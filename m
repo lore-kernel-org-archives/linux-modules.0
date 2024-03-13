@@ -1,94 +1,108 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp1.ms.mff.cuni.cz (smtp-in1.ms.mff.cuni.cz [195.113.20.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000942F2B;
-	Wed, 13 Mar 2024 01:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B311912E73;
+	Wed, 13 Mar 2024 08:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.113.20.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710293916; cv=none; b=AVkgRKiE3z1JXyh9FtwCH6Jtank2o/jePQ3rC+jp26j5lkByCu2m5fq3Nx2N8rC/K7SuILATVFNKQS7pIG4cLQVPR8N1RgNjFmW3G2CH6GPgHI7dKMI12M1XJqVKGOQM++a8ERNWL5RxTtgGScxnsZIKFXeSA90QOZUnFjQEaRU=
+	t=1710319941; cv=none; b=ho1gzQ+Q8wj1jSxBMVrPkOQMo3lRxo9+SnVlNFaFIYXLjzSqUZxHUXzWX25sTof/Xqgn9Np2T2szmn1Kq+FDSCUk1+Ab3JHWjKZe6ILZLZa5+R4SZ7RbYgcIayUKM0w49kwe7BXF+n5xF5FJP4TeFY72Bu7/7ojvaVhi8TtYSmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710293916; c=relaxed/simple;
-	bh=elyAwsBMhBT+fZx4cbo81a/ihT1pgtXSmCdhSQhxU5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NVW1JQdWSMVPlFZm3c6AM7ZghgkNnheUY18UjrYZNz4Vw/GT+lLo6jW1UBmrLmL1C7jWwEbpsWKroPlfLUUOHgej39naN5x8l9CekF2ZLILx/QxN+JwRLrdyRQgb0yd9Ni6n6OOmNzt5jiih3Kq8yP6z0Bf9Pp3jBTvCLF1l9uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AmhtsckY; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AmhtsckY"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=hq6ZayF5HIGEfSfJFdnv7uS9zlR+5nppIUmOOmY8mBU=; b=AmhtsckYWdqbEX3JDk+Uhn6jSo
-	EDz3UVDpRqqOAb/HPGcogJ823lqtFj+dXCt35FiRIFCCrE26YRijxNLAKovcxGhd6CGEYgjtcYy/8
-	X0PJnH8ogOwXxYNboJF/t6JEcBRooA2rqUWUwZWEmnrgKiwztK8wKRTT+z2LGC4AlOXkYYjVKsjSa
-	z4wNc20F6ICca4+Kgcnm9MYW1R1kf1GME94F0IWQ8ngdk3OHKJqsJS1N+Ix2H5y60q1W9+GBg2Wpc
-	Sr5z3trRCOJKrUplxUhopaz80sYGgIuSEiFYqHyw8NQgGjEMHuCWutRHjdMUtuTgUN8NxiI76GTKd
-	7bnNP2yA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rkDZg-00000008SCx-3iG3;
-	Wed, 13 Mar 2024 01:38:32 +0000
-Date: Tue, 12 Mar 2024 18:38:32 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-modules@vger.kernel.org
-Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Kees Cook <keescook@chromium.org>, mcgrof@kernel.org
-Subject: [GIT PULL] Modules changes for v6.9-rc1
-Message-ID: <ZfEDmCMBe2b6Eyky@bombadil.infradead.org>
+	s=arc-20240116; t=1710319941; c=relaxed/simple;
+	bh=+NePArLWJMB57UThWlpn3BKXqneliUUo+Wa39GBb6SQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:To:From:
+	 In-Reply-To; b=HXQ6SUGto9CJzXQDIifpc0tJNK/1/aqdmypyOYL0oZEQ3srdY5TXDjd2A4QgHcMDeBMPaS2+cofvuxoXo/TOaaOGm3+RAJHj4koN4wyvpkkWL+2Lm6ssjEHHHlRq0VPqgCuuSgO6xiFyKA6hyNMvv0piwY67oNLzx7ujR1g1XqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz; spf=pass smtp.mailfrom=matfyz.cz; arc=none smtp.client-ip=195.113.20.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=matfyz.cz
+X-SubmittedBy: id balejk@matfyz.cz subject /postalCode=110+2000/O=Univerzita+20Karlova/street=Ovocn+5CxC3+5CxBD+20trh+20560/5/ST=Praha,+20Hlavn+5CxC3+5CxAD+20m+5CxC4+5Cx9Bsto/C=CZ/CN=Karel+20Balej/emailAddress=balejk@matfyz.cz
+	serial F5FD910E8FE2121B897F7E55B84E351D
+	issued by /C=NL/O=GEANT+20Vereniging/CN=GEANT+20Personal+20CA+204
+	auth type TLS.CUNI
+Received: from localhost (koleje-wifi-0013.koleje.cuni.cz [78.128.191.13])
+	(authenticated)
+	by smtp1.ms.mff.cuni.cz (8.16.1/8.16.1) with ESMTPS id 42D8neSJ059445
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+	Wed, 13 Mar 2024 09:49:41 +0100 (CET)
+	(envelope-from balejk@matfyz.cz)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 13 Mar 2024 09:50:11 +0100
+Message-Id: <CZSHRUIJ4RKL.34T4EASV5DNJM@matfyz.cz>
+Cc: <alexandre.torgue@foss.st.com>, <davem@davemloft.net>,
+        <dhowells@redhat.com>, <herbert@gondor.apana.org.au>,
+        <keyrings@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>, <mcgrof@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [REGRESSION] Re: [PATCH] crypto: pkcs7: remove sha1 support
+To: <dimitri.ledkov@canonical.com>,
+        "Johannes Berg"
+ <johannes@sipsolutions.net>
+From: "Karel Balej" <balejk@matfyz.cz>
+In-Reply-To: <20231010212240.61637-1-dimitri.ledkov@canonical.com>
 
-The following changes since commit 41bccc98fb7931d63d03f326a746ac4d429c1dd3:
+Dimitri, Johannes,
 
-  Linux 6.8-rc2 (2024-01-28 17:01:12 -0800)
+ever since upgrading to Linux v6.7 I am unable to connect to a 802.1X
+wireless network (specifically, eduroam). In my dmesg, the following
+messages appear:
 
-are available in the Git repository at:
+	[   68.161621] wlan0: authenticate with xx:xx:xx:xx:xx:xx (local address=
+=3Dxx:xx:xx:xx:xx:xx)
+	[   68.163733] wlan0: send auth to xx:xx:xx:xx:xx:xx (try 1/3)
+	[   68.165773] wlan0: authenticated
+	[   68.166785] wlan0: associate with xx:xx:xx:xx:xx:xx (try 1/3)
+	[   68.168498] wlan0: RX AssocResp from xx:xx:xx:xx:xx:xx (capab=3D0x1411 =
+status=3D0 aid=3D4)
+	[   68.172445] wlan0: associated
+	[   68.204956] wlan0: Limiting TX power to 23 (23 - 0) dBm as advertised b=
+y xx:xx:xx:xx:xx:xx
+	[   70.262032] wlan0: deauthenticated from xx:xx:xx:xx:xx:xx (Reason: 23=
+=3DIEEE8021X_FAILED)
+	[   73.065966] wlan0: authenticate with xx:xx:xx:xx:xx:xx (local address=
+=3Dxx:xx:xx:xx:xx:xx)
+	[   73.068006] wlan0: send auth to xx:xx:xx:xx:xx:xx (try 1/3)
+	[   73.070166] wlan0: authenticated
+	[   73.070756] wlan0: associate with xx:xx:xx:xx:xx:xx (try 1/3)
+	[   73.072807] wlan0: RX AssocResp from xx:xx:xx:xx:xx:xx (capab=3D0x1411 =
+status=3D0 aid=3D4)
+	[   73.076676] wlan0: associated
+	[   73.120396] wlan0: Limiting TX power to 23 (23 - 0) dBm as advertised b=
+y xx:xx:xx:xx:xx:xx
+	[   75.148376] wlan0: deauthenticating from xx:xx:xx:xx:xx:xx by local cho=
+ice (Reason: 23=3DIEEE8021X_FAILED)
+	[   77.718016] wlan0: authenticate with xx:xx:xx:xx:xx:xx (local address=
+=3Dxx:xx:xx:xx:xx:xx)
+	[   77.720137] wlan0: send auth to xx:xx:xx:xx:xx:xx (try 1/3)
+	[   77.722670] wlan0: authenticated
+	[   77.724737] wlan0: associate with xx:xx:xx:xx:xx:xx (try 1/3)
+	[   77.726172] wlan0: RX AssocResp from xx:xx:xx:xx:xx:xx (capab=3D0x1411 =
+status=3D0 aid=3D4)
+	[   77.730822] wlan0: associated
+	[   77.830763] wlan0: Limiting TX power to 23 (23 - 0) dBm as advertised b=
+y xx:xx:xx:xx:xx:xx
+	[   79.784199] wlan0: deauthenticating from xx:xx:xx:xx:xx:xx by local cho=
+ice (Reason: 23=3DIEEE8021X_FAILED)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.9-rc1
+The connection works fine with v6.6 and I have bisected the problem to
+the revision introduced by this patch (16ab7cb5825f mainline).
 
-for you to fetch changes up to d1909c0221739356f31c721de4743e7d219a56cc:
+My wireless kernel driver is iwlwifi and I use iwd. I started the bisect
+with a config copied from my distribution package [1].
 
-  module: Don't ignore errors from set_memory_XX() (2024-02-16 11:30:43 -0800)
+Would you please help me with this? Please let me know if I forgot to
+mention something which could be helpful in resolving this.
 
-----------------------------------------------------------------
-Modules changes for v6.9-rc1
+[1] https://raw.githubusercontent.com/void-linux/void-packages/master/srcpk=
+gs/linux6.6/files/x86_64-dotconfig
 
-Christophe Leroy did most of the work on this release, first with a few
-cleanups on CONFIG_STRICT_KERNEL_RWX and ending with error handling for
-when set_memory_XX() can fail. This is part of a larger effort to clean
-up all these callers which can fail, modules is just part of it.
-
-This has been sitting on linux-next for about a month without issues.
-
-----------------------------------------------------------------
-Christophe Leroy (6):
-      module: Use set_memory_rox()
-      module: Change module_enable_{nx/x/ro}() to more explicit names
-      init: Declare rodata_enabled and mark_rodata_ro() at all time
-      modules: Remove #ifdef CONFIG_STRICT_MODULE_RWX around rodata_enabled
-      powerpc: Simplify strict_kernel_rwx_enabled()
-      module: Don't ignore errors from set_memory_XX()
-
-Randy Dunlap (1):
-      lib/test_kmod: fix kernel-doc warnings
-
- arch/powerpc/include/asm/mmu.h |  9 +-----
- include/linux/init.h           |  4 ---
- init/main.c                    | 21 +++++---------
- kernel/module/internal.h       |  6 ++--
- kernel/module/main.c           | 20 +++++++++++---
- kernel/module/strict_rwx.c     | 63 +++++++++++++++++++++++++++---------------
- lib/test_kmod.c                |  6 +++-
- 7 files changed, 73 insertions(+), 56 deletions(-)
+Thank you very much, kind regards,
+K. B.
