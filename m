@@ -1,178 +1,106 @@
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3FD47F46
-	for <linux-modules@vger.kernel.org>; Wed, 13 Mar 2024 15:31:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75C69823D0;
+	Wed, 13 Mar 2024 17:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710343894; cv=none; b=CWDBzLAXCf7a6Zvpntc87xSI4cH9b8MUvLGntfeOIm7b4r3wmpGnfXbhPl7zvaaLbTgaNrUA5MfpC5uneOKEB2UWSBA4rsKh5FGfTtlSYBBVy9VcY2gOITCovGQ5lHmNzNLALulnR3WZOBIGXWHFc0nGQ5GPa9dbT8frSXsBobc=
+	t=1710350773; cv=none; b=JKiclYvZz1YAvmyLFiI99I00XL1kFol8T6RuuILJtwpRUks9CPuPlE4AWDWnVEm4+/PHbnE82vF1nej6hyLSE9EC89A64Hg4oFaue+NY36vA9Nn+wLuyxTyTKAg3+VbMJNuhWjEDLgqTS5bM/n2LM9XRWkSiV/GlE0zJFQKCw5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710343894; c=relaxed/simple;
-	bh=Zq4RfZOjcqNtcLFUzAg0QuQxZvQrvC1IKPOXZvtCEr8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LEysbvoebXx6ousjOiN4WmVYY/VZ2idUA7CS9sSOHyw0Lwr4Vib8wrHhhp0mh5dYZqs4sCt/0fbyE0MLb6vBQ09uTOKQu+3ZvzknOaKDrLXJUn+iB3zjLBakGJ3bN5tff3maz0Lt/iFOKJqz3eMcGzyU6OpV+Nm66GtFn9FSCL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nHy1XTA7; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710350773; c=relaxed/simple;
+	bh=pHdBbxIGCsn6bga9ZUWJIdqQzQ/NGDwpmOuAP2belZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ibx26gv1Mj/Xtquvv7wHvPBXz5wvd8YFw3V3kOrcyUFWvUaSNViukZ8tVe4T48raWir0bxeJI+57M6veZCmYC5WBpO2canfvevzHGlXwyTkRNg2Uux0DyZ9aPux8ChVDUYdyBYrm0CPLH+DF+TszTr2cXpYBCdJeUHHZ6pf3Yao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ih/RA9K2; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nHy1XTA7"
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dcc7cdb3a98so1180174276.2
-        for <linux-modules@vger.kernel.org>; Wed, 13 Mar 2024 08:31:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ih/RA9K2"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-788598094c4so5260685a.0;
+        Wed, 13 Mar 2024 10:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710343891; x=1710948691; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JtMw74U66kmsHyXAV7bBZ7SbbkNSfFBApfqkzQBmCrI=;
-        b=nHy1XTA7EB89TkqAKPt3CSMUwffHkk/CAuX5IYEt3/EzeN/XRhGq2DKnf7K6hxBuX2
-         lizjW6ABzbMxvs9EVRQPfIEdfnzXbICsxanCJ313DaPFFsn3XgjJXutzC0m8X+uGp4Z5
-         Om3PINc9nBM2T9TOBrh3Fdfv+4E3X3TozhN1tc8/oU8w+/Zy+NQckLE5J7e2sPXxNlyr
-         Yg6YbyXesZbqI/nCi6EKIOgO914R0yfPTAzB91Id3Q95jZ4U6SQbdb1pjfCT0GK05Dcl
-         tPLny3Iv8ZJxV34iyTvblGo8lJ5DISojziQxMAi9f+np2LqJCj/YFpKveTEQzzcE0BjG
-         1ivg==
+        d=gmail.com; s=20230601; t=1710350770; x=1710955570; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/xlPdDv6yvSDgUYLn/3ttkYWsR7atQ5kgTqz8H924Zg=;
+        b=ih/RA9K2TpucD0A8pA6vOGj9e4ua/89FjLztujfp+MObcS6sHjzdTD4V2y03sGUViV
+         i4NtKtEWQgFU+D30OVanaxcXUpLvUPifvTOeVh+Orw42h7O8mM31avL9dM0GiaTpYNX8
+         j6fu5qDupiMnOJP28RpUUMPWfqEhC1Y5d8JGruSWx+U7DFnGucoT1lVXgTHisueicQpG
+         5yZho8mUottLpWQiG2uPItRPouijwVyOo7WWfKIB50c9vNPwryJm6sRnleih+begoJq4
+         CN4cZUsrdtiBfjuBvovONrkGFEyt8/d65g4ztbabkbAC767KOT0Kwhsj+urEWCOAEcOB
+         1Sxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710343891; x=1710948691;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JtMw74U66kmsHyXAV7bBZ7SbbkNSfFBApfqkzQBmCrI=;
-        b=rZta4/JnV5EmkFrDyNu+EblMqgbNraEXfLZb9WIaOmnbzSSbXLgsWd4mX7tO50XHUq
-         NhUbXevvquBPWn9FSWhMQ+1AjP/clY1r7IKXwATHXeBnlpb9R6OnS6Wc9357Nk4lwlSI
-         KQdA4B4P+nliTcoYOgkYmk3wzV32PVr0GogJWL86Y90NGW61EeZNSoal29gBlho1TQd2
-         mhohylNm4EVmZubwRDtyF5ITa1qbw5UjCQemZrTak/cJjLzkCX6oZGqo7rkLB2xX73J2
-         bSHX9iJfJYUSp9LM8WSGHJJYgAd78K0pttgCCoNgw/MC9wQ6i86H8sr+B97I+WMzPTrb
-         8Rrw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxqpoT3tVvykSoyDfqI0Vrk2xiDjX1pwCrZwC8R92gdWpI4Sb7thZ1QwgtJXvf6DazQWrOcJkezC8GsMRfHy2IrXL9mrYXZ/2BbaaM3g==
-X-Gm-Message-State: AOJu0YwW9WhOSn+rIml4ETulBjSv+HIlF904cd+UPGO0TDzy4nhp4zE7
-	GB+4ZgD4xDIFf1AhV+S/rcOi+boKzrcGO92oWJFwblNFrNIMuta+mqg0Rn90w51sxl2mLmt0t0I
-	cPEwLbCIKh/unLuggmgmkOfXB2qbSYJTUESe7
-X-Google-Smtp-Source: AGHT+IFt/OYhWjwqlxyr/Zyxfa6nHqBBNGn1lVwocwLdvQz8oj2Fnp7dsALCjpYCUrb0E7Elvx8ovXgew43c6K/l7cs=
-X-Received: by 2002:a5b:706:0:b0:dcb:abbc:f597 with SMTP id
- g6-20020a5b0706000000b00dcbabbcf597mr2798485ybq.54.1710343891190; Wed, 13 Mar
- 2024 08:31:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710350770; x=1710955570;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/xlPdDv6yvSDgUYLn/3ttkYWsR7atQ5kgTqz8H924Zg=;
+        b=l2sPbEtEXDR/ZzjWkb4lZirt95S6+HtbpsJ4YH2qAw2C+5XVYDeM23nfdzdbkGNf1O
+         ebxbUwDalEW5FHvXVPixRPvFmG1lsNalGRRcktKen4Tc+Ib4FXc9qaZX6yj+NwfwmOnk
+         zil3GodIdC2dsbl3FT6nGQ4DXqgnSFvMVtMyY+4EUgX8q9DBvTmCyixtZCBXTYii2ACS
+         P+7T/tBCCuJsUvv5/0QUj0mWPltMuPKCHyDmXVuO2q6Rds4hbpVeGLh3ahT++9sX+QI9
+         MqdibHSqvWO4YyEtC5oajnGo4HevHaVSmEVr5PWy7of0rsiOb2WBWjiPAiRCs8ZXn6oy
+         GCcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtE4uApdPj7Yyod1FQX0vhaaX+0aFzdWcm+ca9H4ZwFQNbsgSp2wfuphEHVxMVbypgBMWrPaEHoGxk49Z0lkIifwgz+YM3YKvnxJy7pwtIDGXvIIQ7lrXto5IewspRLWDfHjKOJQPH8pm1ekpO8rqkgn3NfiGGtRmc1w7f4e0wXGNRD60uI96Oi24qW6u28MtI96UYlMz6WEbwC3QoewzYLluFlVOoVHhM++Xrseyhe+CiLXJz2ZMXOytL6MWazRZRsv0bb3kQiJ55nyDF1iutQAKjnVOQMkmtbLM=
+X-Gm-Message-State: AOJu0YzfUlNScLe8t9U5ISTys6i3l55qhlJv3bIerPSkcROfz9rucFPA
+	+eJbwsv2qztSddrDgz26fl6eR0lQE8tIYXea7Uo417XUHo2C6rV9
+X-Google-Smtp-Source: AGHT+IFyyiGiWin6XQHjnKeLqB0dBkLVo4kmfRKf8luDrrfr/cY3NN2DX7JZ46wiVXxtXIKQSkqJLg==
+X-Received: by 2002:a05:620a:178e:b0:787:a83a:cfed with SMTP id ay14-20020a05620a178e00b00787a83acfedmr607731qkb.70.1710350770507;
+        Wed, 13 Mar 2024 10:26:10 -0700 (PDT)
+Received: from [10.102.4.159] ([208.195.13.130])
+        by smtp.gmail.com with ESMTPSA id yf23-20020a05620a3bd700b007884b14b0b4sm4888800qkn.51.2024.03.13.10.26.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Mar 2024 10:26:10 -0700 (PDT)
+Message-ID: <f2dcbe55-0f0e-4173-8e21-f899c6fc802a@gmail.com>
+Date: Wed, 13 Mar 2024 10:26:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306182440.2003814-1-surenb@google.com> <20240306182440.2003814-21-surenb@google.com>
- <ZfHAcVwJ6w9b1x0Z@casper.infradead.org>
-In-Reply-To: <ZfHAcVwJ6w9b1x0Z@casper.infradead.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 13 Mar 2024 15:31:18 +0000
-Message-ID: <CAJuCfpFf2xrCA_Rq_-e5HsDMqeS87p0b28PkK+wgWco17mxyDQ@mail.gmail.com>
-Subject: Re: [PATCH v5 20/37] mm: fix non-compound multi-order memory
- accounting in __free_pages
-To: Matthew Wilcox <willy@infradead.org>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] Re: [PATCH] crypto: pkcs7: remove sha1 support
+To: Johannes Berg <johannes@sipsolutions.net>, Karel Balej
+ <balejk@matfyz.cz>, dimitri.ledkov@canonical.com
+Cc: alexandre.torgue@foss.st.com, davem@davemloft.net, dhowells@redhat.com,
+ herbert@gondor.apana.org.au, keyrings@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, mcgrof@kernel.org,
+ mcoquelin.stm32@gmail.com, linux-wireless@vger.kernel.org,
+ netdev@vger.kernel.org, iwd@lists.linux.dev
+References: <CZSHRUIJ4RKL.34T4EASV5DNJM@matfyz.cz>
+ <005f998ec59e27633b1b99fdf929e40ccfd401c1.camel@sipsolutions.net>
+Content-Language: en-US
+From: James Prestwood <prestwoj@gmail.com>
+In-Reply-To: <005f998ec59e27633b1b99fdf929e40ccfd401c1.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 13, 2024 at 3:04=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
-> wrote:
->
-> On Wed, Mar 06, 2024 at 10:24:18AM -0800, Suren Baghdasaryan wrote:
-> > When a non-compound multi-order page is freed, it is possible that a
-> > speculative reference keeps the page pinned. In this case we free all
-> > pages except for the first page, which will be freed later by the last
-> > put_page(). However put_page() ignores the order of the page being free=
-d,
-> > treating it as a 0-order page. This creates a memory accounting imbalan=
-ce
-> > because the pages freed in __free_pages() do not have their own alloc_t=
-ag
-> > and their memory was accounted to the first page. To fix this the first
-> > page should adjust its allocation size counter when "tail" pages are fr=
-eed.
->
-> It's not "ignored".  It's not available!
->
-> Better wording:
->
-> However the page passed to put_page() is indisinguishable from an
-> order-0 page, so it cannot do the accounting, just as it cannot free
-> the subsequent pages.  Do the accounting here, where we free the pages.
->
-> (I'm sure further improvements are possible)
->
-> > +static inline void pgalloc_tag_sub_bytes(struct alloc_tag *tag, unsign=
-ed int order)
-> > +{
-> > +     if (mem_alloc_profiling_enabled() && tag)
-> > +             this_cpu_sub(tag->counters->bytes, PAGE_SIZE << order);
-> > +}
->
-> This is a terribly named function.  And it's not even good for what we
-> want to use it for.
->
-> static inline void pgalloc_tag_sub_pages(struct alloc_tag *tag, unsigned =
-int nr)
-> {
->         if (mem_alloc_profiling_enabled() && tag)
->                 this_cpu_sub(tag->counters->bytes, PAGE_SIZE * nr);
-> }
->
-> > +++ b/mm/page_alloc.c
-> > @@ -4697,12 +4697,21 @@ void __free_pages(struct page *page, unsigned i=
-nt order)
-> >  {
-> >       /* get PageHead before we drop reference */
-> >       int head =3D PageHead(page);
-> > +     struct alloc_tag *tag =3D pgalloc_tag_get(page);
-> >
-> >       if (put_page_testzero(page))
-> >               free_the_page(page, order);
-> >       else if (!head)
-> > -             while (order-- > 0)
-> > +             while (order-- > 0) {
-> >                       free_the_page(page + (1 << order), order);
-> > +                     /*
-> > +                      * non-compound multi-order page accounts all all=
-ocations
-> > +                      * to the first page (just like compound one), th=
-erefore
-> > +                      * we need to adjust the allocation size of the f=
-irst
-> > +                      * page as its order is ignored when put_page() f=
-rees it.
-> > +                      */
-> > +                     pgalloc_tag_sub_bytes(tag, order);
->
-> -       else if (!head
-> +       else if (!head) {
-> +               pgalloc_tag_sub_pages(1 << order - 1);
->                 while (order-- > 0)
->                         free_the_page(page + (1 << order), order);
-> +       }
->
-> It doesn't need a comment, it's obvious what you're doing.
+Hi,
 
-All suggestions seem fine to me. I'll adjust the next version accordingly.
-Thanks for reviewing and the feedback!
+On 3/13/24 1:56 AM, Johannes Berg wrote:
+> Not sure why you're CC'ing the world, but I guess adding a few more
+> doesn't hurt ...
+>
+> On Wed, 2024-03-13 at 09:50 +0100, Karel Balej wrote:
+>>   and I use iwd
+> This is your problem, the wireless stack in the kernel doesn't use any
+> kernel crypto code for 802.1X.
 
+Yes, the wireless stack has zero bearing on the issue. I think that's 
+what you meant by "problem".
+
+IWD has used the kernel crypto API forever which was abruptly broken, 
+that is the problem.
+
+The original commit says it was to remove support for sha1 signed kernel 
+modules, but it did more than that and broke the keyctl API.
+
+>
+> I suppose iwd wants to use the kernel infrastructure but has no
+> fallbacks to other implementations.
+> johannes
 >
