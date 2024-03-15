@@ -1,166 +1,210 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB84113FE7;
-	Thu, 14 Mar 2024 23:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A04C19474;
+	Fri, 15 Mar 2024 10:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710459539; cv=none; b=Nv6m7LKbpHiTfU7SYeprMQLT3x/qrEKT4P6uOtsGb5bRwC9JJKzMnzU0AEjQVZd+rP/oqI1/uQD1CWZTjF1/L4k+xmSreoBaqurYtILR+A6oHwzDnmnf/XHC467zeMBkswJC6sosCIxyN27oEjW7oioE9Lgn5NpcXD7+95CEkno=
+	t=1710500337; cv=none; b=ADK6iyvmqlO0bpszkQnFd2HMJTJlOsKUi6jjo678k7pHmCX+Pb1E1DIdWbsZvGPNzyF+6ezOqzREz35fYxoauWHr6dNGiOgOgtP7l7K5wBjmz+NWjAJfbsymffAxbG+9GTxioTGXQWp8MPd7pgDFkMxiPe8fSuLI2uRB9p2dpL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710459539; c=relaxed/simple;
-	bh=ToO7+GC40SPPq/DJBkYHMz5VkP5cIZgxtl9+T1qyeNw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FX4en9A/QOie8YbNpuWQN/z2ef0M8KeubaF9OiBzH7ymaaGPgdhX1XOqr4EHPpSUTHZZlky0dOtMQGih/pOC8Z8QLTjp++TWB2xEqOqx5ZeF7XU26Syr98VovRFh4fEXmgD0UTTocR9GFNhVDoMeELa2+AGH3S+NaY7iJCt06yY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SowCYaPC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1710500337; c=relaxed/simple;
+	bh=bLXi0Kv2aTCp63cNUTwNkTolcU7Fdj7oossLerdiFcs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mokFSlsCyn/pc7u8J/SYlROAZjToEGytjMRd38KQYxDqX97/yYZSzfmCojICe1c0yKIb/+VvpKnW97Ra/y+Uyag66QqYLf7FJ1prXWqC42yUUPqZEU/7+GM+18hdlIv8sQSBxNVoMrHopWh1SKkTZpo0vfABWVoHo98W2hZtBdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kIeV/N+n; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=N4muqVjs; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kIeV/N+n; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=N4muqVjs; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SowCYaPC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957B9C43601;
-	Thu, 14 Mar 2024 23:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1710459538;
-	bh=ToO7+GC40SPPq/DJBkYHMz5VkP5cIZgxtl9+T1qyeNw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SowCYaPCOLjEnDgHQ2XC7R0LqG8iVH1tSpqaCRt02cjOZBaHctbbQFmzEqjRcvhmj
-	 i/Zv0c3M92heLQdOgfA7NRi08RATmBjbXeesA48ueQQzaTtz4oMZJC+BryGvTZ5lm3
-	 hO56AiCBUqrXAEan0fgh5ziDS9R32mi6gkiDZJxFX6Tr8T275Z2BSpkjdh5qiRIEDa
-	 /g22lzM98Iq3qxplKJI1PJDely87LNSOCGJT/fh/f8iXg2Z/v7lVh3UzAkWK6HdC8Z
-	 bvJhRgLIhynwbMDwZicreJqGkqeTdLFI23xGNjsyjPB+cNlOpR29hGWDtjed/bGmM8
-	 7bHtbgf2uwG1Q==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2d4360ab3daso19976631fa.3;
-        Thu, 14 Mar 2024 16:38:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWd2Px/Af6sDtDIT8cbm+QE6lgHKXyCWAQCf3vBqr8tyO8+A83j8fPqfatAzq+Ag/2pojYzm1AWZC60+oeOL/mkfrRaHWXYHVwDYLb1JCaBy1pb1RChTMzSoCCSbD9/Hh6FewnSjf+JaeyqVrtTZXtEZrRP+z0P5DhCqugdfBPeBsb7+wNFI5dz8df9kf4iLenMbUMbo9j2FmGL7p+cEuKYnikYyOmUFVhwvknmgSPLXAhREwx7PhAV8mTuR9UTq37e0FXoKHQwfqByE7+6GBt1pmmaEJx41LIWL7c=
-X-Gm-Message-State: AOJu0YxhxQM6KkgZsEklxfjW5qw2KmMnrPUoyl9vT+Le4EedwOsVwDeO
-	d8u/W51X0Z7sa1wwOfOfPwffsTtzDfYNQQ1+/aKnGGeJoniGAAAIFLIbcYajObokB4O3c5TcpdA
-	RHU6s4MximEJPvz2HYU3TJcLUZxE=
-X-Google-Smtp-Source: AGHT+IF2/ImKbZWGcxV6yAg7OxnoINqcxhfzgB5aBbVZi8+MbYBftvaXns5kzEnVc2lBbJ0XnQ1q0SLbGXlAKuS4j2k=
-X-Received: by 2002:a2e:9a8a:0:b0:2d2:3fac:5fdc with SMTP id
- p10-20020a2e9a8a000000b002d23fac5fdcmr2171806lji.10.1710459536886; Thu, 14
- Mar 2024 16:38:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kIeV/N+n";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="N4muqVjs";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kIeV/N+n";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="N4muqVjs"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 50E4E21DD2;
+	Fri, 15 Mar 2024 10:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1710500333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9muM8bo+rTj/3DcyAeA4j1Dljj8nhnMTXgWWpTVnpQM=;
+	b=kIeV/N+n1Qjn4RwdctLpBJA/ti5qrD6sZCC/MPiMggb17MFzRe5HBe0AQTNROQDaKSju7R
+	a0SLFUAt+MJiKmd9tkmDZZP0d8BIvQQaQcoE33BtEHz87wjWhVe0H/xpFhRF3pbknSydFH
+	TYmRZwi/PzREciTT3ulCpGUJ5who+rQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1710500333;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9muM8bo+rTj/3DcyAeA4j1Dljj8nhnMTXgWWpTVnpQM=;
+	b=N4muqVjs0s0Jytaoa8YUY3ruVKbKV/g3CLqo9GREsnONsvr9go6NQwryE9JTCFZbAjNLnA
+	uwWsA04tQTN0rHCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1710500333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9muM8bo+rTj/3DcyAeA4j1Dljj8nhnMTXgWWpTVnpQM=;
+	b=kIeV/N+n1Qjn4RwdctLpBJA/ti5qrD6sZCC/MPiMggb17MFzRe5HBe0AQTNROQDaKSju7R
+	a0SLFUAt+MJiKmd9tkmDZZP0d8BIvQQaQcoE33BtEHz87wjWhVe0H/xpFhRF3pbknSydFH
+	TYmRZwi/PzREciTT3ulCpGUJ5who+rQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1710500333;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9muM8bo+rTj/3DcyAeA4j1Dljj8nhnMTXgWWpTVnpQM=;
+	b=N4muqVjs0s0Jytaoa8YUY3ruVKbKV/g3CLqo9GREsnONsvr9go6NQwryE9JTCFZbAjNLnA
+	uwWsA04tQTN0rHCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B4DD81368C;
+	Fri, 15 Mar 2024 10:58:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BxitK+wp9GU7dwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 15 Mar 2024 10:58:52 +0000
+Message-ID: <1f51ffe8-e5b9-460f-815e-50e3a81c57bf@suse.cz>
+Date: Fri, 15 Mar 2024 11:58:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <005f998ec59e27633b1b99fdf929e40ccfd401c1.camel@sipsolutions.net>
- <f2dcbe55-0f0e-4173-8e21-f899c6fc802a@gmail.com> <20240313194423.GA1111@sol.localdomain>
- <b838e729-dc30-4e18-b928-c34c16b08606@gmail.com> <20240313202223.GB1111@sol.localdomain>
- <db86cba4-0e61-441d-8e66-405a13b61a3c@gmail.com> <20240313221043.GC1111@sol.localdomain>
- <f0492c92-1015-48e3-bfce-598c7a4843d1@quicinc.com> <20240313230611.GD1111@sol.localdomain>
- <a4d24b2c-7dbf-4354-9514-f8a253aac14b@gmail.com> <20240314202011.GB1132@sol.localdomain>
-In-Reply-To: <20240314202011.GB1132@sol.localdomain>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 15 Mar 2024 00:38:45 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGxxRs6Rkhevm9NSY6TaJUsOmF3UqdHUo=NRg9kQKtSBA@mail.gmail.com>
-Message-ID: <CAMj1kXGxxRs6Rkhevm9NSY6TaJUsOmF3UqdHUo=NRg9kQKtSBA@mail.gmail.com>
-Subject: Re: [REGRESSION] Re: [PATCH] crypto: pkcs7: remove sha1 support
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: James Prestwood <prestwoj@gmail.com>, Jeff Johnson <quic_jjohnson@quicinc.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Karel Balej <balejk@matfyz.cz>, 
-	dimitri.ledkov@canonical.com, alexandre.torgue@foss.st.com, 
-	davem@davemloft.net, dhowells@redhat.com, herbert@gondor.apana.org.au, 
-	keyrings@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	mcgrof@kernel.org, mcoquelin.stm32@gmail.com, linux-wireless@vger.kernel.org, 
-	netdev@vger.kernel.org, iwd@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 23/37] mm/slab: add allocation accounting into slab
+ allocation and free paths
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mhocko@suse.com, hannes@cmpxchg.org,
+ roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com,
+ penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com,
+ peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com,
+ will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+ dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+ david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+ nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org,
+ muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org,
+ pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com,
+ dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com,
+ keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com,
+ gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+ penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+ glider@google.com, elver@google.com, dvyukov@google.com,
+ shakeelb@google.com, songmuchun@bytedance.com, jbaron@akamai.com,
+ aliceryhl@google.com, rientjes@google.com, minchan@google.com,
+ kaleshsingh@google.com, kernel-team@android.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+ linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+References: <20240306182440.2003814-1-surenb@google.com>
+ <20240306182440.2003814-24-surenb@google.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20240306182440.2003814-24-surenb@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -3.00
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.00 / 50.00];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 XM_UA_NO_VERSION(0.01)[];
+	 TO_DN_SOME(0.00)[];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_TRACE(0.00)[suse.cz:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_GT_50(0.00)[76];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 MID_RHS_MATCH_FROM(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 ARC_NA(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 FROM_HAS_DN(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 TAGGED_RCPT(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 TO_MATCH_ENVRCPT_SOME(0.00)[];
+	 DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FREEMAIL_CC(0.00)[linux.dev,suse.com,cmpxchg.org,suse.de,stgolabs.net,infradead.org,oracle.com,i-love.sakura.ne.jp,lwn.net,manifault.com,redhat.com,arm.com,kernel.org,arndb.de,linutronix.de,linux.intel.com,kernel.dk,nvidia.com,soleen.com,google.com,gmail.com,chromium.org,linuxfoundation.org,linaro.org,goodmis.org,linux.com,lge.com,bytedance.com,akamai.com,android.com,vger.kernel.org,lists.linux.dev,kvack.org,googlegroups.com];
+	 RCVD_TLS_ALL(0.00)[];
+	 SUSPICIOUS_RECIPS(1.50)[];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="kIeV/N+n";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=N4muqVjs
+X-Rspamd-Queue-Id: 50E4E21DD2
 
-On Thu, 14 Mar 2024 at 21:20, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> On Thu, Mar 14, 2024 at 04:52:47AM -0700, James Prestwood wrote:
-> > IWD uses AF_ALG/keyctl for _all_ its crypto, cipher, and checksum needs.
-> > Anything that wifi requires as far as crypto goes IWD uses the kernel,
-> > except ECC is the only exception. The entire list of crypto requirements
-> > (for full support at least) for IWD is here:
-> >
-> > https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/tools/test_runner_kernel_config
->
-> That's quite an extensive list, and it's not documented in the iwd README.
-> Don't you get bug reports from users who are running a kernel that's missing one
-> of those options?
->
-> > For KEYCTL_PKEY_* specifically we use it for all asymmetric crypto
-> > operations, (query), encrypt, decrypt, sign, verify.
-> >
-> > I'll be honest, the AF_ALG/keyctl support in ELL was mostly done by the time
-> > I started working on IWD so I was not aware the documentation was so poor.
-> > That is an entirely separate issue than this IMO, and I'm happy to help with
-> > getting docs updated to include a proper list of supported features. In
-> > addition maybe some automated testing that gets run on kernel builds which
-> > actually exercises this API so it doesn't get accidentally get broken in the
-> > future? Docs/tests IMO are the proper "fix" here, not telling someone to
-> > stop using an API that has existed a long time.
->
-> I looked into the history, and it seems the KEYCTL_PKEY_* APIs were added as a
-> collaboration between the iwd developers and the kernel keyrings maintainer.
-> So, as far as I can tell, it's not that the kernel had an existing API that iwd
-> started using.  It's that iwd got some APIs added to the kernel for themselves.
-> KEYCTL_PKEY_* don't seem to have been adopted elsewhere; Debian Code Search
-> doesn't return any notable results.  keyctl does provide a command-line
-> interface to them, but I can't find any users of the keyctl commands either.
->
-> Then, everyone disappeared and it got dumped on the next generation of kernel
-> developers, who often don't know that this API even exists.  And since the API
-> is also poorly specified and difficult to maintain (e.g., changing a seemingly
-> unrelated part of the kernel can break it), the results are predictable...  And
-> of course the only thing that breaks is iwd, since it's the only user.
->
-> It would be worth taking a step back and looking at the overall system
-> architecture here.  Is this the best way to ensure a reliable wireless
-> experience for Linux users?
->
-> Maybe it's time to admit that KEYCTL_PKEY_* was basically an experiment, and a
-> different direction (e.g. using OpenSSL) should be taken...
->
-> (Another issue with the kernel keyrings stuff is that provides a significant
-> attack surface for the kernel to be exploited.)
->
-> If you do decide to continue with the status quo, it may be necessary for the
-> iwd developers to take a more active role in maintaining this API in order to
-> ensure it continues working properly for you.
->
-> AF_ALG is on *slightly* firmer ground since it's been around for longer, is
-> properly part of the crypto subsystem, and has a few other users.  Unfortunately
-> it still suffers from the same issues though, just to a slightly lesser degree.
->
+On 3/6/24 19:24, Suren Baghdasaryan wrote:
+> Account slab allocations using codetag reference embedded into slabobj_ext.
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-We dropped MD4 because there are no users in the kernel. It is not the
-kernel's job to run code on behalf of user space if it does not
-require any privileges and can therefore execute in user space
-directly.
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 
-The fact that AF_ALG permits this is a huge oversight on the part of
-the kernel community, and a major maintenance burden. The point of
-AF_ALG was to expose hardware crypto accelerators (which are shared
-resources that /need/ to be managed by the kernel) to user space, and
-we inadvertently ended up allowing the kernel's pure-software
-algorithms to be used in the same way.
+Nit below:
 
-The fact that we even added APIs to the kernel to accommodate iwd is
-even worse. It means system call overhead (which has become worse due
-to all the speculation mitigations) to execute some code that could
-execute in user space just as well, which is a bad idea for other
-reasons too (for instance, accelerated crypto that uses SIMD in the
-kernel disables preemption on many architectures, resulting in
-scheduling jitter)
+> @@ -3833,6 +3913,7 @@ void slab_post_alloc_hook(struct kmem_cache *s,	struct obj_cgroup *objcg,
+>  			  unsigned int orig_size)
+>  {
+>  	unsigned int zero_size = s->object_size;
+> +	struct slabobj_ext *obj_exts;
+>  	bool kasan_init = init;
+>  	size_t i;
+>  	gfp_t init_flags = flags & gfp_allowed_mask;
+> @@ -3875,6 +3956,12 @@ void slab_post_alloc_hook(struct kmem_cache *s,	struct obj_cgroup *objcg,
+>  		kmemleak_alloc_recursive(p[i], s->object_size, 1,
+>  					 s->flags, init_flags);
+>  		kmsan_slab_alloc(s, p[i], init_flags);
+> +		obj_exts = prepare_slab_obj_exts_hook(s, flags, p[i]);
+> +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> +		/* obj_exts can be allocated for other reasons */
+> +		if (likely(obj_exts) && mem_alloc_profiling_enabled())
+> +			alloc_tag_add(&obj_exts->ref, current->alloc_tag, s->size);
+> +#endif
 
-Note that in the case of iwd, it is unlikely that the use of AF_ALG
-could ever result in meaningful use of hardware accelerators: today's
-wireless interfaces don't use software crypto for the bulk of the data
-(i.e., the packets themselves) and the wireless key exchange protocols
-etc are unlikely to be supported in generic crypto accelerators, and
-even if they were, the latency would likely result in worse
-performance overall than a software implementation.
+I think you could still do this a bit better:
 
-So iwd's deliberate choice to use the kernel as a crypto library is
-severely misguided. I have made the same point 4 years ago when I
-replaced iwd's use of the kernel's ecb(arc4) code with a suitable
-software implementation (3 files changed, 53 insertions, 40
-deletions). Of course, replacing other algorithms will take more work
-than that, but it is the only sensible approach. We all know the cat
-is out of the bag when it comes to AF_ALG, and we simply have to
-retain all those broken algorithms as executable code at the kernel's
-privileged execution level, just in case some user space is still
-around that relies on it. But that doesn't mean we cannot be very
-clear about our preferred way forward.
+Check mem_alloc_profiling_enabled() once before the whole block calling
+prepare_slab_obj_exts_hook() and alloc_tag_add()
+Remove need_slab_obj_ext() check from prepare_slab_obj_exts_hook()
+
+>  	}
+>  
+>  	memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
+> @@ -4353,6 +4440,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
+>  	       unsigned long addr)
+>  {
+>  	memcg_slab_free_hook(s, slab, &object, 1);
+> +	alloc_tagging_slab_free_hook(s, slab, &object, 1);
+>  
+>  	if (likely(slab_free_hook(s, object, slab_want_init_on_free(s))))
+>  		do_slab_free(s, slab, object, object, 1, addr);
+> @@ -4363,6 +4451,7 @@ void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
+>  		    void *tail, void **p, int cnt, unsigned long addr)
+>  {
+>  	memcg_slab_free_hook(s, slab, p, cnt);
+> +	alloc_tagging_slab_free_hook(s, slab, p, cnt);
+>  	/*
+>  	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
+>  	 * to remove objects, whose reuse must be delayed.
+
