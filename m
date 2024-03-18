@@ -1,221 +1,385 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FB7482D7
-	for <linux-modules@vger.kernel.org>; Fri, 15 Mar 2024 17:06:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B72153391
+	for <linux-modules@vger.kernel.org>; Mon, 18 Mar 2024 16:15:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710522409; cv=none; b=lohZS1VbPG6SSRkcN6XwG6P7EjwD+ZZdoC+4ctTN2Bz9bdEpdIjeqKApeGG+Ys7XLWmSbKOuoqlXq2CQ9LJZ11WLNucCujyajZ8VzrAfvjpdS9YWz5T+Simfw8eHXMokkcPZ3YVo3pksnbZLaJ01n4wnUYuGP1rJ828LxBehOEE=
+	t=1710778532; cv=none; b=mhTo1vDr0bOHvWT6WeNiTpSLYK3RXFrjqpcchz/wVje0x9VMeiwr20G4J55ax1DFRUpe9uEHxaWUZlrTklN50bWBqzgMv0IFXWtZSee3BbF3WcsOTC/9kCCU4q3Izlw42d5g9AHQU0WEkia3zWdnMDqMjEy295DQlB5dG5dXllU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710522409; c=relaxed/simple;
-	bh=LNQjeHjDBEInTCwCSWcroDRYdeiq48Ic8r1TtkNrkfA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BrG4RE45OjLDT9bzYM8C0U3uRceLFuu/bQ0r+9NqREdXWCEWinmML5eYZbbsDBCJqZvcyrmVZQy5HOFCAdKWkyG5+oOmPSFLnW9IRcwkG2PYTXkG/MEQldFTNJMMqbKoY9IWUp+/lN3uUYpZcQo3zKNh0cvdcXf+mw87YwodpkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rya3Xw3T; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1710778532; c=relaxed/simple;
+	bh=9VADwp4+hzA7HCZcn5bxSUTFgIGpIAmjdDIESDdq7B8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DrkG2LkCjhd3jSDGF7IcA+f02ws5Z9Sob/s/QFr8boDLN3rCuUI5vwDDwdv8g9jdbq6MCZ8TSPC8UwS107K6Ut5ugqzbTVYXxGM31qxnJ4fphLFbUroz1KvcJDWApZewC2wFJPanhGuVY+qu8ICFKUEJJMfnaKqqLAqY6Ukl3o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JSGMKbCK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rya3Xw3T"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-609eb3e5a56so25546737b3.1
-        for <linux-modules@vger.kernel.org>; Fri, 15 Mar 2024 10:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1710522406; x=1711127206; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rC572A3yia7X47ZYtWd+ymj431bX9Z5tiP3vPmrWrg8=;
-        b=rya3Xw3T8AljDIaTfGNOGJm/xQWnLA6e+ZFuT6jbITv9/8xLt5COBXTWischjeSkEL
-         rnMXSbvPATe554rW5eGDTfCeeFdaD8nW3JAf8wT82TppRYwdT3x72FYEM738kQxk97j2
-         e9SQrSQ3+Dv3JdQBc6bOako7jAkylCOdV8OdcNqwCOXaPTCgLB0mE/CLtbe6dazWnTNU
-         GWnZ7sT7bqE8I/nC8Nv3G6fWRL9v18fMNEpYC8lc2MPPJe02fKAMilCfnaHzYjv+Z3J4
-         X2rTSGjpnkKyZX0B1/1JDuTfEU2y628Levs1yUskk//5ZUR2/QtZsttHAEYggz+fXfHu
-         w47g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710522406; x=1711127206;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rC572A3yia7X47ZYtWd+ymj431bX9Z5tiP3vPmrWrg8=;
-        b=a9Y5sEgyOONPpqIWHqL+Y6ujXPGmn5vjvBspZWn23hOereaehP0GO9efYmVRCmTNVC
-         FY2SauV7stMksV1B6aZ4BcsFBMuHjK3el3LP1d0G3rJKY6h5IEvCTfk153CY0CzyPo31
-         6F7AiVJfHbqbfCBgGxma7m/rqYuaxvkgeq07+hhMU0GzWm2P/kZSuqH885rd6RMLEPiK
-         n6a1DcAJsDv5isVEvje7uivGP96FojhtJifxYnEG0M4ejsD21UMyxKFgDQBBy2UPFDcB
-         Q+H3EBz8PnNceaJm9uKuSRfIYS3sZgBn5qYwFphi0BG6nVTROkyombVqxAgGcl9dQhQ3
-         tjPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVBSWfyqUPRrgH3Dx7CL5QfZrD53TBxHUkXrNLp1bCESyvJGvZTbAVp7IavapKg5tuTrafUKOMbxaqtKIRUsV3r3xtvFgXocyOQHz+9Kw==
-X-Gm-Message-State: AOJu0YwAYkjUiR4JY8wiqTXny8u1MiAt/PzOXWnl/ZaE1+6ipvutsZQI
-	7zx5BS8nEOK2JLochaxzHEjX6slt+qV3jmVmPB6awzhQj+Y2GaSw2e/FnIRnKnO/f36/YfP7Gid
-	p5H+BJPUas8cSh//O3Js41zCpgjinEz6ZEWIW
-X-Google-Smtp-Source: AGHT+IG+SAoqNcEaTJHB1lafvOscPKTA59uq+i5wvMJxRbkvSwmj0DhtE9DM8+iuZUaegEqULpfsbKdPtUWThZDcacY=
-X-Received: by 2002:a25:dbca:0:b0:dcc:273e:1613 with SMTP id
- g193-20020a25dbca000000b00dcc273e1613mr5471648ybf.40.1710522405619; Fri, 15
- Mar 2024 10:06:45 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JSGMKbCK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1710778528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vYkts5cBs9M/m6jp0h/RfFAVaZnW+2LqcBFPyCKyEiY=;
+	b=JSGMKbCKVK0mfmW79dEcIY0mEzZJLuTrKVLdTlRMR4rD8aOKpWNMCdveHmVyU2hk4ZrE/y
+	8OJ5SdTKZ/DJ84yVQ673rEd++rzfurUaid9WT8s8N+b7ngOqyfyR/NNLxxtUgsE7omqRGm
+	ap063k4FtusJmAhfZKsWlselu0C8zb8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-479-dH2qt6wlPXqO24ZwEKJv-w-1; Mon, 18 Mar 2024 12:15:27 -0400
+X-MC-Unique: dH2qt6wlPXqO24ZwEKJv-w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 532038007A1
+	for <linux-modules@vger.kernel.org>; Mon, 18 Mar 2024 16:15:27 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.73])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 3FECD1C060A4;
+	Mon, 18 Mar 2024 16:15:26 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: linux-modules@vger.kernel.org
+Cc: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Subject: [PATCH kmod] libkmod: add user soft dependecies
+Date: Mon, 18 Mar 2024 17:15:14 +0100
+Message-ID: <20240318161517.58550-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240306182440.2003814-1-surenb@google.com> <20240306182440.2003814-24-surenb@google.com>
- <1f51ffe8-e5b9-460f-815e-50e3a81c57bf@suse.cz> <CAJuCfpE5mCXiGLHTm1a8PwLXrokexx9=QrrRF4fWVosTh5Q7BA@mail.gmail.com>
- <e6e96b64-01b1-4e23-bb0b-45438f9a6cc4@suse.cz>
-In-Reply-To: <e6e96b64-01b1-4e23-bb0b-45438f9a6cc4@suse.cz>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 15 Mar 2024 17:06:32 +0000
-Message-ID: <CAJuCfpEsAHSAUP_EFP4yZdyZ1hfVPbQSWn9j-eZQdiRLy5MGYg@mail.gmail.com>
-Subject: Re: [PATCH v5 23/37] mm/slab: add allocation accounting into slab
- allocation and free paths
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
-	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
-	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
-	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
-	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
-	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
-	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
-	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
-	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
-	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
-	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
-	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
-	glider@google.com, elver@google.com, dvyukov@google.com, shakeelb@google.com, 
-	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	kernel-team@android.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
-	cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-On Fri, Mar 15, 2024 at 4:52=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wr=
-ote:
->
-> On 3/15/24 16:43, Suren Baghdasaryan wrote:
-> > On Fri, Mar 15, 2024 at 3:58=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
-> wrote:
-> >>
-> >> On 3/6/24 19:24, Suren Baghdasaryan wrote:
-> >> > Account slab allocations using codetag reference embedded into slabo=
-bj_ext.
-> >> >
-> >> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> >> > Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> >> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> >>
-> >> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> >>
-> >> Nit below:
-> >>
-> >> > @@ -3833,6 +3913,7 @@ void slab_post_alloc_hook(struct kmem_cache *s=
-, struct obj_cgroup *objcg,
-> >> >                         unsigned int orig_size)
-> >> >  {
-> >> >       unsigned int zero_size =3D s->object_size;
-> >> > +     struct slabobj_ext *obj_exts;
-> >> >       bool kasan_init =3D init;
-> >> >       size_t i;
-> >> >       gfp_t init_flags =3D flags & gfp_allowed_mask;
-> >> > @@ -3875,6 +3956,12 @@ void slab_post_alloc_hook(struct kmem_cache *=
-s,        struct obj_cgroup *objcg,
-> >> >               kmemleak_alloc_recursive(p[i], s->object_size, 1,
-> >> >                                        s->flags, init_flags);
-> >> >               kmsan_slab_alloc(s, p[i], init_flags);
-> >> > +             obj_exts =3D prepare_slab_obj_exts_hook(s, flags, p[i]=
-);
-> >> > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> >> > +             /* obj_exts can be allocated for other reasons */
-> >> > +             if (likely(obj_exts) && mem_alloc_profiling_enabled())
->
-> Could you at least flip these two checks then so the static key one goes =
-first?
+It has been seen that for some network mac drivers (i.e. lan78xx) the
+related module for the phy is loaded dynamically depending on the current
+hardware. In this case, the associated phy is read using mdio bus and then
+the associated phy module is loaded during runtime (kernel function
+phy_request_driver_module). However, no software dependency is defined, so
+the user tools will no be able to get this dependency. For example, if
+dracut is used and the hardware is present, lan78xx will be included but no
+phy module will be added, and in the next restart the device will not work
+from boot because no related phy will be found during initramfs stage.
 
-Yes, definitely. I was thinking about removing need_slab_obj_ext()
-from prepare_slab_obj_exts_hook() and adding this instead of the above
-code:
+In order to solve this, we could define a normal 'pre' software dependency
+in lan78xx module with all the possible phy modules (there may be some),
+but proceeding in that way, all the possible phy modules would be loaded
+while only one is necessary.
 
-+        if (need_slab_obj_ext()) {
-+                obj_exts =3D prepare_slab_obj_exts_hook(s, flags, p[i]);
-+#ifdef CONFIG_MEM_ALLOC_PROFILING
-+                /*
-+                 * Currently obj_exts is used only for allocation
-profiling. If other users appear
-+                 * then mem_alloc_profiling_enabled() check should be
-added here.
-+                 */
-+                if (likely(obj_exts))
-+                        alloc_tag_add(&obj_exts->ref,
-current->alloc_tag, s->size);
-+#endif
-+        }
+The idea is to add a new attribute when the software dependency is defined,
+apart from the normal ones 'pre' and 'post', I have called it 'user', to be
+used only by the user tools that need to detect this situation. In that
+way, for example, dracut could check the 'user' attribute of the modules in
+order to install these software dependencies in initramfs too. That is, for
+the  commented lan78xx module, defining the 'user' attribute to the
+software dependency with the possible phy modules list, only the necessary
+phy would be loaded on demand keeping the same behavior but all the
+possible phy modules would be available from initramfs.
 
-Does that look good?
+A new function 'kmod_module_get_user_softdeps' in libkmod will be added for
+this to avoid breaking the API and maintain backward compatibility. This
+general procedure could be useful for other similar cases (not only for
+dynamic phy loading).
 
-> >> > +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> >> > +             /* obj_exts can be allocated for other reasons */
-> >> > +             if (likely(obj_exts) && mem_alloc_profiling_enabled())
->
-> >> > +                     alloc_tag_add(&obj_exts->ref, current->alloc_t=
-ag, s->size);
-> >> > +#endif
-> >>
-> >> I think you could still do this a bit better:
-> >>
-> >> Check mem_alloc_profiling_enabled() once before the whole block callin=
-g
-> >> prepare_slab_obj_exts_hook() and alloc_tag_add()
-> >> Remove need_slab_obj_ext() check from prepare_slab_obj_exts_hook()
-> >
-> > Agree about checking mem_alloc_profiling_enabled() early and one time,
-> > except I would like to use need_slab_obj_ext() instead of
-> > mem_alloc_profiling_enabled() for that check. Currently they are
-> > equivalent but if there are more slab_obj_ext users in the future then
-> > there will be cases when we need to prepare_slab_obj_exts_hook() even
-> > when mem_alloc_profiling_enabled()=3D=3Dfalse. need_slab_obj_ext() will=
- be
-> > easy to extend for such cases.
->
-> I thought we don't generally future-proof internal implementation details
-> like this until it's actually needed. But at least what I suggested above
-> would help, thanks.
->
-> > Thanks,
-> > Suren.
-> >
-> >>
-> >> >       }
-> >> >
-> >> >       memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
-> >> > @@ -4353,6 +4440,7 @@ void slab_free(struct kmem_cache *s, struct sl=
-ab *slab, void *object,
-> >> >              unsigned long addr)
-> >> >  {
-> >> >       memcg_slab_free_hook(s, slab, &object, 1);
-> >> > +     alloc_tagging_slab_free_hook(s, slab, &object, 1);
-> >> >
-> >> >       if (likely(slab_free_hook(s, object, slab_want_init_on_free(s)=
-)))
-> >> >               do_slab_free(s, slab, object, object, 1, addr);
-> >> > @@ -4363,6 +4451,7 @@ void slab_free_bulk(struct kmem_cache *s, stru=
-ct slab *slab, void *head,
-> >> >                   void *tail, void **p, int cnt, unsigned long addr)
-> >> >  {
-> >> >       memcg_slab_free_hook(s, slab, p, cnt);
-> >> > +     alloc_tagging_slab_free_hook(s, slab, p, cnt);
-> >> >       /*
-> >> >        * With KASAN enabled slab_free_freelist_hook modifies the fre=
-elist
-> >> >        * to remove objects, whose reuse must be delayed.
-> >>
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+---
+ libkmod/docs/libkmod-sections.txt |  1 +
+ libkmod/libkmod-config.c          | 66 +++++++++++++++++++++++++++----
+ libkmod/libkmod-internal.h        |  1 +
+ libkmod/libkmod-module.c          | 50 +++++++++++++++++++++++
+ libkmod/libkmod.h                 |  2 +
+ libkmod/libkmod.sym               |  1 +
+ 6 files changed, 114 insertions(+), 7 deletions(-)
+
+diff --git a/libkmod/docs/libkmod-sections.txt b/libkmod/docs/libkmod-sections.txt
+index 33d9eec..04743e4 100644
+--- a/libkmod/docs/libkmod-sections.txt
++++ b/libkmod/docs/libkmod-sections.txt
+@@ -62,6 +62,7 @@ kmod_module_remove_module
+ kmod_module_get_module
+ kmod_module_get_dependencies
+ kmod_module_get_softdeps
++kmod_module_get_user_softdeps
+ kmod_module_apply_filter
+ kmod_module_get_filtered_blacklist
+ kmod_module_get_install_commands
+diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
+index e83621b..c0e15be 100644
+--- a/libkmod/libkmod-config.c
++++ b/libkmod/libkmod-config.c
+@@ -54,8 +54,10 @@ struct kmod_softdep {
+ 	char *name;
+ 	const char **pre;
+ 	const char **post;
++	const char **user;
+ 	unsigned int n_pre;
+ 	unsigned int n_post;
++	unsigned int n_user;
+ };
+ 
+ const char *kmod_blacklist_get_modname(const struct kmod_list *l)
+@@ -110,6 +112,12 @@ const char * const *kmod_softdep_get_post(const struct kmod_list *l, unsigned in
+ 	return dep->post;
+ }
+ 
++const char * const *kmod_softdep_get_user(const struct kmod_list *l, unsigned int *count) {
++	const struct kmod_softdep *dep = l->data;
++	*count = dep->n_user;
++	return dep->user;
++}
++
+ static int kmod_config_add_command(struct kmod_config *config,
+ 						const char *modname,
+ 						const char *command,
+@@ -263,11 +271,11 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 	struct kmod_softdep *dep;
+ 	const char *s, *p;
+ 	char *itr;
+-	unsigned int n_pre = 0, n_post = 0;
++	unsigned int n_pre = 0, n_post = 0, n_user = 0;
+ 	size_t modnamelen = strlen(modname) + 1;
+ 	size_t buflen = 0;
+ 	bool was_space = false;
+-	enum { S_NONE, S_PRE, S_POST } mode = S_NONE;
++	enum { S_NONE, S_PRE, S_POST, S_USER } mode = S_NONE;
+ 
+ 	DBG(config->ctx, "modname=%s\n", modname);
+ 
+@@ -298,6 +306,9 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 		else if (plen == sizeof("post:") - 1 &&
+ 				memcmp(p, "post:", sizeof("post:") - 1) == 0)
+ 			mode = S_POST;
++		else if (plen == sizeof("user:") - 1 &&
++				memcmp(p, "user:", sizeof("user:") - 1) == 0)
++			mode = S_USER;
+ 		else if (*s != '\0' || (*s == '\0' && !was_space)) {
+ 			if (mode == S_PRE) {
+ 				buflen += plen + 1;
+@@ -305,6 +316,9 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 			} else if (mode == S_POST) {
+ 				buflen += plen + 1;
+ 				n_post++;
++			} else if (mode == S_USER) {
++				buflen += plen + 1;
++				n_user++;
+ 			}
+ 		}
+ 		p = s + 1;
+@@ -312,11 +326,12 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 			break;
+ 	}
+ 
+-	DBG(config->ctx, "%u pre, %u post\n", n_pre, n_post);
++	DBG(config->ctx, "%u pre, %u post, %u user\n", n_pre, n_post, n_user);
+ 
+ 	dep = malloc(sizeof(struct kmod_softdep) + modnamelen +
+ 		     n_pre * sizeof(const char *) +
+ 		     n_post * sizeof(const char *) +
++		     n_user * sizeof(const char *) +
+ 		     buflen);
+ 	if (dep == NULL) {
+ 		ERR(config->ctx, "out-of-memory modname=%s\n", modname);
+@@ -324,9 +339,11 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 	}
+ 	dep->n_pre = n_pre;
+ 	dep->n_post = n_post;
++	dep->n_user = n_user;
+ 	dep->pre = (const char **)((char *)dep + sizeof(struct kmod_softdep));
+ 	dep->post = dep->pre + n_pre;
+-	dep->name = (char *)(dep->post + n_post);
++	dep->user = dep->post + n_post;
++	dep->name = (char *)(dep->user + n_user);
+ 
+ 	memcpy(dep->name, modname, modnamelen);
+ 
+@@ -334,6 +351,7 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 	itr = dep->name + modnamelen;
+ 	n_pre = 0;
+ 	n_post = 0;
++	n_user = 0;
+ 	mode = S_NONE;
+ 	was_space = false;
+ 	for (p = s = line; ; s++) {
+@@ -362,6 +380,9 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 		else if (plen == sizeof("post:") - 1 &&
+ 				memcmp(p, "post:", sizeof("post:") - 1) == 0)
+ 			mode = S_POST;
++		else if (plen == sizeof("user:") - 1 &&
++				memcmp(p, "user:", sizeof("user:") - 1) == 0)
++			mode = S_USER;
+ 		else if (*s != '\0' || (*s == '\0' && !was_space)) {
+ 			if (mode == S_PRE) {
+ 				dep->pre[n_pre] = itr;
+@@ -375,6 +396,12 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ 				itr[plen] = '\0';
+ 				itr += plen + 1;
+ 				n_post++;
++			} else if (mode == S_USER) {
++				dep->user[n_user] = itr;
++				memcpy(itr, p, plen);
++				itr[plen] = '\0';
++				itr += plen + 1;
++				n_user++;
+ 			}
+ 		}
+ 		p = s + 1;
+@@ -395,14 +422,15 @@ static int kmod_config_add_softdep(struct kmod_config *config,
+ static char *softdep_to_char(struct kmod_softdep *dep) {
+ 	const size_t sz_preprefix = sizeof("pre: ") - 1;
+ 	const size_t sz_postprefix = sizeof("post: ") - 1;
++	const size_t sz_userprefix = sizeof("user: ") - 1;
+ 	size_t sz = 1; /* at least '\0' */
+-	size_t sz_pre, sz_post;
++	size_t sz_pre, sz_post, sz_user;
+ 	const char *start, *end;
+ 	char *s, *itr;
+ 
+ 	/*
+-	 * Rely on the fact that dep->pre[] and dep->post[] are strv's that
+-	 * point to a contiguous buffer
++	 * Rely on the fact that dep->pre[] dep->post[] and dep->user[]
++	 * are strv's that point to a contiguous buffer
+ 	 */
+ 	if (dep->n_pre > 0) {
+ 		start = dep->pre[0];
+@@ -422,6 +450,15 @@ static char *softdep_to_char(struct kmod_softdep *dep) {
+ 	} else
+ 		sz_post = 0;
+ 
++	if (dep->n_user > 0) {
++		start = dep->user[0];
++		end = dep->user[dep->n_user - 1]
++					+ strlen(dep->user[dep->n_user - 1]);
++		sz_user = end - start;
++		sz += sz_user + sz_userprefix;
++	} else
++		sz_user = 0;
++
+ 	itr = s = malloc(sz);
+ 	if (s == NULL)
+ 		return NULL;
+@@ -456,6 +493,21 @@ static char *softdep_to_char(struct kmod_softdep *dep) {
+ 		itr = p;
+ 	}
+ 
++	if (sz_user) {
++		char *p;
++
++		memcpy(itr, "user: ", sz_userprefix);
++		itr += sz_userprefix;
++
++		/* include last '\0' */
++		memcpy(itr, dep->user[0], sz_user + 1);
++		for (p = itr; p < itr + sz_user; p++) {
++			if (*p == '\0')
++				*p = ' ';
++		}
++		itr = p;
++	}
++
+ 	*itr = '\0';
+ 
+ 	return s;
+diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
+index 26a7e28..8e4f112 100644
+--- a/libkmod/libkmod-internal.h
++++ b/libkmod/libkmod-internal.h
+@@ -145,6 +145,7 @@ const char *kmod_command_get_modname(const struct kmod_list *l) __attribute__((n
+ const char *kmod_softdep_get_name(const struct kmod_list *l) __attribute__((nonnull(1)));
+ const char * const *kmod_softdep_get_pre(const struct kmod_list *l, unsigned int *count) __attribute__((nonnull(1, 2)));
+ const char * const *kmod_softdep_get_post(const struct kmod_list *l, unsigned int *count);
++const char * const *kmod_softdep_get_user(const struct kmod_list *l, unsigned int *count);
+ 
+ 
+ /* libkmod-module.c */
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 585da41..dbe676c 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -1664,6 +1664,56 @@ KMOD_EXPORT int kmod_module_get_softdeps(const struct kmod_module *mod,
+ 	return 0;
+ }
+ 
++/**
++ * kmod_module_get_user_softdeps:
++ * @mod: kmod module
++ * @user: where to save the list of user soft dependencies.
++ *
++ * Get user dependencies for this kmod module. Soft dependencies come
++ * from configuration file and are not cached in @mod because it may include
++ * dependency cycles that would make we leak kmod_module. Any call
++ * to this function will search for this module in configuration, allocate a
++ * list and return the result.
++ *
++ * @user is newly created list of kmod_module and
++ * should be unreferenced with kmod_module_unref_list().
++ *
++ * Returns: 0 on success or < 0 otherwise.
++ */
++KMOD_EXPORT int kmod_module_get_user_softdeps(const struct kmod_module *mod,
++						struct kmod_list **user)
++{
++	const struct kmod_list *l;
++	const struct kmod_config *config;
++
++	if (mod == NULL || user == NULL)
++		return -ENOENT;
++
++	assert(*user == NULL);
++
++	config = kmod_get_config(mod->ctx);
++
++	kmod_list_foreach(l, config->softdeps) {
++		const char *modname = kmod_softdep_get_name(l);
++		const char * const *array;
++		unsigned count;
++
++		if (fnmatch(modname, mod->name, 0) != 0)
++			continue;
++
++		array = kmod_softdep_get_user(l, &count);
++		*user = lookup_softdep(mod->ctx, array, count);
++
++		/*
++		 * find only the first command, as modprobe from
++		 * module-init-tools does
++		 */
++		break;
++	}
++
++	return 0;
++}
++
+ /**
+  * kmod_module_get_remove_commands:
+  * @mod: kmod module
+diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
+index 7251aa7..ec6d270 100644
+--- a/libkmod/libkmod.h
++++ b/libkmod/libkmod.h
+@@ -196,6 +196,8 @@ const char *kmod_module_get_remove_commands(const struct kmod_module *mod);
+ struct kmod_list *kmod_module_get_dependencies(const struct kmod_module *mod);
+ int kmod_module_get_softdeps(const struct kmod_module *mod,
+ 				struct kmod_list **pre, struct kmod_list **post);
++int kmod_module_get_user_softdeps(const struct kmod_module *mod,
++					struct kmod_list **user);
+ int kmod_module_get_filtered_blacklist(const struct kmod_ctx *ctx,
+ 					const struct kmod_list *input,
+ 					struct kmod_list **output) __attribute__ ((deprecated));
+diff --git a/libkmod/libkmod.sym b/libkmod/libkmod.sym
+index 0c04fda..26c3eef 100644
+--- a/libkmod/libkmod.sym
++++ b/libkmod/libkmod.sym
+@@ -42,6 +42,7 @@ global:
+ 
+ 	kmod_module_get_dependencies;
+ 	kmod_module_get_softdeps;
++	kmod_module_get_user_softdeps;
+ 	kmod_module_get_filtered_blacklist;
+ 
+ 	kmod_module_get_name;
+-- 
+2.44.0
+
