@@ -1,55 +1,55 @@
 Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5B41369A8
-	for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 16:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE00E137772
+	for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 16:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711039066; cv=none; b=sZW93CRZTVC1pPmibiGjyfqLAU+cQn8NGerJvn0u2Rd9AI7rWe7Xj4UPrRn48MSghTe+KgKhseTsossNGNL6+aXNLHBOEQcJQv1qP66TJpFcbxlg+WzU7xZj9wsMtIuvUN2D1EOUQ3Zz3vtB9eNYPCeFKa49pbJRUVLC59bVa6Q=
+	t=1711039068; cv=none; b=U019Zw0L0LXeYrbu4WSXxji8X2ETItKo5phyOfSrzquDu+7eXMDsUkmdNUK/BIXIf1U+XPISPdJMwZbAFf0CwgDfTrHSXN8dGcCHlZdGjBQdaqzkc/RdCxucCzg70A3s4W0v74nOnE42oGnFpwCxTmMHJJ1I/zE3F71asHn4gLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711039066; c=relaxed/simple;
-	bh=8zCwJvSNaJ7p3GYWvtF+uEjaWu4osVUHKZZpZlUWdhc=;
+	s=arc-20240116; t=1711039068; c=relaxed/simple;
+	bh=z2eJy0t2bdkmakMZRyMHx8Zh+sPp3sJo51GJl0bffFg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BmblOEOf9HMujD3REdJc+0i9YAfqMPD4KguA/C6ce3mc/LPjHnbBMRkld3PA2FasyRR3PAzj4fkWzXUGAMwH0ayHiPqS+T/3e0ezha+gzeXq7dd901L4OcYXuk8Zq0szAJIIwJqw7X1mybd55DOv457Kwf5lcuSPpmyAeKBtwhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qz/vhG2F; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=jkGbzA7Br9qvw3vJOfJSATsDFiQosZVRSbHMkv8KHy5fsKTEcPEjQPMZ0qq3cODFUgIks4X6p1jN+q8LtUPmshvj1tuaTzxbaYqaQbyAqLsyNFf2yCKAOYvP+HKp3n9J/rFPsDZsH045a7lhOXL6mv9DflGDB5/NBfHR2ChR43c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UZLKKUlE; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qz/vhG2F"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-610c23abd1fso23001947b3.0
-        for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 09:37:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UZLKKUlE"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a605154d0so14619797b3.0
+        for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 09:37:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711039063; x=1711643863; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711039065; x=1711643865; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BfPuXrQNw6sP43MOvy7juBQZEF5XCZI3rVOwMSUBcyU=;
-        b=Qz/vhG2FyiyoaVNO7d3/ux5VqSZi/N/B5QhMf/fzt/9QoIxt2N7yERE54i8Cl0KraV
-         kcwPucjDxVV6h3vojeN/1S46iAK21mJgBUebkCx2y86cLekg5/nJfMnMmg7bVeY5vpkq
-         Y3z6FqbXNt4Ryw1iVgLZX/h3UWLXv/4K9VdjvM9+rUP4oPYPcmMuoNa7CLXuqVpqdPQt
-         ZVRYDmQt4AZVX2XEj2HKxw5MgHaO4/MJN5Ls82fn2uRWsfMESD64bvDE694Cus2jyMds
-         2sUO4MLmvrENFw6UHdmvg4mYhoeXGdJEStEFyu612e7F6IwjrR6h4Y3O5Vs745t8aufA
-         SyLA==
+        bh=adETXft81L3mg8VeiLZhJ9Sn5YTIW37aD8rIZRQJCFY=;
+        b=UZLKKUlElHdKoVJnA/LuY9jg0NkLB6vwXGStqPA0YRImOU2pNXToNXs195ZQ14UFnE
+         6onBZfh8TAgJmvp8XA/p2OGTeR/GUt/kR8bCSNWH92aBG2quY3p/Qi1ZSC8mtE6ZBO3l
+         K1XRas9hGxHmr5SkJoIRnY6GEBSo4iulor1QSg5BgONy/LA8s3mCAKHtpsC5J03hx/I4
+         nwK3N0U94Fg0Qb4tcU98nek/fDUhyCE5I21YMkIf4aY59K9MsfCjo0xN+JfnPhpoOgVT
+         27QbJ+Ck8zsrqK4prKa0qFBd6qQdXFiUfIPyvdszYIbAtOHnH0V8/QuVgJUo4e5Pe0Gj
+         Kh3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711039063; x=1711643863;
+        d=1e100.net; s=20230601; t=1711039065; x=1711643865;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BfPuXrQNw6sP43MOvy7juBQZEF5XCZI3rVOwMSUBcyU=;
-        b=kkkuWzaNp8fchvF1q15RQ4W6anCdhQLJoyOmiE6qNU0WhWIzLx6CSsrBtNfKtrqREt
-         G5g374jixkBdnRCDAoLVZUaWJuiHwppeHPTGMaurjCgxvFnlKF0SxsBs0KC+8Fbeawmy
-         YiA5vGov5jXhJPooAhM+apU19nGA4v5oB4o/nHs7zF1MmLl9LTtU3RxEGA+yugLRzTrt
-         SeimDRLPc35YFhzDVnY9ASu7jWUWloPIdZDSnFwTvFQ+gDreeIyQwwmsEKe1Ci66EsRX
-         taNjrpgmB/3tCH9mBYjuNkNBlzF8VxaRJiAmTh9ynD+46WdvadAbqzazArj3QT2UsKK3
-         DpUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXqy3ibeS2O1ksZb/c74D1tYtWGwxetL/dK3sOua2ynV4PYe70QbY6WbfYGGzpZWZyil3DYRKaxY5yMW4is5ROggI9La1UiDvUVEybESA==
-X-Gm-Message-State: AOJu0Yxxfv739rLdFCUVYXtDRo8nEDigu4JksR1QYNqTVJxw2zSp5DrJ
-	FN9qotT0jf6TQUwuYR9i3AQn1g0LYZXI390rQEewkWTpd3dCfPT366PumcMbkz9tKOO4/ltc7LZ
-	m6g==
-X-Google-Smtp-Source: AGHT+IF0jEtLINTH4On1VBGvIr2Jc0SGzS38YLdjNwaqc8VhKxt4NeXt5PC/R2alQ3iBswciTecJTdFY/QM=
+        bh=adETXft81L3mg8VeiLZhJ9Sn5YTIW37aD8rIZRQJCFY=;
+        b=JiNWGU7pGKTCc0KpkmEkdYLdXeBOb6Qo+r9vERrs7u9SvjFph/mnpeODn/JSjgqRda
+         jAsdNTmdSWZdVXGjKJhKxHyNnzrinmsQufoUj5Yc7RVdNb5Ktgenu9NZ67BP+RsXXXXl
+         FwBG3mfCpoNIVHUrY9hORiq8fo90ze2TLJuSWy7YskzIPegm8Ik21Pd8wpDk2e9CzrCl
+         UskrssdWCdiH5M7FFyiyS0q1/lI7JLMypK/rcSPmr4gA17tO1NihKNGmXe4fZ1jWImWs
+         64csU8TaGec0/a+tuJMuckQ9E7ARsMyIznaPGqT4O7n7UPa10P/S4mohELu6xdGtv8fp
+         ZDlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3KO4U8mzGXPUDFdRF+6RVY1Lcyol44OcOFSkPEIFLKl9gXHeQcwRP0oM3Tq7I3rnjmhMxsDWon6tYPblwR9kMZxwSSa8MNWhBvjreZQ==
+X-Gm-Message-State: AOJu0Yw4Gxko7938y93LH6OQZMcmrYWZoqVg3xdMhDSf4GzSVwRenKqs
+	CawyV/YqU80pTFxXxedyJCvs1dbPnYAktwP/Jim8PgqjchiItkOfxs1JLfl0DzvHzu1XT3WF/AE
+	Lmw==
+X-Google-Smtp-Source: AGHT+IEpbeHGmaH4ZP6HrzXLjRbRGOQFlxFrFvHpCJT+qt/SUASA+RVr+wlFFHpwWsqOIXtYDNaLSozJTUQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:a489:6433:be5d:e639])
- (user=surenb job=sendgmr) by 2002:a05:690c:39b:b0:60c:d162:7abc with SMTP id
- bh27-20020a05690c039b00b0060cd1627abcmr2322702ywb.1.1711039062719; Thu, 21
- Mar 2024 09:37:42 -0700 (PDT)
-Date: Thu, 21 Mar 2024 09:36:37 -0700
+ (user=surenb job=sendgmr) by 2002:a05:690c:b06:b0:60c:cf91:53e0 with SMTP id
+ cj6-20020a05690c0b0600b0060ccf9153e0mr3628ywb.1.1711039064823; Thu, 21 Mar
+ 2024 09:37:44 -0700 (PDT)
+Date: Thu, 21 Mar 2024 09:36:38 -0700
 In-Reply-To: <20240321163705.3067592-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,9 +59,9 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240321163705.3067592-1-surenb@google.com>
 X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
-Message-ID: <20240321163705.3067592-16-surenb@google.com>
-Subject: [PATCH v6 15/37] lib: introduce early boot parameter to avoid
- page_ext memory overhead
+Message-ID: <20240321163705.3067592-17-surenb@google.com>
+Subject: [PATCH v6 16/37] mm: percpu: increase PERCPU_MODULE_RESERVE to
+ accommodate allocation tags
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -91,95 +91,34 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-The highest memory overhead from memory allocation profiling comes from
-page_ext objects. This overhead exists even if the feature is disabled
-but compiled-in. To avoid it, introduce an early boot parameter that
-prevents page_ext object creation. The new boot parameter is a tri-state
-with possible values of 0|1|never. When it is set to "never" the
-memory allocation profiling support is disabled, and overhead is minimized
-(currently no page_ext objects are allocated, in the future more overhead
-might be eliminated). As a result we also lose ability to enable memory
-allocation profiling at runtime (because there is no space to store
-alloctag references). Runtime sysctrl becomes read-only if the early boot
-parameter was set to "never". Note that the default value of this boot
-parameter depends on the CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-configuration. When CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n
-the boot parameter is set to "never", therefore eliminating any overhead.
-CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y results in boot parameter
-being set to 1 (enabled). This allows distributions to avoid any overhead
-by setting CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=n config and
-with no changes to the kernel command line.
-We reuse sysctl.vm.mem_profiling boot parameter name in order to avoid
-introducing yet another control. This change turns it into a tri-state
-early boot parameter.
+As each allocation tag generates a per-cpu variable, more space is required
+to store them. Increase PERCPU_MODULE_RESERVE to provide enough area. A
+better long-term solution would be to allocate this memory dynamically.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Tejun Heo <tj@kernel.org>
 ---
- lib/alloc_tag.c | 41 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+ include/linux/percpu.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-index cb5adec4b2e2..617c2fbb6673 100644
---- a/lib/alloc_tag.c
-+++ b/lib/alloc_tag.c
-@@ -116,9 +116,46 @@ static bool alloc_tag_module_unload(struct codetag_type *cttype,
- 	return module_unused;
- }
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 8c677f185901..62b5eb45bd89 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -14,7 +14,11 @@
  
-+#ifdef CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
-+static bool mem_profiling_support __meminitdata = true;
+ /* enough to cover all DEFINE_PER_CPUs in modules */
+ #ifdef CONFIG_MODULES
++#ifdef CONFIG_MEM_ALLOC_PROFILING
++#define PERCPU_MODULE_RESERVE		(8 << 12)
 +#else
-+static bool mem_profiling_support __meminitdata;
+ #define PERCPU_MODULE_RESERVE		(8 << 10)
 +#endif
-+
-+static int __init setup_early_mem_profiling(char *str)
-+{
-+	bool enable;
-+
-+	if (!str || !str[0])
-+		return -EINVAL;
-+
-+	if (!strncmp(str, "never", 5)) {
-+		enable = false;
-+		mem_profiling_support = false;
-+	} else {
-+		int res;
-+
-+		res = kstrtobool(str, &enable);
-+		if (res)
-+			return res;
-+
-+		mem_profiling_support = true;
-+	}
-+
-+	if (enable != static_key_enabled(&mem_alloc_profiling_key)) {
-+		if (enable)
-+			static_branch_enable(&mem_alloc_profiling_key);
-+		else
-+			static_branch_disable(&mem_alloc_profiling_key);
-+	}
-+
-+	return 0;
-+}
-+early_param("sysctl.vm.mem_profiling", setup_early_mem_profiling);
-+
- static __init bool need_page_alloc_tagging(void)
- {
--	return true;
-+	return mem_profiling_support;
- }
- 
- static __init void init_page_alloc_tagging(void)
-@@ -158,6 +195,8 @@ static int __init alloc_tag_init(void)
- 	if (IS_ERR_OR_NULL(alloc_tag_cttype))
- 		return PTR_ERR(alloc_tag_cttype);
- 
-+	if (!mem_profiling_support)
-+		memory_allocation_profiling_sysctls[0].mode = 0444;
- 	register_sysctl_init("vm", memory_allocation_profiling_sysctls);
- 	procfs_init();
- 
+ #else
+ #define PERCPU_MODULE_RESERVE		0
+ #endif
 -- 
 2.44.0.291.gc1ea87d7ee-goog
 
