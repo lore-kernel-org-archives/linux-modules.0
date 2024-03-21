@@ -1,55 +1,55 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EE7137C52
-	for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 16:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747001386D9
+	for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 16:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711039071; cv=none; b=LpaE8SUz7jopPpCyPcvTvbp9ZGsSu/RAfSpjcxq7OYJJlEy8jk+DHyCJhxea3FrYKqD5kWlYtEZfS96zIM8/RlJMKDsMwzNoO64vpkCRsKwU2iadpzvYWBLenT23aR5DRlefszu2JDeZ2PWyNHZ3ufmk/H6Nawe7Yln5N3pnDrs=
+	t=1711039074; cv=none; b=W9T8kBS7H0MpvivEOc8MmuF4UAeWS+A23lw1dIoUdafLNrd7rFG8ua98CkKubQZVhKSnhIJIiczmaYRCNC7cNmTXCidmO8wefckh0PnTCIHH+WJjNjsC+Hj+owSm+xhcjrPeBbbvyNAGPjTUWxNIyiZYqbMccDh9WBTWSygEa5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711039071; c=relaxed/simple;
-	bh=Ee1C79zjRKyHY0Jd7GlbMSdMC+j1VG4HgBauK0xuTRM=;
+	s=arc-20240116; t=1711039074; c=relaxed/simple;
+	bh=MmVdvfO5LC6xlnfdEs4QpWcPQgkIPaDigwpfUrWBnqk=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=FOCUG45XsF3w6eaIKG+ltUK/XEIJenwiRcOTm0+/wYQ9CS8MG1Z5FJV1vqs6Ps9UaGkY9+u+9GF72DU4iBUJTxmsmnFV+WC0ITEHK2xvkirQYgfamrEWWqBAUUduoKq4vCAELJIoygdCaAUWXTZU8De8UqgNSneoa8PnIVw/w9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bs5+KZ/n; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=cwhRDb10BauCnUsoY5zOPb/driypMjlJsAlo4SlaV0EKq0loYS+kyKfhTPIXgdixMEPkPwPey/wgBX8Tb6YtJonQe2hDgdDVeKfHKktJwmF15zlML/SfqtN1B6MhXbmt+Qc6zOPLBPGzOiBoMd37POb+80hTzCgY7s+EMScOsyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=k6b48qlK; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bs5+KZ/n"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-607838c0800so24231577b3.1
-        for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 09:37:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="k6b48qlK"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-dccc49ef73eso1589430276.2
+        for <linux-modules@vger.kernel.org>; Thu, 21 Mar 2024 09:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1711039067; x=1711643867; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1711039071; x=1711643871; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jp7kzC4k0D+sc/q1IPxvwe52UJDwCcNnw+Zbq+7qIDQ=;
-        b=bs5+KZ/nRD2pQWOKOAeHI7fkQjvbxd74uUQMsvXYX8nuGd9hGudUdsSbjNa77nloRF
-         JwzNpdOI43NXdAkA70TaCqKzBrah/GFbqWsi0cNLyHrmrfP6lB6FZv/GSUJE3cFC8+/f
-         bCvUNcMzeugLa1jhH7/gNT6D2eGRCRD2PypExCRylvlPHo6oKRGrTzryBOn2O03yuzeX
-         sDA4HGoikg98XfDHYBfVU/6dOrFnbGXqrINgp2Z8FHFZMtGFoVqVk3dYkvu1H/T7hYwL
-         Iy9rgoe6BQDlOoP+4UWmEuK+hHINBtDJoURcDOuSXwBBrfPT/oGAhNU1H5QRfStDFn/O
-         ecBg==
+        bh=VNGm+8y6Ss+mlVcFwBeCqCAgvw3+NOVbq/tJOyMa3ww=;
+        b=k6b48qlKuYTyAtbrBSpBlbp9s4TuD29XNg2PUvWUK/sO++SLka2xRgi+Ews85668nc
+         u/Wqetwc9mqGwhuPKi+niDHoUszTie9YjirlNfRqm+qdlFv2Ns4As5L8g6LSKBXhO+Er
+         Zm8DEFU79fnkhGFWUzg60aS9BRHGgRNjA5M5JvrSecFl0KwkaP/MKfTfj0mri8I0n0Yz
+         PT3kVB+jfUV215S+5UoSWnDzB5dp01pgqnHus8iyuS8xMj4z8cC2OTB4c6o6G2W4Wm0i
+         DWdg/phufirn/+v3cdRasGJBYSbVve7VsWA4wnO9lZrHDQBzhWEuW9KhilDyAokyZd7l
+         e/Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711039067; x=1711643867;
+        d=1e100.net; s=20230601; t=1711039071; x=1711643871;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jp7kzC4k0D+sc/q1IPxvwe52UJDwCcNnw+Zbq+7qIDQ=;
-        b=Nh6yfyrJ9tiKoLB0gDrVOCCtSVvogom1jQnSlglAAZHd4YeVRs1Nc+0bOt2WAL2iLH
-         r5wDq58I5ai8h9ihkhp/gLpUbmnfrndunTb+YfURQGMjKxjDEFsvIPK/7EFeIqWm29SQ
-         jEV8KRm3+/ljAYVXt0BlsAv1LQmfPYVrcGnFIoUTQsCVo6/lJxVI3YXgVo+ZcfojpXW6
-         yUiW/n3izNxlJvCjsMbryy/JBvlHfpSRMpjpJvDg8l/YhyYdYr7Bbt9R2Vo4C9hhelqg
-         7ROd1iZ3xNdU9OjhA8q8Mn3eIg4/e6MT9GmQjElJm7J2U8I3hRENvacDIkWhPF9wij3R
-         llPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWe8kFxBE9VVTMUFPBHosyc0010thYHhskYH/A/BrJOtsGKcu1g0yTceNGFfQTcFg4E2YTxtYqLxAIkgnnX1ee8c2BCKIQh0cnCMj4HRQ==
-X-Gm-Message-State: AOJu0YzrpuZT9ZLJiQl8aYm8l+Usanph+hM997dg88KZA0XVsIO4ghGh
-	wTR+f5H+7n+xBYKgtZG6cInZ4D8CzMC3twEpWMLJaat/MyndzsJDPkFRaERwtGMjjOyVlXXJo/Y
-	Flw==
-X-Google-Smtp-Source: AGHT+IFI5aLEMhGkJPVMYqKYBpHCCYs3laPPvxTJvnz1VdKYfIbwJ16TvQd2SO6GjZkf9rmaF0ZSWy/DcA4=
+        bh=VNGm+8y6Ss+mlVcFwBeCqCAgvw3+NOVbq/tJOyMa3ww=;
+        b=cb0oQ6/RuOouWjKSgvEOKlrqT0l3Dp7KzoP7XQxppf8DY8kqKyRhKmKK4K2xOty5kF
+         cDrKQ/XLAIJQ2Aj+0t6Mg4fcDrw78iKEdwPT9XGwtahaNnQ7zG1V0t8M2fnHSZK00PG/
+         OmbpzMr628nyitghCGG74QzQQbTB0MrViUP7bi3uWZAuw1DKVULLCXqn0AKvY2lIS+CN
+         AU1ziRgHofyzryVWbpqJIYKq4RUPCPNsboRqdR8zkl7AJomWy56zSBrVm/qU8e8miVEV
+         2nPVTJe53t9kypaT8q+8ztGfouv5okMhv16zB8m9k0qmewxzsaTcGHfyvXLGSxvgfDlf
+         BNXA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnB7HdSqH0Z9PFKtYkVTUmX8gAQAWXAkpmSJd0EJ+HmU3dM3covKdhK+hfADV9L3LOdZhfHqYW2yXMjcllJVR2JCCaFHPB14YHqgwarg==
+X-Gm-Message-State: AOJu0Yz33eEosIOoJQXgwXzuIVMEZiBfeR/4vXBvTzYYRkHoMl/npHl3
+	CXZldrEDsF/WRXHJ16VQGyJ01DN/k1/d+sDKZZHR9xH0IuX1B+vx6YZnjb9ia2hpgbXLIuqQQ/s
+	BSQ==
+X-Google-Smtp-Source: AGHT+IFHuXgNI5SVUJASc8Fg628bHOvpHsCOaQtXol/znxQ1foKXK9QPyvtw6ludSGd9C7o69Hlt2+8i3RA=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:a489:6433:be5d:e639])
- (user=surenb job=sendgmr) by 2002:a05:690c:6f91:b0:60a:1844:74ef with SMTP id
- je17-20020a05690c6f9100b0060a184474efmr881713ywb.1.1711039067006; Thu, 21 Mar
- 2024 09:37:47 -0700 (PDT)
-Date: Thu, 21 Mar 2024 09:36:39 -0700
+ (user=surenb job=sendgmr) by 2002:a05:6902:1004:b0:dc6:44d4:bee0 with SMTP id
+ w4-20020a056902100400b00dc644d4bee0mr1149298ybt.7.1711039071427; Thu, 21 Mar
+ 2024 09:37:51 -0700 (PDT)
+Date: Thu, 21 Mar 2024 09:36:41 -0700
 In-Reply-To: <20240321163705.3067592-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240321163705.3067592-1-surenb@google.com>
 X-Mailer: git-send-email 2.44.0.291.gc1ea87d7ee-goog
-Message-ID: <20240321163705.3067592-18-surenb@google.com>
-Subject: [PATCH v6 17/37] change alloc_pages name in dma_map_ops to avoid name conflicts
+Message-ID: <20240321163705.3067592-20-surenb@google.com>
+Subject: [PATCH v6 19/37] mm: create new codetag references during page splitting
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz, 
@@ -90,207 +90,128 @@ Cc: kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
 	cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-After redefining alloc_pages, all uses of that name are being replaced.
-Change the conflicting names to prevent preprocessor from replacing them
-when it's not intended.
+When a high-order page is split into smaller ones, each newly split
+page should get its codetag. After the split each split page will be
+referencing the original codetag. The codetag's "bytes" counter
+remains the same because the amount of allocated memory has not
+changed, however the "calls" counter gets increased to keep the
+counter correct when these individual pages get freed.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- arch/alpha/kernel/pci_iommu.c           | 2 +-
- arch/mips/jazz/jazzdma.c                | 2 +-
- arch/powerpc/kernel/dma-iommu.c         | 2 +-
- arch/powerpc/platforms/ps3/system-bus.c | 4 ++--
- arch/powerpc/platforms/pseries/vio.c    | 2 +-
- arch/x86/kernel/amd_gart_64.c           | 2 +-
- drivers/iommu/dma-iommu.c               | 2 +-
- drivers/parisc/ccio-dma.c               | 2 +-
- drivers/parisc/sba_iommu.c              | 2 +-
- drivers/xen/grant-dma-ops.c             | 2 +-
- drivers/xen/swiotlb-xen.c               | 2 +-
- include/linux/dma-map-ops.h             | 2 +-
- kernel/dma/mapping.c                    | 4 ++--
- 13 files changed, 15 insertions(+), 15 deletions(-)
+ include/linux/alloc_tag.h   |  9 +++++++++
+ include/linux/pgalloc_tag.h | 30 ++++++++++++++++++++++++++++++
+ mm/huge_memory.c            |  2 ++
+ mm/page_alloc.c             |  2 ++
+ 4 files changed, 43 insertions(+)
 
-diff --git a/arch/alpha/kernel/pci_iommu.c b/arch/alpha/kernel/pci_iommu.c
-index c81183935e97..7fcf3e9b7103 100644
---- a/arch/alpha/kernel/pci_iommu.c
-+++ b/arch/alpha/kernel/pci_iommu.c
-@@ -929,7 +929,7 @@ const struct dma_map_ops alpha_pci_ops = {
- 	.dma_supported		= alpha_pci_supported,
- 	.mmap			= dma_common_mmap,
- 	.get_sgtable		= dma_common_get_sgtable,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- };
- EXPORT_SYMBOL(alpha_pci_ops);
-diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
-index eabddb89d221..c97b089b9902 100644
---- a/arch/mips/jazz/jazzdma.c
-+++ b/arch/mips/jazz/jazzdma.c
-@@ -617,7 +617,7 @@ const struct dma_map_ops jazz_dma_ops = {
- 	.sync_sg_for_device	= jazz_dma_sync_sg_for_device,
- 	.mmap			= dma_common_mmap,
- 	.get_sgtable		= dma_common_get_sgtable,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- };
- EXPORT_SYMBOL(jazz_dma_ops);
-diff --git a/arch/powerpc/kernel/dma-iommu.c b/arch/powerpc/kernel/dma-iommu.c
-index 8920862ffd79..f0ae39e77e37 100644
---- a/arch/powerpc/kernel/dma-iommu.c
-+++ b/arch/powerpc/kernel/dma-iommu.c
-@@ -216,6 +216,6 @@ const struct dma_map_ops dma_iommu_ops = {
- 	.get_required_mask	= dma_iommu_get_required_mask,
- 	.mmap			= dma_common_mmap,
- 	.get_sgtable		= dma_common_get_sgtable,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- };
-diff --git a/arch/powerpc/platforms/ps3/system-bus.c b/arch/powerpc/platforms/ps3/system-bus.c
-index d6b5f5ecd515..56dc6b29a3e7 100644
---- a/arch/powerpc/platforms/ps3/system-bus.c
-+++ b/arch/powerpc/platforms/ps3/system-bus.c
-@@ -695,7 +695,7 @@ static const struct dma_map_ops ps3_sb_dma_ops = {
- 	.unmap_page = ps3_unmap_page,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
--	.alloc_pages = dma_common_alloc_pages,
-+	.alloc_pages_op = dma_common_alloc_pages,
- 	.free_pages = dma_common_free_pages,
- };
- 
-@@ -709,7 +709,7 @@ static const struct dma_map_ops ps3_ioc0_dma_ops = {
- 	.unmap_page = ps3_unmap_page,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
--	.alloc_pages = dma_common_alloc_pages,
-+	.alloc_pages_op = dma_common_alloc_pages,
- 	.free_pages = dma_common_free_pages,
- };
- 
-diff --git a/arch/powerpc/platforms/pseries/vio.c b/arch/powerpc/platforms/pseries/vio.c
-index 90ff85c879bf..477c1d5e1737 100644
---- a/arch/powerpc/platforms/pseries/vio.c
-+++ b/arch/powerpc/platforms/pseries/vio.c
-@@ -611,7 +611,7 @@ static const struct dma_map_ops vio_dma_mapping_ops = {
- 	.get_required_mask = dma_iommu_get_required_mask,
- 	.mmap		   = dma_common_mmap,
- 	.get_sgtable	   = dma_common_get_sgtable,
--	.alloc_pages	   = dma_common_alloc_pages,
-+	.alloc_pages_op	   = dma_common_alloc_pages,
- 	.free_pages	   = dma_common_free_pages,
- };
- 
-diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
-index 2ae98f754e59..c884deca839b 100644
---- a/arch/x86/kernel/amd_gart_64.c
-+++ b/arch/x86/kernel/amd_gart_64.c
-@@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops = {
- 	.get_sgtable			= dma_common_get_sgtable,
- 	.dma_supported			= dma_direct_supported,
- 	.get_required_mask		= dma_direct_get_required_mask,
--	.alloc_pages			= dma_direct_alloc_pages,
-+	.alloc_pages_op			= dma_direct_alloc_pages,
- 	.free_pages			= dma_direct_free_pages,
- };
- 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index b58f5a3311c3..6ba52481a1d7 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1715,7 +1715,7 @@ static const struct dma_map_ops iommu_dma_ops = {
- 	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
- 	.alloc			= iommu_dma_alloc,
- 	.free			= iommu_dma_free,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- 	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
- 	.free_noncontiguous	= iommu_dma_free_noncontiguous,
-diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
-index 9ce0d20a6c58..feef537257d0 100644
---- a/drivers/parisc/ccio-dma.c
-+++ b/drivers/parisc/ccio-dma.c
-@@ -1022,7 +1022,7 @@ static const struct dma_map_ops ccio_ops = {
- 	.map_sg =		ccio_map_sg,
- 	.unmap_sg =		ccio_unmap_sg,
- 	.get_sgtable =		dma_common_get_sgtable,
--	.alloc_pages =		dma_common_alloc_pages,
-+	.alloc_pages_op =	dma_common_alloc_pages,
- 	.free_pages =		dma_common_free_pages,
- };
- 
-diff --git a/drivers/parisc/sba_iommu.c b/drivers/parisc/sba_iommu.c
-index 784037837f65..fc3863c09f83 100644
---- a/drivers/parisc/sba_iommu.c
-+++ b/drivers/parisc/sba_iommu.c
-@@ -1090,7 +1090,7 @@ static const struct dma_map_ops sba_ops = {
- 	.map_sg =		sba_map_sg,
- 	.unmap_sg =		sba_unmap_sg,
- 	.get_sgtable =		dma_common_get_sgtable,
--	.alloc_pages =		dma_common_alloc_pages,
-+	.alloc_pages_op =	dma_common_alloc_pages,
- 	.free_pages =		dma_common_free_pages,
- };
- 
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index 76f6f26265a3..29257d2639db 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -282,7 +282,7 @@ static int xen_grant_dma_supported(struct device *dev, u64 mask)
- static const struct dma_map_ops xen_grant_dma_ops = {
- 	.alloc = xen_grant_dma_alloc,
- 	.free = xen_grant_dma_free,
--	.alloc_pages = xen_grant_dma_alloc_pages,
-+	.alloc_pages_op = xen_grant_dma_alloc_pages,
- 	.free_pages = xen_grant_dma_free_pages,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
-diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-index 0e6c6c25d154..1c4ef5111651 100644
---- a/drivers/xen/swiotlb-xen.c
-+++ b/drivers/xen/swiotlb-xen.c
-@@ -403,7 +403,7 @@ const struct dma_map_ops xen_swiotlb_dma_ops = {
- 	.dma_supported = xen_swiotlb_dma_supported,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
--	.alloc_pages = dma_common_alloc_pages,
-+	.alloc_pages_op = dma_common_alloc_pages,
- 	.free_pages = dma_common_free_pages,
- 	.max_mapping_size = swiotlb_max_mapping_size,
- };
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index 4abc60f04209..9ee319851b5f 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -29,7 +29,7 @@ struct dma_map_ops {
- 			unsigned long attrs);
- 	void (*free)(struct device *dev, size_t size, void *vaddr,
- 			dma_addr_t dma_handle, unsigned long attrs);
--	struct page *(*alloc_pages)(struct device *dev, size_t size,
-+	struct page *(*alloc_pages_op)(struct device *dev, size_t size,
- 			dma_addr_t *dma_handle, enum dma_data_direction dir,
- 			gfp_t gfp);
- 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 58db8fd70471..5e2d51e1cdf6 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -570,9 +570,9 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
- 	size = PAGE_ALIGN(size);
- 	if (dma_alloc_direct(dev, ops))
- 		return dma_direct_alloc_pages(dev, size, dma_handle, dir, gfp);
--	if (!ops->alloc_pages)
-+	if (!ops->alloc_pages_op)
- 		return NULL;
--	return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-+	return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
+diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+index 28c0005edae1..bc9b1b99a55b 100644
+--- a/include/linux/alloc_tag.h
++++ b/include/linux/alloc_tag.h
+@@ -106,6 +106,15 @@ static inline void __alloc_tag_ref_set(union codetag_ref *ref, struct alloc_tag
+ 	this_cpu_inc(tag->counters->calls);
  }
  
- struct page *dma_alloc_pages(struct device *dev, size_t size,
++static inline void alloc_tag_ref_set(union codetag_ref *ref, struct alloc_tag *tag)
++{
++	alloc_tag_add_check(ref, tag);
++	if (!ref || !tag)
++		return;
++
++	__alloc_tag_ref_set(ref, tag);
++}
++
+ static inline void alloc_tag_add(union codetag_ref *ref, struct alloc_tag *tag, size_t bytes)
+ {
+ 	alloc_tag_add_check(ref, tag);
+diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
+index 66bd021eb46e..093edf98c3d7 100644
+--- a/include/linux/pgalloc_tag.h
++++ b/include/linux/pgalloc_tag.h
+@@ -67,11 +67,41 @@ static inline void pgalloc_tag_sub(struct page *page, unsigned int nr)
+ 	}
+ }
+ 
++static inline void pgalloc_tag_split(struct page *page, unsigned int nr)
++{
++	int i;
++	struct page_ext *page_ext;
++	union codetag_ref *ref;
++	struct alloc_tag *tag;
++
++	if (!mem_alloc_profiling_enabled())
++		return;
++
++	page_ext = page_ext_get(page);
++	if (unlikely(!page_ext))
++		return;
++
++	ref = codetag_ref_from_page_ext(page_ext);
++	if (!ref->ct)
++		goto out;
++
++	tag = ct_to_alloc_tag(ref->ct);
++	page_ext = page_ext_next(page_ext);
++	for (i = 1; i < nr; i++) {
++		/* Set new reference to point to the original tag */
++		alloc_tag_ref_set(codetag_ref_from_page_ext(page_ext), tag);
++		page_ext = page_ext_next(page_ext);
++	}
++out:
++	page_ext_put(page_ext);
++}
++
+ #else /* CONFIG_MEM_ALLOC_PROFILING */
+ 
+ static inline void pgalloc_tag_add(struct page *page, struct task_struct *task,
+ 				   unsigned int nr) {}
+ static inline void pgalloc_tag_sub(struct page *page, unsigned int nr) {}
++static inline void pgalloc_tag_split(struct page *page, unsigned int nr) {}
+ 
+ #endif /* CONFIG_MEM_ALLOC_PROFILING */
+ 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index c77cedf45f3a..b29f9ef0fcb2 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -38,6 +38,7 @@
+ #include <linux/sched/sysctl.h>
+ #include <linux/memory-tiers.h>
+ #include <linux/compat.h>
++#include <linux/pgalloc_tag.h>
+ 
+ #include <asm/tlb.h>
+ #include <asm/pgalloc.h>
+@@ -2924,6 +2925,7 @@ static void __split_huge_page(struct page *page, struct list_head *list,
+ 	/* Caller disabled irqs, so they are still disabled here */
+ 
+ 	split_page_owner(head, order, new_order);
++	pgalloc_tag_split(head, 1 << order);
+ 
+ 	/* See comment in __split_huge_page_tail() */
+ 	if (folio_test_anon(folio)) {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 9c86ef2a0296..fd1cc5b80a56 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -2666,6 +2666,7 @@ void split_page(struct page *page, unsigned int order)
+ 	for (i = 1; i < (1 << order); i++)
+ 		set_page_refcounted(page + i);
+ 	split_page_owner(page, order, 0);
++	pgalloc_tag_split(page, 1 << order);
+ 	split_page_memcg(page, order, 0);
+ }
+ EXPORT_SYMBOL_GPL(split_page);
+@@ -4863,6 +4864,7 @@ static void *make_alloc_exact(unsigned long addr, unsigned int order,
+ 		struct page *last = page + nr;
+ 
+ 		split_page_owner(page, order, 0);
++		pgalloc_tag_split(page, 1 << order);
+ 		split_page_memcg(page, order, 0);
+ 		while (page < --last)
+ 			set_page_refcounted(last);
 -- 
 2.44.0.291.gc1ea87d7ee-goog
 
