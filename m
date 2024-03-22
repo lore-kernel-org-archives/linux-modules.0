@@ -1,90 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2DF4501C;
-	Fri, 22 Mar 2024 13:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEDF3B2AD;
+	Fri, 22 Mar 2024 13:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711113620; cv=none; b=TyynmqGVdfQz/u865NDFUYfmtBx3Muegc3X1GiMdRRMTBDSlK1WBbKeiypES2NYHS5+Ox/acQg2NkM5MxXDSnR77f7DCrN4yALahnQ5Pel6vJXwxt9fux2XLt+DtjwBB1zotnnAqBSy2IWQiV9n/BjV8TzNz/H4BM4XMumFVq6c=
+	t=1711115227; cv=none; b=iYcUBosjpB1Y1rF/fCLhWUtTwxEN7ocSi6nwEs7+tvBf1za6eqgza1N34WG+yeGb9UDha96VQ3RVxgS60SfxyO04QXhJILvEJDYk+tuJsMP4TNZD9x+Hjd8QBxX3bxK58Yc/X8Y6GlCu6FWO//JNM6yZb0BkSxGNF9msmxwtnNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711113620; c=relaxed/simple;
-	bh=EEJlkqbFRKdutJiIhqb15BoNHeyy0W43DVSF26lWl08=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JpyBpYCGb4S8KTIRFxN+qy+s47wIectoA1NH7K2gvYccNPQtUK2CAf7IYML1PHyCdwyVN5B1CPysiokAhlUxk8JsxZn3IZbtgo1g293gixS6a1Zo1oKNJi00aJfwRFQMOMaycYwXeDBcdrBuZmc6/EAJrQWPdVJbPxUGHyJvYkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y91k3fo+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711115227; c=relaxed/simple;
+	bh=s3azQ8hw9tbONDOE3SHRMvTzgqDXLaEClwuAjV8vnZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ulbN86QmhuFEiaIteXRvtFv352sxSb02UzWtG9J/xLjsiR7IYHONhcck4KaGlrarbtrS8UtoqWSyiSt1S2dKKbhsn5KsVEe77EUllwKqGUcyNFB4vGf+Yv86T81gyC8nOB7taR1BOTqGI/MZHxfK9F9PEgBDmbKukPLbhYaH/Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IVexsGSj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y91k3fo+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6887FC433F1;
-	Fri, 22 Mar 2024 13:20:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711113619;
-	bh=EEJlkqbFRKdutJiIhqb15BoNHeyy0W43DVSF26lWl08=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Y91k3fo+UgGLFpJEMeLTwOztmBVaIzbRbC2bvNmlLzsbTRzUA4innhjnIMM7+kuVQ
-	 5AB8mUKTls/OeC1KsWS1U13jpEl4MCg6W5nIt94kpqauIYdKDNTb4NFW9XBbflOPxY
-	 N2m7SyG5SA/bjR/cqmL51I2GAbC7uakQL/e9VkiKCGf07kRZQp23pA7wqbcwaNSUtM
-	 GFJIp4lqKl639NlPyzesF0xaHRXvdZkDf0TAbOHlHbEJd72+9PuVtEsfh4KSJh93ga
-	 A5B/SxAPVviWmANwyl+++nVOO1+shLU0PfLhBw4w0fGl6PGBmWgHewqVt/ChuYPbx7
-	 pg8pbgj6b3fIA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IVexsGSj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 838CBC433C7;
+	Fri, 22 Mar 2024 13:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1711115227;
+	bh=s3azQ8hw9tbONDOE3SHRMvTzgqDXLaEClwuAjV8vnZQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IVexsGSje2RXC0xRat8lqPLOX9S0ZFGeT6dF1V+6QH1rtqCDW+uNwpQBVok1r26yD
+	 7wEmS1Otg+YNp+pjfOVh+ZpAI1tD81+IUz9ntpA4jzJWOUhle99drUtrY5wgcqtrJn
+	 YoZYrgA7Y2s+zUYwB3UsQ6yMWYdBMluby9K5Iazk=
+Date: Fri, 22 Mar 2024 14:47:03 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-modules@vger.kernel.org,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] module: silence warning about unused 'no_warn' variable
-Date: Fri, 22 Mar 2024 14:20:05 +0100
-Message-Id: <20240322132014.906097-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH] module: silence warning about unused 'no_warn' variable
+Message-ID: <2024032224-equator-calm-5f3a@gregkh>
+References: <20240322132014.906097-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240322132014.906097-1-arnd@kernel.org>
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Mar 22, 2024 at 02:20:05PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The sysfs_create_link() return code is marked as __must_check, but the
+> module_add_driver() function tries hard to not care, by assigning the
+> return code to a variable. When building with 'make W=1', gcc still
+> warns because this variable is only assigned but not used:
+> 
+> drivers/base/module.c: In function 'module_add_driver':
+> drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
+> 
+> Add an explicit cast to void to prevent this check as well.
+> 
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
+> See-also: 4a7fb6363f2d ("add __must_check to device management code")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I'm not entirely sure what bug the __must_check on sysfs_create_link()
+> is trying to prevent, or why the module loader code is allowed to
+> ignore this. It would be nice to have an Ack from the sysfs maintainers
+> on this.
 
-The sysfs_create_link() return code is marked as __must_check, but the
-module_add_driver() function tries hard to not care, by assigning the
-return code to a variable. When building with 'make W=1', gcc still
-warns because this variable is only assigned but not used:
+No, let's fix this properly and unwind if we can't create the link.  You
+are pointing at something from 2006, so I guess we always thought "this
+can not fail" and never did anything about it since then.
 
-drivers/base/module.c: In function 'module_add_driver':
-drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
+thanks,
 
-Add an explicit cast to void to prevent this check as well.
-
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
-See-also: 4a7fb6363f2d ("add __must_check to device management code")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-I'm not entirely sure what bug the __must_check on sysfs_create_link()
-is trying to prevent, or why the module loader code is allowed to
-ignore this. It would be nice to have an Ack from the sysfs maintainers
-on this.
----
- drivers/base/module.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/base/module.c b/drivers/base/module.c
-index 46ad4d636731..0180dbcf2240 100644
---- a/drivers/base/module.c
-+++ b/drivers/base/module.c
-@@ -67,6 +67,8 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
- 					    driver_name);
- 		kfree(driver_name);
- 	}
-+
-+	(void)no_warn;
- }
- 
- void module_remove_driver(struct device_driver *drv)
--- 
-2.39.2
-
+greg k-h
