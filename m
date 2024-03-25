@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8816FE11;
-	Mon, 25 Mar 2024 22:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF23E71732;
+	Mon, 25 Mar 2024 22:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711404396; cv=none; b=WEJMlJJsIiS6fgC1zILlLDExsmO5PytHe8KrUQ9jX3G9xJ98QN4lKnODbfAYHTMsUrNRdn8yoSL7OBr8483ps1n51il47Hg76lKePlPFzdusrp6+DxuqF0RRkOs0R0swW/6uQWaDmKJFAwcvI9Pj/1TdRS1UlcAq6k6EDJZvjBU=
+	t=1711404587; cv=none; b=BfVNFMtYav3sKRSKstOe12zgqMFoOndTQV3GO9hlD4dZq3FvlwzAl83BNYqyZWY/zmwBzq94hiGfUp/6LRTviWImCSO9uCu7yolBByFAIRIHsomWdzWyQru+pirQ7Jhe2lv7MUux2NYHS/67k2zAsB8TpxoItve7wxYvgBciHIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711404396; c=relaxed/simple;
-	bh=z/mz7FVFwe1LcDtvbacDByrhd+3w8HygIiOVlwJYbDU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=G6MO349uoSkeVGR+6PkhsU6+j5HynIx7E9RgTxFMTp70AzaauKIPWxijoUOKbOOpiHcEqV8KAW8UfBU2IV2IZSM7qfFzjpeIifCKYDG8N8VABMLyk/Ot2lsetELh/xDmevQSG7wvCfCfqDex7+FeelJ0PR3InUnbq9MzWRO8Sa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUHFUZpJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711404587; c=relaxed/simple;
+	bh=MHgrmDbY6yGfAgeqDr3txltVR53Kng8qLPXpLxZiglw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=UZXUWe7hAm2h54yFmEOjyJfbQcV/MThirZykPyEhKfrJo+Z8fjiACHX3Idikn4AEe5IT34lvwGrtca8QNqfXUY0qbrc4sf2il2AiZlMSIsFmXuOFnJkWdHRDJddxXYvz1i9FLTWTRgfyfWMibVACzVn6bx7Lx/3051HOEJAaZFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSnWZsxW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUHFUZpJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF2EC433C7;
-	Mon, 25 Mar 2024 22:06:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSnWZsxW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E98FC433C7;
+	Mon, 25 Mar 2024 22:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711404395;
-	bh=z/mz7FVFwe1LcDtvbacDByrhd+3w8HygIiOVlwJYbDU=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=nUHFUZpJoimXH48MX0QAGf9i1kd81LXa6MCNkuKKiuL/HL0G/isOw3uNIJbFJgy/I
-	 tM8XtTD2n9TxwpwqVDRMOR9seeFdqslt/L4RG3SXOQnPYC7wtLQw7adq46ggnSNyK4
-	 NyhL1L1edHltaLQYS4ugCN+2ctlA1u0Xwmec4RSALlTYiDoqlTzcUQ0/xsZUS7ZeVP
-	 es0UF2PqFCLKqS9CKiJ1N6KGd2aDr+eoChBqx0Fd1lQjnYPGmUKx+htikR0i6RlzOR
-	 YpsngEmzjg/or+4fWjSJ3Km/MUCyQ3Un9N49l47F7/ovgKZ2wMWhGqlfEy54rtAblq
-	 G2ze3GUVApWug==
+	s=k20201202; t=1711404586;
+	bh=MHgrmDbY6yGfAgeqDr3txltVR53Kng8qLPXpLxZiglw=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=NSnWZsxWV5zih75kzQMss0dcrkir5jVOC2GifM2BBPN77g5hkoNR3oxgkh/zNR3j6
+	 S2Bq5lxz+2EPod17risV9ZyCEhMThjo9Lf1Xx/wzwwzgX3sxKDx0GrYnFB06OD76Xx
+	 0IZO8QQPVYf1VgGcq9PrcoDQ9b4vcF7kMdMIkzHiikVNpbaNYZ0YBwYno3KdjNth5R
+	 TD/rmv+qrAzCcx+Xxhb+zxSyXDPaLVHDD/3Vr5jteguD4BNhJ0qhvagGmCpj4EPwZ8
+	 L7ptgGeLIynCCC9OhLlGawsSKuX/+wbiaNAq2lBg7WzJLyLwPYt2GQJ578dFIZ9wV0
+	 9XlVUjpnhJEYw==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -34,24 +34,33 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 26 Mar 2024 00:06:31 +0200
-Message-Id: <D03683T2J8T8.18AMQ9ABQAQT5@kernel.org>
+Date: Tue, 26 Mar 2024 00:09:42 +0200
+Message-Id: <D036AJAEAOUF.34494O217N0RI@kernel.org>
+Subject: Re: [PATCH v5 1/2] kprobes: textmem API
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Jarkko Sakkinen" <jarkko@kernel.org>, <linux-riscv@lists.infradead.org>
 Cc: "Masami Hiramatsu" <mhiramat@kernel.org>, "Paul Walmsley"
  <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
  Ou" <aou@eecs.berkeley.edu>, <linux-kernel@vger.kernel.org>, "Luis
  Chamberlain" <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>, "Naveen
  N . Rao" <naveen.n.rao@linux.ibm.com>, "Anil S Keshavamurthy"
  <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/2] kprobes: textmem API
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, <linux-riscv@lists.infradead.org>
 X-Mailer: aerc 0.17.0
 References: <20240325215502.660-1-jarkko@kernel.org>
 In-Reply-To: <20240325215502.660-1-jarkko@kernel.org>
 
-s/textmem/execmem/ (also in long description)
+On Mon Mar 25, 2024 at 11:55 PM EET, Jarkko Sakkinen wrote:
+> +#ifdef CONFIG_MODULES
+>  	if (register_module_notifier(&trace_kprobe_module_nb))
+>  		return -EINVAL;
+> +#endif /* CONFIG_MODULES */
 
-will hold sending a new version as not a functional issue, will fix
-after review.
+register_module_notifier() does have "dummy" version but what
+would I pass to it. It makes more mess than it cleans to declare
+also a "dummy" version of trace_kprobe_module_nb.
+
+The callback itself has too tight module subsystem bindings so
+that they could be simply flagged with IS_DEFINED() (or correct
+if I'm mistaken, this the conclusion I've ended up with).
 
 BR, Jarkko
