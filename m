@@ -1,139 +1,371 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4BF1CD3F;
-	Tue, 26 Mar 2024 01:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD29282EB;
+	Tue, 26 Mar 2024 01:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711416072; cv=none; b=WsdV01Y29OnMbOUW8C6RjM4Qbsw9jt62tg5ZT6BjXjf/gJkJx3MMJ0IcJvB484LhYRfvGgaazB88kK2001FvxXdJusm2nYswtfWtI0xs/VoNQ101romfaztrKSKItIhZjxgHEVyS9DfcMza5PVtOc/XKSvOpGtUiJyxAHAWFf3o=
+	t=1711416706; cv=none; b=CScmilDHRXHwEXPhyTzJORAgUeXzzniuSms5fSbGRUcDoBaVWVjzM8sAjpm4hA5hjs7+CIHjDVjI8t9Cr024QAukXrMzv74hsxvuAFoCSSF0UFFACXNuvMhG48tUQG4WTMnUCaHczVmGjyskACCvi4qvCvIUUCdIRTqMvFLTL8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711416072; c=relaxed/simple;
-	bh=oxc669xa4HArX18pe0zMZ3KIpnQmQJWwkeqzhcN8JkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uiPLMSlWxTl28carax7u9xlDgyd8ZWTVS5l2lAgwI7vBDrnS+5UM6g5av11PR3A/cQqfOjILtycZdC/9qrvyJRHqNVIt1xczt6m3WHiNYtVKN6XooC1GOGxr876az/jQ633fmHwKcGOCOy0fh9Cya1n8b3S3h+JvQ2SyilMjAh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VByYMOgn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711416706; c=relaxed/simple;
+	bh=fyMVCArFo+f8p4yZJMhm4nPq0mpcMqn01kbP8JFPM+w=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=mg0na/zPkpDeS5V4xaYK7R5foLO3duwPoB5AJqMNGx7EeZFkIV8wbxBd21E+g3nJFetFhbmA/wtAbH9Y0/shIcTGVSxdVYbl94aWBI59t7RELlNNG7elbzyJcy2z/4jAa5hEvMtCh77Y5tRslJwMBTrnq7Kc2PWCn97/GXGLU2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzslBCk1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VByYMOgn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576DAC433F1;
-	Tue, 26 Mar 2024 01:21:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzslBCk1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BEE4C433F1;
+	Tue, 26 Mar 2024 01:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711416071;
-	bh=oxc669xa4HArX18pe0zMZ3KIpnQmQJWwkeqzhcN8JkQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VByYMOgnCP2iCf/wIvMGIWEZ4efp6NKR1i70mSvBsSMDbQX/BMpoSESqMLQLC+dCu
-	 Lttm79WU10PxVme+2sNIuUct8OAHnNjEAq/eg6C6/CBSLhAUQ7VqshB/vdVJdVFyZF
-	 OEY1sqJOQRV0KQ8XA462AGjzqXZa+p2s3roU9VwZOZ2H34LHiH8vtbBQcJlrYkGmH8
-	 M4PKUXsTcaYDQCwCZxPhMT3g9b1AqE8+XTLQ7t/omtIYeje7yu6EpzGpLzLd6CsvPY
-	 9LHe4AWYk0vXwKlhIaKm6P2VK14F47fMOXH03DiGDrI5nS/8J/7Qk9FvsWH2K25zWo
-	 GPL8moZhjgeJg==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-riscv@lists.infradead.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	linux-kernel@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	linux-modules@vger.kernel.org,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v6 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
-Date: Tue, 26 Mar 2024 03:21:02 +0200
-Message-ID: <20240326012102.27438-2-jarkko@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240326012102.27438-1-jarkko@kernel.org>
-References: <20240326012102.27438-1-jarkko@kernel.org>
+	s=k20201202; t=1711416706;
+	bh=fyMVCArFo+f8p4yZJMhm4nPq0mpcMqn01kbP8JFPM+w=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=IzslBCk1C74hsa8EtTUZRErzCYazb1ez8+TFdOfWsvRuudRGkP8Usg+3yZnVnKSAf
+	 QK6TPzCjn8coUnMfy0q6bNYpZzDYzGFPrVPHJYGLeyLafGa57Q5ehgmYimzYNSDsPH
+	 DPINiDT8By+kfJz7cyFzNpWaD+Dn1M/JY4oup9RdIonlGSaDANAo9le0aL55QSB5as
+	 5+C5Gmdq+VVnwXHsFvbsYZBPTFNhgc6xrla1LyEVPqk68rNJa/MXhjkrekYuFlFJaG
+	 lVgXeka5EdnyDrCK9hCfrePFc57JSmUq1U9YcX5SMPOA+W1UJ1TcS4IPsuHnpclUNZ
+	 dcjQyzXEEFSMA==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 26 Mar 2024 03:31:42 +0200
+Message-Id: <D03AL7A5G3M2.3UK4ASWILGBJS@kernel.org>
+Cc: <linux-riscv@lists.infradead.org>, "Paul Walmsley"
+ <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, <linux-kernel@vger.kernel.org>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>, "Naveen
+ N . Rao" <naveen.n.rao@linux.ibm.com>, "Anil S Keshavamurthy"
+ <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v5 1/2] kprobes: textmem API
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Masami Hiramatsu" <mhiramat@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240325215502.660-1-jarkko@kernel.org>
+ <20240326095836.f43d259b7747269a7c0b9d23@kernel.org>
+In-Reply-To: <20240326095836.f43d259b7747269a7c0b9d23@kernel.org>
 
-Tacing with kprobes while running a monolithic kernel is currently
-impossible due the kernel module allocator dependency.
+On Tue Mar 26, 2024 at 2:58 AM EET, Masami Hiramatsu (Google) wrote:
+> On Mon, 25 Mar 2024 23:55:01 +0200
+> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> > Tracing with kprobes while running a monolithic kernel is currently
+> > impossible because CONFIG_KPROBES depends on CONFIG_MODULES because it =
+uses
+> > the kernel module allocator.
+> >=20
+> > Introduce alloc_textmem() and free_textmem() for allocating executable
+> > memory. If an arch implements these functions, it can mark this up with
+> > the HAVE_ALLOC_EXECMEM kconfig flag.
+> >=20
+> > At first this feature will be used for enabling kprobes without
+> > modules support for arch/riscv.
+> >=20
+> > Link: https://lore.kernel.org/all/20240325115632.04e37297491cadfbbf3827=
+67@kernel.org/
+> > Suggested-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > v5:
+> > - alloc_execmem() was missing GFP_KERNEL parameter. The patch set did
+> >   compile because 2/2 had the fixup (leaked there when rebasing the
+> >   patch set).
+> > v4:
+> > - Squashed a couple of unrequired CONFIG_MODULES checks.
+> > - See https://lore.kernel.org/all/D034M18D63EC.2Y11D954YSZYK@kernel.org=
+/
+> > v3:
+> > - A new patch added.
+> > - For IS_DEFINED() I need advice as I could not really find that many
+> >   locations where it would be applicable.
+> > ---
+> >  arch/Kconfig                | 16 +++++++++++++++-
+> >  include/linux/execmem.h     | 13 +++++++++++++
+> >  kernel/kprobes.c            | 17 ++++++++++++++---
+> >  kernel/trace/trace_kprobe.c |  8 ++++++++
+> >  4 files changed, 50 insertions(+), 4 deletions(-)
+> >  create mode 100644 include/linux/execmem.h
+> >=20
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index a5af0edd3eb8..33ba68b7168f 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -52,8 +52,8 @@ config GENERIC_ENTRY
+> > =20
+> >  config KPROBES
+> >  	bool "Kprobes"
+> > -	depends on MODULES
+> >  	depends on HAVE_KPROBES
+> > +	select ALLOC_EXECMEM
+> >  	select KALLSYMS
+> >  	select TASKS_RCU if PREEMPTION
+> >  	help
+> > @@ -215,6 +215,20 @@ config HAVE_OPTPROBES
+> >  config HAVE_KPROBES_ON_FTRACE
+> >  	bool
+> > =20
+> > +config HAVE_ALLOC_EXECMEM
+> > +	bool
+> > +	help
+> > +	  Architectures that select this option are capable of allocating exe=
+cutable
+> > +	  memory, which can be used by subsystems but is not dependent of any=
+ of its
+> > +	  clients.
+> > +
+> > +config ALLOC_EXECMEM
+> > +	bool "Executable (trampoline) memory allocation"
+> > +	depends on MODULES || HAVE_ALLOC_EXECMEM
+> > +	help
+> > +	  Select this for executable (trampoline) memory. Can be enabled when=
+ either
+> > +	  module allocator or arch-specific allocator is available.
+> > +
+> >  config ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> >  	bool
+> >  	help
+> > diff --git a/include/linux/execmem.h b/include/linux/execmem.h
+> > new file mode 100644
+> > index 000000000000..ae2ff151523a
+> > --- /dev/null
+> > +++ b/include/linux/execmem.h
+> > @@ -0,0 +1,13 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef _LINUX_EXECMEM_H
+> > +#define _LINUX_EXECMEM_H
+> > +
+> > +#ifdef CONFIG_HAVE_ALLOC_EXECMEM
+> > +void *alloc_execmem(unsigned long size, gfp_t gfp);
+> > +void free_execmem(void *region);
+> > +#else
+> > +#define alloc_execmem(size, gfp)	module_alloc(size)
+> > +#define free_execmem(region)		module_memfree(region)
+> > +#endif
+> > +
+> > +#endif /* _LINUX_EXECMEM_H */
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index 9d9095e81792..87fd8c14a938 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -44,6 +44,7 @@
+> >  #include <asm/cacheflush.h>
+> >  #include <asm/errno.h>
+> >  #include <linux/uaccess.h>
+> > +#include <linux/execmem.h>
+> > =20
+> >  #define KPROBE_HASH_BITS 6
+> >  #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
+> > @@ -113,17 +114,17 @@ enum kprobe_slot_state {
+> >  void __weak *alloc_insn_page(void)
+> >  {
+> >  	/*
+> > -	 * Use module_alloc() so this page is within +/- 2GB of where the
+> > +	 * Use alloc_execmem() so this page is within +/- 2GB of where the
+> >  	 * kernel image and loaded module images reside. This is required
+> >  	 * for most of the architectures.
+> >  	 * (e.g. x86-64 needs this to handle the %rip-relative fixups.)
+> >  	 */
+> > -	return module_alloc(PAGE_SIZE);
+> > +	return alloc_execmem(PAGE_SIZE, GFP_KERNEL);
+> >  }
+> > =20
+> >  static void free_insn_page(void *page)
+> >  {
+> > -	module_memfree(page);
+> > +	free_execmem(page);
+> >  }
+> > =20
+> >  struct kprobe_insn_cache kprobe_insn_slots =3D {
+> > @@ -1580,6 +1581,7 @@ static int check_kprobe_address_safe(struct kprob=
+e *p,
+> >  		goto out;
+> >  	}
+> > =20
+> > +#ifdef CONFIG_MODULES
+>
+> You don't need this block, because these APIs have dummy functions.
 
-Address the issue by implementing textmem API for RISC-V.
+Hmm... I'll verify this tomorrow.
 
-Link: https://www.sochub.fi # for power on testing new SoC's with a minimal stack
-Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian.com/ # continuation
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v4:
-- Include linux/execmem.h.
-v3:
-- Architecture independent parts have been split to separate patches.
-- Do not change arch/riscv/kernel/module.c as it is out of scope for
-  this patch set now.
-v2:
-- Better late than never right? :-)
-- Focus only to RISC-V for now to make the patch more digestable. This
-  is the arch where I use the patch on a daily basis to help with QA.
-- Introduce HAVE_KPROBES_ALLOC flag to help with more gradual migration.
----
- arch/riscv/Kconfig          |  1 +
- arch/riscv/kernel/Makefile  |  3 +++
- arch/riscv/kernel/execmem.c | 22 ++++++++++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 arch/riscv/kernel/execmem.c
+>
+> >  	/* Check if 'p' is probing a module. */
+> >  	*probed_mod =3D __module_text_address((unsigned long) p->addr);
+> >  	if (*probed_mod) {
+>
+> So this block never be true if !CONFIG_MODULES automatically, and it shou=
+ld be
+> optimized out by compiler.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index e3142ce531a0..499512fb17ff 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -132,6 +132,7 @@ config RISCV
- 	select HAVE_KPROBES if !XIP_KERNEL
- 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
- 	select HAVE_KRETPROBES if !XIP_KERNEL
-+	select HAVE_ALLOC_EXECMEM if !XIP_KERNEL
- 	# https://github.com/ClangBuiltLinux/linux/issues/1881
- 	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
- 	select HAVE_MOVE_PMD
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 604d6bf7e476..337797f10d3e 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -73,6 +73,9 @@ obj-$(CONFIG_SMP)		+= cpu_ops.o
- 
- obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
- obj-$(CONFIG_MODULES)		+= module.o
-+ifeq ($(CONFIG_ALLOC_EXECMEM),y)
-+obj-y				+= execmem.o
-+endif
- obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
- 
- obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-diff --git a/arch/riscv/kernel/execmem.c b/arch/riscv/kernel/execmem.c
-new file mode 100644
-index 000000000000..3e52522ead32
---- /dev/null
-+++ b/arch/riscv/kernel/execmem.c
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#include <linux/mm.h>
-+#include <linux/execmem.h>
-+#include <linux/vmalloc.h>
-+#include <asm/sections.h>
-+
-+void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
-+{
-+	return __vmalloc_node_range(size, 1, MODULES_VADDR,
-+				    MODULES_END, GFP_KERNEL,
-+				    PAGE_KERNEL, 0, NUMA_NO_NODE,
-+				    __builtin_return_address(0));
-+}
-+
-+void free_execmem(void *region)
-+{
-+	if (in_interrupt())
-+		pr_warn("In interrupt context: vmalloc may not work.\n");
-+
-+	vfree(region);
-+}
--- 
-2.44.0
+Yeah sure, was not done for saving cycles. Just wanted to make sure that
+my stuff compiles with different config flag combinations related but
+I'll check tomorrow morning if I can relax this further.
 
+>
+> > @@ -1603,6 +1605,8 @@ static int check_kprobe_address_safe(struct kprob=
+e *p,
+> >  			ret =3D -ENOENT;
+> >  		}
+> >  	}
+> > +#endif
+> > +
+> >  out:
+> >  	preempt_enable();
+> >  	jump_label_unlock();
+> > @@ -2482,6 +2486,7 @@ int kprobe_add_area_blacklist(unsigned long start=
+, unsigned long end)
+> >  	return 0;
+> >  }
+> > =20
+> > +#ifdef CONFIG_MODULES
+> >  /* Remove all symbols in given area from kprobe blacklist */
+> >  static void kprobe_remove_area_blacklist(unsigned long start, unsigned=
+ long end)
+> >  {
+> > @@ -2499,6 +2504,7 @@ static void kprobe_remove_ksym_blacklist(unsigned=
+ long entry)
+> >  {
+> >  	kprobe_remove_area_blacklist(entry, entry + 1);
+> >  }
+> > +#endif /* CONFIG_MODULES */
+>
+> I think this block should be moved right before remove_module_kprobe_blac=
+klist().
+> Then we can gather the code depending on modules in one place.
+
+Agree with this without verification :-)
+
+
+>
+> > =20
+> >  int __weak arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long=
+ *value,
+> >  				   char *type, char *sym)
+> > @@ -2564,6 +2570,7 @@ static int __init populate_kprobe_blacklist(unsig=
+ned long *start,
+> >  	return ret ? : arch_populate_kprobe_blacklist();
+> >  }
+> > =20
+> > +#ifdef CONFIG_MODULES
+> >  static void add_module_kprobe_blacklist(struct module *mod)
+> >  {
+> >  	unsigned long start, end;
+> > @@ -2665,6 +2672,7 @@ static struct notifier_block kprobe_module_nb =3D=
+ {
+> >  	.notifier_call =3D kprobes_module_callback,
+> >  	.priority =3D 0
+> >  };
+> > +#endif /* CONFIG_MODULES */
+>
+> So, keep the kprobe_module_nb outside of this #ifdef as I sed.
+
+Yup, already done in v6.
+
+>
+>
+> > =20
+> >  void kprobe_free_init_mem(void)
+> >  {
+> > @@ -2724,8 +2732,11 @@ static int __init init_kprobes(void)
+> >  	err =3D arch_init_kprobes();
+> >  	if (!err)
+> >  		err =3D register_die_notifier(&kprobe_exceptions_nb);
+> > +
+> > +#ifdef CONFIG_MODULES
+> >  	if (!err)
+> >  		err =3D register_module_notifier(&kprobe_module_nb);
+> > +#endif
+>
+> Then we don't need this #ifdef.
+
+Addressed in v6.
+
+>
+> > =20
+> >  	kprobes_initialized =3D (err =3D=3D 0);
+> >  	kprobe_sysctls_init();
+> > diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+> > index c4c6e0e0068b..af70bb1e9c3a 100644
+> > --- a/kernel/trace/trace_kprobe.c
+> > +++ b/kernel/trace/trace_kprobe.c
+> > @@ -111,6 +111,7 @@ static nokprobe_inline bool trace_kprobe_within_mod=
+ule(struct trace_kprobe *tk,
+> >  	return strncmp(module_name(mod), name, len) =3D=3D 0 && name[len] =3D=
+=3D ':';
+> >  }
+> > =20
+> > +#ifdef CONFIG_MODULES
+> >  static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kpr=
+obe *tk)
+> >  {
+> >  	char *p;
+> > @@ -129,6 +130,9 @@ static nokprobe_inline bool trace_kprobe_module_exi=
+st(struct trace_kprobe *tk)
+> > =20
+> >  	return ret;
+> >  }
+> > +#else
+> > +#define trace_kprobe_module_exist(tk) false /* aka a module never exis=
+ts */
+> > +#endif /* CONFIG_MODULES */
+> > =20
+> >  static bool trace_kprobe_is_busy(struct dyn_event *ev)
+> >  {
+> > @@ -670,6 +674,7 @@ static int register_trace_kprobe(struct trace_kprob=
+e *tk)
+> >  	return ret;
+> >  }
+> > =20
+> > +#ifdef CONFIG_MODULES
+> >  /* Module notifier call back, checking event on the module */
+> >  static int trace_kprobe_module_callback(struct notifier_block *nb,
+> >  				       unsigned long val, void *data)
+> > @@ -704,6 +709,7 @@ static struct notifier_block trace_kprobe_module_nb=
+ =3D {
+> >  	.notifier_call =3D trace_kprobe_module_callback,
+> >  	.priority =3D 1	/* Invoked after kprobe module callback */
+> >  };
+> > +#endif /* CONFIG_MODULES */
+>
+> As I similar to the above, let's move trace_kprobe_module_nb outside
+> of #ifdef.
+
+Ditto (also in v6).
+
+>
+> > =20
+> >  static int count_symbols(void *data, unsigned long unused)
+> >  {
+> > @@ -1897,8 +1903,10 @@ static __init int init_kprobe_trace_early(void)
+> >  	if (ret)
+> >  		return ret;
+> > =20
+> > +#ifdef CONFIG_MODULES
+> >  	if (register_module_notifier(&trace_kprobe_module_nb))
+> >  		return -EINVAL;
+> > +#endif /* CONFIG_MODULES */
+>
+> And remove this #ifdef.
+>
+> Thank you!
+
+Thanks for quick reviews and sorry for the spam. I just try to move this
+forward with small pushes because with compilation flags it is easy to
+blow up compilation.
+
+I'll do the aforementioned suggestions that were missing from v6 to v7.
+
+>
+> > =20
+> >  	return 0;
+> >  }
+> > --=20
+> > 2.44.0
+> >=20
+
+
+BR, Jarkko
