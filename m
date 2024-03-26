@@ -1,154 +1,128 @@
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD67125C9;
-	Tue, 26 Mar 2024 13:57:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CC012D1E9;
+	Tue, 26 Mar 2024 14:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711461476; cv=none; b=jYfZBrw7GOdi/BSxff686bO2GRCR9wxi0N3oRlvom1ahL0jsSMan25w59xjrzWqTUUD791idh3iaJJ4+6OmbKG63xPUuGnjW9kSInBdcQcgRNfq59CH67O8zGWQRJsJX6Agn1yDZu3sNiuciPOoNYX4uyvQc30vK8PKQmia6tW0=
+	t=1711462391; cv=none; b=AgnOgmrrDUqGScoOja6GPsRrfss2NketQXl8Uw6KBsFhUavl2zwI6mZq3Q0XkWvb3KUylRjYQ+cM0Fo9bilHRkk8wOsgT3XdmDBdTlfmkfddmRHi+w5gwMGdCIO7eVvqKGrN/6F60T5x44AWunMhTuAnQZk61Vr4h0G9YaAsv4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711461476; c=relaxed/simple;
-	bh=CLFfLoPP9OaJ8wUgaocuHNJTFOcQ2uSgPXCCMz/0tII=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i4WC4fs5Mzaz3no3PyiKFqdcdv4vYOgFDD2OHxR5raM4wRAz1eRzcRdcvzq10MW7pudEvQ4V5zpY268laCR2XbgLdWvOiAaXOmMrmAYfamHdgatApyGMXiKEwBf+BL+kD+IKCYqenlVZxH6mK9+LytxiLFxsF7vZJpu8i16Dyew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CA3A1E000D;
-	Tue, 26 Mar 2024 13:57:42 +0000 (UTC)
-Message-ID: <474ed846-672a-4ff0-9d53-cbf8192fee5f@ghiti.fr>
-Date: Tue, 26 Mar 2024 14:57:42 +0100
+	s=arc-20240116; t=1711462391; c=relaxed/simple;
+	bh=C07QoGZwFIqiiGLDYtIT/bDm7g2eW60WzjZK/2lcL1o=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ByZvyNI5SOS03lp+RedS25cWWM26I8JBomJwzzWEx46+5eXJkXZ4cBaU/TJDDDbvqhZRHZ42tllryR2dEnH/rVw+l6rHyePdoDChre1VRRxkoUKwKzJUF+MNaorMFskD0nN60z7d22H71JYTcsJDxonRzAjMBFCRiXfpVZh87hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IfAd/QhD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JfDwFEmQ; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IfAd/QhD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JfDwFEmQ"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id 0A94A13800C7;
+	Tue, 26 Mar 2024 10:13:08 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Tue, 26 Mar 2024 10:13:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1711462388; x=1711548788; bh=qwEl2RbjTY
+	FZ3+lGDXzFX22ORlHVarQEQDkkqeWQ6+M=; b=IfAd/QhDJkneIhSG1PMAHOgbo/
+	mcVTxuJiD/yHg9YhAnYnZUftiTZkSefCnZODbx157mbtsl6c9KOoEEJw5GVPRs1t
+	4pKyrlXc3PE5L1IOIP/0QKVBGs2yNstleCl35baKMMtsQLa/DCZ9omCnFOXrxM+y
+	YaYt9yA5nphdbfUHbwQZtnDC0awtsvnxQpY+mpuYRV5vowZLKiTpjW2SxhNU64J9
+	QEujTdGbAPcin+SRXLf4b3DAFEoCsr1einZXn7xfTAyugJwP1Y7DB1BCHA4QcLNU
+	W3mYGxECmUf0jcgzAIchIFVXoDxcpt1cuObldDCcZ8Gj/2s0oXUvqlT/B0Gw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1711462388; x=1711548788; bh=qwEl2RbjTYFZ3+lGDXzFX22ORlHV
+	arQEQDkkqeWQ6+M=; b=JfDwFEmQ8TcsCAzZifaUtTGemxt/kA2wS6Wxfey7Yrya
+	l1oV15QGJN9tspkG4Jvphm8fXiHE1lt5cDzZ25+/63XjMn6rFfQU+eeRl4nU24hB
+	X0tKZ5Nu46ni4fT5FqyWmxwJ3xI6uaVtB2N4O7Lbw1bTI5p8da/L6Yodjz8J+R8q
+	ogHIG+CeJOu0FnKMAf/qjCuXVgtbbVxzKWXtsf7heSNO1o4a/4ikWT1IunJsfH9V
+	/7xEQoh7k5cXmeRO0CP4Xce0r/kEMyXQC98+AlkvWtY9rdipL2M8JQ1zJ4NdW4Ww
+	ffU0Tz3dJ0CCmJUX5g/Vs/d8eJJzaG4+1xVcg4Z3jg==
+X-ME-Sender: <xms:89cCZpuStysZle_lcQ6e_39Ge5HGVApzWhrBgJRpBZ7vqbresYYPXA>
+    <xme:89cCZifKumP_QBFxyJCgRHqsmRNzZ787fJzS-XrEjRDlnMRPIRio5ynT7nwaMU-A9
+    jK-uuXPoZOIDizT5RE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:89cCZsx0e212wvfgtlWiXcYU5tqkhNAczCkNZP9wfA0EO_X-u8xnVQ>
+    <xmx:89cCZgNvc2GXUQRxPl1yyEz95GvFxNjCeFcRcPNikptFpkl7RNlJhQ>
+    <xmx:89cCZp-66mD18GWucmFFBGYq9XMM7lTwSeMdRgUXwKURHsg9kvBKUw>
+    <xmx:89cCZgXsFpVb_mBNe5-9MAf1AXATaTe_lx4ptHKhkMWsgMY3wgHsLQ>
+    <xmx:9NcCZpzUasImbbYFeND7Zcn2AAUpgwINPS0QeIIbxpl3ss3JyIsxjw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 96BB1B6008F; Tue, 26 Mar 2024 10:13:07 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
-Content-Language: en-US
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-riscv@lists.infradead.org
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- linux-modules@vger.kernel.org, "Naveen N . Rao"
- <naveen.n.rao@linux.ibm.com>,
- Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
- "David S . Miller" <davem@davemloft.net>,
- Masami Hiramatsu <mhiramat@kernel.org>
-References: <20240325215502.660-1-jarkko@kernel.org>
- <20240325215502.660-2-jarkko@kernel.org>
-From: Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20240325215502.660-2-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: alex@ghiti.fr
+Message-Id: <5fb74d31-a5f7-4fc0-96f0-f69158829df3@app.fastmail.com>
+In-Reply-To: <2024032349-corporate-detached-0dc9@gregkh>
+References: <20240322173930.947963-1-arnd@kernel.org>
+ <2024032349-corporate-detached-0dc9@gregkh>
+Date: Tue, 26 Mar 2024 15:12:46 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Luis Chamberlain" <mcgrof@kernel.org>, linux-modules@vger.kernel.org,
+ "Rafael J . Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2] module: don't ignore sysfs_create_link() failures
+Content-Type: text/plain
 
-Hi Jarkko,
-
-On 25/03/2024 22:55, Jarkko Sakkinen wrote:
-> Tacing with kprobes while running a monolithic kernel is currently
-> impossible due the kernel module allocator dependency.
+On Sat, Mar 23, 2024, at 17:50, Greg Kroah-Hartman wrote:
+> On Fri, Mar 22, 2024 at 06:39:11PM +0100, Arnd Bergmann wrote:
+>> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+>> index daee55c9b2d9..7ef75b60d331 100644
+>> --- a/drivers/base/bus.c
+>> +++ b/drivers/base/bus.c
+>> @@ -674,7 +674,12 @@ int bus_add_driver(struct device_driver *drv)
+>>  		if (error)
+>>  			goto out_del_list;
+>>  	}
+>> -	module_add_driver(drv->owner, drv);
+>> +	error = module_add_driver(drv->owner, drv);
+>> +	if (error) {
+>> +		printk(KERN_ERR "%s: failed to create module links for %s\n",
+>> +			__func__, drv->name);
+>> +		goto out_del_list;
 >
-> Address the issue by implementing textmem API for RISC-V.
+> Don't we need to walk back the driver_attach() call here if this fails?
+
+Yes, fixed now. There are still some other calls right after
+it that print an error but don't cause bus_add_driver() to fail
+though. We may want to add similar unwinding there, but that
+feels like it should be a separate patch.
+
+>>  
+>>  	if (!mk)
+>> -		return;
+>> +		return 0;
+>> +
+>> +	ret = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
+>> +	if (ret && ret != -EEXIST)
 >
-> Link: https://www.sochub.fi # for power on testing new SoC's with a minimal stack
-> Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian.com/ # continuation
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v5:
-> - No changes, expect removing alloc_execmem() call which should have
->    been part of the previous patch.
-> v4:
-> - Include linux/execmem.h.
-> v3:
-> - Architecture independent parts have been split to separate patches.
-> - Do not change arch/riscv/kernel/module.c as it is out of scope for
->    this patch set now.
-> v2:
-> - Better late than never right? :-)
-> - Focus only to RISC-V for now to make the patch more digestable. This
->    is the arch where I use the patch on a daily basis to help with QA.
-> - Introduce HAVE_KPROBES_ALLOC flag to help with more gradual migration.
-> ---
->   arch/riscv/Kconfig          |  1 +
->   arch/riscv/kernel/Makefile  |  3 +++
->   arch/riscv/kernel/execmem.c | 22 ++++++++++++++++++++++
->   3 files changed, 26 insertions(+)
->   create mode 100644 arch/riscv/kernel/execmem.c
+> Why would EEXIST happen here?  How can this be called twice?
 >
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index e3142ce531a0..499512fb17ff 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -132,6 +132,7 @@ config RISCV
->   	select HAVE_KPROBES if !XIP_KERNEL
->   	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
->   	select HAVE_KRETPROBES if !XIP_KERNEL
-> +	select HAVE_ALLOC_EXECMEM if !XIP_KERNEL
->   	# https://github.com/ClangBuiltLinux/linux/issues/1881
->   	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
->   	select HAVE_MOVE_PMD
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index 604d6bf7e476..337797f10d3e 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -73,6 +73,9 @@ obj-$(CONFIG_SMP)		+= cpu_ops.o
->   
->   obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
->   obj-$(CONFIG_MODULES)		+= module.o
-> +ifeq ($(CONFIG_ALLOC_EXECMEM),y)
-> +obj-y				+= execmem.o
-> +endif
->   obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
->   
->   obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
-> diff --git a/arch/riscv/kernel/execmem.c b/arch/riscv/kernel/execmem.c
-> new file mode 100644
-> index 000000000000..3e52522ead32
-> --- /dev/null
-> +++ b/arch/riscv/kernel/execmem.c
-> @@ -0,0 +1,22 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/mm.h>
-> +#include <linux/execmem.h>
-> +#include <linux/vmalloc.h>
-> +#include <asm/sections.h>
-> +
-> +void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
-> +{
-> +	return __vmalloc_node_range(size, 1, MODULES_VADDR,
-> +				    MODULES_END, GFP_KERNEL,
-> +				    PAGE_KERNEL, 0, NUMA_NO_NODE,
-> +				    __builtin_return_address(0));
-> +}
 
+My impression was that the lack of error handling and the
+comment was ab out a case where that might happen
+intentionally. I've removed it now as I couldn't find any
+evidence that this is really needed. I suppose we would
+find out in testing if we do.
 
-The __vmalloc_node_range() line ^^ must be from an old kernel since we 
-added VM_FLUSH_RESET_PERMS in 6.8, see 749b94b08005 ("riscv: Fix 
-module_alloc() that did not reset the linear mapping permissions").
-
-In addition, I guess module_alloc() should now use alloc_execmem() right?
-
-
-> +
-> +void free_execmem(void *region)
-> +{
-> +	if (in_interrupt())
-> +		pr_warn("In interrupt context: vmalloc may not work.\n");
-> +
-> +	vfree(region);
-> +}
-
-
-I remember Mike Rapoport sent a patchset to introduce an API for 
-executable memory allocation 
-(https://lore.kernel.org/linux-mm/20230918072955.2507221-1-rppt@kernel.org/), 
-how does this intersect with your work? I don't know the status of his 
-patchset though.
-
-Thanks,
-
-Alex
-
+     Arnd
