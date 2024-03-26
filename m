@@ -1,185 +1,203 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CE613CA98;
-	Tue, 26 Mar 2024 15:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220481C288;
+	Tue, 26 Mar 2024 16:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711467600; cv=none; b=LHyID/sSExbpmKVrXMMbveQoakX4DGhoV61/d8o/Uz2DSbdjtJvCEaPfgsZHTOeRBFujZqHmM7jBkt4Zc5j9qsll120Fa1dWLvMA+iryg8r+lya7H4rsEfz7XQqx4iMOjLiVOyk4wHEHB2Zwy5YnhZylfkL80qfX4RFq6FGB5n0=
+	t=1711471770; cv=none; b=qTZLQizcyqj1hsDTUROJJzGe0XgN0B7PFvHIF+w9mSDEF7+HpU8gUnzFZ4+Dar0lnOv4lRxmdSF5A94Dc2uI+1OhzAjCqcLZbsnIpAXJ56x3c+ZSc1meDO2c4IExD57baK76qFiwb1H9S8FdvEoen2EtVuaykIwGqt4xXQ9xc0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711467600; c=relaxed/simple;
-	bh=ztmkPAB0U1ULXqxkAJmpV7w+Ysid9k8KKpLkRxinnKg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k4SjJzMzURlofj6p5aT3RHyl2YauItKHy+EjvHDPz2o+ula0vZo0ejVqcN4iU9TagpIPZXOENPWITnjI3op2/Z5gh7HmjV9OxbFvDWAWG+xLQAWZ/7wuCn4UdmUOLGgHfbUuilOpCJQEvDfZ+bPxbO0DuY8xMy8KQTNI32bxXZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyKA41Y/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711471770; c=relaxed/simple;
+	bh=H2HpTU1EmHDoY/mcqae3NhFHA7uFSeakgfW/r6p76sQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=nd8z9KI+D3SM869O1EcDxODGDcS4RM6ouAqzzKTug6YrAf50R3Hit2JhPBJAn1e7CK2levSvf705BMy9V9jAPA1FbObC5a1HlbOZ+VXO+4koECGPqrpsVbExwrXX8gBm3nZwYjbPod/ocHGKr4y/wSkbmIKh1T3EAUalow5lSc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rb1LiOVj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyKA41Y/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9697C433F1;
-	Tue, 26 Mar 2024 15:39:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rb1LiOVj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9400CC433C7;
+	Tue, 26 Mar 2024 16:49:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711467600;
-	bh=ztmkPAB0U1ULXqxkAJmpV7w+Ysid9k8KKpLkRxinnKg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qyKA41Y/u8Cszywiz7OK3FbbmiKGQ9C4dXlmSowzO0eODtV3XQMYhndL6LqSSCExc
-	 gSr5KriK7AK/eduOXCzUuM9/M/JTph42YYV7yXqy/Ep5e4C8RdOMDwEY3NB+TWhosG
-	 ynhFk3x5fLusreKA62Lb5K8LI+Hrn02SMQKKQERtg/F9T4BStRFCcanXEuZXn7koxg
-	 lsnbct8Q5TAF/wUov8x/pcO/9j1j/+eoZC8z34hhlBPd/+k36MCtc3hIUbdc3qsQoD
-	 O7ZTB0GZ/L4AyBehCj5ri1j5aP5jWLIf/OTq2a320InuObeAqCv/u7gXamunek3p0/
-	 fkdWsgil6eNBQ==
-From: SeongJae Park <sj@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	hannes@cmpxchg.org,
-	roman.gushchin@linux.dev,
-	mgorman@suse.de,
-	dave@stgolabs.net,
-	willy@infradead.org,
-	liam.howlett@oracle.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	corbet@lwn.net,
-	void@manifault.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	arnd@arndb.de,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	dave.hansen@linux.intel.com,
-	x86@kernel.org,
-	peterx@redhat.com,
-	david@redhat.com,
-	axboe@kernel.dk,
-	mcgrof@kernel.org,
-	masahiroy@kernel.org,
-	nathan@kernel.org,
-	dennis@kernel.org,
-	jhubbard@nvidia.com,
-	tj@kernel.org,
-	muchun.song@linux.dev,
-	rppt@kernel.org,
-	paulmck@kernel.org,
-	pasha.tatashin@soleen.com,
-	yosryahmed@google.com,
-	yuzhao@google.com,
-	dhowells@redhat.com,
-	hughd@google.com,
-	andreyknvl@gmail.com,
-	keescook@chromium.org,
-	ndesaulniers@google.com,
-	vvvvvv@google.com,
-	gregkh@linuxfoundation.org,
-	ebiggers@google.com,
-	ytcoode@gmail.com,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	bristot@redhat.com,
-	vschneid@redhat.com,
-	cl@linux.com,
-	penberg@kernel.org,
-	iamjoonsoo.kim@lge.com,
-	42.hyeyoo@gmail.com,
-	glider@google.com,
-	elver@google.com,
-	dvyukov@google.com,
-	songmuchun@bytedance.com,
-	jbaron@akamai.com,
-	aliceryhl@google.com,
-	rientjes@google.com,
-	minchan@google.com,
-	kaleshsingh@google.com,
-	kernel-team@android.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH v6 30/37] mm: vmalloc: Enable memory allocation profiling
-Date: Tue, 26 Mar 2024 08:39:54 -0700
-Message-Id: <20240326153954.89199-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <CAJuCfpGwLRBWKegYq5XY++fCPWO4mpzrhifw9QGvzJ5Uf9S4jw@mail.gmail.com>
-References: 
+	s=k20201202; t=1711471770;
+	bh=H2HpTU1EmHDoY/mcqae3NhFHA7uFSeakgfW/r6p76sQ=;
+	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
+	b=Rb1LiOVjtZh6e2NNbZ+rKw3OGvUoB+4Y12YHHS/D+WSBc0gCcc/iRQX3Ub2HGSj5F
+	 Dt8yu94iSHRlIB+e3gelfxcGfDAcDl0IRzBJTkS5OTTrO66OGnqxCmnKd9PteK6mV/
+	 m4zTp75pHeBPPkOckURWggi/akxlFKVQTH6IQNn1/W+6NILIvtJd4B9uNQ+iox0JgT
+	 shYeK4DSLx5hgEDTFAyHfT3Mf2NjKSelhKZlpQJC0flSKpkt8Tt4MkUzZQDK0shRyT
+	 TWqBnwyfjWMGzDHucKvIxZNyLYemKUuvwtI2g+euY2CHGQOQcxQtzy20QtBFxGATNR
+	 yT1Ivng41AjmQ==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Tue, 26 Mar 2024 18:49:25 +0200
+Message-Id: <D03U3UZ4XBOW.66TLKVR1PKPH@kernel.org>
+To: "Alexandre Ghiti" <alex@ghiti.fr>, <linux-riscv@lists.infradead.org>
+Cc: "Paul Walmsley" <paul.walmsley@sifive.com>, "Palmer Dabbelt"
+ <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
+ <linux-kernel@vger.kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
+ <linux-modules@vger.kernel.org>, "Naveen N . Rao"
+ <naveen.n.rao@linux.ibm.com>, "Anil S Keshavamurthy"
+ <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>
+Subject: Re: [PATCH v5 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240325215502.660-1-jarkko@kernel.org>
+ <20240325215502.660-2-jarkko@kernel.org>
+ <474ed846-672a-4ff0-9d53-cbf8192fee5f@ghiti.fr>
+In-Reply-To: <474ed846-672a-4ff0-9d53-cbf8192fee5f@ghiti.fr>
 
-On Tue, 26 Mar 2024 00:51:21 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
-
-> On Mon, Mar 25, 2024 at 11:20 AM SeongJae Park <sj@kernel.org> wrote:
+On Tue Mar 26, 2024 at 3:57 PM EET, Alexandre Ghiti wrote:
+> Hi Jarkko,
+>
+> On 25/03/2024 22:55, Jarkko Sakkinen wrote:
+> > Tacing with kprobes while running a monolithic kernel is currently
+> > impossible due the kernel module allocator dependency.
 > >
-> > On Mon, 25 Mar 2024 10:59:01 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+> > Address the issue by implementing textmem API for RISC-V.
 > >
-> > > On Mon, Mar 25, 2024 at 10:49 AM SeongJae Park <sj@kernel.org> wrote:
-> > > >
-> > > > On Mon, 25 Mar 2024 14:56:01 +0000 Suren Baghdasaryan <surenb@google.com> wrote:
-> > > >
-> > > > > On Sat, Mar 23, 2024 at 6:05 PM SeongJae Park <sj@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi Suren and Kent,
-> > > > > >
-> > > > > > On Thu, 21 Mar 2024 09:36:52 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
-> > > > > >
-> > > > > > > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > > > > > >
-> > > > > > > This wrapps all external vmalloc allocation functions with the
-> > > > > > > alloc_hooks() wrapper, and switches internal allocations to _noprof
-> > > > > > > variants where appropriate, for the new memory allocation profiling
-> > > > > > > feature.
-> > > > > >
-> > > > > > I just noticed latest mm-unstable fails running kunit on my machine as below.
-> > > > > > 'git-bisect' says this is the first commit of the failure.
-> > > > > >
-> > > > > >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
-> > > > > >     [10:59:53] Configuring KUnit Kernel ...
-> > > > > >     [10:59:53] Building KUnit Kernel ...
-> > > > > >     Populating config with:
-> > > > > >     $ make ARCH=um O=../kunit.out/ olddefconfig
-> > > > > >     Building with:
-> > > > > >     $ make ARCH=um O=../kunit.out/ --jobs=36
-> > > > > >     ERROR:root:/usr/bin/ld: arch/um/os-Linux/main.o: in function `__wrap_malloc':
-> > > > > >     main.c:(.text+0x10b): undefined reference to `vmalloc'
-> > > > > >     collect2: error: ld returned 1 exit status
-> > > > > >
-> > > > > > Haven't looked into the code yet, but reporting first.  May I ask your idea?
-> > > > >
-> > > > > Hi SeongJae,
-> > > > > Looks like we missed adding "#include <linux/vmalloc.h>" inside
-> > > > > arch/um/os-Linux/main.c in this patch:
-> > > > > https://lore.kernel.org/all/20240321163705.3067592-2-surenb@google.com/.
-> > > > > I'll be posing fixes for all 0-day issues found over the weekend and
-> > > > > will include a fix for this. In the meantime, to work around it you
-> > > > > can add that include yourself. Please let me know if the issue still
-> > > > > persists after doing that.
-> > > >
-> > > > Thank you, Suren.  The change made the error message disappears.  However, it
-> > > > introduced another one.
-> > >
-> > > Ok, let me investigate and I'll try to get a fix for it today evening.
+> > Link: https://www.sochub.fi # for power on testing new SoC's with a min=
+imal stack
+> > Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profi=
+an.com/ # continuation
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > v5:
+> > - No changes, expect removing alloc_execmem() call which should have
+> >    been part of the previous patch.
+> > v4:
+> > - Include linux/execmem.h.
+> > v3:
+> > - Architecture independent parts have been split to separate patches.
+> > - Do not change arch/riscv/kernel/module.c as it is out of scope for
+> >    this patch set now.
+> > v2:
+> > - Better late than never right? :-)
+> > - Focus only to RISC-V for now to make the patch more digestable. This
+> >    is the arch where I use the patch on a daily basis to help with QA.
+> > - Introduce HAVE_KPROBES_ALLOC flag to help with more gradual migration=
+.
+> > ---
+> >   arch/riscv/Kconfig          |  1 +
+> >   arch/riscv/kernel/Makefile  |  3 +++
+> >   arch/riscv/kernel/execmem.c | 22 ++++++++++++++++++++++
+> >   3 files changed, 26 insertions(+)
+> >   create mode 100644 arch/riscv/kernel/execmem.c
 > >
-> > Thank you for this kind reply.  Nonetheless, this is not blocking some real
-> > thing from me.  So, no rush.  Plese take your time :)
-> 
-> I posted a fix here:
-> https://lore.kernel.org/all/20240326073750.726636-1-surenb@google.com/
-> Please let me know if this resolves the issue.
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index e3142ce531a0..499512fb17ff 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -132,6 +132,7 @@ config RISCV
+> >   	select HAVE_KPROBES if !XIP_KERNEL
+> >   	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+> >   	select HAVE_KRETPROBES if !XIP_KERNEL
+> > +	select HAVE_ALLOC_EXECMEM if !XIP_KERNEL
+> >   	# https://github.com/ClangBuiltLinux/linux/issues/1881
+> >   	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
+> >   	select HAVE_MOVE_PMD
+> > diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> > index 604d6bf7e476..337797f10d3e 100644
+> > --- a/arch/riscv/kernel/Makefile
+> > +++ b/arch/riscv/kernel/Makefile
+> > @@ -73,6 +73,9 @@ obj-$(CONFIG_SMP)		+=3D cpu_ops.o
+> >  =20
+> >   obj-$(CONFIG_RISCV_BOOT_SPINWAIT) +=3D cpu_ops_spinwait.o
+> >   obj-$(CONFIG_MODULES)		+=3D module.o
+> > +ifeq ($(CONFIG_ALLOC_EXECMEM),y)
+> > +obj-y				+=3D execmem.o
+> > +endif
+> >   obj-$(CONFIG_MODULE_SECTIONS)	+=3D module-sections.o
+> >  =20
+> >   obj-$(CONFIG_CPU_PM)		+=3D suspend_entry.o suspend.o
+> > diff --git a/arch/riscv/kernel/execmem.c b/arch/riscv/kernel/execmem.c
+> > new file mode 100644
+> > index 000000000000..3e52522ead32
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/execmem.c
+> > @@ -0,0 +1,22 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +
+> > +#include <linux/mm.h>
+> > +#include <linux/execmem.h>
+> > +#include <linux/vmalloc.h>
+> > +#include <asm/sections.h>
+> > +
+> > +void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
 
-I confirmed it is fixing the issue, and replied to the patch with my Tested-by:
-tag.  Thank you for this kind fix, Suren.
+Need to have the parameter name here. I guess this could just as well
+pass through gfp to vmalloc from the caller as kprobes does call
+module_alloc() with GFP_KERNEL set in RISC-V.
 
+> > +{
+> > +	return __vmalloc_node_range(size, 1, MODULES_VADDR,
+> > +				    MODULES_END, GFP_KERNEL,
+> > +				    PAGE_KERNEL, 0, NUMA_NO_NODE,
+> > +				    __builtin_return_address(0));
+> > +}
+>
+>
+> The __vmalloc_node_range() line ^^ must be from an old kernel since we=20
+> added VM_FLUSH_RESET_PERMS in 6.8, see 749b94b08005 ("riscv: Fix=20
+> module_alloc() that did not reset the linear mapping permissions").
+>
+> In addition, I guess module_alloc() should now use alloc_execmem() right?
 
-Thanks,
-SJ
+Ack for the first comment. For the 2nd it is up to arch/<arch> to choose
+whether to have shared or separate allocators.
 
-[...]
+So if you want I can change it that way but did not want to make the
+call myself.
+
+>
+>
+> > +
+> > +void free_execmem(void *region)
+> > +{
+> > +	if (in_interrupt())
+> > +		pr_warn("In interrupt context: vmalloc may not work.\n");
+> > +
+> > +	vfree(region);
+> > +}
+>
+>
+> I remember Mike Rapoport sent a patchset to introduce an API for=20
+> executable memory allocation=20
+> (https://lore.kernel.org/linux-mm/20230918072955.2507221-1-rppt@kernel.or=
+g/),=20
+> how does this intersect with your work? I don't know the status of his=20
+> patchset though.
+>
+> Thanks,
+>
+> Alex
+
+I have also made a patch set for kprobes in the 2022:
+
+https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian.com/
+
+I think this Calvin's, Mike's and my early patch set have the same
+problem: they try to choke all architectures at once. And further,
+Calvin's and Mike's work also try to cover also tracing subsystems
+at once.
+
+I feel that my relatively small patch set which deals only with
+trivial kprobe (which is more in the leaf than e.g. bpf which
+is more like orchestrator tool) and implements one arch of which
+dog food I actually eat is a better starting point.
+
+Arch code is always something where you need to have genuine
+understanding so full architecture coverage from day one is
+just too risky for stability. Linux is better off if people who
+work on a  specific arch proactively will "fill the holes".
+
+So the way I see my patch set is "lowest common denominator"
+in both architecture axis and tracing subsystem axist. It should
+not interfere that much with the other work (like bpf).
+
+BR, Jarkko
