@@ -1,106 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66C0C4E1A2;
-	Tue, 26 Mar 2024 02:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CB357314;
+	Tue, 26 Mar 2024 03:13:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711418488; cv=none; b=mlfoy4RKRAxs4U+9P8T5Pf1WWG/DrfaAhhwrLrHvFatIoKNRO+y367y8fw4hlX2PibA9R2xufgnpZI4N3kfhuk6lNkXVgzphmHOa1Wm7n2ng8Sw4g6SrOZq6tHvZW/ATozYJ9yTrt1XOfbt6hDH8WhUDztiLX79gGTwBOTiANPY=
+	t=1711422793; cv=none; b=b8l+RZyQNKuVhJCP8p57XO2l2LgvOVMgKSKmNx8CHfqyiiWhV2gCxY7L5cQJS+QSXMMGQaevOuSQYr6Ym7YIAysiMYO/Y0we0zyde9mgkttFIvZZJjh+LDx8GJuaii7NiHxvWY5UIL8IaxdYICmUxvKnA5Jz4MXqmg2SPc6SlZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711418488; c=relaxed/simple;
-	bh=MF9ovmrIg6e8IQIMkwaYLFqAcxexDC3fSt0fm0vWIc4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=b/BFF/gY99v+1+T2d4mIUbUsWitjPom1cu/Ph7PUl/Jan9WJCU8mILUA31hUSBk7lZiXQJGAj+m3+igau7kB/Kv6jOOhdZ83lv9WaujFPxjVvJUN82ddE60i+LA53+GnFfIiGcX3NgzsxZXPAO05+ffZ1ZwTZEmOqN+8AhQo9N8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lhw57AEB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711422793; c=relaxed/simple;
+	bh=FwGoHomiC96TQlvY/JajBwhK2/NC3YF4AOwU6GXj5Nw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GO/bxbpU8acTQ71fF+2QUhPZBq43earJUHlDi2doOzyH5F8lzuP9+RMPLOgzJp5hwrxGDEUTuNlqMOi2Hmms94oYOI0c56nCG6Z6fSZfRX/xu/oGtyy0Q6yIn/sESKlzEmfxRLyFmQVxqG/3BKsAG8v/BgKALcBgvYW/tjbzb4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SCLuPgk5; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lhw57AEB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E47C433C7;
-	Tue, 26 Mar 2024 02:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711418487;
-	bh=MF9ovmrIg6e8IQIMkwaYLFqAcxexDC3fSt0fm0vWIc4=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=Lhw57AEBPxbjD9GL0sYfWTtjr9JPLANVwg5Yz1VhBT/S50e2etFPWxhogAEkIOW7w
-	 c4trvVg5EzC3Xng1V19j2Dm9Yvs33knBUrCaRLqlKh5lpCKfiSULRnnfK970su7Qqa
-	 W/VlNom4Hf+B+NR3A8gZ5pDfJuvrir5CEOuQVEhvMxh/DHply97ElQUI2qaCFvjXxH
-	 v69BQSz8BF6/g/XGpOUqx7Wlwxz2dSU8gNRRBmcYWDH0/acsGQLVPhwpDs0EIXacI+
-	 n1PHMW9iMhAtQfL24uHs7U5cspXL0IC8tZrffj/YxQzXR8I/J0VlMxyYuEnr5XaqI4
-	 tqMgvIYyYUWiQ==
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SCLuPgk5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=oyTIYfAEgFR5EqikXW3EqaVFHy5A7Gf0H+FFygqy/tY=; b=SCLuPgk5eGRHTeejI7Po8CxJNS
+	bbsYrw4YA1RuHwQTN3lJSqv0cJSQcoH3NsUnHsCLUTRrfJWekmABSNIEgOKhEMlB8dnHghsjIdFjH
+	tbov3PTpb0mXI/yE5w3u/IVAXlC1QXni5Bz5wSTdDFmtmk3/lUQVqBMRUB9JCEGMaZRxGPpLSKzI8
+	AkEU50g2pNUrPdELPskDeHhnLyEAClZf8W9he7Cc9V+7bQe2F0mZfyzWa1l9zDCSP6kaY+j2mVk7o
+	yGjKWP4eAvQ2SZs4EGAA8NkZAxQg0NaXHyaK9US3OwjCxbPOUVpB0PZEswh/elWS8A6JeJkH0GU+N
+	ub3NBf9A==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1roxEn-00000000Lm5-3f0u;
+	Tue, 26 Mar 2024 03:12:34 +0000
+Date: Tue, 26 Mar 2024 03:12:33 +0000
+From: Matthew Wilcox <willy@infradead.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+	mgorman@suse.de, dave@stgolabs.net, liam.howlett@oracle.com,
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net,
+	void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+	catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
+	tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+	x86@kernel.org, peterx@redhat.com, david@redhat.com,
+	axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com,
+	tj@kernel.org, muchun.song@linux.dev, rppt@kernel.org,
+	paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, keescook@chromium.org,
+	ndesaulniers@google.com, vvvvvv@google.com,
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+	vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+	iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+	elver@google.com, dvyukov@google.com, songmuchun@bytedance.com,
+	jbaron@akamai.com, aliceryhl@google.com, rientjes@google.com,
+	minchan@google.com, kaleshsingh@google.com, kernel-team@android.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v6 14/37] lib: introduce support for page allocation
+ tagging
+Message-ID: <ZgI9Iejn6DanJZ-9@casper.infradead.org>
+References: <20240321163705.3067592-1-surenb@google.com>
+ <20240321163705.3067592-15-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 26 Mar 2024 04:01:23 +0200
-Message-Id: <D03B7XJYRFC1.2L3I2TO5HNQD3@kernel.org>
-Cc: <linux-riscv@lists.infradead.org>, "Paul Walmsley"
- <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
- Ou" <aou@eecs.berkeley.edu>, <linux-kernel@vger.kernel.org>, "Luis
- Chamberlain" <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>, "Naveen
- N . Rao" <naveen.n.rao@linux.ibm.com>, "Anil S Keshavamurthy"
- <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v5 1/2] kprobes: textmem API
-From: "Jarkko Sakkinen" <jarkko@kernel.org>
-To: "Jarkko Sakkinen" <jarkko@kernel.org>, "Masami Hiramatsu"
- <mhiramat@kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20240325215502.660-1-jarkko@kernel.org>
- <20240326095836.f43d259b7747269a7c0b9d23@kernel.org>
- <D03AL7A5G3M2.3UK4ASWILGBJS@kernel.org>
-In-Reply-To: <D03AL7A5G3M2.3UK4ASWILGBJS@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321163705.3067592-15-surenb@google.com>
 
-On Tue Mar 26, 2024 at 3:31 AM EET, Jarkko Sakkinen wrote:
-> > > +#endif /* _LINUX_EXECMEM_H */
-> > > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> > > index 9d9095e81792..87fd8c14a938 100644
-> > > --- a/kernel/kprobes.c
-> > > +++ b/kernel/kprobes.c
-> > > @@ -44,6 +44,7 @@
-> > >  #include <asm/cacheflush.h>
-> > >  #include <asm/errno.h>
-> > >  #include <linux/uaccess.h>
-> > > +#include <linux/execmem.h>
-> > > =20
-> > >  #define KPROBE_HASH_BITS 6
-> > >  #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
-> > > @@ -113,17 +114,17 @@ enum kprobe_slot_state {
-> > >  void __weak *alloc_insn_page(void)
-> > >  {
-> > >  	/*
-> > > -	 * Use module_alloc() so this page is within +/- 2GB of where the
-> > > +	 * Use alloc_execmem() so this page is within +/- 2GB of where the
-> > >  	 * kernel image and loaded module images reside. This is required
-> > >  	 * for most of the architectures.
-> > >  	 * (e.g. x86-64 needs this to handle the %rip-relative fixups.)
-> > >  	 */
-> > > -	return module_alloc(PAGE_SIZE);
-> > > +	return alloc_execmem(PAGE_SIZE, GFP_KERNEL);
-> > >  }
-> > > =20
-> > >  static void free_insn_page(void *page)
-> > >  {
-> > > -	module_memfree(page);
-> > > +	free_execmem(page);
-> > >  }
-> > > =20
-> > >  struct kprobe_insn_cache kprobe_insn_slots =3D {
-> > > @@ -1580,6 +1581,7 @@ static int check_kprobe_address_safe(struct kpr=
-obe *p,
-> > >  		goto out;
-> > >  	}
-> > > =20
-> > > +#ifdef CONFIG_MODULES
-> >
-> > You don't need this block, because these APIs have dummy functions.
->
-> Hmm... I'll verify this tomorrow.
+On Thu, Mar 21, 2024 at 09:36:36AM -0700, Suren Baghdasaryan wrote:
+> +++ b/include/linux/pgalloc_tag.h
+> @@ -0,0 +1,78 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * page allocation tagging
+> + */
+> +#ifndef _LINUX_PGALLOC_TAG_H
+> +#define _LINUX_PGALLOC_TAG_H
+> +
+> +#include <linux/alloc_tag.h>
+> +
+> +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> +
+> +#include <linux/page_ext.h>
+> +
+> +extern struct page_ext_operations page_alloc_tagging_ops;
+> +extern struct page_ext *page_ext_get(struct page *page);
+> +extern void page_ext_put(struct page_ext *page_ext);
 
-It depends on having struct module available given "(*probed_mod)->state".
+Why are you duplicating theses two declarations?
 
-It is non-existent unless CONFIG_MODULES is set given how things are
-flagged in include/linux/module.h.
-
-BR, Jarkko
+I just deleted them locally and don't see any build problems.  tested with
+x86-64 defconfig (full build), allnoconfig full build and allmodconfig
+mm/ and fs/ (nobody has time to build allmodconfig drivers/)
