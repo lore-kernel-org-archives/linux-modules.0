@@ -1,128 +1,182 @@
-Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CC012D1E9;
-	Tue, 26 Mar 2024 14:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2EFED9;
+	Tue, 26 Mar 2024 14:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711462391; cv=none; b=AgnOgmrrDUqGScoOja6GPsRrfss2NketQXl8Uw6KBsFhUavl2zwI6mZq3Q0XkWvb3KUylRjYQ+cM0Fo9bilHRkk8wOsgT3XdmDBdTlfmkfddmRHi+w5gwMGdCIO7eVvqKGrN/6F60T5x44AWunMhTuAnQZk61Vr4h0G9YaAsv4w=
+	t=1711464475; cv=none; b=PAfCurn4xudZRybbuD85+d1vw6LsFdeT7zqCxPDo39QLV7XhXMOJGm1k1yxRKqyi/JSfoG5+YLF4ugZ6nQjqqvREPql0L07GKtHxjbtZpDu9b+lkaM+lIs+RJpyd7A7k6CQ1yWwUuidiIwpPiYFOs/JkpbbCUNCgv3waKKlOwc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711462391; c=relaxed/simple;
-	bh=C07QoGZwFIqiiGLDYtIT/bDm7g2eW60WzjZK/2lcL1o=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=ByZvyNI5SOS03lp+RedS25cWWM26I8JBomJwzzWEx46+5eXJkXZ4cBaU/TJDDDbvqhZRHZ42tllryR2dEnH/rVw+l6rHyePdoDChre1VRRxkoUKwKzJUF+MNaorMFskD0nN60z7d22H71JYTcsJDxonRzAjMBFCRiXfpVZh87hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=IfAd/QhD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JfDwFEmQ; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1711464475; c=relaxed/simple;
+	bh=2VRodtLYji0E2iO14KF37hDwen2VjVMAvwAcrcgPpT4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RP8DQWyViGOgZmbG2QgzfPgzfywKA/8kNopgnvNdc4T6EGj7lUY4r7gXw1Opte+0uc+fUuisIXtCDlUPqjnQW03IOAW28kHepgtmA8eSrcorHK9W+3xOlMOLutz9UQHP5vIMjzlkvWulGnlVHp5NSC5gpQjGL6gYvjuJAQ743BE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E4BQDDTk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="IfAd/QhD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JfDwFEmQ"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfout.nyi.internal (Postfix) with ESMTP id 0A94A13800C7;
-	Tue, 26 Mar 2024 10:13:08 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Tue, 26 Mar 2024 10:13:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1711462388; x=1711548788; bh=qwEl2RbjTY
-	FZ3+lGDXzFX22ORlHVarQEQDkkqeWQ6+M=; b=IfAd/QhDJkneIhSG1PMAHOgbo/
-	mcVTxuJiD/yHg9YhAnYnZUftiTZkSefCnZODbx157mbtsl6c9KOoEEJw5GVPRs1t
-	4pKyrlXc3PE5L1IOIP/0QKVBGs2yNstleCl35baKMMtsQLa/DCZ9omCnFOXrxM+y
-	YaYt9yA5nphdbfUHbwQZtnDC0awtsvnxQpY+mpuYRV5vowZLKiTpjW2SxhNU64J9
-	QEujTdGbAPcin+SRXLf4b3DAFEoCsr1einZXn7xfTAyugJwP1Y7DB1BCHA4QcLNU
-	W3mYGxECmUf0jcgzAIchIFVXoDxcpt1cuObldDCcZ8Gj/2s0oXUvqlT/B0Gw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1711462388; x=1711548788; bh=qwEl2RbjTYFZ3+lGDXzFX22ORlHV
-	arQEQDkkqeWQ6+M=; b=JfDwFEmQ8TcsCAzZifaUtTGemxt/kA2wS6Wxfey7Yrya
-	l1oV15QGJN9tspkG4Jvphm8fXiHE1lt5cDzZ25+/63XjMn6rFfQU+eeRl4nU24hB
-	X0tKZ5Nu46ni4fT5FqyWmxwJ3xI6uaVtB2N4O7Lbw1bTI5p8da/L6Yodjz8J+R8q
-	ogHIG+CeJOu0FnKMAf/qjCuXVgtbbVxzKWXtsf7heSNO1o4a/4ikWT1IunJsfH9V
-	/7xEQoh7k5cXmeRO0CP4Xce0r/kEMyXQC98+AlkvWtY9rdipL2M8JQ1zJ4NdW4Ww
-	ffU0Tz3dJ0CCmJUX5g/Vs/d8eJJzaG4+1xVcg4Z3jg==
-X-ME-Sender: <xms:89cCZpuStysZle_lcQ6e_39Ge5HGVApzWhrBgJRpBZ7vqbresYYPXA>
-    <xme:89cCZifKumP_QBFxyJCgRHqsmRNzZ787fJzS-XrEjRDlnMRPIRio5ynT7nwaMU-A9
-    jK-uuXPoZOIDizT5RE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledruddufedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:89cCZsx0e212wvfgtlWiXcYU5tqkhNAczCkNZP9wfA0EO_X-u8xnVQ>
-    <xmx:89cCZgNvc2GXUQRxPl1yyEz95GvFxNjCeFcRcPNikptFpkl7RNlJhQ>
-    <xmx:89cCZp-66mD18GWucmFFBGYq9XMM7lTwSeMdRgUXwKURHsg9kvBKUw>
-    <xmx:89cCZgXsFpVb_mBNe5-9MAf1AXATaTe_lx4ptHKhkMWsgMY3wgHsLQ>
-    <xmx:9NcCZpzUasImbbYFeND7Zcn2AAUpgwINPS0QeIIbxpl3ss3JyIsxjw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 96BB1B6008F; Tue, 26 Mar 2024 10:13:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-328-gc998c829b7-fm-20240325.002-gc998c829
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E4BQDDTk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C54DC433F1;
+	Tue, 26 Mar 2024 14:47:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711464475;
+	bh=2VRodtLYji0E2iO14KF37hDwen2VjVMAvwAcrcgPpT4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E4BQDDTkgrdwdIkmMvielkRpTAsqHIEG3dNSrY21fnxwoLYvLOoCje+XGKi0Q6+lb
+	 vXFNIViLU9NTXcLVTR3XwdRIIouf6xWYpzwnmHI2t5ZxiCoyK5CtJGLAMaMQhP4GqM
+	 LFJItP61E8WSzWQOgV3iidHNLT5C63yxLkS/wCtha2CzziKBhSzJgJ8mdUJnDc4MsM
+	 mHMWnrCmz0M9BMr26mXQL/Ot8TdiiiLpbc7Z6ykNI9wEj4r4WuyvPMGjqE0R7U0B4a
+	 JYlh8463XR1dZ+1yi/iNsx2NnACkLOIgc70LBf5p2SbJ28JbOOieq3jHp29R//i1VX
+	 XyBZZot1G0W0w==
+From: Arnd Bergmann <arnd@kernel.org>
+To: linux-kbuild@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Bill Metzenthen <billm@melbpc.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	x86@kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	"Manoj N. Kumar" <manoj@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	netdev@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-scsi@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [PATCH 00/12] kbuild: enable some -Wextra warnings by default
+Date: Tue, 26 Mar 2024 15:47:15 +0100
+Message-Id: <20240326144741.3094687-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5fb74d31-a5f7-4fc0-96f0-f69158829df3@app.fastmail.com>
-In-Reply-To: <2024032349-corporate-detached-0dc9@gregkh>
-References: <20240322173930.947963-1-arnd@kernel.org>
- <2024032349-corporate-detached-0dc9@gregkh>
-Date: Tue, 26 Mar 2024 15:12:46 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Luis Chamberlain" <mcgrof@kernel.org>, linux-modules@vger.kernel.org,
- "Rafael J . Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v2] module: don't ignore sysfs_create_link() failures
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Sat, Mar 23, 2024, at 17:50, Greg Kroah-Hartman wrote:
-> On Fri, Mar 22, 2024 at 06:39:11PM +0100, Arnd Bergmann wrote:
->> diff --git a/drivers/base/bus.c b/drivers/base/bus.c
->> index daee55c9b2d9..7ef75b60d331 100644
->> --- a/drivers/base/bus.c
->> +++ b/drivers/base/bus.c
->> @@ -674,7 +674,12 @@ int bus_add_driver(struct device_driver *drv)
->>  		if (error)
->>  			goto out_del_list;
->>  	}
->> -	module_add_driver(drv->owner, drv);
->> +	error = module_add_driver(drv->owner, drv);
->> +	if (error) {
->> +		printk(KERN_ERR "%s: failed to create module links for %s\n",
->> +			__func__, drv->name);
->> +		goto out_del_list;
->
-> Don't we need to walk back the driver_attach() call here if this fails?
+From: Arnd Bergmann <arnd@arndb.de>
 
-Yes, fixed now. There are still some other calls right after
-it that print an error but don't cause bus_add_driver() to fail
-though. We may want to add similar unwinding there, but that
-feels like it should be a separate patch.
+This is a follow-up on a couple of patch series I sent in the past,
+enabling -Wextra (aside from stuff that is explicitly disabled),
+-Wcast-function-pointer-strict and -Wrestrict.
 
->>  
->>  	if (!mk)
->> -		return;
->> +		return 0;
->> +
->> +	ret = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
->> +	if (ret && ret != -EEXIST)
->
-> Why would EEXIST happen here?  How can this be called twice?
->
-
-My impression was that the lack of error handling and the
-comment was ab out a case where that might happen
-intentionally. I've removed it now as I couldn't find any
-evidence that this is really needed. I suppose we would
-find out in testing if we do.
+I have tested these on 'defconfig' and 'allmodconfig' builds across
+all architectures, as well as many 'randconfig' builds on x86, arm and
+arm64. It would be nice to have all the Makefile.extrawarn changes in
+v6.10, hopefully with the driver fixes going in before that through
+the respective subsystem trees.
 
      Arnd
+
+Arnd Bergmann (12):
+  kbuild: make -Woverride-init warnings more consistent
+  [v3] parport: mfc3: avoid empty-body warning
+  kbuild: turn on -Wextra by default
+  kbuild: remove redundant extra warning flags
+  firmware: dmi-id: add a release callback function
+  nouveau: fix function cast warning
+  cxlflash: fix function pointer cast warnings
+  x86: math-emu: fix function cast warnings
+  kbuild: enable -Wcast-function-type-strict unconditionally
+  sata: sx4: fix pdc20621_get_from_dimm() on 64-bit
+  [v4] kallsyms: rework symbol lookup return codes
+  kbuild: turn on -Wrestrict by default
+
+ arch/x86/math-emu/fpu_etc.c                   |  9 +++--
+ arch/x86/math-emu/fpu_trig.c                  |  6 ++--
+ arch/x86/math-emu/reg_constant.c              |  7 +++-
+ drivers/ata/sata_sx4.c                        |  6 ++--
+ drivers/firmware/dmi-id.c                     |  7 +++-
+ .../gpu/drm/amd/display/dc/dce110/Makefile    |  2 +-
+ .../gpu/drm/amd/display/dc/dce112/Makefile    |  2 +-
+ .../gpu/drm/amd/display/dc/dce120/Makefile    |  2 +-
+ drivers/gpu/drm/amd/display/dc/dce60/Makefile |  2 +-
+ drivers/gpu/drm/amd/display/dc/dce80/Makefile |  2 +-
+ drivers/gpu/drm/i915/Makefile                 |  6 ++--
+ .../drm/nouveau/nvkm/subdev/bios/shadowof.c   |  7 +++-
+ drivers/gpu/drm/xe/Makefile                   |  4 +--
+ drivers/net/ethernet/renesas/sh_eth.c         |  2 +-
+ drivers/parport/parport_mfc3.c                |  3 +-
+ drivers/pinctrl/aspeed/Makefile               |  2 +-
+ drivers/scsi/cxlflash/lunmgt.c                |  4 +--
+ drivers/scsi/cxlflash/main.c                  | 14 ++++----
+ drivers/scsi/cxlflash/superpipe.c             | 34 +++++++++----------
+ drivers/scsi/cxlflash/superpipe.h             | 11 +++---
+ drivers/scsi/cxlflash/vlun.c                  |  7 ++--
+ fs/proc/Makefile                              |  2 +-
+ include/linux/filter.h                        | 14 ++++----
+ include/linux/ftrace.h                        |  6 ++--
+ include/linux/module.h                        | 14 ++++----
+ kernel/bpf/Makefile                           |  2 +-
+ kernel/bpf/core.c                             |  7 ++--
+ kernel/kallsyms.c                             | 23 +++++++------
+ kernel/module/kallsyms.c                      | 26 +++++++-------
+ kernel/trace/ftrace.c                         | 13 +++----
+ mm/Makefile                                   |  3 +-
+ scripts/Makefile.extrawarn                    | 33 ++++--------------
+ 32 files changed, 134 insertions(+), 148 deletions(-)
+
+-- 
+2.39.2
+
+Cc: Bill Metzenthen <billm@melbpc.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: x86@kernel.org
+Cc: Damien Le Moal <dlemoal@kernel.org>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Harry Wentland <harry.wentland@amd.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: "Manoj N. Kumar" <manoj@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Greg Kroah-Hartman <gregkh@suse.de>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: amd-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+Cc: intel-xe@lists.freedesktop.org
+Cc: netdev@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-scsi@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-modules@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: llvm@lists.linux.dev
