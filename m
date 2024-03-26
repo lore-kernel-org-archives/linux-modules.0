@@ -1,130 +1,185 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A88513C83C;
-	Tue, 26 Mar 2024 15:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CE613CA98;
+	Tue, 26 Mar 2024 15:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711466959; cv=none; b=rxwAPz+qzs3nIqXt2UIHu/Q5G710Te6CrtSQG23FHOaV/4Mzdw39cfb/MLZ2E2arU0sqRiZSrQIed+4n1cNVpT5zwmnDg5MmKmQXA2x6pYmfI0X4Xm3dm9fMAVb3m3YyxJYVYVcUaQkn9on6LCAiOkHqtl2gZVhZhUKsJXOn6Rw=
+	t=1711467600; cv=none; b=LHyID/sSExbpmKVrXMMbveQoakX4DGhoV61/d8o/Uz2DSbdjtJvCEaPfgsZHTOeRBFujZqHmM7jBkt4Zc5j9qsll120Fa1dWLvMA+iryg8r+lya7H4rsEfz7XQqx4iMOjLiVOyk4wHEHB2Zwy5YnhZylfkL80qfX4RFq6FGB5n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711466959; c=relaxed/simple;
-	bh=GIOVKygProOFQxNSEBqrYix0YouMUJ42MxRavpDOBV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p4P5weSNWjvLulwoPa3/2MYao8uIfMlSobZ5n27GKruazoAsce9c39vHty6DuXYaNzhN7wDnG5ODCaMDUWHL1FyGAG06bosRXA5OJ8lZjTLZhbCLR6RdVrqhoFeVZ3Wqcr7xQPl8t9JBIu1JemDCpcnLIJOiFw4xbz1D0AtGCRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A/vLvjET; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1711467600; c=relaxed/simple;
+	bh=ztmkPAB0U1ULXqxkAJmpV7w+Ysid9k8KKpLkRxinnKg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=k4SjJzMzURlofj6p5aT3RHyl2YauItKHy+EjvHDPz2o+ula0vZo0ejVqcN4iU9TagpIPZXOENPWITnjI3op2/Z5gh7HmjV9OxbFvDWAWG+xLQAWZ/7wuCn4UdmUOLGgHfbUuilOpCJQEvDfZ+bPxbO0DuY8xMy8KQTNI32bxXZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyKA41Y/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A/vLvjET"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1711466958; x=1743002958;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GIOVKygProOFQxNSEBqrYix0YouMUJ42MxRavpDOBV8=;
-  b=A/vLvjETfH7Ku9SY8f6IUFXJKgDWc2qxBoHt///XAn162LlMPe2udIx3
-   ZPdlPSmCJ7GtE5A7H2ZG6m4C+kNHJfkxnMKMutZvEkrDPQVHWVBu/8aQc
-   Vy+bgact5r8n5GnCwsMhXC/PgRH5GqWVCqb+EbQsxBb24dkgKEKdj7hFu
-   M51N7YDcIcVouOz39xlyEpT8DWwTHkuqeQ2dIu1VtTGEuy+BW7lganGo6
-   RsE7EDqmFCWBRUZjMBLG342dFFY0xyax9JNjmb03JB9wE9xYBY769H99z
-   JURdujmwDokftR7gEcOIgv/NJtujoauojRWP/gp4bMWrrBG+a6dClq1YS
-   w==;
-X-CSE-ConnectionGUID: Ou5j85P0RCa71qhaLiAUHw==
-X-CSE-MsgGUID: z5DnR3BWRp+8JBjPwnm8ug==
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="6420442"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="6420442"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 08:29:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11025"; a="914883352"
-X-IronPort-AV: E=Sophos;i="6.07,156,1708416000"; 
-   d="scan'208";a="914883352"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Mar 2024 08:29:15 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rp8jh-0000000GL6G-0OaB;
-	Tue, 26 Mar 2024 17:29:13 +0200
-Date: Tue, 26 Mar 2024 17:29:12 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyKA41Y/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9697C433F1;
+	Tue, 26 Mar 2024 15:39:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711467600;
+	bh=ztmkPAB0U1ULXqxkAJmpV7w+Ysid9k8KKpLkRxinnKg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=qyKA41Y/u8Cszywiz7OK3FbbmiKGQ9C4dXlmSowzO0eODtV3XQMYhndL6LqSSCExc
+	 gSr5KriK7AK/eduOXCzUuM9/M/JTph42YYV7yXqy/Ep5e4C8RdOMDwEY3NB+TWhosG
+	 ynhFk3x5fLusreKA62Lb5K8LI+Hrn02SMQKKQERtg/F9T4BStRFCcanXEuZXn7koxg
+	 lsnbct8Q5TAF/wUov8x/pcO/9j1j/+eoZC8z34hhlBPd/+k36MCtc3hIUbdc3qsQoD
+	 O7ZTB0GZ/L4AyBehCj5ri1j5aP5jWLIf/OTq2a320InuObeAqCv/u7gXamunek3p0/
+	 fkdWsgil6eNBQ==
+From: SeongJae Park <sj@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	hannes@cmpxchg.org,
+	roman.gushchin@linux.dev,
+	mgorman@suse.de,
+	dave@stgolabs.net,
+	willy@infradead.org,
+	liam.howlett@oracle.com,
+	penguin-kernel@i-love.sakura.ne.jp,
+	corbet@lwn.net,
+	void@manifault.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	arnd@arndb.de,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	peterx@redhat.com,
+	david@redhat.com,
+	axboe@kernel.dk,
+	mcgrof@kernel.org,
+	masahiroy@kernel.org,
+	nathan@kernel.org,
+	dennis@kernel.org,
+	jhubbard@nvidia.com,
+	tj@kernel.org,
+	muchun.song@linux.dev,
+	rppt@kernel.org,
+	paulmck@kernel.org,
+	pasha.tatashin@soleen.com,
+	yosryahmed@google.com,
+	yuzhao@google.com,
+	dhowells@redhat.com,
+	hughd@google.com,
+	andreyknvl@gmail.com,
+	keescook@chromium.org,
+	ndesaulniers@google.com,
+	vvvvvv@google.com,
+	gregkh@linuxfoundation.org,
+	ebiggers@google.com,
+	ytcoode@gmail.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	cl@linux.com,
+	penberg@kernel.org,
+	iamjoonsoo.kim@lge.com,
+	42.hyeyoo@gmail.com,
+	glider@google.com,
+	elver@google.com,
+	dvyukov@google.com,
+	songmuchun@bytedance.com,
+	jbaron@akamai.com,
+	aliceryhl@google.com,
+	rientjes@google.com,
+	minchan@google.com,
+	kaleshsingh@google.com,
+	kernel-team@android.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev,
+	linux-arch@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-modules@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	"Ricardo B. Marliere" <ricardo@marliere.net>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v3] module: don't ignore sysfs_create_link() failures
-Message-ID: <ZgLpyDIsHThTT_KG@smile.fi.intel.com>
-References: <20240326145733.3413024-1-arnd@kernel.org>
+	kasan-dev@googlegroups.com,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH v6 30/37] mm: vmalloc: Enable memory allocation profiling
+Date: Tue, 26 Mar 2024 08:39:54 -0700
+Message-Id: <20240326153954.89199-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <CAJuCfpGwLRBWKegYq5XY++fCPWO4mpzrhifw9QGvzJ5Uf9S4jw@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240326145733.3413024-1-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 26, 2024 at 03:57:18PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, 26 Mar 2024 00:51:21 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+
+> On Mon, Mar 25, 2024 at 11:20 AM SeongJae Park <sj@kernel.org> wrote:
+> >
+> > On Mon, 25 Mar 2024 10:59:01 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > > On Mon, Mar 25, 2024 at 10:49 AM SeongJae Park <sj@kernel.org> wrote:
+> > > >
+> > > > On Mon, 25 Mar 2024 14:56:01 +0000 Suren Baghdasaryan <surenb@google.com> wrote:
+> > > >
+> > > > > On Sat, Mar 23, 2024 at 6:05 PM SeongJae Park <sj@kernel.org> wrote:
+> > > > > >
+> > > > > > Hi Suren and Kent,
+> > > > > >
+> > > > > > On Thu, 21 Mar 2024 09:36:52 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
+> > > > > >
+> > > > > > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > > > > > >
+> > > > > > > This wrapps all external vmalloc allocation functions with the
+> > > > > > > alloc_hooks() wrapper, and switches internal allocations to _noprof
+> > > > > > > variants where appropriate, for the new memory allocation profiling
+> > > > > > > feature.
+> > > > > >
+> > > > > > I just noticed latest mm-unstable fails running kunit on my machine as below.
+> > > > > > 'git-bisect' says this is the first commit of the failure.
+> > > > > >
+> > > > > >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+> > > > > >     [10:59:53] Configuring KUnit Kernel ...
+> > > > > >     [10:59:53] Building KUnit Kernel ...
+> > > > > >     Populating config with:
+> > > > > >     $ make ARCH=um O=../kunit.out/ olddefconfig
+> > > > > >     Building with:
+> > > > > >     $ make ARCH=um O=../kunit.out/ --jobs=36
+> > > > > >     ERROR:root:/usr/bin/ld: arch/um/os-Linux/main.o: in function `__wrap_malloc':
+> > > > > >     main.c:(.text+0x10b): undefined reference to `vmalloc'
+> > > > > >     collect2: error: ld returned 1 exit status
+> > > > > >
+> > > > > > Haven't looked into the code yet, but reporting first.  May I ask your idea?
+> > > > >
+> > > > > Hi SeongJae,
+> > > > > Looks like we missed adding "#include <linux/vmalloc.h>" inside
+> > > > > arch/um/os-Linux/main.c in this patch:
+> > > > > https://lore.kernel.org/all/20240321163705.3067592-2-surenb@google.com/.
+> > > > > I'll be posing fixes for all 0-day issues found over the weekend and
+> > > > > will include a fix for this. In the meantime, to work around it you
+> > > > > can add that include yourself. Please let me know if the issue still
+> > > > > persists after doing that.
+> > > >
+> > > > Thank you, Suren.  The change made the error message disappears.  However, it
+> > > > introduced another one.
+> > >
+> > > Ok, let me investigate and I'll try to get a fix for it today evening.
+> >
+> > Thank you for this kind reply.  Nonetheless, this is not blocking some real
+> > thing from me.  So, no rush.  Plese take your time :)
 > 
-> The sysfs_create_link() return code is marked as __must_check, but the
-> module_add_driver() function tries hard to not care, by assigning the
-> return code to a variable. When building with 'make W=1', gcc still
-> warns because this variable is only assigned but not used:
-> 
-> drivers/base/module.c: In function 'module_add_driver':
-> drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
-> 
-> Rework the code to properly unwind and return the error code to the
-> caller. My reading of the original code was that it tries to
-> not fail when the links already exist, so keep ignoring -EEXIST
-> errors.
+> I posted a fix here:
+> https://lore.kernel.org/all/20240326073750.726636-1-surenb@google.com/
+> Please let me know if this resolves the issue.
 
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-
-Wondering if you can move these to be after --- to avoid polluting commit
-message. This will have the same effect and be archived on lore. But on
-pros side it will unload the commit message(s) from unneeded noise.
-
-...
-
-> +	error = module_add_driver(drv->owner, drv);
-> +	if (error) {
-> +		printk(KERN_ERR "%s: failed to create module links for %s\n",
-> +			__func__, drv->name);
-
-What's wrong with pr_err()? Even if it's not a style used, in a new pieces of
-code this can be improved beforehand. So, we will reduce a technical debt, and
-not adding to it.
-
-> +		goto out_detach;
-> +	}
-
-...
-
-> +int module_add_driver(struct module *mod, struct device_driver *drv)
->  {
->  	char *driver_name;
-> -	int no_warn;
-> +	int ret;
-
-I would move it...
-
->  	struct module_kobject *mk = NULL;
-
-...to be here.
-
--- 
-With Best Regards,
-Andy Shevchenko
+I confirmed it is fixing the issue, and replied to the patch with my Tested-by:
+tag.  Thank you for this kind fix, Suren.
 
 
+Thanks,
+SJ
+
+[...]
