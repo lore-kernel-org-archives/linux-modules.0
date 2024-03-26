@@ -1,57 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEF313C680;
-	Tue, 26 Mar 2024 14:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3471413C696;
+	Tue, 26 Mar 2024 14:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711464907; cv=none; b=X6t34KzFPiIXsLfq3+g8NIdYDN2+1eLinexjuqjiWVf7uUenMZWs2epfeOZfVNTc0kdIXMjfPyHM/J2PEJnFiObuaxMDKy6JFMEszEwF78+dALIYke5BT+ih6+KdRSPYSUPd2MGIzg7UWl2YmcfmcN2RDrP7Yu0+Zb1gL3drFIg=
+	t=1711465059; cv=none; b=Z+kgmbLE+L0wnsYKgApQS0gEJ/x4zxNWQPWUjxMhHC6SpFt9dqvpNLOgvPSxiXQdTdZEIarOQz7QZbSnFvyC3dUc11Ol8Lx7zRlfxKXGpSKE8nwl4se2uxeyubup7TfnKSj/xBmtUls5LbRiVsMSPnurHqhB5DBP79T7p420ZiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711464907; c=relaxed/simple;
-	bh=OkKUUc2EsY1HkFkCZesI8s/5V6S6mbVPGD3caXQZEEM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Flh/Yx5l9cePtLa8I+LLtuZdYGjP0OVbclXAjzf0tRobw8sOA9Qm8BKVCNSMmINy7HIB33HOvM18QIZi0t7I6TYOljuEvVAsPxyXLQoBgy1UQvKMPzt+i7uE/10rV9UTbVHCJLWA2GJCG8L4YoFCQoNHMcZ3ksqgaSWRmmrJHIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4c4OA9v; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711465059; c=relaxed/simple;
+	bh=D/D7xFW3Ns/95BX0XjxxVeG1+4Tl3hXAWQiMRnjcwMg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kxLKNba5hdyo9lJ91NEcDalMgU/Nx9z/cHujpkzhUSEYEvAf1A2rg1SYOW07MbV2WXFjSSYamg9vJ7X6c07MZvY+GZ3G2mFU4KG9kCpJ5lWasYY2eoewfXDWWL5/LSvVpayO4OBGvcVfypZRtsPbn2keETiiI1IvG2Kv55dQDIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+fL4Pd0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4c4OA9v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1554C433F1;
-	Tue, 26 Mar 2024 14:55:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+fL4Pd0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D13C433F1;
+	Tue, 26 Mar 2024 14:57:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711464906;
-	bh=OkKUUc2EsY1HkFkCZesI8s/5V6S6mbVPGD3caXQZEEM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t4c4OA9vcR5PmSMiLBFdXrYdA07QJFREj+2/8VH5bEIZuPBIYQ/RrTMz7phZMW+an
-	 7HgH0OmQiw/L5py4Ye4IE14uqG7Thd9Efn5b/4dYol4ZZ0ll8JToJLghrRXGdTzeux
-	 8OUPLvpTVgQbdJzdLHshP+lygO5KQ6aXCcfFlp7Kj0H9H0mZbzsEC32ORYF15mqEWk
-	 uFrPB9f/TQVC6Mj2op5oh6IYtwy28Cz1WWtU+ACH/GnAShoI6NwD1c9hUi0qsE/kF1
-	 /bhuglj3TsXSVO8iWKXL3n+cI0uy8YRzljUbT2aJqXmIEqJotCY/iBEe8+gS/EQkcC
-	 3wREc95DfGWiw==
+	s=k20201202; t=1711465058;
+	bh=D/D7xFW3Ns/95BX0XjxxVeG1+4Tl3hXAWQiMRnjcwMg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=i+fL4Pd0BYS1PoAvRDXvMzGEITB2SiYsXZg4lWjmwbo0YtkEa4WfIE3jkBqA5HeX/
+	 81v81okQB39H/KM74PpvbIQj7ZXTX7xNBZdWyFkYryjd4SlS03xweo5752Zaw1xHKS
+	 lG4b9F+mN56kK8bgt2zpiA0+A6fTijrEZN75MZ+nbyHxNWNYdQzXNzbwv+GreHfqTw
+	 KLFP5EryVqMvUtbuw/cXv0bADcegFtpRWR7HRNIozoKgHaJBgqK1+mcmTdnt3ys4wA
+	 TQJaDH9nMrYrZ9KTFpI3fZU6yaj6qWn1d/CtmFtioM42MDB3tF+IRe1Cn4AeC/YHzg
+	 1PBFQFMncEyiw==
 From: Arnd Bergmann <arnd@kernel.org>
-To: linux-kbuild@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Kees Cook <keescook@chromium.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 11/12] [v4] kallsyms: rework symbol lookup return codes
-Date: Tue, 26 Mar 2024 15:53:38 +0100
-Message-Id: <20240326145348.3318887-2-arnd@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	"Ricardo B. Marliere" <ricardo@marliere.net>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] [v3] module: don't ignore sysfs_create_link() failures
+Date: Tue, 26 Mar 2024 15:57:18 +0100
+Message-Id: <20240326145733.3413024-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240326144741.3094687-1-arnd@kernel.org>
-References: <20240326144741.3094687-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -62,350 +49,154 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-Building with W=1 in some configurations produces a false positive
-warning for kallsyms:
+The sysfs_create_link() return code is marked as __must_check, but the
+module_add_driver() function tries hard to not care, by assigning the
+return code to a variable. When building with 'make W=1', gcc still
+warns because this variable is only assigned but not used:
 
-kernel/kallsyms.c: In function '__sprint_symbol.isra':
-kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
-  503 |                 strcpy(buffer, name);
-      |                 ^~~~~~~~~~~~~~~~~~~~
+drivers/base/module.c: In function 'module_add_driver':
+drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
 
-This originally showed up while building with -O3, but later started
-happening in other configurations as well, depending on inlining
-decisions. The underlying issue is that the local 'name' variable is
-always initialized to the be the same as 'buffer' in the called functions
-that fill the buffer, which gcc notices while inlining, though it could
-see that the address check always skips the copy.
+Rework the code to properly unwind and return the error code to the
+caller. My reading of the original code was that it tries to
+not fail when the links already exist, so keep ignoring -EEXIST
+errors.
 
-The calling conventions here are rather unusual, as all of the internal
-lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
-ftrace_func_address_lookup, module_address_lookup and
-kallsyms_lookup_buildid) already use the provided buffer and either return
-the address of that buffer to indicate success, or NULL for failure,
-but the callers are written to also expect an arbitrary other buffer
-to be returned.
-
-Rework the calling conventions to return the length of the filled buffer
-instead of its address, which is simpler and easier to follow as well
-as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
-unchanged, since that is called from 16 different functions and
-adapting this would be a much bigger change.
-
-Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
+See-also: 4a7fb6363f2d ("add __must_check to device management code")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-v4: fix string length
-v3: use strscpy() instead of strlcpy()
-v2: complete rewrite after the first patch was rejected (in 2020). This
-    is now one of only two warnings that are in the way of enabling
-    -Wextra/-Wrestrict by default.
+v3: make error handling stricter, add unwinding,
+     fix build fail with CONFIG_MODULES=n
+v2: rework to actually handle the error. I have not tested the
+    error handling beyond build testing, so please review carefully.
 ---
- include/linux/filter.h   | 14 +++++++-------
- include/linux/ftrace.h   |  6 +++---
- include/linux/module.h   | 14 +++++++-------
- kernel/bpf/core.c        |  7 +++----
- kernel/kallsyms.c        | 23 ++++++++++++-----------
- kernel/module/kallsyms.c | 26 +++++++++++++-------------
- kernel/trace/ftrace.c    | 13 +++++--------
- 7 files changed, 50 insertions(+), 53 deletions(-)
+ drivers/base/base.h   |  9 ++++++---
+ drivers/base/bus.c    |  9 ++++++++-
+ drivers/base/module.c | 42 +++++++++++++++++++++++++++++++-----------
+ 3 files changed, 45 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index c99bc3df2d28..9d4a7c6f023e 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1168,18 +1168,18 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index 0738ccad08b2..db4f910e8e36 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -192,11 +192,14 @@ extern struct kset *devices_kset;
+ void devices_kset_move_last(struct device *dev);
  
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym);
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
- struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	const char *ret = __bpf_address_lookup(addr, size, off, sym);
-+	int ret = __bpf_address_lookup(addr, size, off, sym);
- 
- 	if (ret && modname)
- 		*modname = NULL;
-@@ -1223,11 +1223,11 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--static inline const char *
-+static inline int
- __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		     unsigned long *off, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline bool is_bpf_text_address(unsigned long addr)
-@@ -1246,11 +1246,11 @@ static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
- 	return NULL;
- }
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline void bpf_prog_kallsyms_add(struct bpf_prog *fp)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 54d53f345d14..56834a3fa9be 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -87,15 +87,15 @@ struct ftrace_direct_func;
- 
- #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_MODULES) && \
- 	defined(CONFIG_DYNAMIC_FTRACE)
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym);
+ #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
+-void module_add_driver(struct module *mod, struct device_driver *drv);
++int module_add_driver(struct module *mod, struct device_driver *drv);
+ void module_remove_driver(struct device_driver *drv);
  #else
--static inline const char *
-+static inline int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
+-static inline void module_add_driver(struct module *mod,
+-				     struct device_driver *drv) { }
++static inline int module_add_driver(struct module *mod,
++				    struct device_driver *drv)
++{
 +	return 0;
- }
++}
+ static inline void module_remove_driver(struct device_driver *drv) { }
  #endif
  
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 1153b0d99a80..118c36366b35 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -922,11 +922,11 @@ int module_kallsyms_on_each_symbol(const char *modname,
-  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-  * found, otherwise NULL.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *symbolsize,
--				  unsigned long *offset,
--				  char **modname, const unsigned char **modbuildid,
--				  char *namebuf);
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *symbolsize,
-+			  unsigned long *offset,
-+			  char **modname, const unsigned char **modbuildid,
-+			  char *namebuf);
- int lookup_module_symbol_name(unsigned long addr, char *symname);
- int lookup_module_symbol_attrs(unsigned long addr,
- 			       unsigned long *size,
-@@ -955,14 +955,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index daee55c9b2d9..ffea0728b8b2 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -674,7 +674,12 @@ int bus_add_driver(struct device_driver *drv)
+ 		if (error)
+ 			goto out_del_list;
+ 	}
+-	module_add_driver(drv->owner, drv);
++	error = module_add_driver(drv->owner, drv);
++	if (error) {
++		printk(KERN_ERR "%s: failed to create module links for %s\n",
++			__func__, drv->name);
++		goto out_detach;
++	}
+ 
+ 	error = driver_create_file(drv, &driver_attr_uevent);
+ 	if (error) {
+@@ -699,6 +704,8 @@ int bus_add_driver(struct device_driver *drv)
+ 
+ 	return 0;
+ 
++out_detach:
++	driver_detach(drv);
+ out_del_list:
+ 	klist_del(&priv->knode_bus);
+ out_unregister:
+diff --git a/drivers/base/module.c b/drivers/base/module.c
+index 46ad4d636731..d16b5c8e5473 100644
+--- a/drivers/base/module.c
++++ b/drivers/base/module.c
+@@ -30,14 +30,14 @@ static void module_create_drivers_dir(struct module_kobject *mk)
+ 	mutex_unlock(&drivers_dir_mutex);
  }
  
- /* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
-+static inline int module_address_lookup(unsigned long addr,
- 						unsigned long *symbolsize,
- 						unsigned long *offset,
- 						char **modname,
- 						const unsigned char **modbuildid,
- 						char *namebuf)
+-void module_add_driver(struct module *mod, struct device_driver *drv)
++int module_add_driver(struct module *mod, struct device_driver *drv)
  {
--	return NULL;
-+	return 0;
- }
- 
- static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 696bc55de8e8..ffc232333643 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -735,11 +735,11 @@ static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
- 	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym)
- {
- 	struct bpf_ksym *ksym;
--	char *ret = NULL;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	ksym = bpf_ksym_find(addr);
-@@ -747,9 +747,8 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		unsigned long symbol_start = ksym->start;
- 		unsigned long symbol_end = ksym->end;
- 
--		strncpy(sym, ksym->name, KSYM_NAME_LEN);
-+		ret = strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
--		ret = sym;
- 		if (size)
- 			*size = symbol_end - symbol_start;
- 		if (off)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 18edd57b5fe8..eeb0e249e0e2 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -394,12 +394,12 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
- 	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
- }
- 
--static const char *kallsyms_lookup_buildid(unsigned long addr,
-+static int kallsyms_lookup_buildid(unsigned long addr,
- 			unsigned long *symbolsize,
- 			unsigned long *offset, char **modname,
- 			const unsigned char **modbuildid, char *namebuf)
- {
--	const char *ret;
+ 	char *driver_name;
+-	int no_warn;
 +	int ret;
+ 	struct module_kobject *mk = NULL;
  
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
-@@ -416,7 +416,7 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 		if (modbuildid)
- 			*modbuildid = NULL;
+ 	if (!drv)
+-		return;
++		return 0;
  
--		ret = namebuf;
-+		ret = strlen(namebuf);
- 		goto found;
+ 	if (mod)
+ 		mk = &mod->mkobj;
+@@ -56,17 +56,37 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
  	}
  
-@@ -448,8 +448,13 @@ const char *kallsyms_lookup(unsigned long addr,
- 			    unsigned long *offset,
- 			    char **modname, char *namebuf)
- {
--	return kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
--				       NULL, namebuf);
-+	int ret = kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
-+					  NULL, namebuf);
+ 	if (!mk)
+-		return;
++		return 0;
 +
-+	if (!ret)
-+		return NULL;
++	ret = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
++	if (ret)
++		return ret;
+ 
+-	/* Don't check return codes; these calls are idempotent */
+-	no_warn = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
+ 	driver_name = make_driver_name(drv);
+-	if (driver_name) {
+-		module_create_drivers_dir(mk);
+-		no_warn = sysfs_create_link(mk->drivers_dir, &drv->p->kobj,
+-					    driver_name);
+-		kfree(driver_name);
++	if (!driver_name) {
++		ret = -ENOMEM;
++		goto out;
++	}
 +
-+	return namebuf;
- }
- 
- int lookup_symbol_name(unsigned long addr, char *symname)
-@@ -484,19 +489,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- {
- 	char *modname;
- 	const unsigned char *buildid;
--	const char *name;
- 	unsigned long offset, size;
- 	int len;
- 
- 	address += symbol_offset;
--	name = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
-+	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
- 				       buffer);
--	if (!name)
-+	if (!len)
- 		return sprintf(buffer, "0x%lx", address - symbol_offset);
- 
--	if (name != buffer)
--		strcpy(buffer, name);
--	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
- 	if (add_offset)
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ef73ae7c8909..6e6619a5b2f1 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -321,14 +321,15 @@ void * __weak dereference_module_function_descriptor(struct module *mod,
-  * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-  * not to lock to avoid deadlock on oopses, simply disable preemption.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *size,
--			    unsigned long *offset,
--			    char **modname,
--			    const unsigned char **modbuildid,
--			    char *namebuf)
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *size,
-+			  unsigned long *offset,
-+			  char **modname,
-+			  const unsigned char **modbuildid,
-+			  char *namebuf)
- {
--	const char *ret = NULL;
-+	const char *sym;
-+	int ret = 0;
- 	struct module *mod;
- 
- 	preempt_disable();
-@@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
- #endif
- 		}
- 
--		ret = find_kallsyms_symbol(mod, addr, size, offset);
--	}
--	/* Make a copy in here where it's safe */
--	if (ret) {
--		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
--		ret = namebuf;
-+		sym = find_kallsyms_symbol(mod, addr, size, offset);
-+
-+		if (sym)
-+			ret = strscpy(namebuf, sym, KSYM_NAME_LEN);
++	module_create_drivers_dir(mk);
++	if (!mk->drivers_dir) {
++		ret = -EINVAL;
++		goto out;
  	}
 +
- 	preempt_enable();
- 
- 	return ret;
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index da1710499698..b40f9bd29080 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6970,7 +6970,7 @@ allocate_ftrace_mod_map(struct module *mod,
- 	return mod_map;
- }
- 
--static const char *
-+static int
- ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			   unsigned long addr, unsigned long *size,
- 			   unsigned long *off, char *sym)
-@@ -6991,21 +6991,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			*size = found_func->size;
- 		if (off)
- 			*off = addr - found_func->ip;
--		if (sym)
--			strscpy(sym, found_func->name, KSYM_NAME_LEN);
--
--		return found_func->name;
-+		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
- 	}
- 
--	return NULL;
++	ret = sysfs_create_link(mk->drivers_dir, &drv->p->kobj, driver_name);
++	if (ret)
++		goto out;
++
++	kfree(driver_name);
++
 +	return 0;
++out:
++	sysfs_remove_link(&drv->p->kobj, "module");
++	sysfs_remove_link(mk->drivers_dir, driver_name);
++	kfree(driver_name);
++
++	return ret;
  }
  
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
- 	struct ftrace_mod_map *mod_map;
--	const char *ret = NULL;
-+	int ret;
- 
- 	/* mod_map is freed via call_rcu() */
- 	preempt_disable();
+ void module_remove_driver(struct device_driver *drv)
 -- 
 2.39.2
 
