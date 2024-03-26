@@ -1,127 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C891129E88;
-	Tue, 26 Mar 2024 18:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4A5208B4;
+	Tue, 26 Mar 2024 19:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711478579; cv=none; b=Ua5fCnBnbaHcOCFG5mv1sfLXYJPCtWHo2SHb+wTaGFBRhcpLCrMKE4pZsvWwKvsRUW1elze2xjzhVYiFjtUBIhNgZzROw8k2JtExqv41fOkUFT5OgLI26NmMYGCYc+nZJo37MZtlSn3O+EdPVlZ9Tg80ECu2PKVjjDIL19tjY9c=
+	t=1711479821; cv=none; b=If8r9v3x7z5kYT0272MlsQnZ9OG/ml+52VUB/bPCG/83fk8iEWzY0vziz1/ucivCEozCkPW6wXn49/clsU9BDwEBfQZs2kDUTT9xq2cibBVaxRMGPSin1h34njhH+gly11ci1OQwgosAlbXy75j3VA7OWHYq6BUmAcDtHZBEOTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711478579; c=relaxed/simple;
-	bh=4jVrfD/KvnLbhutEiKxJwcAulEU3J50vmATSDtq9sqw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZWB6A6M2awg0XwcV2uW/pRNDig4wpQSbezMT3mObcuAHAKXp9ZCP1AYx3TeQCqBPV0xdz+w7M9YZEU4HGjRo0qqsiE/9TFzQDKFIHOGE4qjVPPsBysx9vtGyoedDqzjCQU5NOX6d10r8OBpLpaS/9QYICj7hFJTonu2rCMVWul0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IyialCPC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IyialCPC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF51BC433C7;
-	Tue, 26 Mar 2024 18:42:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711478579;
-	bh=4jVrfD/KvnLbhutEiKxJwcAulEU3J50vmATSDtq9sqw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IyialCPC3XtDBNWscY3/R0P7oEJ2BjULmLF15MUdpQ/pvuLKfcck53g46epTk9R58
-	 GcoQoHy7q0tyoVKC4r2PeOMLJETm3V64gaZ6n0cpw2/irlliNf5Bz6Ix7/Jk6iiIvv
-	 Uq8GFF1QvQUAQYnGCOhzMEDLT49PuPraYC/Xt0eH3RSMJwYnwuVLwWunZJ0YXiJGlF
-	 T8d4fgIvrUCpB3xwMLXnx/t4UzEU/u8Bwc3L1mFyD90OxoXAJqCuDmclN+R0yWiD1L
-	 PpBZCgmPohc/Oiom6oxYypolD90iiUaNY+Lr04O+HJ3/BolKbCj5SYbKxcLzJ81HLM
-	 FE1yx4O0ZhDcw==
-Date: Tue, 26 Mar 2024 18:42:54 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-riscv@lists.infradead.org,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org,
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v7 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
-Message-ID: <20240326-cape-compacted-e76df066752f@spud>
-References: <20240326134616.7691-1-jarkko@kernel.org>
- <20240326134616.7691-2-jarkko@kernel.org>
+	s=arc-20240116; t=1711479821; c=relaxed/simple;
+	bh=TqovAb508p1BXXN111/h6eBu0Viy43Rz1TFD/5ic6A0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FiHMdZ+POX2MOFfwvBosx2+9/2+LNRd8l1nb5nFiMXfWUMPAyjw32Yeap2V7RoyyWl1YIDBZrn79SM2mS+rrDl6n257IhYFtvZUCYQ8K6H2keC2wXzvWkJCOcmrPCQmYrLACoSRV1GwB9ljcg62yeWLf+8u4+wz1aKBD87IszQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9277320002;
+	Tue, 26 Mar 2024 19:03:25 +0000 (UTC)
+Message-ID: <9f9eea13-f36b-4aa7-bcb4-d2759826305e@ghiti.fr>
+Date: Tue, 26 Mar 2024 20:03:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ZY3M3zfLOpMoFKjK"
-Content-Disposition: inline
-In-Reply-To: <20240326134616.7691-2-jarkko@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
+Content-Language: en-US
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-riscv@lists.infradead.org
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ linux-modules@vger.kernel.org, "Naveen N . Rao"
+ <naveen.n.rao@linux.ibm.com>,
+ Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+ "David S . Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>
+References: <20240325215502.660-1-jarkko@kernel.org>
+ <20240325215502.660-2-jarkko@kernel.org>
+ <474ed846-672a-4ff0-9d53-cbf8192fee5f@ghiti.fr>
+ <D03U3UZ4XBOW.66TLKVR1PKPH@kernel.org>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <D03U3UZ4XBOW.66TLKVR1PKPH@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
+
+On 26/03/2024 17:49, Jarkko Sakkinen wrote:
+> On Tue Mar 26, 2024 at 3:57 PM EET, Alexandre Ghiti wrote:
+>> Hi Jarkko,
+>>
+>> On 25/03/2024 22:55, Jarkko Sakkinen wrote:
+>>> Tacing with kprobes while running a monolithic kernel is currently
+>>> impossible due the kernel module allocator dependency.
+>>>
+>>> Address the issue by implementing textmem API for RISC-V.
+>>>
+>>> Link: https://www.sochub.fi # for power on testing new SoC's with a minimal stack
+>>> Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian.com/ # continuation
+>>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>> ---
+>>> v5:
+>>> - No changes, expect removing alloc_execmem() call which should have
+>>>     been part of the previous patch.
+>>> v4:
+>>> - Include linux/execmem.h.
+>>> v3:
+>>> - Architecture independent parts have been split to separate patches.
+>>> - Do not change arch/riscv/kernel/module.c as it is out of scope for
+>>>     this patch set now.
+>>> v2:
+>>> - Better late than never right? :-)
+>>> - Focus only to RISC-V for now to make the patch more digestable. This
+>>>     is the arch where I use the patch on a daily basis to help with QA.
+>>> - Introduce HAVE_KPROBES_ALLOC flag to help with more gradual migration.
+>>> ---
+>>>    arch/riscv/Kconfig          |  1 +
+>>>    arch/riscv/kernel/Makefile  |  3 +++
+>>>    arch/riscv/kernel/execmem.c | 22 ++++++++++++++++++++++
+>>>    3 files changed, 26 insertions(+)
+>>>    create mode 100644 arch/riscv/kernel/execmem.c
+>>>
+>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>>> index e3142ce531a0..499512fb17ff 100644
+>>> --- a/arch/riscv/Kconfig
+>>> +++ b/arch/riscv/Kconfig
+>>> @@ -132,6 +132,7 @@ config RISCV
+>>>    	select HAVE_KPROBES if !XIP_KERNEL
+>>>    	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+>>>    	select HAVE_KRETPROBES if !XIP_KERNEL
+>>> +	select HAVE_ALLOC_EXECMEM if !XIP_KERNEL
+>>>    	# https://github.com/ClangBuiltLinux/linux/issues/1881
+>>>    	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !LD_IS_LLD
+>>>    	select HAVE_MOVE_PMD
+>>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>>> index 604d6bf7e476..337797f10d3e 100644
+>>> --- a/arch/riscv/kernel/Makefile
+>>> +++ b/arch/riscv/kernel/Makefile
+>>> @@ -73,6 +73,9 @@ obj-$(CONFIG_SMP)		+= cpu_ops.o
+>>>    
+>>>    obj-$(CONFIG_RISCV_BOOT_SPINWAIT) += cpu_ops_spinwait.o
+>>>    obj-$(CONFIG_MODULES)		+= module.o
+>>> +ifeq ($(CONFIG_ALLOC_EXECMEM),y)
+>>> +obj-y				+= execmem.o
+>>> +endif
+>>>    obj-$(CONFIG_MODULE_SECTIONS)	+= module-sections.o
+>>>    
+>>>    obj-$(CONFIG_CPU_PM)		+= suspend_entry.o suspend.o
+>>> diff --git a/arch/riscv/kernel/execmem.c b/arch/riscv/kernel/execmem.c
+>>> new file mode 100644
+>>> index 000000000000..3e52522ead32
+>>> --- /dev/null
+>>> +++ b/arch/riscv/kernel/execmem.c
+>>> @@ -0,0 +1,22 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>> +
+>>> +#include <linux/mm.h>
+>>> +#include <linux/execmem.h>
+>>> +#include <linux/vmalloc.h>
+>>> +#include <asm/sections.h>
+>>> +
+>>> +void *alloc_execmem(unsigned long size, gfp_t /* gfp */)
+> Need to have the parameter name here. I guess this could just as well
+> pass through gfp to vmalloc from the caller as kprobes does call
+> module_alloc() with GFP_KERNEL set in RISC-V.
+>
+>>> +{
+>>> +	return __vmalloc_node_range(size, 1, MODULES_VADDR,
+>>> +				    MODULES_END, GFP_KERNEL,
+>>> +				    PAGE_KERNEL, 0, NUMA_NO_NODE,
+>>> +				    __builtin_return_address(0));
+>>> +}
+>>
+>> The __vmalloc_node_range() line ^^ must be from an old kernel since we
+>> added VM_FLUSH_RESET_PERMS in 6.8, see 749b94b08005 ("riscv: Fix
+>> module_alloc() that did not reset the linear mapping permissions").
+>>
+>> In addition, I guess module_alloc() should now use alloc_execmem() right?
+> Ack for the first comment. For the 2nd it is up to arch/<arch> to choose
+> whether to have shared or separate allocators.
+>
+> So if you want I can change it that way but did not want to make the
+> call myself.
 
 
---ZY3M3zfLOpMoFKjK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'd say module_alloc() should use alloc_execmem() then since there are 
+no differences for now.
 
-On Tue, Mar 26, 2024 at 03:46:16PM +0200, Jarkko Sakkinen wrote:
-> Tacing with kprobes while running a monolithic kernel is currently
-> impossible due the kernel module allocator dependency.
->=20
-> Address the issue by implementing textmem API for RISC-V.
 
-This doesn't compile for nommu:
-  /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:10:46: error: 'MODULES_=
-VADDR' undeclared (first use in this function)
-  /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:11:37: error: 'MODULES_=
-END' undeclared (first use in this function)
-  /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:14:1: error: control re=
-aches end of non-void function [-Werror=3Dreturn-type]
-Clang builds also report:
-=2E./arch/riscv/kernel/execmem.c:8:56: warning: omitting the parameter name=
- in a function definition is a C2x extension [-Wc2x-extensions]
+>>
+>>> +
+>>> +void free_execmem(void *region)
+>>> +{
+>>> +	if (in_interrupt())
+>>> +		pr_warn("In interrupt context: vmalloc may not work.\n");
+>>> +
+>>> +	vfree(region);
+>>> +}
+>>
+>> I remember Mike Rapoport sent a patchset to introduce an API for
+>> executable memory allocation
+>> (https://lore.kernel.org/linux-mm/20230918072955.2507221-1-rppt@kernel.org/),
+>> how does this intersect with your work? I don't know the status of his
+>> patchset though.
+>>
+>> Thanks,
+>>
+>> Alex
+> I have also made a patch set for kprobes in the 2022:
+>
+> https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian.com/
+>
+> I think this Calvin's, Mike's and my early patch set have the same
+> problem: they try to choke all architectures at once. And further,
+> Calvin's and Mike's work also try to cover also tracing subsystems
+> at once.
+>
+> I feel that my relatively small patch set which deals only with
+> trivial kprobe (which is more in the leaf than e.g. bpf which
+> is more like orchestrator tool) and implements one arch of which
+> dog food I actually eat is a better starting point.
+>
+> Arch code is always something where you need to have genuine
+> understanding so full architecture coverage from day one is
+> just too risky for stability. Linux is better off if people who
+> work on a  specific arch proactively will "fill the holes".
+>
+> So the way I see my patch set is "lowest common denominator"
+> in both architecture axis and tracing subsystem axist. It should
+> not interfere that much with the other work (like bpf).
 
->=20
-> Link: https://www.sochub.fi # for power on testing new SoC's with a minim=
-al stack
-> Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profian=
-=2Ecom/ # continuation
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v5-v7:
-> - No changes.
-> v4:
-> - Include linux/execmem.h.
-> v3:
-> - Architecture independent parts have been split to separate patches.
-> - Do not change arch/riscv/kernel/module.c as it is out of scope for
->   this patch set now.
 
-Meta comment. I dunno when v1 was sent, but versions can you please
-relax with submitting new versions of your patches? There's conversations
-ongoing on v5 at the moment, while this is a more recent version. v2
-seems to have been sent on the 23rd and there's been 5 versions in the
-last day:
-https://patchwork.kernel.org/project/linux-riscv/list/?submitter=3D195059&s=
-tate=3D*
+I understand your point. But is there any consensus among you on how to 
+deal with this issue? I'm not opposed at all to your patch, and it's 
+small enough that we can revert it later on if that's not the right 
+solution anyway.
 
-Could you please also try and use a cover letter for patchsets, ideally
-with a consistent subject? Otherwise I have to manually mark stuff as
-superseded.
 
-Thanks,
-Conor.
-
-> v2:
-> - Better late than never right? :-)
-> - Focus only to RISC-V for now to make the patch more digestable. This
->   is the arch where I use the patch on a daily basis to help with QA.
-> - Introduce HAVE_KPROBES_ALLOC flag to help with more gradual migration.
-
---ZY3M3zfLOpMoFKjK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZgMXLgAKCRB4tDGHoIJi
-0kr6APoC8w1hFwYBq68SvRiP5k+lnvxzYoTYGxCdhojX1wA0lAD6AyvaCzZnOAGK
-ej3FsxMvaVpbalYkFzvk6xtCRrliwQk=
-=Qyv3
------END PGP SIGNATURE-----
-
---ZY3M3zfLOpMoFKjK--
+>
+> BR, Jarkko
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
