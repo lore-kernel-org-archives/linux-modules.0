@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0233014D6FE;
-	Wed, 27 Mar 2024 16:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B278E1AAD7;
+	Wed, 27 Mar 2024 17:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711558460; cv=none; b=fKOiS8djKlMkbmNnVdP2Xi2I6jzuS3e482JDPA80WthrIaAuKKhhdW/xQ+UkaAdS1pqn3U6fNYi1ibG/6bxiPoQz+JLZgIcTUMBbIsby4rdVtKFoFAfWzPd+Gnkvl8cpPNsf2IvIuS655LCGjeyK3hw/cvG6hplwfj5k04DmvsA=
+	t=1711558805; cv=none; b=n8T29SpC5rXBu6ml8LJMaecYq4QDQwOxtq85D8ttdiVi1H8kw2MAmsXTGpqz1NMhL72Ib6y43DqL4kxqkIdaNpJw50L9C/ojTsjk3+WT54m+X9PwL/kEw4uyArKAozabFfhWigaE/r5tlgcDc2fvmBvTGFV52Q9Y38+IagH/Nvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711558460; c=relaxed/simple;
-	bh=UuN+/yVlhFYfqrv1X4nW0lUiQAKVn7emAnsT71kKaNM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=oF3zoFyiGhkrAMuEZVx4ZIj08HX0PJoAE6526tDGg/G3kOvgcDPF6VrMCFCskLhLASxYExQSjpkixYKCTKvUtB7jPgBocNC3+K3Oy0Fh51iVdHPcWiy46leUmTtnsVc8Fe15dOQ1RpSB16/v535Gqk2hKDoeKaZwBNJ6JeFGV40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VdznTPEg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711558805; c=relaxed/simple;
+	bh=kFJK27eqsn3b94GlLP703fwEajJD+XlRkEDUgGuh2cI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=hlPgyuU1f+9q5wxJUW0KA5Y4AN9XyCCmktimbSNiysMVNIppCMsOG/2xRrgC1OlKmm/O2V4uKWuaEpqczgXNv85e+RXjjeSgGZv/kql71PY4ZBufKUSV1eAuyN/yW9w9Xd5lgsYTQd/S3PRH3X+yJJ4VJMN91+J+Jhh4N7ZqUGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMXB4AEi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VdznTPEg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AFCC43141;
-	Wed, 27 Mar 2024 16:54:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMXB4AEi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F492C433F1;
+	Wed, 27 Mar 2024 17:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711558459;
-	bh=UuN+/yVlhFYfqrv1X4nW0lUiQAKVn7emAnsT71kKaNM=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=VdznTPEgYpRW2KJZteflSdemSgEbTzuadvjOPsPxT/etXe4Tp/Mi2l9GrR9WydQ0C
-	 Vxx9DO2dr0szfSXJr+iijjnFWVPOQZyhZA55gSCfc33oIWhOPIEyWsmzTW8f1/mTDB
-	 y29tQRHZTSoxB8pZ0RO/IQBYdAL+5eqwLxrTLSeY3vwtnV4OOD22b1MIQOkBx5/Tvv
-	 FqLYdllfiSD34uHLnXph9IzqBWRVVi2ZehcMJg9bWYMjoOG2ioUk4+89PnHWjf2lgw
-	 Zxfj9ieYwF33sat6lvfafnMEqN9mKNJ2lqZjZrWOBMtBEd2jNGLoNSFCvr3Kq1FKiU
-	 i2aOUsIk5KjKw==
+	s=k20201202; t=1711558805;
+	bh=kFJK27eqsn3b94GlLP703fwEajJD+XlRkEDUgGuh2cI=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=LMXB4AEil8mhpE14pDOZqk5V1G188v/TX9AtT86gdloR9J8ZE6YYFIuKlQ6Z5UZai
+	 ksIWU4umsus3CI4jcIqamwIW1/1BUK51hMF6nWTO/ybRk6h24jLLwM5k9LsVDzmjen
+	 KSlyP8rn5Cl3MBWOuEJuMsCHv3G+qvASXSOYok+8tEK4bRu4FYc4uHhXpqFNyzugKX
+	 W86SAEnJ+6FFFqq0dK7TLagxjyFHw/IXsCFF00jRzL4KQm0Ckp17ryUENvaKF3ioao
+	 rk7UvQWIGDvrFX2dp1rP4Ha5h/BhxE0MXQRiFlHeaoDv2p1LHr8qkdigCDJAVZXITN
+	 LHE94pHdXHP7A==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -34,78 +34,74 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 27 Mar 2024 18:54:16 +0200
-Message-Id: <D04OU424128P.22TP02GW2CJCT@kernel.org>
-To: "Mimi Zohar" <zohar@linux.ibm.com>, "Luis Chamberlain"
- <mcgrof@kernel.org>
-Cc: <linux-modules@vger.kernel.org>, <linux-integrity@vger.kernel.org>,
- "Roberto Sassu" <roberto.sassu@huawei.com>, <linux-kernel@vger.kernel.org>,
- "Ken Goldman" <kgold@linux.ibm.com>
-Subject: Re: [PATCH] ima: define an init_module critical data record
+Date: Wed, 27 Mar 2024 19:00:00 +0200
+Message-Id: <D04OYICG7UM7.3SFZE1NKID389@kernel.org>
+Cc: <linux-riscv@lists.infradead.org>, "Paul Walmsley"
+ <paul.walmsley@sifive.com>, "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert
+ Ou" <aou@eecs.berkeley.edu>, <linux-kernel@vger.kernel.org>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>, "Naveen
+ N . Rao" <naveen.n.rao@linux.ibm.com>, "Anil S Keshavamurthy"
+ <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>
+Subject: Re: [PATCH v7 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
 From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Conor Dooley" <conor@kernel.org>
 X-Mailer: aerc 0.17.0
-References: <20240327150019.81477-1-zohar@linux.ibm.com>
-In-Reply-To: <20240327150019.81477-1-zohar@linux.ibm.com>
+References: <20240326134616.7691-1-jarkko@kernel.org>
+ <20240326134616.7691-2-jarkko@kernel.org>
+ <20240326-cape-compacted-e76df066752f@spud>
+In-Reply-To: <20240326-cape-compacted-e76df066752f@spud>
 
-On Wed Mar 27, 2024 at 5:00 PM EET, Mimi Zohar wrote:
-> The init_module syscall loads an ELF image into kernel space without
-> measuring the buffer containing the ELF image.  To close this kernel
-> module integrity gap, define a new critical-data record which includes
-> the hash of the ELF image.
+On Tue Mar 26, 2024 at 8:42 PM EET, Conor Dooley wrote:
+> On Tue, Mar 26, 2024 at 03:46:16PM +0200, Jarkko Sakkinen wrote:
+> > Tacing with kprobes while running a monolithic kernel is currently
+> > impossible due the kernel module allocator dependency.
+> >=20
+> > Address the issue by implementing textmem API for RISC-V.
 >
-> Instead of including the buffer data in the IMA measurement list,
-> include the hash of the buffer data to avoid large IMA measurement
-> list records.  The buffer data hash would be the same value as the
-> finit_module syscall file hash.
+> This doesn't compile for nommu:
+>   /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:10:46: error: 'MODULE=
+S_VADDR' undeclared (first use in this function)
+>   /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:11:37: error: 'MODULE=
+S_END' undeclared (first use in this function)
+>   /build/tmp.3xucsBhqDV/arch/riscv/kernel/execmem.c:14:1: error: control =
+reaches end of non-void function [-Werror=3Dreturn-type]
+> Clang builds also report:
+> ../arch/riscv/kernel/execmem.c:8:56: warning: omitting the parameter name=
+ in a function definition is a C2x extension [-Wc2x-extensions]
 >
-> To enable measuring the init_module buffer and other critical data from
-> boot, define "ima_policy=3Dcritical_data" on the boot command line.  Sinc=
-e
-> builtin policies are not persistent, a custom IMA policy must include
-> the rule as well: measure func=3DCRITICAL_DATA label=3Dmodules
+> >=20
+> > Link: https://www.sochub.fi # for power on testing new SoC's with a min=
+imal stack
+> > Link: https://lore.kernel.org/all/20220608000014.3054333-1-jarkko@profi=
+an.com/ # continuation
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> > v5-v7:
+> > - No changes.
+> > v4:
+> > - Include linux/execmem.h.
+> > v3:
+> > - Architecture independent parts have been split to separate patches.
+> > - Do not change arch/riscv/kernel/module.c as it is out of scope for
+> >   this patch set now.
 >
-> To verify the template data hash value, first convert the buffer data
-> hash to binary:
-> grep "init_module" \
-> 	/sys/kernel/security/integrity/ima/ascii_runtime_measurements | \
-> 	tail -1 | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> Meta comment. I dunno when v1 was sent, but versions can you please
+> relax with submitting new versions of your patches? There's conversations
+> ongoing on v5 at the moment, while this is a more recent version. v2
+> seems to have been sent on the 23rd and there's been 5 versions in the
+> last day:
+> https://patchwork.kernel.org/project/linux-riscv/list/?submitter=3D195059=
+&state=3D*
 >
-> Reported-by: Ken Goldman <kgold@linux.ibm.com>
-> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/ima/ima_main.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index c84e8c55333d..4b4348d681a6 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -902,6 +902,13 @@ static int ima_post_load_data(char *buf, loff_t size=
-,
->  		return 0;
->  	}
-> =20
-> +	/*
-> +	 * Measure the init_module syscall buffer containing the ELF image.
-> +	 */
-> +	if (load_id =3D=3D LOADING_MODULE)
-> +		ima_measure_critical_data("modules", "init_module",
-> +					  buf, size, true, NULL, 0);
+> Could you please also try and use a cover letter for patchsets, ideally
+> with a consistent subject? Otherwise I have to manually mark stuff as
+> superseded.
 
-No reason not to ack but could be just as well (passing checkpatch):
+Point taken but the work has been taken over by Mark and relevant
+changes are now sucked into that patch set.
 
-	if (load_id =3D=3D LOADING_MODULE)
-		ima_measure_critical_data("modules", "init_module", buf, size, true, NULL=
-, 0);
-
-< 100 characters
-
-> +
->  	return 0;
->  }
-> =20
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Thanks,
+> Conor.
 
 BR, Jarkko
