@@ -1,45 +1,45 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A0F12E1FD
-	for <linux-modules@vger.kernel.org>; Wed, 27 Mar 2024 14:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C0D143C62
+	for <linux-modules@vger.kernel.org>; Wed, 27 Mar 2024 14:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711548713; cv=none; b=f3cQxNFQMv5ZF1VPccddYHrq8ub4DitXUsFmfENoMzMSxwVhdVeXIMb1he31xyffgpu94rwPF+tdPpjSZzSXrRKaPEoA4wGaEO2FHTSrTK7pJzYdtubVAArvhlkIdEe/Da5ECOfyAD178SNObSK4gGaIhwwlOrcQLEcxk8Ap9G4=
+	t=1711548821; cv=none; b=KQ1FAjmZWat6ioyEIWFYalISj3BYjQpaRftLM1fPtHdFHloBhJwBv0vOqcIP75Aiqe5BcBTKf3UbqpZsr9ktnjko7MKKlCZCAK4FoAGIcEIv0VXkEpTA6rru3wpTedDwr+pnVVM82AV3+vMgPHcJof+7gukNvMbWLChpYc7sogI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711548713; c=relaxed/simple;
+	s=arc-20240116; t=1711548821; c=relaxed/simple;
 	bh=HxJ6RYTgWhDhf0x47FmNd4KAxA87HuB9paHnDEah+Sk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qwx47qLYEyzCK83/khpEUXdpNVoaCXGC9a83EW9YZndbPUGp4aLhn1mdCXDNlHNU0Kmoqub8YK0hjZNOLf1tQRx6+cGlc+tVvSlXirh1Y8c4MmCfJr5S/myXgB8igVsrG2TMfJE5jVLojnrLnu+LehoE3VnNLjANoXcWQ1D/Uwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SqVn+J/w; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=TO15NCAcgoOmBrjABNE35mKLm6AcgZsLfq3b4mxpSddPz4sWekGdpBWAM1lC17CaGsnuoH4Szg7VSCx4a/DhfQSZcmjqgbkdXBKiP4HJfTjfQzltr8S/aHXQQ9bWFPadUhy0QBvq3K9tv/Xp2RgGF2IZ/4o15fCs3aMG4TOpdd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f9ULQEMr; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SqVn+J/w"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f9ULQEMr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1711548709;
+	s=mimecast20190719; t=1711548818;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
 	bh=gqpa6+NlZijAJfLqiO7xlzVReEa/WqyvZrc6kYfZzzw=;
-	b=SqVn+J/wsDuqSMrUE6xlaSS3rVCfxJx3uUC4lNO6mOolPMRS/XlpHSL5OTYUBfjtPvaD+n
-	4unY4w5YlufOduJCNmlePDTZqUbJCklkRx6U+i7P0oUUKJ28gw6FnhN8NcUO/ZYK7tA1eh
-	lFTED1+5dFqLDUvKmXW8zfYpcl3Q99U=
+	b=f9ULQEMrKS7bqJwbruYTN0v7lJtoGzuxN36zHS+Cd1h9ucxF7BYvQ9RAn4luHQJjdqrkWe
+	Flv4XONnyO4Jpw0rQfsruNcdzvrHSGRQCsCEDLbFk+UB7w10WVjXJtsWiuPkFZ3sIaIKlZ
+	raLnj6957AL0XBqWnyROAcI0BDmNF+w=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-649-DVKQDeWmOz21IJlnbh2dJg-1; Wed, 27 Mar 2024 10:11:46 -0400
-X-MC-Unique: DVKQDeWmOz21IJlnbh2dJg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-482-houZaejnMOuvBwkr8mxq7A-1; Wed, 27 Mar 2024 10:13:34 -0400
+X-MC-Unique: houZaejnMOuvBwkr8mxq7A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E1A0F85A58B;
-	Wed, 27 Mar 2024 14:11:45 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7ECBC88B7A7;
+	Wed, 27 Mar 2024 14:13:34 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.39.193.90])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 42E4C40C6CB1;
-	Wed, 27 Mar 2024 14:11:44 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 7D46F3C24;
+	Wed, 27 Mar 2024 14:13:32 +0000 (UTC)
 From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 To: lucas.demarchi@intel.com
 Cc: emil.velikov@collabora.com,
@@ -48,9 +48,9 @@ Cc: emil.velikov@collabora.com,
 	linux-modules@vger.kernel.org,
 	mcgrof@kernel.org,
 	md@linux.it
-Subject: [PATCH v2 patch] libkmod: add weak dependecies
-Date: Wed, 27 Mar 2024 15:11:16 +0100
-Message-ID: <20240327141116.97587-1-jtornosm@redhat.com>
+Subject: [PATCH v2 kmod] libkmod: add weak dependecies
+Date: Wed, 27 Mar 2024 15:13:05 +0100
+Message-ID: <20240327141305.97783-1-jtornosm@redhat.com>
 In-Reply-To: <7vowjj4oo64a2vquvqaszmzcdvbrlkntcze2btnogvkwwtuddv@uz72wpi2t55s>
 References: <7vowjj4oo64a2vquvqaszmzcdvbrlkntcze2btnogvkwwtuddv@uz72wpi2t55s>
 Precedence: bulk
@@ -60,7 +60,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
 
 It has been seen that for some network mac drivers (i.e. lan78xx) the
 related module for the phy is loaded dynamically depending on the current
