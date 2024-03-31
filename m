@@ -1,199 +1,226 @@
-Received: from PA5P264CU001.outbound.protection.outlook.com (mail-francecentralazon11020003.outbound.protection.outlook.com [52.101.167.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D5C5F87C;
-	Thu, 28 Mar 2024 12:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.167.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711630259; cv=fail; b=uiarhWRXL9gwXXlBx/l88ZwDygbGbmyDtFcgNS2UTDKmYVBUFQMqQgz2xVP22zuzrnnyTX8CUjUvrqZzKxIw11ZBWiMLp77Pig+y03Fh/6b5D46nL84Rmj1XQ7o/WlJHePfusGZXf5t98WJwxVy4vUF0q5SOvKlam9cee+349lo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711630259; c=relaxed/simple;
-	bh=mcELksiNTmJF9U49TTniMSP8yQtszQs3+7Cywoceq4Q=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=lbvdscismKvCE6uJXqi0bcEp8HZ0sTpSzK5IvP6H5ADblZVthA5Oiu4FjI/5g0tgG6CZSwO1pmXVnXz3ROOg7QNQz6OuVVC8H6cst725ZURHbSRTNjwVL6JJjeLkGp5eDIDPStmrecz1+codBjSPg7YPbV4UMj7wvHaW9sgbCJI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b=F/9ks4Tk; arc=fail smtp.client-ip=52.101.167.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E2B77620;
+	Sun, 31 Mar 2024 13:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1711892379; cv=none; b=DRxckm0FlUZGBAllw+lTy5KfhfhNG8gxLYxHQTEpwgmLZ8a9IxkLZyw9v0EGemb9eiIwZOcXn2gDJU+vD95+4t76pZy1wtRsMwY5oMZQuS8Je/iqeCrJ6um8Gniep1B9lqX57Jt6iqn3P9oRM2eIMd4eD71XLXjQ1AqfjzjBwbY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1711892379; c=relaxed/simple;
+	bh=InENMLyEVj8LDUl4O3ZdCqTFX1wjOTf3pldDMrk1Xp4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tUuqldESm5GaLXzmrWEd6gaMKtS8A7Q2gZGHEbtAcsIAlA3F2/aWGpxVUikZ3S4cnfYkYt2HOcn6hnWqi+OV6cL8FgOv1qAWvcbrzjM+xbgt/6LCzQI24tYPxbGedzPJSQs63VnbLv/M21NPyKaHbgNyy7glljRoqxSldQvNfIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gek/8PDz; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=csgroup.eu header.i=@csgroup.eu header.b="F/9ks4Tk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FVBblMn34fYUkC8SIU3uI6Fr0fe0TNvYsZZExyVzOBb1KY7NIg6ngDe01wzokW9MusWt3+6G4nsHm5u1/K0arQi1Grh6ZthB4Nk00Cq9UWmI264zJiPr+VOlDlqdc4+6f3X49uXYXrLW0ww2Ye83l+jhZUF64QHVnpUaA9BAlL0HgKnKbisQE5C1B0tj/+AKVXV3sjE13TX3gDxN/sElkaF+No3c8fgRq9ZgU4Fzk1z6oi19kI5U87A097zbU+f1oVC/9OYzggBOLRHbqJimx5akNUVvPtYg+M8RdzgF6Sv90A3AZKsa983ULI1emfFeOsIC3ZC0JILEPHpaBZieng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mcELksiNTmJF9U49TTniMSP8yQtszQs3+7Cywoceq4Q=;
- b=oZnZSVNKtYEQLbaLYr5Ir+8vAdyfULxNQPKHKRSKvSfxdYEAaWLw8R+FcoK/hl/GNq8qxXRaSJ3fqof4ihJJZQcMd865TEVOtAhSEB9cJTtpIe7i+7mEhYAzXzR/EDx4srtn8DlmaxdH2ld67Y5yIlqwu6dnJaKuHR1lCZQaGthfbt4ot4M1VuHK2UGBG8JC6IZFxm06DzAHjXMEUZB01EprfvCfWK0phdD5LUNXFH1QilyDHBRVu10BUkd2sRBkV5UWGCY/9E9ea94MfvglH88vs+GOHXAO93KbNd1wzKF1guTPw3avUXjxn5jxBdnF/nQu5ksj2fYDBFt46sVwLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mcELksiNTmJF9U49TTniMSP8yQtszQs3+7Cywoceq4Q=;
- b=F/9ks4Tk3gTRDydAdfW+3oC5D8G4pKwaTY7ZFugr0kVsbOxcItfLtz5kB1vjAFrPi/Y9d7rafeeQOiqgL/VNXRTeHDkq2Rd9GpVTRxgX+8FwbJWia/yzyLpmQJjsT9Ipu9z/DCv7auer55CfzBugTcO3QneASFND1uiv7DWLkYvcm5TCZKAFcIVfbMqPW7hIqQnO1V+6HdpmTS3QUc+ro88hrDx2XTtBoxL/DFIKx4N80jhkKaXT5fM1uyR4vjg2kJd0X2XS7T6104vI2+AHczqu9TMRbOfmPLUoSt8iSxpsVLbc4nmvfyuwei47i/ysPXYUPSaSJ4v92rwpdYbqhA==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2571.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.33; Thu, 28 Mar
- 2024 12:50:54 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::c192:d40f:1c33:1f4e%6]) with mapi id 15.20.7409.038; Thu, 28 Mar 2024
- 12:50:54 +0000
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Jarkko Sakkinen <jarkko@kernel.org>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>
-CC: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Luis
- Chamberlain <mcgrof@kernel.org>, "linux-modules@vger.kernel.org"
-	<linux-modules@vger.kernel.org>, "Naveen N . Rao"
-	<naveen.n.rao@linux.ibm.com>, Anil S Keshavamurthy
-	<anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH v7 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
-Thread-Topic: [PATCH v7 2/2] arch/riscv: Enable kprobes when CONFIG_MODULES=n
-Thread-Index: AQHaf4RCkQCyd7P0cUC2CDp5+q6YwLFNHhqA
-Date: Thu, 28 Mar 2024 12:50:54 +0000
-Message-ID: <e4c3933c-884d-476b-976b-ccaa86e66ddc@csgroup.eu>
-References: <20240326134616.7691-1-jarkko@kernel.org>
- <20240326134616.7691-2-jarkko@kernel.org>
-In-Reply-To: <20240326134616.7691-2-jarkko@kernel.org>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MRZP264MB2571:EE_
-x-ms-office365-filtering-correlation-id: 2a2f60b5-f371-4b5a-0865-08dc4f25b491
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- upzO7OPPpkGjxrmRhuzPaEF+ONUy6FHLc3r9jR50WSQL8+thGKHRYHtOUG1/ZyswwVt3SGYUdyErJ85ZUosPSF3/09yg9RBbvq2KGVBrZyAkod2gv7W9gmVL8us0QbyX0VivMm5D2+rjWNz1kXFBLu29+jpP/hZAWqRFYn3TLCfxMeNiGZslGHxHmu5Zv7H4av9uQ1uNS3NDmYNlGspD6LHaGU/bENEJnH0zHtUDgMIVdmJTKl3lEabWA5ZJih+7aK26sQC5L01mYEa2LzoA9GPwEGZIbFx3RxGFj6G1ZcII2F8VkAAKTPv9xoi61XxMWKpVxHVD8utFhBAhNHJA+8Ly7Fo7PZEV0OYuIhI4e0XGnOk67iOK7EJLsCrrGVkkY/hN3O0zEpVDQaK2xfFon9z8T44vWDiiOocto8lg83AsIGmuw7i58qEKahXGL6ohilFdV8plwUhc9Wh63F+/K9iXlY8LrQ1g1Ay6nX6SDTEj56Hfsgb67IkU8rw66+r+JX5SISfPimB9+WIup10BCauRqk+Kw73awrO+pgcPcBY+mVR7wIvSBOPsoFuwlCRsyM680tscfzJHJIN4JwzXzoBln2uVqVUjB/tRQUVWCw4a+a/e8sD3/R9H5DbQjTqD28jXCRwDfkZKCx2Of19+yU0YvR+RLUshh3WyXlQAveg=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(7416005)(376005)(38070700009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?dGpnNldJeEN3RlpNdHBlaEwxVGVMZlUwK2NnMitlS1Rqc0wwSE1CUzlBMUM1?=
- =?utf-8?B?ZjZ5Nk5nYi9CWTgyQzl3RTZDdHVpbk9SR2FtZmZneDFueENGUXJWS2NzMmww?=
- =?utf-8?B?OUdlQ0tieTBkcEtZdml1Qmt6YXErOFIzL0hMRU94QXRFcUlyTEdkMWI4eEpm?=
- =?utf-8?B?ejFGd2NWMURWeW5aY21kenpDbHBoWlEzUGVneVYrQmtxNHlpUVZXMTFnVExH?=
- =?utf-8?B?ZFdvU1BrcDVXWDVDNXpxOUNVd3lKb1MydHBweDlUSy9SSUFmZHMxdDNyUHg1?=
- =?utf-8?B?VllpMEN4U2tIWHE3cUNCVEV4Q25tUEhRN0tTZGRkVlJOaWZJc0JoaEdYQytl?=
- =?utf-8?B?VEtqV2hzMmxZejdyUHhjTGl5Z1pUT2t2bzV6eTJpTy9ZaTExSkt0eGllUjhi?=
- =?utf-8?B?RzVWM0oxZXRKWTV1c2RpQVJUL2xza3hQQlh0SWtqZ2JTRktqWEI5Ykg2Lytv?=
- =?utf-8?B?SnoxeVpkSGFjWUJXZVpmaXlCbHhvVys1bUdzVnYzZ3lhOVNpU3ZRZnVFVGd6?=
- =?utf-8?B?Y2VBT1Qyb1RlRDd4KzFrbzhUUjF0OHFlazZWc201TU9CeEE4d1pNNjRQTitF?=
- =?utf-8?B?WmM1OGFtWS9iV0tuc2hCR1Q1WUhTc0xYNmtNT0hmbTVuZERoZ0FLOHdXQmZ1?=
- =?utf-8?B?SitFSTdVaWZBZlVHZjZpOFZrbjgxUnJaOEsvWVhLMUFqZG1DTEVaRmhoTms3?=
- =?utf-8?B?TXdlMnJ0SUhCNnBZMDdQdE1uYzNqWXBYRWdTSG5zZDR1L0YwRmM5dmFRTC9l?=
- =?utf-8?B?NDB2YW84aFZPT0VzdCtRYmJ6Z1A5VzFsVEUyczlFMklQbktIUG5MZHRIZWl0?=
- =?utf-8?B?b3lPTHczMlgxcHdGOTJ0SWloTjY4djFVODQ3Y0ZwbGFNbUI2YTFhN1FxZmxZ?=
- =?utf-8?B?SjBQZXB2anNDWDhKRjloRjkrOTdUdFdDMDRMMjJIOHE3ZldZUUJ0MFJzTGky?=
- =?utf-8?B?aER4dU5xMEJDRmZ1N241SWdaM2Q5RElzTC9qRkt2d0lVa0FjbXlrN3IxMnlU?=
- =?utf-8?B?aWJORnRDZHMyV3NPTjR4SVpYWWR2UUNVVG9kUzQ3eERmaWd3RW9FUlRZb29Q?=
- =?utf-8?B?MU5RYUx6WGlUM3RYcHBYcHVrSlBrcXVmRkJxN1hXSkMveHovc0NRbG1rVEhD?=
- =?utf-8?B?cjA1NmpkV2MwbkhheTVlYXZJL3VKT1V5NzM2bDJwL3NGNmhsTFVhN083YlVx?=
- =?utf-8?B?dnJmbGt2eVpsVFg4SjZaM3IyY0JrZXhGSjdTM3EveE8vTXk2YUNuRW9MVlhT?=
- =?utf-8?B?dDZtUGdHNnBITlRsNGhDSTVtK1NGeC8waElIcFV6ckZyNnpCT0pLVEZlSEp1?=
- =?utf-8?B?NHJUK1NCLys1K3doVWJ5ak1GTGtucWpRbXFETlNabDMyQkpXWDdJbTZ5eHRo?=
- =?utf-8?B?MCtWZEJvbnF3M1E3VW0xb0tISTZMTnE1Q25xRUluNzRhZ3orN2xXQXgrZHBj?=
- =?utf-8?B?RitSSVFCSjBzVGVzazBBVDZVZm9KTDRNWXF2VE85eDFacW1FaC9yN1VXZmNL?=
- =?utf-8?B?WXl1ME5oTXRMMGcvK1dVOHEzTUZnZmFvWHlmWnZWNnVCN0RQRkE2QVJ1aFBM?=
- =?utf-8?B?M1RhOXl5Y3NvNWdaNVFxUFhWK1I3TGFTVWszQ0pvZDdEM0NIbTkwbUdlcjlv?=
- =?utf-8?B?a1RlM0t2ZDYzcGxmTDJOU0pSYVo3djJKeG04enlucCt2Tm9CYkhJYUdRL1pD?=
- =?utf-8?B?TGxtMklqWTNPSTBsUkFOeHloQTlNN1lyaXZxK2NZMjZFUE0ySyszVHhzb0ht?=
- =?utf-8?B?ZnBaRzVSTmlSRjFWVTRLdTRkaTd3MUF4STVoT25wTnRrUVFvWEo4ekNNMzNr?=
- =?utf-8?B?SDBGZTlFQldtajNGWFRuUkUyaHcwVUNpV0x5SlpjRkZjU0xid28rWGR0Z0Z2?=
- =?utf-8?B?bWU1ZXlBY0Rvd1BNSWlQUGY0UTNzN24vTDkvTUN6cDlUV3B0TU1zeEdpeng0?=
- =?utf-8?B?YkVSVHFJUUpORS9oK0hGcC9CdW9SNFhSMlN3ZXR2dDNxT3hKeVJXUzNodGJx?=
- =?utf-8?B?NW4veUJ4U0poMzIxck15OWpXbFpTakNWc29VOFNOOWxrYW9aQ2NmSzg1YzRZ?=
- =?utf-8?B?ZWNxTFRQY0J1eDNWUVdoQ0VLTXhUbjhJYWIxVVN0VHBISlNGSlEyMzRTbldZ?=
- =?utf-8?B?VHdLd1BVenRFOWlUYkNpSGtUcjZZdEptYi8rbWVLQzBBK3ZvM09xTXZEWkp2?=
- =?utf-8?B?WUN3Tk45cTVHMzZBNElpR05NSytSNW4yb0kveGk2YThnT3k2TUNHN0VESUJF?=
- =?utf-8?B?R2dUZTRVbzJUOVBxWVR5NlBmSllBPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <66FCE73D0F1C7245A7628AAB9B644D4D@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gek/8PDz"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6eaf7c97738so764200b3a.2;
+        Sun, 31 Mar 2024 06:39:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1711892377; x=1712497177; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w9NaVh8gtRfzS1+NNHkWoqkIF1L86qwamtcfpVwuotk=;
+        b=Gek/8PDzPuHciILXm/4QlbAolaRQP76y60OTV4bSd2WystTnnzzjZFTeeM5UJeVxM6
+         Xk/JyZ9ka0weI2f4KwkOXdIowkYAoji4prbSIbP1+MUHV4pDO8mL2xQe+xCQmVwJNYIu
+         wkpV+wlFjmn64UGl70Qxf8WXrgEOmDgngL+aHPQDo2VMcUrrixKHTfKKHa8TQqvER//3
+         FUG1KiMQR/dB2TKlBCTUI3+D70oouvCvFO8VcVWCew2DcJE0a+uUlKVWNpKvxWzOtJ6k
+         OzOfSoZoc75Sz3fKsvMk894bXFiwXoTJUcuP3vI/RMe/fV3eXiWdjTgEQ1g8UkNdtza+
+         Ax0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711892377; x=1712497177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w9NaVh8gtRfzS1+NNHkWoqkIF1L86qwamtcfpVwuotk=;
+        b=taAe/nAcyH209azUMqxiakME9bnGcEe32XtaYvBmjuzOaQvGtT3BSEvIk476LwlJ11
+         xtIuLKOgcGB+vfpKkQ40ZGOPSvVsdHuRmRxHXavtNnV9f7TehTKlhAVKoGOqiSFarNdg
+         He+dGj/R4fmEknbabKWZ6L8jejG3fCb/dC1pcAAJXXAR6pRSn6c7TiCP/jYd/oFzsPnj
+         GznNKqbWgv2qAgqqfulYFIrisBpWhObxHusnl9jnhwrITd2sdENQmHS5fsEzcuQRiYc1
+         3aDzuMOZcNHR3+WRCYqyZ/7U0UCwmsAXxc4fm4xuk4fKh69uo8HQINPvC5e34kAlRmOk
+         joZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUiUvvTPMDxOk9D9FPt0COKyKV8zYCZdAW0v3K3p51Vw0DT9BrIZHKLGJinLIDQwoVV13kQdLFzkytTYeXAq4c1+kgj2RVUYGUEjkJ3UQ==
+X-Gm-Message-State: AOJu0YxaXmWn+dzea6U7iTk5Z2Fx5z/VDnXrmLVSjXf3nAUfdmtHnMed
+	Sbzj+cFOShlJKD/9ospIS/mhw0JT1owRWx7rrfgegQlZWDKOri3CBLGevoQRFxpBGA==
+X-Google-Smtp-Source: AGHT+IEn4VdXcwvYZjmd7FZg4r3bvVG4brdLf+U8Hh/U4QlQBjzuvZ8GB1KwVBX0u4QddEkx6ifdoA==
+X-Received: by 2002:a05:6a00:b4a:b0:6ea:b69a:7c48 with SMTP id p10-20020a056a000b4a00b006eab69a7c48mr8573072pfo.29.1711892377128;
+        Sun, 31 Mar 2024 06:39:37 -0700 (PDT)
+Received: from localhost.localdomain ([39.144.104.108])
+        by smtp.gmail.com with ESMTPSA id p37-20020a631e65000000b005df41b00ee9sm5772899pgm.68.2024.03.31.06.39.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 31 Mar 2024 06:39:36 -0700 (PDT)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	mcgrof@kernel.org
+Cc: live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH] livepatch: Delete the associated module when replacing an old livepatch
+Date: Sun, 31 Mar 2024 21:38:39 +0800
+Message-Id: <20240331133839.18316-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a2f60b5-f371-4b5a-0865-08dc4f25b491
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Mar 2024 12:50:54.0984
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: R68qNDDXjbZ3vLd2jc8NupFLv6MahmMeAXKeOxv2onBrnE+EVvJKRS9IQeUsnXBEanRvBRDnMTJ/nnOxuV2XYe9hhR1pOtb8rhgJNqZeJ/Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2571
+Content-Transfer-Encoding: 8bit
 
-DQoNCkxlIDI2LzAzLzIwMjQgw6AgMTQ6NDYsIEphcmtrbyBTYWtraW5lbiBhIMOpY3JpdMKgOg0K
-PiBUYWNpbmcgd2l0aCBrcHJvYmVzIHdoaWxlIHJ1bm5pbmcgYSBtb25vbGl0aGljIGtlcm5lbCBp
-cyBjdXJyZW50bHkNCj4gaW1wb3NzaWJsZSBkdWUgdGhlIGtlcm5lbCBtb2R1bGUgYWxsb2NhdG9y
-IGRlcGVuZGVuY3kuDQo+IA0KPiBBZGRyZXNzIHRoZSBpc3N1ZSBieSBpbXBsZW1lbnRpbmcgdGV4
-dG1lbSBBUEkgZm9yIFJJU0MtVi4NCj4gDQo+IExpbms6IGh0dHBzOi8vd3d3LnNvY2h1Yi5maSAj
-IGZvciBwb3dlciBvbiB0ZXN0aW5nIG5ldyBTb0MncyB3aXRoIGEgbWluaW1hbCBzdGFjaw0KPiBM
-aW5rOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvMjAyMjA2MDgwMDAwMTQuMzA1NDMzMy0x
-LWphcmtrb0Bwcm9maWFuLmNvbS8gIyBjb250aW51YXRpb24NCj4gU2lnbmVkLW9mZi1ieTogSmFy
-a2tvIFNha2tpbmVuIDxqYXJra29Aa2VybmVsLm9yZz4NCj4gLS0tDQo+IHY1LXY3Og0KPiAtIE5v
-IGNoYW5nZXMuDQo+IHY0Og0KPiAtIEluY2x1ZGUgbGludXgvZXhlY21lbS5oLg0KPiB2MzoNCj4g
-LSBBcmNoaXRlY3R1cmUgaW5kZXBlbmRlbnQgcGFydHMgaGF2ZSBiZWVuIHNwbGl0IHRvIHNlcGFy
-YXRlIHBhdGNoZXMuDQo+IC0gRG8gbm90IGNoYW5nZSBhcmNoL3Jpc2N2L2tlcm5lbC9tb2R1bGUu
-YyBhcyBpdCBpcyBvdXQgb2Ygc2NvcGUgZm9yDQo+ICAgIHRoaXMgcGF0Y2ggc2V0IG5vdy4NCj4g
-djI6DQo+IC0gQmV0dGVyIGxhdGUgdGhhbiBuZXZlciByaWdodD8gOi0pDQo+IC0gRm9jdXMgb25s
-eSB0byBSSVNDLVYgZm9yIG5vdyB0byBtYWtlIHRoZSBwYXRjaCBtb3JlIGRpZ2VzdGFibGUuIFRo
-aXMNCj4gICAgaXMgdGhlIGFyY2ggd2hlcmUgSSB1c2UgdGhlIHBhdGNoIG9uIGEgZGFpbHkgYmFz
-aXMgdG8gaGVscCB3aXRoIFFBLg0KPiAtIEludHJvZHVjZSBIQVZFX0tQUk9CRVNfQUxMT0MgZmxh
-ZyB0byBoZWxwIHdpdGggbW9yZSBncmFkdWFsIG1pZ3JhdGlvbi4NCj4gLS0tDQo+ICAgYXJjaC9y
-aXNjdi9LY29uZmlnICAgICAgICAgIHwgIDEgKw0KPiAgIGFyY2gvcmlzY3Yva2VybmVsL01ha2Vm
-aWxlICB8ICAzICsrKw0KPiAgIGFyY2gvcmlzY3Yva2VybmVsL2V4ZWNtZW0uYyB8IDIyICsrKysr
-KysrKysrKysrKysrKysrKysNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKykN
-Cj4gICBjcmVhdGUgbW9kZSAxMDA2NDQgYXJjaC9yaXNjdi9rZXJuZWwvZXhlY21lbS5jDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9LY29uZmlnIGIvYXJjaC9yaXNjdi9LY29uZmlnDQo+
-IGluZGV4IGUzMTQyY2U1MzFhMC4uNDk5NTEyZmIxN2ZmIDEwMDY0NA0KPiAtLS0gYS9hcmNoL3Jp
-c2N2L0tjb25maWcNCj4gKysrIGIvYXJjaC9yaXNjdi9LY29uZmlnDQo+IEBAIC0xMzIsNiArMTMy
-LDcgQEAgY29uZmlnIFJJU0NWDQo+ICAgCXNlbGVjdCBIQVZFX0tQUk9CRVMgaWYgIVhJUF9LRVJO
-RUwNCj4gICAJc2VsZWN0IEhBVkVfS1BST0JFU19PTl9GVFJBQ0UgaWYgIVhJUF9LRVJORUwNCj4g
-ICAJc2VsZWN0IEhBVkVfS1JFVFBST0JFUyBpZiAhWElQX0tFUk5FTA0KPiArCXNlbGVjdCBIQVZF
-X0FMTE9DX0VYRUNNRU0gaWYgIVhJUF9LRVJORUwNCj4gICAJIyBodHRwczovL2dpdGh1Yi5jb20v
-Q2xhbmdCdWlsdExpbnV4L2xpbnV4L2lzc3Vlcy8xODgxDQo+ICAgCXNlbGVjdCBIQVZFX0xEX0RF
-QURfQ09ERV9EQVRBX0VMSU1JTkFUSU9OIGlmICFMRF9JU19MTEQNCj4gICAJc2VsZWN0IEhBVkVf
-TU9WRV9QTUQNCj4gZGlmZiAtLWdpdCBhL2FyY2gvcmlzY3Yva2VybmVsL01ha2VmaWxlIGIvYXJj
-aC9yaXNjdi9rZXJuZWwvTWFrZWZpbGUNCj4gaW5kZXggNjA0ZDZiZjdlNDc2Li4zMzc3OTdmMTBk
-M2UgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3Yva2VybmVsL01ha2VmaWxlDQo+ICsrKyBiL2Fy
-Y2gvcmlzY3Yva2VybmVsL01ha2VmaWxlDQo+IEBAIC03Myw2ICs3Myw5IEBAIG9iai0kKENPTkZJ
-R19TTVApCQkrPSBjcHVfb3BzLm8NCj4gICANCj4gICBvYmotJChDT05GSUdfUklTQ1ZfQk9PVF9T
-UElOV0FJVCkgKz0gY3B1X29wc19zcGlud2FpdC5vDQo+ICAgb2JqLSQoQ09ORklHX01PRFVMRVMp
-CQkrPSBtb2R1bGUubw0KPiAraWZlcSAoJChDT05GSUdfQUxMT0NfRVhFQ01FTSkseSkNCj4gK29i
-ai15CQkJCSs9IGV4ZWNtZW0ubw0KDQpXaHkgbm90IGp1c3QgOg0KDQpvYmotJChDT05GSUdfQUxM
-T0NfRVhFQ01FTSkJCSs9IGV4ZWNtZW0ubw0KDQo+ICtlbmRpZg0KPiAgIG9iai0kKENPTkZJR19N
-T0RVTEVfU0VDVElPTlMpCSs9IG1vZHVsZS1zZWN0aW9ucy5vDQo+ICAgDQo+ICAgb2JqLSQoQ09O
-RklHX0NQVV9QTSkJCSs9IHN1c3BlbmRfZW50cnkubyBzdXNwZW5kLm8NCj4gZGlmZiAtLWdpdCBh
-L2FyY2gvcmlzY3Yva2VybmVsL2V4ZWNtZW0uYyBiL2FyY2gvcmlzY3Yva2VybmVsL2V4ZWNtZW0u
-Yw0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjNlNTI1MjJl
-YWQzMg0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL2FyY2gvcmlzY3Yva2VybmVsL2V4ZWNtZW0u
-Yw0KPiBAQCAtMCwwICsxLDIyIEBADQo+ICsvLyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BM
-LTIuMC1vci1sYXRlcg0KPiArDQo+ICsjaW5jbHVkZSA8bGludXgvbW0uaD4NCj4gKyNpbmNsdWRl
-IDxsaW51eC9leGVjbWVtLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvdm1hbGxvYy5oPg0KPiArI2lu
-Y2x1ZGUgPGFzbS9zZWN0aW9ucy5oPg0KPiArDQo+ICt2b2lkICphbGxvY19leGVjbWVtKHVuc2ln
-bmVkIGxvbmcgc2l6ZSwgZ2ZwX3QgLyogZ2ZwICovKQ0KPiArew0KPiArCXJldHVybiBfX3ZtYWxs
-b2Nfbm9kZV9yYW5nZShzaXplLCAxLCBNT0RVTEVTX1ZBRERSLA0KPiArCQkJCSAgICBNT0RVTEVT
-X0VORCwgR0ZQX0tFUk5FTCwNCg0KV2h5IG5vdCB1c2UgZ2ZwIGFyZ3VtZW50ID8NCg0KPiArCQkJ
-CSAgICBQQUdFX0tFUk5FTCwgMCwgTlVNQV9OT19OT0RFLA0KPiArCQkJCSAgICBfX2J1aWx0aW5f
-cmV0dXJuX2FkZHJlc3MoMCkpOw0KPiArfQ0KPiArDQo+ICt2b2lkIGZyZWVfZXhlY21lbSh2b2lk
-ICpyZWdpb24pDQo+ICt7DQo+ICsJaWYgKGluX2ludGVycnVwdCgpKQ0KPiArCQlwcl93YXJuKCJJ
-biBpbnRlcnJ1cHQgY29udGV4dDogdm1hbGxvYyBtYXkgbm90IHdvcmsuXG4iKTsNCg0KRG8geW91
-IGV4cGVjdCB0aGF0IHRvIGhhcHBlbiA/IG1vZHVsZV9tZW1mcmVlKCkgaGFzIGEgV0FSTl9PTigp
-IG1lYW5pbmcgDQp0aGlzIHNob3VsZCBuZXZlciBoYXBwZW4gYW5kIGlmIGl0IHJlYWxseSBkb2Vz
-IGl0IGlzIG5vdCBqdXN0IGEgcG9vciANCmRtZXNnIHdhcm5pbmcuDQoNCj4gKw0KPiArCXZmcmVl
-KHJlZ2lvbik7DQo+ICt9DQo=
+Enhance the functionality of kpatch to automatically remove the associated
+module when replacing an old livepatch with a new one. This ensures that no
+leftover modules remain in the system. For instance:
+
+- Load the first livepatch
+  $ kpatch load 6.9.0-rc1+/livepatch-test_0.ko
+  loading patch module: 6.9.0-rc1+/livepatch-test_0.ko
+  waiting (up to 15 seconds) for patch transition to complete...
+  transition complete (2 seconds)
+
+  $ kpatch list
+  Loaded patch modules:
+  livepatch_test_0 [enabled]
+
+  $ lsmod |grep livepatch
+  livepatch_test_0       16384  1
+
+- Load a new livepatch
+  $ kpatch load 6.9.0-rc1+/livepatch-test_1.ko
+  loading patch module: 6.9.0-rc1+/livepatch-test_1.ko
+  waiting (up to 15 seconds) for patch transition to complete...
+  transition complete (2 seconds)
+
+  $ kpatch list
+  Loaded patch modules:
+  livepatch_test_1 [enabled]
+
+  $ lsmod |grep livepatch
+  livepatch_test_1       16384  1
+  livepatch_test_0       16384  0   <<<< leftover
+
+With this improvement, executing
+`kpatch load 6.9.0-rc1+/livepatch-test_1.ko` will automatically remove the
+livepatch-test_0.ko module.
+
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ include/linux/module.h  |  1 +
+ kernel/livepatch/core.c | 11 +++++++++--
+ kernel/module/main.c    | 43 ++++++++++++++++++++++++-----------------
+ 3 files changed, 35 insertions(+), 20 deletions(-)
+
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 1153b0d99a80..9a95174a919b 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -75,6 +75,7 @@ extern struct module_attribute module_uevent;
+ /* These are either module local, or the kernel's dummy ones. */
+ extern int init_module(void);
+ extern void cleanup_module(void);
++extern void delete_module(struct module *mod);
+ 
+ #ifndef MODULE
+ /**
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index ecbc9b6aba3a..f1edc999f3ef 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -711,6 +711,8 @@ static void klp_free_patch_start(struct klp_patch *patch)
+  */
+ static void klp_free_patch_finish(struct klp_patch *patch)
+ {
++	struct module *mod = patch->mod;
++
+ 	/*
+ 	 * Avoid deadlock with enabled_store() sysfs callback by
+ 	 * calling this outside klp_mutex. It is safe because
+@@ -721,8 +723,13 @@ static void klp_free_patch_finish(struct klp_patch *patch)
+ 	wait_for_completion(&patch->finish);
+ 
+ 	/* Put the module after the last access to struct klp_patch. */
+-	if (!patch->forced)
+-		module_put(patch->mod);
++	if (!patch->forced)  {
++		module_put(mod);
++		if (module_refcount(mod))
++			return;
++		mod->state = MODULE_STATE_GOING;
++		delete_module(mod);
++	}
+ }
+ 
+ /*
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e1e8a7a9d6c1..e863e1f87dfd 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -695,12 +695,35 @@ EXPORT_SYMBOL(module_refcount);
+ /* This exists whether we can unload or not */
+ static void free_module(struct module *mod);
+ 
++void delete_module(struct module *mod)
++{
++	char buf[MODULE_FLAGS_BUF_SIZE];
++
++	/* Final destruction now no one is using it. */
++	if (mod->exit != NULL)
++		mod->exit();
++	blocking_notifier_call_chain(&module_notify_list,
++				     MODULE_STATE_GOING, mod);
++	klp_module_going(mod);
++	ftrace_release_mod(mod);
++
++	async_synchronize_full();
++
++	/* Store the name and taints of the last unloaded module for diagnostic purposes */
++	strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloaded_module.name));
++	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false),
++		sizeof(last_unloaded_module.taints));
++
++	free_module(mod);
++	/* someone could wait for the module in add_unformed_module() */
++	wake_up_all(&module_wq);
++}
++
+ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 		unsigned int, flags)
+ {
+ 	struct module *mod;
+ 	char name[MODULE_NAME_LEN];
+-	char buf[MODULE_FLAGS_BUF_SIZE];
+ 	int ret, forced = 0;
+ 
+ 	if (!capable(CAP_SYS_MODULE) || modules_disabled)
+@@ -750,23 +773,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 		goto out;
+ 
+ 	mutex_unlock(&module_mutex);
+-	/* Final destruction now no one is using it. */
+-	if (mod->exit != NULL)
+-		mod->exit();
+-	blocking_notifier_call_chain(&module_notify_list,
+-				     MODULE_STATE_GOING, mod);
+-	klp_module_going(mod);
+-	ftrace_release_mod(mod);
+-
+-	async_synchronize_full();
+-
+-	/* Store the name and taints of the last unloaded module for diagnostic purposes */
+-	strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloaded_module.name));
+-	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
+-
+-	free_module(mod);
+-	/* someone could wait for the module in add_unformed_module() */
+-	wake_up_all(&module_wq);
++	delete_module(mod);
+ 	return 0;
+ out:
+ 	mutex_unlock(&module_mutex);
+-- 
+2.39.1
+
