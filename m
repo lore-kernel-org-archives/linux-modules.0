@@ -1,422 +1,347 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67FA11718;
-	Thu,  4 Apr 2024 14:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD02712AAE7
+	for <linux-modules@vger.kernel.org>; Thu,  4 Apr 2024 16:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712241281; cv=none; b=tP3LJivd+Ah91fZp1BlEXhLUr1GN/lXeiACGIjqTa3PovMlWTUzLTSTFBtRj2E63jck0mg3+lwIpqF5L+60yZieUGVPlV3HPozgrh81y+V6FUFoDuuOGJM5BtQkz4WreDUz+mvJhQo83dk/P9IUAB5Jv54D3udgwIBOh7o03si8=
+	t=1712249893; cv=none; b=czdJ4FXg0jIg/paiqOl1YT3HUdVRHcVQUFNtPOmlljGGNSGkWNf2XdBN3sGDXXyhwNi/ZPVe/ybscdCDsczOTn8VJNjx+wRYkLrkqQl9SCF2f+DBBhSnLDMmC22tE7dHEVZt4h8kP+LKhNxXi7iKCN6CvaPl/wzQnQKpozkRybo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712241281; c=relaxed/simple;
-	bh=DDF+XoErYnE2SQ7bm4cBMxwMCcMyp9S5zq1e/e1ba80=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oexpiuuWFTBV832w+i0hIaKtCQD0ZhZ84DWUAlXUyEqeZs6ew/Z/mcw5OrDlfHNhHIJKpV1D1YiGOxsUVl3XEvjurOTrW+tT5azX5VeE4CYcphi20FEd0Jd/NdDBivkbFJMFA90GEqBxG+JXxpY4zmQUz7U8VcZHXTg1YI/sZ5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rdT5/L2w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712249893; c=relaxed/simple;
+	bh=Ug3wNn9rUYSiApUWsdmJAfxaH7gkdUjC0d0zsQR/y4Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WZq2JHNQrAFtUDuEOO7W2uBQYEHBg5nC85NscwDYxYFJgePnXNAuOyUOjHrvN70E/9QeqjZUQM0lDC+JjkEmVo39oFLoaHsYWX2NR/nOBLajMI4FkbgiUffGVUXwqEMQpCGiLsk7ps0ktqPjnJnitl92ZbI1VebR0y99FThnpgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VE+TMXT1; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rdT5/L2w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943C5C433C7;
-	Thu,  4 Apr 2024 14:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712241281;
-	bh=DDF+XoErYnE2SQ7bm4cBMxwMCcMyp9S5zq1e/e1ba80=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rdT5/L2wdzNErSonxSKnmQa0CbrjCSi3vurljmcC8FjlTvmCHDNAhmv6qCMLjs7R8
-	 7xKirXzY+KfW9aJEwReRTUM8hhjZ3qsEpFg4Tm7QQiWo7tVbJFS75q4TAUkbnnd1z8
-	 bc10zHHXsS2HFNFlKr4nZzzxKYDw28hAlqdDYR37FBQ/tYlbWZ+FZyl0A+wyNPMyRz
-	 zMvYqqLkWHlByJdjCSKCz3aP6qwy2PBsTqJKvKseD+Av7RN6WPASAKnQyXmOb31mVD
-	 0yI1rbaCQObKNXgIjcdQCMVv0+1cJtoDplMuJUX2sTRAPqEjhTkXAZjtx9d+hW6fkN
-	 mti+xxkkT4K7g==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Zhen Lei <thunder.leizhen@huawei.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] [v5] kallsyms: rework symbol lookup return codes
-Date: Thu,  4 Apr 2024 16:33:15 +0200
-Message-Id: <20240404143424.3279752-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VE+TMXT1"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dcc80d6006aso1318381276.0
+        for <linux-modules@vger.kernel.org>; Thu, 04 Apr 2024 09:58:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712249890; x=1712854690; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SnNkrv9amLNSOChMZU1xiNRngWLHsWRGHJdyDWSVIjQ=;
+        b=VE+TMXT19IlGsNP/1GZ4QkeACDqlNHhbUWPxK9JAFxupGgfIy3o9CUYHwC3zIILeE/
+         dw0le8WSHyjn/yq30nG7WGIBs+X6a9VPfx1czXi3gORFjnFlex63/z9NmeK+P7uf4FiD
+         RHJKVnZ48GhO6Q4rq8jgk0qaybB9hdHz4S+E0g6+tSZchhycJvFOpbl7D2UtYx1SXGvj
+         gepwgqcJ7Jg/qqAYl7LvxwqsD5gHQVzcaToe3QQoSJR+sUbcEAX8lpWLwVUPvWrUQ6mm
+         MWXNXICHXg6DmfFEa3hCb/McRPKDAOzCAeHvys1ChiPt0IZ9j9LrXVHefmOmwHrmBH7X
+         jS3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712249890; x=1712854690;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SnNkrv9amLNSOChMZU1xiNRngWLHsWRGHJdyDWSVIjQ=;
+        b=gjgpxZVqtxLe+h+CmeXBuxlHT94ZSj1j57Hhhho2urhR2vnI2msHHBrPvB7pSSwe5H
+         aU9ryyAimKQaCZ7QDAhhGCfYF9fVzVEa2bRod62qR3YVdDX3l8NSvc3+o96j8SZ5oRfY
+         yuhu1Ong4LK7TqEfEMcujg7wBEmwDkXdHsDopIZBy9kx9BPCmoIBFflTa3CjJREG9LZO
+         Um05o1meVRXaM+UtC3bD8cvai+HLZJx4ASqWUDlvzOb2J7pDCFAx3DxL8XzLxzZUvQwI
+         dzrsuz91Qu3+Iijv3CEuowqLC4B/ivZZkre63qvK4SjyHsiZwkFVQanVeN1LNDa4zGfY
+         xgOA==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ8MZJVBqnoXpfTFBmCzshxJhLdf0AVWkNveSDUdL7S2xyVpFyNu939wWZflLz/oFRP8zXzIs33bTtLG1le5eyTfLaz8nMLUC+93LFjQ==
+X-Gm-Message-State: AOJu0Yyd4OkohKcE37kOPgAeS1gjjEF2DpTaaA4Qd7p/dgoSusF/gJ3d
+	Zyukz8MI9pusBn1LIHMu+/DBFaR+xkeG5C80rVvD3RzX/A4QVkd6PNHbk3wqjzDJTlGy8utWF8U
+	q4T82GsrkLUQlssxF+UY0VZEEh8tNOECU9jqt
+X-Google-Smtp-Source: AGHT+IF7B3akhgfxRrnqjce/FXowsw1E3eakccZbE6M28J8HXpTOkV5OPQcXw5mCpvOPKhYETIzOkOwrlUerT+o2JDc=
+X-Received: by 2002:a5b:481:0:b0:dcc:9d30:58a0 with SMTP id
+ n1-20020a5b0481000000b00dcc9d3058a0mr2683124ybp.64.1712249889460; Thu, 04 Apr
+ 2024 09:58:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240321163705.3067592-1-surenb@google.com> <20240321163705.3067592-6-surenb@google.com>
+ <20240321133147.6d05af5744f9d4da88234fb4@linux-foundation.org>
+ <gnqztvimdnvz2hcepdh3o3dpg4cmvlkug4sl7ns5vd4lm7hmao@dpstjnacdubq>
+ <20240321150908.48283ba55a6c786dee273ec3@linux-foundation.org>
+ <bliyhrwtskv5xhg3rxxszouxntrhnm3nxhcmrmdwwk4iyx5wdo@vodd22dbtn75> <CAJuCfpEO4NjYysJ7X8ME_GjHc41u-_dK4AhrhmaSMh_9mxaHSA@mail.gmail.com>
+In-Reply-To: <CAJuCfpEO4NjYysJ7X8ME_GjHc41u-_dK4AhrhmaSMh_9mxaHSA@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 4 Apr 2024 09:57:55 -0700
+Message-ID: <CAJuCfpEGJHs=ygb2_PNcqEy__dvhby5N7dvwnno=3pDEvE1+2g@mail.gmail.com>
+Subject: Re: [PATCH v6 05/37] fs: Convert alloc_inode_sb() to a macro
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, mhocko@suse.com, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	penguin-kernel@i-love.sakura.ne.jp, corbet@lwn.net, void@manifault.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, catalin.marinas@arm.com, 
+	will@kernel.org, arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, 
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com, 
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org, 
+	nathan@kernel.org, dennis@kernel.org, jhubbard@nvidia.com, tj@kernel.org, 
+	muchun.song@linux.dev, rppt@kernel.org, paulmck@kernel.org, 
+	pasha.tatashin@soleen.com, yosryahmed@google.com, yuzhao@google.com, 
+	dhowells@redhat.com, hughd@google.com, andreyknvl@gmail.com, 
+	keescook@chromium.org, ndesaulniers@google.com, vvvvvv@google.com, 
+	gregkh@linuxfoundation.org, ebiggers@google.com, ytcoode@gmail.com, 
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+	bsegall@google.com, bristot@redhat.com, vschneid@redhat.com, cl@linux.com, 
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, 
+	glider@google.com, elver@google.com, dvyukov@google.com, 
+	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	kernel-team@android.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kasan-dev@googlegroups.com, 
+	cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Mar 21, 2024 at 3:47=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Thu, Mar 21, 2024 at 3:17=E2=80=AFPM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> > On Thu, Mar 21, 2024 at 03:09:08PM -0700, Andrew Morton wrote:
+> > > On Thu, 21 Mar 2024 17:15:39 -0400 Kent Overstreet <kent.overstreet@l=
+inux.dev> wrote:
+> > >
+> > > > On Thu, Mar 21, 2024 at 01:31:47PM -0700, Andrew Morton wrote:
+> > > > > On Thu, 21 Mar 2024 09:36:27 -0700 Suren Baghdasaryan <surenb@goo=
+gle.com> wrote:
+> > > > >
+> > > > > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > > > > >
+> > > > > > We're introducing alloc tagging, which tracks memory allocation=
+s by
+> > > > > > callsite. Converting alloc_inode_sb() to a macro means allocati=
+ons will
+> > > > > > be tracked by its caller, which is a bit more useful.
+> > > > >
+> > > > > I'd have thought that there would be many similar
+> > > > > inlines-which-allocate-memory.  Such as, I dunno, jbd2_alloc_inod=
+e().
+> > > > > Do we have to go converting things to macros as people report
+> > > > > misleading or less useful results, or is there some more general
+> > > > > solution to this?
+> > > >
+> > > > No, this is just what we have to do.
+> > >
+> > > Well, this is something we strike in other contexts - kallsyms gives =
+us
+> > > an inlined function and it's rarely what we wanted.
+> > >
+> > > I think kallsyms has all the data which is needed to fix this - how
+> > > hard can it be to figure out that a particular function address lies
+> > > within an outer function?  I haven't looked...
+> >
+> > This is different, though - even if a function is inlined in multiple
+> > places there's only going to be one instance of a static var defined
+> > within that function.
+>
+> I guess one simple way to detect the majority of these helpers would
+> be to filter all entries from /proc/allocinfo which originate from
+> header files.
+>
+> ~# grep ".*\.h:." /proc/allocinfo
+>       933888      228 include/linux/mm.h:2863 func:pagetable_alloc
+>          848       53 include/linux/mm_types.h:1175 func:mm_alloc_cid
+>            0        0 include/linux/bpfptr.h:70 func:kvmemdup_bpfptr
+>            0        0 include/linux/bpf.h:2237 func:bpf_map_kmalloc_node
+>            0        0 include/linux/bpf.h:2256 func:bpf_map_alloc_percpu
+>            0        0 include/linux/bpf.h:2256 func:bpf_map_alloc_percpu
+>            0        0 include/linux/bpf.h:2237 func:bpf_map_kmalloc_node
+>            0        0 include/linux/bpf.h:2249 func:bpf_map_kvcalloc
+>            0        0 include/linux/bpf.h:2243 func:bpf_map_kzalloc
+>            0        0 include/linux/bpf.h:2237 func:bpf_map_kmalloc_node
+>            0        0 include/linux/ptr_ring.h:471
+> func:__ptr_ring_init_queue_alloc
+>            0        0 include/linux/bpf.h:2256 func:bpf_map_alloc_percpu
+>            0        0 include/linux/bpf.h:2237 func:bpf_map_kmalloc_node
+>            0        0 include/net/tcx.h:80 func:tcx_entry_create
+>            0        0 arch/x86/include/asm/pgalloc.h:156 func:p4d_alloc_o=
+ne
+>       487424      119 include/linux/mm.h:2863 func:pagetable_alloc
+>            0        0 include/linux/mm.h:2863 func:pagetable_alloc
+>          832       13 include/linux/jbd2.h:1607 func:jbd2_alloc_inode
+>            0        0 include/linux/jbd2.h:1591 func:jbd2_alloc_handle
+>            0        0 fs/nfs/iostat.h:51 func:nfs_alloc_iostats
+>            0        0 include/net/netlabel.h:281 func:netlbl_secattr_cach=
+e_alloc
+>            0        0 include/net/netlabel.h:381 func:netlbl_secattr_allo=
+c
+>            0        0 include/crypto/internal/acompress.h:76
+> func:__acomp_request_alloc
+>         8064       84 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>         1016       74 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>          384        4 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>          704        3 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>           32        1 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>           64        1 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>           40        2 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>           32        1 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>        30000      625 include/acpi/platform/aclinuxex.h:67
+> func:acpi_os_acquire_object
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:67
+> func:acpi_os_acquire_object
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>          512        1 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>          192        6 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>          192        3 include/acpi/platform/aclinuxex.h:52 func:acpi_os_a=
+llocate
+>        61992      861 include/acpi/platform/aclinuxex.h:67
+> func:acpi_os_acquire_object
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 include/acpi/platform/aclinuxex.h:67
+> func:acpi_os_acquire_object
+>            0        0 include/acpi/platform/aclinuxex.h:57
+> func:acpi_os_allocate_zeroed
+>            0        0 drivers/iommu/amd/amd_iommu.h:141 func:alloc_pgtabl=
+e_page
+>            0        0 drivers/iommu/amd/amd_iommu.h:141 func:alloc_pgtabl=
+e_page
+>            0        0 drivers/iommu/amd/amd_iommu.h:141 func:alloc_pgtabl=
+e_page
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/hid_bpf.h:154 func:call_hid_bpf_rdesc=
+_fixup
+>            0        0 include/linux/skbuff.h:3392 func:__dev_alloc_pages
+>       114688       56 include/linux/ptr_ring.h:471
+> func:__ptr_ring_init_queue_alloc
+>            0        0 include/linux/skmsg.h:415 func:sk_psock_init_link
+>            0        0 include/linux/bpf.h:2237 func:bpf_map_kmalloc_node
+>            0        0 include/linux/ptr_ring.h:628 func:ptr_ring_resize_m=
+ultiple
+>        24576        3 include/linux/ptr_ring.h:471
+> func:__ptr_ring_init_queue_alloc
+>            0        0 include/net/netlink.h:1896 func:nla_memdup
+>            0        0 include/linux/sockptr.h:97 func:memdup_sockptr
+>            0        0 include/net/request_sock.h:131 func:reqsk_alloc
+>            0        0 include/net/tcp.h:2456 func:tcp_v4_save_options
+>            0        0 include/net/tcp.h:2456 func:tcp_v4_save_options
+>            0        0 include/crypto/hash.h:586 func:ahash_request_alloc
+>            0        0 include/linux/sockptr.h:97 func:memdup_sockptr
+>            0        0 include/linux/sockptr.h:97 func:memdup_sockptr
+>            0        0 net/sunrpc/auth_gss/auth_gss_internal.h:38
+> func:simple_get_netobj
+>            0        0 include/crypto/hash.h:586 func:ahash_request_alloc
+>            0        0 include/net/netlink.h:1896 func:nla_memdup
+>            0        0 include/crypto/skcipher.h:869 func:skcipher_request=
+_alloc
+>            0        0 include/net/fq_impl.h:361 func:fq_init
+>            0        0 include/net/netlabel.h:316 func:netlbl_catmap_alloc
+>
+> and it finds our example:
+>
+>          832       13 include/linux/jbd2.h:1607 func:jbd2_alloc_inode
+>
+> Interestingly the inlined functions which are called from multiple
+> places will have multiple entries with the same file+line:
+>
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>            0        0 include/linux/dma-fence-chain.h:91
+> func:dma_fence_chain_alloc
+>
+> So, duplicate entries can be also used as an indication of an inlined all=
+ocator.
+> I'll go chase these down and will post a separate patch converting them.
 
-Building with W=1 in some configurations produces a false positive
-warning for kallsyms:
-
-kernel/kallsyms.c: In function '__sprint_symbol.isra':
-kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
-  503 |                 strcpy(buffer, name);
-      |                 ^~~~~~~~~~~~~~~~~~~~
-
-This originally showed up while building with -O3, but later started
-happening in other configurations as well, depending on inlining
-decisions. The underlying issue is that the local 'name' variable is
-always initialized to the be the same as 'buffer' in the called functions
-that fill the buffer, which gcc notices while inlining, though it could
-see that the address check always skips the copy.
-
-The calling conventions here are rather unusual, as all of the internal
-lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
-ftrace_func_address_lookup, module_address_lookup and
-kallsyms_lookup_buildid) already use the provided buffer and either return
-the address of that buffer to indicate success, or NULL for failure,
-but the callers are written to also expect an arbitrary other buffer
-to be returned.
-
-Rework the calling conventions to return the length of the filled buffer
-instead of its address, which is simpler and easier to follow as well
-as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
-unchanged, since that is called from 16 different functions and
-adapting this would be a much bigger change.
-
-Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
-Link: https://lore.kernel.org/lkml/20240326130647.7bfb1d92@gandalf.local.home/
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-v5: fix ftrace_mod_address_lookup return value,
-    rebased on top of 2e114248e086 ("bpf: Replace deprecated strncpy with strscpy")
-v4: fix string length
-v3: use strscpy() instead of strlcpy()
-v2: complete rewrite after the first patch was rejected (in 2020). This
-    is now one of only two warnings that are in the way of enabling
-    -Wextra/-Wrestrict by default.
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- include/linux/filter.h   | 14 +++++++-------
- include/linux/ftrace.h   |  6 +++---
- include/linux/module.h   | 14 +++++++-------
- kernel/bpf/core.c        |  7 +++----
- kernel/kallsyms.c        | 23 ++++++++++++-----------
- kernel/module/kallsyms.c | 26 +++++++++++++-------------
- kernel/trace/ftrace.c    | 13 +++++--------
- 7 files changed, 50 insertions(+), 53 deletions(-)
-
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 161d5f7b64ed..e3a8f51fdf84 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1202,18 +1202,18 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym);
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
- struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	const char *ret = __bpf_address_lookup(addr, size, off, sym);
-+	int ret = __bpf_address_lookup(addr, size, off, sym);
- 
- 	if (ret && modname)
- 		*modname = NULL;
-@@ -1257,11 +1257,11 @@ static inline bool bpf_jit_kallsyms_enabled(void)
- 	return false;
- }
- 
--static inline const char *
-+static inline int
- __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		     unsigned long *off, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline bool is_bpf_text_address(unsigned long addr)
-@@ -1280,11 +1280,11 @@ static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
- 	return NULL;
- }
- 
--static inline const char *
-+static inline int
- bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline void bpf_prog_kallsyms_add(struct bpf_prog *fp)
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 54d53f345d14..56834a3fa9be 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -87,15 +87,15 @@ struct ftrace_direct_func;
- 
- #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_MODULES) && \
- 	defined(CONFIG_DYNAMIC_FTRACE)
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym);
- #else
--static inline const char *
-+static inline int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
--	return NULL;
-+	return 0;
- }
- #endif
- 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 1153b0d99a80..118c36366b35 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -922,11 +922,11 @@ int module_kallsyms_on_each_symbol(const char *modname,
-  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
-  * found, otherwise NULL.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *symbolsize,
--				  unsigned long *offset,
--				  char **modname, const unsigned char **modbuildid,
--				  char *namebuf);
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *symbolsize,
-+			  unsigned long *offset,
-+			  char **modname, const unsigned char **modbuildid,
-+			  char *namebuf);
- int lookup_module_symbol_name(unsigned long addr, char *symname);
- int lookup_module_symbol_attrs(unsigned long addr,
- 			       unsigned long *size,
-@@ -955,14 +955,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
- }
- 
- /* For kallsyms to ask for address resolution.  NULL means not found. */
--static inline const char *module_address_lookup(unsigned long addr,
-+static inline int module_address_lookup(unsigned long addr,
- 						unsigned long *symbolsize,
- 						unsigned long *offset,
- 						char **modname,
- 						const unsigned char **modbuildid,
- 						char *namebuf)
- {
--	return NULL;
-+	return 0;
- }
- 
- static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 7a33a3a7e63c..a1cfd2a34762 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -735,11 +735,11 @@ static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
- 	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
- }
- 
--const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
-+int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- 				 unsigned long *off, char *sym)
- {
- 	struct bpf_ksym *ksym;
--	char *ret = NULL;
-+	int ret = 0;
- 
- 	rcu_read_lock();
- 	ksym = bpf_ksym_find(addr);
-@@ -747,9 +747,8 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
- 		unsigned long symbol_start = ksym->start;
- 		unsigned long symbol_end = ksym->end;
- 
--		strscpy(sym, ksym->name, KSYM_NAME_LEN);
-+		ret = strscpy(sym, ksym->name, KSYM_NAME_LEN);
- 
--		ret = sym;
- 		if (size)
- 			*size = symbol_end - symbol_start;
- 		if (off)
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 18edd57b5fe8..eeb0e249e0e2 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -394,12 +394,12 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
- 	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
- }
- 
--static const char *kallsyms_lookup_buildid(unsigned long addr,
-+static int kallsyms_lookup_buildid(unsigned long addr,
- 			unsigned long *symbolsize,
- 			unsigned long *offset, char **modname,
- 			const unsigned char **modbuildid, char *namebuf)
- {
--	const char *ret;
-+	int ret;
- 
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
-@@ -416,7 +416,7 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 		if (modbuildid)
- 			*modbuildid = NULL;
- 
--		ret = namebuf;
-+		ret = strlen(namebuf);
- 		goto found;
- 	}
- 
-@@ -448,8 +448,13 @@ const char *kallsyms_lookup(unsigned long addr,
- 			    unsigned long *offset,
- 			    char **modname, char *namebuf)
- {
--	return kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
--				       NULL, namebuf);
-+	int ret = kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
-+					  NULL, namebuf);
-+
-+	if (!ret)
-+		return NULL;
-+
-+	return namebuf;
- }
- 
- int lookup_symbol_name(unsigned long addr, char *symname)
-@@ -484,19 +489,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- {
- 	char *modname;
- 	const unsigned char *buildid;
--	const char *name;
- 	unsigned long offset, size;
- 	int len;
- 
- 	address += symbol_offset;
--	name = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
-+	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
- 				       buffer);
--	if (!name)
-+	if (!len)
- 		return sprintf(buffer, "0x%lx", address - symbol_offset);
- 
--	if (name != buffer)
--		strcpy(buffer, name);
--	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
- 	if (add_offset)
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index ef73ae7c8909..6e6619a5b2f1 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -321,14 +321,15 @@ void * __weak dereference_module_function_descriptor(struct module *mod,
-  * For kallsyms to ask for address resolution.  NULL means not found.  Careful
-  * not to lock to avoid deadlock on oopses, simply disable preemption.
-  */
--const char *module_address_lookup(unsigned long addr,
--				  unsigned long *size,
--			    unsigned long *offset,
--			    char **modname,
--			    const unsigned char **modbuildid,
--			    char *namebuf)
-+int module_address_lookup(unsigned long addr,
-+			  unsigned long *size,
-+			  unsigned long *offset,
-+			  char **modname,
-+			  const unsigned char **modbuildid,
-+			  char *namebuf)
- {
--	const char *ret = NULL;
-+	const char *sym;
-+	int ret = 0;
- 	struct module *mod;
- 
- 	preempt_disable();
-@@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
- #endif
- 		}
- 
--		ret = find_kallsyms_symbol(mod, addr, size, offset);
--	}
--	/* Make a copy in here where it's safe */
--	if (ret) {
--		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
--		ret = namebuf;
-+		sym = find_kallsyms_symbol(mod, addr, size, offset);
-+
-+		if (sym)
-+			ret = strscpy(namebuf, sym, KSYM_NAME_LEN);
- 	}
-+
- 	preempt_enable();
- 
- 	return ret;
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 32ea92934268..03061c98a94c 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6974,7 +6974,7 @@ allocate_ftrace_mod_map(struct module *mod,
- 	return mod_map;
- }
- 
--static const char *
-+static int
- ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			   unsigned long addr, unsigned long *size,
- 			   unsigned long *off, char *sym)
-@@ -6995,21 +6995,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
- 			*size = found_func->size;
- 		if (off)
- 			*off = addr - found_func->ip;
--		if (sym)
--			strscpy(sym, found_func->name, KSYM_NAME_LEN);
--
--		return found_func->name;
-+		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
- 	}
- 
--	return NULL;
-+	return 0;
- }
- 
--const char *
-+int
- ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
- 		   unsigned long *off, char **modname, char *sym)
- {
- 	struct ftrace_mod_map *mod_map;
--	const char *ret = NULL;
-+	int ret = 0;
- 
- 	/* mod_map is freed via call_rcu() */
- 	preempt_disable();
--- 
-2.39.2
-
+I just posted https://lore.kernel.org/all/20240404165404.3805498-1-surenb@g=
+oogle.com/
+to report allocations done from the inlined functions in the headers
+to their callers.
