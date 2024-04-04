@@ -1,251 +1,422 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0DE1272A0
-	for <linux-modules@vger.kernel.org>; Thu,  4 Apr 2024 14:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67FA11718;
+	Thu,  4 Apr 2024 14:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712239454; cv=none; b=GmzDD05Zi59eD0WiDy61viETxugQKTNoel+qVm7REAGzsybOwYijM/u0XV9xmxRFTMR6TqIeRomnXfv6QdVdkoYvLsyPoPxrfd6lbVwXFlI4Xc3itIgevT0L8L99+pRNDkKCT1le6P4B9FZ6meAGEq2o0JVzP5RSPWv9zMyb2iw=
+	t=1712241281; cv=none; b=tP3LJivd+Ah91fZp1BlEXhLUr1GN/lXeiACGIjqTa3PovMlWTUzLTSTFBtRj2E63jck0mg3+lwIpqF5L+60yZieUGVPlV3HPozgrh81y+V6FUFoDuuOGJM5BtQkz4WreDUz+mvJhQo83dk/P9IUAB5Jv54D3udgwIBOh7o03si8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712239454; c=relaxed/simple;
-	bh=4YsbgZU6LmmggK+xUjomwMPE5BdtxPaPztjbjqDo6S8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eEddf2TZ67ZBOZqZv2W24k3RyGbRbqKn2VB881UeDxXPr/bjApZ1Z9DdwhNlXr7lZKjqdnMkeqH1PyvHnKhv8dgLoRrlCPe5SXC2YbUAynQSlYQtpxH0VSroxPhyOZFdRfzwS2Ue9wlhRPVgcxDMffccxB3JasvFx4wVDEJ9xwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UWARAJx0; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1712241281; c=relaxed/simple;
+	bh=DDF+XoErYnE2SQ7bm4cBMxwMCcMyp9S5zq1e/e1ba80=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oexpiuuWFTBV832w+i0hIaKtCQD0ZhZ84DWUAlXUyEqeZs6ew/Z/mcw5OrDlfHNhHIJKpV1D1YiGOxsUVl3XEvjurOTrW+tT5azX5VeE4CYcphi20FEd0Jd/NdDBivkbFJMFA90GEqBxG+JXxpY4zmQUz7U8VcZHXTg1YI/sZ5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rdT5/L2w; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UWARAJx0"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3438f079ff5so640134f8f.2
-        for <linux-modules@vger.kernel.org>; Thu, 04 Apr 2024 07:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1712239451; x=1712844251; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xrZUZuJ6o8h0kswN/fPU1Rkqp3+7k0LUkx9tP62SUxo=;
-        b=UWARAJx0g/bR/iPsXTkfCFzItBohORLWbZ+hWRWNjF6UaofS5i4x35YNMDAR3bV1JQ
-         Va1rBXHkO4cSsOSMgnrESy889AFAkwHcvfXCWoA070RbpZk08JhnV8rZ20zom4rERhZg
-         F4+i9jqxAInwhG3/V6eVTWvaEJPzOGJOD1NBrhdN/Gxw7lgPlRhyMTV8luDgsP8maQZa
-         AgA74tFvbPpZ2HXExp55KwFgctuuLf/F6v/ekTZfNrgKLGmZBGB0qVkT4bf2aD+1vikA
-         KikIqtV0hREu4/tOXvhsNFK5NqYHiTz5Ifaecq9q0CKnCrTzcym7cVaMnE66vY6g6j37
-         oNCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712239451; x=1712844251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xrZUZuJ6o8h0kswN/fPU1Rkqp3+7k0LUkx9tP62SUxo=;
-        b=CbGHxSiC9n+QVy/bdYRv9OwJ+dRIa+OAFjxxiFzrZ4G1Cu1xedzQiI/mbMtNwXQTDF
-         TK9AyPFlhrh9NXiW0NgEK11lEKy0u1/N05vz0kpZlKuOgVfVa7SvpXjyV2wV6Fgla5Ac
-         JgXXxcfi40aBuRAVbxes+4DP6ecikmVkLB1k+HsAFI4eZVxSrM1V3JOI3rCq/aNKqaQB
-         bKojkb+vfRiAgEGB4a6Jz102jM1j4DX9TDtNTiH/uz0fHB3HAkZRDDs7OKzN6GVHp+pi
-         UPEG5FRJNmprD8FOivLJkIxn9sksqkgJscz00+I9T/a82Mdmacd8Gq2UAiicFuJ1FV04
-         6lFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXc5mwFpW9gWjTckv5+cjyQTZSPqeADCWioyGv5sBVH6eLzVPXbBV2KChSy7MMsMTpTy/f8Oyvlz5Y3BxCJ+7zOAVtbCCBC485AeTwS6Q==
-X-Gm-Message-State: AOJu0Yyc24TynvlghJhZ4L6u5zsIOCxS0MByrQchSoV0ltqzFOt+E3ii
-	V2SOt4v3c0rOVeqv7GPO7Slh/VKD4ShwMrFNNZhJdm08dN0abt8JcI/5P580Ee8=
-X-Google-Smtp-Source: AGHT+IFWkeyEYEnU9VKeUX+p9nUTn+I54XTino0LqNky9iIqJeqs78AiDz9uaJ1OrM65SiOjV30vMA==
-X-Received: by 2002:adf:f789:0:b0:343:97b0:fd1c with SMTP id q9-20020adff789000000b0034397b0fd1cmr1914389wrp.13.1712239450817;
-        Thu, 04 Apr 2024 07:04:10 -0700 (PDT)
-Received: from alley ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id i13-20020adffc0d000000b00343c1cd5aedsm1698442wrr.52.2024.04.04.07.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 07:04:10 -0700 (PDT)
-Date: Thu, 4 Apr 2024 16:04:08 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, mcgrof@kernel.org,
-	live-patching@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] livepatch: Delete the associated module when replacing
- an old livepatch
-Message-ID: <Zg6zWLuYHotLSSLT@alley>
-References: <20240331133839.18316-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rdT5/L2w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943C5C433C7;
+	Thu,  4 Apr 2024 14:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712241281;
+	bh=DDF+XoErYnE2SQ7bm4cBMxwMCcMyp9S5zq1e/e1ba80=;
+	h=From:To:Cc:Subject:Date:From;
+	b=rdT5/L2wdzNErSonxSKnmQa0CbrjCSi3vurljmcC8FjlTvmCHDNAhmv6qCMLjs7R8
+	 7xKirXzY+KfW9aJEwReRTUM8hhjZ3qsEpFg4Tm7QQiWo7tVbJFS75q4TAUkbnnd1z8
+	 bc10zHHXsS2HFNFlKr4nZzzxKYDw28hAlqdDYR37FBQ/tYlbWZ+FZyl0A+wyNPMyRz
+	 zMvYqqLkWHlByJdjCSKCz3aP6qwy2PBsTqJKvKseD+Av7RN6WPASAKnQyXmOb31mVD
+	 0yI1rbaCQObKNXgIjcdQCMVv0+1cJtoDplMuJUX2sTRAPqEjhTkXAZjtx9d+hW6fkN
+	 mti+xxkkT4K7g==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Kees Cook <keescook@chromium.org>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: [PATCH] [v5] kallsyms: rework symbol lookup return codes
+Date: Thu,  4 Apr 2024 16:33:15 +0200
+Message-Id: <20240404143424.3279752-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240331133839.18316-1-laoar.shao@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun 2024-03-31 21:38:39, Yafang Shao wrote:
-> Enhance the functionality of kpatch to automatically remove the associated
-> module when replacing an old livepatch with a new one. This ensures that no
-> leftover modules remain in the system. For instance:
+From: Arnd Bergmann <arnd@arndb.de>
 
-I like this feature. I would suggest to split it into two parts:
+Building with W=1 in some configurations produces a false positive
+warning for kallsyms:
 
-  + 1st patch would implement the delete_module() API. It must be safe
-    even for other potential in-kernel callers. And it must be
-    acceptable for the module loader code maintainers.
+kernel/kallsyms.c: In function '__sprint_symbol.isra':
+kernel/kallsyms.c:503:17: error: 'strcpy' source argument is the same as destination [-Werror=restrict]
+  503 |                 strcpy(buffer, name);
+      |                 ^~~~~~~~~~~~~~~~~~~~
 
-  + 2nd patch() using the API in the livepatch code.
-    We will need to make sure that the new delete_module()
-    API is used correctly from the livepatching code side.
+This originally showed up while building with -O3, but later started
+happening in other configurations as well, depending on inlining
+decisions. The underlying issue is that the local 'name' variable is
+always initialized to the be the same as 'buffer' in the called functions
+that fill the buffer, which gcc notices while inlining, though it could
+see that the address check always skips the copy.
 
-The 2nd patch should also fix the selftests.
+The calling conventions here are rather unusual, as all of the internal
+lookup functions (bpf_address_lookup, ftrace_mod_address_lookup,
+ftrace_func_address_lookup, module_address_lookup and
+kallsyms_lookup_buildid) already use the provided buffer and either return
+the address of that buffer to indicate success, or NULL for failure,
+but the callers are written to also expect an arbitrary other buffer
+to be returned.
 
+Rework the calling conventions to return the length of the filled buffer
+instead of its address, which is simpler and easier to follow as well
+as avoiding the warning. Leave only the kallsyms_lookup() calling conventions
+unchanged, since that is called from 16 different functions and
+adapting this would be a much bigger change.
 
-> - Load the first livepatch
->   $ kpatch load 6.9.0-rc1+/livepatch-test_0.ko
->   loading patch module: 6.9.0-rc1+/livepatch-test_0.ko
->   waiting (up to 15 seconds) for patch transition to complete...
->   transition complete (2 seconds)
-> 
->   $ kpatch list
->   Loaded patch modules:
->   livepatch_test_0 [enabled]
-> 
->   $ lsmod |grep livepatch
->   livepatch_test_0       16384  1
-> 
-> - Load a new livepatch
->   $ kpatch load 6.9.0-rc1+/livepatch-test_1.ko
->   loading patch module: 6.9.0-rc1+/livepatch-test_1.ko
->   waiting (up to 15 seconds) for patch transition to complete...
->   transition complete (2 seconds)
-> 
->   $ kpatch list
->   Loaded patch modules:
->   livepatch_test_1 [enabled]
-> 
->   $ lsmod |grep livepatch
->   livepatch_test_1       16384  1
->   livepatch_test_0       16384  0   <<<< leftover
-> 
-> With this improvement, executing
-> `kpatch load 6.9.0-rc1+/livepatch-test_1.ko` will automatically remove the
-> livepatch-test_0.ko module.
+Link: https://lore.kernel.org/all/20200107214042.855757-1-arnd@arndb.de/
+Link: https://lore.kernel.org/lkml/20240326130647.7bfb1d92@gandalf.local.home/
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+v5: fix ftrace_mod_address_lookup return value,
+    rebased on top of 2e114248e086 ("bpf: Replace deprecated strncpy with strscpy")
+v4: fix string length
+v3: use strscpy() instead of strlcpy()
+v2: complete rewrite after the first patch was rejected (in 2020). This
+    is now one of only two warnings that are in the way of enabling
+    -Wextra/-Wrestrict by default.
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ include/linux/filter.h   | 14 +++++++-------
+ include/linux/ftrace.h   |  6 +++---
+ include/linux/module.h   | 14 +++++++-------
+ kernel/bpf/core.c        |  7 +++----
+ kernel/kallsyms.c        | 23 ++++++++++++-----------
+ kernel/module/kallsyms.c | 26 +++++++++++++-------------
+ kernel/trace/ftrace.c    | 13 +++++--------
+ 7 files changed, 50 insertions(+), 53 deletions(-)
 
-As already mentioned by Joe, please replace "kpatch" with
-the related "modprobe" and "echo 0 >/sys/kernel/livepatch/<name>/enable"
-calls.
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 161d5f7b64ed..e3a8f51fdf84 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1202,18 +1202,18 @@ static inline bool bpf_jit_kallsyms_enabled(void)
+ 	return false;
+ }
+ 
+-const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
++int __bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 				 unsigned long *off, char *sym);
+ bool is_bpf_text_address(unsigned long addr);
+ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
+ 		    char *sym);
+ struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
+ 
+-static inline const char *
++static inline int
+ bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		   unsigned long *off, char **modname, char *sym)
+ {
+-	const char *ret = __bpf_address_lookup(addr, size, off, sym);
++	int ret = __bpf_address_lookup(addr, size, off, sym);
+ 
+ 	if (ret && modname)
+ 		*modname = NULL;
+@@ -1257,11 +1257,11 @@ static inline bool bpf_jit_kallsyms_enabled(void)
+ 	return false;
+ }
+ 
+-static inline const char *
++static inline int
+ __bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		     unsigned long *off, char *sym)
+ {
+-	return NULL;
++	return 0;
+ }
+ 
+ static inline bool is_bpf_text_address(unsigned long addr)
+@@ -1280,11 +1280,11 @@ static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
+ 	return NULL;
+ }
+ 
+-static inline const char *
++static inline int
+ bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		   unsigned long *off, char **modname, char *sym)
+ {
+-	return NULL;
++	return 0;
+ }
+ 
+ static inline void bpf_prog_kallsyms_add(struct bpf_prog *fp)
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 54d53f345d14..56834a3fa9be 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -87,15 +87,15 @@ struct ftrace_direct_func;
+ 
+ #if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_MODULES) && \
+ 	defined(CONFIG_DYNAMIC_FTRACE)
+-const char *
++int
+ ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+ 		   unsigned long *off, char **modname, char *sym);
+ #else
+-static inline const char *
++static inline int
+ ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+ 		   unsigned long *off, char **modname, char *sym)
+ {
+-	return NULL;
++	return 0;
+ }
+ #endif
+ 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 1153b0d99a80..118c36366b35 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -922,11 +922,11 @@ int module_kallsyms_on_each_symbol(const char *modname,
+  * least KSYM_NAME_LEN long: a pointer to namebuf is returned if
+  * found, otherwise NULL.
+  */
+-const char *module_address_lookup(unsigned long addr,
+-				  unsigned long *symbolsize,
+-				  unsigned long *offset,
+-				  char **modname, const unsigned char **modbuildid,
+-				  char *namebuf);
++int module_address_lookup(unsigned long addr,
++			  unsigned long *symbolsize,
++			  unsigned long *offset,
++			  char **modname, const unsigned char **modbuildid,
++			  char *namebuf);
+ int lookup_module_symbol_name(unsigned long addr, char *symname);
+ int lookup_module_symbol_attrs(unsigned long addr,
+ 			       unsigned long *size,
+@@ -955,14 +955,14 @@ static inline int module_kallsyms_on_each_symbol(const char *modname,
+ }
+ 
+ /* For kallsyms to ask for address resolution.  NULL means not found. */
+-static inline const char *module_address_lookup(unsigned long addr,
++static inline int module_address_lookup(unsigned long addr,
+ 						unsigned long *symbolsize,
+ 						unsigned long *offset,
+ 						char **modname,
+ 						const unsigned char **modbuildid,
+ 						char *namebuf)
+ {
+-	return NULL;
++	return 0;
+ }
+ 
+ static inline int lookup_module_symbol_name(unsigned long addr, char *symname)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 7a33a3a7e63c..a1cfd2a34762 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -735,11 +735,11 @@ static struct bpf_ksym *bpf_ksym_find(unsigned long addr)
+ 	return n ? container_of(n, struct bpf_ksym, tnode) : NULL;
+ }
+ 
+-const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
++int __bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 				 unsigned long *off, char *sym)
+ {
+ 	struct bpf_ksym *ksym;
+-	char *ret = NULL;
++	int ret = 0;
+ 
+ 	rcu_read_lock();
+ 	ksym = bpf_ksym_find(addr);
+@@ -747,9 +747,8 @@ const char *__bpf_address_lookup(unsigned long addr, unsigned long *size,
+ 		unsigned long symbol_start = ksym->start;
+ 		unsigned long symbol_end = ksym->end;
+ 
+-		strscpy(sym, ksym->name, KSYM_NAME_LEN);
++		ret = strscpy(sym, ksym->name, KSYM_NAME_LEN);
+ 
+-		ret = sym;
+ 		if (size)
+ 			*size = symbol_end - symbol_start;
+ 		if (off)
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 18edd57b5fe8..eeb0e249e0e2 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -394,12 +394,12 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
+ 	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
+ }
+ 
+-static const char *kallsyms_lookup_buildid(unsigned long addr,
++static int kallsyms_lookup_buildid(unsigned long addr,
+ 			unsigned long *symbolsize,
+ 			unsigned long *offset, char **modname,
+ 			const unsigned char **modbuildid, char *namebuf)
+ {
+-	const char *ret;
++	int ret;
+ 
+ 	namebuf[KSYM_NAME_LEN - 1] = 0;
+ 	namebuf[0] = 0;
+@@ -416,7 +416,7 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
+ 		if (modbuildid)
+ 			*modbuildid = NULL;
+ 
+-		ret = namebuf;
++		ret = strlen(namebuf);
+ 		goto found;
+ 	}
+ 
+@@ -448,8 +448,13 @@ const char *kallsyms_lookup(unsigned long addr,
+ 			    unsigned long *offset,
+ 			    char **modname, char *namebuf)
+ {
+-	return kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
+-				       NULL, namebuf);
++	int ret = kallsyms_lookup_buildid(addr, symbolsize, offset, modname,
++					  NULL, namebuf);
++
++	if (!ret)
++		return NULL;
++
++	return namebuf;
+ }
+ 
+ int lookup_symbol_name(unsigned long addr, char *symname)
+@@ -484,19 +489,15 @@ static int __sprint_symbol(char *buffer, unsigned long address,
+ {
+ 	char *modname;
+ 	const unsigned char *buildid;
+-	const char *name;
+ 	unsigned long offset, size;
+ 	int len;
+ 
+ 	address += symbol_offset;
+-	name = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
++	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
+ 				       buffer);
+-	if (!name)
++	if (!len)
+ 		return sprintf(buffer, "0x%lx", address - symbol_offset);
+ 
+-	if (name != buffer)
+-		strcpy(buffer, name);
+-	len = strlen(buffer);
+ 	offset -= symbol_offset;
+ 
+ 	if (add_offset)
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index ef73ae7c8909..6e6619a5b2f1 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -321,14 +321,15 @@ void * __weak dereference_module_function_descriptor(struct module *mod,
+  * For kallsyms to ask for address resolution.  NULL means not found.  Careful
+  * not to lock to avoid deadlock on oopses, simply disable preemption.
+  */
+-const char *module_address_lookup(unsigned long addr,
+-				  unsigned long *size,
+-			    unsigned long *offset,
+-			    char **modname,
+-			    const unsigned char **modbuildid,
+-			    char *namebuf)
++int module_address_lookup(unsigned long addr,
++			  unsigned long *size,
++			  unsigned long *offset,
++			  char **modname,
++			  const unsigned char **modbuildid,
++			  char *namebuf)
+ {
+-	const char *ret = NULL;
++	const char *sym;
++	int ret = 0;
+ 	struct module *mod;
+ 
+ 	preempt_disable();
+@@ -344,13 +345,12 @@ const char *module_address_lookup(unsigned long addr,
+ #endif
+ 		}
+ 
+-		ret = find_kallsyms_symbol(mod, addr, size, offset);
+-	}
+-	/* Make a copy in here where it's safe */
+-	if (ret) {
+-		strncpy(namebuf, ret, KSYM_NAME_LEN - 1);
+-		ret = namebuf;
++		sym = find_kallsyms_symbol(mod, addr, size, offset);
++
++		if (sym)
++			ret = strscpy(namebuf, sym, KSYM_NAME_LEN);
+ 	}
++
+ 	preempt_enable();
+ 
+ 	return ret;
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 32ea92934268..03061c98a94c 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6974,7 +6974,7 @@ allocate_ftrace_mod_map(struct module *mod,
+ 	return mod_map;
+ }
+ 
+-static const char *
++static int
+ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
+ 			   unsigned long addr, unsigned long *size,
+ 			   unsigned long *off, char *sym)
+@@ -6995,21 +6995,18 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
+ 			*size = found_func->size;
+ 		if (off)
+ 			*off = addr - found_func->ip;
+-		if (sym)
+-			strscpy(sym, found_func->name, KSYM_NAME_LEN);
+-
+-		return found_func->name;
++		return strscpy(sym, found_func->name, KSYM_NAME_LEN);
+ 	}
+ 
+-	return NULL;
++	return 0;
+ }
+ 
+-const char *
++int
+ ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+ 		   unsigned long *off, char **modname, char *sym)
+ {
+ 	struct ftrace_mod_map *mod_map;
+-	const char *ret = NULL;
++	int ret = 0;
+ 
+ 	/* mod_map is freed via call_rcu() */
+ 	preempt_disable();
+-- 
+2.39.2
 
-"kpatch" is a 3rd party tool and only few people know what it does
-internally. The kernel commit message is there for current and future
-kernel developers. They should be able to understand the behavior
-even without digging details about "random" user-space tools.
-
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -721,8 +723,13 @@ static void klp_free_patch_finish(struct klp_patch *patch)
->  	wait_for_completion(&patch->finish);
->  
->  	/* Put the module after the last access to struct klp_patch. */
-> -	if (!patch->forced)
-> -		module_put(patch->mod);
-> +	if (!patch->forced)  {
-> +		module_put(mod);
-> +		if (module_refcount(mod))
-> +			return;
-> +		mod->state = MODULE_STATE_GOING;
-
-mod->state should be modified only by the code in kernel/module/.
-It helps to keep the operation safe (under control of module
-loader code maintainers).
-
-The fact that this patch does the above without module_mutex is
-a nice example of possible mistakes.
-
-And there are more problems, see below.
-
-> +		delete_module(mod);
-
-klp_free_patch_finish() is called also from the error path
-in klp_enable_patch(). We must not remove the module
-in this case. do_init_module() will do the clean up
-the right way.
-
-> +	}
->  }
->  
->  /*
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index e1e8a7a9d6c1..e863e1f87dfd 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -695,12 +695,35 @@ EXPORT_SYMBOL(module_refcount);
->  /* This exists whether we can unload or not */
->  static void free_module(struct module *mod);
->  
-> +void delete_module(struct module *mod)
-> +{
-> +	char buf[MODULE_FLAGS_BUF_SIZE];
-> +
-
-If we export this API via include/linux/module.h then
-it could be used anywhere in the kernel. Therefore we need
-to make it safe.
-
-This function should do the same actions as the syscall
-starting from:
-
-	mutex_lock(&module_mutex); 
-
-	if (!list_empty(&mod->source_list)) {
-		/* Other modules depend on us: get rid of them first. */
-		ret = -EWOULDBLOCK;
-		goto out;
-	}
-...
-
-Best Regards,
-Petr
-
-> +	/* Final destruction now no one is using it. */
-> +	if (mod->exit != NULL)
-> +		mod->exit();
-> +	blocking_notifier_call_chain(&module_notify_list,
-> +				     MODULE_STATE_GOING, mod);
-> +	klp_module_going(mod);
-> +	ftrace_release_mod(mod);
-> +
-> +	async_synchronize_full();
-> +
-> +	/* Store the name and taints of the last unloaded module for diagnostic purposes */
-> +	strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloaded_module.name));
-> +	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false),
-> +		sizeof(last_unloaded_module.taints));
-> +
-> +	free_module(mod);
-> +	/* someone could wait for the module in add_unformed_module() */
-> +	wake_up_all(&module_wq);
-> +}
-> +
->  SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  		unsigned int, flags)
->  {
->  	struct module *mod;
->  	char name[MODULE_NAME_LEN];
-> -	char buf[MODULE_FLAGS_BUF_SIZE];
->  	int ret, forced = 0;
->  
->  	if (!capable(CAP_SYS_MODULE) || modules_disabled)
-> @@ -750,23 +773,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  		goto out;
->  
->  	mutex_unlock(&module_mutex);
-> -	/* Final destruction now no one is using it. */
-> -	if (mod->exit != NULL)
-> -		mod->exit();
-> -	blocking_notifier_call_chain(&module_notify_list,
-> -				     MODULE_STATE_GOING, mod);
-> -	klp_module_going(mod);
-> -	ftrace_release_mod(mod);
-> -
-> -	async_synchronize_full();
-> -
-> -	/* Store the name and taints of the last unloaded module for diagnostic purposes */
-> -	strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloaded_module.name));
-> -	strscpy(last_unloaded_module.taints, module_flags(mod, buf, false), sizeof(last_unloaded_module.taints));
-> -
-> -	free_module(mod);
-> -	/* someone could wait for the module in add_unformed_module() */
-> -	wake_up_all(&module_wq);
-> +	delete_module(mod);
->  	return 0;
->  out:
->  	mutex_unlock(&module_mutex);
