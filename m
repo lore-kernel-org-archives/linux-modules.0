@@ -1,204 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADEB29CEA;
-	Mon,  8 Apr 2024 08:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD6D2A8DA;
+	Mon,  8 Apr 2024 08:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712563582; cv=none; b=MqUXX8T45H9EXQ3OLB5VeIcJU8+LcaVga11O/BVEsD9oJcPQMl6hKUGPf05aK8Ia2WcRfQRIqDEwPirI0ZDiihxECWZcQpsx62LldePllfCT6uiafabsFoX2rpFCjgVzigOsqG9IEJzJGNY/x+pieo7wQVQiqs+A8zE1eBPVvVk=
+	t=1712565746; cv=none; b=tSmtB8maf/npoGPE8n4GlEy+aZ+DAVOK91ABGRBlsHryDKC6Hkm2585v7MDebXDLBh1pqQj8eCDXl4eE8J/PIH4h3tWlSG/HsWuhzWlcplIkaawJXgA8ikcgO1EDFbcjXj/Ut06khVk6lVyUd3Zfa+79D8I5nBY46HkwZZei1E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712563582; c=relaxed/simple;
-	bh=TX+FD3p3l4+7566GyF6jvv4HQftl4YsdRmMDigxumnI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bHS2Md8K5wTEFOmuzq92nYCy8nTSCi3AKlJY+KUh3C+n7iRahxZQGZaRopAyh7kSZZ2QcmHld5jvr8MJauYgzV2F8K4LY1Cg0wMqZn6V659/cIo+NLEg5zkr0sUVWQ88HSK/Ubsd9qFKxYDW+ApOre5HKt/LvZ2g5Gv3WsV2NZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=envx6Q6E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712565746; c=relaxed/simple;
+	bh=x5uAG/ltu+aXdeMkNcec1QhqHWClHSds/cSLz1O5N+g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZT/fGoGwQyBaa7rWv9GNT9/qhrtLMGgiYyfgCHw05zl4mAx9jMipSp0EjxpbBuprT8zeOcYHp/e0Ui8O9GIE6rbN+vNxlVcBI+Fi6q+8nvoOpl65yJqoRZkqJ2bXpA/khmqdVQEZ/Q0UTHgJ/2pqCcMdqGYUhggYf4yEJMi9BpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+qi3BU/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="envx6Q6E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88523C433C7;
-	Mon,  8 Apr 2024 08:06:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+qi3BU/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66F0CC433B2;
+	Mon,  8 Apr 2024 08:42:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712563582;
-	bh=TX+FD3p3l4+7566GyF6jvv4HQftl4YsdRmMDigxumnI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=envx6Q6EeNU7r/yDittBuydlGFZHg1q9TRqI3a8eYuSgjFbvPSjV9GkUQI9DK1NKn
-	 SLcEDCGzL+6XMElann/g66gzeMHFuAz9zS7DzRwe72KIsDeMShgTJMINGjAGRmKXic
-	 5DQJDWTFTw/QBf9cnYnPt5Zz078eeHUmJa74t/RRXhkkrs34XcRGbcnrhJ0gWkZ0jV
-	 YKfKCMdHOPm8nwXO9r8Zzv2zQFLaQIa7y0pE50v2up1ubs4qF8XOo5wkY6RcVNDEIL
-	 qaCvA0veEG4oK7qjfW75lXK6cOiZXJ08LF48K+F5hAoRp34vx9pdG0GqOyu8qdhFsk
-	 KGEe9X7cVgxwA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-modules@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] [v4] module: don't ignore sysfs_create_link() failures
-Date: Mon,  8 Apr 2024 10:05:58 +0200
-Message-Id: <20240408080616.3911573-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+	s=k20201202; t=1712565745;
+	bh=x5uAG/ltu+aXdeMkNcec1QhqHWClHSds/cSLz1O5N+g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j+qi3BU/XayOJEtk+zUWGNNXQZwmsfv+7aRrjOixLWr9b8aDnkabQa9KH3L/LY6DI
+	 m+NUPCrWQD+jJhcuDStJoFGhTxPISCbmLKbIMwc1bFdbxldPGeFotZRP6XX6Yyd1Sw
+	 8wW/P/+K3Tm/krPTPGekFenbgHv7BnAJwy+LJocFCu1wAm/93oF6WXorKLzFVtb796
+	 5Q/i+69eFIPDnCr0eBPH58O33gEBpxh53m0HOGjCTGWk4+u1OXRHXOZLCw5h7+TNm8
+	 xz7Or05SIZ89ACo+2Vey5KDI9TxFEUmkyU6UxNShLs+ZjjGIyqQbPR5Gy+6aw56pgm
+	 UQ1Y0TfhTn4wg==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2d8129797fcso56246301fa.1;
+        Mon, 08 Apr 2024 01:42:25 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXHW8otahrjrLLKh9J4WLXrl0zC74rJD2KqhK2M7odqLJVeRJxSYoq81uYvwmkreoN4X50RogjkAAPpKtfjar5iOWBF1mxJYwuGWmDiSdUbwLsQarYDrhSU42isJLV2+mXWkW3wGWJAx6xQgLkQAJRx8GhC2+rkSrZSlKn6ov9RbYC+4mjaKt/vvljwuTEU33okZRTFUanGHRatLTB4iBTJ3FVCJcmvu719ajLMQw6yDozrwyVq5dy/pBQiLw==
+X-Gm-Message-State: AOJu0Yy92AjzvoA49OSpu1/HpsCJ70hwuWcRj6qYl6KenfOkQU9UBiKM
+	saiF0PmCf4JU9tKcqmsYG47Z5BsiS2TkK6qlVgLPTU6x4m8G9LDTy9NjNyWIy1dsuTz4ghjiHA8
+	V8+sAoB9/MKS5JrMZ/6YmZQjNEOM=
+X-Google-Smtp-Source: AGHT+IEEZZz1BlhQIx5HBD9lAq9n0KDHPwdJDpGGUfNMfpXy5a9hhWu2MwVcoReA5TtUW0Y7LCD+C38a7qls1lB/zag=
+X-Received: by 2002:a2e:8911:0:b0:2d8:713f:817b with SMTP id
+ d17-20020a2e8911000000b002d8713f817bmr4768893lji.26.1712565743595; Mon, 08
+ Apr 2024 01:42:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1712410202.git.lukas@wunner.de>
+In-Reply-To: <cover.1712410202.git.lukas@wunner.de>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 8 Apr 2024 10:42:12 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHsRLqdXZmRddVUZswCmiJqy8-ncgDF-ooTM2Wdi9q0Qw@mail.gmail.com>
+Message-ID: <CAMj1kXHsRLqdXZmRddVUZswCmiJqy8-ncgDF-ooTM2Wdi9q0Qw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Deduplicate bin_attribute simple read() callbacks
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
+	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, 
+	Jean Delvare <jdelvare@suse.com>, linux-efi@vger.kernel.org, 
+	Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, 
+	intel-gvt-dev@lists.freedesktop.org, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Sat, 6 Apr 2024 at 15:52, Lukas Wunner <lukas@wunner.de> wrote:
+>
+> For my upcoming PCI device authentication v2 patches, I have the need
+> to expose a simple buffer in virtual memory as a bin_attribute.
+>
+> It turns out we've duplicated the ->read() callback for such simple
+> buffers a fair number of times across the tree.
+>
+> So instead of reinventing the wheel, I decided to introduce a common
+> helper and eliminate all duplications I could find.
+>
+> I'm open to a bikeshedding discussion on the sysfs_bin_attr_simple_read()
+> name. ;)
+>
+> Lukas Wunner (2):
+>   sysfs: Add sysfs_bin_attr_simple_read() helper
+>   treewide: Use sysfs_bin_attr_simple_read() helper
+>
 
-The sysfs_create_link() return code is marked as __must_check, but the
-module_add_driver() function tries hard to not care, by assigning the
-return code to a variable. When building with 'make W=1', gcc still
-warns because this variable is only assigned but not used:
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-drivers/base/module.c: In function 'module_add_driver':
-drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
-
-Rework the code to properly unwind and return the error code to the
-caller. My reading of the original code was that it tries to
-not fail when the links already exist, so keep ignoring -EEXIST
-errors.
-
-Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-See-also: 4a7fb6363f2d ("add __must_check to device management code")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-Luis, can you merge this through the modules-next tree?
-
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
----
-v4: minor style changes, based on feedback from Andy Shevchenko
-v3: make error handling stricter, add unwinding,
-     fix build fail with CONFIG_MODULES=n
-v2: rework to actually handle the error. I have not tested the
-    error handling beyond build testing, so please review carefully.
----
- drivers/base/base.h   |  9 ++++++---
- drivers/base/bus.c    |  9 ++++++++-
- drivers/base/module.c | 42 +++++++++++++++++++++++++++++++-----------
- 3 files changed, 45 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/base/base.h b/drivers/base/base.h
-index 0738ccad08b2..db4f910e8e36 100644
---- a/drivers/base/base.h
-+++ b/drivers/base/base.h
-@@ -192,11 +192,14 @@ extern struct kset *devices_kset;
- void devices_kset_move_last(struct device *dev);
- 
- #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
--void module_add_driver(struct module *mod, struct device_driver *drv);
-+int module_add_driver(struct module *mod, struct device_driver *drv);
- void module_remove_driver(struct device_driver *drv);
- #else
--static inline void module_add_driver(struct module *mod,
--				     struct device_driver *drv) { }
-+static inline int module_add_driver(struct module *mod,
-+				    struct device_driver *drv)
-+{
-+	return 0;
-+}
- static inline void module_remove_driver(struct device_driver *drv) { }
- #endif
- 
-diff --git a/drivers/base/bus.c b/drivers/base/bus.c
-index daee55c9b2d9..ffea0728b8b2 100644
---- a/drivers/base/bus.c
-+++ b/drivers/base/bus.c
-@@ -674,7 +674,12 @@ int bus_add_driver(struct device_driver *drv)
- 		if (error)
- 			goto out_del_list;
- 	}
--	module_add_driver(drv->owner, drv);
-+	error = module_add_driver(drv->owner, drv);
-+	if (error) {
-+		printk(KERN_ERR "%s: failed to create module links for %s\n",
-+			__func__, drv->name);
-+		goto out_detach;
-+	}
- 
- 	error = driver_create_file(drv, &driver_attr_uevent);
- 	if (error) {
-@@ -699,6 +704,8 @@ int bus_add_driver(struct device_driver *drv)
- 
- 	return 0;
- 
-+out_detach:
-+	driver_detach(drv);
- out_del_list:
- 	klist_del(&priv->knode_bus);
- out_unregister:
-diff --git a/drivers/base/module.c b/drivers/base/module.c
-index 46ad4d636731..a1b55da07127 100644
---- a/drivers/base/module.c
-+++ b/drivers/base/module.c
-@@ -30,14 +30,14 @@ static void module_create_drivers_dir(struct module_kobject *mk)
- 	mutex_unlock(&drivers_dir_mutex);
- }
- 
--void module_add_driver(struct module *mod, struct device_driver *drv)
-+int module_add_driver(struct module *mod, struct device_driver *drv)
- {
- 	char *driver_name;
--	int no_warn;
- 	struct module_kobject *mk = NULL;
-+	int ret;
- 
- 	if (!drv)
--		return;
-+		return 0;
- 
- 	if (mod)
- 		mk = &mod->mkobj;
-@@ -56,17 +56,37 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
- 	}
- 
- 	if (!mk)
--		return;
-+		return 0;
-+
-+	ret = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
-+	if (ret)
-+		return ret;
- 
--	/* Don't check return codes; these calls are idempotent */
--	no_warn = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
- 	driver_name = make_driver_name(drv);
--	if (driver_name) {
--		module_create_drivers_dir(mk);
--		no_warn = sysfs_create_link(mk->drivers_dir, &drv->p->kobj,
--					    driver_name);
--		kfree(driver_name);
-+	if (!driver_name) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	module_create_drivers_dir(mk);
-+	if (!mk->drivers_dir) {
-+		ret = -EINVAL;
-+		goto out;
- 	}
-+
-+	ret = sysfs_create_link(mk->drivers_dir, &drv->p->kobj, driver_name);
-+	if (ret)
-+		goto out;
-+
-+	kfree(driver_name);
-+
-+	return 0;
-+out:
-+	sysfs_remove_link(&drv->p->kobj, "module");
-+	sysfs_remove_link(mk->drivers_dir, driver_name);
-+	kfree(driver_name);
-+
-+	return ret;
- }
- 
- void module_remove_driver(struct device_driver *drv)
--- 
-2.39.2
-
+>  arch/powerpc/platforms/powernv/opal.c              | 10 +-------
+>  drivers/acpi/bgrt.c                                |  9 +-------
+>  drivers/firmware/dmi_scan.c                        | 12 ++--------
+>  drivers/firmware/efi/rci2-table.c                  | 10 +-------
+>  drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++----------------
+>  .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
+>  fs/sysfs/file.c                                    | 27 ++++++++++++++++++++++
+>  include/linux/sysfs.h                              | 15 ++++++++++++
+>  init/initramfs.c                                   | 10 +-------
+>  kernel/module/sysfs.c                              | 13 +----------
+>  10 files changed, 56 insertions(+), 85 deletions(-)
+>
+> --
+> 2.43.0
+>
