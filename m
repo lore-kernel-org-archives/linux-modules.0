@@ -1,144 +1,204 @@
-Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279E433981;
-	Mon,  8 Apr 2024 08:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADEB29CEA;
+	Mon,  8 Apr 2024 08:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712563359; cv=none; b=KdVhCle2Q9t4Jy6eyBNFOO611rAaoXLEJupcfdg7sWc5Qc40CIi3PRnf14u7qXHvO0j+447PLgunBg/0Tk6HHiZT5BBbzfKeIHOLLKx9yfOc5Q8LHJKW0M+guUQGsILWc5yF3RaV2emUvh7HNX9QNtuFU44oKPEx0WWj8zx4XQg=
+	t=1712563582; cv=none; b=MqUXX8T45H9EXQ3OLB5VeIcJU8+LcaVga11O/BVEsD9oJcPQMl6hKUGPf05aK8Ia2WcRfQRIqDEwPirI0ZDiihxECWZcQpsx62LldePllfCT6uiafabsFoX2rpFCjgVzigOsqG9IEJzJGNY/x+pieo7wQVQiqs+A8zE1eBPVvVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712563359; c=relaxed/simple;
-	bh=ONVCO97q0NUpcIKzKBU0FPe0s0GFuXeW+BnFifgu3xY=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=QVyzkOqG764kzRnlbZwCCPoN/iAb1C9DDFPEhIGUWFEU4LB8F1aRkB78mF/ojZ0aHmkLlzVNZaS6uYwgScAfVCWepTlZSXBqaCaNSTPtxcM4HI04+VAd3b9kCSA3CzQLBH9t/Of2Y+VguxvcmvCLr18236yNrIdD7BffUyKdQkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nsKkW6FL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EWrFlLHI; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712563582; c=relaxed/simple;
+	bh=TX+FD3p3l4+7566GyF6jvv4HQftl4YsdRmMDigxumnI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bHS2Md8K5wTEFOmuzq92nYCy8nTSCi3AKlJY+KUh3C+n7iRahxZQGZaRopAyh7kSZZ2QcmHld5jvr8MJauYgzV2F8K4LY1Cg0wMqZn6V659/cIo+NLEg5zkr0sUVWQ88HSK/Ubsd9qFKxYDW+ApOre5HKt/LvZ2g5Gv3WsV2NZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=envx6Q6E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nsKkW6FL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EWrFlLHI"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id 3767E1140083;
-	Mon,  8 Apr 2024 04:02:37 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Mon, 08 Apr 2024 04:02:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1712563357; x=1712649757; bh=353KQRVAV2
-	Vp7+I9XXlJcOEzq1lBks9gDh0CvvTWW/0=; b=nsKkW6FL2r2tnPuQpDnAidkQhs
-	LL3HSoM+e6C0oZ0OxTM1WH0kFDXQaplxMk/9onG4HREKvUBpbU/3NN0N0jm+zp+N
-	FUFbrPs7xjZYr0zG0rLD/m0rcGNGliVJ6gOYX5NTp+aL2Ze+R2pa0b7LfoXcbfF1
-	m0k2WzRL1cf81/4qPYCtiZurlwDMFsCVX+kVd5nv9h08sIYvtEIiHxjenGtH7Yfv
-	wdDEgSo+vODN2Ys7GvcmbXeWBN3yEG7KqoQSDgNzDgcO6pXM6vP0QmtrMa18F/re
-	kwaUvKF+GQLnbxPxjaFyGgWPvmevwb5YLUbibrMWL8OMky7Q341Mbf/hGzVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712563357; x=1712649757; bh=353KQRVAV2Vp7+I9XXlJcOEzq1lB
-	ks9gDh0CvvTWW/0=; b=EWrFlLHIQsyNwfytwwCpBq0y8szxw6wp9EfltAmhQPCm
-	S1vxG9bnKhMz+C8zoQcj1EANhgy/Eo02LOpryePrQZJTNVesalw8a+cP29zsBRiF
-	mzQjnnzOCJcOwxAxXh89X9NmiH+yR9PKdljGGIoRpId/LkX32B8VbYM9KPo5U+AS
-	ypP170QCiytQurLxkdsxx3aU40Nnf5dX2dUP/3Z6StDR4N+0zoEQ+HgH3b8YQ7E9
-	dSb/u9DkwmRiwwJhXyeHku50DBmx/fxFX2N3zT+6CgxP7TjU7fVCUCZjLd4YJNe/
-	6cu6qUJLmm1YJr5YXbFsY/rPZVf9VWe4REA5RINQ1w==
-X-ME-Sender: <xms:nKQTZn7sg9fuxydSPC6aiQfrfhiJkZiSLxO8zK7A5DsiUT-f6e13vA>
-    <xme:nKQTZs4Bw9liDbbsD1ztXiHAuQAyw4lu-Lb6TSAKzBLGvdfZap6fkBJHTFa0WJzeo
-    vJ9aqWMmRbCXfZZJZQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudeghedguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:nKQTZucw7zC7JFdoAQvzJD_OFSiA76Bk8p6P9-ZZhj6Fb6J_PCFSOw>
-    <xmx:nKQTZoLInmefylyxgIHB3_Pa4Tv6Qr2cUZaRBXB5qFm0NyMUhzEY1Q>
-    <xmx:nKQTZrLv25aXlJLG5lT8QSsmJl8oXRkzn0ucTRSBTdH2KJLCNAzR4A>
-    <xmx:nKQTZhyX_alJkF3znDEalp8iB2OtaaI1tHjFYU_7UemBToHNw3-xXg>
-    <xmx:naQTZi8heEtIapVsAtsq_vsYUD0nePLv0HZ_PUNWsqIRwgxhgsEbeIVR>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 6CE04B6008F; Mon,  8 Apr 2024 04:02:36 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-368-gc733b1d8df-fm-20240402.001-gc733b1d8
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="envx6Q6E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88523C433C7;
+	Mon,  8 Apr 2024 08:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712563582;
+	bh=TX+FD3p3l4+7566GyF6jvv4HQftl4YsdRmMDigxumnI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=envx6Q6EeNU7r/yDittBuydlGFZHg1q9TRqI3a8eYuSgjFbvPSjV9GkUQI9DK1NKn
+	 SLcEDCGzL+6XMElann/g66gzeMHFuAz9zS7DzRwe72KIsDeMShgTJMINGjAGRmKXic
+	 5DQJDWTFTw/QBf9cnYnPt5Zz078eeHUmJa74t/RRXhkkrs34XcRGbcnrhJ0gWkZ0jV
+	 YKfKCMdHOPm8nwXO9r8Zzv2zQFLaQIa7y0pE50v2up1ubs4qF8XOo5wkY6RcVNDEIL
+	 qaCvA0veEG4oK7qjfW75lXK6cOiZXJ08LF48K+F5hAoRp34vx9pdG0GqOyu8qdhFsk
+	 KGEe9X7cVgxwA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-modules@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] [v4] module: don't ignore sysfs_create_link() failures
+Date: Mon,  8 Apr 2024 10:05:58 +0200
+Message-Id: <20240408080616.3911573-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b08dbd71-b5b1-41aa-847e-46149dda2ab7@app.fastmail.com>
-In-Reply-To: <ZgLpyDIsHThTT_KG@smile.fi.intel.com>
-References: <20240326145733.3413024-1-arnd@kernel.org>
- <ZgLpyDIsHThTT_KG@smile.fi.intel.com>
-Date: Mon, 08 Apr 2024 10:02:15 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, linux-modules@vger.kernel.org,
- "Rafael J . Wysocki" <rafael@kernel.org>, "Jens Axboe" <axboe@kernel.dk>,
- "Ricardo B. Marliere" <ricardo@marliere.net>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v3] module: don't ignore sysfs_create_link() failures
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 26, 2024, at 16:29, Andy Shevchenko wrote:
-> On Tue, Mar 26, 2024 at 03:57:18PM +0100, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The sysfs_create_link() return code is marked as __must_check, but the
->> module_add_driver() function tries hard to not care, by assigning the
->> return code to a variable. When building with 'make W=1', gcc still
->> warns because this variable is only assigned but not used:
->> 
->> drivers/base/module.c: In function 'module_add_driver':
->> drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
->> 
->> Rework the code to properly unwind and return the error code to the
->> caller. My reading of the original code was that it tries to
->> not fail when the links already exist, so keep ignoring -EEXIST
->> errors.
->
->> Cc: Luis Chamberlain <mcgrof@kernel.org>
->> Cc: linux-modules@vger.kernel.org
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->
-> Wondering if you can move these to be after --- to avoid polluting commit
-> message. This will have the same effect and be archived on lore. But on
-> pros side it will unload the commit message(s) from unneeded noise.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Done
+The sysfs_create_link() return code is marked as __must_check, but the
+module_add_driver() function tries hard to not care, by assigning the
+return code to a variable. When building with 'make W=1', gcc still
+warns because this variable is only assigned but not used:
 
->
->> +	error = module_add_driver(drv->owner, drv);
->> +	if (error) {
->> +		printk(KERN_ERR "%s: failed to create module links for %s\n",
->> +			__func__, drv->name);
->
-> What's wrong with pr_err()? Even if it's not a style used, in a new pieces of
-> code this can be improved beforehand. So, we will reduce a technical debt, and
-> not adding to it.
+drivers/base/module.c: In function 'module_add_driver':
+drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
 
-I think that would be more confusing, and would rather keep the
-style consistent. There is no practical difference here.
+Rework the code to properly unwind and return the error code to the
+caller. My reading of the original code was that it tries to
+not fail when the links already exist, so keep ignoring -EEXIST
+errors.
 
->> +int module_add_driver(struct module *mod, struct device_driver *drv)
->>  {
->>  	char *driver_name;
->> -	int no_warn;
->> +	int ret;
->
-> I would move it...
->
->>  	struct module_kobject *mk = NULL;
->
-> ...to be here.
+Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+See-also: 4a7fb6363f2d ("add __must_check to device management code")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+Luis, can you merge this through the modules-next tree?
 
-Done
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-modules@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+---
+v4: minor style changes, based on feedback from Andy Shevchenko
+v3: make error handling stricter, add unwinding,
+     fix build fail with CONFIG_MODULES=n
+v2: rework to actually handle the error. I have not tested the
+    error handling beyond build testing, so please review carefully.
+---
+ drivers/base/base.h   |  9 ++++++---
+ drivers/base/bus.c    |  9 ++++++++-
+ drivers/base/module.c | 42 +++++++++++++++++++++++++++++++-----------
+ 3 files changed, 45 insertions(+), 15 deletions(-)
 
-     Arnd
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index 0738ccad08b2..db4f910e8e36 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -192,11 +192,14 @@ extern struct kset *devices_kset;
+ void devices_kset_move_last(struct device *dev);
+ 
+ #if defined(CONFIG_MODULES) && defined(CONFIG_SYSFS)
+-void module_add_driver(struct module *mod, struct device_driver *drv);
++int module_add_driver(struct module *mod, struct device_driver *drv);
+ void module_remove_driver(struct device_driver *drv);
+ #else
+-static inline void module_add_driver(struct module *mod,
+-				     struct device_driver *drv) { }
++static inline int module_add_driver(struct module *mod,
++				    struct device_driver *drv)
++{
++	return 0;
++}
+ static inline void module_remove_driver(struct device_driver *drv) { }
+ #endif
+ 
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index daee55c9b2d9..ffea0728b8b2 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -674,7 +674,12 @@ int bus_add_driver(struct device_driver *drv)
+ 		if (error)
+ 			goto out_del_list;
+ 	}
+-	module_add_driver(drv->owner, drv);
++	error = module_add_driver(drv->owner, drv);
++	if (error) {
++		printk(KERN_ERR "%s: failed to create module links for %s\n",
++			__func__, drv->name);
++		goto out_detach;
++	}
+ 
+ 	error = driver_create_file(drv, &driver_attr_uevent);
+ 	if (error) {
+@@ -699,6 +704,8 @@ int bus_add_driver(struct device_driver *drv)
+ 
+ 	return 0;
+ 
++out_detach:
++	driver_detach(drv);
+ out_del_list:
+ 	klist_del(&priv->knode_bus);
+ out_unregister:
+diff --git a/drivers/base/module.c b/drivers/base/module.c
+index 46ad4d636731..a1b55da07127 100644
+--- a/drivers/base/module.c
++++ b/drivers/base/module.c
+@@ -30,14 +30,14 @@ static void module_create_drivers_dir(struct module_kobject *mk)
+ 	mutex_unlock(&drivers_dir_mutex);
+ }
+ 
+-void module_add_driver(struct module *mod, struct device_driver *drv)
++int module_add_driver(struct module *mod, struct device_driver *drv)
+ {
+ 	char *driver_name;
+-	int no_warn;
+ 	struct module_kobject *mk = NULL;
++	int ret;
+ 
+ 	if (!drv)
+-		return;
++		return 0;
+ 
+ 	if (mod)
+ 		mk = &mod->mkobj;
+@@ -56,17 +56,37 @@ void module_add_driver(struct module *mod, struct device_driver *drv)
+ 	}
+ 
+ 	if (!mk)
+-		return;
++		return 0;
++
++	ret = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
++	if (ret)
++		return ret;
+ 
+-	/* Don't check return codes; these calls are idempotent */
+-	no_warn = sysfs_create_link(&drv->p->kobj, &mk->kobj, "module");
+ 	driver_name = make_driver_name(drv);
+-	if (driver_name) {
+-		module_create_drivers_dir(mk);
+-		no_warn = sysfs_create_link(mk->drivers_dir, &drv->p->kobj,
+-					    driver_name);
+-		kfree(driver_name);
++	if (!driver_name) {
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	module_create_drivers_dir(mk);
++	if (!mk->drivers_dir) {
++		ret = -EINVAL;
++		goto out;
+ 	}
++
++	ret = sysfs_create_link(mk->drivers_dir, &drv->p->kobj, driver_name);
++	if (ret)
++		goto out;
++
++	kfree(driver_name);
++
++	return 0;
++out:
++	sysfs_remove_link(&drv->p->kobj, "module");
++	sysfs_remove_link(mk->drivers_dir, driver_name);
++	kfree(driver_name);
++
++	return ret;
+ }
+ 
+ void module_remove_driver(struct device_driver *drv)
+-- 
+2.39.2
+
