@@ -1,101 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470CD13F42A;
-	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC5A1411C9;
+	Mon,  8 Apr 2024 16:00:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712588494; cv=none; b=uRoqqWANLNavbl5vmJnsCI4xn5XWcY4D5QYlTYtBKee6s8H4U6lakBSySHofUzWXb4l8a5c1DZh7NevtJfL8iJDzHTUxGPz/OhMui4vbheLZfMah4cCeRzo/tXAOPsbuHWNcrjaUtDl4On02G5sBnG4plBv6lJpcDBLscpEvzCE=
+	t=1712592009; cv=none; b=ulkgIhi/YxXh/sUK+7FjKxRi7m7mdXLb9dO4RVUV19BjTqLFABV4OW09x58hHRJUQ3BwojeYcsl7RCKSmr6eiFvfTFcqD+53Cscye+eVZOQf8MP5nd8sDk3T24v/wPhWDMIvP5NPhb5Ha5WUij+2hDKcbYgc84vVSzjm1IImPq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712588494; c=relaxed/simple;
-	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bjGRrwHk++ZbrkhTgH5dXtENpfRHmOQgJczDQVc15iA567JVW7k1W6MUUOXs7yZhxnNGzTX9gfmFXSqeiqb/RfO03pubmr21C5vGhsPv+wymsdlr54E51D1WxkfwCXhutiACQjLNfRk4LWGJ4pRpG7g74ENrtKCkg1UVyI74PrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPVzIBvT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712592009; c=relaxed/simple;
+	bh=EsluPGBp8z3WBuyBSd9yS9dXpcZyDXvLR8NR4Vhr3vQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GHCdvPxbIAkNF3kbKgb34y8LHMkYufkEvUrezu9nczehvv3QARQ/UWXwDmI2/cK+v4jpf9bDlYjb+apFki7s6XOAek0WeNaCGqsrmIcKAisxGtZ1xsoWKfwvzzYwT7ONB8D5rwe4nfeYVhMrr5Q94xIu8NVoJOc7zAX6QyYPOQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=G7ayW8YJ; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPVzIBvT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB446C433F1;
-	Mon,  8 Apr 2024 15:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712588493;
-	bh=EITVdlJtkrnylLXhed9Pr1DfYAyVTQ3XvaUDh63E534=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iPVzIBvT/iSK03mJ74WyCdtfwrYQ0FIvhL5K8YMXOWzUcxtAW1X9DNCrqtBiFjfyi
-	 tl90sPwPpZ5rbnlWkWlrmucbJbApIpssRcLEk4bwAVt6FxwLnhmycj60p3s5ZulGuY
-	 Oi6kb5XzN6oeZLDaCEoYGMUGaCwA36s9aVa2vFCs+0r3L2ACNZZS6RJMIMK7lmGxXl
-	 LZaKWREq5eaTZ8dEmqubeluPfq1pepZhLI9FVjpANsP8XqyeISOYtrQC8gZ/KN/t0I
-	 J4RLdMza2ntow+e8CC8hAcBjXsrybDusTaZepo397svH4xSl9ToXUzq+mYubuhRT/b
-	 17pKAxdggeVsA==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6ea1572136eso453455a34.1;
-        Mon, 08 Apr 2024 08:01:33 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW3+0lUuKg3hHhe5fIqYbB6u665OvDnFDviXdUd7KWwdn3iXbLFY6hEeIr3VKPT+6KhtijdC/aMEQixQJR8e62LzYen9GjggTwawKLEhn9SqELjylZL57kGQkpxmjD/8n7Z+WFUBW8H2HCWTBOLjc+YqFVDm55FTv5XdDPgzEIaiLOjT+XnmOtAolUMwTh7zUKraa7MV0+2yxafcRNvULKVG6VwrLZivXIW1gexeQtwi62weIsFjgZCMyHHVQ==
-X-Gm-Message-State: AOJu0YzUFgJuG5OoHcgg+C7cG0jOPGlDiSTYqqsmM17PI9Otqcm2Gp8w
-	0xKNpdaFYwl5HKE7Dz+tIuFRrDijMGKw9nsfRzmQji05ws/GVvDn/2lcM2jA+e5CupL+fHBJ80z
-	yHjpuw6lyNGtgRjHxBoAg7xnjuYg=
-X-Google-Smtp-Source: AGHT+IE7BjvtTOsOgPqYkXR1Qq+KOOG/nJtiEyKbfNUuvRcPpCIK8D3B6ZYbWXxS6qJ87RK9Jxd6UH195uv+p6a4TTw=
-X-Received: by 2002:a05:6808:603:b0:3c5:f534:e2c7 with SMTP id
- y3-20020a056808060300b003c5f534e2c7mr2839026oih.1.1712588493105; Mon, 08 Apr
- 2024 08:01:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G7ayW8YJ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=i+CnLiyt3a/2zi5nZLCIWovq8ywq+T8g1xLxm8wLpf0=; b=G7ayW8YJwpLfRcKPNK//Na+wnG
+	JFvLxiIAB9r/u3thtdxelqWM1GqjtIPobvbqqvf3uE1H+rlE9mv4N5Go5/ti2N4rIbuWe34xwlSKS
+	K1KRJB3BJsgwi+AYdpkqJGYpbaM6O0VgVQhS0gvvxqcMe/j63N0CmQGJ9y6vdx2WqN6f7g/lzen9B
+	Ls9d2c6G0E333K8CG4FJ9pquS/kQzN+MvHD67cuHsqpQ3UnlnfUuz2tGFrAS46W3KfnEKyaGprxQq
+	9kPiUcEytYy6iU4P99SV6HL6DA0db/rUwpuSAYOMI6S1zqR150mVJyaj50c6pPDCanx6JuI/v5jsY
+	/5Hw3VzA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rtrPi-0000000G84E-1mFm;
+	Mon, 08 Apr 2024 16:00:06 +0000
+Date: Mon, 8 Apr 2024 09:00:06 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-modules@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v4] module: don't ignore sysfs_create_link() failures
+Message-ID: <ZhQUhvSCpz48f6tw@bombadil.infradead.org>
+References: <20240408080616.3911573-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1712410202.git.lukas@wunner.de>
-In-Reply-To: <cover.1712410202.git.lukas@wunner.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Apr 2024 17:01:22 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
-Message-ID: <CAJZ5v0hOHCSp8-8EZjuGAOR0QSH3CcvokG3uBGAKFFpTrkqQRA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Deduplicate bin_attribute simple read() callbacks
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
-	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org, 
-	Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org, 
-	Zhenyu Wang <zhenyuw@linux.intel.com>, Zhi Wang <zhi.wang.linux@gmail.com>, 
-	intel-gvt-dev@lists.freedesktop.org, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240408080616.3911573-1-arnd@kernel.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Sat, Apr 6, 2024 at 3:52=E2=80=AFPM Lukas Wunner <lukas@wunner.de> wrote=
-:
->
-> For my upcoming PCI device authentication v2 patches, I have the need
-> to expose a simple buffer in virtual memory as a bin_attribute.
->
-> It turns out we've duplicated the ->read() callback for such simple
-> buffers a fair number of times across the tree.
->
-> So instead of reinventing the wheel, I decided to introduce a common
-> helper and eliminate all duplications I could find.
->
-> I'm open to a bikeshedding discussion on the sysfs_bin_attr_simple_read()
-> name. ;)
->
-> Lukas Wunner (2):
->   sysfs: Add sysfs_bin_attr_simple_read() helper
->   treewide: Use sysfs_bin_attr_simple_read() helper
->
->  arch/powerpc/platforms/powernv/opal.c              | 10 +-------
->  drivers/acpi/bgrt.c                                |  9 +-------
->  drivers/firmware/dmi_scan.c                        | 12 ++--------
->  drivers/firmware/efi/rci2-table.c                  | 10 +-------
->  drivers/gpu/drm/i915/gvt/firmware.c                | 26 +++++-----------=
------
->  .../intel/int340x_thermal/int3400_thermal.c        |  9 +-------
->  fs/sysfs/file.c                                    | 27 ++++++++++++++++=
-++++++
->  include/linux/sysfs.h                              | 15 ++++++++++++
->  init/initramfs.c                                   | 10 +-------
->  kernel/module/sysfs.c                              | 13 +----------
->  10 files changed, 56 insertions(+), 85 deletions(-)
->
-> --
+On Mon, Apr 08, 2024 at 10:05:58AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The sysfs_create_link() return code is marked as __must_check, but the
+> module_add_driver() function tries hard to not care, by assigning the
+> return code to a variable. When building with 'make W=1', gcc still
+> warns because this variable is only assigned but not used:
+> 
+> drivers/base/module.c: In function 'module_add_driver':
+> drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
+> 
+> Rework the code to properly unwind and return the error code to the
+> caller. My reading of the original code was that it tries to
+> not fail when the links already exist, so keep ignoring -EEXIST
+> errors.
+> 
+> Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-For the series
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+  Luis
