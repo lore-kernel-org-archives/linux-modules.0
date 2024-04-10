@@ -1,61 +1,65 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AD2181314
-	for <linux-modules@vger.kernel.org>; Wed, 10 Apr 2024 19:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5B228FD
+	for <linux-modules@vger.kernel.org>; Wed, 10 Apr 2024 19:48:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712777859; cv=none; b=VCbShdZFe8ppeQoVi2GFR1l8wUPqTLqFpQDIfQ+GaJyoQDF/4DlsRV2TXOFfHI1v0vMXtN0/fM1rplHFfZt/PGQx/dPbOlObWaLWY04//O/GVwKcZLbAju7QIkc13n4On89l6/29GO3iEnmmerD2ralhx8RohYEPQ+p/SqgQcgY=
+	t=1712778489; cv=none; b=N1XCQr4OLHRHfSPxFM4YuSRqdbp0LiODeT4bL5rcba/yx3H0z9EGqxYzS36Hc2jMt4F7g/2/P6ketKAckIjADZqYTNAXZdIPBN4GgauTxdI3q4ctovFNXho1U5UeMGwLh5qehQsPty/mDUXMeJiexhWDmfSHwTdTBoRMDtalmdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712777859; c=relaxed/simple;
-	bh=xMMO6aZGP77Uw6u5kdTHAsT7oR9jSNRKOlwYEa4tcRc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=u0kv3neKAa/uRs57WQ76xhmx3CPsfE+MZdaFTsLiEGOno7cQQz8u+nZ3k1livKXKCWjvI2r41oG5e+pVY0EOH4zPYKuX9GavG4/Kv/RTmdx/5oRZwfPkE7SNgGuUn+0zsICaWs3DimVSgaJzKa9farezUrgoWsKpZyrhR0jsMac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elsk.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GyHMW5Bi; arc=none smtp.client-ip=209.85.215.201
+	s=arc-20240116; t=1712778489; c=relaxed/simple;
+	bh=G9pCAXQpRlbuAd4uEiAYnbaRqsOWvK/wc08OLEXKruE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=A6brE9B/pFqoZwQc/MLh1lndfYrcliW+KRBfDU4d0eXcQfJ9AW+0E6JWyZSLXlFG6LO4r6IyV9DDkIydO2Y/br667Js7ac1gPVLR7kF5uU6AJNTmO/BNEMYfK2LoLpf9a4Zn2G+aqKvZ5IuObBVXxyzyu3FqDJv/rn6Gy9yJsjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elsk.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OcnjeJyc; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elsk.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GyHMW5Bi"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-5c6245bc7caso5128729a12.3
-        for <linux-modules@vger.kernel.org>; Wed, 10 Apr 2024 12:37:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OcnjeJyc"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-5d8bcf739e5so6184711a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 10 Apr 2024 12:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712777857; x=1713382657; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qSs1Be4CKwQ+2h3+x6EEWxYTHxK+KNPpEJBGnih4gRI=;
-        b=GyHMW5BinR+Ej5hduBzL0IXUeEUPRNp7yos7sRwWLG6ZK5W0ajY9QmfdOuW98NU0lM
-         OI49FmYAIUipG1GiWwruz0ZpwJAofyD7LankDh1FWs/G70cWpOiAuAqk4HDNPp/fz6/r
-         qbqcQgABl5xZPAlV1ChHCaTOjW5jiBb2ZgN1GOs5kYzEZ/RbzOHR3Z0F84VU9/wmchdV
-         UCccwTH7v2gvEPYVrSTESNK81HbbVgvOYD/k69aXYzdXJQg3XFY5Pv1zyNTBU760yqIv
-         7VZ83YINc7yPc5Yx39xvkgiQltWPYotjjn9Top2BpxcZw9dysl2aYenPdZPg2qhrTGZN
-         iKcg==
+        d=google.com; s=20230601; t=1712778488; x=1713383288; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fhoQ0YlSeaHnAyoqhgDUSmcljf7yTto7cwKe73n0AeU=;
+        b=OcnjeJyczldS7ZjdsWwtba0dEWnSm3BO8XHNraVQjpegg2hi4PkIWS6cq/mku3eMY3
+         pCitvWVqAickInMAIbzrgTSq0mDdyaPXpQlgZKZGLyHd5dicqzD/EBOmyEAv4GBDM3Pv
+         eS+PRKj8fbR7pSntL5/NBW7OIWfg9fCezLPF/2aJigM0OI18S/U64Gpl/vB9dpg0uVlV
+         G6pEWuA1N3U6KZwYCuogoJ+083us4/zmhwFCt74nH6A+bWNLGQV6UpMg7fLlreSJMyHx
+         18UZOjWNeDqes0whFMmrqzmwhxD0slwYV0FeG2wBvTFMiEBGUeUvgDqouvAKXvhoEvmk
+         wLmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712777857; x=1713382657;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qSs1Be4CKwQ+2h3+x6EEWxYTHxK+KNPpEJBGnih4gRI=;
-        b=Gbuhf009bVXKSSckichYs9r7me9bAK79sDSm9RlbVRmO2qxd3PJOKaZvfFkqsnZV6T
-         QaoAbPln48dkZwfYh4QCQjSpQyBqgU685lpQucPlZnOtSwPGwnWXHMvWRL10HvqkFKyb
-         RU0L/X/0xlLik62wHMvu5oawZgdfABrTPWJM0BOdur3bCpQpFPKfTFxTrJEhL5UJPOAQ
-         TXOq2fFy9b6t7St6B5WvAhG3gXwrot2aqQoJp75YtVNmAIw4gdup/HWKq1Vos4HizQ2t
-         D7LO5mgw773gTXS0qaQf7+1S9M2n+SKK9dlVUON0zKwPLrUwxSTD5zIh72UUArp+U/zt
-         P0yg==
-X-Gm-Message-State: AOJu0YyjZlrZiRggCIGSkjgkPBRWMRv0A+6XDRn4/fp3hv09liY4PZsR
-	fCfqVn7GnyPK0olGx4fTe94P1ezVX7xA9BudxZ+h9JpxMRgzc1R5THwI33Yu8efY++bapA==
-X-Google-Smtp-Source: AGHT+IFT4CiD98c9VgqhVLXEOO44vZm368oiIi09Y7mZNWlFLMmcvrNVGJhZKWERo+1wqRzpn1au1WCO
+        d=1e100.net; s=20230601; t=1712778488; x=1713383288;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fhoQ0YlSeaHnAyoqhgDUSmcljf7yTto7cwKe73n0AeU=;
+        b=FjXchBoN+v8WuVTNdQhuf3PXo9QlWUI3mfemVVU8mZYiOyKTDiZKOIVbjNT5lA/97w
+         eaXwA8Sh4Ycn68oreEHtIIRheU4PGIhhkNfODc6mX2wfV+vZGPRt+R2LHfsBTFU7NRdn
+         LLQyzGbHxLNtbw17QHKv/arkXGUZJCyN2izcpATkgvfequ4lqk3phrXWyoayHeMaH60P
+         /TkGZ0AeGubKV/9T/MD3OSy+hD52SobgqUhXNI4LOES0MVp++20NxZiQMkuGy/LnKt59
+         pD2QyUb/kt1OfmVke4jy7tlKvrberSNjHGjPMLxpI+Gxj+y6AhuUDwbwjh8VV/PzGDZO
+         8cpw==
+X-Gm-Message-State: AOJu0Ywr+mi6ce2UnO93YpW/Fa8j1yhQ2xeflJaDPD4XHKwaTLQ+mzks
+	cgcTR5rHNu6XnBiRp+FnlorEUT3sWM7V/L5FLE7GOLR2j6x/0LC599N6FyXpzpaPK7Tieg==
+X-Google-Smtp-Source: AGHT+IHdOVU9tXohK/q7b+fwNSg1Qx0m+4m5scq0juNSXQe+OsyFDOyHe32s4ZBvoB6NhkN/LQQYz2H5
 X-Received: from elsk.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:dbd])
- (user=elsk job=sendgmr) by 2002:a63:df06:0:b0:5dc:8970:45a3 with SMTP id
- u6-20020a63df06000000b005dc897045a3mr15675pgg.0.1712777857235; Wed, 10 Apr
- 2024 12:37:37 -0700 (PDT)
-Date: Wed, 10 Apr 2024 19:37:34 +0000
+ (user=elsk job=sendgmr) by 2002:a17:902:d506:b0:1e4:3909:47ef with SMTP id
+ b6-20020a170902d50600b001e4390947efmr76111plg.11.1712778487532; Wed, 10 Apr
+ 2024 12:48:07 -0700 (PDT)
+Date: Wed, 10 Apr 2024 19:48:02 +0000
+In-Reply-To: <20240410193734.29788-1-elsk@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240410193734.29788-1-elsk@google.com>
-Subject: [PATCH] module: allow UNUSED_KSYMS_WHITELIST to be relative against objtree.
+References: <20240410193734.29788-1-elsk@google.com>
+X-Mailer: git-send-email 2.44.0.683.g7961c838ac-goog
+Message-ID: <20240410194802.62036-1-elsk@google.com>
+Subject: [PATCH v2] module: allow UNUSED_KSYMS_WHITELIST to be relative
+ against objtree.
 From: Yifan Hong <elsk@google.com>
 To: Luis Chamberlain <mcgrof@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>
@@ -93,6 +97,9 @@ that may be evaluated differently on different machines.
 
 Signed-off-by: Yifan Hong <elsk@google.com>
 ---
+V1 -> V2: properly handle absolute paths by treating
+  them as-is.
+
  kernel/module/Kconfig    | 2 +-
  scripts/Makefile.modpost | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
@@ -111,7 +118,7 @@ index f3e0329337f6..cb8377a18927 100644
  config MODULES_TREE_LOOKUP
  	def_bool y
 diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 739402f45509..efdf0cf39cf1 100644
+index 739402f45509..36952638bbc6 100644
 --- a/scripts/Makefile.modpost
 +++ b/scripts/Makefile.modpost
 @@ -94,7 +94,7 @@ targets += .vmlinux.objs
@@ -119,7 +126,7 @@ index 739402f45509..efdf0cf39cf1 100644
  ifdef CONFIG_TRIM_UNUSED_KSYMS
  ksym-wl := $(CONFIG_UNUSED_KSYMS_WHITELIST)
 -ksym-wl := $(if $(filter-out /%, $(ksym-wl)),$(srctree)/)$(ksym-wl)
-+ksym-wl := $(if $(wildcard $(ksym-wl)),,$(srctree)/)$(ksym-wl)
++ksym-wl := $(if $(filter-out /%, $(ksym-wl)),$(if $(wildcard $(ksym-wl)),,$(srctree)/))$(ksym-wl)
  modpost-args += -t $(addprefix -u , $(ksym-wl))
  modpost-deps += $(ksym-wl)
  endif
