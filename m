@@ -1,48 +1,55 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E7D3D57A;
-	Thu, 11 Apr 2024 16:29:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11444437A
+	for <linux-modules@vger.kernel.org>; Thu, 11 Apr 2024 18:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712852974; cv=none; b=Eyh6tuSeK3Sc7DuRPuoA3KF9EUsuisdEmQyGPUWEAvuKJUKI7aHO6EYY6/8BzeIgF1tvfwhO7d2SFar2jBFa35HjCV5IibIbX9WU47du4aDZclxenouwHjhuDN84uLh2cQAC1qDAzPUiqkPd7zWxhvvCVFsBcbaFyNHYd1p57c0=
+	t=1712858435; cv=none; b=Yoc//gPZNC5mBZhyWlRUl6CIHfcTYcbm8ATchcGY3dG55Lo5kQX6zytXJQ4zgeCLSiOpou8WwzZk3+R9jq003G4S5RiZYS/SLmuK1UnUhwSMvx9D+lZGkDj7VLWvHBxyjlIP+hNp3Lszk70p3qV7OGt5nLQ3fSXBp5yYZtzOrZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712852974; c=relaxed/simple;
-	bh=5KYOKLUoKUSHt+aSUX0mRdSiiFrnp5pk3GvLLooLOG8=;
+	s=arc-20240116; t=1712858435; c=relaxed/simple;
+	bh=yh/ixDQ5eg6OWrim9+bm1G6d/37CpJ1/QL+beESG4jw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FdrDTYc1iGs/Clfu56pNmx+ux2+O7jLRTu4raCUYG8foi8FE/TOTMBKqq0y/bcusfZl1ctJ5kArM3WSUlNSyCNNOT85+k8NqbkcYWYhhuElsvauxFraQc/qCsCReth1YkbNfcKBHri2r5KrNoqBWop9NNgW6bET3IQvjqWjJOcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GV3kEgin; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=e1qv4dEQQciknKQEmsEKmtgfI/VtHoyUgj+Pc2ICdIW7uBMgNQCKHGfOCD6xgaKxJLheYRrltqwbbTHc7Q6UxBx//SOMxbrWavs9Nyonjov0uaJOgHtI+E+axiemAIsI8gY1octo21OcRtctBq4E+LVe2DoyTfXXd35olQkwZkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F6A8Ql6Y; arc=none smtp.client-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GV3kEgin"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jSoELd035Qbpy5VZyyE32Ep100gFdbPAw1g5jQHs3Gk=; b=GV3kEgin3atUbtVlAM9Zi1o7mL
-	uiwrfPr3Y2s6po7PQUakBsr+gPOriaV3RYZA51NZtP6tRAl8QbiHvyxpnIkLMZYw1busyZL/lxDdB
-	nS2kdjUG2e/sRknhVltIsFiRoiDi+dsQD3P17gf+jbQze1pz/xB9xArIWxCrqawiqX1iNM910Hv5/
-	Q2uYRWMlf+ipQpi0pP3hm6X8McFvYQwrfdaguJqQ+aD9/D8D+JhlNTqiPbwJ0J1/LCDUi0x7Rdj5C
-	h7UHMWAuYvxWAIOtpVD6a0qi53ihd3/K1zuAfUF8DiORxnM5gUr4zC7b/0DMZS5ZWfetUpUPLVRAq
-	L3dQqCPw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1ruxIo-0000000D5AC-2bTn;
-	Thu, 11 Apr 2024 16:29:30 +0000
-Date: Thu, 11 Apr 2024 09:29:30 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Yifan Hong <elsk@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	Matthias =?iso-8859-1?Q?M=E4nnich?= <maennich@google.com>,
-	Ulises Mendez Martinez <umendez@google.com>
-Subject: Re: [PATCH v2] module: allow UNUSED_KSYMS_WHITELIST to be relative
- against objtree.
-Message-ID: <ZhgP6nzoDAH6UqXB@bombadil.infradead.org>
-References: <20240410193734.29788-1-elsk@google.com>
- <20240410194802.62036-1-elsk@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F6A8Ql6Y"
+Date: Thu, 11 Apr 2024 14:00:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712858430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hugd8ugKeGXlWiLmTwUcSwxtoNqEbzFWRyiumV4I0QI=;
+	b=F6A8Ql6YjuHeVhFhvCjRCHtt6+j5Zmavb6rBRVS2UPMjaUzBr8Uy9YMXKrMLS6Bdu93QAe
+	+1JDwGCXhSmYXVX/GYkUtjra2ilUH2ndkI9p7bCt0GDxnXoAiXvPRveKB1Tl7czCP5mSyl
+	LwnxqSrFPBMBfyHHV7aQPCs6G/4zVIs=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, netdev@vger.kernel.org, 
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 00/15] mm: jit/text allocator
+Message-ID: <v52bizaflxzrxqk2wtuek2m2juwbzr6jxnpzlvtswkarcaejow@kd7tygzbmijs>
+References: <20240411160051.2093261-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -51,40 +58,116 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240410194802.62036-1-elsk@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <20240411160051.2093261-1-rppt@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 10, 2024 at 07:48:02PM +0000, Yifan Hong wrote:
-> If UNUSED_KSYMS_WHITELIST is a file generated
-> before Kbuild runs, and the source tree is in
-> a read-only filesystem, the developer must put
-> the file somewhere and specify an absolute
-> path to UNUSED_KSYMS_WHITELIST. This worked,
-> but if IKCONFIG=y, an absolute path is embedded
-> into .config and eventually into vmlinux, causing
-> the build to be less reproducible when building
-> on a different machine.
+On Thu, Apr 11, 2024 at 07:00:36PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
 > 
-> This patch makes the handling of
-> UNUSED_KSYMS_WHITELIST to be similar to
-> MODULE_SIG_KEY.
+> Hi,
 > 
-> First, check if UNUSED_KSYMS_WHITELIST is an
-> absolute path, just as before this patch. If so,
-> use the path as is.
+> Since v3 I looked into making execmem more of an utility toolbox, as we
+> discussed at LPC with Mark Rutland, but it was getting more hairier than
+> having a struct describing architecture constraints and a type identifying
+> the consumer of execmem.
 > 
-> If it is a relative path, use wildcard to check
-> the existence of the file below objtree first.
-> If it does not exist, fall back to the original
-> behavior of adding $(srctree)/ before the value.
+> And I do think that having the description of architecture constraints for
+> allocations of executable memory in a single place is better that having it
+> spread all over the place.
 > 
-> After this patch, the developer can put the generated
-> file in objtree, then use a relative path against
-> objtree in .config, eradicating any absolute paths
-> that may be evaluated differently on different machines.
+> The patches available via git:
+> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v4
 > 
-> Signed-off-by: Yifan Hong <elsk@google.com>
+> v4 changes:
+> * rebase on v6.9-rc2
+> * rename execmem_params to execmem_info and execmem_arch_params() to
+>   execmem_arch_setup()
+> * use single execmem_alloc() API instead of execmem_{text,data}_alloc() (Song)
+> * avoid extra copy of execmem parameters (Rick)
+> * run execmem_init() as core_initcall() except for the architectures that
+>   may allocated text really early (currently only x86) (Will)
+> * add acks for some of arm64 and riscv changes, thanks Will and Alexandre
+> * new commits:
+>   - drop call to kasan_alloc_module_shadow() on arm64 because it's not
+>     needed anymore
+>   - rename MODULE_START to MODULES_VADDR on MIPS
+>   - use CONFIG_EXECMEM instead of CONFIG_MODULES on powerpc as per Christophe:
+>     https://lore.kernel.org/all/79062fa3-3402-47b3-8920-9231ad05e964@csgroup.eu/
+> 
+> v3: https://lore.kernel.org/all/20230918072955.2507221-1-rppt@kernel.org
+> * add type parameter to execmem allocation APIs
+> * remove BPF dependency on modules
+> 
+> v2: https://lore.kernel.org/all/20230616085038.4121892-1-rppt@kernel.org
+> * Separate "module" and "others" allocations with execmem_text_alloc()
+> and jit_text_alloc()
+> * Drop ROX entailment on x86
+> * Add ack for nios2 changes, thanks Dinh Nguyen
+> 
+> v1: https://lore.kernel.org/all/20230601101257.530867-1-rppt@kernel.org
+> 
+> = Cover letter from v1 (sligtly updated) =
+> 
+> module_alloc() is used everywhere as a mean to allocate memory for code.
+> 
+> Beside being semantically wrong, this unnecessarily ties all subsystmes
+> that need to allocate code, such as ftrace, kprobes and BPF to modules and
+> puts the burden of code allocation to the modules code.
+> 
+> Several architectures override module_alloc() because of various
+> constraints where the executable memory can be located and this causes
+> additional obstacles for improvements of code allocation.
+> 
+> A centralized infrastructure for code allocation allows allocations of
+> executable memory as ROX, and future optimizations such as caching large
+> pages for better iTLB performance and providing sub-page allocations for
+> users that only need small jit code snippets.
+> 
+> Rick Edgecombe proposed perm_alloc extension to vmalloc [1] and Song Liu
+> proposed execmem_alloc [2], but both these approaches were targeting BPF
+> allocations and lacked the ground work to abstract executable allocations
+> and split them from the modules core.
+> 
+> Thomas Gleixner suggested to express module allocation restrictions and
+> requirements as struct mod_alloc_type_params [3] that would define ranges,
+> protections and other parameters for different types of allocations used by
+> modules and following that suggestion Song separated allocations of
+> different types in modules (commit ac3b43283923 ("module: replace
+> module_layout with module_memory")) and posted "Type aware module
+> allocator" set [4].
+> 
+> I liked the idea of parametrising code allocation requirements as a
+> structure, but I believe the original proposal and Song's module allocator
+> was too module centric, so I came up with these patches.
+> 
+> This set splits code allocation from modules by introducing execmem_alloc()
+> and and execmem_free(), APIs, replaces call sites of module_alloc() and
+> module_memfree() with the new APIs and implements core text and related
+> allocations in a central place.
+> 
+> Instead of architecture specific overrides for module_alloc(), the
+> architectures that require non-default behaviour for text allocation must
+> fill execmem_info structure and implement execmem_arch_setup() that returns
+> a pointer to that structure. If an architecture does not implement
+> execmem_arch_setup(), the defaults compatible with the current
+> modules::module_alloc() are used.
+> 
+> Since architectures define different restrictions on placement,
+> permissions, alignment and other parameters for memory that can be used by
+> different subsystems that allocate executable memory, execmem APIs
+> take a type argument, that will be used to identify the calling subsystem
+> and to allow architectures to define parameters for ranges suitable for that
+> subsystem.
+> 
+> The new infrastructure allows decoupling of BPF, kprobes and ftrace from
+> modules, and most importantly it paves the way for ROX allocations for
+> executable memory.
 
-Applied and pushed, thanks.
+It looks like you're just doing API cleanup first, then improving the
+implementation later?
 
-  Luis
+Patch set looks nice and clean; previous versions did seem to leak too
+much arch/module details (or perhaps we were just bikeshedding too much
+;) - but the API first approach is nice.
+
+Looking forward to seeing this merged.
