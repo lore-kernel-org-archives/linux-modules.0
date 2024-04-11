@@ -1,39 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0EE1E516;
-	Thu, 11 Apr 2024 12:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED4E624;
+	Thu, 11 Apr 2024 13:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712839354; cv=none; b=Iwf54MilFVDD/A9S2KpR0rS+VfZgumTqCNtIJdrJPrUmdL5kMTT4Hv6ZxL6f8qeyMXGrGYUpfY/c30VsnGc6CraQo+KYyldRNwbwkaC+4jbRNICt4OxUfIRpv8foUC7cJRzZeYadxkEGszOsvOIiUn0gr4RlarXL6a5OiG8LRmU=
+	t=1712840832; cv=none; b=jTRROlBLjTqtI+XIGAUHjzKT/B6pTXhaoUXc4XtfxN031ETZoBR5WYkl5f8SbDD0oE/mkN2sIw/OQ6LGe3PmdFvMBR60d4W9H3YZi+MXnP+Hef9azCgHHSSSHSzUCHPqLaOUCGaCW88qWoLCjtTNoMB/DTNBdaj0zjpwmnF9QNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712839354; c=relaxed/simple;
-	bh=WSM6gnND1FVp3qPuNl33Edn2hp3BLAP7Hq+mlVeX2LM=;
+	s=arc-20240116; t=1712840832; c=relaxed/simple;
+	bh=jBDcfNa+ZA0GhG6LAA8y9wdXr1NILjkk4RiSds6k6CM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JysK6LwFW4ChY2IUA40+6o9xYXrrRxnjD68XpxA40mbz2s576UKDUp+WSfyY4QRhCfvPFlYsiketqUiutdegnSaolzMAfqVmKoxOFneteVkd0dRYC3FD9baHOEDsVmSYqdCqthpkqCS6ZNShs0foCjeKbbtf89jvF/yIy8fYbmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GQceUHJq; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkm2fj45aTYSGpaxqfuJr6ELhATaGnQpD3MVIg6zV9j9NLHeyDRpatXTgSHQ6wMvL7+SbBgIN3ea/BniRwDF9FGjXtS6R0HThBLmdkM0Y3DgX1xcXqhBN8/sY8+5/CaXUGtTmf7i9gKFUxDdfcOjSpa5JIn21O/Zg/QDtEpCEMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nEAigv/e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GQceUHJq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BE52C43390;
-	Thu, 11 Apr 2024 12:42:33 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nEAigv/e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 171F6C433F1;
+	Thu, 11 Apr 2024 13:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712839353;
-	bh=WSM6gnND1FVp3qPuNl33Edn2hp3BLAP7Hq+mlVeX2LM=;
+	s=korg; t=1712840831;
+	bh=jBDcfNa+ZA0GhG6LAA8y9wdXr1NILjkk4RiSds6k6CM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GQceUHJqIZnw2nnOrTYt2hTP25pAEjigLaTKWTMmkNTEqckWgj0lkXYEokZYXg9X2
-	 mLE20L/sgv79uQ5BgsiVzcUC8uHtlHW3Zg0UT+sg7V230+yB5BQFZoTBSYefxKWuq4
-	 Vj6Tgg55ExqMwyS7SojwElrWgNIN2rSOsidBWTk8=
-Date: Thu, 11 Apr 2024 14:42:31 +0200
+	b=nEAigv/eqYtD+nsLaUlG13p5KlC4W5zHhp72SVBIi+SAijs3tSDYQHkjOz8atq0vF
+	 YHn+MDCqfVqEJm7JLB4lMHJtirV0VLuYgEmqShGnDjWGqMR5VUT0324OZlMJaDNg8P
+	 efibU29MYTA1wtA6bod9kF/GFyaPmhRldp5GKdYI=
+Date: Thu, 11 Apr 2024 15:07:08 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	linux-modules@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v4] module: don't ignore sysfs_create_link() failures
-Message-ID: <2024041121-dab-battalion-e3e1@gregkh>
-References: <20240408080616.3911573-1-arnd@kernel.org>
- <ZhQUhvSCpz48f6tw@bombadil.infradead.org>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	linuxppc-dev@lists.ozlabs.org, linux-acpi@vger.kernel.org,
+	Jean Delvare <jdelvare@suse.com>, Ard Biesheuvel <ardb@kernel.org>,
+	linux-efi@vger.kernel.org, Zhenyu Wang <zhenyuw@linux.intel.com>,
+	Zhi Wang <zhi.wang.linux@gmail.com>,
+	intel-gvt-dev@lists.freedesktop.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/2] sysfs: Add sysfs_bin_attr_simple_read() helper
+Message-ID: <2024041101-haggler-devouring-9dcf@gregkh>
+References: <cover.1712410202.git.lukas@wunner.de>
+ <5ed62b197a442ec6db53d8746d9d806dd0576e2d.1712410202.git.lukas@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -42,28 +48,27 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZhQUhvSCpz48f6tw@bombadil.infradead.org>
+In-Reply-To: <5ed62b197a442ec6db53d8746d9d806dd0576e2d.1712410202.git.lukas@wunner.de>
 
-On Mon, Apr 08, 2024 at 09:00:06AM -0700, Luis Chamberlain wrote:
-> On Mon, Apr 08, 2024 at 10:05:58AM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The sysfs_create_link() return code is marked as __must_check, but the
-> > module_add_driver() function tries hard to not care, by assigning the
-> > return code to a variable. When building with 'make W=1', gcc still
-> > warns because this variable is only assigned but not used:
-> > 
-> > drivers/base/module.c: In function 'module_add_driver':
-> > drivers/base/module.c:36:6: warning: variable 'no_warn' set but not used [-Wunused-but-set-variable]
-> > 
-> > Rework the code to properly unwind and return the error code to the
-> > caller. My reading of the original code was that it tries to
-> > not fail when the links already exist, so keep ignoring -EEXIST
-> > errors.
-> > 
-> > Fixes: e17e0f51aeea ("Driver core: show drivers in /sys/module/")
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Sat, Apr 06, 2024 at 03:52:01PM +0200, Lukas Wunner wrote:
+> When drivers expose a bin_attribute in sysfs which is backed by a buffer
+> in memory, a common pattern is to set the @private and @size members in
+> struct bin_attribute to the buffer's location and size.
 > 
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> The ->read() callback then merely consists of a single memcpy() call.
+> It's not even necessary to perform bounds checks as these are already
+> handled by sysfs_kf_bin_read().
+> 
+> However each driver is so far providing its own ->read() implementation.
+> The pattern is sufficiently frequent to merit a public helper, so add
+> sysfs_bin_attr_simple_read() as well as BIN_ATTR_SIMPLE_RO() and
+> BIN_ATTR_SIMPLE_ADMIN_RO() macros to ease declaration of such
+> bin_attributes and reduce LoC and .text section size.
+> 
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> ---
+>  fs/sysfs/file.c       | 27 +++++++++++++++++++++++++++
+>  include/linux/sysfs.h | 15 +++++++++++++++
+>  2 files changed, 42 insertions(+)
 
-Oh right, I should apply this, sorry about that, will go do that now...
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
