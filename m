@@ -1,137 +1,90 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AF97FBA3;
-	Thu, 11 Apr 2024 16:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E7D3D57A;
+	Thu, 11 Apr 2024 16:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712851602; cv=none; b=V/K1vI+am7Y8kCauY9pTpBX+Om3gt9c5tt46y7Ip6Gx8NmtN+faaxarKNqH2513WFGe4w1ouZZC1ORBMt+rk3UsMjuREp9KytQPgKV2v18/X5+bUJ5RntWqyCX17B5Ou3pQWOAUta9E706JGUejVuslra31I3Sczi0DKKjvgi6M=
+	t=1712852974; cv=none; b=Eyh6tuSeK3Sc7DuRPuoA3KF9EUsuisdEmQyGPUWEAvuKJUKI7aHO6EYY6/8BzeIgF1tvfwhO7d2SFar2jBFa35HjCV5IibIbX9WU47du4aDZclxenouwHjhuDN84uLh2cQAC1qDAzPUiqkPd7zWxhvvCVFsBcbaFyNHYd1p57c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712851602; c=relaxed/simple;
-	bh=GpS8ytfjSzE76nC42qU8VRxGL9fjdKFDqm8vIE1x4YY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sDyMGJeu7DcHah/asI4jkO2BprdRBal/6loYPrbVOPgZtXSYSnd7RFTy+MCl8G0R/cgt9qcqkJ5XW4MpPfow+Bl6Bpfu38M1FE70Bs8Mtx0jegngxw83p1tSRtSZOmEwy6HgbS1MiBG/XUOuAj+xcGIp51hPyGs8uU+bkfHUg8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRW/q4WS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712852974; c=relaxed/simple;
+	bh=5KYOKLUoKUSHt+aSUX0mRdSiiFrnp5pk3GvLLooLOG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FdrDTYc1iGs/Clfu56pNmx+ux2+O7jLRTu4raCUYG8foi8FE/TOTMBKqq0y/bcusfZl1ctJ5kArM3WSUlNSyCNNOT85+k8NqbkcYWYhhuElsvauxFraQc/qCsCReth1YkbNfcKBHri2r5KrNoqBWop9NNgW6bET3IQvjqWjJOcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GV3kEgin; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRW/q4WS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A810C4AF09;
-	Thu, 11 Apr 2024 16:06:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712851602;
-	bh=GpS8ytfjSzE76nC42qU8VRxGL9fjdKFDqm8vIE1x4YY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=eRW/q4WS++c0r4pBuIO3O4Xg4RhucjdHqnNZoi79AHoLhQPJWC7o5buwGGFBPvniC
-	 VKRspPAvG+oxGO/Mu52T5QZWLHipAdpse5TDkTXl4UCRQQbTzoV2tVhPjQUCAlmNo0
-	 NG232/NssiPa7JNKn0tv4mghHev6HdVbKr+LbbRCokaCTTwVdChPLdcxxCtgfIMnpO
-	 Z1hyZ7UoVGi2N4el/7GuNUEzPhXZ5vzgMOKVlVVadMtRh3z+39u712GiPM9IWHw2qe
-	 adjgDWeIItjJVb1bdKVNluXidKTvt1LLI9M1CnLR4urws3bFChygnRYjAkvNDCL/IG
-	 2uw/kGGX3wdrg==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Helge Deller <deller@gmx.de>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Mike Rapoport <rppt@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	x86@kernel.org
-Subject: [RFC PATCH 7/7] x86/module: enable ROX caches for module text
-Date: Thu, 11 Apr 2024 19:05:26 +0300
-Message-ID: <20240411160526.2093408-8-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240411160526.2093408-1-rppt@kernel.org>
-References: <20240411160526.2093408-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GV3kEgin"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=jSoELd035Qbpy5VZyyE32Ep100gFdbPAw1g5jQHs3Gk=; b=GV3kEgin3atUbtVlAM9Zi1o7mL
+	uiwrfPr3Y2s6po7PQUakBsr+gPOriaV3RYZA51NZtP6tRAl8QbiHvyxpnIkLMZYw1busyZL/lxDdB
+	nS2kdjUG2e/sRknhVltIsFiRoiDi+dsQD3P17gf+jbQze1pz/xB9xArIWxCrqawiqX1iNM910Hv5/
+	Q2uYRWMlf+ipQpi0pP3hm6X8McFvYQwrfdaguJqQ+aD9/D8D+JhlNTqiPbwJ0J1/LCDUi0x7Rdj5C
+	h7UHMWAuYvxWAIOtpVD6a0qi53ihd3/K1zuAfUF8DiORxnM5gUr4zC7b/0DMZS5ZWfetUpUPLVRAq
+	L3dQqCPw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1ruxIo-0000000D5AC-2bTn;
+	Thu, 11 Apr 2024 16:29:30 +0000
+Date: Thu, 11 Apr 2024 09:29:30 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Yifan Hong <elsk@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Matthias =?iso-8859-1?Q?M=E4nnich?= <maennich@google.com>,
+	Ulises Mendez Martinez <umendez@google.com>
+Subject: Re: [PATCH v2] module: allow UNUSED_KSYMS_WHITELIST to be relative
+ against objtree.
+Message-ID: <ZhgP6nzoDAH6UqXB@bombadil.infradead.org>
+References: <20240410193734.29788-1-elsk@google.com>
+ <20240410194802.62036-1-elsk@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240410194802.62036-1-elsk@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+On Wed, Apr 10, 2024 at 07:48:02PM +0000, Yifan Hong wrote:
+> If UNUSED_KSYMS_WHITELIST is a file generated
+> before Kbuild runs, and the source tree is in
+> a read-only filesystem, the developer must put
+> the file somewhere and specify an absolute
+> path to UNUSED_KSYMS_WHITELIST. This worked,
+> but if IKCONFIG=y, an absolute path is embedded
+> into .config and eventually into vmlinux, causing
+> the build to be less reproducible when building
+> on a different machine.
+> 
+> This patch makes the handling of
+> UNUSED_KSYMS_WHITELIST to be similar to
+> MODULE_SIG_KEY.
+> 
+> First, check if UNUSED_KSYMS_WHITELIST is an
+> absolute path, just as before this patch. If so,
+> use the path as is.
+> 
+> If it is a relative path, use wildcard to check
+> the existence of the file below objtree first.
+> If it does not exist, fall back to the original
+> behavior of adding $(srctree)/ before the value.
+> 
+> After this patch, the developer can put the generated
+> file in objtree, then use a relative path against
+> objtree in .config, eradicating any absolute paths
+> that may be evaluated differently on different machines.
+> 
+> Signed-off-by: Yifan Hong <elsk@google.com>
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations.
+Applied and pushed, thanks.
 
-Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
----
- arch/x86/mm/init.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 8e8cd0de3af6..049a8b4c64e2 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1102,9 +1102,23 @@ unsigned long arch_max_swapfile_size(void)
- #endif
- 
- #ifdef CONFIG_EXECMEM
-+static void execmem_invalidate(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, 0xcc, size);
-+	else
-+		text_poke_set(ptr, 0xcc, size);
-+}
-+
- static struct execmem_info execmem_info __ro_after_init = {
-+	.invalidate = execmem_invalidate,
- 	.ranges = {
--		[EXECMEM_DEFAULT] = {
-+		[EXECMEM_MODULE_TEXT] = {
-+			.flags = EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE,
-+			.alignment = MODULE_ALIGN,
-+		},
-+		[EXECMEM_KPROBES...EXECMEM_MODULE_DATA] = {
- 			.flags = EXECMEM_KASAN_SHADOW,
- 			.alignment = MODULE_ALIGN,
- 		},
-@@ -1119,9 +1133,16 @@ struct execmem_info __init *execmem_arch_setup(void)
- 		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
- 
- 	start = MODULES_VADDR + offset;
--	execmem_info.ranges[EXECMEM_DEFAULT].start = start;
--	execmem_info.ranges[EXECMEM_DEFAULT].end = MODULES_END;
--	execmem_info.ranges[EXECMEM_DEFAULT].pgprot = PAGE_KERNEL;
-+
-+	for (int i = EXECMEM_MODULE_TEXT; i < EXECMEM_TYPE_MAX; i++) {
-+		struct execmem_range *r = &execmem_info.ranges[i];
-+
-+		r->start = start;
-+		r->end = MODULES_END;
-+		r->pgprot = PAGE_KERNEL;
-+	}
-+
-+	execmem_info.ranges[EXECMEM_MODULE_TEXT].pgprot = PAGE_KERNEL_ROX;
- 
- 	return &execmem_info;
- }
--- 
-2.43.0
-
+  Luis
