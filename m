@@ -1,45 +1,68 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E3C14A091;
-	Fri, 12 Apr 2024 20:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0E2208A4;
+	Sun, 14 Apr 2024 06:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712953250; cv=none; b=b0Ok1ZZV37suVQCqax4XPd5E9mZb3nfF3A3EkG/F3WRLy91Qb/lcwwojuJMKIAdtiXzV1oBRb9C9nau6KAkU0dP1rvQCtMapoL0cjrqrEQnwH4UtzWQwbHe0AuXJznDVpLiEPtHpC2Dh+bWyQGsKsgAeb4+xk+z8w1YCYJBi8CM=
+	t=1713077714; cv=none; b=sNgAbe44+8KCXVOMWnMyi3DTHTI2GzrsliFL/yMDRAQman10MDCOo+8UyosQECDl15n3W42EL1MubMaZWfWAvmNw69CRTvr0KKPrDgHD7jdgqCMb0jZusTw7o1TyqVYG0CdSmXsL40esGjbtG5sJAsPZx42TwTvEy/MpG6axTCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712953250; c=relaxed/simple;
-	bh=4xLHEQcQ1V8eybg8jbVcylscrNjj4X7QeUnaQO5RvwA=;
+	s=arc-20240116; t=1713077714; c=relaxed/simple;
+	bh=yXFVMzCDhJLeup5ZM/cl95e9uW89yN9aiaOn424Za9g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtebS1eWiJ9npnH+1/mDqKqAAHm2y+PrBbR4qtebBZQ/vX8CLRAc5fudzcNJHeFcPPD8WdOcL4ZvxzZPrfm1cbd9oYDUg+X612j8H0gul1dS9dcHSEqj7uASbBgpdyw9rmLJgvaHNq66YSRDznZ3Le1ULdW2ObW9pTb+aXt2yaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tVcUfZGX; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=UfoccgObn9EnkjBv9/uDVMKczF511MmardP1KOfr21WJgoPvmo8sVA34vRS8OMzYum+fhe6jGjiSTws1TwWKbRgww6+PFulfm8skHJk3rhZ/zFjYIHCKpWfGMtMSC2JRE+h/KCm4r53wL/+QJbJSwRjVrAGaJRfGBJ0ut2PPIoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ExCk/4I4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tVcUfZGX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=V1ruHJWRhf9traik+clLxlyBbZ44QWr1+mb3lIChcXg=; b=tVcUfZGXCKsFcNpkt+aEDu9t3Y
-	jPqsuKJ9q72BDW1DhXj91fBpPaEe9KiTfpBSIKkmUw9sdkO0ugrN/z9l1viJj027h8ykD8nx8Ob08
-	IZM7kfWn53Oxo4lXAB0LHC9yViVMMXJfaO6iOxXOCVPYiisFhGib5Wg5WIGdUbORp5xCqco7CMu7N
-	0CpG25SDEufzlILmoYXKO003r8Nu98HHs8azBbeljcsZ0su/xw9GtVrvJfgykzwAQPoERVtsH26f6
-	moWp5BiaEQraIkhpAgr+Mgd7GiP8SZL+negT14TpvvukRZm6iuN9xMh/K/3yNZBgSFjWM75uvUdWH
-	MIt+cqgg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1rvNO9-00000001B6L-1DtP;
-	Fri, 12 Apr 2024 20:20:48 +0000
-Date: Fri, 12 Apr 2024 13:20:43 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Justin Stitt <justinstitt@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] kallsyms: replace deprecated strncpy with strscpy
-Message-ID: <ZhmXm4xVMY5QPEGn@bombadil.infradead.org>
-References: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ExCk/4I4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6995FC072AA;
+	Sun, 14 Apr 2024 06:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713077713;
+	bh=yXFVMzCDhJLeup5ZM/cl95e9uW89yN9aiaOn424Za9g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ExCk/4I4W5Phef5aKaCHl7yCjGPCdhEDo2t4j5gOOcRyNoNKAWaoFjcjUPNV/ZDjL
+	 NgPGAZFKEHXGgq8aJVi8Z2vvDSoVvCAV16D5jLcPzItS86EojO+p5yw5DDCakIbCdC
+	 uDA7f0oS8i29LKJV724dmx85sHqKA14tjFqITDp8vRb8dfZu8WBgwU1FYXq0TYmRGR
+	 7tSa/jZjNfXa/T7/J/CXr2wjq9OOfmF2PhtvRmpH6VXO/pNGCEo0ysFPCgbJcswH3+
+	 8pSQxW9Jh3lYLdHalhcMBeJUrFP7jE5aNtiOQBUuA7scvpAOHZqdofUGHWY2VvqQnF
+	 hEcRjO6WYTf+Q==
+Date: Sun, 14 Apr 2024 09:53:59 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+Message-ID: <Zht9hw_DhDsaTuEP@kernel.org>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+ <20240411160051.2093261-6-rppt@kernel.org>
+ <Zhg9DXzagPbpNGH1@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -48,35 +71,57 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240412-strncpy-kernel-module-kallsyms-c-v1-1-ba3f0fc16163@google.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Zhg9DXzagPbpNGH1@bombadil.infradead.org>
 
-On Fri, Apr 12, 2024 at 06:53:47PM +0000, Justin Stitt wrote:
-> strncpy() is deprecated for use on NUL-terminated destination strings
-> [1] and as such we should prefer more robust and less ambiguous string
-> interfaces. The goal is to remove its use completely [2].
+On Thu, Apr 11, 2024 at 12:42:05PM -0700, Luis Chamberlain wrote:
+> On Thu, Apr 11, 2024 at 07:00:41PM +0300, Mike Rapoport wrote:
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > module_alloc() is used everywhere as a mean to allocate memory for code.
+> > 
+> > Beside being semantically wrong, this unnecessarily ties all subsystems
+> > that need to allocate code, such as ftrace, kprobes and BPF to modules and
+> > puts the burden of code allocation to the modules code.
+> > 
+> > Several architectures override module_alloc() because of various
+> > constraints where the executable memory can be located and this causes
+> > additional obstacles for improvements of code allocation.
+> > 
+> > Start splitting code allocation from modules by introducing execmem_alloc()
+> > and execmem_free() APIs.
+> > 
+> > Initially, execmem_alloc() is a wrapper for module_alloc() and
+> > execmem_free() is a replacement of module_memfree() to allow updating all
+> > call sites to use the new APIs.
+> > 
+> > Since architectures define different restrictions on placement,
+> > permissions, alignment and other parameters for memory that can be used by
+> > different subsystems that allocate executable memory, execmem_alloc() takes
+> > a type argument, that will be used to identify the calling subsystem and to
+> > allow architectures define parameters for ranges suitable for that
+> > subsystem.
 > 
-> namebuf is eventually cleaned of any trailing llvm suffixes using
-> strstr(). This hints that namebuf should be NUL-terminated.
-> 
-> static void cleanup_symbol_name(char *s)
-> {
-> 	char *res;
-> 	...
-> 	res = strstr(s, ".llvm.");
-> 	...
-> }
-> 
-> Due to this, use strscpy() over strncpy() as it guarantees
-> NUL-termination on the destination buffer. Drop the -1 from the length
-> calculation as it is no longer needed to ensure NUL-termination.
-> 
-> Link: https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings [1]
-> Link: https://manpages.debian.org/testing/linux-manual-4.8/strscpy.9.en.html
-> Link: https://github.com/KSPP/linux/issues/90 [2]
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> It would be good to describe this is a non-fuctional change.
 
-Thanks! Queued up on modules-next.
+Ok.
+ 
+> > Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> > ---
+> 
+> > diff --git a/mm/execmem.c b/mm/execmem.c
+> > new file mode 100644
+> > index 000000000000..ed2ea41a2543
+> > --- /dev/null
+> > +++ b/mm/execmem.c
+> > @@ -0,0 +1,26 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> 
+> And this just needs to copy over the copyright notices from the main.c file.
 
-  Luis
+Will do.
+ 
+>   Luis
+
+-- 
+Sincerely yours,
+Mike.
