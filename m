@@ -1,117 +1,180 @@
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96651369B8;
-	Mon, 15 Apr 2024 17:57:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9336EB75;
+	Tue, 16 Apr 2024 07:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713203837; cv=none; b=DMM2AqC2MipIwKecgqYqZqRoiCgxG9jiVsXzKaYcySC6CrozDmnsM6Z0BhURYPEW3W9WwRBz92+Z9zGEiw6chOQW3XCuMKkcKx4HE6Vm8AcvdX59fZuJ97evFiY/HEwRMgRfAIXNxwVIpnjxQW/eq7hvjODv2yecYrJoXobTAGE=
+	t=1713252206; cv=none; b=VHkeyzIbKbKGyGXLYc8WCAkzSIf45pmkXFPO39XulTqCp8JJt/VEmI/5zqg1Jqo6Wmy/ZVyh5thfkGWRbDRnp74yq47yDxrd7F053nt8oEP+d4VPJgUEmNNM5xh9f+yPPiB28qE+352P3m7l/fO/+G+uFsyTPbXrNkjMhaV64ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713203837; c=relaxed/simple;
-	bh=HZXXTICwCNfNnAAPksAihITX/uhY4HG81OJG+2aD0Lg=;
+	s=arc-20240116; t=1713252206; c=relaxed/simple;
+	bh=ULqJjlTCraVJ0ruf913jYz2dlG1gS6UCOgmOiRdXRlo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z2zN7MvKSGEjOaU3ydJOGNCAZHa5Nh4jxc2gJ5LWGGzqa8ZkCD1hsNY7OtmEh1z9NfXzgRl3WMjPQgMrweb+gMo8lZcVeoSyHtwYwP5notr/msd9nqM4lRoIdvZ/Hxu7wHOZxc/6z2uz76MpDnQsoGQ1cWdd/K7VCJcdRDxGRII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=qraoAuVl; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=UjCvUPLzf0P3JLPBqJW2/Sn+xfkNer8nzPpJ1PQZr0VieC5pN2cPRDtF86WlRWoIMN163+SoQ1iEKRXtCwXwxWKOfl+DcQCsuFTcPeEUDF3NH+HFL84kVCy3ArKqnHlZf/m0tWDuZLJTDnBDJy2NWegGodnzs2laWUFeMHkhecM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekk8HCBF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="qraoAuVl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=7WoF/OVhja5rh0oZfHmbZHpLS9885IhKeZTon+/iGxA=; b=qraoAuVl2vW4OX78
-	0mqZnQJQzqSfaofrXipcO+bzUmf69MX21EjsLpb51ayPP4EkFCxSqG5+7ZSlKXrtuUN7GTMgPVpgK
-	hLL6jmykX+jjjZZRq/8++IEyjyCZS2O2oDo+1/tP4TuuE2m/YuDmBumng0J9Q2Ed0/rKUsM9gqlNi
-	FauM6xkVIFCUYF/BEn9hNqQxGwd1g9Al9TFKti28M45fYuVUUuOtoEw6mkBvpMeWzEDiwIBBQdML/
-	05rpf7EMZqogpYlYkNNOHvbqnjggIIZi7c3Pi9cmnHMqFXpolHVqMn8H8LvBwNWcFcc/88CO6ySHB
-	eJ+bzeEJsoYoSc5YiQ==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1rwQJO-001G0D-1x;
-	Mon, 15 Apr 2024 17:40:10 +0000
-Date: Mon, 15 Apr 2024 17:40:10 +0000
-From: "Dr. David Alan Gilbert" <dave@treblig.org>
-To: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, akpm@linux-foundation.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
-	brauner@kernel.org, jack@suse.cz
-Subject: Re: [PATCH] module: ban '.', '..' as module names, ban '/' in module
- names
-Message-ID: <Zh1menJ5GYy2ayFx@gallifrey>
-References: <ee371cf7-69fa-4f9c-99b9-59bab86f25e4@p183>
- <ZhxDj3vQFLy62Yow@bombadil.infradead.org>
- <e770923a-6719-403c-a9f2-1f7ac4313474@p183>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekk8HCBF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBECC113CE;
+	Tue, 16 Apr 2024 07:23:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713252205;
+	bh=ULqJjlTCraVJ0ruf913jYz2dlG1gS6UCOgmOiRdXRlo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ekk8HCBFjthC7O7PxrFN7j/GM7z/nWOuO8k9QOUSLiGyz09GAO2cg64dmGZlUlds7
+	 00Ewxyx3C6wcPZBoIkKGD6lbL3qbO2ksVpnRUlonLdQr9BhpV1yf7+bx9loZNn41At
+	 rywVk+bWOXuipnXUZImOPnzXQlyIpQamAXCi97V5XEUtgpABiSiT97flmkQAEFDr7A
+	 YcuRY0rwjZPTJIRXEph9PF+jUZc4mOVTGomsCx8EugJ6WC8EEbdEckfhASAJlczMAM
+	 pEgjXqHCw7T7cVdoBUzlejwen9ZBJYRh+vjYrzCI4CZ6xsCi82SwkYS2yHPnvfOsma
+	 Wo31Nl9r7Gz/Q==
+Date: Tue, 16 Apr 2024 10:22:14 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Bj\"orn T\"opel" <bjorn@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Donald Dutile <ddutile@redhat.com>,
+	Eric Chanudet <echanude@redhat.com>,
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nadav Amit <nadav.amit@gmail.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+Message-ID: <Zh4nJp8rv1qRBs8m@kernel.org>
+References: <20240411160051.2093261-1-rppt@kernel.org>
+ <20240411160051.2093261-6-rppt@kernel.org>
+ <20240415075241.GF40213@noisy.programming.kicks-ass.net>
+ <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e770923a-6719-403c-a9f2-1f7ac4313474@p183>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-17-amd64 (x86_64)
-X-Uptime: 17:39:50 up 103 days, 20:29,  1 user,  load average: 0.00, 0.00,
- 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+In-Reply-To: <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
 
-* Alexey Dobriyan (adobriyan@gmail.com) wrote:
-> On Sun, Apr 14, 2024 at 01:58:55PM -0700, Luis Chamberlain wrote:
-> > On Sun, Apr 14, 2024 at 10:05:05PM +0300, Alexey Dobriyan wrote:
-> > > --- a/include/linux/fs.h
-> > > +++ b/include/linux/fs.h
-> > > @@ -3616,4 +3616,12 @@ extern int vfs_fadvise(struct file *file, loff_t offset, loff_t len,
-> > >  extern int generic_fadvise(struct file *file, loff_t offset, loff_t len,
-> > >  			   int advice);
-> > >  
-> > > +/*
-> > > + * Use this if data from userspace end up as directory/filename on
-> > > + * some virtual filesystem.
+On Mon, Apr 15, 2024 at 06:36:39PM +0100, Mark Rutland wrote:
+> On Mon, Apr 15, 2024 at 09:52:41AM +0200, Peter Zijlstra wrote:
+> > On Thu, Apr 11, 2024 at 07:00:41PM +0300, Mike Rapoport wrote:
+> > > +/**
+> > > + * enum execmem_type - types of executable memory ranges
+> > > + *
+> > > + * There are several subsystems that allocate executable memory.
+> > > + * Architectures define different restrictions on placement,
+> > > + * permissions, alignment and other parameters for memory that can be used
+> > > + * by these subsystems.
+> > > + * Types in this enum identify subsystems that allocate executable memory
+> > > + * and let architectures define parameters for ranges suitable for
+> > > + * allocations by each subsystem.
+> > > + *
+> > > + * @EXECMEM_DEFAULT: default parameters that would be used for types that
+> > > + * are not explcitly defined.
+> > > + * @EXECMEM_MODULE_TEXT: parameters for module text sections
+> > > + * @EXECMEM_KPROBES: parameters for kprobes
+> > > + * @EXECMEM_FTRACE: parameters for ftrace
+> > > + * @EXECMEM_BPF: parameters for BPF
+> > > + * @EXECMEM_TYPE_MAX:
 > > > + */
-> > > +static inline bool string_is_vfs_ready(const char *s)
-> > > +{
-> > > +	return strcmp(s, ".") != 0 && strcmp(s, "..") != 0 && !strchr(s, '/');
-> > > +}
-> > >  #endif /* _LINUX_FS_H */
-> > > --- a/kernel/module/main.c
-> > > +++ b/kernel/module/main.c
-> > > @@ -2893,6 +2893,11 @@ static int load_module(struct load_info *info, const char __user *uargs,
-> > >  
-> > >  	audit_log_kern_module(mod->name);
-> > >  
-> > > +	if (!string_is_vfs_ready(mod->name)) {
-> > > +		err = -EINVAL;
-> > > +		goto free_module;
-> > > +	}
-> > > +
+> > > +enum execmem_type {
+> > > +	EXECMEM_DEFAULT,
+> > > +	EXECMEM_MODULE_TEXT = EXECMEM_DEFAULT,
+> > > +	EXECMEM_KPROBES,
+> > > +	EXECMEM_FTRACE,
+> > > +	EXECMEM_BPF,
+> > > +	EXECMEM_TYPE_MAX,
+> > > +};
 > > 
-> > Sensible change however to put string_is_vfs_ready() in include/linux/fs.h 
-> > is a stretch if there really are no other users.
+> > Can we please get a break-down of how all these types are actually
+> > different from one another?
+> > 
+> > I'm thinking some platforms have a tiny immediate space (arm64 comes to
+> > mind) and has less strict placement constraints for some of them?
 > 
-> This is forward thinking patch :-)
+> Yeah, and really I'd *much* rather deal with that in arch code, as I have said
+> several times.
 > 
-> Other subsystems may create files/directories in proc/sysfs, and should
-> check for bad names as well:
+> For arm64 we have two bsaic restrictions: 
 > 
-> 	/proc/2821/net/dev_snmp6/eth0
+> 1) Direct branches can go +/-128M
+>    We can expand this range by having direct branches go to PLTs, at a
+>    performance cost.
 > 
-> This looks exactly like something coming from userspace and making it
-> into /proc, so the filter function doesn't belong to kernel/module/internal.h
+> 2) PREL32 relocations can go +/-2G
+>    We cannot expand this further.
+> 
+> * We don't need to allocate memory for ftrace. We do not use trampolines.
+> 
+> * Kprobes XOL areas don't care about either of those; we don't place any
+>   PC-relative instructions in those. Maybe we want to in future.
+> 
+> * Modules care about both; we'd *prefer* to place them within +/-128M of all
+>   other kernel/module code, but if there's no space we can use PLTs and expand
+>   that to +/-2G. Since modules can refreence other modules, that ends up
+>   actually being halved, and modules have to fit within some 2G window that
+>   also covers the kernel.
+> 
+> * I'm not sure about BPF's requirements; it seems happy doing the same as
+>   modules.
 
-You mean like:
-
-[24180.292204] tuxthe____: renamed from tuxthe🐧
-root@dalek:/home/dg# ls /sys/class/net/
-enp5s0  lo  tuxthe____  tuxthe🐧  tuxthe🖊  virbr0  virbr1
-
-?
-
-Dave
+BPF are happy with vmalloc().
+ 
+> So if we *must* use a common execmem allocator, what we'd reall want is our own
+> types, e.g.
 > 
+> 	EXECMEM_ANYWHERE
+> 	EXECMEM_NOPLT
+> 	EXECMEM_PREL32
+> 
+> ... and then we use those in arch code to implement module_alloc() and friends.
+
+I'm looking at execmem_types more as definition of the consumers, maybe I
+should have named the enum execmem_consumer at the first place.
+
+And the arch constrains defined in struct execmem_range describe how memory
+should be allocated for each consumer.
+
+These constraints are defined early at boot and remain static, so
+initializing them once and letting a common allocator use them makes
+perfect sense to me.
+
+I agree that fallback_{start,end} are not ideal, but we have 3
+architectures that have preferred and secondary range for modules. And arm
+and powerpc use the same logic for kprobes as well, and I don't see why this
+code should be duplicated.
+
+And, for instance, if you decide to place PC-relative instructions if
+kprobes XOL areas, you'd only need to update execmem_range for kprobes to
+be more like the range for modules.
+
+With central allocator it's easier to deal with the things like
+VM_FLUSH_RESET_PERMS and caching of ROX memory and I think it will be more
+maintainable that module_alloc(), alloc_insn_page() and
+bpf_jit_alloc_exec() spread all over the place.
+ 
+> Mark.
+
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Sincerely yours,
+Mike.
