@@ -1,142 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2311442F4;
-	Thu, 18 Apr 2024 17:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DAC6A00E;
+	Thu, 18 Apr 2024 19:31:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713462839; cv=none; b=i9w5i8935nPo1sdrS6/UQmSKRCap9P+Ga8M96m0Aa2f/AaDznnb7SrkKX6zzJPlkzGj83Owk1yKukmnFLuQFHgUBDKAeCJDUXlKZERBL97VW/vtESPO+UH/iOIi0RdTKmrDjokSBxgUbb1c47Q6ersSVFvKXv18DQNEr6rzQYDs=
+	t=1713468694; cv=none; b=RKr7x5bUBe9pOB6k/xwUvZF/XwYc7Lm8lLMrNLrc1Pe5FQ7xL1DINjI9vAyMZcknuotkgFQWC38VFnui0bvMRIDjMaCDtC4cfjjbAUqlRLL9/+mOe4GkhLbSR+kfnEGgmXQEObGuKA6/fqo41gB5awzRXKGK/RkwJlONbx2R4mM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713462839; c=relaxed/simple;
-	bh=GVKHg9/GMb+Q7svthQO5bm+rPzNDL6zXlQZOsDeKWL0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iPDzZv5Y/UdvP5C0JHl0OsL2oiIyxexW4QoxqHuXhvBsKnOxQsbvnFrhuqK/y8RwqIwVgQLyace7C4RywoTWZIjx8w1Mvl2OrVeuA6YyeEuJdEVgz7BIGd8GYISmj1vCGm/Slf3tCd6PZdiqc/ocV0DX5HFZ9kCkgZCd25yjBMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qitx/umw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713468694; c=relaxed/simple;
+	bh=Ps3ERSaJ3Nubf413Mgm5+5UAMdezoWO525AtmvS7hLg=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=kRicg1RyoXGu/ZHwAfSmhZNRzdWFDwXLr12Bj3NL4Mvi/WVdAAVTbLTtnPM/HlDfuK5tsYyuNw4yDixTfXu052lDRLWqA5WPTWr12ZgCDsng/qVKlGUAaO5lSZ597wS8N4ZSdK37oaVH1btlq+mkNfIWjgWXSD3a5IPM6rkwdSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lUEv9uwr; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qitx/umw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F12DC3277B;
-	Thu, 18 Apr 2024 17:53:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713462839;
-	bh=GVKHg9/GMb+Q7svthQO5bm+rPzNDL6zXlQZOsDeKWL0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qitx/umwjvXDKNme47QxvztrUiipBcKV2Lg0Yvd1RXezrm9EMN+zfFrxXb923+dxO
-	 AxZ6KgXvjlorR3mUIjvBXST4+3n8nelthPynguxJTOQoS9rNBrqZ+3MIlU37kTQ9FA
-	 a4e+nx+8unMMLT17+KcFFJ93DVlkbK2eXc4Av0nU3f2Yxj+rBXrkR0WI95IANr/7qX
-	 uZj4q1Xb4qjUIP87QNJk+Jgy4oid7eW9FtvEPOx7D0x1Tt1iXSqSWNLPcTP4XbQ2OW
-	 z8BEya9Rxr0dlQHlDm5T4jpRs2aqcA2Iy8EkKuiv4ehWjUKDt48ywWZ7K+xjdgeN4d
-	 Qxf4CJCyjHkiA==
-Date: Thu, 18 Apr 2024 20:52:39 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-Message-ID: <ZiFd567L4Zzm2okO@kernel.org>
-References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-6-rppt@kernel.org>
- <20240415075241.GF40213@noisy.programming.kicks-ass.net>
- <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
- <Zh4nJp8rv1qRBs8m@kernel.org>
- <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
- <ZiE91CJcNw7gBj9g@kernel.org>
- <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lUEv9uwr"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3465921600dso1071781f8f.3;
+        Thu, 18 Apr 2024 12:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713468691; x=1714073491; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ps3ERSaJ3Nubf413Mgm5+5UAMdezoWO525AtmvS7hLg=;
+        b=lUEv9uwrH2d1EIeIr6R1nj4v0AOv2obynUkrSBtRy60ku3qo7KemDH6bn7tYVlzO3a
+         P5/pUB3KHASzb7TMGBP7JKc+uslQ3eJdvZY0TuPG9QuxXQ+nkKtpV+bIK6ZHs+KJ5HmM
+         cjrxADU9Ke+fWIZEejQVhgV6FbazGZLgT0OsMzN014yCpa+7DZy/ywfpRS4RR3HGb4+d
+         Rna2RRpJov+QfFeqYviAVwfzq7evgJsYXxwGSrwAWkPjCi4cAYvK60IO92usyBooRtqt
+         zZvUCvA+V6nh95/ojlY/CvOvWGlH6Q6RRIXF7DAneqKh9WFI/iMLkXz0VL6VRe76FSIM
+         7FfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713468691; x=1714073491;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ps3ERSaJ3Nubf413Mgm5+5UAMdezoWO525AtmvS7hLg=;
+        b=lBa95u7ACsS5NO8engccFk57GAyRzMQn/qT9Riv3mgAdPXl9ZENdogkc40erLlnWQE
+         22/ZWpMIjqdEMnbnIpiMrGS31/IHjOmoPvFz3wY+So5tTH1tPX+2NsNmTgD9syJDAQNm
+         InYr0639kH4kENE/K8SmwjxNfpqR6GMNGHiR/rVFChpyNbSjmVORZ34Ct7SqrsUpMb9p
+         /MLwj3lqwRbAD8BroWigTa95nuWQfDMIXbmXWg89Gi8uQAZok9DbKOgZg2wc3QmhpVMI
+         i0SnWwW5ZFxbyLn6S2roWdhKXQviVloSNicPPus/+Jui/GZGgf6xXz+ScOfTEllDQZhb
+         hs2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUlHWkSgsaICGh2U7PrQXuUTnhBvu/x5CGEN7ia5U1WhO4BJIkl8N7VBVnpzaHQiJaodloWMPIHuAho+PC5tRBxugetCX0imNF+xHgnNcbnMmzm3hfZPPNVWVWFN+AjpqpIQQCTWqYbsSAtqca5xQJ1cPnK751L3dVEx1ycMwkGWR71OGksQ7+XUL2LocBIOe/L6Df6Nl9kBM3a09AcUzwgor/qs8NtcVjH4DqsiicYztbzG317zsKcRJR9BdqhK88=
+X-Gm-Message-State: AOJu0YzDlr6XDccMuhEFaLfzUpD25iWbEc3we+goWzbkoNvQuZys5aAT
+	19qWTgc6AIiuPWVHTbA0hwg5+7Ru/XkMZWIqg1PN/UHicX65wAxe
+X-Google-Smtp-Source: AGHT+IH0u8bsjFHZqemZxrgoGwtoIHFPdCVNpm0ysNZP2RZZazFU1pUbMRvZ+DfZhHxeIo/1VeVn9Q==
+X-Received: by 2002:adf:e58f:0:b0:349:eb59:c188 with SMTP id l15-20020adfe58f000000b00349eb59c188mr2213684wrm.5.1713468690932;
+        Thu, 18 Apr 2024 12:31:30 -0700 (PDT)
+Received: from smtpclient.apple ([132.69.239.36])
+        by smtp.gmail.com with ESMTPSA id c26-20020a170906d19a00b00a55662919c1sm1277105ejz.172.2024.04.18.12.31.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Apr 2024 12:31:30 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.500.171.1.1\))
+Subject: Re: [RFC PATCH 3/7] module: [
+From: Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <ZiDz4YbIHEOAnpwF@kernel.org>
+Date: Thu, 18 Apr 2024 22:31:16 +0300
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andy Lutomirski <luto@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Christoph Hellwig <hch@infradead.org>,
+ Helge Deller <deller@gmx.de>,
+ Lorenzo Stoakes <lstoakes@gmail.com>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Song Liu <song@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Will Deacon <will@kernel.org>,
+ bpf <bpf@vger.kernel.org>,
+ linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+ linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+ the arch/x86 maintainers <x86@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A714B340-9EFB-4F27-9CD6-CFBC1BC9139F@gmail.com>
+References: <20240411160526.2093408-1-rppt@kernel.org>
+ <20240411160526.2093408-4-rppt@kernel.org>
+ <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
+ <ZiDz4YbIHEOAnpwF@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+X-Mailer: Apple Mail (2.3774.500.171.1.1)
 
-On Thu, Apr 18, 2024 at 09:13:27AM -0700, Song Liu wrote:
-> On Thu, Apr 18, 2024 at 8:37 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > >
-> > > > I'm looking at execmem_types more as definition of the consumers, maybe I
-> > > > should have named the enum execmem_consumer at the first place.
-> > >
-> > > I think looking at execmem_type from consumers' point of view adds
-> > > unnecessary complexity. IIUC, for most (if not all) archs, ftrace, kprobe,
-> > > and bpf (and maybe also module text) all have the same requirements.
-> > > Did I miss something?
-> >
-> > It's enough to have one architecture with different constrains for kprobes
-> > and bpf to warrant a type for each.
-> 
-> AFAICT, some of these constraints can be changed without too much work.
 
-But why?
-I honestly don't understand what are you trying to optimize here. A few
-lines of initialization in execmem_info?
-What is the advantage in forcing architectures to have imposed limits on
-kprobes or bpf allocations?
 
-> > Where do you see unnecessary complexity?
-> >
-> > > IOW, we have
-> > >
-> > > enum execmem_type {
-> > >         EXECMEM_DEFAULT,
-> > >         EXECMEM_TEXT,
-> > >         EXECMEM_KPROBES = EXECMEM_TEXT,
-> > >         EXECMEM_FTRACE = EXECMEM_TEXT,
-> > >         EXECMEM_BPF = EXECMEM_TEXT,      /* we may end up without
-> > > _KPROBE, _FTRACE, _BPF */
-> > >         EXECMEM_DATA,  /* rw */
-> > >         EXECMEM_RO_DATA,
-> > >         EXECMEM_RO_AFTER_INIT,
-> > >         EXECMEM_TYPE_MAX,
-> > > };
-> > >
-> > > Does this make sense?
-> >
-> > How do you suggest to deal with e.g. riscv that has separate address spaces
-> > for modules, kprobes and bpf?
-> 
-> IIUC, modules and bpf use the same address space on riscv
+> On 18 Apr 2024, at 13:20, Mike Rapoport <rppt@kernel.org> wrote:
+>=20
+> On Tue, Apr 16, 2024 at 12:36:08PM +0300, Nadav Amit wrote:
+>>=20
+>>=20
+>>=20
+>> I might be missing something, but it seems a bit racy.
+>>=20
+>> IIUC, module_finalize() calls alternatives_smp_module_add(). At this
+>> point, since you don=E2=80=99t hold the text_mutex, some might do =
+text_poke(),
+>> e.g., by enabling/disabling static-key, and the update would be
+>> overwritten. No?
+>=20
+> Right :(
+> Even worse, for UP case alternatives_smp_unlock() will "patch" still =
+empty
+> area.
+>=20
+> So I'm thinking about calling alternatives_smp_module_add() from an
+> additional callback after the execmem_update_copy().
+>=20
+> Does it make sense to you?
 
-Not exactly, bpf is a subset of modules on riscv.
+Going over the code again - I might have just been wrong: I confused the
+alternatives and the jump-label mechanisms (as they do share a lot of
+code and characteristics).
 
-> while kprobes use vmalloc address.
+The jump-labels are updated when prepare_coming_module() is called, =
+which
+happens after post_relocation() [which means they would be updated using
+text_poke() =E2=80=9Cinefficiently=E2=80=9D but should be safe].
 
-The whole point of using the entire vmalloc for kprobes is to avoid
-pollution of limited modules space.
- 
-> Thanks,
-> Song
+The =E2=80=9Calternatives=E2=80=9D appear only to use text_poke() (in =
+contrast for
+text_poke_early()) from very specific few flows, e.g.,=20
+common_cpu_up() -> alternatives_enable_smp().
 
--- 
-Sincerely yours,
-Mike.
+Are those flows pose a problem after boot?
+
+Anyhow, sorry for the noise.=
