@@ -1,125 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAC0194C62;
-	Thu, 18 Apr 2024 19:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75B1181BB2;
+	Thu, 18 Apr 2024 21:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713469549; cv=none; b=VqvR9C6I9hX5kFd3KznBHJpCoHWSkhjfX/p0NTjiqQxRxch5R/y7FGZMZDZRAEQIcGIaHUUDi+0L1QDLUqOL2BGSWH3O8Ak2R6gQeN0pzaC1HVhiNjFAz1qEL4obMskQnCcUbiIk7/6UFt7FWU05EUzhLs5chKh1VKa3lNOhL5M=
+	t=1713474096; cv=none; b=juJVu8Pax7GY/2jO7F3QFUV2bMvNmO3PYQKqR270aq9nhRsFMRT1pHXTh6vNegjsO76hGpnp27D/LZOsYB3prDpto9hAp5SelZsC8WUZFZ9/EkLMlASjIUFCAJYgnLxDIYe2HRMUR5+/drE8yZWwtdFFsLi4XqdUCCjKBs2OwgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713469549; c=relaxed/simple;
-	bh=dHO0bamdxUUeACG8WtZho+GCcL4yBYsb4entMWbbmyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NeuLydmOy43wm77BprVIRDo9C2R0ZLK1SeQ9zN3+wz0EaAEPlphAvRSyd7M3fb9/ySjonJ1hgZhbmmAO20tH97yReu37Wzf8qSkWXdQIWo/9BPVN481ZQNKdSlBdpj+h7YQ8DVBTKArq/x62lwd6T0IHYsCNuhRNzCIdtEFEEf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CmVx6dRz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713474096; c=relaxed/simple;
+	bh=Q9xFEu3Y5LoeO0EqCkhUGHL0dsvPtZI4/AmKYvf5MnY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b+0txUzk5jK372QzTaz06e3UetBupnMUMh0c0sXUWXVGXQbNID8oChy+JzzSmHlvrbXEBhABFCYWr1jkplkUVNUld8ypXwzVqN/rfPwJ3r67GfYI2KH1PZxyEhljlZQoB3vXJHhS1sFr5xDKu3NQSoWCKV7cNkptrG0rWtw4EI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=os3i7OUl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CmVx6dRz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E87BEC113CC;
-	Thu, 18 Apr 2024 19:45:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="os3i7OUl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2941AC116B1;
+	Thu, 18 Apr 2024 21:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713469548;
-	bh=dHO0bamdxUUeACG8WtZho+GCcL4yBYsb4entMWbbmyQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CmVx6dRzicEYeby+eqehWh43quHdNoBbYY/i36pebwlC3hu3ZmeS4VjBXURj7aNy3
-	 iceEu2pMqBEVdzfyoNs6zYPwdeFEVjMU4daLSOF+34RPv/VgtKgm1TQzPbhCvKJCzp
-	 PwHKW3yddAFwEE2clGQPe9VCz0EWlv35PYz4PkEEkLTMMrd+GAZOMmGABmKaUl5Y8d
-	 4udjlt3Z97dUrMWxxJyIATuY3MTqmnZM5WdZYeq2ykeLqUHwwS1ZlLE9RAdOJI4t5m
-	 dZHSPXrDPE8q2nmOH9o+Xw5o1ED5ivvKuuyvGRHdoAhgoYmdvYsWWSvRA9smcyAVNW
-	 9J1gVzjdVbV+Q==
-Date: Thu, 18 Apr 2024 22:44:31 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Nadav Amit <nadav.amit@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>, Helge Deller <deller@gmx.de>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>, Will Deacon <will@kernel.org>,
-	bpf <bpf@vger.kernel.org>, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-	the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [RFC PATCH 3/7] module: [
-Message-ID: <ZiF4H5_tGx7woaXH@kernel.org>
-References: <20240411160526.2093408-1-rppt@kernel.org>
- <20240411160526.2093408-4-rppt@kernel.org>
- <0C4B9C1A-97DE-4798-8256-158369AF42A4@gmail.com>
- <ZiDz4YbIHEOAnpwF@kernel.org>
- <A714B340-9EFB-4F27-9CD6-CFBC1BC9139F@gmail.com>
+	s=k20201202; t=1713474096;
+	bh=Q9xFEu3Y5LoeO0EqCkhUGHL0dsvPtZI4/AmKYvf5MnY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=os3i7OUlnuFPwuywx5IIlmo6dtB59/Q7XJaGiZcHLePn7Eo9BufTvQVTR9mtW/eWI
+	 r4VK8QYyOlINdoOVjMcOehKmc6Sz4RWc7AtrGTHCmGpbXOTolpO+C2kb76Yr0cYvCD
+	 FMV4Iw8AtSf28SLOw4t9ku4hBlZ5jBKnjL2Jb3XS6QpCLdtSLjS9TIGuRVkBAtaceK
+	 Ynk+zxcFm8+Rdi8k+nN2pCkddAj7x4BuIRqRa6CNsxBp/r1PxXoHz9fS6XaoKD1pY8
+	 suIp6V5PCH1MCOf8eW5abdXsn+Qdv014GIVeNCWNab/ijMMs94IjvrIAImNdFlp9rg
+	 H2pmiaunPJ3ng==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5193363d255so1680614e87.3;
+        Thu, 18 Apr 2024 14:01:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXdsvnbLDbcUzdTwvNlfEf/J2+sRkWH+nKCsviXNlfBx3cDYng6/7AWgS6PTAFPIlk3Z7Emj69Zu/ZGHHYs6zSXTa+Oy+ttoUBdIdBtHg0AB+4XjekacyTx1qh8Xh4+4JHTTQhdTQ+jGFirf0pTn4wZvIlU+Wg4vdnMjDWgzIaVaAd7rS03c8i+nPQWdUt3TjBWi1VarY3Px16fo2aGdrqPKH5CS/6T4MWguKsofonzcpAiBdB4iLBHmVm10oLwbvgCTsWQd3fJz6jm6LstPIDpaYS3CwJv7i1M4sTdgKKMHw3vdySSytDoWcsXfUPNvSW4GNQcgA3k4V+741spUVa0kElB0fwD4htNDnjEwsEkAZxtyKRztK773FFcbfUfBoJAj6GsNkKwJzXlhAmzpWfTwhRIFnPCpXf8aOD/IRjXSd/AhUAO1LLgLos=
+X-Gm-Message-State: AOJu0YyVr8D8aTN3AsKi5MTkbI+ETPboRkITKyi31uZXtp7shRbDFjct
+	TfiUcwVZ+Ay5YhV7bwS6+4UzYAL+m0x4/5LUtYwf4kuu7tAZbeG0JeItREuz8sqnDrsZA2qeiTN
+	xRtZE+HXyocLjRYPOJs5fQESe6dY=
+X-Google-Smtp-Source: AGHT+IHNxy9sJsnZs3KQVfU0+czeg8tBpsYhbjwNsSaDNt4tlgSyRo9Mz2ssjEN7kjA5vVRJEg5DihQkgyMA2Jl/jC4=
+X-Received: by 2002:a05:6512:1251:b0:516:cec0:1fc0 with SMTP id
+ fb17-20020a056512125100b00516cec01fc0mr104453lfb.63.1713474094462; Thu, 18
+ Apr 2024 14:01:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <A714B340-9EFB-4F27-9CD6-CFBC1BC9139F@gmail.com>
+References: <20240411160051.2093261-1-rppt@kernel.org> <20240411160051.2093261-6-rppt@kernel.org>
+ <20240415075241.GF40213@noisy.programming.kicks-ass.net> <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
+ <Zh4nJp8rv1qRBs8m@kernel.org> <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
+ <ZiE91CJcNw7gBj9g@kernel.org> <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
+ <ZiFd567L4Zzm2okO@kernel.org>
+In-Reply-To: <ZiFd567L4Zzm2okO@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 18 Apr 2024 14:01:22 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+Message-ID: <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, 
+	linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Bjorn Topel <bjorn@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Kent Overstreet <kent.overstreet@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Puranjay Mohan <puranjay12@gmail.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Russell King <linux@armlinux.org.uk>, 
+	Steven Rostedt <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 18, 2024 at 10:31:16PM +0300, Nadav Amit wrote:
-> 
-> > On 18 Apr 2024, at 13:20, Mike Rapoport <rppt@kernel.org> wrote:
-> > 
-> > On Tue, Apr 16, 2024 at 12:36:08PM +0300, Nadav Amit wrote:
-> >> 
-> >> 
-> >> 
-> >> I might be missing something, but it seems a bit racy.
-> >> 
-> >> IIUC, module_finalize() calls alternatives_smp_module_add(). At this
-> >> point, since you don’t hold the text_mutex, some might do text_poke(),
-> >> e.g., by enabling/disabling static-key, and the update would be
-> >> overwritten. No?
-> > 
-> > Right :(
-> > Even worse, for UP case alternatives_smp_unlock() will "patch" still empty
-> > area.
-> > 
-> > So I'm thinking about calling alternatives_smp_module_add() from an
-> > additional callback after the execmem_update_copy().
-> > 
-> > Does it make sense to you?
-> 
-> Going over the code again - I might have just been wrong: I confused the
-> alternatives and the jump-label mechanisms (as they do share a lot of
-> code and characteristics).
-> 
-> The jump-labels are updated when prepare_coming_module() is called, which
-> happens after post_relocation() [which means they would be updated using
-> text_poke() “inefficiently” but should be safe].
-> 
-> The “alternatives” appear only to use text_poke() (in contrast for
-> text_poke_early()) from very specific few flows, e.g., 
-> common_cpu_up() -> alternatives_enable_smp().
-> 
-> Are those flows pose a problem after boot?
+On Thu, Apr 18, 2024 at 10:54=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wr=
+ote:
+>
+> On Thu, Apr 18, 2024 at 09:13:27AM -0700, Song Liu wrote:
+> > On Thu, Apr 18, 2024 at 8:37=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
+ wrote:
+> > > > >
+> > > > > I'm looking at execmem_types more as definition of the consumers,=
+ maybe I
+> > > > > should have named the enum execmem_consumer at the first place.
+> > > >
+> > > > I think looking at execmem_type from consumers' point of view adds
+> > > > unnecessary complexity. IIUC, for most (if not all) archs, ftrace, =
+kprobe,
+> > > > and bpf (and maybe also module text) all have the same requirements=
+.
+> > > > Did I miss something?
+> > >
+> > > It's enough to have one architecture with different constrains for kp=
+robes
+> > > and bpf to warrant a type for each.
+> >
+> > AFAICT, some of these constraints can be changed without too much work.
+>
+> But why?
+> I honestly don't understand what are you trying to optimize here. A few
+> lines of initialization in execmem_info?
 
-Yes, common_cpu_up is called  on CPU hotplug, so it's possible to have a
-race between alternatives_smp_module_add() and common_cpu_up() ->
-alternatives_enable_smp().
+IIUC, having separate EXECMEM_BPF and EXECMEM_KPROBE makes it
+harder for bpf and kprobe to share the same ROX page. In many use cases,
+a 2MiB page (assuming x86_64) is enough for all BPF, kprobe, ftrace, and
+module text. It is not efficient if we have to allocate separate pages for =
+each
+of these use cases. If this is not a problem, the current approach works.
 
-And in UP case alternatives_smp_module_add() will call
-alternatives_smp_unlock() that will patch module text before it is updated.
-
-> Anyhow, sorry for the noise.
-
-On the contrary, I would have missed it.
-
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Song
