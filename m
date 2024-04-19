@@ -1,39 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D77DA63E;
-	Fri, 19 Apr 2024 06:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52BC77F13;
+	Fri, 19 Apr 2024 15:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713509798; cv=none; b=uSluC9zo28vHSoNgnpCTH08/ccnBLEO8gH6TK5xWBiFM5Mj2WodUMDcTCP+DgAZvoSe/JFTO7t0wTfWMQxTdeY+XuOSCRP+QGzcwAi1XwGisjgI+chvmpjnSOeV7+zLindn5TMjqfqYWoRFBugF/QePjG3f07+1kKDwNSJ20dLU=
+	t=1713541839; cv=none; b=llxUtTwdAiKq8S2FEKL8LydSacvUQ9TpvrR9IJhg6N05U6DgWqyv6AGjaWydIydVEz5g0C0lpIwrVRZkWuNf/mYF7s6xZI1D5eBUk476x9Pph/MxBKWrwKPxcSuyAi/6wqycKbzEIdg91jxUnH9NppKyaWOLzDxaonOTtiP4YfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713509798; c=relaxed/simple;
-	bh=QyMnC6yNCYeGf0vrwo+bvOEGlhU1enTkpEMS1UdTz3o=;
+	s=arc-20240116; t=1713541839; c=relaxed/simple;
+	bh=4syrMVBjLG+mqSAuWdu45onjerLE6hugRcJZYIbTm9w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfeXrSOHRfzoP83QFoYBbmVcyWej2sBnyV6u8bkYQKL4THyJKWx3Lf+tKiXXLWm+KPl3tx31E9mwK1BP+kQCHb38y9WM8sYfUi+nPCaL24bUDc5/YYAghrAP3yqhqoIAzAMprsIP3bJUFivCquJ9mBFkvBGfLUPa1kXva/J6dFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGPxC8PC; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=eRQOzsrj/ljKZqDXeCjzoqjDfNZ7gDiQqNMj/V3zxy6Yy3GW8lNZ8Wpj+4Ze0h9to0OYve361+ZtgU+i+EptEWjNOZhPbTulto8OduVyHbVsfZKROE8yHI0m5CxDzD1YOGYxJOieOXc7RpR1PtGT81f/avI2+EjtzQDf6o8E0W0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OHj3fHUB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGPxC8PC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5881C072AA;
-	Fri, 19 Apr 2024 06:56:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OHj3fHUB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B33F9C3277B;
+	Fri, 19 Apr 2024 15:50:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713509797;
-	bh=QyMnC6yNCYeGf0vrwo+bvOEGlhU1enTkpEMS1UdTz3o=;
+	s=k20201202; t=1713541839;
+	bh=4syrMVBjLG+mqSAuWdu45onjerLE6hugRcJZYIbTm9w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GGPxC8PCY8SnZrF0RCOMbIgSLrKy8hMUcTwQhGg04AArCCIqcrHmv5Ozj+/15Mxmb
-	 Z5tAH7Vdwb4CwNtAt3c/UrCpMIZJPngEV7ak2csa/7FlHToGNqqaiOtjXXYFiXJWt3
-	 6ObsP+646nnF8SnH5skC5WEdWELGtHSHzBDWXZqXYwBofamn2QdDvdgy5CTKGNpPOO
-	 1v84dtOt7AKF4KxvZWU3TOdBN2g9tkVxrJyakFg/qwL0NKQfGsXLfFOWV0O05jtLTZ
-	 wM29U64qOuZV772RLQ5j7ljjoO+qx0/azdfHFMH7xioH9AhimXQ/fqnfmBiI3Sy0+P
-	 8Za6g/P3pUaVg==
-Date: Fri, 19 Apr 2024 09:55:16 +0300
+	b=OHj3fHUBZ5oW6uWZr153zLjsZ6q0yv8DxwxD0Zy4isctsEWry5XXGSfR8Vc3hMrh/
+	 vizLT7qFrrEF533kmJCP3HWtZ7Qzr6mVAw251VXfA8O2WlqLyeSYgvuFfPALuIdv03
+	 8KfWQePVkfruiceot7yZycnjNdoMZw4MifC81l3AU9dBYam0QRDoIaUN7a6lFYb8MN
+	 K0Whze6qtl25bkJdh4oiv03gWibiSz5LhY9l5mv+w3PTDhkRKRk4JGDzV2xKnexhV7
+	 tGBMGlG1WEFnNmkggVGWaWOAgxzIa+Avjitv3Mny3kNElAG5XpvzSHnQsEDp7b51Tm
+	 Ziw7Ozh3aQ/+w==
+Date: Fri, 19 Apr 2024 18:49:17 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
+To: Masami Hiramatsu <masami.hiramatsu@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Topel <bjorn@kernel.org>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -44,12 +42,13 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
 	Huacai Chen <chenhuacai@kernel.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Nadav Amit <nadav.amit@gmail.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Puranjay Mohan <puranjay12@gmail.com>,
 	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
@@ -60,68 +59,53 @@ Cc: Mark Rutland <mark.rutland@arm.com>,
 	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-Message-ID: <ZiIVVBgaDN4RsroT@kernel.org>
+Subject: Re: [PATCH v4 14/15] kprobes: remove dependency on CONFIG_MODULES
+Message-ID: <ZiKSffcTiP2c6fbs@kernel.org>
 References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-6-rppt@kernel.org>
- <20240415075241.GF40213@noisy.programming.kicks-ass.net>
- <Zh1lnIdgFeM1o8S5@FVFF77S0Q05N.cambridge.arm.com>
- <Zh4nJp8rv1qRBs8m@kernel.org>
- <CAPhsuW6Pbg2k_Gu4dsBx+H8H5XCHvNdtEZJBPiG_eT0qqr9D1w@mail.gmail.com>
- <ZiE91CJcNw7gBj9g@kernel.org>
- <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
- <ZiFd567L4Zzm2okO@kernel.org>
- <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+ <20240411160051.2093261-15-rppt@kernel.org>
+ <20240418061615.5fad23b954bf317c029acc4d@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+In-Reply-To: <20240418061615.5fad23b954bf317c029acc4d@gmail.com>
 
-On Thu, Apr 18, 2024 at 02:01:22PM -0700, Song Liu wrote:
-> On Thu, Apr 18, 2024 at 10:54 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > On Thu, Apr 18, 2024 at 09:13:27AM -0700, Song Liu wrote:
-> > > On Thu, Apr 18, 2024 at 8:37 AM Mike Rapoport <rppt@kernel.org> wrote:
-> > > > > >
-> > > > > > I'm looking at execmem_types more as definition of the consumers, maybe I
-> > > > > > should have named the enum execmem_consumer at the first place.
-> > > > >
-> > > > > I think looking at execmem_type from consumers' point of view adds
-> > > > > unnecessary complexity. IIUC, for most (if not all) archs, ftrace, kprobe,
-> > > > > and bpf (and maybe also module text) all have the same requirements.
-> > > > > Did I miss something?
-> > > >
-> > > > It's enough to have one architecture with different constrains for kprobes
-> > > > and bpf to warrant a type for each.
-> > >
-> > > AFAICT, some of these constraints can be changed without too much work.
-> >
-> > But why?
-> > I honestly don't understand what are you trying to optimize here. A few
-> > lines of initialization in execmem_info?
+Hi Masami,
+
+On Thu, Apr 18, 2024 at 06:16:15AM +0900, Masami Hiramatsu wrote:
+> Hi Mike,
 > 
-> IIUC, having separate EXECMEM_BPF and EXECMEM_KPROBE makes it
-> harder for bpf and kprobe to share the same ROX page. In many use cases,
-> a 2MiB page (assuming x86_64) is enough for all BPF, kprobe, ftrace, and
-> module text. It is not efficient if we have to allocate separate pages for each
-> of these use cases. If this is not a problem, the current approach works.
+> On Thu, 11 Apr 2024 19:00:50 +0300
+> Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > 
+> > kprobes depended on CONFIG_MODULES because it has to allocate memory for
+> > code.
+> > 
+> > Since code allocations are now implemented with execmem, kprobes can be
+> > enabled in non-modular kernels.
+> > 
+> > Add #ifdef CONFIG_MODULE guards for the code dealing with kprobes inside
+> > modules, make CONFIG_KPROBES select CONFIG_EXECMEM and drop the
+> > dependency of CONFIG_KPROBES on CONFIG_MODULES.
+> 
+> Thanks for this work, but this conflicts with the latest fix in v6.9-rc4.
+> Also, can you use IS_ENABLED(CONFIG_MODULES) instead of #ifdefs in
+> function body? We have enough dummy functions for that, so it should
+> not make a problem.
 
-The caching of large ROX pages does not need to be per type. 
-
-In the POC I've posted for caching of large ROX pages on x86 [1], the cache is
-global and to make kprobes and bpf use it it's enough to set a flag in
-execmem_info.
-
-[1] https://lore.kernel.org/all/20240411160526.2093408-1-rppt@kernel.org
-
-> Thanks,
-> Song
+The code in check_kprobe_address_safe() that gets the module and checks for
+__init functions does not compile with IS_ENABLED(CONFIG_MODULES). 
+I can pull it out to a helper or leave #ifdef in the function body,
+whichever you prefer.
+ 
+> -- 
+> Masami Hiramatsu
 
 -- 
 Sincerely yours,
