@@ -1,313 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C338414F9E1;
-	Mon, 22 Apr 2024 14:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85A41847;
+	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713795124; cv=none; b=I8NvMLwqdlQrL69bFqT3d0w6JhCFuJp58mH4j+iwVSK+pPnEAhObe1/JB9IdQQyFcr/XF9+6A/KxCZkqFpC/Qub5zmiLdQmgANRuFdUa2gbPa3HHAySNrMS1eQhezZttUupEirvnPm2HGG6ECYIr75FhebBS0rqX21fhTWzQRLY=
+	t=1713810736; cv=none; b=QznZ5pBJl0AHmDy48WduUBUcGmD1B5IijLy07IEf5r/lnv88qxYRvA5oQaYlwdAlpqc1GVY1w1jWVl0QJqGwczxeeYfnZSSyAcfepfHnjKaKOF2nbfqgLPQaF761qomi9Pp7CLQeTv3/4Q6nT+jkRFMRRAHrU+7khNTTDfbwIaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713795124; c=relaxed/simple;
-	bh=63rvt2yz8r57hl8myRcuStiGVHTSpmv479F+BVPlgOk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=EXwSD1gOrzC1UFPRGE5PVklfn2EoSRdpM7bDx5A8c6v9xGY92yUE7DYBMuHjcoWboURdTr2w4X7aiJpQwuRUlk6lCh0sCZljFPZTVx+fOjhme6Pl/doOqdc+R6TiLVs9/VPwgnkJtli8CrbQU9LQGi+34iQfac4+sgukfYDjUD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZI2g4Uq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713810736; c=relaxed/simple;
+	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l28eZyiFEZGZ1i/VsciXHLakue8jpER4MkOl+eJHmzT4EU9NaymBI9aKgNE9lZM/8yoE6WRNH4NyIldiPpWKYf1t9kvuTHhyts5SEsj2/ZLFCkaNrcxQpiqy6FhTHbHod+xQPd+97s1/vPOsXJ5KKbqXRqeBgtbDl/8gOtm5gBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFjAm3nG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZI2g4Uq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAD5C32783;
-	Mon, 22 Apr 2024 14:11:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFjAm3nG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA94C4AF0B;
+	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713795123;
-	bh=63rvt2yz8r57hl8myRcuStiGVHTSpmv479F+BVPlgOk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=XZI2g4UqcleGPHMCMSqV3/iC7oJP0tZWbpfXP00rfR9bLCRfpzFMwC9X4q54oxXMM
-	 DnhZrHtKfWP5KsKR0UwBwIDd4eHpEkLzxxX7LPi42cCObWXCldmkT2ETPDxFRfwhiK
-	 nyXLCvvf3mWcIJjGAf2BRpg+sGk/r9FACse9FCIZKTAIMRKChgqXwhJ7CqFLLV8oy/
-	 QLrmKiFkxPB4YBmwLg/Hf4QkKGO2SUvS8pCcc0bNoMWOtMRS3u0h3n+olJg1vGec5V
-	 55mbL/zgu8a6qrqHPaT4tJ+d8LCTGjRW/TTRHz6/VaV0UanNJA0VfQalKnV9xzPuaQ
-	 EUKZMBGXl8nFQ==
-Date: Mon, 22 Apr 2024 23:11:51 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
- <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
- <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
- <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
- <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Luis
- Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Michael Ellerman
- <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Rick Edgecombe
- <rick.p.edgecombe@intel.com>, Russell King <linux@armlinux.org.uk>, Sam
- Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 14/15] kprobes: remove dependency on CONFIG_MODULES
-Message-Id: <20240422231151.0d7c18ec1917887c7f323d4c@kernel.org>
-In-Reply-To: <20240422094436.3625171-15-rppt@kernel.org>
-References: <20240422094436.3625171-1-rppt@kernel.org>
-	<20240422094436.3625171-15-rppt@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1713810736;
+	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WFjAm3nG7XUTrBnb9o2ks89OQgjxiSe5eWX8YxXd1sW0hbIxt8VjaFgdNY7jwwl/k
+	 AfWjBBQkR55Va8AnJ9aZ9HNo3aWGj92Hg8yQfe6AZc/sgCyr09/ddJev56eXLxhUbk
+	 bYRNUKDXSWSv0PHnlWydUHx0kp/IGq0ZRSR0xO71ow/Lfv7EI3MTbMaLFw4v7bXSFJ
+	 3STUYz/yJHlp6VqKWBeoWQO13+U5j6+pSZw+u4eCUWHpkY832oOPrwYV84rmuYW4C/
+	 bOCj02N41ZbDl+Gdwcz6EkWfYsWwZ5MhWh4lcO8wHP44/mjOjwNi1xfPxSrEJkKHPw
+	 nRWV7XhBkaFPQ==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2da08b06e0dso56752861fa.2;
+        Mon, 22 Apr 2024 11:32:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVAiL4f0XpoTnbX2tsCYaeKCYRiAi5LlPsAXRg2XqaLnBfw0mAuWdG/n2s/rm1fN67yq2GFli/x7nix6Ci20zGBFF2tfTCPkpcU/cIUBXZfkl7bWOQ674srKDnADgriyGJjKil0QaqrFI6dYTBROAkgPQKjtNQoJOgjlaRxPYZtdGQ1xcGmfmo0LD51lKKVhfV+73d6mxcL3emy2Up/snWYvkBkSLoI6l8HPx139+GJVqJqGWEqCwbslJXVJ+i8E6ipAnU54pLeSVwJhoM1dTOLgvLRzXWjcDvU2C4oMB/Tgx3uj0qCNRGpKIrpvjSk81tsEbxLki9rk8infjoGwWTgUgZ/U+KECMhad5na35inrctV6TP7qU+I+9l7U++LRZ9ZsqeiFMXTp8B2pjo9iEXyJe6o+/8L3LQDsvbol2gD9M6TJmM+Tb/uvUQ=
+X-Gm-Message-State: AOJu0YzIVj4kudDkOfIdSzPU7qWk5hi4ACyrTbrFxV2xQk0sd40r9cdc
+	G+YEaqz2iHHiLezycD0rMYEcmoO8FS2eYfkJpBR1rkwmo709PQ8NsIDTsIZrqnsyZnn0247incU
+	B6rCbtRT3RUAl8E2ws3o7ouKDoIs=
+X-Google-Smtp-Source: AGHT+IEL0FWUHmCKYIOk93aax6U4BdFHP3q3Bogcq6+CoScwmomqpj0/rB2eiX3SYQzXlZuuQSNAuqDXXtIwEOxd65Y=
+X-Received: by 2002:a2e:9496:0:b0:2d8:1d29:23a8 with SMTP id
+ c22-20020a2e9496000000b002d81d2923a8mr6582027ljh.29.1713810734431; Mon, 22
+ Apr 2024 11:32:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <ZiE91CJcNw7gBj9g@kernel.org> <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
+ <ZiFd567L4Zzm2okO@kernel.org> <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
+ <ZiIVVBgaDN4RsroT@kernel.org> <CAPhsuW7WoU+a46FhqqH8f-3=ehxeD4wSgKDWegMin1pT49OSWw@mail.gmail.com>
+ <ZiKjmaDgz_56ovbv@kernel.org> <CAPhsuW7Nj1Sa_9xQtTgHz9AmX39zdh2x2COqA-qmkfpfX9hNWw@mail.gmail.com>
+ <ZiLNGgVSQ7_cg58y@kernel.org> <CAPhsuW4KRM4O4RFbYQrt=Coqyh9w29WiF2YF=8soDfauLFsKBA@mail.gmail.com>
+ <ZiNDGjkcqEPqruza@kernel.org> <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
+In-Reply-To: <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Mon, 22 Apr 2024 11:32:02 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
+Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
+Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Bjorn Topel <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "David S. Miller" <davem@davemloft.net>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile <ddutile@redhat.com>, 
+	Eric Chanudet <echanude@redhat.com>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Russell King <linux@armlinux.org.uk>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 22 Apr 2024 12:44:35 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+Hi Masami and Mike,
 
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> kprobes depended on CONFIG_MODULES because it has to allocate memory for
-> code.
-> 
-> Since code allocations are now implemented with execmem, kprobes can be
-> enabled in non-modular kernels.
-> 
-> Add #ifdef CONFIG_MODULE guards for the code dealing with kprobes inside
-> modules, make CONFIG_KPROBES select CONFIG_EXECMEM and drop the
-> dependency of CONFIG_KPROBES on CONFIG_MODULES.
+On Sat, Apr 20, 2024 at 2:11=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
+rg> wrote:
+[...]
+> > >
+> > > IIUC, we need to update __execmem_cache_alloc() to take a range point=
+er as
+> > > input. module text will use "range" for EXECMEM_MODULE_TEXT, while kp=
+robe
+> > > will use "range" for EXECMEM_KPROBE. Without "map to" concept or shar=
+ing
+> > > the "range" object, we will have to compare different range parameter=
+s to check
+> > > we can share cached pages between module text and kprobe, which is no=
+t
+> > > efficient. Did I miss something?
+>
+> Song, thanks for trying to eplain. I think I need to explain why I used
+> module_alloc() originally.
+>
+> This depends on how kprobe features are implemented on the architecture, =
+and
+> how much features are supported on kprobes.
+>
+> Because kprobe jump optimization and kprobe jump-back optimization need t=
+o
+> use a jump instruction to jump into the trampoline and jump back from the
+> trampoline directly, if the architecuture jmp instruction supports +-2GB =
+range
+> like x86, it needs to allocate the trampoline buffer inside such address =
+space.
+> This requirement is similar to the modules (because module function needs=
+ to
+> call other functions in the kernel etc.), at least kprobes on x86 used
+> module_alloc().
+>
+> However, if an architecture only supports breakpoint/trap based kprobe,
+> it does not need to consider whether the execmem is allocated.
+>
+> >
+> > We can always share large ROX pages as long as they are within the corr=
+ect
+> > address space. The permissions for them are ROX and the alignment
+> > differences are due to KASAN and this is handled during allocation of t=
+he
+> > large page to refill the cache. __execmem_cache_alloc() only needs to l=
+imit
+> > the search for the address space of the range.
+>
+> So I don't think EXECMEM_KPROBE always same as EXECMEM_MODULE_TEXT, it
+> should be configured for each arch. Especially, if it is only used for
+> searching parameter, it looks OK to me.
 
-Looks good to me.
+Thanks for the explanation!
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+I was thinking "we can have EXECMEM_KPROBE share the same parameters as
+EXECMEM_MODULE_TEXT for all architectures". But this thought is built on to=
+p
+of assumptions on future changes/improvements within multiple sub systems.
+At this moment, I have no objections moving forward with current execmem AP=
+Is.
 
-Thank you!
-
-> 
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> ---
->  arch/Kconfig                |  2 +-
->  include/linux/module.h      |  9 ++++++
->  kernel/kprobes.c            | 55 +++++++++++++++++++++++--------------
->  kernel/trace/trace_kprobe.c | 20 +++++++++++++-
->  4 files changed, 63 insertions(+), 23 deletions(-)
-> 
-> diff --git a/arch/Kconfig b/arch/Kconfig
-> index 7006f71f0110..a48ce6a488b3 100644
-> --- a/arch/Kconfig
-> +++ b/arch/Kconfig
-> @@ -52,9 +52,9 @@ config GENERIC_ENTRY
->  
->  config KPROBES
->  	bool "Kprobes"
-> -	depends on MODULES
->  	depends on HAVE_KPROBES
->  	select KALLSYMS
-> +	select EXECMEM
->  	select TASKS_RCU if PREEMPTION
->  	help
->  	  Kprobes allows you to trap at almost any kernel address and
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 1153b0d99a80..ffa1c603163c 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -605,6 +605,11 @@ static inline bool module_is_live(struct module *mod)
->  	return mod->state != MODULE_STATE_GOING;
->  }
->  
-> +static inline bool module_is_coming(struct module *mod)
-> +{
-> +        return mod->state == MODULE_STATE_COMING;
-> +}
-> +
->  struct module *__module_text_address(unsigned long addr);
->  struct module *__module_address(unsigned long addr);
->  bool is_module_address(unsigned long addr);
-> @@ -857,6 +862,10 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
->  	return ptr;
->  }
->  
-> +static inline bool module_is_coming(struct module *mod)
-> +{
-> +	return false;
-> +}
->  #endif /* CONFIG_MODULES */
->  
->  #ifdef CONFIG_SYSFS
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index ddd7cdc16edf..ca2c6cbd42d2 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -1588,7 +1588,7 @@ static int check_kprobe_address_safe(struct kprobe *p,
->  	}
->  
->  	/* Get module refcount and reject __init functions for loaded modules. */
-> -	if (*probed_mod) {
-> +	if (IS_ENABLED(CONFIG_MODULES) && *probed_mod) {
->  		/*
->  		 * We must hold a refcount of the probed module while updating
->  		 * its code to prohibit unexpected unloading.
-> @@ -1603,12 +1603,13 @@ static int check_kprobe_address_safe(struct kprobe *p,
->  		 * kprobes in there.
->  		 */
->  		if (within_module_init((unsigned long)p->addr, *probed_mod) &&
-> -		    (*probed_mod)->state != MODULE_STATE_COMING) {
-> +		    !module_is_coming(*probed_mod)) {
->  			module_put(*probed_mod);
->  			*probed_mod = NULL;
->  			ret = -ENOENT;
->  		}
->  	}
-> +
->  out:
->  	preempt_enable();
->  	jump_label_unlock();
-> @@ -2488,24 +2489,6 @@ int kprobe_add_area_blacklist(unsigned long start, unsigned long end)
->  	return 0;
->  }
->  
-> -/* Remove all symbols in given area from kprobe blacklist */
-> -static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
-> -{
-> -	struct kprobe_blacklist_entry *ent, *n;
-> -
-> -	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
-> -		if (ent->start_addr < start || ent->start_addr >= end)
-> -			continue;
-> -		list_del(&ent->list);
-> -		kfree(ent);
-> -	}
-> -}
-> -
-> -static void kprobe_remove_ksym_blacklist(unsigned long entry)
-> -{
-> -	kprobe_remove_area_blacklist(entry, entry + 1);
-> -}
-> -
->  int __weak arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
->  				   char *type, char *sym)
->  {
-> @@ -2570,6 +2553,25 @@ static int __init populate_kprobe_blacklist(unsigned long *start,
->  	return ret ? : arch_populate_kprobe_blacklist();
->  }
->  
-> +#ifdef CONFIG_MODULES
-> +/* Remove all symbols in given area from kprobe blacklist */
-> +static void kprobe_remove_area_blacklist(unsigned long start, unsigned long end)
-> +{
-> +	struct kprobe_blacklist_entry *ent, *n;
-> +
-> +	list_for_each_entry_safe(ent, n, &kprobe_blacklist, list) {
-> +		if (ent->start_addr < start || ent->start_addr >= end)
-> +			continue;
-> +		list_del(&ent->list);
-> +		kfree(ent);
-> +	}
-> +}
-> +
-> +static void kprobe_remove_ksym_blacklist(unsigned long entry)
-> +{
-> +	kprobe_remove_area_blacklist(entry, entry + 1);
-> +}
-> +
->  static void add_module_kprobe_blacklist(struct module *mod)
->  {
->  	unsigned long start, end;
-> @@ -2672,6 +2674,17 @@ static struct notifier_block kprobe_module_nb = {
->  	.priority = 0
->  };
->  
-> +static int kprobe_register_module_notifier(void)
-> +{
-> +	return register_module_notifier(&kprobe_module_nb);
-> +}
-> +#else
-> +static int kprobe_register_module_notifier(void)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_MODULES */
-> +
->  void kprobe_free_init_mem(void)
->  {
->  	void *start = (void *)(&__init_begin);
-> @@ -2731,7 +2744,7 @@ static int __init init_kprobes(void)
->  	if (!err)
->  		err = register_die_notifier(&kprobe_exceptions_nb);
->  	if (!err)
-> -		err = register_module_notifier(&kprobe_module_nb);
-> +		err = kprobe_register_module_notifier();
->  
->  	kprobes_initialized = (err == 0);
->  	kprobe_sysctls_init();
-> diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
-> index 14099cc17fc9..2cb2a3951b4f 100644
-> --- a/kernel/trace/trace_kprobe.c
-> +++ b/kernel/trace/trace_kprobe.c
-> @@ -111,6 +111,7 @@ static nokprobe_inline bool trace_kprobe_within_module(struct trace_kprobe *tk,
->  	return strncmp(module_name(mod), name, len) == 0 && name[len] == ':';
->  }
->  
-> +#ifdef CONFIG_MODULES
->  static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
->  {
->  	char *p;
-> @@ -129,6 +130,12 @@ static nokprobe_inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
->  
->  	return ret;
->  }
-> +#else
-> +static inline bool trace_kprobe_module_exist(struct trace_kprobe *tk)
-> +{
-> +	return false;
-> +}
-> +#endif
->  
->  static bool trace_kprobe_is_busy(struct dyn_event *ev)
->  {
-> @@ -670,6 +677,7 @@ static int register_trace_kprobe(struct trace_kprobe *tk)
->  	return ret;
->  }
->  
-> +#ifdef CONFIG_MODULES
->  /* Module notifier call back, checking event on the module */
->  static int trace_kprobe_module_callback(struct notifier_block *nb,
->  				       unsigned long val, void *data)
-> @@ -704,6 +712,16 @@ static struct notifier_block trace_kprobe_module_nb = {
->  	.notifier_call = trace_kprobe_module_callback,
->  	.priority = 1	/* Invoked after kprobe module callback */
->  };
-> +static int trace_kprobe_register_module_notifier(void)
-> +{
-> +	return register_module_notifier(&trace_kprobe_module_nb);
-> +}
-> +#else
-> +static int trace_kprobe_register_module_notifier(void)
-> +{
-> +	return 0;
-> +}
-> +#endif /* CONFIG_MODULES */
->  
->  static int count_symbols(void *data, unsigned long unused)
->  {
-> @@ -1933,7 +1951,7 @@ static __init int init_kprobe_trace_early(void)
->  	if (ret)
->  		return ret;
->  
-> -	if (register_module_notifier(&trace_kprobe_module_nb))
-> +	if (trace_kprobe_register_module_notifier())
->  		return -EINVAL;
->  
->  	return 0;
-> -- 
-> 2.43.0
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Song
