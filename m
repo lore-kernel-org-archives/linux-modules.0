@@ -1,167 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 676CC14273;
-	Sat, 20 Apr 2024 10:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4CB79D3;
+	Mon, 22 Apr 2024 02:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713610428; cv=none; b=dhiY3/x0/9/8c2XF3wZ3TuyZQtQSeoHqlsIJIg/Hgw9p3R4PBClSUWy2l0eIP2ae8MC5Y5E2CmmKKfdMzSSd0l7HaFbQMyvUaF2IxqBx1YPh/9YevN9N/+D6BvVZ9d9/aHcKceuFFeBOa1zEn/loWPRDysDt549816haSrqwOKI=
+	t=1713751376; cv=none; b=kY6SLeZc6f+ukSTbepLXvBU/6/aKNpD4olMOIqC8ion1m3R2VA2MHkDkm2EKkUm8G+LuBU9Gd8KY9Y0V7S+dWhc/JWgR5iypbrCmL7+35sQbtV5rSVbWcMNOkxkkWeK4tbX1ZYbc6HyACDId1e/s2IyCnJv+vWdXZNX3ZVU8QBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713610428; c=relaxed/simple;
-	bh=SM7VfRahGBLcoMQTiuF9XwON0oAIQm3UPvX2eiqyDXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B379p1/kc4juQFlkHH+3LJhZad49RSBm76RIHBkLVYifKzVKHEa96448eyXSnKi4w/TAZFTFpNipR/I9vPkm5C2+2oR/halV7ENDHl6/5mlL/V/TweTfv1cOIZGDJczKd52N/dDx8B+KIueL4VTLH5Jp94MLgvJcranozjJ/qiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3eyeiLy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713751376; c=relaxed/simple;
+	bh=gX58Kqwb4ETkW3PNNVNBEZm8HOp4ZVyZ3Z+Q1hS32XM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qMgLPV3mj/j4G81ptGIzhl/aUwFEYtSFRC2suiyx5XkdvImOjOlH3MUjOdoutleLprl22FoaT8qDdNbONEt1cS3gLV4C2s4VXt06As5qeDQyAbq9bCeT3kdsDR666wdtexYtMUPuFTAggyQR6XpLarqDjlpmsniNKoD9gIbZGQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YS1ILjDS; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3eyeiLy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F744C072AA;
-	Sat, 20 Apr 2024 10:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713610427;
-	bh=SM7VfRahGBLcoMQTiuF9XwON0oAIQm3UPvX2eiqyDXo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X3eyeiLylPAUkLSbyyrlGHXzvYV/bgYpLPhV7vw8xijwr2D1MExbuRdRactesAT8X
-	 zdt7h71F5DqBQu/eRbhv/5Y0Rre5yGM+3/QnKDXleUxYNRTZmWf1Vo3WU+1+o9lafL
-	 JRP9zqL5lB14IFxVzQv/2Y2x11fPGHO1UTIDooMmj7MCyEzwQSZ7FSoL/8Q352iA+B
-	 xJtavt8SFXQQ13eBr6UXoSA7CP3oDA+2zBywG990wKdhsiRvE/zNe3PUQwDEQ+0Y6e
-	 BUuBnLZ3CWf9tTcjXso+bnm9SeKBHDu3KkkjgF+H+J+dCs6K3ICndd93HsxM2BWoMW
-	 e8kLY5pax56uw==
-Date: Sat, 20 Apr 2024 13:52:27 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v4 14/15] kprobes: remove dependency on CONFIG_MODULES
-Message-ID: <ZiOea81saMutayxt@kernel.org>
-References: <20240411160051.2093261-1-rppt@kernel.org>
- <20240411160051.2093261-15-rppt@kernel.org>
- <20240418061615.5fad23b954bf317c029acc4d@gmail.com>
- <ZiKSffcTiP2c6fbs@kernel.org>
- <321def3e-8bf1-4920-92dd-037b20f1272d@csgroup.eu>
- <ZiNv0jY7Ebw75iQl@kernel.org>
- <20240420181500.07b39c77f1ca086e8a5161b4@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YS1ILjDS"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-617d411a6b3so32883077b3.3;
+        Sun, 21 Apr 2024 19:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713751374; x=1714356174; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8rCd+3oGFPLNxJ/lF2Elx3LOmcNWWnGksUlsqddWG9M=;
+        b=YS1ILjDS0SH36/GKd1t+zvqDUKawmO31EAp+RMbaOMUL0Y1DaGnLrSbPfeONuBlvxd
+         LTxD7PDgeapshiUhuTumOG+hWjPn9lGnQ6MFVU8Fwv98YIJH709OF7vg9x0KVQlNbBfW
+         He/BKKonDCUdNOJwEGV22lanXuh25AGmtKN3IJbwicUmeeUIkyR7o/TlHGWK9CXXOBF0
+         qviGYAL4TZOLUcmKlq9IVITHW7jM8qc1T/yIWgo80So4hhzdFq7LfcVcjrMJ9AwxKmZB
+         BLUt9P5jws4P8M9C6ngYANHNgsVN3LTkhAubLqFQ3YhCNfcd3amkYfKDOOwl803x9gyr
+         K7OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713751374; x=1714356174;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8rCd+3oGFPLNxJ/lF2Elx3LOmcNWWnGksUlsqddWG9M=;
+        b=Qt1s2YDqn3TNbaI45QGkbQ2Br54+GGllhDOLprveqH6Vq3t+O8UNTOb7vYGRW05SZ4
+         46kj+ZEIjSbqHVM6syFTCn5gklE5h6EUZDTLhf/3d+0OKH/D6pKvF7qYIMWJ24fiqJR3
+         U8a0JD+uAdOz5wbj7hbINbe+zhx3cGg4T96ICo9vB+DWgJEX3Qt23IUrHeB3SoY2tfRU
+         vx+7b3dmXpCEEM/zuArfHZq0ASDZnrQMtbHw1tCUHzfd+amoo9Vg3r4jdjnDia7RHNkL
+         fZXN9QELeMIVGVQTX80hbNWXQ6nwW/Fla5jxWk4h3r7iy4om6cikjg/Mbn/3KKFHREcV
+         O44w==
+X-Forwarded-Encrypted: i=1; AJvYcCWV/3CYisVBllm/1n5OulPY7eSLCg0johpiuG2JqdzxCSVkK6OBmv6gsNvWJr5LXwzcPJuckpF6G2l9zWmLKDkBo5zb1B3fGpkUqaVTofLTbhOHEGMTvBRjAOTfODHlzbx4ChAl24jTQl3N2A==
+X-Gm-Message-State: AOJu0Yy18Vd6e+O+ZJtyI8t7YXE8LwZ44EWAPiSiyo3zvMcIntTcNHdM
+	bgdicf2rLp3jfPDc4VYOWf5scY0wfRkTw2n/3+BbZIZUSNUVdZvhocZkpkVVU04lEf5q5yDW9vP
+	2k/dIQWtGnyTGkGiLe8rSw38/YN95uTy6Cn4TfRjW
+X-Google-Smtp-Source: AGHT+IFhNKH1ucZi/kC1SXz2zfN2BjNMtrLIppGo/tv6NzQ/hO96DTo8DIjfFVwcB6/X5VASl0l1T/dI/XFc3RNDbVs=
+X-Received: by 2002:a05:690c:368b:b0:61b:3346:83ce with SMTP id
+ fu11-20020a05690c368b00b0061b334683cemr9549761ywb.15.1713751373879; Sun, 21
+ Apr 2024 19:02:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240420181500.07b39c77f1ca086e8a5161b4@kernel.org>
+References: <20240417053530.30995-1-wangyao@lemote.com>
+In-Reply-To: <20240417053530.30995-1-wangyao@lemote.com>
+From: Ainux Wang <ainux.wang@gmail.com>
+Date: Mon, 22 Apr 2024 10:02:17 +0800
+Message-ID: <CAPWE4_xp4YNdnkWnuoH85TM7XBxF6f4k3Q0wWKe+D0tjgyJtRg@mail.gmail.com>
+Subject: Re: [PATCH] modules: Drop the .export_symbol section from the final modules
+To: wangyao@lemote.com
+Cc: mcgrof@kernel.org, masahiroy@kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Apr 20, 2024 at 06:15:00PM +0900, Masami Hiramatsu wrote:
-> On Sat, 20 Apr 2024 10:33:38 +0300
-> Mike Rapoport <rppt@kernel.org> wrote:
-> 
-> > On Fri, Apr 19, 2024 at 03:59:40PM +0000, Christophe Leroy wrote:
-> > > 
-> > > 
-> > > Le 19/04/2024 à 17:49, Mike Rapoport a écrit :
-> > > > Hi Masami,
-> > > > 
-> > > > On Thu, Apr 18, 2024 at 06:16:15AM +0900, Masami Hiramatsu wrote:
-> > > >> Hi Mike,
-> > > >>
-> > > >> On Thu, 11 Apr 2024 19:00:50 +0300
-> > > >> Mike Rapoport <rppt@kernel.org> wrote:
-> > > >>
-> > > >>> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > >>>
-> > > >>> kprobes depended on CONFIG_MODULES because it has to allocate memory for
-> > > >>> code.
-> > > >>>
-> > > >>> Since code allocations are now implemented with execmem, kprobes can be
-> > > >>> enabled in non-modular kernels.
-> > > >>>
-> > > >>> Add #ifdef CONFIG_MODULE guards for the code dealing with kprobes inside
-> > > >>> modules, make CONFIG_KPROBES select CONFIG_EXECMEM and drop the
-> > > >>> dependency of CONFIG_KPROBES on CONFIG_MODULES.
-> > > >>
-> > > >> Thanks for this work, but this conflicts with the latest fix in v6.9-rc4.
-> > > >> Also, can you use IS_ENABLED(CONFIG_MODULES) instead of #ifdefs in
-> > > >> function body? We have enough dummy functions for that, so it should
-> > > >> not make a problem.
-> > > > 
-> > > > The code in check_kprobe_address_safe() that gets the module and checks for
-> > > > __init functions does not compile with IS_ENABLED(CONFIG_MODULES).
-> > > > I can pull it out to a helper or leave #ifdef in the function body,
-> > > > whichever you prefer.
-> > > 
-> > > As far as I can see, the only problem is MODULE_STATE_COMING.
-> > > Can we move 'enum module_state' out of #ifdef CONFIG_MODULES in module.h  ?
-> > 
-> > There's dereference of 'struct module' there:
-> >  
-> > 		(*probed_mod)->state != MODULE_STATE_COMING) {
-> > 			...
-> > 		}
-> > 
-> > so moving out 'enum module_state' won't be enough.
-> 
-> Hmm, this part should be inline functions like;
-> 
-> #ifdef CONFIG_MODULES
-> static inline bool module_is_coming(struct module *mod)
-> {
-> 	return mod->state == MODULE_STATE_COMING;
-> }
-> #else
-> #define module_is_coming(mod) (false)
+Hi, everyone:
+Could someone review this patch?
+Best regards,
+Ainux Wang.
 
-I'd prefer
-
-static inline module_is_coming(struct module *mod)
-{
-	return false;
-}
-
-> #endif
+<wangyao@lemote.com> =E4=BA=8E2024=E5=B9=B44=E6=9C=8817=E6=97=A5=E5=91=A8=
+=E4=B8=89 13:35=E5=86=99=E9=81=93=EF=BC=9A
 >
-> Then we don't need the enum.
-> Thank you,
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
--- 
-Sincerely yours,
-Mike.
+> From: Wang Yao <wangyao@lemote.com>
+>
+> Commit ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
+> forget drop the .export_symbol section from the final modules.
+>
+> Signed-off-by: Wang Yao <wangyao@lemote.com>
+> ---
+>  scripts/module.lds.S | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> index bf5bcf2836d8..89ff01a22634 100644
+> --- a/scripts/module.lds.S
+> +++ b/scripts/module.lds.S
+> @@ -13,6 +13,7 @@ SECTIONS {
+>         /DISCARD/ : {
+>                 *(.discard)
+>                 *(.discard.*)
+> +               *(.export_symbol)
+>         }
+>
+>         __ksymtab               0 : { *(SORT(___ksymtab+*)) }
+> --
+> 2.27.0
+>
