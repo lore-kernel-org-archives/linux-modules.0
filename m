@@ -1,223 +1,131 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A1615A4B0;
-	Wed, 24 Apr 2024 12:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD134AD31
+	for <linux-modules@vger.kernel.org>; Thu, 25 Apr 2024 01:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713960584; cv=none; b=iKJATSnJ+ydUZxLA6VVi/dSS/FC27Wno186XB5xGVfCsOVqFIKNCc1MEvv2o0BF1OAUxASwuEerqcChtD6eUoqqn9/hVEHdah8YdOZhSSEFrnfYjpFpQeS+SNYHElFJNGxH+qD7sRScstXJZB41V64T5RPh9rBawaa/U51Z2CxY=
+	t=1714010344; cv=none; b=c71PwTwEm+CRofaPtsxEIyasusz5N4QXPcuAWR7rb2Styxy0FfJ+vvKddAHtJMeauwixCuzq+a8D1mrFjPrbrqWmpgWFZ/BMplo7xLnGhKeLygenvxYo5OujyUyU4kuOmzHUtr7tOrVPDx9I8hb71eGzc+bgKsXJoeb9/uUYKPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713960584; c=relaxed/simple;
-	bh=IYr2ymtDnzRjoGBlAt7i6ZTSzxn7Op1cEuDB7evFyO4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E9BSN3xna3b15j+rGA178F6ePFKzO9AAvEEFVKUgZ8MAVsNbhvMc87b7c8Wq+6zZiZOdAAYFMG4L+QVYCBPdPFNTW65+QHf9J5EFqXT3FBgUdAuP4Thev/dyA4DGv1W68k2MafUlmQeIIJs7mJJD7gSIEcdG0qFjam6tOn1guwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S8D4A0Q2; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1714010344; c=relaxed/simple;
+	bh=p/cGThLZ3QnfmTN7NW9NTr5bcTYchPjUIQ6WCPhs4IQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L7qGIqFE5RJQn4LHzclEYqqwzN0TsERQxOl5LFfzXE0ELiJXABDmPt2N9AuDAks+DuO2usNhcOjhpuxwcbRp8YrDZV5/aHQ6aORm4xA4tULnoJNXJbTpTgcN5menaIK8kqY3EVhgniigScaoPIOszJkHS3Jd6Nch6q2YL5va7IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=DKH8/s3J; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S8D4A0Q2"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6a077a861e7so26610776d6.2;
-        Wed, 24 Apr 2024 05:09:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="DKH8/s3J"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e8b03fa5e5so4183235ad.1
+        for <linux-modules@vger.kernel.org>; Wed, 24 Apr 2024 18:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713960582; x=1714565382; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RoTyunRbk6WKbcDZzKg0fChldKgzN8TCsYu19OLDZgw=;
-        b=S8D4A0Q2j8m24hWY/16EZvlJft8Hvw//xlguWdP4QQ26AjGUeYnjs1bNCTQWodg917
-         7B39TbcXRl50HarsqMUkX7epGZVciXnyPkAsyC3stwCDZ1FcCekJX0bdtDNchf9pvpWe
-         qjF932Zw/vzEQTX5bScI6uZixKBeq64FZyjXguQaQ5IQrmKfT0fJ0Jr3/N/0aS9oZjE4
-         gDAm1yAsakd2jtFVH4NmaXdh+Opi4WqHGAF3OudHG9PVU7PTVjY5CydRaLqhyNs9Zg3k
-         VqR0qZZI9RX1gqRg5nmB79a9OaUzd7x+zAKI4xAOp0ExyCPQYVNnYmggNQi3Pqml0cgx
-         ZPAg==
+        d=chromium.org; s=google; t=1714010342; x=1714615142; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=S4qlJ+DG6HoUrdCik4e+F/ZipKmWdndDCcmvcXd31J0=;
+        b=DKH8/s3JRXewO3uRlUu4fCoood6Fz58WtrLazwyrSzra0mwJ9mITfxLQXdn+2npsKd
+         AatPjRBUoHypnwwljhYrMkOBSBRQ25yB0gdmKwZCLwWouMGpc1BCWIwfh3ujF+UbXo0+
+         jbQQehQ52/2q73gd0IoDWpbdw+s06PcKXfokQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713960582; x=1714565382;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RoTyunRbk6WKbcDZzKg0fChldKgzN8TCsYu19OLDZgw=;
-        b=qUvNGiYVmvNStrbhxFH0+0eIC18rHSbUn3dBGjW+AJGMSUNxij/vAgyzw/VxzX/tgE
-         a84FE3Xrq3ZYyKt5jcabXHUIhEnO4n/dF2ef3KYPXVex12LPoBREtpYHx/a/nM9ml8/R
-         EXXxHPmypxEq8fMMbVd7EBnPug5DtaaTSzPKNIEPkGVMNQRuiwuZ0Zn8rXsdH0GXX+XT
-         2JzWei3LJ29u/1pyWVQzeCMChkub8pVKfLOVxHidM6vFDyGPznuJ99mXy0Kcx6WRrXq/
-         33ovm+tfRx6Dv9jaSzfV9VN5omZPO7TA+vpC6VCTweO+B7BsM3QMZ0MoTgL7LTKqkEDE
-         s5wQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLTKReK8213hKMtChN038csDD4YGG2B5NFkJV5lSlcc0azFiWd2Vlz8Rf9WBdfItlvblTYnNSgqrSxyeB/d7/F3PX2HSW3YAyGh6cJtA==
-X-Gm-Message-State: AOJu0Yz7vNcpIRQ4uavGlo6p+0xHo7pqq4G5wq4QGBSwR9kZGR6LmaaM
-	nYQUbfC1ZVSggK570/nVAZIW9SnJdPQH6b2kmDWTBp689mZeV3a+0Xud/LBFtFMnnVN8kUcyS+V
-	VkxwXluezZ5aTQ0Wo+XT+j1AVlag=
-X-Google-Smtp-Source: AGHT+IG6P5IOtP/IBR7tUT+Vmq3PxHxW08YKGSM7hoe5r+LPonprmr+xHcBxyNJLNSssJggvIKz0eFcT8E4l8guGNsA=
-X-Received: by 2002:a0c:e149:0:b0:6a0:8c9a:c74b with SMTP id
- c9-20020a0ce149000000b006a08c9ac74bmr2282787qvl.28.1713960581636; Wed, 24 Apr
- 2024 05:09:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714010342; x=1714615142;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S4qlJ+DG6HoUrdCik4e+F/ZipKmWdndDCcmvcXd31J0=;
+        b=Ks167y8YBHAkcXb+HSuiGmpz2hpVkbb1gqo6oAdpSa+qyHvFXzJRNXs4dmVEysA0Dr
+         p1xZK5WiKYr1EebgB9cXWHS29vpJzknvF0SsNUowS3syhLeStMylWOp8maPnVO4VHlHy
+         p+qbrOyGmoqmjheW4+rCn3LBNqnGS0wYAw0bJGLEn/yuFJoGY7vcbu1ebo4cDhtiC0/F
+         MUDcgZyd1/+k3zZj8p4BzCYkicrDRf+NBZDD9nQBvczG09Snm5fThPx5yM2Y7foit9Vf
+         561VnafL/zGWIoP7E0kt+gbCTG/36je8oInZ5NAPKp9RRGgdypIfsxGrCQXPtds0CCi5
+         wL3A==
+X-Forwarded-Encrypted: i=1; AJvYcCWznMSbpi8RO/8amKFHsFELi0fYsubOP0obY4uLYkE8XXPuRJs2uTxOol178o9ECpJfaHFfLAxiUbSwcN3q7YR0cchBQZsAOeLYcGRC5g==
+X-Gm-Message-State: AOJu0YzyboPAkhwghW/5BgJ++gOpa0jX7r1g+BZbIp6AmT8ewfm+QLcW
+	FbzglBHwlMEKCI4ABk0A1rjSEhUhK8IZe4QG9bpJH4AO5bz6QNxMcFNRun3eLg==
+X-Google-Smtp-Source: AGHT+IFgnziqKVsPlDFcaVY3O1lcKny/l/El36yYFOjaOKnKn279lG8Ph9ngGazPAxyRWX6j+oUVIg==
+X-Received: by 2002:a17:903:2290:b0:1e8:92:c5e2 with SMTP id b16-20020a170903229000b001e80092c5e2mr6592452plh.47.1714010342304;
+        Wed, 24 Apr 2024 18:59:02 -0700 (PDT)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902934200b001e25da6f2f2sm12553004plp.68.2024.04.24.18.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Apr 2024 18:59:01 -0700 (PDT)
+Date: Wed, 24 Apr 2024 18:59:01 -0700
+From: Kees Cook <keescook@chromium.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, mhocko@suse.com,
+	vbabka@suse.cz, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+	mgorman@suse.de, dave@stgolabs.net, willy@infradead.org,
+	liam.howlett@oracle.com, penguin-kernel@i-love.sakura.ne.jp,
+	corbet@lwn.net, void@manifault.com, peterz@infradead.org,
+	juri.lelli@redhat.com, catalin.marinas@arm.com, will@kernel.org,
+	arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, x86@kernel.org, peterx@redhat.com,
+	david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+	masahiroy@kernel.org, nathan@kernel.org, dennis@kernel.org,
+	jhubbard@nvidia.com, tj@kernel.org, muchun.song@linux.dev,
+	rppt@kernel.org, paulmck@kernel.org, pasha.tatashin@soleen.com,
+	yosryahmed@google.com, yuzhao@google.com, dhowells@redhat.com,
+	hughd@google.com, andreyknvl@gmail.com, ndesaulniers@google.com,
+	vvvvvv@google.com, gregkh@linuxfoundation.org, ebiggers@google.com,
+	ytcoode@gmail.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+	penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+	glider@google.com, elver@google.com, dvyukov@google.com,
+	songmuchun@bytedance.com, jbaron@akamai.com, aliceryhl@google.com,
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+	kernel-team@android.com, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	kasan-dev@googlegroups.com, cgroups@vger.kernel.org
+Subject: Re: [PATCH v6 00/37] Memory allocation profiling
+Message-ID: <202404241852.DC4067B7@keescook>
+References: <20240321163705.3067592-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240407035730.20282-1-laoar.shao@gmail.com> <20240407035730.20282-2-laoar.shao@gmail.com>
-In-Reply-To: <20240407035730.20282-2-laoar.shao@gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Wed, 24 Apr 2024 20:09:05 +0800
-Message-ID: <CALOAHbDGcY5y6hWZgJp9ELrt_w4pfB-X3EqS3yu8k37pj3ZEcw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] module: Add a new helper delete_module()
-To: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, 
-	joe.lawrence@redhat.com, mcgrof@kernel.org, 
-	Greg KH <gregkh@linuxfoundation.org>
-Cc: live-patching@vger.kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240321163705.3067592-1-surenb@google.com>
 
-On Sun, Apr 7, 2024 at 11:58=E2=80=AFAM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
->
-> Introduce a new helper function, delete_module(), designed to delete kern=
-el
-> modules from locations outside of the `kernel/module` directory.
->
-> No functional change.
->
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> ---
->  include/linux/module.h |  1 +
->  kernel/module/main.c   | 82 ++++++++++++++++++++++++++++++++----------
->  2 files changed, 65 insertions(+), 18 deletions(-)
->
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 1153b0d99a80..c24557f1b795 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -75,6 +75,7 @@ extern struct module_attribute module_uevent;
->  /* These are either module local, or the kernel's dummy ones. */
->  extern int init_module(void);
->  extern void cleanup_module(void);
-> +extern int delete_module(struct module *mod);
->
->  #ifndef MODULE
->  /**
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index e1e8a7a9d6c1..3b48ee66db41 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -695,12 +695,74 @@ EXPORT_SYMBOL(module_refcount);
->  /* This exists whether we can unload or not */
->  static void free_module(struct module *mod);
->
-> +static void __delete_module(struct module *mod)
-> +{
-> +       char buf[MODULE_FLAGS_BUF_SIZE];
-> +
-> +       WARN_ON_ONCE(mod->state !=3D MODULE_STATE_GOING);
-> +
-> +       /* Final destruction now no one is using it. */
-> +       if (mod->exit !=3D NULL)
-> +               mod->exit();
-> +       blocking_notifier_call_chain(&module_notify_list,
-> +                                    MODULE_STATE_GOING, mod);
-> +       klp_module_going(mod);
-> +       ftrace_release_mod(mod);
-> +
-> +       async_synchronize_full();
-> +
-> +       /* Store the name and taints of the last unloaded module for diag=
-nostic purposes */
-> +       strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloade=
-d_module.name));
-> +       strscpy(last_unloaded_module.taints, module_flags(mod, buf, false=
-),
-> +               sizeof(last_unloaded_module.taints));
-> +
-> +       free_module(mod);
-> +       /* someone could wait for the module in add_unformed_module() */
-> +       wake_up_all(&module_wq);
-> +}
-> +
-> +int delete_module(struct module *mod)
-> +{
-> +       int ret;
-> +
-> +       mutex_lock(&module_mutex);
-> +       if (!list_empty(&mod->source_list)) {
-> +               /* Other modules depend on us: get rid of them first. */
-> +               ret =3D -EWOULDBLOCK;
-> +               goto out;
-> +       }
-> +
-> +       /* Doing init or already dying? */
-> +       if (mod->state !=3D MODULE_STATE_LIVE) {
-> +               ret =3D -EBUSY;
-> +               goto out;
-> +       }
-> +
-> +       /* If it has an init func, it must have an exit func to unload */
-> +       if (mod->init && !mod->exit) {
-> +               ret =3D -EBUSY;
-> +               goto out;
-> +       }
-> +
-> +       if (try_release_module_ref(mod) !=3D 0) {
-> +               ret =3D -EWOULDBLOCK;
-> +               goto out;
-> +       }
-> +       mod->state =3D MODULE_STATE_GOING;
-> +       mutex_unlock(&module_mutex);
-> +       __delete_module(mod);
-> +       return 0;
-> +
-> +out:
-> +       mutex_unlock(&module_mutex);
-> +       return ret;
-> +}
-> +
->  SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->                 unsigned int, flags)
->  {
->         struct module *mod;
->         char name[MODULE_NAME_LEN];
-> -       char buf[MODULE_FLAGS_BUF_SIZE];
->         int ret, forced =3D 0;
->
->         if (!capable(CAP_SYS_MODULE) || modules_disabled)
-> @@ -750,23 +812,7 @@ SYSCALL_DEFINE2(delete_module, const char __user *, =
-name_user,
->                 goto out;
->
->         mutex_unlock(&module_mutex);
-> -       /* Final destruction now no one is using it. */
-> -       if (mod->exit !=3D NULL)
-> -               mod->exit();
-> -       blocking_notifier_call_chain(&module_notify_list,
-> -                                    MODULE_STATE_GOING, mod);
-> -       klp_module_going(mod);
-> -       ftrace_release_mod(mod);
-> -
-> -       async_synchronize_full();
-> -
-> -       /* Store the name and taints of the last unloaded module for diag=
-nostic purposes */
-> -       strscpy(last_unloaded_module.name, mod->name, sizeof(last_unloade=
-d_module.name));
-> -       strscpy(last_unloaded_module.taints, module_flags(mod, buf, false=
-), sizeof(last_unloaded_module.taints));
-> -
-> -       free_module(mod);
-> -       /* someone could wait for the module in add_unformed_module() */
-> -       wake_up_all(&module_wq);
-> +       __delete_module(mod);
->         return 0;
->  out:
->         mutex_unlock(&module_mutex);
-> --
-> 2.39.1
->
+On Thu, Mar 21, 2024 at 09:36:22AM -0700, Suren Baghdasaryan wrote:
+> Low overhead [1] per-callsite memory allocation profiling. Not just for
+> debug kernels, overhead low enough to be deployed in production.
 
-Luis, Greg,
+Okay, I think I'm holding it wrong. With next-20240424 if I set:
 
-Since the last version, there hasn't been any response. Would you mind
-taking a moment to review it and provide your feedback on the
-kernel/module changes?
+CONFIG_CODE_TAGGING=y
+CONFIG_MEM_ALLOC_PROFILING=y
+CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT=y
 
---=20
-Regards
-Yafang
+My test system totally freaks out:
+
+...
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+Oops: general protection fault, probably for non-canonical address 0xc388d881e4808550: 0000 [#1] PREEMPT SMP NOPTI
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.9.0-rc5-next-20240424 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+RIP: 0010:__kmalloc_node_noprof+0xcd/0x560
+
+Which is:
+
+__kmalloc_node_noprof+0xcd/0x560:
+__slab_alloc_node at mm/slub.c:3780 (discriminator 2)
+(inlined by) slab_alloc_node at mm/slub.c:3982 (discriminator 2)
+(inlined by) __do_kmalloc_node at mm/slub.c:4114 (discriminator 2)
+(inlined by) __kmalloc_node_noprof at mm/slub.c:4122 (discriminator 2)
+
+Which is:
+
+        tid = READ_ONCE(c->tid);
+
+I haven't gotten any further than that; I'm EOD. Anyone seen anything
+like this with this series?
+
+-Kees
+
+-- 
+Kees Cook
