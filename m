@@ -1,67 +1,67 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B037E7441F
-	for <linux-modules@vger.kernel.org>; Mon, 29 Apr 2024 23:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8372082D90
+	for <linux-modules@vger.kernel.org>; Mon, 29 Apr 2024 23:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714432447; cv=fail; b=aJrxKEPH8SB0C8qMfqmWvw7tgNZhRspMXQzpqf+7ZULclahqXHHkZs5xXCnBvHP3VoW827I5AyRrbERfqVTREasi51wxht44RF9AS7JiVsnu/BoDcx8caafZyrbmbcG1HUz/IoIzHYSxgoxW4PLxFOoY+6xZ3ALdrFbowkcDH5Y=
+	t=1714432449; cv=fail; b=fnl8+axSLrqjqp2nYoKLiPK7usM3PGdUeC+mdHwo8FJpis15LwDyveToMI0D1wk7zeItP1akI5ap/WXSCUCYqKA88pPPx3ZdEqyYTUcp5Vl4+bVVeMv0tspFv5eURNXEWiRtedBtwwGcqq8uSgnc4AG2CTusbwyNoYNdg3HFYpE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714432447; c=relaxed/simple;
-	bh=5oEefHapB5JlTIFSKu0L95PNpKiWDmqtesKkX3H8Im8=;
+	s=arc-20240116; t=1714432449; c=relaxed/simple;
+	bh=LiaiymcliRCsF6BxImGg6jPxVB0ZcNaCnYi2vI6DY3c=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=gPDngpBTkdjvt05CeNGMRMKii8NFM9Mn1t3J9ECspkJRYP8hyj6XIsjfRPRP9UYzdP9GmICocRgZWOuWkC9H+OODIKV8rMJ2RGL58sXYuaYx8YAxH50+ZOBRThBzqvzrDkGQplK7B5XnR9pYE21LXmbKU5i072+3fdzXthm4Uxk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e9kakMgd; arc=fail smtp.client-ip=198.175.65.11
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YuK7T2NTZjWU5DnBUg2yTiBCfXMbxnJeCgzZJi1g4k0j5wudJAbCQHHLSw6/Y9MH/pNa6eRSLfI2vVqgOzBwxazoS0QD0bSZC3wbR0FIgVuBJJ6XLnA2I23/kGTie4tYemnUIr0IQMJmA04kRrMDQiOqY1uH56qnqhg10E+A+uY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W4tTP9Nc; arc=fail smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e9kakMgd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W4tTP9Nc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714432446; x=1745968446;
+  t=1714432448; x=1745968448;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=5oEefHapB5JlTIFSKu0L95PNpKiWDmqtesKkX3H8Im8=;
-  b=e9kakMgdJGZvw/0uXaJVJmZPzz9WgNvTbwkbkfUOum6SePs0YA643P0j
-   muXlmU7vQbqkmXSgxAuvfXZdpZk71Qa9DH7J+I7FHfDCA09A5NAB/q8+S
-   VRVrcCcJbZ83GjOCGyg4PrsxOjqYnObha7IcD/kaC8NFiJu0AP9PyhuR2
-   NpiV3hCmySl22GHRC8VdyCFPawnvbx41SWQn/7UYAaYIzZb+OH9V8l865
-   AbSkDPWQhAxBJU/LvQSCB+fXTHcjoTK3KQVjCNghfqfWRuPKVW1D9gYRf
-   oRrnpdDSz2aREFQsmpyMlZUEzG70JsCkywE5OUQ4u8nRpagqElyatpzKu
-   A==;
-X-CSE-ConnectionGUID: fShn+b4ISj+grqb8M9qvVg==
-X-CSE-MsgGUID: waenSyiwRNaaYC5fVcuCCA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20668343"
+  bh=LiaiymcliRCsF6BxImGg6jPxVB0ZcNaCnYi2vI6DY3c=;
+  b=W4tTP9NcZVm7fnLsLmdOfMHAiTygR4GQorWUaaHQjfdVZGOKkr8w9qks
+   xZl5jrCskR5gbtv9GO6yOYi2KM7uHitsB1DSuWA12Zf1K63nLCFkS4cLf
+   gsM0h9eozNXGCd+kJ6Ro4hM5vXlKSnm2PY372iybPZnZtMw8HqJq+S+I9
+   REmkReJyBWehEyAE2YbixsFt2ZQSp2gr2IF470w1Y7qnevYgi8t+sC5N+
+   O04dma2og343bBDXUvnCvPRJYxAqWgCs0K026Cttgju2uQso66jKCWJgh
+   xIpbCT4pdO6aOi0IATOTVCZBKyHxAtODO3Ky/YH7UxSv/dXc2MsxwgWYa
+   g==;
+X-CSE-ConnectionGUID: rk6ka7MPTVqLgknb80RHZw==
+X-CSE-MsgGUID: TtuPm8PJRSqCAzT+flh3gA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="20668394"
 X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="20668343"
+   d="scan'208";a="20668394"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:13:39 -0700
-X-CSE-ConnectionGUID: VDdQprHNT3aw95HpNW2y4Q==
-X-CSE-MsgGUID: pOWpqS+BRIW8tFNXB0AwrQ==
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:13:51 -0700
+X-CSE-ConnectionGUID: 7ZYbd4FcTvOmk5oefUZDYg==
+X-CSE-MsgGUID: ppzgfYgLS8qBUkalqneLTg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="57461282"
+   d="scan'208";a="57461305"
 Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Apr 2024 16:13:39 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Apr 2024 16:13:51 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
  ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 29 Apr 2024 16:13:38 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ 15.1.2507.35; Mon, 29 Apr 2024 16:13:50 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 29 Apr 2024 16:13:38 -0700
+ 15.1.2507.35 via Frontend Transport; Mon, 29 Apr 2024 16:13:50 -0700
 Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 29 Apr 2024 16:13:37 -0700
+ 15.1.2507.35; Mon, 29 Apr 2024 16:13:50 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nLkL793swncbz391VOPA5/CdD81mfb1dNouhKXS7qJUVBJs8HN1mR67f5MtwMPIrySbAZf6RtMtSWKs+LhrNaj72Z6JjB4hSRcGjck2JsLiXT0m++NPoJ8m53xoeHoFDi6Ap5p9hR/75DN2jgrGcq1F8k6bFHWmQWEj6bbre1+/RSFUWzqsvOJdAey1unFw38rNavniGCm0TjKfFaHGPHMzbdWdK0VMbiorUJaJXE1ktWOidot9ynNg2f7Za6ztkkgnzyn2rG5i5GF6aTo/09QguDZXPbIpCG/7/jGWsxuV1E3sSTS+3yNyxM23QzX19pw5fSjcR7qgxlr9QVyMOhw==
+ b=k2jsaGXR3tPL8AqJgB7Su1bySt9RxRdGrzuLL44S8R0uO7jPk6qF4oAxMcxsJflNO/5Z7HnZj0kO47Vdvsotd8epx8DkUwSCZog5WLksnvguv68a1uNh1UtqwLCisGQIMlHEPNyVLeHEBSBO+CaCnSgzB2NKLX48hnegGewLgOjHXXPgUlyBwxFmOGRVn5oDStc2kCN5YdexTwbESME1oLjXya6i/vIwQuAcYjdJrnz33vx3vNaAZwgzoPI8KyGEzEky0AQ7KPNmzZBC+PELbbc0/30AeUaVrEWMDcc0oMLzJnttCV7NqIfTA67kRAGB0coEuMjinimUPKxnKcjx+g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZGvLtbYvwljR4cXRI7/lrH2kssbsuUbd3YKiiAXYR50=;
- b=QkZiFoc3JZRp8kGdr2hTGvgWePYtKrhoZcpGtImcgNmEqDd6DerRfogsL4IAgauPx/smIxJPv7Dl09/xZCM2+tWDCx62q0a0iZtCbaoxtWp/2IzIDXq6NYf5DDnz+4FyyrRTmnDK0okZVt+rKQk0V56H7VrrX38aAch2zNo9T1Wvl+L/g5mbtDIrixdb3sf0DuBtUhElqH/wInTyryLkExI6grfjRvJOcwgjXEcHXaJmPGg8zRqkoR95eeV7WO1ziUpDvgGcEdNNO+w7zrv7Vk1sYyhs8hey9uT54KketIy/xVGql8KFW4D2OK9rH4qzWzoXsuORTmWpp8HtXnUYHw==
+ bh=5ifSe1g1QcIVU+F4w31ug2ZRo/Fs/ye/jK6oRqsBL8s=;
+ b=GuR/tgTyY2qC8bDm+o8/+sPan6UrfboZQGhqSEQNSwAVvdquHKHOlDmnNAj2u8HXEf4e532rHKlnPCrvspvwGCMAJSTRMTq5pDwfKk7eSev/1LvoP9ypiEB1/DfEVquV0AgqsfU1xxI4FfwJCE4jGK4gmtuudNbIpwq7cmcxnu1fbWgb4mQIYGa1TYIfLqguhjdPEYSDpYD0jp3um3Tuh+dShQVuYorG2HLwX8UK4GLSYVpjbrQU8/+hY4EnrKITwYOw166HWRktMvenlAraEBdBjMEihGhEKAo6Ttg9za22+dTF4uWNts7vFxgdXMkaItfJDxefXevbDarqZr2uHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -71,24 +71,24 @@ Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
  by DM4PR11MB8089.namprd11.prod.outlook.com (2603:10b6:8:17f::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Mon, 29 Apr
- 2024 23:13:36 +0000
+ 2024 23:13:48 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::9365:d8e6:4e8d:8711]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::9365:d8e6:4e8d:8711%6]) with mapi id 15.20.7519.031; Mon, 29 Apr 2024
- 23:13:36 +0000
-Date: Mon, 29 Apr 2024 18:13:31 -0500
+ 23:13:48 +0000
+Date: Mon, 29 Apr 2024 18:13:43 -0500
 From: Lucas De Marchi <lucas.demarchi@intel.com>
 To: <emil.l.velikov@gmail.com>
 CC: <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH kmod 04/13] libkmod: clear file->memory if map fails
-Message-ID: <dqayzwd635hfjtxaiiy3ad76o3cs2kzyabh3j4ldfzn4lavslp@xpsnjpupu4l3>
+Subject: Re: [PATCH kmod 05/13] libkmod: nuke struct file_ops
+Message-ID: <u5ec6iz5xhqwzhbnq2dlbwj6xkqbbgpe5vlptkaa6lag5m5p6q@pfwzvhhd3hcd>
 References: <20240212-decompression-fixes-v1-0-06f92ad07985@gmail.com>
- <20240212-decompression-fixes-v1-4-06f92ad07985@gmail.com>
+ <20240212-decompression-fixes-v1-5-06f92ad07985@gmail.com>
 Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240212-decompression-fixes-v1-4-06f92ad07985@gmail.com>
-X-ClientProxiedBy: MW4PR03CA0190.namprd03.prod.outlook.com
- (2603:10b6:303:b8::15) To CY5PR11MB6139.namprd11.prod.outlook.com
+In-Reply-To: <20240212-decompression-fixes-v1-5-06f92ad07985@gmail.com>
+X-ClientProxiedBy: MW4PR04CA0090.namprd04.prod.outlook.com
+ (2603:10b6:303:6b::35) To CY5PR11MB6139.namprd11.prod.outlook.com
  (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -98,113 +98,249 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DM4PR11MB8089:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a089876-f713-49a6-8875-08dc68a1ff3d
+X-MS-Office365-Filtering-Correlation-Id: 09d8531f-0f99-479e-b00d-08dc68a2063c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|1800799015|366007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?BHRWU8vDmldcMnGopKdQYOWDwSdYgpu4LpSQ4x98g6ZsS+QmSz+hdtU50odb?=
- =?us-ascii?Q?obPP2BUudyEFmo0Q7NpIreBSeyMJ4XsyvNVYlLh2aySasx+H7iDR9vOkOAmb?=
- =?us-ascii?Q?ppz2sXXqS42un85wGhRUx54JtjobJhZNFkBAt6OIX3/MyXsj9F5S2ie4DVEI?=
- =?us-ascii?Q?5MInR01QeHlAqqCPZ8i8aGVIleqqFUuytw6eMCI39af9jr3Usx/A79kx8kmU?=
- =?us-ascii?Q?lvdskcgfx/gKIkF6gY84NTxDoksCqts5ZQXsJmhI94gXSJLM10+ftzXIHMT5?=
- =?us-ascii?Q?cOUHj7mRu6vSVHTw0CiuffDRAvmWkl2PY6XWOYDH2kjUQVz//Ws2qsmpxdGE?=
- =?us-ascii?Q?wNP7CR/CttKkOhpeEd+jRB5G03DSQuhObR6Fc7ut/X+j8dA/NAhWbDcaV/BE?=
- =?us-ascii?Q?yyNg+GajRBs3hfHnq0TJVBAN7Ppvyod2wL2VhZALLHkp03lZkNgv6b4iT6re?=
- =?us-ascii?Q?od8wsXfsGAVJzZFkHKxkX4GLLZhixoyX2Jq3rP29mc/OSDllJDA2ODKvezrx?=
- =?us-ascii?Q?06b0ZaElFskJrB05xv+8s8Pu1M3QJW9Lh2kc3UmGHAzn5aJ1cmb/K9V37v5Q?=
- =?us-ascii?Q?U6uZX5KhjJz1f2cl12Jmbg5y2f3IM4vKZZ6/H0tPJl34+admh4cK43G/xOIO?=
- =?us-ascii?Q?02M6kGEKx7nACwGp5/VkhgyS96gg6afTbey9leMVtWnasFEJaBLya+979qZ/?=
- =?us-ascii?Q?KA1mOh07kvP3s2ugRBcBvoIz+6iZP6GO3luhYhNDh67o7CquOm75Ny9hV4QG?=
- =?us-ascii?Q?hAL8VFTs/Z7nw/FgcPV/k/cvMbft7mJ32tSSzez9sTs07Bg3mSg++cDFc2PB?=
- =?us-ascii?Q?T4tIHadtSSbwi4MBLYQkHjuw7pH47WSPwvfHIB6drjkWDjT6KvyPLDsteSeS?=
- =?us-ascii?Q?cRuDcbrftgPJTuzZmYGBgOS+u06qyFH5yT8EuIn+RHVeHecH13wO3ENSrIf0?=
- =?us-ascii?Q?S+l8C9J+lRdYF7YusadsN9uMBjCyXzvI9QUqMlOZCtH7LT6UgtfUQl+wreTS?=
- =?us-ascii?Q?X4MBLv3HPVqZU7u9KGbiZCIUXs1NExzw+5+GQyLi/vAPVwD0PLxW8lbk0KpS?=
- =?us-ascii?Q?qapm7F/PrL4oPUc1ifrzmSqq/ApaoQPONa9aDolw2k3pknU9epnQat5HheiZ?=
- =?us-ascii?Q?yc5gD28oys8n8Z5r67XRUWUwcb5gbzoCmf9hchzeWJ+hvc63qo10p+rSwIfj?=
- =?us-ascii?Q?0OfBzL8Vz+jRzbf2pyjE2JsNz3P0luMIeh5DE/KbSlM03YFsaHUXAvVEIUsO?=
- =?us-ascii?Q?yu0LBfw+ahcPKDvudc10FJAIQGOaPTlrXMGUDdbHkA=3D=3D?=
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?XisiJRcdedqsI4v480m2110u2xSjw2btYm/VLqTpstUZTqXp0vwJvbhcEjm3?=
+ =?us-ascii?Q?ozb3b58qTuCWispK6ZzZam9QWahf4E2pMsl7AoOVZuTWRLSK+EZwn1/EB80/?=
+ =?us-ascii?Q?i+9xKtsDo6yt6+kbP8lGqELR0eNZ5FeCPp5XdkG5j555KF54fpQcO+MdVjac?=
+ =?us-ascii?Q?vyqFgTcdwOnN2juO4T/lpsiOghIXpHs/mYAPJSyd9MglyacgaI8XHoWcOSuj?=
+ =?us-ascii?Q?UGHvqijKj1f1H6GmZQEMxOR8xlWOYRh6hMZyS2aCMcQRxzCFc6d2tK+woTEV?=
+ =?us-ascii?Q?gPT9s16RcipgA0WnNKhSLeKlxr0DmIjS4es2PtKFTAFkxebo8WC6qCMSFv4R?=
+ =?us-ascii?Q?8uMgQyjnk4/c734njRihcpa4GQaXFe1CMNtE8oYeD3lTNFSpWYflcsnYoiBU?=
+ =?us-ascii?Q?Czk/LW9Nr5YNItE6SapDgrWhlwsuzYUQh7wbx/mi72XLiKIKoCYH7M2+oNhm?=
+ =?us-ascii?Q?/w0XAK9QBp8jjgfmhUMRFx+HfW+16q0+wK/t73B2n4XaXilhFLa6yBBwWOtu?=
+ =?us-ascii?Q?qvAw7pBKT0lygDLdsWRjexEQd7hbWVv3nz+cJXgzc8LAXasb+eeGdQFp8oMR?=
+ =?us-ascii?Q?4Le5k2U0w4dISD2x790IyqvGY86/IFjiv5OhW0a9FqwYCBYGbLNGCFBbqQ9U?=
+ =?us-ascii?Q?Ijh2wShlRh06/fLGyhgFzdf3uozBFivUKthxsrHPu63OYuqtZtDA9K2n27Ws?=
+ =?us-ascii?Q?lud9+AfVCUN3zqPkETKRMEawZFBnEIOt9XAq32V6pmHn90Z7+JgTglHVgbwS?=
+ =?us-ascii?Q?JPI40ZO43nS1k5Ig+BJo2WeVeOep26qO69Qb5oZu7/uFwwTCfYDNOOgeG0Fh?=
+ =?us-ascii?Q?h78Q6QqqlRFKpiTaxv2XybtixiHKmt8nz6n3o2+Of2G+yVRSt2HBZmmAAu0E?=
+ =?us-ascii?Q?0LfGC/5EQszRZ0qwWZ7h0Im9Fu1RtT7kfVVWD0XDJJF1RRA8HTwmbAL1QzQ8?=
+ =?us-ascii?Q?fcwL1/kc0R26iW8wEhMPPwiou9L2cseUbslQEIDSEY4v/IzkFsUgSnqNB9yV?=
+ =?us-ascii?Q?VlSpRZV0wolXGYAp94Nt1ADFl/pM7IDPx0jlM8NBIj0Z2/CqnaCHdsmlBW0l?=
+ =?us-ascii?Q?TUSvtk7DlnerdVUs6uua791AsfcdG34Dgg+Ee18vEZnZHeuequvigzyyKt4u?=
+ =?us-ascii?Q?c9qNzM8JmLH4joM66w/+w83iXafOkjvGO+SZlmkEOSVarYnYK54nyVX9Dj1W?=
+ =?us-ascii?Q?d2TzbvhKctT4fH8pOk7fgSagJL6v9nJv18K1fp4MvMIA9N1KDzKkC49wAGH6?=
+ =?us-ascii?Q?JmT+gjLeQ78bXEx92TyQH3jUePzf+ZYLIayZK/DyYg=3D=3D?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(1800799015)(366007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WujG9A2RMIkhh8JDvm8LpKYpxzqu2lF7L7SGB0EiVIXR40DX27BfXHQbUwcQ?=
- =?us-ascii?Q?kZ/GEGvkDrrhP2OuS6u3N9bnsoqhVBG2KPBS4Jqq8pT37xopX2bGw5d9izTj?=
- =?us-ascii?Q?Hm4Thw53drPMWKXb94OypqfXR+MTIPqfDeXTJvxliqPE1Hep1bKqF6vgBBhF?=
- =?us-ascii?Q?U3dM463vfraKdTDRkwYFEfZHnA8lRnt6A1b8JeHZPo+M/ZpbMhRlg33gwON4?=
- =?us-ascii?Q?XFAxLYyAsNoQzY8GSnyOb5F/f2Q30ve7TmHQmL72cff0pGvOXX5mR3k43W1q?=
- =?us-ascii?Q?93dJyoga3we3St9Q6K4l0CbFnZ15+/s0wm+tm1DIm5HLuVhxS1F8hfC5j7wh?=
- =?us-ascii?Q?CqSCxFa3w0cFwYzypma/9Efbeus1T5Cpwv6VQt7WOqAkIzkgLJ9e63P8pHcG?=
- =?us-ascii?Q?tJ3FfkYRuUuP0VDRCHV7ruBcQbBlQrnpv/VcMh5rScEWk+APHGVYn6tKB4ny?=
- =?us-ascii?Q?Sds9N6qgx7U6AoXUn1glU0Pw/t99bPd23g/wIhpbqv8qDE/h6DJZAkejuDgn?=
- =?us-ascii?Q?0MougtdCa5WiiJsu4zCvykoEBa89OSqZ6ag4b5nz9dqQMiOWC2hDdG8m+vmf?=
- =?us-ascii?Q?bzSEfrMpTkNVqDkATzpntgDeClvnwqTn/hU+MIJQYMj8/Ak2PXbHRGZFrkrB?=
- =?us-ascii?Q?cIKX2pzj1ybBXot6X6GMwdmkGt323r9GKlor9r0hXuP5gRUej7qvZpUUOFH6?=
- =?us-ascii?Q?zPZUuJ3gMl1T0NfPK+gzw/r/4Y+PX49NYFaBCeYOKTaPkyzGb/C1IirdrRwB?=
- =?us-ascii?Q?WjcL2aLz/FzQeOcPKt0Y4n2FDH/FvLV9VSjhBLeB2GRGN7sMQZqmBncRRewq?=
- =?us-ascii?Q?KQVwdubxSOqTXYXtqjY9VpqA+zdhebiohnIBqFK1RusQLALT8lIoEu5WPqbS?=
- =?us-ascii?Q?m6dUQRR/oW2IA7xFxXV5yuOwvGjqol9o18zZ+/ljFwTl6ww60h42+DxQS86T?=
- =?us-ascii?Q?7Ygdv2pslWC+Wr1bej5nas9nkxcA0AtucvTa28cLRJSixLqBx1ZQrhs3XxOK?=
- =?us-ascii?Q?GC2NrsaO/D4JAp7yh1q3+no8L8+fzihYSdidVWezCEo3SY47jQNSE+VKDvxX?=
- =?us-ascii?Q?8WGRB5iXPremzzfYPp+qt3io0bsMbly7SVGNigAKaDrTKS7YbMOt2GVkNR/J?=
- =?us-ascii?Q?Qbty0GhjqQhc/RpoNTo9nDzI/tNgz6Se7PF5JRuIiSfL5xUWiiglY+53Og8t?=
- =?us-ascii?Q?wDZe8EBGtYchxkXuelP1x7OoWMJPe6Myn6OxYCAZniIgwTItCYOhn+rnGSDb?=
- =?us-ascii?Q?UbbwVe76tjef+EgMRGIMJgd//bPQXSq9nM0eYERNHZ22pV2/P9XuQOFr7tCr?=
- =?us-ascii?Q?l4CPNFEuycaFTMGQhCIctykQv3p5D8ovPRLQRFjKHa2rgp91ppy6EI9hl/hz?=
- =?us-ascii?Q?RcjNjSbW9mmDkXQk7gGsaNxQx9/DcFMQAAG4gcXHv3QF1odWN1TtXEZB+HLf?=
- =?us-ascii?Q?VVGEyfIARikiv5FTvYdoYepHO8xxOvIT03KYfa/RnGiIs/iF9vwRQr5BiygJ?=
- =?us-ascii?Q?eSyJpfAztCXLLhlgwFNxyU5N+IrvEhzLa4UMSNzcJzrSqk7MIwJ9zIeFT5/Y?=
- =?us-ascii?Q?qctuP5x+Kxzfa+uFHCdY43qf11dWKTOHT4VHlJ4KUsLSdCDDW06w3+nC4Nz7?=
- =?us-ascii?Q?tw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a089876-f713-49a6-8875-08dc68a1ff3d
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?deNd1JnRtpcsa0cKmMAfa/+maAwz1P3lDdwMZDtCauHfItZbieXWR8pa6IeL?=
+ =?us-ascii?Q?2o3Iv/lyZTfEsRZ831I9snV53QhxeCadEcQxjwm1L2Ffank16Ls3vZg83r8p?=
+ =?us-ascii?Q?T2wcxDg7MI/4uXDUMFAXyRZJ1IWj9DJeopxvvbXtAZccB2Vjl6D3p4a5FNVq?=
+ =?us-ascii?Q?c9CRW6rh2wdUBbIP6EMzo5HCqhwOkNByaxbFHikMJyGS297uypIQy0DQvkNW?=
+ =?us-ascii?Q?vLI6tJLky2QuM9KJR9iegXzVdRtPm0d7vbO0AdxMOMFCY54LMQQdGhcZeNrZ?=
+ =?us-ascii?Q?x0xwA2Pm4AZJ0OvwJ+aKBn2BifvXFK83+GuP0d3eJhiVKNtfW2rFXLIruKc4?=
+ =?us-ascii?Q?nXyftVF66SLD8xQ3xTHLe26wqClEmyIihGj9ZU5yXvNKwgzJre/bpDgKFSuF?=
+ =?us-ascii?Q?wPiPZjXW/T0E+vKbCMPXlf2ywCQRNSMEqIDwlxCSXY6mzH2/CxyIIpQJIoHw?=
+ =?us-ascii?Q?9M/ZpJX8yO+//T6Z08us3WsUpj7Yv7fWtC7hYIWzEKrJm+AynR0CXLH5qIjY?=
+ =?us-ascii?Q?YO0zcGeedTy5inEevGfxuiclwrX65lng4mFHddpnicaKstfRyq4y59i8euSd?=
+ =?us-ascii?Q?VOLyarrlCQWLyliHvs79y9IP1jfNFTxsJ3B9Pj++lwcmAMghKKzw2fq0eWES?=
+ =?us-ascii?Q?KHav8ia/LyJ9fjKDuAb2dEZmJCPwpW1GYJmzsO1JBgHoWXxN2DyyFTX/hXG9?=
+ =?us-ascii?Q?MR1wsZnbR79DHM94dQaiARNQgCn44Idy64g2ebHHbC3FzXt+kf0RSW5UwJJH?=
+ =?us-ascii?Q?zMjvQ3bUIX/1rt9Q6NitCoSZ9fwy6VRmgDMgY5VfVUfgMoho6DP8oI+1Ou8d?=
+ =?us-ascii?Q?9DTkh/9Td3ouGbmFEdqhQhtXSAbC/ePVbLtm8CugfOrBXRoEZYb2UjKooqug?=
+ =?us-ascii?Q?VFmDhO1yKxAbyQqyw8LSSj8cmXj01XSCy9hi6G6DH5U4PvGvIxFRZfCEkOOA?=
+ =?us-ascii?Q?lVXrYtuZ3izFMv/9+f0bYWPWePPpNmfMdpmdhDIV6zJdDWoyzdxGCj1NbqKu?=
+ =?us-ascii?Q?txfXaJ3zNYZ6KnzEPCR7EOXTT8IJnTymsyG0rciCw3pQ6brHV9aLNeCiNVAo?=
+ =?us-ascii?Q?HaYbYNOCv2xr3bKxWWKApGlKsoMfl85MZ+Kjs7JRBiQtG5fHOQTkiHHHa8Pq?=
+ =?us-ascii?Q?eQGeiEbaq+8BBQJFf3zEhk4IeYu962QNNzwlWG7CtvxcI5TbGxWZQiXUUh98?=
+ =?us-ascii?Q?Acwo23V1+Ht88IoALn4UuySif53+3W6CaBuvqUjz5fZcyyS71RobXw2nw48G?=
+ =?us-ascii?Q?Ca88qDxZkhq85qQr1mlToOl51zmil84o22T2oPEiRymfZh2E2+qyJjH12xWe?=
+ =?us-ascii?Q?wnTCAblgLZx24LPZtWN+1rvOlX5z8sJuktCJtLsjDUF1Ao8zBRUM5Q9vf1Sl?=
+ =?us-ascii?Q?8SGIPaR0dSFtVY6ewHQEbeMwfvC3CIPHjAG5hGiMdbQtf2ejo8qgrAmN/4SL?=
+ =?us-ascii?Q?KNyo/zDV65fajbdq8fA1ZV2wcwPQimibJ5tra7Q6DpQyLd92IcuI4kBspl0a?=
+ =?us-ascii?Q?C0UcxgohakEAEmcqyPV3+tGfaPHoTLXI86mrNB50QwOxCRgRWMLBYrIa/WFb?=
+ =?us-ascii?Q?71MmJU6ocGM5LdFXJgmNG1qXTtSM/LXfxK34ukSJ6bXAR8cDn8Q8dN3vSROH?=
+ =?us-ascii?Q?yQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09d8531f-0f99-479e-b00d-08dc68a2063c
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2024 23:13:36.3226
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2024 23:13:48.2317
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s1+Fl81HzL6SV6OikFWf5D4zTIrstDGjG3UwRHJB2sm2gXiCllzabaN4+eOFt/6itgQEhzH2/fFuImsNseG4Q/ZA8iK+AvPRityVVCsqAgA=
+X-MS-Exchange-CrossTenant-UserPrincipalName: fY5hdf2SovYUy2NX/BWMX5xTFm6SnPAW1FWiknBpc1fV346zWHMIUz7bXzS+QEIWex4GqYZd1kgJ6BxX4oKdYvrmrY5ACcRYKE2iSDIZzgE=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8089
 X-OriginatorOrg: intel.com
 
-On Mon, Feb 12, 2024 at 05:23:05PM GMT, Emil Velikov via B4 Relay wrote:
+On Mon, Feb 12, 2024 at 05:23:06PM GMT, Emil Velikov via B4 Relay wrote:
 >From: Emil Velikov <emil.l.velikov@gmail.com>
 >
->On mmap failure file->memory is set to -1, which we'll happily pass down
->to munmap later on.
+>With the previous commits, we removed the need for a distinct unload
+>callback.
 >
->More importantly, since we do a NULL check in kmod_file_load_contents()
->we will exit the function without (re)attempting the load again.
->
->Since we ignore the return code for the load function(s), one can end up
->calling kmod_elf_get_memory() and feed that -1 into init_module.
+>So nuke the struct all together and only use/keep the load one around.
 >
 >Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+>---
 
 
 Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
+thanks
 Lucas De Marchi
 
->---
-> libkmod/libkmod-file.c | 4 +++-
-> 1 file changed, 3 insertions(+), 1 deletion(-)
+> libkmod/libkmod-file.c | 62 +++++++++++++++-----------------------------------
+> 1 file changed, 18 insertions(+), 44 deletions(-)
 >
 >diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
->index abd4723..b408aed 100644
+>index b408aed..8a0336f 100644
 >--- a/libkmod/libkmod-file.c
 >+++ b/libkmod/libkmod-file.c
->@@ -392,8 +392,10 @@ static int load_reg(struct kmod_file *file)
-> 	file->size = st.st_size;
-> 	file->memory = mmap(NULL, file->size, PROT_READ, MAP_PRIVATE,
-> 			    file->fd, 0);
->-	if (file->memory == MAP_FAILED)
->+	if (file->memory == MAP_FAILED) {
->+		file->memory = NULL;
-> 		return -errno;
->+	}
+>@@ -41,18 +41,12 @@
+> #include "libkmod.h"
+> #include "libkmod-internal.h"
 >
+>-struct kmod_file;
+>-struct file_ops {
+>-	int (*load)(struct kmod_file *file);
+>-	void (*unload)(struct kmod_file *file);
+>-};
+>-
+> struct kmod_file {
+> 	int fd;
+> 	enum kmod_file_compression_type compression;
+> 	off_t size;
+> 	void *memory;
+>-	const struct file_ops *ops;
+>+	int (*load)(struct kmod_file *file);
+> 	const struct kmod_ctx *ctx;
+> 	struct kmod_elf *elf;
+> };
+>@@ -181,11 +175,6 @@ out:
+> 	return ret;
+> }
+>
+>-static void unload_zstd(struct kmod_file *file)
+>-{
+>-	free(file->memory);
+>-}
+>-
+> static const char magic_zstd[] = {0x28, 0xB5, 0x2F, 0xFD};
+> #endif
+>
+>@@ -287,11 +276,6 @@ static int load_xz(struct kmod_file *file)
+> 	return ret;
+> }
+>
+>-static void unload_xz(struct kmod_file *file)
+>-{
+>-	free(file->memory);
+>-}
+>-
+> static const char magic_xz[] = {0xfd, '7', 'z', 'X', 'Z', 0};
+> #endif
+>
+>@@ -356,11 +340,6 @@ error:
+> 	return err;
+> }
+>
+>-static void unload_zlib(struct kmod_file *file)
+>-{
+>-	free(file->memory);
+>-}
+>-
+> static const char magic_zlib[] = {0x1f, 0x8b};
+> #endif
+>
+>@@ -368,18 +347,18 @@ static const struct comp_type {
+> 	size_t magic_size;
+> 	enum kmod_file_compression_type compression;
+> 	const char *magic_bytes;
+>-	const struct file_ops ops;
+>+	int (*load)(struct kmod_file *file);
+> } comp_types[] = {
+> #ifdef ENABLE_ZSTD
+>-	{sizeof(magic_zstd),	KMOD_FILE_COMPRESSION_ZSTD, magic_zstd, {load_zstd, unload_zstd}},
+>+	{sizeof(magic_zstd),	KMOD_FILE_COMPRESSION_ZSTD, magic_zstd, load_zstd},
+> #endif
+> #ifdef ENABLE_XZ
+>-	{sizeof(magic_xz),	KMOD_FILE_COMPRESSION_XZ, magic_xz, {load_xz, unload_xz}},
+>+	{sizeof(magic_xz),	KMOD_FILE_COMPRESSION_XZ, magic_xz, load_xz},
+> #endif
+> #ifdef ENABLE_ZLIB
+>-	{sizeof(magic_zlib),	KMOD_FILE_COMPRESSION_ZLIB, magic_zlib, {load_zlib, unload_zlib}},
+>+	{sizeof(magic_zlib),	KMOD_FILE_COMPRESSION_ZLIB, magic_zlib, load_zlib},
+> #endif
+>-	{0,			KMOD_FILE_COMPRESSION_NONE, NULL, {NULL, NULL}}
+>+	{0,			KMOD_FILE_COMPRESSION_NONE, NULL, NULL}
+> };
+>
+> static int load_reg(struct kmod_file *file)
+>@@ -400,15 +379,6 @@ static int load_reg(struct kmod_file *file)
 > 	return 0;
 > }
+>
+>-static void unload_reg(struct kmod_file *file)
+>-{
+>-	munmap(file->memory, file->size);
+>-}
+>-
+>-static const struct file_ops reg_ops = {
+>-	load_reg, unload_reg
+>-};
+>-
+> struct kmod_elf *kmod_file_get_elf(struct kmod_file *file)
+> {
+> 	if (file->elf)
+>@@ -436,7 +406,7 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
+> 		goto error;
+> 	}
+>
+>-	for (itr = comp_types; itr->ops.load != NULL; itr++) {
+>+	for (itr = comp_types; itr->load != NULL; itr++) {
+> 		if (magic_size_max < itr->magic_size)
+> 			magic_size_max = itr->magic_size;
+> 	}
+>@@ -459,17 +429,17 @@ struct kmod_file *kmod_file_open(const struct kmod_ctx *ctx,
+> 			goto error;
+> 		}
+>
+>-		for (itr = comp_types; itr->ops.load != NULL; itr++) {
+>+		for (itr = comp_types; itr->load != NULL; itr++) {
+> 			if (memcmp(buf, itr->magic_bytes, itr->magic_size) == 0) {
+>-				file->ops = &itr->ops;
+>+				file->load = itr->load;
+> 				file->compression = itr->compression;
+> 				break;
+> 			}
+> 		}
+> 	}
+>
+>-	if (file->ops == NULL) {
+>-		file->ops = &reg_ops;
+>+	if (file->load == NULL) {
+>+		file->load = load_reg;
+> 		file->compression = KMOD_FILE_COMPRESSION_NONE;
+> 	}
+>
+>@@ -496,7 +466,7 @@ void kmod_file_load_contents(struct kmod_file *file)
+> 		return;
+>
+> 	/*  The load functions already log possible errors. */
+>-	file->ops->load(file);
+>+	file->load(file);
+> }
+>
+> void *kmod_file_get_contents(const struct kmod_file *file)
+>@@ -524,8 +494,12 @@ void kmod_file_unref(struct kmod_file *file)
+> 	if (file->elf)
+> 		kmod_elf_unref(file->elf);
+>
+>-	if (file->memory)
+>-		file->ops->unload(file);
+>+	if (file->compression == KMOD_FILE_COMPRESSION_NONE) {
+>+		if (file->memory)
+>+			munmap(file->memory, file->size);
+>+	} else {
+>+		free(file->memory);
+>+	}
+>
+> 	close(file->fd);
+> 	free(file);
 >
 >-- 
 >2.43.0
