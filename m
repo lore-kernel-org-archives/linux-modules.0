@@ -1,223 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBECC85945
-	for <linux-modules@vger.kernel.org>; Mon, 29 Apr 2024 23:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714433984; cv=fail; b=fBIurOVOqFrvg2+qpYD83lhzvukFUBW5KoaSb2L6G+DmQagVB+TjufZk2oVFF7MAzOMmTZRjrOp6kX/Jy/UgDdEawgSgfcgU9paaoFj7XRHnV8VOqbN0zCJKInVNpIWvjcuKBg4oEdJNuYHqB4ieKnz+qGqdcNtrhSYDM+YBC6U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714433984; c=relaxed/simple;
-	bh=yjQIjj3U3O8O6N7vXZs9mP5cMfhUb/miVPu+mmKuV4M=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Ku8/miliZ1sFHt74ixR24Yp0YQr/U6RwFbBuWtifEYmnWSebpEmG5rquTLtexxkBqAHv9gqKg76eApkixQP315w+aV+ff0nnPj0H7U3aZeVUKxE/0BK1n0Y/6IVD8x6NoVgdtGYGlNk9osF15TlYqhl4DBhzVf3WhmfxJEtYaYQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eEWEPJs6; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11775171089
+	for <linux-modules@vger.kernel.org>; Tue, 30 Apr 2024 12:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1714480890; cv=none; b=rDXyHu9BbhjKgdaSulecY0sslXlVfvirYpEvur0pbHgKrnCD5PHa3+H+X2TmbRW2N6xcBl6Mw0paWjNepbJ0ufO/iQZGzijBFbUmbYliqb2jMlvd+n+QO+CWYwBrLpzCh+MAe+X5KGHC4YaO15CWSQU2G8fNiALnXqY2jecXXlY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1714480890; c=relaxed/simple;
+	bh=EAkzlUPf87vK95pHRAftB3pj+wg3xtsMqv6zZ2xItvQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kZHL0sdplzLQYC08ELClKxFjy1h36IoAiTy6og3UNa2yxs+0yuF27QxQf0Hi+i4K8AvGLozQpt/a6BSNI/SkqG0w8SEaDdeYGDAhNaDpc/XvSJMqV/1N5FT6vLPGCG/YIwuqgvknnPkREWoyPDdoSbnyZkBJiNE031afwIjrxzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rCUkLJkh; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eEWEPJs6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714433983; x=1745969983;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=yjQIjj3U3O8O6N7vXZs9mP5cMfhUb/miVPu+mmKuV4M=;
-  b=eEWEPJs6fXIQbapkwHikypH0arXFWcUoiY7AakpbkjPK0y8n9VdCe/Vb
-   D8OYah6YbwO93lVXfjoUfALr/7V2Kg+tf70GFdOclJDm3YozsThCFGmFt
-   ee+A2n0xDhcTJseGZte044zeVNNtJMtXvqq8EP6ipcx91eys+1h2IBTPC
-   SfoZnrJHggYEN6X+MP9M4c4oYTcuoToprhnEZCQK78nUGSezvZMHjWqxw
-   JezuM4BBT/txjF32h46OuChw6TvYTM2tEmXI23OzhDGqUrfuZpJnPWksd
-   woQbBDndE/E+MlK61iVs/kRxHHn6LjabPpBjEIA8OVCI7Pda0if8iAvnR
-   Q==;
-X-CSE-ConnectionGUID: vQmFtKg3Qx66/bH1PVtMdw==
-X-CSE-MsgGUID: ZFVK5MjmQyCDTsFU0yZcqQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11059"; a="9965030"
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="9965030"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2024 16:39:42 -0700
-X-CSE-ConnectionGUID: NK4Cc5aTQSG31wwdyVxHDA==
-X-CSE-MsgGUID: N3egfRxZQd2lSXUrLfId6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,240,1708416000"; 
-   d="scan'208";a="26347652"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Apr 2024 16:39:42 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 29 Apr 2024 16:39:41 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Mon, 29 Apr 2024 16:39:41 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Mon, 29 Apr 2024 16:39:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bh1lKGX+MlMm2ARj0pc523udsQp1jNQnzJeUai4lCnzGLiJHh3pHvDz+xUweOPo9Wj5TRB6qykqcO1ji8ddQU1m/6a005ArMwz1ki/2P6EUDMDrfrZyZRu7QbZlHfsWwcy0D9BHolQv5F3gatM3pvcdNCZe/qcffJjVRLFm3lV+1aj67IPaDmMrcYEt/L4R/xPxEVbgnONPEdpfZJTAMD4fMWJbp1wg+SindiFyKUHDMre60f9UzslK5qubk05hEAgbBcJIdjyXXzkQ9XHR5IiKgK0zOk+IqKxMBa+Ued9SnugBr+YXuO91P3pRQyd51fhRnqM7df5qbvLpSop0cow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PeosG0hI719BjRqA0h6ecC2Fu+FSRsSB97WW4QaeHS4=;
- b=J5hhaequd+leCDzSibsGi7ew/Qrk9+eUUs3aO4dGj04AvFnAnAMqPlu9MM3uc38nM996qrkaxP/nZqP2Ql6JvRTxMXPvW75V5UsMV9oOmG+6NttTFu7KzqsObo3IXAoYhhHAg9LJkmewA0sPJYC8rMeqCqb7rAhdrYe+W77/GKwjfd7Xxbj91+7Uy88n8yUjyEHJ0wOJr5sG7PYsBMvLK0VBuWuGQI6k0V0lb34jsiieQ/zGEfzrf5495DtaqDuVAKro9dP2/3A3hm9qxD4ecFCUFS/n1/PyNXRLAmB7iIXzEuXALhvDQkyMuRUpQGNJOheVe4I+DZbqk7iygEd7ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SA2PR11MB5035.namprd11.prod.outlook.com (2603:10b6:806:116::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7519.34; Mon, 29 Apr
- 2024 23:39:38 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::9365:d8e6:4e8d:8711]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::9365:d8e6:4e8d:8711%6]) with mapi id 15.20.7519.031; Mon, 29 Apr 2024
- 23:39:38 +0000
-Date: Mon, 29 Apr 2024 18:39:32 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: <emil.l.velikov@gmail.com>
-CC: <linux-modules@vger.kernel.org>, <mcgrof@kernel.org>
-Subject: Re: [PATCH kmod 13/13] libkmod: always fallback to do_init_module()
-Message-ID: <4gbaobiwemc4y6ztn7zxbn3ztxc4jydqjnpsbcfp2ejhaanu2u@cjernf4wylda>
-References: <20240212-decompression-fixes-v1-0-06f92ad07985@gmail.com>
- <20240212-decompression-fixes-v1-13-06f92ad07985@gmail.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20240212-decompression-fixes-v1-13-06f92ad07985@gmail.com>
-X-ClientProxiedBy: MW4PR04CA0226.namprd04.prod.outlook.com
- (2603:10b6:303:87::21) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rCUkLJkh"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-51d62b0ecb7so4351910e87.3
+        for <linux-modules@vger.kernel.org>; Tue, 30 Apr 2024 05:41:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1714480887; x=1715085687; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1zoRl9JNX91wxTFZ95WC2aOVdcvQqQ9ebO1YgbX9Wg=;
+        b=rCUkLJkhLTkgj0vZihEKMMlayMlyQ0cFd5TjQa4r0Jddy9PM8aCO1E3l7kk3Jz+SUF
+         GTxeTJy6Av4km5bpOTg+yOSdPvXLSxOOjQOnHQ2TvI4NWTmDRXUzyCtCI6w4n7BCRqGX
+         v4+oj/UExjkdmINHO5kKztJkDTG3sBR9dELu5NYmlYuEYKnM0rCgpyyvYeDrL9ZYplzq
+         iS3G0yI2yJVRGCkMXuuwWC4nn+VzEi5zzi8/pE6CeziV9EPrz4BvedgrUJ9mrXQ5Csgr
+         13a2BhyUlVwR/HKh44guz0Y+9aQRhc91cb/h1t+FvIAqWHgb/xjcLN8z5V0kus9g72LW
+         4QRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714480887; x=1715085687;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z1zoRl9JNX91wxTFZ95WC2aOVdcvQqQ9ebO1YgbX9Wg=;
+        b=rGgUyj7dG2jpRPOcHvmDEp0NtDzQo+I6EA9TW0u3Iw0QTBA2yMihmAxJ4lpQ+UiCtr
+         0ilrnpLZnpXgcKr42ZpRkJMY3PyMMsuc2VyXIr+Tpg/4y6ph5J/HRClofFoYOQR5r/Ad
+         MHq4mMbmKN4UuySRniWj45wjTyRGaBf1g58j5sv5ToF+Eo/WvzDUcWhnJMpBFtjFmRLK
+         LcrvZL3zuqXxERtKlC7rdzO6apiZQz2EY2+6MAl9xxwpn+wbhdgJdtzdxbytbeMuN+Ut
+         fCBMM0+VD8yATWtb8GzMXc3PzP07oe0n0rR4Ih750QIElTR/czsNqxh3YVyReZOYEIcY
+         6PhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWaABcFjZU3gdQLoIsTGrs3XqBAwGdK/Ou3w1EbyiApH408FH4PIRhZqF2g9kVHSSccfPAHovxoJYBn3ccDV+BwGinXyxbonDZSA7qRfQ==
+X-Gm-Message-State: AOJu0YxL+k3uvY9fiTmWvyTQsji76HcQzRVmiq5NYgXYX3XVjcIidMK6
+	3CuoQVfKGnUTqSeuN20s5POdva5oHfD1y8aLXLtZgB6kwMszMHWVj3tLraIMjD0=
+X-Google-Smtp-Source: AGHT+IE/W9/dkxBso0irV5VrVX3LkNO5o5h+kLfYM+38G90SJ9h02blz/dj31DJFXSXcVMXms6NQew==
+X-Received: by 2002:a05:6512:45c:b0:51c:2c7e:ac92 with SMTP id y28-20020a056512045c00b0051c2c7eac92mr11527071lfk.23.1714480887229;
+        Tue, 30 Apr 2024 05:41:27 -0700 (PDT)
+Received: from [192.168.69.100] (mab78-h01-176-184-55-179.dsl.sta.abo.bbox.fr. [176.184.55.179])
+        by smtp.gmail.com with ESMTPSA id i27-20020a17090639db00b00a58eab2bf0fsm3928326eje.179.2024.04.30.05.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Apr 2024 05:41:26 -0700 (PDT)
+Message-ID: <c5248d22-672d-4acc-9b12-86815d6e22dc@linaro.org>
+Date: Tue, 30 Apr 2024 14:41:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA2PR11MB5035:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf8a9b72-a5e5-4d90-d59a-08dc68a5a27d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?5hddhn94S+F53lic7+oSIchHP5M4E108UKdiGyFldrb2Y/s4yr6BAl3TwO6m?=
- =?us-ascii?Q?ZQgRcIRcVb3GenG7h+WLXIV+hxFZebQqp9LquMxE95uCkaRukqyQwiE3A+8a?=
- =?us-ascii?Q?eQZQac/rH9r4mDtaqttTqlVH7q4c1ficWgMXGgt82rwHFNOOeRRtSjZZe5a/?=
- =?us-ascii?Q?3Uea7M9n5CxN44k/FshXYOs0Vs8MRehROvxEuMSRix+SE0dUDAhc/5eAgghp?=
- =?us-ascii?Q?UaBQ6785vpnltWWvQSjqdigmxbVCyjrVp0o0GXB+HtYk+tL+CDoy5Gntyp3Q?=
- =?us-ascii?Q?DUIAwwrlxPe41ETFbtiiV19Uj1e3oVH+ni+3ZqdRpWo23swSkG15dDb8ev02?=
- =?us-ascii?Q?xMzIIxRw5TG7IRqo/ur/GCAoTCpKdXxDvFNN3pQyS5zMFCIfiiN8Zd7lA9ly?=
- =?us-ascii?Q?+Jg6oHzqnR/hCAk886GbgSJvTrXKwYHQjVRs9rV/f1R2b9Whywbhfbafj92v?=
- =?us-ascii?Q?6vWLxLQTvBIVYLi5ZLEx+DsNbMaF2oApz+Nv1AEBjlzC+iL6EJ5EDiK3pq81?=
- =?us-ascii?Q?Y9b4AU2mIUWQwshcVnlngXZE8Eb6IwWOpNr8u+e5OIrmLyBRbx+ChcqCj50g?=
- =?us-ascii?Q?73zGQNXJqH6iBbicU7ovqb2w8uwtQM7mXnZGYC+1Ul4rS6qU7vHxkGdxTI8I?=
- =?us-ascii?Q?Igvs8gK0hoeFnNnU143i23zp9mozimYkYUPeW/8ILuqfl54EeCs3j6i0ABXn?=
- =?us-ascii?Q?ATTl/Vcu/5134rS/cw2ftwtnhV8ibH+X6RE0CnfaRchAToQmJjqSGnLt9dPK?=
- =?us-ascii?Q?cfad5mdBeQ8cMsTxihpaiOkOHOlgU8veUSCWK0UTiDL78kfYtMYSGJg+QNrI?=
- =?us-ascii?Q?JDPdRGIsqX+lFDm4FlnZM4kDxFQjH/P3ko+93hydn956E+pyItvzJmEB1hLd?=
- =?us-ascii?Q?cMT6lGfWvsNG2uDmEwgSyX/wmV/mEsXWEfQVEPkRmI3KHaMD9qIl8AbCsz1U?=
- =?us-ascii?Q?H/nHBmWxvgyyCvj6Yf3Y67f/DZv4OBIv369MDf57npFvoDuWrUuOvLDz7cWL?=
- =?us-ascii?Q?qsp6r4NUrj5G0RdK65TUUzGTvlPca/LOi9q+eH013jpNBrYi8GYp5estAtwE?=
- =?us-ascii?Q?L2oy5haC2XqzG59DK/XP0TcXu7yK3pOvt9Okn8fL2FfH6yMTMoslSlSeFyLZ?=
- =?us-ascii?Q?QMrs1IdacpOGN2UAcIobHN2+K1Sw0QP7kdPAiG2YknF/uWfojHo76W4hgyTI?=
- =?us-ascii?Q?hh3N3U2Qx9Y6AQoTFwPJd+6Oc1GTOqN6+noSmZBLwWIf1BVWpEKy7Wb8rsGa?=
- =?us-ascii?Q?JXO1qlEjTirVNszVBUqAvaKm4I7Q68c8B66VWjjWTQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d/oC3eDMuoOHsril5RonMmUnzwAv+YHFjojqH9ixgWvyrd14IIROze4ndoIZ?=
- =?us-ascii?Q?7VRe8yPKVRHfe+pYfXcy2qqr7ZJKV9zSyaOvu3lvBU1VNty2HAs+DQyt7Hf4?=
- =?us-ascii?Q?w/YB9Dz4cqyYDtmDUKM6lNpxA0W1BM2Yn4vqLY2DfWq2pIwWNSc9r2+vryU1?=
- =?us-ascii?Q?csISqiRCBf9ne0BEwc11V9tWJtz8zValb4Cd5eeWa0maYNocS1M2Zhd4zjDf?=
- =?us-ascii?Q?/miJrrVy1zFRGJpcgV43avTtEK73rEOMuBEgcOAy6qMvjDBqRdDatEkSpKCC?=
- =?us-ascii?Q?4w1M0pCIxXtdKbcfpxaAk7DujsAyrGQXmwpPICUuMOWLWQ3PbsttaDmvRrOh?=
- =?us-ascii?Q?EWCxlCAI9+E83JTY++0St1RlUxF4WwOU2R0LLPgpHR9EetpaijYB99iyC5hm?=
- =?us-ascii?Q?OXK8jJ4S8+SR7bVYe7MS3lRc0Gw+unu+LBg66LyCpUEQO6mhawWMh+9IJj67?=
- =?us-ascii?Q?YgD7GVE1U8ub710EDuhpCrX7Gv3W0gx+SAg/9BBXD6z+TS2ZMFm40oAdW0Um?=
- =?us-ascii?Q?+rfbvo6KU957bdlQyD7DkpY+p4xqXjViugDU+m1PiMEM4tQpP44hVPe2ih+F?=
- =?us-ascii?Q?JmXJXZfC3TkECtTOss2GLnqPCkn6Dqu96DAhXc3l8Y4cgfMHblOBYAKfzOzd?=
- =?us-ascii?Q?7AMGOrtaIlvVz5xz6viUIGyQv3UZep2l8m7Ujsk05B192jdo+1V568ryN/wf?=
- =?us-ascii?Q?Gsg6IWNh/VN+iEqIINxpEXClCZtVwlGSI8o5Fykblw+Ih4Y+sC95FyEcvHwT?=
- =?us-ascii?Q?UMDMtswuJM/f9Zbt3+QL4bDoHkLYdSZtd8g1cKEdr8vugCekWNHisCsdU0cb?=
- =?us-ascii?Q?tBdlksmhmA4bp1RDLP8TOenTofEbCBqb5OZrBfURq2JPDXGw4DbGULtW9Bug?=
- =?us-ascii?Q?1eaLdZN6w28TpJOkBJGcKYefLUiQ1tt7xlYmG9pJIxazZlE0yp/YZSzgbJHZ?=
- =?us-ascii?Q?HWtkHwOPq3HSEoH1qS/KWYuYxRLDn3rMwMyVPdcHxRbVyA4jqLAfm07woleC?=
- =?us-ascii?Q?Wua5N9wsOZQWIr3n5ONLblROUlSFkkZZroejGdI3L4a/D03UtEmJj2hwv5mn?=
- =?us-ascii?Q?oXQMWt6lJq3iMQcdEIaOWuVBpSFbqjEH6yKSifdNVabd07mhIEd3++UkawN4?=
- =?us-ascii?Q?N2gOChCcJiskUpZ+kZl6mOurUCGk2ADYnqyoX8+OBmas0VppGCeSa96+KQLl?=
- =?us-ascii?Q?r/ngDBNHt7qhaaxtue7R9DqcZ6OsZa/JLXfZKTNaIJ63Ql8AxLbjDZxd/iD3?=
- =?us-ascii?Q?+zNhnwNr3mZdAsX3pn+2YhY58PptBObyZ2+Br+9wop9prCmwYkt/Ltr/NeDx?=
- =?us-ascii?Q?j4k/pILYX5KaHovnD5KmlkMQeIJmwUp2Mv1OJqbSvxOPXqaH3AIaDHDPlTvL?=
- =?us-ascii?Q?QJ6r9aCnB8Wu9b5dkALdreQ7nETmXVDjH53zyuFJy3d+KAYpe61rD7CdRZ5v?=
- =?us-ascii?Q?WjJ0QfHN9t2ejkdQZDkNyZOLa0a38ojhMna3oNn9FmXu71FCJCr5NN3oVB61?=
- =?us-ascii?Q?vyi90cW5ljCD6RT69qx+EaIwTf8/o2ZGlKXQilJ38xu1oAr2nyWKiRuDtmjX?=
- =?us-ascii?Q?vldtgOEJMD2kI3MJqGumSMOdAFprD3L1qk3BuqxC6XFLNhbK3R5CwPNSbFbM?=
- =?us-ascii?Q?Xw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf8a9b72-a5e5-4d90-d59a-08dc68a5a27d
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2024 23:39:38.7745
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LlDOwPbgR2DztYaJXrjozewOiF2HAuTEDmC4vU3xdkGx1RYdQjXFMbwY/COER2ru/MvbKSGv0WfTV3C7u8i0y/OXRqKNnYOft087PqEJV5M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5035
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 05/16] module: make module_memory_{alloc,free} more
+ self-contained
+To: Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>,
+ Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Michael Ellerman
+ <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Russell King <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>,
+ Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240429121620.1186447-1-rppt@kernel.org>
+ <20240429121620.1186447-6-rppt@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+In-Reply-To: <20240429121620.1186447-6-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 12, 2024 at 05:23:14PM GMT, Emil Velikov via B4 Relay wrote:
->From: Emil Velikov <emil.l.velikov@gmail.com>
->
->Since the direct loading was introduced a few bugs became obvious that
->the compression args used were off - both in-kernel and dkms.
->
->While both of those are fixed already, not all of those have reached all
->users. For example: for dkms I'm aiming to do a release just as kmod has
->theirs (to align /lib/modules <> /usr/lib/modules support).
->
->Although I am wondering if we can indiscriminatingly callback to the old
->do_init_module() in all the cases. This means that we'll catch any
->in-kernel decompression issues - invalid args, ENOMEM, other....
->Although for others (wrong magic, perm, etc) we will end up doing the
->exact kernel work twice.
+On 29/4/24 14:16, Mike Rapoport wrote:
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Move the logic related to the memory allocation and freeing into
+> module_memory_alloc() and module_memory_free().
+> 
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> ---
+>   kernel/module/main.c | 64 +++++++++++++++++++++++++++-----------------
+>   1 file changed, 39 insertions(+), 25 deletions(-)
 
-I'm not sure I like to repeat this for any error. Example: if we get an
-EAGAIN we go and try again?  When thinking about the recent in-kernel
-optimizations to stop loading the same file again over and over, just
-doing it again seems like a wrong approach.
+Nice code simplification.
 
->
->Overall the trade-off seems worth it, so flip this.
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-
-I'm not sure. I will keep this out for now and apply the rest.
-+Luis too.
-
-
-Lucas De Marchi
-
-
->
->Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
->---
-> libkmod/libkmod-module.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
->index d309948..2c0d46d 100644
->--- a/libkmod/libkmod-module.c
->+++ b/libkmod/libkmod-module.c
->@@ -980,7 +980,7 @@ KMOD_EXPORT int kmod_module_insert_module(struct kmod_module *mod,
-> 	}
->
-> 	err = do_finit_module(mod, flags, args);
->-	if (err == -ENOSYS)
->+	if (err)
-> 		err = do_init_module(mod, flags, args);
->
-> 	if (err < 0)
->
->-- 
->2.43.0
->
