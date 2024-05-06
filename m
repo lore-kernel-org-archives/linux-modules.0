@@ -1,147 +1,77 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46827143897
-	for <linux-modules@vger.kernel.org>; Mon,  6 May 2024 12:20:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923713C00
+	for <linux-modules@vger.kernel.org>; Mon,  6 May 2024 12:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714998007; cv=none; b=CE3yya6bWQJPITOMdDe5Wk/Z+zcHkZ7bAzypVHqYlN7/a1nATxGVjqZoitEpupiCrBlZM9AUGd6FAQymFEjjir4shceX3yiEPxIX4PgsCbCY2EGvS10209ago2KrkAAQp0YagyFufZH4Z+UFqYKHzse6WOjVu+FUiQCjTpM6eT4=
+	t=1714999006; cv=none; b=pZgHfNRx8/4+9DTqz4zRWmY2kqT712SIOrgxJmZ5DVYZYAZdZHHkUDsJ4B4OH99vBqSxeR7BejTVo6XSKZrH/SVzJvkBaQz4dqhPcctLVPOJeD6Vnc0g07y4DF9ObCLIkAYtH9La7glWgTa9OMwNJJ+hBy4oAkHvMF5zfbnS1Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714998007; c=relaxed/simple;
-	bh=mAArmLgHTbc9SDFQvrexkAIxKimEX/Y8Xw9iVm0GwGo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BwK59OQglgleaaZUiIKhYPbhJJHEeRJA4B5z/0FGFHtY12OlJ2BSNHhBIbnlBLVyGEqSEOt9+V7HwSBUg7xZIL4L/LFVCHNSgwRAJG+zuNTWjAloKJhp+oYl+HzoaVZ8Xam6gN+CEmBpiErE1uoKvIjIoFXodXiNv68Ln0l9WgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CPAEHGgf; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1714999006; c=relaxed/simple;
+	bh=mV+oaEHJcdm3/3wRQ/lnbWGHEBLmKf1UfZZlx3952AU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BU7rkznlbziAGc+xUT7CoQV5y0octeFucg9qLnhrHe/krxV7ncXWMc4IOPIeJZeofRA3u+7vqC01koyTJhEcw63dZzZbz6I2BVjyNLsEdz5MJdcxMAKTojpjMTJLoaOrPjdN/TkAKPYLun7ntomYLOohbxsTaE/E4weHusNiSaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TPdh2lVW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CPAEHGgf"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2e30c625178so14178961fa.1
-        for <linux-modules@vger.kernel.org>; Mon, 06 May 2024 05:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1714998003; x=1715602803; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q0GlYR+L5nTi5e9ZOfLlEo/HVKT0hHUI331HkA0aFhE=;
-        b=CPAEHGgfbq+4Wi3rpHtmP+ReWa0wu1M5Qs9f1zrJKiykI97hiZf4/Eo2+uhIBtv7ce
-         TvpZHVt7mwXeg4dDa3IbW1CynAJk9sLAldqA8B2QkFoFCrBpXsPgtzWym+GGxUb+cZzH
-         rG8PN+cjrTdyxpTUfzuDkwT8iZNoSFYjcUbtp+MXb6yKyxpZ6Fq1Xmz2bVEI9T2h/J7S
-         zij+PNlF2XSdj106Qdkmlrq6a6e8afRkhbBTeJkgNPFl4Bljfev9//OiPZTVL3InbrP/
-         oRKjCtCjKqe28Dhz46IL1LwCCZzwOpq7FZYZHkVKNUViVO528wTTkZpgh4BlJAP88t5y
-         +9Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714998003; x=1715602803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q0GlYR+L5nTi5e9ZOfLlEo/HVKT0hHUI331HkA0aFhE=;
-        b=GvIUObW7euMlybFBdb/66jV159nRwvUsdE9D7V5uCc7s7FeTPz6IVEdmB1pYh9zoKY
-         I8NMqr1ElXaLfr8wCqMLb87/hHI26/4xRdCKywrAphdkbfWipEqs8aJGsELk9Kh6BqDc
-         c44xhdNAHxUeOl2YOKJmlmxzTEh6bL8OaYetVTfoGDwgmO9ZTV5ZPeM1jIWnF0ltgZrR
-         cl86kEAJqJIr9NKW6JWOZYpcaG1BSovbmh8WNgv9SVRCj+CVjcMLXF9E/uCGuWE1BXOA
-         Qpvw14ggBeYztOpjidFkCnlcOoSoG0Ku6UM8u1iIq6Jw4HOoD4ipyQab6nkOsDpGJRs1
-         piLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXeW3c+e98WcfzC63lgIl0C/YaXJgUtvEw95iEGV4Hyc+L2BFYN9UgAis+KtUuHVLDEr0SXj0/rSTZDK8ZLBqZ+6yo4Gz92clIEXolTBQ==
-X-Gm-Message-State: AOJu0YzCdZW3NpqQb+iQatvzmJoDaK6/GY5nhnB9FICDguV4P4mgG7hN
-	3kDOxz7jnTw2qJXye+mILuHUfMM/GmdELCZIYJeJKpZWkSYWpBE10A5IBUM/oB4=
-X-Google-Smtp-Source: AGHT+IFivHHv483bejgmkPdh1hOw8Sz/YEF2pqRzorIuf/QT9TUUEOmSK/eUX+CRZo1gYLzRzyLOcQ==
-X-Received: by 2002:a2e:3510:0:b0:2dd:bd92:63a with SMTP id z16-20020a2e3510000000b002ddbd92063amr6558634ljz.34.1714998003147;
-        Mon, 06 May 2024 05:20:03 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05600c3aca00b00418e4cc9de7sm19562575wms.7.2024.05.06.05.20.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 05:20:02 -0700 (PDT)
-Date: Mon, 6 May 2024 14:20:01 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, mcgrof@kernel.org,
-	live-patching@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] livepatch: Delete the associated module of
- disabled livepatch
-Message-ID: <ZjjK8ecESRtnHjLh@pathway.suse.cz>
-References: <20240407035730.20282-1-laoar.shao@gmail.com>
- <20240407035730.20282-3-laoar.shao@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TPdh2lVW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1714999003;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mV+oaEHJcdm3/3wRQ/lnbWGHEBLmKf1UfZZlx3952AU=;
+	b=TPdh2lVWHKXSB4YpHE4PCpInYrNYqxvCdEWlZQpSP8Bne5dUGMQvrf25CICI5Hk1OYpRKm
+	jfFSzLDyYFhYGV0Xa9T2GWsfx50eDmpynbg8HZKhxtt+qYnWmlUCPztYYW7qHoJQVd8CTI
+	gUpI/dhFDY6WsY6Q2GeqdTdaN7phNxI=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-fgNsyTZLNMWFcPXb3JhGug-1; Mon,
+ 06 May 2024 08:36:38 -0400
+X-MC-Unique: fgNsyTZLNMWFcPXb3JhGug-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6C813C025C9;
+	Mon,  6 May 2024 12:36:37 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.193.190])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 41A0F200A3BB;
+	Mon,  6 May 2024 12:36:36 +0000 (UTC)
+From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+To: jtornosm@redhat.com
+Cc: emil.l.velikov@gmail.com,
+	gustavo.sousa@intel.com,
+	linux-modules@vger.kernel.org,
+	lucas.demarchi@intel.com,
+	mcgrof@kernel.org,
+	md@linux.it
+Subject: Re: [PATCH v2 patch] libkmod: add weak dependecies
+Date: Mon,  6 May 2024 14:36:02 +0200
+Message-ID: <20240506123634.14246-1-jtornosm@redhat.com>
+In-Reply-To: <20240409155035.524993-1-jtornosm@redhat.com>
+References: <20240409155035.524993-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240407035730.20282-3-laoar.shao@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-On Sun 2024-04-07 11:57:30, Yafang Shao wrote:
-> In our production environment, upon loading a new atomic replace livepatch,
-> we encountered an issue where the kernel module of the old livepatch
-> remained, despite being replaced by the new one. This issue can be
-> reproduced using the following steps:
-> 
-> - Pre setup: Build two atomic replace livepatches
-> 
-> - First step: Load the first livepatch using the insmod command
->   $ insmod livepatch-test_0.ko
-> 
->   $ ls /sys/kernel/livepatch/
->   livepatch_test_0
-> 
->   $ cat /sys/kernel/livepatch/livepatch_test_0/enabled
->   1
-> 
->   $ lsmod  | grep livepatch
->   livepatch_test_0       16384  1
-> 
-> - Second step: Load the new livepatch using the insmod command
->   $ insmod livepatch-test_1.ko
-> 
->   $ ls /sys/kernel/livepatch/
->   livepatch_test_1                  <<<< livepatch_test_0 was replaced
-> 
->   $ cat /sys/kernel/livepatch/livepatch_test_1/enabled
->   1
-> 
->   $ lsmod  | grep livepatch
->   livepatch_test_1       16384  1
->   livepatch_test_0       16384  0    <<<< leftover
-> 
-> Detecting which livepatch will be replaced by the new one from userspace is
-> not reliable, necessitating the need for the operation to be performed
-> within the kernel itself. With this improvement, executing
-> `insmod livepatch-test_1.ko` will automatically remove the
-> livepatch-test_0.ko module.
-> 
-> Following this change, the associated kernel module will be removed when
-> executing `echo 0 > /sys/kernel/livepatch/${livepath}/enabled`. Therefore,
-> adjustments need to be made to the selftests accordingly.
-> 
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -721,8 +723,12 @@ static void klp_free_patch_finish(struct klp_patch *patch)
->  	wait_for_completion(&patch->finish);
->  
->  	/* Put the module after the last access to struct klp_patch. */
-> -	if (!patch->forced)
-> -		module_put(patch->mod);
-> +	if (!patch->forced) {
-> +		module_put(mod);
-> +		if (!delete)
-> +			return;
-> +		delete_module(mod);
+Hello Lucas,
 
-We should check the return value and report an error.
+If you have time, let me ask you about the status of the weak dependency feature.
+Do you have any feedback/review for me?
+Should I do something to improve it and/or progress?
 
-> +	}
->  }
+Thanks in advance
 
-Otherwise, it looks good to me.
+Best regards
+José Ignacio
 
-I am personally in favor of this change. It removes one step
-which otherwise has to be called from userspace after a non trivial
-delay. The transition might take seconds.
 
-It should simplify the scripting around livepatch modules handling.
-It might reduce the need to over-optimize transition times.
-
-Best Regards,
-Petr
