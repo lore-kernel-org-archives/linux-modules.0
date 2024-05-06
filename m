@@ -1,77 +1,97 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923713C00
-	for <linux-modules@vger.kernel.org>; Mon,  6 May 2024 12:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED85156641;
+	Mon,  6 May 2024 18:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714999006; cv=none; b=pZgHfNRx8/4+9DTqz4zRWmY2kqT712SIOrgxJmZ5DVYZYAZdZHHkUDsJ4B4OH99vBqSxeR7BejTVo6XSKZrH/SVzJvkBaQz4dqhPcctLVPOJeD6Vnc0g07y4DF9ObCLIkAYtH9La7glWgTa9OMwNJJ+hBy4oAkHvMF5zfbnS1Pc=
+	t=1715019315; cv=none; b=h3+ymjmW45lCp+GvN6GKcyrsNL5QsCBLiSeilSszSMDyvqIghA8HEoJ9GOLiN8K2EvjtvQQ+lHNjvOfEQfs+oLXpgOUvWQDHRBiGyUponEeg/ZkJwMPydJU8K5dd2BX+eYzb9ifvl5jERSbTlbh/myPpuYG+Si37qXkVv+IWKfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714999006; c=relaxed/simple;
-	bh=mV+oaEHJcdm3/3wRQ/lnbWGHEBLmKf1UfZZlx3952AU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BU7rkznlbziAGc+xUT7CoQV5y0octeFucg9qLnhrHe/krxV7ncXWMc4IOPIeJZeofRA3u+7vqC01koyTJhEcw63dZzZbz6I2BVjyNLsEdz5MJdcxMAKTojpjMTJLoaOrPjdN/TkAKPYLun7ntomYLOohbxsTaE/E4weHusNiSaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TPdh2lVW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TPdh2lVW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714999003;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mV+oaEHJcdm3/3wRQ/lnbWGHEBLmKf1UfZZlx3952AU=;
-	b=TPdh2lVWHKXSB4YpHE4PCpInYrNYqxvCdEWlZQpSP8Bne5dUGMQvrf25CICI5Hk1OYpRKm
-	jfFSzLDyYFhYGV0Xa9T2GWsfx50eDmpynbg8HZKhxtt+qYnWmlUCPztYYW7qHoJQVd8CTI
-	gUpI/dhFDY6WsY6Q2GeqdTdaN7phNxI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-fgNsyTZLNMWFcPXb3JhGug-1; Mon,
- 06 May 2024 08:36:38 -0400
-X-MC-Unique: fgNsyTZLNMWFcPXb3JhGug-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6C813C025C9;
-	Mon,  6 May 2024 12:36:37 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.193.190])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 41A0F200A3BB;
-	Mon,  6 May 2024 12:36:36 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: jtornosm@redhat.com
-Cc: emil.l.velikov@gmail.com,
-	gustavo.sousa@intel.com,
-	linux-modules@vger.kernel.org,
-	lucas.demarchi@intel.com,
-	mcgrof@kernel.org,
-	md@linux.it
-Subject: Re: [PATCH v2 patch] libkmod: add weak dependecies
-Date: Mon,  6 May 2024 14:36:02 +0200
-Message-ID: <20240506123634.14246-1-jtornosm@redhat.com>
-In-Reply-To: <20240409155035.524993-1-jtornosm@redhat.com>
-References: <20240409155035.524993-1-jtornosm@redhat.com>
+	s=arc-20240116; t=1715019315; c=relaxed/simple;
+	bh=ZhH5iWadclZ9+WfXofPKpyaOZHjgm7/VzbgUngE0oP8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FanQkZg96UguXoIjJosomOTl3sHWhTjfV+Vg5/uElN9flOe52yatyN7YRdjzVCx/X6V51ZD/OWxeAoeLgbMJBBBkcqJxYGfcWGMMrYP9oLl5nrF7Wxhp7HCeClcibsg72o4+mj+DmAXslWlI3vrp/vi/0C1SLgy99q6lliPLErw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4789AC116B1;
+	Mon,  6 May 2024 18:15:10 +0000 (UTC)
+Date: Mon, 6 May 2024 14:15:15 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
+ <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
+ <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
+ <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Liviu
+ Dudau <liviu@dudau.co.uk>, Luis Chamberlain <mcgrof@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>, Rick
+ Edgecombe <rick.p.edgecombe@intel.com>, Russell King
+ <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>, Song Liu
+ <song@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas
+ Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v8 06/17] mm: introduce execmem_alloc() and
+ execmem_free()
+Message-ID: <20240506141515.10fb2a69@gandalf.local.home>
+In-Reply-To: <20240505142600.2322517-7-rppt@kernel.org>
+References: <20240505142600.2322517-1-rppt@kernel.org>
+	<20240505142600.2322517-7-rppt@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello Lucas,
+On Sun,  5 May 2024 17:25:49 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-If you have time, let me ask you about the status of the weak dependency feature.
-Do you have any feedback/review for me?
-Should I do something to improve it and/or progress?
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 70139d9d2e01..c8ddb7abda7c 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/memory.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/set_memory.h>
+> +#include <linux/execmem.h>
+>  
+>  #include <trace/syscall.h>
+>  
+> @@ -261,15 +262,14 @@ void arch_ftrace_update_code(int command)
+>  #ifdef CONFIG_X86_64
+>  
+>  #ifdef CONFIG_MODULES
+> -#include <linux/moduleloader.h>
+>  /* Module allocation simplifies allocating memory for code */
+>  static inline void *alloc_tramp(unsigned long size)
+>  {
+> -	return module_alloc(size);
+> +	return execmem_alloc(EXECMEM_FTRACE, size);
+>  }
+>  static inline void tramp_free(void *tramp)
+>  {
+> -	module_memfree(tramp);
+> +	execmem_free(tramp);
+>  }
+>  #else
+>  /* Trampolines can only be created if modules are supported */
+> diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
 
-Thanks in advance
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Best regards
-José Ignacio
-
-
+-- Steve
