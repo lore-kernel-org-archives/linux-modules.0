@@ -1,96 +1,100 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F05A1E861;
-	Sun,  5 May 2024 19:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8754D481B1;
+	Mon,  6 May 2024 06:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714937625; cv=none; b=D3XbBtbWTpZeOGK+DrC1ZgO8s8053RdoJCIw9nmzw6rEwsR+2ghMuyCLelRqGqECFoDDNUVmRiFPBb9yWFkn6ke0jBA/zu8Ul/eQlWNXwMMQ7EA8xKVEKOUMWXZJE1P0iyZy6lTgflVEKIHm30FfOpbuueIZsOVePO8x8btmfDw=
+	t=1714976880; cv=none; b=UtQg1eXfbfovM2nqDErmodSQMOnh5MtmZVPewsWrtOKXXg/HqULuzc90I5CiSyT5iG0nNFwPVmI38TGF9O+Ww3zLep8Oh5Oiaj6+llPZeeYfDGv9P3gfJHqjcdNph7CvzRPF2aelRwIfp24N+Aq3+sJ0fEqJ/K2mQqirX6u9krA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714937625; c=relaxed/simple;
-	bh=FAa895ktb1uP1Vp93a9G7q8BSm2alQQQ6zACrN4BDCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LLoxacyzy9oeAMGCyE+tnpKycRFnCKBJGPSofpNOp1GpHh1FentXLWmJTfeNzYKstObhv9K2Y4at5xfwo6P2jHgNEp1Y1vqpI+kQIkCJh+3nTEJtxSRS75HHmJwoOVz64Q8AWGnqg0zsMJtwqQlTpYxWryLmhp0Hsho5XjOCyJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=McWQbNDY; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1714976880; c=relaxed/simple;
+	bh=J6lwFhRAUTQqgryMYvr9KovWpiaYAxESsqduXrYIcBs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aahkMfmG0co22689/7B65H1jB/lxUOZmWsSfOTGd8Igy+CSI8r/9u7n0hM+/UPicZD7WR2lr2+IHVhX5IVVWsnZnofTl+Tutcj7jdzr/mGlFxg08lhQwYBoL3sx9WNpLi/2sbU81sOx80k4B2qF45tExjA7O0tKJG/lR3rN+f00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OYbf2BJg; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="McWQbNDY"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ir7v3reFern2bMfdElsM96VZnzXzk0n4uUJTOAif+1Q=; b=McWQbNDYzuYXgpSXDP4LItZWas
-	c+G1yOfrbEspOzp1y83MmoVq+GjM65/lDs5ubikEffoKy6knBTT0Cnta994MJYbor6t7/xL39+xZY
-	ql5OkyzdVJnqVLsZA07ot1DBjiNfK/PRj32i+7icc4KxOKtjuizlh6PQ2yg/Gh2uW00MtWrZH+noT
-	DmGe+qrgLQzl+Vjiy6wLJXFRAfjYNsLD6oxZNRyY3G4+BY0/9l8y8NCR4bpLwA4zkQq+SpC8pRlQ7
-	1jq7R+FD/uXz6shSAQhD3+U1mfsV1BoTVZ/bSVu26krBG1rtN+CtsWnH1RZsq3KB14EYp0oR36XWz
-	2afx1NrA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s3hc8-0000000587A-2v0C;
-	Sun, 05 May 2024 19:33:36 +0000
-Date: Sun, 5 May 2024 12:33:36 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Donald Dutile <ddutile@redhat.com>,
-	Eric Chanudet <echanude@redhat.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Liviu Dudau <liviu@dudau.co.uk>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nadav Amit <nadav.amit@gmail.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Sam Ravnborg <sam@ravnborg.org>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH RESEND v8 00/16] mm: jit/text allocator
-Message-ID: <ZjffEEsRIb8r0jG6@bombadil.infradead.org>
-References: <20240505160628.2323363-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OYbf2BJg"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4464lTsT004249;
+	Mon, 6 May 2024 06:27:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=qcppdkim1; bh=RIGEcxO
+	9iBsq9RdQ7hRo5WlqUTKj0bvYnPS1dfwVru8=; b=OYbf2BJg/nJyimJpCpvDUYw
+	CBg8Qwh1iCWwVGdP4A4TN4zAy4X2nLOskANFYXL0GRzKIwKWZOeyS8BdaTaXbwJf
+	eR0x2f9Q4o/ew/42btx0/579ZP4k+byhdqsn9APDRHOBgPjEEBWxUAGmCKeOhHI2
+	BJKjb51iuaDER3t7UEJpNDudIkclTYE/YbvNmANoR38ZeJcji7HeEJFkVjDEjbz5
+	1IiSl1ccMrr+V9OO5oNGc3Tt8LBKtPq7iM4QSXySyyqMjbI3vchQ+ECwSzHo/OVl
+	qAwpqwbDiSIUPke7Py0g0+DS4QSx+PJDEwbXGSdO1+kT3duDHaUD9xL/kKCXtjw=
+	=
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xwe6rtqry-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 May 2024 06:27:56 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4466RtsI004039
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 6 May 2024 06:27:55 GMT
+Received: from la-sh003-lnx.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 5 May 2024 23:27:54 -0700
+From: Joey Jiao <quic_jiangenj@quicinc.com>
+To: <linux-modules@vger.kernel.org>
+CC: <quic_jiangenj@quicinc.com>, Luis Chamberlain <mcgrof@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] kernel/module: disable cfi for do_mod_ctors
+Date: Mon, 6 May 2024 14:27:13 +0800
+Message-ID: <20240506062713.3360093-1-quic_jiangenj@quicinc.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240505160628.2323363-1-rppt@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -B47IhXWWiA2NCBlPHeLJXSS0am_gHDx
+X-Proofpoint-GUID: -B47IhXWWiA2NCBlPHeLJXSS0am_gHDx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-06_03,2024-05-03_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ clxscore=1011 mlxscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=892 malwarescore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2404010003 definitions=main-2405060039
 
-On Sun, May 05, 2024 at 07:06:12PM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> 
-> Hi,
-> 
-> The patches are also available in git:
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=execmem/v8
-> 
-> v8:
-> * fix intialization of default_execmem_info
+CFI failure when both CONFIG_CONSTRUCTORS and CFI_CLANG enabled.
 
-Thanks, applied and pushed to modules-next. If we find fixes, let's
-please just now have separate patches on top of this series.
+CFI failure at do_init_module+0x100/0x384 (target:
+tsan.module_ctor+0x0/0xa98 [module_name_xx]; expected type: 0xa540670c)
 
-  Luis
+Disable cfi for do_mod_ctors to avoid cfi check on mod->ctors[i]().
+
+Signed-off-by: Joey Jiao <quic_jiangenj@quicinc.com>
+---
+ kernel/module/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e1e8a7a9d6c1..d51e63795637 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2453,6 +2453,7 @@ static int post_relocation(struct module *mod, const struct load_info *info)
+ }
+ 
+ /* Call module constructors. */
++__nocfi
+ static void do_mod_ctors(struct module *mod)
+ {
+ #ifdef CONFIG_CONSTRUCTORS
+-- 
+2.43.2
+
