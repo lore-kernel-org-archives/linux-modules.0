@@ -1,79 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5CE41C75;
-	Tue,  7 May 2024 02:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B1E6A8DB;
+	Tue,  7 May 2024 05:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715049324; cv=none; b=rsl2bY9eIgBeXYrf71wPciMP2KjhWb/Be3ujIjnkffZKIJkbVdI2ulsgMbZ4DuUlVPXkarG2bucTnIRAVc0mcU924Gkov1xy1BcM/eSA/6lzwCxJ+bStjWAp0c2Iidg04qtcXVy+PpR9uofJDdmcqFM/mfERfW5zSLHxn8/FK4s=
+	t=1715058970; cv=none; b=F2en9R5fwoP1FevybSKhaXrpLJajtq71oQz2ZxsLjAoWfNuh9D6+Zn48pH5wKoyFx8/5amQcJccZGmef6JjgJmZKfyHfTKhj/7pprKDEx8R6gjwExtjDUJHdDXvEqkfxORxR3Jjph42J/5ioPf7iboxwxRhZPBm3UaCjytYzVBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715049324; c=relaxed/simple;
-	bh=d6O3dcC8wWUL2pYuEX03QsHXDZ+ynSU+4wXodxkTgJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DM9NJDN22DQSS6Lk52K/rrIt/Aljl/ylUC8ATUtFSActj/VARlX8ecceEpJ4Ds7wpdlC1K3lFHTqg2UngVANTmu8yRkXEg5eb+sIDPQBDRnBeLLI2EG6p7KfwWSt1RM6UnZatjaom3CDtgHg0MKsycKThaWyQARzEd4+eeyd/x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kVpqyXXv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715058970; c=relaxed/simple;
+	bh=i9DHeWX7KXecasXvAhYHrRVaJGI4UAUdfJll+Nk8yww=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ctUEsEa7GElkNlt1npSQRNvBjU94pE0TIaIGqPqR6+k0tGq5p6oI2UQ0Ob+gLYlSl3gMJQugADQEMTJGOyV32GJly7eqLnVA0zsaU8HvjfKSWlmn8QsIrjg9yQx6C5qAs1/vUaI7mYQbz7bcDFeLyrfTymwQD0+N8Gk6thbXR58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SRu0NbWK; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kVpqyXXv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A624C116B1;
-	Tue,  7 May 2024 02:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715049324;
-	bh=d6O3dcC8wWUL2pYuEX03QsHXDZ+ynSU+4wXodxkTgJQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kVpqyXXvvbLId/WiNugidvbtyKQZxncCgTRQPVZ6oDDvKjX9E2nDhC59fol39qJoi
-	 Wx+d+ugyxkm/MyQcxhsw9IVwJAO9MaPkPi6+xNf31TggJei1cDnS6MzzmLLdopI92Q
-	 X8W3fAjlOp4iU2lXQsTXkrX4GMmgRzcQu7pthdTgl6TUolqkozeQ4ez4Vxe3BvAjxc
-	 fv20rwrJt3IZngyKcMR2itH54fbG+8kqQXO9lwviy3ZKbLN00/NeQfD+1C7cEwGneO
-	 0pCdeiX4S623FT5Y0HKt2n7rjxaZFYVopt5tYpK2vykDhvxoNFJ/niV/d781gWXhB0
-	 5CaV1Gs9RrX1Q==
-Date: Mon, 6 May 2024 19:35:22 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Yafang Shao <laoar.shao@gmail.com>, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, mcgrof@kernel.org,
-	live-patching@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] livepatch: Delete the associated module of
- disabled livepatch
-Message-ID: <20240507023522.zk5xygvpac6gnxkh@treble>
-References: <20240407035730.20282-1-laoar.shao@gmail.com>
- <20240407035730.20282-3-laoar.shao@gmail.com>
- <20240503211434.wce2g4gtpwr73tya@treble>
- <Zji_w3dLEKMghMxr@pathway.suse.cz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRu0NbWK"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-62036051972so30094297b3.1;
+        Mon, 06 May 2024 22:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715058968; x=1715663768; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qRRN/6JR9vsHlrdWS5YE9S6ooRxHV3XoqORdpSSw4eU=;
+        b=SRu0NbWKF5FKvYi8NHOALyopQ3mzhXGZ77ANmfB5DRsmJtVgUOLMhFxw8WIOYwiWna
+         DydkFTUUmjtdtaoVIK1+P43Wg6ZTQB9gj/GLpvacxl+EWxB9iVw2s9nXhAG+Vh+O+y2l
+         kw2th2xq8v8UUC8rGJRdSUkP2D5P+K8Jzj5z78yJMRLf7yJyzeQ5B38e5jZYx1ChRJBU
+         IE3jpFvBxv9R4nfUCu53Pvd3fGs8x7mekH00PAeTkhL/bPGkdRu6EW60iwNQDADDHKY7
+         5xPG1OzgL5OAVQXmEJM7iKif5t0NLRWedPFbxTIis8oYmLA5k26faeoK+j2sbGpFBebc
+         R2QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715058968; x=1715663768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qRRN/6JR9vsHlrdWS5YE9S6ooRxHV3XoqORdpSSw4eU=;
+        b=UIWDxM8qJn63V2DD7wicB26RYhrzaNs0Y95zLOYb+4fpI+x6lw/BqZsfawN2kqEGJp
+         6PwpRCzyoLSHm++h5Wko1kInNwOviRP+IawVHxkpMUR+HX2cNHCcfFxoparotpTEU6jO
+         CFHypeTWXE2yobtyJUnUSgdbPozN39H/ZljrLOML1eqf4gw/5oN9nMd+LTqM98CaMhBB
+         tF57M422L4+ArdYv7yL/XFDy9ujyntuRN0hAF/rO8U3MdJrDRKgKk9gWwAZyluHkDeMo
+         ucb9Ky4r4xQIqMTb7f7o0ALJl323cb1RQ5eScmezJ2JnYPFqWIN5mgklqMLWyNHRTiAU
+         4fXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGJA1T0unrf90Qr7q1tn/vJWQLUwFfu0UknP6A1KCoPwaMzD6qVGCGaTHwZA1JbsUKljLweJ1PNOqbnSbd8+zqIpwj9oXq5tzYrytYYg==
+X-Gm-Message-State: AOJu0YykKb/4qRzRgj4Hgmb+R0HNxSJ0UcTIiwiyvM2B41VJJRyovTpw
+	pJSHdnR13Ye8n91QU660rzH890R755/STBrva1s1n1NnjGDpo7rNiRVWZOjCSYx95dT+IQ7o3KO
+	gqEEd2FsS16VhMFVAD6PRMUWh2UfczA==
+X-Google-Smtp-Source: AGHT+IF1IsOQnyYpiHXGGnDEQACnR+86vly8yM9hSdUsAu3azUm9HfKfMGNWGUCFN0JG/kiZpL4sldEk/1epYvTM/jc=
+X-Received: by 2002:a0d:eb48:0:b0:61e:a62:d8fc with SMTP id
+ u69-20020a0deb48000000b0061e0a62d8fcmr11878695ywe.20.1715058967513; Mon, 06
+ May 2024 22:16:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Zji_w3dLEKMghMxr@pathway.suse.cz>
+References: <20240417053530.30995-1-wangyao@lemote.com>
+In-Reply-To: <20240417053530.30995-1-wangyao@lemote.com>
+From: Ainux Wang <ainux.wang@gmail.com>
+Date: Tue, 7 May 2024 13:15:31 +0800
+Message-ID: <CAPWE4_yuDpLG7bLywEq7xQwB6+NVCUP0AwE+VgOZ-3hHpRVyUQ@mail.gmail.com>
+Subject: Re: [PATCH] modules: Drop the .export_symbol section from the final modules
+To: mcgrof@kernel.org, masahiroy@kernel.org, Wang Yao <wangyao@lemote.com>, 
+	linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 06, 2024 at 01:32:19PM +0200, Petr Mladek wrote:
-> Also it would require adding an API to remove the sysfs files from the
-> module_exit callback.
+Hi, everyone:
 
-Could the sysfs removal be triggered from klp_module_going() or a module
-notifier?
+Could someone review this patch?
 
-> I do not see any reasonable reason to keep the replaced livepatch
-> module loaded. It is an unusable piece of code. IMHO, it would be
-> really convenient if the kernel removed it.
+Best regards,
+Ainux Wang.
 
-User space needs to be polling for the transition to complete so it can
-reverse the patch if it stalls.  Otherwise the patch could stall forever
-and go unnoticed.
+<wangyao@lemote.com> =E4=BA=8E2024=E5=B9=B44=E6=9C=8817=E6=97=A5=E5=91=A8=
+=E4=B8=89 13:35=E5=86=99=E9=81=93=EF=BC=9A
 
-Can't user space just unload the replaced module after it detects the
-completed transition?
-
-I'm not sure I see the benefit in complicating the kernel and possibly
-introducing bugs, when unloading the module from user space seems to be
-a perfectly valid option.
-
-Also, an error returned by delete_module() to the kernel would be
-ignored and the module might remain in memory forever without being
-noticed.
-
--- 
-Josh
+>
+> From: Wang Yao <wangyao@lemote.com>
+>
+> Commit ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
+> forget drop the .export_symbol section from the final modules.
+>
+> Signed-off-by: Wang Yao <wangyao@lemote.com>
+> ---
+>  scripts/module.lds.S | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+> index bf5bcf2836d8..89ff01a22634 100644
+> --- a/scripts/module.lds.S
+> +++ b/scripts/module.lds.S
+> @@ -13,6 +13,7 @@ SECTIONS {
+>         /DISCARD/ : {
+>                 *(.discard)
+>                 *(.discard.*)
+> +               *(.export_symbol)
+>         }
+>
+>         __ksymtab               0 : { *(SORT(___ksymtab+*)) }
+> --
+> 2.27.0
+>
