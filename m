@@ -1,118 +1,215 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAA115E5C4;
-	Tue,  7 May 2024 14:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C242B13329C;
+	Tue,  7 May 2024 23:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715090678; cv=none; b=kgrY/33OmlPIpe+0VNrgugU33MLQDIe+JKSF9ok1RwlwqyXjoiarEMM0jHzgfuUHdihfjUof1opXhakZW1ZX9eV1gJgZ6NNNi0WLFZ0ItBOU5/teTLqzr/WZahdjWMmIXMUiBRtQUy0jk2A29zeWSO/GW5JL4CDhvgKVflCwxto=
+	t=1715125274; cv=none; b=OkB35gfkdzPhtxtDSZ4xgBJaX+HxhZRSo/vGhdQEEV5SQ3ksd4gKg110XV6oqNBBnWG8KIrg6i0gwC28u81zkEaeCKv2aG1aTHFRZ4SGQJc6xiwi22vHHkA0ro4iKNjdg8lGoLJOKgqC9G9mHqwnUFwN3gpTLAqnx0RSIXLU52w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715090678; c=relaxed/simple;
-	bh=nlaeZmL+KJJ2V177uLxHFZ29IrgSTAq0VC/0/V/HUIw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gz1vVumZFnv2PWLabYqqhSIfJsTn4VqNCKCrHn/uQAo+2HOLEpTGyjhsoER+S/vElwaW4JZpmkr3MHIm+TOyYSjwK8dJB5Ufd88juJYxh0Ysq3SkSPXleRTXC61ZM1oKLq2UeiUJANl9kGDr9TLtZoXDz/UGC2oRgU8YnhCS/6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lBenVZPR; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715125274; c=relaxed/simple;
+	bh=ODKOUMcSjW/vZC3ltI6tPmb1ZIxhx2e2qI8/N+kVOFM=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=t6CwqmleLwgGY8hf61vJqTDLDLKUtwOl7IzBSRD290G2mMXBMDMCx2LipMBcNV+MIlJJGXlHmZeFSZuCnSIP01uaA+ypqj6ovQ9E8BObn5JsrlczQyJPZMNFW+hJSgwjhYqdHmj6d7yuiJRfiFhF3lDHotmh5ouLRqgfEu8Km9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WH1d1Zrd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lBenVZPR"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6a0ff97a9c7so43040126d6.0;
-        Tue, 07 May 2024 07:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715090676; x=1715695476; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mBGToCMB6kGQ+VwKBgwLZvBpbX3sGXBJlbKQvazNkag=;
-        b=lBenVZPRzznHMARA/cALxRZps3j3WN26eJ0N1bWGsl1S1d0sOLb+yXVHCyYP7kqNij
-         tRpZLGrj0qv7R9LbhezbSYLX1N1qEq9gL3KVAm5SsZn+g+xwsYtYvEqCW4oCTcroyFqw
-         Ue5Qvmd52D4t7sRSD4hPdW1oylav2YEMEfeSfIRMRUpNz972QMT8BJnvsMfsIU8e2MBf
-         ORjJqv+B0GX9vB7qogWf/o3WQnP6//Zw3QFW9vRuTqDsofL5SW1kJrTMj4PacJ5qyU1m
-         8VFgFTWakgO1FzmynH+Gi7kgVPbR/I1CGtD/yB0E0J2TnvcrQdn2qVvocdg3ydqozGjt
-         i5MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715090676; x=1715695476;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mBGToCMB6kGQ+VwKBgwLZvBpbX3sGXBJlbKQvazNkag=;
-        b=suwnvO8NtPg8osKjnRViH9PG60Tk+j9Y0sD1geQpT/gwFBjw3Jd8Q9gDQnTGZFlE0j
-         bewckW5xmiI9qS5jNIf7RoDjFce0EiaFamYDeTf9cRu+QbS5OTuRvMRir6hQKNkr08mN
-         JE5Dtf9LhQ2R2Tf2dIUyRYA2BalLthZAAGWOfhYdoSEplUDvrdXhDSUAi/z2BSZZTWU0
-         +ez5/1LOcMaULp0dBMm1IPOhm70TCkHIZHXLd/VSjDCg3axBhqzinWACvPPJAtKMQbIH
-         /9y3h05sgcK4RkC9eFMFLsfpWn/BrPOqIVmGy4VRAvw5AoIAo9Vz+vvj+8cobI6QSSBa
-         fehw==
-X-Forwarded-Encrypted: i=1; AJvYcCUazzrEK2AX9T6l5V6pC8LYKbu8/74G7ou06UbxwKoY8rEPcg+wTELx5LRVKydWKbCO6YoXx0jMjdm5XxYf9MFGLgxXqfHkYLoWSs3/AyapZbrZDH7IUb+rGKh3mkkqLy0IjDa/vq2I6EBYu3k=
-X-Gm-Message-State: AOJu0YyFpQWq63JjlWSldbswng8WYgFO3bUB/ULfMblYQbFsn1oc44jw
-	t9IMlo4Zx8xGcapNwGwwxT6m15iCvf0vayOvh77DQdQEaA5yjjWtC/S3spy3Ufxz+WQb+FzTMU7
-	3lWlOGmMR+M5mP/UN3vx0T3EeXwQugsBCiKo=
-X-Google-Smtp-Source: AGHT+IGiSNwX2oRF7dtfcnU9xHgu+cAheggzUcyFac3OO2PogaW1cgJI/dNFidFeO7Q9jjbP9VElAFgbTMAHVYIAWOw=
-X-Received: by 2002:a05:6214:c84:b0:6a0:b3ec:9032 with SMTP id
- r4-20020a0562140c8400b006a0b3ec9032mr4787351qvr.12.1715090675961; Tue, 07 May
- 2024 07:04:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WH1d1Zrd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D7C2C2BBFC;
+	Tue,  7 May 2024 23:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715125273;
+	bh=ODKOUMcSjW/vZC3ltI6tPmb1ZIxhx2e2qI8/N+kVOFM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WH1d1ZrdOijFn1cT49Jm2ZUSrhswkNac03IVHqq7Eohwb66eyC/upbIRg5OmSQrS5
+	 590jVcfK2eY7mGIT+Mu2vfZ+2kgvT+bvvG+nO0mpjkaiB/hzuVoCqKdsgEfcB6GUI1
+	 tZHVMdm8HMaoJWCDDdSEsUeSS2shrn9LwS64jApcEtp551mG5S0J2RXLfrbG59V5J/
+	 HlHuUhoLZsEzbSOo52SetyHK+GisTyafXt2qQ3WQN6uI/FPqAL3Mvb4Ag0onvgsMRn
+	 PVoqChvTS3nyekeTg4nrB1W8PoOH/gLtrOXEqRETwcHpFeC7NS6eZgZtaW77r3KgQl
+	 SXWjnlSGSut3Q==
+Date: Wed, 8 May 2024 08:41:02 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christophe
+ Leroy <christophe.leroy@csgroup.eu>, "David S. Miller"
+ <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile
+ <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, Heiko Carstens
+ <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen
+ <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, Liviu
+ Dudau <liviu@dudau.co.uk>, Luis Chamberlain <mcgrof@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Philippe =?UTF-8?B?TWF0aGlldS1EYXVkw6k=?= <philmd@linaro.org>, Rick
+ Edgecombe <rick.p.edgecombe@intel.com>, Russell King
+ <linux@armlinux.org.uk>, Sam Ravnborg <sam@ravnborg.org>, Song Liu
+ <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
+ <tglx@linutronix.de>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, netdev@vger.kernel.org,
+ sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH RESEND v8 05/16] module: make module_memory_{alloc,free}
+ more self-contained
+Message-Id: <20240508084102.9e9b18a9b111d427e7cc9c94@kernel.org>
+In-Reply-To: <20240505160628.2323363-6-rppt@kernel.org>
+References: <20240505160628.2323363-1-rppt@kernel.org>
+	<20240505160628.2323363-6-rppt@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240407035730.20282-1-laoar.shao@gmail.com> <20240407035730.20282-3-laoar.shao@gmail.com>
- <20240503211434.wce2g4gtpwr73tya@treble> <Zji_w3dLEKMghMxr@pathway.suse.cz> <20240507023522.zk5xygvpac6gnxkh@treble>
-In-Reply-To: <20240507023522.zk5xygvpac6gnxkh@treble>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 7 May 2024 22:03:59 +0800
-Message-ID: <CALOAHbArS+WVnfU-RUzbgFJTH5_H=m_x44+GvXPS_C3AKj1j8w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] livepatch: Delete the associated module of
- disabled livepatch
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>, jikos@kernel.org, mbenes@suse.cz, 
-	joe.lawrence@redhat.com, mcgrof@kernel.org, live-patching@vger.kernel.org, 
-	linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 7, 2024 at 10:35=E2=80=AFAM Josh Poimboeuf <jpoimboe@kernel.org=
-> wrote:
->
-> On Mon, May 06, 2024 at 01:32:19PM +0200, Petr Mladek wrote:
-> > Also it would require adding an API to remove the sysfs files from the
-> > module_exit callback.
->
-> Could the sysfs removal be triggered from klp_module_going() or a module
-> notifier?
->
-> > I do not see any reasonable reason to keep the replaced livepatch
-> > module loaded. It is an unusable piece of code. IMHO, it would be
-> > really convenient if the kernel removed it.
->
-> User space needs to be polling for the transition to complete so it can
-> reverse the patch if it stalls.  Otherwise the patch could stall forever
-> and go unnoticed.
->
-> Can't user space just unload the replaced module after it detects the
-> completed transition?
+On Sun,  5 May 2024 19:06:17 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-Are you referring to polling the
-"/sys/kernel/livepatch/XXX/transition"? The challenge lies in the
-uncertainty regarding which livepatches will be replaced and how many.
-Even if we can poll the transition status, there's no guarantee that a
-livepatch will be replaced by this operation.
+> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> 
+> Move the logic related to the memory allocation and freeing into
+> module_memory_alloc() and module_memory_free().
+> 
 
->
-> I'm not sure I see the benefit in complicating the kernel and possibly
-> introducing bugs, when unloading the module from user space seems to be
-> a perfectly valid option.
->
-> Also, an error returned by delete_module() to the kernel would be
-> ignored and the module might remain in memory forever without being
-> noticed.
+Looks good to me.
 
-As Petr pointed out, we can enhance the functionality by checking the
-return value and providing informative error messages. This aligns
-with the user experience when deleting a module; if deletion fails,
-users have the option to try again. Similarly, if error messages are
-displayed, users can manually remove the module if needed.
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
---=20
-Regards
-Yafang
+Thanks,
+
+> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> ---
+>  kernel/module/main.c | 64 +++++++++++++++++++++++++++-----------------
+>  1 file changed, 39 insertions(+), 25 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index e1e8a7a9d6c1..5b82b069e0d3 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -1203,15 +1203,44 @@ static bool mod_mem_use_vmalloc(enum mod_mem_type type)
+>  		mod_mem_type_is_core_data(type);
+>  }
+>  
+> -static void *module_memory_alloc(unsigned int size, enum mod_mem_type type)
+> +static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+>  {
+> +	unsigned int size = PAGE_ALIGN(mod->mem[type].size);
+> +	void *ptr;
+> +
+> +	mod->mem[type].size = size;
+> +
+>  	if (mod_mem_use_vmalloc(type))
+> -		return vzalloc(size);
+> -	return module_alloc(size);
+> +		ptr = vmalloc(size);
+> +	else
+> +		ptr = module_alloc(size);
+> +
+> +	if (!ptr)
+> +		return -ENOMEM;
+> +
+> +	/*
+> +	 * The pointer to these blocks of memory are stored on the module
+> +	 * structure and we keep that around so long as the module is
+> +	 * around. We only free that memory when we unload the module.
+> +	 * Just mark them as not being a leak then. The .init* ELF
+> +	 * sections *do* get freed after boot so we *could* treat them
+> +	 * slightly differently with kmemleak_ignore() and only grey
+> +	 * them out as they work as typical memory allocations which
+> +	 * *do* eventually get freed, but let's just keep things simple
+> +	 * and avoid *any* false positives.
+> +	 */
+> +	kmemleak_not_leak(ptr);
+> +
+> +	memset(ptr, 0, size);
+> +	mod->mem[type].base = ptr;
+> +
+> +	return 0;
+>  }
+>  
+> -static void module_memory_free(void *ptr, enum mod_mem_type type)
+> +static void module_memory_free(struct module *mod, enum mod_mem_type type)
+>  {
+> +	void *ptr = mod->mem[type].base;
+> +
+>  	if (mod_mem_use_vmalloc(type))
+>  		vfree(ptr);
+>  	else
+> @@ -1229,12 +1258,12 @@ static void free_mod_mem(struct module *mod)
+>  		/* Free lock-classes; relies on the preceding sync_rcu(). */
+>  		lockdep_free_key_range(mod_mem->base, mod_mem->size);
+>  		if (mod_mem->size)
+> -			module_memory_free(mod_mem->base, type);
+> +			module_memory_free(mod, type);
+>  	}
+>  
+>  	/* MOD_DATA hosts mod, so free it at last */
+>  	lockdep_free_key_range(mod->mem[MOD_DATA].base, mod->mem[MOD_DATA].size);
+> -	module_memory_free(mod->mem[MOD_DATA].base, MOD_DATA);
+> +	module_memory_free(mod, MOD_DATA);
+>  }
+>  
+>  /* Free a module, remove from lists, etc. */
+> @@ -2225,7 +2254,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+>  static int move_module(struct module *mod, struct load_info *info)
+>  {
+>  	int i;
+> -	void *ptr;
+>  	enum mod_mem_type t = 0;
+>  	int ret = -ENOMEM;
+>  
+> @@ -2234,26 +2262,12 @@ static int move_module(struct module *mod, struct load_info *info)
+>  			mod->mem[type].base = NULL;
+>  			continue;
+>  		}
+> -		mod->mem[type].size = PAGE_ALIGN(mod->mem[type].size);
+> -		ptr = module_memory_alloc(mod->mem[type].size, type);
+> -		/*
+> -                 * The pointer to these blocks of memory are stored on the module
+> -                 * structure and we keep that around so long as the module is
+> -                 * around. We only free that memory when we unload the module.
+> -                 * Just mark them as not being a leak then. The .init* ELF
+> -                 * sections *do* get freed after boot so we *could* treat them
+> -                 * slightly differently with kmemleak_ignore() and only grey
+> -                 * them out as they work as typical memory allocations which
+> -                 * *do* eventually get freed, but let's just keep things simple
+> -                 * and avoid *any* false positives.
+> -		 */
+> -		kmemleak_not_leak(ptr);
+> -		if (!ptr) {
+> +
+> +		ret = module_memory_alloc(mod, type);
+> +		if (ret) {
+>  			t = type;
+>  			goto out_enomem;
+>  		}
+> -		memset(ptr, 0, mod->mem[type].size);
+> -		mod->mem[type].base = ptr;
+>  	}
+>  
+>  	/* Transfer each section which specifies SHF_ALLOC */
+> @@ -2296,7 +2310,7 @@ static int move_module(struct module *mod, struct load_info *info)
+>  	return 0;
+>  out_enomem:
+>  	for (t--; t >= 0; t--)
+> -		module_memory_free(mod->mem[t].base, t);
+> +		module_memory_free(mod, t);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.43.0
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
