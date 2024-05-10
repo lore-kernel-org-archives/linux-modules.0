@@ -1,52 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from rcdn-iport-1.cisco.com (rcdn-iport-1.cisco.com [173.37.86.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B424C7D
-	for <linux-modules@vger.kernel.org>; Fri, 10 May 2024 08:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1D254662
+	for <linux-modules@vger.kernel.org>; Fri, 10 May 2024 11:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715331532; cv=none; b=l2WjtBLJr3g4Ikz3n1kPq7UghA32dxSJ3Dyn+AKI7tJxecK7k4pd+2aCCrJ73nfk7p7aNxg10ntUrceraXLxksyWOxuHk+ep5JzyFi302lAV1FA37bnRr9WiNNXOsJB7m0hIh2LZlzd94J8qAj5ylOtzVWsp+IQZQ1+aMIqYdD4=
+	t=1715340099; cv=none; b=h02ymG/9lezuBs8UDV9gQP8IXCukMFWwgnSYkeghRkwa0LzUV825Z+MBVVsC4O3KH1BxYZWJKDZkPuWvF9caeUR92wuuV1GZZKiHb8Mz74V2jCMcXiLAiQNYlNWCO2UKkTURJmnsMkpiGmJEuTdl7W5RZD/O812+paDCxvxLPdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715331532; c=relaxed/simple;
-	bh=i7lzNbNU766SPvXgvLbc9nKxUz6ZhlRWGGhNlC8Djwo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UXhep1Ydn0AWXlo8/9ST51kGvU1xyPD/YlTg8VSul3j/OkB613XXS6Ae+UK07gUfgcXLx+IhuP7c4kRczelJtI6c9Adwg0Htwdl59PvbSISM1hjF08p30YbCgz8FZmyO8rT/W3idVWOelalA/dWAFTIVFCaA9CiNLOS7KpRulsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XVEzyLMV; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1715340099; c=relaxed/simple;
+	bh=Qg7obT9d97nW/Bj9Zjun0D2JnS97mHIIq7G4J6jLkEw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DWf1ExLHzb76SzCT5IK4988QIk+tcRrGgzL6lynmxM2G62qT7Zj6zfAFffhQRO/DbWM/rpE2tHW8fmlJUbi/CcVacX7umV1m52JpIZhel1YLDRP0mdEeOO2GWEm+uHeDiLJYMisLbouwnMke8xDmjYuRDMXcGWinOj0BR8GkAXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=Uhk65CAp; arc=none smtp.client-ip=173.37.86.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XVEzyLMV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715331530;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=67Tjslp/ob1JH0/G6tnxQC8C57IHxzX8yRCE85hX0kc=;
-	b=XVEzyLMVEp4yaLD7pFXVlGUakIRU5i+EFm6S6/Utxi9mo22HALhfat2B6J/IinkWSC8Hc7
-	FjZEI/cP15Xa7YRnviHznNXQ0C6HyBYZa6E4HWei1ddPbRINGGnwzgMDoUJKjduaUo5TnR
-	/Rjesb/Dj9ZLrjrQGaimC41hJacmE1U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-480-FUWC7ru5OjOluU0xYKoIlA-1; Fri, 10 May 2024 04:57:35 -0400
-X-MC-Unique: FUWC7ru5OjOluU0xYKoIlA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C75A9800CA5;
-	Fri, 10 May 2024 08:57:34 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.109])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 5FBFE5751D3;
-	Fri, 10 May 2024 08:57:33 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: mcgrof@kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: lucas.demarchi@intel.com,
-	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-Subject: [PATCH v3] module: create weak dependecies
-Date: Fri, 10 May 2024 10:57:22 +0200
-Message-ID: <20240510085726.327831-1-jtornosm@redhat.com>
+	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="Uhk65CAp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=cisco.com; i=@cisco.com; l=10191; q=dns/txt;
+  s=iport; t=1715340097; x=1716549697;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L62N3ZzLFkJPskgT8bq9QBAkpOkTSQvskgC/EL/XzPA=;
+  b=Uhk65CApNaRsOf02CuygqNa1CAeAN2AD91t5wi4CsGfZFO+cvQ9K54pD
+   HTiVJcfNNIhmbNOqhk1/NdTJ2qQUwmiy2pHdgBO/ko+Awi/365Az4BeMN
+   BEDhBEtuAPQ5EaxOc5iSf9SzcwC0ZROC0vVO3VGD8mAKUFaDL/azVTFIy
+   Y=;
+X-CSE-ConnectionGUID: LBIQ+0UjRZeYepFZtvHCAQ==
+X-CSE-MsgGUID: zRQRIt1RReCge+SWVqoQAw==
+X-IPAS-Result: =?us-ascii?q?A0AvAQAgAj5mmJNdJa1agliEGEJIlj6LdJIZgSUDVg8BA?=
+ =?us-ascii?q?QEPRAQBAYUGiDoCJjQJDgECBAEBAQEDAgMBAQEBAQEBAQYBAQUBAQECAQcFF?=
+ =?us-ascii?q?AEBAQEBAQEBHhkFDhAnhgGGXCsLAUaBUIMAgmUCAbE2gXkzgQHeMYFrGIEwj?=
+ =?us-ascii?q?QeFZCcbgUlEgRWBO4ItiwcEhg6JOopagh+HfYVUSoEjA1khAhEBVRMNCgs+C?=
+ =?us-ascii?q?RYCFgMbFAQwDwkLJgMqBjYCEgwGBgZZIBYJBCMDCAQDRAMgcREDBBoECwd1g?=
+ =?us-ascii?q?zEEE0QDgTiJfYIJgTQpgXeBDoMQS4R2gXcOYYkgDwcFSUADCxgNSBEsNRQbB?=
+ =?us-ascii?q?iIfbgelTj0+EwETgSlsB5NACoMgjDuCHYEynzmEHaEsGjOEBaYviByQRoJUo?=
+ =?us-ascii?q?VCEY4FlOoFbTSMVO4JnUhkPji0NCdAKIzU7AgcLAQEDCYpoAQE?=
+IronPort-Data: A9a23:UX9wnazhqFyEoAxvlkJ6t+cfxirEfRIJ4+MujC+fZmUNrF6WrkUBz
+ mdNWG2GO63bZ2P0fNl0Ydjk8x8OvZXWyNZhSldpq1hgHilAwSbn6Xt1DatR0we6dJCroJdPt
+ p1GAjX4BJlpCCea/lH0auSJQUBUjcmgXqD7BPPPJhd/TAplTDZJoR94kobVuKYw6TSCK13L4
+ YOaT/H3Ygf/h2YpazpMsspvlTs21BjMkGJA1rABTagjUG/2zxE9EJ8ZLKetGHr0KqE88jmSH
+ rurIBmRpws1zj91Yj+Xuu+Tnn4iHtY+CTOzZk9+AMBOtPTtShsaic7XPNJEAateZq7gc9pZk
+ L2hvrToIesl0zGldOk1C3Fl/y9C0aJu3JXmGDvnjM6p/UD3fmPC8elwLGofBNhNkgp3KTkmG
+ f0wMjsBaFWIgPi7heviDOJtnc8kasLsOevzuFk5kmqfVqlgEMuFGvmVjTNb9G9YasRmA/3ea
+ tAfbidHZxXbaBoJMVASYH47tL3x3CWlKGAH+Dp5o4Il2VHp7RAo6oLgG9XYOee1e9xSp2+H8
+ zeuE2PRWUxCa4fFllJp6EmEgvLElDi9VI9UEbSi/f5rqFKWz20XThYRUDOTp7+igU6/Vsh3I
+ lIRvCYjxYA29Uq2Xpz4WBGlpHOflgATVsAWEOAg7gyJjK3O7G6k6nMsVDVNbpkts9U7AGVzk
+ FSIhNjuQzdotdV5VE5x6J+whxKLenAoL1UwaB4JVSU3/8fDi6gK20enoslYLIa5idj8GDfVy
+ j+MrTQji7h7sSLt//vhlbwgq2z1zqUlXjIIChPrsnVJBz6Viaa/bICurFPc9/sFdd/fRViat
+ 39CkM+bhAzvMX1vvHLTKAnuNOj1jxpgDNE6qQUxd3XG32/xk0NPhagKvFlDyL5Ba67ogwPBb
+ k7Joh9275ROJnasZqIfS9vuUplwkvm8S4u5Dqy8gj9yjn5ZKV7vEMZGOB744owRuBdEfVwXY
+ M7EIZj2UR7294w+kWfuLwvi7VPb7ntjnTyIH8+TI+WP2ruFb3ndUqYeLFaLdag46qjCyDg5A
+ P4BX/ZmPy53CbWkCgGOqNZ7BQlTcRATW8usw+QJLbHrH+aTMDx7YxMn6el/K9UNcmU8vrqgw
+ 0xRrWcElwCh3yKZdlTih7IKQOqHYKuTZEkTZUQEVWtEEVB6CWpzxM/zr6cKQIQ=
+IronPort-HdrOrdr: A9a23:j41pbKNRJcyPw8BcTs6jsMiBIKoaSvp037Dk7SxMoHtuA66lfq
+ +V8sjzuSWftN9zYgBCpTn/Asi9qBrnnPYf3WB7B9iftWfd1VdABbsSiLcKuweBJ8U7ndQtsp
+ uJtMNFebnNMWQ=
+X-Talos-CUID: =?us-ascii?q?9a23=3ASiVlLmijd4YU5aUwZxGlDW9RYTJuVlf89TSIHk2?=
+ =?us-ascii?q?CO2tYRaW7e0OO2IhNqp87?=
+X-Talos-MUID: 9a23:Zw8k1Ai+Yu/b8Ej5X+LQ9MMpJv1R2YWyUXo3nL4Jtoq/ChJpPA60k2Hi
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="6.08,150,1712620800"; 
+   d="scan'208";a="212423578"
+Received: from rcdn-core-11.cisco.com ([173.37.93.147])
+  by rcdn-iport-1.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 11:21:30 +0000
+Received: from sjc-ads-1541.cisco.com (sjc-ads-1541.cisco.com [171.70.59.233])
+	by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTP id 44ABLTuC031338;
+	Fri, 10 May 2024 11:21:30 GMT
+From: Valerii Chernous <vchernou@cisco.com>
+To: linux-modules@vger.kernel.org
+Cc: xe-linux-external@cisco.com, Nicolas Schier <n.schier@avm.de>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: [MODALTS v0.1 3/4] kmod: add modules.alternatives to modprobe
+Date: Fri, 10 May 2024 04:21:27 -0700
+Message-Id: <20240510112128.2417494-3-vchernou@cisco.com>
+X-Mailer: git-send-email 2.35.6
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -54,67 +81,326 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 171.70.59.233, sjc-ads-1541.cisco.com
+X-Outbound-Node: rcdn-core-11.cisco.com
 
-It has been seen that for some network mac drivers (i.e. lan78xx) the
-related module for the phy is loaded dynamically depending on the current
-hardware. In this case, the associated phy is read using mdio bus and then
-the associated phy module is loaded during runtime (kernel function
-phy_request_driver_module). However, no software dependency is defined, so
-the user tools will no be able to get this dependency. For example, if
-dracut is used and the hardware is present, lan78xx will be included but no
-phy module will be added, and in the next restart the device will not work
-from boot because no related phy will be found during initramfs stage.
-
-In order to solve this, we could define a normal 'pre' software dependency
-in lan78xx module with all the possible phy modules (there may be some),
-but proceeding in that way, all the possible phy modules would be loaded
-while only one is necessary.
-
-The idea is to create a new type of dependency, that we are going to call
-'weak' to be used only by the user tools that need to detect this situation.
-In that way, for example, dracut could check the 'weak' dependency of the
-modules involved in order to install these dependencies in initramfs too.
-That is, for the commented lan78xx module, defining the 'weak' dependency
-with the possible phy modules list, only the necessary phy would be loaded
-on demand keeping the same behavior, but all the possible phy modules would
-be available from initramfs.
-
-The 'weak' dependency support has been included in kmod:
-https://github.com/kmod-project/kmod/commit/05828b4a6e9327a63ef94df544a042b5e9ce4fe7
-But, take into account that this can only be used if depmod is new enough.
-If it isn't, depmod will have the same behavior as always (keeping backward
-compatibility) and the information for the 'weak' dependency will not be
-provided.
-
-Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Cc: xe-linux-external@cisco.com
+Cc: Valerii Chernous <vchernou@cisco.com>
+Signed-off-by: Valerii Chernous <vchernou@cisco.com>
 ---
-V2 -> V3:
-- Include note about backward compatibility.
-- Balance the /* and */.
-V1 -> V2:
-- Include reference to 'weak' dependency support in kmod.
+ libkmod/libkmod-internal.h |   2 +
+ libkmod/libkmod-module.c   |  74 ++++++++++++++++++++++-
+ libkmod/libkmod.c          | 118 ++++++++++++++++++++++++++++++++++++-
+ libkmod/libkmod.h          |   6 ++
+ 4 files changed, 196 insertions(+), 4 deletions(-)
 
- include/linux/module.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 1153b0d99a80..2a056017df5b 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -173,6 +173,12 @@ extern void cleanup_module(void);
-  */
- #define MODULE_SOFTDEP(_softdep) MODULE_INFO(softdep, _softdep)
+diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
+index 0a274e7..44acfb1 100644
+--- a/libkmod/libkmod-internal.h
++++ b/libkmod/libkmod-internal.h
+@@ -107,6 +107,8 @@ int kmod_lookup_alias_from_kernel_builtin_file(struct kmod_ctx *ctx, const char
+ int kmod_lookup_alias_from_builtin_file(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
+ bool kmod_lookup_alias_is_builtin(struct kmod_ctx *ctx, const char *name) __attribute__((nonnull(1, 2)));
+ int kmod_lookup_alias_from_commands(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
++int kmod_lookup_alternatives_from_modalt_file(struct kmod_ctx *ctx, const char *name, struct kmod_list **list) __attribute__((nonnull(1, 2, 3)));
++char *kmod_search_modalternatives(struct kmod_ctx *ctx, const char *name) __attribute__((nonnull(1, 2)));
+ void kmod_set_modules_visited(struct kmod_ctx *ctx, bool visited) __attribute__((nonnull((1))));
+ void kmod_set_modules_required(struct kmod_ctx *ctx, bool required) __attribute__((nonnull((1))));
  
-+/*
-+ * Weak module dependencies. See man modprobe.d for details.
-+ * Example: MODULE_WEAKDEP("module-foo")
-+ */
-+#define MODULE_WEAKDEP(_weakdep) MODULE_INFO(weakdep, _weakdep)
+diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
+index 2cdec34..5f4a877 100644
+--- a/libkmod/libkmod-module.c
++++ b/libkmod/libkmod-module.c
+@@ -107,7 +107,7 @@ struct kmod_module {
+ 	bool required : 1;
+ };
+ 
+-static inline const char *path_join(const char *path, size_t prefixlen,
++const char *path_join(const char *path, size_t prefixlen,
+ 							char buf[PATH_MAX])
+ {
+ 	size_t pathlen;
+@@ -700,11 +700,83 @@ static const struct kmod_list *module_get_dependencies_noref(const struct kmod_m
+ 
+ 		if (!mod->init.dep)
+ 			return NULL;
 +
- /*
-  * MODULE_FILE is used for generating modules.builtin
-  * So, make it no-op when this is being built as a module
++		update_mod_deps_correspond_to_alternatives((struct kmod_module *)mod);
+ 	}
+ 
+ 	return mod->dep;
+ }
+ 
++int update_mod_deps_correspond_to_alternatives(struct kmod_module *mod)
++{
++	if (is_index_available(mod->ctx, KMOD_INDEX_MODULES_ALTERNATIVES)) {
++		struct kmod_list *l;
++		struct kmod_list *preferred_l = NULL;
++		struct kmod_list *final_l = NULL;
++		int n;
++
++		DBG(mod->ctx, "Update deps alternatives for mod: %s\n",
++		    mod->name != NULL ? mod->name : "undef");
++		kmod_list_foreach(l, mod->dep) {
++			struct kmod_list *l_alt;
++			char buf[PATH_MAX*2];
++			struct kmod_module *dep = (struct kmod_module *)l->data;
++			struct kmod_module *preferred;
++
++			snprintf(buf, sizeof(buf), "%s#_#%s", mod->name, dep->name);
++			preferred = NULL;
++			n = kmod_lookup_alternatives_from_modalt_file(mod->ctx, buf, &l_alt);
++			if (n == 0 || n == -ENOENT) {
++				preferred = dep;
++				kmod_module_ref(preferred);
++			} else if ( n < 0) {
++				kmod_module_unref_list(preferred_l);
++				return n;
++			} else {
++				struct kmod_list *l2;
++				kmod_list_foreach(l2, l_alt) {
++					struct stat st;
++					struct kmod_module *alt = (struct kmod_module *)l2->data;
++					// if no preferrable alternative use first as preferred //
++					if (preferred == NULL)
++						preferred = alt;
++					snprintf(buf, sizeof(buf), "/sys/module/%s", alt->name);
++					if (stat(buf, &st) == 0 && S_ISDIR(st.st_mode)) {
++						// if one from alternative providers loaded use it as alternative //
++						preferred = alt;
++						break;
++					}
++				}
++				kmod_module_ref(preferred);
++				kmod_module_unref_list(l_alt);
++			}
++			preferred_l = kmod_list_append(preferred_l, preferred);
++		}
++		kmod_list_foreach_reverse(l, preferred_l) {
++			struct kmod_list *l2 = NULL;
++			struct kmod_module *dep = (struct kmod_module *)l->data;
++			final_l = kmod_list_insert_before(final_l, dep);
++			if (dep->dep == NULL) {
++				n = kmod_lookup_alias_from_moddep_file(mod->ctx, dep->name, &l2);
++				if (n < 0) {
++					DBG(mod->ctx, "Loading subdeps for %s failed\n", dep->name);
++					kmod_module_unref_list(preferred_l);
++					return n;
++				}
++			}
++			// remove duplicates from final dependencies and add all sub deps to current deps
++			kmod_list_foreach_reverse(l2, dep->dep) {
++				final_l = kmod_list_remove_data(final_l, l2->data);
++				final_l = kmod_list_insert_before(final_l, l2->data);
++			}
++		}
++		kmod_module_unref_list(mod->dep);
++		mod->dep = final_l;
++	} else
++		DBG(mod->ctx, "Alternatives indexes[%d]) didn't load\n", (int)KMOD_INDEX_MODULES_ALTERNATIVES);
++	return 0;
++}
++
+ /**
+  * kmod_module_get_dependencies:
+  * @mod: kmod module
+diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
+index 213b424..e5646b2 100644
+--- a/libkmod/libkmod.c
++++ b/libkmod/libkmod.c
+@@ -40,7 +40,7 @@
+ 
+ #define KMOD_HASH_SIZE (256)
+ #define KMOD_LRU_MAX (128)
+-#define _KMOD_INDEX_MODULES_SIZE KMOD_INDEX_MODULES_BUILTIN + 1
++#define _KMOD_INDEX_MODULES_SIZE KMOD_INDEX_MODULES_ALTERNATIVES + 1
+ 
+ /**
+  * SECTION:libkmod
+@@ -59,6 +59,7 @@ static const struct {
+ 	[KMOD_INDEX_MODULES_SYMBOL] = { .fn = "modules.symbols", .prefix = "alias "},
+ 	[KMOD_INDEX_MODULES_BUILTIN_ALIAS] = { .fn = "modules.builtin.alias", .prefix = "" },
+ 	[KMOD_INDEX_MODULES_BUILTIN] = { .fn = "modules.builtin", .prefix = ""},
++	[KMOD_INDEX_MODULES_ALTERNATIVES] = { .fn = "modules.alternatives", .prefix = ""},
+ };
+ 
+ static const char *const default_config_paths[] = {
+@@ -655,6 +656,105 @@ char *kmod_search_moddep(struct kmod_ctx *ctx, const char *name)
+ 	return line;
+ }
+ 
++char *kmod_search_modalternatives(struct kmod_ctx *ctx, const char *name)
++{
++	struct index_file *idx;
++	char fn[PATH_MAX];
++	char *line;
++
++	if (ctx->indexes[KMOD_INDEX_MODULES_ALTERNATIVES]) {
++		DBG(ctx, "use mmaped index '%s' mod alternative=%s\n",
++				index_files[KMOD_INDEX_MODULES_ALTERNATIVES].fn, name);
++		return index_mm_search(ctx->indexes[KMOD_INDEX_MODULES_ALTERNATIVES],
++									name);
++	}
++
++	snprintf(fn, sizeof(fn), "%s/%s.bin", ctx->dirname,
++					index_files[KMOD_INDEX_MODULES_ALTERNATIVES].fn);
++
++	DBG(ctx, "file=%s mod alternative name=%s\n", fn, name);
++
++	idx = index_file_open(fn);
++	if (idx == NULL) {
++		DBG(ctx, "could not open mod alternatives file '%s'\n", fn);
++		return NULL;
++	}
++
++	line = index_search(idx, name);
++	index_file_close(idx);
++
++	return line;
++}
++
++int kmod_lookup_alternatives_from_modalt_file(struct kmod_ctx *ctx, const char *name,
++						struct kmod_list **list)
++{
++	char *line;
++	int n = 0, err = 0;
++	const char *dirname;
++	size_t dirnamelen;
++	char buf[PATH_MAX];
++	char *p, *saveptr;
++
++	*list = NULL;
++	/*
++	 * Module alternatives names do not contain ':'. Return early if we know it will
++	 * not be found.
++	 */
++	if (strchr(name, ':'))
++		return 0;
++
++	line = kmod_search_modalternatives(ctx, name);
++	if (line == NULL)
++		return 0;
++
++	p = strchr(line, ':');
++	if (p == NULL) {
++		err = -ENOENT;
++		goto fail;
++	}
++	*p = '\0';
++	p++;
++
++	dirname = kmod_get_dirname(ctx);
++	dirnamelen = strlen(dirname);
++	if (dirnamelen + 2 >= PATH_MAX)
++		return 0;
++	memcpy(buf, dirname, dirnamelen);
++	buf[dirnamelen] = '/';
++	dirnamelen++;
++	buf[dirnamelen] = '\0';
++
++	for (p = strtok_r(p, " \t", &saveptr); p != NULL;
++                                p = strtok_r(NULL, " \t", &saveptr)) {
++		struct kmod_module *mod;
++		const char *path;
++		path = path_join(p, dirnamelen, buf);
++		if (path == NULL) {
++			ERR(ctx, "could not join path '%s' and '%s'.\n", dirname, p);
++			err = -ENOENT;
++			goto fail;
++		}
++		err = kmod_module_new_from_path(ctx, path, &mod);
++		if (err < 0) {
++			ERR(ctx, "ctx=%p path=%s error=%s\n", ctx, path, strerror(-err));
++			goto fail;
++		}
++		*list = kmod_list_append(*list, mod);
++		n++;
++	}
++
++	free(line);
++	return n;
++
++fail:
++	kmod_module_unref_list(*list);
++	*list = NULL;
++	free(line);
++	return err;
++}
++
++
+ int kmod_lookup_alias_from_moddep_file(struct kmod_ctx *ctx, const char *name,
+ 						struct kmod_list **list)
+ {
+@@ -681,6 +781,7 @@ int kmod_lookup_alias_from_moddep_file(struct kmod_ctx *ctx, const char *name,
+ 
+ 		*list = kmod_list_append(*list, mod);
+ 		kmod_module_parse_depline(mod, line);
++		update_mod_deps_correspond_to_alternatives(mod);
+ 	}
+ 
+ finish:
+@@ -916,12 +1017,12 @@ KMOD_EXPORT int kmod_load_resources(struct kmod_ctx *ctx)
+ 				    &ctx->indexes[i]);
+ 
+ 		/*
+-		 * modules.builtin.alias are considered optional since it's
++		 * modules.builtin.alias and modules.alternatives are considered optional since it's
+ 		 * recently added and older installations may not have it;
+ 		 * we allow failing for any reason
+ 		 */
+ 		if (ret) {
+-			if (i != KMOD_INDEX_MODULES_BUILTIN_ALIAS)
++			if (i != KMOD_INDEX_MODULES_BUILTIN_ALIAS && i != KMOD_INDEX_MODULES_ALTERNATIVES)
+ 				break;
+ 			ret = 0;
+ 		}
+@@ -1022,3 +1123,14 @@ enum kmod_file_compression_type kmod_get_kernel_compression(const struct kmod_ct
+ {
+ 	return ctx->kernel_compression;
+ }
++
++bool is_index_available(const struct kmod_ctx *ctx, enum kmod_index index)
++{
++	if (ctx == NULL)
++		return false;
++	if (index >= _KMOD_INDEX_MODULES_SIZE)
++		return false;
++	if (ctx->indexes[index] == NULL)
++		return false;
++	return true;
++}
+diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
+index 7251aa7..f3bd3d7 100644
+--- a/libkmod/libkmod.h
++++ b/libkmod/libkmod.h
+@@ -25,6 +25,7 @@
+ #include <stdarg.h>
+ #include <stdbool.h>
+ #include <inttypes.h>
++#include <limits.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -72,6 +73,7 @@ enum kmod_index {
+ 	KMOD_INDEX_MODULES_SYMBOL,
+ 	KMOD_INDEX_MODULES_BUILTIN_ALIAS,
+ 	KMOD_INDEX_MODULES_BUILTIN,
++	KMOD_INDEX_MODULES_ALTERNATIVES,
+ 	/* Padding to make sure enum is not mapped to char */
+ 	_KMOD_INDEX_PAD = 1U << 31,
+ };
+@@ -264,6 +266,10 @@ int kmod_module_dependency_symbol_get_bind(const struct kmod_list *entry);
+ uint64_t kmod_module_dependency_symbol_get_crc(const struct kmod_list *entry);
+ void kmod_module_dependency_symbols_free_list(struct kmod_list *list);
+ 
++bool is_index_available(const struct kmod_ctx *ctx, enum kmod_index index);
++int update_mod_deps_correspond_to_alternatives(struct kmod_module *mod);
++const char *path_join(const char *path, size_t prefixlen, char buf[PATH_MAX]);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
 -- 
-2.44.0
+2.35.6
 
