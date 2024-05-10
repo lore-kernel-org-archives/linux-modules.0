@@ -1,80 +1,79 @@
-Received: from rcdn-iport-9.cisco.com (rcdn-iport-9.cisco.com [173.37.86.80])
+Received: from rcdn-iport-5.cisco.com (rcdn-iport-5.cisco.com [173.37.86.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE50817088F
-	for <linux-modules@vger.kernel.org>; Fri, 10 May 2024 11:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6730B17088A
+	for <linux-modules@vger.kernel.org>; Fri, 10 May 2024 11:22:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.37.86.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715340174; cv=none; b=dpcadxoS9Faxk/g6HF2ofKX6ZB8GJEcQY++Fjy5zRZ6SavNMkTvb2GkLVGp/1TfBN/GoEyGGIl56T4n08mZZ0HMtjrVO0OManwOwwbDo3vthDJW8/93dUZA1ibTMlA/4BBLECCZZfN9h6BToaXqZVRxCokgDUOJ9Zsjs9tMHUys=
+	t=1715340179; cv=none; b=ohVehoHvYsAZwOJmZbyEXYdlStlzumN38KsUbd5l0Psz9sPZA9uWWW6dorbrnqUD0XdJI+ELj9bH0PFLmbbToeBG4AFOBA6RxDY+CgdMJXi6IDNOvUCWyGgrDtam+/gnzeg2Ko3fM3/3ZALJzpdNhOaeM97CyB5wMWaqKHaE7vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715340174; c=relaxed/simple;
-	bh=UwoIUQjKJGLVRQ9kJgr8dhwklwHwNBjwEHRpwEj+Y/Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Mlk+9808Si5RBHy/XlbLEhcKD4egykodZwhOcvEyRDRUxd2mmOe3+s4W5RwTVclwFiVXIEmavKsynoXO4kDQWCZ8wGV2pSOmfwyQBDgGPzvQV4Hbix1zQMusA+l8Wj9dfzB36gJtCuaUzNVBs7juCRK5/7z81Fy05p7IkQWrnsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=jedzXyR1; arc=none smtp.client-ip=173.37.86.80
+	s=arc-20240116; t=1715340179; c=relaxed/simple;
+	bh=mfOQCN5GJ4CKpWqxcoUyuraHPSm4QgrwV5P7W9TdVfk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W4BTFYI0kvdv+GGC62Y5VEYqHGTAzNfylKr4LF7o3nJJDE2lh04XpZLgMJ7weEcf95EcIxakwRcq0gbHPGyz3/poRmzXBKCrxdrs6mUCw7yPejOd52/QXpxMsizHlVuscyM2TlJ3mtKtQq1ABGaiJUOBr4JGc+12T5CG12h47ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=HjuzW15R; arc=none smtp.client-ip=173.37.86.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="jedzXyR1"
+	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="HjuzW15R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=11356; q=dns/txt;
-  s=iport; t=1715340160; x=1716549760;
+  d=cisco.com; i=@cisco.com; l=14322; q=dns/txt;
+  s=iport; t=1715340159; x=1716549759;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=FM6IXRcIoLolCf5wF4zHEmnkOQI6vbe0BxNzLrmoQaE=;
-  b=jedzXyR17EScKd/Qh32YjxuXI8tBTlbpl4E5FSOboQReljhB0N6d/wlG
-   F9escskNWAHBrYbDP9Tpa/XqnuEI8cHm02mXYNq6PJocskQv1TmnWhWlO
-   nZVYnoqZnEihrEwEe+Wj8GPbVXffj0oWTAXDS5zA8FH5sXgMVcnvz+NFe
-   Q=;
-X-CSE-ConnectionGUID: 0yzc3ISMQbamOIayOguemA==
-X-CSE-MsgGUID: Eb2k3aayQsC95yoxOVNsYg==
-X-IPAS-Result: =?us-ascii?q?A0ANAAAgAj5mmJNdJa1aHAEBAQEBAQcBARIBAQQEAQGBe?=
- =?us-ascii?q?wcBAQsBhBdCSIxyiUyBFopekhmBJQNWDwEBAQ9EBAEBhQaIOgImNAkOAQIEA?=
- =?us-ascii?q?QEBAQMCAwEBAQEBAQEBBgEBBQEBAQIBBwUUAQEBAQEBAQEeGQUOECeGAYZcK?=
- =?us-ascii?q?wsBRi18J4MAgmUCAbE2gXkzgQHeMYFrGIEwAY0GhWQnG4FJRIEVgTuBN3aLB?=
- =?us-ascii?q?wSGNIQ9hFeCaYJwgTmFZ4d9hVRKgSMDWSECEQFVEw0KCz4JFgIWAxsUBDAPC?=
- =?us-ascii?q?QsmAyoGNgISDAYGBlkgFgkEIwMIBANEAyBxEQMEGgQLB3WDMQQTRAOBOIl9g?=
- =?us-ascii?q?z0pgXeBDoMQS4R2gXcOYYkgDwcFSUADCxgNSBEsNRQbBiIfbgelRwcBLE4TA?=
- =?us-ascii?q?RMvCXmBIg8tA5ItHQqDIIw7gh2BMp85hB2hLBozqjSIHJBGpCSEY4FlOoFbT?=
- =?us-ascii?q?SMVO4JnUhkPjiwBDQnQCiM1OwIHCwEBAwmKCGABAQ?=
-IronPort-Data: A9a23:Mg3l/qKqAPf54bDsFE+R+ZUlxSXFcZb7ZxGr2PjKsXjdYENS1DEDx
- mBLDzqAaarcNzf0f4xzO4TjoR4Bv5/Uz4BkQQAd+CA2RRqmiyZq6fd1j6vUF3nPRiEWZBs/t
- 63yUvGZcYZsCCea/0/xWlTYhSEU/bmSQbbhA/LzNCl0RAt1IA8skhsLd9QR2uaEuvDnRVvd0
- T/Oi5eHYgP9hmcsajt8B5+r8XuDgtyj4Fv0gXRmDRx7lAe2v2UYCpsZOZawIxPQKmWDNrfnL
- wpr5OjRElLxp3/BOPv8+lrIWhFirorpAOS7oiE+t55OLfR1jndaPq4TbJLwYKrM4tmDt4gZJ
- N5l7fRcReq1V0HBsLx1bvVWL81xFfVX6rScAEOaiMaaymrnemrLzOhjCWhjaOX0+s4vaY1P3
- eYTJDZIZReZiqfvmfSwS/JngYIoK8yD0IE34y47i2qGS6d9B8mfHM0m5vcAtNs0rt5FHfvEY
- c0EQTFudx/HJRZIPz/7Dbpkxb3w2SmuK2MwRFS9iKBt4DPaxR1Iy5O8bcvSavu0Y95kkRPNz
- o7B1z+kWk5BboP3JSC+2naxjebU2y/2HocbDra499ZlhVSSwioYDxh+fV39uvK5i0Okc9tBL
- goY90IGqak06VzuS97xQhm1u1aasRMGHdldCes37EeK0KW83uqCLnIPQjgEY9s8uYpvHHoh1
- 0SCmJXiAjkHXKCppWy1rqaGpmiTAg0sJ2YHQg4NXCwK/tTmidRm5v7QdepLHKmwh9zzPDj/x
- TGWsSQz74n/a+ZVjc1XGniZ2lqRSoj1c+Ij2unAsouYAu5RfoWpYcmj7kLWqK8Zao2YVVKG+
- nMDnqByDdzi77nTykRho81UQNlFAspp1hWH3zaD+LF6q1yQF4aLJ9w43d2HDB4B3jw4UTHoe
- lTPngha+YVeOnCnBYcuPNvsUZt7kfa/SYy5PhwxUjaoSsUgHONg1Hw+DXN8I0iy+KTRufhmZ
- sfFK5rE4YgyUPk6lFJauNvxIZdwm3hhnjmMLXwK5x+myrGZLGWEUqsINUDGb+Yyqsu5TPb9r
- b5i2z+x40wHCoXWO3CPmaZKdAxiBSZgX/je9ZcIHtNv1yI7QgnN/deLn+N4E2Gk9owI/tr1E
- oaVBhAClgCg2yKWQehIA1g6AI7SsV9EhSpTFUQR0ZyAghDPva7HAH8jSqYK
-IronPort-HdrOrdr: A9a23:2yamT6nWoaCZC9+Qfi066LTD5yzpDfIj3DAbv31ZSRFFG/FwWf
- rDoB19726XtN9/Yh8dcLy7UpVoIkmslqKdn7NxAV7KZmCP01dAR7sM0WKN+VDd8gTFh4tgPN
- 9bE5SXzLbLfD9HZQGQ2njdL+od
-X-Talos-CUID: =?us-ascii?q?9a23=3AUogDe2lWdSpHJI5NvTr5wOGVY0bXOSXM3nyLAnS?=
- =?us-ascii?q?dMGxgTZq0QE63975pluM7zg=3D=3D?=
-X-Talos-MUID: =?us-ascii?q?9a23=3AmipAVw9gXLRcy99+QzrgNqOQf+piuaf1AUkcqI4?=
- =?us-ascii?q?t6pSVMjxXBRGGvTviFw=3D=3D?=
+  bh=vjhxBDH3gSNQZuhO2E3vYqWQtz7MoDhLUtdyjGZ+jOU=;
+  b=HjuzW15R1+ukVzW1NjyY1+qEoPpRL3heH2668ewvvPf+XrVWTW1J4t5r
+   71efKHH3VR2BYYnlv8AjZ9c372P5UDKVZHTr7a1SmV/Ngp7reXZcuJzJq
+   0KO1x0iuT7J6VNpKAX+Z+P0Dro3GJVFhA/Jnn6ggFN12DDS+3zcaEyHiE
+   U=;
+X-CSE-ConnectionGUID: p/zY9UUUTh+IUgrn9mItDw==
+X-CSE-MsgGUID: TOvHFo01QcGAUtAG/9IoAA==
+X-IPAS-Result: =?us-ascii?q?A0AUAAAgAj5mmJNdJa1aHQEBAQEJARIBBQUBgXsIAQsBh?=
+ =?us-ascii?q?BdCSIxyiUyBFopekhkUgREDVg8BAQEPRAQBAYUGiDoCJjQJDgECBAEBAQEDA?=
+ =?us-ascii?q?gMBAQEBAQEBAQYBAQUBAQECAQcFFAEBAQEBAQEBHhkFDhAnhTsHP4ZcKwsBR?=
+ =?us-ascii?q?oFQgwCCZQIBsTaBeTOBAd4xgWsYgTABjQaFZCcbgUlEgRWBO4E3doQphl4Eh?=
+ =?us-ascii?q?Q6BAIdYSoUZgxEVgk4aSyuBcwEECIUzgj6FVEqBIwNZIQIRAVUTDQoLPgkWA?=
+ =?us-ascii?q?hYDGxQEMA8JCyYDKgY2AhIMBgYGWSAWCQQjAwgEA0QDIHERAwQaBAsHdYMxB?=
+ =?us-ascii?q?BNEA4E4iX2CCYE0KYF3gQ6DEEuEdoF3DmGJIA8HBUlAAwsYDUgRLDUUGwYiH?=
+ =?us-ascii?q?24HpUcHASwEDBs2FByBFUEjB5MjHQqDIIw7gh2BMolulUuEHaEsGjOEBZdGA?=
+ =?us-ascii?q?o5niByQRoJUoVCEY4FlOkiBE00jFTuCZ1IZD4slgwcBDQnQCiM1OwIHCwEBA?=
+ =?us-ascii?q?wmKaAEB?=
+IronPort-Data: A9a23:a4eFCKlROgpMsJwBSt5/Xr/o5gypJkRdPkR7XQ2eYbSJt1+Wr1Gzt
+ xIXWGjUbPmJM2b0f95wbo619hlXsJPTm98yGVFuqyAyRVtH+JHPbTi7wugcHM8zwunrFh8PA
+ xA2M4GYRCwMZiaB4E/rav649SUUOZigHtLUEPTDNj16WThqQSIgjQMLs+Mii+aEu/Dha++2k
+ Y20+5231GONgWYubjpJsvrb8XuDgdyr0N8mlg1mDRx0lAe2e0k9VPo3Oay3Jn3kdYhYdsbSq
+ zHrlezREsvxpn/BO/v9+lrJWhRiro36YWBivkFrt52K2XCukMCdPpETb5LwYW8P49mAcksYJ
+ N9l7fRcQi9xVkHAdXh0vxRwS0lD0aN6FLDvOT+tgJ2u8nD6czjN/vp0ChAzHJE05bMiaY1O3
+ aRwxDEldBuPgae9x6i2D7A1wM8iN8LseogYvxmMzxmAUq1gGs+FEv6MvIMHtNszrpgm8fL2e
+ cEZZCBpawnoaBxUMVBRA5U79AutriOmKWID8Q3J+cLb5UDv6xJR/r+1aePeVfW3Wex62Re5o
+ UvvqjGR7hYyb4HHlmHfrRpAnNTnmT7wUZlUGLD+8/dwi12S7mMWARwSE1C8pJGRjAilUNJeJ
+ lY88zQr66Q/nGSvT9/gT1i9p3KZuhMHc8RfHvd86wyXzKfQpQGDCQA5oiVpctcqsoo9QiYnk
+ wbQ2djoHjdo9raSTBpx64t4sxuqfjokfFI/WBMEDio47MPl8YQSkj7QG4ML/LGOsvX5HjT5w
+ javpSc4hqkOgcNj60ld1Q6d695LjsaQJjPZ9jnqsnSZAhSVjbNJiqSy4lTdqP1HNovcFwDHt
+ 3kfkM/Y5+cLZX1sqMBvaLtTdF1Kz6/ZWNE5vbKJN8J/n9hK0yX/Fb28GBkkeC9U3j8sIFcFm
+ nP7twJL/4N0N3C3d6JxaI/ZI511lPW6SoW5CK+INoYmjn1NmOmvoXAGiam4gjCFraTQuf5X1
+ WqzKJ/zXShAVcyLMhLvGrpFuVPU+szO7TiOHc+glUvPPUu2b3+OQrBNK0qVcu089+uFpg6Tm
+ +uzxOPUoyizpNbWO3GNmaZKdAhiBSFiWfje9ZcNHsbdeVUOJY3UI6KLqV/XU9Y7z/09eyah1
+ izVZ3K0P3Kj2ieZc1rUNSELhXGGdc8XkE/X9BcEZT6As0XPq672hEvDX/PbpYUaydE=
+IronPort-HdrOrdr: A9a23:U5ZMa6GSHDiDNGM3pLqE58eALOsnbusQ8zAXPo5KJSC9Ffbo9f
+ xG88506faZslwssRIb6LO90de7IE80nKQdieIs1NyZMzUO1lHEEGhK1/qG/9SZIU3DHio379
+ YGT0C4Y+eAaWRHsQ==
+X-Talos-CUID: 9a23:UHcdDmNsWDFsnu5DQG51xR8pJ/0Zcj788XjKJR69KHpFV+jA
+X-Talos-MUID: 9a23:4K07OQlfVDHfl2PNAu9RdnpeE9lIzaP2UXkGvrw7p+Crcn1RPB602WE=
 X-IronPort-Anti-Spam-Filtered: true
 X-IronPort-AV: E=Sophos;i="6.08,150,1712620800"; 
-   d="scan'208";a="212078906"
+   d="scan'208";a="212731744"
 Received: from rcdn-core-11.cisco.com ([173.37.93.147])
-  by rcdn-iport-9.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 11:21:29 +0000
+  by rcdn-iport-5.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2024 11:21:30 +0000
 Received: from sjc-ads-1541.cisco.com (sjc-ads-1541.cisco.com [171.70.59.233])
-	by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTP id 44ABLTuA031338;
+	by rcdn-core-11.cisco.com (8.15.2/8.15.2) with ESMTP id 44ABLTuB031338;
 	Fri, 10 May 2024 11:21:29 GMT
 From: Valerii Chernous <vchernou@cisco.com>
 To: linux-modules@vger.kernel.org
 Cc: xe-linux-external@cisco.com, Nicolas Schier <n.schier@avm.de>,
         Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [MODALTS v0.1 1/4] tools/depmod.c: use symbol alternatives for modules.dep
-Date: Fri, 10 May 2024 04:21:25 -0700
-Message-Id: <20240510112128.2417494-1-vchernou@cisco.com>
+Subject: [MODALTS v0.1 2/4] kmod: add generation of modules.alternatives to depmod
+Date: Fri, 10 May 2024 04:21:26 -0700
+Message-Id: <20240510112128.2417494-2-vchernou@cisco.com>
 X-Mailer: git-send-email 2.35.6
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -87,361 +86,445 @@ X-Auto-Response-Suppress: DR, OOF, AutoReply
 X-Outbound-SMTP-Client: 171.70.59.233, sjc-ads-1541.cisco.com
 X-Outbound-Node: rcdn-core-11.cisco.com
 
-Add depmod cmd line switch -D to extend symbol search dependencies algorithm
-Currently, depmod use only one symbol provider into symbols hash table
-So if some symbol exported by different modules only one symbol provider
-will be presented into symbols hash table(the latest found during modules parsing)
-All other alternatives will be deleted from hash table
-As result depmod can point dependency to module different correspond to build time dependencies
-and create invalid dependency
-To avoid this issue "-D" flag extend items of symbols hash table to symbol list,
-check build time depencies and choissing proper symbol alternative if found
-corresponding module name into available modules list
-In case if no corresponding found it use latest found symbol alternative as previous alorithm
+algorithm of creating deps alternatives
+
+1. for each module(m) creating hash map(mp) of module providers for required symbols(s)
+
+2. for each required(primary) symbol(s) into module(m) create temp array of providers(p)
+from list of symbol(s) alternatives with first elem into array as symbol(s)
+
+3. get array of providers(pc) for owner(o) of symbol(s) from
+hash map(mp) of module providers
+
+4. if array of providers(pc) already presented
+4.1 check is pc equal or subset of p, if yes leave pc into map(mp) and ignore p,
+4.2 no - remove from temp array p all symbols providers that is not presenetd into pc
+(create new set of providers p less or equal to pc(providers should cover all
+required symbols, not only current symbol) and update hash map(mp) for owner(o)
+to new(cutted) p
+
+4.3 if array of providers(pc) is not presented for owner(o), create it
+
+At the end of algorithm, for each primary dependency hash map(mp) contain modules
+alternatives that provided all required symbols
+
+Note:
+Alternatives than not provide some required symbol(s) didn't trap to final list and
+variant where this symbol provided by some other module ignored(not implemented)
+Note:
+modules.dep index different for standard/basic and modules alternatives algorithms
+modules.dep for modules alternatives algorithm contain only direct dependencies
+and full dependency list will be calculated into runtime correspond to
+preferred alternative.
+modules.dep for standard/basic algorithm contain full dependency list for
+module and can't be changed during runtime without rebuild database via depmod
 
 Cc: xe-linux-external@cisco.com
 Cc: Valerii Chernous <vchernou@cisco.com>
 Signed-off-by: Valerii Chernous <vchernou@cisco.com>
 ---
- libkmod/libkmod-internal.h |   5 ++
- libkmod/libkmod-module.c   |   5 --
- shared/util.c              |  20 ++++++
- shared/util.h              |   1 +
- tools/depmod.c             | 144 +++++++++++++++++++++++++++++++++----
- 5 files changed, 155 insertions(+), 20 deletions(-)
+ tools/depmod.c | 293 ++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 290 insertions(+), 3 deletions(-)
 
-diff --git a/libkmod/libkmod-internal.h b/libkmod/libkmod-internal.h
-index 3bc6e11..0a274e7 100644
---- a/libkmod/libkmod-internal.h
-+++ b/libkmod/libkmod-internal.h
-@@ -68,6 +68,11 @@ enum kmod_file_compression_type {
- 	KMOD_FILE_COMPRESSION_ZLIB,
- };
- 
-+struct kmod_module_info {
-+        char *key;
-+        char value[];
-+};
-+
- struct kmod_list *kmod_list_append(struct kmod_list *list, const void *data) _must_check_ __attribute__((nonnull(2)));
- struct kmod_list *kmod_list_prepend(struct kmod_list *list, const void *data) _must_check_ __attribute__((nonnull(2)));
- struct kmod_list *kmod_list_remove(struct kmod_list *list) _must_check_;
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index d309948..2cdec34 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -2261,11 +2261,6 @@ static struct kmod_elf *kmod_module_get_elf(const struct kmod_module *mod)
- 	return kmod_file_get_elf(mod->file);
- }
- 
--struct kmod_module_info {
--	char *key;
--	char value[];
--};
--
- static struct kmod_module_info *kmod_module_info_new(const char *key, size_t keylen, const char *value, size_t valuelen)
- {
- 	struct kmod_module_info *info;
-diff --git a/shared/util.c b/shared/util.c
-index e2bab83..ea4b9c0 100644
---- a/shared/util.c
-+++ b/shared/util.c
-@@ -546,3 +546,23 @@ unsigned long long stat_mstamp(const struct stat *st)
- 	return (unsigned long long) st->st_mtime;
- #endif
- }
-+
-+int str_in_coma_separated_str_list(const char *where, const char *what)
-+{
-+	char *p = strstr(where, what);
-+	if (p) {
-+		int is_head_ok, is_tail_ok;
-+		size_t l = strlen(what);
-+		if (p == where || (p > where && *(p-1) == ','))
-+			is_head_ok = 1;
-+		else
-+			is_head_ok = 0;
-+		if (*(p+l) == 0 || *(p+l) == ',')
-+			is_tail_ok = 1;
-+		else
-+			is_tail_ok = 0;
-+		if (is_head_ok == 1 && is_tail_ok == 1)
-+			return p - where;
-+	}
-+	return -1;
-+}
-diff --git a/shared/util.h b/shared/util.h
-index c4a3916..4337bd6 100644
---- a/shared/util.h
-+++ b/shared/util.h
-@@ -17,6 +17,7 @@
- #define strstartswith(a, b) (strncmp(a, b, strlen(b)) == 0)
- char *strchr_replace(char *s, char c, char r);
- void *memdup(const void *p, size_t n) __attribute__((nonnull(1)));
-+int str_in_coma_separated_str_list(const char *where, const char *what);
- 
- /* module-related functions                                                 */
- /* ************************************************************************ */
 diff --git a/tools/depmod.c b/tools/depmod.c
-index 43fc354..24f79c4 100644
+index 24f79c4..7bea8e9 100644
 --- a/tools/depmod.c
 +++ b/tools/depmod.c
-@@ -59,7 +59,7 @@ static const char *const default_cfg_paths[] = {
- 	NULL
- };
- 
--static const char cmdopts_s[] = "aAb:o:C:E:F:euqrvnP:wmVh";
-+static const char cmdopts_s[] = "aAb:o:C:E:F:DeuqrvnP:wmVh";
- static const struct option cmdopts[] = {
- 	{ "all", no_argument, 0, 'a' },
- 	{ "quick", no_argument, 0, 'A' },
-@@ -68,6 +68,7 @@ static const struct option cmdopts[] = {
- 	{ "config", required_argument, 0, 'C' },
- 	{ "symvers", required_argument, 0, 'E' },
- 	{ "filesyms", required_argument, 0, 'F' },
-+	{ "deps-alternatives", no_argument, 0, 'D' },
- 	{ "errsyms", no_argument, 0, 'e' },
- 	{ "unresolved-error", no_argument, 0, 'u' }, /* deprecated */
- 	{ "quiet", no_argument, 0, 'q' }, /* deprecated */
-@@ -95,6 +96,7 @@ static void help(void)
- 		"Options:\n"
- 		"\t-a, --all            Probe all modules\n"
- 		"\t-A, --quick          Only does the work if there's a new module\n"
-+		"\t-D, --deps-alternatives	using symbols alternatives for generating modules deps\n"
- 		"\t-e, --errsyms        Report not supplied symbols\n"
- 		"\t-n, --show           Write the dependency file on stdout only\n"
- 		"\t-P, --symbol-prefix  Architecture symbol prefix\n"
-@@ -476,6 +478,7 @@ struct cfg {
- 	uint8_t check_symvers;
- 	uint8_t print_unknown;
- 	uint8_t warn_dups;
-+	uint8_t use_deps_alternatives;
- 	struct cfg_override *overrides;
- 	struct cfg_search *searches;
- 	struct cfg_external *externals;
-@@ -924,10 +927,12 @@ struct mod {
- 	uint16_t users; /* how many modules depend on this one */
- 	bool visited; /* helper field to report cycles */
- 	struct vertex *vertex; /* helper field to report cycles */
-+	struct kmod_module_info *deps_from_mod_info;
- 	char modname[];
- };
- 
- struct symbol {
-+	struct symbol *next;
- 	struct mod *owner;
- 	uint64_t crc;
- 	char name[];
-@@ -975,13 +980,40 @@ static int mod_add_dependency(struct mod *mod, struct symbol *sym)
+@@ -919,6 +919,7 @@ struct mod {
+ 	struct kmod_list *info_list;
+ 	struct kmod_list *dep_sym_list;
+ 	struct array deps; /* struct symbol */
++	struct hash *deps_alts; /* array struct symbol */
+ 	size_t baselen; /* points to start of basename/filename */
+ 	size_t modnamesz;
+ 	int sort_idx; /* sort index using modules.order */
+@@ -950,6 +951,7 @@ struct depmod {
+ static void mod_free(struct mod *mod)
+ {
+ 	DBG("free %p kmod=%p, path=%s\n", mod, mod->kmod, mod->path);
++	hash_free(mod->deps_alts);
+ 	array_free_array(&mod->deps);
+ 	kmod_module_unref(mod->kmod);
+ 	kmod_module_info_free_list(mod->info_list);
+@@ -980,6 +982,76 @@ static int mod_add_dependency(struct mod *mod, struct symbol *sym)
  	return 0;
  }
  
--static void symbol_free(struct symbol *sym)
-+static void symbol_free_sub(struct symbol *sym)
- {
- 	DBG("free %p sym=%s, owner=%p %s\n", sym, sym->name, sym->owner,
- 	    sym->owner != NULL ? sym->owner->path : "");
- 	free(sym);
- }
- 
-+static void symbol_free(struct symbol *sym)
++static struct symbol *depmod_symbol_find(const struct depmod *depmod,
++							const char *name);
++
++struct array *symbol_get_owners(struct depmod *depmod, struct symbol *sym, int *err)
 +{
-+	struct symbol *sym_i, *sym_i_tmp;
-+	sym_i = sym;
-+	while (sym_i != NULL) {
-+		sym_i_tmp = sym_i;
-+		sym_i = sym_i->next;
-+		symbol_free_sub(sym_i_tmp);
++	struct array *sym_arr;
++	struct symbol *sym_l, *li;
++	sym_arr = malloc(sizeof(struct array));
++	if (sym_arr == NULL) {
++	    *err = -ENOMEM;
++	    return NULL;
 +	}
++	array_init(sym_arr, 4);
++	// first owner into alternatives should be primary owner so add it at 0 position //
++	*err = array_append(sym_arr, sym);
++	if ( *err < 0)
++		goto fail;
++	sym_l = (struct symbol*)depmod_symbol_find(depmod, sym->name);
++	for (li = sym_l; li != NULL; li = li->next)
++		if (li != sym) {
++			*err = array_append(sym_arr, li);
++			if ( *err < 0)
++				goto fail;
++		}
++	*err = 0;
++	return sym_arr;
++fail:
++	array_free_array(sym_arr);
++	free(sym_arr);
++	return NULL;
 +}
 +
-+static struct kmod_module_info *depmod_get_mod_info(struct mod *mod, const char *key)
++static int mod_update_dep_alternatives_groups(const struct depmod *depmod, struct mod *mod, struct symbol *sym)
 +{
-+	struct kmod_list *l;
-+	struct kmod_module_info *rval = NULL;
++	struct array *alt_arr;
++	int err;
 +
-+	kmod_list_foreach(l, mod->info_list) {
-+		struct kmod_module_info *info;
-+		info = (struct kmod_module_info *)l->data;
-+		if (strcmp(info->key, key) == 0 ) {
-+			rval = info;
-+			break;
++	DBG("Preparing alternatives for module %s dependency %s %s\n", mod->path, sym->name,
++	    sym->owner != NULL ? sym->owner->path : "(unknown)");
++
++	if (sym->owner == NULL)
++		return 0;
++	err = 0;
++	alt_arr = (struct array*)hash_find(mod->deps_alts, sym->owner->path);
++	if (!alt_arr) {
++		// Create the initial alternative modules array if not presented
++		alt_arr = symbol_get_owners(depmod, sym, &err);
++		if (!alt_arr)
++			goto alt_ex;
++		err = hash_add(mod->deps_alts, sym->owner->path, alt_arr);
++	} else {
++		// Remove alternatives that don't provide the necessary symbol
++		struct symbol *sym_l, *li;
++		size_t si = 0;
++		sym_l = (struct symbol*)depmod_symbol_find(depmod, sym->name);
++		while (si < alt_arr->count) {
++			for (li = sym_l; li != NULL; li = li->next)
++				if (li->owner == ((struct symbol*)alt_arr->array[si])->owner)
++					break;
++			// primary owner can't be removed from alternatives
++			if (!li && si != 0)
++				array_remove_at(alt_arr, si);
++			else
++				si += 1;
 +		}
 +	}
-+	return rval;
++alt_ex:
++	return err;
 +}
++
+ static void symbol_free_sub(struct symbol *sym)
+ {
+ 	DBG("free %p sym=%s, owner=%p %s\n", sym, sym->name, sym->owner,
+@@ -1014,6 +1086,13 @@ static struct kmod_module_info *depmod_get_mod_info(struct mod *mod, const char
+ 	return rval;
+ }
+ 
++static void symbol_alternatives_free(struct array *arr)
++{
++	array_free_array(arr);
++	free(arr);
++}
++
 +
  static int depmod_init(struct depmod *depmod, struct cfg *cfg,
  							struct kmod_ctx *ctx)
  {
-@@ -1537,8 +1569,9 @@ static int depmod_symbol_add(struct depmod *depmod, const char *name,
- 					const struct mod *owner)
- {
- 	size_t namelen;
--	int err;
- 	struct symbol *sym;
-+	int err = 0;
-+	struct symbol *sym_l = NULL, *sym_li = NULL;
+@@ -1089,6 +1168,11 @@ static int depmod_module_add(struct depmod *depmod, struct kmod_module *kmod)
+ 	memcpy(mod->modname, modname, modnamesz);
+ 	mod->modnamesz = modnamesz;
  
- 	if (!prefix_skipped && (name[0] == depmod->cfg->sym_prefix))
- 		name++;
-@@ -1548,20 +1581,49 @@ static int depmod_symbol_add(struct depmod *depmod, const char *name,
- 	if (sym == NULL)
- 		return -ENOMEM;
++	mod->deps_alts = hash_new(64, (void (*)(void *))symbol_alternatives_free);
++	if (mod->deps_alts == NULL) {
++		free(mod);
++		return -ENOMEM;
++	}
+ 	array_init(&mod->deps, 4);
  
-+	sym->next = NULL;
- 	sym->owner = (struct mod *)owner;
- 	sym->crc = crc;
- 	memcpy(sym->name, name, namelen);
+ 	mod->path = strdup(kmod_module_get_path(kmod));
+@@ -1127,6 +1211,7 @@ static int depmod_module_add(struct depmod *depmod, struct kmod_module *kmod)
  
--	err = hash_add(depmod->symbols, sym->name, sym);
--	if (err < 0) {
--		free(sym);
--		return err;
-+	if (depmod->cfg->use_deps_alternatives == 0) {
-+	    err = hash_add(depmod->symbols, sym->name, sym);
-+	    if (err < 0)
-+		goto err_ext;
-+	} else {
-+	    sym_l = hash_find(depmod->symbols, sym->name);
-+	    for (sym_li = sym_l; sym_li != NULL; sym_li = sym_li->next)
-+		if (sym_li->crc == sym->crc && sym_li->owner == sym->owner)
-+		    break;
-+	    if (sym_li != NULL)
-+		// symbol already in the list
-+		goto clr_ext;
-+	    else {
-+		if (sym_l != NULL) {
-+		    // insert new sym at second pos to left start list pointer from
-+		    // hash without changes
-+		    sym->next = sym_l->next;
-+		    sym_l->next = sym;
-+		} else {
-+		    // new symbol
-+		    err = hash_add(depmod->symbols, sym->name, sym);
-+		    if (err < 0)
-+			goto err_ext;
-+		}
-+	    }
+ fail:
+ 	free(mod->uncrelpath);
++	hash_free(mod->deps_alts);
+ 	free(mod);
+ 	return err;
+ }
+@@ -1742,6 +1827,8 @@ static int depmod_load_module_dependencies(struct depmod *depmod, struct mod *mo
+ 		}
+ 
+ 		mod_add_dependency(mod, sym);
++		if (depmod->cfg->use_deps_alternatives == 1)
++			mod_update_dep_alternatives_groups(depmod, mod, sym);
  	}
  
--	DBG("add %p sym=%s, owner=%p %s\n", sym, sym->name, owner,
-+	DBG("add %p sym=%s,crc(%#"PRIx64"), owner=%p %s\n", sym, name, crc, owner,
- 	    owner != NULL ? owner->path : "");
- 
  	return 0;
-+
-+err_ext:
-+	ERR("Failed to add %p sym=%s,crc(%#"PRIx64"), owner=%p %s\n", sym, name, crc, owner,
-+	        owner != NULL ? owner->path : "");
-+clr_ext:
-+	symbol_free(sym);
-+	return err;
+@@ -2164,11 +2251,24 @@ static int mod_fill_all_unique_dependencies(const struct mod *mod, const struct
+ 	return err;
  }
  
- static struct symbol *depmod_symbol_find(const struct depmod *depmod,
-@@ -1571,7 +1633,7 @@ static struct symbol *depmod_symbol_find(const struct depmod *depmod,
- 		name++;
- 	if (name[0] == depmod->cfg->sym_prefix)
- 		name++;
--	return hash_find(depmod->symbols, name);
-+	return (struct symbol *)hash_find(depmod->symbols, name);
- }
+-static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod, size_t *n_deps)
++static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod, size_t *n_deps, int is_direct_deps_only)
+ {
+ 	const struct mod **deps;
+ 	size_t last = 0;
  
- static int depmod_load_modules(struct depmod *depmod)
-@@ -1615,6 +1677,40 @@ load_info:
- 	return 0;
- }
- 
-+static struct symbol *depmod_symbol_get_primary(const struct depmod *depmod,
-+							const char *name,
-+							struct mod *mod)
-+{
-+	struct symbol *sym, *sym_l;
-+	sym_l = depmod_symbol_find(depmod, name);
-+	if (sym_l == NULL)
-+		sym = NULL;
-+	else if (sym_l->next == NULL)
-+		sym = sym_l;
-+	else {
-+		struct symbol *sym_li;
-+		if (mod->deps_from_mod_info == NULL && mod->info_list != NULL)
-+			mod->deps_from_mod_info = depmod_get_mod_info(mod, "depends");
-+		if (mod->deps_from_mod_info == NULL)
-+			sym = sym_l;
-+		else {
-+			sym = NULL;
-+			for (sym_li = sym_l; sym_li != NULL; sym_li = sym_li->next) {
-+				if (sym_li->owner->modname != NULL &&
-+				    str_in_coma_separated_str_list(mod->deps_from_mod_info->value, sym_li->owner->modname) >= 0) {
-+					sym = sym_li;
-+					break;
-+				}
-+			}
-+			if (sym == NULL) {
-+				DBG("Can't find proper owner for symbol: %s use first from list\n", name);
-+				sym = sym_l;
-+			}
-+		}
++	if (is_direct_deps_only == 1) {
++	// in case of dirrect deps it's already unique so make an deps array copy//
++		*n_deps = mod->deps.count;
++		if (*n_deps == 0)
++			return NULL;
++		last = mod->deps.count;
++		deps = malloc(sizeof(struct mod *) * last);
++		if (deps == NULL)
++			return NULL;
++		for (size_t i = 0; i < last; i++)
++			deps[i] = mod->deps.array[i];
++		goto sort_dep;
 +	}
-+	return sym;
+ 	*n_deps = mod_count_all_dependencies(mod);
+ 	if (*n_deps == 0)
+ 		return NULL;
+@@ -2182,6 +2282,7 @@ static const struct mod **mod_get_all_sorted_dependencies(const struct mod *mod,
+ 		return NULL;
+ 	}
+ 
++sort_dep:
+ 	qsort(deps, last, sizeof(struct mod *), dep_cmp);
+ 	*n_deps = last;
+ 	return deps;
+@@ -2208,7 +2309,7 @@ static int output_deps(struct depmod *depmod, FILE *out)
+ 		if (mod->deps.count == 0)
+ 			goto end;
+ 
+-		deps = mod_get_all_sorted_dependencies(mod, &n_deps);
++		deps = mod_get_all_sorted_dependencies(mod, &n_deps, depmod->cfg->use_deps_alternatives);
+ 		if (deps == NULL) {
+ 			ERR("could not get all sorted dependencies of %s\n", p);
+ 			goto end;
+@@ -2245,7 +2346,7 @@ static int output_deps_bin(struct depmod *depmod, FILE *out)
+ 		size_t j, n_deps, linepos, linelen, slen;
+ 		int duplicate;
+ 
+-		deps = mod_get_all_sorted_dependencies(mod, &n_deps);
++		deps = mod_get_all_sorted_dependencies(mod, &n_deps, depmod->cfg->use_deps_alternatives);
+ 		if (deps == NULL && n_deps > 0) {
+ 			ERR("could not get all sorted dependencies of %s\n", p);
+ 			continue;
+@@ -2368,6 +2469,171 @@ static int output_aliases_bin(struct depmod *depmod, FILE *out)
+ 	return 0;
+ }
+ 
++static int sym_mod_cmp(const void *pa, const void *pb)
++{
++	int rsl;
++	const struct symbol *a = *(const struct symbol**)pa;
++	const struct symbol *b = *(const struct symbol**)pb;
++	rsl = strcmp(a->owner->modname, b->owner->modname);
++	if (rsl == 0)
++		rsl = strcmp(a->owner->path, b->owner->path);
++	return rsl;
 +}
 +
- static int depmod_load_module_dependencies(struct depmod *depmod, struct mod *mod)
- {
- 	const struct cfg *cfg = depmod->cfg;
-@@ -1625,7 +1721,7 @@ static int depmod_load_module_dependencies(struct depmod *depmod, struct mod *mo
- 		const char *name = kmod_module_dependency_symbol_get_symbol(l);
- 		uint64_t crc = kmod_module_dependency_symbol_get_crc(l);
- 		int bindtype = kmod_module_dependency_symbol_get_bind(l);
--		struct symbol *sym = depmod_symbol_find(depmod, name);
-+		struct symbol *sym = depmod_symbol_get_primary(depmod, name, mod);
- 		uint8_t is_weak = bindtype == KMOD_SYMBOL_WEAK;
- 
- 		if (sym == NULL) {
-@@ -2306,12 +2402,27 @@ static int output_symbols(struct depmod *depmod, FILE *out)
- 	hash_iter_init(depmod->symbols, &iter);
- 
- 	while (hash_iter_next(&iter, NULL, &v)) {
--		const struct symbol *sym = v;
--		if (sym->owner == NULL)
--			continue;
--
--		fprintf(out, "alias symbol:%s %s\n",
-+		if (depmod->cfg->use_deps_alternatives == 0) {
-+			const struct symbol *sym = v;
-+			if (sym->owner == NULL)
-+				continue;
-+			fprintf(out, "alias symbol:%s %s\n",
- 					sym->name, sym->owner->modname);
-+		} else {
-+			struct symbol *sym_li;
-+			int is_printed = 0;
-+			for ( sym_li = (struct symbol*)v; sym_li != NULL; sym_li = sym_li->next) {
-+				if (sym_li->owner == NULL)
-+					continue;
-+				if ( is_printed == 0 ) {
-+					fprintf(out, "alias symbol:%s", sym_li->name);
-+					is_printed = 1;
-+				}
-+				fprintf(out, " %s", sym_li->owner->modname);
-+			}
-+			if ( is_printed == 1 )
-+				fprintf(out,"\n");
++static int sym_name_cmp(const void *pa, const void *pb)
++{
++	const struct symbol *sa, *sb;
++	const struct array *a = *(const struct array**)pa;
++	const struct array *b = *(const struct array**)pb;
++	sa = (const struct symbol*)a->array[0];
++	sb = (const struct symbol*)b->array[0];
++	return strcmp(sa->name, sb->name);
++}
++
++static void sort_sym_alternatives(struct array *sym_arr)
++{
++	if (sym_arr->count <= 2)
++		return;
++	// first element into array should remain it position //
++	qsort( &sym_arr->array[1], sym_arr->count - 1, sizeof(void*), sym_mod_cmp);
++}
++
++static int sort_mod_alternatives(const struct mod *mod, struct array *sorted)
++{
++	struct hash_iter it;
++	const void *v;
++	int rval;
++
++	array_init(sorted, 4);
++	hash_iter_init(mod->deps_alts, &it);
++	while (hash_iter_next(&it, NULL, &v)) {
++		struct array *sym_arr = (struct array *)v;
++		struct symbol *sym = (struct symbol *)sym_arr->array[0];
++		sort_sym_alternatives(sym_arr);
++		rval = array_append(sorted, sym_arr);
++		if (rval < 0) {
++			array_free_array(sorted);
++			return rval;
 +		}
- 	}
++	}
++	array_sort(sorted, sym_name_cmp);
++	return 0;
++}
++
++static int output_alternatives(struct depmod *depmod, FILE *out)
++{
++	size_t i, i2, i3;
++	fputs("# Modules dependencies alternatives extracted from modules themselves.\n", out);
++	for (i = 0; i < depmod->modules.count; i++) {
++		const struct mod *mod = depmod->modules.array[i];
++		struct array sorted_alts;
++		int rval;
++		rval = sort_mod_alternatives(mod, &sorted_alts);
++		if ( rval < 0) {
++		    ERR("Sorting deps alternatives for %s failed\n", mod->modname);
++		    return rval;
++		}
++		for (i2 = 0; i2 < sorted_alts.count; i2++) {
++			struct array *sym_arr = (struct array *)sorted_alts.array[i2];
++			struct symbol *alternative = (struct symbol *)sym_arr->array[0];
++			// avoid printing deps with single alternative to reduce index size//
++			if (sym_arr->count <= 1)
++				continue;
++			fprintf(out, "%s#_#%s:", mod->modname, alternative->owner->modname);
++			for (i3 = 0; i3 < sym_arr->count; i3++) {
++				alternative = (struct symbol *)sym_arr->array[i3];
++				fprintf(out, " %s", mod_get_compressed_path(alternative->owner));
++			}
++			fprintf(out, "\n");
++		}
++		array_free_array(&sorted_alts);
++	}
++	return 0;
++}
++
++static int output_alternatives_bin(struct depmod *depmod, FILE *out)
++{
++	struct index_node *idx;
++	size_t i, i2, i3;
++	int err = 0;
++
++	if (out == stdout)
++		return 0;
++
++	idx = index_create();
++	if (idx == NULL)
++		return -ENOMEM;
++
++	for (i = 0; i < depmod->modules.count; i++) {
++		const struct mod *mod = depmod->modules.array[i];
++		struct array sorted_alts;
++		int rval;
++		rval = sort_mod_alternatives(mod, &sorted_alts);
++		if ( rval < 0) {
++		    ERR("Sorting deps alternatives for %s failed\n", mod->modname);
++		    return rval;
++		}
++
++		for (i2 = 0; i2 < sorted_alts.count; i2++) {
++			int duplicate;
++			char alt_key[PATH_MAX*2];
++			char *alt_value, *tmp_value;
++			size_t alt_vsize = PATH_MAX*2;
++			size_t alt_vlen = 0;
++			struct array *sym_arr = (struct array *)sorted_alts.array[i2];
++			struct symbol *alternative = (struct symbol *)sym_arr->array[0];
++			// avoid storing deps with single alternative to reduce index size //
++			if (sym_arr->count <= 1)
++				continue;
++			// construct index key //
++			snprintf(alt_key, sizeof(alt_key) - 1, "%s#_#%s", mod->modname, alternative->owner->modname);
++			alt_value = malloc(alt_vsize);
++			if (alt_value == NULL) {
++				err = -ENOMEM;
++				goto fail;
++			}
++			alt_vlen = snprintf(alt_value, alt_vsize, "%s:", alt_key);
++			// construct index value //
++			for ( i3 = 0; i3 < sym_arr->count; i3++) {
++				size_t l;
++				const char *mpath;
++				alternative = (struct symbol *)sym_arr->array[i3];
++				mpath = mod_get_compressed_path(alternative->owner);
++				l = strlen(mpath) + strlen(" ");
++				if (alt_vlen + l >= alt_vsize) {
++					alt_vsize += PATH_MAX > l ? PATH_MAX : l + 1;
++					tmp_value = realloc(alt_value, alt_vsize);
++					if (tmp_value == NULL) {
++						free(alt_value);
++						err = -ENOMEM;
++						goto fail;
++					}
++					alt_value = tmp_value;
++				}
++				strncat(alt_value, " ", alt_vsize);
++				strncat(alt_value, mpath, alt_vsize);
++				alt_vlen += l;
++			}
++			DBG("Adding to index mod: %s, key: %s, value: %s\n", mod->modname, alt_key, alt_value);
++			duplicate = index_insert(idx, alt_key, alt_value, mod->idx);
++			if (duplicate && depmod->cfg->warn_dups)
++				WRN("duplicate module alternative:\n%s %s\n",
++				    alt_key, mod->modname);
++			free(alt_value);
++		}
++		array_free_array(&sorted_alts);
++	}
++
++	index_write(idx, out);
++	index_destroy(idx);
++
++	return 0;
++fail:
++	index_destroy(idx);
++	return err;
++
++}
++
+ static int output_softdeps(struct depmod *depmod, FILE *out)
+ {
+ 	size_t i;
+@@ -2684,6 +2950,8 @@ static int depmod_output(struct depmod *depmod, FILE *out)
+ 		{ "modules.dep.bin", output_deps_bin },
+ 		{ "modules.alias", output_aliases },
+ 		{ "modules.alias.bin", output_aliases_bin },
++		{ "modules.alternatives", output_alternatives },
++		{ "modules.alternatives.bin", output_alternatives_bin },
+ 		{ "modules.softdep", output_softdeps },
+ 		{ "modules.symbols", output_symbols },
+ 		{ "modules.symbols.bin", output_symbols_bin },
+@@ -2719,6 +2987,25 @@ static int depmod_output(struct depmod *depmod, FILE *out)
+ 		char tmp[NAME_MAX] = "";
+ 		int r, ferr;
  
- 	return 0;
-@@ -2956,6 +3067,9 @@ static int do_depmod(int argc, char *argv[])
- 			config_paths[n_config_paths] = NULL;
- 			break;
- 		}
-+		case 'D':
-+			cfg.use_deps_alternatives = 1;
-+			break;
- 		case 'E':
- 			module_symvers = optarg;
- 			cfg.check_symvers = 1;
++		// modules.alternatives and modules.alternatives.bin should be processed only into dependency alternatives mode(with -D flag) //
++		if (depmod->cfg->use_deps_alternatives == 0 && (itr->cb == output_alternatives || itr->cb == output_alternatives_bin)) {
++			if (fp == NULL) {
++			// if not output to stdout //
++				int fd;
++				fd = openat(dfd, itr->name, O_RDONLY|O_CLOEXEC);
++				if (fd >=0) {
++					// if alternatives index file exists //
++					close(fd);
++					if (unlinkat(dfd, itr->name, 0) != 0) {
++						err = -errno;
++						ERR("unlinkat(%s, %s)\n", dname, itr->name);
++						break;
++					}
++				}
++			}
++			continue;
++		}
++
+ 		if (fp == NULL) {
+ 			int flags = O_CREAT | O_EXCL | O_WRONLY;
+ 			int mode = 0644;
 -- 
 2.35.6
 
