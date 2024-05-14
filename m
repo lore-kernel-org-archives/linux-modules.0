@@ -1,178 +1,238 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417AD17BD2;
-	Tue, 14 May 2024 08:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715674959; cv=none; b=TKVKofs61X6D2WlbnKKo8KquqrDqjOg+IY1w7V4tzQT8XZcs7WWe/a8rFakOA6x7M+10U24Ngs8pfGXvJyvrcAc6ywdE7R0OFgsrLbMtNi4Lt1W+05wdF6f5qmzH2zAbC+3Ev0v83zjeDAKmA2mwxK1MGOL4XP03O38VbeQNVc0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715674959; c=relaxed/simple;
-	bh=pp1cHNisj+tKz9XnjQgXLHVPUh8pqcGAdMvNqdaZNQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BKQ7YuHtsZkDPPOQgT4fFeOMJ9bD818R7hoCDmDzosT0SAwGMrcEaDoszbfOaAvsL9PPUb9jCliNpP3R6X8mU4VEnjKVygnO/RGYfY2Cuxl1zdLBZ7oNxnPga/w+fYU6uODYmDeTP/9ecmguC021u4wCPoXTWvfBVI+G0mmn3nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Vv991aFK; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591BE144D0B;
+	Tue, 14 May 2024 14:26:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715696767; cv=fail; b=ogfFLo81EkOjCjyPcyNoiKcBhpdXk3FBtOgz4rkshM0EZb5GRtNcamZaYwFuz2aBOJ80Lkf/4Suyi0Rcz6BRjePITNENRYoKNjVxbR0jGfGdsAF1zuChFZKBV95jfYenVZmUzJNK/M1TJ9PFyZjHO7S7shwV8YXfAc0Xq65/QMc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715696767; c=relaxed/simple;
+	bh=yCbJMG+rItny0+1Qogp67PlK+RRDihhhYT35+oDoHwM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CD5wxQQMCafIBvXr2qAhJODLFWweieliSJNQvO00OEn6PAWgmL80OFhtvHSEePSFqN2riMPXi4PypDBtU9KgKFeSE8BsBQvelhtYp64vyDddjExgSUziOf5cjcN3fvwBtdXrc4SfKfs8CzS4/4PL8t6NhyDO7leiLFhvoCIFWL4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ao/PUCT5; arc=fail smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Vv991aFK"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=i2r1tYPEIFq5ICtSDsTyOodWu9HoIuruvn+TZUTQ0y8=; b=Vv991aFKT1XN/drhhQgMf2jEtZ
-	v068ortgpU6RLM/jvJZXbhNziqOEckfDgR1S23T1VX2gDkEPDKOOtfW7fMpNoziJeNxKuhZ+9NQ6g
-	offVVLb04CTmfWs0HLStyA2EIkLsYD1eR2tesQdOLJCHuGytm7ahMhIgdxIbUf8oFIUR6qmSjn08d
-	xEv3OX9Mm3QQMq1mH3Fce6811Py/bG/h3ikPzyEEfKLNQPJXeR76u6aaI+NxU2U82Sj3JRuLF8lBo
-	wXcxJaZIEGi+PCXJDHPjtzC1rH2SyOfmrMctQuPMVr0yJ72j3h1mTC6fIH6nXLDIgJ0jD51uW8D9n
-	C/HEtH4A==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1s6nQh-0000000FLBc-2A8j;
-	Tue, 14 May 2024 08:22:35 +0000
-Date: Tue, 14 May 2024 01:22:35 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-modules@vger.kernel.org, mcgrof@kernel.org
-Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, rppt@kernel.org, song@kernel.org,
-	tglx@linutronix.de, bjorn@kernel.org, mhiramat@kernel.org,
-	rostedt@goodmis.org, philmd@linaro.org, will@kernel.org,
-	sam@ravnborg.org, alexghiti@rivosinc.com, liviu@dudau.co.uk,
-	justinstitt@google.com, elsk@google.com
-Subject: [GIT PULL] Modules changes for v6.10-rc1
-Message-ID: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ao/PUCT5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1715696766; x=1747232766;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=yCbJMG+rItny0+1Qogp67PlK+RRDihhhYT35+oDoHwM=;
+  b=Ao/PUCT5f0g2O9Kwxb5DmsQdXU35YdDFi3iO+WA3GWoeUbrZmt4419+n
+   hVT87sUca086SgfS5RW6W4v24vTEErEX9hhHQcuSTuFx3Jzu78rpwT6yy
+   ReNzqEIwgRVmQ8X9DQEbOe/EdxTytYAdtcq76vlH+4eyyr9u70RBDgFQF
+   MzhZ/AhgI2RQJ0uSJDypBh0oPsnKOYZ6aYJ/YD7LpVeVX0uWAwjMXJ6YZ
+   T6YnuDjbVr7tPOcWDFYYeimcFJuT7WVsRV9guFvaizy9TcOZKA4KiKykm
+   sY5J+jcQLhDS9siY/KHrQv+mNgV3BmQxesM6p5ciuHYuBATGP7aRlOodq
+   A==;
+X-CSE-ConnectionGUID: MvYOqhqnSSqgGA/Md03JcA==
+X-CSE-MsgGUID: kg7tEg+tQNiHgdgMr16qSQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11073"; a="11539138"
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="11539138"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2024 07:26:05 -0700
+X-CSE-ConnectionGUID: ZJWhVpwmR4ic4cUzAqb9TQ==
+X-CSE-MsgGUID: vxBNhJtkQP2IgWamGbd+BA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,159,1712646000"; 
+   d="scan'208";a="35224588"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 May 2024 07:26:06 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 14 May 2024 07:26:05 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 14 May 2024 07:26:05 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 14 May 2024 07:26:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mjEWPOkgFO4WU7gOp+ISj+kIKQN3vbbnt5rbyrZCFjgMwcE4AHahI/zn0nksU0rlyba54L3vyk6vixcPaDx+wIYUF1sqA1KW4Jr3/90sUKEig829lX3rGYnRf9N5vk4x069f6RifGbAW2QkaaE+5pyAUwAKwPLM/U4j/OhoVk4c4CBKbQ53zYPPxP/tbPClWk4xlR1XtCN2LiVgqPVpJ/qRfzE++goAyRgv4G8PmoKvT9BRZxRDVyAZEx6bH9eJgfVXGQfhyfw4Rzme89amLnkO+bNmxW0fVPaFLcL/37YGBvsSVm6zJqP4aCR8djhlmc21EMQvNR1h9FlWOtF9jig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yXqxWHg14qV01kdPq5ssI7W2ZoM/uS3P8yeLQs/B3X0=;
+ b=kZhytQB0FkFO2621WTMCAE5hvWc3XJyJTA9Jb2xLzDLd556VL4doKjIHpRoGcKf1VdiovdOp42oIVK+l3fwTclbJj4K2feZgLLXJgiycEaREcHgkNEe70kBVjU2f9eE/ZeUmajhRsXGlWEBULcjLzWpL1v8O09q+O7TllRrWAkLLOrEWddF5AvZjHHUiXYzHPUWhNc+T+V4o6b9b717v11+5g/+OdlK9wXP/ym5G4DrEFAOizB3XA188ugUcDTGRvjpYYwcyWXYgS1kKinly2qrlfqpA3oRMWENx0vnPUTLNeFuz9Gg2hS09IZhrtpJzgvYsvIMPQ6RbGZ0m8dosZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by CH3PR11MB8442.namprd11.prod.outlook.com (2603:10b6:610:1ae::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.55; Tue, 14 May
+ 2024 14:26:00 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%5]) with mapi id 15.20.7544.052; Tue, 14 May 2024
+ 14:26:00 +0000
+Date: Tue, 14 May 2024 09:25:55 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+CC: <mcgrof@kernel.org>, <linux-modules@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] module: create weak dependecies
+Message-ID: <4rfixlve7indkkudtsgyl7bfp5xykzlh3sf2xzlesjbo7xrh44@b4tdzwxxribv>
+References: <20240510085726.327831-1-jtornosm@redhat.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240510085726.327831-1-jtornosm@redhat.com>
+X-ClientProxiedBy: MW4PR03CA0211.namprd03.prod.outlook.com
+ (2603:10b6:303:b9::6) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|CH3PR11MB8442:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0173bced-e1f4-4b3c-8073-08dc7421c748
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|366007|1800799015|376005;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?UTIocNZp3odTARaOJC+f3Wy/YdJcFWANKv/qoMl+Z2k23rS5Ww9YuXAX0JVz?=
+ =?us-ascii?Q?SZUbbsmsnMLC9K3zvpqpGNzV40pPSxA0XjxQ+BmNvXc0u3ZDEy1BnJBaknss?=
+ =?us-ascii?Q?m9V4TWoAS7Qiu4U+KOzlBtbUrbnVFeGgaEDrw+C761hZHrl4VvhSS+lwsQbC?=
+ =?us-ascii?Q?baEoQEPy6Ez7i6oa/zopEuD7A4gwALrj6r/FzWUcpC/GsQq7jbuIMM3Tq/fN?=
+ =?us-ascii?Q?xnmsd6xKOiDTLMY1vsaKfVWhQO0iloZh4FE9wwKYGv622IZJGQL2WNCEmMMu?=
+ =?us-ascii?Q?Hl3Fqn/jcCIcaXMORigjpQTa8D+dxGj3xTzOiuMJAcpWPrqGBQdV4/6bR1KV?=
+ =?us-ascii?Q?33epp412NYXXDEabI7PFyuOZ6yiSZc6LyHRoIx396yzL9/WBlOPdMUmkwkPH?=
+ =?us-ascii?Q?EugcZJNc4lRFYUKAQE63vbkx0kE6KjOme+zfCA9/hPPdUMyimFUEErZeuYq5?=
+ =?us-ascii?Q?jOU126JSLzHqN5L+zu0Wd+4q5Lp7zXVzrTShywTc/4jrYn77sTIP0uVCmxTs?=
+ =?us-ascii?Q?EoBbsTqkbWDUH7FeP6RKGkVQ8jmTAHReaAcmsoZmB1M8GfMg4EAXpiBz5cKG?=
+ =?us-ascii?Q?uSq6ogWjHZb4EpnXxgM/hTiULYEQdM6oKkj8PQu5fsiL3NzGzItfALUJ9ESB?=
+ =?us-ascii?Q?EAxwmgI8RTVEJ9dOi1N2GUop7d8e8CKMi72HXJ0Wz7N8rIdAGIUvhnfpOr/4?=
+ =?us-ascii?Q?qqr/GOfZCorU95kSzDgTA5n9c6incOWdkprofC8RX+BhmdTA5LSXPQeMJl25?=
+ =?us-ascii?Q?u1KmX2Ic0yJvokzZ+x/4coOZNVMIWHJyYR4YfTYjw5lDkhxPFZCJIO05xHcS?=
+ =?us-ascii?Q?HD4k4J2yk/kwML4o/V0+QsFqyLLq3oDp3FcwuEO9pwMPrJPMPzFPMS31dof0?=
+ =?us-ascii?Q?3kadY5ocFuj7f4DOJ95/PmpNF7nslwpDi69JsuT4ZWgQi6Z/DBdmxK6rSY8v?=
+ =?us-ascii?Q?lrgvgSyLBR+uUQr2hQSPFB6ALEE/6ZWYG8SK8KYK8hRL+KnYW+f+2s33an17?=
+ =?us-ascii?Q?hnzXMDWcPyAVzalwyReHtRc948B197bNXk2Spz1XbUSSYPernpFFsJYJF9/6?=
+ =?us-ascii?Q?6+H4rqrXNRmgpog5lBPHp+w3SfOtJiWvU+Dcg6CXVXKak+gZ/0ryiKW9YZes?=
+ =?us-ascii?Q?lbNbQdfcqitIwmUzxy8luJP4sj9iUUuRzMed7hH7JCtv8hxI03Qg4x5cMI+y?=
+ =?us-ascii?Q?qv8c0IYnJObWCTklOfWVvVKSO1C6kbDMuRMWV68FOxKbpDlBMdDd9PGv/Rk?=
+ =?us-ascii?Q?=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(1800799015)(376005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SIuXqjebDS2O7HeDwRlVE3CWkJC6ccd/s2ziTslZMFmjGyy+B+zOgA/X+hCJ?=
+ =?us-ascii?Q?iwFhsrURjsYO8qFfQzt3A1K3CC3tDlPu87I+8ZlsR5jEKzJAwmwL/wLayq7X?=
+ =?us-ascii?Q?XdL8DdSbJcLZ0qwCntA6r477wJ6WFK7YJ5ZulJJNX+CKXkT78Y7U+G+ecxBv?=
+ =?us-ascii?Q?YrchQPdrQigoxLkrgE4jmKQkZst3NRTOiwf5z7SW4Uh9Fa3Od2QAaae7qEsN?=
+ =?us-ascii?Q?fLxmgSIYXqWW5sJuKynNQL9v8E16pN90WXHeLhjsgo/KNFJOLp/FyVE50vVh?=
+ =?us-ascii?Q?1i1GzG491pI9nm+K6lgGgJADVT3yybaz/7fE1uqJCDDFFra388SENHIa08hy?=
+ =?us-ascii?Q?ktyWZW+wku7UJxHJM0QCKEDJbj8heQU137zDBQWP8Tbk3dCDNdQMIt9Jaj1U?=
+ =?us-ascii?Q?Cltlrj0gu1t9TsjZFakHdTou9+5DRomOunO6GLAmjlQP34cdxscrSz4Zi2r7?=
+ =?us-ascii?Q?BUUHXb8S/zl0GHsOcxhRmw6ixEQU+ysAZyPWLQDL3qlRZS3TS0GaX4lXq7me?=
+ =?us-ascii?Q?Bsaxpce6+TSW8+dO+Cu5Jy3lYAExPXhVUNozzMLYQfqOGkEjt0tvIxGSc/m/?=
+ =?us-ascii?Q?+4Be/efLAgRsJZAEPCp9aejVDzFgzvG51ydmDtnXmMbOPKks3HSqrLC0QKLS?=
+ =?us-ascii?Q?NrhXA74xQ2FVxQXVJgY8ySW9ZAsDRgOfhpgXQUJXpdqo/q91xpI7cl93JOWe?=
+ =?us-ascii?Q?wFhPhETH6acTKKBem2AezNZZs9EXKYvN7PgFXd2DPdzblRH7CikCxEii8tMg?=
+ =?us-ascii?Q?2KZWVwextHoQOoG9b0o0wtS3xALm+2NrW6V/+t8myPZlbSOKRmOPe04EFBvi?=
+ =?us-ascii?Q?hLkzlYZmRhjab8VVOtnTImQXldrCagmDbqAzsT/F5Cl2YtmoX+fPAOZxy8A4?=
+ =?us-ascii?Q?QPlFm5GyuRU1EgZdKooRSXCKtGN8zLJlrXG7CW+2ptNp4m/TfCgYlFr83DM9?=
+ =?us-ascii?Q?27lzjpFCKkUNW8v3iwggmEgfunapy0pIjXxGEpu+zNuWyK8W3dCXdLzfra5+?=
+ =?us-ascii?Q?3GCoYat55liT9ohhXKXaBEtKW+0Sb/M5fPkodWoj+7l315PJcUDSzcYPWkIn?=
+ =?us-ascii?Q?U5nH16/y+pqH7MhtA/TmJ/3UnDPXZP9qTngStG0jFz50Q9jFzhK3HIlF5Esi?=
+ =?us-ascii?Q?yoXJ8gs6F8ft9+4cPNEEL2RKgdB5W2H3KvrXVZJqrU03l2hrgO8ZIjKPTcux?=
+ =?us-ascii?Q?beQlZb/r5JkGyo/MPYCc3wVvRUrgyMj1WFT+1DI3q2g0oorZQJVTG3aVopOW?=
+ =?us-ascii?Q?chAnk3IAfCBtf8Wg9Mp6z3PGRz9xkLJUJOpcMBTQs1YT2dRrgB+RLo9GvOZf?=
+ =?us-ascii?Q?UHNoBsO0lx7sE3zXBct64nozoajHL6r7hEK/6YIuQDqNWuoYAAaZlHFfrJJC?=
+ =?us-ascii?Q?m/BDqxRNviKMvPNTs4xiQxUX/+WAp/UNmiNL+GRIOAca0nWkK4vz2WnJjtkF?=
+ =?us-ascii?Q?eKt5LUSaYQohZcI4OFCdWLQGiwLtoEpKTMqR9//Tyei1w8Ia7/0wMaz7Q5UW?=
+ =?us-ascii?Q?rCN6TvLPHa4Z4tUnrzJc5iknL6mYgKK84zrBNsfrH8gQuUgzlk2ExdyTEwo+?=
+ =?us-ascii?Q?Iig2Tkn/hsfaoAON3y15HvTG+xJqAQKpdBuiguDPOv4DGiybFU+y4ig2NwrY?=
+ =?us-ascii?Q?Jw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0173bced-e1f4-4b3c-8073-08dc7421c748
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2024 14:26:00.7937
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NSpOBpNbwrC8Esu/QKtJllXKY4wVS8Ks93kXLG/h6QPaM7QvUfusiCLCvUWkzx3ojjPIwaU1EPDd97y354gi8tVZ9TIAtROtfkocBkiLXwg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8442
+X-OriginatorOrg: intel.com
 
-The following changes since commit a5131c3fdf2608f1c15f3809e201cf540eb28489:
+On Fri, May 10, 2024 at 10:57:22AM GMT, Jose Ignacio Tornos Martinez wrote:
+>It has been seen that for some network mac drivers (i.e. lan78xx) the
+>related module for the phy is loaded dynamically depending on the current
+>hardware. In this case, the associated phy is read using mdio bus and then
+>the associated phy module is loaded during runtime (kernel function
+>phy_request_driver_module). However, no software dependency is defined, so
+>the user tools will no be able to get this dependency. For example, if
+>dracut is used and the hardware is present, lan78xx will be included but no
+>phy module will be added, and in the next restart the device will not work
+>from boot because no related phy will be found during initramfs stage.
+>
+>In order to solve this, we could define a normal 'pre' software dependency
+>in lan78xx module with all the possible phy modules (there may be some),
+>but proceeding in that way, all the possible phy modules would be loaded
+>while only one is necessary.
+>
+>The idea is to create a new type of dependency, that we are going to call
+>'weak' to be used only by the user tools that need to detect this situation.
+>In that way, for example, dracut could check the 'weak' dependency of the
+>modules involved in order to install these dependencies in initramfs too.
+>That is, for the commented lan78xx module, defining the 'weak' dependency
+>with the possible phy modules list, only the necessary phy would be loaded
+>on demand keeping the same behavior, but all the possible phy modules would
+>be available from initramfs.
+>
+>The 'weak' dependency support has been included in kmod:
+>https://github.com/kmod-project/kmod/commit/05828b4a6e9327a63ef94df544a042b5e9ce4fe7
+>But, take into account that this can only be used if depmod is new enough.
+>If it isn't, depmod will have the same behavior as always (keeping backward
+>compatibility) and the information for the 'weak' dependency will not be
+>provided.
+>
+>Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
 
-  Merge tag 'x86-shstk-2024-05-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2024-05-13 19:33:23 -0700)
 
-are available in the Git repository at:
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.10-rc1
+thanks
+Lucas De Marchi
 
-for you to fetch changes up to 2c9e5d4a008293407836d29d35dfd4353615bd2f:
-
-  bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of (2024-05-14 00:36:29 -0700)
-
-----------------------------------------------------------------
-Modules changes for v6.10-rc1
-
-Finally something fun. Mike Rapoport does some cleanup to allow us to
-take out module_alloc() out of modules into a new paint shedded execmem_alloc()
-and execmem_free() so to make emphasis these helpers are actually used outside
-of modules. It starts with a no-functional changes API rename / placeholders
-to then allow architectures to define their requirements into a new shiny
-struct execmem_info with ranges, and requirements for those ranges. Archs
-now can intitialize this execmem_info as the last part of mm_core_init() if
-they have to diverge from the norm. Each range is a known type clearly
-articulated and spelled out in enum execmem_type.
-
-Although a lot of this is major cleanup and prep work for future enhancements an
-immediate clear gain is we get to enable KPROBES without MODULES now. That is
-ultimately what motiviated to pick this work up again, now with smaller goal as
-concrete stepping stone.
-
-This has been sitting on linux-next for a little less than a month, a few issues
-were found already and fixed, in particular an odd mips boot issue. Arch folks
-reviewed the code too. This is ready for wider exposure and testing.
-
-----------------------------------------------------------------
-Justin Stitt (1):
-      kallsyms: replace deprecated strncpy with strscpy
-
-Mike Rapoport (IBM) (16):
-      arm64: module: remove unneeded call to kasan_alloc_module_shadow()
-      mips: module: rename MODULE_START to MODULES_VADDR
-      nios2: define virtual address space for modules
-      sparc: simplify module_alloc()
-      module: make module_memory_{alloc,free} more self-contained
-      mm: introduce execmem_alloc() and execmem_free()
-      mm/execmem, arch: convert simple overrides of module_alloc to execmem
-      mm/execmem, arch: convert remaining overrides of module_alloc to execmem
-      riscv: extend execmem_params for generated code allocations
-      arm64: extend execmem_info for generated code allocations
-      powerpc: extend execmem_params for kprobes allocations
-      arch: make execmem setup available regardless of CONFIG_MODULES
-      x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
-      powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropriate
-      kprobes: remove dependency on CONFIG_MODULES
-      bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
-
-Yifan Hong (1):
-      module: allow UNUSED_KSYMS_WHITELIST to be relative against objtree.
-
- arch/Kconfig                         |  10 ++-
- arch/arm/kernel/module.c             |  34 ---------
- arch/arm/mm/init.c                   |  45 +++++++++++
- arch/arm64/Kconfig                   |   1 +
- arch/arm64/kernel/module.c           | 126 ------------------------------
- arch/arm64/kernel/probes/kprobes.c   |   7 --
- arch/arm64/mm/init.c                 | 140 ++++++++++++++++++++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c        |  11 ---
- arch/loongarch/kernel/module.c       |   6 --
- arch/loongarch/mm/init.c             |  21 +++++
- arch/mips/include/asm/pgtable-64.h   |   4 +-
- arch/mips/kernel/module.c            |  10 ---
- arch/mips/mm/fault.c                 |   4 +-
- arch/mips/mm/init.c                  |  23 ++++++
- arch/nios2/include/asm/pgtable.h     |   5 +-
- arch/nios2/kernel/module.c           |  20 -----
- arch/nios2/mm/init.c                 |  21 +++++
- arch/parisc/kernel/module.c          |  12 ---
- arch/parisc/mm/init.c                |  23 +++++-
- arch/powerpc/Kconfig                 |   2 +-
- arch/powerpc/include/asm/kasan.h     |   2 +-
- arch/powerpc/kernel/head_8xx.S       |   4 +-
- arch/powerpc/kernel/head_book3s_32.S |   6 +-
- arch/powerpc/kernel/kprobes.c        |  22 +-----
- arch/powerpc/kernel/module.c         |  38 ----------
- arch/powerpc/lib/code-patching.c     |   2 +-
- arch/powerpc/mm/book3s32/mmu.c       |   2 +-
- arch/powerpc/mm/mem.c                |  64 ++++++++++++++++
- arch/riscv/include/asm/pgtable.h     |   3 +
- arch/riscv/kernel/module.c           |  12 ---
- arch/riscv/kernel/probes/kprobes.c   |  10 ---
- arch/riscv/mm/init.c                 |  35 +++++++++
- arch/riscv/net/bpf_jit_core.c        |  13 ----
- arch/s390/kernel/ftrace.c            |   4 +-
- arch/s390/kernel/kprobes.c           |   4 +-
- arch/s390/kernel/module.c            |  42 +---------
- arch/s390/mm/init.c                  |  30 ++++++++
- arch/sparc/include/asm/pgtable_32.h  |   2 +
- arch/sparc/kernel/module.c           |  30 --------
- arch/sparc/mm/Makefile               |   2 +
- arch/sparc/mm/execmem.c              |  21 +++++
- arch/sparc/net/bpf_jit_comp_32.c     |   8 +-
- arch/x86/Kconfig                     |   1 +
- arch/x86/kernel/ftrace.c             |  16 +---
- arch/x86/kernel/kprobes/core.c       |   4 +-
- arch/x86/kernel/module.c             |  51 -------------
- arch/x86/mm/init.c                   |  29 +++++++
- include/linux/execmem.h              | 132 ++++++++++++++++++++++++++++++++
- include/linux/module.h               |   9 +++
- include/linux/moduleloader.h         |  15 ----
- kernel/bpf/Kconfig                   |   2 +-
- kernel/bpf/core.c                    |   6 +-
- kernel/kprobes.c                     |  63 +++++++++------
- kernel/module/Kconfig                |   3 +-
- kernel/module/kallsyms.c             |   2 +-
- kernel/module/main.c                 | 105 ++++++++++++-------------
- kernel/trace/trace_kprobe.c          |  20 ++++-
- mm/Kconfig                           |   3 +
- mm/Makefile                          |   1 +
- mm/execmem.c                         | 143 +++++++++++++++++++++++++++++++++++
- mm/mm_init.c                         |   2 +
- scripts/Makefile.modpost             |   2 +-
- 62 files changed, 906 insertions(+), 584 deletions(-)
- create mode 100644 arch/sparc/mm/execmem.c
- create mode 100644 include/linux/execmem.h
- create mode 100644 mm/execmem.c
+>---
+>V2 -> V3:
+>- Include note about backward compatibility.
+>- Balance the /* and */.
+>V1 -> V2:
+>- Include reference to 'weak' dependency support in kmod.
+>
+> include/linux/module.h | 6 ++++++
+> 1 file changed, 6 insertions(+)
+>
+>diff --git a/include/linux/module.h b/include/linux/module.h
+>index 1153b0d99a80..2a056017df5b 100644
+>--- a/include/linux/module.h
+>+++ b/include/linux/module.h
+>@@ -173,6 +173,12 @@ extern void cleanup_module(void);
+>  */
+> #define MODULE_SOFTDEP(_softdep) MODULE_INFO(softdep, _softdep)
+>
+>+/*
+>+ * Weak module dependencies. See man modprobe.d for details.
+>+ * Example: MODULE_WEAKDEP("module-foo")
+>+ */
+>+#define MODULE_WEAKDEP(_weakdep) MODULE_INFO(weakdep, _weakdep)
+>+
+> /*
+>  * MODULE_FILE is used for generating modules.builtin
+>  * So, make it no-op when this is being built as a module
+>-- 
+>2.44.0
+>
