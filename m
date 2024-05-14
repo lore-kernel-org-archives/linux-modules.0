@@ -1,109 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA3684D07;
-	Mon, 13 May 2024 23:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417AD17BD2;
+	Tue, 14 May 2024 08:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715641869; cv=none; b=eJH27GMfOWxmgbl3ZLp7nGIhmCeZAzY0WPWOOsoAi9bVm3lg4dS7dUp/vxMrI2XXWRdAwpQEgpDMISq4bChCPE6Q52rmyR6GRNDDPGSPEULp5q2nn16pf8dcxFoHTU42GLLljGWabJJz1stFv4edFD7YVDzbYBng4I7JPYArG+Q=
+	t=1715674959; cv=none; b=TKVKofs61X6D2WlbnKKo8KquqrDqjOg+IY1w7V4tzQT8XZcs7WWe/a8rFakOA6x7M+10U24Ngs8pfGXvJyvrcAc6ywdE7R0OFgsrLbMtNi4Lt1W+05wdF6f5qmzH2zAbC+3Ev0v83zjeDAKmA2mwxK1MGOL4XP03O38VbeQNVc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715641869; c=relaxed/simple;
-	bh=hQfcbOiJ/AYUeUOi4w81BbwdO7aOw9T215Ro5XK324c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ER9BD4vKbr2ZbZGc8cuk0L9iARTqGetLgVMpgbrhkvYsGzNdElmVYZKP6tfAlNa/W09Om5eA1ks9/4bWZSL9+r90wXpDmeqGxS82V0BmPYCmJNhorjPr3w2eDjcmmmjEmI5BywJzT8TG7+n6mdNQFmKna/uK1IQv/CRARV9psuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTLky4xU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715674959; c=relaxed/simple;
+	bh=pp1cHNisj+tKz9XnjQgXLHVPUh8pqcGAdMvNqdaZNQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BKQ7YuHtsZkDPPOQgT4fFeOMJ9bD818R7hoCDmDzosT0SAwGMrcEaDoszbfOaAvsL9PPUb9jCliNpP3R6X8mU4VEnjKVygnO/RGYfY2Cuxl1zdLBZ7oNxnPga/w+fYU6uODYmDeTP/9ecmguC021u4wCPoXTWvfBVI+G0mmn3nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Vv991aFK; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTLky4xU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766B2C113CC;
-	Mon, 13 May 2024 23:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715641868;
-	bh=hQfcbOiJ/AYUeUOi4w81BbwdO7aOw9T215Ro5XK324c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RTLky4xUOtE02A+ob5CMhhN0i0825yAulZK8x22vH+G4k2FSpKLuY3wShDF94RO5p
-	 FytRsn0sIuGWt9XMN5qrFXy5zmNEz26ldTz09shWJVQarUrJtctdXWjY5qTat059aD
-	 OBhNMcoeutnYZhDYeu+foiGBj5uqvAMMHWFdRyp+NnT9qYDRrJ2SCOovXXbN7xTlCG
-	 aFcQV0h9vfdHOtrjarLbtCpjqp3230KBjwHcxHr9Jlkz06LKVTb+zwyIiRdzeEZuwm
-	 phLuKZA7eJAU5Ifo1HKUAgH/9VCWIRtWRwzgLcCbkh4psc7kSlRPK7KvVz/qZHudl/
-	 3egTHrz3VOPSg==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2e564cad1f1so39920811fa.0;
-        Mon, 13 May 2024 16:11:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWOIK38xyiPT1D7amHlK8ZkzzvylIgA5JWr/fxwVW+l1YbjVKwt9Pg8kzFtZsCmF3S7mb2fV90QWDN19NaGP5LILmgasx9sr1F8U5THa60Rfgqlz9N7EgKPsdfs5XH+WXTumWRXoYAo2JHBxA==
-X-Gm-Message-State: AOJu0YxzFyiyMj1YjtwTGaStIzMmYBkm+DkfBui036enzWLa3tdpl5Gr
-	/1h5kr+D+yR3xOZLRChzbkUVCqpTR4AMEmZ2vyZ+W5zcSCmpaHHcvoI8TnY9NbbMtHjmIrkpWLj
-	1eU0LwPTK9/rAmRHdTsYWn/uBD8k=
-X-Google-Smtp-Source: AGHT+IFr1b2jSVXtqMOvohFbgAWT3eKNmF6sprJC5IH9sPfmFtqcoUuaeyqsIfuX8DZilAsIW3XNhgkYobn21WK5IRg=
-X-Received: by 2002:a2e:7219:0:b0:2d8:6606:9e61 with SMTP id
- 38308e7fff4ca-2e5203a1e5emr70320741fa.48.1715641867234; Mon, 13 May 2024
- 16:11:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Vv991aFK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=i2r1tYPEIFq5ICtSDsTyOodWu9HoIuruvn+TZUTQ0y8=; b=Vv991aFKT1XN/drhhQgMf2jEtZ
+	v068ortgpU6RLM/jvJZXbhNziqOEckfDgR1S23T1VX2gDkEPDKOOtfW7fMpNoziJeNxKuhZ+9NQ6g
+	offVVLb04CTmfWs0HLStyA2EIkLsYD1eR2tesQdOLJCHuGytm7ahMhIgdxIbUf8oFIUR6qmSjn08d
+	xEv3OX9Mm3QQMq1mH3Fce6811Py/bG/h3ikPzyEEfKLNQPJXeR76u6aaI+NxU2U82Sj3JRuLF8lBo
+	wXcxJaZIEGi+PCXJDHPjtzC1rH2SyOfmrMctQuPMVr0yJ72j3h1mTC6fIH6nXLDIgJ0jD51uW8D9n
+	C/HEtH4A==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1s6nQh-0000000FLBc-2A8j;
+	Tue, 14 May 2024 08:22:35 +0000
+Date: Tue, 14 May 2024 01:22:35 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-modules@vger.kernel.org, mcgrof@kernel.org
+Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, rppt@kernel.org, song@kernel.org,
+	tglx@linutronix.de, bjorn@kernel.org, mhiramat@kernel.org,
+	rostedt@goodmis.org, philmd@linaro.org, will@kernel.org,
+	sam@ravnborg.org, alexghiti@rivosinc.com, liviu@dudau.co.uk,
+	justinstitt@google.com, elsk@google.com
+Subject: [GIT PULL] Modules changes for v6.10-rc1
+Message-ID: <ZkMfS727s_1MQWzQ@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240417053530.30995-1-wangyao@lemote.com> <Zj_0KU2cInEUbsW3@bombadil.infradead.org>
-In-Reply-To: <Zj_0KU2cInEUbsW3@bombadil.infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 14 May 2024 08:10:31 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARCxO9rysrJyZo1uVQ+83YJJc5KFqY65+_3vWwSa80xtQ@mail.gmail.com>
-Message-ID: <CAK7LNARCxO9rysrJyZo1uVQ+83YJJc5KFqY65+_3vWwSa80xtQ@mail.gmail.com>
-Subject: Re: [PATCH] modules: Drop the .export_symbol section from the final modules
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: wangyao@lemote.com, ainux.wang@gmail.com, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Sun, May 12, 2024 at 7:42=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Wed, Apr 17, 2024 at 01:35:30PM +0800, wangyao@lemote.com wrote:
-> > From: Wang Yao <wangyao@lemote.com>
-> >
-> > Commit ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by modpost")
-> > forget drop the .export_symbol section from the final modules.
-> >
-> > Signed-off-by: Wang Yao <wangyao@lemote.com>
->
-> Masahiro, commit ddb5cdbafaaa ("kbuild: generate KSYMTAB entries by
-> modpost") was your change, wanna address / take it through your
-> tree? It makes sense to me though.
+The following changes since commit a5131c3fdf2608f1c15f3809e201cf540eb28489:
 
+  Merge tag 'x86-shstk-2024-05-13' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2024-05-13 19:33:23 -0700)
 
-Yes, applied now.
+are available in the Git repository at:
 
-Thanks for the reminder.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.10-rc1
 
+for you to fetch changes up to 2c9e5d4a008293407836d29d35dfd4353615bd2f:
 
+  bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of (2024-05-14 00:36:29 -0700)
 
+----------------------------------------------------------------
+Modules changes for v6.10-rc1
 
+Finally something fun. Mike Rapoport does some cleanup to allow us to
+take out module_alloc() out of modules into a new paint shedded execmem_alloc()
+and execmem_free() so to make emphasis these helpers are actually used outside
+of modules. It starts with a no-functional changes API rename / placeholders
+to then allow architectures to define their requirements into a new shiny
+struct execmem_info with ranges, and requirements for those ranges. Archs
+now can intitialize this execmem_info as the last part of mm_core_init() if
+they have to diverge from the norm. Each range is a known type clearly
+articulated and spelled out in enum execmem_type.
 
->
->   Luis
->
-> > ---
-> >  scripts/module.lds.S | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-> > index bf5bcf2836d8..89ff01a22634 100644
-> > --- a/scripts/module.lds.S
-> > +++ b/scripts/module.lds.S
-> > @@ -13,6 +13,7 @@ SECTIONS {
-> >       /DISCARD/ : {
-> >               *(.discard)
-> >               *(.discard.*)
-> > +             *(.export_symbol)
-> >       }
-> >
-> >       __ksymtab               0 : { *(SORT(___ksymtab+*)) }
-> > --
-> > 2.27.0
-> >
+Although a lot of this is major cleanup and prep work for future enhancements an
+immediate clear gain is we get to enable KPROBES without MODULES now. That is
+ultimately what motiviated to pick this work up again, now with smaller goal as
+concrete stepping stone.
 
+This has been sitting on linux-next for a little less than a month, a few issues
+were found already and fixed, in particular an odd mips boot issue. Arch folks
+reviewed the code too. This is ready for wider exposure and testing.
 
+----------------------------------------------------------------
+Justin Stitt (1):
+      kallsyms: replace deprecated strncpy with strscpy
 
---=20
-Best Regards
-Masahiro Yamada
+Mike Rapoport (IBM) (16):
+      arm64: module: remove unneeded call to kasan_alloc_module_shadow()
+      mips: module: rename MODULE_START to MODULES_VADDR
+      nios2: define virtual address space for modules
+      sparc: simplify module_alloc()
+      module: make module_memory_{alloc,free} more self-contained
+      mm: introduce execmem_alloc() and execmem_free()
+      mm/execmem, arch: convert simple overrides of module_alloc to execmem
+      mm/execmem, arch: convert remaining overrides of module_alloc to execmem
+      riscv: extend execmem_params for generated code allocations
+      arm64: extend execmem_info for generated code allocations
+      powerpc: extend execmem_params for kprobes allocations
+      arch: make execmem setup available regardless of CONFIG_MODULES
+      x86/ftrace: enable dynamic ftrace without CONFIG_MODULES
+      powerpc: use CONFIG_EXECMEM instead of CONFIG_MODULES where appropriate
+      kprobes: remove dependency on CONFIG_MODULES
+      bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of
+
+Yifan Hong (1):
+      module: allow UNUSED_KSYMS_WHITELIST to be relative against objtree.
+
+ arch/Kconfig                         |  10 ++-
+ arch/arm/kernel/module.c             |  34 ---------
+ arch/arm/mm/init.c                   |  45 +++++++++++
+ arch/arm64/Kconfig                   |   1 +
+ arch/arm64/kernel/module.c           | 126 ------------------------------
+ arch/arm64/kernel/probes/kprobes.c   |   7 --
+ arch/arm64/mm/init.c                 | 140 ++++++++++++++++++++++++++++++++++
+ arch/arm64/net/bpf_jit_comp.c        |  11 ---
+ arch/loongarch/kernel/module.c       |   6 --
+ arch/loongarch/mm/init.c             |  21 +++++
+ arch/mips/include/asm/pgtable-64.h   |   4 +-
+ arch/mips/kernel/module.c            |  10 ---
+ arch/mips/mm/fault.c                 |   4 +-
+ arch/mips/mm/init.c                  |  23 ++++++
+ arch/nios2/include/asm/pgtable.h     |   5 +-
+ arch/nios2/kernel/module.c           |  20 -----
+ arch/nios2/mm/init.c                 |  21 +++++
+ arch/parisc/kernel/module.c          |  12 ---
+ arch/parisc/mm/init.c                |  23 +++++-
+ arch/powerpc/Kconfig                 |   2 +-
+ arch/powerpc/include/asm/kasan.h     |   2 +-
+ arch/powerpc/kernel/head_8xx.S       |   4 +-
+ arch/powerpc/kernel/head_book3s_32.S |   6 +-
+ arch/powerpc/kernel/kprobes.c        |  22 +-----
+ arch/powerpc/kernel/module.c         |  38 ----------
+ arch/powerpc/lib/code-patching.c     |   2 +-
+ arch/powerpc/mm/book3s32/mmu.c       |   2 +-
+ arch/powerpc/mm/mem.c                |  64 ++++++++++++++++
+ arch/riscv/include/asm/pgtable.h     |   3 +
+ arch/riscv/kernel/module.c           |  12 ---
+ arch/riscv/kernel/probes/kprobes.c   |  10 ---
+ arch/riscv/mm/init.c                 |  35 +++++++++
+ arch/riscv/net/bpf_jit_core.c        |  13 ----
+ arch/s390/kernel/ftrace.c            |   4 +-
+ arch/s390/kernel/kprobes.c           |   4 +-
+ arch/s390/kernel/module.c            |  42 +---------
+ arch/s390/mm/init.c                  |  30 ++++++++
+ arch/sparc/include/asm/pgtable_32.h  |   2 +
+ arch/sparc/kernel/module.c           |  30 --------
+ arch/sparc/mm/Makefile               |   2 +
+ arch/sparc/mm/execmem.c              |  21 +++++
+ arch/sparc/net/bpf_jit_comp_32.c     |   8 +-
+ arch/x86/Kconfig                     |   1 +
+ arch/x86/kernel/ftrace.c             |  16 +---
+ arch/x86/kernel/kprobes/core.c       |   4 +-
+ arch/x86/kernel/module.c             |  51 -------------
+ arch/x86/mm/init.c                   |  29 +++++++
+ include/linux/execmem.h              | 132 ++++++++++++++++++++++++++++++++
+ include/linux/module.h               |   9 +++
+ include/linux/moduleloader.h         |  15 ----
+ kernel/bpf/Kconfig                   |   2 +-
+ kernel/bpf/core.c                    |   6 +-
+ kernel/kprobes.c                     |  63 +++++++++------
+ kernel/module/Kconfig                |   3 +-
+ kernel/module/kallsyms.c             |   2 +-
+ kernel/module/main.c                 | 105 ++++++++++++-------------
+ kernel/trace/trace_kprobe.c          |  20 ++++-
+ mm/Kconfig                           |   3 +
+ mm/Makefile                          |   1 +
+ mm/execmem.c                         | 143 +++++++++++++++++++++++++++++++++++
+ mm/mm_init.c                         |   2 +
+ scripts/Makefile.modpost             |   2 +-
+ 62 files changed, 906 insertions(+), 584 deletions(-)
+ create mode 100644 arch/sparc/mm/execmem.c
+ create mode 100644 include/linux/execmem.h
+ create mode 100644 mm/execmem.c
