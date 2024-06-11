@@ -1,100 +1,89 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B70C8176FC9;
-	Tue, 11 Jun 2024 09:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD7F28E37
+	for <linux-modules@vger.kernel.org>; Tue, 11 Jun 2024 14:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718098618; cv=none; b=FD9+ClsD4SrEGaPJHzjqoppAcTFCHD69k0wVwKIjtWinPIDFOqSm0Kmo+tym5dcKoZXCGd3SGhJSAvxog0nib1LWmHevjm8iLrhUdMNgdubihGwadDI5gS/E1l6DJYuILZLaEB6CXGdrycWgfGkWWXMzmpeoStn7auUfmNKk9j4=
+	t=1718116501; cv=none; b=as93orTPRPks2XbBQ/oA76VzpiRVYbYSaTBL7L43tgSh7TZY/GI/zc0K4/XbH4LMR1OJYlKCslUPT3kqpvEYugmbhDPYS3kMmktKkpYvBluWGkXi05dy1pXFyprVA3eVSCF9fh5ZnSza+elszNfaD5nQyid0X3m3aSztkE0TM98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718098618; c=relaxed/simple;
-	bh=q+pnA94jVzMSLj4z6FXJf6PzzV6xwk04ttDNDlMYGio=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qWsFh4p0FHaDEorGk0oAjO1AsNjxqSif4JDsR55N4uaobO5kJ0poAzP5b59lwIEchmAnrjSaIAMaaDlaYeK0uMN2AIXlo1l793RGJ1/+FDAbJNR2L4MHgnq/f3MleRA0+Lfpun1MNyRYUmfxMmkFT2+/afBeAvm/VE9tKZQ/LMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Vz3PT4NTzz3560P;
-	Tue, 11 Jun 2024 17:33:01 +0800 (CST)
-Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 161E5180065;
-	Tue, 11 Jun 2024 17:36:48 +0800 (CST)
-Received: from [10.67.111.172] (10.67.111.172) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 11 Jun 2024 17:36:47 +0800
-Message-ID: <d0743ed8-d26c-3471-ed5d-66ec9e46db5e@huawei.com>
-Date: Tue, 11 Jun 2024 17:36:47 +0800
+	s=arc-20240116; t=1718116501; c=relaxed/simple;
+	bh=Wr0aEzQeW1dijVE5GfbbS5a6pf9XdZhae/d6e2b2VLk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=o6wyLqfZJo/huNs6xr93z9uBmmlwQHYhP/U5Wt+olqNueZcfDN7n3o/iUCzWWw+SE8fpvnjEJetNzkanoQoFH7p1ZYsjgoXszzgq4ix7v+zQgbAaVZ+Vh08idB5mQKkanwCdo0VOSwbS0b85wP/O8o5OlkIxxAmaxpEMGpvtPxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dkiM2kQQ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dkiM2kQQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32992C32789;
+	Tue, 11 Jun 2024 14:35:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718116501;
+	bh=Wr0aEzQeW1dijVE5GfbbS5a6pf9XdZhae/d6e2b2VLk=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=dkiM2kQQwmhJga7B8yW0b+wplmUOMS2l+2wm+Ft8Av7d8mEKRa1PJiGkPNIV9mhOb
+	 QufH3i886OT2qKuBKbMKTmwIDF4+8YM+uD9/sg/oA97/AeGbxOqokliWgrMlgUJL7s
+	 V6+cDCPPSjl9cMddDRejSIvO2G6LfG4Lb6KG+1m+wovnmeWgGRrs3z5D41IqnCuKW1
+	 snuz2vw8+1qINr8EEcv/DDTbX3DO2NwOh8bVGf38ctCDEQzJl44A61LOpu50seA7WQ
+	 WbuNRbr1hZW19qPh2YC3/9QC9i7aQG4oR5eOiJxKdyZJmT94p9+EvHFfwDEkaK0FjA
+	 72/4FZpm7VgLw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22162C27C75;
+	Tue, 11 Jun 2024 14:35:01 +0000 (UTC)
+From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
+Date: Tue, 11 Jun 2024 15:34:56 +0100
+Subject: [PATCH kmod] .mailmap: Forward to my personal email
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [RFC PATCH] ftrace: Skip __fentry__ location of overridden weak
- functions
-Content-Language: en-US
-To: Peter Zijlstra <peterz@infradead.org>
-CC: <rostedt@goodmis.org>, <mcgrof@kernel.org>, <mhiramat@kernel.org>,
-	<mark.rutland@arm.com>, <mathieu.desnoyers@efficios.com>,
-	<jpoimboe@kernel.org>, <linux-modules@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-References: <20240607115211.734845-1-zhengyejian1@huawei.com>
- <20240607150228.GR8774@noisy.programming.kicks-ass.net>
- <57e499a4-e26d-148f-317d-233e873d11b4@huawei.com>
- <20240611092157.GU40213@noisy.programming.kicks-ass.net>
-From: Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <20240611092157.GU40213@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500012.china.huawei.com (7.185.36.15)
+Message-Id: <20240611-mailmap-v1-1-69ce7f7ffbe6@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAJBgaGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDM0ND3dzEzJzcxALdFEtLQ9NkI3ODlFRLJaDqgqLUtMwKsEnRsbW1AHO
+ HZBhZAAAA
+To: linux-modules@vger.kernel.org
+Cc: Emil Velikov <emil.l.velikov@gmail.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718116499; l=637;
+ i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
+ bh=tP92u435afiqHpYb37PUHPdJHFdDZzRRYbNdk2K9+HI=;
+ b=4k7eUFnEF+XuReppNLw5CVpDMuYJheEycH/rLQPeaJieCNf1Q9Ud0E6PTS6+EYirtNYTrhs8A
+ 78XVud30N8dCC72PJrjCXMeasAueyshMHe6GG43NXg4P1kIP6Bjb6/y
+X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
+ pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
+X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
+ auth_id=35
+X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
+Reply-To: emil.l.velikov@gmail.com
 
-On 2024/6/11 17:21, Peter Zijlstra wrote:
-> On Tue, Jun 11, 2024 at 09:56:51AM +0800, Zheng Yejian wrote:
->> On 2024/6/7 23:02, Peter Zijlstra wrote:
-> 
->>> Oh gawd, sodding weak functions again.
->>>
->>> I would suggest changing scipts/kallsyms.c to emit readily identifiable
->>> symbol names for all the weak junk, eg:
->>>
->>>     __weak_junk_NNNNN
->>>
->>
->> Sorry for the late reply, I just had a long noon holiday :>
->>
->> scripts/kallsyms.c is compiled and used to handle symbols in vmlinux.o
->> or vmlinux.a, see kallsyms_step() in scripts/link-vmlinux.sh, those
->> overridden weak symbols has been removed from symbol table of vmlinux.o
->> or vmlinux.a. But we can found those symbols from original xx/xx.o file,
->> for example, the weak free_initmem() in in init/main.c is overridden,
->> its symbol is not in vmlinx but is still in init/main.o .
->>
->> How about traversing all origin xx/xx.o and finding all weak junk symbols ?
-> 
-> You don't need to. ELF symbl tables have an entry size for FUNC type
-> objects, this means that you can readily find holes in the text and fill
-> them with a symbol.
-> 
-> Specifically, you can check the mcount locations against the symbol
-> table and for every one that falls in a hole, generate a new junk
-> symbol.
-> 
-> Also see 4adb23686795 where objtool adds these holes to the
-> ignore/unreachable code check.
-> 
-> 
-> The lack of size for kallsyms is in a large part what is causing the
-> problems.
+From: Emil Velikov <emil.l.velikov@gmail.com>
 
-Thanks for your suggestions, I'll try it soon.
+My Collabora email is bouncing, so forward to my personal Gmail.
 
---
+Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+---
+Hello everyone, just a trivial one-liner to reduce annoyance due to
+bouncing emails.
+---
+ .mailmap | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-ZYJ
+diff --git a/.mailmap b/.mailmap
+new file mode 100644
+index 0000000..7a9ca51
+--- /dev/null
++++ b/.mailmap
+@@ -0,0 +1 @@
++Emil Velikov <emil.l.velikov@gmail.com> <emil.velikov@collabora.com>
+
+---
+base-commit: 8837461494761d58be579641f20cc043274adddf
+change-id: 20240611-mailmap-d9915c270de9
+
+Best regards,
+-- 
+Emil Velikov <emil.l.velikov@gmail.com>
+
+
