@@ -1,61 +1,126 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBAF71FDA;
-	Sat,  8 Jun 2024 05:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3E863CB;
+	Tue, 11 Jun 2024 01:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717823241; cv=none; b=ARYhNu+i56ibMy9Cgshy06zqXNcShZTe33zBs4i7oVx2/oBiBDiShnkHuaQrZ2D/iSRDf2G+K/8AcHH8X2BG9a5rDnwMd5LzFuUMpn4QE73Wd6TuryJeDzSUmv/3ZBzCPrWzcrLgFOnWy/gV3ra/bSxPPC4Js81/0IBhJIDJVJU=
+	t=1718071023; cv=none; b=Z907CJdFthD0qGWfeTnMGtHdJyNgEUxskdVBi+lv6GyDnlrSrLui/9TL+JCqAJ9lzwQJ7P1cbH47NIZMX2jPtVWZugYokpLmyyhCqHe8gW1LLK7tK9ZGtR8XSJTA5eAsewOU2DNJS3ork0U/u2qRRphLTH/OXICttNOsjN6jrRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717823241; c=relaxed/simple;
-	bh=2+FztU1qVsUzMpbv2Y3TRsKUZHOWbMFrM2CD9ybjoNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WHC3XE0NkFsJcWqxie82xsZp5x1F0ECrkzgG/cfjZbJM/frrxVZR+ROQ0aBKZdq6xEWLcS2wWeVfoD8ZpbE1whdtK9aJydIVQzdwyqX/EitbbQ3KsNCwX3lJn+yAlZm+BbH96doSSh5GfoPJiuWRX5CdBFhp51JW211GP1IjE/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=i4XJm2dp; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="i4XJm2dp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=WW9SR+GmQvoS8oWvwysSokTuVGvGjT1ciRouIMs0aUg=; b=i4XJm2dpphJ+nXjKA1YLEM+c2M
-	CwgnXki755aR4V0dAabfDI4cOEGVDpZ/JkR1jV7TY/em/+pW4zcvXDQr1xlS5vPOlbdeOTTJA/Lwa
-	W26r6OUGL6BhzkoxxooegDs6Ma299FIP9lpEK86STMGP77NdI64d5T9imF+XoeltfmOU/77hyESWd
-	fMdvq9WYIvL7Gw4ZmJhbY1ncOrUiTrIWF84Qy5DsGWq9kRb/SUwK8NNx4aoXXr6nW4fv0VqhBpBmZ
-	KA5EaUoHJDiYVfVW1UPuE04ThjsPIj0y+cY30WY3dfKq6BaubtVKEU7JnZXYtdu6Fp9HIn1OMYYKj
-	HXzI225Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sFoIO-0000000GaSm-3Aq1;
-	Sat, 08 Jun 2024 05:07:16 +0000
-Date: Fri, 7 Jun 2024 22:07:16 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Aditya Garg <gargaditya08@live.com>
-Cc: "mcgrof@kernel.org" <mcgrof@kernel.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Current status and possible improvements in
- CONFIG_MODULE_FORCE_UNLOAD
-Message-ID: <ZmPnBCvmkczqI4Z_@infradead.org>
-References: <MA0P287MB021781F0CCD7C62CAC608714B8FA2@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1718071023; c=relaxed/simple;
+	bh=Rqwz1rMtbocjuzkpdlY14SlJ71M96bYi5eunpDJIidM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jAaa7Y4ZOnK26Ary57ilme0YtlV4wsrJqT1+opQ6vQd/sLpoxVs5do6ebLOKlBgM0LLGvpuKUW0Q78CXPkSshGEnKt08WSD/kH/qYBaRKcmQ5Uk/Xh7dz4jYLwnDvlts9eEE4T8v/Lt1ekbUvIPkFGrkwFctxEfQd2xDauje1Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4VysBm5mRNz1X3Rt;
+	Tue, 11 Jun 2024 09:53:04 +0800 (CST)
+Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
+	by mail.maildlp.com (Postfix) with ESMTPS id 813711A0190;
+	Tue, 11 Jun 2024 09:56:51 +0800 (CST)
+Received: from [10.67.111.172] (10.67.111.172) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 11 Jun 2024 09:56:51 +0800
+Message-ID: <57e499a4-e26d-148f-317d-233e873d11b4@huawei.com>
+Date: Tue, 11 Jun 2024 09:56:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MA0P287MB021781F0CCD7C62CAC608714B8FA2@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [RFC PATCH] ftrace: Skip __fentry__ location of overridden weak
+ functions
+Content-Language: en-US
+To: Peter Zijlstra <peterz@infradead.org>
+CC: <rostedt@goodmis.org>, <mcgrof@kernel.org>, <mhiramat@kernel.org>,
+	<mark.rutland@arm.com>, <mathieu.desnoyers@efficios.com>,
+	<jpoimboe@kernel.org>, <linux-modules@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+References: <20240607115211.734845-1-zhengyejian1@huawei.com>
+ <20240607150228.GR8774@noisy.programming.kicks-ass.net>
+From: Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <20240607150228.GR8774@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
 
-On Thu, Jun 06, 2024 at 06:49:59AM +0000, Aditya Garg wrote:
-> Hi
+On 2024/6/7 23:02, Peter Zijlstra wrote:
+> On Fri, Jun 07, 2024 at 07:52:11PM +0800, Zheng Yejian wrote:
+>> ftrace_location() was changed to not only return the __fentry__ location
+>> when called for the __fentry__ location, but also when called for the
+>> sym+0 location after commit aebfd12521d9 ("x86/ibt,ftrace: Search for
+>> __fentry__ location"). That is, if sym+0 location is not __fentry__,
+>> ftrace_location() would find one over the entire size of the sym.
+>>
+>> However, there is case that more than one __fentry__ exist in the sym
+>> range (described below) and ftrace_location() would find wrong __fentry__
+>> location by binary searching, which would cause its users like livepatch/
+>> kprobe/bpf to not work properly on this sym!
+>>
+>> The case is that, based on current compiler behavior, suppose:
+>>   - function A is followed by weak function B1 in same binary file;
+>>   - weak function B1 is overridden by function B2;
+>> Then in the final binary file:
+>>   - symbol B1 will be removed from symbol table while its instructions are
+>>     not removed;
+>>   - __fentry__ of B1 will be still in __mcount_loc table;
+>>   - function size of A is computed by substracting the symbol address of
+>>     A from its next symbol address (see kallsyms_lookup_size_offset()),
+>>     but because symbol info of B1 is removed, the next symbol of A is
+>>     originally the next symbol of B1. See following example, function
+>>     sizeof A will be (symbol_address_C - symbol_address_A):
+>>
+>>       symbol_address_A
+>>       symbol_address_B1 (Not in symbol table)
+>>       symbol_address_C
+>>
+>> The weak function issue has been discovered in commit b39181f7c690
+>> ("ftrace: Add FTRACE_MCOUNT_MAX_OFFSET to avoid adding weak function")
+>> but it didn't resolve the issue in ftrace_location().
+>>
+>> There may be following resolutions:
 > 
-> I am Aditya Garg. I often require using out of tree drivers to support various hardwares on Linux.
+> Oh gawd, sodding weak functions again.
+> 
+> I would suggest changing scipts/kallsyms.c to emit readily identifiable
+> symbol names for all the weak junk, eg:
+> 
+>    __weak_junk_NNNNN
+> 
 
-Just stop buying hardwarew that requires this, or improve and upstream
-the drivers to make your life easier instead of making other peoples
-life worse.
+Sorry for the late reply, I just had a long noon holiday :>
 
+scripts/kallsyms.c is compiled and used to handle symbols in vmlinux.o
+or vmlinux.a, see kallsyms_step() in scripts/link-vmlinux.sh, those
+overridden weak symbols has been removed from symbol table of vmlinux.o
+or vmlinux.a. But we can found those symbols from original xx/xx.o file,
+for example, the weak free_initmem() in in init/main.c is overridden,
+its symbol is not in vmlinx but is still in init/main.o .
+
+How about traversing all origin xx/xx.o and finding all weak junk symbols ?
+
+> That instantly fixes the immediate problem and Steve's horrid hack can
+> go away.
+> 
+
+Yes, this can be done in same patch series.
+
+> Additionally, I would add a boot up pass that would INT3 fill all such
+> functions and remove/invalidate all
+> static_call/static_jump/fentry/alternative entry that is inside of them.
+> 
+> 
+> 
+
+--
+
+Thanks,
+Zheng Yejian
