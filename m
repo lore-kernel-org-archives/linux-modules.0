@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920432E3E0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D8B2E644
 	for <linux-modules@vger.kernel.org>; Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118304; cv=none; b=CwRR8pbYUf9ZGEUPEgUGsTRnBQ3NlJd2N8j0/5m17JkIGYvfKbfgZgH8A8pRTv8AcLYIb5WnHfaE4p23NkvL+04bg8MBzXmJNULu5o+/9LqfUZrAJhIlTGN1OJ8s7OuefSzwDNcloLT4DHWScztXR8j0ax0sfF0IF3pxsKecOHc=
+	t=1718118304; cv=none; b=sb/GC1BMcbW7U6X0TiWDxJoeJJi/L6yB1muLFkdo47ZP/dAq56E9LUbnBRLw+H8Ls58kwmnhRH1/WXOOXzoX84oi3AsoOYUd2Md0Mp0T2MC8zzt7zWh9H0j2LmtSYZAHxa7yHGKwHpYzPF3O5GX4gE311oUF0fxiNBzJWEb0w5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718118304; c=relaxed/simple;
-	bh=LbaAyTGfXO0Dcw1r060HBXx0jSIYF1rUPXiVrvRbBLQ=;
+	bh=YxVTQWFK0ULliU8yINBDLTRH62SL+CObsNtitF+Ux50=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=USha6Dcw7EGZyKY/sEmuG5FwWFPbsbxSomM8ixkK0T+lRIw2a4QER8XRYpTwOffT+qzuuD/cCq3JcKwiZEY3VtJ61ConLZet+rJTP0yExrjzGWXZpAOsebRKCOlqvl11xoMzfGc7V6XRghPjI6nej2EjjbGnjBm/DSekXr5otZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDIG0K2o; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=oM83HuyulhkTUh7SXVZt9i2PGFmMLEjyb7hV+1S917FaNKbksErgG/J4/jvpeV2Ot7d9zB0CQAyIx92q1AlpwRUNrg09zbPVpD3hxh0x0qVhW+D5K9pVXC0m+aMjJB6p89afBT3ngXcb3gdXpgpmX4ChCZ2n9MxNa6Bm+nB3ttw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbVlwLaX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDIG0K2o"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3DC73C4AF1C;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbVlwLaX"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A1CCC4AF55;
 	Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718118304;
-	bh=LbaAyTGfXO0Dcw1r060HBXx0jSIYF1rUPXiVrvRbBLQ=;
+	bh=YxVTQWFK0ULliU8yINBDLTRH62SL+CObsNtitF+Ux50=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=RDIG0K2oqEVqNBnce/OtRRL0fWp64igFLirh92GnQVB1FM/c3WATjyBtsjZlW5P3q
-	 NewwKtY7el/y558dcGPQQfx6wOTo0pvOHJMTUyesTDBfA7e9SJfji6hB6W6dUnObqz
-	 clDT+xbRQ41VwIiRlAGRiwnNmRu4DbELoikJkKSq++wHEAVUG+IcB+Lm+XCm4bEi4g
-	 ggeqh/2bjr8zQ6L4m+w2HegPWpG6WOlfGXNYt5DOBgDeLuSYpZ3r06vZMTvxD5SrfZ
-	 5RSmmnkvxDO8xsMYAi9NYtSGsWrifZc23bae2l0WvRoLzfWHR5tXID34II7o4/tt8p
-	 DtUDk/wAsW0kg==
+	b=DbVlwLaXKb7b6ziSWvvo22KH5smwowsXkWdlr6E+YhhWMECcDsOpJtd2XVquD3nbh
+	 knV72LHkmzb4YGnbflrwCRALmglwxL3h8VFwuRomOZT+H3L09K5/OrNZ25b5ojx/QM
+	 sIwwX0HmhJZY7jDPsio1/mgCNbt1LKmRusjPaMQZd2zqSj71aRrvVyMHT0zBmmZwj4
+	 C6yT4AKX8nE0iMQOxMvbKbsF68E9LNHxuu5CzTpixS1s9fuqcsETpAMw3k9sEEg9lL
+	 SHe65nEPg+lsxzfLs4IiyB1kKLBcXXjDR/noC+RIzWwL5BWBGbiUJlkGYgDOVuwZZH
+	 ry28f/iXouQag==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32FCAC27C79;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FA47C27C7B;
 	Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Tue, 11 Jun 2024 16:05:03 +0100
-Subject: [PATCH kmod 03/20] man: build the scdoc based man pages
+Date: Tue, 11 Jun 2024 16:05:06 +0100
+Subject: [PATCH kmod 06/20] man: white space fixes
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -39,18 +39,18 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240611-man-v1-3-bd6864d49639@gmail.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240611-man-v1-6-bd6864d49639@gmail.com>
 References: <20240611-man-v1-0-bd6864d49639@gmail.com>
 In-Reply-To: <20240611-man-v1-0-bd6864d49639@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Emil Velikov <emil.l.velikov@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=2553;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=4971;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=dl1+/dNbs/jvTy3ZNqBX6ojBIXb0bXg0KM+9qRR65Go=;
- b=4ZqlwLgzt57gf07nKUiCplQWZHXc+cXWwHxTbFJA7pTmO9EmXRWt+R7SW+UwUP1IVVhhQs30s
- LNzhaz0xKykB8+g2ZwgnsVpAeQ7+kHr+wZE7+kTvpF+DL+jDBOJRLGp
+ bh=Ex8172Z3JhiuC/8VPfdZczsy5Xn1oTcythmsLXdNtQA=;
+ b=ZV7RckVXyVMjxSOrpgvG69+jQqXEPjlgCSI45mwbuoPb4h32R1eE1h4fAOm0W67bnHXHQb5vJ
+ y39dPFQxSO7Af+reiG01X/8S8nQORKTkWkWYus6JbfyAoaF+QaanKPR
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
@@ -60,91 +60,102 @@ Reply-To: emil.l.velikov@gmail.com
 
 From: Emil Velikov <emil.l.velikov@gmail.com>
 
-Note that scdoc does not handle natively handle the dummy
-modules.dep.bin.5 entry, so we need to create one manually.
-
-Not a big deal, since it's single static line anyway.
-
-Also: pkg-config --variable=scdoc scdoc, produces the full executable
-and path, although for now we stick with the AC_PATH_PROG approach.
+These were present in the original xml files and I opted to keep them
+separate fix to make the transition/comparison easier.
 
 Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
 ---
- configure.ac          |  2 +-
- man/Makefile.am       | 24 ++++++++----------------
- man/modules.dep.bin.5 |  1 +
- 3 files changed, 10 insertions(+), 17 deletions(-)
+ man/depmod.8.scd     | 4 ++--
+ man/depmod.d.5.scd   | 2 +-
+ man/modprobe.8.scd   | 8 ++++----
+ man/modprobe.d.5.scd | 4 ++--
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/configure.ac b/configure.ac
-index 9527aa2..dcf7479 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -32,7 +32,7 @@ AC_PROG_SED
- AC_PROG_MKDIR_P
- AC_PROG_LN_S
- PKG_PROG_PKG_CONFIG
--AC_PATH_PROG([XSLTPROC], [xsltproc])
-+AC_PATH_PROG([SCDOC], [scdoc])
+diff --git a/man/depmod.8.scd b/man/depmod.8.scd
+index 8cb6449..80cc48d 100644
+--- a/man/depmod.8.scd
++++ b/man/depmod.8.scd
+@@ -54,8 +54,8 @@ rather than the current kernel version (as returned by *uname -r*).
+ 	than running *depmod* again later.
  
- AC_PROG_CC_C99
+ *-o* _outdir_, *--outdir* _outdir_
+-	Set the output directory where depmod will store any generated file.
+-	_ outdir_ serves as a root to that location, similar to how _basedir_ is
++	Set the output directory where *depmod* will store any generated file.
++	_outdir_ serves as a root to that location, similar to how _basedir_ is
+ 	used. Also this setting takes precedence and if used together with
+ 	_basedir_ it will result in the input being that directory, but the output
+ 	being the one set by _outdir_.
+diff --git a/man/depmod.d.5.scd b/man/depmod.d.5.scd
+index 9c42478..4e05b93 100644
+--- a/man/depmod.d.5.scd
++++ b/man/depmod.d.5.scd
+@@ -50,7 +50,7 @@ override _modulename_ _kernelversion_ _modulesubdirectory_
+ 	This command allows you to override which version of a specific module
+ 	will be used when more than one module sharing the same name is
+ 	processed by the *depmod* command. It is possible to specify one kernel
+-	or all kernels using the \* wildcard. _ modulesubdirectory_ is the name
++	or all kernels using the \* wildcard. _modulesubdirectory_ is the name
+ 	of the subdirectory under @MODULE_DIRECTORY@ (or other module location)
+ 	where the target module is installed.
  
-diff --git a/man/Makefile.am b/man/Makefile.am
-index d62ff21..0285fdd 100644
---- a/man/Makefile.am
-+++ b/man/Makefile.am
-@@ -2,37 +2,29 @@ MAN5 = depmod.d.5 modprobe.d.5 modules.dep.5
- MAN8 = kmod.8 depmod.8 insmod.8 lsmod.8 rmmod.8 modprobe.8 modinfo.8
- MAN_STUB = modules.dep.bin.5
+diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
+index 653fbd9..aac3a74 100644
+--- a/man/modprobe.8.scd
++++ b/man/modprobe.8.scd
+@@ -6,7 +6,7 @@ modprobe - Add and remove modules from the Linux Kernel
  
--AM_V_XSLT = $(AM_V_XSLT_$(V))
--AM_V_XSLT_ = $(AM_V_XSLT_$(AM_DEFAULT_VERBOSITY))
--AM_V_XSLT_0 = @echo "  XSLT    " $@;
--
--XSLT = $(if $(XSLTPROC), $(XSLTPROC), xsltproc)
-+AM_V_SCDOC = $(AM_V_SCDOC_$(V))
-+AM_V_SCDOC_ = $(AM_V_SCDOR_$(AM_DEFAULT_VERBOSITY))
-+AM_V_SCDOC_0 = @echo "  SCDOC    " $@;
+ # SYNOPSIS
  
- if BUILD_TOOLS
- dist_man_MANS = $(MAN5) $(MAN8) $(MAN_STUB)
--modules.dep.bin.5: modules.dep.5
- endif
+-*modprobe* [*-v*] [*-V*] [*-C *_config-file_] [*-n*] [*-i*] [*-q*] [*-b*] [_modulename_]
++*modprobe* [*-v*] [*-V*] [*-C* _config-file_] [*-n*] [*-i*] [*-q*] [*-b*] [_modulename_]
+ \ \ \ \ \ \ \ \ \ \[_module parameters_...]
  
--EXTRA_DIST = $(MAN5:%.5=%.5.xml) $(MAN8:%.8=%.8.xml)
-+EXTRA_DIST = $(MAN5:%.5=%.5.scd) $(MAN8:%.8=%.8.scd)
- CLEANFILES = $(dist_man_MANS)
+ *modprobe* [*-r*] [*-v*] [*-n*] [*-i*] [_modulename_...]
+@@ -19,10 +19,10 @@ modprobe - Add and remove modules from the Linux Kernel
  
- define generate_manpage
--	$(AM_V_XSLT)if [ '$(distconfdir)' != '/lib' ] ; then \
-+	$(AM_V_SCDOC)if [ '$(distconfdir)' != '/lib' ] ; then \
- 		sed -e 's|@DISTCONFDIR@|$(distconfdir)|g' $< ; \
- 	else \
- 		sed -e '/@DISTCONFDIR@/d' $< ; \
- 	fi | \
- 	sed -e 's|@MODULE_DIRECTORY@|$(module_directory)|g' | \
--	$(XSLT) \
--		-o $@ \
--		--nonet \
--		--stringparam man.output.quietly 1 \
--		--param funcsynopsis.style "'ansi'" \
--		http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl -
-+	$(SCDOC) > $@
- endef
+ *modprobe* intelligently adds or removes a module from the Linux kernel: note
+ that for convenience, there is no difference between \_ and - in module names
+-(automatic underscore conversion is performed). * modprobe* looks in the module
++(automatic underscore conversion is performed). *modprobe* looks in the module
+ directory @DISTCONFDIR@/`uname -r` for all the modules and other files, except
+ for the optional configuration files in the /etc/modprobe.d directory (see
+-*modprobe.d*(5)). * modprobe* will also use module options specified on the
++*modprobe.d*(5)). *modprobe* will also use module options specified on the
+ kernel command line in the form of <module>.<option> and blacklists in the form
+ of modprobe.blacklist=<module>.
  
--%.5: %.5.xml
-+%.5: %.5.scd
- 	$(generate_manpage)
+@@ -167,7 +167,7 @@ database.
+ 	itself. This produces a (possibly empty) set of module filenames, one
+ 	per line, each starting with "insmod" and is typically used by
+ 	distributions to determine which modules to include when generating
+-	initrd/initramfs images. * Install* commands which apply are shown
++	initrd/initramfs images. *Install* commands which apply are shown
+ 	prefixed by "install". It does not run any of the install commands. Note
+ 	that *modinfo*(8) can be used to extract dependencies of a module from the
+ 	module itself, but knows nothing of aliases or install commands.
+diff --git a/man/modprobe.d.5.scd b/man/modprobe.d.5.scd
+index 93b9522..2907175 100644
+--- a/man/modprobe.d.5.scd
++++ b/man/modprobe.d.5.scd
+@@ -94,7 +94,7 @@ install _modulename_ _command..._
+ options _modulename_ _option..._
+ 	This command allows you to add options to the module _modulename_ (which
+ 	might be an alias) every time it is inserted into the kernel: whether
+-	directly (using *modprobe* _ modulename_) or because the module being
++	directly (using *modprobe* _modulename_) or because the module being
+ 	inserted depends on this module.
  
--%.8: %.8.xml
-+%.8: %.8.scd
- 	$(generate_manpage)
-diff --git a/man/modules.dep.bin.5 b/man/modules.dep.bin.5
-new file mode 100644
-index 0000000..795636b
---- /dev/null
-+++ b/man/modules.dep.bin.5
-@@ -0,0 +1 @@
-+.so modules.dep.5
+ 	All options are added together: they can come from an *option* for the
+@@ -106,7 +106,7 @@ remove _modulename_ _command..._
+ 
+ softdep _modulename_ pre: _modules..._ post: _modules..._
+ 	The *softdep* command allows you to specify soft, or optional, module
+-	dependencies. _ modulename_ can be used without these optional modules
++	dependencies. _modulename_ can be used without these optional modules
+ 	installed, but usually with some features missing. For example, a driver
+ 	for a storage HBA might require another module be loaded in order to use
+ 	management features.
 
 -- 
 2.45.0
