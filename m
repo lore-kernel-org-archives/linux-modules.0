@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96E81EB21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5C62C6B6
 	for <linux-modules@vger.kernel.org>; Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118304; cv=none; b=UBNFo4aMsSfoCN1SR900RDOE8znGA9fzBxqUv7RzvKF9T276GG64Zc4yqx9NASE5z0CWFUr60di9WZ4BRIixuCjtBUUo3LlkXNfVl7SUG5/mNg4d79BlHh2G2ngyl09wHQBmiZuPTznQiOGhDn5DjCI3PAb4QVae5Btuc+hKsVY=
+	t=1718118304; cv=none; b=IOaWPacNtkY3gjp5C3UVGu5+y0wPqgEYxOMMxJWwS1HjCexNdy88WRiIoFpG70STy7JYxaTIkbossIdR6B0btm59umZcGgpoLjbFA/aDoUwSZFGPfgDk9ss+AO5VTNNl0wcmK9Fh81ibBmuW9KKRPW4N+jnn2euyQ2u8/tBGQHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718118304; c=relaxed/simple;
-	bh=G6pSMDpddWlekCjvTNWoWMRR5TEZgXMxrSqfJ4jZcFc=;
+	bh=ZKAkrl1Jwj9r3pKh/RgpwJzxPHENUuBb/A4qqq/dFeA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mz0gKLOck9xPbVuHE73czSxcXObm29XoK1Iy1Fu1Fv5W35axH9OAd7A97DyugfZlSqZ8Z6xADYFhiYQjV1FW8uR/ehu1q9qaWF6zkHp1iAuUKgS0gfMdAW5gknMJgeAvbPZr3+fsOOWlE25nQk0umoxEznN5itulvpUr/CZ0C5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cmuWlp8E; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=S7po/0hlfQRQEE86o8t5EsrOYIieEu0i1by4Atts64BNdn46Zrpn9E77mbTLGWUQPiemVFTShc2ds74WDfzHzNy+iJcpHlBM7LAeAToCuWx9uRAIQ4VxtMKRdick31c2Uv5HnyIDX+Z2fP6bi6aaPBlPfRDmRAFD7hPL1Oh0Nw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ku7P/sS5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cmuWlp8E"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5E26C2BD10;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ku7P/sS5"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96A2BC4AF48;
 	Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718118304;
-	bh=G6pSMDpddWlekCjvTNWoWMRR5TEZgXMxrSqfJ4jZcFc=;
+	bh=ZKAkrl1Jwj9r3pKh/RgpwJzxPHENUuBb/A4qqq/dFeA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=cmuWlp8EAb55ERPh51ZArc/W0SYuLHZPkwChHKhbSGH9afbcCtrm5zuev0DkwniyI
-	 fu20I+vYgPpOXus8e7MZtpAOnt72EZJ03aW8OxYClNi0ntA1ZDjTh/K5yissgZ4oSu
-	 gp9wJ13oiVoYmtA6wQ/tNVsyNjhgAOdGBOwa8tvktM0RUoEwp0qtQZzhTWJUnaOW0H
-	 iPXEmLp/rKRZ92glg4Qj2/DdwhygszaAPmtrFsEi3jVRzhyAnJyfYl3dxbfipi6/P0
-	 7u9MOP5ofTJZCH80HUe33tQ+UzvruZi6wiIJ7Pqryt24+CaSNPAf0SC+fRzKQRWGE3
-	 /lPybVHA/P2AQ==
+	b=ku7P/sS5F6cL0RihGEksy+6dRcLXMyqhktt1Q4lrZnQr1ut6UbfQb3tXz5bfxwsDf
+	 cIA1wAgtARtkVNthV+6NMsyLCyldTmAYZW8rw5wftjLgS+8feHkpzJqqyhP/MWYHV1
+	 D1Fj8Mab+IKA6om8eKsl7FcFo4oRj7ZQ9bmIvcvPZLtOBCPNXj7XOtDmcyE3QWHj3Z
+	 M9xe5jsFPk1eSxtPFP2RMTVI/JO2Ui1rEzu/ORcuEr9bNxK03mNMaPkPGOzXWucN2Y
+	 PYOIhiE/kaEKYhRlXx9UWk75ZP7MBKeuuTooIS6Xuqh7Dtx3cK7WcbzA4y4oM/oSmp
+	 6B2KW1/ItNzlw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB9AC27C77;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF28C27C75;
 	Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Tue, 11 Jun 2024 16:05:11 +0100
-Subject: [PATCH kmod 11/20] man: depmod.d: document the config file order
- handling
+Date: Tue, 11 Jun 2024 16:05:08 +0100
+Subject: [PATCH kmod 08/20] man: some options take an argument, mention
+ that
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,17 +41,17 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240611-man-v1-11-bd6864d49639@gmail.com>
+Message-Id: <20240611-man-v1-8-bd6864d49639@gmail.com>
 References: <20240611-man-v1-0-bd6864d49639@gmail.com>
 In-Reply-To: <20240611-man-v1-0-bd6864d49639@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Emil Velikov <emil.l.velikov@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=2376;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=3010;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=ddft5epJfJ7Syzl58yhh/w8V7UnnoNgSvHNj/DUisJQ=;
- b=2dLX7d3FGKruy7BchZS8mjaY+lunw72uun71hvwSaKKPWSwhajtTZ2eZSFuBdbc2k7WAF3EDn
- 7qO58RkwByfA0Qcim5G5MOx5n+78FTx2Eg4fpmZecalWVjCCKUZy6VG
+ bh=ujIDwGUQV0FOmUpTbz7QEpgmiqJ/HE3dkWV2TNVcd/Y=;
+ b=ZxbtX+lbUqtIULQ/Cq8wTcj19J34F/PJt1NxsI/SqhMNsFbSIhC5lAhMLEwfawBX4TCn8LLe4
+ RcXN2fRQ3dvBudkctvV5FOgY5wdW2EQut1CaiE9CTq3m5+8ElEOH8ZS
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
@@ -61,76 +61,82 @@ Reply-To: emil.l.velikov@gmail.com
 
 From: Emil Velikov <emil.l.velikov@gmail.com>
 
-The depmod.d configuration order/handling aligns with existing tools
-such as sysctl.d, even though there is no mention in the manual.
+For example modinfo -F requires the field name, although the
+documentation was missing the "field".
 
-Reorder the list in SYNOPSIS and add a bit of verbiage describing things.
-
-Section is copied^Winspired by sysctl.d(5) ;-)
+Similarly modprobe has omissions, so let's fix those as well.
 
 Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
 ---
- man/Makefile.am    |  1 +
- man/depmod.d.5.scd | 22 ++++++++++++++++++----
- 2 files changed, 19 insertions(+), 4 deletions(-)
+There are two different styles across the man pages:
+ -s, --short foo
+ -s foo, --short foo
 
-diff --git a/man/Makefile.am b/man/Makefile.am
-index 25135e9..181f619 100644
---- a/man/Makefile.am
-+++ b/man/Makefile.am
-@@ -15,6 +15,7 @@ CLEANFILES = $(dist_man_MANS)
+A proposal to resolve these comes with a later patch in this series.
+---
+ man/depmod.8.scd   | 2 +-
+ man/modinfo.8.scd  | 4 ++--
+ man/modprobe.8.scd | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/man/depmod.8.scd b/man/depmod.8.scd
+index 80cc48d..7a2e84b 100644
+--- a/man/depmod.8.scd
++++ b/man/depmod.8.scd
+@@ -72,7 +72,7 @@ rather than the current kernel version (as returned by *uname -r*).
+ 	assumption can break especially when additionally updated third party
+ 	drivers are not correctly installed or were built incorrectly.
  
- define generate_manpage
- 	$(AM_V_SCDOC)cat $< | \
-+	sed -e 's|@SYSCONFDIR@|$(sysconfdir)|g' | \
- 	sed -e 's|@DISTCONFDIR@|$(distconfdir)|g' | \
- 	sed -e 's|@MODULE_DIRECTORY@|$(module_directory)|g' | \
- 	$(SCDOC) > $@
-diff --git a/man/depmod.d.5.scd b/man/depmod.d.5.scd
-index 9cf99d5..9ee35e8 100644
---- a/man/depmod.d.5.scd
-+++ b/man/depmod.d.5.scd
-@@ -6,15 +6,15 @@ depmod.d - Configuration directory for depmod
+-*-E*, *--symvers*
++*-E*, *--symvers* _Module.symvers_
+ 	When combined with the *-e* option, this reports any symbol versions
+ 	supplied by modules that do not match with the symbol versions provided
+ 	by the kernel in its _Module.symvers_. This option is mutually
+diff --git a/man/modinfo.8.scd b/man/modinfo.8.scd
+index 75267bc..9545257 100644
+--- a/man/modinfo.8.scd
++++ b/man/modinfo.8.scd
+@@ -31,8 +31,8 @@ architecture.
+ *-V*, *--version*
+ 	Print the *modinfo* version.
  
- # SYNOPSIS
+-*-F*, *--field*
+-	Only print this field value, one per line. This is most useful for
++*-F* _field_, *--field* _field_
++	Only print this _field_ value, one per line. This is most useful for
+ 	scripts. Field names are case-insensitive. Common fields (which may not
+ 	be in every module) include author, description, license, parm, depends,
+ 	and alias. There are often multiple parm, alias and depends fields. The
+diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
+index f4ce0be..9594798 100644
+--- a/man/modprobe.8.scd
++++ b/man/modprobe.8.scd
+@@ -55,7 +55,7 @@ database.
+ 	configuration files (if any) to module names as well. It is usually used
+ 	by *udev*(7).
  
--/lib/depmod.d/\*.conf
-+@SYSCONFDIR@/depmod.d/\*.conf
+-*-C*, *--config*
++*-C* _directory_, *--config* _directory_
+ 	This option overrides the default configuration directory
+ 	(/etc/modprobe.d).
  
--@DISTCONFDIR@/depmod.d/\*.conf
-+/run/depmod.d/\*.conf
+@@ -151,14 +151,14 @@ database.
+ 	require it. Your distribution kernel may not have been built to support
+ 	removal of modules at all.
  
- /usr/local/lib/depmod.d/\*.conf
+-*-w*, *--wait=*TIMEOUT_MSEC
++*-w* _TIMEOUT_MSEC_, *--wait* _TIMEOUT_MSEC_
+ 	This option causes *modprobe -r *to continue trying to remove a module
+ 	if it fails due to the module being busy, i.e. its refcount is not 0 at
+ 	the time the call is made. Modprobe tries to remove the module with an
+ 	incremental sleep time between each tentative up until the maximum wait
+ 	time in milliseconds passed in this option.
  
--/run/depmod.d/\*.conf
-+@DISTCONFDIR@/depmod.d/\*.conf
+-*-S*, *--set-version*
++*-S* _version_, *--set-version* _version_
+ 	Set the kernel version, rather than using *uname*(2) to decide on the
+ 	kernel version (which dictates where to find the modules).
  
--/etc/depmod.d/\*.conf
-+/lib/depmod.d/\*.conf
- 
- # DESCRIPTION
- 
-@@ -29,6 +29,20 @@ lines and lines starting with '#' ignored (useful for adding comments). A '\\'
- at the end of a line causes it to continue on the next line, which makes the
- files a bit neater.
- 
-+# CONFIGURATION DIRECTORIES AND PRECEDENCE
-+
-+Configuration files are read from directories in @SYSCONFDIR@/, /run/,
-+/usr/local/lib/, @DISTCONFDIR@/, and /lib/ in order of precedence, as listed in
-+the SYNOPSIS section above. Files must have the ".conf" extension. Files in
-+@SYSCONFDIR@/ override files with the same name in /run/, /usr/local/lib/,
-+@DISTCONFDIR@/, and /lib/. Files in /run/ override files with the same name
-+under /usr/, @DISTCONFDIR@/ and /lib/.
-+
-+All configuration files are sorted by their filename in lexicographic order,
-+regardless of which of the directories they reside in. If multiple files specify
-+the same option, the entry in the file with the lexicographically latest name
-+will take precedence.
-+
- # COMMANDS
- 
- search _subdirectory..._
 
 -- 
 2.45.0
