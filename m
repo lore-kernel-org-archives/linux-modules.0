@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8AD3CF6A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E1B51016
 	for <linux-modules@vger.kernel.org>; Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118305; cv=none; b=gea91+9MhRzV/Soq20IKIk2dDZFjzWmd0CHslbEPkOxYu8swi/VqhVmr9/BP6JrLKN6AIAfgr5s+Ee4YBesjn4eJxZOeBFmVfRgc/T+sCn5rh0NmhZh+lBPoBSRIjWOm00W8byY2afq1cJ5Q9TYR7GW3RNBwSVvY0lI/jKCCEC8=
+	t=1718118305; cv=none; b=hBBl0xtHabFU9zpeZ8iNkvjL5kKO09N9griHt0+MA1iDUlUSXipMWMAeEm+beLcbJ59IQcXbjzot4F/tPAD6vFsmOClGHMvWmMrfnrExNpcAbJX+v0GtF2x1gISguGvHGCwZt+zYy5ms4U7cpLGKbEzaS1HmmmgzmIOxdZs/TVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718118305; c=relaxed/simple;
-	bh=UJYWSb2Y4QsAnuYtl7oJ6cJFvfg5TbfC7TPgwp1MB/g=;
+	bh=eWw8kAuke93vjRbEMbS+qDopyz7UAiLzdhyq++aN5WM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=s4cpGRh5o6G4OzWajWIrP7YkKsU1GeBuuN42DaYZPDxqP54Mc+RrrTj/rX7ECnueng4Yi9qzfNxW2FEf3Y9YiLdU+F7H6piCu+5xVsCYPF4UO2/BeYJhubwEgbWgQ+YccIi2n7jDG2fZe0XkUx7VP4t9dHSrlYf37P/BR3FnoJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oe8N+LoS; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=hBI3hWyTsAtULgDEQnRQq/S1OlV9lkcLDttN9kcMyOhiVDviJAUv4RUF0gbCQdlcDGOL4cw7S3gw3Ye/SdyXlknplVcy0Orl3HqQe8JUq/4bNjLYk9Qf1+psSpvKrJq5k9Ixqe73KdYAeZn/GfXCN6VUKdBSkoScXhCjg1/7AQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nq8XTaCG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oe8N+LoS"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 036EAC4DDE3;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nq8XTaCG"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 148AEC4DDE7;
 	Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1718118305;
-	bh=UJYWSb2Y4QsAnuYtl7oJ6cJFvfg5TbfC7TPgwp1MB/g=;
+	bh=eWw8kAuke93vjRbEMbS+qDopyz7UAiLzdhyq++aN5WM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=oe8N+LoSr38amoECwvd8uZoz9SfGJ9BYdBP7tPe7rKO+0ZEUsSkKlVVi/HXy/CD4k
-	 XViQvSkMjh3ddpgAVzIlMiLGaIBXe8ZsDyvHMjr9/I8sVtry95Nou4yWaP+s5yDiYR
-	 KXgMyuyVOtfsBVf+O96x56+XSuQWQ/DECVqDHuLAMXCXf4hvmJa9H2Xg0q6kIRMqW/
-	 VrZUxNyIFvzPRrpoGFWot+MA/nl56xHheyKpum/v2uufSBwr84SycCcJCmy9xtC9Xw
-	 wqGj6vMnVDtM582oKVHLE3NCMabqGeZT434g4SP1/vc2K/LMwOHBDNtJRS5mvThIgb
-	 jlYKiplg3rOqw==
+	b=Nq8XTaCGge5MhkI3IaRv+9OI0xjG0n6fMpFBc6YoT2+yzy5f6nrQ9SZ6C1/vaco4x
+	 yjVmrCuDaszVrZoA/3db4uZ5XXqbfKyvKTH/Yg+IfKnzsDqBpdSEj7BL6m180j7iTD
+	 izts4I4C1Jd/g/L6baYu5uw+HWwySWbNgIaMVpm96Wk1S0CkoofBvRDnJnmLSdgrG4
+	 8FEARCkrGCs1vZPE1IMsepls3cMryskhWk2AcSt7qm+UpZbopoGR5YGZ++rx/49HBM
+	 zJ6RC9B7U8Bc34LhZfIZOsSEHwoBaUxNVmXck9qhlqz74Z0qtJSXXzSTZ9MIN9xzuo
+	 Boj6J+7rXDTmQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E813CC27C75;
-	Tue, 11 Jun 2024 15:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A9E6C27C77;
+	Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Tue, 11 Jun 2024 16:05:17 +0100
-Subject: [PATCH kmod 17/20] man: modprobe.d: mention about MODPROBE_OPTIONS
+Date: Tue, 11 Jun 2024 16:05:19 +0100
+Subject: [PATCH kmod 19/20] man: remove the "Maintained by" references
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -40,17 +40,17 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240611-man-v1-17-bd6864d49639@gmail.com>
+Message-Id: <20240611-man-v1-19-bd6864d49639@gmail.com>
 References: <20240611-man-v1-0-bd6864d49639@gmail.com>
 In-Reply-To: <20240611-man-v1-0-bd6864d49639@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Emil Velikov <emil.l.velikov@gmail.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=1492;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=3839;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=i0qBUwKgbC+64tmZG/2a7YKtjhyh59kDUIlSs5fyIrg=;
- b=wPqeIcdKIzbkN0BkqDZMzMtLAKjqbqmXgz44m7nHejkTwtzsHIqZY0J1hQ6xTIsgK2wCKJ378
- eWkH/qpVk4oAVzff52T/QvZYyDJvIx8ZAFYuNjxrbK9B3Q1bW83UiFs
+ bh=zxDwsxezKzKd4XXoucEoUtFGD/+f6o/6S2mBfQf4Gus=;
+ b=coUhYTpWBiHSVb9fEW7YVHXWlbGpSPnEKJiVCNpqGSHNO++Xvi6kX97CzozwRZqv4tEZXtxYA
+ vtC33AlAnIOD4RGkxaps6jfxNImPaHuJTuIVGFk/Ji4m2wRHK4o/y1x
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
@@ -60,44 +60,133 @@ Reply-To: emil.l.velikov@gmail.com
 
 From: Emil Velikov <emil.l.velikov@gmail.com>
 
-The environment variable alters the config file ordering, so mention it
-in the man page.
+At a glance through my system, around 2% of the man pages include such
+statement.
+
+Looking through git log, Jon has been active in a while and presumably
+have moved on.
+
+Most importantly the Copyright section isn't the best place to reference
+the maintainer/contact person.
 
 Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
 ---
-Hi Lucas,
+Instead we can add a note in the authors section, pointing people to the
+ML/kernel.org/Github repo for when seeking contact.
 
-Looking at modprobe(8), while the variable is mentioned there is no
-details about:
- - the format and it's stability across versions - is it ABI
- - is the same option (say config) allowed multiple times
-   - if so, does the latest(?) instance override the previous ones, or
-   - all instances are in effect, with the latest(?) having the highest
-     priority
+Also should probably s/Developer/Maintainer/ for Lucas, who's been
+keeping the project afloat the last few decades ;-)
 
-Can you shed some light? I'd be happy to put that in patch form :-)
-
-Thanks
-Emil
+Lucas, what do you think?
 ---
- man/modprobe.d.5.scd | 4 ++++
- 1 file changed, 4 insertions(+)
+ man/insmod.8.scd      | 1 -
+ man/kmod.8.scd        | 3 +--
+ man/lsmod.8.scd       | 1 -
+ man/modinfo.8.scd     | 1 -
+ man/modprobe.8.scd    | 1 -
+ man/modprobe.d.5.scd  | 1 -
+ man/modules.dep.5.scd | 1 -
+ man/rmmod.8.scd       | 1 -
+ 8 files changed, 1 insertion(+), 9 deletions(-)
 
+diff --git a/man/insmod.8.scd b/man/insmod.8.scd
+index b6f8654..27d4409 100644
+--- a/man/insmod.8.scd
++++ b/man/insmod.8.scd
+@@ -21,7 +21,6 @@ information about errors.
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/kmod.8.scd b/man/kmod.8.scd
+index 2007a2d..6bd9432 100644
+--- a/man/kmod.8.scd
++++ b/man/kmod.8.scd
+@@ -35,8 +35,7 @@ Linux Kernel modules. Most users will only run it using its other names.
+ 
+ # COPYRIGHT
+ 
+-This manual page originally Copyright 2014, Marco d'Itri. Maintained by Lucas De
+-Marchi and others.
++This manual page originally Copyright 2014, Marco d'Itri.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/lsmod.8.scd b/man/lsmod.8.scd
+index eb2f2e8..ded619e 100644
+--- a/man/lsmod.8.scd
++++ b/man/lsmod.8.scd
+@@ -15,7 +15,6 @@ lsmod - Show the status of modules in the Linux Kernel
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/modinfo.8.scd b/man/modinfo.8.scd
+index 9545257..d088c7e 100644
+--- a/man/modinfo.8.scd
++++ b/man/modinfo.8.scd
+@@ -63,7 +63,6 @@ architecture.
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2003, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
+index 8354765..657d172 100644
+--- a/man/modprobe.8.scd
++++ b/man/modprobe.8.scd
+@@ -197,7 +197,6 @@ The MODPROBE_OPTIONS environment variable can also be used to pass arguments to
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
 diff --git a/man/modprobe.d.5.scd b/man/modprobe.d.5.scd
-index b300758..9d03c49 100644
+index 9d03c49..41d2e78 100644
 --- a/man/modprobe.d.5.scd
 +++ b/man/modprobe.d.5.scd
-@@ -46,6 +46,10 @@ the SYNOPSIS section above. Files must have the ".conf" extension. Files in
- @DISTCONFDIR@/, and /lib/. Files in /run/ override files with the same name
- under /usr/, @DISTCONFDIR@/ and /lib/.
+@@ -170,7 +170,6 @@ directly within the modules.
+ # COPYRIGHT
  
-+NOTE: Any configuration directories set via the MODPROBE_OPTIONS environment
-+variable are added with the top-most priority. See the ENVIRONMENT section in
-+*modprobe*(8).
-+
- All configuration files are sorted by their filename in lexicographic order,
- regardless of which of the directories they reside in. If multiple files specify
- the same option, the entry in the file with the lexicographically latest name
+ This manual page originally Copyright 2004, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/modules.dep.5.scd b/man/modules.dep.5.scd
+index c4e7653..7723a16 100644
+--- a/man/modules.dep.5.scd
++++ b/man/modules.dep.5.scd
+@@ -29,7 +29,6 @@ fashion rather than touching these files.
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
+diff --git a/man/rmmod.8.scd b/man/rmmod.8.scd
+index e1f656f..c4dcc3e 100644
+--- a/man/rmmod.8.scd
++++ b/man/rmmod.8.scd
+@@ -35,7 +35,6 @@ is provided) from the kernel. Most users will want to use *modprobe*(8) with the
+ # COPYRIGHT
+ 
+ This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+-Maintained by Jon Masters and others.
+ 
+ # SEE ALSO
+ 
 
 -- 
 2.45.0
