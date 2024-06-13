@@ -1,428 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 601DC5D8F0
-	for <linux-modules@vger.kernel.org>; Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CE5143C5F;
+	Thu, 13 Jun 2024 13:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718118305; cv=none; b=tQV5OFsN605wiwppVWC/+ZJCNAQXWsNayPcZriLsSUdPiwGYRp/J7PE9WHvIUij3dMSZnlCzF8Sco6Cbnl5TzGaTydrqYooDJWdW1kKCWJmiD+vNdveJz/t6UnYWq0000AHCZ4dwwdtUjTgCwYJdGd1Pzn/rssPDmc+2DsvAl4M=
+	t=1718285805; cv=none; b=LFg19xWbXQBGLjngUmjk6sJMr++whhDOnqjjooPR0t9FosgOGLkiW9GA0KKxw/eMnkvCW2122Uw7+xI9aiVkATdfzZKVABFyQrZBARJ8hQ1uNS/E8yuSTh2HckFRnDIv8CBMvwpzPurpMUH6j+mS8XSujMX9yBiCL/kdmrcSjjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718118305; c=relaxed/simple;
-	bh=ckYsD1Mzz7O5d2NQjA4ekQ6BuReMUiYVluHLr21oomE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KSsBUEDOI3fkb0I63DXeGZADVVzFOqhTnC44SyNldrfHwS59rKA29cMRO/KEkrcsWOfSosjRpop1NKcPxwjvEvZ5YQ+r2MMouhUIbkvcusSEYmvu+Ftbv3cAxPjTizbYhoaD6yuDZ6SmR9kFOEPOeEDt1OQWFswCLpurER0o//k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RVIJabXR; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RVIJabXR"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 26F6BC4DDE2;
-	Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718118305;
-	bh=ckYsD1Mzz7O5d2NQjA4ekQ6BuReMUiYVluHLr21oomE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=RVIJabXRnYzYHyEQnYRtBe4FWpmTuHTMd9nH+XBIdjuV87+j0VUM8wQU/MLmqq6qJ
-	 q+oeRn9afGi1YoeGGg2iRYeeaaCk09vRTsRj7N2FlzYGs9HKNWK9uoedw/clnKCQS0
-	 8a14Sny6egAnou4CIXyFF/AojrSj9WCnEv+U5rNMQx5DMLwGVFP5QDmMdAmoIzBM4e
-	 lAFc9/pnNwWmu/AnC5PhTjKVtqUxDNkK4QgMchwiqBua8RrmwvoTmfzIgueSlg2iTb
-	 /dDYlTicef4OnEVqEWZ8HzsByE7k1y1vNl0avf6rqErz0X+XqwCRVNTypgP+mRPTh4
-	 6o4j/4E7Y53JA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BE1C27C79;
-	Tue, 11 Jun 2024 15:05:05 +0000 (UTC)
-From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Tue, 11 Jun 2024 16:05:20 +0100
-Subject: [PATCH kmod 20/20] man: list options one per line
+	s=arc-20240116; t=1718285805; c=relaxed/simple;
+	bh=L3kKolLqYCdCsguERH50zIApmY/jXnpJBn/Cw8AtSBc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dbirFXteDmHz7qFj1gpijxFlNHjPwuRPkQIjnFxVhiyFs1xu/2A9qB1CAcqd0idGO8WD9U8qV/aWt1nhE+sRwtOUvv6++Qvcm+k2KQ4l67DHfXA8ZQ61hC5TVwxaMPY/ftxrzaJthuFyCSHV49qHAJaLL4Y3/kbU60zDjL3E+gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4W0Ncx4JDtzwTlf;
+	Thu, 13 Jun 2024 21:32:33 +0800 (CST)
+Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
+	by mail.maildlp.com (Postfix) with ESMTPS id E049B140154;
+	Thu, 13 Jun 2024 21:36:40 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 13 Jun 2024 21:36:40 +0800
+From: Zheng Yejian <zhengyejian1@huawei.com>
+To: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
+	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<masahiroy@kernel.org>, <nathan@kernel.org>, <nicolas@fjasle.eu>,
+	<kees@kernel.org>, <james.clark@arm.com>, <kent.overstreet@linux.dev>,
+	<yhs@fb.com>, <jpoimboe@kernel.org>, <peterz@infradead.org>
+CC: <zhengyejian1@huawei.com>, <linux-kernel@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: [PATCH 3/6] module: kallsyms: Determine exact function size
+Date: Thu, 13 Jun 2024 21:37:08 +0800
+Message-ID: <20240613133711.2867745-4-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240611-man-v1-20-bd6864d49639@gmail.com>
-References: <20240611-man-v1-0-bd6864d49639@gmail.com>
-In-Reply-To: <20240611-man-v1-0-bd6864d49639@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Emil Velikov <emil.l.velikov@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718118301; l=12342;
- i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=iEsXEhrs2v3OLHp+4HwYCKBxvEq3t2+J74GNP/VdBA8=;
- b=S1l4ZzvEyIWtIEtrL5t2w1pOpH60IaWEuAw5qBjXZu3GOdqkrIu34p+LuS0T9zytbEse6la49
- KHkBX0+xd+aCbnODi5aDpXS+/uNTnSR3YDev3xEg1v0zeq8IWUA8iDk
-X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
- pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
-X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
- auth_id=35
-X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
-Reply-To: emil.l.velikov@gmail.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
 
-From: Emil Velikov <emil.l.velikov@gmail.com>
+When a weak type function is overridden, its symbol will be removed
+from the symbol table, but its code will not been removed. It will
+cause find_kallsyms_symbol() to compute a larger function size than
+it actually is, just because symbol of its following weak function is
+removed.
 
-Somewhat inspired by my selfish use of VIM as man pager. Namely, when
-there are multiple options on the same line, only the first one gets
-properly rendered.
+To fix this issue, check that an given address is within the size of
+the function found.
 
-A good bonus point is that very long instances, like modinfo's legacy
-"--author, --description ..." look a bit neater now.
-
-With this is also more consistently handle short/long options which take
-an argument.
-
-Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
- man/depmod.8.scd   | 37 +++++++++++++++++++++++++------------
- man/kmod.8.scd     |  6 ++++--
- man/modinfo.8.scd  | 17 ++++++++++++-----
- man/modprobe.8.scd | 50 ++++++++++++++++++++++++++++++++++----------------
- man/rmmod.8.scd    | 12 ++++++++----
- 5 files changed, 83 insertions(+), 39 deletions(-)
+ include/linux/module.h   |  7 +++++++
+ kernel/module/kallsyms.c | 19 +++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/man/depmod.8.scd b/man/depmod.8.scd
-index 0252a72..8c87a64 100644
---- a/man/depmod.8.scd
-+++ b/man/depmod.8.scd
-@@ -35,16 +35,19 @@ rather than the current kernel version (as returned by *uname -r*).
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ffa1c603163c..13518f464d3f 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -597,6 +597,13 @@ static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
+ }
+ #endif
  
- # OPTIONS
++#ifndef HAVE_ARCH_KALLSYMS_SYMBOL_TYPE
++static inline unsigned int kallsyms_symbol_type(const Elf_Sym *sym)
++{
++	return ELF_ST_TYPE(sym->st_info);
++}
++#endif
++
+ /* FIXME: It'd be nice to isolate modules during init, too, so they
+    aren't used before they (may) fail.  But presently too much code
+    (IDE & SCSI) require entry into the module during init.*/
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index 62fb57bb9f16..092ae6f43dad 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -262,6 +262,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	unsigned long nextval, bestval;
+ 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
+ 	struct module_memory *mod_mem;
++	const Elf_Sym *sym;
  
--*-a*, *--all*
-+*-a*
-+*--all*
- 	Probe all modules. This option is enabled by default if no file names
- 	are given in the command-line.
+ 	/* At worse, next value is at end of module */
+ 	if (within_module_init(addr, mod))
+@@ -278,9 +279,10 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	 * starts real symbols at 1).
+ 	 */
+ 	for (i = 1; i < kallsyms->num_symtab; i++) {
+-		const Elf_Sym *sym = &kallsyms->symtab[i];
+-		unsigned long thisval = kallsyms_symbol_value(sym);
++		unsigned long thisval;
  
--*-A*, *--quick*
-+*-A*
-+*--quick*
- 	This option scans to see if any modules are newer than the
- 	*modules.dep* file before any work is done: if not, it silently exits
- 	rather than regenerating the files.
++		sym = &kallsyms->symtab[i];
++		thisval = kallsyms_symbol_value(sym);
+ 		if (sym->st_shndx == SHN_UNDEF)
+ 			continue;
  
--*-b* _basedir_, *--basedir* _basedir_
-+*-b* _basedir_
-+*--basedir* _basedir_
- 	If your modules are not currently in the (normal) directory
- 	@MODULE_DIRECTORY@/_version_, but in a staging area, you can specify a
- 	_basedir_ which is prepended to the directory name. This _basedir_ is
-@@ -53,18 +56,21 @@ rather than the current kernel version (as returned by *uname -r*).
- 	distribution vendor who needs to pre-generate the meta-data files rather
- 	than running *depmod* again later.
+@@ -292,6 +294,13 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+ 			continue;
  
--*-o* _outdir_, *--outdir* _outdir_
-+*-o* _outdir_
-+*--outdir* _outdir_
- 	Set the output directory where *depmod* will store any generated file.
- 	_outdir_ serves as a root to that location, similar to how _basedir_ is
- 	used. Also this setting takes precedence and if used together with
- 	_basedir_ it will result in the input being that directory, but the output
- 	being the one set by _outdir_.
++		if (kallsyms_symbol_type(sym) == STT_FUNC &&
++		    addr >= thisval && addr < thisval + sym->st_size) {
++			best = i;
++			bestval = thisval;
++			nextval = thisval + sym->st_size;
++			goto find;
++		}
+ 		if (thisval <= addr && thisval > bestval) {
+ 			best = i;
+ 			bestval = thisval;
+@@ -303,6 +312,12 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	if (!best)
+ 		return NULL;
  
--*-C*, *--config* _file_ _or_ _directory_
-+*-C*  _file_ _or_ _directory_
-+*--config* _file_ _or_ _directory_
- 	This option overrides the default configuration files. See
- 	*depmod.d*(5).
- 
--*-e*, *--errsyms*
-+*-e*
-+*--errsyms*
- 	When combined with the *-F* option, this reports any symbols which a
- 	module needs which are not supplied by other modules or the kernel.
- 	Normally, any symbols not provided by modules are assumed to be provided
-@@ -72,21 +78,26 @@ rather than the current kernel version (as returned by *uname -r*).
- 	assumption can break especially when additionally updated third party
- 	drivers are not correctly installed or were built incorrectly.
- 
--*-E*, *--symvers* _Module.symvers_
-+*-E* _Module.symvers_
-+*--symvers* _Module.symvers_
- 	When combined with the *-e* option, this reports any symbol versions
- 	supplied by modules that do not match with the symbol versions provided
- 	by the kernel in its _Module.symvers_. This option is mutually
- 	incompatible with *-F*.
- 
--*-F*, *--filesyms* _System.map_
-+*-F* _System.map_
-+*--filesyms* _System.map_
- 	Supplied with the _System.map_ produced when the kernel was built, this
- 	allows the *-e* option to report unresolved symbols. This option is
- 	mutually incompatible with *-E*.
- 
--*-h*, *--help*
-+*-h*
-+*--help*
- 	Print the help message and exit.
- 
--*-n*, *--show*, *--dry-run*
-+*-n*
-+*--show*
-+*--dry-run*
- 	This sends the resulting *modules.dep* and the various map files to
- 	standard output rather than writing them into the module directory.
- 
-@@ -94,11 +105,13 @@ rather than the current kernel version (as returned by *uname -r*).
- 	Some architectures prefix symbols with an extraneous character. This
- 	specifies a prefix character (for example '\_') to ignore.
- 
--*-v*, *--verbose*
-+*-v*
-+*--verbose*
- 	In verbose mode, *depmod* will print (to stdout) all the symbols each
- 	module depends on and the module's file name which provides that symbol.
- 
--*-V*, *--version*
-+*-V*
-+*--version*
- 	Show version of program and exit. See below for caveats when run on
- 	older kernels.
- 
-diff --git a/man/kmod.8.scd b/man/kmod.8.scd
-index 6bd9432..ff80c2f 100644
---- a/man/kmod.8.scd
-+++ b/man/kmod.8.scd
-@@ -15,10 +15,12 @@ Linux Kernel modules. Most users will only run it using its other names.
- 
- # OPTIONS
- 
--*-V*, *--version*
-+*-V*
-+*--version*
- 	Show the program version and exit.
- 
--*-h*, *--help*
-+*-h*
-+*--help*
- 	Show the help message.
- 
- # COMMANDS
-diff --git a/man/modinfo.8.scd b/man/modinfo.8.scd
-index d088c7e..038234d 100644
---- a/man/modinfo.8.scd
-+++ b/man/modinfo.8.scd
-@@ -28,17 +28,20 @@ architecture.
- 
- # OPTIONS
- 
--*-V*, *--version*
-+*-V*
-+*--version*
- 	Print the *modinfo* version.
- 
--*-F* _field_, *--field* _field_
-+*-F* _field_
-+*--field* _field_
- 	Only print this _field_ value, one per line. This is most useful for
- 	scripts. Field names are case-insensitive. Common fields (which may not
- 	be in every module) include author, description, license, parm, depends,
- 	and alias. There are often multiple parm, alias and depends fields. The
- 	special _field_ filename lists the filename of the module.
- 
--*-b* _basedir_, *--basedir* _basedir_
-+*-b* _basedir_
-+*--basedir* _basedir_
- 	Root directory for modules, / by default.
- 
- *-k* _kernel_
-@@ -49,12 +52,16 @@ architecture.
- 	modules in a new kernel for which you must make an initrd/initramfs
- 	image prior to booting.
- 
--*-0*, *--null*
-+*-0*
-+*--null*
- 	Use the ASCII zero character to separate _field_ values, instead of a new
- 	line. This is useful for scripts, since a new line can theoretically
- 	appear inside a _field_.
- 
--*-a* *--author*, *-d* *--description*, *-l* *--license*, *-p* *--parameters*,
-+*-a* *--author*
-+*-d* *--description*
-+*-l* *--license*
-+*-p* *--parameters*
- *-n* *--filename*
- 	These are shortcuts for the *--field* flag's author, description,
- 	license, parm and filename arguments, to ease the transition from the
-diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
-index 657d172..a06cf31 100644
---- a/man/modprobe.8.scd
-+++ b/man/modprobe.8.scd
-@@ -46,22 +46,26 @@ database.
- 
- # OPTIONS
- 
--*-a*, *--all*
-+*-a*
-+*--all*
- 	Insert all module names on the command line.
- 
--*-b*, *--use-blacklist*
-+*-b*
-+*--use-blacklist*
- 	This option causes *modprobe* to apply the *blacklist* commands in the
- 	configuration files (if any) to module names as well. It is usually used
- 	by *udev*(7).
- 
--*-C* _directory_, *--config* _directory_
-+*-C* _directory_
-+*--config* _directory_
- 	This option overrides the default configuration directory. See
- 	*modprobe.d*(5).
- 
- 	This option is passed through *install* or *remove* commands to other
- 	*modprobe* commands in the MODPROBE_OPTIONS environment variable.
- 
--*-c*, *--showconfig*
-+*-c*
-+*--showconfig*
- 	Dump out the effective configuration from the config directory and exit.
- 
- *--dump-modversions*
-@@ -69,7 +73,8 @@ database.
- 	This option is commonly used by distributions in order to package up a
- 	Linux kernel module using module versioning deps.
- 
--*-d*, *--dirname*
-+*-d*
-+*--dirname*
- 	Root directory for modules, / by default.
- 
- *--first-time*
-@@ -103,7 +108,8 @@ database.
- 	This applies to any modules inserted: both the module (or alias) on the
- 	command line and any modules on which it depends.
- 
--*-f*, *--force*
-+*-f*
-+*--force*
- 	Try to strip any versioning information from the module which might
- 	otherwise stop it from loading: this is the same as using both
- 	*--force-vermagic* and *--force-modversion*. Naturally, these checks are
-@@ -113,7 +119,9 @@ database.
- 	This applies to any modules inserted: both the module (or alias) on the
- 	command line and any modules on which it depends.
- 
--*-i*, *--ignore-install*, *--ignore-remove*
-+*-i*
-+*--ignore-install*
-+*--ignore-remove*
- 	This option causes *modprobe* to ignore *install* and *remove* commands
- 	in the configuration file (if any) for the module specified on the
- 	command line (any dependent modules are still subject to commands set
-@@ -122,24 +130,29 @@ database.
- 	the request was more specifically made with only one or other (and not
- 	both) of *--ignore-install* or *--ignore-remove*. See *modprobe.d*(5).
- 
--*-n*, *--dry-run*, *--show*
-+*-n*
-+*--dry-run*
-+*--show*
- 	This option does everything but actually insert or delete the modules
- 	(or run the install or remove commands). Combined with *-v*, it is
- 	useful for debugging problems. For historical reasons both *--dry-run*
- 	and *--show* actually mean the same thing and are interchangeable.
- 
--*-q*, *--quiet*
-+*-q*
-+*--quiet*
- 	With this flag, *modprobe* won't print an error message if you try to
- 	remove or insert a module it can't find (and isn't an alias or
- 	*install*/*remove* command). However, it will still return with a non-zero
- 	exit status. The kernel uses this to opportunistically probe for modules
- 	which might exist using request_module.
- 
--*-R*, *--resolve-alias*
-+*-R*
-+*--resolve-alias*
- 	Print all module names matching an alias. This can be useful for
- 	debugging module alias problems.
- 
--*-r*, *--remove*
-+***-r*
-+*--remove*
- 	This option causes *modprobe* to remove rather than insert a module. If
- 	the modules it depends on are also unused, *modprobe* will try to remove
- 	them too. Unlike insertion, more than one module can be specified on the
-@@ -150,14 +163,16 @@ database.
- 	require it. Your distribution kernel may not have been built to support
- 	removal of modules at all.
- 
--*-w* _TIMEOUT_MSEC_, *--wait* _TIMEOUT_MSEC_
-+*-w* _TIMEOUT_MSEC_
-+*--wait* _TIMEOUT_MSEC_
- 	This option causes *modprobe -r *to continue trying to remove a module
- 	if it fails due to the module being busy, i.e. its refcount is not 0 at
- 	the time the call is made. Modprobe tries to remove the module with an
- 	incremental sleep time between each tentative up until the maximum wait
- 	time in milliseconds passed in this option.
- 
--*-S* _version_, *--set-version* _version_
-+*-S* _version_
-+*--set-version* _version_
- 	Set the kernel version, rather than using *uname*(2) to decide on the
- 	kernel version (which dictates where to find the modules).
- 
-@@ -171,7 +186,8 @@ database.
- 	that *modinfo*(8) can be used to extract dependencies of a module from the
- 	module itself, but knows nothing of aliases or install commands.
- 
--*-s*, *--syslog*
-+*-s*
-+*--syslog*
- 	This option causes any error messages to go through the syslog mechanism
- 	(as LOG_DAEMON with level LOG_NOTICE) rather than to standard error.
- 	This is also automatically enabled when stderr is unavailable.
-@@ -179,10 +195,12 @@ database.
- 	This option is passed through *install* or *remove* commands to other
- 	*modprobe* commands in the MODPROBE_OPTIONS environment variable.
- 
--*-V*, *--version*
-+*-V*
-+*--version*
- 	Show version of program and exit.
- 
--*-v*, *--verbose*
-+*-v*
-+*--verbose*
- 	Print messages about what the program is doing. Usually *modprobe* only
- 	prints messages if something goes wrong.
- 
-diff --git a/man/rmmod.8.scd b/man/rmmod.8.scd
-index c4dcc3e..1baed99 100644
---- a/man/rmmod.8.scd
-+++ b/man/rmmod.8.scd
-@@ -16,20 +16,24 @@ is provided) from the kernel. Most users will want to use *modprobe*(8) with the
- 
- # OPTIONS
- 
--*-v*, *--verbose*
-+*-v*
-+*--verbose*
- 	Print messages about what the program is doing. Usually *rmmod* prints
- 	messages only if something goes wrong.
- 
--*-f*, *--force*
-+*-f*
-+*--force*
- 	This option can be extremely dangerous: it has no effect unless
- 	CONFIG_MODULE_FORCE_UNLOAD was set when the kernel was compiled. With
- 	this option, you can remove modules which are being used, or which are
- 	not designed to be removed, or have been marked as unsafe (see *lsmod*(8)).
- 
--*-s*, *--syslog*
-+*-s*
-+*--syslog*
- 	Send errors to syslog instead of standard error.
- 
--*-V*, *--version*
-+*-V*
-+*--version*
- 	Show version of program and exit.
- 
- # COPYRIGHT
-
++	sym = &kallsyms->symtab[best];
++	if (kallsyms_symbol_type(sym) == STT_FUNC && sym->st_size &&
++	    addr >= kallsyms_symbol_value(sym) + sym->st_size)
++		return NULL;
++
++find:
+ 	if (size)
+ 		*size = nextval - bestval;
+ 	if (offset)
 -- 
-2.45.0
-
+2.25.1
 
