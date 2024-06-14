@@ -1,48 +1,64 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B884314430C;
-	Thu, 13 Jun 2024 13:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5776D190071;
+	Fri, 14 Jun 2024 09:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718285806; cv=none; b=PNuZZdpw2XSX/1bN8cPS206sm5yfe+MPfO/Yn0PvNSu73wFcM2sQrgQt1wL0qAea0qVaxeTKQAe0nFaFgDqvaTzO7O/GvgNIIUi0KZCZBX2EEfz/o6MTSsLvsvMthWxAfOasIGHmGGNKKTdxGeQaPqdxx+UazIM7e1d7Uqc6TK8=
+	t=1718357139; cv=none; b=LEC9qKnEFj9gmUc6WA2A4sdrWblUrMnSi59AlO8KeekBYsX4toYzHUo7ZUWgE/rAISD/Ck+aTYFtI41bFu5apXNlGu4MBzpA90vgK9vaeQDxwk4zUsqY88hTj5MTpMT0ggDiIBaxGVujj8sf3oOGFrFQ3wm5g8JAh0pJdYa5zQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718285806; c=relaxed/simple;
-	bh=e65AO8YkGqI6QNmDImUltk/oT8Th8lPKfyfsMwtaoc8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sgchlM9P2uJ9RhjZ/ewIcxoswEKhj6XCZB88RGMpbCTm0BRTGyJRaipOYC+5pUvkrJKinMfBC+qpdH5VeHac4Dpw9C5TKS7FbdyU7/zA3fKcw/BSizo1WW8h/LepIY28THZ28nmsA+F5GuihS59sXzLuE3EtmneK41GvWH6O438=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W0NcC6mT1zmb2t;
-	Thu, 13 Jun 2024 21:31:55 +0800 (CST)
-Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 761B1140258;
-	Thu, 13 Jun 2024 21:36:41 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 13 Jun 2024 21:36:41 +0800
-From: Zheng Yejian <zhengyejian1@huawei.com>
-To: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
-	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<masahiroy@kernel.org>, <nathan@kernel.org>, <nicolas@fjasle.eu>,
-	<kees@kernel.org>, <james.clark@arm.com>, <kent.overstreet@linux.dev>,
-	<yhs@fb.com>, <jpoimboe@kernel.org>, <peterz@infradead.org>
-CC: <zhengyejian1@huawei.com>, <linux-kernel@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-Subject: [PATCH 5/6] ftrace: Fix possible out-of-bound issue in ftrace_process_locs()
-Date: Thu, 13 Jun 2024 21:37:10 +0800
-Message-ID: <20240613133711.2867745-6-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240613133711.2867745-1-zhengyejian1@huawei.com>
-References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+	s=arc-20240116; t=1718357139; c=relaxed/simple;
+	bh=UWWGN8rwUhoUf3ASge4Yp7b3xfivuopyY+SUJKZCE1A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qb/aqr59DYVY7axhjF6T0eaZOlz8JMtpAOAIvcHJCeA/WdrW3Qu56IH0mvHMkVijQkAEP4BdHb5nzfk54oEdIL0nolB84K4xTxFeiO9Ad8Ld8nd4H/mRhQaANifkq8vfX+/31E12GJYX0P+5zmOCCG1Q9D3Ye57nDDlTwXtoF9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T0Myv6I2; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T0Myv6I2"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f6a837e9a3so13420905ad.1;
+        Fri, 14 Jun 2024 02:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718357137; x=1718961937; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=14sEE7yn1U0eUXYZByRzOLPuXHbmQOHSDN3TIPlXPVQ=;
+        b=T0Myv6I2BnJVbzZXvWXYaHWfl25aWDGkBD5i+En8peaOCvxc63R5/R1s/26WhF+ZKu
+         LaUaB10jGCWSG3gO/o9AMAf0VEFW72gafj+JfH9ToxSzyZRJsPJsEwO2SGTNUOJtkAcG
+         xU0/h7epuUBDUXsLur/R/py8wZhGNKuI/XPtgDnTLUg6lwZ2u4CklMwfIMzbyZGB5u04
+         lT+IIMl+3n5+xkXHYPKAEXcmBfZOiouLApN7gnhSlRvV4rJ53CtfYfSfMpftlFq3KP0B
+         pSDMUTdtIcwH2P3FM0qa6/jAOIAJh23y8ihbBtgtV5MeRcarAladCWseEJNC3IDp2KIz
+         el/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718357137; x=1718961937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=14sEE7yn1U0eUXYZByRzOLPuXHbmQOHSDN3TIPlXPVQ=;
+        b=cCpNW5E+49QqJfNkl6RiDxk0e7tsmVCVODD4nW+VDlWNn1JcUGyPvstqxTVKNis8Qd
+         mc05y2cX3HEGPADBovWhXkUb6Pi7g7D+Rt7lxksbGrf0mGSACGi1Ff2ITtjMhvVoUe+u
+         fT6Y9lZCJZOY5jyyxDRkAhV+jirY1weo43rV0hRI8U9oCY1p7qMho798CJ8gYiAi+LhA
+         4dYqqYVShiEcZNj/e4j8DdkJgLTG64lREubDu2SqAIZxCd3NCPyqDPw122t22s7QAc3c
+         2xl6gADp1QmqqRvPZFtI+NQri1Q3MfbJsAe8dS2NIdxNcnDrimjaILPux50FYJtv1Dp+
+         IOSg==
+X-Forwarded-Encrypted: i=1; AJvYcCV1m3/ICls1w+d8n0oH/WemVA6kkPgRd7gbTgt7aODi079r8HJqXq1WLNtWa2wku+iO9lJHDRmxh53Zq/Refhe7P3WdLo8Lm6GG1pQg
+X-Gm-Message-State: AOJu0YyVDFcK6mtDAG+CXjU7f5eBjdfpJtdjYyd+BqyUZitFYGOqP5rO
+	e0n6i2cQXhVfz06LalELbuDw5jjn4REt/fgwF5di+O/tA9hssWqs
+X-Google-Smtp-Source: AGHT+IGXeLZqqIbJyrkcAeI6rs6MxGVpjuOg2DOfz3FZfPTUzzQbVXdgdEp5ZcrINQBEE8kr/RsKmQ==
+X-Received: by 2002:a17:903:1250:b0:1f7:13ac:e80e with SMTP id d9443c01a7336-1f8625c1578mr24880735ad.4.1718357137473;
+        Fri, 14 Jun 2024 02:25:37 -0700 (PDT)
+Received: from localhost.localdomain ([106.13.248.94])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855eff755sm27800365ad.184.2024.06.14.02.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jun 2024 02:25:37 -0700 (PDT)
+From: Yusong Gao <a869920004@gmail.com>
+To: mcgrof@kernel.org
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	a869920004@gmail.com
+Subject: [PATCH] module: Add log information for loading module failures
+Date: Fri, 14 Jun 2024 09:25:19 +0000
+Message-Id: <20240614092519.1611533-1-a869920004@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -50,74 +66,42 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500012.china.huawei.com (7.185.36.15)
 
-In ftrace_process_locs(), a series pages are prepared and linked in
-start_pg, then fentry records are skipped or added, then unused pages
-are freed.
+Add log information in kernel-space when loading module failures.
+Try to load the unsigned module and the module with bad signature
+when set 1 to /sys/module/module/parameters/sig_enforce.
 
-However, assume that all records are skipped, currently the start_pg
-will still be in list of ftrace_pages_start but without any record.
-Then in ftrace_free_mem() index record by (pg->index - 1) will be out
-of bound.
+Unsigned module case:
+(linux) insmod unsigned.ko
+[   18.714661] Loading of unsigned module is rejected
+insmod: can't insert 'unsigned.ko': Key was rejected by service
+(linux)
 
-To fix this issue, properly handle with unused start_pg and add
-WARN_ON_ONCE() where the records need to be indexed.
+Bad signature module case:
+(linux) insmod bad_signature.ko
+insmod: can't insert 'bad_signature.ko': Key was rejected by service
+(linux)
 
-Fixes: 26efd79c4624 ("ftrace: Fix possible warning on checking all pages used in ftrace_process_locs()")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+There have different logging behavior the bad signature case only log
+in user-space, add log info for fatal errors in module_sig_check().
+
+Signed-off-by: Yusong Gao <a869920004@gmail.com>
 ---
- kernel/trace/ftrace.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ kernel/module/signing.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 0e8628e4d296..c46c35ac9b42 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6575,10 +6575,22 @@ static int ftrace_process_locs(struct module *mod,
- 		rec->ip = addr;
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index a2ff4242e623..6a6493c8f7e4 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -113,6 +113,7 @@ int module_sig_check(struct load_info *info, int flags)
+ 		 * unparseable signatures, and signature check failures --
+ 		 * even if signatures aren't required.
+ 		 */
++		pr_notice("Loading module failed (errno=%d)\n", -err);
+ 		return err;
  	}
  
--	if (pg->next) {
-+	if (pg->index == 0) {
-+		/* No record is added on the current page, so it's unused */
-+		pg_unuse = pg;
-+	} else if (pg->next) {
-+		/* Current page has records, so it's next page is unused */
- 		pg_unuse = pg->next;
- 		pg->next = NULL;
- 	}
-+	/*
-+	 * Even the start_pg hasn't been used, that means, no record has
-+	 * been added, so restore state of ftrace_pages and just go out.
-+	 */
-+	if (pg_unuse == start_pg) {
-+		ftrace_pages->next = NULL;
-+		goto out;
-+	}
- 
- 	/* Assign the last page to ftrace_pages */
- 	ftrace_pages = pg;
-@@ -6794,6 +6806,8 @@ void ftrace_release_mod(struct module *mod)
- 	 */
- 	last_pg = &ftrace_pages_start;
- 	for (pg = ftrace_pages_start; pg; pg = *last_pg) {
-+		/* The page should have at lease one record */
-+		WARN_ON_ONCE(!pg->index);
- 		rec = &pg->records[0];
- 		if (within_module(rec->ip, mod)) {
- 			/*
-@@ -7176,6 +7190,8 @@ void ftrace_free_mem(struct module *mod, void *start_ptr, void *end_ptr)
- 		mod_map = allocate_ftrace_mod_map(mod, start, end);
- 
- 	for (pg = ftrace_pages_start; pg; last_pg = &pg->next, pg = *last_pg) {
-+		/* The page should have at lease one record */
-+		WARN_ON_ONCE(!pg->index);
- 		if (end < pg->records[0].ip ||
- 		    start >= (pg->records[pg->index - 1].ip + MCOUNT_INSN_SIZE))
- 			continue;
 -- 
-2.25.1
+2.34.1
 
