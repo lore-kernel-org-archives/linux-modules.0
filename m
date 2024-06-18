@@ -1,103 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057E922626;
-	Tue, 18 Jun 2024 17:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0E64654E;
+	Tue, 18 Jun 2024 18:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718731123; cv=none; b=BkeapD99BNM1lEl517qvCYluQD2wACGEM2tmYZm/eGfrh60a9eiMup911fa5kLAeYEQMnRYLC2QPbXv2Vt1s2IQ9+89nswMi64S/J3SloTrhRtX20GteXL3JTjzr924qUsz1TbK5/B8oa9bXrfbNk6iRAuH8N1Oc5gWA1S8srUU=
+	t=1718736902; cv=none; b=K8Pb3pGcHJNkiI/CKfNrIqPyWlM8XoDtvrojCWK98uI8/Lz6R0oDuy9hdlmBFdL02cZWdiHwD+GKQtGRAH0F3tkjbc87MWXTCDd5myaehXbHM61Cd0UDJkPF+6nvNZjqc2MW4108VZOpfOo0UTJTkANZmKbzXkxuav/1E14H/iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718731123; c=relaxed/simple;
-	bh=Fd6qzSNzEMV8858Bh6VBUQbUwbOFiC+vQqdgJm3030E=;
+	s=arc-20240116; t=1718736902; c=relaxed/simple;
+	bh=t4EqGHW5fyaATtO+CwxVtRvurq2G9JFw2lTHdVP0YSE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tyU0L4BPq4hDNw4yeIINWPzc+WAH8EHdisPIx1bbZsCelK17e7u6u2qurUXDFOddkARU9Fg341ett0pIbJIxQfalBZ88xhjlQ14CpV6WRoStQBS9xOYcThyi1IEEi5t5D3ro9CmtN6+wDOudVJG6R1lglkX5R2nhAnHXOE/QdSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nUHs44q8; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=etR8zH+IP5WWX32HgZ+rkYDAIuwkC7/A3ZN742Qoycsll4VUCavHTYD/rjLO5PCSgT2+iZGTIGRV4kTPOxLhHCv4+GSm9c94t9BbtbreyU2HMpcqW1cE2N3Sse23GFI8r6z8GiqM028cKUCtr+LVGt1Nb27/LhAObPqwCh7QVEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=wGOkpV3f; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nUHs44q8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E82AFC3277B;
-	Tue, 18 Jun 2024 17:18:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718731122;
-	bh=Fd6qzSNzEMV8858Bh6VBUQbUwbOFiC+vQqdgJm3030E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nUHs44q85clcuV6tyEc4MWYb/rLO0WegRjMs87eC357iktfkc4YLmxGXn0N6ynnrS
-	 NUTUQ01Trf1upYqJ1Iik1Do4Tj8euycLpCiIx+LiQWgPP2MZ/i8EgbEIrm0DLN3Vi0
-	 hkbwHdQ1cl//LtKEMm0f2sJOjHrcPVhyeN2FkoL4=
-Date: Tue, 18 Jun 2024 19:18:39 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Matthew Maurer <mmaurer@google.com>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
-Message-ID: <2024061828-tricky-playtime-f844@gregkh>
-References: <20240617175818.58219-17-samitolvanen@google.com>
- <2024061842-hatless-viewpoint-5024@gregkh>
- <CAK7LNAS_OsXeoDRoMbdXUGY=-jhuoHgo-L6W79n+Kb4G4xEBwQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wGOkpV3f"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kk5EHzQ8aWV3rqKBi34gZ1PvbS8WzVa5AK1EvoPjDCw=; b=wGOkpV3f7fi1BsRYSWISoyDLWZ
+	JXRCed7MCNaXPAl9NG93lR+etAIOM9ABlUwLA2hsp/bkoPhZxW+o9IV9kk7THxFtCBevfqKapk5ti
+	4qyOelg67H6FqQHWR9xYJK5VZL4Wy2vtOftfGr/W9KAvWqnenJzQEwZoHyHWREFvXe0PeMLezvSpm
+	vXDxfouAMDbhA1wVD9NOXU323swCPfQI4aDSwpVhKWTG6dxlzk6k8iNs5kuIJf7HhNn8nW0Rn0w7M
+	BT6/pVeC4FNiNV0TQkHQPl/L2yzqmyyGF/GFuXt3nOcu98vqwb+JLtg3XgDjSST8ogb5b3pQ6LY67
+	r9iSwY/w==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sJdyt-0000000GGqb-2lbW;
+	Tue, 18 Jun 2024 18:54:59 +0000
+Date: Tue, 18 Jun 2024 11:54:59 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Yusong Gao <a869920004@gmail.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: Add log information for loading module failures
+Message-ID: <ZnHYA9dmtUEPLgYP@bombadil.infradead.org>
+References: <20240614092519.1611533-1-a869920004@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAS_OsXeoDRoMbdXUGY=-jhuoHgo-L6W79n+Kb4G4xEBwQ@mail.gmail.com>
+In-Reply-To: <20240614092519.1611533-1-a869920004@gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Wed, Jun 19, 2024 at 01:50:36AM +0900, Masahiro Yamada wrote:
-> On Wed, Jun 19, 2024 at 1:44 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Jun 17, 2024 at 05:58:19PM +0000, Sami Tolvanen wrote:
-> > > Hi folks,
-> > >
-> > > This series implements CONFIG_MODVERSIONS for Rust, an important
-> > > feature for distributions like Android that want to ship Rust
-> > > kernel modules, and depend on modversions to help ensure module ABI
-> > > compatibility.
-> > >
-> > > There have been earlier proposals [1][2] that would allow Rust
-> > > modules to coexist with modversions, but none that actually implement
-> > > symbol versioning. Unlike C, Rust source code doesn't have sufficient
-> > > information about the final ABI, as the compiler has considerable
-> > > freedom in adjusting structure layout for improved performance [3],
-> > > for example, which makes using a source code parser like genksyms
-> > > a non-starter. Based on Matt's suggestion and previous feedback
-> > > from maintainers, this series uses DWARF debugging information for
-> > > computing versions. DWARF is an established and relatively stable
-> > > format, which includes all the necessary ABI details, and adding a
-> > > CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
-> > > reasonable trade-off.
-> > >
-> > > The first 12 patches of this series add a small tool for computing
-> > > symbol versions from DWARF, called gendwarfksyms. When passed a list
-> > > of exported symbols, the tool generates an expanded type string
-> > > for each symbol, and computes symbol CRCs similarly to genksyms.
-> > > gendwarfksyms is written in C and uses libdw to process DWARF, mainly
-> > > because of the existing support for C host tools that use elfutils
-> > > (e.g., objtool).
-> >
-> > That's cool, can the C code be switched to also use this?  That way we
-> > only have one path/code for all of this?
+On Fri, Jun 14, 2024 at 09:25:19AM +0000, Yusong Gao wrote:
+> Add log information in kernel-space when loading module failures.
+> Try to load the unsigned module and the module with bad signature
+> when set 1 to /sys/module/module/parameters/sig_enforce.
 > 
+> Unsigned module case:
+> (linux) insmod unsigned.ko
+> [   18.714661] Loading of unsigned module is rejected
+> insmod: can't insert 'unsigned.ko': Key was rejected by service
+> (linux)
 > 
-> As the description says, it requires CONFIG_DEBUG_INFO.
-> We can strip the debug info from the final vmlinux, but
-> I guess the build speed will be even slower than the current genksyms.
+> Bad signature module case:
+> (linux) insmod bad_signature.ko
+> insmod: can't insert 'bad_signature.ko': Key was rejected by service
+> (linux)
+> 
+> There have different logging behavior the bad signature case only log
+> in user-space, add log info for fatal errors in module_sig_check().
+> 
+> Signed-off-by: Yusong Gao <a869920004@gmail.com>
+> ---
+>  kernel/module/signing.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index a2ff4242e623..6a6493c8f7e4 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -113,6 +113,7 @@ int module_sig_check(struct load_info *info, int flags)
+>  		 * unparseable signatures, and signature check failures --
+>  		 * even if signatures aren't required.
+>  		 */
+> +		pr_notice("Loading module failed (errno=%d)\n", -err);
+>  		return err;
 
-For people who want genksyms (i.e. distros), don't they normally already
-enable DEBUG_INFO as well?  The problems of genksyms are well known and
-a pain (I speak from experience), so replacing it with info based on
-DWARF would be great, I'll gladly trade off the DEBUG_INFO issue for
-stablilty!
+I welcome pr_debug() messages but if we were to add a regular print for every
+single type of failure we'd clutter the code, we don't want that.
 
-thanks,
-
-greg k-h
+  Luis
