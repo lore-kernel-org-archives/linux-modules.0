@@ -1,63 +1,64 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CC415EFB1
-	for <linux-modules@vger.kernel.org>; Tue, 18 Jun 2024 20:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F27177986
+	for <linux-modules@vger.kernel.org>; Tue, 18 Jun 2024 21:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718741976; cv=none; b=Ki6EUx3HOqBuBPkaKSYsu2jfNotOM+hJlkc1dXwm59H8joJFwF1c+IaDUup0eSAqss2nP6WXxRfNzS7GEj1Uv9FEhmPWYYNf3HO3Yc455F6zQdmaMsGJnW7lebqIWmUZnvjTsTuTcpBwZILGv2M6LGrbxNLTv+GneKJmJ4M94/A=
+	t=1718745597; cv=none; b=fnXtEukX3GlDpZCj6j2kj/wF6a1VNbmlhIqD8qWYAWd5x+ppNq6wBBCQnPUfRuEAgmhaet2dnfBEW809GQ4xZsLzNztI3N6nvKGsRCenC2UP5PHyIEPEHTnCRVx4btLmPZ1Y9Wt3mWox1Rfg7nAJy4N0slJG1Nh7ibJ6dxWyG94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718741976; c=relaxed/simple;
-	bh=94jbta9RKhaSlDyNCdrM049X1zIhYddMYsT9+9JpVCw=;
+	s=arc-20240116; t=1718745597; c=relaxed/simple;
+	bh=Gp65oFcJHk79zm6jGkHE3iKZLC9l4N5bay4Ton5RAkI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SDrVIOEYDBIIhebq/ck1ervXQkfqTe5j+E0iEaWDdRqIlm9unEOft9lXgV5yZF1YyvCgtcXck1rb2jWiw9B2/E3NuwJY4Kpq18PkMxwdf6Or9Z7OGWIHUyeNLP0rDQ9aA2cyVFy0uKFZlzCrIuDc4snk0suXskGi9gWsXpNc1Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nCPgnJkx; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ai5YrD1ExteUe0xoq4ikBn69HUKR3Ssw0nBXxnVzdLj6PhUUQdBD7BUQKZU9JeaxtgLL3U08WEv+n7NvzaHFTHbb8wbXvRfEBbF4uJ+7h9PrEMJWL+ZIAUSn94olD/SuzKPu5bQ0XYX3bTAO0KPBwoN80BTE/SkcqXPsbNeaHS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LwkttVTI; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nCPgnJkx"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1f44b5b9de6so46671185ad.3
-        for <linux-modules@vger.kernel.org>; Tue, 18 Jun 2024 13:19:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LwkttVTI"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f47f07aceaso49056245ad.0
+        for <linux-modules@vger.kernel.org>; Tue, 18 Jun 2024 14:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718741973; x=1719346773; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mV+obHqwFZWixpRN1P9+xUT02aptZp/gmo4vDnJf/nM=;
-        b=nCPgnJkxijXsbXuXvnvc6dhkOchG+VYl5E2NLv40o3JUTEelBIH/oPgQMBl8kp4Obi
-         gBI4kR0m9626Uh4ZNV/yENqRuzP5Qb/E7mgHg4aaETA6KRTKw+xDt1BMNvFJ/MTyUjhV
-         Rft47qohh8WZIsQeiPKkOIJHjNkZAXeugXCFPQW5gZRvF4/C+ZSGyeYmeqsFbegCiuow
-         SX9r4+IhIw4Q2AwDEJ3t39sZL41E32/e93hCTCBqf1/MnmOH+X7zsoKD26WRkUHC8P32
-         OoT2O8D695PeoTyJ8HXNSSPyr0xUDHhKKZ8mYmCP94X6K2E4lUQvTLMz+fMxKJaik9aH
-         OuQw==
+        d=google.com; s=20230601; t=1718745594; x=1719350394; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=50YSa4Ao9uogaf7E1ijDuiJSBHVaTQT8KJlzelZTT/A=;
+        b=LwkttVTImLPCW3/wpbhz4VhC49V0EPWg1VVLkHbwFlEXSLvhmpdgW5Kat5d73rED+n
+         IhJqnelZbgXX1rD23hm2VwROQDn8gMIHH7Ai5uXF8rTRcjT78wnKOtQU6l5SVTNC7O1u
+         5uTMC30CrmtVs+ZkCsV5cqiTn/RMTFgaDrA/AAhqGOk7xebnTiRJc33DmZyf5+nW++Fx
+         opUGNb230qLaP7KfDYb/cx353a+KSBCOfMTK1lM+hpZ0S3mZBCEpKS4VrtYgx9E4J4A6
+         JhsKKBJ3yuj/mLiaD9fh2qEI1R4iHJ6KC075qH1F7VFT9ctp3dA0IKFFJXbaF8GB+fTQ
+         cZGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718741973; x=1719346773;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mV+obHqwFZWixpRN1P9+xUT02aptZp/gmo4vDnJf/nM=;
-        b=ubHKcas+KKH024Mq0UJqfI4HyMGgi7DCXdd0K6G1wEHh62WKaCA7gRIL0jQGKLq9L1
-         mjytI20pBv6N4vFZ/yrMSAjnKsHrKm/KHwPUhClU8If0HdfTp/SWyN/pu6apDsoEOHTK
-         qZmN0zFeSKiZWwBoom3yJkvRVneGcMikzsskLJxVpuDSrjrwqJ7LPUfiUpxs20Slpr//
-         QiBKjREAt29zq0+PuVyo/9OKkZrgQwsOudGjT6S/MhHlnIubIRmwiL4m+vEgGC++kx36
-         F9pg5YnTyDjiR++6hMXQBmo8heKsHBh5hWxiqwUx1awcIaJ0a7PueXj0pEVwCFfKdYOX
-         rVuw==
-X-Forwarded-Encrypted: i=1; AJvYcCWv4ac/2BHw2vUumaRbBj2Cwu51735CQkck3s6Cy4dDYEbgIovyGHGPEb7u1cvzVXEsWvm9zsZhFIf3hoWKtyqtasEur2WbvqjHPCbN5w==
-X-Gm-Message-State: AOJu0Yxie/C1/z57kJ6R68cp0QEh6mrrzyesmY/bd3KV947lvBJckB1W
-	Ulq/XukdcfwAoFptQE6rlbOdcXCyEwbRAD8z/yHP+W0o54A/boeGwwe1xo0I4Q==
-X-Google-Smtp-Source: AGHT+IHyLOxXtzm0QV3I4PfO8dmxnhFR4zmQ5ve3IHxTlcknskE8vGuxSlOyocduRsCXhhHzmgHp0Q==
-X-Received: by 2002:a17:902:d504:b0:1f6:7fa4:e064 with SMTP id d9443c01a7336-1f9aa46e5b5mr7283155ad.61.1718741973072;
-        Tue, 18 Jun 2024 13:19:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1718745594; x=1719350394;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50YSa4Ao9uogaf7E1ijDuiJSBHVaTQT8KJlzelZTT/A=;
+        b=adWMKx0kbeKFSYSSozDJqz9PfQESTzNwOGmIPi3h4Z2onwiXwr7xdUu8oitewezosl
+         1KyykfcoS1u5buvRL0qFr9RwuqBy+BtIL7Yz6FyX5ZvpjyfY0oaNvO3u8IpnOquV0DJb
+         mNeiT1nuXM0GaSxw70NV9S/X6KpgIVjPHTZWPbDqprGm7br6BZ+cgqyRgLamfU8/FEIT
+         4JUdB6rE6kbn3Uo//oxlfRPhQYbURgI4T3EdOB0XXWF7qUNULknGa1MVM4HnFA2fcoJi
+         gM94aU9CZvT+HvbbePLATOCQUP011zCWmX/IG2EvbJE2nPT68jIbUViBO8SQAeGFu2x4
+         ETuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6qBVDxq144wFtMIG5rjUIs3wG73X/6F10nZy9XZdqtqRLLU9/a1p/i3VXodL+XHohti4eCwycYNJw8DMYpJhpIlWZGhvR5g00ivMc/g==
+X-Gm-Message-State: AOJu0YxFxyXDktyx/t+Frj+hblA2y9dO5y7drOsISa3AmCcgoC21602N
+	UhcRh3Huueebrn5BPdiAfmeRS/iluCOsju7T644paH5OHh5DA821FiKoWAE3dQ==
+X-Google-Smtp-Source: AGHT+IFC6LosG5J95Q/vdHU1XCPYWAnw91UYD1rLAPhQ60B8axl3RfeB1tNNTT7aB4UYI73ab2iYuQ==
+X-Received: by 2002:a17:902:eb44:b0:1f7:5a6c:ae3e with SMTP id d9443c01a7336-1f9aa3ec4a1mr7767585ad.33.1718745593732;
+        Tue, 18 Jun 2024 14:19:53 -0700 (PDT)
 Received: from google.com ([2620:0:1000:2510:5dfa:e7d1:8470:826c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f43ce3sm101374865ad.278.2024.06.18.13.19.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f855f48951sm101769505ad.280.2024.06.18.14.19.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jun 2024 13:19:32 -0700 (PDT)
-Date: Tue, 18 Jun 2024 13:19:27 -0700
+        Tue, 18 Jun 2024 14:19:53 -0700 (PDT)
+Date: Tue, 18 Jun 2024 14:19:47 -0700
 From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Kris Van Hees <kris.van.hees@oracle.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
 	Miguel Ojeda <ojeda@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Matthew Maurer <mmaurer@google.com>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
 	Wedson Almeida Filho <wedsonaf@gmail.com>,
@@ -65,98 +66,84 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
 Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
-Message-ID: <20240618201927.GC1611012@google.com>
+Message-ID: <20240618211947.GD1611012@google.com>
 References: <20240617175818.58219-17-samitolvanen@google.com>
- <2024061842-hatless-viewpoint-5024@gregkh>
- <CAK7LNAS_OsXeoDRoMbdXUGY=-jhuoHgo-L6W79n+Kb4G4xEBwQ@mail.gmail.com>
- <2024061828-tricky-playtime-f844@gregkh>
- <CAK7LNAR9qgk2AxtMUMiOw-jYZyjmj6aVDPH25aPa4K-1jQjOFw@mail.gmail.com>
+ <ZnHjO7x9nszs9pUC@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAR9qgk2AxtMUMiOw-jYZyjmj6aVDPH25aPa4K-1jQjOFw@mail.gmail.com>
+In-Reply-To: <ZnHjO7x9nszs9pUC@bombadil.infradead.org>
 
-On Wed, Jun 19, 2024 at 04:03:45AM +0900, Masahiro Yamada wrote:
-> On Wed, Jun 19, 2024 at 2:18 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Jun 19, 2024 at 01:50:36AM +0900, Masahiro Yamada wrote:
-> > > On Wed, Jun 19, 2024 at 1:44 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > That's cool, can the C code be switched to also use this?  That way we
-> > > > only have one path/code for all of this?
-> > >
-> > >
-> > > As the description says, it requires CONFIG_DEBUG_INFO.
-> > > We can strip the debug info from the final vmlinux, but
-> > > I guess the build speed will be even slower than the current genksyms.
-> >
-> > For people who want genksyms (i.e. distros), don't they normally already
-> > enable DEBUG_INFO as well?  The problems of genksyms are well known and
-> > a pain (I speak from experience), so replacing it with info based on
-> > DWARF would be great, I'll gladly trade off the DEBUG_INFO issue for
-> > stablilty!
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
+Hi Luis,
+
+On Tue, Jun 18, 2024 at 12:42:51PM -0700, Luis Chamberlain wrote:
+> On Mon, Jun 17, 2024 at 05:58:19PM +0000, Sami Tolvanen wrote:
+> > The first 12 patches of this series add a small tool for computing
+> > symbol versions from DWARF, called gendwarfksyms. When passed a list
+> > of exported symbols, the tool generates an expanded type string
+> > for each symbol, and computes symbol CRCs similarly to genksyms.
 > 
+> So this is too word centric Rust, let's think about this generically.
+> We still ahve a symbol limitation even in the C world then, and this
+> solution can solve that problem also for other reasons for *whatever*
+> reason we devise to-come-up-with-in-the-future for augmenting symbols.
+> Today Rust, tomorrow, who knows.
+
+If you're referring to the symbol hashing in the __versions table,
+that's not specific to Rust. Rust just happens to be the only source of
+long symbol names right now.
+
+> > gendwarfksyms is written in C and uses libdw to process DWARF, mainly
+> > because of the existing support for C host tools that use elfutils
+> > (e.g., objtool).
 > 
+> I agree with Masahiro, that testing this with vmlinux would be eye
+> opening to what challenges we really have ahead. So, to help with this
+> let's try to re-think about this  from another perspective.
+>
+> Yes, old userspace should not break, but you can add yet another option
+> to let you opt-in to a new world order of how these crc are mapped to
+> hashed repersentations of the symbols. This would allow us to:
+
+We did run into an issue with depmod in our testing, where it needs to
+be taught about hashed names to avoid 'unknown symbol' warnings. I'm not
+sure if this is acceptable, so I would like to hear feedback about the
+viability of the hashing scheme in general.
+
+If old userspace can't have any regressions because of long symbol
+names, I suspect we'll have to go back to omitting long symbols from
+struct modversion_info and adding a v2 of the __versions table with no
+symbol name length limitations. Happy to hear your thoughts.
+
+> a) Ensure correctness for all users / tools, so that proper plumbing is
+>    really done. By considering all symbols you increase your scope of
+>    awareness of anything that could really break.
 > 
-> I do not think gendwarfksyms is a drop-in replacement,
-> because it relies on libelf and libdw, which will not
-> work with LLVM bitcode when CONFIG_LTO_CLANG=y.
+> b) Remove the "Rust" nature about this
 > 
-> His "Let's postpone this until final linking" stuff will
-> come back?
-> Then, vmlinux.o is processed to extract the CRC
-> of all symbols?
+> c) Rust modules just becomes a *user* of this approach
 
-I agree, this won't work with LTO unless we process vmlinux.o.
+I believe the only Rust nature here is the last patch that enables
+gendwarfksyms only for Rust. Otherwise, there shouldn't be anything
+strictly Rust specific.
 
-> In my benchmark, this tool took 3.84 sec just for processing
-> a single rust/core.o object.
+> It gets me wondering, given Kris is also working on allowing traces to
+> map symbols to module names, how does this fit into that world [0]?
 
-To be fair, Rust currently exports all globals and core.o has 400
-exported symbols as a result. During my brief testing, this tool is
-faster than genksyms for normal C code.
+AFAIK long symbol names are only a problem for struct modversion_info,
+which uses a relatively short name buffer, so I'm hoping other efforts
+won't be affected.
 
-> I'd love to see how long it will take to process vmlinux.o
+> As for a) the reason I'm thinking about having the ability to test a
+> full real kernel and moules with this is, without that, how are you sure
+> you have the full scope of the changes needed?
 
-It's obviously going to be quite slow, my defconfig vmlinux.o has
-14k exported symbols:
-
- Performance counter stats for './tools/gendwarfksyms/gendwarfksyms vmlinux.o':
-
-        371,527.67 msec task-clock:u                     #    1.000 CPUs utilized
-                 0      context-switches:u               #    0.000 /sec
-                 0      cpu-migrations:u                 #    0.000 /sec
-           231,554      page-faults:u                    #  623.248 /sec
-   <not supported>      cycles:u
-   <not supported>      instructions:u
-   <not supported>      branches:u
-   <not supported>      branch-misses:u
-
-     371.686151684 seconds time elapsed
-
-     370.534637000 seconds user
-       0.987825000 seconds sys
-
-The tool is currently single-threaded, so if we really want to go this
-route, it could probably be made a bit faster.
-
-> And this occurs even when a single source file is changed
-> and vmlinux.o is re-linked.
-
-I suppose anyone using LTO already knows it won't be a quick rebuild
-though.
+Sure, I can look into hooking this up for the entire kernel and seeing
+what breaks, in addition the issues Masahiro pointed out, of course.
 
 Sami
