@@ -1,41 +1,44 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F150623D0;
-	Fri, 28 Jun 2024 17:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A841CCCB0;
+	Fri, 28 Jun 2024 17:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719594989; cv=none; b=EiMSrwcyp24lXrpuoBp+AKLPPfti/+njINVfPGojMI4srFwFHAIG82ip7tBCrJW0R9hAJg0ry1dNPtekV9hIM+eUYK2IvwewsjRgYrUKnzWew5ji9WC8tFlyJxvWxhbicEAjt9ixinWXn2mRQxRqw//sMWW4mfyNx8gkEdJ4WxM=
+	t=1719595521; cv=none; b=lyi+JErPZp/4wilRWKJFtYBWQambhwTkak3MjYKW7Xd51peJGc9tIWAS2mYNyaqAeNmTX9XkdSoqh+yALnZ34TZxMK5OYVr2IhP/rY1PSl/UkrU7sbdAJHSQsDR70VClMANxWIyjO1lz84qFC66LrGWIxfDdIKjJXWzvLhG3AeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719594989; c=relaxed/simple;
-	bh=BVzadzBv3km8XG6p6BKHxmV5dz6nhJeKjWoOEMkG+jY=;
+	s=arc-20240116; t=1719595521; c=relaxed/simple;
+	bh=x6j73uoCRrZ14yA3p55yPP6y7FL+Uk8sLbq29Ko5E/4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WrA+RG5hTbiWRS3v9C1oezfdO+JyaJAIqtjFrST01jOSllsD39srlCECngolk4/wNAmnI2X7Vb94hDVq+P62+vZfX2ws/sh7TNAwsdymC7oJyIu8hpSshQjgXps2YmNFHRqvNTt7uJcn2k9+MTfLql3zwn5tU72S2ysUP2YDgBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jW4Zgyaj; arc=none smtp.client-ip=198.137.202.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=HedZ2xHMs36f7H2YZ4FWRqPi96fp4JFIzYQsQxwXacdvC+JqO7jzVupvYGt7uvkM6OsQlwGVyxvWUZF4fhsW5rpO983w2K5B9lwwRQgtb4LElIMzW9AdCaf1OrNq3U1BABGEN1JLFNNj+jM9u5F+CrM2aaoqdWbAOYRsqgLJ+P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=GVgXdC7E; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jW4Zgyaj"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="GVgXdC7E"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
 	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Sgu1R12gnRao8J6vIMSWPtxCpqtZokT+JjQHwgSLSU8=; b=jW4Zgyaj9EIcAYS4j4F/3j2EF0
-	lEzZeWPOXwMjfOjDPzGZym3D/PLMspR2kRZNnVKhQuODUYUGH8VxVcA2eb+YwpwJbHEpkWcf/KstI
-	Li/hnWKKjO3CmpCisFwkH6w0KjAVWkdSGAdfwHeVrdot6Fz0NrTyXvhV2DU7BDc6HwOWhCm0xF3EF
-	zd9BUdeSLEByZ220TPXMVH2FWWJRhsp8+udslbC4cUlpMTo5xixlxqPmxmFvK/I6aWWUvAv/Y1xHV
-	UxhE6b/2SSpa7NiSHiRj4TCkKSOOF4lWv4XYO4zfA6lvM2lI3eB0sSN8UAnYXAuOKmkGMd4posG/z
-	BdTORQLg==;
+	bh=O7+BgIEUquUKXJpFeq9QGAUW5FT/jrmi5BFL0thD5sA=; b=GVgXdC7EJuEzd74wgwyZ5FwRom
+	dzWhaI0TFTg/RWPZ+R3b6EEsG3B3UforTugwa1SO0oraiF/+YqoUFOOYopUs3BGleJffU1gcXDGGn
+	VQIniY7lH6eBBxlrPo8sYWNOmwmZlNy+iI9jeWIo2yoPeOQbKviosSx2+sYxMe0QgxLRXW4PrXlQ/
+	B0IzjGnrfr/eakrN1gykJWkBssEPEJ8OjcR7bD5UCChFfsnVkE/1jd69G5v687id+7Rf9TtvvG1Cl
+	F9DdDmd0TIIMelYcvmaybgXf6q+1ib4nv0ssa+PI0IxkA51zRo1TmjUBCkfyRSdXXN1tfStoxfgv1
+	vjjZNb2w==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sNFCz-0000000ETQN-2OTt;
-	Fri, 28 Jun 2024 17:16:25 +0000
-Date: Fri, 28 Jun 2024 10:16:25 -0700
+	id 1sNFLc-0000000EUqx-0579;
+	Fri, 28 Jun 2024 17:25:20 +0000
+Date: Fri, 28 Jun 2024 10:25:19 -0700
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Yusong Gao <a869920004@gmail.com>
+To: Daniel von Kirschten <danielkirschten@gmail.com>
 Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] module: Add log info for verifying module signature
-Message-ID: <Zn7v6XGbSTxo3T4f@bombadil.infradead.org>
-References: <20240628103923.1677347-1-a869920004@gmail.com>
+Subject: Re: [PATCH 6.10.0-rc2] kernel/module: avoid panic on loading broken
+ module
+Message-ID: <Zn7x_9BpJLwYSORn@bombadil.infradead.org>
+References: <230772fc-1076-4afb-8f7a-e7c402548c3b@gmail.com>
+ <ZnHm-5oljP8_5dFB@bombadil.infradead.org>
+ <82da9ad9-6a79-4edf-b38f-ef000b68c50a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -44,75 +47,84 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240628103923.1677347-1-a869920004@gmail.com>
+In-Reply-To: <82da9ad9-6a79-4edf-b38f-ef000b68c50a@gmail.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Fri, Jun 28, 2024 at 10:39:23AM +0000, Yusong Gao wrote:
-> Add log information in kernel-space when loading module failures.
-> Try to load the unsigned module and the module with bad signature
-> when set 1 to /sys/module/module/parameters/sig_enforce.
+On Fri, Jun 21, 2024 at 04:05:27PM +0200, Daniel von Kirschten wrote:
+> Am 18.06.2024 um 21:58 schrieb Luis Chamberlain:
+> > On Thu, Jun 06, 2024 at 03:31:49PM +0200, Daniel v. Kirschten wrote:
+> > > If a module is being loaded, and the .gnu.linkonce.this_module section
+> > > in the module's ELF file does not have the WRITE flag, the kernel will
+> > > map the finished module struct of that module as read-only.
+> > > This causes a kernel panic when the struct is written to the first time
+> > > after it has been marked read-only. Currently this happens in
+> > > complete_formation in kernel/module/main.c:2765 when the module's state is
+> > > set to MODULE_STATE_COMING, just after setting up the memory protections.
+> > 
+> > How did you find this issue?
 > 
-> Unsigned module case:
-> (linux) insmod unsigned.ko
-> [   18.714661] Loading of unsigned module is rejected
-> insmod: can't insert 'unsigned.ko': Key was rejected by service
-> (linux)
-> 
-> Bad signature module case:
-> (linux) insmod bad_signature.ko
-> insmod: can't insert 'bad_signature.ko': Key was rejected by service
-> (linux)
-> 
-> There have different logging behavior the bad signature case only log
-> in user-space, add log info for fatal errors in module_sig_check().
-> 
-> Signed-off-by: Yusong Gao <a869920004@gmail.com>
-> ---
-> V3: Clarify the message type and the error code meaning.
-> V2: Change print level from notice to debug.
-> ---
->  kernel/module/signing.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
-> 
-> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-> index a2ff4242e623..826cdab8e3e4 100644
-> --- a/kernel/module/signing.c
-> +++ b/kernel/module/signing.c
-> @@ -67,6 +67,31 @@ int mod_verify_sig(const void *mod, struct load_info *info)
->  				      NULL, NULL);
->  }
->  
-> +static const char *mod_decode_error(int errno)
-> +{
-> +	char *errstr = "Unrecognized error";
+> In a university course I got the assignment to manually craft a loadable .ko
+> file, given only a regular object file, without using Kbuild. During testing
+> my module files, most of them were simply (correctly) rejected by the kernel
+> with an appropriate error message, but at some point I ran into this exact
+> kernel panic, and investigated it to understand why my module file was
+> invalid.
 
-This is not safe. You can just extend the existing debug switch for
-strict module loading and re-use the variable there and use that,
-for example
+OK, then the commit log should describe that this doesn't fix any known
+real world issue, but rather a custom crafted module without the regular
+module build system.
 
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index a2ff4242e623..9111822116e6 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -106,6 +106,9 @@ int module_sig_check(struct load_info *info, int flags)
- 	case -ENOKEY:
- 		reason = "module with unavailable key";
- 		break;
-+	case -EKEYREJECTED:
-+		reason = "Key was rejected by service";
-+		break;
- 
- 	default:
- 		/*
-@@ -113,6 +116,7 @@ int module_sig_check(struct load_info *info, int flags)
- 		 * unparseable signatures, and signature check failures --
- 		 * even if signatures aren't required.
- 		 */
-+		pr_debug("Verifying module signature failed: %s\n", reason);
- 		return err;
- 	}
+> > > Down the line, this seems to lead to unpredictable freezes when trying to
+> > > load other modules - I guess this is due to some structures not being
+> > > cleaned up properly, but I didn't investigate this further.
+> > > 
+> > > A check already exists which verifies that .gnu.linkonce.this_module
+> > > is ALLOC. This patch simply adds an analogous check for WRITE.
+> > 
+> > Can you check to ensure our modules generated have a respective check to
+> > ensure this check exists at build time? That would proactively inform
+> > userspace when a built module is not built correctly, and the tool
+> > responsible can be identified.
+> 
+> See above - I don't think it's possible to create such a broken module file
+> with any of "official" tools.
 
-Also certs/system_keyring.c already has a lot of pr_devel stuff too, so
-do we really need this?
+That should be clearly stated on the commit log.
+
+> I haven't looked too deeply into how Kbuild
+> actually builds modules, but as far as I know, the user doesn't even come
+> into contact with this_module w
+
+Consider that a next level university assignment and is more useful to the world
+than this debug message. Because above you suggest "I don't think", go
+out and now be sure.
+
+> hen using the regular toolchain, because
+> Kbuild is responsible for creating the .this_module section. And Kbuild of
+> course creates it with the correct flags. So if I understand correctly,
+
+...
+
+> this
+> problem can only occur when the module was built by some external tooling
+> (or manually, in my case).
+
+Who would create custom modules without the Linux kernel module build
+system, and what uses does that provide? It seems you are proving why
+this would be terribly silly thing to do.
+
+Now, the *value* your change has is it can prevent a crash in case of a
+corrupted module, which *can* occur, consider an odd filesystem
+live corruption, at least this would be caught at module load attempt
+and not crash. That's worth committing for this reason but your commit
+log really needs much more clarity. Why? Because stupid bots want to
+assign stupid CVEs for anything that seems like a security issue and
+this could escalate to such type of things. Providing clarity helps
+system integrators decide if they want to backport this sort of patch.
+Providing clarify on the chances of this happening and how we think it
+can happen helps a lot.
+
+If you want to be more proactive, try to enhance userspace kmod modprobe
+so that this is also verified.
 
   Luis
