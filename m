@@ -1,143 +1,118 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698F4481D7;
-	Fri, 28 Jun 2024 10:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F150623D0;
+	Fri, 28 Jun 2024 17:16:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719571178; cv=none; b=QglxXTe7lapf11sVDodasV4rXvmN07bN5bjByZNCSWm9r9ppexh8n0UgjbF4MFWg2bRxsklZ3UHCVWedtupZ+3KyU5Gk3Cltfx+xMoSAcxxnqVT3PLN+8sipJw5QdloBrLKHe6IhLbKlCIKvtvB28uaIH+pjo/Oe5xuEGhgSQyI=
+	t=1719594989; cv=none; b=EiMSrwcyp24lXrpuoBp+AKLPPfti/+njINVfPGojMI4srFwFHAIG82ip7tBCrJW0R9hAJg0ry1dNPtekV9hIM+eUYK2IvwewsjRgYrUKnzWew5ji9WC8tFlyJxvWxhbicEAjt9ixinWXn2mRQxRqw//sMWW4mfyNx8gkEdJ4WxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719571178; c=relaxed/simple;
-	bh=s9lOKFc4gcO+LDvKXl6H3jR7MqKnwxk2tRCqRHFNMtc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pjEBMWsM6DU/UnDUulg9Ei0z2bL1xa7PxPDnAftsIjHA4MErY9P+fqZh/kyP/Ltl+1f8MIo2NwhxLXYK/SmSf9rbhCBIf69+A1xWzTcFcXF0v6a9kk0XiILYh4TYfa4T2+kFEt3yLjiM2Vq3Bx7nWh31k81L1usaLBdY8ycRJSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GuomXuDq; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719594989; c=relaxed/simple;
+	bh=BVzadzBv3km8XG6p6BKHxmV5dz6nhJeKjWoOEMkG+jY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WrA+RG5hTbiWRS3v9C1oezfdO+JyaJAIqtjFrST01jOSllsD39srlCECngolk4/wNAmnI2X7Vb94hDVq+P62+vZfX2ws/sh7TNAwsdymC7oJyIu8hpSshQjgXps2YmNFHRqvNTt7uJcn2k9+MTfLql3zwn5tU72S2ysUP2YDgBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jW4Zgyaj; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GuomXuDq"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1f8395a530dso2161945ad.0;
-        Fri, 28 Jun 2024 03:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719571176; x=1720175976; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jXpXg9YTB6eajBI0oY9nEykHAkxkknrQk8vZaZGHMas=;
-        b=GuomXuDq4aP3K5cVp8isRGhttElVBTPAIqovbOe8icF6/ScIUfsJUgiTSn4qPl1q1a
-         bQTc2TvanOMnBCo2LyWAf9go+sl+t3/VzurDigDnI61YhouY11BYsYqMQJcfnOkU1KW3
-         7PzdG0NtQhtJwzcUUZ6FS5ESiKQDm79Nci5h7FHSov67zdube7Tx+V8Q+/Rxp7JeycvY
-         QQrrNYyt78Xb+SNEPyDrCYSc/v+0nwxwJUlMF6K3GRnxpPKr/racSBIU/ylJlJqv4b1X
-         mMymMpiCjPZhZ0V385V7weOXot+vFFBRP8T0USMVsagVvlEBmPvdejCKhg3qSwCTYNVO
-         L2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719571176; x=1720175976;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jXpXg9YTB6eajBI0oY9nEykHAkxkknrQk8vZaZGHMas=;
-        b=hDIJ/h/qSyPR+/tY1QbQ2Au+/suSfkhwLQzgmolJGMBm0FAioJCinbUcaeDR0CV8YH
-         ymiPzYV2CGwlGAxZClxyVHbHGF5sYLCFJ9oM9JvMNvX8ZsdVFvBnKpZ3CT5DLlmEaXCC
-         jQa5DOSAWxcCHlcquwTUF9xd3rFbR1KFMEpQJursbqJMjLIZBd9Qt4NhtV5PvcEpxt6j
-         mDjI2RaibMOt/eVNAgeIbnufDXCGHl2KB0mgA2bY3Q56wL0JKUpx4cvXQ1ctvLJ/DGr9
-         e3sUFhocLGAlHcG5yKU8hz96R69m314z5FCLAHjB8nXNENLsmUtihtRulDA8ZOQkg4GY
-         wjwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUudy86iIh2xqBxXl8Oa1R0HtHuiU2J0B/vg+bpdM0lgff3XGsHeM5OvRduzG8VoAij3a1Fm3ruoVI88bGZyyOINHE9rcnhlwtaZ7gY
-X-Gm-Message-State: AOJu0YysBSAVPKKhxPtn/lLRClxW0AM5jMdX0pgAqsy8HHwG+hceZ0iN
-	2RlhufpkbPS5q+Ws6yc6TfMyOZPCHK5YHMOcOd/3YfmZ5RbQoLpF
-X-Google-Smtp-Source: AGHT+IHwLvLRz5doDoofDV7sc4qT6KEsIxSql/KM5jzssjx10EIOf41YDq8JuD13FLb2WCGqaAMJWQ==
-X-Received: by 2002:a17:902:ee91:b0:1f8:6971:c35d with SMTP id d9443c01a7336-1fa23f9bea7mr127152015ad.68.1719571176479;
-        Fri, 28 Jun 2024 03:39:36 -0700 (PDT)
-Received: from localhost.localdomain ([114.111.24.234])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fac10e3a87sm12302265ad.94.2024.06.28.03.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 03:39:36 -0700 (PDT)
-From: Yusong Gao <a869920004@gmail.com>
-To: mcgrof@kernel.org
-Cc: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	a869920004@gmail.com
-Subject: [PATCH v3] module: Add log info for verifying module signature
-Date: Fri, 28 Jun 2024 10:39:23 +0000
-Message-Id: <20240628103923.1677347-1-a869920004@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jW4Zgyaj"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Sgu1R12gnRao8J6vIMSWPtxCpqtZokT+JjQHwgSLSU8=; b=jW4Zgyaj9EIcAYS4j4F/3j2EF0
+	lEzZeWPOXwMjfOjDPzGZym3D/PLMspR2kRZNnVKhQuODUYUGH8VxVcA2eb+YwpwJbHEpkWcf/KstI
+	Li/hnWKKjO3CmpCisFwkH6w0KjAVWkdSGAdfwHeVrdot6Fz0NrTyXvhV2DU7BDc6HwOWhCm0xF3EF
+	zd9BUdeSLEByZ220TPXMVH2FWWJRhsp8+udslbC4cUlpMTo5xixlxqPmxmFvK/I6aWWUvAv/Y1xHV
+	UxhE6b/2SSpa7NiSHiRj4TCkKSOOF4lWv4XYO4zfA6lvM2lI3eB0sSN8UAnYXAuOKmkGMd4posG/z
+	BdTORQLg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sNFCz-0000000ETQN-2OTt;
+	Fri, 28 Jun 2024 17:16:25 +0000
+Date: Fri, 28 Jun 2024 10:16:25 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Yusong Gao <a869920004@gmail.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] module: Add log info for verifying module signature
+Message-ID: <Zn7v6XGbSTxo3T4f@bombadil.infradead.org>
+References: <20240628103923.1677347-1-a869920004@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240628103923.1677347-1-a869920004@gmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Add log information in kernel-space when loading module failures.
-Try to load the unsigned module and the module with bad signature
-when set 1 to /sys/module/module/parameters/sig_enforce.
+On Fri, Jun 28, 2024 at 10:39:23AM +0000, Yusong Gao wrote:
+> Add log information in kernel-space when loading module failures.
+> Try to load the unsigned module and the module with bad signature
+> when set 1 to /sys/module/module/parameters/sig_enforce.
+> 
+> Unsigned module case:
+> (linux) insmod unsigned.ko
+> [   18.714661] Loading of unsigned module is rejected
+> insmod: can't insert 'unsigned.ko': Key was rejected by service
+> (linux)
+> 
+> Bad signature module case:
+> (linux) insmod bad_signature.ko
+> insmod: can't insert 'bad_signature.ko': Key was rejected by service
+> (linux)
+> 
+> There have different logging behavior the bad signature case only log
+> in user-space, add log info for fatal errors in module_sig_check().
+> 
+> Signed-off-by: Yusong Gao <a869920004@gmail.com>
+> ---
+> V3: Clarify the message type and the error code meaning.
+> V2: Change print level from notice to debug.
+> ---
+>  kernel/module/signing.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+> 
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index a2ff4242e623..826cdab8e3e4 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -67,6 +67,31 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+>  				      NULL, NULL);
+>  }
+>  
+> +static const char *mod_decode_error(int errno)
+> +{
+> +	char *errstr = "Unrecognized error";
 
-Unsigned module case:
-(linux) insmod unsigned.ko
-[   18.714661] Loading of unsigned module is rejected
-insmod: can't insert 'unsigned.ko': Key was rejected by service
-(linux)
-
-Bad signature module case:
-(linux) insmod bad_signature.ko
-insmod: can't insert 'bad_signature.ko': Key was rejected by service
-(linux)
-
-There have different logging behavior the bad signature case only log
-in user-space, add log info for fatal errors in module_sig_check().
-
-Signed-off-by: Yusong Gao <a869920004@gmail.com>
----
-V3: Clarify the message type and the error code meaning.
-V2: Change print level from notice to debug.
----
- kernel/module/signing.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+This is not safe. You can just extend the existing debug switch for
+strict module loading and re-use the variable there and use that,
+for example
 
 diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index a2ff4242e623..826cdab8e3e4 100644
+index a2ff4242e623..9111822116e6 100644
 --- a/kernel/module/signing.c
 +++ b/kernel/module/signing.c
-@@ -67,6 +67,31 @@ int mod_verify_sig(const void *mod, struct load_info *info)
- 				      NULL, NULL);
- }
- 
-+static const char *mod_decode_error(int errno)
-+{
-+	char *errstr = "Unrecognized error";
-+
-+	switch (errno) {
-+	case -ENOMEM:
-+		errstr = "Out of memory";
-+		break;
-+	case -EINVAL:
-+		errstr = "Invalid argument";
-+		break;
-+	case -EBADMSG:
-+		errstr = "Invaild module signature format";
-+		break;
-+	case -EMSGSIZE:
-+		errstr = "Message too long";
-+		break;
+@@ -106,6 +106,9 @@ int module_sig_check(struct load_info *info, int flags)
+ 	case -ENOKEY:
+ 		reason = "module with unavailable key";
+ 		break;
 +	case -EKEYREJECTED:
-+		errstr = "Key was rejected by service";
++		reason = "Key was rejected by service";
 +		break;
-+	}
-+
-+	return errstr;
-+}
-+
- int module_sig_check(struct load_info *info, int flags)
- {
- 	int err = -ENODATA;
-@@ -113,6 +138,8 @@ int module_sig_check(struct load_info *info, int flags)
+ 
+ 	default:
+ 		/*
+@@ -113,6 +116,7 @@ int module_sig_check(struct load_info *info, int flags)
  		 * unparseable signatures, and signature check failures --
  		 * even if signatures aren't required.
  		 */
-+		pr_debug("Verifying module signature failed: %s\n",
-+			 mod_decode_error(err));
++		pr_debug("Verifying module signature failed: %s\n", reason);
  		return err;
  	}
- 
--- 
-2.34.1
 
+Also certs/system_keyring.c already has a lot of pr_devel stuff too, so
+do we really need this?
+
+  Luis
