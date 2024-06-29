@@ -1,99 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DAF11E4AF
-	for <linux-modules@vger.kernel.org>; Sat, 29 Jun 2024 17:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149A486255
+	for <linux-modules@vger.kernel.org>; Sat, 29 Jun 2024 17:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719682000; cv=fail; b=ikscXwU/vmG4zUo/QXVRY0aBZNbhIAsczCsJdBA5nOXu/v87pJeO5zhs1lmuX2nAmGglpGsMvf2PutUeocW1DUcJ2VXYBnfuLcW06kgpe3BIGYqtgWDdxoIKmlaC10SgKrue1ZARJQ/17UuWokErJ3BWEXWWNQuX5MTKGPWEljs=
+	t=1719683480; cv=fail; b=prFuhNJRR0O81+w+6+srXiJ2T4MJvSKrzjkb7aMWuEb+tWOdjdfDxfZBRywN4/Jg64QxfShg2nKF2BUW5NbuqTnEGTTpDXA2kszpxEPVajGZnUaTZBOXdShz+R8PAayqDUbCBmi/xnabT3oUFMjR8/tGipsPVew2Cs0I6xAqHgE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719682000; c=relaxed/simple;
-	bh=IFftHGNg2ureirGFJKZgzrV7A+sAfxgIX5U8gg8wNcA=;
+	s=arc-20240116; t=1719683480; c=relaxed/simple;
+	bh=WmN3kX04WcVO8T52ZSTFzpmAEcmwEPNFPdw3iSCN59k=;
 	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=DjjBBPp83m4yp1AaO1gH06ONyoIQu2R53SA8/EP8yqqL0G0NaZB3XcgOQ3BKPUZSFkbo5drzQnHsPbKdlzTum/GmnJO9ehP29uRbZNlP7jGleSa8KOiQLXAVAilrUQaAcjkT6RYxgV4PLl+ZgjfKw4XY6sYtEap4+hlWlsZkYeo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kZ0xbvw8; arc=fail smtp.client-ip=192.198.163.12
+	 Content-Disposition:In-Reply-To:MIME-Version; b=j94r3K9cCp+1dqq/fjWL8Y461CXkLd65inZ2glWJL66dkaYAmasCZEtBAJbRqzWHkw3ipwXy5UzFIalBS3ybOpwFwvV/lNA7RRL4ng2zqA6LNjrJ0BsVG9ISLEpf/rjFEWClWja4Ln5Qbfa4viFNCLQ5OpDUuy/TvToYRZBBP0I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdWIeGkd; arc=fail smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kZ0xbvw8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdWIeGkd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719681998; x=1751217998;
+  t=1719683478; x=1751219478;
   h=date:from:to:cc:subject:message-id:references:
    in-reply-to:mime-version;
-  bh=IFftHGNg2ureirGFJKZgzrV7A+sAfxgIX5U8gg8wNcA=;
-  b=kZ0xbvw8a+rYsujNaFL/2Z183n7ylW5Kz/aX+8nKoDWnY+HPR+TmleV0
-   kAx0TIAKl069JEIFy3gg+l0zw1Qwo1f3Z3wPiHr5R0SzDod3xcoW4+IPY
-   eNJST1MkrpIcF8VRWfbbL2tArJKSWYAeKHaQCEoU99qtgoa6aYFbOu2hq
-   fRU8DjbbCCpgCyz9LLWeDyunPQDFSR80VuiD7bILs4HH8M9yNgJgnp8m0
-   O+Fahu5VAPnXYTK+9xRDObkcEvIbXuQlXtVJbg8nQhxo2cYdPjJ1hhVEQ
-   c1Zbu/hkqtQWdl82JrsMsRbL2xNJ3Vpd213GX6yGfjVAooevFNXhZuuBE
-   Q==;
-X-CSE-ConnectionGUID: X8kKehIrSt2N8dDUyZsXpQ==
-X-CSE-MsgGUID: ZpKKWEVMQyiHUxFP5hg/jw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11118"; a="20719954"
+  bh=WmN3kX04WcVO8T52ZSTFzpmAEcmwEPNFPdw3iSCN59k=;
+  b=gdWIeGkdzwkzY16pE9L8d3VJeaNJE/QkPG8uc8DsGFQWZTEX44n3JIdm
+   XRTtEyJv+AFKoK7PBsfmF+FVSb9k75pjVMZFHKoh85bM+ef4buAPmpiOm
+   uwlIZO29lPu1lRsYoxl5Rk2VxqvtSU3JmEs8E0AcCYGGEpDoFkS3eJ6Ne
+   enNGv0LvOlZ60PYGNM2ylU2pkmXcrbMcwJdT3c0+aFTgKxG+Se2zxs4aV
+   6RrR8ouPw+V3MD2I0D4qbQOslQGeO8+dzHxxgUj/r+cGcqQhtJAA/Xs3C
+   0ky/aQsZwmpd2SvNS5o8znpGSK7lL6I12+JFFbEP1QkgkcmSOWnoopB9w
+   A==;
+X-CSE-ConnectionGUID: kqAuSZJ+TmqplKRgz8e/tQ==
+X-CSE-MsgGUID: GeRefkz5RQypYLgHYSpVGQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11118"; a="12317292"
 X-IronPort-AV: E=Sophos;i="6.09,172,1716274800"; 
-   d="scan'208";a="20719954"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2024 10:26:38 -0700
-X-CSE-ConnectionGUID: 1IJxl4/3TIW1h65lmyiYMQ==
-X-CSE-MsgGUID: KMxQpNR2TayAohO26kbHrA==
+   d="scan'208";a="12317292"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2024 10:51:17 -0700
+X-CSE-ConnectionGUID: PGHeQ4UxQxKONfv5Rr5DjA==
+X-CSE-MsgGUID: sArNTD44SY6FOZnrUcfCDQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,172,1716274800"; 
-   d="scan'208";a="44958172"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Jun 2024 10:26:37 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+   d="scan'208";a="50243401"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Jun 2024 10:51:17 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Sat, 29 Jun 2024 10:26:37 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.1.2507.39; Sat, 29 Jun 2024 10:51:16 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Sat, 29 Jun 2024 10:26:36 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ 15.1.2507.39; Sat, 29 Jun 2024 10:51:16 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Sat, 29 Jun 2024 10:26:36 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.45) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2507.39 via Frontend Transport; Sat, 29 Jun 2024 10:51:16 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Sat, 29 Jun 2024 10:26:36 -0700
+ 15.1.2507.39; Sat, 29 Jun 2024 10:51:16 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O+8NSkg+xn9TzT5oFWg/7AYLV8JECLUXJ9ztipXWTZKIUsV+RyMVOvO+GClkk97S5q/AYy+njvJdz+GBCgB9MJvffk6H0jZiNqBhn+4WFzvjStZVDftRb8uYwUdN5QVbiV9aAH/XCOmZ1CTwwUDSrZRaJjEf+nSjV3sZIpDyFdSDn4ZlM3zsWzy5mA2DiOnxYhlj0bpsDrk/if22TjcV0fF9fzZdO20z48g5xwziSkoRY49AgrHctSze0whEFP5sZhSiljDmBp9Jot9xUi/VbirOtnc8Sc8Gr1SMBSVc3/rUr+w5S8KasqYF8GJFa1o530d6325F4I4sjqntLto2EA==
+ b=bqPvLMTiB5EWVh/6vjDVVkIy6IRJpgRJS64COSMMyQWVY5VnAmgMYRJsyqB8A+u68/3ElHbjMNxPZ+GMPWuRXKmALVAy1on5nL2JkFGFuXT4mdrGgCOTCwmOt8H1I8J0zkxIoog2x2Oo2kl784swqADT0cSApxfeFGwyP8wq4Z+oeibsXb058r7S7r8BFZci3Ztpvs/cReG6qSGex7S39UOejUXRpyjSgakg9BlpibehMCZFIi1NaQtxICYPErmIWRi2zu8mbh/G0X1TP2OanskeXURtwF0BGgY0SRYMciRWa/+woF6cQEt1jcFfv0Gqv7D9a+QgZONWpplg5ooLRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EWKXcEXkiOY8B/+ig0Rhgflz+z3142Z2E9C7sLHijIQ=;
- b=U9eKPLADzAGAr89jRzlJlKhTvDvw1bpiLWGwtwusToFH2VahHskktdSTc5VRj/7XlNJz8t0AdDR/iVnRCcby0VdkQUqKpTahRE7uq8nZiPRHKUn7g42VRZ9UTq19xPFyBnWFABCDEJqt0aCkI8iMqRJtPf6FhgY/0bLOXv/tsSfH57ZUDs9NPIrAl2zUFySmPUYAGYmn8MlWs2avc1oc9TWI9YqTHWD7Cg8vG6dEDYr+BQrrznOAVS5Xo6Bscit3e8GpJdHbf3/adgG+smIZNnOhJDIm0ql6MCDsaPlpLdiv06ZPueBjLvN5xbfQAbrFs41X8Q65+Fz0FNTklDfRNg==
+ bh=JmfX+qOrt0pGPPSCg5tg0CIO0g8U0PSAjImwII4yAAg=;
+ b=Hwvam7PMs/DOID8VtcwtfA5PEw2RMDQpwdhdNES8DgGeX2D0MVLnO7nKm3t+Feh5zc7Wt1Zn/Nb1Lfc4FBnB3xHmhCo9H6W/3qeQQGJTip2ZmE9ucHtwgpshmSazIcfM7WWztZzEnDdgnnzU2ZCkgn0UsAYWLMCTdPGx4+aZfUS3yfGdJu2uFE3SasiFY4cJ0xBYpiqB7mb1zLHjuzyvFh7PiBBj/IaXqmRJJnGaujDAz+rD2IFgOTjdDy47Mb5pqSM2daUO//mu9urG3NC9fMdwgyyqqSCIXZc4l6aTtp3d8vVeXHrp2Wp36ROXv/nBPro69bPVne8B5luPCr4dVA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by PH7PR11MB6426.namprd11.prod.outlook.com (2603:10b6:510:1f6::12) with
+ by CYYPR11MB8405.namprd11.prod.outlook.com (2603:10b6:930:c6::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Sat, 29 Jun
- 2024 17:26:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.30; Sat, 29 Jun
+ 2024 17:51:11 +0000
 Received: from CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
  ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7698.025; Sat, 29 Jun 2024
- 17:26:29 +0000
-Date: Sat, 29 Jun 2024 12:26:26 -0500
+ 17:51:11 +0000
+Date: Sat, 29 Jun 2024 12:51:08 -0500
 From: Lucas De Marchi <lucas.demarchi@intel.com>
 To: <emil.l.velikov@gmail.com>
 CC: <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH kmod 11/20] man: depmod.d: document the config file order
- handling
-Message-ID: <uojaxpxptkc4t2y4iy2kpmcti6xhwa3hcwyztdijku66w6ac6z@vfpomcikmevt>
+Subject: Re: [PATCH kmod 19/20] man: remove the "Maintained by" references
+Message-ID: <lvy5sy5kthttcvm2iextckgttlunvegyq7d737vgzlqxp5a4of@65fhjttrycmx>
 References: <20240611-man-v1-0-bd6864d49639@gmail.com>
- <20240611-man-v1-11-bd6864d49639@gmail.com>
+ <20240611-man-v1-19-bd6864d49639@gmail.com>
 Content-Type: text/plain; charset="us-ascii"; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20240611-man-v1-11-bd6864d49639@gmail.com>
-X-ClientProxiedBy: MW4PR03CA0172.namprd03.prod.outlook.com
- (2603:10b6:303:8d::27) To CY5PR11MB6139.namprd11.prod.outlook.com
+In-Reply-To: <20240611-man-v1-19-bd6864d49639@gmail.com>
+X-ClientProxiedBy: MW3PR06CA0016.namprd06.prod.outlook.com
+ (2603:10b6:303:2a::21) To CY5PR11MB6139.namprd11.prod.outlook.com
  (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -102,180 +101,255 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|PH7PR11MB6426:EE_
-X-MS-Office365-Filtering-Correlation-Id: a780f291-1f41-4ebd-079c-08dc98609c90
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|CYYPR11MB8405:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0173269-3200-4bcf-4784-08dc98640ffd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|27256017;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?Tm+KgDgChT/B3fK9TOrLJ2C3dHQD4iPbT2ADLug24pxL7OdsKIi5xATBrZl1?=
- =?us-ascii?Q?NWFLP3eW8Ak5WTDFK3Bm2SAMKOKpBVmHT1AtWtHidqeu3TTq9jTaQaUf7POJ?=
- =?us-ascii?Q?Xx8SOU5o7AnW4cPNWXgFreKQXZsKHCf42dpQc5CDtQ8BHZzYZCmoNFJJ8HiU?=
- =?us-ascii?Q?Hz9pI6yvhXuxXnm8LRy2N2brqJnLJhTE+ICOeMxHrVmV0ZS6t4TtYJ1lXYMt?=
- =?us-ascii?Q?Qw5WkQ0hQ3+/DRGTbKnymah18/Qz/rJbVf5XUYF73CNKilv1zmlAi5FA51k2?=
- =?us-ascii?Q?yy+AfpTevAmkH0EWu8Jhkq6ctZAlOPrceDG03m7DAwuz+EPIDvZqAyxcVnO7?=
- =?us-ascii?Q?2GtUi5K+gpl96euTdgOcQHK3wwK9Ftna8AXA9VPZrladUP6EAPqPHfdFHWwX?=
- =?us-ascii?Q?LAxC996BPM5tY9OSPaz4Orekt+EGeSptYZ2EiqRE/g/jC7wJd5qHIgWmsXht?=
- =?us-ascii?Q?SlB9/PgIEVTNcl6ErLlYQT1E2KT1mCexI7HAcOTwPi097z3XmJi7L+nteYfQ?=
- =?us-ascii?Q?YSBXDDbyzUWoQGlqkZ89rc+GRkZHc13y2ApbRJTumMnKYkWTItZHGa3cZdUe?=
- =?us-ascii?Q?/0aEF3C17Xr6ioJGf+15hxN/AD2U0K6XKUVYF5TL0pCTe4GEZo1W6CjDsN61?=
- =?us-ascii?Q?+7ceI7bjk5w72UYJ0xqKinjR8ooSkyL+zHWTT+sAzamPBajcOZ1G18h9Zgsk?=
- =?us-ascii?Q?63Wgpk+j3B7mKoqoTJIOeE9sppqa3Mwwrn65Pwvxjy2HNXxf2nGdJ5Zthtw3?=
- =?us-ascii?Q?sTOoqxZt1yvgtqVx5cC1T5SSpYl2qs2ZrhTKTfWe6XlmHcVlQmZ6PsWbPrFw?=
- =?us-ascii?Q?TzBkEKLsRPuc+HK6cQBonybEvBrF6W7us4QzUAduVo2eExPolHvoJf+esMi/?=
- =?us-ascii?Q?RdU5Q7C+i1rHMn3Q4AZ+GN/+RVWiQP66+xM6rr3tZR+TmqvjQn7w5jegFnCG?=
- =?us-ascii?Q?i0hQjChYOKPZfRf6mT2NV8i7p+J+MT9iXMJ16Qt225RNYzc9uQlDphksSoTY?=
- =?us-ascii?Q?gKZCGnIXXVG8jky1ugP1SpQ0lo9JYXQg6lww8HgdmyHqxk8pDHrhKGtXTYU+?=
- =?us-ascii?Q?QKvhrAVHlWcEq3DNEeuX74YqF8wzbbgSTw4XO8oc9ttVjEFYfCG/lCAtpbQT?=
- =?us-ascii?Q?2TjdyNtrlJQUq7PVNy3vLERVCYVZjIIE8C4KrZ7RjF9/5m2KK0AEJxSgs6wV?=
- =?us-ascii?Q?Nrm86+IcYGLFqHeE743rkuUmX0uL4MYBA60WPizM8olRSBej2V2yH5JW8k41?=
- =?us-ascii?Q?EMt8gxUQjupXDfdXtldauBKMfRLeY4AqOFd0K5cr5u+ZTpxjk7DLynbddSxh?=
- =?us-ascii?Q?7jtno2dtmohNRAAED9WEx3HVT8/1/cQ8XgPRKUkMgo+pJy4mFygsy2uzJCMK?=
- =?us-ascii?Q?Wizca9U7J0OQa4tJQgo0dG3PlmXEZuC0HALHRv8jW0u3ZkmxvQ=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(27256017);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?iIXMb6Gc7L/1kSDupLimxMDFYWc1nus3H2I4h9xsZDv8tLv88CAOF1FcQZF1?=
+ =?us-ascii?Q?2noxMoYCvGWrMV7R5r4Yjq+hVonBaJBUItA8DOnmYefm8Iru+PBMg1WN8puV?=
+ =?us-ascii?Q?Bf+0jV9Z7zMqOoRy/r/xvKBsdReC+H4oVTMAORhBfihG3U0UP/H0vuoXUB9F?=
+ =?us-ascii?Q?/xS/Df7r5xSuiaFGfF/nqVjy26d60gzl9Ir2pJ9J0/9QCmay9mzWpJEd+HD6?=
+ =?us-ascii?Q?A20OYDj0C3YY/nj+qtX0nZBoxVVkNij6ypOwCKLTs++PW6JoR97ETS++vAjW?=
+ =?us-ascii?Q?a0t3C84uPWWFmIPdZIBrl/cixmq0byXdouYtg9C9ICzCyY443VZGwzsOt2Ik?=
+ =?us-ascii?Q?oC9DCrWBJGhXpUzRR9TUamchlYBG2NlgUSBhz95xuTzQnpsl6Bld7pdnK8Li?=
+ =?us-ascii?Q?1qUB+ZIw9zddys5GOB736MZCSnAXDfxGjVrZwhrUwuJQcJ6zrHo8kowHjz0L?=
+ =?us-ascii?Q?EPYAxVWgv+ks4w9aSXHmyzZe3PqMxzJcqGsEUYETI97rZnbF4hsBvb/T1oBC?=
+ =?us-ascii?Q?tzauFVpXWTgKM+TtTmtXFQxkXxU8mTxRs9EdglEETC3RuSEleHlzqF8j+hhk?=
+ =?us-ascii?Q?FeOKuSrd8TcXgPujYHFokieCyDGFSNNp4sq8ZFtSJp0OyMrnVZc/MunbuQdI?=
+ =?us-ascii?Q?fENqQvjzbxP/oJTRTzWl0IKV/z6dLdp1KJ6b+6QTipoDC1rg6rVJGPXkCzKQ?=
+ =?us-ascii?Q?kXdyA5B17LBSqUFczW2m6bgGzsG/Iu7aOTqy6Qc+baSjlQ5FkxbgHufi+dJs?=
+ =?us-ascii?Q?qNDvOKPEqIamSwhciDNALhXdzkVp4VTcStFjLk9hqV97Y5rDjiR1lGPxSB8h?=
+ =?us-ascii?Q?LtivOIrc5/EpKTjZEA5VGbtXOjS4gk4H8Gk/Ter+umiUTw+jeWFfFndiZNH2?=
+ =?us-ascii?Q?G6wPFM0+biGz985x22355Qje46YSuhLyUXvf/76KvoUBCu80BMtlebTXVUJt?=
+ =?us-ascii?Q?hQ+LSQat4RO++E7CpEqNBJDun96ROvaxmYVShz3Dq+0KenW+ULuXZybLMDC9?=
+ =?us-ascii?Q?Gs+eLXrLo3fxOSv4geQu2M+XEmr38VZOAJDzwB4KoAuecB31WrnRIZZapQEr?=
+ =?us-ascii?Q?jgkcvp0YkdjH7uOsXjCra24/lnLUZbOO/A1URrtm3z3bmi1OOc6z62+W+lYd?=
+ =?us-ascii?Q?FjyFfJVqHJZKmgUNotY89r6FyY9OXFWeml2l6ztcNwITSRKIzoYrWb6Yn1O4?=
+ =?us-ascii?Q?ukDMG8d66qyuxwjAuligFSQp9i19LNfaz/PoOk8ilLaiXuNMRJ+/bJBR7Byo?=
+ =?us-ascii?Q?fUri24V+uA+mJt15fOwjGXIadj1BAywz7ViyBDj2Pw=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zJDj3/BN84Lf/JypQbLQStfa6TNjqDzyuyQyILtqOst3JxVzpZ5/yzpz5uDv?=
- =?us-ascii?Q?dPuM9zh8d8thYiTiZXDTWBzrrs6Y6OJiN4CZifcgoSesMWFJFkc8ebVQXkP0?=
- =?us-ascii?Q?YRXSvCeDlo0z3wf4141hSfgprJOHBBh4GjsCPcdG4tqBkvURpFgp+PoCVpmz?=
- =?us-ascii?Q?fruNEqPDR2TKD9Eq8F2kqbRTozC2uxlvIV3KuvKpIe3aJkCQedkx6EBU0A5r?=
- =?us-ascii?Q?Dr/naet1Ul7SnJ5jEPP8yNBRpUWP4BWrqrhRZZhU0gvhl2Kta6R/0xTqaQzR?=
- =?us-ascii?Q?FYZGfwnx6AQa4h9I4WtD5YqO/gLMCaf6weSBIHqRYoa3hrWR2xTq0LyO7URL?=
- =?us-ascii?Q?540BE/ZAAWnx0PnTjF6YSoktBVD+sAvjr7kPkwEby57gbSRpT+2pGzpCDUAP?=
- =?us-ascii?Q?HCFPV54BEnFC+u2WRmi8WUXGgUUiLK/zV3hfQpLsmD4228tqquIvF2nJ/8lM?=
- =?us-ascii?Q?4I6ezZop/KegEK9AlMmaMNiULD9aXfMg02Y2VgRdhR8lWGHtKbwfOE6VvIJV?=
- =?us-ascii?Q?UY7PNej8IuN4ca+3NuNBqAyPT2Duk/meAmeodDK9MBFiGU6dcpaauPo7RgR1?=
- =?us-ascii?Q?jXyJOCu728eZmEpzezW/fhJzL3kT8DDhlgRmg76oYReMzeFaUaTL76Vitt9Q?=
- =?us-ascii?Q?nI2H9mGmW8av/NZmnGDiGQ5kblyS9he0npcySXVkXbZGke4vny5ry/G4A3mJ?=
- =?us-ascii?Q?03qfYBehOibx7ydmdS8Lf30HfbreyXmu+fOKU7RKphD704sq1hqe5yTQD5fr?=
- =?us-ascii?Q?0qwXzJ8cmpAdvqLnMvudFdmiPfJexKOpd6p0wi8aApemp64CIlSe+NJVKk/6?=
- =?us-ascii?Q?c9SWTwzAf1lYNZOoeyNgVkqz3k5H6p7W9qaxczX99+rm3xF42OPNc9Y9bsMS?=
- =?us-ascii?Q?jsDN2b+rgT9wockpxA+6oZlK3mjhXbs2y0GQCl/coMwBgeGBDr5M5iL6fNBW?=
- =?us-ascii?Q?EQl6zX5y6fdsgzDoOeQv3Ilq7+O5Raj99W8MXaFfHf55cXdSgOMNL5w8Bk2O?=
- =?us-ascii?Q?1Q4/wCPynAqFbhOlt2G90Q08Eqmua0eAcCP4k94Vrcf8fpBtEpmpOBsvT05I?=
- =?us-ascii?Q?ez66on89FMsLJEDTJPOxvnA/ieg1IJYhlkJ3D3LuIDl29+hpjeusO9EMJHl7?=
- =?us-ascii?Q?OsaKpJtO74ej5hZ9LkiH+7+v/8Eo/+ies46nlUEyDJay99YkWJNzRT26HxZn?=
- =?us-ascii?Q?ZEnTED+stdYEgBrdjpDhfKfjVdAYKjiHwqWPRwsUUMLp3/oon2rbwk3tcLo9?=
- =?us-ascii?Q?gu22/Y9KBv2BeOXbYfjQNvL6xsQ4kiM0gID1yGNXvM7+H9PWwoVZT0oHaySO?=
- =?us-ascii?Q?hcidEoL/Zq097rG9Y+HthciREGnL+Q5xYue/2dv9LLKAd8B/kBiF4i0Vo0qA?=
- =?us-ascii?Q?0XcqGV9smEKLqwBNSCUGp6+0SmZjT3ddjOIRbb2Q9FAIkX8xhWL93J0uELU0?=
- =?us-ascii?Q?DeaTIqzLnpVznpS4NcDPiopZmeEWgZW5aYOyfQ79CCmcON1HbeKk4txNMR6/?=
- =?us-ascii?Q?pv3mptwMRjsGOR/50jlrMl7MxQ8ZNCC6Np3cKheHXHu+0/1873gvcWZXEe/2?=
- =?us-ascii?Q?W4wB5xuVYX5KGl8yK4SgE3LR1a/6nhkDZL3vDRxzfs97umSweWutSTcBOR7H?=
- =?us-ascii?Q?2A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a780f291-1f41-4ebd-079c-08dc98609c90
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5t/L6UT2KvN9b2sHN01sQnJyHKUjSIJkIJWUdNdp50IvUGtvA66AKSAsULyC?=
+ =?us-ascii?Q?hkfkh+imv3lHh/fqZDgI+Uz1/OqTFTQJiY5Kut0GIBG4egoYIDS5t8bEcF/K?=
+ =?us-ascii?Q?yOx1YYv473z7l90lJQAF78hukquGyMdlFdKYa3IpKRp+wr3GPQ4doLcLE9/P?=
+ =?us-ascii?Q?1MnumihAJeFuPR02AyBBRZBW1QXLavCQ6Myq6EJjOdWHHIu/M5Pt18pNFfoC?=
+ =?us-ascii?Q?3WeG0UoO06Pn1Sh3lKID+LfSk2QOiKijB/yslCRcTO00b6G+aP/fuUq7F7gD?=
+ =?us-ascii?Q?/y+Yv7g08mACzYuSiWxRJ3pqV56XhSTmC2GddIcJxcf65q1/yNvnMs+8euWH?=
+ =?us-ascii?Q?dQwJ4bVVH0R5rWQ1QZitOrwg39hTMoV9U7oGP8KYC+LL+SAU6WuyKcXEbZ7F?=
+ =?us-ascii?Q?CZQ3Jq53Aj8T7AbIvd5QclLEr4gmTFMQvBQJD7lrpLEKzYe+xGLcr3AxhVr5?=
+ =?us-ascii?Q?13/QT8TTCWR78ZE1BthMUe1MXNuCHKEFIdt8+C+wnedNDS4hHgkHPaeKmQ2/?=
+ =?us-ascii?Q?8RlQGQhXzpEpTZCt2N/gpAqvuce//QxKH8xpU5JW0gwsRu8MDJ/geQg4w1HA?=
+ =?us-ascii?Q?6x/E+VH3rIhSTw9hbdVTET7MKoSSxVwJ1cMADMgncZyO0/lh/U5tDCNgfUxM?=
+ =?us-ascii?Q?isiAqM02ySVzko4tl02IxeByffBKowuj/rbb7Z8MpvzW26g0sHOBvtv5W4KG?=
+ =?us-ascii?Q?Zs6Y4ch7+zF3by/+4eIEikd7yvviE8r95krhAJQnPQISOMhbAGDQFe6BpAM+?=
+ =?us-ascii?Q?8aj4116vERE6GbpvWu3W1RJ1fI1m8J9ZQbMvKjcrtFWDw6LEbL3WHJ3s4FPz?=
+ =?us-ascii?Q?ZUljxKwXnFmzO8+3Cl2rvBjQB9Zih5JcU9ahRuEesBYyLeeq9iji5My7KRYP?=
+ =?us-ascii?Q?pE1HuRRsjROlUD3z1yh9N2ZvIERkOEYockfnlUU828nIxwMDOzfm660SboNO?=
+ =?us-ascii?Q?ystMusfyh5HtGfTEctF1MBsX5BCCImQB3CcquDNkXBum2Ndx3pbKqRgeMXPV?=
+ =?us-ascii?Q?/BuGx2FUF5Gy5YxJ1mjB79y19Gk1ZXcMkfzMOfJsO+y3j3Ig9p10HP4wnMBR?=
+ =?us-ascii?Q?mq0jM71PGJ/S1WIzsIOHckn8q897974+LxQtO1GY/fu9P3S1+JO9yEiDkSe7?=
+ =?us-ascii?Q?uIHQPZdFrIzgkApKRPBVpyC4bnouhHkrleUuQr7u5znihMfJKPQ2UWWim9Va?=
+ =?us-ascii?Q?nUzFxdAUBT+ZnsAsVbKwU4QYbIl/ZM02wmslVEyqpLp6OvPNKOlVMh2QK23t?=
+ =?us-ascii?Q?MK10uM+bFLIyJFrtru6IbmTTiXEeKsHqM1G2ceQ+4vWq6CqBnUuoJonMzU+D?=
+ =?us-ascii?Q?fD6LTcW2q3LW6JmAzPUbJyM/993xJyzCdPVwOu21r45AihsqD8sHPq2v5E8n?=
+ =?us-ascii?Q?FIfnGLn+6CrygA3OD9gH2tte8RZGJTT6pAtwTvBy7WFyyqzabf9gRLS7xBEA?=
+ =?us-ascii?Q?PO/CDYQcndp4V6C+eInKWmCCmRsaO2fazLkGnCj4iT+Vk5ABRXCVp7phUzaX?=
+ =?us-ascii?Q?0f7/36DxDXDM8amswK6bq6I6soo3vlxBEdmEFo0gWotdRYEQg+JRsbnk+1TA?=
+ =?us-ascii?Q?mnfLvARaCINGkfnuEnKruznUOedKTew7/Od6CHcafy0yQlV7ioaGMxwfEPKA?=
+ =?us-ascii?Q?/g=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0173269-3200-4bcf-4784-08dc98640ffd
 X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2024 17:26:29.2342
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2024 17:51:11.3764
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: F+Yo7RNDLkgdLCyZMhIYh1lRaT+bZX/waTyrZ9Gg8Ne8dUfLk8Xe3MH3aKkclFzZVPlIKe4+txxRn//Tag4ZeszFJEhS2ID2WbfuM4KL6J0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6426
+X-MS-Exchange-CrossTenant-UserPrincipalName: kRX24ayeoJeCrSEbd7s7P2EBXcmd6ViAnKTF1GggNcBbPxhzdMyZj4XN/FsTGdwsU0O3bHWyjAS4m+1uN59KbciLq8d5/zHjzm1ekmzxAQw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR11MB8405
 X-OriginatorOrg: intel.com
 
-On Tue, Jun 11, 2024 at 04:05:11PM GMT, Emil Velikov via B4 Relay wrote:
+On Tue, Jun 11, 2024 at 04:05:19PM GMT, Emil Velikov via B4 Relay wrote:
 >From: Emil Velikov <emil.l.velikov@gmail.com>
 >
->The depmod.d configuration order/handling aligns with existing tools
->such as sysctl.d, even though there is no mention in the manual.
+>At a glance through my system, around 2% of the man pages include such
+>statement.
 >
->Reorder the list in SYNOPSIS and add a bit of verbiage describing things.
+>Looking through git log, Jon has been active in a while and presumably
+>have moved on.
+
+Jon was the author and maintainer of module-init-tools, that got replaced
+by kmod:
+
+https://lwn.net/Articles/472354/
+my blog: https://politreco.com/2011/12/announce-kmod-1/
+Jon's blog: http://www.jonmasters.org/blog/2011/12/20/libkmod-replaces-module-init-tools/  
+
 >
->Section is copied^Winspired by sysctl.d(5) ;-)
+>Most importantly the Copyright section isn't the best place to reference
+>the maintainer/contact person.
+
+agreed
+
 >
 >Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
 >---
-> man/Makefile.am    |  1 +
-> man/depmod.d.5.scd | 22 ++++++++++++++++++----
-> 2 files changed, 19 insertions(+), 4 deletions(-)
+>Instead we can add a note in the authors section, pointing people to the
+>ML/kernel.org/Github repo for when seeking contact.
 >
->diff --git a/man/Makefile.am b/man/Makefile.am
->index 25135e9..181f619 100644
->--- a/man/Makefile.am
->+++ b/man/Makefile.am
->@@ -15,6 +15,7 @@ CLEANFILES = $(dist_man_MANS)
+>Also should probably s/Developer/Maintainer/ for Lucas, who's been
+>keeping the project afloat the last few decades ;-)
 >
-> define generate_manpage
-> 	$(AM_V_SCDOC)cat $< | \
->+	sed -e 's|@SYSCONFDIR@|$(sysconfdir)|g' | \
-> 	sed -e 's|@DISTCONFDIR@|$(distconfdir)|g' | \
-> 	sed -e 's|@MODULE_DIRECTORY@|$(module_directory)|g' | \
-> 	$(SCDOC) > $@
->diff --git a/man/depmod.d.5.scd b/man/depmod.d.5.scd
->index 9cf99d5..9ee35e8 100644
->--- a/man/depmod.d.5.scd
->+++ b/man/depmod.d.5.scd
->@@ -6,15 +6,15 @@ depmod.d - Configuration directory for depmod
->
-> # SYNOPSIS
->
->-/lib/depmod.d/\*.conf
->+@SYSCONFDIR@/depmod.d/\*.conf
->
->-@DISTCONFDIR@/depmod.d/\*.conf
->+/run/depmod.d/\*.conf
->
-> /usr/local/lib/depmod.d/\*.conf
->
->-/run/depmod.d/\*.conf
->+@DISTCONFDIR@/depmod.d/\*.conf
->
->-/etc/depmod.d/\*.conf
->+/lib/depmod.d/\*.conf
->
-> # DESCRIPTION
->
->@@ -29,6 +29,20 @@ lines and lines starting with '#' ignored (useful for adding comments). A '\\'
-> at the end of a line causes it to continue on the next line, which makes the
-> files a bit neater.
->
->+# CONFIGURATION DIRECTORIES AND PRECEDENCE
->+
->+Configuration files are read from directories in @SYSCONFDIR@/, /run/,
->+/usr/local/lib/, @DISTCONFDIR@/, and /lib/ in order of precedence, as listed in
->+the SYNOPSIS section above. Files must have the ".conf" extension. Files in
->+@SYSCONFDIR@/ override files with the same name in /run/, /usr/local/lib/,
+>Lucas, what do you think?
 
-ok until here.
+I like the format used by git:
 
->+@DISTCONFDIR@/, and /lib/. Files in /run/ override files with the same name
->+under /usr/, @DISTCONFDIR@/ and /lib/.
+AUTHORS
+        Git was started by Linus Torvalds, and is currently maintained by
+        Junio C Hamano. Numerous contributions have come from the Git
+        mailing list <git@vger.kernel.org[6]>.
+        https://openhub.net/p/git/contributors/summary gives you a more
+        complete list of contributors.
 
-I actually find this odd. Why mention /run overriding /usr/ (that
-was not mentioneed before), and not mention the other overrides?
+        If you have a clone of git.git itself, the output of
+        git-shortlog(1) and git-blame(1) can show you the authors for
+        specific parts of the project.
 
->+
->+All configuration files are sorted by their filename in lexicographic order,
->+regardless of which of the directories they reside in. If multiple files specify
->+the same option, the entry in the file with the lexicographically latest name
->+will take precedence.
+Can we get inspiration from there, remove the COPYRIGHT section and add
+a new AUTHORS section?  A brief history mentioning that kmod replaced
+module-init-tools can be added in kmod(8). Something like this?
 
-Looking at sysctl(8) and systemd-system.conf for inspiration, I'd write
-something like:
+KMOD(8)
+...
+AUTHORS
+        kmod project was started by Lucas De Marchi as a drop-in
+        replacement to module-init-tools that was maintained by Jon
+        Masters, adding a library (libkmod) and additional features.
 
-	# CONFIGURATION DIRECTORIES AND PRECEDENCE
+        Numerous contributions have come from the linux-modules mailing
+        list <linux-modules@vger.kernel.org> and Github. If you have a
+        clone of kmod.git itself, the output of git-shortlog(1) and
+        git-blame(1) can show you the authors for specific parts of the
+        project.
 
-	Configuration files are read from directories in listed in SYNOPSYS in
-	that order of precedence. Once a file of a given filename is loaded, any
-	file of the same name in subsequent directories is ignored.
+        Lucas De Marchi <lucas.de.marchi@gmail.com> is the current
+        maintainer of the project.
 
-	All configuration files are sorted in lexicographic order, regardless of
-	the directory they reside in. Configuration files can either be
-	completely replaced (by having a new configuration file with the same
-	name in a directory of higher priority) or partially replaced (by having
-	a configuration file that is ordered later).
-
-... or maybe also repeat the list of files like sysctl does to have it
-all in one place.
-
+The other man pages can omit the first paragraph.
 
 thanks
 Lucas De Marchi
 
->+
-> # COMMANDS
+>---
+> man/insmod.8.scd      | 1 -
+> man/kmod.8.scd        | 3 +--
+> man/lsmod.8.scd       | 1 -
+> man/modinfo.8.scd     | 1 -
+> man/modprobe.8.scd    | 1 -
+> man/modprobe.d.5.scd  | 1 -
+> man/modules.dep.5.scd | 1 -
+> man/rmmod.8.scd       | 1 -
+> 8 files changed, 1 insertion(+), 9 deletions(-)
 >
-> search _subdirectory..._
+>diff --git a/man/insmod.8.scd b/man/insmod.8.scd
+>index b6f8654..27d4409 100644
+>--- a/man/insmod.8.scd
+>+++ b/man/insmod.8.scd
+>@@ -21,7 +21,6 @@ information about errors.
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/kmod.8.scd b/man/kmod.8.scd
+>index 2007a2d..6bd9432 100644
+>--- a/man/kmod.8.scd
+>+++ b/man/kmod.8.scd
+>@@ -35,8 +35,7 @@ Linux Kernel modules. Most users will only run it using its other names.
+>
+> # COPYRIGHT
+>
+>-This manual page originally Copyright 2014, Marco d'Itri. Maintained by Lucas De
+>-Marchi and others.
+>+This manual page originally Copyright 2014, Marco d'Itri.
+>
+> # SEE ALSO
+>
+>diff --git a/man/lsmod.8.scd b/man/lsmod.8.scd
+>index eb2f2e8..ded619e 100644
+>--- a/man/lsmod.8.scd
+>+++ b/man/lsmod.8.scd
+>@@ -15,7 +15,6 @@ lsmod - Show the status of modules in the Linux Kernel
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/modinfo.8.scd b/man/modinfo.8.scd
+>index 9545257..d088c7e 100644
+>--- a/man/modinfo.8.scd
+>+++ b/man/modinfo.8.scd
+>@@ -63,7 +63,6 @@ architecture.
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2003, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
+>index 8354765..657d172 100644
+>--- a/man/modprobe.8.scd
+>+++ b/man/modprobe.8.scd
+>@@ -197,7 +197,6 @@ The MODPROBE_OPTIONS environment variable can also be used to pass arguments to
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/modprobe.d.5.scd b/man/modprobe.d.5.scd
+>index 9d03c49..41d2e78 100644
+>--- a/man/modprobe.d.5.scd
+>+++ b/man/modprobe.d.5.scd
+>@@ -170,7 +170,6 @@ directly within the modules.
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2004, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/modules.dep.5.scd b/man/modules.dep.5.scd
+>index c4e7653..7723a16 100644
+>--- a/man/modules.dep.5.scd
+>+++ b/man/modules.dep.5.scd
+>@@ -29,7 +29,6 @@ fashion rather than touching these files.
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
+>diff --git a/man/rmmod.8.scd b/man/rmmod.8.scd
+>index e1f656f..c4dcc3e 100644
+>--- a/man/rmmod.8.scd
+>+++ b/man/rmmod.8.scd
+>@@ -35,7 +35,6 @@ is provided) from the kernel. Most users will want to use *modprobe*(8) with the
+> # COPYRIGHT
+>
+> This manual page originally Copyright 2002, Rusty Russell, IBM Corporation.
+>-Maintained by Jon Masters and others.
+>
+> # SEE ALSO
+>
 >
 >-- 
 >2.45.0
