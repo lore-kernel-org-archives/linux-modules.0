@@ -1,403 +1,255 @@
-Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from relay1-q.mailbaby.net (relay1-q.mailbaby.net [67.217.63.251])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10036145B09
-	for <linux-modules@vger.kernel.org>; Mon,  1 Jul 2024 12:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=173.37.86.78
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719838386; cv=fail; b=PCulxMsnmMyOqVS4pdQh3PCV8pkJiq5ix1v7NRAc8L3fBXasL7dQFGpScwehM8UF4bFM+Zm1GB87aFD7HVjcQMYwQ3qG7dXpE+BfNM/MaeyI4kSzdVFuNiO1R9kFG2ZreUEuUrGNQvaMlJMpkbQR7IDe1FHDBkVyjsOAdMa0uG0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719838386; c=relaxed/simple;
-	bh=VPbBg07ecQaYAztQOYd/kldyr1w7hq1eOzVPN6SXwZk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XV20VUZ9t29kCezVVcZbCXWDTvQ11X7qnBXi5LRRckmieDHoIP/urZc7nOaSgRcDTGd5sRAjiKaLJaXE1WxKFWEhnNlhW7hQwrThvqvJ8EzZux+2j1tsdn8c1V5HSsV4+QtrGPp950J95azd0o0XSSS7hvBeGhRuZa24PLMOD08=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com; spf=pass smtp.mailfrom=cisco.com; dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b=HesAJGEf; arc=fail smtp.client-ip=173.37.86.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cisco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cisco.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63891C3D
+	for <linux-modules@vger.kernel.org>; Tue,  2 Jul 2024 05:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.217.63.251
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1719899396; cv=none; b=d4vyAZc4raHDg2sKC3XnuFVjFjSl0Lo6rdzy31cwaKj5dJixawGUHgG/pWL42kOSAgvI5jQC8ilYDL3T6HkccFW5fVU/dLKRFkGbfEJI7IfBa1iIb57601H4ns9GiOuH66Q1qjtmN9Wcpbi72Sb1xmo8oJD4nb2ixRUPOm+0k8I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1719899396; c=relaxed/simple;
+	bh=jZFHz7qk29RqwEyiJGu1UAgq5doWP0aOqvcNZeq1qyE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=e9+dZfed79y9VcelLsVvLenqtSneLG9rtZu8zoMBsh66eq9XSdQhdP3uJCbYpd32R9nnLUNJn5WX6EArHZUXTHm6yKoZCZQe0jvkYiv3ONB+DMWoXLaBrbdor9Tl/xk/jUhCLkB15N2J8TitDzq2OCZa9n2+QkwTWQT6AV9HqFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=agatha.dev; spf=fail smtp.mailfrom=agatha.dev; dkim=pass (1024-bit key) header.d=mailbaby.net header.i=@mailbaby.net header.b=cEppydcu; dkim=pass (2048-bit key) header.d=agatha.dev header.i=@agatha.dev header.b=SSgQ+pJT; arc=none smtp.client-ip=67.217.63.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=agatha.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=agatha.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cisco.com header.i=@cisco.com header.b="HesAJGEf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=cisco.com; i=@cisco.com; l=7419; q=dns/txt; s=iport;
-  t=1719838384; x=1721047984;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=EmHcBNoHAJ1cmn1POTwhYKEmvh03fxWBiIoY79agFbw=;
-  b=HesAJGEfcv0NEHuaPv3RgvXKO+6OkrvEC4O/B1Z1Tk7zV4efVgW76T3O
-   MbJIJ6ryV48lZa5s9t0PUGHPSQH0ZK5PfefR+rgBNG0QUCTtvJfk8XXeM
-   th4apdeOacraZC3mrWCk4Rjty1vzataIOrItTIt5j+OnELK5wb/CufK2f
-   A=;
-X-CSE-ConnectionGUID: xEMUwHTYSC2J+ejTsnCcBQ==
-X-CSE-MsgGUID: UfZ/g2QaSw2VBMm+BeNk8Q==
-X-IPAS-Result: =?us-ascii?q?A0ABAACbpYJmmJxdJa1aGgEBAQEBAQEBAQEDAQEBARIBA?=
- =?us-ascii?q?QEBAgIBAQEBQCWBFgUBAQEBCwGBcVJ6gR5IiCEDhE5fiG4DkUSMSYElA1YPA?=
- =?us-ascii?q?QEBDQEBRAQBAYISgnQCiQ0CJjQJDgECBAEBAQEDAgMBAQEBAQEBAQEFAQEFA?=
- =?us-ascii?q?QEBAgEHBRQBAQEBAQEBAR4ZBQ4QJ4YBhl0BAQEBAgESKD8FCwIBCA4DBAEBA?=
- =?us-ascii?q?R4QMR0IAgQOBQgagl6CQiMDAaA8AYFAAoooeIE0gQGCGAXeABiBMAGIMAGKP?=
- =?us-ascii?q?Ccbgg2BV3mBNzg+hEMChBOCLwSBEYlCg2iEXoFEEoEKLxeDBA4rgWoFC4NLg?=
- =?us-ascii?q?hmBSII9Jgs9hC8wh35UexwDWSECEQFVExcLPh0CFgMbFAQwDwkLJikGOQISD?=
- =?us-ascii?q?AYGBlk0CQQjAwgEA0IDIHERAwQaBAsHd4FxgTQEE0eBN4lsDIMtKYFJJ4EMg?=
- =?us-ascii?q?w1LbIQDgWsMYYhngQ+BPoFiAYNKS4R4HUADC209NRQbBQSBNQWtBQc9GzYBG?=
- =?us-ascii?q?xUqKyFSDSoEBQEFDA0RDZJfOIMPrg+BPQoog2uUZ40AF6o5mGejPA8NhQkCB?=
- =?us-ascii?q?AIEBQIPAQEGgWc6SIETcBU7gmdSGQ+OOs17eDsCBwsBAQMJhkiEIgEB?=
-IronPort-PHdr: A9a23:uMuPRBUbNNFNlIdzi+Mr1hBxgLzV8K02AWYlg6HPw5pUeailupP6M
- 1OavrNmjUTCWsPQ7PcXw+bVsqW1QWUb+t7Bq3ENdpVQSgUIwdsbhQ0uAcOJSAX7IffmYjZ8H
- ZFqX15+9Hb9Ok9QS47lf1OHmnSp9nYJHwnncw98J+D7AInX2tq81+2o/ZrOSw5JnzG6J7h1K
- Ub+oQDYrMJDmYJ5Me5x0k7Tr3lFcPgeyWJzcFSUmRu9rsvl9594+CMWsPUkn/M=
-IronPort-Data: A9a23:kIXPRK8COguBQQpFrVIZDrUDnn6TJUtcMsCJ2f8bNWPcYEJGY0x3n
- GdOCjuGa/nZYzejf4ojOd6+oUoB75PRz9NlSwQ/pC5EQiMRo6IpJzg2wmQcns+2BpeeJK6yx
- 5xGMrEsFOhtEzmB4E7rauW8xZVF/fngbqLmD+LZMTxGSwZhSSMw4TpugOdRbrRA2bBVOCvT/
- 4ujyyHjEAX9gWIsbTpNs/vrRC5H5ZwehhtJ5jTSWtgT1LPuvyF9JI4SI6i3M0z5TuF8dsamR
- /zOxa2O5WjQ+REgELuNyt4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5nXBYoUnq7vh3S9zxHJ
- HqhgrTrIeshFvWkdO3wyHC0GQkmVUFN0OevzXRSLaV/wmWeG0YAzcmCA2kmEKgl5cZLMFplr
- 95bJTIxdRaojMiPlefTpulE3qzPLeHxN48Z/3pn1zycULAtQIvIROPB4towMDUY358VW62BI
- ZtCL2MyMnwsYDUXUrsTIIw1nOqygH7iWzZZs1mS46Ew5gA/ySQriuW9bIOEIofiqcN9o0iq4
- W2cxm3CHUskHvmaihCI1HH8v7qa9c/8cNlPTOLjrKECbEeo7mgSDgAGEF68reS9h1WWRd1SM
- QoX9zAooKx081akJuQRRDWiq3KC+xUbQdcVTqsx6RqGzezf5APx6nU4oiBpePEDidAWeQ0R/
- QWr3N7rOSdpm7a/cCfInluLlg+aNS8QJG4EQCYLSwoZ/tXuyL3faDqRFL6P94br17XI9SHM/
- tyckMQpa1wuYSMjza63+xXMhCih48WPRQ8u7QKRVWWghu+YWGJHT9L1gbQ4xa8cRGp8crVnl
- CNe8yR5xLtSZaxhbATXHI0w8EiBvp5pygH0j191BIUG/D+w4XOldo04yGghfRY3apxYKGS5P
- BW7VeZtCHl7YSXCgUhfPt3ZNijW5fmI+SnND6qNN4EfOPCdiifZrHo1DaJv44wduBNxyf5kY
- 8jznTeEBncBAqMv1yutW+oYyvcqwCt4rV4/trilpylLJYG2PSbPIZ9caQPmRrlgsMus/l6Pm
- /4BbJTi9vmqeLCkCsUh2dRNfQliwLlSLc2elvG7gcbefFE/QzF5UaS5LHFIU9UNopm5X9zgp
- xmVckRZ01H4w3bALG23hrpLMdsDgb4XQaoHABER
-IronPort-HdrOrdr: A9a23:2w8rMaskKVQLbWWmgfWo72FQ7skCCoAji2hC6mlwRA09TyXGrb
- HMoB1L73/JYWgqOU3IwerwRpVoIUmxyXZ0ibNhW4tKLzOWyVdAS7sSrLcKogeQVREWmdQtr5
- uIH5IObOEYSGIK8voSgzPIU+rIouP3jZxA7N22pxwCPGMaDp2IrT0JdjpzeXcGPTWucKBJb6
- Z0kfA33wZIF05nCfhTL0N1LNTrlpngrr6jSxgAABIs9QmJih2VyJOSKXKl9yZbeQlihZM5/0
- b4syGR3MieWveApSP05iv21dB7idHhwtxMCIinkc4OMAjhjQ6uecBIR6CClCpdmpDs1H8a1P
- 335zswNcV67H3cOkuvpwH25gXm2DEyr1f/1F6jh2f5q8CRfkN+NyMBv/McTvLq0TtngDhO6t
- MT44tfjesOMfr0plW72zEPbWAwqqP7mwt5rQdZtQ0ubWJXUs4ikWVYxjIXLH/FdxiKtLzO14
- JVfZzhDPo6SyLuU1nJ+mZo29CiRXI1A1OPRVUDoNWc13xMkGl+1FZw/r1Top4szuN3d3B/3Z
- WPDo140LVVCsMGZ6N0A+kMBcOxF2zWWBrJdGafO07uGq0LM2/E78ef2sR72Mi6PJgTiJcikp
- XIV11V8WY0ZkL1EMWLmJlG6ArETmmxVSnkjste+596sLvhQ6eDC1zOdHk+18+75/kPCMzSXP
- i+fJpQHv/4NGPrXZ1E2gXvMqMiYUX2kPdl8+rTd2j+1P4jcLeawtAzWMyjU4bQLQ==
-X-Talos-CUID: 9a23:5KLF0G4NDXzBRlFmvdss5GMxJ98FTkzm5y3yYEK6NX1vY7a/cArF
-X-Talos-MUID: 9a23:0S02WghHXpwiQDNfy5C4R8MpCclapKv0MUk2js84keyBdgZ9HTTNtWHi
-X-IronPort-Anti-Spam-Filtered: true
-Received: from rcdn-core-5.cisco.com ([173.37.93.156])
-  by rcdn-iport-7.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2024 12:51:55 +0000
-Received: from rcdn-opgw-3.cisco.com (rcdn-opgw-3.cisco.com [72.163.7.164])
-	by rcdn-core-5.cisco.com (8.15.2/8.15.2) with ESMTPS id 461CpsUC007143
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
-	for <linux-modules@vger.kernel.org>; Mon, 1 Jul 2024 12:51:55 GMT
-X-CSE-ConnectionGUID: LJO9cCmhR56FPTXpErkhHA==
-X-CSE-MsgGUID: Dh8t9opMQPe6fkKm2u4GNw==
-Authentication-Results: rcdn-opgw-3.cisco.com; dkim=pass (signature verified) header.i=@cisco.com; spf=Pass smtp.mailfrom=vchernou@cisco.com; dmarc=pass (p=reject dis=none) d=cisco.com
-X-IronPort-AV: E=Sophos;i="6.09,176,1716249600"; 
-   d="scan'208";a="21884993"
-Received: from mail-mw2nam04lp2170.outbound.protection.outlook.com (HELO NAM04-MW2-obe.outbound.protection.outlook.com) ([104.47.73.170])
-  by rcdn-opgw-3.cisco.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2024 12:51:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AWhnCDlfNx+ATc7+h/6MmdDRz+aC+ND/UUB5NFMiy0nyesqawseUE1qGZyh35MmGupi/P+rvMf8Hb0xJlG/Iuiqw9Wos5hFzQrumwWYAIamg5DBETmCqlWDZ1CTvYGbe+abP0VsOB1ysAkcaiLqOqCdhsafzIg4/dq5h7eGYOMGaV/Og1GS4JCUSRljJirl9dynmbV1hVOdNkndkG5pPRu9F2EWvhHcezm77PieOycKXd43oODxcNeByv3hKXKmpd+M8EyRDO/15eeZq6my/B3k/aTr5rwAX+8oG23Pe7y3yoNWZ+ERgPiI0aEk/FFE2M6Udd++L/ZAvtVpfsjGJ+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EmHcBNoHAJ1cmn1POTwhYKEmvh03fxWBiIoY79agFbw=;
- b=S1TWLc+Tp6/n23lgUczyI5nbpYPvihUCyzvskr0AGpQZfWm+r7GHDoHcQIHkpKpsQoNEw7NdQiP40tDUIJaTMmrXhO+RhuDRGaoiaIS2aU5Bq8+hhe3MebMSlq4DLbVwlcxeyOSTsTZPZ29/oXXi6n/zi4H6DU53z+JGkYuZquM0/LdKeV3ZjHvvhrRvV8n7lNG/58QOzZxOGjJHldYGwJnrWFA6AjKeIb9PZR5KfmvrL0MLJslJIM50SP6b5kYPMTZ6QO5PLmY5HO/LLUkSf7xdtYZ99JxtOacS8PANNm5uPz+A0XyDjdzFseSuc7rbYCCFcWWCOtk8L3zyCqNjmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cisco.com; dmarc=pass action=none header.from=cisco.com;
- dkim=pass header.d=cisco.com; arc=none
-Received: from DS0PR11MB7765.namprd11.prod.outlook.com (2603:10b6:8:130::8) by
- SA1PR11MB8475.namprd11.prod.outlook.com (2603:10b6:806:3a3::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.29; Mon, 1 Jul
- 2024 12:51:50 +0000
-Received: from DS0PR11MB7765.namprd11.prod.outlook.com
- ([fe80::9840:ad29:c571:9c68]) by DS0PR11MB7765.namprd11.prod.outlook.com
- ([fe80::9840:ad29:c571:9c68%4]) with mapi id 15.20.7719.029; Mon, 1 Jul 2024
- 12:51:50 +0000
-From: "Valerii Chernous -X (vchernou - GLOBALLOGIC INC at Cisco)"
-	<vchernou@cisco.com>
-To: Nicolas Schier <n.schier@avm.de>
-CC: Lucas De Marchi <lucas.demarchi@intel.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
-        Lucas De
- Marchi <lucas.de.marchi@gmail.com>
-Subject: Re: [MODALTS v0.1 4/4] add modules deps alternatives description
-Thread-Topic: [MODALTS v0.1 4/4] add modules deps alternatives description
-Thread-Index: AQHaosw6qlfEDe8qx06xqsYjBzFaELHeBg2AgAPSJB+AADdQgIAADm5I
-Date: Mon, 1 Jul 2024 12:51:50 +0000
-Message-ID:
- <DS0PR11MB77651EE7F968FA7D2E0FAB0EDED32@DS0PR11MB7765.namprd11.prod.outlook.com>
-References: <20240510112128.2417494-4-vchernou@cisco.com>
- <z6dffospgjlmczpc3ydj34t7rf37dq7f5vjjd4e6txpw2hmoex@6s26au6y4puj>
- <DS0PR11MB7765763AE24FC792CB3F72BFDED32@DS0PR11MB7765.namprd11.prod.outlook.com>
- <20240701-grinning-sapphire-labrador-eaa91e@buildd>
-In-Reply-To: <20240701-grinning-sapphire-labrador-eaa91e@buildd>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7765:EE_|SA1PR11MB8475:EE_
-x-ms-office365-filtering-correlation-id: ce2a00a6-e98a-4229-d5c9-08dc99cc9364
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?n+hPyYUxV3gh8Otp172BsIXx6n1BbRiA8neq0/Ia+BHxlmy3umuaqljgja3Y?=
- =?us-ascii?Q?aVX1iQwTy2QIzXXMFGowI5K1yxVZn/SYEvcVY4tgr2ba/n/I6go2ddo1AMkt?=
- =?us-ascii?Q?SrBaHWD5L1wYupqzAMA3fvhM9DWA2KRhjXSMWI/Sv71kQ2Oq+rOwowIP3whi?=
- =?us-ascii?Q?k13j0QxkMeHmPE/YU3tBrfP+gAygj1Wy9Vx8uozqyrsjsheZqNPuz5fJyAKy?=
- =?us-ascii?Q?HxgPh91IsyOoZnL+QQb0sqZYYZYFzWqfW+cJkMfEW0J0G3x3wB72O6rg8aDZ?=
- =?us-ascii?Q?W6kzId6mag8iUkgFshzHPv/YfOxrNwTkp93uUlqlJjDuj6WPa5XYWGAf25nc?=
- =?us-ascii?Q?/wXJmjHnpCSk3tCAQk3qq+LDs0s/h/wGHlRgfMx3sMNji07I23erhLoYdEGb?=
- =?us-ascii?Q?hsGrk5h62PJRmaUKtBUmHdVRQO2wkPtYn6EzCOw/hie11tFcnTur3aFOj8k+?=
- =?us-ascii?Q?ek81voMVcVrpRq2vZJvqRaWuFYv/AwPvjEcPsRgRdGErAvIp2tWTJgwjqxpq?=
- =?us-ascii?Q?lfHkE8OFhe1L5AMh7uW1Y89NTAqOMLZivOcMd6J0P3Kfu3VONrVKuQyPWM0v?=
- =?us-ascii?Q?fBvmAQIIv9i4aAsG6COo8pXbQE8LnSmWgrgMKVit0+rjGrs/kmxFkgItzprR?=
- =?us-ascii?Q?DXnq/zAuJo/DDRC+Zjl3brTzvX7DF4DTTPOVzZUAdluuZkxpl4ULRQgw5OtV?=
- =?us-ascii?Q?V3fUtEgybp5ADffFpFFg7dlyRJxOhEO/InGj5+BtaHjyLZvbeOYImFOR9/rQ?=
- =?us-ascii?Q?6SWDBjwUMC+ffKcbwbqNl0HeXmP8k+PiyarsGB/CvO6HchoLfzzOuo2LZFRQ?=
- =?us-ascii?Q?O8wXeByiEH4Xaofk/QIHpIq+i3RolrnUNEpBOTbxhwzPACA9mSIzACIg4c3r?=
- =?us-ascii?Q?CyYm/TmTHFx5ScSJXjhMWg8KG49TtZXrzHkb7mk1WHCp7juJdaz/cMuG4vWW?=
- =?us-ascii?Q?4c19NCABFmfTLKASEBkZ7VJCnQuxdQZofLk40haobdZdrcTaPtkxPIvqirOb?=
- =?us-ascii?Q?3HZ0Q+VY4852SuQfCyoHzb0zJ+/UqZecbKDviCwfVNlUDYBNKCV9XssT/gDL?=
- =?us-ascii?Q?Rr63/k+2Ki8G6Ge9ywrcDUNS11NtQeAy2vEs6WWR0m9xJ7ale6WTQV9xl8Dk?=
- =?us-ascii?Q?WVptR31UKXPEblXFQ6mfXJGn15EwF6THkGRGNJOaMqaDO6m4LflpsqN2M/vO?=
- =?us-ascii?Q?/mpywYbmes7LN6EBepv0f/+nniwS+S7d8X6bOc09RdZOj+KTnCnScMM6jTAq?=
- =?us-ascii?Q?xka8hw6Vff23bN1+uvguzgGjwzbeX9bfWthSLA0Juta+rwrc+Of4rNM8T7C4?=
- =?us-ascii?Q?VjR5UI1sR9ooNwW/Ct8XAVi7gZ5PW7N/Je81MrnNjuABeCKwIHeMfzzX2Y53?=
- =?us-ascii?Q?yK465FiAiFEDfyeL/SUDegce6ceEvARAU3YpUj2dwof3v86vWQ=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7765.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?gbqHJ3GWOg7iI8sWVh2mxNSe12VLmwIx3iFjMumFF//8c31XVgep0YWxg+KY?=
- =?us-ascii?Q?mrF5NFU3bQCgTGbnnfbSLpTmp2n6N42IvmBiOz5CW0MNY1eUAbwYYXnZcE3K?=
- =?us-ascii?Q?Y1WVV+Qe1XpBAltI8gLu3oYq1krhKiRlqyyPnsG9HAGq/9G6XTcpzO7FSE+v?=
- =?us-ascii?Q?OeDSgYnMtddhAFalPJMo3NwV3DYuNO+IAsvM+m2wDkkHXpyR8O6PTjurSn2f?=
- =?us-ascii?Q?iVjpW24gbp4soiBaivakxcN9OYs3r04A63Ab9sZIJEwG5fK9Aoo+qpGRgTre?=
- =?us-ascii?Q?VRn5RNwQdy3f03XRxBjG4WwCrbnp2uSwne280QgSXihoYshjk3pEof0Dy+DD?=
- =?us-ascii?Q?1UGv+Bb7H8oqX26r9jGyhSdn1y+6z7K5RUTLJGZ5WPwVGCbaSNZJBs57F/jF?=
- =?us-ascii?Q?CWLBMu+iFiV0K8vsb5gqMsJosEdcJbeCaH+knm7tDHH9rRZd6ZJUHYtLI+kX?=
- =?us-ascii?Q?w6R0z7lrp2D0W/qBwTv3SXvGbuZ4iHOxBlageM35vW0mjWJZRTNozs+uiEB9?=
- =?us-ascii?Q?Q58ipvKbf7/GctvuDsYWdvgTrO84ZW9P9ONHjuObZmsLh72Z82BGoprAkVZm?=
- =?us-ascii?Q?L1sLF1HWPX+s02XJp8muHz3iz5xKRdI4pJM88KeQsxLEHajDzC71yCGe6aWg?=
- =?us-ascii?Q?HXcErZEKVNvtjYkiSAp2BAv35PVw2Ph5EO9Bxs9Vsu2lC92aoUmIo69PUHZd?=
- =?us-ascii?Q?6VgXU8BhS1oYyvNqD7DMqQtRkzxglBpJlG550ihZZWPSEHLxxqYuuiBplcFS?=
- =?us-ascii?Q?oUqukyvByX13vO7hPTYTEaWtr8mZJXy2AjE0mOZDGj+wpTctueCtxPmyS6xe?=
- =?us-ascii?Q?W/ENaDHJ7KPGlKjMOt2y9ZJJgQSdVQ8DmDo7ZPIZS5ljMTyYYLOUBr+lm635?=
- =?us-ascii?Q?xvuo1RhweUXpq2KWFYDcMQ0Hi1+nFenQkrlWTaGWXv+zNyt9t2R1uo2VQU3G?=
- =?us-ascii?Q?eTcoRNnzeEoTpxgYdOREblx0cBB364Ayul0LFmUA4P+POX+i06gX8kCIjAey?=
- =?us-ascii?Q?u/tVYcLoo9Tm1zjvGm7RWKFU5a8Uuc+8LBJfqhAiA4tHwabapTBaxzd39Yf3?=
- =?us-ascii?Q?QZq7ioiA+vwLAK14ZHQCyQhZimaN8uqbpzCIq61+eQC7oVOmtGoXi2qXW0Fx?=
- =?us-ascii?Q?3BS4yRznn7YuwaeRZzq71DSxDw3Ye3qXm/uiumMuSMD3ApiS4LCN6Fcw/aq7?=
- =?us-ascii?Q?UaX9t4TkuTPMzVmv/N3lqz6mo4QhMXKhBzX2HL0CaZsI7W4N+HFu2o7fx+Sv?=
- =?us-ascii?Q?8f2xN/hzxfKTE17BQcq58ZKa42MSKJNN3H4Ha9wc1jwcjOrW8seKaldBwcp5?=
- =?us-ascii?Q?+LSxEPHP/JPF+TvzKiWwRCnVFK2YxK4ddQ9HPLVCo9rp35llLHU1mMlAkuUU?=
- =?us-ascii?Q?ohXu6tpqa75e93pu9s7tPFAcC0wBsPjceXwN/kpRd1YqRxOEFqitlWKjGuVE?=
- =?us-ascii?Q?nh2aegNEaMRo6q5aaRGewnpCRbGrcMBpJNsJ9mklthocP3QrHK1GMZiRkbLr?=
- =?us-ascii?Q?sK/bB7b/+wKTM54YMjSL2knL5P7wIsDVWvBWpf8k6D/N3/bfr0yT/eTXtbRY?=
- =?us-ascii?Q?sy14hmlKeKOfxDXnyMqNq918KS065D5+SQElqNO+0smOwtu3vDJ31AIjPQXq?=
- =?us-ascii?Q?qw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (1024-bit key) header.d=mailbaby.net header.i=@mailbaby.net header.b="cEppydcu";
+	dkim=pass (2048-bit key) header.d=agatha.dev header.i=@agatha.dev header.b="SSgQ+pJT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbaby.net;
+ q=dns/txt; s=bambino; bh=kLRQSdBWD5O01x5quSpu5x32+TFH2X1iwkgzQjlFJjA=;
+ h=from:subject:date:message-id:to:cc:mime-version:content-type;
+ b=cEppydcumRHOK6OYUsUc6CgWJ/jZqaWpY6ikj6FFyaRX8jcJWgVN6iMG707phaTdN1+Q38HLq
+ vsGw5pdbjcXT4rF6Cf5WMOVfdgcrwi/Z+/ou1WGSznzh3JEisVIFFCjbEpb6GY+Y4Ps6ckF7HNc
+ fd7pvRvlnvATGNGMP960Mlg=
+Received: from mia3000.dnsiaas.com ([192.155.110.18] mia3000.dnsiaas.com)
+ (Authenticated sender: mb6724)
+ by relay1-q.mailbaby.net (MailBabyMTA) with ESMTPSA id 19071f93f2f0009a32.003
+ for <linux-modules@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 02 Jul 2024 05:44:38 +0000
+X-Zone-Loop: 5b901c33db9a0388cc15ed1dd3ac9f96f2b9c2eea9e8
+X-Get-Message-Sender-Via: mb6724: authenticated_id: code@agatha.dev
+X-NS-SCAN: PASS
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=agatha.dev;
+	s=default; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=kLRQSdBWD5O01x5quSpu5x32+TFH2X1iwkgzQjlFJjA=; b=SSgQ+pJT2Yl7bYtV2EO+AWkUR2
+	FSUJgsvxdh2Tyb+URU8u5J32pWw1wBQf0bTZYzlHdr7qcLSWVM/61IiMuNkZhJ1AEM2w+qTnrX/+S
+	fYOcPdLrFtSquHIZmqwN6v8SrRZuA4FnY5uConT45d22leIVQgz5sx3xjdVRwxO4MAQJysGF3aLGW
+	p4RGDuZjGcUmn1IDSwvUotHfBHdExtcaJ3UVK5dYW5IRxE28EUmoK1ZUEvWS+1BZYyI2TnioevqDc
+	A3TUO4530o/UqOqA/JR1NXTndChf1LjluWL+qUq0BV5QHB/CDFJsKwqnXK9lxItsR9irWRlVuxY/z
+	Ox7pNlkQ==;
+Received: from [186.250.91.79] (port=19818 helo=kurupi-arch.blackcat)
+	by mia3000.dnsiaas.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <code@agatha.dev>)
+	id 1sOWJe-00000001HnP-3X5k;
+	Tue, 02 Jul 2024 01:44:35 -0400
+Date: Tue, 2 Jul 2024 02:44:31 -0300
+From: =?utf-8?Q?=C3=81gatha?= Isabelle Chris Moreira Guedes <code@agatha.dev>
+To: linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>
+Cc: =?utf-8?Q?=C3=81gatha?= Isabelle Chris Moreira Guedes <patch-reply@agatha.dev>, 
+	Jookia <contact@jookia.org>
+Subject: [PATCH] staging: Fix missing warning/taint on builtin code
+Message-ID: <yf3ewok3u7fu7f4yqlcovcvedkhyjtibvwzlgbcjwf7ijcsktt@vrk54srlnk2n>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4942; i=code@agatha.dev;
+ h=from:subject; bh=M0JBCO3WgTHKX1tSFWBSzLK4B1xEvuxIrpd2ceDc2cc=;
+ b=owGbwMvMwCX2vcdPlI2bz4fxtFoSQ1pz70ebCxU2Be1Cu9PScgqb/szZ482lx3KG47noiWOBG
+ ZUVL1o6SlkYxLgYZMUUWXjKhRO04v+kvyvaGQIzh5UJZAgDF6cATKSOmeE3u+Kjl738rt4mxs88
+ c8w3XlZg5eN4cHDvscq3tw0LdzYtYWTY3j7hpX+XtIP85q8P5V9y1v//db1xpuOaZ8wfTqzXdn/
+ BAgA=
+X-Developer-Key: i=code@agatha.dev; a=openpgp;
+ fpr=0C7713602A5FFC67EE72B954F78C4E15060B0E4C
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: cisco.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7765.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce2a00a6-e98a-4229-d5c9-08dc99cc9364
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2024 12:51:50.4725
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5ae1af62-9505-4097-a69a-c1553ef7840e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ph3XJVIXxX2zqUdDQNUFHgGUkMg4RK4vopYT+c0eVkdSADEbJtuPjIjteC4TKOZE5h7xRP3+TfVK/+i+exYNhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8475
-X-Outbound-SMTP-Client: 72.163.7.164, rcdn-opgw-3.cisco.com
-X-Outbound-Node: rcdn-core-5.cisco.com
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="g43t564sfxvjtdzc"
+Content-Disposition: inline
+X-AuthUser: me@agatha.dev
 
-Hi Nicolas,
 
-> It sounds to me, as if you would like to auto-generate modprobe.d/ files
-> for your platforms at boot time and implement the pre-loading of some
-> modules before some others with common modprobe.d syntax (e.g.
-> 'install', cp. modprobe.d(5)).  But you probably evaluated that before
-> implementing your patches?
+--g43t564sfxvjtdzc
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Some kind but not exactly. I try to provide method to avoid regenerating
-modules deps db during runtime
+Fix the absence of warning message and kernel tainting when initializing
+drivers from the `drivers/staging` subtree from initcalls (when
+configured as built-in).
 
-> If your module load order is just platform dependent, I do not yet
-> understand, why (possibly boot-time dynamic) depmod.d configuration is
-> not sufficiently flexible enough.  I probably have missing some
-> important point.
+When such a driver is built as module and the module is loaded, the
+`load_module()` function taints the kernel to signal code of unknown
+quality is loaded, and produces a warning like this:
 
-Device filesystem mounted as readonly to reduce security riscs so using
-depmod during boot time is restricted
+[    8.076352] rts5208: module is from the staging directory, the
+quality is unknown, you have been warned.
 
-> I strongly support Lucas' request for a cover-letter.
-Probably, it will be a good idea to prepare test repo with couple of simple
-modules to demonstrate what patchset do
+The same behaviour is absent, however, when a staging driver is compiled
+as built-in on the kernel image, since loading it happens through
+initcalls and not through load_module().
 
-> Kind regards,
-> Nicolas
+This might prevent relevant information of being available on a bug
+report (i.e. on a panic log) among other possible problems.
 
-Thank you Nicolas for review :)
-Best regards,
-Valerii
+Signed-off-by: =C1gatha Isabelle Chris Moreira Guedes <code@agatha.dev>
+---
+ACKNOWLEDGEMENTS
+Thanks for Jookia, heat and ukleinek for the important comments &
+suggestions on this patch prior to submission.
 
-________________________________________
-From: Nicolas Schier <n.schier@avm.de>
-Sent: Monday, July 1, 2024 1:33 PM
-To: Valerii Chernous -X (vchernou - GLOBALLOGIC INC at Cisco)
-Cc: Lucas De Marchi; linux-modules@vger.kernel.org; xe-linux-external(maile=
-r list); Lucas De Marchi
-Subject: Re: [MODALTS v0.1 4/4] add modules deps alternatives description
+ drivers/staging/Makefile |  2 ++
+ include/linux/init.h     |  6 ++++++
+ include/linux/module.h   | 33 +++++++++++++++++++++++++++++++++
+ init/main.c              | 20 ++++++++++++++++++++
+ kernel/module/main.c     |  4 +---
+ 5 files changed, 62 insertions(+), 3 deletions(-)
 
-On Mon, Jul 01, 2024 at 09:23:03AM +0000, Valerii Chernous wrote:
-> >On Fri, May 10, 2024 at 04:21:28AM GMT, Valerii Chernous wrote:
-> >>Cc: xe-linux-external@cisco.com
-> >>Cc: Valerii Chernous <vchernou@cisco.com>
-> >>Signed-off-by: Valerii Chernous <vchernou@cisco.com>
-> >>---
-> >> README.deps.alternatives.txt | 40 ++++++++++++++++++++++++++++++++++++
-> >> 1 file changed, 40 insertions(+)
-> >> create mode 100644 README.deps.alternatives.txt
-> >>
-> >>diff --git a/README.deps.alternatives.txt b/README.deps.alternatives.tx=
-t
-> >>new file mode 100644
-> >>index 0000000..9ad3ce5
-> >>--- /dev/null
-> >>+++ b/README.deps.alternatives.txt
-> >>@@ -0,0 +1,40 @@
-> >>+Modules alternatives feature allow to calculate dependency alternative=
-s
-> >>+during build time and aviod to regenerate modules db into runtime
-> >>+
-> >>+To enable deps alternatives calculation use "-D" flag with depmod,
-> >>+it will create indexes modules.alternatives and modules.alternatives.b=
-in
-> >>+This indexes will be used by modprobe in runtime
-> >>+By default modprobe will load first(primary/major) dependency from lis=
-t
-> >>+If it required to load alternative module, it should be done manually =
-before
-> >>+loading main modules set.
-> >>+For example systemd service that detect platform type can load require=
-d platform
-> >>+modules and after it run main device initialization
-> >>+In case when alternative module loaded, modprobe detect this and skip =
-to load primary
-> >>+dependency
-> >>+
-> >>+modules deps alternatives generation basic algorithm description
-> >>+1. Load modules information(imported/exported symbols)
-> >>+2. Find depended symbol alternatives(create list available symbols
-> >>+   alternatives instead of storing last one)
-> >>+3. Choise primary/major alternative per depended symbol correspond to
-> >>+   build time dependency(build time deps getting from module info sect=
-ion)
-> >>+4. Create a list of dependency modules alternatives correspond to next=
- rule:
-> >>+4.1 All modules alternatives for module dependency should provide all =
-symbols
-> >>+5 Store modules alternatives index(modules.alternatives) as key:value =
-where
-> >>+key is a pair depended#_#primary_depency,
-> >>+value is list of all modules that provide all symbols from primary_dep=
-ency
-> >>+for depended module
-> >>+
-> >>+Note:
-> >>+Current implementation/algorithm doesn't cover variant where requred s=
-ymbols
-> >>+from primary deps provided by more that one modules. Exporting all sym=
-bols in
-> >>+alternative depency that used by depended module from primary_depency =
-is
-> >>+mandatory!
-> >>+
-> >>+Note:
-> >>+modules.dep index different for standard/basic and modules alternative=
-s algorithms
-> >>+modules.dep for modules alternatives algorithm contain only direct dep=
-endencies and
-> >>+full dependency list will be calculated into runtime correspond to pre=
-ferred alternative.
-> >>+modules.dep for standard/basic algorithm contain full dependency list =
-for module and
-> >>+can't be changed during runtime without rebuild database via depmod
->
->
-> >well... this kind of explains the what, but still no clue on why.
-> >If multiple different modules are providing the same symbol, then they
-> >are doing things wrong.
->
-> >If there are multiple variants of the same module (again, is this about
-> >external modules?), then I see no advantage to delay the decisions from
-> >depmod-time to modprobe-time. Just setup your depmod.d configuration.
->
-> >Also end users have not visibility on a README.deps.alternatives.txt
-> >file. Documentation in kmod is kept on man pages.
->
->
-> >Lucas De Marchi
->
-> First at all, thank you for review, Lucas.
-> Let me try to explain feature more:
-> 1. You are correct, feature tested on external modules
->
-> 2.
-> >If multiple different modules are providing the same symbol, then they
-> >are doing things wrong.
->
-> Modules exported the same api(the same functions) and on my opinion it's =
-ok
-> and kernel process normally different modules with the same exports. One =
-major
-> restriction is only one module with the same symbols can be loaded on the=
- same
-> time but it's ok in my case(as I described, in my case, it's per platform
-> modules and devices with different hardware using the same software image=
-).
->
-> 3.
-> >If there are multiple variants of the same module (again, is this about
-> >external modules?), then I see no advantage to delay the decisions from
-> >depmod-time to modprobe-time. Just setup your depmod.d configuration.
->
-> It can be different variant of the same module but maybe not. For example=
- it
-> can be cryptography modules. Modules provide the same api but implementat=
-ion
-> of api is totally different and depend on specific hardware. With modules
-> alternatives feature it's easy to use this kind of modules. You can use
-> required alternative for specific hardware and all depended modules can u=
-se
-> external functions directly without any wrappers or "if" statements to re=
-solve
-> dependencies.
-> With using depmod.d configuration it's possible to choose primary alterna=
-tive
-> into build time but in my case required alternative is unknown during bui=
-ld time,
-> it will be known only into runtime. In this case it required to regenerat=
-e
-> modules db into runtime and I try to avoid this.
+diff --git a/drivers/staging/Makefile b/drivers/staging/Makefile
+index 5390879b5d1b..7cea13436426 100644
+--- a/drivers/staging/Makefile
++++ b/drivers/staging/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for staging directory
+=20
++subdir-ccflags-y +=3D -DSTAGING_CODE
++
+ obj-y				+=3D media/
+ obj-$(CONFIG_FB_OLPC_DCON)	+=3D olpc_dcon/
+ obj-$(CONFIG_RTL8192E)		+=3D rtl8192e/
+diff --git a/include/linux/init.h b/include/linux/init.h
+index 58cef4c2e59a..68c37600958f 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -397,4 +397,10 @@ void __init parse_early_options(char *cmdline);
+ #define __exit_p(x) NULL
+ #endif
+=20
++#ifdef CONFIG_STAGING
++#ifndef __ASSEMBLY__
++extern void staging_taint(const char *code_id, bool module);
++#endif /* __ASSEMBLY__ */
++#endif /* CONFIG_STAGING */
++
+ #endif /* _LINUX_INIT_H */
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 330ffb59efe5..ffe58f5d143b 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -76,6 +76,39 @@ extern struct module_attribute module_uevent;
+ extern int init_module(void);
+ extern void cleanup_module(void);
+=20
++#ifdef CONFIG_STAGING
++
++#define __lower_define_initcall(fn, id) ___define_initcall(fn, id, .initca=
+ll##id)
++
++/**
++ * __staging_define_initcall(fn,id) - staging initialization entry point
++ * @fn: the function to run at kernel boot time
++ * @id: the initcall level
++ *
++ * __staging_define_initcall() will ensure the drive's init function is al=
+ways
++ * called during initcalls for staging code by producing a wrapper functio=
+n.
++ * It applies if a module from the drivers/staging subtree is builtin to t=
+he
++ * kernel. It reproduces the behavior in load_module() by tainting the ker=
+nel
++ * and logging a warning about the code quality.
++ */
++
++#define __staging_define_initcall(fn, id) \
++	static int __init __staging_wrapped_##fn(void) \
++	{ \
++		staging_taint(__FILE__, false); \
++		return fn(); \
++	} \
++__lower_define_initcall(__staging_wrapped_##fn, id)
++
++#ifdef STAGING_CODE
++
++#undef __define_initcall
++#define __define_initcall(fn, id) __staging_define_initcall(fn, id)
++
++#endif /* STAGING_CODE */
++
++#endif /* CONFIG_STAGING */
++
+ #ifndef MODULE
+ /**
+  * module_init() - driver initialization entry point
+diff --git a/init/main.c b/init/main.c
+index 206acdde51f5..fca889f3bcc0 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1602,3 +1602,23 @@ static noinline void __init kernel_init_freeable(voi=
+d)
+=20
+ 	integrity_load_keys();
+ }
++
++#ifdef CONFIG_STAGING
++/**
++ * staging_init_taint() - We need to taint the kernel whenever staging code
++ * is initialized (from built-in drivers) or loaded (as modules) and issue
++ * a warning the first time it happens.
++ */
++void staging_taint(const char *code_id, bool module)
++{
++	char *code_type =3D module ? "module" : "builtin driver at";
++
++	pr_warn("%s %s: The kernel contains code from staging directory"
++		"the quality is unknown, you have been warned.\n",
++		code_type, code_id);
++
++	add_taint(TAINT_CRAP, LOCKDEP_STILL_OK);
++}
++EXPORT_SYMBOL(staging_taint);
++
++#endif /* CONFIG_STAGING */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d18a94b973e1..d7d33336ab43 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2039,9 +2039,7 @@ static void module_augment_kernel_taints(struct modul=
+e *mod, struct load_info *i
+ 	check_modinfo_retpoline(mod, info);
+=20
+ 	if (get_modinfo(info, "staging")) {
+-		add_taint_module(mod, TAINT_CRAP, LOCKDEP_STILL_OK);
+-		pr_warn("%s: module is from the staging directory, the quality "
+-			"is unknown, you have been warned.\n", mod->name);
++		staging_taint(mod->name, true);
+ 	}
+=20
+ 	if (is_livepatch_module(mod)) {
+--=20
+2.45.2
 
-It sounds to me, as if you would like to auto-generate modprobe.d/ files
-for your platforms at boot time and implement the pre-loading of some
-modules before some others with common modprobe.d syntax (e.g.
-'install', cp. modprobe.d(5)).  But you probably evaluated that before
-implementing your patches?
 
-If your module load order is just platform dependent, I do not yet
-understand, why (possibly boot-time dynamic) depmod.d configuration is
-not sufficiently flexible enough.  I probably have missing some
-important point.
+--g43t564sfxvjtdzc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I strongly support Lucas' request for a cover-letter.
+-----BEGIN PGP SIGNATURE-----
 
-Kind regards,
-Nicolas
+iHUEABYKAB0WIQQMdxNgKl/8Z+5yuVT3jE4VBgsOTAUCZoOTugAKCRD3jE4VBgsO
+TPWCAPwOyNBuM1QEcscgmuuJFibaalLbh+ZZc4yb3TVJkqpGNQEAvqpNDfRaKcZJ
++PyayOxrPy9KDV4NYowEE0s3RC/32Ac=
+=ReiF
+-----END PGP SIGNATURE-----
+
+--g43t564sfxvjtdzc--
