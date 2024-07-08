@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2F113A3F6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C35713A3FF
 	for <linux-modules@vger.kernel.org>; Mon,  8 Jul 2024 13:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720446212; cv=none; b=FtlM4q1zgQPth4VCvi3frjewHy7U9KEmhj0K26vNc5TrfRShF0PopGosCjbMJcCydsRiWtYrM7K1qmoTAfAqHvw9fHlI0XKf1UJrYJnn2LKoKBtDRJmeKJ7RNz1PnoD+Qe6gdL3ZpjmJofivahQAb4YWQukKBrO5VbwnjJ0kIAk=
+	t=1720446212; cv=none; b=u03rfALIGEOJQWCCkpSqKO5vs+VBppjYZvI656TcLM1sGexbmbWpRXsagGamOVwh23YTzhyBkdmjyfDU/eXbsJyEE2sR9ucizxJC8tfzshrQEWDpL+YHwL+NB57DOmQDVpuRj+zbntQT+8Ltk68CDXbPHyAx9gkv5lFTYEjDP5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1720446212; c=relaxed/simple;
-	bh=qLVsjUXyswkYxa2heevGHqnUzTjsaOF/+H6aS/6J/jo=;
+	bh=reX775AdHtgwryW4rzmIxVLlWJDaQLw3RSOwGwr/TBk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Oh4gwQqW0nv2hS7KVncAxcXDu4jdURqrav7AK58PG/dtEUHioDgtA+KQf6Qo4RrfqZpgA++wNUER3sYXV9R6IWnJCt5tlSQL4NVPKxgsysDEzSyufAEQX5ZzhOYmUWIvsUBm8stcVZ6wmoD8AVxsFsfog1yIQyBURWhaYCb/sbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BBKtTx8S; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=QZMKV7q9+tHJ5l3LZPgckm2IwjspZZwv3lModYiMCqWYUfySAumJGFsZFm/3vbY8qk5eeXy1Q4Yt3F3KJ2/0vyMDN4+bWGM+/UV594dFLTutILFbRJBYTk91m0e+pqoEORX74mIUUvLKt8LzdXRN30nid5WkWVE7ahBNCHUrLR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCLHi6Lq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BBKtTx8S"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C631C4AF10;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCLHi6Lq"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 261AFC4AF0F;
 	Mon,  8 Jul 2024 13:43:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1720446212;
-	bh=qLVsjUXyswkYxa2heevGHqnUzTjsaOF/+H6aS/6J/jo=;
+	bh=reX775AdHtgwryW4rzmIxVLlWJDaQLw3RSOwGwr/TBk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=BBKtTx8SN/yw6ai2QbLY62udbhDc2CrZprKhMlbn+Yjs2qcFXjBpMrst2WtljnHGm
-	 8pGfpcwXMwVcKcWqYs0JnpwR86IMeNIoi1iQf40V3G0Mfx8S/UbDDbGyIS93qwByXQ
-	 1lwLH9mraD7dN480KPofs69P2pOBF+7HPS/jCTuUzxUmFI6qXeIHI2n9/xQWFCBoXV
-	 E8+BjDjpEJytkZI/bf77Zyj4r1xR96yqCnlXufCNg3kJp6odaFUj9YCgnQVy+5J8GA
-	 ByQFYEeu3MQgqFW3/4hRtCctFPovwtGEzc7wMAVgDQGefEbnoHZmrhYx4ZcKeVfda5
-	 J9iNHekI7vRPg==
+	b=WCLHi6LqHUPlBfxs6wFg54L4bj7imvVu3HMDys/Hh0Twzbp+jC0BC2kgVOkABjLdd
+	 j/HZi/Q7hBC7d2J86sOxNpoCjTm6WnSTFwY3rJHyurl/9tQ/X2SD1k1vMxWbi8oP/e
+	 HL7inwecPIlI9QPNrn4abY4oYW9if3ypbLNbo+hlZjyDUutvP4LevYv7XB5qGS2pkC
+	 8zZQ3aaDeZ9u6+ivECbMPfEFVnYWIsgcAcU+A2MRVh3EuKFjkyArBSbL9hx47bUJdY
+	 wh/rglselhZAhjc4znesFKzJKAo1TMczPPG8v9nwMwlQeiOnLAxkhbEcCsvd9GTGbp
+	 fAO3wXjqB2fDA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32824C3271E;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E24EC3DA44;
 	Mon,  8 Jul 2024 13:43:32 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Mon, 08 Jul 2024 14:43:15 +0100
-Subject: [PATCH kmod v2 07/17] man: depmod.d: document the config file
- order handling
+Date: Mon, 08 Jul 2024 14:43:13 +0100
+Subject: [PATCH kmod v2 05/17] man: couple of grammar/language fixes
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,17 +40,17 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240708-man-v2-7-a23df6ef871e@gmail.com>
+Message-Id: <20240708-man-v2-5-a23df6ef871e@gmail.com>
 References: <20240708-man-v2-0-a23df6ef871e@gmail.com>
 In-Reply-To: <20240708-man-v2-0-a23df6ef871e@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Emil Velikov <emil.l.velikov@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1720446209; l=2297;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1720446209; l=1047;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=PAvjWYoZgIb8yJI4fuG/sOZcmrnJqbKRc4WY3D6CsBc=;
- b=lchggi4LFvuHfqfR6Aj4s+QV7DRKbs1on1OAfBuelfteWZdhTlk0EPEBYO3waO2D/tZHeCgqI
- jiyso6P6YmHDamT8tj7pVnbjz8vO4EfhkwRsSo3odeWqE1WSTk8IU81
+ bh=ghp1yuMPaFDIfrK29UeBaDCxUNFTVzebnE9Fx50cEnI=;
+ b=qlJHCkU+ErMxwUATAGB/1X+4BZ4gPuqH4eNb5lxRFjeJIMRTzfA7gzeywbUJ+W6mjq5iV5zYl
+ 5ReFlqC1vYxDXQ0HElS+bqXkBZ8N4p+KtYG/asIufqq5bwUBXXCzpJe
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
@@ -61,76 +60,33 @@ Reply-To: emil.l.velikov@gmail.com
 
 From: Emil Velikov <emil.l.velikov@gmail.com>
 
-The depmod.d configuration order/handling aligns with existing tools
-such as sysctl.d, even though there is no mention in the manual.
-
-Reorder the list in SYNOPSIS and add a bit of verbiage describing things.
-
-Section is inspired by sysctl.d(5) and sysctl(8).
-
 Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
 ---
-v2: Reword as per Lucas' suggestion.
----
- man/Makefile.am    |  1 +
- man/depmod.d.5.scd | 20 ++++++++++++++++----
- 2 files changed, 17 insertions(+), 4 deletions(-)
+ man/modprobe.8.scd | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/man/Makefile.am b/man/Makefile.am
-index 39a0015..6356d87 100644
---- a/man/Makefile.am
-+++ b/man/Makefile.am
-@@ -15,6 +15,7 @@ CLEANFILES = $(filter-out $(MAN_STUB), $(dist_man_MANS))
+diff --git a/man/modprobe.8.scd b/man/modprobe.8.scd
+index 9594798..b47908b 100644
+--- a/man/modprobe.8.scd
++++ b/man/modprobe.8.scd
+@@ -101,7 +101,7 @@ database.
+ 	Naturally, this check is there for your protection, so using this option
+ 	is dangerous unless you know what you're doing.
  
- define generate_manpage
- 	$(AM_V_SCDOC)cat $< | \
-+	sed -e 's|@SYSCONFDIR@|$(sysconfdir)|g' | \
- 	sed -e 's|@DISTCONFDIR@|$(distconfdir)|g' | \
- 	sed -e 's|@MODULE_DIRECTORY@|$(module_directory)|g' | \
- 	$(SCDOC) > $@
-diff --git a/man/depmod.d.5.scd b/man/depmod.d.5.scd
-index 9cf99d5..bd1291b 100644
---- a/man/depmod.d.5.scd
-+++ b/man/depmod.d.5.scd
-@@ -6,15 +6,15 @@ depmod.d - Configuration directory for depmod
+-	This applies any modules inserted: both the module (or alias) on the
++	This applies to any modules inserted: both the module (or alias) on the
+ 	command line and any modules on which it depends.
  
- # SYNOPSIS
+ *-f*, *--force*
+@@ -112,7 +112,7 @@ database.
+ 	know what you are doing.
  
--/lib/depmod.d/\*.conf
-+@SYSCONFDIR@/depmod.d/\*.conf
+ 	This applies to any modules inserted: both the module (or alias) on the
+-	command line and any modules it on which it depends.
++	command line and any modules on which it depends.
  
--@DISTCONFDIR@/depmod.d/\*.conf
-+/run/depmod.d/\*.conf
- 
- /usr/local/lib/depmod.d/\*.conf
- 
--/run/depmod.d/\*.conf
-+@DISTCONFDIR@/depmod.d/\*.conf
- 
--/etc/depmod.d/\*.conf
-+/lib/depmod.d/\*.conf
- 
- # DESCRIPTION
- 
-@@ -29,6 +29,18 @@ lines and lines starting with '#' ignored (useful for adding comments). A '\\'
- at the end of a line causes it to continue on the next line, which makes the
- files a bit neater.
- 
-+# CONFIGURATION DIRECTORIES AND PRECEDENCE
-+
-+Configuration files are read from directories in listed in SYNOPSYS in that
-+order of precedence. Once a file of a given filename is loaded, any file of the
-+same name in subsequent directories is ignored.
-+
-+All configuration files are sorted in lexicographic order, regardless of the
-+directory they reside in. Configuration files can either be completely replaced
-+(by having a new configuration file with the same name in a directory of higher
-+priority) or partially replaced (by having a configuration file that is ordered
-+later).
-+
- # COMMANDS
- 
- search _subdirectory..._
+ *-i*, *--ignore-install*, *--ignore-remove*
+ 	This option causes *modprobe* to ignore *install* and *remove* commands
 
 -- 
 2.45.2
