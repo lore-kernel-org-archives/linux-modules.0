@@ -1,68 +1,45 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFE1140363
-	for <linux-modules@vger.kernel.org>; Mon,  8 Jul 2024 15:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AF612E75;
+	Mon,  8 Jul 2024 21:42:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720453285; cv=none; b=HyoQlVCf40vk2ZxyBnLIZjH8kAmTssokB8AEyDgdIdIVq8mmblZhUIFtCognZf/8wNtxx4fiMqp3wTiccu51lvtunSCFfSwFYkB+9S1rWOUZT1cnhy2XEHXbjrtmmA5Y2Ga14YksU9Wtl2WhFRo5UtItk5sBjUQhMiJqJDNPKvk=
+	t=1720474954; cv=none; b=pBZxoeJF4tK1EGWZKjxIX0aVhE1SvKuO3mFOBdwuUlSr79M3uXrxmQ6xS4prYJxpNGdDmEgswLxVTJCEb7dE/h84hkojjN+y5psibp5WWLHfaDld8C4scdKejE2JVdkN8qEUdFCk2riPPi84mUOKMKszMdVdGl86orpxTNkARfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720453285; c=relaxed/simple;
-	bh=AvANucvrZ/fsPo2yOI31iWo1FDKNiABMfD22ldNz5dc=;
+	s=arc-20240116; t=1720474954; c=relaxed/simple;
+	bh=nNHjOUmsuhksRuBi0fRdrf0oyZ550QXs02FNHRVIwb4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wkli+WD001DNqpIl5VgTGI42hd6mgw01Q4uQU5eDbjET+9s8Ft9aWZhn068MfGIiaZD8lGG/lmHzK3XEsB45XpWhWfBEkY6oTL+YIiUj80+DvQr6staP7pdKNDeWkUSkWaKFH7lYsjbyfpULIvYmqqS+PMA+S0hLdpMBCUUQu9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I6THk+Uf; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=i91hLsEHFm2yWPLAkSylrNmIfQeHPy8+U1QmblMVDXCCC+GXISzsBsuq7d+m2bTtyriB42S21oxLshhLgF0sPVKFcvWPo5s9XtOIr+/1enoR9blVtLyDJjj/yFAUA4aMWmeqhoJKdQ5dEIPbUph9EnkzdMaV1GZyiZ2IFcVkmqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JmsIav5a; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I6THk+Uf"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3d921528d92so1096313b6e.3
-        for <linux-modules@vger.kernel.org>; Mon, 08 Jul 2024 08:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720453284; x=1721058084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AvANucvrZ/fsPo2yOI31iWo1FDKNiABMfD22ldNz5dc=;
-        b=I6THk+Ufxa7oPGUpTwf25paKUBL/GcJ6sRYE480kVLl98UABU6FlLsCfabp3KC/4rc
-         kWwXlPPyzqiDDVedwk/hJ+ZgdvSocmZEaccUEtvdEd2GXo9JjhrQCLQ6u7XdmB4MqXOG
-         VBNxpVry7lAKQcf+9sBKJqkNVOSe0L6jbB96Jz9r/dvS8pLHH5NOZ8omkexEy+YQqgPE
-         7SodmH1mQXB3ZisLRFGdH2saZZxSYBxSSYyZt1HzCVIGPvtfEutcYDOWnYeMlUmHXszM
-         DD2g61wJWzdjQtcJ73R5qd/icCNRaKHFazC1u0Z1Nwr0winO0s0Q8xjLo4ed1daD7Oyo
-         RtIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720453284; x=1721058084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AvANucvrZ/fsPo2yOI31iWo1FDKNiABMfD22ldNz5dc=;
-        b=sT7lLRNLjJwXZoYAo9iSN0EcOBkFXaL9S5/Z+GOAV7hhUoFRTaZye/OU1MzpT723zz
-         4nyzRtJ9MGK6J4x6xmAESX2wjZ2bDgG2QBPU0Yqj1fQotstCGt7Sz1w7su8xlr+Pde6o
-         QUXli/0dd25Nuy7YBhBMs9HOtru1b4BUDEd/i1Yv4txdrUXviFJNb3VRDKAeHW9pKvpz
-         dqgSwIGnleH8tKFs+MqbaRP8IR0W1rll6bX2VqvDtCU/Xd4fXsEYVPoB1q+OV2oypg19
-         o1XMoNW9+cKSaJDLWeXwYpTUsE4VGyBLQpwLmdTv8yyMIF7eqJTig+SZ3dW15ebePnql
-         seqA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4HPJD900e6ygtYpPHS46QFkUf92JCXMgeUMEe0WZkhNPtBxOim7dBFGw2Zm/XOBcq30tjFSH2lTztpkGlzRPiqZ/chBUXExaVEG66SA==
-X-Gm-Message-State: AOJu0YxTbsBJ34C+b8XYMcgaifgshfnNou+cEM7gJ+6PzOgvWkOw6/Ga
-	ih8KqmunAFXT1qI1EJBMun0GlOk6tfreaEIUvUUkPHR/npPyfCmHq/E6PibofkE=
-X-Google-Smtp-Source: AGHT+IE4fartsbVqJ1ZXTAUJYr3DKVogSxSpB+ivKX+k3fcl6RoAaf2u7l1kY5INfh9HbLRD0moHGg==
-X-Received: by 2002:a05:6808:13c7:b0:3d5:633b:3d8d with SMTP id 5614622812f47-3d914ea41fbmr11853349b6e.53.1720453283519;
-        Mon, 08 Jul 2024 08:41:23 -0700 (PDT)
-Received: from localhost ([2603:8080:b800:f700:6fc:b7f5:4853:aff3])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d93ad2b3e5sm28150b6e.29.2024.07.08.08.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jul 2024 08:41:23 -0700 (PDT)
-Date: Mon, 8 Jul 2024 17:41:21 +0200
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: =?iso-8859-1?Q?=C1gatha?= Isabelle Chris Moreira Guedes <code@agatha.dev>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	patch-reply@agatha.dev
-Subject: Re: [PATCH v3] init: staging: Fix missing warning/taint on builtin
- code
-Message-ID: <11f00921-e8d5-488f-82e5-a22e68fc5748@suswa.mountain>
-References: <zsk54zosv6tht4j4nma4ix7lq2knxi3ylqadd2foznc72nkaa3@xbc7gpozx6ai>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JmsIav5a"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+4oLNogoKqNdECWwvx4V4mZJfeGXVDyegSQAzpBI+nY=; b=JmsIav5acmpHbrPFIcr5DCSWbC
+	KqomigDtbRr7st/F5qsV//WJpwj9UkZiA7Sb2yIrlOVtbMzhQJGxN7O16wbMc/sQGTI5rpWKs+9OG
+	CbD6MxkKQLOEJGhJG/RZcjL6kbvEnOkvhZOxnMDhwgj69JFMfgVwlGwR0y1iYlipZpqZ47C9ilal2
+	WWOV1CtcEd6P4daQ95+Plf7Ej7Vo+aHM6m2kFFS8uf9RnsTrN8KuJNoJ2lb5Q2bloDDM1/9zQjQ4a
+	SELBsPDpnDLi2pY0eT/St9WPG25l9bXv6pvP//k/RoTzaNux1/iDkffJ7lWb79A9w1c/g/Fy1EOlI
+	BGDC5j+Q==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sQw7y-0000000573F-2DGQ;
+	Mon, 08 Jul 2024 21:42:30 +0000
+Date: Mon, 8 Jul 2024 14:42:30 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Andreas Hindborg <nmi@metaspace.dk>
+Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Adam Bratschi-Kaye <ark.email@gmail.com>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH] rust: add `module_params` macro
+Message-ID: <ZoxdRjpy2hRndqmc@bombadil.infradead.org>
+References: <20240705111455.142790-1-nmi@metaspace.dk>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,12 +48,49 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <zsk54zosv6tht4j4nma4ix7lq2knxi3ylqadd2foznc72nkaa3@xbc7gpozx6ai>
+In-Reply-To: <20240705111455.142790-1-nmi@metaspace.dk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-Thanks!
+On Fri, Jul 05, 2024 at 11:15:11AM +0000, Andreas Hindborg wrote:
+> From: Andreas Hindborg <a.hindborg@samsung.com>
+> 
+> This patch includes changes required for Rust kernel modules to utilize
+> module parameters. This code implements read only support for integer
+> types without `sysfs` support.
+> 
+> This code is a reduced and updated version of code by Adam available in the
+> original `rust` branch [1].
+> 
+> [1] https://github.com/Rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f
+> 
+> Cc: Adam Bratschi-Kaye <ark.email@gmail.com>
+> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
+> 
 
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+This poses an interesting challenge I'd like to take up with the Rust
+community. I'm fine with Rust bindings, however many C maintainers
+neither don't speak / write Rust, and in many cases many don't even want
+to touch Rust at all. In my case I want to get there.. but just haven't
+had time yet. So we have to live with that world. But to help with a
+Rust world, clearly we need to allow for some Rust bindings.
 
-regards,
-dan carpenter
+As a compromise, I recently suggested for example for the firmware_loader
+Rust bindings to be acceptable if and only if we could get the developer
+doing those changes to be willing to commit to also being *both* a C and
+rust maintainer for the firmware loader.
 
+I'm starting to feel the same way about modules, but modules requires
+more work than the firmware loader. And since I also know Andreas has
+already a lot on his plate, I'm at a cross roads.  My above request for
+the firmware loader made sense to the person working on the firmware
+loader changes, but who would help on the modules side of things? And
+does this request make sense to help scale?
+
+The rationale here is that a rust binding means commitment then also
+from fresh blood to help co-maintain review C / Rust for exising code
+when there is will / desire to collaborate from an existing C maintainer.
+
+I realize this may be a lot to ask, but I think this is one of the
+responsible ways to ask to scale here.
+
+  Luis
