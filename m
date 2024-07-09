@@ -1,253 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D4412DDAE
-	for <linux-modules@vger.kernel.org>; Tue,  9 Jul 2024 05:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720501902; cv=fail; b=O/V8SQZ+DGJ4l0KC5KdU3zWZtfxCGYDecZkw4t1B5JE+iwXjV/0jLeBVEU0YZb7IjQTGlrTdIHjsJt+srN7mhUZCABw/ZgWzifKFY9qNyZFmLkZhPSBVSGKJXXp0A5WosV7ijY3VI5X1YoVcUDbWXXNS1aV3j99VgiTl55o5NKo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720501902; c=relaxed/simple;
-	bh=7CtZrSRQbEGuIh1CfzOeM+Bao2/pBbyFKVr6U6KaflM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Rz4BdP9qIaVIFNBmL4hoeJN44pfFlEZPBytp8l8EYhra7avQBI7TqcdmFNwGNoANFHhuBsHH0dyecq674TV/VixMvRonaFyKoWSY3b11HO9q4v7ApQUEiBu40GIgBSGi4rG7XR3Ts+HMf7pVxeYh0qclaAyHgbyzJvbp2f3WrAU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UivOotdB; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C31620
+	for <linux-modules@vger.kernel.org>; Tue,  9 Jul 2024 05:20:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720502460; cv=none; b=T0bLSO+olgQKmls4mjXpqt147uHSqegnjFVjAX0rnrkYFoyIK+dOSuO5JQNJTBkgk2KZNyxHy383DtqpDZmxQemSor0LYTOLQt/j7ikJZDuwzTDQLU+fIC/L8VQjkdeUUhmgvC3Lvs7JfP5o2t89nK5yza74Tp8r5rsjRydtEpw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720502460; c=relaxed/simple;
+	bh=Ffxb66OXXpaDSXvsf91iEqbXPV2zoKVNjmr/+GSrvjo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DiixE8IgmZXyZmmatdyTMaijvfeI93jaVWnKsOj3Cybe2/1nt0+wu6bBBOPXdWi4Gkdl9s6B3Is/tC9ulVdSiO9lUZsplZ47fb2DCAqtpPKZ0OgFNqzC2MSdb5xy4X33/N9iG9XnB9iQNpQDAaG47E6P09F8K9qm1wBcU4npYsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PBJ14Xwy; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UivOotdB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720501901; x=1752037901;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=7CtZrSRQbEGuIh1CfzOeM+Bao2/pBbyFKVr6U6KaflM=;
-  b=UivOotdBNzOF6Q/Kg2TV8/Xp3MIM++Ihqp+wqFFNk7+sHh3hVJScecTE
-   QGJ6JFqekhle0dmR4c8XqfwdPO0uiR/Ukj5KuJm+SKI/gjAYkiLSLe0cM
-   utE5NJBkYJgIHZ4UQ3yAd977goD5zLxjSOcYbNpG7SWvytyUF51YHOjcb
-   WttV1qJWfwbNDpxALx/Mn/6JD6FJ8DtpThjBHhuqJs76BQMHfdw8sq2hU
-   uoEuOoD3NhDUkULAPFWAgtGGcPWC9QB4dU8DjU6NxcfA5ntX0pDabkWCE
-   t4DQnUJdLQEpBTXjoEtiROUzPKUiRl5Cj5cSKwU9RRZKL7eTWOcnzkuns
-   w==;
-X-CSE-ConnectionGUID: OVCHgGeITk6pKW8Kb4RsKQ==
-X-CSE-MsgGUID: W6nkTm+lRbON3a3YA3xlZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="28336609"
-X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
-   d="scan'208";a="28336609"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 22:11:40 -0700
-X-CSE-ConnectionGUID: RAaGy3FXTOGv1kEWKZY4kg==
-X-CSE-MsgGUID: J2Xq3x0RQoCeT0XSvZyNTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
-   d="scan'208";a="47814601"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Jul 2024 22:11:41 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 8 Jul 2024 22:11:39 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 8 Jul 2024 22:11:39 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 8 Jul 2024 22:11:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D+tCrnNSEmVrC4ST5BpwhELQ3FcGXM6qQU6/MD7OG5W7ruvbuVikn8mYpWxu+rnPtQtUHenagmqpvG6jLLgyfpwzTOPj8oJfq49jVRCCRm8puNXxIy1FGPKeclNf1eL+NCznTRUlEZ3upOHzh0e2W1BNLu043fvic+N7ojJVZCRVprU5OX9qhi7Egumx03WvqIRtsgrOCVZAZKn/Jv2iyMiyNCTq/pkuc9itunBZFpCx9F5BdAu9US+B9nXA9+3s4Ds7WuwLggzASiG8WLN6H1NdpHm3LcmYLzM95e41MaqrY2gfc43/YqadCRR+blPFlHKBJ1dNBcEdGNqvnVoAAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JfKcH/d3wdTtb2eH88PBZsZ6v0nzzWT0O04hZFe8SYY=;
- b=PzW368i9jKXGb5F2vn4a9QLSLGYhe1Bg9dHTxNCZS0BFlgJmRxvA7AHoa4ZIWxDta//k353YCZyj+ClEzA/Ql6FxjsyWXeSbbZmWnSFp1KFTtEuOAfUkgrUmXkcEDFOo3ukM4pOYwBP0Tg5D/MLdLN8li+RHSIDisi2zpyGPmJDtmU44i7bIIylEG1IVSHz7zPWZy446AH9DsZqsRJA4DQeAsDlgNH6izSvHFOCuw52mU26Tdr4bkDkxrzdyUrJDMqElV7vVw5syDJgzyGWjUHUjAdnQlYr3/JAO/2DRBcKSbkqDdFPn+CuAex4c9BTHDt6im3sTFHFxPGnlMEkjHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by PH7PR11MB6930.namprd11.prod.outlook.com (2603:10b6:510:205::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35; Tue, 9 Jul
- 2024 05:11:32 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7741.033; Tue, 9 Jul 2024
- 05:11:31 +0000
-Date: Tue, 9 Jul 2024 00:11:30 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Emil Velikov <emil.l.velikov@gmail.com>
-CC: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	<linux-modules@vger.kernel.org>
-Subject: Re: [PATCH kmod] testsuite: add tests for weak dependencies
-Message-ID: <lozgnoo3vnuzuezii2pdhxzoy5efmxtlwivugoze4hxr2bechc@mr6kegfejniw>
-References: <20240530070836.9438-1-jtornosm@redhat.com>
- <Zov-e-a_KQyJb8LI@arch-x395>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Zov-e-a_KQyJb8LI@arch-x395>
-X-ClientProxiedBy: MW4PR03CA0014.namprd03.prod.outlook.com
- (2603:10b6:303:8f::19) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PBJ14Xwy"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-79f02fe11aeso186752785a.2
+        for <linux-modules@vger.kernel.org>; Mon, 08 Jul 2024 22:20:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720502458; x=1721107258; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZKNsbM3GPwp7/TmhU19CnobEVglxGjJavT9dlt88xzk=;
+        b=PBJ14XwyD7m8d/0rT7m1YNEL+lWdo/Hc4FOv3FW2ZLnXZhmYv1DA4nTJ+PfsJqLKR6
+         IriWQcyBJy7dQJtkUU+3/aBfHOi15b6DSnBexqYOCDCq7JAsVDaU7CHzmaDtPNrPS4zN
+         D4NgdsXtuoPatOor2v0P/cocUyuxdMwMXExICdxyRlMTedDVvjB2sKI2L7GU0AgHZ0W3
+         LanMcB23qU2pbk5vQgs9y/Hw+Hx90tCxGH6SeAQ6Nk/qFGoLNmoUamGBxsqupPYpUzcw
+         d4Rlr4b+FaKN+rYt7VYDoZK65hg/eRtsoNwTEV67nOQiWb1yxEdsgTw2mnXmfIMpLLDd
+         XYfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720502458; x=1721107258;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZKNsbM3GPwp7/TmhU19CnobEVglxGjJavT9dlt88xzk=;
+        b=SMDHADuDLIe6qliW8mjcl9DD0Ti1DNzjTrm2+R2oZTYFq+IBKVvhEFnjGjnwmjEhxB
+         xJKmSScN9mnNJOjjNIoQsXQzm29J1UvC21LpeGGQTYZwwcDGMovS9/x4rpN9gLWhqFOf
+         nFyBsilppuYX057CsqwlZeqQo8UiK3HnOdPNjrEpLH7gkWtZgFBmlbii+nNwrEMLEyeC
+         n3TStt21A21jkxgmDq4oJMZ0+qnKWbfqcgWvlz1bTsaVAzGOVZhLHbTuL9n0sH42BvzJ
+         qJdyh9RHGEg1xkwsqrDH3ghMdmpupairh4UDJAuDqwEiLSPZdUtrrpUCs2qH/xwMTFp2
+         7bAg==
+X-Gm-Message-State: AOJu0YyQvipBfnD/RwJvkTL/yqPNO2C4iGyJh976Y/y1Lbu9TkyNtD3H
+	hsOvLISTQ47TUO55PdgWkbC175HRiXg0mi3gpfDFqd18bfmMMq+3xbNtiw==
+X-Google-Smtp-Source: AGHT+IHFEd0aDnhvYftpsVAqb2yeoJdG5pQcSZKEsE0VhEAX6FoYyLDsr18BFcaHkzKO9NFPiXfq8A==
+X-Received: by 2002:ae9:e50c:0:b0:79f:aaa:ad2d with SMTP id af79cd13be357-79f19c09fd0mr173696785a.69.1720502457740;
+        Mon, 08 Jul 2024 22:20:57 -0700 (PDT)
+Received: from ldmartin-desk2.intel.com ([2600:1702:4eb6:3000::3f])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f1902bdf5sm60544185a.66.2024.07.08.22.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 22:20:57 -0700 (PDT)
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules@vger.kernel.org,
+	Emil Velikov <emil.l.velikov@gmail.com>
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: Re: [PATCH kmod v2 00/17] man: minor improvements, post the scdoc conversion
+Date: Tue,  9 Jul 2024 00:20:55 -0500
+Message-ID: <172050244024.75910.1843250455969178165.b4-ty@gmail.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240708-man-v2-0-a23df6ef871e@gmail.com>
+References: <20240708-man-v2-0-a23df6ef871e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|PH7PR11MB6930:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5628400-0f64-4be5-e9ff-08dc9fd59890
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?AfO7KFx6orZI6VBBYD3RoMWmYYrhxKTtrHGuMseGUhHC7fzukPJdwjH6TmJG?=
- =?us-ascii?Q?IpxfOpNc5Ph9JU6Y9AymhsiSfiQNVoCSBe6KZPpwlaAgnIxX+Kw2EBBmuWDo?=
- =?us-ascii?Q?Gb4V9SroF2jlUCvTqXhvJzQtiMc3r5tGDZDQ92PcQyVlA1Hkl+r7AWfkUZHc?=
- =?us-ascii?Q?4taIGY5Jns7uUxvBXD5QpWOzlUSOlxYSXtusmDbrKkBmPRC9ECei18NlR84y?=
- =?us-ascii?Q?8GwFLoNgx2VY6dD3U3iMb3U7M0D1q2gm4fyGHDHc8k7ATI4IgjlKXY6UPg+Q?=
- =?us-ascii?Q?nXyyp5HYXZwywR9g3FJfZR5UmlNRcM1txPTrsrXpvt6YjwcykZVN61JTKyQ2?=
- =?us-ascii?Q?XJYIfR2fU+sXtHO4WisXI/elxu+usUfOkhpl5UuYHo1GULn1kueqLLIlmgfH?=
- =?us-ascii?Q?6B6hv1KI4mqPO2MxtqU9YBQXkwWuOF3uTVOvGIjfw8xAZRgDpJ1j4aJXId/v?=
- =?us-ascii?Q?PIzAACsWT35nB5XiotJFcvYSDJk6r7+9VilxJ3BDdvJ9jxvveIm4IHMrn8yC?=
- =?us-ascii?Q?RAEI3Nb/wszTPDw6OTVLc+UruTomBuK034ijLx4b6F1r3Lcg+WQxWdirbLJl?=
- =?us-ascii?Q?tJL4fZl0ShkhB8GBIFGJO/Zk1vnGxHiJ/6B7RZews3PqhBiPXiLZ2zcSjJvz?=
- =?us-ascii?Q?PA/+fPA5TQPxZIMxMZ/7tBFPTjJ//6zlmtq+4gWcEmMKTIJNn3IN7A7MvGzQ?=
- =?us-ascii?Q?qLPOSwn/n2vGuhQRibTy2n/QwjQy7RvBPaIQOcEPc9lSS8FAif6qKmcYzNrN?=
- =?us-ascii?Q?6tDav8YKOT7Um4h4Mnqo/5zB4Dt4+OwBOtrAZbTaB5HS2FUqlvvt47P7PUHN?=
- =?us-ascii?Q?S1IbI3vckOSz/tdk65G7vPmUd1hH8gHQ7axXAhehJqN6GgMhTLEqVXdeCyQL?=
- =?us-ascii?Q?hCvGw7FR19642vTwVQ4iTQzox+8gp/RhQ9Hx84ZmNyDRvqHzAx2MDKbZcGlm?=
- =?us-ascii?Q?nFxkCtXNHBMl/KGD1mJUwtj4ZVTVHLSsHUwVmDhlRi08nekCIFpPqdyO4Tdv?=
- =?us-ascii?Q?pegsmLUwMjpBl5SiDR1pDUJgC5AGBu/10YajtemJFRhORqRycZjYBaoVnVOx?=
- =?us-ascii?Q?8lLfkqUdOR9gTHvGWgQbZgkbJnZVnwXcfC9TAhKt6i6Ih9CNtKeKm/OyHwOV?=
- =?us-ascii?Q?0ml9yFlHH3VNlbjisba82j13wYGZBjv3n1JHue8al+3um7MafDrGHqcnlxf1?=
- =?us-ascii?Q?j+fIgBqma4Li9yNmLSa8ut1L5gXqFC0sfmL9vlsieOuqlTIjbJ9YsFdcK4h+?=
- =?us-ascii?Q?QMztplmU3aAy5iCGrLa6qocSUqgc09+0ZQlNtWBSXh0RenOsTZb4NOE06Dl2?=
- =?us-ascii?Q?HDE=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Eb4FVrl4igZZWZ5A2EvpR7fTJd1kSupn/PQrxqz2RULlyqMAR33iD+IYi3uw?=
- =?us-ascii?Q?1kYr2LEL4J/Y2ImAB02u3KjgNtK91Kgtf/MqJYYCvgMXNzi/9UtBM7cuaA3N?=
- =?us-ascii?Q?WYZqt6RnbLCzbVPB+2EXGxJQrZ5NCHq2pQJ+RAy2/rPVPOU9kiJfGEhR+YoX?=
- =?us-ascii?Q?Qxy3QuaShe4QUXIendyNF4lp0twGtxdfpPxRA8gVpOXkgDAEsvjuXnIzxBY7?=
- =?us-ascii?Q?bQdN23MWBLfdmSkgTB0i60FQyScgFLTyi+KfOkVNxHJPnazx36LtmeEKFmDC?=
- =?us-ascii?Q?eFJIB/+8z8D8JQeee4CVEfPyn0yFzJc9bgcWsK/sqwd9QA7ddM9Ld/wPGs25?=
- =?us-ascii?Q?TNJao+NGIdF9qTFHx6XqzuqLY79qY8kg1i5s1ntFGN3/2DUH5dwM8orozcQu?=
- =?us-ascii?Q?vt13X5LWvth7sOx9+TwnqFs6vS/4Z06Gu8Q+1xrEWk6KZiYEGLlclNtNH7OE?=
- =?us-ascii?Q?wWJ97REBnxbEmEU9Z1pvIiIuVH5mUUzaHNxaMchaQDkM8tYyYPhNPpygTvzg?=
- =?us-ascii?Q?/4PNB/cKPNKBqq4UV1KLtzj0bUn+W23WOJdltJoEtMvaAJ+f/MiLA95wfkxK?=
- =?us-ascii?Q?DeyP6evsvYPQ0sF4WdaY1llPyj+5bsUrMpvbS9komfn9SnIPS49dtX/GbhPM?=
- =?us-ascii?Q?QBXhgkHxiN467XMEA5KYpRudfyoQeFbbswb8K5ZBBYwWXU8/ZYhdkuKxdRdo?=
- =?us-ascii?Q?gf0ZyqyfeysTg2Neg4cJR1PoPennqCxJo5OtX1zLJzQvJhgGqKjZwo1yBA9w?=
- =?us-ascii?Q?8XXyxEpOc0XLWEsFwt7YIgiOg9YBMbflYUG3SC4SZ81yrUs37Ni7AaUT1+Ba?=
- =?us-ascii?Q?d6gGQV9IMca1EeGW2dZswsve5k5lu0prAOV/a5oTN6DB9vik7sFgCX4/WoeO?=
- =?us-ascii?Q?RsnRIwlIcF+ucgav7xkN+LQIKli80YzGaAbjleKehtMBuJ7rJHhrtRXF2i68?=
- =?us-ascii?Q?Ek7xxtUazvkprv9pDF3rQPlFFjs0+JGCT5spL4ZtMct3EdYqNXIXyjAkCRfF?=
- =?us-ascii?Q?dxeJl+IDe1xwtybivCgVZFobBPMTWXqlrkWPsmBWE8lMKbhFr9ym5/3rol97?=
- =?us-ascii?Q?cSgTxaCEOxsSNzP4icIHFOB97exfg8alU8Dt9DWXMOGYbdCH4q6DxZA1yqEy?=
- =?us-ascii?Q?z2F3P6GR1bTBLjAGPLq5n5Rv3FuIeAJUPkxXKxzMdAsv101D5lbjRFZdzz9x?=
- =?us-ascii?Q?/K+IT6qD0DM4CxHpNfoWDvZVH6BgRJOGeQptU1CSL3g9sKVMHJDwGyxWI4Zi?=
- =?us-ascii?Q?8vJseTRVVo8ZhnyGhtoTA9Wns8iQLLo29jg6q3Vmo8YnKmefpO7YQyV5Cz9F?=
- =?us-ascii?Q?7OFGVXPZ8OXq81v/yUoi+h7yjNa5HnM5hUytSXNQU/avaVafbjkqKTZKIT3p?=
- =?us-ascii?Q?4KvAv5ru+T1Ua014SALvv92txx3gARv2sh3uAbK6J7+rWNvdvgXzwGy59nL2?=
- =?us-ascii?Q?hHlDMCv4mJ6PH6iXy49WnWPDlrDA/Ugp4zUrRWAtgBEwbJ3XrFSujYKnVH9z?=
- =?us-ascii?Q?BKx7qNnC1aLU+3b8UKtqTL/UoQF8Tv5hCV7vMoXB2LhwtktQLBrWZ9ibBWth?=
- =?us-ascii?Q?yDrUFgH/ORpB0Sxdm203DaQMm4D5lwkqKWG92MwpGaqjiSexmquJRjf/eFvK?=
- =?us-ascii?Q?eQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5628400-0f64-4be5-e9ff-08dc9fd59890
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 05:11:31.7511
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A7JvuTzSRVAl0MtUrTP5hNDzKyQHXY5kLMoX7Pqtv74jQhtTV8WTJwGfRkIubPDkyXP1tHAg09/cg2j/mWk8hzWiRQRONSHdWLkXewhFFU8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6930
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 08, 2024 at 03:58:03PM GMT, Emil Velikov wrote:
->Hello Jose,
->
->On 2024/05/30, Jose Ignacio Tornos Martinez wrote:
->> The following tests to verify weak dependencies have been implemented:
->> 1) modprobe test to check that related weakdep modules are not loaded
->>    due to being a weakdep.
->> 2) depmod test to check weakdep output.
->> 3) user test to check that configuration files with weakdep are parsed
->>    correctly and related weakdep modules can be read correctly from user
->>    applications.
->>
->> Signed-off-by: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
->> ---
->
->Seems like this commit has regressed make distcheck on my end. Namely
->I'm running the following commands:
->
->git clone ...
->cd kmod
->git clean -fxd
->./autogen.sh c
->make distcheck
->
->Result in:
->
->...
->make[5]: *** No rule to make target '.../kmod-32/_build/sub/testsuite/module-playground/mod-weakdep.o', needed by '.../kmod-32/_build/sub/testsuite/module-playground/mod-weakdep.mod'.  Stop.
->make[4]: *** [Makefile:1903: .../kmod-32/_build/sub/testsuite/module-playground] Error 2
 
-I added a fix in
-https://lore.kernel.org/linux-modules/20240709044758.67725-1-lucas.de.marchi@gmail.com/T/#t
+On Mon, 08 Jul 2024 14:43:08 +0100, Emil Velikov wrote:
+> Here is the remaining patches from my scdoc series, re-spinned with all
+> (:fingers-crossed:) the comments addressed.
+> 
+> The series includes:
+>  - patch 1-5 - trivial fixes as white space, punctuation, etc
+>  - patch 6-14 - expand documentation around {depmod,modprobe}.d
+>    handling, remove open-coded .d and .conf references
+>  - patch 15 - remove "maintained by" references
+>  - patch 16 - NEW: replace all AUTHORS sections with suggested snippet
+>  - patch 17 - list short and long options on separate lines
+> 
+> [...]
 
-and also sketched the new CI hooks using github.
+Applied, thanks!
 
->
->
->Can you reproduce it on your end?
->
->
->While in the area, a couple of question if I may:
->
->- Should we move the new weakdeps API in libkmod/libkmod.sym near the
->  end in a separate LIBKMOD_XX section?
+[01/17] man: add some extra bold/italic annotations
+        commit: 134bf30e7493ae50ad31ef5d3767174505eba4cb
+[02/17] man: white space fixes
+        commit: f1e233c31edb7d45704d2c7e7563ca9e8891fb43
+[03/17] man: misc punctuation fixes
+        commit: e971579bba7616cee3e13efa5ced7682fd395739
+[04/17] man: some options take an argument, mention that
+        commit: 2b5c56c43026fba590aa866074964ae79d6f49ab
+[05/17] man: couple of grammar/language fixes
+        commit: 6f80a0874bdbcee17c26750ae92a5bae52f0ae45
+[06/17] man: stop removing DISTCONFDIR lines
+        commit: 52a9d424649cab905fbddd6013eca5fe9c89b40f
+[07/17] man: depmod.d: document the config file order handling
+        commit: 12ca199bd771a5bff17d6ae73fc23be277ccbaf0
+[08/17] man: depmod.d: factor out a CONFIGURATION FORMAT section
+        commit: 0682f1ed56a8f7c681798c720436b2ec3d028d4e
+[09/17] man: depmod.d: rework the opening description sentence
+        commit: 7b19a71289198beac8fae9bcb8d5bc176edb21f2
+[10/17] man: depmod: remove hard-coded /etc/depmod.d references
+        commit: e83e142ce7eb2130cbee16771129482fefc36478
+[11/17] man: modprobe.d: document the config file order handling
+        commit: 11d09ac414bd706ea4a7bf923240655909195da4
+[12/17] man: modprobe.d: factor out a CONFIGURATION FORMAT section
+        commit: e46b473a92c776c84f74e984dc05ffe0ac921a7a
+[13/17] man: add few mentions about MODPROBE_OPTIONS
+        commit: 42d60a3267162a36ec6b6b39a7b91e5078b90979
+[14/17] man: modprobe: remove hard-coded /etc/modprobe.d references
+        commit: 4ec655d249c804b5394d63f0f04bfe5c94ab7031
+[15/17] man: remove the "Maintained by" references
+        commit: ff38d82edeb113b22381cf4d0439a041f64d12c7
+[16/17] man: rework AUTHORS section
+        commit: 082617913f68b0363e5701e470f2b78786dd9aaa
+[17/17] man: list options one per line
+        commit: e7626810fd0f34db2c205b86ff6ad6cf42794fa7
 
-yes
-
->
->As-is, it looks like we're adding symbols to what should be a frozen set
->(aka LIBKMOD_5, which was released decade+ ago).
->
->Admittedly there was a similar erroneous(?) change not loo long ago -
->9becaae ("libkmod: Add lookup from module name").
-
-yes, my bad
-
->
->@Lucas can/should we fix the kmod_module_new_from_name_lookup symbol in
->the version script?
-
-yes and this should be something for distros to backport.
-
->
->
->- Is this work related to the weak-modules used in RHEL/Fedora [1]?
->  Alternatively, would the RedHat team consider having the weak-modules
->  solution in upstream kmod?
->
->... assuming Lucas is OK with the idea. I'm approaching with with my
-
-I was not familiar with that weak-modules and will wait for Jose to
-clarify.
-
-thanks
-Lucas De Marchi
-
->dkms co-maintainer hat on, where the fewer "if distro == X" logic we
->have the better.
->
->Thanks in advance,
->Emil
->
->[1] https://src.fedoraproject.org/rpms/kmod/blob/rawhide/f/weak-modules
+Best regards,
+-- 
+Lucas De Marchi <lucas.de.marchi@gmail.com>
