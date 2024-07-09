@@ -1,96 +1,84 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AF612E75;
-	Mon,  8 Jul 2024 21:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C4929CEA
+	for <linux-modules@vger.kernel.org>; Tue,  9 Jul 2024 04:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720474954; cv=none; b=pBZxoeJF4tK1EGWZKjxIX0aVhE1SvKuO3mFOBdwuUlSr79M3uXrxmQ6xS4prYJxpNGdDmEgswLxVTJCEb7dE/h84hkojjN+y5psibp5WWLHfaDld8C4scdKejE2JVdkN8qEUdFCk2riPPi84mUOKMKszMdVdGl86orpxTNkARfA=
+	t=1720500493; cv=none; b=aypmcD82tiKBgK+3/6/WKViq46xgyv6WPmk6TADl8fPKuZRHnDgunJRQjtaGpXbz2LMjx4aXNir3Zw7/8ZNfL2ybqK8IebAOSB9fP6T33sb8HM5T08kqqpK3l+/et36zEixJ1bqI/BmphLiQpRjzZmPfZyGqT94+W7qH9ZgekFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720474954; c=relaxed/simple;
-	bh=nNHjOUmsuhksRuBi0fRdrf0oyZ550QXs02FNHRVIwb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i91hLsEHFm2yWPLAkSylrNmIfQeHPy8+U1QmblMVDXCCC+GXISzsBsuq7d+m2bTtyriB42S21oxLshhLgF0sPVKFcvWPo5s9XtOIr+/1enoR9blVtLyDJjj/yFAUA4aMWmeqhoJKdQ5dEIPbUph9EnkzdMaV1GZyiZ2IFcVkmqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JmsIav5a; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1720500493; c=relaxed/simple;
+	bh=RxZLtr692jj5AwES7MRKB8LnWHqjw6F6hLyxioxr6z0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VmfdsCGoI9jnPyvKP6gq6rpfh+DuKdnmvdkNRx0Q0A3URLoRY++klxZQ9qTBDSmpz0hkYfNsRDuZSJXQfm5BO52mzIV6BG8ht098AhlPJJLr0UAf8Xi7rYK3pAFg6OxO92jmrxmnah4VDGz25KD/pT17Akg5Gis0ZqLpJli42gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fYT0S6Xq; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JmsIav5a"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+4oLNogoKqNdECWwvx4V4mZJfeGXVDyegSQAzpBI+nY=; b=JmsIav5acmpHbrPFIcr5DCSWbC
-	KqomigDtbRr7st/F5qsV//WJpwj9UkZiA7Sb2yIrlOVtbMzhQJGxN7O16wbMc/sQGTI5rpWKs+9OG
-	CbD6MxkKQLOEJGhJG/RZcjL6kbvEnOkvhZOxnMDhwgj69JFMfgVwlGwR0y1iYlipZpqZ47C9ilal2
-	WWOV1CtcEd6P4daQ95+Plf7Ej7Vo+aHM6m2kFFS8uf9RnsTrN8KuJNoJ2lb5Q2bloDDM1/9zQjQ4a
-	SELBsPDpnDLi2pY0eT/St9WPG25l9bXv6pvP//k/RoTzaNux1/iDkffJ7lWb79A9w1c/g/Fy1EOlI
-	BGDC5j+Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sQw7y-0000000573F-2DGQ;
-	Mon, 08 Jul 2024 21:42:30 +0000
-Date: Mon, 8 Jul 2024 14:42:30 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Andreas Hindborg <nmi@metaspace.dk>
-Cc: Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Adam Bratschi-Kaye <ark.email@gmail.com>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH] rust: add `module_params` macro
-Message-ID: <ZoxdRjpy2hRndqmc@bombadil.infradead.org>
-References: <20240705111455.142790-1-nmi@metaspace.dk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fYT0S6Xq"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-79f1b569ab7so34287485a.3
+        for <linux-modules@vger.kernel.org>; Mon, 08 Jul 2024 21:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720500490; x=1721105290; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hVQmzQ5gm1tySs6YGgxwqa2WrwmFGYDtLV0HkkGNAWg=;
+        b=fYT0S6XqRceZCXhD7BFVoBDaoV1XJXCPtpeafdUEDzLYB4bBPuMVuyfGa+rvYouquF
+         AeFFGkW7NWSoFYOyu5I4/mGH3xI1P9Fov5xwObZM3nvio5ZJ0T6AnakvbpIPj1VM4J3L
+         UdJnTp+GgFsqdTPBTcIgpmLcXrwMnlwoxlc4N0y4OGGWbSk/YO5dAv3vjnDD74Ri9kN0
+         KVHR4D3XfiUj2Uk5hgGMl7mRiIC788hbsAsb6nRx0PH8OCy2B4xJ6RXIFZ+vj4MIMZZG
+         OfMkBYlkVQVtLdsJOw5ZR8GTmPRE1GuBkB+JOJqD38/Is/PLPJtt0IM725pzggAM4TWE
+         wI9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720500490; x=1721105290;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hVQmzQ5gm1tySs6YGgxwqa2WrwmFGYDtLV0HkkGNAWg=;
+        b=luBGGcedz9AO1OFvySkeOfJS+ZsmtsspDmJDgi9k7zy6X/tW/EQytlLVVFV5IZBfpo
+         RKwQx3SK28HB+E/nc4I1gyURwRS8b4c6qDY0sZbl90jGPfpV5y23jM4SfM/+7DHRcBXx
+         rem74JiFBogkYrhArrXfYEoF815Ovp3vLyzAQMDOCx4/G0WznQN/jnxn+FGTU6Dn2bM7
+         bL0PVvZGGOJGFyAwfJzq835G0T6cLEZQFFB7008eGl6TXfieQ12nLBNfbrAbWH0NM/AM
+         q2te5aLivRr2rx77Ik3NPnCmpl8dLQgNkW6HaTPTWZ5C+4F1dNSh+wk3DeBUBmHHpgUi
+         yqWQ==
+X-Gm-Message-State: AOJu0Yz6GMHGPI5a0jM4gXgRWsXI1T8XCHZNdkeuUKyBfNH9o4nMUuOe
+	AUTitX3Y1r65Iukc6m5CEfxBYh/+MtYeQdJHEQ7vMtdXf+e5ORUfxOE/Wg==
+X-Google-Smtp-Source: AGHT+IFUuOd2KcdKUDDoexzMMpMXDdhiQOkNa0UhKXFCTxn9H86ZPIpB8SD/YPeQBwePX7H7qFx/zg==
+X-Received: by 2002:a05:620a:137a:b0:79f:4e6:181e with SMTP id af79cd13be357-79f19a44101mr188243285a.13.1720500489662;
+        Mon, 08 Jul 2024 21:48:09 -0700 (PDT)
+Received: from ldmartin-desk2.intel.com ([2600:1702:4eb6:3000::3f])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f1902ac2esm58639985a.59.2024.07.08.21.48.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 21:48:08 -0700 (PDT)
+From: Lucas De Marchi <lucas.de.marchi@gmail.com>
+To: linux-modules@vger.kernel.org
+Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Subject: [PATCH 0/3] Use github-action for CI
+Date: Mon,  8 Jul 2024 23:47:55 -0500
+Message-ID: <20240709044758.67725-1-lucas.de.marchi@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240705111455.142790-1-nmi@metaspace.dk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jul 05, 2024 at 11:15:11AM +0000, Andreas Hindborg wrote:
-> From: Andreas Hindborg <a.hindborg@samsung.com>
-> 
-> This patch includes changes required for Rust kernel modules to utilize
-> module parameters. This code implements read only support for integer
-> types without `sysfs` support.
-> 
-> This code is a reduced and updated version of code by Adam available in the
-> original `rust` branch [1].
-> 
-> [1] https://github.com/Rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f
-> 
-> Cc: Adam Bratschi-Kaye <ark.email@gmail.com>
-> Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
-> 
+Besides being in kernel.org, kmod is also hosted in Github
+at https://github.com/kmod-project/kmod/. Let's use the quick
+integration with github-actions to test we don't keep breaking
+build/checks.
 
-This poses an interesting challenge I'd like to take up with the Rust
-community. I'm fine with Rust bindings, however many C maintainers
-neither don't speak / write Rust, and in many cases many don't even want
-to touch Rust at all. In my case I want to get there.. but just haven't
-had time yet. So we have to live with that world. But to help with a
-Rust world, clearly we need to allow for some Rust bindings.
+Lucas De Marchi (3):
+  ci: Add github workflow
+  build: Add mod-weakdep.c to EXTRA_DIST
+  build/ci: Add distcheck
 
-As a compromise, I recently suggested for example for the firmware_loader
-Rust bindings to be acceptable if and only if we could get the developer
-doing those changes to be willing to commit to also being *both* a C and
-rust maintainer for the firmware loader.
+ .github/workflows/main.yml | 54 ++++++++++++++++++++++++++++++++++++++
+ Makefile.am                |  1 +
+ 2 files changed, 55 insertions(+)
+ create mode 100644 .github/workflows/main.yml
 
-I'm starting to feel the same way about modules, but modules requires
-more work than the firmware loader. And since I also know Andreas has
-already a lot on his plate, I'm at a cross roads.  My above request for
-the firmware loader made sense to the person working on the firmware
-loader changes, but who would help on the modules side of things? And
-does this request make sense to help scale?
+-- 
+2.45.2
 
-The rationale here is that a rust binding means commitment then also
-from fresh blood to help co-maintain review C / Rust for exising code
-when there is will / desire to collaborate from an existing C maintainer.
-
-I realize this may be a lot to ask, but I think this is one of the
-responsible ways to ask to scale here.
-
-  Luis
