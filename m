@@ -1,125 +1,80 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC2413212D
-	for <linux-modules@vger.kernel.org>; Tue,  9 Jul 2024 07:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575B6143752;
+	Tue,  9 Jul 2024 08:27:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720511172; cv=none; b=YY/Sj+xTPb4+EbjIVC3JHDnqQMDXnukNCgoCQ1jI21jvpAZxJcPNwGMWjWVSkFNIrN86vuvByWOnxZNlwRHfw0Go50oJCrxnRv4M+Ctuk55rkTPmps9WHyV2XM5O/1zJfAtFMMwi0nN9J3W9k9GigZzk1hrMAZs22MCddnn+0Mw=
+	t=1720513633; cv=none; b=fO632M2+WLcaP0tvzzqCbgi0NVuFbJ0KneRAbfL0jKhnIMQUBJqDR5zcrX38rW1nIyzASBwI1EQy02x2DcREE2U495T05AttI4OujEM6re9oBEuKj93ols1LdtQ5mKLGoOvEedFAuApTEZ7UogyAN4ulHzEcHmNqA4RGzdymYzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720511172; c=relaxed/simple;
-	bh=Odg3B155mdaYV/grBfTxKLgNybZCFxJqj7KupC/8HVU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=impBEjrRIQxg4Dwz8HOURDI7phBlEWe5BcnLjsKc6dzD3zNiMy7urv84BdaJ3YSvzQLatzWSWWMewroCjJpgzaN4cp8m6SlSEAictJbTtFGJf0gtVZcxNE/qZfYzOnvg9Qtgb2qZon19WBVXbJh453X5pBV5bmPBLzUNYUsYkXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=heG6TIvv; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1720513633; c=relaxed/simple;
+	bh=8swVpidJ5ergHaUtyYa0T5Ao4WQQVKO8d3kfW7RqCAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A3s2vjr3rZ7Wu5ZRo73htv0rlbO53yc6gu13WVYr69La6uTBpxtF07/cRi6qlrM0FjJ+ruozZzZ52+XxOZcb+eyZXGPh9b6kNqC/AB641oF1Nj1src84bHX8FBZE8N3EGLFLj2BLVmO+iflgiG9nO+ZR+uSI9DPUvliE1uEKPw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MKs58uMT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="heG6TIvv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720511169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mACayD5AYHS+xw2+EP+bDeIlyuLbxCuR4Y/5wRgyA3k=;
-	b=heG6TIvvg0uWeZfRBNpRsCr9by8pUT89G4TJ1TasnMoagx1c2gSaRnhQQVBM/UqT5NWWYt
-	FaqrMn1tLIXFvLTECexJBBvCP8J9fDEpCdWTW2E3hJYkulLPGTDzZRS+CRQnEkri9hmCLO
-	oYemtuURe9KoS7hDHffM4TCQcmWVExI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-402-YKyo1cP0OXCt8Z5Wd0zMmw-1; Tue,
- 09 Jul 2024 03:45:59 -0400
-X-MC-Unique: YKyo1cP0OXCt8Z5Wd0zMmw-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D36181935DE5;
-	Tue,  9 Jul 2024 07:45:58 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.39.192.37])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 841E41955E83;
-	Tue,  9 Jul 2024 07:45:56 +0000 (UTC)
-From: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
-To: lucas.demarchi@intel.com
-Cc: emil.l.velikov@gmail.com,
-	jtornosm@redhat.com,
-	linux-modules@vger.kernel.org
-Subject: Re: [PATCH kmod] testsuite: add tests for weak dependencies
-Date: Tue,  9 Jul 2024 09:45:49 +0200
-Message-ID: <20240709074554.20855-1-jtornosm@redhat.com>
-In-Reply-To: <lozgnoo3vnuzuezii2pdhxzoy5efmxtlwivugoze4hxr2bechc@mr6kegfejniw>
-References: <lozgnoo3vnuzuezii2pdhxzoy5efmxtlwivugoze4hxr2bechc@mr6kegfejniw>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MKs58uMT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7963CC3277B;
+	Tue,  9 Jul 2024 08:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720513632;
+	bh=8swVpidJ5ergHaUtyYa0T5Ao4WQQVKO8d3kfW7RqCAw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MKs58uMTimJSNukbLWZVm36D1otxy9BBGzP/Gob20xKl25WDcspRBnkP4N2py/S2S
+	 X7NY9l4aN4axsk2IoB5jvqmW4SXmP3lcd5b+oyvO3NjG659aBjUBnv/eiZE98rxHHY
+	 YOsSyPUoaa/ItFlU+AIle/K1xTdXgvs23G2qEWDw=
+Date: Tue, 9 Jul 2024 10:27:09 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: nmi <nmi@metaspace.dk>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Adam Bratschi-Kaye <ark.email@gmail.com>,
+	Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH] rust: add `module_params` macro
+Message-ID: <2024070924-darkening-knee-bfef@gregkh>
+References: <20240705111455.142790-1-nmi@metaspace.dk>
+ <ZoxdRjpy2hRndqmc@bombadil.infradead.org>
+ <LHGWBNSEDaOsx4BbADR1pZYqPV0KKhVaJ1Qvwe9h4UPeERRAA4s1DTIsnFR5rpHBGa6uIG1tU_4hTBXgjAc5BNwNqo0Rg_kOx2W_y0EUy_I=@metaspace.dk>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <LHGWBNSEDaOsx4BbADR1pZYqPV0KKhVaJ1Qvwe9h4UPeERRAA4s1DTIsnFR5rpHBGa6uIG1tU_4hTBXgjAc5BNwNqo0Rg_kOx2W_y0EUy_I=@metaspace.dk>
 
-Hello,
+On Tue, Jul 09, 2024 at 06:00:46AM +0000, nmi wrote:
+> Hi Luis,
+> 
+> On Monday, July 8th, 2024 at 23:42, Luis Chamberlain <mcgrof@kernel.org> wrote:
+> 
+> > I'm starting to feel the same way about modules, but modules requires
+> > more work than the firmware loader. And since I also know Andreas has
+> > already a lot on his plate, I'm at a cross roads. My above request for
+> > the firmware loader made sense to the person working on the firmware
+> > loader changes, but who would help on the modules side of things? And
+> > does this request make sense to help scale?
+> >
+> > The rationale here is that a rust binding means commitment then also
+> > from fresh blood to help co-maintain review C / Rust for exising code
+> > when there is will / desire to collaborate from an existing C maintainer.
+> >
+> > I realize this may be a lot to ask, but I think this is one of the
+> > responsible ways to ask to scale here.
+> 
+> I am not sure I am the right person for the task, because as you say,
+> I have a lot on my plate. But perhaps lets schedule a call so I can
+> get a sense of the required effort. 
 
->>Seems like this commit has regressed make distcheck on my end. Namely
->>I'm running the following commands:
->>
->>git clone ...
->>cd kmod
->>git clean -fxd
->>./autogen.sh c
->>make distcheck
->>
->>Result in:
->>
->>...
->>make[5]: *** No rule to make target '.../kmod-32/_build/sub/testsuite/module-playground/mod-weakdep.o', needed by '.../kmod-32/_build/sub/testsuite/module-playground/mod-weakdep.mod'.  Stop.
->>make[4]: *** [Makefile:1903: .../kmod-32/_build/sub/testsuite/module-playground] Error 2
->
->I added a fix in
->https://lore.kernel.org/linux-modules/20240709044758.67725-1-lucas.de.marchi@gmail.com/T/#t
->
->and also sketched the new CI hooks using github.
->
->>Can you reproduce it on your end?
+Kernel development is done through emails, not calls :)
 
-Sorry Emil, I only tested with 'make check' and I didn't try 'make distcheck'
-(really I didn't know it).
-Yes, it was failing for me too, and I have verified that with the solution
-from Lucas ([PATCH 2/3] build: Add mod-weakdep.c to EXTRA_DIST) is working.
-Thanks Lucas for fixing it.
+If a submitter isn't willing to maintain the code they submit, then it
+should be rejected as maintance is the most important part.
 
->>
->>
->>- Is this work related to the weak-modules used in RHEL/Fedora [1]?
->>  Alternatively, would the RedHat team consider having the weak-modules
->>  solution in upstream kmod?
->>
->>... assuming Lucas is OK with the idea. I'm approaching with with my
->>dkms co-maintainer hat on, where the fewer "if distro == X" logic we
->>have the better.
->
->I was not familiar with that weak-modules and will wait for Jose to
->clarify.
+Sorry,
 
-weak modules concept is very different from weak dependencies and not
-related. Let me try to explain:
-
-weak modules is about keeping KABI compatibility between kernels with
-the same version, in order to reuse modules (internal or external ones),
-so it is mainly for RHEL and the update process.
-For Fedora, that is the upstream distro, and with no guarantee for KABI,
-is not necessary. 
-
-weak dependencies is to be used by upstream (and everywhere) to allow user
-applications to be aware of internal dependencies that are not declared as
-softdep because they are dynamically loaded.
-dracut has approved this feature from yesterday and I am waiting to have
-the kernel declaration in linux master branch to apply some weak dependencies
-(i.e. lan78xx).
-
-Best regards
-José Ignacio
-
+greg k-h
