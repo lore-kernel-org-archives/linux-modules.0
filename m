@@ -1,144 +1,182 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7636918628D
-	for <linux-modules@vger.kernel.org>; Tue,  9 Jul 2024 13:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658557D412
+	for <linux-modules@vger.kernel.org>; Wed, 10 Jul 2024 07:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720533023; cv=none; b=eLIjwKV3Z7Ce+4dfpR3axZH/dMWraolpifwBIhJU+ju286FAwJT2HrmLZBb1p/tOR8pvlWRbOsaX9kyY1DxR2rnMNf3MlSGZ0CIIPLP1OcqAisbroVYqm5tG2G8EQbJ1TYIcY5/cioz6JUguu0k4zs9a8QL1TAknPfqg33/P6Hg=
+	t=1720596655; cv=none; b=qIPN480R5x3GYErzWn2rVFsjcsim1Eph+mkm7OPfs7NP276MKYyvs+Agph8bHNQ+AuhKdxRDb6emTT7Gg9QKcBbP/IIqussma4+NZJeH6vxeQNK4twpbEu1T5kBWcTHH4iuNVanks45QeLca7YMMAr131h90Jw3hCuiFR0WzaKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720533023; c=relaxed/simple;
-	bh=zeNqukykfeBzVcQJBjXGwl1ywROQhZgTZO5DLQiLwgk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WPIc/6RS3P+WfyMQHMhTfKbZX2f9Eaj0tpY2Xwu9Si7+EoXzabxiU6Dfh5ykFH999aBYVIbJjNr0XMjEKi2Ey73UQ/2o9aqNqJI4EvW2zRrp4cpgIz2bfzOisyl4QiSlBASvAxn5jW9nYHWu5YQh92ahGDO2ETyFeQHGH3TCLdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cLhJUwcw; arc=none smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1720596655; c=relaxed/simple;
+	bh=bg11X0+ouhSXutIZH+FX0laaIoy8Fd6IAGYyDkPoOmg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k64jSzPUWKrCUXdk8UpQBMo8V+nt2BOXwMoMQGrk9+P1xuKXDDutyhX4Yb3o8vPqzTLtdS1UqJ42SsOxcw7n/u32nQY0issN/x3iIulnJeczyAtAl8TsvHSDTLbiaQZoUAcQPXQWyAJ2so22SvE1hCNfvKRdn48pcJ6Sqn+zViI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dJCiLAhd; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cLhJUwcw"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-447fd75f9aeso4126711cf.1
-        for <linux-modules@vger.kernel.org>; Tue, 09 Jul 2024 06:50:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dJCiLAhd"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a77c25beae1so650959466b.2
+        for <linux-modules@vger.kernel.org>; Wed, 10 Jul 2024 00:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720533020; x=1721137820; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QZEPDl91dKzWSTLHqn5h1YE/Ocu4Kf/XY0HCuLFY6IM=;
-        b=cLhJUwcw89sn92s0yGyNorJVe93lwJnNq0FKAcMp3asmsthIxnPvI9tK8OEtyw+RXr
-         bKNnUdIlCZYCkYft11wE7XCWQFUDgWiomL5Y1VHcLWyw9v2QoTqtOnu1KVPOvAfXAVj/
-         sNsvKZ0xaC5H2Twu5epIWsNDihycmHDCCbH6Un2jnisTOUvLSBm50kynW31TWNnMSpKV
-         8bWRcxwBq7Rx+jkfop5FsFl6X++Sb188NvUvkUnKZXWCrWeNescUTTK0Tp1KyjUrWnRx
-         5DSfTYCq9cUA15SpxHQOsDLZPv2ML9sYtnexlcPsPXzPK0hO7QFxdV3S8yFcIjZYs+KC
-         m2fA==
+        d=suse.com; s=google; t=1720596652; x=1721201452; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BE/oQZmZGmjJjHSOCOGHNHHe0sV17vr1YpR/41Jzb5g=;
+        b=dJCiLAhd/2MRdbJWp59ir8VhnLVuK+eiZYL4Bb/vRADJi74iKHszneGBh0sliGvTxr
+         K/SJ72GSlzwYqH6wc4kUgVjYptXtWBsPcKHzWasteD4RPNaloPxQJvVrZ/oHyzNv5fm5
+         Ysq7+aQbcwtE2r0EhoQKmv+nb/OFGTohmFkk+MemWnsiwzyJeuBAUPsGpKsqXM5hOqyv
+         mFzLh/K+v/dMAn2MV2W7vtQw2HgZMa0DKphGC3pTuAlL+lo8UL67TblHD2BBHlQrmdcI
+         4//b90OGCk0KZUbbPIdpi91EWjNDLqXedO5Vpv8klLofrYYemNMTd19Nbn2M/Oz/oMkj
+         V7Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720533020; x=1721137820;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QZEPDl91dKzWSTLHqn5h1YE/Ocu4Kf/XY0HCuLFY6IM=;
-        b=HMSC3peLU7UQ9ibi5sSCBS0fcYwBLK6ZrxlqL/cMVjQu4XBx91vhJ8p/1GE0d39bdW
-         5pfsHP3PxDH5i53LpBTLbVj1WV3uO7nmoQaA8AIMkmW3DB3wLqVFtYKheX9/k7ifVeGU
-         1Z1WVCADc2b4OpGBQ7uBRpnUzhoMUSW5L9rhcEqrwdN/AFKeudcqESCA5BSZJhISdmRC
-         UCOJSUhEMJPsf8LXIFQIyt8/mEoRrwZDiijhxM6XdiNMCTeWgoKhaEaI1PxjBE8CzMkv
-         QcG2RPddpiMi3zlDAk3/JAM42OqZgV6dCwDoW1w71s6kd07YGMdzAKSLxyUkk45vmUId
-         E/Dg==
-X-Gm-Message-State: AOJu0YzZCe99laQ3bZkFpOZBDsIkAqREsjPJZDwcAu1/SVSCbci53G8D
-	3T03pd7TZ2b9fbEipKd2Mbep+HXt1xum1eU8+QqjbBde3cpOdCpo+Qb8JA==
-X-Google-Smtp-Source: AGHT+IGPu9cemw2jg9nWjtljioavWfnmyAlwCDmP6xWicPYhJOP/97BNigcL0M6bMYHH3IJae+795Q==
-X-Received: by 2002:ac8:5ac6:0:b0:447:e808:ab24 with SMTP id d75a77b69052e-447fa908876mr25135701cf.50.1720533019904;
-        Tue, 09 Jul 2024 06:50:19 -0700 (PDT)
-Received: from ldmartin-desk2.intel.com ([2600:1702:4eb6:3000::3f])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-447f9b4e536sm10604831cf.39.2024.07.09.06.50.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 06:50:18 -0700 (PDT)
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH v2 1/1] ci: Add github workflow
-Date: Tue,  9 Jul 2024 08:50:07 -0500
-Message-ID: <20240709135007.104325-2-lucas.de.marchi@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240709135007.104325-1-lucas.de.marchi@gmail.com>
-References: <20240709135007.104325-1-lucas.de.marchi@gmail.com>
+        d=1e100.net; s=20230601; t=1720596652; x=1721201452;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BE/oQZmZGmjJjHSOCOGHNHHe0sV17vr1YpR/41Jzb5g=;
+        b=Nl5u3iPXNigA6kUupJMWcJ6Uy6KSKkSeBLEuC/9rTIlaWmDILnkW5kO5leDi1eQ59Q
+         uazLbmYOG72hGZD9o+dw5AUMlvBIDJBZ3IQ+bX4pGX3s4hGnGzB8cLkwB2GzqIQVyrXG
+         px73O6kmjEfhu7oy5nFDSk9jLbnkP0LRg8X2DUj3b4lPfwPn8Ae2o34jGiOfdadtA2xO
+         9lGgrDBanRA2FpyFzo4ILcgMVEQkfgeZiNMuu0JptywqxuywHNgAKo09mzWf8qbOgG5k
+         +8x/1wvntGLJRKPyrrdpCfs5XxzguR1fmkGTaaNg+uFR2tKtICrIDY3pPe6bV51Wh8OK
+         8JNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyr5740r1+pE8noehcTRLdrZOz+FMMb5d/PwvB+eKj9q9W8vN8NxP0KzIgqDVmjVQXiHywaNi4JcDJVv6uHUw6PVlqqzJ7Tu2I8RsrbA==
+X-Gm-Message-State: AOJu0Ywz1vbMEHkHIrqVw1BOB8uX3Lhd8fK8HU/P3FfpOk3Fr3nUPrbv
+	UFswc1xoKwLUTPcDOywRMYZjFaWuj/2K5NyDkgYQO++9yxfUeNY0Wg/oQXIC4NY=
+X-Google-Smtp-Source: AGHT+IFC1z/bjrfqmHUH7re49LUgUD3hZ7k7PnkWdvTpsNEn2b9WWeiNWttRMRVU89UAnO150KlFSA==
+X-Received: by 2002:a17:907:2da1:b0:a71:ddb8:9394 with SMTP id a640c23a62f3a-a780b6fe3e7mr424621466b.40.1720596651593;
+        Wed, 10 Jul 2024 00:30:51 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a871f2fsm135117366b.202.2024.07.10.00.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Jul 2024 00:30:51 -0700 (PDT)
+Message-ID: <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com>
+Date: Wed, 10 Jul 2024 09:30:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
+Content-Language: en-US
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20240617175818.58219-17-samitolvanen@google.com>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20240617175818.58219-17-samitolvanen@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add a minimal github workflow to test kmod. This can be incremented in
-future to test more distros, compilers and libc.
+On 6/17/24 19:58, Sami Tolvanen wrote:
+> Hi folks,
+> 
+> This series implements CONFIG_MODVERSIONS for Rust, an important
+> feature for distributions like Android that want to ship Rust
+> kernel modules, and depend on modversions to help ensure module ABI
+> compatibility.
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
- .github/workflows/main.yml | 56 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 .github/workflows/main.yml
+Thanks for working on this. Below is some feedback with my (open)SUSE
+hat on, although it should be quite general.
 
-diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
-new file mode 100644
-index 0000000..79eff14
---- /dev/null
-+++ b/.github/workflows/main.yml
-@@ -0,0 +1,56 @@
-+name: Build and Test
-+
-+on:
-+  push:
-+    branches: [master, ci-test]
-+  pull_request:
-+    branches: [master]
-+
-+jobs:
-+  build:
-+    runs-on: ubuntu-latest
-+    steps:
-+      - uses: actions/checkout@v4
-+
-+      - name: install dependencies
-+        run: |
-+          sudo apt-get update
-+          sudo apt-get install --yes \
-+            build-essential \
-+            autoconf \
-+            automake \
-+            gtk-doc-tools \
-+            libssl-dev \
-+            liblzma-dev \
-+            libssl-dev \
-+            libtool \
-+            libzstd-dev \
-+            linux-headers-generic \
-+            scdoc \
-+            zstd \
-+
-+      - name: configure
-+        run: |
-+          mkdir build
-+          cd build
-+          ../autogen.sh c
-+
-+      - name: build
-+        run: |
-+          cd build
-+          make -j$(nproc)
-+
-+      - name: test
-+        run: |
-+          cd build
-+          make -j$(nproc) check
-+
-+      - name: install
-+        run: |
-+          cd build
-+          DESTDIR=$PWD/inst make install
-+
-+      - name: distcheck
-+        run: |
-+          cd build
-+          make distcheck
--- 
-2.45.2
+> There have been earlier proposals [1][2] that would allow Rust
+> modules to coexist with modversions, but none that actually implement
+> symbol versioning. Unlike C, Rust source code doesn't have sufficient
+> information about the final ABI, as the compiler has considerable
+> freedom in adjusting structure layout for improved performance [3],
+> for example, which makes using a source code parser like genksyms
+> a non-starter. Based on Matt's suggestion and previous feedback
+> from maintainers, this series uses DWARF debugging information for
+> computing versions. DWARF is an established and relatively stable
+> format, which includes all the necessary ABI details, and adding a
+> CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
+> reasonable trade-off.
 
+Using the DWARF data makes sense to me. Distribution kernels are
+normally built with debuginfo because one has to be able to debug them
+later, unsurprisingly. Besides that, one now typically wants to use BPF
+together with built-in BTF data (CONFIG_DEBUG_INFO_BTF), which also
+requires building the kernel with debuginfo.
+
+I would however keep in mind that producing all DWARF data has some
+cost. From a quick test, an x86_64-defconfig build is ~30% slower for me
+with CONFIG_DEBUG_INFO=y. The current genksyms tool allows to have
+debuginfo disabled when backporting some patches and consequently have
+a quicker feedback whether modversions changed. This option would
+disappear with gendwarfksyms but I think it is acceptable.
+
+> 
+> The first 12 patches of this series add a small tool for computing
+> symbol versions from DWARF, called gendwarfksyms. When passed a list
+> of exported symbols, the tool generates an expanded type string
+> for each symbol, and computes symbol CRCs similarly to genksyms.
+> gendwarfksyms is written in C and uses libdw to process DWARF, mainly
+> because of the existing support for C host tools that use elfutils
+> (e.g., objtool).
+
+In addition to calculating CRCs of exported symbols, genksyms has other
+features which I think are important.
+
+Firstly, the genksyms tool has a human-readable storage format for input
+data used in the calculation of symbol CRCs. Setting the make variable
+KBUILD_SYMTYPES enables dumping this data and storing it in *.symtypes
+files.
+
+When a developer later modifies the kernel and wants to check if some
+symbols have changed, they can take these files and feed them as
+*.symref back to genksyms. This allows the tool to provide an actual
+reason why some symbols have changed, instead of just printing that
+their CRCs are different.
+
+Is there any plan to add the same functionality to gendwarfksyms, or do
+you envison that people will use libabigail, Symbol-Type Graph, or
+another tool for making this type of comparison?
+
+Secondly, when distributions want to maintain stable kABI, they need to
+be able to deal with patch backports that add new members to structures.
+One common approach is to have placeholders in important structures
+which can be later replaced by the new members as needed. __GENKSYMS__
+ifdefs are then used at the C source level to hide these kABI-compatible
+changes from genksyms.
+
+Gendwarfksyms works on the resulting binary and so using such ifdefs
+wouldn't work. Instead, I suspect that what is required is a mechanism
+to tell the tool that a given change is ok, probably by allowing to
+specify some map from the original definition to the new one.
+
+Is there a plan to implement something like this, or how could it be
+addressed?
+
+> Another compatibility issue is fitting the extremely long mangled
+> Rust symbol names into struct modversion_info, which can only hold
+> 55-character names (on 64-bit systems). Previous proposals suggested
+> changing the structure to support longer names, but the conclusion was
+> that we cannot break userspace tools that parse the version table.
+> 
+> The next two patches of the series implement support for hashed
+> symbol names in struct modversion_info, where names longer than 55
+> characters are hashed, and the hash is stored in the name field. To
+> avoid breaking userspace tools, the binary hash is prefixed with a
+> null-terminated string containing the name of the hash function. While
+> userspace tools can later be updated to potentially produce more
+> useful information about the long symbols, this allows them to
+> continue working in the meantime.
+
+I think this approach with hashed names is quite complex. I'd personally
+be also in favor of having a new section with variable-length strings to
+store the names of imported symbols. As yet another alternative, it
+should be also possible to refer directly into .symtab/.strtab to avoid
+duplicating the names, but I suspect it would be non-trivial to
+implement.
+
+Cheers,
+Petr
