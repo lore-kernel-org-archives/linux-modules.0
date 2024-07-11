@@ -1,105 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B766C1DDC5;
-	Wed, 10 Jul 2024 13:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93583BE6F;
+	Thu, 11 Jul 2024 08:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720617746; cv=none; b=bwEUJ/kMputaRYAvWq2qC6MfcluKZB2kORFA7MJYrFZBFy9Kc5wrqA6JnGYHTavo4nk8vwOD9RKV4Qk1USEhS5oFlG5UOe266gLiMzHND96cTrUsqSotGzuBLflS0+GCgJoTYnGgqJEEa28hsg5EiB4uFncWUXW1dPfHA14v+Sg=
+	t=1720686393; cv=none; b=tdcMcWygcGkQd6MWG9fuVKZkuN+nMfrbFWVVH1xaPMab9hj+rfi4ysJ6/Upj3MB+EFbp+LTXeKCgPd0bXvMWgklrE6XNRtSx+07+mdb8Jd7hp8AbhQsZlJ2lzwyENIMmxXIFSFWusei8E8cHW6xCGs/s4xoYdtbEQa4rcvcgYYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720617746; c=relaxed/simple;
-	bh=H/Mh5dijKIbLYIxonJjEKCDKJU/iEvbrdpiVCnmG2dY=;
+	s=arc-20240116; t=1720686393; c=relaxed/simple;
+	bh=PXqQ+xvRcwFYqjNiQ2YRemoNo2jA6llAw+agI//5xaI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rxLRvVi4kh/92VXHc0Lybc5PqGskRozBZU2qhWI9tQw3wYZAaF41yW9qTKHH92CsNu5PGDteR8UZ/ULOgrqJJs9Yo3sKCFhQRl8987+ISebWZIOqS1D7hWs87EsFJtQvOY05pSYDO/3i1wukey4JuIK1k70mED6BjFWDRnMzCro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PaD2r72i; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=WlIAEkeE9CKR+kGeKFbn0rBpX/HKcovjtN5lcGjB6y8iOlkdSpCnkmEOITC7hRuRv/rGQEmHEfzezQ8FO3IfPNHAT1T1+l3zeKXZ+JFxxHGg/xL2g1qZ4qKkVv1CjBAGfycJJjjFuZ5v+eDjPBfpTBNO9GrirgpzzvMzC2HTB4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PQaTuRoA; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PaD2r72i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA1FC32781;
-	Wed, 10 Jul 2024 13:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720617745;
-	bh=H/Mh5dijKIbLYIxonJjEKCDKJU/iEvbrdpiVCnmG2dY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PaD2r72iJ7Oz+lB6QWTBKvGGi1zGUpmdiwtKSwfAnT8zbaLBRanI7OPDR2Nw9+UEo
-	 NarRLTQhlJ1jOJBnDZJzBQUFGrEQTrUVBPwj5Ar9JksnyoG2pKGABp5iYaEe3dDxZH
-	 mLCigsguIlw2/S3JVRHdl8wVimCYV43VfDqUxrIU=
-Date: Wed, 10 Jul 2024 15:22:22 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?iso-8859-1?Q?=C1gatha?= Isabelle Chris Moreira Guedes <code@agatha.dev>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>, patch-reply@agatha.dev
-Subject: Re: [PATCH v3] init: staging: Fix missing warning/taint on builtin
- code
-Message-ID: <2024071032-hardened-discard-4cf6@gregkh>
-References: <zsk54zosv6tht4j4nma4ix7lq2knxi3ylqadd2foznc72nkaa3@xbc7gpozx6ai>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PQaTuRoA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=IoLwNlzL5pVMes7pL0SN66rptxB5HrdHgJG/HnPw4go=; b=PQaTuRoAFO4mYSXAy4lP5USzkH
+	J4gUlSWhlzUH/NiDp2KgLiNQyEPTdMu168GNAB9Xrv/R/ZrGvfNdcgkIvvJIWj09Vgk9a8ggoHSFy
+	2KdfrQSuu3vW2ButEYbttpqj5waDZW3iB310fOAvvWUrQ0P6VtNMOZZhB4EdwxlfRxhXlznlQ+YqR
+	F/JweXuda1clgoNwnhjEhvu83qwhnqHcOpvSIE+DVIhIpDdijDtzz2i/7LW7MTKT26TVRbl8P1zD3
+	0Ng39ttpebR98ql+1a2w6xoV1vfdIooxibBfDUpFPdCoZXuIPevrR572JixXR9My07LBNLwmXvfyR
+	XMs3+RKw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sRp8E-0000000DAT4-2xks;
+	Thu, 11 Jul 2024 08:26:26 +0000
+Date: Thu, 11 Jul 2024 01:26:26 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Youling Tang <youling.tang@linux.dev>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>, tytso@mit.edu,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	linux-fsdevel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH 0/3] Add {init, exit}_sequence_fs() helper function
+Message-ID: <Zo-XMrK6luarjfqZ@infradead.org>
+References: <20240711074859.366088-1-youling.tang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <zsk54zosv6tht4j4nma4ix7lq2knxi3ylqadd2foznc72nkaa3@xbc7gpozx6ai>
+In-Reply-To: <20240711074859.366088-1-youling.tang@linux.dev>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Sat, Jul 06, 2024 at 12:15:01AM -0300, Ágatha Isabelle Chris Moreira Guedes wrote:
-> Fix the absence of warning message and kernel tainting when initializing
-> drivers from the `drivers/staging` subtree from initcalls (when
-> configured as built-in).
-> 
-> When such a driver is built as module and the module is loaded, the
-> `load_module()` function taints the kernel to signal code of unknown
-> quality is loaded, and produces a warning like this:
-> 
-> [    8.076352] rts5208: module is from the staging directory, the
-> quality is unknown, you have been warned.
-> 
-> The same behaviour is absent, however, when a staging driver is compiled
-> as built-in on the kernel image, since loading it happens through
-> initcalls and not through load_module().
-> 
-> This might prevent relevant information of being available on a bug
-> report (i.e. on a panic log) among other possible problems.
-> 
-> NOTES:
-> - The patch is written in such a way that all non-staging drivers are
->   kept the way they were, except for staging drivers built with
->   `-DSTAGING_CODE`.
+Can we please stop this boilerplate code an instead our __init/__exit
+sections to supper multiple entires per module.  This should be mostly
+trivial, except that we'd probably want a single macro that has the
+init and exit calls so that the order in the section is the same and
+the unroll on failure can walk back form the given offset. e.g.
+something like:
 
-That's good!
+module_subinit(foo_bar_init, foo_bar_exit);
+module_subinit(foo_bar2_init, foo_bar2_exit);
 
-> - Since it changes some macros related to clang LTO as well, I tested it
->   and it works properly in kernels compiled with both clang and gcc.
 
-This is odd, why is it messing with LTO stuff?  It should be much more
-"self contained" than this I feel like.
-
-I see what you are doing by trying to use some of the LTO macros again,
-but in doing so, it makes it really hard to understand the diff and feel
-comfortable with this.
-
-If you want to stick with what you have done here, can you split it up a
-bit more?  Once patch for the LTO header file changes and then another
-that only adds the staging stuff.  That way it's easier to review and
-justify that nothing is going to be broken with this patch.
-
-> - Some `checkpatch.pl` errors, warnings and checks (with `--strict`) are
->   present. Some were already there, some I introduced but I think
->   they're unavoidable. Some IMHO don´t make sense at all, I think they
->   would apply for most regular macros but initcall macros are just way
->   different.
-
-Yeah, checkpatch and macros can get tricky, use your best judgement here
-and it looks ok.
-
-> Fixes: 061b1bd394ca ("Staging: add TAINT_CRAP for all drivers/staging code")
-
-I think it really fixes the commit _after_ this one that turns on the
-taint for the build :)
-
-anyway, nice work, I think it's almost there!
-
-greg k-h
