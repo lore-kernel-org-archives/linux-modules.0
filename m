@@ -1,61 +1,65 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE793B1BC
-	for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 20:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B69573B1BC
+	for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 20:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720815623; cv=none; b=ojjBUZQogojE8UFgS6ne+unzdXIpZgoo8G6QIfbJN9l1tRWEfAjuy0wqlMQX0akm4gI2uKq3D1g4SAojeVRzT/T1uuaVIvqa/lBdtVyiHi3A4VbIwUKiC1G2C+SUfDtg2eoTTewvvLz+OVpLhL93R/8INs2UsIXXEmamUy6YOkk=
+	t=1720815625; cv=none; b=iDSE4KplDRN0yH8n10QxBfUAwNJgw+qlg4uYrhnuuuI2KeZ23LTvjin5Mg7bBSeqyW2aIU7QBow9LSRtueDixiQf0ZaWMw1b/xg0fmx6aqiK3fUwfsjtLOKTEWMBHAJ+NFhf/hmMm7QM20EwYHS93TQsYP6OjmfC3CaXSiErFRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720815623; c=relaxed/simple;
-	bh=bs28XFB/pvWEPiOIYn+ZPuJ0O4E3/IVuMY+c5SgzGn0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p4ZURn8JgAdtZss1R53JttdR6LdNu3za8nSxrRmNP4oeqye6VaO35eYb6j9EzFFhalsNZkp50YNkwPt4U7W/cywn4UR+MFkU3BaAmZSqvjEhCXyRF1Rv45iFyifsHyzjvBqRkgf4EQpDzjIIhGlyHBq428VEOoscFaJwAS8slPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MhmeJPHo; arc=none smtp.client-ip=209.85.167.178
+	s=arc-20240116; t=1720815625; c=relaxed/simple;
+	bh=0T48t6sfd0VkfPNeM5QbBtt+KDwq2Fa234DzncRZiwU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JtAimIIAsk+wXOg6Up4P1g74zhtyoB2QAfu59zB4SUc62FJqJzg4OibMluzqNZ1KJG05AtN+riudzCHhVNUxOyvd0BhzpqaivnFjDXcRR6vS1z71w0SeOcRPKQ2Rm17u4vVoBYRoJl7xivzoH0rHUPfEb/wXPAl1sZh1Jn0EmTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RQ593Ga/; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MhmeJPHo"
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3d9da46ca13so1207394b6e.2
-        for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 13:20:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RQ593Ga/"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3d9c487b2b5so1452681b6e.3
+        for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 13:20:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720815620; x=1721420420; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=413RuQ7gL1ZnDD9GKlt9WjHqGUCpYSVyI6AQx2FB/r4=;
-        b=MhmeJPHopb2KHp/7U8e8bc7OopTCRv2eAJM5fHCQPqMYnHeEyZNNey09/rvc3M1U3l
-         uwXKeSLVfxoznMqITMs7cYC1k7ZjBvoB96IAF1TEaUc3g2bcfjI7T7/Q0xSW+eWF7CLN
-         TGQQEgRj10IcIJNIQas8bbAZrnexeoZ0h0jjnX/RXVCLNjgmmZZqfg3i2u2eL8fvCjyi
-         zT3V36yNyKXejmr4PT1LoXAnxVTh3eviu91Q+Fgr14ClnT3QgMpIp4gwPauREw01sIsJ
-         xDZ/ThSyIhsYIH22fzhb9GdX73w+N55Dq7oSVtEaJv7HNwyKA5qKtrM7JU3suyQso6oR
-         FlYg==
+        d=gmail.com; s=20230601; t=1720815622; x=1721420422; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O4j1j/WYJEzLsa6TiS2XDZ2PsMffRwqUeBPYw60ayeY=;
+        b=RQ593Ga/If3a7EeNIU1zXFdoSFuoSdMCAWaJJo4nUtDN20NNNnSfaeRaNbhv343u2V
+         F5LvviHdIyq8VV/i6idQuK0/JFx4UZh+9oAaqgTkv4eO0VAcv8/yMSDXDj9znXnSFhsh
+         0JmxeRsKWhyxLGkVddki9HWfpoKeT061nNiKRajdoCHHOqn0ue5b2JIot7BbGlPTBeKR
+         wYIAAyRSiZsLlG6+wUbojgAaIf++sl1ShIyj1l9PiHmaBG7HZFCGyW3Uv57XILDgJCbI
+         1/njza7vrycXQ1k2WMCuSKsgnaI8n73cl25tmmB1Z2GBtL1+4+w0O9uSp2Kp/kfd7/Dg
+         aanA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720815620; x=1721420420;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=413RuQ7gL1ZnDD9GKlt9WjHqGUCpYSVyI6AQx2FB/r4=;
-        b=t/pf8us6fGOpHEp1SFzXdEbqW56NWIVU6I691pYVM+2zXo3nK0cLG6vbCMpzM3mOOf
-         j/auAlPNFZfSpUMz5wOkmLqmHla34+HRMZraxyXLlp8KYUpSJdNQypXx69zAgjS1z9er
-         +tGhuRlCW03itOnc+MBhfwztyWoMJV4+yZDVR3kv2aDoR3rGDBn17Dagmg8GSnnVQR1b
-         w+anudaXRRqrKwmRbU7N24muESi0Ap3SMnT1rEyNCiOtLlipk4/RlrpBQsN8No2KJES5
-         ijUvAaW2KdLGTiWaFwpgFtI/oBnDMgli6nsn155uR7oaCj3tW3CgNeYZz3PJo1Z7o8Sx
-         0FUg==
-X-Gm-Message-State: AOJu0YzTynLuCQufiJrAEro1ELuNlWcEHPDHQj+Dia0rF7OsATFJny+T
-	+hlDSxmYYsxQNj8wonkpt4qa+kgjF3KKQhrXpdx3lVAZDFbRjJid4Z+s1g==
-X-Google-Smtp-Source: AGHT+IHJ7jNx5InBJCHYFF8TpjbSePp1XFLTj1pk90aC1DKPWwXq0lFLtAeql5LT1F2v5PItCfugWQ==
-X-Received: by 2002:a05:6808:15a9:b0:3d9:2aa5:4077 with SMTP id 5614622812f47-3d93c038484mr15642908b6e.5.1720815620054;
-        Fri, 12 Jul 2024 13:20:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720815622; x=1721420422;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O4j1j/WYJEzLsa6TiS2XDZ2PsMffRwqUeBPYw60ayeY=;
+        b=f/UfVDFHgQ2yYnzOYA/xeRdBuskrkyTu4YVt0zHjvksNDvicIvFJ6IH69tTqF9rVOY
+         7fT64B8Hz7MG/wZNgZ7vQOOYHNgto67JIunPFnO6cRb4wLsnE1DqwOEgZ9936bZF9Bmd
+         PyKuvQXe+9ZVyVo66q7KkZGRFgF+J5b9hBTbNIW8dpE5ETt+AMCZwb2qeSRiPGvqATS+
+         34Ujv3NypgTpsv3V7QfroHno+o2zDnLsc98EwDY417z4EuZysxMkRpExT/eBKd0yvEiv
+         UAiWdth0bAK6Oc5i2KYho0wvemu4uun498JSECnDBFUjudYhCw4BgD5WOG9W4plmfSZZ
+         oI3A==
+X-Gm-Message-State: AOJu0YxcowcLTizYhkMpVOqAZnjLcBj+F8GTJ3eizSPY6x/pscbip3kC
+	6uTRRPc9HgP8H/ngRI3pMIlxGig3VuzFlmY5LZMKB95jkKG2nXiulmBapw==
+X-Google-Smtp-Source: AGHT+IFyy9vRAoZ984KEOoL/fGVyZODpjqtf3MtjwWUjaRHD8q7h6c8OXb/qc5GFpUxEbFjHSyiATg==
+X-Received: by 2002:a54:4586:0:b0:3da:82e9:ea9b with SMTP id 5614622812f47-3da82e9edbemr7454333b6e.43.1720815622045;
+        Fri, 12 Jul 2024 13:20:22 -0700 (PDT)
 Received: from ldmartin-desk2.intel.com ([2600:1702:4eb6:3000::3f])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f19028f7csm434473585a.67.2024.07.12.13.20.19
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f19028f7csm434473585a.67.2024.07.12.13.20.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 13:20:19 -0700 (PDT)
+        Fri, 12 Jul 2024 13:20:20 -0700 (PDT)
 From: Lucas De Marchi <lucas.de.marchi@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH 0/5] Add distros to github CI
-Date: Fri, 12 Jul 2024 15:20:06 -0500
-Message-ID: <20240712202011.906033-1-lucas.de.marchi@gmail.com>
+Subject: [PATCH 1/5] ci: Replace package installation with local action
+Date: Fri, 12 Jul 2024 15:20:07 -0500
+Message-ID: <20240712202011.906033-2-lucas.de.marchi@gmail.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240712202011.906033-1-lucas.de.marchi@gmail.com>
+References: <20240712202011.906033-1-lucas.de.marchi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -64,37 +68,73 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a few distros to CI to improve coverage. This is now executed
-on Ubuntu 24.04, Ubuntu 22.04, Fedora (latest), Archlinux
-and Alpine (latest).
+Separate the package installation step with a local action so
+it's easier to support more versions and distros.
 
-For Alpine, the testsuite is disabled as it's currently not working. It
-can be enabled once fixed.
-
-Results:
-https://github.com/kmod-project/kmod/actions/runs/9913631414
-
-Also available as a Github PR:
-https://github.com/kmod-project/kmod/pull/44
-
-Lucas De Marchi (5):
-  ci: Replace package installation with local action
-  ci: Use a container and expand versions
-  ci: Add Archlinux
-  ci: Add Fedora
-  ci: Add Alpine
-
- .github/actions/setup-alpine/action.yml    | 22 ++++++++++
- .github/actions/setup-archlinux/action.yml | 16 ++++++++
- .github/actions/setup-fedora/action.yml    | 27 +++++++++++++
- .github/actions/setup-ubuntu/action.yml    | 23 +++++++++++
- .github/workflows/main.yml                 | 47 +++++++++++++---------
- 5 files changed, 117 insertions(+), 18 deletions(-)
- create mode 100644 .github/actions/setup-alpine/action.yml
- create mode 100644 .github/actions/setup-archlinux/action.yml
- create mode 100644 .github/actions/setup-fedora/action.yml
+Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
+---
+ .github/actions/setup-ubuntu/action.yml | 22 ++++++++++++++++++++++
+ .github/workflows/main.yml              | 18 +-----------------
+ 2 files changed, 23 insertions(+), 17 deletions(-)
  create mode 100644 .github/actions/setup-ubuntu/action.yml
 
+diff --git a/.github/actions/setup-ubuntu/action.yml b/.github/actions/setup-ubuntu/action.yml
+new file mode 100644
+index 0000000..554d261
+--- /dev/null
++++ b/.github/actions/setup-ubuntu/action.yml
+@@ -0,0 +1,22 @@
++name: 'setup Ubuntu'
++description: 'Setup an Ubuntu container for running CI'
++runs:
++  using: 'composite'
++  steps:
++    - name: Install dependencies
++      shell: bash
++      run: |
++        sudo apt-get update
++        sudo apt-get install --yes \
++          build-essential \
++          autoconf \
++          automake \
++          gtk-doc-tools \
++          libssl-dev \
++          liblzma-dev \
++          libssl-dev \
++          libtool \
++          libzstd-dev \
++          linux-headers-generic \
++          scdoc \
++          zstd
+diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
+index 79eff14..fa9c9b9 100644
+--- a/.github/workflows/main.yml
++++ b/.github/workflows/main.yml
+@@ -11,23 +11,7 @@ jobs:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+-
+-      - name: install dependencies
+-        run: |
+-          sudo apt-get update
+-          sudo apt-get install --yes \
+-            build-essential \
+-            autoconf \
+-            automake \
+-            gtk-doc-tools \
+-            libssl-dev \
+-            liblzma-dev \
+-            libssl-dev \
+-            libtool \
+-            libzstd-dev \
+-            linux-headers-generic \
+-            scdoc \
+-            zstd \
++      - uses: ./.github/actions/setup-ubuntu
+ 
+       - name: configure
+         run: |
 -- 
 2.45.2
 
