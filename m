@@ -1,167 +1,110 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291343C062
-	for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 20:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50569F4FB;
+	Sun, 14 Jul 2024 11:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720815632; cv=none; b=cRkBdYaFFAKhyBbSMYOr3oC3r/rSw/4I7xcrGTyNghQpIx/4cCXN2Ju7/x9ZXJPK98zbjLcqLtbyld/dF6Ziig2WgOfCFYNgHG/fhcAFY3iTNQw5VDQmgkKnCkHRAcLw8gjpWyq25nKlVs82I/l2K9+S56itriQhHmGEAfHrjto=
+	t=1720955877; cv=none; b=lMV8BwWQsxg6MuKScaoAlePUddfLq/MdOstoLOGd6g1LRNFeAFfFNmuDp92H1QHrOV6IKBN1j2rTV5vChMw+Bqp7aovpT7cbJwaPHbaoevTU5i3QA+tsu0vVjTiuRYxz2xEfrzUKn5IDnCS83QWgmai+mUivew3oYLMUL9rp7Ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720815632; c=relaxed/simple;
-	bh=jgd6Ar3mjHxEU4gvhyzDWcNIBSGlMr5exCrEb4AilVo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I6bKQrkiE5TW0J8BUMt/yOZNztyb7MlBsqwUTeBCEKOfmMJiY48KEdX796dhIvkJVf19Oji6+RSasc+xazapjeMmoG2dQwqO6rHdNFJgTQPCOt1xg6unOAwmxNci81Ul6xGURfATiCKEH/8RCg1+pKIo6SUL9irWpRfaspRBzL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k17lnnpe; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1720955877; c=relaxed/simple;
+	bh=lB+D30ieUHrYR/nzmhn2wp3IdbzaoZbtAxkshjUDHbE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Wsknt1Y9RYv/gaTxMQZ+wNOp6diIkDaxJfxjqbgA0kztWCXtrUj+8Kb/K2o2Av6qz/jrAo07CPRh1HMB0ix6sAj01d1KtPmmJocqkspeSwvL81Ng8XSuWbYESY9lpm25kLJw8Blk3T+xqMIGuOJPycN4rcizYmWwMtx8VX+gHQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=OnIy8aqG; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k17lnnpe"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-79ef82c6391so127048785a.3
-        for <linux-modules@vger.kernel.org>; Fri, 12 Jul 2024 13:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720815630; x=1721420430; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rsayz27AEK0ZUF0FdWJVnVPT8Q1Wqz0KnZfkRPataDo=;
-        b=k17lnnpe+XV4wlk1YOMr3zPnxZZwTlQKMz5jkbyb8stRWnU7MXs5rJcUxBWJZ8BbRU
-         lorf3+30+cACOmFFYD7AoQ/p3Ecy0wITkSStcy8T8i712o87fVDoGCgVwJcQ2gfL9QkM
-         JThRIe06rulR0GGzl8J2/kuQScOYH4GMkOOxhdOKlkwutG8IOTnzcys7KQxDTvYqla1+
-         If4G141wEV6LyICvAjJpuuodqNbsX+jw7a4v7duXZ/bqPVO4VYNZtzaB+NJsaommWPaf
-         2OpyQvjoGKH622NkfqDBK8msi0GO4j2PrkqMg3lbzuzz4TlCXw1c7jXIUWsKdHQaUvLf
-         fBXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720815630; x=1721420430;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rsayz27AEK0ZUF0FdWJVnVPT8Q1Wqz0KnZfkRPataDo=;
-        b=HKfw6DAlXzDnFNGb4GaVBmgivjGttZZumsasO1+K/aJFpRw6IOuN39k/EER0qHzB1l
-         zrd05TubSbXsbUL4OByrpjHaxOSxn+r3vbGyUIV+FxKl2Nn23vKo4C8s6HtkqAlgzSCu
-         7INFSxY8xc4CX3ZRBuKSihBSg/ddnWz6MZT386QhGBUkFgOR5X36RSQ6oAE3jW+lpHZj
-         /KxNOyCARwTFcWoAwz0q4cwyGwNUMTLkw3lKFthoPT3PRHROadDmRwg5bFj5CEtjDlD6
-         BThTzl5XwShabPhKhPFuibYXaoNuDIYGZeQDoA2vXsPFBc0QIsQpOnLn18scW67bk/Dg
-         7zHA==
-X-Gm-Message-State: AOJu0YzhvTt2sCJEWm8or0ZHGLG3IupNVnN5Kw3EaoGC80oaeVTFZJBj
-	6/4jvbGHvFT0IAqQ95uT7sJsHdNQcyrqCpEGbCND3ucdg7Svp73VRSkGrg==
-X-Google-Smtp-Source: AGHT+IE3W+7ucp/82UBVPXsjQuw5LFvYIsgnE0cSH3W6VD6hw4HqpXKYpD6SZI0BdAgxbkDOTE+nfg==
-X-Received: by 2002:a05:620a:2482:b0:79e:f930:535e with SMTP id af79cd13be357-79f19a71793mr1878563885a.27.1720815629677;
-        Fri, 12 Jul 2024 13:20:29 -0700 (PDT)
-Received: from ldmartin-desk2.intel.com ([2600:1702:4eb6:3000::3f])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f19028f7csm434473585a.67.2024.07.12.13.20.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jul 2024 13:20:28 -0700 (PDT)
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH 5/5] ci: Add Alpine
-Date: Fri, 12 Jul 2024 15:20:11 -0500
-Message-ID: <20240712202011.906033-6-lucas.de.marchi@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240712202011.906033-1-lucas.de.marchi@gmail.com>
-References: <20240712202011.906033-1-lucas.de.marchi@gmail.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="OnIy8aqG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1720955863; x=1721560663; i=markus.elfring@web.de;
+	bh=aZKbjgcdoWWnRDIxEAnvTwtYcMVZe5Hxddsqm8NEs2k=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=OnIy8aqGsVlZPcrpdq5QicQaW5/jdFYM3/4j6Oh7NrjqUubk8ax21mb10lP2599A
+	 +KH1q8z9jMOSRF4wIDwlhKNmvq5gD1QW+9GzzOZbIjTwIIImlaGSY9dgl57da2f4Q
+	 cT5+pndb+/vqxfwJpCnAn+q74Z/TZeL0Ol5EBvyav9T3J9a6GdLUCZ1vjD3TSC/WJ
+	 UymVEnu6plSRaRCkKiEhDGTiT9XjKD0AhbHvLLWAuiZ9kaOyIIIziDQbdybPfGFgw
+	 1UAnPVpixoj6fOpQa2jniDGpcVj7JwYpfXynHAJ7TyZD+PNVxn2ToeAC3ChB3y11Y
+	 /xQ59o7PCMmXLCtQrg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.82.95]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MMY1D-1sktiy1gAx-00ILU4; Sun, 14
+ Jul 2024 13:17:43 +0200
+Message-ID: <0750654d-a21f-44b5-bf90-1474ec5f88e1@web.de>
+Date: Sun, 14 Jul 2024 13:17:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+To: linux-modules@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>
+Content-Language: en-GB
+Cc: LKML <linux-kernel@vger.kernel.org>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] module: Use seq_putc() in two functions
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:t/vPEWGt5TRaJj5GcdxVo7fWeXJXU/h6bhk4OELyZvpUPPKdPJM
+ KDZCNlz+hFd6NHeVHTBiV+Uj98ApFqs5IZagQqKfCM7COs5aZlAoTFmwvOL6zkdPhX8abuc
+ dIerOUXLjXzoX/vmIyN4/FQ2a96mbUoq4brzQo4lyGx/dFhYecSgtrxV1m5UjKI8r/q5DNw
+ 8n6MFGJreQzczKVZ/NTuw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:bn71XKnmFb4=;4wR7eKLxkpW2dboBU2J/aw8a7Nq
+ wxIITTusNiyX+bpfu08AoRpETV18s6RgFYMnu+dSSlteaq6KKTpLj8LR57eNkVVaq1zAoiJ20
+ D6M9rbKRQ9MwgrieelSotBa56p271QdHMlvjCg3pCGJZ5WLn711sLfraK0ixsQoyS/gx86uoX
+ J0Ktb6FDVvQDqLkwb+qajccjmh816L/1QH+cWGvFvwJKzzLsgDuZ0/Sq2yFijEh1mBYIG5a28
+ eZ596990rp056W+CKyCWso2d7BGOuQIr1GEsH1fOLf3W9K6ECM4EyAcx07B8ADQOzyMJSzd9H
+ LPlb+78OdhHkeek3G8FBtl+dUfNhVPKha8S1u5lHsN6CLslmPM+h5zDl1lU25xpZylQZTccKP
+ yt7cIHoam+UNW1gJ0YBp4mR9lbFul4gHyZRfzRg01TzSuUueYFkPS0x1p2AhL/7D0XPXIZOpp
+ geMiv0JkGdtE767cSoyr9Ef98tSZ4A8s2IJfLT0nQ2Msent+Ma/j+vzgQY1NktqNnrCtLHUus
+ VxNf6Ij9r5jkIp9eCnTByZtYcvhY7rkztBdE5YpLDk2MMWO1VRT0wKm7r/kKpUnpWPsgxoBaJ
+ 0yWvrv83d+Bn4F8K9P6JRmR3oh+ESMfVEjQAHEcyJwkDW+V7nnR/aONsNYufRVksdnK0eIvC5
+ 9QXkLpyf/zOfZgnoew2zCebfaT6lK99asvWIO1PYwbSPvY6E5mwbdo6OoVNbk5n4JTO+2H+FL
+ +wPBp/eqIHm8G9lvzreu5rbJ+hx3ce+pPtM3WN5wRYdOrun1iWm1JXi5tyhWtyt0GDtBlpqwx
+ aE/n9plHNs/rKsqxyvlZW9lw==
 
-Add setup action for Alpine and start building it. Unfortunately the
-testsuite is not ready yet and fails to build like this:
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Sun, 14 Jul 2024 13:13:15 +0200
 
-	../testsuite/path.c:219:14: error: conflicting types for '__xstat64';
-	have 'int(int,  const char *, struct stat64 *)'
-	  219 | WRAP_VERSTAT(__x,64);
-	      |              ^~~
+Single characters should be put into a sequence.
+Thus use the corresponding function =E2=80=9Cseq_putc=E2=80=9D.
 
-Add everything needed on the setup action, so when the underlying issue
-is fixed, the testsuite can be enabled in CI.
+This issue was transformed by using the Coccinelle software.
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
- .github/actions/setup-alpine/action.yml | 22 ++++++++++++++++++++++
- .github/workflows/main.yml              | 16 +++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
- create mode 100644 .github/actions/setup-alpine/action.yml
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ kernel/module/procfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.github/actions/setup-alpine/action.yml b/.github/actions/setup-alpine/action.yml
-new file mode 100644
-index 0000000..1c7eae9
---- /dev/null
-+++ b/.github/actions/setup-alpine/action.yml
-@@ -0,0 +1,22 @@
-+name: 'setup Alpine'
-+description: 'Setup an Alpine container for running CI'
-+runs:
-+  using: 'composite'
-+  steps:
-+    - name: Install dependencies
-+      shell: sh
-+      run: |
-+        apk update
-+        apk add \
-+          autoconf \
-+          automake \
-+          bash \
-+          build-base \
-+          gtk-doc \
-+          libtool \
-+          linux-edge-dev \
-+          openssl-dev \
-+          scdoc \
-+          xz-dev \
-+          zlib-dev \
-+          zstd-dev
-diff --git a/.github/workflows/main.yml b/.github/workflows/main.yml
-index 4a2fff2..b4ad5cd 100644
---- a/.github/workflows/main.yml
-+++ b/.github/workflows/main.yml
-@@ -11,7 +11,17 @@ jobs:
-     runs-on: ubuntu-latest
-     strategy:
-       matrix:
--        container: ['ubuntu:22.04', 'ubuntu:24.04', 'archlinux:base-devel', 'fedora:latest']
-+        include:
-+          - container: 'ubuntu:22.04'
-+            test: 'yes'
-+          - container: 'ubuntu:24.04'
-+            test: 'yes'
-+          - container: 'archlinux:base-devel'
-+            test: 'yes'
-+          - container: 'fedora:latest'
-+            test: 'yes'
-+          - container: 'alpine:latest'
-+            test: 'no'
- 
-     container:
-       image: ${{ matrix.container }}
-@@ -25,6 +35,8 @@ jobs:
-         if: ${{ startsWith(matrix.container, 'archlinux') }}
-       - uses: ./.github/actions/setup-fedora
-         if: ${{ startsWith(matrix.container, 'fedora') }}
-+      - uses: ./.github/actions/setup-alpine
-+        if: ${{ startsWith(matrix.container, 'alpine') }}
- 
-       - name: configure
-         run: |
-@@ -38,6 +50,7 @@ jobs:
-           make -j$(nproc)
- 
-       - name: test
-+        if: ${{ matrix.test == 'yes' }}
-         run: |
-           cd build
-           make KDIR=/usr/lib/modules/*/build -j$(nproc) check
-@@ -48,6 +61,7 @@ jobs:
-           DESTDIR=$PWD/inst make install
- 
-       - name: distcheck
-+        if: ${{ matrix.test == 'yes' }}
-         run: |
-           cd build
-           make KDIR=/usr/lib/modules/*/build distcheck
--- 
+diff --git a/kernel/module/procfs.c b/kernel/module/procfs.c
+index 0a4841e88adb..dc91d3dba8f3 100644
+=2D-- a/kernel/module/procfs.c
++++ b/kernel/module/procfs.c
+@@ -35,7 +35,7 @@ static inline void print_unload_info(struct seq_file *m,=
+ struct module *mod)
+ 	}
+
+ 	if (!printed_something)
+-		seq_puts(m, "-");
++		seq_putc(m, '-');
+ }
+ #else /* !CONFIG_MODULE_UNLOAD */
+ static inline void print_unload_info(struct seq_file *m, struct module *m=
+od)
+@@ -99,7 +99,7 @@ static int m_show(struct seq_file *m, void *p)
+ 	if (mod->taints)
+ 		seq_printf(m, " %s", module_flags(mod, buf, true));
+
+-	seq_puts(m, "\n");
++	seq_putc(m, '\n');
+ 	return 0;
+ }
+
+=2D-
 2.45.2
 
