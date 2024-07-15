@@ -1,99 +1,229 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A2833C5;
-	Mon, 15 Jul 2024 20:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBFD13B5B6
+	for <linux-modules@vger.kernel.org>; Mon, 15 Jul 2024 20:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721074384; cv=none; b=uqGQ0Wx4QfGhHca6cCs5lzJR0ZsoCYzogr4JG+LTtJ0e+JT7IJOnv4iPQYaJo6Ay8Cq17Q31gDbDI5toGlSIeXJEwYkpYP71BW4+raoWU2r+5DPcYxPzwimTZgDUuoGRLaY0Y1Irl1AAfFsy+QfqPBwEoAean78xFed+H9bPx2w=
+	t=1721076039; cv=none; b=r5j8dqn+A2eP4g1zdhNW9S8grnXc4qQFpdaMgY4xstaN7fU6Pgk8zHSp2UwQeV02PUmIG0gSb3UGahmbHWksCCNr8FU+8lMQVfk2wFNOeGlRmvrjpxK0W7Ptuyz5iLVuodalxZblRUPhdy0TFc1kxzkIFbrDUwJFPF7FQggAYy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721074384; c=relaxed/simple;
-	bh=7OmVVQobhT3hSRfGbLhcTRfJUMXmXRi2dqnL5IXZS94=;
+	s=arc-20240116; t=1721076039; c=relaxed/simple;
+	bh=oSy7pWCF/gI0rY02+WvHWDsxr8vczHoYLSUS5+7+31E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lrQAAL5hLRNc9DRTmGaOvBBY/PfoME0pkD3ZIay4o9l2ZNLTwdouCOOxSlWfFwvhzdjiNtBHE37uvZFifoI795i/r8aToLgubqla4BiEETYtuEPxV7E1mfNTnUCabz2tNQmZSxj/lLdd5aa/mrQkRqdZoYboHdbReUdHlgY9VxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F148nSjS; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=pH4laxktxmgBgJS7F4vDVWWSyq6QqrsfEWK8LmhOIC2yJjymYDZep2pItkbkp5e6qUP0gmBwqR+OvfLmS672lfMfwJns1/cF+6rFGFEkrxDbpVe3kQKeeGlzl//KsNZePrPDOG9wIOvOUZie07/jmUJiXjFcqWtFaLprAAxAloY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yPWPewEk; arc=none smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F148nSjS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71526C4AF0E;
-	Mon, 15 Jul 2024 20:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721074383;
-	bh=7OmVVQobhT3hSRfGbLhcTRfJUMXmXRi2dqnL5IXZS94=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F148nSjStWATTjAnDYTpC9c0XIaOxn1KvnJIj6HAtt2tSLK4GBJH0V6yQNyB6At8E
-	 Dh3cmk92UReqsRsOHGHl+wlMc51+Pa7rXBDAH4A5gBFUkmKCjAx4/Nbb2OecpxJ/WZ
-	 H6u6L7FXB4kNbf+l/QiqaEA+GNakZKgc+RV3FHko1ds2meoYeOYfEkb/SRDOxcokbl
-	 Lia4mvNHDklhZjiMQj2WhrAVaYM7WctgK847g18BDjlWvZ5LsO7i6SnGzJSWmJusUn
-	 ch23mcGe2aRrSlDluuxG0h9Q0z/GVTwTpZlsR9e3ujPY3tDhIzFYIyUHr9r67F8UaK
-	 ErQGpvoWKsRlw==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2eeb1ba0468so55142541fa.0;
-        Mon, 15 Jul 2024 13:13:03 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXbl6JiuPOR6UGrkTfnU3IL3jUnqr4t3v9M4Z6UkaUHDJ+fNAG8DnW/6MHqOIREXTMi2IJ0yGaxuifdd/PIXMNAAqeNCqzAcOLQi4b7fjPnYoGkGo5hcr4kkOfFvHVhJROkGKdSowSI9sLq6gxG2at/wyFbrOqbV9xxoNFR5gMKYLwrIJ1XuVWbMa1I1g5/WQTVLKqpcdRkteLhjHIONqqcJB5LzpqpsCQ/1LqwwbO52K9YRKyd7hxN18YQwtlOis1RKA==
-X-Gm-Message-State: AOJu0YwRKCORehAv2OfGaC7w3yOUEonDn/79PKSP4MWHYFnZFqhCnNQJ
-	JnkqqI2Ta2jkEpNnrCRPtWQHYexWs5IV/KYfZrxv7KRNwPxUKwvOlasQ9BgJgFuehbp0GENhWY8
-	hW7CydkMl12NKSYlVC9PwyrS0XEw=
-X-Google-Smtp-Source: AGHT+IHobuX65Qnne2KlfE18leFW6GlJLHaB/JmPa66fpayvh11K/s2F89TKgZdfpv7KGVf5mpLk/XmBKYwXCMmctQY=
-X-Received: by 2002:a05:6512:1282:b0:52c:e393:6634 with SMTP id
- 2adb3069b0e04-52edf019b1amr10513e87.33.1721074382019; Mon, 15 Jul 2024
- 13:13:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yPWPewEk"
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-81057a258d4so1567024241.0
+        for <linux-modules@vger.kernel.org>; Mon, 15 Jul 2024 13:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1721076037; x=1721680837; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eS0BTNSokaMY/dxoDgKw9rrLuSVkHGouvH7zTfa5F8Y=;
+        b=yPWPewEk2HIlUxcXck4BYGsGLeEMtdjG/EihbfhLtN8JPK+hD0B68i4exYg49Aa26L
+         1vFb5XolTRkvGVoBmN8xNYfC1zKFGp5pRfL2vaZwIJ9aHFtFTn37cpL7vzcWIHwFyJdT
+         gh5832lBw1fToUNWEOnIplLZKHKxuSXv2VPGZLVBKtZssq8Vb45aJ6XpLtEeUNPH4CKW
+         GKiB2fp3baFbcoiukYQHFfWTXTGyTrTYBhLNXVbbm3Dw7MpAPpn6imESgM46TfhkSYCj
+         485aFPbNVDgkdHdCH1TZMRRJ7hzFWjv5GAF3vTmTILyxWrT9ReqTZIhzR+CWtqCs4CWL
+         8w2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721076037; x=1721680837;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eS0BTNSokaMY/dxoDgKw9rrLuSVkHGouvH7zTfa5F8Y=;
+        b=KRGfXVa7Ixd43RIRYb0q0AV2MfVVqCzDwbum5e4KRPLKr2Ku8MrECrO89VlHrWoxAk
+         5jN0TVjGeGJfd9/+5X7ajvxf6sWMRFQdtTL6/BhBd4Z43u3dd8nDsb1le8E3W36MrgRi
+         cDGUGNFVpxtSPPIBfEmMMXsHzrOyWDtNqrUiWKGClbMnv/JTInxdpC0Kk4zA++hbRCAG
+         tumB/wGiP1TKZLHJrkPIt6APDucHqOzOL/ajOMX9yV0hsTQoFeENGKm2ByyghldsRcD7
+         rJvpY7EAfs56WFGovMicfU27omJ9Y0tXYw+bj8N0c7Hd4N0CYvjvwMHLAjL/gm0u9dA4
+         WI4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVjEtBaCwOKil4aynVPSR+CzHblowHOH2/R+uA8qu3zJHKibDalPWXvcrJzfRcYkp4mzEzh1i7eFuswCYi1JPlRvnqrCFBdkgr3KvAQTA==
+X-Gm-Message-State: AOJu0YxMNOPVnLLB6BAJxmHq3fAt2Z4dU7VvbUFfi2+HTSnn5h7pt8WY
+	9sG1f6LezH3yXyUuTAbrsvigvpbraVWs3Og/SAECDSa2vS49yZVGafKG9O7c3dA4PwcQYc6wEFB
+	c/FVFuc3kyd7pdobqwrvJpNJpLEs0PUMa6Fue
+X-Google-Smtp-Source: AGHT+IEielVS1o0SbsVVS78wRgd1TDMQT3A8qiYKcy98d6bE9prj7+6YJzc5lzzm8j0RfdvdKEkpi5wqVYxF4RpD0X4=
+X-Received: by 2002:a05:6102:3c88:b0:48f:e86c:5e1d with SMTP id
+ ada2fe7eead31-4914c4defeemr201499137.9.1721076036510; Mon, 15 Jul 2024
+ 13:40:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240613133711.2867745-1-zhengyejian1@huawei.com> <20240613133711.2867745-2-zhengyejian1@huawei.com>
-In-Reply-To: <20240613133711.2867745-2-zhengyejian1@huawei.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 16 Jul 2024 05:12:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQkSnZ1nVXiZH9kg52H-A_=urcsv-W7wGXvunMGhGX8Vw@mail.gmail.com>
-Message-ID: <CAK7LNAQkSnZ1nVXiZH9kg52H-A_=urcsv-W7wGXvunMGhGX8Vw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] kallsyms: Optimize multiple times of realloc() to one
- time of malloc()
-To: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, 
-	naveen.n.rao@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	mcgrof@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org, 
-	nicolas@fjasle.eu, kees@kernel.org, james.clark@arm.com, 
-	kent.overstreet@linux.dev, yhs@fb.com, jpoimboe@kernel.org, 
-	peterz@infradead.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org
+References: <20240617175818.58219-17-samitolvanen@google.com> <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com>
+In-Reply-To: <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 15 Jul 2024 20:39:59 +0000
+Message-ID: <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
+Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
+To: Petr Pavlu <petr.pavlu@suse.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 13, 2024 at 10:36=E2=80=AFPM Zheng Yejian <zhengyejian1@huawei.=
-com> wrote:
+Hi Petr,
+
+On Wed, Jul 10, 2024 at 7:30=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
 >
-> Array 'table' is used to store pointers of symbols that read from in.map
-> file, and its size depends on the number of symbols. Currently 'table'
-> is expanded by calling realloc() every 10000 symbols read.
+> On 6/17/24 19:58, Sami Tolvanen wrote:
+> > Hi folks,
+> >
+> > This series implements CONFIG_MODVERSIONS for Rust, an important
+> > feature for distributions like Android that want to ship Rust
+> > kernel modules, and depend on modversions to help ensure module ABI
+> > compatibility.
 >
-> However, there generally are around 100000+ symbols, which means that
-> the expansion is generally 10+ times.
+> Thanks for working on this. Below is some feedback with my (open)SUSE
+> hat on, although it should be quite general.
+
+Great, thanks for taking a look!
+
+> > There have been earlier proposals [1][2] that would allow Rust
+> > modules to coexist with modversions, but none that actually implement
+> > symbol versioning. Unlike C, Rust source code doesn't have sufficient
+> > information about the final ABI, as the compiler has considerable
+> > freedom in adjusting structure layout for improved performance [3],
+> > for example, which makes using a source code parser like genksyms
+> > a non-starter. Based on Matt's suggestion and previous feedback
+> > from maintainers, this series uses DWARF debugging information for
+> > computing versions. DWARF is an established and relatively stable
+> > format, which includes all the necessary ABI details, and adding a
+> > CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
+> > reasonable trade-off.
 >
-> As an optimization, introduce linked list 'sym_list' to associate and
-> count all symbols, then store them into 'table' at one time.
+> Using the DWARF data makes sense to me. Distribution kernels are
+> normally built with debuginfo because one has to be able to debug them
+> later, unsurprisingly. Besides that, one now typically wants to use BPF
+> together with built-in BTF data (CONFIG_DEBUG_INFO_BTF), which also
+> requires building the kernel with debuginfo.
 >
-> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+> I would however keep in mind that producing all DWARF data has some
+> cost. From a quick test, an x86_64-defconfig build is ~30% slower for me
+> with CONFIG_DEBUG_INFO=3Dy. The current genksyms tool allows to have
+> debuginfo disabled when backporting some patches and consequently have
+> a quicker feedback whether modversions changed. This option would
+> disappear with gendwarfksyms but I think it is acceptable.
 
+Yes, this matches my benchmarks too. Presumably folks who care about
+build times and are not interested in debugging information or Rust
+support would prefer genksyms instead. I'm planning to turn this into
+a Kconfig choice in the next version.
 
-I do not think this is worthwhile.
+> > The first 12 patches of this series add a small tool for computing
+> > symbol versions from DWARF, called gendwarfksyms. When passed a list
+> > of exported symbols, the tool generates an expanded type string
+> > for each symbol, and computes symbol CRCs similarly to genksyms.
+> > gendwarfksyms is written in C and uses libdw to process DWARF, mainly
+> > because of the existing support for C host tools that use elfutils
+> > (e.g., objtool).
+>
+> In addition to calculating CRCs of exported symbols, genksyms has other
+> features which I think are important.
+>
+> Firstly, the genksyms tool has a human-readable storage format for input
+> data used in the calculation of symbol CRCs. Setting the make variable
+> KBUILD_SYMTYPES enables dumping this data and storing it in *.symtypes
+> files.
+>
+> When a developer later modifies the kernel and wants to check if some
+> symbols have changed, they can take these files and feed them as
+> *.symref back to genksyms. This allows the tool to provide an actual
+> reason why some symbols have changed, instead of just printing that
+> their CRCs are different.
+>
+> Is there any plan to add the same functionality to gendwarfksyms, or do
+> you envison that people will use libabigail, Symbol-Type Graph, or
+> another tool for making this type of comparison?
 
-realloc() is simple.
+gendwarfksyms also uses human-readable input for the CRC calculations,
+and it prints out the input strings with the --debug option. I plan to
+hook this up to KBUILD_SYMTYPES in v2. It should be convenient enough
+to simply compare the pretty-printed output with diff, so I'm not sure
+if a built-in comparison option is needed. Any other DWARF analysis
+tool can be used to spot the differences too, as you mentioned.
 
-If this is a problem, you can increase the
-"+=3D 10000" to "+=3D 65536" or something.
+> Secondly, when distributions want to maintain stable kABI, they need to
+> be able to deal with patch backports that add new members to structures.
+> One common approach is to have placeholders in important structures
+> which can be later replaced by the new members as needed. __GENKSYMS__
+> ifdefs are then used at the C source level to hide these kABI-compatible
+> changes from genksyms.
+>
+> Gendwarfksyms works on the resulting binary and so using such ifdefs
+> wouldn't work. Instead, I suspect that what is required is a mechanism
+> to tell the tool that a given change is ok, probably by allowing to
+> specify some map from the original definition to the new one.
+>
+> Is there a plan to implement something like this, or how could it be
+> addressed?
 
+That's a great question. Here's what Android uses currently to
+maintain a stable kABI, I assume you're doing something similar?
 
+https://android.googlesource.com/kernel/common/+/refs/heads/android15-6.6/i=
+nclude/linux/android_kabi.h
 
+If using unions here is acceptable to everyone, a simple solution
+would be to use a known name prefix for the reserved members and teach
+gendwarfksyms to only print out the original type for the replaced
+ones. For example:
 
+The initial placeholder:
 
+    u8 __kabi_reserved_1[8];
 
+After replacement:
 
---=20
-Best Regards
-Masahiro Yamada
+    union {
+            u64 new_member;
+            struct {
+                    u8 __kabi_reserved_1[8];
+            };
+    }
+
+Here gendwarfksyms would see the __kabi_reserved prefix and only use
+u8 [8] for the CRC calculation. Does this sound reasonable?
+
+Greg, I know you've been dealing with this for a long time, any thoughts?
+
+> > Another compatibility issue is fitting the extremely long mangled
+> > Rust symbol names into struct modversion_info, which can only hold
+> > 55-character names (on 64-bit systems). Previous proposals suggested
+> > changing the structure to support longer names, but the conclusion was
+> > that we cannot break userspace tools that parse the version table.
+> >
+> > The next two patches of the series implement support for hashed
+> > symbol names in struct modversion_info, where names longer than 55
+> > characters are hashed, and the hash is stored in the name field. To
+> > avoid breaking userspace tools, the binary hash is prefixed with a
+> > null-terminated string containing the name of the hash function. While
+> > userspace tools can later be updated to potentially produce more
+> > useful information about the long symbols, this allows them to
+> > continue working in the meantime.
+>
+> I think this approach with hashed names is quite complex. I'd personally
+> be also in favor of having a new section with variable-length strings to
+> store the names of imported symbols. As yet another alternative, it
+> should be also possible to refer directly into .symtab/.strtab to avoid
+> duplicating the names, but I suspect it would be non-trivial to
+> implement.
+
+Thanks for the feedback. I think for the next version we'll look into
+reviving the relevant bits of Matt's previous patch series, which
+implemented a new section that supports variable-length names:
+
+https://lore.kernel.org/lkml/CAGSQo03R+HYcX2JJDSm7LA8V370s_3hrbTBc2s51Pp9nx=
+WTz5w@mail.gmail.com/
+
+Sami
