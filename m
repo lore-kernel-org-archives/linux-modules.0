@@ -1,1585 +1,341 @@
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66B62F34
-	for <linux-modules@vger.kernel.org>; Fri, 19 Jul 2024 22:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1889B1803D;
+	Sat, 20 Jul 2024 14:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721427195; cv=none; b=f1osh2gFXbBg4XDNMG66oDVmiCBPLFHbA2jxke4Kc/aWQ0M85zBNNTt2MPUL56dXAyz2Vy7RP0MEVi2G0WnMPQtfvm9KRjO4cZHqOJaJ4kUUYnQLKr/+afctOurk25gVpDK6L7gCq6Yw1jk6IR3mx33aWObeLef5cgrdBWg/Mck=
+	t=1721484932; cv=none; b=MtQD4Ydi5j6eqE+cFnmZXVIhPvWhtz9QVoZFiTYtBjnu+FBgCPzndwrkPu0Fge34PAK30RRSho8wIfNr6TvdLqxyx1ii99iw43SrVJ0ZqEwj3m/hUoVJPRUbA3XQmJd6NCg1Fz5y0ZwXeyKds3JMG2osjjXI2WHH7H/HAsz22ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721427195; c=relaxed/simple;
-	bh=HEgkU/PUMuGyv0/nBU58V+L4DjCcBtk2ZCj9NbQnj7g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=p76mZL3OBS33G/BPg8RoNns1kOrISCpJ32pvy34fEKBlSrEHWOdFiNMqwXB//V/vG00FKTpNYFs4thG2p8Q+cg0iWx0UsBPgl/JR2AtCiJ786dw1n89fEFKgBtWMidpCe9PuxKRQHgrL7/xBULEWj9FXgkRYHWfZ2MQQKJQgi5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=By9ZmfC+; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721484932; c=relaxed/simple;
+	bh=siC36GPXr2aNokMak0PbQR2qdcyg1ve7YXRSuhNJEbE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r8Oe46zKeR+NJbdPeYu8tDYnTBPUgHCWCddy0/dYljAJ08ipwqRcGI0szj8RftLK+QJEtDLnKTKc+4F0YKkqey3NUVab5k/W8hnrYVnnYWzu8fq1JG4/RTBOrCANeYXu4uFtZkiLEjtcqSItmoZX8IUDSNruYFard82WicOC57E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDCGrYkF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="By9ZmfC+"
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-79f323f0898so111770885a.0
-        for <linux-modules@vger.kernel.org>; Fri, 19 Jul 2024 15:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721427190; x=1722031990; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zfIZQB1okgrN/5p6ySv5mLOnx9G2ApVgpt0cSJRUB0Y=;
-        b=By9ZmfC+U2YpCTApCTwyMONm1ApbaPGK9vEq14gfRJVImG3aOyTDarkvJQRkJl6u55
-         hQHXBDyOBTLQgoRvvBnMvwQXbM7RAmglOS0yL6o4ooWUweDg+HTdrpIuN2bQQJs3Msab
-         P2hyvXHBrNLabvPX1nzqY55IT8WxKD/qt7cMv/wrmHZM92Xi5r9JsrzwTbc0YD+RQ8Dy
-         wHd5jSYX6i5Xb2wI6096ADWkQvqz1WWEY4wQcCMBa71vPk9NC+VdP7KtUkfSLXlaooV9
-         YJVwgnXe3rKGTpKHLrzssWu/CGtRbRZELpOWjdZQiAjWfriayIqXkJRMQXfmV2kCiHzg
-         3I2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721427190; x=1722031990;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zfIZQB1okgrN/5p6ySv5mLOnx9G2ApVgpt0cSJRUB0Y=;
-        b=RZb5gRH+/xYAUbTfZFCym7Qohm8ktRYC6lJ3HX/5XJZE1+jTVIBPMBASlC0C5L1j1g
-         BWD/3mXzw0AF6l/gmf7Y8pG1H+vfLoEll3+npjZlyL1EaTRlkTVZ5Ni1+f8QNTh5/rY6
-         xI6Mmu0gmwmAr6rCy45vsEmuSPJwPZKtwx2qNyOZQ+OK8GhMtHulfVGhyLI9/PA1hy5K
-         X+lioPAERvz/o/c7QY9wbwRfPJJzS+s8AziXpoHi6CqA40r+DfmSK/YLWwHVbkvuBDgW
-         p4DPNN3qhjHlu+OCiH12bOKUbdtVHQQPmmuaMd9oSZqbZDG+itE6fV1vjSFa/n30Ml6H
-         aLvw==
-X-Gm-Message-State: AOJu0YxdoAtaiELAhVpflCjSVH4YzqneSTcgPsLJr4Y6gS93Yon3Df0Y
-	nyMTF7rfcs0C7a+gyJ4SHStO/Z3yLHuJ+EAjtpO9vP7SJpxWyajp7UPgIg==
-X-Google-Smtp-Source: AGHT+IEOSTlaQYu1TLlHzZwCZiXG1TPHaoxSN/ovpSfc4SvpzpTdPFjlVu6//dBRUhWeg9vMsSEU9Q==
-X-Received: by 2002:a05:620a:1a03:b0:79f:18f8:cdc7 with SMTP id af79cd13be357-7a1a13207camr151871485a.9.1721427188637;
-        Fri, 19 Jul 2024 15:13:08 -0700 (PDT)
-Received: from ldmartin-desk2.lan ([134.134.139.73])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a19907b3f9sm132026985a.119.2024.07.19.15.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jul 2024 15:13:07 -0700 (PDT)
-From: Lucas De Marchi <lucas.de.marchi@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: Emil Velikov <emil.l.velikov@gmail.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>
-Subject: [PATCH kmod] Use SPDX header for license
-Date: Fri, 19 Jul 2024 17:12:49 -0500
-Message-ID: <20240719221249.376162-1-lucas.de.marchi@gmail.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDCGrYkF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7A8C4AF1A;
+	Sat, 20 Jul 2024 14:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721484931;
+	bh=siC36GPXr2aNokMak0PbQR2qdcyg1ve7YXRSuhNJEbE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RDCGrYkFHBvehj29UDRcl3t1EHsB51xf7GFo5CKB+uCbnDQtMfOicE33zGH7obU16
+	 jVTtgFsRzB3DbZepcD2yJrIKvGGKY/+bb8sS+JmtXmlmXTRV6VdHtLMMfmnOa1q8+C
+	 HrWen2hKhk2s0Je4ox5loQTIQviQ3g0ZK3c24Soc84jYZj0UYDa4aEQ33k7A2nUTGa
+	 b+aRyZ9coYkE58bdz9EiXRzyaHFOWkWs0Wkt6VRBWOeLEadXb7ny85sg+jbP2vt4YR
+	 SrtG4gsnkQGC2WvKsrbktxEE5pFxP7rJdHBytYr/64QJTDQdpZRvJdNKjfgL1frJK4
+	 XqHQrYOlg0dKA==
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2eefe705510so32541641fa.1;
+        Sat, 20 Jul 2024 07:15:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWN2s3ZU59witQd+ggejld4+vvkziMR48itbPD/bsFvcHN1xryuvWDakoeosFiOmFEMGM26xTdnNFrCvVjkGW2H5uN+XOTXpuQZIBHnICcI948MqQVd5evPzproUsBktPPXTKibTiqmPVrITavOOBoIluLTPLVWszou24iMkro2xiwrIrVAQFm4twDY51h+S7CReVM9Q4P0EWWu+59x/8xmgmbcBNIXVqO6fgA38xFY99hAcK5+1nLhN6DLO7vqZ1YJ6A==
+X-Gm-Message-State: AOJu0YxJ79+BXvmXwNfA6BMPh8UFzbiaJS0NBjhT+eJx+H8dNP0BM/ea
+	AezwwVg0Q/F/ZbyPFZObNCOsR8qEHKiNLn3lgeiRrSM0c8/r5PNiFd5dv0Vd1GdSX+GCCsK3wDS
+	BBg8iSlO60v848GO3Kg8n13zpAfw=
+X-Google-Smtp-Source: AGHT+IEhxz5OQdjF+IMtXBi+my/g5+ok7BZORmWpYKrgQ6H3SidmmywUXep47MVnf2ny1Eir5dgtPfQ95aC55PC0NSg=
+X-Received: by 2002:a2e:9816:0:b0:2eb:f472:e7d3 with SMTP id
+ 38308e7fff4ca-2ef16733722mr18077141fa.6.1721484929979; Sat, 20 Jul 2024
+ 07:15:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+ <20240613133711.2867745-3-zhengyejian1@huawei.com> <CAK7LNAQaLc6aDK85qQtPHoCkQSGyL-TxXjpgJTfehe2Q1=jMSA@mail.gmail.com>
+ <c87eeb9c-5f54-480c-17c2-01339416b1b9@huawei.com>
+In-Reply-To: <c87eeb9c-5f54-480c-17c2-01339416b1b9@huawei.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 20 Jul 2024 23:14:53 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
+Message-ID: <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] kallsyms: Emit symbol at the holes in the text
+To: Zheng Yejian <zhengyejian1@huawei.com>
+Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com, 
+	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu, 
+	naveen.n.rao@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	mcgrof@kernel.org, mathieu.desnoyers@efficios.com, nathan@kernel.org, 
+	nicolas@fjasle.eu, kees@kernel.org, james.clark@arm.com, 
+	kent.overstreet@linux.dev, yhs@fb.com, jpoimboe@kernel.org, 
+	peterz@infradead.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Drop the lengthy license from each file and just use SPDX like most
-projects nowadays.
+On Thu, Jul 18, 2024 at 12:45=E2=80=AFPM Zheng Yejian <zhengyejian1@huawei.=
+com> wrote:
+>
+> On 2024/7/16 16:33, Masahiro Yamada wrote:
+> > On Thu, Jun 13, 2024 at 10:36=E2=80=AFPM Zheng Yejian <zhengyejian1@hua=
+wei.com> wrote:
+> >>
+> >> When a weak type function is overridden, its symbol will be removed
+> >> from the symbol table, but its code will not be removed. Besides,
+> >> due to lacking of size for kallsyms, kernel compute function size by
+> >> substracting its symbol address from its next symbol address (see
+> >> kallsyms_lookup_size_offset()). These will cause that size of some
+> >> function is computed to be larger than it actually is, just because
+> >> symbol of its following weak function is removed.
+> >>
+> >> This issue also causes multiple __fentry__ locations to be counted in
+> >> the some function scope, and eventually causes ftrace_location() to fi=
+nd
+> >> wrong __fentry__ location. It was reported in
+> >> Link: https://lore.kernel.org/all/20240607115211.734845-1-zhengyejian1=
+@huawei.com/
+> >>
+> >> Peter suggested to change scipts/kallsyms.c to emit readily
+> >> identifiable symbol names for all the weak junk, eg:
+> >>
+> >>    __weak_junk_NNNNN
+> >>
+> >> The name of this kind symbol needs some discussion, but it's temporari=
+ly
+> >> called "__hole_symbol_XXXXX" in this patch:
+> >> 1. Pass size info to scripts/kallsyms  (see mksysmap());
+> >> 2. Traverse sorted function symbols, if one function address plus its
+> >>     size less than next function address, it means there's a hole, the=
+n
+> >>     emit a symbol "__hole_symbol_XXXXX" there which type is 't'.
+> >>
+> >> After this patch, the effect is as follows:
+> >>
+> >>    $ cat /proc/kallsyms | grep -A 3 do_one_initcall
+> >>    ffffffff810021e0 T do_one_initcall
+> >>    ffffffff8100245e t __hole_symbol_XXXXX
+> >>    ffffffff810024a0 t __pfx_rootfs_init_fs_context
+> >>
+> >> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> >> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+> >
+> >
+> >
+> > With my quick test, "t__hole_symbol_XXXXX" was encoded
+> > into the following 10-byte stream.
+> >
+> > .byte 0x09, 0x94, 0xbf, 0x18, 0xf3, 0x3d, 0xce, 0xd1, 0xd1, 0x58
+> >
+> >
+> >
+> > Now "t__hole_symbol_XXXXX" is the most common symbol name.
+> > However, 10 byte is consumed for every instance of
+> > "t__hole_symbol_XXXXX".
+> >
+> > This is much less efficient thanI had expected,
+> > although I did not analyze the logic of this inefficiency.
+> >
+> Hi, Masahiro!
+>
+> In my local test, "t__hole_symbol_XXXXX" was finally encoded
+> into just one byte. See "kallsyms_token_table" in the .tmp_vmlinux.kallsy=
+ms2.S:
+>
+>    kallsyms_token_table:
+>          [...]
+>          .asciz  "t__hole_symbol_XXXXX"
+>          .asciz  "hole_symbol_XXXXX"
+>          .asciz  "e_symbol_XXXXX"
+>          .asciz  "XXXXX"
+>          .asciz  "XXX"
+>          .asciz  "e_symbol_"
+>          .asciz  "ymbol_"
+>          .asciz  "ymb"
+>          .asciz  "hol"
+>          .asciz  "ol_"
+>          .asciz  "pfx"
+>          .asciz  "pf"
+>          .asciz  "e_s"
+>          .asciz  "ym"
+>          .asciz  "t__"
+>          .asciz  "_s"
+>          .asciz  "ol"
+>          .asciz  "__"
+>          .asciz  "XX"
+>
+> But it would still takes up several tokens due to substrings of
+> "t__hole_symbol_XXXXX" would also become the most common ones.
+> After this patch, the number of "t__hole_symbol_XXXXX" will be ~30% of th=
+e total.
+>
+> >
+> >
+> >
+> >
+> >
+> >
+> >> ---
+> >>   scripts/kallsyms.c      | 101 ++++++++++++++++++++++++++++++++++++++=
++-
+> >>   scripts/link-vmlinux.sh |   4 +-
+> >>   scripts/mksysmap        |   2 +-
+> >>   3 files changed, 102 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> >> index 6559a9802f6e..5c4cde864a04 100644
+> >> --- a/scripts/kallsyms.c
+> >> +++ b/scripts/kallsyms.c
+> >> @@ -35,6 +35,7 @@
+> >>   struct sym_entry {
+> >>          struct sym_entry *next;
+> >>          unsigned long long addr;
+> >> +       unsigned long long size;
+> >>          unsigned int len;
+> >>          unsigned int seq;
+> >>          unsigned int start_pos;
+> >> @@ -74,6 +75,7 @@ static int token_profit[0x10000];
+> >>   static unsigned char best_table[256][2];
+> >>   static unsigned char best_table_len[256];
+> >>
+> >> +static const char hole_symbol[] =3D "__hole_symbol_XXXXX";
+> >>
+> >>   static void usage(void)
+> >>   {
+> >> @@ -130,8 +132,16 @@ static struct sym_entry *read_symbol(FILE *in, ch=
+ar **buf, size_t *buf_len)
+> >>          size_t len;
+> >>          ssize_t readlen;
+> >>          struct sym_entry *sym;
+> >> +       unsigned long long size =3D 0;
+> >>
+> >>          errno =3D 0;
+> >> +       /*
+> >> +        * Example of expected symbol format:
+> >> +        * 1. symbol with size info:
+> >> +        *    ffffffff81000070 00000000000001d7 T __startup_64
+> >> +        * 2. symbol without size info:
+> >> +        *    0000000002a00000 A text_size
+> >> +        */
+> >>          readlen =3D getline(buf, buf_len, in);
+> >>          if (readlen < 0) {
+> >>                  if (errno) {
+> >> @@ -145,9 +155,24 @@ static struct sym_entry *read_symbol(FILE *in, ch=
+ar **buf, size_t *buf_len)
+> >>                  (*buf)[readlen - 1] =3D 0;
+> >>
+> >>          addr =3D strtoull(*buf, &p, 16);
+> >> +       if (*buf =3D=3D p || *p++ !=3D ' ') {
+> >> +               fprintf(stderr, "line format error: unable to parse ad=
+dress\n");
+> >> +               exit(EXIT_FAILURE);
+> >> +       }
+> >> +
+> >> +       if (*p =3D=3D '0') {
+> >> +               char *str =3D p;
+> >>
+> >> -       if (*buf =3D=3D p || *p++ !=3D ' ' || !isascii((type =3D *p++)=
+) || *p++ !=3D ' ') {
+> >> -               fprintf(stderr, "line format error\n");
+> >> +               size =3D strtoull(str, &p, 16);
+> >> +               if (str =3D=3D p || *p++ !=3D ' ') {
+> >> +                       fprintf(stderr, "line format error: unable to =
+parse size\n");
+> >> +                       exit(EXIT_FAILURE);
+> >> +               }
+> >> +       }
+> >> +
+> >> +       type =3D *p++;
+> >> +       if (!isascii(type) || *p++ !=3D ' ') {
+> >> +               fprintf(stderr, "line format error: unable to parse ty=
+pe\n");
+> >>                  exit(EXIT_FAILURE);
+> >>          }
+> >>
+> >> @@ -182,6 +207,7 @@ static struct sym_entry *read_symbol(FILE *in, cha=
+r **buf, size_t *buf_len)
+> >>                  exit(EXIT_FAILURE);
+> >>          }
+> >>          sym->addr =3D addr;
+> >> +       sym->size =3D size;
+> >>          sym->len =3D len;
+> >>          sym->sym[0] =3D type;
+> >>          strcpy(sym_name(sym), name);
+> >> @@ -795,6 +821,76 @@ static void sort_symbols(void)
+> >>          qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
+> >>   }
+> >>
+> >> +static int may_exist_hole_after_symbol(const struct sym_entry *se)
+> >
+> >
+> > The return type should be bool.
+> >
+>
+> Yes!
+>
+> >
+> >
+> >> +{
+> >> +       char type =3D se->sym[0];
+> >> +
+> >> +       /* Only check text symbol or weak symbol */
+> >> +       if (type !=3D 't' && type !=3D 'T' &&
+> >> +           type !=3D 'w' && type !=3D 'W')
+> >> +               return 0;
+> >> +       /* Symbol without size has no hole */
+> >> +       return se->size !=3D 0;
+> >> +}
+> >> +
+> >> +static struct sym_entry *gen_hole_symbol(unsigned long long addr)
+> >> +{
+> >> +       struct sym_entry *sym;
+> >> +       static size_t len =3D sizeof(hole_symbol);
+> >> +
+> >> +       /* include type field */
+> >> +       sym =3D malloc(sizeof(*sym) + len + 1);
+> >> +       if (!sym) {
+> >> +               fprintf(stderr, "unable to allocate memory for hole sy=
+mbol\n");
+> >> +               exit(EXIT_FAILURE);
+> >> +       }
+> >> +       sym->addr =3D addr;
+> >> +       sym->size =3D 0;
+> >> +       sym->len =3D len;
+> >> +       sym->sym[0] =3D 't';
+> >> +       strcpy(sym_name(sym), hole_symbol);
+> >> +       sym->percpu_absolute =3D 0;
+> >> +       return sym;
+> >> +}
+> >> +
+> >> +static void emit_hole_symbols(void)
+> >> +{
+> >> +       unsigned int i, pos, nr_emit;
+> >> +       struct sym_entry **new_table;
+> >> +       unsigned int new_cnt;
+> >> +
+> >> +       nr_emit =3D 0;
+> >> +       for (i =3D 0; i < table_cnt - 1; i++) {
+> >> +               if (may_exist_hole_after_symbol(table[i]) &&
+> >> +                   table[i]->addr + table[i]->size < table[i+1]->addr=
+)
+> >> +                       nr_emit++;
+> >> +       }
+> >> +       if (!nr_emit)
+> >> +               return;
+> >> +
+> >> +       new_cnt =3D table_cnt + nr_emit;
+> >> +       new_table =3D malloc(sizeof(*new_table) * new_cnt);
+> >
+> >
+> > Do you need to allocate another huge table?
+> >
+> > You can use realloc() to append the room for nr_emit
+> > if you iterate the table in the reverse order.
+> >
+>
+> Yes, it would be much better. If it turns out to be the
+> "emit hole symbol" solution, I'll change it to that in the next version,
+> actually, I forgot to mark this series as "RFC".
 
-Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
----
- libkmod/libkmod-builtin.c     | 18 ++------------
- libkmod/libkmod-config.c      | 20 +++-------------
- libkmod/libkmod-elf.c         | 19 +++------------
- libkmod/libkmod-file.c        | 19 +++------------
- libkmod/libkmod-index.c       | 19 +++------------
- libkmod/libkmod-index.h       | 19 +++------------
- libkmod/libkmod-list.c        | 19 +++------------
- libkmod/libkmod-module.c      | 19 +++------------
- libkmod/libkmod-signature.c   | 19 +++------------
- libkmod/libkmod.c             | 19 +++------------
- libkmod/libkmod.h             | 19 +++------------
- shared/array.c                | 19 +++------------
- shared/hash.c                 | 19 +++------------
- shared/macro.h                | 20 ++++------------
- shared/scratchbuf.c           | 19 +++------------
- shared/strbuf.c               | 19 ++-------------
- shared/util.c                 | 21 +++-------------
- shell-completion/bash/kmod    | 20 +++-------------
- testsuite/delete_module.c     | 17 +++----------
- testsuite/init_module.c       | 18 +++-----------
- testsuite/path.c              | 17 +++----------
- testsuite/test-array.c        | 16 ++-----------
- testsuite/test-blacklist.c    | 17 +++----------
- testsuite/test-dependencies.c | 17 +++----------
- testsuite/test-depmod.c       | 17 +++----------
- testsuite/test-hash.c         | 16 ++-----------
- testsuite/test-init.c         | 17 +++----------
- testsuite/test-initstate.c    | 16 ++-----------
- testsuite/test-list.c         | 16 ++-----------
- testsuite/test-loaded.c       | 18 ++++----------
- testsuite/test-modinfo.c      | 17 +++----------
- testsuite/test-modprobe.c     | 17 +++----------
- testsuite/test-new-module.c   | 17 +++----------
- testsuite/test-scratchbuf.c   | 16 ++-----------
- testsuite/test-strbuf.c       | 16 ++-----------
- testsuite/test-testsuite.c    | 17 +++----------
- testsuite/test-user.c         | 14 +----------
- testsuite/test-util.c         | 19 ++++-----------
- testsuite/testsuite.c         | 17 +++----------
- testsuite/testsuite.h         | 17 +++----------
- testsuite/uname.c             | 17 +++----------
- tools/depmod.c                | 45 ++++-------------------------------
- tools/insmod.c                | 19 +++------------
- tools/kmod.c                  | 19 +++------------
- tools/kmod.h                  | 19 +++------------
- tools/log.c                   | 19 +++------------
- tools/log.h                   | 19 +++------------
- tools/lsmod.c                 | 19 +++------------
- tools/modinfo.c               | 19 +++------------
- tools/modprobe.c              | 19 +++------------
- tools/rmmod.c                 | 19 +++------------
- tools/static-nodes.c          | 23 ++++--------------
- 52 files changed, 153 insertions(+), 818 deletions(-)
 
-diff --git a/libkmod/libkmod-builtin.c b/libkmod/libkmod-builtin.c
-index 65334a8..3c1b0d1 100644
---- a/libkmod/libkmod-builtin.c
-+++ b/libkmod/libkmod-builtin.c
-@@ -1,20 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel built-in modules
-- *
-- * Copyright (C) 2019  Alexey Gladkov <gladkov.alexey@gmail.com>
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright (C) 2019 Alexey Gladkov <gladkov.alexey@gmail.com>
-  */
- 
- #include <sys/types.h>
-diff --git a/libkmod/libkmod-config.c b/libkmod/libkmod-config.c
-index a571b6b..c39e07d 100644
---- a/libkmod/libkmod-config.c
-+++ b/libkmod/libkmod-config.c
-@@ -1,21 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- * Copyright (C) 2013  Intel Corporation. All rights reserved.
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <ctype.h>
-diff --git a/libkmod/libkmod-elf.c b/libkmod/libkmod-elf.c
-index 933825b..7a262d6 100644
---- a/libkmod/libkmod-elf.c
-+++ b/libkmod/libkmod-elf.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/libkmod/libkmod-file.c b/libkmod/libkmod-file.c
-index 52490fb..5998a1d 100644
---- a/libkmod/libkmod-file.c
-+++ b/libkmod/libkmod-file.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/libkmod/libkmod-index.c b/libkmod/libkmod-index.c
-index 6a34c8d..3fd65f4 100644
---- a/libkmod/libkmod-index.c
-+++ b/libkmod/libkmod-index.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <arpa/inet.h>
-diff --git a/libkmod/libkmod-index.h b/libkmod/libkmod-index.h
-index db671b0..a3d67fa 100644
---- a/libkmod/libkmod-index.h
-+++ b/libkmod/libkmod-index.h
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #pragma once
-diff --git a/libkmod/libkmod-list.c b/libkmod/libkmod-list.c
-index 7623693..e4b1925 100644
---- a/libkmod/libkmod-list.c
-+++ b/libkmod/libkmod-list.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <stdlib.h>
-diff --git a/libkmod/libkmod-module.c b/libkmod/libkmod-module.c
-index 5c26e03..793da21 100644
---- a/libkmod/libkmod-module.c
-+++ b/libkmod/libkmod-module.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/libkmod/libkmod-signature.c b/libkmod/libkmod-signature.c
-index 80f6447..d59ea13 100644
---- a/libkmod/libkmod-signature.c
-+++ b/libkmod/libkmod-signature.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - module signature display
-- *
-- * Copyright (C) 2013 Michal Marek, SUSE
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2013 Michal Marek, SUSE
-+ * Copyright © 2015-2024 Intel Corporation
-  */
- 
- #include <endian.h>
-diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 213b424..5efa968 100644
---- a/libkmod/libkmod.c
-+++ b/libkmod/libkmod.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/libkmod/libkmod.h b/libkmod/libkmod.h
-index fce66d1..ca731cb 100644
---- a/libkmod/libkmod.h
-+++ b/libkmod/libkmod.h
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #pragma once
-diff --git a/shared/array.c b/shared/array.c
-index c2e2e14..2b424c7 100644
---- a/shared/array.c
-+++ b/shared/array.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/shared/hash.c b/shared/hash.c
-index a87bc50..41f943e 100644
---- a/shared/hash.c
-+++ b/shared/hash.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/shared/macro.h b/shared/macro.h
-index b59f7dc..fa35ec0 100644
---- a/shared/macro.h
-+++ b/shared/macro.h
-@@ -1,21 +1,9 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
-+
- #pragma once
- 
- #include <stddef.h>
-diff --git a/shared/scratchbuf.c b/shared/scratchbuf.c
-index 8d9eb83..499cda3 100644
---- a/shared/scratchbuf.c
-+++ b/shared/scratchbuf.c
-@@ -1,21 +1,8 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - interface to kernel module operations
-- *
-- * Copyright (C) 2016  Intel Corporation. All rights reserved.
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2016-2024 Intel Corporation
-  */
-+
- #include "scratchbuf.h"
- 
- #include <errno.h>
-diff --git a/shared/strbuf.c b/shared/strbuf.c
-index a69d914..0f8378f 100644
---- a/shared/strbuf.c
-+++ b/shared/strbuf.c
-@@ -1,21 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * libkmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- * Copyright (C) 2014  Intel Corporation. All rights reserved.
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/shared/util.c b/shared/util.c
-index 437bc69..81694c8 100644
---- a/shared/util.c
-+++ b/shared/util.c
-@@ -1,22 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - interface to kernel module operations
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- * Copyright (C) 2012  Lucas De Marchi <lucas.de.marchi@gmail.com>
-- * Copyright (C) 2013-2014  Intel Corporation. All rights reserved.
-- *
-- * This library is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This library is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/shell-completion/bash/kmod b/shell-completion/bash/kmod
-index f530836..0a494ce 100644
---- a/shell-completion/bash/kmod
-+++ b/shell-completion/bash/kmod
-@@ -1,22 +1,8 @@
--# kmod completion                                          -*- shell-script -*-
--#
--# This file is part of kmod.
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: LGPL-2.1-or-later
- #
- # Copyright 2010 Ran Benita
--# Copyright (C) 2013  Intel Corporation. All rights reserved.
--#
--# This program is free software; you can redistribute it and/or modify it
--# under the terms of the GNU Lesser General Public License as published by
--# the Free Software Foundation; either version 2.1 of the License, or
--# (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful, but
--# WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
--# General Public License for more details.
--#
--# You should have received a copy of the GNU Lesser General Public License
--# along with this program; if not, see <http://www.gnu.org/licenses/>.
-+# Copyright © 2013-2024 Intel Corporation
- 
- __contains_word () {
-         local word=$1; shift
-diff --git a/testsuite/delete_module.c b/testsuite/delete_module.c
-index f3ae20b..1c2fb27 100644
---- a/testsuite/delete_module.c
-+++ b/testsuite/delete_module.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/testsuite/init_module.c b/testsuite/init_module.c
-index 503e703..ccbcae1 100644
---- a/testsuite/init_module.c
-+++ b/testsuite/init_module.c
-@@ -1,19 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- * Copyright (C) 2012-2013  Lucas De Marchi <lucas.de.marchi@gmail.com>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #ifndef HAVE_FINIT_MODULE
-diff --git a/testsuite/path.c b/testsuite/path.c
-index 00935fb..8c85e8f 100644
---- a/testsuite/path.c
-+++ b/testsuite/path.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- /* We unset _FILE_OFFSET_BITS here so we can override both stat and stat64 on
-diff --git a/testsuite/test-array.c b/testsuite/test-array.c
-index ef1e1e9..444823f 100644
---- a/testsuite/test-array.c
-+++ b/testsuite/test-array.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C)  2014 Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2014-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-blacklist.c b/testsuite/test-blacklist.c
-index 969567d..ca0a4f9 100644
---- a/testsuite/test-blacklist.c
-+++ b/testsuite/test-blacklist.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-dependencies.c b/testsuite/test-dependencies.c
-index 38f5fc1..feac47f 100644
---- a/testsuite/test-dependencies.c
-+++ b/testsuite/test-dependencies.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-depmod.c b/testsuite/test-depmod.c
-index eaa5b1a..a836211 100644
---- a/testsuite/test-depmod.c
-+++ b/testsuite/test-depmod.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-hash.c b/testsuite/test-hash.c
-index 1bea04e..536dfad 100644
---- a/testsuite/test-hash.c
-+++ b/testsuite/test-hash.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C)  2014 Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2014-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-init.c b/testsuite/test-init.c
-index edbfc23..4ec24d0 100644
---- a/testsuite/test-init.c
-+++ b/testsuite/test-init.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-initstate.c b/testsuite/test-initstate.c
-index 9332e8f..2ed1e17 100644
---- a/testsuite/test-initstate.c
-+++ b/testsuite/test-initstate.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2015  Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2015-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-list.c b/testsuite/test-list.c
-index 535e8d7..a5b7365 100644
---- a/testsuite/test-list.c
-+++ b/testsuite/test-list.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C)  2015 Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2015-2024 Intel Corporation
-  */
- 
- #include <stdio.h>
-diff --git a/testsuite/test-loaded.c b/testsuite/test-loaded.c
-index 9d5814f..d2faa1b 100644
---- a/testsuite/test-loaded.c
-+++ b/testsuite/test-loaded.c
-@@ -1,20 +1,10 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
-+
- #include <errno.h>
- #include <inttypes.h>
- #include <stddef.h>
-diff --git a/testsuite/test-modinfo.c b/testsuite/test-modinfo.c
-index 373dc95..5473d45 100644
---- a/testsuite/test-modinfo.c
-+++ b/testsuite/test-modinfo.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-modprobe.c b/testsuite/test-modprobe.c
-index 6a824c9..dd2732a 100644
---- a/testsuite/test-modprobe.c
-+++ b/testsuite/test-modprobe.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-new-module.c b/testsuite/test-new-module.c
-index 9872b78..4efde1b 100644
---- a/testsuite/test-new-module.c
-+++ b/testsuite/test-new-module.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-scratchbuf.c b/testsuite/test-scratchbuf.c
-index 6d86957..367d755 100644
---- a/testsuite/test-scratchbuf.c
-+++ b/testsuite/test-scratchbuf.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C)  2016 Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2016-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-strbuf.c b/testsuite/test-strbuf.c
-index c98c91d..f021ce6 100644
---- a/testsuite/test-strbuf.c
-+++ b/testsuite/test-strbuf.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C)  2014 Intel Corporation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2014-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-testsuite.c b/testsuite/test-testsuite.c
-index c77c4bb..2d6405c 100644
---- a/testsuite/test-testsuite.c
-+++ b/testsuite/test-testsuite.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <dirent.h>
-diff --git a/testsuite/test-user.c b/testsuite/test-user.c
-index c37c9a0..97a4747 100644
---- a/testsuite/test-user.c
-+++ b/testsuite/test-user.c
-@@ -1,18 +1,6 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-  * Copyright Red Hat
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-  */
- 
- #include <errno.h>
-diff --git a/testsuite/test-util.c b/testsuite/test-util.c
-index e3243e8..3538966 100644
---- a/testsuite/test-util.c
-+++ b/testsuite/test-util.c
-@@ -1,19 +1,8 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- * Copyright (C) 2012  Pedro Pedruzzi
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2012  Pedro Pedruzzi
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <fcntl.h>
-diff --git a/testsuite/testsuite.c b/testsuite/testsuite.c
-index 6602aaf..dd70030 100644
---- a/testsuite/testsuite.c
-+++ b/testsuite/testsuite.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <dirent.h>
-diff --git a/testsuite/testsuite.h b/testsuite/testsuite.h
-index 4b2565c..1f46891 100644
---- a/testsuite/testsuite.h
-+++ b/testsuite/testsuite.h
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #pragma once
-diff --git a/testsuite/uname.c b/testsuite/uname.c
-index 27f92d5..4ec2036 100644
---- a/testsuite/uname.c
-+++ b/testsuite/uname.c
-@@ -1,18 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU Lesser General Public
-- * License as published by the Free Software Foundation; either
-- * version 2.1 of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-- * Lesser General Public License for more details.
-- *
-- * You should have received a copy of the GNU Lesser General Public
-- * License along with this library; if not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <dlfcn.h>
-diff --git a/tools/depmod.c b/tools/depmod.c
-index 8e9e2d1..c87eb1b 100644
---- a/tools/depmod.c
-+++ b/tools/depmod.c
-@@ -1,22 +1,11 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-depmod - calculate modules.dep  using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2008  Alan Jenkins <alan-jenkins@tuffmail.co.uk>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
-+#include <arpa/inet.h>
- #include <assert.h>
- #include <ctype.h>
- #include <dirent.h>
-@@ -129,31 +118,7 @@ static inline void _show(const char *fmt, ...)
- }
- #define SHOW(...) _show(__VA_ARGS__)
- 
--
--/* binary index write *************************************************/
--#include <arpa/inet.h>
--/* BEGIN: code from module-init-tools/index.c just modified to compile here.
-- *
-- * Original copyright:
-- *   index.c: module index file shared functions for modprobe and depmod
-- *   Copyright (C) 2008  Alan Jenkins <alan-jenkins@tuffmail.co.uk>.
-- *
-- *   These programs are free software; you can redistribute it and/or modify
-- *   it under the terms of the GNU General Public License as published by
-- *   the Free Software Foundation; either version 2 of the License, or
-- *   (at your option) any later version.
-- *
-- *   This program is distributed in the hope that it will be useful,
-- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
-- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- *   GNU General Public License for more details.
-- *
-- *   You should have received a copy of the GNU General Public License
-- *   along with these programs.  If not, see <http://www.gnu.org/licenses/>.
-- */
--
- /* see documentation in libkmod/libkmod-index.c */
--
- #define INDEX_MAGIC 0xB007F457
- #define INDEX_VERSION_MAJOR 0x0002
- #define INDEX_VERSION_MINOR 0x0001
-diff --git a/tools/insmod.c b/tools/insmod.c
-index c422971..83eb7c6 100644
---- a/tools/insmod.c
-+++ b/tools/insmod.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-insmod - insert modules into linux kernel using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/kmod.c b/tools/kmod.c
-index e1a73be..c061a35 100644
---- a/tools/kmod.c
-+++ b/tools/kmod.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - one tool to rule them all
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/kmod.h b/tools/kmod.h
-index 1770786..f18176b 100644
---- a/tools/kmod.h
-+++ b/tools/kmod.h
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - one tool to rule them all
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #pragma once
-diff --git a/tools/log.c b/tools/log.c
-index 3317a35..183e3af 100644
---- a/tools/log.c
-+++ b/tools/log.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - log infrastructure
-- *
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/log.h b/tools/log.h
-index d55a4c6..4ff2d1d 100644
---- a/tools/log.h
-+++ b/tools/log.h
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod - log infrastructure
-- *
-- * Copyright (C) 2012-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2012-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <stdarg.h>
-diff --git a/tools/lsmod.c b/tools/lsmod.c
-index d9a27f2..228a042 100644
---- a/tools/lsmod.c
-+++ b/tools/lsmod.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-lsmod - list modules from linux kernel using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/modinfo.c b/tools/modinfo.c
-index cacc32d..441a93c 100644
---- a/tools/modinfo.c
-+++ b/tools/modinfo.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-modinfo - query kernel module information using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/modprobe.c b/tools/modprobe.c
-index 4328da6..1b6bc0b 100644
---- a/tools/modprobe.c
-+++ b/tools/modprobe.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-modprobe - manage linux kernel modules using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <assert.h>
-diff --git a/tools/rmmod.c b/tools/rmmod.c
-index 3942e7b..ceb536f 100644
---- a/tools/rmmod.c
-+++ b/tools/rmmod.c
-@@ -1,20 +1,7 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-rmmod - remove modules from linux kernel using libkmod.
-- *
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
-diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 5ef3743..01919ed 100644
---- a/tools/static-nodes.c
-+++ b/tools/static-nodes.c
-@@ -1,22 +1,9 @@
-+// SPDX-License-Identifier: LGPL-2.1-or-later
- /*
-- * kmod-static-nodes - manage modules.devname
-- *
-- * Copyright (C) 2004-2012 Kay Sievers <kay@vrfy.org>
-- * Copyright (C) 2011-2013  ProFUSION embedded systems
-- * Copyright (C) 2013 Tom Gundersen <teg@jklm.no>
-- *
-- * This program is free software: you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation, either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+ * Copyright © 2004-2012 Kay Sievers <kay@vrfy.org>
-+ * Copyright © 2011-2013 ProFUSION embedded systems
-+ * Copyright © 2013 Tom Gundersen <teg@jklm.no>
-+ * Copyright © 2013-2024 Intel Corporation
-  */
- 
- #include <errno.h>
--- 
-2.45.2
+"__hole_symbol_XXXXX" is too much.
 
+You can use the empty symbol type/name as a special case
+to represent the hole.
+
+
+--=20
+Best Regards
+Masahiro Yamada
