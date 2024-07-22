@@ -1,323 +1,231 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4263232;
-	Mon, 22 Jul 2024 01:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32552160873
+	for <linux-modules@vger.kernel.org>; Mon, 22 Jul 2024 08:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721612972; cv=none; b=pC1ySE8LslUMPA2NcCHn9//5m74fAZ9s/9w116xVeWg8u5rWbhIsLD32eMP+XHSVxFDTgA6uVsR6i0kmC9eUr7x2FlAXpNHt5yfDLNHCL2n+tURoZjWK1AJQmHwSTvQtoJ9BbaqDPbaSTJROYsopD9r2ka6OZQ2s/o0UAvpXXXQ=
+	t=1721636448; cv=none; b=JHrTc8sXkFd3h+Mvg6gxtKZwRWAFPKI0GiFAbKdeejXETcBFZ+OOYoLNnMdSVi4KqkmixW8xsCJqYAtYKpY2DUU4TVwBQJ7vGZuzZbZldrQOUFXPA5IcA9fvWUBiOrL/J8uzjFOIiZqJFA/4uPl5L/iysS940ydEbqPHGoLmPGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721612972; c=relaxed/simple;
-	bh=swvuAzxg91U5ghYWXkg8rKM9aIt6O6L6hqCR1Qfa/gk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=cYaIqskhPyvfk/J9qNqbpaLah2eIi1MU9i/xXYddJYBBC1jlnptXdzh9GnQ4jl4G6GiVpS83OpOCSVNgKCyeYJAdN4d4rCFjgVFJ7YjLrNGr5Wpvt9t4JvzY9nPr9KboDkzdKa37vjDxLIoeUEUVSF3de5fiPtN0owAkbm/95Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WS2dS0V04z20krD;
-	Mon, 22 Jul 2024 09:25:00 +0800 (CST)
-Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 322421A0188;
-	Mon, 22 Jul 2024 09:29:08 +0800 (CST)
-Received: from [10.67.111.172] (10.67.111.172) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 22 Jul 2024 09:29:07 +0800
-Message-ID: <50180a93-b555-087e-2376-3bf46fabafb6@huawei.com>
-Date: Mon, 22 Jul 2024 09:29:07 +0800
+	s=arc-20240116; t=1721636448; c=relaxed/simple;
+	bh=Gc9GfiVqIOW6AG0XYb6oTsaSrqIXqslUw+R/1OUGG6w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c7RjygrtmPMRhwTP037m2b3AZ1xOG7xLfKRjHbgI0KplUJvcK1nEHnwjgLpGJ4jehf8BldC7PI1uDlwNetfQ0YebdKVe0+LmpluEmtrl/5x+oODw/5KPwLIV/htSCVhPZN9W3+SvA1af6g01n5XclNDyHiPdmrYlf9HuJiE4960=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eMbxl77Q; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eMbxl77Q"
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2ef2d582e31so8888941fa.2
+        for <linux-modules@vger.kernel.org>; Mon, 22 Jul 2024 01:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1721636444; x=1722241244; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7VgB/lccVac6zBTZqqHsKy16+19WVuie2nqQLn2rSGc=;
+        b=eMbxl77QZ2yzU12J8h9FCuAGPolVsKbzqdYDefpmeMvmjTi4c4GRaD+9403M/UOOjn
+         Vqp6xDnljVdeXE+XBq6W0xV5UwiBLrzTdWML0g9X0QR1mYLMJaM4zyxviPdt/0Nkt6Ox
+         CmneRS4Pfzk9yM5y/3swgm7PF1q8Cxfp87bJonNGsKul7j6AvrIYAQIm+5xXjCZTZ45j
+         lAG3TVHY9e3Ene205cFv/Ecas4lEXGSaC4FnF2gZKOY5n9eCnbOUa4rQsvYbDxdowNg/
+         fvoFacFbhVUrOIpQ/Vmt2sw8z+2ioorBVEh8EbpMTGlfS6Xeox+5xdowKszps5WFmlOa
+         r7gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721636444; x=1722241244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VgB/lccVac6zBTZqqHsKy16+19WVuie2nqQLn2rSGc=;
+        b=iGP/RJuBOXAzMoNj7x1X5FcLQeXRWLJ1VN1G3BppWuf3K6S1t2Z7o4WMbARd12q9VX
+         D1z7YYSzdcBPM2pfoIEx2Gb6x7741IfKkXv8E3uQdIiRr2k5SOhebYxbTByagzo/yq0/
+         tk6/T7o4DcTYQVUIctL4ugelyVKMVsxuJ8JyhddkxOkDwwondtFZMMD71KEqJnb959T+
+         O4KVYagn1phcLSVHwZoxH+UKvTiPxKvMKW4saNJ0tMzuDubLZZqWS04lMMXCJWBjS5TN
+         +HKM9bJws7F/H4YJlx11q+szSYSJVXV6Km0WdkQquOUpH1ooKLW+ewhDcn3eROWNc9fh
+         5z2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXBLTxtBhoseLsq+VI8EZlLsCo4/gJLIt6YstE5djcKW1qvzrCJMJUsi96gppLQuvOVqDUNa9ThA99dws9ldIu7gns1kKY8ndE+muSG5A==
+X-Gm-Message-State: AOJu0YwpcAmqhNWk+mnkwL5FAL386IsoMVwmX5OoAT6YxzPqjqBSXyW3
+	2uToBIg7qAMEueNoQEJAaNSEm/jV0ZkT94ED3pVfntxg4z2koOv1+Ar3NA0CTKaTj1hib6rJyNG
+	AjPI=
+X-Google-Smtp-Source: AGHT+IFZ2Q+AkcV37TqF+QsvZ6J2I6gHwlMwj3NTq7zlAw3SR5/ehvU6L+ZpDtObyjgWCJAuX4BG7Q==
+X-Received: by 2002:a2e:2d12:0:b0:2ef:1f68:eae1 with SMTP id 38308e7fff4ca-2ef1f68ebe1mr34682991fa.17.1721636444239;
+        Mon, 22 Jul 2024 01:20:44 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cb76a46dfcsm3186370a91.0.2024.07.22.01.20.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jul 2024 01:20:43 -0700 (PDT)
+Message-ID: <00714a65-953f-4885-9229-1990543c4154@suse.com>
+Date: Mon, 22 Jul 2024 10:20:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/6] kallsyms: Emit symbol at the holes in the text
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
 Content-Language: en-US
-To: Masahiro Yamada <masahiroy@kernel.org>
-CC: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
-	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<nathan@kernel.org>, <nicolas@fjasle.eu>, <kees@kernel.org>,
-	<james.clark@arm.com>, <kent.overstreet@linux.dev>, <yhs@fb.com>,
-	<jpoimboe@kernel.org>, <peterz@infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>,
-	<linux-kbuild@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
- <20240613133711.2867745-3-zhengyejian1@huawei.com>
- <CAK7LNAQaLc6aDK85qQtPHoCkQSGyL-TxXjpgJTfehe2Q1=jMSA@mail.gmail.com>
- <c87eeb9c-5f54-480c-17c2-01339416b1b9@huawei.com>
- <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
-From: Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20240617175818.58219-17-samitolvanen@google.com>
+ <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com>
+ <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500012.china.huawei.com (7.185.36.15)
 
-On 2024/7/20 22:14, Masahiro Yamada wrote:
-> On Thu, Jul 18, 2024 at 12:45 PM Zheng Yejian <zhengyejian1@huawei.com> wrote:
+On 7/15/24 22:39, Sami Tolvanen wrote:
+> On Wed, Jul 10, 2024 at 7:30 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>> On 6/17/24 19:58, Sami Tolvanen wrote:
+>>> The first 12 patches of this series add a small tool for computing
+>>> symbol versions from DWARF, called gendwarfksyms. When passed a list
+>>> of exported symbols, the tool generates an expanded type string
+>>> for each symbol, and computes symbol CRCs similarly to genksyms.
+>>> gendwarfksyms is written in C and uses libdw to process DWARF, mainly
+>>> because of the existing support for C host tools that use elfutils
+>>> (e.g., objtool).
 >>
->> On 2024/7/16 16:33, Masahiro Yamada wrote:
->>> On Thu, Jun 13, 2024 at 10:36 PM Zheng Yejian <zhengyejian1@huawei.com> wrote:
->>>>
->>>> When a weak type function is overridden, its symbol will be removed
->>>> from the symbol table, but its code will not be removed. Besides,
->>>> due to lacking of size for kallsyms, kernel compute function size by
->>>> substracting its symbol address from its next symbol address (see
->>>> kallsyms_lookup_size_offset()). These will cause that size of some
->>>> function is computed to be larger than it actually is, just because
->>>> symbol of its following weak function is removed.
->>>>
->>>> This issue also causes multiple __fentry__ locations to be counted in
->>>> the some function scope, and eventually causes ftrace_location() to find
->>>> wrong __fentry__ location. It was reported in
->>>> Link: https://lore.kernel.org/all/20240607115211.734845-1-zhengyejian1@huawei.com/
->>>>
->>>> Peter suggested to change scipts/kallsyms.c to emit readily
->>>> identifiable symbol names for all the weak junk, eg:
->>>>
->>>>     __weak_junk_NNNNN
->>>>
->>>> The name of this kind symbol needs some discussion, but it's temporarily
->>>> called "__hole_symbol_XXXXX" in this patch:
->>>> 1. Pass size info to scripts/kallsyms  (see mksysmap());
->>>> 2. Traverse sorted function symbols, if one function address plus its
->>>>      size less than next function address, it means there's a hole, then
->>>>      emit a symbol "__hole_symbol_XXXXX" there which type is 't'.
->>>>
->>>> After this patch, the effect is as follows:
->>>>
->>>>     $ cat /proc/kallsyms | grep -A 3 do_one_initcall
->>>>     ffffffff810021e0 T do_one_initcall
->>>>     ffffffff8100245e t __hole_symbol_XXXXX
->>>>     ffffffff810024a0 t __pfx_rootfs_init_fs_context
->>>>
->>>> Suggested-by: Peter Zijlstra <peterz@infradead.org>
->>>> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
->>>
->>>
->>>
->>> With my quick test, "t__hole_symbol_XXXXX" was encoded
->>> into the following 10-byte stream.
->>>
->>> .byte 0x09, 0x94, 0xbf, 0x18, 0xf3, 0x3d, 0xce, 0xd1, 0xd1, 0x58
->>>
->>>
->>>
->>> Now "t__hole_symbol_XXXXX" is the most common symbol name.
->>> However, 10 byte is consumed for every instance of
->>> "t__hole_symbol_XXXXX".
->>>
->>> This is much less efficient thanI had expected,
->>> although I did not analyze the logic of this inefficiency.
->>>
->> Hi, Masahiro!
+>> In addition to calculating CRCs of exported symbols, genksyms has other
+>> features which I think are important.
 >>
->> In my local test, "t__hole_symbol_XXXXX" was finally encoded
->> into just one byte. See "kallsyms_token_table" in the .tmp_vmlinux.kallsyms2.S:
+>> Firstly, the genksyms tool has a human-readable storage format for input
+>> data used in the calculation of symbol CRCs. Setting the make variable
+>> KBUILD_SYMTYPES enables dumping this data and storing it in *.symtypes
+>> files.
 >>
->>     kallsyms_token_table:
->>           [...]
->>           .asciz  "t__hole_symbol_XXXXX"
->>           .asciz  "hole_symbol_XXXXX"
->>           .asciz  "e_symbol_XXXXX"
->>           .asciz  "XXXXX"
->>           .asciz  "XXX"
->>           .asciz  "e_symbol_"
->>           .asciz  "ymbol_"
->>           .asciz  "ymb"
->>           .asciz  "hol"
->>           .asciz  "ol_"
->>           .asciz  "pfx"
->>           .asciz  "pf"
->>           .asciz  "e_s"
->>           .asciz  "ym"
->>           .asciz  "t__"
->>           .asciz  "_s"
->>           .asciz  "ol"
->>           .asciz  "__"
->>           .asciz  "XX"
+>> When a developer later modifies the kernel and wants to check if some
+>> symbols have changed, they can take these files and feed them as
+>> *.symref back to genksyms. This allows the tool to provide an actual
+>> reason why some symbols have changed, instead of just printing that
+>> their CRCs are different.
 >>
->> But it would still takes up several tokens due to substrings of
->> "t__hole_symbol_XXXXX" would also become the most common ones.
->> After this patch, the number of "t__hole_symbol_XXXXX" will be ~30% of the total.
->>
->>>
->>>
->>>
->>>
->>>
->>>
->>>> ---
->>>>    scripts/kallsyms.c      | 101 +++++++++++++++++++++++++++++++++++++++-
->>>>    scripts/link-vmlinux.sh |   4 +-
->>>>    scripts/mksysmap        |   2 +-
->>>>    3 files changed, 102 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
->>>> index 6559a9802f6e..5c4cde864a04 100644
->>>> --- a/scripts/kallsyms.c
->>>> +++ b/scripts/kallsyms.c
->>>> @@ -35,6 +35,7 @@
->>>>    struct sym_entry {
->>>>           struct sym_entry *next;
->>>>           unsigned long long addr;
->>>> +       unsigned long long size;
->>>>           unsigned int len;
->>>>           unsigned int seq;
->>>>           unsigned int start_pos;
->>>> @@ -74,6 +75,7 @@ static int token_profit[0x10000];
->>>>    static unsigned char best_table[256][2];
->>>>    static unsigned char best_table_len[256];
->>>>
->>>> +static const char hole_symbol[] = "__hole_symbol_XXXXX";
->>>>
->>>>    static void usage(void)
->>>>    {
->>>> @@ -130,8 +132,16 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
->>>>           size_t len;
->>>>           ssize_t readlen;
->>>>           struct sym_entry *sym;
->>>> +       unsigned long long size = 0;
->>>>
->>>>           errno = 0;
->>>> +       /*
->>>> +        * Example of expected symbol format:
->>>> +        * 1. symbol with size info:
->>>> +        *    ffffffff81000070 00000000000001d7 T __startup_64
->>>> +        * 2. symbol without size info:
->>>> +        *    0000000002a00000 A text_size
->>>> +        */
->>>>           readlen = getline(buf, buf_len, in);
->>>>           if (readlen < 0) {
->>>>                   if (errno) {
->>>> @@ -145,9 +155,24 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
->>>>                   (*buf)[readlen - 1] = 0;
->>>>
->>>>           addr = strtoull(*buf, &p, 16);
->>>> +       if (*buf == p || *p++ != ' ') {
->>>> +               fprintf(stderr, "line format error: unable to parse address\n");
->>>> +               exit(EXIT_FAILURE);
->>>> +       }
->>>> +
->>>> +       if (*p == '0') {
->>>> +               char *str = p;
->>>>
->>>> -       if (*buf == p || *p++ != ' ' || !isascii((type = *p++)) || *p++ != ' ') {
->>>> -               fprintf(stderr, "line format error\n");
->>>> +               size = strtoull(str, &p, 16);
->>>> +               if (str == p || *p++ != ' ') {
->>>> +                       fprintf(stderr, "line format error: unable to parse size\n");
->>>> +                       exit(EXIT_FAILURE);
->>>> +               }
->>>> +       }
->>>> +
->>>> +       type = *p++;
->>>> +       if (!isascii(type) || *p++ != ' ') {
->>>> +               fprintf(stderr, "line format error: unable to parse type\n");
->>>>                   exit(EXIT_FAILURE);
->>>>           }
->>>>
->>>> @@ -182,6 +207,7 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
->>>>                   exit(EXIT_FAILURE);
->>>>           }
->>>>           sym->addr = addr;
->>>> +       sym->size = size;
->>>>           sym->len = len;
->>>>           sym->sym[0] = type;
->>>>           strcpy(sym_name(sym), name);
->>>> @@ -795,6 +821,76 @@ static void sort_symbols(void)
->>>>           qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
->>>>    }
->>>>
->>>> +static int may_exist_hole_after_symbol(const struct sym_entry *se)
->>>
->>>
->>> The return type should be bool.
->>>
->>
->> Yes!
->>
->>>
->>>
->>>> +{
->>>> +       char type = se->sym[0];
->>>> +
->>>> +       /* Only check text symbol or weak symbol */
->>>> +       if (type != 't' && type != 'T' &&
->>>> +           type != 'w' && type != 'W')
->>>> +               return 0;
->>>> +       /* Symbol without size has no hole */
->>>> +       return se->size != 0;
->>>> +}
->>>> +
->>>> +static struct sym_entry *gen_hole_symbol(unsigned long long addr)
->>>> +{
->>>> +       struct sym_entry *sym;
->>>> +       static size_t len = sizeof(hole_symbol);
->>>> +
->>>> +       /* include type field */
->>>> +       sym = malloc(sizeof(*sym) + len + 1);
->>>> +       if (!sym) {
->>>> +               fprintf(stderr, "unable to allocate memory for hole symbol\n");
->>>> +               exit(EXIT_FAILURE);
->>>> +       }
->>>> +       sym->addr = addr;
->>>> +       sym->size = 0;
->>>> +       sym->len = len;
->>>> +       sym->sym[0] = 't';
->>>> +       strcpy(sym_name(sym), hole_symbol);
->>>> +       sym->percpu_absolute = 0;
->>>> +       return sym;
->>>> +}
->>>> +
->>>> +static void emit_hole_symbols(void)
->>>> +{
->>>> +       unsigned int i, pos, nr_emit;
->>>> +       struct sym_entry **new_table;
->>>> +       unsigned int new_cnt;
->>>> +
->>>> +       nr_emit = 0;
->>>> +       for (i = 0; i < table_cnt - 1; i++) {
->>>> +               if (may_exist_hole_after_symbol(table[i]) &&
->>>> +                   table[i]->addr + table[i]->size < table[i+1]->addr)
->>>> +                       nr_emit++;
->>>> +       }
->>>> +       if (!nr_emit)
->>>> +               return;
->>>> +
->>>> +       new_cnt = table_cnt + nr_emit;
->>>> +       new_table = malloc(sizeof(*new_table) * new_cnt);
->>>
->>>
->>> Do you need to allocate another huge table?
->>>
->>> You can use realloc() to append the room for nr_emit
->>> if you iterate the table in the reverse order.
->>>
->>
->> Yes, it would be much better. If it turns out to be the
->> "emit hole symbol" solution, I'll change it to that in the next version,
->> actually, I forgot to mark this series as "RFC".
+>> Is there any plan to add the same functionality to gendwarfksyms, or do
+>> you envison that people will use libabigail, Symbol-Type Graph, or
+>> another tool for making this type of comparison?
 > 
-> 
-> "__hole_symbol_XXXXX" is too much.
-> 
-> You can use the empty symbol type/name as a special case
-> to represent the hole.
-> 
+> gendwarfksyms also uses human-readable input for the CRC calculations,
+> and it prints out the input strings with the --debug option. I plan to
+> hook this up to KBUILD_SYMTYPES in v2. It should be convenient enough
+> to simply compare the pretty-printed output with diff, so I'm not sure
+> if a built-in comparison option is needed. Any other DWARF analysis
+> tool can be used to spot the differences too, as you mentioned.
 
-Ok, I'll try it in v2.
+From my perspective, I'm okay if gendwarfksyms doesn't provide
+functionality to compare a new object file with its reference symtypes
+file.
+
+As mentioned, genksyms has this functionality but I actually think the
+way it works is not ideal. Its design is to operate on one compilation
+unit at the time. This has the advantage that a comparison of each file
+is performed in parallel during the build, simply because of the make
+job system. On the other hand, it has two problems.
+
+The first one is that genksyms doesn't provide a comparison of the
+kernel as a whole. This means that the tool gives rather scattered and
+duplicated output about changed structs in the build log. Ideally, one
+would like to see a single compact report about what changed at the end
+of the build.
+
+The second problem is the handling of symtypes files. This data is large
+and if one wants to store them in a Git repository together with the
+kernel source, it is advisable to first compress/consolidate it in some
+way. This is trivial because these files typically contain many
+duplicates. However, the issue is that to feed the data back to
+genksyms, they need to be unpacked during each build which can take some
+time.
+
+I think a better approach is to have a tool that can be given
+a consolidated symtypes file as one input and can compare it with all
+new symtypes files produced during a kernel build. An example of a tool
+that takes this approach is the kabi Python script in UEK [1].
+
+A few months ago, I also started working on a tool inspired by this
+script. The goal is to have similar functionality but hopefully with
+a much faster implementation. Hence, this tool is written in a compiled
+language (Rust at the moment) and should also become multi-threaded. I'm
+hoping to find some time to make progress on it and make the code
+public. It could later be added to the upstream kernel to replace the
+comparison functionality implemented by genksyms, if there is interest.
+
+So as mentioned, I'm fine if gendwarfksyms doesn't have this
+functionality. However, for distributions that rely on the symtypes
+format, I'd be interested in having gendwarfksyms output its dump data
+in this format as well.
+
+For example, instead of producing:
+
+gendwarfksyms: process_exported_symbols: _some_mangled_func_name (@ XYZ)
+subprogram(
+   [formal parameters...]
+)
+-> structure_type core::result::Result<(), core::fmt::Error> {
+   [a description of the structure...]
+};
+
+.. the output could be something like this:
+
+S#'core::result::Result<(), core::fmt::Error>' structure_type core::result::Result<(), core::fmt::Error> { [a description of the structure...] }
+_some_mangled_func_name subprogram _some_mangled_func_name ( [formal parameters...] ) -> S#'core::result::Result<(), core::fmt::Error>'
+
+>> Secondly, when distributions want to maintain stable kABI, they need to
+>> be able to deal with patch backports that add new members to structures.
+>> One common approach is to have placeholders in important structures
+>> which can be later replaced by the new members as needed. __GENKSYMS__
+>> ifdefs are then used at the C source level to hide these kABI-compatible
+>> changes from genksyms.
+>>
+>> Gendwarfksyms works on the resulting binary and so using such ifdefs
+>> wouldn't work. Instead, I suspect that what is required is a mechanism
+>> to tell the tool that a given change is ok, probably by allowing to
+>> specify some map from the original definition to the new one.
+>>
+>> Is there a plan to implement something like this, or how could it be
+>> addressed?
+> 
+> That's a great question. Here's what Android uses currently to
+> maintain a stable kABI, I assume you're doing something similar?
+
+Correct, (open)SUSE kernels have placeholders in likely-to-change
+structs which can be used for new members. Or if no placeholder is
+present, it might be necessary to place a new member in a gap (padding)
+in the struct layout.
 
 > 
+> https://android.googlesource.com/kernel/common/+/refs/heads/android15-6.6/include/linux/android_kabi.h
+> 
+> If using unions here is acceptable to everyone, a simple solution
+> would be to use a known name prefix for the reserved members and teach
+> gendwarfksyms to only print out the original type for the replaced
+> ones. For example:
+> 
+> The initial placeholder:
+> 
+>     u8 __kabi_reserved_1[8];
+> 
+> After replacement:
+> 
+>     union {
+>             u64 new_member;
+>             struct {
+>                     u8 __kabi_reserved_1[8];
+>             };
+>     }
+> 
+> Here gendwarfksyms would see the __kabi_reserved prefix and only use
+> u8 [8] for the CRC calculation. Does this sound reasonable?
 
--- 
+I like this idea. I think it's good that the necessary kABI information
+about an updated member can be expressed at the source code level in
+place of the actual change, and it isn't needed to feed additional input
+to the tool.
+
+[1] https://github.com/oracle/linux-uek/blob/dbdd7f3611cb03e607e156834497dd2767103530/uek-rpm/tools/kabi
+
 Thanks,
-Zheng Yejian
-
+Petr
