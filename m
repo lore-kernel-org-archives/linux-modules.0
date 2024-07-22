@@ -1,258 +1,323 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4541373
-	for <linux-modules@vger.kernel.org>; Sun, 21 Jul 2024 02:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721530140; cv=fail; b=MvT4SEpEGka/1iZ37K/zS3CtCCR59Umar5RJs39iTNzurtm1EtMUngUIYfZXUInzRpW3zVoZY41l7T04sdugXuKZzDp/9QNZ0bt8vdk8jIV9djdnm7TawK+jAh648BpfwgMp68nxyjmIe0bcK3hJGrTPzT27rdP6hl5qNkElxBs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721530140; c=relaxed/simple;
-	bh=sM4CY+m0Jn3PcGu80AR14gJAgntMLiUHSfgN57hZ5Is=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nNyOZ3e208wkKG9sTiJOLa9esouoLSal5j/QYAAyiQUael6PspWiaFEmps9+o56XzmeaeUBbyD0bzY3FPBPFgaFJFvepQ41pWjMaKPxwNDJfFUa4grxsOBjVXRLhxNl/H7deOhovFs3Vz+IBiLQZtxXdT76d3wScysd6A+6Zc90=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tuf0oUsS; arc=fail smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tuf0oUsS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721530139; x=1753066139;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=sM4CY+m0Jn3PcGu80AR14gJAgntMLiUHSfgN57hZ5Is=;
-  b=Tuf0oUsSnHLiJPucaQLLATn6Sdh/H2Jfrxe8m9AFTFbhSvklFfHfXYmU
-   Y0X70944emuOy/mL+YPkP490PGSKTugVO0r76BWLtyKKh2+tsxYtspKEH
-   fbWF2eHGatV2X7bFbPb23b5Cn0nT7IL7GoNYjO9mvUZ25IjUFAoQrP5xz
-   S/O2bSG3guWLer5kHq1qCS3XdB4t8omVGEFKpa04ZCfNbBPYp5kXbuEjt
-   ZDFzMu8WMzIDSfItPC922oT3vJ076+k5TONTG/m1fUro1GxNbABvvhHF4
-   Og88wrGcSDVIaGyBSTHX67CAULPAFMHlUXUbQV9kDEvY7dlEzxrJkbdg2
-   A==;
-X-CSE-ConnectionGUID: kBVMJj9kSli921jWaNGxDg==
-X-CSE-MsgGUID: S1MLgsj4RjWEQl501EAY6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11139"; a="18964074"
-X-IronPort-AV: E=Sophos;i="6.09,225,1716274800"; 
-   d="scan'208";a="18964074"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2024 19:48:58 -0700
-X-CSE-ConnectionGUID: OtFnu2voShKdl5W/GmHCKg==
-X-CSE-MsgGUID: 6CC3qQHSTt+iL6jv0LeWmw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,225,1716274800"; 
-   d="scan'208";a="51400721"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 20 Jul 2024 19:48:57 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Sat, 20 Jul 2024 19:48:57 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Sat, 20 Jul 2024 19:48:57 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4263232;
+	Mon, 22 Jul 2024 01:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721612972; cv=none; b=pC1ySE8LslUMPA2NcCHn9//5m74fAZ9s/9w116xVeWg8u5rWbhIsLD32eMP+XHSVxFDTgA6uVsR6i0kmC9eUr7x2FlAXpNHt5yfDLNHCL2n+tURoZjWK1AJQmHwSTvQtoJ9BbaqDPbaSTJROYsopD9r2ka6OZQ2s/o0UAvpXXXQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721612972; c=relaxed/simple;
+	bh=swvuAzxg91U5ghYWXkg8rKM9aIt6O6L6hqCR1Qfa/gk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=cYaIqskhPyvfk/J9qNqbpaLah2eIi1MU9i/xXYddJYBBC1jlnptXdzh9GnQ4jl4G6GiVpS83OpOCSVNgKCyeYJAdN4d4rCFjgVFJ7YjLrNGr5Wpvt9t4JvzY9nPr9KboDkzdKa37vjDxLIoeUEUVSF3de5fiPtN0owAkbm/95Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WS2dS0V04z20krD;
+	Mon, 22 Jul 2024 09:25:00 +0800 (CST)
+Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
+	by mail.maildlp.com (Postfix) with ESMTPS id 322421A0188;
+	Mon, 22 Jul 2024 09:29:08 +0800 (CST)
+Received: from [10.67.111.172] (10.67.111.172) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Sat, 20 Jul 2024 19:48:56 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hMZWv+Dz/2KkBrncKtEAsrp5yI4zw/0mYWBRLU1ns/+KlnGd/yLaUIl+5x2NxhwTjV4GnswU9pwbIN5j9UkYf7UvCZD+BJY1bVL5JOGKt1nv07/eZfWoLWlUIb0hEvGRQv/x+F7wDGH5IN7uoumHrCaWeUPahT5IYMjpvEbpNM0Kg+s4cmHgAVZgMSPKX/j3XPsis+IlqBzJKGDaJS+nXxmhi+x5d4cEdXs3QmgYuYLAil2TiA+NZDVs9526UsmIpw+4nHWtmqf+DNmWJ7KiZfTXDEPaa2Ah090mrGSvoMvvxKfpoRx2mEPhHzxx47ipBL5Ke3m/EXyEWWR6xq8s1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jx2wQF8sbaCSjiRDW2KWiXTWGk4Z0r3LJqcQjK2anm4=;
- b=JbPGtALHMYNLU+q+lslGAR+azed853JKW3Exe36vPim4UECL60FTNuVqwhFjTG/ZWb5aZSBwOaC2CsXDAd0nr6ZD1Pl2JdOwTnKU7ugda6AOXitBQ4RzEH7jZWx9NHFOXjsDwNbD8ZEu3FzOKL0uOS3l7oi0u6ZkAL8EBt+MeLobDcx+ITKqYC+geTB2HEunuUj6Qwue7sqiBZf2W5mpN1UII3+/EQ8PHlNAJwXOPepcu9es6eSbZJbA8FkiPmkXaPxD0MR5ExwHBe2SDOsN8iqMVoBnmusSRJM2zBCpP4TPH+ZfUyWWB0Zbt+aN/AbptetLb/mnWRspgEibcXUuZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SA2PR11MB4811.namprd11.prod.outlook.com (2603:10b6:806:11d::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.17; Sun, 21 Jul
- 2024 02:48:54 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44%6]) with mapi id 15.20.7784.017; Sun, 21 Jul 2024
- 02:48:54 +0000
-Date: Sat, 20 Jul 2024 21:48:51 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Emil Velikov <emil.l.velikov@gmail.com>
-CC: Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	<linux-modules@vger.kernel.org>
-Subject: Re: [PATCH kmod] Use SPDX header for license
-Message-ID: <yo6aq7kqlmwdkg2ls2gqpj4fpipgisbvd55cgn2fbkreru2rok@qjvn4oceb77u>
-References: <20240719221249.376162-1-lucas.de.marchi@gmail.com>
- <CACvgo52Gh269GHA29Mu7Sq2TWhLNqNJj5weBF8k_ZANfD3=4ug@mail.gmail.com>
-Content-Type: text/plain; charset="iso-8859-1"; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACvgo52Gh269GHA29Mu7Sq2TWhLNqNJj5weBF8k_ZANfD3=4ug@mail.gmail.com>
-X-ClientProxiedBy: MW4PR04CA0389.namprd04.prod.outlook.com
- (2603:10b6:303:81::34) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ 15.1.2507.39; Mon, 22 Jul 2024 09:29:07 +0800
+Message-ID: <50180a93-b555-087e-2376-3bf46fabafb6@huawei.com>
+Date: Mon, 22 Jul 2024 09:29:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SA2PR11MB4811:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7168b410-6a99-48e2-6e9d-08dca92fa8f5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?fEzXYbYHB2+bCcJ5Jjv5m9rfikD9kyOsJz+flrkKp0ynQaRAS/tzrg6xNr?=
- =?iso-8859-1?Q?Guw/5gikXaJc+tMUR2epmoo1KupbwB7A7QxmRtt3GFXvhbavKCsayo9GuY?=
- =?iso-8859-1?Q?mgwP/AP0abSDi4qFRiRTTnAixSdkNGnKQ+vGGVyywOu8E08MaMr+aOx2aY?=
- =?iso-8859-1?Q?4k8r98Npkxud55zwUjYsIBIP7mH6TpFR1mHpk60X/Gt8Uz79PgpHnXxGsx?=
- =?iso-8859-1?Q?/9rS4veY0SsB/oDX0wpOB1Njyzsw8AGMu5vhYIE8y+RvAqvueVRg7HbmkS?=
- =?iso-8859-1?Q?y83gBCLZepoU+nXUA/fKbTiD0ta6+pibj24MSi22ZDglDLDxDrP/2mkhOG?=
- =?iso-8859-1?Q?J/WyGLJWARF22By417mp/tFpLjf7F1m0lK2VlizsmEH6o9z0PQlCBF4vLu?=
- =?iso-8859-1?Q?fJJXgLNL2o7oqD1oJxkqAqZ55KIO0DNnLQt3tHAVBXk3nym5TCiyyCLaxZ?=
- =?iso-8859-1?Q?vmihVyLong2ym9bZ6EA6lZCza0FEhIZM3MJJGvV9d3hKhePfezPOIc8l5+?=
- =?iso-8859-1?Q?ybiXJXWeo0Kw5slSV041bRaId/7m+vTLaKJWqhVltOlWOp/XCE86v1SC3n?=
- =?iso-8859-1?Q?p+uXV2UZwh2avKv4RlqbJnF1aHra2pnkJf8zBwjlymjxKxubohn6vPPywq?=
- =?iso-8859-1?Q?nzI6jUO9Pp2Xy1k9iQw5R/P3pDC3V4XsZFH8QFESJxSZWhsXuRbkI7eM2h?=
- =?iso-8859-1?Q?5wAQz6nggKjTqD19k4vigzg05L/ekcXV0wxhGuSGQEhaWcnwL6bhrzAn2i?=
- =?iso-8859-1?Q?HhfpWfbVXhiQsOUzASp9ZBI0/FnWVCyp/MfdKYSBa1pq9wZ0JbDWO4LksQ?=
- =?iso-8859-1?Q?I7FIMBveX9pq1/Ls91f3HNzx3VUxZRi4orPXrTjAzvNVuIBZ2Es7lN+C2X?=
- =?iso-8859-1?Q?m8Ynk3sEgQOc22LnZ+7A2FXfMRGvpM4zjiGLnntcOopccUXUB852Smo11h?=
- =?iso-8859-1?Q?sLlIlbl7Xs8njv63KWaDvs2Gxd8minzNutCgdcZ2yduJ2HE7Jcebj5aiCy?=
- =?iso-8859-1?Q?l0vNoa7FWA9Yuv5SgwbHw1qzr9polr64m6z6uzKpTzgFYcLdNJ1Uz3Fya1?=
- =?iso-8859-1?Q?/VbHmCXviMqBuQSzc8mPLBRKTJn/43W0TV+erxCwg0Z76X+C20+n2vGcS6?=
- =?iso-8859-1?Q?295vrJgt15xJy/ceUsO8foxmqIFKcnxfPF4saBMQFAX6/8n6BLcvEklFrU?=
- =?iso-8859-1?Q?uRqVduTDaKlDfEgwxYtFk4Y+Mn1QYm1Wv2dX1g9oBH8XKbD80guG5+ei7r?=
- =?iso-8859-1?Q?CGGEzhwlK+vVwm5OWs6vX339YYxjaf/RF0U7nU4rWu2BWlojLQNHLC8PyR?=
- =?iso-8859-1?Q?w7S2kI4swTDXjg7akrj7vx120elz7o/XTXuZEzcBns1wrKWJT4qG3dy/pM?=
- =?iso-8859-1?Q?A750Y34+FE?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?OrSkKGBoSJVLINNmSGICwpHPAMn5e/2Hixm3AFg4MgCwR1E0hbw0fY0SK7?=
- =?iso-8859-1?Q?6kFP14PoLdHzYbw6G8d0tdW2+s3jJLYtOgm6pDUTwg575GnCyQlnUEjWLx?=
- =?iso-8859-1?Q?W+E8j0iIAfPg/dm1eZ0WL4YTpP23tIK57TFxHQPJ+v5DdT2PbbAIh82oeV?=
- =?iso-8859-1?Q?hywVKuZlFZUxEOJki5ziipKfLgQfrYftTMStUjgQJZh9bAenzrfTI7ii1a?=
- =?iso-8859-1?Q?FOl/jxDm+VXbFLB891JJrwgr9TcipfxBNp0K2tSxcb5ofo1Z+/DYAs2gFS?=
- =?iso-8859-1?Q?dDONqN2K+BEcJlxxkINLOi0IJtZR7h4eUfk6Q/mJkStcuGcGf97tiv2Djh?=
- =?iso-8859-1?Q?YUSS1RxUeZ3VVRIHzoRtjtBKODzkAyaeppOpDgjo4vck86YbtOV7qtJ0MN?=
- =?iso-8859-1?Q?u5G+OP8WKa9K6DQAdYNwh6Qnu2lFLNsNMdskd3Dl+iT4PTDgl0nD7BR0y8?=
- =?iso-8859-1?Q?CkKlRpfWlHNMSgaRjOsPNlcXUD9FKAdo6cyCLt66ssWiSNWxye666KFIkH?=
- =?iso-8859-1?Q?dT7FSBynuyHxDzRfCEoLP+zU3m9GFzNy9yYirSXpn4yNXFyWgeQ4PXHKAm?=
- =?iso-8859-1?Q?ydQ+vnqnN4SeUjlaW7/5dZt/pKpkSQyBJGVP0+tvHMsqWO4KOZn5+CyyjX?=
- =?iso-8859-1?Q?aJe7sUjyZIFkuGmwPeun66CE5mAU8vHMrqUfki2Dvu0VSCwmLxqZeFL/J2?=
- =?iso-8859-1?Q?VRo7nGs8omjXF6219bvthjJOAKOlsJwXbnQxFV/mdIx/t/1PLeQ+VPwbuA?=
- =?iso-8859-1?Q?q+k8MrtHONEPxSzAQnbvosPXlRy4NZ6Ph+mNW2kBybCg3CZOs+k3N/QO0Y?=
- =?iso-8859-1?Q?+Lm3RSM9tYSKgPT7p/P8qfVxn/L6TiBQilT5G6eoayEHC177E3ezNzvM4x?=
- =?iso-8859-1?Q?ScT3eGZSi+WGH67OWN+04FA7d4qKOtXZG6VxvzS3LUjh+MW/nKWfk6v612?=
- =?iso-8859-1?Q?m7TlWw5F1XCVsgRHcswzpuR9y0NHF5rroAZmyRyJrceRZlKB++YamJ16cF?=
- =?iso-8859-1?Q?ZMFGVaCY3cSQsKoJtnJYLCAZPG1ZydrW2Y9wipwcR1Acb5JPNVWvwN3Nr+?=
- =?iso-8859-1?Q?roMSrvpSsKavAwe8mKg5kDhHmx7Z+2drobDUbmB77kyDG5W6BtRSiGvC7U?=
- =?iso-8859-1?Q?C1qXZJloo2UdbcvVuvNzzLtkEfCTZA3OQOmAd44WTK7EUHrVKvr8BwB7K5?=
- =?iso-8859-1?Q?1khDANgD5ddUPlRTuMOjS31F7cMNq8rOpqqlIjZfmarxFQiuB1yfhNq2YB?=
- =?iso-8859-1?Q?C1xkiakQtU9MtTXmdnTSMl25vymsOu2ezK53TPQi1gvp3BHbk+/Ta+jNW2?=
- =?iso-8859-1?Q?eQ4fD/+qG3fg33ebq6wi1mA2d+fF3/s+C0hyE9goKoS/dOMRlD1VTaELuF?=
- =?iso-8859-1?Q?9YBeeI3xBTJB90A+yquJMGAS7DT9AlWq3hII/PfIkFn7T//pAp/h8dusbG?=
- =?iso-8859-1?Q?sV+Cax+s2E5Qk1UZ02hwHTB33amPRccRXDZiTBk86RcnKa1MhmIhn/PrLo?=
- =?iso-8859-1?Q?FZoieKk1fVKJLRsMkk4HXEf3Ntp7aeKLCzstALTwztSvRLdqgWtKZgfPLU?=
- =?iso-8859-1?Q?KOGgXuU1aKDHo0/tbWt6xTYjjtst+t6F4E+POfUo+/BaybTU3tsYw/pnHH?=
- =?iso-8859-1?Q?4Ae/MYfUNpDMTSAccji0w5fPkv2G0m86562PDTThlE4HKJl7isI/Q2cw?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7168b410-6a99-48e2-6e9d-08dca92fa8f5
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2024 02:48:54.4349
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pL7X5CC/8BZqN5a97ON34qsbhxhhFJunlSyIIESL7qAVJtBCweEBeewC+uYBPvvfpy1oN5VZFjkhMSV0HhpSaaBLxg4WcDecQoIWKghLoB4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4811
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/6] kallsyms: Emit symbol at the holes in the text
+Content-Language: en-US
+To: Masahiro Yamada <masahiroy@kernel.org>
+CC: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
+	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<nathan@kernel.org>, <nicolas@fjasle.eu>, <kees@kernel.org>,
+	<james.clark@arm.com>, <kent.overstreet@linux.dev>, <yhs@fb.com>,
+	<jpoimboe@kernel.org>, <peterz@infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>,
+	<linux-kbuild@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+ <20240613133711.2867745-3-zhengyejian1@huawei.com>
+ <CAK7LNAQaLc6aDK85qQtPHoCkQSGyL-TxXjpgJTfehe2Q1=jMSA@mail.gmail.com>
+ <c87eeb9c-5f54-480c-17c2-01339416b1b9@huawei.com>
+ <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
+From: Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
 
-On Sat, Jul 20, 2024 at 04:39:05PM GMT, Emil Velikov wrote:
->On Fri, 19 Jul 2024 at 23:13, Lucas De Marchi <lucas.de.marchi@gmail.com> wrote:
+On 2024/7/20 22:14, Masahiro Yamada wrote:
+> On Thu, Jul 18, 2024 at 12:45â€¯PM Zheng Yejian <zhengyejian1@huawei.com> wrote:
 >>
->> Drop the lengthy license from each file and just use SPDX like most
->> projects nowadays.
+>> On 2024/7/16 16:33, Masahiro Yamada wrote:
+>>> On Thu, Jun 13, 2024 at 10:36â€¯PM Zheng Yejian <zhengyejian1@huawei.com> wrote:
+>>>>
+>>>> When a weak type function is overridden, its symbol will be removed
+>>>> from the symbol table, but its code will not be removed. Besides,
+>>>> due to lacking of size for kallsyms, kernel compute function size by
+>>>> substracting its symbol address from its next symbol address (see
+>>>> kallsyms_lookup_size_offset()). These will cause that size of some
+>>>> function is computed to be larger than it actually is, just because
+>>>> symbol of its following weak function is removed.
+>>>>
+>>>> This issue also causes multiple __fentry__ locations to be counted in
+>>>> the some function scope, and eventually causes ftrace_location() to find
+>>>> wrong __fentry__ location. It was reported in
+>>>> Link: https://lore.kernel.org/all/20240607115211.734845-1-zhengyejian1@huawei.com/
+>>>>
+>>>> Peter suggested to change scipts/kallsyms.c to emit readily
+>>>> identifiable symbol names for all the weak junk, eg:
+>>>>
+>>>>     __weak_junk_NNNNN
+>>>>
+>>>> The name of this kind symbol needs some discussion, but it's temporarily
+>>>> called "__hole_symbol_XXXXX" in this patch:
+>>>> 1. Pass size info to scripts/kallsyms  (see mksysmap());
+>>>> 2. Traverse sorted function symbols, if one function address plus its
+>>>>      size less than next function address, it means there's a hole, then
+>>>>      emit a symbol "__hole_symbol_XXXXX" there which type is 't'.
+>>>>
+>>>> After this patch, the effect is as follows:
+>>>>
+>>>>     $ cat /proc/kallsyms | grep -A 3 do_one_initcall
+>>>>     ffffffff810021e0 T do_one_initcall
+>>>>     ffffffff8100245e t __hole_symbol_XXXXX
+>>>>     ffffffff810024a0 t __pfx_rootfs_init_fs_context
+>>>>
+>>>> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+>>>> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+>>>
+>>>
+>>>
+>>> With my quick test, "t__hole_symbol_XXXXX" was encoded
+>>> into the following 10-byte stream.
+>>>
+>>> .byte 0x09, 0x94, 0xbf, 0x18, 0xf3, 0x3d, 0xce, 0xd1, 0xd1, 0x58
+>>>
+>>>
+>>>
+>>> Now "t__hole_symbol_XXXXX" is the most common symbol name.
+>>> However, 10 byte is consumed for every instance of
+>>> "t__hole_symbol_XXXXX".
+>>>
+>>> This is much less efficient thanI had expected,
+>>> although I did not analyze the logic of this inefficiency.
+>>>
+>> Hi, Masahiro!
 >>
->
->Massive +1 for the idea, I should go and update some of my other projects.
->
->> Signed-off-by: Lucas De Marchi <lucas.de.marchi@gmail.com>
->> ---
->
-><snip>
->
->> --- a/libkmod/libkmod-config.c
->> +++ b/libkmod/libkmod-config.c
->> @@ -1,21 +1,7 @@
->> +// SPDX-License-Identifier: LGPL-2.1-or-later
->>  /*
->> - * libkmod - interface to kernel module operations
->> - *
->> - * Copyright (C) 2011-2013  ProFUSION embedded systems
->> - * Copyright (C) 2013  Intel Corporation. All rights reserved.
->> - *
->> - * This library is free software; you can redistribute it and/or
->> - * modify it under the terms of the GNU Lesser General Public
->> - * License as published by the Free Software Foundation; either
->> - * version 2.1 of the License, or (at your option) any later version.
->> - *
->> - * This library is distributed in the hope that it will be useful,
->> - * but WITHOUT ANY WARRANTY; without even the implied warranty of
->> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
->> - * Lesser General Puc License for more details.
->> - *
->> - * You should have received a copy of the GNU Lesser General Public
->> - * License along with this library; if not, see <http://www.gnu.org/licenses/>.
->> + * Copyright © 2011-2013 ProFUSION embedded systems
->> + * Copyright © 2013-2024 Intel Corporation
->>   */
+>> In my local test, "t__hole_symbol_XXXXX" was finally encoded
+>> into just one byte. See "kallsyms_token_table" in the .tmp_vmlinux.kallsyms2.S:
 >>
->
->The commit is few somewhat unrelated things. Since dealing with
->legalese is rarely fun, perhaps we can err on the verbose side and
->split things?
->Namely:
-> - replaces license verbiage with SPDX one-liner
-> - updates Intel copyright statement - would it make sense to your
->@intel email as author here?
+>>     kallsyms_token_table:
+>>           [...]
+>>           .asciz  "t__hole_symbol_XXXXX"
+>>           .asciz  "hole_symbol_XXXXX"
+>>           .asciz  "e_symbol_XXXXX"
+>>           .asciz  "XXXXX"
+>>           .asciz  "XXX"
+>>           .asciz  "e_symbol_"
+>>           .asciz  "ymbol_"
+>>           .asciz  "ymb"
+>>           .asciz  "hol"
+>>           .asciz  "ol_"
+>>           .asciz  "pfx"
+>>           .asciz  "pf"
+>>           .asciz  "e_s"
+>>           .asciz  "ym"
+>>           .asciz  "t__"
+>>           .asciz  "_s"
+>>           .asciz  "ol"
+>>           .asciz  "__"
+>>           .asciz  "XX"
+>>
+>> But it would still takes up several tokens due to substrings of
+>> "t__hole_symbol_XXXXX" would also become the most common ones.
+>> After this patch, the number of "t__hole_symbol_XXXXX" will be ~30% of the total.
+>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>
+>>>> ---
+>>>>    scripts/kallsyms.c      | 101 +++++++++++++++++++++++++++++++++++++++-
+>>>>    scripts/link-vmlinux.sh |   4 +-
+>>>>    scripts/mksysmap        |   2 +-
+>>>>    3 files changed, 102 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+>>>> index 6559a9802f6e..5c4cde864a04 100644
+>>>> --- a/scripts/kallsyms.c
+>>>> +++ b/scripts/kallsyms.c
+>>>> @@ -35,6 +35,7 @@
+>>>>    struct sym_entry {
+>>>>           struct sym_entry *next;
+>>>>           unsigned long long addr;
+>>>> +       unsigned long long size;
+>>>>           unsigned int len;
+>>>>           unsigned int seq;
+>>>>           unsigned int start_pos;
+>>>> @@ -74,6 +75,7 @@ static int token_profit[0x10000];
+>>>>    static unsigned char best_table[256][2];
+>>>>    static unsigned char best_table_len[256];
+>>>>
+>>>> +static const char hole_symbol[] = "__hole_symbol_XXXXX";
+>>>>
+>>>>    static void usage(void)
+>>>>    {
+>>>> @@ -130,8 +132,16 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
+>>>>           size_t len;
+>>>>           ssize_t readlen;
+>>>>           struct sym_entry *sym;
+>>>> +       unsigned long long size = 0;
+>>>>
+>>>>           errno = 0;
+>>>> +       /*
+>>>> +        * Example of expected symbol format:
+>>>> +        * 1. symbol with size info:
+>>>> +        *    ffffffff81000070 00000000000001d7 T __startup_64
+>>>> +        * 2. symbol without size info:
+>>>> +        *    0000000002a00000 A text_size
+>>>> +        */
+>>>>           readlen = getline(buf, buf_len, in);
+>>>>           if (readlen < 0) {
+>>>>                   if (errno) {
+>>>> @@ -145,9 +155,24 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
+>>>>                   (*buf)[readlen - 1] = 0;
+>>>>
+>>>>           addr = strtoull(*buf, &p, 16);
+>>>> +       if (*buf == p || *p++ != ' ') {
+>>>> +               fprintf(stderr, "line format error: unable to parse address\n");
+>>>> +               exit(EXIT_FAILURE);
+>>>> +       }
+>>>> +
+>>>> +       if (*p == '0') {
+>>>> +               char *str = p;
+>>>>
+>>>> -       if (*buf == p || *p++ != ' ' || !isascii((type = *p++)) || *p++ != ' ') {
+>>>> -               fprintf(stderr, "line format error\n");
+>>>> +               size = strtoull(str, &p, 16);
+>>>> +               if (str == p || *p++ != ' ') {
+>>>> +                       fprintf(stderr, "line format error: unable to parse size\n");
+>>>> +                       exit(EXIT_FAILURE);
+>>>> +               }
+>>>> +       }
+>>>> +
+>>>> +       type = *p++;
+>>>> +       if (!isascii(type) || *p++ != ' ') {
+>>>> +               fprintf(stderr, "line format error: unable to parse type\n");
+>>>>                   exit(EXIT_FAILURE);
+>>>>           }
+>>>>
+>>>> @@ -182,6 +207,7 @@ static struct sym_entry *read_symbol(FILE *in, char **buf, size_t *buf_len)
+>>>>                   exit(EXIT_FAILURE);
+>>>>           }
+>>>>           sym->addr = addr;
+>>>> +       sym->size = size;
+>>>>           sym->len = len;
+>>>>           sym->sym[0] = type;
+>>>>           strcpy(sym_name(sym), name);
+>>>> @@ -795,6 +821,76 @@ static void sort_symbols(void)
+>>>>           qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
+>>>>    }
+>>>>
+>>>> +static int may_exist_hole_after_symbol(const struct sym_entry *se)
+>>>
+>>>
+>>> The return type should be bool.
+>>>
+>>
+>> Yes!
+>>
+>>>
+>>>
+>>>> +{
+>>>> +       char type = se->sym[0];
+>>>> +
+>>>> +       /* Only check text symbol or weak symbol */
+>>>> +       if (type != 't' && type != 'T' &&
+>>>> +           type != 'w' && type != 'W')
+>>>> +               return 0;
+>>>> +       /* Symbol without size has no hole */
+>>>> +       return se->size != 0;
+>>>> +}
+>>>> +
+>>>> +static struct sym_entry *gen_hole_symbol(unsigned long long addr)
+>>>> +{
+>>>> +       struct sym_entry *sym;
+>>>> +       static size_t len = sizeof(hole_symbol);
+>>>> +
+>>>> +       /* include type field */
+>>>> +       sym = malloc(sizeof(*sym) + len + 1);
+>>>> +       if (!sym) {
+>>>> +               fprintf(stderr, "unable to allocate memory for hole symbol\n");
+>>>> +               exit(EXIT_FAILURE);
+>>>> +       }
+>>>> +       sym->addr = addr;
+>>>> +       sym->size = 0;
+>>>> +       sym->len = len;
+>>>> +       sym->sym[0] = 't';
+>>>> +       strcpy(sym_name(sym), hole_symbol);
+>>>> +       sym->percpu_absolute = 0;
+>>>> +       return sym;
+>>>> +}
+>>>> +
+>>>> +static void emit_hole_symbols(void)
+>>>> +{
+>>>> +       unsigned int i, pos, nr_emit;
+>>>> +       struct sym_entry **new_table;
+>>>> +       unsigned int new_cnt;
+>>>> +
+>>>> +       nr_emit = 0;
+>>>> +       for (i = 0; i < table_cnt - 1; i++) {
+>>>> +               if (may_exist_hole_after_symbol(table[i]) &&
+>>>> +                   table[i]->addr + table[i]->size < table[i+1]->addr)
+>>>> +                       nr_emit++;
+>>>> +       }
+>>>> +       if (!nr_emit)
+>>>> +               return;
+>>>> +
+>>>> +       new_cnt = table_cnt + nr_emit;
+>>>> +       new_table = malloc(sizeof(*new_table) * new_cnt);
+>>>
+>>>
+>>> Do you need to allocate another huge table?
+>>>
+>>> You can use realloc() to append the room for nr_emit
+>>> if you iterate the table in the reverse order.
+>>>
+>>
+>> Yes, it would be much better. If it turns out to be the
+>> "emit hole symbol" solution, I'll change it to that in the next version,
+>> actually, I forgot to mark this series as "RFC".
+> 
+> 
+> "__hole_symbol_XXXXX" is too much.
+> 
+> You can use the empty symbol type/name as a special case
+> to represent the hole.
+> 
 
-I hate to have author in these lines and recommend people to look at git
-blame
+Ok, I'll try it in v2.
 
-as for the updated statement, see below
+> 
 
-> - (C) -> © update the ProFUSION copyright statement - LF's LFC191 [1]
->and SPDX [2] lists these as analogous to "Copyright" alone
+-- 
+Thanks,
+Zheng Yejian
 
-using both the symbol (or (C) ascii-only variant) plus the spelled out
-"Copyright" is what is commonly used in the kernel. AFAICS the reference
-you gave is only about parsing the line and handling all of them being
-the same thing.
-
-> - drops the libkmod description one-liners
->
->Four commits might be an overkill - license vs rest should be good IMHO.
->
->Btw you can also use SPDX-FileCopyrightText [3].
-
-I like to follow what kernel is doing since the project is very tied to
-the kernel... this thread is relevant:
-https://lore.kernel.org/lkml/YyBl%2FFUVndtEFkW9@kroah.com/
-
-For the Intel one, I just got the one that I know it's approved since
-it's being constantly added to the kernel. So I just paste it everywhere
-updating the year.
-
-Lucas De Marchi
-
->
->HTH
->-Emil
->
->[1] https://training.linuxfoundation.org/training/open-source-licensing-basics-for-software-developers/
->[2] https://spdx.github.io/spdx-spec/v2.3/license-matching-guidelines-and-templates/#b102-guideline
->[3] https://spdx.github.io/spdx-spec/v2.3/file-tags/
