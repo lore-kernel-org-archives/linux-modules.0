@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CFD1448FB;
-	Tue, 23 Jul 2024 21:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B4F1422AB;
+	Tue, 23 Jul 2024 22:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721770319; cv=none; b=lMFprOqEe2p6RxAzIjPz08UKc639Y5zEg46Szh6mL7v+9xvE05RurRpGvNhQa/0yYrkw7V65qQQGpyDy2jxdWpvw8ulPdUyeTcuCO5L114tWvgyfGHHjyIHq0ehnfXV/58fOKXPW2iHJsqFiPnkAtPsKFHSq/G0URy2AqZAP4eI=
+	t=1721773501; cv=none; b=cvNIsDWrE4iDyzS78KQbGf1Bb5HGHWTXqiRxUEbSWhES2BIhQnddufBhpZSBDn4t7qfN5hSgq+b7hizOkWHqD+zQrFCmJyWIyX/GOT0PYMt4rvlziMHyPfc3eCw5hc23qc+6GPVUxHunnN6T20i71cFtDOSzkHR873FZnDy2FK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721770319; c=relaxed/simple;
-	bh=emqRXC4zbFB95UYh4yI6o+bUQDFgG7kIbVNfc6B+a/s=;
+	s=arc-20240116; t=1721773501; c=relaxed/simple;
+	bh=ViQtFf4C97IjtVQAJCI22eGpWrUZSSX3Zptd3VqhktI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n08AnS2aKp9TraaFr5myujPvq+ycHp3o9D2r1iw0pUT4OAwWG/V6ro3x8ORXPxJ4Li72WlgUN4at41a3P9L6s1S6dxw5/I/UZUXfMy4ZZSuYZTNJpns3NRl8t/je+/0NFk+ls8ie+LBHuq3ZIfADMs0IXyZhk2r5Kf8U2x7Ch4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l2EaSC36; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=q/gsVnX3kfDZSIl6666HSO8PLt1+jYeeX5xf/Wu93KxoLQbsBcqUNSPLYH08Ruzw8wkqrsqXjvS00oRu0W8qoYYHqRvgEHuJy0UREmLPbzQZEKrLYTnHy1Iqwjg6v9VEQYTxbLx9DmNbs1JExTjvsI4M7PI4SPUXXF/W0mJTWR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sb4auE96; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l2EaSC36"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sb4auE96"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721770318; x=1753306318;
+  t=1721773498; x=1753309498;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=emqRXC4zbFB95UYh4yI6o+bUQDFgG7kIbVNfc6B+a/s=;
-  b=l2EaSC36CRwYuclgheLeevXoDE+QVyVpaGWkU3FnYLlfKlPupB6ist5P
-   +cHFa6pBW252JZb8ju+8KI7SYUIX8qWhlfIqBOlSG2EuDG+XsNUgY+7GA
-   WmE/gJNyTWlNLrds+J1aYmIRCWCFsU1hm7r6950+54LLOpdCCVjghGy1C
-   pcutx0GI44SYrlejtSNOhOHV2eJNyJXkVzpSa2SsykzyEDKk0zNhg0Dwp
-   h+geDXw+XD4JTjqqZV1j7+XTN3y2RwfsaKGqHBwATUIPGt07QILnj4eUB
-   FeF7HIf8a/sWgcw5iqKwwtbK8ZqFd3BzyKx19dXqbGcXDEb3YJ6i4hAgp
-   A==;
-X-CSE-ConnectionGUID: Wem086CXToe0WtaOamq3jw==
-X-CSE-MsgGUID: pMst6wNeR5advhlE2Dj9Cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="41946561"
+  bh=ViQtFf4C97IjtVQAJCI22eGpWrUZSSX3Zptd3VqhktI=;
+  b=Sb4auE96xJXdkpnVbIl/PQOUV1cC3P9ilqD61dKrBpWbrqCQup7bQsOG
+   FdMbXZwfbrI530DIWJmMuqxIho+zOhPhOItOKusWeopB+PKXyM0bMV6Ch
+   zymHQimXjruSxn49CGhIvhTbZdlMFDVNBd3n1JfGcs0PxEQOMFhpAalxX
+   /fDAQQiFus9Q95vD3d27ekyCP3M0p2scwkbQdpxuegeHQaiJHID8eMZ3O
+   6qS5wT6bl5vbGgDM49AGxDE2AgbpCEO3GFZQndgcbu+J6eTApw2gJDs5l
+   igmgG6QAbQ0dQCvzpFUmxCnl4HarvNa3U/+5t/R7K6MxrnC8aqG82qNQd
+   g==;
+X-CSE-ConnectionGUID: 0g9rx9PZTJGN1o196Jwq7g==
+X-CSE-MsgGUID: 7VWNvgvCTq+YiggzGEynfw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="30088129"
 X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
-   d="scan'208";a="41946561"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 14:31:58 -0700
-X-CSE-ConnectionGUID: 9PnZNZK5ROSFsJZBagkOvg==
-X-CSE-MsgGUID: nknNECQjS+WNfr/mbbyZBg==
+   d="scan'208";a="30088129"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 15:24:58 -0700
+X-CSE-ConnectionGUID: 7X5r9o4GQ7eA/VcONYNQvQ==
+X-CSE-MsgGUID: pOxbvXMtRta4kwubr+gFnw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,231,1716274800"; 
-   d="scan'208";a="52598208"
+   d="scan'208";a="52094633"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 23 Jul 2024 14:31:53 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 23 Jul 2024 15:24:53 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sWN6s-000mN4-1a;
-	Tue, 23 Jul 2024 21:31:50 +0000
-Date: Wed, 24 Jul 2024 05:31:30 +0800
+	id 1sWNwB-000mOu-1Y;
+	Tue, 23 Jul 2024 22:24:51 +0000
+Date: Wed, 24 Jul 2024 06:24:46 +0800
 From: kernel test robot <lkp@intel.com>
 To: Youling Tang <youling.tang@linux.dev>, Arnd Bergmann <arnd@arndb.de>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -61,9 +61,10 @@ Cc: oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
 	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
 	linux-f2fs-devel@lists.sourceforge.net, youling.tang@linux.dev,
 	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
-Message-ID: <202407240502.xqotqBQ1-lkp@intel.com>
-References: <20240723083239.41533-5-youling.tang@linux.dev>
+Subject: Re: [PATCH 2/4] btrfs: Use module_subinit{_noexit} and
+ module_subeixt helper macros
+Message-ID: <202407240648.afyUbKEP-lkp@intel.com>
+References: <20240723083239.41533-3-youling.tang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -72,7 +73,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240723083239.41533-5-youling.tang@linux.dev>
+In-Reply-To: <20240723083239.41533-3-youling.tang@linux.dev>
 
 Hi Youling,
 
@@ -87,59 +88,25 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Youling-Tang/module-Add-module_subinit-_noexit-and-module_subeixt-helper-macros/20240723-164434
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240723083239.41533-5-youling.tang%40linux.dev
-patch subject: [PATCH 4/4] f2fs: Use module_{subinit, subeixt} helper macros
-config: arm64-randconfig-002-20240724 (https://download.01.org/0day-ci/archive/20240724/202407240502.xqotqBQ1-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20240723083239.41533-3-youling.tang%40linux.dev
+patch subject: [PATCH 2/4] btrfs: Use module_subinit{_noexit} and module_subeixt helper macros
+config: arm64-randconfig-004-20240724 (https://download.01.org/0day-ci/archive/20240724/202407240648.afyUbKEP-lkp@intel.com/config)
 compiler: aarch64-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407240502.xqotqBQ1-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407240648.afyUbKEP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407240502.xqotqBQ1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407240648.afyUbKEP-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from fs/f2fs/dir.c:13:
-   fs/f2fs/f2fs.h: In function 'f2fs_create_root_stats':
->> fs/f2fs/f2fs.h:4131:1: warning: no return statement in function returning non-void [-Wreturn-type]
-    4131 | static inline int __init f2fs_create_root_stats(void) { }
-         | ^~~~~~
---
-   In file included from fs/f2fs/data.c:25:
-   fs/f2fs/f2fs.h: In function 'f2fs_create_root_stats':
->> fs/f2fs/f2fs.h:4131:1: warning: no return statement in function returning non-void [-Wreturn-type]
-    4131 | static inline int __init f2fs_create_root_stats(void) { }
-         | ^~~~~~
-   fs/f2fs/data.c: In function 'f2fs_mpage_readpages':
-   fs/f2fs/data.c:2373:17: warning: variable 'index' set but not used [-Wunused-but-set-variable]
-    2373 |         pgoff_t index;
-         |                 ^~~~~
---
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
-   aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/ext4/super.o' being placed in section `.subexitcall.exit'
-   aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/ext4/super.o' being placed in section `.subinitcall.init'
->> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/f2fs/super.o' being placed in section `.subexitcall.exit'
->> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/f2fs/super.o' being placed in section `.subinitcall.init'
-
-
-vim +4131 fs/f2fs/f2fs.h
-
-  4128	
-  4129	static inline int f2fs_build_stats(struct f2fs_sb_info *sbi) { return 0; }
-  4130	static inline void f2fs_destroy_stats(struct f2fs_sb_info *sbi) { }
-> 4131	static inline int __init f2fs_create_root_stats(void) { }
-  4132	static inline void f2fs_destroy_root_stats(void) { }
-  4133	static inline void f2fs_update_sit_info(struct f2fs_sb_info *sbi) {}
-  4134	#endif
-  4135	
+>> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/btrfs/super.o' being placed in section `.subexitcall.exit'
+>> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/btrfs/super.o' being placed in section `.subinitcall.init'
+>> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/btrfs/super.o' being placed in section `.subexitcall.exit'
+>> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/btrfs/super.o' being placed in section `.subinitcall.init'
+>> aarch64-linux-ld: warning: orphan section `.subexitcall.exit' from `fs/btrfs/super.o' being placed in section `.subexitcall.exit'
+>> aarch64-linux-ld: warning: orphan section `.subinitcall.init' from `fs/btrfs/super.o' being placed in section `.subinitcall.init'
 
 -- 
 0-DAY CI Kernel Test Service
