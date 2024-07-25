@@ -1,127 +1,120 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4108D13AD8
-	for <linux-modules@vger.kernel.org>; Thu, 25 Jul 2024 03:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2F916D4C3;
+	Thu, 25 Jul 2024 11:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721876514; cv=none; b=g+VxSsY9RuEue7iRWAP051JoojmfZeMrW3K0F0t4tiBq29U4d4r13vu9e/wg7gRTABFti0nn3c2/xFwfFl6FI2Q8ogLO2i47/xYOXT0CDBkOaGexLmkeUWGVSnhcX64nAG53V14iQ/2jWTwBku3ZR88T1zHF/kHuMAQ5D8ihDic=
+	t=1721907478; cv=none; b=DMDYi/bh7wqpQ5WuhS5Ob6Wcyx2s9wgzbMadZru5ZD0wp/mIXIQejxW9f2H7qtOcZwyZF6igdeQDPpLOXJcoSpIDTLJTR16Fc6SSMn02b6l8cVWC78QIbYpNhjTRlvVX1Coh7sfA7My+7QQOgf50/wc3MxQCxzMhqRlPwGcBDnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721876514; c=relaxed/simple;
-	bh=49jcBefj5FcT3M9x20xUQPUdsQZFD9U6hguK29l+JiI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lYvtY33wxtv6EVNOvoBGshF8mujfQQyLr1If5mm9Q79qVczpKmNBVyhqXKBouP5k49JTXDQhsUhmNhtr4r7njv2keb036ZUp5f+mRZ9Lu+rslO3Bsyb/zCBVoVfekD4BLDKElG8JUZ+8m7E8NSN91lxbavWYrulxbOhtQcN2F/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t0bnRmik; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1721907478; c=relaxed/simple;
+	bh=a8Z6Q9tsTrYdEjiQ6k1+fN0sXA3vkOxm4OoLs3NCtlE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FRWBVO7esl2zb7/E1daLwhwmQPJ/ecbz23VaXyjRA9QpMRZrNYRdmGHntzixkn3Mydmh3MjwY/6IgaQ9IXAxegaNL5JrLAJxMJNvyLApGYv0pzVz0yVYIPjv6R5XgfMT33LRm8F4mYm9suCCdRv+RFRO4zGcRAS8giiEcZQkk/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=KdZDdP2s; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t0bnRmik"
-Message-ID: <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1721876510;
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="KdZDdP2s"
+From: Dragan Simic <dsimic@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1721907473;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dinahWWNWKVgxUr2QQ8r5vtDMN47K5jpbrU4x04fZmQ=;
-	b=t0bnRmiksgMcuV2n4/X74UTpJITvS5MrnJV4M93S6NWIOs2XsMr+6Kz8W7etk9BqNLgiLm
-	WyW+SnXPb9G/KKg4743QNI4cw/8+OwX72AkIF3GAqZwoNi6QNrEMZbnhD9k/VEF+m8nY7q
-	VR/2e2/7phjKq6pM1GTTV0CvBfSEfNI=
-Date: Thu, 25 Jul 2024 11:01:33 +0800
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8cRY9HOX7blyu3XT+Ji9M1eNuX4gkPBubPEEF4Jgnb4=;
+	b=KdZDdP2sKyLQM4sLBuk6kJRtv09Qbeq0etLPQjHQ9fGprGvxS4ILbljILLe29R1eZyKrTC
+	3io+gSMfC2N5zZ7voPtG2JD0zEwBdMObM60X/6KGd/VlVmdSlGwF6P/CBNae17U/AKXPdl
+	E7Z81QG0UxF3DPdjDpNSe/smfnbdskBdeeV7xwStrhLJawaQ3IefYEtF9jyoAvlW0fPWJg
+	jLO1esE01iB0FDTY80ZTdBsGKQ/nYe+ZuU6p5gGKhJXhCpXh5XKZVa6AWanCvkmWgEIlai
+	zq+f8Vta+X4vcvZVToMuiHZuXbib6uaee+fViOAMW7fyDgyjZdRVzyouyalGYQ==
+To: linux-modules@vger.kernel.org
+Cc: mcgrof@kernel.org,
+	linux-kernel@vger.kernel.org,
+	didi.debian@cknow.org,
+	Steven Price <steven.price@arm.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Qiang Yu <yuq825@gmail.com>
+Subject: [PATCH] module: Add hard dependencies as syntactic sugar
+Date: Thu, 25 Jul 2024 13:37:46 +0200
+Message-Id: <04e0676b0e77c5eb69df6972f41d77cdf061265a.1721906745.git.dsimic@manjaro.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
- David Sterba <dsterba@suse.com>, tytso@mit.edu,
- Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim <jaegeuk@kernel.org>,
- Chao Yu <chao@kernel.org>, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, Youling Tang <tangyouling@kylinos.cn>
-References: <20240723083239.41533-1-youling.tang@linux.dev>
- <20240723083239.41533-2-youling.tang@linux.dev>
- <Zp-_RDk5n5431yyh@infradead.org>
- <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
- <ZqEhMCjdFwC3wF4u@infradead.org>
-Content-Language: en-US, en-AU
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Youling Tang <youling.tang@linux.dev>
-In-Reply-To: <ZqEhMCjdFwC3wF4u@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-On 24/07/2024 23:43, Christoph Hellwig wrote:
-> On Wed, Jul 24, 2024 at 09:57:05AM +0800, Youling Tang wrote:
->> module_init(initfn)/module_exit(exitfn) has two definitions (via MODULE):
->> - buindin: uses do_initcalls() to iterate over the contents of the specified
->>    section and executes all initfn functions in the section in the order in
->>    which they are stored (exitfn is not required).
->>
->> - ko: run do_init_module(mod)->do_one_initcall(mod->init) to execute initfn
->>    of the specified module.
->>
->> If we change module_subinit to something like this, not called in
->> module_init,
->> Not only do we want to ensure that exit is executed in reverse order of
->> init, but we also want to ensure the order of init.
-> Yes.
->
->> This does not guarantee the order in which init will be executed (although
->> the init/exit order will remain the same)
-> Hmm, so the normal built-in initcalls depend on the link order, but when
-> they are in the same file, the compiler can reorder them before we even
-> get to the linker.
->
-> I wonder what a good syntax would be to still avoid the boilerplate
-> code.  We'd probably need one macro to actually define the init/exit
-> table in a single statement so that it can't be reordered, but that
-> would lose the ability to actually declare the module subinit/exit
-> handlers in multiple files, which really is the biggest win of this
-> scheme as it allows to keep the functions static instead of exposing
-> them to other compilation units.
->
-> And in fact even in your three converted file systems, most
-> subinit/exit handler are in separate files, so maybe instead
-> enforcing that there is just one per file and slightly refactoring
-> the code so that this is the case might be the best option?
-- It doesn't feel good to have only one subinit/exit in a file.
-   Assuming that there is only one file in each file, how do we
-   ensure that the files are linked in order?(Is it sorted by *.o
-   in the Makefile?)
+Panfrost and Lima DRM drivers use devfreq to perform DVFS, which is supported
+on the associated platforms, while using simple_ondemand devfreq governor by
+default.  This makes the simple_ondemand module a hard dependency for both
+Panfrost and Lima, because the presence of the simple_ondemand module in an
+initial ramdisk allows the initialization of Panfrost or Lima to succeed.
+This is currently expressed using MODULE_SOFTDEP. [1][2]  Please see commits
+80f4e62730a9 ("drm/panfrost: Mark simple_ondemand governor as softdep") and
+0c94f58cef31 ("drm/lima: Mark simple_ondemand governor as softdep") for
+additional background information.
 
-- Even if the order of each init is linked correctly, then the
-   runtime will be iterated through the .subinitcall.init section,
-   which executes each initfn in sequence (similar to do_initcalls),
-   which means that no other code can be inserted between each subinit.
+With the addition of MODULE_WEAKDEP in commit 61842868de13 ("module: create
+weak dependecies"), the dependency between Panfrost/Lima and simple_ondemand
+can be expressed in a much better way as a weakdep, because that provides
+the required dependency information to the utilities that generate initial
+ramdisks, but leaves the actual loading of the required kernel module(s) to
+the kernel.  However, being able to actually express this as a hard module
+dependency would still be beneficial.
 
+With all this in mind, let's add MODULE_HARDDEP as some kind of syntactic
+sugar, currently implemented as an alias for MODULE_WEAKDEP, so the actual
+hard module dependencies can be expressed properly, and possibly handled
+differently in the future, avoiding the need to go back, track and churn
+all such instances of hard module dependencies.  The first consumers of
+MODULE_HARDDEP will be the Panfrost and Lima DRM drivers, but the list of
+consumers may also grow a bit in the future.
 
-If module_subinit is called in module_init, other code can be inserted
-between subinit, similar to the following:
+For example, allowing reduction of the initial ramdisk size is a possible
+future difference between handling the MODULE_WEAKDEP and MODULE_HARDDEP
+dependencies.  When the size of the initial ramdisk is limited, the utilities
+that generate initial ramdisks can use the distinction between the weakdeps
+and the harddeps to safely omit some of the weakdep modules from the created
+initial ramdisks, and to keep all harddep modules.
 
-```
-static int __init init_example(void)
-{
-     module_subinit(inita, exita);
+Due to the nature of MODULE_WEAKDEP, the above-described example will also
+require some additional device-specific information to be made available to
+the utilities that create initial ramdisks, so they can actually know which
+weakdep modules can be safely pruned for a particular device, but the
+distinction between the harddeps and the weakdeps opens up a path towards
+using such additional "pruning information" in a more robust way, by ensuring
+that the absolutely required harddep modules aren't pruned away.
 
-     otherthing...
+[1] https://lore.kernel.org/dri-devel/4e1e00422a14db4e2a80870afb704405da16fd1b.1718655077.git.dsimic@manjaro.org/T/#u
+[2] https://lore.kernel.org/dri-devel/fdaf2e41bb6a0c5118ff9cc21f4f62583208d885.1718655070.git.dsimic@manjaro.org/T/#u
 
-     module_subinit(initb, exitb);
+Cc: Steven Price <steven.price@arm.com>
+Cc: Boris Brezillon <boris.brezillon@collabora.com>
+Cc: Qiang Yu <yuq825@gmail.com>
+Signed-off-by: Dragan Simic <dsimic@manjaro.org>
+---
+ include/linux/module.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-     return 0;
-}
-
-module_init(init_example);
-```
-
-IMHO, module_subinit() might be better called in module_init().
-
-Thanks,
-Youling.
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 88ecc5e9f523..40e5762847a9 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -179,6 +179,14 @@ extern void cleanup_module(void);
+  */
+ #define MODULE_WEAKDEP(_weakdep) MODULE_INFO(weakdep, _weakdep)
+ 
++/*
++ * Hard module dependencies. Currently handled the same as weak
++ * module dependencies, but intended to mark hard dependencies
++ * as such for possible different handling in the future.
++ * Example: MODULE_HARDDEP("module-foo")
++ */
++#define MODULE_HARDDEP(_harddep) MODULE_WEAKDEP(_harddep)
++
+ /*
+  * MODULE_FILE is used for generating modules.builtin
+  * So, make it no-op when this is being built as a module
