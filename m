@@ -1,111 +1,127 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C0E282FA
-	for <linux-modules@vger.kernel.org>; Wed, 24 Jul 2024 17:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4108D13AD8
+	for <linux-modules@vger.kernel.org>; Thu, 25 Jul 2024 03:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721840705; cv=none; b=Yy/RmKb9Pe3fNQwjIHybWRwJ+PCPqhOR1SwuPgBnHGyp8lUR6FgJVgjCH+TKq7ENKZWTYOKx3C9ZQ/8RdQVoTyRiADiNjGi1NkSO14C8VkVj9n+7g4zS4OWuMnZSfjOvX8FvR2nsjWGcGXpvrp7sjmIQ/dhMYuL73nPXcLfJwIY=
+	t=1721876514; cv=none; b=g+VxSsY9RuEue7iRWAP051JoojmfZeMrW3K0F0t4tiBq29U4d4r13vu9e/wg7gRTABFti0nn3c2/xFwfFl6FI2Q8ogLO2i47/xYOXT0CDBkOaGexLmkeUWGVSnhcX64nAG53V14iQ/2jWTwBku3ZR88T1zHF/kHuMAQ5D8ihDic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721840705; c=relaxed/simple;
-	bh=2Bz9LEUG5IRIBnqaD+mw+y/DTHSwXPPuolZ57c8CUOs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JAclyO/uT9AmBFinVbKU6ykV6yeo2wUSp/Q79blMHA8YgePPyYkDxRunW5veNZ5Px/MnWJT2run4cZzuRHr4eeYplCk7gHzwDPWiEywt/icpm7JyT9C51sU763ZShmYU/Jhk5bec1K1nIVAWS5JM0TWosXi/nZIQalmucAnBhEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZTdDl021; arc=none smtp.client-ip=209.85.167.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1721876514; c=relaxed/simple;
+	bh=49jcBefj5FcT3M9x20xUQPUdsQZFD9U6hguK29l+JiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lYvtY33wxtv6EVNOvoBGshF8mujfQQyLr1If5mm9Q79qVczpKmNBVyhqXKBouP5k49JTXDQhsUhmNhtr4r7njv2keb036ZUp5f+mRZ9Lu+rslO3Bsyb/zCBVoVfekD4BLDKElG8JUZ+8m7E8NSN91lxbavWYrulxbOhtQcN2F/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t0bnRmik; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZTdDl021"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3dab349467dso22818b6e.1
-        for <linux-modules@vger.kernel.org>; Wed, 24 Jul 2024 10:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721840703; x=1722445503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Bz9LEUG5IRIBnqaD+mw+y/DTHSwXPPuolZ57c8CUOs=;
-        b=ZTdDl0218icOzhXRxV8PNDcWewDcWDJg/7il0MJhV1wyoQFYzwubnpxXYSpPN7wLHK
-         lGRJflvoiynVCfiEXmhbWj3UGmPXd4sKCjfSDUDvLoGklojFsfYWulGVqKbN2eoJ1XE5
-         vrtayUVzRaAx199NcSPQJvC76x9UbDxEeyN5BvOpBx57vCCv0yBjUM3cyQlKDmMQ2UdX
-         jhn78hxdiJHy6sY0iRFa9P3T2za4KzTm8/YWIt4i+1MIzX0bRIzVi/Vj5qbLVOppapDp
-         uD1Pm49HmdFh2YfLkxnZwAgOgnSjEy3qaZEZK+N9aC3Kaaf35Yy50r/bpYZwfk4xKH0S
-         A6sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721840703; x=1722445503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Bz9LEUG5IRIBnqaD+mw+y/DTHSwXPPuolZ57c8CUOs=;
-        b=kqtzma5oiQL5dQzwDRpQjwG1f9GgrImc9DRP6iwUguc16eUq7DZ40khupdUGxGDapA
-         dYO8ZWZRbsoSMRvwruJUGlgttqG4keb1NI4YO22xUA9EcUjGgZcRSYtsIGZYDQtSzaU4
-         JASyvt9hPuMQBBJJpZBB/MwnaQzS67G38bh7HxTBbxzhEoKbl9fn2Om+Rb/eSrljSW93
-         uPLJtEZpXcqjSd2oAuOU9wucOhiflt6hh9X38YAT6ABYW6f4ErDyQrkheoyvqS1cqSWI
-         bHNQJKzt87D9C/eSSA0HpHtiEMT2BWaeiNxRYOOpi7I+HSYcVjLR6jjC2IR2IDvjGh+l
-         7/NA==
-X-Forwarded-Encrypted: i=1; AJvYcCUcHOKfkXhvecwZtqArQzI8NKsfLf+LYOaZo+/8ue/m18edC69QPgmZA4RBLy+WD6kxZ4px6AFlXZCd4Mh68ruWfDLWNe5/aMeKrnRi0w==
-X-Gm-Message-State: AOJu0YyKVm8ZN0cv5z/whEYH7wO5I01d2o4xTly8InAcvCvO7CWa46Ez
-	pJ/ZZrIENMa2UN427a8n6uv67Zh1Iy0uhJO0+d1hj6UoueK8fcndjQCUbVl01TKk5BMZLM998HO
-	Wp667f09WpLrKmx6qVkUFCMyf2xMcHsXEnwtC
-X-Google-Smtp-Source: AGHT+IH5qu5Pd8+Wc1JJyMKIDTSnImI5ORd+5pnxuYabMb0yDNFZtWUMGOB1Qib+k8k3GVaD7dTdh2/YBJzda258UN4=
-X-Received: by 2002:a05:6830:6005:b0:703:67f8:9b3b with SMTP id
- 46e09a7af769-7092e77b710mr418087a34.30.1721840702560; Wed, 24 Jul 2024
- 10:05:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t0bnRmik"
+Message-ID: <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1721876510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dinahWWNWKVgxUr2QQ8r5vtDMN47K5jpbrU4x04fZmQ=;
+	b=t0bnRmiksgMcuV2n4/X74UTpJITvS5MrnJV4M93S6NWIOs2XsMr+6Kz8W7etk9BqNLgiLm
+	WyW+SnXPb9G/KKg4743QNI4cw/8+OwX72AkIF3GAqZwoNi6QNrEMZbnhD9k/VEF+m8nY7q
+	VR/2e2/7phjKq6pM1GTTV0CvBfSEfNI=
+Date: Thu, 25 Jul 2024 11:01:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240705111455.142790-1-nmi@metaspace.dk> <ZoxdRjpy2hRndqmc@bombadil.infradead.org>
- <CANiq72=VU+PHfkiq8HokfeCEKvQoeBiUaB76XbW6s3f2zYmEtA@mail.gmail.com> <ZplNxxXS3RLULeI6@bombadil.infradead.org>
-In-Reply-To: <ZplNxxXS3RLULeI6@bombadil.infradead.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 24 Jul 2024 17:04:25 +0000
-Message-ID: <CABCJKud=dfBKaCSqW2NbDCiN=EX0hGxkZ7H+dCd5mK_9NbwBVw@mail.gmail.com>
-Subject: Re: [PATCH] rust: add `module_params` macro
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Kris Van Hees <kris.van.hees@oracle.com>, Andreas Hindborg <nmi@metaspace.dk>, 
-	Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Adam Bratschi-Kaye <ark.email@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, tytso@mit.edu,
+ Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim <jaegeuk@kernel.org>,
+ Chao Yu <chao@kernel.org>, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+ linux-f2fs-devel@lists.sourceforge.net, Youling Tang <tangyouling@kylinos.cn>
+References: <20240723083239.41533-1-youling.tang@linux.dev>
+ <20240723083239.41533-2-youling.tang@linux.dev>
+ <Zp-_RDk5n5431yyh@infradead.org>
+ <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
+ <ZqEhMCjdFwC3wF4u@infradead.org>
+Content-Language: en-US, en-AU
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Youling Tang <youling.tang@linux.dev>
+In-Reply-To: <ZqEhMCjdFwC3wF4u@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Luis,
-
-On Thu, Jul 18, 2024 at 5:15=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
+On 24/07/2024 23:43, Christoph Hellwig wrote:
+> On Wed, Jul 24, 2024 at 09:57:05AM +0800, Youling Tang wrote:
+>> module_init(initfn)/module_exit(exitfn) has two definitions (via MODULE):
+>> - buindin: uses do_initcalls() to iterate over the contents of the specified
+>>    section and executes all initfn functions in the section in the order in
+>>    which they are stored (exitfn is not required).
+>>
+>> - ko: run do_init_module(mod)->do_one_initcall(mod->init) to execute initfn
+>>    of the specified module.
+>>
+>> If we change module_subinit to something like this, not called in
+>> module_init,
+>> Not only do we want to ensure that exit is executed in reverse order of
+>> init, but we also want to ensure the order of init.
+> Yes.
 >
-> On Tue, Jul 09, 2024 at 12:08:16PM +0200, Miguel Ojeda wrote:
-> > On Mon, Jul 8, 2024 at 11:42=E2=80=AFPM Luis Chamberlain <mcgrof@kernel=
-.org> wrote:
-> > >
-> > > The rationale here is that a rust binding means commitment then also
-> > > from fresh blood to help co-maintain review C / Rust for exising code
-> > > when there is will / desire to collaborate from an existing C maintai=
-ner.
-> > >
-> > > I realize this may be a lot to ask, but I think this is one of the
-> > > responsible ways to ask to scale here.
-> >
-> > But, yes, I think Rust is a great opportunity to get new
-> > co-maintainers, as well as getting new developers involved with kernel
-> > maintenance in general, which could help with other issues too.
+>> This does not guarantee the order in which init will be executed (although
+>> the init/exit order will remain the same)
+> Hmm, so the normal built-in initcalls depend on the link order, but when
+> they are in the same file, the compiler can reorder them before we even
+> get to the linker.
 >
-> Great well then my preference is to not have Rust bindings for modules
-> unless the Rust community can commit to not only a co-maintianer for
-> both C And Rust but also commit to not ditching the role; if a C/Rust
-> co-maintainer gets hits by a bus the Rust community would strive to
-> look for someone else to step in. This would proactively help with
-> upstream responsibilities understood by companies who hire developers
-> in this context. It is why I brought up Andreas's work, I already know
-> he has a lot of work to do and responsibilities. If not Andreas, who else
-> can step up to help with this, Sami?
+> I wonder what a good syntax would be to still avoid the boilerplate
+> code.  We'd probably need one macro to actually define the init/exit
+> table in a single statement so that it can't be reordered, but that
+> would lose the ability to actually declare the module subinit/exit
+> handlers in multiple files, which really is the biggest win of this
+> scheme as it allows to keep the functions static instead of exposing
+> them to other compilation units.
+>
+> And in fact even in your three converted file systems, most
+> subinit/exit handler are in separate files, so maybe instead
+> enforcing that there is just one per file and slightly refactoring
+> the code so that this is the case might be the best option?
+- It doesn't feel good to have only one subinit/exit in a file.
+   Assuming that there is only one file in each file, how do we
+   ensure that the files are linked in order?(Is it sorted by *.o
+   in the Makefile?)
 
-I agree, having a co-maintainer from the Rust community sounds like a
-good idea. It would be great if someone actually working on the
-bindings could step up, but if there are no other volunteers, I can
-certainly help with this.
+- Even if the order of each init is linked correctly, then the
+   runtime will be iterated through the .subinitcall.init section,
+   which executes each initfn in sequence (similar to do_initcalls),
+   which means that no other code can be inserted between each subinit.
 
-Sami
+
+If module_subinit is called in module_init, other code can be inserted
+between subinit, similar to the following:
+
+```
+static int __init init_example(void)
+{
+     module_subinit(inita, exita);
+
+     otherthing...
+
+     module_subinit(initb, exitb);
+
+     return 0;
+}
+
+module_init(init_example);
+```
+
+IMHO, module_subinit() might be better called in module_init().
+
+Thanks,
+Youling.
