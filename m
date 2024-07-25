@@ -1,183 +1,295 @@
-Received: from libero.it (smtp-18.italiaonline.it [213.209.10.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3ACB19D06C
-	for <linux-modules@vger.kernel.org>; Thu, 25 Jul 2024 17:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.209.10.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721927817; cv=none; b=UsMKcaDc20F5ISmByyqu8LB75SRt4+ZvriMvbvgVv5ZpBTOimcQaAMvyNAc7w4fpTuQ2C60Eego8l5FE9M+Ash3yMio8xQKgF3ex09oteafJtztLcPfIHIILsQIJNG/ea8PYkBpVX/J31Nlxhgei6ineteJvPpCZ6rdAm5t8/v8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721927817; c=relaxed/simple;
-	bh=6+NYjaaWQjPgYA8E4Kvwk5zgAalJY3/PEZO6lBK4bYc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XBfOvsJBXrRda+MEfnDF/C4SWgVmT+aE6ffgC+oJZ0K0Efq29USZPGQSkRrD8PSZd5Wbmg0p1RtxRI+ZPmQsCK5IfscLLkX0pnSIMp+smdFZcG+zF4V9a3MJbpk5Q3RK2R+IBJMs5/B2dtNY1ZEsvLy/7BaE4mNCEmVlrLRJDys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=libero.it; spf=pass smtp.mailfrom=libero.it; dkim=pass (2048-bit key) header.d=libero.it header.i=@libero.it header.b=sv2rZIsu; arc=none smtp.client-ip=213.209.10.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=libero.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=libero.it
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA4A19CD0E;
+	Thu, 25 Jul 2024 17:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721927915; cv=fail; b=MNtQf0GGpcVk+Jya8Z6E2NsVYA27skzquIZRlmnSfb1vSjgUrZhtAYeLsHXXPbA5xvWQhLcK5KqPFSHXWWrJbwm9RqeZz2qXo8RLRUtFY1nCmB7asYjXegozBjgPiMv6ZQ4XXlo+E75seLK7U13wlhwlClLz6Jh7ssGhqbuFpfc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721927915; c=relaxed/simple;
+	bh=TmFkB4K3DdDy3i8GRSas2K/QhBLHTM/v7zmrszNjSng=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uiARkUZr3u7PDYdWdkwxKOXBpKcqBXfjftPRp1dLIiGRBaoy1AEwTVgH8+GMciaddqvULYNxz+qJKaGc+SqR3ktE4seC9rkfFOF5OvuMcW/7/hAtVJOQ8uQSFRCn7NIITU4lliMvHEEykvONAY2DZjkQXcYpj3hpnqB87HBJURo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kvE5YmU+; arc=fail smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=libero.it header.i=@libero.it header.b="sv2rZIsu"
-Received: from [192.168.1.27] ([84.220.171.3])
-	by smtp-18.iol.local with ESMTPA
-	id X22gsAgcOUZkEX22hsDYMn; Thu, 25 Jul 2024 19:14:16 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-	t=1721927656; bh=NfPTdF6NiK8Ugj9UJnwjr7KjQLdt6YNvXp7SXJiAaTA=;
-	h=From;
-	b=sv2rZIsuh+TZrJuuwjVZQ+UNjifdwjxYosNmNRvlVCw3eTselSqPsCJJ+mfWUKChB
-	 IOW33olXIzZzs49jRf2lXOOZh9jSEas/WyD9vlIUHYsMa58AYH02usPcCXsVq30MxA
-	 w9UnOEfc3/FF8gl3OtLWEnMDA3ETw4T+AHiiamykbU37SUDAIUf4qAmMUaeeRdqomW
-	 53FHICYBUJER18vN9zpu0yI7fUDZf/FdS9ETOvwQaFrRlXx/FEJfsuqm3Q16TqPvSl
-	 BWUZOheBPOTcHIQmeHKLax//MkJWiEHZrHbcmk64/nw7G1Mhd6PbCLw1W2HB6KVhan
-	 OofMRLPiVNNVg==
-X-CNFS-Analysis: v=2.4 cv=P43xhTAu c=1 sm=1 tr=0 ts=66a287e8 cx=a_exe
- a=hciw9o01/L1eIHAASTHaSw==:117 a=hciw9o01/L1eIHAASTHaSw==:17
- a=IkcTkHD0fZMA:10 a=2a-IQ_BPnOOq8STWmVUA:9 a=QEXdDO2ut3YA:10
-Message-ID: <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
-Date: Thu, 25 Jul 2024 19:14:14 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kvE5YmU+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721927913; x=1753463913;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=TmFkB4K3DdDy3i8GRSas2K/QhBLHTM/v7zmrszNjSng=;
+  b=kvE5YmU+XWog2jUrqSCCNkPc5PV1hPVvzWf+jvphjrIkiCs7n2w3Bwiv
+   59Pu4k8v1058cDVhltNMLY6m73ft0DGbUNvTDoHei/ksNcAzedfSN7sY/
+   GnD+3kRU/eAi/dzmbxG2YMSq8sppOuRSGd+qbuDYGXGAnyynrLefnsRYb
+   XmEl5DPF2xbYuyHieVl2hg4U4Olv40iLrqGc/CRH7gmi8HFk0WRcTj5ru
+   ef9Nfh6A1qnhH3bThfKm+CSL7onTBCON5lWFgVqZdnyWr5hTQvmN8Jkj3
+   1xO+WUIGHp+sIeY5NwfKs141Hyyyk3B7P4W0aDgo5fwvCI6LZ7S6r+nJi
+   g==;
+X-CSE-ConnectionGUID: 18LGgDXHTGmtNPqCOH2P4A==
+X-CSE-MsgGUID: Nl8WFj7RS8GQ+4OBZBM8SA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11144"; a="19825001"
+X-IronPort-AV: E=Sophos;i="6.09,236,1716274800"; 
+   d="scan'208";a="19825001"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2024 10:18:32 -0700
+X-CSE-ConnectionGUID: l8Zo3j3fRnaA1j745GlG6Q==
+X-CSE-MsgGUID: v+Iqn4DlTB2MONeX/w1ZYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,236,1716274800"; 
+   d="scan'208";a="52882618"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 25 Jul 2024 10:18:31 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 25 Jul 2024 10:18:31 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 25 Jul 2024 10:18:31 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 25 Jul 2024 10:18:31 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 25 Jul 2024 10:18:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w8Pz3POJyZ3QIaq+JHU4K/CKyMD2lGTZGHdFqWpwOTpbUhVUK20Uiqr9nMTFsUFtzsUQXNeC9n/g8wHoq3Re3vgCHO6L1k/aLcO061iwMNAyStXeAOQVtBpdoYL/5+Kx/48PCRY3eCyYpLKu3F+8EBmxf6R9yPA+JfeSWMjMBrHeiLScAsMZPFEylDB91OlN+1IjYdEoCFhj2DTbkOGZYTq3AagjAMtKsz6Tast8zBRKhTfxALcsIkk2SUFl7P4RD7/F53xaKGKbMNiysT3NRcng3XVVp1+v989irN1easfwHOUdt7P9geso/boNihpj9e+Tfg+tAbNJr/nMIJ63pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IJYKxNaLGywHVKs+kTQ8eok+oGb1k8jP0T9TUPlVy1Y=;
+ b=yVDL4jgwwVSypK3rTYQlr6GpiuiczwKg6ZcZ33AyPRQ9c2ZNM77GjxJB5LhWhdK7afs+59zpH9GPe4aDIwyBn4SBsUeIou41voa2YNVA+JuBGIj8TpwZyh6OqV3G6NwzgnTC+HPhDXe3FeHivXXrWi5jGBUGNm3vdivOarT5PNmtyStiZZQo8AErzBfp+W2jSZigItbDx3CBGmQ2GjCdE9jN3nFEXdtR9Mnjo+iZ0vSR2EqeUa2NYf1+nIBT0SEYmdVoumPUVev/4uS5SHe81tpITLLfHjGs4dwXDOdoQ2sVZsmouiyjHGbAozBBxwrFOY5ds9XkmeFNVCdjHc8v8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by DM4PR11MB6429.namprd11.prod.outlook.com (2603:10b6:8:b5::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.29; Thu, 25 Jul
+ 2024 17:18:25 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%6]) with mapi id 15.20.7784.017; Thu, 25 Jul 2024
+ 17:18:25 +0000
+Date: Thu, 25 Jul 2024 12:18:21 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Steven Price <steven.price@arm.com>
+CC: Dragan Simic <dsimic@manjaro.org>, <linux-modules@vger.kernel.org>,
+	<mcgrof@kernel.org>, <linux-kernel@vger.kernel.org>, <didi.debian@cknow.org>,
+	Boris Brezillon <boris.brezillon@collabora.com>, Qiang Yu <yuq825@gmail.com>
+Subject: Re: [PATCH] module: Add hard dependencies as syntactic sugar
+Message-ID: <azedppfy2e5vjycn4zpzkj4ek5mjgjmdjsxf63fm347pningpc@uuhkyeiu35yg>
+References: <04e0676b0e77c5eb69df6972f41d77cdf061265a.1721906745.git.dsimic@manjaro.org>
+ <gcykzencr7rmeiy3rmclxrbbvuryo2uyb6plqqovee3bsme42b@g6pwzbgitgka>
+ <1393cce9-bd64-469d-aa2b-0fb768bf9e87@arm.com>
+Content-Type: text/plain; charset="iso-8859-1"; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1393cce9-bd64-469d-aa2b-0fb768bf9e87@arm.com>
+X-ClientProxiedBy: MW4PR03CA0173.namprd03.prod.outlook.com
+ (2603:10b6:303:8d::28) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: kreijack@inwind.it
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-To: Christoph Hellwig <hch@infradead.org>, Arnd Bergmann <arnd@arndb.de>
-Cc: Youling Tang <youling.tang@linux.dev>,
- Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
- Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
- Theodore Ts'o <tytso@mit.edu>, Andreas Dilger <adilger.kernel@dilger.ca>,
- Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
- Youling Tang <tangyouling@kylinos.cn>
-References: <20240723083239.41533-1-youling.tang@linux.dev>
- <20240723083239.41533-2-youling.tang@linux.dev>
- <Zp-_RDk5n5431yyh@infradead.org>
- <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
- <ZqEhMCjdFwC3wF4u@infradead.org>
- <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
- <ZqJjsg3s7H5cTWlT@infradead.org>
- <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
- <ZqJwa2-SsIf0aA_l@infradead.org>
-Content-Language: en-US
-From: Goffredo Baroncelli <kreijack@libero.it>
-In-Reply-To: <ZqJwa2-SsIf0aA_l@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfG/Wvh0SRpiC6+9TK5wDnJHkad1zDDvsaBJvq3RV0wxQe/gsCv892ru65MTczmo5pUQbMVX1NrSDKvwqHfPhuJBf0ZxGzZeEL+a+mvbgls/Akdt1xnWI
- QVhkfaLd9wCv/5kE+RXroTc8NBaqfGNvTkgm8wW/kV+ID+bMQPyU9v2N50kCXz/az8FjEsLILcwQkb56M9QCNJLf5/x4Edv+D9ZhMzYbSo8fSwZGhzvPUhFy
- alLW3nbg9ry6fouAwd6fMSP76dUADaS1CRxSpsHzaCoHNwECubxa/2NXm3ZYxMpcjU8sN2MtV21GcpexDxmy+Sr3xbx+P6Vt1DU7fGY56SSYqSvs5k73a0Du
- GxpE2dsJ5cD+U0N9zYReAO4pGZvz3VWIDnOB06t6HoHLF24cazVbsYQuF6IIM2VQm7Mbu1G8Jd56XLbPJb4RCy1Z1fkWC6H3z8C7pr/rpSYiK3hhZBwrFydP
- fUV66fKGVnIFcE1O24B5weWxHgrN1goxpDFVQDc77xc6wCo7bDDaJuZCdAvJHBUQWMiYTlZRbSMOBMvY1xkCktZX2iS13vdrThLlld56N+oUhO0t70FYx+uj
- YxVqoXAL4Ts8d2ykDkeTVr3CUL4HiWTiWGozXnb8THEphRoSBFPeFuOUBiETwenwSU0MOY11dbBFOqGBybicQS69laD9aAqO314s+9tUAJrvzHltLzTYuD/q
- PdS1vxWgkiPYI+0XgUX2wtTCNSW5xE4Skow3bECu2B4KzzaztlFzYA==
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DM4PR11MB6429:EE_
+X-MS-Office365-Filtering-Correlation-Id: d84e2fcd-3bda-447f-6580-08dcaccdcab1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?c9ZpVY3P7Pn4lYE/JSAuEWAS3AcF0rXPo8UAIMTSQW7AK2ixEr2HMboGOX?=
+ =?iso-8859-1?Q?zw3ehmjsnIfH/8LOK/ufbf8KO/Y18UlSCxBn/OsRJWjJENblQCFla19mJx?=
+ =?iso-8859-1?Q?hbdZSWu93vQtNKjrbVCnjMKtEgEU1kcSuFI+Lrfu9okr4VmLbClkSBbnNO?=
+ =?iso-8859-1?Q?qnZPmkcg2EwBMgFlDru6vdJ0MDkgmWgdhf9mvkG17Hxjh/kdzSMKMze0zm?=
+ =?iso-8859-1?Q?9KPc/2n+0nB1ItUN4Npgo3j/nKswW4IENTfwRPkuWhHHZeXjiwqIUHffZa?=
+ =?iso-8859-1?Q?49eZzPhPIMNr/qCAkKlZj21IeJ86T2WW8k8P8IGeeHFJYCPj14hnRbe9zo?=
+ =?iso-8859-1?Q?xy67sVl+XL56HX4iZCin4U6QGa7W3eMv9xVmXgpKUAfVUB1w6HmBSXo/e0?=
+ =?iso-8859-1?Q?2UJh8uuNEydrO6cqZOnvZ19OIx8bNWUpbE7ELxV8IVUGkos7NirqatjiOe?=
+ =?iso-8859-1?Q?ZB310Ru2R+Z/3LtMVGNjSnYex6CVwVevaQNaCTj0Y315vx3PGbkZeiRBxB?=
+ =?iso-8859-1?Q?ERIkUVAq3m8azoom6m7JAQBMkRf5jntk0+RYLVP7nZN6SoP3NDwgOTejbl?=
+ =?iso-8859-1?Q?+80iN3KUkrRO3I0Cio6yhXzbdzlLWkM2E9P2SSOjmt7WtYgdnnSmBxLQcU?=
+ =?iso-8859-1?Q?Rtm1fSkepph6DPSoCT348LnZDg4ujZ9+hRID45WMe2jhg9e0Ml0Ljf1mUy?=
+ =?iso-8859-1?Q?GkbWZpPAmFLX6kohzuAcgdG78JteJZY7KM5AqOzjA8dL8Q0t3yOEpnnavM?=
+ =?iso-8859-1?Q?injFmay9KG7gH23GBCuQo7OEVYq1aPuVqjvZ0/jBq6fgTHzITZTPxKO6mO?=
+ =?iso-8859-1?Q?aQ89Ia9EUuMgUX9QmrWSKEsaRPMkzYaqn3sxx2ljch07aHHqgeSjr5nNiV?=
+ =?iso-8859-1?Q?ch/KhNJQhSxcIJmNHj9hPNv7F06jg0/yrzyMTqk8St3XBbjK/xRVBTQCxj?=
+ =?iso-8859-1?Q?KdJz4UGFxElJ/k+ROkJllkc4QyWDM619lkVOAIrXghE4OKQIJQ/FRam0Kg?=
+ =?iso-8859-1?Q?qR6urtlymOb/4e6xNP03XBDaYsHnpMDa04lWPV2JwDhOftP1Sg/600voO0?=
+ =?iso-8859-1?Q?HM2cWrufV6xZ8TGQYkcEpjwmQ/P3AaZ9kHrxu6B5ONNO3Nfh9MqFOpDdo7?=
+ =?iso-8859-1?Q?4G+5nnTvP6W7eK4Y+HkjEOPA+I+gf89y2Z3ehHtyEuYArmQJEzAHgYKEpz?=
+ =?iso-8859-1?Q?1AZGT8DYMmeV8zOCB16aJNgdPjbjZh/HLtSyutGTmj16a7n7cHq7SDGvMn?=
+ =?iso-8859-1?Q?GK11L3JfK1W6GcglRMJ2G7V5L3CIp2M4vVin+cvxYWJMPtY9olbkI9y67M?=
+ =?iso-8859-1?Q?tinnfkC+AxWg0VraCz3WtMHEKWNorG0uHnNIh1xddUCdq3oxfyCF3rcfjd?=
+ =?iso-8859-1?Q?SVf0Lpllxz2ibfvVjoNOiSKByRa8YA+A=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?7JsjrMGyZPWckt/yPBswFQuC/doCCIttpWIYHDnBrjj/ZxEfuHdJQ6eQaJ?=
+ =?iso-8859-1?Q?fQV3QYHuY6kn0BsCTyhAjX+sK6oScglma9o9RPvvkdmp3bFxZzqYjNEPq6?=
+ =?iso-8859-1?Q?TZLJY5cP5p5eb7Rt8HqC8iSta8l1yRuefnNoDVEX49Gv+UrOPGmhw1SbvL?=
+ =?iso-8859-1?Q?LK+xVI/3ooCWwWZAecG+8Kwlc/ZYpV8g2E16rIgaNFbVjE9/XIYiPXNoCJ?=
+ =?iso-8859-1?Q?63ekDEErvRJqaZRxatb8L+4HOnW8VWYcKoGc4YxROh07OfnTlwDcYnBQ7Q?=
+ =?iso-8859-1?Q?W9Zp3rLT6PBTbS7pknG4Fnu58vGmsVcjf9DcTqDjFITCY7emXrhKa9mzFG?=
+ =?iso-8859-1?Q?dCGTbGph15ue2fByDodQoyhrb9xlJTsD0ZZMQfPbg0nGoguwA4YqqYVdk9?=
+ =?iso-8859-1?Q?2Ues9JELlszMti+pXdoBckKDHV22SHR75lpQxaQndVDaBlShykQyYbLKAU?=
+ =?iso-8859-1?Q?PY2tgUje7EUuBvji2qjLvfVL5eqHc+PYdlS6WH7qVY76cdoMbd2qFLngzj?=
+ =?iso-8859-1?Q?9GhhW2PS0G4RGxqKchBSFyt6BAAZ4LeKhyGzAEHr1VU6IxNk/3jOYZnMk8?=
+ =?iso-8859-1?Q?/+o6DUNfut2MOs3emMnlqFyYbF/Rf1WDp0ZRx56jOWX1zBxBywM1pbsn97?=
+ =?iso-8859-1?Q?h9hR+GbmWPXlU0POKRGU6QPKrAEf0heLd95gSRMqNNASekWakX8X1Xmv1N?=
+ =?iso-8859-1?Q?Lzs3vAHGUjnhTccKiH6WPdGuJ4lMH5YbIxBi7AsONtstzm103y9RFu8+ZX?=
+ =?iso-8859-1?Q?NDeHmLXhFFGeJe4BqewQk+zjdxJIjRDIFLGMPB0MuoNVlw2U85e1m4nsk4?=
+ =?iso-8859-1?Q?XxiJzaYVKAaxpnfEfDmgj6tbjjldsrh0Zvne3oOjsX4+oWm0ceFBlS9zbk?=
+ =?iso-8859-1?Q?st6JrbwZNrTL1/BxMMXphF1ZAoU8yKvEyMjrVjYoji4wD+YR5IkMFkAzj8?=
+ =?iso-8859-1?Q?TNpvR8F15vk2RDjGZdoOLdXsgNFKFPNECKF62Y3nvSA03O8O8NlcH6Cc58?=
+ =?iso-8859-1?Q?QfUsro4EDj2KNym4liJDv0U8k6Vk0Vj0d4dcjrthXOMo49+T2KWSaOvZas?=
+ =?iso-8859-1?Q?DVu6VXeNRdwsikAgcLvLRofRcNI5ZgChe9EHkNv17JJ3euPrqGIAX4HSVs?=
+ =?iso-8859-1?Q?uZRFacwRzZhECJf08sTY29p48z+5+ZdCqwgC4VYyTMj3shmUuG0/WgWr5F?=
+ =?iso-8859-1?Q?9Wdlr9mUBopC6K0OMGOijO2Wazwu6MIrcBJcc3utbrmic+F86Ou2YN/T3E?=
+ =?iso-8859-1?Q?pFSeeeuTRrxaJiZcZQLqOMzI1aHjIM+NBg3uuOmDljsfehTE6OGXYPdPkB?=
+ =?iso-8859-1?Q?Ijhw7zkZaOMmnuBUmovwe6KLRobA5jO5FRoz5DI9W9ZvXT96SIIcJOdJdN?=
+ =?iso-8859-1?Q?JMiNbfdBNHDJNBJLTm0uQREX7xCua/o1Qg4hJrX4S/52tcPvLMkCE5YCrP?=
+ =?iso-8859-1?Q?z2JI82I3BRXd0ZO06zFelKbBBqr9W9bSOnbarETwt+4/K9oMuG80ZEgSbc?=
+ =?iso-8859-1?Q?6IUzK1VTXYgBk9ydYY35o5MkKWKGY02FNrZH6ELY8jrsylfBNDckeUgr6R?=
+ =?iso-8859-1?Q?mp7eyuck43IdZD1p8w73yHM5zz9WXyXBMZMMhpehTIRjehF96r3lsvBvHe?=
+ =?iso-8859-1?Q?AjVE7Ef7CU4ibGoEC+96lbnWgSLXpAJyc1ZWWBTBg9H0HxlFZDYtgeug?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d84e2fcd-3bda-447f-6580-08dcaccdcab1
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jul 2024 17:18:25.0741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5Wl+aSQAYd12/a9KaJsZRj/RpvRTWOYb6Z0z8iWesO4uRiilL33QP7Qw33Sdg/ywc3oMVkY6nOVUaQ8tpFLS1DvIthFn4AttXkp+XpGmGco=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6429
+X-OriginatorOrg: intel.com
 
-On 25/07/2024 17.34, Christoph Hellwig wrote:
-> On Thu, Jul 25, 2024 at 05:30:58PM +0200, Arnd Bergmann wrote:
->> Now I think we could just make the module_init() macro
->> do the same thing as a built-in initcall() and put
->> an entry in a special section, to let you have multiple
->> entry points in a loadable module.
+On Thu, Jul 25, 2024 at 04:39:40PM GMT, Steven Price wrote:
+>On 25/07/2024 15:29, Lucas De Marchi wrote:
+>> On Thu, Jul 25, 2024 at 01:37:46PM GMT, Dragan Simic wrote:
+>>> Panfrost and Lima DRM drivers use devfreq to perform DVFS, which is
+>>> supported
+>>> on the associated platforms, while using simple_ondemand devfreq
+>>> governor by
+>>> default.  This makes the simple_ondemand module a hard dependency for
+>>> both
+>>> Panfrost and Lima, because the presence of the simple_ondemand module
+>>> in an
+>>> initial ramdisk allows the initialization of Panfrost or Lima to succeed.
+>>> This is currently expressed using MODULE_SOFTDEP. [1][2]  Please see
+>>> commits
+>>> 80f4e62730a9 ("drm/panfrost: Mark simple_ondemand governor as
+>>> softdep") and
+>>> 0c94f58cef31 ("drm/lima: Mark simple_ondemand governor as softdep") for
+>>> additional background information.
+>>>
+>>> With the addition of MODULE_WEAKDEP in commit 61842868de13 ("module:
+>>> create
+>>> weak dependecies"), the dependency between Panfrost/Lima and
+>>> simple_ondemand
+>>> can be expressed in a much better way as a weakdep, because that provides
+>>> the required dependency information to the utilities that generate
+>>> initial
+>>> ramdisks, but leaves the actual loading of the required kernel
+>>> module(s) to
+>>> the kernel.  However, being able to actually express this as a hard
+>>> module
+>>> dependency would still be beneficial.
+>>>
+>>> With all this in mind, let's add MODULE_HARDDEP as some kind of syntactic
 >>
->> There are still at least two problems though:
+>> Sorry, but NACK from me. This only adds to the confusion.
 >>
->> - while link order is defined between files in a module,
->>    I don't think there is any guarantee for the order between
->>    two initcalls of the same level within a single file.
-> 
-> I think the sanest answer is to only allow one per file.  If you
-> are in the same file anyway calling one function from the other
-> is not a big burden.  It really is when they are spread over files
-> when it is annoying, and the three examples show that pretty
-> clearly.
-> 
->> - For built-in code we don't have to worry about matching
->>    the order of the exit calls since they don't exist there.
->>    As I understand, the interesting part of this patch
->>    series is about making sure the order matches between
->>    init and exit, so there still needs to be a way to
->>    express a pair of such calls.
-> 
-> That's why you want a single macro to define the init and exit
-> callbacks, so that the order can be matched up and so that
-> error unwinding can use the relative position easily.
-> 
+>> hard/normal dependency:
+>>     It's a symbol dependency. If you want it in your module, you
+>>     have to use a symbol. Example:
+>>
+>>     $ modinfo ksmbd | grep depends
+>>     depends:        ib_core,rdma_cm,nls_ucs2_utils,cifs_arc4
+>>
+>>
+>> soft dependency:
+>>     A dependency you declare in configuration or in the module
+>>     info added by the kernel. A "pre" softdep means libkmod/modprobe
+>>     will try to load that dep before the actual module. Example:
+>>
+>>     $ modinfo ksmbd | grep softdep
+>>     softdep:        pre: crc32
+>>     softdep:        pre: gcm
+>>     softdep:        pre: ccm
+>>     softdep:        pre: aead2
+>>     softdep:        pre: sha512
+>>     softdep:        pre: sha256
+>>     softdep:        pre: cmac
+>>     softdep:        pre: aes
+>>     softdep:        pre: nls
+>>     softdep:        pre: md5
+>>     softdep:        pre: hmac
+>>     softdep:        pre: ecb
+>>
+>> weak dependency:
+>>     A dependency you declare in configuration or in the module
+>>     info added by the kernel. libkmod/modprobe will not change the
+>>     way it loads the module and it will only used by tools that need
+>>     to make sure the module is there when the kernel does a
+>>     request_module() or somehow tries to load that module.
+>>
+>> So if you want a hard dependency, just use a symbol from the module. If
+>> you want to emulate a hard dependency without calling a symbol, you use
+>> a pre softdep, not a weakdep.  You use a weakdep if the kernel itself,
+>> somehow may load module in runtime.
+>>
+>> The problem described in 80f4e62730a9 ("drm/panfrost: Mark
+>> simple_ondemand governor as softdep")
+>> could indeed be solved with a weakdep, so I'm not sure why you'd want to
+>> alias it as a "hard dep".
+>
+>The simple_ondemand dependency sadly isn't visible as a symbol. It's
+>currently 'fixed' by using a softdep, but that has drawbacks and doesn't
+>actually express the requirement. A "weakdep" works, but has the
+>drawback that it implies that the dependency is optional. This patch at
+>least means that the driver can express the dependency, even if
+>currently that just gets output as the same weakdep.
+>
+>I'm not sure what the logic was behind the name "weak" - what we
 
-Instead of relying to the "expected" order of the compiler/linker,
-why doesn't manage the chain explicitly ? Something like:
+borrowed terminology from linker and weak symbols
 
-struct __subexitcall_node {
-	void (*exitfn)(void);
-	struct subexitcall_node  *next;
+>(currently at least) have in panfrost is not a weak dependency by the
+>normal definition of the term - the driver will fail to load if the
+>ondemand governor is unavailable.
 
-static inline void __subexitcall_rollback(struct __subexitcall_node *p)
-{
-	while (p) {
-		p->exitfn();
-		p = p->next;
-	}
-}
+there are 2 options:
 
-#define __subinitcall_noexit(initfn, rollback)					\
-do {										\
-	int _ret;								\
-	_ret = initfn();							\
-	if (_ret < 0) {								\
-		__subexitcall_rollback(rollback);				\
-		return _ret;							\
-	}									\
-} while (0)
+1) use a softdep and let the module loading logic always load the
+simple_ondemand module before panfrost
+2) use a weakdep and if/when needed, do a request_module()
 
-#define __subinitcall(initfn, exitfn, rollback)						\
-do {											\
-	static subexitcall_node node = {exitfn, rollback->head};	                \
-	__subinitcall_noexit(initfn, rollback);						\
-	rollback = &node;
-} while (0)
+In both cases the tools creating the initramfs should add all
+dependencies to initramfs: weakdep, softdep and dep.
 
+>This patch doesn't solve the confusion, but at least means panfrost
+>doesn't need another round of churn in the future. The alternative
+>presumably is don't merge this and panfrost will have to wait until a
+>proper "hard dependency" mechanism is available.
 
-#define MODULE_SUBINIT_INIT(rollback) \
-	struct __subexitcall_node	*rollback = NULL
+hard dependency == symbol dependency. I think the mix of terms isn't
+helping. soft doesn't necessarily means "optional". AFAICT this hard dep
+thing is trying to introduce a "mandatory softdep", with a name that is
+already used to denote symbol dependency. And it currently does anything
+other than turning it into a weakdep.
 
-#define MODULE_SUBINIT_CALL(initfn, exitfn, rollback) \
-	__subinitcall(initfn, exitfn, rollback)
-
-#define MODULE_SUBINIT_CALL_NOEXIT(initfn, rollback) \
-	__subinitcall_noexit(initfn, rollback)
-
-#define MODULE_SUBEXIT(rollback) 		\
-do {						\
-	__subexitcall_rollback(rollback);	\
-	rollback = NULL;			\
-} while(0)
-
-usage:
-
-	MODULE_SUBINIT_INIT(rollback);
-
-	
-	MODULE_SUBINIT_CALL(init_a, exit_a, rollback);
-	MODULE_SUBINIT_CALL(init_b, exit_b, rollback);
-	MODULE_SUBINIT_CALL_NOEXIT(init_c, rollback);
-
-
-	MODULE_SUBEXIT(rollback);
-
-this would cost +1 pointer for each function. But this would save from situation like
-
-	r = init_a();
-	if (r)
-		init_b();
-	init_c();
-
-
-
-
--- 
-gpg @keyserver.linux.it: Goffredo Baroncelli <kreijackATinwind.it>
-Key fingerprint BBF5 1610 0B64 DAC6 5F7D  17B2 0EDA 9B37 8B82 E0B5
-
+Lucas De Marchi
