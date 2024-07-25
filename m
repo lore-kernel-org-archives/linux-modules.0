@@ -1,120 +1,204 @@
-Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2F916D4C3;
-	Thu, 25 Jul 2024 11:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52DA19AD7B
+	for <linux-modules@vger.kernel.org>; Thu, 25 Jul 2024 12:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721907478; cv=none; b=DMDYi/bh7wqpQ5WuhS5Ob6Wcyx2s9wgzbMadZru5ZD0wp/mIXIQejxW9f2H7qtOcZwyZF6igdeQDPpLOXJcoSpIDTLJTR16Fc6SSMn02b6l8cVWC78QIbYpNhjTRlvVX1Coh7sfA7My+7QQOgf50/wc3MxQCxzMhqRlPwGcBDnw=
+	t=1721912375; cv=none; b=mS/DpB07Pi8/DZY5wo+KGDKgkjre6Ap9oXJ2kGILdgl+utXpWei1WbD8O1HTja/o59rLwcEY27zlASALLs3iasMfG1iEnRi4inou9/uabLtGE3Z+vx9/LUemyll/Y67z/Ix/sgk98vOOh1s7xUzZjmxoIVAxx1ErvuxL3Ro1SM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721907478; c=relaxed/simple;
-	bh=a8Z6Q9tsTrYdEjiQ6k1+fN0sXA3vkOxm4OoLs3NCtlE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FRWBVO7esl2zb7/E1daLwhwmQPJ/ecbz23VaXyjRA9QpMRZrNYRdmGHntzixkn3Mydmh3MjwY/6IgaQ9IXAxegaNL5JrLAJxMJNvyLApGYv0pzVz0yVYIPjv6R5XgfMT33LRm8F4mYm9suCCdRv+RFRO4zGcRAS8giiEcZQkk/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=KdZDdP2s; arc=none smtp.client-ip=116.203.91.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
+	s=arc-20240116; t=1721912375; c=relaxed/simple;
+	bh=C5M5Cp6O26cJNK6tU4XtF1j29Ai+zh3qyJcVP9FvsUc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n4tcK7D0DMxZGj23mLv0Tfb/Y5gKHHJY3x8NBR21cWynLITwJrwMHgVvk/qN+Ot6ac2ZnnVwphxx1MmBi/0ri0daFOXyC+AJvFMsrALV8SmfCbpZ2fe5RQ+QUYd3+1MXtgPaDBPZ70mbEAVFPcq5gWKeybxMt8aa55KyY+pmJG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P5VhkUEl; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="KdZDdP2s"
-From: Dragan Simic <dsimic@manjaro.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
-	t=1721907473;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8cRY9HOX7blyu3XT+Ji9M1eNuX4gkPBubPEEF4Jgnb4=;
-	b=KdZDdP2sKyLQM4sLBuk6kJRtv09Qbeq0etLPQjHQ9fGprGvxS4ILbljILLe29R1eZyKrTC
-	3io+gSMfC2N5zZ7voPtG2JD0zEwBdMObM60X/6KGd/VlVmdSlGwF6P/CBNae17U/AKXPdl
-	E7Z81QG0UxF3DPdjDpNSe/smfnbdskBdeeV7xwStrhLJawaQ3IefYEtF9jyoAvlW0fPWJg
-	jLO1esE01iB0FDTY80ZTdBsGKQ/nYe+ZuU6p5gGKhJXhCpXh5XKZVa6AWanCvkmWgEIlai
-	zq+f8Vta+X4vcvZVToMuiHZuXbib6uaee+fViOAMW7fyDgyjZdRVzyouyalGYQ==
-To: linux-modules@vger.kernel.org
-Cc: mcgrof@kernel.org,
-	linux-kernel@vger.kernel.org,
-	didi.debian@cknow.org,
-	Steven Price <steven.price@arm.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Qiang Yu <yuq825@gmail.com>
-Subject: [PATCH] module: Add hard dependencies as syntactic sugar
-Date: Thu, 25 Jul 2024 13:37:46 +0200
-Message-Id: <04e0676b0e77c5eb69df6972f41d77cdf061265a.1721906745.git.dsimic@manjaro.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P5VhkUEl"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52f008aa351so207961e87.0
+        for <linux-modules@vger.kernel.org>; Thu, 25 Jul 2024 05:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1721912372; x=1722517172; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zIfbxqUmzo46HSqAfgUq13hsjAeuf22jHoKKPgp0pGo=;
+        b=P5VhkUEleZCyNLWchOdPc3xqdnScxsbOG7V707hkBC9gT+mDbg4jWVD4mStMAsn+Tu
+         182SOuTVu9iXjawOrhbmot8KtnYkV+PE/ePt+fPLgAeCNMmaCoVlPUSMPe8aTb8AOjsv
+         DqEKU+FS/83TBIa70MH7N8xrWq7Yw798mrm0dwl+big1d16XBnZGToA6ZbI77RHQRswb
+         VkDrLs9mNX/gBOPrIO5IFPgrAPEP0oWIGod9tbHVWtQLNTZRuEm4v6t3Lq/q/r+LK55l
+         yd645b9xR2mhY8L8GhorBJX5PrTraD/VrdrXTIVILJdyy924GX4UhbO037QhLf/BmHBp
+         T34w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721912372; x=1722517172;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zIfbxqUmzo46HSqAfgUq13hsjAeuf22jHoKKPgp0pGo=;
+        b=UGIy9nkmrTFM5GOS9RDpnZ5zH+zUere8Ndg87NcjD2S2wis+5rETQw6Q9tE0UJ6s0V
+         RvkvpPQtpCT1+Eg/vlGFznzX0dFBWPGhdIrF6Ay1h/OsxLOAu18nBHIxKwTSp3yQwJJ0
+         PULLx9Vdqs/yLFR/FjRqj1sF0S3QXFc8ZE70b3avgVyOppJvKTReJYFNxxyEf+QFn578
+         W+HfLygDx0IXtUjZzz9q+sBBQ9kA84S9guzgG82BJWgxTO4U/rmfEI/rsF1OXXT380jp
+         hf+4HJHoQx7h7msayCmJ95I17Y4ji//CFuzPZKhLrcrhNoAty9hhliDuUsIGyPlBsFVl
+         7G9A==
+X-Forwarded-Encrypted: i=1; AJvYcCXHDV4V7ZF/g+GniEVVsrkKQeqzoXcHr/RrsB3zTUTNxKJhAJ91x0h3w3Bw57qLgrNQGlxwmKFQ9UkGwuZ6xKYwLYHVZP/gzPmQKPy8Sg==
+X-Gm-Message-State: AOJu0YzipWXDKwlOHIAmohpY3UmlKweLaGuxwk6Yzdj77TJ/Xfgjm2FY
+	QoQvCxVVIaqImli30Iiu4tHdgpFuHl7EmRLxvrRP4t50e6fSaP8ZYslqUHCxW+4=
+X-Google-Smtp-Source: AGHT+IGycK5yh/wfucGGjHImpM5C1XOB/I60EH6O1olLGqE4w2H/LzB8RkII7zGMsVepz1K6MGim1Q==
+X-Received: by 2002:a19:a407:0:b0:52e:9d28:c28a with SMTP id 2adb3069b0e04-52fd6035f28mr1125423e87.26.1721912371865;
+        Thu, 25 Jul 2024 05:59:31 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acad4348bsm70245466b.118.2024.07.25.05.59.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jul 2024 05:59:31 -0700 (PDT)
+Message-ID: <90416ccc-8537-489c-ac15-78aacbcb42b0@suse.com>
+Date: Thu, 25 Jul 2024 14:59:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] module: Split modules_install compression and
+ in-kernel decompression
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240722090622.16524-1-petr.pavlu@suse.com>
+ <20240722090622.16524-2-petr.pavlu@suse.com>
+ <CAK7LNATG-kYuxGgzC7e-BbTPMnSH+MCAEVOXoQkdGYH9xLincA@mail.gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CAK7LNATG-kYuxGgzC7e-BbTPMnSH+MCAEVOXoQkdGYH9xLincA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-Panfrost and Lima DRM drivers use devfreq to perform DVFS, which is supported
-on the associated platforms, while using simple_ondemand devfreq governor by
-default.  This makes the simple_ondemand module a hard dependency for both
-Panfrost and Lima, because the presence of the simple_ondemand module in an
-initial ramdisk allows the initialization of Panfrost or Lima to succeed.
-This is currently expressed using MODULE_SOFTDEP. [1][2]  Please see commits
-80f4e62730a9 ("drm/panfrost: Mark simple_ondemand governor as softdep") and
-0c94f58cef31 ("drm/lima: Mark simple_ondemand governor as softdep") for
-additional background information.
+On 7/22/24 12:23, Masahiro Yamada wrote:
+> On Mon, Jul 22, 2024 at 6:07 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>>
+>> The kernel configuration allows specifying a module compression mode. If
+>> one is selected then each module gets compressed during
+>> 'make modules_install' and additionally one can also enable support for
+>> a respective direct in-kernel decompression support. This means that the
+>> decompression support cannot be enabled without the automatic compression.
+>>
+>> Some distributions, such as the (open)SUSE family, use a signer service for
+>> modules. A build runs on a worker machine but signing is done by a separate
+>> locked-down server that is in possession of the signing key. The build
+>> invokes 'make modules_install' to create a modules tree, collects
+>> information about the modules, asks the signer service for their signature,
+>> appends each signature to the respective module and compresses all modules.
+>>
+>> When using this arrangment, the 'make modules_install' step produces
+>> unsigned+uncompressed modules and the distribution's own build recipe takes
+>> care of signing and compression later.
+>>
+>> The signing support can be currently enabled without automatically signing
+>> modules during 'make modules_install'. However, the in-kernel decompression
+>> support can be selected only after first enabling automatic compression
+>> during this step.
+>>
+>> To allow only enabling the in-kernel decompression support without the
+>> automatic compression during 'make modules_install', separate the
+>> compression options similarly to the signing options, as follows:
+>>
+>>> Enable loadable module support
+>> [*] Module compression
+>>       Module compression type (GZIP)  --->
+>> [*]   Automatically compress all modules
+>> [ ]   Support in-kernel module decompression
+>>
+>> * "Module compression" (MODULE_COMPRESS) is a new main switch for the
+>>   compression/decompression support. It replaces MODULE_COMPRESS_NONE.
+>> * "Module compression type" (MODULE_COMPRESS_<type>) chooses the
+>>   compression type, one of GZ, XZ, ZSTD.
+>> * "Automatically compress all modules" (MODULE_COMPRESS_ALL) is a new
+>>   option to enable module compression during 'make modules_install'. It
+>>   defaults to Y.
+>> * "Support in-kernel module decompression" (MODULE_DECOMPRESS) enables
+>>   in-kernel decompression.
+>>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+> 
+> 
+> 
+> My preference is to add
+>  CONFIG_MODULE_DECOMPRESS_GZIP
+>  CONFIG_MODULE_DECOMPRESS_XZ
+>  CONFIG_MODULE_DECOMPRESS_ZSTD
+> instead of
+>  CONFIG_MODULE_COMPRESS_ALL.
+> 
+> 
+> 
+> 
+> For example,
+> 
+> 
+> if MODULE_DECOMPRESS
+> 
+> config MODULE_DECOMPRESS_GZIP
+>        bool "Support in-kernel GZIP decompression for module"
+>        default MODULE_COMPRESS_GZIP
+> 
+> config MODULE_DECOMPRESS_XZ
+>        bool "Support in-kernel XZ decompression for module"
+>        default MODULE_COMPRESS_XZ
+> 
+> config MODULE_DECOMPRESS_ZSTD
+>        bool "Support in-kernel ZSTD decompression for module"
+>        default MODULE_COMPRESS_ZSTD
+> 
+> endif
+> 
+> 
+> 
+> 
+> 
+> OR, maybe
+> 
+> 
+> 
+> config MODULE_DECOMPRESS_GZIP
+>        bool "Support in-kernel GZIP decompression for module"
+>        select MODULE_DECOMPRESS
+> 
+> config MODULE_DECOMPRESS_XZ
+>        bool "Support in-kernel XZ decompression for module"
+>        select MODULE_DECOMPRESS
+> 
+> config MODULE_DECOMPRESS_ZSTD
+>        bool "Support in-kernel ZSTD decompression for module"
+>        select MODULE_DECOMPRESS
+> 
+> config MODULE_DECOMPRESS
+>        bool
+> 
+> 
+> 
+> 
+> You can toggle MODULE_COMPRESS_GZIP and
+> MODULE_DECOMPRESS_GZIP independently
 
-With the addition of MODULE_WEAKDEP in commit 61842868de13 ("module: create
-weak dependecies"), the dependency between Panfrost/Lima and simple_ondemand
-can be expressed in a much better way as a weakdep, because that provides
-the required dependency information to the utilities that generate initial
-ramdisks, but leaves the actual loading of the required kernel module(s) to
-the kernel.  However, being able to actually express this as a hard module
-dependency would still be beneficial.
+I can implement this, but what would be a use case to enable multiple module
+decompression types in the kernel?
 
-With all this in mind, let's add MODULE_HARDDEP as some kind of syntactic
-sugar, currently implemented as an alias for MODULE_WEAKDEP, so the actual
-hard module dependencies can be expressed properly, and possibly handled
-differently in the future, avoiding the need to go back, track and churn
-all such instances of hard module dependencies.  The first consumers of
-MODULE_HARDDEP will be the Panfrost and Lima DRM drivers, but the list of
-consumers may also grow a bit in the future.
+> 
+> 
+> Of course, the current kernel/module/decompress.c does not
+> work when multiple (or zero) CONFIG_MODULE_DECOMPRESS_* is
+> enabled. It needs a little modification.
 
-For example, allowing reduction of the initial ramdisk size is a possible
-future difference between handling the MODULE_WEAKDEP and MODULE_HARDDEP
-dependencies.  When the size of the initial ramdisk is limited, the utilities
-that generate initial ramdisks can use the distinction between the weakdeps
-and the harddeps to safely omit some of the weakdep modules from the created
-initial ramdisks, and to keep all harddep modules.
+One issue is with the file /sys/module/compression which shows the module
+decompression type supported by the kernel. If multiple types are allowed then
+I think they should all get listed there. This could however create some
+compatibility problems. For instance, kmod reads this file and currently
+expects to find exactly one type, so it would need updating as well.
 
-Due to the nature of MODULE_WEAKDEP, the above-described example will also
-require some additional device-specific information to be made available to
-the utilities that create initial ramdisks, so they can actually know which
-weakdep modules can be safely pruned for a particular device, but the
-distinction between the harddeps and the weakdeps opens up a path towards
-using such additional "pruning information" in a more robust way, by ensuring
-that the absolutely required harddep modules aren't pruned away.
-
-[1] https://lore.kernel.org/dri-devel/4e1e00422a14db4e2a80870afb704405da16fd1b.1718655077.git.dsimic@manjaro.org/T/#u
-[2] https://lore.kernel.org/dri-devel/fdaf2e41bb6a0c5118ff9cc21f4f62583208d885.1718655070.git.dsimic@manjaro.org/T/#u
-
-Cc: Steven Price <steven.price@arm.com>
-Cc: Boris Brezillon <boris.brezillon@collabora.com>
-Cc: Qiang Yu <yuq825@gmail.com>
-Signed-off-by: Dragan Simic <dsimic@manjaro.org>
----
- include/linux/module.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 88ecc5e9f523..40e5762847a9 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -179,6 +179,14 @@ extern void cleanup_module(void);
-  */
- #define MODULE_WEAKDEP(_weakdep) MODULE_INFO(weakdep, _weakdep)
- 
-+/*
-+ * Hard module dependencies. Currently handled the same as weak
-+ * module dependencies, but intended to mark hard dependencies
-+ * as such for possible different handling in the future.
-+ * Example: MODULE_HARDDEP("module-foo")
-+ */
-+#define MODULE_HARDDEP(_harddep) MODULE_WEAKDEP(_harddep)
-+
- /*
-  * MODULE_FILE is used for generating modules.builtin
-  * So, make it no-op when this is being built as a module
+Thanks,
+Petr
