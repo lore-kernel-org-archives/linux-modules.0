@@ -1,96 +1,244 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1F71993AE;
-	Thu, 25 Jul 2024 15:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FE019D8A7;
+	Thu, 25 Jul 2024 15:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721921650; cv=none; b=E3to6Jy9eNbbjZbVmXAAyVjrECMQyAxKdqYU6ROoyqvW0m872YdP+8d2fkAvIV3cVhUdcv4I2Rb+QHQdxzhs6AmFAHnRddr+L6Lz2Ck1L4/VFHzPljgfjSVEThcGElWA+D0IRpogkErqk9/ZMraTeEu6bwb7VSlns9I/OtVsYWE=
+	t=1721921983; cv=none; b=sue/FQbZ1mxBAbeZ2gwWNRH17WgZpAqIvlCAvO+JBxSWDJpXdPSYV34Y7hKYGZs+4e9CeKJZgVkArss5bIq4qZ4iBC30Lme3+qdVI+5jmBVKOImd9uGDXG9JRhERIgo+FgfzQ978BS/siOSozagx9kypRbVTQbsv9+i0eQgcfec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721921650; c=relaxed/simple;
-	bh=mosRgo+TNXHCMViMqQ63lOJKcR81W989gSomumQQF28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AdpEZh96s+4+d1sd65vGeNpCHuz+mv6brr0yxXYwhxkNwb+o9nUtTs1zP6gZEF7F22beQUZKCo4ecKkgEecTuf6OpYWYsEU9Cr5HrMjqLM8wLJfUdu5Frb5qMZeQeDih26DG42z6n5Rv21D2bpY034nT541WYB47xzIDw9uLHWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LIOpP/z0; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1721921983; c=relaxed/simple;
+	bh=/Q6LIwSXhl9w92fZ1x0zh6nl/6FRDk+HvHN6mbe9gvY=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=sd06qnhjmgYrZT7iMJVL+Z59C92ww5lEycczkcIec5wnnFj6Xa9D04U7MIygCH+Nof7nFRIXMCjHPU3yh7HpghO850WSKFDYwLvLL3mI644bmloyq6X48UU/HRMPAantDHR52mG5TFOV6NEbOyluvZl+D03gYf1Pi5CCEfi3nSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=mSsR1/UL; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LIOpP/z0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Jf02KJptUmzqNSH7cWf1ELLoEYpwrFBHCIF0xHDo8l0=; b=LIOpP/z0HDXBvgis90fj8E5C4a
-	mKo04fF6xe5Kfd7gqhDDo/Ltpr6NVq86cDZZflinaEq8T3lDMs7VaQyEvc+UdG7DdZgLDnNTB64qF
-	OzbeX9Jfb1r6PqIxfPAO4MeQrtJ6ObM7nkMmX4RV7s5Sodywr272B2RBteD0PacNJBgYNiVqurMZU
-	psJmvT3z99KULg2rvesB8JAhCoLgJTSa8xGEpp+LMV2A9xYxYM/4lyJ4VFLC5IQuiFyLccQ6eu+MS
-	oTzVGMoZDIhsp629Bhp3yThgyrqDwXxfqCe0wNzbqthfraFbl+zYMWSNZ1TW7fLBiWf4YGDBWFkRl
-	EkrFh6Mw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sX0Tj-00000001QbE-0QCv;
-	Thu, 25 Jul 2024 15:34:03 +0000
-Date: Thu, 25 Jul 2024 08:34:03 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Youling Tang <youling.tang@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-Message-ID: <ZqJwa2-SsIf0aA_l@infradead.org>
-References: <20240723083239.41533-1-youling.tang@linux.dev>
- <20240723083239.41533-2-youling.tang@linux.dev>
- <Zp-_RDk5n5431yyh@infradead.org>
- <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
- <ZqEhMCjdFwC3wF4u@infradead.org>
- <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
- <ZqJjsg3s7H5cTWlT@infradead.org>
- <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="mSsR1/UL"
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1721921977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lm30dDQVqW/J+G07pqjob65g5GHevsNWLvfXIuMQvmU=;
+	b=mSsR1/ULP6oqUL6WuFDMYE47yoVC4k7Py62pGy+1IylC3URFAtnAdc00/Zv9GqsaZJ7KAA
+	6FPvinYd1RN/15d5fVJoTtzmgnFoece4FFCaFfpQ5P404OGGyTW0B7Hd5lRrYdtQxjEGuN
+	CqM9XJpOmYIn2vqtbX2Xn9fWUf7c+o+VucuDgYzLvfC5g+b9rbvD55Lfs0tPp9BS3ccNCL
+	c8bSU/eMMmqCdxN1If6HEqfiXcpbzK/XUns7W+8ZQ0q4+09ViySzk/v3V6R1Zzb+xUmoHr
+	WrlV7dH9TvCBN/LU3LNn0mdkeyX3RG6vuL459f4MerUnQg7ap+8aGQdU+kA9Og==
+Date: Thu, 25 Jul 2024 17:39:37 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, mcgrof@kernel.org,
+ linux-kernel@vger.kernel.org, didi.debian@cknow.org, Steven Price
+ <steven.price@arm.com>, Boris Brezillon <boris.brezillon@collabora.com>,
+ Qiang Yu <yuq825@gmail.com>
+Subject: Re: [PATCH] module: Add hard dependencies as syntactic sugar
+In-Reply-To: <gcykzencr7rmeiy3rmclxrbbvuryo2uyb6plqqovee3bsme42b@g6pwzbgitgka>
+References: <04e0676b0e77c5eb69df6972f41d77cdf061265a.1721906745.git.dsimic@manjaro.org>
+ <gcykzencr7rmeiy3rmclxrbbvuryo2uyb6plqqovee3bsme42b@g6pwzbgitgka>
+Message-ID: <0720a516416a92a8f683053d37ee9481@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-On Thu, Jul 25, 2024 at 05:30:58PM +0200, Arnd Bergmann wrote:
-> Now I think we could just make the module_init() macro
-> do the same thing as a built-in initcall() and put
-> an entry in a special section, to let you have multiple
-> entry points in a loadable module.
+Hello Lucas,
+
+On 2024-07-25 16:29, Lucas De Marchi wrote:
+> On Thu, Jul 25, 2024 at 01:37:46PM GMT, Dragan Simic wrote:
+>> Panfrost and Lima DRM drivers use devfreq to perform DVFS, which is 
+>> supported
+>> on the associated platforms, while using simple_ondemand devfreq 
+>> governor by
+>> default.  This makes the simple_ondemand module a hard dependency for 
+>> both
+>> Panfrost and Lima, because the presence of the simple_ondemand module 
+>> in an
+>> initial ramdisk allows the initialization of Panfrost or Lima to 
+>> succeed.
+>> This is currently expressed using MODULE_SOFTDEP. [1][2]  Please see 
+>> commits
+>> 80f4e62730a9 ("drm/panfrost: Mark simple_ondemand governor as 
+>> softdep") and
+>> 0c94f58cef31 ("drm/lima: Mark simple_ondemand governor as softdep") 
+>> for
+>> additional background information.
+>> 
+>> With the addition of MODULE_WEAKDEP in commit 61842868de13 ("module: 
+>> create
+>> weak dependecies"), the dependency between Panfrost/Lima and 
+>> simple_ondemand
+>> can be expressed in a much better way as a weakdep, because that 
+>> provides
+>> the required dependency information to the utilities that generate 
+>> initial
+>> ramdisks, but leaves the actual loading of the required kernel 
+>> module(s) to
+>> the kernel.  However, being able to actually express this as a hard 
+>> module
+>> dependency would still be beneficial.
+>> 
+>> With all this in mind, let's add MODULE_HARDDEP as some kind of 
+>> syntactic
 > 
-> There are still at least two problems though:
+> Sorry, but NACK from me. This only adds to the confusion.
 > 
-> - while link order is defined between files in a module,
->   I don't think there is any guarantee for the order between
->   two initcalls of the same level within a single file.
+> hard/normal dependency:
+> 	It's a symbol dependency. If you want it in your module, you
+> 	have to use a symbol. Example:
+> 
+> 	$ modinfo ksmbd | grep depends
+> 	depends:        ib_core,rdma_cm,nls_ucs2_utils,cifs_arc4
+> 
+> 
+> soft dependency:
+> 	A dependency you declare in configuration or in the module
+> 	info added by the kernel. A "pre" softdep means libkmod/modprobe
+> 	will try to load that dep before the actual module. Example:
+> 
+> 	$ modinfo ksmbd | grep softdep
+> 	softdep:        pre: crc32
+> 	softdep:        pre: gcm
+> 	softdep:        pre: ccm
+> 	softdep:        pre: aead2
+> 	softdep:        pre: sha512
+> 	softdep:        pre: sha256
+> 	softdep:        pre: cmac
+> 	softdep:        pre: aes
+> 	softdep:        pre: nls
+> 	softdep:        pre: md5
+> 	softdep:        pre: hmac
+> 	softdep:        pre: ecb
+> 
+> weak dependency:
+> 	A dependency you declare in configuration or in the module
+> 	info added by the kernel. libkmod/modprobe will not change the
+> 	way it loads the module and it will only used by tools that need
+> 	to make sure the module is there when the kernel does a
+> 	request_module() or somehow tries to load that module.
 
-I think the sanest answer is to only allow one per file.  If you
-are in the same file anyway calling one function from the other
-is not a big burden.  It really is when they are spread over files
-when it is annoying, and the three examples show that pretty
-clearly.
+Thanks for a very nicely written and detailed summary.  Alas, I knew
+all that already.
 
-> - For built-in code we don't have to worry about matching
->   the order of the exit calls since they don't exist there.
->   As I understand, the interesting part of this patch
->   series is about making sure the order matches between
->   init and exit, so there still needs to be a way to
->   express a pair of such calls.
+> So if you want a hard dependency, just use a symbol from the module. If
+> you want to emulate a hard dependency without calling a symbol, you use
+> a pre softdep, not a weakdep.  You use a weakdep if the kernel itself,
+> somehow may load module in runtime.
+> 
+> The problem described in 80f4e62730a9 ("drm/panfrost: Mark
+> simple_ondemand governor as softdep")
+> could indeed be solved with a weakdep, so I'm not sure why you'd want 
+> to
+> alias it as a "hard dep".
 
-That's why you want a single macro to define the init and exit
-callbacks, so that the order can be matched up and so that
-error unwinding can use the relative position easily.
+It's obviously true that the described problem with Panfrost and Lima
+can be solved using weakdeps.  However, solving a problem and going
+the extra mile to future-proof the solution are two rather different
+things.  The proposed introduction of harddeps tries to go the extra
+mile, and to future-proof any possible changes to weakdeps, as already
+described in the patch description.
+
+To sum it up, harddeps would be something like "pinned down" weakdeps,
+that must not be removed by any future size-related optimizations of
+the initial ramdisk contents.  While it costs us nearly nothing to add
+support for that now, it may provide reasonable returns in the future.
+And can be easily reverted at any point, if the later conclusion is
+that the expected returns didn't pan out.
+
+As an example of the differences between just solving a problem and
+going the extra mile, let's have a look at the commit d5178578bcd4
+(btrfs: directly call into crypto framework for checksumming) and the
+lines containing MODULE_SOFTDEP at the very end of fs/btrfs/super.c. [3]
+Are all those softdeps candidates for straight conversion into weakdeps,
+i.e. can the kernel load all those modules by itself?  Perhaps, but
+also maybe not, meaning that all those softdeps need to be investigated
+and tested before the conversion, incurring additional cost.  OTOH, if
+Btrfs went the extra mile and used some "syntactic sugar" instead, we'd
+probably have the conversion ready to go now, at zero cost.
+
+That's what the proposed "syntactic sugar" harddeps try to do, to save
+us some time and effort later down the road.
+
+[3] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/btrfs/super.c#n2610
+
+>> sugar, currently implemented as an alias for MODULE_WEAKDEP, so the 
+>> actual
+>> hard module dependencies can be expressed properly, and possibly 
+>> handled
+>> differently in the future, avoiding the need to go back, track and 
+>> churn
+>> all such instances of hard module dependencies.  The first consumers 
+>> of
+>> MODULE_HARDDEP will be the Panfrost and Lima DRM drivers, but the list 
+>> of
+>> consumers may also grow a bit in the future.
+>> 
+>> For example, allowing reduction of the initial ramdisk size is a 
+>> possible
+>> future difference between handling the MODULE_WEAKDEP and 
+>> MODULE_HARDDEP
+>> dependencies.  When the size of the initial ramdisk is limited, the 
+>> utilities
+>> that generate initial ramdisks can use the distinction between the 
+>> weakdeps
+>> and the harddeps to safely omit some of the weakdep modules from the 
+>> created
+>> initial ramdisks, and to keep all harddep modules.
+>> 
+>> Due to the nature of MODULE_WEAKDEP, the above-described example will 
+>> also
+>> require some additional device-specific information to be made 
+>> available to
+>> the utilities that create initial ramdisks, so they can actually know 
+>> which
+>> weakdep modules can be safely pruned for a particular device, but the
+>> distinction between the harddeps and the weakdeps opens up a path 
+>> towards
+>> using such additional "pruning information" in a more robust way, by 
+>> ensuring
+>> that the absolutely required harddep modules aren't pruned away.
+>> 
+>> [1] 
+>> https://lore.kernel.org/dri-devel/4e1e00422a14db4e2a80870afb704405da16fd1b.1718655077.git.dsimic@manjaro.org/T/#u
+>> [2] 
+>> https://lore.kernel.org/dri-devel/fdaf2e41bb6a0c5118ff9cc21f4f62583208d885.1718655070.git.dsimic@manjaro.org/T/#u
+>> 
+>> Cc: Steven Price <steven.price@arm.com>
+>> Cc: Boris Brezillon <boris.brezillon@collabora.com>
+>> Cc: Qiang Yu <yuq825@gmail.com>
+>> Signed-off-by: Dragan Simic <dsimic@manjaro.org>
+>> ---
+>> include/linux/module.h | 8 ++++++++
+>> 1 file changed, 8 insertions(+)
+>> 
+>> diff --git a/include/linux/module.h b/include/linux/module.h
+>> index 88ecc5e9f523..40e5762847a9 100644
+>> --- a/include/linux/module.h
+>> +++ b/include/linux/module.h
+>> @@ -179,6 +179,14 @@ extern void cleanup_module(void);
+>>  */
+>> #define MODULE_WEAKDEP(_weakdep) MODULE_INFO(weakdep, _weakdep)
+>> 
+>> +/*
+>> + * Hard module dependencies. Currently handled the same as weak
+>> + * module dependencies, but intended to mark hard dependencies
+>> + * as such for possible different handling in the future.
+>> + * Example: MODULE_HARDDEP("module-foo")
+>> + */
+>> +#define MODULE_HARDDEP(_harddep) MODULE_WEAKDEP(_harddep)
+>> +
+>> /*
+>>  * MODULE_FILE is used for generating modules.builtin
+>>  * So, make it no-op when this is being built as a module
