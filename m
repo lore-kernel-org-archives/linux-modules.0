@@ -1,83 +1,186 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE8917A580;
-	Fri, 26 Jul 2024 18:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1277244C64
+	for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 21:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722017352; cv=none; b=cYEjYbJZOHsy7BDbQ0JHfSXVOea2pqBnUaRJTivQ/iPXN+CGL6HXsjxxi7uyBzbXvzHEUOpltCsIvXxYIWr+/tmuwCW/myhLTyWOaHUOG5fVY3gG4+Z/pRYZFsQ43dv63q+EvSfGfWm79jUW2/Bd99zJ9YYG14x6DexS/Ze1qmI=
+	t=1722027962; cv=none; b=YisFY6wLlmFdIwjeejCyotOZ3KPsAkCW6vmN9YchswxWkS9NLLt0nDB4Vpl443LW3kYEa0fU0jmdTzPvV7keeE/17KWv7oEx13GR51fRJtuJkkxBjI2nMJwI67H3zAUWrLyMxpY6PV+UHHLSYezwtdDdPDCzVwxq43qHUoRvtPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722017352; c=relaxed/simple;
-	bh=QwKVfIJx6b6w9eytozal7rkLHjdJGPTRw1tI+tPnJqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFb7021O/AvY6lrOp3UjunxQ1ABWd6IQAMhj20+TLe3DWWCfSTyFi2ncvIyUFl+YfUsWyihtkpIDtD1zv8ib2bA/J4N2txMPlarhFroOi+DeldLMWdK67Svrs16UJuNAZ3y+4JOzwtXN6mcEosetZXfNGdrMumLPI3L8vIwpBwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oArlGx+H; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1722027962; c=relaxed/simple;
+	bh=7m1g6Y9PmgQZrshJ6w1fDE+ejH8mNXDvgc4AnljHtLw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Y6/XDyXxY0uLMOHjMdEfgLDvysm2yWY3rh/Bo4gy8cRND/M0Dgp82Cn98Mgd1IwlR4WrtGSujxgHWGpyU4Yk7KrZp8sKa9sdRioQGnFYgG3LIvXxlYiu1n+d0NjtgpW8QS1a0cHNTNO0pZgO4fJF5CH3OQbNk/p8OMNz0CfK4Yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sBUqpHNy; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oArlGx+H"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=5Y+bBdbxxKC2hf51b7J1S8qThB2b/5XgdfKw1OYTUmk=; b=oArlGx+Huj22K57mLVmHcbr0Xl
-	MiQWzuEi4Bl7fRZsVt+B9ZKIiRlk60bv4A1VwbYD2R+Rij6yZOAmguXQjSY/MHCs+c5GLg+B3THb3
-	3L32kWuUMtGuW5OmDt0vugl+4K77MJTbYl21N3h8WQHlnLaDt19jUm/cZTwsI/giT5Mdk2ZVaQSEi
-	dAPaioHkwR/mfs6CveVJ30rbYPtXcU+9XwlzNWTKLLmrSaqNALfDlg5Bho5b/WSTNBGtSdnkr8Fxd
-	Kg9ecy0O4QzGYhFP4PuJgMaBPF/t2ijbsQYxLefX5IusHSMB6Z92ApoMggnQ+t2OmX4XcWnwFI/4X
-	MPHP0EfA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sXPNG-00000004cOz-4BYF;
-	Fri, 26 Jul 2024 18:09:02 +0000
-Date: Fri, 26 Jul 2024 11:09:02 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Theodore Ts'o <tytso@mit.edu>
-Cc: David Sterba <dsterba@suse.cz>, Christoph Hellwig <hch@infradead.org>,
-	Youling Tang <youling.tang@linux.dev>, kreijack@inwind.it,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-Message-ID: <ZqPmPufwqbGOTyGI@infradead.org>
-References: <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
- <ZqJjsg3s7H5cTWlT@infradead.org>
- <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
- <ZqJwa2-SsIf0aA_l@infradead.org>
- <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
- <ZqKreStOD-eRkKZU@infradead.org>
- <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
- <ZqOs84hdYkSV_YWd@infradead.org>
- <20240726152237.GH17473@twin.jikos.cz>
- <20240726175800.GC131596@mit.edu>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sBUqpHNy"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5d5c7f24382so611092eaf.2
+        for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 14:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722027960; x=1722632760; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S4dFsz1ZUiiVPLP2/oVmM76j2Zw+Q0kRIKFNpgfUvZ8=;
+        b=sBUqpHNyagTcb/pWt5M9eLZiQmj47YN26k30tn3ooi9tRBN/TNjLLf0p2vqgM0qpDN
+         Pihb3UZk1afagApVgqw1o4SUqMdWHxuguxrzA5IGb5WpE2FbFs28DbPZGwBtZLmwnOKI
+         rzpcZdk54sJQjCsa9JTIE3s0mObLj4t6F14c5s9K2B3XR4sIx3iY/bT3BCCf5AMjdRsG
+         B9axh4+lpASCZHQopUGvazAQucA211t7a4GNjUwu+YuAVEiTAHUstawOhLlDt000EJen
+         91k6WeRmvNNS5+zpTPMF4/nSachn48Ut4QBMVFxfIucBC08nyM0QFzrHByeAfBHAxIzw
+         ++XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722027960; x=1722632760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S4dFsz1ZUiiVPLP2/oVmM76j2Zw+Q0kRIKFNpgfUvZ8=;
+        b=P/w2DqZf8775TiyeROMRtewmmdAXSU9xz79VhuNixfaVw0hX3gkTcf6SWmaK3oMLbt
+         NTk+31DBYDhKlY7Q2O0DLPZNsAm0coD9nKptoJB5xWNfxUXT5CNEcu89+rXtcBm3yDYj
+         wh90NjstFm3uXAUi6ERAuGMezwR9cNmhwOfY/1o2EuFQrjxaBWDR19YFuVNjbdbmUdY9
+         ob3xHO+LmJ49qr24yuhisLnV+pmEJFdKRkXgK5hxVHUDWFcq5iYRDwVPXGHP+4A/7F9H
+         NgPxEQ5SjyT5ubepphRqx/l0CrHemLbuzPpzSaJ/tnITUefrL88lMCdH6LWGVK0tjWwH
+         92ww==
+X-Forwarded-Encrypted: i=1; AJvYcCUB2hi7bs0HnTwizqV1XI3ePSAGBLyymPm4/zOE+Ab5pvr++W7o3Jn2cNPQJYqCgrLSu7xtCr0+tX5tdTX56chkN3sSOQnrDFNt72cGHA==
+X-Gm-Message-State: AOJu0YwW01Mu78fCIMdxgOUir11+FO/DN5ycyc7t8eu/2RoCohYnXUcl
+	S44sIaj312PvRW79SieeP6cZOekDyDEfb5sNgDYfSP27QVYNbzDs/7je+PkDjUpXScD/rL7wCW3
+	ko/kUtoNCfco5OsWSsnxR0e5e8SNcBO/vQVQI
+X-Google-Smtp-Source: AGHT+IG1GLCWxWGHnjyRbfSvDoWYCQGDNo4SQoda4isgd4Dc8NBikla8Kh6LKbsjYVUmp44NQu2vB1l6jw1VOSKTmeE=
+X-Received: by 2002:a05:6358:52c7:b0:1a6:b009:503a with SMTP id
+ e5c5f4694b2df-1adc0695563mr115620755d.4.1722027959728; Fri, 26 Jul 2024
+ 14:05:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240726175800.GC131596@mit.edu>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20240617175818.58219-17-samitolvanen@google.com>
+ <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com> <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
+ <00714a65-953f-4885-9229-1990543c4154@suse.com>
+In-Reply-To: <00714a65-953f-4885-9229-1990543c4154@suse.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 26 Jul 2024 21:05:22 +0000
+Message-ID: <CABCJKucj7zjc4=EiFdSnzNDBvQmaWBBt_KJsTq1ybp=Vegp5eQ@mail.gmail.com>
+Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 26, 2024 at 01:58:00PM -0400, Theodore Ts'o wrote:
-> Yeah, that's my reaction as well.  This only saves 50 lines of code in
-> ext4, and that includes unrelated changes such as getting rid of "int
-> i" and putting the declaration into the for loop --- "for (int i =
-> ...").  Sure, that saves two lines of code, but yay?
-> 
-> If the ordering how the functions gets called is based on the magic
-> ordering in the Makefile, I'm not sure this actually makes the code
-> clearer, more robust, and easier to maintain for the long term.
+Hi Petr,
 
-So you two object to kernel initcalls for the same reason and would
-rather go back to calling everything explicitly?
+On Mon, Jul 22, 2024 at 8:20=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> From my perspective, I'm okay if gendwarfksyms doesn't provide
+> functionality to compare a new object file with its reference symtypes
+> file.
+>
+> As mentioned, genksyms has this functionality but I actually think the
+> way it works is not ideal. Its design is to operate on one compilation
+> unit at the time. This has the advantage that a comparison of each file
+> is performed in parallel during the build, simply because of the make
+> job system. On the other hand, it has two problems.
+>
+> The first one is that genksyms doesn't provide a comparison of the
+> kernel as a whole. This means that the tool gives rather scattered and
+> duplicated output about changed structs in the build log. Ideally, one
+> would like to see a single compact report about what changed at the end
+> of the build.
 
+Sure, that makes sense. Android uses STG for this, which might be
+useful to other folks too:
+
+https://android.googlesource.com/platform/external/stg/
+https://android.googlesource.com/platform/external/stg/+/refs/heads/main/do=
+c/stgdiff.md#output-formats
+
+> A few months ago, I also started working on a tool inspired by this
+> script. The goal is to have similar functionality but hopefully with
+> a much faster implementation. Hence, this tool is written in a compiled
+> language (Rust at the moment) and should also become multi-threaded. I'm
+> hoping to find some time to make progress on it and make the code
+> public. It could later be added to the upstream kernel to replace the
+> comparison functionality implemented by genksyms, if there is interest.
+>
+> So as mentioned, I'm fine if gendwarfksyms doesn't have this
+> functionality. However, for distributions that rely on the symtypes
+> format, I'd be interested in having gendwarfksyms output its dump data
+> in this format as well.
+
+We can definitely tweak the output format, but I'm not sure if making
+it fully compatible with the genksyms symtypes format is feasible,
+especially for Rust code. I also intentionally decided to use DWARF
+tag names in the output instead of shorthands like s# etc. to make it
+a bit more readable.
+
+> For example, instead of producing:
+>
+> gendwarfksyms: process_exported_symbols: _some_mangled_func_name (@ XYZ)
+> subprogram(
+>    [formal parameters...]
+> )
+> -> structure_type core::result::Result<(), core::fmt::Error> {
+>    [a description of the structure...]
+> };
+>
+> .. the output could be something like this:
+>
+> S#'core::result::Result<(), core::fmt::Error>' structure_type core::resul=
+t::Result<(), core::fmt::Error> { [a description of the structure...] }
+> _some_mangled_func_name subprogram _some_mangled_func_name ( [formal para=
+meters...] ) -> S#'core::result::Result<(), core::fmt::Error>'
+
+This wouldn't be enough to make the output format compatible with
+symtypes though. genksyms basically produces a simple key-value pair
+database while gendwarfksyms currently outputs the fully expanded type
+string for each symbol. If you need the tool to produce a type
+database, it might also be worth discussing if we should use a bit
+less ad hoc format in that case.
+
+One more thing to note about the current --debug output is that it
+directly correlates with the debugging information and thus may not
+contain all aliases. For example, the Rust compiler deduplicates
+identical function implementations (e.g. Deref::deref and
+DerefMut::deref_mut etc.), but only one of the symbol names appears in
+DWARF. We use symbol addresses to print out #SYMVERs also for the
+aliases, but they don't show up in the debugging output right now.
+
+> > If using unions here is acceptable to everyone, a simple solution
+> > would be to use a known name prefix for the reserved members and teach
+> > gendwarfksyms to only print out the original type for the replaced
+> > ones. For example:
+> >
+> > The initial placeholder:
+> >
+> >     u8 __kabi_reserved_1[8];
+> >
+> > After replacement:
+> >
+> >     union {
+> >             u64 new_member;
+> >             struct {
+> >                     u8 __kabi_reserved_1[8];
+> >             };
+> >     }
+> >
+> > Here gendwarfksyms would see the __kabi_reserved prefix and only use
+> > u8 [8] for the CRC calculation. Does this sound reasonable?
+>
+> I like this idea. I think it's good that the necessary kABI information
+> about an updated member can be expressed at the source code level in
+> place of the actual change, and it isn't needed to feed additional input
+> to the tool.
+
+OK, cool. I agree that being able to specify these details in source
+code is much cleaner. I'll add an implementation for this, and for the
+definition visibility issue Greg mentioned in v2.
+
+Sami
