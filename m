@@ -1,186 +1,156 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1277244C64
-	for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 21:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D81114F118;
+	Fri, 26 Jul 2024 22:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722027962; cv=none; b=YisFY6wLlmFdIwjeejCyotOZ3KPsAkCW6vmN9YchswxWkS9NLLt0nDB4Vpl443LW3kYEa0fU0jmdTzPvV7keeE/17KWv7oEx13GR51fRJtuJkkxBjI2nMJwI67H3zAUWrLyMxpY6PV+UHHLSYezwtdDdPDCzVwxq43qHUoRvtPU=
+	t=1722033956; cv=none; b=NM/692P0HDrSpeSfmvhwjb9cng/TTsh1bOqwnoFYUrab/4GOmyccmkmZTXDykbmHOLlSDDkmokoYZa3l4AruQ6zgioGErReBVaYR4SnH9oYjtgxO9SmKT4RmPaZ85jelCjXD9AZLrMuc0uzbK+VaeeEB7Pk8AGtpCdTLRZ/1eIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722027962; c=relaxed/simple;
-	bh=7m1g6Y9PmgQZrshJ6w1fDE+ejH8mNXDvgc4AnljHtLw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y6/XDyXxY0uLMOHjMdEfgLDvysm2yWY3rh/Bo4gy8cRND/M0Dgp82Cn98Mgd1IwlR4WrtGSujxgHWGpyU4Yk7KrZp8sKa9sdRioQGnFYgG3LIvXxlYiu1n+d0NjtgpW8QS1a0cHNTNO0pZgO4fJF5CH3OQbNk/p8OMNz0CfK4Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sBUqpHNy; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1722033956; c=relaxed/simple;
+	bh=hOE0Z1kvdh6uIGZYovKHSoP1hXB54DzI0w7nD3XgJXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B6nJ4ZUXMYbdlWTNuM7K+JtzDaegZdT1Ae+iz66SxGwDvLcgMsRLFs+zvQtKq1bihinkFmQZ9Lt31euNi3r14z7+DU8plQboO117A3T9SBOxXDpysXNdI84oYXvIvl2MzYgmbk5u1n99CLU2dRa4AF3XJBsZau+uYibMI5mmMm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=A1eLqX/o; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LYynmnwN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=A1eLqX/o; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LYynmnwN; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sBUqpHNy"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5d5c7f24382so611092eaf.2
-        for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 14:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722027960; x=1722632760; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S4dFsz1ZUiiVPLP2/oVmM76j2Zw+Q0kRIKFNpgfUvZ8=;
-        b=sBUqpHNyagTcb/pWt5M9eLZiQmj47YN26k30tn3ooi9tRBN/TNjLLf0p2vqgM0qpDN
-         Pihb3UZk1afagApVgqw1o4SUqMdWHxuguxrzA5IGb5WpE2FbFs28DbPZGwBtZLmwnOKI
-         rzpcZdk54sJQjCsa9JTIE3s0mObLj4t6F14c5s9K2B3XR4sIx3iY/bT3BCCf5AMjdRsG
-         B9axh4+lpASCZHQopUGvazAQucA211t7a4GNjUwu+YuAVEiTAHUstawOhLlDt000EJen
-         91k6WeRmvNNS5+zpTPMF4/nSachn48Ut4QBMVFxfIucBC08nyM0QFzrHByeAfBHAxIzw
-         ++XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722027960; x=1722632760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S4dFsz1ZUiiVPLP2/oVmM76j2Zw+Q0kRIKFNpgfUvZ8=;
-        b=P/w2DqZf8775TiyeROMRtewmmdAXSU9xz79VhuNixfaVw0hX3gkTcf6SWmaK3oMLbt
-         NTk+31DBYDhKlY7Q2O0DLPZNsAm0coD9nKptoJB5xWNfxUXT5CNEcu89+rXtcBm3yDYj
-         wh90NjstFm3uXAUi6ERAuGMezwR9cNmhwOfY/1o2EuFQrjxaBWDR19YFuVNjbdbmUdY9
-         ob3xHO+LmJ49qr24yuhisLnV+pmEJFdKRkXgK5hxVHUDWFcq5iYRDwVPXGHP+4A/7F9H
-         NgPxEQ5SjyT5ubepphRqx/l0CrHemLbuzPpzSaJ/tnITUefrL88lMCdH6LWGVK0tjWwH
-         92ww==
-X-Forwarded-Encrypted: i=1; AJvYcCUB2hi7bs0HnTwizqV1XI3ePSAGBLyymPm4/zOE+Ab5pvr++W7o3Jn2cNPQJYqCgrLSu7xtCr0+tX5tdTX56chkN3sSOQnrDFNt72cGHA==
-X-Gm-Message-State: AOJu0YwW01Mu78fCIMdxgOUir11+FO/DN5ycyc7t8eu/2RoCohYnXUcl
-	S44sIaj312PvRW79SieeP6cZOekDyDEfb5sNgDYfSP27QVYNbzDs/7je+PkDjUpXScD/rL7wCW3
-	ko/kUtoNCfco5OsWSsnxR0e5e8SNcBO/vQVQI
-X-Google-Smtp-Source: AGHT+IG1GLCWxWGHnjyRbfSvDoWYCQGDNo4SQoda4isgd4Dc8NBikla8Kh6LKbsjYVUmp44NQu2vB1l6jw1VOSKTmeE=
-X-Received: by 2002:a05:6358:52c7:b0:1a6:b009:503a with SMTP id
- e5c5f4694b2df-1adc0695563mr115620755d.4.1722027959728; Fri, 26 Jul 2024
- 14:05:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="A1eLqX/o";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LYynmnwN";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="A1eLqX/o";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LYynmnwN"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 25F8221B17;
+	Fri, 26 Jul 2024 22:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1722033952;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wEH8Vk8Kw3nyR7i95KJItR4+alXownkC8UVtnwJo0OM=;
+	b=A1eLqX/o3M7AFIEpMfRvh9UI16KN1MarYEfSLxUe0RcDFUcJJTMzohG8/Enihr7MMxtUYm
+	fHpQKSb1thuoBT46Frp0arz9Rhw/cNoJsgJ7SfaIpM4cKz59OTUHO71Eoq5vg/ZKF2awYF
+	uqTQchb3NbuddeY6BjyQxGCicc6THvI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1722033952;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wEH8Vk8Kw3nyR7i95KJItR4+alXownkC8UVtnwJo0OM=;
+	b=LYynmnwNijUa7IM9Aurpnga1UXlEZyj3zZYcbrjnAkj4RhzIKCV8IErRexqSNbnRzeKkac
+	HzPg1zOUZPJ/i+Cg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1722033952;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wEH8Vk8Kw3nyR7i95KJItR4+alXownkC8UVtnwJo0OM=;
+	b=A1eLqX/o3M7AFIEpMfRvh9UI16KN1MarYEfSLxUe0RcDFUcJJTMzohG8/Enihr7MMxtUYm
+	fHpQKSb1thuoBT46Frp0arz9Rhw/cNoJsgJ7SfaIpM4cKz59OTUHO71Eoq5vg/ZKF2awYF
+	uqTQchb3NbuddeY6BjyQxGCicc6THvI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1722033952;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wEH8Vk8Kw3nyR7i95KJItR4+alXownkC8UVtnwJo0OM=;
+	b=LYynmnwNijUa7IM9Aurpnga1UXlEZyj3zZYcbrjnAkj4RhzIKCV8IErRexqSNbnRzeKkac
+	HzPg1zOUZPJ/i+Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E52A4138A7;
+	Fri, 26 Jul 2024 22:45:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id k1NYNx8npGacGAAAD6G6ig
+	(envelope-from <dsterba@suse.cz>); Fri, 26 Jul 2024 22:45:51 +0000
+Date: Sat, 27 Jul 2024 00:45:42 +0200
+From: David Sterba <dsterba@suse.cz>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Theodore Ts'o <tytso@mit.edu>, David Sterba <dsterba@suse.cz>,
+	Youling Tang <youling.tang@linux.dev>, kreijack@inwind.it,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+	David Sterba <dsterba@suse.com>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	Youling Tang <tangyouling@kylinos.cn>
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+Message-ID: <20240726224542.GP17473@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <ZqJjsg3s7H5cTWlT@infradead.org>
+ <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
+ <ZqJwa2-SsIf0aA_l@infradead.org>
+ <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
+ <ZqKreStOD-eRkKZU@infradead.org>
+ <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
+ <ZqOs84hdYkSV_YWd@infradead.org>
+ <20240726152237.GH17473@twin.jikos.cz>
+ <20240726175800.GC131596@mit.edu>
+ <ZqPmPufwqbGOTyGI@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240617175818.58219-17-samitolvanen@google.com>
- <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com> <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
- <00714a65-953f-4885-9229-1990543c4154@suse.com>
-In-Reply-To: <00714a65-953f-4885-9229-1990543c4154@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 26 Jul 2024 21:05:22 +0000
-Message-ID: <CABCJKucj7zjc4=EiFdSnzNDBvQmaWBBt_KJsTq1ybp=Vegp5eQ@mail.gmail.com>
-Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZqPmPufwqbGOTyGI@infradead.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	HAS_REPLYTO(0.30)[dsterba@suse.cz];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	TO_DN_SOME(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[mit.edu,suse.cz,linux.dev,inwind.it,arndb.de,kernel.org,fb.com,toxicpanda.com,suse.com,dilger.ca,vger.kernel.org,lists.sourceforge.net,kylinos.cn];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[inwind.it]
+X-Spam-Flag: NO
+X-Spam-Score: -3.80
 
-Hi Petr,
+On Fri, Jul 26, 2024 at 11:09:02AM -0700, Christoph Hellwig wrote:
+> On Fri, Jul 26, 2024 at 01:58:00PM -0400, Theodore Ts'o wrote:
+> > Yeah, that's my reaction as well.  This only saves 50 lines of code in
+> > ext4, and that includes unrelated changes such as getting rid of "int
+> > i" and putting the declaration into the for loop --- "for (int i =
+> > ...").  Sure, that saves two lines of code, but yay?
+> > 
+> > If the ordering how the functions gets called is based on the magic
+> > ordering in the Makefile, I'm not sure this actually makes the code
+> > clearer, more robust, and easier to maintain for the long term.
+> 
+> So you two object to kernel initcalls for the same reason and would
+> rather go back to calling everything explicitly?
 
-On Mon, Jul 22, 2024 at 8:20=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> From my perspective, I'm okay if gendwarfksyms doesn't provide
-> functionality to compare a new object file with its reference symtypes
-> file.
->
-> As mentioned, genksyms has this functionality but I actually think the
-> way it works is not ideal. Its design is to operate on one compilation
-> unit at the time. This has the advantage that a comparison of each file
-> is performed in parallel during the build, simply because of the make
-> job system. On the other hand, it has two problems.
->
-> The first one is that genksyms doesn't provide a comparison of the
-> kernel as a whole. This means that the tool gives rather scattered and
-> duplicated output about changed structs in the build log. Ideally, one
-> would like to see a single compact report about what changed at the end
-> of the build.
-
-Sure, that makes sense. Android uses STG for this, which might be
-useful to other folks too:
-
-https://android.googlesource.com/platform/external/stg/
-https://android.googlesource.com/platform/external/stg/+/refs/heads/main/do=
-c/stgdiff.md#output-formats
-
-> A few months ago, I also started working on a tool inspired by this
-> script. The goal is to have similar functionality but hopefully with
-> a much faster implementation. Hence, this tool is written in a compiled
-> language (Rust at the moment) and should also become multi-threaded. I'm
-> hoping to find some time to make progress on it and make the code
-> public. It could later be added to the upstream kernel to replace the
-> comparison functionality implemented by genksyms, if there is interest.
->
-> So as mentioned, I'm fine if gendwarfksyms doesn't have this
-> functionality. However, for distributions that rely on the symtypes
-> format, I'd be interested in having gendwarfksyms output its dump data
-> in this format as well.
-
-We can definitely tweak the output format, but I'm not sure if making
-it fully compatible with the genksyms symtypes format is feasible,
-especially for Rust code. I also intentionally decided to use DWARF
-tag names in the output instead of shorthands like s# etc. to make it
-a bit more readable.
-
-> For example, instead of producing:
->
-> gendwarfksyms: process_exported_symbols: _some_mangled_func_name (@ XYZ)
-> subprogram(
->    [formal parameters...]
-> )
-> -> structure_type core::result::Result<(), core::fmt::Error> {
->    [a description of the structure...]
-> };
->
-> .. the output could be something like this:
->
-> S#'core::result::Result<(), core::fmt::Error>' structure_type core::resul=
-t::Result<(), core::fmt::Error> { [a description of the structure...] }
-> _some_mangled_func_name subprogram _some_mangled_func_name ( [formal para=
-meters...] ) -> S#'core::result::Result<(), core::fmt::Error>'
-
-This wouldn't be enough to make the output format compatible with
-symtypes though. genksyms basically produces a simple key-value pair
-database while gendwarfksyms currently outputs the fully expanded type
-string for each symbol. If you need the tool to produce a type
-database, it might also be worth discussing if we should use a bit
-less ad hoc format in that case.
-
-One more thing to note about the current --debug output is that it
-directly correlates with the debugging information and thus may not
-contain all aliases. For example, the Rust compiler deduplicates
-identical function implementations (e.g. Deref::deref and
-DerefMut::deref_mut etc.), but only one of the symbol names appears in
-DWARF. We use symbol addresses to print out #SYMVERs also for the
-aliases, but they don't show up in the debugging output right now.
-
-> > If using unions here is acceptable to everyone, a simple solution
-> > would be to use a known name prefix for the reserved members and teach
-> > gendwarfksyms to only print out the original type for the replaced
-> > ones. For example:
-> >
-> > The initial placeholder:
-> >
-> >     u8 __kabi_reserved_1[8];
-> >
-> > After replacement:
-> >
-> >     union {
-> >             u64 new_member;
-> >             struct {
-> >                     u8 __kabi_reserved_1[8];
-> >             };
-> >     }
-> >
-> > Here gendwarfksyms would see the __kabi_reserved prefix and only use
-> > u8 [8] for the CRC calculation. Does this sound reasonable?
->
-> I like this idea. I think it's good that the necessary kABI information
-> about an updated member can be expressed at the source code level in
-> place of the actual change, and it isn't needed to feed additional input
-> to the tool.
-
-OK, cool. I agree that being able to specify these details in source
-code is much cleaner. I'll add an implementation for this, and for the
-definition visibility issue Greg mentioned in v2.
-
-Sami
+No and not my call to do it for the kernel. Somebody probably had a
+reason use the initcalls, there are probably practical reasons for that.
+Quick grep shows there are thousands of initcalls scattered over the
+whole code base, that does ask for some tricks because updating a single
+file with explicit calls would be a nightmare. Unlike for a subsystem
+inside one directory, like a filesystem.
