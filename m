@@ -1,176 +1,166 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D589418E1E;
-	Fri, 26 Jul 2024 15:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EF417BDC
+	for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 16:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722007363; cv=none; b=ASiskY44UpoM4MyCCFDsuQpprSmB+D0yDilBMOH85+F3EOiGEB3K67OcbyLSAOI/mjkRSPU3sAM93PTsVKlUVZ61pMPfCvkrn9By1IEmP7852nJ7E8IPVWTBjLcsjcFroSKF6v9qx1JUIv9MosgZmu+soRcRQIEUg4z+a0BEzbA=
+	t=1722011781; cv=none; b=Rmw8FO7vbHnpDF27642DlQsGn2g2F/JfJiqz/L3usc/Kvy8yfFohaSvg3q9NNuCGd2i/LE4ZgtXK5pE+ePuibaDCy8FJUEgJyQiwySshzI9x07t2doobHgsF/sfAydDb3RR0VQNTbj7VbSKuCaoQB2vh1zrdzLXVsQ0lFJf5AUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722007363; c=relaxed/simple;
-	bh=5ea6J4F3xTYQI+FVtmFYyRykx9btGmI+rnvRxLuvejI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V+vo8voAcEsgT3R7IxDUF/UqOD+GTSM1tRvCYGyP3ZB32/CmrZE3/v7PU97gY5Lg67TvN8pmdnSYIIZ6VA5ZNjzMhw2Kq9YRUmo8gnslezuEYYjBvbaGWKZrw9jX+S4T7uEoQN6ti5i+avvFXvYr5BI/YtUBkfc3LI2GhZvJv2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=q3elkxZE; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=947VmE0r; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Kqbq+to/; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UfWcXsqC; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1722011781; c=relaxed/simple;
+	bh=tdYSfOWf/SV1uFaMUE1ec1v+BMVlp+xPpRRA+oEX8uY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BMX6kUNt/tmG4E7gQBUWWjOWcwgpVezF3WLAvm9Ws0n0G3LoUf6Bkpwslbk6Slktk2b5XyA3cCsr/s6Nxg4W0DdXJS7r/ZO9ykWmo8Z/1CM74CaXTYPSfG5oYrgvXpoJJ37WY4pBYfBXyad8YkeEosnhr91sWy2IXtMx6e9lQqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuhrYqix; arc=none smtp.client-ip=209.85.208.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="q3elkxZE";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="947VmE0r";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Kqbq+to/";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UfWcXsqC"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CC7DE219BF;
-	Fri, 26 Jul 2024 15:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1722007360;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nr6jgka+gDBT3QQ7bb9PNkdpnMtXeZV68l1U6OfFaqc=;
-	b=q3elkxZESedwoEe0iUED5lOQbJV9ZRWPQltOdic0NpXAtJY/EiN5gMmIEUiMWY9yppgng5
-	6vHX74SCzYTqbJL/8+DyEy2mSuBbbVz+24XQLb9uAEUi4AUC1Pe9f11DGPMiyjFaWT3w6p
-	Cpc3BoFxDn3frW7nxPk+2nBnWffG11I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1722007360;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nr6jgka+gDBT3QQ7bb9PNkdpnMtXeZV68l1U6OfFaqc=;
-	b=947VmE0rAIutWyXfUgWwi60aZCVln6pfnucIC1mlfeI9IcD5vdNjGGIV1jU6UR7rbKu34N
-	JxqUY9Is45qfwpAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1722007358;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nr6jgka+gDBT3QQ7bb9PNkdpnMtXeZV68l1U6OfFaqc=;
-	b=Kqbq+to/EyF/FOIb4JQK+wpQDcfHcU09pojkYOkJXt/Nj62vQ62DbUIwyDMnE76fU7JoRl
-	h2/v3chroOC3NZ0Ewi2bHzSOBLy8opglAIvdt7tBQnwQtWM5iDPZvq94Ewf73G7p1w2Q0p
-	uAi9NZ1qkSPCJ9XKF0LjIlxsF5wjiKw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1722007358;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nr6jgka+gDBT3QQ7bb9PNkdpnMtXeZV68l1U6OfFaqc=;
-	b=UfWcXsqCQv+u627gdDOwb0Qe5lzmjOGQVAtU2Gfh5f+O7bTWC5rDTkzRE1A+toGuwfcx7G
-	OZMIEwnitR8aabAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9485D1396E;
-	Fri, 26 Jul 2024 15:22:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id cGYKJD6/o2bKLgAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Fri, 26 Jul 2024 15:22:38 +0000
-Date: Fri, 26 Jul 2024 17:22:37 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Youling Tang <youling.tang@linux.dev>, kreijack@inwind.it,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-	David Sterba <dsterba@suse.com>, Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-Message-ID: <20240726152237.GH17473@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <0a63dfd1-ead3-4db3-a38c-2bc1db65f354@linux.dev>
- <ZqEhMCjdFwC3wF4u@infradead.org>
- <895360e3-97bb-4188-a91d-eaca3302bd43@linux.dev>
- <ZqJjsg3s7H5cTWlT@infradead.org>
- <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
- <ZqJwa2-SsIf0aA_l@infradead.org>
- <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
- <ZqKreStOD-eRkKZU@infradead.org>
- <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
- <ZqOs84hdYkSV_YWd@infradead.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LuhrYqix"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2ef2ed59200so16886011fa.3
+        for <linux-modules@vger.kernel.org>; Fri, 26 Jul 2024 09:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722011778; x=1722616578; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ByzIZ1BITVtfZJUk4FnFaHkTt2nIO23plx/AgKa+I0I=;
+        b=LuhrYqixlcXElmx1spMhRpZHjyZY4yNGGSRzR5kZw3x4DbawrXrdat9szzoxJ+lap0
+         HMLzWQEZTvjucS5UdReY8IsE+L7PqR9nOAWlzUqdRCP7VzVCETgSNLWA2e0N6J7PK9pe
+         nQ9Kr5lVmTCuBba225Du6e75GENHA6OcXZxWr5nK5AHkLHxf8MMMVwLeoUXq2ffruvyc
+         M1VihJ+4U0a2v8r32MzJ5grRdYA3H9F0k71HgAM0E/KN7f2z6SKgCbS/EnwJfdDE2R9x
+         QlPq4n7GjgipRx6fiUMoqM/evNu2KM0muaaAu28+md/zQ+Gn6UVTLB0mv9nG18mwBRlr
+         SmrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722011778; x=1722616578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ByzIZ1BITVtfZJUk4FnFaHkTt2nIO23plx/AgKa+I0I=;
+        b=ZkoagLC8QBsPr7hbnvR6+5k7bLS7JEDpb74s8zB0wTWMDsZw+bd6zhjXOAO+CwuuwZ
+         Fj+n2NONiehrno+ymfwfwmtBfuRHaaDs1i/NiAzAbl/k+gh4yKkqF/Lu68LpMHhMTqKs
+         VM0A+8TX+vgsw15LAkPB6DIUijRIEzk7dVo8J0PgQ1WTJ9X4izFw4QQMv5UxHnkNvr12
+         JoRGSK/NAI+jn/D946x00dqQnhiMFaqV40yyyBl7lIlhH909dmvxEIkSofo4rmAlpAKU
+         FPI3Lz8mfCfrsjKsvvtROMA4eaOjU5U5EB51SbABu6yauNh74utiRvNCyCPQrIHnuGvZ
+         L/dw==
+X-Gm-Message-State: AOJu0Yy2vBG4NqIMUa2XvAY5+y+lCrWKV3EJehOW91ci7psjTvXKrYYV
+	KXZzfJPPTU28JgS23OEbFtIKdeLr0uvGq72mkM15OTMnbDHwlHqFKeq/llfaqdN5pOxICbmsv0a
+	UWTzNOCJxuKkRiwVukoTeSFtvlg/WFERo
+X-Google-Smtp-Source: AGHT+IF0Pe7amm0sNjhemU6DlOniE1po11xAqikI6Zw9skjbbsjg0Gc3ahXYuNz1+2hwuiljFVfCR2+FZgua0VzelXQ=
+X-Received: by 2002:a2e:9dd4:0:b0:2ef:2bac:bb50 with SMTP id
+ 38308e7fff4ca-2f12ee14eedmr1701141fa.11.1722011777708; Fri, 26 Jul 2024
+ 09:36:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZqOs84hdYkSV_YWd@infradead.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	MIME_GOOD(-0.10)[text/plain];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[inwind.it];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[linux.dev,inwind.it,arndb.de,kernel.org,fb.com,toxicpanda.com,suse.com,mit.edu,dilger.ca,vger.kernel.org,lists.sourceforge.net,kylinos.cn];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
+References: <20240723185921.1005569-1-lucas.de.marchi@gmail.com> <20240723185921.1005569-2-lucas.de.marchi@gmail.com>
+In-Reply-To: <20240723185921.1005569-2-lucas.de.marchi@gmail.com>
+From: Emil Velikov <emil.l.velikov@gmail.com>
+Date: Fri, 26 Jul 2024 17:36:06 +0100
+Message-ID: <CACvgo53D4O+-bEDV8OQQjURAUNQ3i4NjOGqefNk2po68DbguZg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] Use SPDX header for license
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 26, 2024 at 07:04:35AM -0700, Christoph Hellwig wrote:
-> On Fri, Jul 26, 2024 at 04:54:59PM +0800, Youling Tang wrote:
-> > Based on this patch, we may need to do these things with this
-> >
-> >
-> > 1. Change the order of *.o in the Makefile (the same order as before the
-> > change)
-> 
-> While we'll need to be careful, we don't need to match the exact
-> order.  Most of the calls simply create slab caches / mempools and
-> similar things and the order for those does not matter at all.
-> 
-> Of course the register_filesytem calls need to be last, and sysfs
-> registration probably should be second to last, but for the vast
-> amount of calls the order does not matter as long as it is unwound
-> in reverse order.
-> 
-> > 2. We need to define module_subinit through the ifdef MODULE
-> > distinction,
-> 
-> Yes.
-> 
-> > When one of the subinit runs in a module fails, it is difficult
-> > to rollback execution of subexit.
-> 
-> By having both section in the same order, you an just walk the
-> exit section backwards from the offset that failed.  Of course that
-> only matters for the modular case as normal initcalls don't get
-> unwound when built-in either.
-> 
-> > 4. The order in which subinit is called is not intuitively known
-> > (although it can be found in the Makefile).
-> 
-> Link order through make file is already a well known concept due to
-> it mattering for built-in code.
+Hey Lucas,
 
-All of this sounds overengineered for something that is a simple array
-and two helpers. The code is not finalized so I'll wait for the next
-version but specific file order in makefile and linker tricks seems
-fragile and I'm not sure I want this for btrfs.
+Thanks for going through and splitting this, even though wasn't
+particularly fun.
+
+One small note inline:
+
+On Tue, 23 Jul 2024 at 19:59, Lucas De Marchi
+<lucas.de.marchi@gmail.com> wrote:>
+
+<snip>
+
+> diff --git a/m4/attributes.m4 b/m4/attributes.m4
+> index bfdb50f..208dfdc 100644
+> --- a/m4/attributes.m4
+> +++ b/m4/attributes.m4
+> @@ -1,23 +1,10 @@
+> +dnl SPDX-License-Identifier: GPL-2.0-or-later
+> +dnl
+>  dnl Macros to check the presence of generic (non-typed) symbols.
+>  dnl Copyright (c) 2006-2008 Diego Petten=C3=B2 <flameeyes@gmail.com>
+>  dnl Copyright (c) 2006-2008 xine project
+>  dnl Copyright (c) 2012 Lucas De Marchi <lucas.de.marchi@gmail.com>
+>  dnl
+> -dnl This program is free software; you can redistribute it and/or modify
+> -dnl it under the terms of the GNU General Public License as published by
+> -dnl the Free Software Foundation; either version 2, or (at your option)
+> -dnl any later version.
+> -dnl
+> -dnl This program is distributed in the hope that it will be useful,
+> -dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+> -dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> -dnl GNU General Public License for more details.
+> -dnl
+> -dnl You should have received a copy of the GNU General Public License
+> -dnl along with this program; if not, write to the Free Software
+> -dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+> -dnl 02110-1301, USA.
+> -dnl
+>  dnl As a special exception, the copyright owners of the
+>  dnl macro gives unlimited permission to copy, distribute and modify the
+>  dnl configure scripts that are the output of Autoconf when processing th=
+e
+> diff --git a/m4/features.m4 b/m4/features.m4
+> index 82a244f..6a9b5bd 100644
+> --- a/m4/features.m4
+> +++ b/m4/features.m4
+> @@ -1,17 +1,6 @@
+> -#  Copyright (c) 2015 Lucas De Marchi <lucas.de.marchi@gmail.com>
+> -#
+> -#  This program is free software: you can redistribute it and/or modify =
+it
+> -#  under the terms of the GNU General Public License as published by the
+> -#  Free Software Foundation, either version 2 of the License, or (at you=
+r
+> -#  option) any later version.
+> -#
+> -#  This program is distributed in the hope that it will be useful, but
+> -#  WITHOUT ANY WARRANTY; without even the implied warranty of
+> -#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Gene=
+ral
+> -#  Public License for more details.
+> +# SPDX-License-Identifier: GPL-2.0-or-later
+>  #
+> -#  You should have received a copy of the GNU General Public License alo=
+ng
+> -#  with this program. If not, see <http://www.gnu.org/licenses/>.
+> +#  Copyright (c) 2015 Lucas De Marchi <lucas.de.marchi@gmail.com>
+>  #
+>  #  As a special exception, the respective Autoconf Macro's copyright own=
+er
+>  #  gives unlimited permission to copy, distribute and modify the configu=
+re
+> @@ -25,7 +14,7 @@
+>  #  Macro released by the Autoconf Archive. When you make and distribute =
+a
+>  #  modified version of the Autoconf Macro, you may extend this special
+>  #  exception to the GPL to apply to your modified version as well.
+> -#
+> +
+>  # CC_FEATURE_APPEND([FLAGS], [ENV-TO-CHECK], [FLAG-NAME])
+>  AC_DEFUN([CC_FEATURE_APPEND], [
+>    AS_VAR_PUSHDEF([FLAGS], [$1])dnl
+
+If I'm reading things correctly [1] [2], these two should be:
+
+# SPDX-License-Identifier: GPL-2.0-or-later WITH Autoconf-exception-macro
+
+... and the exception can be removed.
+
+With that addressed - either as separate patch or squashed - the series is:
+Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+
+HTH
+Emil
+
+[1] https://spdx.org/licenses/exceptions-index.html
+[2] https://spdx.org/licenses/Autoconf-exception-macro.html
