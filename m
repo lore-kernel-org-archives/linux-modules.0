@@ -1,89 +1,223 @@
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6000A180A69
-	for <linux-modules@vger.kernel.org>; Sat, 27 Jul 2024 14:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.9.28.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C011877;
+	Sun, 28 Jul 2024 09:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722092099; cv=none; b=rbgGsGUukRihyYRNErs63pdZS6SvKEui95EdTwnvnj5M0o1wyDhfQyFEGO8GglUKjVMvejouSREmysyhxH/qBjLDul0Egdo+FmMLSOa+yHT8IM+XupIao0lVsptiDNaldiNScv9GikC2uc20BpN6swN8ZNLSykw40fMVwufCgR8=
+	t=1722157441; cv=none; b=FfNDeEL685elRHb3BdMmzZ1HgcOLKjt3LwOKgIt4MpJhCCsrvDibIHb8uDPtvMxX0/HjDKrRMbAMeA1XJjWiKe6ZaWueV5fL6tYpR2VMvgpVNolZF8IydThHNcb1oF3AMomQc0aO3di+KNKLIsk4zKwKk+aR2uV29e7zFOrSdxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722092099; c=relaxed/simple;
-	bh=yiWuP8Onb+fyKehtZA9+3qlxXA9OLQ0daLGmt8gHCrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FeF7YLUARG+/nZqkQi5ywlycEJN8Gr9Sitd6av1Fl2lgyozW8c8lZFBMo4J4ro+1V2cYkFAP6C3DmCFDsWzeWrn2Z1rPYQP3ISS+sSdIFGXhji1MmkhD3ZWGYXtKZQTbkGKy0kiZvZwXNee6F8J6s+umNpeJPPjHBmqj3Tddwp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu; spf=pass smtp.mailfrom=mit.edu; dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b=W3SqZwj6; arc=none smtp.client-ip=18.9.28.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mit.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mit.edu
+	s=arc-20240116; t=1722157441; c=relaxed/simple;
+	bh=QxM94LwGA2JdJecwH8apfoLuglqSOMOVfCkvfiW9i/4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gGgSvEufozgKNNX9OWtKMEZsr2tooDLOFP1tQ+cu2ZMl5CO9IvCOIJj31tjSBS69aoazL+z7Ivx71WnMn497IN1VPpZBJtzg8IdGkjalwNKgyi85fvl5Fo/+6dvXxRtn/lb4PuyfvJMO7WbBqJApxLj8OYAXuubnbFHFtWxjvaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBMU8rQg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="W3SqZwj6"
-Received: from cwcc.thunk.org (pool-173-48-113-198.bstnma.fios.verizon.net [173.48.113.198])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 46REqWUW017051
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 27 Jul 2024 10:52:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1722091958; bh=qLhE8zhbnsrLQesDE5s8eN6bXS32QqwKbPnsHmPpjPs=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=W3SqZwj6xO4JInZDIxy44/G9zuWEAwQBDT8wo9oAislq4E8B456lR87n3bSU9fcTu
-	 iY0V57/ee8ng08hyb4Csnb2aESguN8FAilgp5bT1uF+l0t0N6l5WFjifYiECO6bUDd
-	 t5BTjYHDKkOovBhtRTqwkR8rL7aX++aINeXzjuXf7n9rHduxZMGTecM7BxEExtLP51
-	 RiF9Pepy9ILquFzBv7I6nIGYyVPO16Y/OWE3V35dTFL7MdnWaaeUIgp9Z79JAPI2dj
-	 iZEP64jTBjnKooEX1ccphhGHyHOYzUv04vJ6/ie7IN7IddG/d/a9WC4B2NrMWDyWKL
-	 An8LLBeP0m5Aw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 8A69515C0251; Sat, 27 Jul 2024 10:52:32 -0400 (EDT)
-Date: Sat, 27 Jul 2024 10:52:32 -0400
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: David Sterba <dsterba@suse.cz>, Youling Tang <youling.tang@linux.dev>,
-        kreijack@inwind.it, Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        Youling Tang <tangyouling@kylinos.cn>
-Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
- module_subeixt helper macros
-Message-ID: <20240727145232.GA377174@mit.edu>
-References: <ZqJjsg3s7H5cTWlT@infradead.org>
- <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
- <ZqJwa2-SsIf0aA_l@infradead.org>
- <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
- <ZqKreStOD-eRkKZU@infradead.org>
- <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
- <ZqOs84hdYkSV_YWd@infradead.org>
- <20240726152237.GH17473@twin.jikos.cz>
- <20240726175800.GC131596@mit.edu>
- <ZqPmPufwqbGOTyGI@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBMU8rQg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EE4C4AF09;
+	Sun, 28 Jul 2024 09:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722157440;
+	bh=QxM94LwGA2JdJecwH8apfoLuglqSOMOVfCkvfiW9i/4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=vBMU8rQg/66YMODUCisd2/xQ0kKep+z0VohpL24KTfO4sKFxbA9s1O8M2UH/6x2Yb
+	 8ekByf6TX1yFzHQVLDf3YKHjQvnwQ0kflQZIQoPHMUwOShW4fTdXbAAt5iqfzrmfRY
+	 nLNEa+WAYcHnBdFpgACSdyTdA0ben4B3eSqp7zjMSV2q4TkG/Nrqmt49ErlHr/pNUN
+	 bJ3EDPv3ac5EwKIF/ERyqs2XmuFnY6R+u40xevC9KvKn8jz7UnsmcBqVNXMcPdgV2I
+	 5YY8F1938N0z/IiV49sP1RklkRJEwUl+OSf1/ny2By6hjmP5VbD24n6UxItS4n1SWR
+	 PkQSi6QhWLY8g==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52f01993090so3886440e87.2;
+        Sun, 28 Jul 2024 02:04:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXqhXIc9n2DAZocDpGpOLdJ9RZ09mxIKD3wrev79HeRnq6yAa5dnMinjLFmZS782Oy04Ik3PgJK5L+eeMNuT/SFoYDvRuVIsGy0lfaEJgCUesoBnKOZ3/Bl+sftO9xeRE007rqn79LmHRVIh9eglnB2AuL7sSNrRYmqT4PDDaU/aSIPSuIeeQ2DOg==
+X-Gm-Message-State: AOJu0Yxkqc3aFPpgLzEHr7zy6+ZEnI5E2VU6HkILn3DyidyjBjAw9auO
+	B0BcMS531CEw9+CVWl5IPEe38Tv+GQfhdzjzg26Ouv1HzFSMuW1QCddQiF5QkNaAfkZQrBiFFyi
+	eWwuK8vH3IgRqrEn/XTYlISGjn34=
+X-Google-Smtp-Source: AGHT+IEA8iKtDLPkOIolC2s6x/f3cSR63CivhHgQ0vStJfRCj7P7AJL1bEamf+xWVVK8nbJy2NaOQncDu9LXWbZTqgU=
+X-Received: by 2002:ac2:54b7:0:b0:52c:db06:ee60 with SMTP id
+ 2adb3069b0e04-5309b2bb677mr2809814e87.41.1722157439567; Sun, 28 Jul 2024
+ 02:03:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZqPmPufwqbGOTyGI@infradead.org>
+References: <20240722090622.16524-1-petr.pavlu@suse.com> <20240722090622.16524-2-petr.pavlu@suse.com>
+ <CAK7LNATG-kYuxGgzC7e-BbTPMnSH+MCAEVOXoQkdGYH9xLincA@mail.gmail.com> <90416ccc-8537-489c-ac15-78aacbcb42b0@suse.com>
+In-Reply-To: <90416ccc-8537-489c-ac15-78aacbcb42b0@suse.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 28 Jul 2024 18:03:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARMR1Pn3Rj6fC-u3qQC4jQGrasD1mqxg-8qPNPdTy61gw@mail.gmail.com>
+Message-ID: <CAK7LNARMR1Pn3Rj6fC-u3qQC4jQGrasD1mqxg-8qPNPdTy61gw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] module: Split modules_install compression and
+ in-kernel decompression
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 26, 2024 at 11:09:02AM -0700, Christoph Hellwig wrote:
-> On Fri, Jul 26, 2024 at 01:58:00PM -0400, Theodore Ts'o wrote:
-> > Yeah, that's my reaction as well.  This only saves 50 lines of code in
-> > ext4, and that includes unrelated changes such as getting rid of "int
-> > i" and putting the declaration into the for loop --- "for (int i =
-> > ...").  Sure, that saves two lines of code, but yay?
-> > 
-> > If the ordering how the functions gets called is based on the magic
-> > ordering in the Makefile, I'm not sure this actually makes the code
-> > clearer, more robust, and easier to maintain for the long term.
-> 
-> So you two object to kernel initcalls for the same reason and would
-> rather go back to calling everything explicitly?
+On Thu, Jul 25, 2024 at 9:59=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> On 7/22/24 12:23, Masahiro Yamada wrote:
+> > On Mon, Jul 22, 2024 at 6:07=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com=
+> wrote:
+> >>
+> >> The kernel configuration allows specifying a module compression mode. =
+If
+> >> one is selected then each module gets compressed during
+> >> 'make modules_install' and additionally one can also enable support fo=
+r
+> >> a respective direct in-kernel decompression support. This means that t=
+he
+> >> decompression support cannot be enabled without the automatic compress=
+ion.
+> >>
+> >> Some distributions, such as the (open)SUSE family, use a signer servic=
+e for
+> >> modules. A build runs on a worker machine but signing is done by a sep=
+arate
+> >> locked-down server that is in possession of the signing key. The build
+> >> invokes 'make modules_install' to create a modules tree, collects
+> >> information about the modules, asks the signer service for their signa=
+ture,
+> >> appends each signature to the respective module and compresses all mod=
+ules.
+> >>
+> >> When using this arrangment, the 'make modules_install' step produces
+> >> unsigned+uncompressed modules and the distribution's own build recipe =
+takes
+> >> care of signing and compression later.
+> >>
+> >> The signing support can be currently enabled without automatically sig=
+ning
+> >> modules during 'make modules_install'. However, the in-kernel decompre=
+ssion
+> >> support can be selected only after first enabling automatic compressio=
+n
+> >> during this step.
+> >>
+> >> To allow only enabling the in-kernel decompression support without the
+> >> automatic compression during 'make modules_install', separate the
+> >> compression options similarly to the signing options, as follows:
+> >>
+> >>> Enable loadable module support
+> >> [*] Module compression
+> >>       Module compression type (GZIP)  --->
+> >> [*]   Automatically compress all modules
+> >> [ ]   Support in-kernel module decompression
+> >>
+> >> * "Module compression" (MODULE_COMPRESS) is a new main switch for the
+> >>   compression/decompression support. It replaces MODULE_COMPRESS_NONE.
+> >> * "Module compression type" (MODULE_COMPRESS_<type>) chooses the
+> >>   compression type, one of GZ, XZ, ZSTD.
+> >> * "Automatically compress all modules" (MODULE_COMPRESS_ALL) is a new
+> >>   option to enable module compression during 'make modules_install'. I=
+t
+> >>   defaults to Y.
+> >> * "Support in-kernel module decompression" (MODULE_DECOMPRESS) enables
+> >>   in-kernel decompression.
+> >>
+> >> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> >> ---
+> >
+> >
+> >
+> > My preference is to add
+> >  CONFIG_MODULE_DECOMPRESS_GZIP
+> >  CONFIG_MODULE_DECOMPRESS_XZ
+> >  CONFIG_MODULE_DECOMPRESS_ZSTD
+> > instead of
+> >  CONFIG_MODULE_COMPRESS_ALL.
+> >
+> >
+> >
+> >
+> > For example,
+> >
+> >
+> > if MODULE_DECOMPRESS
+> >
+> > config MODULE_DECOMPRESS_GZIP
+> >        bool "Support in-kernel GZIP decompression for module"
+> >        default MODULE_COMPRESS_GZIP
+> >
+> > config MODULE_DECOMPRESS_XZ
+> >        bool "Support in-kernel XZ decompression for module"
+> >        default MODULE_COMPRESS_XZ
+> >
+> > config MODULE_DECOMPRESS_ZSTD
+> >        bool "Support in-kernel ZSTD decompression for module"
+> >        default MODULE_COMPRESS_ZSTD
+> >
+> > endif
+> >
+> >
+> >
+> >
+> >
+> > OR, maybe
+> >
+> >
+> >
+> > config MODULE_DECOMPRESS_GZIP
+> >        bool "Support in-kernel GZIP decompression for module"
+> >        select MODULE_DECOMPRESS
+> >
+> > config MODULE_DECOMPRESS_XZ
+> >        bool "Support in-kernel XZ decompression for module"
+> >        select MODULE_DECOMPRESS
+> >
+> > config MODULE_DECOMPRESS_ZSTD
+> >        bool "Support in-kernel ZSTD decompression for module"
+> >        select MODULE_DECOMPRESS
+> >
+> > config MODULE_DECOMPRESS
+> >        bool
+> >
+> >
+> >
+> >
+> > You can toggle MODULE_COMPRESS_GZIP and
+> > MODULE_DECOMPRESS_GZIP independently
+>
+> I can implement this, but what would be a use case to enable multiple mod=
+ule
+> decompression types in the kernel?
 
-I don't oject to kernel initcalls which don't have any
-interdependencies and where ordering doesn't matter.
 
-						- Ted
+I just thought there is a possibility where the singer service A
+compresses modules in GZIP, and the singer service B in XZ, etc.
+
+If the compression type is predictable at the Kbuild time,
+it is fine.
+
+
+
+
+>
+> >
+> >
+> > Of course, the current kernel/module/decompress.c does not
+> > work when multiple (or zero) CONFIG_MODULE_DECOMPRESS_* is
+> > enabled. It needs a little modification.
+>
+> One issue is with the file /sys/module/compression which shows the module
+> decompression type supported by the kernel. If multiple types are allowed=
+ then
+> I think they should all get listed there. This could however create some
+> compatibility problems. For instance, kmod reads this file and currently
+> expects to find exactly one type, so it would need updating as well.
+
+
+OK, understood. Then,
+
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+
+--
+Best Regards
+Masahiro Yamada
