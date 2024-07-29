@@ -1,223 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C011877;
-	Sun, 28 Jul 2024 09:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D4D3A1BF
+	for <linux-modules@vger.kernel.org>; Mon, 29 Jul 2024 01:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722157441; cv=none; b=FfNDeEL685elRHb3BdMmzZ1HgcOLKjt3LwOKgIt4MpJhCCsrvDibIHb8uDPtvMxX0/HjDKrRMbAMeA1XJjWiKe6ZaWueV5fL6tYpR2VMvgpVNolZF8IydThHNcb1oF3AMomQc0aO3di+KNKLIsk4zKwKk+aR2uV29e7zFOrSdxE=
+	t=1722217611; cv=none; b=UghutB7LADMjKgWlz+uvt4IdrCJgK9/YgwOliyocIhAaSTad6Hhm2WjvwR5rTMEW/Ay8/GF/0+robi0M+lcihvGsdmPsinXkxI1OkNEVKBLo1mfcRAsAyyeLZpFjl0gBwGXyVcA3vBQ4NJdLt0RuFLoGw7IGstOtm/XE2w/dTPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722157441; c=relaxed/simple;
-	bh=QxM94LwGA2JdJecwH8apfoLuglqSOMOVfCkvfiW9i/4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gGgSvEufozgKNNX9OWtKMEZsr2tooDLOFP1tQ+cu2ZMl5CO9IvCOIJj31tjSBS69aoazL+z7Ivx71WnMn497IN1VPpZBJtzg8IdGkjalwNKgyi85fvl5Fo/+6dvXxRtn/lb4PuyfvJMO7WbBqJApxLj8OYAXuubnbFHFtWxjvaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBMU8rQg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722217611; c=relaxed/simple;
+	bh=lZuGlOIc3eRYuViK94AAOvBgXPuSdxIjwVbfAN91LpE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cVo+FlPzMNR3sM/vfTScOkJvRf6/J8h1uZYV59X8c0o+R4lGUCTrqxRcZzdjY5nyjiSf8UmXRkFwzUQ65Z/Pkq3+OLF2VWjrsOIp2SSf9gJ4i5StRAWVYdc7EDkWN5WKfRdW8edfs8V26kechPW0FILAoY2gWzeMTR0/KHIP+Hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y8Up7+78; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBMU8rQg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EE4C4AF09;
-	Sun, 28 Jul 2024 09:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722157440;
-	bh=QxM94LwGA2JdJecwH8apfoLuglqSOMOVfCkvfiW9i/4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vBMU8rQg/66YMODUCisd2/xQ0kKep+z0VohpL24KTfO4sKFxbA9s1O8M2UH/6x2Yb
-	 8ekByf6TX1yFzHQVLDf3YKHjQvnwQ0kflQZIQoPHMUwOShW4fTdXbAAt5iqfzrmfRY
-	 nLNEa+WAYcHnBdFpgACSdyTdA0ben4B3eSqp7zjMSV2q4TkG/Nrqmt49ErlHr/pNUN
-	 bJ3EDPv3ac5EwKIF/ERyqs2XmuFnY6R+u40xevC9KvKn8jz7UnsmcBqVNXMcPdgV2I
-	 5YY8F1938N0z/IiV49sP1RklkRJEwUl+OSf1/ny2By6hjmP5VbD24n6UxItS4n1SWR
-	 PkQSi6QhWLY8g==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-52f01993090so3886440e87.2;
-        Sun, 28 Jul 2024 02:04:00 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXqhXIc9n2DAZocDpGpOLdJ9RZ09mxIKD3wrev79HeRnq6yAa5dnMinjLFmZS782Oy04Ik3PgJK5L+eeMNuT/SFoYDvRuVIsGy0lfaEJgCUesoBnKOZ3/Bl+sftO9xeRE007rqn79LmHRVIh9eglnB2AuL7sSNrRYmqT4PDDaU/aSIPSuIeeQ2DOg==
-X-Gm-Message-State: AOJu0Yxkqc3aFPpgLzEHr7zy6+ZEnI5E2VU6HkILn3DyidyjBjAw9auO
-	B0BcMS531CEw9+CVWl5IPEe38Tv+GQfhdzjzg26Ouv1HzFSMuW1QCddQiF5QkNaAfkZQrBiFFyi
-	eWwuK8vH3IgRqrEn/XTYlISGjn34=
-X-Google-Smtp-Source: AGHT+IEA8iKtDLPkOIolC2s6x/f3cSR63CivhHgQ0vStJfRCj7P7AJL1bEamf+xWVVK8nbJy2NaOQncDu9LXWbZTqgU=
-X-Received: by 2002:ac2:54b7:0:b0:52c:db06:ee60 with SMTP id
- 2adb3069b0e04-5309b2bb677mr2809814e87.41.1722157439567; Sun, 28 Jul 2024
- 02:03:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y8Up7+78"
+Message-ID: <23862652-a702-4a5d-b804-db9ee9f6f539@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1722217607;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7iniOVG3gmXmMx4OmearIZzDrv6mcb+oZJZnr0nrBNk=;
+	b=Y8Up7+78RpdUjqbjHPIQbw7hf77OpaqpA9PDUsezW/ro4XhuCufC4VK4aP2RwSJRPwTwsC
+	S/vrbNHe1FA73FXDSpRwZ66++fonyUl1SSO3Qm6B5fDoDpGdfIU66/JbZwbvQch5bcs38D
+	+kQgibNyS71FQyvlL8ltJ5K88WOu72Y=
+Date: Mon, 29 Jul 2024 09:46:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240722090622.16524-1-petr.pavlu@suse.com> <20240722090622.16524-2-petr.pavlu@suse.com>
- <CAK7LNATG-kYuxGgzC7e-BbTPMnSH+MCAEVOXoQkdGYH9xLincA@mail.gmail.com> <90416ccc-8537-489c-ac15-78aacbcb42b0@suse.com>
-In-Reply-To: <90416ccc-8537-489c-ac15-78aacbcb42b0@suse.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 28 Jul 2024 18:03:22 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARMR1Pn3Rj6fC-u3qQC4jQGrasD1mqxg-8qPNPdTy61gw@mail.gmail.com>
-Message-ID: <CAK7LNARMR1Pn3Rj6fC-u3qQC4jQGrasD1mqxg-8qPNPdTy61gw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] module: Split modules_install compression and
- in-kernel decompression
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/4] module: Add module_subinit{_noexit} and
+ module_subeixt helper macros
+To: Christoph Hellwig <hch@infradead.org>, Theodore Ts'o <tytso@mit.edu>,
+ David Sterba <dsterba@suse.cz>, Arnd Bergmann <arnd@arndb.de>
+Cc: kreijack@inwind.it, Luis Chamberlain <mcgrof@kernel.org>,
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+ David Sterba <dsterba@suse.com>, Andreas Dilger <adilger.kernel@dilger.ca>,
+ Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+ Youling Tang <tangyouling@kylinos.cn>
+References: <ZqJjsg3s7H5cTWlT@infradead.org>
+ <61beb54b-399b-442d-bfdb-bad23cefa586@app.fastmail.com>
+ <ZqJwa2-SsIf0aA_l@infradead.org>
+ <68584887-3dec-4ce5-8892-86af50651c41@libero.it>
+ <ZqKreStOD-eRkKZU@infradead.org>
+ <91bfea9b-ad7e-4f35-a2c1-8cd41499b0c0@linux.dev>
+ <ZqOs84hdYkSV_YWd@infradead.org> <20240726152237.GH17473@twin.jikos.cz>
+ <20240726175800.GC131596@mit.edu> <ZqPmPufwqbGOTyGI@infradead.org>
+ <20240727145232.GA377174@mit.edu>
+Content-Language: en-US, en-AU
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Youling Tang <youling.tang@linux.dev>
+In-Reply-To: <20240727145232.GA377174@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jul 25, 2024 at 9:59=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> On 7/22/24 12:23, Masahiro Yamada wrote:
-> > On Mon, Jul 22, 2024 at 6:07=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com=
-> wrote:
-> >>
-> >> The kernel configuration allows specifying a module compression mode. =
-If
-> >> one is selected then each module gets compressed during
-> >> 'make modules_install' and additionally one can also enable support fo=
-r
-> >> a respective direct in-kernel decompression support. This means that t=
-he
-> >> decompression support cannot be enabled without the automatic compress=
-ion.
-> >>
-> >> Some distributions, such as the (open)SUSE family, use a signer servic=
-e for
-> >> modules. A build runs on a worker machine but signing is done by a sep=
-arate
-> >> locked-down server that is in possession of the signing key. The build
-> >> invokes 'make modules_install' to create a modules tree, collects
-> >> information about the modules, asks the signer service for their signa=
-ture,
-> >> appends each signature to the respective module and compresses all mod=
-ules.
-> >>
-> >> When using this arrangment, the 'make modules_install' step produces
-> >> unsigned+uncompressed modules and the distribution's own build recipe =
-takes
-> >> care of signing and compression later.
-> >>
-> >> The signing support can be currently enabled without automatically sig=
-ning
-> >> modules during 'make modules_install'. However, the in-kernel decompre=
-ssion
-> >> support can be selected only after first enabling automatic compressio=
-n
-> >> during this step.
-> >>
-> >> To allow only enabling the in-kernel decompression support without the
-> >> automatic compression during 'make modules_install', separate the
-> >> compression options similarly to the signing options, as follows:
-> >>
-> >>> Enable loadable module support
-> >> [*] Module compression
-> >>       Module compression type (GZIP)  --->
-> >> [*]   Automatically compress all modules
-> >> [ ]   Support in-kernel module decompression
-> >>
-> >> * "Module compression" (MODULE_COMPRESS) is a new main switch for the
-> >>   compression/decompression support. It replaces MODULE_COMPRESS_NONE.
-> >> * "Module compression type" (MODULE_COMPRESS_<type>) chooses the
-> >>   compression type, one of GZ, XZ, ZSTD.
-> >> * "Automatically compress all modules" (MODULE_COMPRESS_ALL) is a new
-> >>   option to enable module compression during 'make modules_install'. I=
-t
-> >>   defaults to Y.
-> >> * "Support in-kernel module decompression" (MODULE_DECOMPRESS) enables
-> >>   in-kernel decompression.
-> >>
-> >> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> >> ---
-> >
-> >
-> >
-> > My preference is to add
-> >  CONFIG_MODULE_DECOMPRESS_GZIP
-> >  CONFIG_MODULE_DECOMPRESS_XZ
-> >  CONFIG_MODULE_DECOMPRESS_ZSTD
-> > instead of
-> >  CONFIG_MODULE_COMPRESS_ALL.
-> >
-> >
-> >
-> >
-> > For example,
-> >
-> >
-> > if MODULE_DECOMPRESS
-> >
-> > config MODULE_DECOMPRESS_GZIP
-> >        bool "Support in-kernel GZIP decompression for module"
-> >        default MODULE_COMPRESS_GZIP
-> >
-> > config MODULE_DECOMPRESS_XZ
-> >        bool "Support in-kernel XZ decompression for module"
-> >        default MODULE_COMPRESS_XZ
-> >
-> > config MODULE_DECOMPRESS_ZSTD
-> >        bool "Support in-kernel ZSTD decompression for module"
-> >        default MODULE_COMPRESS_ZSTD
-> >
-> > endif
-> >
-> >
-> >
-> >
-> >
-> > OR, maybe
-> >
-> >
-> >
-> > config MODULE_DECOMPRESS_GZIP
-> >        bool "Support in-kernel GZIP decompression for module"
-> >        select MODULE_DECOMPRESS
-> >
-> > config MODULE_DECOMPRESS_XZ
-> >        bool "Support in-kernel XZ decompression for module"
-> >        select MODULE_DECOMPRESS
-> >
-> > config MODULE_DECOMPRESS_ZSTD
-> >        bool "Support in-kernel ZSTD decompression for module"
-> >        select MODULE_DECOMPRESS
-> >
-> > config MODULE_DECOMPRESS
-> >        bool
-> >
-> >
-> >
-> >
-> > You can toggle MODULE_COMPRESS_GZIP and
-> > MODULE_DECOMPRESS_GZIP independently
->
-> I can implement this, but what would be a use case to enable multiple mod=
-ule
-> decompression types in the kernel?
+On 27/07/2024 22:52, Theodore Ts'o wrote:
+> On Fri, Jul 26, 2024 at 11:09:02AM -0700, Christoph Hellwig wrote:
+>> On Fri, Jul 26, 2024 at 01:58:00PM -0400, Theodore Ts'o wrote:
+>>> Yeah, that's my reaction as well.  This only saves 50 lines of code in
+>>> ext4, and that includes unrelated changes such as getting rid of "int
+>>> i" and putting the declaration into the for loop --- "for (int i =
+>>> ...").  Sure, that saves two lines of code, but yay?
+>>>
+>>> If the ordering how the functions gets called is based on the magic
+>>> ordering in the Makefile, I'm not sure this actually makes the code
+>>> clearer, more robust, and easier to maintain for the long term.
+>> So you two object to kernel initcalls for the same reason and would
+>> rather go back to calling everything explicitly?
+> I don't oject to kernel initcalls which don't have any
+> interdependencies and where ordering doesn't matter.
+1. Previous version implementation: array mode (see link 1) :
+    Advantages:
+    - Few changes, simple principle, easy to understand code.
+    Disadvantages:
+    - Each modified module needs to maintain an array, more code.
+
+2. Current implementation: explicit call subinit in initcall (see link 2) :
+    Advantages:
+    - Direct use of helpes macros, the subinit call sequence is
+      intuitive, and the implementation is relatively simple.
+    Disadvantages:
+    - helper macros need to be implemented compared to array mode.
+
+3. Only one module_subinit per file (not implemented, see link 3) :
+    Advantage:
+    - No need to display to call subinit.
+    Disadvantages:
+    - Magic order based on Makefile makes code more fragile,
+    - Make sure that each file has only one module_subinit,
+    - It is not intuitive to know which subinits the module needs
+      and in what order (grep and Makefile are required),
+    - With multiple subinits per module, it would be difficult to
+      define module_{subinit, subexit} by MODULE, and difficult to
+      rollback when initialization fails (I haven't found a good way
+      to do this yet).
 
 
-I just thought there is a possibility where the singer service A
-compresses modules in GZIP, and the singer service B in XZ, etc.
+Personally, I prefer the implementation of method two.
 
-If the compression type is predictable at the Kbuild time,
-it is fine.
+Links:
+[1]: 
+https://lore.kernel.org/all/20240711074859.366088-4-youling.tang@linux.dev/
+[2]: 
+https://lore.kernel.org/all/20240723083239.41533-2-youling.tang@linux.dev/
+[3]: https://lore.kernel.org/all/ZqKreStOD-eRkKZU@infradead.org/
 
-
-
-
->
-> >
-> >
-> > Of course, the current kernel/module/decompress.c does not
-> > work when multiple (or zero) CONFIG_MODULE_DECOMPRESS_* is
-> > enabled. It needs a little modification.
->
-> One issue is with the file /sys/module/compression which shows the module
-> decompression type supported by the kernel. If multiple types are allowed=
- then
-> I think they should all get listed there. This could however create some
-> compatibility problems. For instance, kmod reads this file and currently
-> expects to find exactly one type, so it would need updating as well.
-
-
-OK, understood. Then,
-
-Acked-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
-
---
-Best Regards
-Masahiro Yamada
+Thanks,
+Youling.
