@@ -1,208 +1,665 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDD9170A14
-	for <linux-modules@vger.kernel.org>; Thu,  1 Aug 2024 11:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF052189BA2;
+	Thu,  1 Aug 2024 11:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722511346; cv=none; b=Ztm3XW3vjRg4TXNYj0B1qqep5/nzYVrBOf037dCs/njeh/MTWZ14rQo47tnHhrZ7bCwkAxA49A8MSz5ly8UCj24vlq9hVjUDhEpnr4hH0qROQvu5H0IdPkFynQe7inaO2UqZ1/6lL2xhSzlTc8dutYtJ8mRo+ZD/oRKmsWFxZ4Y=
+	t=1722511808; cv=none; b=Mv6DrsY1+uhYGxEPjTOWqJXUQOSjdKaVYexD0FW9HuumuEczC7lbHmJpLRgblaPQqP8TaPbZzjiY+fZHBHYOUlxBg8wuZgBKc3CnmI4HWgF5+CFe2IUgeTLZUsscdJ+YG7Pd9ZT3Aev96cXJOqvDvxWcwiKKpYvo68WLL2x+YO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722511346; c=relaxed/simple;
-	bh=wT1WeQtWSF4pKg/aqyS1PtzbeURzHustn4W7PgKlu/s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SQSxPL3FCsjRCeChcMEkOATbz/0/IkjPNQZ8CUlQHNpAou9xK6eymUIr48Yvgi3YjaOqUmRuwIrQ399reSjrWC6d8Hc3lDTBRnQ8UJOumhHqUjhhSigB7YvATGT1ZAY+5MUuaQpa3f6v2WmhPc1H9FcltqSVXslHnH2EcD/dFOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QV5uuEkL; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1722511808; c=relaxed/simple;
+	bh=VgtZ2oOZGYyxn6HtiWcbqX+Ai1fITzrNHpvkrF7eIOI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HPDnD6k5H0AtR3t2+c4S51vGaovPULRs/yvw8N72L2gZc8e/QHBdlb3mp4ZpuqW3WTyZetv4n6/Ho8mAclUzIfr+MBUCOFXvdJyU5u5J9sZTRr6lF+E/MoCZEgPoNW9BIiUK+IycwnTiiwmCDnN6qnaxMwrPGgKTHzHEe5rngeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=metaspace.dk; spf=pass smtp.mailfrom=metaspace.dk; dkim=pass (2048-bit key) header.d=metaspace.dk header.i=@metaspace.dk header.b=hHXqIiYR; arc=none smtp.client-ip=185.70.43.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=metaspace.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=metaspace.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QV5uuEkL"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a7aada2358fso336029466b.0
-        for <linux-modules@vger.kernel.org>; Thu, 01 Aug 2024 04:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1722511342; x=1723116142; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2qlZj/baYl2pbc9LuE7Qbzb/56dqo6s6gnzipMfbe3g=;
-        b=QV5uuEkLlhu0v3M2uPfkYKSaz6GZaHbVnu102+7axKQdD4l8dQLcds3JLNFXbZVCLD
-         kFpkil7+YE8t1NCKM8OqTHgKGlan1i8Z2FYmB7eFijfR1uYLzRJ67n04PBn5GSP2f0q+
-         r0PcCG/0xY6tuXSDjOeC43cVTekKxpYu+WhNj985Yq3RmupPV4Pj4RDJu06tu/sDX+gR
-         pQ5Muea2WHTE0H2st0UlBopKKt9DtEU1Ef/XLj2usTlvmK12nHnxHZVtxGUhqaMTg1vw
-         Ja3G5MHKm+QQkb+mamMMoTmX5n8Qowhn1AyEstPOpoA7+AAGLTsltSSPAJ6wYja4qbri
-         fHwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722511342; x=1723116142;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2qlZj/baYl2pbc9LuE7Qbzb/56dqo6s6gnzipMfbe3g=;
-        b=vJJOQVGVLLbDapPaSPWkmIC4sA4ahEQZZXks/rR7HfrJYHcbOCEjIu3Pl8Uqm8j8EW
-         GUYEZR3SkTqr8/ojc9iMKxDoVZJeJfgwN0PS55N4ApgeoTlgXbIWNtGjZRqgbNPMvp/B
-         lifWWfe4ANgiDDxfHRLrLd51TnAaut31arMz+o0HaguaykVlS5hM7l2QAJITQs2CG7bn
-         YAHU2MAeKVmvh5HrOg8oWnuxwUQZ48zqVPs0BSTCRofcjMPs+SFgv9AY0SfVbEoKDtbB
-         CTnbs/tlP6ioOlqD2fJcvBXCBr7p+bj0Uq8t8LaMYt7x3iozwY97CzpOavpva6OTdMZu
-         uWWw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9M+eyvHav2jGQZgQqMFUPErenF1xAMZGaJF1jYETY5iIF3KLA9juQhtJTsCkKUz9/P3zXojYrTeG1dVXyQjFsE+WHVqv6q+jF7TGLAA==
-X-Gm-Message-State: AOJu0YwbcGVBkAxm/iTEQ656SYEzKA8VGv49Y2rXHSvqu0r1lWNQ7LWj
-	yKgTqeTLiWo2mBgetyQEJij7GNIt5fIvj1K3D2hNPrMbbKylP3NehgDc3WJC15w=
-X-Google-Smtp-Source: AGHT+IHSi4OBNzaU+B2LgJN8/gLfHe2x6D+r2Bobw+i8XhnHPuZjnSs85LOFa27DBHA9NywFZOhCkA==
-X-Received: by 2002:a17:907:1608:b0:a7a:bae8:f2b5 with SMTP id a640c23a62f3a-a7dbcd4b357mr54629866b.36.1722511342367;
-        Thu, 01 Aug 2024 04:22:22 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab23624sm885445266b.20.2024.08.01.04.22.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Aug 2024 04:22:22 -0700 (PDT)
-Message-ID: <f08678b1-260f-4200-889b-a4ec016fc7e1@suse.com>
-Date: Thu, 1 Aug 2024 13:22:21 +0200
+	dkim=pass (2048-bit key) header.d=metaspace.dk header.i=@metaspace.dk header.b="hHXqIiYR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=metaspace.dk;
+	s=protonmail; t=1722511794; x=1722770994;
+	bh=t5Aam9RncmzXx3s9IGiR6QSwyNprlAtYBAhFTSqZMC0=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=hHXqIiYRdfHdZ0jJ5VU6NeX6oOjO/VsJoww6/n5RWR++pg0EmtIdfmLwl8K5NL4Wu
+	 nrWssx34gtU/rODLJSWnm38n/JBucnXxaZTpEvNm2fYlHVKfkZOKxNNCEOEkAfklSi
+	 KhSRb2YmQpB3f6vlQpN8v8zO0JcjMKIL/PZsG4iJgy5bJRM2Dju9StpFW2UzM6GNRd
+	 FV240nptmt2Mq7syvw8rW2IxjJWCOrDp/5OPCWLs3L8H1XAY63Y6JuAFJsBqeypv1l
+	 SSrqgP+/nW+o4kyfPvVIGSRrj44WVOjO2kwpPi1LhU2Kt1CiPqBLGupox8nuY8t0qI
+	 lkq443KL5TSfA==
+Date: Thu, 01 Aug 2024 11:29:49 +0000
+To: Benno Lossin <benno.lossin@proton.me>
+From: Andreas Hindborg <nmi@metaspace.dk>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, Andreas Hindborg <a.hindborg@samsung.com>, Adam Bratschi-Kaye <ark.email@gmail.com>
+Subject: Re: [PATCH] rust: add `module_params` macro
+Message-ID: <87plqso50o.fsf@metaspace.dk>
+In-Reply-To: <2838cf2e-936c-45de-bb19-af9da66fbe00@proton.me>
+References: <20240705111455.142790-1-nmi@metaspace.dk> <2838cf2e-936c-45de-bb19-af9da66fbe00@proton.me>
+Feedback-ID: 113830118:user:proton
+X-Pm-Message-ID: 0a0b10e43e5537d2a38d7adfaba05a3979547fb0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/15] Implement MODVERSIONS for Rust
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-References: <20240617175818.58219-17-samitolvanen@google.com>
- <0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com>
- <CABCJKueGRBdFfGW-cvOvqxc-a85GpxtwPmLdE_1RiAkNLrEg+g@mail.gmail.com>
- <00714a65-953f-4885-9229-1990543c4154@suse.com>
- <CABCJKucj7zjc4=EiFdSnzNDBvQmaWBBt_KJsTq1ybp=Vegp5eQ@mail.gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <CABCJKucj7zjc4=EiFdSnzNDBvQmaWBBt_KJsTq1ybp=Vegp5eQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 7/26/24 23:05, Sami Tolvanen wrote:
-> On Mon, Jul 22, 2024 at 8:20 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
->>
->> From my perspective, I'm okay if gendwarfksyms doesn't provide
->> functionality to compare a new object file with its reference symtypes
->> file.
->>
->> As mentioned, genksyms has this functionality but I actually think the
->> way it works is not ideal. Its design is to operate on one compilation
->> unit at the time. This has the advantage that a comparison of each file
->> is performed in parallel during the build, simply because of the make
->> job system. On the other hand, it has two problems.
->>
->> The first one is that genksyms doesn't provide a comparison of the
->> kernel as a whole. This means that the tool gives rather scattered and
->> duplicated output about changed structs in the build log. Ideally, one
->> would like to see a single compact report about what changed at the end
->> of the build.
-> 
-> Sure, that makes sense. Android uses STG for this, which might be
-> useful to other folks too:
-> 
-> https://android.googlesource.com/platform/external/stg/
-> https://android.googlesource.com/platform/external/stg/+/refs/heads/main/doc/stgdiff.md#output-formats
 
-STG is an interesting tool. I've played with it a bit last year. To be
-frank, I was surprised to see a new tool being proposed by Google to
-generate modversion CRCs from DWARF instead of potentially extending
-your STG project for this purpose. I'm not sure if it is something that
-you folks have considered and evaluated.
+Hi Benno,
 
->> A few months ago, I also started working on a tool inspired by this
->> script. The goal is to have similar functionality but hopefully with
->> a much faster implementation. Hence, this tool is written in a compiled
->> language (Rust at the moment) and should also become multi-threaded. I'm
->> hoping to find some time to make progress on it and make the code
->> public. It could later be added to the upstream kernel to replace the
->> comparison functionality implemented by genksyms, if there is interest.
->>
->> So as mentioned, I'm fine if gendwarfksyms doesn't have this
->> functionality. However, for distributions that rely on the symtypes
->> format, I'd be interested in having gendwarfksyms output its dump data
->> in this format as well.
-> 
-> We can definitely tweak the output format, but I'm not sure if making
-> it fully compatible with the genksyms symtypes format is feasible,
-> especially for Rust code. I also intentionally decided to use DWARF
-> tag names in the output instead of shorthands like s# etc. to make it
-> a bit more readable.
+Thanks for the comments!
 
-Sure, it might be necessary to extend the symtypes format a bit, for
-example, by allowing spaces in type names. What other problems do you
-see?
+"Benno Lossin" <benno.lossin@proton.me> writes:
 
-The example I showed preserves the DWARF tag names in type descriptions.
-Cross-references and the target type names use the s# prefix as they
-they need to be distinguished from other tokens.
+> On 05.07.24 13:15, Andreas Hindborg wrote:
 
->> For example, instead of producing:
->>
->> gendwarfksyms: process_exported_symbols: _some_mangled_func_name (@ XYZ)
->> subprogram(
->>    [formal parameters...]
->> )
->> -> structure_type core::result::Result<(), core::fmt::Error> {
->>    [a description of the structure...]
->> };
->>
->> .. the output could be something like this:
->>
->> S#'core::result::Result<(), core::fmt::Error>' structure_type core::result::Result<(), core::fmt::Error> { [a description of the structure...] }
->> _some_mangled_func_name subprogram _some_mangled_func_name ( [formal parameters...] ) -> S#'core::result::Result<(), core::fmt::Error>'
-> 
-> This wouldn't be enough to make the output format compatible with
-> symtypes though. genksyms basically produces a simple key-value pair
-> database while gendwarfksyms currently outputs the fully expanded type
-> string for each symbol. If you need the tool to produce a type
-> database, it might also be worth discussing if we should use a bit
-> less ad hoc format in that case.
+[...]
 
-What I think is needed is the ability to compare an updated kernel with
-some previous reference and have an output that clearly and accurately
-shows why CRCs of some symbols changed. The previous reference should be
-possible to store in Git together with the kernel source. It means it
-should be ideally some text format and limited in size. This is what
-distributions that care about stable kABI do in some form currently.
+>> +
+>> +/// Types that can be used for module parameters.
+>> +///
+>> +/// Note that displaying the type in `sysfs` will fail if
+>> +/// [`core::str::from_utf8`] (as implemented through the [`core::fmt::D=
+isplay`]
+>> +/// trait) writes more than [`PAGE_SIZE`] bytes (including an additiona=
+l null
+>> +/// terminator).
+>> +///
+>> +/// [`PAGE_SIZE`]: `bindings::PAGE_SIZE`
+>> +pub trait ModuleParam: core::fmt::Display + core::marker::Sized {
+>> +    /// The `ModuleParam` will be used by the kernel module through thi=
+s type.
+>> +    ///
+>> +    /// This may differ from `Self` if, for example, `Self` needs to tr=
+ack
+>> +    /// ownership without exposing it or allocate extra space for other=
+ possible
+>> +    /// parameter values. This is required to support string parameters=
+ in the
+>> +    /// future.
+>> +    type Value: ?Sized;
+>> +
+>> +    /// Whether the parameter is allowed to be set without an argument.
+>> +    ///
+>> +    /// Setting this to `true` allows the parameter to be passed withou=
+t an
+>> +    /// argument (e.g. just `module.param` instead of `module.param=3Df=
+oo`).
+>> +    const NOARG_ALLOWED: bool;
+>
+> I think, there is a better way of doing this. Instead of this bool, we
+> do the following:
+> 1. have a `const DEFAULT: Option<Self>`
+> 2. change the type of the argument of `try_from_param_arg` to
+>    `&'static [u8]`
+>
+> That way we don't have the weird behavior of `try_from_param_arg` that
+> for params that don't have a default value.
 
-This functionality would be needed if some distribution wants to
-maintain stable Rust kABI (not sure if it is actually feasible), or if
-the idea is for gendwarfksyms to be a general tool that could replace
-genksyms. I assume for the sake of argument that this is the case.
+Since we have no parameter types for which `NOARG_ALLOWED` is true in
+this patch set, it is effectively dead code. I will remove it.
 
-Gendwarfksyms could implement this functionality on its own, or as
-discussed, I believe it could provide a symtypes-like dump and a second
-tool could be used to work with this format and for comparing it.
+>
+>> +
+>> +    /// Convert a parameter argument into the parameter value.
+>> +    ///
+>> +    /// `None` should be returned when parsing of the argument fails.
+>> +    /// `arg =3D=3D None` indicates that the parameter was passed witho=
+ut an
+>> +    /// argument. If `NOARG_ALLOWED` is set to `false` then `arg` is gu=
+aranteed
+>> +    /// to always be `Some(_)`.
+>> +    ///
+>> +    /// Parameters passed at boot time will be set before [`kmalloc`] i=
+s
+>> +    /// available (even if the module is loaded at a later time). Howev=
+er, in
+>> +    /// this case, the argument buffer will be valid for the entire lif=
+etime of
+>> +    /// the kernel. So implementations of this method which need to all=
+ocate
+>> +    /// should first check that the allocator is available (with
+>> +    /// [`crate::bindings::slab_is_available`]) and when it is not avai=
+lable
+>> +    /// provide an alternative implementation which doesn't allocate. I=
+n cases
+>> +    /// where the allocator is not available it is safe to save referen=
+ces to
+>> +    /// `arg` in `Self`, but in other cases a copy should be made.
+>> +    ///
+>> +    /// [`kmalloc`]: ../../../include/linux/slab.h
+>> +    fn try_from_param_arg(arg: Option<&'static [u8]>) -> Option<Self>;
+>
+> Do we want this to return `Result` instead?
+> Or rather, why is this returning `Option`?
 
-From my point of view, the current --debug format is not suitable for
-this purpose because its expanded and unstructured form means it is
-bloated and hard to compare with a previous reference.
+Some legacy cruft is going on here I think. At some point in the past
+the patch set supported parameters without value, and this option was
+supposed to represent the presence of a value. It looks like it then got
+aliased with parse errors.
 
-I'm also not quite yet sold on using separate DWARF tooling, such as
-libabigail or STG, to actually understand why gendwarfksyms produced
-a different CRC for some symbol. Using these tools makes sense in the
-genksyms world, where genksyms operates on the source code level and
-this additional tooling can only work on debug data.
+Since we do not support parameters without value in this patch set, I
+will update the return type and documentation to handle parse errors
+with `Result`.
 
-With gendwarfksyms working directly with DWARF data, it doesn't seem
-appealing to me to first run gendwarfksyms to produce CRCs, compare them
-with their reference, and if they are different, use a second tool to
-process the same DWARF data again and with some luck hopefully get an
-actual answer why the CRCs changed. I'm worried that users might
-encounter inaccurate answers if the two tools interpret the input data
-differently.
+>
+>> +
+>> +    /// Get the current value of the parameter for use in the kernel mo=
+dule.
+>> +    ///
+>> +    /// This function should not be used directly. Instead use the wrap=
+per
+>> +    /// `read` which will be generated by [`macros::module`].
+>> +    fn value(&self) -> &Self::Value;
+>> +
+>> +    /// Set the module parameter from a string.
+>> +    ///
+>> +    /// Used to set the parameter value at kernel initialization, when =
+loading
+>> +    /// the module or when set through `sysfs`.
+>> +    ///
+>> +    /// `param.arg` is a pointer to `*mut Self` as set up by the [`modu=
+le!`]
+>> +    /// macro.
+>> +    ///
+>> +    /// See `struct kernel_param_ops.set`.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// If `val` is non-null then it must point to a valid null-termina=
+ted
+>> +    /// string. The `arg` field of `param` must be an instance of `Self=
+`.
+>> +    ///
+>> +    /// # Invariants
+>> +    ///
+>> +    /// Currently, we only support read-only parameters that are not re=
+adable
+>> +    /// from `sysfs`. Thus, this function is only called at kernel
+>> +    /// initialization time, or at module load time, and we have exclus=
+ive
+>> +    /// access to the parameter for the duration of the function.
+>> +    ///
+>> +    /// [`module!`]: macros::module
+>> +    unsafe extern "C" fn set_param(
+>> +        val: *const core::ffi::c_char,
+>> +        param: *const crate::bindings::kernel_param,
+>> +    ) -> core::ffi::c_int {
+>> +        let arg =3D if val.is_null() {
+>> +            None
+>> +        } else {
+>> +            // SAFETY: By function safety requirement, val is non-null =
+and
+>> +            // null-terminated. By C API contract, `val` is live and va=
+lid for
+>> +            // reads for the duration of this function.
+>> +            Some(unsafe { CStr::from_char_ptr(val).as_bytes() })
+>> +        };
+>> +        match Self::try_from_param_arg(arg) {
+>> +            Some(new_value) =3D> {
+>> +                // SAFETY: `param` is guaranteed to be valid by C API c=
+ontract
+>> +                // and `arg` is guaranteed to point to an instance of `=
+Self`.
+>> +                let old_value =3D unsafe { (*param).__bindgen_anon_1.ar=
+g as *mut Self };
+>> +                // SAFETY: `old_value` is valid for writes, as we have =
+exclusive
+>> +                // access. `old_value` is pointing to an initialized st=
+atic, an
+>> +                // so it is properly initialized.
+>> +                let _ =3D unsafe { core::ptr::replace(old_value, new_va=
+lue) };
+>> +                0
+>> +            }
+>> +            None =3D> EINVAL.to_errno(),
+>> +        }
+>> +    }
+>
+> Do implementers need to override this function? If not, then I would
+> move it out of the trait.
 
-> 
-> One more thing to note about the current --debug output is that it
-> directly correlates with the debugging information and thus may not
-> contain all aliases. For example, the Rust compiler deduplicates
-> identical function implementations (e.g. Deref::deref and
-> DerefMut::deref_mut etc.), but only one of the symbol names appears in
-> DWARF. We use symbol addresses to print out #SYMVERs also for the
-> aliases, but they don't show up in the debugging output right now.
+Ok, makes sense =F0=9F=91=8D
 
-Thanks,
-Petr
+>
+>> +
+>> +    /// Write a string representation of the current parameter value to=
+ `buf`.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// Must not be called.
+>> +    ///
+>> +    /// # Note
+>> +    ///
+>> +    /// This should not be called as we declare all parameters as read =
+only.
+>> +    unsafe extern "C" fn get_param(
+>> +        _buf: *mut core::ffi::c_char,
+>> +        _param: *const crate::bindings::kernel_param,
+>> +    ) -> core::ffi::c_int {
+>> +        0
+>> +    }
+>
+> Ditto.
+
+Ok.
+
+>
+>> +
+>> +    /// Drop the parameter.
+>> +    ///
+>> +    /// Called when unloading a module.
+>> +    ///
+>> +    /// # Safety
+>> +    ///
+>> +    /// The `arg` field of `param` must be an initialized instance of `=
+Self`.
+>> +    unsafe extern "C" fn free(arg: *mut core::ffi::c_void) {
+>> +        // SAFETY: By function safety requirement, `arg` is an initiali=
+zed
+>> +        // instance of `Self`. By C API contract, `arg` will not be use=
+d after
+>> +        // this function returns.
+>> +        unsafe { core::ptr::drop_in_place(arg as *mut Self) };
+>> +    }
+>
+> Ditto.
+
+Ok.
+
+>
+>> +}
+>
+> [...]
+>
+>> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+>> index 563dcd2b7ace..dc0b47879a8c 100644
+>> --- a/rust/macros/helpers.rs
+>> +++ b/rust/macros/helpers.rs
+>> @@ -107,6 +107,14 @@ pub(crate) struct Generics {
+>>      pub(crate) ty_generics: Vec<TokenTree>,
+>>  }
+>>=20
+>> +pub(crate) fn get_string(it: &mut token_stream::IntoIter, expected_name=
+: &str) -> String {
+>
+> This name is rather weird, `get_field` makes more sense IMO.
+
+Looking at this, the `get` prefix is not aligned with other helpers. How
+about `expect_string_field` ?
+
+>
+>> +    assert_eq!(expect_ident(it), expected_name);
+>> +    assert_eq!(expect_punct(it), ':');
+>> +    let string =3D expect_string(it);
+>> +    assert_eq!(expect_punct(it), ',');
+>
+> Why do we require a trailing comma?
+
+For consistency with existing module macro. All keys must be terminated
+with comma.
+
+
+[...]
+
+>> +
+>> +    fn emit_params(&mut self, info: &ModuleInfo) {
+>
+> This parses the parameters, but shouldn't that happen in
+> `ModuleInfo::parse`? I agree that it should be a different function, but
+> I don't think that we should store the params as a `Group` and fail when
+> we emit the params.
+
+I can move the parsing to the parsing stage =F0=9F=91=8D
+
+>
+>> +        if let Some(params) =3D &info.params {
+>> +            assert_eq!(params.delimiter(), Delimiter::Brace);
+>> +
+>> +            let mut it =3D params.stream().into_iter();
+>> +
+>> +            loop {
+>> +                let param_name =3D match it.next() {
+>> +                    Some(TokenTree::Ident(ident)) =3D> ident.to_string(=
+),
+>> +                    Some(_) =3D> panic!("Expected Ident or end"),
+>> +                    None =3D> break,
+>> +                };
+>> +
+>> +                assert_eq!(expect_punct(&mut it), ':');
+>> +                let param_type =3D expect_ident(&mut it);
+>> +                let group =3D expect_group(&mut it);
+>> +                assert_eq!(expect_punct(&mut it), ',');
+>
+> Why do we require a trailing comma?
+
+For consistency.
+
+>
+>> +
+>> +                assert_eq!(group.delimiter(), Delimiter::Brace);
+>
+> This check will should be immediately after expecting the group.=20
+
+Yes.
+
+>
+>> +
+>> +                let mut param_it =3D group.stream().into_iter();
+>> +                let param_default =3D get_param_default(&mut param_it);
+>
+> I don't understand why this is put into its own (5 LOC) function and
+> other parts of this function are not. If you can separate parsing from
+> emitting better, this will probably improve.
+
+It is an easy thing to break out and adding it back inline does not do
+anything good IMO. Let's see how it looks when I separate parsing and
+emitting.
+
+>
+>> +                let param_description =3D get_string(&mut param_it, "de=
+scription");
+>> +                expect_end(&mut param_it);
+>> +
+>> +                let (param_kernel_type, ops): (String, _) =3D (
+>
+> Why do you need to specify the type like this?
+
+Legacy cruft. I will remove it.
+
+>
+>> +                    param_type.to_string(),
+>> +                    param_ops_path(&param_type).to_string(),
+>> +                );
+>> +
+>> +                self.emit_param("parmtype", &param_name, &param_kernel_=
+type);
+>
+> Is the spelling intentional? "parmtype"?
+
+This is intentional. I don't think the kernel is ever parsing this, but
+it is parsed by the `modinfo` tool.
+
+>
+>> +                self.emit_param("parm", &param_name, &param_description=
+);
+>> +                let param_type_internal =3D param_type.clone();
+>> +
+>> +                let read_func =3D format!(
+>> +                    "
+>> +                        pub(crate) fn read(&self)
+>> +                            -> &<{param_type_internal}
+>> +                               as kernel::module_param::ModuleParam>::V=
+alue {{
+>
+> Please add a `::` in front of `kernel::module_param::ModuleParam`. There
+> are more instances below.
+
+Thanks.
+
+>
+>> +                            // Note: when we enable r/w parameters, we =
+need to lock here.
+>> +
+>> +                            // SAFETY: Parameters do not need to be loc=
+ked because they are
+>> +                            // read only or sysfs is not enabled.
+>> +                            unsafe {{
+>> +                                <{param_type_internal} as kernel::modul=
+e_param::ModuleParam>::value(
+>> +                                    &__{name}_{param_name}_value
+>> +                                )
+>> +                            }}
+>> +                        }}
+>> +                    ",
+>> +                    name =3D info.name,
+>> +                    param_name =3D param_name,
+>> +                    param_type_internal =3D param_type_internal,
+>> +                );
+>> +
+>> +                let kparam =3D format!(
+>> +                    "
+>> +                    kernel::bindings::kernel_param__bindgen_ty_1 {{
+>> +                        // SAFETY: Access through the resulting pointer=
+ is
+>> +                        // serialized by C side and only happens before=
+ module
+>> +                        // `init` or after module `drop` is called.
+>> +                        arg: unsafe {{ &__{name}_{param_name}_value }}
+>> +                            as *const _ as *mut core::ffi::c_void,
+>
+> Here you should use `addr_of[_mut]!` instead of taking a reference.
+
+This is a static initializer, so it would be evaluated in const context.
+At that time, this is going to be the only reference to
+`&__{name}_{param_name}_value` which would be const. So it should be
+fine?
+
+The safety comment is wrong though.
+
+>Also
+> will this pointer be used to write to the static, in that case you need
+> `_mut!`.
+
+Not in this version of the patch set, but potentially in future iterations.
+
+>
+>> +                    }},
+>> +                ",
+>> +                    name =3D info.name,
+>> +                    param_name =3D param_name,
+>> +                );
+>
+> What is the reason for putting `kparam` and `read_func` outside of the
+> `write!` below? I think it would be easier to read if they are inlined.
+
+It had different shapes based on other options in the original patch
+set. I guess I can just inline it in this version.
+
+>
+>> +                write!(
+>> +                    self.param_buffer,
+>> +                    "
+>> +                static mut __{name}_{param_name}_value: {param_type_int=
+ernal} =3D {param_default};
+>> +
+>> +                pub(crate) struct __{name}_{param_name};
+>> +
+>> +                impl __{name}_{param_name} {{ {read_func} }}
+>> +
+>> +                pub(crate) const {param_name}: __{name}_{param_name} =
+=3D __{name}_{param_name};
+>
+> Why do we need a unit struct as a constant? I think it would make more
+> sense to have a unit struct/empty enum as the type and the `read`
+> function be without a receiver.
+
+To be able to call `module_parameters::my_parameter.read()`. Other
+options would be `module_parameters::my_parameter::read()` or
+`module_parameters::my_parameter_read()`.
+
+I don't think there will be a difference in the generated machine code.
+I also don't have any particular preference. Probably
+`module_parameters::my_parameter::read()` is the most idiomatic one.
+
+>
+>> +
+>> +                // Note: the C macro that generates the static structs =
+for the `__param` section
+>> +                // asks for them to be `aligned(sizeof(void *))`. Howev=
+er, that was put in place
+>> +                // in 2003 in commit 38d5b085d2a0 (\"[PATCH] Fix over-a=
+lignment problem on x86-64\")
+>> +                // to undo GCC over-alignment of static structs of >32 =
+bytes. It seems that is
+>> +                // not the case anymore, so we simplify to a transparen=
+t representation here
+>> +                // in the expectation that it is not needed anymore.
+>> +                // TODO: Revisit this to confirm the above comment and =
+remove it if it happened.
+>
+> Should this TODO be fixed before this is merged? Or do you intend for it
+> to stay?
+> If this is indeed correct, should this also be changed in the C side (of
+> course a different patch)?
+
+I dug into this. The original code in this patch must be quite old,
+because that the code the comment refers to was changed in Nov 2020 from
+`aligned(sizeof(void *))` to `__aligned(__alignof__(struct
+kernel_param))`. The commit message says that the rationale for not
+removing the alignment completely is to prevent the compiler from
+increasing the alignment, as this would mess up the array stride used in
+the `__param` section.
+
+So I think we can remove the comment and keep `repr(transparent)`, right?
+I think `rustc` would not increase the alignment of a `repr(C)` struct
+for optimization purposes?
+
+>
+>> +                /// Newtype to make `bindings::kernel_param` `Sync`.
+>> +                #[repr(transparent)]
+>> +                struct __{name}_{param_name}_RacyKernelParam(kernel::bi=
+ndings::kernel_param);
+>> +
+>> +                // SAFETY: C kernel handles serializing access to this =
+type. We
+>> +                // never access from Rust module.
+>> +                unsafe impl Sync for __{name}_{param_name}_RacyKernelPa=
+ram {{
+>> +                }}
+>
+> Any reason to put the `}` on the next line?
+
+No. Do you have any tricks for formatting multi line strings of code like t=
+his?
+
+>
+>> +
+>> +                #[cfg(not(MODULE))]
+>> +                const __{name}_{param_name}_name: *const core::ffi::c_c=
+har =3D
+>> +                    b\"{name}.{param_name}\\0\" as *const _ as *const c=
+ore::ffi::c_char;
+>> +
+>> +                #[cfg(MODULE)]
+>> +                const __{name}_{param_name}_name: *const core::ffi::c_c=
+har =3D
+>> +                    b\"{param_name}\\0\" as *const _ as *const core::ff=
+i::c_char;
+>> +
+>> +                #[link_section =3D \"__param\"]
+>> +                #[used]
+>> +                static __{name}_{param_name}_struct: __{name}_{param_na=
+me}_RacyKernelParam =3D
+>> +                    __{name}_{param_name}_RacyKernelParam(kernel::bindi=
+ngs::kernel_param {{
+>> +                        name: __{name}_{param_name}_name,
+>> +                        // SAFETY: `__this_module` is constructed by th=
+e kernel at load time
+>> +                        // and will not be freed until the module is un=
+loaded.
+>> +                        #[cfg(MODULE)]
+>> +                        mod_: unsafe {{ &kernel::bindings::__this_modul=
+e as *const _ as *mut _ }},
+>> +                        #[cfg(not(MODULE))]
+>> +                        mod_: core::ptr::null_mut(),
+>> +                        // SAFETY: This static is actually constant as =
+seen by
+>> +                        // module code. But we need a unique address fo=
+r it, so it
+>> +                        // must be static.
+>
+> This safety comment makes no sense, should it be a normal comment?
+
+I removed the unsafe block and the safety comment as unsafe is not
+required here.
+
+>
+>> +                        ops: unsafe {{ &{ops} }} as *const kernel::bind=
+ings::kernel_param_ops,
+>
+> Why is this `unsafe` block needed, the `make_param_ops` macro declares a
+> non-mut static.
+>
+>> +                        perm: 0, // Will not appear in sysfs
+>> +                        level: -1,
+>
+> Why this value?
+
+The kernel has 8 initcall levels. Parameters can be assigned one of
+these levels to have the parameter initialized just before the init
+functions for that level are executed. -1 has no effect for loadable module=
+s, but
+for built-in modules it looks like the args will be initialized just after =
+early
+boot args (level 0).
+
+At any rate, this is what C side does.
+
+>
+>> +                        flags: 0,
+>> +                        __bindgen_anon_1: {kparam}
+>> +                    }});
+>> +                ",
+>> +                    name =3D info.name,
+>> +                    param_type_internal =3D param_type_internal,
+>> +                    read_func =3D read_func,
+>> +                    param_default =3D param_default,
+>> +                    param_name =3D param_name,
+>> +                    ops =3D ops,
+>> +                    kparam =3D kparam,
+>> +                )
+>> +                .unwrap();
+>> +            }
+>> +        }
+>>      }
+>>  }
+>>=20
+>> +fn param_ops_path(param_type: &str) -> &'static str {
+>> +    match param_type {
+>> +        "i8" =3D> "::kernel::module_param::PARAM_OPS_I8",
+>> +        "u8" =3D> "::kernel::module_param::PARAM_OPS_U8",
+>> +        "i16" =3D> "::kernel::module_param::PARAM_OPS_I16",
+>> +        "u16" =3D> "::kernel::module_param::PARAM_OPS_U16",
+>> +        "i32" =3D> "::kernel::module_param::PARAM_OPS_I32",
+>> +        "u32" =3D> "::kernel::module_param::PARAM_OPS_U32",
+>> +        "i64" =3D> "::kernel::module_param::PARAM_OPS_I64",
+>> +        "u64" =3D> "::kernel::module_param::PARAM_OPS_U64",
+>> +        "isize" =3D> "::kernel::module_param::PARAM_OPS_ISIZE",
+>> +        "usize" =3D> "::kernel::module_param::PARAM_OPS_USIZE",
+>> +        t =3D> panic!("Unrecognized type {}", t),
+>
+> I would write "Unsupported parameter type `{}`!".
+
+Ok.
+
+>
+>> +    }
+>> +}
+>> +
+>> +fn get_param_default(param_it: &mut token_stream::IntoIter) -> String {
+>> +    assert_eq!(expect_ident(param_it), "default");
+>> +    assert_eq!(expect_punct(param_it), ':');
+>> +    let default =3D try_literal(param_it).expect("Expected default para=
+m value");
+>> +    assert_eq!(expect_punct(param_it), ',');
+>> +    default
+>> +}
+>> +
+>
+> Could you also add documentation in rust/macros/lib.rs on the `module!`
+> macro how parameters can be declared/used? I took a look and it seems
+> that there is out-of-date docs there also.
+
+Yes, will do. It looks like that documentation was actually never
+correct in mainline.
+
+Best regards,
+Andreas
+
+
+
