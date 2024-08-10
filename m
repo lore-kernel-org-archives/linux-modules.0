@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DE713E02A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2482157488
 	for <linux-modules@vger.kernel.org>; Sat, 10 Aug 2024 12:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723292727; cv=none; b=FEWvi2OzicTZxYt0bsmAVU8YA7I5XDkIdQQUvOnYFe7Bxqc9x93tTocEwuUdL26H0nUA4XA91OELIhsLDGLLnYmMKVwtIIiLc/eXIpYHIBu1RJ7F6iXlmywWJ0KahoqdY5tD80EDWyc6wWtjN6XOI1CNq6l2xaX40n4zixExxRE=
+	t=1723292727; cv=none; b=myHoL2Oh2beEh+Tf3mceih6JlyG8hRiAByrzzK4BDU0TUZzJfmkWK2CsCaU/OLlusZ1FuskBY1WsK4Cz7OcdJUAPsE9/GEmI9GZ8CBeS1pQiSuKUHOO22/MXm9qk8OIHPTv/U3kLkGviggf9x/1Yx4u3eEE7FUd8mCWZqvAgMDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723292727; c=relaxed/simple;
-	bh=jKLWG81C9L7T6MeJh+poogsU6/o0mKi42/7OOCmdamY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DI6SSwPW0aWMI3oNYNrqzgpTVt0a7QWFToFTajS5iie6mdanj8WUeCgLNOpLZkQwi0asVYFyASgMc+Z7Zf3+7HQ7lhookU0QtQpsu+I1JD/I9YrfzWlFaevYzaov6pYQFp+lJANndJxnAJWEwukIk9WvhkqBMkU2J55ItAARHY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MACnCDTl; arc=none smtp.client-ip=10.30.226.201
+	bh=wOHVJ5H+ilz1a1R5578g5XOMZxAQTNQ4cTfxrsDR+Ic=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M12S4t/WE2XgCphRR14XIDMvR3CveqlPrrjlx4or/WNktmMXc9oo4jzRDHZFjdS3NpwM2iF3aK+qg8I+/iQoMVa3m4U/WoCdW1u37frAo96DLd3yiE9zWixWO6GjevqncKnjgtOk0t0CcRdn/lCz27glf8iQwj1hoV/BV56IX1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYOStea1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MACnCDTl"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C4CCC4AF0E;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYOStea1"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 32B30C32781;
 	Sat, 10 Aug 2024 12:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1723292727;
-	bh=jKLWG81C9L7T6MeJh+poogsU6/o0mKi42/7OOCmdamY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=MACnCDTl0uiGUcysNTY65LycaYGAB8weu/hkt2pnaDq1ZqeqnVkA6vWr8p4Nq2sDX
-	 hZ0+ZtUTdKQtuzyRe3rx4m7sMQZyo/431hgk+6l3BI7TfQQld6q6eYeJQzRk2pdh0n
-	 U6nco31we9OMKeaozcCxZPZYaVMAbXn8IfM0H5Pd46fck3fzhmYExNPGO1+2+0gtLL
-	 8VTRXf0Pkco/T3aSR6j3qzC6m92mu15uh9cIUZXdNmeLDB/SsYBhPGGPEIGn5gZGOl
-	 BHXzDJPLZoLA1p0Gi2/cRvRsvXRpkiPIdDS3s4i45EOO47UZAYANC8wbsk/o0piAh5
-	 IMPWMJiKzfwYg==
+	bh=wOHVJ5H+ilz1a1R5578g5XOMZxAQTNQ4cTfxrsDR+Ic=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=FYOStea1aWFEPHy5/8WQ32riKOytK2eUll4+a5bTO2fsK+b3lnNBOSh/1mXfhQL8N
+	 wROx6K41n/44fBi6yZLH9ObS4xA/ofTfxWp3CKVqlZDwIYw8kivmxvbBfnhIZIXMkQ
+	 FH18yGsU/5MPjW3Q4EY2tPiQwzv6D/0fU5zcHxnh3uPTWQXfZ6MP+FGy70BO5kv1AK
+	 xnUPQBIEcQy7dM8emEF2wOEpvmyFU/BCl0jfdKq6nCLVZrPT0RJ7P6om8Gmnfn7qLR
+	 rOVhOgwMPcIYmzQT0klHRfidfn2Qbquek5SZ8ACk5L+7iFFtHcvt4+TO4qQDaabzqV
+	 zkHglHVgAN/XQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 377A4C531DC;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EFEDC3DA7F;
 	Sat, 10 Aug 2024 12:25:27 +0000 (UTC)
 From: Emil Velikov via B4 Relay <devnull+emil.l.velikov.gmail.com@kernel.org>
-Date: Sat, 10 Aug 2024 13:25:16 +0100
-Subject: [PATCH kmod 2/2] m4: remove verbose license exception clause
+Subject: [PATCH kmod 0/2] Couple of SPDX fixes
+Date: Sat, 10 Aug 2024 13:25:14 +0100
+Message-Id: <20240810-b4-spdx-fixup-v1-0-b9c84d637fb3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -40,18 +40,18 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240810-b4-spdx-fixup-v1-2-b9c84d637fb3@gmail.com>
-References: <20240810-b4-spdx-fixup-v1-0-b9c84d637fb3@gmail.com>
-In-Reply-To: <20240810-b4-spdx-fixup-v1-0-b9c84d637fb3@gmail.com>
+X-B4-Tracking: v=1; b=H4sIACpct2YC/x2MQQqAIBAAvyJ7bkFDSvpKdNDcai8mSiGIf086D
+ sNMhUyJKcMiKiR6OfMdOqhBwH7ZcBKy7wyjHLU0SqLTmKMveHB5IrrZeUvGTdJb6E1M1MX/W7f
+ WPvV0rBNfAAAA
 To: linux-modules@vger.kernel.org
 Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>, 
  Emil Velikov <emil.l.velikov@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723292726; l=1516;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723292726; l=857;
  i=emil.l.velikov@gmail.com; s=20230301; h=from:subject:message-id;
- bh=4i3lPNK55/Jj+IH1COzPpCNGv9x/md4G29+CkWIv0Os=;
- b=fGnn/BmKGEG0Ko/XAgBKGXb+V0KzcimIZdE5SzHwbL5FJWcxXjAiKzHtKr243Ryw/2dD35cx4
- Qc4uncwgtTSC55hI5nkpgBSe500XCuezBgG7kKzVCZFjZI2YOfjnFgJ
+ bh=wOHVJ5H+ilz1a1R5578g5XOMZxAQTNQ4cTfxrsDR+Ic=;
+ b=UGtH1lYs4R6M5KdqytjVGwm6VB4lOy81mD+sjgSwsOMlGj8AvulAkNfDrYS3mfYOq0oI9RECD
+ 0qsCLC2PrrYB6zyxRDWbmnxw/38iR7OjO8xx1dOIG9Z9OinVZhqNva+
 X-Developer-Key: i=emil.l.velikov@gmail.com; a=ed25519;
  pk=qeUTVTNyI3rcR2CfNNWsloTihgzmtbZo98GdxwZKCkY=
 X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
@@ -59,43 +59,33 @@ X-Endpoint-Received: by B4 Relay for emil.l.velikov@gmail.com/20230301 with
 X-Original-From: Emil Velikov <emil.l.velikov@gmail.com>
 Reply-To: emil.l.velikov@gmail.com
 
-From: Emil Velikov <emil.l.velikov@gmail.com>
+Hi all,
 
-It is already encoded in the SPDX license identifier.
+Seems like the revision of the SPDX license identifiers, that landed in
+master, dropped the wrong hunk/paragraph.
 
-Cc: Lucas De Marchi <lucas.de.marchi@gmail.com>
-Fixes: b5a2cd0 ("Use SPDX header for license")
-Signed-off-by: Emil Velikov <emil.l.velikov@gmail.com>
+Namely: a function description/summary was removed in one m4 file, while
+the license exception in the second m4 file was intended.
+
+I've left the two changes as separate patches, since I'm not 100% sure
+if dropping the former wasn't semi-intentional.
+
+Feel free to pick whichever patch makes sense o/
+
 ---
- m4/features.m4 | 13 -------------
- 1 file changed, 13 deletions(-)
+Emil Velikov (2):
+      m4: reinstate CC_CHECK_FLAG_APPEND summary
+      m4: remove verbose license exception clause
 
-diff --git a/m4/features.m4 b/m4/features.m4
-index 87ed2fb..6384a05 100644
---- a/m4/features.m4
-+++ b/m4/features.m4
-@@ -1,19 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later WITH Autoconf-exception-macro
- #
- #  Copyright (c) 2015 Lucas De Marchi <lucas.de.marchi@gmail.com>
--#
--#  As a special exception, the respective Autoconf Macro's copyright owner
--#  gives unlimited permission to copy, distribute and modify the configure
--#  scripts that are the output of Autoconf when processing the Macro. You
--#  need not follow the terms of the GNU General Public License when using
--#  or distributing such scripts, even though portions of the text of the
--#  Macro appear in them. The GNU General Public License (GPL) does govern
--#  all other use of the material that constitutes the Autoconf Macro.
--#
--#  This special exception to the GPL applies to versions of the Autoconf
--#  Macro released by the Autoconf Archive. When you make and distribute a
--#  modified version of the Autoconf Macro, you may extend this special
--#  exception to the GPL to apply to your modified version as well.
- 
- # CC_FEATURE_APPEND([FLAGS], [ENV-TO-CHECK], [FLAG-NAME])
- AC_DEFUN([CC_FEATURE_APPEND], [
+ m4/attributes.m4 |  5 +++++
+ m4/features.m4   | 13 -------------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
+---
+base-commit: af21689dd0f1ef6f40d6ecc323885026a07486f9
+change-id: 20240810-b4-spdx-fixup-b7bdae8b60da
 
+Best regards,
 -- 
-2.45.2
+Emil Velikov <emil.l.velikov@gmail.com>
 
 
