@@ -1,55 +1,55 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC160482EB
-	for <linux-modules@vger.kernel.org>; Mon, 19 Aug 2024 15:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E22D12EBD6
+	for <linux-modules@vger.kernel.org>; Mon, 19 Aug 2024 15:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724080527; cv=none; b=M8qKv9codp9ib7kn06MHyArFvFvpr5dyAGaxoW1bQFodWnw5mxtkWtYhqJGn+pcgXu3XT9td1YymgKL/Oc7fbRr1mOXvTdV9qCrDjb/HU9bRkobKt9XQZp22ADC7+rNA7qzB1kkqNvluo68F95WfPww8nCMgIyPe+G24A1ttmYQ=
+	t=1724080528; cv=none; b=Q7mHWfxbph6UxJQ4O0/xJipCQh4S+DyF1olLQIs2nhAuaJ7L0eO9v7ecRqBAL2haB6NquF0UTcvLwp70CBooKS7pMKkwtM7zn1AMOmXCVvmtEyXiQFLDA0waAFM5nuKfbMP5x7/WGCtAeOTnnVLyUlgeUxTrsZy9aT/oCZtIhhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724080527; c=relaxed/simple;
-	bh=t2m2UTGlNGu6xeqjU1O/0aU57NO63lg0H45rqPmK8m4=;
+	s=arc-20240116; t=1724080528; c=relaxed/simple;
+	bh=MUvOJSwOhvcj0oP5fQ05zdy1te7n3482CKE5x+nxiMc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=j/rzY4SS04YcXf1av71lRANxREH8JmljiF2ohvKIryweoSmCo6AvYp2/QP3AzUpox1RLf6+BNGxtGARZokVh/nVqfI2qS0P2DLR1CCnfY9eP1E4uqCVQdUUXjZpuv32YLBLBjWzZVA0J0OkzH7ZRnaxAwUquD7b+KQ1qakTP5sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hEEHp39r; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=A0wir7oybIUE2VftBhWs13dtqU3mnHArcE0chhP8rqrbYfYMMRAqpBZSVIyQriFBYRn9wqLK4j7popENWpiCADcVO8LpWVIWb4rQoTOpW376RDuxwY6DZNDtCpSGiO4f5YqreG+wK2ECEXdoh9OQ7O2+mPURGqfXipv6qharI+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WNpR98IM; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hEEHp39r"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6b8f13f2965so23236957b3.1
-        for <linux-modules@vger.kernel.org>; Mon, 19 Aug 2024 08:15:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WNpR98IM"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e163641feb9so1530469276.0
+        for <linux-modules@vger.kernel.org>; Mon, 19 Aug 2024 08:15:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724080523; x=1724685323; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724080525; x=1724685325; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gI06ovdfCz8cO9NK2nQDa04h5rjz0kRy+tQsOrEFgfI=;
-        b=hEEHp39rxoanO1EMe5XLXPpYLTnEGZx0LryAIjp6rv0g9EYXSsmigWyQw+DA68/l8V
-         ZAzVQdxwCSQb5uje/7TCGqJnqdHPz2opNQZtg1ij5EbzWbRT5g2SysVHZ6V0e2b3kG9b
-         +0VoT85ZPJdGhly5kaY7uv3+oQ8z1k7yqp3VVi+sMmqcEVJFUgT0EEZ01vnXlDvcG/dD
-         GaVINIUU9NSlkP4BWhj65pG7Ezi/g4y8T5/NDLVuNrHs4bsxi1EcQim8ZQeNxk7832N9
-         1vd0uth5wR/Wd5rnDyuJWC9tbx2Iesv0A1Bajd1cGTcI/cjEFqtFxt63d+S0tD/J623S
-         wywQ==
+        bh=YvUli7DxjvCadNZqU9R55CXUnn1ASOBr3/ifBorIX/s=;
+        b=WNpR98IMZ2wyZLy3JZmOGImKa+0cCKml6iVPL/xZ9iJ3PsuBFYqsXhdUJV0vQwss2+
+         7mX48n0NewnwQYNnSzxRYW0terSZZEi6OHvgZGfk7GH59c8k7lGTSfIytsNFHPlMmJzH
+         pK61vyGgvuFrjUWOOQDgmsHzJN73+5B/o+hHvfBYrdZU0+qidSMcP4DnLL01eSVVbNIM
+         7i55c26fwsHvgoWbrSBj+Mn22d3VJCioYBvYPhHCA2KXwWbsn0vrBYUdVdbB7NwyTnnY
+         okPt0PsyqgRXyj9Z6MmJXgPYsI2rFWFdE2+04pcy/V/qSqMwz6tocrcsj0v6NRb6QDv/
+         daSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724080523; x=1724685323;
+        d=1e100.net; s=20230601; t=1724080525; x=1724685325;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gI06ovdfCz8cO9NK2nQDa04h5rjz0kRy+tQsOrEFgfI=;
-        b=Dtb0rTwPRe6r75V1IdWruIgfNMyFilS7eywoLEhy24vVKJM6hcvloNVdCX38WugzAH
-         Y9Btq5azqJHgDHsCIfmR7w5T1kjXWVvlEMKP38iM7zmWAAJERJf2h/0renXf6s/iupGw
-         kNsRuFDAVo7yAun0jW7whta6PBEIy6VJHtdiTGKjytHk+SijWlY6rQcZHwFBLn8nQLd/
-         eS+12qsdlZ/zBocpdD/MEqDVrn9T9Vy3c9l8i3u7a3Fa38+qDh2JJoiv2YJTMX2deVkh
-         FB14VUkblGigNtLgftEqex9t176oPKLSAvl+zQAjkR5w+C3iK8e6ta9KbZAe9k7oWf9r
-         rD5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVDUMIjxKkNVMH8dPAf3URXFoJtLYGhoTGbrT24ZA2DIEcJJ53GD+QJNukSqN0EaC73umq5kMoOAUM0YtKpvQMvtRkHQA8gHQyl2zb/IQ==
-X-Gm-Message-State: AOJu0YycGlWn93Jytos+T548yT4tXwkGEY+CZSS6IavTpmyUV4eIZVzN
-	f76MKm6ZHN0xvcbTlOPG9u2qr1oEYpit7VGBpvi8BJt8a4AbGvX0JO4l/Kz91prQdsgA/mDECuq
-	vMg==
-X-Google-Smtp-Source: AGHT+IG/BKrJXqYP6cRYhE+Lu+8cVFetj3uIJoL3u5FtbKpk/WoSJ/pAYSGnYrr9RqZE8k4lDy0dOBXbaE4=
+        bh=YvUli7DxjvCadNZqU9R55CXUnn1ASOBr3/ifBorIX/s=;
+        b=o375bhBno2FxRgsnPpVESWtkDrv3j3inoceT1rPC4JAsdwTwGW3kYUEcJz0uO1KfSY
+         NokLB7Ly74qNCpPEVw+/mW2Jmou7gKoj3eP+RdtWzZSfdtRObizWG3cwHe95GiueJzxA
+         NYVNz3Ka8lFWxu/4JVJMV/djelIB/fnd2tUs8NDcJjtotZltrJug3WLd0gS3sBPGx2Ze
+         9KCSnL/lo8O0c3eXYc2XVEHgPa4yhwVGjTXMwHuq4SNUN0SF82PPHQCyciH5PJnT+unG
+         f/Uc22Fy2L8JULrTxeFJCuKeOiSgdtKeWOhCzqK891u8vzuf+r3cWsezo4UghgQuhbxS
+         VV7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVBHcr7urVfUBKiToRcdnsgzE/5LxACr07u4JGDR3UulgNnDHMPLn70OcTaGkrsDXapQ0HTG9uJOlyK3/YAgzG3CDjNXytwxdnRFeYK/A==
+X-Gm-Message-State: AOJu0YyYDpXGqM1cfQw86/+0PlALedBmBwQK0xXdZRKRoBofhCR/mVc1
+	Eyw0kFlxa3KptESBe5EK2kNHIvRDHWiSiXxzjEIORKolRRj6NWcrH7QfALbsmqTfnFhxS9uFt+n
+	Z6w==
+X-Google-Smtp-Source: AGHT+IGmKKGKkjcmWysWP9m62+j5ch91LeGhxiVj6StWd2Ak+bhrYPJ7oEQRjLH7HKKJlPCdxmQ+SytC38U=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:5aea:cf26:50f4:76db])
- (user=surenb job=sendgmr) by 2002:a05:690c:c04:b0:6b2:6cd4:7f9a with SMTP id
- 00721157ae682-6b26cd48046mr5942197b3.8.1724080522969; Mon, 19 Aug 2024
- 08:15:22 -0700 (PDT)
-Date: Mon, 19 Aug 2024 08:15:10 -0700
+ (user=surenb job=sendgmr) by 2002:a25:951:0:b0:e0b:af9b:fb94 with SMTP id
+ 3f1490d57ef6-e1182f824e6mr313544276.6.1724080525039; Mon, 19 Aug 2024
+ 08:15:25 -0700 (PDT)
+Date: Mon, 19 Aug 2024 08:15:11 -0700
 In-Reply-To: <20240819151512.2363698-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,8 +59,9 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240819151512.2363698-1-surenb@google.com>
 X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
-Message-ID: <20240819151512.2363698-5-surenb@google.com>
-Subject: [PATCH 4/5] alloc_tag: make page allocation tag reference size configurable
+Message-ID: <20240819151512.2363698-6-surenb@google.com>
+Subject: [PATCH 5/5] alloc_tag: config to store page allocation tag refs in
+ page flags
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
@@ -77,297 +78,245 @@ Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
 	linux-modules@vger.kernel.org, kernel-team@android.com, surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce CONFIG_PGALLOC_TAG_REF_BITS to control the size of the
-page allocation tag references. When the size is configured to be
-less than a direct pointer, the tags are searched using an index
-stored as the tag reference.
+Add CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to store allocation tag
+references directly in the page flags. This removes dependency on
+page_ext and results in better performance for page allocations as
+well as reduced page_ext memory overhead.
+CONFIG_PGALLOC_TAG_REF_BITS controls the number of bits required
+to be available in the page flags to store the references. If the
+number of page flag bits is insufficient, the build will fail and
+either CONFIG_PGALLOC_TAG_REF_BITS would have to be lowered or
+CONFIG_PGALLOC_TAG_USE_PAGEFLAGS should be disabled.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/alloc_tag.h   | 10 +++++-
- include/linux/codetag.h     |  3 ++
- include/linux/pgalloc_tag.h | 69 +++++++++++++++++++++++++++++++++++++
- lib/Kconfig.debug           | 11 ++++++
- lib/alloc_tag.c             | 50 ++++++++++++++++++++++++++-
- lib/codetag.c               |  4 +--
- mm/mm_init.c                |  1 +
- 7 files changed, 144 insertions(+), 4 deletions(-)
+ include/linux/mmzone.h            |  3 ++
+ include/linux/page-flags-layout.h | 10 +++++--
+ include/linux/pgalloc_tag.h       | 48 +++++++++++++++++++++++++++++++
+ lib/Kconfig.debug                 | 27 +++++++++++++++--
+ lib/alloc_tag.c                   |  4 +++
+ mm/page_ext.c                     |  2 +-
+ 6 files changed, 89 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
-index 21e3098220e3..b5cf24517333 100644
---- a/include/linux/alloc_tag.h
-+++ b/include/linux/alloc_tag.h
-@@ -30,8 +30,16 @@ struct alloc_tag {
- 	struct alloc_tag_counters __percpu	*counters;
- } __aligned(8);
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 17506e4a2835..0dd2b42f7cb6 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -1085,6 +1085,7 @@ static inline bool zone_is_empty(struct zone *zone)
+ #define KASAN_TAG_PGOFF		(LAST_CPUPID_PGOFF - KASAN_TAG_WIDTH)
+ #define LRU_GEN_PGOFF		(KASAN_TAG_PGOFF - LRU_GEN_WIDTH)
+ #define LRU_REFS_PGOFF		(LRU_GEN_PGOFF - LRU_REFS_WIDTH)
++#define ALLOC_TAG_REF_PGOFF	(LRU_REFS_PGOFF - ALLOC_TAG_REF_WIDTH)
  
-+struct alloc_tag_kernel_section {
-+	struct alloc_tag *first_tag;
-+	unsigned long count;
-+};
-+
- struct alloc_tag_module_section {
--	unsigned long start_addr;
-+	union {
-+		unsigned long start_addr;
-+		struct alloc_tag *first_tag;
-+	};
- 	unsigned long end_addr;
- 	/* used size */
- 	unsigned long size;
-diff --git a/include/linux/codetag.h b/include/linux/codetag.h
-index c4a3dd60205e..dafc59838d87 100644
---- a/include/linux/codetag.h
-+++ b/include/linux/codetag.h
-@@ -13,6 +13,9 @@ struct codetag_module;
- struct seq_buf;
- struct module;
+ /*
+  * Define the bit shifts to access each section.  For non-existent
+@@ -1096,6 +1097,7 @@ static inline bool zone_is_empty(struct zone *zone)
+ #define ZONES_PGSHIFT		(ZONES_PGOFF * (ZONES_WIDTH != 0))
+ #define LAST_CPUPID_PGSHIFT	(LAST_CPUPID_PGOFF * (LAST_CPUPID_WIDTH != 0))
+ #define KASAN_TAG_PGSHIFT	(KASAN_TAG_PGOFF * (KASAN_TAG_WIDTH != 0))
++#define ALLOC_TAG_REF_PGSHIFT	(ALLOC_TAG_REF_PGOFF * (ALLOC_TAG_REF_WIDTH != 0))
  
-+#define CODETAG_SECTION_START_PREFIX	"__start_"
-+#define CODETAG_SECTION_STOP_PREFIX	"__stop_"
+ /* NODE:ZONE or SECTION:ZONE is used to ID a zone for the buddy allocator */
+ #ifdef NODE_NOT_IN_PAGE_FLAGS
+@@ -1116,6 +1118,7 @@ static inline bool zone_is_empty(struct zone *zone)
+ #define LAST_CPUPID_MASK	((1UL << LAST_CPUPID_SHIFT) - 1)
+ #define KASAN_TAG_MASK		((1UL << KASAN_TAG_WIDTH) - 1)
+ #define ZONEID_MASK		((1UL << ZONEID_SHIFT) - 1)
++#define ALLOC_TAG_REF_MASK	((1UL << ALLOC_TAG_REF_WIDTH) - 1)
+ 
+ static inline enum zone_type page_zonenum(const struct page *page)
+ {
+diff --git a/include/linux/page-flags-layout.h b/include/linux/page-flags-layout.h
+index 7d79818dc065..21bba7c8c965 100644
+--- a/include/linux/page-flags-layout.h
++++ b/include/linux/page-flags-layout.h
+@@ -5,6 +5,12 @@
+ #include <linux/numa.h>
+ #include <generated/bounds.h>
+ 
++#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
++#define ALLOC_TAG_REF_WIDTH	CONFIG_PGALLOC_TAG_REF_BITS
++#else
++#define ALLOC_TAG_REF_WIDTH	0
++#endif
 +
  /*
-  * An instance of this structure is created in a special ELF section at every
-  * code location being tagged.  At runtime, the special section is treated as
+  * When a memory allocation must conform to specific limitations (such
+  * as being suitable for DMA) the caller will pass in hints to the
+@@ -91,7 +97,7 @@
+ #endif
+ 
+ #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
+-	KASAN_TAG_WIDTH + LAST_CPUPID_SHIFT <= BITS_PER_LONG - NR_PAGEFLAGS
++	KASAN_TAG_WIDTH + ALLOC_TAG_REF_WIDTH + LAST_CPUPID_SHIFT <= BITS_PER_LONG - NR_PAGEFLAGS
+ #define LAST_CPUPID_WIDTH LAST_CPUPID_SHIFT
+ #else
+ #define LAST_CPUPID_WIDTH 0
+@@ -102,7 +108,7 @@
+ #endif
+ 
+ #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
+-	KASAN_TAG_WIDTH + LAST_CPUPID_WIDTH > BITS_PER_LONG - NR_PAGEFLAGS
++	KASAN_TAG_WIDTH + ALLOC_TAG_REF_WIDTH + LAST_CPUPID_WIDTH > BITS_PER_LONG - NR_PAGEFLAGS
+ #error "Not enough bits in page flags"
+ #endif
+ 
 diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
-index c76b629d0206..80b8801cb90b 100644
+index 80b8801cb90b..da95c09bcdf1 100644
 --- a/include/linux/pgalloc_tag.h
 +++ b/include/linux/pgalloc_tag.h
-@@ -9,7 +9,18 @@
+@@ -88,6 +88,52 @@ static inline void write_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
+ void __init alloc_tag_sec_init(void);
  
- #ifdef CONFIG_MEM_ALLOC_PROFILING
- 
-+#if !defined(CONFIG_PGALLOC_TAG_REF_BITS) || CONFIG_PGALLOC_TAG_REF_BITS > 32
-+#define PGALLOC_TAG_DIRECT_REF
- typedef union codetag_ref	pgalloc_tag_ref;
-+#else /* !defined(CONFIG_PGALLOC_TAG_REF_BITS) || CONFIG_PGALLOC_TAG_REF_BITS > 32 */
-+#if CONFIG_PGALLOC_TAG_REF_BITS > 16
-+typedef u32	pgalloc_tag_ref;
-+#else
-+typedef u16	pgalloc_tag_ref;
-+#endif
-+#endif /* !defined(CONFIG_PGALLOC_TAG_REF_BITS) || CONFIG_PGALLOC_TAG_REF_BITS > 32 */
+ #endif /* PGALLOC_TAG_DIRECT_REF */
 +
-+#ifdef PGALLOC_TAG_DIRECT_REF
- 
- static inline void read_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
- {
-@@ -20,6 +31,63 @@ static inline void write_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
- {
- 	pgref->ct = ref->ct;
- }
++#ifdef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
 +
-+static inline void alloc_tag_sec_init(void) {}
++typedef struct page	*pgtag_ref_handle;
 +
-+#else /* PGALLOC_TAG_DIRECT_REF */
-+
-+extern struct alloc_tag_kernel_section kernel_tags;
-+extern struct alloc_tag_module_section module_tags;
-+
-+#define CODETAG_ID_NULL		0
-+#define CODETAG_ID_EMPTY	1
-+#define CODETAG_ID_FIRST	2
-+
-+static inline void read_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
++/* Should be called only if mem_alloc_profiling_enabled() */
++static inline pgtag_ref_handle get_page_tag_ref(struct page *page,
++						union codetag_ref *ref)
 +{
-+	pgalloc_tag_ref idx = *pgref;
++	if (page) {
++		pgalloc_tag_ref pgref;
 +
-+	switch (idx) {
-+	case (CODETAG_ID_NULL):
-+		ref->ct = NULL;
-+		break;
-+	case (CODETAG_ID_EMPTY):
-+		set_codetag_empty(ref);
-+		break;
-+	default:
-+		idx -= CODETAG_ID_FIRST;
-+		ref->ct = idx < kernel_tags.count ?
-+			&kernel_tags.first_tag[idx].ct :
-+			&module_tags.first_tag[idx - kernel_tags.count].ct;
++		pgref = (page->flags >> ALLOC_TAG_REF_PGSHIFT) & ALLOC_TAG_REF_MASK;
++		read_pgref(&pgref, ref);
++		return page;
 +	}
++
++	return NULL;
 +}
 +
-+static inline void write_pgref(pgalloc_tag_ref *pgref, union codetag_ref *ref)
++static inline void put_page_tag_ref(pgtag_ref_handle page)
 +{
-+	struct alloc_tag *tag;
-+
-+	if (!ref->ct) {
-+		*pgref = CODETAG_ID_NULL;
-+		return;
-+	}
-+
-+	if (is_codetag_empty(ref)) {
-+		*pgref = CODETAG_ID_EMPTY;
-+		return;
-+	}
-+
-+	tag = ct_to_alloc_tag(ref->ct);
-+	if (tag >= kernel_tags.first_tag && tag < kernel_tags.first_tag + kernel_tags.count) {
-+		*pgref = CODETAG_ID_FIRST + (tag - kernel_tags.first_tag);
-+		return;
-+	}
-+
-+	*pgref = CODETAG_ID_FIRST + kernel_tags.count + (tag - module_tags.first_tag);
++	WARN_ON(!page);
 +}
 +
-+void __init alloc_tag_sec_init(void);
++static inline void update_page_tag_ref(pgtag_ref_handle page, union codetag_ref *ref)
++{
++	unsigned long old_flags, flags, val;
++	pgalloc_tag_ref pgref;
 +
-+#endif /* PGALLOC_TAG_DIRECT_REF */
++	if (WARN_ON(!page || !ref))
++		return;
++
++	write_pgref(&pgref, ref);
++	val = (unsigned long)pgref;
++	val = (val & ALLOC_TAG_REF_MASK) << ALLOC_TAG_REF_PGSHIFT;
++	do {
++		old_flags = READ_ONCE(page->flags);
++		flags = old_flags;
++		flags &= ~(ALLOC_TAG_REF_MASK << ALLOC_TAG_REF_PGSHIFT);
++		flags |= val;
++	} while (unlikely(!try_cmpxchg(&page->flags, &old_flags, flags)));
++}
++
++#else /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
++
  #include <linux/page_ext.h>
  
  extern struct page_ext_operations page_alloc_tagging_ops;
-@@ -197,6 +265,7 @@ static inline void pgalloc_tag_sub(struct page *page, unsigned int nr) {}
- static inline void pgalloc_tag_split(struct page *page, unsigned int nr) {}
- static inline struct alloc_tag *pgalloc_tag_get(struct page *page) { return NULL; }
- static inline void pgalloc_tag_sub_pages(struct alloc_tag *tag, unsigned int nr) {}
-+static inline void alloc_tag_sec_init(void) {}
+@@ -136,6 +182,8 @@ static inline void update_page_tag_ref(pgtag_ref_handle pgref, union codetag_ref
+ 	write_pgref(pgref, ref);
+ }
  
- #endif /* CONFIG_MEM_ALLOC_PROFILING */
- 
++#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
++
+ static inline void clear_page_tag_ref(struct page *page)
+ {
+ 	if (mem_alloc_profiling_enabled()) {
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index a30c03a66172..253f9c2028da 100644
+index 253f9c2028da..9fc8c1981f27 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -1000,6 +1000,17 @@ config MEM_ALLOC_PROFILING_DEBUG
+@@ -979,7 +979,7 @@ config MEM_ALLOC_PROFILING
+ 	depends on PROC_FS
+ 	depends on !DEBUG_FORCE_WEAK_PER_CPU
+ 	select CODE_TAGGING
+-	select PAGE_EXTENSION
++	select PAGE_EXTENSION if !PGALLOC_TAG_USE_PAGEFLAGS
+ 	select SLAB_OBJ_EXT
+ 	help
+ 	  Track allocation source code and record total allocation size
+@@ -1000,10 +1000,26 @@ config MEM_ALLOC_PROFILING_DEBUG
  	  Adds warnings with helpful error messages for memory allocation
  	  profiling.
  
-+config PGALLOC_TAG_REF_BITS
-+	int "Number of bits for page allocation tag reference (10-64)"
-+	range 10 64
-+	default "64"
++config PGALLOC_TAG_USE_PAGEFLAGS
++	bool "Use pageflags to encode page allocation tag reference"
++	default n
 +	depends on MEM_ALLOC_PROFILING
 +	help
-+	  Number of bits used to encode a page allocation tag reference.
++	  When set, page allocation tag references are encoded inside page
++	  flags, otherwise they are encoded in page extensions.
 +
-+	  Smaller number results in less memory overhead but limits the number of
-+	  allocations which can be tagged (including allocations from modules).
++	  Setting this flag reduces memory and performance overhead of memory
++	  allocation profiling but also limits how many allocations can be
++	  tagged. The number of bits is set by PGALLOC_TAG_USE_PAGEFLAGS and
++	  they must fit in the page flags field.
++
++	  Say N if unsure.
++
+ config PGALLOC_TAG_REF_BITS
+ 	int "Number of bits for page allocation tag reference (10-64)"
+ 	range 10 64
+-	default "64"
++	default "16" if PGALLOC_TAG_USE_PAGEFLAGS
++	default "64" if !PGALLOC_TAG_USE_PAGEFLAGS
+ 	depends on MEM_ALLOC_PROFILING
+ 	help
+ 	  Number of bits used to encode a page allocation tag reference.
+@@ -1011,6 +1027,13 @@ config PGALLOC_TAG_REF_BITS
+ 	  Smaller number results in less memory overhead but limits the number of
+ 	  allocations which can be tagged (including allocations from modules).
+ 
++	  If PGALLOC_TAG_USE_PAGEFLAGS is set, the number of requested bits should
++	  fit inside the page flags.
++
++	  If PGALLOC_TAG_USE_PAGEFLAGS is not set, the number of bits used to store
++	  a reference is rounded up to the closest basic type. If set higher than 32,
++	  a direct pointer to the allocation tag is stored for performance reasons.
 +
  source "lib/Kconfig.kasan"
  source "lib/Kconfig.kfence"
  source "lib/Kconfig.kmsan"
 diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
-index a1d80d2ef512..d0da206d539e 100644
+index d0da206d539e..1fbe80e68fdb 100644
 --- a/lib/alloc_tag.c
 +++ b/lib/alloc_tag.c
-@@ -3,6 +3,7 @@
- #include <linux/execmem.h>
- #include <linux/fs.h>
- #include <linux/gfp.h>
-+#include <linux/kallsyms.h>
- #include <linux/module.h>
- #include <linux/page_ext.h>
- #include <linux/pgalloc_tag.h>
-@@ -11,13 +12,14 @@
- #include <linux/seq_file.h>
- 
- static struct codetag_type *alloc_tag_cttype;
--static struct alloc_tag_module_section module_tags;
- static struct maple_tree mod_area_mt = MTREE_INIT(mod_area_mt, MT_FLAGS_ALLOC_RANGE);
- /* A dummy object used to indicate an unloaded module */
- static struct module unloaded_mod;
- /* A dummy object used to indicate a module prepended area */
- static struct module prepend_mod;
- 
-+struct alloc_tag_module_section module_tags;
-+
- DEFINE_PER_CPU(struct alloc_tag_counters, _shared_alloc_tag);
- EXPORT_SYMBOL(_shared_alloc_tag);
- 
-@@ -157,6 +159,33 @@ static void __init procfs_init(void)
- 	proc_create_seq("allocinfo", 0400, NULL, &allocinfo_seq_op);
+@@ -432,6 +432,8 @@ static int __init setup_early_mem_profiling(char *str)
  }
+ early_param("sysctl.vm.mem_profiling", setup_early_mem_profiling);
  
-+#ifndef PGALLOC_TAG_DIRECT_REF
++#ifndef CONFIG_PGALLOC_TAG_USE_PAGEFLAGS
 +
-+#define SECTION_START(NAME)	(CODETAG_SECTION_START_PREFIX NAME)
-+#define SECTION_STOP(NAME)	(CODETAG_SECTION_STOP_PREFIX NAME)
-+
-+struct alloc_tag_kernel_section kernel_tags = { NULL, 0 };
-+
-+void __init alloc_tag_sec_init(void)
-+{
-+	struct alloc_tag *last_codetag;
-+
-+	kernel_tags.first_tag = (struct alloc_tag *)kallsyms_lookup_name(
-+					SECTION_START(ALLOC_TAG_SECTION_NAME));
-+	last_codetag = (struct alloc_tag *)kallsyms_lookup_name(
-+					SECTION_STOP(ALLOC_TAG_SECTION_NAME));
-+	kernel_tags.count = last_codetag - kernel_tags.first_tag;
-+}
-+
-+static inline unsigned long alloc_tag_align(unsigned long val)
-+{
-+	if (val % sizeof(struct alloc_tag) == 0)
-+		return val;
-+	return ((val / sizeof(struct alloc_tag)) + 1) * sizeof(struct alloc_tag);
-+}
-+
-+#endif /* PGALLOC_TAG_DIRECT_REF */
-+
- static bool needs_section_mem(struct module *mod, unsigned long size)
+ static __init bool need_page_alloc_tagging(void)
  {
- 	return size >= sizeof(struct alloc_tag);
-@@ -214,6 +243,21 @@ static void *reserve_module_tags(struct module *mod, unsigned long size,
- 	if (!align)
- 		align = 1;
+ 	return mem_profiling_support;
+@@ -448,6 +450,8 @@ struct page_ext_operations page_alloc_tagging_ops = {
+ };
+ EXPORT_SYMBOL(page_alloc_tagging_ops);
  
-+#ifndef PGALLOC_TAG_DIRECT_REF
-+	/*
-+	 * If alloc_tag size is not a multiple of required alignment tag
-+	 * indexing does not work.
-+	 */
-+	if (!IS_ALIGNED(sizeof(struct alloc_tag), align)) {
-+		pr_err("%s: alignment %lu is incompatible with allocation tag indexing (CONFIG_PGALLOC_TAG_REF_BITS)",
-+			mod->name, align);
-+		return ERR_PTR(-EINVAL);
-+	}
++#endif /* CONFIG_PGALLOC_TAG_USE_PAGEFLAGS */
 +
-+	/* Ensure prepend consumes multiple of alloc_tag-sized blocks */
-+	if (prepend)
-+		prepend = alloc_tag_align(prepend);
-+#endif /* PGALLOC_TAG_DIRECT_REF */
- 	rcu_read_lock();
- repeat:
- 	/* Try finding exact size and hope the start is aligned */
-@@ -462,6 +506,10 @@ static int __init alloc_tag_init(void)
- 		return -ENOMEM;
- 
- 	module_tags.end_addr = module_tags.start_addr + module_tags_mem_sz;
-+#ifndef PGALLOC_TAG_DIRECT_REF
-+	/* Ensure the base is alloc_tag aligned */
-+	module_tags.start_addr = alloc_tag_align(module_tags.start_addr);
-+#endif
- 	mt_set_in_rcu(&mod_area_mt);
- 	alloc_tag_cttype = codetag_register_type(&desc);
- 	if (IS_ERR(alloc_tag_cttype)) {
-diff --git a/lib/codetag.c b/lib/codetag.c
-index d602a81bdc03..53585518a103 100644
---- a/lib/codetag.c
-+++ b/lib/codetag.c
-@@ -151,8 +151,8 @@ static struct codetag_range get_section_range(struct module *mod,
- 					      const char *section)
- {
- 	return (struct codetag_range) {
--		get_symbol(mod, "__start_", section),
--		get_symbol(mod, "__stop_", section),
-+		get_symbol(mod, CODETAG_SECTION_START_PREFIX, section),
-+		get_symbol(mod, CODETAG_SECTION_STOP_PREFIX, section),
- 	};
- }
- 
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 4ba5607aaf19..231a95782455 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -2650,6 +2650,7 @@ void __init mm_core_init(void)
- 	report_meminit();
- 	kmsan_init_shadow();
- 	stack_depot_early_init();
-+	alloc_tag_sec_init();
- 	mem_init();
- 	kmem_cache_init();
- 	/*
+ #ifdef CONFIG_SYSCTL
+ static struct ctl_table memory_allocation_profiling_sysctls[] = {
+ 	{
+diff --git a/mm/page_ext.c b/mm/page_ext.c
+index 641d93f6af4c..5f993c271ee7 100644
+--- a/mm/page_ext.c
++++ b/mm/page_ext.c
+@@ -83,7 +83,7 @@ static struct page_ext_operations *page_ext_ops[] __initdata = {
+ #if defined(CONFIG_PAGE_IDLE_FLAG) && !defined(CONFIG_64BIT)
+ 	&page_idle_ops,
+ #endif
+-#ifdef CONFIG_MEM_ALLOC_PROFILING
++#if defined(CONFIG_MEM_ALLOC_PROFILING) && !defined(CONFIG_PGALLOC_TAG_USE_PAGEFLAGS)
+ 	&page_alloc_tagging_ops,
+ #endif
+ #ifdef CONFIG_PAGE_TABLE_CHECK
 -- 
 2.46.0.184.g6999bdac58-goog
 
