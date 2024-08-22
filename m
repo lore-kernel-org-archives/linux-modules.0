@@ -1,90 +1,182 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64BF514A0B8
-	for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2024 10:35:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1171C93D7;
+	Thu, 22 Aug 2024 12:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724322930; cv=none; b=Fj/N75x+pPMmQS+SWEoY5gkAYwbfoGE4s0M36kUwMqTXXTTeOtdxsH7jY7b8G2OcMnW9sVCG86R6ooarwkpwLqEfs0bkWBIxmpifH8lvjqSNN/KEjlRn7oVW1vzMzaZTFqIm/IgGbH23KsPT89rGEwQuLoF3CRGZVlLAP6XYGIE=
+	t=1724328024; cv=none; b=DrR0a8XSWVVWHZv2HS6//piFdpFFyYB1x9o3rhF+UW3YA13ijFQEJXCLC1n6gDeMA6m1WavSlJQeEKXM//M4hdDSNN0qRyb8MCOM9HpLtomlRnsyNKUsQFLtow5lFmCuljO/isAkbliDBEQi7z/O6wFMJfjC5NNDfvl7li494EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724322930; c=relaxed/simple;
-	bh=Zr7XPwrtEk3qtd+gx6KyV19j72eTMSccWfQQdkVH9B8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jbKoCwfL7HHMWaJ/u6o6ThulEbI37GZyJhvWJ6T9CWTCI+JYBc1/g7zGYmyZBZreuS63LMtGCIS6s/YmpkNXYMZlr5ym5ULmshSa71tulb1XLqyA0JyRVa9P+twuJKjHF/1UkoJPyZ5j+Wuw4SW8VHGJ6Ev55KGfBnOhAsY0c9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UfQLBYi0; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1724328024; c=relaxed/simple;
+	bh=Frs7AnE6wun6QVrxYzJHiybARafDIPzKWYZS2yfNvU4=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jeETstirv/C4zeL1UhVR2NBNp4BCbihEbYAapBHHbeGrpVuH45oOdEQXVS4SGVRBO14wwFa2Muvd9bfqYMg+GTE8lXla+MQkOzjFXadPuUvOUuiE3n2K5n8g5OU5SlFddXpPCyBJMgJ1URNrkyrXVtz4/8SagjIIAp9kVPewifM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=AbXlpY6K; arc=none smtp.client-ip=185.70.40.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UfQLBYi0"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2f3ea86377aso6414411fa.1
-        for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2024 03:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1724322925; x=1724927725; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/p6i37or0QISD6fmH5m5OZHLkmrLXz/r/0MMJoGQsE0=;
-        b=UfQLBYi011JLpNa01J/SQMCyA8Rzw729b54O3xxekLSR57OcD0L6JXDL5TLUYP9fq9
-         wgNveyQkREuhRPzA5gD/DiHNW8QFa5HHpK2Smz/sgbvn/iMUoSFjepm29FJDbO4ljxG/
-         7Q8FY9mAl5x+lHw2yDF8SxPK6R+ungv2MjKbGt9WA+xUMKl2tZddfr17fRbbURoRjreD
-         /xxV/RD6vHVCYjtfCi7/SbWi/iIqbjyFVHRIdBEs6K32DauDeF/smsvfXhjRjmGivbBv
-         SM2+mWjq+1OtnnBva6emZ7hCt+pcHe8eywmeUWTySOpchDRpREStV2UeGkSJ5wU41SEE
-         FwpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724322925; x=1724927725;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/p6i37or0QISD6fmH5m5OZHLkmrLXz/r/0MMJoGQsE0=;
-        b=WvQSzJBu5Otdq/Dw2rMQ1DVczCqKtmgO9pi4MGSkR7Yl/bustd6cf1sdxqKtldc9vB
-         xou4nodzAqfr+NenZi55QoKy9L3gdCPRxhH5YBDnViYrAyMxn7wcyqWi2H9TzQcSFVPr
-         fzROfchZhXSBlocSYET+TpqA3zgFnP/FmPf0hQxEwSS2J6KcoWSSCyuQfe2qd7Kvroam
-         4E+iSkkOO8kWgDFou4AgYYWkEQBKgqTS7csPygIk6ClQj/UTGxfO7JCAg6B6LGTXLmZF
-         Sdxqb+a4PqP1oY2MOXUfC0iQBh2sBa/LPOFHgyA3Odc1uU5liJ5kQkrLoVd5zVlszAvB
-         OfRw==
-X-Forwarded-Encrypted: i=1; AJvYcCUPSfAB0wzFnIlDlRitCRiBwVaTtmKhx79DqO8WQaZo0gCfpWgBeJvXGv8A8wZngG06mcFTwqkVjqmNsXYo@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0GM/ZIoWXktm43j5ibd3uX9aTAP5SqsU7xsSXvrWdR3NygCSt
-	OVHHmC0oNoXKUtl3AvcF6ElKZ328rklxrMc2jPpddpCkIe33l0UXwCQavbeCu6MaV2oYfZNokl8
-	+
-X-Google-Smtp-Source: AGHT+IGdsE1iYvV40D2msT5q26R9UmfrcxBs0mu8KXtbUxmxjfHILnwDSACtQevE3PyiAHKFLGBQJw==
-X-Received: by 2002:a2e:a985:0:b0:2f3:ea86:3727 with SMTP id 38308e7fff4ca-2f3f88941e8mr35284061fa.24.1724322925314;
-        Thu, 22 Aug 2024 03:35:25 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c04a3e9540sm749547a12.41.2024.08.22.03.35.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Aug 2024 03:35:25 -0700 (PDT)
-Message-ID: <a3701a9a-5b42-4581-a150-67d84601061c@suse.com>
-Date: Thu, 22 Aug 2024 12:35:24 +0200
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="AbXlpY6K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1724328020; x=1724587220;
+	bh=Eo15Vf0KvOVZFuFUurKSOxZuNxfh+ilduZH8kmrr0LY=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=AbXlpY6KEBifkw188IiiQaP/sOabCXCfj/ExVcTdKU7eh/6SlO3OqboiDUVWJ5IhF
+	 9x2JRX6TNyLMxOEb7+OlsYSn0RpFoW8DcTNl/eHly/z2XMhYMaUt1920m6sYvASBzY
+	 4qGDChY0zkDjodnIYKsJj2b8mWH+OOLPjn9Pcje6GnWWVJikR1nL7IFP6WWnHba39g
+	 G+bOL4OBCLCZh00/6y48Qd+JAnGB3DVgfuIe37+5HyB6+A2S5AjZKPX2M9ANU1aDqe
+	 3tHAUaf64vNCndueMoz+MUTnidjc4HZk13fxw7jrNgnqKqNZxGJ0kAHqYzK4uwOf6Q
+	 vtHAq/cGsXN2w==
+Date: Thu, 22 Aug 2024 12:00:15 +0000
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Matthew Maurer <mmaurer@google.com>, Sami Tolvanen <samitolvanen@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 16/19] gendwarfksyms: Add support for reserved structure fields
+Message-ID: <77e8e20c-8ca1-4df7-a4d7-ed77454f1754@proton.me>
+In-Reply-To: <2024082257-refrain-subsector-b6c4@gregkh>
+References: <20240815173903.4172139-37-samitolvanen@google.com> <20240819193851.GA4809@google.com> <a76f9422-4001-416a-a31b-37ab7dcb17f4@proton.me> <CABCJKudAF0=29js8SDcYY5r6kM7RBveTrZH9RyECNGqkcqy=nw@mail.gmail.com> <CAGSQo01kCUd64nB7C7Ssy1N=UBpOP3bORsRDcHJ1k2CqkbKsfQ@mail.gmail.com> <c6c1e84a-40f3-41a5-a732-f1cf06521691@proton.me> <2024082229-elevation-emporium-8118@gregkh> <bc2e02d7-d4a7-4f0f-852c-e26ad6a8688f@proton.me> <2024082257-refrain-subsector-b6c4@gregkh>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: d4880588e8a82bc15d53eb3fbef04fb18dc7073e
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: scale modules with more reviewers
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: kris.van.hees@oracle.com, samitolvanen@google.com, da.gomez@samsung.com,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240821174021.2371547-1-mcgrof@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20240821174021.2371547-1-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 8/21/24 19:40, Luis Chamberlain wrote:
-> We're looking to add Rust module support, and I don't speak
-> Rust yet. The compromise was reached that in order to scale we'd
-> get volunteers committed from the Rust community willing to review
-> both Rust and C code for modules so we can ensure we get proper
-> reviews for both parts of the code and so that we can scale.
-> 
-> Add those who have stepped up to help.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+On 22.08.24 09:29, Greg Kroah-Hartman wrote:
+> On Thu, Aug 22, 2024 at 05:55:32AM +0000, Benno Lossin wrote:
+>> On 22.08.24 01:29, Greg Kroah-Hartman wrote:
+>>> On Wed, Aug 21, 2024 at 11:31:25AM +0000, Benno Lossin wrote:
+>>>> On 20.08.24 22:03, Matthew Maurer wrote:
+>>>>>>> The way `KAbiReserved` is implemented is via a `union` (maybe a bit
+>>>>>>> ironic, considering what I said in my other replies, but in this ca=
+se,
+>>>>>>> we would provide a safe abstraction over this `union`, thus avoidin=
+g
+>>>>>>> exposing users of this type to `unsafe`):
+>>>>>>>
+>>>>>>>     #[repr(C)]
+>>>>>>>     pub union KAbiReserved<T, R> {
+>>>>>>>         value: T,
+>>>>>>>         _reserved: R,
+>>>>>>>     }
+>>>>>>
+>>>>>> I like this approach even better, assuming any remaining issues with
+>>>>>> ownership etc. can be sorted out. This would also look identical to
+>>>>>> the C version in DWARF if you rename _reserved in the union to
+>>>>>> __kabi_reserved. Of course, we can always change gendwarfksyms to
+>>>>>> support a different scheme for Rust code if a better solution comes
+>>>>>> along later.
+>>>>
+>>>> Yeah sure, that should also then work directly with this patch, right?
+>>>>
+>>>>>> Sami
+>>>>>
+>>>>> Agreement here - this seems like a good approach to representing
+>>>>> reserved in Rust code. A few minor adjustments we discussed off-list
+>>>>> which aren't required for gendwarfksyms to know about:
+>>>>> 1. Types being added to reserved fields have to be `Copy`, e.g. they
+>>>>> must be `!Drop`.
+>>>>> 2. Types being added to reserved fields must be legal to be
+>>>>> represented by all zeroes.
+>>>>> 3. Reserved fields need to be initialized to zero before having their
+>>>>> union set to the provided value when constructing them.
+>>>>> 4. It may be helpful to have delegating trait implementations to avoi=
+d
+>>>>> the couple places where autoderef won't handle the conversion.
+>>>>>
+>>>>> While I think this is the right solution, esp. since it can share a
+>>>>> representation with C, I wanted to call out one minor shortfall - a
+>>>>> reserved field can only be replaced by one type. We could still
+>>>>> indicate a replacement by two fields the same as in C, by using a
+>>>>> tuple which will look like an anonymous struct. The limitation will b=
+e
+>>>>> that if two or more new fields were introduced, we'd need to edit the
+>>>>> patches accessing them to do foo.x.y and foo.x.z for their accesses
+>>>>> instead of simply foo.y and foo.z - the autoref trick only works for =
+a
+>>>>> single type.
+>>>>
+>>>> We will have to see how often multiple fields are added to a struct. I=
+f
+>>>> they are infrequent and it's fine for those patches to then touch the
+>>>> field accesses, then I think we can just stick with this approach.
+>>>> If there are problems with that, we can also try the following:
+>>>> all fields of kABI structs must be private and must only be accessed
+>>>> through setters/getters. We can then modify the body the setters/gette=
+rs
+>>>> to handle the additional indirection.
+>>>
+>>> That's just not going to work, sorry.  Remember, the goal here is to
+>>> keep the code that comes from kernel.org identical to what you have in
+>>> your "enterprise" kernel tree, with the exception of the few extra
+>>> "padding" fields you have added to allow for changes in the future in
+>>> the kernel.org versions.
+>>
+>> Yeah, that's what I thought.
+>>
+>>> Requiring all kernel.org changes that add a new field to a structure to
+>>> only do so with a settter/getter is going to just not fly at all as the=
+y
+>>> will not care one bit.
+>>>
+>>> Or, we can just forget about "abi stability" for rust code entirely,
+>>> which I am totally fine with.  It's something that managers seem to lik=
+e
+>>> for a "check box" but in reality, no one really needs it (hint, vendors
+>>> rebuild their code anyway.)
+>>
+>> The approach already works for a adding a single field and I got from
+>> the discussions with Matthew and Sami that that is the most common case.
+>> We will reach out to the Rust folks and see what we can do about the
+>> multiple field case.
+>=20
+> No, single field is NOT the common case, the common case is reserving
+> multiple padding variables in a structure as lots of things can change
+> of the long lifetimes of some of these kernel trees.  Look at the
+> changes in the Android or SLES or RHEL kernels for specifics.
 
-Acked-by: Petr Pavlu <petr.pavlu@suse.com>
+Thanks for letting me know.
 
+> Here's one example in the android tree where 4 64bit fields are reserved
+> for future abi changes:
+> =09https://android.googlesource.com/kernel/common/+/refs/heads/android12-=
+5.10/include/linux/fs.h#421
+>=20
+> And here's a different place where a field is being used with many
+> remaining for future use:
+> =09https://android.googlesource.com/kernel/common/+/refs/heads/android12-=
+5.10/include/linux/sched.h#1379
+>=20
+> And also, we want/need lots of other space reservation at times, look at
+> how "Others" can get access to reserved areas in structures that need to
+> be done in an abi-safe way:
+> =09https://android.googlesource.com/kernel/common/+/refs/heads/android12-=
+5.10/include/linux/sched.h#1375
+
+Let me correct myself, it's only possible to replace one `KAbiReserved`
+by one new field. You can have as many fields of type `KAbiReserved` as
+you want. The thing that you can't do is replace a single `KAbiReserved`
+field by multiple (well you can, but then you have to change the sites
+that use it).
+
+> All of this also needs to be possible in any structures that are
+> exported by rust code if vendors want to have a way to track and ensure
+> that abis do not change over time, just like they can today in C code.
+
+All of those structs need to be `repr(C)`, otherwise they don't
+have a stable layout to begin with. Other than that, only autoderef
+might be missing. But we would have to see if that even comes up.
+
+> Or if not possible, just don't export any rust structures at all :)
+
+I think that we should try to get this working.
+
+---
 Cheers,
-Petr
+Benno
+
