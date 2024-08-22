@@ -1,189 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53ED487AE;
-	Thu, 22 Aug 2024 17:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832101CCEFB
+	for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2024 17:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724348189; cv=none; b=Qgk1V4aO+sjQza8N6nkrBpD7mDQi4/jEjf2n/IGoyH+C3CNeWMQV2QPym6qaagARBYPDFRRh8F8Y6iOM04B/C+jjQBhHB4pVvmKNRwkXNVM1s+gw9gRV4l2VTtMsdHoRtthy5PAkhvkXYYnIrb9dL6aRAo2mut5THZQAdbWIjCs=
+	t=1724349482; cv=none; b=f4H71KlMzXqJ0UOwcpayE8OIVfFrorbHJlfgYcJojorl/gsgycY76sgJTQOZxhxVFYxVOssQk7OzPxIg0GzyR1pLQtqZoFtv4SRlOwOVc853+hoyOoDr17Ok58IRHDr/mcGcF75mYyCrv3DhfAoK1bsFr3lPysGaXkfbwJ/YMas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724348189; c=relaxed/simple;
-	bh=ALLrNEBz2lBvoCSYyf3SnpzNRa2dr0JSZGzm5i/Z76k=;
+	s=arc-20240116; t=1724349482; c=relaxed/simple;
+	bh=AyQnYoPe6sf/wSyLAOYvZiLsLlNC/z1c6uDn8wvCjt4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GyLsT2Q/k/JpcoVb6kH2O1b3flT89P25vGL7m26AQxHXPG/PqCd97TDS1rUWRkSm0gVksYhzylNboOt9SFOycPIUANgapdvqASbv/0Zlh8klo+bCSbmoFyemcqoS+m3X2rpehL2/b4z0cZKUecuZE6N+5TovJ/rtsNeDZJCM0RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZD8erRH; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=WVgTyzSoUMBHUpNTBFYaOZbIi5QcE1M6fO2LApTJ2wYxgiLAzfccmAmhW6/HyVDBLBItXcTcGzHgw2Xpe4CrDeZc9OB5oATegmrdPJFCQNwRrIBQW2k1bH+oIzsUzieaA9jm9FDIdE3oRoVZgk6/ZIsnX50DNHyVPU2NR+Y0Y0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A0TnMeyY; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZD8erRH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 733C7C4AF12;
-	Thu, 22 Aug 2024 17:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724348188;
-	bh=ALLrNEBz2lBvoCSYyf3SnpzNRa2dr0JSZGzm5i/Z76k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aZD8erRHGDh2nsjbCAbpiKFU4MOXC9oNfSIo6ZKseA4+ou0A+f0ZtcCH1INMc43ZT
-	 Wr1HW9ygEpnPX0pOoRH3XQVWzWxnJSrH5ibPiWBwBFs9j25kp9PdrNVOyFVyzcTYew
-	 Pzafe7Nq8MN8kacxxBd3bTf8uhgyxKqfoE3+pY661X2C2QhIqyEHsbIyHBv77TADip
-	 1BFyTIQudGsdtaJuIfQdc4+3Ugr8mAseZ9VKvKlLai6wNi7ZJ1ZYvK0QCJcSczIsrC
-	 f8xHPce9Xc+zn7IMXX0Fi3NlyrFNKLUbaCj4ndWDdvo4EH+hOS2fzl/+dygXG0K7ER
-	 Q6WsBD9aQXEDg==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5343617fdddso769391e87.0;
-        Thu, 22 Aug 2024 10:36:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVQ7mAN2XA50aKSW4GTF6YnkvrcdwA1Ta5lqsq4BUlbVTs8OOFnFqMvmLi0Bg5XP9mQGPP5BB/ewDRHEi4FGyh/swsZ@vger.kernel.org, AJvYcCVqzYKI2tx1luqGb4n0Ab80Bnh3r6Gsx4pa45o9f7GIk+SH4V0ItaUuOkBUv7eENAyz/fjqkZlauiHBPxs=@vger.kernel.org, AJvYcCVwnkpBANgRRAVm79xNL6WWLLKVgHLW0MZmluWn6hd0hHut6/CKwonLrC5TMCINhsE5n+ITOWeGDObRIA9OEA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyI2mZlipsXQCH/TQ+T40xfEbjQWYK7OoT8XQ0q4Tt+0KYAVHPL
-	kwUBj2boe1A/F17ukumVMoPf/MsRsZNaUtg4Yj3ESc5u1JRES0uMjebQKpEk7zd0qE8GF2QBUu3
-	3lX+SY+npwRBWj/oKXRN+iYjeS2w=
-X-Google-Smtp-Source: AGHT+IHjEo7S6pVlNBC7rLTzZt9ouBtvu4VbscK/zAkryHKCVDTjtRFouTb6icvjUG0NC9wW6KL1KWWdDDUarh5FSRg=
-X-Received: by 2002:a05:6512:1111:b0:52f:cd03:a84a with SMTP id
- 2adb3069b0e04-5334fd4cdd0mr2460609e87.39.1724348187091; Thu, 22 Aug 2024
- 10:36:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A0TnMeyY"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-44fee2bfd28so27491cf.1
+        for <linux-modules@vger.kernel.org>; Thu, 22 Aug 2024 10:58:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724349479; x=1724954279; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TOajGVKCmpE5kmdw/T7Qp/wNBvNSdZEW8S+OXk3bvwo=;
+        b=A0TnMeyYdHzSVj/b2HPYdhkBusch8SVI34fBwCpGSZbzyKirr+eshjNsd/eyeq1DmH
+         oEr82q5XOSGB1/Nx1BGV2zQLPQlIgtgpFR1pZc/iXchTci7b68j1vVkIGq1uzemWAQw7
+         hekHQKnm1CFInFEdfnZ5IOA/Z+sChhxSlyDv5rT/jTdD8P+xRkRAlrAlRJwEa2FFSirN
+         vHVDlAcwUKdM3bd3GXaNoSv1CHgBKVmFyLN2QsL7RX7KF1f2EBLwd0bh8hMWDwuK3UUP
+         xR3QqYAs+OYTHkxpYBIniCYr0vKfRzi3DFiIBdFhkOnhrr2vDJKE9fFiYcdeIBUaUajI
+         nnzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724349479; x=1724954279;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TOajGVKCmpE5kmdw/T7Qp/wNBvNSdZEW8S+OXk3bvwo=;
+        b=G/CoIYGcAlMzs0ggCAJVRGyIfUFk3Tj4rOr2rwPWSrI+SIY2vqyPy31ULmD4eejdEH
+         U5Rn4Gf0g50NaPeHqDTvlXMShwGW+Q/7msfiR6DkfrJt3Wiptz5hjNf/m29IpJTt6/Vo
+         4fIMbEPJlumi8yeUd3JxXnsYJvPXorTwK2I/OZkpjNXSLkD99VL6t54Hk5hm4KTUyxii
+         pFeLUL4egMo9HigZNXxlg9TVkYsI+RDXr2u/SQSipSw2DGF/EBRMokG2DIQIBbhitqBN
+         orp3aq6cpCjjQ7klx8ZIVfCfGxvpIr5wfVbnWY3BA2dwj982gTuq5KPSTAVBxV6AIPT9
+         2jrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWam5k5ulq09Ytuqh1fxUiNo4YfO/KcM/sZdjJdqUA37VFOdA2CdqBvBSG8FVsPJmIQKuZ3kCTeZ8u1Z35f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/ZSVrNACTOWxXLXofG98iO47Xb6vWHHhCmimYOslobEX5ikhk
+	SNPWGA3DuptqM/dUC2KrI413xxP05F0cV2wNHvofe+PWDziGjqih8aOdjasSXgJANVmCub88GJ9
+	wqr3uxSDeD81lb+Pblz+ojjfHHeawUP/g1+zO
+X-Google-Smtp-Source: AGHT+IHpOQGA1+Xvu8VfAIHeP2jPYfCEPVVyYq8ryHdwZRdhtAaz9lpYz6WE5A47PoBLoqFMm3zfFnuZRf1AcYxhCf8=
+X-Received: by 2002:a05:622a:1b91:b0:447:e3e3:77c1 with SMTP id
+ d75a77b69052e-4550859549emr27021cf.29.1724349479217; Thu, 22 Aug 2024
+ 10:57:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821040700.1919317-1-kris.van.hees@oracle.com> <20240821040700.1919317-3-kris.van.hees@oracle.com>
-In-Reply-To: <20240821040700.1919317-3-kris.van.hees@oracle.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 23 Aug 2024 02:35:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR3Vkubuv7Rb2eeRE45Yycs9DJLRUatBb=9--VPT80aQw@mail.gmail.com>
-Message-ID: <CAK7LNAR3Vkubuv7Rb2eeRE45Yycs9DJLRUatBb=9--VPT80aQw@mail.gmail.com>
-Subject: Re: [PATCH v7 3/4] scripts: add verifier script for builtin module
- range data
-To: Kris Van Hees <kris.van.hees@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Nick Alcock <nick.alcock@oracle.com>, Alan Maguire <alan.maguire@oracle.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Jiri Olsa <olsajiri@gmail.com>, Elena Zannoni <elena.zannoni@oracle.com>
+References: <20240815173903.4172139-21-samitolvanen@google.com> <874j7ccxtz.fsf@trenco.lwn.net>
+In-Reply-To: <874j7ccxtz.fsf@trenco.lwn.net>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 22 Aug 2024 10:57:21 -0700
+Message-ID: <CABCJKud=YO=fxF_tmX1N2ec66Rzqh8RsaQu0qrbC5WB529wgWg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/19] Implement DWARF modversions
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, 
+	Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 21, 2024 at 1:11=E2=80=AFPM Kris Van Hees <kris.van.hees@oracle=
-.com> wrote:
->
-> The modules.builtin.ranges offset range data for builtin modules is
-> generated at compile time based on the list of built-in modules and
-> the vmlinux.map and vmlinux.o.map linker maps.  This data can be used
-> to determine whether a symbol at a particular address belongs to
-> module code that was configured to be compiled into the kernel proper
-> as a built-in module (rather than as a standalone module).
->
-> This patch adds a script that uses the generated modules.builtin.ranges
-> data to annotate the symbols in the System.map with module names if
-> their address falls within a range that belongs to one or more built-in
-> modules.
->
-> It then processes the vmlinux.map (and if needed, vmlinux.o.map) to
-> verify the annotation:
->
->   - For each top-level section:
->      - For each object in the section:
->         - Determine whether the object is part of a built-in module
->           (using modules.builtin and the .*.cmd file used to compile
->            the object as suggested in [0])
->         - For each symbol in that object, verify that the built-in
->           module association (or lack thereof) matches the annotation
->           given to the symbol.
->
-> Signed-off-by: Kris Van Hees <kris.van.hees@oracle.com>
-> Reviewed-by: Nick Alcock <nick.alcock@oracle.com>
-> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->     Changes since v6:
->      - Applied Masahiro Yamada's suggestions to the AWK script.
->
->     Changes since v5:
->      - Added optional 6th argument to specify kernel build directory.
->      - Report error and exit if .*.o.cmd files cannot be read.
->
->     Changes since v4:
->      - New patch in the series
-> ---
->  scripts/verify_builtin_ranges.awk | 356 ++++++++++++++++++++++++++++++
->  1 file changed, 356 insertions(+)
->  create mode 100755 scripts/verify_builtin_ranges.awk
->
-> diff --git a/scripts/verify_builtin_ranges.awk b/scripts/verify_builtin_r=
-anges.awk
-> new file mode 100755
-> index 000000000000..93f66e9a8802
-> --- /dev/null
-> +++ b/scripts/verify_builtin_ranges.awk
-> @@ -0,0 +1,356 @@
-> +#!/usr/bin/gawk -f
-> +# SPDX-License-Identifier: GPL-2.0
-> +# verify_builtin_ranges.awk: Verify address range data for builtin modul=
-es
-> +# Written by Kris Van Hees <kris.van.hees@oracle.com>
-> +#
-> +# Usage: verify_builtin_ranges.awk modules.builtin.ranges System.map \
-> +#                                 modules.builtin vmlinux.map vmlinux.o.=
-map \
-> +#                                 [ <build-dir> ]
-> +#
-> +
-> +# Return the module name(s) (if any) associated with the given object.
-> +#
-> +# If we have seen this object before, return information from the cache.
-> +# Otherwise, retrieve it from the corresponding .cmd file.
-> +#
-> +function get_module_info(fn, mod, obj, s) {
-> +       if (fn in omod)
-> +               return omod[fn];
-> +
-> +       if (match(fn, /\/[^/]+$/) =3D=3D 0)
-> +               return "";
-> +
-> +       obj =3D fn;
-> +       mod =3D "";
-> +       fn =3D kdir "/" substr(fn, 1, RSTART) "." substr(fn, RSTART + 1) =
-".cmd";
-> +       if (getline s <fn =3D=3D 1) {
-> +               if (match(s, /DKBUILD_MODFILE=3D['"]+[^'"]+/) > 0) {
-> +                       mod =3D substr(s, RSTART + 16, RLENGTH - 16);
-> +                       gsub(/['"]/, "", mod);
-> +               }
-> +       } else {
-> +               print "ERROR: Failed to read: " fn "\n\n" \
-> +                     "  Invalid kernel build directory (" kdir ")\n" \
-> +                     "  or its content does not match " ARGV[1] >"/dev/s=
-tderr";
-> +               close(fn);
-> +               total =3D 0;
-> +               exit(1);
-> +       }
-> +       close(fn);
-> +
-> +       # A single module (common case) also reflects objects that are no=
-t part
-> +       # of a module.  Some of those objects have names that are also a =
-module
-> +       # name (e.g. core).  We check the associated module file name, an=
-d if
-> +       # they do not match, the object is not part of a module.
-> +       if (mod !~ / /) {
-> +               if (!(mod in mods))
-> +                       mod =3D "";
-> +       }
-> +
-> +       gsub(/([^/ ]*\/)+/, "", mod);
-> +       gsub(/-/, "_", mod);
-> +
-> +       # At this point, mod is a single (valid) module name, or a list o=
-f
-> +       # module names (that do not need validation).
-> +       omod[obj] =3D mod;
-> +       close(fn);
+Hi Jon,
 
+On Thu, Aug 22, 2024 at 9:43=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> wr=
+ote:
+>
+> Sami Tolvanen <samitolvanen@google.com> writes:
+>
+> > The first 16 patches of this series add a small tool for computing
+> > symbol versions from DWARF, called gendwarfksyms. When passed a
+> > list of exported symbols and an object file, the tool generates
+> > an expanded type string for each symbol, and computes symbol CRCs
+> > similarly to genksyms.
+>
+> Potentially silly question but: how similarly?  Specifically, do the two
+> tools generate the same CRCs for the same symbols?  It seems that might
+> be important for users transitioning to the new DWARF world order.
 
-Same as 2/4.
+Reconstructing the source-based type strings genksyms uses from DWARF
+wouldn't really be feasible, so the CRCs will be different. The
+similar part is just that we build a human-readable string from the
+debugging information and compute a CRC from it. If anyone is
+interested in switching to gendwarfksyms, they'll have to rebuild all
+their modules too.
 
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+Sami
