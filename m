@@ -1,153 +1,308 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF4F185951
-	for <linux-modules@vger.kernel.org>; Fri, 23 Aug 2024 14:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588C118893E;
+	Fri, 23 Aug 2024 14:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724423299; cv=none; b=psiHqwRWMLmKjMqtc4u5Cs2cqxZdYsPhf+ztP0ftagE3pS28ucFtUKAYbkR7/IzsfwVOjt9fyqVu0yx0IKwLglcDiqeBWR5BPz/YHqzZwBacqb20YPGeQ2pgu/5IQFZlVH0+QMqFke9KzSVlflMTDOh+/EI7lqcOr4PGrLdBHYE=
+	t=1724423381; cv=none; b=XRBbN32uFZBlssJzUiiOdU+XMX6CJ3kPJfuUl1lYiVW7ABpQw4Hfzwh9WONHAP73woiN3qmooNwiq/58DkcqCqf62SDQGy1MdmxI0cEcfWqcpQ9aQNoK+RXWk3mLp34XKMuYN2CQ0ntDgoIBYh+UbIoP/YsIzG31I2U5UHeSdEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724423299; c=relaxed/simple;
-	bh=SnDFux/fhi3cwvYLU3j8zed/L+ZbGvV9LI0yhVV3hWw=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:References; b=PkpHChsy+ogedtui+weCzwsSuxEFeXI80w/psobsF8d7IcNQcXCCVGHFeVfk+fstkO++CQQdAJ385WBqzobGVIVosPihZvyQN595uk9UXCy5y1j3N9khhGy4+uYzSClEj+WwlX4P61t9EDahnL/0+Gw9NqdUkPZdUlBc4n5n3vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=keKFFM17; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1724423381; c=relaxed/simple;
+	bh=lp10Mqw6LXG/DjpZXEPfNmKQcCCj50TX0zJgtwnyKNo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pUoyL1yOdOCFbnCsMOQW1gqJ7WqZ6T9o3WDNoLAuCbVDg91QWBh1oqGKN+2YsYBSH24MKcZRmYFtALj++xwv9vicZbtN75fyFWm0KqTcOvNlWThb5cIOroHtLOYzQsF6W8O1Eop5Bx6rPssk9Edp2aw1J5gg7AWCN89uODAQ+Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=G2ZmqA3j; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DsqwgGk/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=G2ZmqA3j; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DsqwgGk/; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="keKFFM17"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240823142815euoutp0136ec29c479ee3a7bcc6f26b592c06e0f~uYdnRH5Zm3058630586euoutp01L
-	for <linux-modules@vger.kernel.org>; Fri, 23 Aug 2024 14:28:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240823142815euoutp0136ec29c479ee3a7bcc6f26b592c06e0f~uYdnRH5Zm3058630586euoutp01L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1724423295;
-	bh=HD4eE7vwtLj4VX61TxbKyJfyLQL/SBGyzduGVy2uWOA=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=keKFFM17vPqDm1eaw8xYE7JRG0/l59OhO0usm1UEVctkMZbkFUDXYyVseLKt3VhJn
-	 78yq5sW3Rh/P46gTKlg8HJi6OcfhXQKIXu8qOMxf6tvVjSy9MbRYjy7ORxKtsUjMsF
-	 JPgzsmO86O/jDQLV7PJAxhRSVN3Hzd3IegYu1kjk=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240823142815eucas1p10a765bab122ef20b1b7f33758bf4a83a~uYdnFuhKi0068100681eucas1p16;
-	Fri, 23 Aug 2024 14:28:15 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id C9.38.09875.F7C98C66; Fri, 23
-	Aug 2024 15:28:15 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240823142814eucas1p205260ffd9afdfe778edd673f4a2ddb66~uYdmq6Iwc1349113491eucas1p2G;
-	Fri, 23 Aug 2024 14:28:14 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240823142814eusmtrp10cb34f9fdd7693a767bc4c24984ae978~uYdmqHIob1695816958eusmtrp1l;
-	Fri, 23 Aug 2024 14:28:14 +0000 (GMT)
-X-AuditID: cbfec7f4-131ff70000002693-b1-66c89c7f8fc9
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id E1.78.08810.E7C98C66; Fri, 23
-	Aug 2024 15:28:14 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240823142814eusmtip2d67332f8577a3ad73bb9df0292d9e1dd~uYdmX3zj12278322783eusmtip2o;
-	Fri, 23 Aug 2024 14:28:14 +0000 (GMT)
-Received: from localhost (106.110.32.87) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Fri, 23 Aug 2024 15:28:14 +0100
-Date: Fri, 23 Aug 2024 16:28:13 +0200
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<petr.pavlu@suse.com>, <samitolvanen@google.com>, <kris.van.hees@oracle.com>
-Subject: Re: [PATCH] MAINTAINERS: scale modules with more reviewers
-Message-ID: <20240823142813.5s3xjaqftznddwje@AALNPWDAGOMEZ1.aal.scsc.local>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="G2ZmqA3j";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DsqwgGk/";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="G2ZmqA3j";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DsqwgGk/"
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 67D412032B;
+	Fri, 23 Aug 2024 14:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724423377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eR+Ulun1hXojDzAHAkNNJtbRl8AgUv4JNDHaEMqhYOo=;
+	b=G2ZmqA3jupyUI0AEdPJVcxxkwSMAD7CNDtl4KzQplpZ0QJkA2FpIjuNwBUmYsrboUu9bgG
+	Vdz1BVDAeUa07NBunxrekClO/HRLvW1HkiKxypD64ckyeWunoVmmxJ/p9EZXPNPM+nUu8g
+	t7FwVzuyBkMRdGTYB0iZ2W/5qFq6mK8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724423377;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eR+Ulun1hXojDzAHAkNNJtbRl8AgUv4JNDHaEMqhYOo=;
+	b=DsqwgGk/OpeATe6KFZOanOZ4G+INUhYuOyybxzmRTm6n/rB+2hsYPMvJ6Q2ACLT5vfsX2v
+	GTJAXdeBxMiVeIBg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724423377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eR+Ulun1hXojDzAHAkNNJtbRl8AgUv4JNDHaEMqhYOo=;
+	b=G2ZmqA3jupyUI0AEdPJVcxxkwSMAD7CNDtl4KzQplpZ0QJkA2FpIjuNwBUmYsrboUu9bgG
+	Vdz1BVDAeUa07NBunxrekClO/HRLvW1HkiKxypD64ckyeWunoVmmxJ/p9EZXPNPM+nUu8g
+	t7FwVzuyBkMRdGTYB0iZ2W/5qFq6mK8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724423377;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eR+Ulun1hXojDzAHAkNNJtbRl8AgUv4JNDHaEMqhYOo=;
+	b=DsqwgGk/OpeATe6KFZOanOZ4G+INUhYuOyybxzmRTm6n/rB+2hsYPMvJ6Q2ACLT5vfsX2v
+	GTJAXdeBxMiVeIBg==
+Date: Fri, 23 Aug 2024 16:29:36 +0200
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	linux-modules@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+	Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Slaby <jslaby@suse.com>, Jan Engelhardt <jengelh@inai.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] kmod /usr support
+Message-ID: <20240823142936.GK26466@kitsune.suse.cz>
+References: <e3yow7ih6af2hxzkmjay2oan3jypmo4hda64vxvpfco66ajcew@i3zewn4nbklf>
+ <cover.1699618135.git.msuchanek@suse.de>
+ <xbgto5tttcah4mrtyjih72ubod3qb375ww6e2fd4pi342rg4eg@wipwd57q43cc>
+ <CAK7LNARYK-xjBS8puEM9xFtmjBNW6KJ2Qd6f7diZkdEEbUgVHA@mail.gmail.com>
+ <5gx6vt4tzgk4zvboxrrahexr4ja6zm6fisjshdvnlfihsysqzb@quhp42ydtvh2>
+ <20240822083600.GF26466@kitsune.suse.cz>
+ <CAK7LNASEdXPiP0_i5=1uLW-W0kZ9LiMt9r5aq0Gu5nK2yP5wDA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240821174021.2371547-1-mcgrof@kernel.org>
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupmleLIzCtJLcpLzFFi42LZduzned36OSfSDHqW8Fic//qX2eLyrjls
-	Fg2zv7Na3JjwlNFi6Zd3zBZLV7xldWDzWLCp1GPTqk42j49Pb7F4rN9ylcXj8ya5ANYoLpuU
-	1JzMstQifbsEroz7f74yFTzmrOjs2sTUwPiKvYuRk0NCwERix+pbLF2MXBxCAisYJb59fscM
-	4XxhlDhx5RgrhPOZUeLYjc9sMC0vty9khEgsZ5Q41drKCFc1e/IWqP7NjBJfWzrAtrAIqEp8
-	WnyHBcRmE9CU2HdyE1hcREBDYt+EXiaQBmaByYwSvTcWgxUJCzhLnHz5CWgsBwevgLfE98PG
-	IGFeAUGJkzOfgJUwC+hILNj9iQ2khFlAWmL5Pw6QMKeApUTzz+nMEJcqSsyYuJIFwq6VOLXl
-	FtgqCYEnHBKXm/qgEi4Sk1fugLKFJV4d3wINGRmJ05N7oOLpEkvWzYKyCyT23J7FCrJXQsBa
-	ou9MDkTYUWLLzG9MEGE+iRtvBSGu5JOYtA3kHJAwr0RHmxBEtZrE6ntvWCYwKs9C8tcsJH/N
-	QvhrASPzKkbx1NLi3PTUYqO81HK94sTc4tK8dL3k/NxNjMD0cvrf8S87GJe/+qh3iJGJg/EQ
-	owQHs5IIb9K9o2lCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeVVT5FOFBNITS1KzU1MLUotgskwc
-	nFINTBu9K3UCbuX1LWhZebj06BaZsCCesD/R/Ze3BU1kvc0oOz289ecpBoHLq/tS1oQxb9sm
-	zfj/p4jI+lNT2wRl5bZ/c5n2NjE0wrVn7UapY1sSPxk/tqs5c9c2iHVChMMHe5Z26Rq50OKo
-	NaGNwnlcm9rfqp9Peq5VLynZun8nlybXhGa96YvfKM2r21A/69HSM8Irz+d2SdZsnzC9PnP7
-	F1m928IK8+19lrlnXfzz57J0/LOsyx7c0z9dEkyW1X3laCyTVyxjW7R/bUT+qSKR18ZtWpce
-	bgm5fYevOC9lQmTkhJ8Gtiv/+Vgk66kbsT/7I9Z5/FKMa0XeF+1m41u+VdZRXnbh/huvn5oi
-	urxXiaU4I9FQi7moOBEAf3vfFp4DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsVy+t/xe7p1c06kGXzfqWFx/utfZovLu+aw
-	WTTM/s5qcWPCU0aLpV/eMVssXfGW1YHNY8GmUo9NqzrZPD4+vcXisX7LVRaPz5vkAlij9GyK
-	8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DLu//nKVPCY
-	s6KzaxNTA+Mr9i5GTg4JAROJl9sXMnYxcnEICSxllNh74gUzREJGYuOXq6wQtrDEn2tdbBBF
-	Hxkl1t25zQaSEBLYzCgx6asxiM0ioCrxafEdFhCbTUBTYt/JTWAbRAQ0JPZN6GUCaWYWmMwo
-	0XtjMViRsICzxMmXn4BWc3DwCnhLfD9sDLGgh1Gic0I/I0gNr4CgxMmZT8DqmQV0JBbs/sQG
-	Us8sIC2x/B8HSJhTwFKi+ed0qKMVJWZMXMkCYddKfP77jHECo/AsJJNmIZk0C2HSAkbmVYwi
-	qaXFuem5xYZ6xYm5xaV56XrJ+bmbGIFxtu3Yz807GOe9+qh3iJGJg/EQowQHs5IIb9K9o2lC
-	vCmJlVWpRfnxRaU5qcWHGE2BQTGRWUo0OR8Y6Xkl8YZmBqaGJmaWBqaWZsZK4ryeBR2JQgLp
-	iSWp2ampBalFMH1MHJxSDUxtmjclY95XarwWEDiyKd1QQ2xG0gmduBnb6+frTYhYcUdZ8HqY
-	9DLZtJurouRz6tf8XV1X9YxD78i5Wd/P2CpWngwPbtljUyO+/uqfCxXn/+yzPdU/d0/8Er6z
-	EWvfzVmmddln1ru2H+ravx/cKZiXtvzIrsMy6zxqytWU85bvPD9tu0fUhr+8qwLWRN8VD6id
-	sPigrlrCfT4jtZ7nDHWT0oVUn8Tc+qyg7PP/aNCm7Oot9UUb1j+wC5MMCpYqlg79KrVTqjiX
-	fWayECPXg3/MH090L/ymF2poXrQr86Vx3jpu3nvGx2dsnOGz5IRtj+as/9/tNl53P5FYfJWr
-	JkNRPuvapoN7KjT3zX6mWSusxFKckWioxVxUnAgALnom2DwDAAA=
-X-CMS-MailID: 20240823142814eucas1p205260ffd9afdfe778edd673f4a2ddb66
-X-Msg-Generator: CA
-X-RootMTR: 20240821174031eucas1p227ee9e3d67c1b52aca8603f73e7d30dc
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240821174031eucas1p227ee9e3d67c1b52aca8603f73e7d30dc
-References: <CGME20240821174031eucas1p227ee9e3d67c1b52aca8603f73e7d30dc@eucas1p2.samsung.com>
-	<20240821174021.2371547-1-mcgrof@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNASEdXPiP0_i5=1uLW-W0kZ9LiMt9r5aq0Gu5nK2yP5wDA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[intel.com,vger.kernel.org,suse.com,gmail.com,inai.de,kernel.org,google.com,fjasle.eu];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.de:email]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-On Wed, Aug 21, 2024 at 10:40:21AM -0700, Luis Chamberlain wrote:
-> We're looking to add Rust module support, and I don't speak
-> Rust yet. The compromise was reached that in order to scale we'd
-> get volunteers committed from the Rust community willing to review
-> both Rust and C code for modules so we can ensure we get proper
-> reviews for both parts of the code and so that we can scale.
+On Fri, Aug 23, 2024 at 10:03:05PM +0900, Masahiro Yamada wrote:
+> On Thu, Aug 22, 2024 at 5:36 PM Michal Suchánek <msuchanek@suse.de> wrote:
+> >
+> > Hello,
+> >
+> > On Thu, Aug 22, 2024 at 01:05:11AM -0500, Lucas De Marchi wrote:
+> > > On Tue, Dec 19, 2023 at 05:37:31PM GMT, Masahiro Yamada wrote:
+> > > > On Thu, Dec 7, 2023 at 3:37 AM Lucas De Marchi <lucas.demarchi@intel.com> wrote:
+> > > > >
+> > > > > On Fri, Nov 10, 2023 at 01:13:53PM +0100, Michal Suchanek wrote:
+> > > > > >Hello,
+> > > > > >
+> > > > > >This is resend of the last patch in the series that adds prefix support
+> > > > > >to kernel module location together with additional patch for validating
+> > > > > >the user supplied input to options that are interpreted as directories.
+> > > > > >
+> > > > > >Thanks
+> > > > >
+> > > > > applied, thanks
+> > > > >
+> > > > > Lucas De Marchi
+> > > >
+> > > >
+> > > >
+> > > > If I understood this correctly, MODULE_DIRECTORY is determined
+> > > > by "configure --with-module-directory=...", and there is no
+> > > > way to change it after that.
+> > > >
+> > > >
+> > > > If so, how to work with cross-building?
+> > > >
+> > > > Cross-building is typical when building embedded Linux systems.
+> > >
+> > > I was thinking the `pkg-config --variable=module_directory`
+> > > from the target would be sufficient, but...
+> > >
+> > > >
+> > > >
+> > > > Consider this scenario:
+> > > >
+> > > > - Your build machine adopts
+> > > >    MODULE_DIRECTORY=/usr/lib/modules
+> > > > - The target embedded system adopts
+> > > >    MODULE_DIRECTORY=/lib/modules
+> > > >
+> > > > (or vice a versa)
+> > > > depmod is used also for cross-building because
+> > > > it is executed as a part of "make module_install".
+> > > >
+> > > >
+> > > > The counterpart patch set for Kbuild provides
+> > > > KERNEL_MODULE_DIRECTORY, which only changes
+> > > > the destination directory to which *.ko are copied.
+> > > >
+> > > > You cannot change the directory where the
+> > > > depmod searches for modules, as it is fixed
+> > > > at the compile-time of kmod.
+> > > >
+> > > >
+> > > >
+> > > >
+> > > > In this case, what we can do is to build another
+> > > > instance of kmod configured for the target system,
+> > >
+> > > the target system may not even have depmod actually, so using just the
+> > > host one seems more appropriate. But target should have the kmod.pc for
+> > > the pkg-config call to work.
+> > >
+> > > > and use it for modules_install:
+> > > >
+> > > > 1. In the kmod source directory
+> > > >    ./configure --with=module-directory=/lib/modules
+> > > >    make
+> > > >
+> > > > 2. make modules_install INSTALL_MOD_PATH=<staging-dir>
+> > > >     KERNEL_MODULE_DIRECTORY=/lib/modules
+> > > >     DEPMOD=<new-depmod-you-has-just-built>
+> > > >
+> > > >
+> > > >
+> > > > If you use OpenEmbedded etc., this is what you do
+> > > > because host tools are built from sources.
+> > > >
+> > > > But, should it be required all the time?
+> > > > Even when the target embedded system uses
+> > > > busybox-based modprobe instead of kmod?
+> > >
+> > > no, I don't think we can rely on depmod from the target.
+> > >
+> > > >
+> > > >
+> > > >
+> > > > depmod provides --basedir option, which changes
+> > > > the prefix part, but there is no way to override
+> > > > the stem part, MODULE_DIRECTRY.
+> > > >
+> > > > In the review of the counter patch set,
+> > > > I am suggesting an option to override MODULE_DIRECTRY
+> > > > (let's say --moduledir) at least for depmod.
+> > >
+> > > ok
+> > >
+> > > >
+> > > > (Perhaps modinfo too, as it also supports --basedir)
+> > > >
+> > > >
+> > > >
+> > > > Then, we can change scripts/depmod.sh so that
+> > > > Kbuild can propagate KERNEL_MODULE_DIRECTORY
+> > > > to depmod.
+> > > >
+> > > >
+> > > > if  <depmod supports --moduledir>; then
+> > > >    set -- "$@"  --moduledir "${KERNEL_MODULE_DIRECTORY}"
+> > > > fi
+> > > >
+> > > >
+> > > >
+> > > > Does it make sense?
+> >
+> > It does not make sense for the common case: building kernel for the host
+> > system.
+> >
+> > Then overriding the directory is wrong, and using what kmod was compiled
+> > with is needed to get correct module directory layout.
 > 
-> Add those who have stepped up to help.
 > 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
+> NACK.
+> 
+> scripts/Makefile.modinst and depmod must agree about
+> the install destination.
+> 
+> Both must refer to the same ${KERNEL_MODULE_DIRECTORY}.
 
-Acked-by: Daniel Gomez <da.gomez@samsung.com>
+Nack to what, exactly?
 
-Daniel
+And what needs to agree here, exactly?
 
+If the kmod was compiled with a non-default kernel module directory then
+for depmod and scripts/Makefile.modinst to agree the kernel makefile
+should extract the directory it was compile with from kmod kmod, and
+that is the change that was not merged.
+
+Overriding the directory with an option only for the kernel build will
+make modules_install install the modules in the wrong directory.
+
+Of course, the user is free to move them elsewhere afterwards but I
+would say they should not need to do that.
+
+Then there is the possibility that the build is for a different target
+system, and the host kmod and scripts/Makefile.modinst agreeing is not
+enough.
+
+Then either a 'cross' kmod can be built, and this will again work so
+long as both path and pkgconfig path point to this modified kmod.
+
+Or kmod can grow an option to set the kernel module directory
+dynamically. However, setting it to the current hardcoded value will
+again break the case when building for the current system with
+non-default kernel module directory location.
+
+Unless both is done - that is the default is read from kmod, user is
+provided with an option to override the default, and whatever ends up
+being used by scripts/Makefile.modinst is then passed back to depmod.
+
+Or do you envision some other solution?
+
+Thanks
+
+Michal
+
+> > Or it would make sense if both was done:
+> >
+> > Default KERNEL_MODULE_DIRECTORY to what kmod was compiled with, and
+> > then pass the actual value to depmod so that depmod uses the compiled-in
+> > value by default, and the user-provided value when
+> > KERNEL_MODULE_DIRECTORY was overridden by the user.
+> >
+> > Thanks
+> >
+> > Michal
 > 
-> First order of business, please help review Kris Van Hees's patches with
-> Rust in mind!
 > 
->  MAINTAINERS | 3 +++
->  1 file changed, 3 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f328373463b0..7e2cf251427d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15454,6 +15454,9 @@ F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
->  
->  MODULE SUPPORT
->  M:	Luis Chamberlain <mcgrof@kernel.org>
-> +R:	Petr Pavlu <petr.pavlu@suse.com>
-> +R:	Sami Tolvanen <samitolvanen@google.com>
-> +R:	Daniel Gomez <da.gomez@samsung.com>
->  L:	linux-modules@vger.kernel.org
->  L:	linux-kernel@vger.kernel.org
->  S:	Maintained
 > -- 
-> 2.43.0
-> 
+> Best Regards
+> Masahiro Yamada
