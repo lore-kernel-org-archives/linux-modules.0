@@ -1,132 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BD164A;
-	Mon, 26 Aug 2024 17:28:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7481990CD
+	for <linux-modules@vger.kernel.org>; Mon, 26 Aug 2024 17:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724693317; cv=none; b=kW0KnR2yGbattM2zbt/D7lrKbmyHY8FKUvUxmEqicafr0YYvqDQCg9D414VzArW5UAoLgcB85yjsB2YIhMBQ9pj5kxMpYsPt5fEWuo2jLrW8xIt6EgAUCDbnx/nhLM6uMzclxBa08s1WtOo7xkusS2z0qgAtqBJpktgAoZiOaWQ=
+	t=1724694124; cv=none; b=ks9xW7D7ZLF26SSH5UI3cuc6Nz3dC4hAK55z+RZedlY1V7gfqa8HXr2b2lj0PmpfJCX523Kp36PXhAvghfwQ6O3pfLo0lcdto6T8u+m+HnPmzvKghSLmTHDH+kZx37+iQmzsldHdqhQXxh+TWkjviKm7U8QZgV/C/KVqeI6RLtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724693317; c=relaxed/simple;
-	bh=Ah1MYcJfpVaPDZCj/MgYPfBVJo43ln+VDcKQfM/BWW0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F0vJuB4enMf3kzX5w92GGjgpsS14IY3U78m1dP1LqdjuRTbkrmE7/1p6+62IWa4VSSS9IXuOm/ij9PxvLfDGCDYIOreZRpO9VqbJ8l7adlo09mkcJdQ+bEByMEFVsKuXzHUdV5LrCmwNVmGObV8zg6akptUVLJ+lZkfWB04lDGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E6AC8B7B5;
-	Mon, 26 Aug 2024 17:28:29 +0000 (UTC)
-Date: Mon, 26 Aug 2024 13:29:09 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson
- <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
- <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
- Hellwig <hch@infradead.org>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
- Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
- <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
- <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>,
- Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
- Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
- Song Liu <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
- <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 5/8] ftrace: Add swap_func to ftrace_process_locs()
-Message-ID: <20240826132909.306b08fc@gandalf.local.home>
-In-Reply-To: <20240826065532.2618273-6-rppt@kernel.org>
-References: <20240826065532.2618273-1-rppt@kernel.org>
-	<20240826065532.2618273-6-rppt@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1724694124; c=relaxed/simple;
+	bh=QuSLEspvauRYDRZz063fX415QSr6sTsEnReWnJYDXVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JeorQ01nBcDU2PakedCBh9UWc/0UbTwaksRDDBwqkG8t4JS0IgymBLkBmMMM46ulXl02gQ7jrRgLbA0Rq5DKZ723AX4K7PH3TmCgwmmF0XgxiCi4Bx2Rxz+MqK2+NabcZYVcdmbSCfZH1mr0d4dWlBP/XOLKBaPvokYIJPh+b0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OUmwdnOp; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OUmwdnOp"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5bec4e00978so4365866a12.0
+        for <linux-modules@vger.kernel.org>; Mon, 26 Aug 2024 10:42:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724694121; x=1725298921; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JiCSnJD3HP198YRuwR9nlOg90E6QQ9s3+l37OIn7TdU=;
+        b=OUmwdnOpvRIWhkEmEAVhae0ZqGSgwqeyx6i6qmgV7GHgS1xbADzTRVPvgceJApGf3x
+         zV6VD24l4MMAP9Bt2MOlgWr+Qj12uc5qs6ntTy/X2ASnAKtL/Cym4LNw3U50VmTQeO/i
+         juLndVSyNOR5ONMpHc96US7Sw/pG260fBK0mkLsbdKiIvpc4rNN2hgwPEbzw/RqoJPGp
+         K2pIRs0LjRIvcqg5hioX3Ad20YVVGMR3HJNaiUDk4e7+wso2WsNRuuRzIB4X4ikE+or+
+         brky1YIWkYi/sMSX8D4bMwUiuq4/zWIfLJnI59tEaHzXBwzTZs0wuaV197pyP2SmWabv
+         8e8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724694121; x=1725298921;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JiCSnJD3HP198YRuwR9nlOg90E6QQ9s3+l37OIn7TdU=;
+        b=PWUFZJ3Z0H30lEIZfPjwb0wzo36iARTHViWJANbPDjQl0GBEjymNdHwzow0Ut9d/za
+         3TUa+/P2Qef52GbzLZ+/Q1sg4doP7YJlM0qqOGJHUvpGa5he0okn7eNOasF7xqTgcZIw
+         03bVB0thYFfiAczgLWeuqpMW/RjJH0k/WKHO2F1SRbT02eKj4r4cL49THDJA4RFt1BfF
+         qKc9mVDhS+U/A7pPRr8s+ImX9e0SjtQLqYkjXqrUaZHi4vc3CeY1GEEtk+phc+q/zv9a
+         lZBFfkXdFMLn0QpYj4wRopTcTkVCrob8etmA1/vTOjJBx5Dome+3ssq1ATxoarorRwbi
+         lfFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdeLcDqX9WvglqNjK0K5WhOfoNFXlg4PpG6U0jZG76EdUqOp46GCBUZOA1YNUL+omMrbwMpRApsr5i60hf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC5RonMZrG9uR6Esc7GrZg4w4cW53pP244LY2NedLVVorAjct6
+	0o9S7JUyHVW6ZPwlL7TCTxC7yX5A+uZAOzX4+fCZ7OftpYThl/iTvuDr7Yy8HDA=
+X-Google-Smtp-Source: AGHT+IFr4go4JINnJLtcWs0BB1xC/SXPqe+y4XSFmlELq1W0LCxG/Dp4ZIa768YslVaqXV+TjwDVpA==
+X-Received: by 2002:a05:6402:34c7:b0:5c0:ba90:6a9e with SMTP id 4fb4d7f45d1cf-5c0ba906ba4mr80529a12.38.1724694120916;
+        Mon, 26 Aug 2024 10:42:00 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c0bb213739sm9690a12.54.2024.08.26.10.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Aug 2024 10:42:00 -0700 (PDT)
+Message-ID: <71505c05-b651-4740-b14a-a53084a16a61@suse.com>
+Date: Mon, 26 Aug 2024 19:41:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/19] tools: Add gendwarfksyms
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>,
+ Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
+ Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ rust-for-linux@vger.kernel.org
+References: <20240815173903.4172139-21-samitolvanen@google.com>
+ <20240815173903.4172139-22-samitolvanen@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20240815173903.4172139-22-samitolvanen@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, 26 Aug 2024 09:55:29 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
-
-> From: Song Liu <song@kernel.org>
+On 8/15/24 19:39, Sami Tolvanen wrote:
+> Add a basic DWARF parser, which uses libdw to traverse the debugging
+> information in an object file and looks for functions and variables.
+> In follow-up patches, this will be expanded to produce symbol versions
+> for CONFIG_MODVERSIONS from DWARF.
 > 
-> ftrace_process_locs sorts module mcount, which is inside RO memory. Add a
-> ftrace_swap_func so that archs can use RO-memory-poke function to do the
-> sorting.
-
-Can you add the above as a comment above the ftrace_swap_func() function?
-
-Thanks,
-
--- Steve
-
-> 
-> Signed-off-by: Song Liu <song@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > ---
->  include/linux/ftrace.h |  2 ++
->  kernel/trace/ftrace.c  | 13 ++++++++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+>  kernel/module/Kconfig                 |   8 ++
+>  scripts/Makefile                      |   1 +
+>  scripts/gendwarfksyms/.gitignore      |   2 +
+>  scripts/gendwarfksyms/Makefile        |   7 ++
+>  scripts/gendwarfksyms/dwarf.c         |  87 +++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.c | 146 ++++++++++++++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.h |  78 ++++++++++++++
+>  7 files changed, 329 insertions(+)
+>  create mode 100644 scripts/gendwarfksyms/.gitignore
+>  create mode 100644 scripts/gendwarfksyms/Makefile
+>  create mode 100644 scripts/gendwarfksyms/dwarf.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
 > 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index fd5e84d0ec47..b794dcb7cae8 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -1188,4 +1188,6 @@ unsigned long arch_syscall_addr(int nr);
->  
->  #endif /* CONFIG_FTRACE_SYSCALLS */
->  
-> +void ftrace_swap_func(void *a, void *b, int n);
-> +
->  #endif /* _LINUX_FTRACE_H */
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 4c28dd177ca6..9829979f3a46 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6989,6 +6989,17 @@ static void test_is_sorted(unsigned long *start,
-> unsigned long count) }
->  #endif
->  
-> +void __weak ftrace_swap_func(void *a, void *b, int n)
+> [...]
+> +static int parse_options(int argc, const char **argv)
 > +{
-> +	unsigned long t;
+> +	for (int i = 1; i < argc; i++) {
+> +		bool flag = false;
 > +
-> +	WARN_ON_ONCE(n != sizeof(t));
+> +		for (int j = 0; j < ARRAY_SIZE(options); j++) {
+> +			if (strcmp(argv[i], options[j].arg))
+> +				continue;
 > +
-> +	t = *((unsigned long *)a);
-> +	*(unsigned long *)a = *(unsigned long *)b;
-> +	*(unsigned long *)b = t;
-> +}
+> +			*options[j].flag = true;
 > +
->  static int ftrace_process_locs(struct module *mod,
->  			       unsigned long *start,
->  			       unsigned long *end)
-> @@ -7016,7 +7027,7 @@ static int ftrace_process_locs(struct module *mod,
->  	 */
->  	if (!IS_ENABLED(CONFIG_BUILDTIME_MCOUNT_SORT) || mod) {
->  		sort(start, count, sizeof(*start),
-> -		     ftrace_cmp_ips, NULL);
-> +		     ftrace_cmp_ips, ftrace_swap_func);
->  	} else {
->  		test_is_sorted(start, count);
->  	}
+> +			if (options[j].param) {
+> +				if (++i >= argc) {
+> +					error("%s needs an argument",
+> +					      options[j].arg);
+> +					return -1;
+> +				}
+> +
+> +				*options[j].param = argv[i];
+> +			}
+> +
+> +			flag = true;
+> +			break;
+> +		}
+> +
+> +		if (!flag)
+> +			object_files[object_count++] = argv[i];
 
+I would rather add a check that this doesn't produce an out-of-bounds
+access.
+
+> [...]
+> +int main(int argc, const char **argv)
+> +{
+> +	unsigned int n;
+> +
+> +	if (parse_options(argc, argv) < 0)
+> +		return usage();
+> +
+> +	for (n = 0; n < object_count; n++) {
+> +		Dwfl *dwfl;
+> +		int fd;
+> +
+> +		fd = open(object_files[n], O_RDONLY);
+> +		if (fd == -1) {
+> +			error("open failed for '%s': %s", object_files[n],
+> +			      strerror(errno));
+> +			return -1;
+> +		}
+> +
+> +		dwfl = dwfl_begin(&callbacks);
+> +		if (!dwfl) {
+> +			error("dwfl_begin failed for '%s': %s", object_files[n],
+> +			      dwarf_errmsg(-1));
+> +			return -1;
+> +		}
+> +
+> +		if (!dwfl_report_offline(dwfl, object_files[n], object_files[n],
+> +					 fd)) {
+> +			error("dwfl_report_offline failed for '%s': %s",
+> +			      object_files[n], dwarf_errmsg(-1));
+> +			return -1;
+> +		}
+> +
+> +		dwfl_report_end(dwfl, NULL, NULL);
+> +
+> +		if (dwfl_getmodules(dwfl, &process_modules, NULL, 0)) {
+> +			error("dwfl_getmodules failed for '%s'",
+> +			      object_files[n]);
+> +			return -1;
+> +		}
+
+I see that libdwfl has also directly function dwfl_nextcu(). Would it
+make sense to use it to simplify the code?
+
+> +
+> +		dwfl_end(dwfl);
+> +		close(fd);
+
+Isn't fd consumed by dwfl_report_offline() on success? I'm seeing EBADF
+from this close() call.
+
+> +	}
+> +
+> +	return 0;
+> +}
+
+-- 
+Thanks,
+Petr
