@@ -1,144 +1,105 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C942132132
-	for <linux-modules@vger.kernel.org>; Tue, 27 Aug 2024 18:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500BB1D2F51
+	for <linux-modules@vger.kernel.org>; Tue, 27 Aug 2024 19:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724784512; cv=none; b=DqlGqpWzk6FsDlvA2ZP2l1DBNKibOMsNBqci5yADRUYsR7ArGaibI25Hy1+ov/ukyhv80Nuxp3fmg6UEBRj7BMZRCgSXnHCU8tAXQVfJ9eUECYMLSLqhsy2KtnviKEhVkjWii3y+xGfqb3I1eYFg6bDoZc67HcJ4fHsM9URdplE=
+	t=1724785880; cv=none; b=kZ4XYYUykOV7sjsY1L0p3L3ST/t+7e0FQXL1zV7gAvFvz7cwcfQfFutvbhNsReoG962llwHeKDgma2xbZyBtzggsMFV9vUS2iRgDK/rWmn+YdJDHyTwzFXrYXj9SlYXfm5xQ8HCpQGUpVVM/UsQdgKr840seNdGnGt4B0PfQpBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724784512; c=relaxed/simple;
-	bh=I5//Ha3NSD2Wtl/0jjx0iRpYd7vI5TxmgjMPfRVQ1/g=;
+	s=arc-20240116; t=1724785880; c=relaxed/simple;
+	bh=xNzO7qOTTQGEuyADmXVfFcDNzsBtnhXqp36UzvFFVE0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m6D5jKZkBB3mdvewEof9y5HAHeljbDqYcYKAK8NcSXoB4VqzFDA8LgGVWYSDDjt7/Wk6Ksz4RvoG5CHBExmIbzndIl3d9lAoWaibR1xgu/p7SleIjlQj5TtX6JOruZk78mFb/maKtZAl60M5ONjD4H9ndwnvHHM3j933ymQHVwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4eGRhfl3; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=Up89ymdp2ceW3TO+uq9gbQN0oUIfiYqNbyOmEOY7ap5cr+Nr0i7at7SG7Tlg1znSoVHMj4c+HpLz8Ha6EFXEBbL0GJ+4Wq4NJB/XJhRL1HZZ9J8rM5MwZDPRBnYkNjhIGVD21rgN1SLVlnYVoaSLj9jwB2qpsAPwENmWnrVQqHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=p7gFyxcz; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4eGRhfl3"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-454b1e08393so46851cf.0
-        for <linux-modules@vger.kernel.org>; Tue, 27 Aug 2024 11:48:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="p7gFyxcz"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6b3afc6cd01so53734317b3.1
+        for <linux-modules@vger.kernel.org>; Tue, 27 Aug 2024 12:11:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724784510; x=1725389310; darn=vger.kernel.org;
+        d=umich.edu; s=google-2016-06-03; t=1724785877; x=1725390677; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LidQY3N7TAVU7mz++A4EWJV/Qlk2ObRsexeEqCJH/sQ=;
-        b=4eGRhfl3kXUoAYV1Enr6mzC5351bzICnr6nhNH48IsRwaHVU6z0s5mLq9fPrOcJH8x
-         XHvrX8i4u70ltCZhnNQVWkQWZbJ8OE4ye70pZwN5v7GnrptJCtO0qNmrDQI1pnzMGlXg
-         T6aLawl8+TaQPwcQ1YagRxdQ25I2Qo671YZLLrBTwSvscdTk6aHmFH0WIkdfFl9aj8Md
-         tjImVw834O50hhLLMltKfGrs603HfCFL770DDl3BVSrEfxZK+88hb8ix86u09xJ2F6m4
-         BLPqVXfNF0UHtMjF8LkmHNtrktVfPF7JdZ9k7VM/j2T4JtEl+KlH3xDdCeb3V7zoAdh6
-         KRmg==
+        bh=xNzO7qOTTQGEuyADmXVfFcDNzsBtnhXqp36UzvFFVE0=;
+        b=p7gFyxczx+7zdP7P/+Rh7k8h/euUbWV/c6+j94luI2EhyrKbsbIVMNQoNP194VOLBm
+         Udh1t2zSHqe/O6UDjd+umMikLrT9CcZrnDEiUtotjtKuh3mtwc5afrvY2x3hQ4mYUyzE
+         OE+dL4j4q8pDXdXc1rTMGDR/BMn8MGk0iVlTFfDy+4aVAd1F85zP7oxwkP1wZJqknf2L
+         W2t1+udeA15Hs07xj1K9NTMYP1eveTJu1iEq5p8dKr+JYJLlFe9LlT4DEQsapdskM2UH
+         xKn8GVO13IVL7Bm1FaACmftOfKgslhKXW2fWYMpENaGRJXh8MIcB8YJEmrGgtv252H1d
+         pvNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724784510; x=1725389310;
+        d=1e100.net; s=20230601; t=1724785877; x=1725390677;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LidQY3N7TAVU7mz++A4EWJV/Qlk2ObRsexeEqCJH/sQ=;
-        b=iYZY/kp89GdaPa7QQcMXcoF1XwsE/fuQ0RqrN7HEt/02j4p4fxbfIbDc2Fo+JejUOv
-         2s3G+U90C0y7HXZXYK7vbAna/e7m8vir3Pomr/HVBZTUytjfUcxSF9pRcF6bYxxuMNeQ
-         6XMkVpMrsljo57Za0ObtQRLkJW+FEcCs/yCC5W0qBvzV0dVkCP3onhHpaJiIeqTFvItI
-         GVIz2nTu6pBc/eU/84/Nh5/RhvF0uOovhBJHWlB03f0fgRMiu7W8zwgpAulzUYyYnzeG
-         ENMga+ryXhdDNzN8IrFbqojg7GKE9wmOZ02b9aRRpeeyUDDPogZPC/RY9oty0YqRUoN6
-         bwDA==
-X-Forwarded-Encrypted: i=1; AJvYcCWh88gNrei1l9f/2O7DLDJIj9flvZnr9c72G9uSxlMJroACCnXnY5mk6NVm3i4sjvlnQxG+y9b143NIXKhH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/OZCgqj/kbtPM+Lxb4V4XQyRGbts3UywJ7bOrs+XLxmoytHCF
-	jHSDslOyDSzWntePLvrKdB4Af40G3wcZLiuWpY32CLuibCtZKOBSMk4NLAqWAoIrevKlTIZenHv
-	Az2yWE1zg9YeNosrawZ1Tb/P0XqVDS0IFG8K4
-X-Google-Smtp-Source: AGHT+IEYo3wpUDQ07W+N/9n1FFu7R6YCMxlFn855GpjF2BmicavhNUlzTFwLoKagN05qtS/bFGVksEONLKfLBTPt0T8=
-X-Received: by 2002:ac8:5a45:0:b0:453:5b18:817 with SMTP id
- d75a77b69052e-4566caed6c1mr336721cf.6.1724784509942; Tue, 27 Aug 2024
- 11:48:29 -0700 (PDT)
+        bh=xNzO7qOTTQGEuyADmXVfFcDNzsBtnhXqp36UzvFFVE0=;
+        b=jMpBxwFsDd4iD/eHXI2+foilSFGFrXlCLMLX4HL/jEK0TroOczSvDIrxsg1eLLM+gp
+         D4Pvy82RYYWZY7eFHsJ08NIJu4uuxBIRbRVW4zX9fSX3uW9bAdYXhiJh27BFSjQfp4Lc
+         5yxswhtL2Xcv6tCkyOFP+OC8JxU8RCd2H8qLqP0O4pLn6Uz3uRZt41XtFtpojnp3YC8C
+         F6oWaZ2P9TPaczvz0QNnSqO3zM3ZBg8n/vCaYjkpbeO7lJmUu43bCzLvYFOT3kB+xCP7
+         xJsUW3tnFEgwc5bfsDuyN7WFhGmRsKL5M/zkeTy190H0fe24w/Qj+aa5VWWnkFJWJG6r
+         Cdxg==
+X-Forwarded-Encrypted: i=1; AJvYcCVKNVvd8FLmgXHiiioKNG3qF1R2lO5TvTqJvrjRG/RuRR2HRmEyReVBbhA7AdGr41ASJMDPwIxQ+NDAzqbX@vger.kernel.org
+X-Gm-Message-State: AOJu0YwD3fXsKSb7mCboPvZQXnE7t4PufkGTILCz5NjC6HZDQsIZTlxd
+	Qvh3JyQyzUh0zz+4rID0E90crOCWVSmahLii9Q36vdPEWMtHMXOubqKQaLcA2FH8i/seMkggf0n
+	QTv1/nIMglxTYoCzpAojVOTGJXbWrlcanJtE6iQ==
+X-Google-Smtp-Source: AGHT+IFvAuIzn1nxkt/URa8Wh42r+pnypqpU85+ebAjYMRQV9X8DnUpctjW9fn8HkMEtDjJXr7rc4KN16ZG+0YDepro=
+X-Received: by 2002:a05:690c:6a89:b0:622:c892:6ae7 with SMTP id
+ 00721157ae682-6d129dbf29emr2279337b3.12.1724785877378; Tue, 27 Aug 2024
+ 12:11:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-23-samitolvanen@google.com> <f9ad5fdd-25d4-4d98-84d0-84dfba2a75f2@suse.com>
-In-Reply-To: <f9ad5fdd-25d4-4d98-84d0-84dfba2a75f2@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 27 Aug 2024 11:47:51 -0700
-Message-ID: <CABCJKuc8fOmsbpqOJXwYstwc+7DEf-Bf26_n5_ai2Pax1tXqUg@mail.gmail.com>
-Subject: Re: [PATCH v2 02/19] gendwarfksyms: Add symbol list handling
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20240819133345.3438739-1-nmi@metaspace.dk> <CALNs47sF1o4x-=wPdy6c520-sCX_+sA=158MMP9c0SByKvwXfw@mail.gmail.com>
+ <875xrmxdzg.fsf@metaspace.dk>
+In-Reply-To: <875xrmxdzg.fsf@metaspace.dk>
+From: Trevor Gross <tmgross@umich.edu>
+Date: Tue, 27 Aug 2024 15:11:05 -0400
+Message-ID: <CALNs47vwhV-DRzPbvE22vefaROmjj_5SCLuyQrfKvy=Q4Ou9WQ@mail.gmail.com>
+Subject: Re: [PATCH v2] rust: add `module_params` macro
+To: Andreas Hindborg <nmi@metaspace.dk>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Adam Bratschi-Kaye <ark.email@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, rust-for-linux@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Petr,
-
-On Tue, Aug 27, 2024 at 2:16=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
+On Tue, Aug 27, 2024 at 10:00=E2=80=AFAM Andreas Hindborg <nmi@metaspace.dk=
+> wrote:
 >
-> On 8/15/24 19:39, Sami Tolvanen wrote:
-> > +static bool is_export_symbol(struct state *state, Dwarf_Die *die)
-> > +{
-> > +     Dwarf_Die *source =3D die;
-> > +     Dwarf_Die origin;
-> > +
-> > +     state->sym =3D NULL;
+> "Trevor Gross" <tmgross@umich.edu> writes:
 >
-> Nit: This assignment isn't strictly necessary, the value is overwritten
-> a few lines below and isn't used in between.
-
-True, I think this was left over from refactoring.
-
-> > +int symbol_read_exports(FILE *file)
-> > +{
-> > +     struct symbol *sym;
-> > +     char *line =3D NULL;
-> > +     char *name =3D NULL;
-> > +     size_t size =3D 0;
-> > +     int nsym =3D 0;
-> > +
-> > +     while (getline(&line, &size, file) > 0) {
-> > +             if (sscanf(line, "%ms\n", &name) !=3D 1) {
-> > +                     error("malformed input line: %s", line);
-> > +                     return -1;
-> > +             }
-> > +
-> > +             free(line);
-> > +             line =3D NULL;
-> > +
-> > +             if (is_exported(name))
-> > +                     continue; /* Ignore duplicates */
-> > +
-> > +             sym =3D malloc(sizeof(struct symbol));
-> > +             if (!sym) {
-> > +                     error("malloc failed");
-> > +                     return -1;
-> > +             }
-> > +
-> > +             sym->name =3D name;
-> > +             name =3D NULL;
-> > +
-> > +             hash_add(symbol_names, &sym->name_hash, name_hash(sym->na=
-me));
-> > +             ++nsym;
-> > +
-> > +             debug("%s", sym->name);
-> > +     }
-> > +
-> > +     if (line)
-> > +             free(line);
+> > On Mon, Aug 19, 2024 at 8:35=E2=80=AFAM Andreas Hindborg <nmi@metaspace=
+.dk> wrote:
+> >>
+> >> From: Andreas Hindborg <a.hindborg@samsung.com>
+> >>
+> >> This patch includes changes required for Rust kernel modules to utiliz=
+e
+> >> module parameters. This code implements read only support for integer
+> >> types without `sysfs` support.
+> >
+> > Also, I think the subject line needs an update ("rust: add
+> > `module_params` macro")
 >
-> The loop leaks line on a potential sscanf() error and name if the symbol
-> is a duplicate or malloc(sizeof(struct symbol)) fails. Additionally, it
-> should be possible to avoid allocating line by getline() on each
-> iteration.
->
-> I would change it to something like this (not tested):
+> Well, it is still what it does. Plus few support types. You think it is
+> not descriptive enough?
 
-Good points, I'll change this to your suggested version (after testing). Th=
-anks!
+Maybe it should just say 'Add parameter support to the `module!`
+macro'? The text `module_params` doesn't seem to appear in the patch,
+I was looking for something like `module_params!`.
 
-Sami
+- Trevor
+
+> BR Andreas
