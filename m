@@ -1,58 +1,58 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389661AC438
-	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 21:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D1D1AD9F9
+	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 21:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724881848; cv=none; b=sdl/t47OZt8OZ0Ux6TarUcaVepOjCuRGLOtk5pd5fdEJWMiRHSSsxjCBL1sb0njyVxtnT6a0L9nz6/CHQPKen9NaN5dKkiBt1oJryzAtpgJ/0FeZKiriWFxokoh3uHb7ERPj+XOB11mfQNsYZx7M6BwCXWdKuzTWCXfCc7+OtKQ=
+	t=1724882204; cv=none; b=u4fuMeeUF+T8TMMAfYqRrb/BD5CwPvLOPIOhpmXrgmZbEndLH63rqcaWHdF+0XnYJSO6MJ1M5I9sVSQkdQMDj8lF9ddmx1yzemNaafWd9bS15OvOHdDPJ0VhDy8J5P+JwExEG59c6fyd+Mn2+VhotS0FxzzMxyDcIIwU3T0+1pY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724881848; c=relaxed/simple;
-	bh=GkRq0ivoQpAiOEzaTGohkuRwvXQipTcElCzKrbs2YGI=;
+	s=arc-20240116; t=1724882204; c=relaxed/simple;
+	bh=PID4ATgIcRdlwJUDpahwj8UfLb1Vr51kkg4K6Y9E+zY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/Yl7L5lJmx8M09yfiJV9RRNQBidhb6F7SECHEZvQ+nBZ8EEkYPery+usAjuKf0kqb2hL9ihmrcCsivwtWBofx5Uldmjn0+dFsguwBlWZrU9d17kn2HgPPSVnyyP1ufdbom4z8JHemevSpRiicp1CFeS/LESce0CmRnKidklL3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FenEweSg; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=gfSaVnZOicPGCY/TDCFLIXJn7wxXPG/Ffs6WcZ7/ggMITkUo6gExw1Kfq0R9ZMLohpTYaOXrj34nVO8P958IPRWmobIHYaPQuiXGBEGKw7xNtsl94Gtzhksg3V2Cdl1JSXwtpigp39+anmNOZNWpNid72fh7I73R2zhnVNl3lNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u430U86/; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FenEweSg"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-202018541afso26455ad.1
-        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 14:50:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u430U86/"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20353e5de9cso61905ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 14:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724881845; x=1725486645; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724882202; x=1725487002; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=kOlS11zZF40IO+TxYPwBjtED80hWVLwZdESib8W/thQ=;
-        b=FenEweSgrJUH336ILbzBFrhicAIypPvYSt6nhniWn3aGXPE6hXzXxLnkGPn//2jsOl
-         qjP2IeleGamF3+VqN+JHicphP1a+AreKsgI2W6DSlKWqh2OeOqEwLCdHYZitZMqkmJiQ
-         3k0PjzE8LHj41EjTPG8eHCEHfKy1OtH2ZweseeN7K3oVGXXHkNCr10+m6VhD+DIT4aDw
-         Mn1x0Q0H6KfhKpBxTzX6nAdofO6sAbcnDMCnSvZR6QGTFPvFCcuYRTE8thHI0sj4XMpE
-         62AX/nAUpBbKfGODgcTcglYbiyxERiPexO4qJ2+Fe//G/FU3IhtSJLTL9GkvKvSJaNrm
-         oc1g==
+        bh=oMJtTqWHyENpXYFshc0NGQIcxCOjJlWKHxL6Pc51Vp8=;
+        b=u430U86/w41hIGFRxUWn2jOegZ4k8oU+D01A/WfKA6xHYh9biKU3pjpECPVqChTXeT
+         lh1cnSqRaX7byzuwdtxDxnKpWIFMUVmmbh5u9Yg526AnskSHunCa/RGuYq9iJWUz3pyt
+         bIOeiHXLS8Rq0JbG6TGfrkGVAyzbdE6FrqNS4qWL48M0godsDp1BxyNi3MpIyLolXEl0
+         u7d7wNZ6DfO5QMytEPTUFLEkpfzwtHrwO4+Z9a1+CyWpEhw55v+xc/8v3Zh7t8SbEaKF
+         T7+QXDzVJG+xqTsoqnKdHmizcldii+sbnNFkCqNHUr2aG5F3WVawzyR60yEF4xgyfGE3
+         jQDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724881845; x=1725486645;
+        d=1e100.net; s=20230601; t=1724882202; x=1725487002;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kOlS11zZF40IO+TxYPwBjtED80hWVLwZdESib8W/thQ=;
-        b=OKecHqkgqa+xDQSaM5wfoGy6z8rAYfhcrp2fBXyCHDioIW6Q9E6Pe3yresVInnbd03
-         XcZJY5VAgdv4V7m/QG1+O+aCdA0JtWJEPkolXDDaI2+q7tpuphqEfnRoqZutIqdJ7J9Z
-         l5Vsj/ApJRsKxdMVbXD526AkGAtkdejdJvObsYDERrKWvVqAfCLqqN+HO0TA3A46yUk7
-         98QN+wYhi8TpHTjSiNCFifLDtBne+zYCftKqHyljEzVJ+7rpS6Im63ax9clnb619UEwe
-         fspnXsrUP07iklThEIv6gGScBsXXNeuEDAT0bKcbmw3+ZxsmcCWcO+YFW/xSYLEUQfcj
-         1r0A==
-X-Forwarded-Encrypted: i=1; AJvYcCVnDPwxBUcGLB4Y8TMrw4akOQPFkg+ycMBN3NE8e+NDRTxMlF1s1AIIP3rKwtlf1q/RMzCE/IT642pOvIPo@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfVpGn3mRo0lFTZAn3J/ypKu3jf5wx7Sr+m8BPCtS3Np0RmMWy
-	esT6ohGLofFYaSBZyipPJ281R32WwLEIpWn4tYLI2sAhPuiOdJBUoEjnNEZCAA==
-X-Google-Smtp-Source: AGHT+IH/W+fSipeqZ/wEzg8zzpJwjeYTFTuLFrl+gU3PBb15jaA3+7EFtkDmAEa/AEzYRe+ZhMBTqQ==
-X-Received: by 2002:a17:903:1d0:b0:201:dc7b:a882 with SMTP id d9443c01a7336-2050d23634emr950865ad.26.1724881845281;
-        Wed, 28 Aug 2024 14:50:45 -0700 (PDT)
+        bh=oMJtTqWHyENpXYFshc0NGQIcxCOjJlWKHxL6Pc51Vp8=;
+        b=I7y4IprZzMFTzT6dkhzG7xCMWvfsv0REVOhlUdhc3Y4q9fQTrQTTDQ8Rhi9wSlZxzm
+         vodjYWNu87PUSu3B/rRzOH16fNuOHDNaaAnp/bWG6JVGM36vZSRetX/3p7MX+Eob4+K7
+         WsqLPxTzIA8SJaMgUQfG1p8AtL2Ggzp//StPouxCYBeQoW5f5Vwvqaa9LM0ZudUS6a3M
+         nj7aBelh1c1t5mJf/FQAA+rm09VM4GRCsoyhj3oFG+yBET7M3DkkWHTSUwXmR8qc3jYJ
+         +ng2czArHybY9Gc70YJy9XXY3XKXucpCTD7qDWJpoEa0zV6676sCTSbQOKt/AoljvVZ2
+         HVaw==
+X-Forwarded-Encrypted: i=1; AJvYcCXr81UPYSSF3vu5o+COUHdxSoJGYRDscu/qz184rh8YS2G9jDXNsihVMi1YIRp4JsQRGtvrXbkYDTGu97P9@vger.kernel.org
+X-Gm-Message-State: AOJu0YxltLBbMAx8rQtEAI0C77rdLyTmHzZVgEQg1t5GuTc/FVjIgwBt
+	/tc5cDCh5PsKqWUEQxJXpkbZ8Wqc6aA+va/RLPzp20hw6KUV6XXngMczc7UxvA==
+X-Google-Smtp-Source: AGHT+IFWsFfpSmAomvEtt5G6mILaLDEaIo62yZwexT1w7z/fqh1GYiNgxkqAWApkzmvRxk0nVu7qtg==
+X-Received: by 2002:a17:903:187:b0:1f7:1c96:d2e8 with SMTP id d9443c01a7336-2050d1999a0mr965815ad.10.1724882201781;
+        Wed, 28 Aug 2024 14:56:41 -0700 (PDT)
 Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d844602748sm2481590a91.16.2024.08.28.14.50.43
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8445f9602sm2484968a91.14.2024.08.28.14.56.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 14:50:44 -0700 (PDT)
-Date: Wed, 28 Aug 2024 21:50:40 +0000
+        Wed, 28 Aug 2024 14:56:40 -0700 (PDT)
+Date: Wed, 28 Aug 2024 21:56:37 +0000
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
@@ -65,11 +65,11 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
 	Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>,
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 02/19] gendwarfksyms: Add symbol list handling
-Message-ID: <20240828215040.GC2130480@google.com>
+Subject: Re: [PATCH v2 03/19] gendwarfksyms: Add address matching
+Message-ID: <20240828215637.GD2130480@google.com>
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-23-samitolvanen@google.com>
- <CAK7LNAS=8uU-FUpVqh-z-=7LOfXxYcDQExKLvB+6qe8Fdq_51Q@mail.gmail.com>
+ <20240815173903.4172139-24-samitolvanen@google.com>
+ <CAK7LNASAzsgmkWGOU7WWuBMmzG4vPRDQLjyW4sW+q46QZT=vnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -79,74 +79,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAS=8uU-FUpVqh-z-=7LOfXxYcDQExKLvB+6qe8Fdq_51Q@mail.gmail.com>
+In-Reply-To: <CAK7LNASAzsgmkWGOU7WWuBMmzG4vPRDQLjyW4sW+q46QZT=vnQ@mail.gmail.com>
 
-On Thu, Aug 29, 2024 at 03:16:21AM +0900, Masahiro Yamada wrote:
+On Thu, Aug 29, 2024 at 03:22:25AM +0900, Masahiro Yamada wrote:
 > On Fri, Aug 16, 2024 at 2:39 AM Sami Tolvanen <samitolvanen@google.com> wrote:
-> > @@ -105,6 +105,8 @@ int main(int argc, const char **argv)
-> >         if (parse_options(argc, argv) < 0)
-> >                 return usage();
+> >  int symbol_read_exports(FILE *file)
+> > @@ -57,13 +93,14 @@ int symbol_read_exports(FILE *file)
+> >                 if (is_exported(name))
+> >                         continue; /* Ignore duplicates */
 > >
-> > +       check(symbol_read_exports(stdin));
+> > -               sym = malloc(sizeof(struct symbol));
+> > +               sym = calloc(1, sizeof(struct symbol));
 > 
 > 
 > 
-> symbol_read_exports() is only called from main().
+> I am tired of noise changes when reviewing this patch set.
 > 
-> Do you need to make symbol_read_exports() return
-> the error code all the way back to the main()
-> function?
 > 
-> Personally, I'd like to make the program bail out as early as
-> possible if there is no point in continuing running.
+> 2/19 added malloc(), which is immediately replaced with calloc() by 3/19.
 
-That's a valid point. The current error handling prints out a short
-trace of exactly where something failed as the error propagates
-through the call stack, but bailing out after printing the first
-error is probably informative enough. I'll look into cleaning this
-up.
+This was changed to calloc because the structure now has a new field
+that should be zero-initialized, but I do agree, this could have
+just been a calloc from the beginning. I'll change this in the next
+version.
 
-> See also this patchset.
-> 
-> https://lore.kernel.org/linux-kbuild/20240812124858.2107328-1-masahiroy@kernel.org/T/#m5c0f795b57588a2c313cd2cc6e24ac95169fd225
-
-Thanks for the link. In general I prefer to print out an error to
-indicate what went wrong, but I suppose memory allocation errors
-should be rare enough that it's not necessary. I'll switch to these
-in the next version.
-
-> > +int symbol_read_exports(FILE *file)
-> > +{
-> > +       struct symbol *sym;
-> > +       char *line = NULL;
-> > +       char *name = NULL;
-> > +       size_t size = 0;
-> > +       int nsym = 0;
-> > +
-> > +       while (getline(&line, &size, file) > 0) {
-> > +               if (sscanf(line, "%ms\n", &name) != 1) {
-> > +                       error("malformed input line: %s", line);
-> > +                       return -1;
-> > +               }
-> > +
-> > +               free(line);
-> > +               line = NULL;
-> > +
-> > +               if (is_exported(name))
-> > +                       continue; /* Ignore duplicates */
-> > +
-> > +               sym = malloc(sizeof(struct symbol));
-> > +               if (!sym) {
-> > +                       error("malloc failed");
-> > +                       return -1;
-> > +               }
-> > +
-> > +               sym->name = name;
-> > +               name = NULL;
-> 
-> Is this necessary?
-
-Here, no, but in Petr's cleaned up version it is again necessary, so
-you'll see this in v3 still.
+I did try to make sure there wouldn't be too much churn in the series,
+but clearly I've missed a few places. Hopefully there's nothing
+equally egregious in the later patches!
 
 Sami
