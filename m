@@ -1,59 +1,60 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A8717BEC6
-	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 12:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D054C17C98E
+	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 12:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724848533; cv=none; b=tUgIZveuOuDLuYznGVgrQpbn7BftaaJyUk+RbenWQuFVUqSTTnIrxDk2x6u3zvbRL1eg0U9A7xJdj65XLGs2+A0mHsWDRYOZvlTYgfanCqo2hfm+BE8ryG7KlKpycqaoUcsFKgA6gWzfbPF4YErF8IrygI4IIgWMQ4m6KE4Ot/A=
+	t=1724849168; cv=none; b=gg2Sz9jKH+9ynwVudxBkZr3PlOvlq0JA/AIhLvZPgAhhS67rI387CKnWzSwlokdSpkaT9q7XaEpHuuPNlpE2NpbRpMzOsxPh4GbhcIWH/6AApPitUB/VlG94daT+kzSJDhrKoSwwFjdcdtL77moi/WRiCFJb0+0wsOW6+DmA038=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724848533; c=relaxed/simple;
-	bh=aEKzrBbYi9Ry+ohyfsBeblxLDxy0FJBfs72+PMvk3CI=;
+	s=arc-20240116; t=1724849168; c=relaxed/simple;
+	bh=/cT4Xi/eOAEvpHXHWvsJjX7/kGH9RbuoUARrWLTszIo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JqTH/UebJNm5V6IYSIvAa65yNg4OcxHtsmyhukWZU5AmUdvNj29Eb2+rxpiBft2a2451JklnaMYFSp6y9V/nD02po7hMCRfqcRjkqABv7AdU8oV3mQ3L8ivdtQz7BSbFEmCxpNoB7sFsLXgCA5Ir6v7OyLU1+vS0zUo6cwc3UbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VyER4sID; arc=none smtp.client-ip=209.85.221.43
+	 In-Reply-To:Content-Type; b=G92yXeZ+cvWCd5/iESqgn53J8xkOw9StMIVqoCHjlxb6D9/xDTIb8UNC3ORfEkMyWbTnqHJhJz9f8S6h/T7hyUYmXnrpmwjZ4YAgcbqCc/kt0P+5//GeUSVfrd6qzQTucC87qGjWm7f72NOfhOcj7vuQLL0WNaM2JjVoOAIGImA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bqPT0FgF; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VyER4sID"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3718eaf4046so4879332f8f.3
-        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 05:35:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bqPT0FgF"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5334a8a1b07so8362684e87.1
+        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 05:46:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1724848530; x=1725453330; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1724849165; x=1725453965; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pUt4fS45inpztmNIGJYo+GUFk/1UM7umsW/0Hcne0yc=;
-        b=VyER4sID8XPVvDMTajQC6Q8MjpdhvmAnngg57GeINNiTY8jixM2Z1ENhwCdMRLhy8E
-         2VPyOFxzF9ouqkYQAO0IjgLgulIx7jd93vVdUOEzm9YuqTrjoHVoNgaxVkRKjLPGFUnF
-         1pPV0cyOU8RVXiSFexmocPQiT1AZd82dt+M88yUY1eGseyeQaTVDfiUSVi38BpJoGqx9
-         48H4AWbs3w5IreBuIa6IvlQE+NXrPG3a3EInA6yKEvtxW4Eq9G7BWoEjdKCvS77sPwZ1
-         9ivY0c6d7I6R/js7DMAYp/QLD64yMfXymA4BopiH3rBKGv0GDdOXkqY13sHFI5GLIQe2
-         HFHg==
+        bh=tF6sUHkqO4SD68+xzQN28GcD5wP4XnQ+wDIp9/AK6/w=;
+        b=bqPT0FgFHsyU0G3EFTYeVAYqEjyEG4TGKN4uLTLEU2g7/QNSE3uAml5tp/91l5uEHK
+         43vxcwPJnCdw4mIolZkt34dIH7lIsAjt2Q9T8L/DB6Gk7sqGLtmogH9ynFenbEtZKN2S
+         DEBCWOzLnqEdrG9kMlrpZrymTXS7sasbUiaCkxpaG5xVgk1/JGYhHg5BxSRXpnzNgSj+
+         71HBMdsWuVKUQhrVnaUDYNhJ5C0NlLxmj0Y7/MABKhhswVjXVtSg+IerRAY0DuzShfq6
+         hPIE6KXI6KgKluPvNqXReXLxQgsuIxgZG4qh96k8s3keQpoUIHM8/8SgWgr5K+Q8foht
+         g4cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724848530; x=1725453330;
+        d=1e100.net; s=20230601; t=1724849165; x=1725453965;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pUt4fS45inpztmNIGJYo+GUFk/1UM7umsW/0Hcne0yc=;
-        b=Wr87LCzOe8/5MLV9Ns65lcytSEXIDbJe6tAdcDustSSQkmiOSbTA9S827diob0Nr0Y
-         nluE1QN438r2/JbfamREPQt9tna27c7NMvj0ekGgiYO93N3yMwyR5cae8ExmrRYl0W5n
-         d2gK2LRhKdM5Z0MWJ1LiZMjAHLtNNZHNMK8Wj/U1bzoYbpeYKvEFc9U/25g5RUh329Hc
-         bnJ9n7HvBVnr8wd6zpMZHOWUQNw25/5v3BV8k7GjmAtfNNCkwrGMtGRej3WVHy9hGg+V
-         QsZyLdpcc94h7kLcVpH1L+2LspUqmojAaaQmmL61R+zaUwJNjk6q5dkgqp5vZkmosn/o
-         Cghw==
-X-Forwarded-Encrypted: i=1; AJvYcCU92g15rfidfem26RtSGUQ9Ktq/BJfBxWBzlRdAmSdtsVSUDXKgaURUQBaM0lNquV/Ew+68R1Z4T8kkvVcS@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdjwTc10BzkBPc7LpjOBjl/H6ePhX8GTn4B3kLsOIXlAJBwqhx
-	MwcNcTsSVkleg/boWoueczCoLraBC+otNroOhMAN2Y4fzqhQqGCV9mGieR2Jmo4=
-X-Google-Smtp-Source: AGHT+IHtoo2WUu3BieUUp3gLp4qf08YKUh5yOQZnaKr6LG3FzOM6CjSzhHpc5du36ZYPkM90Gk3FgQ==
-X-Received: by 2002:a5d:46cf:0:b0:371:8e85:c58e with SMTP id ffacd0b85a97d-37311863a3cmr13842070f8f.33.1724848530075;
-        Wed, 28 Aug 2024 05:35:30 -0700 (PDT)
+        bh=tF6sUHkqO4SD68+xzQN28GcD5wP4XnQ+wDIp9/AK6/w=;
+        b=NxSi4rX/JLEJ56x41VHcqOj29ZuG77GcE09I7yveZCMXFXZSoQiQrKQJ319c/SEzN/
+         rF+BE+oPUlEdtguA1XL2rrqeb3I9DE5RHG15/3Zja/rkD9XFwxWvCGNZqeRhRA7tuCWU
+         GANEzMWPA5xB7yNC+yBROBOhYLiCr3DnsO2Yq4MzbRKZ0GUZKlrEkzUAUk0o/f/C41Iu
+         2TptTdeXgrEhMeVGgFwng437ye9Y6ISxDnXhcTJq/434nGd55/LOte0jNtDDm7z7yax/
+         /826VrDDGNXWrWJdGMDDBJNloIz7m1X5RoBfyNfz8YYJhK1f+gTL7f/fsNjVught8WSz
+         g6tg==
+X-Forwarded-Encrypted: i=1; AJvYcCU6A4oNMjWt+Qh4d3t3awSllgLFsr7C/O6CjQT8oNmc/AOqDCkyTSMpxISgoWMixy77HaWMXZ8Mn2p+nxo0@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfZ7+6fP3RgwfIKw2p2rOA9dZ4Pq88vWGgmZ6Br8i/6kgHVf50
+	KvGXJ0DeFz24m43u/pXugK9CgTkbTAlE9rcGiPzzexwewxiQkqTQT/0p6kiDPxxDJiWe1Nt1i4h
+	OFqY=
+X-Google-Smtp-Source: AGHT+IHro9qeKaCY792yMnKxlwgxFiEDVsOC5d/A0lnJdSBAxKmmf92zy4Bd/E6/xRJrnEvtOOeR/Q==
+X-Received: by 2002:a05:6512:ac7:b0:533:6f3:9857 with SMTP id 2adb3069b0e04-5343882e19bmr11853046e87.5.1724849164718;
+        Wed, 28 Aug 2024 05:46:04 -0700 (PDT)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e549cc55sm241658566b.64.2024.08.28.05.35.29
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e582d896sm243412366b.131.2024.08.28.05.46.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Aug 2024 05:35:29 -0700 (PDT)
-Message-ID: <95db3178-a2ce-421e-8024-afd7fa3359a3@suse.com>
-Date: Wed, 28 Aug 2024 14:35:29 +0200
+        Wed, 28 Aug 2024 05:46:04 -0700 (PDT)
+Message-ID: <742f7226-9c66-4cfb-ba31-222dfb54fc34@suse.com>
+Date: Wed, 28 Aug 2024 14:46:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,7 +62,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/19] gendwarfksyms: Add symbol list handling
+Subject: Re: [PATCH v2 05/19] gendwarfksyms: Expand base_type
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
@@ -74,48 +75,199 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
  linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
  rust-for-linux@vger.kernel.org
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-23-samitolvanen@google.com>
+ <20240815173903.4172139-26-samitolvanen@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20240815173903.4172139-23-samitolvanen@google.com>
+In-Reply-To: <20240815173903.4172139-26-samitolvanen@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/15/24 19:39, Sami Tolvanen wrote:
+> Start making gendwarfksyms more useful by adding support for
+> expanding DW_TAG_base_type types and basic DWARF attributes.
+> 
+> Example:
+> 
+>   $ echo loops_per_jiffy | \
+>       scripts/gendwarfksyms/gendwarfksyms --debug vmlinux.o
+>   ...
+>   gendwarfksyms: process_exported_symbols: loops_per_jiffy
+>   variable base_type unsigned long byte_size(8) encoding(7);
+>   ...
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  scripts/gendwarfksyms/dwarf.c | 121 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 120 insertions(+), 1 deletion(-)
+> 
 > diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-> index 65a29d0bd8f4..71cfab0553da 100644
+> index 956b30224316..a37c9049d18e 100644
 > --- a/scripts/gendwarfksyms/dwarf.c
 > +++ b/scripts/gendwarfksyms/dwarf.c
-> @@ -5,6 +5,48 @@
-> [...]
+> @@ -5,6 +5,17 @@
+>  
+>  #include "gendwarfksyms.h"
+>  
+> +#define DEFINE_GET_ATTR(attr, type)                                    \
+> +	static bool get_##attr##_attr(Dwarf_Die *die, unsigned int id, \
+> +				      type *value)                     \
+> +	{                                                              \
+> +		Dwarf_Attribute da;                                    \
+> +		return dwarf_attr(die, id, &da) &&                     \
+> +		       !dwarf_form##attr(&da, value);                  \
+> +	}
 > +
-> +static bool is_export_symbol(struct state *state, Dwarf_Die *die)
-> +{
-> +	Dwarf_Die *source = die;
-> +	Dwarf_Die origin;
+> +DEFINE_GET_ATTR(udata, Dwarf_Word)
 > +
-> +	state->sym = NULL;
+>  static bool get_ref_die_attr(Dwarf_Die *die, unsigned int id, Dwarf_Die *value)
+>  {
+>  	Dwarf_Attribute da;
+> @@ -60,6 +71,74 @@ static int process(struct state *state, const char *s)
+>  	return 0;
+>  }
+>  
+> +#define MAX_FMT_BUFFER_SIZE 128
 > +
-> +	/* If the DIE has an abstract origin, use it for type information. */
-> +	if (get_ref_die_attr(die, DW_AT_abstract_origin, &origin))
-> +		source = &origin;
-> +
-> +	state->sym = symbol_get(get_name(die));
-> +
-> +	/* Look up using the origin name if there are no matches. */
-> +	if (!state->sym && source != die)
-> +		state->sym = symbol_get(get_name(source));
-> +
-> +	state->die = *source;
-> +	return !!state->sym;
-> +}
+> +static int process_fmt(struct state *state, const char *fmt, ...)
 
-Sorry, I don't want to comment much on function names.. but I realized
-the name of is_export_symbol() isn't really great. The "is_" prefix
-strongly indicates that it is only a query function, yet it changes the
-state. It makes its caller process_exported_symbols() hard to understand
-on the first read.
+Nit: The state parameter is unused by a number of these process_*()
+functions, including the leaf process(). I suggest removing it so it
+doesn't need to be passed around unnecessarily.
+
+> +{
+> +	char buf[MAX_FMT_BUFFER_SIZE];
+> +	va_list args;
+> +	int res;
+> +
+> +	va_start(args, fmt);
+> +
+> +	res = checkp(vsnprintf(buf, sizeof(buf), fmt, args));
+> +	if (res >= MAX_FMT_BUFFER_SIZE - 1) {
+
+This check looks off by one, though on the safe side:
+res >= sizeof(buf)
+
+> +		error("vsnprintf overflow: increase MAX_FMT_BUFFER_SIZE");
+> +		res = -1;
+> +	} else {
+> +		res = check(process(state, buf));
+> +	}
+> +
+> +	va_end(args);
+> +	return res;
+> +}
+> +
+> +/* Process a fully qualified name from DWARF scopes */
+> +static int process_fqn(struct state *state, Dwarf_Die *die)
+> +{
+> +	Dwarf_Die *scopes = NULL;
+> +	const char *name;
+> +	int res;
+> +	int i;
+> +
+> +	res = checkp(dwarf_getscopes_die(die, &scopes));
+> +	if (!res) {
+> +		name = get_name(die);
+> +		name = name ?: "<unnamed>";
+> +		return check(process(state, name));
+> +	}
+> +
+> +	for (i = res - 1; i >= 0; i--) {
+> +		if (dwarf_tag(&scopes[i]) == DW_TAG_compile_unit)
+> +			continue;
+> +
+> +		name = get_name(&scopes[i]);
+> +		name = name ?: "<unnamed>";
+> +		check(process(state, name));
+> +		if (i > 0)
+> +			check(process(state, "::"));
+
+Failed check(process()) calls here return immediately and so would leak
+scopes. However, I see this is fixed in the following patch
+"gendwarfksyms: Add a cache for processed DIEs" so it's ok.
+
+> +	}
+> +
+> +	free(scopes);
+> +	return 0;
+> +}
+> +
+> +#define DEFINE_PROCESS_UDATA_ATTRIBUTE(attribute)                         \
+> +	static int process_##attribute##_attr(struct state *state,        \
+> +					      Dwarf_Die *die)             \
+> +	{                                                                 \
+> +		Dwarf_Word value;                                         \
+> +		if (get_udata_attr(die, DW_AT_##attribute, &value))       \
+> +			check(process_fmt(state,                          \
+> +					  " " #attribute "(%" PRIu64 ")", \
+> +					  value));                        \
+> +		return 0;                                                 \
+> +	}
+> +
+> +DEFINE_PROCESS_UDATA_ATTRIBUTE(alignment)
+> +DEFINE_PROCESS_UDATA_ATTRIBUTE(byte_size)
+> +DEFINE_PROCESS_UDATA_ATTRIBUTE(encoding)
+> +
+>  bool match_all(Dwarf_Die *die)
+>  {
+>  	return true;
+> @@ -81,6 +160,44 @@ int process_die_container(struct state *state, Dwarf_Die *die,
+>  	return 0;
+>  }
+>  
+> +static int process_type(struct state *state, Dwarf_Die *die);
+> +
+> +static int process_type_attr(struct state *state, Dwarf_Die *die)
+> +{
+> +	Dwarf_Die type;
+> +
+> +	if (get_ref_die_attr(die, DW_AT_type, &type))
+> +		return check(process_type(state, &type));
+> +
+> +	/* Compilers can omit DW_AT_type -- print out 'void' to clarify */
+> +	return check(process(state, "base_type void"));
+> +}
+> +
+> +static int process_base_type(struct state *state, Dwarf_Die *die)
+> +{
+> +	check(process(state, "base_type "));
+> +	check(process_fqn(state, die));
+> +	check(process_byte_size_attr(state, die));
+> +	check(process_encoding_attr(state, die));
+> +	return check(process_alignment_attr(state, die));
+> +}
+> +
+> +static int process_type(struct state *state, Dwarf_Die *die)
+> +{
+> +	int tag = dwarf_tag(die);
+> +
+> +	switch (tag) {
+> +	case DW_TAG_base_type:
+> +		check(process_base_type(state, die));
+> +		break;
+> +	default:
+> +		debug("unimplemented type: %x", tag);
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Exported symbol processing
+>   */
+> @@ -91,7 +208,9 @@ static int process_subprogram(struct state *state, Dwarf_Die *die)
+>  
+>  static int process_variable(struct state *state, Dwarf_Die *die)
+>  {
+> -	return check(process(state, "variable;\n"));
+> +	check(process(state, "variable "));
+> +	check(process_type_attr(state, die));
+> +	return check(process(state, ";\n"));
+>  }
+>  
+>  static int process_symbol_ptr(struct state *state, Dwarf_Die *die)
 
 -- 
-Thanks
+Thanks,
 Petr
