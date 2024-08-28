@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2EF1A4F35;
-	Wed, 28 Aug 2024 17:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D7A2747B;
+	Wed, 28 Aug 2024 18:15:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724867141; cv=none; b=bYnu3gLMwiUlREi9MSI+s7hNTtSuNPY+NpugF95JQ/O0vey+zLY/mf0QMJO8Sh1bbcj+HmMuaTXn0smRu7mFnYVU/+wyqN7TaNsH+xRnINxy/wyrWPc4T5D+wVqC2v3oluu7n/EycRZ74Yy6Q7XGdCCcdFEQAHR9MFSOM635XpQ=
+	t=1724868940; cv=none; b=EnZJnSlvKTSPwgNrrrItUAqHU86vcCWkgbZ6GuqVxQMj5c3Y5DV24cuv3E4o1KgCBRCBQiWmpj9T74Z0DfLOC3I5IEm3l1Up8Rx1Pp1BvSWFB0vSxMArEFksiGINZAsJS34qypQy4q4WqWSkQELKozeYDbbgwOjqWvR5+rPlwik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724867141; c=relaxed/simple;
-	bh=4Qiw+BbTYt7FJKSMYASlcgd58nWV+EBUZuAr/QB1Wx8=;
+	s=arc-20240116; t=1724868940; c=relaxed/simple;
+	bh=FveA6ivn7jNuVVJwt3ZVsWXWe3VU5PK0bqzTdYvMwNE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C0Vxbce73iT+IE07ribEo40XEigTWOBe6dKGdEH3rB3EndFjQs4Q80s/tCUq4LWFXxVAIv+zS3otdovsWzod1/2zHygD+CG1yJ0kBexqfB7BKEscROE64cUP2sQj+TxGzf0c79WB3oUBsZq/7+YXorUO4bmAgwTp7hYjqtOTAoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEqZvJE5; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=iqtLzXnczvOTShN1VfLaw5cTbIFKYwTXASiHP/mcCJI1koAxYZ/UdFY/Px2I+OWyG5VLkFQGQUcVMW5/2GYYiNhM/fv4PmBzKeuYs6D5ya54yHc2I5IUEZUpZ6REwy560wBlZTOlqzodCn1W2NC4SQHDygsIdj5hjuh+oRetOLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EadeC2G5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEqZvJE5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32749C4CEC5;
-	Wed, 28 Aug 2024 17:45:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EadeC2G5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D46E6C4CEC3;
+	Wed, 28 Aug 2024 18:15:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724867141;
-	bh=4Qiw+BbTYt7FJKSMYASlcgd58nWV+EBUZuAr/QB1Wx8=;
+	s=k20201202; t=1724868939;
+	bh=FveA6ivn7jNuVVJwt3ZVsWXWe3VU5PK0bqzTdYvMwNE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=hEqZvJE5ZeneIyXZnFUDgTWEJcSBKtN43yE1RsVCSc7Y1eQ0P7TpuTmbpHlq+c3FM
-	 IbmA0/TDbAMsNSXs+rZurno+0jZNnVka/pOSvP0C9S6S9uz2ONszhd0p4jGmA6ieTd
-	 68XgcwdofL7YJsxq+tzt2CObceWzfJigR8g5aBPV8HHsBJvwPcm+H48+bKUj/XxFmt
-	 OBoyhRSY8UeRFQx/sMDLQtasUCV54DbaIC7afl5ITrGatJTqqaGnWXTTQbzM5ESAX3
-	 Wk+W9pB7KKceh2fTvG/gf+2gPrNKtViCAk4DWtC7AJqGsVu7VIMRShqzHmpYBtgSNk
-	 K7d18x/r/y87w==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5342109d726so771402e87.0;
-        Wed, 28 Aug 2024 10:45:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUjWaDRCUL8qUgSyWj0OTRMXWQC1emUkS585izhYR7f5veg/V4wUre6TSDCACIpO4HQWM+X1FzJzIhrg4f54Dw=@vger.kernel.org, AJvYcCUt3dtjRh05hONECFHYDOsr3mdBWSMGbNNDI9AOWH+6AD4Vty+as0N/mhalnHVpTZo8Nv8FYZ5Nk6cppzXz/w==@vger.kernel.org, AJvYcCVveX0Q3OHRVT/6JvuFm0OJCT70Bqdd3OlRSLb6J/LBuH3sIhcvnbxzqmvJjIhNdFoyJJTYNFnFMsegZKem@vger.kernel.org, AJvYcCXoK1HrKkb0htmZbOTyDEoCgEqYB7ILlLXihrlcF6cf1Z6BLKQqQOIkHAYarVF+2UbxqQkyKIKpGDeF8vY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+aJJJfhCxzM+lLgmdCNPDCd503P3Wd4qD/6LLi3vuUBx8oJSU
-	XQBYzrQCVB5tnEviT6ihf/xDtO4FeveGFU3FBAwqF+kl3RnPNklHSJxv0j7Sl38AcoAQf+zV34e
-	jwT910kE1H87mJdKo94PfmhWRv5g=
-X-Google-Smtp-Source: AGHT+IG1po+DYHVNsioMEdLXCeX+9UMJ/6DMlarYwZVmvp6SI+NmtwkVeaxCugBYSiYJR4XG5lGM/3BvXD+9vwqSqEk=
-X-Received: by 2002:a05:6512:3b12:b0:52f:c398:8780 with SMTP id
- 2adb3069b0e04-5353da48604mr119124e87.18.1724867139788; Wed, 28 Aug 2024
- 10:45:39 -0700 (PDT)
+	b=EadeC2G5/c1OO3GBWW8sYLNVlSbhUacvcdVwKY0jRzfddZi1t7HJ8/fsSzoH+3JRC
+	 J0LKRmnRgedjLZNQ2c9w+ALCX6a0iPCaejEuyG00t/uvjIMDPr+DlRhKaUTdBTtuLh
+	 0IBCUzeLx3lRTHMKtMY9HoKs1WvyILtzA6KRhQO5czQ/a03dvktee4MhrMiCIFikVq
+	 pU3gtAGq6cM/JPlK8mOYQWWSFoKdZv635VvekJOrk2XoogZYhJvYtIxosei722hZ+O
+	 azMuOef5YszfO3fiI96P8hkfbwaJru15Po7JcGvpptO5vfF20LhkuJlfEaLxzW5z/J
+	 i/FK2wb7WOEsQ==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-533488ffaf7so9680588e87.0;
+        Wed, 28 Aug 2024 11:15:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUDVfqqaeYskwunGlOJ7KjFJfvuank/jPvc+9yipR1fbpF2IDd14+vARJJW8NcqKNFZcc48abaqCWIFegCd@vger.kernel.org, AJvYcCUXf3f+RJ5ARwqbxZQtj4qqBykXa3gBifp6c0akLN1PlGjfqBOHRLliIfwPtRQb5a7dDHrhflxlt8U0t6x3+w==@vger.kernel.org, AJvYcCV8XRmTQ6XPkgDAGaetTQIO9BoIzGWvT0aaacEoWv7llR1w1pq3jZ43vnYgtpcY5eZLfkIPiw6XKSrF0mg=@vger.kernel.org, AJvYcCVAIiJR7IIoQh3G8bX3Q6lwJwdUljwbf5XG20yXhv7IeyX19s8IxJzs3biydi0FmriMyrR1yZn3R8BlZ5rWTso=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf3RvqaPAQr8q3QXMjlMEgyMTzxzBsLA3KmW3z1/2FELuY/SKB
+	IWqegYynNVpUxNLCyXKaL/BPugXpLT22z5tj7NqBtQ3GyqxW8QMXIKg6+2voAVrP5S0mP4FJLG2
+	zX5n2gKFRtzE1inSJG2Jbe5qFzBg=
+X-Google-Smtp-Source: AGHT+IF/63jL53P75A8iee8qUEGbkNUdjDngWZczENu3dFzHOlQ0gMsu6LTAAnvPf8fF3Lg63689rhWEBKtJDKSCfY8=
+X-Received: by 2002:a05:6512:e92:b0:533:97b:e272 with SMTP id
+ 2adb3069b0e04-5353e5aae0emr99002e87.41.1724868938342; Wed, 28 Aug 2024
+ 11:15:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815173903.4172139-21-samitolvanen@google.com> <20240815173903.4172139-22-samitolvanen@google.com>
-In-Reply-To: <20240815173903.4172139-22-samitolvanen@google.com>
+References: <20240815173903.4172139-21-samitolvanen@google.com> <20240815173903.4172139-27-samitolvanen@google.com>
+In-Reply-To: <20240815173903.4172139-27-samitolvanen@google.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 29 Aug 2024 02:45:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATKWnkdmxvPBaBLYThLk0Voh7UVh5V4_eKHs9g-40qUTQ@mail.gmail.com>
-Message-ID: <CAK7LNATKWnkdmxvPBaBLYThLk0Voh7UVh5V4_eKHs9g-40qUTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/19] tools: Add gendwarfksyms
+Date: Thu, 29 Aug 2024 03:15:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARQncjxxqbjiMHXdAnakpo8QYo-5kYnN=KaD2xDe0uXPA@mail.gmail.com>
+Message-ID: <CAK7LNARQncjxxqbjiMHXdAnakpo8QYo-5kYnN=KaD2xDe0uXPA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/19] gendwarfksyms: Add a cache for processed DIEs
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
@@ -63,489 +63,189 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Aug 16, 2024 at 2:39=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
 com> wrote:
 >
-> Add a basic DWARF parser, which uses libdw to traverse the debugging
-> information in an object file and looks for functions and variables.
-> In follow-up patches, this will be expanded to produce symbol versions
-> for CONFIG_MODVERSIONS from DWARF.
-
-
-
-I do not think it would make sense to split the patch
-until this tool starts to do something useful.
-
-
-
-
-
-
+> Basic types in DWARF repeat frequently and traversing the DIEs using
+> libdw is relatively slow. Add a simple hashtable based cache for the
+> processed DIEs.
 >
 > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 > ---
->  kernel/module/Kconfig                 |   8 ++
->  scripts/Makefile                      |   1 +
->  scripts/gendwarfksyms/.gitignore      |   2 +
->  scripts/gendwarfksyms/Makefile        |   7 ++
->  scripts/gendwarfksyms/dwarf.c         |  87 +++++++++++++++
->  scripts/gendwarfksyms/gendwarfksyms.c | 146 ++++++++++++++++++++++++++
->  scripts/gendwarfksyms/gendwarfksyms.h |  78 ++++++++++++++
->  7 files changed, 329 insertions(+)
->  create mode 100644 scripts/gendwarfksyms/.gitignore
->  create mode 100644 scripts/gendwarfksyms/Makefile
->  create mode 100644 scripts/gendwarfksyms/dwarf.c
->  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
->  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
+>  scripts/gendwarfksyms/Makefile        |   1 +
+>  scripts/gendwarfksyms/die.c           | 170 +++++++++++++++++++++++
+>  scripts/gendwarfksyms/dwarf.c         | 192 ++++++++++++++++++++------
+>  scripts/gendwarfksyms/gendwarfksyms.c |   6 +
+>  scripts/gendwarfksyms/gendwarfksyms.h |  58 +++++++-
+>  5 files changed, 382 insertions(+), 45 deletions(-)
+>  create mode 100644 scripts/gendwarfksyms/die.c
 >
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 4047b6d48255..a506d4ac660f 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -168,6 +168,14 @@ config MODVERSIONS
->           make them incompatible with the kernel you are running.  If
->           unsure, say N.
->
-> +config GENDWARFKSYMS
-> +       bool
-> +       depends on DEBUG_INFO
-> +       # Requires full debugging information, split DWARF not supported.
-> +       depends on !DEBUG_INFO_REDUCED && !DEBUG_INFO_SPLIT
-> +       # Requires ELF object files.
-> +       depends on !LTO
-> +
->  config ASM_MODVERSIONS
->         bool
->         default HAVE_ASM_MODVERSIONS && MODVERSIONS
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index dccef663ca82..2fd0199662e9 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -54,6 +54,7 @@ targets +=3D module.lds
->
->  subdir-$(CONFIG_GCC_PLUGINS) +=3D gcc-plugins
->  subdir-$(CONFIG_MODVERSIONS) +=3D genksyms
-> +subdir-$(CONFIG_GENDWARFKSYMS) +=3D gendwarfksyms
->  subdir-$(CONFIG_SECURITY_SELINUX) +=3D selinux
->
->  # Let clean descend into subdirs
-> diff --git a/scripts/gendwarfksyms/.gitignore b/scripts/gendwarfksyms/.gi=
-tignore
-> new file mode 100644
-> index 000000000000..ab8c763b3afe
-> --- /dev/null
-> +++ b/scripts/gendwarfksyms/.gitignore
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +/gendwarfksyms
 > diff --git a/scripts/gendwarfksyms/Makefile b/scripts/gendwarfksyms/Makef=
 ile
-> new file mode 100644
-> index 000000000000..c1389c161f9c
-> --- /dev/null
+> index 623f8fc975ea..fcbac52ca00a 100644
+> --- a/scripts/gendwarfksyms/Makefile
 > +++ b/scripts/gendwarfksyms/Makefile
-> @@ -0,0 +1,7 @@
-> +hostprogs-always-y +=3D gendwarfksyms
-> +
-> +gendwarfksyms-objs +=3D gendwarfksyms.o
-> +gendwarfksyms-objs +=3D dwarf.o
-> +
-> +HOST_EXTRACFLAGS :=3D -I $(srctree)/tools/include
-> +HOSTLDLIBS_gendwarfksyms :=3D -ldw -lelf
-> diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.=
-c
+> @@ -1,6 +1,7 @@
+>  hostprogs-always-y +=3D gendwarfksyms
+>
+>  gendwarfksyms-objs +=3D gendwarfksyms.o
+> +gendwarfksyms-objs +=3D die.o
+>  gendwarfksyms-objs +=3D dwarf.o
+>  gendwarfksyms-objs +=3D symbols.o
+>
+> diff --git a/scripts/gendwarfksyms/die.c b/scripts/gendwarfksyms/die.c
 > new file mode 100644
-> index 000000000000..65a29d0bd8f4
+> index 000000000000..ad6ba435d9dd
 > --- /dev/null
-> +++ b/scripts/gendwarfksyms/dwarf.c
-> @@ -0,0 +1,87 @@
+> +++ b/scripts/gendwarfksyms/die.c
+> @@ -0,0 +1,170 @@
 > +// SPDX-License-Identifier: GPL-2.0-or-later
 > +/*
 > + * Copyright (C) 2024 Google LLC
 > + */
 > +
+> +#include <string.h>
 > +#include "gendwarfksyms.h"
 > +
-> +/*
-> + * Type string processing
-> + */
-> +static int process(struct state *state, const char *s)
+> +#define DIE_HASH_BITS 20
+> +
+> +/* uintptr_t die->addr -> struct die * */
+> +static DEFINE_HASHTABLE(die_map, DIE_HASH_BITS);
+> +
+> +static unsigned int map_hits;
+> +static unsigned int map_misses;
+> +
+> +static int create_die(Dwarf_Die *die, struct die **res)
 > +{
-> +       s =3D s ?: "<null>";
+> +       struct die *cd;
 > +
-> +       if (debug)
-> +               fputs(s, stderr);
+> +       cd =3D malloc(sizeof(struct die));
+> +       if (!cd) {
+> +               error("malloc failed");
+> +               return -1;
+> +       }
 > +
+> +       cd->state =3D INCOMPLETE;
+> +       cd->mapped =3D false;
+> +       cd->fqn =3D NULL;
+> +       cd->tag =3D -1;
+> +       cd->addr =3D (uintptr_t)die->addr;
+> +       cd->list =3D NULL;
+> +
+> +       hash_add(die_map, &cd->hash, addr_hash(cd->addr));
+> +       *res =3D cd;
 > +       return 0;
 > +}
 > +
-> +bool match_all(Dwarf_Die *die)
-> +{
-> +       return true;
-> +}
-> +
-> +int process_die_container(struct state *state, Dwarf_Die *die,
-> +                         die_callback_t func, die_match_callback_t match=
+> +int __die_map_get(uintptr_t addr, enum die_state state, struct die **res=
 )
 > +{
-> +       Dwarf_Die current;
-> +       int res;
+> +       struct die *cd;
 > +
-> +       res =3D checkp(dwarf_child(die, &current));
-> +       while (!res) {
-> +               if (match(&current))
-> +                       check(func(state, &current));
-> +               res =3D checkp(dwarf_siblingof(&current, &current));
+> +       hash_for_each_possible(die_map, cd, hash, addr_hash(addr)) {
+> +               if (cd->addr =3D=3D addr && cd->state =3D=3D state) {
+> +                       *res =3D cd;
+> +                       return 0;
+> +               }
 > +       }
 > +
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Symbol processing
-> + */
-> +static int process_subprogram(struct state *state, Dwarf_Die *die)
-> +{
-> +       return check(process(state, "subprogram;\n"));
-> +}
-> +
-> +static int process_variable(struct state *state, Dwarf_Die *die)
-> +{
-> +       return check(process(state, "variable;\n"));
-> +}
-> +
-> +static int process_exported_symbols(struct state *state, Dwarf_Die *die)
-> +{
-> +       int tag =3D dwarf_tag(die);
-> +
-> +       switch (tag) {
-> +       /* Possible containers of exported symbols */
-> +       case DW_TAG_namespace:
-> +       case DW_TAG_class_type:
-> +       case DW_TAG_structure_type:
-> +               return check(process_die_container(
-> +                       state, die, process_exported_symbols, match_all))=
-;
-> +
-> +       /* Possible exported symbols */
-> +       case DW_TAG_subprogram:
-> +       case DW_TAG_variable:
-> +               if (tag =3D=3D DW_TAG_subprogram)
-> +                       check(process_subprogram(state, die));
-> +               else
-> +                       check(process_variable(state, die));
-> +
-> +               return 0;
-> +       default:
-> +               return 0;
-> +       }
-> +}
-> +
-> +int process_module(Dwfl_Module *mod, Dwarf *dbg, Dwarf_Die *cudie)
-> +{
-> +       struct state state =3D { .mod =3D mod, .dbg =3D dbg };
-> +
-> +       return check(process_die_container(
-> +               &state, cudie, process_exported_symbols, match_all));
-> +}
-> diff --git a/scripts/gendwarfksyms/gendwarfksyms.c b/scripts/gendwarfksym=
-s/gendwarfksyms.c
-> new file mode 100644
-> index 000000000000..27f2d6423c45
-> --- /dev/null
-> +++ b/scripts/gendwarfksyms/gendwarfksyms.c
-> @@ -0,0 +1,146 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2024 Google LLC
-> + */
-> +
-> +#include <fcntl.h>
-> +#include <errno.h>
-> +#include <stdarg.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include "gendwarfksyms.h"
-> +
-> +/*
-> + * Options
-> + */
-> +
-> +/* Print out debugging information to stderr */
-> +bool debug;
-> +
-> +static const struct {
-> +       const char *arg;
-> +       bool *flag;
-> +       const char **param;
-> +} options[] =3D {
-> +       { "--debug", &debug, NULL },
-> +};
-> +
-> +static int usage(void)
-> +{
-> +       error("usage: gendwarfksyms [options] elf-object-file ...");
-
-
-
-Description for each option, please.
-
-See
-scripts/genksyms/genksyms.c
-as an example.
-
-
 > +       return -1;
 > +}
 > +
-> +static const char *object_files[MAX_INPUT_FILES];
-> +static unsigned int object_count;
-> +
-> +static int parse_options(int argc, const char **argv)
-
-
-
-Why not getopt_long()?
-
-
-See
-scripts/kallsyms.c
-scripts/genksyms/genksyms.c
-as examples.
-
-
-
-
-
-
-
-
-
+> +int die_map_get(Dwarf_Die *die, enum die_state state, struct die **res)
 > +{
-> +       for (int i =3D 1; i < argc; i++) {
-> +               bool flag =3D false;
-> +
-> +               for (int j =3D 0; j < ARRAY_SIZE(options); j++) {
-> +                       if (strcmp(argv[i], options[j].arg))
-> +                               continue;
-> +
-> +                       *options[j].flag =3D true;
-> +
-> +                       if (options[j].param) {
-> +                               if (++i >=3D argc) {
-> +                                       error("%s needs an argument",
-> +                                             options[j].arg);
-> +                                       return -1;
-> +                               }
-> +
-> +                               *options[j].param =3D argv[i];
-> +                       }
-> +
-> +                       flag =3D true;
-> +                       break;
-> +               }
-> +
-> +               if (!flag)
-> +                       object_files[object_count++] =3D argv[i];
+> +       if (__die_map_get((uintptr_t)die->addr, state, res) =3D=3D 0) {
+> +               map_hits++;
+> +               return 0;
 > +       }
 > +
-> +       return object_count ? 0 : -1;
+> +       map_misses++;
+> +       return check(create_die(die, res));
 > +}
 > +
-> +static int process_modules(Dwfl_Module *mod, void **userdata, const char=
- *name,
-> +                          Dwarf_Addr base, void *arg)
+> +static void reset_die(struct die *cd)
 > +{
-> +       Dwarf_Addr dwbias;
-> +       Dwarf_Die cudie;
-> +       Dwarf_CU *cu =3D NULL;
-> +       Dwarf *dbg;
-> +       int res;
+> +       struct die_fragment *tmp;
+> +       struct die_fragment *df =3D cd->list;
 > +
-> +       debug("%s", name);
-> +       dbg =3D dwfl_module_getdwarf(mod, &dwbias);
+> +       while (df) {
+> +               if (df->type =3D=3D STRING)
+> +                       free(df->data.str);
 > +
-> +       do {
-> +               res =3D dwarf_get_units(dbg, cu, &cu, NULL, NULL, &cudie,=
- NULL);
-> +               if (res < 0) {
-> +                       error("dwarf_get_units failed: no debugging infor=
-mation?");
-> +                       return -1;
-> +               } else if (res =3D=3D 1) {
-> +                       break; /* No more units */
-> +               }
-> +
-> +               check(process_module(mod, dbg, &cudie));
-> +       } while (cu);
-> +
-> +       return DWARF_CB_OK;
-> +}
-> +
-> +static const Dwfl_Callbacks callbacks =3D {
-> +       .section_address =3D dwfl_offline_section_address,
-> +       .find_debuginfo =3D dwfl_standard_find_debuginfo,
-> +};
-> +
-> +int main(int argc, const char **argv)
-> +{
-> +       unsigned int n;
-> +
-> +       if (parse_options(argc, argv) < 0)
-> +               return usage();
-> +
-> +       for (n =3D 0; n < object_count; n++) {
-
-
-When does  "object_count >=3D 2" happen ?
-
-
-
-
-
-
-
-
-
-
-> +               Dwfl *dwfl;
-> +               int fd;
-> +
-> +               fd =3D open(object_files[n], O_RDONLY);
-> +               if (fd =3D=3D -1) {
-> +                       error("open failed for '%s': %s", object_files[n]=
-,
-> +                             strerror(errno));
-> +                       return -1;
-> +               }
-> +
-> +               dwfl =3D dwfl_begin(&callbacks);
-> +               if (!dwfl) {
-> +                       error("dwfl_begin failed for '%s': %s", object_fi=
-les[n],
-> +                             dwarf_errmsg(-1));
-> +                       return -1;
-> +               }
-> +
-> +               if (!dwfl_report_offline(dwfl, object_files[n], object_fi=
-les[n],
-> +                                        fd)) {
-> +                       error("dwfl_report_offline failed for '%s': %s",
-> +                             object_files[n], dwarf_errmsg(-1));
-> +                       return -1;
-> +               }
-> +
-> +               dwfl_report_end(dwfl, NULL, NULL);
-> +
-> +               if (dwfl_getmodules(dwfl, &process_modules, NULL, 0)) {
-> +                       error("dwfl_getmodules failed for '%s'",
-> +                             object_files[n]);
-> +                       return -1;
-> +               }
-> +
-> +               dwfl_end(dwfl);
-> +               close(fd);
+> +               tmp =3D df->next;
+> +               free(df);
+> +               df =3D tmp;
 > +       }
 > +
-> +       return 0;
+> +       cd->state =3D INCOMPLETE;
+> +       cd->mapped =3D false;
+> +       if (cd->fqn)
+> +               free(cd->fqn);
+> +       cd->fqn =3D NULL;
+> +       cd->tag =3D -1;
+> +       cd->addr =3D 0;
+> +       cd->list =3D NULL;
 > +}
-> diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksym=
-s/gendwarfksyms.h
-> new file mode 100644
-> index 000000000000..5ab7ce7d4efb
-> --- /dev/null
-> +++ b/scripts/gendwarfksyms/gendwarfksyms.h
-> @@ -0,0 +1,78 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/*
-> + * Copyright (C) 2024 Google LLC
-> + */
 > +
-> +#include <dwarf.h>
-> +#include <elfutils/libdw.h>
-> +#include <elfutils/libdwfl.h>
-> +#include <linux/hashtable.h>
-> +#include <inttypes.h>
-> +#include <stdlib.h>
-> +#include <stdio.h>
+> +void die_map_free(void)
+> +{
+> +       struct hlist_node *tmp;
+> +       unsigned int stats[LAST + 1];
+> +       struct die *cd;
+> +       int i;
 > +
-> +#ifndef __GENDWARFKSYMS_H
-> +#define __GENDWARFKSYMS_H
+> +       memset(stats, 0, sizeof(stats));
 > +
-> +/*
-> + * Options -- in gendwarfksyms.c
-> + */
-> +extern bool debug;
+> +       hash_for_each_safe(die_map, i, tmp, cd, hash) {
+> +               stats[cd->state]++;
+> +               reset_die(cd);
+> +               free(cd);
+> +       }
+> +       hash_init(die_map);
 > +
-> +#define MAX_INPUT_FILES 128
+> +       if ((map_hits + map_misses > 0))
+> +               debug("hits %u, misses %u (hit rate %.02f%%)", map_hits,
+> +                     map_misses,
+> +                     (100.0f * map_hits) / (map_hits + map_misses));
 > +
-> +/*
-> + * Output helpers
-> + */
-> +#define __PREFIX "gendwarfksyms: "
-> +#define __println(prefix, format, ...)                                \
-> +       fprintf(stderr, prefix __PREFIX "%s: " format "\n", __func__, \
-> +               ##__VA_ARGS__)
+> +       for (i =3D 0; i <=3D LAST; i++)
+> +               debug("%s: %u entries", die_state_name(i), stats[i]);
+> +}
 > +
-> +#define debug(format, ...)                                    \
-> +       do {                                                  \
-> +               if (debug)                                    \
-> +                       __println("", format, ##__VA_ARGS__); \
-> +       } while (0)
+> +static int append_item(struct die *cd, struct die_fragment **res)
+> +{
+> +       struct die_fragment *prev;
+> +       struct die_fragment *df;
 > +
-> +#define warn(format, ...) __println("warning: ", format, ##__VA_ARGS__)
-> +#define error(format, ...) __println("error: ", format, ##__VA_ARGS__)
+> +       df =3D malloc(sizeof(struct die_fragment));
+> +       if (!df) {
+> +               error("malloc failed");
+> +               return -1;
+> +       }
 > +
-> +/*
-> + * Error handling helpers
-> + */
-> +#define __check(expr, test, rv)                                 \
-> +       ({                                                      \
-> +               int __res =3D expr;                               \
-> +               if (test) {                                     \
-> +                       error("`%s` failed: %d", #expr, __res); \
-> +                       return rv;                              \
-> +               }                                               \
-> +               __res;                                          \
-> +       })
+> +       df->type =3D EMPTY;
+> +       df->next =3D NULL;
 > +
-> +/* Error =3D=3D non-zero values */
-> +#define check(expr) __check(expr, __res, -1)
-> +/* Error =3D=3D negative values */
-> +#define checkp(expr) __check(expr, __res < 0, __res)
-> +
-> +/*
-> + * dwarf.c
-> + */
-> +
-> +struct state {
-> +       Dwfl_Module *mod;
-> +       Dwarf *dbg;
-> +};
-> +
-> +typedef int (*die_callback_t)(struct state *state, Dwarf_Die *die);
-> +typedef bool (*die_match_callback_t)(Dwarf_Die *die);
-> +extern bool match_all(Dwarf_Die *die);
-> +
-> +extern int process_die_container(struct state *state, Dwarf_Die *die,
-> +                                die_callback_t func,
-> +                                die_match_callback_t match);
-> +
-> +extern int process_module(Dwfl_Module *mod, Dwarf *dbg, Dwarf_Die *cudie=
-);
+> +       prev =3D cd->list;
+> +       while (prev && prev->next)
+> +               prev =3D prev->next;
 
 
-No 'extern' for function declarations.
+
+So, this entirely traverses the singly-linked list
+every time a new item is appended to the tail.
+
+
+In my analysis, this while loop iterates for thousands
+of times in total for emitting each export symbol.
+
+
+Why isn't this list_add_tail()?
 
 
 
 
 
-> +
-> +#endif /* __GENDWARFKSYMS_H */
-> --
-> 2.46.0.184.g6999bdac58-goog
->
+
 
 
 --
 Best Regards
-
 Masahiro Yamada
