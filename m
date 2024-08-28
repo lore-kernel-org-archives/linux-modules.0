@@ -1,114 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9696E14D282;
-	Wed, 28 Aug 2024 07:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C33E1741E0
+	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 12:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724829341; cv=none; b=d3Lh5RR+pRrwZVlTJgxn8CUkvUq6+NvR+nZkHkAfsPH/2RD2uW8pJoQ31ZBcgoRAqxV+bKJRzRI9bzlmzTK/pTJn2/N/MqcISC/sJuricd/lTwkAnKyoFMPXdcYmqCiPBLD5PLmvBrF5dpZJ7gQTdjBmpzYKqir4HtKKNveVILU=
+	t=1724848270; cv=none; b=X4FzD3cxM3sMvY9dmCsjMkXlinFoMpmW6m2F5Ogxdfx9CAbE6cAA/asO7Y0GumEQdkUNs0DcaP5goQ5sBMX9gYeVlDqPALykW3Wc/FCYCHrH9aD3eSxFJZf58Bhkw9uBQ6Yoc9i0vXY/SJrx4ncKOE7RA+7+6lXmWPAZ8+ZrlwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724829341; c=relaxed/simple;
-	bh=NMwwwM1jrp/qrf+hPLfBh9ss0lqgPsdHmYFP+q8ILEI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pO5Vbv3+nf+aQSY5+D+9yDfftgBaxZde9+cPr4EihrQVGs2937PMhNyW4+JDspWggg87d2g0j/Sxw4jaaV4Kd7AlpEexQtKREtGz70yO/EY2Qd8LkmXGRAcyjg+ZM9z25o/H4qjgWu5Lz5LsO+pvtbLPG46fEhQUttWgjlKQ0MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVlmGTDG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724848270; c=relaxed/simple;
+	bh=yT8yqaGNeNQPTO7kAIHMQlRQrwRp5/fHqh9u6p0Uu1g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B6oaPu3YzSTIGZXqISvw8EK1yF7f8oPdd1TLZfc/3i1zp4UHgg/qzqdoPxi6ehK5LJBK9VkTXc8g+4H2ZFDEGdIb5+R6jkNUV+1Fr6yDb6GXVWB4DRxZLxfw3Gsq6nVs5Z88wjpMKGKEt2DfnoMrUosyzY3zncxE6WwPqcAMhnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ceZTy2QL; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVlmGTDG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D7FC4FEF3;
-	Wed, 28 Aug 2024 07:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724829341;
-	bh=NMwwwM1jrp/qrf+hPLfBh9ss0lqgPsdHmYFP+q8ILEI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VVlmGTDGt1DEfNNVnLf2kSpnzzXEBlHUp8QVD2PvvhsRsxGVueSojv1wHXk8U4+9j
-	 o8ujGqY7Ff/gj9lfdDTD6Rt/cXc05VHh2shOwrIlrzidG1Sh50O5qBu0tLQaNdhQ0O
-	 dbg3h7IrLnhQg9xOY/SB+d0+lTnLucCqZdCXnviGyF/QfJdRmjZdIegu/L8CBcCn7p
-	 P1nslkrgOB7jC7BRWCPOdqcXf0WNZA25fYoimT0t2pla9pm7OkxOfXI/fiIs004TcF
-	 ET5/tFS9/umfCtgY8PPx76Xodu+zj4M1yU5HTzuo5ZcDtx7E5FMEZ0APVJqRciuhzq
-	 YIAHuZjMt0tIg==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2f4f505118fso54024941fa.3;
-        Wed, 28 Aug 2024 00:15:41 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVg9jdiZ3d4GxnmIbKMi1iBWmP+0IyAYlnhUZD4Ir+KR4inLHDvEhBfdJ4V5PixMeDhsKiVitvzbV94+2I=@vger.kernel.org, AJvYcCWpS7LEhLd0vGXjSMBt4U+L2RSYi4pWi39+Q/B5wW1XiR50tgsZIfLfjg/Bz2zhZ/B5wijYmpTFKODkSWlpuLw=@vger.kernel.org, AJvYcCXHLakEkbP1B9ivRPq5TOAkBDd/CjJhIFanMZjSbnGoEfPZitiOkkl3ug+KcB6qXiXSJLHPdMWoSn8iS/Itcg==@vger.kernel.org, AJvYcCXhD1TZAZeXDMtpEyBHWeE5lcpKKDVLZkhpRWOVwq1A+4kz7Kur6nyiNeCTQc5/QTIM53+sMa4F2K+woxzs@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWYJnlzGXSyKuS3OUJawcKM/bnBR/vhqFlyWEwuX75RIr+AumB
-	+N3ql1PCAx0iqHp0Nx99g/8DEzhQB1aqYXgTNGWVuffchO4SgwUdkL7EifREKJmABOqYiLbLFq2
-	rtf/zIGzWENafpCPUn4T0LX7QDpM=
-X-Google-Smtp-Source: AGHT+IGeiHzjppyiOzBEOUZ/0V/PBewgAL1CCGk/uVR+74Z8yFzChu+qKl3qWPdvEuIh5XMH14MHw9544LmMkmjX1ss=
-X-Received: by 2002:a05:6512:3195:b0:52e:9f17:841a with SMTP id
- 2adb3069b0e04-534387558bdmr10993178e87.6.1724829339571; Wed, 28 Aug 2024
- 00:15:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ceZTy2QL"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3718cd91185so3577984f8f.2
+        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 05:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724848267; x=1725453067; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=97RTF+dpgpGQaMhBvDsJzwR8A1uS6k4qKn0LeXHonpE=;
+        b=ceZTy2QLPsqRTXV3YqR4INy848I0t481vsJuFtHxiANuYvcPYsL6n4jqRsIJTTPEnq
+         dufP97lydWARxEAKkuTxKo58osZ1/B4ruBQ/6hS0ClV4nvBa3hg06aUZw/ZJgi9sOfwo
+         pZkXuHh3stTrBA4m6kPE4TLodTR/j+VFEnRiQKI1UPFdQAyFwJsaeD6bTwXzzwz4VsRY
+         oZj8tlnGBw6gXXKdqNeTQUEyyP9q+OWSzDFpnIV01GPYC09UAtLPE3InYU92wJfEcGJb
+         razJ4W7my+2v3RXe5l/djWxC/oApQKvJTCY4nDb5zDgjAF0C1TW85uf0+727UMQLxNua
+         Qbew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724848267; x=1725453067;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=97RTF+dpgpGQaMhBvDsJzwR8A1uS6k4qKn0LeXHonpE=;
+        b=OuqlYRf3HblcHgC6ZjZmBHn3Ojc7I7PhUwveOsAAh+pldmR0/bHfcDAcxSmz9HFM3j
+         Sy1uLU9amF7lQbjnOUSuUi0H9q9KUSak+e0GdwdaSqmR9y/bZt1/klvk3LIBt2jgUnAX
+         zLqjGOKJJutK0LEwXUq6SJTYqSFx/IeD5x5CcYCUPvq0EOMYrfY8LntAOcoL6bHpi9Sm
+         HUJ7ZzN0MOhp6Nbs5K/PmWJWL2Sck4np+GvmH72M4JvWi1GDggwETRQe3YhtS9DlUcF3
+         S4Tohv0vcT35vNS558sDsM0uBI1ILnf7k7DanIEtDn5T6CIC8Lniq7n12FtbxlGkcYLM
+         R5Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCXyEStVArkMA6rsEL1sJ3yzncPTM+SSn3H1Kz1/YKa160rTqK7kL99RqPjsMq33DCI+LXYx+iKCbcSh5Xg+@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHCXaE41G77b8K6fT0nn1R10cpq4UujLE9xYV1iQx4EfW91Iwk
+	6EjBD/kDK7tbsa4UCqAPBa1Uy3ePR/pliE/t743IiskPHLUXH5lGwhy9Rx+0KYY=
+X-Google-Smtp-Source: AGHT+IH4TigGxV8OPvwVxfj+AOpE9w26Vd8fbU/5v7j2ANhiwVGyf+VOZbm9gN7oSeAmM8WyvvtELQ==
+X-Received: by 2002:a5d:6d8b:0:b0:367:9c12:3e64 with SMTP id ffacd0b85a97d-3749684c1admr1667714f8f.46.1724848266623;
+        Wed, 28 Aug 2024 05:31:06 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e582d878sm240255266b.119.2024.08.28.05.31.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Aug 2024 05:31:06 -0700 (PDT)
+Message-ID: <80e7994d-f82e-4f2a-b233-d4f9d6900698@suse.com>
+Date: Wed, 28 Aug 2024 14:31:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-25-samitolvanen@google.com> <CAK7LNATb8zbwEVgM+_=CaYSysov6YBMbKjy8+t8CrRA_72jxuQ@mail.gmail.com>
-In-Reply-To: <CAK7LNATb8zbwEVgM+_=CaYSysov6YBMbKjy8+t8CrRA_72jxuQ@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 28 Aug 2024 16:15:03 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQBO-VA8G9uumwH5m9idQofY1ZR+hnNfL7y4P3m16xFNQ@mail.gmail.com>
-Message-ID: <CAK7LNAQBO-VA8G9uumwH5m9idQofY1ZR+hnNfL7y4P3m16xFNQ@mail.gmail.com>
-Subject: Re: [PATCH v2 04/19] gendwarfksyms: Add support for type pointers
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/19] tools: Add gendwarfksyms
 To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
+ Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>,
+ Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20240815173903.4172139-21-samitolvanen@google.com>
+ <20240815173903.4172139-22-samitolvanen@google.com>
+ <71505c05-b651-4740-b14a-a53084a16a61@suse.com>
+ <CABCJKufveknkc_ribOBamC_MXRGounFkYBeRkKhppPSHijxtZg@mail.gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CABCJKufveknkc_ribOBamC_MXRGounFkYBeRkKhppPSHijxtZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 28, 2024 at 3:50=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Fri, Aug 16, 2024 at 2:39=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
-e.com> wrote:
-> >
-> > The compiler may choose not to emit type information in DWARF for
-> > external symbols. Clang, for example, does this for symbols not
-> > defined in the current TU.
-> >
-> > To provide a way to work around this issue, add support for
-> > __gendwarfksyms_ptr_<symbol> pointers that force the compiler to emit
-> > the necessary type information in DWARF also for the missing symbols.
-> >
-> > Example usage:
-> >
-> >   #define GENDWARFKSYMS_PTR(sym) \
-> >       static typeof(sym) *__gendwarfksyms_ptr_##sym __used  \
-> >           __section(".discard.gendwarfksyms") =3D &sym;
-> >
-> >   extern int external_symbol(void);
-> >   GENDWARFKSYMS_PTR(external_symbol);
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->
->
->
->
-> Commit ddb5cdbafaaad6b99d7007ae1740403124502d03
-> had a similar idea; it has a reference to each
-> export symbol, including the ones defined in different TUs,
-> but in assembly code.
->
-> Didn't it suffice your need?
->
+On 8/26/24 20:47, Sami Tolvanen wrote:
+> On Mon, Aug 26, 2024 at 10:42 AM Petr Pavlu <petr.pavlu@suse.com> wrote:
+>> On 8/15/24 19:39, Sami Tolvanen wrote:
+>>> [...]
+>>> +int main(int argc, const char **argv)
+>>> +{
+>>> +     unsigned int n;
+>>> +
+>>> +     if (parse_options(argc, argv) < 0)
+>>> +             return usage();
+>>> +
+>>> +     for (n = 0; n < object_count; n++) {
+>>> +             Dwfl *dwfl;
+>>> +             int fd;
+>>> +
+>>> +             fd = open(object_files[n], O_RDONLY);
+>>> +             if (fd == -1) {
+>>> +                     error("open failed for '%s': %s", object_files[n],
+>>> +                           strerror(errno));
+>>> +                     return -1;
+>>> +             }
+>>> +
+>>> +             dwfl = dwfl_begin(&callbacks);
+>>> +             if (!dwfl) {
+>>> +                     error("dwfl_begin failed for '%s': %s", object_files[n],
+>>> +                           dwarf_errmsg(-1));
+>>> +                     return -1;
+>>> +             }
+>>> +
+>>> +             if (!dwfl_report_offline(dwfl, object_files[n], object_files[n],
+>>> +                                      fd)) {
+>>> +                     error("dwfl_report_offline failed for '%s': %s",
+>>> +                           object_files[n], dwarf_errmsg(-1));
+>>> +                     return -1;
+>>> +             }
+>>> +
+>>> +             dwfl_report_end(dwfl, NULL, NULL);
+>>> +
+>>> +             if (dwfl_getmodules(dwfl, &process_modules, NULL, 0)) {
+>>> +                     error("dwfl_getmodules failed for '%s'",
+>>> +                           object_files[n]);
+>>> +                     return -1;
+>>> +             }
+>>
+>> I see that libdwfl has also directly function dwfl_nextcu(). Would it
+>> make sense to use it to simplify the code?
+> 
+> How do you propose using the function? This loop goes through multiple
+> input files, should we need them, and we iterate through all the CUs
+> in process_modules.
 
+I was thinking it could be possible to replace the code to traverse
+modules and their their CUs, that is functions process_modules() and
+process_module(), with dwfl_nextcu(). However, I now notice that more
+work is added in subsequent patches to process_modules() so this
+wouldn't quite work.
 
-Presumably, this is an unfortunate duplication, but I do not have an
-idea to avoid it.
+I would then only suggest to change some function names in the current
+code. Function process_modules() is a callback to process a single
+module and so it would be better to name it process_module(). The
+present function process_module() actually processes a compilation unit
+DIE so I would rename it to something like process_cu().
 
-The symbol reference in assembly code works in *.S as well as *.c.
+On 8/15/24 19:39, Sami Tolvanen wrote:
+> +int process_module(Dwfl_Module *mod, Dwarf *dbg, Dwarf_Die *cudie)
+> +{
+> +	struct state state = { .mod = mod, .dbg = dbg };
+> +
+> +	return check(process_die_container(
+> +		&state, cudie, process_exported_symbols, match_all));
+> +}
 
-The C reference will pull-in the debug info, but it will not work in *.S
+Mostly a minor suggestion too.. Looking at the entire series, state.mod
+ends up unused and state.dbg is only used in process_cached() where it
+could be possibly replaced by doing dwarf_cu_getdwarf(die->cu)?
 
+Removing these two members from the state struct would then allow to
+instantiate a new state in process_exported_symbols() for each processed
+symbol. That looks cleaner than changing state.sym and resetting some
+parts of the state as the function walks over the exported symbols.
 
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+Thanks,
+Petr
