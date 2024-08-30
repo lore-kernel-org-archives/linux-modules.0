@@ -1,185 +1,112 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F4B16D9AA;
-	Fri, 30 Aug 2024 09:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F7316DED2
+	for <linux-modules@vger.kernel.org>; Fri, 30 Aug 2024 23:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725010460; cv=none; b=tUaX46L1E3IEZ8MQN2TOFY+b0OSzVZsrDOD9bGKgedGmJ7lq6x2Ym2Uy0voNAttvHH7yIGPX1+Z10V25Css0QH7dZyyvei4/95D8hwPNzsGP6BnqRkVbQ5dLEfz6JRIJ+1vI+wIzc7IUAmHpDdlpl6K5ek6rG9I8FbpSu/WYfp0=
+	t=1725061759; cv=none; b=iUpUY7AG4vYXw0j5TFeOUwKljYngCuaD1gywxr+/GgEf1VK1PU7DAsXUcsKRGmPLY542GtX+Q3gQcgLi5LaXN2GfiPZHcAxOxq8iAu0GgG6KSG/d2WPBFBHvZbUeDSgFguLm/5KwVFQBneXsntcb3wXgGFwkApi07CU15X9HQFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725010460; c=relaxed/simple;
-	bh=5xzxu4uvuew94qkeV4W1RIusju+T2Ow4WlvX452sg0s=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=lNb+5w/0nR7/jfwMfHYF5BYia7uVjyrUdRyhSkDAmUaWBL2fT30JoKsGXbQlFs9oOtM1OseZwTb26B4/Xm4tAgGgX9h8EhtMuKtadeoO3+grIIBIimCwC2+CRItR8JIDdR5kRttO0cEuTLIrWbZpNj1NBQHeX6tU/ZiVTn5E6pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hgWMtuhL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UY/Ua2wp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hgWMtuhL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UY/Ua2wp; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1725061759; c=relaxed/simple;
+	bh=E4bwRTmMN3gpdrrJ+34PGDohq3gLhiEt90gFRaqXxyU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B3KBbeZIzuU/I08H1D2cue0ggpA+Qg/wFIfLP+zPMniekY0957SXppXpwn/s91CnY4qEBtvlINbyTUNteYISyO+M6lNTeNXRhdboBr3OETt6TFwLS/A0+Wp9LE/7TUWntPRSq/Yv9rocyc5jG2NPQ4JnWwvKALHsoeTEuKIIWgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BlkmYLfs; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hgWMtuhL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UY/Ua2wp";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hgWMtuhL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UY/Ua2wp"
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 367E2219B5;
-	Fri, 30 Aug 2024 09:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1725010456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zlm4X4QOcGE6DHm7ygOQKPj87QXS/m+PxWQiajETJgk=;
-	b=hgWMtuhLo3K1c0F/7FQO84/drBRMdGrmqVLt5Q4ZDR5yVqjcBFe55w4ZNclIAWQpbzdttx
-	XO27BnSJsL+nCxpNixi18Q2hHy6s2EA3yQcjDdtd3QEZfhoTrlVxm23T7Iw1HRk/aTuXoO
-	bOWZDEOEyjMJASeuiCaygjZGgeJcY7w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1725010456;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zlm4X4QOcGE6DHm7ygOQKPj87QXS/m+PxWQiajETJgk=;
-	b=UY/Ua2wpu1Pi9WP40gpnvfMrtOZWdIEEXjIBDMWnIOkYDwLjSfTvohNm3LjoXLABynH0L1
-	aYsnLKW9+zdhpFBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1725010456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zlm4X4QOcGE6DHm7ygOQKPj87QXS/m+PxWQiajETJgk=;
-	b=hgWMtuhLo3K1c0F/7FQO84/drBRMdGrmqVLt5Q4ZDR5yVqjcBFe55w4ZNclIAWQpbzdttx
-	XO27BnSJsL+nCxpNixi18Q2hHy6s2EA3yQcjDdtd3QEZfhoTrlVxm23T7Iw1HRk/aTuXoO
-	bOWZDEOEyjMJASeuiCaygjZGgeJcY7w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1725010456;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zlm4X4QOcGE6DHm7ygOQKPj87QXS/m+PxWQiajETJgk=;
-	b=UY/Ua2wpu1Pi9WP40gpnvfMrtOZWdIEEXjIBDMWnIOkYDwLjSfTvohNm3LjoXLABynH0L1
-	aYsnLKW9+zdhpFBQ==
-Date: Fri, 30 Aug 2024 11:34:16 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Sami Tolvanen <samitolvanen@google.com>
-cc: Masahiro Yamada <masahiroy@kernel.org>, 
-    Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>, 
-    Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, 
-    Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-    rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 16/19] gendwarfksyms: Add support for reserved structure
- fields
-In-Reply-To: <20240815173903.4172139-37-samitolvanen@google.com>
-Message-ID: <alpine.LSU.2.21.2408301114000.1124@pobox.suse.cz>
-References: <20240815173903.4172139-21-samitolvanen@google.com> <20240815173903.4172139-37-samitolvanen@google.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BlkmYLfs"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4567fe32141so76801cf.0
+        for <linux-modules@vger.kernel.org>; Fri, 30 Aug 2024 16:49:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725061756; x=1725666556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TP0VIEgrFYpHgeMfKEUNg/ROM1J2CbpA619iyejeYoc=;
+        b=BlkmYLfsljY44QTG3HKlIOsBE0II3bP8yl2bq8tdX7jDuFTOPblVZkJacKb1DutT+a
+         dPyGgDQ/SQeMlx7lO1iSM70e4oUYQqPvQ3b3Xnv0GUaB9pKSTdQT3cn0CsDH8i//svdR
+         WQAE9ElP7ImYIYUvnjnIX4/83M7tOLss9V9D+dLFIwoapeIle2EsMgupJ8KlggR5V9A6
+         t8S8orXlEinj36l9/5jCnhQBTdcNeCybByrqLc9+2iLNfiE85Opz5akLm0/xR+K/XWgF
+         8/E7QqgBcBGFBjxYCt2l5TVJdgF1eHW2EeRanxNN3wZmtxYDIxfA3S0mvRl6c9AUOgW/
+         D6OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725061756; x=1725666556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TP0VIEgrFYpHgeMfKEUNg/ROM1J2CbpA619iyejeYoc=;
+        b=PfWtF46gPSplr6vffSCIOwfeOFY8O1S4bBlt/dzIZvWaAV8wzNAJH9KaxBgJuMLgFT
+         PViDi7NZpB60AOz6nJO8hqUnrTFPw9wxSbz0q3yesrQj5N7M+aF9yKVMZenKh6vHTU8p
+         gPwdCnGIYc8GGeGahb0LnBgpA2byYBXdQ1oMN3zQrAmrGigiCLDq9ZsCyi684BjhZaCD
+         d5cqlQRhLJDb4rJ/Ybu1YkOa4xp5I4hw9Zs673pV+LLDzekxngwMoI+9rPWkOSKXKnN8
+         QQLTf5hUyGX8o4yU8Kb83Q0Z7GyQ3eo8D2pwJ4Cqu+b3aS5LgnmST6wUeaL2h3ErTydo
+         GrSg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6pZH8HXED1g+fPywJxscb1uVK823ehRXRw8F64ZgvMYzWgw3SB1/dWQivejPPKrr82lDbGERERVRsLBjU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCwajBz6SBb03Xa8NTYzZahlLS7VsMQlwbzTt3dWXAQo8xVu8f
+	uxRaHM8pwXY7g+PSYQayjE+1eM67PLZuySxVZtWvKxB+ndSaVBTq0Q0E3/9TkdJbbYZhaz1Rd6z
+	FjDYq8xmcQB16xEd/DVzIEBWTFwMcCuD3pqVC
+X-Google-Smtp-Source: AGHT+IGhb6pwgPVlootJoP49CP94+EsPf6u+/j/OQWLkWAwJ0wQhWQED7bZMZLKe3dOxdh7MSSDMORHBJlY90a7t6Ho=
+X-Received: by 2002:a05:622a:1a20:b0:453:581f:f29e with SMTP id
+ d75a77b69052e-4574543029cmr1072671cf.24.1725061756115; Fri, 30 Aug 2024
+ 16:49:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	TAGGED_RCPT(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,google.com,gmail.com,garyguo.net,suse.com,gompa.dev,marcan.st,jannau.net,lists.linux.dev,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+References: <20240824033757.52005-1-kris.van.hees@oracle.com> <20240824033757.52005-4-kris.van.hees@oracle.com>
+In-Reply-To: <20240824033757.52005-4-kris.van.hees@oracle.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 30 Aug 2024 16:48:37 -0700
+Message-ID: <CABCJKufBPaVu-C4bKY=jWxOQJX1OR+7=+DE-wtcy7=d=9ZFFcQ@mail.gmail.com>
+Subject: Re: [PATCH v9 3/4] scripts: add verifier script for builtin module
+ range data
+To: Kris Van Hees <kris.van.hees@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Nick Alcock <nick.alcock@oracle.com>, Alan Maguire <alan.maguire@oracle.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Jiri Olsa <olsajiri@gmail.com>, 
+	Elena Zannoni <elena.zannoni@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Kris,
 
-On Thu, 15 Aug 2024, Sami Tolvanen wrote:
+On Fri, Aug 23, 2024 at 8:38=E2=80=AFPM Kris Van Hees <kris.van.hees@oracle=
+.com> wrote:
+>
+> diff --git a/scripts/verify_builtin_ranges.awk b/scripts/verify_builtin_r=
+anges.awk
+> new file mode 100755
+> index 000000000000..f513841da83e
+> --- /dev/null
+> +++ b/scripts/verify_builtin_ranges.awk
+> @@ -0,0 +1,356 @@
+> +#!/usr/bin/gawk -f
+> +# SPDX-License-Identifier: GPL-2.0
+> +# verify_builtin_ranges.awk: Verify address range data for builtin modul=
+es
+> +# Written by Kris Van Hees <kris.van.hees@oracle.com>
+> +#
+> +# Usage: verify_builtin_ranges.awk modules.builtin.ranges System.map \
+> +#                                 modules.builtin vmlinux.map vmlinux.o.=
+map \
+> +#                                 [ <build-dir> ]
 
-> Distributions that want to maintain a stable kABI need the ability to
-> add reserved fields to kernel data structures that they anticipate
-> will be modified during the ABI support timeframe, either by LTS
-> updates or backports.
-> 
-> With genksyms, developers would typically hide changes to the reserved
-> fields from version calculation with #ifndef __GENKSYMS__, which would
-> result in the symbol version not changing even though the actual type
-> of the reserved field changes. When we process precompiled object
-> files, this is again not an option.
-> 
-> To support stable symbol versions for reserved fields, change the
-> union type processing to recognize field name prefixes, and if the
-> union contains a field name that starts with __kabi_reserved, only use
-> the type of that field for computing symbol versions. In other words,
-> let's assume we have a structure where we want to reserve space for
-> future changes:
-> 
->   struct struct1 {
->     long a;
->     long __kabi_reserved_0; /* reserved for future use */
->   };
->   struct struct1 exported;
-> 
-> gendwarfksyms --debug produces the following output:
-> 
->   variable structure_type struct1 {
->     member base_type long int byte_size(8) encoding(5) data_member_location(0),
->     member base_type long int byte_size(8) encoding(5) data_member_location(8),
->   } byte_size(16);
->   #SYMVER exported 0x67997f89
-> 
-> To take the reserved field into use, a distribution would replace it
-> with a union, with one of the fields keeping the __kabi_reserved name
-> prefix for the original type:
-> 
->   struct struct1 {
->     long a;
->     union {
->       long __kabi_reserved_0;
->       struct {
->           int b;
->           int v;
->       };
->     };
+While I was testing this, I did an arm64 build and I'm getting a long
+list of errors that ends with this:
 
-yes, this is one of the approaches we use in SLES. We add kabi paddings 
-to some structures in advance (see [1] as a random example) and then use 
-it later if needed.
+ERROR: Failed to read:
+././drivers/firmware/efi/libstub/.lib.a(efi-stub-entry.stub.o.cmd
 
-It is not the only approach. Much more often we do not have a padding and 
-use alignment holes ([5]), addition of a new member to the end of a 
-structure ([2] or [3]) and such "tricks" ([4] for a newly fully defined 
-structure).
+  Invalid kernel build directory (.)
+  or its content does not match modules.builtin.ranges
 
-It is not feasible to add kabi paddings to all structures. We also have a 
-different approach to kabi in terms of its coverage than RHEL does for 
-example (as far as I know).
+That path looks a bit funky. Have you tested this with other
+architectures? I was able to get this to work on x86 builds just fine.
 
-Not sure if it is interesting to upstream but I wanted to mention that it 
-is not only about the ability to add reserved fields to kernel structures 
-in practice.
-
-Regards,
-Miroslav
-
-[1] https://github.com/SUSE/kernel-source/blob/SLE15-SP6/patches.suse/crypto-add-suse_kabi_padding.patch
-[2] https://github.com/SUSE/kernel-source/blob/SLE15-SP6/patches.kabi/0001-iommu-Add-static-iommu_ops-release_domain.patch
-[3] https://github.com/SUSE/kernel-source/blob/SLE15-SP6/patches.kabi/nfs-Block-on-write-congestion-kabi-fixup.patch.
-[4] https://github.com/SUSE/kernel-source/blob/SLE15-SP6/patches.kabi/of-kabi-workaround.patch
-[5] https://github.com/SUSE/kernel-source/blob/SLE15-SP6/patches.kabi/KVM-x86-Snapshot-if-a-vCPU-s-vendor-model-is-AMD-vs..patch
+Sami
