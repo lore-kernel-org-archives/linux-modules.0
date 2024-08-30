@@ -1,123 +1,141 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1CE1AD3EF
-	for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 23:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6883C567F
+	for <linux-modules@vger.kernel.org>; Fri, 30 Aug 2024 03:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724886567; cv=none; b=kZGhLx41Imy6o+FiIJRqJDq/NvAk76tj1+hPRR/qj3WbtFlMgGwuxiAtE5OdA+5KaLl7XuWT0IrXpRL3dCXSxMH+UEF/M/jctaWzsXio6U1AzEEnqdu1yrNc4KWcHnoJ2MtlQXjf7XMcfc8bFzfzk5fON7NrEtTsoQ0jTQ1t+D4=
+	t=1724989460; cv=none; b=lKvH1/NG5pnuhemqwJ/69WC9JIJqjiwu6DQX5nNw/5t81gG1XdLOW7WEa9UzbNBqqRmLt1HEy5Ua4lAPYayFp0LbV+GPhYNRAWUMqmwRgbKaQxx31QDFxpDD6ejSUwocHsovrdhtnHKwS54BsFz5kUnj1+QI+hIBOejjGPyeFLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724886567; c=relaxed/simple;
-	bh=RZmcXzwnrRhYwDoAQj1Jxhe7OhhEeGVabMOYn+OKJEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VobjL12NP4IMWtnaMJ6lsr6d4nBY4OU8nX4wXQZcDGVp2TUlYLpK1/awvn9CBuB6TvNsuPoi//BRkTSiaZc5qKwfTyeiTxJwO1+EBqZ0WduU69Zc7mhgBnOdxN1zksal7VB4ZMYlUGgVyZToS8PDWMbh21EUyEsOE5p4vIIhOkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H4Mzj55Y; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H4Mzj55Y"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-201fed75b38so38715ad.1
-        for <linux-modules@vger.kernel.org>; Wed, 28 Aug 2024 16:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724886565; x=1725491365; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bF9tb8hwDYR6xa7gB1x7sZNbhUYJUgSYOVOAb5zjrCw=;
-        b=H4Mzj55Y4gMWJjD1yLPZX94RAzWQmOtv7QN7sKScGjy84ZXuLZl7MRRSW+5n14ADLp
-         1mv1DSXKXTcK9T4lsvGpZsPosjeUN3M+jNiiBszsGLZTfRzDKl/VC8U0hvjOuRLwfQBP
-         Hm1h5BOIZfPcb7Mrk0/8ENbwdZEijPzrw/qWtU9d8Q8P8np7DcjyDIzVMn+eCsVS9rqY
-         XgrsEuQX3KS7KTat6SaZ1TNqgHSjKoMKtpXROs9+3lDy47NoTCfcQzh7c6oUYckFX8Ah
-         l5fYnYM+0oqAS41V5b59z6BSEwP7RvB186VBIGi5eNx23qGQO5LcFTdj4w+3vvCA4Vih
-         kNGg==
+	s=arc-20240116; t=1724989460; c=relaxed/simple;
+	bh=tGsdxuuv598jVK+tZLbnqdHHWwnUPEfVZ3aSORhi1xk=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=uq32WrCVGYE/1BmxprN6jqvzk0660BeVmANS4aCC7FSPgKL9M7cw1so0r1QX6uqLolGXcSuD52dvJQyvLF34ZtNJny4y43wZeGMzA6L43al2fIpRDoj5rAzHsA7h0UBWOjixdD0LgWTcUxK9fdas71R+T/FxLHp85r0EKUnABDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-824c925d120so142200939f.3
+        for <linux-modules@vger.kernel.org>; Thu, 29 Aug 2024 20:44:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724886565; x=1725491365;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bF9tb8hwDYR6xa7gB1x7sZNbhUYJUgSYOVOAb5zjrCw=;
-        b=mM6UasGbatSoj3OHBlQ6bNazXazeVMr3CWQRjhsIcWRxcHvsge++BRY6k09dQX8eOL
-         vVJ7xrdzE51cH1Z+ii5MHas7wAvkl2mQmdi066FEP9Xtd1JPGUSTEuXAiwqI39DWoOs+
-         fhI/iTtetATRBmb5vHoW3wKuTdL91YuAuBEgrSxt/E60brtMcJ0IhoQy/87AugBhSTuW
-         NElRqx+TVMKTl6rriWlTat/XMPB9BAKOrTioF8mkBiE7EAsdMQRnYS4N8njDCzBYZ+Eg
-         GVRjE/0/KXQUPWptzmdh8/ZFjQK9SuXRlT8usSboKgKMOKpB1rlL4iBoXssUjQs836vt
-         A5Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCXdFWmd5U7T7ozYOIc82El7ZdToBFag6jeHMBFOkWzlkiMqxp6u2MyMGc8+oa+lzkRk5kCDWQIHPkDjf3jS@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr7Zvk545xyF2U8prBHF8FNlE4UxtOrRQKFWWTjR4cBbqtxkD1
-	QRTOICDbruXmiNdk0KUixnpZx1SWeHnYdssH76WOv/GnpGT25g/PGblstHwGcA==
-X-Google-Smtp-Source: AGHT+IGefsWlldxzVDyfJdh6ODHqSR4DIkOY4bryKmhorJbglzA63HVpwHsAO+Qawqv6PlgLxud4xg==
-X-Received: by 2002:a17:902:ce8a:b0:200:7d11:e8e3 with SMTP id d9443c01a7336-2050d1f0c57mr1140385ad.14.1724886564314;
-        Wed, 28 Aug 2024 16:09:24 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e55a5b56sm5350b3a.57.2024.08.28.16.09.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 16:09:23 -0700 (PDT)
-Date: Wed, 28 Aug 2024 23:09:19 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matthew Maurer <mmaurer@google.com>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>, Neal Gompa <neal@gompa.dev>,
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
-	Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 02/19] gendwarfksyms: Add symbol list handling
-Message-ID: <20240828230919.GI2130480@google.com>
-References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-23-samitolvanen@google.com>
- <95db3178-a2ce-421e-8024-afd7fa3359a3@suse.com>
+        d=1e100.net; s=20230601; t=1724989458; x=1725594258;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EeOg+SB0yxrJiY7pfqPASylS6AmynBWxHScTHhkZb6w=;
+        b=lHhbBXtP0xj+WQ/abdjZdWLFmgQdV0jfYfbSNcf4gpauhQ6AMp4JLANPFCoBXhLaZy
+         XN4U0HXOnRDxKaKpmezGSzHZldM/mq/kiPvd2CJMuNWz+QShKFca/skflcfjiA6cdG2O
+         Xndz1KldiZHxPza64VDlNOyX+lQVpiVk6mxRR/9ZjTCCumqNz+4LVr6TqfOJAzPstoYK
+         ZZh5ceW22duGUgWZticiG0MvKNwD6J7k3h19QiobILktUF2K3jCuPkxA9cLaBLyEaA8b
+         FExESx4o9uKifa9eSYG4jUHr+SULBQ3SZW2f7rxuwAFals1RsvcJorblBsKXBVuxVNb9
+         pbDw==
+X-Forwarded-Encrypted: i=1; AJvYcCVrY1zcB4XuLiOLc+GNBpxHbZuaB3V6a8iiOF7zPPJat1CwWYFYtoqlGWGlUrV9EjqCjrhtsPOBcAaXWrNn@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9Sb8vQ6tX8V5ffJQNiSDbat1CiRY97pBTXUxi2vjDA+JsS5Ds
+	AU1y00mZZfhr3gMw44YP5Bqgl/FkXyd9TIaJIi8bpVNIurwBmNpWLdcOgdQRCPnu7FJZGIoWGjO
+	G9jqogPJ23u5NQtACXkSK34zwSzQXeD2KMXo5yWfhkAphI84FQXgZxnM=
+X-Google-Smtp-Source: AGHT+IGbv7tVYwWeIOWrlp7Jloc0bw6g2w9JSVtxBYUGpiYbxjroReNF5d4wrvw+ymZHcDmLX/bjTgq6E546OUUcpIa0Wjvx7aeH
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <95db3178-a2ce-421e-8024-afd7fa3359a3@suse.com>
+X-Received: by 2002:a05:6602:13ce:b0:81f:7d7d:89fd with SMTP id
+ ca18e2360f4ac-82a2623e7eamr5761839f.1.1724989458573; Thu, 29 Aug 2024
+ 20:44:18 -0700 (PDT)
+Date: Thu, 29 Aug 2024 20:44:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eb77d60620de6758@google.com>
+Subject: [syzbot] [modules?] kernel panic: stack is corrupted in call_usermodehelper_exec
+From: syzbot <syzbot+14d9438422f594f856bd@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	mcgrof@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Aug 28, 2024 at 02:35:29PM +0200, Petr Pavlu wrote:
-> On 8/15/24 19:39, Sami Tolvanen wrote:
-> > diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-> > index 65a29d0bd8f4..71cfab0553da 100644
-> > --- a/scripts/gendwarfksyms/dwarf.c
-> > +++ b/scripts/gendwarfksyms/dwarf.c
-> > @@ -5,6 +5,48 @@
-> > [...]
-> > +
-> > +static bool is_export_symbol(struct state *state, Dwarf_Die *die)
-> > +{
-> > +	Dwarf_Die *source = die;
-> > +	Dwarf_Die origin;
-> > +
-> > +	state->sym = NULL;
-> > +
-> > +	/* If the DIE has an abstract origin, use it for type information. */
-> > +	if (get_ref_die_attr(die, DW_AT_abstract_origin, &origin))
-> > +		source = &origin;
-> > +
-> > +	state->sym = symbol_get(get_name(die));
-> > +
-> > +	/* Look up using the origin name if there are no matches. */
-> > +	if (!state->sym && source != die)
-> > +		state->sym = symbol_get(get_name(source));
-> > +
-> > +	state->die = *source;
-> > +	return !!state->sym;
-> > +}
-> 
-> Sorry, I don't want to comment much on function names.. but I realized
-> the name of is_export_symbol() isn't really great. The "is_" prefix
-> strongly indicates that it is only a query function, yet it changes the
-> state. It makes its caller process_exported_symbols() hard to understand
-> on the first read.
+Hello,
 
-I see your point. How would you make this more obvious? get_ doesn't
-seem entirely accurate either. match_ perhaps?
+syzbot found the following issue on:
 
-Sami
+HEAD commit:    3b9dfd9e5936 Merge tag 'hwmon-for-v6.11-rc6' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=141ab933980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d76559f775f44ba6
+dashboard link: https://syzkaller.appspot.com/bug?extid=14d9438422f594f856bd
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d8c77b980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11034a35980000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-3b9dfd9e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3dab2f917732/vmlinux-3b9dfd9e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/541828a1cf09/bzImage-3b9dfd9e.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/cc6a8f9d7bd9/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+14d9438422f594f856bd@syzkaller.appspotmail.com
+
+Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: call_usermodehelper_exec+0x493/0x4a0
+CPU: 0 UID: 0 PID: 5107 Comm: syz-executor310 Not tainted 6.11.0-rc5-syzkaller-00148-g3b9dfd9e5936 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:93 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:119
+ panic+0x349/0x860 kernel/panic.c:354
+ __stack_chk_fail+0x15/0x20 kernel/panic.c:827
+ call_usermodehelper_exec+0x493/0x4a0
+ call_modprobe kernel/module/kmod.c:103 [inline]
+ __request_module+0x3ee/0x650 kernel/module/kmod.c:173
+ ctrl_getfamily+0x28e/0x6b0 net/netlink/genetlink.c:1450
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
+ genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
+ netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2550
+ genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
+ netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
+ netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
+ netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x221/0x270 net/socket.c:745
+ __sys_sendto+0x3a4/0x4f0 net/socket.c:2204
+ __do_sys_sendto net/socket.c:2216 [inline]
+ __se_sys_sendto net/socket.c:2212 [inline]
+ __x64_sys_sendto+0xde/0x100 net/socket.c:2212
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fb2add42023
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 80 3d 81 90 09 00 00 41 89 ca 74 14 b8 2c 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 75 c3 0f 1f 40 00 55 48 83 ec 30 44 89 4c 24
+RSP: 002b:00007ffe2a46ace8 EFLAGS: 00000202 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007ffe2a46ad90 RCX: 00007fb2add42023
+RDX: 000000000000001c RSI: 00007ffe2a46ade0 RDI: 0000000000000005
+RBP: 0000000000000005 R08: 00007ffe2a46ad04 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
+R13: 00007ffe2a46ad58 R14: 00007ffe2a46ade0 R15: 0000000000000000
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
