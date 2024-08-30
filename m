@@ -1,141 +1,227 @@
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6883C567F
-	for <linux-modules@vger.kernel.org>; Fri, 30 Aug 2024 03:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9DF12F59C;
+	Fri, 30 Aug 2024 05:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724989460; cv=none; b=lKvH1/NG5pnuhemqwJ/69WC9JIJqjiwu6DQX5nNw/5t81gG1XdLOW7WEa9UzbNBqqRmLt1HEy5Ua4lAPYayFp0LbV+GPhYNRAWUMqmwRgbKaQxx31QDFxpDD6ejSUwocHsovrdhtnHKwS54BsFz5kUnj1+QI+hIBOejjGPyeFLM=
+	t=1724996518; cv=none; b=NC70vSvlgZudCN7RDqq++78dbWqQxNi6iiOfOp8jUbkF7VLHxM5Xd/mpgHyAMNZgwHzoqWSYH5b4P1lRDXMSrui9JvdpoHuerB4QJqcdTcWWJ2X7VqQBJID0I2ETml5J7KWlHJF3raK91pwpc/HRQAxiy7iM7T2XQxzMuOji6HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724989460; c=relaxed/simple;
-	bh=tGsdxuuv598jVK+tZLbnqdHHWwnUPEfVZ3aSORhi1xk=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=uq32WrCVGYE/1BmxprN6jqvzk0660BeVmANS4aCC7FSPgKL9M7cw1so0r1QX6uqLolGXcSuD52dvJQyvLF34ZtNJny4y43wZeGMzA6L43al2fIpRDoj5rAzHsA7h0UBWOjixdD0LgWTcUxK9fdas71R+T/FxLHp85r0EKUnABDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-824c925d120so142200939f.3
-        for <linux-modules@vger.kernel.org>; Thu, 29 Aug 2024 20:44:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724989458; x=1725594258;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EeOg+SB0yxrJiY7pfqPASylS6AmynBWxHScTHhkZb6w=;
-        b=lHhbBXtP0xj+WQ/abdjZdWLFmgQdV0jfYfbSNcf4gpauhQ6AMp4JLANPFCoBXhLaZy
-         XN4U0HXOnRDxKaKpmezGSzHZldM/mq/kiPvd2CJMuNWz+QShKFca/skflcfjiA6cdG2O
-         Xndz1KldiZHxPza64VDlNOyX+lQVpiVk6mxRR/9ZjTCCumqNz+4LVr6TqfOJAzPstoYK
-         ZZh5ceW22duGUgWZticiG0MvKNwD6J7k3h19QiobILktUF2K3jCuPkxA9cLaBLyEaA8b
-         FExESx4o9uKifa9eSYG4jUHr+SULBQ3SZW2f7rxuwAFals1RsvcJorblBsKXBVuxVNb9
-         pbDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVrY1zcB4XuLiOLc+GNBpxHbZuaB3V6a8iiOF7zPPJat1CwWYFYtoqlGWGlUrV9EjqCjrhtsPOBcAaXWrNn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9Sb8vQ6tX8V5ffJQNiSDbat1CiRY97pBTXUxi2vjDA+JsS5Ds
-	AU1y00mZZfhr3gMw44YP5Bqgl/FkXyd9TIaJIi8bpVNIurwBmNpWLdcOgdQRCPnu7FJZGIoWGjO
-	G9jqogPJ23u5NQtACXkSK34zwSzQXeD2KMXo5yWfhkAphI84FQXgZxnM=
-X-Google-Smtp-Source: AGHT+IGbv7tVYwWeIOWrlp7Jloc0bw6g2w9JSVtxBYUGpiYbxjroReNF5d4wrvw+ymZHcDmLX/bjTgq6E546OUUcpIa0Wjvx7aeH
+	s=arc-20240116; t=1724996518; c=relaxed/simple;
+	bh=WJB1Qv9t1WJLJSPM8oLL76616PtUevddQKiteAa1kJA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZQLEd2knXYfW4/3en1nvjaGFQ6pbNK6LDx4o6ISt+NXH4/UzlLehcJtb0sj7K/BIoQK9Iy/kbb8NsZxH5Ht1alj2k/WRGEgSLiH+2hhzgUo5960HdVJIOKRcIRZ+ph5KRxMHbN77/p7KASI9bmEJxeLFb77JXDiWStYbWg9dIi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=f6vw7ZT/; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="f6vw7ZT/"
+X-UUID: 8bb28e08669211ef8593d301e5c8a9c0-20240830
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=k4A5y+j5+WAfhLRjqTomaLz8jYqVXqpj3++oyTEnWOI=;
+	b=f6vw7ZT/L44ErZ6qZvbTeGbhVWmWxu241qhQA8P7nutz4WqZ6rwUMqgujvJ3aD5Jc/eucDrWbPDwSn7Pwt6WPoY/ts/l9WXaMQ33W0VAgE5HajyMig7wXw/sn2ItcwhtsvDS/9GZ7bvxtzaCQJHhUTkg8k3EVPmZRLtV6XmBcHE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:04c0c5c0-20cf-4123-a6e5-4277dea87755,IP:0,U
+	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-25
+X-CID-META: VersionHash:6dc6a47,CLOUDID:94266acf-7921-4900-88a1-3aef019a55ce,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 8bb28e08669211ef8593d301e5c8a9c0-20240830
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+	(envelope-from <chunhui.li@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 1789130880; Fri, 30 Aug 2024 13:41:46 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 29 Aug 2024 22:41:47 -0700
+Received: from mbjsdccf07.gcn.mediatek.inc (10.15.20.246) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 30 Aug 2024 13:41:47 +0800
+From: Chunhui Li <chunhui.li@mediatek.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<wsd_upstream@mediatek.com>, Chunhui Li <chunhui.li@mediatek.com>, Xion Wang
+	<xion.wang@mediatek.com>
+Subject: [PATCH] module: abort module loading when sysfs setup suffer errors
+Date: Fri, 30 Aug 2024 13:43:54 +0800
+Message-ID: <20240830054400.26622-1-chunhui.li@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:13ce:b0:81f:7d7d:89fd with SMTP id
- ca18e2360f4ac-82a2623e7eamr5761839f.1.1724989458573; Thu, 29 Aug 2024
- 20:44:18 -0700 (PDT)
-Date: Thu, 29 Aug 2024 20:44:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000eb77d60620de6758@google.com>
-Subject: [syzbot] [modules?] kernel panic: stack is corrupted in call_usermodehelper_exec
-From: syzbot <syzbot+14d9438422f594f856bd@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	mcgrof@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-Hello,
+When insmod a kernel module, if fails in add_notes_attrs or
+add_sysfs_attrs such as memory allocation fail, mod_sysfs_setup
+will still return success, but we can't access user interface
+on android device.
 
-syzbot found the following issue on:
+Patch for make mod_sysfs_setup can check the error of
+add_notes_attrs and add_sysfs_attrs
 
-HEAD commit:    3b9dfd9e5936 Merge tag 'hwmon-for-v6.11-rc6' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=141ab933980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d76559f775f44ba6
-dashboard link: https://syzkaller.appspot.com/bug?extid=14d9438422f594f856bd
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d8c77b980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11034a35980000
-
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-3b9dfd9e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3dab2f917732/vmlinux-3b9dfd9e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/541828a1cf09/bzImage-3b9dfd9e.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/cc6a8f9d7bd9/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+14d9438422f594f856bd@syzkaller.appspotmail.com
-
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: call_usermodehelper_exec+0x493/0x4a0
-CPU: 0 UID: 0 PID: 5107 Comm: syz-executor310 Not tainted 6.11.0-rc5-syzkaller-00148-g3b9dfd9e5936 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:119
- panic+0x349/0x860 kernel/panic.c:354
- __stack_chk_fail+0x15/0x20 kernel/panic.c:827
- call_usermodehelper_exec+0x493/0x4a0
- call_modprobe kernel/module/kmod.c:103 [inline]
- __request_module+0x3ee/0x650 kernel/module/kmod.c:173
- ctrl_getfamily+0x28e/0x6b0 net/netlink/genetlink.c:1450
- genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
- genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
- netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2550
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
- netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
- netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
- netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
- sock_sendmsg_nosec net/socket.c:730 [inline]
- __sock_sendmsg+0x221/0x270 net/socket.c:745
- __sys_sendto+0x3a4/0x4f0 net/socket.c:2204
- __do_sys_sendto net/socket.c:2216 [inline]
- __se_sys_sendto net/socket.c:2212 [inline]
- __x64_sys_sendto+0xde/0x100 net/socket.c:2212
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fb2add42023
-Code: 64 89 02 48 c7 c0 ff ff ff ff eb b7 66 2e 0f 1f 84 00 00 00 00 00 90 80 3d 81 90 09 00 00 41 89 ca 74 14 b8 2c 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 75 c3 0f 1f 40 00 55 48 83 ec 30 44 89 4c 24
-RSP: 002b:00007ffe2a46ace8 EFLAGS: 00000202 ORIG_RAX: 000000000000002c
-RAX: ffffffffffffffda RBX: 00007ffe2a46ad90 RCX: 00007fb2add42023
-RDX: 000000000000001c RSI: 00007ffe2a46ade0 RDI: 0000000000000005
-RBP: 0000000000000005 R08: 00007ffe2a46ad04 R09: 000000000000000c
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
-R13: 00007ffe2a46ad58 R14: 00007ffe2a46ade0 R15: 0000000000000000
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
+Signed-off-by: Xion Wang <xion.wang@mediatek.com>
+Signed-off-by: Chunhui Li <chunhui.li@mediatek.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ kernel/module/sysfs.c | 49 ++++++++++++++++++++++++++++++-------------
+ 1 file changed, 35 insertions(+), 14 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+index 26efe1305c12..a9ee650d995d 100644
+--- a/kernel/module/sysfs.c
++++ b/kernel/module/sysfs.c
+@@ -69,12 +69,13 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
+ 	kfree(sect_attrs);
+ }
+ 
+-static void add_sect_attrs(struct module *mod, const struct load_info *info)
++static int add_sect_attrs(struct module *mod, const struct load_info *info)
+ {
+ 	unsigned int nloaded = 0, i, size[2];
+ 	struct module_sect_attrs *sect_attrs;
+ 	struct module_sect_attr *sattr;
+ 	struct bin_attribute **gattr;
++	int ret = 0;
+ 
+ 	/* Count loaded sections and allocate structures */
+ 	for (i = 0; i < info->hdr->e_shnum; i++)
+@@ -85,7 +86,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
+ 	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
+ 	if (!sect_attrs)
+-		return;
++		return -ENOMEM;
+ 
+ 	/* Setup section attributes. */
+ 	sect_attrs->grp.name = "sections";
+@@ -103,8 +104,10 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 		sattr->address = sec->sh_addr;
+ 		sattr->battr.attr.name =
+ 			kstrdup(info->secstrings + sec->sh_name, GFP_KERNEL);
+-		if (!sattr->battr.attr.name)
++		if (!sattr->battr.attr.name) {
++			ret = -ENOMEM;
+ 			goto out;
++		}
+ 		sect_attrs->nsections++;
+ 		sattr->battr.read = module_sect_read;
+ 		sattr->battr.size = MODULE_SECT_READ_SIZE;
+@@ -113,13 +116,16 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 	}
+ 	*gattr = NULL;
+ 
+-	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp))
++	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp)) {
++		ret = -EIO;
+ 		goto out;
++	}
+ 
+ 	mod->sect_attrs = sect_attrs;
+-	return;
++	return 0;
+ out:
+ 	free_sect_attrs(sect_attrs);
++	return ret;
+ }
+ 
+ static void remove_sect_attrs(struct module *mod)
+@@ -158,15 +164,16 @@ static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
+ 	kfree(notes_attrs);
+ }
+ 
+-static void add_notes_attrs(struct module *mod, const struct load_info *info)
++static int add_notes_attrs(struct module *mod, const struct load_info *info)
+ {
+ 	unsigned int notes, loaded, i;
+ 	struct module_notes_attrs *notes_attrs;
+ 	struct bin_attribute *nattr;
++	int ret = 0;
+ 
+ 	/* failed to create section attributes, so can't create notes */
+ 	if (!mod->sect_attrs)
+-		return;
++		return -EINVAL;
+ 
+ 	/* Count notes sections and allocate structures.  */
+ 	notes = 0;
+@@ -176,12 +183,12 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
+ 			++notes;
+ 
+ 	if (notes == 0)
+-		return;
++		return 0;
+ 
+ 	notes_attrs = kzalloc(struct_size(notes_attrs, attrs, notes),
+ 			      GFP_KERNEL);
+ 	if (!notes_attrs)
+-		return;
++		return -ENOMEM;
+ 
+ 	notes_attrs->notes = notes;
+ 	nattr = &notes_attrs->attrs[0];
+@@ -201,19 +208,24 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
+ 	}
+ 
+ 	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
+-	if (!notes_attrs->dir)
++	if (!notes_attrs->dir) {
++		ret = -ENOMEM;
+ 		goto out;
++	}
+ 
+ 	for (i = 0; i < notes; ++i)
+ 		if (sysfs_create_bin_file(notes_attrs->dir,
+-					  &notes_attrs->attrs[i]))
++					  &notes_attrs->attrs[i])) {
++			ret = -EIO;
+ 			goto out;
++	}
+ 
+ 	mod->notes_attrs = notes_attrs;
+-	return;
++	return 0;
+ 
+ out:
+ 	free_notes_attrs(notes_attrs, i);
++	return ret;
+ }
+ 
+ static void remove_notes_attrs(struct module *mod)
+@@ -385,11 +397,20 @@ int mod_sysfs_setup(struct module *mod,
+ 	if (err)
+ 		goto out_unreg_modinfo_attrs;
+ 
+-	add_sect_attrs(mod, info);
+-	add_notes_attrs(mod, info);
++	err = add_sect_attrs(mod, info);
++	if (err)
++		goto out_unreg_sect_attrs;
++
++	err = add_notes_attrs(mod, info);
++	if (err)
++		goto out_unreg_notes_attrs;
+ 
+ 	return 0;
+ 
++out_unreg_notes_attrs:
++	remove_notes_attrs(mod);
++out_unreg_sect_attrs:
++	remove_sect_attrs(mod);
+ out_unreg_modinfo_attrs:
+ 	module_remove_modinfo_attrs(mod, -1);
+ out_unreg_param:
+-- 
+2.45.2
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
