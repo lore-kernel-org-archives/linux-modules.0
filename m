@@ -1,59 +1,59 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CAA21C32F2
-	for <linux-modules@vger.kernel.org>; Mon,  2 Sep 2024 09:52:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75A61C3314
+	for <linux-modules@vger.kernel.org>; Mon,  2 Sep 2024 09:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725270734; cv=none; b=btbVZ3acoyBxSJ9HrntqfD6e2Ul1bqkmB9aXDeM+L5VEIXCaidln3EjkpjtBhsS9srFamglxBMoBYdlJmIHOlom56p15DoUHafmQFO5qiqSTLJV/VrjSGdAFKMH7HW3sh8Bfr9tda6R5s27bC7cYiXQOqPqD8N/rdfGlvsvomIE=
+	t=1725271036; cv=none; b=Sq1PJY0MYguKcuR24cBk0elUySBqPDJplxKqTFU/uzE60J5WxwbY1gIpVLjsfuAu0TWw8U2kIFCLZeOKa7ikjAg7+PvBv7CSwQPxjs/A9WItIymH9qQctMTAIW92dq3JwQKMPq8XEnMkE7UbbdKBC8cj9kGA5VRItFHiThxGyh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725270734; c=relaxed/simple;
-	bh=Y3286RFIN/qanbnIGpLD1sy9reDUKmRfsP0fszQnG2A=;
+	s=arc-20240116; t=1725271036; c=relaxed/simple;
+	bh=azrlqXQHeE9U6sT5l2klpYX/5FeFDtmF4VwChR6aHvs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eAPMpmhAGegLW4aFNCFLG0eXpQq+J8cq5I09RNMWMqb3Hn7MImg2TBenG6vYSgRNuEz5QOZuOJiaiKWfef1uT7NJLX/wTmoil+KGQv8byiMuXr8eTawTKwVMRJ8UEvvCmoYGuk7Z9JHWU1139SoHv8YnUugMmBvsLyPEj0DVyF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HACGL+ST; arc=none smtp.client-ip=209.85.167.47
+	 In-Reply-To:Content-Type; b=BTqNKQxHt9cs7GFN7+3HS7Ex7ASXNgDv1eGjNKUnf1Z4OQCbqGdZqKhgMG9XvvfS6vOw7ijewsxgQxjMM6JNw23z1kqSWwt9bKlfLkdXeAsZp12e8y7cI3syNRL4SujeQP23KRIdVrp9NMKEoZ1h8iGK+QtkBQoBOUp0QWIuRP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BVi0Da/2; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HACGL+ST"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5343eeb4973so6107073e87.2
-        for <linux-modules@vger.kernel.org>; Mon, 02 Sep 2024 02:52:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BVi0Da/2"
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f3e071eb64so55469611fa.1
+        for <linux-modules@vger.kernel.org>; Mon, 02 Sep 2024 02:57:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725270730; x=1725875530; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1725271033; x=1725875833; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yx8BEfb/mnbcgYtxco8Iy/KiPiqDzvW3Qbyqerwej2A=;
-        b=HACGL+STIeP144wMpOhb48Z6YNQigumPtmMYXzA2vs7mIqbLKjZMDSxucgaZ6BEIht
-         oREQMtSTR1K04lndTwRN5oiF+/c3nI6Yc28H6sV6uLlyQHrQcVId8lvLDIKwA3MvQCl8
-         YIRLSAwTDsaUBs41rB/VxAEZBDZWNqGdV8EYUHF1nxEoufHgfdflEesEU2MxhY4HWzDN
-         D5MMz9LILoHP9fIsIZve237SOigbmLoWmcGJU9j54TRT1D433FfgNR1D18Dm/A8/4Xzh
-         k/3sMykomZ/At4HWniqfBYJjn71IrOymgAz1y8thK+IZs8cloTW0b2dC5Z30AAerec/Z
-         KVGA==
+        bh=yjsZv7veQRgQQOgF16n7lr/LWeiZhMmKVsEed9iOcZQ=;
+        b=BVi0Da/25t3SwHmcVZ6lPp0M3a94OPnlzqPrUx/ManSaBaiHDKjpwq9TzXNy5m5PqI
+         i4uBewQyVAsQB1ZSexGA9QMWBYH23jAlTL+j//8ZUn1ZuTW2Je7wk5t5rzVfXjuvDPjs
+         6eglK3f1QgsBX+nw4aj7L2akOV8dmJhS4C52l9amoKInYCh2933BkMW0ze2CK02NyE8u
+         v0H6pVzs4P7N+4dUy5U4LpLrSsfqUf0akJY6AeS/0PsN2Vp2wNtNhyVIENc6XTqFEDC8
+         S3+rVAH+Ms3hOMxEBoWg11DmHh7QqWqPYfmCArTBlc48+TgwTG08yuxuz8wjBs6i9v32
+         qXnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725270730; x=1725875530;
+        d=1e100.net; s=20230601; t=1725271033; x=1725875833;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yx8BEfb/mnbcgYtxco8Iy/KiPiqDzvW3Qbyqerwej2A=;
-        b=Vzg3Ol9xsuFQP57TeZ9T7TLdjWClWQb0KTdhp8iWcd6PpYOSmI7LC2FqFqE69bNJ4P
-         zhpcMCjfIvNJCXwF6mBRF3BpRKfiF7piizDOvEh5HSH1F4wJ1OSLW+xY7YzPrgyg5O1x
-         TDUSOFTtE3EL18wgsGQ+pBeHPGkZyI+BT7Gl1oyG0U/ovgsXzjtqsr+4hSsNdY7MHnAR
-         POAfroUNOBvmze98Whe5etHMYP7ANx4ybWYhrRPssa6LUbHZuzliO+xXWpuasioSHisa
-         ezC/eTm0JWADv9i333d1uD3nZ2oc0SWNzkTeeCslm58GR+U4QZkARxw7zJsW84IB384M
-         I3IA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAe9pFrMq28/dctMOEuKuLncgS5vBWsk7YlTRODMP/h6G7vEygn27mhBdMQt/pGlAkjSkx6M4EHA71bzF9@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7Wm9BdZZjUBiFxXdC8oyirmdVPudXMnNetHKlyzaFOi9OvL/y
-	GBMqtttbWhF5lPkGGtt+G5v78oPbBHAGX6FM79ZPVLUQYntsYoUUNCbFSjOazZY=
-X-Google-Smtp-Source: AGHT+IFsKjRAuLVJClwA0Nrt/yFrgmXM54r0gk3+x482UZ6mR7qGdsUfVkQo6Wdbf5SvREoe7xnxYQ==
-X-Received: by 2002:a05:6512:3c9e:b0:52c:deb9:904b with SMTP id 2adb3069b0e04-53546bde550mr7411628e87.38.1725270730406;
-        Mon, 02 Sep 2024 02:52:10 -0700 (PDT)
+        bh=yjsZv7veQRgQQOgF16n7lr/LWeiZhMmKVsEed9iOcZQ=;
+        b=SqKhRy0zg6SrD9YevxOfvKnH3EucEYi1QAq8XHOz8z/uHTNn53XGRdl2usPcD9dC9O
+         QriPKTEEywh56/QcZIgMKEHP25aLAaaIBkLLMr6BTA1wJ1n1/7GKPF4jz4n0vmbkpfvg
+         PTOhA5ESyG/HYQUXs7BFfFKTOqhscvNgvwM1zHIRa8hl5fzT/Uqbl//+wFK04YD7zmZJ
+         58jXtJpugtwRuKVfRrAWOL2aLJaMzsqGmueJw0ZnnfnTO3JbfOLVOHUbog3uTk5gSYJv
+         5cOmAQVEXKHVmcTIdqgTfjSTb8x4E26aTd+GuqTI3VVkjtjQHEu+nfaqfoLMS+mnNKKk
+         DRGw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhgPpVmo+tybqCxwRpNpKu99pU16N2l+Rz0g8yL4gMmvgW7nSYlQ9nYVZbTetEI1HdZeh2FOZLjg7SxaTY@vger.kernel.org
+X-Gm-Message-State: AOJu0YxA1ApsAUqUtMNVsoIaFPKwcbp1jad7d6UskMQZSEhSW8JilYRi
+	eEz1NEWbdyYjGuXsswc9YUM4xogmxDHz3uvBGxaZOcNGiofeQ+UyvrFM6vDXA0w=
+X-Google-Smtp-Source: AGHT+IH7z8FryQZ6mKwNMkGnRP2RrSvLwrgspXmgco9jQNTg8+KhqeedDLVTW9djucaR8HYMG7P+gw==
+X-Received: by 2002:a05:651c:19a3:b0:2ef:c8a1:ff4 with SMTP id 38308e7fff4ca-2f6105c49a9mr116896891fa.7.1725271032683;
+        Mon, 02 Sep 2024 02:57:12 -0700 (PDT)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89892333a0sm530996466b.220.2024.09.02.02.52.09
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c7bf90sm5031726a12.43.2024.09.02.02.57.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Sep 2024 02:52:10 -0700 (PDT)
-Message-ID: <1c7d9094-c893-4423-822c-4ec33ae06d1b@suse.com>
-Date: Mon, 2 Sep 2024 11:52:08 +0200
+        Mon, 02 Sep 2024 02:57:12 -0700 (PDT)
+Message-ID: <20420395-28ed-4579-84e1-4f7e7641363e@suse.com>
+Date: Mon, 2 Sep 2024 11:57:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,69 +61,53 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/19] gendwarfksyms: Add symbol list handling
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+Subject: Re: [PATCH v2 00/19] Implement DWARF modversions
+To: Sami Tolvanen <samitolvanen@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
  Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
- Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>,
- Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+ Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>,
+ Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
+ Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ rust-for-linux@vger.kernel.org
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-23-samitolvanen@google.com>
- <95db3178-a2ce-421e-8024-afd7fa3359a3@suse.com>
- <20240828230919.GI2130480@google.com>
+ <CAK7LNAQ0dHq3eALkvGDSCyVKOvhBqwCEG3BTQ0h52Xq_1YNu2A@mail.gmail.com>
+ <20240828225302.GH2130480@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20240828230919.GI2130480@google.com>
+In-Reply-To: <20240828225302.GH2130480@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/29/24 01:09, Sami Tolvanen wrote:
-> On Wed, Aug 28, 2024 at 02:35:29PM +0200, Petr Pavlu wrote:
->> On 8/15/24 19:39, Sami Tolvanen wrote:
->>> diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
->>> index 65a29d0bd8f4..71cfab0553da 100644
->>> --- a/scripts/gendwarfksyms/dwarf.c
->>> +++ b/scripts/gendwarfksyms/dwarf.c
->>> @@ -5,6 +5,48 @@
->>> [...]
->>> +
->>> +static bool is_export_symbol(struct state *state, Dwarf_Die *die)
->>> +{
->>> +	Dwarf_Die *source = die;
->>> +	Dwarf_Die origin;
->>> +
->>> +	state->sym = NULL;
->>> +
->>> +	/* If the DIE has an abstract origin, use it for type information. */
->>> +	if (get_ref_die_attr(die, DW_AT_abstract_origin, &origin))
->>> +		source = &origin;
->>> +
->>> +	state->sym = symbol_get(get_name(die));
->>> +
->>> +	/* Look up using the origin name if there are no matches. */
->>> +	if (!state->sym && source != die)
->>> +		state->sym = symbol_get(get_name(source));
->>> +
->>> +	state->die = *source;
->>> +	return !!state->sym;
->>> +}
+On 8/29/24 00:53, Sami Tolvanen wrote:
+> On Wed, Aug 28, 2024 at 04:04:09PM +0900, Masahiro Yamada wrote:
+>> On Fri, Aug 16, 2024 at 2:39 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+>>> - Added a --symtypes flag for generating a genksyms-style
+>>>   symtypes output based on Petr's feedback, and refactored
+>>>   symbol version calculations to be based on symtypes instead
+>>>   of raw --dump-dies output.
 >>
->> Sorry, I don't want to comment much on function names.. but I realized
->> the name of is_export_symbol() isn't really great. The "is_" prefix
->> strongly indicates that it is only a query function, yet it changes the
->> state. It makes its caller process_exported_symbols() hard to understand
->> on the first read.
+>>
+>>
+>> I do not know if this is worthwhile.
 > 
-> I see your point. How would you make this more obvious? get_ doesn't
-> seem entirely accurate either. match_ perhaps?
+> Greg, Petr, do you want to comment on the usefulness of the symtypes
+> output? I was under the impression it was a useful tool for figuring
+> out exactly what caused the versions to change?
 
-Looks reasonable to me.
+Right, the symtypes data is useful if distributions wish to maintain
+stable kABI for their kernels. The data can be compressed/consolidated
+and stored together with the source code for the distribution kernel,
+serving as a reference kABI. Later, when the kernel is updated and CRCs
+of some symbols change, the reference can be compared with the new
+symtypes data to understand what has actually changed.
+
+The previous discussion was under v1 of the series:
+https://lore.kernel.org/linux-modules/0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com/t/#u
 
 -- 
-Thanks,
+Cheers,
 Petr
