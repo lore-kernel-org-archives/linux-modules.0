@@ -1,63 +1,66 @@
 Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CEA3A1CD
-	for <linux-modules@vger.kernel.org>; Mon,  2 Sep 2024 04:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE6B14B970
+	for <linux-modules@vger.kernel.org>; Mon,  2 Sep 2024 04:41:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725252094; cv=none; b=dkXUePBDCfbFcRq63x4ODZWWjIoZwkL8ZxJOW0K0Izvp4n4r9KG2h0cGKtuMJNENNQ0RV/KX8eyVyGJxFSAQzt8PFcBAbAR39Nyw7i3qf8iXb3GnQKrwf/qDFNymA6lCTy/dt9NKIp+KUdJdUiPz4CvZwVqNjP4ncPz7duQpVtA=
+	t=1725252096; cv=none; b=mJdw7DcnyFHTgnARFHbycMxouRocYz1iP3n7zHoRIwg/I7AgyXV3E5vpo+3rB+OjVyi+MKiGJi7Qpaf2JzAuMsaEyZsksSfGF8U7UnURnY5waLqK0+0cqavNYT5GljMQZr/lxkQit8S6vwtnxr3nv9+MGBKmczCKM2L2ljsTQEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725252094; c=relaxed/simple;
-	bh=2yYesrk2XeOkiLpyoJrRc9CQY3G+vSCbxn6itbaapxA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FLEfT7kQpZiVfnOGDdePLgguJQlzhypF/O03zC05pifFNdnb+/iKYrobDchOz+Xi3oRtDa/A8MhpJhY/F9BSrNMKI880aWEIFOglaBGSOfAAwgQZnfJweCg+/cSX9RMJ21xVCW32rigCwvByjV79LP8QRVEnkXJkHUNTCS/86z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a9fHg23Q; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1725252096; c=relaxed/simple;
+	bh=knnBZu7kPS2XiZHCOoomuagEtSw2A+8o8O+N0AJpu1I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=MMMz5Q03LQerax20dK9JQgpPSqzSAOGHl8HAV56xloVzk70AEipZ9nRsiqCKwSH4UIFrhNhi1+8eO7N1VTb9gHHOmoOFpZku7ew8wIYhWAcUr8FnaxGm1DTUjQcWs9AsqIOruNY3EbKg3fLiMwA35fvin07IOVVy7a87waGD8fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ObbJEsFl; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a9fHg23Q"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e116c697904so7977771276.1
-        for <linux-modules@vger.kernel.org>; Sun, 01 Sep 2024 21:41:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ObbJEsFl"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e0b3d35ccfbso5825336276.3
+        for <linux-modules@vger.kernel.org>; Sun, 01 Sep 2024 21:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725252092; x=1725856892; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=T+xLud21hrQ5yA1EN2qeiMEzMSrTdr6OveRNrXJfwOw=;
-        b=a9fHg23QJi6LOx82/+bhdT9Y/6bH+3lzQCHICw7HOSPphcTqUmAzb/G3AV/q9lS4aA
-         MNR2FpjEqTBw+trO9720V3NM8jUTghoMcjjVtXdgqiV2zn5T4SYyJghT/46BTcEU/1LP
-         q1K7l0LEbZlCevs+9eebA80Nl7rL6JS1/XpKYVFfylpZa/49DqimTMYLNXNc2ddaAWPZ
-         n1DfAuJxcVcXS8Rh6D0UVc7UFmIPOL6ENewmCqPe34XL6tPsMKS8teutjftyzezrKcLD
-         hEEXvTbnIR+E0LgffE1aLNf4xqHHoksfa3uHkppHxnscjHVF/1bUqq52Ibox9OSb7wgc
-         1Txg==
+        d=google.com; s=20230601; t=1725252094; x=1725856894; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kLpU39ux3x2TTO/xeONsOF6qZRhVUZNcpjltFBicrmM=;
+        b=ObbJEsFlLJj8q/uKPICo68h7XtFK06WRs42lj1wo+168rApzvRYv51HHAlJitWtqhe
+         /uNRbCQ8Zmt/9Igg0ogICyUA3lZO9IfvX3pUV25vgVQz+ys9AdH++a+hDTIkc6e1tqHt
+         fdybiZ7BtsHMX4zid+OMrBrn90A1oPdVW3rHcZvmkOTSkO/tI7piYo0ajYi78Al6IAmJ
+         qaG8Rwy/6Ebw8cZtQyzfQPIAW2G++DWwCYOn5Kbh9ugsFMlCLN1O0xkdSKpS/DTZQ0H5
+         1Zmd/csCJnyNXSm8miBpMWZa+P6PIF4PupFNY1iySiwyLlidYQfNw5OZbl/ZqaiqSyp8
+         BXnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725252092; x=1725856892;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T+xLud21hrQ5yA1EN2qeiMEzMSrTdr6OveRNrXJfwOw=;
-        b=ZEL8U2nlkLH1f3LUB4cibtbnbEKc3/4DCwmMSougrgiU/Sz3adLi7MJ29CHb9nHUA5
-         FWGRIvmMZm+dSqZq4izW7gzGgWMZUGcIFZ18xjtBOVKnduJMVaY5dJdIm7BIk/SyRma3
-         CPi9frJBczNCU9gS/XA9sPvpOysKvZvoVn03sfWmBVcWOiln4S29ytWMJ6B5yC2Le9sp
-         4LS3ElW9YG10i8DNofPe8+TAOw4eIiDpbkcpCaxcJuVJ5uvjO6Y+Pz+8VtnfYlc0WmGd
-         nZeKAsEzGRnDl6ig2uSs20JMpgmTOZuLbP8XR2sit6V/ioDMHz9Mzy6uotFZZ/d9fCau
-         K9BA==
-X-Forwarded-Encrypted: i=1; AJvYcCWzTJeUejFPQ9RJugZt6QzDnHf8Cwh+0SY7m067FN0Zyg0pF1+kTVWjrMEJzsaWrQgeQpwOCx8p2ibyVg2v@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHLkbSP+E8o6R8hz0qGAMwLqHrffRzDgDYneET73jfkTQIO0gk
-	tiAFuJxYxEJOzqnjEgFsuUw80iH/YeTL8s3ER4VrCJ01NuuRwAGA/teZyI1nVLDuDw+hqOEl7/u
-	6nw==
-X-Google-Smtp-Source: AGHT+IEtE0kPr6IIFRldaKi06F+5QIrTC4yNkT2oW719Q3CsdKB0l7HveLeFNrmbQ3s+nnJWshQtc5hKBEM=
+        d=1e100.net; s=20230601; t=1725252094; x=1725856894;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kLpU39ux3x2TTO/xeONsOF6qZRhVUZNcpjltFBicrmM=;
+        b=LzAIPrcs2jYGdSUNW++Wv6CoPZqo5ieNS5N1wnn47vR4DtqjU6yPFxHZfucBH+CEXs
+         2QAURLlCz+HaCSt49Qh62pesnlWbd7ksMwUxyr87FudkZzg2HUfPjmWSI0oX6zX5FCn6
+         6+YwrdDhvUqY6zv2aeHWMU6s6hfKDs9ZbKNqN2IYmFjL3y7V3zX07nD7ZY1lq3RKvET+
+         iJyOto6d9jOd4Xa6T3sSLRLZfGgjBicljX6JPWt2ysrmy/1SBW+zn1VpifcgpiSZXOHY
+         NWvx2qzlIKXXUYAp2n8fqtRZtN/ddE/TXrpjp7pallh/kj7A+2HUgiUS/GRUODPcDvyf
+         5Xbg==
+X-Forwarded-Encrypted: i=1; AJvYcCU9xA4a+/p9AOghHP5nx2Io0olhsCvOgswKYa7oOfdvKg0jakWPPK6kNZVFXIIf6AMBCtEiRG2ZTEspBNK6@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdETQbyvZAL+V00Pli2LZ9ARnRKRPAmZmulrD2DEmHqfyhexTG
+	bR7SVOPsjnlMpgcKUHy02dtf6OWTNp5q2r8ROLhnLe5gMja4lZab2XvbAQ8r1uUracpnJDXElr5
+	xdw==
+X-Google-Smtp-Source: AGHT+IE+2G0xxDfv2kbdFSiqwhGjdz1DeNRKuCcVpqvSyerK6sADotCLCA7OoS3t5ommCEFjIJVLeySgq3I=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:7343:ecd2:aed:5b8f])
- (user=surenb job=sendgmr) by 2002:a25:99c3:0:b0:e0e:87f7:f6d3 with SMTP id
- 3f1490d57ef6-e1a7a1cfec1mr370503276.11.1725252092109; Sun, 01 Sep 2024
- 21:41:32 -0700 (PDT)
-Date: Sun,  1 Sep 2024 21:41:22 -0700
+ (user=surenb job=sendgmr) by 2002:a25:83c4:0:b0:e03:3683:e67f with SMTP id
+ 3f1490d57ef6-e1a79fed1aamr15821276.5.1725252094100; Sun, 01 Sep 2024 21:41:34
+ -0700 (PDT)
+Date: Sun,  1 Sep 2024 21:41:23 -0700
+In-Reply-To: <20240902044128.664075-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20240902044128.664075-1-surenb@google.com>
 X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
-Message-ID: <20240902044128.664075-1-surenb@google.com>
-Subject: [PATCH v2 0/6] page allocation tag compression
+Message-ID: <20240902044128.664075-2-surenb@google.com>
+Subject: [PATCH v2 1/6] maple_tree: add mas_for_each_rev() helper
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
@@ -71,82 +74,44 @@ Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
 	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
 	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com, surenb@google.com
+	linux-modules@vger.kernel.org, kernel-team@android.com, surenb@google.com, 
+	"Liam R. Howlett" <Liam.Howlett@Oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This patchset implements several improvements:
-1. Gracefully handles module unloading while there are used allocations
-allocated from that module;
-2. Provides an option to reduce memory overhead from storing page
-allocation references by indexing allocation tags;
-3. Provides an option to store page allocation tag references in the
-page flags, removing dependency on page extensions and eliminating the
-memory overhead from storing page allocation references (~0.2% of total
-system memory).
-4. Improves page allocation performance when CONFIG_MEM_ALLOC_PROFILING
-is enabled by eliminating page extension lookup. Page allocation
-performance overhead is reduced from 14% to 5.5%.
+Add mas_for_each_rev() function to iterate maple tree nodes in reverse
+order.
 
-Patch #1 introduces mas_for_each_rev() helper function.
+Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+---
+ include/linux/maple_tree.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Patch #2 copies module tags into virtually contiguous memory which
-serves two purposes:
-- Lets us deal with the situation when module is unloaded while there
-are still live allocations from that module. Since we are using a copy
-version of the tags we can safely unload the module. Space and gaps in
-this contiguous memory are managed using a maple tree.
-- Enables simple indexing of the tags in the later patches.
-
-Preallocated virtually contiguous memory size can be configured using
-max_module_alloc_tags kernel parameter.
-
-Patch #3 is a code cleanup to simplify later changes.
-
-Patch #4 abstracts page allocation tag reference to simplify later
-changes.
-
-Patch #5 lets us control page allocation tag reference sizes and
-introduces tag indexing.
-
-Patch #6 adds a config to store page allocation tag references inside
-page flags if they fit.
-
-Patchset applies to mm-unstable.
-
-Changes since v1 [1]:
-- introduced mas_for_each_rev() and use it, per Liam Howlett
-- use advanced maple_tree API to minimize lookups, per Liam Howlett
-- fixed CONFIG_MODULES=n configuration build, per kernel test robot
-
-[1] https://lore.kernel.org/all/20240819151512.2363698-1-surenb@google.com/
-
-Suren Baghdasaryan (6):
-  maple_tree: add mas_for_each_rev() helper
-  alloc_tag: load module tags into separate continuous memory
-  alloc_tag: eliminate alloc_tag_ref_set
-  alloc_tag: introduce pgalloc_tag_ref to abstract page tag references
-  alloc_tag: make page allocation tag reference size configurable
-  alloc_tag: config to store page allocation tag refs in page flags
-
- .../admin-guide/kernel-parameters.txt         |   4 +
- include/asm-generic/codetag.lds.h             |  19 ++
- include/linux/alloc_tag.h                     |  46 ++-
- include/linux/codetag.h                       |  40 ++-
- include/linux/maple_tree.h                    |  14 +
- include/linux/mmzone.h                        |   3 +
- include/linux/page-flags-layout.h             |  10 +-
- include/linux/pgalloc_tag.h                   | 287 +++++++++++++---
- kernel/module/main.c                          |  67 ++--
- lib/Kconfig.debug                             |  36 +-
- lib/alloc_tag.c                               | 321 ++++++++++++++++--
- lib/codetag.c                                 | 104 +++++-
- mm/mm_init.c                                  |   1 +
- mm/page_ext.c                                 |   2 +-
- scripts/module.lds.S                          |   5 +-
- 15 files changed, 826 insertions(+), 133 deletions(-)
-
-
-base-commit: 18d35b7e30d5a217ff1cc976bb819e1aa2873301
+diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
+index 8e1504a81cd2..45e633806da2 100644
+--- a/include/linux/maple_tree.h
++++ b/include/linux/maple_tree.h
+@@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_state *mas)
+ #define mas_for_each(__mas, __entry, __max) \
+ 	while (((__entry) = mas_find((__mas), (__max))) != NULL)
+ 
++/**
++ * mas_for_each_rev() - Iterate over a range of the maple tree in reverse order.
++ * @__mas: Maple Tree operation state (maple_state)
++ * @__entry: Entry retrieved from the tree
++ * @__min: minimum index to retrieve from the tree
++ *
++ * When returned, mas->index and mas->last will hold the entire range for the
++ * entry.
++ *
++ * Note: may return the zero entry.
++ */
++#define mas_for_each_rev(__mas, __entry, __min) \
++	while (((__entry) = mas_find_rev((__mas), (__min))) != NULL)
++
+ #ifdef CONFIG_DEBUG_MAPLE_TREE
+ enum mt_dump_format {
+ 	mt_dump_dec,
 -- 
 2.46.0.469.g59c65b2a67-goog
 
