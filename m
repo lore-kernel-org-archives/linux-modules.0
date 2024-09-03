@@ -1,301 +1,229 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B25A1A2621
-	for <linux-modules@vger.kernel.org>; Tue,  3 Sep 2024 11:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D661CA6A1;
+	Tue,  3 Sep 2024 14:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725362585; cv=none; b=isneEskARXlLu6q4X7cp0KSeyWf5ObwMx64dfLPMd7aWZE12uZ2ZKEIfENusH+7hmnv0zSuR7b4aiVSkX74fwoyeN8bCbeVWv+ChK387QtRrMLq9Q/FpmcuvR9Oii013wgv/X8UCRfzJP8DmuExzl/rIgsyoeE8kRnYzY3JNTJA=
+	t=1725372307; cv=none; b=MnMZT5K0VhPE6d2VoWj0S5tGe0c1Mwtm8z7yeNcssDbD/Z3urGaJPB9OPUcQiL2xd9mJNwRomsJYOGaOuQjZKkCFVx5OX75urcFBzsFbXBYzDHF/5MapPel7Aj1mvrNMZnSUiRQ9FCFLygsyUzWGLfhKlpdAWR/l7l7t+i5dETA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725362585; c=relaxed/simple;
-	bh=bJZp7v9VF/zV4FIdUkvtoSwQVPiQZ4CIEegB9jZ1ems=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ge7/HSZsj3Vq+ENy5LDGM9ZXwCIBJVxqPz61c5wvS6rayAw4Pz1X3Z5I2C4cDH/uRxtg28e49d8k+RVTEYUJCa7FxDi8zAIPBXq86YIB8G1vPyM7xxRJp1jF5HaaqJYVQhTcugGvXM6D8TiAhgd4Tz7g/jZJ43OG83RZqn22jLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PFT6Aiyp; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1725372307; c=relaxed/simple;
+	bh=BsrCTrBNZtP6Tj322oSAskAaur02xSr1bxYZEPRvQNk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SNmEnCOvmEEhwCqgQA81cUeCjIw8MZuvkXL7h7lmK26HV05Xj0zvJ8mpwRrWilN7v/jpAIsV38hLDBk73g8IDdxA+3fd5oGJsKc5dLUifQ2uTKYmQBvxQG/MpFniCX/MbOASh/ToKcER6RhyhUoSYrn4cGu2iQ/ynPklGqf1LcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LwlKSK5E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PFT6Aiyp"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a8682bb5e79so634519166b.2
-        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2024 04:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725362580; x=1725967380; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w4IcuQeuiymqaS/a1RhzzDSLXJUOsYIq0tu0n3fb8ks=;
-        b=PFT6Aiyphmh4O3azCZhqdkp3AU/wdEZCCJYVuMRA1izQyj7ADd3DmFtUUdKvvL7WzB
-         WgoHOM1iQok10Sd0K0GWUEfiDW7E7m1H2P9sUIv8vZnGtsalgP86/SBobP1XK1Uc2M3G
-         BRoS7QnatYgs9b+BnayTw/vgfK9i2OAxYpRkrIWT3v99o5o1bmYLSEVZLkD2aDuafOML
-         sEkyc8tiHYluymJAQtU/USkD18czTSwOAfB1l6cLU7FQitHu3opFpegNYaWPNe8SOMFI
-         r8u7NEx6QyRM0etVutufaFnsXGVpfJoeGxoYZXQl6p0DLYP0B2p3O6hP7As+rQtXY02m
-         XC5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725362580; x=1725967380;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4IcuQeuiymqaS/a1RhzzDSLXJUOsYIq0tu0n3fb8ks=;
-        b=wfxPHfkT/G8e43pDfttTCy/lPghXWmt5rAXjj/2t2z4PTY6L1Kvcw9gSOmuN2CbRAv
-         hxr6DiQtSXRhObcwuQsb3A6/v9dnfywJLR4Dm17liDEdhrahB4s24oEddP2wGa0EBD2D
-         wFiCMUJdBpV1ST9KUGSI8O7G6E9QSCBtSsr0MXmbhQ2+sCplQrKinZxzMFbj4T6Gpcgd
-         uv8guTZWtnyZSISeUQWT0PZ6f7MyLZsoVVMK4bFlHla5Gl0b12IKCuOlwHSYBrKDeucI
-         byQ1WDtkDQ6pcq+EBfZV+CuS076uu8Mi3/6w8/j9QfswpljYKNUjUnVV1JL/VVcovUkT
-         uRDw==
-X-Forwarded-Encrypted: i=1; AJvYcCW88RMVKiLakWBtKbFuiGPjeQxSyL38Hkzo20WdP55SVQnY/GG69uViSdy4mOT6eUMymi6L5K+Db7isVO6B@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQZt4adKOKApDabnRTzuLL0eKkN6N0bW0Lfu7LJO6vBAcpGqKO
-	nPpY50T+zfBXEiiFHTa9yLMgvgo4vYRBU6HQ5zPzWJNBEGLVlF/ZNAMzzRYSrDU=
-X-Google-Smtp-Source: AGHT+IHuKeLghdg/ls1i2JFJtmfoByQgn6d7Wd00RW7FnQCnrsmyQ9cHM02wmJzDXMutnkx6CANOYw==
-X-Received: by 2002:a17:906:9c84:b0:a86:77ac:7e4e with SMTP id a640c23a62f3a-a89fae1b87emr516226866b.34.1725362579557;
-        Tue, 03 Sep 2024 04:22:59 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8988feae4dsm673991766b.31.2024.09.03.04.22.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Sep 2024 04:22:59 -0700 (PDT)
-Message-ID: <c50f5364-ca94-4d5b-be99-3a3ffcf79648@suse.com>
-Date: Tue, 3 Sep 2024 13:22:58 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwlKSK5E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACE3C4CEC7;
+	Tue,  3 Sep 2024 14:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725372307;
+	bh=BsrCTrBNZtP6Tj322oSAskAaur02xSr1bxYZEPRvQNk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LwlKSK5ErajemkQ1KlZk+PEO093DEXhm55Ais/KtaVEe+G3BtR/+jE1Cts9scrxeK
+	 58t+ZzcCZ80rDznylNm/yxpgjJbMGdwnOqOEq5bHZjjZ193LEMVdYrgnbhLxX3X0k1
+	 N/+3OCJX+i07bgkTSildivRE6d1SGCCVs9s+M/RBVj4Z0L5p1rlXFt5eH5C6WPu0K5
+	 xIMbR01ytLl3MRhvrFDJLXR35AF6MxOmL5YWCpVbzR0abzQLLdxZas5vTttmurMX3L
+	 fbKQm5zpbM/4LfxuOoWjH/FzFiCxR6y+RhUEvPfCnDHSWHoq38ozWJXz/P2O0JmZYY
+	 QiBiW7HNLBnpA==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5344ab30508so5819597e87.0;
+        Tue, 03 Sep 2024 07:05:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUZLthdZ8nI2ys1VR3UuvBMHTroTXhflhE9QhKIkuM9hhkTueWdObyNjfPh0mjfx88hK4MEKL7bHscuA0M=@vger.kernel.org, AJvYcCVvZVmqaL9kyGGsp1ycx/mwoeQ0+tJX0zVP6mW0JgkYBitDnE2LpI8RqwD7/Fk/oOqszjcvsXB2eKcHosdi6Q==@vger.kernel.org, AJvYcCWtjf6RiblLw6YP1AtTgVbvWBgqsuGe+/lFs9qXdl8KCuyS8or5hf/mZkoxs/4aiGBzMgUHlXvDVYwArO2e@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz11kV7T5vEEjCqFZ27l/jI3BNsFEp6899JUXRevmuG4q2PY9SO
+	yuGDB6OSEAglTKbwtMQ30SLnzlQF1UU72J6pwTRBg/GcTBaW7hLobV5dIBfG+8GfQb1CMA0fsKw
+	7e0cMbV8EilyqjBVQ3g41mXJhphM=
+X-Google-Smtp-Source: AGHT+IEl3stPqDMrvRRj2fwAJdMbwHVOrTU6HZ6qDm17MfN0Xhh+H8Y7LfJOTTRkVc+ORgP7+gCtUgz7kFNJW8gCUaM=
+X-Received: by 2002:a05:6512:234a:b0:534:53d7:c97f with SMTP id
+ 2adb3069b0e04-5353ebdb303mr5808947e87.23.1725372305167; Tue, 03 Sep 2024
+ 07:05:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: abort module loading when sysfs setup suffer
- errors
-To: Chunhui Li <chunhui.li@mediatek.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- wsd_upstream@mediatek.com, Xion Wang <xion.wang@mediatek.com>
-References: <20240830054400.26622-1-chunhui.li@mediatek.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20240830054400.26622-1-chunhui.li@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240901-modinfo-const-v2-1-ece53ca15075@weissschuh.net>
+In-Reply-To: <20240901-modinfo-const-v2-1-ece53ca15075@weissschuh.net>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 3 Sep 2024 23:04:28 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATrtMzf4UG_kKL7c0E2=q8_Yh6j61-2F-f4VH0y9+vjug@mail.gmail.com>
+Message-ID: <CAK7LNATrtMzf4UG_kKL7c0E2=q8_Yh6j61-2F-f4VH0y9+vjug@mail.gmail.com>
+Subject: Re: [PATCH v2] modpost: compile constant module information only once
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/30/24 07:43, Chunhui Li wrote:
-> When insmod a kernel module, if fails in add_notes_attrs or
-> add_sysfs_attrs such as memory allocation fail, mod_sysfs_setup
-> will still return success, but we can't access user interface
-> on android device.
-> 
-> Patch for make mod_sysfs_setup can check the error of
-> add_notes_attrs and add_sysfs_attrs
+On Mon, Sep 2, 2024 at 2:56=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisssc=
+huh.net> wrote:
+>
+> Various information about modules is compiled into the info sections.
+> For that a dedicated .mod.c file is generated by modpost for each module
+> and then linked into the module.
+> However most of the information in the .mod.c is the same for all
+> modules, internal and external.
+> Split the shared information into a dedicated source file that is
+> compiled once and then linked into all modules.
+>
+> This avoids frequent rebuilds for all .mod.c files when using
+> CONFIG_LOCALVERSION_AUTO because the local version ends up in .mod.c
+> through UTS_RELEASE and VERMAGIC_STRING.
+> The modules are still relinked in this case.
+>
+> The code is also easier to maintain as it's now in a proper source file
+> instead of an inline string literal.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-s/add_sysfs_attrs/add_sect_attrs/
 
-I think it makes sense to propagate errors from these functions upward,
-although I wonder if the authors of this code didn't intentionally make
-the errors silent, possibly because the interface was mostly intended
-for debugging only?
+Applied to linux-kbuild. Thanks!
 
-The original commits which added add_sect_attrs() and add_notes_attrs()
-don't mention anything explicitly in this regard:
-https://github.com/mpe/linux-fullhistory/commit/db939b519bea9b88ae1c95c3b479c0b07145f2a0
-https://github.com/torvalds/linux/commit/6d76013381ed28979cd122eb4b249a88b5e384fa
 
-> 
-> Signed-off-by: Xion Wang <xion.wang@mediatek.com>
-> Signed-off-by: Chunhui Li <chunhui.li@mediatek.com>
 > ---
->  kernel/module/sysfs.c | 49 ++++++++++++++++++++++++++++++-------------
->  1 file changed, 35 insertions(+), 14 deletions(-)
-> 
-> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-> index 26efe1305c12..a9ee650d995d 100644
-> --- a/kernel/module/sysfs.c
-> +++ b/kernel/module/sysfs.c
-> @@ -69,12 +69,13 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
->  	kfree(sect_attrs);
->  }
->  
-> -static void add_sect_attrs(struct module *mod, const struct load_info *info)
-> +static int add_sect_attrs(struct module *mod, const struct load_info *info)
->  {
->  	unsigned int nloaded = 0, i, size[2];
->  	struct module_sect_attrs *sect_attrs;
->  	struct module_sect_attr *sattr;
->  	struct bin_attribute **gattr;
-> +	int ret = 0;
-
-Nit: It isn't necessary to initialize this variable to 0 because the
-code explicitly does "return 0;" on success. While on the error path,
-the variable is always assigned.
-
->  
->  	/* Count loaded sections and allocate structures */
->  	for (i = 0; i < info->hdr->e_shnum; i++)
-> @@ -85,7 +86,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
->  	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
->  	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
->  	if (!sect_attrs)
-> -		return;
-> +		return -ENOMEM;
->  
->  	/* Setup section attributes. */
->  	sect_attrs->grp.name = "sections";
-> @@ -103,8 +104,10 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
->  		sattr->address = sec->sh_addr;
->  		sattr->battr.attr.name =
->  			kstrdup(info->secstrings + sec->sh_name, GFP_KERNEL);
-> -		if (!sattr->battr.attr.name)
-> +		if (!sattr->battr.attr.name) {
-> +			ret = -ENOMEM;
->  			goto out;
-> +		}
->  		sect_attrs->nsections++;
->  		sattr->battr.read = module_sect_read;
->  		sattr->battr.size = MODULE_SECT_READ_SIZE;
-> @@ -113,13 +116,16 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
->  	}
->  	*gattr = NULL;
->  
-> -	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp))
-> +	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp)) {
-> +		ret = -EIO;
->  		goto out;
-> +	}
-
-Why does the logic return -EIO instead of propagating the error code
-from sysfs_create_group()?
-
->  
->  	mod->sect_attrs = sect_attrs;
-> -	return;
-> +	return 0;
->  out:
->  	free_sect_attrs(sect_attrs);
-> +	return ret;
->  }
->  
->  static void remove_sect_attrs(struct module *mod)
-> @@ -158,15 +164,16 @@ static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
->  	kfree(notes_attrs);
->  }
->  
-> -static void add_notes_attrs(struct module *mod, const struct load_info *info)
-> +static int add_notes_attrs(struct module *mod, const struct load_info *info)
->  {
->  	unsigned int notes, loaded, i;
->  	struct module_notes_attrs *notes_attrs;
->  	struct bin_attribute *nattr;
-> +	int ret = 0;
-
-Similarly here, the initialization is not necessary.
-
->  
->  	/* failed to create section attributes, so can't create notes */
->  	if (!mod->sect_attrs)
-> -		return;
-> +		return -EINVAL;
-
-Since the patch modifies mod_sysfs_setup() to bail out when registering
-section attributes fails, this condition can no longer be true and the
-check can be removed.
-
->  
->  	/* Count notes sections and allocate structures.  */
->  	notes = 0;
-> @@ -176,12 +183,12 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
->  			++notes;
->  
->  	if (notes == 0)
-> -		return;
-> +		return 0;
->  
->  	notes_attrs = kzalloc(struct_size(notes_attrs, attrs, notes),
->  			      GFP_KERNEL);
->  	if (!notes_attrs)
-> -		return;
-> +		return -ENOMEM;
->  
->  	notes_attrs->notes = notes;
->  	nattr = &notes_attrs->attrs[0];
-> @@ -201,19 +208,24 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
->  	}
->  
->  	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
-> -	if (!notes_attrs->dir)
-> +	if (!notes_attrs->dir) {
-> +		ret = -ENOMEM;
->  		goto out;
-> +	}
->  
->  	for (i = 0; i < notes; ++i)
->  		if (sysfs_create_bin_file(notes_attrs->dir,
-> -					  &notes_attrs->attrs[i]))
-> +					  &notes_attrs->attrs[i])) {
-> +			ret = -EIO;
->  			goto out;
-> +	}
-
-Similarly here, the actual error from sysfs_create_bin_file() can be
-returned.
-
->  
->  	mod->notes_attrs = notes_attrs;
-> -	return;
-> +	return 0;
->  
->  out:
->  	free_notes_attrs(notes_attrs, i);
-> +	return ret;
->  }
->  
->  static void remove_notes_attrs(struct module *mod)
-> @@ -385,11 +397,20 @@ int mod_sysfs_setup(struct module *mod,
->  	if (err)
->  		goto out_unreg_modinfo_attrs;
->  
-> -	add_sect_attrs(mod, info);
-> -	add_notes_attrs(mod, info);
-> +	err = add_sect_attrs(mod, info);
-> +	if (err)
-> +		goto out_unreg_sect_attrs;
+> Changes in v2:
+> - Remove RFC status
+> - Incorporate Masahiro's proposals
+>   - Rename modinfo.o to .module-common.o
+>   - Build a dedicated .module-common.o for external modules
+> - Link to v1: https://lore.kernel.org/r/20240824-modinfo-const-v1-1-485f9=
+c64b868@weissschuh.net
+> ---
+> Masahiro, feel free to add some attribution for yourself when applying.
+> The new appraoch is pleasantly simpler.
+> ---
+>  scripts/Makefile.modfinal |  7 +++++--
+>  scripts/mod/modpost.c     | 23 -----------------------
+>  scripts/module-common.c   | 25 +++++++++++++++++++++++++
+>  3 files changed, 30 insertions(+), 25 deletions(-)
+>
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 306a6bb86e4d..6b1b72257b29 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -30,6 +30,9 @@ quiet_cmd_cc_o_c =3D CC [M]  $@
+>  %.mod.o: %.mod.c FORCE
+>         $(call if_changed_dep,cc_o_c)
+>
+> +$(extmod_prefix).module-common.o: $(srctree)/scripts/module-common.c FOR=
+CE
+> +       $(call if_changed_dep,cc_o_c)
 > +
-> +	err = add_notes_attrs(mod, info);
-> +	if (err)
-> +		goto out_unreg_notes_attrs;
->  
->  	return 0;
->  
-> +out_unreg_notes_attrs:
-> +	remove_notes_attrs(mod);
-> +out_unreg_sect_attrs:
-> +	remove_sect_attrs(mod);
+>  quiet_cmd_ld_ko_o =3D LD [M]  $@
+>        cmd_ld_ko_o +=3D                                                  =
+ \
+>         $(LD) -r $(KBUILD_LDFLAGS)                                      \
+> @@ -54,13 +57,13 @@ if_changed_except =3D $(if $(call newer_prereqs_excep=
+t,$(2))$(cmd-check),      \
+>         printf '%s\n' 'savedcmd_$@ :=3D $(make-cmd)' > $(dot-target).cmd,=
+ @:)
+>
+>  # Re-generate module BTFs if either module's .ko or vmlinux changed
+> -%.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODUL=
+ES),$(KBUILD_BUILTIN),vmlinux) FORCE
+> +%.ko: %.o %.mod.o $(extmod_prefix).module-common.o scripts/module.lds $(=
+and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
+>         +$(call if_changed_except,ld_ko_o,vmlinux)
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>         +$(if $(newer-prereqs),$(call cmd,btf_ko))
+>  endif
+>
+> -targets +=3D $(modules:%.o=3D%.ko) $(modules:%.o=3D%.mod.o)
+> +targets +=3D $(modules:%.o=3D%.ko) $(modules:%.o=3D%.mod.o) $(extmod_pre=
+fix).module-common.o
+>
+>  # Add FORCE to the prerequisites of a target to force it to be always re=
+built.
+>  # ----------------------------------------------------------------------=
+-----
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index c8cd5d822bb6..107393a8c48a 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1755,26 +1755,9 @@ static void check_modname_len(struct module *mod)
+>  static void add_header(struct buffer *b, struct module *mod)
+>  {
+>         buf_printf(b, "#include <linux/module.h>\n");
+> -       /*
+> -        * Include build-salt.h after module.h in order to
+> -        * inherit the definitions.
+> -        */
+> -       buf_printf(b, "#define INCLUDE_VERMAGIC\n");
+> -       buf_printf(b, "#include <linux/build-salt.h>\n");
+> -       buf_printf(b, "#include <linux/elfnote-lto.h>\n");
+>         buf_printf(b, "#include <linux/export-internal.h>\n");
+> -       buf_printf(b, "#include <linux/vermagic.h>\n");
+>         buf_printf(b, "#include <linux/compiler.h>\n");
+>         buf_printf(b, "\n");
+> -       buf_printf(b, "#ifdef CONFIG_UNWINDER_ORC\n");
+> -       buf_printf(b, "#include <asm/orc_header.h>\n");
+> -       buf_printf(b, "ORC_HEADER;\n");
+> -       buf_printf(b, "#endif\n");
+> -       buf_printf(b, "\n");
+> -       buf_printf(b, "BUILD_SALT;\n");
+> -       buf_printf(b, "BUILD_LTO_INFO;\n");
+> -       buf_printf(b, "\n");
+> -       buf_printf(b, "MODULE_INFO(vermagic, VERMAGIC_STRING);\n");
+>         buf_printf(b, "MODULE_INFO(name, KBUILD_MODNAME);\n");
+>         buf_printf(b, "\n");
+>         buf_printf(b, "__visible struct module __this_module\n");
+> @@ -1792,12 +1775,6 @@ static void add_header(struct buffer *b, struct mo=
+dule *mod)
+>         if (!external_module)
+>                 buf_printf(b, "\nMODULE_INFO(intree, \"Y\");\n");
+>
+> -       buf_printf(b,
+> -                  "\n"
+> -                  "#ifdef CONFIG_MITIGATION_RETPOLINE\n"
+> -                  "MODULE_INFO(retpoline, \"Y\");\n"
+> -                  "#endif\n");
+> -
+>         if (strstarts(mod->name, "drivers/staging"))
+>                 buf_printf(b, "\nMODULE_INFO(staging, \"Y\");\n");
+>
+> diff --git a/scripts/module-common.c b/scripts/module-common.c
+> new file mode 100644
+> index 000000000000..12fbc6d3aae8
+> --- /dev/null
+> +++ b/scripts/module-common.c
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/module.h>
+> +/*
+> + * Include build-salt.h after module.h in order to
+> + * inherit the definitions.
+> + */
+> +#define INCLUDE_VERMAGIC
+> +#include <linux/build-salt.h>
+> +#include <linux/elfnote-lto.h>
+> +#include <linux/vermagic.h>
+> +
+> +#ifdef CONFIG_UNWINDER_ORC
+> +#include <asm/orc_header.h>
+> +ORC_HEADER;
+> +#endif
+> +
+> +BUILD_SALT;
+> +BUILD_LTO_INFO;
+> +
+> +MODULE_INFO(vermagic, VERMAGIC_STRING);
+> +
+> +#ifdef CONFIG_MITIGATION_RETPOLINE
+> +MODULE_INFO(retpoline, "Y");
+> +#endif
+>
+> ---
+> base-commit: 9f18baf3dd656e7ca166038d51e0b54a892d87db
+> change-id: 20240824-modinfo-const-6f0d67e2b301
+>
+> Best regards,
+> --
+> Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+>
 
-Upon a failure from add_sect_attrs(), the caller doesn't need to unwind
-its operation. It is the responsibility of add_sect_attrs() to clean up
-after itself on error. Instead, the code in mod_sysfs_setup() needs to
-unwind all previous successful operations leading up to this point,
-which means here additionally to invoke del_usage_links().
 
-I think you want something as follows:
-
-err = add_sect_attrs(mod, info);
-if (err)
-	goto out_unreg_usage_links;
-
-err = add_notes_attrs(mod, info);
-if (err)
-	goto out_unreg_sect_attrs;
-
-return 0;
-
-out_unreg_sect_attrs:
-	remove_sect_attrs(mod);
-out_unreg_usage_links:
-	del_usage_links(mod);
-[...]
-
->  out_unreg_modinfo_attrs:
->  	module_remove_modinfo_attrs(mod, -1);
->  out_unreg_param:
-
--- 
-Cheers,
-Petr
+--=20
+Best Regards
+Masahiro Yamada
