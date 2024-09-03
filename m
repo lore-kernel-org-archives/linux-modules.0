@@ -1,59 +1,59 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C48C8489
-	for <linux-modules@vger.kernel.org>; Tue,  3 Sep 2024 15:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88971188A1A
+	for <linux-modules@vger.kernel.org>; Tue,  3 Sep 2024 15:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725376321; cv=none; b=kdHRHS7VU235vNzmm4pux7IaKIg53N2/VlKIDn2ZJt8hZiM3xjBHS+z72kHx5zr2k8MxzruDDZzLipUJ48sCprM127KXBfMgAn/2pmhCXz37hsML08h3CAVDuRGbs28UTCZ9V9GREzChA87vTRNtjuqq++Azl9E8oruBKVX+sk8=
+	t=1725376541; cv=none; b=u/7LpY3tyMxngRlJmn5vOH8PR/6AnbBs2yr23rX0K1BW0UD24Obqlpa3XaSJmDa/NUAIajWOEOePwdq53JxY3JlntAVw/EfylGXbNfmdo3m41OWdPy3F8ZYuJ8AditLgiV4TBmdzjqlY88+6xZ9/sFoQUYSovpEpnvdwaOI9vAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725376321; c=relaxed/simple;
-	bh=HaQoSOeNV+l72P3AJuWZoCj9lxSZl2+1ZxYqkRtwfCw=;
+	s=arc-20240116; t=1725376541; c=relaxed/simple;
+	bh=VQoch2Jnk1OtZ5AtE+c96J0cQy86KkHUvIBG+sr4F1s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q8INmuMHfhkqL/e/ondiWOBxDB15zT+JauIs76S6QbSImQA7EZBft37zZc3D/RlzvD4cox/qS3VgRwA8Aq/j/XcurBG3QMroQouzVKgFXq+KHwm2TnEgPFYIdlMPsv4TtSImbBOd4mDPuXOELLO475oYDNFjVAxfclJWJFEEXIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IXOBeDS4; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=ecgm5sZZ6LCIAouOFmFlfMHdKKn194cxeaoeQJEml33MAzfTO9bQf9jFsdLfXeDbsKzGB5kHisvv/I0tjpra4JSlzNgxiFv8ziaEsDxFEykejMU+YLr+TnThIDHnJ68Q+pzFhwgnx5uqwloyodK68BmVqe87ZJPK6TfXmvcUhNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WULXNsMF; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IXOBeDS4"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a86883231b4so650747966b.3
-        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2024 08:11:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WULXNsMF"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-533496017f8so7351158e87.0
+        for <linux-modules@vger.kernel.org>; Tue, 03 Sep 2024 08:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725376318; x=1725981118; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1725376538; x=1725981338; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8WDyM7wA+4uXBEwvEfZ6K89F1ujUbboR8QatKwOx+kg=;
-        b=IXOBeDS4oCGAf/Gz3mqX9hKKukL0qrRfs9tZPRq2GoV2182iaU/hC81nSQ8PtlLBmK
-         sSy+rLMTANh6Z5+T9hJBZJSbFnU6cxwbCMuMN5eYJc/0ZI4ZPhX0662K/t4cpqIna708
-         dPYLtqEvXgiAs8A8KXdS6ZVBNs4aH/Dx7Hmd+oHi29n+fFq2M2p2IrzTB0lINVY1mKKR
-         lhHyUcGNwIBk9AsNXfnLo0cJXnYpPBo74M9qxrIiOKzL92ChsWBS7whKEx4mEcmsU/mt
-         ipRkJ1oqW9XWEwyrqoUb5iKaQECVjUtvw1y522pnfHK/a5qHxCkzvQZMOVUUWLJHK5g8
-         r6Ag==
+        bh=/+e0U/aRCvU8DuFYoeV8O/KmFptz8b7Txjch+YXTIjA=;
+        b=WULXNsMFwBairxyGwUrNlaDT+LuyCLt4ia6PJNtRKhbDZfTcfO8L3m2HiHfk3cDrX7
+         +DjCPhtyfHVECGC0+DkgAMq75e6ZgJXAlNykaS7KVzBehf/tZG5cxmGlLA30bq4eSUgF
+         MgHMXRUKF8QNAzHAtaLKW1/qrv8VJqnzzzGalq8BxhYWfHG+ESNn7ZnYme/vPuZJ6VQr
+         f6ALrlWHrQa9RXeo/Rm6s771mFMl0Q9y/rO9Y59ZJ6JgQ3KU8Lu6UwBjZzr/C2NF9nbR
+         jEDJxh/RVmMCTO1Y8hYk6mqebkmxZ5q5LHveKKI9pTBo+MkrefIpG2WH7AGnZWnkcDv/
+         bZEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725376318; x=1725981118;
+        d=1e100.net; s=20230601; t=1725376538; x=1725981338;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8WDyM7wA+4uXBEwvEfZ6K89F1ujUbboR8QatKwOx+kg=;
-        b=C5HSauugifvAZDFUh6srmMkUeFBkKjfHMMJ5ymwoBbDSViQ9BqMu8IhfEJ97tgGjiA
-         J5wQ6247QrCeX6j8f4P8mDnKdNK5PFpfsxjev/TL6RRMs0kAbjqjEKnF8rOpKWSjvCil
-         vZphZyhsA3yeR6EXnmt8ABo5gTyuE4eYBl205nNAZEur41J7iYW5iENEB6v95BGQjmst
-         dU+d9gNq2n3mIWDfqx4OnCEKIS58s4B1AP6d3zxmHmYjLU/Ys20DcnEhE3ZIMqAYiWxY
-         hymz22Qbc0iVN05vG1qSTU0arOII8ySDMVv0aj9j7nWTcwnLvoA/vzTerBbGj00GwD76
-         pOew==
-X-Forwarded-Encrypted: i=1; AJvYcCV88xVxTk8LGmdkcOjnuFVyISoTZOJ8WCPVqep031R6sdy6k2cvgvHs6arczVr4tvWjUcO6sIccJiAQacy1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz47I8owyI6D0WRio7HUe4Ippw33tyadsM3R9ACqMQo/WZRDNi5
-	NHQnxDSdBW5RL457m+8JAyg65JwJkBpXlPymFDNz7P3AL3SxrKsWge9CSVSMLMc=
-X-Google-Smtp-Source: AGHT+IFoUUFxcVhHxWppSsUC1TKbkdYIP8izH9TlTs0zzWQ7ixgWt0bHVTTPOJbkicRNtP6gPNtD2A==
-X-Received: by 2002:a17:906:ef0d:b0:a80:f7db:3e7 with SMTP id a640c23a62f3a-a89d87216d1mr821251966b.5.1725376318249;
-        Tue, 03 Sep 2024 08:11:58 -0700 (PDT)
+        bh=/+e0U/aRCvU8DuFYoeV8O/KmFptz8b7Txjch+YXTIjA=;
+        b=SYrXH19/9R0ZNxTqtpVwyU7gACmsiU/ttbDxk8UMG7508MhAzwT0OLJiVqEC5U/LAX
+         uyaIz71cfoApUxb7AH0XJ7+sgH/Kj29wUqXi5zLBnrb6LiDUulprjskyTCw0ffowkWqA
+         8cKp3vxgFrauq/R2cTLk2WyuzMPUSW9FbXb2hE5+TI1W0xq2KrjWREMnjFV4GvhG9aXP
+         sW0ijX40Nr5jR4G75EliRWeukhQBywoiKNO1iIlcYAuJoI9ukhrq/TIT7oTha3IPvL6I
+         wqbvEqbt1GLIYwm51DCcdSCKWZQRXIxN4GdnLQBtNF5YhbzrAVNBzvFqSmo6Kxct/Ddk
+         rpgA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9qlYgNPEj6r3MLxibiaGQXtjZmmubk+3eQ9i7pqeSQn9B5E8PO35emSRgnN4LiU/I87pP8uOImgHrZysU@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnrfTcW00EKUfDgBd/4mgB3aLsfNMsinY3nr7ytgeapcx7Kvlj
+	Bh4NJ8Kc8h2VG5yGuv1ITPCgBG1l+yOMIB4O+fE8qXkpxHjDbF2hj3FilXineFw=
+X-Google-Smtp-Source: AGHT+IGdZTw/KUyMiDlZSkuc9mANPu7vBYcf24gYwin1fZw518o/l8XDosnXT/1xrZtFfnHMtfr7sg==
+X-Received: by 2002:a05:6512:2383:b0:52c:9468:c991 with SMTP id 2adb3069b0e04-53546b03ffamr9361946e87.14.1725376537413;
+        Tue, 03 Sep 2024 08:15:37 -0700 (PDT)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8989196500sm695054466b.138.2024.09.03.08.11.57
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c226c6a2fdsm6520881a12.13.2024.09.03.08.15.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Sep 2024 08:11:57 -0700 (PDT)
-Message-ID: <9978884e-87c8-4c20-b9ff-b4571bce01ce@suse.com>
-Date: Tue, 3 Sep 2024 17:11:57 +0200
+        Tue, 03 Sep 2024 08:15:37 -0700 (PDT)
+Message-ID: <47bc562d-b9c7-464b-a2e2-dbb8c14d146b@suse.com>
+Date: Tue, 3 Sep 2024 17:15:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,7 +61,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/19] gendwarfksyms: Expand subroutine_type
+Subject: Re: [PATCH v2 11/19] gendwarfksyms: Limit structure expansion
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
@@ -74,77 +74,65 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
  linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
  rust-for-linux@vger.kernel.org
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-29-samitolvanen@google.com>
+ <20240815173903.4172139-32-samitolvanen@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20240815173903.4172139-29-samitolvanen@google.com>
+In-Reply-To: <20240815173903.4172139-32-samitolvanen@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/15/24 19:39, Sami Tolvanen wrote:
-> Add support for expanding DW_TAG_subroutine_type and the parameters
-> in DW_TAG_formal_parameter. Use this to also expand subprograms.
+> Expand each structure type only once per exported symbol. This
+> is necessary to support self-referential structures, which would
+> otherwise result in infinite recursion, but is still sufficient for
+> catching ABI changes.
 > 
-> Example output with --debug:
-> 
->   subprogram(
->     formal_parameter base_type usize byte_size(8),
->     formal_parameter base_type usize byte_size(8),
->   )
->   -> base_type void;
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  scripts/gendwarfksyms/dwarf.c         | 57 ++++++++++++++++++++++++++-
->  scripts/gendwarfksyms/gendwarfksyms.h |  1 +
->  2 files changed, 57 insertions(+), 1 deletion(-)
-> 
+> For pointers to structure types, limit type expansion inside the
+> pointer to two levels. This should be plenty for detecting ABI
+> differences, but it stops us from pulling in half the kernel for
+> types that contain pointers to large kernel data structures, like
+> task_struct, for example.
+
+I'm quite worried about this optimization for pointer types. It could
+result in some kABI changes not being recognized.
+
+I assume the goal of the optimization is to speed up the tool's runtime.
+How much does it improve the processing time and is there any other way
+how it could be done?
+
 > diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-> index 82185737fa2a..c81652426be8 100644
+> index 92b6ca4c5c91..2f1601015c4e 100644
 > --- a/scripts/gendwarfksyms/dwarf.c
 > +++ b/scripts/gendwarfksyms/dwarf.c
 > [...]
+> @@ -651,6 +742,7 @@ static int process_exported_symbols(struct state *state, struct die *cache,
+>  		else
+>  			check(process_variable(state, &state->die));
 >  
-> +static int __process_subroutine_type(struct state *state, struct die *cache,
-> +				     Dwarf_Die *die, const char *type)
-> +{
-> +	check(process(state, cache, type));
-> +	check(process(state, cache, "("));
-> +	check(process_linebreak(cache, 1));
-> +	/* Parameters */
-> +	check(process_die_container(state, cache, die, process_type,
-> +				    match_formal_parameter_type));
-> +	check(process_linebreak(cache, -1));
-> +	check(process(state, cache, ")"));
-> +	process_linebreak(cache, 0);
-> +	/* Return type */
-> +	check(process(state, cache, "-> "));
-> +	return check(process_type_attr(state, cache, die));
-> +}
+> +		cache_clear_expanded(&state->expansion_cache);
+>  		return 0;
+>  	default:
+>  		return 0;
 
-If I understand correctly, this formatting logic also affects the
-symtypes output. Looking at its format, I would like to propose a few
-minor changes.
+I wonder if it would make sense to share the cache between processing
+individual exported symbols.
 
-Example of the current symtypes output:
-kprobe_event_cmd_init subprogram( formal_parameter pointer_type <unnamed> { s#dynevent_cmd } byte_size(8), formal_parameter pointer_type <unnamed> { base_type char byte_size(1) encoding(8) } byte_size(8), formal_parameter base_type int byte_size(4) encoding(5),  ) -> base_type void
+The hard case looks to be the following:
+s#A struct A { int ; }
+s#B struct B { s#A ; }
+foo void foo ( s#B )
+bar void bar ( s#A , s#B )
 
-Proposed changes:
-kprobe_event_cmd_init subprogram ( formal_parameter pointer_type <unnamed> { s#dynevent_cmd } byte_size(8) , formal_parameter pointer_type <unnamed> { base_type char byte_size(1) encoding(8) } byte_size(8) , formal_parameter base_type int byte_size(4) encoding(5) ) -> base_type void
-                                ^- (1)                                                                    ^- (2)                                                                                                                                                       ^- (3)
+When processing foo, the code would cache s#B with expanded s#A.
+However, when processing bar and reaching s#B, the cache should report
+a miss because s#B with unexpanded s#A is required.
 
-(1) "subprogram(" is split to "subprogram (".
-(2) A space is added prior to ",".
-(3) String ", " is removed after the last parameter.
+So the code would need to track which types were already expanded and
+have each cache entry accordingly tagged with similar data.
 
-Separating each token with a whitespace matches the current genksyms
-format, makes the data trivially parsable and easy to pretty-print by
-additional tools. If some tokens are merged, as in "subprogram(", then
-such a tool needs to have extra logic to parse each word and split it
-into tokens.
-
-For attributes with one value, such as "byte_size(4)", I think the
-current format is probably ok.
+Hm, it might be that doing all this additional tracking would then be
+actually slower than processing the types repeatedly for each symbol.
+I'm not sure.
 
 -- 
 Thanks,
