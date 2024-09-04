@@ -1,236 +1,236 @@
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237B91CC885;
-	Wed,  4 Sep 2024 12:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213551DC184
+	for <linux-modules@vger.kernel.org>; Wed,  4 Sep 2024 16:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725453555; cv=none; b=BRahY5y59EW30PCUMXkRgjqXmlZ01jptWPG6dxALQNHfaD1u4mkbdeZLSHztgFdY+PteQORUPUBNwaa7kwZohaxP8p/qykYJYTmT07huOo2z1kd9OrmPG11OsqwRac/omISd28UaxFw+dOU/DB3EwzHOfzFyKWuBRPABl0OGANw=
+	t=1725466100; cv=none; b=aHaga/HYjWTos9GRpi+5Jh3Gm+n3dPliwR141SfBh3/Feoefc4dKrdSqGnG380GDCkPIOAysKnhrEi8ypaXzjo/DILFMo+iEzsmp+pjvj+ywmHCSDViEmRAoJDWWwAaIF6IP/X9tAaZVn458QxywGDKbkIzdbmMGeL1cv+btjmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725453555; c=relaxed/simple;
-	bh=SmN1v30KDRqP4hgPOi6Zg2+R4CMbr3KihUxWnH4DkP4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EtA4C5IerSinuJdtbmVhSNAW/cnPpTKuS5jGOEUXr9KDWDpHwiMi/Q54bdv/dyWBkFHmccOtqzPgPw3+hsN+JXzX3EWap47HAYp6qJnO5P3kVVNkbzTvC17/WBqdrumpgLebuxzJ32o0SUtGBy/QiMMxFYyqf47V/WuyNHuRTD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=hDGncRrm; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1725466100; c=relaxed/simple;
+	bh=YM1KtulpPCPRxDHtU0Vtn8bNsr5FCjaa/VxQ6MRU0CE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uJ9t+1U5n3knOwmYNCoatq/peu8ntKlUxFj229HCPoyD2ZaJjd2I6Wv13D13fgQtSrgqPmJSCyjxP2E+6ytUmE9e/oqtVpn86CqwgYnGSTD3DqYHOlrnxUZx45pRQPTSSoTQGOeKUAAohnbQQBinIf6NGQPx/68CZwFVpXBAd/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=guCovA1g; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="hDGncRrm"
-X-UUID: a6d2d6da6aba11ef8593d301e5c8a9c0-20240904
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=aO9ZiOlbToA5gahsBzJeseLep5Ro0Hb56Y6urVLbIqI=;
-	b=hDGncRrm7b8ky/s7h1UVMV51Sl30en+lDozdiYCeT1ZOuo/3Wt7jbsVhy4cYsNLSvap3+Uu15ojDoBBq61BDhlla5jTZgzLK2YPqn4God2+1dUTNnP8SXnGx/eqggmZ9u5zLZfWFhZJCrlvWXKx/++l1SrUg9xKRfdGVb6RZNB4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:ebbb3374-7dae-48ff-9de7-1d403c73abcb,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:6dc6a47,CLOUDID:547470bf-d7af-4351-93aa-42531abf0c7b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: a6d2d6da6aba11ef8593d301e5c8a9c0-20240904
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-	(envelope-from <chunhui.li@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 888197126; Wed, 04 Sep 2024 20:38:56 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 4 Sep 2024 20:38:58 +0800
-Received: from mbjsdccf07.gcn.mediatek.inc (10.15.20.246) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 4 Sep 2024 20:38:57 +0800
-From: Chunhui Li <chunhui.li@mediatek.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<wsd_upstream@mediatek.com>, Chunhui Li <chunhui.li@mediatek.com>, kernel
- test robot <lkp@intel.com>, Xion Wang <xion.wang@mediatek.com>
-Subject: [PATCH v2] module: abort module loading when sysfs setup suffer errors
-Date: Wed, 4 Sep 2024 20:41:07 +0800
-Message-ID: <20240904124108.20444-1-chunhui.li@mediatek.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="guCovA1g"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2056aa5cefcso211145ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 04 Sep 2024 09:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725466098; x=1726070898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=60X+GVTsm77C3O7RWqxDsSogxlp8g48EOsrd3C6f93s=;
+        b=guCovA1gBnohMEzY0C0GexzqA6pnBxgpKp4NsfReo820gnDZAS7yCUl2szpGuOvwWr
+         z2xhwb+GA5m7K04Wm79AD2Hq0zZ6Ej7XKtBfGnM0pKAi6lUcUcOAe+p9dGBivReNXE6y
+         sOal071Gvt0/JZCuF3dY8o+Moq+OQ8BXnZFs7LW29wwhmG5NDJG+CtInrKyNAlHxpTO5
+         0EY+VHy7eyY5hQRVFSfB5Kodo1plXzbwcWRg61I+DWS3HVB1Kw9tOiheNP4UFLUstEDJ
+         3yCBy6Sh+ZNyuwsmDlGrn3TuN4E85dEiiNlfQE4zPrexkod/dcKdwyP+/RzNvMwsCBNo
+         /gYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725466098; x=1726070898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=60X+GVTsm77C3O7RWqxDsSogxlp8g48EOsrd3C6f93s=;
+        b=JdaSDJZK/tq920GgDKdgGasYB/q59WaoBgtnJ2N5pasPTE6i+tN/EwXnx0V4M0rhHs
+         IaWciISinSA55Id+HIXXbDg8ws8PLTy1wL8ZFHP/w6t/0VqGzQ4rBBztsebLrRIPM20m
+         SP58WNKJD5vkpuy862R8gkCheIi3M7yIQODHjd54qQcvMOB70xo/wUBOsK29o3XGA3oQ
+         m1W7UP3DgSKJQmgZrcbybIYNyfrQAVnOpCtCpdBOi2g3pDFU0Z6vFtIIV5jvN2k2uNAa
+         t1UopNDed2BXN1/0mJ7UrYawTJlL+LymYY0rhDmHERHKxVOtk2+N95Zda3WCz6L2Cok8
+         1RIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmrHzSwfl+FvShqOS8UiMUgXantUqt65RDFwEhY0G81Vdj/TDsrZR1/emZY6IF5j4CQ6kW8wacaQzJ9SNC@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8PlEgORn7NLnPo44HxY/G5g3quaXdcf4RTw76AnD8Yqz2D3xY
+	2vdi18n3Fidbo2ALYS8MsRKANApCH/zdTLsv2yPVrjER32/h6EjVHZPeqLUZBeZmtg8EvVokUcV
+	j6EAs/rO0RTUzg5bvDhK/I+oqt3bQ0FPszljj
+X-Google-Smtp-Source: AGHT+IEl7wqni8pYwfiTi4i+C6Cah6Qs7+S0s/DuJ3hiJc2vSd83YZ8C7wA85q+KXr69umyz9wqxDRGcOIVMOyg4Ceg=
+X-Received: by 2002:a17:902:f9c6:b0:205:753e:b49a with SMTP id
+ d9443c01a7336-206b07c6bfdmr3813365ad.18.1725466097883; Wed, 04 Sep 2024
+ 09:08:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+References: <20240902044128.664075-1-surenb@google.com> <20240902044128.664075-7-surenb@google.com>
+ <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
+ <CAJuCfpGNYgx0GW4suHRzmxVH28RGRnFBvFC6WO+F8BD4HDqxXA@mail.gmail.com>
+ <47c4ef47-3948-4e46-8ea5-6af747293b18@nvidia.com> <70ef75d9-a573-4989-9a9d-c8bc087f212b@nvidia.com>
+In-Reply-To: <70ef75d9-a573-4989-9a9d-c8bc087f212b@nvidia.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 4 Sep 2024 09:08:04 -0700
+Message-ID: <CAJuCfpEQLDW1A7EX8LAcaRYdxKYBvP1E1cmYDoFXrG_V+AXv+g@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] alloc_tag: config to store page allocation tag
+ refs in page flags
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, kent.overstreet@linux.dev, corbet@lwn.net, 
+	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
+	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
+	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
+	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
+	pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org, 
+	dennis@kernel.org, yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
+	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
+	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When insmod a kernel module, if fails in add_notes_attrs or
-add_sysfs_attrs such as memory allocation fail, mod_sysfs_setup
-will still return success, but we can't access user interface
-on android device.
+On Tue, Sep 3, 2024 at 7:06=E2=80=AFPM 'John Hubbard' via kernel-team
+<kernel-team@android.com> wrote:
+>
+> On 9/3/24 6:25 PM, John Hubbard wrote:
+> > On 9/3/24 11:19 AM, Suren Baghdasaryan wrote:
+> >> On Sun, Sep 1, 2024 at 10:16=E2=80=AFPM Andrew Morton <akpm@linux-foun=
+dation.org> wrote:
+> >>> On Sun,  1 Sep 2024 21:41:28 -0700 Suren Baghdasaryan <surenb@google.=
+com> wrote:
+> > ...
+> >>> We shouldn't be offering things like this to our users.  If we cannot=
+ decide, how
+> >>> can they?
+> >>
+> >> Thinking about the ease of use, the CONFIG_PGALLOC_TAG_REF_BITS is the
+> >> hardest one to set. The user does not know how many page allocations
+>
+> I should probably clarify my previous reply, so here is the more detailed
+> version:
+>
+> >> are there. I think I can simplify this by trying to use all unused
+> >> page flag bits for addressing the tags. Then, after compilation we can
+>
+> Yes.
+>
+> >> follow the rules I mentioned before:
+> >> - If the available bits are not enough to address all kernel page
+> >> allocations, we issue an error. The user should disable
+> >> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS.
+>
+> The configuration should disable itself, in this case. But if that is
+> too big of a change for now, I suppose we could fall back to an error
+> message to the effect of, "please disable CONFIG_PGALLOC_TAG_USE_PAGEFLAG=
+S
+> because the kernel build system is still too primitive to do that for you=
+". :)
 
-Patch for make mod_sysfs_setup can check the error of
-add_notes_attrs and add_sysfs_attrs.
+I don't think we can detect this at build time. We need to know how
+many page allocations there are, which we find out only after we build
+the kernel image (from the section size that holds allocation tags).
+Therefore it would have to be a post-build check. So I think the best
+we can do is to generate the error like the one you suggested after we
+build the image.
+Dependency on CONFIG_PAGE_EXTENSION is yet another complexity because
+if we auto-disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS, we would have to
+also auto-enable CONFIG_PAGE_EXTENSION if it's not already enabled.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202409010016.3XIFSmRA-lkp@intel.com/
-Signed-off-by: Xion Wang <xion.wang@mediatek.com>
-Signed-off-by: Chunhui Li <chunhui.li@mediatek.com>
----
- kernel/module/sysfs.c | 53 +++++++++++++++++++++++++++++--------------
- 1 file changed, 36 insertions(+), 17 deletions(-)
+I'll dig around some more to see if there is a better way.
 
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index 26efe1305c12..61a3547e56f9 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -69,12 +69,13 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
- 	kfree(sect_attrs);
- }
- 
--static void add_sect_attrs(struct module *mod, const struct load_info *info)
-+static int add_sect_attrs(struct module *mod, const struct load_info *info)
- {
- 	unsigned int nloaded = 0, i, size[2];
- 	struct module_sect_attrs *sect_attrs;
- 	struct module_sect_attr *sattr;
- 	struct bin_attribute **gattr;
-+	int ret;
- 
- 	/* Count loaded sections and allocate structures */
- 	for (i = 0; i < info->hdr->e_shnum; i++)
-@@ -85,7 +86,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
- 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
- 	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
- 	if (!sect_attrs)
--		return;
-+		return -ENOMEM;
- 
- 	/* Setup section attributes. */
- 	sect_attrs->grp.name = "sections";
-@@ -103,8 +104,10 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
- 		sattr->address = sec->sh_addr;
- 		sattr->battr.attr.name =
- 			kstrdup(info->secstrings + sec->sh_name, GFP_KERNEL);
--		if (!sattr->battr.attr.name)
-+		if (!sattr->battr.attr.name) {
-+			ret = -ENOMEM;
- 			goto out;
-+		}
- 		sect_attrs->nsections++;
- 		sattr->battr.read = module_sect_read;
- 		sattr->battr.size = MODULE_SECT_READ_SIZE;
-@@ -113,13 +116,15 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
- 	}
- 	*gattr = NULL;
- 
--	if (sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp))
-+	ret = sysfs_create_group(&mod->mkobj.kobj, &sect_attrs->grp);
-+	if (ret)
- 		goto out;
- 
- 	mod->sect_attrs = sect_attrs;
--	return;
-+	return 0;
- out:
- 	free_sect_attrs(sect_attrs);
-+	return ret;
- }
- 
- static void remove_sect_attrs(struct module *mod)
-@@ -158,11 +163,12 @@ static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
- 	kfree(notes_attrs);
- }
- 
--static void add_notes_attrs(struct module *mod, const struct load_info *info)
-+static int add_notes_attrs(struct module *mod, const struct load_info *info)
- {
- 	unsigned int notes, loaded, i;
- 	struct module_notes_attrs *notes_attrs;
- 	struct bin_attribute *nattr;
-+	int ret;
- 
- 	/* failed to create section attributes, so can't create notes */
- 	if (!mod->sect_attrs)
-@@ -176,12 +182,12 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
- 			++notes;
- 
- 	if (notes == 0)
--		return;
-+		return 0;
- 
- 	notes_attrs = kzalloc(struct_size(notes_attrs, attrs, notes),
- 			      GFP_KERNEL);
- 	if (!notes_attrs)
--		return;
-+		return -ENOMEM;
- 
- 	notes_attrs->notes = notes;
- 	nattr = &notes_attrs->attrs[0];
-@@ -201,19 +207,23 @@ static void add_notes_attrs(struct module *mod, const struct load_info *info)
- 	}
- 
- 	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
--	if (!notes_attrs->dir)
-+	if (!notes_attrs->dir) {
-+		ret = -ENOMEM;
- 		goto out;
-+	}
- 
--	for (i = 0; i < notes; ++i)
--		if (sysfs_create_bin_file(notes_attrs->dir,
--					  &notes_attrs->attrs[i]))
-+	for (i = 0; i < notes; ++i) {
-+		ret = sysfs_create_bin_file(notes_attrs->dir, &notes_attrs->attrs[i]);
-+		if (ret)
- 			goto out;
-+	}
- 
- 	mod->notes_attrs = notes_attrs;
--	return;
-+	return 0;
- 
- out:
- 	free_notes_attrs(notes_attrs, i);
-+	return ret;
- }
- 
- static void remove_notes_attrs(struct module *mod)
-@@ -223,9 +233,9 @@ static void remove_notes_attrs(struct module *mod)
- }
- 
- #else /* !CONFIG_KALLSYMS */
--static inline void add_sect_attrs(struct module *mod, const struct load_info *info) { }
-+static inline int add_sect_attrs(struct module *mod, const struct load_info *info) { }
- static inline void remove_sect_attrs(struct module *mod) { }
--static inline void add_notes_attrs(struct module *mod, const struct load_info *info) { }
-+static inline int add_notes_attrs(struct module *mod, const struct load_info *info) { }
- static inline void remove_notes_attrs(struct module *mod) { }
- #endif /* CONFIG_KALLSYMS */
- 
-@@ -385,11 +395,20 @@ int mod_sysfs_setup(struct module *mod,
- 	if (err)
- 		goto out_unreg_modinfo_attrs;
- 
--	add_sect_attrs(mod, info);
--	add_notes_attrs(mod, info);
-+	err = add_sect_attrs(mod, info);
-+	if (err)
-+		goto out_del_usage_links;
-+
-+	err = add_notes_attrs(mod, info);
-+	if (err)
-+		goto out_unreg_sect_attrs;
- 
- 	return 0;
- 
-+out_unreg_sect_attrs:
-+	remove_sect_attrs(mod);
-+out_del_usage_links:
-+	del_usage_links(mod);
- out_unreg_modinfo_attrs:
- 	module_remove_modinfo_attrs(mod, -1);
- out_unreg_param:
--- 
-2.45.2
+>
+>
+> >> - If there are enough unused bits but we have to push last_cpupid out
+> >> of page flags, we issue a warning and continue. The user can disable
+> >> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS if last_cpupid has to stay in page
+> >> flags.
+>
+> Let's try to decide now, what that tradeoff should be. Just pick one base=
+d
+> on what some of us perceive to be the expected usefulness and frequency o=
+f
+> use between last_cpuid and these tag refs.
+>
+> If someone really needs to change the tradeoff for that one bit, then tha=
+t
+> someone is also likely able to hack up a change for it.
 
+Yeah, from all the feedback, I realize that by pursuing the maximum
+flexibility I made configuring this mechanism close to impossible. I
+think the first step towards simplifying this would be to identify
+usable configurations. From that POV, I can see 3 useful modes:
+
+1. Page flags are not used. In this mode we will use direct pointer
+references and page extensions, like we do today. This mode is used
+when we don't have enough page flags. This can be a safe default which
+keeps things as they are today and should always work.
+2. Page flags are used but not forced. This means we will try to use
+all free page flags bits (up to a reasonable limit of 16) without
+pushing out last_cpupid.
+3. Page flags are forced. This means we will try to use all free page
+flags bits after pushing last_cpupid out of page flags. This mode
+could be used if the user cares about memory profiling more than the
+performance overhead caused by last_cpupid.
+
+I'm not 100% sure (3) is needed, so I think we can skip it until
+someone asks for it. It should be easy to add that in the future.
+If we detect at build time that we don't have enough page flag bits to
+cover kernel allocations for modes (2) or (3), we issue an error
+prompting the user to reconfigure to mode (1).
+
+Ideally, I would like to have (2) as default mode and automatically
+fall back to (1) when it's impossible but as I mentioned before, I
+don't yet see a way to do that automatically.
+
+For loadable modules, I think my earlier suggestion should work fine.
+If a module causes us to run out of space for tags, we disable memory
+profiling at runtime and log a warning for the user stating that we
+disabled memory profiling and if the user needs it they should
+configure mode (1). I *think* I can even disable profiling only for
+that module and not globally but I need to try that first.
+
+I can start with modes (1) and (2) support which requires only
+CONFIG_PGALLOC_TAG_USE_PAGEFLAGS defaulted to N. Any user can try
+enabling this config and if that builds fine then keeping it for
+better performance and memory usage. Does that sound acceptable?
+Thanks,
+Suren.
+
+>
+> thanks,
+> --
+> John Hubbard
+>
+> >> - If we run out of addressing space during module loading, we disable
+> >> allocation tagging and continue. The user should disable
+> >> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS.
+> >
+> > If the computer already knows what to do, it should do it, rather than
+> > prompting the user to disable a deeply mystifying config parameter.
+> >
+> >>
+> >> This leaves one outstanding case:
+> >> - If we run out of addressing space during module loading but we would
+> >> not run out of space if we pushed last_cpupid out of page flags during
+> >> compilation.
+> >> In this case I would want the user to have an option to request a
+> >> larger addressing space for page allocation tags at compile time.
+> >> Maybe I can keep CONFIG_PGALLOC_TAG_REF_BITS for such explicit
+> >> requests for a larger space? This would limit the use of
+> >> CONFIG_PGALLOC_TAG_REF_BITS to this case only. In all other cases the
+> >> number of bits would be set automatically. WDYT?
+> >
+> > Manually dealing with something like this is just not going to work.
+> >
+> > The more I read this story, the clearer it becomes that this should be
+> > entirely done by the build system: set it, or don't set it, automatical=
+ly.
+> >
+> > And if you can make it not even a kconfig item at all, that's probably =
+even
+> > better.
+> >
+> > And if there is no way to set it automatically, then that probably mean=
+s
+> > that the feature is still too raw to unleash upon the world.
+> >
+> > thanks,
+>
+>
+>
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
