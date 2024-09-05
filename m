@@ -1,211 +1,454 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB065154C0E
-	for <linux-modules@vger.kernel.org>; Wed,  4 Sep 2024 21:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9BD1FDA;
+	Thu,  5 Sep 2024 02:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725484069; cv=none; b=N2gNR12Rr5Hd0rz1CJlByMA+elzxSMF5HEGyGCv6k4HBtzVcRn8WtFqnV9epp0QF3ljvSabPggiHuh+9U3LbJn4wFYpHeorOrRUiWbS5Mv3rkgggsSWCZDjeNf1d9PYo3rNzgaVzxFH9WaP7ELZGKeUAWTjLTfJAYfJ5FIkt7xM=
+	t=1725503438; cv=none; b=rwcNhJSTSwIhxw/ilaDkVT6rlQLqeiqkxCRCrpvSWz0pD7uxwxT1Z9U+d4eeWLmoYLviLcrFGU1yyLkAHAP/5TBCB8/A6cX3a/MM0SshJrhdfC9NSOvBCK5A0o4+hJQjbVZPb7efK4ML74frHnGgLeszVjYdWxNPSsxuwkl2pP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725484069; c=relaxed/simple;
-	bh=uqOzk7cpoKkEi2MG7rO8J+EGBTGB6GV6x/+HS5AP9MY=;
+	s=arc-20240116; t=1725503438; c=relaxed/simple;
+	bh=vu+8gF50aThdnonmfLLwf0kczJi2q256qpphqhqZ5pg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CwxkK3MygfFjEWWIS9KGdJFx2RUvIx5tY4XYGn9RYZQYdDpvZbVeNGcZKIAvUXo92LreXf5bCGN9yyZ38MA99f3cDeXSehoqxHLt2ra9GfTe8oPOXdRy9AWFfJxQpbQxxjdpYNzC2JomikYBIX/p+HPP40mTRtYhGUbwRiX040A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UfdzCB5s; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=WtnacAUJjf9heVA6jmk7HxUGFyDksoqfp7JOXE4XyIhm47kPzGrLotdu5Qet+k7q9aUGru/rj1AYqNynDEYVcDviPoGjjrZHQmDc5bXf/T10vO2uwtLbWrJ4zrD7jIHA7swHuFoBlEJihW9DILGeBoFAKSJ9XzhZvAZU4nuw/5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQqCL2Sb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UfdzCB5s"
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-39d3ad05f8eso19475ab.1
-        for <linux-modules@vger.kernel.org>; Wed, 04 Sep 2024 14:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725484067; x=1726088867; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w42R7BNbzfV9m9Ak5XplqSqEhc1UT4kjpkgNMP3MoEY=;
-        b=UfdzCB5sHb6PJvB65wMCgLjR9cZnYete4t2lk0uR6fZBMaOJtgwrlFFa3SbMr/WuOp
-         2GkLviVRZyPS/EIssHzblOE3O4kgS0FbnopapRAjsRkR5AD4sAoepzD4lVEwr0Jl3jdh
-         GEV28fmd2xrV5u8vcw1tRr9koP30wMBWgsCoG32FjiGbngdNvFo3nbC/EMzEwewNckmO
-         y3re6TxfUehlRWcPUs8pjqUUJc8zVzr7+T9iyVLaQS1U4OEsPtLs8CpxpORAEWv7od8f
-         VioXN5x16Nzd61oRaAH+KDSZyr3O4KQtN9DRrU7v0MFnD1KdOqau9AXpcDOSBkRMSD20
-         tF/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725484067; x=1726088867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w42R7BNbzfV9m9Ak5XplqSqEhc1UT4kjpkgNMP3MoEY=;
-        b=WZAvqIJj4gyuJQLjMEqLNU3yIAl4v9Xcmw4LESnmTHXzxPZdH+n5oVCfQBiUqO90XI
-         W0fwBrJMu3QOZnOQSizINV18po/TyJSL1idXvX6xz4w2ut80WsizDfeCEhU0rXp7qbFV
-         9xU+5jKEfOGckDcuGYzmv/fKNH1QeIG+FmpypYQbBGS1Hd90Qy9yubiLhAkYZ+VBLR7x
-         8vqZrkjDQOU1StEKwzZz5zSSYy/F6/svTaimTeQkwGcQZWTuCReC93hBTqiwib5ny64h
-         pA6WOhXvnW8yzevVg76pYOd0j8F7vBns3XP7xdFIhRdbD4MfG/lBFJQzMSZnSqxJrz72
-         +b3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWSzIh92V9TET4Fbu7YBhQMOwxBKTsu/hIncpUgyRrBpgAfFuL1uyUBEbMrXIbtMi9/NiYmejFIovn+pQg2@vger.kernel.org
-X-Gm-Message-State: AOJu0YxId1rwL1yDE39uxu3J1l5InDViH09syxSIQPnJwTn1r2kdJfTq
-	plYrbEUp7quxRvkpm0v3AA3sVGlato27Z1kLXBYTsMuBpu0JmY8iJkH/jzf+Q/FCKwQFUMlLkRk
-	BaulE46tMtrv0WgMBoPTGJdnI0eriVtbPgdgG
-X-Google-Smtp-Source: AGHT+IGl61F4f0ftYFMGsiQbwYzHE/z5H02ZJShnK57l4cZ0n0C26unhLmoZ1lt/9kS0S1twnCdNwstxD7QTkD9leS4=
-X-Received: by 2002:a05:6e02:194e:b0:377:14ab:42ea with SMTP id
- e9e14a558f8ab-3a047199bb8mr996875ab.16.1725484066426; Wed, 04 Sep 2024
- 14:07:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQqCL2Sb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC3DC4AF09;
+	Thu,  5 Sep 2024 02:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725503436;
+	bh=vu+8gF50aThdnonmfLLwf0kczJi2q256qpphqhqZ5pg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UQqCL2Sb5IVNhMLghhQdYUlk29RF9gDGR1jN28rJG2AMOAP3v0ciTv9ksEvIpGbOI
+	 1yj79cltIdJW7BpXzrk0woWOSSLEY7pzcmvRHi8KjV8oWoDD3au01v6LWqNURNu1aZ
+	 I3JGGs9k+bvzB0ZMdPW+96PDTCF2WDrrx82iIfTZUViKsPDD0rLG73mztdWhMzYN1n
+	 Cd0Wjv9/sTRD5Ve9a87BEjuLxlTpJTMujOMb0sK69IxO+YM8m00fmxD+fpEUU16ezN
+	 2ZMSxL6K44u/6BvtDMBea0Z54z+JJ37X5b1S/FX3AQtHsYSudRw+f63iqBYGLwUYtz
+	 k0XURQ5/Bc9Hg==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5343617fdddso353683e87.0;
+        Wed, 04 Sep 2024 19:30:36 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUWX5efW0FjhYufAAuJONVhFxIt1eHgDpfTtVxt/BC6wrPKq3D2jr3ttUkFp0bv+qWgzL7n13lo3XPEJKQA@vger.kernel.org, AJvYcCW+q72L5PxjgqdtjiE0FHtdULkRbWI/wPa3BXqdJFpIU8mhgY1pYG6X4+8q4tY1ywSRTItWm3ppyIGF7nwOckc=@vger.kernel.org, AJvYcCWO/oalPh/fw4qWahu/WAOD8dHh6DmHKmXWKs3VExyO4LmALNGOjym2BB8cyy20m2XPZtIvF81RoxtEfCklcg==@vger.kernel.org, AJvYcCX2mK27YmrueiLjWBh65b43Y/HWOitGBJhfNpRZgyIIq6HLRrTX6BGkHoacl/SsBFIdq9ODKwtliIo21RU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjcjNKWOMQJ4RISaNktDr21YtFwuSS7q7caWxcyLH7CrPQbuvu
+	ZTufm42oe8lzOvrsSLgWETsYro2g0nOKPfkct/OhdXWvOIeZqQ6/dfY7EPgkZr3Zea6Vd805HRR
+	LhE/YVuN21dbXl+7+4bmnWEoFgyE=
+X-Google-Smtp-Source: AGHT+IH48gq1HYG69IuX0xJHVqkrcQ8u+RTiH+KH3YHrAcGEGaGTq/fJpb1r27eh7rzL9QlEkr+nEaiKs6h+DoPT9hY=
+X-Received: by 2002:a05:6512:108f:b0:533:4785:82ab with SMTP id
+ 2adb3069b0e04-53546b223d3mr15665603e87.1.1725503435348; Wed, 04 Sep 2024
+ 19:30:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240902044128.664075-1-surenb@google.com> <20240902044128.664075-7-surenb@google.com>
- <20240901221636.5b0af3694510482e9d9e67df@linux-foundation.org>
- <CAJuCfpGNYgx0GW4suHRzmxVH28RGRnFBvFC6WO+F8BD4HDqxXA@mail.gmail.com>
- <47c4ef47-3948-4e46-8ea5-6af747293b18@nvidia.com> <70ef75d9-a573-4989-9a9d-c8bc087f212b@nvidia.com>
- <CAJuCfpEQLDW1A7EX8LAcaRYdxKYBvP1E1cmYDoFXrG_V+AXv+g@mail.gmail.com> <c55739ec-3f0c-4f37-ad86-fe337d71d5a2@nvidia.com>
-In-Reply-To: <c55739ec-3f0c-4f37-ad86-fe337d71d5a2@nvidia.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 4 Sep 2024 14:07:31 -0700
-Message-ID: <CAJuCfpH_BSiQiNyUs8Jx3WZHmEELW3_NESi8ii0XCQR_x+gxNg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] alloc_tag: config to store page allocation tag
- refs in page flags
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, kent.overstreet@linux.dev, corbet@lwn.net, 
-	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org, 
-	dennis@kernel.org, yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
-	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
-	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
+References: <20240815173903.4172139-21-samitolvanen@google.com> <20240815173903.4172139-22-samitolvanen@google.com>
+In-Reply-To: <20240815173903.4172139-22-samitolvanen@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 5 Sep 2024 11:29:58 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQdutCiBkWtA6MbVLpfhB-MQXnszQm8eEiBZpeX++5eLA@mail.gmail.com>
+Message-ID: <CAK7LNAQdutCiBkWtA6MbVLpfhB-MQXnszQm8eEiBZpeX++5eLA@mail.gmail.com>
+Subject: Re: [PATCH v2 01/19] tools: Add gendwarfksyms
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
+	Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 4, 2024 at 11:58=E2=80=AFAM 'John Hubbard' via kernel-team
-<kernel-team@android.com> wrote:
+On Fri, Aug 16, 2024 at 2:39=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
 >
-> On 9/4/24 9:08 AM, Suren Baghdasaryan wrote:
-> > On Tue, Sep 3, 2024 at 7:06=E2=80=AFPM 'John Hubbard' via kernel-team
-> > <kernel-team@android.com> wrote:
-> >> On 9/3/24 6:25 PM, John Hubbard wrote:
-> >>> On 9/3/24 11:19 AM, Suren Baghdasaryan wrote:
-> >>>> On Sun, Sep 1, 2024 at 10:16=E2=80=AFPM Andrew Morton <akpm@linux-fo=
-undation.org> wrote:
-> >>>>> On Sun,  1 Sep 2024 21:41:28 -0700 Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> ...
-> >> The configuration should disable itself, in this case. But if that is
-> >> too big of a change for now, I suppose we could fall back to an error
-> >> message to the effect of, "please disable CONFIG_PGALLOC_TAG_USE_PAGEF=
-LAGS
-> >> because the kernel build system is still too primitive to do that for =
-you". :)
-> >
-> > I don't think we can detect this at build time. We need to know how
-> > many page allocations there are, which we find out only after we build
-> > the kernel image (from the section size that holds allocation tags).
-> > Therefore it would have to be a post-build check. So I think the best
-> > we can do is to generate the error like the one you suggested after we
-> > build the image.
-> > Dependency on CONFIG_PAGE_EXTENSION is yet another complexity because
-> > if we auto-disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS, we would have to
-> > also auto-enable CONFIG_PAGE_EXTENSION if it's not already enabled.
-> >
-> > I'll dig around some more to see if there is a better way.
-> >>
-> >>>> - If there are enough unused bits but we have to push last_cpupid ou=
-t
-> >>>> of page flags, we issue a warning and continue. The user can disable
-> >>>> CONFIG_PGALLOC_TAG_USE_PAGEFLAGS if last_cpupid has to stay in page
-> >>>> flags.
-> >>
-> >> Let's try to decide now, what that tradeoff should be. Just pick one b=
-ased
-> >> on what some of us perceive to be the expected usefulness and frequenc=
-y of
-> >> use between last_cpuid and these tag refs.
-> >>
-> >> If someone really needs to change the tradeoff for that one bit, then =
-that
-> >> someone is also likely able to hack up a change for it.
-> >
-> > Yeah, from all the feedback, I realize that by pursuing the maximum
-> > flexibility I made configuring this mechanism close to impossible. I
-> > think the first step towards simplifying this would be to identify
-> > usable configurations. From that POV, I can see 3 useful modes:
-> >
-> > 1. Page flags are not used. In this mode we will use direct pointer
-> > references and page extensions, like we do today. This mode is used
-> > when we don't have enough page flags. This can be a safe default which
-> > keeps things as they are today and should always work.
+> Add a basic DWARF parser, which uses libdw to traverse the debugging
+> information in an object file and looks for functions and variables.
+> In follow-up patches, this will be expanded to produce symbol versions
+> for CONFIG_MODVERSIONS from DWARF.
 >
-> Definitely my favorite so far.
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  kernel/module/Kconfig                 |   8 ++
+>  scripts/Makefile                      |   1 +
+>  scripts/gendwarfksyms/.gitignore      |   2 +
+>  scripts/gendwarfksyms/Makefile        |   7 ++
+>  scripts/gendwarfksyms/dwarf.c         |  87 +++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.c | 146 ++++++++++++++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.h |  78 ++++++++++++++
+>  7 files changed, 329 insertions(+)
+>  create mode 100644 scripts/gendwarfksyms/.gitignore
+>  create mode 100644 scripts/gendwarfksyms/Makefile
+>  create mode 100644 scripts/gendwarfksyms/dwarf.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
 >
-> > 2. Page flags are used but not forced. This means we will try to use
-> > all free page flags bits (up to a reasonable limit of 16) without
-> > pushing out last_cpupid.
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 4047b6d48255..a506d4ac660f 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -168,6 +168,14 @@ config MODVERSIONS
+>           make them incompatible with the kernel you are running.  If
+>           unsure, say N.
 >
-> This is a logical next step, agreed.
+> +config GENDWARFKSYMS
+> +       bool
+> +       depends on DEBUG_INFO
+> +       # Requires full debugging information, split DWARF not supported.
+> +       depends on !DEBUG_INFO_REDUCED && !DEBUG_INFO_SPLIT
+> +       # Requires ELF object files.
+> +       depends on !LTO
+> +
+>  config ASM_MODVERSIONS
+>         bool
+>         default HAVE_ASM_MODVERSIONS && MODVERSIONS
+> diff --git a/scripts/Makefile b/scripts/Makefile
+> index dccef663ca82..2fd0199662e9 100644
+> --- a/scripts/Makefile
+> +++ b/scripts/Makefile
+> @@ -54,6 +54,7 @@ targets +=3D module.lds
 >
-> > 3. Page flags are forced. This means we will try to use all free page
-> > flags bits after pushing last_cpupid out of page flags. This mode
-> > could be used if the user cares about memory profiling more than the
-> > performance overhead caused by last_cpupid.
-> >
-> > I'm not 100% sure (3) is needed, so I think we can skip it until
-> > someone asks for it. It should be easy to add that in the future.
+>  subdir-$(CONFIG_GCC_PLUGINS) +=3D gcc-plugins
+>  subdir-$(CONFIG_MODVERSIONS) +=3D genksyms
+> +subdir-$(CONFIG_GENDWARFKSYMS) +=3D gendwarfksyms
+>  subdir-$(CONFIG_SECURITY_SELINUX) +=3D selinux
 >
-> Right.
->
-> > If we detect at build time that we don't have enough page flag bits to
-> > cover kernel allocations for modes (2) or (3), we issue an error
-> > prompting the user to reconfigure to mode (1).
-> >
-> > Ideally, I would like to have (2) as default mode and automatically
-> > fall back to (1) when it's impossible but as I mentioned before, I
-> > don't yet see a way to do that automatically.
-> >
-> > For loadable modules, I think my earlier suggestion should work fine.
-> > If a module causes us to run out of space for tags, we disable memory
-> > profiling at runtime and log a warning for the user stating that we
-> > disabled memory profiling and if the user needs it they should
-> > configure mode (1). I *think* I can even disable profiling only for
-> > that module and not globally but I need to try that first.
-> >
-> > I can start with modes (1) and (2) support which requires only
-> > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS defaulted to N. Any user can try
-> > enabling this config and if that builds fine then keeping it for
-> > better performance and memory usage. Does that sound acceptable?
-> > Thanks,
-> > Suren.
-> >
->
-> How badly do we need (2)? Because this is really expensive:
->
->     a) It adds complexity to a complex,delicate core part of mm.
->
->     b) It adds constraints, which prevent possible future features.
->
-> It's not yet clear that (2) is valuable enough (compared to (1))
-> to compensate, at least from what I've read. Unless I missed
-> something big.
+>  # Let clean descend into subdirs
+> diff --git a/scripts/gendwarfksyms/.gitignore b/scripts/gendwarfksyms/.gi=
+tignore
+> new file mode 100644
+> index 000000000000..ab8c763b3afe
+> --- /dev/null
+> +++ b/scripts/gendwarfksyms/.gitignore
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +/gendwarfksyms
+> diff --git a/scripts/gendwarfksyms/Makefile b/scripts/gendwarfksyms/Makef=
+ile
+> new file mode 100644
+> index 000000000000..c1389c161f9c
+> --- /dev/null
+> +++ b/scripts/gendwarfksyms/Makefile
+> @@ -0,0 +1,7 @@
+> +hostprogs-always-y +=3D gendwarfksyms
+> +
+> +gendwarfksyms-objs +=3D gendwarfksyms.o
+> +gendwarfksyms-objs +=3D dwarf.o
+> +
+> +HOST_EXTRACFLAGS :=3D -I $(srctree)/tools/include
+> +HOSTLDLIBS_gendwarfksyms :=3D -ldw -lelf
+> diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.=
+c
+> new file mode 100644
+> index 000000000000..65a29d0bd8f4
+> --- /dev/null
+> +++ b/scripts/gendwarfksyms/dwarf.c
+> @@ -0,0 +1,87 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2024 Google LLC
+> + */
+> +
+> +#include "gendwarfksyms.h"
+> +
+> +/*
+> + * Type string processing
+> + */
+> +static int process(struct state *state, const char *s)
+> +{
+> +       s =3D s ?: "<null>";
+> +
+> +       if (debug)
+> +               fputs(s, stderr);
+> +
+> +       return 0;
+> +}
+> +
+> +bool match_all(Dwarf_Die *die)
+> +{
+> +       return true;
+> +}
+> +
+> +int process_die_container(struct state *state, Dwarf_Die *die,
+> +                         die_callback_t func, die_match_callback_t match=
+)
+> +{
+> +       Dwarf_Die current;
+> +       int res;
+> +
+> +       res =3D checkp(dwarf_child(die, &current));
+> +       while (!res) {
+> +               if (match(&current))
+> +                       check(func(state, &current));
+> +               res =3D checkp(dwarf_siblingof(&current, &current));
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Symbol processing
+> + */
+> +static int process_subprogram(struct state *state, Dwarf_Die *die)
+> +{
+> +       return check(process(state, "subprogram;\n"));
+> +}
+> +
+> +static int process_variable(struct state *state, Dwarf_Die *die)
+> +{
+> +       return check(process(state, "variable;\n"));
+> +}
+> +
+> +static int process_exported_symbols(struct state *state, Dwarf_Die *die)
+> +{
+> +       int tag =3D dwarf_tag(die);
+> +
+> +       switch (tag) {
+> +       /* Possible containers of exported symbols */
+> +       case DW_TAG_namespace:
+> +       case DW_TAG_class_type:
+> +       case DW_TAG_structure_type:
+> +               return check(process_die_container(
+> +                       state, die, process_exported_symbols, match_all))=
+;
+> +
+> +       /* Possible exported symbols */
+> +       case DW_TAG_subprogram:
+> +       case DW_TAG_variable:
+> +               if (tag =3D=3D DW_TAG_subprogram)
+> +                       check(process_subprogram(state, die));
+> +               else
+> +                       check(process_variable(state, die));
+> +
+> +               return 0;
+> +       default:
+> +               return 0;
+> +       }
+> +}
+> +
+> +int process_module(Dwfl_Module *mod, Dwarf *dbg, Dwarf_Die *cudie)
+> +{
+> +       struct state state =3D { .mod =3D mod, .dbg =3D dbg };
+> +
+> +       return check(process_die_container(
+> +               &state, cudie, process_exported_symbols, match_all));
+> +}
+> diff --git a/scripts/gendwarfksyms/gendwarfksyms.c b/scripts/gendwarfksym=
+s/gendwarfksyms.c
+> new file mode 100644
+> index 000000000000..27f2d6423c45
+> --- /dev/null
+> +++ b/scripts/gendwarfksyms/gendwarfksyms.c
+> @@ -0,0 +1,146 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2024 Google LLC
+> + */
+> +
+> +#include <fcntl.h>
+> +#include <errno.h>
+> +#include <stdarg.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include "gendwarfksyms.h"
+> +
+> +/*
+> + * Options
+> + */
+> +
+> +/* Print out debugging information to stderr */
+> +bool debug;
+> +
+> +static const struct {
+> +       const char *arg;
+> +       bool *flag;
+> +       const char **param;
+> +} options[] =3D {
+> +       { "--debug", &debug, NULL },
+> +};
+> +
+> +static int usage(void)
+> +{
+> +       error("usage: gendwarfksyms [options] elf-object-file ...");
+> +       return -1;
+> +}
+> +
+> +static const char *object_files[MAX_INPUT_FILES];
+> +static unsigned int object_count;
+> +
+> +static int parse_options(int argc, const char **argv)
+> +{
+> +       for (int i =3D 1; i < argc; i++) {
+> +               bool flag =3D false;
+> +
+> +               for (int j =3D 0; j < ARRAY_SIZE(options); j++) {
+> +                       if (strcmp(argv[i], options[j].arg))
+> +                               continue;
+> +
+> +                       *options[j].flag =3D true;
+> +
+> +                       if (options[j].param) {
+> +                               if (++i >=3D argc) {
+> +                                       error("%s needs an argument",
+> +                                             options[j].arg);
+> +                                       return -1;
+> +                               }
+> +
+> +                               *options[j].param =3D argv[i];
+> +                       }
+> +
+> +                       flag =3D true;
+> +                       break;
+> +               }
+> +
+> +               if (!flag)
+> +                       object_files[object_count++] =3D argv[i];
+> +       }
+> +
+> +       return object_count ? 0 : -1;
+> +}
+> +
+> +static int process_modules(Dwfl_Module *mod, void **userdata, const char=
+ *name,
+> +                          Dwarf_Addr base, void *arg)
+> +{
+> +       Dwarf_Addr dwbias;
+> +       Dwarf_Die cudie;
+> +       Dwarf_CU *cu =3D NULL;
+> +       Dwarf *dbg;
+> +       int res;
+> +
+> +       debug("%s", name);
+> +       dbg =3D dwfl_module_getdwarf(mod, &dwbias);
+> +
+> +       do {
+> +               res =3D dwarf_get_units(dbg, cu, &cu, NULL, NULL, &cudie,=
+ NULL);
+> +               if (res < 0) {
+> +                       error("dwarf_get_units failed: no debugging infor=
+mation?");
+> +                       return -1;
+> +               } else if (res =3D=3D 1) {
+> +                       break; /* No more units */
+> +               }
+> +
+> +               check(process_module(mod, dbg, &cudie));
+> +       } while (cu);
+> +
+> +       return DWARF_CB_OK;
+> +}
+> +
+> +static const Dwfl_Callbacks callbacks =3D {
+> +       .section_address =3D dwfl_offline_section_address,
+> +       .find_debuginfo =3D dwfl_standard_find_debuginfo,
+> +};
+> +
+> +int main(int argc, const char **argv)
+> +{
+> +       unsigned int n;
+> +
+> +       if (parse_options(argc, argv) < 0)
+> +               return usage();
+> +
+> +       for (n =3D 0; n < object_count; n++) {
+> +               Dwfl *dwfl;
+> +               int fd;
+> +
+> +               fd =3D open(object_files[n], O_RDONLY);
+> +               if (fd =3D=3D -1) {
+> +                       error("open failed for '%s': %s", object_files[n]=
+,
+> +                             strerror(errno));
+> +                       return -1;
+> +               }
+> +
+> +               dwfl =3D dwfl_begin(&callbacks);
+> +               if (!dwfl) {
+> +                       error("dwfl_begin failed for '%s': %s", object_fi=
+les[n],
+> +                             dwarf_errmsg(-1));
+> +                       return -1;
+> +               }
+> +
+> +               if (!dwfl_report_offline(dwfl, object_files[n], object_fi=
+les[n],
+> +                                        fd)) {
+> +                       error("dwfl_report_offline failed for '%s': %s",
+> +                             object_files[n], dwarf_errmsg(-1));
+> +                       return -1;
+> +               }
+> +
+> +               dwfl_report_end(dwfl, NULL, NULL);
+> +
+> +               if (dwfl_getmodules(dwfl, &process_modules, NULL, 0)) {
+> +                       error("dwfl_getmodules failed for '%s'",
+> +                             object_files[n]);
+> +                       return -1;
+> +               }
+> +
+> +               dwfl_end(dwfl);
+> +               close(fd);
+> +       }
+> +
+> +       return 0;
+> +}
+> diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksym=
+s/gendwarfksyms.h
+> new file mode 100644
+> index 000000000000..5ab7ce7d4efb
+> --- /dev/null
+> +++ b/scripts/gendwarfksyms/gendwarfksyms.h
+> @@ -0,0 +1,78 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Copyright (C) 2024 Google LLC
+> + */
+> +
+> +#include <dwarf.h>
+> +#include <elfutils/libdw.h>
+> +#include <elfutils/libdwfl.h>
+> +#include <linux/hashtable.h>
+> +#include <inttypes.h>
+> +#include <stdlib.h>
+> +#include <stdio.h>
 
-(1) is what we already have today.
-(2) would allow us to drop page_ext dependency, so there is
-considerable memory saving and performance improvement (no need to
-lookup the page extension on each tag reference). The benefits are
-described in the cover letter at:
-https://lore.kernel.org/all/20240902044128.664075-1-surenb@google.com/.
+
+Could you include external headers first,
+then in-tree headers?
+(and one blank line in-between).
 
 
->
->
-> thanks,
-> --
-> John Hubbard
->
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+
+Also, please consider using scripts/include/hashtable.h
+
+
+
+How about this?
+
+
+#include <dwarf.h>
+#include <elfutils/libdw.h>
+#include <elfutils/libdwfl.h>
+#include <inttypes.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <hashtable.h>
+
+
+
+
+
+
+If necessary, you can use this patch too:
+https://lore.kernel.org/linux-kbuild/20240904235500.700432-1-masahiroy@kern=
+el.org/T/#u
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
