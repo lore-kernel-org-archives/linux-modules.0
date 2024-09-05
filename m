@@ -1,55 +1,55 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752D61A00FA
-	for <linux-modules@vger.kernel.org>; Thu,  5 Sep 2024 17:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB06A14EC71
+	for <linux-modules@vger.kernel.org>; Thu,  5 Sep 2024 18:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725556974; cv=none; b=GQsyJy3uuGS1xNio9luvHEt18LY5+s+6GDklzd4n0MwurOTpbu3XWNlLN6u5z5IH3a+xVHYTbJgL+kY/djfaBO05YvcdwMVCQvilENwMMaHee4qyP0snfMIHTlYVEgb2nzAgaEHda1PGWs64hBT6RhItPKDUWLr0Vj7Ennkox3Y=
+	t=1725560177; cv=none; b=csSwDpTD8quR4KQltQdE5S6pLxXCtGfbec9n59Hmb+YQmxi8ckqScpa4UYJRX5oegDv8c5QWh9vWUadPkxf3WKdGgBft+WaYZmtc6Mxd69jjTwBupixAMpVv83B0IdoWVBrTR8Uwn55UyNEFink9cJ/kBiC8+2ZDACHfCoyR4b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725556974; c=relaxed/simple;
-	bh=YFFKBprzYe9Tjgx2xzIwNzSdZsPmSgV07WRj1qDXFxg=;
+	s=arc-20240116; t=1725560177; c=relaxed/simple;
+	bh=VDG73B3i8Fkx0gtYg22krryRHLAdvGRMSQ2YE6B/GM8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E/ifaxMl96cag+w4qb0Ir23aCtd+8gCHDz+sQoMz4Anz6/r9if9xfTLYXoTCk0/HsqUEVsN5RPPTVg5n1iQYwRB+/mUDS7N2BE5ArpMXHnMOsFqCnevqs9DH9wxrsKCoNiYfysl1pPsoS7JyA9uKWZ00ydh3jRG81nWiI4Do8Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RBY30qTw; arc=none smtp.client-ip=209.85.160.182
+	 To:Cc:Content-Type; b=eGB2EygmCxXBEs+wU5AJ4gy/RxV6bf9lqHFdkid7jgSGbPVZHisAept1h5A/MQDfAxiaantnTycnRCyN0KLEqh67iJD+2Acp1AbvSopHaOj2VH1+HGDy7mLADw4j7u+Il0L4UGZ8y/0Bd3+5DgGkproIk/oul77Ez0IZvKS32hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2MH0RSR+; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RBY30qTw"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4567fe32141so18831cf.0
-        for <linux-modules@vger.kernel.org>; Thu, 05 Sep 2024 10:22:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2MH0RSR+"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4567fe32141so38981cf.0
+        for <linux-modules@vger.kernel.org>; Thu, 05 Sep 2024 11:16:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725556971; x=1726161771; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1725560174; x=1726164974; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Mvs7XZfIpE1KW27Mt7NAHyVzsNIaPWNnyyca8sCjzlY=;
-        b=RBY30qTwPitK5RhRYhOmrFrMNOh0bvy8MUUjCqXkdJuDtApdLEs6dM6/2JGWREdVUD
-         BzETBfblOOq1xtixYxxA3bpPrIFtIWmQ0EOTh3h+bUgD5cHKG+t9V7UHTwG8w8d6pZ2e
-         Tji1FS5ZEaQQ286jEUuheA3EuvE6BJtOT7k/ZLr+OEHSehaFMTlYDh+E1uD0IqTQ90kp
-         EQDjnyfqWMMP7+0sTwo7tmoHLHzFyxeqOg3Es8obwIwoO4DJIp/5hVLnwBwLg0c2CFc4
-         Dzr3rJZ21J/fKRbw9RR590Lxkp5nAbi7rB6wxRPvEOCYNg66yOOmiRfWCnLGY6FDwkHA
-         1Bhw==
+        bh=ZdUTGl7VQBs4B0vEjvie8Mtu3hSlR654PMQj+t2RiC8=;
+        b=2MH0RSR+vBTqzWcGR82xVle83Co3iKi8k0SOVZRgYdM6YUfUT0t/U+S05hqjqfYBMm
+         E8OxUZIxYGAy8bwOBDXGlD2IQsfOBPHR7VEFkCRUshU5JbHckkVWjpqnPtS9aUiCWF33
+         1CZv7V6HZ/LV2WiS0XqDEl4BK+JvtdXsYEwTkY6RaB5zLyp76qofq4DG9MkgWSKfHLlg
+         fr91AnP3EqFQWrvWmffIljiYcBXYJQJmwN/wE2IQBmC5vEayfhplZ/IdJFHVODSc+bEB
+         5rH5K+gmEVmF3GSmsUPXdCP3nF3RgARM5frtEd9VgoFMAnIHTWHfTqwBcSZPjxF6u3VG
+         h+2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725556971; x=1726161771;
+        d=1e100.net; s=20230601; t=1725560174; x=1726164974;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mvs7XZfIpE1KW27Mt7NAHyVzsNIaPWNnyyca8sCjzlY=;
-        b=NbBRswr0kJFvchDQCOdJsxES409LY4avNqRWlBo5AlzGkB4kzyiFeHX5xKj+lM9twE
-         gdJqieLMcsdr+44eFdi5uPTauhBq6oZhhg12+8a5YQqsX+wC4fdgRbbk6VjfCB1cV2hp
-         Fo4Y6e0gj/8cScEnTwsDlrieXNACcM2TL0oiGVBd/dY/C/rMTQu7Jd9r+dUyp9tXVnx1
-         XNmfbXjfDzQhG9CK5Evj3fGbzwthVU+Vnrlt1g6Ojd/B2WO0Ty+KrVgYljlqwhy6O6ga
-         FX1bfKWnCcDLQ02YVa96WZ8CvVVqIIyDZ6WOjx2qkYO6NuUE/H0J9J7naKjpXPutB6AH
-         Ecbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUhHgqq7+X+KsXrybXo12+ptyiNikTcihp/XSU6fhuFvFoYgXZ1Aa31PmbuD+MUo/CIoVwrAoNUDA4Es11L@vger.kernel.org
-X-Gm-Message-State: AOJu0YztOJodEeERJnXM3qmTjhCs+cwzUCZMHgZFZLkYXN7WOr3w6E3u
-	b9FATObIwYPFi9Q45qOGsoFgzz+W8C68VfTLi2wRBwi9rEB1QYBzNQVQyN8jDxM9SGji9Of5KG3
-	y6RmFvYsB93ww1WNehqUg+1+YvAtGgf2zyHck
-X-Google-Smtp-Source: AGHT+IF4rwXFs+UGCrz3ubl9L36dS9jXzoOD9ZgQ9qmLanwyxQeo4NKEDHOV384nsw66SxugWS/hRi2Iyt4M39fljdA=
-X-Received: by 2002:a05:622a:5786:b0:456:796b:2fe5 with SMTP id
- d75a77b69052e-458033f9c3amr3636611cf.9.1725556971239; Thu, 05 Sep 2024
- 10:22:51 -0700 (PDT)
+        bh=ZdUTGl7VQBs4B0vEjvie8Mtu3hSlR654PMQj+t2RiC8=;
+        b=nVzv0//rBUrwIbiDhuHc88lmk1ijQ3EMnGEtieBRSo3Hxojz/PxThOHIs4cb5qdl0L
+         9DdP6pT5XkH5UhxQj3UGsPsZD8/ZyIxAYgT+VV98v9KJf2JdlWq48nawKAVH3ieZZ5Im
+         Mc9wDN/djSQVZDOCAqCAWV7z6GCg3dynMKR5AREWpbNuwjtnvWnNsMFObR3yPoOnO3+B
+         k9IdJ5FPOLNqQQkZPCRsv6wtCOabt7zNtuj4yg56mSeRXAsr/ZQN46KyYAdQlQTBlTSv
+         vabjNTmt5FV4Bwoes62SLLWH/bQ9nolqOdBeudTfkdTgDvbpnc2RFof6GMFu+mXWwlR/
+         h9hg==
+X-Forwarded-Encrypted: i=1; AJvYcCW6jtGaAbS6O2PXKrFag+f7YOHePN20uzF9vu0ksmciiyuC4wmdzI9tUT8BdYpcKNugysD7UWDg9wZcH8xM@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjlsFOtwrhbH8of2GvJZOxGWI7Mxj5dk8uRj2op8aKLh0L9Jdd
+	fEd9pVrQSRHsNtZxu5N3un7N6PzgamMqgHRdadEC+nL5ZuyT6enpmwcR0G0Mt+lFR1HtCVV8KBx
+	F8b8Xn81O2yYzvK49WGHEd3gmMTNwGQPg2DBc
+X-Google-Smtp-Source: AGHT+IHplDe4MMiBWOY5cVCCpgg/EB/UGBgSHmgVn9Z/Jd71Qt02BDSa8paxdOMnp8DalfNq+r7OJlfFE4bJP3BtPdQ=
+X-Received: by 2002:ac8:5891:0:b0:453:55b5:ecfb with SMTP id
+ d75a77b69052e-4580c434242mr323391cf.2.1725560173715; Thu, 05 Sep 2024
+ 11:16:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -57,12 +57,12 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-29-samitolvanen@google.com> <9978884e-87c8-4c20-b9ff-b4571bce01ce@suse.com>
-In-Reply-To: <9978884e-87c8-4c20-b9ff-b4571bce01ce@suse.com>
+ <20240815173903.4172139-32-samitolvanen@google.com> <47bc562d-b9c7-464b-a2e2-dbb8c14d146b@suse.com>
+In-Reply-To: <47bc562d-b9c7-464b-a2e2-dbb8c14d146b@suse.com>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 5 Sep 2024 10:22:14 -0700
-Message-ID: <CABCJKucn8KFw3+oj0qanYm-CbCpMhrJFKZqFmgQ0p5-zqfCc8w@mail.gmail.com>
-Subject: Re: [PATCH v2 08/19] gendwarfksyms: Expand subroutine_type
+Date: Thu, 5 Sep 2024 11:15:36 -0700
+Message-ID: <CABCJKucxDtCeq5NgwU9+8Fb1yGbrcV_91NbzM=6YquPLL48Jxg@mail.gmail.com>
+Subject: Re: [PATCH v2 11/19] gendwarfksyms: Limit structure expansion
 To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -74,61 +74,72 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 3, 2024 at 8:11=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wro=
+On Tue, Sep 3, 2024 at 8:15=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wro=
 te:
 >
 > On 8/15/24 19:39, Sami Tolvanen wrote:
+> > Expand each structure type only once per exported symbol. This
+> > is necessary to support self-referential structures, which would
+> > otherwise result in infinite recursion, but is still sufficient for
+> > catching ABI changes.
 > >
-> > +static int __process_subroutine_type(struct state *state, struct die *=
-cache,
-> > +                                  Dwarf_Die *die, const char *type)
-> > +{
-> > +     check(process(state, cache, type));
-> > +     check(process(state, cache, "("));
-> > +     check(process_linebreak(cache, 1));
-> > +     /* Parameters */
-> > +     check(process_die_container(state, cache, die, process_type,
-> > +                                 match_formal_parameter_type));
-> > +     check(process_linebreak(cache, -1));
-> > +     check(process(state, cache, ")"));
-> > +     process_linebreak(cache, 0);
-> > +     /* Return type */
-> > +     check(process(state, cache, "-> "));
-> > +     return check(process_type_attr(state, cache, die));
-> > +}
+> > For pointers to structure types, limit type expansion inside the
+> > pointer to two levels. This should be plenty for detecting ABI
+> > differences, but it stops us from pulling in half the kernel for
+> > types that contain pointers to large kernel data structures, like
+> > task_struct, for example.
 >
-> If I understand correctly, this formatting logic also affects the
-> symtypes output. Looking at its format, I would like to propose a few
-> minor changes.
+> I'm quite worried about this optimization for pointer types. It could
+> result in some kABI changes not being recognized.
+>
+> I assume the goal of the optimization is to speed up the tool's runtime.
+> How much does it improve the processing time and is there any other way
+> how it could be done?
 
-Correct, it's passed directly to the symtypes output.
+It=E2=80=99s mostly a matter of how deep it makes sense to go. For example,
+queue_delayed_work_on accepts a pointer to s#workqueue_struct, which
+points to s#worker, which points to s#task_struct, which points to
+s#mm_struct etc. Does a change to an internal kernel data structure
+several references deep change the ABI of the function?
 
-> Example of the current symtypes output:
-> kprobe_event_cmd_init subprogram( formal_parameter pointer_type <unnamed>=
- { s#dynevent_cmd } byte_size(8), formal_parameter pointer_type <unnamed> {=
- base_type char byte_size(1) encoding(8) } byte_size(8), formal_parameter b=
-ase_type int byte_size(4) encoding(5),  ) -> base_type void
->
-> Proposed changes:
-> kprobe_event_cmd_init subprogram ( formal_parameter pointer_type <unnamed=
-> { s#dynevent_cmd } byte_size(8) , formal_parameter pointer_type <unnamed>=
- { base_type char byte_size(1) encoding(8) } byte_size(8) , formal_paramete=
-r base_type int byte_size(4) encoding(5) ) -> base_type void
->                                 ^- (1)                                   =
-                                 ^- (2)                                    =
-                                                                           =
-                                        ^- (3)
->
-> (1) "subprogram(" is split to "subprogram (".
-> (2) A space is added prior to ",".
-> (3) String ", " is removed after the last parameter.
->
-> Separating each token with a whitespace matches the current genksyms
-> format, makes the data trivially parsable and easy to pretty-print by
-> additional tools. If some tokens are merged, as in "subprogram(", then
-> such a tool needs to have extra logic to parse each word and split it
-> into tokens.
+If we traverse through the DWARF without limits, during a defconfig
+build the highest pointer expansion depth I see is 70 levels (!), with
+~5k symbols going 30+ levels deep. We would end up pulling in a lot of
+major internal data structures at that point, and a change to any of
+them would change thousands of symbol versions, which feels
+undesirable.
 
-Sure, that makes sense. I'll clean this up.
+I'm fine with increasing the limit to something more reasonable
+though, the impact on performance doesn't seem to be significant in
+parallel builds. Of course, this might impact vmlinux.o processing
+more, if we end up doing that, since the DWARF at that point contains
+information about all the data structures.
+
+I do wonder if there's a better way to figure out where to stop than a
+hard limit. Any thoughts?
+
+> > diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwar=
+f.c
+> > index 92b6ca4c5c91..2f1601015c4e 100644
+> > --- a/scripts/gendwarfksyms/dwarf.c
+> > +++ b/scripts/gendwarfksyms/dwarf.c
+> > [...]
+> > @@ -651,6 +742,7 @@ static int process_exported_symbols(struct state *s=
+tate, struct die *cache,
+> >               else
+> >                       check(process_variable(state, &state->die));
+> >
+> > +             cache_clear_expanded(&state->expansion_cache);
+> >               return 0;
+> >       default:
+> >               return 0;
+>
+> I wonder if it would make sense to share the cache between processing
+> individual exported symbols.
+
+The actual DIE caching happens in die_map, which is already shared
+between symbols. The expansion cache keeps track of which DIEs we have
+processed per symbol, so we don't process the same thing twice and end
+up in a loop, for example.
 
 Sami
