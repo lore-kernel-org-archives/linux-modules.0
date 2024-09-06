@@ -1,138 +1,123 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8BBD1A7241
-	for <linux-modules@vger.kernel.org>; Thu,  5 Sep 2024 20:53:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0221C86F2;
+	Fri,  6 Sep 2024 09:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725569596; cv=none; b=rFDVFptMDYHQLlti0q6xN7OTTpofoF5GIhpmy+EljcY7JaOHsv1OnbiDIRA8YyMjrZiijXlIuKRLlqlNHENIeZnGRbFAvJPHWRzVxELEQuS+7DdNPMglETGyJEr5EJK0eRZc1mr5jZDHjdw0hbTNaXFY+/HVtXEdfMxB+0jfBC8=
+	t=1725615460; cv=none; b=TqWFp7PopKEOViisL0VfWxRsAGqEJXAJjvXBTBKQg9mnu5RULl+mQanWlSpvxbZq6t1NHjmEBNhs1QlvJNAkVMHfS3lwNlvV83bPmGC9LIVcrWjIDpFVtAhm87V+9kD77OTcDH4Yv2F7DMv3YDN/w5y4zdV78TWexpnWF4fE904=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725569596; c=relaxed/simple;
-	bh=BCPHjrxa/2c46cQlwvtBcorPbkKjJ57wCHWPzKc0gYU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jUGdlFVQlVraOKiqwXhCEtcNFxcYVxqDa51S9JfuUpaTZUj3WSHQDVIpaHZJMVVaMbVTP7bUTAGBSDFBNtbks292gixw3IzOxWQ6Sb+oiWPRyDlQ5kkcZerKXd8JucsmmLnGLrYAwqQos/RPH8OeTHi/ldMurpmVRjr4E7fS7C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F6jfJn1C; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F6jfJn1C"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-457c6389a3aso23111cf.1
-        for <linux-modules@vger.kernel.org>; Thu, 05 Sep 2024 13:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725569594; x=1726174394; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BCPHjrxa/2c46cQlwvtBcorPbkKjJ57wCHWPzKc0gYU=;
-        b=F6jfJn1Cwaob9wTLKZrSx3fiAtOZnEJQuPUIWsWAUBO1Z3y+q9UMPdwGmDVg7AmeU7
-         MxRIRdTkWkekJGAB5eB8ft7uvUGMKSTI46ekfguNGz4DPoU9rWOMbGgTiR6MJiciBhaP
-         kt4J4BV/SF79VeUHCAb50yYUwzvcVte1irZRTX0siVvxCS09SqnhEkfelhxHQIbYo8e+
-         vejStRVe6oHLihgU1bv7L1Ee1TY06TYjly8sOjNIWzVaSBSA/G02OvzJYoqlFOajWMc4
-         2a/y0Xyry4GVLdwR+q7PCIFeiH6fCz+oh1zRygGsFPY0tFH5C4E7zIq7yPC03VAuxhUD
-         KxrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725569594; x=1726174394;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BCPHjrxa/2c46cQlwvtBcorPbkKjJ57wCHWPzKc0gYU=;
-        b=VzhuNy5vHhuxH4/n0ezUQRJNUCV8y0I64HtX8ygEfHk5Gu7CpPO1OsdD7bDmr0KgEM
-         g4FmPafieosMZO2dtooommBXElq8dxgPoGkPA2AXlw3NTD87cuevCUY+9h+Y+BalZl44
-         rMcN7dma4Hmy612ixkOrNznWPmusv1rzbYfX4bLys+aT+GDFMGzHOhEE26zi0k9VLs4r
-         ptF11FqEJ1YJkmVltNm0XyMKQGLg/HpCj18bAx8kQr4t23rRcJoFeZRk5XVlTssuqzJe
-         YWEGLT6PAfHmYgO2PkUB+r++B3eQOCZTk1aPWKxtQffjZGBmdHHEcMcYL2dZW3budAvm
-         Yitw==
-X-Forwarded-Encrypted: i=1; AJvYcCVQVDsIEH469zS1uhpFuNonv7Em/l2IZkUjQKrquCpYiI47b6wEh3sCwyC2yLmU+9/ucY9NK4TVFWR3cwK8@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCxaMmwIEWs8DBepjb+pFtnl5xqOhFW1aF0meqsiovpmrkt/D1
-	7nHtZguBb/LzdeeZlGYizkObMNVCyf5UO/pmnMKT7ryctNGunAW4Rw+v4Ak7as+4qkRTWZ8UG1i
-	ggGOmoHV3KAzSFihdmft52O+pWiFMQTbp+6mb
-X-Google-Smtp-Source: AGHT+IEyDq3JrzaEs03Q1q6474Lw72SpaaWbS1WNHPASK98Yp/ym0+RHgGQfwZR8C+mk4SWq/i0+5v5gojSd3ZhoK8I=
-X-Received: by 2002:a05:622a:1486:b0:453:5b18:817 with SMTP id
- d75a77b69052e-4580c4346c9mr987391cf.6.1725569593602; Thu, 05 Sep 2024
- 13:53:13 -0700 (PDT)
+	s=arc-20240116; t=1725615460; c=relaxed/simple;
+	bh=A27GPoNCqeEblNkD35Q5FEOM7mXI18FF4Q+F+Be5xBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VUewNUUR02UlTsm7n0nMW5gUDqhOFq1y8/YO/zA/t/u8f7lWvmzO5Lg/GGk8OXkDwxwKD0RPMiNgRtjIGFTMJswyM/DPzfrd/Cz+GfYqdW0Jbl4PPypunXvAGzvRRLaETTm6DtXFqaalVhOiiM3Z/9MAJjSdrgh1EXDeehkkwVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4X0WNd0KqCz9sS7;
+	Fri,  6 Sep 2024 11:37:37 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Tb5_IXnVVz6o; Fri,  6 Sep 2024 11:37:36 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4X0WNc6BLsz9sRs;
+	Fri,  6 Sep 2024 11:37:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C01C28B778;
+	Fri,  6 Sep 2024 11:37:36 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id LWSbpxzkChqf; Fri,  6 Sep 2024 11:37:36 +0200 (CEST)
+Received: from [192.168.235.70] (unknown [192.168.235.70])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 65D348B764;
+	Fri,  6 Sep 2024 11:37:34 +0200 (CEST)
+Message-ID: <7c3720ff-b763-44b0-9b57-a2fbff3c7f56@csgroup.eu>
+Date: Fri, 6 Sep 2024 11:37:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-22-samitolvanen@google.com> <CAK7LNAQdutCiBkWtA6MbVLpfhB-MQXnszQm8eEiBZpeX++5eLA@mail.gmail.com>
-In-Reply-To: <CAK7LNAQdutCiBkWtA6MbVLpfhB-MQXnszQm8eEiBZpeX++5eLA@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 5 Sep 2024 20:52:34 +0000
-Message-ID: <CABCJKucott2g8mZyJ0uaG+PdPTMsniR7eNCR9GwHpT_kQ+GFvg@mail.gmail.com>
-Subject: Re: [PATCH v2 01/19] tools: Add gendwarfksyms
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 7/8] execmem: add support for cache of large ROX pages
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+ Brian Cain <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Christoph Hellwig <hch@infradead.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Dinh Nguyen
+ <dinguyen@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Kent Overstreet <kent.overstreet@linux.dev>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>,
+ Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
+ Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
+ Song Liu <song@kernel.org>, Stafford Horne <shorne@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
+ Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240826065532.2618273-1-rppt@kernel.org>
+ <20240826065532.2618273-8-rppt@kernel.org>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240826065532.2618273-8-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-On Thu, Sep 5, 2024 at 2:30=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Fri, Aug 16, 2024 at 2:39=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
-e.com> wrote:
-> >
-> > +++ b/scripts/gendwarfksyms/gendwarfksyms.h
-> > @@ -0,0 +1,78 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> > +/*
-> > + * Copyright (C) 2024 Google LLC
-> > + */
-> > +
-> > +#include <dwarf.h>
-> > +#include <elfutils/libdw.h>
-> > +#include <elfutils/libdwfl.h>
-> > +#include <linux/hashtable.h>
-> > +#include <inttypes.h>
-> > +#include <stdlib.h>
-> > +#include <stdio.h>
->
->
-> Could you include external headers first,
-> then in-tree headers?
-> (and one blank line in-between).
 
-Sure, I'll reorder this.
+Le 26/08/2024 à 08:55, Mike Rapoport a écrit :
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Using large pages to map text areas reduces iTLB pressure and improves
+> performance.
+> 
+> Extend execmem_alloc() with an ability to use PMD_SIZE'ed pages with ROX
+> permissions as a cache for smaller allocations.
 
-> Also, please consider using scripts/include/hashtable.h
->
->
->
-> How about this?
->
->
-> #include <dwarf.h>
-> #include <elfutils/libdw.h>
-> #include <elfutils/libdwfl.h>
-> #include <inttypes.h>
-> #include <stdlib.h>
-> #include <stdio.h>
->
-> #include <hashtable.h>
->
->
->
->
->
->
-> If necessary, you can use this patch too:
-> https://lore.kernel.org/linux-kbuild/20240904235500.700432-1-masahiroy@ke=
-rnel.org/T/#u
+Why only PMD_SIZE ?
 
-Thanks for the patch! I think this would otherwise work, but I also
-need jhash (or a similar hash function), and I can't combine the
-tools/include version with this, because it ends up pulling in a
-duplicate definition of struct list_head. Would you consider adding a
-hash function as well?
+On power 8xx, PMD_SIZE is 4M and the 8xx doesn't have such a page size. 
+When you call vmalloc() with VM_ALLOW_HUGE_VMAP you get 16k pages or 
+512k pages depending on the size you ask for, see function 
+arch_vmap_pte_supported_shift()
 
-Sami
+> 
+> To populate the cache, a writable large page is allocated from vmalloc with
+> VM_ALLOW_HUGE_VMAP, filled with invalid instructions and then remapped as
+> ROX.
+> 
+> Portions of that large page are handed out to execmem_alloc() callers
+> without any changes to the permissions.
+> 
+> When the memory is freed with execmem_free() it is invalidated again so
+> that it won't contain stale instructions.
+> 
+> The cache is enabled when an architecture sets EXECMEM_ROX_CACHE flag in
+> definition of an execmem_range.
+> 
+
+Christophe
