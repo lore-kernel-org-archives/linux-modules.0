@@ -1,164 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4FB1AC8B0;
-	Mon,  9 Sep 2024 06:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13801ACDE0
+	for <linux-modules@vger.kernel.org>; Mon,  9 Sep 2024 07:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725864597; cv=none; b=B1dnDYq/bCtw6hqM9WsEt9lCY0+ugmTFSHODPJbgny8WHCpS2+2M7pfbYI/dMprJZqCpiofiH/p44T4Nkz2FnbZIt5TcjGlQ5ROpEzUw+FgEPMROq2hbzAbFA1rc/gLNYVOgFXfMR/qXwHK4/c/g3204OndfJK796ZKdp2nqBPI=
+	t=1725867642; cv=none; b=aBPRX+KiC3OOq6yU0RP//lh5qSz/c3WwuAlCi0PdcUPTcHlTeZz1Un+WBXSI7M5LuX7qJjkQcBngV+uug3K55UTIH/rCj4+nMcFmgK6APhLATBQEiQmv4Z6t9eVteoB6j4rH+nLpQJfRb1Kopg5KnRwDkYWmei2G7Rv5aM3Ptmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725864597; c=relaxed/simple;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=liw9dugMCqYMNm8zUZX6JVuQRsz3Qj3Q91EwEnMF6RG8zNO2pl9LYRUKGcmBSJw6PuShvAUPSrdhiA4JhEY7G4+nqyIIlo+AfhKqXhvf6hPEaxH/1QVbmV722cGFoJ9HzH4d4clM9VYrL6YfQwdaAmdbSwtoey/6x+31Vxxu+WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkZCp3fS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725867642; c=relaxed/simple;
+	bh=UxNG104SdunqMkFngXFGvHzSLaLcGrl3Ka4Dw3p5Z5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOY9HV83l3soYCwQ/X3k5QCWOB8Q5UJPXJSlpkPIp7NYcxoUmk0q34pirK167XNqjHYhvfBfUv9VvF4ijvgE2w7j75g1A60lIK75NH0fJ0hYmzAZgK30z9EJP6uMVCsyMDssLFSJUV4+0jWcwVaNZ+zMh/PFhnaNhdSkfB1xpfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Df+yyUuj; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkZCp3fS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62106C4CECB;
-	Mon,  9 Sep 2024 06:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725864597;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BkZCp3fShQXfTG1Nn+VMmuW0LYueTyrn7acbRvvboJKcY6YjPoDDx968iFpKR1CWC
-	 aF/p0o4PzZ/eloW/K8mvH2s9aJhYiRq+CLA/Z6C5cf0zaOL7QYXEhZf0/TByS50AhI
-	 bJWZ0vLimK/FFtaJwXD9Yjc4jTIfHrr3Tv5YRIoRd3fkkJvNyNI486dzezhXOWgnQJ
-	 HbPC0BW8QqdHVqqtZvDGdZd2DLKkW13q6h3MOVdLTl2ijRdrSJoovSlNGk+YE1vLSL
-	 MY6Kf9lXc+klIMZqkADFnytoN8MKNCrTtrBVamTW4DGupk55fMoWoan0CIHDPihKAp
-	 1QrOM6cpJNDWA==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v3 8/8] x86/module: enable ROX caches for module text
-Date: Mon,  9 Sep 2024 09:47:30 +0300
-Message-ID: <20240909064730.3290724-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240909064730.3290724-1-rppt@kernel.org>
-References: <20240909064730.3290724-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Df+yyUuj"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-374c962e5adso2172415f8f.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 Sep 2024 00:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725867639; x=1726472439; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSRoG8tK9Qzdn5ZF5Thjq6HAamLJOlkqFyKHUb902Ao=;
+        b=Df+yyUujmD6BG36HLJH1xGBmAuTWCLEZKsYN7N+IS4fdLQ5RxiM+48LjPHz5aTe5vX
+         pIh9qWzSA5vQx79IS26lS6OkuMVRwGXCWGiCLJlsgncBDbCF0SVwRXyP73UET2YcxJ7e
+         IhV52OAwBPtAxnpVPdWkyLYEeiDslOFJ5xJUs8/hKWrHCd599LVHGBRXQnMglK8euy6I
+         kh+m7XIN1Zlz1GVyIcXCIMAZU1SH7OCXvdQt1KtmOSL1HQ/GNCDtzwxmFaJquAK8ix/D
+         XY1ZT6M8nRbyNUEINOofhlSRpIPLYLjfiK4qb5cpzGMN0RxQsSxNyawM+PwUSwZQYHS4
+         rt3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725867639; x=1726472439;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pSRoG8tK9Qzdn5ZF5Thjq6HAamLJOlkqFyKHUb902Ao=;
+        b=nKEtcqXkDwnLq+70BUhY0wB+Q/8Iq7zZliaHZQ0rdK02eWX3Hy7xeVJ1BJdyu9SuH8
+         A9nN1e9V8B4uxsIBTD+CVJcmeTkFCrkCVY9PfGZmhEcv2n2kisPkVuPFkObg4QckteNH
+         iWFU0iD1wcTCT2vUcxGCtcoBOvqLl51NFFEQdm9uy4r/rziBTJy3LM7vCerSsa+zqfcm
+         lB2qSe6OvdfexkyFRloKSrumuyst5HPbHBHtEwzfvGw7ZzwZk0XU/MPiAWtvFUXxAhhc
+         brk9wzREQChVX8t7Uc1Cy5XnbG8EvLJ/m6vDBDefYfuh0SLOUHqIrTtxVG1OgEpO2rI3
+         hqdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUX1hnne8d9xYHbKX3/XYig2b2a27NEuPPsBM5+KO7t9Wt5KKoKf419CPsWYm2k9sAltzD/kXEj6YUGllRc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOFyNjkW8GHRzzy70uTlK/2UXEYh9F2YiJqP1UBlRe3MkyR7Td
+	tU9q/nuvdJaryaYibq13sFpwijXfQ4GMJKkVxH1u+MPhjv0pDDhD7P6IPDsnng==
+X-Google-Smtp-Source: AGHT+IGQ/ZFD3mkNZDTh6saUtZfGvLfnY0CjLqXgpaKRFJwBWYtBgPQqa4vfHxZ3vJl18MzgOgP5DA==
+X-Received: by 2002:adf:fa81:0:b0:374:c33d:377d with SMTP id ffacd0b85a97d-3779bd187acmr10031803f8f.28.1725867638858;
+        Mon, 09 Sep 2024 00:40:38 -0700 (PDT)
+Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42caeb21a73sm68386085e9.3.2024.09.09.00.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 00:40:38 -0700 (PDT)
+Date: Mon, 9 Sep 2024 08:40:34 +0100
+From: Vincent Donnefort <vdonnefort@google.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: mcgrof@kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@android.com,
+	Song Liu <song@kernel.org>
+Subject: Re: [PATCH] module: Refine kmemleak scanned areas
+Message-ID: <Zt6mcvkzPI8WNgHl@google.com>
+References: <20240906153856.22204-1-vdonnefort@google.com>
+ <ZtxenHsGPyDoYnzY@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZtxenHsGPyDoYnzY@arm.com>
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Sat, Sep 07, 2024 at 03:12:13PM +0100, Catalin Marinas wrote:
+> On Fri, Sep 06, 2024 at 04:38:56PM +0100, Vincent Donnefort wrote:
+> > commit ac3b43283923 ("module: replace module_layout with module_memory")
+> > introduced a set of memory regions for the module layout sharing the
+> > same attributes but didn't update the kmemleak scanned areas which
+> > intended to limit kmemleak scan to sections containing writable data.
+> > This means sections such as .text and .rodata are scanned by kmemleak.
+> > 
+> > Refine the scanned areas for modules by limiting it to MOD_TEXT and
+> > MOD_INIT_TEXT mod_mem regions.
+> > 
+> > CC: Song Liu <song@kernel.org>
+> > CC: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+> > 
+> > diff --git a/kernel/module/debug_kmemleak.c b/kernel/module/debug_kmemleak.c
+> > index 12a569d361e8..b4cc03842d70 100644
+> > --- a/kernel/module/debug_kmemleak.c
+> > +++ b/kernel/module/debug_kmemleak.c
+> > @@ -12,19 +12,9 @@
+> >  void kmemleak_load_module(const struct module *mod,
+> >  			  const struct load_info *info)
+> >  {
+> > -	unsigned int i;
+> > -
+> > -	/* only scan the sections containing data */
+> > -	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
+> > -
+> > -	for (i = 1; i < info->hdr->e_shnum; i++) {
+> > -		/* Scan all writable sections that's not executable */
+> > -		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
+> > -		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
+> > -		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
+> > -			continue;
+> > -
+> > -		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
+> > -				   info->sechdrs[i].sh_size, GFP_KERNEL);
+> > +	/* only scan writable, non-executable sections */
+> > +	for_each_mod_mem_type(type) {
+> > +		if (type != MOD_DATA && type != MOD_INIT_DATA)
+> > +			kmemleak_no_scan(mod->mem[type].base);
+> >  	}
+> >  }
+> 
+> I lost track of how module memory allocation works. Is struct module
+> still scanned after this change?
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations.
+That section being RW, it will be part of the MOD_DATA vmalloc and scanned.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/mm/init.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..a0ec99fb9385 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,6 +1053,15 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-@@ -1063,8 +1072,23 @@ struct execmem_info __init *execmem_arch_setup(void)
- 	start = MODULES_VADDR + offset;
- 
- 	execmem_info = (struct execmem_info){
-+		.fill_trapping_insns = execmem_fill_trapping_insns,
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL_ROX,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
 -- 
-2.43.0
+Vincent
 
+> 
+> -- 
+> Catalin
