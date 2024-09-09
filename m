@@ -1,30 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CD61B14E8;
-	Mon,  9 Sep 2024 08:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF81B3746;
+	Mon,  9 Sep 2024 09:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725871981; cv=none; b=Dey4jnu5tvnNViwEMRBGXXb5OPPz1BclikTL2pLiO03/N6QuAtya8wDJFcWGikmykMqz8yFMMueF97WXlsYkndqbeBTMEo3E4Ze/c9uKEp/ObgI9/Tg1T97jR76pSE7UMZCitgtYO9jKzwlEoJVRbx7w8sfk7t+MFpLo3tn9FQ8=
+	t=1725874169; cv=none; b=WcOLWEuwg0a6QAf3zz0UlvHiZ+qdW5I6lCO4hz8GaBkw0mJ9N3+3HlcBxPA5Ii+WnIbLXpQglI05WD3OyaCDq7bu7MuJcZWJU4AAu5phKSbtnnlZw7Dho6TZUg8S+hstQsfKMzW4FmeJbYribKkHhT2vwGoHTkAosLSQ3mGqLSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725871981; c=relaxed/simple;
-	bh=5pYzR9/0mNgcE9oWenX5Qf/q1RYzYHaUwcpqyuXMLk0=;
+	s=arc-20240116; t=1725874169; c=relaxed/simple;
+	bh=o/hjh/Sq8hcMxZEgqMKb/vs7eiHDdZcNb8ZaB2phBzU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lptHCs7Oqwvoznsd08pGB562pzfvVLR6axWEzAMLysyDhZLtP+lbBvtWmoqpIfe9JKzMiN85WlksF64N0bqjQaEz2LXcm5XYLSMW+Q8227MKNv1qNypgNrGQMjdR/aetqv/1AMracEmvs9pe55PHqpYfKdlpD7S7KrlLLlJGWcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C62C4CEC5;
-	Mon,  9 Sep 2024 08:52:59 +0000 (UTC)
-Date: Mon, 9 Sep 2024 09:52:57 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: mcgrof@kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@android.com,
-	Song Liu <song@kernel.org>
-Subject: Re: [PATCH] module: Refine kmemleak scanned areas
-Message-ID: <Zt63aV2zmkOkwRc3@arm.com>
-References: <20240906153856.22204-1-vdonnefort@google.com>
- <ZtxenHsGPyDoYnzY@arm.com>
- <Zt6mcvkzPI8WNgHl@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lrc7wTJwsmYRsW13+ElWV9jlZH3sFd9lxBcRGC0FC4JcAVd0YLqPV3qCsQB79DdbvSAvxrPdSSVUZNA4RQQ2czdCEs65Iy5GXV39jKjnkBD3MFMFJk/AcTMEGiRue340lp/JnO74Lo9SWKMEZUhB9eoyu2FvwdDKu/ypA/GwcIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PHcK1SUW; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PHcK1SUW"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=f16Hum48X2/PRv+OYRnrqWvXhbLKUUXP4MBg4DPZdlQ=; b=PHcK1SUWaNK+mGL/l3LU81VEdD
+	D9nBb1lF9fC+k5KduxINliKCuQNtwOV9r3VV7JhDFojWrMZqtjtzwsWQR7ymjqHMdZK4/Tzo1krQG
+	l72L0TWbRaFKsNxIJEvL02K4akN/vihdxELVqTsQPMZh102jhI0PE6Yrqkpm+R5bTxUWvCjPykmtq
+	WlbddJH0odsLTU/9pMOdxn+PkTNa49n7N5ZvM4UD0maObK3Zd9qj9kNJXbjqHQeNmT1JTuolvrtNi
+	Vpta2pPXprvf8lrp/xLulCdRHeE9tzU/AQ/jRdr1yi09xwhjfkgynp4ly+k7LQoKGQqGefX9PFflQ
+	rxIuTYAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1snai3-0000000AlXM-0txX;
+	Mon, 09 Sep 2024 09:29:24 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 80F5330047C; Mon,  9 Sep 2024 11:29:23 +0200 (CEST)
+Date: Mon, 9 Sep 2024 11:29:23 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 6/8] x86/module: perpare module loading for ROX
+ allocations of text
+Message-ID: <20240909092923.GB4723@noisy.programming.kicks-ass.net>
+References: <20240909064730.3290724-1-rppt@kernel.org>
+ <20240909064730.3290724-7-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -33,60 +90,27 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zt6mcvkzPI8WNgHl@google.com>
+In-Reply-To: <20240909064730.3290724-7-rppt@kernel.org>
 
-On Mon, Sep 09, 2024 at 08:40:34AM +0100, Vincent Donnefort wrote:
-> On Sat, Sep 07, 2024 at 03:12:13PM +0100, Catalin Marinas wrote:
-> > On Fri, Sep 06, 2024 at 04:38:56PM +0100, Vincent Donnefort wrote:
-> > > commit ac3b43283923 ("module: replace module_layout with module_memory")
-> > > introduced a set of memory regions for the module layout sharing the
-> > > same attributes but didn't update the kmemleak scanned areas which
-> > > intended to limit kmemleak scan to sections containing writable data.
-> > > This means sections such as .text and .rodata are scanned by kmemleak.
-> > > 
-> > > Refine the scanned areas for modules by limiting it to MOD_TEXT and
-> > > MOD_INIT_TEXT mod_mem regions.
-> > > 
-> > > CC: Song Liu <song@kernel.org>
-> > > CC: Catalin Marinas <catalin.marinas@arm.com>
-> > > Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> > > 
-> > > diff --git a/kernel/module/debug_kmemleak.c b/kernel/module/debug_kmemleak.c
-> > > index 12a569d361e8..b4cc03842d70 100644
-> > > --- a/kernel/module/debug_kmemleak.c
-> > > +++ b/kernel/module/debug_kmemleak.c
-> > > @@ -12,19 +12,9 @@
-> > >  void kmemleak_load_module(const struct module *mod,
-> > >  			  const struct load_info *info)
-> > >  {
-> > > -	unsigned int i;
-> > > -
-> > > -	/* only scan the sections containing data */
-> > > -	kmemleak_scan_area(mod, sizeof(struct module), GFP_KERNEL);
-> > > -
-> > > -	for (i = 1; i < info->hdr->e_shnum; i++) {
-> > > -		/* Scan all writable sections that's not executable */
-> > > -		if (!(info->sechdrs[i].sh_flags & SHF_ALLOC) ||
-> > > -		    !(info->sechdrs[i].sh_flags & SHF_WRITE) ||
-> > > -		    (info->sechdrs[i].sh_flags & SHF_EXECINSTR))
-> > > -			continue;
-> > > -
-> > > -		kmemleak_scan_area((void *)info->sechdrs[i].sh_addr,
-> > > -				   info->sechdrs[i].sh_size, GFP_KERNEL);
-> > > +	/* only scan writable, non-executable sections */
-> > > +	for_each_mod_mem_type(type) {
-> > > +		if (type != MOD_DATA && type != MOD_INIT_DATA)
-> > > +			kmemleak_no_scan(mod->mem[type].base);
-> > >  	}
-> > >  }
-> > 
-> > I lost track of how module memory allocation works. Is struct module
-> > still scanned after this change?
-> 
-> That section being RW, it will be part of the MOD_DATA vmalloc and scanned.
+On Mon, Sep 09, 2024 at 09:47:28AM +0300, Mike Rapoport wrote:
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 8da0e66ca22d..563d9a890ce2 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
 
-Ah, makes sense. I'm fine with this patch, it simplifies the code now
-that we have mod->mem[type]. I wouldn't say it's a fix, though no
-backporting needed.
+> @@ -654,4 +656,15 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>  }
+>  #endif
+>  
+> +void ftrace_swap_func(void *a, void *b, int n)
+> +{
+> +	unsigned long t;
+> +
+> +	WARN_ON_ONCE(n != sizeof(t));
+> +
+> +	t = *((unsigned long *)a);
+> +	text_poke_copy(a, b, sizeof(t));
+> +	text_poke_copy(b, &t, sizeof(t));
+> +}
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+This is insane, just force BUILDTIME_MCOUNT_SORT
