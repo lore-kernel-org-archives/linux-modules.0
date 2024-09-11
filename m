@@ -1,116 +1,160 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F173518592D
-	for <linux-modules@vger.kernel.org>; Wed, 11 Sep 2024 11:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2EC1B14EF
+	for <linux-modules@vger.kernel.org>; Wed, 11 Sep 2024 16:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726055031; cv=none; b=dapmRPk8anRH9TpVVhtiX8YmoxmOxQpVzCDYyhVD2o0Phx/d0peSR+9tGJzqIgBqCoz+FAjNt+sa2LQx3V/OQkY+fGgNCbAl0f+LlLn39H9drKRE5WlhH+B8z1PQoRSr4Wr0E+gvI7W7nEqh/egwp62XTTJILqPAJBiWowCaLig=
+	t=1726070629; cv=none; b=lXlAPJQWf/MoaiEpEW1gb/gmd90iI96t7Ui1JTkt7VVTPRpVjbRe7G/WCggXaprowhoxuVPdaITj4uB8lXI0gZmf6PZIoArWw4dHc6ytb3xouQr3jcTisjOn6UUM+kWNWZYqRGTpTXacOrwR4xBztM0SBHSPjIXNhbHMMVbcoWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726055031; c=relaxed/simple;
-	bh=9hiabN1M+tFNIMHDE9LStpgFSYodQc7eDrfAIyTkOt8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XJLgmFuvU2o23VGlqnE5gXBlOBY/hHJjmDo26CizxrUXI7MACfurLnsvJ3k0w3t5HT+flbUhpuQJMZ8E7fUc3eJgZiXoW2iWKjcCRkZCI9MZtd6L3tzKQP4tfcbngDInNtbXrMs9N3PuQyWKnwR1oFeEn2qPax9qnYH/+va2lZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Jb8ZBocJ; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1726070629; c=relaxed/simple;
+	bh=9sXB+vF2HaFIBrbpsH0gLpHJzwQVTbseoo4NvxT6HN8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mWSDNdBS6soWHFsGgOa3ut18DnTTUVsR/K6Dq8p/exSo7zVXJuYAVuERUg3o1xiMVEKI55qgGoyKyV6j67QQDqGyPCClmN8WGoB7rJ4X8zvOZPiJwXCQDuNAueR5ekMursgwTOJDJ6eH28iusn7yQ52RdSFfr78uSlSQCfANW4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=digjE51U; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Jb8ZBocJ"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a8d43657255so508920466b.0
-        for <linux-modules@vger.kernel.org>; Wed, 11 Sep 2024 04:43:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="digjE51U"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4581cec6079so645411cf.0
+        for <linux-modules@vger.kernel.org>; Wed, 11 Sep 2024 09:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726055028; x=1726659828; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0836bPdfIiVhJZmRIpwdukfSHhRJerCCPsKDHVUH+Xo=;
-        b=Jb8ZBocJ7jZyWFF5OTAhOZOcqC4RFE+/vrOVXNe9nZnnRyckUmpcX6gH+63iEWoaPn
-         jv8AOOF0tW+PfpzU3ER3mDJQAFv77eaKEfhqABdlqQcy7zofOqc2eBpyJzwZ8QySxsJ5
-         BeDAi9IBXE5XywostMWjEzru4y14iYalgzcZi2LK1WD9DuO+wPsHoyuRTsOV35jvDnRh
-         I5jQ5a8qxpE+YsPhAL7zDWi7BWkIrM7Xq/u2GS0kMP9eMRMk2v2QrTgHv3JJxeLnpKrh
-         fIV3CWDoETaj07/Z+FQBx85De44D6+7F3hMIopwEpsS0x8ug+EH8ynJE+TFFPqNZR39p
-         HieQ==
+        d=google.com; s=20230601; t=1726070626; x=1726675426; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7nej+hDXRQGZRY33WrOI2LiHyYN70vRosnPoaBCwRhc=;
+        b=digjE51Ua/9wuvOdGLvuOu3Yx0OgfKSGYXG/tLoCN8673ZHKqw3CL65wZere2xEHlL
+         CSZF+Dm294ox/O0OVaeJ4J5U1EnTI9cK9IYlwjn/8jrdMUwDT9XvTjV+c1mtWGViu5Pk
+         ZPsRf2dTd57MQ3hdymvwrxxJhVohbwoYg0ndIsXsuunPYxbT3DR0INZh45pLQ+xD1+lQ
+         vTWSpVYUG1+1edNxMg/nSWVsr4Q/+bzOoQq6GfUJeChIcgn7uYKivv4IZj590wYSJtSW
+         PRH9E2BJilIt0TXrnoR9T9WcYmzjNis4Qr+HgcYY5i12LF+r9rS2NWk4p+rdlT+yi9nL
+         YFBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726055028; x=1726659828;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0836bPdfIiVhJZmRIpwdukfSHhRJerCCPsKDHVUH+Xo=;
-        b=p4q3fsHs3pgglil3c57VGP+4GrL9QgtW9cFbO86O+9XsfYbVad8dp4iqpni71CXbeN
-         6ufjU1yvIcRSarTMLSJMoYRoVYW9yA2qlhxFUzCzeFKeRKVuIYbmql1gI+bqbjjcDrR9
-         gtDlxF2LG98GPAOSToCN6N1BkCprd05PyyzrP2fKNnv3+t8K1PWH5v/pXTWFNILDOr1M
-         WzQLZf59YWWMZ0wfTsul0VZQlbNMhc4/zEGQ7FimWEo8U1MZLLyqEozXwas/Kl0CutM0
-         AhbXUSnE+KeHjhuCr5Yh95iqJ2++NzbNaKOVra48ftnhSNFNxrWlNIgI0h0GAieFWNnV
-         +6VA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5PWdVC5b+n9kF1ef89aq7aiTFdpC74TT9972rhJ65Ngb4ZeSXDzlEWT5xMnw+VtjVYXrrhq5IwTVMTuWk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBzHRa4W2N23VGt5rl9uIV4PHBPyrrB8LDUueVG8cZPg9SmEBl
-	tgt6ExlhACu9XCh/qbayBLmZql5dey6MFmOy+F41KLd70VtaxnpJdKgmYewQkV4=
-X-Google-Smtp-Source: AGHT+IE06+xDqkLYzGpC/L+2NLQeM/nBC/Gy5jIkoMSaoEd70RtXRRQzFeVamgQr7aHe0PKw8Wnx3w==
-X-Received: by 2002:a17:907:2d0a:b0:a86:82e2:8c64 with SMTP id a640c23a62f3a-a8ffab78821mr368553266b.35.1726055027526;
-        Wed, 11 Sep 2024 04:43:47 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25835d97sm606731866b.4.2024.09.11.04.43.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Sep 2024 04:43:47 -0700 (PDT)
-Message-ID: <599892ec-3cf5-4349-984b-7c94f2ba5687@suse.com>
-Date: Wed, 11 Sep 2024 13:43:46 +0200
+        d=1e100.net; s=20230601; t=1726070626; x=1726675426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7nej+hDXRQGZRY33WrOI2LiHyYN70vRosnPoaBCwRhc=;
+        b=Xe/Ev97P2AuySeLqUQTQmf/h00mIXhHizqTwDnLXWKoP4M7QzV+yzY+2AypUhyaUnW
+         gXwdHsdM7974WyHYYgnQjn17sAdxcgRLFmnysVzKNlB1fLXFgF+LImKzj7IFJOdDt6La
+         yRhl80b9J1EOQSwcVx/LpZBwJAkVXIIRgNPUrgtWXNSE0dsyX2fedzff23P5fWJYlZLW
+         jx2Dwbe2jYGxnK8AjGRwnq6X9OM26u/fPSugl2t6w7z5vP4Y7ugWtvgvGbBmbEfadYVd
+         1yZHuUIfmEJdw1mrFby9ucwWcPhA3NKn865OxukYbwXWVBbVLJHMCfTo4F2jQjJQT5CH
+         NUwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUF4Sy+WrXOhRdy7bTkHOY2KcuffKmLSG4VwEpu7BYhmJ+KIyEdnjKm2IBxEdua5wUU5RE1jsud7mFH6KvE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgeF85Kkk/TJzIpv2JlfLtEsGn8anZI4TU3HRVSXMfdCNdA60+
+	odIeWl59KzIY/aHDnj4H3+18H9FenRoaZ2FrCBsrSLe46UyGhln9+Jg9uFcsLI8dtkEDOcufqB2
+	UJgvBSquP1LYhQjbtNTlRTYeZcfqxDX9bqJQF
+X-Google-Smtp-Source: AGHT+IFqdCZ/zpCHMcTbg+wp9DmWUAH6fN0n+S9E0/kdxeU/B33WqP/WHqvn0q9L2zpcH9hRPg20QhMF9dEBajFDZtI=
+X-Received: by 2002:a05:622a:d2:b0:456:7513:44ba with SMTP id
+ d75a77b69052e-4584f3a33d4mr4259221cf.4.1726070626297; Wed, 11 Sep 2024
+ 09:03:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 16/19] gendwarfksyms: Add support for reserved
- structure fields
-To: Sami Tolvanen <samitolvanen@google.com>, Miroslav Benes <mbenes@suse.cz>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
- Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>,
- Petr Pavlu <petr.pavlu@suse.com>, Neal Gompa <neal@gompa.dev>,
- Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
- Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- rust-for-linux@vger.kernel.org
 References: <20240815173903.4172139-21-samitolvanen@google.com>
- <20240815173903.4172139-37-samitolvanen@google.com>
- <alpine.LSU.2.21.2408301114000.1124@pobox.suse.cz>
- <CABCJKucCWfeC0yL6Q2ZcBfef0tMd9L_gmHRJt-cUYkg_4PDtnA@mail.gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <CABCJKucCWfeC0yL6Q2ZcBfef0tMd9L_gmHRJt-cUYkg_4PDtnA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20240815173903.4172139-35-samitolvanen@google.com> <286b1cc5-1757-4f0a-bb66-0875f4608c7e@suse.com>
+In-Reply-To: <286b1cc5-1757-4f0a-bb66-0875f4608c7e@suse.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 11 Sep 2024 09:03:07 -0700
+Message-ID: <CABCJKudJR13PJgjr9-5Ff9Dzmb7=pSx7JWM5qTyR8oYRdtSDDA@mail.gmail.com>
+Subject: Re: [PATCH v2 14/19] gendwarfksyms: Add symbol versioning
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, Neal Gompa <neal@gompa.dev>, 
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Asahi Linux <asahi@lists.linux.dev>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/31/24 02:05, Sami Tolvanen wrote:
-> On Fri, Aug 30, 2024 at 9:34 AM Miroslav Benes <mbenes@suse.cz> wrote:
->>
->> yes, this is one of the approaches we use in SLES. We add kabi paddings
->> to some structures in advance (see [1] as a random example) and then use
->> it later if needed.
->>
->> It is not the only approach. Much more often we do not have a padding and
->> use alignment holes ([5]), addition of a new member to the end of a
->> structure ([2] or [3]) and such "tricks" ([4] for a newly fully defined
->> structure).
-> 
-> Thanks for bringing this up! Sounds like we're also going to need a
-> way to completely exclude specific fields from the output then. I
-> think we can use a similar union approach, but instead of instructing
-> the tool to use another type, we can just indicate that the field
-> should be skipped. I'll come up with a solution for v3.
+Hi Petr,
 
-It might have been mentioned previously, not sure, but one more case to
-consider is handling of enum declarations. New enumerators can be
-typically added without breaking ABI, e.g. 'enum E { OLD1, OLD2, NEW }'.
-It would be then great to have some ability to hide them from
-gendwarfksyms.
+On Wed, Sep 11, 2024 at 3:08=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> On 8/15/24 19:39, Sami Tolvanen wrote:
+> > +static inline unsigned long partial_crc32(const char *s, unsigned long=
+ crc)
+> > +{
+> > +     while (*s)
+> > +             crc =3D partial_crc32_one(*s++, crc);
+> > +     return crc;
+> > +}
+> > +
+> > +#endif /* __CRC32_H */
+>
+> I think the CRC32 code should be ideally shared between genksyms and
+> gendwarfksyms. One option would be to stick it under scripts/include,
+> not sure if the best one though.
 
-I think neither of the __kabi_reserved or __gendwarfksyms_declonly
-mechanism can currently help with that.
+This was carried over from the initial version, which wasn't under
+scripts yet. I'm happy to deduplicate this though. Masahiro, any
+preferences on where this should go?
 
--- 
-Thanks,
-Petr
+> > +static int get_symbol_cache(struct state *state, Dwarf_Die *die,
+> > +                         struct die **cache)
+> > +{
+> > +     checkp(symbol_set_die(state->sym, die));
+> > +     check(die_map_get(die, SYMBOL, cache));
+> > +
+> > +     if ((*cache)->state !=3D INCOMPLETE)
+> > +             return 1; /* We already processed a symbol for this DIE *=
+/
+> > +
+> > +     (*cache)->tag =3D dwarf_tag(die);
+> > +     return 0;
+> > +}
+>
+> Nit: The "get_" prefix in the name of this function is misleading. It
+> isn't a plain getter but has an effect of setting the symbol die.
+> A different name would be better.
+
+Sure, I'll clean this up.
+
+> > +static int calculate_version(struct version *version, const char *name=
+,
+> > +                          struct type_list *list)
+> > +{
+> > +     check(version_init(version));
+> > +     check(__calculate_version(version, list));
+> > +     cache_clear_expanded(&expansion_cache);
+> > +     return 0;
+> > +}
+>
+> Nit: The name parameter is unused.
+
+Ah, so it is. I'll fix this too.
+
+> More importantly, it made me think which names are included in the CRC
+> calculation and which ones are omitted.
+>
+> If I'm looking correctly, names of structs, enums and enumerators make
+> it into the calculation. On the other hand, names of struct members,
+> function parameters and exports (functions/variables) are missing.
+>
+> I think the names of struct members and function parameters should be
+> added as well. If the code changes 'struct A { int cols; int rows; }' to
+> 'struct A { int rows; int cols; }' then that should be recognized as
+> a different API/ABI. The same applies to function parameters.
+
+I did leave out member names because typically renaming a member
+doesn't change the ABI, but you're right, it might help capture these
+types of changes where fields with identical types are reordered for
+some reason. I'll add names.
+
+> I'm not sure about export names. I would probably include them as well,
+> if only for consistency.
+
+I would rather leave out the symbol names to have consistent CRCs
+between symbols that have identical types. Or is there an actual
+benefit in including the symbol name in the CRC? The names are already
+rather explicitly involved when symbol versions are checked.
+
+Sami
