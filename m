@@ -1,450 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDAE2C6BB
-	for <linux-modules@vger.kernel.org>; Thu, 12 Sep 2024 11:58:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726142329; cv=fail; b=bI3CNROBzf9eiFxarnA3OzRKCxm9i+33SsuvYLzQY5uTk+Hj/Oiih1HZmLbbbf78/nQ8kanoNXW//7OPO6zc1sA+pfopGheIjn7U75FscoTw5rhYW0UlVdrWXFj+d7t13wTlyeA/FiCNZDHsVVzHgU7gLkcxFeuQPneXVaEoGmc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726142329; c=relaxed/simple;
-	bh=zQnXUMF0qqypv/iM70laF/zjTAtsDjibwXzNrPjMJdk=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=ViN23wRZnfwstiS+8SLx+2CZ0xInren330c4FIPonOxNiRX+J7UjUQmCZ8TEBY7FsuGLG65QHUCDI055yjkll6mqZifxQT15sQO0vUXLbyfal3RIfmphfBJ14EIg0nGowwrRB76pMzDU6e/eNnqBMfl7k3eKHNkH6PW3KVnJT8s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oADgPlwh; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0134AEF4
+	for <linux-modules@vger.kernel.org>; Thu, 12 Sep 2024 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726157220; cv=none; b=ALlnEENaazDopL0SNXvPofAhHwswn4LygQcVslH8hXvZTbGZuuSIwVMPcu/xDIq2EG0OXCQSUsvvkYPTumHL0U121xHle2etqJDH0uboWSPPMYRgFaA8P9b0DfTr9H80F0X0ej2jrY6HDb7BfAkz695nSv8W8qwU4nSlEnFp44w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726157220; c=relaxed/simple;
+	bh=IT1o82vxgKP1FGlb30UH98pNclOmxQrMnkN0OFaimUc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R7m/wXWMuoAIrY7/D3XPeXF7heXpghEG/bYzq2g0pySPfHKht67woog/cbG0tmIewm8yCkLvRrUPu/SgO63Xls7DNTA3qd30kym0sjuFJHWD6RujeGwsmzoZ2FCysXEyMBhRGozLaLhFb1sq8vXDF3EmLCHc4zOCX8TRP45JUJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ywMov3Oq; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oADgPlwh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726142328; x=1757678328;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=zQnXUMF0qqypv/iM70laF/zjTAtsDjibwXzNrPjMJdk=;
-  b=oADgPlwhpHaod+/LGa/E+5yaxR5VjVvUg2IM9lbKN5MROhBTT95/Bm4y
-   XUsUmucuwFQXu9vstwL41ium282UKTVW4hz+Q+UwohWNJHWx1IkMOsJqh
-   ZP2x70nCg/dVz/mzOkrApJWHN36Q7ljunQ7UfU70VQa/gmBu8g6mm7Buf
-   JIviTr8fvxzpSriIvOIPU2hiD9k5b36Rgf7Si86pcfe7779ZqbSnpXGlZ
-   oK1zwd5UQtPLO4QjSApkH2R3hKW148sLZ7pueFLRpVoaUMDoMxaz+zKJh
-   ZGFBN44rRaebTQ6OwOiuHW9ZJBTDY4e3ZlYPzlhsroUm8OQLLkeYaIaxk
-   A==;
-X-CSE-ConnectionGUID: c0XjjQETTxWOsHRfAahbLQ==
-X-CSE-MsgGUID: 2QGwtmIpQ6Oxd+45EYYudA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="24473549"
-X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
-   d="scan'208";a="24473549"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 04:58:47 -0700
-X-CSE-ConnectionGUID: Ty/IOCopTYCHGYVQ6/kVFg==
-X-CSE-MsgGUID: gqrO3K0pQh6uGK1adYBOGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
-   d="scan'208";a="68189383"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Sep 2024 04:58:47 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 12 Sep 2024 04:58:46 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Thu, 12 Sep 2024 04:58:46 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 12 Sep 2024 04:58:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z77AiBI9GBGVoQkUggogCSBE25onDUYOJnTh0MkomSPJrPq837RV6mWzbOTq1gQX0J6YihtCQBSEfmtVq5u87ugGANaSgeOmldcWqlvtaOZu7DfNNoxfvANTRTho/MsPiTzs9ABkC4/LytcsSHiUmdywUlUPkRgUKyaBO/1f/f9ZWSv8p7SSaN5cqBHmo+z8W4DAbKn9lppI3waR+xeE3HjCu982JFz5Ikk5irj1V4ymK0dpHIl9plF+0svAxvCXO1AE878HZ1LRhmIUqKrEyS3sW8MhGQOewDp08uxC0GUeHq5jUWJoO2wxcQIQo4WqMPBwjvfUd/S/8dbMtyvoag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ypJj5p+TtMIbIICxGS2PfvQM2XjMdOsatTNG281060g=;
- b=I5LI8EJNEC49sVkoqRPo+bv7EShnHTovB4ukNlbPR4/1X9wytHEBsnSq9hfytv4U2Dk5kU5TRuy6O2JtT9LA+gj5Av9rqJzJYRknxeKR7NIrkG7eXNEY8CRT0Ymz9mb4Rx6HdhD7lfCcLlIT63Aq36eDSjPR8bRZr/gM082rcxrcwMf/bsKDDhTxoQRvHbdKSIn68YDyGOtSyOX8Jg2rGXMko06I3cIIq/nOqJpLlAPpi5bm7ASObH6Dy1PiVfXz7uuam3jGANvzC1QzfzLkzxbcFFm8/ysHI1bLvifRHy39sAe6VoUp9qGsfHn2qMECbJRADy/cIYtmvCtJsOO5mA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5293.namprd11.prod.outlook.com (2603:10b6:5:390::20)
- by PH0PR11MB5904.namprd11.prod.outlook.com (2603:10b6:510:14e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.17; Thu, 12 Sep
- 2024 11:58:37 +0000
-Received: from DM4PR11MB5293.namprd11.prod.outlook.com
- ([fe80::e1f5:3b23:9560:2dc2]) by DM4PR11MB5293.namprd11.prod.outlook.com
- ([fe80::e1f5:3b23:9560:2dc2%3]) with mapi id 15.20.7962.016; Thu, 12 Sep 2024
- 11:58:37 +0000
-From: "Bommu, Krishnaiah" <krishnaiah.bommu@intel.com>
-To: "De Marchi, Lucas" <lucas.demarchi@intel.com>
-CC: "Vivi, Rodrigo" <rodrigo.vivi@intel.com>, "intel-xe@lists.freedesktop.org"
-	<intel-xe@lists.freedesktop.org>, "intel-gfx@lists.freedesktop.org"
-	<intel-gfx@lists.freedesktop.org>, Kamil Konieczny
-	<kamil.konieczny@linux.intel.com>, "Ceraolo Spurio, Daniele"
-	<daniele.ceraolospurio@intel.com>, "Upadhyay, Tejas"
-	<tejas.upadhyay@intel.com>, Tvrtko Ursulin <tursulin@ursulin.net>, "Joonas
- Lahtinen" <joonas.lahtinen@linux.intel.com>, "Nikula, Jani"
-	<jani.nikula@intel.com>, =?iso-8859-1?Q?Thomas_Hellstr=F6m?=
-	<thomas.hellstrom@linux.intel.com>, "Teres Alexis, Alan Previn"
-	<alan.previn.teres.alexis@intel.com>, "Winkler, Tomas"
-	<tomas.winkler@intel.com>, "Usyskin, Alexander"
-	<alexander.usyskin@intel.com>, "linux-modules@vger.kernel.org"
-	<linux-modules@vger.kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
-Subject: RE: [PATCH v2] drm: Ensure Proper Unload/Reload Order of MEI Modules
- for i915/Xe Driver
-Thread-Topic: [PATCH v2] drm: Ensure Proper Unload/Reload Order of MEI Modules
- for i915/Xe Driver
-Thread-Index: AQHbAm73lGp4NTx/3UOlFF18ADnlm7JRIFMAgAALD4CAAO4OMIAArkWAgAFHTtA=
-Date: Thu, 12 Sep 2024 11:58:37 +0000
-Message-ID: <DM4PR11MB5293DCB20388C7BA5950369A9D642@DM4PR11MB5293.namprd11.prod.outlook.com>
-References: <20240909040317.17108-1-krishnaiah.bommu@intel.com>
- <ZuBfwqpIX4HAGwb1@intel.com>
- <3zgu3edmrjum2rbhu7tv5xo7xans2uper7qn3lswca3nsc4tdl@gevqfr65js4g>
- <DM4PR11MB529387DB2FBB0A5C1064895C9D9B2@DM4PR11MB5293.namprd11.prod.outlook.com>
- <b3gmlgx6tl5uyzsdsp6q36blhzchvhpvno25tvwrj6nnu23dmz@rkacgyjoxsru>
-In-Reply-To: <b3gmlgx6tl5uyzsdsp6q36blhzchvhpvno25tvwrj6nnu23dmz@rkacgyjoxsru>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR11MB5293:EE_|PH0PR11MB5904:EE_
-x-ms-office365-filtering-correlation-id: 53dd5627-d68e-44d1-c52b-08dcd3223c38
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?Jr/c2/Z55KcN/m15j4YLDF3ev/rYo0pqa0maLejq478hhM2Qm9ebxNgqqM?=
- =?iso-8859-1?Q?wPa/rIqg7tZhcaOLNJGErQHGRoAOZ7tJLW8u4m8atMF7sFEUdzlVlRKnU2?=
- =?iso-8859-1?Q?3sWOrwM6Ar4ayHa7m8lQvjdPAHZTKmRrIpyf4782cIKYX6Pn2slViSL0nE?=
- =?iso-8859-1?Q?ykyiiBMejzKUs+SNkjGZO3tSekYAfvGzsdna7LGKgdHkJb8ftkq5Rw9ADd?=
- =?iso-8859-1?Q?qAKLbOLsushjme9my07Bk7KhraKMahVaoyWLtLr0AytlqysjuofX23LeJ/?=
- =?iso-8859-1?Q?G4ck5+6/18RMOtE7h7JiZtKVyxeBIq2K0JUljhMBn/hxU49wDJBmfGOUWa?=
- =?iso-8859-1?Q?go7m0/LuxLrU7/DFL940C6OMLyzDIdLfohl5hlWH6UH9su7mIC7Bnvrxjo?=
- =?iso-8859-1?Q?s20sqdUXGkKzYPDYF7QXnNfbgXlAIpc4iDod+bem2j/ZHYXABXr5csyaWq?=
- =?iso-8859-1?Q?QgvuaTmZ+srVeI6M7Aowr46YRdV1QUlMW1rZdYmBLzz5ufQZymgdnE2mtf?=
- =?iso-8859-1?Q?nx3AZ315dNU3Cqpo1uXslSS+y4ZtmeNnuymRKp0z2yARnkye5tmnhjt0Jh?=
- =?iso-8859-1?Q?AhJo4TWJcL7g8D2Lqej2MIezBDoAX+6ITBtuysBFpAC7v0U66mgH9ZCHJi?=
- =?iso-8859-1?Q?Tke/XSeP76gUwi8fGBZObV/TiWepNy5l9NL/pLYSTD2aQQit01i05Iv+SZ?=
- =?iso-8859-1?Q?RUNIH78lLm6u/WY3n+cJ4Cd7cUxEbXbxYoZJCH9XEfG2s0rDoECPMu5twP?=
- =?iso-8859-1?Q?3lxtfU7eyLy4ugoLcZPj2h6PZIBgFQYzIn5SZk4IF0f+LgfR+PcCfwEPLK?=
- =?iso-8859-1?Q?dY7kVJrnXWpw78rEPtqFGn7B3yxjli2xuUUMEA+c3DDWFy6q7BQGlhx5AX?=
- =?iso-8859-1?Q?JUh9NgsLdanFwinqfEk0IAXePx3c3VH/bSxl7wIslgdVwtPS+2U5PskT2J?=
- =?iso-8859-1?Q?PWu1ccNDtQ3V0WoG+3X4Ki5f3dHuWrPHx+xjO6MGGpkN8rwsYagdpSUcY9?=
- =?iso-8859-1?Q?iJO3D1bbavsTDvkyT2IT3IMvyex4xtB2lbp14aBee1+PL6tH9UuEsbQPCU?=
- =?iso-8859-1?Q?ZpZfoBZRx3dyzWRR1p5aWFr+GMkejtuI+kjM1wO5HNpThZKmcm7wt+K3aQ?=
- =?iso-8859-1?Q?O+dHoPwDUioWPcQRjqqhi205A2kyGlxMx+ECM5hqF3Vv89k295O+aB+s3n?=
- =?iso-8859-1?Q?Pv4EVdoc1piYOWcIu6Z1rX/PhVMYqItofmkWlsLzofL3Jgy4Sa7iRy96xX?=
- =?iso-8859-1?Q?zaqL+Y6g6tkOYKrnAif+tjWMbAX/vRCG1rfshcKDzFciiD4B7y7aEM0oi4?=
- =?iso-8859-1?Q?9/eoIPH97C79Z9HdSjWKCWl2mDv6h3HSpai/oEMguzimuFd4Bu4zXVERX3?=
- =?iso-8859-1?Q?MW/KQGCLLvq/ZZgrQD3wkp2CviaSEi+fCxXZ+4r08XzO0kuHGa9mo=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5293.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wPvhSkFgGjtM/gw2+HcPnlr0fi2a2cHmkpgZIVrlXeJep7qiOTkxc+CgdR?=
- =?iso-8859-1?Q?0RNlmc3NJq9pGsFUoSaOKIYmnVOt6wIMvsJQIByVFxjkSn7Q+9SBHvNKyF?=
- =?iso-8859-1?Q?cnBmyuHKs+DjRm+zQMUV6RBcFLPgLECmpFwYR6i4O4SRQtqxGQesmtHhME?=
- =?iso-8859-1?Q?4lu/BW4XnuhIbswojCu/KWYsU0BpWrThOdFtD5+YLxYUKqviCELrHG+2sv?=
- =?iso-8859-1?Q?toIcZ8CRFlFiWSg98TiYpSYO0dbXkfYN/bWZqc89j8h/EtkIAXXdQkjWiT?=
- =?iso-8859-1?Q?ofOkofniQf6ur5VC6zbeM0zZUaMCOUH3nImyMXJBIpm+uEiC7cxmNOE+dC?=
- =?iso-8859-1?Q?d1gpeYAZE9W10zsvf2BNFvTHiO4tYwgXTCJSOrc4vX/Te8b30D6iYgSFDf?=
- =?iso-8859-1?Q?KhRPVqyC48MVgDuZE0bMmsNjHIowMi7m7x9s0OIC5g1+9arWQwMOxqVkvG?=
- =?iso-8859-1?Q?fAxx9vqRGeQmdRt+c33rhLz10aB96gyaa8ha5piMvIzcwMHmECj+JBwiqW?=
- =?iso-8859-1?Q?iuJvRWqO+V1EM19J5odL8B6ktXUUNepdR8ShrRQu5Ufixt0GScPW313Coq?=
- =?iso-8859-1?Q?OuioSUKZ6qB/+QA0BNSc6c3FUn7gLdd2kIXvOayF8sU/HCImt12HBO9oJW?=
- =?iso-8859-1?Q?Rs4H3VkhSSrlEurlbTVxhAfwKu2XzsNy73EcxcyPMWKVCB51fNK5CvMIwH?=
- =?iso-8859-1?Q?5mNgmjmCjzKhy0PFpldMDYf27Q4bxQFShtdGqe9KbLg3u7KnJdFaznIysN?=
- =?iso-8859-1?Q?MPZaeSKh07R7Jqj9hTmFfKpHKOISSkmNhiFF+RXGWVSRed3Oc+B6yisPMp?=
- =?iso-8859-1?Q?ZVNJXOWrNIvrnQL6gGa46HhYnzFU2xvJGlBoh7SjigZ+pQE5zyKdTwq22X?=
- =?iso-8859-1?Q?3+LYvrGKaq5jxaUloC0afN8/8kk+XKDQASvXRLYsTN1AF4Fx3FMOS33kVF?=
- =?iso-8859-1?Q?78fLyY85wktoCmAWobeW8F7/Q733cZBfdyLdU1YbUrROWFKNf5QHPVUpx5?=
- =?iso-8859-1?Q?tRjcfv7xEneECiCskwlu++vjjlw5qM2Uv8VogWgzhbvc82uGEBm0rtXcqu?=
- =?iso-8859-1?Q?zkBQzotHixtPca5JhZYd1do9uR2xvybml1rnfjxB2Xui03d+9yIrbmD7hS?=
- =?iso-8859-1?Q?n9wozrPWxdsdFIvqA1Vmr8Gz6ZwmRfXpGpfkmrD623nPd1CtY4D3fCb1bi?=
- =?iso-8859-1?Q?x3Z/V84o1p5FjQrX9/gkNf9FC0fULkBwBX2xJlVAf1nWSFFTmLAB0Zz9o6?=
- =?iso-8859-1?Q?XT4ZgqmbQ7zw5CIvVG6hPplGaRsGiINhZ6kzJ6IdI2L781gmF68kik2fZR?=
- =?iso-8859-1?Q?yt0lkAXQ+hIzqZysWoHqZXe7JoYhHo2e5AgHBk7C3wKCF+hBo0WmTK+Bnp?=
- =?iso-8859-1?Q?UXR6hTisZnTHvF+7heTjdaps52j7NKBGU9JE1pHlrryNX5t2xvB6sYMH1d?=
- =?iso-8859-1?Q?UPhfZXj6Q4rKiWnFGj4UOnn6IXrf6KHrqc+d7EvnC2E0r4WUiH8Qy/Mq5p?=
- =?iso-8859-1?Q?SNWtVarl2+PrJipLpcIjFVJ1Qp9XCO4uj9SuB5WIynm0XkKGMEy+QiT/rl?=
- =?iso-8859-1?Q?4yaWKI3U8nDdzKF1AqdPkd+Umd+suYfc5dKuItwGQNrIrj7ey5qvGHtzla?=
- =?iso-8859-1?Q?3WEeC5mv5rPjKaVaTB1BHdtIqRKpmK5WW6eKfwLKVZtHXvbuNqU8/pUw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ywMov3Oq"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4581cec6079so284031cf.0
+        for <linux-modules@vger.kernel.org>; Thu, 12 Sep 2024 09:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726157218; x=1726762018; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=omr6m6gliwPRufxamwdCTWNYYmJ3FITHC3JRHgUinPo=;
+        b=ywMov3OqjGZmpPHa1Bxchdlu3MGugCjbPAoPpbL69/JGHT8Ul+Zt/qswuWWoBrnWW3
+         iXp4ueDFPpdqA06vL6FxdbmjTFcN2+m9xgF5DIaJ6h+9XETGRgzt2JkrcTMQOS9MjXyi
+         e32tvykhQ3roJ7/Wphhah1DsVPl8vnc8jcHbC3Xb+SphmzuwOzgXjtobZJCTVKyPjn5i
+         7lFCy5rmCmnbfznwNJVbB5Py70zMj6UBzqw0lI9psdXvPj02Nhnvq5ONvQYDdwrQ9Pn8
+         UZ+nuRzJRlUEBmb2++OvqIFz4fZZsHBJozyDdj0LQmuh7qPySniuOjGToTo/eGjC1aRQ
+         v8vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726157218; x=1726762018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=omr6m6gliwPRufxamwdCTWNYYmJ3FITHC3JRHgUinPo=;
+        b=mDJVZ87e+mwOV9GB2nPdCx+8tBMt1RUiwFGoqVOARustyeYtRgbVh4Kaw/Xs+qT3EX
+         sIP2LllzuDz23fiKrjPUrAAOh/9hkhJ9iaWAcQYSEEW2KrZ3EGIn8psV9vNX9NSEGfJu
+         civ6tZ8BYG18kSyDxp+w8DVdm7WzDXIbVcevCvgLwvw/lWnvwMjlYgI8dtKeWZL3d58S
+         IxLYPbYuX6hpL6nKAnM67UpQVRW5nl8VGx4k8U/UZtQTh2FEJCT6BPmK+Bpo54NvGzby
+         lhrYWt7VuJQDffhaH7TYU49p1Jd8faysbvLMKJJerZBICAcj5MVHRGwajfJmbjnZauGi
+         2TEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKyxvgmOsv8fMD/rplKUVCMeSeGhPxUDkkMct5I+venkpmfvAyirc06b2JV9T6CFi/uo7gUMSHviHQuNdH@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNBVmuF+YwBAvIOBB3raOL3Rx917fS9pLXA+h00TwC6qhN/fFN
+	UM+DUprfwUJ7qfDxXPtruVTdpCqBdK5FkqpxzdpF3pFyGTYQy5ck3MEyoT/+tIcDiSZMih5vYtq
+	bROyqvoFKV0afKpvO+ZU6zDeY4oLi+Fd6U4/R
+X-Google-Smtp-Source: AGHT+IGOGPADRaVpGoTSHr0PDggkgl8HZXldTfXyU/ZgwZHpTw+qG9d8tMyjvXLDA0IIjRFc4gXxPJ5tunVOQkpfzMo=
+X-Received: by 2002:a05:622a:198b:b0:447:e0a6:9163 with SMTP id
+ d75a77b69052e-458607b265amr3217081cf.14.1726157217773; Thu, 12 Sep 2024
+ 09:06:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5293.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53dd5627-d68e-44d1-c52b-08dcd3223c38
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2024 11:58:37.2346
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4Z2hsKfqdxDJi/eNK69RzleXIMPOHyHBFwDMIlR7TUugsfYdNu7NGqwZbNLF988fpMtmIeOBTgGXZp/5uf2JMBc7I/BvdkmwGTjCEgBL1LQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5904
-X-OriginatorOrg: intel.com
+References: <20240815173903.4172139-21-samitolvanen@google.com>
+ <20240815173903.4172139-37-samitolvanen@google.com> <alpine.LSU.2.21.2408301114000.1124@pobox.suse.cz>
+ <CABCJKucCWfeC0yL6Q2ZcBfef0tMd9L_gmHRJt-cUYkg_4PDtnA@mail.gmail.com> <599892ec-3cf5-4349-984b-7c94f2ba5687@suse.com>
+In-Reply-To: <599892ec-3cf5-4349-984b-7c94f2ba5687@suse.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 12 Sep 2024 09:06:19 -0700
+Message-ID: <CABCJKuer=O3FnLJNGMg2+-HxFJFUrccTuuHt5OiMpRsAJBvBsg@mail.gmail.com>
+Subject: Re: [PATCH v2 16/19] gendwarfksyms: Add support for reserved
+ structure fields
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Miroslav Benes <mbenes@suse.cz>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, 
+	Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-
-> -----Original Message-----
-> From: De Marchi, Lucas <lucas.demarchi@intel.com>
-> Sent: Wednesday, September 11, 2024 9:49 PM
-> To: Bommu, Krishnaiah <krishnaiah.bommu@intel.com>
-> Cc: Vivi, Rodrigo <rodrigo.vivi@intel.com>; intel-xe@lists.freedesktop.or=
-g; intel-
-> gfx@lists.freedesktop.org; Kamil Konieczny <kamil.konieczny@linux.intel.c=
-om>;
-> Ceraolo Spurio, Daniele <daniele.ceraolospurio@intel.com>; Upadhyay, Teja=
+On Wed, Sep 11, 2024 at 4:43=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> On 8/31/24 02:05, Sami Tolvanen wrote:
+> > On Fri, Aug 30, 2024 at 9:34=E2=80=AFAM Miroslav Benes <mbenes@suse.cz>=
+ wrote:
+> >>
+> >> yes, this is one of the approaches we use in SLES. We add kabi padding=
 s
-> <tejas.upadhyay@intel.com>; Tvrtko Ursulin <tursulin@ursulin.net>; Joonas
-> Lahtinen <joonas.lahtinen@linux.intel.com>; Nikula, Jani
-> <jani.nikula@intel.com>; Thomas Hellstr=F6m
-> <thomas.hellstrom@linux.intel.com>; Teres Alexis, Alan Previn
-> <alan.previn.teres.alexis@intel.com>; Winkler, Tomas
-> <tomas.winkler@intel.com>; Usyskin, Alexander
-> <alexander.usyskin@intel.com>; linux-modules@vger.kernel.org; Luis
-> Chamberlain <mcgrof@kernel.org>
-> Subject: Re: [PATCH v2] drm: Ensure Proper Unload/Reload Order of MEI
-> Modules for i915/Xe Driver
->=20
-> + linux-modules
-> + Luis
->=20
-> On Wed, Sep 11, 2024 at 01:00:47AM GMT, Bommu, Krishnaiah wrote:
+> >> to some structures in advance (see [1] as a random example) and then u=
+se
+> >> it later if needed.
+> >>
+> >> It is not the only approach. Much more often we do not have a padding =
+and
+> >> use alignment holes ([5]), addition of a new member to the end of a
+> >> structure ([2] or [3]) and such "tricks" ([4] for a newly fully define=
+d
+> >> structure).
 > >
-> >
-> >> -----Original Message-----
-> >> From: De Marchi, Lucas <lucas.demarchi@intel.com>
-> >> Sent: Tuesday, September 10, 2024 9:13 PM
-> >> To: Vivi, Rodrigo <rodrigo.vivi@intel.com>
-> >> Cc: Bommu, Krishnaiah <krishnaiah.bommu@intel.com>; intel-
-> >> xe@lists.freedesktop.org; intel-gfx@lists.freedesktop.org; Kamil
-> >> Konieczny <kamil.konieczny@linux.intel.com>; Ceraolo Spurio, Daniele
-> >> <daniele.ceraolospurio@intel.com>; Upadhyay, Tejas
-> >> <tejas.upadhyay@intel.com>; Tvrtko Ursulin <tursulin@ursulin.net>;
-> >> Joonas Lahtinen <joonas.lahtinen@linux.intel.com>; Nikula, Jani
-> >> <jani.nikula@intel.com>; Thomas Hellstr=F6m
-> >> <thomas.hellstrom@linux.intel.com>; Teres Alexis, Alan Previn
-> >> <alan.previn.teres.alexis@intel.com>; Winkler, Tomas
-> >> <tomas.winkler@intel.com>; Usyskin, Alexander
-> >> <alexander.usyskin@intel.com>
-> >> Subject: Re: [PATCH v2] drm: Ensure Proper Unload/Reload Order of MEI
-> >> Modules for i915/Xe Driver
-> >>
-> >> On Tue, Sep 10, 2024 at 11:03:30AM GMT, Rodrigo Vivi wrote:
-> >> >On Mon, Sep 09, 2024 at 09:33:17AM +0530, Bommu Krishnaiah wrote:
-> >> >> This update addresses the unload/reload sequence of MEI modules in
-> >> >> relation to the i915/Xe graphics driver. On platforms where the
-> >> >> MEI hardware is integrated with the graphics device (e.g.,
-> >> >> DG2/BMG), the i915/xe driver is depend on the MEI modules.
-> >> >> Conversely, on newer platforms like MTL and LNL, where the MEI
-> >> >> hardware is separate, this
-> >> dependency does not exist.
-> >> >>
-> >> >> The changes introduced ensure that MEI modules are unloaded and
-> >> >> reloaded in the correct order based on platform-specific
-> >> >> dependencies. This is achieved by adding a MODULE_SOFTDEP
-> >> >> directive to
-> >> the i915 and Xe module code.
-> >>
-> >>
-> >> can you explain what causes the modules to be loaded today? Also, is
-> >> this to fix anything related to *loading* order or just unload?
-> >>
-> >> >>
-> >> >> These changes enhance the robustness of MEI module handling across
-> >> >> different hardware platforms, ensuring that the i915/Xe driver can
-> >> >> be cleanly unloaded and reloaded without issues.
-> >> >>
-> >> >> v2: updated commit message
-> >> >>
-> >> >> Signed-off-by: Bommu Krishnaiah <krishnaiah.bommu@intel.com>
-> >> >> Cc: Kamil Konieczny <kamil.konieczny@linux.intel.com>
-> >> >> Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> >> >> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-> >> >> Cc: Tejas Upadhyay <tejas.upadhyay@intel.com>
-> >> >> ---
-> >> >>  drivers/gpu/drm/i915/i915_module.c | 2 ++
-> >> >>  drivers/gpu/drm/xe/xe_module.c     | 2 ++
-> >> >>  2 files changed, 4 insertions(+)
-> >> >>
-> >> >> diff --git a/drivers/gpu/drm/i915/i915_module.c
-> >> >> b/drivers/gpu/drm/i915/i915_module.c
-> >> >> index 65acd7bf75d0..2ad079ad35db 100644
-> >> >> --- a/drivers/gpu/drm/i915/i915_module.c
-> >> >> +++ b/drivers/gpu/drm/i915/i915_module.c
-> >> >> @@ -75,6 +75,8 @@ static const struct {  };  static int
-> >> >> init_progress;
-> >> >>
-> >> >> +MODULE_SOFTDEP("pre: mei_gsc_proxy mei_gsc");
-> >> >> +
-> >> >>  static int __init i915_init(void)  {
-> >> >>  	int err, i;
-> >> >> diff --git a/drivers/gpu/drm/xe/xe_module.c
-> >> >> b/drivers/gpu/drm/xe/xe_module.c index bfc3deebdaa2..5633ea1841b7
-> >> >> 100644
-> >> >> --- a/drivers/gpu/drm/xe/xe_module.c
-> >> >> +++ b/drivers/gpu/drm/xe/xe_module.c
-> >> >> @@ -127,6 +127,8 @@ static void xe_call_exit_func(unsigned int i)
-> >> >>  	init_funcs[i].exit();
-> >> >>  }
-> >> >>
-> >> >> +MODULE_SOFTDEP("pre: mei_gsc_proxy mei_gsc");
-> >> >
-> >> >I'm honestly not very comfortable with this.
-> >> >
-> >> >1. This is not true for every device supported by these modules.
-> >> >2. This is not true for every (and the most basic) functionality of t=
-hese
-> drivers.
-> >> >
-> >> >Shouldn't this be done in the the mei side?
-> >>
-> >> I don't think it's possible to do from the mei side. Would mei depend
-> >> on both xe and i915 (and thus cause both to be loaded regardless of
-> >> the platform?). For a runtime dependency like this that depends on
-> >> the platform, I think the best way would be a weakdep + either a
-> >> request_module() or something else that causes the module to load (is
-> >> that what comp_* is doing today?)
-> >>
-> >> >
-> >> >Couldn't at probe we identify the need of them and if needed we
-> >> >return -EPROBE to attempt a retry after the mei drivers were probed?
-> >>
-> >> I'm not sure this is fixing anything for probe. I think we already
-> >> wait on the other component to be ready without blocking the rest of t=
-he
-> driver functionality.
-> >>
-> >> A weakdep wouldn't cause the module to be loaded where it's not
-> >> needed, but need some clarification if this is trying to fix anything =
-load-
-> related or just unload.
-> >
-> >This change is fixing unload.
-> >During xe load I am seeing mei_gsc modules was loaded, but not unloaded
-> >during the unload xe
->=20
-> so, first thing: if things are correct in the kernel, we shouldn't need t=
-o
-> **unload** the module after unbinding the device. Why are we unloading xe
-> and the other modules for tests?
+> > Thanks for bringing this up! Sounds like we're also going to need a
+> > way to completely exclude specific fields from the output then. I
+> > think we can use a similar union approach, but instead of instructing
+> > the tool to use another type, we can just indicate that the field
+> > should be skipped. I'll come up with a solution for v3.
+>
+> It might have been mentioned previously, not sure, but one more case to
+> consider is handling of enum declarations. New enumerators can be
+> typically added without breaking ABI, e.g. 'enum E { OLD1, OLD2, NEW }'.
+> It would be then great to have some ability to hide them from
+> gendwarfksyms.
+>
+> I think neither of the __kabi_reserved or __gendwarfksyms_declonly
+> mechanism can currently help with that.
 
-While running gta@xe_module_load@reload-no-display I see failure, to addres=
-s this failure I have this changes, previously I am trying to fix from IGT,=
- but as per igt review suggestion I am trying to fix issue in kernel,=20
-IGT patch: https://patchwork.freedesktop.org/series/137343/
+I thought about this a bit and I wonder if we need a separate
+mechanism for that, or is it sufficient to just #define any additional
+hidden values you want to add instead of including them in the enum?
 
-> >root@DUT6127BMGFRD:/home/gta# lsmod | grep xe ------>>>just after
-> >system reboot root@DUT6127BMGFRD:/home/gta#
-> >root@DUT6127BMGFRD:/home/gta# lsmod | grep mei
-> >mei_hdcp               28672  0
-> >mei_pxp                16384  0
-> >mei_me                 49152  2
-> >mei                   167936  5 mei_hdcp,mei_pxp,mei_me
-> >root@DUT6127BMGFRD:/home/gta# lsmod | grep xe
-> >root@DUT6127BMGFRD:/home/gta# root@DUT6127BMGFRD:/home/gta#
-> modprobe xe
-> >root@DUT6127BMGFRD:/home/gta# root@DUT6127BMGFRD:/home/gta#
-> lsmod |
-> >grep mei
-> >mei_gsc_proxy          16384  0
-> >mei_gsc                12288  1
->=20
-> 			       ^ which means there's one user, which
-> 			         should be xe
->=20
-> >mei_hdcp               28672  0
-> >mei_pxp                16384  0
-> >mei_me                 49152  3 mei_gsc
-> >mei                   167936  8 mei_gsc_proxy,mei_gsc,mei_hdcp,mei_pxp,m=
-ei_me
-> >root@DUT6127BMGFRD:/home/gta#
-> >root@DUT6127BMGFRD:/home/gta#
-> >root@DUT6127BMGFRD:/home/gta#
-> >root@DUT6127BMGFRD:/home/gta# init 3
-> >root@DUT6127BMGFRD:/home/gta# echo -n auto >
-> >/sys/bus/pci/devices/0000\:03\:00.0/power/control
-> >root@DUT6127BMGFRD:/home/gta# echo -n "0000:03:00.0" >
-> >/sys/bus/pci/drivers/xe/unbind root@DUT6127BMGFRD:/home/gta#
-> modprobe
-> >-r xe root@DUT6127BMGFRD:/home/gta#
-> root@DUT6127BMGFRD:/home/gta# lsmod
-> >| grep xe root@DUT6127BMGFRD:/home/gta# lsmod | grep mei
-> >mei_gsc_proxy          16384  0
-> >mei_gsc                12288  0
->=20
-> 			       ^ great, so the refcount went to 0,
-> 			         confirming it was xe. It should go to 0
-> 				 even before you unload the module,
-> 				 when unbind.
->=20
-> A couple of points:
->=20
-> 1) why do we care about unloading mei_gsc. Just loading xe
->     again (or even not even unloading it, just unbind/rebind),
->     should still work if the xe <-> mei_gsc integration is done
->     correctly.
->=20
-> 2) If for some reason we do want to remove the module, then we will
->     need some work in kernel/module/  to start tracking runtime module
->     dependencies, i.e. when one module does a module_get(foo->owner), it
->     would add to a list and output on sysfs together with the holders lis=
-t.
->     This way you would be able to track the runtime deps and remove them
->     if their refcount went to 0 after removing xe.
->=20
-> (2) is doable, but previous attempts were not successful [1]. Is  there s=
-omething
-> else to make the simpler solution (1) to work?
->=20
+  enum e {
+      A,
+      B,
+  #define C (B + 1)
+  #define D (C + 1)
+  };
 
-Reference why I am doing this changes, please see review comments of this p=
-atch https://patchwork.freedesktop.org/series/137343/
+Do you see any issues with this approach? I think Clang would complain
+about this with -Wassign-enum, but I'm not sure if we even enable that
+in the kernel, and as long as you don't overflow the underlying type,
+which is a requirement for not breaking the ABI anyway, it should be
+fine.
 
-Regards,
-Krishna.
-
-> thanks
-> Lucas De Marchi
->=20
-> [1] https://lore.kernel.org/linux-
-> modules/cover.1652113087.git.mchehab@kernel.org/
->=20
-> >mei_hdcp               28672  0
-> >mei_pxp                16384  0
-> >mei_me                 49152  3 mei_gsc
-> >mei                   167936  7 mei_gsc_proxy,mei_gsc,mei_hdcp,mei_pxp,m=
-ei_me
-> >root@DUT6127BMGFRD:/home/gta#
-> >
-> >Regards,
-> >Krishna.
-> >
-> >>
-> >> Lucas De Marchi
-> >>
-> >> >
-> >> >Cc: Alexander Usyskin <alexander.usyskin@intel.com>
-> >> >Cc: Tomas Winkler <tomas.winkler@intel.com>
-> >> >Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
-> >> >Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> >> >Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-> >> >Cc: Thomas Hellstr=F6m <thomas.hellstrom@linux.intel.com>
-> >> >Cc: Jani Nikula <jani.nikula@intel.com>
-> >> >Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> >> >Cc: Tvrtko Ursulin <tursulin@ursulin.net>
-> >> >
-> >> >> +
-> >> >>  static int __init xe_init(void)
-> >> >>  {
-> >> >>  	int err, i;
-> >> >> --
-> >> >> 2.25.1
-> >> >>
+Sami
