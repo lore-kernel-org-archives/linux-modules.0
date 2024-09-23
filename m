@@ -1,323 +1,290 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B63B644;
-	Fri, 20 Sep 2024 00:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C6019F421
+	for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 18:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726791888; cv=none; b=KusKA2KBg/gqWtSlkhiRM7vAXqyf2hj0c8YVVR2hGnNmZhVl4CnEQS4rH1Cf6pUXGvzw1T5nFKZmNdNP6A3cUECY3xCWc7w6hI/zHnNqpN6lTngr7TOs2cxXQzeJa+bV9HDWMGbLrKyA77xSZCB41zvdV51r9P8r/hEqqcLmFaI=
+	t=1727115547; cv=none; b=h6CNvTPMAFR8xB+bWpTCJ6mJCxFm3AQE6h2/zdnr87j4UzbAgco9Amz5FGlaz4J+NcI2n2KLkbQ7af1KzFqViEu9ELVJQReLtyf03TzlUqltfi48QhP0/ySGiFTjC6txCor0o3RjKFF8vSDSdK8VQ+SHz+EujYdM8bBjzLBTyyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726791888; c=relaxed/simple;
-	bh=Hqd6RXlwbvPRlhDdh/h6DKLVXsmzrExjE+8yh8izd/w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vj4HoPggL1ZtBOwiH/eYC71w5V+X+imKxup6F1qoRD0fIisaYKFXewsvBkk+NwD2vBvKwnZh+pjjxxGmBegKeQnoQdBcZzTtY2gtc15R4goSsOwMgXpMC/MG+cP2/M9VvqKVQaUja+EhK6eHOkfQV6fkO8UnkOOrg4oz9eq4rPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4LyBNSm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727115547; c=relaxed/simple;
+	bh=gj6khed8ryNs549o/Lb/gffVUpbK8LV/Z0TyhikI208=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=WMiFYx+wOKM2dbQKKmL8v4HGf6aXJfjomeFAwg//1KCTGIagq75OLpw8Ellq6j4uYd0a6Rt3uzUYDGwtjCKvXURiwTzNLyREKPwqf6SJ9S493rKu6EGc4jAd1QoWSgWWlOxIAngkM+c/Yfb1CK5Dvfmx4Sic5lvy9aO3aSbiGh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NSsH3Fei; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4LyBNSm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1575EC4CEC4;
-	Fri, 20 Sep 2024 00:24:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726791888;
-	bh=Hqd6RXlwbvPRlhDdh/h6DKLVXsmzrExjE+8yh8izd/w=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=O4LyBNSmPF/V4D3wDEE5AInT38jIIGo1jeXZ2ExXJkw9ikqTTqnozlHcJ5zK22x9L
-	 5TCay6hhG64zggy+/FJNV3SJB1KL+EKeTNxQiL3Xe1XDqMK/43xLW2V6pVhD6QCOCL
-	 38vt5XrQWxjSWxvWl2q46yzAEX2hiGQSPcQMksIRQ1BMbiASblrctj36RtzhPr3Ps/
-	 unyc/Um5DHri1zO7A4SjPiCO4U3rDkczjDhclJKFT/aLjXrYpmg9+puK5uRIeas6f3
-	 F88JmERBENTRXtO4Cm7jcqAgPcsAZsDJI9jsCRvlQaiX95uywNMBCQb8+eaUJG834Y
-	 k6no0qEv7RF+g==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f75c6ed428so16101111fa.0;
-        Thu, 19 Sep 2024 17:24:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUOHlVosLJv9pTVENQ/o4uuTgqLkw/VnEUo5eZELj44/qbPayWvbteYvrEdeH28y1Jx0rs4Ddi0CQbTwmdpuSfgLYEN@vger.kernel.org, AJvYcCXjnmVe1vQ37SFMT2NlOjD9JN/pimgVog9+KmWaMOQQZJL9Z+kfaHuHvKvJS7LpaJHndXtnCaEVvtRuuo4=@vger.kernel.org, AJvYcCXpDdkX0rKuSwk3S1KQCcEgly995T50geHEfArR0DRNMebknrlsUVjDtrsrVlrV+qHiAclzEHLK7qqx2snOyw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0o6dSs+oUry7HBUYO4JkXlp2neZ9Y0zKNhp8daHXL/rT1TTTE
-	QZpzzh52Ykg1Y1XWIqDINd7w9V2xwyroeEai56yZ5sZjVNmvKiIRKFUaPeqJz7ift2dZrSxlPuf
-	fDZnjq698uNKmjpaUPZ5fKc4QZTc=
-X-Google-Smtp-Source: AGHT+IEfFRLhYVDcncbvSkDb1MMFX/XL/QQpOmSx9gq+6xL64xUG+xbb6AJvb+vfqRGs/2zyIj4vP4SHNMfzKtTGf1k=
-X-Received: by 2002:a2e:9e10:0:b0:2f7:5b47:ac1f with SMTP id
- 38308e7fff4ca-2f7cb337718mr6573311fa.29.1726791886779; Thu, 19 Sep 2024
- 17:24:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NSsH3Fei"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-718ea25967eso5196678b3a.2
+        for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 11:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727115545; x=1727720345; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fYykaPJf9iN08q62sPPqgPYjrSR/2ddqDpdkxmVOH40=;
+        b=NSsH3FeiKout/lPDHS7NLOcKPIGPRDLGnO8pioIat4/Su9yOWn5hoi4UT9AotgyXLV
+         WXSmWCQQ+1WlnuMLYjyaTdxH0sQKM5hlbIb4Z4YKTrs7mDoXDrKv6dYTIAYId0Rw1Zmx
+         YcVIJ9izc6RLdHLqG8O2d2cQ7JMP/aXCNhKD+H/a1K6nnNDfJs4NQFLszZLpmiQz064H
+         sHE9a6egIz5GZF31R3zF71gsI/cJz3Ydpa7g8tHqLu8il2rSLXP9UudxQ0UCUkrQPYvy
+         0nQr+t8mUlSx21kGRZINwDY5m+/epCQQC1Tibb6wkcIDcV7LRuhwtTQwBCjrk7egJVTE
+         3CBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727115545; x=1727720345;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fYykaPJf9iN08q62sPPqgPYjrSR/2ddqDpdkxmVOH40=;
+        b=WH78KFAunc8kPV00Sw6+h/eA6QCzMPPhYO3qWh9ZtEiWMkTBkzS9HXOu7cX5wK21us
+         x2ks1GYRITbSvDdbgSzBUvHarvJTzGOcUIv3q/hOxp28xpGw6RteiUlX64LVx2tufzKr
+         mU6o10F0Q35WCleYlQku4Exp1sH7lvhNkgYmHZmxKl5GtHkGyhS4l5kUjHNg8ak1TuXB
+         +Sv+3gGiYGyR0f4PnYd6kibOCat9L/m9lWh2oQJ6LugrmFuR3gnQn0tg00qUU8Smi9jU
+         fhu16pY5coyftXPYW5Fx4yh6NFO+w3m4v0suK27Q4Pzl4VXgMC/pUCfZsoceYTJmEG1+
+         TL7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXm5jeTSIkEA44HVxP/f3kTH7hBDqG1y9fbgsxJqxyVRSSm0KVyVmNqsP2k5WyYYXvPbPjhRShbbjY2UT5G@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYie6DPn73As1HSspnXN1XdMCTft5qY4ThbCWX0InYIhzruO2f
+	7JRMpV2jx3OXYZQYTVikmSBrOCgZrYlvUSk43TaWBAy8n3Ls4/8sFgg9Q5cl/3WQctgV0L/CAEe
+	ZinM7Ra95nsG26iiBT/AS7xD9+A==
+X-Google-Smtp-Source: AGHT+IFXsfcwc3JvPBOqJlRoLdNtPRiE6lFFX4gPJa86MrvCNC+ZBctwFTPVCwA4l+3zKo8NhIJqs5E35fawOlvKtBk=
+X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
+ (user=samitolvanen job=sendgmr) by 2002:a05:6a00:6f20:b0:718:dfec:9570 with
+ SMTP id d2e1a72fcca58-7199cee9a89mr53651b3a.6.1727115545229; Mon, 23 Sep 2024
+ 11:19:05 -0700 (PDT)
+Date: Mon, 23 Sep 2024 18:18:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240906144506.1151789-1-kris.van.hees@oracle.com>
- <20240906144506.1151789-3-kris.van.hees@oracle.com> <CAK7LNAQtuqBwheX6SLWMyKE0h2wLzApii1xyMBqNs3ge_JSUvg@mail.gmail.com>
- <Zt9P5p6XGBp2Uwde@oracle.com> <CAK7LNAS53tB708sRSbCA=_2GP_sAoNYHtLzhYMV=5U-+FfcR3Q@mail.gmail.com>
- <ZuyRPYFl4uDijwNg@kvh-deb-bpf.us.oracle.com>
-In-Reply-To: <ZuyRPYFl4uDijwNg@kvh-deb-bpf.us.oracle.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 20 Sep 2024 09:24:10 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ-CdKqgthaKrh+e3isuQACQZyDyFemR9S17R4CQAJROw@mail.gmail.com>
-Message-ID: <CAK7LNAQ-CdKqgthaKrh+e3isuQACQZyDyFemR9S17R4CQAJROw@mail.gmail.com>
-Subject: Re: [PATCH v10 2/4] kbuild: generate offset range data for builtin modules
-To: Kris Van Hees <kris.van.hees@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Nick Alcock <nick.alcock@oracle.com>, Alan Maguire <alan.maguire@oracle.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Sam James <sam@gentoo.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Jiri Olsa <olsajiri@gmail.com>, 
-	Elena Zannoni <elena.zannoni@oracle.com>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9451; i=samitolvanen@google.com;
+ h=from:subject; bh=gj6khed8ryNs549o/Lb/gffVUpbK8LV/Z0TyhikI208=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDGkfN7LVCXiHbzxl367qMENkzerDMTIO3lyGm86UeMhut
+ Teyq9rcUcrCIMbBICumyNLydfXW3d+dUl99LpKAmcPKBDKEgYtTACZSxcLIMLdI8oLBu7NxrBlp
+ er8+B/ZuuffDW+rK7LlJOo+a3l4UaWX4xdwRutTaot6tzrvqU3OG2ZUHbgdPPH0n/HlW7BWltyV XWAE=
+X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
+Message-ID: <20240923181846.549877-22-samitolvanen@google.com>
+Subject: [PATCH v3 00/20] Implement DWARF modversions
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Gary Guo <gary@garyguo.net>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, 
+	Miroslav Benes <mbenes@suse.cz>, Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 20, 2024 at 6:02=E2=80=AFAM Kris Van Hees <kris.van.hees@oracle=
-.com> wrote:
->
-> On Thu, Sep 19, 2024 at 11:28:44PM +0900, Masahiro Yamada wrote:
-> > Hi Kris,
-> >
-> >
-> >
-> > On Tue, Sep 10, 2024 at 4:43=E2=80=AFAM Kris Van Hees <kris.van.hees@or=
-acle.com> wrote:
-> > >
-> > > On Sun, Sep 08, 2024 at 11:50:51AM +0900, Masahiro Yamada wrote:
-> > > > On Fri, Sep 6, 2024 at 11:45???PM Kris Van Hees <kris.van.hees@orac=
-le.com> wrote:
-> > > > >
-> > > > > Create file module.builtin.ranges that can be used to find where
-> > > > > built-in modules are located by their addresses. This will be use=
-ful for
-> > > > > tracing tools to find what functions are for various built-in mod=
-ules.
-> > > > >
-> > > > > The offset range data for builtin modules is generated using:
-> > > > >  - modules.builtin: associates object files with module names
-> > > > >  - vmlinux.map: provides load order of sections and offset of fir=
-st member
-> > > > >     per section
-> > > > >  - vmlinux.o.map: provides offset of object file content per sect=
-ion
-> > > > >  - .*.cmd: build cmd file with KBUILD_MODFILE
-> > > > >
-> > > > > The generated data will look like:
-> > > > >
-> > > > > .text 00000000-00000000 =3D _text
-> > > > > .text 0000baf0-0000cb10 amd_uncore
-> > > > > .text 0009bd10-0009c8e0 iosf_mbi
-> > > > > ...
-> > > > > .text 00b9f080-00ba011a intel_skl_int3472_discrete
-> > > > > .text 00ba0120-00ba03c0 intel_skl_int3472_discrete intel_skl_int3=
-472_tps68470
-> > > > > .text 00ba03c0-00ba08d6 intel_skl_int3472_tps68470
-> > > > > ...
-> > > > > .data 00000000-00000000 =3D _sdata
-> > > > > .data 0000f020-0000f680 amd_uncore
-> > > > >
-> > > > > For each ELF section, it lists the offset of the first symbol.  T=
-his can
-> > > > > be used to determine the base address of the section at runtime.
-> > > > >
-> > > > > Next, it lists (in strict ascending order) offset ranges in that =
-section
-> > > > > that cover the symbols of one or more builtin modules.  Multiple =
-ranges
-> > > > > can apply to a single module, and ranges can be shared between mo=
-dules.
-> > > > >
-> > > > > The CONFIG_BUILTIN_MODULE_RANGES option controls whether offset r=
-ange data
-> > > > > is generated for kernel modules that are built into the kernel im=
-age.
-> > > > >
-> > > > > How it works:
-> > > > >
-> > > > >  1. The modules.builtin file is parsed to obtain a list of built-=
-in
-> > > > >     module names and their associated object names (the .ko file =
-that
-> > > > >     the module would be in if it were a loadable module, hereafte=
-r
-> > > > >     referred to as <kmodfile>).  This object name can be used to
-> > > > >     identify objects in the kernel compile because any C or assem=
-bler
-> > > > >     code that ends up into a built-in module will have the option
-> > > > >     -DKBUILD_MODFILE=3D<kmodfile> present in its build command, a=
-nd those
-> > > > >     can be found in the .<obj>.cmd file in the kernel build tree.
-> > > > >
-> > > > >     If an object is part of multiple modules, they will all be li=
-sted
-> > > > >     in the KBUILD_MODFILE option argument.
-> > > > >
-> > > > >     This allows us to conclusively determine whether an object in=
- the
-> > > > >     kernel build belong to any modules, and which.
-> > > > >
-> > > > >  2. The vmlinux.map is parsed next to determine the base address =
-of each
-> > > > >     top level section so that all addresses into the section can =
-be
-> > > > >     turned into offsets.  This makes it possible to handle sectio=
-ns
-> > > > >     getting loaded at different addresses at system boot.
-> > > > >
-> > > > >     We also determine an 'anchor' symbol at the beginning of each
-> > > > >     section to make it possible to calculate the true base addres=
-s of
-> > > > >     a section at runtime (i.e. symbol address - symbol offset).
-> > > > >
-> > > > >     We collect start addresses of sections that are included in t=
-he top
-> > > > >     level section.  This is used when vmlinux is linked using vml=
-inux.o,
-> > > > >     because in that case, we need to look at the vmlinux.o linker=
- map to
-> > > > >     know what object a symbol is found in.
-> > > > >
-> > > > >     And finally, we process each symbol that is listed in vmlinux=
-.map
-> > > > >     (or vmlinux.o.map) based on the following structure:
-> > > > >
-> > > > >     vmlinux linked from vmlinux.a:
-> > > > >
-> > > > >       vmlinux.map:
-> > > > >         <top level section>
-> > > > >           <included section>  -- might be same as top level secti=
-on)
-> > > > >             <object>          -- built-in association known
-> > > > >               <symbol>        -- belongs to module(s) object belo=
-ngs to
-> > > > >               ...
-> > > > >
-> > > > >     vmlinux linked from vmlinux.o:
-> > > > >
-> > > > >       vmlinux.map:
-> > > > >         <top level section>
-> > > > >           <included section>  -- might be same as top level secti=
-on)
-> > > > >             vmlinux.o         -- need to use vmlinux.o.map
-> > > > >               <symbol>        -- ignored
-> > > > >               ...
-> > > > >
-> > > > >       vmlinux.o.map:
-> > > > >         <section>
-> > > > >             <object>          -- built-in association known
-> > > > >               <symbol>        -- belongs to module(s) object belo=
-ngs to
-> > > > >               ...
-> > > > >
-> > > > >  3. As sections, objects, and symbols are processed, offset range=
-s are
-> > > > >     constructed in a straight-forward way:
-> > > > >
-> > > > >       - If the symbol belongs to one or more built-in modules:
-> > > > >           - If we were working on the same module(s), extend the =
-range
-> > > > >             to include this object
-> > > > >           - If we were working on another module(s), close that r=
-ange,
-> > > > >             and start the new one
-> > > > >       - If the symbol does not belong to any built-in modules:
-> > > > >           - If we were working on a module(s) range, close that r=
-ange
-> > > > >
-> > > > > Signed-off-by: Kris Van Hees <kris.van.hees@oracle.com>
-> > > > > Reviewed-by: Nick Alcock <nick.alcock@oracle.com>
-> > > > > Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-> > > > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > > > > Tested-by: Sam James <sam@gentoo.org>
-> > > > > ---
-> > > >
-> > > >
-> > > > If v10 is the final version, I offer to locally squash the followin=
-g:
-> > >
-> > > Thanks!  That would be great!  v10 is indeed the final version (see b=
-wlow).
-> > >
-> > > > diff --git a/.gitignore b/.gitignore
-> > > > index c06a3ef6d6c6..625bf59ad845 100644
-> > > > --- a/.gitignore
-> > > > +++ b/.gitignore
-> > > > @@ -69,6 +69,7 @@ modules.order
-> > > >  /Module.markers
-> > > >  /modules.builtin
-> > > >  /modules.builtin.modinfo
-> > > > +/modules.builtin.ranges
-> > > >  /modules.nsdeps
-> > > >
-> > > >  #
-> > > > diff --git a/Documentation/dontdiff b/Documentation/dontdiff
-> > > > index 3c399f132e2d..a867aea95c40 100644
-> > > > --- a/Documentation/dontdiff
-> > > > +++ b/Documentation/dontdiff
-> > > > @@ -180,6 +180,7 @@ modpost
-> > > >  modules-only.symvers
-> > > >  modules.builtin
-> > > >  modules.builtin.modinfo
-> > > > +modules.builtin.ranges
-> > > >  modules.nsdeps
-> > > >  modules.order
-> > > >  modversions.h*
-> > >
-> > > > If Sami reports more errors and you end up with v11,
-> > > > please remember to fold it.
-> > >
-> > > Sami confirmed v10 [0].  Can you squash his reviewed-by and tested-by=
- as well?
-> > >
-> > > Thanks for all the help!
-> > >
-> > >         Kris
-> > >
-> > > [0] https://lore.kernel.org/lkml/20240909191801.GA398180@google.com/
-> >
-> >
-> >
-> >
-> >
-> > Can you please add a small explanation to
-> > Documentation/kbuild/kbuild.rst ?
-> >
-> >
-> > It documents modules.order, modules.builtin, modules.builtin.modinfo.
-> >
-> > Having modules.builtin.ranges there will keep the consistency.
-> >
-> >
-> >
-> > You do not need to re-submit the entire patch.
-> >
-> > If you provide a diff in a few days,
-> > I will locally squash it.
->
-> Thank you for offering to locally squash the diff.
->
->         Kris
->
->
-> diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuil=
-d.rst
-> index 9c8d1d046ea5..142be0c74761 100644
-> --- a/Documentation/kbuild/kbuild.rst
-> +++ b/Documentation/kbuild/kbuild.rst
-> @@ -22,6 +22,11 @@ modules.builtin.modinfo
->  This file contains modinfo from all modules that are built into the kern=
-el.
->  Unlike modinfo of a separate module, all fields are prefixed with module=
- name.
->
-> +modules.builtin.ranges
-> +----------------------
-> +This file contains address offset ranges (per ELF section) for all modul=
-es
-> +that are built into the kernel.  Together with System.map, it can be use=
-d
-> +to associate module names with symbols.
->
->  Environment variables
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Hi,
+
+Here's v3 of the DWARF modversions series [1][2]. The main
+motivation remains modversions support for Rust, which is important
+for distributions like Android that are eager to ship Rust kernel
+modules. Per Luis' request [3], v2 dropped the Rust specific bits
+from the series and instead added the feature as an option for
+the entire kernel. Matt is still addressing Rust modversion_info
+compatibility issues in a separate series [4], and we'll follow up
+with a patch to actually allow CONFIG_MODVERSIONS with Rust once
+everything else has been sorted out.
+
+A short background recap: Unlike C, Rust source code doesn't
+have sufficient information about the final ABI, as the compiler
+has considerable freedom in adjusting structure layout, for
+example, which makes using a source code parser like genksyms a
+non-starter. Based on Matt's suggestion and previous feedback from
+maintainers, this series uses DWARF debugging information for
+computing versions. DWARF is an established and a relatively stable
+format, which includes all the necessary ABI details, and adding a
+CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
+reasonable trade-off.
+
+The first two patches add more list macros to scripts/include and
+move the genksyms CRC32 implementation to a shared header file. The
+next 15 patches add gendwarfksyms, a tool for computing symbol
+versions from DWARF. When passed a list of exported symbols and
+object files, the tool generates an expanded type string for each
+symbol and computes symbol CRCs similarly to genksyms. gendwarfksyms
+is written in C and uses libdw to process DWARF. Patch 18 ensures
+that debugging information is present where we need it, patch 19
+adds gendwarfksyms as an alternative to genksyms, and the last patch
+adds documentation.
+
+Note that v3 is based on next-20240923 as it depends on Masahiro's
+scripts/include changes. For x86, we also need a separate small
+patch to include asm/ptrace.h in asm/ftrace.h. [5] For your
+convenience, you can find this series with all the prerequisites
+here:
+
+https://github.com/samitolvanen/linux/commits/gendwarfksyms-v3
+
+If you also want to test the series with Rust modules, this branch
+adds Matt's modversion_info series and a small patch to enable Rust
+modversions:
+
+https://github.com/samitolvanen/linux/commits/rustmodversions-v3
+
+Looking forward to hearing your thoughts!
+
+Sami
 
 
-Squashed to v10 2/4.
-Thanks!
+[1] v1: https://lore.kernel.org/lkml/20240617175818.58219-17-samitolvanen@google.com/
+[2] v2: https://lore.kernel.org/lkml/20240815173903.4172139-21-samitolvanen@google.com/
+[3] https://lore.kernel.org/lkml/ZnIZEtkkQWEIGf9n@bombadil.infradead.org/
+[4] https://lore.kernel.org/lkml/20240806212106.617164-1-mmaurer@google.com/
+[5] https://lore.kernel.org/lkml/20240916221557.846853-2-samitolvanen@google.com/
+
+---
+
+Changes in v3:
+- Updated SPX license headers.
+
+- Squashed the first two patches in v2 and tried to reduce churn as
+  much as reasonable.
+
+- Dropped patch 18 from v2 ("x86/asm-prototypes: Include
+  <asm/ptrace.h>") as it's addressed by a separate patch. [5]
+
+- Changed the error handling code to immediately terminate instead
+  of propagating the errors back to main, which cleaned up the code
+  quite a bit.
+
+- Switched to the list and hashtable implementations in scripts and
+  dropped the remaining tools/include dependencies. Added a couple
+  missing list macros. (patch 1)
+
+- Moved the genksyms CRC32 implementation to scripts/include and
+  dropped the duplicate code. (patches 2 and 14)
+
+- Switched from ad-hoc command line parsing to getopt_long (patch 3).
+
+- Added structure member and function parameter names to the DIE
+  output to match genksyms behavior, and tweaked the symtypes format
+  to be more parser-friendly in general based on Petr's suggestions.
+
+- Replaced the declaration-only struct annotations with more generic
+  kABI stability rules that allow source code annotations to be used
+  where #ifndef __GENKSYMS__ was previously used.  Added support for
+  rules that can be used to exclude enumerators from versioning.
+  (patch 16)
+
+- Per Miroslav's suggestion, added an option to hide structure
+  members from versioning when they're added to existing alignment
+  holes, for example. (patch 16)
+
+- Per Greg's request, added documentation and example macros for the
+  --stable features, and a couple of test cases. (patches 15, 16, and
+  20)
+
+- Fixed making symtypes files, which need to depend on .o files with
+  gendwarfksyms. (patch 19)
+
+- Addressed several other smaller issues that Petr and Masahiro
+  kindly pointed out during the v2 review.
+
+Changes in v2:
+- Per Luis' request, dropped Rust-specific patches and added
+  gendwarfksyms as an alternative to genksyms for the entire
+  kernel.
+
+- Added support for missing DWARF features needed to handle
+  also non-Rust code.
+
+- Changed symbol address matching to use the symbol table
+  information instead of relying on addresses in DWARF.
+
+- Added __gendwarfksyms_ptr patches to ensure the compiler emits
+  the necessary type information in DWARF even for symbols that
+  are defined in other TUs.
+
+- Refactored debugging output and moved the more verbose output
+  behind --dump* flags.
+
+- Added a --symtypes flag for generating a genksyms-style
+  symtypes output based on Petr's feedback, and refactored
+  symbol version calculations to be based on symtypes instead
+  of raw --dump-dies output.
+
+- Based on feedback from Greg and Petr, added --stable flag and
+  support for reserved data structure fields and declaration-onl
+  structures. Also added examples for using these features.
+
+- Added a GENDWARFKSYMS option and hooked up kbuild support
+  for both C and assembly code. Note that with gendwarfksyms,
+  we have to actually build a temporary .o file for calculating
+  assembly modversions.
+
+---
+
+Sami Tolvanen (20):
+  scripts: import more list macros
+  scripts: move genksyms crc32 implementation to a common include
+  tools: Add gendwarfksyms
+  gendwarfksyms: Add address matching
+  gendwarfksyms: Expand base_type
+  gendwarfksyms: Add a cache for processed DIEs
+  gendwarfksyms: Expand type modifiers and typedefs
+  gendwarfksyms: Expand subroutine_type
+  gendwarfksyms: Expand array_type
+  gendwarfksyms: Expand structure types
+  gendwarfksyms: Limit structure expansion
+  gendwarfksyms: Add die_map debugging
+  gendwarfksyms: Add symtypes output
+  gendwarfksyms: Add symbol versioning
+  gendwarfksyms: Add support for kABI rules
+  gendwarfksyms: Add support for reserved and ignored fields
+  gendwarfksyms: Add support for symbol type pointers
+  export: Add __gendwarfksyms_ptr_ references to exported symbols
+  kbuild: Add gendwarfksyms as an alternative to genksyms
+  Documentation/kbuild: Add DWARF module versioning
+
+ Documentation/kbuild/gendwarfksyms.rst      |  274 +++++
+ Documentation/kbuild/index.rst              |    1 +
+ include/linux/export.h                      |   15 +
+ kernel/module/Kconfig                       |   31 +
+ scripts/Makefile                            |    3 +-
+ scripts/Makefile.build                      |   39 +-
+ scripts/gendwarfksyms/.gitignore            |    2 +
+ scripts/gendwarfksyms/Makefile              |   12 +
+ scripts/gendwarfksyms/cache.c               |   44 +
+ scripts/gendwarfksyms/die.c                 |  166 +++
+ scripts/gendwarfksyms/dwarf.c               | 1085 +++++++++++++++++++
+ scripts/gendwarfksyms/examples/kabi.h       |  141 +++
+ scripts/gendwarfksyms/examples/kabi_ex0.c   |   86 ++
+ scripts/gendwarfksyms/examples/kabi_ex1.c   |   89 ++
+ scripts/gendwarfksyms/examples/kabi_ex2.c   |   98 ++
+ scripts/gendwarfksyms/examples/kabi_rules.c |   56 +
+ scripts/gendwarfksyms/examples/symbolptr.c  |   29 +
+ scripts/gendwarfksyms/gendwarfksyms.c       |  195 ++++
+ scripts/gendwarfksyms/gendwarfksyms.h       |  351 ++++++
+ scripts/gendwarfksyms/kabi.c                |  214 ++++
+ scripts/gendwarfksyms/symbols.c             |  317 ++++++
+ scripts/gendwarfksyms/types.c               |  477 ++++++++
+ scripts/genksyms/genksyms.c                 |   77 +-
+ scripts/include/crc32.h                     |   93 ++
+ scripts/include/list.h                      |   50 +
+ 25 files changed, 3860 insertions(+), 85 deletions(-)
+ create mode 100644 Documentation/kbuild/gendwarfksyms.rst
+ create mode 100644 scripts/gendwarfksyms/.gitignore
+ create mode 100644 scripts/gendwarfksyms/Makefile
+ create mode 100644 scripts/gendwarfksyms/cache.c
+ create mode 100644 scripts/gendwarfksyms/die.c
+ create mode 100644 scripts/gendwarfksyms/dwarf.c
+ create mode 100644 scripts/gendwarfksyms/examples/kabi.h
+ create mode 100644 scripts/gendwarfksyms/examples/kabi_ex0.c
+ create mode 100644 scripts/gendwarfksyms/examples/kabi_ex1.c
+ create mode 100644 scripts/gendwarfksyms/examples/kabi_ex2.c
+ create mode 100644 scripts/gendwarfksyms/examples/kabi_rules.c
+ create mode 100644 scripts/gendwarfksyms/examples/symbolptr.c
+ create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
+ create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
+ create mode 100644 scripts/gendwarfksyms/kabi.c
+ create mode 100644 scripts/gendwarfksyms/symbols.c
+ create mode 100644 scripts/gendwarfksyms/types.c
+ create mode 100644 scripts/include/crc32.h
 
 
+base-commit: ef545bc03a65438cabe87beb1b9a15b0ffcb6ace
+-- 
+2.46.0.792.g87dc391469-goog
 
---=20
-Best Regards
-Masahiro Yamada
