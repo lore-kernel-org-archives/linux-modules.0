@@ -1,55 +1,55 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58E51A2642
-	for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 18:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F601A2866
+	for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 18:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727115561; cv=none; b=t8suptoN2bfnWbyr3dGWpv5tMgoh6IhpO5QTf+i3qmIqvQw7/ARC3SMWP0PlNCkI6QJsM0iOCKRNFelfW0puApMtwzvISRcHF0ZbrdTuCRMUJL90Em1Tic82CesV0d2ZDWbmdYQ/GlITytKKDt9zX7AfcXyLi/TodjEBxKZ77D8=
+	t=1727115563; cv=none; b=HcSsa5mG7IbY/7H8VHL4P+NHF/nfmfOYzJArAp0F+I5bAXeJ7vLXdcko830zXmvyh41ku+jiqR+AUs5aSWF4w6xup1Lzf4Gm5J8XDC0RcXOH2LuGQNe7irYUFuNo0OkQyaOfZxOMNhxjxyUZNqO+//GtSYAXrH3c7J4nLoWoEE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727115561; c=relaxed/simple;
-	bh=ymRviO+a5cEV3+mp0Yi0XXSwQOhrRgtOy5SB1olfBDk=;
+	s=arc-20240116; t=1727115563; c=relaxed/simple;
+	bh=YnxRLubYaRu5LmAQuXzMlCDLmcU4MfVwQeLF/vCiIvY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RPBbaz30dsUiJmvE7gqHVTtk8EL/aNkAH89tUFiO2BgSKW7ubohT6La42puKQ0fregOwJKQ1Ni1RF4g8EqWxhGT842RoApLUczJH3v8mvVrJVH4U56oXBNqKiLPQS16wfSozx+JxQIujAVxiAxuJcg/FV0NQKPi/tELOgltkVMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tHUwiCD7; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=jz3Wi7WMZQyxkPWhqpt5qekZcPnu9zqya1DAd4PjBgBeaST44RWP0+8uEXuw9YDG4nI4Iq+oq2veudbqY7oWDfWz3jtz/HjFbWSFzNLfmFUxWU+hzf+UumKmv5JpJY/H90YwPaTgnRYBAbhMErO0hMNfAvx0Wn/idkPDFjq/4pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mNa6NkvD; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tHUwiCD7"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e20b046922so108867b3.1
-        for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 11:19:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mNa6NkvD"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-7b696999c65so2999147a12.3
+        for <linux-modules@vger.kernel.org>; Mon, 23 Sep 2024 11:19:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727115559; x=1727720359; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727115560; x=1727720360; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lx1zf/KMHWOofjasnauK3EaDfAHFjR3zRo1FGvEVy2g=;
-        b=tHUwiCD7xkxmNWqmgwZfzAY5cBaOsRgxASBDefcrjBHFNKiAZWuinqTkSSdkcqFZZS
-         Q0PdVF6byByl3XHfK7L/3ZITUUcrlfcfLtvPbJ+QcqpGnyp0oTpSaTQa3PvKj/zlN9bE
-         njtr/0SB330F4ZFr1k5xU/+SxcRZTulPPAhUo8AI8DllKcZeKfdFnFd7XJYtUh2/1Jmu
-         Gug+I9SNW0KyfHtVBaLDJFm8Dt2LUWgQuIAVihvJ1//ZCaz1o31NG146Z5u//31rNiZ8
-         U91zXfQ95RgszL17HF9w+VGKwvnxBfZywLZiQFuLONGXDzG5Jv3lTkWEbXWp3HYtaFCR
-         BrWQ==
+        bh=0QY5Hy6t2hyco5Zb7/L0lbrSBcXnpHdZW8dyGEzKIpI=;
+        b=mNa6NkvDDYsyzamhyHd7KZK2QiILEoVlXSM+cUxteSGkDk9CSRdt6Ouqw6ZBb9DDxr
+         C8BMP0fYy2n3xsjcFW6NbJv+iCWFEbHCwJVTFRlWAN7fkPPt5GwCulQYlo8N7E8G7Yk4
+         zPvr9htKiqlTJrpqPWyYM74/eTuAhDxdswIsGJf7BB5K3dd7o7JG5tZjU8Mq7rlp+9q4
+         mlD5sOs5RBH+beCigRLC9ZZMIKAehKVxwAPnpmD2d8jJkMxarUJczlRCmo+LkKpUij9u
+         cbmom7xeBG3yXJFbfsk0kjZBhDfJ3s8sTBbI4jiqSL7RPsBMZ9Oh2UyFgjrq68lzc5zl
+         4NcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727115559; x=1727720359;
+        d=1e100.net; s=20230601; t=1727115560; x=1727720360;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lx1zf/KMHWOofjasnauK3EaDfAHFjR3zRo1FGvEVy2g=;
-        b=t7WEdoaDkuPIdF5uTi5Q1n0CrDJdj09OhKkQLhUKLsHN8y5offVPvvo/Z26D0oQwUY
-         wrx2MVQjmgwxJ8xbzMnhh67QYDyKj4dtjXfwpoDmTCekPeZAkBg4a7D4TIvYjMK6QNnY
-         XOONu0vEM3lNwn9GXT1ojkhnPybnPjUchSQpo9xv/lNZ2AUY00LenRwcNDnzYDF6yw/T
-         gh1jhb1xY/w1f7pBRSGJ4RU481fwMXzdTSn4MvTqsuuWWg0i4IGh0LOrDNg2v7BTKQR9
-         aEak6UnStCcyue0eTDLS/OJIiUuFOOfTDfVldP98GmJuAbAmsS/eCXPzRTOW6mYde3WD
-         /ZzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVuV52oN13qpQo+kkDhT/EOpHA52SuYsY1vMNaJhlWHUg9iVPlJIIUxbMK/fACpVG+o2JcwaRgdJZtgPCvG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyASkuJcDi/SuB7tpZCkScjVFJWNe//DtmPxPUNdgDwLzeHv/b2
-	x+EOGvsVbRi7qbTgRrX6CjZPfzI4/TOvHoWlCwgmc5vpMxyPQYlR9GISxsAJirzKkTp0SqkIasZ
-	HirrWHkMZ1640ICWzr4sJb20URg==
-X-Google-Smtp-Source: AGHT+IHIiX0oEVv8/+fATBQ7LD6NBHYzwVtHhVQ0EnnibVqWRuZ/lhL988HpQao5hS9ju6/+Oj1BAws9oo3moFSvy2g=
+        bh=0QY5Hy6t2hyco5Zb7/L0lbrSBcXnpHdZW8dyGEzKIpI=;
+        b=iBNGcwkjT3MBOkYFeKinipGL/UO1nz3HjdUYSCqj95offB3bNMVl661RI1tazpiZI6
+         aX1qS22qGHpF6up0iTKJTWWdgKHmGBRxx0u37+CEjP/G/P35Vgrq5zTvNtdepyp4KMwa
+         ElRvFErhxE+VkS/HMivZZah5qeoXLwAYiOTHWjRbeh49IryLVzDu2rhiqHJKObSIh5Uw
+         hdjFLKCv/AbyTvAAlxoJB0IyxLFLTv17QiTwrq5a9k/w7wJJzHgYmKgI5oc7ETd7swZL
+         r4x7hUI+aliQLmy2EPb2dUX4XK1TarfVachMGfXMPBnv+ffFfLqe8MdMtlv4j1+hpijk
+         QTFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVyNHIFfwNmzj+IKXRmcXOyhz4nRiZ8SLiDOQCldp8+YtZBzSqgF3BZZb/99s4sRzepv/wBp5pSBfTzB53Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoLyc24CyOBk16dY5lP6LvuoMVfRzsNaKla5SZWuAGWwZs1EAB
+	qBVxKNY9poFwTO/pDXv5NAOAIEoRark8GI7ZB94s6crdwp/thh79I+ovkp+DQ5GW3dOiGK3d6Sb
+	dOI6Xl3D+ue6H4I6XMZxI4cQZXg==
+X-Google-Smtp-Source: AGHT+IF/yPm3Q7gCKUFaoUWev9k41igxQNUBQ8slxggC77S4yv3VXQoOTiBlJiL8f1t8waF428RuZmoZyGvu8Yp1D1o=
 X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a25:8751:0:b0:e1a:9ed2:67f4 with SMTP
- id 3f1490d57ef6-e2250c24608mr11792276.2.1727115558693; Mon, 23 Sep 2024
- 11:19:18 -0700 (PDT)
-Date: Mon, 23 Sep 2024 18:18:53 +0000
+ (user=samitolvanen job=sendgmr) by 2002:a63:b254:0:b0:7db:16b4:7a2a with SMTP
+ id 41be03b00d2f7-7dcd3c474ebmr12955a12.2.1727115560447; Mon, 23 Sep 2024
+ 11:19:20 -0700 (PDT)
+Date: Mon, 23 Sep 2024 18:18:54 +0000
 In-Reply-To: <20240923181846.549877-22-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,14 +59,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240923181846.549877-22-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5378; i=samitolvanen@google.com;
- h=from:subject; bh=ymRviO+a5cEV3+mp0Yi0XXSwQOhrRgtOy5SB1olfBDk=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDGkfN3KWySrN/VU7q2rOIjXj7Oglc7pCZk/zeRy/PyuQd
- aJd5xb9jlIWBjEOBlkxRZaWr6u37v7ulPrqc5EEzBxWJpAhDFycAjCRS4qMDJuXfn3a9lyv8tyO
- F2syzn/t/leU3GiRriDUXj+H+RCXbT8jw5eunhVXuc68t3im9O2d8YfpHO79rwy3ys/Y1XPotYH FLQ4A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5712; i=samitolvanen@google.com;
+ h=from:subject; bh=YnxRLubYaRu5LmAQuXzMlCDLmcU4MfVwQeLF/vCiIvY=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDGkfN3L1la67YPFtm47e9Yi7NkxCfamzy4XMLl5lj5m9K
+ /rKixeLOkpZGMQ4GGTFFFlavq7euvu7U+qrz0USMHNYmUCGMHBxCsBE5r9nZNj8/vKiVccm/U9+
+ vSH6zSWe6dpHn4hdKnzyTGDmnadP9eYbMDJ8stzpP0lousu3Q983X/VX5Gp0Fm4uvLfoveO/3H0 7CyUZAQ==
 X-Mailer: git-send-email 2.46.0.792.g87dc391469-goog
-Message-ID: <20240923181846.549877-29-samitolvanen@google.com>
-Subject: [PATCH v3 07/20] gendwarfksyms: Expand type modifiers and typedefs
+Message-ID: <20240923181846.549877-30-samitolvanen@google.com>
+Subject: [PATCH v3 08/20] gendwarfksyms: Expand subroutine_type
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -78,181 +78,191 @@ Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
 	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add support for expanding DWARF type modifiers, such as pointers,
-const values etc., and typedefs. These types all have DW_AT_type
-attribute pointing to the underlying type, and thus produce similar
-output.
+Add support for expanding DW_TAG_subroutine_type and the parameters
+in DW_TAG_formal_parameter. Use this to also expand subprograms.
 
-Also add linebreaks and indentation to debugging output to make it
-more readable.
+Example output with --dump-dies:
+
+  subprogram (
+    formal_parameter pointer_type {
+      const_type {
+        base_type char byte_size(1) encoding(6)
+      }
+    }
+  )
+  -> base_type unsigned long byte_size(8) encoding(7)
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- scripts/gendwarfksyms/die.c           | 12 +++++
- scripts/gendwarfksyms/dwarf.c         | 67 +++++++++++++++++++++++++++
- scripts/gendwarfksyms/gendwarfksyms.h |  5 ++
- 3 files changed, 84 insertions(+)
+ scripts/gendwarfksyms/dwarf.c         | 84 ++++++++++++++++++++++++++-
+ scripts/gendwarfksyms/gendwarfksyms.h |  4 ++
+ 2 files changed, 85 insertions(+), 3 deletions(-)
 
-diff --git a/scripts/gendwarfksyms/die.c b/scripts/gendwarfksyms/die.c
-index 28d89fce89fc..2829387fd815 100644
---- a/scripts/gendwarfksyms/die.c
-+++ b/scripts/gendwarfksyms/die.c
-@@ -130,6 +130,18 @@ void die_map_add_string(struct die *cd, const char *str)
- 	df->type = FRAGMENT_STRING;
- }
- 
-+void die_map_add_linebreak(struct die *cd, int linebreak)
-+{
-+	struct die_fragment *df;
-+
-+	if (!cd)
-+		return;
-+
-+	df = append_item(cd);
-+	df->data.linebreak = linebreak;
-+	df->type = FRAGMENT_LINEBREAK;
-+}
-+
- void die_map_add_die(struct die *cd, struct die *child)
- {
- 	struct die_fragment *df;
 diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-index f0c881bef026..50ef58591c83 100644
+index 50ef58591c83..5bdab5b80ca2 100644
 --- a/scripts/gendwarfksyms/dwarf.c
 +++ b/scripts/gendwarfksyms/dwarf.c
-@@ -6,6 +6,17 @@
- #include <stdarg.h>
- #include "gendwarfksyms.h"
+@@ -209,6 +209,15 @@ DEFINE_PROCESS_UDATA_ATTRIBUTE(alignment)
+ DEFINE_PROCESS_UDATA_ATTRIBUTE(byte_size)
+ DEFINE_PROCESS_UDATA_ATTRIBUTE(encoding)
  
-+static bool do_linebreak;
-+static int indentation_level;
-+
-+/* Line breaks and indentation for pretty-printing */
-+static void process_linebreak(struct die *cache, int n)
-+{
-+	indentation_level += n;
-+	do_linebreak = true;
-+	die_map_add_linebreak(cache, n);
-+}
-+
- #define DEFINE_GET_ATTR(attr, type)                                    \
- 	static bool get_##attr##_attr(Dwarf_Die *die, unsigned int id, \
- 				      type *value)                     \
-@@ -75,6 +86,12 @@ static void process(struct die *cache, const char *s)
- {
- 	s = s ?: "<null>";
- 
-+	if (dump_dies && do_linebreak) {
-+		fputs("\n", stderr);
-+		for (int i = 0; i < indentation_level; i++)
-+			fputs("  ", stderr);
-+		do_linebreak = false;
++/* Match functions -- die_match_callback_t */
++#define DEFINE_MATCH(type)                                     \
++	static bool match_##type##_type(Dwarf_Die *die)        \
++	{                                                      \
++		return dwarf_tag(die) == DW_TAG_##type##_type; \
 +	}
- 	if (dump_dies)
- 		fputs(s, stderr);
++
++DEFINE_MATCH(formal_parameter)
++
+ bool match_all(Dwarf_Die *die)
+ {
+ 	return true;
+@@ -221,19 +230,28 @@ int process_die_container(struct state *state, struct die *cache,
+ 	Dwarf_Die current;
+ 	int res;
  
-@@ -236,6 +253,40 @@ static void process_type_attr(struct state *state, struct die *cache,
++	/* Track the first item in lists. */
++	if (state)
++		state->first_list_item = true;
++
+ 	res = checkp(dwarf_child(die, &current));
+ 	while (!res) {
+ 		if (match(&current)) {
+ 			/* <0 = error, 0 = continue, >0 = stop */
+ 			res = checkp(func(state, cache, &current));
+ 			if (res)
+-				return res;
++				goto out;
+ 		}
+ 
+ 		res = checkp(dwarf_siblingof(&current, &current));
+ 	}
+ 
+-	return 0;
++	res = 0;
++out:
++	if (state)
++		state->first_list_item = false;
++
++	return res;
+ }
+ 
+ static int process_type(struct state *state, struct die *parent,
+@@ -253,6 +271,40 @@ static void process_type_attr(struct state *state, struct die *cache,
  	process(cache, "base_type void");
  }
  
-+/* Container types with DW_AT_type */
-+static void __process_type(struct state *state, struct die *cache,
-+			   Dwarf_Die *die, const char *type)
++static void process_list_comma(struct state *state, struct die *cache)
 +{
-+	process(cache, type);
-+	process_fqn(cache, die);
-+	process(cache, " {");
-+	process_linebreak(cache, 1);
-+	process_type_attr(state, cache, die);
-+	process_linebreak(cache, -1);
-+	process(cache, "}");
-+	process_byte_size_attr(cache, die);
-+	process_alignment_attr(cache, die);
++	if (state->first_list_item) {
++		state->first_list_item = false;
++	} else {
++		process(cache, " ,");
++		process_linebreak(cache, 0);
++	}
 +}
 +
-+#define DEFINE_PROCESS_TYPE(type)                                            \
++/* Comma-separated with DW_AT_type */
++static void __process_list_type(struct state *state, struct die *cache,
++				Dwarf_Die *die, const char *type)
++{
++	const char *name = get_name_attr(die);
++
++	process_list_comma(state, cache);
++	process(cache, type);
++	process_type_attr(state, cache, die);
++	if (name) {
++		process(cache, " ");
++		process(cache, name);
++	}
++}
++
++#define DEFINE_PROCESS_LIST_TYPE(type)                                       \
 +	static void process_##type##_type(struct state *state,               \
 +					  struct die *cache, Dwarf_Die *die) \
 +	{                                                                    \
-+		__process_type(state, cache, die, #type "_type");            \
++		__process_list_type(state, cache, die, #type " ");           \
 +	}
 +
-+DEFINE_PROCESS_TYPE(atomic)
-+DEFINE_PROCESS_TYPE(const)
-+DEFINE_PROCESS_TYPE(immutable)
-+DEFINE_PROCESS_TYPE(packed)
-+DEFINE_PROCESS_TYPE(pointer)
-+DEFINE_PROCESS_TYPE(reference)
-+DEFINE_PROCESS_TYPE(restrict)
-+DEFINE_PROCESS_TYPE(rvalue_reference)
-+DEFINE_PROCESS_TYPE(shared)
-+DEFINE_PROCESS_TYPE(volatile)
-+DEFINE_PROCESS_TYPE(typedef)
++DEFINE_PROCESS_LIST_TYPE(formal_parameter)
++
+ /* Container types with DW_AT_type */
+ static void __process_type(struct state *state, struct die *cache,
+ 			   Dwarf_Die *die, const char *type)
+@@ -287,6 +339,29 @@ DEFINE_PROCESS_TYPE(shared)
+ DEFINE_PROCESS_TYPE(volatile)
+ DEFINE_PROCESS_TYPE(typedef)
+ 
++static void __process_subroutine_type(struct state *state, struct die *cache,
++				      Dwarf_Die *die, const char *type)
++{
++	process(cache, type);
++	process(cache, " (");
++	process_linebreak(cache, 1);
++	/* Parameters */
++	check(process_die_container(state, cache, die, process_type,
++				    match_formal_parameter_type));
++	process_linebreak(cache, -1);
++	process(cache, ")");
++	process_linebreak(cache, 0);
++	/* Return type */
++	process(cache, "-> ");
++	process_type_attr(state, cache, die);
++}
++
++static void process_subroutine_type(struct state *state, struct die *cache,
++				    Dwarf_Die *die)
++{
++	__process_subroutine_type(state, cache, die, "subroutine_type");
++}
 +
  static void process_base_type(struct state *state, struct die *cache,
  			      Dwarf_Die *die)
  {
-@@ -257,6 +308,9 @@ static void process_cached(struct state *state, struct die *cache,
- 		case FRAGMENT_STRING:
- 			process(NULL, df->data.str);
- 			break;
-+		case FRAGMENT_LINEBREAK:
-+			process_linebreak(NULL, df->data.linebreak);
-+			break;
- 		case FRAGMENT_DIE:
- 			if (!dwarf_die_addr_die(dwarf_cu_getdwarf(die->cu),
- 						(void *)df->data.addr, &child))
-@@ -292,7 +346,20 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
- 	}
- 
- 	switch (tag) {
-+	/* Type modifiers */
-+	PROCESS_TYPE(atomic)
-+	PROCESS_TYPE(const)
-+	PROCESS_TYPE(immutable)
-+	PROCESS_TYPE(packed)
-+	PROCESS_TYPE(pointer)
-+	PROCESS_TYPE(reference)
-+	PROCESS_TYPE(restrict)
-+	PROCESS_TYPE(rvalue_reference)
-+	PROCESS_TYPE(shared)
-+	PROCESS_TYPE(volatile)
-+	/* Other types */
+@@ -357,8 +432,11 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
+ 	PROCESS_TYPE(rvalue_reference)
+ 	PROCESS_TYPE(shared)
+ 	PROCESS_TYPE(volatile)
++	/* Subtypes */
++	PROCESS_TYPE(formal_parameter)
+ 	/* Other types */
  	PROCESS_TYPE(base)
-+	PROCESS_TYPE(typedef)
++	PROCESS_TYPE(subroutine)
+ 	PROCESS_TYPE(typedef)
  	default:
  		debug("unimplemented type: %x", tag);
- 		break;
+@@ -388,7 +466,7 @@ static void process_symbol(struct state *state, Dwarf_Die *die,
+ static int __process_subprogram(struct state *state, struct die *cache,
+ 				Dwarf_Die *die)
+ {
+-	process(cache, "subprogram");
++	__process_subroutine_type(state, cache, die, "subprogram");
+ 	return 0;
+ }
+ 
 diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksyms/gendwarfksyms.h
-index 7df270429c21..81b8989efa22 100644
+index 81b8989efa22..d5186472f705 100644
 --- a/scripts/gendwarfksyms/gendwarfksyms.h
 +++ b/scripts/gendwarfksyms/gendwarfksyms.h
-@@ -62,6 +62,9 @@ extern int dump_dies;
- /* Error == negative values */
+@@ -63,6 +63,7 @@ extern int dump_dies;
  #define checkp(expr) __check(expr, __res < 0)
  
-+/* Consistent aliases (DW_TAG_<type>_type) for DWARF tags */
-+#define DW_TAG_typedef_type DW_TAG_typedef
-+
+ /* Consistent aliases (DW_TAG_<type>_type) for DWARF tags */
++#define DW_TAG_formal_parameter_type DW_TAG_formal_parameter
+ #define DW_TAG_typedef_type DW_TAG_typedef
+ 
  /*
-  * symbols.c
-  */
-@@ -102,6 +105,7 @@ enum die_state {
- enum die_fragment_type {
- 	FRAGMENT_EMPTY,
- 	FRAGMENT_STRING,
-+	FRAGMENT_LINEBREAK,
- 	FRAGMENT_DIE
+@@ -155,6 +156,9 @@ void die_map_free(void);
+ struct state {
+ 	struct symbol *sym;
+ 	Dwarf_Die die;
++
++	/* List expansion */
++	bool first_list_item;
  };
  
-@@ -109,6 +113,7 @@ struct die_fragment {
- 	enum die_fragment_type type;
- 	union {
- 		char *str;
-+		int linebreak;
- 		uintptr_t addr;
- 	} data;
- 	struct list_head list;
+ typedef int (*die_callback_t)(struct state *state, struct die *cache,
 -- 
 2.46.0.792.g87dc391469-goog
 
