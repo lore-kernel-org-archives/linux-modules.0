@@ -1,141 +1,137 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EC61A3BA6
-	for <linux-modules@vger.kernel.org>; Wed, 25 Sep 2024 23:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243C51714BD;
+	Thu, 26 Sep 2024 12:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727307765; cv=none; b=UbN7Qak0IqXwenIcnJEFcPh4VPG/v/SBgVXiW668N5sflhNW+8jtrq9y7cBfKp9Fun+y2+jm/HtkY7h8s3DNK/UkegMC2sBzbJBKKDE0qaamwhJDJZ1ICveL9G432Yde7ae1T+o5K+lrEIZQ3DLTHch4CHfOirepV65Az2aqqf8=
+	t=1727353364; cv=none; b=X2x0wFuHtx6g0UvHm7Z+qrtMmrNSBoemSJA06jXuWp5Ps0zIpis/Bnyj6qKrbMn0k0wSy2CDRK3wOyHehomxiG228zvc0MnhC+JQae7vPJ7keanzWE3Wo7AhvPPQH5H2jc1h0FODCdQaE7uYx8sWbHk7C6xPPx7eiFGZv51HXkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727307765; c=relaxed/simple;
-	bh=cwCCg7cjlmVJH30GDf9Cwg6fhR2bbuS17MaqIuOSV0s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lHLBnq3J7sc6UQ/o1FWVaQa/jBOkS/nsKj+XoigniCmrZw+gU+vGG5S8j0HTZPyE7RRsO93s+25IK4zAFSNoUp8ccpEGL9YZirKbFgQY+0Nqep7FvQSsr6RSJv4n91/iONj0KAJLX0i94flvW/9VjHX3Rxl+Bh7KPFRnzMPbsUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E2DB/sBO; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E2DB/sBO"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c247dd0899so5400a12.1
-        for <linux-modules@vger.kernel.org>; Wed, 25 Sep 2024 16:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727307762; x=1727912562; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ek54duFW07igKvK9AQGJRlqEiTdehADtLtBpPhw2agE=;
-        b=E2DB/sBOLvarg2yLjBPzCZclNsJO7hUZ6G7JWzC4pwy0KSxVSEd4lwuegmPYuVSQE4
-         prcHVOg7GAh69d/EyX0HEVwPNO7OoxLLT1XW9/QLTBTpHNoaawRjhV6Izc8NyK6G7J8g
-         yWT+LFnEPZTweXSqF0Az63SGuO4uGNkcw9+B+7ZDCh1lPcuAEmiGtGkKT7vA+yauVohF
-         3I/GitalJG7xgdUdG+J/pJVjqu/LMTaS6qysbWg7BKBSXex1Mmr8VhbGOaHL7P8+MlDu
-         17kRZ9XoPDATpxO0EUSiqUqOlSRZ5lMf95dG/4z3py4hD1ZCDkd3CV/2P3UQBIVojm1S
-         /P1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727307762; x=1727912562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ek54duFW07igKvK9AQGJRlqEiTdehADtLtBpPhw2agE=;
-        b=jWWXXoF3JponKaVnGFBqp8pbrh3BRlJR2CT8jLTPpCNh2fHX0BLoGS+xFWNdALS8uv
-         VyFVFqZs9ad1xQB/CwjpdUgmzHlxXNak7tllZg6N4Wtg68u533RguGTBDNtrIMDeu71f
-         nRX87bGcWZyNiywIrt4nWZ7C2rvnjxNk3a2q+4QNdR4CxKuWSys6RXiB+k1PdyfOYcmd
-         wV8ftnNohzrP4QRP6ABzh5p4HcAJXqVFoDxkL6ffVMcUxO5Doi5g1MrH3W0reOQ3kWUC
-         FB0+8BYb+nd+6Ee9vplZpAQ4xLMY9mFQ8v9QWEv8nOWFrAlNHzZEFkTNuSvJig1nrZ06
-         9+Yg==
-X-Forwarded-Encrypted: i=1; AJvYcCXe7SOIrL8UeD9D6HQwfjya4ypcYyR3xLpyIWoVjeyHp6H2aKJgAtedHxl7fZdoABNcm78a4Z/IkxqzMDpJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLLZPGW9vvqSlzJjNRr0rZ11NXuzOqX17d8ftnaKYegWZV6QoG
-	1HMrLW2eI0xJQVYJRuztmY4Lya3ujcJPQonrtqyJL700ScBbk6c8hkvSJdrxXA/cOshKHTlTmq3
-	Otdz6ejEpZXokOhi67nw+8V1kfF9GKT9Q67+g
-X-Google-Smtp-Source: AGHT+IEQLkFnBxCVmc+hBCfJCN9xgnB4wVQcVoqAWlHhf+GqjN1sdjtOkK/z88OGPV3GGtu/6kc0Wj3d2hT0sVNu66g=
-X-Received: by 2002:a05:6402:524d:b0:5c2:5251:ba5c with SMTP id
- 4fb4d7f45d1cf-5c8783c7d8fmr251259a12.0.1727307761901; Wed, 25 Sep 2024
- 16:42:41 -0700 (PDT)
+	s=arc-20240116; t=1727353364; c=relaxed/simple;
+	bh=YZzBmMO9bp4raxlf9pje1ASVpTpnjxF5iuLUpm5tYIs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EFvy+uSn2o5+9a/ns7gWs0pZgHDB1ilrJzK1/bjVKFxMjDdeNNvUghvh1iyV6DTzBT9OWD0WY7oEyrsmoSzEIJNR0/cqRarqFWXv3EEeBHywzlUqExdWtMTUz/Loxdj5ydjUFrt7QHkqUhjsvrFkAb/fgFHKaqeXi5LnmnhskDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4XDt5q71Kdz9sSL;
+	Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id SeWZDw47vw6L; Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4XDt5q5zDDz9sRy;
+	Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B71BE8B76E;
+	Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id cW2IzJlvTqAb; Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 63CB08B763;
+	Thu, 26 Sep 2024 14:22:39 +0200 (CEST)
+Message-ID: <b31c74c1-0c19-4bc4-b1af-db817977748d@csgroup.eu>
+Date: Thu, 26 Sep 2024 14:22:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240924212024.540574-1-mmaurer@google.com> <20240924212024.540574-15-mmaurer@google.com>
- <20240925230000.GA3176650@google.com>
-In-Reply-To: <20240925230000.GA3176650@google.com>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Wed, 25 Sep 2024 16:42:30 -0700
-Message-ID: <CAGSQo00OqOJ+s3xULXvojXMSCR8y-TQOHAwWqpS2VDxWaDxxQA@mail.gmail.com>
-Subject: Re: [PATCH v4 14/16] modules: Support extended MODVERSIONS info
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org, 
-	gary@garyguo.net, mcgrof@kernel.org, Michael Ellerman <mpe@ellerman.id.au>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Benjamin Gray <bgray@linux.ibm.com>, 
-	Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, neal@gompa.dev, 
-	marcan@marcan.st, j@jannau.net, asahi@lists.linux.dev, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org, 
-	linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Thanks for the catch. I've sent up v5 to include that fix. I've also
-added a changelog and made sure the patches make it to linux-modules@
-as Daniel suggested.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
+To: Matthew Maurer <mmaurer@google.com>, masahiroy@kernel.org,
+ ndesaulniers@google.com, ojeda@kernel.org, gary@garyguo.net,
+ mcgrof@kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Benjamin Gray <bgray@linux.ibm.com>,
+ Naveen N Rao <naveen@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, neal@gompa.dev, marcan@marcan.st,
+ j@jannau.net, asahi@lists.linux.dev, linux-modules@vger.kernel.org,
+ Nicholas Piggin <npiggin@gmail.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Boqun Feng <boqun.feng@gmail.com>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org
+References: <20240925233854.90072-1-mmaurer@google.com>
+ <20240925233854.90072-15-mmaurer@google.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240925233854.90072-15-mmaurer@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-On Wed, Sep 25, 2024 at 4:00=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> Hi Matt,
->
-> On Tue, Sep 24, 2024 at 09:19:56PM +0000, Matthew Maurer wrote:
-> > +static void dedotify_ext_version_names(char *str_seq, unsigned long si=
-ze)
-> > +{
-> > +     unsigned long out =3D 0;
-> > +     unsigned long in;
-> > +     char last =3D '\0';
-> > +
-> > +     for (in =3D 0; in < size; in++) {
-> > +             if (last =3D=3D '\0')
-> > +                     /* Skip one leading dot */
-> > +                     if (str_seq[in] =3D=3D '.')
-> > +                             in++;
->
-> Thanks for addressing Michael's comment, this looks correct to me.
->
-> Nit: might be cleaner in a single if statement though:
->
->         /* Skip one leading dot */
->         if (last =3D=3D '\0' && str_seq[in] =3D=3D '.')
->                 in++;
->
-> > +void modversion_ext_start(const struct load_info *info,
-> > +                       struct modversion_info_ext *start)
-> > +{
-> > +     unsigned int crc_idx =3D info->index.vers_ext_crc;
-> > +     unsigned int name_idx =3D info->index.vers_ext_name;
-> > +     Elf_Shdr *sechdrs =3D info->sechdrs;
-> > +
-> > +     /*
-> > +      * Both of these fields are needed for this to be useful
-> > +      * Any future fields should be initialized to NULL if absent.
-> > +      */
-> > +     if ((crc_idx =3D=3D 0) || (name_idx =3D=3D 0))
-> > +             start->remaining =3D 0;
-> > +
-> > +     start->crc =3D (const s32 *)sechdrs[crc_idx].sh_addr;
-> > +     start->name =3D (const char *)sechdrs[name_idx].sh_addr;
-> > +     start->remaining =3D sechdrs[crc_idx].sh_size / sizeof(*start->cr=
-c);
-> > +}
->
-> This looks unchanged from v3, so I think my comment from there
-> still applies:
->
-> https://lore.kernel.org/lkml/CABCJKufJK0WO92wnW09VTLqZk0ODxhuKQG=3DHbKE-v=
-a0urJU1Vg@mail.gmail.com/
->
-> Sami
+
+Le 26/09/2024 à 01:38, Matthew Maurer a écrit :
+> Adds a new format for MODVERSIONS which stores each field in a separate
+> ELF section. This initially adds support for variable length names, but
+> could later be used to add additional fields to MODVERSIONS in a
+> backwards compatible way if needed. Any new fields will be ignored by
+> old user tooling, unlike the current format where user tooling cannot
+> tolerate adjustments to the format (for example making the name field
+> longer).
+> 
+> Since PPC munges its version records to strip leading dots, we reproduce
+> the munging for the new format. Other architectures do not appear to
+> have architecture-specific usage of this information.
+> 
+> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> ---
+>   arch/powerpc/kernel/module_64.c | 23 ++++++++-
+>   kernel/module/internal.h        | 11 ++++
+>   kernel/module/main.c            | 92 ++++++++++++++++++++++++++++++---
+>   kernel/module/version.c         | 45 ++++++++++++++++
+>   4 files changed, 161 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index e9bab599d0c2..4e7b156dd8b2 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -355,6 +355,23 @@ static void dedotify_versions(struct modversion_info *vers,
+>   		}
+>   }
+>   
+> +static void dedotify_ext_version_names(char *str_seq, unsigned long size)
+> +{
+> +	unsigned long out = 0;
+> +	unsigned long in;
+> +	char last = '\0';
+> +
+> +	for (in = 0; in < size; in++) {
+> +		/* Skip one leading dot */
+> +		if (last == '\0' && str_seq[in] == '.')
+> +			in++;
+> +		last = str_seq[in];
+> +		str_seq[out++] = last;
+> +	}
+
+Why do you need a loop here ?
+
+Can't you just do something like:
+
+	if (str_seq[0] == '.')
+		memmove(str_seq, str_seq + 1, size);
+
+
+> +	/* Zero the trailing portion of the names table for robustness */
+> +	memset(&str_seq[out], 0, size - out);
+
+This seems unneeded.
+
+> +}
+> +
+>   /*
+>    * Undefined symbols which refer to .funcname, hack to funcname. Make .TOC.
+>    * seem to be defined (value set later).
+
+
+
+Christophe
