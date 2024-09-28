@@ -1,93 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE03C14D43D;
-	Fri, 27 Sep 2024 21:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91F445009;
+	Sat, 28 Sep 2024 16:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727472543; cv=none; b=FpZMVjdY7kdgYRbA5cZ5+QlymMt/NZ+Ds2M41CHlYbI+T9cf1tydP+QOz+Exkye7K12/l1Z4AnNum9qCspi/p8UOTpOyPV1hhFiN9Xu3xNR445n541ktY+Yscfi8VIHCfN7n/8os4zyGmIXLhyjLCTNdR5IOUUmjwy//yIgxkQo=
+	t=1727541908; cv=none; b=oFJXlIjzVjR8ebYUi9MrhA84uZI6CzTXaYkrkptbbY+7Z4YWL7vRjLhR58EE6Kq2RoOo6De3mZgCbjbbC06VPK6j0Dz8vrFGlO1YTPnygk+S3LgdIiLoKZp7n9OkdTiKqRusNCgrfozTR04mI5Fcavsnd4+Qdx7gSr2z9KLFOlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727472543; c=relaxed/simple;
-	bh=pH33JBA1XiLy2oH0ddyRqN1FptJn9l9jJKHzfLHfq0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GNrDctKYjDyYN1eDvsvN+6mILtEFeYCqxqSdEMl8bvArclQmEbcTW3CryO8OHwXkCztI4QjA3zPnZAe/BDzVSQlJ1SXY3z4LMkqpg7hHlgCgpTyf+5Dvl9LlD1I37bwwaQJ+v9auLAoB526PeBTfvG2SkWzrKFjRG40OOy1TrK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G8Ah7msH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1727541908; c=relaxed/simple;
+	bh=ERtCtS0fQs7KR5xgzlrxodSeCITZlOCFrL4gvMPGbsE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=K94p7jlZuiW9nXkk8/znC4hZlIpRGWSezvLR9gYvLzl5sZuO4TNFq1d7oS7Cd7VBYT25lq3B0wfYagzsrvxFWQX8tBxALZNNCH8NBP5MbSTCxePQKmHkVwXhN8BRBOgC1jemLH6BJb5LuTg230DDU1XMOhbsKlBKErCAt2l0mdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GkG1UP63; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G8Ah7msH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AEF7C4CEC4;
-	Fri, 27 Sep 2024 21:29:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GkG1UP63"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886BBC4CEC3;
+	Sat, 28 Sep 2024 16:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727472542;
-	bh=pH33JBA1XiLy2oH0ddyRqN1FptJn9l9jJKHzfLHfq0w=;
-	h=Date:From:To:Cc:Subject:From;
-	b=G8Ah7msHY/Yh9Vhmqa7j32k1LcmH7052ZB2GYCv4MU2KF/zg75r5/O56XEKBAQz2I
-	 JDY04yPKVbQXWYHY5fS5lUfAyWF8Arth/73KnUF0eLppnfdMEWDbJRLSc4FXTPTTFC
-	 Xq1qccZeEi2Nd10HZt4lIM78xZ84v3/gxdl0cuJet5GMo1/WxvBKfNpkxoATtEB0yk
-	 68pAl1fEYyiFNeaM5ZEo4qr96PBIH7Kjd0942To6NstglINSZntdpdJX+m5DEckzlf
-	 TZMfH2tsFS4VyaYCfs5xBryctjSUhX8iVmWpVqw0w079nPXeR2f7nJyQCxzK+n4gE5
-	 uGXgguFUDs0Lg==
-Date: Fri, 27 Sep 2024 14:29:00 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com,
-	petr.pavlu@suse.com, da.gomez@samsung.com,
-	linux-modules@vger.kernel.org
-Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	vdonnefort@google.com, song@kernel.org, catalin.marinas@arm.com,
-	chunhui.li@mediatek.com, xion.wang@mediatek.com,
-	masahiroy@kernel.org, mcgrof@kernel.org
-Subject: [GIT PULL] Modules changes for v6.12-rc1
-Message-ID: <ZvcjnE9Me0hCy4yK@bombadil.infradead.org>
+	s=k20201202; t=1727541907;
+	bh=ERtCtS0fQs7KR5xgzlrxodSeCITZlOCFrL4gvMPGbsE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=GkG1UP63/1GHgi7pUv4XlBdHLzm7GNz0LEKaGE+gBlxsGkQz1s3ZVQkxyftARk91K
+	 V7GXJN7k3tOd7N9JNZKhQNIm+RMmudySmeUn2oJxPciEE8Va9nObib3VyaWQsv65HX
+	 rRfdJVUtmUPuAEyc+kFF6mWFdducdaqdOznbyiKBNPctbooj+vGYEwKqiz1ge7XtoE
+	 VJZZOIo1bwM/6jWMOAOlDunZ3IB+VmK6Qm4htl2gb1gFr6WxLcvMHcGkMZ3zDUjeO9
+	 CpDVBldN/IIrYsfw1PkiXeB7wLHZYiuWzZa63XGGNIdSgTIqvUC1VE8g7tHKo/cdAa
+	 VR42sfZiASaRw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70F503809A80;
+	Sat, 28 Sep 2024 16:45:11 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules changes for v6.12-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZvcjnE9Me0hCy4yK@bombadil.infradead.org>
+References: <ZvcjnE9Me0hCy4yK@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZvcjnE9Me0hCy4yK@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.12-rc1
+X-PR-Tracked-Commit-Id: b319cea80539df9bea0ad98cb5e4b2fcb7e1a34b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6f81a446f86106c68630032e114024ec7a557077
+Message-Id: <172754191013.2302262.17894339790402930398.pr-tracker-bot@kernel.org>
+Date: Sat, 28 Sep 2024 16:45:10 +0000
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com, petr.pavlu@suse.com, da.gomez@samsung.com, linux-modules@vger.kernel.org, patches@lists.linux.dev, linux-kernel@vger.kernel.org, vdonnefort@google.com, song@kernel.org, catalin.marinas@arm.com, chunhui.li@mediatek.com, xion.wang@mediatek.com, masahiroy@kernel.org, mcgrof@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-The following changes since commit 47ac09b91befbb6a235ab620c32af719f8208399:
+The pull request you sent on Fri, 27 Sep 2024 14:29:00 -0700:
 
-  Linux 6.11-rc4 (2024-08-18 13:17:27 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.12-rc1
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6f81a446f86106c68630032e114024ec7a557077
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.12-rc1
+Thank you!
 
-for you to fetch changes up to b319cea80539df9bea0ad98cb5e4b2fcb7e1a34b:
-
-  module: Refine kmemleak scanned areas (2024-09-13 09:55:17 -0700)
-
-----------------------------------------------------------------
-Modules changes for v6.12-rc1
-
-There are a few fixes / cleanups from Vincent, Chunhui, and Petr, but the
-most important part of this pull request is the Rust community stepping
-up to help maintain both C / Rust code for future Rust module support. We
-grow the set of modules maintainers by 3 now, and with this hope to scale to
-help address what's needed to properly support future Rust module support.
-
-A lot of exciting stuff coming in future kernel releases.
-
-This has been on linux-next for ~ 3 weeks now with no issues.
-
-----------------------------------------------------------------
-Chunhui Li (1):
-      module: abort module loading when sysfs setup suffer errors
-
-Luis Chamberlain (1):
-      MAINTAINERS: scale modules with more reviewers
-
-Petr Pavlu (2):
-      module: Split modules_install compression and in-kernel decompression
-      module: Clean up the description of MODULE_SIG_<type>
-
-Vincent Donnefort (1):
-      module: Refine kmemleak scanned areas
-
- MAINTAINERS                    |  3 ++
- kernel/module/Kconfig          | 77 +++++++++++++++++++++---------------------
- kernel/module/debug_kmemleak.c | 18 +++-------
- kernel/module/sysfs.c          | 63 ++++++++++++++++++++++------------
- scripts/Makefile.modinst       |  2 ++
- 5 files changed, 90 insertions(+), 73 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
