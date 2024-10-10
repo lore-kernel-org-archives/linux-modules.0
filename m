@@ -1,117 +1,111 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FA81CC89F
-	for <linux-modules@vger.kernel.org>; Thu, 10 Oct 2024 15:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAC19AA6B;
+	Thu, 10 Oct 2024 17:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728575599; cv=none; b=st6y6H5KIF/P/3amuF35rHHMW8ToVAOrIMmp1CJAOrRnuBrp/1ssMDkW45MZRunLJ7IEeGGfwSdNZogutUK31iniYbf89lxFGXdvKllxxopr0nk7NOThKa7/qif84KHHTY1PYd4Fb/W9m98ho9hWelIpLRVP8uF/jnuSJ0SaaiY=
+	t=1728580712; cv=none; b=Kl2XB1eeRlt7qxPKIwMIMP7olnumK8gsjJMdy2L3KMxHkQaNbIfABk/e85bza+2ZV9kujedqmxgAsZ/7UHvHteAozt+gNCAh2sb1p5lkceC65fn97tZU/tZhUEfepe8lQT7Be24UTyQY55lDz+RPjCL2k3j29J71oGya5mYSaP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728575599; c=relaxed/simple;
-	bh=OEKgT5FaXcrpIO0R1OJJHf0yvgx7y1d7mR06I8IroIc=;
+	s=arc-20240116; t=1728580712; c=relaxed/simple;
+	bh=vaucBuX2fMrEpT3kygwI4CcFnWG5blOdj+4yYIH1/lc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cp0YUvcjcdDq7QkQIkwWeTKC+n3XwE+9krRNdhyWnN/xwdfFA/TxC5iLriga41y2A7x8TeuvWeGayTJ1/fJOPjXX1SJ78qRfSoeQleRm2QLwD36MAnAFRnuhBenlAR3sSDq2ODZX1lzkvFQUfuCLN4P2+kl7zfYd/qvcPyEwlVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gLfg+uGL; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=VdyUqTy6CptoVSqVgvzdYJMqPU6hJwsDnJ2c5zqIj6cq6ZJnMSFz+hXc2D2YP6Tse4+y88y9zq6qQC1ceGSi9VIEQs4p9Plc0JwM+xWYtQbrO0SE/qLvB32fevMLBuTF7BrXn0G85g2OsFxS51nidUHgDFJa6qrYyTpEbUHrqSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YGQC3YGT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gLfg+uGL"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-45fb0ebb1d0so257221cf.1
-        for <linux-modules@vger.kernel.org>; Thu, 10 Oct 2024 08:53:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728575597; x=1729180397; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bRF7QTAhluph4t1u2jY3lQtQT6pq0IqnJy/G2sC0qKY=;
-        b=gLfg+uGL9nnJXg3JX0x9h1w/z1xRq5/GKSna+PmYzrHn7KIHLxUgvUALoqM9YJ5NgF
-         SDDt09uxrVVKZ6pBH8mLnC7SwqqaM0D1CinL785Ip6NAmoh2zocSvhuv6909SrLfBDvA
-         laxdhU9ZKUdahT66MQIQPBhLvvV9heCvHg+zZ+jx+65FbE6kjAIKik1cWKFEWKsCqvcd
-         F0hEp/spjigQSK9wMJ+SW6s5UH0EE5Zb0Haa4DQXCdvSvYE2uwro9Hwd2dkfudo7BR1Q
-         HVpxPysO+/nkdQfmTwwarGpL/uTBVtenAab5dadGeU++cYr/dkk41dbbPw+3animKJGs
-         87DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728575597; x=1729180397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bRF7QTAhluph4t1u2jY3lQtQT6pq0IqnJy/G2sC0qKY=;
-        b=ttlEnuRTG81GZICUpNgS1Dvr0N1kkHpxS9nWuSsjFPApVRPmypqcEUjdbX0o9LOKpw
-         CqZZ398oN/SDmS9T66Ji/TbeDKkmErp/5XjjMO7Rci3XWwWXk/Vcp89bg3NwJOZKE78M
-         YyubtCiip0vGq6vaD4w+zMI1Yz/MjNn8/z5fdLFGmxfBWKbCMAb/fdolEkICxLmsDrmd
-         QlUglVxURvCn6e+PKFV78kjZYKEhG87TM3wezWd3d30gSaJDb+pcLcjba5CYr/OE+9HQ
-         7AlCcwX8Y3vcHTpDvk7EJjYaTmXx82mNBe2BUd81Kb/ZaG4MTN8YCgOPcav463q4ms6m
-         yBKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWCj9AqVIdgvQPiGJULzzWm0WcEzmZGDm/Fu1cOqvSvqXhw7CS0FtKXWJxymifNg6vggq/IJd1IwpIFmjhi@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtnXuLC/nSF/fyTw2xSLl3KEcktdbptEl7g/YE+8r8sKNHENcr
-	0XmmD4nf58EgECmGG6u8Q0lYp71QRv+x69LngbPbVSzrvbpSMq/CzDyLTcdMxpKem3ONE9z4JxT
-	SNgBhjut38ytBf/Rq/zYfg/nFkz/8BRDpzBTh
-X-Google-Smtp-Source: AGHT+IFQAlD/kyDgC4ga4+ipIjureI+CBWbmGopaPOHkfvMa2Tw2xU4vZqdtGy3/S6U22tdGXqVetrx15+hx10NVr30=
-X-Received: by 2002:a05:622a:450d:b0:45f:9b3:c7d4 with SMTP id
- d75a77b69052e-46040329dc4mr4203261cf.6.1728575596483; Thu, 10 Oct 2024
- 08:53:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YGQC3YGT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E86C4CED1;
+	Thu, 10 Oct 2024 17:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728580711;
+	bh=vaucBuX2fMrEpT3kygwI4CcFnWG5blOdj+4yYIH1/lc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YGQC3YGTpIM/Tv02Vn7usGJD/6tt+x+KTKu3UxnMO5NCC8+C7ZPh5ezrehFriglwe
+	 0kHT558np8Wr8rw+tHrk6iFdI6TYZzj/XuDQyl1ohCHGBlLvqRKvMY9o2gFo+NuycW
+	 y20uvBOD9Gdu+xnvXvzrx2PBIPwMfqD7Kk74Y5ZM4wURiZxI3kabAPnyXgltKV5Te8
+	 nLgYuMl0XB6UP3CI6ocVV8lyp79EB210TDlqZm0fWRLk96yJAx28fczirFRv8Ok4xn
+	 g28YaYfndtMh2lJkpow1r3uH0m1V9UcGEfvj2KBq6mV0UhVTJerIhIuFum/RTZvtMI
+	 Z12HDd0NC/l1Q==
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-8354851fcabso48911939f.2;
+        Thu, 10 Oct 2024 10:18:31 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUNwS4nU0i1pFTedEe9QquUZznRCoLc+3xUgysql3JpZQ1HE+HaPatufKWc8qr0x/Ye2SQsxkziAepgcw==@vger.kernel.org, AJvYcCURTNsCKHxmNg85Q0OquBOAAn4jXzp/HSvwityJzy1FP4UBfrQS5ey7549dEMoRJBoqS9u+h2FK5J1O1Q==@vger.kernel.org, AJvYcCUnXjAFL7Vh4gBrRhVyEqBEd8t7lq75QzDLkU1jQpu2pPeqMTjdN0rG+XEjvXFfcEgIwZrUtX9iKlnYuZl1Iw==@vger.kernel.org, AJvYcCUpsoApLKAYKbB/pB5ltcSLmuksx4pmT57XP4Qx563kh6rXnFT7j/pvr+QRHXsv5PpsC1hMx2rrNHaaQA==@vger.kernel.org, AJvYcCUujDcBpwF8M6Qg6H2w77GxDLXtQ6Xokb0ZnQ0XkGg8nSLYIfwOopK4UFUL7XDf1Xq/gGar3qy1fSoKKIyQsQ==@vger.kernel.org, AJvYcCVceqbqnoD8upMwp/2rMzTQA+NnTmzxnZYka3o5PMZK0SOnabs3WzoIzYtuNHcGv17yAVbwdSAnLAP741oYp1068Njm@vger.kernel.org, AJvYcCVtUOzBZjY/yodlV6U3dIaM80pFkBdfOsoKfaz6TGmw57MrAN7kZC7WJeTmxobtSTkk1AoqdjwrNfc=@vger.kernel.org, AJvYcCVtYIpyyF4KPkwJbK0dSAr8z/fZQfE/nEvPhH1FlGGEIhNujLo9NzrcQWT8hZZGg1MM832Sv4mM5/YgOw==@vger.kernel.org, AJvYcCWMFvZbSRThFQeP2ZvabB4MrRYbmwFHdF4xKCT4Sau2vCUtG5OivWCBhzdTpUxAl7M41KjCuFW7bGqFhAY=@vger.kernel.org, AJvYcCWcPvgouWs6OFoewglssFG7UHTBjYz/7OKk2nN1Ovn1QIhK2B3HNcbOeqHTS/9TFy8wFXTOAnuPwbM7AxRY@vger.kernel.org, AJvYcCWgcrmvKS+saR8ChWJ38tf6CjCHieZyZn8se624ihvJDrH/8Hd8woMODD9mOtz/sMEzCi0=@vger.kernel.org, AJvYcCWsKsLVzkoC7SAiMH7xEL4hMOOAvV863DEiMnc42F7DPzDatuylHqJQNdtM5UIa2cyFJv+gpo5iu2pckVXg@vger.kernel.org, AJvYcCXfHFj95a4sWp51N7WEhfSNNqDmCkH5z7GRG7BzYeyhUFXbus+OhaAaGyRp8Kf0QQULH+MkcC0Xpe/rI66Tg44=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQR8Mgvc/yWBlexpByTgWAPe9ne4Og5hO9d59xlmOJSOhlNgN2
+	cf5Fd0Crb6QwfYEcRnE0TZbARHYJQ6Xgji+ynd/D7NOUT8aORLlv06NQJVa7qMltWwCZRZY6TRu
+	QtAxxGqpEubkGQgWES9J+UiGKsgE=
+X-Google-Smtp-Source: AGHT+IGszKBBrf1gYsUhslMqcPNpC/f6sAFFbsmL+u+zGmeEd2sYZs3+7Tvb9T+CKCsx/nhk3yidKvoEgysxI18Lmn4=
+X-Received: by 2002:a05:6e02:144d:b0:3a0:92e5:af68 with SMTP id
+ e9e14a558f8ab-3a3b51daa94mr2839515ab.15.1728580710921; Thu, 10 Oct 2024
+ 10:18:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
- <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info> <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
- <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com> <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-In-Reply-To: <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 10 Oct 2024 08:52:37 -0700
-Message-ID: <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build errors
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: sedat.dilek@gmail.com, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241009180816.83591-1-rppt@kernel.org> <20241009180816.83591-5-rppt@kernel.org>
+ <CAPhsuW66etfdU3Fvk0KsELXcgWD6_TkBFjJ-BTHQu5OejDsP2w@mail.gmail.com> <ZwdpnPKKQGF5DtSv@kernel.org>
+In-Reply-To: <ZwdpnPKKQGF5DtSv@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Thu, 10 Oct 2024 10:18:19 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6gb76T_75TPzb-AvfyAcYE83iYhDpjJNHJQWDd3Fki_Q@mail.gmail.com>
+Message-ID: <CAPhsuW6gb76T_75TPzb-AvfyAcYE83iYhDpjJNHJQWDd3Fki_Q@mail.gmail.com>
+Subject: Re: [PATCH v5 4/8] module: prepare to handle ROX allocations for text
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Thu, Oct 10, 2024 at 1:57=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.i=
-nfo> wrote:
+On Wed, Oct 9, 2024 at 10:47=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
+te:
 >
-> On 10.10.24 10:42, Sedat Dilek wrote:
-> > On Thu, Oct 10, 2024 at 10:29=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail=
-.com> wrote:
-> >> On Thu, Oct 10, 2024 at 10:19=E2=80=AFAM Thorsten Leemhuis <linux@leem=
-huis.info> wrote:
-> >>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
-> >>
-> >> That was wrong in the original code which you moved:
-> >>
-> >> +config MODULE_SIG_SHA384
-> >> +       bool "SHA-384"
-> >> +       select CRYPTO_SHA512 <--- SHA*384*
+> On Wed, Oct 09, 2024 at 03:23:40PM -0700, Song Liu wrote:
+> > On Wed, Oct 9, 2024 at 11:10=E2=80=AFAM Mike Rapoport <rppt@kernel.org>=
+ wrote:
+> > [...]
+> > > diff --git a/include/linux/module.h b/include/linux/module.h
+> > > index 88ecc5e9f523..7039f609c6ef 100644
+> > > --- a/include/linux/module.h
+> > > +++ b/include/linux/module.h
+> > > @@ -367,6 +367,8 @@ enum mod_mem_type {
+> > >
+> > >  struct module_memory {
+> > >         void *base;
+> > > +       void *rw_copy;
+> > > +       bool is_rox;
+> > >         unsigned int size;
 > >
-> > Thorsten, please fix it!
+> > Do we really need to hold the rw_copy all the time?
 >
-> That looks intentional to me -- and CRYPTO_SHA384 from a quick look does
-> not even exist.
+> We hold it only during module initialization, it's freed in
+> post_relocation.
 
-It is intentional. SHA-384 is just truncated SHA-512 with different
-initial hash values. The same with SHA-224/256.
+Ah, I missed this part. Sorry for the noise.
 
-> But that's not at all my area of expertise, so I would not want to touch
-> it anyway.
->
-> Ciao, Thorsten
->
-> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
-> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
-> the "choice" section; haven't tried that, but that sounds like a better
-> solution. Will likely give it a try, unless someone brings up unwanted
-> side effects this might cause.
-
-Yes, that would be a much better way to change the default. Overall,
-moving away from SHA-1 seems like a good idea and SHA-512 feels like a
-reasonable choice. Luis, do you see any issues with changing the
-default here?
-
-Sami
+Song
