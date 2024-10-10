@@ -1,112 +1,112 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E21B1BBBFD;
-	Thu, 10 Oct 2024 09:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E410F1C7B8F;
+	Thu, 10 Oct 2024 13:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728553046; cv=none; b=kKEveWA7tE3CLqQ8U8k9w54o+uyY/bGD5rJI2gpAc6icFPTKP0ixPJmFPv2MtxOmQUnZ4aW8olu0QQ5FsMTyCDA/TfpzLDX+e1Dgu9QgBuAz83GiuDgOW7+CSP9zIh+SihxtzB6Cz1qsCGIi7PO2Y8zGK8ShAa6tCtWlW12I2yE=
+	t=1728565284; cv=none; b=DcyQ2lBwhdjZpkOtJ0PVBCmjCGD1FVEdtBoY+Vt9YOPmefsw6xtUGEpcUQcKlY/F1m1LCJ42gQTfWMLWkVo3ylensI4c5KES77YOTlZs/JBfFqhWp+FaARZRjeerXjRxiyenDdvjG8bSTRX6jYFCdXBg/b9QZ2geR0losu8w+RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728553046; c=relaxed/simple;
-	bh=VHw6/ru4WIVfCSF+1BJ/2OnkobBWimQqjQ0m1jsqe1E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sYn3YzHA7jezRX/jdXFBlZlISKMFY3Sce3QMHqiP5uTA77EWBqwDrBXwtZvHtrg1UrczDZmiMHJHp+K+hggnLNTrlf5nHXFlHLM8c06EYhcElLKhMRMHulbN77JMMfDn67dq6PWZGF5IWNopoK+y3MXLJeQw/k/L97LyckkEey4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FlsJOB2u; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728565284; c=relaxed/simple;
+	bh=0gFND+MAHX6q3fPU9Dm7aa3AX+VkNdk2ZdK9663ePGM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rPeAz5Ni8C8daLh6FKYFhAMiYN0TD/1HqsU8wbKvJe0Z96mlV4S/cQ4aA9JGIWhDCQX+fFSmqLW1kHLjy1Cmhn4zUraIWN9+Brw1aE5Qxw1vW6bJpPnhVMnzUg/0rvwT+mhs8pNzO7S5K0Em/Lmvh+wR4pwb5oeMN9aCafu4rkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i15xpEq/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FlsJOB2u"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2fac187eef2so7420011fa.3;
-        Thu, 10 Oct 2024 02:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728553042; x=1729157842; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qasUjW8lOXNOYBd4pGW/rSPH9GILqj8in2xygjAFCM8=;
-        b=FlsJOB2u3lR+BH7X3NVJqnOWLPPzqFMxPvk3tUb6VXeq1ELc7sXWz3WYTmTkWyl194
-         FnsQnfy7Ls9ZlZjwwZlVRz26ZM8qU9yDB1atoJ+gs6NhULALVb8UoZXmIdK7ArCatK05
-         Un4zkZMb5VwsrhIXlNbyT5/Rb84B0pnb6KLCEsyhDyRyDAYW3v7eSywVjJrJKenIaURQ
-         keoXX9plhbZavdgg+km+DtgkAOe1zaHdFk5Po6An4gUan3BtILtf+pwY5po8Aehlp9Dh
-         HX1U2AM0mB3b2mVdj3OSpvHZXabQ2fLDQ4Znb2ZkIZmM7rDmT3AUsoaYh5HkiyPal3Yc
-         6GrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728553042; x=1729157842;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qasUjW8lOXNOYBd4pGW/rSPH9GILqj8in2xygjAFCM8=;
-        b=lf6pAVk4yo5ci6j4H/29eDBfN+Sd4HM73cUvdITFf7zUXFD/jfBzbQa1SEaD6P/u0+
-         PHpheasRRgk0euMoriqH0Jrv2+tF6OwofOd/bLKd31C9Vnd0BzJ5WpV8IW3We1bVBToe
-         F40tODZnDlHZwd1Kf/TFy1zxAbvMkdgHeX8MfAONfpNc2KLyKfOVkXjBMrhZiJoqFSz8
-         h9jXXwJBeBCy+YjZBfZ7PXXhjOafm64ThfgXZnwWTgUFHQaO2c2oP7sSnJ8Mo+lMIPAa
-         hnWlOSxjs37rOt6fLxDT3NSF1vjHZ4a+QhNfok51CSySM3rVO7EDwJQ2KuolBMz6vVa5
-         aZmw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgHKiFUGQwl33SCLsrMykfa0U42VcsIk080uc9RfMRSjDXDRqXt0gy0giKBzCueYu0YPF06CCyUR/kfobw@vger.kernel.org, AJvYcCXib4b7r8Dv8bExpknU4vmhkCOHn6JI9dyjurSag1sfFRIbi34gVi6oa020bJZ7WV5o55Es4z8V0fWFS8BQGw==@vger.kernel.org, AJvYcCXrT+j1F6SNGvcUXO3GlVrHQ60JZUuyuLyvg/B4L5TROaHck5BoUp+oSqkEc2ZL8+/1X1+gk95w06lRQb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4ZZDjgPFR+purIoLEGCG5tD5rM1x3EpU2Ee5ojoep3vy2TYfp
-	HcixH8e1111++Qxb5ptF/XLeV+RV2LGwD9bGs4k124Ut20cPPMZhYcVJiVmvpFZD4An/vbw7Ptr
-	6OB6tytSbbQSHk6mTsg9Dy7NzVWk=
-X-Google-Smtp-Source: AGHT+IFoqWdCcFDyIW+T0u2K8pinEPwVaR4dgwJcH4CIPd5f99UTZp6LTbYJnA+DiT5gZsxG7Rmadj7M2RjxD5xISsQ=
-X-Received: by 2002:a05:651c:a0a:b0:2f3:b8dc:7d24 with SMTP id
- 38308e7fff4ca-2fb1873e91emr32922731fa.17.1728553042257; Thu, 10 Oct 2024
- 02:37:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i15xpEq/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F0EC4CEC5;
+	Thu, 10 Oct 2024 13:01:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728565283;
+	bh=0gFND+MAHX6q3fPU9Dm7aa3AX+VkNdk2ZdK9663ePGM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i15xpEq/kuFAv6DlXG15A1e80Zkeyfpm7KcH2z/4b7LHy0huNtJIfhTPl8l4m2Thz
+	 DrC+EerzAtj77QkSwvdLuoM9HsdVcSXAYblfY52ni7z3rWCwNvYecLnzzamyv05TxQ
+	 MvyRQw4iBhqZGVncP0l5I4u44ZK9GkUbVv2NjZJ1KmbX6KkRkPzCVKd/P5aEdD5W04
+	 r/juMpxct8TYbYtPQygo8mwFvlF95PkeOYNJV8aiyjpOL0HlbI0t0P6KYVnwxFYXRs
+	 bP4FdthxlHe3zfpEHTln3UXCWui5XHPdWaBkcJjwrkqkqBVwNb4EXbX5FI3Wx8W6oT
+	 ueyyZehAwF8+A==
+Date: Thu, 10 Oct 2024 15:57:33 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <ZwfPPZrxHzQgYfx7@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
- <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info> <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
- <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com> <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-In-Reply-To: <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 10 Oct 2024 11:36:46 +0200
-Message-ID: <CA+icZUUmo+mJTKUS8kH9qUNH0+CqeYNspqp9OA-iWw1KMMDMwg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build errors
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zwd7GRyBtCwiAv1v@infradead.org>
 
-On Thu, Oct 10, 2024 at 10:57=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.=
-info> wrote:
->
-> On 10.10.24 10:42, Sedat Dilek wrote:
-> > On Thu, Oct 10, 2024 at 10:29=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail=
-.com> wrote:
-> >> On Thu, Oct 10, 2024 at 10:19=E2=80=AFAM Thorsten Leemhuis <linux@leem=
-huis.info> wrote:
-> >>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
-> >>
-> >> That was wrong in the original code which you moved:
-> >>
-> >> +config MODULE_SIG_SHA384
-> >> +       bool "SHA-384"
-> >> +       select CRYPTO_SHA512 <--- SHA*384*
-> >
-> > Thorsten, please fix it!
->
-> That looks intentional to me -- and CRYPTO_SHA384 from a quick look does
-> not even exist.
->
-> But that's not at all my area of expertise, so I would not want to touch
-> it anyway.
->
-> Ciao, Thorsten
->
-> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
-> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
-> the "choice" section; haven't tried that, but that sounds like a better
-> solution. Will likely give it a try, unless someone brings up unwanted
-> side effects this might cause.
->
->
+On Wed, Oct 09, 2024 at 11:58:33PM -0700, Christoph Hellwig wrote:
+> On Wed, Oct 09, 2024 at 09:08:15PM +0300, Mike Rapoport wrote:
+> >  /**
+> >   * struct execmem_info - architecture parameters for code allocations
+> > + * @fill_trapping_insns: set memory to contain instructions that will trap
+> >   * @ranges: array of parameter sets defining architecture specific
+> >   * parameters for executable memory allocations. The ranges that are not
+> >   * explicitly initialized by an architecture use parameters defined for
+> >   * @EXECMEM_DEFAULT.
+> >   */
+> >  struct execmem_info {
+> > +	void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
+> >  	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
+> 
+> Why is the filler an indirect function call and not an architecture
+> hook?
 
-SHA1 | SHA256 | SHA512 <--- IMHO enough.
+The idea is to keep everything together and have execmem_info describe all
+that architecture needs. 
 
--sed@-
+-- 
+Sincerely yours,
+Mike.
