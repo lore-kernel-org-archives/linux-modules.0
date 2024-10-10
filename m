@@ -1,152 +1,103 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AADC206972;
-	Thu, 10 Oct 2024 08:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1834C1E572C;
+	Thu, 10 Oct 2024 08:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728547485; cv=none; b=EHyy9BYRpjToh3Qb59S5zew1d1qYdkRt/Ijr4LPgws+n5F8sMuKyekcCcg9rsKF/p74rz6WmmEpNluZOk1k0RngCH40jCt8nrTs7+ju59/TKDfYrYErRNYyvD+kk7asNoTMrDwU7hElHLPRjsjSk9gtgzE4F8lN7P7Qy4lRI9F8=
+	t=1728549037; cv=none; b=s36FZxXr5wCOcIf9u9eZICBzK6VRw7FbWvzxFE1NItTeTSZgy/obvR8JJv6a8VhT1Wmmt0QUX6jBMLPNxF8irfVp5/MJQ5KDBlGX+CfHANgljw+ONf/G+qAbWkXgZVSRimd94U6c3Co7cWppOSxMKBPU1/FmV2G/wU0QsNReEO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728547485; c=relaxed/simple;
-	bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=MRVnYAoHoenjrfhIoAGrGBM4oe2ofBruaYZNILTXmFvBsEywcMgEFOa/y8zUJfT+69oYrdNLcgOAyZicwEOaCzvCWmeUMn1iB5lcx32GsGYs3G9xmiBwLrB8fIV9YxD5tSwqfBLUX908w7zzJ7jNGZWqxsDOqS+S1/6/lupc/F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qUwWDZgm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YKVFY9ru; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1728549037; c=relaxed/simple;
+	bh=+mwfCV5Xaz78bJIAQCoJRY4hO0RI7al8uPck8YFKoeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a1PQZaR9fcLlKE5XEJ2ZO3v462xljWMCgqwlbOBM8tBEGyYHw1I4aYzcVQQhWJ6J5QHkEWTBgq+2uyPTEtQ0RGdfUMBW/0Nq4iygi3RW1eQRFZ1GBZhLwFpLpOjtR9hwLIIRgt18QBKaU7hF3E4ENZ1VvKQJPZ7rg3gOeg0rCyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OEHMlwgD; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qUwWDZgm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YKVFY9ru"
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 36D3E11401D9;
-	Thu, 10 Oct 2024 04:04:41 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 10 Oct 2024 04:04:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1728547481;
-	 x=1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=
-	qUwWDZgmoFSc2bvCLEkOL58hDVYZTrXcWqA1r8Cm2RvEFx5gUkRYopFuSPQ3amGK
-	A75AnB60O0tNSjpd6qb4sOHfavqwBuHErQVjVa8XNdYjdZheAewMWD81oqp5grVF
-	OMyHEJ3EtyhTGHXEhPd56/rpTE8Os9ZcKFpOiuCDpJ0WFjtvtQv24Ut5jJoTHnYd
-	aFsDvyOZRC8f1Zd8Ggv9tLbENlgXMnhXw4fjpTepep99VYTMAzRQ02ssu1RFUoY3
-	g2Q/l1BksGyyAC49oDIHgf037BwdnufA/EmmDjUOvMxnh4dx4RBbboyuyOd840NT
-	xuqFLD+Nws1CIVcuTITmHg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1728547481; x=
-	1728633881; bh=NOnTXEDf/afk98+qld6jjp5+THx/CJ1WRioKL/FDWFo=; b=Y
-	KVFY9ruZTwjCXaru75A1LYIRzB9hNonTtp+VnwOuUDc00DfM6Q58QBkP6xvTdp45
-	5KRX9ad0rBSJypNyLeRiaImyE0+6VyqMZel3jXqgaXrTtoIYd8as+0tpJgI4+Rwy
-	XFY3m+TuzIDj8+4xOE9H/ir6Bpc93KNZM9vqBvrYFGayrfXvHSClTBdE5Y51ymOD
-	CBmzaZCAlBE7NBw0EKGEjQ/m7G/CH5ceK628BoC5sGH6eY/a3dskoTF5R7ilaei7
-	0OZJ/HycrEwomf3gFDs9UzNX1vf9aG49RHy276/+i4YF/m+QWD5HGfVUe1MczrPH
-	EnyTMmojm4/cNsD1aIH0Q==
-X-ME-Sender: <xms:mIoHZ4klWhimXUj0T6QpcTwiYXJRsoU5LdDufDqDOomjiAXzPU1DeQ>
-    <xme:mIoHZ30tXQyn4xrtPUssnTi-kdfuHuz3J0caWpTGpMt2leGiFPK0R6BThxrSwX69m
-    nH-QCqJpajtXht5q6M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdefgedguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
-    fedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrtghhsehvghgvrhdrkhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqtghskhihsehvghgvrhdrkhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuhhlvghssehvghgvrhdrkhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqohhpvghnrhhishgtsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:mIoHZ2oEJ0fbuiaD8xkujPJKuAgfTVFVgkQ1MaKFzQJpFSIpGzfDAg>
-    <xmx:mIoHZ0mJL5zhDflICU5OnCxj5xD-lNh7hszg2y7w_jG0SosfB6v4TA>
-    <xmx:mIoHZ23OJE-QCT7HdDHaNJq2YoxMQsePqKr1PpcugeuoE58nHC1iew>
-    <xmx:mIoHZ7tuhBf_WSccVXoM3lkeeX0DDoNl6mMcyPN5JCQqsonWnM8tzw>
-    <xmx:mYoHZ8NM8dSyfUFOSROsLFZvsdyCyDiUWAXTgcQSDhI-SDaU9fYoh5C4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D17622220071; Thu, 10 Oct 2024 04:04:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OEHMlwgD"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398e53ca28so639393e87.3;
+        Thu, 10 Oct 2024 01:30:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728549034; x=1729153834; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6K5e5UuEzDWXiQ3PgmTy2pOR94vNJzdNel9NAMV4yRc=;
+        b=OEHMlwgDHT63LnfVcvuMPnxGXYx9omZ2d6bjr9TR/Xql2dAJ/UeeqyLF7EDjNFH6MJ
+         eBQBMn5xTWXC8eRlrAuHvntdkGhLmINIRjJfDzrisSTkwWhjkoyVAUCGPBHsBlQNV91f
+         ap+tfAWd48/7u8MKF3wyebKYrIMp+rEN6NvP8N6JhFzqRlI2saiXetG+onElsJCauFKy
+         Wmz+n7FFbXGSV/a4ov4LfJ+NcaOWJtL+gAYlDlaq9dNGALMZW4iQ184W1rGkvKfgH1pl
+         LSdl0EFalHSokghIkLyW/nGLVQ03MU9dO6JUY8Kkq9VplJswDYZCVxBtC1ZnDb+aFHih
+         k2bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728549034; x=1729153834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6K5e5UuEzDWXiQ3PgmTy2pOR94vNJzdNel9NAMV4yRc=;
+        b=Rnlatm9uFhvNrao094Mko76FNvpiXQL4Ww1snGegwxjRv8nShrwTgXL1V84bI2HamS
+         wMox3xEKcpQk7zb+vrd6/ssLgXusWkBTJmGhFR1A87lGKJm0mi6TCLuagJ2vdZ2STMWa
+         CiRCOe7qlFCq8ipOLp533+JsMyVOBouG4DBnDXy7/srzfbmgRXGEVEoFK9++R9M4DQL2
+         2TmyHLvO9Pb3c6AykCmwuuu6zzlF/9qo1MmTgC2Ymz9w6vTnK8Fq+cfo7962vmL2r6s4
+         Hn3JdBIyNpSUatrUIBtHXDo+eucgP/gcVxvYbgJ/yjWK8mah77geffhbuDRwvGElwIoe
+         sgTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVcw3zbY2hW410WFUn/pGlIzD14N/JmhII7nHOy0BlT72t+ySG8LWkqd2gbZdRrq/8jQDIQp1kv6X1cHx3a9A==@vger.kernel.org, AJvYcCWKgJILFakdRNbsz4dvKYcDijgNHs1BEG/On/Lr1bedYyHz4Sc89O4JdlveuzK8IDks2+4Dt8wMVvLxf3nT@vger.kernel.org, AJvYcCWQjt/m5HKvGRH0mlOSCJJB+mS/qXErkM67+2E3HHCpmmoGmPr3EVSEdxMoTk/Vxr1gTe/f4QDs09pEoUM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1pTO2COKSsZvxxVNL+HeH+KV4zjJxvFCT3sECnfogRY5WgoBR
+	p0HG3kzIOnSsA9GJ3k8d5k0aniwjdm/oPB+y8Igf7KjAcXq2o1gw0cQ31rWjfvaHjwRpB9J1Ga0
+	AkPc6deoZyBeUJPDuiWQQULsxCFdsWOjF
+X-Google-Smtp-Source: AGHT+IHW2rWv2FjlUD4PnKhrCsRLnkCbi6EGrXvNAggFWmb5dnRlFWNJzTzQl5lYAYssfabEQSk0RNg0mbjhEVGoL1Q=
+X-Received: by 2002:a05:6512:1056:b0:539:9f21:35dc with SMTP id
+ 2adb3069b0e04-539c4981051mr3469810e87.57.1728549033800; Thu, 10 Oct 2024
+ 01:30:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 10 Oct 2024 08:04:19 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Mike Rapoport" <rppt@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>
-Cc: "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Borislav Petkov" <bp@alien8.de>, "Brian Cain" <bcain@quicinc.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Dave Hansen" <dave.hansen@linux.intel.com>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>, guoren <guoren@kernel.org>,
- "Helge Deller" <deller@gmx.de>, "Huacai Chen" <chenhuacai@kernel.org>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Kent Overstreet" <kent.overstreet@linux.dev>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Matt Turner" <mattst88@gmail.com>, "Max Filippov" <jcmvbkbc@gmail.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Michal Simek" <monstr@monstr.eu>, "Oleg Nesterov" <oleg@redhat.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Richard Weinberger" <richard@nod.at>,
- "Russell King" <linux@armlinux.org.uk>, "Song Liu" <song@kernel.org>,
- "Stafford Horne" <shorne@gmail.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "Vineet Gupta" <vgupta@kernel.org>, "Will Deacon" <will@kernel.org>,
- bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org, x86@kernel.org
-Message-Id: <e1ba5ab2-a7e2-4f2c-8e2d-4788656ef695@app.fastmail.com>
-In-Reply-To: <20241009180816.83591-4-rppt@kernel.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-4-rppt@kernel.org>
-Subject: Re: [PATCH v5 3/8] asm-generic: introduce text-patching.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
+ <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
+In-Reply-To: <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Thu, 10 Oct 2024 10:29:57 +0200
+Message-ID: <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build errors
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 9, 2024, at 18:08, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Thu, Oct 10, 2024 at 10:19=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.=
+info> wrote:
 >
-> Several architectures support text patching, but they name the header
-> files that declare patching functions differently.
+> On 10.10.24 09:00, Thorsten Leemhuis wrote:
+> > Avoid build errors with allmodconfig on Fedora Linux 41+ by reordering
+> > the Kconfig choices so modules are signed with sha512 by default. That
+> > way sha1 will be avoided, which beforehand was chosen by default on
+> > x86_64 when running allmodconfig -- which on the latest Fedora leads to
+> > the following build error when building the certs/ directory:
+> > [...]
+> > Link: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustsha1SigVer =
+[1]
 >
-> Make all such headers consistently named text-patching.h and add an empty
-> header in asm-generic for architectures that do not support text patching.
+> Sorry, one search-and-replace went to far, this is meant to be:
+> https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer
 >
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Ciao, Thorsten
+>
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Hi Thorsten,
+
+That was wrong in the original code which you moved:
+
++config MODULE_SIG_SHA384
++       bool "SHA-384"
++       select CRYPTO_SHA512 <--- SHA*384*
+
+BR,
+-sed@-
