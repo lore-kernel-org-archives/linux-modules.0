@@ -1,103 +1,180 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1834C1E572C;
-	Thu, 10 Oct 2024 08:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E232B1E7C05
+	for <linux-modules@vger.kernel.org>; Thu, 10 Oct 2024 08:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728549037; cv=none; b=s36FZxXr5wCOcIf9u9eZICBzK6VRw7FbWvzxFE1NItTeTSZgy/obvR8JJv6a8VhT1Wmmt0QUX6jBMLPNxF8irfVp5/MJQ5KDBlGX+CfHANgljw+ONf/G+qAbWkXgZVSRimd94U6c3Co7cWppOSxMKBPU1/FmV2G/wU0QsNReEO8=
+	t=1728549049; cv=none; b=g6zfQc6R/ErEohkD8RW0mur/SscqUa3e4Vgn9QQRkPv1YB/dDmRWVcNW2zPutvD4AoXKUs/vjaSGT5e/hehIORLyyt1rut3VJk4J4NQFWa3KVKUXjIF6apgrcSWUjrtiwT4j6gLyfqNterS5ydfMtk2JFC7wkdoOPoSsfCWvRgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728549037; c=relaxed/simple;
-	bh=+mwfCV5Xaz78bJIAQCoJRY4hO0RI7al8uPck8YFKoeo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a1PQZaR9fcLlKE5XEJ2ZO3v462xljWMCgqwlbOBM8tBEGyYHw1I4aYzcVQQhWJ6J5QHkEWTBgq+2uyPTEtQ0RGdfUMBW/0Nq4iygi3RW1eQRFZ1GBZhLwFpLpOjtR9hwLIIRgt18QBKaU7hF3E4ENZ1VvKQJPZ7rg3gOeg0rCyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OEHMlwgD; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728549049; c=relaxed/simple;
+	bh=ciGEzLPrN7XbFB5cK/viPY+fgmysJA4dkt9WpJTF0yc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m7WizDbGYlUus5DXX3VzPUwUwYrwk2X3xq+B0BGjteyDJpKZDM501a2THWT9GGZs+iD+3JNAi1vxJJhTOpYH9ZKpAo4GbZq2f+nc2hrF0tLcrQnxqjVVpRsXi615xVXFXfzUzeH3fLGpFtsS4uOtvEiV9VdfhxQDYZz/8v8AFug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=V6GGARyi; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OEHMlwgD"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5398e53ca28so639393e87.3;
-        Thu, 10 Oct 2024 01:30:35 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="V6GGARyi"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2e0d9b70455so562560a91.3
+        for <linux-modules@vger.kernel.org>; Thu, 10 Oct 2024 01:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728549034; x=1729153834; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6K5e5UuEzDWXiQ3PgmTy2pOR94vNJzdNel9NAMV4yRc=;
-        b=OEHMlwgDHT63LnfVcvuMPnxGXYx9omZ2d6bjr9TR/Xql2dAJ/UeeqyLF7EDjNFH6MJ
-         eBQBMn5xTWXC8eRlrAuHvntdkGhLmINIRjJfDzrisSTkwWhjkoyVAUCGPBHsBlQNV91f
-         ap+tfAWd48/7u8MKF3wyebKYrIMp+rEN6NvP8N6JhFzqRlI2saiXetG+onElsJCauFKy
-         Wmz+n7FFbXGSV/a4ov4LfJ+NcaOWJtL+gAYlDlaq9dNGALMZW4iQ184W1rGkvKfgH1pl
-         LSdl0EFalHSokghIkLyW/nGLVQ03MU9dO6JUY8Kkq9VplJswDYZCVxBtC1ZnDb+aFHih
-         k2bQ==
+        d=chromium.org; s=google; t=1728549047; x=1729153847; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xjRgM2erkgK9qh8AbT3u9Jz1xqlQ+SHokymxxsnkwPs=;
+        b=V6GGARyi90X+B17khH8hgRXfkBE9ec0tP9aPBognNcsNGhdlAyv2TpWda74Rrygr43
+         wm/TFHucQh7st1/A3E0U/wGDw06wEopcR47DAwsyoGCllaHrH5KtzktV31CtVJ2punOw
+         q/WMnORmUlcaLeudv40KSjAkX+bc+k5zSVRLU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728549034; x=1729153834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6K5e5UuEzDWXiQ3PgmTy2pOR94vNJzdNel9NAMV4yRc=;
-        b=Rnlatm9uFhvNrao094Mko76FNvpiXQL4Ww1snGegwxjRv8nShrwTgXL1V84bI2HamS
-         wMox3xEKcpQk7zb+vrd6/ssLgXusWkBTJmGhFR1A87lGKJm0mi6TCLuagJ2vdZ2STMWa
-         CiRCOe7qlFCq8ipOLp533+JsMyVOBouG4DBnDXy7/srzfbmgRXGEVEoFK9++R9M4DQL2
-         2TmyHLvO9Pb3c6AykCmwuuu6zzlF/9qo1MmTgC2Ymz9w6vTnK8Fq+cfo7962vmL2r6s4
-         Hn3JdBIyNpSUatrUIBtHXDo+eucgP/gcVxvYbgJ/yjWK8mah77geffhbuDRwvGElwIoe
-         sgTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVcw3zbY2hW410WFUn/pGlIzD14N/JmhII7nHOy0BlT72t+ySG8LWkqd2gbZdRrq/8jQDIQp1kv6X1cHx3a9A==@vger.kernel.org, AJvYcCWKgJILFakdRNbsz4dvKYcDijgNHs1BEG/On/Lr1bedYyHz4Sc89O4JdlveuzK8IDks2+4Dt8wMVvLxf3nT@vger.kernel.org, AJvYcCWQjt/m5HKvGRH0mlOSCJJB+mS/qXErkM67+2E3HHCpmmoGmPr3EVSEdxMoTk/Vxr1gTe/f4QDs09pEoUM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1pTO2COKSsZvxxVNL+HeH+KV4zjJxvFCT3sECnfogRY5WgoBR
-	p0HG3kzIOnSsA9GJ3k8d5k0aniwjdm/oPB+y8Igf7KjAcXq2o1gw0cQ31rWjfvaHjwRpB9J1Ga0
-	AkPc6deoZyBeUJPDuiWQQULsxCFdsWOjF
-X-Google-Smtp-Source: AGHT+IHW2rWv2FjlUD4PnKhrCsRLnkCbi6EGrXvNAggFWmb5dnRlFWNJzTzQl5lYAYssfabEQSk0RNg0mbjhEVGoL1Q=
-X-Received: by 2002:a05:6512:1056:b0:539:9f21:35dc with SMTP id
- 2adb3069b0e04-539c4981051mr3469810e87.57.1728549033800; Thu, 10 Oct 2024
- 01:30:33 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728549047; x=1729153847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xjRgM2erkgK9qh8AbT3u9Jz1xqlQ+SHokymxxsnkwPs=;
+        b=hqtT8vvOBg8ko08jRWA0Bmwrdz29w9YivdsG5G4UiDKkPE1fS3IgYrJjohIeyZ8+/X
+         mCn3HuZl+xCrB95J7ROZKdUz8UAZLPSgZPc3xrsdLtOKcBRdVVKUmthZoDVzGEA36n7u
+         gqe6xbaI/VIBxrj4uXlqsAlP0xqPBodOnwK/qKvMaMV/kgIdT0jeU7JseGf0zC2n6DqU
+         cURSKJHNRCsescGvS/GmsbqzGvsqGWuRYyhljcSrA20JPSn/c2bJ4D5JvrfvnPc7Zr4L
+         ghc5JVu4yK/sAblK9rRQvlYrXDEENQ0MoiFPfqOJK1gm3pbivKocYmIgQt9onFYDfRQz
+         I4rw==
+X-Forwarded-Encrypted: i=1; AJvYcCV54OK5n5tZUQVruF2li9WJiwqNX29t0nGnG6ss0jhqWwrzF1rnUPDtsJZ6QOxp16bZK0YAmTYCJHXRvKgQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvILjJsOZY/yyo0qIoJLQ84xYDcHrb+wKKQlVJ2jZRyN+27qH1
+	qQ8VfyhyoqpeQT2NTPLF2j0/Lc7EEPJirSrfTZCJcJdUSAw+Tigjj8M/CWx0bg==
+X-Google-Smtp-Source: AGHT+IGiHJLVn7EEJZoiHDg1IHJwEmo5BKI2W3X+EqMqHJDA19Xi8bq+M3epyy60EICvZVegJa7iQQ==
+X-Received: by 2002:a17:90a:178e:b0:2e2:cc47:ce1a with SMTP id 98e67ed59e1d1-2e2cc47ce65mr2245610a91.1.1728549047177;
+        Thu, 10 Oct 2024 01:30:47 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:c13a:abb0:1c8:a3c3])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2d5f0a424sm730808a91.28.2024.10.10.01.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 01:30:46 -0700 (PDT)
+Date: Thu, 10 Oct 2024 17:30:33 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Bisected: [PATCH v5 8/8] x86/module: enable ROX caches for module
+ text
+Message-ID: <20241010083033.GA1279924@google.com>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-9-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
- <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
-In-Reply-To: <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 10 Oct 2024 10:29:57 +0200
-Message-ID: <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build errors
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009180816.83591-9-rppt@kernel.org>
 
-On Thu, Oct 10, 2024 at 10:19=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.=
-info> wrote:
->
-> On 10.10.24 09:00, Thorsten Leemhuis wrote:
-> > Avoid build errors with allmodconfig on Fedora Linux 41+ by reordering
-> > the Kconfig choices so modules are signed with sha512 by default. That
-> > way sha1 will be avoided, which beforehand was chosen by default on
-> > x86_64 when running allmodconfig -- which on the latest Fedora leads to
-> > the following build error when building the certs/ directory:
-> > [...]
-> > Link: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustsha1SigVer =
-[1]
->
-> Sorry, one search-and-replace went to far, this is meant to be:
-> https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer
->
-> Ciao, Thorsten
->
+On (24/10/09 21:08), Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> text allocations.
+> 
 
-Hi Thorsten,
+With this modprobe disappoints kmemleak
 
-That was wrong in the original code which you moved:
-
-+config MODULE_SIG_SHA384
-+       bool "SHA-384"
-+       select CRYPTO_SHA512 <--- SHA*384*
-
-BR,
--sed@-
+[   12.700128] kmemleak: Found object by alias at 0xffffffffa000a000
+[   12.702179] CPU: 5 UID: 0 PID: 410 Comm: modprobe Tainted: G                 N 6.12.0-rc2+ #760
+[   12.704656] Tainted: [N]=TEST
+[   12.705526] Call Trace:
+[   12.706250]  <TASK>
+[   12.706888]  dump_stack_lvl+0x3e/0xdb
+[   12.707961]  __find_and_get_object+0x100/0x110
+[   12.709256]  kmemleak_no_scan+0x2e/0xb0
+[   12.710354]  kmemleak_load_module+0xad/0xe0
+[   12.711557]  load_module+0x2391/0x45a0
+[   12.712507]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.713599]  do_syscall_64+0x54/0xf0
+[   12.714477]  ? irqentry_exit_to_user_mode+0x33/0x100
+[   12.715696]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.716931] RIP: 0033:0x7fc7af51f059
+[   12.717816] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
+[   12.722324] RSP: 002b:00007ffc1d0b0c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[   12.724173] RAX: ffffffffffffffda RBX: 00005618a9439b20 RCX: 00007fc7af51f059
+[   12.725884] RDX: 0000000000000000 RSI: 000056187aea098b RDI: 0000000000000003
+[   12.727617] RBP: 0000000000000000 R08: 0000000000000060 R09: 00005618a943af60
+[   12.729361] R10: 0000000000000038 R11: 0000000000000246 R12: 000056187aea098b
+[   12.731101] R13: 0000000000040000 R14: 00005618a9439ac0 R15: 0000000000000000
+[   12.732814]  </TASK>
+[   12.733362] kmemleak: Object 0xffffffffa0000000 (size 2097152):
+[   12.734800] kmemleak:   comm "modprobe", pid 410, jiffies 4294880489
+[   12.736334] kmemleak:   min_count = 2
+[   12.737228] kmemleak:   count = 0
+[   12.738043] kmemleak:   flags = 0x5
+[   12.738917] kmemleak:   checksum = 0
+[   12.739783] kmemleak:   backtrace:
+[   12.740606]  kmemleak_vmalloc+0x29/0xc0
+[   12.741532]  kasan_alloc_module_shadow+0xbe/0xe0
+[   12.742649]  execmem_vmalloc+0x116/0x220
+[   12.743596]  execmem_alloc+0xfb/0x3d0
+[   12.744479]  load_module+0x1e84/0x45a0
+[   12.745383]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.746452]  do_syscall_64+0x54/0xf0
+[   12.747319]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.748772] kmemleak: Not scanning unknown object at 0xffffffffa000a000
+[   12.750364] CPU: 5 UID: 0 PID: 410 Comm: modprobe Tainted: G                 N 6.12.0-rc2+ #760
+[   12.752441] Tainted: [N]=TEST
+[   12.753165] Call Trace:
+[   12.753760]  <TASK>
+[   12.754279]  dump_stack_lvl+0x3e/0xdb
+[   12.755165]  kmemleak_load_module+0xad/0xe0
+[   12.756165]  load_module+0x2391/0x45a0
+[   12.757068]  __se_sys_finit_module+0x4e0/0x7a0
+[   12.758135]  do_syscall_64+0x54/0xf0
+[   12.759099]  ? irqentry_exit_to_user_mode+0x33/0x100
+[   12.760292]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
+[   12.761508] RIP: 0033:0x7fc7af51f059
+[   12.762372] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
+[   12.772361] RSP: 002b:00007ffc1d0b0c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[   12.774957] RAX: ffffffffffffffda RBX: 00005618a9439b20 RCX: 00007fc7af51f059
+[   12.776635] RDX: 0000000000000000 RSI: 000056187aea098b RDI: 0000000000000003
+[   12.778283] RBP: 0000000000000000 R08: 0000000000000060 R09: 00005618a943af60
+[   12.779949] R10: 0000000000000038 R11: 0000000000000246 R12: 000056187aea098b
+[   12.781619] R13: 0000000000040000 R14: 00005618a9439ac0 R15: 0000000000000000
+[   12.783319]  </TASK>
