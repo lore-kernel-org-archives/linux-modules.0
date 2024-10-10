@@ -1,113 +1,133 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1931C1AC9;
-	Thu, 10 Oct 2024 07:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C9E19AD73;
+	Thu, 10 Oct 2024 07:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728544275; cv=none; b=cazkQXDw+GHC83mPGyXBToZDVvFUjvmshXkFJu9IsyH2mylOsEhSfKi1/KiRMLLUTaTdqLYWIsnVmUqljdQzx+NDg8fwjEobJEHZdyS0U37cSLp/FRVW2OCzlwIouSDc+BH1dTmVeFF+VOO+TvSCeg5iHZ1GTLjaFRucOuS9RMk=
+	t=1728545268; cv=none; b=glno/+hFrhAsSDipzQOkIpWss3F9yLUrD9KhcwmXAWQnaCWFixnYXkimF7t5uLr5IOOQacFdCodq1q3XjJMwlef4zuz7S62tVrIjL7grNBO+IIfh0ZuSMKGp6R3PG4csuQ8N6AHZVC5fsNhzBqLQoiWbb2szSzOjvBLFayBik1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728544275; c=relaxed/simple;
-	bh=iLtywOfASceq6JiM/9PmPJnxDruCUwPKD9XfGLCzlkU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=E81ZN+sJHOgaLmDI+bAqL+fgVWfbXm29FRjmFRk/9zhAGujWx5I0P1ItjQsy5AJn/lvK4pX/+GpdkeFBTrQ7lv8slvL4g2B0Cr2hjFbmpVhMy+NbAulzziq1O7Rx5ziXGayABoEXo6O+ktWMUH5TslB6AabN7/R8NVmZ3+V18Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=dSxXVw6a; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="dSxXVw6a"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=iLtywOfASceq6JiM/9PmPJnxDruCUwPKD9XfGLCzlkU=; t=1728544273;
-	x=1728976273; b=dSxXVw6a5VEHPnDnzI38eafUAPJjT42vWnZrHg23vpKL+fYEFd5KWCvMXl9Kz
-	4x7SpTzBa+Sp6Ao+pDWyPQbtpaWEIK/MZ5aWH5Hmt+nOqJVUgb0QxzAcWkYhDT44ayvE58lYkzttc
-	IU2A6tBPiP/qI8pmd6a8MQPxla/h8xW+IP/zYYQy6OEhi6ZBagc+UkSoFGDJcQr8HaMv57Hz2Kbnv
-	tB2km257ebj6fLMPYC0bdkImU/llc9buJjDI/MSwm+kdzUn3M7v29qgmsKaG+7FXo4FP35BiXUlqI
-	+dyreh3n4ijcvyw2ATfpmOlsRCndBHPuwQ3FWBBTp72p+tNN/w==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1synKJ-0000Ep-4k; Thu, 10 Oct 2024 09:11:11 +0200
-Message-ID: <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
-Date: Thu, 10 Oct 2024 09:11:10 +0200
+	s=arc-20240116; t=1728545268; c=relaxed/simple;
+	bh=l3tvN995WrTW85WorpTc0P1WzFKQ+3NtgLmALeDmXf4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p0/syqbitwYpL3WrIRKyGeI2FnmYFxah21ZMBCC3w+N1t9rOPGFCJDd4fO07sRqDvXA156vcLOl5HlgM792jT/RsxlmXPFlwUwyqJLX2pXs6U9CyONjkdJnfta/1A1cXotjhoxFuo6JHbrwC7rFOkvCEWs0pSweWrBIyz4eyl9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3e03b6d99c3so363573b6e.0;
+        Thu, 10 Oct 2024 00:27:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728545265; x=1729150065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7cEkDPRbXErPkgoWEGdbZCw32b468GFBk0qa08gpGWY=;
+        b=CJgCHC0Qexv5UZKHinbEnmnfRXYwjXp5rxSVbsiNnEUfIf3NOdcTV06DYs1YDf55YL
+         qMeslOr7pMA9yf200+eFQplIjSAgYBa253NL1A77n1kPfMc4+w0GWd6a91dwt1KtSMD3
+         58LQKqUy23UwHWCTShiILO6xQTvKdC0s2YqREPRuj47nZuw04KeAXyY7k71nrth9AuJX
+         sBze91IEM5XjmKH8iR72AecVPDb1+ME2oYZePRFRFmDa5EqF5w5zhdiZYxNclNMcfnRi
+         jYnrf5zKysWvLfCajVvyKrG7H4JnMXJ6n1C7d3NwPuVc9ZtdReecDQ15XawDRXnv7Gnp
+         p+hw==
+X-Forwarded-Encrypted: i=1; AJvYcCUug2MXpDzHQENPzfiNF/I1uIXhBDPW6NebiwxmzptY+gpM/xiRX5q9s7cJr6Kll5+96EggGaXMszVBUQ==@vger.kernel.org, AJvYcCV7LsQWSaY7utIH0AQdb/3mcPhDwHihXI0sJ5mng6Li/bT3N2yvanuxPy40iYg+bwlVFGQ=@vger.kernel.org, AJvYcCVDRJaOvryxQZIAtikiJ0E5t8FZX/zhosdozMzsZCTUybLbKAUG+5xD52cQ6agD/CycDxevMw2PCyk=@vger.kernel.org, AJvYcCVKzFsxkFJZl07rb2SX3U+WW+uK8aNg+tgWnUqd/ZFIaCpjQXIzb20kh7yRYjXdHLhAdVvzPMXi67Y/uvRDsfn/C7FV@vger.kernel.org, AJvYcCWEv3a+aBWk3uYT4UjAYWj0L800ZvoE3h2oyZtIO4Xg6O6+a984j5mAjNJnfodecfnMeyBzfqGoLkHheZIG@vger.kernel.org, AJvYcCWJKUNaJtT0I6N8auDs2jiyWKURIU7w836K8xq+8VukQPgIEisQSPxIDGoU7vPOXilloABjw0x+Ai2UmR8=@vger.kernel.org, AJvYcCWdnnVS728L+h9tNTV8pU+squ0g/FSYZtWTdxYsOyH1T/uLPGbWr6qPcFTYQ7Ow613CM6EwnBPKRstpVnA5RMI=@vger.kernel.org, AJvYcCWn2vNzod9rJ2UPZlWSAEMHD9MbuNoQcDmMOAXPBPYfrpzQfHNkcEVzve4aduXexIssw3PwbvrmC0F6SzDd@vger.kernel.org, AJvYcCWuypF92PX0zNnAiFgOsfYonoz+fto4zzbuDCw6DXp0rq/qFGCS3MkNnnGC3nH/gL+qi2+YKtUZ9NefnA==@vger.kernel.org, AJvYcCX+GfH4FFUKeWu1BcIhzPdX+1FrjdG0rgErztEYMvGU3gx/ZWOjhNjePqvwmymTlJg6LbzqMtvvQ5j2Hkl9qQ==@vger.kernel.org, AJvYcCX6UKG4P6RIK0OEs5tUhIoLnliOAbQ+0kZSUDdn8HkoDqGHtNBbDeORbjYSsBA1yMG9mB9AknYFy/4+jg==@vger.kernel.org, AJvYcCXox7yS65bX4/eB6/Vvy+xddjB75QkiKst+tUAPVKGKldbWhQoPx8YfvrfBmmeqwiQS84+B7aHvAcVUUwvVhQ==@vger.kernel.org, AJvYcCXoyg5HzQ0NC1hXATVyaPUz9rXLI1HFFINzbOegTWRbL8fFAzb7GHM6V97UGmt5//wZv2OI+IYzlPMmxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqwJvPTxFvInboUX3XdxRwKe2jKr3ZF26GmYwEV35dBoZpj6WJ
+	CB/FGuisHxfCQfVPcFDeA5MU0zenigHB2nVNd8gmEtjEBc8qPe/EOdWBvEz5
+X-Google-Smtp-Source: AGHT+IG9Coh8UjDwgsX6VZC8zxFTpOxW6eK1dKBNyh7mpGh8aiVbuqYoYnacrRQSEFLhjSnkOwaYJg==
+X-Received: by 2002:a05:6808:180b:b0:3e3:a90f:3091 with SMTP id 5614622812f47-3e3e66ebff4mr5526055b6e.26.1728545265350;
+        Thu, 10 Oct 2024 00:27:45 -0700 (PDT)
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com. [209.85.215.181])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea44909bd7sm500604a12.50.2024.10.10.00.27.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Oct 2024 00:27:44 -0700 (PDT)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7c3e1081804so357649a12.3;
+        Thu, 10 Oct 2024 00:27:44 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU9cKaxrT3KMxHO48QaREe3rHkU5uFWc1HzTh5/s50P4Hh6yG2F+jj7iqrex1CjFkOLVYPEKzCO9zd/nA==@vger.kernel.org,
+ AJvYcCUM02/WSbyK6ICj41CZUZcIiJqSitW+oCwakLbrE4uHX2tUN5DpQ9pNLG1C9ugcAXI1q8+NAzjshf3/E8mZVQk=@vger.kernel.org,
+ AJvYcCUWVeWvXBjaZPXaM41+7CHirBIjO4KpHnd3kWErRt5zbVa/fStvxeslzG9wtkgrJ7mdBDM=@vger.kernel.org,
+ AJvYcCUa8vcLT1MpI+v4QEv2A43SCo/8wVo60fy+9oBHndlYRvYH9KkF98gsH5rVdS/nC5k1tLqMmjKldvu74g==@vger.kernel.org,
+ AJvYcCUotUWWfZCfh09XGaOf3O/M0IKZTuVIXz05kbiltdtiGPA+snkB6IZt4Blpb7Y4IXNdb+0CfDHTYgU=@vger.kernel.org,
+ AJvYcCUyEf68ra5WHeQ/HIGvHpWHZVaTv/TgA/2m5MUXFz09U2XXLd1ecHZxRTfxa3WjTgEfv45NVqog5mfm79uVzw==@vger.kernel.org,
+ AJvYcCV24DhrxdNOgwjEAkiFGV/+GhlPPb4CF+pgaBz3PhZt65owny6dDXbvc2rDEXchJMOEh34Hv7Vqr88/1wzvew==@vger.kernel.org,
+ AJvYcCVPNPYHAPv/NCQW69xMISsKyuQ0vtA8cdWiCLTh/Xig2S5SbD9jLXREVifX2OyrnpEmoorSeYQHBElUi5Ec@vger.kernel.org,
+ AJvYcCVYsbLsY2G/bUTHoJcwB+0IMiX491T8BfjQYDB3bIKOF4bpoM+YfO928Alq2ISKToQm6PHKNIGHTWs4Q1w8fFa5D+j4@vger.kernel.org,
+ AJvYcCVnzASNqnPyzXNO/CZjYSSAFfCUXVDeo4f5G6nJngPeaVD85M+jwUJP9lRXBYPRBeF9nRur6CpLKx6w0A==@vger.kernel.org,
+ AJvYcCVz/7quep/rr/0B80ky0XCHaCgvy2MFFBiP6fOwgIkwFmD0gT0g+VTHmrnSCPc2vYB7yxwG2Ous/zJLx5KP@vger.kernel.org,
+ AJvYcCX612HB9VBSEhnPzlhdva0oJ42FYepCPbIQ2IayxReGa589aZf6xIGCqIm0/mJwIoF+dOVjnUjxr8Wr+w==@vger.kernel.org,
+ AJvYcCX7G7cHrV73DdTjxGFGi3Izz7CF7+2F25lbj9HuKMnRaIbjXVtxxxK4i/g4WV9YFcnPW6pnjwTiakqosU0=@vger.kernel.org
+X-Received: by 2002:a05:690c:60c2:b0:6b3:a6ff:7676 with SMTP id
+ 00721157ae682-6e3221867cemr55553697b3.3.1728544955686; Thu, 10 Oct 2024
+ 00:22:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build
- errors
-From: Thorsten Leemhuis <linux@leemhuis.info>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
-Content-Language: en-US, de-DE
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1728544273;66d5f9eb;
-X-HE-SMSGID: 1synKJ-0000Ep-4k
+References: <20241009180816.83591-1-rppt@kernel.org> <20241009180816.83591-4-rppt@kernel.org>
+In-Reply-To: <20241009180816.83591-4-rppt@kernel.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 10 Oct 2024 09:22:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV9TPH+mDJvvuRO3RBYfgWRwvv1kwyr_iLNju+iumb96Q@mail.gmail.com>
+Message-ID: <CAMuHMdV9TPH+mDJvvuRO3RBYfgWRwvv1kwyr_iLNju+iumb96Q@mail.gmail.com>
+Subject: Re: [PATCH v5 3/8] asm-generic: introduce text-patching.h
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>, 
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10.10.24 09:00, Thorsten Leemhuis wrote:
-> Avoid build errors with allmodconfig on Fedora Linux 41+ by reordering
-> the Kconfig choices so modules are signed with sha512 by default. That
-> way sha1 will be avoided, which beforehand was chosen by default on
-> x86_64 when running allmodconfig -- which on the latest Fedora leads to
-> the following build error when building the certs/ directory:
-> [...]
-> Link: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustsha1SigVer [1]
+On Wed, Oct 9, 2024 at 8:09=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wrot=
+e:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Several architectures support text patching, but they name the header
+> files that declare patching functions differently.
+>
+> Make all such headers consistently named text-patching.h and add an empty
+> header in asm-generic for architectures that do not support text patching=
+.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Sorry, one search-and-replace went to far, this is meant to be:
-https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer
+>  arch/m68k/include/asm/Kbuild                      |  1 +
 
-Ciao, Thorsten
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
