@@ -1,114 +1,116 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4318F6A;
-	Thu, 10 Oct 2024 09:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E16919F41D;
+	Thu, 10 Oct 2024 09:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728551418; cv=none; b=cFdQuaquTIFMXvKTs/cCKLzNhZtIILmP1RfB01OupUKwMBrbZofhUrMOt2+cZHhTAN4Bx03oT2bYRdDhdPrqLlO1oumJofp32rpx5AO7w90NTlKeVmetCx3qcJISuLWkmgaGMg0bukpAuJQnY6YAo5is9gp4bHDbEfxcHjFNYDE=
+	t=1728552807; cv=none; b=qPbpPVDQ+a8w6ozik17wcF4sHnzlSlMtYbOOBirI1CMQ7+FaASMvxnkQT84rDIHBrntHdnO4iEosLxOUZQa8SmUQGYr9DaJv+xEzR3v4/zcN8qEY9NRQaAZsDCe73IqkOWfDbNaxYTazOrc7k0bSNL6zeym/myyb35m2V6Bfp5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728551418; c=relaxed/simple;
-	bh=jTjghx8VHXT+kOdfh9A/292U2rQaKwgNnNKjF2yE4qw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u+DNzq0hOeJmFS9URelgcrUyygb5xs1wG0xFigGxp4HSVqEOGpnkoK90XBwOOvgXbny1dn4myIBJU3XjRzK2cKT/gX2BWNIpmcQKj114GE/jZ+DYF1jc7/K589Qa2D/5+r7g4Dpt0cml4i8JVR+iG1LpbvwDn8jZXirddxN0CWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNKxw4B7; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728552807; c=relaxed/simple;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P/kr7K7j/QChCjIu/QlHZg+ZRwrQVwQxKsyHLxgkTbFOEYPnBEgIqKDJxaMzUqyKWyjV/9jfdPxGIV2KeMOft14D/2mFu75sW25ifO3tF+kcunTi0J88LrnA4YI+JF9sL/alYVzkHMgepippNUT45QyNC9v5b6Aey+zKF7CbpTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOVNNKtr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNKxw4B7"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fabc9bc5dfso6067481fa.0;
-        Thu, 10 Oct 2024 02:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728551415; x=1729156215; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=lZBbt+lSSa7fnxgSraIyld2JLcytXaPCGbR+f+l/LYs=;
-        b=QNKxw4B7OEWUQ5KAsTDXWpn/ZBsM7StfLbPO+Z53hJESAUwqc4mXIpkDawiqsvguwm
-         mN0Eo0EeXM4C9XtqGTi6sZ+iNNAAKb1KPlw8hD6v2Ywki/lKQq6YGrUwrLCOnBjQ57vp
-         3JGD+pELGAY9HIOvGg61/0ye8ZI+MNm0eL5MGVUcjtY0jqSq3USlVPDaghoyUnkXI/x+
-         6fNeEdHBzzqgzuh61GxIeG95fy1XrgZCH9I6tcMZy9dFV/VQywlZ73XtRO5h5GSvBl7j
-         QizbSqLN8q0So5BEVMt+zEgV402GB0Izo0AtR0hzpmaFiUw1Sc9uPIF1Msdp88gBeGMF
-         tLsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728551415; x=1729156215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lZBbt+lSSa7fnxgSraIyld2JLcytXaPCGbR+f+l/LYs=;
-        b=ZLa1FHTh2gY8cRPgcAXtQX6O2nzeUC9wT4SIms0QCfvH4/qCSYqZa/jKpuyrJJoPyA
-         jCmrTai77OTQ0a1grvNKstq49TiXE2FtXFhiiDT5t2AmT6/PTGXHBujkTGt3RSRcNqgK
-         PqrFN9f/ItJ0v/xQO4q6eyyWZY7iBY2+hiMpGS632030wdQyuVQnXDhHkEn7T31LGLXA
-         IOAjLpd30JneTL87kjU08VooJAAZRVAJf+x1Xub9CwPwrtpM1NlmzHAQPhUYrvGMmgm/
-         MaewUfkGdC3dXXpAOtvi0W2TZagCLp7A/naecS6UnNZu8nhMtAWPqweTaRzD7Zpm3uK0
-         gDMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUX76p2TxTnKfEA9VFtwJKXNL/NKRZZmXz8kq0c9kvZN3MNgc0Anjwr7ek6wFKLxcctSnNAjVaTaC4rWlg=@vger.kernel.org, AJvYcCVN+gpelt1jgnDCcLRy13oZi+ryfquE4ct5ZdJbKEDyKwRkDndn6ZudBM8azu8EWY72Eq8L86WuzEb65Asb@vger.kernel.org, AJvYcCXn6wZ2KvycFzazhO4hp4gWEswAohedK/S4cKZB9BeG+J3E+leLc+jV0q2YvyYAkDQnfD26IBQ1xNZulwSszw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUfCDGo9Qoqp+vLtHFiQ3OJbTBQbuq/Qxtwb+ccAk7fiCblOEF
-	Fo6j/rDsKZju2obDWma7lPxAoqIwAVXBmHqbNezlZRvJY6+HJrhAX2JmVMd4kgMFf/vTUHLtADx
-	d/qAxKKdiGkd4kiBPJ1+XKH5H67w=
-X-Google-Smtp-Source: AGHT+IFPayMa/kEZOmOpLQsvdrbM559dB6IYuhya4uNVA6xYflcmwSgY1eBZT/eRKnnIOH16i/0HmGsqLSqNKv6eByY=
-X-Received: by 2002:a2e:d1a:0:b0:2fa:d059:af2 with SMTP id 38308e7fff4ca-2fb187d282emr26432621fa.39.1728551415021;
- Thu, 10 Oct 2024 02:10:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOVNNKtr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18111C4CEC5;
+	Thu, 10 Oct 2024 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728552807;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TOVNNKtrf8daQuuMacjY7pAlRlt/k4vb7wjQCQYF0aVuw/4MxtY1IEDmecYy869WA
+	 eL70bjSLCWzeSg87onzBIfUU+BSv9+MhwYkC/eIJ924jg8Lyc5Ubk1r7GreDoZptDJ
+	 teVpdajxre4MsBPJA9mql4sRA7irY3J0uloNZaSVW+zDmxt4CzZVh6D1UOnW7YD45l
+	 /XMlYCHBMS9YgkvBhtdnENr2FDWIvohUoNzgrqIpRpXIOWraQQuc8IrP9OJlfmnsWJ
+	 /Y7TcehyVVbI3ky02lFC2Bu9TlmKaTridXnO8cdxvFKPK24cuDB2/RZZ9PsqYrxZV2
+	 Py4W9D9Jti/XA==
+Date: Thu, 10 Oct 2024 12:29:39 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zweeg3oc-zrrG_D9@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
- <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info> <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
- <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com> <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-In-Reply-To: <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Thu, 10 Oct 2024 11:09:38 +0200
-Message-ID: <CA+icZUXcyro2B9cvccrxbAWHt-Dhv0SO7vErvbCRQc2TK60N2A@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build errors
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 
-On Thu, Oct 10, 2024 at 10:57=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.=
-info> wrote:
->
-> On 10.10.24 10:42, Sedat Dilek wrote:
-> > On Thu, Oct 10, 2024 at 10:29=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail=
-.com> wrote:
-> >> On Thu, Oct 10, 2024 at 10:19=E2=80=AFAM Thorsten Leemhuis <linux@leem=
-huis.info> wrote:
-> >>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
-> >>
-> >> That was wrong in the original code which you moved:
-> >>
-> >> +config MODULE_SIG_SHA384
-> >> +       bool "SHA-384"
-> >> +       select CRYPTO_SHA512 <--- SHA*384*
-> >
-> > Thorsten, please fix it!
->
-> That looks intentional to me -- and CRYPTO_SHA384 from a quick look does
-> not even exist.
->
-> But that's not at all my area of expertise, so I would not want to touch
-> it anyway.
->
-> Ciao, Thorsten
->
-> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
-> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
-> the "choice" section; haven't tried that, but that sounds like a better
-> solution. Will likely give it a try, unless someone brings up unwanted
-> side effects this might cause.
->
+On Wed, Oct 09, 2024 at 01:24:27PM -0700, Andrew Morton wrote:
+> On Wed,  9 Oct 2024 21:08:15 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > Using large pages to map text areas reduces iTLB pressure and improves
+> > performance.
+> 
+> Are there any measurable performance improvements?
 
-Not an expert in this area, too.
+I don't have any numbers, I just followed the common sense of "less TLB
+entries is better" and relied on Thomas comments from previous discussions.
+ 
+> What are the effects of this series upon overall memory consumption?
+ 
+There will be some execmem cache fragmentation and an increase in memory
+consumption. It depends on the actual modules loaded and how large it the
+fragmentation.
 
-Looks like I misread it.
+For a set of pretty randomly chosen modules where most come from
+net/netfilter I see an increase from 19M to 25M.
 
-SHA224 selects XXX_SHA*256* so the code might be intentional.
+> The lack of acks is a bit surprising for a v5 patch, but I'll add all
+> this to mm.git for some testing, thanks.
+> 
 
--sed@-
+-- 
+Sincerely yours,
+Mike.
