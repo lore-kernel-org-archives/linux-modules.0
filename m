@@ -1,119 +1,150 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2CF20ADF7;
-	Fri, 11 Oct 2024 07:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C547B20C496;
+	Fri, 11 Oct 2024 10:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728632817; cv=none; b=EwtJMNgEZXS7b3TkSK0ceUIqB7HqhaOWMA8VhsJD1ArT2feFxe7xbvxGgdQgZQOt3tP8HVGafP+biFA/lutrI+7sjaF1alR14IYl7t3F6OwI6UPQD/puTO7WR01dNVq55mkrhYvW4c0zGKm37ffodSUhCwTDz+EcUjsX3K9rHqk=
+	t=1728642485; cv=none; b=sDqxGNqJTW27VInODumUbSh1MHV3vv5nCREOiM9XGLhVoE/yw5z6eJk2NO9f0b9bWrexCCPB79GVA8J7TTQiJILnDLTM/Yf7M8f/C2suKE42uWIo0ci7pkaxl7SqW3/V50y3JBp+kez9DTQ13ykfpV5cz8c9akWcTXDsnzdMR8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728632817; c=relaxed/simple;
-	bh=HQSSCIywenQzOJiT5UPu5auwm7k09dThmwbWbEkcmME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRVVmLHA6vlvg3GNNwU29K8s4zKY5o6vpQCX7BHujj6SixX8gEFBWHnkKCdYg1X7HDeFdJTjnftzCKfqFxVUvnenynNZLFTTY/Jj8C03I12Cc/AfuSCNvc13VW2jb5e269zErDTpESQl0IDKuxG5gXwNur1l6CYClUQtIvhNsgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=RNzRRI+j; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1728642485; c=relaxed/simple;
+	bh=JAWxdb2054N4vnmVoEksQzgMI3keyHTm3oH2Hvh2fMk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Zcobt1qu8lq+DVNjmvlYzhtJrkjEW+EScJXD8y2NJ7ow72XP/YbMgryuhtFY8Ld1HB6nKZwTWjMIxUOtSL7nJkaES8i0645Pp8SKoSiqnDMDPpCQokCU4w8wLTJYv8GpD5R2I0aIwb3NUlR5Kd2qLjoJWfThvnKCEoGi694Gwyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=Fr5pdSLU; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="RNzRRI+j"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="Fr5pdSLU"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=HlhUCBO2cgAocJ0jal2+odmhS3fEGMT9ApCG3YBalmk=; b=RNzRRI+jS+E41pEvv2tM/PBMQr
-	SQs+GEy9wRlJQS7LgwXIlsLPiOEfZ0lcfVl/LZAzCmJERr/wrGQx/6Jkm+z665nLQ1YxAvvKLbZgJ
-	K836flQdGWfRcahrgPWsGgbE2Kv46RlU2j9210RhGvDmBYmeahOdJixtpW4jFIpXAj2/1kuIqVUzm
-	9UeGFlwfEh13tOOBCEhTCdOmFs+NkVHulOmWBcYiyIrEdETWz96sC8sQ5hitRuikUOylqpHtAubjX
-	bIdwQSiSdX8D+zYfq6nK2YaptkNRLX5ebrdQ9hI/fijT9vdqmXxkPzbZ/e0uearFNRK9I5GNV8P5M
-	+7qkIbyw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1szALv-0000000Faln-258j;
-	Fri, 11 Oct 2024 07:46:23 +0000
-Date: Fri, 11 Oct 2024 00:46:23 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <ZwjXz0dz-RldVNx0@infradead.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-8-rppt@kernel.org>
- <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=yhMkYAxISXGsvtgkvT6WmQHNSFavUtNH55oNonTLR+s=; t=1728642483;
+	x=1729074483; b=Fr5pdSLUQtoehp+HsHwjisbMYE/iaJnPxKmv9Qsu4iMcy6Bo0uQtHeuwXbBa/
+	0dMgW8K06Cg/1Avx7FTG1q+b1eup1rkqyceCg3zOv7RPbXmemDFVIg8PbAaSPzAe4VgdAf0eD2N/d
+	snIfV+YPHtFhB4a3X6oo9Hi39A+SRfM+4js06u5TXvUAXeSz/tAt5H+lkcZVFp+Bijl3xUTqHq0tV
+	U1UKkwrAVWc9Xo7bG6TWlm6LOOn3FszxGzU1ez3niFQijMF7AdGcdhfKQA6LwOThAj9eHTfWPML22
+	h2lBVM6XLgrF0lBKpq5icAe+UkrkxOa3a5uzTo6VD4l+NvyMEw==;
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1szCsE-0004hg-Vr; Fri, 11 Oct 2024 12:27:55 +0200
+Message-ID: <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
+Date: Fri, 11 Oct 2024 12:27:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZwfPPZrxHzQgYfx7@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build
+ errors
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: sedat.dilek@gmail.com, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>,
+ linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
+ <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
+ <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
+ <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com>
+ <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
+ <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: en-US, de-DE
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1728642483;a17e4649;
+X-HE-SMSGID: 1szCsE-0004hg-Vr
 
-On Thu, Oct 10, 2024 at 03:57:33PM +0300, Mike Rapoport wrote:
-> On Wed, Oct 09, 2024 at 11:58:33PM -0700, Christoph Hellwig wrote:
-> > On Wed, Oct 09, 2024 at 09:08:15PM +0300, Mike Rapoport wrote:
-> > >  /**
-> > >   * struct execmem_info - architecture parameters for code allocations
-> > > + * @fill_trapping_insns: set memory to contain instructions that will trap
-> > >   * @ranges: array of parameter sets defining architecture specific
-> > >   * parameters for executable memory allocations. The ranges that are not
-> > >   * explicitly initialized by an architecture use parameters defined for
-> > >   * @EXECMEM_DEFAULT.
-> > >   */
-> > >  struct execmem_info {
-> > > +	void (*fill_trapping_insns)(void *ptr, size_t size, bool writable);
-> > >  	struct execmem_range	ranges[EXECMEM_TYPE_MAX];
-> > 
-> > Why is the filler an indirect function call and not an architecture
-> > hook?
+On 10.10.24 17:52, Sami Tolvanen wrote:
+
+Thx for your feedback!
+
+> On Thu, Oct 10, 2024 at 1:57 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>> On 10.10.24 10:42, Sedat Dilek wrote:
+>>> On Thu, Oct 10, 2024 at 10:29 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>>> On Thu, Oct 10, 2024 at 10:19 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>>>>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
+>
+>> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
+>> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
+>> the "choice" section; haven't tried that, but that sounds like a better
+>> solution. Will likely give it a try, unless someone brings up unwanted
+>> side effects this might cause.
 > 
-> The idea is to keep everything together and have execmem_info describe all
-> that architecture needs. 
+> Yes, that would be a much better way to change the default. Overall,
+> moving away from SHA-1 seems like a good idea and SHA-512 feels like a
+> reasonable choice. Luis, do you see any issues with changing the
+> default here?
 
-But why?  That's pretty different from our normal style of arch hooks,
-and introduces an indirect call in a security sensitive area.
+So, how do I make such a default choice work without breaking the
+current magic, which looks like this:
 
+"""
+config MODULE_SIG_HASH
+	string
+	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+	default "sha1" if MODULE_SIG_SHA1
+	default "sha256" if MODULE_SIG_SHA256
+	default "sha384" if MODULE_SIG_SHA384
+	default "sha512" if MODULE_SIG_SHA512
+	default "sha3-256" if MODULE_SIG_SHA3_256
+	default "sha3-384" if MODULE_SIG_SHA3_384
+	default "sha3-512" if MODULE_SIG_SHA3_512
+"""
+
+Reordering those did not do the trick. And I suspect adding a
+
+  default "sha512"
+
+would break the magic. Would dropping sha1, sha256 and sha384 from the
+list be a middle ground that could work for everyone?
+
+Ciao, Thorsten
