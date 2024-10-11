@@ -1,37 +1,37 @@
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C547B20C496;
-	Fri, 11 Oct 2024 10:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D56419923C;
+	Fri, 11 Oct 2024 12:00:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728642485; cv=none; b=sDqxGNqJTW27VInODumUbSh1MHV3vv5nCREOiM9XGLhVoE/yw5z6eJk2NO9f0b9bWrexCCPB79GVA8J7TTQiJILnDLTM/Yf7M8f/C2suKE42uWIo0ci7pkaxl7SqW3/V50y3JBp+kez9DTQ13ykfpV5cz8c9akWcTXDsnzdMR8o=
+	t=1728648054; cv=none; b=d2H2hu5LuIQOtX7CgXVxF5MBSIiWsS/zs1EXpoAiLRGEEehGWR0pfr/dFaO/B0zqvtlHKLF6O9HjUXFvBkCLkJG09TJq8c6RanNbduxhxTgHcQV+Zv3PjOUzR7WiYCvbZzgMcuTUYJJn594p1Y4T7pR+AYA3v5BI+O9ZKrAa0gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728642485; c=relaxed/simple;
-	bh=JAWxdb2054N4vnmVoEksQzgMI3keyHTm3oH2Hvh2fMk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zcobt1qu8lq+DVNjmvlYzhtJrkjEW+EScJXD8y2NJ7ow72XP/YbMgryuhtFY8Ld1HB6nKZwTWjMIxUOtSL7nJkaES8i0645Pp8SKoSiqnDMDPpCQokCU4w8wLTJYv8GpD5R2I0aIwb3NUlR5Kd2qLjoJWfThvnKCEoGi694Gwyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=Fr5pdSLU; arc=none smtp.client-ip=80.237.130.52
+	s=arc-20240116; t=1728648054; c=relaxed/simple;
+	bh=9D/7dLb/6tumYsDmzDx9Fj0xsL8A3FQc8Ti8eTiMeQI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Rp820GWt97JKXyMpH5UR0fsp9/5l/jieDPo2lxB7xgH1HjOSH3iEJTzqi2IgvETi0WrgUh6phXsPG++f5B8A+y6zvf4zaOFdy7igZ2r0goC+JvwRT08a7H0w8vG7i7lo46ZZ1il+zrWzME1j58Kga+pf7RhDYpOfsmopjGM5pp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=GaAAYdCH; arc=none smtp.client-ip=80.237.130.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="Fr5pdSLU"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="GaAAYdCH"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:From:
 	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
 	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=yhMkYAxISXGsvtgkvT6WmQHNSFavUtNH55oNonTLR+s=; t=1728642483;
-	x=1729074483; b=Fr5pdSLUQtoehp+HsHwjisbMYE/iaJnPxKmv9Qsu4iMcy6Bo0uQtHeuwXbBa/
-	0dMgW8K06Cg/1Avx7FTG1q+b1eup1rkqyceCg3zOv7RPbXmemDFVIg8PbAaSPzAe4VgdAf0eD2N/d
-	snIfV+YPHtFhB4a3X6oo9Hi39A+SRfM+4js06u5TXvUAXeSz/tAt5H+lkcZVFp+Bijl3xUTqHq0tV
-	U1UKkwrAVWc9Xo7bG6TWlm6LOOn3FszxGzU1ez3niFQijMF7AdGcdhfKQA6LwOThAj9eHTfWPML22
-	h2lBVM6XLgrF0lBKpq5icAe+UkrkxOa3a5uzTo6VD4l+NvyMEw==;
+	References; bh=NCWp0+lYO1dI6y3TFt2yA85bcIM4JZKx0ZfVlTSGOkg=; t=1728648052;
+	x=1729080052; b=GaAAYdCH9pHHLgd9j6jYRKN6ugH+hP/5QJJ0d4FvxmKMwa18Pt3NXN0hxhm5q
+	yN23tQOCyyzWubxfEZdgdSGQATu5WUoJSIW6kaNM3CDzaSg/8geQXSHwudhQlS3czUCwuCOlHZL6h
+	zSiWHNxO+uBXPECDbXrZrfnnB237H52Q+mRdZfh9EU0+S6OxWOkC/SA06+aT+prUUMfVx6xcoFyb/
+	5q7mLHAw5NIJHihMjQ8cOsgO64/0gAQ8lNqXeEhU/ej9BB0yK5S2fUCELRuSBKhYClRnELyZk1qK/
+	6JudK+fb0VBDSvgq+Cuh71+RYuMoAWq1LwRM0GBLS/gaF9L4Eg==;
 Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
 	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1szCsE-0004hg-Vr; Fri, 11 Oct 2024 12:27:55 +0200
-Message-ID: <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
-Date: Fri, 11 Oct 2024 12:27:54 +0200
+	id 1szEK8-0006Ke-IV; Fri, 11 Oct 2024 14:00:48 +0200
+Message-ID: <e1037fe6-9cee-488f-8c9f-d5b4a763cb48@leemhuis.info>
+Date: Fri, 11 Oct 2024 14:00:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,6 +41,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build
  errors
+From: Thorsten Leemhuis <linux@leemhuis.info>
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: sedat.dilek@gmail.com, Luis Chamberlain <mcgrof@kernel.org>,
  Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>,
@@ -52,7 +53,7 @@ References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemh
  <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com>
  <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
  <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
-From: Thorsten Leemhuis <linux@leemhuis.info>
+ <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
 Content-Language: en-US, de-DE
 Autocrypt: addr=linux@leemhuis.info; keydata=
  xsFNBFJ4AQ0BEADCz16x4kl/YGBegAsYXJMjFRi3QOr2YMmcNuu1fdsi3XnM+xMRaukWby47
@@ -97,54 +98,38 @@ Autocrypt: addr=linux@leemhuis.info; keydata=
  ysaCIZqWxrlhHWWmJMvowVMkB92uPVkxs5IMhSxHS4c2PfZ6D5kvrs3URvIc6zyOrgIaHNzR
  8AF4PXWPAuZu1oaG/XKwzMqN/Y/AoxWrCFZNHE27E1RrMhDgmyzIzWQTffJsVPDMQqDfLBhV
  ic3b8Yec+Kn+ExIF5IuLfHkUgIUs83kDGGbV+wM8NtlGmCXmatyavUwNCXMsuI24HPl7gV2h n7RI
-In-Reply-To: <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
+In-Reply-To: <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1728642483;a17e4649;
-X-HE-SMSGID: 1szCsE-0004hg-Vr
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1728648052;3dcff5b2;
+X-HE-SMSGID: 1szEK8-0006Ke-IV
 
-On 10.10.24 17:52, Sami Tolvanen wrote:
-
-Thx for your feedback!
-
-> On Thu, Oct 10, 2024 at 1:57 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->> On 10.10.24 10:42, Sedat Dilek wrote:
->>> On Thu, Oct 10, 2024 at 10:29 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>>> On Thu, Oct 10, 2024 at 10:19 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->>>>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
->
->> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
->> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
->> the "choice" section; haven't tried that, but that sounds like a better
->> solution. Will likely give it a try, unless someone brings up unwanted
->> side effects this might cause.
+On 11.10.24 12:27, Thorsten Leemhuis wrote:
+> On 10.10.24 17:52, Sami Tolvanen wrote:
+> Thx for your feedback!
+>> On Thu, Oct 10, 2024 at 1:57 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>>> On 10.10.24 10:42, Sedat Dilek wrote:
+>>>> On Thu, Oct 10, 2024 at 10:29 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>>>>> On Thu, Oct 10, 2024 at 10:19 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
+>>>>>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
+>>
+>>> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
+>>> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
+>>> the "choice" section; haven't tried that, but that sounds like a better
+>>> solution. Will likely give it a try, unless someone brings up unwanted
+>>> side effects this might cause.
+>>
+>> Yes, that would be a much better way to change the default. Overall,
+>> moving away from SHA-1 seems like a good idea and SHA-512 feels like a
+>> reasonable choice. Luis, do you see any issues with changing the
+>> default here?
 > 
-> Yes, that would be a much better way to change the default. Overall,
-> moving away from SHA-1 seems like a good idea and SHA-512 feels like a
-> reasonable choice. Luis, do you see any issues with changing the
-> default here?
+> So, how do I make such a default choice work without breaking the
+> current magic, which looks like this:
+> [...]
 
-So, how do I make such a default choice work without breaking the
-current magic, which looks like this:
-
-"""
-config MODULE_SIG_HASH
-	string
-	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
-	default "sha1" if MODULE_SIG_SHA1
-	default "sha256" if MODULE_SIG_SHA256
-	default "sha384" if MODULE_SIG_SHA384
-	default "sha512" if MODULE_SIG_SHA512
-	default "sha3-256" if MODULE_SIG_SHA3_256
-	default "sha3-384" if MODULE_SIG_SHA3_384
-	default "sha3-512" if MODULE_SIG_SHA3_512
-"""
-
-Reordering those did not do the trick. And I suspect adding a
-
-  default "sha512"
-
-would break the magic. Would dropping sha1, sha256 and sha384 from the
-list be a middle ground that could work for everyone?
+Ignore that, I was missing something obvious and got mislead by my
+brain, sorry for the noise. Will send a updated patch in a few days to
+give Luis and others a chance to raise objections reg. switching to SHA512.
 
 Ciao, Thorsten
