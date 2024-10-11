@@ -1,135 +1,214 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D56419923C;
-	Fri, 11 Oct 2024 12:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD882218D69;
+	Fri, 11 Oct 2024 13:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728648054; cv=none; b=d2H2hu5LuIQOtX7CgXVxF5MBSIiWsS/zs1EXpoAiLRGEEehGWR0pfr/dFaO/B0zqvtlHKLF6O9HjUXFvBkCLkJG09TJq8c6RanNbduxhxTgHcQV+Zv3PjOUzR7WiYCvbZzgMcuTUYJJn594p1Y4T7pR+AYA3v5BI+O9ZKrAa0gw=
+	t=1728651715; cv=none; b=Qyoiimoe8Ms2p2HcaJ+vIuN+xrB6uhv9YpsdQLKJabgCs0Ii50l7NXielSprcakeUTNDbPtUysZMZPZlQbuBZoLGs3H78ZXZAyAZKNPZjVv8vyYSwhHLfcJzELtYx7MscuDcakpW2iAmj04t1+cl6HCLoTZOsYg00IB7ZdX2rCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728648054; c=relaxed/simple;
-	bh=9D/7dLb/6tumYsDmzDx9Fj0xsL8A3FQc8Ti8eTiMeQI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Rp820GWt97JKXyMpH5UR0fsp9/5l/jieDPo2lxB7xgH1HjOSH3iEJTzqi2IgvETi0WrgUh6phXsPG++f5B8A+y6zvf4zaOFdy7igZ2r0goC+JvwRT08a7H0w8vG7i7lo46ZZ1il+zrWzME1j58Kga+pf7RhDYpOfsmopjGM5pp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=GaAAYdCH; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+	s=arc-20240116; t=1728651715; c=relaxed/simple;
+	bh=j6FIkJsgrJb7Fy59tSRAkzfdThNSkDRiwl7mc5Gyfrs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lui3SpDtahZHaPTCJziDEtUrwD2PfBBiKXeauK5K+qjqfR2Q2Q/ewELhImdolxa1PbOUES4jOUS8BqybyoOnnJxcSIl5/22kK+Vsen8mOOf4pISca40n2fmHaM8qTPEago80rPSFs5uj1J+78kSB5Kdch4Auo3yuoxkqSG0cd/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oaq6u26x; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="GaAAYdCH"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=NCWp0+lYO1dI6y3TFt2yA85bcIM4JZKx0ZfVlTSGOkg=; t=1728648052;
-	x=1729080052; b=GaAAYdCH9pHHLgd9j6jYRKN6ugH+hP/5QJJ0d4FvxmKMwa18Pt3NXN0hxhm5q
-	yN23tQOCyyzWubxfEZdgdSGQATu5WUoJSIW6kaNM3CDzaSg/8geQXSHwudhQlS3czUCwuCOlHZL6h
-	zSiWHNxO+uBXPECDbXrZrfnnB237H52Q+mRdZfh9EU0+S6OxWOkC/SA06+aT+prUUMfVx6xcoFyb/
-	5q7mLHAw5NIJHihMjQ8cOsgO64/0gAQ8lNqXeEhU/ej9BB0yK5S2fUCELRuSBKhYClRnELyZk1qK/
-	6JudK+fb0VBDSvgq+Cuh71+RYuMoAWq1LwRM0GBLS/gaF9L4Eg==;
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1szEK8-0006Ke-IV; Fri, 11 Oct 2024 14:00:48 +0200
-Message-ID: <e1037fe6-9cee-488f-8c9f-d5b4a763cb48@leemhuis.info>
-Date: Fri, 11 Oct 2024 14:00:47 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oaq6u26x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABE8C4CECC;
+	Fri, 11 Oct 2024 13:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728651714;
+	bh=j6FIkJsgrJb7Fy59tSRAkzfdThNSkDRiwl7mc5Gyfrs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oaq6u26xuDAEns7R2BMHzk4mIfr5FvGiVAeZZthgyUlPcz06DFRl95J0wmkdOT54S
+	 YxSAeidiUzjAm9FHVkdDWMVY0Rbrih0bi/ggL0JYHKzOopKm6PqY7SOiicdRP66yLH
+	 5VGXr5I3OyVhwrNf1s3DsezlYqKELPmsDJA9V5PkevyRbR9c/cPzuOfoCS+m2Co7l0
+	 +b6MYlu7b05Tu5XRA7HGcdEBXgbkMUXnasokDLcI2U83NwvkTB9/gQY3jZ2G5u5tvh
+	 AFQJNhIyJak3q6KuqIiMeMoh+g8h6wyqQ854Avo5pBLLyOPI6RqZBJ4HC26lw54SRH
+	 zUMItw7kbSuLg==
+Date: Fri, 11 Oct 2024 15:58:04 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 6/8] x86/module: perpare module loading for ROX
+ allocations of text
+Message-ID: <Zwkg3LwlNJOwNWZh@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-7-rppt@kernel.org>
+ <20241010225411.GA922684@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1] module: sign with sha512 by default to avoid build
- errors
-From: Thorsten Leemhuis <linux@leemhuis.info>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: sedat.dilek@gmail.com, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>,
- linux-modules@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <42aa307d7ffae1851b4a8787f5c276dd0b3beece.1728543368.git.linux@leemhuis.info>
- <b32f1e42-d775-4538-ba36-9e9b906a34e3@leemhuis.info>
- <CA+icZUUgwJWY=PWO5fQPZbUc-q=LkdHXVe4+g-LnXmQfCA3N7Q@mail.gmail.com>
- <CA+icZUX9hrwFXA-6KVT+yZ=-NqyPB=LOKKWSf77-xb32totgHA@mail.gmail.com>
- <a5b3c47e-5f0f-4c0f-8ad9-4fb34d150548@leemhuis.info>
- <CABCJKudayCsPuowkUW7_JV_2HPNp5tf_py6jjDe6Ld7oMai9jg@mail.gmail.com>
- <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
-Content-Language: en-US, de-DE
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <c94590a5-4121-497b-8529-cbab2b01fe51@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1728648052;3dcff5b2;
-X-HE-SMSGID: 1szEK8-0006Ke-IV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010225411.GA922684@thelio-3990X>
 
-On 11.10.24 12:27, Thorsten Leemhuis wrote:
-> On 10.10.24 17:52, Sami Tolvanen wrote:
-> Thx for your feedback!
->> On Thu, Oct 10, 2024 at 1:57 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->>> On 10.10.24 10:42, Sedat Dilek wrote:
->>>> On Thu, Oct 10, 2024 at 10:29 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->>>>> On Thu, Oct 10, 2024 at 10:19 AM Thorsten Leemhuis <linux@leemhuis.info> wrote:
->>>>>> On 10.10.24 09:00, Thorsten Leemhuis wrote:
->>
->>> P.S.: Vegard Nossum mentioned in the fediverse that I could also solve
->>> the problem the patch is about by adding "default MODULE_SIG_SHA512" to
->>> the "choice" section; haven't tried that, but that sounds like a better
->>> solution. Will likely give it a try, unless someone brings up unwanted
->>> side effects this might cause.
->>
->> Yes, that would be a much better way to change the default. Overall,
->> moving away from SHA-1 seems like a good idea and SHA-512 feels like a
->> reasonable choice. Luis, do you see any issues with changing the
->> default here?
+On Thu, Oct 10, 2024 at 03:54:11PM -0700, Nathan Chancellor wrote:
+> Hi Mike,
 > 
-> So, how do I make such a default choice work without breaking the
-> current magic, which looks like this:
-> [...]
+> On Wed, Oct 09, 2024 at 09:08:14PM +0300, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > When module text memory will be allocated with ROX permissions, the
+> > memory at the actual address where the module will live will contain
+> > invalid instructions and there will be a writable copy that contains the
+> > actual module code.
+> > 
+> > Update relocations and alternatives patching to deal with it.
+> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> 
+> I bisected a boot failure that I see with CONFIG_CFI_CLANG enabled to
+> this change as commit be712757cabd ("x86/module: perpare module loading
+> for ROX allocations of text") in -next.
+ 
+>   [    0.000000] Linux version 6.12.0-rc2-00140-gbe712757cabd (nathan@n3-xlarge-x86) (ClangBuiltLinux clang version 19.1.0 (https://github.com/llvm/llvm-project.git a4bf6cd7cfb1a1421ba92bca9d017b49936c55e4), ClangBuiltLinux LLD 19.1.0 (https://github.com/llvm/llvm-project.git a4bf6cd7cfb1a1421ba92bca9d017b49936c55e4)) #1 SMP PREEMPT_DYNAMIC Thu Oct 10 22:42:57 UTC 2024
+>   ...
+>   [    0.092204] Speculative Store Bypass: Mitigation: Speculative Store Bypass disabled via prctl
+>   [    0.093207] TAA: Mitigation: TSX disabled
+>   [    0.093711] MMIO Stale Data: Mitigation: Clear CPU buffers
+>   [    0.094228] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+>   [    0.095203] x86/fpu: Supporting XSAVE feature 0x002: 'SSE registers'
+>   [    0.096203] x86/fpu: Supporting XSAVE feature 0x004: 'AVX registers'
+>   [    0.097203] x86/fpu: Supporting XSAVE feature 0x020: 'AVX-512 opmask'
+>   [    0.098003] x86/fpu: Supporting XSAVE feature 0x040: 'AVX-512 Hi256'
+>   [    0.098203] x86/fpu: Supporting XSAVE feature 0x080: 'AVX-512 ZMM_Hi256'
+>   [    0.099203] x86/fpu: Supporting XSAVE feature 0x200: 'Protection Keys User registers'
+>   [    0.100204] x86/fpu: xstate_offset[2]:  576, xstate_sizes[2]:  256
+>   [    0.101204] x86/fpu: xstate_offset[5]:  832, xstate_sizes[5]:   64
+>   [    0.102203] x86/fpu: xstate_offset[6]:  896, xstate_sizes[6]:  512
+>   [    0.103204] x86/fpu: xstate_offset[7]: 1408, xstate_sizes[7]: 1024
+>   [    0.104051] x86/fpu: xstate_offset[9]: 2432, xstate_sizes[9]:    8
+>   [    0.104204] x86/fpu: Enabled xstate features 0x2e7, context size is 2440 bytes, using 'compacted' format.
+> 
+> then nothing after that. Boot is successful if CFI is not enabled (the
+> initrd will just shutdown the machine after printing the version string).
+> 
+> If there is any further information I can provide or patches I can test,
+> I am more than happy to do so.
 
-Ignore that, I was missing something obvious and got mislead by my
-brain, sorry for the noise. Will send a updated patch in a few days to
-give Luis and others a chance to raise objections reg. switching to SHA512.
+I overlooked how cfi_*_callers routines update addr.
+This patch should fix it:
 
-Ciao, Thorsten
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 3b3fa93af3b1..cf782f431110 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1148,11 +1148,13 @@ static int cfi_disable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
++
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+@@ -1172,11 +1174,12 @@ static int cfi_enable_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (!hash) /* nocfi callers */
+ 			continue;
+ 
+@@ -1249,11 +1252,12 @@ static int cfi_rand_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (hash) {
+ 			hash = -cfi_rehash(hash);
+ 			text_poke_early(wr_addr + 2, &hash, 4);
+@@ -1269,14 +1273,15 @@ static int cfi_rewrite_callers(s32 *start, s32 *end, struct module *mod)
+ 
+ 	for (s = start; s < end; s++) {
+ 		void *addr = (void *)s + *s;
+-		void *wr_addr = module_writable_address(mod, addr);
++		void *wr_addr;
+ 		u32 hash;
+ 
+ 		addr -= fineibt_caller_size;
+-		hash = decode_caller_hash(addr);
++		wr_addr = module_writable_address(mod, addr);
++		hash = decode_caller_hash(wr_addr);
+ 		if (hash) {
+ 			text_poke_early(wr_addr, fineibt_caller_start, fineibt_caller_size);
+-			WARN_ON(*(u32 *)(addr + fineibt_caller_hash) != 0x12345678);
++			WARN_ON(*(u32 *)(wr_addr + fineibt_caller_hash) != 0x12345678);
+ 			text_poke_early(wr_addr + fineibt_caller_hash, &hash, 4);
+ 		}
+ 		/* rely on apply_retpolines() */
+ 
+> Cheers,
+> Nathan
+
+-- 
+Sincerely yours,
+Mike.
