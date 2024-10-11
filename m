@@ -1,90 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E332A1CFEAD;
-	Fri, 11 Oct 2024 22:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECEAB1D1E8F
+	for <linux-modules@vger.kernel.org>; Fri, 11 Oct 2024 22:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728685332; cv=none; b=ZFd1eAcxUAxp8ROKVv+bH672VLx6QuYkw1NsIUICFaLWSU/ew+9rtBp66HdwHNb0YQGZMRPU0UDgmsOnBxQsQqfboLw05MV9SIlVhxhRNAhtrPXJ6ckBT9TANkW5ipPW7jFi7n33jc1uXD/JRVlR2DDUqcGIFyxgfHnh4LedqNc=
+	t=1728685389; cv=none; b=K3bldzK3GKCUyIMFplmkhfUMmk0ZvE/1SXC3/UymDciuYr+d9TjZOmBVIOmuriGs4irrGp/+XxJKRoTn5IodRxt5RGMDNd0MMtmcW/66tdkV7kTLpRTSK+ovPgSQGiDzY+Mndx1P39sdByx9HDPVGP1N1fWzCXPJOieT2BOvd8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728685332; c=relaxed/simple;
-	bh=5olLXSZ89FpxCn4+GMLE3sVaUDfyIAgUMN4KPakNJ3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LU3a4EtjMiANuwW0UDe6mzK2ppxCkVAOZ3t7SgdqmhdWG90efcxgSY2ur/6LkVC94EA4ZXGpqsxz5hdoJmbavHyzWCYqFYKX3OGd3JyphOlN0IOksbGWldfvyif8uqPWZtkbAvm6m1/Cj40vLdqTWeQ1m3mLGaL3L4j4wLXwweY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pcN6ikuo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728685389; c=relaxed/simple;
+	bh=CJDIZt9SDia3kRARDeq0N7pRKkAvIEdL1EhtcEH4zWU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=defc3FefnvBBHw6eCXwCwVq265MlHZIkDV6743AMVYG3VNX4eTbhVDhsTYC/XMG/YXmO6KfNjz3l3FsEE/ceyrB9fmTmA2pmTgT2tR6d7nMU4d2vIzmR4eivh71BAofpnjw6isIvfug9x7kr5qtN3N3pZEmjwkndvB/+TOsYK7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qU5M0pC7; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pcN6ikuo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA63BC4CEC3;
-	Fri, 11 Oct 2024 22:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728685331;
-	bh=5olLXSZ89FpxCn4+GMLE3sVaUDfyIAgUMN4KPakNJ3k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pcN6ikuoLar19vMRfs0vbt+MzJX5NNXLuD0WdJMnsLHRkqKdxaw5UoyC8kkpcQUDG
-	 N/thjtFZnL2R7fry55PrFTl2tvxKrpcvbgK3Lvl1x7uoHDAhBEd4jrNhOOIx3zyp7r
-	 qjLicXuLaqXdQB+xPmq4kkW3y/GX8xDsVq8KafbEBPJBMB7AzjtEzSoBnHUnkridqE
-	 qYESZPVrpeLD5gsbTgyvkoEzEmYtfDN1rBaCbS1CpEPWankb6ObLoapBlyO81PnuM1
-	 QYTRHJ7DJAblD0D9CGz/aZIJ8Tkn+4W1k/ltc7ZY+20gmDhHD7JxIkT2/XND1/Ck+M
-	 nilw1JNGPsIkw==
-Date: Fri, 11 Oct 2024 15:22:09 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Matthew Maurer <mmaurer@google.com>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
-	gary@garyguo.net, Michael Ellerman <mpe@ellerman.id.au>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	neal@gompa.dev, marcan@marcan.st, j@jannau.net,
-	asahi@lists.linux.dev, linux-modules@vger.kernel.org,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
-Message-ID: <ZwmlEYdS0aPVF32k@bombadil.infradead.org>
-References: <20240925233854.90072-1-mmaurer@google.com>
- <20240925233854.90072-15-mmaurer@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qU5M0pC7"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e681ba70so2371e87.1
+        for <linux-modules@vger.kernel.org>; Fri, 11 Oct 2024 15:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728685386; x=1729290186; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=maYFMKfM6boFdhGm6DtqmLZWBbLTCgX3HfNDs5UmCQU=;
+        b=qU5M0pC7kKtnuzCebPkw/6BhkXjMU4cqXfWJ0e5PHlSMp5q5+vfnoTf24vUX1LW5qy
+         RHnmrzCKzVptlo5dWIANhg/LgG9+vKv/cj1ySZvX2t++Sh43UX+w+cEnDULi3m3GGkSM
+         hkESkezf9MFOEjq0rmV7nePk44LnpIgqjOVoh/D/q90dalwQZkMvhHViH9uYiAkRP8TI
+         Cl5NzoR0Tv1RHSsBSCvujxSLUlAaVrpTiPNGv/U2IYm7TD4Zs3AOUina9IZf7/tRNFfv
+         Aow4foN6hEsPRRU20cg0UB7NlY3Y5S/mfmgrKJn4gEVYK3shD/c0zQz+MFTsyDr792nO
+         GShA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728685386; x=1729290186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=maYFMKfM6boFdhGm6DtqmLZWBbLTCgX3HfNDs5UmCQU=;
+        b=EbEmUgCTrU/B9PXKLaeKjV42Okesh2TV85c822b7j65w4UzskvglAjPK7opSWo4AL1
+         zU1sUKCxiFbkiKKoXkIhL9BRPIqZhOINYnVceFuSQ+h9znE0lR0IldYuXt0T3bGVsmzO
+         Mg6Is3XFESV65APLTyuNaqU9F+ROTPaRMdgOcYXEHlHycCk5Vnb0FyXG93/U+XWSB6ZN
+         CZzxxMMXvEeCPo4hSVdXSOkn5Q6saDm517xdqUWpxE1YWTNFlExdW//+wh7gRrshjsQa
+         9+Qidw6B9g2AQTrcwKCnOeGub4N0UoSXjsWdEo6hfwG0eJpi7YE8GdgfbyXcvGPomwie
+         ygOA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9zmbuKY8O5fYh45cCaYlfstIxEnDWDe5X7m/0fcIzu+1Xb5BjqWWltD53aRD/QzrZurz3SlowLib6ev/u@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDfZQW3IBcS6xRSWtDTdaacjJ9+M9o52gFecIB2Xe+590NLPQl
+	TN5nzLmpliGbj5qrKGE+w8FMq1EtdZgI7+rOabrWvmP2IbRZ13sfkU8hTxszE6AilT6xVnDTV+N
+	HTsQXHOE6oHnfqqcrKFF+enW4A6HU2KbPE0/3
+X-Google-Smtp-Source: AGHT+IGr43daPZ49/lS60D7/4sgtSi5WXLqig+kBuBxaN2sMmsSkjjoy3oJWvbRMgwV3mVJzY8wJBYqH4iO+1rac7CY=
+X-Received: by 2002:a05:6512:3d05:b0:533:49ab:780e with SMTP id
+ 2adb3069b0e04-539e5f0a2a4mr148247e87.2.1728685385873; Fri, 11 Oct 2024
+ 15:23:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240925233854.90072-15-mmaurer@google.com>
+References: <20240925233854.90072-1-mmaurer@google.com> <20240925233854.90072-14-mmaurer@google.com>
+ <Zwmi-MEVE_E4nkzl@bombadil.infradead.org>
+In-Reply-To: <Zwmi-MEVE_E4nkzl@bombadil.infradead.org>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Fri, 11 Oct 2024 15:22:54 -0700
+Message-ID: <CAGSQo03H=O5id=bdRorHmRLNzGM9njcRradQUvjpngk3sXfViw@mail.gmail.com>
+Subject: Re: [PATCH v5 13/16] export_report: Rehabilitate script
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org, 
+	gary@garyguo.net, Alex Gaynor <alex.gaynor@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, neal@gompa.dev, 
+	marcan@marcan.st, j@jannau.net, asahi@lists.linux.dev, 
+	linux-modules@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 25, 2024 at 11:38:29PM +0000, Matthew Maurer wrote:
-> Adds a new format for MODVERSIONS which stores each field in a separate
-> ELF section. This initially adds support for variable length names, but
-> could later be used to add additional fields to MODVERSIONS in a
-> backwards compatible way if needed. Any new fields will be ignored by
-> old user tooling, unlike the current format where user tooling cannot
-> tolerate adjustments to the format (for example making the name field
-> longer).
-> 
-> Since PPC munges its version records to strip leading dots, we reproduce
-> the munging for the new format. Other architectures do not appear to
-> have architecture-specific usage of this information.
-> 
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+On Fri, Oct 11, 2024 at 3:13=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> On Wed, Sep 25, 2024 at 11:38:28PM +0000, Matthew Maurer wrote:
+> > * modules.order has .o files when in a build dir, support this
+>
+> The commit log is not clear, is it that it's always had *.o files, and
+> you're adding them now, why? Why is the .ko search now removed?
 
-I'm all for the ELF validation work so far, all that was nice, thanks
-for all that tidying up. This however is not considering when we really
-need all this at all, and not making it specific to the build times when
-such things are needed. That is, yes I'd like to see the need for this
-clearly explicitly defined through Kconfig, a *select FOO_FEATURE* for
-when this is needed. No need to extend a module with bloat if we don't
-need it, likewise if a kernel was built without needing those things,
-why bloat the modules with the extra information?
+The script was broken when I found it, but it was a script that
+analyzed MODVERSIONS, so I tried to ensure it would still work with my
+changes. This necessitated rehabilitating it first. I did not touch
+`.modules.order` files, but they contained `.o` and so this script
+wouldn't run correctly.
 
-  Luis
+>
+> > * .mod.c source layout has changed,
+>
+> When, why did this change not happen at that time?
+
+It was changed for readability [1] back in 2019. I assume the change
+did not happen at that time because this script is rarely run. If we'd
+prefer to discard this patch and ignore the script instead (or remove
+it?), that's fine.
+
+[1]: https://lore.kernel.org/all/20190909113423.2289-2-yamada.masahiro@soci=
+onext.com/
+
+>
+> > update regexes to match
+>
+> Why did this not break anything before ? Is this fixing something, or
+> is it prep work?
+>
+> > * Add a stage 3, to be more robust against additional .mod.c content
+>
+> Future .mod.c changes?
+
+The rest of this series adds additional `.mod.c` content to support
+the string names. This stage 3 is intended to prevent that from
+causing the script to choke.
+
+>
+>   Luis
