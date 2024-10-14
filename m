@@ -1,35 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101C81A76C4;
-	Mon, 14 Oct 2024 13:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F6202F34;
+	Mon, 14 Oct 2024 19:16:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728911493; cv=none; b=eeSDxrQk8+xnUIpvuq8HzU3azwQnUMgTfDrdPo3SYqPXwfqlqDT81IzPVd/o7BVdsx4JHuKXwhrJaVot0Gqs+ZstH+NxABCTTSrgYa7FnLfD2HK6PVY9Yd/ESKetxgglUMTbXoOOgN6zsM+MzOe0/m2XiGbNh8KQIuc9/14YR+w=
+	t=1728933384; cv=none; b=cegl1BPXxppRW+41dCHi4URIL/7h7UWCtx3dEusPGgu0lK5uOtYsd0vXEv3SYq196pZc5UYYUX35xTCZqi1loe6+uq5C973RpUhkwpidnsd7NpT+22gAbmg+NeWHv9SA81S+W3TJukmRz1uOwnJ3pEjJ00CgH+KEyX2H8hRQ7wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728911493; c=relaxed/simple;
-	bh=Rj0DDOED5iD2FdGYxYV+4r4tEXYq4n6Xi/0d9QAVLUc=;
+	s=arc-20240116; t=1728933384; c=relaxed/simple;
+	bh=UuppSLaM0kOzMrDSh2RloHR9IgCcKKb57FBSLEkEUWY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jv2BjvjRfhADX1K/7e1XCYeM8/kImi6/9tkXEXk90RWuefHEx1UKDuIKqtLoLMJtswZNCFzyyX9AWJ5xlJK6FwhmVYwpsev9aq9ezQwygKULDJGSLuKtF+T1pLtgxNgi25DatM6G0qfaITvVGe7t+ga4lYgeJ6HObxENxVjug6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMvBZJVO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FFCOuTgz8sD7Ed/Kud9QCetDjIUNalCJp7fx5uHw1Lmy9rz4nHQDEuyQ/Js8mUYGIu7NDMob76aKmnNJiOi2L4O9SXpk56EaNsy0we+WKWwieq1Sco/q44kKRl8QMxa9zBx62PKRSDUFlxYPAUQCHyOzRrL463Nm1OvZadSbpoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjG/5WZA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMvBZJVO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D95C4CEC3;
-	Mon, 14 Oct 2024 13:11:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjG/5WZA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC60C4CEC3;
+	Mon, 14 Oct 2024 19:16:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728911492;
-	bh=Rj0DDOED5iD2FdGYxYV+4r4tEXYq4n6Xi/0d9QAVLUc=;
+	s=k20201202; t=1728933383;
+	bh=UuppSLaM0kOzMrDSh2RloHR9IgCcKKb57FBSLEkEUWY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vMvBZJVOinxsLsrPPXzSxPojzLbDfnzNQ55w0X0QwTjcMMxar0CDAK08E2JThkQpb
-	 4cpioov/cqx2XJwdmLwC1BTnXl3vfXvrgA1ETi3RHPPFn/KFa3uZAW+joXD5HEZg+c
-	 4U5ok631tPzwPd7hoGyNRL5ynGDynUSOamB6K2RiHfHSi/erCk9kHqPS+1U5lBuMVB
-	 r0jU8Sa0yR3rOlG2WDCJ68+YmRHtYreB6qz66TSlQdG0YMQVcdBysszRX2pWrQ1lN4
-	 ziJbkceFmXn8rCIwx79sxsDKS6SGBNY9GisCIBFcBwGbEy+4gMh7VJcsFjn3AG+8KF
-	 uacBBUphpSFpQ==
-Date: Mon, 14 Oct 2024 16:07:40 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
+	b=EjG/5WZADaXhvwARHnqKg67eiuXX7gTWxPoitBNELLTxxDNviuMSsmlu/en6P6ED8
+	 zpJ52uHjqiz/g2IcIGwuziTngHnAXDzicRERzVAAIDP4l2L6y33KAuyIagMcpMXzl4
+	 9dBRK2tjgLlrX3Ons9R5vBST3i3yiewblKFLfAI64WB5+23Fn5KkJljDLeTWRKDZ84
+	 jnexNcW9vYFK3px9crwCiVYgH/8ctiyb/DdHjxU96pqWdOL1lwHrwqpz6qzLtvvsU8
+	 7pmIeyrMmskmV1mcXKss65BVVX6VBxafQdYx2gdNsA2KwzhcBEiTj2VcG0YSmjPMmN
+	 oCmkdGtrERExg==
+Date: Mon, 14 Oct 2024 12:16:20 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@infradead.org>,
 	Andreas Larsson <andreas@gaisler.com>,
 	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
@@ -45,7 +47,6 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
@@ -73,14 +74,14 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <Zw0XnDHbpHDwFDHy@kernel.org>
+Message-ID: <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
 References: <20241009180816.83591-1-rppt@kernel.org>
  <20241009180816.83591-8-rppt@kernel.org>
  <Zwd7GRyBtCwiAv1v@infradead.org>
  <ZwfPPZrxHzQgYfx7@kernel.org>
  <ZwjXz0dz-RldVNx0@infradead.org>
  <ZwuIPZkjX0CfzhjS@kernel.org>
- <ZwyyTetoLX7aXhGg@infradead.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -89,21 +90,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZwyyTetoLX7aXhGg@infradead.org>
+In-Reply-To: <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
 
-On Sun, Oct 13, 2024 at 10:55:25PM -0700, Christoph Hellwig wrote:
-> On Sun, Oct 13, 2024 at 11:43:41AM +0300, Mike Rapoport wrote:
+On Sun, Oct 13, 2024 at 08:26:26PM -0700, Andrew Morton wrote:
+> On Sun, 13 Oct 2024 11:43:41 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > > > The idea is to keep everything together and have execmem_info describe all
+> > > > that architecture needs. 
+> > > 
 > > > But why?  That's pretty different from our normal style of arch hooks,
 > > > and introduces an indirect call in a security sensitive area.
 > > 
 > > Will change to __weak hook. 
+> > 
 > 
-> Isn't the callback required when using the large ROX page?  I.e.
-> shouldn't it be an unconditional callback and not a weak override?
+> Thanks, I'll drop the v1 series;
+> 
+> The todos which I collected are:
+> 
+> https://lkml.kernel.org/r/CAPhsuW66etfdU3Fvk0KsELXcgWD6_TkBFjJ-BTHQu5OejDsP2w@mail.gmail.com
+> https://lkml.kernel.org/r/Zwd6vH0rz0PVedLI@infradead.org
+> https://lkml.kernel.org/r/ZwjXz0dz-RldVNx0@infradead.org
+> https://lkml.kernel.org/r/202410111408.8fe6f604-lkp@intel.com
 
-I'll add a Kconfig option to ensure that an architecture that wants to use
-large ROX pages has explicit callback for that.
+BTW Andrew I'd like to pick this up through the modules tree, and while
+at it, also beat it up with some more testing as we're expanding also
+with the modversions stuff for Rust modules.
 
--- 
-Sincerely yours,
-Mike.
+  Luis
