@@ -1,38 +1,35 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A8129B0;
-	Tue, 15 Oct 2024 04:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E31B173357;
+	Tue, 15 Oct 2024 05:58:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728965422; cv=none; b=eCBJyvZNMFtG78gz7G3ReHiZfgKOgzeL4+1pv8CjQ3YDIst6oUCaaffRmVnX5q5RJAk1pDHwvKt7TPbJDb/BxUQ2g2nnsbrakRv9QO27jNn0j9yn58r1+J42X6XPVtUu5EBPV8xyk6F2CZSycy6yqDBgjEobkCt9TdCjwcZxA2Q=
+	t=1728971904; cv=none; b=h0HLH9OOFqKGG0f6gIwNXysULgsyFEjhbuYIVpVlGurbxUtAe+Tlx0X/mA0mZdooB0sVx1sF+LoZnAuWbKDfA+xwCUVhpDpw1a8dmfZjJpw6B36+jYY/8hgLlP18DhD3nv0t4fARBYE7faNU6xgkl1gRehvfjUgDCSFhZslFYP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728965422; c=relaxed/simple;
-	bh=bP0ydmliT7A3C7Nd/bJhXr4/VtNYgg6ylmhoq0xGHpY=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lQUmHdvaFUPapNPxRCsSofsP567Lc076JUulSfTjFILa8xUjdSpikskWepIQLWevLjpdrS2rTtKN1SavQNxGUp56Z3OLvwMrCiUDm9IO3lKYVfrio8QU8n+zUCfjPTyJIZ7RuCsYjdPEnbmAwEiwFe17WlO9yy9A0vj7HfxN7a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SY5JMHuh; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1728971904; c=relaxed/simple;
+	bh=Bo5YA9yZSBe+D0lpdePuveWlpCV5YIVCk7/YdaIdQ1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uEr/lbh2hSO/E6wSSsvOP4Tr952+NELX0LoBSuKZSp1sSKTpVcYGFI6mX9vm7dI7OgmLRpb21bpQL8YN+52qfbuyA3c+9ZINPWjazVMGdflxQ2GCcbL41amK8koQk4VQCaEsqgtqkNBwDGjez1P1xXgfC12yqbTd3H8ANyHWUvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jG5sGGJ/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SY5JMHuh"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:From:Date:Reply-To:To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7oo0+NFzG0+ifufE/qqCDtaU5giwdXfO9PmS95o7Kt8=; b=SY5JMHuh/AAausEpvgqOw55iPl
-	Y8ImNtY8lwsSme/gxOUJfn+PUpLmjBiImSQW8MgRsf/JwD2ylancbB7Oiq7Nb5pI/K+nL0VSslrVN
-	XGZDs/pfzl9qkHw9zhppqbh0CIlkbpip4FIfw3Q96wZIQ5RtgU7B+aKjPOAFhQgdyxWZRFKmjWNzj
-	aB4GXacLxjCnOdKJuBNHg1xEqeG82y6hoDUIzs0VCnES/acA9z0GNZHDId+EQ6f5sxmB59pJt+3Ij
-	lUGVImtl2K8gDkfxbjwy4dLx6Um+jtshEo5c8RK27ua6rOKWJTnZIKd2v54UPxT1P/adSb9eBKXwh
-	o8CW4uBg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1t0YsX-000000071rX-3MXJ;
-	Tue, 15 Oct 2024 04:09:49 +0000
-Date: Mon, 14 Oct 2024 21:09:49 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jG5sGGJ/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325E1C4CEC7;
+	Tue, 15 Oct 2024 05:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728971903;
+	bh=Bo5YA9yZSBe+D0lpdePuveWlpCV5YIVCk7/YdaIdQ1I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jG5sGGJ/uyj72sfIjEOgM3YbtVaq12kKOCpq+pn5nPbrPsQT2kC9ydtk/YzTUly5r
+	 4eVw7lpNOy5kN1mWcmFmO7tb0cYSymlnAwpq2Wio7c3ZyfvyaEwu9JPC9amMYfUYbj
+	 MtCJD0izwYdWw2k3enQm6TEHcbCSImNPeik7wVIFjejDi/qTBQORJWwxVSIAEvqN5Q
+	 l9yRtb72GuYxy6JDeT8CrEewKpTCwuiujl9ZpZL5V+ZbK8ZPy8dUW/6qHkWufpsPdi
+	 7qTmnW97lTs/3celEWZrNKMwS30XeMtKFXPBKIkve6XIFrcQu+bxXeiRq9P0LbGJXD
+	 wA3RYW8I7S+NQ==
+Date: Tue, 15 Oct 2024 08:54:29 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Andreas Larsson <andreas@gaisler.com>,
@@ -77,7 +74,7 @@ Cc: Mike Rapoport <rppt@kernel.org>, Christoph Hellwig <hch@infradead.org>,
 	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
+Message-ID: <Zw4DlTTbz4QwhOvU@kernel.org>
 References: <20241009180816.83591-1-rppt@kernel.org>
  <20241009180816.83591-8-rppt@kernel.org>
  <Zwd7GRyBtCwiAv1v@infradead.org>
@@ -86,6 +83,7 @@ References: <20241009180816.83591-1-rppt@kernel.org>
  <ZwuIPZkjX0CfzhjS@kernel.org>
  <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
  <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+ <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -94,11 +92,22 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+In-Reply-To: <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
 
-Mike, please run this with kmemleak enabled and running, and also try to get
-tools/testing/selftests/kmod/kmod.sh to pass. I run into silly boot issues
-with just a guest.
+On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
+> Mike, please run this with kmemleak enabled and running, and also try to get
+> tools/testing/selftests/kmod/kmod.sh to pass.
 
-  Luis
+There was an issue with kmemleak, I fixed it here:
+
+https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+
+> I run into silly boot issues with just a guest.
+
+Was it kmemleak or something else?
+ 
+>   Luis
+
+-- 
+Sincerely yours,
+Mike.
