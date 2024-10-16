@@ -1,135 +1,125 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCE3170A3E
-	for <linux-modules@vger.kernel.org>; Wed, 16 Oct 2024 05:33:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2C41C9DC8;
+	Wed, 16 Oct 2024 10:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729056811; cv=none; b=azAoUBFj0cUAMuCEAtB+Gm+Bh5UVCzAWfS3FY4AttS5kL0fGmlXQI1wmptBZawcEsvkOQb+TL6+slRXLolpfNyN1a2bBq0zk6osHxRwOpc5UQhc62LDPikY0djWiFMaWKcj/kQzl0S2ntKMJmHuMgdrpZztnN8dTYV1Qh5c22GM=
+	t=1729075491; cv=none; b=aVJRpJeeuCfA088n8apUXU0J5NhbVjFC9mVuT2HJGHLyYg6mnblpCpdRvSAw9GhAd1joR7jWlTKI+mvLjXF30seoUMpqAT5CzOpijDDdcDSoYMOi2005uf17czDoaIAmSBs0ZVkaabazWsQ/eSy86ou5vq3CnfZOg5JlQ7MuPq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729056811; c=relaxed/simple;
-	bh=a8AHrour6y3gtSVQgfuTGwKhI4oiODFOIV0RsJ1H81I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=n177vJOXHD51gMObkn8V8/PmkrTGSCVYBw0nC+7yVDTFmRbH+vur/44fO7LGOrMEvsTlICvR3xDAejeDg40jFVbxLiHEHr7dSWEiQJcCRMOr99RpffGvlPeg0iPWrVew0unC89pwoL5Zgb889zlT4poKdxfFSUmWWzY7BMO+C28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pDGBBC4h; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1729075491; c=relaxed/simple;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YfWqYCZ0cda3DGVYPs/1s0FKMi5bcMzksfVhVb4m9JqnkyLoKypMooWDasO+QH4lkeuomcSO3EsCGRhsBuK76A/7ZWyq3+1BRSR4FxRaGOAZQKiK4RJSp3s/O4dcYZhMj5IIAIvpfwBHMQ5W/pJ1MHu50HBhB8mFYDHZZsHrQl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tu7R+TE5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pDGBBC4h"
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a3b28ac9a1so75015ab.1
-        for <linux-modules@vger.kernel.org>; Tue, 15 Oct 2024 22:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729056808; x=1729661608; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IE3n7neBCFO0QX3SRz3T65QnhWq2c+d+oC2i4MBN32E=;
-        b=pDGBBC4hEwg1iPsMzi9bQ3+KMqgaINZMNpjYEUFDC3VR82QnxUUZoMvO/8F6zNk1LD
-         e3dcK48akf0KDNzBL4LUsa9kV6eeyWXDUqIeXZQIccgYaqOwLFqg9Ys7jmC6QoSis3Mf
-         d6wbPyWC5OsB5X5D31sx0BZLd0Rc/XMFnY5IjE2QP3c+VcXKXe9rSBK05vy2Qk88BeNd
-         HfzR0FLKzr7pnXFhjLgqTlIA4orch8vOyfmcOvai8k83rVQoIuiFpjqqIoF/UNUoR3OF
-         IGZEzBnbg1v959oHOOEdXrADN+pb23RtW69+KcNQzrlIPA59tLW9gliSRzLTDXdLiX1R
-         k+nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729056808; x=1729661608;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IE3n7neBCFO0QX3SRz3T65QnhWq2c+d+oC2i4MBN32E=;
-        b=ZDuLv4KL37K0L0v6PdjT3hNwL2+bGE1YKHId+8pGkThG68MmpG9u/8r40zSXYbLEwH
-         s4tfZnaEKevEwFycWr2Oo1BDx+XseVsKvmwxkSFwHBbsgO4CREgfjgHHuvClrCag9f0E
-         hPoD2aqV4RCzT3/F8p8bhxSMosjpdypBWrlsZ3FWIRRdRQ/aj9BM7IeBQpzQu8afBrH5
-         aAAu0oIqh5XvdZliH+BjmORN6Xjxr7SG/oGRl3fJrehqUQPzSOYqiTYxk1y59dhh6fS/
-         sXPiBEpvdUbWk1xY59QxtxSWbhRRxmHgQKdRChzNH9BMjKjLXK7Ok+8tJuSwAC5q0xCH
-         +d3w==
-X-Forwarded-Encrypted: i=1; AJvYcCWoplfoeZM78XIj2LYCmkxehkRwsPL6twsqQ4K3rtit+gBBGdQ25nbGNmlvHLiwIVGQjw9Q6E/OLOjh1TbT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv8jH4LZOWE0ajkkKgsRDAOhGyhmHeFoYyX3Dz1DXlV1Hvww8z
-	Alidy5EQRHWMP43DqPsVlsy/BvNw92gIe+LLGaxGx2lRrChUjuJoPxwPzMm2p9xDbC8Z5KhgsAT
-	twpLUkpWvspn2yA24hM+RcLYvh+ZgjUCPDfFl
-X-Google-Smtp-Source: AGHT+IHVny0OObU929AfXGoqJehfn3ed3sWMkp/JKdrStFJ+P9YrlgLxFcEP8zDxPHDtQik/xhI9gZNftcG09QqbV38=
-X-Received: by 2002:a92:cd81:0:b0:3a0:a233:caf8 with SMTP id
- e9e14a558f8ab-3a3ddecf747mr2346255ab.26.1729056808205; Tue, 15 Oct 2024
- 22:33:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tu7R+TE5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A439EC4CEC5;
+	Wed, 16 Oct 2024 10:44:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729075491;
+	bh=REY0yUs/eb8jGqS7iPmNLu0O7M3zjCPm2K1uOQnlIfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tu7R+TE5l4rMjxEyzDDIH6fpt5ZNmC1c7xJx7SQDlI9CzDxMt5yOQnVYNAW9hdV8J
+	 OeaDo9Hr12xvhUKQgId1tm4/CewmMpWCLOk3wgiUJwXyvWq4QlFB+Uh/pOgd95q0F1
+	 zyNekZpzro5oJZ2JEUpyorUNUZLep/wgUFWwzFdkGHL+BF7JNIRifDS33KF/5qGC2v
+	 jYrUvBLfr/xZZ4LfL7bWflm1YPeuIUzgGbLP+eWNj7AbuOUcsPGdhrgXCl4uUGrO38
+	 j9PqqivnqqmoYQsjfU9edkgWUJ3Ic8/MVLUiY8xlv+pKvbZQmwKQdokHEcp8hCdCUB
+	 nLnfE4mx3UK6g==
+Date: Wed, 16 Oct 2024 13:40:55 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zw-YN4JIltntY52Y@kernel.org>
+References: <20241009180816.83591-8-rppt@kernel.org>
+ <Zwd7GRyBtCwiAv1v@infradead.org>
+ <ZwfPPZrxHzQgYfx7@kernel.org>
+ <ZwjXz0dz-RldVNx0@infradead.org>
+ <ZwuIPZkjX0CfzhjS@kernel.org>
+ <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
+ <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
+ <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
+ <Zw4DlTTbz4QwhOvU@kernel.org>
+ <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014203646.1952505-1-surenb@google.com> <20241014203646.1952505-2-surenb@google.com>
- <o3jak2i7ohhxi53xlthv7yy3oop62qpfscel36szn4sctg67ip@ctrntnrcauav>
-In-Reply-To: <o3jak2i7ohhxi53xlthv7yy3oop62qpfscel36szn4sctg67ip@ctrntnrcauav>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Tue, 15 Oct 2024 22:33:15 -0700
-Message-ID: <CAJuCfpF2Xe4XcvruJe7evZpbYY71W7SVjbXQ_+XgzJvcLtVuuw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] maple_tree: add mas_for_each_rev() helper
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net, 
-	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com, 
-	minchan@google.com, kaleshsingh@google.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zw7MirnsHnhRveBB@bombadil.infradead.org>
 
-On Tue, Oct 15, 2024 at 6:48=E2=80=AFPM 'Liam R. Howlett' via kernel-team
-<kernel-team@android.com> wrote:
->
-> * Suren Baghdasaryan <surenb@google.com> [241014 16:36]:
-> > Add mas_for_each_rev() function to iterate maple tree nodes in reverse
-> > order.
-> >
-> > Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->
-> I am now sure I added a R-B in a reply to this :)
+On Tue, Oct 15, 2024 at 01:11:54PM -0700, Luis Chamberlain wrote:
+> On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
+> > On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
+> > > Mike, please run this with kmemleak enabled and running, and also try to get
+> > > tools/testing/selftests/kmod/kmod.sh to pass.
+> > 
+> > There was an issue with kmemleak, I fixed it here:
+> > 
+> > https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
+> 
+> Ah, so this was a side fix, not part of this series, thanks.
+> 
+> > > I run into silly boot issues with just a guest.
+> > 
+> > Was it kmemleak or something else?
+> 
+> Both kmemleak and the kmod selftest failed, here is a run of the test
+> with this patch series:
+> 
+> https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
 
-Sorry, I missed it. Will add in the next version. Thanks!
+Is there a kernel log to look at? Could not find it in the run report
+ 
+>   Luis
 
->
-> > ---
-> >  include/linux/maple_tree.h | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-> > index c2c11004085e..e7e2caa1a95a 100644
-> > --- a/include/linux/maple_tree.h
-> > +++ b/include/linux/maple_tree.h
-> > @@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_st=
-ate *mas)
-> >  #define mas_for_each(__mas, __entry, __max) \
-> >       while (((__entry) =3D mas_find((__mas), (__max))) !=3D NULL)
-> >
-> > +/**
-> > + * mas_for_each_rev() - Iterate over a range of the maple tree in reve=
-rse order.
-> > + * @__mas: Maple Tree operation state (maple_state)
-> > + * @__entry: Entry retrieved from the tree
-> > + * @__min: minimum index to retrieve from the tree
-> > + *
-> > + * When returned, mas->index and mas->last will hold the entire range =
-for the
-> > + * entry.
-> > + *
-> > + * Note: may return the zero entry.
-> > + */
-> > +#define mas_for_each_rev(__mas, __entry, __min) \
-> > +     while (((__entry) =3D mas_find_rev((__mas), (__min))) !=3D NULL)
-> > +
-> >  #ifdef CONFIG_DEBUG_MAPLE_TREE
-> >  enum mt_dump_format {
-> >       mt_dump_dec,
-> > --
-> > 2.47.0.rc1.288.g06298d1525-goog
-> >
->
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+-- 
+Sincerely yours,
+Mike.
