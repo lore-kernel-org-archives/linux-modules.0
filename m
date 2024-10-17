@@ -1,114 +1,140 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E5C224CC;
-	Thu, 17 Oct 2024 04:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B117B12DD8A;
+	Thu, 17 Oct 2024 09:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729140105; cv=none; b=cXEGWJeHkGJw72ckPLa1raAFK5DtXQ8hTWXxDmR0SxWrIOUnAWXd/WrQmLAvGT06ImmCHZRjJeBhhyXZU9iysJbTjLu2jpvBieEML47fEkDuRC8cQbC8dByynzyT80EsC/AaxC9Amf3QZ0IivKBscfVX9gkYhg+y6LsHY4rifkU=
+	t=1729157722; cv=none; b=UpUiOJbtw8iZ3OKHSVxebF+uGWLS8vNm2NCm+hvjhRvzS2cSuF5i2BybNOXgS1e/q+R9OGC+eO0ah6MfCRnpLzk/zuGv45PoEU/Zp1N9Jc0xyA48Ep4am3M+4T/Hg5H16vBQPCu6DnlPnCIg/EOdSROTCR9MDx3Ji3ywBIqg9Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729140105; c=relaxed/simple;
-	bh=ao336pkzJ1vCCnqcKARdbwKuHQux4BznZ203PT2NfU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sVXj5mU+ZYSPZZn4xPlnPKFE6tL2+a4r+GlS0HmbPllbNsnytXED+TaNwLPE2iMlqul3bNGdTehpBL01hN2rsJk2N41k7TvLH4aDdLB4ZQfrdduI/QwMqNF7Ix8RToPAhPeqNxr8jMuqclbZRQR5y6a1mPkVDE9FhtDISxPa2yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4XTZt75P4mz9sPd;
-	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6MMm0su871D5; Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4XTZt74G4dz9rvV;
-	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7DC5D8B770;
-	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id fWKN7eEXBxpc; Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
-Received: from [192.168.233.183] (unknown [192.168.233.183])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 45AE88B764;
-	Thu, 17 Oct 2024 06:41:34 +0200 (CEST)
-Message-ID: <526fe185-7077-4b51-8ce1-9ef994aa7025@csgroup.eu>
-Date: Thu, 17 Oct 2024 06:41:32 +0200
+	s=arc-20240116; t=1729157722; c=relaxed/simple;
+	bh=ped3950d54S9hAnLeEAj3X1RF7de8yQC2eJe9g2KexQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sv8MyB8pyytV987E6kqqqbg5g6m9STWTSaQnrT5pgPr5TxCrkicKeIMX69tWBC7ej3UzeOdtxQQw+sespwseuMEdqKv9krABRrG1s6oIFQEi8RksbUHoPXDRQHjNM4Grc+2QyIkS9yxMiEEipChXZtYelJcxlisohlhB27DhJaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XiFI8B0o; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XiFI8B0o"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=VVu7cX1SI2+XfnYlKmwbrDG3+CJWOAmt2jAl9wbUo9k=; b=XiFI8B0ovduSIe40JjuY242meO
+	1tWdoXPB8Y4u6FvdJlkOh0pr/b+ptTLEARYM4Fz0YcPpgeZ6S8vIFL3pv7C67je495kkW38x9jgPx
+	kZcvMosNEICP21MaeTfL4OcNrqj3D/g6hBzGdP9sE2b36zBWvYJp4QWDybwMxKdlcL3ZpeYi7ki7+
+	suQtk2YIywEtSE8+GUQPkWxddDo9J2uY+LZoII7Oa4V1WDt8U55u9QC4d2zaOtcNPZVh6JsT6n2VV
+	yz3mabQVBKOF3bVpb3D/1s3d5tFfjBLa1mZAU7RdfOnmovvB/POi51RCfYsgOa7ik7FCs2q+EK5D6
+	fjlJqizw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t1Mua-000000075pF-1RkI;
+	Thu, 17 Oct 2024 09:35:17 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id EF73A3005AF; Thu, 17 Oct 2024 11:35:15 +0200 (CEST)
+Date: Thu, 17 Oct 2024 11:35:15 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241017093515.GU16066@noisy.programming.kicks-ass.net>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
-To: Luis Chamberlain <mcgrof@kernel.org>, Matthew Maurer
- <mmaurer@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Helge Deller <deller@gmx.de>
-Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
- gary@garyguo.net, Michael Ellerman <mpe@ellerman.id.au>,
- Alex Gaynor <alex.gaynor@gmail.com>, Benjamin Gray <bgray@linux.ibm.com>,
- Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, neal@gompa.dev,
- marcan@marcan.st, j@jannau.net, asahi@lists.linux.dev,
- linux-modules@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Boqun Feng
- <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org
-References: <20240925233854.90072-1-mmaurer@google.com>
- <20240925233854.90072-15-mmaurer@google.com>
- <ZwmlEYdS0aPVF32k@bombadil.infradead.org>
- <CAGSQo01o4fWYwSzZHX5dyTUKcaCSZ7z-hPQ8w63tgBPGbM_UCA@mail.gmail.com>
- <ZwmnnMmqVWLaelvQ@bombadil.infradead.org>
- <Zwm4lXdKB9RfPQ5M@bombadil.infradead.org>
- <Zwm4v_1wh5RwuHxF@bombadil.infradead.org>
- <CAGSQo03df-tnmwcz4nh3qtuQPKQ2zLHW0juQyKUXGsdeS7QkLA@mail.gmail.com>
- <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016170128.7afeb8b0@gandalf.local.home>
 
-
-
-Le 17/10/2024 à 01:21, Luis Chamberlain a écrit :
-> On Tue, Oct 15, 2024 at 04:22:22PM -0700, Matthew Maurer wrote:
->> So, the basic things I can think of to test here are:
->>
->> 1. The kernel can still load the previous MODVERSIONS format
->> 2. The kernel can load the new MODVERSIONS format
->> 3. If we artificially tweak a CRC in the previous format, it will fail to load.
->> 4. If we artificially tweak a CRC in the new format, it will fail to load.
->> 5. With CONFIG_EXTENDED_MODVERSIONS enabled, the kernel will build and
->> load modules with long symbol names, with MODVERSIONS enabled.
->>
->> Is there anything else you were thinking of here, or are those the
->> kinds of checks you were envisioning?
+On Wed, Oct 16, 2024 at 05:01:28PM -0400, Steven Rostedt wrote:
+> On Wed, 16 Oct 2024 15:24:22 +0300
+> Mike Rapoport <rppt@kernel.org> wrote:
 > 
-> That sounds great. Yeah, the above would be great to test. A while ago
-> I wrote a new modules selftests in order to test possible improvements
-> on find_symbol() but I also did this due to push the limits of the
-> numbers of symbols we could support. I wrote all this to also test the
-> possible 64-bit alignment benefits of __ksymtab_ sections on
-> architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (e.g. ppc64,
-> ppc64le, parisc, s390x,...). But come to think of it, you might be
-> able to easily leverage this to also just test long symbols by self
-> generated symbols as another test case. In case its useful to you I've
-> put this in a rebased branch 20241016-modules-symtab branch. Feel free
-> to use as you see fit.
+> > diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> > index 8da0e66ca22d..b498897b213c 100644
+> > --- a/arch/x86/kernel/ftrace.c
+> > +++ b/arch/x86/kernel/ftrace.c
+> > @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+> >  		return ret;
+> >  
+> >  	/* replace the text with the new text */
+> > -	if (ftrace_poke_late)
+> > +	if (ftrace_poke_late) {
+> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > -	else
+> > -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > +	} else {
+> > +		mutex_lock(&text_mutex);
+> > +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> > +		mutex_unlock(&text_mutex);
+> > +	}
+> >  	return 0;
+> >  }
+> 
+> So this slows down the boot by over 30ms. That may not sound like much, but
+> we care very much about boot times. This code is serialized with boot and
+> runs whenever ftrace is configured in the kernel. The way I measured this,
+> was that I added:
+> 
 
-By reading this, I discovered that was initially added to powerpc by 
-commit 271ca788774a ("arch: enable relative relocations for arm64, power 
-and x86") and then removed due to problem with modules, see commit 
-ff69279a44e9 ("powerpc: disable support for relative ksymtab references")
+> If this is only needed for module load, can we at least still use the
+> text_poke_early() at boot up?
 
-Wouldn't it be better to try and fix modules and activate again 
-CONFIG_HAVE_ARCH_PREL32_RELOCATIONS on powerpc ?
+Right, so I don't understand why this is needed at all.
+ftrace_module_init() runs before complete_formation() which normally
+switches to ROX, as such ftrace should be able to continue to do direct
+modifications here.
 
-Christophe
+Which reminds me, at some point I did patches adding a
+MODULE_STATE_UNFORMED callback in order for static_call / jump_label to
+be able to avoid the expensive patching on module load as well (arguably
+ftrace should be using that too, instead of a custom callback).
