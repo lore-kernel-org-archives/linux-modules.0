@@ -1,125 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB08161326;
-	Wed, 16 Oct 2024 23:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C67A8488
+	for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 00:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729123099; cv=none; b=hvWB13YpvSDMupLs2xW+03HRgDOwga50spkpqLx52kc6tTV4f+inKHLvfO5ZofLkSRRdNqmPVnbQ1QxNzAmBNNmRpqXtJb03Wo6OIlBZGSqDELrN31ud2oKaqYErCMtmZSb96fY3xsVX/1Qv1/VynQCi7s2ikNOVEp25xFzqR7w=
+	t=1729124801; cv=none; b=OtgPg7pNpCsdYhnjF3KZ96apAiJa5r594sei3BDeeohBkmZG/1LFrsqPbHb+odIMD/2I7eHrn6BBvJGuIaGD25J5PKfKu2/qdvaLwfQ8Mjo50BRu3CE6YPkQqfGdOzPI/lcknDLVbqaYTJtPjM2KE3tCyHTlNABVP14qOY3Wy30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729123099; c=relaxed/simple;
-	bh=dl4ZMMi6UkY66eeJUj39rk75iod/Rq4ydDN6GkT6Ce0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H6ltQe0Uez5ux6YgMw2Obb/cHsFqXjgU3ORgKYV7BmZRvo6MKTwAYZ5pMnOAbsSpLxNJClr6ShxUa4D729VDBcpVyaRP8hDtCGfRchUMslOCCVEUUFWodp2Rnq1f3mYbBuFl4US+RE9/BphEEWDpGKO354pyHivz/xKbx23r/r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUyJRTRo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729124801; c=relaxed/simple;
+	bh=0jwTR0iueyndpPrNwaFPpUKTaxSDEKtRjzWhhrTbnME=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L4HzhudjeAywkmPOyIpxsaTpK6v1b8yD56xMmSzCbv1RizXbOqwa9BJYoC2wrU1qruh+ok4zpk1pcq5e/5RuhH05DeCHmyQDqF7h36B/abR4GMxHHTYdrzWHwLB16qWAN1bMzwE3G8ODU26cAgZe42baBKAba7O0myNfoC1LkiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dPAShefK; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUyJRTRo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0128CC4CEC5;
-	Wed, 16 Oct 2024 23:58:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729123098;
-	bh=dl4ZMMi6UkY66eeJUj39rk75iod/Rq4ydDN6GkT6Ce0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aUyJRTRo0x2+3z/2y/FQ+aEK3XYUoN8mcz2N9MbvfVeg7WtoOgXSHf9qFPMa9WqK4
-	 I4Eb7NqiTNyvOxrYQ0Ck1crWzLXaJyBVvU1iHXhrLqptfZmWv1nwU+oeXM6onwo7B1
-	 Bjome/eLzoTdbg0LAyDRkQaPt6vpNKaP3Fks19G43RKkcc3xWsk/OAukW5yOL9KK4T
-	 DRNRLea/INzHDvb30jc2JX11dyzgwAjaplu5U/zrOnXLPkT+ALdxPNd3g3qhlwF7Nb
-	 IhixQCW/u2nVSk7r2vmTsqvA+1zxrdLaddel3zcxJ5QIG57g91CYpQvbUsqReiBH8k
-	 JX5BKTdKfsQpQ==
-Date: Wed, 16 Oct 2024 16:58:15 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org, kdevops@lists.linux.dev
-Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
-Message-ID: <ZxBTFyyzZhByMjmo@bombadil.infradead.org>
-References: <Zwd7GRyBtCwiAv1v@infradead.org>
- <ZwfPPZrxHzQgYfx7@kernel.org>
- <ZwjXz0dz-RldVNx0@infradead.org>
- <ZwuIPZkjX0CfzhjS@kernel.org>
- <20241013202626.81f430a16750af0d2f40d683@linux-foundation.org>
- <Zw1uBBcG-jAgxF_t@bombadil.infradead.org>
- <Zw3rDS3GRWZe4CBu@bombadil.infradead.org>
- <Zw4DlTTbz4QwhOvU@kernel.org>
- <Zw7MirnsHnhRveBB@bombadil.infradead.org>
- <Zw-YN4JIltntY52Y@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dPAShefK"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-460969c49f2so122971cf.0
+        for <linux-modules@vger.kernel.org>; Wed, 16 Oct 2024 17:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729124798; x=1729729598; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jWdC8o5l9dSoefG8d0V05ixiC17MDxk90k3DqUJtL94=;
+        b=dPAShefKWC4QLcHJmjMl42aFVABXczWNYOdsNby8FvOQZmrOY+D/bLU44LMmQfp28j
+         o5RU24BNZTDP/dGSSF4rnlvS13/PAsvwi3YP9tLDNCH9eB6NZETgfc/G3zieRIrxHGqk
+         sqCrjVa+fpeBHGLut2kvfeBCE6GLbwnQ7V6Wt0GF5OjvStGyxtrbx+CnB5HbPtyOhBkw
+         wt3ZM0nl0fFdk2+clQPHPKmi7n3GOedeQC3AScb8UfjcPZddocARw79Ape7PfOv+XhMM
+         r/O2ZQnw0eEuKmKRqRMdl8vj33Sx/gwdsXQCkIVtr/f0xMu9O+RUCs1CJN/qDWRvZDB+
+         pkzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729124798; x=1729729598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jWdC8o5l9dSoefG8d0V05ixiC17MDxk90k3DqUJtL94=;
+        b=KFPOZ42MJBtjwBt+BoH+n00A8NAjyYP/Hevt+8CEh1cZ2Pc1mtA30aWGZPvUqyZ9WA
+         tBvfw3jxNqKH7aDZmeNsiGJyXI6i+F8mOw0zCcpbT45jQqjpX+sOS0khtpInFgxPRSFL
+         mwcZsEwAsc1iwBeJnI2NfVCVFAv8Ofqo4YwFw23ypMCHgVNQAT05r3zlrZEcYnrhgO2G
+         tdy8l7+uMi1uoBvKt4VNilf9TqkTrst79FVT6SeoYd9IXfnCkl8Ky9qZZyG2MRuHSskk
+         Cb85C+k7q+yV1vrRE2pdAXZZXCma6YCx7Jo2eF6/4NBic8YIVf9POr+L+7BsfEX1PBT1
+         rEMA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVdYg0uwYYmq00ryYc02inA+ECvhIZ5PqB4Y/urOTd/6Xr4j3IClmdp8AnbR6rSPUjvHS6rsBkzxab9u/b@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5DxlrWTr9EtyLTHwL384naAw2Mazfc6D9CwlxDYJ2XQR+Dopc
+	VOJIPcJ4U1JpWehSDMcnvPGb3SFgSwlHJSanWEzZ1SR8ZYnQ+wfyJMUFLFToQ1A4PwUTR7Okb0x
+	1hVc0QqCPjjEXPXRkaa00wYS8IdW1u/wYO1wb
+X-Google-Smtp-Source: AGHT+IFyrIuiUrO1qU9KQuQZSVEK+54cenmGt/fL8q6O8TUeM+0K1ZlNZ1Ma9YYWd9GL+AJTnwqdve95TquY/nRUVCA=
+X-Received: by 2002:ac8:648d:0:b0:45f:924:6bcd with SMTP id
+ d75a77b69052e-4609c8e1b3amr1552851cf.22.1729124798070; Wed, 16 Oct 2024
+ 17:26:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zw-YN4JIltntY52Y@kernel.org>
+References: <20241015231925.3854230-1-mmaurer@google.com> <20241015231925.3854230-5-mmaurer@google.com>
+In-Reply-To: <20241015231925.3854230-5-mmaurer@google.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 16 Oct 2024 17:25:58 -0700
+Message-ID: <CABCJKucg9okLPkK1bgDqZ+gdRxSxvkE2Ff8JPBkrcsH+Guo_vg@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] modpost: Produce extended MODVERSIONS information
+To: Matthew Maurer <mmaurer@google.com>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org, 
+	gary@garyguo.net, mcgrof@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, neal@gompa.dev, marcan@marcan.st, j@jannau.net, 
+	asahi@lists.linux.dev, linux-modules@vger.kernel.org, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 16, 2024 at 01:40:55PM +0300, Mike Rapoport wrote:
-> On Tue, Oct 15, 2024 at 01:11:54PM -0700, Luis Chamberlain wrote:
-> > On Tue, Oct 15, 2024 at 08:54:29AM +0300, Mike Rapoport wrote:
-> > > On Mon, Oct 14, 2024 at 09:09:49PM -0700, Luis Chamberlain wrote:
-> > > > Mike, please run this with kmemleak enabled and running, and also try to get
-> > > > tools/testing/selftests/kmod/kmod.sh to pass.
-> > > 
-> > > There was an issue with kmemleak, I fixed it here:
-> > > 
-> > > https://lore.kernel.org/linux-mm/20241009180816.83591-1-rppt@kernel.org/T/#m020884c1795218cc2be245e8091fead1cda3f3e4
-> > 
-> > Ah, so this was a side fix, not part of this series, thanks.
-> > 
-> > > > I run into silly boot issues with just a guest.
-> > > 
-> > > Was it kmemleak or something else?
-> > 
-> > Both kmemleak and the kmod selftest failed, here is a run of the test
-> > with this patch series:
-> > 
-> > https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11352286624/job/31574722735
-> 
-> Is there a kernel log to look at? Could not find it in the run report
+Hi Matt,
 
-No, I forgot to include the guestfs console on artifacts, I'll do that
-in the next run.
+On Tue, Oct 15, 2024 at 4:19=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
+ wrote:
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 107393a8c48a..d18ff8a1109a 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1840,15 +1840,56 @@ static void add_versions(struct buffer *b, struct=
+ module *mod)
+>                         continue;
+>                 }
+>                 if (strlen(s->name) >=3D MODULE_NAME_LEN) {
+> +#ifdef CONFIG_EXTENDED_MODVERSIONS
+> +                       /* this symbol will only be in the extended info =
+*/
+> +                       continue;
+> +#else
+>                         error("too long symbol \"%s\" [%s.ko]\n",
+>                               s->name, mod->name);
+>                         break;
+> +#endif
 
-  Luis
+I applied these patches to my test tree[1] and have the following
+options enabled in my .config:
+
+$ grep -E 'MODVERSIONS|GEN.*KSYMS' .config
+CONFIG_HAVE_ASM_MODVERSIONS=3Dy
+CONFIG_MODVERSIONS=3Dy
+# CONFIG_GENKSYMS is not set
+CONFIG_GENDWARFKSYMS=3Dy
+CONFIG_ASM_MODVERSIONS=3Dy
+CONFIG_EXTENDED_MODVERSIONS=3Dy
+
+When I try to build a Rust module, I still get the following error:
+
+ERROR: modpost: too long symbol
+"_RNvXs2_NtNtNtCsivAAjSnxUpM_4core3fmt3num3implNtB9_7Display3fmt"
+[samples/rust/rust_print.ko]
+
+I suspect gating this behind a config would require you to add a new
+command line flag to modpost and check for CONFIG_EXTENDED_MODVERSIONS
+in scripts/Makefile.modpost instead.
+
+[1] https://github.com/samitolvanen/linux/commits/rustmodversions
+
+Sami
