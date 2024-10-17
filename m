@@ -1,55 +1,55 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07AB51DF98A
-	for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 17:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC371DED4B
+	for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 17:35:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729185444; cv=none; b=DrgDW0M/Mse+7ljrkKfcvOHjy3xvq6xrcTEANTKzLiaQ6vDYWsb7UfyhBi5pBCazSSBLS+L8vZ+n3CrN+7EgNE8NaJhyq7n2X/6aTdFBuN4WHick565N028SkrW2GiTa9m7oRXn04l5L1MekZWJpBLBvkYaRdpojpZkZg8Bpe+Y=
+	t=1729186548; cv=none; b=VDgls81ZvNX0Tr2ec0xMUPyeRLn3Hb/Egr5Cj7Y2dZDPUQCpQJtMH43FyVb8U6rDw6dNxZOOjayaps4BCBr9Xln0m1BGvl+79HCKZ+7tUyVuc3tVXrhd2/YZWs4IrIuV5IedvJA4BygMfmEs0z6yHw+Ja0y1QIrN+JH1NATsr4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729185444; c=relaxed/simple;
-	bh=LXBM87VgTajUfoddl93XER3Ggzxg+hva2Bdydm+KZvs=;
+	s=arc-20240116; t=1729186548; c=relaxed/simple;
+	bh=HuLw3XyUw5DMqXb931/MX/8kxOX3NCDGhGfWHIZsYUk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AHVjKdwWLiEmwJFmZfkKaE3rHIT0byfR4lLV9LcysmhnNbqhda1dH9dJgJHH3urgUtflXCdwggkvsaq7cur3a4XJg6u5L94tKBz6tQnTuVR1846Vm7JgtWKT6s3DdG6Rxv9rt1/7E97PlFdneicogdIFntwk5VMIPb81MULdggM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3XjWA+EV; arc=none smtp.client-ip=209.85.160.175
+	 To:Cc:Content-Type; b=XpkFaeAi7iYI1m77/dajqzS3b7uaSz3YSvLWJmtEL02SaNU6d5JWu3rgsf13RUq+8w84xPLzVMv8PLiNfC7z04y9R84TQFiW1e6Mx5aEDh73KJh3+2IoINUPba02QNaWeRNCKVD+x/GtqgoFJsQzye22h0ku4L5ENv6aeuxeXNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FJzkGIHj; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3XjWA+EV"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-460969c49f2so16401cf.0
-        for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 10:17:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FJzkGIHj"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4601a471aecso14111cf.1
+        for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 10:35:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729185437; x=1729790237; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729186543; x=1729791343; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BzGHX9RewD+lFN+PsdkdUDyFtxdmTUuls9yy7HWZZDw=;
-        b=3XjWA+EVJW1pT187uxMDSUXIY54EWTo6mena/HHRyPuksdmOF9wumFqJRah+CMDHGz
-         Q5gT/gAiNsHJKYLdcZ6F+JydRm5QImAF2RJWuracsUyH7MmPpl0FSmODBkqVI3rU5ycw
-         WRy3ATDH1MFNqq6x8424P8n1cZ5/r/CTkaHIuPXO0eu/m8kjjTClw8aStHwwq+MCRZdN
-         xhrCGuEnsW3cUY/cq12fxfKLk40lkbkYSekoh892s4w7gbnbc3mMmc96VNgIZNmxS79F
-         fO3kLgFmjih/q6EBPzFGVHZrEwPzG1JQKiDdyU+vGsYMUWWy/X+o3by5N6SLzcglh23x
-         FBxA==
+        bh=dURRoBcg5xdc+sfdygcMDdcNIH61rDVf7UQMeP0ptwg=;
+        b=FJzkGIHj80CeJYXMnKUMhfmYg/9wAbXJxmDLj00C2PAhETZZ/U3t2NBwLcNDXlA4JO
+         KZ8dmvRgVJgNj+CQq0dzXVcOc2gC1+OF2ztrJO6dBrc3PxXr6QbJGh0h82/jYshRaBBD
+         +f5g02XA6cgVr6uTH46VwWtb68CojEZiKfCioVBhO76uU8lyTQELcoKSoRfycOMtlgeZ
+         /Y750xp3n4o9YoV3HX+yTQF9t3689goBZmSsG+whOvXNch5W1sksaCKVTEWCQ1F3NT9h
+         Q/jdYC/S70Fv2kBIQCalBHu28+RbAbSIokp7ogmZLNWhYoZ4L71SXiRDOmUOTKrrotZe
+         DTKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729185437; x=1729790237;
+        d=1e100.net; s=20230601; t=1729186543; x=1729791343;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BzGHX9RewD+lFN+PsdkdUDyFtxdmTUuls9yy7HWZZDw=;
-        b=hGfzFkc930SglYGmD6qOGh0n6QBefTpulLqvXViIxAC19z+aASMvR2VdDij89L/R3n
-         h2yuH7ohvSm5KqdXzQrYh2pF3nIx3q16L5tNSLG3F+gT7UVT27o3bdLbflnzveW5bkaV
-         LKr2tCnENdtODzB5as68ljjSnJfK0JUdhBV3BeGq4AD8ugJJJMRb07U31It0j6+1XJ7L
-         4iG/kYDduoW4A/oD1KViCXgSFQ1P0ibtX2ybeoxMwTp1uetD0Vf14LPSnfvZgjdquW4j
-         WwGCweX3qT11QBUm91btN8HG7+8/CPGwLZlXbcaIZv/59MBK98YkpDMXjzSC/R+J3GU/
-         5/QA==
-X-Forwarded-Encrypted: i=1; AJvYcCV1+UEB/3p8Y+IX5g5mTYctWCZvSHI/fclWiu6KPbnSnLWNr+ktjSFYwcn5p+AWxTPGXc0849a4Io5rHZ32@vger.kernel.org
-X-Gm-Message-State: AOJu0YzePmBpKda1RGoYAFxgtmJAGyIjJKHkN3rDCC890LdBcGcCe79m
-	ecgjJNWC4nsGGmx5NkTeHlAduGm5fEWt2NZCUnrQfjDi6+4RFS2QD5NoQX1RsBSDXSayU6eStud
-	G5HjxaXfardMF/AFldhyux7/33cTR19xKl5wZ
-X-Google-Smtp-Source: AGHT+IFjnbonH6yoypoj4JMlM2KZYLkHt5TRVpIt0pWfJ3kNYug/WS8GkSqpjREjXv+9piu9Cr4VVtVs+4gHPNpk+DI=
-X-Received: by 2002:a05:622a:468d:b0:460:46a8:9e67 with SMTP id
- d75a77b69052e-4609c7fefbcmr4254721cf.10.1729185436537; Thu, 17 Oct 2024
- 10:17:16 -0700 (PDT)
+        bh=dURRoBcg5xdc+sfdygcMDdcNIH61rDVf7UQMeP0ptwg=;
+        b=qVnQcpmsxqgx7BHp5wp0Yz7og/CW/9buVvfyJe+rNcs3NdChG1b8U1FcS7+nMA/dAW
+         bEMgr/FumIKAMmoY0q/wqs19ajtNEuNMzk0cjGdgn1KCh3MYwOyUDPxgcFD9U/w5ac9i
+         Iq+wevb+FeJakqME82G80UabPDK/P4pfmg7ugu3L7yrNaOrkbwmXulzwxGGXhl58/U2t
+         QGUuCoYRlvBHoAdJ/U8L0UqTAvay3IAwOXgaA+dO2RvKPC5kp3RR+IkWymPx+Yo6Lz8q
+         JpqOwMRQpsucy/XTwPUAMtbzL85MI75ePY4887M7b/cdD2V8RdfgttfcAcuJEwVJ3LWf
+         g8Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCWbUkGEdcvbOX3KZrjWcJJ2DqQwc6etMEn035LSfVV4Xff1W7GhOaksEapiBiXDq5czXh3aZbxnry+Vm3yh@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtU743JMqhLh8QzkK4ulYHBKCP33d9AbLlkrOyYiNEtnTYPZ8v
+	8g3Xc9Rfv+luK2k/3tfOqE7IuSuCEsTHzyxalhdR49GC5ggLBWEai8aJ4LfjRYZMb2/IQutVCNR
+	LxJvZSAT5RWQauj+/HvuJet/P5R0Qkvk5844C
+X-Google-Smtp-Source: AGHT+IEaDSNEXF6UDd2rD0Gd9sSzpU9Rg3eq7jFfKlAmBkK223IeHgDaarxW/TGnC4DSXNdPeOYFY1DS/4zAFx3ebnw=
+X-Received: by 2002:a05:622a:a64e:b0:45e:fea6:a3b1 with SMTP id
+ d75a77b69052e-4609f69cb5dmr3909251cf.19.1729186543003; Thu, 17 Oct 2024
+ 10:35:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -57,12 +57,12 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241008183823.36676-21-samitolvanen@google.com>
- <20241008183823.36676-24-samitolvanen@google.com> <9a3c1b7e-6cd3-45ea-9be1-13a5b436cacd@suse.com>
-In-Reply-To: <9a3c1b7e-6cd3-45ea-9be1-13a5b436cacd@suse.com>
+ <20241008183823.36676-33-samitolvanen@google.com> <13be9260-1799-4255-89d4-65d56358e348@suse.com>
+In-Reply-To: <13be9260-1799-4255-89d4-65d56358e348@suse.com>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 17 Oct 2024 10:16:37 -0700
-Message-ID: <CABCJKue0rb_7V5bpuC3Zvwnv4n29=s+9J_hW5Z+6i6VPRQs9Nw@mail.gmail.com>
-Subject: Re: [PATCH v4 03/19] gendwarfksyms: Add address matching
+Date: Thu, 17 Oct 2024 10:35:06 -0700
+Message-ID: <CABCJKueKHy9XmpRVG=HkJaJWAQvtN6OvnnW+Aag4Hd1dfif5SA@mail.gmail.com>
+Subject: Re: [PATCH v4 12/19] gendwarfksyms: Add symtypes output
 To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -75,42 +75,44 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Petr,
 
-On Thu, Oct 17, 2024 at 7:08=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+On Thu, Oct 17, 2024 at 7:13=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
 ote:
 >
-> > @@ -22,9 +53,13 @@ static unsigned int for_each(const char *name, symbo=
-l_callback_t func,
-> >               if (strcmp(match->name, name))
-> >                       continue;
-> >
-> > +             /* Call func for the match, and all address matches */
-> >               if (func)
-> >                       func(match, data);
-> >
-> > +             if (match->addr.section !=3D SHN_UNDEF)
-> > +                     return __for_each_addr(match, func, data) + 1;
+> On 10/8/24 20:38, Sami Tolvanen wrote:
+> > +     if (symtypes_file) {
+> > +             symfile =3D fopen(symtypes_file, "w");
 > > +
-> >               return 1;
-> >       }
+> > +             if (!symfile) {
+> > +                     error("fopen failed for '%s': %s", symtypes_file,
+> > +                           strerror(errno));
+> > +                     return -1;
 >
-> This change means that symbol_get() doesn't return the first matching
-> symbol but the last one matched by an address.
->
-> For instance:
-> void foo(int a1) {}
-> void bar(int a1) __attribute__((alias("foo")));
->
-> The compiler produces the debug information only for foo() but
-> gendwarfksyms would instead report that it processed bar() when reading
-> this data, which is misleading. On the other hand, I don't immediately
-> see that it would result in an incorrect CRC or symtypes output, because
-> the symbols with the same address are effectively treated as one group,
-> so I'm not sure if this is important or not.
+> Nit: The 'return -1;' statement is not needed since error() doesn't
+> return.
 
-Hmm, I suppose we could print out all the symbol names that matched,
-but no, this doesn't affect versions or type output. I'll think about
-it.
+Ah, missed this one. I'll fix this in v5.
+
+> > @@ -107,7 +108,8 @@ static void get_symbol(struct symbol *sym, void *ar=
+g)
+> >  {
+> >       struct symbol **res =3D arg;
+> >
+> > -     *res =3D sym;
+> > +     if (sym->state =3D=3D SYMBOL_UNPROCESSED)
+> > +             *res =3D sym;
+> >  }
+>
+> What is the reason to check that the symbol is in the unprocessed state
+> here?
+
+At this point it's mostly a sanity check to avoid extra work in case
+we run into more than one DIE that matches a symbol (or its aliases).
+This actually happened in earlier versions because we handled symbol
+type pointers (patch 17) as soon as we found them, but now that we
+just save them for later in case they're needed, this probably isn't
+strictly necessary anymore. I don't see any downsides in keeping this
+check though.
 
 Sami
