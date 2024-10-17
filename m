@@ -1,112 +1,114 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F184C538A
-	for <linux-modules@vger.kernel.org>; Thu, 17 Oct 2024 00:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E5C224CC;
+	Thu, 17 Oct 2024 04:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729125895; cv=none; b=OspFdsMZd9VW9r6F3F/SqMraaIQxQ9ctOw0bEbEOiAwjF1zW3IS08nhwX4c5QZ63zta34RNILA3P3vc/5QYbLc8SzslRAFqVA2qknm2EvqOZWY2iV+AaP3liqaYrJv/6k+7H/6n5sudPjaD5wyuV4g1DkuYdTxHYky/YIZ66VHQ=
+	t=1729140105; cv=none; b=cXEGWJeHkGJw72ckPLa1raAFK5DtXQ8hTWXxDmR0SxWrIOUnAWXd/WrQmLAvGT06ImmCHZRjJeBhhyXZU9iysJbTjLu2jpvBieEML47fEkDuRC8cQbC8dByynzyT80EsC/AaxC9Amf3QZ0IivKBscfVX9gkYhg+y6LsHY4rifkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729125895; c=relaxed/simple;
-	bh=q38Gk75NQ3Y05W/bT7Aw1wLV2+4Q3MEANDoCrYZhOww=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ksTT0DGOofHGJGUEYm7cBbPx6jSuZEn98geF4hYPmpM9+BJHkO8btaFR6wJyoMrS9tTFTxioseKIEYHBIa/2IaAy0qQPBzi6m2Sx5SioWF1VGQSeCsb0ygTM9QW18VuGRMTgJ+ABGdXMnlb41sTI627ggC+W1eN1PDfoXP7+610=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VDbs4/gw; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VDbs4/gw"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-460969c49f2so126421cf.0
-        for <linux-modules@vger.kernel.org>; Wed, 16 Oct 2024 17:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729125892; x=1729730692; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bDVTSiiju+/i8uVx/5igK7HXQnS/pAXMN54tJaymcIs=;
-        b=VDbs4/gw+LgN0yybuhmMRR7SNsLjmqZoaRJ+NZNgSyghJhvqIXEtkBZsIPvjW1ugF5
-         0E9Nm/Ikme5acGHyo2UgjFWmDHzbb6mUKfITV3prU33ddEsMxOJkZSC29zdCQLfKxn3d
-         xqTUo74V82cqjO3hhXDhHAJKATJ+tjwDC060H8bYcaKgFQX79aUmOCcnyEXcG1guuD9a
-         GFH+GubmNhdRfoRTBaI1+MpkvItC0RWd5LFChZxNm7vjv5lMl6GACUXiKSx7WE5w0Vds
-         /pnrf5o90psBjQpw5DgCcQHtYY740eir5JW9c0IeYkqZpsADDzBSFy7SmQd9tZckAuAa
-         nfJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729125892; x=1729730692;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bDVTSiiju+/i8uVx/5igK7HXQnS/pAXMN54tJaymcIs=;
-        b=fIgRdp3R734bLp6IkoAFyCN9tZv8Q84UlAl9pe6t9qfNheuNqQ5iylH4Fm0a1cFgEh
-         e+bfpdoBLGrrr7xNSGQOz0t3YMMTJ1BrfhV1Al6M5R9AsouQGuWN7vBT1wk0T4S3x/pu
-         /2SB0ScIhk8Bb9e1uQnUdXZGfgTn3XoCbZaN5TH2MHJIXYISVaSnKkaYwEZjSrAnmRuV
-         HgG2MR3WLtjcBPZoic91wgGoZuR/XVmxqfaqx4XSGcSDaFO9V8oQWtXxXJ0HE87gMjRz
-         KQaHww3EmPXBP1AyyF89pTW41BS9e5kjoCbT8o0zryg8/7sc0IFvfNQGvBd0IC2HcAfP
-         daBw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdRrJvDMniLH0gNENGWEWVo2xXWUh5qIE2+YpaSAtQy4KvGoahq/TV9zqFIljYnAKBk0x6ENnAjVC452Nb@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzVgG17+Zqeh4L7dzT87BuDPnv4C+4VS5tGd1ceo8s3c+KaVTb
-	t7MJU83HjuVIWppVTDnmkwfOZix5SjoEQ3BgPlTD/sMaNrKCK6Hivql54zw44L0egGswBNszOJQ
-	MUZBrQwvrOb6S2LTiwPlTtdxkQFchEDN0t3lipoegjrCZ0kNnEWXi
-X-Google-Smtp-Source: AGHT+IHGsHS9kd3lV9IPjVl/ZP3eT/Hgf527JCJgpbosa0wkAa/UhNg9JyYeaHygJfVEjoItGGw850c9B3soz7Ac6tQ=
-X-Received: by 2002:a05:622a:1303:b0:45f:7d4:5007 with SMTP id
- d75a77b69052e-4609c8e1a90mr1672431cf.18.1729125891569; Wed, 16 Oct 2024
- 17:44:51 -0700 (PDT)
+	s=arc-20240116; t=1729140105; c=relaxed/simple;
+	bh=ao336pkzJ1vCCnqcKARdbwKuHQux4BznZ203PT2NfU8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sVXj5mU+ZYSPZZn4xPlnPKFE6tL2+a4r+GlS0HmbPllbNsnytXED+TaNwLPE2iMlqul3bNGdTehpBL01hN2rsJk2N41k7TvLH4aDdLB4ZQfrdduI/QwMqNF7Ix8RToPAhPeqNxr8jMuqclbZRQR5y6a1mPkVDE9FhtDISxPa2yA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4XTZt75P4mz9sPd;
+	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6MMm0su871D5; Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4XTZt74G4dz9rvV;
+	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7DC5D8B770;
+	Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id fWKN7eEXBxpc; Thu, 17 Oct 2024 06:41:35 +0200 (CEST)
+Received: from [192.168.233.183] (unknown [192.168.233.183])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 45AE88B764;
+	Thu, 17 Oct 2024 06:41:34 +0200 (CEST)
+Message-ID: <526fe185-7077-4b51-8ce1-9ef994aa7025@csgroup.eu>
+Date: Thu, 17 Oct 2024 06:41:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241015231651.3851138-1-mmaurer@google.com>
-In-Reply-To: <20241015231651.3851138-1-mmaurer@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 16 Oct 2024 17:44:14 -0700
-Message-ID: <CABCJKucRKzMXF-mCxztAgOJxofEGAd33DMC_MHgPBsTmsdJcww@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Module Validation Refactor
-To: Matthew Maurer <mmaurer@google.com>
-Cc: mcgrof@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
+To: Luis Chamberlain <mcgrof@kernel.org>, Matthew Maurer
+ <mmaurer@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>,
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Helge Deller <deller@gmx.de>
+Cc: masahiroy@kernel.org, ndesaulniers@google.com, ojeda@kernel.org,
+ gary@garyguo.net, Michael Ellerman <mpe@ellerman.id.au>,
+ Alex Gaynor <alex.gaynor@gmail.com>, Benjamin Gray <bgray@linux.ibm.com>,
+ Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, neal@gompa.dev,
+ marcan@marcan.st, j@jannau.net, asahi@lists.linux.dev,
+ linux-modules@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Boqun Feng
+ <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org
+References: <20240925233854.90072-1-mmaurer@google.com>
+ <20240925233854.90072-15-mmaurer@google.com>
+ <ZwmlEYdS0aPVF32k@bombadil.infradead.org>
+ <CAGSQo01o4fWYwSzZHX5dyTUKcaCSZ7z-hPQ8w63tgBPGbM_UCA@mail.gmail.com>
+ <ZwmnnMmqVWLaelvQ@bombadil.infradead.org>
+ <Zwm4lXdKB9RfPQ5M@bombadil.infradead.org>
+ <Zwm4v_1wh5RwuHxF@bombadil.infradead.org>
+ <CAGSQo03df-tnmwcz4nh3qtuQPKQ2zLHW0juQyKUXGsdeS7QkLA@mail.gmail.com>
+ <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
 
-On Tue, Oct 15, 2024 at 4:16=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
- wrote:
->
-> Split out from Extended MODVERSIONS Support [1]
->
-> This series refactors module validation during loading to ensure that
-> everything is checked on its way in. This is intended to make the code
-> robust enough that we can more confidently add new pieces like extended
-> MODVERSIONS.
->
-> [1] https://lore.kernel.org/all/20240925233854.90072-1-mmaurer@google.com=
-/
->
-> Matthew Maurer (12):
->   module: Take const arg in validate_section_offset
->   module: Factor out elf_validity_ehdr
->   module: Factor out elf_validity_cache_sechdrs
->   module: Factor out elf_validity_cache_secstrings
->   module: Factor out elf_validity_cache_index_info
->   module: Factor out elf_validity_cache_index_mod
->   module: Factor out elf_validity_cache_index_sym
->   module: Factor out elf_validity_cache_index_str
->   module: Group section index calculations together
->   module: Factor out elf_validity_cache_strtab
->   module: Additional validation in elf_validity_cache_strtab
->   module: Reformat struct for code style
->
->  kernel/module/internal.h |   7 +-
->  kernel/module/main.c     | 569 +++++++++++++++++++++++++++++----------
->  2 files changed, 428 insertions(+), 148 deletions(-)
 
-Looks like these patches are unchanged from the pre-split version[1].
-For the series:
+Le 17/10/2024 à 01:21, Luis Chamberlain a écrit :
+> On Tue, Oct 15, 2024 at 04:22:22PM -0700, Matthew Maurer wrote:
+>> So, the basic things I can think of to test here are:
+>>
+>> 1. The kernel can still load the previous MODVERSIONS format
+>> 2. The kernel can load the new MODVERSIONS format
+>> 3. If we artificially tweak a CRC in the previous format, it will fail to load.
+>> 4. If we artificially tweak a CRC in the new format, it will fail to load.
+>> 5. With CONFIG_EXTENDED_MODVERSIONS enabled, the kernel will build and
+>> load modules with long symbol names, with MODVERSIONS enabled.
+>>
+>> Is there anything else you were thinking of here, or are those the
+>> kinds of checks you were envisioning?
+> 
+> That sounds great. Yeah, the above would be great to test. A while ago
+> I wrote a new modules selftests in order to test possible improvements
+> on find_symbol() but I also did this due to push the limits of the
+> numbers of symbols we could support. I wrote all this to also test the
+> possible 64-bit alignment benefits of __ksymtab_ sections on
+> architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (e.g. ppc64,
+> ppc64le, parisc, s390x,...). But come to think of it, you might be
+> able to easily leverage this to also just test long symbols by self
+> generated symbols as another test case. In case its useful to you I've
+> put this in a rebased branch 20241016-modules-symtab branch. Feel free
+> to use as you see fit.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+By reading this, I discovered that was initially added to powerpc by 
+commit 271ca788774a ("arch: enable relative relocations for arm64, power 
+and x86") and then removed due to problem with modules, see commit 
+ff69279a44e9 ("powerpc: disable support for relative ksymtab references")
 
-[1] https://lore.kernel.org/linux-modules/20240925233854.90072-1-mmaurer@go=
-ogle.com/
+Wouldn't it be better to try and fix modules and activate again 
+CONFIG_HAVE_ARCH_PREL32_RELOCATIONS on powerpc ?
 
-Sami
+Christophe
