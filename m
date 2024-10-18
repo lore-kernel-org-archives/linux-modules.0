@@ -1,55 +1,55 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4E8203710
-	for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2024 17:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82C418FC7E
+	for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2024 21:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729273553; cv=none; b=BkARWE9+iZ1iNRHZxGp2x7djpxl5C9Dj1mI4dBCT9WL1YS4Ke3Q0x6qe/vmzK/1calY9V6QBB6B8j9zOYjwNoAYmbebQQYSUplJj0KjOXIP5BSPoU4D5cS7LUJd9NaPWlvWPb+Oi2M2yDvXGpQ96jv7rZSWAAyib9mcSpLcvfd8=
+	t=1729288662; cv=none; b=AwRxPOnVlewpelZmeghMVhKnzAYs+TcUPXaBAhKwCVZ828CHecoKuhaknST+4QPFnlD748gNjXTr4kotOPXyKnV8+zejoOZoq4QvhP4LnHMglSSt5SIsui64Db6asCJAerp687Mm0o+go6T38fVUzk5ofawnszsrwPV9Au8/nL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729273553; c=relaxed/simple;
-	bh=SUsv7tExHvjG2Og3roP3MX96s4t/7e9/sISX4/ZHQGs=;
+	s=arc-20240116; t=1729288662; c=relaxed/simple;
+	bh=HCZMsZpAQBrxa2AhPMoCIWeOljEcR4s8Q7G7h64K6Jc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Id5SljH9gkB4oIF+OM0jm3V4VFYGBNBx2pox4VPrgku5kNapOEdD3sr4jZgAn1XQkh0+tOsjRypBhGmstymyMAZnA+VZn4nctEODpCdK5YNi9EnE99etiTBRDkfzBUj+HLiEAcgChPazyR4zDO5lM1pD6pXHPDMRH/VuyRY9VHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pxCbnTGw; arc=none smtp.client-ip=209.85.160.175
+	 To:Cc:Content-Type; b=AxuKQIx+uLeY9iL6PzOdR5D/jpEmgAxtK6qg/DQXul6Hvg+rZNC9/yKQChXD/3D3UwhWGDrS3HU0nTS8dd9S4T+oRYCP4EWvdY6tI72WP2PPvjig/3vIAbBsZYIvAGLkW7kLDE/PGaEzspZyCSnfYPkvnvtGz5AfjQMJ6h0alN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K9tIgy1U; arc=none smtp.client-ip=209.85.166.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pxCbnTGw"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-460a8d1a9b7so20151cf.1
-        for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2024 10:45:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K9tIgy1U"
+Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a3b3f4b2afso62015ab.0
+        for <linux-modules@vger.kernel.org>; Fri, 18 Oct 2024 14:57:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729273550; x=1729878350; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729288660; x=1729893460; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2HNohuL1u3Ke6VUFgUqBJ1ousiBndflpg7Tj2zyNChI=;
-        b=pxCbnTGw3082a7QIPkSH7ooMYJOpDRjqn3+cr2LNcsyRSquGCEuQEpDfHqn4LMkLIM
-         7KVskAAoo/7WVmiGqHPfIj80XNeQJadURYcew4ktJoN9/cJhaMWBEeAfzv45eV/sACdT
-         CGGvXj2jh5QcIm95tmPDGAZGOll9ymZgPSjwiPVNGQogH0FQ1emnydtDm4VAkEm/HFdO
-         lHEUbBoDJ/5i2RJI6OgbZHwjgtvgQ9aLTwrhkArG8sYpZ25VVWJxwqlUDyoWIRjnuzrV
-         oBygtzMUFe2Q6pbmbxIAe6mmWrf50AJ/szyDrbjhzvmiikETUK5HKHLvhllPyMKui6O3
-         yhyg==
+        bh=o2RHdVaLA/1r8YT6FR6xHNJRT28I3khxJDB21yaB3p8=;
+        b=K9tIgy1UwstLT7B+m+w3UC64utCCowIDBYXM0Sos7svGkhS4qlp7VstOTyFs+l7l88
+         2AZecz1nNu2ZKr8Sa+FhZ0YA3jbVgtqV0vBEzPbl9d6rUh4isPBamLfnKDgbMPTJZVlX
+         ydCxENjWTKg5mKah1ZjOjJ9cipFXfx2QwAtbXapM7gHC0mx9CLGwZDv58V23YvyJ89x5
+         HsGlWNxYi8FenCELbrkrwJElukuQ8N6G6DrAWiIT0znQmcZ3YMDmrT8dgx4Mbk2beq5y
+         yGJTuTjK9zvZOB7CC8VsFZ5F3faK4MVlxIbbZrj15v1dIQM9xqRDjLcqw9NMG4JYcH1j
+         wvIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729273550; x=1729878350;
+        d=1e100.net; s=20230601; t=1729288660; x=1729893460;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2HNohuL1u3Ke6VUFgUqBJ1ousiBndflpg7Tj2zyNChI=;
-        b=nLyNKmIx03S3qnvbC5HGTaVo5SqBkFGHxJPagE2svqoLZRNY399pkuZJoJmVLG0hn9
-         Bv7F4waq282jsYVJ3eNIdupzvfKeBMikAVX8K3cu8kNdjsnM7O+7eWGQ0mioR0/VkpFB
-         dLEVZWEl+g+6/qL9ISyMWSXSKo/8/65OxT6JN+hZjraN3mP1dVinwGiz/sm7zvnyW8GX
-         QCq7tG/h1315oE0MzTBIxi8XTMNGPEAS3X21mdlHdNbbVFMLqZ+d6FDjVWGAVxgFfuaO
-         DxTlRYAECYio4THBGtCUkYb2e0GjtcUJlyutINv04iV+mnNfMqpnhdJH5+mtk1x+e4B3
-         PVcw==
-X-Forwarded-Encrypted: i=1; AJvYcCXtZY8neIp35Ht6hLLiW5eQEUT9kufQD/Y8OqyyEPhxg7KM1jzDoyFGpK6eTEFqJft6krBXLMCEY64fhoJD@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNpXeEwQQo2Y3TSRjcf9DQ81uHG8/iZDDl4cRvq0WtUT57XzDy
-	6HuxAyFAsPx8DDjqz6p0uUTmQI5ndojNuEhrTTngLfgzldNhs9FQevMyqtoDGo/FdpG4e0CiWMS
-	h24y/I/omD2fi2RjCaHaovPVLPnj0te17RQWq
-X-Google-Smtp-Source: AGHT+IGLh5tN3Mn+UeRjw6TTi6Ilr8u+U81XwFGNFN94aBWeUXT1vXcpiZD1WFcjvHGV6Z3iM3U/fjqB5uzAQX6cuG8=
-X-Received: by 2002:a05:622a:2a19:b0:458:14dd:108b with SMTP id
- d75a77b69052e-460aec26827mr3223491cf.13.1729273550039; Fri, 18 Oct 2024
- 10:45:50 -0700 (PDT)
+        bh=o2RHdVaLA/1r8YT6FR6xHNJRT28I3khxJDB21yaB3p8=;
+        b=uSJuOpNXMKDSejw16WDYUSJVa6X9+1Cx5eOuPdkJKzQsf6VGoL5q2bZ2UUaJp2jlsK
+         Wqrve4nwYegt+JsDvR/AmSwqAIkzfau7Gt9ogfGQgfOQBPnRL9ckFWtAa08TUPXR0DgI
+         WIqm+Uw6E3X51zZhr2AEqSMZOxRng/Jo7X0COZFby954+ABg+aGK1Hn0XUjyN4AMECrL
+         QMUNFEjRpBAeikYXQ3gLlOsSFcoQxGOBjujwdwtME/I396X11IuUoXwKrRHUwLgBEj6o
+         N3J1uOuCblOfRTr6W20fmCSewkCoHgZjiYUAOwfpWtrS0p3GAPjaQnIr7dycYdH456CY
+         nLQA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSX+5GrrC6lVOO+unN54t6M6uF//slSECBF1oXf2i7SlEFednZ0jWkx24z1XiMoHd6cI9yv0U6kDKfXIru@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCZPbhW5Z3wi1ZgslZ4KjHxwdHqn9Ah/gOvpEBSNDW+ToY/fqy
+	+lWC5Oqy3BDD9xYv2b3cvEuVWgHSuOY869m+kbmXdDB1LBqt6ZO1fNMmzRuWwPZVXHo2Exm9mpG
+	nNzqiuexiVoSlR+aOKgA9YnOqCoDPNlXqWPir
+X-Google-Smtp-Source: AGHT+IHfPiH22npnOGXJz9+1tdq9zNcHnLzDebicv89VSjhYktk+2yqwb46rCfuG1C6oqvQbOj8a9Ynzf6qXh2Xd8h8=
+X-Received: by 2002:a05:6e02:1522:b0:3a0:b643:7892 with SMTP id
+ e9e14a558f8ab-3a3fa3d7e53mr317555ab.21.1729288659388; Fri, 18 Oct 2024
+ 14:57:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -62,11 +62,11 @@ References: <20241014203646.1952505-1-surenb@google.com> <20241014203646.1952505
  <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
  <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com> <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
  <ZxJcryjDUk_LzOuj@tiehlicka> <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
- <ZxKWBfQ_Lps93fY1@tiehlicka>
-In-Reply-To: <ZxKWBfQ_Lps93fY1@tiehlicka>
+ <ZxKWBfQ_Lps93fY1@tiehlicka> <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
+In-Reply-To: <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Fri, 18 Oct 2024 10:45:39 -0700
-Message-ID: <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
+Date: Fri, 18 Oct 2024 14:57:26 -0700
+Message-ID: <CAJuCfpHFmmZhSrWo0iWST9+DGbwJZYdZx7zjHSHJLs_QY-7UbA@mail.gmail.com>
 Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
  refs in page flags
 To: Michal Hocko <mhocko@suse.com>
@@ -86,77 +86,103 @@ Cc: David Hildenbrand <david@redhat.com>, John Hubbard <jhubbard@nvidia.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 18, 2024 at 10:08=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
+On Fri, Oct 18, 2024 at 10:45=E2=80=AFAM Suren Baghdasaryan <surenb@google.=
+com> wrote:
 >
-> On Fri 18-10-24 09:04:24, Suren Baghdasaryan wrote:
-> > On Fri, Oct 18, 2024 at 6:03=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
-wrote:
-> > >
-> > > On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
-> > > > On Tue, Oct 15, 2024 at 8:42=E2=80=AFAM David Hildenbrand <david@re=
-dhat.com> wrote:
-> > > [...]
-> > > > > Right, I think what John is concerned about (and me as well) is t=
-hat
-> > > > > once a new feature really needs a page flag, there will be object=
-ion
-> > > > > like "no you can't, we need them for allocation tags otherwise th=
-at
-> > > > > feature will be degraded".
+> On Fri, Oct 18, 2024 at 10:08=E2=80=AFAM Michal Hocko <mhocko@suse.com> w=
+rote:
+> >
+> > On Fri 18-10-24 09:04:24, Suren Baghdasaryan wrote:
+> > > On Fri, Oct 18, 2024 at 6:03=E2=80=AFAM Michal Hocko <mhocko@suse.com=
+> wrote:
 > > > >
-> > > > I do understand your concern but IMHO the possibility of degrading =
-a
-> > > > feature should not be a reason to always operate at degraded capaci=
-ty
-> > > > (which is what we have today). If one is really concerned about
-> > > > possible future regression they can set
-> > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=3Dn and keep what we have today. T=
-hat's
-> > > > why I'm strongly advocating that we do need
-> > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control over =
-how
-> > > > this scarce resource is used.
+> > > > On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
+> > > > > On Tue, Oct 15, 2024 at 8:42=E2=80=AFAM David Hildenbrand <david@=
+redhat.com> wrote:
+> > > > [...]
+> > > > > > Right, I think what John is concerned about (and me as well) is=
+ that
+> > > > > > once a new feature really needs a page flag, there will be obje=
+ction
+> > > > > > like "no you can't, we need them for allocation tags otherwise =
+that
+> > > > > > feature will be degraded".
+> > > > >
+> > > > > I do understand your concern but IMHO the possibility of degradin=
+g a
+> > > > > feature should not be a reason to always operate at degraded capa=
+city
+> > > > > (which is what we have today). If one is really concerned about
+> > > > > possible future regression they can set
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=3Dn and keep what we have today.=
+ That's
+> > > > > why I'm strongly advocating that we do need
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control ove=
+r how
+> > > > > this scarce resource is used.
+> > > >
+> > > > I really do not think users will know how/why to setup this and I w=
+ouldn't
+> > > > even bother them thinking about that at all TBH.
+> > > >
+> > > > This is an implementation detail. It is fine to reuse unused flags =
+space
+> > > > as a storage as a performance optimization but why do you want user=
+s to
+> > > > bother with that? Why would they ever want to say N here?
 > > >
-> > > I really do not think users will know how/why to setup this and I wou=
-ldn't
-> > > even bother them thinking about that at all TBH.
+> > > In this patch you can find a couple of warnings that look like this:
 > > >
-> > > This is an implementation detail. It is fine to reuse unused flags sp=
-ace
-> > > as a storage as a performance optimization but why do you want users =
-to
-> > > bother with that? Why would they ever want to say N here?
+> > > pr_warn("With module %s there are too many tags to fit in %d page fla=
+g
+> > > bits. Memory profiling is disabled!\n", mod->name,
+> > > NR_UNUSED_PAGEFLAG_BITS);
+> > > emitted when we run out of page flag bits during a module loading,
+> > >
+> > > pr_err("%s: alignment %lu is incompatible with allocation tag
+> > > indexing, disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS",  mod->name,
+> > > align);
+> > > emitted when the arch-specific section alignment is incompatible with
+> > > alloc_tag indexing.
 > >
-> > In this patch you can find a couple of warnings that look like this:
-> >
-> > pr_warn("With module %s there are too many tags to fit in %d page flag
-> > bits. Memory profiling is disabled!\n", mod->name,
-> > NR_UNUSED_PAGEFLAG_BITS);
-> > emitted when we run out of page flag bits during a module loading,
-> >
-> > pr_err("%s: alignment %lu is incompatible with allocation tag
-> > indexing, disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS",  mod->name,
-> > align);
-> > emitted when the arch-specific section alignment is incompatible with
-> > alloc_tag indexing.
+> > You are asking users to workaround implementation issue by configuratio=
+n
+> > which sounds like a really bad idea. Why cannot you make the fallback
+> > automatic?
 >
-> You are asking users to workaround implementation issue by configuration
-> which sounds like a really bad idea. Why cannot you make the fallback
-> automatic?
+> Automatic fallback is possible during boot, when we decide whether to
+> enable page extensions or not. So, if during boot we decide to disable
+> page extensions and use page flags, we can't go back and re-enable
+> page extensions after boot is complete. Since there is a possibility
+> that we run out of page flags at runtime when we load a new module,
+> this leaves this case when we can't reference the module tags and we
+> can't fall back to page extensions, so we have to disable memory
+> profiling.
+> I could keep page extensions always on just in case this happens but
+> that's a lot of memory waste to handle a rare case...
 
-Automatic fallback is possible during boot, when we decide whether to
-enable page extensions or not. So, if during boot we decide to disable
-page extensions and use page flags, we can't go back and re-enable
-page extensions after boot is complete. Since there is a possibility
-that we run out of page flags at runtime when we load a new module,
-this leaves this case when we can't reference the module tags and we
-can't fall back to page extensions, so we have to disable memory
-profiling.
-I could keep page extensions always on just in case this happens but
-that's a lot of memory waste to handle a rare case...
+After thinking more about this, I suggest a couple of changes that
+IMHO would make configuration simpler:
+1. Change the CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to an early boot
+parameter. Today we have a "mem_profiling" parameter to enable/disable
+memory profiling. I suggest adding "mem_profiling_use_pgflags" to
+switch the current behavior of using page extensions to use page
+flags. We keep the current behavior of using page extensions as
+default (mem_profiling_use_pgflags=3D0) because it always works even
+though it has higher overhead.
+2. No auto-fallback. If mem_profiling_use_pgflags=3D1 and we don't have
+enough page flags (at boot time or later when we load a module), we
+simply disable memory profiling with a warning.
+
+I think this would be less confusing for users and will avoid David's
+example when performance is unexpectedly degraded. The default option
+will work for everyone as it does today and advanced users who want to
+minimize the overhead can set mem_profiling_use_pgflags=3D1 to check if
+that works for their system.
+WDYT?
 
 >
-> --
-> Michal Hocko
-> SUSE Labs
+> >
+> > --
+> > Michal Hocko
+> > SUSE Labs
