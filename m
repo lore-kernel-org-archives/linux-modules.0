@@ -1,127 +1,107 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D8B13C816
-	for <linux-modules@vger.kernel.org>; Sat, 19 Oct 2024 22:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C837647F53;
+	Sat, 19 Oct 2024 22:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729375831; cv=none; b=BuLlHXb6DuIxOJe09nwTRk4R2DIPmpNBk/fr/0AGmE2omX2wFtFZoKhrOeBx7tNaUCdp+acvUtkLNwBKeZu34tIDQmGx0Cw1+GyHCEa+MBe6SVhAMoLvsq8zyJ0wNx05JaHdnki/MPdxVy0/GNzY/VXS3vRxXIAUR0ivKcplIcs=
+	t=1729376234; cv=none; b=bPYTtgHg5njHBvkLZ9vQ58eklhvocJ8JIQHGgn6oydzCXdXRulgZeNZr618MRBp/LO7QvBhjbwdfZSPb41yw+fz8z+wrLrb52U7witVQKwYR5acEmwe6fGTb+5xlhngOSJGpjqxhDB7TFxHFXZyEg9Yv1au9silV9JrUb7LjZCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729375831; c=relaxed/simple;
-	bh=E8yJAGA+WXseiASrATVpEUc4a0ztnM92be1wv/hrwuI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VLDjeIf83LMcfpajX2a5iSxPjWun0iRZKWSrb4DDrMymZeVIQNyRWNNF06UL3t93F5ZrxMJa3pr1qX5J2wfNgjf/Z1txICP4WZBF9FNR2qQEnKiRV4bxoIT7ayH5Vaoix4WOxcbdP9EOjqXfWT+8X3y9AAxTb7topbv50h9fyv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I66R7ST4; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729376234; c=relaxed/simple;
+	bh=Z2c0wsfmuX1zi8SflpbS251BcU2hxlDOujSruYyu/d0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ep6vGmEM6thKxeHMYCkQ2ihUoH2L33cAIh50WSmS1QEWddxgoUWHv6ZZrgXDZ5SsGftxFkODdoWoFtFWsGMgEYtVa9Om/eN1TWdUcLVb9RFSFXdPL8KIfbkV0oQJgofC1KqWxOYiIMi+u5JbhI827l4eSyth8ohv0DZBvvNmIVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y3/Gl4uf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I66R7ST4"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539f72c913aso3897329e87.1
-        for <linux-modules@vger.kernel.org>; Sat, 19 Oct 2024 15:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729375827; x=1729980627; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=m99yWBYvjNOuJ/xfN9fzRFdi8s+CeuV28C3wioWcRr0=;
-        b=I66R7ST4wtZjipKUc8BQtoKlzeK6MW2lJgPEfEQHAhmmrzeETUKIL7OEhwu5jKAJKm
-         NI6p/oHc6NZXDD7T8EivD2OYe4MPRn3lf106igD2crw3J78miXFmHnBnUqwQ1wYrmik6
-         8DLxfc9kHiVonn0Joous+cpD8evLstoXR5eeK7gTOFfMqP+4gyi5GLcS2SGQM+jerILY
-         kOqPPm8NaapdhGePWhwCMGQ011p9hNzCsOhM0ZTsrHIfGideugY6ScNpIw8/vWRQJ1E3
-         b3emoVO1VL2Td0kX42GbmAXzYE0PN9hmY0AhGUENeM/mxgW1pDf1jgnbSlWreJslAp5t
-         XMxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729375827; x=1729980627;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m99yWBYvjNOuJ/xfN9fzRFdi8s+CeuV28C3wioWcRr0=;
-        b=hpkpZjLNdvzRDVIpmgzXkrDh2/2BaEhLBF6/0MtTU4LeCrwEm9mq+S0BHgwxa3C/ER
-         mKfzIRmKiCclDOZcxwVD5tAVitLF7R2z4vywOccBrM+4Z+MY9zRY4ZA75njcRbcgXWMo
-         H6TIdAdp8hkGvLDv+Ol9r8AUPXuoxic3MjsIb4a/j326nWA6s/OtR5cV9zupIRwgCddY
-         av2qpzugjGiYHk6Zicv3QubKho4XDrL8LZk2YDctMmclpyJBD4EoXW1oXcuX3cit2OfO
-         pa0xBH0NFquKb4+trdiZF03cYXZGgMJ9KwUCvsHtWhlHTDPeeIbn204JxHmOVb8ycwa2
-         ipXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXksnFruQG66tYb6L2XOj5o7kcHFSa5G5c/zCuSmHrtzSD8n016aGiFvWmUJdMkpIUMtuQSd9Tkv0VQjubv@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeigYY85S5rX5dayBhiUtaX8xoWzmc31wBhl94RHPMgV8qZvxj
-	kfxLSI5NwjSaP9SxJ/t0QM0Ij/dkJUbLuspSWRFKd0mC76KjJccJ0SnOgMkUYre/80JOQMpSlXW
-	rQHkqZrwgiIgXRbSQ6WZ/ErtFd9E=
-X-Google-Smtp-Source: AGHT+IFKIs6/rGZm3ruXOPN0F4CgQSp53qqR8bjO03xssJKODyeMpcpHMF3lKVbFs1CM9Z9D8T3Dz5iQIfs6bGLgRh4=
-X-Received: by 2002:a05:6512:1116:b0:539:f7ba:c982 with SMTP id
- 2adb3069b0e04-53a1522aa1emr3585080e87.33.1729375826911; Sat, 19 Oct 2024
- 15:10:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y3/Gl4uf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2BF9C4CEC5;
+	Sat, 19 Oct 2024 22:17:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729376233;
+	bh=Z2c0wsfmuX1zi8SflpbS251BcU2hxlDOujSruYyu/d0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y3/Gl4ufOW+DMjq3rv6lYuhhIdTKFTpnYyq9HW3K85Fpw/HAzL0vMrW4IM6WgA6ot
+	 bjEzE8mPv3G48TEzrc49STj8tErEueRnWJWErlpFGCRDNYXxf9im+wvXTmSV4zaKV0
+	 ldRIuiJMSPHK7+jcRgJoan6AukGaTfuRN0fLb0k4bEoOLO4bzzu30c0zr4xQe5rqsB
+	 ele2dWq5/Lat3gCmSxFXcXRfJdqOONJR5Y9PAtRblqYiPb3tzG5o6SkuYpbslQB3Wg
+	 ZrBARuLjQoY8sKdBblenF5FJQAR6rsrhvv/Ra8Vcs8mcf/tC+y4RqwTBTJVaeAg57/
+	 Qr4B5j9wt3E/A==
+Date: Sat, 19 Oct 2024 15:17:10 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org,
+	Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v6 1/8] mm: vmalloc: group declarations depending on
+ CONFIG_MMU together
+Message-ID: <ZxQv5vUuaFBT6Kxd@bombadil.infradead.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-2-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+icZUULLhDyScuQnM4Tx+JD9xMFhnKVkxepUK_o1jGhJGo+bQ@mail.gmail.com>
- <CA+icZUW_K-f-ATDuvtsjXokx7aWUcfh7XpW2JhxBeegXp3V4xw@mail.gmail.com>
- <CACvgo50-oorSp+70CctrxQRt04T5bkrO-z4uX66GeBFXROxYZA@mail.gmail.com>
- <CA+icZUVi8_17bPgGYFph-Jc3bhTRRVZa1K8dJgOChHors_ySFA@mail.gmail.com>
- <CACvgo50dFQHROV+JhJOgutDOTYQg4R9aWTJdBXXhNWjR_rF9Bw@mail.gmail.com> <CA+icZUXt5iDqw43-vxCamYFpz0SpaiWNfgkj8e+a5LwK9E5n+A@mail.gmail.com>
-In-Reply-To: <CA+icZUXt5iDqw43-vxCamYFpz0SpaiWNfgkj8e+a5LwK9E5n+A@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sun, 20 Oct 2024 00:09:50 +0200
-Message-ID: <CA+icZUXuWwEz+h_bRGK3sP_hLnzjYh+8McUGQJzqcqyr58K+_w@mail.gmail.com>
-Subject: Re: First experiments with kmod-git and meson build-system
-To: Emil Velikov <emil.l.velikov@gmail.com>
-Cc: "Marco d'Itri" <md@linux.it>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
-	linux-modules@vger.kernel.org, Tobias Stoeckmann <tobias@stoeckmann.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016122424.1655560-2-rppt@kernel.org>
 
-On Sun, Oct 20, 2024 at 12:07=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com=
-> wrote:
->
-> On Sat, Oct 19, 2024 at 4:31=E2=80=AFPM Emil Velikov <emil.l.velikov@gmai=
-l.com> wrote:
-> ...
-> > > [built-in options]
-> > > -buildtype =3D 'debugoptimized'
-> > > +;buildtype =3D 'debugoptimized'
-> > >
-> > > ^^ What buildtype other than above exists?
-> > >
-> >
-> > Check the meson website - it describes them quite well [2]
-> >
-> > [2] https://mesonbuild.com/Builtin-options.html#details-for-buildtype
-> >
-> > -Emil
-> >
->
-> Thanks.
->
-> In my custom INI file:
->
-> [built-in options]
-> buildtype =3D 'release'
->
-> and:
->
-> sudo meson install --strip -C ../build
->
-> Results:
->
-> # file /bin/kmod /usr/lib/x86_64-linux-gnu/libkmod.so.2.5.0
-> /bin/kmod:                                  ELF 64-bit LSB pie
-> executable, x86-64, version 1 (SYSV), dynamically linked, interpreter
-> /lib64/ld-linux-x86-64.so.2, Build
-> ID[sha1]=3Def45146171c0036544a9345fbd7d0c96e3fa4cc3, for GNU/Linux 3.2.0,=
- stripped
-> /usr/lib/x86_64-linux-gnu/libkmod.so.2.5.0: ELF 64-bit LSB shared
-> object, x86-64, version 1 (SYSV), dynamically linked,
-> BuildID[sha1]=3D725a4446b481b380588011e4e8733c1db
-> eed3c82, stripped
->
-> # ll /bin/kmod /usr/lib/x86_64-linux-gnu/libkmod.so.2.5.0
-> -rwxr-xr-x 1 root root 172K 19. Okt 23:51 /bin/kmod
-> -rwxr-xr-x 1 root root 103K 19. Okt 23:51
-> /usr/lib/x86_64-linux-gnu/libkmod.so.2.5.0
->
+On Wed, Oct 16, 2024 at 03:24:17PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> There are a couple of declarations that depend on CONFIG_MMU in
+> include/linux/vmalloc.h spread all over the file.
+> 
+> Group them all together to improve code readability.
+> 
+> No functional changes.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-Link: https://mesonbuild.com/Release-notes-for-0-62-0.html#meson-install-st=
-rip
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+
+  Luis
