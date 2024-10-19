@@ -1,85 +1,121 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5396CEAC7;
-	Sat, 19 Oct 2024 15:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B28149E00;
+	Sat, 19 Oct 2024 20:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729351532; cv=none; b=Sj/MnnkzozSCCxIny1cY89RTb4ZsVa87NEHidjWPiHnXvuUy7GEPBywboEwCvzYdBa8E8hb4F6K+PMY0FrGm/ZpNcDozWequWxr8HPfmtj70xednx8IvUzyPyzN5dTqesgNcqozcEs7w7irx30mtaP/SEyGp1p5oDT29zD+OXxE=
+	t=1729370735; cv=none; b=W0P45wkxrrFxVAeKyQPhEM/6qv3vps/mhfQH7xMTZe2TQLqnLx9ZKDWZnccUTdyiKiSnlyNcbSh/Iao0Kc11QbvaSPz3GNndxNR3Tlptr1wSso2GG+Eg7e3+dTpVdNFdf6GAGupbzIW9+DO/qpvtG0hnc3DtmEly2nFkCTGKnyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729351532; c=relaxed/simple;
-	bh=VGpUeFJ9CXGCHzG7wfKHVaaoZcBpkxpWYGXVicoxglQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hH02stmW56QFB1q04GhWCqbWI6LbojGSDId99yzzUJnoPaCcKOKwWVOt6dtN3NQnLNX4wLWexkdOmEeJH1OJW9cviHDiPSVHrtsOK1bw5GXOyaFu6+p1o9FUXrjYA7mnU5ZfF7oFjZcopwvCj1OhwqeN2n4yW9hJ65+DrdP658s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AyG7JtEC; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729370735; c=relaxed/simple;
+	bh=gmwDQ6No3ct9TKBBHTtT4Yw2AFEeVWE9FZaRD6OcRhU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BMAFWbvZZSaVZQBTtvBYYMT6jsCZgMW6UPHCEkhgLNvjPtrEVm6moRKAFOfZyvWHZqh6fpPV4t86w+oJvvmkaO94ScJGeh9ostjiaqY61kV0Lfq4Y1ZdVxyg6c8Y8/PqpeUkDsGexZKw7/BrYKiC/wOro+Jn4F+cP0PsKYF49D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUrB6OvU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyG7JtEC"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5c9a664e65fso3587597a12.1;
-        Sat, 19 Oct 2024 08:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729351528; x=1729956328; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IqOxPIGSWxdyAWdKZgznaaC0m5Gn9KejcbfH9xhAtts=;
-        b=AyG7JtEC9HfI0yKWwntsATxsdPG4no43mLLP6mX5gGIEWPYwv+aMbpDyIlyLzAaMqc
-         sPKyEMcX1U1DwUMnoKz6PZrRBGAOOVw0Cu1yDAoOQyns1JaZG3oUbP5/fpDVLSlEMmIS
-         dNfV8/n6sVxVtZFExUqQMiD6PF+WBzEMjDGUbXDnbbQ5NEaDnTS6Q8j3c10HaijrcDlU
-         Ce4NcjZ2fnq57sGBxb8T8ghnS53+8uhM14P45TRtuA4b1jmZcGsmPoUSg7+XlkUtRqzu
-         wT5hcJC3eDZAZhcJ/lmWNnLwOHXC3d9ou4z3HUN5nLnbq+z3CH6qzrbn/QlUI907Q5TY
-         J1Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729351528; x=1729956328;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IqOxPIGSWxdyAWdKZgznaaC0m5Gn9KejcbfH9xhAtts=;
-        b=PsTOmZOBZqPGNEUCX3Fxpa1PYNWWUFoZz+NIFNYjsF8Wf7lqaASw7/4hZTld8lwYIR
-         9r1rCmseOOkOfqMycGeQbMnztm2k0nCptgC1me/siFi8aNlAECp/t3O32HsDC6ypUAs7
-         YSUrhT05UNsl7iS1jrK4m6YS2UP6Qt/rZyFaC6305S1DVW/DedRiLtEyAWxqsIyVW8CA
-         Fuoe9pQXyxq2oPqOqJoKJwX1QBWAPanhcnHf8Z2+Ljw096U7+RyHy5NuxUfdZSbKct6J
-         rX+k9ECtwLMu3C54+nVCEr1BOBO1570NfSKX8rr/ggZCoEigPkvifB51nUN/bc3k0nbK
-         8jkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWLQ/5vIIqKBYOUUKPjhXDLXCdmEZBQM6mTblGSbxqiXzvziu150wtEYifdcKuZ5VjLFSWy8rdRWJ69AY8=@vger.kernel.org, AJvYcCXMkYo0ZYsN4Sv4ySEnUbGexZX1C0P6UPnjDrxarM/89enE3hC8aHr91c4rWTvndv+LoL1i4RDDhkqx8J09Mw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWuRjGv0Vdwfm5VJGMfmBp9RgcerHfITO/YfKdbrpJbyXi0XzG
-	gLtD8vx7XQjSq3t8a/14eZlvW0w11RYhWx23tcaFTAzdBg5eO1E=
-X-Google-Smtp-Source: AGHT+IFWDsDPsXARX8DbF/3BZ+lp4G/6LnDqEvJX/elkC+I2gkZGFfudkczxuhVBVtCUiVahi5/uww==
-X-Received: by 2002:a17:906:c150:b0:a9a:478:2ee3 with SMTP id a640c23a62f3a-a9a69c970f3mr535012566b.40.1729351528224;
-        Sat, 19 Oct 2024 08:25:28 -0700 (PDT)
-Received: from p183 ([46.53.252.171])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a68c284dfsm223950866b.197.2024.10.19.08.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2024 08:25:27 -0700 (PDT)
-Date: Sat, 19 Oct 2024 18:25:25 +0300
-From: Alexey Dobriyan <adobriyan@gmail.com>
-To: Tobias Stoeckmann <tobias@stoeckmann.org>
-Cc: mcgrof@kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: .strtab must be null terminated
-Message-ID: <abafecde-06b4-46ae-9249-2584f6610763@p183>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUrB6OvU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3166CC4CEC5;
+	Sat, 19 Oct 2024 20:45:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729370735;
+	bh=gmwDQ6No3ct9TKBBHTtT4Yw2AFEeVWE9FZaRD6OcRhU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gUrB6OvUzAE3AfRej4jnJKDKbxYWz+cZRF2tn/UZIEQYCHBDOXpBVYbDfJraR7l8n
+	 gQHPGSDOLU6fVoOcnonflRVT6kmlZLGBMcBzFjGdoU/5eToXxY3a2X6/CoWL8Y6Blw
+	 vKtGYWIsOvdhlXC92kFcqafZsLC9tpLm7bpbk3P2Skg4OChT+D7E4n3UBt7xZTHfsB
+	 ThVIQ4MslwI+4PFogaRVcMfc7eHKw/pCuD9frmWslk5PHbQLkDb3S+jXyJ1ktn0C0+
+	 mYdgaWvRjSyREVgG2REjeZMLJkqmzh0Pzohff1f2PBtHLM/G7NDMxg99n+rxReWrI4
+	 CLsyhOwQepJiQ==
+Date: Sat, 19 Oct 2024 13:45:32 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Helge Deller <deller@gmx.de>
+Cc: Matthew Maurer <mmaurer@google.com>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, masahiroy@kernel.org,
+	ndesaulniers@google.com, ojeda@kernel.org, gary@garyguo.net,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Benjamin Gray <bgray@linux.ibm.com>,
+	Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	neal@gompa.dev, marcan@marcan.st, j@jannau.net,
+	asahi@lists.linux.dev, linux-modules@vger.kernel.org,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
+Message-ID: <ZxQabNukxBo3utbh@bombadil.infradead.org>
+References: <20240925233854.90072-1-mmaurer@google.com>
+ <20240925233854.90072-15-mmaurer@google.com>
+ <ZwmlEYdS0aPVF32k@bombadil.infradead.org>
+ <CAGSQo01o4fWYwSzZHX5dyTUKcaCSZ7z-hPQ8w63tgBPGbM_UCA@mail.gmail.com>
+ <ZwmnnMmqVWLaelvQ@bombadil.infradead.org>
+ <Zwm4lXdKB9RfPQ5M@bombadil.infradead.org>
+ <Zwm4v_1wh5RwuHxF@bombadil.infradead.org>
+ <CAGSQo03df-tnmwcz4nh3qtuQPKQ2zLHW0juQyKUXGsdeS7QkLA@mail.gmail.com>
+ <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
+ <9f3f6bd9-47d1-45fa-aa6b-9e0a80a5ebc6@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <9f3f6bd9-47d1-45fa-aa6b-9e0a80a5ebc6@gmx.de>
 
-> +	strhdr = &info->sechdrs[info->index.str];
-> +	if (strhdr->sh_size > 0 && info->strtab[strhdr->sh_size - 1] != '\0') {
-> +		pr_err("module %s: string table isn't null terminated\n",
-> +		       info->name ?: "(missing .modinfo section or name field)");
-> +		goto no_exec;
-> +	}
+On Thu, Oct 17, 2024 at 02:08:19PM +0200, Helge Deller wrote:
+> Hi Luis,
+> 
+> On 10/17/24 01:21, Luis Chamberlain wrote:
+> > That sounds great. Yeah, the above would be great to test. A while ago
+> > I wrote a new modules selftests in order to test possible improvements
+> > on find_symbol() but I also did this due to push the limits of the
+> > numbers of symbols we could support. I wrote all this to also test the
+> > possible 64-bit alignment benefits of __ksymtab_ sections on
+> > architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (e.g. ppc64,
+> > ppc64le, parisc, s390x,...). [....]
+> > 
+> > I forget what we concluded on Helge Deller's alignement patches, I think
+> > there was an idea on how to address the alignment through other means.
+> > 
+> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20241016-modules-symtab
+> 
+> I stumbled upon the unaligned-memory-access.rst document [1].
+> Please read it, as it is a really good document, and the section
+> "Why unaligned access is bad" states:
+> It should be obvious from the above that if your code causes unaligned
+> memory accesses to happen, your code will not work correctly on certain
+> platforms and will cause performance problems on others.
+> 
+> With this in mind, you really should apply both of my alignment
+> patches which you currently carry in [0].
+> 
+> For parisc I partly solved the issue by fixing the arch-specific kernel unalignment
+> handler, but every time module sections are stored unaligned, it triggers
+> performance degregation on parisc (and other sensitive platforms).
+> 
+> I suggest you apply them unconditionally.
+> 
+> Helge
+> 
+> [1]  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/core-api/unaligned-memory-access.rst
 
-Reviewed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+You're right, I've just referred to that doc and pushed to the new
+linux modules [2] modules-next branch. This is also great timing so
+that the work that is ongoing for Rust will take this into
+consideration as well. I'll just post the test I wrote as separate
+thing but it surely can be used to help test some of this later.
 
-The _very_ correct test is "there must be NUL between last index used
-and the end of the section somewhere".
+[2] git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
 
-.shstrtab has the same overly restrictive test:
-
-	if (info->secstrings[strhdr->sh_size - 1] != '\0') {
-
-But, of course, it doesn't matter in practice.
+  Luis
