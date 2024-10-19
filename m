@@ -1,188 +1,185 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7542418FDA3
-	for <linux-modules@vger.kernel.org>; Sat, 19 Oct 2024 11:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5B91E0495;
+	Sat, 19 Oct 2024 12:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729337723; cv=none; b=C4KkD/nBR6EyP/skZ37rsTBM6Ag09mRM3sW6Op1MbQ6vn5rhi+D3BHdl89chLcVuqA4W8EWK4gIfC2koNABCuFlbGJjFEV/fTP/w6kEOLqjNldwBmHh8kjGFPEmZBMGvJMm2PMB6DcMhhMHFw/5ll/U50qfkLqXBQyGRY421o/A=
+	t=1729339862; cv=none; b=CgUq0NlakXJjLmJQWF+3GgyodcqHmQ3X3iyntOtSBYqgYQC7Err53cQBaSWR2kHJo6Z2lmKxd6JZkoM9hmzIHRNs0+BG+WqgCDDbWcNBp1hPKkdT8DcQEXc9+gfdudl/e0fXB3A6SsPk89NxrtpHNEyh9aWCOoKfwTkF0KrTWFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729337723; c=relaxed/simple;
-	bh=2n4PF8CnprW7GUDooRd4Nz6EVnHgF6NYo3jxvhbdf5s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HIJrzM8LFEsJqtaiU9yhAja4fwlgaxwhDN6tZw0uXRlqUz79S55yptbEycYBIL5wePWU3wkeRBjF381Bwc2OPLTBEv1LMKOjUFEqDVCgcgOJg4PHAqys4VXAGoTS0NJmGWPV8fS8/a/qxwHhS/Ay48lVHRGc5s+cN/+l1NR6qbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICFi6pNs; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729339862; c=relaxed/simple;
+	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KryTlx4mafgLlC1YKfp/w1oQ98hpeR/aM7v3aBYXQN59lXBaS6wFv3O8haz+YLJq9zqgiHAoWJgTZ8EzumQvhHd5BA9yWOIIzxn+tX1JPgV6rczZ2q51pnLbsbqco51xipOXItaYd6Xg1ABwAUiKEd8uZj0YBa6jN+Q7CXD9zlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ji+u5mIf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICFi6pNs"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53a007743e7so3657192e87.1
-        for <linux-modules@vger.kernel.org>; Sat, 19 Oct 2024 04:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729337719; x=1729942519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=I8w+UoMDInrXbiFCIfoc3+F1T0v0NGy1HmrrSz4kaCI=;
-        b=ICFi6pNsqJKgyJ0XuBDTlN94CKoQQqY4w1hnTKX2dLpJ5R40yB8xzZotHqitHjhb5C
-         hdq0UPuHHIcJqL6+6J9492PWplt1Zvd4+Shh6my4v0nw/FUUo1+5lbNgp3K5AdzFApXH
-         Q0fNi4HLXAkFzxhE2AgG10oAgd/wcf3Re2kHtAAWN3kBEIYm4gppyQ3cDrYLc5sMulDJ
-         kD0YADBRyRV24RegFTnljpdnO34xeasDSbZ6l830iqZ8PWNs29zw6eNxLCoVmlZoD06D
-         iM7xa7FdpbFjovt6lySDGTfYF0JMUKKYT1TBPsWEMRFtI7xTRxL2EZIBoY4PFrjz/UsE
-         IRXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729337719; x=1729942519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I8w+UoMDInrXbiFCIfoc3+F1T0v0NGy1HmrrSz4kaCI=;
-        b=SQ1r+TgxabdNyTaKXQYJweXQ/ZKQguczkxpG+/pWqxeXbwMe/1oyXfLuZR1E3oKu4H
-         GlFF3zbnuMwj0qAbv9h0oBr/VN/LMX9H4078CI6JL29d7wWJ56d32V5tr25ppbEztzC+
-         l8eOGwxdGhSl2xdbtx2sahEVHjaSmiZfhh9hbTyuFKmuqVHQu/VUbiPqqqEPbAEy2wZq
-         DHIoneuAeruwiPP1aJskdqCYbu/ag3HfUv0uMDhCtG+OIssHDij0awD76qKxviHzWZsT
-         FK4+g8gf3SlbGXnRRwK6sfkzSrPQXrWOWrfMaUNf4p7hNpxtNU104zfYhlb4FNY6XpgN
-         zalw==
-X-Forwarded-Encrypted: i=1; AJvYcCV3N0xksLfDh6bzNt8dTXs8dXcrKXbSLutyWkfRTw8Ioq/FwqGQW/ZEtTJlaZ+zbuje+005xTkMHYMz8q8K@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQAeiADHOhmAIHGCs0UXUVdvA67pXNyWAcrjUzH0oytnMQU9ob
-	YBHsHtOr/MIpWftUNa6xgxN38XMXQDqzSSiDnmqb4bNxkHdY/e72N8+QoicrWQeCLOyKqcTx3GH
-	bxbW+aDERQeKr7Jqy3iT6EJ/m85w=
-X-Google-Smtp-Source: AGHT+IGk60pp13OWq6sWMeVGzSzbi2gc45nfxmHM9VetSrKDDZ4Fc7VgbqcoXI/tU5c/dK8GIWtnyOtMxpXnMKCoRuQ=
-X-Received: by 2002:a05:6512:1293:b0:53a:bb9:b54a with SMTP id
- 2adb3069b0e04-53a154fa5e9mr3002685e87.48.1729337719248; Sat, 19 Oct 2024
- 04:35:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ji+u5mIf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C444C4CEC5;
+	Sat, 19 Oct 2024 12:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729339862;
+	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ji+u5mIf1nBg2Nj6gLisAF5MRqi/wx3vBw5aJxxyqXCZq6i3mNEIjudfG3JajAqFI
+	 WJRVPOIUQSQMsfw+JO35XVRk0koV9Zi9I3YAvvjqBLsmrQOq5ay1ac5pdb0lvGGzR1
+	 j08uXL+V5r/xzvXwZInMDzkCPiTd8EFrbVzmdTCt/13Ip6ENRmE+El1EXUc14T5/hg
+	 fuuSACJI10Sa/jG2tlc11AxV3tkbudw+OnnTaatlKtiS8TlF8dKP0jJBWpV4zxhOjz
+	 kxntgxyzd/tCBOSTcO89LQ6Xv/hweCp+LHVMbTjkYPRC9v5XPDgpwR4Gn2FpyhtFiC
+	 QsF+azFAwnoMg==
+Date: Sat, 19 Oct 2024 15:07:00 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <ZxOg5MEXzH4qPq-s@kernel.org>
+References: <20241016122424.1655560-1-rppt@kernel.org>
+ <20241016122424.1655560-7-rppt@kernel.org>
+ <20241016170128.7afeb8b0@gandalf.local.home>
+ <20241017101712.5a052712@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+icZUULLhDyScuQnM4Tx+JD9xMFhnKVkxepUK_o1jGhJGo+bQ@mail.gmail.com>
- <CA+icZUW_K-f-ATDuvtsjXokx7aWUcfh7XpW2JhxBeegXp3V4xw@mail.gmail.com> <CACvgo50-oorSp+70CctrxQRt04T5bkrO-z4uX66GeBFXROxYZA@mail.gmail.com>
-In-Reply-To: <CACvgo50-oorSp+70CctrxQRt04T5bkrO-z4uX66GeBFXROxYZA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sat, 19 Oct 2024 13:34:43 +0200
-Message-ID: <CA+icZUVi8_17bPgGYFph-Jc3bhTRRVZa1K8dJgOChHors_ySFA@mail.gmail.com>
-Subject: Re: First experiments with kmod-git and meson build-system
-To: Emil Velikov <emil.l.velikov@gmail.com>
-Cc: "Marco d'Itri" <md@linux.it>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
-	linux-modules@vger.kernel.org, Tobias Stoeckmann <tobias@stoeckmann.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241017101712.5a052712@gandalf.local.home>
 
-On Fri, Oct 18, 2024 at 2:01=E2=80=AFPM Emil Velikov <emil.l.velikov@gmail.=
-com> wrote:
->
-> Hi Sedat,
->
-> On Fri, 18 Oct 2024 at 11:48, Sedat Dilek <sedat.dilek@gmail.com> wrote:
+On Thu, Oct 17, 2024 at 10:17:12AM -0400, Steven Rostedt wrote:
+> On Wed, 16 Oct 2024 17:01:28 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > If this is only needed for module load, can we at least still use the
+> > text_poke_early() at boot up?
+> > 
+> >  	if (ftrace_poke_late) {
+> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+> > 	} else if (system_state == SYSTEM_BOOTING) {
+> > 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> >  	} else {
+> >  		mutex_lock(&text_mutex);
+> >  		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
+> >  		mutex_unlock(&text_mutex);
+> >  	}
+> > 
+> > ?
+> > 
+> > The above if statement looks to slow things down just slightly, but only by
+> > 2ms, which is more reasonable.
+> 
+> I changed the above to this (yes it's a little hacky) and got my 2ms back!
+> 
+> -- Steve
+> 
+> DEFINE_STATIC_KEY_TRUE(ftrace_modify_boot);
+> 
+> static int __init ftrace_boot_init_done(void)
+> {
+> 	static_branch_disable(&ftrace_modify_boot);
+> 	return 0;
+> }
+> /* Ftrace updates happen before core init */
+> core_initcall(ftrace_boot_init_done);
 
-> Have you tested the resulting files, or you're just building testing?
-> In case of the latter we already have CI which covers Debian so
-> :shrug:
->
+We can also pass mod to ftrace_modify_code_direct() and use that to
+distinguish early boot and ftrace_module_init.
+With this I get very similar numbers like with the static branch
 
-Hi Emil,
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 8da0e66ca22d..859902dd06fc 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -111,17 +111,22 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
+  */
+ static int __ref
+ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
+-			  const char *new_code)
++			  const char *new_code, struct module *mod)
+ {
+ 	int ret = ftrace_verify_code(ip, old_code);
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* replace the text with the new text */
+-	if (ftrace_poke_late)
++	if (ftrace_poke_late) {
+ 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
+-	else
++	} else if (!mod) {
+ 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
++	} else {
++		mutex_lock(&text_mutex);
++		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
++		mutex_unlock(&text_mutex);
++	}
+ 	return 0;
+ }
+ 
+@@ -142,7 +147,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long ad
+ 	 * just modify the code directly.
+ 	 */
+ 	if (addr == MCOUNT_ADDR)
+-		return ftrace_modify_code_direct(ip, old, new);
++		return ftrace_modify_code_direct(ip, old, new, mod);
+ 
+ 	/*
+ 	 * x86 overrides ftrace_replace_code -- this function will never be used
+@@ -161,7 +166,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 	new = ftrace_call_replace(ip, addr);
+ 
+ 	/* Should only be called when module is loaded */
+-	return ftrace_modify_code_direct(rec->ip, old, new);
++	return ftrace_modify_code_direct(rec->ip, old, new, NULL);
+ }
+ 
+ /*
+ 
 
-Great, you consider Debian/unstable builds in your CI.
-Thanks.
-
-> > looks like etc directory was not copied to $PREFIX.
-> >
->
-> Yes, meson behaves differently wrt /etc - not much we can do there.
-> Ideally you can check how other Debian packages using meson deal with
-> this and borrow the approach.
->
-
-Hmmm, can this be somehow documented - say in README.md?
-
-> > meson setup --prefix $PREFIX --sysconfdir $PREFIX/etc --native-file
-> > build-dev.ini ../build
-> >
->
-> The build-dev.ini is a configuration file for kmod _developers_, so it
-> for packaging purposes seems off IMHO.
->
-
-Yupp.
-Did upgrade to latest kmod-git and moved to a custom ini file - see below.
-
-[ Documentation ]
-
-README.md requires some hints to manpages and docs build requirements:
-
-manpages: scdoc
-docs: gtk-doc-tools (/usr/bin/gtkdoc-scan)
-
-Link: https://packages.debian.org/sid/all/gtk-doc-tools/filelist
-
-I see some more improvements to README.md.
-Offer: I can cook up a patch and send for review.
-
-> If you want to help with the Debian side, you can reach out to their
-> maintainer Marco (CC'd) via the debian bug tracker, email or salsa[1].
->
-> HTH
-> Emil
-> [1] https://salsa.debian.org/md/kmod
-
-Ah Marco :-)!
-
-I did an install from kmod-git with overwriting the kmod binary and
-libkmod library.
-
-Renew my initrd.img file:
-
-KVER=3D"6.12.0-rc3-1-amd64-clang19-kcfi" ; update-initramfs -c -k $KVER
--v 2>&1 | tee log_update-initramfs_$KVER.txt
-
-Booted fine!
-
-I saw some other things like:
-
- file /usr/lib/x86_64-linux-gnu/libkmod.so*
-/usr/lib/x86_64-linux-gnu/libkmod.so:       symbolic link to libkmod.so.2
-/usr/lib/x86_64-linux-gnu/libkmod.so.2:     symbolic link to libkmod.so.2.5=
-.0
-/usr/lib/x86_64-linux-gnu/libkmod.so.2.5.0: ELF 64-bit LSB shared
-object, x86-64, version 1 (SYSV), dynamically linked,
-BuildID[sha1]=3D3990121244ac36f617b2d289712054ecb1e390ba, with
-debug_info, not stripped
-
-Or an ASAN complaint is displayed requiring a LD_PRELOAD when
-"b_sanitize =3D 'address,undefined'" is used (when running
-update-initramfs).
-
-I have done my own INI file:
-
---- build-dev.ini       2024-10-19 13:24:58.806312629 +0200
-+++ build-dileks.ini    2024-10-19 13:26:05.332670566 +0200
-@@ -4,15 +4,15 @@
-; SPDX-License-Identifier: LGPL-2.1-or-later
-
-[project options]
--build-tests =3D true
--debug-messages =3D true
--docs =3D true
-+build-tests =3D false
-+debug-messages =3D false
-+docs =3D false
-zstd =3D 'enabled'
-xz =3D 'enabled'
-zlib =3D 'enabled'
-openssl =3D 'enabled'
-werror =3D true
--b_sanitize =3D 'address,undefined'
-+;b_sanitize =3D 'address,undefined'
-
-[built-in options]
--buildtype =3D 'debugoptimized'
-+;buildtype =3D 'debugoptimized'
-
-^^ What buildtype other than above exists?
-
-Thanks for the helpful hints, Emil.
-
-Best regards,
--Sedat-
+-- 
+Sincerely yours,
+Mike.
