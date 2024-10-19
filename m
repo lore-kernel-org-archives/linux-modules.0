@@ -1,82 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710121922CC;
-	Sat, 19 Oct 2024 22:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9257D20E30B;
+	Sat, 19 Oct 2024 22:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729378307; cv=none; b=bFRRvAdCM9oIbcpz+ux12sdIRzBu3awh13uxbp4CNELJYz28gE5GYBfGkxyyekI+sJs6YYIgvujDUE73V8yi1XsQXRtMvRCtkH1m0kZBWQZi1q1mGZQAweRQCtlsFEyUKfPfGHVtQbcGH338Gih/VztW5FNNyRO6H9UlW8RVHYw=
+	t=1729378626; cv=none; b=kX5DpPxp8KssVwBa+wOgVPmqPRUH54uNagjpKpIevnBQGPrPBBsvdDCWTUTldwIP6z80UR1clv0xlDCTviWhCze77AI3jSDzX/g/58RuREi+pdbBLqb1xcwCmf8BopoaPVg1rQ/MUwk+1FFvuxMaY4C2bKF+AnrzvmhAh8omvRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729378307; c=relaxed/simple;
-	bh=iaKyJYsgDj5oq6LrolQ8TT/cIGmsXYFI9lXbWUpr55Y=;
+	s=arc-20240116; t=1729378626; c=relaxed/simple;
+	bh=GMkLHvRnZGJtzjtdeNAUL8UOKS7DHVy67CBq9JbkoZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QjYH+MgPahDCMPiM+C+9mamJ/P15+LTbeAuU9sw5ZLdV3jqDjHTm1xXdtLYA5HDLZYs22/1T/xALK5D4UQ5PKlImXnOOqHzEaHWtTBZoDC3vv9poTtTEfjjSr+fCk6zUJOfmLRCSHtEChVh5B5E21lYRWXzx91yzQNB+bN3bXjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWWcwFHR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUJdwZV6qaTImEkiiwlqC6SkavDPL+6Re/pjVyLMtfZlHNQ8lhLncYFCHqbQb+FUK+uwqgWkZsLAUx/cppO+hsneAf6J7HZvexGJ65LmSokLliHTirfuNshBnaFbaSiGYy0kURCuviyqhWua7s7dGZuZSdgGGWIzTlCZ0N3qRF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U00Bhue5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWWcwFHR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A509C4CEC5;
-	Sat, 19 Oct 2024 22:51:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U00Bhue5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2330C4CEC5;
+	Sat, 19 Oct 2024 22:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729378307;
-	bh=iaKyJYsgDj5oq6LrolQ8TT/cIGmsXYFI9lXbWUpr55Y=;
+	s=k20201202; t=1729378626;
+	bh=GMkLHvRnZGJtzjtdeNAUL8UOKS7DHVy67CBq9JbkoZI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PWWcwFHRKAv10UFeMWidR+oArwiG2+r721GO7uSmTpQx0pOBJf1X5cPUKD4gQg0+v
-	 evgCS5YusRtKfCXFwytoJRX7ZRENJRAMHCt8HvG03nMPWzjaJDvjdrgLKvwNx81i5w
-	 NIzDOiB7M0V+Ul7Gwqxo7hFP4wjCIx8CdeY/s0mZyLShSAGZB3TOEh3ca9PA+vMo3W
-	 q8+DRfeiSbEMT2pfBoZx2+ts1c/ZoMbSDOpbvF1L4SRM4K2S0rC8EknH09OaDU5jzH
-	 5NBzulTpDRDsAwrp/w7GYCrOs4CtagANrNUd5w9SX4IoQrxyUxMdI/Mnop054oa6hH
-	 EFlkfWan9WOpw==
-Date: Sat, 19 Oct 2024 15:51:43 -0700
+	b=U00Bhue5iIHc38+7K+ZB2GAYxUsO4UTUNzFhLjIFH/SBdWQi5GAd+6XCU9cfYIxK9
+	 1rpxefzEkuo9j22QVzZ2e0iickU55iLgJ5h3DRq/i3bINu9vdVDnqaE+bflRIWZvCi
+	 NXo14kFvmyjoZ3OWln6fspyvUYuglP5eAhbUoIkycgRvDAEABCe/Q90ri5Nd+Z64fR
+	 EdZJWBgnX+3sS8MH+Gf1BGhB+r8DWGwI8TnTFXZMTtQQTyh7Qvgja4HMtJZbDeousF
+	 JBTHtAhrOo3KP+QJyXxCUF+rqb6pdl5Jy5MRYI6jp15kWDwJKfK5VTy45vHEhUWePP
+	 uk594+46j0QAA==
+Date: Sat, 19 Oct 2024 15:57:04 -0700
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 0/8] x86/module: use large ROX pages for text
- allocations
-Message-ID: <ZxQ3_8xNPYsQA5GH@bombadil.infradead.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] module: sign with sha512 instead of sha1 by default
+Message-ID: <ZxQ5QJAa-iv4S6sw@bombadil.infradead.org>
+References: <52ee32c0c92afc4d3263cea1f8a1cdc809728aff.1729088288.git.linux@leemhuis.info>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -85,29 +45,43 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241016122424.1655560-1-rppt@kernel.org>
+In-Reply-To: <52ee32c0c92afc4d3263cea1f8a1cdc809728aff.1729088288.git.linux@leemhuis.info>
 
-On Wed, Oct 16, 2024 at 03:24:16PM +0300, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Wed, Oct 16, 2024 at 04:18:41PM +0200, Thorsten Leemhuis wrote:
+> Switch away from using sha1 for module signing by default and use the
+> more modern sha512 instead, which is what among others Arch, Fedora,
+> RHEL, and Ubuntu are currently using for their kernels.
 > 
-> Hi,
+> Sha1 has not been considered secure against well-funded opponents since
+> 2005[1]; since 2011 the NIST and other organizations furthermore
+> recommended its replacement[2]. This is why OpenSSL on RHEL9, Fedora
+> Linux 41+[3], and likely some other current and future distributions
+> reject the creation of sha1 signatures, which leads to a build error of
+> allmodconfig configurations:
 > 
-> This is an updated version of execmem ROX caches.
+>   80A20474797F0000:error:03000098:digital envelope routines:do_sigver_init:invalid digest:crypto/evp/m_sigver.c:342:
+>   make[4]: *** [.../certs/Makefile:53: certs/signing_key.pem] Error 1
+>   make[4]: *** Deleting file 'certs/signing_key.pem'
+>   make[4]: *** Waiting for unfinished jobs....
+>   make[3]: *** [.../scripts/Makefile.build:478: certs] Error 2
+>   make[2]: *** [.../Makefile:1936: .] Error 2
+>   make[1]: *** [.../Makefile:224: __sub-make] Error 2
+>   make[1]: Leaving directory '...'
+>   make: *** [Makefile:224: __sub-make] Error 2
 > 
-> Andrew, Luis, there is a conflict with Suren's "page allocation tag
-> compression" patches:
+> This change makes allmodconfig work again and sets a default that is
+> more appropriate for current and future users, too.
 > 
-> https://lore.kernel.org/all/20241014203646.1952505-1-surenb@google.com
-> 
-> Probably taking this via mmotm would be more convenient.
+> Link: https://www.schneier.com/blog/archives/2005/02/cryptanalysis_o.html [1]
+> Link: https://csrc.nist.gov/projects/hash-functions [2]
+> Link: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustsha1SigVer [3]
+> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
 
-Yeah, it's already there on Andrew's tree, fine with me to go through there.
+Thanks!
 
-The linux modules KPD [0] has picked this up from the mailing list and
-tested with kdevops, and this series passes our modules test now [1], and so:
+Tested-by: kdevops <kdevops@lists.linux.dev> [0]
+Links: https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11420092929/job/31775404330 # [0]
 
-Tested-by: kdevops <kdevops@lists.linux.dev> [1]
-
-Link https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11420097546 # [0]
+Applied and pushed!
 
   Luis
