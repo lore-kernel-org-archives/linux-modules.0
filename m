@@ -1,85 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5B91E0495;
-	Sat, 19 Oct 2024 12:11:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFBE537FF;
+	Sat, 19 Oct 2024 14:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729339862; cv=none; b=CgUq0NlakXJjLmJQWF+3GgyodcqHmQ3X3iyntOtSBYqgYQC7Err53cQBaSWR2kHJo6Z2lmKxd6JZkoM9hmzIHRNs0+BG+WqgCDDbWcNBp1hPKkdT8DcQEXc9+gfdudl/e0fXB3A6SsPk89NxrtpHNEyh9aWCOoKfwTkF0KrTWFc=
+	t=1729347617; cv=none; b=YhxbNSG23SI1auOPEQLpjPmDsQuLj1eIwzrqhbx1AjXTooEl39yNCgFAXjXEaE965fkkXUL4NDzBCzUHPxzp/eLkLYrp8TD/1s5vrW/6s8/QoLa27h3ZH4YCwr7wzED9+ZzUz/PVeehWjo6TcOJc9espydYHYUHPxt0Y2VUC5b8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729339862; c=relaxed/simple;
-	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KryTlx4mafgLlC1YKfp/w1oQ98hpeR/aM7v3aBYXQN59lXBaS6wFv3O8haz+YLJq9zqgiHAoWJgTZ8EzumQvhHd5BA9yWOIIzxn+tX1JPgV6rczZ2q51pnLbsbqco51xipOXItaYd6Xg1ABwAUiKEd8uZj0YBa6jN+Q7CXD9zlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ji+u5mIf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729347617; c=relaxed/simple;
+	bh=EubbHA9aWeqeVtquYU1NLEUa+R7xITfA/9u8hXxCp9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Cn/SLGS7qxPvJfKfLVV6V3sv/7uZaGo/Sv8g5tfXPITc47KlIkz6WpT5Q08d4qY+BuH3QN78kwE4cXlzilnlUKwidJH7D+N+rNbXk+XDNtf8NdnFV2A5XJ/V5YVQF5VdPnMcBDMC5PsQwZ2KtcLnhUpMglOJnSmrJZ1QNZ/z3EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stoeckmann.org; spf=pass smtp.mailfrom=stoeckmann.org; dkim=pass (2048-bit key) header.d=stoeckmann.org header.i=tobias@stoeckmann.org header.b=UEr8LM4h; arc=none smtp.client-ip=212.227.126.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stoeckmann.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=stoeckmann.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ji+u5mIf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C444C4CEC5;
-	Sat, 19 Oct 2024 12:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729339862;
-	bh=FSuVpxp8ZC8+I9iOSenx9AlHNi52QSz7zz+w4xwBZFU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ji+u5mIf1nBg2Nj6gLisAF5MRqi/wx3vBw5aJxxyqXCZq6i3mNEIjudfG3JajAqFI
-	 WJRVPOIUQSQMsfw+JO35XVRk0koV9Zi9I3YAvvjqBLsmrQOq5ay1ac5pdb0lvGGzR1
-	 j08uXL+V5r/xzvXwZInMDzkCPiTd8EFrbVzmdTCt/13Ip6ENRmE+El1EXUc14T5/hg
-	 fuuSACJI10Sa/jG2tlc11AxV3tkbudw+OnnTaatlKtiS8TlF8dKP0jJBWpV4zxhOjz
-	 kxntgxyzd/tCBOSTcO89LQ6Xv/hweCp+LHVMbTjkYPRC9v5XPDgpwR4Gn2FpyhtFiC
-	 QsF+azFAwnoMg==
-Date: Sat, 19 Oct 2024 15:07:00 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
- allocations of text
-Message-ID: <ZxOg5MEXzH4qPq-s@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
- <20241016122424.1655560-7-rppt@kernel.org>
- <20241016170128.7afeb8b0@gandalf.local.home>
- <20241017101712.5a052712@gandalf.local.home>
+	dkim=pass (2048-bit key) header.d=stoeckmann.org header.i=tobias@stoeckmann.org header.b="UEr8LM4h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stoeckmann.org;
+	s=s1-ionos; t=1729347608; x=1729952408; i=tobias@stoeckmann.org;
+	bh=YaO01H0aBFxXTIh6R9RLuOMde/+nhqIC3cIiUOtVZtY=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=UEr8LM4hJzDNQ0EKNFkxunkdMo/yID6FRlulJgS/xYK0LXgXISoI2pWjVkA0p0dn
+	 +0lxYovsT1CvlJgct7EvftCVL7hAis6BwcKHaNERGMnvFcKh4Ujw/rsU4wD/mgP9w
+	 vxh96Sa5aNYtTq3eEoY8gVD5xhD04qA4gQTZCX0G3j7UF48/nROlbttLUCHQJ4FB+
+	 hqDuxHko4edudbWwi6pS1ES60MbQP/Nbjrk9B4xEB2K+sLnicLBHQz3OmEhdZkvgL
+	 30heWsRdYbQ4C9UecJTTXa2GaJzBxIpqxJlvQiuPKQZvKbpjrOx6ZlRxC/bAXuKZx
+	 a2X6yFIEblbfzAoFLA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([93.225.54.107]) by mrelayeu.kundenserver.de
+ (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mpkwn-1tiaKM2UxB-00jzEU; Sat, 19 Oct 2024 16:14:43 +0200
+Date: Sat, 19 Oct 2024 16:14:40 +0200
+From: Tobias Stoeckmann <tobias@stoeckmann.org>
+To: mcgrof@kernel.org
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] module: .strtab must be null terminated
+Message-ID: <5uwynkpfhtqbrq47nqvp2ixpjhstjl7o7uxqp3b6snj233tvzi@avfrbljjpdel>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -88,98 +47,71 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241017101712.5a052712@gandalf.local.home>
+X-Provags-ID: V03:K1:PC9FP5yhmpbpK6fq2dE79Avr/g93nX5OOYPuxBmEQZVfEsgWtgT
+ UaN2/JEuYkrsKkURBEXtQvGrRqJYvmMbD+IJaHc1wsI/Ys80p/ixmpdNOrI9EMdn5R7qv9c
+ oaz/xvmwdh3/F2dIcItmU8DJt6RGnHICnw5gnf8cGaN6NnDRcc7+aEbJyCk7ZX2qEw/C5P8
+ 28FjWnsAbdUGF0kbfxpmQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:TL6FhCzdM2A=;BK/7PJVqPBXIY6thjxytUMHdGGC
+ LzuHYlqS7+QMmYO4De8vWeulVgYRpgEseKy/8csfAXHZfti/bvZece+O/Y1fjVFVh5B0rXbxo
+ U9/JoN+c/AhoqesQIS6zkX4ZS7tFIDMSWmZUVvVS9X3jVEHzA01mqMOTbFIamwI368wRkBpgs
+ ohbSeD+s8DEME1HzzGj9tM64Zw4oZ/Jstb45vf9LhilhF1ggV4C6Yz0VxOZOuetu/4HcvvfNc
+ eNGeD7dvsAaBXc+DO2gM6TqzbV1hbelczI+TTFt5MPKYF5GXmLsoPmT+wAuo6V8kcbRW8SOUj
+ /uArIhToH4HJr2V/9eOA3xhaJDx2h+Y63yvtCF+rQTqmEE1k5pH8vNniR32m/p/47aDGM/blO
+ 3H7dZivJyOBNCSk75poiGDB3yjyQ+lKHps9hLndhvEZKg+9SQemCpiCh8UU/68Eh+gTdvub62
+ 883JGD6WZgAfSoielgRWkJarjWn9ZhGM7DYqwd9Q/All3vbNao+XWkuVE7uouYFSsvKglEjsH
+ yOpfWq/YDZCPrUxNRKQmnhVFn1hVbfM0gganpkej1Jciy6KPgUsj/b5HMwYxI8dBTZmlS10tR
+ yhyiVvMIXeuaaTcy6XpNG8l6g7QzIa5h0R6zhrPqcCDTKiHJQJ6iWjPpXh5gCmB+H5TySaJWY
+ Yb3HXLc53Vk5fMF1praM84OqvlhD83YPvxx6nracvbjoVW2P2mZNDqU2y2iMIT0tbl+Cgu2lw
+ Xt57EWlkUGxo1rEjErfa6fqwZnrcVfCcQ==
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 17, 2024 at 10:17:12AM -0400, Steven Rostedt wrote:
-> On Wed, 16 Oct 2024 17:01:28 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > If this is only needed for module load, can we at least still use the
-> > text_poke_early() at boot up?
-> > 
-> >  	if (ftrace_poke_late) {
-> >  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-> > 	} else if (system_state == SYSTEM_BOOTING) {
-> > 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> >  	} else {
-> >  		mutex_lock(&text_mutex);
-> >  		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> >  		mutex_unlock(&text_mutex);
-> >  	}
-> > 
-> > ?
-> > 
-> > The above if statement looks to slow things down just slightly, but only by
-> > 2ms, which is more reasonable.
-> 
-> I changed the above to this (yes it's a little hacky) and got my 2ms back!
-> 
-> -- Steve
-> 
-> DEFINE_STATIC_KEY_TRUE(ftrace_modify_boot);
-> 
-> static int __init ftrace_boot_init_done(void)
-> {
-> 	static_branch_disable(&ftrace_modify_boot);
-> 	return 0;
-> }
-> /* Ftrace updates happen before core init */
-> core_initcall(ftrace_boot_init_done);
+The string table must be NUL-terminated, just like the section name table.
 
-We can also pass mod to ftrace_modify_code_direct() and use that to
-distinguish early boot and ftrace_module_init.
-With this I get very similar numbers like with the static branch
+Signed-off-by: Tobias Stoeckmann <tobias@stoeckmann.org>
+=2D--
+In order to create a proof of concept, which I can't get into a simple
+script right now, it's easiest to move '.strtab' to the end of the module
+file, write as many 'A' characters at the end as required according to the
+section size, and try to insert the module.
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 8da0e66ca22d..859902dd06fc 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -111,17 +111,22 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
-  */
- static int __ref
- ftrace_modify_code_direct(unsigned long ip, const char *old_code,
--			  const char *new_code)
-+			  const char *new_code, struct module *mod)
- {
- 	int ret = ftrace_verify_code(ip, old_code);
- 	if (ret)
- 		return ret;
- 
- 	/* replace the text with the new text */
--	if (ftrace_poke_late)
-+	if (ftrace_poke_late) {
- 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
--	else
-+	} else if (!mod) {
- 		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+	} else {
-+		mutex_lock(&text_mutex);
-+		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-+		mutex_unlock(&text_mutex);
+In dmesg, you can see lines like:
+
+```
+poc: Unknown symbol AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\xc6\x=
+e9<\xfe\xff\xff\x8b
+\xff\xc1\xe9\x03\xf3H\xa5\xeb\xa1I\x8b~ \xe8 (err -2)
+```
+=2D--
+ kernel/module/main.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 49b9bca9d..9c5b373a7 100644
+=2D-- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1847,6 +1847,18 @@ static int elf_validity_cache_copy(struct load_info=
+ *info, int flags)
+ 	info->index.str =3D shdr->sh_link;
+ 	info->strtab =3D (char *)info->hdr + info->sechdrs[info->index.str].sh_o=
+ffset;
+
++	/*
++	 * The string table must be NUL-terminated, as required
++	 * by the spec. This makes strcmp and pr_* calls that access
++	 * strings in the section safe.
++	 */
++	strhdr =3D &info->sechdrs[info->index.str];
++	if (strhdr->sh_size > 0 && info->strtab[strhdr->sh_size - 1] !=3D '\0') =
+{
++		pr_err("module %s: string table isn't null terminated\n",
++		       info->name ?: "(missing .modinfo section or name field)");
++		goto no_exec;
 +	}
- 	return 0;
- }
- 
-@@ -142,7 +147,7 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec, unsigned long ad
- 	 * just modify the code directly.
- 	 */
- 	if (addr == MCOUNT_ADDR)
--		return ftrace_modify_code_direct(ip, old, new);
-+		return ftrace_modify_code_direct(ip, old, new, mod);
- 
++
  	/*
- 	 * x86 overrides ftrace_replace_code -- this function will never be used
-@@ -161,7 +166,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 	new = ftrace_call_replace(ip, addr);
- 
- 	/* Should only be called when module is loaded */
--	return ftrace_modify_code_direct(rec->ip, old, new);
-+	return ftrace_modify_code_direct(rec->ip, old, new, NULL);
- }
- 
- /*
- 
+ 	 * The ".gnu.linkonce.this_module" ELF section is special. It is
+ 	 * what modpost uses to refer to __this_module and let's use rely
+=2D-
+2.47.0
 
--- 
-Sincerely yours,
-Mike.
