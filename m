@@ -1,121 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B28149E00;
-	Sat, 19 Oct 2024 20:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5E02A8E5;
+	Sat, 19 Oct 2024 21:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729370735; cv=none; b=W0P45wkxrrFxVAeKyQPhEM/6qv3vps/mhfQH7xMTZe2TQLqnLx9ZKDWZnccUTdyiKiSnlyNcbSh/Iao0Kc11QbvaSPz3GNndxNR3Tlptr1wSso2GG+Eg7e3+dTpVdNFdf6GAGupbzIW9+DO/qpvtG0hnc3DtmEly2nFkCTGKnyg=
+	t=1729372871; cv=none; b=aBb+PI4fhT2ELBtBznbjATDjOAkS/ALMdQXgwDKqgNMfxd34WBMaMqA2rSmPEbD60ZgB6KoeQ6pZQw5FxBCKmuNWGtrhYo3IU/LShhfrGhT3ImZAJV2mhlULI2xDeADhDDKK+TPDRrhDtjiO4PuvfeqEb208YRVovhWEwZ1OCQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729370735; c=relaxed/simple;
-	bh=gmwDQ6No3ct9TKBBHTtT4Yw2AFEeVWE9FZaRD6OcRhU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BMAFWbvZZSaVZQBTtvBYYMT6jsCZgMW6UPHCEkhgLNvjPtrEVm6moRKAFOfZyvWHZqh6fpPV4t86w+oJvvmkaO94ScJGeh9ostjiaqY61kV0Lfq4Y1ZdVxyg6c8Y8/PqpeUkDsGexZKw7/BrYKiC/wOro+Jn4F+cP0PsKYF49D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gUrB6OvU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729372871; c=relaxed/simple;
+	bh=b+ixQT+D7HXYHPXd24UWiCusqWiFBUNqqJco+ViNWM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j7owT1DML1y3fTKhhETbAKFr2IKeybOb2McylEpZ+V3hJly+yQ1yPga7uds2cOUOcdIWt2wdM6ssvgJaQOv4UG4Yl/srJOiLLA8w6DZLnkmwCspH3SmGBycsvqV42RTXn9T0KYev/I7fQwD8ndsUN0IgiVRWWUIZYot+bkAxuQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HBWFGXt2; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gUrB6OvU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3166CC4CEC5;
-	Sat, 19 Oct 2024 20:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729370735;
-	bh=gmwDQ6No3ct9TKBBHTtT4Yw2AFEeVWE9FZaRD6OcRhU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gUrB6OvUzAE3AfRej4jnJKDKbxYWz+cZRF2tn/UZIEQYCHBDOXpBVYbDfJraR7l8n
-	 gQHPGSDOLU6fVoOcnonflRVT6kmlZLGBMcBzFjGdoU/5eToXxY3a2X6/CoWL8Y6Blw
-	 vKtGYWIsOvdhlXC92kFcqafZsLC9tpLm7bpbk3P2Skg4OChT+D7E4n3UBt7xZTHfsB
-	 ThVIQ4MslwI+4PFogaRVcMfc7eHKw/pCuD9frmWslk5PHbQLkDb3S+jXyJ1ktn0C0+
-	 mYdgaWvRjSyREVgG2REjeZMLJkqmzh0Pzohff1f2PBtHLM/G7NDMxg99n+rxReWrI4
-	 CLsyhOwQepJiQ==
-Date: Sat, 19 Oct 2024 13:45:32 -0700
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HBWFGXt2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=dkFpBigpf/M3vHRUj/pj5SiJUX28dX7S56b9xBPIGZs=; b=HBWFGXt2CRJhwqw4oyQdPzjTsc
+	mOeYySOzhZV3hZW/PcrjqiBtpI1ODrNWnkRHV6mMZUJsbeGF2Tit48wYG/GxYict0JXQkwWzhPPWZ
+	83TrxYCo2s6Q1yqTFFolxkzAv5x+Udiv0+Rc6BbVU+HIoqHOlMIlovPGl6+vqQQyCrLfu8yzIv7mh
+	7FRVr0UB7w82rKzLS18DBWVIuS8n6GT4+NRJVOn+Y07YxlTC8/iUnLpUUNpVRW0kmVg+W46OmIcVn
+	aPFKy69qB42t26FFqxvxbyj9FGl8/7bS2mKrLfnch92hOjvm940Z2QFbXeqmeiuYajRAKwuJBdYl7
+	1rOF5pag==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t2Gsg-00000003wgb-0oae;
+	Sat, 19 Oct 2024 21:21:02 +0000
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Helge Deller <deller@gmx.de>
-Cc: Matthew Maurer <mmaurer@google.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, masahiroy@kernel.org,
-	ndesaulniers@google.com, ojeda@kernel.org, gary@garyguo.net,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Benjamin Gray <bgray@linux.ibm.com>,
-	Naveen N Rao <naveen@kernel.org>, rust-for-linux@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	neal@gompa.dev, marcan@marcan.st, j@jannau.net,
-	asahi@lists.linux.dev, linux-modules@vger.kernel.org,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v5 14/16] modules: Support extended MODVERSIONS info
-Message-ID: <ZxQabNukxBo3utbh@bombadil.infradead.org>
-References: <20240925233854.90072-1-mmaurer@google.com>
- <20240925233854.90072-15-mmaurer@google.com>
- <ZwmlEYdS0aPVF32k@bombadil.infradead.org>
- <CAGSQo01o4fWYwSzZHX5dyTUKcaCSZ7z-hPQ8w63tgBPGbM_UCA@mail.gmail.com>
- <ZwmnnMmqVWLaelvQ@bombadil.infradead.org>
- <Zwm4lXdKB9RfPQ5M@bombadil.infradead.org>
- <Zwm4v_1wh5RwuHxF@bombadil.infradead.org>
- <CAGSQo03df-tnmwcz4nh3qtuQPKQ2zLHW0juQyKUXGsdeS7QkLA@mail.gmail.com>
- <ZxBKkJu-XPOGs-NG@bombadil.infradead.org>
- <9f3f6bd9-47d1-45fa-aa6b-9e0a80a5ebc6@gmx.de>
+To: sfr@canb.auug.org.au
+Cc: petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com,
+	mcgrof@kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] next: use new shared modules tree
+Date: Sat, 19 Oct 2024 14:21:00 -0700
+Message-ID: <20241019212100.940549-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f3f6bd9-47d1-45fa-aa6b-9e0a80a5ebc6@gmx.de>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 
-On Thu, Oct 17, 2024 at 02:08:19PM +0200, Helge Deller wrote:
-> Hi Luis,
-> 
-> On 10/17/24 01:21, Luis Chamberlain wrote:
-> > That sounds great. Yeah, the above would be great to test. A while ago
-> > I wrote a new modules selftests in order to test possible improvements
-> > on find_symbol() but I also did this due to push the limits of the
-> > numbers of symbols we could support. I wrote all this to also test the
-> > possible 64-bit alignment benefits of __ksymtab_ sections on
-> > architectures without CONFIG_HAVE_ARCH_PREL32_RELOCATIONS (e.g. ppc64,
-> > ppc64le, parisc, s390x,...). [....]
-> > 
-> > I forget what we concluded on Helge Deller's alignement patches, I think
-> > there was an idea on how to address the alignment through other means.
-> > 
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=20241016-modules-symtab
-> 
-> I stumbled upon the unaligned-memory-access.rst document [1].
-> Please read it, as it is a really good document, and the section
-> "Why unaligned access is bad" states:
-> It should be obvious from the above that if your code causes unaligned
-> memory accesses to happen, your code will not work correctly on certain
-> platforms and will cause performance problems on others.
-> 
-> With this in mind, you really should apply both of my alignment
-> patches which you currently carry in [0].
-> 
-> For parisc I partly solved the issue by fixing the arch-specific kernel unalignment
-> handler, but every time module sections are stored unaligned, it triggers
-> performance degregation on parisc (and other sensitive platforms).
-> 
-> I suggest you apply them unconditionally.
-> 
-> Helge
-> 
-> [1]  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/core-api/unaligned-memory-access.rst
+Use the new shared modules tree as we have more than one
+modules maintainer now.
 
-You're right, I've just referred to that doc and pushed to the new
-linux modules [2] modules-next branch. This is also great timing so
-that the work that is ongoing for Rust will take this into
-consideration as well. I'll just post the test I wrote as separate
-thing but it surely can be used to help test some of this later.
+git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
 
-[2] git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ Next/Trees | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  Luis
+diff --git a/Next/Trees b/Next/Trees
+index 38812059087c..585cddaf8746 100644
+--- a/Next/Trees
++++ b/Next/Trees
+@@ -252,7 +252,7 @@ regmap		git	git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git#for
+ sound		git	git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git#for-next
+ ieee1394	git	https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git#for-next
+ sound-asoc	git	git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git#for-next
+-modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git#modules-next
++modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git#modules-next
+ input		git	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git#next
+ block		git	git://git.kernel.dk/linux-block.git#for-next
+ device-mapper	git	git://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git#for-next
+-- 
+2.43.0
+
