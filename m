@@ -1,95 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08E7EAF6;
-	Sun, 20 Oct 2024 17:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A24197A81;
+	Sun, 20 Oct 2024 20:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729445302; cv=none; b=KC+HSyhkPGu1g+eloNLQFYQPtek5JP5mR7zF0TBtLB6qMkOnDT3H6GHO76Zw3zPoHcQrbe06aJd/Odfmqj52/RBJaHMPAjhSByWLRydFaUJxygubyd5MfCbbxfotjDfX7AqHWdEXHxrSc1OIcL08lJyECA3TQ1PkZ+vmempeZvo=
+	t=1729456764; cv=none; b=AG4NDLCAVuQ/qWxmSDxJO/YT3gIkq+bst7+he+lQgSfrqfjBtUzjsSLQmNzeEAj7mxatJHg28nmB/apOc6F9xOT0HHWP9SVj8lAlKCDC/QdYUTVKg47bMhEyR32y/Yzl992Frn+ZxPXUl11LR/xhadWLBFA4MEWlTCY+5vl0wtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729445302; c=relaxed/simple;
-	bh=YMxtJ+tEYbzwb2WO37t/lB+wTVMicOsjBgBCeMXj41Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VUxsKLaRgNPMObCLRyVpudJpidd6/YaZ9JWdCkxcUff6PTwFrT27KqQNvqAUwsqLK87ULN8U1bmv93ug1Gbkk2PwzU7osmPatjrAFAXf1x65IF03hmCV8gznomlx6tk5PCWfj7a+cMLuYGX091egkqe4QePIcYVfvOKJyqcCeMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CM/SFsbx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729456764; c=relaxed/simple;
+	bh=5TQHYQ6Afx6n89aKi3GjfRs8mppeAlFI9hCXm9fei+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U6BDdHUkoTSUi1BjhrzBtZ5RFpDab3bDRTPa6VV4Vi9etN1japJfna6GZjNg79JihbHwPnYIwO6A7JDW4X1Beo6P1wGNLk+YrNlUe0YR0ZhrU3Wmiy7qOd4fV0Zxx8GzM936vp/x+iT0Dnf6k5Y0eVAwQ2wJoYrfgtC/nBhDF+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iDhNDm24; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CM/SFsbx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377C2C4CEC6;
-	Sun, 20 Oct 2024 17:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729445302;
-	bh=YMxtJ+tEYbzwb2WO37t/lB+wTVMicOsjBgBCeMXj41Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CM/SFsbxK0S5GIfM7y9UmvGwDH/YnbdcekQp95GgKDEsoSwhWJrRNVSQp5ygK/G9u
-	 35QsXe/uIHpOEodrRTQDtnGnU618L2n9rW7ZuvCiZO353JEb3m9v6/I5MpvCIePUBM
-	 0pFYshd3NzZY3duqb1p0xt7MRbbZaKm1ozLA2gUKxn3X5/U0um2tK1a3ByOpiZGd3c
-	 vilW6RMz2w4KTne5xBd4w8qLMGBg1KHdhxlZbuV8wW9jKQ1V9Bvsld6WHSyyUR3FYS
-	 HadMQ38C1PE96Uy6TBdgem4vGOPjLSoaMAjLaGaaRDbeIj0cNTJmcAu0DL2L96p1E9
-	 Doz+g8Mp+2raQ==
-Date: Sun, 20 Oct 2024 10:28:20 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iDhNDm24"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1729456758;
+	bh=5TQHYQ6Afx6n89aKi3GjfRs8mppeAlFI9hCXm9fei+4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=iDhNDm24+GBkvq9XmNkTfGako6t2N2UTUovuCy6S9gN7GrkQ/gI7d2L5Lh0d9PvKC
+	 pZMRfSIt9VI84c8ANGHw6uRH/e5BBSatV7ld+NYP41mKrGQKI7Tr7dUTA5iGVGroyh
+	 mHJL0KEDGDkWSLHKT40gWA12uHeZipJ0r+WNM96hy2r2kcOzQOOdHqtVzmskaKaaEB
+	 7sADqUFGuCtlAd9EzKcaZiVOAcUoqRrQ7xzrOjCVJNkizjqJX/paoYY76vQvPtOwsv
+	 V5IyXWfVSvvnxgZ/P20ER+bNsMRo0JjL6AcJRzC+VcYtPvE+Fqur8oykLaocg0WczY
+	 RG3eDN+9Nnm/w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XWqzp39n3z4wbv;
+	Mon, 21 Oct 2024 07:39:18 +1100 (AEDT)
+Date: Mon, 21 Oct 2024 07:39:18 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Luis Chamberlain <mcgrof@kernel.org>
 Cc: petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] next: use new shared modules tree
-Message-ID: <ZxU9tMF7SPNfPYok@bombadil.infradead.org>
+Message-ID: <20241021073918.7b7071d6@canb.auug.org.au>
+In-Reply-To: <ZxU9tMF7SPNfPYok@bombadil.infradead.org>
 References: <20241019212100.940549-1-mcgrof@kernel.org>
- <20241020215949.41324ccf@canb.auug.org.au>
+	<20241020215949.41324ccf@canb.auug.org.au>
+	<ZxU9tMF7SPNfPYok@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/KdnhONMyGwiVMw+qh=giEf9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/KdnhONMyGwiVMw+qh=giEf9
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20241020215949.41324ccf@canb.auug.org.au>
 
-On Sun, Oct 20, 2024 at 09:59:49PM +1100, Stephen Rothwell wrote:
-> Hi,
->=20
-> On Sat, 19 Oct 2024 14:21:00 -0700 Luis Chamberlain <mcgrof@kernel.org> w=
-rote:
-> >
-> > Use the new shared modules tree as we have more than one
-> > modules maintainer now.
-> >=20
-> > git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git
-> >=20
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> >  Next/Trees | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/Next/Trees b/Next/Trees
-> > index 38812059087c..585cddaf8746 100644
-> > --- a/Next/Trees
-> > +++ b/Next/Trees
-> > @@ -252,7 +252,7 @@ regmap		git	git://git.kernel.org/pub/scm/linux/kern=
-el/git/broonie/regmap.git#for
-> >  sound		git	git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.g=
-it#for-next
-> >  ieee1394	git	https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/=
-linux1394.git#for-next
-> >  sound-asoc	git	git://git.kernel.org/pub/scm/linux/kernel/git/broonie/s=
-ound.git#for-next
-> > -modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linu=
-x.git#modules-next
-> > +modules		git	git://git.kernel.org/pub/scm/linux/kernel/git/modules/lin=
-ux.git#modules-next
-> >  input		git	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.gi=
-t#next
-> >  block		git	git://git.kernel.dk/linux-block.git#for-next
-> >  device-mapper	git	git://git.kernel.org/pub/scm/linux/kernel/git/device=
--mapper/linux-dm.git#for-next
->=20
-> Done
->=20
-> Currently only you, Luis, are listed as a contact.  Should I add anyone e=
-lse?
+Hi Luis,
 
-Yes please add: petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@sams=
-ung.com
+On Sun, 20 Oct 2024 10:28:20 -0700 Luis Chamberlain <mcgrof@kernel.org> wro=
+te:
+>
+> Yes please add: petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@sa=
+msung.com
 
-  Luis
+Done.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KdnhONMyGwiVMw+qh=giEf9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcVanYACgkQAVBC80lX
+0GzOnwf+KaJraH8PQ8iqVlt0OI1G7PpxhMBqjowpwq13wKSSrCYlqVJMXQ/qp7jC
+ze0MQXW3nW2XtJAAFq0j7Fr7CnPUJhRoyBj7c0ZOmShBHBilCZwJEpS00rRhUD5J
+7rYMKih2/8dtXdJBps4yM4nVQsFKwHvRKdiqocnjlzseQ0BrphnoUBqgi0/cRFtN
+Nln+NSOc2+/cjuaQcENxkRq5JLsp79Wqq6FXDRbPVxHwj/DvaVQ7KRPvp7QkVb3h
+r3H7kaml3Ei0w+Uwx6jgzcCL8Sa1ThGh1o/REGiIVpIY1LFcI3hZr26BNR860ORu
+768XsYQF15r/gM1xvJdidyzdouig5g==
+=KS72
+-----END PGP SIGNATURE-----
+
+--Sig_/KdnhONMyGwiVMw+qh=giEf9--
