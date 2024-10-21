@@ -1,89 +1,165 @@
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A24197A81;
-	Sun, 20 Oct 2024 20:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134CA1CF285
+	for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 07:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729456764; cv=none; b=AG4NDLCAVuQ/qWxmSDxJO/YT3gIkq+bst7+he+lQgSfrqfjBtUzjsSLQmNzeEAj7mxatJHg28nmB/apOc6F9xOT0HHWP9SVj8lAlKCDC/QdYUTVKg47bMhEyR32y/Yzl992Frn+ZxPXUl11LR/xhadWLBFA4MEWlTCY+5vl0wtw=
+	t=1729495297; cv=none; b=T1Dsloc0E3zHxCFJKrgftH2sywzbT1mrYrM8lyXOwHtxEu57CkctDF50jde9hKbFxhp1F5K8TEqU3X077S6mrN6FahawA831FDDro9VSuT8CA+jFIrkXUg4SvLhy3b90tdRG9jr5nbjQKVsh9u6wnRXs4Th1x0RFlPX6iUlJBpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729456764; c=relaxed/simple;
-	bh=5TQHYQ6Afx6n89aKi3GjfRs8mppeAlFI9hCXm9fei+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U6BDdHUkoTSUi1BjhrzBtZ5RFpDab3bDRTPa6VV4Vi9etN1japJfna6GZjNg79JihbHwPnYIwO6A7JDW4X1Beo6P1wGNLk+YrNlUe0YR0ZhrU3Wmiy7qOd4fV0Zxx8GzM936vp/x+iT0Dnf6k5Y0eVAwQ2wJoYrfgtC/nBhDF+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iDhNDm24; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+	s=arc-20240116; t=1729495297; c=relaxed/simple;
+	bh=u7mbkFbLccM2lr1dpHGOrtIFIX6zwELH/gCl+41CUSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jj/aFzz+NIL/2atkIKa/ydmU+1Z08f+phLrl1XUFqTcbWtiIP7zEn/EAoGBuXgWRp3Rv/MIE3odlbr/vS/ZXioEuvV6m1y6kmGj1+Th/92VCx7q6czLoEafJzC/Pc14niionrOqRbGzlG8jGun9j9grOYTE3zcVPEnC8+06KbdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=B1DB5bC5; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iDhNDm24"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1729456758;
-	bh=5TQHYQ6Afx6n89aKi3GjfRs8mppeAlFI9hCXm9fei+4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iDhNDm24+GBkvq9XmNkTfGako6t2N2UTUovuCy6S9gN7GrkQ/gI7d2L5Lh0d9PvKC
-	 pZMRfSIt9VI84c8ANGHw6uRH/e5BBSatV7ld+NYP41mKrGQKI7Tr7dUTA5iGVGroyh
-	 mHJL0KEDGDkWSLHKT40gWA12uHeZipJ0r+WNM96hy2r2kcOzQOOdHqtVzmskaKaaEB
-	 7sADqUFGuCtlAd9EzKcaZiVOAcUoqRrQ7xzrOjCVJNkizjqJX/paoYY76vQvPtOwsv
-	 V5IyXWfVSvvnxgZ/P20ER+bNsMRo0JjL6AcJRzC+VcYtPvE+Fqur8oykLaocg0WczY
-	 RG3eDN+9Nnm/w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4XWqzp39n3z4wbv;
-	Mon, 21 Oct 2024 07:39:18 +1100 (AEDT)
-Date: Mon, 21 Oct 2024 07:39:18 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] next: use new shared modules tree
-Message-ID: <20241021073918.7b7071d6@canb.auug.org.au>
-In-Reply-To: <ZxU9tMF7SPNfPYok@bombadil.infradead.org>
-References: <20241019212100.940549-1-mcgrof@kernel.org>
-	<20241020215949.41324ccf@canb.auug.org.au>
-	<ZxU9tMF7SPNfPYok@bombadil.infradead.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="B1DB5bC5"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a99f646ff1bso511558566b.2
+        for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 00:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1729495293; x=1730100093; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sM4ACN0kxcjfg5UR2mRm8TYbMyjtVqVwofUPN7ArdNY=;
+        b=B1DB5bC5U2viQQ3ofI3XE2foauUP3xDOk706VJU+4PpHE/G0cTqm0su7f9KC9xS4AY
+         vuwYCwW5F9DZrdyblTloeJZl7s8g53rwI+i8T2XjIXPFBOtoBVjM5kxe0laU1aN7ljjz
+         cD7PHfGfHMv7E8B8TNRr5YXEBPRX5x1fs9RzPXgSOXt380I1KAzJkqUmZRvlGwUDdQQg
+         Jk0LbQMtdzeHPLU1p4b30CO+N3I+0AbtQ28H38CySVeqzmi+T7Ftz79vHapasHpbABJs
+         yldrCvts8sK676By1QzThRqx0U0/J6YbxIF0AZYfWKw67hTBZwHndCkCC+7OKmnUfA32
+         mSVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729495293; x=1730100093;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sM4ACN0kxcjfg5UR2mRm8TYbMyjtVqVwofUPN7ArdNY=;
+        b=kW2TY7tEU/7RQGHauAVgR03wm03oHU+bmCvB80wsh86suE5TsIAJxAYInamLjUzAiu
+         3qdSYdZJs3FApPQUj9ge+CdLjrKGWQo0yQCLhcQ7c/VRShKk5y9NChC0B+D7yWmNWQJU
+         vaUQV9aTKai5eXINQCJlUkK4eX8AOXn8Wh9PJWdjZAfU7FtpXkj6yamLG3aq+WZWBuQe
+         eZVRe/zJ/8UFbAfNmULlw2tTsqrRHYejA0woaFpQX34u3ldDZP0QP1fZryflG0i2PJW8
+         /CjlO4fD3nl4rELnJRUB3Al7+TPg6fpYvz81IlK9+od3K/R6MKSvhuV9taZROJ5qAaTF
+         jzEA==
+X-Forwarded-Encrypted: i=1; AJvYcCV6kjoImWkKiblthfCKgf4wqwwc5Xuawnt6AZGDsG2tJMjw/cBzp3SWBorhoI1jIYtyb9hZKoLelmHAVQ70@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxtpwbg9v+Clm5n4YEZLac1WuVDwOByJ6E+lknM7x96KONM+vKR
+	dWU/utN3nQbmo2lsoBqDc8VvWr7kQ9Fxn/dBYqIrrZnWJgpKsLqfn0ecEXz6UvA=
+X-Google-Smtp-Source: AGHT+IH7c0NP6cQiTSwyl//5zHrNCLOmGdFL9dCgtDAoFWr5dtBuuJz0loN2CEAZ3ZOL1zVScXIQ/Q==
+X-Received: by 2002:a17:906:c10b:b0:a9a:1792:f05 with SMTP id a640c23a62f3a-a9a69ba907cmr1161713466b.31.1729495293159;
+        Mon, 21 Oct 2024 00:21:33 -0700 (PDT)
+Received: from localhost (109-81-89-238.rct.o2.cz. [109.81.89.238])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a91559dfcsm167515166b.132.2024.10.21.00.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2024 00:21:32 -0700 (PDT)
+Date: Mon, 21 Oct 2024 09:21:32 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org,
+	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
+	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
+	xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+	willy@infradead.org, liam.howlett@oracle.com,
+	pasha.tatashin@soleen.com, souravpanda@google.com,
+	keescook@chromium.org, dennis@kernel.org, yuzhao@google.com,
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com,
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
+ refs in page flags
+Message-ID: <ZxYA_CHt8tVjowPQ@tiehlicka>
+References: <CAJD7tkY0zzwX1BCbayKSXSxwKEGiEJzzKggP8dJccdajsr_bKw@mail.gmail.com>
+ <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
+ <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
+ <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
+ <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+ <ZxJcryjDUk_LzOuj@tiehlicka>
+ <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
+ <ZxKWBfQ_Lps93fY1@tiehlicka>
+ <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KdnhONMyGwiVMw+qh=giEf9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
 
---Sig_/KdnhONMyGwiVMw+qh=giEf9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri 18-10-24 10:45:39, Suren Baghdasaryan wrote:
+> On Fri, Oct 18, 2024 at 10:08 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Fri 18-10-24 09:04:24, Suren Baghdasaryan wrote:
+> > > On Fri, Oct 18, 2024 at 6:03 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Tue 15-10-24 08:58:59, Suren Baghdasaryan wrote:
+> > > > > On Tue, Oct 15, 2024 at 8:42 AM David Hildenbrand <david@redhat.com> wrote:
+> > > > [...]
+> > > > > > Right, I think what John is concerned about (and me as well) is that
+> > > > > > once a new feature really needs a page flag, there will be objection
+> > > > > > like "no you can't, we need them for allocation tags otherwise that
+> > > > > > feature will be degraded".
+> > > > >
+> > > > > I do understand your concern but IMHO the possibility of degrading a
+> > > > > feature should not be a reason to always operate at degraded capacity
+> > > > > (which is what we have today). If one is really concerned about
+> > > > > possible future regression they can set
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n and keep what we have today. That's
+> > > > > why I'm strongly advocating that we do need
+> > > > > CONFIG_PGALLOC_TAG_USE_PAGEFLAGS so that the user has control over how
+> > > > > this scarce resource is used.
+> > > >
+> > > > I really do not think users will know how/why to setup this and I wouldn't
+> > > > even bother them thinking about that at all TBH.
+> > > >
+> > > > This is an implementation detail. It is fine to reuse unused flags space
+> > > > as a storage as a performance optimization but why do you want users to
+> > > > bother with that? Why would they ever want to say N here?
+> > >
+> > > In this patch you can find a couple of warnings that look like this:
+> > >
+> > > pr_warn("With module %s there are too many tags to fit in %d page flag
+> > > bits. Memory profiling is disabled!\n", mod->name,
+> > > NR_UNUSED_PAGEFLAG_BITS);
+> > > emitted when we run out of page flag bits during a module loading,
+> > >
+> > > pr_err("%s: alignment %lu is incompatible with allocation tag
+> > > indexing, disable CONFIG_PGALLOC_TAG_USE_PAGEFLAGS",  mod->name,
+> > > align);
+> > > emitted when the arch-specific section alignment is incompatible with
+> > > alloc_tag indexing.
+> >
+> > You are asking users to workaround implementation issue by configuration
+> > which sounds like a really bad idea. Why cannot you make the fallback
+> > automatic?
+> 
+> Automatic fallback is possible during boot, when we decide whether to
+> enable page extensions or not. So, if during boot we decide to disable
+> page extensions and use page flags, we can't go back and re-enable
+> page extensions after boot is complete. Since there is a possibility
+> that we run out of page flags at runtime when we load a new module,
+> this leaves this case when we can't reference the module tags and we
+> can't fall back to page extensions, so we have to disable memory
+> profiling.
 
-Hi Luis,
+Right, I do understand (I guess) the challenge. I am just arguing that
+it makes really no sense to tell user to recompile the kernel with a
+CONFIG_FOO to workaround this limitation. Please note that many users of
+this feature will simply use a precompiled (e.g. distribution) kernels.
+Once you force somebody to recompile with
+CONFIG_PGALLOC_TAG_USE_PAGEFLAGS=n they are not going back to a more
+memory optimal implementation.
 
-On Sun, 20 Oct 2024 10:28:20 -0700 Luis Chamberlain <mcgrof@kernel.org> wro=
-te:
->
-> Yes please add: petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@sa=
-msung.com
-
-Done.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KdnhONMyGwiVMw+qh=giEf9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmcVanYACgkQAVBC80lX
-0GzOnwf+KaJraH8PQ8iqVlt0OI1G7PpxhMBqjowpwq13wKSSrCYlqVJMXQ/qp7jC
-ze0MQXW3nW2XtJAAFq0j7Fr7CnPUJhRoyBj7c0ZOmShBHBilCZwJEpS00rRhUD5J
-7rYMKih2/8dtXdJBps4yM4nVQsFKwHvRKdiqocnjlzseQ0BrphnoUBqgi0/cRFtN
-Nln+NSOc2+/cjuaQcENxkRq5JLsp79Wqq6FXDRbPVxHwj/DvaVQ7KRPvp7QkVb3h
-r3H7kaml3Ei0w+Uwx6jgzcCL8Sa1ThGh1o/REGiIVpIY1LFcI3hZr26BNR860ORu
-768XsYQF15r/gM1xvJdidyzdouig5g==
-=KS72
------END PGP SIGNATURE-----
-
---Sig_/KdnhONMyGwiVMw+qh=giEf9--
+Just my 2cents
+-- 
+Michal Hocko
+SUSE Labs
