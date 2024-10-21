@@ -1,165 +1,184 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35561E25E6
-	for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 09:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71ED7EEB3
+	for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 15:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729502039; cv=none; b=n0abZp0S2pDAo7MVxeZVctccg7jVn2zD/AAWQQ/kXgqrVbOT1o331TAqkMesjnmql3WoGGxcQo07kpgusISPTUQYVuMUlT55zpATxtqjILv/BiFq+VHa2+f/JQFGNdG4uuBCfOyxyAyeLSsGf3D7HNx4oRNAG3ZOkTHVAwe1Vu4=
+	t=1729523133; cv=none; b=GurK3MnV/L8X75VKGsCDR8xsMIY3o6xVfvskzCt3Seg0ZzjtJ39UP8pOFtpWwTq8xczXR5HzxSkx8Eku15AATVZU6bj9elLe2velLWNX5WxLmE/NUGFNVB2+pjk0goJ3+qMEn4Gur8zqRLqSO5BrBGZv4i6enwABQif+2H4JNNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729502039; c=relaxed/simple;
-	bh=Qpok900RIq0lalZ/bvNPZcgfy2eFsV4ECXKYjvsFsZ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X3E4JrJG6jaPT3vl/VBeKAeTaMQqzWc7Zh6sf8Mt77vANnIV3zq5XVYFv6HhsV5aL6dNBgJk2p/hDX/B33RtKt6LFd35dd/yfeibl9u7PRnohG3cvpM+bWloROxSYruhU33Kyw8F71+Wc8Hod1NARtE95EfsKbUJY+JX8oCikmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=az3cDt+Z; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1729523133; c=relaxed/simple;
+	bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RxYL6A4Vh+ZxEsOAkePdtKs8jFkcksmkRxF2enIJ8PiGJLYN93aXT4K5AKBuo5+JRXyJeyXdOo7Org01cXMDV3V7L8Ys5jL3WwuhIjeADiSi5SUwZopIi1HOFdSBVeJ59mEPhflpY/fQWsots1P86qrfx7AZLd+ARuBwys/xXK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o2obhUQE; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="az3cDt+Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729502036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=laNZkwIbOwCUsbOEzRR8/YU1OhJt9JdhAA++t+a3gVA=;
-	b=az3cDt+ZxDHq8M+ejK5hdsiVoCJiE5RDy4wU2GjBBroij9ALfmMIJhMkPlRcFkf1FO5ziB
-	qXsCEWaTh0AEwk9ZjGYyWGM47D1MOpYOVlArMw1O11Pt2BSVe859pPWhcIzDuW2UuvLVGX
-	DqyTqr8icLqcJ7u5Fxwa2eHPBatW9Ug=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-34-WQ8Ebj-GN4iBY8TUQ0iOow-1; Mon, 21 Oct 2024 05:13:52 -0400
-X-MC-Unique: WQ8Ebj-GN4iBY8TUQ0iOow-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37d4854fa0eso2464120f8f.2
-        for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 02:13:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o2obhUQE"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4608dddaa35so442921cf.0
+        for <linux-modules@vger.kernel.org>; Mon, 21 Oct 2024 08:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729523130; x=1730127930; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
+        b=o2obhUQEUvs2nzyOdKmj3of+1dlQjQTUWPlAwVpHDjAu7Unq3D9QVRoQZEZ4/Zk+sN
+         QqumoSpKaFvLgROIuzbxLa82XmziYtcJt6u7rcj9Da0llP6UZDmKFZmHtEUDYTf0Fm6Z
+         t549V37XDPzTzWMTbvStFbayTnLSwrpjrQslmMqSyTXgn5RpBYSjuLOujFIzb80FEsYc
+         xGw+KFsImIKUeBVLXmlcwOYrqMdvaXG/FlGY3RYzUE4ffxytkKfLfEo90KjvFZplaqJG
+         S6s4Ofxgka5fhSql3Naihcsl7OSYxGeD+2P1nPa+LAKXyDEqbwnSaa3iin5S+NG0b5ky
+         T4ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729502031; x=1730106831;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=laNZkwIbOwCUsbOEzRR8/YU1OhJt9JdhAA++t+a3gVA=;
-        b=C6c07B51kOjyElI4LxBXdwQ9ZIqMk1+LhipqTUhFm36PVf4uVt5Q0a/kAFLfvuWJU0
-         QBDaNy2Nna+MbDFlQyJn6MZbjBx+S1034gWlzm3V0AcZtg7I9JVGj8LI6fd/BSPnEvnZ
-         LlIzSOTIrzRUAOiV7ajkSFyzFHkUF4N/A8rPJwUmzkkf4vWUZSxWaVIf9Hv1LGQkw6eA
-         82+AgwLe3Pd4+fKx8SPUwGSY0BlKFRLRAuSa9ckMy2tYcR7+zkfMxqnhlo4A7AsSzI+0
-         QEuYVokvr7WLPZtOq+KZOIgQl46lHm+eiW8JaRuVudDYePe5w6InwGweSGEITocTZSIC
-         v/4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUn9opDp6yaVjb0JXR52ycfjpPI/INIQeuJvnkWen7WIXJA8G6NbxUUF8N4J5Ms8b+3Ce+A298PuNW1oxWj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzZvsBHMNgN8XT83sNo7s96pTFcLezBVMcu6kp6C6fwy3aXKl6
-	SF/aaURIowXk7MpiIKEkiCvyqeeKPSzrjyQeR9qhgGopaOksAYfdGm/qIm+jHYBD0nXRcLHcc+L
-	ZXCoAezpriCnbg2si79/7kx1731nq/nhj2I6m3JNXvuCqTZeqvFCUmeTdROXOOBs=
-X-Received: by 2002:a5d:60cd:0:b0:37d:52d0:a59d with SMTP id ffacd0b85a97d-37eab72732cmr6823869f8f.10.1729502031068;
-        Mon, 21 Oct 2024 02:13:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGf2q3ct7vDUcpXfTgq4f/Ogs1pSXSIZFsokW+/dUVWCwOUrBI/1w/NWhFvrEEHU/F3TQLS9Q==
-X-Received: by 2002:a5d:60cd:0:b0:37d:52d0:a59d with SMTP id ffacd0b85a97d-37eab72732cmr6823825f8f.10.1729502030651;
-        Mon, 21 Oct 2024 02:13:50 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:36d3:2b96:a142:a05b? ([2a09:80c0:192:0:36d3:2b96:a142:a05b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0b944fbsm3841034f8f.72.2024.10.21.02.13.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Oct 2024 02:13:50 -0700 (PDT)
-Message-ID: <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
-Date: Mon, 21 Oct 2024 11:13:48 +0200
+        d=1e100.net; s=20230601; t=1729523130; x=1730127930;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=50bzoL0E5RW9jtb3/55tHhkokdpjPWuz5iPr4mnKF78=;
+        b=vzpJ34l+FkpMVX+S7gsLoQf9CfMWtVpvs/Y1hRnkFdGsX77R/YwfpWmifz1zyMtxDM
+         qWiuPT3lnPCqGyyn3rhxlanlTOf6HCgV0MCD6hjInsxyDKvKxsslQ4SEQZbgbb3kc8Pl
+         ghMpp17NS51P6r6lO387BALmDKj5LeEf9zPq7gu/P0sPmd/1x6NajvXFGbEUaoS3EGo7
+         PBhEWYHrVWJdLRRa29bfAq3LRAocZMoQSyT1q/xtdP0jVLfzgDC0igIM+FYgR92rh5Cz
+         8175/+rP81a1znDU2CsJFY0bi6RraZZay8/8tWesAbo0w9vv+9tgmfPsgV503f+wtH6u
+         gzNA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmO4jnzD++08Pb1Nw6fSwY4UCWc1dZN49BeIB7rzjhBToDRsMycBw3Txv3FhQMNdZkgARW4giASIuK5D/o@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOBVdYg/abkBdk4xAtCVaO/XtMygQs03bwec87BMKZZRxce8sE
+	sSci6Gs7GWnEOg7jHMnKnj9Vm7nWQVrnokY/oGFyWTvo3fPmuVpOWgjjuvFMoBy2e7nlsQ+Xez7
+	PysOjgAokcrxLz267Eran0BFmougdXoFPqIy9
+X-Google-Smtp-Source: AGHT+IEOXV+Q7vMIloFDPvxSVsyITVEcRe5763BxgPsFvYZ2aNgQJzPh1q4g46HKK2Ge4bEfemTrl3UiZHhHOGQk7cA=
+X-Received: by 2002:ac8:5a03:0:b0:45c:9d26:8f6e with SMTP id
+ d75a77b69052e-460be5cce66mr3744761cf.21.1729523129971; Mon, 21 Oct 2024
+ 08:05:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
+ <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com> <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
+ <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com> <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
+ <ZxJcryjDUk_LzOuj@tiehlicka> <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
+ <ZxKWBfQ_Lps93fY1@tiehlicka> <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
+ <CAJuCfpHFmmZhSrWo0iWST9+DGbwJZYdZx7zjHSHJLs_QY-7UbA@mail.gmail.com>
+ <ZxYCK0jZVmKSksA4@tiehlicka> <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
+In-Reply-To: <62a7eb3f-fb27-43f4-8365-0fa0456c2f01@redhat.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 21 Oct 2024 08:05:16 -0700
+Message-ID: <CAJuCfpE_aSyjokF=xuwXvq9-jpjDfC+OH0etspK=G6PS7SvMFg@mail.gmail.com>
 Subject: Re: [PATCH v3 5/5] alloc_tag: config to store page allocation tag
  refs in page flags
-To: Michal Hocko <mhocko@suse.com>, Suren Baghdasaryan <surenb@google.com>
-Cc: John Hubbard <jhubbard@nvidia.com>, Yosry Ahmed <yosryahmed@google.com>,
- akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net,
- arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org,
- thuth@redhat.com, tglx@linutronix.de, bp@alien8.de,
- xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz,
- hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
- willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com,
- souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
- yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org,
- iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com,
- kaleshsingh@google.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org, kernel-team@android.com
-References: <cd848c5f-50cd-4834-a6dc-dff16c586e49@nvidia.com>
- <6a2a84f5-8474-432f-b97e-18552a9d993c@redhat.com>
- <CAJuCfpGkuaCh+PxKbzMbu-81oeEdzcfjFThoRk+-Cezf0oJWZg@mail.gmail.com>
- <9c81a8bb-18e5-4851-9925-769bf8535e46@redhat.com>
- <CAJuCfpH-YqwEi1aqUAF3rCZGByFpvKVSfDckATtCFm=J_4+QOw@mail.gmail.com>
- <ZxJcryjDUk_LzOuj@tiehlicka>
- <CAJuCfpGV3hwCRJj6D-SnSOc+VEe5=_045R1aGJEuYCL7WESsrg@mail.gmail.com>
- <ZxKWBfQ_Lps93fY1@tiehlicka>
- <CAJuCfpHa9qjugR+a3cs6Cud4PUcPWdvc+OgKTJ1qnryyJ9+WXA@mail.gmail.com>
- <CAJuCfpHFmmZhSrWo0iWST9+DGbwJZYdZx7zjHSHJLs_QY-7UbA@mail.gmail.com>
- <ZxYCK0jZVmKSksA4@tiehlicka>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-In-Reply-To: <ZxYCK0jZVmKSksA4@tiehlicka>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: David Hildenbrand <david@redhat.com>
+Cc: Michal Hocko <mhocko@suse.com>, John Hubbard <jhubbard@nvidia.com>, 
+	Yosry Ahmed <yosryahmed@google.com>, akpm@linux-foundation.org, 
+	kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, mcgrof@kernel.org, 
+	rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, tglx@linutronix.de, 
+	bp@alien8.de, xiongwei.song@windriver.com, ardb@kernel.org, vbabka@suse.cz, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
+	yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org, 
+	iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com, 
+	kaleshsingh@google.com, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Oct 21, 2024 at 2:13=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+>
+>
+> Am 21.10.24 um 09:26 schrieb Michal Hocko:
+> > On Fri 18-10-24 14:57:26, Suren Baghdasaryan wrote:
+> >> On Fri, Oct 18, 2024 at 10:45=E2=80=AFAM Suren Baghdasaryan <surenb@go=
+ogle.com> wrote:
+> >>>
+> >>> On Fri, Oct 18, 2024 at 10:08=E2=80=AFAM Michal Hocko <mhocko@suse.co=
+m> wrote:
+> >>>
+> >>> Automatic fallback is possible during boot, when we decide whether to
+> >>> enable page extensions or not. So, if during boot we decide to disabl=
+e
+> >>> page extensions and use page flags, we can't go back and re-enable
+> >>> page extensions after boot is complete. Since there is a possibility
+> >>> that we run out of page flags at runtime when we load a new module,
+> >>> this leaves this case when we can't reference the module tags and we
+> >>> can't fall back to page extensions, so we have to disable memory
+> >>> profiling.
+> >>> I could keep page extensions always on just in case this happens but
+> >>> that's a lot of memory waste to handle a rare case...
+> >>
+> >> After thinking more about this, I suggest a couple of changes that
+> >> IMHO would make configuration simpler:
+> >> 1. Change the CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to an early boot
+> >> parameter.
+> >
+> > This makes much more sense!
+> >
+> >> Today we have a "mem_profiling" parameter to enable/disable
+> >> memory profiling. I suggest adding "mem_profiling_use_pgflags" to
+> >> switch the current behavior of using page extensions to use page
+> >> flags.
+> >
+> > I do not want to bikeshed about this but to me it would make more sense
+> > to have an extension paramater to mem_profiling and call it something
+> > like compress or similar so that page flags are not really carved into
+> > naming. The docuemntation then can explain that the copression cannot b=
+e
+> > always guaranteed and it might fail so this is more of a optimistic and
+> > potentially failing optimization that might need to be dropped in some
+> > usege scenarios.
+>
+> Maybe we can reuse the existing parameter (e.g., tristate). Only makes se=
+nse if
+> we don't expect too many other modes though :)
+
+Yeah, I thought about adding new values to "mem_profiling" but it's a
+bit complicated. Today it's a tristate:
+
+mem_profiling=3D0|1|never
+
+0/1 means we disable/enable memory profiling by default but the user
+can enable it at runtime using a sysctl. This means that we enable
+page_ext at boot even when it's set to 0.
+"never" means we do not enable page_ext, memory profiling is disabled
+and sysctl to enable it will not be exposed. Used when a distribution
+has CONFIG_MEM_ALLOC_PROFILING=3Dy but the user does not use it and does
+not want to waste memory on enabling page_ext.
+
+I can add another option like "pgflags" but then it also needs to
+specify whether we should enable or disable profiling by default
+(similar to 0|1 for page_ext mode). IOW we will need to encode also
+the default state we want. Something like this:
+
+mem_profiling=3D0|1|never|pgflags_on|pgflags_off
+
+Would this be acceptable?
 
 
-
-Am 21.10.24 um 09:26 schrieb Michal Hocko:
-> On Fri 18-10-24 14:57:26, Suren Baghdasaryan wrote:
->> On Fri, Oct 18, 2024 at 10:45 AM Suren Baghdasaryan <surenb@google.com> wrote:
->>>
->>> On Fri, Oct 18, 2024 at 10:08 AM Michal Hocko <mhocko@suse.com> wrote:
->>>
->>> Automatic fallback is possible during boot, when we decide whether to
->>> enable page extensions or not. So, if during boot we decide to disable
->>> page extensions and use page flags, we can't go back and re-enable
->>> page extensions after boot is complete. Since there is a possibility
->>> that we run out of page flags at runtime when we load a new module,
->>> this leaves this case when we can't reference the module tags and we
->>> can't fall back to page extensions, so we have to disable memory
->>> profiling.
->>> I could keep page extensions always on just in case this happens but
->>> that's a lot of memory waste to handle a rare case...
->>
->> After thinking more about this, I suggest a couple of changes that
->> IMHO would make configuration simpler:
->> 1. Change the CONFIG_PGALLOC_TAG_USE_PAGEFLAGS to an early boot
->> parameter.
-> 
-> This makes much more sense!
-> 
->> Today we have a "mem_profiling" parameter to enable/disable
->> memory profiling. I suggest adding "mem_profiling_use_pgflags" to
->> switch the current behavior of using page extensions to use page
->> flags.
-> 
-> I do not want to bikeshed about this but to me it would make more sense
-> to have an extension paramater to mem_profiling and call it something
-> like compress or similar so that page flags are not really carved into
-> naming. The docuemntation then can explain that the copression cannot be
-> always guaranteed and it might fail so this is more of a optimistic and
-> potentially failing optimization that might need to be dropped in some
-> usege scenarios.
-
-Maybe we can reuse the existing parameter (e.g., tristate). Only makes sense if 
-we don't expect too many other modes though :)
-
-> 
->> We keep the current behavior of using page extensions as
->> default (mem_profiling_use_pgflags=0) because it always works even
->> though it has higher overhead.
-> 
-> Yes this seems to be a safe default.
-
-Agreed.
-
-> 
->> 2. No auto-fallback. If mem_profiling_use_pgflags=1 and we don't have
->> enough page flags (at boot time or later when we load a module), we
->> simply disable memory profiling with a warning.
-
-Sounds reasonable to me.
-
--- 
-Cheers,
-
-David / dhildenb
-
+>
+> >
+> >> We keep the current behavior of using page extensions as
+> >> default (mem_profiling_use_pgflags=3D0) because it always works even
+> >> though it has higher overhead.
+> >
+> > Yes this seems to be a safe default.
+>
+> Agreed.
+>
+> >
+> >> 2. No auto-fallback. If mem_profiling_use_pgflags=3D1 and we don't hav=
+e
+> >> enough page flags (at boot time or later when we load a module), we
+> >> simply disable memory profiling with a warning.
+>
+> Sounds reasonable to me.
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
