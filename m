@@ -1,55 +1,55 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEC91CC154
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 17:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03B31CEEB1
+	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 17:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729703287; cv=none; b=OzmmZ8U12CiAO1a5BGZNnsmeYGHdSxOzZA2lGOsogxvRYCxtT2NAYYhiHUIPqPvYsaDxJ01XoU4iyTfo2laUrQOBuo3NMAVO1Y2JvVHW3wCUZEKDa8s98pvZ40kDn0FKAiOuJEgcOp6h/fNXcA86Pjf0heVuM1rXXEQ1vPo5BK4=
+	t=1729703288; cv=none; b=qnz/lWWyiIRt7kxad2PlBwZvtTQ2FRfoEx9fvuedCW+u4SjuJrtq4TiTsYmoIApuqPk8sbsmW8jtmhRrtRz6S56/cp9VhDg1FKRNW9LRoJ0be0bYDBfKxx4zR1GCHuTKrTuIMDwb94AYA1Cr6xe8rUhvah4p9LlIxa5opbwzMs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729703287; c=relaxed/simple;
-	bh=oPiAZk7sAUwyc2ZRzUfKOKHVYouPvs61/fhZTZAzOCM=;
+	s=arc-20240116; t=1729703288; c=relaxed/simple;
+	bh=ZiQDRmQrDQydODmBhplTHGUqS5BFAUWK779ZQGEAgqA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JNYvNSIdTZ5WSp6P6z1A3fKvEDsf29d8ebZne5kREDCx8MtNcIeCz3rXiv9b4bDG0YIzqG1kJ8w+PzbJjOJ9H6SLmwbDr4xBLkLx8mQf9G8E/qTJnyseSbq6CHnkVcusipzO9NhaWegRgXRkvNHQGee7weNPY+axJpjqMqWS79s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qx652BjR; arc=none smtp.client-ip=209.85.219.201
+	 To:Cc:Content-Type; b=rT3rlM/oC6OjJhodH2U2Y5PhZmCBvlXINLfNr463d1d4Ndo4JYiHdfaNaQDuvxnaREK8kVE/XF0/86zgySDxQV5eRE7QDWmoJ1Y8EMBgs7996TOUl2tPXVJTf15ZaQPwkQZ4JLLldYpIdxi1PIyf/2i/AaLLE5F2gzBuQXj9OLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H9VJE0Ix; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qx652BjR"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e297a366304so20881276.2
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 10:08:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H9VJE0Ix"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e28edea9af6so20940276.3
+        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 10:08:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729703284; x=1730308084; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729703286; x=1730308086; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cy4VkAGTnueEjEvw1TSjR77Zk0lX1faSNj+Oljrwa2Y=;
-        b=Qx652BjRJlLBDhiwtgP7rFltqcVCeOz64AMfJMi1lfmNwRT3W6yJF2h66vz/NOdKvE
-         iZX2r/6r71iZd3H6wP+kW3t8a0HXMP2YOsXTg3tOJAbvPBlyVSndmovQp59wBX4nnbV8
-         jejqeBwwjT7qIeRe08oGq0Cp83lM1+FOvt43wByN6sfYVEa14DIljwjJONrccZ7wFFHv
-         fZNNV++nuuSoZIeX9NJpihOasG9IF1MQ4QIyGQFQJs0TmnWguyVWNAywiZshv+JiuOUm
-         SH/lNNTmYiapZtyvrkKBGRczlN8UQ2w9m85DNYwABykAZaiWY/T+pOmFff90ZJdc96hQ
-         4Vlg==
+        bh=qzUZQuDC5qa2V/vpTubJjhmN2aD40kQ8oHuQLi+u1Z4=;
+        b=H9VJE0IxnL+nTpuDEfsO0joE5Y4h/z1jDdQWH90pxx78iQW0+5bC8VfzuKV24bUIYs
+         JsgRVJHzYRaU4yx6NTIfs/fAgAnNj7fSlc/35MqQINhe8/EqMqbbaEH62DQmNMmE6gnL
+         DaB95933+EXSIGWDW+BGhswMHRZvrC+TTIq6nrsH8ZbcjWCcNKR5lmKJM+IE4k3c6PW/
+         aEv4xTCJOGgygaMJmnwWlmD0NYZVx9Vh19W3WDDgy/NpHuctojMwISl4M/GdPUjTxgSw
+         vHXGz8+HaWxNq0oFjvVSSStkHGbOT3S2lwkPCsjCOQPWkTzZ8ZXH3TMK6atlhFefzaSZ
+         9ZNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729703284; x=1730308084;
+        d=1e100.net; s=20230601; t=1729703286; x=1730308086;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cy4VkAGTnueEjEvw1TSjR77Zk0lX1faSNj+Oljrwa2Y=;
-        b=BpwRFUiG3cHWK5mntpMuIAhZrbsk4ggK50U2A3hIzzVDKaDa1BOam+wfQ0ctMwx8Ia
-         0LduZQpnQT5wsuQJjs+hyv8xlh3Us6i962OH8zvvR3NHm6JL5UKqxKtxJb5I78s8l12c
-         1qynnnZTovBNdzMU2gh+NyEgOC/kdlgZQShfL6sM+1xWzYybVHFHcuHpHR+AVgQdBk6p
-         oUB4Otl35gs5KEJvWTyhmg5M3/iX82ttIF4Z81X4uCf5y03JrL7bJ/q9+h5ic+hcQYcB
-         giKhORc8jtsre3/AF7zoijqkWvCvRQNcOJZxE9uhWzDdfn56s8lvwkP17I1aJsC2ybqR
-         PoXw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKMPoGzNiLqfm3FZVeW/chCBYRTp7VM3K57bvzk2JWkmIrCjiPoTdnTPJnMkC2Nf+bdWbTVbzGrbdsjBRI@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO/DDo/3hFNyoSLdeUpQaeS+zx1IxHyI8AtxaIat0yN1dxl3Up
-	UxqgjhgPEXjsxR/yf0CC3OuXj73NdXL+jyfGpUIVrUmrGzyXLLTni+oXFY5PI1rJ+g4nTKV76Kr
-	UXQ==
-X-Google-Smtp-Source: AGHT+IG5P3EOBq94xAhs93OihXu6fn1+vh8Hj0b9Xh0nro0ohDjLm9Tm7P85Bm8yXiSBBXuIOUCegUy3OSE=
+        bh=qzUZQuDC5qa2V/vpTubJjhmN2aD40kQ8oHuQLi+u1Z4=;
+        b=eKElGERcEA/5whECNHW9H0LJgj0NV/RVkafeYWmd5ke/BpZW2GePbkMti2IGhPddFs
+         j0xg+BdoQAmdNOuM7OlFY9+V4QdZxOGRBuic8Gqhwa1gsVUkQ3xQIzf4ROpyGHzzcdhb
+         nnUWybcKhLTrHxD/yAjhI+ww127JkoNeEUoqndRgK96rf2BOIVP6aQ7bN7+hC8SjL8rP
+         UX6tAZHe01XnDeOdEHLBL7ONOdJkV9Z3ZyfPpslveNP7bVSbG6RIgRnZytkz+IKdPVpW
+         du6jyhM3cB8HaFu84yYNvHmOLAqWJqexyRp5bNgFMrEyM5rTqhOv6te3IRvO3ZYrAdmO
+         NUxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVuxaGbxR4Ba0lo5A2XpZe38YgxzjCWx1UneaEg0bXSWcepIyflPVzUAclKZRYFQEE+LNe34WGsl20Lmy5e@vger.kernel.org
+X-Gm-Message-State: AOJu0YwySszq2ZbuFcdovwTfRV58say1Tx0QPSsw5Xzj7IaqcxhTTpwf
+	8d0wX/h9gEbZmdjhDqG0cPg8EqRBgRRHBTMG6pRh8IpkJhK1XCY3E2XSFgJfFtKBnCKIOFggGTT
+	PYQ==
+X-Google-Smtp-Source: AGHT+IEf9XVjhAQxbJksRoGGus3EwGVaSTpLfWlLEYi7zdwXtn6qn+dayeJKMPCmDwrDuVs0NH6hwtuuxI8=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2a00:79e0:2e3f:8:a087:59b9:198a:c44c])
- (user=surenb job=sendgmr) by 2002:a25:7241:0:b0:e2e:2b0f:19fc with SMTP id
- 3f1490d57ef6-e2e3a631bf2mr3476276.4.1729703283882; Wed, 23 Oct 2024 10:08:03
+ (user=surenb job=sendgmr) by 2002:a25:8289:0:b0:e2e:3401:ea0f with SMTP id
+ 3f1490d57ef6-e2e3a6bbdffmr7278276.7.1729703286023; Wed, 23 Oct 2024 10:08:06
  -0700 (PDT)
-Date: Wed, 23 Oct 2024 10:07:54 -0700
+Date: Wed, 23 Oct 2024 10:07:55 -0700
 In-Reply-To: <20241023170759.999909-1-surenb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241023170759.999909-1-surenb@google.com>
 X-Mailer: git-send-email 2.47.0.105.g07ac214952-goog
-Message-ID: <20241023170759.999909-2-surenb@google.com>
-Subject: [PATCH v4 1/6] maple_tree: add mas_for_each_rev() helper
+Message-ID: <20241023170759.999909-3-surenb@google.com>
+Subject: [PATCH v4 2/6] alloc_tag: introduce shutdown_mem_profiling helper function
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
@@ -77,45 +77,79 @@ Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
 	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com, surenb@google.com, 
-	"Liam R. Howlett" <Liam.Howlett@Oracle.com>
+	kernel-team@android.com, surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
 
-Add mas_for_each_rev() function to iterate maple tree nodes in reverse
-order.
+Implement a helper function to disable memory allocation profiling and
+use it when creation of /proc/allocinfo fails.
+Ensure /proc/allocinfo does not get created when memory allocation
+profiling is disabled.
 
-Suggested-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
 ---
- include/linux/maple_tree.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ lib/alloc_tag.c | 33 ++++++++++++++++++++++++++-------
+ 1 file changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 61c236850ca8..cbbcd18d4186 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -592,6 +592,20 @@ static __always_inline void mas_reset(struct ma_state *mas)
- #define mas_for_each(__mas, __entry, __max) \
- 	while (((__entry) = mas_find((__mas), (__max))) != NULL)
+diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
+index 81e5f9a70f22..435aa837e550 100644
+--- a/lib/alloc_tag.c
++++ b/lib/alloc_tag.c
+@@ -8,6 +8,14 @@
+ #include <linux/seq_buf.h>
+ #include <linux/seq_file.h>
  
-+/**
-+ * mas_for_each_rev() - Iterate over a range of the maple tree in reverse order.
-+ * @__mas: Maple Tree operation state (maple_state)
-+ * @__entry: Entry retrieved from the tree
-+ * @__min: minimum index to retrieve from the tree
-+ *
-+ * When returned, mas->index and mas->last will hold the entire range for the
-+ * entry.
-+ *
-+ * Note: may return the zero entry.
-+ */
-+#define mas_for_each_rev(__mas, __entry, __min) \
-+	while (((__entry) = mas_find_rev((__mas), (__min))) != NULL)
++#define ALLOCINFO_FILE_NAME		"allocinfo"
 +
- #ifdef CONFIG_DEBUG_MAPLE_TREE
- enum mt_dump_format {
- 	mt_dump_dec,
++#ifdef CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
++static bool mem_profiling_support __meminitdata = true;
++#else
++static bool mem_profiling_support __meminitdata;
++#endif
++
+ static struct codetag_type *alloc_tag_cttype;
+ 
+ DEFINE_PER_CPU(struct alloc_tag_counters, _shared_alloc_tag);
+@@ -144,9 +152,26 @@ size_t alloc_tag_top_users(struct codetag_bytes *tags, size_t count, bool can_sl
+ 	return nr;
+ }
+ 
++static void __init shutdown_mem_profiling(void)
++{
++	if (mem_alloc_profiling_enabled())
++		static_branch_disable(&mem_alloc_profiling_key);
++
++	if (!mem_profiling_support)
++		return;
++
++	mem_profiling_support = false;
++}
++
+ static void __init procfs_init(void)
+ {
+-	proc_create_seq("allocinfo", 0400, NULL, &allocinfo_seq_op);
++	if (!mem_profiling_support)
++		return;
++
++	if (!proc_create_seq(ALLOCINFO_FILE_NAME, 0400, NULL, &allocinfo_seq_op)) {
++		pr_err("Failed to create %s file\n", ALLOCINFO_FILE_NAME);
++		shutdown_mem_profiling();
++	}
+ }
+ 
+ static bool alloc_tag_module_unload(struct codetag_type *cttype,
+@@ -174,12 +199,6 @@ static bool alloc_tag_module_unload(struct codetag_type *cttype,
+ 	return module_unused;
+ }
+ 
+-#ifdef CONFIG_MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT
+-static bool mem_profiling_support __meminitdata = true;
+-#else
+-static bool mem_profiling_support __meminitdata;
+-#endif
+-
+ static int __init setup_early_mem_profiling(char *str)
+ {
+ 	bool enable;
 -- 
 2.47.0.105.g07ac214952-goog
 
