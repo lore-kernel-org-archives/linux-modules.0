@@ -1,138 +1,96 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2398A158868
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867E91E7C28
+	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729717772; cv=none; b=qhCTNf3UoswUVD0JGv3hyVjl6eOo8H6o6AwYDv7fuRzfMDDWCmeHclaFTExAMtcw30tOjP7LMsorGO/dj6zVvdNhE3eAtANeFF9dlBICsAlI+h99LHoEXtBEgrj9n1zclWPU+ZgoiGfSG5pjxkEofcbOGo+lxX1/Jf3xXrZS2y8=
+	t=1729718065; cv=none; b=MQhFdJeiQeVMv89cXGVjvsePWJpcOJLu9YaUIz1E8gZ8dibO8pUQfUnd+Iaffzkud0GFjIdS0Lrz63n1skE2FHjCd9GXzUEUxhgUKeynO8nPH1UihqsXno8hh7QnFxRC08pRrvQMbzj/UKA2/la+Iii8KIfStXjBp0SUP7Sjp4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729717772; c=relaxed/simple;
-	bh=XonaIiFrBJ4wGnJLEIHPTYo5mO+JgjFRx+Tk2sZ7yvM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nkl7dqRsXSITFnM7NAPmv386Al6/8hzeal/1OGwQcfZ1l5t+5WAZdUJYpj9mgXEb3Hg7JkmFOtcMjPhN7D2QU+0QoPZQM/m04hRy95vmNKV78m45/gaitIpgm5aNFdS7UhE/tWVL+dNqRYKBj1TPC3IDVGQ8A9sjWihqIKZHL2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xsp8L6Yz; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1729718065; c=relaxed/simple;
+	bh=8nQwDzRZMEEccD2/QDJcj2ANlOCR6o7eEanPcy3VeIc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=U01X4ZC5laFNex3kR8cLuBiRxXi4VwG6EryOumlC+61Myc+oz19r85uHTl+9LerzW8/jY44gskTYi2jDrhG7aXoYOGPMvx5Ghw8jRv+p/LOY69Zf+TlVZntaCEwK/vGf3LifQBS4gTStzBEY7LwFgf7QhP+uJMSGyw7XmKDEy4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UBMraUEF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xsp8L6Yz"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4315a8cff85so19045e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 14:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729717768; x=1730322568; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1Hc6TqTcrhd8OnsnaGs3m8D6+LMkz7l3Gr9ozPNQss=;
-        b=Xsp8L6Yz321nUWxg7ZCjxmGGXzkIIgVdqRqBKSGsvxqERJLvMhmAHzGRmSriXRgHBi
-         kaC8brKh+4hWu9e65NIvSrSjBlQtxyrb3n94aKWyU4Pisizh8E6WlJ7QyXyfSgp4g667
-         fQS6BoXn+ol9CqgkKIzg9d67h87Joh+5bhND6JRCo3KrbBf7I2ejAydN3i3+N1QNOCsG
-         M0bYgZXAn5/2E1JLf+S4Av67EhRY69y5kpWB4sCH/rkPQh96bW5YGVpcVVbbYqVtjVJ0
-         XalGjcgg2jrztH5YSaokIb6sOVEh+NAZtC3E/4XAtYHmeWV2ehrC81b3o4NHmbRJ+NCE
-         MUrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729717768; x=1730322568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D1Hc6TqTcrhd8OnsnaGs3m8D6+LMkz7l3Gr9ozPNQss=;
-        b=ZZzrigMl0VX51IceXhjM5qjshMsh/NP2TqT5HiQPbwgWvjf/KdhC3Kh73Izbty1Bpz
-         3MaZOi/blY2Mg1liszb45DmDJoFvvLjU6LM0mkRnpgDjaerZZSroEOe1GtyxErEphHzS
-         nZhtMyMpotqZ64xU3XXO2K2GPvt7JZoG2YFWx7RFUpYOxt3CHB/WNrdzzEjMfhqM/j/A
-         Oym4lEdVH2tOAiJ/qvBLrGeZMp96iIgWDtK9txtlvNr72U0Ee91lbF90PU62Fn4LM01h
-         pTHm4jO4cNL+dPo/paCvbaC3aT82KhmXfp5KGb7O6iBSI27kcjzZgJcJwk83EeTsVuSK
-         pfXw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzt/hoFiFmeymadTsc1dHLpw5OtUn/VOo+gPWBPlc7OrEMpHK9RhaCWvj8y+YZxs0AL5JOOZsCnGsKl8yi@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeoPNrCYY9hfmT61GudiX/6X23dO6etitETT1xAZ+k2a0g3BF5
-	jLR0UzIgYXFH4EPz/px5YEtLNQMUIGT+NcD59ZGgIuU/TflO/nVxnmjclq+gWe6a7O7oTVqS8/r
-	icq8y4R2vKH6FITZZFaHmkuiRVFQxlmUj3ECQ
-X-Google-Smtp-Source: AGHT+IG7lHrCmkHrUK87/No/R3m5mQ51hRtR/sVg3+psInFw5wdf+0mCw9HD7V91WPK90Gie/P5wYbHJdFXnglBqC8A=
-X-Received: by 2002:a05:600c:b8d:b0:42b:a961:e51 with SMTP id
- 5b1f17b1804b1-4318a4ace7bmr1380915e9.0.1729717768323; Wed, 23 Oct 2024
- 14:09:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UBMraUEF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729718062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EhHsFXeHGq8GrsrwQBQKdWbjYOo8uENaYKPAHKoXKFI=;
+	b=UBMraUEFOXprJb8co9du5sFXPSXrKtF4Bqd/6d2keevdrh5N83L9MvW/0zi3+diZDCyfnU
+	l00tpjflfviJLPXgOKI2fiDiaorRv21Twaw/Zb6cGOpwWAYheFwIFewrbVci17r97834Fc
+	PXTKXwYHDBaWNtDrr2FlkIo9+bfK+70=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-528-0u1JrsP0MNW569a32udyUw-1; Wed,
+ 23 Oct 2024 17:14:19 -0400
+X-MC-Unique: 0u1JrsP0MNW569a32udyUw-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5285F195609E;
+	Wed, 23 Oct 2024 21:14:17 +0000 (UTC)
+Received: from madcap2.tricolour.com (unknown [10.22.58.9])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C3D7E300018D;
+	Wed, 23 Oct 2024 21:14:14 +0000 (UTC)
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: [PATCH v1] audit,module: restore audit logging in load failure case
+Date: Wed, 23 Oct 2024 17:13:20 -0400
+Message-ID: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-6-surenb@google.com>
- <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org>
-In-Reply-To: <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 23 Oct 2024 14:09:12 -0700
-Message-ID: <CAJuCfpH9yc2kYGZqYjYPWbApy05yqiONqziBQ+qF+R3nZRL56w@mail.gmail.com>
-Subject: Re: [PATCH v4 5/6] alloc_tag: introduce pgtag_ref_handle to abstract
- page tag references
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
-	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
-	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
-	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
-	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, Oct 23, 2024 at 2:00=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Wed, 23 Oct 2024 10:07:58 -0700 Suren Baghdasaryan <surenb@google.com>=
- wrote:
->
-> > To simplify later changes to page tag references, introduce new
-> > pgtag_ref_handle type. This allows easy replacement of page_ext
-> > as a storage of page allocation tags.
-> >
-> > ...
-> >
-> >  static inline void pgalloc_tag_copy(struct folio *new, struct folio *o=
-ld)
-> >  {
-> > +     union pgtag_ref_handle handle;
-> > +     union codetag_ref ref;
-> >       struct alloc_tag *tag;
-> > -     union codetag_ref *ref;
-> >
-> >       tag =3D pgalloc_tag_get(&old->page);
-> >       if (!tag)
-> >               return;
-> >
-> > -     ref =3D get_page_tag_ref(&new->page);
-> > -     if (!ref)
-> > +     if (!get_page_tag_ref(&new->page, &ref, &handle))
-> >               return;
-> >
-> >       /* Clear the old ref to the original allocation tag. */
-> >       clear_page_tag_ref(&old->page);
-> >       /* Decrement the counters of the tag on get_new_folio. */
-> > -     alloc_tag_sub(ref, folio_nr_pages(new));
-> > -
-> > -     __alloc_tag_ref_set(ref, tag);
-> > -
-> > -     put_page_tag_ref(ref);
-> > +     alloc_tag_sub(&ref, folio_nr_pages(new));
->
-> mm-stable has folio_size(new) here, fixed up.
+The move of the module sanity check to earlier skipped the audit logging
+call in the case of failure and to a place where the previously used
+context is unavailable.
 
-Oh, right. You merged that patch tonight and I formatted my patchset
-yesterday :)
-Thanks for the fixup.
+Add an audit logging call for the module loading failure case and get
+the module name when possible.
 
->
-> I think we aleady discussed this, but there's a crazy amount of
-> inlining here.  pgalloc_tag_split() is huge, and has four callsites.
+Link: https://issues.redhat.com/browse/RHEL-52839
+Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+---
+ kernel/module/main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I must have missed that discussion but I am happy to unline this
-function. I think splitting is heavy enough operation that this
-uninlining would not have be noticeable.
-Thanks!
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 49b9bca9de12..1f482532ef66 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3057,8 +3057,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	 * failures once the proper module was allocated and
+ 	 * before that.
+ 	 */
+-	if (!module_allocated)
++	if (!module_allocated) {
++		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+ 		mod_stat_bump_becoming(info, flags);
++	}
+ 	free_copy(info, flags);
+ 	return err;
+ }
+-- 
+2.43.5
+
