@@ -1,98 +1,97 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E1C13AA2B
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 20:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721341E5731;
+	Wed, 23 Oct 2024 21:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729716846; cv=none; b=Ghje99my3OH1jQ+eGl0WYA4aS8N+4wyFNWMWDHiynusb7pUQyCgR1ifHPVRN0Ai33yCepaZYi0QP/clEwOLBfogzqb1IIx2/KAVnzEGAonKi6I+IusHMIvRROLi7lffgurKJwZaHj/MgzAn4GEA44pHBBM2IC/h3wTk6iCPhqoI=
+	t=1729717224; cv=none; b=qPyPD1O32FQq9GdNjUzxirylitH/6GSuteLsqikpJwp9Cy+e2vowHfoUOrgjWSFs78GH7t8qhdmccLhtT+NgE/pbaprGgCDpKrddsXiauDtKK8mEWWjhF7nu1Yci6NhkJl7Fy4FFdwVOiPpKGEqw7T1fie5+I+12v+sw3cprh7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729716846; c=relaxed/simple;
-	bh=g5ckEO23Wn5YIEXbTRJcK4k8xpMQsQkgzw7p8a9MqaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E7mrOqanJqW9h74bnVsTrGUbGBRmzuJq7oKwA0botD8X7oy/VHPODOA+4hXbRICOsGPKuACTr+0E+DSWUt1ICdDHu7pvWo2RlNeOpi2BaIVI/AMzlteyjV5qE3JjwQjLNo54eoYX14jPPv9sEU88bAR7dw9tENOwH0K1skBN+oM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXImqc1O; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729717224; c=relaxed/simple;
+	bh=4eSmCo6i0if5D6CdJVmAQN9GUXvTbEx1TW8GzU+3oWo=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=STnBEeV4IPIZlNeCGW5JcP/z4QRmzr1g+VELgvxpT6YxKd0qlJHi+Qpja3Zyyvn5m1iR8EOEAAeBLvnXnONhHPB8BZ/Cu8DUZxoDcbgu2G90NTVwUdBSECeummAnkiESZSQFWohB9u/Eun6Ukz03TEp265y1MruPQAJtu7q6T9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=r2uxN5Qd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXImqc1O"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cb15b84544so235915a12.2
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 13:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729716843; x=1730321643; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ORBQL0Yg2MeD8szwBEe4qZP77M4FRJlxDCLTMnnCgEk=;
-        b=BXImqc1OfaI/VLgN1P+cMYXP7tPg+NoOQnQ+kUt0uUbia/AvgH+AFPjdvmRLRxGSQq
-         svIRBYCktxhDRZJMOT8FWB7ClVCEIUM+KAsN1WCkeCK6IdPMo0RRGZ+t6S2n9LxByxra
-         +Jk4cnEslZxpXKngBSTykoRTa+RxdtkgJsXkomzcjLcXU7LtBbqBXfqeLj6My+0QwbiJ
-         4J6ePZceo9oB3Z3bLxQ6KfuPXXmwqKop72P8VOBmDIBmBWR2tFN7xFc/8Jr68ueNaRIi
-         2+nJirRjBnNLX1RsYkpCWuFPPgPG5egcQhSzMwqvLFlbN/7c6TliDQi1O771o+twDmdg
-         TiuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729716843; x=1730321643;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ORBQL0Yg2MeD8szwBEe4qZP77M4FRJlxDCLTMnnCgEk=;
-        b=IJoPwrNzRwU2AZQFiIxZvzpUVhf+6timLfifyHFkYzBUlltZcsDim3XgnJTBB3A4Hw
-         +RGpMEg4K4yfVG1CcVTLggSwkkKDuFUyUQp4I3LXFFr3mscBIa5zDQiYiq/ootnk4G+t
-         f4DJw4xyN2ySFHN3AeCbfAE2bnhNb8O1gdqOOL3Ut4BPTaZvqAGtti8bxQ5+tIq40wRi
-         gcKiP2qf882GYwjfhKsHnsf6Ld41pJmIrnkXPzcY4sjltPB9SEzA8+G4PFni0ZbDlalk
-         mEamkogK+6LhoihCJ+duDkpCY2i9Bi4IVKYW0I8enYwnVJYgffdypNhoP7QxWp+HsuvN
-         xWzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVgkPDZENMKS3x+IRywMk24YjC+e2bNsTKbroiFicg29vW7ICjN677xRajlTuz8xdDqM/NscveApWT3oHvF@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSsqWQCUsc60dCoOhbhIyqzwf/GkbV9/tD/oSBgRANHrVywPj3
-	iSOL1goZnYmyJZeZgqWLVnfM0IY+4j9Q9zrCGP/gR6L8T79rbNEH4hsM6X3v
-X-Google-Smtp-Source: AGHT+IFlqgRofLjWLWamsYT+EJlNuWJj/vbdLnyicBfMgntkOzoURWwA4pJfnXUDgRAvBeBJR7DZIQ==
-X-Received: by 2002:a05:6402:3888:b0:5c9:36c4:cead with SMTP id 4fb4d7f45d1cf-5cb8b26f218mr2615871a12.34.1729716843068;
-        Wed, 23 Oct 2024 13:54:03 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:3035:a06:45ec:3047:d021:9cb4:a37e])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cb66c6b556sm4806894a12.63.2024.10.23.13.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 13:54:02 -0700 (PDT)
-From: Sedat Dilek <sedat.dilek@gmail.com>
-To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Emil Velikov <emil.l.velikov@gmail.com>,
-	linux-modules@vger.kernel.org
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Subject: [PATCH] meson: Collect all prefix get_option at one place
-Date: Wed, 23 Oct 2024 22:52:49 +0200
-Message-ID: <20241023205352.45271-1-sedat.dilek@gmail.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="r2uxN5Qd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 665E7C4CEC6;
+	Wed, 23 Oct 2024 21:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1729717224;
+	bh=4eSmCo6i0if5D6CdJVmAQN9GUXvTbEx1TW8GzU+3oWo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=r2uxN5Qd5gm76NxG+Qlhr9lMttgqy65AazTAi8k5+n4TtXJdd1yL5LhAGuhhgk0xi
+	 Un7unedgoFxkTyTeFCt4VXqOoSSgnu5sM3TwS7VxhOc4WG2sVBqY7a9QsA1wzJ1je2
+	 kb9ElqWHIX9krkoGE3oF1hiLvbjrQkZwifaqy1mg=
+Date: Wed, 23 Oct 2024 14:00:17 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de,
+ mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com,
+ tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com,
+ ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com,
+ hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+ willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com,
+ souravpanda@google.com, keescook@chromium.org, dennis@kernel.org,
+ jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org,
+ petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
+ yuzhao@google.com, vvvvvv@google.com, rostedt@goodmis.org,
+ iamjoonsoo.kim@lge.com, rientjes@google.com, minchan@google.com,
+ kaleshsingh@google.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, maple-tree@lists.infradead.org,
+ linux-modules@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 5/6] alloc_tag: introduce pgtag_ref_handle to
+ abstract page tag references
+Message-Id: <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org>
+In-Reply-To: <20241023170759.999909-6-surenb@google.com>
+References: <20241023170759.999909-1-surenb@google.com>
+	<20241023170759.999909-6-surenb@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
----
- meson.build | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Wed, 23 Oct 2024 10:07:58 -0700 Suren Baghdasaryan <surenb@google.com> wrote:
 
-diff --git a/meson.build b/meson.build
-index 58acf2eac8e9..2ed33c28471f 100644
---- a/meson.build
-+++ b/meson.build
-@@ -187,6 +187,7 @@ sysconfdir = get_option('sysconfdir')
- cdata.set_quoted('SYSCONFDIR', sysconfdir)
- 
- bindir = join_paths(get_option('prefix'), get_option('bindir'))
-+includedir = join_paths(get_option('prefix'), get_option('includedir'))
- libdir = join_paths(get_option('prefix'), get_option('libdir'))
- 
- distconfdir = get_option('distconfdir')
-@@ -493,7 +494,7 @@ summary({
-   'sysconfdir'  : sysconfdir,
-   'distconfdir' : distconfdir,
-   'libdir'      : libdir,
--  'includedir'  : join_paths(get_option('prefix'), get_option('includedir')),
-+  'includedir'  : includedir,
-   'bindir'      : bindir
- }, section : 'Directories')
- 
--- 
-2.45.2
+> To simplify later changes to page tag references, introduce new
+> pgtag_ref_handle type. This allows easy replacement of page_ext
+> as a storage of page allocation tags.
+> 
+> ...
+>
+>  static inline void pgalloc_tag_copy(struct folio *new, struct folio *old)
+>  {
+> +	union pgtag_ref_handle handle;
+> +	union codetag_ref ref;
+>  	struct alloc_tag *tag;
+> -	union codetag_ref *ref;
+>  
+>  	tag = pgalloc_tag_get(&old->page);
+>  	if (!tag)
+>  		return;
+>  
+> -	ref = get_page_tag_ref(&new->page);
+> -	if (!ref)
+> +	if (!get_page_tag_ref(&new->page, &ref, &handle))
+>  		return;
+>  
+>  	/* Clear the old ref to the original allocation tag. */
+>  	clear_page_tag_ref(&old->page);
+>  	/* Decrement the counters of the tag on get_new_folio. */
+> -	alloc_tag_sub(ref, folio_nr_pages(new));
+> -
+> -	__alloc_tag_ref_set(ref, tag);
+> -
+> -	put_page_tag_ref(ref);
+> +	alloc_tag_sub(&ref, folio_nr_pages(new));
 
+mm-stable has folio_size(new) here, fixed up.
+
+I think we aleady discussed this, but there's a crazy amount of
+inlining here.  pgalloc_tag_split() is huge, and has four callsites.
