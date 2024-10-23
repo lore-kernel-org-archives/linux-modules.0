@@ -1,131 +1,138 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DFD1EF94F
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2398A158868
+	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729717709; cv=none; b=m2+qGPkZlRXvvwUuGhHfMEF3MNnUHSLrxjOKuxpQIfKpLVq4uF6ZNAsCWXraX5xIQCh7K1SOvzSnlus0rD2Rw/5waAGSX3QvzNTC7HvF6VaoH4t4Fo1XizSMYPKu7+zW3OUeG56FiYO2cUYWr8P5KstKvtb0v1cFMk4n3OFT/DY=
+	t=1729717772; cv=none; b=qhCTNf3UoswUVD0JGv3hyVjl6eOo8H6o6AwYDv7fuRzfMDDWCmeHclaFTExAMtcw30tOjP7LMsorGO/dj6zVvdNhE3eAtANeFF9dlBICsAlI+h99LHoEXtBEgrj9n1zclWPU+ZgoiGfSG5pjxkEofcbOGo+lxX1/Jf3xXrZS2y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729717709; c=relaxed/simple;
-	bh=l6GhtOLjTV4WPuga7aMEtfVG7+2QgeqWsQOgmFoTN34=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NmPKFgNtoAZNC7bfEKJ0G3VMYu5k1bgc4fG2LZSHhrcpI1VlTLKSYRJYV1lg8Jess61nNaBd5UlyWjxyTD+QGl2A1xrd4yrhVPbfT47yMF/SnGoNxK9S4cgBj6N1DY6iQVyeggoW0jX3D7ruyvBylXj3c5sWpTwRrrTLR7KVCyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3CCkdcl; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729717772; c=relaxed/simple;
+	bh=XonaIiFrBJ4wGnJLEIHPTYo5mO+JgjFRx+Tk2sZ7yvM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nkl7dqRsXSITFnM7NAPmv386Al6/8hzeal/1OGwQcfZ1l5t+5WAZdUJYpj9mgXEb3Hg7JkmFOtcMjPhN7D2QU+0QoPZQM/m04hRy95vmNKV78m45/gaitIpgm5aNFdS7UhE/tWVL+dNqRYKBj1TPC3IDVGQ8A9sjWihqIKZHL2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xsp8L6Yz; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3CCkdcl"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-539f72c913aso300366e87.1
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 14:08:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xsp8L6Yz"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4315a8cff85so19045e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 14:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729717706; x=1730322506; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wC5CorFNxet/K6XJjDD+4xYSSsvi0kb6UDd17WYIu7Y=;
-        b=b3CCkdclYHtibVmM/odBdUsQr45+1PQf0/6xC3pbanZflLQYfeE4q28o6aV/c5vB7o
-         QFe6dHP5jyGCJ3INxuPIAZfKOGQ35Q94CSrfmqfMX/nwqzcBij+B3Tc9gk6s/EOKKnCH
-         MvGFjVbruonL+WRakqzXeRHQos6W486OoJNobmNa06ph2bKFf1NppsDFocvWH//9Tzdd
-         coJQkXfeOwmlxs+cXVEkz0Uiaj7wNrVWCYQyid9VF4kC4JtjGYwKAWwqIIMptBHIJVZf
-         oGrp8J+BiNp8UHJ7agSnV7wdRsmK+2Uxx5xjvO96DSNqvgOnMtXC/ODbcuSKGlP8HrMp
-         zPZw==
+        d=google.com; s=20230601; t=1729717768; x=1730322568; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1Hc6TqTcrhd8OnsnaGs3m8D6+LMkz7l3Gr9ozPNQss=;
+        b=Xsp8L6Yz321nUWxg7ZCjxmGGXzkIIgVdqRqBKSGsvxqERJLvMhmAHzGRmSriXRgHBi
+         kaC8brKh+4hWu9e65NIvSrSjBlQtxyrb3n94aKWyU4Pisizh8E6WlJ7QyXyfSgp4g667
+         fQS6BoXn+ol9CqgkKIzg9d67h87Joh+5bhND6JRCo3KrbBf7I2ejAydN3i3+N1QNOCsG
+         M0bYgZXAn5/2E1JLf+S4Av67EhRY69y5kpWB4sCH/rkPQh96bW5YGVpcVVbbYqVtjVJ0
+         XalGjcgg2jrztH5YSaokIb6sOVEh+NAZtC3E/4XAtYHmeWV2ehrC81b3o4NHmbRJ+NCE
+         MUrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729717706; x=1730322506;
-        h=cc:to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wC5CorFNxet/K6XJjDD+4xYSSsvi0kb6UDd17WYIu7Y=;
-        b=RBajXCog5Dc2lyyYLdZfzGLjW/824LDW+DDjURJqKQLQu9u32Yh7hsaaYg3w2f/jXe
-         xhbqoAcEgu4ioYD2e8WRW22W1QeQlA9Ttsajx9EqtmBQb2WOogOvviiMVEk2MOCfDVkp
-         twT7tV1fKnSWxOd5ArCjIkZQAslIdObieGFjESg4PJjNzxRLR1OPHgRXQXW8hOK/ij5X
-         aYnHCrGSyo/K7Xp/BxOYKdHB4VW5+5TBO4Lu9U5O4Jm5dD6lkvHrrsCIOEMrpgaRPnnD
-         9tWTMrBkaKo8BPGtPIokGz8yfJX98ReQoS2a1dmXB9ejaclqTRg6VkADsL9WV7sU90cW
-         ZYIA==
-X-Gm-Message-State: AOJu0Ywnu2EpmlmBYhvVJugGN2G55SP/gQwdCZhEcY+Ypntdyme2FDUN
-	bfBVxOJMK8qkpTiTIQpXFhCRxM+LAiSaCieJtWhU/2GYZ5GmOzITqyZgicXgf6vJqiUeC7YqU2n
-	XmGo5oQeEef0rlS9+NRC7N53g5Mfv4lpNI8o=
-X-Google-Smtp-Source: AGHT+IEX0W1DzvvhrCAt5G8uUzT/vu0TGof4KLbTrUTBqI3oS54SHGyC5IgFvnLjzciQIIdYv4GcQB1SolR0XsYF7I8=
-X-Received: by 2002:a05:6512:1189:b0:533:3fc8:43ee with SMTP id
- 2adb3069b0e04-53b1a3030f0mr2450098e87.13.1729717705869; Wed, 23 Oct 2024
- 14:08:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729717768; x=1730322568;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D1Hc6TqTcrhd8OnsnaGs3m8D6+LMkz7l3Gr9ozPNQss=;
+        b=ZZzrigMl0VX51IceXhjM5qjshMsh/NP2TqT5HiQPbwgWvjf/KdhC3Kh73Izbty1Bpz
+         3MaZOi/blY2Mg1liszb45DmDJoFvvLjU6LM0mkRnpgDjaerZZSroEOe1GtyxErEphHzS
+         nZhtMyMpotqZ64xU3XXO2K2GPvt7JZoG2YFWx7RFUpYOxt3CHB/WNrdzzEjMfhqM/j/A
+         Oym4lEdVH2tOAiJ/qvBLrGeZMp96iIgWDtK9txtlvNr72U0Ee91lbF90PU62Fn4LM01h
+         pTHm4jO4cNL+dPo/paCvbaC3aT82KhmXfp5KGb7O6iBSI27kcjzZgJcJwk83EeTsVuSK
+         pfXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUzt/hoFiFmeymadTsc1dHLpw5OtUn/VOo+gPWBPlc7OrEMpHK9RhaCWvj8y+YZxs0AL5JOOZsCnGsKl8yi@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeoPNrCYY9hfmT61GudiX/6X23dO6etitETT1xAZ+k2a0g3BF5
+	jLR0UzIgYXFH4EPz/px5YEtLNQMUIGT+NcD59ZGgIuU/TflO/nVxnmjclq+gWe6a7O7oTVqS8/r
+	icq8y4R2vKH6FITZZFaHmkuiRVFQxlmUj3ECQ
+X-Google-Smtp-Source: AGHT+IG7lHrCmkHrUK87/No/R3m5mQ51hRtR/sVg3+psInFw5wdf+0mCw9HD7V91WPK90Gie/P5wYbHJdFXnglBqC8A=
+X-Received: by 2002:a05:600c:b8d:b0:42b:a961:e51 with SMTP id
+ 5b1f17b1804b1-4318a4ace7bmr1380915e9.0.1729717768323; Wed, 23 Oct 2024
+ 14:09:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Wed, 23 Oct 2024 23:07:49 +0200
-Message-ID: <CA+icZUVTpf+XjDp=Mh0ghuk2tQwkgGd0OMUzK++RBSfhBk4+aQ@mail.gmail.com>
-Subject: meson: always pass complete path to kmod-symlink.sh
-To: Emil Velikov <emil.l.velikov@gmail.com>
-Cc: linux-modules@vger.kernel.org, lucas.de.marchi@gmail.com
+References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-6-surenb@google.com>
+ <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org>
+In-Reply-To: <20241023140017.e165544bf20bcb0c79bfee57@linux-foundation.org>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 23 Oct 2024 14:09:12 -0700
+Message-ID: <CAJuCfpH9yc2kYGZqYjYPWbApy05yqiONqziBQ+qF+R3nZRL56w@mail.gmail.com>
+Subject: Re: [PATCH v4 5/6] alloc_tag: introduce pgtag_ref_handle to abstract
+ page tag references
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kent.overstreet@linux.dev, corbet@lwn.net, arnd@arndb.de, 
+	mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, thuth@redhat.com, 
+	tglx@linutronix.de, bp@alien8.de, xiongwei.song@windriver.com, 
+	ardb@kernel.org, david@redhat.com, vbabka@suse.cz, mhocko@suse.com, 
+	hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net, 
+	willy@infradead.org, liam.howlett@oracle.com, pasha.tatashin@soleen.com, 
+	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
+	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
+	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
+	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
+	kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Emil,
+On Wed, Oct 23, 2024 at 2:00=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Wed, 23 Oct 2024 10:07:58 -0700 Suren Baghdasaryan <surenb@google.com>=
+ wrote:
+>
+> > To simplify later changes to page tag references, introduce new
+> > pgtag_ref_handle type. This allows easy replacement of page_ext
+> > as a storage of page allocation tags.
+> >
+> > ...
+> >
+> >  static inline void pgalloc_tag_copy(struct folio *new, struct folio *o=
+ld)
+> >  {
+> > +     union pgtag_ref_handle handle;
+> > +     union codetag_ref ref;
+> >       struct alloc_tag *tag;
+> > -     union codetag_ref *ref;
+> >
+> >       tag =3D pgalloc_tag_get(&old->page);
+> >       if (!tag)
+> >               return;
+> >
+> > -     ref =3D get_page_tag_ref(&new->page);
+> > -     if (!ref)
+> > +     if (!get_page_tag_ref(&new->page, &ref, &handle))
+> >               return;
+> >
+> >       /* Clear the old ref to the original allocation tag. */
+> >       clear_page_tag_ref(&old->page);
+> >       /* Decrement the counters of the tag on get_new_folio. */
+> > -     alloc_tag_sub(ref, folio_nr_pages(new));
+> > -
+> > -     __alloc_tag_ref_set(ref, tag);
+> > -
+> > -     put_page_tag_ref(ref);
+> > +     alloc_tag_sub(&ref, folio_nr_pages(new));
+>
+> mm-stable has folio_size(new) here, fixed up.
 
-commit 844835cd9a4e5f08e1a3eefb4928c5d769264894 breaks when NO DESTDIR is set:
+Oh, right. You merged that patch tonight and I formatted my patchset
+yesterday :)
+Thanks for the fixup.
 
-meson compile -C ../build
+>
+> I think we aleady discussed this, but there's a crazy amount of
+> inlining here.  pgalloc_tag_split() is huge, and has four callsites.
 
-meson setup --native-file build-dileks.ini ../build
-
-[ build-dileks.ini ]
-; SPDX-FileCopyrightText: 2024 Emil Velikov <emil.l.velikov@gmail.com>
-; SPDX-FileCopyrightText: 2024 Lucas De Marchi <lucas.de.marchi@gmail.com>
-;
-; SPDX-License-Identifier: LGPL-2.1-or-later
-
-[project options]
-build-tests = false
-debug-messages = false
-docs = false
-zstd = 'enabled'
-xz = 'enabled'
-zlib = 'enabled'
-openssl = 'enabled'
-werror = true
-strip = true
-
-[built-in options]
-buildtype = 'release'
--EOF-
-
-sudo LC_ALL=C meson install -C ../build
-...
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
-/home/dileks/src/kmod/git/scripts/kmod-symlink.sh: line 10: DESTDIR:
-unbound variable
-FAILED: install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
-failed with exit code 1.
-
-Works:
-
-sudo DESTDIR=/bin meson install -C ../build
-...
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/insmod'
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/lsmod'
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/modinfo'
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/modprobe'
-Running custom install script
-'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/rmmod'
-
-$ ll /bin/*mod
--rwxr-xr-x 1 root root  67K 23. Okt 17:36 /bin/chmod
-lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/depmod -> kmod
-lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/insmod -> kmod
--rwxr-xr-x 1 root root 172K 23. Okt 23:02 /bin/kmod
-lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/lsmod -> kmod
-lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/rmmod -> kmod
-
-Set a default for DESTDIR (destdir)?
-
-Best regards,
--Sedat-
+I must have missed that discussion but I am happy to unline this
+function. I think splitting is heavy enough operation that this
+uninlining would not have be noticeable.
+Thanks!
