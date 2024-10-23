@@ -1,92 +1,131 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1FF1E285A
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DFD1EF94F
+	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 21:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729717566; cv=none; b=rks2x9jCMrgmZKfK4aYsCWATKTR1RSOD3vFICmDQzmiqcbeXsVT7UF2VG782gKunUGQCVxWsaitfKI/Ogxjp3lgjf9eFpLTbrD1nkGNIfwoMx9pdpg+Zj3s5E+w7t/OgIRSHKnVTMGpYAJ2vV1mLlYjbkzESxz5H5QcqCJQVAjk=
+	t=1729717709; cv=none; b=m2+qGPkZlRXvvwUuGhHfMEF3MNnUHSLrxjOKuxpQIfKpLVq4uF6ZNAsCWXraX5xIQCh7K1SOvzSnlus0rD2Rw/5waAGSX3QvzNTC7HvF6VaoH4t4Fo1XizSMYPKu7+zW3OUeG56FiYO2cUYWr8P5KstKvtb0v1cFMk4n3OFT/DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729717566; c=relaxed/simple;
-	bh=/JEcIBihja6V3LP52eHEY4Q3j5KZkMGS+N+dxgjhsRc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i/9fkUgE0P1ryiVb6L0apdfzl282kwumgEJWm8WutW4YZYMPlyx7FXQ3jLKJVdHNp+q/9BRjqAR9S/kZ6Me48N2fJJQJ0RHhAOhmkDtPpOP7gG8MhuFqxvUJoqWKbWCNFDaaCuZjeQixJi8NBbMQOn3icnjtsODzdD/Wi9aIK10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X4YNJ68t; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1729717709; c=relaxed/simple;
+	bh=l6GhtOLjTV4WPuga7aMEtfVG7+2QgeqWsQOgmFoTN34=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NmPKFgNtoAZNC7bfEKJ0G3VMYu5k1bgc4fG2LZSHhrcpI1VlTLKSYRJYV1lg8Jess61nNaBd5UlyWjxyTD+QGl2A1xrd4yrhVPbfT47yMF/SnGoNxK9S4cgBj6N1DY6iQVyeggoW0jX3D7ruyvBylXj3c5sWpTwRrrTLR7KVCyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3CCkdcl; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X4YNJ68t"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so17885e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 14:06:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3CCkdcl"
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-539f72c913aso300366e87.1
+        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 14:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729717563; x=1730322363; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/JEcIBihja6V3LP52eHEY4Q3j5KZkMGS+N+dxgjhsRc=;
-        b=X4YNJ68t0nwRFvxpqTrPL5CBJYmjDBnPdlWa0T0sajxnUKiHqH6PxrgMr7ESOh34Go
-         uRnj9cS2v27XeMen/pbCT4inSZRm02OoqPJbSPT89R4TGKiZ6xBhpx9Ej2/f2UtAGK7F
-         7T8pCdmA8lMC8cFzK8G8Ts2sTNVbIebfcFU6KlDTuHW/oRL8tdEh3U28hbI3LZQkJKzx
-         o6LVG9QUzf7ytipO8RGDhSttTdF/ri4QUukc3vge4W57Mxt0enKDk8lVPvvUNd50/UQe
-         3bgWCpGfzLU0I4dMdOsZbkymfmn/qT1CbmRf/UuhCaphnrWqGkKv8hZ0Ovd3bKxPUdAI
-         txLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729717563; x=1730322363;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20230601; t=1729717706; x=1730322506; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/JEcIBihja6V3LP52eHEY4Q3j5KZkMGS+N+dxgjhsRc=;
-        b=VzQEcVE+rHTAAPBIpW+BdkXDtIfX6jBN+CCJixz/74cMH/x6akfaUrYuQqOdIZbb3c
-         wLmLft8pyYf3srGQEN1PXq+TUTdPSyoN2Rp5YzAONtDRg1duY5tXrEvb52nT7/X3TT3x
-         ilpclPPAFaDTzwWpkIhxX76RcqwiPq/UivrCAM9SsgzglY8nwnckFVYvHbMR/jhWJNC+
-         czl2iz9Hu8ElEFZfWd9Sk8Iv3puHSvwpCpXJQiQkRsbHox3NWjoB6Gv8QfThDdK+9uMk
-         98GyFAEGDkg6WCMKc+RFdziRdeGjhUnFyS1BpDJ9Ub02bnKhFuNPD5s5BtyfGzfN7ShK
-         KLIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXOZHMAbG5WJYOKHH8r6FVT2H9cHP9BtrRfGhGLSu0lDBDQ39NgsQz1o1ueUz4aWxZ3l8xlJahPwtqatgEw@vger.kernel.org
-X-Gm-Message-State: AOJu0YypCKhtyMtNfQ8qr3A2hUcWP+9H82WD3+WDT1SmcSXQMEq47hma
-	zeiZVFYc1Xgh5MDWb2bqOdlow2ySeRSI3MgOBtJIpLpF0SjMsu/czjpTzxnUB33zusLL0C9PXVC
-	sRHsDgELKveBVgdEfs7l38HUX+X+RICB8Yemn
-X-Google-Smtp-Source: AGHT+IE7E1sQKkdi+IOPziXhygUCQe4DRbGEMh2n+xHqKHoCU4m0rJ13HS4/hKLnTcO13YuD7nqu8DLLl+hDRTXCmBQ=
-X-Received: by 2002:a05:600c:5023:b0:42c:b0b0:513a with SMTP id
- 5b1f17b1804b1-4318a50525emr1319735e9.2.1729717562737; Wed, 23 Oct 2024
- 14:06:02 -0700 (PDT)
+        bh=wC5CorFNxet/K6XJjDD+4xYSSsvi0kb6UDd17WYIu7Y=;
+        b=b3CCkdclYHtibVmM/odBdUsQr45+1PQf0/6xC3pbanZflLQYfeE4q28o6aV/c5vB7o
+         QFe6dHP5jyGCJ3INxuPIAZfKOGQ35Q94CSrfmqfMX/nwqzcBij+B3Tc9gk6s/EOKKnCH
+         MvGFjVbruonL+WRakqzXeRHQos6W486OoJNobmNa06ph2bKFf1NppsDFocvWH//9Tzdd
+         coJQkXfeOwmlxs+cXVEkz0Uiaj7wNrVWCYQyid9VF4kC4JtjGYwKAWwqIIMptBHIJVZf
+         oGrp8J+BiNp8UHJ7agSnV7wdRsmK+2Uxx5xjvO96DSNqvgOnMtXC/ODbcuSKGlP8HrMp
+         zPZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729717706; x=1730322506;
+        h=cc:to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wC5CorFNxet/K6XJjDD+4xYSSsvi0kb6UDd17WYIu7Y=;
+        b=RBajXCog5Dc2lyyYLdZfzGLjW/824LDW+DDjURJqKQLQu9u32Yh7hsaaYg3w2f/jXe
+         xhbqoAcEgu4ioYD2e8WRW22W1QeQlA9Ttsajx9EqtmBQb2WOogOvviiMVEk2MOCfDVkp
+         twT7tV1fKnSWxOd5ArCjIkZQAslIdObieGFjESg4PJjNzxRLR1OPHgRXQXW8hOK/ij5X
+         aYnHCrGSyo/K7Xp/BxOYKdHB4VW5+5TBO4Lu9U5O4Jm5dD6lkvHrrsCIOEMrpgaRPnnD
+         9tWTMrBkaKo8BPGtPIokGz8yfJX98ReQoS2a1dmXB9ejaclqTRg6VkADsL9WV7sU90cW
+         ZYIA==
+X-Gm-Message-State: AOJu0Ywnu2EpmlmBYhvVJugGN2G55SP/gQwdCZhEcY+Ypntdyme2FDUN
+	bfBVxOJMK8qkpTiTIQpXFhCRxM+LAiSaCieJtWhU/2GYZ5GmOzITqyZgicXgf6vJqiUeC7YqU2n
+	XmGo5oQeEef0rlS9+NRC7N53g5Mfv4lpNI8o=
+X-Google-Smtp-Source: AGHT+IEX0W1DzvvhrCAt5G8uUzT/vu0TGof4KLbTrUTBqI3oS54SHGyC5IgFvnLjzciQIIdYv4GcQB1SolR0XsYF7I8=
+X-Received: by 2002:a05:6512:1189:b0:533:3fc8:43ee with SMTP id
+ 2adb3069b0e04-53b1a3030f0mr2450098e87.13.1729717705869; Wed, 23 Oct 2024
+ 14:08:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008183823.36676-21-samitolvanen@google.com>
- <20241008183823.36676-36-samitolvanen@google.com> <55549683-2453-4b67-a380-8ace34b3a06d@suse.com>
-In-Reply-To: <55549683-2453-4b67-a380-8ace34b3a06d@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 23 Oct 2024 21:05:24 +0000
-Message-ID: <CABCJKudc-f4OfyfWnDwXGM=ohSin7Z=y7Fk92Du_17LB9ptV+A@mail.gmail.com>
-Subject: Re: [PATCH v4 15/19] gendwarfksyms: Add support for reserved and
- ignored fields
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, Asahi Linux <asahi@lists.linux.dev>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Wed, 23 Oct 2024 23:07:49 +0200
+Message-ID: <CA+icZUVTpf+XjDp=Mh0ghuk2tQwkgGd0OMUzK++RBSfhBk4+aQ@mail.gmail.com>
+Subject: meson: always pass complete path to kmod-symlink.sh
+To: Emil Velikov <emil.l.velikov@gmail.com>
+Cc: linux-modules@vger.kernel.org, lucas.de.marchi@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 23, 2024 at 2:53=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> I've noted some nits above which you might want to trivially address.
+Hi Emil,
 
-These all looked reasonable to me, I'll address them in the next version.
+commit 844835cd9a4e5f08e1a3eefb4928c5d769264894 breaks when NO DESTDIR is set:
 
-> Otherwise this looks ok to me, feel free to add:
->
-> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+meson compile -C ../build
 
-Thanks!
+meson setup --native-file build-dileks.ini ../build
 
-Sami
+[ build-dileks.ini ]
+; SPDX-FileCopyrightText: 2024 Emil Velikov <emil.l.velikov@gmail.com>
+; SPDX-FileCopyrightText: 2024 Lucas De Marchi <lucas.de.marchi@gmail.com>
+;
+; SPDX-License-Identifier: LGPL-2.1-or-later
+
+[project options]
+build-tests = false
+debug-messages = false
+docs = false
+zstd = 'enabled'
+xz = 'enabled'
+zlib = 'enabled'
+openssl = 'enabled'
+werror = true
+strip = true
+
+[built-in options]
+buildtype = 'release'
+-EOF-
+
+sudo LC_ALL=C meson install -C ../build
+...
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
+/home/dileks/src/kmod/git/scripts/kmod-symlink.sh: line 10: DESTDIR:
+unbound variable
+FAILED: install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
+failed with exit code 1.
+
+Works:
+
+sudo DESTDIR=/bin meson install -C ../build
+...
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/depmod'
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/insmod'
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/lsmod'
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/modinfo'
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/modprobe'
+Running custom install script
+'/home/dileks/src/kmod/git/scripts/kmod-symlink.sh /usr/bin/rmmod'
+
+$ ll /bin/*mod
+-rwxr-xr-x 1 root root  67K 23. Okt 17:36 /bin/chmod
+lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/depmod -> kmod
+lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/insmod -> kmod
+-rwxr-xr-x 1 root root 172K 23. Okt 23:02 /bin/kmod
+lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/lsmod -> kmod
+lrwxrwxrwx 1 root root    4 20. Okt 00:19 /bin/rmmod -> kmod
+
+Set a default for DESTDIR (destdir)?
+
+Best regards,
+-Sedat-
