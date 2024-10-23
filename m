@@ -1,103 +1,98 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C78E1B4F0C
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 18:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E1C13AA2B
+	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 20:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729708233; cv=none; b=SaxXwpRK2KgeZ86XYjYkPBmCdxdFaFtDR9kAGw6tIATyT2pVMhvpQooA9PFcu3M9UMHAkiZeCjdUjaz/BeGa7ngOxGz9+8a9PnBWFEknMhT8lFOpm62NHx+9rydZy0ah2CEq875MLdzdAHQbbl53E64dfhCb7f8mS1KD8m8ZdN0=
+	t=1729716846; cv=none; b=Ghje99my3OH1jQ+eGl0WYA4aS8N+4wyFNWMWDHiynusb7pUQyCgR1ifHPVRN0Ai33yCepaZYi0QP/clEwOLBfogzqb1IIx2/KAVnzEGAonKi6I+IusHMIvRROLi7lffgurKJwZaHj/MgzAn4GEA44pHBBM2IC/h3wTk6iCPhqoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729708233; c=relaxed/simple;
-	bh=ubUqy/1MJzXp3/UXBgXCxp9XPERhzWpzHXPp04ORje4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AaCM8t4Na0/y5uyHda41ltX3hBdOUHnu5M+VobDG60+O2Y8QBRPDRZTty3hoK8Uo5mpC30fjiexywrOF6S6mqfjCafptfC6H3q70j8OB4+vyO7cC3CQC8MFASsZHOwAW+eH7lqlcOWqf910rQGaAjGDP1cc8oD1wgd3OrzVPnSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b=eq/ELnXX; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1729716846; c=relaxed/simple;
+	bh=g5ckEO23Wn5YIEXbTRJcK4k8xpMQsQkgzw7p8a9MqaM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E7mrOqanJqW9h74bnVsTrGUbGBRmzuJq7oKwA0botD8X7oy/VHPODOA+4hXbRICOsGPKuACTr+0E+DSWUt1ICdDHu7pvWo2RlNeOpi2BaIVI/AMzlteyjV5qE3JjwQjLNo54eoYX14jPPv9sEU88bAR7dw9tENOwH0K1skBN+oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BXImqc1O; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen-com.20230601.gappssmtp.com header.i=@soleen-com.20230601.gappssmtp.com header.b="eq/ELnXX"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-71815313303so79315a34.1
-        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 11:30:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXImqc1O"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cb15b84544so235915a12.2
+        for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 13:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen-com.20230601.gappssmtp.com; s=20230601; t=1729708229; x=1730313029; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ubUqy/1MJzXp3/UXBgXCxp9XPERhzWpzHXPp04ORje4=;
-        b=eq/ELnXXiMmEb0+ITbFQVY6x+WyP9N5HJwQ+DbZaAbp4orjmr1MaNnlaIQo0CF64Mm
-         suQYJiU3tugj0rwbPTSS+Lpnx5JIJ9bEIUQEZ2cstnHMHa39hmmr9w5PpYDfAZsr7Nhl
-         /yvP8DQoTqRp+u1pMoAv7h18L57zC8idAlmXkrsHB7xx6XfuD/vyXvfrW+H1VUGCWeVx
-         iiWK2ogNxcV84oB5dsbo8Y+YUktCxIerlie6bJ6T0dvH7xUcPiIKwGiWSngdpMr8OY+7
-         GLtFnCiOEULuI4PcP71P2UD0SMF0xNykHuNiBtB8nsoM1tP49i8wzBlLKjBtsx3+WHad
-         Sc8A==
+        d=gmail.com; s=20230601; t=1729716843; x=1730321643; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ORBQL0Yg2MeD8szwBEe4qZP77M4FRJlxDCLTMnnCgEk=;
+        b=BXImqc1OfaI/VLgN1P+cMYXP7tPg+NoOQnQ+kUt0uUbia/AvgH+AFPjdvmRLRxGSQq
+         svIRBYCktxhDRZJMOT8FWB7ClVCEIUM+KAsN1WCkeCK6IdPMo0RRGZ+t6S2n9LxByxra
+         +Jk4cnEslZxpXKngBSTykoRTa+RxdtkgJsXkomzcjLcXU7LtBbqBXfqeLj6My+0QwbiJ
+         4J6ePZceo9oB3Z3bLxQ6KfuPXXmwqKop72P8VOBmDIBmBWR2tFN7xFc/8Jr68ueNaRIi
+         2+nJirRjBnNLX1RsYkpCWuFPPgPG5egcQhSzMwqvLFlbN/7c6TliDQi1O771o+twDmdg
+         TiuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729708229; x=1730313029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ubUqy/1MJzXp3/UXBgXCxp9XPERhzWpzHXPp04ORje4=;
-        b=jwtyC+L6dn6y2HgeF+5WpKp+9K1AxhWe2ePYs4g3LHdsOJSuxtun/avnGx0qEl67xm
-         kzeQr+BY4xgKR9aKsqGDaoqnZMldbbOys215T9v+kUpprmRvX2imkGW0DhLO6tXkPGZV
-         yMGVLTAZIpRt1OtLOgTirx25vhqh0NVeRu0HPgM6lMZ7L6J2GzTxwipt0tlC/nLdNcFZ
-         w7zeCxIMGPvoXpDiSNsvZGAUBPoEDy1QxpmSm+MzAJqFw3x3ocgBpqTFyIfdMgXIuiOK
-         mi0YXANPa/AYmgIiU1xXNeP68Ri533SRJjHdrwZEzNxgtcb/GfHftYiVayEhlXYFRYHK
-         +HLw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFQQA9xCOy/b0KxDe7/zHPQ2pzIORtQ6N+euC655IOANQ+179RAAEsylKEJ2jE6SNtREBd4nkJ8m44HQFI@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAVxxB44I0mK+BKAlewmiK3NF9UVV7bcpDeRrHC00Xyk8rKnLs
-	obbtjkN9ZahNICXMkJYz5z6qxqhL7Nx4Mx5SQ14KQAWDKyJc40cJAW9Jr/oBD/YhHrLKRA7N1SZ
-	h1s3Lh367iwFXOyjF+NsNuERjz7Hkf5l2zJ0fcA==
-X-Google-Smtp-Source: AGHT+IHZNmISvMTUF0Ry3WVIT6e83mSx+xUUgcWBYXzvmpfrEZ1SC65WVbmpMeEmSjAgZbhRAY6FHGSOWJPRJPg+7LE=
-X-Received: by 2002:a05:6358:6f05:b0:1c3:7ff6:4a88 with SMTP id
- e5c5f4694b2df-1c3d81b1815mr252520455d.25.1729708229406; Wed, 23 Oct 2024
- 11:30:29 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729716843; x=1730321643;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ORBQL0Yg2MeD8szwBEe4qZP77M4FRJlxDCLTMnnCgEk=;
+        b=IJoPwrNzRwU2AZQFiIxZvzpUVhf+6timLfifyHFkYzBUlltZcsDim3XgnJTBB3A4Hw
+         +RGpMEg4K4yfVG1CcVTLggSwkkKDuFUyUQp4I3LXFFr3mscBIa5zDQiYiq/ootnk4G+t
+         f4DJw4xyN2ySFHN3AeCbfAE2bnhNb8O1gdqOOL3Ut4BPTaZvqAGtti8bxQ5+tIq40wRi
+         gcKiP2qf882GYwjfhKsHnsf6Ld41pJmIrnkXPzcY4sjltPB9SEzA8+G4PFni0ZbDlalk
+         mEamkogK+6LhoihCJ+duDkpCY2i9Bi4IVKYW0I8enYwnVJYgffdypNhoP7QxWp+HsuvN
+         xWzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVgkPDZENMKS3x+IRywMk24YjC+e2bNsTKbroiFicg29vW7ICjN677xRajlTuz8xdDqM/NscveApWT3oHvF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSsqWQCUsc60dCoOhbhIyqzwf/GkbV9/tD/oSBgRANHrVywPj3
+	iSOL1goZnYmyJZeZgqWLVnfM0IY+4j9Q9zrCGP/gR6L8T79rbNEH4hsM6X3v
+X-Google-Smtp-Source: AGHT+IFlqgRofLjWLWamsYT+EJlNuWJj/vbdLnyicBfMgntkOzoURWwA4pJfnXUDgRAvBeBJR7DZIQ==
+X-Received: by 2002:a05:6402:3888:b0:5c9:36c4:cead with SMTP id 4fb4d7f45d1cf-5cb8b26f218mr2615871a12.34.1729716843068;
+        Wed, 23 Oct 2024 13:54:03 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:3035:a06:45ec:3047:d021:9cb4:a37e])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cb66c6b556sm4806894a12.63.2024.10.23.13.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2024 13:54:02 -0700 (PDT)
+From: Sedat Dilek <sedat.dilek@gmail.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Emil Velikov <emil.l.velikov@gmail.com>,
+	linux-modules@vger.kernel.org
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Subject: [PATCH] meson: Collect all prefix get_option at one place
+Date: Wed, 23 Oct 2024 22:52:49 +0200
+Message-ID: <20241023205352.45271-1-sedat.dilek@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241023170759.999909-1-surenb@google.com> <20241023170759.999909-7-surenb@google.com>
-In-Reply-To: <20241023170759.999909-7-surenb@google.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 23 Oct 2024 14:29:51 -0400
-Message-ID: <CA+CK2bBzZDdVN66qK4UQ4jpDuAABu89S3mVNbJipaJjL3bcg4w@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] alloc_tag: support for page allocation tag compression
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: akpm@linux-foundation.org, kent.overstreet@linux.dev, corbet@lwn.net, 
-	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	souravpanda@google.com, keescook@chromium.org, dennis@kernel.org, 
-	jhubbard@nvidia.com, urezki@gmail.com, hch@infradead.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, yuzhao@google.com, 
-	vvvvvv@google.com, rostedt@goodmis.org, iamjoonsoo.kim@lge.com, 
-	rientjes@google.com, minchan@google.com, kaleshsingh@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
-	maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, 
-	kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 23, 2024 at 1:08=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> Implement support for storing page allocation tag references directly
-> in the page flags instead of page extensions. sysctl.vm.mem_profiling
-> boot parameter it extended to provide a way for a user to request this
-> mode. Enabling compression eliminates memory overhead caused by page_ext
-> and results in better performance for page allocations. However this
-> mode will not work if the number of available page flag bits is
-> insufficient to address all kernel allocations. Such condition can
-> happen during boot or when loading a module. If this condition is
-> detected, memory allocation profiling gets disabled with an appropriate
-> warning. By default compression mode is disabled.
->
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
+---
+ meson.build | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thank you very much Suren for doing this work. This is a very
-significant improvement for the fleet users.
+diff --git a/meson.build b/meson.build
+index 58acf2eac8e9..2ed33c28471f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -187,6 +187,7 @@ sysconfdir = get_option('sysconfdir')
+ cdata.set_quoted('SYSCONFDIR', sysconfdir)
+ 
+ bindir = join_paths(get_option('prefix'), get_option('bindir'))
++includedir = join_paths(get_option('prefix'), get_option('includedir'))
+ libdir = join_paths(get_option('prefix'), get_option('libdir'))
+ 
+ distconfdir = get_option('distconfdir')
+@@ -493,7 +494,7 @@ summary({
+   'sysconfdir'  : sysconfdir,
+   'distconfdir' : distconfdir,
+   'libdir'      : libdir,
+-  'includedir'  : join_paths(get_option('prefix'), get_option('includedir')),
++  'includedir'  : includedir,
+   'bindir'      : bindir
+ }, section : 'Directories')
+ 
+-- 
+2.45.2
 
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
