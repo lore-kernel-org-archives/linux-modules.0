@@ -1,199 +1,108 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D889178C90
-	for <linux-modules@vger.kernel.org>; Wed, 23 Oct 2024 02:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027124C7C;
+	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729650703; cv=none; b=seUWdPMFv22abju2TGQRuNyy19KtGLiyFHQeCRT8t3BCAYvWTm1k32FixfJ11/+vnXiuUy6e+1KZX4CAES1ZPfo0elDiaijQMDrUodkQLNjuJnW/aUEznkV3pTUd4uTpZ1D7uExwVv3vaK8K7oylR9EWcru0Vk4ElCX4Wa0i+lc=
+	t=1729659373; cv=none; b=tX76QJdTkEVZd7EhRQFqMQ8/ye1Btac1GYtobAKT6wZTM0tUptmauB55nDVza9+VTnDxUJAUHakIBMHy3BClaLcj+I8OjJIz0VAvAs5/9H1Izbzh+lc3+Z4PqoZ4DC/qQ8ghgHAsg07m1UwWRSAm69Udl3DKKDnSa42Wgl4LrkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729650703; c=relaxed/simple;
-	bh=AXnGIklQqq/lnjPHJiHbKua3HNYNN7XmIM8srTiC2rw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uHGiU2ZaI7vMEyLYSaB7huKR/RTgG1214KybyRKTljsVCRCExG8aTcHGRVwRpEJjnTs6yl0POgYLXRFzyz4jQCr6yOMEopyOtM3mIeOOMGIvUXq6A4pqYfUrmqBl1JT11MLsVM4fwJlsSMwcGr4XKd86rHIi5C4Edt9PHlnWhmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x6RQx9Y4; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
+	s=arc-20240116; t=1729659373; c=relaxed/simple;
+	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cxbo4xUkuVFie93RzUBvY2pdBaQQA7eoKMRB65QdVaZOuJE+tZ7+FRcVQIXDs3o0S8AviwrstqzBT0Xh06P7YtG+MAWBzsR9YpMeRKY0ppA63A2nHl81mc8Z2H6eeSGGQFidZDD4l+aYP1Wx4Y7/KD9awwrrQBiakoFRR2DQUxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/wLRcYq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x6RQx9Y4"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e3529d80e5so111057087b3.0
-        for <linux-modules@vger.kernel.org>; Tue, 22 Oct 2024 19:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729650701; x=1730255501; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YVm76pegvjtsU2eVkCp0KUVvIC3D2L+QTQ/qD8J0RGc=;
-        b=x6RQx9Y4aYypbZVPWI2tSTKcrTH4HgP/YtcBMY56Q0w1dV+TKE2ab34jduWTEaSKaf
-         P5SMsto8G8CsBz4c4t9om9qwC4nbuavYJH+/MP4ax7b84d7uZFUjeQA1dinBDHyKiTLQ
-         YYdjwqm7BXXaQmcpKP8Kf82c6WFrN9IilLR6XSZPcQSZhBiqWNcYfrbg1eb8uruA41Tf
-         CwrzNWa8lQS4eQkYk29vMcSnGRBIDSCQoK8tODo1VxGv11qX9cfmfyLPkii2Z+FSOakn
-         uGP4kGgqdy+yRAw33P7FHGOZJOY5yp/3AxSqbnTrl/0Fyc21VIbPuzIs50bhnyCHABlR
-         J7hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729650701; x=1730255501;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YVm76pegvjtsU2eVkCp0KUVvIC3D2L+QTQ/qD8J0RGc=;
-        b=OoFj50Ap+cP4CEwAVonCUlFlhQ7x0HnLXzMlbGQUp9c+I9jZcTi9fNCgHO532zZvlW
-         aYU5Bt/oeqHw9AuMoFGcY4CfLU2ierL5uSmkNENKBkcXoUmC+NC2fsyobq00oGRtlTmF
-         GCA6OMUuA9Xn9Qlf6s158Fcf6OXIHm79LrkwLcWU7fzhPQBMPSDQvS8a/SWva7+z0XbF
-         IOLGTQ1dcQXX1osYcPkjKbb7QGpwK6rPiaPMJW0mSlOmqvgXrZYeazYRzKqcfbpZdXox
-         tTovKyaQttM07nzMPnJVWeYw+9cBQe7edwE22BPN7KCtQ16sRL+Dwhr1iUmmfLsEekEp
-         cA/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVPQbbJsjIiA5YgY1FZMa3y1HDav0e5K/cAlw3W8DgrXh7jMQtjOy4qlg6fHrpJbQnkDGemXBNvbc2Vb++O@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzvxPs8wq5nMfYKYuQrNzRhqPH9U7oWLEfh++aZ0T2lIWn2y51
-	EtaHobUobM1lwlZ7XV9jMWL6SMVjG1SeB9woyBjDGf9yqnC/1cu+WcbhUyR3UyZMRNz8uw8P3mX
-	e90+sBg==
-X-Google-Smtp-Source: AGHT+IEAkeaejmFNh7AdweUswVgSnsnPXI+PIy2hRogub8V/yCkXh4Je5UqAMfghNt8CcH8kkBRMSxNOEULS
-X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
- (user=mmaurer job=sendgmr) by 2002:a05:690c:25c9:b0:6e6:38:8567 with SMTP id
- 00721157ae682-6e7f0fdb1ecmr462847b3.8.1729650700838; Tue, 22 Oct 2024
- 19:31:40 -0700 (PDT)
-Date: Wed, 23 Oct 2024 02:31:30 +0000
-In-Reply-To: <20241023-extended-modversions-v7-0-339787b43373@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/wLRcYq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EA15C4CEE5;
+	Wed, 23 Oct 2024 04:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729659372;
+	bh=AY8Zp2haauObwpX/UvHbw6SC+bgAY17isTJb8nygQ7o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B/wLRcYqNvmH9rKOUlk+DslyRamaqLgwQTL6/KJVgEcnszZzVyKKfCyI2AHRJgTp5
+	 dOYApRfE9wZH8Kmf+E/2e8ZicbHgYn8OCU3muwWu2w7D6lCaGXSnbiCoYotqdeyirU
+	 XbsYTsyJPNNuVpoqs97dqeLr4aTc4CrWHGcMurBP/jtQ67bkS+Dy3jIP7OSC5mCV9z
+	 96PAv81sfiwa71YOqspUtVJdezDakaEiM2nAdb/Imas2QlcZwD//sSvlikHLQfAbMd
+	 dgD99JcV0OmbXLw2c7yHTyze3fmAJmfrDONepeEouQPw5GCexbS5BMkz4dg/M2Hqyn
+	 ajAa+5UHitSMw==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539e3f35268so4916653e87.3;
+        Tue, 22 Oct 2024 21:56:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWMLAIFAHs8cWQCbZdOs4uGTQN35Fg6SBHlEgkAGp56yu4T0YetGdhcfgrBbhk5TNDpePsdDV7lvdOC@vger.kernel.org, AJvYcCWehxvkJMgwDe9Sr+vs0fg7Iq0uMnarCFfVu6aK8EZ3Ja9dKEqW4pzceUhCjj9ZMy6NuSadw8BRuApnpN/Grg==@vger.kernel.org, AJvYcCX/f+tkdKB9oxFisSDdYnBC8Lu558K6ybiDV+i6yL0Pt8MwGKi2o/JebeTVrzboEvsDss+21O4Rf16B484I@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcLKPRHqSl/hWolUR0lJaGp3YoyRjco5g67qZGGNVlgKTDYAHI
+	3cjs2ftBkniO5gZs4b0EP1oh0vFK/NjL4Mgr26WjvMUOv2xBXmxX6TM29gEPrOKZFBtM/8xohTg
+	KuIaokcGP7mVXDZ371Sjv28mkHiU=
+X-Google-Smtp-Source: AGHT+IH2WKaFs7NPh26+cmobMHBnnTIDPrdXMLtM0gbtf4eQ0HRop6c5o0FiEKJcPuU668AFQL/9XuP68s+wZZoy4VA=
+X-Received: by 2002:a05:6512:238f:b0:539:9594:b226 with SMTP id
+ 2adb3069b0e04-53b1a31f6a1mr440383e87.34.1729659371194; Tue, 22 Oct 2024
+ 21:56:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241023-extended-modversions-v7-0-339787b43373@google.com>
-X-Mailer: b4 0.15-dev
-Message-ID: <20241023-extended-modversions-v7-3-339787b43373@google.com>
-Subject: [PATCH v7 3/3] rust: Use gendwarfksyms + extended modversions for CONFIG_MODVERSIONS
-From: Matthew Maurer <mmaurer@google.com>
-To: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, Matthew Maurer <mmaurer@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+References: <20240129192644.3359978-1-mcgrof@kernel.org> <ZbrFoKUJQ8MIdzXD@bombadil.infradead.org>
+ <ZbvdbdxOKZ9FUQuC@bombadil.infradead.org> <CAK7LNATjKzUVR7DbJqb=yAinJ1YZo8tzwiXA79E9-VrDn11wwg@mail.gmail.com>
+ <Zb0zGZrotuWyhsFd@bombadil.infradead.org> <Zxap5hbcXw36rRWW@bombadil.infradead.org>
+ <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
+In-Reply-To: <7d0ce4fc-c9ab-4c67-8666-d5bd56dc970d@gmx.de>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 23 Oct 2024 13:55:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
+Message-ID: <CAK7LNASPm8zo2y2vZfeX+LC=xuF+s_bAjkmzTSaT-nmcYoSkKw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] modules: few of alignment fixes
+To: Helge Deller <deller@gmx.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, arnd@arndb.de, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Sami Tolvanen <samitolvanen@google.com>
+On Tue, Oct 22, 2024 at 5:07=E2=80=AFAM Helge Deller <deller@gmx.de> wrote:
+>
+> On 10/21/24 21:22, Luis Chamberlain wrote:
+> > On Fri, Feb 02, 2024 at 10:23:21AM -0800, Luis Chamberlain wrote:
+> >> On Sat, Feb 03, 2024 at 12:20:38AM +0900, Masahiro Yamada wrote:
+> >>> On Fri, Feb 2, 2024 at 3:05=E2=80=AFAM Luis Chamberlain <mcgrof@kerne=
+l.org> wrote:
+> >>>>
+> >>>> On Wed, Jan 31, 2024 at 02:11:44PM -0800, Luis Chamberlain wrote:
+> >>>>> On Mon, Jan 29, 2024 at 11:26:39AM -0800, Luis Chamberlain wrote:
+> >>>>>> Masahiro, if there no issues feel free to take this or I can take =
+them in
+> >>>>>> too via the modules-next tree. Lemme know!
+> >>>>>
+> >>>>> I've queued this onto modules-testing to get winder testing [0]
+> >>>>
+> >>>> I've moved it to modules-next as I've found no issues.
+> >>>>
+> >>>>    Luis
+> >>>
+> >>>
+> >>> I believe this patch series is wrong.
+> >>>
+> >>> I thought we agreed that the alignment must be added to
+> >>> individual asm code, not to the linker script.
+> >>>
+> >>> I am surprised that you came back to this.
+> >>
+> >> I misseed the dialog on the old cover letter, sorry. I've yanked these=
+ patches
+> >> out. I'd expect a respin from Helge.
+> >
+> > Just goind down memory lane -- Helge, the work here pending was to move
+> > this to the linker script. Were you going to follow up on this?
+>
+> Masahiro mentions above, that the alignment should be added
+> to the individual asm code. This happened in the meantime for parisc, but
+> I'm not sure if all platforms get this right.
+> So in addition, I still believe that adding the alignment to the linker
+> script too is another right thing to do.
+>
+> Helge
 
-Previously, two things stopped Rust from using MODVERSIONS:
-1. Rust symbols are occasionally too long to be represented in the
-   original versions table
-2. Rust types cannot be properly hashed by the existing genksyms
-   approach because:
-	* Looking up type definitions in Rust is more complex than C
-	* Type layout is potentially dependent on the compiler in Rust,
-	  not just the source type declaration.
+Yes, I believe the proper alignment should be specified in asm code.
 
-CONFIG_EXTENDED_MODVERSIONS addresses the first point, and
-CONFIG_GENDWARFKSYMS the second. If Rust wants to use MODVERSIONS, allow
-it to do so by selecting both features.
-
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Co-developed-by: Matthew Maurer <mmaurer@google.com>
-Signed-off-by: Matthew Maurer <mmaurer@google.com>
----
- init/Kconfig  |  3 ++-
- rust/Makefile | 32 ++++++++++++++++++++++++++++++--
- 2 files changed, 32 insertions(+), 3 deletions(-)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 530a382ee0feb391b4717abdba3672e584a462d0..f5cce579f29b2ed89e97f8075a3bf70e32e71ad0 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1942,7 +1942,8 @@ config RUST
- 	bool "Rust support"
- 	depends on HAVE_RUST
- 	depends on RUST_IS_AVAILABLE
--	depends on !MODVERSIONS
-+	select EXTENDED_MODVERSIONS if MODVERSIONS
-+	depends on (GENDWARFKSYMS || !MODVERSIONS)
- 	depends on !GCC_PLUGIN_RANDSTRUCT
- 	depends on !RANDSTRUCT
- 	depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
-diff --git a/rust/Makefile b/rust/Makefile
-index b5e0a73b78f3e58fc8fb8c9fab8fb5792406c6d8..b80bc4eb98202f774c493da89c2caee322cffc91 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -303,10 +303,11 @@ $(obj)/bindings/bindings_helpers_generated.rs: private bindgen_target_extra = ;
- $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/helpers.c FORCE
- 	$(call if_changed_dep,bindgen)
- 
-+rust_exports = $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ && $$3!~/__cfi/ { printf $(2),$(3) }'
-+
- quiet_cmd_exports = EXPORTS $@
-       cmd_exports = \
--	$(NM) -p --defined-only $< \
--		| awk '$$2~/(T|R|D|B)/ && $$3!~/__cfi/ {printf "EXPORT_SYMBOL_RUST_GPL(%s);\n",$$3}' > $@
-+	$(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n",$$3) > $@
- 
- $(obj)/exports_core_generated.h: $(obj)/core.o FORCE
- 	$(call if_changed,exports)
-@@ -378,11 +379,35 @@ ifneq ($(or $(CONFIG_ARM64),$(and $(CONFIG_RISCV),$(CONFIG_64BIT))),)
- 		__ashlti3 __lshrti3
- endif
- 
-+ifdef CONFIG_MODVERSIONS
-+cmd_gendwarfksyms = $(if $(skip_gendwarfksyms),, \
-+	$(call rust_exports,$@,"%s\n",$$3) | \
-+	scripts/gendwarfksyms/gendwarfksyms \
-+		$(if $(KBUILD_SYMTYPES), --symtypes $(@:.o=.symtypes),) \
-+		$@ >> $(dot-target).cmd)
-+endif
-+
- define rule_rustc_library
- 	$(call cmd_and_fixdep,rustc_library)
- 	$(call cmd,gen_objtooldep)
-+	$(call cmd,gendwarfksyms)
- endef
- 
-+define rule_rust_cc_library
-+	$(call if_changed_rule,cc_o_c)
-+	$(call cmd,force_checksrc)
-+	$(call cmd,gendwarfksyms)
-+endef
-+
-+# helpers.o uses the same export mechanism as Rust libraries, so ensure symbol
-+# versions are calculated for the helpers too.
-+$(obj)/helpers/helpers.o: $(src)/helpers/helpers.c $(recordmcount_source) FORCE
-+	+$(call if_changed_rule,rust_cc_library)
-+
-+# Disable symbol versioning for exports.o to avoid conflicts with the actual
-+# symbol versions generated from Rust objects.
-+$(obj)/exports.o: private skip_gendwarfksyms = 1
-+
- $(obj)/core.o: private skip_clippy = 1
- $(obj)/core.o: private skip_flags = -Wunreachable_pub
- $(obj)/core.o: private rustc_objcopy = $(foreach sym,$(redirect-intrinsics),--redefine-sym $(sym)=__rust$(sym))
-@@ -394,6 +419,7 @@ ifneq ($(or $(CONFIG_X86_64),$(CONFIG_X86_32)),)
- $(obj)/core.o: scripts/target.json
- endif
- 
-+$(obj)/compiler_builtins.o: private skip_gendwarfksyms = 1
- $(obj)/compiler_builtins.o: private rustc_objcopy = -w -W '__*'
- $(obj)/compiler_builtins.o: $(src)/compiler_builtins.rs $(obj)/core.o FORCE
- 	+$(call if_changed_rule,rustc_library)
-@@ -404,6 +430,7 @@ $(obj)/alloc.o: private rustc_target_flags = $(alloc-cfgs)
- $(obj)/alloc.o: $(RUST_LIB_SRC)/alloc/src/lib.rs $(obj)/compiler_builtins.o FORCE
- 	+$(call if_changed_rule,rustc_library)
- 
-+$(obj)/build_error.o: private skip_gendwarfksyms = 1
- $(obj)/build_error.o: $(src)/build_error.rs $(obj)/compiler_builtins.o FORCE
- 	+$(call if_changed_rule,rustc_library)
- 
-@@ -413,6 +440,7 @@ $(obj)/bindings.o: $(src)/bindings/lib.rs \
-     $(obj)/bindings/bindings_helpers_generated.rs FORCE
- 	+$(call if_changed_rule,rustc_library)
- 
-+$(obj)/uapi.o: private skip_gendwarfksyms = 1
- $(obj)/uapi.o: $(src)/uapi/lib.rs \
-     $(obj)/compiler_builtins.o \
-     $(obj)/uapi/uapi_generated.rs FORCE
-
--- 
-2.47.0.105.g07ac214952-goog
-
+--=20
+Best Regards
+Masahiro Yamada
