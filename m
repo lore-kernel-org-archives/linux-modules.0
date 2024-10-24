@@ -1,57 +1,57 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D96E12D1F1
-	for <linux-modules@vger.kernel.org>; Thu, 24 Oct 2024 23:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72C0218584
+	for <linux-modules@vger.kernel.org>; Thu, 24 Oct 2024 23:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729810920; cv=none; b=X0MnDYQ6LbkBlJnBUS4/RG9kJV8QPx0BfnwhMRsm+8odjejLmUytS2QygeZonclDcEmCif5aORZHZ3m5s2Xmg0sixsXNBAoJymlhY8IEkIaZh/DK1i1w7whkokMFyJ72Y/kLGu88Ri1oJHsSXym+ukT0ep5hAaY+NPdT9H1+55g=
+	t=1729811190; cv=none; b=HZK+taAR/8cRJZc2w9BSqAtijySMUJx7vIGbPoI4PfrR0MopGxJKFaAToKFztgUfNj70Q7Xl/QeI2q/bQWW1ViJQwVlFmLxwmltK7g/PBqUGIIbP51taJlD6MKtVktINhDBO0zGLNBgAg1xkRnkTY3AeonTKt3B6BiS6NIFpibs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729810920; c=relaxed/simple;
-	bh=ybEBU/t/SJePZebl4iAjsIn1gGCyVGhTKSar4dgvytE=;
+	s=arc-20240116; t=1729811190; c=relaxed/simple;
+	bh=HMpKxgYPxHCa/w+TdKwcqFScgohp/4MHekk0zNJ9O7w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o6fNYcKlyjLI7ezHtcnAi+rtKdzWgpmHv9WlW979aeq2ULVB/FPohkpGGlZwfK0ezpF/a9EPkLIwyRa0nsytEVw9IgtpGmsgAZuR4ujXYPj7MF7Xd7BleZQgkgggJF5V0KXbAiXk4vJqICHMEPyOR52wge7I3Z4fidii2Q362yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=icxf1yBL; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=C5WVsMFg+VfDHzZTkCUI1QQPaffUE/lFxez5ujlsMzCIUG2HwDMsJDUt5ijivHVw2NJwaR7zcSywmwbYvqWAy5VASoQhJjPZdRmQA14wZQQNjnoLGEdcePmhoMqKgCszvASuXQBfJZdLCVaZPQGBiIa+uuC9mbJkN+4trxUrta4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1x5Q9jgc; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="icxf1yBL"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20ca4877690so35355ad.1
-        for <linux-modules@vger.kernel.org>; Thu, 24 Oct 2024 16:01:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1x5Q9jgc"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-20ca03687fdso41995ad.0
+        for <linux-modules@vger.kernel.org>; Thu, 24 Oct 2024 16:06:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729810918; x=1730415718; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1729811187; x=1730415987; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YWPqFC2idLXwWLVGXP8sgBtLusvgfrCXLHA1CgLV1iw=;
-        b=icxf1yBLDguit0cVY9iCBraP7Qp4FL43FqAT2G6joQoC3FaY3fqe1Bg4Hl4HfK66JN
-         95OmZuWqsKEGnpSs498al2+y9zlbrJEdF4F4BnYfApcpL/KLgzfQ09dAqjfao7WmGCa0
-         I9Dh5GzkFvfAkKl97y9oebePwuig4qgYWd8l3RH1e5GPGUI++nF5ST7LSfPpWMuN2CPd
-         O0+NCBGZRDYPItqTZDF6/IxK7tEBaRvRCtJVaSIniqgcKTi+voqu/3K9bhR6x2RmxbRe
-         mYSp3OTJmd8drOIaQc5Hk8iNdAkYagVKV0it1iXsblzyxlLwVI9Xz3eX7PlaoGmsMp7e
-         wT5w==
+        bh=ETJZ+z0riIyNZ07U3QSTstx4QvvpQHVTh5tLw1Ae2tI=;
+        b=1x5Q9jgcwOMSJz/4OFTSBP4Pg8oGKC0g8ODCGs9jjFHxDx/E7xdi7f7b7LLFXrRrfd
+         MXC/RI2Fuhovdgj9PCCcTZ/QXfTIlZvUaZXP8ysFXpVMOobD1MHfzZ31LtiZa6ar6CNv
+         CPJoyRYkkXx+iKnkGcH6wCHkv0jwc8jcRgBsIKK6QWdhdbKFvo42PFB/xb/kocizpaO1
+         64FgBPpIqBs8NDqrB5cKYD7zuytmtvRlDXDHvq7NVAi9ihURD/Xx9FQVpJNW86MC3CiV
+         HwCpFmS6rKAB8A4I73WQUX44pENSlyCl6Is+x3lpSGXCG4eYM1qbNEB7zP8riyqUaR8J
+         wfnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729810918; x=1730415718;
+        d=1e100.net; s=20230601; t=1729811187; x=1730415987;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YWPqFC2idLXwWLVGXP8sgBtLusvgfrCXLHA1CgLV1iw=;
-        b=by/Xg6U8F9Hbhr/1kDhFHKjaE6V5+5dVNrqS1JCwkCsd4dDRLU03ZrQNA0JtDI1FqP
-         c3IeVU7611YEVoVdO3lLs5CmS6dm/+h5vvQww0EOnlTzIlPGheEgeeL9dJSSVfH7EHIM
-         QBFT/rXb7OUahEORFbPURAYDBN/fcZzEHz4TDl93AiI3IFmO5k7iLtsmvYoGf9le6CHX
-         LHmhMxHps1ipiADP6JfxnTQwKoBki6s16N48RRQClRAZfbw+BuJ+JM/vp0D+xUfxm3uu
-         dDNYe6Swh1KM2mQQCd6Ch5F4tkY1mZOFdsHGCWay+sgaSUptXXuXkpzabsKD3eek8XFD
-         EorQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyokN7xCL5nekj7Lzoi0pb0yhalGOBg6t8KueXgeBZXJrslPQIrcunp/lw+ma82ZSELv4XsDJKmJPUL1wD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx90pY58oFwGrwabvB58PFWBa6n0H8RWp7L2rsv9zlrx2qCcmVX
-	zQnyxqRFQwoXq/P1T0G4X/MV6DEbOKDhFp1qLlAMgsvuC698oPhyW0Lk/tI+4A==
-X-Google-Smtp-Source: AGHT+IECEzj2j2R3HEQNqRkKqGUxd9Vcb7D0j4G32E56QFP5qsmcyNWJW/GLTUqkmxlzQwTttNdiEQ==
-X-Received: by 2002:a17:902:cec8:b0:20c:a8cf:fa27 with SMTP id d9443c01a7336-20fc2219a8dmr1193475ad.18.1729810917420;
-        Thu, 24 Oct 2024 16:01:57 -0700 (PDT)
+        bh=ETJZ+z0riIyNZ07U3QSTstx4QvvpQHVTh5tLw1Ae2tI=;
+        b=E27hkhSuSGhxT4q+XF0sPX8mhBXSxqQqowW7X9/O0ZIEdYYmh9JyTSON4detFCKGlJ
+         ppUxPoem9epQbNoJ9ExdanI1KY/PVu6u9SXjlzdBO8M9T8Pr5ZZevVh1p+begOCbElvD
+         XYDnWQPWY/le60PVZzQ7tZXGY6nZKIsw0Nh+RzYh+wZgNFa5KwZdcRX7S3vDDhoWyzZs
+         NlxyzxTFi3I3Pq9E5TfqGhhTDkwfA2dMYIONlqOE9qy8FzueqK7/zvEdAN6uAvDWqA6d
+         SX11ESdVJyfHjHm+GI3ih9rZT0UzSvqsOy+eQn60UXZ8ZG7FetcBkFQg1QfoyPU4bcGb
+         8rLA==
+X-Forwarded-Encrypted: i=1; AJvYcCU58yxddjTz+AATLU0T7VPuC9cYSXE5DpKrY06I6DyCGLbvzntovtu/9129DmMLkWt/ck0bk5l9WOusu1s0@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTrm88Q/i6dGm8Rjkt740A5HmgNRF3ATA4d/ea9SiapQBztvuV
+	s1Wlo/N+nvRf4kzLUeL59MTiIRw+iWpYwtxebeP6xL2STq5newTEqi85YxRBMg==
+X-Google-Smtp-Source: AGHT+IFJuHdwPAvfIIk6Cjv1uHcC4bkvVJ4gTYWWjL2dM+mbjxBVmFxEzO9xnCcZL8zQeDD9a34Ovw==
+X-Received: by 2002:a17:903:2445:b0:20b:a2b8:1850 with SMTP id d9443c01a7336-2105b1d0744mr482185ad.15.1729811186359;
+        Thu, 24 Oct 2024 16:06:26 -0700 (PDT)
 Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e8e3572efbsm26644a91.22.2024.10.24.16.01.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e7ef0cc7csm76651665ad.101.2024.10.24.16.06.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2024 16:01:56 -0700 (PDT)
-Date: Thu, 24 Oct 2024 23:01:52 +0000
+        Thu, 24 Oct 2024 16:06:25 -0700 (PDT)
+Date: Thu, 24 Oct 2024 23:06:22 +0000
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Matthew Maurer <mmaurer@google.com>
 Cc: Michael Ellerman <mpe@ellerman.id.au>,
@@ -74,10 +74,11 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>,
 	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] modpost: Produce extended MODVERSIONS information
-Message-ID: <20241024230152.GB1382412@google.com>
+Subject: Re: [PATCH v7 3/3] rust: Use gendwarfksyms + extended modversions
+ for CONFIG_MODVERSIONS
+Message-ID: <20241024230622.GC1382412@google.com>
 References: <20241023-extended-modversions-v7-0-339787b43373@google.com>
- <20241023-extended-modversions-v7-2-339787b43373@google.com>
+ <20241023-extended-modversions-v7-3-339787b43373@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -86,23 +87,58 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241023-extended-modversions-v7-2-339787b43373@google.com>
+In-Reply-To: <20241023-extended-modversions-v7-3-339787b43373@google.com>
 
-On Wed, Oct 23, 2024 at 02:31:29AM +0000, Matthew Maurer wrote:
-> Generate both the existing modversions format and the new extended one
-> when running modpost. Presence of this metadata in the final .ko is
-> guarded by CONFIG_EXTENDED_MODVERSIONS.
+On Wed, Oct 23, 2024 at 02:31:30AM +0000, Matthew Maurer wrote:
+> From: Sami Tolvanen <samitolvanen@google.com>
 > 
-> We no longer generate an error on long symbols in modpost if
-> CONFIG_EXTENDED_MODVERSIONS is set, as they can now be appropriately
-> encoded in the extended section. These symbols will be skipped in the
-> previous encoding. An error will still be generated if
-> CONFIG_EXTENDED_MODVERSIONS is not set.
+> Previously, two things stopped Rust from using MODVERSIONS:
+> 1. Rust symbols are occasionally too long to be represented in the
+>    original versions table
+> 2. Rust types cannot be properly hashed by the existing genksyms
+>    approach because:
+> 	* Looking up type definitions in Rust is more complex than C
+> 	* Type layout is potentially dependent on the compiler in Rust,
+> 	  not just the source type declaration.
 > 
+> CONFIG_EXTENDED_MODVERSIONS addresses the first point, and
+> CONFIG_GENDWARFKSYMS the second. If Rust wants to use MODVERSIONS, allow
+> it to do so by selecting both features.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Co-developed-by: Matthew Maurer <mmaurer@google.com>
 > Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> ---
+>  init/Kconfig  |  3 ++-
+>  rust/Makefile | 32 ++++++++++++++++++++++++++++++--
+>  2 files changed, 32 insertions(+), 3 deletions(-)
+> 
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 530a382ee0feb391b4717abdba3672e584a462d0..f5cce579f29b2ed89e97f8075a3bf70e32e71ad0 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -1942,7 +1942,8 @@ config RUST
+>  	bool "Rust support"
+>  	depends on HAVE_RUST
+>  	depends on RUST_IS_AVAILABLE
+> -	depends on !MODVERSIONS
+> +	select EXTENDED_MODVERSIONS if MODVERSIONS
+> +	depends on (GENDWARFKSYMS || !MODVERSIONS)
 
-Thanks for fixing this, LGTM.
+Nit: `depends on !MODVERSIONS || GENDWARFKSYMS` would match the
+convention used below.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> +cmd_gendwarfksyms = $(if $(skip_gendwarfksyms),, \
+> +	$(call rust_exports,$@,"%s\n",$$3) | \
+> +	scripts/gendwarfksyms/gendwarfksyms \
+> +		$(if $(KBUILD_SYMTYPES), --symtypes $(@:.o=.symtypes),) \
+> +		$@ >> $(dot-target).cmd)
+
+Note that Petr suggested adding a KBUILD_ flag for passing the
+--stable parameter to gendwarfksyms, which I think would be useful,
+so once I send out v5 of that series, we'll have to update this to
+also use the parameter when processing Rust objects:
+
+https://lore.kernel.org/linux-modules/8017c328-f039-46c3-b472-f203cd6e2cfe@suse.com/
 
 Sami
