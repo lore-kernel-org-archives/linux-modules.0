@@ -1,55 +1,55 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C77228B5B
-	for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 17:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA26229104
+	for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 17:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730307705; cv=none; b=uwnA2i1QH5qR/FnSEkseQ2pfFteyX3iBVAr9q8/CVPgBmHbQkNZUboy9ZIJ8F3+EtLuKdl+5RUKTGOp1QHOkkSUMek9bQAMY1Avrb+J5Yhf5m5rLX9jv4R8uhh99PyYZm2WDnDtf+/+odKz+Uf5IcD/2LEN29fptmKm0n+cW2rc=
+	t=1730307706; cv=none; b=VvaQeNpuaHnXwYKM2wiUR2UEbExAmZVxr5Llo1NKP0ZPb4EKAEt00JlJGiU9uQ1FzsfDzADoDIu88M8hHNp8YnHPOmou36VxeM5bV5v20BgNRapkH0fHyYUi/9crXaja3GN6HloD92mfMlqotb12Aiyoj8rHmqc26CxlLwE+TdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730307705; c=relaxed/simple;
-	bh=jz4OqGSqdykaeaYVxTVMbv9ETE/RlcvzTo1yK+d3V8o=;
+	s=arc-20240116; t=1730307706; c=relaxed/simple;
+	bh=Fa2DDp//fgzxVZObACZomfQEZKjE3iiFEcYvVFgoCGs=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qPdN0tFgz/Ho4JoXM7vQk/6a3zTYRvXtiGofyGHz8t/McrR3DZ0WkFaVW40keUtONidSOothDw5DFlL5ZHDrzgIaqQ2QCuFUiYmBSaW3lmA4MiggO0C3alwkr6Qe5r0SeeY/xPkpjg/MpsdYQQ6lGKWKACJjyQGM7/0aPTyXoCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tb0JE01M; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=O5HkpG/T6iIVSlwSK/3sd+/hZ06x//gTZ+l+1xebcjlXRGutfWwSZ63ld/DdSUcBlsqs5iZGo6vljFxLwRua7ghtriZGwEn2oOTl9OiEHmyOvJs/2hKpGfnSIc+8ZiqLsu0VfwFXX0Ix2yV8RsZLMVw9JYCMm9Tzkb/uXYX8/xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F0LMa1wh; arc=none smtp.client-ip=209.85.219.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tb0JE01M"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6ea258fe4b6so51034617b3.1
-        for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 10:01:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F0LMa1wh"
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e2904d0cad0so19066276.1
+        for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 10:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730307700; x=1730912500; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1730307702; x=1730912502; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ya57kHey92WdnN8H51ZJGBOKXIv+w0nzQyUSQYLXyU=;
-        b=Tb0JE01MB73m/SlHC1bRRAmUA6fB9VGSDCLIVinv4fHa85dJRrQAWZVKOkcqqLIWXg
-         xAZ18mw8PZoOscw2cNV/ctNg6qeVVyoM37isypVmIGrBYbaWBoX4F1vJTS7Qj9UUouLV
-         lTfTu/ygJIqe/0dvS5ZwUlIq4TUWa8uZ8U4J1rMjWQ0pqWYoameS0HXFoZhOOHTFTIVp
-         q2DH1+FbrIwSYwrv1+MVbyI5benoWUruPCKQ62JHfsjgtRePVTBJZzHXAhGL2wz8XbCw
-         MEHiq215A7FaBJ5xfyRewd28Vc9039DRONJLVjAdSMHHiS/E/o6u8yolLVCvKD/az8eB
-         Za/A==
+        bh=bkeNqNlpBvlwRMNr77cOA0ECCkCTywfcRJ4vlEAOu7I=;
+        b=F0LMa1whJyWax9PuDikgVcurPqcaqyWYS7HMOrJRBwRu2d0K3Wo850BjVFJiM8kfX1
+         C54mLZ36/RaP+t02uMM0xtXUfChkm15ZzuVDVWHlO7uCXERNYSTqvmBqrD5AMqatsJWc
+         pf/33YW53nproQcW8u7ZbHTZInRTZzZKrtYlqb8+KL1dO0evrltdcG72YkYFRcJWWhUu
+         9GTgTRg+bGnrVqSbwWzRXwQaSAB436qskxWHjtXKTj53UCILweacRL715kAHYkRmqokD
+         0yXw/wuoVRDQa2DiDda0UDz8Y7AtAcvkWhNH6+2CrTYH6BwdXFUyRaLUI37I1IblpJpU
+         6k3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730307700; x=1730912500;
+        d=1e100.net; s=20230601; t=1730307702; x=1730912502;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ya57kHey92WdnN8H51ZJGBOKXIv+w0nzQyUSQYLXyU=;
-        b=fVXJ+gzy8ZfVbozEztkUdyt0tVD6qaIz20FAYcRedqJHdKinEN6IFtxLisNY9rim5p
-         eX3LvJbt4xZzSfqkyna+hqFdDMgXH7W2rD3AIgy9SEojmuTZVNYL19tY+yupd1efqvj5
-         8XkUfLDYYYOY4fdGNwNYNjoE6O3dOfCpPymQabAlji0jXMX1J16dTKYJ+YEOex2ZiuW4
-         wDN6bHcTJgNnkNrhrKp6rraNS2Vl9oOLf7IWtvvbtv1LgR/XXluGuu55oloQtgLI6Byq
-         8wZy1SVhvKKzfK30C0BlGPh8HY/zQoyBk74U/Ryk6MrGKtfThkK/3lgDpheBwmnNAJFo
-         OlmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW46/MdoAikviNUb5WYYwFkU5u1nRdk4rFBG5GlCC/0fd0TjjgWZ0fsFr+6og1B66QMSNBo535HcQJ3VIEh@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtKqTzGJh2ATJOi96XSp6HmyLT9CMxixmwniBlSMwUQrQsc5l1
-	oGqjgeOibRDXVt/Pz3JMmKDTWOiinPBkRBwk3Q2R3UaaHI2maLnWh6bUxuVl2AzLA0CwXZGP9rk
-	XdJb4m+Umcva7BjpBvhjdEQ+ycg==
-X-Google-Smtp-Source: AGHT+IHDRaW34vtNX5zSmYETpGcA+cCtNzN/UmXLNuslzxu6qN56j45I3hw8HDZrFE9QY01UGCp48ZzZHMdPvbhchAk=
+        bh=bkeNqNlpBvlwRMNr77cOA0ECCkCTywfcRJ4vlEAOu7I=;
+        b=Za4Hj5ZAQ0caRhbsqnKbphZ55eBtnws6BPGIf2JmVVTwDtkbR247fe6slNO4AlojXE
+         PcYDONOUz+aHL9D0xxzAXvwPAWdWLMJNW+n7Jt2g8X1+uBB7kIxowQbrsKqKc6wzgVyk
+         aJzl5yj7/+bHtLSq3oZoYrEYkXJu9t1cz8KSuOAfJuZzbR5MjAfvkqu50083rwlT/fHP
+         vLE8cEPNAFLYwUQ3GsNtg/bUPViLjsWhWtfycBR3i5zoqEyPdaTXQcOUhjEXe7l621uj
+         LNFgOTRisK7YyTmT4KjVYSpUfwmVwE9Gj0tfTh/vWinE+T9JipV1YTEZ3Pax0gMLOAsP
+         1xVw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZV+3jRGOysSlz7iyo6aikUN+STDCvvVL9Br4sFmyxZlgxBV69sF5Ulzk/jaa2qs7YYrSG6+uSF3mtIUIt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5L8eZZ28Z+rHESd3tmpEDGges0ivaa8BC0mMQ04+XodprLoFh
+	fxKxP7NMdro3UFjPUSmmsA0i9dIi/aQ7jv5JyZWvr7QF3EnV48i9iAf8p3kP8GUzeRAgAed4wzT
+	FZ9bst/XiImhcIoZoYyj75NIW1A==
+X-Google-Smtp-Source: AGHT+IHoxDwrsnO/Hwo/UVn4gIntnZI8QDGdUdOOE4QleoDdYzerUkh8az+AVVu6IrIsvSXjHTUytmXR05TYglOweBI=
 X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a25:add3:0:b0:e30:cac7:5b70 with SMTP
- id 3f1490d57ef6-e30cc37c0a9mr4772276.11.1730307700388; Wed, 30 Oct 2024
- 10:01:40 -0700 (PDT)
-Date: Wed, 30 Oct 2024 17:01:17 +0000
+ (user=samitolvanen job=sendgmr) by 2002:a25:7bc2:0:b0:e29:76b7:ed37 with SMTP
+ id 3f1490d57ef6-e3087c111e1mr58279276.9.1730307701817; Wed, 30 Oct 2024
+ 10:01:41 -0700 (PDT)
+Date: Wed, 30 Oct 2024 17:01:18 +0000
 In-Reply-To: <20241030170106.1501763-21-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,14 +59,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241030170106.1501763-21-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10017; i=samitolvanen@google.com;
- h=from:subject; bh=jz4OqGSqdykaeaYVxTVMbv9ETE/RlcvzTo1yK+d3V8o=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDOlKaeEzbbnuK3mfWG1q4G2uY7bxL8sChuh74gv52S5P2
- LR59YvMjlIWBjEOBlkxRZaWr6u37v7ulPrqc5EEzBxWJpAhDFycAjCRKWyMDIv4zrQ3lcdZG7H+
- 2n7kPfd2+wMcj1/4Tj/LUqG5Lmh+pgvDP4sC07t8J/je6v2a6RrwieHrDvt/z47fyfpSdydoZoc 5HxcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5123; i=samitolvanen@google.com;
+ h=from:subject; bh=Fa2DDp//fgzxVZObACZomfQEZKjE3iiFEcYvVFgoCGs=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDOlKaRE6Fl76Mzi+pwicVXg/fW9xe+b0gxdXx5Rnytw52
+ Gvv3W3cUcrCIMbBICumyNLydfXW3d+dUl99LpKAmcPKBDKEgYtTACZyzZfhf87vX5+TJtZMlk8v
+ 9Nl/d1fDC12VDVd0z13yPOL9uuORCycjw3/nyLdPOGSSQq4fzolluSuvvi/yTcOJbeWRnXoy6i7 uXAA=
 X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241030170106.1501763-31-samitolvanen@google.com>
-Subject: [PATCH v5 10/19] gendwarfksyms: Limit structure expansion
+Message-ID: <20241030170106.1501763-32-samitolvanen@google.com>
+Subject: [PATCH v5 11/19] gendwarfksyms: Add die_map debugging
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -79,348 +79,151 @@ Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
 	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Expand each structure type only once per exported symbol. This
-is necessary to support self-referential structures, which would
-otherwise result in infinite recursion, but is still sufficient for
-catching ABI changes.
-
-For pointers, limit structure expansion after the first pointer
-in the symbol type. This should be plenty for detecting ABI
-differences, but it stops us from pulling in half the kernel for
-types that contain pointers to large kernel data structures, like
-task_struct, for example.
+Debugging the DWARF processing can be somewhat challenging, so add
+more detailed debugging output for die_map operations. Add the
+--dump-die-map flag, which adds color coded tags to the output for
+die_map changes.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Acked-by: Neal Gompa <neal@gompa.dev>
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- scripts/gendwarfksyms/Makefile        |   1 +
- scripts/gendwarfksyms/cache.c         |  44 +++++++++++
- scripts/gendwarfksyms/dwarf.c         | 109 ++++++++++++++++++++++++--
- scripts/gendwarfksyms/gendwarfksyms.h |  37 +++++++++
- 4 files changed, 183 insertions(+), 8 deletions(-)
- create mode 100644 scripts/gendwarfksyms/cache.c
+ scripts/gendwarfksyms/dwarf.c         | 15 +++++++++++++++
+ scripts/gendwarfksyms/gendwarfksyms.c |  7 +++++++
+ scripts/gendwarfksyms/gendwarfksyms.h | 13 +++++++++++++
+ 3 files changed, 35 insertions(+)
 
-diff --git a/scripts/gendwarfksyms/Makefile b/scripts/gendwarfksyms/Makefile
-index c0d4ce50fc27..c06145d84df8 100644
---- a/scripts/gendwarfksyms/Makefile
-+++ b/scripts/gendwarfksyms/Makefile
-@@ -2,6 +2,7 @@
- hostprogs-always-y += gendwarfksyms
- 
- gendwarfksyms-objs += gendwarfksyms.o
-+gendwarfksyms-objs += cache.o
- gendwarfksyms-objs += die.o
- gendwarfksyms-objs += dwarf.o
- gendwarfksyms-objs += symbols.o
-diff --git a/scripts/gendwarfksyms/cache.c b/scripts/gendwarfksyms/cache.c
-new file mode 100644
-index 000000000000..2f1517133a20
---- /dev/null
-+++ b/scripts/gendwarfksyms/cache.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2024 Google LLC
-+ */
-+
-+#include "gendwarfksyms.h"
-+
-+struct expanded {
-+	uintptr_t addr;
-+	struct hlist_node hash;
-+};
-+
-+void __cache_mark_expanded(struct expansion_cache *ec, uintptr_t addr)
-+{
-+	struct expanded *es;
-+
-+	es = xmalloc(sizeof(struct expanded));
-+	es->addr = addr;
-+	hash_add(ec->cache, &es->hash, addr_hash(addr));
-+}
-+
-+bool __cache_was_expanded(struct expansion_cache *ec, uintptr_t addr)
-+{
-+	struct expanded *es;
-+
-+	hash_for_each_possible(ec->cache, es, hash, addr_hash(addr)) {
-+		if (es->addr == addr)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+void cache_clear_expanded(struct expansion_cache *ec)
-+{
-+	struct hlist_node *tmp;
-+	struct expanded *es;
-+
-+	hash_for_each_safe(ec->cache, es, tmp, hash) {
-+		free(es);
-+	}
-+
-+	hash_init(ec->cache);
-+}
 diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-index 98191ca7cef0..cf929d6808be 100644
+index cf929d6808be..513f37d1798a 100644
 --- a/scripts/gendwarfksyms/dwarf.c
 +++ b/scripts/gendwarfksyms/dwarf.c
-@@ -26,6 +26,7 @@ static void process_linebreak(struct die *cache, int n)
- 		       !dwarf_form##attr(&da, value);                  \
- 	}
+@@ -103,6 +103,8 @@ static void process(struct die *cache, const char *s)
+ 	if (dump_dies)
+ 		fputs(s, stderr);
  
-+DEFINE_GET_ATTR(flag, bool)
- DEFINE_GET_ATTR(udata, Dwarf_Word)
- 
- static bool get_ref_die_attr(Dwarf_Die *die, unsigned int id, Dwarf_Die *value)
-@@ -79,6 +80,13 @@ static bool match_export_symbol(struct state *state, Dwarf_Die *die)
- 	return !!state->sym;
++	if (cache)
++		die_debug_r("cache %p string '%s'", cache, s);
+ 	die_map_add_string(cache, s);
  }
  
-+static bool is_declaration(Dwarf_Die *die)
-+{
-+	bool value;
-+
-+	return get_flag_attr(die, DW_AT_declaration, &value) && value;
-+}
-+
- /*
-  * Type string processing
-  */
-@@ -455,19 +463,27 @@ static void __process_structure_type(struct state *state, struct die *cache,
- 				     die_callback_t process_func,
- 				     die_match_callback_t match_func)
- {
-+	bool is_decl;
-+
- 	process(cache, type);
- 	process_fqn(cache, die);
- 	process(cache, " {");
- 	process_linebreak(cache, 1);
+@@ -551,6 +553,8 @@ static void process_cached(struct state *state, struct die *cache,
+ 	list_for_each_entry(df, &cache->fragments, list) {
+ 		switch (df->type) {
+ 		case FRAGMENT_STRING:
++			die_debug_b("cache %p STRING '%s'", cache,
++				    df->data.str);
+ 			process(NULL, df->data.str);
+ 			break;
+ 		case FRAGMENT_LINEBREAK:
+@@ -560,6 +564,8 @@ static void process_cached(struct state *state, struct die *cache,
+ 			if (!dwarf_die_addr_die(dwarf_cu_getdwarf(die->cu),
+ 						(void *)df->data.addr, &child))
+ 				error("dwarf_die_addr_die failed");
++			die_debug_b("cache %p DIE addr %" PRIxPTR " tag %x",
++				    cache, df->data.addr, dwarf_tag(&child));
+ 			check(process_type(state, NULL, &child));
+ 			break;
+ 		default:
+@@ -656,6 +662,9 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
+ 	cache = die_map_get(die, want_state);
  
--	check(process_die_container(state, cache, die, process_func,
--				    match_func));
-+	is_decl = is_declaration(die);
+ 	if (cache->state == want_state) {
++		die_debug_g("cached addr %p tag %x -- %s", die->addr, tag,
++			die_state_name(cache->state));
 +
-+	if (!is_decl && state->expand.expand) {
-+		check(process_die_container(state, cache, die, process_func,
-+					    match_func));
-+	}
- 
- 	process_linebreak(cache, -1);
- 	process(cache, "}");
- 
--	process_byte_size_attr(cache, die);
--	process_alignment_attr(cache, die);
-+	if (!is_decl && state->expand.expand) {
-+		process_byte_size_attr(cache, die);
-+		process_alignment_attr(cache, die);
-+	}
- }
- 
- #define DEFINE_PROCESS_STRUCTURE_TYPE(structure)                        \
-@@ -552,6 +568,42 @@ static void process_cached(struct state *state, struct die *cache,
- 	}
- }
- 
-+static void state_init(struct state *state)
-+{
-+	state->expand.expand = true;
-+	state->expand.ptr_depth = 0;
-+	state->expand.ptr_expansion_depth = 0;
-+	hash_init(state->expansion_cache.cache);
-+}
-+
-+static void expansion_state_restore(struct expansion_state *state,
-+				    struct expansion_state *saved)
-+{
-+	state->expand = saved->expand;
-+	state->ptr_depth = saved->ptr_depth;
-+	state->ptr_expansion_depth = saved->ptr_expansion_depth;
-+}
-+
-+static void expansion_state_save(struct expansion_state *state,
-+				 struct expansion_state *saved)
-+{
-+	expansion_state_restore(saved, state);
-+}
-+
-+static bool is_pointer_type(int tag)
-+{
-+	return tag == DW_TAG_pointer_type || tag == DW_TAG_reference_type;
-+}
-+
-+static bool is_expanded_type(int tag)
-+{
-+	return tag == DW_TAG_class_type || tag == DW_TAG_structure_type ||
-+	       tag == DW_TAG_union_type || tag == DW_TAG_enumeration_type;
-+}
-+
-+/* The maximum depth for expanding structures in pointers */
-+#define MAX_POINTER_EXPANSION_DEPTH 2
-+
- #define PROCESS_TYPE(type)                                \
- 	case DW_TAG_##type##_type:                        \
- 		process_##type##_type(state, cache, die); \
-@@ -559,18 +611,55 @@ static void process_cached(struct state *state, struct die *cache,
- 
- static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
- {
-+	enum die_state want_state = DIE_COMPLETE;
- 	struct die *cache;
-+	struct expansion_state saved;
- 	int tag = dwarf_tag(die);
- 
-+	expansion_state_save(&state->expand, &saved);
-+
- 	/*
--	 * If we have the DIE already cached, use it instead of walking
-+	 * Structures and enumeration types are expanded only once per
-+	 * exported symbol. This is sufficient for detecting ABI changes
-+	 * within the structure.
-+	 *
-+	 * We fully expand the first pointer reference in the exported
-+	 * symbol, but limit the expansion of further pointer references
-+	 * to at most MAX_POINTER_EXPANSION_DEPTH levels.
-+	 */
-+	if (is_pointer_type(tag))
-+		state->expand.ptr_depth++;
-+
-+	if (is_expanded_type(tag)) {
-+		if (cache_was_expanded(&state->expansion_cache, die->addr))
-+			state->expand.expand = false;
-+
-+		if (state->expand.ptr_depth > 0) {
-+			if (state->expand.ptr_expansion_depth >=
-+			    MAX_POINTER_EXPANSION_DEPTH)
-+				state->expand.expand = false;
-+
-+			if (state->expand.expand)
-+				state->expand.ptr_expansion_depth++;
-+		}
-+
-+		if (state->expand.expand)
-+			cache_mark_expanded(&state->expansion_cache, die->addr);
-+		else
-+			want_state = DIE_UNEXPANDED;
-+	}
-+
-+	/*
-+	 * If we have want_state already cached, use it instead of walking
- 	 * through DWARF.
- 	 */
--	cache = die_map_get(die, DIE_COMPLETE);
-+	cache = die_map_get(die, want_state);
- 
--	if (cache->state == DIE_COMPLETE) {
-+	if (cache->state == want_state) {
  		process_cached(state, cache, die);
  		die_map_add_die(parent, cache);
-+
-+		expansion_state_restore(&state->expand, &saved);
+ 
+@@ -663,6 +672,9 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
  		return 0;
  	}
  
-@@ -611,9 +700,10 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
++	die_debug_g("addr %p tag %x -- %s -> %s", die->addr, tag,
++		    die_state_name(cache->state), die_state_name(want_state));
++
+ 	switch (tag) {
+ 	/* Type modifiers */
+ 	PROCESS_TYPE(atomic)
+@@ -698,6 +710,9 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
+ 		error("unexpected type: %x", tag);
+ 	}
  
++	die_debug_r("parent %p cache %p die addr %p tag %x", parent, cache,
++		    die->addr, tag);
++
  	/* Update cache state and append to the parent (if any) */
  	cache->tag = tag;
--	cache->state = DIE_COMPLETE;
-+	cache->state = want_state;
- 	die_map_add_die(parent, cache);
+ 	cache->state = want_state;
+diff --git a/scripts/gendwarfksyms/gendwarfksyms.c b/scripts/gendwarfksyms/gendwarfksyms.c
+index 7552fde495ef..ed6d8c585268 100644
+--- a/scripts/gendwarfksyms/gendwarfksyms.c
++++ b/scripts/gendwarfksyms/gendwarfksyms.c
+@@ -19,6 +19,8 @@
+ int debug;
+ /* Dump DIE contents */
+ int dump_dies;
++/* Print debugging information about die_map changes */
++int dump_die_map;
  
-+	expansion_state_restore(&state->expand, &saved);
- 	return 0;
- }
+ static void usage(void)
+ {
+@@ -26,6 +28,7 @@ static void usage(void)
+ 	      "Options:\n"
+ 	      "  -d, --debug          Print debugging information\n"
+ 	      "      --dump-dies      Dump DWARF DIE contents\n"
++	      "      --dump-die-map   Print debugging information about die_map changes\n"
+ 	      "  -h, --help           Print this message\n"
+ 	      "\n",
+ 	      stderr);
+@@ -74,6 +77,7 @@ int main(int argc, char **argv)
  
-@@ -675,11 +765,14 @@ static int process_exported_symbols(struct state *unused, struct die *cache,
- 		if (!match_export_symbol(&state, die))
- 			return 0;
+ 	struct option opts[] = { { "debug", 0, NULL, 'd' },
+ 				 { "dump-dies", 0, &dump_dies, 1 },
++				 { "dump-die-map", 0, &dump_die_map, 1 },
+ 				 { "help", 0, NULL, 'h' },
+ 				 { 0, 0, NULL, 0 } };
  
-+		state_init(&state);
-+
- 		if (tag == DW_TAG_subprogram)
- 			process_subprogram(&state, &state.die);
- 		else
- 			process_variable(&state, &state.die);
- 
-+		cache_clear_expanded(&state.expansion_cache);
- 		return 0;
+@@ -93,6 +97,9 @@ int main(int argc, char **argv)
+ 		}
  	}
- 	default:
+ 
++	if (dump_die_map)
++		dump_dies = 1;
++
+ 	if (optind >= argc) {
+ 		usage();
+ 		error("no input files?");
 diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksyms/gendwarfksyms.h
-index 8e087a5d58e2..da28a35d19b2 100644
+index da28a35d19b2..72912c6b6e64 100644
 --- a/scripts/gendwarfksyms/gendwarfksyms.h
 +++ b/scripts/gendwarfksyms/gendwarfksyms.h
-@@ -105,6 +105,7 @@ void symbol_free(void);
+@@ -24,6 +24,7 @@
+  */
+ extern int debug;
+ extern int dump_dies;
++extern int dump_die_map;
  
- enum die_state {
- 	DIE_INCOMPLETE,
-+	DIE_UNEXPANDED,
- 	DIE_COMPLETE,
- 	DIE_LAST = DIE_COMPLETE
- };
-@@ -134,6 +135,7 @@ static inline const char *die_state_name(enum die_state state)
- {
- 	switch (state) {
- 	CASE_CONST_TO_STR(DIE_INCOMPLETE)
-+	CASE_CONST_TO_STR(DIE_UNEXPANDED)
- 	CASE_CONST_TO_STR(DIE_COMPLETE)
- 	}
+ /*
+  * Output helpers
+@@ -46,6 +47,18 @@ extern int dump_dies;
+ 		exit(1);                                     \
+ 	} while (0)
  
-@@ -156,9 +158,40 @@ void die_map_add_linebreak(struct die *pd, int linebreak);
- void die_map_add_die(struct die *pd, struct die *child);
- void die_map_free(void);
- 
-+/*
-+ * cache.c
-+ */
++#define __die_debug(color, format, ...)                                 \
++	do {                                                            \
++		if (dump_dies && dump_die_map)                          \
++			fprintf(stderr,                                 \
++				"\033[" #color "m<" format ">\033[39m", \
++				__VA_ARGS__);                           \
++	} while (0)
 +
-+#define EXPANSION_CACHE_HASH_BITS 11
-+
-+/* A cache for addresses we've already seen. */
-+struct expansion_cache {
-+	HASHTABLE_DECLARE(cache, 1 << EXPANSION_CACHE_HASH_BITS);
-+};
-+
-+void __cache_mark_expanded(struct expansion_cache *ec, uintptr_t addr);
-+bool __cache_was_expanded(struct expansion_cache *ec, uintptr_t addr);
-+
-+static inline void cache_mark_expanded(struct expansion_cache *ec, void *addr)
-+{
-+	__cache_mark_expanded(ec, (uintptr_t)addr);
-+}
-+
-+static inline bool cache_was_expanded(struct expansion_cache *ec, void *addr)
-+{
-+	return __cache_was_expanded(ec, (uintptr_t)addr);
-+}
-+
-+void cache_clear_expanded(struct expansion_cache *ec);
++#define die_debug_r(format, ...) __die_debug(91, format, __VA_ARGS__)
++#define die_debug_g(format, ...) __die_debug(92, format, __VA_ARGS__)
++#define die_debug_b(format, ...) __die_debug(94, format, __VA_ARGS__)
 +
  /*
-  * dwarf.c
+  * Error handling helpers
   */
-+struct expansion_state {
-+	bool expand;
-+	unsigned int ptr_depth;
-+	unsigned int ptr_expansion_depth;
-+};
- 
- struct state {
- 	struct symbol *sym;
-@@ -166,6 +199,10 @@ struct state {
- 
- 	/* List expansion */
- 	bool first_list_item;
-+
-+	/* Structure expansion */
-+	struct expansion_state expand;
-+	struct expansion_cache expansion_cache;
- };
- 
- typedef int (*die_callback_t)(struct state *state, struct die *cache,
 -- 
 2.47.0.163.g1226f6d8fa-goog
 
