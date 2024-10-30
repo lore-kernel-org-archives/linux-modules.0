@@ -1,390 +1,325 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9916235A31
-	for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 17:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7291E231C
+	for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 17:16:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730307721; cv=none; b=rh8z5qiw1UDnO5nTlwxyqKXgl5g0si5qywDHroJx12bkXZaaWtYAriNTefDUsd88vz2vfQT3G44t3DajRYvcQQC1xvjkzEGvd5m/NeYk5yUti8PbpH9NIqGt4Xfh8LORm/L6LYtpBt6p28MUVrL+VqkxqRZbZQ+cqvTexfGQwU0=
+	t=1730308599; cv=none; b=p0nnDO82BWJcagHbHrgVG3iIeXgqfflGJDeZ6VfvG4oVQqMCdlc7eyjDF2Yc1TBwr7BLWfGBJwKMnVAC94gw0SOMf44pa1Ywzf2FyctJK40eYTsVWNoY7xMUjwU6fFHHXw9E0qe8TW/Yz4+ivZ7tYb43PVxdxurh7HaxmbMyMVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730307721; c=relaxed/simple;
-	bh=3FriUdHtDkRRZPJGTzNicaJg/WplN7J779UEvmaSOpk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bQEsGwAqDRhUiDcY+QdBIJOmXWkOMUDcbdM5wE3FBKez3wyzNm1tkfJ6eti0XVkvnrmeUKbSlqydGY2Nq6HP9hstSN7lkzo18+CQs5mDr6ZM22QC0wx4SJWX2HgKz0gQDUEbKAppGH7GlTLvR7VcuCV9rDQWCum3JitVHtUyvZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SFd53Vok; arc=none smtp.client-ip=209.85.128.202
+	s=arc-20240116; t=1730308599; c=relaxed/simple;
+	bh=Tm1wNYqvzeAF3HnTDVTnjC8Rcq/6gl29WbAbQZ1MVNg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=gdLNpJDo70xXGRTyL6Aq+lS5g62PXmcp3ba8vrFJWqOJnB998Mh90FafnpqjrJXrbznJoDDVwcqaYUN0NFWXUeaS5zkpjt0dXGC1l1UF6y8Xxp7DGoZNSlbTYUy9Yx1D2FLkIZY+tDqm/KTEHsPCkcKLsK13HJZ/Q8NLlkOAyZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ggoZYOY+; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SFd53Vok"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e9ba43a9a0so95642387b3.3
-        for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 10:01:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ggoZYOY+"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ea258fe4b6so51371047b3.1
+        for <linux-modules@vger.kernel.org>; Wed, 30 Oct 2024 10:16:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730307716; x=1730912516; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCXKhYHd2Mx+NGKb3+6xjgXWoy+xYokNujvaCJkeSC8=;
-        b=SFd53Vokul5S8vFJeHifqAQ3DwLXvOWkQzj4cGpj4hXtigQophPOMgUOQIE2tkp+EN
-         QgA/uWK/QDOKBmbCJ8Y0fNekWIqebIHsFSna7ZysNHfEeMvtEe2dC4d1q8tJPhtZXDV3
-         X4jz9bIoKDIQZM4bd0b493mGjH8RLw95RTSrm0NZfHXR4txlvb5xCUQzeuAxbtvumhyd
-         s4t7kD/I7RmrRjOLAdWchCKK+O5qBDH0W6mH/I0Y9eHQ32CIjw9T+6ZOXe/4YKkKpWXk
-         kszwpyYZ8PC40RXtn3ERFl8rr5bA198lAN69QL7L4vaGsMZUYUYrYApICVhDXzaPm2RG
-         02MQ==
+        d=google.com; s=20230601; t=1730308596; x=1730913396; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=g6NaQ3IuZZfSraqlt8TSkxzrbSmeVk6CTF7q3lZSxz4=;
+        b=ggoZYOY+OBg8MYH9iZI4VkvQ9iww88haatF39UO3Di1sJp0y9oNHbNspMBdEcVNZ/N
+         9e+KHQjRjP9h4j0sVl6jqBbxk/paVpdkvXFPeIqhOp1vn7GsW23+QqlFZVUPvGE/EOSp
+         nBFq2tKYbni5iyhKjyEmfaU32JqUYjX5ZouSTEWh0nG5QEM5RAcdyY9kncNM+BIjolED
+         VjjB58mBrdVr/mvNDzHNEQKLIICmhVZtRr+NjVmLHof6q0fs3w8hSLVN42jPkdTOLK1b
+         LbBvo4zXemia7U3JfMIgKD81q7WnK6cjHPxsTGI5HndK3luzXxzbtd6F2cZtqBO2EM4K
+         5gRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730307716; x=1730912516;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCXKhYHd2Mx+NGKb3+6xjgXWoy+xYokNujvaCJkeSC8=;
-        b=Gqbp5NiUiaSKuiZ9rQ0rR1X4DXqcJ4fUEpz1FZLy9+eA3KrmxyUAHVefvN+mracwO+
-         2WsuniZS9DWyzrisEEJXe6io3Bwbr0ULe2o2ZzYTy3qemsGFLR9tA0L8Ut7jEt+DC1fK
-         3Hi/56IEbScmyrLypN+qxS7oSXj08jr/D+7vOOHaE8bZiCELnW43hENbwsQEpVquTanr
-         z7m9snSAvzL9DZTrByF1sSSbqH4P1/2W6iRLwmJn1fL1x9JHMzJpBaLIO4aEQmvAasfR
-         4aw3Jkc7pIbh7u9h0cn5sFIFTgSQKkPIfMmJViG3GjBFZlcy2ttseHZIZWlUCHnVFst1
-         EQcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWyigs+LSpYb6jBvjMAPfRE6o++GmIJTKaKutZW357me2jx4XqgcVJQgzW+BlCI0okn38z+iyygOYGu1rR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxmo+wTYYc6KQON40lwXDcC1sB5fdB7MbnPTZMsQ8XqAd7opg20
-	Rn5o/vsSgFug93hKSfg5a5HGG3W0kJ7QQuvvnL9ktDZnb1fKj6jjVchUem09A2psi2nds3POqEI
-	y1VGcHXmUZr26LRCytqcAVLawUQ==
-X-Google-Smtp-Source: AGHT+IFnlhMaDeXQ/6v7SCYeIH1jerB9WtfdLD+6iI6HSe1DJjys46YrL6vqN8je+TUjGgFatkLOlTQGRlnhv5puLNo=
-X-Received: from samitolvanen.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:4f92])
- (user=samitolvanen job=sendgmr) by 2002:a05:690c:6481:b0:6e3:da91:3e17 with
- SMTP id 00721157ae682-6ea5231fbb5mr1437b3.2.1730307715651; Wed, 30 Oct 2024
- 10:01:55 -0700 (PDT)
-Date: Wed, 30 Oct 2024 17:01:26 +0000
-In-Reply-To: <20241030170106.1501763-21-samitolvanen@google.com>
+        d=1e100.net; s=20230601; t=1730308596; x=1730913396;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g6NaQ3IuZZfSraqlt8TSkxzrbSmeVk6CTF7q3lZSxz4=;
+        b=LH4+zRSDe1tSjIjigoYBN08ymFQPq/0DsF1kxu782yXZSTUl+eLIiHUuaF9DQO31Qm
+         JYSh5YfjcE2gv/EpZOOwl/LbTUN2jh+VaaRiSNe88s6orKmR7ShCVPs65FojiEM+aQiq
+         ZLx3kzyVva84Jelo4VfJfLsZg24ES0YppqfTclE+to/OwNUDgpinB08JUYwKEBDf/J0f
+         lMHFraqKL/7GUvSsfxQtzt5R45S5cMYMCWNb8ghD8AaC3JQ+xjwKpiKbJLLyAu6vPTU/
+         5cBKAx2/x1pDyfPPqRY3gG5b0lRt8LCNgLhJpMloWiMquok0it4a0zIlsstupjzgXnIm
+         jz+w==
+X-Forwarded-Encrypted: i=1; AJvYcCUVq6gdS4z9tvSzeLFLPMYRAj9Nr3Y8THRoqZMMzmDmsYizbBZ35/YriPoYVd2LKk+4nDJs4ftVrt8/lOUP@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSTiM7LFHXcZrUSW1Mupivqv7iiwbk5wffmjEfumSqSKns3sgm
+	KRQnjPPquCfomHwNdKOW3alG3jNociS9ZB0Wz7++oop2iH5e4s1zjABo9JwW5Y2OZp4TiT+l3Vf
+	K9A5tQw==
+X-Google-Smtp-Source: AGHT+IG5xPxqqpKxLgZ6zXN6V78UnUjBXaSxpkGut/FS6GJSqSvmQ69f6lOGEvOsEwQHgaeCqjpR5w/uRE0E
+X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
+ (user=mmaurer job=sendgmr) by 2002:a25:4b85:0:b0:e29:68a9:8612 with SMTP id
+ 3f1490d57ef6-e3087a54ccemr74678276.4.1730308595588; Wed, 30 Oct 2024 10:16:35
+ -0700 (PDT)
+Date: Wed, 30 Oct 2024 17:16:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20241030170106.1501763-21-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12136; i=samitolvanen@google.com;
- h=from:subject; bh=3FriUdHtDkRRZPJGTzNicaJg/WplN7J779UEvmaSOpk=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDOlKaTFdRtv3hvepTRY2XHo/0H7N2WQ1s+P+/0+ybzJo+
- HIqXsW1o5SFQYyDQVZMkaXl6+qtu787pb76XCQBM4eVCWQIAxenAExkuiHDXxH+rvC1W49KVh11
- C+CwPJm+O4cxdE0J53qxw4bz/xStK2Nk2CvpJTBBa2W5aLjd1dSpImunFT8v7f3/OP7XqxMqU/1 CWAE=
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241030170106.1501763-40-samitolvanen@google.com>
-Subject: [PATCH v5 19/19] Documentation/kbuild: Add DWARF module versioning
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, Hector Martin <marcan@marcan.st>, 
-	Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, Asahi Linux <asahi@lists.linux.dev>, 
-	Sedat Dilek <sedat.dilek@gmail.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-B4-Tracking: v=1; b=H4sIAPFpImcC/4WNQQqDMBBFryKzbopJrCVd9R7FhR1HDagTEgkWy
+ d2b5gJdfd6H//4JgbylAI/qBE/RBstbBnWpAOd+m0jYITOoWjWyVkZ4WjmSoMOx3zOVcIu46/a
+ GLfb6TQR57TyN9ijmV5d5tmFn/ylHUf7a/84ohRQGhxZxNLox+jkxTwtdkVfoUkpfzMP6kL8AA AA=
+X-Change-Id: 20241029-remove-export-report-pl-7365c6ca3bee
+X-Mailer: b4 0.15-dev
+Message-ID: <20241030-remove-export-report-pl-v2-1-f289ab92bd2e@google.com>
+Subject: [PATCH v2] scripts: Remove export_report.pl
+From: Matthew Maurer <mmaurer@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>, Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Add documentation for gendwarfksyms changes, and the kABI stability
-features that can be useful for distributions even though they're not
-used in mainline kernels.
+This script has been broken for 5 years with no user complaints.
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Neal Gompa <neal@gompa.dev>
+It first had its .mod.c parser broken in commit a3d0cb04f7df ("modpost:
+use __section in the output to *.mod.c"). Later, it had its object file
+enumeration broken in commit f65a486821cf ("kbuild: change module.order
+to list *.o instead of *.ko"). Both of these changes sat for years with
+no reports.
+
+Rather than reviving this script as we make further changes to `.mod.c`,
+this patch gets rid of it because it is clearly unused.
+
+Signed-off-by: Matthew Maurer <mmaurer@google.com>
 ---
- Documentation/kbuild/gendwarfksyms.rst | 276 +++++++++++++++++++++++++
- Documentation/kbuild/index.rst         |   1 +
- 2 files changed, 277 insertions(+)
- create mode 100644 Documentation/kbuild/gendwarfksyms.rst
+Changes in v2:
+- Remove references to export_report from Makefile
+- Link to v1: https://lore.kernel.org/r/20241029-remove-export-report-pl-v1-1-9cd6ccf93493@google.com
+---
+ Makefile                 |   6 +-
+ scripts/export_report.pl | 186 -----------------------------------------------
+ 2 files changed, 1 insertion(+), 191 deletions(-)
 
-diff --git a/Documentation/kbuild/gendwarfksyms.rst b/Documentation/kbuild/gendwarfksyms.rst
-new file mode 100644
-index 000000000000..0f5000491132
---- /dev/null
-+++ b/Documentation/kbuild/gendwarfksyms.rst
-@@ -0,0 +1,276 @@
-+=======================
-+DWARF module versioning
-+=======================
-+
-+1. Introduction
-+===============
-+
-+When CONFIG_MODVERSIONS is enabled, symbol versions for modules
-+are typically calculated from preprocessed source code using the
-+**genksyms** tool.  However, this is incompatible with languages such
-+as Rust, where the source code has insufficient information about
-+the resulting ABI. With CONFIG_GENDWARFKSYMS (and CONFIG_DEBUG_INFO)
-+selected, **gendwarfksyms** is used instead to calculate symbol versions
-+from the DWARF debugging information, which contains the necessary
-+details about the final module ABI.
-+
-+1.1. Usage
-+==========
-+
-+gendwarfksyms accepts a list of object files on the command line, and a
-+list of symbol names (one per line) in standard input::
-+
-+        Usage: gendwarfksyms [options] elf-object-file ... < symbol-list
-+
-+        Options:
-+          -d, --debug          Print debugging information
-+              --dump-dies      Dump DWARF DIE contents
-+              --dump-die-map   Print debugging information about die_map changes
-+              --dump-types     Dump type strings
-+              --dump-versions  Dump expanded type strings used for symbol versions
-+          -s, --stable         Support kABI stability features
-+          -T, --symtypes file  Write a symtypes file
-+          -h, --help           Print this message
-+
-+
-+2. Type information availability
-+================================
-+
-+While symbols are typically exported in the same translation unit (TU)
-+where they're defined, it's also perfectly fine for a TU to export
-+external symbols. For example, this is done when calculating symbol
-+versions for exports in stand-alone assembly code.
-+
-+To ensure the compiler emits the necessary DWARF type information in the
-+TU where symbols are actually exported, gendwarfksyms adds a pointer
-+to exported symbols in the `EXPORT_SYMBOL()` macro using the following
-+macro::
-+
-+        #define __GENDWARFKSYMS_EXPORT(sym)                             \
-+                static typeof(sym) *__gendwarfksyms_ptr_##sym __used    \
-+                        __section(".discard.gendwarfksyms") = &sym;
-+
-+
-+When a symbol pointer is found in DWARF, gendwarfksyms can use its
-+type for calculating symbol versions even if the symbol is defined
-+elsewhere. The name of the symbol pointer is expected to start with
-+`__gendwarfksyms_ptr_`, followed by the name of the exported symbol.
-+
-+3. Symtypes output format
-+=========================
-+
-+Similarly to genksyms, gendwarfksyms supports writing a symtypes
-+file for each processed object that contain types for exported
-+symbols and each referenced type that was used in calculating symbol
-+versions. These files can be useful when trying to determine what
-+exactly caused symbol versions to change between builds. To generate
-+symtypes files during a kernel build, set `KBUILD_SYMTYPES=1`.
-+
-+Matching the existing format, the first column of each line contains
-+either a type reference or a symbol name. Type references have a
-+one-letter prefix followed by "#" and the name of the type. Four
-+reference types are supported::
-+
-+        e#<type> = enum
-+        s#<type> = struct
-+        t#<type> = typedef
-+        u#<type> = union
-+
-+Type names with spaces in them are wrapped in single quotes, e.g.::
-+
-+        s#'core::result::Result<u8, core::num::error::ParseIntError>'
-+
-+The rest of the line contains a type string. Unlike with genksyms that
-+produces C-style type strings, gendwarfksyms uses the same simple parsed
-+DWARF format produced by **--dump-dies**, but with type references
-+instead of fully expanded strings.
-+
-+4. Maintaining a stable kABI
-+============================
-+
-+Distribution maintainers often need the ability to make ABI compatible
-+changes to kernel data structures due to LTS updates or backports. Using
-+the traditional `#ifndef __GENKSYMS__` to hide these changes from symbol
-+versioning won't work when processing object files. To support this
-+use case, gendwarfksyms provides kABI stability features designed to
-+hide changes that won't affect the ABI when calculating versions. These
-+features are all gated behind the **--stable** command line flag and are
-+not used in the mainline kernel. To use stable features during a kernel
-+build, set `KBUILD_GENDWARFKSYMS_STABLE=1`.
-+
-+Examples for using these features are provided in the
-+**scripts/gendwarfksyms/examples** directory, including helper macros
-+for source code annotation. Note that as these features are only used to
-+transform the inputs for symbol versioning, the user is responsible for
-+ensuring that their changes actually won't break the ABI.
-+
-+4.1. kABI rules
-+===============
-+
-+kABI rules allow distributions to fine-tune certain parts
-+of gendwarfksyms output and thus control how symbol
-+versions are calculated. These rules are defined in the
-+`.discard.gendwarfksyms.kabi_rules` section of the object file and
-+consist of simple null-terminated strings with the following structure::
-+
-+	version\0type\0target\0value\0
-+
-+This string sequence is repeated as many times as needed to express all
-+the rules. The fields are as follows:
-+
-+- `version`: Ensures backward compatibility for future changes to the
-+  structure. Currently expected to be "1".
-+- `type`: Indicates the type of rule being applied.
-+- `target`: Specifies the target of the rule, typically the fully
-+  qualified name of the DWARF Debugging Information Entry (DIE).
-+- `value`: Provides rule-specific data.
-+
-+The following helper macro, for example, can be used to specify rules
-+in the source code::
-+
-+	#define __KABI_RULE(hint, target, value)                             \
-+		static const char __PASTE(__gendwarfksyms_rule_,             \
-+					  __COUNTER__)[] __used __aligned(1) \
-+			__section(".discard.gendwarfksyms.kabi_rules") =     \
-+				"1\0" #hint "\0" #target "\0" #value
-+
-+
-+Currently, only the rules discussed in this section are supported, but
-+the format is extensible enough to allow further rules to be added as
-+need arises.
-+
-+4.1.1. Managing structure visibility
-+====================================
-+
-+A structure declaration can change into a full definition when
-+additional includes are pulled into the translation unit. This changes
-+the versions of any symbol that references the structure even if the ABI
-+remains unchanged. As it may not be possible to drop includes without
-+breaking the build, the `struct_declonly` rule can be used to specify a
-+data structure as declaration-only, even if the debugging information
-+contains the full definition.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "struct_declonly"
-+- `target`: The fully qualified name of the target data structure
-+  (as shown in **--dump-dies** output).
-+- `value`: This field is ignored and is expected to have the value ";".
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+	#define KABI_STRUCT_DECLONLY(fqn) \
-+		__KABI_RULE(struct_declonly, fqn, ;)
-+
-+Example usage::
-+
-+	struct s {
-+		/* definition */
-+	};
-+
-+	KABI_STRUCT_DECLONLY(s);
-+
-+4.1.2. Adding enumerators
-+=========================
-+
-+For enums, all enumerators and their values are included in calculating
-+symbol versions, which becomes a problem if we later need to add more
-+enumerators without changing symbol versions. The `enumerator_ignore`
-+rule allows us to hide named enumerators from the input.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "enumerator_ignore"
-+- `target`: The fully qualified name of the target enum
-+  (as shown in **--dump-dies** output).
-+- `value`: The name of the enumerator to ignore.
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+	#define KABI_ENUMERATOR_IGNORE(fqn, field) \
-+		__KABI_RULE(enumerator_ignore, fqn, field)
-+
-+Example usage::
-+
-+	enum e {
-+		A, B, C, D,
-+	};
-+
-+	KABI_ENUMERATOR_IGNORE(e, B);
-+	KABI_ENUMERATOR_IGNORE(e, C);
-+
-+
-+4.3. Adding structure members
-+=============================
-+
-+Perhaps the most common ABI compatible changeis adding a member to a
-+kernel data structure. When changes to a structure are anticipated,
-+distribution maintainers can pre-emptively reserve space in the
-+structure and take it into use later without breaking the ABI. If
-+changes are needed to data structures without reserved space, existing
-+alignment holes can potentially be used instead. While kABI rules could
-+be added for these type of changes, using unions is typically a more
-+natural method. This section describes gendwarfksyms support for using
-+reserved space in data structures and hiding members that don't change
-+the ABI when calculating symbol versions.
-+
-+4.3.1. Reserving space and replacing members
-+============================================
-+
-+To reserve space in a struct, adding a member of any type with a name
-+that starts with `__kabi_` will result in the name being left out of
-+symbol versioning::
-+
-+        struct s {
-+                long a;
-+                long __kabi_reserved_0; /* reserved for future use */
-+        };
-+
-+The space reserved by this member can be later taken into use by
-+wrapping it into a union, which includes the original type and the
-+replacement struct member::
-+
-+        struct s {
-+                long a;
-+                union {
-+                        long __kabi_reserved_0; /* original type */
-+                        struct b b; /* replaced field */
-+                };
-+        };
-+
-+As long as the reserved member's name in the union starts with
-+`__kabi_reserved_`, the original type will be used for symbol
-+versioning and rest of the union is ignored. The examples include
-+`KABI_(RESERVE|USE)*` macros that help simplify the process and also
-+ensure the replacement member's size won't exceed the reserved space.
-+
-+4.3.2. Hiding members
-+=====================
-+
-+Predicting which structures will require changes during the support
-+timeframe isn't always possible, in which case one might have to resort
-+to placing new members into existing alignment holes::
-+
-+        struct s {
-+                int a;
-+                /* a 4-byte alignment hole */
-+                unsigned long b;
-+        };
-+
-+
-+While this won't change the size of the data structure, one needs to
-+be able to hide the added members from symbol versioning. Similarly
-+to reserved fields, this can be accomplished by wrapping the added
-+member to a union where one of the fields has a name starting with
-+`__kabi_ignored`::
-+
-+        struct s {
-+                int a;
-+                union {
-+                        char __kabi_ignored_0;
-+                        int n;
-+                };
-+                unsigned long b;
-+        };
-+
-+With **--stable**, both versions produce the same symbol version.
-diff --git a/Documentation/kbuild/index.rst b/Documentation/kbuild/index.rst
-index cee2f99f734b..e82af05cd652 100644
---- a/Documentation/kbuild/index.rst
-+++ b/Documentation/kbuild/index.rst
-@@ -21,6 +21,7 @@ Kernel Build System
-     reproducible-builds
-     gcc-plugins
-     llvm
-+    gendwarfksyms
+diff --git a/Makefile b/Makefile
+index f554430954deebd56ede882f81a541ebc42f1937..5333b3f8a1a916d70614d6d125dc383b2a47bb34 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1620,7 +1620,6 @@ help:
+ 	@echo  '                    with a stack size larger than MINSTACKSIZE (default: 100)'
+ 	@echo  '  versioncheck    - Sanity check on version.h usage'
+ 	@echo  '  includecheck    - Check for duplicate included header files'
+-	@echo  '  export_report   - List the usages of all exported symbols'
+ 	@echo  '  headerdep       - Detect inclusion cycles in headers'
+ 	@echo  '  coccicheck      - Check with Coccinelle'
+ 	@echo  '  clang-analyzer  - Check with clang static analyzer'
+@@ -2033,7 +2032,7 @@ endif
+ # Scripts to check various things for consistency
+ # ---------------------------------------------------------------------------
  
- .. only::  subproject and html
+-PHONY += includecheck versioncheck coccicheck export_report
++PHONY += includecheck versioncheck coccicheck
  
+ includecheck:
+ 	find $(srctree)/* $(RCS_FIND_IGNORE) \
+@@ -2048,9 +2047,6 @@ versioncheck:
+ coccicheck:
+ 	$(Q)$(BASH) $(srctree)/scripts/$@
+ 
+-export_report:
+-	$(PERL) $(srctree)/scripts/export_report.pl
+-
+ PHONY += checkstack kernelrelease kernelversion image_name
+ 
+ # UML needs a little special treatment here.  It wants to use the host
+diff --git a/scripts/export_report.pl b/scripts/export_report.pl
+deleted file mode 100755
+index feb3d5542a62d90b7af4f041d98a3c4b5ac386c0..0000000000000000000000000000000000000000
+--- a/scripts/export_report.pl
++++ /dev/null
+@@ -1,186 +0,0 @@
+-#!/usr/bin/env perl
+-# SPDX-License-Identifier: GPL-2.0-only
+-#
+-# (C) Copyright IBM Corporation 2006.
+-#	Author : Ram Pai (linuxram@us.ibm.com)
+-#
+-# Usage: export_report.pl -k Module.symvers [-o report_file ] -f *.mod.c
+-#
+-
+-use warnings;
+-use Getopt::Std;
+-use strict;
+-
+-sub numerically {
+-	my $no1 = (split /\s+/, $a)[1];
+-	my $no2 = (split /\s+/, $b)[1];
+-	return $no1 <=> $no2;
+-}
+-
+-sub alphabetically {
+-	my ($module1, $value1) = @{$a};
+-	my ($module2, $value2) = @{$b};
+-	return $value1 <=> $value2 || $module2 cmp $module1;
+-}
+-
+-sub print_depends_on {
+-	my ($href) = @_;
+-	print "\n";
+-	for my $mod (sort keys %$href) {
+-		my $list = $href->{$mod};
+-		print "\t$mod:\n";
+-		foreach my $sym (sort numerically @{$list}) {
+-			my ($symbol, $no) = split /\s+/, $sym;
+-			printf("\t\t%-25s\n", $symbol);
+-		}
+-		print "\n";
+-	}
+-	print "\n";
+-	print "~"x80 , "\n";
+-}
+-
+-sub usage {
+-        print "Usage: @_ -h -k Module.symvers  [ -o outputfile ] \n",
+-	      "\t-f: treat all the non-option argument as .mod.c files. ",
+-	      "Recommend using this as the last option\n",
+-	      "\t-h: print detailed help\n",
+-	      "\t-k: the path to Module.symvers file. By default uses ",
+-	      "the file from the current directory\n",
+-	      "\t-o outputfile: output the report to outputfile\n";
+-	exit 0;
+-}
+-
+-sub collectcfiles {
+-    my @file;
+-    open my $fh, '< modules.order' or die "cannot open modules.order: $!\n";
+-    while (<$fh>) {
+-	s/\.ko$/.mod.c/;
+-	push (@file, $_)
+-    }
+-    close($fh);
+-    chomp @file;
+-    return @file;
+-}
+-
+-my (%SYMBOL, %MODULE, %opt, @allcfiles);
+-
+-if (not getopts('hk:o:f',\%opt) or defined $opt{'h'}) {
+-        usage($0);
+-}
+-
+-if (defined $opt{'f'}) {
+-	@allcfiles = @ARGV;
+-} else {
+-	@allcfiles = collectcfiles();
+-}
+-
+-if (not defined $opt{'k'}) {
+-	$opt{'k'} = "Module.symvers";
+-}
+-
+-open (my $module_symvers, '<', $opt{'k'})
+-    or die "Sorry, cannot open $opt{'k'}: $!\n";
+-
+-if (defined $opt{'o'}) {
+-    open (my $out, '>', $opt{'o'})
+-	or die "Sorry, cannot open $opt{'o'} $!\n";
+-
+-    select $out;
+-}
+-
+-#
+-# collect all the symbols and their attributes from the
+-# Module.symvers file
+-#
+-while ( <$module_symvers> ) {
+-	chomp;
+-	my (undef, $symbol, $module, $gpl, $namespace) = split('\t');
+-	$SYMBOL { $symbol } =  [ $module , "0" , $symbol, $gpl];
+-}
+-close($module_symvers);
+-
+-#
+-# collect the usage count of each symbol.
+-#
+-my $modversion_warnings = 0;
+-
+-foreach my $thismod (@allcfiles) {
+-	my $module;
+-
+-	unless (open ($module, '<', $thismod)) {
+-		warn "Sorry, cannot open $thismod: $!\n";
+-		next;
+-	}
+-
+-	my $state=0;
+-	while ( <$module> ) {
+-		chomp;
+-		if ($state == 0) {
+-			$state = 1 if ($_ =~ /static const struct modversion_info/);
+-			next;
+-		}
+-		if ($state == 1) {
+-			$state = 2 if ($_ =~ /__attribute__\(\(section\("__versions"\)\)\)/);
+-			next;
+-		}
+-		if ($state == 2) {
+-			if ( $_ !~ /0x[0-9a-f]+,/ ) {
+-				next;
+-			}
+-			my $sym = (split /([,"])/,)[4];
+-			my ($module, $value, $symbol, $gpl) = @{$SYMBOL{$sym}};
+-			$SYMBOL{ $sym } =  [ $module, $value+1, $symbol, $gpl];
+-			push(@{$MODULE{$thismod}} , $sym);
+-		}
+-	}
+-	if ($state != 2) {
+-		warn "WARNING:$thismod is not built with CONFIG_MODVERSIONS enabled\n";
+-		$modversion_warnings++;
+-	}
+-	close($module);
+-}
+-
+-print "\tThis file reports the exported symbols usage patterns by in-tree\n",
+-	"\t\t\t\tmodules\n";
+-printf("%s\n\n\n","x"x80);
+-printf("\t\t\t\tINDEX\n\n\n");
+-printf("SECTION 1: Usage counts of all exported symbols\n");
+-printf("SECTION 2: List of modules and the exported symbols they use\n");
+-printf("%s\n\n\n","x"x80);
+-printf("SECTION 1:\tThe exported symbols and their usage count\n\n");
+-printf("%-25s\t%-25s\t%-5s\t%-25s\n", "Symbol", "Module", "Usage count",
+-	"export type");
+-
+-#
+-# print the list of unused exported symbols
+-#
+-foreach my $list (sort alphabetically values(%SYMBOL)) {
+-	my ($module, $value, $symbol, $gpl) = @{$list};
+-	printf("%-25s\t%-25s\t%-10s\t", $symbol, $module, $value);
+-	if (defined $gpl) {
+-		printf("%-25s\n",$gpl);
+-	} else {
+-		printf("\n");
+-	}
+-}
+-printf("%s\n\n\n","x"x80);
+-
+-printf("SECTION 2:\n\tThis section reports export-symbol-usage of in-kernel
+-modules. Each module lists the modules, and the symbols from that module that
+-it uses.  Each listed symbol reports the number of modules using it\n");
+-
+-print "\nNOTE: Got $modversion_warnings CONFIG_MODVERSIONS warnings\n\n"
+-    if $modversion_warnings;
+-
+-print "~"x80 , "\n";
+-for my $thismod (sort keys %MODULE) {
+-	my $list = $MODULE{$thismod};
+-	my %depends;
+-	$thismod =~ s/\.mod\.c/.ko/;
+-	print "\t\t\t$thismod\n";
+-	foreach my $symbol (@{$list}) {
+-		my ($module, $value, undef, $gpl) = @{$SYMBOL{$symbol}};
+-		push (@{$depends{"$module"}}, "$symbol $value");
+-	}
+-	print_depends_on(\%depends);
+-}
+
+---
+base-commit: 6fb2fa9805c501d9ade047fc511961f3273cdcb5
+change-id: 20241029-remove-export-report-pl-7365c6ca3bee
+
+Best regards,
 -- 
-2.47.0.163.g1226f6d8fa-goog
+Matthew Maurer <mmaurer@google.com>
 
