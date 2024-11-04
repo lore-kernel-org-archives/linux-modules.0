@@ -1,62 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D011E2007;
-	Fri,  1 Nov 2024 21:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAC11FDFB8;
+	Mon,  4 Nov 2024 23:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730495428; cv=none; b=SidNQLjx9ODzwdclX/eYNVoQ8x+QhQyFnTr/bF/6PWu61LqywkujgjXsNKMAse+qftf8PQJmnOlAQeAGcj4u7EcSU6YgivlIe5m0nTGoSdPenwQ5l8MyVQNXIwNQXLTpZGAP8pvee9ZcdFt5tTkv4rOdWIUIYZxmCGFZG6kDjH8=
+	t=1730762866; cv=none; b=DUmZPgGllUSpsCScWP67LZ4WMz+xT3AIpFq7UTpxuw5IfdeNNr8pE5DNZPab2rE0JxBnk3V8TCMgYZF5jbe1vGmyB5Lai0nFa1jEqP98FoTjJg38Us1QgBtAOjRLVG82HwqMwtRC1PPLrujn7N1zC02qF3YkIxvSa4oXiQfAZTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730495428; c=relaxed/simple;
-	bh=iyoQ0SoznYC5xCs0wEiyKZlGiMYOyU/gfF8eEWA0h94=;
+	s=arc-20240116; t=1730762866; c=relaxed/simple;
+	bh=G7tF/ZaqXBtDJLMTb97Oc+SktZk//Kx3oRVjwm2Gkec=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZRAzhJmslsGIuWaZ5iuqUR/V1IQPs5uaWxXDMgvDpxsR2I+/cvAcLlm070obxdJgvkb3SxJKovpualVjqrPh4k3dw9FUbHgoC80+ZCCKT0QNIb6Ptv4efZesil3sEeLmt0JsQei8+tQ/ey06us2vOiFrbx8obt46gonETPCp6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OnxqZhlL; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=iMfr9ma5FM5iB+sdPQI+ndfM51faiAWWz/rSdiqVGlsTnRDmmrbVlCCzCVQfOR+CUMMgOC020tyydBrT60q6bI3PWwXC6wyIs3oc6FirponM3aGC8+VE9nH8tjmg1eu9f4qqmpUcBEEFUvDTV4354qXfHRoQYtp7o5KRUYqqpXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uD6aQVKZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OnxqZhlL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019BAC4CECD;
-	Fri,  1 Nov 2024 21:10:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uD6aQVKZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB3A7C4CECE;
+	Mon,  4 Nov 2024 23:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730495425;
-	bh=iyoQ0SoznYC5xCs0wEiyKZlGiMYOyU/gfF8eEWA0h94=;
+	s=k20201202; t=1730762866;
+	bh=G7tF/ZaqXBtDJLMTb97Oc+SktZk//Kx3oRVjwm2Gkec=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OnxqZhlLQCm4F6jRIlfQHrp3HE9n+L+dOm9rbuBMf7OdYO8rKcf1IuXg5KqhdQg7x
-	 xvXAzYTsxP5HhRtcZ2JzXmr7gBdf7Kb/DxBQW1G2Jz/Dxg3S0tlb/JOy0L4J06JkXF
-	 sih+G67GeO3dZQpUW/pFFmjemzwtkZ3OscUle9QSxkGkH1WjHzuprWUyCBpGA7279K
-	 uE1fMVVVDlN0tQ4qomSIx+10fe1fYLWLIuMzkUnaKLzQpCuU4z1qcIUgV7qzyygpLd
-	 OcPlLj0Lhu+1k/dFDb/fd+w/xz7Md5vKJHywpsoREfDnn7501JrZDpOgSbnWID/ptY
-	 z/PcsRO8UinZQ==
-Date: Fri, 1 Nov 2024 14:10:23 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Matthew Maurer <mmaurer@google.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
+	b=uD6aQVKZ8xYi+PTTwYupZ6PGdQoZjGxor3CJ6T/KZlWjFxurKitUGg4OsLqeVl22R
+	 oTMAQXmWqXP0EO6JaBIYZ9VEqoL35XGUitRTwgi+bJtDhjSL6UuAIcLW7XMfz2tbvE
+	 x3MFVpG1yHfJRXfsS6NaRprs6A1rIqEf/OZ8jX2sy+DwUFdsMetTULRZ3iOQoxlOsn
+	 5JoGBx6K0BrtfF9Z0+hxFGtNMWymLR+Dppngi0NxeJnTpYgOWeDN7FHowhaRXk3khA
+	 u6nha7LupF4lzkb6ryYEoHDIxLmpv0DY+XiF9diWn7xWUzJjMMZ/7hbbF3UF0ISQXS
+	 B++nhrf0RE3MQ==
+Date: Mon, 4 Nov 2024 16:27:41 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
-Message-ID: <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org>
-References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
- <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
- <ZyNr--iMz_6Fj4yq@bombadil.infradead.org>
- <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v7 6/8] x86/module: prepare module loading for ROX
+ allocations of text
+Message-ID: <20241104232741.GA3843610@thelio-3990X>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-7-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,42 +87,65 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
+In-Reply-To: <20241023162711.2579610-7-rppt@kernel.org>
 
-On Thu, Oct 31, 2024 at 01:00:28PM -0700, Matthew Maurer wrote:
-> > The question is, if only extended moversions are used, what new tooling
-> > requirements are there? Can you test using only extended modversions?
-> >
-> >   Luis
+Hi Mike,
+
+On Wed, Oct 23, 2024 at 07:27:09PM +0300, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> I'm not sure precisely what you're asking for. Do you want:
-> 1. A kconfig that suppresses the emission of today's MODVERSIONS
-> format? 
+> When module text memory will be allocated with ROX permissions, the
+> memory at the actual address where the module will live will contain
+> invalid instructions and there will be a writable copy that contains the
+> actual module code.
+> 
+> Update relocations and alternatives patching to deal with it.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Tested-by: kdevops <kdevops@lists.linux.dev>
 
-Yes that's right, a brave new world, and with the warning of that.
+Hopefully the last time you have to hear from me, as I am only
+experiencing issues with only one of my test machines at this point and
+it is my only machine that supports IBT, so it seems to point to
+something specific with the IBT part of the FineIBT support. I notice
+either a boot hang or an almost immediate reboot (triple fault?). I
+guess this is how I missed reporting this earlier, as my machine was
+falling back to the default distribution kernel after the restart and I
+did not notice I was not actually testing a -next kernel.
 
-> This would be fairly easy to do, but I was leaving it enabled
-> for compatibility's sake, at least until extended modversions become
-> more common. This way existing `kmod` tools and kernels would continue
-> to be able to load new-style modules.
+Checking out the version of this change that is in next-20241104, commit
+7ca6ed09db62 ("x86/module: prepare module loading for ROX allocations of
+text"), it boots with either 'cfi=off' or 'cfi=kcfi' but it exhibits the
+issues noted above with 'cfi=fineibt'. At the immediate parent, commit
+b575d981092f ("arch: introduce set_direct_map_valid_noflush()"), all
+three combinations boot fine.
 
-Sure, understood why we'd have both.
+  $ uname -r; tr ' ' '\n' </proc/cmdline | grep cfi=
 
-> 2. libkmod support for parsing the new format? I can do that fairly
-> easily too, but wanted the format actually decided on and accepted
-> before I started modifying things that read modversions.
+  6.12.0-rc5-debug-00214-g7ca6ed09db62
+  cfi=kcfi
 
-This is implied, what I'd like is for an A vs B comparison to be able to
-be done on even without rust modules, so that we can see if really
-libkmod changes are all that's needed. Does boot fail without a new
-libkmod for this? If so the Kconfig should specificy that for this new
-brave new world.
+  6.12.0-rc5-debug-00214-g7ca6ed09db62
+  cfi=off
 
-If a distribution can leverage just one format, why would they not
-consider it if they can ensure the proper tooling is in place. We
-haven't itemized the differences in practice and this could help
-with this. One clear difference so far is the kabi stuff, but that's
-just evaluating one way of doing things so far, I suspect we'll get
-more review on that from Petr soon.
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=fineibt
 
-  Luis
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=kcfi
+
+  6.12.0-rc5-debug-00213-gb575d981092f
+  cfi=off
+
+I do not think this machine has an accessible serial port and I do not
+think IBT virtualization is supported via either KVM or TCG in QEMU, so
+I am not sure how to get more information about what is going on here. I
+wanted to try reverting these changes on top of next-20241104 but there
+was a non-trivial conflict in mm/execmem.c due to some changes on top,
+so I just tested in the mm history.
+
+If there is any other information I can provide or patches I can test, I
+am more than happy to do so.
+
+Cheers,
+Nathan
