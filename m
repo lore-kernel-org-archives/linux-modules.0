@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E3C1FEFD4;
-	Tue,  5 Nov 2024 07:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D775A1714B3;
+	Tue,  5 Nov 2024 19:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730790175; cv=none; b=RcJeWZ6v52G06I3IJ7catWvPxRXIlj3AmNTX2upEKe1gL281mlAVS6gvBS/Dnx3uI01DCsNpKqn9u0c9oSZV5qwNVN7DlCoeW/sTgLbBL3Eh/eN1R+gPA887izB1NONSr5EHSJL9AFi5oQBp4jyT6f++7QML7iywRBOBvn02JEU=
+	t=1730833473; cv=none; b=u/Z/dDTm+O0vTv/fJJQYJBau0/Y1uBrdhZ5M6JgGqAIw2jn76xCCSdJuAIeZg8bIZXbPp60ARfEC8T87lEw1PYnL3gqfS36D9qGoFBA6Aave62nBJjeWtMl1Kip2kZr5Uz6JCVbFdmjLNAglkWtwSHA/2eUMCzX2UDKP8M1G+ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730790175; c=relaxed/simple;
-	bh=vfcX72EWl1PlKyFBzjhHz5V71yaLAfzK3VjVgomZL4Y=;
+	s=arc-20240116; t=1730833473; c=relaxed/simple;
+	bh=uoF4ZbISUkj3LBJVbm7mjK2pNt272UgYSEG9wAikNJE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uj/7jDTU/QqpD9FFIjKjnCvPfRZF9vJoxPylVeB5cmvjdCmI+cxnpcr9kIWY/H6xMRd+aj/A/5iI9dPeHF4wvcqSAQifexW70in+eKc3yObppkL/p9VI6ZIRoQCk7d1C1zWjQqppaNwnaOEV960KLEQc7l9IaQq/cGWTUHwoh24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i3dpbmwH; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=qTVCpA/MsSM6wb7HDUNMjT5x8n3MYqO0MtF0nnI5zLkrRQVMyFYUbQNWjb0sv28srMgW5MwsGF/kODia9MQqFdyGoJnI5qwGKbFARum0JE6F6hzobyl/dq2boUlSIkSCtD7v2waf7gQ4ObMfEk63uJ70JTzmLAbYXqGs8mdnAmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ndFUDxiZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i3dpbmwH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B12C4CECF;
-	Tue,  5 Nov 2024 07:02:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ndFUDxiZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14183C4CECF;
+	Tue,  5 Nov 2024 19:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730790174;
-	bh=vfcX72EWl1PlKyFBzjhHz5V71yaLAfzK3VjVgomZL4Y=;
+	s=k20201202; t=1730833472;
+	bh=uoF4ZbISUkj3LBJVbm7mjK2pNt272UgYSEG9wAikNJE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i3dpbmwHLfd+qUmJoaWeTGPHb10DC+M0kf+DMEykGWoYpGOuSUDviaUCAAx4zIAfi
-	 my4z1l/oyVoPrY5WEhvGAqrSv0MLPuXbzVIKUoMd0jh8oEVUCEONnRV4s7PDepCIp9
-	 ZD54y4ohFGVDY1Cs7nPdmpyfCNtvqUqW5KJ/Ch+xipF5ZFMCAivKT3JR6Xd9V1a/4G
-	 LvZ1wHQ1rlIUNyplCl+fPkOtsT/XeAFLJAPXe+EdvajpWUHCrgFIHiD89oCp0/Bkx4
-	 xYtH7/sknC5+POJtdvm/YMmFy0WRYObll2kMIURKDi3pF/30ytxQP7HSq81EZrmTXO
-	 namiYtOl86+Aw==
-Date: Tue, 5 Nov 2024 09:02:26 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
+	b=ndFUDxiZpHd3P71EA4Dtdpamj3S+pD0a2NSCYEIkT703any4R0lrK0H/JhQd4Hv2S
+	 hAfH0p9N7ObDyDDis1fM3KZKbcT6xDBcyV1iwhCKpgr5eJTjsn996Jr680vAO44Otj
+	 drCVf6YoRKOceIQN9knu/aAssyHKuocecyBZr/vNKZiP9PdCl8g8D3PbpLRYGfT7S3
+	 8Jxa1hlnrGJeQdCliPqKl36JEkEIgDaJdtPl3tXojvE85kFpWmMnDAcr4PjH7oX62l
+	 V8Za49Z9doiMVqhjlWd7GWzNdgnAXYy87njYhKhjV/rXdMfHzibVSbsFtDSY64+oSA
+	 zKXctAOfMY/4A==
+Date: Tue, 5 Nov 2024 12:04:27 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Andreas Larsson <andreas@gaisler.com>,
@@ -76,10 +76,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	sparclinux@vger.kernel.org, x86@kernel.org
 Subject: Re: [PATCH v7 6/8] x86/module: prepare module loading for ROX
  allocations of text
-Message-ID: <ZynDAhW0lKCfOqZl@kernel.org>
+Message-ID: <20241105190427.GA2903209@thelio-3990X>
 References: <20241023162711.2579610-1-rppt@kernel.org>
  <20241023162711.2579610-7-rppt@kernel.org>
  <20241104232741.GA3843610@thelio-3990X>
+ <ZynDAhW0lKCfOqZl@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -88,91 +89,29 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104232741.GA3843610@thelio-3990X>
+In-Reply-To: <ZynDAhW0lKCfOqZl@kernel.org>
 
-Hi Nathan,
+On Tue, Nov 05, 2024 at 09:02:26AM +0200, Mike Rapoport wrote:
+> There's a silly mistake in cfi_rewrite_endbr() in that commit, the patch
+> below should fix it. Can you please test?
 
-On Mon, Nov 04, 2024 at 04:27:41PM -0700, Nathan Chancellor wrote:
-> Hi Mike,
-> 
-> On Wed, Oct 23, 2024 at 07:27:09PM +0300, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > When module text memory will be allocated with ROX permissions, the
-> > memory at the actual address where the module will live will contain
-> > invalid instructions and there will be a writable copy that contains the
-> > actual module code.
-> > 
-> > Update relocations and alternatives patching to deal with it.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > Tested-by: kdevops <kdevops@lists.linux.dev>
-> 
-> Hopefully the last time you have to hear from me, as I am only
-> experiencing issues with only one of my test machines at this point and
-> it is my only machine that supports IBT, so it seems to point to
-> something specific with the IBT part of the FineIBT support. I notice
-> either a boot hang or an almost immediate reboot (triple fault?). I
-> guess this is how I missed reporting this earlier, as my machine was
-> falling back to the default distribution kernel after the restart and I
-> did not notice I was not actually testing a -next kernel.
-> 
-> Checking out the version of this change that is in next-20241104, commit
-> 7ca6ed09db62 ("x86/module: prepare module loading for ROX allocations of
-> text"), it boots with either 'cfi=off' or 'cfi=kcfi' but it exhibits the
-> issues noted above with 'cfi=fineibt'. At the immediate parent, commit
-> b575d981092f ("arch: introduce set_direct_map_valid_noflush()"), all
-> three combinations boot fine.
-> 
->   $ uname -r; tr ' ' '\n' </proc/cmdline | grep cfi=
-> 
->   6.12.0-rc5-debug-00214-g7ca6ed09db62
->   cfi=kcfi
-> 
->   6.12.0-rc5-debug-00214-g7ca6ed09db62
->   cfi=off
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=fineibt
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=kcfi
-> 
->   6.12.0-rc5-debug-00213-gb575d981092f
->   cfi=off
-> 
-> I do not think this machine has an accessible serial port and I do not
-> think IBT virtualization is supported via either KVM or TCG in QEMU, so
-> I am not sure how to get more information about what is going on here. I
-> wanted to try reverting these changes on top of next-20241104 but there
-> was a non-trivial conflict in mm/execmem.c due to some changes on top,
-> so I just tested in the mm history.
-> 
-> If there is any other information I can provide or patches I can test, I
-> am more than happy to do so.
+Yup, that was it! All my machines boot with this diff applied on top of
+next-20241105, so with that fixed, I think we are all good here.
 
-Yes, please :)
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-There's a silly mistake in cfi_rewrite_endbr() in that commit, the patch
-below should fix it. Can you please test?
+> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+> index 3407efc26528..243843e44e89 100644
+> --- a/arch/x86/kernel/alternative.c
+> +++ b/arch/x86/kernel/alternative.c
+> @@ -1241,7 +1241,7 @@ static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
+>  		void *addr = (void *)s + *s;
+>  		void *wr_addr = module_writable_address(mod, addr);
+>  
+> -		poison_endbr(addr+16, wr_addr, false);
+> +		poison_endbr(addr + 16, wr_addr + 16, false);
+>  	}
+>  }
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 3407efc26528..243843e44e89 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1241,7 +1241,7 @@ static void cfi_rewrite_endbr(s32 *start, s32 *end, struct module *mod)
- 		void *addr = (void *)s + *s;
- 		void *wr_addr = module_writable_address(mod, addr);
- 
--		poison_endbr(addr+16, wr_addr, false);
-+		poison_endbr(addr + 16, wr_addr + 16, false);
- 	}
- }
- 
- 
-> Cheers,
-> Nathan
-
--- 
-Sincerely yours,
-Mike.
+Cheers,
+Nathan
