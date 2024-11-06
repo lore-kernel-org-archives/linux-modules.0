@@ -1,151 +1,205 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9661DE3D2
-	for <linux-modules@vger.kernel.org>; Wed,  6 Nov 2024 18:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7B0646;
+	Wed,  6 Nov 2024 19:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730918851; cv=none; b=FLeyhuLT+PLAOkThytP/C2CLKSC2cSQGFfsP6eH5HM5YYThgaRUwmNv93Z1Vz5krkedZyELBYsuC3gC8WaIY2bMPjfDAaaNbks5ZFt1kJ6kasV+MtXhhGxf880ttgJBFkr7p2p03H3PceMbBje9CKez4+z8a5S6l3qYfPMg+qR0=
+	t=1730919772; cv=none; b=lhCujtljSi3/hO7patSH1s1T2M06eJNLy/pnmgse+ZB1LR1CcuargRa/qQZY1fwZ02cjm2VjodowztFE/4vUZavDaFg9kp3Qo9Jw6+FACsOKP6DNmkH9NRjDkYvk+PVgSOy9NVsMwWjxOew+pmvLeTlBcY7ki1GF1ZUKJ7rWanA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730918851; c=relaxed/simple;
-	bh=Exqe8iAbGSGFmpY63vbdFYXXt5TTkypiNy6jnutfI7w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hk+OQMQD3fNI+H0MMeJpgFTrjOn1HGx7lApK9GzyjZ5ZjuxudWv9ojfUgqTmtJhida/ixoDI+EocvuITAT+UTZElxEdr5LG9YTD00E6C8OXHWefxXyg2WFw23a5HG3kvivoIuh6fCtYNLJxee1zgQ2uPC5GHal92UeQG4f8PZZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SpP2b/+q; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1730919772; c=relaxed/simple;
+	bh=IhNmAHl50eN2Qntv98/NdsYVBigGbufrZ49dx0S8UfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oAd12gBVxPVC93HTf1sRZu0iydFA/4d79NMyJ712GlncN+Sct6v6r2/umjntUMWXkbDamJ34ofEEItCkD7DKnGrB1cS0fcuFfphe2hO1+g4CJj/whOfIHyPcLUYU4G9SOvY2TK4GTGnagwy8nsqceB8sMprJk3cYBA1jdKqpK3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=siaAa8ha; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SpP2b/+q"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43150ea2db6so25825e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 06 Nov 2024 10:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730918848; x=1731523648; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2dGrUXDC8J5pqSkCVeKC3N6enHQma720hZqyIMlE1hY=;
-        b=SpP2b/+qby5XWTbnicG3upZYrlXn4YDT6g4NTbcECe0GtoJrL3GuBllteEGEP8zXsl
-         Wpwi+MZ0zBRf+h0PpWRkKJLfZ4w3g9bbeoBiX4fGfziKM/n5Xw1ta+UDBDTXJgNysYWO
-         wWWS0d23hfAFqyvQWakhdUZf/qno2ZUIJwY/ZR+L1iCqa6MrkSRaXukrxJfoS4fsaaJt
-         fFZaX7zSY1TC5OpuPyr0QxN5yrlGTKn3GJxQIMJK+EvKSqZYece7me/m9ega4jfCqWiP
-         AGwRmID5eOuarhUKaU5qwrdkGZ6h7SF6CEFjhq66O/d7Fk5+uwZWZ10SUxNTzmSdEc2J
-         7BiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730918848; x=1731523648;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2dGrUXDC8J5pqSkCVeKC3N6enHQma720hZqyIMlE1hY=;
-        b=poRSTI4Nr7DtV09ZaQlRzU7v4KckP1AzeoRQHnDPA/L9mUvSlvJC46QVyceMK97GzB
-         iMAadFKdNqFLy5wXsQNIAJf+zJsRVLz5pmhvxELbsGlQ9Xkx1u19f+YOfPdEx0cVzBLS
-         56rlBsD+9/EtwLU0AI4zP1wfIH5/ylLAqcTopmrBRA+wLGZc+xf81jmpu4U/KgAUEx1Q
-         4tY0kGJokmwRGNspdizsSVSYG5U9A199mmI+7Y/eD0XrK15W4aTZzO3zoxOV4wm6mdxR
-         JcuuibnNu0Ys8siINUe7D4R7yzW4DW4461WAtgmaOS1Z9Mke7CP93ChP3mvVPxXuOQi+
-         1CpQ==
-X-Gm-Message-State: AOJu0YyTRKh94GSNP6hCQsHQAh+RyRQATm1wI/KHs5hN7kgRlNojU6BX
-	r8YS3Sq793vZm9sw2S+s0r6oJXfOrigHHId7wGbOcs63nq/ooO81XhMcgUGuLyWQ65GAqdZytuy
-	e2Ue2CZVYAUx7SaicRA1SlonsmV8Wk1xgDN0m
-X-Gm-Gg: ASbGncsagOnrV4PXylrFVqEvQEPvjjIfs2qvlfrBxNRIZngjaYzEXAhchwNL0WTkjWH
-	jZdTl9QFC+g/FODiA+jlKJFXAHsOEGVnPrL+DvoXCOGqX7Bqjhd/EGHaZAoU=
-X-Google-Smtp-Source: AGHT+IEoEPmxnp0ZrudFR7joTbzlQj+R3HBGqdcNc8Wo/wQ4UlmCH/EpGH3i6KaycnwSNh8sQa+mrw9pRNPmOLCn904=
-X-Received: by 2002:a05:600c:a3a8:b0:42b:a8fc:3937 with SMTP id
- 5b1f17b1804b1-432af2ed605mr633765e9.4.1730918847928; Wed, 06 Nov 2024
- 10:47:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="siaAa8ha"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=9QSSI/uYI0CEB6fzsQ7FkjhfiqW1QbCWsDx3P3extjI=; b=siaAa8hau4q9E3xQgArws/8Mvu
+	76jfTHf5Rnw/55kK7T0Glkqd/6oDCE0sXsjXs5gGKaie6jRpzKEbswwzQ2inuelKaWyj+/3Qv30bp
+	ghYt7KNNEGMp0hU78rCU2svK2HpBzVqBVoeGA/TNcUAjCUXV+Ao4aEIN4DxRyR75Qg2MbAvrOFpv/
+	Jjf291PKmJRAJ9CLS7a+iJfdAr11ffaydh0NLcrrzqnK/5exYlpSO/UKkNLR7Y5ipIroomOOG7wK4
+	r3VzTWJAuhPqO0++tCkfQSBnI13SexeHudUr7wGjv2ZJUa4OyhPw9bK5OeGGA4wafInTfuaiuvWky
+	5EbGtnJQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t8lIf-000000059H0-0ND9;
+	Wed, 06 Nov 2024 19:02:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C4A5E300478; Wed,  6 Nov 2024 20:02:40 +0100 (CET)
+Date: Wed, 6 Nov 2024 20:02:40 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: mcgrof@kernel.org
+Cc: x86@kernel.org, hpa@zytor.com, mcgrof@kernel.org, petr.pavlu@suse.com,
+	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
+	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	hch@infradead.org, gregkh@linuxfoundation.org
+Subject: [RFC] module: Strict per-modname namespaces
+Message-ID: <20241106190240.GR10375@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241106002401.283517-1-mcgrof@kernel.org>
-In-Reply-To: <20241106002401.283517-1-mcgrof@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 6 Nov 2024 18:46:48 +0000
-Message-ID: <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
-Subject: Re: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for variables
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	petr.pavlu@suse.com, da.gomez@samsung.com, masahiroy@kernel.org, 
-	deller@gmx.de, linux-arch@vger.kernel.org, live-patching@vger.kernel.org, 
-	kris.van.hees@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Luis,
+Hi,
 
-On Wed, Nov 6, 2024 at 12:24=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> Use 0 for the values as we use them for the return value on init
-> to keep the test modules simple. This fixes a splat reported
->
-> do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it sho=
-uld follow 0/-E convention
-> do_init_module: loading module anyway...
-> CPU: 5 UID: 0 PID: 1873 Comm: modprobe Not tainted 6.12.0-rc3+ #4
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/=
-2024
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x56/0x80
->  do_init_module.cold+0x21/0x26
->  init_module_from_file+0x88/0xf0
->  idempotent_init_module+0x108/0x300
->  __x64_sys_finit_module+0x5a/0xb0
->  do_syscall_64+0x4b/0x110
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> RIP: 0033:0x7f4f3a718839
-> Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f=
-7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
- ff>
-> RSP: 002b:00007fff97d1a9e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-> RAX: ffffffffffffffda RBX: 000055b94001ab90 RCX: 00007f4f3a718839
-> RDX: 0000000000000000 RSI: 000055b910e68a10 RDI: 0000000000000004
-> RBP: 0000000000000000 R08: 00007f4f3a7f1b20 R09: 000055b94001c5b0
-> R10: 0000000000000040 R11: 0000000000000246 R12: 000055b910e68a10
-> R13: 0000000000040000 R14: 000055b94001ad60 R15: 0000000000000000
->  </TASK>
-> do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it sho=
-uld follow 0/-E convention
-> do_init_module: loading module anyway...
-> CPU: 1 UID: 0 PID: 1884 Comm: modprobe Not tainted 6.12.0-rc3+ #4
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/=
-2024
-> Call Trace:
->  <TASK>
->  dump_stack_lvl+0x56/0x80
->  do_init_module.cold+0x21/0x26
->  init_module_from_file+0x88/0xf0
->  idempotent_init_module+0x108/0x300
->  __x64_sys_finit_module+0x5a/0xb0
->  do_syscall_64+0x4b/0x110
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> RIP: 0033:0x7ffaa5d18839
->
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->  lib/tests/module/gen_test_kallsyms.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen=
-_test_kallsyms.sh
-> index ae5966f1f904..3f2c626350ad 100755
-> --- a/lib/tests/module/gen_test_kallsyms.sh
-> +++ b/lib/tests/module/gen_test_kallsyms.sh
-> @@ -32,7 +32,7 @@ gen_num_syms()
->         PREFIX=3D$1
->         NUM=3D$2
->         for i in $(seq 1 $NUM); do
-> -               printf "int auto_test_%s_%010d =3D 0xff;\n" $PREFIX $i
-> +               printf "int auto_test_%s_%010d =3D 0;\n" $PREFIX $i
->                 printf "EXPORT_SYMBOL_GPL(auto_test_%s_%010d);\n" $PREFIX=
- $i
->         done
->         echo
+I've been wanting $topic for a while, and having just stumbled into the
+whole namespace thing by accident, I figured I'd give it a go, most if
+the hard parts seem to have already been done.
 
-Looks good to me. Thanks!
+It reserves and disallows imports on any "MODULE_${name}" namespace,
+while it implicitly adds the same namespace to every module.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+This allows exports targeted at specific modules and no others -- one
+random example included. I've hated the various kvm exports we've had
+for a while, and strictly limiting them to the kvm module helps
+alleviate some abuse potential.
 
-Sami
+---
+ arch/x86/kernel/fpu/core.c |  2 +-
+ kernel/module/main.c       | 28 ++++++++++++++++++++++++++--
+ scripts/mod/modpost.c      | 29 ++++++++++++++++++++---------
+ 3 files changed, 47 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 1209c7aebb21..23b188a53d9d 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -366,7 +366,7 @@ int fpu_swap_kvm_fpstate(struct fpu_guest *guest_fpu, bool enter_guest)
+ 	fpregs_unlock();
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(fpu_swap_kvm_fpstate);
++EXPORT_SYMBOL_NS_GPL(fpu_swap_kvm_fpstate, MODULE_kvm);
+ 
+ void fpu_copy_guest_fpstate_to_uabi(struct fpu_guest *gfpu, void *buf,
+ 				    unsigned int size, u64 xfeatures, u32 pkru)
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 49b9bca9de12..b30af879c2cb 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1070,6 +1070,13 @@ static int verify_namespace_is_imported(const struct load_info *info,
+ 
+ 	namespace = kernel_symbol_namespace(sym);
+ 	if (namespace && namespace[0]) {
++		/*
++		 * Implicitly import MODULE_${mod->name} namespace.
++		 */
++		if (strncmp(namespace, "MODULE_", 7) == 0 &&
++		    strcmp(namespace+7, mod->name) == 0)
++			return 0;
++
+ 		for_each_modinfo_entry(imported_namespace, info, "import_ns") {
+ 			if (strcmp(namespace, imported_namespace) == 0)
+ 				return 0;
+@@ -1613,15 +1620,30 @@ static void module_license_taint_check(struct module *mod, const char *license)
+ 	}
+ }
+ 
+-static void setup_modinfo(struct module *mod, struct load_info *info)
++static int setup_modinfo(struct module *mod, struct load_info *info)
+ {
+ 	struct module_attribute *attr;
++	char *imported_namespace;
+ 	int i;
+ 
+ 	for (i = 0; (attr = modinfo_attrs[i]); i++) {
+ 		if (attr->setup)
+ 			attr->setup(mod, get_modinfo(info, attr->attr.name));
+ 	}
++
++	for_each_modinfo_entry(imported_namespace, info, "import_ns") {
++		/*
++		 * 'MODULE_' prefixed namespaces are implicit, disallow
++		 * explicit imports.
++		 */
++		if (strstarts(imported_namespace, "MODULE_")) {
++			pr_err("%s: module tries to import module namespace: %s\n",
++			       mod->name, imported_namespace);
++			return -EPERM;
++		}
++	}
++
++	return 0;
+ }
+ 
+ static void free_modinfo(struct module *mod)
+@@ -2935,7 +2957,9 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 		goto free_unload;
+ 
+ 	/* Set up MODINFO_ATTR fields */
+-	setup_modinfo(mod, info);
++	err = setup_modinfo(mod, info);
++	if (err)
++		goto free_modinfo;
+ 
+ 	/* Fix up syms, so that st_value is a pointer to location. */
+ 	err = simplify_symbols(mod, info);
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 107393a8c48a..d1de3044ee03 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1553,8 +1553,19 @@ static void mod_set_crcs(struct module *mod)
+ 	free(buf);
+ }
+ 
++static const char *mod_basename(const char *modname)
++{
++	const char *basename = strrchr(modname, '/');
++	if (basename)
++		basename++;
++	else
++		basename = modname;
++	return basename;
++}
++
+ static void read_symbols(const char *modname)
+ {
++	char module_namespace[MODULE_NAME_LEN + 8];
+ 	const char *symname;
+ 	char *version;
+ 	char *license;
+@@ -1586,12 +1597,16 @@ static void read_symbols(const char *modname)
+ 			license = get_next_modinfo(&info, "license", license);
+ 		}
+ 
+-		namespace = get_modinfo(&info, "import_ns");
+-		while (namespace) {
++		for (namespace = get_modinfo(&info, "import_ns"); namespace;
++		     namespace = get_next_modinfo(&info, "import_ns", namespace)) {
++			if (strstarts(namespace, "MODULE_"))
++				error("importing implicit module namespace: %s\n", namespace);
++
+ 			add_namespace(&mod->imported_namespaces, namespace);
+-			namespace = get_next_modinfo(&info, "import_ns",
+-						     namespace);
+ 		}
++		snprintf(module_namespace, sizeof(module_namespace), "MODULE_%s",
++			 mod_basename(mod->name));
++		add_namespace(&mod->imported_namespaces, module_namespace);
+ 
+ 		if (extra_warn && !get_modinfo(&info, "description"))
+ 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
+@@ -1700,11 +1715,7 @@ static void check_exports(struct module *mod)
+ 		s->crc_valid = exp->crc_valid;
+ 		s->crc = exp->crc;
+ 
+-		basename = strrchr(mod->name, '/');
+-		if (basename)
+-			basename++;
+-		else
+-			basename = mod->name;
++		basename = mod_basename(mod->name);
+ 
+ 		if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+ 			modpost_log(!allow_missing_ns_imports,
