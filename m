@@ -1,123 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54825218D99;
-	Thu,  7 Nov 2024 22:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC1021766E;
+	Thu,  7 Nov 2024 22:38:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731018802; cv=none; b=aHruMmd+MH/rZLqN3xAwYBqGQx5Lni9l2XUFPc922Mi0bgscmiGTFFfLL8fh1MKyexJEu/4bahVCiU7oGjz7xw0c6XzAbIyaJSFzA3bojXmN7otFn0IGaQpLEgRozkeuR91sl6q5hC2luBpDQ3hOFGvZZRgPGoUV9r6xetzsBMY=
+	t=1731019095; cv=none; b=D17lh+5r38YvIgsa3HnfaMsksO/4Va36QMtRF2aceBVqcHeNIJ9i8Ljjwg5e+vw+u+0piDgaHYRGUkUptJC6pAYk/RicY3gzkbm76UJq/tIrgKFyFKf6lerxnJgJ3tatGZVRhStjWhTn2Cz46WxAiMIDt4d9C0XdUxp4p6FemWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731018802; c=relaxed/simple;
-	bh=u+y+ZgnzSc1JBFX0IBWulkzQvEr1r5XByDl3smbKDig=;
+	s=arc-20240116; t=1731019095; c=relaxed/simple;
+	bh=1vresE0L3Nh3fHiQZbFLwAwAhjoMFFb+bTLtc7rSuxI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TH2mBDl5BTKXdwrd1LMPLHbdOQIPXnUwMIqWoWdeYqFyqZm2ARSrtC5b8UadztfmtGgO3EdYwKSqqqS2lxzdDrgrXpWxhh9E9ntYceQRn9YN+0b+FF6kCplwFdSHBpKAkBELyMzoVBxgh22JPeZAFIJuO03A/QpcuNPlfCIMd04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLLQjJsu; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nc9qSu8UHf3ghJZLaCh8FEcmMrywlmwBalkDM9oeuDNEL1RbTyHtVSSyuCRuuWpd5XuS8IwiEkaV+hH73loATmmuevtZI/vA2MTyXJ/wVtMDzMW97TJTXcat3ifatBA+edsYdN2SE1PVfmDR67PoGF1D9UniyB7ss4pcC3eAF+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6fjrNRK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLLQjJsu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8044CC4CECC;
-	Thu,  7 Nov 2024 22:33:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6fjrNRK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B13FC4CECC;
+	Thu,  7 Nov 2024 22:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731018801;
-	bh=u+y+ZgnzSc1JBFX0IBWulkzQvEr1r5XByDl3smbKDig=;
+	s=k20201202; t=1731019095;
+	bh=1vresE0L3Nh3fHiQZbFLwAwAhjoMFFb+bTLtc7rSuxI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kLLQjJsu9fyqP8yzMFHBWd5h5WM1jNHoZXNwdDGFgsG3Vd7u1wj2XANhEwRes0GWU
-	 YoqCc5J+/7r2hYKc7JR/ZtEn3JeqA2orhLEFcZAVUcBGyMmMMLnGgE5XM70EFeu3Gw
-	 iktSCrppCV7agn9jxuD6YN2xxrMiHZFiJbxWqp9/jkbGQPRuh9ukrdBuSZXnFxBLVy
-	 sG/cngVuAEsKTbwAG0+n4rb7Q1DS7r/+IHP0nmK2dxQd19hyIhDqf1HlooLqcCOPb1
-	 L0WUD0s2uP7NirQbhLF3So9usIuX3ReuVM9bJ25Owkey9CxcdazXidspl1yWJTv2ss
-	 0lKimBvWDHZBQ==
-Date: Thu, 7 Nov 2024 14:33:20 -0800
+	b=T6fjrNRK0H7rMGmtghlNMki/7KUUA3JkXKRGsBeHjc8CCMykYE+gcyamhcLzNFUT1
+	 TPYgWtKUP50fWbzpvceAl/y5Ye4PI2/vVF6v7d6Pl7Rht23wGL+oFVUf+kZhHuu/IV
+	 ZH8w2RYM443JXE4j0c8o+9E4dp8pF0UsmJ7MqlFMQ2yfFxsVDPfqDvcJf1SeEyEToy
+	 qrfZ3HAy0D1q7aqZraUuZCbf8JBqF9MW2YrBZ+AWwcSlYW7d5pitli87r1Hw4CzJnZ
+	 E6F8nkrNVLvi3VEEhCM5zPRItjpua5G9swipPx81U9fpAJbRA43qT1QJTXvjO14r6h
+	 XJ5/Mq96LOcZQ==
+Date: Thu, 7 Nov 2024 14:38:13 -0800
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	petr.pavlu@suse.com, da.gomez@samsung.com, masahiroy@kernel.org,
-	deller@gmx.de, linux-arch@vger.kernel.org,
-	live-patching@vger.kernel.org, kris.van.hees@oracle.com
-Subject: Re: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for
- variables
-Message-ID: <Zy1AMPMYfE5tKJYz@bombadil.infradead.org>
-References: <20241106002401.283517-1-mcgrof@kernel.org>
- <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
+Message-ID: <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
+References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
+ <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
+ <ZyNr--iMz_6Fj4yq@bombadil.infradead.org>
+ <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
+ <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org>
+ <CAGSQo02uDZ5QoRMPOn=3Fa9g5d+VPfKW-vmSsS2H+pOdPYCBFw@mail.gmail.com>
+ <ZyrRYUD0K1f7SwWg@bombadil.infradead.org>
+ <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
+In-Reply-To: <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
 
-On Wed, Nov 06, 2024 at 06:46:48PM +0000, Sami Tolvanen wrote:
-> Hi Luis,
+On Wed, Nov 06, 2024 at 02:19:38PM -0800, Matthew Maurer wrote:
+> >
+> > > If booted against an old kernel, it will
+> > > behave as though there is no modversions information.
+> >
+> > Huh? This I don't get. If you have the new libkmod and boot
+> > an old kernel, that should just not break becauase well, long
+> > symbols were not ever supported properly anyway, so no regression.
 > 
-> On Wed, Nov 6, 2024 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > Use 0 for the values as we use them for the return value on init
-> > to keep the test modules simple. This fixes a splat reported
-> >
-> > do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it should follow 0/-E convention
-> > do_init_module: loading module anyway...
-> > CPU: 5 UID: 0 PID: 1873 Comm: modprobe Not tainted 6.12.0-rc3+ #4
-> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/2024
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x56/0x80
-> >  do_init_module.cold+0x21/0x26
-> >  init_module_from_file+0x88/0xf0
-> >  idempotent_init_module+0x108/0x300
-> >  __x64_sys_finit_module+0x5a/0xb0
-> >  do_syscall_64+0x4b/0x110
-> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> > RIP: 0033:0x7f4f3a718839
-> > Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff>
-> > RSP: 002b:00007fff97d1a9e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-> > RAX: ffffffffffffffda RBX: 000055b94001ab90 RCX: 00007f4f3a718839
-> > RDX: 0000000000000000 RSI: 000055b910e68a10 RDI: 0000000000000004
-> > RBP: 0000000000000000 R08: 00007f4f3a7f1b20 R09: 000055b94001c5b0
-> > R10: 0000000000000040 R11: 0000000000000246 R12: 000055b910e68a10
-> > R13: 0000000000040000 R14: 000055b94001ad60 R15: 0000000000000000
-> >  </TASK>
-> > do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it should follow 0/-E convention
-> > do_init_module: loading module anyway...
-> > CPU: 1 UID: 0 PID: 1884 Comm: modprobe Not tainted 6.12.0-rc3+ #4
-> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/2024
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x56/0x80
-> >  do_init_module.cold+0x21/0x26
-> >  init_module_from_file+0x88/0xf0
-> >  idempotent_init_module+0x108/0x300
-> >  __x64_sys_finit_module+0x5a/0xb0
-> >  do_syscall_64+0x4b/0x110
-> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> > RIP: 0033:0x7ffaa5d18839
-> >
-> > Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> > ---
-> >  lib/tests/module/gen_test_kallsyms.sh | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen_test_kallsyms.sh
-> > index ae5966f1f904..3f2c626350ad 100755
-> > --- a/lib/tests/module/gen_test_kallsyms.sh
-> > +++ b/lib/tests/module/gen_test_kallsyms.sh
-> > @@ -32,7 +32,7 @@ gen_num_syms()
-> >         PREFIX=$1
-> >         NUM=$2
-> >         for i in $(seq 1 $NUM); do
-> > -               printf "int auto_test_%s_%010d = 0xff;\n" $PREFIX $i
-> > +               printf "int auto_test_%s_%010d = 0;\n" $PREFIX $i
-> >                 printf "EXPORT_SYMBOL_GPL(auto_test_%s_%010d);\n" $PREFIX $i
-> >         done
-> >         echo
-> 
-> Looks good to me. Thanks!
-> 
-> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> Specifically, if you set NO_BASIC_MODVERSIONS, build a module, and
+> then load said module with a kernel *before* EXTENDED_MODVERSIONS
+> existed, it will see no modversion info on the module to check. This
+> will be true regardless of symbol length.
 
-Merged, thanks.
+Isn't that just the same as disabling modverisons?
+
+If you select modversions, you get the options to choose:
+
+  - old modversions
+  - old modversions + extended modversions
+  - extended modversions only
+
+> > I'm not quite sure I understood your last comment here though,
+> > can you clarify what you meant?
+> >
+> > Anyway, so now that this is all cleared up, the next question I have
+> > is, let's compare a NO_BASIC_MODVERSIONS world now, given that the
+> > userspace requirements aren't large at all, what actual benefits does
+> > using this new extended mod versions have? Why wouldn't a distro end
+> > up preferring this for say a future release for all modules?
+> 
+> I think a distro will end up preferring using this for all modules,
+> but was intending to put both in for a transitional period until the
+> new format was more accepted.
+
+The only thing left I think to test is the impact at runtime, and the
+only thing I can think of is first we use find_symbol() on resolve_symbol() 
+which it took me a while to review and realize that this just uses a
+completely different ELF section, the the ksymtab sections which are split up
+between the old and the gpl section. But after that we use check_version().
+I suspect the major overhead here is in find_symbol() and that's in no way shape
+or form affected by your changes, and I also suspect that since the
+way you implemented for_each_modversion_info_ext() is just *one* search
+there shouldn't be any penalty here at all. Given it took *me* a while
+to review all this, I think it would be good for you to also expand your
+cover letter to be crystal clear on these expectations to users and
+developers and if anything expand on the Kconfig / and add documentation
+if we don't document any of this.
+
+I'd still like to see you guys test all this with the new TEST_KALLSYMS.
 
   Luis
