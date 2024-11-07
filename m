@@ -1,139 +1,123 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D84421766D
-	for <linux-modules@vger.kernel.org>; Thu,  7 Nov 2024 19:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54825218D99;
+	Thu,  7 Nov 2024 22:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731008420; cv=none; b=stPFM6AGYm80fZHuLKaLkvyT8cIxABBQlw2sFncmsqOMhj1VmFtTcOxfNGbi6M0YDanolDxV7Zyo60CqL0vjdemzcoPXgvgEbZYmsAqKPDAUd5arGHl4Fh5MFo7XIsN0+m8NfpB6EJE8hxzGHZIlGeseUtnDjcP1US4PKf/UOis=
+	t=1731018802; cv=none; b=aHruMmd+MH/rZLqN3xAwYBqGQx5Lni9l2XUFPc922Mi0bgscmiGTFFfLL8fh1MKyexJEu/4bahVCiU7oGjz7xw0c6XzAbIyaJSFzA3bojXmN7otFn0IGaQpLEgRozkeuR91sl6q5hC2luBpDQ3hOFGvZZRgPGoUV9r6xetzsBMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731008420; c=relaxed/simple;
-	bh=Hqpenv6p1LWFDwIjrHP2BsQXKPVjR2b5HZRJ4ZqChTY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SYMU3aue78hwRol1Gzjbrg9eCn1IUEERBSGUiOpZV8G0KW5FajATMkr4MZyzs5eD8SSbFGc4JdmLOpGxsrp0H5R0iJ4o2hjRJtAOjQYYRCU8uTytxhkvM1QCdHKQXQuz8umXtm6ZXlUaf0iFOAmjRMXr8eAPUsLlK29ZJe+zZDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zhgwGXl3; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731018802; c=relaxed/simple;
+	bh=u+y+ZgnzSc1JBFX0IBWulkzQvEr1r5XByDl3smbKDig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TH2mBDl5BTKXdwrd1LMPLHbdOQIPXnUwMIqWoWdeYqFyqZm2ARSrtC5b8UadztfmtGgO3EdYwKSqqqS2lxzdDrgrXpWxhh9E9ntYceQRn9YN+0b+FF6kCplwFdSHBpKAkBELyMzoVBxgh22JPeZAFIJuO03A/QpcuNPlfCIMd04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kLLQjJsu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zhgwGXl3"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c934b2c991so3759a12.0
-        for <linux-modules@vger.kernel.org>; Thu, 07 Nov 2024 11:40:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731008417; x=1731613217; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nd/75cbpPjgH2M9LbK7DZEh2TDCTCcgqhG32wv/Y+KM=;
-        b=zhgwGXl3wArw+w/R+l2xwrB7BtISB3OVqwvwQb25nE3DEQQIzxXLJAeaXnBIey8KEm
-         QGhhbyxjo7IFQqdJsmCPANVISzFCfdy/I4FKQq5PF8Hp5zl7BtPb7CC/vekWhkIMj2zg
-         D/bFPg/XZzFy+MXHR+ERBnN4gzFH4VWYfMEG7Otcl4p67K08Mm9tusAY+PPnDthmNoRA
-         P9kyYFgFkzTO2y8yQa6Xy7ikMrKqZvAbvVftR6SDSyCcqP8Fmo1R1ehIlNnMNDy+EODS
-         qzuHEwueFO+yBz6cxzUoDlpWPxo79ZjCFP27QRsyDckDofFAGrQeeIlKwD9VkPvXDCKS
-         Cluw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731008417; x=1731613217;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nd/75cbpPjgH2M9LbK7DZEh2TDCTCcgqhG32wv/Y+KM=;
-        b=dBQ8z3zJvv3Lbt316aBV5uCA/ImxcJlVRbOjCCiX3kPN0LwP+nJd61JfW4fQobxOR2
-         au02EGOs9bTh/XiMhlD8aZ/VXZ0/ATEKWbIuxGJHC6N5pxATFeDumKBcgXYW6nGfgL48
-         0B/WVPGhBdUpMN6NLYsNqK0W2coAtjqOqvx2BR8hTEW8oLmOmTgQYYMkOoDepWGgBBbV
-         OEK11lS3C6DAsWGCP2f2H0SIS1kRJqEhlyMDmz3OErIpoq1waFdeiVW1qZM/uXw+s4ik
-         CB4SpzQaXWoB5SCSe1ethquKoWcxBtWLr7lRPJ5ul4isFOAZ3WkCqQC2G5jE9z0qmpl8
-         Kkyg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYCtv1whUa+DIZ3Q0pofGa9FHgebsL7TRxbhC6XQItIeFtj9ZEu+EdcjlcA3eG55um/2GN+amet7BytunR@vger.kernel.org
-X-Gm-Message-State: AOJu0YyD7mkkxLr12k67O14zQSaR1o1kabmykJ8qTuRI+RnXJtKgtLVK
-	h/1UWjSlEmzzOk7At9FsoUjfgmWCnOWxhKi11XKz+gnZwGecT2U81LBa7aQavwJo/oFHf4DqpAY
-	JvEDsE4nZ3BnogpBPovDGmxXxIJ5R+5782LNv
-X-Gm-Gg: ASbGncsz6XhJjWBOUFCB4UVrmj24zsjnbiBZO3BGDkrFKYIk9kv7cnGWQ783mHNYxZk
-	bWrJSAn1fA+2YJzoGpmfjctCtoYwuoxV2ul4qjDdT9zBMazDrRSkLC7XtXXi+7w==
-X-Google-Smtp-Source: AGHT+IEBiwFNQfuoAxFiltxJ2hrjOfio8RnmCYl6hN2gWLInsahzd3pu0ISjskuePHQ29yF2SOFAso1eK087KsDFWnI=
-X-Received: by 2002:aa7:c846:0:b0:5ce:b7c5:4b3c with SMTP id
- 4fb4d7f45d1cf-5cefbcb8d85mr748450a12.5.1731008416865; Thu, 07 Nov 2024
- 11:40:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kLLQjJsu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8044CC4CECC;
+	Thu,  7 Nov 2024 22:33:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731018801;
+	bh=u+y+ZgnzSc1JBFX0IBWulkzQvEr1r5XByDl3smbKDig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kLLQjJsu9fyqP8yzMFHBWd5h5WM1jNHoZXNwdDGFgsG3Vd7u1wj2XANhEwRes0GWU
+	 YoqCc5J+/7r2hYKc7JR/ZtEn3JeqA2orhLEFcZAVUcBGyMmMMLnGgE5XM70EFeu3Gw
+	 iktSCrppCV7agn9jxuD6YN2xxrMiHZFiJbxWqp9/jkbGQPRuh9ukrdBuSZXnFxBLVy
+	 sG/cngVuAEsKTbwAG0+n4rb7Q1DS7r/+IHP0nmK2dxQd19hyIhDqf1HlooLqcCOPb1
+	 L0WUD0s2uP7NirQbhLF3So9usIuX3ReuVM9bJ25Owkey9CxcdazXidspl1yWJTv2ss
+	 0lKimBvWDHZBQ==
+Date: Thu, 7 Nov 2024 14:33:20 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	petr.pavlu@suse.com, da.gomez@samsung.com, masahiroy@kernel.org,
+	deller@gmx.de, linux-arch@vger.kernel.org,
+	live-patching@vger.kernel.org, kris.van.hees@oracle.com
+Subject: Re: [PATCH] tests/module/gen_test_kallsyms.sh: use 0 value for
+ variables
+Message-ID: <Zy1AMPMYfE5tKJYz@bombadil.infradead.org>
+References: <20241106002401.283517-1-mcgrof@kernel.org>
+ <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
- <20241030-extended-modversions-v8-1-93acdef62ce8@google.com>
- <874j4tcbhf.fsf@mpe.ellerman.id.au> <ZyMJaFcF4dTTzNgK@bombadil.infradead.org>
- <CAGSQo02H_RwtLpdt4E_LWKjzGvryY_7s20e4QhhA5B7N0LPxVA@mail.gmail.com> <ZyM2cHGaIT9vFOGq@bombadil.infradead.org>
-In-Reply-To: <ZyM2cHGaIT9vFOGq@bombadil.infradead.org>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Thu, 7 Nov 2024 11:40:05 -0800
-Message-ID: <CAGSQo00=H8iUAP9FwSxgT3kdBmBrzsdWqA0kh5f_5FsBLxyBUQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/3] modules: Support extended MODVERSIONS info
-To: Luis Chamberlain <mcgrof@kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	Lucas De Marchi <lucas.de.marchi@gmail.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKueDJuAz30=Wat5D1-V9eYzAbP7wAY61Fgzw_KZJcHWiSw@mail.gmail.com>
 
-Adding Lucas DeMarchi to the thread after voicing an interest in the
-modpost patch.
-
-On Thu, Oct 31, 2024 at 12:49=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Wed, Oct 30, 2024 at 10:06:12PM -0700, Matthew Maurer wrote:
-> > On Wed, Oct 30, 2024 at 9:37=E2=80=AFPM Luis Chamberlain <mcgrof@kernel=
-.org> wrote:
-> > >
-> > > On Thu, Oct 31, 2024 at 12:22:36PM +1100, Michael Ellerman wrote:
-> > > > Matthew Maurer <mmaurer@google.com> writes:
-> > > > > Adds a new format for MODVERSIONS which stores each field in a se=
-parate
-> > > > > ELF section. This initially adds support for variable length name=
-s, but
-> > > > > could later be used to add additional fields to MODVERSIONS in a
-> > > > > backwards compatible way if needed. Any new fields will be ignore=
-d by
-> > > > > old user tooling, unlike the current format where user tooling ca=
-nnot
-> > > > > tolerate adjustments to the format (for example making the name f=
-ield
-> > > > > longer).
-> > > > >
-> > > > > Since PPC munges its version records to strip leading dots, we re=
-produce
-> > > > > the munging for the new format. Other architectures do not appear=
- to
-> > > > > have architecture-specific usage of this information.
-> > > > >
-> > > > > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > > > > ---
-> > > > >  arch/powerpc/kernel/module_64.c | 24 ++++++++++-
-> > > >
-> > > > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-> > >
-> > > Michael, Matthew, why make everyone deal with this instead of just
-> > > making this an arch thing and ppc would be the only one doing it?
-> > >
-> > >   Luis
-> > >
+On Wed, Nov 06, 2024 at 06:46:48PM +0000, Sami Tolvanen wrote:
+> Hi Luis,
+> 
+> On Wed, Nov 6, 2024 at 12:24 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > >
-> > I'm not sure I understand - the PPC changes are in an arch-specific
-> > directory, and triggered through the arch-implemented callback
-> > mod_frob_arch_sections. What would you like done to make it more of an
-> > arch-thing?
->
-> Sorry, yes, I see that now, that's what I get for late night patch
-> review. Nevermidn, this all looks good to me now.
->
->   Luis
+> > Use 0 for the values as we use them for the return value on init
+> > to keep the test modules simple. This fixes a splat reported
+> >
+> > do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it should follow 0/-E convention
+> > do_init_module: loading module anyway...
+> > CPU: 5 UID: 0 PID: 1873 Comm: modprobe Not tainted 6.12.0-rc3+ #4
+> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/2024
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x56/0x80
+> >  do_init_module.cold+0x21/0x26
+> >  init_module_from_file+0x88/0xf0
+> >  idempotent_init_module+0x108/0x300
+> >  __x64_sys_finit_module+0x5a/0xb0
+> >  do_syscall_64+0x4b/0x110
+> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > RIP: 0033:0x7f4f3a718839
+> > Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff>
+> > RSP: 002b:00007fff97d1a9e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> > RAX: ffffffffffffffda RBX: 000055b94001ab90 RCX: 00007f4f3a718839
+> > RDX: 0000000000000000 RSI: 000055b910e68a10 RDI: 0000000000000004
+> > RBP: 0000000000000000 R08: 00007f4f3a7f1b20 R09: 000055b94001c5b0
+> > R10: 0000000000000040 R11: 0000000000000246 R12: 000055b910e68a10
+> > R13: 0000000000040000 R14: 000055b94001ad60 R15: 0000000000000000
+> >  </TASK>
+> > do_init_module: 'test_kallsyms_b'->init suspiciously returned 255, it should follow 0/-E convention
+> > do_init_module: loading module anyway...
+> > CPU: 1 UID: 0 PID: 1884 Comm: modprobe Not tainted 6.12.0-rc3+ #4
+> > Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 2024.08-1 09/18/2024
+> > Call Trace:
+> >  <TASK>
+> >  dump_stack_lvl+0x56/0x80
+> >  do_init_module.cold+0x21/0x26
+> >  init_module_from_file+0x88/0xf0
+> >  idempotent_init_module+0x108/0x300
+> >  __x64_sys_finit_module+0x5a/0xb0
+> >  do_syscall_64+0x4b/0x110
+> >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > RIP: 0033:0x7ffaa5d18839
+> >
+> > Reported-by: Sami Tolvanen <samitolvanen@google.com>
+> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> > ---
+> >  lib/tests/module/gen_test_kallsyms.sh | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/lib/tests/module/gen_test_kallsyms.sh b/lib/tests/module/gen_test_kallsyms.sh
+> > index ae5966f1f904..3f2c626350ad 100755
+> > --- a/lib/tests/module/gen_test_kallsyms.sh
+> > +++ b/lib/tests/module/gen_test_kallsyms.sh
+> > @@ -32,7 +32,7 @@ gen_num_syms()
+> >         PREFIX=$1
+> >         NUM=$2
+> >         for i in $(seq 1 $NUM); do
+> > -               printf "int auto_test_%s_%010d = 0xff;\n" $PREFIX $i
+> > +               printf "int auto_test_%s_%010d = 0;\n" $PREFIX $i
+> >                 printf "EXPORT_SYMBOL_GPL(auto_test_%s_%010d);\n" $PREFIX $i
+> >         done
+> >         echo
+> 
+> Looks good to me. Thanks!
+> 
+> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+
+Merged, thanks.
+
+  Luis
