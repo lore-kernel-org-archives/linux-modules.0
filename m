@@ -1,57 +1,57 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F34217448
-	for <linux-modules@vger.kernel.org>; Thu,  7 Nov 2024 19:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D84421766D
+	for <linux-modules@vger.kernel.org>; Thu,  7 Nov 2024 19:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731008284; cv=none; b=tXC+xUpwakM1K0VX259YdZ5Mc+J+lHWrb1MuLAuFrxYKHw8hysxNWf6518C2Mdj/uyS7AIfom99vnck+ERu100eWS6YheOIz5K+ZNbgXxMErsT+tsNuEKnD9oG0PwFk6ot+CSGDwb6oxNRPUwsw/AGApZcNGPx4ImZ+QSqlqST0=
+	t=1731008420; cv=none; b=stPFM6AGYm80fZHuLKaLkvyT8cIxABBQlw2sFncmsqOMhj1VmFtTcOxfNGbi6M0YDanolDxV7Zyo60CqL0vjdemzcoPXgvgEbZYmsAqKPDAUd5arGHl4Fh5MFo7XIsN0+m8NfpB6EJE8hxzGHZIlGeseUtnDjcP1US4PKf/UOis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731008284; c=relaxed/simple;
-	bh=OQrBkqQtsvfo3sVV9/HnVk7awZnGrUeB4xmdydHvXaA=;
+	s=arc-20240116; t=1731008420; c=relaxed/simple;
+	bh=Hqpenv6p1LWFDwIjrHP2BsQXKPVjR2b5HZRJ4ZqChTY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bAwKGKWFsi9vZeS3o9YLM0Fd5+A/4yTvNPKb3vMRMbvUxKXxKBdSJdCdSQkO1ahRda291tSmvXqyigS1w2yLCj1iOCScdZ2yqBQq8djw3GKafkf01rw59fjtetHBM7wl2Zvey598BVkw6frO0XJ/mSdu3JKdmAuL/3HBe3nhQXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ikLmlUL8; arc=none smtp.client-ip=209.85.167.41
+	 To:Cc:Content-Type; b=SYMU3aue78hwRol1Gzjbrg9eCn1IUEERBSGUiOpZV8G0KW5FajATMkr4MZyzs5eD8SSbFGc4JdmLOpGxsrp0H5R0iJ4o2hjRJtAOjQYYRCU8uTytxhkvM1QCdHKQXQuz8umXtm6ZXlUaf0iFOAmjRMXr8eAPUsLlK29ZJe+zZDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zhgwGXl3; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ikLmlUL8"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-539e19d8c41so4700e87.0
-        for <linux-modules@vger.kernel.org>; Thu, 07 Nov 2024 11:38:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zhgwGXl3"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c934b2c991so3759a12.0
+        for <linux-modules@vger.kernel.org>; Thu, 07 Nov 2024 11:40:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731008281; x=1731613081; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731008417; x=1731613217; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HOj8LMAazYpTjfu5mrOLk8RCDPLc0j+wCQq6uBtbnSs=;
-        b=ikLmlUL8cMVInuKhbMVsSZ6FYcRVXAPcqIa6caRCNNnnltidGQfGESUsfQi9R/0MMZ
-         07dyYLEBiy0kOaL3osXflyrNIyTPUeHq+eF20jKcEeSJ8N8LT2klLl0+PCwPGMum1bSw
-         ox6o2/VEtFjgG6U44kaxHuWOPNbYC4ApJ7FHbKHEziOsWdL0OoemeNXqyNpqHRjeEgeA
-         zZhK2ZDSSaEWXdnevPUOsS2obHBPyktma3j5Jg/TZVt0s8ahkEBmxUWAXJ3PeFGKJW6A
-         ry1qNWnCym5xjGHdgci4hYYfTXKR7HaaZp9O+9Q8GpyhqWB6ZteGbLhxROB3fpF4794a
-         q5Pg==
+        bh=nd/75cbpPjgH2M9LbK7DZEh2TDCTCcgqhG32wv/Y+KM=;
+        b=zhgwGXl3wArw+w/R+l2xwrB7BtISB3OVqwvwQb25nE3DEQQIzxXLJAeaXnBIey8KEm
+         QGhhbyxjo7IFQqdJsmCPANVISzFCfdy/I4FKQq5PF8Hp5zl7BtPb7CC/vekWhkIMj2zg
+         D/bFPg/XZzFy+MXHR+ERBnN4gzFH4VWYfMEG7Otcl4p67K08Mm9tusAY+PPnDthmNoRA
+         P9kyYFgFkzTO2y8yQa6Xy7ikMrKqZvAbvVftR6SDSyCcqP8Fmo1R1ehIlNnMNDy+EODS
+         qzuHEwueFO+yBz6cxzUoDlpWPxo79ZjCFP27QRsyDckDofFAGrQeeIlKwD9VkPvXDCKS
+         Cluw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731008281; x=1731613081;
+        d=1e100.net; s=20230601; t=1731008417; x=1731613217;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HOj8LMAazYpTjfu5mrOLk8RCDPLc0j+wCQq6uBtbnSs=;
-        b=A/dlZBpLsh9T6A5iyBjfa6fL6wH27yCdxlSdXqTf3OLkPWGazK2BxJd7+bh0XU53Ay
-         F35kiD5cTbaxtoQD3PuQQADU+/D/88FvIPdyZtAzBJx0gT52oKN5ZrXslOgndX6LevME
-         FD5Lh9kfWybHuMDc/5CGeROFZdk4aTHJt9Y9talyPT7rz6Eikk41fB/7aeC6knposQBG
-         TZPE93IZG6Y7ELx6+hCu0YfRcsVi3VUcLiWgnnInO5ixjvMzIPcEWnhnv9O/N+VS7Hub
-         ygWc6N8dmaUWKhklEf2U11IkVBVjAqalBEOdHc2Slb3XJlK+Xtg0F/aiijqPenRJ1KRZ
-         HYwA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXaakEO20AdevdRMHEv575k+4IZGLFXv9v38OZ1j8aEGQn2sN1/aa4vyFgKtnDgIpTqemjJXmk0OyIse7S@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb+fXIvZqCeLkgIyKVwJ/YC3Ep1efCRWX/vR91bq8M+h5bCT8X
-	KXkyUE1RG3RzFLwKa36bCN004elT2ylmDNtX9CaBG8NBD54t8ElAImyC3vWwz4TNjd5yrAyAeOy
-	H4CqIL4oEQ+xBPCPb08taNEr1ITBf93G6onyC
-X-Gm-Gg: ASbGncu1VKesvZb5EVUX/LmXv7/j5hWAA3iW963RBGHIwgz1avsXQXHdO7497vET6Ki
-	r1wjlwucYFs0DkI7MaO71UAcNK6ipaa4gXS/qJEkUgj4bSv0deKOzXT4YfcniRA==
-X-Google-Smtp-Source: AGHT+IGExvGXqzYeYDQ4rDspkwVFg2PIUqBXwcbJS7a2hiTewgKwW0pQmiUCGPl4ZzxqFZQAq3zzHYeO+DEmkcjl1iI=
-X-Received: by 2002:ac2:4e44:0:b0:53c:7652:6c97 with SMTP id
- 2adb3069b0e04-53d811f1d2cmr340579e87.2.1731008280784; Thu, 07 Nov 2024
- 11:38:00 -0800 (PST)
+        bh=nd/75cbpPjgH2M9LbK7DZEh2TDCTCcgqhG32wv/Y+KM=;
+        b=dBQ8z3zJvv3Lbt316aBV5uCA/ImxcJlVRbOjCCiX3kPN0LwP+nJd61JfW4fQobxOR2
+         au02EGOs9bTh/XiMhlD8aZ/VXZ0/ATEKWbIuxGJHC6N5pxATFeDumKBcgXYW6nGfgL48
+         0B/WVPGhBdUpMN6NLYsNqK0W2coAtjqOqvx2BR8hTEW8oLmOmTgQYYMkOoDepWGgBBbV
+         OEK11lS3C6DAsWGCP2f2H0SIS1kRJqEhlyMDmz3OErIpoq1waFdeiVW1qZM/uXw+s4ik
+         CB4SpzQaXWoB5SCSe1ethquKoWcxBtWLr7lRPJ5ul4isFOAZ3WkCqQC2G5jE9z0qmpl8
+         Kkyg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYCtv1whUa+DIZ3Q0pofGa9FHgebsL7TRxbhC6XQItIeFtj9ZEu+EdcjlcA3eG55um/2GN+amet7BytunR@vger.kernel.org
+X-Gm-Message-State: AOJu0YyD7mkkxLr12k67O14zQSaR1o1kabmykJ8qTuRI+RnXJtKgtLVK
+	h/1UWjSlEmzzOk7At9FsoUjfgmWCnOWxhKi11XKz+gnZwGecT2U81LBa7aQavwJo/oFHf4DqpAY
+	JvEDsE4nZ3BnogpBPovDGmxXxIJ5R+5782LNv
+X-Gm-Gg: ASbGncsz6XhJjWBOUFCB4UVrmj24zsjnbiBZO3BGDkrFKYIk9kv7cnGWQ783mHNYxZk
+	bWrJSAn1fA+2YJzoGpmfjctCtoYwuoxV2ul4qjDdT9zBMazDrRSkLC7XtXXi+7w==
+X-Google-Smtp-Source: AGHT+IEBiwFNQfuoAxFiltxJ2hrjOfio8RnmCYl6hN2gWLInsahzd3pu0ISjskuePHQ29yF2SOFAso1eK087KsDFWnI=
+X-Received: by 2002:aa7:c846:0:b0:5ce:b7c5:4b3c with SMTP id
+ 4fb4d7f45d1cf-5cefbcb8d85mr748450a12.5.1731008416865; Thu, 07 Nov 2024
+ 11:40:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,19 +59,17 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
- <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
- <ZyNr--iMz_6Fj4yq@bombadil.infradead.org> <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
- <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org> <CAGSQo02uDZ5QoRMPOn=3Fa9g5d+VPfKW-vmSsS2H+pOdPYCBFw@mail.gmail.com>
- <ZyrRYUD0K1f7SwWg@bombadil.infradead.org> <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
- <hs5fxluchiconuonhziu3qh2ol5bsdxva3cuny2mit4i3equzt@ieueiius5x4w>
-In-Reply-To: <hs5fxluchiconuonhziu3qh2ol5bsdxva3cuny2mit4i3equzt@ieueiius5x4w>
+ <20241030-extended-modversions-v8-1-93acdef62ce8@google.com>
+ <874j4tcbhf.fsf@mpe.ellerman.id.au> <ZyMJaFcF4dTTzNgK@bombadil.infradead.org>
+ <CAGSQo02H_RwtLpdt4E_LWKjzGvryY_7s20e4QhhA5B7N0LPxVA@mail.gmail.com> <ZyM2cHGaIT9vFOGq@bombadil.infradead.org>
+In-Reply-To: <ZyM2cHGaIT9vFOGq@bombadil.infradead.org>
 From: Matthew Maurer <mmaurer@google.com>
-Date: Thu, 7 Nov 2024 11:37:49 -0800
-Message-ID: <CAGSQo00H+K-Sr1F37N27RutWthYRd0o4QbP_Z-kfWwb65L+Kxw@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+Date: Thu, 7 Nov 2024 11:40:05 -0800
+Message-ID: <CAGSQo00=H8iUAP9FwSxgT3kdBmBrzsdWqA0kh5f_5FsBLxyBUQ@mail.gmail.com>
+Subject: Re: [PATCH v8 1/3] modules: Support extended MODVERSIONS info
+To: Luis Chamberlain <mcgrof@kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>, 
+	Lucas De Marchi <lucas.de.marchi@gmail.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
 	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
 	Madhavan Srinivasan <maddy@linux.ibm.com>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
@@ -86,62 +84,56 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Lucas De Marchi <lucas.de.marchi@gmail
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 6, 2024 at 10:27=E2=80=AFPM Lucas De Marchi
-<lucas.demarchi@intel.com> wrote:
+Adding Lucas DeMarchi to the thread after voicing an interest in the
+modpost patch.
+
+On Thu, Oct 31, 2024 at 12:49=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.or=
+g> wrote:
 >
-> On Wed, Nov 06, 2024 at 02:19:38PM -0800, Matthew Maurer wrote:
-> >>
-> >> > If booted against an old kernel, it will
-> >> > behave as though there is no modversions information.
-> >>
-> >> Huh? This I don't get. If you have the new libkmod and boot
-> >> an old kernel, that should just not break becauase well, long
-> >> symbols were not ever supported properly anyway, so no regression.
+> On Wed, Oct 30, 2024 at 10:06:12PM -0700, Matthew Maurer wrote:
+> > On Wed, Oct 30, 2024 at 9:37=E2=80=AFPM Luis Chamberlain <mcgrof@kernel=
+.org> wrote:
+> > >
+> > > On Thu, Oct 31, 2024 at 12:22:36PM +1100, Michael Ellerman wrote:
+> > > > Matthew Maurer <mmaurer@google.com> writes:
+> > > > > Adds a new format for MODVERSIONS which stores each field in a se=
+parate
+> > > > > ELF section. This initially adds support for variable length name=
+s, but
+> > > > > could later be used to add additional fields to MODVERSIONS in a
+> > > > > backwards compatible way if needed. Any new fields will be ignore=
+d by
+> > > > > old user tooling, unlike the current format where user tooling ca=
+nnot
+> > > > > tolerate adjustments to the format (for example making the name f=
+ield
+> > > > > longer).
+> > > > >
+> > > > > Since PPC munges its version records to strip leading dots, we re=
+produce
+> > > > > the munging for the new format. Other architectures do not appear=
+ to
+> > > > > have architecture-specific usage of this information.
+> > > > >
+> > > > > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+> > > > > Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> > > > > ---
+> > > > >  arch/powerpc/kernel/module_64.c | 24 ++++++++++-
+> > > >
+> > > > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+> > >
+> > > Michael, Matthew, why make everyone deal with this instead of just
+> > > making this an arch thing and ppc would be the only one doing it?
+> > >
+> > >   Luis
+> > >
 > >
-> >Specifically, if you set NO_BASIC_MODVERSIONS, build a module, and
+> > I'm not sure I understand - the PPC changes are in an arch-specific
+> > directory, and triggered through the arch-implemented callback
+> > mod_frob_arch_sections. What would you like done to make it more of an
+> > arch-thing?
 >
-> how are you setting NO_BASIC_MODVERSIONS and loading it in a kernel
-> that still doesn't have that, i.e. before EXTENDED_MODVERSIONS?
-
-That action would involve e.g. building a module against a 6.13 series
-kernel with NO_BASIC_MODVERSIONS and trying insmod it on a 6.12 series
-kernel. I know it's not supported, I was just trying to describe the
-full matrix of what would happen differently with the proposed
-additional config flag.
-
+> Sorry, yes, I see that now, that's what I get for late night patch
+> review. Nevermidn, this all looks good to me now.
 >
-> Please Cc me on the format change and if possible submit the libkmod
-> support.
-
-It seems awkward to adjust kmod to support a format that still hasn't
-been accepted to the kernel. I can send kmod patches to support it,
-but since this patch series hasn't been accepted yet, it seemed a bit
-premature.
-
-I'll explicitly add you to the format change (patch before this in the
-series) and add you to the whole series in v9
-
->
-> thanks
-> Lucas De Marchi
->
-> >then load said module with a kernel *before* EXTENDED_MODVERSIONS
-> >existed, it will see no modversion info on the module to check. This
-> >will be true regardless of symbol length.
-> >
-> >>
-> >> I'm not quite sure I understood your last comment here though,
-> >> can you clarify what you meant?
-> >>
-> >> Anyway, so now that this is all cleared up, the next question I have
-> >> is, let's compare a NO_BASIC_MODVERSIONS world now, given that the
-> >> userspace requirements aren't large at all, what actual benefits does
-> >> using this new extended mod versions have? Why wouldn't a distro end
-> >> up preferring this for say a future release for all modules?
-> >
-> >I think a distro will end up preferring using this for all modules,
-> >but was intending to put both in for a transitional period until the
-> >new format was more accepted.
-> >
-> >>
-> >>   Luis
+>   Luis
