@@ -1,41 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09508383;
-	Wed,  6 Nov 2024 23:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81D610F9;
+	Thu,  7 Nov 2024 05:39:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730936526; cv=none; b=qKToZjfEAlpkQ1ovQjBOxeh2zpcm0DlW6Y3KqwPCMYM8aNZoTjdeLpVNUGIi/3JSCHankiu20j4Nyf9+Pro3ZM5z94HNDPVl62agy216JDW0B73+KxCtLTwz9ExHxQWM0PXd68iMzX2s27JTHOkDdzsHxSSi8berExnverkRHIc=
+	t=1730957949; cv=none; b=BfVF3lOuZWx4NQIDzseT4dQVUzG5Y91/MFgfxNxp5g6DuFhh7UkeTEu1pUCrQlKfIfPrnP+MjHZz7bKAwaqL7x4A45wWfpwzV2w94NEr4DXicH9SctlxpzAPKjQinYgIxGghXpzCJBcbsWdBN7pH6eOu80CJO5uRKfMVWS0/LL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730936526; c=relaxed/simple;
-	bh=kwrvRtpnL9wQxwLPaB3tUfEYfC0qsi4v9251ehrqVeQ=;
+	s=arc-20240116; t=1730957949; c=relaxed/simple;
+	bh=TCCpGBshBu+THqy+5WrdgDzMl1x45RUuHcpz16sYwU8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PD4xv17BXDghJNDpHEr8L5ZO64hlZ0NhL99jb9lB5mJL3rPcbCHI9behQkA06L2Lui110aue4O7BpGu+/lMKdFSzSgT+VFINgdYKd4FHU0Rs41LnCqMRQyvQwmX5hq+vJQfbQMJVjKO+YwFAlfoxNYTUdEm8ensbd7OLzwtNck4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XNcDhYDU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=CrU/3+NjMubsFonjEONu2tPLt1e4nkbojEKwb6LLzQw28CKD/h8Ef3gc4vSWlLHoeOpBgflr5V26z8hpR4LVqVSBZouT06lX8T2sFJr9D6pR++vYCKz3rvS9LO+JD48lwYVpXN1AvWZ7RSfV1T0sk0LFXdNB2bG1SoLqOsXod+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jaHiKwCc; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XNcDhYDU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B36CC4CEC6;
-	Wed,  6 Nov 2024 23:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730936525;
-	bh=kwrvRtpnL9wQxwLPaB3tUfEYfC0qsi4v9251ehrqVeQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XNcDhYDUdSPyfOdgNO8jvSiKfDe8h+ARB1B6QxdNU03dkrPGlTLnzCvdRheiGYXx1
-	 B0fy/y+1nCzSja3bozoUAkxbMghhz24mKLBCO4D+eUvdFDm7T9bDj+0ttPwPCxyXbe
-	 XI75HpGg+mXySsz+X8F+xGdbTewJAyk8FcjC3aEeB/cv2I1xb1XZaiA53EWRr/Et9H
-	 1UA2V4JDnDklDyVod1sHvdZnBvd+Z3qRDqKsyhqblgtYa7iBUPbr4uz8fFxZi5m3gX
-	 yKEr18QDqBxO3Kj4sWi0BdvCsFTzEmoCDVWPgn9ptfS0Mchoikhs3uTgGYj0RsbjPQ
-	 DAXgeyF+NcTpA==
-Date: Wed, 6 Nov 2024 15:42:03 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jaHiKwCc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=ty6m/yYMpkl25OURhK1ou6hUG+x4YfrCyt8WHhmSpBk=; b=jaHiKwCcngJlHsLZuiPuUSP11x
+	oehUQ/1Sevm5QohHCbGCni/Ks2Li3cj4a6Nli2gR/ADN3kw7HU7Xter/Wz1juTZ0fzaoiuw2ww4DE
+	dnufpjlPsYfTh5qv0IMMUna7dpnJr77sRJBmWjxg1VqaWG4upttdSSRS4eBGtIVQv5LaX+27cuIj/
+	s3pjYp3KNbLKNFW9t1A2SWNMwHLoULy4+IKnfqGtI7HvDQxpmvyy+uZ8IeWr+nvoxIMtc1ajxykkI
+	auPpPicJXre0r4yhrQp1SH4+FTluFV3pN3DrgDtm6MAqnSo/qLntVCz9Afq7leeBdtPZWSX1C+9Uh
+	JnEVj8Vg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1t8vET-00000005jAK-27pp;
+	Thu, 07 Nov 2024 05:39:01 +0000
+Date: Wed, 6 Nov 2024 21:39:01 -0800
+From: Christoph Hellwig <hch@infradead.org>
 To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
 	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
 	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
 	hch@infradead.org, gregkh@linuxfoundation.org
 Subject: Re: [RFC] module: Strict per-modname namespaces
-Message-ID: <Zyv-yxClglfwvmUa@bombadil.infradead.org>
+Message-ID: <ZyxSdayBstBGhAeO@infradead.org>
 References: <20241106190240.GR10375@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -46,80 +49,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20241106190240.GR10375@noisy.programming.kicks-ass.net>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
 On Wed, Nov 06, 2024 at 08:02:40PM +0100, Peter Zijlstra wrote:
-> Hi,
-> 
-> I've been wanting $topic for a while, and having just stumbled into the
-> whole namespace thing by accident, I figured I'd give it a go, most if
-> the hard parts seem to have already been done.
-
-Neat, hch suggested something similar a while back
-
-https://lore.kernel.org/all/ZCIiBHyrzDoTJPXT@bombadil.infradead.org/
-
 > It reserves and disallows imports on any "MODULE_${name}" namespace,
 > while it implicitly adds the same namespace to every module.
 
-That's simple enough, I like it.
+Ah nice.  This is pretty similar to what I want and had badly prototyped
+a while ago.
 
 > This allows exports targeted at specific modules and no others -- one
 > random example included. I've hated the various kvm exports we've had
 > for a while, and strictly limiting them to the kvm module helps
 > alleviate some abuse potential.
 
-Yeah we also want:
+And this was one of the targets on my list.  Specific kunits tests
+would be another category.
 
-EXPORT_SYMBOL_NS_GPL(bdev_disk_changed, MODULE_loop);
-EXPORT_SYMBOL_NS_GPL(bdev_disk_changed, MODULE_dasd_kmod);
+> +EXPORT_SYMBOL_NS_GPL(fpu_swap_kvm_fpstate, MODULE_kvm);
 
-But we might as well have EXPORT_SYMBOL_GPL_FOR() with the implied
-module list. We could then add just:
-
-
-EXPORT_SYMBOL_GPL_FOR(bdev_disk_changed, loop);
-
-But it would be nice to just also support this as well:
-
-EXPORT_SYMBOL_GPL_FOR(bdev_disk_changed, loop, dasd_kmod);
-
-That's possible perhaps something grotesque like this:
-
-#define _EXPORT_SYMBOL_GPL_FOR_EACH(name, module) EXPORT_SYMBOL_NS_GPL(name, MODULE_##module);
-
-#define _GET_MACRO(_1, _2, _3, _4, _5, NAME, ...) NAME
-
-#define _EXPORT_SYMBOL_GPL_FOR1(name, a) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, a)
-
-#define _EXPORT_SYMBOL_GPL_FOR2(name, a, b) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, a) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, b)
-
-#define _EXPORT_SYMBOL_GPL_FOR3(name, a, b, c) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, a) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, b) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, c)
-
-#define _EXPORT_SYMBOL_GPL_FOR4(name, a, b, c, d) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, a) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, b) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, c) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, d)
-
-#define _EXPORT_SYMBOL_GPL_FOR5(name, a, b, c, d, e) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, a) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, b) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, c) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, d) \
-    _EXPORT_SYMBOL_GPL_FOR_EACH(name, e)
-
-#define EXPORT_SYMBOL_GPL_FOR(name, ...) \
-    _GET_MACRO(__VA_ARGS__, \
-               _EXPORT_SYMBOL_GPL_FOR5, \
-               _EXPORT_SYMBOL_GPL_FOR4, \
-               _EXPORT_SYMBOL_GPL_FOR3, \
-               _EXPORT_SYMBOL_GPL_FOR2, \
-               _EXPORT_SYMBOL_GPL_FOR1)(name, __VA_ARGS__)
-
-  Luis
+I would have preferred a syntax that has the MODULE in the export macro
+instead of the namespace, but I do care more about actually having the
+functionality, and this seems way simpler than what I had.
