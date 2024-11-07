@@ -1,137 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1831D3644;
-	Thu,  7 Nov 2024 08:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E40F20E32F;
+	Thu,  7 Nov 2024 11:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730967215; cv=none; b=OE2PR9WnUdaxqUStidnkg0FouZwul7YKrcn5y9ntC+gFcbwrBY9oj0KSa0srtTzvMGbE6HMo1cm7KSMnmSHAH0L9qnPDYqViD2sN293eDguAAJEdtFuPdtIYw8KK7amRkwVOLGUqHMaY+H63C5JdGP96I0U5VNXctuWfLYVzy24=
+	t=1730980713; cv=none; b=gMXSK1TY52FGRtC2kUV1yLH0Bt4Ulc0DlgSgW2xVm35Z92MrjcuLrdk3ZvoVcvVY255HeyP3/8+SEoTegSLb69tm7dCKF4v3jw8n5YAE0LZ+l5B9A5Ke/LBp2V08WfUeUt2BuTZ6ZS7/3bePdSlGpZfTxvgoZEVxEOeelQWsnGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730967215; c=relaxed/simple;
-	bh=4Gp7NgkH2bJqCGngPvp+IQbfoaYJHJZsWZ4irQEDe6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fiMro7a7m9ZRVgn6tuXzuoulmje0WaD+srg7tgGfEn735GtwLbPsHDNx/lAio102ddW0Hl0qhquk5OnocucCa49YCXs+30Xq9HyJATMbk63xarK8pXy8+KsvuL/iwLNpxGFAFTIZE21u+ytA4OS5OveG1sL3cX7gM2YUQkoM8mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjDE1G+w; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730980713; c=relaxed/simple;
+	bh=nw1lnGh2RJPeIABl3agOJj4u7ZuKcu4/NGAN2/31ULw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+tx8mv2zVAogQ9RYpyuBIW5uvR4aMiaIVTy5GUoobcCQC2N8q2QwNM0TTlnCXHfCzGEkX2PbtnM8eChabu3+ZGxpjXsiXAlipbNS7GPDXJ40mWT+8qSTeu0RT8uM6feOanSwxk42AA4Ro4DtDGitF1Sq8FQFOAVaFgJpvV//6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=C9xY9pxT; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjDE1G+w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 468D8C4AF0B;
-	Thu,  7 Nov 2024 08:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730967215;
-	bh=4Gp7NgkH2bJqCGngPvp+IQbfoaYJHJZsWZ4irQEDe6I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HjDE1G+wouJVjzLF35Az7/q9/wdoGFlBcnrVJcob1UJRYlnZSkCN1TWu3lrjlktCP
-	 py/7/BUKnrWa+KzxCY761dySmqFAWlYSO6Ep7ToyRwQTEUsYP+PZF3Cz89deNjcmCj
-	 jhskBCjBy11xyp5W10q/wWdErsFJaqv3RuFz93LBHGqF2W3yjgXtGH5EGLvCx0jhA6
-	 pdgenJRaclUsPBxz9r+5lkw/9wwXgbJzJlkDfTB7/gvrIls1JPRDeLRN+KbzoIqrte
-	 GB/d2qGfl/gvKP6WVgashaHTWQClnBbdOiBELJUKtmsCirwCqWOpgARi5Ozt9xm7iL
-	 bAR6MIs6BkT5Q==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2fb498a92f6so5384191fa.1;
-        Thu, 07 Nov 2024 00:13:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUmUGPgeN0Tod3IW5TyS3Ell5cSpZ29c0pTAG9rJypH1GpZ33M5V1TN0OMAl4nr05R/LYEn0hcFOKbAl3zVCw==@vger.kernel.org, AJvYcCVZMUcY6DK8iCkZ52bGSfb4JSbMa/0lLJSnIRYWz9PCZoC+BpvGYIakVIjrasVmsb3sSA0+OzLWHcgZd/lr@vger.kernel.org, AJvYcCXLO+ULt+jTU6rId1lkkF+13C+RkVXo81Pbe/ztI1L/wB4f2Pf4Xv5DVAXtzmWJeufxmR8qeQJLb1qmdjI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJHmXMSxHJ2xGsTUE6EjXJO5bYOU9iLquSUk8UYUH3vaH8/DaS
-	kd2e8GLbpfEE9b55EK478zeRB+S3oEcLdu1P3S4siGM3M12DZwjNGA+RSDFEis7TcGSPSZOPbnB
-	Rc0zSQiWEQscQcVZS/piqx+VBviI=
-X-Google-Smtp-Source: AGHT+IEfkbuZAVqhb0UlE9xN85OUJcL6GmdKeqptL1m9TrfR0DbuKvesnTUhsNiljX71+aAb4oqdMzx4yNNGkrkWdkk=
-X-Received: by 2002:a2e:b88d:0:b0:2fb:3d86:d932 with SMTP id
- 38308e7fff4ca-2fcbdfaea70mr218462241fa.12.1730967213878; Thu, 07 Nov 2024
- 00:13:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="C9xY9pxT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QeeeJ+pTNi3ecp0eZcHHlz3Esi2ELCMxUu1oqF99Rqk=; b=C9xY9pxTKJgMCVVwf7E9CW+MK3
+	8H71J0TmHgrjcQTh3Eyf4HNUIwb1Bi8uBQnxLwB/hkSw6VeqvEdCTe2cnQn3QaL9obN7W0YQVZOYs
+	XyW2HB2Fp2yz0wfdAP+JnYpU+RFgRLLH8fbj12L1uOhAUtaMcpIpXX3tzkaISiuJ1SMGZKHYYBtN7
+	TJ9O8qlslbDbR1v0CrZN6Mai7PNpojbEdaFtPBtfbMYmaxsQP7MXnWHDmG8jBT8/mcxl6zWjVOKC/
+	rVhFoMik8zKSuwU/x4ac8EKmzaiJ3DGzRRquRL4i4ra3m+ai57b9V61Oqq04f+a4+BMgWECn1x5jt
+	4c4mTeTA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t919Y-0000000C803-0Tpx;
+	Thu, 07 Nov 2024 11:58:20 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 364CB3006AB; Thu,  7 Nov 2024 12:58:19 +0100 (CET)
+Date: Thu, 7 Nov 2024 12:58:19 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
+	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org,
+	nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	hch@infradead.org, gregkh@linuxfoundation.org
+Subject: Re: [RFC] module: Strict per-modname namespaces
+Message-ID: <20241107115819.GA38786@noisy.programming.kicks-ass.net>
+References: <20241106190240.GR10375@noisy.programming.kicks-ass.net>
+ <CAK7LNAQ-wMTOaCuBab-JOfz4ggefNiEBmiKCUpuFncTqS0P3xQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241106190240.GR10375@noisy.programming.kicks-ass.net>
- <Zyv-yxClglfwvmUa@bombadil.infradead.org> <ZyxUTT8t28XUkk4x@infradead.org>
-In-Reply-To: <ZyxUTT8t28XUkk4x@infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 7 Nov 2024 17:12:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASDnB86Ds_dqBTxfHi=OfTXqu66U3v+4M_OEzKiK5Skdw@mail.gmail.com>
-Message-ID: <CAK7LNASDnB86Ds_dqBTxfHi=OfTXqu66U3v+4M_OEzKiK5Skdw@mail.gmail.com>
-Subject: Re: [RFC] module: Strict per-modname namespaces
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Peter Zijlstra <peterz@infradead.org>, x86@kernel.org, 
-	hpa@zytor.com, petr.pavlu@suse.com, samitolvanen@google.com, 
-	da.gomez@samsung.com, nathan@kernel.org, nicolas@fjasle.eu, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAQ-wMTOaCuBab-JOfz4ggefNiEBmiKCUpuFncTqS0P3xQ@mail.gmail.com>
 
-On Thu, Nov 7, 2024 at 2:46=E2=80=AFPM Christoph Hellwig <hch@infradead.org=
-> wrote:
->
-> On Wed, Nov 06, 2024 at 03:42:03PM -0800, Luis Chamberlain wrote:
-> > > This allows exports targeted at specific modules and no others -- one
-> > > random example included. I've hated the various kvm exports we've had
-> > > for a while, and strictly limiting them to the kvm module helps
-> > > alleviate some abuse potential.
+On Thu, Nov 07, 2024 at 04:55:46PM +0900, Masahiro Yamada wrote:
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 107393a8c48a..d1de3044ee03 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1553,8 +1553,19 @@ static void mod_set_crcs(struct module *mod)
+> >         free(buf);
+> >  }
 > >
-> > Yeah we also want:
+> > +static const char *mod_basename(const char *modname)
+> > +{
+> > +       const char *basename = strrchr(modname, '/');
+> > +       if (basename)
+> > +               basename++;
+> > +       else
+> > +               basename = modname;
+> > +       return basename;
+> > +}
+> > +
+> >  static void read_symbols(const char *modname)
+> >  {
+> > +       char module_namespace[MODULE_NAME_LEN + 8];
+> >         const char *symname;
+> >         char *version;
+> >         char *license;
+> > @@ -1586,12 +1597,16 @@ static void read_symbols(const char *modname)
+> >                         license = get_next_modinfo(&info, "license", license);
+> >                 }
 > >
-> > EXPORT_SYMBOL_NS_GPL(bdev_disk_changed, MODULE_loop);
-> > EXPORT_SYMBOL_NS_GPL(bdev_disk_changed, MODULE_dasd_kmod);
+> > -               namespace = get_modinfo(&info, "import_ns");
+> > -               while (namespace) {
+> > +               for (namespace = get_modinfo(&info, "import_ns"); namespace;
+> > +                    namespace = get_next_modinfo(&info, "import_ns", namespace)) {
+> 
+> The conversion from while() to for() is an unrelated change.
+> Split it to a separate patch if you want to change it.
+
+Yeah, at some point I had a break or continue in there I think, it
+didn't live. If you like I can keep it a split it out.
+
+> > +                       if (strstarts(namespace, "MODULE_"))
+> > +                               error("importing implicit module namespace: %s\n", namespace);
+> > +
+> >                         add_namespace(&mod->imported_namespaces, namespace);
+> > -                       namespace = get_next_modinfo(&info, "import_ns",
+> > -                                                    namespace);
+> >                 }
+> > +               snprintf(module_namespace, sizeof(module_namespace), "MODULE_%s",
+> > +                        mod_basename(mod->name));
+
+.. here ..
+
+> > +               add_namespace(&mod->imported_namespaces, module_namespace);
 > >
-> > But we might as well have EXPORT_SYMBOL_GPL_FOR() with the implied
-> > module list. We could then add just:
+> >                 if (extra_warn && !get_modinfo(&info, "description"))
+> >                         warn("missing MODULE_DESCRIPTION() in %s\n", modname);
+> > @@ -1700,11 +1715,7 @@ static void check_exports(struct module *mod)
+> >                 s->crc_valid = exp->crc_valid;
+> >                 s->crc = exp->crc;
 > >
-> >
-> > EXPORT_SYMBOL_GPL_FOR(bdev_disk_changed, loop);
-> >
-> > But it would be nice to just also support this as well:
-> >
-> > EXPORT_SYMBOL_GPL_FOR(bdev_disk_changed, loop, dasd_kmod);
->
-> Parsing a variable length list in a single macro tends to be a bit
-> of a pain, and I don't think there is much benefit.  Most of the cases
-> should be exactly one module.  If we can cover the small uses of
-> multiple uses with multiple exports I think its perfectly fine, and if
-> we can't cover it at all I can probably live with that aswell.
->
+> > -               basename = strrchr(mod->name, '/');
+> > -               if (basename)
+> > -                       basename++;
+> > -               else
+> > -                       basename = mod->name;
+> > +               basename = mod_basename(mod->name);
+> 
+> This is an unrelated change.
 
-Perhaps, the namespace argument can be a string.
+Hardly unrelated, I added a second usage above. So you're saying I
+should've just copy pasted the whole thing and then it would've been
+fine?
 
-EXPORT_SYMBOL_GPL_FOR(bdev_disk_changed, "loop,dasd_kmos");
+> So, it should be split into a separate prerequisite patch,
+> something like, "modpost: introduce mod_basename() helper"
 
-If a symbol is intended for particular subsystem drivers,
-maybe, we can support a wildcard.
+Well, I can...
 
-/*
- * foo_register and foo_unregister can be used by
- * modules names "foo-*".
- */
-EXPORT_SYMBOL_GPL_FOR(foo_register, "foo-*");
-EXPORT_SYMBOL_GPL_FOR(foo_unregister, "foo-*");
-
-
-
-
-
-Commit d143b9db8069f0e2a0fa34484e806a55a0dd4855
-revealed a bare namespace string was a bad idea.
-
-With EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE)
-we do not know if "SPI_DW_CORE" is really a namespace string, or
-replaced with another string by macro expansions.
-
-
-With EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, "SPI_DW_CORE")
-we clearly know  "SPI_DW_CORE" is a namespace string.
-
-
-https://lore.kernel.org/lkml/Ymltn72chRkV4P83@kroah.com/T/
-
-
-
-> > > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, "SPI_DW_CORE")
-> > >
-> > >    is much much better than:
-> > >
-> > > EXPORT_SYMBOL_NS_GPL(dw_spi_resume_host, SPI_DW_CORE)
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+Anyway, let me see about doing that whole ',' parsing thing people seem
+to want.
