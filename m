@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA9086250;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648A112EBE7;
 	Fri,  8 Nov 2024 16:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731082348; cv=none; b=h0OyNUNT/QUyT4RJQ/rb3xc29WWcq8fOt38fsgWslkfcCYAxFs02vBmLZK10qJoIoPQHqZevRmnpHZTq39Y1LYoF4DMpTVxoZbjdclt1GIJZ9sAuOE8hAN8IbUlSuuXMLoZiBleSPUfHcmXVZRk5sz1FTOF3OsNW8q3zGLW+vEA=
+	t=1731082348; cv=none; b=Nw76tXZ4mrcEVLcvveHuULmQv5SkjMDnYgOaxwZu2YStsOTTpFgSvzmezIqnqKG/jePj86nN9Kv0dYDCeuh77YxFmNwgaKVnZvp8yWypbzxcCd24afW5KAw7h2U5O8fjJI8b99gJDFMfkUGVpL/Xx7pGuibN7o9hlfTj4m5MOUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731082348; c=relaxed/simple;
-	bh=1d5ON2PggbcA+/anVU20HTNwni2NHoWKO08BLOoL/G8=;
+	bh=y7UEdgJZNHGbfohT5ewpxC1rRkwrbwYbdFePqHEeR/U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Mi6W1HzqkiTzQiAQ4tpm6fghjsJBRjX45gz8BoD7GneRfYa8c7SqOBJ4TSQvKbsUPFJbpI6uly94YhDZCEGsUH0W2J5CopP2e1q4cy7o0zQxQJa3DhhJq/sdYD551jfqsjt9u5GS/lpdtQ9PJ0tla4JR8Jw75/zpHLfu6sQkRZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAQQTFdN; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=clbzGr8k0bFgjkLR/1Lu01Shsdn760I/8pDMZOFkJWNPsuKMW2KSeg8BRMvM/vnbgGwslreOpv8KunmreQmPzLk3YmKYIuZDfZLMD4Wng7yjTDD/svWpXTXeX68GmZYmUMg1nuFenofDofSqUCviWnwvt7V5IJfRySEShgBRBcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uns91pKf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAQQTFdN"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E756AC4CECF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uns91pKf"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F07ABC4CED3;
 	Fri,  8 Nov 2024 16:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1731082348;
-	bh=1d5ON2PggbcA+/anVU20HTNwni2NHoWKO08BLOoL/G8=;
+	bh=y7UEdgJZNHGbfohT5ewpxC1rRkwrbwYbdFePqHEeR/U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=MAQQTFdNdtlVaHezPwwSZe+0ExgcyrBWlWmPkSx/oMSJx2tuC2JpulT/fukEY9Wy+
-	 L4E3w8FHjDuVILB4wjH5UpcrIhEAjY477n9MWrCq3/9ctGBFPC0wYzU5znOzPWszXd
-	 GcHwHyU/o5P9u97AOn/ID+VJ728KH8Cp5eKGUC+rK+e9mRpvvevaoqkDKaQY9xbblF
-	 0c5YbWfCdSh7wQ+2EyC5yKII4eHN2VKG00s4NghROFscOXCIGEO7wCYUSvu0tyC/cq
-	 hPTiio3soePhTexz6OSOj/AmoSh7DQ+TxMY1tXOSy1BNW+IcaeiL6ANbQvTFVAlQNw
-	 wt4jCuM1Mp2Dw==
+	b=uns91pKfBAA+OWnZ0+lPlcekTLocGV4CQPqWE040euOvglKYClL/+5azIQ2l6IGnU
+	 pFLB9E8wRoD02E5YsC/bPmgk6fAwzMyCvX18vY6tB1KfHp/nFqDRPWM4+RPiaXq4Kp
+	 FFtvOAoTHWl6eCcP9rGuMQm7zfZd8JYnnTWEIT4wMxTusZmZ4NCcop6PWrkN79ylxn
+	 MsIA+RN2oAU3iznLV8vf0D/AAYt9fRbYePlNqm+/eoIPzLbozqzI+k4TAK/+FCLw1X
+	 nDiNFRFTAkaTIEdtyFnHDX/OwH8t8hHrrv/qMTMBsDIrq3M6/Ke+hWOQX3gBnAbPMU
+	 RqH0s1HquHECQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5DC5D5C0FF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E64B6D5D69A;
 	Fri,  8 Nov 2024 16:12:27 +0000 (UTC)
 From: Daniel Gomez via B4 Relay <devnull+da.gomez.samsung.com@kernel.org>
-Date: Fri, 08 Nov 2024 17:12:14 +0100
-Subject: [PATCH RFC v3 2/4] module: avoid double ref drop on ro_after_init
- failure
+Date: Fri, 08 Nov 2024 17:12:15 +0100
+Subject: [PATCH RFC v3 3/4] module: update state and release reference
+ under lock
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241108-modules-ro_after_init-v3-2-6dd041b588a5@samsung.com>
+Message-Id: <20241108-modules-ro_after_init-v3-3-6dd041b588a5@samsung.com>
 References: <20241108-modules-ro_after_init-v3-0-6dd041b588a5@samsung.com>
 In-Reply-To: <20241108-modules-ro_after_init-v3-0-6dd041b588a5@samsung.com>
 To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
@@ -53,11 +53,11 @@ Cc: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
  linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731082346; l=1137;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1731082346; l=927;
  i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
- bh=9DltLcORsUZtMTYEZ5ybIyns3a3KM2mPjN1YlLgDFI0=;
- b=QZs431yGGNbH/0/7tBF4itYMit6iYIAJECiADp0Xq/FSZbSS3fyf+8N8yLOlqCVaakbY8YlG3
- nr9/IXGgCWmCuTJXB82rd7r27cxS+jDRSl+P4zu79plf5pt/OAoUKsO
+ bh=oDK90qbYeBOZipkuaq567b8TktP7UW9UN57bt99vHXY=;
+ b=66ib05tLV5YIvQdiwB6EdW2FQlciFDI8VnOCbvAoLDNo9f0q92j48REvKz2O62bMMp4KTZsDa
+ u3HaxoUHdV5A2+WA8zNVf55mbFYUAnUdmd1IWvh5DsVP0LMV8/9bPiK
 X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
  pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
 X-Endpoint-Received: by B4 Relay for da.gomez@samsung.com/20240621 with
@@ -67,36 +67,33 @@ Reply-To: da.gomez@samsung.com
 
 From: Daniel Gomez <da.gomez@samsung.com>
 
-Ensure the module reference is only dropped once in case we fail at
-MOD_RO_AFTER_INIT case.
+Ensure the module state change and reference drop operations are
+performed within module_mutex to prevent potential race conditions in
+the failure path.
 
 Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
- kernel/module/main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/module/main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index e0b2a8d9e324..35a50ded64a6 100644
+index 35a50ded64a6..2b45a6efa0a9 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2941,8 +2941,6 @@ static noinline int do_init_module(struct module *mod)
- 	ftrace_free_mem(mod, mod->mem[MOD_INIT_TEXT].base,
- 			mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
- 	mutex_lock(&module_mutex);
--	/* Drop initial reference. */
--	module_put(mod);
- 	trim_init_extable(mod);
- #ifdef CONFIG_KALLSYMS
- 	/* Switch to core kallsyms now init is done: kallsyms may be walking! */
-@@ -2951,6 +2949,8 @@ static noinline int do_init_module(struct module *mod)
- 	ret = module_enable_rodata_ro(mod, true);
- 	if (ret)
- 		goto fail_mutex_unlock;
-+	/* Drop initial reference. */
-+	module_put(mod);
- 	mod_tree_remove_init(mod);
- 	module_arch_freeing_init(mod);
- 	for_class_mod_mem_type(type, init) {
+@@ -2994,10 +2994,12 @@ static noinline int do_init_module(struct module *mod)
+ fail_free_freeinit:
+ 	kfree(freeinit);
+ fail:
++	mutex_lock(&module_mutex);
+ 	/* Try to protect us from buggy refcounters. */
+ 	mod->state = MODULE_STATE_GOING;
+-	synchronize_rcu();
+ 	module_put(mod);
++	mutex_unlock(&module_mutex);
++	synchronize_rcu();
+ 	blocking_notifier_call_chain(&module_notify_list,
+ 				     MODULE_STATE_GOING, mod);
+ 	klp_module_going(mod);
 
 -- 
 2.39.2
