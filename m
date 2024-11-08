@@ -1,242 +1,207 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8511885A4
-	for <linux-modules@vger.kernel.org>; Fri,  8 Nov 2024 16:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B369F233D72;
+	Fri,  8 Nov 2024 19:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731082933; cv=none; b=PVcSuSuzQvsWSK0t+fDa1fRHm0SvVoa6iRKJBclSLLo1HO9rr1kehKI6aSP8y8Qz81dPo1qpIIdnXBqaMzhmlmOvyMDaXn0OcFWJZ1HqfervU4LEuV/G5PmQwG3JLj3JsJt523CniqYh5J3R64f1+akGWVTfkLF3egNT11tJHuA=
+	t=1731095168; cv=none; b=fT7Lkk84rZWKR3oR/vjs3zjGa3VRiWrwW8kmzk60CULC9r9whr8s6jeEv63SuV5wOWjdw5yQcQd9bTCJ/aB2Z5Reon8awfr9gQT/jJSl112hAHA3nkqHadkQ4FXdZ2cpYKRtyQ8qQpks+qYvN4u7adymcgv6eg7GABX2m8OaiQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731082933; c=relaxed/simple;
-	bh=X3Bu14m0mjtybmOg+NXfDHnfykk0Geg6qmB1khN/pR8=;
-	h=MIME-Version:Content-Type:Date:Message-ID:Subject:CC:To:From:
-	 In-Reply-To:References; b=DzXj14/HbXBIsH68g6huJX+2lc0HJnvqNN05DoaD/EV9FfuXgBwogDyJ9fFq+30uA/RmOUFwuLqzauSwKAausAzavQr5AljD49cZ07DvlHECjH4FIu23Oxezoxxh2OchgWGYKwPXRYDMTkOF8icHObgX0tQataGp2zSTd49A8uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=SwjYiAEI; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1731095168; c=relaxed/simple;
+	bh=dfsPNKwbdKF5+uHMQ4I81EKY+YT6HSKId4ACsK4I1uU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cerXBYk61Ly9nxfVzgDVlL8WwLccV+5czPuLv61PU6zcv40M4TessSnbZTxkCdme5zG1Tvb1383oG12WYqIDZQ5j9iV1X73g9n80PypTsWs4t26qQgFISogZAyRSYs2waVRndZkLpdRvfkd53TJX9msg+N4ieXsGtvwnHPXNrm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VaMFKTnW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="SwjYiAEI"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20241108162209euoutp01cfd5653532c81df31415300cebf82e8d~GCsCakqNX1760017600euoutp01r
-	for <linux-modules@vger.kernel.org>; Fri,  8 Nov 2024 16:22:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20241108162209euoutp01cfd5653532c81df31415300cebf82e8d~GCsCakqNX1760017600euoutp01r
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1731082929;
-	bh=3Lperh0AwiJdCdZ057laB85yTaUwLOwIDG6MZrtqKRA=;
-	h=Date:Subject:CC:To:From:In-Reply-To:References:From;
-	b=SwjYiAEI9SkDWA3A5a1CIOCfYXIVeVDRFktEnCWx1hpSxvfsbUbffYe0/6UwCTIsS
-	 u1Q128MECh5D4dsT0mRY0B+mEqr3DXpdNDx3JrrRRJvmBfjP01EthI+mrX3drEEuOk
-	 cxws6l5WBIDp5oLDxPe6v2UgAVPXOlGVnx/9jflc=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20241108162208eucas1p19b20b3aaebaff2a70a38224be4d73a7d~GCsBuntD51943319433eucas1p1L;
-	Fri,  8 Nov 2024 16:22:08 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 5B.1A.20397.0BA3E276; Fri,  8
-	Nov 2024 16:22:08 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20241108162208eucas1p2eb9cc8b76b0797ba1c5d720d7e7fcf05~GCsBZFOqM2819828198eucas1p2k;
-	Fri,  8 Nov 2024 16:22:08 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241108162208eusmtrp2dafddf99f306ac5b70d657742347206e~GCsBYbhww2644626446eusmtrp2P;
-	Fri,  8 Nov 2024 16:22:08 +0000 (GMT)
-X-AuditID: cbfec7f5-e59c770000004fad-20-672e3ab03b7f
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id C2.29.19920.FAA3E276; Fri,  8
-	Nov 2024 16:22:07 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241108162207eusmtip2c559ef632ae055ca4692837b9b562487~GCsBOO4Cr2587525875eusmtip2r;
-	Fri,  8 Nov 2024 16:22:07 +0000 (GMT)
-Received: from localhost (106.110.32.87) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Fri, 8 Nov 2024 16:22:06 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VaMFKTnW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D582C4CECD;
+	Fri,  8 Nov 2024 19:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731095168;
+	bh=dfsPNKwbdKF5+uHMQ4I81EKY+YT6HSKId4ACsK4I1uU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VaMFKTnW6Lq4PKdIcJycKE80yn2hWH/e6W2mfLWs7afvihph5RcXAgEh7wg+b85Z8
+	 HpZJxaFAJYWwJJKBHIsrAqcGQeSLfZfD54rFO0I29XReAvBx3IC0t0V+xYw8X2o4B1
+	 GERRD3iLDX192jmAGtMPFei7o0UO8LcdPWWhtpTrHrPaJXxmiK5RNFnowdqDHF94KB
+	 danFlPzorFnW9YZOuEHt+VInqDmuDSjziJfaND3MBZL8pJS9Rur2JzJaFslQU58w6A
+	 BeP6TzrjM0v0ATU6vaLZHsYFf6+dEfru0qAcvDaUYGVhcVkNWBdWzSmAdpcFBNHfcM
+	 KSLbRYseXwwlQ==
+Date: Fri, 8 Nov 2024 11:46:06 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: da.gomez@samsung.com
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Jinjie Ruan <ruanjinjie@huawei.com>, Jens Axboe <axboe@kernel.dk>,
+	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v3 4/4] module: refactor ro_after_init failure path
+Message-ID: <Zy5qfqC_NjQHUF_u@bombadil.infradead.org>
+References: <20241108-modules-ro_after_init-v3-0-6dd041b588a5@samsung.com>
+ <20241108-modules-ro_after_init-v3-4-6dd041b588a5@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-Date: Fri, 8 Nov 2024 17:22:06 +0100
-Message-ID: <D5GXOLX14TL7.3QXEU9ZLHBFKR@samsung.com>
-Subject: Re: [PATCH] static_call: Handle module init failure correctly in
- static_call_del_module()
-CC: Mike Rapoport <rppt@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, <linux-kernel@vger.kernel.org>, "Peter
- Zijlstra (Intel)" <peterz@infradead.org>, Josh Poimboeuf
-	<jpoimboe@kernel.org>, "Liu Shixin" <liushixin2@huawei.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Christophe Leroy
-	<christophe.leroy@csgroup.eu>, Petr Pavlu <petr.pavlu@suse.com>, "Sami
- Tolvanen" <samitolvanen@google.com>, <linux-modules@vger.kernel.org>
-From: Daniel Gomez <da.gomez@samsung.com>
-X-Mailer: aerc 0.18.2-67-g7f69618ac1fd
-In-Reply-To: <D5GXESPXRVH3.1M4T003I1F7BU@samsung.com>
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBKsWRmVeSWpSXmKPExsWy7djPc7obrPTSDbatELK4M+k5u8Wx1UDi
-	8q45bBYNs7+zWsxcWWhxY8JTRovjvQeYLJZ+ecdscWT9diaLa7OAxNIVb1ktNm+ayuzA4/H1
-	5jkmjwWbSj1ajrxl9di8Qstj06pONo93586xe6zfcpXF4/MmuQCOKC6blNSczLLUIn27BK6M
-	O/PPsBb8la94eO8FUwPjZ4kuRg4OCQETiflTlLoYuTiEBFYwShxoXsrSxcgJ5HxhlNi4JgIi
-	8ZlRomfbJWaQBEjDtllnWCASyxkl3vxZwgJXdfLjCTYIZxOjxL0925lAWngFBCVOznwCNpdZ
-	QFti2cLXzBC2pkTr9t/sIDaLgIrE9r/NUPUmEvvXrwSrERZIkTi+5wQjyFBmgYlMElfu/WcF
-	cUQETjFKfNi8AqybDWjSvpOb2CEOVJP43z8RbBungKnElG0fmSDiihIzJq5kgbBrJU5tucUE
-	MkhCYDGnxKq9s6CaXSQubn/DBmELS7w6vgUqLiPxf+d8qEHpEkvWzYIaVCCx5/YsVkhQWkv0
-	ncmBCDtKbOw5DBXmk7jxVhDiYT6JSdumM0OEeSU62oQmMKrMQgqiWUhBNAspiBYwMq9iFE8t
-	Lc5NTy02zkst1ytOzC0uzUvXS87P3cQITFyn/x3/uoNxxauPeocYmTgYDzFKcDArifD6R2mn
-	C/GmJFZWpRblxxeV5qQWH2KU5mBREudVTZFPFRJITyxJzU5NLUgtgskycXBKNTC5Bm9o9OY9
-	vzw6+t0NL2kB7fMaEYHnvbTU2K4kMgbva38tWXdzK3vfRqX87AXutg0r1jzQXMjjb+/2al7i
-	lKeOZUfiDgStMQzIFgpYdOdSwOV7hy+nRvz/+vjoBrkl1tnvO5b931A+4xW/6Ra2GFPz+4+y
-	vscKr9uSk+408eO542bVdidK5FUvXNu4eu2azofKGZpcpWt3vf/XI5id8O3aPotaMVblnKPC
-	J1/8uK70V/GD+A3/qEk16lt/sAetDDWIY3+w14clUttb/uj6mhqjOaGr3Q47ll0///Mzo578
-	nLPl2i4O9x8vYU/kPLPwyN6fnRaviwNFqxgvFTQLS02XCppgx9K4b13WyVsxTMFKLMUZiYZa
-	zEXFiQB93JjpywMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsVy+t/xe7rrrfTSDWa9srS4M+k5u8Wx1UDi
-	8q45bBYNs7+zWsxcWWhxY8JTRovjvQeYLJZ+ecdscWT9diaLa7OAxNIVb1ktNm+ayuzA4/H1
-	5jkmjwWbSj1ajrxl9di8Qstj06pONo93586xe6zfcpXF4/MmuQCOKD2bovzSklSFjPziElul
-	aEMLIz1DSws9IxNLPUNj81grI1MlfTublNSczLLUIn27BL2MO/PPsBb8la94eO8FUwPjZ4ku
-	Rk4OCQETiW2zzrB0MXJxCAksZZS4NGkDI0RCRmLjl6usELawxJ9rXWwQRR8ZJZ49fgnlbGKU
-	uH7tCRNIFa+AoMTJmU9YQGxmAW2JZQtfM0PYmhKt23+zg9gsAioS2/82Q9WbSOxfvxKsRlgg
-	ReL4nhOMIEOZBSYySVy5958VxBEROMUo8WHzCrBuNqBJ+05uYoe4SU3if/9EqMPbWCS2LLwL
-	luAUMJWYsu0jE0SRosSMiStZIOxaic9/nzFOYBSZheTaWUiunYXk2gWMzKsYRVJLi3PTc4sN
-	9YoTc4tL89L1kvNzNzEC43vbsZ+bdzDOe/VR7xAjEwfjIUYJDmYlEV7/KO10Id6UxMqq1KL8
-	+KLSnNTiQ4ymQG9PZJYSTc4HJpi8knhDMwNTQxMzSwNTSzNjJXFet8vn04QE0hNLUrNTUwtS
-	i2D6mDg4pRqYNMu1J4Xz76jSK+sv5Vc6dGrial+BVdnrty031rtcIxU+pX4K1wYho8p9tZMf
-	nvJr6Z7dv/vRRfX27uKV08/MswrfxXs6M2ofp0edwHyxdJH6BcefLfdiDs68e11zzuNN/ut9
-	zxiFhdS9NFF6sOgA8yT2q4yLLTa/2Ozz7tfRsBkyXRO2L/r13iZK/UfhzXaXNPWUkkIWx0Oe
-	e5s4A7L4U8OndQSfa5myON0+TKOgPvp1x43gmS4qVSZXH6bKbjoyoazk5WGzhR5abx+6rTy7
-	QbBGSFp3vrxbRdBiic0T0mJmv+grdxLvM/j1z4H/+62Xq6Qn9ifun/csS9/nrEThCumNFx8m
-	iG10n11uXRGqxFKckWioxVxUnAgAM2V6LXgDAAA=
-X-CMS-MailID: 20241108162208eucas1p2eb9cc8b76b0797ba1c5d720d7e7fcf05
-X-Msg-Generator: CA
-X-RootMTR: 20241108154954eucas1p1225526ff7f7d97ae7078f112300f080f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20241108154954eucas1p1225526ff7f7d97ae7078f112300f080f
-References: <87cylj7v6x.ffs@tglx>
-	<3e158999-c93a-a4e3-85a9-2d6bfc1ccee7@huawei.com> <877cbr7qed.ffs@tglx>
-	<50551f21-6e90-3556-7a3d-8b81a042f99c@huawei.com> <87a5gm5tb3.ffs@tglx>
-	<ZtuPSIFsV8C3UZW8@bombadil.infradead.org>
-	<Zuv0nmFblHUwuT8v@bombadil.infradead.org> <ZvJomuNWjtHYDcsW@kernel.org>
-	<8bd5e396-7583-435e-bafc-7d092a31f4ff@csgroup.eu>
-	<CGME20241108154954eucas1p1225526ff7f7d97ae7078f112300f080f@eucas1p1.samsung.com>
-	<Zy4zGy9aoQ1-Qokg@bombadil.infradead.org>
-	<D5GXESPXRVH3.1M4T003I1F7BU@samsung.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241108-modules-ro_after_init-v3-4-6dd041b588a5@samsung.com>
 
-On Fri Nov 8, 2024 at 5:09 PM CET, Daniel Gomez wrote:
-> On Fri Nov 8, 2024 at 4:49 PM CET, Luis Chamberlain wrote:
->> + Other new module maintainers
->>
->> On Fri, Nov 08, 2024 at 09:12:03AM +0100, Christophe Leroy wrote:
->>> Hi Luis,
->>>=20
->>> Le 24/09/2024 =C3=A0 09:22, Mike Rapoport a =C3=A9crit=C2=A0:
->>> > On Thu, Sep 19, 2024 at 02:53:34AM -0700, Luis Chamberlain wrote:
->>> > > On Fri, Sep 06, 2024 at 04:24:56PM -0700, Luis Chamberlain wrote:
->>> > > > On Thu, Sep 05, 2024 at 11:44:00AM +0200, Thomas Gleixner wrote:
->>> > > > > Now you at least provided the information that the missing clea=
-nup in
->>> > > > > the init() function is not the problem. So the obvious place to=
- look is
->>> > > > > in the module core code whether there is a failure path _after_
->>> > > > > module->init() returned success.
->>> > > > >=20
->>> > > > > do_init_module()
->>> > > > >          ret =3D do_one_initcall(mod->init);
->>> > > > >          ...
->>> > > > > 	ret =3D module_enable_rodata_ro(mod, true);
->>> > > > > 	if (ret)
->>> > > > > 		goto fail_mutex_unlock;
->>> > > > >=20
->>> > > > > and that error path does _not_ invoke module->exit(), which is =
-obviously
->>> > > > > not correct. Luis?
->>> > > >=20
->>> > > > You're spot on this needs fixing.
->>> > >=20
->>> > > Christophe, this is a regression caused by the second hunk of your =
-commit
->>> > > d1909c0221739 ("module: Don't ignore errors from set_memory_XX()") =
-on v6.9.
->>> > > Sadly there are a few issues with trying to get to call mod->exit()=
-:
->>> > >=20
->>> > > - We should try try_stop_module()  and that can fail
->>> > > - source_list may not be empty and that would block removal
->>> > > - mod->exit may not exist
->>> > >=20
->>> > > I'm wondering if instead we should try to do the module_enable_roda=
-ta_ro()
->>> > > before the init, but that requires a bit more careful evaluation...
->>> >=20
->>> > There is ro_after_init section, we can't really make it RO before ->i=
-nit()
->>>=20
->>> Surprisingly I never received Luis's email
->>
->> So odd..
->>
->>> allthough I got this answer from Mike that I overlooked.
->>>=20
->>> So coming back here from
->>> https://lore.kernel.org/all/ZyQhbHxDTRXTJgIx@bombadil.infradead.org/
->>>=20
->>> As far as I understand, indeed once init is called it is too late to fa=
-il,
->>
->> Partly yes, party no. Party yes in that its a can of worms we have not
->> had to deal with before, and also I worry about deadlocks, and the code
->> to address this seems complex. right ?
->
-> I have a RFC ready with this, I'll send this now so we can discuss on
-> with a proposal.
->
->>
->>
->>> Especially when the module has no exit() path or when
->>> CONFIG_MODULE_UNLOAD is not built in.
->>
->> That's exactly the other extreme case I fear for.
->>
->>> So the only thing we can do then is a big fat warning telling
->>> set_memory_ro() on ro_after_init memory has failed ?
->>
->> I suspect this is more sensible to do.
->
-> I came to the same conclusion while trying to fix this path. + I added
-> an alternative for discussion.
->
->>
->>> Maybe we should try and change it to RO then back to RW before calling =
-init,
->>> to be on a safer side hopping that if change to RO works once it will w=
-ork
->>> twice ?
->>
->> That's another approach wich could work, if we proove that this does
->> work, it's a nice best effort and I think less or a mess to the codebase
->> then special-casing the error handling of trying to deal with the
->> driver's exit.
->>
->> Daniel Gomez has been looking at this, so his feedback here would be
->> valuable.
->
-> What if we detect ro_after_init first, and block any module
-> initialization depending on this ro_after_init to actually start loading
-> it? That way we can stop and unload the module successfully.
+On Fri, Nov 08, 2024 at 05:12:16PM +0100, Daniel Gomez via B4 Relay wrote:
+> From: Daniel Gomez <da.gomez@samsung.com>
+> 
+> When ro_after_init fails, we need to unload the module.
+> 
+> Rename the goto tag to fail_ro_after_init to make it more clear and try
+> to check for dependencies, stop the module and call the exit function.
+> This allows to unload the module if ro_after_init fails.
+> 
+> This fixes the following error in block loop device driver when forcing
+> ro_after_init error path:
+> 
+> Nov 06 11:36:25 debian kernel: loop: module loaded
+> Nov 06 11:36:25 debian kernel: BUG: unable to handle page fault for
+> address: ffffffffa0006320
+> Nov 06 11:36:25 debian kernel: #PF: supervisor read access in kernel mode
+> Nov 06 11:36:25 debian kernel: #PF: error_code(0x0000) - not-present page
+> Nov 06 11:36:25 debian kernel: PGD 1e3f067 P4D 1e3f067 PUD 1e40063 PMD
+> 10e7d4067 PTE 0
+> Nov 06 11:36:25 debian kernel: Oops: Oops: 0000 [#1]
+> Nov 06 11:36:25 debian kernel: CPU: 0 UID: 0 PID: 428 Comm:
+> (udev-worker) Not tainted 6.12.0-rc6-g4ade030a2d1b #155
+> Nov 06 11:36:25 debian kernel: Hardware name: QEMU Standard PC (Q35 +
+> ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+> Nov 06 11:36:25 debian kernel: RIP: 0010:bdev_open+0x83/0x290
+> Nov 06 11:36:25 debian kernel: Code: bb 48 01 00 00 48 89 3c 24 e8 79 24
+> 38 00 48 8b 43 40 41 bd fa ff ff ff 48 83 b8 40 03 00 00 00 0f 84 b3 01
+> 00 00 48 8b 43 48 <48> 8b 78 78 e8 d4 c9 c8 ff 84 c0 0f 84 9e 01 00 00
+> 80 3d 45 ad ad
+> Nov 06 11:36:25 debian kernel: RSP: 0018:ffff8881054dbc58 EFLAGS:
+> 00010286
+> Nov 06 11:36:25 debian kernel: RAX: ffffffffa00062a8 RBX:
+> ffff8881054a6800 RCX: ffff8881075becc0
+> Nov 06 11:36:25 debian kernel: RDX: 0000000000000000 RSI:
+> 0000000000000009 RDI: ffff8881054a6948
+> Nov 06 11:36:25 debian kernel: RBP: 0000000000000009 R08:
+> ffff88810e7aa9c0 R09: 0000000000000000
+> Nov 06 11:36:25 debian kernel: R10: ffff88810e5ab0c0 R11:
+> ffff88810e796190 R12: ffff88810094e980
+> Nov 06 11:36:25 debian kernel: R13: 00000000fffffffa R14:
+> 0000000000000000 R15: 0000000000000000
+> Nov 06 11:36:25 debian kernel: FS:  00007fd2ff110900(0000)
+> GS:ffffffff81e47000(0000) knlGS:0000000000000000
+> Nov 06 11:36:25 debian kernel: CS:  0010 DS: 0000 ES: 0000 CR0:
+> 0000000080050033
+> Nov 06 11:36:25 debian kernel: CR2: ffffffffa0006320 CR3:
+> 000000010e7ed004 CR4: 00000000003706b0
+> Nov 06 11:36:25 debian kernel: Call Trace:
+> Nov 06 11:36:25 debian kernel:  <TASK>
+> Nov 06 11:36:25 debian kernel:  ? __die_body+0x16/0x60
+> Nov 06 11:36:25 debian kernel:  ? page_fault_oops+0x22a/0x310
+> Nov 06 11:36:25 debian kernel:  ? exc_page_fault+0x99/0xa0
+> Nov 06 11:36:25 debian kernel:  ? asm_exc_page_fault+0x22/0x30
+> Nov 06 11:36:25 debian kernel:  ? bdev_open+0x83/0x290
+> Nov 06 11:36:25 debian kernel:  ? bdev_open+0x67/0x290
+> Nov 06 11:36:25 debian kernel:  ? iput+0x37/0x150
+> Nov 06 11:36:25 debian kernel:  ? blkdev_open+0xab/0xd0
+> Nov 06 11:36:25 debian kernel:  ? blkdev_mmap+0x60/0x60
+> Nov 06 11:36:25 debian kernel:  ? do_dentry_open+0x25d/0x3b0
+> Nov 06 11:36:25 debian kernel:  ? vfs_open+0x1e/0xc0
+> Nov 06 11:36:25 debian kernel:  ? path_openat+0x9cf/0xbb0
+> Nov 06 11:36:25 debian kernel:  ? do_filp_open+0x7f/0xd0
+> Nov 06 11:36:25 debian kernel:  ? do_sys_openat2+0x67/0xb0
+> Nov 06 11:36:25 debian kernel:  ? do_sys_open+0x4b/0x50
+> Nov 06 11:36:25 debian kernel:  ? do_syscall_64+0x3d/0xb0
+> Nov 06 11:36:25 debian kernel:  ? entry_SYSCALL_64_after_hwframe+0x4b/0x53
+> Nov 06 11:36:25 debian kernel:  </TASK>
+> Nov 06 11:36:25 debian kernel: Modules linked in:
+> Nov 06 11:36:25 debian kernel: CR2: ffffffffa0006320
+> Nov 06 11:36:25 debian kernel: ---[ end trace 0000000000000000 ]---
+> 
+> ./scripts/faddr2line --list vmlinux bdev_open+0x83/0x290
+> bdev_open+0x83/0x290:
+> 
+> bdev_open at block/bdev.c:908
+>  903
+>  904            mutex_lock(&disk->open_mutex);
+>  905            ret = -ENXIO;
+>  906            if (!disk_live(disk))
+>  907                    goto abort_claiming;
+> >908<           if (!try_module_get(disk->fops->owner))
+>  909                    goto abort_claiming;
+>  910            ret = -EBUSY;
+>  911            if (!bdev_may_open(bdev, mode))
+>  912                    goto put_module;
+>  913            if (bdev_is_partition(bdev))
+> 
+> Reported-by: Thomas Gleixner <tglx@linutronix.de>
+> Closes: https://lore.kernel.org/all/20230915082126.4187913-1-ruanjinjie@huawei.com/
+> Fixes: d1909c022173 ("module: Don't ignore errors from set_memory_XX()").
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+>  kernel/module/main.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 2b45a6efa0a9..c23521ae8bda 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2880,7 +2880,7 @@ module_param(async_probe, bool, 0644);
+>   */
+>  static noinline int do_init_module(struct module *mod)
+>  {
+> -	int ret = 0;
+> +	int ret = 0, forced = 0;
+>  	struct mod_initfree *freeinit;
+>  #if defined(CONFIG_MODULE_STATS)
+>  	unsigned int text_size = 0, total_size = 0;
+> @@ -2948,7 +2948,7 @@ static noinline int do_init_module(struct module *mod)
+>  #endif
 
-In case I'm missing someone, I've just sent the RFC here:
+It is not clear here but note that do_init_module() happens
+before the module is live and so any try_module_get() in the
+do_init_module() path should fail.
 
-https://lore.kernel.org/linux-modules/20241108-modules-ro_after_init-v3-0-6=
-dd041b588a5@samsung.com/T/#t
+>  	ret = module_enable_rodata_ro(mod, true);
 
-Please ignore "v3" prefix. That was a mistake. Not sure why b4 added
-that.
+But here do_init_module() should be have completed and the module is live.
+So a open() on a block device *can* race after init, at which point
+if open uses do_init_module() then it snatches a ref.
 
->
->>
->>   Luis
+>  	if (ret)
+> -		goto fail_mutex_unlock;
+> +		goto fail_ro_after_init;
+>  	/* Drop initial reference. */
+>  	module_put(mod);
+>  	mod_tree_remove_init(mod);
+> @@ -2989,8 +2989,12 @@ static noinline int do_init_module(struct module *mod)
+>  
+>  	return 0;
+>  
+> -fail_mutex_unlock:
+> +fail_ro_after_init:
+> +	list_empty(&mod->source_list);
+> +	try_stop_module(mod, 0, &forced);
 
+Which is why try_stop_module() can fail here. But we don't want to fail.
+
+This is a chicken and egg, since we are already live we can't stop
+the world created from undernath us from not using try_module_get(),
+as its the right thing to do.
+
+The above sledge hammer can fail then and we don't want that.
+
+>  	mutex_unlock(&module_mutex);
+> +	if (mod->exit != NULL)
+> +		mod->exit();
+>  fail_free_freeinit:
+>  	kfree(freeinit);
+>  fail:
+
+So I'd prefer a soolution which is clearer, and doesn't have to deal
+with all these complexities somehow.
+
+ Luis
