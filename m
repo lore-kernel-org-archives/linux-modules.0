@@ -1,125 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFC1021766E;
-	Thu,  7 Nov 2024 22:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314061D3578;
+	Fri,  8 Nov 2024 08:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731019095; cv=none; b=D17lh+5r38YvIgsa3HnfaMsksO/4Va36QMtRF2aceBVqcHeNIJ9i8Ljjwg5e+vw+u+0piDgaHYRGUkUptJC6pAYk/RicY3gzkbm76UJq/tIrgKFyFKf6lerxnJgJ3tatGZVRhStjWhTn2Cz46WxAiMIDt4d9C0XdUxp4p6FemWc=
+	t=1731053328; cv=none; b=Wd3SYQPiOLfF34c0c0PwgXQAAWioJpwhNpEr4+YqaJlpdN0ptnfSUW1QUrolxXLrVW/asjOE5pOFVDg/icy1HF4uYG27dJjpGlh7m4mFtJyV5l+L3wyTBOUAT2VuO+mDeyQ1/qbqDTDHkcWJSDw3gaAXarxWPWQ5cn5yoJ8KgAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731019095; c=relaxed/simple;
-	bh=1vresE0L3Nh3fHiQZbFLwAwAhjoMFFb+bTLtc7rSuxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nc9qSu8UHf3ghJZLaCh8FEcmMrywlmwBalkDM9oeuDNEL1RbTyHtVSSyuCRuuWpd5XuS8IwiEkaV+hH73loATmmuevtZI/vA2MTyXJ/wVtMDzMW97TJTXcat3ifatBA+edsYdN2SE1PVfmDR67PoGF1D9UniyB7ss4pcC3eAF+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6fjrNRK; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6fjrNRK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B13FC4CECC;
-	Thu,  7 Nov 2024 22:38:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731019095;
-	bh=1vresE0L3Nh3fHiQZbFLwAwAhjoMFFb+bTLtc7rSuxI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T6fjrNRK0H7rMGmtghlNMki/7KUUA3JkXKRGsBeHjc8CCMykYE+gcyamhcLzNFUT1
-	 TPYgWtKUP50fWbzpvceAl/y5Ye4PI2/vVF6v7d6Pl7Rht23wGL+oFVUf+kZhHuu/IV
-	 ZH8w2RYM443JXE4j0c8o+9E4dp8pF0UsmJ7MqlFMQ2yfFxsVDPfqDvcJf1SeEyEToy
-	 qrfZ3HAy0D1q7aqZraUuZCbf8JBqF9MW2YrBZ+AWwcSlYW7d5pitli87r1Hw4CzJnZ
-	 E6F8nkrNVLvi3VEEhCM5zPRItjpua5G9swipPx81U9fpAJbRA43qT1QJTXvjO14r6h
-	 XJ5/Mq96LOcZQ==
-Date: Thu, 7 Nov 2024 14:38:13 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Matthew Maurer <mmaurer@google.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
-Message-ID: <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
-References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
- <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
- <ZyNr--iMz_6Fj4yq@bombadil.infradead.org>
- <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
- <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org>
- <CAGSQo02uDZ5QoRMPOn=3Fa9g5d+VPfKW-vmSsS2H+pOdPYCBFw@mail.gmail.com>
- <ZyrRYUD0K1f7SwWg@bombadil.infradead.org>
- <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
+	s=arc-20240116; t=1731053328; c=relaxed/simple;
+	bh=LD2eDfz4SMAlB7umwDHTDu0TvSKpT8mglT8E9NBfcjU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=niY0H8IHUElTqA/Fa+Q5DcibYDk/2d5OYhUmWIeu/H+3bZxPrgB9J3ffWqKJQGqbJSNaqTMZC3nhmcdVGREi5FtEou+DXhEqDTVk7Sb4XVKXYPsCn8sJp4RuA9nrXrSXZTkUqlOajBobG0SNDasxzIuqLMG6hrYFjlzbxyPvM5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e29047bec8fso2383095276.0;
+        Fri, 08 Nov 2024 00:08:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731053324; x=1731658124;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0AcfQIh4eL6wqtezh6vPlrQwPcncc/rwq6AytHbkvyU=;
+        b=dAEhA+l+qguEDzp+cmRK/jIIOs9e0bbyUqhYm7wGCgbbXRNBLAIVedmU+4zr05buuS
+         JDbAFPJhKvW4Lt81zFJI7Ia4zHfDmxmAbX2llDWgCkLCyYnrHWxPbukrAguTCin8hUnb
+         0aOauTdIv8i5Zi6XYkyQqpbN3cn40sQznSrE/i+Q3qVjLSZdpaVDoqllCLjw4fGTTDZT
+         JpUuXLNl6W+fGykH8XgGc4gYrYbKKVlDR81rfEUo0fq9t0JAb+LSZoohe4jWpt3jkjXs
+         7RUJwLze8DtHEq27pXrHfl8Hov8YYSofbdG6LPVSh7dZRr8MFrQxgR6u9J0/sZNzQMnY
+         Ww4w==
+X-Forwarded-Encrypted: i=1; AJvYcCUsYb2SiK+qZQ0hU6TNM6c0bFo0mEQZGvnmQ69izMgG4Gx6Pd9VZzZmEYwowMiE6wETh/bZk1zgLxpHKm8=@vger.kernel.org, AJvYcCVGPjXlLSVlMFcD8EfIROWGw4E53qHDGsC/xY5imbzE12AuHxFjfN6p5ijfkcuJPX3P4o2nucwcJptlDr4DDg==@vger.kernel.org, AJvYcCXUcGLUjWGbSY48MfiLNKqnOrhGwsU0a0U3Q4w4vnun0vPQ/YsVVKCAc8QjJf5wrLDOTXX4j5IQ5tfKV0IB@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/BvNF9YyiMd04svx6zkLUFB1zjBUUine8z9cDliHJw2Q9aJ3x
+	1DRGmw+JIcY+daKXDM0SDe8HcbyNGBLwS5sFuiu1b8mcYHvm1ZUrPq0KcwwO
+X-Google-Smtp-Source: AGHT+IEMiGBY1n86Ty1i9Vt5vHiCM2UQhC579mG35SG/6bcIepIg9x3jPY0EGjCNR1X+O0F0sYPpGA==
+X-Received: by 2002:a05:690c:39f:b0:6e3:ceb:9e49 with SMTP id 00721157ae682-6eadc18ed23mr21295537b3.16.1731053324422;
+        Fri, 08 Nov 2024 00:08:44 -0800 (PST)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eaceb7a6f0sm6301847b3.104.2024.11.08.00.08.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Nov 2024 00:08:43 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e29047bec8fso2383072276.0;
+        Fri, 08 Nov 2024 00:08:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVfb8tX8Un0JRRm+UrKTWogxKAzu4vDb8+TXPbvkNQlyACdX+N2SG3iVwch/WLZOY4x/q9jT7Ke/KokKzA=@vger.kernel.org, AJvYcCXQH+hOZEyCF+4Yem/AXIyvFXWzET3+b1xk3Je7S9XTs1TLgH+/dE0QP7fN3bCZe6rWjk8GNva7u0csH519@vger.kernel.org, AJvYcCXruCFqMNQxMX1sLWI+o8vRqY+bsH9cvKnWNys1Tp1HMGDIezzw0Z+ol9FA6JG7YBlvDJs7cuTy8DyPvLNJpQ==@vger.kernel.org
+X-Received: by 2002:a05:690c:9686:b0:664:74cd:5548 with SMTP id
+ 00721157ae682-6eadc0a205fmr22121087b3.1.1731053322861; Fri, 08 Nov 2024
+ 00:08:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
+References: <20241106190240.GR10375@noisy.programming.kicks-ass.net> <ZyxSdayBstBGhAeO@infradead.org>
+In-Reply-To: <ZyxSdayBstBGhAeO@infradead.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 8 Nov 2024 09:08:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUgO83KksK59XEmF+EqXWHWBd1FLML0Ee1dQ7nOiGV2Eg@mail.gmail.com>
+Message-ID: <CAMuHMdUgO83KksK59XEmF+EqXWHWBd1FLML0Ee1dQ7nOiGV2Eg@mail.gmail.com>
+Subject: Re: [RFC] module: Strict per-modname namespaces
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, 
+	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com, 
+	masahiroy@kernel.org, nathan@kernel.org, nicolas@fjasle.eu, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 06, 2024 at 02:19:38PM -0800, Matthew Maurer wrote:
-> >
-> > > If booted against an old kernel, it will
-> > > behave as though there is no modversions information.
-> >
-> > Huh? This I don't get. If you have the new libkmod and boot
-> > an old kernel, that should just not break becauase well, long
-> > symbols were not ever supported properly anyway, so no regression.
-> 
-> Specifically, if you set NO_BASIC_MODVERSIONS, build a module, and
-> then load said module with a kernel *before* EXTENDED_MODVERSIONS
-> existed, it will see no modversion info on the module to check. This
-> will be true regardless of symbol length.
+On Thu, Nov 7, 2024 at 6:39=E2=80=AFAM Christoph Hellwig <hch@infradead.org=
+> wrote:
+> On Wed, Nov 06, 2024 at 08:02:40PM +0100, Peter Zijlstra wrote:
+> > It reserves and disallows imports on any "MODULE_${name}" namespace,
+> > while it implicitly adds the same namespace to every module.
+>
+> Ah nice.  This is pretty similar to what I want and had badly prototyped
+> a while ago.
+>
+> > This allows exports targeted at specific modules and no others -- one
+> > random example included. I've hated the various kvm exports we've had
+> > for a while, and strictly limiting them to the kvm module helps
+> > alleviate some abuse potential.
+>
+> And this was one of the targets on my list.  Specific kunits tests
+> would be another category.
 
-Isn't that just the same as disabling modverisons?
+Indeed. E.g. making the scsi_lib KUnit tests modular would require
+exporting an internal symbol[1], which the SCSI maintainers don't like.
 
-If you select modversions, you get the options to choose:
+[1] "[PATCH] scsi: core: Make scsi_lib KUnit tests modular for real"
+    https://lore.kernel.org/all/48ca5e827ca420bbdbabb1643e2179dc95c9e0b7.17=
+10849638.git.geert@linux-m68k.org/
 
-  - old modversions
-  - old modversions + extended modversions
-  - extended modversions only
+Gr{oetje,eeting}s,
 
-> > I'm not quite sure I understood your last comment here though,
-> > can you clarify what you meant?
-> >
-> > Anyway, so now that this is all cleared up, the next question I have
-> > is, let's compare a NO_BASIC_MODVERSIONS world now, given that the
-> > userspace requirements aren't large at all, what actual benefits does
-> > using this new extended mod versions have? Why wouldn't a distro end
-> > up preferring this for say a future release for all modules?
-> 
-> I think a distro will end up preferring using this for all modules,
-> but was intending to put both in for a transitional period until the
-> new format was more accepted.
+                        Geert
 
-The only thing left I think to test is the impact at runtime, and the
-only thing I can think of is first we use find_symbol() on resolve_symbol() 
-which it took me a while to review and realize that this just uses a
-completely different ELF section, the the ksymtab sections which are split up
-between the old and the gpl section. But after that we use check_version().
-I suspect the major overhead here is in find_symbol() and that's in no way shape
-or form affected by your changes, and I also suspect that since the
-way you implemented for_each_modversion_info_ext() is just *one* search
-there shouldn't be any penalty here at all. Given it took *me* a while
-to review all this, I think it would be good for you to also expand your
-cover letter to be crystal clear on these expectations to users and
-developers and if anything expand on the Kconfig / and add documentation
-if we don't document any of this.
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-I'd still like to see you guys test all this with the new TEST_KALLSYMS.
-
-  Luis
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
