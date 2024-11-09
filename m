@@ -1,58 +1,58 @@
 Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2618F143C63
-	for <linux-modules@vger.kernel.org>; Sat,  9 Nov 2024 22:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9DA143C63
+	for <linux-modules@vger.kernel.org>; Sat,  9 Nov 2024 22:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731190646; cv=none; b=bRQzzd7B7WPXHnLHeawHreMrFHIdbFdYaONr0R2AuX/yq+3GvdgKeS6/zVvl/f4jGXrds+oD2v8Zf8vZsI5ZyLqShl/keGADwh31eo+fe+LX2e5xkUvsWWWChCv8422FNVldtOgrcq5R7PnvKhUb8K/xSshyLOxVBayg8rn2dB4=
+	t=1731190715; cv=none; b=Q0FEAcVPk+9Um5jBZYKoWG6oAgryPaqIfcCZPPPzpR5Yw334JfaV4PepdlL+iIC7xUs0w8ylemiPDsKmJ0UWtjn2aES8TNKeRL4LbeVBDglBh+q9qXiz/yimXFRmYr83X2iM2jKeUsoqmjunpJ8l/WpVgSyXeDvcES7NvX9E6eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731190646; c=relaxed/simple;
-	bh=QsMQnXVPXdFJYOkdxe4IjuaL38UpsOeDPai9dSd6LSw=;
-	h=MIME-Version:Content-Type:Date:Message-ID:To:From:Subject:CC:
-	 In-Reply-To:References; b=C0CYaZF2AJ5oVSJ8key9ccSor3e60CYPM6YAGf9OqLKxkbq0DoqyaxbXbkeG/FPymn2bSnZwo8AEnM7T2ATWGgQqsYs5Tw2+8R7weqluWMmUwreLKjGoq7Sk0uZSIQwXLRFJ1pYMLlhd2Uw6DxFtcLMuPppz6GFdaT5FYiqSM4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bX5oLq9J; arc=none smtp.client-ip=210.118.77.12
+	s=arc-20240116; t=1731190715; c=relaxed/simple;
+	bh=fzBFJIcd3qlFlWYoEdtn06bovmvzZegifUjMYynKNtM=;
+	h=MIME-Version:Content-Type:Date:Message-ID:Subject:CC:To:From:
+	 In-Reply-To:References; b=P3mfEeo5nO/Eo1n2KzzCuPjbjZUtSDdluaB7e2Mm3WoJhkpxTicSfCG1TPm5snKeIKAfWqJQDFyVSTi1k7DxdNeTG6ohhqWjVsYB639x6ArXSztiWm2iAjUHpXA4jTWGBLJFJqOUCu866YiXBzXrl8hX7rgzOCPosx3ia1HxrGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=AF8bvp+v; arc=none smtp.client-ip=210.118.77.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bX5oLq9J"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241109221722euoutp026b3e315bd2e29591bfb00b085a21b6ad~GbLd_FWOP1200912009euoutp02e
-	for <linux-modules@vger.kernel.org>; Sat,  9 Nov 2024 22:17:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241109221722euoutp026b3e315bd2e29591bfb00b085a21b6ad~GbLd_FWOP1200912009euoutp02e
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="AF8bvp+v"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241109221831euoutp0214b5f988223c9c08bdfd6c173765fa2e~GbMetq9Eo1942519425euoutp02B
+	for <linux-modules@vger.kernel.org>; Sat,  9 Nov 2024 22:18:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241109221831euoutp0214b5f988223c9c08bdfd6c173765fa2e~GbMetq9Eo1942519425euoutp02B
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1731190642;
-	bh=ueqcKqZ3CAToylfEDQVhdRAfa9slExaYq87dkAOsapI=;
-	h=Date:To:From:Subject:CC:In-Reply-To:References:From;
-	b=bX5oLq9J+h5faIJyiOlnL4q9o30JJwp6MkYDllA+rkU9CbGk6hMtCzLFf6qybJsp+
-	 Rx5zn8davwuHT6K/K/7REBDT1Aq3M9536h3XlkbTlgcr7Yj90WFy8ajTDO4yYfHQQJ
-	 UjVzwsotedicRHTkJlSNH3w58LL0FpYioF+SYF3Y=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+	s=mail20170921; t=1731190711;
+	bh=1QYkVJ2Bgp5p8UrOg8lRsj0WLdLN1sJlQeeS+VEyRNc=;
+	h=Date:Subject:CC:To:From:In-Reply-To:References:From;
+	b=AF8bvp+v+B+AvPVLsXk/8dr+GCJlKRe045+P2R/BVu7nqXxNU/oG22IeojfM2dgae
+	 U0sxTpN7s+O0QC77lOogeSNU2bxq2hED+VYHwais9OXcLJNru1vvufxpcZvwstZYeU
+	 G6eiDX1ZW/q6GghUQASydc1085UuwwkhkSui+jN8=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
 	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20241109221720eucas1p2331532aea4e6280e6432987b759e2d6b~GbLcxa7pE1899518995eucas1p2X;
-	Sat,  9 Nov 2024 22:17:20 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 83.69.20821.07FDF276; Sat,  9
-	Nov 2024 22:17:20 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241109221720eucas1p1e3f15dd5a4b8e20d107d1584630c8422~GbLcPDtHx2136121361eucas1p10;
-	Sat,  9 Nov 2024 22:17:20 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241109221720eusmtrp1e388b539b692bb4c49801397909ab7a7~GbLcOQdCt0594805948eusmtrp1M;
-	Sat,  9 Nov 2024 22:17:20 +0000 (GMT)
-X-AuditID: cbfec7f2-b09c370000005155-d0-672fdf704957
+	20241109221831eucas1p24f3b1e7927d45a70cf0fd6f4fe489f4e~GbMeLNgCF1899518995eucas1p2x;
+	Sat,  9 Nov 2024 22:18:31 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 22.B4.20409.6BFDF276; Sat,  9
+	Nov 2024 22:18:30 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241109221829eucas1p250055e370d38d9104f71e08633139406~GbMc1-RbV0948609486eucas1p2O;
+	Sat,  9 Nov 2024 22:18:29 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241109221829eusmtrp232ac7c25b60d39f36561ce02b1116f71~GbMc1brwE1587815878eusmtrp2a;
+	Sat,  9 Nov 2024 22:18:29 +0000 (GMT)
+X-AuditID: cbfec7f4-c39fa70000004fb9-9a-672fdfb6c881
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 6E.AF.19920.07FDF276; Sat,  9
-	Nov 2024 22:17:20 +0000 (GMT)
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id 2D.59.19654.5BFDF276; Sat,  9
+	Nov 2024 22:18:29 +0000 (GMT)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
 	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241109221720eusmtip29409a74e180525c4492b8914cac4a28a~GbLb-uWNg1802118021eusmtip2o;
-	Sat,  9 Nov 2024 22:17:19 +0000 (GMT)
+	20241109221829eusmtip26dea181605cb08805274e8a5f09da181~GbMcmpob31523115231eusmtip24;
+	Sat,  9 Nov 2024 22:18:29 +0000 (GMT)
 Received: from mail.scsc.local (106.110.32.87) by CAMSVWEXC02.scsc.local
 	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Sat, 9 Nov 2024 22:17:19 +0000
+	Sat, 9 Nov 2024 22:18:28 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,105 +61,153 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-Date: Sat, 9 Nov 2024 23:17:18 +0100
-Message-ID: <D5HZV4A6SC9A.25U3Q0WUVDJHZ@samsung.com>
+Date: Sat, 9 Nov 2024 23:18:27 +0100
+Message-ID: <D5HZVZY3ZW6B.3MM2Y4NBQ51MC@samsung.com>
+Subject: Re: [RFC PATCH 1/3] module: Split module_enable_rodata_ro()
+CC: <linux-kernel@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 To: Christophe Leroy <christophe.leroy@csgroup.eu>, Luis Chamberlain
 	<mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
 	<samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
 	<linux-modules@vger.kernel.org>
 From: Daniel Gomez <da.gomez@samsung.com>
-Subject: Re: [RFC PATCH 2/3] module: Don't fail module loading when setting
- ro_after_init section RO failed
-CC: <linux-kernel@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>
 X-Mailer: aerc 0.18.2-67-g7f69618ac1fd
-In-Reply-To: <164e5f22f8ab59d1d516e3c992efdd9f83ab4819.1731148254.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
 	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsWy7djP87oF9/XTDT7c0LO4M+k5u8W6t+dZ
-	LS7vmsNm0TD7O6vFjQlPGS2WfnnHbLF0xVtWi82bpjI7cHh8vXmOyWPBplKPTas62TzenTvH
-	7rF+y1UWj8+b5ALYorhsUlJzMstSi/TtErgyvv/ayFxwlKfiyYp17A2MK7m6GDk5JARMJDZ+
-	2cfaxcjFISSwglHi9MLVzBDOF0aJCX1TmCCcz4wSvx8fYIVpeXT6CRtEYjmjxMuNjQhVJ3s+
-	QA3bwShx48xWdpAWXgFBiZMzn7CA2MwC2hLLFr5mhrA1JVq3/waq4eBgEVCR6D8dA1FuIvFm
-	7kuwoSICzxklVu/tYgNJsAHV7zu5CWymsECuRNu1Z1AzPSQWHXjEAnGemsT//oksIDM5BZIk
-	7u2JgAgrSsyYuBKqpFbi1JZbYPMlBH5wSGybOIcNIuEicb/jDpQtLPHq+BZ2CFtG4vTkHqjm
-	dIkl62ZB2QUSe27PYgXZJSFgLdF3Jgci7Chx9/NmqDCfxI23ghBX8klM2jadGSLMK9HRJjSB
-	UWUWUvjMQgqfWUjhs4CReRWjeGppcW56arFhXmq5XnFibnFpXrpecn7uJkZg+jn97/inHYxz
-	X33UO8TIxMF4iFGCg1lJhFfDXz9diDclsbIqtSg/vqg0J7X4EKM0B4uSOK9qinyqkEB6Yklq
-	dmpqQWoRTJaJg1OqgWluojDLfPUjn91enE499XmbnNWlrbss71kc3l5+3/+B1Q9nK9e8275M
-	Ntoql5LKjG+pr+8M7dHlMbSctelEl2g8U6B5wpHPT8O09pX0sn+S5kxPtG2WTa/u5ZjKYBZy
-	9KfVwgk53npP/jUtsvp9euPc3Hm/OEXDNsy7x7/S990dnWVTN31rPSlqxilq8fvW4nD+dtmX
-	rx69d1hUETH7sc3dcgftzWXPawqD+V0Wvfszt6cs9YS5xEKJRQIXtJyPXOGbp6zWnqmzqYrj
-	/VGhKP64qFCPuF0fqgSS2A+k6N+e85hpNZPdc1eundwOD/+byRx/YT87+J/E3/dq7bLsBSkH
-	z/7+dyB/x8KOJ1Ll15VYijMSDbWYi4oTARf4Jh6uAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRmVeSWpSXmKPExsVy+t/xe7oF9/XTDb7+YbO4M+k5u8W6t+dZ
-	LS7vmsNm0TD7O6vFjQlPGS2WfnnHbLF0xVtWi82bpjI7cHh8vXmOyWPBplKPTas62TzenTvH
-	7rF+y1UWj8+b5ALYovRsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyNzWOtjEyV9O1sUlJz
-	MstSi/TtEvQyvv/ayFxwlKfiyYp17A2MK7m6GDk5JARMJB6dfsLWxcjFISSwlFFi1uJF7BAJ
-	GYmNX66yQtjCEn+udUEVfWSU2Pb9BBOEs4NRonfzA7AqXgFBiZMzn7CA2MwC2hLLFr5mhrA1
-	JVq3/waaysHBIqAi0X86BqLcROLN3Jdgc0QEnjNKrN4LsoGTgw2oft/JTWBXCAvkSrRdewY1
-	00Ni0YFHLBAXqUn875/IAnFEJ5PEnumbmUEWcAokSdzbEwFRoygxY+JKqPpaic9/nzFOYBSZ
-	heTUWUhOnYXk1AWMzKsYRVJLi3PTc4sN9YoTc4tL89L1kvNzNzECI3TbsZ+bdzDOe/VR7xAj
-	EwfjIUYJDmYlEV4Nf/10Id6UxMqq1KL8+KLSnNTiQ4ymQD9PZJYSTc4Hpoi8knhDMwNTQxMz
-	SwNTSzNjJXFet8vn04QE0hNLUrNTUwtSi2D6mDg4pRqYfIvUfbP3SUkXifAbLL996eM7S+me
-	gKqv3mc9tj6ZPv+R26fWBWnyfHE7veSKDimY26rO5Go//kY5+e+jHbuOpFk+S61esHXF3aye
-	eSnctme8eRlOP53iFrPXib/O6sDJq9dLwwJvRcwJvhSWvmrHryXqvy3uNoVc1r8bM/EmOwN3
-	Q0+A3n9+fW9WEdX9No0vbh3d5G965siC7HAfs5S0ozbbCif2SCcvuv9s7up/sgqtHgzXugVZ
-	qiZY1LxLTt3Ab3zqTZDZASm7gIXTn29P8578xCriX9KS6O+vy/YsZQy7+Dhyi2nM+t05MS/V
-	l7+33/tiU6x0xVrjrRMEruV/LNOtr/X0WNGYcVvJY+ZDJZbijERDLeai4kQAHYJSAlkDAAA=
-X-CMS-MailID: 20241109221720eucas1p1e3f15dd5a4b8e20d107d1584630c8422
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsWy7djPc7rb7uunGzw7ZmVxZ9Jzdot1b8+z
+	WlzeNYfNomH2d1aLGxOeMlos/fKO2WLpiresFps3TWV24PD4evMck8eCTaUem1Z1snm8O3eO
+	3WP9lqssHp83yQWwRXHZpKTmZJalFunbJXBlXN+6nb1gh3TFoVd7mBoYX4l1MXJySAiYSOxa
+	vZoFxBYSWMEoMe9nWRcjF5D9hVFix9/DjBDOZ0aJbxsWs8J0PF3wnQkisZxR4kfjM4Sq61em
+	MUM4Oxglpq14DTaYV0BQ4uTMJ2A2s4C2xLKFr5khbE2J1u2/2UFsFgEViS/PZzBD1JtIbLp7
+	HywuLOAisXTiAjaIeg+JRQcesYAsEBF4ziixem8XWIINaNC+k5vYIe5Tk/jfPxFsGadAkkTj
+	gelMEHFFiRkTV7JA2LUSp7bcAvtBQqCZU2LNtu9AgziAHBeJJ7vjIGqEJV4d3wI1U0bi/875
+	UHPSJZasmwU1p0Biz+1ZrBCt1hJ9Z3Igwo4S18/NhQrzSdx4KwhxPp/EpG3TmSHCvBIdbUIT
+	GFVmIQXQLKQAmoUUQAsYmVcxiqeWFuempxYb5aWW6xUn5haX5qXrJefnbmIEpp/T/45/2cG4
+	/NVHvUOMTByMhxglOJiVRHg1/PXThXhTEiurUovy44tKc1KLDzFKc7AoifOqpsinCgmkJ5ak
+	ZqemFqQWwWSZODilGphWLHmx6dGKJEHOTRzZf18ar8lOWO51Z+XSOkHbtBkr10nNj1mz1SHv
+	RnR4LE+axfI/8jOXW5V7/fokJbXpinjiBUV1LcX7a8ouLYzb+uPWqs2JrTN2iuU5MpXvubm8
+	++uBsj7pVekv5+65deDhxCu/opl2b2/n9913YolHs9Hk6zcd9j04u3ubZkKkam26o+yRMD/p
+	OX+vTfgR+z8y8NqCnqQpbVt71u4osGK5cvez0gzDv/9duU+f/syyrLk/+zL3b2NGy+6KZ/za
+	oe/W7NLdVTW3c2L61bqmeM0FLmuOP5ZhuXTrzt33yS+Mv7FOf3TPvmXVz9NXZdh9NGfaTGt3
+	3mGXvzI3OvZyyC3/hnkV4kosxRmJhlrMRcWJAAvyrxmuAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrBIsWRmVeSWpSXmKPExsVy+t/xe7pb7+unG8w4L2txZ9Jzdot1b8+z
+	WlzeNYfNomH2d1aLGxOeMlos/fKO2WLpiresFps3TWV24PD4evMck8eCTaUem1Z1snm8O3eO
+	3WP9lqssHp83yQWwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq6dvZpKTm
+	ZJalFunbJehlXN+6nb1gh3TFoVd7mBoYX4l1MXJySAiYSDxd8J2pi5GLQ0hgKaPE0qk7mCAS
+	MhIbv1xlhbCFJf5c62KDKPrIKNHy+ygjhLODUaJn5XxGkCpeAUGJkzOfsIDYzALaEssWvmaG
+	sDUlWrf/ZgexWQRUJL48n8EMUW8isenufbC4sICLxNKJC9gg6j0kFh14xAKyQETgOaPE6r1d
+	YAk2oEH7Tm5ihzhJTeJ//0QWiCs2M0qcW7Ia7ApOgSSJxgPToX5QlJgxcSULhF0r8fnvM8YJ
+	jCKzkBw7C8mxs5Acu4CReRWjSGppcW56brGRXnFibnFpXrpecn7uJkZglG479nPLDsaVrz7q
+	HWJk4mA8xCjBwawkwqvhr58uxJuSWFmVWpQfX1Sak1p8iNEU6OuJzFKiyfnANJFXEm9oZmBq
+	aGJmaWBqaWasJM7LduV8mpBAemJJanZqakFqEUwfEwenVAPTnG9ta5k1gvVXby1Y+jd5+rSp
+	3P0+33+93rRgq+7T5TsdZGz11nyWjDY56f+obKXy0ayDFldVhAQfhaqZ3n7+++p5vyq22ns7
+	gqXWPd93Y/qX6cdXTWv/1+p4JdUhSfqo17Xjd/4w1rxJlrpy8c0GWwGVbcn7rB20Dx7ZEcDg
+	4OV6vvHb2c+V/wR3M33x4lzeLnzGVGnbq57eR+dfK6+WuL3Rr5KbtezScsayW9MzI+/YSD6Y
+	+9LvauZLR/41ScwqCv6q+mySbq18WqJvppac4fzpkZn64d/mF/80f7j0TwywnnUz8V/QiZDP
+	SicPyIomnlbrOPjOx2LD7HNTziq+8Ak5qVe4b5/EsgXSm9JPXlZiKc5INNRiLipOBADson0C
+	WwMAAA==
+X-CMS-MailID: 20241109221829eucas1p250055e370d38d9104f71e08633139406
 X-Msg-Generator: CA
-X-RootMTR: 20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be
+X-RootMTR: 20241109103551eucas1p1bddb2f2d9a898aba967868dece7cd685
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be
-References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
-	<CGME20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be@eucas1p1.samsung.com>
-	<164e5f22f8ab59d1d516e3c992efdd9f83ab4819.1731148254.git.christophe.leroy@csgroup.eu>
+X-CMS-RootMailID: 20241109103551eucas1p1bddb2f2d9a898aba967868dece7cd685
+References: <CGME20241109103551eucas1p1bddb2f2d9a898aba967868dece7cd685@eucas1p1.samsung.com>
+	<737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
 
 On Sat Nov 9, 2024 at 11:35 AM CET, Christophe Leroy wrote:
-> Once module init has succeded it is too late to cancel loading.
-> If setting ro_after_init data section to read-only fails, all we
-> can do is to inform the user through a warning.
+> module_enable_rodata_ro() is called twice, once before module init
+> to set rodata sections readonly and once after module init to set
+> rodata_after_init section readonly.
 >
-> Reported-by: Thomas Gleixner <tglx@linutronix.de>
-> Closes: https://lore.kernel.org/all/20230915082126.4187913-1-ruanjinjie@h=
-uawei.com/
-> Fixes: d1909c022173 ("module: Don't ignore errors from set_memory_XX()")
+> The second time, only the rodata_after_init section needs to be
+> set to read-only, no need to re-apply it to already set rodata.
+>
+> Split module_enable_rodata_ro() in two.
+>
 > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+
+Tested-by: Daniel Gomez <da.gomez@samsung.com>
+
 > ---
->  kernel/module/main.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  kernel/module/internal.h   |  3 ++-
+>  kernel/module/main.c       |  4 ++--
+>  kernel/module/strict_rwx.c | 13 +++++++++----
+>  3 files changed, 13 insertions(+), 7 deletions(-)
 >
+> diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> index 2ebece8a789f..994f35a779dc 100644
+> --- a/kernel/module/internal.h
+> +++ b/kernel/module/internal.h
+> @@ -322,7 +322,8 @@ static inline struct module *mod_find(unsigned long a=
+ddr, struct mod_tree_root *
+>  }
+>  #endif /* CONFIG_MODULES_TREE_LOOKUP */
+> =20
+> -int module_enable_rodata_ro(const struct module *mod, bool after_init);
+> +int module_enable_rodata_ro(const struct module *mod);
+> +int module_enable_rodata_ro_after_init(const struct module *mod);
+>  int module_enable_data_nx(const struct module *mod);
+>  int module_enable_text_rox(const struct module *mod);
+>  int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 2de4ad7af335..1bf4b0db291b 100644
+> index 49b9bca9de12..2de4ad7af335 100644
 > --- a/kernel/module/main.c
 > +++ b/kernel/module/main.c
-> @@ -2583,7 +2583,9 @@ static noinline int do_init_module(struct module *m=
+> @@ -2581,7 +2581,7 @@ static noinline int do_init_module(struct module *m=
 od)
+>  	/* Switch to core kallsyms now init is done: kallsyms may be walking! *=
+/
+>  	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
 >  #endif
->  	ret =3D module_enable_rodata_ro_after_init(mod);
+> -	ret =3D module_enable_rodata_ro(mod, true);
+> +	ret =3D module_enable_rodata_ro_after_init(mod);
 >  	if (ret)
-> -		goto fail_mutex_unlock;
-> +		pr_warn("%s: %s() returned %d, ro_after_init data might still be writa=
-ble\n",
-> +			mod->name, __func__, ret);
-> +
+>  		goto fail_mutex_unlock;
 >  	mod_tree_remove_init(mod);
->  	module_arch_freeing_init(mod);
->  	for_class_mod_mem_type(type, init) {
-> @@ -2622,8 +2624,6 @@ static noinline int do_init_module(struct module *m=
-od)
+> @@ -2751,7 +2751,7 @@ static int complete_formation(struct module *mod, s=
+truct load_info *info)
+>  	module_bug_finalize(info->hdr, info->sechdrs, mod);
+>  	module_cfi_finalize(info->hdr, info->sechdrs, mod);
 > =20
+> -	err =3D module_enable_rodata_ro(mod, false);
+> +	err =3D module_enable_rodata_ro(mod);
+>  	if (err)
+>  		goto out_strict_rwx;
+>  	err =3D module_enable_data_nx(mod);
+> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+> index c45caa4690e5..f68c59974ae2 100644
+> --- a/kernel/module/strict_rwx.c
+> +++ b/kernel/module/strict_rwx.c
+> @@ -44,7 +44,7 @@ int module_enable_text_rox(const struct module *mod)
 >  	return 0;
-
-I think it would make sense to propagate the error. But that would
-require changing modprobe.c. What kind of error can we expect when this
-happens?
-
+>  }
 > =20
-> -fail_mutex_unlock:
-> -	mutex_unlock(&module_mutex);
->  fail_free_freeinit:
->  	kfree(freeinit);
->  fail:
+> -int module_enable_rodata_ro(const struct module *mod, bool after_init)
+> +int module_enable_rodata_ro(const struct module *mod)
+>  {
+>  	int ret;
+> =20
+> @@ -58,12 +58,17 @@ int module_enable_rodata_ro(const struct module *mod,=
+ bool after_init)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	if (after_init)
+> -		return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
+> -
+>  	return 0;
+>  }
+> =20
+> +int module_enable_rodata_ro_after_init(const struct module *mod)
+> +{
+> +	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX) || !rodata_enabled)
+> +		return 0;
+> +
+> +	return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
+> +}
+> +
+>  int module_enable_data_nx(const struct module *mod)
+>  {
+>  	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
 
