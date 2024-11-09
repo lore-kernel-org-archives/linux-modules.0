@@ -1,108 +1,104 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97CD04EB38;
-	Sat,  9 Nov 2024 10:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C4E1537C9
+	for <linux-modules@vger.kernel.org>; Sat,  9 Nov 2024 16:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731148559; cv=none; b=NdsEGVSK2C5U5GO45Az8dWNtX+YnYakDBfZFDSbjJjFK3Crs/IEeAiKTJ3i/xrmRcrnNipwMC3gW1RuIggXqLPvv+KteURjUdm9SZaRs5CkyOMwy3L8gvSmwsECpbaNVACeFbJglBu7CiBS7M9rOAIh/oQbxZ/mB2DJ8n2uwQR4=
+	t=1731170448; cv=none; b=aCLW/8s5lbM9qEwx731yIwGk8onYx1NdLsZQg6hCeC+hjfCGkz4ktz86yqzEZJvoH93K4M6/i56m7/32h+9VrEvaMCElDkzCDOJ8heFVsL/nC+jfffb2d5H/WrShWQ+AK/nA5vnVkqDkmZFsiBtWUkM7uGqbgOyxxwxtXtPaQek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731148559; c=relaxed/simple;
-	bh=+0JA3VREL+CP75q52bwUhSocLz0H9J80XdmFDi/uuF8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FHqYF3oGzHHPfB2hraWqes/FU6bGjkPrYFXWhUias+7JyEMyddZcuEIagq+PETkZQaOOXjywP4NDSG57z281Qo+CYANB10C0Dr6BHjHKuzSln+LXyK+FCQWgLeoLpSmp8IEma1Eno8T0w1IJlGNUrGds+M84KhmpCoyXpBzc1LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4XlsfG4FvVz9sSK;
-	Sat,  9 Nov 2024 11:35:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id lmPlaWsk7gR4; Sat,  9 Nov 2024 11:35:50 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4XlsfC5CByz9sSN;
-	Sat,  9 Nov 2024 11:35:47 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id A0E958B764;
-	Sat,  9 Nov 2024 11:35:47 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id qn5FBAAisxfx; Sat,  9 Nov 2024 11:35:47 +0100 (CET)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.233.57])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3202A8B766;
-	Sat,  9 Nov 2024 11:35:47 +0100 (CET)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Kees Cook <kees@kernel.org>,
+	s=arc-20240116; t=1731170448; c=relaxed/simple;
+	bh=2Qp1HJqt1ZkkVbLZBqVG7b1YcQk5xk99M+jagErontM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0CR4Px9iLRUP4QVBN4WxJDjvwgj5fbubMxrl4uuF2e8fIzgBh6xcy4kkVLyj/RhQnLpBDgKN8O6nC8KpjWLMmfR0fuHgtLyL2781Te9m52if+f/HF1UbNT6AySdsG0BTzZfA/nsXAsJAyjYYH0MQm0PFbT7eRM5U1hvJzdEbWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bkg0g+cJ; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bkg0g+cJ"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5c9c28c1ecbso3941100a12.0
+        for <linux-modules@vger.kernel.org>; Sat, 09 Nov 2024 08:40:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731170445; x=1731775245; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dtOUB1qrhJ6BZVMlrSnOsiJoY3zuyj+h662J62NlIZ8=;
+        b=Bkg0g+cJdmSzO1XSQiTfOGd4BxbcmOwFwO9KHw37Mc5Pbje5eT84NHvx9vC3sAKWZ1
+         IAKjn6kEz8DnEKxmnWPxa/XHHhUl74EAMQa9VBn+m9VJAQD8+NLIVKC+eB80Ek9eCsoU
+         zVgOEE43Ze1LUUq47qsyDHURqWIRPFUhYFbWvGXFf5A5oIN420UPbN6Hg0VzbmXfglB0
+         G4f6FzPjIik1X/GsUf5a9l5MB1g5ZBpfJkKHHOlkLC5XA5kxb9Kjje7fp50RAbsJQ8sw
+         fuezAkfNIWD7FByAxocCPbgKwnWaudGnFLGeOLWk4ByusIrsPJ1LDjTpzC166TkxgCSn
+         Y1WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731170445; x=1731775245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dtOUB1qrhJ6BZVMlrSnOsiJoY3zuyj+h662J62NlIZ8=;
+        b=kw1vzBY8PTScMuLkTXXgBzZw+0Y2fpMHnbhRRCm1lask/ZK5SLfozhagMV8hH/GCOs
+         9uGj+QvWs5w9te0Nsdepe2jOsHNXHI5vwIUPgmqwyXR9GQ+9ifba+kdJnQVUdqd0FZj6
+         QuRF2QG4/oqBpjvTDJa3NwVxv6CdT8feg7jyFy7cL2oyfkSoYxNNFD4KrMrCV+R7YhVX
+         B5Zjm1/F90PjRCAoXtukcTgu6UreDF6/ePLTP74Mgq+YG2jVfdlng9GYHXShwhwRQnsz
+         YBLsxKkXvPswqq/MDAOyXaPpJdN2GMkDHZb9w7WkJ2O9H0lJ54q4LDF86ZX5gN4F3MQ1
+         qFgA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKeVYMmtI+SrSSCOZEkHgiRsgwprUn7dbfvKrtBh74BEog+zeWp5T2QKEb76MoGUmgfZCUEJno8ZnaNjoL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFvXhFb6v7jePm0pj4dF1LeflRhGFao0WoZgDry7I3x5GSg6wK
+	UPho0Fj+M6yFfc51/D5tgoLCRhwTa7y7B3/2danyH5AWV38acUFXgFx4QN9i
+X-Google-Smtp-Source: AGHT+IHLVcNegpdchpBK9ykQlaQriOzfBvfHIO3r8SNvHgNKQKCgXeLisn9qi90ySXhqzglMn2D7CA==
+X-Received: by 2002:a17:907:3e9e:b0:a9a:8674:1739 with SMTP id a640c23a62f3a-a9ef0008cf0mr617216766b.53.1731170444940;
+        Sat, 09 Nov 2024 08:40:44 -0800 (PST)
+Received: from localhost.localdomain ([2a02:3035:a05:3bf:6eb7:59e0:a3c6:6ba1])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0defadfsm378508866b.151.2024.11.09.08.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Nov 2024 08:40:44 -0800 (PST)
+From: Sedat Dilek <sedat.dilek@gmail.com>
+To: Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Emil Velikov <emil.l.velikov@gmail.com>,
 	linux-modules@vger.kernel.org
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [RFC PATCH 3/3] module: pre-test setting ro_after_init data read-only
-Date: Sat,  9 Nov 2024 11:35:37 +0100
-Message-ID: <a32f2390caf6e0d157ffea6e04f5e5d8629620c2.1731148254.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
-References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
+Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Subject: [PATCH] README: List strip CLI command option for summary
+Date: Sat,  9 Nov 2024 17:38:54 +0100
+Message-ID: <20241109164031.20496-1-sedat.dilek@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1731148536; l=1703; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=+0JA3VREL+CP75q52bwUhSocLz0H9J80XdmFDi/uuF8=; b=rA59hj9bUGX0f12Cvp96RyTYI3g4ko1UQG50/59qdgEAWjDifJH3wf0QdI6jQrbbEt45+GTk9 IuVbBTm+60CCw29mxZviRiHVSWDKw0IwTiLlOywwwfVZGFP+TbW0wLe
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-To be on the safe side, try to set ro_after_init data section readonly
-at the same time as rodata. If it fails it will likely fail again
-later so let's cancel module loading while we still can do it.
-If it doesn't fail, put it back to read-only, continue module loading
-and cross fingers so that it still works after module init. Then it
-should in principle never fail so add a WARN_ON_ONCE() to get a big
-fat warning in case it happens anyway.
+As addendum to kmod #220 "summary: List buildtype and strip options" [1].
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+With passing --strip the summary will list:
+
+  User defined options
+    buildtype        : release
+    strip            : true
+
+For details see the meson CLI command options in [2].
+
+Link: https://github.com/kmod-project/kmod/issues/220 [1]
+Link: https://mesonbuild.com/Commands.html [2]
+Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
 ---
- kernel/module/main.c       | 2 +-
- kernel/module/strict_rwx.c | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ README.md | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1bf4b0db291b..b603c9647e73 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2582,7 +2582,7 @@ static noinline int do_init_module(struct module *mod)
- 	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
- #endif
- 	ret = module_enable_rodata_ro_after_init(mod);
--	if (ret)
-+	if (WARN_ON_ONCE(ret))
- 		pr_warn("%s: %s() returned %d, ro_after_init data might still be writable\n",
- 			mod->name, __func__, ret);
+diff --git a/README.md b/README.md
+index 5169890a88a9..3c1ddbfb0a39 100644
+--- a/README.md
++++ b/README.md
+@@ -56,6 +56,10 @@ For end-user and distributions builds, it's recommended to use:
  
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index f68c59974ae2..329afd43f06b 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -58,7 +58,10 @@ int module_enable_rodata_ro(const struct module *mod)
- 	if (ret)
- 		return ret;
+     meson setup --buildtype release builddir/
  
--	return 0;
-+	ret = module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
-+	if (ret)
-+		return ret;
-+	return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_rw);
- }
++Further binary size can be reduced by using strip CLI command:
++
++     meson setup --buildtype release --strip builddir/
++
+ Alternatively you can try autotools build.
+ NOTE: The autotools build is slated for removal with kmod v35
  
- int module_enable_rodata_ro_after_init(const struct module *mod)
 -- 
-2.44.0
+2.45.2
 
