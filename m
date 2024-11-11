@@ -1,126 +1,122 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78511AAE3A
-	for <linux-modules@vger.kernel.org>; Mon, 11 Nov 2024 18:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2FC19CD1B;
+	Mon, 11 Nov 2024 18:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731350180; cv=none; b=kF6zjtG0/044j2dCe2JnHXV2xIRLa5TSZeg5BISVl2wcu8ttTqrDa3IJAHtd5eyFXxvGg20akfqvkc73eGIbIUKzToYaDIfCk0hnzgCji0n2pOg1fPPgELgfyv56V+qaq8REHw26kSfmEL3Wabz5iAUW1TsgjTKLnmBIwp9g078=
+	t=1731351236; cv=none; b=hPq+hqOsNvTcv6CP0tr59wp2I7J+P0XLLMhIwON2o+Ig+tkXWb6AaXVdbYXYxM6WfYyn+GLVt9hGxQbQyXCAotsLcxBQTupl0XL2yKUuMy7RVNmgnF30uGklt4wykpJ2ZxR+0b9k9OinUPTm4eu+90d6M8XiLxY7sP5TErythzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731350180; c=relaxed/simple;
-	bh=PV+dFXayKSoza4QKboAoM48LK/FZeCJuiCqWhtXBk0E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iqjxQZaMWL8q9QgbfKamtm0j0swUXkcPFs+P8nK2LFADAt263t9KykIWpimjznguj2pUIg8w5PSZCtsoWItJmX62bz/hX2HbryXOhmzE2SzZFGb33NIAV1pR3wYxPWbJpm+M4t5ZNP0kwZmCmqBkvEdSSlgPng8cdNF9H9omCxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1RP0KIgH; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1RP0KIgH"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2e9be83c3c3so3302805a91.3
-        for <linux-modules@vger.kernel.org>; Mon, 11 Nov 2024 10:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731350178; x=1731954978; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xT65ccAjs8Gh3WkVN2oxehYUfXZk8VYjMpoaHsa33o0=;
-        b=1RP0KIgHNyK4Ur5hol+Yu7G4mRLT5tpDqZKDX+teyt5MNs2yBx2OY1QvIMD3BKtJpY
-         Tm7AOHxYmRV9NaSxUZZuG3kk5lsUeX1X30ZoixVr4WI1su5YKD/jIl2uSs75SDhMUYQs
-         lKnCVRLqS1q1tO8yaRZXNBlm9PKTocDncHCDW6BtCaJjuXPf8e47MmGK79GRt2/HmFHR
-         Z8G1z4WKiRi+48GzPgrAwCmIW+5QOhG+Yez/bVR0LSE01QCItXedJdbqOKW4uQdN1hPI
-         jmTksgzrW8DUqt8wbXQXMMiMAqUUoBQnAQ5GEZ03tHwNVA69ttUxwWdKfSrxIjHhmjAn
-         9bWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731350178; x=1731954978;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xT65ccAjs8Gh3WkVN2oxehYUfXZk8VYjMpoaHsa33o0=;
-        b=l1Ac7MVNPtqdNF56qWSTGzaxx9a1EuG90Pw6jfnrlOZZEdXg3Kek2vy7cH16FqcuLy
-         rtZaEVilF7v7qqxC2HGefbYUWsJbIky7vKHvrFK3pavk+alssqy0T+ZhuNpdg0puDTUO
-         Q8KFHAfF5GvSDKUNBy3VpyPFnzyv0OaBOGipB3rP74z8YfdgoNXP0Ivtccd9oSO3aG5w
-         3asCLTWz9BoVfYee8VP+gFCblJbOFxn4WcdgksKiNY5iTFhtbAPPLQ0897pXn9/vGnPC
-         8sUh4RGEYG8viQpzsej4odaQ1C4Hmwm++VgoKFVZa8Vs6uQkTzxDPtD4fVh1YOlCzKEw
-         yEhg==
-X-Forwarded-Encrypted: i=1; AJvYcCUPHvhs5DmA1xcAbljENctQh9LE+1FvB4JMVV16Y4MHI4u+y6Myf5/UuJU81PnuVQSMNC6O4nac0I9XrP8n@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywkx6yBCRuvJYEpwk6h4ZN1ZeGrcdd9KGvQ+TKJ8r7xOKF8MGlh
-	JMOku0ozNjBZk+aooZ9bdeYF7lRNMllzIWB/UEF2cMhDGz0Bmu436US8EvzfqeO42vdEeubNToZ
-	iFA==
-X-Google-Smtp-Source: AGHT+IGsaV/1tgPpIVqWB5Mn7y56a6i4yKq/u3n7iqOCe1NxKLezWYvBI7qvvP2xMM7HdjgqR6IWPDWEFzg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a17:90a:8306:b0:2e9:9234:2db7 with SMTP id
- 98e67ed59e1d1-2e9b16eb06fmr126213a91.1.1731350177740; Mon, 11 Nov 2024
- 10:36:17 -0800 (PST)
-Date: Mon, 11 Nov 2024 10:36:16 -0800
-In-Reply-To: <ZzHsZoYlwYpNx9A5@infradead.org>
+	s=arc-20240116; t=1731351236; c=relaxed/simple;
+	bh=z5Ib76vyYe0BpY23WC3IVBifpL+ItBJOpSqR1nCIaIU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D5sMk1pNw8c6BSyqWr8fQeAPtELzwcgqCh5BF4Rvyybw74uT94JGc3PJ2teuKQIX8rue71Mzlt91ti10krtUyh/1lQUNr0OJD0qLUvnBzsoeBQYq+inQCO3No1ljs0aw0e6269OUeQv3dYrnYNgC2ugTa166MiduCqun8RgvcLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4XnJbs66gJz9sSZ;
+	Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id TyAyAoVco0MG; Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4XnJbs4tpgz9sSY;
+	Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 851398B764;
+	Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id HD31GV42XuDC; Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+Received: from [192.168.233.59] (unknown [192.168.233.59])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 1B6C18B763;
+	Mon, 11 Nov 2024 19:53:45 +0100 (CET)
+Message-ID: <b74f0845-4916-47eb-945b-eb91ae05fc91@csgroup.eu>
+Date: Mon, 11 Nov 2024 19:53:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241111105430.575636482@infradead.org> <20241111111817.532312508@infradead.org>
- <ZzHsZoYlwYpNx9A5@infradead.org>
-Message-ID: <ZzJOoFFPjrzYzKir@google.com>
-Subject: Re: [RFC][PATCH 6/8] module: Add module specific symbol namespace support
-From: Sean Christopherson <seanjc@google.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, 
-	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com, 
-	masahiroy@kernel.org, nathan@kernel.org, nicolas@fjasle.eu, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 2/3] module: Don't fail module loading when setting
+ ro_after_init section RO failed
+To: Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
+ linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
+ <CGME20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be@eucas1p1.samsung.com>
+ <164e5f22f8ab59d1d516e3c992efdd9f83ab4819.1731148254.git.christophe.leroy@csgroup.eu>
+ <D5HZV4A6SC9A.25U3Q0WUVDJHZ@samsung.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <D5HZV4A6SC9A.25U3Q0WUVDJHZ@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Nov 11, 2024, Christoph Hellwig wrote:
-> On Mon, Nov 11, 2024 at 11:54:36AM +0100, Peter Zijlstra wrote:
-> > Designate the "MODULE_${modname}" symbol namespace to mean: 'only
-> > export to the named module'.
-> > 
-> > Notably, explicit imports of anything in the "MODULE_" space is
-> > forbidden. Modules implicitly get the "MODULE_${modname}" namespace
-> > added.
+
+
+Le 09/11/2024 à 23:17, Daniel Gomez a écrit :
+> On Sat Nov 9, 2024 at 11:35 AM CET, Christophe Leroy wrote:
+>> Once module init has succeded it is too late to cancel loading.
+>> If setting ro_after_init data section to read-only fails, all we
+>> can do is to inform the user through a warning.
+>>
+>> Reported-by: Thomas Gleixner <tglx@linutronix.de>
+>> Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20230915082126.4187913-1-ruanjinjie%40huawei.com%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C26b5ca7363e54210439b08dd010c4865%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638667874457200373%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=ZeJ%2F3%2B2Nx%2FBf%2FWLFEkhxKlDhZk8LNkz0fs%2Fg2xMcOjY%3D&reserved=0
+>> Fixes: d1909c022173 ("module: Don't ignore errors from set_memory_XX()")
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   kernel/module/main.c | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index 2de4ad7af335..1bf4b0db291b 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -2583,7 +2583,9 @@ static noinline int do_init_module(struct module *mod)
+>>   #endif
+>>   	ret = module_enable_rodata_ro_after_init(mod);
+>>   	if (ret)
+>> -		goto fail_mutex_unlock;
+>> +		pr_warn("%s: %s() returned %d, ro_after_init data might still be writable\n",
+>> +			mod->name, __func__, ret);
+>> +
+>>   	mod_tree_remove_init(mod);
+>>   	module_arch_freeing_init(mod);
+>>   	for_class_mod_mem_type(type, init) {
+>> @@ -2622,8 +2624,6 @@ static noinline int do_init_module(struct module *mod)
+>>   
+>>   	return 0;
 > 
-> Btw, I finally remember why I wanted a separate macro for this:
-> so that we can also add the config symbol as an argument and not
-> export the symbol if the module isn't configured or built in.
+> I think it would make sense to propagate the error. But that would
+> require changing modprobe.c. What kind of error can we expect when this
+> happens?
 
-That could get ugly, especially in generic code, as multiple KVM architectures
-use multiple modules, e.g. x86 generates kvm.ko, and then vendor specific modules
-kvm-amd.ko and kvm-intel.ko; and PPC generates kvm.ko, and kvm-hv.ko and kvm-pr.ko.
-PPC in particular is annoying because it generates kvm.ko for KVM_BOOK3S_32=m or
-KVM_BOOK3S_64=m.
+AFAIK, on powerpc it fails with EINVAL when
+- The area is a vmalloc or module area and is a hugepage area
+- The area is not vmalloc or io register and MMU is not powerpc radix MMU
 
-The other quirk is that, on x86 at least, kvm.ko is now built if and only if at
-least one of KVM_AMD=m or KVM_INTEL=m, which triggers KVM_X86=m.  I.e. kvm.ko isn't
-built if there are no vendor modules, even if KVM=m.
+Otherwise it propagates the error from apply_to_existing_page_range(). 
+IIUC it will return EINVAL when it hits a leaf PTE in upper directories.
 
-I'd also like to use this infrastructure to restrict KVM's own exports, e.g. so
-that KVM exports its symbols for kvm-{amd,intel,hv,pr}.ko only as needed.
+On other architectures it can be different, I know some architecture try 
+to split the pages when they hit hugepages and that can fail.
 
-So rather than having EXPORT_SYMBOL_GPL_FOR() deal with KVM's messes, would it
-instead make sense to have KVM provide EXPORT_SYMBOL_GPL_FOR_KVM()?  Then KVM can
-reuse the painful extrapolation of Kconfigs to module names for its own exports.
-And IMO, that'd make the code that does the exports much more readable, too.
 
-E.g. for x86, something like:
+But I believe if it works the first time it should work next time as well.
 
-#if IS_MODULE(CONFIG_KVM_AMD) && IS_MODULE(CONFIG_KVM_INTEL)
-#define KVM_VENDOR_MODULES kvm-amd,kvm-intel
-#elif IS_MODULE(CONFIG_KVM_AMD)
-#define KVM_VENDOR_MODULES kvm-amd
-#elif IS_MODULE(CONFIG_KVM_INTEL)
-#define KVM_VENDOR_MODULES kvm-intel
-#else
-#undef KVM_VENDOR_MODULES
-#endif
-
-#ifdef KVM_VENDOR_MODULES
-static_assert(IS_MODULE(CONFIG_KVM_X86));
-
-#define EXPORT_SYMBOL_GPL_FOR_KVM_INTERNAL(symbol) \
-	EXPORT_SYMBOL_GPL_FOR(symbol, __stringify(KVM_VENDOR_MODULES))
-#define EXPORT_SYMBOL_GPL_FOR_KVM(symbol) \
-	EXPORT_SYMBOL_GPL_FOR(symbol, "kvm," __stringify(KVM_VENDOR_MODULES))
-#else
-EXPORT_SYMBOL_GPL_FOR_KVM_INTERNAL(symbol)
-EXPORT_SYMBOL_GPL_FOR_KVM(symbol)
-#endif
+> 
+>>   
+>> -fail_mutex_unlock:
+>> -	mutex_unlock(&module_mutex);
+>>   fail_free_freeinit:
+>>   	kfree(freeinit);
+>>   fail:
+> 
