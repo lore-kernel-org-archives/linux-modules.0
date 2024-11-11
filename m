@@ -1,40 +1,39 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27CA156F44;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048D31885B0;
 	Mon, 11 Nov 2024 11:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731323938; cv=none; b=Sar9A281GVeDqii5z5E2Pk5+ipXVia1MbPR6edkHHevH1QL/oao8MhDZoFDJWUdEty9K/VJCS01kdMdk49lNluwxThH+02EvlmOSdy7NKRcTTGwQ7910JI3MSXRI406p5X7WmzDZO5qH1ZtcPtiBfUdDUWfochcf1xut97q30Ow=
+	t=1731323938; cv=none; b=DHWMbY5Eb5SPobt0t7y4/w+uRRGVa7vwfhLZuT61Z9ILxUb90LmNK5SSOREY73S+YX6o1ojqHCTPggknFxdTT3KWpEMTBwWWLSk5FLkOg+tF0HPf6aqKHo9ig6rtQgU7qYw6Ts1fcFIrNI9qXSu5uA2hdFeuV9Z5Tsqqs0SZEQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731323938; c=relaxed/simple;
-	bh=ICOg1urReFlrbqKpNdpCrFXGtC8QcWkJbyQIfD2HIMs=;
-	h=Message-Id:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=MgMdw/Yta/F4GSQWTMRdek0Pm3CfdwNcHt26WRuAQiczanXzdkesABF53irF2iriwSyZoT76nH4LdRDeLFlBes6i9kdR4Uard4W2dEYbpp7LVYxLc5XycWPjl9XokhouXjsAld4AsPK9wOeqYrKX2Rs/47jstKm2L4d4A/MDqkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A2kZgLmU; arc=none smtp.client-ip=90.155.92.199
+	bh=AVTVQFaCxRrH60DxHmd5acjD1ixXYXYxIbQZmNktscg=;
+	h=Message-Id:Date:From:To:Cc:Subject; b=inX3S5la+RvT1OAFoWGmmJMHg+IDcUa393+mV/0mVqOSPLLhmI3LQ9jndL5U0yTwCW5mbz8POJunOkdlrahjGPKvdC+wDpBj4pzRd541TS3J4nG1OKL7HzEaQv+a3rMpw4mIxuoz/ZtCCjCLHkoaFuEAd3lzDQ6DRK9MSRfKlzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Z1Rad/aj; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A2kZgLmU"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Z1Rad/aj"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-	Subject:Cc:To:From:Date:Message-Id:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To;
-	bh=GKPMvBRLR7vZ9BJ6H1VKy/+n8A02WSymmS041p20eEQ=; b=A2kZgLmUDe0momfuDz3nJkXmGO
-	mv73I836/RYc9jtfXJMN5qEuZXVg0dOuH5+l9/DBrAqA50CS0XAca/xMPUBhtvPDLxmW8QdqjJYnO
-	WcawviSnSyZwZ7zlqYVLADLt0gWU/OP3j9DtyOLy5//X4Y6PxxGOJbHrCgichHmTbnw/2C0kn4abu
-	WJNKtz65OEz8FttRWx5i9jTDTOagI3Z3p6xBIYB9ujfF35n/8Ryv/GAFAMP0sIXrS6QRaaDzZqmRV
-	ADWFHwB52ea8AKwwWNLZ9CnhfHcw8xuAewGLSRJyvEUC1wGOBIBpd7FoP0ykktUf40zoOhPQbI1Ak
-	/4Sr3XGw==;
+	d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-Id:
+	Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=99NP88Axcs9KhoqW1tMbLJHKCZ3cOuZFnq7LB2MhYis=; b=Z1Rad/ajLhKK2ieSm7MOZM1Eu4
+	LVa18CSsZBgpyIXhK5jfyQDFwmmSagPRLEWigZY+f+WDqZvwKPd/Xvu1UBgs7HwqzMrMXVhPex4s3
+	7/rvNAnSjtI1idC1oHq6HAThJluqyjui/CdMds9LITd5ciKerAntLL/cbt//mNOW+j2lTCH8+iutq
+	JALHI2TRxtW/j4uv3kVv+EdnTbfVxmu/jAl09gd/g2SF8VD+gaIAAvTmOJZIQTDmTmPLFK7bJgg8u
+	wS9OigG/TUS/COPHYODuynOugA/rCrsO2FuDBYD1Xhu/PXg3G898Er1m89NVkafl9Ae/TvGXOICNJ
+	YXb9CRjw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tASRT-0000000Cpw9-20Zh;
+	id 1tASRT-0000000Cpw5-21cd;
 	Mon, 11 Nov 2024 11:18:47 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id 04C73300F1A; Mon, 11 Nov 2024 12:18:47 +0100 (CET)
-Message-Id: <20241111111817.244594188@infradead.org>
+	id E8377300C1F; Mon, 11 Nov 2024 12:18:46 +0100 (CET)
+Message-Id: <20241111105430.575636482@infradead.org>
 User-Agent: quilt/0.65
-Date: Mon, 11 Nov 2024 11:54:34 +0100
+Date: Mon, 11 Nov 2024 11:54:30 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -49,40 +48,41 @@ Cc: x86@kernel.org,
  linux-modules@vger.kernel.org,
  linux-kbuild@vger.kernel.org,
  hch@infradead.org,
- gregkh@linuxfoundation.org,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [RFC][PATCH 4/8] module/modpost: Use for() loop
-References: <20241111105430.575636482@infradead.org>
+ gregkh@linuxfoundation.org
+Subject: [RFC][PATCH 0/8] module: Strict per-modname namespaces
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 
+Hi!
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- scripts/mod/modpost.c |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Implement a means for exports to be available only to an explicit list of named
+modules. By explicitly limiting the usage of certain exports, the abuse
+potential/risk is greatly reduced.
 
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1586,12 +1586,9 @@ static void read_symbols(const char *mod
- 			license = get_next_modinfo(&info, "license", license);
- 		}
- 
--		namespace = get_modinfo(&info, "import_ns");
--		while (namespace) {
-+		for (namespace = get_modinfo(&info, "import_ns"); namespace;
-+		     namespace = get_next_modinfo(&info, "import_ns", namespace))
- 			add_namespace(&mod->imported_namespaces, namespace);
--			namespace = get_next_modinfo(&info, "import_ns",
--						     namespace);
--		}
- 
- 		if (extra_warn && !get_modinfo(&info, "description"))
- 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
+The first three 'patches' clean up the existing export namespace code along the
+same lines of 33def8498fdd ("treewide: Convert macro and uses of __section(foo)
+to __section("foo")") and for the same reason, it is not desired for the
+namespace argument to be a macro expansion itself.
 
+In fact, the second patch is really only a script, because sending the output
+to the list is a giant waste of bandwidth. Whoever eventually commits this to a
+git tree should squash these first three patches.
+
+The remainder of the patches introduce the special "MODULE_<modname-list>"
+namespace, which shall be forbidden from being explicitly imported. A module
+that matches the simple modname-list will get an implicit import.
+
+Lightly tested with something like:
+
+git grep -l EXPORT_SYMBOL arch/x86/kvm/ | while read file;
+do
+  sed -i -e 's/EXPORT_SYMBOL_GPL(\(.[^)]*\))/EXPORT_SYMBOL_GPL_FOR(\1, "kvm,kvm-intel,kvm-amd")/g' $file;
+done
+
+Also available at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git module/namespace
 
