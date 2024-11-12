@@ -1,186 +1,67 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F313B1A4F21
-	for <linux-modules@vger.kernel.org>; Tue, 12 Nov 2024 17:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13AD21894F;
+	Tue, 12 Nov 2024 19:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731434187; cv=none; b=pobvGlYZkUjN1dY2CHsZfLWaN9ED4sEcS8tiyF5TYz7OyI1dFgYmhzeItkPsOF/qhZM97osnC2c9oMG9v7Coh9rXrj8E9/lqYYc34+VyI6/7Qi1SulQuZO2xS7zu4JyZyby/K4qA0ZRjmSw4h+zELD+Ev9cLnpQs7n6DsQfCPGg=
+	t=1731441157; cv=none; b=Lv0DrKmRiftU4YX+fBXpdJU8lOWQXBj6B+4gMPH+5QB2rFWFU/Kko+9w10ZMsqPaER0UfvrmCsl91+1SgXUZRmxrF2pe5Yjm9YczOGC7LLomELIVFmKVXlES9yb8PLULcTkJnk7Mb7pnx8qZn+S5q+O3kFDs96ez5pzbnuM9Uv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731434187; c=relaxed/simple;
-	bh=JWSxFmX0mWdW30jemqkQmnNHt0dCtAUSXXk9eh8by28=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Ij5+kJTnu3QUmD3uVZkAkroDMoR6nqQHJtG1OTOvKyxeGKJeuD21WuxjQbImASesFGzQffXbNDT+u/2Hr3tN5lqC8TGT8MUFwIfjJWm1ImHeXP3Ic6rOmJ1iNPU3kAAbGMq4DQXIbntBOw4SNHvYvNzJnwkefw8Id2DF0nUmcyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WvlPBj8g; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1731441157; c=relaxed/simple;
+	bh=8LQYQjL64jqm1ymbtTmhmB0TwfCZDaWmJUVIyM/DhHo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L5SImRbsiiv58/3vau6S5vfKkRANzQ1ICcpD1xqimtofr+Ao1VyJYwHiuFHPgREF050PUY4ZmCLM0aAQ9nmF6qdXm1B8xCZBkX9sn6PT2zr6y/Yc6ufuhieZ5IY+yAbdF4/HXYb6jqCbPnj3v643KOcANR46xRuFuv5Sn/mASYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=I7lpUHCe; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WvlPBj8g"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2e2bb354e91so6211592a91.2
-        for <linux-modules@vger.kernel.org>; Tue, 12 Nov 2024 09:56:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731434182; x=1732038982; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9YTemcNOSBux/pW1rWp64ZP6TCtswrMtsdAWnShfy0=;
-        b=WvlPBj8gpdUpj2RvGrbqV4y8B5AM7v3Sta9FZ16aa9T+8GrNTLB52d+xFBATO/S/7F
-         44/UTOgIGMyGu97h6M/rlaA6GxZy5n3RMgKaxJJshgS8RoFup9VWCz9dPyjIGgT1P1z/
-         w7adBvXCFbpoWwKhRWiMhLgdrUxR1EO2SD1j+/xiIucS/SOEZlv4Z/Kq7QdOTukur6c9
-         tD8FWdnEyGez/u3/+fJcgbNxtKcj3c9e4LxFtyfxd8o1s7cCr2x40Lzsq2UpMmo3IVht
-         GYfNCcxBviPr+YmoXbOU8msFeo/l8xS3/27n+I3tVl7OxV1kkKcxFNVwe1i1rZ33lBJ+
-         FK7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731434182; x=1732038982;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9YTemcNOSBux/pW1rWp64ZP6TCtswrMtsdAWnShfy0=;
-        b=AGar3QX+9c7GIEe+it9igewjRrRPpLF/axp9ovcY2SCeoP0Ag+MbHO90mBIewVhVkC
-         kCknj65/nwN81ogzgjMp/EQl8YzIpcaH4tYYXN8iFRYwvQOA3uIx4CenPWJr0/vlTsMd
-         oxgOJ5Mc5knxw1+iI2kxYel+NzhAiHy0+OdBCgAsu/4NwqRsanu9MxCgs2U0urKIfnvm
-         a8zZqe9ZcsYHYyoMw1neeLjuFc5Rlkj0jiUbNkldo62gLUTcU2/AaUNv76V0jJyajum/
-         XFNkus6iz/RrBSWRnCMw8EGRsPmaumGfScOFZIoyClA/0n7UvyJcTD4FnWZQJdAqdeae
-         icPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWs9LKF+JrlV7KrVVf1uhOHJev3iqhYzZwzsSluSUqhkWmr38v5frEsUlY6d/2ULTWor2vH6V0x4XmvSxWu@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywcf4xRIYlsnMV6GaJHIEWxyOUuDxcb0jveGRMJsZxjjUcfhPMe
-	EBVrTLAg9hASx/reQ8OpzR45hN6s5rY2UWpmgjBJb+ShAbN7YcGVb+B0bU5j080MAg/ArGQ40e8
-	qHQ==
-X-Google-Smtp-Source: AGHT+IE5WL7h2XGzNj0qvrasZxftY/gxfWOWiXcQjrdbTbO16lDeHCTWuerM/EDIQ9IuAlYE6FEWQVvgFrY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a17:90b:198c:b0:2d8:8f24:bd8c with SMTP id
- 98e67ed59e1d1-2e9e493301emr50942a91.0.1731434182424; Tue, 12 Nov 2024
- 09:56:22 -0800 (PST)
-Date: Tue, 12 Nov 2024 09:56:20 -0800
-In-Reply-To: <20241112092023.GL22801@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="I7lpUHCe"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=eKCK7X08OarAmefC/MteVkYS2NHZgnlr4eJ6IlPakPE=; b=I7lpUHCenOJG9TgzaTTxGT9KFl
+	OrMVsF0G6Rtx+Z7wRkSYHnXpzSeRfkhCgBLwPdUB55x6o6uPSIsxihSlnyxUnlX7ZgJsqRb6tgOj2
+	iRHwj7t9Sp66QnHdC63L7zqLM27DR4e+PPoN6RaUbiR3JGUuxl9Hy8oAkgKK9TyVn4tLNZYBMbkuJ
+	bnyG0emND0QiN4xH6yICL+cQpMDhcf23hQ50uqhLBkc/d4MBTTT8dtYQznL/uh93HX/BHlllcIwNE
+	gh5iopluIFvoo2mp+W4ZXRliQbRCphL6CEZrkQ2sSMMTfDUY1AIi0HD30UWybfmMF05e1Clm7anCY
+	qoQi2Uiw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tAww7-0000000D8K3-1sOa;
+	Tue, 12 Nov 2024 19:52:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A94DA300478; Tue, 12 Nov 2024 20:52:26 +0100 (CET)
+Date: Tue, 12 Nov 2024 20:52:26 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
+	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
+	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	hch@infradead.org, gregkh@linuxfoundation.org
+Subject: Re: [RFC][PATCH 0/8] module: Strict per-modname namespaces
+Message-ID: <20241112195226.GT22801@noisy.programming.kicks-ass.net>
+References: <20241111105430.575636482@infradead.org>
+ <ZzKl-ldUQD9ldjWR@google.com>
+ <20241112092023.GL22801@noisy.programming.kicks-ass.net>
+ <ZzOWxC4JlCGe_BTe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241111105430.575636482@infradead.org> <ZzKl-ldUQD9ldjWR@google.com>
- <20241112092023.GL22801@noisy.programming.kicks-ass.net>
-Message-ID: <ZzOWxC4JlCGe_BTe@google.com>
-Subject: Re: [RFC][PATCH 0/8] module: Strict per-modname namespaces
-From: Sean Christopherson <seanjc@google.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org, 
-	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	hch@infradead.org, gregkh@linuxfoundation.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZzOWxC4JlCGe_BTe@google.com>
 
-On Tue, Nov 12, 2024, Peter Zijlstra wrote:
-> On Mon, Nov 11, 2024 at 04:48:58PM -0800, Sean Christopherson wrote:
-> > On Mon, Nov 11, 2024, Peter Zijlstra wrote:
-> > > Hi!
-> > > 
-> > > Implement a means for exports to be available only to an explicit list of named
-> > > modules. By explicitly limiting the usage of certain exports, the abuse
-> > > potential/risk is greatly reduced.
-> > > 
-> > > The first three 'patches' clean up the existing export namespace code along the
-> > > same lines of 33def8498fdd ("treewide: Convert macro and uses of __section(foo)
-> > > to __section("foo")") and for the same reason, it is not desired for the
-> > > namespace argument to be a macro expansion itself.
-> > > 
-> > > In fact, the second patch is really only a script, because sending the output
-> > > to the list is a giant waste of bandwidth. Whoever eventually commits this to a
-> > > git tree should squash these first three patches.
-> > > 
-> > > The remainder of the patches introduce the special "MODULE_<modname-list>"
-> > > namespace, which shall be forbidden from being explicitly imported. A module
-> > > that matches the simple modname-list will get an implicit import.
-> > > 
-> > > Lightly tested with something like:
-> > > 
-> > > git grep -l EXPORT_SYMBOL arch/x86/kvm/ | while read file;
-> > > do
-> > >   sed -i -e 's/EXPORT_SYMBOL_GPL(\(.[^)]*\))/EXPORT_SYMBOL_GPL_FOR(\1, "kvm,kvm-intel,kvm-amd")/g' $file;
-> > > done
-> > 
-> > Heh, darn modules.  This will compile just fine, but if the module contains a
-> > dash, loading the module will fail because scripts/Makefile.lib replaces the dash
-> > with an underscore the build name.  E.g. "kvm-intel" at compile time generates
-> > kvm-intel.ko, but the actual name of the module as seen by the kernel is kvm_intel.
-> 
-> I was wondering about that...  WTH is kvm doing that?
+On Tue, Nov 12, 2024 at 09:56:20AM -0800, Sean Christopherson wrote:
 
-No idea.  The naming has been that way since KVM's inception in commit 6aa8b732ca01
-("[PATCH] kvm: userspace interface").  My guess is that either no one noticed, or
-those who noticed didn't care.
+> This likely needs to be addressed in whatever chunk of code is enforcing the
+> namespaces.  The s/-/_ behavior (and vice versa!) is *very* baked into the kernel
+> at this point, e.g. parameqn() will happily parse dashes or underscores for every
+> kernel parameter.  As horrific as it is, I think the module namespace needs to do
+> the same, i.e. treat dashes and underscores as one and the same.
 
-FWIW, IMO the kernel build system is the one that's being weird.  AFAICT, the
-'-' => '_' conversion was added so that spinlocks could be placed into unique
-subsections.  Amusingly, it doesn't appear that there are any remaining users of
-LOCK_SECTION_NAME.
-
-  commit b5635319d32438ed516568f53013a460ba16e6ee
-  Author:     Dave Jones <davej@suse.de>
-  AuthorDate: Fri Feb 8 01:43:23 2002 -0800
-  Commit:     Linus Torvalds <torvalds@penguin.transmeta.com>
-  CommitDate: Fri Feb 8 01:43:23 2002 -0800
-
-    [PATCH] text.lock -> subsection changes.
-    
-    Make spinlocks etc use subsections of their parent sections instead of
-    an ELF section of their own - needed for newer binutils when the parent
-    sector is removed.
-
-#define LOCK_SECTION_NAME ".text..lock."KBUILD_BASENAME
-
-#define LOCK_SECTION_START(extra)               \
-        ".subsection 1\n\t"                     \
-        extra                                   \
-        ".ifndef " LOCK_SECTION_NAME "\n\t"     \
-        LOCK_SECTION_NAME ":\n\t"               \
-        ".endif\n"
-
-#define LOCK_SECTION_END                        \
-        ".previous\n\t"
-
-#define __lockfunc __section(".spinlock.text")
-
-
-> I mean, I suppose you can do: "kvm-intel,kvm_intel" but that's somewhat
-> tedious.
-
-This likely needs to be addressed in whatever chunk of code is enforcing the
-namespaces.  The s/-/_ behavior (and vice versa!) is *very* baked into the kernel
-at this point, e.g. parameqn() will happily parse dashes or underscores for every
-kernel parameter.  As horrific as it is, I think the module namespace needs to do
-the same, i.e. treat dashes and underscores as one and the same.
-
-
-More historical amusement:
-
-commit 8863179c65618844379ef90d4a708293042465c8
-Author:     Andrew Morton <akpm@digeo.com>
-AuthorDate: Sun Feb 2 06:08:27 2003 -0800
-Commit:     Linus Torvalds <torvalds@home.transmeta.com>
-CommitDate: Sun Feb 2 06:08:27 2003 -0800
-
-    [PATCH] kernel param and KBUILD_MODNAME name-munging mess
-    
-    Patch from: Rusty Russell <rusty@rustcorp.com.au>
-    
-    Mikael Pettersson points out that "-s" gets mangled to "_s" on the
-    kernel command line, even though it turns out not to be a
-    parameter.
-
-commit 326e7842d30d5cfc1089b85a7aa63e5c9f3c0a74
-Author:     Rusty Russell <rusty@rustcorp.com.au>
-AuthorDate: Sat Dec 14 20:13:11 2002 -0800
-Commit:     Linus Torvalds <torvalds@home.transmeta.com>
-CommitDate: Sat Dec 14 20:13:11 2002 -0800
-
-    [PATCH] Module Parameter Core Patch
-    
-    This patch is a rewrite of the insmod and boot parameter handling,
-    to unify them.
-    
-    The new format is fairly simple: built on top of __module_param_call there
-    are several helpers, eg "module_param(foo, int, 000)".  The final argument
-    is the permissions bits, for exposing parameters in sysfs (if
-    non-zero) at a later stage.
-
+Right, I'll add a s/-/_/g on both ends of the strcmp or somesuch.
