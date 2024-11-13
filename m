@@ -1,95 +1,83 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CF7335885;
-	Wed, 13 Nov 2024 07:32:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139CA1FA84D;
+	Wed, 13 Nov 2024 09:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731483170; cv=none; b=DAYCZJMEJk3HmhobzAfiU3efsZ0ayyDCmUgqlPKAbUqy9VmlQIpxy3oQTevlz/5subfkl4wlZ+nHl4Pvtl353/Iw/QcPvlLQmUDisS65b5rf7CHN08KCvYggF/ik/Em1916V6LZbDi2dPLCy8X91UmXrX4TgoERha2QQmE2ZY14=
+	t=1731491791; cv=none; b=HMy3Lk2lPgevqq8P+35uC72VySU22mbgy7ZBSbmUSM4vUKRW0zrt1/NOpVvn1bfaDbQOp+lpga/GUKwmfkhSCwkD62/ZRsubdr3/92xvOfW4IRvxmlMK1DWE5ZZDt8LnbmnFMdeCHwnBWio3c58Y1+SevLrvIr9Qt6ls3/TogkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731483170; c=relaxed/simple;
-	bh=sVsJxS9e8Feoju3z9kLVoX7oyF2LbuRtLNrwKHqDJ3E=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=WWR/0yVO2K/VfHVrnxesUkC0ghH3StyAayVQpF71r9B9cqspjjfArYfYUI5Cub2OklFoaNtUmo8ANFilzNWTMw00/tqqVkRu0iViTF7Pq1RZzsOusM/W8JFeoJSrHC/c64KWKDuaBCfVtD/dYua9FYmFgnj4aBsQJCfYARohHnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VETkn3Rp; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731491791; c=relaxed/simple;
+	bh=bvx8jAcX/A6fZXCDUJE05Wfh/AAiBpU4qvm1jooy1E4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d8I32E7CtVkPiB2qiYg9qcOGpRHOHl+k73fRI4Vt8qnZEsR2lgjlo3oy5Mwwq3ZsZYoGeGiQvsiyfpUD6Aziz8zVaLHV/pflW1Aw+UNF0fq6qyyQmcVNoDQiVSz1lXzrf44dne7RT5+TAbiMers0G6GF/AxGSVq9hVdHYchhBxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H7x0/6xI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VETkn3Rp"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7240d93fffdso5598327b3a.2;
-        Tue, 12 Nov 2024 23:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731483168; x=1732087968; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ydt3a/CwJ8B9afYgE/yrVykOza81dEen6k3D9kqyuHM=;
-        b=VETkn3RptQCfWGeWzz6TzgiJ0xmafCgDuqqYofNODFIW3KSw4SMRqCYyQ+c1BN65/I
-         64F8Fruc91+4QaDqbdHGVkmcco0ZJT0yJTYEQjX9Q/jTyvyMGFBy3akP0R0/RudjnRLO
-         JnZPU1lMA+p2h+10AsPFoJ3jShHWQGMkwMwcESUtqM3sPL6b/7rfwJn6ZXBo1fGqySbS
-         rRk7hzu7EtPfkFNCOnnuheoK646I8AHzSLu0kTCzN5rFXiw6g25JKJS9KkVv4lg76w/R
-         Xbf5kDSPXAuK2FUfmwR/PPogx3kl97RyxxdNCl84C+FccVdbu1HqSsew1XWKe8Qyv6I+
-         SMJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731483168; x=1732087968;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ydt3a/CwJ8B9afYgE/yrVykOza81dEen6k3D9kqyuHM=;
-        b=d3ylRecQOVrRtikX2fIuSG84vmraLijdfX6tuge5oP2SAs7J63vK31CD8DpK5A8SHm
-         qmrqNENFsBLvTOOVHllC6a0/FddwMpsnDKRotrbAai9EEGzyovJl/P0nZOedmbUph8rQ
-         x9lVEUbf5CkTgWRQ8dhRaPj7190LqbpU5JPg0qomKcw4GhumJdagLSsNvYNT4jJndmBN
-         mzbWgN9xOc7IXrVLpDm5VLVQjUkZ9Li7zBfErbvVfBeXp0AXxt1RmjL2jw85+vmo5ecL
-         W6IXi0pDqfqb3q1KIA1/MA8hpQDdoMpdzCdKB7JPsekX8Aa1jW1pBUNucjaH0NL27qZ0
-         cWzA==
-X-Forwarded-Encrypted: i=1; AJvYcCUlePrd/EFLQEBCPsUTRqnuFgoGBw4pwqU2bBgL7kKBBDAl56kD6YMVz5GgXqj8NML1y2U7K/nolaL10r8=@vger.kernel.org, AJvYcCW5qHFkrpVGdUdpn3wZPiubZHlZlLLX7fK2GEsbO5jDtGyPvQcMI62fTGdeGI/0H3hK6JAl9IluElKP7CryAA==@vger.kernel.org, AJvYcCXvFHcXcUdcAuH/TqZF/rzkaabczShcKDMp0r0U/7jQJidrfVSaD5wcOLqrOJIm97vGoGcGADzoYPmYL7JL5BKO+Qtj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3f23SPs1VqPHGRr48iOrzbDEE10/S86IS7A2LnQM3H87dwvfF
-	AUbk3XYfKwiB/W6oqWUEvQ4plDoUxtVlFcv3Vf34J8jZo1FMp6Dt
-X-Google-Smtp-Source: AGHT+IGo17+0CiznxgzXvqz3+t8QWlsqph7jxFNRIn4nmCDEyVatBOR0uDeUb8AhZ6CKTeHN6RZgNQ==
-X-Received: by 2002:a05:6a20:9191:b0:1d9:25d4:e8b1 with SMTP id adf61e73a8af0-1dc703de37dmr2643692637.25.1731483168541;
-        Tue, 12 Nov 2024 23:32:48 -0800 (PST)
-Received: from [192.168.68.56] ([122.161.49.182])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407862826sm12543777b3a.15.2024.11.12.23.32.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 23:32:47 -0800 (PST)
-Message-ID: <8acdd32a-1702-4434-8d79-2e73ded36d2a@gmail.com>
-Date: Wed, 13 Nov 2024 13:02:43 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H7x0/6xI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EFC5C4CED0;
+	Wed, 13 Nov 2024 09:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731491790;
+	bh=bvx8jAcX/A6fZXCDUJE05Wfh/AAiBpU4qvm1jooy1E4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H7x0/6xIKMp6G4IfpEco4TyZMuxyONQeQ7Wkn3OERHbdcdW1Vln4bMxBh0encVtSE
+	 TgfjRxKtemHVXre0/gVws8b5Vil/5a2Hx6CkSYaSUBjTDzu8AtIKDSNYGpOOdT1jfD
+	 NTq4orBTdQMJv8g853vrmEGOSamTCOIaXT1gmmbEqTadJGtT0IUJGOS5AMdYNPGYZ2
+	 xcZ+7YBEd8gMXkUAzx9DoOUxPHoYLfzJnldgtjNAIpPtp+8G1q+cxJHYZog0jmOXCF
+	 uTxk71dGz4SNuZe9v7zs85rSTmmaY7YFNsOM7IO31j2yS9JfQjUR4uBWw8/wgHGSfl
+	 S3Y15DCVHvO4A==
+Date: Wed, 13 Nov 2024 01:56:29 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 3/3] module: pre-test setting ro_after_init data
+ read-only
+Message-ID: <ZzR3zWzO2AoeiF8P@bombadil.infradead.org>
+References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
+ <a32f2390caf6e0d157ffea6e04f5e5d8629620c2.1731148254.git.christophe.leroy@csgroup.eu>
+ <ZzO6cNo2MalF92OV@bombadil.infradead.org>
+ <fa0f038e-3066-49de-bcab-97a779735665@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: zhengyejian1@huawei.com
-Cc: bpf@vger.kernel.org, jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com, mcgrof@kernel.org,
- mhiramat@kernel.org, peterz@infradead.org, rostedt@goodmis.org
-References: <20240607115211.734845-1-zhengyejian1@huawei.com>
-Subject: Re: [RFC PATCH] ftrace: Skip __fentry__ location of overridden weak
- functions
-Content-Language: en-US
-From: Dropify <d.dropify@gmail.com>
-In-Reply-To: <20240607115211.734845-1-zhengyejian1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fa0f038e-3066-49de-bcab-97a779735665@csgroup.eu>
 
-Wondering where are we with this issue?
+On Wed, Nov 13, 2024 at 07:49:24AM +0100, Christophe Leroy wrote:
+> 
+> 
+> Le 12/11/2024 à 21:28, Luis Chamberlain a écrit :
+> > On Sat, Nov 09, 2024 at 11:35:37AM +0100, Christophe Leroy wrote:
+> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > index 1bf4b0db291b..b603c9647e73 100644
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -2582,7 +2582,7 @@ static noinline int do_init_module(struct module *mod)
+> > >   	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+> > >   #endif
+> > >   	ret = module_enable_rodata_ro_after_init(mod);
+> > > -	if (ret)
+> > > +	if (WARN_ON_ONCE(ret))
+> > 
+> > Do we want panic on warn systems to crash with this?
+> > 
+> 
+> I would say yes, for two reasons:
+> 1/ It should never happen
+> 2/ Such systems care about security and don't want vulnerable systems
 
-I am experiencing an issue where in a fentry/kfunc bpf probe attached to 
-a function doesn't fire. I have only experienced this behavior on Debian 
-kernels with `CONFIG_X86_KERNEL_IBT` enabled.
+OK thanks for thinking about this.
 
-Because of weak symbols being removed from kallsyms, 
-kallsyms_lookup_size_offset() returns the symbol offset for the function 
-"acct_process()" more than the actual size. And the function body now 
-contains two __fentry__ locations.
+I think making this clear in the commit log would help as people these
+days scream at random WARN_ON_ONCE() sprinkles.
 
-Depending on where binary search lands up first, correct (acct_process + 
-4) or incorrect (acct_process + 260) location is returned.
-
-Thanks,
-
-Dropify
-
+  Luis
