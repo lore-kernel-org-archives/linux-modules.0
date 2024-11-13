@@ -1,57 +1,57 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF4F70835
-	for <linux-modules@vger.kernel.org>; Wed, 13 Nov 2024 17:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9692022EA
+	for <linux-modules@vger.kernel.org>; Wed, 13 Nov 2024 17:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731520134; cv=none; b=SWfFer97vfWZBbwzkrBvMtnduTjbLNZ2riDy8wguEadeiKWwlFZt57vza66NmRks12AXAp8rZWjEZMuSfnbJJTGNVdqqS5Lya5aYxO5kDe6izN/J/SPn09Iwxm0flZ5JrUx003FxhF6EXd6oYZBtaSbptBaYafohfLOjLENBxj4=
+	t=1731520462; cv=none; b=rqi9ZPkvX7v6GDLuUFWOLVoxZ0nqLVP+oJ9bSbf8igx3izXdX0Qa0+/Aet+yGmPmcsVvQ56fUzWyJRInBFALq6qkFUYoON9kUt+dlF+p8hJrIUztjyUeKIkwMhGCfd+1GV83zdVnvop9olx/e2dr5DAZq8XhdywipDNWDcUoQfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731520134; c=relaxed/simple;
-	bh=2vvecHebovoeGzhdxA64vP0FIVcZsrzn6/S2UuTdzUQ=;
+	s=arc-20240116; t=1731520462; c=relaxed/simple;
+	bh=GLNEdJnIJ8LZnbahpw3kB6Ri67YbLsla73/1yEoh83E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YEMWnNsZV6gB76EgqqMzlwxS+IBsV/3YyP76q1qFgDVGkbHiI5tDQTAYHk0zw8Bk+Q49gRbleYzdBNxCxxO3xAiPTqwnWxs1DXvchXhaCXQyPrMHfVP2Mk9DyZm8v/byu1lw8ilzlJCvivRWbNR1PjjOneppqfndvG3E0DI4MFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q5agB2me; arc=none smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=H1zVxkI0mlLaCs8H1vDnZ6Jd6hivxFQyBI8iO/XCKrIO2Uzhhg8i0TzP6iAXP7apruoepdDZ8U+KccpcaRklQVcwQNqrkAmdwfCSAMd5MZfYVF4kZrlqtsY6UPXJw2+lEQlHgeC3diqHv0FDb8pZOs1lokeWVGxVXbm2+52daM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hAPk5E7i; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q5agB2me"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5c93e9e701fso7054a12.1
-        for <linux-modules@vger.kernel.org>; Wed, 13 Nov 2024 09:48:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hAPk5E7i"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5c93e9e701fso7198a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 13 Nov 2024 09:54:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731520131; x=1732124931; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1731520458; x=1732125258; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ut09l0p4ejZD65rK22Do5DdJADgIGvLTdDvLpb35Lpg=;
-        b=q5agB2mexx2fJ5p1z3Xx8YR2q/Zt3BQwdxy3HYl87xBtWPT1NCrsUcJwV6KeCrgi82
-         WmYboHZe532UOtuz5eBh3dBn7+H62L9QIzWHI4ugSiHfSY/Cp4JfVBTEzpMdo6VBc0OJ
-         nokiwrPS/IYH2YvLIe2RLaINnfd9xlryIEZi4OEEEHZOmmHIvrGY+4gIlj9vS49nQHdO
-         7RrXs/TA3AeBBd9p0iNXut3YiDw6reUo5V41UaqgTPgnm0YPZoWox3Zm7N2USLs9B42M
-         fZgUNn0qA1J0AgtmWtf9UD/hhLfAqbq2jTNX6NFMzM2LgmE3au5sZc16sLkg6VXvJ9KW
-         uG4Q==
+        bh=OY7wBsUbdQcWggybLDq37KJ8DaxAj5d11PMFbvDEhAw=;
+        b=hAPk5E7iPdRGDjWTmDRRHcxYpnDfw+d86PJtJkK9kPXpYgcAGWBnOh5J8LTQf3juXK
+         ncOnA0KbRXw2OMxatjtWQRRfg7RR3fZM5YgHCzIWPVXgrn+Ba4UYr5hnmXc3E8ShBshL
+         jRe9+PUp0g9kTFXkEt31FcOpGFxqZRUakp+0LwiyrlM0ycmpMUkzGZJHf3ANlpr3PMGh
+         8l0scIbHmGUsHR7q0EaOTd/FCxikK9xWs4X+m6T08czYuaJLpbDpKU4/C76yw0pxwEtp
+         02EPuiyVLzOvKGSfGmEe4XePJgaF5OQCsgmzQketJJbIkvnyfn/sOAQmkfGfcAJxOBYV
+         eu3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731520131; x=1732124931;
+        d=1e100.net; s=20230601; t=1731520458; x=1732125258;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ut09l0p4ejZD65rK22Do5DdJADgIGvLTdDvLpb35Lpg=;
-        b=gXNjIC0smSIuLB76OJ314Gei2Td1oirfQ9GuoMq7TcFtzHw7IuaIOSs81sMvtAE3fa
-         TBY4mJc8QvpKc306oaV77cUIykj2KwG4UAFs5/bIqsydSn6cB/Gq3rMS3TZwQluOY+15
-         qxWuKOnbl/2s/TAYp7e3N17f4J2UDL3RZWC7RlZeRGW1oSv5tvuKnrND3hbvaeQL3Cb/
-         VOXnDqB3npsAQ0wFKr6lgWj7eAqq6ftWeBXfLeitaDEZdeROx7sxYfyNSCGc6G/3WsS0
-         mOQqE7ZSwQN05JQdoulqY8GsPMihAgmNyTJ8cLyvpNOILoyKMDOkoRlvwm8NnIo/EsVd
-         hcEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU4IbccVDWFPVJee9wHd8RrTGtz5uUHk6QEAbiz1/XDQ3UArADVqk8F/Bw/K33FYo7knP84NoLYeg1eKxmB@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpRKfe9UlHuVuyTVu5pwVexcUPFbfWKILMclMzDZthaO16WDMA
-	X+8gQzd5mxTDv+eWIJQ7DF5WQRGYMRXWOnDNlQPftxHk7LssJa+CdsoD6fnK19fMnRKSitI5b5d
-	+3XjcaFTaWDUgJKf1ImMCloGEHecsgls7g1nC
-X-Gm-Gg: ASbGncs8OMjm+aGvptRBXsh2iMcM1zL/V9AFRVFVk1QPBUC7UgkCrq65lukMrWvYwP4
-	9LSJGgJBrtEBrsvyeoUInIRNdRRdB
-X-Google-Smtp-Source: AGHT+IF+3cQN9o21cQiIysZAB4NJwFjVHmftEWZ1JWnUJZdbBdxTB+kUQux093XqXmTqkJPQ2rghtkSNf6aJlDPPoDk=
-X-Received: by 2002:a05:6402:886:b0:5cf:7145:be96 with SMTP id
- 4fb4d7f45d1cf-5cf7145bfa8mr145258a12.2.1731520130908; Wed, 13 Nov 2024
- 09:48:50 -0800 (PST)
+        bh=OY7wBsUbdQcWggybLDq37KJ8DaxAj5d11PMFbvDEhAw=;
+        b=jgXGdD+juFlNpKwUNnIgHXXbduF9UpbJn2fNGIXuz/MdUtkGFCiyhDZA4o839Pyz7G
+         v+bkL243Id2LezA+VMMG83GD8QMuos0sya9CuiqhXsH/bXc1jXdv8Q8UfPaj1U92+QWj
+         +SCFqhhsgDUyIFnRE+8exxbRx9iaGaIOKI1BtTNHXI4RyNK5gFm07WyHlZUCrvQHJP60
+         3wrmldEFeBJFfpHziH8Y8sOEcF+rnUXwCx9dLcd9zJpVrsYvhC3T7j3gqiWQvM737mPF
+         uZW379aAjB9NCi/nq4RL9OZ57ofpn2Z83HMWQbPuiO10u+f06DJ2ZCLadcR+5SqSOJnc
+         3naw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMV9r1HzGrtoV0BTYsWLrw1zn+m5TJiF+yr9oJYg9wZR153EYb3GMonGQkGoksImh4Fx8lScQrc+wbD5CT@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/uMwJq//JiHIG90lzoL3lWidha5GGtt3s751HbW1Eu0yxUMVJ
+	oWNBhNJMvC8v9D+lxlRjzb3OVbXfQRCK3sl8JwstgR9dRAS29OReEbrAQDpwBx5KB6ZuIbJT9Gw
+	4i3wGNB3eBZWbyGYkYxSvNNVyz59FjU0Y1rrG
+X-Gm-Gg: ASbGncvde8CB7Da5C2etEQIr4Efqi64ZaVLTPAhSlSIKx2oPV11jKluMxaeSI5OdJeW
+	IDvy7N7WeP3vsQ0shBUSbFc0BOTk8
+X-Google-Smtp-Source: AGHT+IFXLnHsfDYTpS01K6b79CsIuzgS6MULqvEjuFdWIkvmBmxgPffAF9QVNOOGzikrvjwjQEp2QY0dMQ2TSECyW3Q=
+X-Received: by 2002:a05:6402:5308:b0:5cf:659c:abb9 with SMTP id
+ 4fb4d7f45d1cf-5cf659cadbfmr209409a12.6.1731520457717; Wed, 13 Nov 2024
+ 09:54:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,12 +59,13 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241030170106.1501763-21-samitolvanen@google.com>
- <20241030170106.1501763-39-samitolvanen@google.com> <CAK7LNAR9c+EEsOvPPn4qSq3gAFskYOXVd=dg8O+bKeeC-HMifw@mail.gmail.com>
-In-Reply-To: <CAK7LNAR9c+EEsOvPPn4qSq3gAFskYOXVd=dg8O+bKeeC-HMifw@mail.gmail.com>
+ <20241030170106.1501763-22-samitolvanen@google.com> <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
+In-Reply-To: <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
 From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 13 Nov 2024 09:48:13 -0800
-Message-ID: <CABCJKudWUBE2ZboktcBEykBReor4T1Cf8dfRCWJYEryoT81OEQ@mail.gmail.com>
-Subject: Re: [PATCH v5 18/19] kbuild: Add gendwarfksyms as an alternative to genksyms
+Date: Wed, 13 Nov 2024 09:53:41 -0800
+Message-ID: <CABCJKueVjP8V-=3Ehi4QvQzg1FZh2unyVMDzSJ_vJ_E5EE+gLg@mail.gmail.com>
+Subject: Re: [PATCH v5 01/19] scripts: move genksyms crc32 implementation to a
+ common include
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
@@ -77,55 +78,47 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Masahiro,
+Hi,
 
-On Mon, Nov 11, 2024 at 8:09=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+On Mon, Nov 11, 2024 at 8:06=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
 rg> wrote:
 >
 > On Thu, Oct 31, 2024 at 2:01=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
 e.com> wrote:
 > >
-> >  # These mirror gensymtypes_c and co above, keep them in synch.
-> > -cmd_gensymtypes_S =3D                                                 =
-        \
-> > -   { echo "\#include <linux/kernel.h>" ;                              =
-      \
-> > -     echo "\#include <asm/asm-prototypes.h>" ;                        =
-      \
-> > -     $(NM) $@ | sed -n 's/.* __export_symbol_\(.*\)/EXPORT_SYMBOL(\1);=
-/p' ; } | \
-> > -    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
-> > +getasmexports =3D                                                     =
-           \
-> > +   { echo "\#include <linux/kernel.h>" ;                              =
- \
-> > +     echo "\#include <linux/string.h>" ;                              =
- \
-> > +     echo "\#include <asm/asm-prototypes.h>" ;                        =
- \
-> > +     $(call getexportsymbols,$(2:.symtypes=3D.o),EXPORT_SYMBOL(\1);) ;=
- }
-> > +
-> > +ifdef CONFIG_GENDWARFKSYMS
-> > +cmd_gensymtypes_S =3D                                                 =
-   \
-> > +       $(getasmexports) |                                             =
- \
-> > +       $(CC) $(c_flags) -c -o $(2:.symtypes=3D.gendwarfksyms.o) -xc -;=
-   \
-> > +       $(call getexportsymbols,$(2:.symtypes=3D.o),\1) |              =
-   \
-> > +       $(gendwarfksyms) $(2:.symtypes=3D.gendwarfksyms.o)
+> > To avoid duplication between host programs, move the crc32 code to a
+> > shared header file.
 >
 >
-> I do not want to see crazy suffix replacements like this.
+> Only the motivation to use this long table is to keep compatibility
+> between genksyms and gendwarfksyms.
+> I do not think this should be exposed to other programs.
+>
+>
+> If you avoid the code duplication, you can do
+>
+> // scripts/gendwarfksyms/crc.c
+> #include "../genksyms/crc.c"
 
-Yeah, I agree. It does get a bit ugly.
+Sure, that sounds reasonable. I'll change this in the next version.
 
-> I decided to delete this.
-> https://lore.kernel.org/linux-kbuild/20241111171753.2917697-2-masahiroy@k=
-ernel.org/T/#u
+> > Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > Acked-by: Neal Gompa <neal@gompa.dev>
+>
+> Does this Ack add any value?
+>
+> Acked-by is meaningful only when it is given by someone who
+> maintains the relevant area or has established a reputation.
+>
+> $ git grep "Neal Gompa"
+> $ git shortlog -n -s | grep "Neal Gompa"
+>      2 Neal Gompa
+>
+> His Ack feels more like "I like it" rather than a qualified endorsement.
 
-Cool, thanks! I'll rebase v6 on top of your patch.
+Like Neal explained, an Ack from a potential user of this feature
+seemed relevant, but if you don't think it's meaningful, I can
+certainly drop it.
 
 Sami
