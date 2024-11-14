@@ -1,139 +1,84 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEBE1CCEE0;
-	Thu, 14 Nov 2024 01:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEFC1F8F0B;
+	Thu, 14 Nov 2024 10:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731546574; cv=none; b=TVYFaI2DF9j9lDTdyihAFjAwBjEQuxfct8r6I95hexcvs0LP3paUab3ZUF27qMkC0pOOEruyqbaBbQagkpXHgRRwelyqHy/47bZTpxoF5EH/ZvS8I/RPXQAC/3yjp7ULxRGMkJVkh+XG7fvsL3h011YkaHHADHmrDPFLTXNsC5s=
+	t=1731580306; cv=none; b=To8Men0ZmPJyNWaYR7iAbE79yrL/jEzB6xLB+BZSv8cWhOxMdSL7UNn46mdMPIc6a/uRJLYrNIp/My+Vkc0PobC+VznSicVPQ1LB9++HQZN7joYX7kCV2rpBA/fyv4sNk3bfSo5plGAO2v3CugUQEFuCM9q9DnhQ0s1RHdOtge8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731546574; c=relaxed/simple;
-	bh=4dBnu6yXq+K0Mi0c+uAajHja4UE4d0nABKzZl+smMfw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QPNEsXjWwBu2Vc5xynxXTZeUXugtINfx5XCD8swTErFotskcZIouLlS8GYNtJJfe2IHBfIuaRviNxOpNynSOhRmgXZyBf0tMkIoiIvzm+JoA5IaVQFcDcBTcMiTMNZg0dhDlfLJx0POahMEA7sP0Gj61fw9p3SpeLyiC2oxfeBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539fb49c64aso73334e87.0;
-        Wed, 13 Nov 2024 17:09:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731546570; x=1732151370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=poZXREh8ime1SzzkUl+eZQKKgwvGXn8BXWEpCPeefZg=;
-        b=mU86A2N49MlMdzEHaaz5SmN7IgUU4u6Ks46VUc6D4rEFwbFBroInT53mTCHN4AqmFB
-         s6e1mkT8FJdV3JhE/a9Mld+EhlbOVW5UUBHV3YoNEjSNqjbrxTf2Kmp4UTj+SDGXBYTQ
-         VHC9CnKEL3AKWXJMUthe5xTVsPJLewCXjsFRrofeuI3OzSTQMn9UzCn+jWaYftYSwsZP
-         eus0kT3rYjOCThUf3fXqIKylBvkgvfrh2G8dB7gSPaX5N8uFPHWjvReV2aCWRPhFtIQT
-         kSczfdeP1cMVeCG0c0oBprgeiHaCNhVbUXTKW3RUCRqJlPjXz4BEVkmdHCxgqigt+bIS
-         mRMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKRQchfiDb6bdz/V50uon9/BKQqOeLuADB+w2lAsZmy6Mz+4mfZIGLHll2XKS4t0zNdpjMLGO9dUaX6rF1ROo=@vger.kernel.org, AJvYcCVu6M/7T6Tv8qZLb/QOULSSyDoooBYDid8S4TMvcY6D7QgxItSf5L+voK7cTO5+lTIHpNzDwiFqJYo7G95XgQ==@vger.kernel.org, AJvYcCXcRHiIUq54GcD79eoLEjE9mMU5rRFi1IkQeTk8gWzPxBZlO0dZi28nIgjABrSWkv5uyTH4VBlSAcLa9S2P@vger.kernel.org, AJvYcCXiE8NxH/la0wylfGcsyintCWZkRvt0+HPEXMCSUGlge8zWXAp+iJDSOym+bOZ1L1axlUIfc3IDzO2A/v8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ2LVBFOSoD6aDsUzZcQ7au/kwMJee6TG9a+y+JWN3azY+dRIZ
-	77C1W+CKAnxfMMEqNpOoQ3FxJX8innYDXPCVBeOMxCSIifr7hXXGwOIY3sM3aQ4GqQ==
-X-Google-Smtp-Source: AGHT+IFg2ulbEahV6fcZy9QQvfeb2d4TR4fvLjExiGL18iXsp/dreHuH87gojPMBSaV4e49oENcR0g==
-X-Received: by 2002:a05:6512:114c:b0:53d:a2da:d396 with SMTP id 2adb3069b0e04-53da5c3eb3amr231136e87.23.1731546570341;
-        Wed, 13 Nov 2024 17:09:30 -0800 (PST)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53da6500ed8sm9564e87.90.2024.11.13.17.09.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Nov 2024 17:09:28 -0800 (PST)
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2fb51e00c05so1146921fa.0;
-        Wed, 13 Nov 2024 17:09:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWBXNIEL/mIT4eKJZ6sOJJK4W003238SM+AF3bJo1b/kEisGVDslJbtaEZtKsTI7Z/1/AmjHt966RFP5SS0eQ==@vger.kernel.org, AJvYcCWLN5P2VVKU8IKR4/SKGdi+rdVI1WfHN9SGerY2L7SzH39+ALsiqkjl/weHdtGzYeer7IE5O3IoJh7xXJvV9jI=@vger.kernel.org, AJvYcCXEWYvLeh5mZS497AyD4y67ZwShY9Vqai8tXSU5GUB2DvUEa1oNusGMQ6cr6lB4oOOGOB+OYCCJ1XdDcJs=@vger.kernel.org, AJvYcCXuWLtT9gtkiI17CAp/HwKTBea2sT+829erSCgl/d7Ivh/1AzdCXM7A4DMNnaZqVKjoQFRxvjti4x//Yi5c@vger.kernel.org
-X-Received: by 2002:a05:651c:503:b0:2fb:3960:9667 with SMTP id
- 38308e7fff4ca-2ff59027c97mr1506281fa.14.1731546568430; Wed, 13 Nov 2024
- 17:09:28 -0800 (PST)
+	s=arc-20240116; t=1731580306; c=relaxed/simple;
+	bh=jMqaYGfAx4uupmaoHgEFR9A0Bf8uniA2ZlccS+XaBPY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YA8ENyADXuOxeeOZI9neqG5ZUyceOKpK9B9mz1KIaH/ZH71Typ6Yh0AX7/qAwq/9l0PKx0r3dHDRxr87hLOrHY5Q2ycsqQVeREwesQGjQ/PM3cQzQTcAB3ZtC54tm7r4hQn0Y3Em5kgbmsIS3qHXKHATtAs1/EtgXr507H2I5ck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKJGcVqQ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKJGcVqQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CCAC4CECF;
+	Thu, 14 Nov 2024 10:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731580305;
+	bh=jMqaYGfAx4uupmaoHgEFR9A0Bf8uniA2ZlccS+XaBPY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YKJGcVqQEO64lR9jC9PFwr9rCRFF+UABckYgHB5C/YK9/q9VWMMmXlSaL7qs0qBGB
+	 PZKT4KH+TOj5OeYOw4XKO2p9FVfvuCJTcxo5Bk65pvgGPQQnY3pnADCsNw7JwQ6Rnr
+	 xvJEDj5qAj/nwQmjNQe/f1bRW4IxBhfVPX5ke1MQLqPy6V3/+i6Ik1+MVXiuguVbB5
+	 1o1ZANX9zHFl18ndIiNdMPJ9qCee4HObxGUxr3GWDt34c7wPv+SU21eWlgVO6YxhtE
+	 7YICTWe5uzY1t304g/m3Vg+7UKP8XyShniGxsfeHX8E94nDQk1JN2Tf0LvrJ7ISxT8
+	 7MTabqSJH9boA==
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Werner Sembach <wse@tuxedocomputers.com>,
+	tux@tuxedocomputers.com,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thorsten Leemhuis <linux@leemhuis.info>
+Subject: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL symbols
+Date: Thu, 14 Nov 2024 11:31:32 +0100
+Message-ID: <20241114103133.547032-4-ukleinek@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030170106.1501763-21-samitolvanen@google.com>
- <20241030170106.1501763-22-samitolvanen@google.com> <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
- <CAEg-Je_o-e3Sc0vNJpF+3eG3sZvV-f2zrCdubRAvPSLzVdyd5Q@mail.gmail.com> <ZzT_ZSNAmeloDjLT@bombadil.infradead.org>
-In-Reply-To: <ZzT_ZSNAmeloDjLT@bombadil.infradead.org>
-From: Neal Gompa <neal@gompa.dev>
-Date: Wed, 13 Nov 2024 20:08:51 -0500
-X-Gmail-Original-Message-ID: <CAEg-Je9yJh4teQeix4N9BF85JhkQMPHLAz2dnBrM1MLbBjO1iA@mail.gmail.com>
-Message-ID: <CAEg-Je9yJh4teQeix4N9BF85JhkQMPHLAz2dnBrM1MLbBjO1iA@mail.gmail.com>
-Subject: Re: [PATCH v5 01/19] scripts: move genksyms crc32 implementation to a
- common include
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1322; i=ukleinek@kernel.org; h=from:subject; bh=jMqaYGfAx4uupmaoHgEFR9A0Bf8uniA2ZlccS+XaBPY=; b=owGbwMvMwMXY3/A7olbonx/jabUkhnTTi63qixkmqf+wmcmy/1FzCcvyS1IHd4qocmemyi/Y1 mHwWqy2k9GYhYGRi0FWTJHFvnFNplWVXGTn2n+XYQaxMoFMYeDiFICJXPjF/j/qeSpz/u6lUmaC pg6zHdqEBN3dDhcpneb4fETua0bQ+aedNnU8b+RnZoRx3AhL+dCs81LB4YvHlunljieWeXxdru5 m11fP8VqHKavjfPgihaojh48GVG/nkZyjOe1+mvSdrLlGD42V5u7VsHcwfLWzPCjgqLt7aETf5u weXVPvGJlNrr1PphRcXm3onnRW1T/2y/cTD+585W252qV8Zxr785Lc/LkqQnUftYs3z+9+kdfPH Zn11C7+WOdV0RI57iWPcjZbd/otZp5mcm/NY9N3spLeSxcofo28nujj1nw5aWaUXe3XQwUdWplf uXz9qizEpQtVfe2P7lKbH3cxSm3WgU9mv2x0Q3UU1d8BAA==
+X-Developer-Key: i=ukleinek@kernel.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 13, 2024 at 2:35=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Wed, Nov 13, 2024 at 09:04:51AM -0500, Neal Gompa wrote:
-> > On Mon, Nov 11, 2024 at 11:06=E2=80=AFPM Masahiro Yamada <masahiroy@ker=
-nel.org> wrote:
-> > >
-> > > On Thu, Oct 31, 2024 at 2:01=E2=80=AFAM Sami Tolvanen <samitolvanen@g=
-oogle.com> wrote:
-> > > >
-> > > > Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
-> > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > Acked-by: Neal Gompa <neal@gompa.dev>
-> > >
-> > > Does this Ack add any value?
-> > >
-> > > Acked-by is meaningful only when it is given by someone who
-> > > maintains the relevant area or has established a reputation.
-> > >
-> > > $ git grep "Neal Gompa"
-> > > $ git shortlog -n -s | grep "Neal Gompa"
-> > >      2 Neal Gompa
-> > >
-> > > His Ack feels more like "I like it" rather than a qualified endorseme=
-nt.
-> > >
-> >
-> > I have tested and looked over the patches from that lens.
->
-> The tests you did, what exaclty was tested?
->
-> If it was to just ensure no regressions, then that information is
-> useful too, and with that you can just provide: Tested-by.
->
-> But actual details of what you test are useful. We now also have
-> automation of tests for modules, and expanding test coverage on that is
-> always welcomed too [0] [1] [2], so far we have 0 Rust coverage.
->
+Hello,
 
-I tested that I could turn on MODVERSIONS with the relevant patch
-series, and get symbol expressions out of it. I didn't go very far
-into it, because I didn't want to invest in reworking the kernel
-symbol dependency generator for RPM packaged kernels to leverage this
-until after it is finally merged. But it worked as described, even if
-none of our kernel packaging infrastructure is adapted for it yet.
+the kernel modules provided by Tuxedo on
+https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
+are licensed under GPLv3 or later. This is incompatible with the
+kernel's license and so makes it impossible for distributions and other
+third parties to support these at least in pre-compiled form and so
+limits user experience and the possibilities to work on mainlining these
+drivers.
 
-To be honest, I considered sending both Acked-by and Tested-by, but I
-figured Acked-by would be sufficient given that I have also looked
-over the code as well and thought it was reasonable.
+This incompatibility is created on purpose to control the upstream
+process. See https://fosstodon.org/@kernellogger/113423314337991594 for
+a nice summary of the situation and some further links about the issue.
 
-Strictly speaking, we don't really use MODVERSIONS in Fedora, it's a
-CentOS/RHEL thing. But, pushing this forward helps make Rust
-enablement for Fedora easier because the Fedora kernel is managed
-through the ARK project, which is mostly oriented around the needs of
-the RHEL kernel team. And CentOS Hyperscale (which I am also part of
-and maintain a kernel for) does have MODVERSIONS on and I would like
-to be able to start enabling Rust stuff there (particularly Asahi
-code, as that's currently the main interesting thing in Rust to use).
+Note that the pull request that fixed the MODULE_LICENSE invocations to
+stop claiming GPL(v2) compatibility was accepted and then immediately
+reverted "for the time being until the legal stuff is sorted out"
+(https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427).
 
+Best regards
+Uwe
 
+Uwe Kleine-König (2):
+  module: Put known GPL offenders in an array
+  module: Block modules by Tuxedo from accessing GPL symbols
 
+ kernel/module/main.c | 56 +++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 9 deletions(-)
 
---
-=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
-=BC=81/ Always, there's only one truth!
+base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
+-- 
+2.45.2
