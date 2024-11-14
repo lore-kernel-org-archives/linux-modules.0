@@ -1,121 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03701FAC47;
-	Thu, 14 Nov 2024 10:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922071D95A1;
+	Thu, 14 Nov 2024 10:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731580311; cv=none; b=uY6LvXsdQ8oZC8rPyUKpYJpm50C1wi9CXX4bbity/jO6w+T0YY59ZOKaPDDrmcqf6FSHc0VxA0LeAQ9QKa+BuVJ4J9wahVT++neB1ov6UPC56D8BWjTdlBCSX0E2b5B1RHhj+2+enHQgz3FcsDPonZoHhZuVh99d82N5JD5Rt1U=
+	t=1731581351; cv=none; b=b8e4Qxtq5bKUuvYHl5YSqDaB4w/2pdXxhNVbVQH84deCbwNSn7r1kLyWiwyysj9aSlR2fpcrkHs0pvwSGBuaedjV1LnNQotDxesotaU54AKDYrZyZJxgn7noeNNjfL2C4ULA2/+lM0lKLc8PVo6TgLJ9RuKhSNOtKek5ycXKE3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731580311; c=relaxed/simple;
-	bh=PvtFbg/8OOw9SaJ63G51HlH+PGdB8FZuVIeCmRurLBE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l5TGd+wpWYO0nWSAcE2PrGJM5TCdoaQRaMDeCCySnQfiQD/WWyPTXeo0h8yanrPw3neAcuzJGEEabqG3harksEvMB2dy01f2Vr3paXL5sfH46RD3vCCRaHxZhYCIK52lp5NYkmDs7Raijb/eAhww/LvRbofsUsmqJ7XBpUckfHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHGS4Z8F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731581351; c=relaxed/simple;
+	bh=1pVwujhlE4sgAgf8ixdm9F0aPf17G792ocRgrybwWrc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jf8NALznRN+Yw4rCsXNbYhaYI1Yo/7x7ECXqwO/AXy+kNVgmgjFAVpSd15SQxtLCBKV+zy09OJ05rb9/IgRmFIhXSkzaEWg0GbN+w0qKRN4HJjrG7/sRrmz4ULgetoyp59J+yrDxqh8yAemmPMEdvsdKiA4Sets7X2ogI/9oUCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=P9w4vJbD; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHGS4Z8F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5234EC4CECD;
-	Thu, 14 Nov 2024 10:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731580311;
-	bh=PvtFbg/8OOw9SaJ63G51HlH+PGdB8FZuVIeCmRurLBE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LHGS4Z8F0wL30Lex/0uqMZFucCEXI1nFoncTAeW5vuigAA8+b7gR1JsyvEdqyJVME
-	 I8fEu/64CvkiMa02Wj1eZukHaKJ1FDHN2uwQ6GjXZjfoXgAeooO/tWLVwBVeO6QUru
-	 arXJjQ2+VjqCyRIdxQx09FnYa3DgImEGdEvthKyFpX1N3e8HnY3wAzgEM4sh0Gtq7l
-	 9lMWEY+pRfALVU1Oy5ke+4Kd4ZlHkDj+M1BgNs/FAnbMstgjJo76vaZgT5toTpmFvQ
-	 Kcp3uMOg3VcI7qUTzKL4tLhRPMvF/e69yRCehWTAYHxQR9CPs0sW89KES4KTRMO/Dg
-	 rrlAlfloMvM/A==
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Werner Sembach <wse@tuxedocomputers.com>,
-	tux@tuxedocomputers.com,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thorsten Leemhuis <linux@leemhuis.info>
-Subject: [PATCH 2/2] module: Block modules by Tuxedo from accessing GPL symbols
-Date: Thu, 14 Nov 2024 11:31:34 +0100
-Message-ID: <20241114103133.547032-6-ukleinek@kernel.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241114103133.547032-4-ukleinek@kernel.org>
-References: <20241114103133.547032-4-ukleinek@kernel.org>
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="P9w4vJbD"
+Received: from [192.168.42.96] (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id 712422FC0052;
+	Thu, 14 Nov 2024 11:49:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1731581344;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yBrUmFsxW544nHEIzJzrCra/Vi9YhwoYI0bndIs2Yo8=;
+	b=P9w4vJbDh38Tds+6qqzUbA2Swk/e6TBPiipS40T2GnSvmprF0YMeB+cHWckWiDKiEe9t51
+	ECt6nQxNMJHOHF+uF7dZoVwh9q2TKDvQrrnOEa3X4A4Nv1Vf/15jaFSsjZ80LhvFeK0Nxo
+	d1EhjauYh3mB1PoY784XsF/RGWSrk4Q=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+Message-ID: <e32e9f5c-3841-41f7-9728-f998f123cc8a@tuxedocomputers.com>
+Date: Thu, 14 Nov 2024 11:49:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2072; i=ukleinek@kernel.org; h=from:subject; bh=PvtFbg/8OOw9SaJ63G51HlH+PGdB8FZuVIeCmRurLBE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBnNdGKZw0mWE7g1hW0HBpcAD8ExG6wnwPUjm1qA kSwKe5ZvrKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZzXRigAKCRCPgPtYfRL+ TtkrB/4rIFmp9c+r8N9S94itqsftcS4Kbq6QmiC/frrvUpaYaB23tXERKy8bFqrq18+P9UEDGG/ Ocn6aGWji3HRYFBX1VWTyRwvdKvN/cppS8RYGKQjzdXWxh0QJzEs5u46W3vWQwVcL3CyhkxA4Ai 5KOW5xbnl4FCoisUa5U98eZdohaRS4vS/enfzd1tt2S4ZTLCzinb4WcD6Urlhi2BVk0kRuJTWhn cx13X/3uSQK2OEYxUvepHzz60UhRJzisdpMlgCs1n3RyMI3irMrwHejdBGZILg8vi6NVDvHkCPd fmy2jNxqS4AvdJqucu+YVXDKZpZAuaD81ocYy2tUgsp3v05q
-X-Developer-Key: i=ukleinek@kernel.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
+ symbols
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>
+Cc: tux@tuxedocomputers.com, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thorsten Leemhuis <linux@leemhuis.info>
+References: <20241114103133.547032-4-ukleinek@kernel.org>
+Content-Language: en-US
+From: Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <20241114103133.547032-4-ukleinek@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Tuxedo licenses the modules used on their hardware under GPLv3+, to
-"keep control of the upstream pacing" – and want to re-license the code
-while upstreaming.
+Hello,
 
-They were asked to then at least not use MODULE_LICENSE("GPL") which
-declares compatibility to the kernel's GPLv2. They accepted the pull
-request and shortly after reverted the change and so continue to lie
-about the license.
+Am 14.11.24 um 11:31 schrieb Uwe Kleine-König:
+> Hello,
+>
+> the kernel modules provided by Tuxedo on
+> https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
+> are licensed under GPLv3 or later. This is incompatible with the
+> kernel's license and so makes it impossible for distributions and other
+> third parties to support these at least in pre-compiled form and so
+> limits user experience and the possibilities to work on mainlining these
+> drivers.
+>
+> This incompatibility is created on purpose to control the upstream
+> process. See https://fosstodon.org/@kernellogger/113423314337991594 for
+> a nice summary of the situation and some further links about the issue.
+>
+> Note that the pull request that fixed the MODULE_LICENSE invocations to
+> stop claiming GPL(v2) compatibility was accepted and then immediately
+> reverted "for the time being until the legal stuff is sorted out"
+> (https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427).
 
-So teach the module loader that these modules are proprietary despite
-their declaration to be GPLv2 compatible "until the legal stuff is
-sorted out".
+As already being implied by that commit message, this is sadly not an issue that 
+can be sorted out over night.
 
-Link: https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427
-Signed-off-by: Uwe Kleine-König <ukleinek@kernel.org>
----
- kernel/module/main.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+We ended up in this situation as MODULE_LICENSE("GPL") on its own does not hint 
+at GPL v2, if one is not aware of the license definition table in the documentation.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 878191c65efc..46badbb09d5e 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2338,6 +2338,39 @@ static const char *module_license_offenders[] = {
- 
- 	/* lve claims to be GPL but upstream won't provide source */
- 	"lve",
-+
-+	/*
-+	 * Tuxedo distributes their kernel modules under GPLv3, but intentially
-+	 * lies in their MODULE_LICENSE() calls.
-+	 * See https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427
-+	 */
-+	"gxtp7380",
-+	"ite_8291",
-+	"ite_8291_lb",
-+	"ite_8297",
-+	"ite_829x",
-+	"stk8321",
-+	"tuxedo_compatibility_check",
-+	"tuxedo_io",
-+	"tuxedo_nb02_nvidia_power_ctrl",
-+	"tuxedo_nb04_keyboard",
-+	"tuxedo_nb04_wmi_ab",
-+	"tuxedo_nb04_wmi_bs",
-+	"tuxedo_nb04_sensors",
-+	"tuxedo_nb04_power_profiles",
-+	"tuxedo_nb04_kbd_backlight",
-+	"tuxedo_nb05_keyboard",
-+	"tuxedo_nb05_kbd_backlight",
-+	"tuxedo_nb05_power_profiles",
-+	"tuxedo_nb05_ec",
-+	"tuxedo_nb05_sensors",
-+	"tuxedo_nb05_fan_control",
-+	"tuxi_acpi",
-+	"tuxedo_tuxi_fan_control",
-+	"clevo_wmi",
-+	"tuxedo_keyboard",
-+	"clevo_acpi",
-+	"uniwill_wmi",
- };
- 
- /*
--- 
-2.45.2
+It was and is never our intention to violate neither GPL v2 nor GPL v3 and we 
+are working on it.
 
+Kind regards,
+
+Werner Sembach
+
+>
+> Best regards
+> Uwe
+>
+> Uwe Kleine-König (2):
+>    module: Put known GPL offenders in an array
+>    module: Block modules by Tuxedo from accessing GPL symbols
+>
+>   kernel/module/main.c | 56 +++++++++++++++++++++++++++++++++++++-------
+>   1 file changed, 47 insertions(+), 9 deletions(-)
+>
+> base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
