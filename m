@@ -1,58 +1,58 @@
 Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC4E1F8EE9
-	for <linux-modules@vger.kernel.org>; Thu, 14 Nov 2024 11:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420011AA7A2
+	for <linux-modules@vger.kernel.org>; Thu, 14 Nov 2024 11:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731585027; cv=none; b=shY2eTg0s3uO90OdO8kq1xvXTizkZSj8VfeFtQAV3IXmymEHpeQSFK0KA1qC9KMStSYALfIBynx8JnDjUe80aNJq4ZZlGvaYFG4o4dSFFhMtXRvycR0M6Fc+5nF4pBLN4XV3R860V++zxOFwkfhUsc7cAStGW4117phslucUUnY=
+	t=1731585387; cv=none; b=O5ZKT+Pk5UoW2CBPQf3cWLlyzos8ZUNxY8B2yhHLL26wwyoMsrmSsnKEJEsBT6DtNvuOE63CV8JyBHyVtkgUSgT2N2ITFwfz6T4man5odauB9743xi4twc0xeGlxXKVo0dU/PMADkrW8qHsRzcFVpFnyOh+GAwep6z33nXqGTi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731585027; c=relaxed/simple;
-	bh=VMNOHBw5gBBtp43tH02IaMDcjlxPJ1NdFLla12jbm1U=;
-	h=MIME-Version:Content-Type:Date:Message-ID:From:Subject:CC:To:
-	 In-Reply-To:References; b=sWl/C56jJoYxzJ+tj7wXgshiroiH808oRHRVRkxRaPrqR7Zs3L9U5mERol5K85ZDcOq6qFHd1QhaPsQoHV+N8N9cmpaUb/sNN9savS4zWp/ZSkYM4lcj/QFuOeKWfw/K4OsG9eZeYRrDjWPWpyLMZb7cuMYDC1zoR94U4dep8W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=IRUvV5bR; arc=none smtp.client-ip=210.118.77.12
+	s=arc-20240116; t=1731585387; c=relaxed/simple;
+	bh=9O1Cc7Fz4E3w41SzCTayrWJ1BSC07hGck2ohtpLALeU=;
+	h=MIME-Version:Content-Type:Date:Message-ID:Subject:CC:To:From:
+	 In-Reply-To:References; b=kPooWLYrn7DuzPyM/6Wv+bOZI1ki4AqZWKCLe7GOjD1A54YBY6o30cYIf3xGOwgJrCD3sRzBIcwEW+wk4Zopj6pooQGA9dCiVFHEzZYmQxQxL6dbvvsqkR5/sW6/RJYkqLiFV74gWZCTlgDM9oxxAMxAdFzgaiS4L+nzQDL++xE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=YvekuNyV; arc=none smtp.client-ip=210.118.77.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="IRUvV5bR"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241114115017euoutp02e44a5f122f8e3831096959bd9d086679~H02Y90YGT0292902929euoutp02e
-	for <linux-modules@vger.kernel.org>; Thu, 14 Nov 2024 11:50:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241114115017euoutp02e44a5f122f8e3831096959bd9d086679~H02Y90YGT0292902929euoutp02e
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="YvekuNyV"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20241114115622euoutp024050cb1c4f771aceb480543eeabc3ab3~H07slYDem0295602956euoutp02b
+	for <linux-modules@vger.kernel.org>; Thu, 14 Nov 2024 11:56:22 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20241114115622euoutp024050cb1c4f771aceb480543eeabc3ab3~H07slYDem0295602956euoutp02b
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1731585017;
-	bh=aSnFwn3fyWLWfZWTjEoWx9q1NNGL8GR1CfTtxNKRsSE=;
-	h=Date:From:Subject:CC:To:In-Reply-To:References:From;
-	b=IRUvV5bRooMIV9FTy4IG4YzQrRPtebVFioKerh1rqO4KYQbG6dCZ8Tbro80p4kjlT
-	 C/U7AXBgpN0EvdGWJugF9Cxrrfqk/vu4FaYzmZL6J0zJFq/XI3XnhTvvvjE7ESTCx8
-	 AILDDI1wm8PzRwNZSixJBrfsAOXY1P7co0+RCCYQ=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	s=mail20170921; t=1731585382;
+	bh=XA7yrOwCYI+Qbk3Ulc9bKec7+IuJiUk1B3sCREYaaR8=;
+	h=Date:Subject:CC:To:From:In-Reply-To:References:From;
+	b=YvekuNyVJmh7zVMZDs476FsrLLL2iMXfBHowfS+EsKAWEf0SDmW7XyrCmiqQou/Lg
+	 w2Ei5IG6G2GGWdx+3P09rufkq8PGjt79xAN5NTTuet2y4SMlZQIt5BxUcVWM4knGDz
+	 lunjaXxA3sZu7rFhvzj/T6t4GdNxAuHH0gmw1aOs=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
 	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20241114115017eucas1p1e8cdb0561b668b4715b67d1c0bbac162~H02Ys0Lo12345323453eucas1p1R;
-	Thu, 14 Nov 2024 11:50:17 +0000 (GMT)
+	20241114115622eucas1p10ff05ed2890e03c1e0240f305333471f~H07sVB0C12031820318eucas1p1M;
+	Thu, 14 Nov 2024 11:56:22 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id 3E.15.20409.9F3E5376; Thu, 14
-	Nov 2024 11:50:17 +0000 (GMT)
+	eusmges1new.samsung.com (EUCPMTA) with SMTP id AC.5E.20821.665E5376; Thu, 14
+	Nov 2024 11:56:22 +0000 (GMT)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20241114115017eucas1p2862331fc47bf0f1a44035cc7e422a6c7~H02YYStlw0875708757eucas1p2O;
-	Thu, 14 Nov 2024 11:50:17 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20241114115621eucas1p1769d552cfbba63da7cf4c4f01ddd9a2f~H07r-G2U72032920329eucas1p1b;
+	Thu, 14 Nov 2024 11:56:21 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
 	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241114115017eusmtrp1bd4dc11952f9293c6e1a39c45e7fbdbf~H02YXvXmX0888608886eusmtrp1I;
-	Thu, 14 Nov 2024 11:50:17 +0000 (GMT)
-X-AuditID: cbfec7f4-c0df970000004fb9-9a-6735e3f92001
+	20241114115621eusmtrp1845bed0aae06916369cd3c24426677ef~H07r_hbWQ1181011810eusmtrp1O;
+	Thu, 14 Nov 2024 11:56:21 +0000 (GMT)
+X-AuditID: cbfec7f2-b11c470000005155-28-6735e5665b1d
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id B8.83.19920.9F3E5376; Thu, 14
-	Nov 2024 11:50:17 +0000 (GMT)
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id 3F.7F.19654.565E5376; Thu, 14
+	Nov 2024 11:56:21 +0000 (GMT)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
 	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241114115016eusmtip228356855edd0f55ee7d9ad03cba9a07d~H02YLyBx11445114451eusmtip25;
-	Thu, 14 Nov 2024 11:50:16 +0000 (GMT)
+	20241114115621eusmtip2ad1470449f1dd496c22d03bddef74495~H07rz-YYf2619326193eusmtip2R;
+	Thu, 14 Nov 2024 11:56:21 +0000 (GMT)
 Received: from mail.scsc.local (106.110.32.87) by CAMSVWEXC02.scsc.local
 	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Thu, 14 Nov 2024 11:50:16 +0000
+	Thu, 14 Nov 2024 11:56:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,10 +61,9 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"
-Date: Thu, 14 Nov 2024 12:50:15 +0100
-Message-ID: <D5LVNQFINITS.13C3C5UV89XRR@samsung.com>
-From: Daniel Gomez <da.gomez@samsung.com>
-Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
+Date: Thu, 14 Nov 2024 12:56:20 +0100
+Message-ID: <D5LVSE2UF1MA.1TZUC95PN6Y1Q@samsung.com>
+Subject: Re: [PATCH 2/2] module: Block modules by Tuxedo from accessing GPL
  symbols
 CC: Werner Sembach <wse@tuxedocomputers.com>, <tux@tuxedocomputers.com>,
 	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
@@ -72,96 +71,128 @@ CC: Werner Sembach <wse@tuxedocomputers.com>, <tux@tuxedocomputers.com>,
 	Leemhuis <linux@leemhuis.info>
 To: =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, "Luis
  Chamberlain" <mcgrof@kernel.org>
+From: Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: aerc 0.18.2-67-g7f69618ac1fd
-In-Reply-To: <20241114103133.547032-4-ukleinek@kernel.org>
+In-Reply-To: <20241114103133.547032-6-ukleinek@kernel.org>
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
 	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIKsWRmVeSWpSXmKPExsWy7djPc7o/H5umG5yeIGtxedccNouG2d9Z
-	LVbvjLa4MeEpo8XSL++YLZaueAsUWjWPxeLn/IusFueXLmV14PRYsKnUY9OqTjaPQ80PmDzW
-	b7nK4vFvWQObx+dNcgFsUVw2Kak5mWWpRfp2CVwZs37cZCxYIljRNX8+ewPjP74uRk4OCQET
-	idu9txi7GLk4hARWMErMPfMIyvnCKLF59382COczkDNzJxtMy+IFHewQieWMEg9Pf0eo+vV9
-	EROEs5NR4tnSThaQFl4BQYmTM5+A2cwC2hLLFr5mhrA1JVq3/2YHsVkEVCU+NRxkh6g3kfj4
-	eAaYzQZUs+/kJjBbWCBUYuadPcwgC5gFmpgkPi1bxgSSEBFIlfg79TkjxH1qEv/7J4It4xSw
-	kujf+5sJIq4oMWPiShYIu1bi1JZbYJdKCPznkPjV0AOVcJFY8r2FGcIWlnh1fAs7hC0jcXoy
-	TE26xJJ1s6DsAok9t2exdjFyANnWEn1nciDCjhJrD9xjgwjzSdx4KwjxL5/EpG3TmSHCvBId
-	bUITGFVmIYXQLKQQmoUUQgsYmVcxiqeWFuempxYb5aWW6xUn5haX5qXrJefnbmIEpqLT/45/
-	2cG4/NVHvUOMTByMhxglOJiVRHhPORunC/GmJFZWpRblxxeV5qQWH2KU5mBREudVTZFPFRJI
-	TyxJzU5NLUgtgskycXBKNTC1JNgs+Rk8X4f/faaOiG7cNfVC3xVBBh5s6Xs0nYzbbH/qOEie
-	7rSYHiy92WPaKRmlM8Gp8gb2YoFcr/oL1WYorao6krXvzX7eBEYthqVLvs7UfV0l9lznh8AE
-	N9/oMLvv21xuGij1rUlZtJKt4/s+731yl3QWst6/6pHY0Lt3pbdss2TQgQ/WO5l6uq+Xfazv
-	+37eu827/kpKRGPCH4UVW0LDhWol74WFeEd/9nx+yFKb5xF/a+kbRhNpPpbMGwI/kkT8+L6c
-	XvX3DvfirweOBrk9V2+fO3vGZ4E8MU7rV30V6VY380Jf/q4SC5k/MSy7m8/Q6Vxcomaj97p6
-	Q17L32Ylzu+3WTpIOjxTYinOSDTUYi4qTgQAhmJtj7QDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7o/H5umG3T+Y7e4vGsOm0XD7O+s
-	Fqt3RlvcmPCU0WLpl3fMFktXvAUKrZrHYvFz/kVWi/NLl7I6cHos2FTqsWlVJ5vHoeYHTB7r
-	t1xl8fi3rIHN4/MmuQC2KD2bovzSklSFjPziElulaEMLIz1DSws9IxNLPUNj81grI1MlfTub
-	lNSczLLUIn27BL2MWT9uMhYsEazomj+fvYHxH18XIyeHhICJxOIFHexdjFwcQgJLGSVOPT7F
-	ApGQkdj45SorhC0s8edaFxtE0UdGiU+/5rFCODsZJfZ9WgLWwSsgKHFy5hMwm1lAW2LZwtfM
-	ELamROv23+wgNouAqsSnhoPsEPUmEh8fzwCz2YBq9p3cBGYLC4RKzLyzhxlkAbNAE5PEtOcr
-	wAaJCKRK/J36nBHiJDWJ//0TWSCu6AY56QnYrZwCVhL9e38zQRQpSsyYuBLqn1qJz3+fMU5g
-	FJmF5NhZSI6dheTYBYzMqxhFUkuLc9Nziw31ihNzi0vz0vWS83M3MQKjdduxn5t3MM579VHv
-	ECMTB+MhRgkOZiUR3lPOxulCvCmJlVWpRfnxRaU5qcWHGE2Bvp7ILCWanA9MF3kl8YZmBqaG
-	JmaWBqaWZsZK4rxul8+nCQmkJ5akZqemFqQWwfQxcXBKNTDl7roecqNw7kZnq/Ldeo+enYhJ
-	eD9t5bbPv+OEJpq3eroKq3RI+MjcniUhpPjKdu9CUcGVAXPdlvz6Np/nf4DK/6uXhSX9Hr1N
-	fH79yolFZl+bRTfN6lu4hOevuQIrp+P6JM6y7kffLq283Lot8uPpwpWcCTvV/IO+/vzLeSDc
-	y/lcqN6lD30L0+bJZJw6lFScc0voQ8TSih+X74ZwPN+pLxq6/q5TcoL5tq/ppd9CujfLnHrq
-	fsVh3r7FIeW5bL+epO6fnH7o72sne43QX4e2KH1WbX5stEnvh1voRhen37t+Hzoidzh7h9lT
-	oWVHVz6PMxEpvsL7W7Em4cophiM39fZf3NRap3LC08msWvHiFiWW4oxEQy3mouJEAHyRychf
-	AwAA
-X-CMS-MailID: 20241114115017eucas1p2862331fc47bf0f1a44035cc7e422a6c7
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPKsWRmVeSWpSXmKPExsWy7djPc7ppT03TDRobuSwu75rDZtEw+zur
+	xeqd0RY3JjxltFj65R2zxdIVb4FCq+axWPycf5HV4vzSpawOnB4LNpV6bFrVyeZxqPkBk8f6
+	LVdZPP4ta2Dz+LxJLoAtissmJTUnsyy1SN8ugStj0d1LTAV7RStaPrSzNTDOEepi5OSQEDCR
+	aLm/iKmLkYtDSGAFo8TJyy2MEM4XRon3h3tYIZzPjBL/v7Www7RsmTgfqmU5UKJzDitIAqxq
+	y143CHsno8Ti/xogNq+AoMTJmU9YQGxmAW2JZQtfM0PYmhKt23+DDWURUJXo+nScEaLeRKJ1
+	5y2wemGBUIm38w6ygSxjFmhikvi0bBkTSEJEIFXi79TnYA1sQIP2ndwEdZ2axP/+iWDNnAJW
+	EucWzWaDiCtKzJi4kgXCrpU4teUW2AcSAs2cEu8Ot7NCJFwkDi9/wgxhC0u8Or4FaqiMxOnJ
+	PVDN6RJL1s2Csgsk9tyeBdTLAWRbS/SdyYEIO0os+9XHCBHmk7jxVhDiXz6JSdumM0OEeSU6
+	2oQmMKrMQgqhWUghNAsphBYwMq9iFE8tLc5NTy02zEst1ytOzC0uzUvXS87P3cQITEOn/x3/
+	tINx7quPeocYmTgYDzFKcDArifCecjZOF+JNSaysSi3Kjy8qzUktPsQozcGiJM6rmiKfKiSQ
+	nliSmp2aWpBaBJNl4uCUamBSO+yz0OMQ+8wYx4OXrQU/WIe337+okD41t3ZD6pHFmlsqUuNP
+	HY+x6GI9v+Fkdq5Qq7Pkt8qFK3Yoad7VdXkjxMvC4egvsPLbk11ugadyD+Uf9lryfIJzVM3e
+	mi36B/ds/GG38PPuu6rHd9fJPYyI4sudtu5kq/n5XL4lXDIVDB/u3/b0aFoTbXjF2NyAvdcx
+	Zv8Tx+XOy8/JG6jN+RT5b8efeWd6wh29srumBrHtMah65nQm/v8Vyat9Rtwd/6Wio6Tn6gtP
+	NfSXcegJuPL4wmrdXW133jjFXJUpltu6inGfwZt/rCuu3nTyc5d+bCXfrvL9ZU8ykzz3mvnz
+	V/DbzP+4ToopsXN27x+GCZuUWIozEg21mIuKEwHRBTI5sgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDIsWRmVeSWpSXmKPExsVy+t/xe7qpT03TDc7261tc3jWHzaJh9ndW
+	i9U7oy1uTHjKaLH0yztmi6Ur3gKFVs1jsfg5/yKrxfmlS1kdOD0WbCr12LSqk83jUPMDJo/1
+	W66yePxb1sDm8XmTXABblJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1N
+	SmpOZllqkb5dgl7GoruXmAr2ila0fGhna2CcI9TFyMkhIWAisWXifKYuRi4OIYGljBJ3fj1i
+	gkjISGz8cpUVwhaW+HOtiw2i6COjxMIVrVDOTkaJWb2/wKp4BQQlTs58wgJiMwtoSyxb+JoZ
+	wtaUaN3+mx3EZhFQlej6dJwRot5EonXnLbB6YYFQibfzDoINZRZoYpKY9nwFWLOIQKrE36nP
+	wRrYgAbtO7mJHeIkNYn//RNZIK7YzSjxYUUf2BWcAlYS5xbNZoMoUpSYMXElC4RdK/H57zPG
+	CYwis5AcOwvJsbOQHLuAkXkVo0hqaXFuem6xkV5xYm5xaV66XnJ+7iZGYLRuO/Zzyw7Gla8+
+	6h1iZOJgPMQowcGsJMJ7ytk4XYg3JbGyKrUoP76oNCe1+BCjKdDXE5mlRJPzgekiryTe0MzA
+	1NDEzNLA1NLMWEmcl+3K+TQhgfTEktTs1NSC1CKYPiYOTqkGpqaweK/5/C0VHQ8YL7ROs2b/
+	+WZiysxzxtsnLW8/UykW07JWZkXFdaGiz1+n2rnnbYubcX6iVMWFp8zxW3YlH3rwXy51f9x8
+	15UtOZ6+Pn5+h1/yiBx4NOmf6nbRhfF2ys5F5fdfLezbsLl0Y+/vGe7lDg/UIisO13UmOWwI
+	mHfz479HNfK5sjJPu31al+lHbvBY8NyqKlJov2336pvbP+45/kjonEy6pIH+46LIX/eYog+o
+	vDs4q495Qohq0dkDKyecmG7PrPtsHfMdm4Lfh3b9SHg5ke3G46MMb+7P0jn9Xe/JMbmwklei
+	b21DkzdNft2huF2p5cH+q3WrH0/+MPuEh126U/0yhZTHpT9tj+QosRRnJBpqMRcVJwIAqJSt
+	q18DAAA=
+X-CMS-MailID: 20241114115621eucas1p1769d552cfbba63da7cf4c4f01ddd9a2f
 X-Msg-Generator: CA
-X-RootMTR: 20241114103151eucas1p133de0b231bf06bf8cd42621347a0ed17
+X-RootMTR: 20241114103157eucas1p13c3e82272fabc2cdf5cba8ec70d2a871
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20241114103151eucas1p133de0b231bf06bf8cd42621347a0ed17
-References: <CGME20241114103151eucas1p133de0b231bf06bf8cd42621347a0ed17@eucas1p1.samsung.com>
-	<20241114103133.547032-4-ukleinek@kernel.org>
+X-CMS-RootMailID: 20241114103157eucas1p13c3e82272fabc2cdf5cba8ec70d2a871
+References: <20241114103133.547032-4-ukleinek@kernel.org>
+	<CGME20241114103157eucas1p13c3e82272fabc2cdf5cba8ec70d2a871@eucas1p1.samsung.com>
+	<20241114103133.547032-6-ukleinek@kernel.org>
 
 On Thu Nov 14, 2024 at 11:31 AM CET, Uwe Kleine-K=C3=B6nig wrote:
-> Hello,
+> Tuxedo licenses the modules used on their hardware under GPLv3+, to
+> "keep control of the upstream pacing" =E2=80=93 and want to re-license th=
+e code
+> while upstreaming.
 >
-> the kernel modules provided by Tuxedo on
-> https://protect2.fireeye.com/v1/url?k=3D2f239e82-70bfb7a8-2f2215cd-000bab=
-e598f7-32952349600b722d&q=3D1&e=3D9535a8fa-5a9d-4d94-a12d-ff39b9d3b9cf&u=3D=
-https%3A%2F%2Fgitlab.com%2Ftuxedocomputers%2Fdevelopment%2Fpackages%2Ftuxed=
-o-drivers
-> are licensed under GPLv3 or later. This is incompatible with the
-> kernel's license and so makes it impossible for distributions and other
-> third parties to support these at least in pre-compiled form and so
-> limits user experience and the possibilities to work on mainlining these
-> drivers.
+> They were asked to then at least not use MODULE_LICENSE("GPL") which
+> declares compatibility to the kernel's GPLv2. They accepted the pull
+> request and shortly after reverted the change and so continue to lie
+> about the license.
 >
-> This incompatibility is created on purpose to control the upstream
-> process. See https://protect2.fireeye.com/v1/url?k=3D12fa0a06-4d66232c-12=
-fb8149-000babe598f7-5be6d19feac11441&q=3D1&e=3D9535a8fa-5a9d-4d94-a12d-ff39=
-b9d3b9cf&u=3Dhttps%3A%2F%2Ffosstodon.org%2F%40kernellogger%2F11342331433799=
-1594 for
-> a nice summary of the situation and some further links about the issue.
+> So teach the module loader that these modules are proprietary despite
+> their declaration to be GPLv2 compatible "until the legal stuff is
+> sorted out".
 >
-> Note that the pull request that fixed the MODULE_LICENSE invocations to
-> stop claiming GPL(v2) compatibility was accepted and then immediately
-> reverted "for the time being until the legal stuff is sorted out"
-> (https://protect2.fireeye.com/v1/url?k=3D80a9845b-df35ad71-80a80f14-000ba=
-be598f7-b5ddbbaedbccb553&q=3D1&e=3D9535a8fa-5a9d-4d94-a12d-ff39b9d3b9cf&u=
-=3Dhttps%3A%2F%2Fgitlab.com%2Ftuxedocomputers%2Fdevelopment%2Fpackages%2Ftu=
-xedo-drivers%2F-%2Fcommit%2Fa8c09b6c2ce6393fe39d8652d133af9f06cfb427).
+> Link: https://protect2.fireeye.com/v1/url?k=3D02b4686b-633f7d5d-02b5e324-=
+74fe485cbff1-8cd9af635fd1f7c7&q=3D1&e=3D5f0a08bc-f529-4e41-a7a1-5aa45c54b8d=
+9&u=3Dhttps%3A%2F%2Fgitlab.com%2Ftuxedocomputers%2Fdevelopment%2Fpackages%2=
+Ftuxedo-drivers%2F-%2Fcommit%2Fa8c09b6c2ce6393fe39d8652d133af9f06cfb427
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <ukleinek@kernel.org>
+> ---
+>  kernel/module/main.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 878191c65efc..46badbb09d5e 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2338,6 +2338,39 @@ static const char *module_license_offenders[] =3D =
+{
+> =20
+>  	/* lve claims to be GPL but upstream won't provide source */
+>  	"lve",
+> +
+> +	/*
+> +	 * Tuxedo distributes their kernel modules under GPLv3, but intentially
+Typo here.
+> +	 * lies in their MODULE_LICENSE() calls.
+> +	 * See https://protect2.fireeye.com/v1/url?k=3D60e8a9e4-0163bcd2-60e922=
+ab-74fe485cbff1-eff87fdcdb83953a&q=3D1&e=3D5f0a08bc-f529-4e41-a7a1-5aa45c54=
+b8d9&u=3Dhttps%3A%2F%2Fgitlab.com%2Ftuxedocomputers%2Fdevelopment%2Fpackage=
+s%2Ftuxedo-drivers%2F-%2Fcommit%2Fa8c09b6c2ce6393fe39d8652d133af9f06cfb427
+> +	 */
+> +	"gxtp7380",
+> +	"ite_8291",
+> +	"ite_8291_lb",
+> +	"ite_8297",
+> +	"ite_829x",
+> +	"stk8321",
+> +	"tuxedo_compatibility_check",
+> +	"tuxedo_io",
+> +	"tuxedo_nb02_nvidia_power_ctrl",
+> +	"tuxedo_nb04_keyboard",
+> +	"tuxedo_nb04_wmi_ab",
+> +	"tuxedo_nb04_wmi_bs",
+> +	"tuxedo_nb04_sensors",
+> +	"tuxedo_nb04_power_profiles",
+> +	"tuxedo_nb04_kbd_backlight",
+> +	"tuxedo_nb05_keyboard",
+> +	"tuxedo_nb05_kbd_backlight",
+> +	"tuxedo_nb05_power_profiles",
+> +	"tuxedo_nb05_ec",
+> +	"tuxedo_nb05_sensors",
+> +	"tuxedo_nb05_fan_control",
+> +	"tuxi_acpi",
+> +	"tuxedo_tuxi_fan_control",
+> +	"clevo_wmi",
+> +	"tuxedo_keyboard",
+> +	"clevo_acpi",
+> +	"uniwill_wmi",
+>  };
 
-This commit did not remove the license boilerplate as this other one [1]
-upstream did. So I think the license was still inconsistent.
+This does not prevent module rename on their side and still bypass the
+module license taint check right?
 
-[1] 1a59d1b8e05ea6ab45f7e18897de1ef0e6bc3da6 ("treewide: Replace GPLv2
-boilerplate/reference with SPDX - rule 15").
-
->
-> Best regards
-> Uwe
->
-> Uwe Kleine-K=C3=B6nig (2):
->   module: Put known GPL offenders in an array
->   module: Block modules by Tuxedo from accessing GPL symbols
->
->  kernel/module/main.c | 56 +++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 47 insertions(+), 9 deletions(-)
->
-> base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
+> =20
+>  /*
 
