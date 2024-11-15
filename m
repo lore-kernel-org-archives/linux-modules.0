@@ -1,77 +1,65 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB52618950A;
-	Fri, 15 Nov 2024 12:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE59F14A088;
+	Fri, 15 Nov 2024 12:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731674993; cv=none; b=kCGlUSBBwGXSAAYkBDBydsdrw0ShYSisZW27v0hm56XDJsu/e+EIBbpJl2CKaSw0dyEyulR5dkTRa170lcp9FqZ6vpoZkCGkrcRVA1NkgRzSAGWZKMqxbI8PFxH+fkoxL4ixQqVjiOjrtoAeITkWDmoLV4MImCFlaMndTT+zZQo=
+	t=1731675097; cv=none; b=WYqGw09WIvojxq8RFFipX5wpeEVITFytUhL3h6TqAEmPI+uNqIocfa+GTyEaM6PbQfO+Z1SivxxwGozUwOA2gkPeQxm+xRFEUEFwSZIvCcn1dnV1Gp5UoeY8vZU7ciw54BlxrZTmJNVnRDNNPTr5mrBvP9ir6E+1kLTS0nb81Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731674993; c=relaxed/simple;
-	bh=uzu/Pblpk2vtYYTcF/7Ls3BSspxpAc/IHqnKWoV4MyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e6enzqkvbLG6Hl3rcvyf2Ga02VM2w5u9ynMgqSlFB/IxBkqOOG3OqqV0JXDVtljkVptFuyeouojzCMEvsHxJuwOAh/QyRB/S9u0cxg6924z2CLVVB31AekdK5s8mqhZeQU9Vi6oMds+XDeiOpW/fHhvXFjJrLIL15ftk084ac6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OXMuuJvb; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1731675097; c=relaxed/simple;
+	bh=ddQo1TKdyjr18X/CX49qvG4aGspREH/6rceHYeVsUPU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kQizJ0x6CY01VjWYHJbiClJNeiDO031j9Rspa/UP7PT24h3HPVGJMfxUCVLTgmgYkUbDZ+JPDHnQ+5PDoHiuY/M+P18tguDhlKjpWEiODLAE9rQSLievjdm1bdX7pu7/afqqfn0mo1WzwaBv7rgXdlv8GlvSvpTnpVti8S07fEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=nlqzezOV; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OXMuuJvb"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=d2eOg3ivIVHbIkLcirrH1jOY4rzIlzHyqaFIXvacHh4=; b=OXMuuJvb6UdZEG6FZfNGWrvKvW
-	Hf+VScexg3Yl7HVFTSoIzBmr+kTO05PXLQpyeS75/HZJt4nKsjCzHVXwdHHWh+5bk1SMxB7DfarSi
-	aqqUPAMBIA7U1EYXVfsjW8bMtqhjv6ZbahZaFczDfjyBDMMi7+H/7tjJsFA2dFt4o7cYqYC6K1nHY
-	4iBeD+lCwqJrT7XrmMq5z5be5t+AITTntw1pEodG0rYXMwBiqP5cpwTD/77/G+spfe1XVL2z2o9un
-	ncgHRBuh95YOySF/kvpEliELlHfA+1f3IqMgOmqAjZNcHEWQXrax3KGF2QyWLjlcG1iQomE1x0T4O
-	d5ob4r9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tBvlY-00000000EYb-3jDa;
-	Fri, 15 Nov 2024 12:49:38 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C193030066A; Fri, 15 Nov 2024 13:49:35 +0100 (CET)
-Date: Fri, 15 Nov 2024 13:49:35 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
-	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
-	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	hch@infradead.org, gregkh@linuxfoundation.org
-Subject: Re: [RFC][PATCH 0/8] module: Strict per-modname namespaces
-Message-ID: <20241115124935.GC22801@noisy.programming.kicks-ass.net>
-References: <20241111105430.575636482@infradead.org>
- <ZzKl-ldUQD9ldjWR@google.com>
- <20241112092023.GL22801@noisy.programming.kicks-ass.net>
- <ZzOWxC4JlCGe_BTe@google.com>
- <20241112195226.GT22801@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="nlqzezOV"
+Received: from wse.fritz.box (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPA id C7AC02FC0057;
+	Fri, 15 Nov 2024 13:51:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1731675087;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ddQo1TKdyjr18X/CX49qvG4aGspREH/6rceHYeVsUPU=;
+	b=nlqzezOVf3ecOxkGroRnPsOtUfp4g9UdfEqSryjlWismxYqGGJusD/Q5A/TvgtUkvaflaJ
+	E7Q04nNJLgN9ngKWNaHMRQi0jgxXAJcFD/W+ZBhn2PRtUIyix88y2HihjkUQ9IhkMmmtbZ
+	8xJiefbVyJdVpwHrrLG7kE/o4A3JMeQ=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+From: Werner Sembach <wse@tuxedocomputers.com>
+To: u.kleine-koenig@baylibre.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@leemhuis.info,
+	vv@tuxedocomputers.com,
+	cs@tuxedo.de
+Subject: [PATCH v2 0/2] module: Block some modules by TUXEDO from accessing
+Date: Fri, 15 Nov 2024 13:49:38 +0100
+Message-ID: <20241115125121.1242871-1-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112195226.GT22801@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 12, 2024 at 08:52:26PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 12, 2024 at 09:56:20AM -0800, Sean Christopherson wrote:
-> 
-> > This likely needs to be addressed in whatever chunk of code is enforcing the
-> > namespaces.  The s/-/_ behavior (and vice versa!) is *very* baked into the kernel
-> > at this point, e.g. parameqn() will happily parse dashes or underscores for every
-> > kernel parameter.  As horrific as it is, I think the module namespace needs to do
-> > the same, i.e. treat dashes and underscores as one and the same.
-> 
-> Right, I'll add a s/-/_/g on both ends of the strcmp or somesuch.
+Following the meeting I wrote about yesterday, I now changed the license
+of what we could change spontaniously to prove good faith.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=module/namespace&id=f2aabf8436348a47037570af139ec2c1de8c5337
+I still hope that the rest can be sorted out before anything gets merged.
+We are working on it. A clear time window would still be helpfull.
 
-My test box seems able to load kvm_intel. I'll let it all sit in that
-tree for a few days such that 0day might get a chance to chew on it
-before posting.
+At Uwe. I don't know how it works if you modifiy someone elses code. I
+removed the Signed-off-by: line and I guess you have to add it again?
 
-Thanks!
