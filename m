@@ -1,127 +1,125 @@
 Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5C284D02;
-	Fri, 15 Nov 2024 17:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25E818787A;
+	Fri, 15 Nov 2024 18:53:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731691647; cv=none; b=gqUc/yFxo5AJZntN3qkZZoqTqUh5wQwtLjjHoAcUfMUW5L7jBr4Iwea0jAxKQzjZwKQztVoQAWpsnz8F5BXW1wpetv9pglFNfb6LLwvowjBjjWQusRiUPwBnNZXRChYsu7tcd31gUa5VEnUOZ9ZDpSGqIqEqOq149RDBZpH+b3E=
+	t=1731696783; cv=none; b=C2HNAw0T5Nx3dpRLMx5PGzh1MhyP1edWDa8NKQa7ZfbyjqRFT+d+cxwwPlnhd6fpM992ZWf3N7mWg8dNTXAICFwLR4uC5ojDcPrLf4wxi68UeZFXM771lHyfEz59Tm35Q8hYFO7+rpKH2UZ+kmdtlQJKavbI+b8a+dQofN+VlaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731691647; c=relaxed/simple;
-	bh=YCufd6lrdaAozuR5N6Mh8z6A/7Gb2wGA+G5IB+FuBDA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R4yREIfmtgqX1IA6pF9N0bX8Rm8hEsNOWTQB5uSpPFbICG7Bp4kSvTr3Apap1qCRqqm9aMA6QpDi02ImYeLogRGLJdWCxN2F3gvpB7P+6CuFKHcaTpd7EpBPUGvS+cv9qDdEIPjQRVWStWI7He5qXvTSMwxdupWTCi0cH7HNOfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=AlhEc+Wr; arc=none smtp.client-ip=157.90.84.7
+	s=arc-20240116; t=1731696783; c=relaxed/simple;
+	bh=Gxh5SD2o3AZvE1R0wsLp3va2AjRJh+tsS2pl/p1tOOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RKdB/nU4XNmdGdkuphyg0fcuX94bnb2Imd/Z/gKvWxp7HhLayqgZlDqfmUAeKxx15CjF1pyKgQg/8jxxC8iOOS4WXap3h4XoIqywk/z9MS43zhwhIU2SmJRtciTgqMt+g48pfuoaYJMzmP/dCJyHW6EtiGkGu1n1Hlmi3YDVSng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=DAZ4OQ0z; arc=none smtp.client-ip=157.90.84.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="AlhEc+Wr"
-Received: from [192.168.42.96] (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="DAZ4OQ0z"
+Received: from wse.fritz.box (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
 	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id D6BA62FC0057;
-	Fri, 15 Nov 2024 18:27:20 +0100 (CET)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPA id 2B19A2FC0059;
+	Fri, 15 Nov 2024 19:52:58 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1731691641;
+	s=default; t=1731696778;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1yJ9wk6LIx5dW8HlLVRa6cUdg5kgKWI4Glgx81OCOQQ=;
-	b=AlhEc+Wr8JjenunIwgBWl+XikhJAwbw1mm4EIeuJGjAvXwTb7zTgkiyObcrdHj+SKGyFur
-	hAgpCgCk2lIo7LiWAHDe1rzNyO6mWvUwvyFJMrHeiINdqGqMkHS6fx26ourtePxbG9O1w8
-	a1yrrNqzQDJhWGItc/0BoKoa6qC6yMU=
+	bh=lzzThzBp51NN8jQZ1RQcQJROIdKCMgSV94iAx8zGQzs=;
+	b=DAZ4OQ0zRVF3EE+M9AqPc0+X3bmQXboIFIvqPeI/SarEPVCmilyCTiN4Mzv+yIro7rcoeG
+	cXNl1tux7oNjTg8Qoef1DgVVaoSeaRVyy/nWao2KwPJqcDD2RcGMwZygZKZnoqdtl7hQEV
+	uXKnKzopSHbuQIk25RI5KVoK+uYSTGk=
 Authentication-Results: mail.tuxedocomputers.com;
 	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <4356a7f8-2c37-4d34-9e77-8af83d251cee@tuxedocomputers.com>
-Date: Fri, 15 Nov 2024 18:27:20 +0100
+From: Werner Sembach <wse@tuxedocomputers.com>
+To: u.kleine-koenig@baylibre.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux@leemhuis.info,
+	vv@tuxedocomputers.com,
+	cs@tuxedo.de,
+	wse@tuxedocomputers.com
+Cc: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH v5 1/2] module: Put known GPL offenders in an array
+Date: Fri, 15 Nov 2024 19:50:30 +0100
+Message-ID: <20241115185253.1299264-2-wse@tuxedocomputers.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241115185253.1299264-1-wse@tuxedocomputers.com>
+References: <20241115185253.1299264-1-wse@tuxedocomputers.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] module: Block some modules by TUXEDO from
- accessing
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
- da.gomez@samsung.com, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux@leemhuis.info, vv@tuxedocomputers.com,
- cs@tuxedo.de
-References: <20241115130139.1244786-1-wse@tuxedocomputers.com>
- <3023bbda-0902-4e5c-aeb1-074623cd8ff0@tuxedocomputers.com>
- <uedhiz7luybtelifxooii5efesmpuot3bsoifdutsvt4axyror@zq37gl3x7je2>
-Content-Language: en-US
-From: Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <uedhiz7luybtelifxooii5efesmpuot3bsoifdutsvt4axyror@zq37gl3x7je2>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Uwe Kleine-König <ukleinek@kernel.org>
 
-Am 15.11.24 um 17:40 schrieb Uwe Kleine-König:
-> Hello Werner,
->
-> On Fri, Nov 15, 2024 at 02:03:27PM +0100, Werner Sembach wrote:
->> Am 15.11.24 um 13:58 schrieb Werner Sembach:
->>> Following the meeting I wrote about yesterday, I now changed the license
->>> of what we could change spontaniously to prove good faith.
->>>
->>> I still hope that the rest can be sorted out before anything gets merged.
->>> We are working on it. A clear time window would still be helpfull.
->>>
->>> At Uwe. I don't know how it works if you modifiy someone elses code. I
->>> removed the Signed-off-by: line and I guess you have to add it again?
-> The more usual thing would have been to reply to my mail saying
-> something like:
->
-> 	All the code in tuxedo-drivers.git that Tuxedo owns the complete
-> 	copyright for was relicensed to GPLv2+ now. (See $link)
-> 	For the remaining code I'm working in the background towards
-> 	relicensing.
->
-> 	So please drop
->
-> 		$modulelist
->
-> 	from your patch of modules to block.
->
-> I'm sure with that feedback you don't risk that the original patch is
-> applied.
-After the prevailing discussion, I'm not so sure about this. I went with the 
-safe option of sending code, because code usually gets more attention on the 
-LKML in my experience.
->
-> If you take someone else's patch and rework it (which IMHO should only
-> be done when the original submitter dropped following up to prevent
-> duplication of work), it's good style to explicitly mention the changes
-> you implemented since the patch was initially posted. And then don't
-> remove the S-o-b line. See 7602ffd1d5e8927fadd5187cb4aed2fdc9c47143 for
-> an example. I think this is (at least partly) also described in
-> Documentation/ somewhere.
-Thanks for the reference, I will come back to it when I need it in the future.
->
-> Looking at
-> https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/dd34594ab880ed477bb75725176c3fb9352a07eb
-> (which would be $link mentioned above): If you switch to GPLv2, using
-> the SPDX-License-Identifier should be good enough (but INAL). For sure
-> don't put "51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
-> in your files,
-> https://www.fsf.org/blogs/community/fsf-office-closing-party. Just keep
->
-> 	You should have received a copy of the GNU General Public License
-> 	along with this program; if not, see <https://www.gnu.org/licenses/>.
->
-> which is also the current suggestion by the FSF,
-> https://www.gnu.org/licenses/old-licenses/gpl-2.0.html.
->
-> Thanks for working on this!
-> Uwe
+Instead of repeating the add_taint_module() call for each offender, create
+an array and loop over that one. This simplifies adding new entries
+considerably.
 
-TBH I would be more happy with an apology for being called a liar, as I was 
-already working on it starting Monday.
+Signed-off-by: Uwe Kleine-König <ukleinek@kernel.org>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+---
+ kernel/module/main.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-Best regards,
-
-Werner Sembach
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 49b9bca9de12f..905d7b60dd709 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2023,11 +2023,20 @@ static int rewrite_section_headers(struct load_info *info, int flags)
+ 	return 0;
+ }
+ 
++static const char *module_license_offenders[] = {
++	/* driverloader was caught wrongly pretending to be under GPL */
++	"driverloader",
++
++	/* lve claims to be GPL but upstream won't provide source */
++	"lve",
++};
++
+ /*
+  * These calls taint the kernel depending certain module circumstances */
+ static void module_augment_kernel_taints(struct module *mod, struct load_info *info)
+ {
+ 	int prev_taint = test_taint(TAINT_PROPRIETARY_MODULE);
++	size_t i;
+ 
+ 	if (!get_modinfo(info, "intree")) {
+ 		if (!test_taint(TAINT_OOT_MODULE))
+@@ -2076,15 +2085,11 @@ static void module_augment_kernel_taints(struct module *mod, struct load_info *i
+ 	if (strcmp(mod->name, "ndiswrapper") == 0)
+ 		add_taint(TAINT_PROPRIETARY_MODULE, LOCKDEP_NOW_UNRELIABLE);
+ 
+-	/* driverloader was caught wrongly pretending to be under GPL */
+-	if (strcmp(mod->name, "driverloader") == 0)
+-		add_taint_module(mod, TAINT_PROPRIETARY_MODULE,
+-				 LOCKDEP_NOW_UNRELIABLE);
+-
+-	/* lve claims to be GPL but upstream won't provide source */
+-	if (strcmp(mod->name, "lve") == 0)
+-		add_taint_module(mod, TAINT_PROPRIETARY_MODULE,
+-				 LOCKDEP_NOW_UNRELIABLE);
++	for (i = 0; i < ARRAY_SIZE(module_license_offenders); ++i) {
++		if (strcmp(mod->name, module_license_offenders[i]) == 0)
++			add_taint_module(mod, TAINT_PROPRIETARY_MODULE,
++					 LOCKDEP_NOW_UNRELIABLE);
++	}
+ 
+ 	if (!prev_taint && test_taint(TAINT_PROPRIETARY_MODULE))
+ 		pr_warn("%s: module license taints kernel.\n", mod->name);
+-- 
+2.43.0
 
