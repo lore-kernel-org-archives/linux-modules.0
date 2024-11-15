@@ -1,51 +1,53 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46071B86F6;
-	Fri, 15 Nov 2024 11:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B7A6F30F;
+	Fri, 15 Nov 2024 12:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731671382; cv=none; b=PO8FlVolEg96zV85WT1i/VqzzZj+QSsgMo08rZ7u0d1/G12nD5wBhjx5e9lGCX9Dg5+fxBFb5p+hg22I97WGggYlGY0m2p1rL0fRiC5NPz2+Hb9XskirOlng9kUDrb0Y3a7sQy3rDUXhp1qPiqJ6OrXtTS9RUwhPLGmiZD49y0Q=
+	t=1731672122; cv=none; b=ghyqwf/8IHrghOVMEDIxxuMC4SVkyHOF8iRMy2CraDWoD3liiWQBuMQTlet1Be6yRqlHh66wjzHpbohBsxVtqkqdFm0joK94h1LWiMw/RTp8EXKd/ubH6utl924n2cMYtNmT2+vrAqph74xdrT6H2U/zGld+nW81tAsBJj2ebyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731671382; c=relaxed/simple;
-	bh=MnBOKQ/+1AjbtPfmzW5O5Ib7vgDNVKV7lus2CXVLKWk=;
+	s=arc-20240116; t=1731672122; c=relaxed/simple;
+	bh=9+qERUFS0AA2LpaZdeMa2icf2BqLd698AI0JTy8nXZo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MKzlnGAzHyFbpyAHAvPBLK7c4Z2RTy2OuAMYa0VsvczA8QMH1iNicv0+03d7YhluhkZJGai16Sk+3EBlC8YFxf92v94A9cItmBsWsIcxbUFc1yY6vp3qgQ+Cfa8N6WcM0gzo6XXesAKNMCZNThRT928gD2dn4jJoDWDOUb8zqdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QsbfJqxz; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ewrZJDImSN8Ztz1WBW4rU0pbyOjKdNtdz6yNSBEu+WM4wCNaOh/2BgCZLwZjtRGX1vnx0asI7OV9V61WeQELRbO7vVj56Ew17rne1WcQVM9qQo/d4+rK/8k+Ggpgas+TAS3/TsZGWImk4YkJ8aHSA4DuBTe5V1Hf/tFmpWJqDWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=svlS5zaI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QsbfJqxz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=D+xKiB8GWNnGuEpcIIELTeU/fw+jvTZ+eMA0hDrzAVw=; b=QsbfJqxzC1INeY0T215hijNnkV
-	cRtX0AQ5QFVKgcEIRfZ+k/U1II6iO/Rqu4YoH9aZ2X2mK5KMi265n81xUK5P9EG9LwaYTLtTbTLDq
-	uv043Iov+exZdtcYjRv7uRemm6MeY1+fZykY+qIi/Yi7YwkkU6yCs7s0QX1CaxjXcPVcxTIxHD5Ar
-	p0EloHF1pChjkNp2CSb/4FcqZgACMcVSj79cltilph9wlcYfeWRCwu1hTkRPUmm3n0/xMO/C376Po
-	4echqSnoTj6CTRJVnX4P3C+HSaFnRQv47+lQkOacgJyMFUFMYA8Xt4bxC88jojOBnvPFCpWYT7rXQ
-	iJRr/CRA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tBupM-00000001MIw-2WeB;
-	Fri, 15 Nov 2024 11:49:27 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id D2F1530066A; Fri, 15 Nov 2024 12:49:26 +0100 (CET)
-Date: Fri, 15 Nov 2024 12:49:26 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
-	samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
-	nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Subject: Re: [RFC][PATCH 1/8] module: Prepare for script
-Message-ID: <20241115114926.GH38972@noisy.programming.kicks-ass.net>
-References: <20241111105430.575636482@infradead.org>
- <20241111111816.912388412@infradead.org>
- <ZzHsOTLCZlUBN7iW@infradead.org>
- <20241111125529.GF22801@noisy.programming.kicks-ass.net>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="svlS5zaI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 932AFC4CECF;
+	Fri, 15 Nov 2024 12:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731672122;
+	bh=9+qERUFS0AA2LpaZdeMa2icf2BqLd698AI0JTy8nXZo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=svlS5zaIeu/Yhm0GOEbycxIIFfQ/72UYqfx0WpeIPvF3jsSj2FG1Aw7Yi57oRDh3R
+	 mtgEDqPYzfNh8RRYoCcOd4WAESfT+ocuYkyqPQ4+oArL/GvWu3sSlToTl9xnFFqwIm
+	 IK7GTPatQzF1FzSowO5RIFkMJqr2OeTGovVbsMsw=
+Date: Fri, 15 Nov 2024 13:01:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Werner Sembach <wse@tuxedocomputers.com>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, tux@tuxedocomputers.com,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vinzenz Vietzke <vv@tuxedocomputers.com>,
+	Christoffer Sandberg <cs@tuxedo.de>
+Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
+ symbols
+Message-ID: <2024111530-angles-celestial-2d5e@gregkh>
+References: <20241114103133.547032-4-ukleinek@kernel.org>
+ <e32e9f5c-3841-41f7-9728-f998f123cc8a@tuxedocomputers.com>
+ <2024111557-unlighted-giggle-0d86@gregkh>
+ <6c1952bc-f58d-4c55-887e-6aa247daec5c@tuxedocomputers.com>
+ <h5q36ajuzgwf5yrjmqv46x62evifcgoi5imxhcvsv7oxauvxak@sj54oisawqnf>
+ <58b85a78-55aa-422c-a21d-254eb16cc8c6@tuxedocomputers.com>
+ <2024111522-brush-excusably-cae5@gregkh>
+ <3ea99d52-cafb-4c79-a78b-fdd1f9a9fcd5@tuxedocomputers.com>
+ <2024111558-albatross-vice-2a73@gregkh>
+ <459e15ff-4f1f-4d7c-b49d-ccae540eaa4f@tuxedocomputers.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -54,54 +56,32 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241111125529.GF22801@noisy.programming.kicks-ass.net>
+In-Reply-To: <459e15ff-4f1f-4d7c-b49d-ccae540eaa4f@tuxedocomputers.com>
 
-On Mon, Nov 11, 2024 at 01:55:29PM +0100, Peter Zijlstra wrote:
-> On Mon, Nov 11, 2024 at 03:36:25AM -0800, Christoph Hellwig wrote:
-> > On Mon, Nov 11, 2024 at 11:54:31AM +0100, Peter Zijlstra wrote:
-> > > Since sed doesn't like multi-line make sure all EXPORT_SYMBOL_NS
-> > > things are a single line.
-> > 
-> > Eww.  Just use coccinelle or another tool not so simplistic.
+On Fri, Nov 15, 2024 at 11:59:47AM +0100, Werner Sembach wrote:
 > 
-> Feel free to do so. I've never managed to get coccinelle to do anything.
+> Am 15.11.24 um 11:22 schrieb Greg KH:
+> > On Fri, Nov 15, 2024 at 10:40:56AM +0100, Werner Sembach wrote:
+> > > Am 15.11.24 um 10:18 schrieb Greg KH:
+> > > > On Fri, Nov 15, 2024 at 10:00:23AM +0100, Werner Sembach wrote:
+> > > > > I guess what I try to convince you and others is that we _are_ taking Open
+> > > > > Source licenses seriously, but still there are mistakes to be made,
+> > > > > especially with complex projects like the Linux kernel, e.g. I'm not aware
+> > > > > of any other project that uses a similar construct to
+> > > > > EXPORT_SYMBOL_GPL()/MODULE_LICENSE().
+> > > > The Linux kernel is very simple from a license point of view, your code
+> > > > has to be GPLv2 compatible.  That's it, nothing complex or odd about
+> > > > that at all.
+> > > Then why does the proprietary NVIDIA driver exist?
+> > You will have to discuss that with that company's lawyers.  That was
+> > their business decision to make, and in my opinion, the contracts they
+> > wrote around that thing were a mastery of license law in "how to pass
+> > the liability onto someone else."
+> But you see where there is complexity, and where my misconception stems from?
 
-So I put a little more effort in and got you this (awk needs to be
-gawk>=4.1)
+No, not at all.  nvidia adds complexity in their contracts with vendors
+in order to attempt to circumvent the very simple license rules that we
+have.  Again, talk to your lawyers about this, they are the ones that
+know this type of thing.
 
-git grep -l -e MODULE_IMPORT_NS -e EXPORT_SYMBOL_NS | while read file;
-do
-  awk -i inplace '
-    /^#define EXPORT_SYMBOL_NS/ {
-      gsub(/__stringify\(ns\)/, "ns");
-      print;
-      next;
-    }
-    /^#define MODULE_IMPORT_NS/ {
-      gsub(/__stringify\(ns\)/, "ns");
-      print;
-      next;
-    }
-    /MODULE_IMPORT_NS/ {
-      $0 = gensub(/MODULE_IMPORT_NS\(([^)]*)\)/, "MODULE_IMPORT_NS(\"\\1\")", "g");
-    }
-    /EXPORT_SYMBOL_NS/ {
-      if ($0 ~ /(EXPORT_SYMBOL_NS[^(]*)\(([^,]+),/) {
-        if ($0 !~ /(EXPORT_SYMBOL_NS[^(]*)\(([^,]+), ([^)]+)\)/ &&
-            $0 !~ /(EXPORT_SYMBOL_NS[^(]*)\(\)/ &&
-            $0 !~ /^my/) {
-          getline line;
-          gsub(/[[:space:]]*\\$/, "");
-          gsub(/[[:space:]]/, "", line);
-          $0 = $0 " " line;
-        }
-
-        $0 = gensub(/(EXPORT_SYMBOL_NS[^(]*)\(([^,]+), ([^)]+)\)/,
-                    "\\1(\\2, \"\\3\")", "g");
-      }
-    }
-    { print }' $file;
-done
-
-
-I'm sure that wasn't worth the time I spend on it though :/
+greg k-h
