@@ -1,43 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F8918F2DB;
-	Fri, 15 Nov 2024 10:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063EC188015
+	for <linux-modules@vger.kernel.org>; Fri, 15 Nov 2024 10:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731666135; cv=none; b=WLNeo3j6Cxbrk8ZT9asr0rUXsGBCLpKRFR+nZdUzuXwNtuf+ucWiUuhQdTQrifFHEBvXNBKgW5XEY1DCAFYMiizHWa1WUjMJtTzJr+AVbCTsDSXV3EhNb5WuK/VvM77Ziay634kL1H5kPKLbTqifjWQ07yyYFWoDv+1pv1uyrJs=
+	t=1731667880; cv=none; b=BJnxfnmlaKA1Aso8RZmXF48Q2aU42oQIh8tltd+L+5RGHqp/67QJC+N5mwKuAF/g1UFKABGPjZRriYhX6wjjGJWjZDosdB+2kMP4/IrSRpyu/XCZtYJIvieQfs1Sdv9ieXDVxpRkPlIOH4pTAGGdDeMWzIsKLl/GdV7Xhtzzd3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731666135; c=relaxed/simple;
-	bh=QJAr2AZr2CkGMCpQrbpd08IUMAZ0ehEw4Samp12OP0U=;
+	s=arc-20240116; t=1731667880; c=relaxed/simple;
+	bh=Qx4F0F461BzRVt5DGASUXEaOPXglVHaubs+hPumYIhQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mZ6PuzQ6N0biO1kOU3bOQTTqw8C038kR7Wvt3982L57nPEaCv1U6juIEU/w2XvnciUB+4W/BO32mXaO1jUO4a44/ZRrafhnZtWQjJi3XFxSEJLiqY4WaiPYsRbDTHYCkgYeW4ideodKQ0XULQf/Q6izT33DL26svzVWukkszQIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mOkgerFK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cB51cJrIIQJTOQmKDrZErcXpzNxDR9ulh1zLCVICKmjzMDLhW9/jPPP2cGjN/8ylqQm3+i3fuzJtETqAjD4P4WBCOFPXtUwjUIaA1HNz7guMSpsAZqI9XRWnmyZve0caSmb46J7bl66CcDih1fVJ7SbYgq8OaXr8/XE8dlRrhdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ghHj80am; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mOkgerFK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B946C4CECF;
-	Fri, 15 Nov 2024 10:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731666135;
-	bh=QJAr2AZr2CkGMCpQrbpd08IUMAZ0ehEw4Samp12OP0U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mOkgerFKaRivr8mbiUVLMi72sDUOUkls8h1t+W2ooBNV9EXv7ZCZ3YNxs9gdMdmB8
-	 j738o4gxD/v3JF8xa3Gn19F3erIbtWqswOPcB1BjG6cj/QxkghcSgrATxKyRTnUYYg
-	 tcStkRIbEqg3wDev1ma2JJarHKTcmyhFoYtL6JrE=
-Date: Fri, 15 Nov 2024 11:22:12 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ghHj80am"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-431616c23b5so9521185e9.0
+        for <linux-modules@vger.kernel.org>; Fri, 15 Nov 2024 02:51:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1731667876; x=1732272676; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qx4F0F461BzRVt5DGASUXEaOPXglVHaubs+hPumYIhQ=;
+        b=ghHj80amLuodM885jnFDpzZZId6U4zEf6JkFlhA9mrzvt8tVKjKVfQlTjslNv2xQid
+         a8ZB01IdS/yqGFrPif0/bmIdYnsSbxnORyh28jgiyF/QGudhAwdgLpzu7OUHXro89Ur5
+         TC6eiMQvxu8lbyScFHAJUSTMvYIk2ThCVs6U2yubFvp7QKBNT6URWKLdDBSEfPUHkTQM
+         ROn60oJ06X6mivXbRs4nhZE6COyiGxs//snCH352VtbSAfCG984AyD4oaPeFec8Q/uoa
+         qwk2T9g6vlVdhAy08koNLRutsUJG7F1j7e8f/bu6d3yILm+RVrCr9XZ6OoT19iDX2+xZ
+         /Z8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731667876; x=1732272676;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qx4F0F461BzRVt5DGASUXEaOPXglVHaubs+hPumYIhQ=;
+        b=Rl9WuIdQo8ZZlvBlx0XotOymmYRcjfN8Bl6d3KaqzUgNe6BcP2YsLUcngFRqjdDKmK
+         tlj7AFiIHXTFL9z5vKkVuBYyyiAiBwYVb3ZH/fDk6SqSmVEVUzGQliZq/LFPngT7myO6
+         RFEH6mCY8W5Q2s+m7JR9nJUQDydJVWgCB4VVTiCLUyG5Lhzun3CJEnsE2j/Zgryis2Ju
+         lQpkKqi9WTNSpLS039qvpF606V/QeJj/hPIKtG+W1mX2oPd82f0VC0Um/txqrKO7G0c1
+         beoEGDOBIzyJcvBBc89lemYain+gTd4QBA80IkQbosnAHpXstPuudYExnEuxGofhIVlL
+         EJ8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXUAjsIkTjjInGpN9JWtwmlf/nDtdpwHHDRqgsMgsF0RPmtBBRZo3w/YhMSNxDEWZAbUbhEUETTxLnhqUYF@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5mwcyJdTZ9fSskPjpQ9AbwrUNsc5hKq06EgefALf9G/ZnFA/t
+	SvGkqr6RMqgkwW6kiKuOeb0xXLbcdyqKXrwg+r5jY20j+mTuiHIQ4ulcOMvtWK0=
+X-Google-Smtp-Source: AGHT+IEELQH215cT5HxQoVpbKazD1oIwR5e78Y6MuL4jy6qtS+rOi2RiLQuJVhCpA5LXSAg3YC4WLA==
+X-Received: by 2002:a05:600c:1c29:b0:431:4e33:98b6 with SMTP id 5b1f17b1804b1-432defd2398mr20383955e9.5.1731667876341;
+        Fri, 15 Nov 2024 02:51:16 -0800 (PST)
+Received: from localhost (p200300f65f28bb0063ffae39110fa2df.dip0.t-ipconnect.de. [2003:f6:5f28:bb00:63ff:ae39:110f:a2df])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dac223e6sm50118295e9.43.2024.11.15.02.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 02:51:15 -0800 (PST)
+Date: Fri, 15 Nov 2024 11:51:13 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Werner Sembach <wse@tuxedocomputers.com>
-Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, tux@tuxedocomputers.com,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Vinzenz Vietzke <vv@tuxedocomputers.com>,
+Cc: Greg KH <gregkh@linuxfoundation.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, tux@tuxedocomputers.com, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thorsten Leemhuis <linux@leemhuis.info>, Vinzenz Vietzke <vv@tuxedocomputers.com>, 
 	Christoffer Sandberg <cs@tuxedo.de>
 Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
  symbols
-Message-ID: <2024111558-albatross-vice-2a73@gregkh>
+Message-ID: <y3lspnzleavkgvujrf66rly65yw3sskjomcvbginijgexaybys@bg53hyadhcbw>
 References: <20241114103133.547032-4-ukleinek@kernel.org>
  <e32e9f5c-3841-41f7-9728-f998f123cc8a@tuxedocomputers.com>
  <2024111557-unlighted-giggle-0d86@gregkh>
@@ -52,35 +77,45 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="urniyztjj4xzapin"
 Content-Disposition: inline
 In-Reply-To: <3ea99d52-cafb-4c79-a78b-fdd1f9a9fcd5@tuxedocomputers.com>
 
+
+--urniyztjj4xzapin
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
+ symbols
+MIME-Version: 1.0
+
+Hello Werner,
+
 On Fri, Nov 15, 2024 at 10:40:56AM +0100, Werner Sembach wrote:
-> 
-> Am 15.11.24 um 10:18 schrieb Greg KH:
-> > On Fri, Nov 15, 2024 at 10:00:23AM +0100, Werner Sembach wrote:
-> > > I guess what I try to convince you and others is that we _are_ taking Open
-> > > Source licenses seriously, but still there are mistakes to be made,
-> > > especially with complex projects like the Linux kernel, e.g. I'm not aware
-> > > of any other project that uses a similar construct to
-> > > EXPORT_SYMBOL_GPL()/MODULE_LICENSE().
-> > The Linux kernel is very simple from a license point of view, your code
-> > has to be GPLv2 compatible.  That's it, nothing complex or odd about
-> > that at all.
 > Then why does the proprietary NVIDIA driver exist?
 
-You will have to discuss that with that company's lawyers.  That was
-their business decision to make, and in my opinion, the contracts they
-wrote around that thing were a mastery of license law in "how to pass
-the liability onto someone else."
+Please don't use NVIDIA's behaviour as a blueprint for your actions.
+INAL, but I would not recommend to deduce from "NVIDIA does it and
+wasn't tried to stop" (for any value of "it") that "it" is legal, honest
+and in line with the open source spirit.
 
-Luckily we now have open drivers for almost all of that hardware, so
-it's not so much of an issue anymore.
+Best regards
+Uwe
 
-Again, talk about this with your company lawyers, they can explain it
-all much better than I can.
+--urniyztjj4xzapin
+Content-Type: application/pgp-signature; name="signature.asc"
 
-thanks,
+-----BEGIN PGP SIGNATURE-----
 
-greg k-h
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmc3J58ACgkQj4D7WH0S
+/k7y+wgAoeHmj2+Ieb2/+7ZLcMqzAgTHIowWVwOoVKDhzeR/QR/KcGI/NpJy6+9d
+N8T7+pSTEZfckqr9kK37pjzX5bRFYnqAOdzKbi9z4qHL+8aTLRVn2nsi7kombrEZ
+0L+lRVzkXEB1bPndRdSGisMhKqLQu8FTf8hNXnPNv1oVoTR5CqJaYRUGVdLt0XJo
+8xQF88D47JhOCm37oMhLqfkAewQqJ0giSKSQKzsC7Z7OFcMUuj3m0alMALIiqJcH
+34J2igse0euzjP9oQ2eH4v+I9wk4nSB2rAWukYcDEUuDqYCg0xQRL2PpS8YrpQQX
+FwoHsvdf4LmLdh7SQrma+KylB9rNCw==
+=Kv05
+-----END PGP SIGNATURE-----
+
+--urniyztjj4xzapin--
