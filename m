@@ -1,127 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD854B666;
-	Sat, 16 Nov 2024 17:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF22519046E;
+	Sat, 16 Nov 2024 18:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731779400; cv=none; b=dq/tuu88xrU1U4DaGAobjui6behNX9b+oseg5XtNzHcMF02XffkydTArA9ClAhnHKvN2knnHyG2xhddCj+mpBrIRE43LjmK8+ogMCiGfxcfCwsz0Ahrh8x9aWAZjx3kOzmwZsR1G3QpEoMFr+eTDemlWk/G5yCFEyNbHwNo6Oww=
+	t=1731782495; cv=none; b=axogZAmDvbfmHk3qyTjZLNXyHyCLcVl1+tnrPJjBXb5okV+2BA+8x0wRrEAb2Wl6eLaidv6p9EKWbNncxVyeED0TIa3POLOudlXv2lhxBE9Lyy9am/rn3nILvR+uFBddMunmFUQUDsc+qDg+FUJWnPSHvWLGHsPamT/+Kfdk2Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731779400; c=relaxed/simple;
-	bh=6omQLfyrdzywIDGTsKilpGsb6tCdhV5CflukTwmNgVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rc/L7iHJwEutyzovoxPCC0Kl9XMnbgIIGtNHATCSxdTfN/dUvob13SUkMtmVDh9NyMg4udT7DMOB85+kNbTduMUMcl4ecUKM/aowJBrJpjwYj7jfzj5LAmwzvqGp+YfPG8smG6jfTW95c0+VdwRJYqU5hfJnghDYUJG9cH8W/2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5gXCT8E; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731782495; c=relaxed/simple;
+	bh=TUu/axCnwXUSPjl7DmdASpjS+JzTdRRaW1X3JGCd1HQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nz8pFabJKedlC8Q8t3fIFwTr5KcI1IFH9Jh/1UTzHGqwOorRaYqlMC7YAT472uZbqsHKgWZ7hTCx2f33fpiAZKIg7YMMPV97GG0gWP0kQ2uUJKKM1gP9W3BnT/+cV3nrG3xIBrXh1z6qcjtnyCj2Ji3+Ux8qEYoZTZEHDNzHlPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=uIiICG1h; arc=none smtp.client-ip=157.90.84.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5gXCT8E"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E3FC4CEC3;
-	Sat, 16 Nov 2024 17:49:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731779399;
-	bh=6omQLfyrdzywIDGTsKilpGsb6tCdhV5CflukTwmNgVE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q5gXCT8E1q1Cnk3WHXKpw6kKLZJApGSAdSYiagjvPD1a4G+/meuSEUIGFJm05KfAK
-	 Hxlfhv70dgOrByUFWaS+uqz5w7O4McVAecoXCi0RWBXn9ac4HWk/CgO7XxvE/XmuX3
-	 HMGL8pYLZnh77Y3rte6rzfIZIe08qYLg0WnpoTOOkdPR2mZriYEj+Ovn8/5Kv9MFeU
-	 2YRWowGMygtQcYs25V96l1uOevypjv5mHh+Zz/xD/H8BcmlJ0CSGZ4F1GjLXbE4B/W
-	 keVHdEQvv+TbD9dp2vVEZ1TNoYtSGpMvakr5VM6LtiNyiKOmj8N0DjZDUsHJ55O5z9
-	 r5xfXZ3sd4V0Q==
-Date: Sat, 16 Nov 2024 18:49:56 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Werner Sembach <wse@tuxedocomputers.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, tux@tuxedocomputers.com, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
- symbols
-Message-ID: <ozjiojcjmdjppmtardffvrqkuksnexyhfttzbyandihzhg6n3t@ssscyybngobw>
-References: <20241114103133.547032-4-ukleinek@kernel.org>
- <e32e9f5c-3841-41f7-9728-f998f123cc8a@tuxedocomputers.com>
- <e7d97b3d-1880-4c89-bbf2-a742d6ac9e6b@kernel.org>
+	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="uIiICG1h"
+Received: from [192.168.42.27] (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
+	(Authenticated sender: wse@tuxedocomputers.com)
+	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id C853F2FC0057;
+	Sat, 16 Nov 2024 19:41:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
+	s=default; t=1731782483;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JBqRSlWZvIoHn8A7/4oK+jcLVTVxG6tAyXjnQGfUghI=;
+	b=uIiICG1h2poU+bwTMHITZuDQcptlbgqEOAAnOCIGILOZD9Hv6bx5l3Wqf79Ur0CmY59/rx
+	glWr+qRCSZdkWmfpEGs3/JDEAxjRfenJHwV/cyWoPz+RyfvR4uXEcBvRfQtrG3eKtJ90Eh
+	9v+4fIO4zBiQEpyBTg9IIdb1YSx1gdU=
+Authentication-Results: mail.tuxedocomputers.com;
+	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
+Message-ID: <2a82f2e1-070a-4269-8b8e-26c5f188c85f@tuxedocomputers.com>
+Date: Sat, 16 Nov 2024 19:41:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z4gm4udsgcwtxml7"
-Content-Disposition: inline
-In-Reply-To: <e7d97b3d-1880-4c89-bbf2-a742d6ac9e6b@kernel.org>
-
-
---z4gm4udsgcwtxml7
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
  symbols
-MIME-Version: 1.0
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, tux@tuxedocomputers.com,
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thorsten Leemhuis <linux@leemhuis.info>
+References: <20241114103133.547032-4-ukleinek@kernel.org>
+ <e32e9f5c-3841-41f7-9728-f998f123cc8a@tuxedocomputers.com>
+ <e7d97b3d-1880-4c89-bbf2-a742d6ac9e6b@kernel.org>
+ <ozjiojcjmdjppmtardffvrqkuksnexyhfttzbyandihzhg6n3t@ssscyybngobw>
+Content-Language: de-DE
+From: Werner Sembach <wse@tuxedocomputers.com>
+In-Reply-To: <ozjiojcjmdjppmtardffvrqkuksnexyhfttzbyandihzhg6n3t@ssscyybngobw>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Hello Uwe,
 
-On Thu, Nov 14, 2024 at 12:14:16PM +0100, Uwe Kleine-K=F6nig wrote:
-> On 11/14/24 11:49, Werner Sembach wrote:
-> > Am 14.11.24 um 11:31 schrieb Uwe Kleine-K=F6nig:
-> > > the kernel modules provided by Tuxedo on
-> > > https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
-> > > are licensed under GPLv3 or later. This is incompatible with the
-> > > kernel's license and so makes it impossible for distributions and oth=
-er
-> > > third parties to support these at least in pre-compiled form and so
-> > > limits user experience and the possibilities to work on mainlining th=
-ese
-> > > drivers.
-> > >=20
-> > > This incompatibility is created on purpose to control the upstream
-> > > process. See https://fosstodon.org/@kernellogger/113423314337991594 f=
-or
-> > > a nice summary of the situation and some further links about the issu=
-e.
-> > >=20
-> > > Note that the pull request that fixed the MODULE_LICENSE invocations =
-to
-> > > stop claiming GPL(v2) compatibility was accepted and then immediately
-> > > reverted "for the time being until the legal stuff is sorted out"
-> > > (https://gitlab.com/tuxedocomputers/development/packages/tuxedo-
-> > > drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427).
-> >=20
-> > As already being implied by that commit message, this is sadly not an
-> > issue that can be sorted out over night.
-> >=20
-> > We ended up in this situation as MODULE_LICENSE("GPL") on its own does
-> > not hint at GPL v2, if one is not aware of the license definition table
-> > in the documentation.
->=20
-> That statement isn't consistent with you saying to pick GPLv3 as an
-> explicitly incompatible license to control the mainlining process. So you
-> knew that it's legally at least questionable to combine these licenses.
+Am 16.11.24 um 18:49 schrieb Uwe Kleine-König:
+> Hello,
+>
+> On Thu, Nov 14, 2024 at 12:14:16PM +0100, Uwe Kleine-König wrote:
+>> On 11/14/24 11:49, Werner Sembach wrote:
+>>> Am 14.11.24 um 11:31 schrieb Uwe Kleine-König:
+>>>> the kernel modules provided by Tuxedo on
+>>>> https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
+>>>> are licensed under GPLv3 or later. This is incompatible with the
+>>>> kernel's license and so makes it impossible for distributions and other
+>>>> third parties to support these at least in pre-compiled form and so
+>>>> limits user experience and the possibilities to work on mainlining these
+>>>> drivers.
+>>>>
+>>>> This incompatibility is created on purpose to control the upstream
+>>>> process. See https://fosstodon.org/@kernellogger/113423314337991594 for
+>>>> a nice summary of the situation and some further links about the issue.
+>>>>
+>>>> Note that the pull request that fixed the MODULE_LICENSE invocations to
+>>>> stop claiming GPL(v2) compatibility was accepted and then immediately
+>>>> reverted "for the time being until the legal stuff is sorted out"
+>>>> (https://gitlab.com/tuxedocomputers/development/packages/tuxedo-
+>>>> drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427).
+>>> As already being implied by that commit message, this is sadly not an
+>>> issue that can be sorted out over night.
+>>>
+>>> We ended up in this situation as MODULE_LICENSE("GPL") on its own does
+>>> not hint at GPL v2, if one is not aware of the license definition table
+>>> in the documentation.
+>> That statement isn't consistent with you saying to pick GPLv3 as an
+>> explicitly incompatible license to control the mainlining process. So you
+>> knew that it's legally at least questionable to combine these licenses.
+> When I wrote this mail I missed the possibility that while Werner knew
+> GPLv3 isn't ok for in-kernel code might still have considered GPLv3 ok
+> for external modules anyhow.
+>
+> So I take back what I said and excuse me for my words. They were not
+> intended as harsh as Werner obviously took them, but still I regret
+> having written my reply with this suggestion.
+>
+> I'm sorry,
+> Uwe
+Thank you very much for these words.
 
-When I wrote this mail I missed the possibility that while Werner knew
-GPLv3 isn't ok for in-kernel code might still have considered GPLv3 ok
-for external modules anyhow.=20
+I hope that in my replies I wasn't too harsh from my side and if so, I 
+too want to apologize for it.
 
-So I take back what I said and excuse me for my words. They were not
-intended as harsh as Werner obviously took them, but still I regret
-having written my reply with this suggestion.
+No more bad feelings going forward.
 
-I'm sorry,
-Uwe
+Best regards,
 
---z4gm4udsgcwtxml7
-Content-Type: application/pgp-signature; name="signature.asc"
+Werner Sembach
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmc420IACgkQj4D7WH0S
-/k6L8Af/Yrhl+2KEFVEyXCZhK5T2bGM3MLav7R0yMc3ZVsZyuR6spJY5g7bpBPqS
-Q94n0qrm7Bk/J/RnC6fULy+TvFGwQDrqE5NSzImB2LSu+y6K2g1VprpFgOnQ3Tgl
-qfLnCoHELuoUrgB2yJlHlowvnZspd9Qcz4qUzPBA5X7MtA5Uqn9dBK47LB0eGg2h
-bnlseBKig59XKGWyi0WALZAsxXPqcSjpxPWpfrdebk1M5UqRim8TTEaKhekCLjUB
-o/2v+yhDJwLEZZxNVMZHqOqK5JyFPnoWVLiw5kEwdcmkbw73C5kQehSkvO52hiHO
-4vHBnmcMis4TV7sDfZsfrPXBA07mCw==
-=zoHt
------END PGP SIGNATURE-----
-
---z4gm4udsgcwtxml7--
