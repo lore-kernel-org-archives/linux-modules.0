@@ -1,148 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A90115381A;
-	Sat, 16 Nov 2024 09:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA1280B
+	for <linux-modules@vger.kernel.org>; Sat, 16 Nov 2024 17:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731748141; cv=none; b=FRJZGuaFVEskHBs0BQ2ODJJOKo6c61fHrnK6V4dbRfuIYQY8jKM3x0SaVQJehTunZ7d8Hv+ATP3GTqdPJMpA7UYoSMdxy2qL4qyIY627gk+IAAe6rYBthTqHTaANjzc8jh21WAhb2VhpuVdwNRnL0yZ3XJi6mWzNPJ9Z1zzHhMc=
+	t=1731777624; cv=none; b=jVc9keHK5YKlyaD/zWNmJ2tBCAb5tZYYhRF4PY5O5+xgC4CvCl7yeRiGZOm1ShrD6E5Ix2TdSYhvR2wIY30KlCrIS2Blb/+uGxn9/NwmAttJzQU/3Gnq6Hrwt4iIzX5/XeFdwdV1zndDgkxgq4rKgifXqwwTdjo6k+0xIVXM87M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731748141; c=relaxed/simple;
-	bh=vR2V+V2QxqcQECfOUvT+5A1KplyfZDEMEObd7HFAmoA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BjLj/hUwu656cbC8LTmYHH8hptYbpApYSS//iyGyHDSmnkm1yOQQvhqqaQ5fpyECbZwRh5X7bWOAzXpfhToRZDaI8t0RmwAzn0mOJwyh3okf/Qpj89L5Ypx9xj69x1hoQdhbfxmKGcHqBhUER3r36VAxccZCDBOXHpk1Z/Hnmg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDL2mFiq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731777624; c=relaxed/simple;
+	bh=5w+T7fDiwjH4Q91Rzn299zU03tEpvFIoldlRVMcVLGU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vk4diY91aw9XK3DctsUxMEID7DkzfUeA6wX7AHE4SCouJjQAMd3sOVc06gJbBKqYuC41fNRV1peLALgcU7VyUAAH7I/3QcbCrFOS/Nttq0JtQQslfukNJVBsod7pTVP/KG5LWBoetzZpcUUsoxP8Oy46wnYvVk+UYAvZ0PuYT38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=TmkP9kmL; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDL2mFiq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADE9C4CEC3;
-	Sat, 16 Nov 2024 09:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731748141;
-	bh=vR2V+V2QxqcQECfOUvT+5A1KplyfZDEMEObd7HFAmoA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fDL2mFiq2jNynLhRPE6JTTBqZQaY/SWRFVMrn4Sx1RYpe4j99Lo53dJmP9pHDsEms
-	 Tyegx6moZ6nF2SKwXPT5WnwFJFfxn0Sohyw3rC8hlnSeZP26rrySKKtUx/mruIT980
-	 /kZDvxQb+RxAYju6zxetisy59I+ldPEUv1MDsN1ovNx9qT456VP95uCH5O0XP5PNbl
-	 p2uxu8WSl5jhehDaCLezX5ldIgnU65GtYOmn0K6UKigAZ/z3hisX/GjlniQiAdXr4Y
-	 utA9XbZUR+QSxbYc6BWAowo9U1SxwzhVXXMHewkV/81PNfu6bTdiH/QLuTvHKw6CYl
-	 ZCx2uN1dxk6yA==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53a007743e7so1672607e87.1;
-        Sat, 16 Nov 2024 01:09:01 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV0/GxAIlrUA518jTXm8GsBSweBAAOsY0hLksW/DBoXK1yEVk72jLG1e4yylZ+DFW+L5momKPNGj0q5EKXJHA==@vger.kernel.org, AJvYcCWg9EzoKX+nK1246AKXlDCi6wXQEaU4guwSid5bA+Bf+4zEvuqFd0NeKRpuCgJ7C/lyRCBHZGcy8lqxENH1YQw=@vger.kernel.org, AJvYcCWpTy/IqRJuuYi5JpwFgrtq5YS8SRbDIPLjuoclOMiwpvgsz13a4ZwDdiynEWI+RULoTH5M12qi7inkFAig@vger.kernel.org, AJvYcCWyQ+j4MnvjV6JEqf73iSo37FqTOwgh5WNxKIzFR6DA/qXOaTzChxoJ3DebNuD5uecAHoL2/rVPrz4UGqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzipiViB5/n7poAuJb4F9ih+QyC7/6i3tqlxEiLcIl5zeYjMotR
-	5PcJE0ZgTIzXKpc4hyqonMPOYFzM+5YxdyNbmCD+jdtvI5A6BNf9n6nQCj79qegJcRTUmVIDUL8
-	q1Z1oIGA5fn65gcVLP4F2hcCz4kQ=
-X-Google-Smtp-Source: AGHT+IHpl8ZAglZvngz5xm6ocic+KgEC+INX3t93NnViVbyMnAzYKh2RUbWNfOuCYlzJQ1LoVk0VBgZmNkdKrSdV/4s=
-X-Received: by 2002:ac2:5b1c:0:b0:53d:abc3:82a9 with SMTP id
- 2adb3069b0e04-53dabc382f0mr1869248e87.19.1731748139824; Sat, 16 Nov 2024
- 01:08:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="TmkP9kmL"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4314c4cb752so14795785e9.2
+        for <linux-modules@vger.kernel.org>; Sat, 16 Nov 2024 09:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1731777619; x=1732382419; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q/dgzgvFQRnihgmL6uOs2B7Yp3DRZimnSwwaTVovC9Q=;
+        b=TmkP9kmLkBSp3Tz7xxzG7Dvg4C9l8nxsfcLmDzk+VSkacU9MLqtgBLHHImxMuAjtj4
+         HKn1lvj9cHKfx7aTNQOynzJ5N1tsgf7nRdbvOAwIs0eDkz2HvAX/L64Ion5H2oUATlC/
+         mlc5upbbjXZfI9WS5ySIDFXcIc7QxrfMq+i9hHtOHCKX+dRPzlcipCQ/NVKz5YYS0qZX
+         XQi3nwy3OcxF7SajhjnlzAjvFLj1rdlRgvhb3LgYWp6CBoey57SM7ND2wQ4fe+j5INj5
+         4QmQdv35lkZ+MmLSKl5uyM8OCPeBzx98mGv/VlRQkinnt1P5aYYPcVitVzb9WIUb9pZc
+         rMHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731777619; x=1732382419;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q/dgzgvFQRnihgmL6uOs2B7Yp3DRZimnSwwaTVovC9Q=;
+        b=kDFp7QdgKE9NjM8o+NgZr13iA4J90oh+W0KbH6Ct5ZzzaXt2v6sa63EntmLqV1y1JB
+         o5qkdKOLgOvZziASPsB3Cx3L4lOZBE9iZCg7UJAL3e60/NRkzfju36sF5x3iPtje1nno
+         9YKHAychUUEl/m8AYh9o/H0SwbYvzshX22Hls+EqZ5jSQ9vTVL6iewRUAfv/Ent4S1/L
+         /pcDz8JB7vYVeCysC9XbeogoYeU+rDk+DSANKVYslLVTQfDZPyZM6rlEyNk/rayZlWGV
+         +NAyrlqAK7pBuJuxOgY22h/pADxH4dOGTMLKRXvnrcL7oUroDTUrfzn8rkcyLjNVNNjt
+         PXRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqQ+wRyvp5YaNd2pN25h4r1dXFBsKoAbxNNQwuMoxWJWBsL8GTqRBp4H/cdfsVWd4bIOykJt4b6nATIvbj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqev1W7IzNchdDQ/4gHv3JZE/3axFImqPliroKk5Y6BqIsWd8Z
+	Q+tuWizsqeRVlFdVtwj6h9frTjo0sKvqNyif0NLp3ySW7rDT6BSkPZl7Zy2SwiI=
+X-Google-Smtp-Source: AGHT+IGPrpiwwvYCz+WWZ7w684+SywIWzla7gQ5qa/QXLMORFBVUuxFDT5sUvlxxHeTi9VQig72ryQ==
+X-Received: by 2002:a05:600c:3b0a:b0:431:52b7:a499 with SMTP id 5b1f17b1804b1-432df78b065mr53563615e9.20.1731777619087;
+        Sat, 16 Nov 2024 09:20:19 -0800 (PST)
+Received: from localhost ([2a02:8071:b783:6940:941:29cc:578f:b591])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432da2946a3sm96583395e9.35.2024.11.16.09.20.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Nov 2024 09:20:18 -0800 (PST)
+Date: Sat, 16 Nov 2024 18:20:15 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Daniel Gomez <d+samsung@kruces.com>
+Cc: Werner Sembach <wse@tuxedocomputers.com>, mcgrof@kernel.org, 
+	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, linux@leemhuis.info, 
+	vv@tuxedocomputers.com, cs@tuxedo.de
+Subject: Re: [PATCH v5 2/2] module: Block a module by TUXEDO from accessing
+ GPL symbols
+Message-ID: <wnfqe7q2aby76zokkh77jhlwc2dbr243kycmejc4wj5wflywgi@6sox742ip22g>
+References: <20241115185253.1299264-1-wse@tuxedocomputers.com>
+ <20241115185253.1299264-3-wse@tuxedocomputers.com>
+ <D5NGCPSP7EO8.28YI337NY203X@kruces.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030170106.1501763-21-samitolvanen@google.com>
- <20241030170106.1501763-22-samitolvanen@google.com> <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
- <CABCJKueVjP8V-=3Ehi4QvQzg1FZh2unyVMDzSJ_vJ_E5EE+gLg@mail.gmail.com>
-In-Reply-To: <CABCJKueVjP8V-=3Ehi4QvQzg1FZh2unyVMDzSJ_vJ_E5EE+gLg@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 16 Nov 2024 18:08:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARVK1ZpGXZVTAynuo7CDjgB4uT5bQzcGiWseZfaEu7Tvw@mail.gmail.com>
-Message-ID: <CAK7LNARVK1ZpGXZVTAynuo7CDjgB4uT5bQzcGiWseZfaEu7Tvw@mail.gmail.com>
-Subject: Re: [PATCH v5 01/19] scripts: move genksyms crc32 implementation to a
- common include
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mtg7bk2c5czsktwc"
+Content-Disposition: inline
+In-Reply-To: <D5NGCPSP7EO8.28YI337NY203X@kruces.com>
+
+
+--mtg7bk2c5czsktwc
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 2/2] module: Block a module by TUXEDO from accessing
+ GPL symbols
+MIME-Version: 1.0
 
-On Thu, Nov 14, 2024 at 2:54=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> Hi,
->
-> On Mon, Nov 11, 2024 at 8:06=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
+On Sat, Nov 16, 2024 at 09:15:55AM +0100, Daniel Gomez wrote:
+> On Fri Nov 15, 2024 at 7:50 PM CET, Werner Sembach wrote:
+> > From: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
 > >
-> > On Thu, Oct 31, 2024 at 2:01=E2=80=AFAM Sami Tolvanen <samitolvanen@goo=
-gle.com> wrote:
-> > >
-> > > To avoid duplication between host programs, move the crc32 code to a
-> > > shared header file.
-> >
-> >
-> > Only the motivation to use this long table is to keep compatibility
-> > between genksyms and gendwarfksyms.
-> > I do not think this should be exposed to other programs.
-> >
-> >
-> > If you avoid the code duplication, you can do
-> >
-> > // scripts/gendwarfksyms/crc.c
-> > #include "../genksyms/crc.c"
->
-> Sure, that sounds reasonable. I'll change this in the next version.
+> > TUXEDO has not yet relicensed a module for GPLv2+ as a reply from former
+> > contributers the committed code under GPLv3+ is awaited.
+>=20
+> FYI, the SPDX identifier GPL-2.0+ is deprecated as of 2.0rc2 [1]. I think=
+ you'd
+> need to use GPL-2.0-or-later [2] instead. And when using the SPDX identif=
+ier,
+> you don't need to include the full text boilerplate in the source of ever=
+y file
+> as long as you include a LICENSE file or COPYRIGHT file with a copy of the
+> license. One example upstream here [3] commit 1a59d1b8e05ea ("treewide: R=
+eplace
+> GPLv2 boilerplate/reference with SPDX - rule 156").
+>=20
+> [1] https://spdx.org/licenses/GPL-2.0+.html
+> [2] https://spdx.org/licenses/GPL-2.0-or-later.html
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/co=
+mmit/?h=3Dv6.12-rc7&id=3D1a59d1b8e05ea
 
+If you're convinced that "GPL-2.0-or-later" is the right string to use
+(and the following somewhat agrees with you:
 
-BTW, is it necessary to share the same crc function
-between genksyms and gendwarfksyms?
+	linux$ git rev-parse next/master
+	744cf71b8bdfcdd77aaf58395e068b7457634b2c
 
-If CONFIG_GENKSYMS and CONFIG_GENDWARFKSYMS
-were able to produce the same CRC, it would be a good motivation
-to share the same function.
-However, as far as I tested, gendwarfksyms generates different CRC values.
+	linux$ git grep -l -F 'SPDX-License-Identifier: GPL-2.0+' next/master | wc=
+ -l
+	3640
 
-When a distro migrates to CONFIG_GENDWARFKSYMS,
-the new kernel cannot load old modules built with CONFIG_GENKSYMS.
+	linux$ git grep -l -F 'SPDX-License-Identifier: GPL-2.0-or-later' next/mas=
+ter | wc -l
+	9005
+)
 
-So, there is no need to share the old code.
-Another solution might be to use crc32() provided by zlib, for example.
-It requires another external library, but this already depends on
-libdw and libelf.
+you can consider patching Documentation/process/license-rules.rst which
+currently reads:
 
+   License identifiers for licenses like [L]GPL with the 'or later' option
+   are constructed by using a "+" for indicating the 'or later' option.::
 
+      // SPDX-License-Identifier: GPL-2.0+
+      // SPDX-License-Identifier: LGPL-2.1+
 
+Best regards
+Uwe
 
+--mtg7bk2c5czsktwc
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmc41E0ACgkQj4D7WH0S
+/k5+SwgAubHUymAvKTccESpnV+7u3Yc/hqVAPKF4P2jEMd5yAHKSi2ekL0Sae1Jz
+mNT7gnv+ytCDflbgLThPeSkjdfAgFyjPQjsZlC29RZ54MsTHIcEiMVvHMueV9UUD
+KqVWhvH/8zQMM5U7FCZpU8scDHxKQuKHnBAhwr1cUHPO4ecNpv1uk5dkDVjzFi1c
+VcZTIzLJz4pf69xaChiHjZRszpkbjhci3lTGPF15WL25E7zs41ix401Z4ReYvJhP
+EYnSgH15fQjy/Wxzcg3rI5a/hwZQYVyk6SMZ4Ddwcof4TzpLdHfdmB4nxSjVdE2G
+nrnK/IbIb+wHs7pTTe/FalQWLn4chA==
+=Dtig
+-----END PGP SIGNATURE-----
 
-
-
-
->
-> > > Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
-> > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > Acked-by: Neal Gompa <neal@gompa.dev>
-> >
-> > Does this Ack add any value?
-> >
-> > Acked-by is meaningful only when it is given by someone who
-> > maintains the relevant area or has established a reputation.
-> >
-> > $ git grep "Neal Gompa"
-> > $ git shortlog -n -s | grep "Neal Gompa"
-> >      2 Neal Gompa
-> >
-> > His Ack feels more like "I like it" rather than a qualified endorsement=
-.
->
-> Like Neal explained, an Ack from a potential user of this feature
-> seemed relevant, but if you don't think it's meaningful, I can
-> certainly drop it.
-
-Tested-by is more suitable if he wants to leave something.
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+--mtg7bk2c5czsktwc--
