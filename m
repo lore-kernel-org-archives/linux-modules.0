@@ -1,163 +1,89 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D6C1E765B
-	for <linux-modules@vger.kernel.org>; Mon, 18 Nov 2024 21:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6FB158DAC;
+	Mon, 18 Nov 2024 22:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731967130; cv=none; b=UAbaTWHqWD5prkgDZteSP/o5zkEn37gukxivT7s51DDERhjx2gNf8bYgjCtZMKg/7ebiDlvFP9ChmuE6j3S8kUUI7nhINzRwLhZC4o7xzuRGHTA06ZQKUBysqHIwPHjTYXSXJppiP6DUhNcrgPcfaxsWriHE1RNaIx0j3YxCzzU=
+	t=1731968708; cv=none; b=ChfY1aksxIYuRjAHSGoD4Jb0OscxpZ7dy9nEhYErhZRBS2SvPOyAmVGaCyayCBCuheMMYU7a0Xl86qSCMuz2JOpKomebOJ+jHFrR1qor3edFCQX1cyzZEw095ptYEgKW/GaQat8TtZxBHneX7WhFM7Q+Sh9TfLwByQIsGZ8BAQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731967130; c=relaxed/simple;
-	bh=hQkH15gr6Qgm2KoVe/ThQVUD4flOHdtYi2Q7pTwd0MQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NOztBeL3dk/f7irexRzVJkh6UrqNDOJwjMqkhNmLXq5L0v5ZD33v79SOWOSpQAT4NUBcOOo5dducLwZMXTwPyUz7vYh2qAqxNM9+LRFrGe63gzzHfnPkP41aoDFQg5Zgai3cfJ+qt3uCPC0/5Yg10XDhXcaIlVOhXn4Hn75zQ6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YCwFGM4m; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1731968708; c=relaxed/simple;
+	bh=ddPu5M9TE4ztBRt5Cq5MpiKHQ4M9ux9latV4D7SSYOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I1StCFkXM+cpUWaLpOdP/gZWjKfOyl4HwbgXuUFZsRBIBqnO/Oz2qnQ43f+RqGby5MSShiEYZinVwhM9itCSfUYNauz3AtJAXrqHiIUhZIKpGLZh44aLDSjLIqzseu31MK6BjOl2bf/ENCqlrtCM2R899e/hJK4XN1kHem5Jodw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CaEUs9iT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YCwFGM4m"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5cfb81a0af9so3406a12.0
-        for <linux-modules@vger.kernel.org>; Mon, 18 Nov 2024 13:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731967127; x=1732571927; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQ3Et6WIBdQ7sud4i/NonpGyXfau4X1TNW+PUgugafE=;
-        b=YCwFGM4m7dm3zFbfStEWvyaCFaFZgAlEnsbWu0wmvgKiX3fe9zlLm1kZwFEwV+Y7q/
-         crJtP3SJxgkueA8WSOKJrQIztfNl6bxSkwKeJvsVh0iA61LK0rsBcohX1jJhvdneuxvN
-         /JFSN23ZmIszzCTZL+nvL4lxcm/2fAI+LK17pHRid03SQFt3q63VmmkkbI+0rejeoaW8
-         uXawDrsKcpcfBip21IbCPgpMygCAEMCqEMCfPoxlmnLiUQGU6suyP8I71Zgo8TKnWikf
-         6Uais1OpfOsGBQQQfOpbIOIx+/02IIGLk70py3jHHlQAJ+Hpt3Bm5bakqdoZ96pTz05s
-         d63g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731967127; x=1732571927;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZQ3Et6WIBdQ7sud4i/NonpGyXfau4X1TNW+PUgugafE=;
-        b=PMT7jyvyJXmPiQTq0WIrRhcQGUFzvcbFuq3dUQBLZXv+Cq6SUvvQqEPtTP840nk0VI
-         MOW56Dn1S8GUO+XU7HtVjo9xcWSWiJdaXnbZJnUsCjii2Y6JumPQ1XAQGMwftF5zD9kN
-         vnfs+ion4m2dK7nSrl2Afe08GTH4+nviXABNdiztdO++VAF/OJe2o1W4s6huEHRZx5G0
-         o4OKEKWwHbHupCfWCNDRaJcytwkfldRANk4gqFinD8U6kC0H5J/f9SrmrEHsbnvoY/Qo
-         opmL6jCgde5OmY4wEr2YKnzyuzAsd+qmr5jKCmBARYURrI9omd168maZkHPbCnP5qQAw
-         j7dg==
-X-Forwarded-Encrypted: i=1; AJvYcCX59VaGAzwZq8jmqgNHIsWgjHZ2fB2Z/TTfODeIDMLxrglfWBkoqv9PZVZLYyWwH0F/fcqMUcy/auxpR2cI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy08Y6hQp08LU6iphVgM8gjV/KvPq64Rx6Jnj7OrHu5t3F7al8l
-	PU31Lt3+KO+969j7b2cYBnwCnwrASayGPnoEt0Il40reGTtuK1HheMZukmHIugfK+MwsopOVegq
-	aYiQYKocNNZ4jTnNq4ZL6nQEjn41jgPwINdpe
-X-Gm-Gg: ASbGncvhyTOeuHat1DwfZ8KiP0E3cAfSX3zPF7OWcF7UNGuqCDeFHMrpCoADMW3knAM
-	tngnch1+N5HI9C03WGiquTUTHgnEfrJQV64/crOTuUQei/S/zd6YSyYSSNEE=
-X-Google-Smtp-Source: AGHT+IED/n5r3VjG+Ri+3OnSZ0XSX0QLyw7ggJKkFG+u6FSu0srLpXwOc/cszXrN20qB0TpblSw7+zX2Fd7l9uwnoW4=
-X-Received: by 2002:a05:6402:50c6:b0:5cf:deaf:ac2 with SMTP id
- 4fb4d7f45d1cf-5cfdec1bb2cmr23256a12.2.1731967126565; Mon, 18 Nov 2024
- 13:58:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CaEUs9iT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD972C4CECC;
+	Mon, 18 Nov 2024 22:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731968707;
+	bh=ddPu5M9TE4ztBRt5Cq5MpiKHQ4M9ux9latV4D7SSYOw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CaEUs9iTNyzwUIBl8ZmfjCwM/V2WWCvvSsaMht5tLzGoar3sKADM03eD7P3OBG+of
+	 awp8UnXXTtN9vu4UoX6+c9RXU/AdkBkpeNcjZV8ercJa0wj9z80J7RzSYP+ZfXhOSW
+	 y1KbcNY5/JgFidtHJbttFVj2sfzwYQCIHRzehexHZWrdXoq8KW3TDxiaYFOaKA/lMb
+	 f6l1NcVEO5h42R3nKDIfYo5xwBZa3R/RqdMSaVTS7WV5QKVRqQR1Nw+qSaD7ZXgYdj
+	 /hHpSQJVo6Av/4pl+ZfKNZf+aAZbhLYgacaQ+ydGYnWk3agBjY68P7U03H6NvkfulP
+	 KxCI9kiryowuQ==
+Date: Mon, 18 Nov 2024 14:25:05 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
+	Lucas De Marchi <lucas.de.marchi@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
+Message-ID: <Zzu-wfGqbuAm24yg@bombadil.infradead.org>
+References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
+ <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
+ <ZyNr--iMz_6Fj4yq@bombadil.infradead.org>
+ <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
+ <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org>
+ <CAGSQo02uDZ5QoRMPOn=3Fa9g5d+VPfKW-vmSsS2H+pOdPYCBFw@mail.gmail.com>
+ <ZyrRYUD0K1f7SwWg@bombadil.infradead.org>
+ <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
+ <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030170106.1501763-21-samitolvanen@google.com>
- <20241030170106.1501763-22-samitolvanen@google.com> <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
- <CABCJKueVjP8V-=3Ehi4QvQzg1FZh2unyVMDzSJ_vJ_E5EE+gLg@mail.gmail.com> <CAK7LNARVK1ZpGXZVTAynuo7CDjgB4uT5bQzcGiWseZfaEu7Tvw@mail.gmail.com>
-In-Reply-To: <CAK7LNARVK1ZpGXZVTAynuo7CDjgB4uT5bQzcGiWseZfaEu7Tvw@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 18 Nov 2024 21:58:09 +0000
-Message-ID: <CABCJKufVpx4dsr7A44qA0ydwTEx+3Qy_OMx9Ch6OKa4nzvRj2g@mail.gmail.com>
-Subject: Re: [PATCH v5 01/19] scripts: move genksyms crc32 implementation to a
- common include
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
 
-Hi,
+On Thu, Nov 07, 2024 at 02:38:13PM -0800, Luis Chamberlain wrote:
+> The only thing left I think to test is the impact at runtime, and the
+> only thing I can think of is first we use find_symbol() on resolve_symbol() 
+> which it took me a while to review and realize that this just uses a
+> completely different ELF section, the the ksymtab sections which are split up
+> between the old and the gpl section.
 
-On Sat, Nov 16, 2024 at 9:09=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Thu, Nov 14, 2024 at 2:54=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
-e.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon, Nov 11, 2024 at 8:06=E2=80=AFPM Masahiro Yamada <masahiroy@kern=
-el.org> wrote:
-> > >
-> > > On Thu, Oct 31, 2024 at 2:01=E2=80=AFAM Sami Tolvanen <samitolvanen@g=
-oogle.com> wrote:
-> > > >
-> > > > To avoid duplication between host programs, move the crc32 code to =
-a
-> > > > shared header file.
-> > >
-> > >
-> > > Only the motivation to use this long table is to keep compatibility
-> > > between genksyms and gendwarfksyms.
-> > > I do not think this should be exposed to other programs.
-> > >
-> > >
-> > > If you avoid the code duplication, you can do
-> > >
-> > > // scripts/gendwarfksyms/crc.c
-> > > #include "../genksyms/crc.c"
-> >
-> > Sure, that sounds reasonable. I'll change this in the next version.
->
->
-> BTW, is it necessary to share the same crc function
-> between genksyms and gendwarfksyms?
->
-> If CONFIG_GENKSYMS and CONFIG_GENDWARFKSYMS
-> were able to produce the same CRC, it would be a good motivation
-> to share the same function.
-> However, as far as I tested, gendwarfksyms generates different CRC values=
-.
->
-> When a distro migrates to CONFIG_GENDWARFKSYMS,
-> the new kernel cannot load old modules built with CONFIG_GENKSYMS.
+Thinking about this some more, if we're going down enabling a new
+option, it seems to beg the question if the old *two* ksymtab sections
+could just be folded into the a new one where the "gpl only" thing
+becomes just one "column" as you call it. Reasons I ask, it seems like
+we're duplicating symbol names on ksymtab and for modeversions. Could
+you review this a bit?
 
-No, it's not necessary to use the exact same function, this was just
-to avoid adding more external dependencies.
-
-> So, there is no need to share the old code.
-> Another solution might be to use crc32() provided by zlib, for example.
-> It requires another external library, but this already depends on
-> libdw and libelf.
-
-Makes sense. I'll switch to the zlib implementation in v6.
-
-> > > > Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
-> > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > Acked-by: Neal Gompa <neal@gompa.dev>
-> > >
-> > > Does this Ack add any value?
-> > >
-> > > Acked-by is meaningful only when it is given by someone who
-> > > maintains the relevant area or has established a reputation.
-> > >
-> > > $ git grep "Neal Gompa"
-> > > $ git shortlog -n -s | grep "Neal Gompa"
-> > >      2 Neal Gompa
-> > >
-> > > His Ack feels more like "I like it" rather than a qualified endorseme=
-nt.
-> >
-> > Like Neal explained, an Ack from a potential user of this feature
-> > seemed relevant, but if you don't think it's meaningful, I can
-> > certainly drop it.
->
-> Tested-by is more suitable if he wants to leave something.
-
-Ack. Neal, I'll drop the acks from v6, but if you end up testing that
-series, please feel free to add your Tested-by.
-
-Sami
+  Luis
