@@ -1,39 +1,60 @@
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F8E193418;
-	Mon, 18 Nov 2024 10:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83AB192D97
+	for <linux-modules@vger.kernel.org>; Mon, 18 Nov 2024 12:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731924719; cv=none; b=ooZYKMa6JjR3MgfXxsAPkFct6OufOlPWFUZvx6uQH3tQQDCV7lL7uVvSO2czwoF/jWI3Zo4eqo4wbyDLaKLjc6BWFqkOHKZPtcUTsGoC1BaxUPqcfAQ+9Qmbj8338sYsI9fk9gSQAiYp6oQvYcKHODFozTR0X0N3yKntvfnqd7E=
+	t=1731934458; cv=none; b=GjNg8mcJFuRIYr/tKAcUjt3QXACXI7qHERfHBXD8t4KxBgwwCfuvpbsJjD9FiH6m8hoy26V50kTMkLN8C06c/SRHTyCrsSUt9qcqqSehu0dMb/xyQcF/QLBAu/yLWypMyCqd7M5lGuXbDRsLPWp2pRictPyUgzWUTE5OfKSxhbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731924719; c=relaxed/simple;
-	bh=y0KL+I4yWQYvU8GZSwrNnW4aW64mki/BNWUAW3tIfnk=;
+	s=arc-20240116; t=1731934458; c=relaxed/simple;
+	bh=JsiQ74lSJhEvKUrChcF8WIs8NQWZMLgUUxS86s/3s7U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=asLTMzcSkgJe73l56PTwpxao2Q6jW05usXLD/E8IoWjJY6V9m6EgVWq70/ClMfmVZmhUxejkMr4THgFBddPcYHtJdWNjDk6v4CbTCUf05uFIKBLvfu7MUgQOQlsmgNmkFY7r8vJtrDBl/JVe64AxFvtq/XZ3DLWM71B94Yhl5jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=GYZbxqqj; arc=none smtp.client-ip=157.90.84.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
+	 In-Reply-To:Content-Type; b=PxHApl9fkGpXavZtV7I7OlomPtC34Hl0v+zjhY7osn8Ue7Oe9dvACJsSTHtjLhXTClIi/7mB3bvvhwiQPfwhNW83iazWO0fW0gQbCiaiHDknSc2SoYEe31ZgCA1mlFzzR5N0aFpRyhajePVVDf/65k831nH+jWpiYvmvNtSq8JY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QOMzIOTv; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="GYZbxqqj"
-Received: from [192.168.42.96] (p5de457db.dip0.t-ipconnect.de [93.228.87.219])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPSA id E84442FC0061;
-	Mon, 18 Nov 2024 11:11:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1731924714;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VyH+jygpYBBLCCseYTOLHa8NhRgcFqWbrqJs95FspFE=;
-	b=GYZbxqqjICQmMWfuhSyyLl+hOHiA/gaWvIv+1EW8y38lQvnEf3eXa0o6pdfWZEN1tlktO/
-	fY+/c49/81rUJsPzbECBhrQdAJlNIRNYbq/lKiElNot/xAYdHDoXdmdnVwJyE5ZmL2Ns+t
-	j+LK6wXUZ2aHbyh4n9JZt6sdXLq8vjQ=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-Message-ID: <ac82a35e-4fe0-4f22-a371-59a546fdab18@tuxedocomputers.com>
-Date: Mon, 18 Nov 2024 11:11:53 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QOMzIOTv"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-431ac30d379so36297675e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 18 Nov 2024 04:54:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1731934455; x=1732539255; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=75HTXdXjmxNI1/MMWma5rxHneXLyGS9ZEHRlSoUGgbw=;
+        b=QOMzIOTv9vsXBnlP+P2xGuKEluuoWkbYwx1jONnyBfki6RZxHVYQHidh7yaheGRYpT
+         kJKIIqWA2KqR4oK+ovqsuzOr1aHO9t9c9u/k+jwNlSDKUEzYvK8ncbg2hhbCPskluiS1
+         zNpQ2sKbSxCYtIwRYEloGY062QscE1jm52SfrYu3x6qI52Lb7q/0c9K3tUHfi3eCg5Rw
+         bo5Ko780RcBi+P4Wd/LiE0u0sTWbeV0KqQiVhFY8C4srZQwU6NLXwptGQH3x+7qVSdHU
+         hwx+O6q4sU61dFqekKWf312CwBgIwUNTFhTelZV83A+HKO6uwQ14gpvM+9rBKoJdOGcN
+         50iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731934455; x=1732539255;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=75HTXdXjmxNI1/MMWma5rxHneXLyGS9ZEHRlSoUGgbw=;
+        b=wUbUfnfyCT5kLzC5+Aum0bDcKulJep2WgDS+K95iCLqtbwhzZB5IO6xhZEojOH8sJF
+         86pV4u+WESTzx6N9eRikf7z3w2iZ9ACZgi67aMJ4EUqlpntRONvI0xdWCFSHwCATh36z
+         m1+BWCJHuVKmRqVVzLg2rN6wJK8qUsBMC7+JCDhS9dolkSB2Acv4gjNmJHbz2/jG5PNv
+         MQ8ttMkvVMYri8jlCYelKRbG/CAkiV9lGIA/o4ikBETU5rYKR/PM9t1jqErRQwkOOLHw
+         aAO1waya6DaAaYmRDy822oehXqQ73PwIDN4o8LDgfiYN9jDLnY1LDFdB+CDI8sju0no6
+         TCWw==
+X-Forwarded-Encrypted: i=1; AJvYcCVE5fdYTQf76vWWKgCvA8vMV3+c0+rnNinq32F95TFBngXlfvPOsw8sojS12UodhYV1X9Bblksbr4+y8wuB@vger.kernel.org
+X-Gm-Message-State: AOJu0YylwWjaiue7ZBer+26qsqUaEowYj33Dz3IJ1t1YBNFwpxxtajDv
+	7vd/GpozrlqAzoBHHDuNUD0Df3LzPhebg6MLQWM6OtdMFBKYZ/zHOT47t0wpKyej8ZVFwkEmnjK
+	P
+X-Google-Smtp-Source: AGHT+IHtcfcSTW3xmt/su9LfzXPc+GJ9f+Q/89GDTtssOykRYD56WDM8/ZtEa6ZYEaudxFspzVkXUQ==
+X-Received: by 2002:a05:600c:3b9c:b0:431:59ab:15cf with SMTP id 5b1f17b1804b1-432df74f8b6mr99668175e9.19.1731934455240;
+        Mon, 18 Nov 2024 04:54:15 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dab78783sm154405505e9.12.2024.11.18.04.54.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2024 04:54:14 -0800 (PST)
+Message-ID: <8ea8dfed-608f-44b9-8adb-fb1798619215@suse.com>
+Date: Mon, 18 Nov 2024 13:54:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -41,93 +62,107 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] module: Block modules by Tuxedo from accessing GPL
- symbols
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>
-Cc: tux@tuxedocomputers.com, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thorsten Leemhuis <linux@leemhuis.info>
-References: <20241114103133.547032-4-ukleinek@kernel.org>
- <20241114103133.547032-6-ukleinek@kernel.org>
+Subject: Re: [PATCH] kmod: verify module name before invoking modprobe
+To: Song Chen <chensong_2000@189.cn>
+Cc: mcgrof@kernel.org, samitolvanen@google.com, da.gomez@samsung.com,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+References: <20241110114233.97169-1-chensong_2000@189.cn>
+ <21423aea-65c3-430e-932d-2ba70b6b9ac3@suse.com>
+ <524b444f-4b81-4005-b93a-39b7d3fd3db1@189.cn>
 Content-Language: en-US
-From: Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <20241114103133.547032-6-ukleinek@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <524b444f-4b81-4005-b93a-39b7d3fd3db1@189.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi,
+On 11/13/24 03:15, Song Chen wrote:
+> 在 2024/11/12 20:56, Petr Pavlu 写道:
+>> On 11/10/24 12:42, Song Chen wrote:
+>>> Sometimes when kernel calls request_module to load a module
+>>> into kernel space, it doesn't pass the module name appropriately,
+>>> and request_module doesn't verify it as well.
+>>>
+>>> As a result, modprobe is invoked anyway and spend a lot of time
+>>> searching a nonsense name.
+>>>
+>>> For example reported from a customer, he runs a user space process
+>>> to call ioctl(fd, SIOCGIFINDEX, &ifr), the callstack in kernel is
+>>> like that:
+>>> dev_ioctl(net/core/dev_iovtl.c)
+>>>    dev_load
+>>>       request_module("netdev-%s", name);
+>>>       or request_module("%s", name);
+>>>
+>>> However if name of NIC is empty, neither dev_load nor request_module
+>>> checks it at the first place, modprobe will search module "netdev-"
+>>> in its default path, env path and path configured in etc for nothing,
+>>> increase a lot system overhead.
+>>>
+>>> To address this problem, this patch copies va_list and introduces
+>>> a helper is_module_name_valid to verify the parameters validity
+>>> one by one, either null or empty. if it fails, no modprobe invoked.
+>>
+>> I'm not sure if I fully follow why this should be addressed at the
+>> request_module() level. If the user repeatedly invokes SIOCGIFINDEX with
+>> an empty name and this increases their system load, wouldn't it be
+>> better to update the userspace to prevent this non-sense request in the
+>> first place? 
+> 
+> If the user process knew, it wouldn't make the mistake.
 
-Am 14.11.24 um 11:31 schrieb Uwe Kleine-König:
-> Tuxedo licenses the modules used on their hardware under GPLv3+, to
-> "keep control of the upstream pacing" – and want to re-license the code
-> while upstreaming.
->
-> They were asked to then at least not use MODULE_LICENSE("GPL") which
-> declares compatibility to the kernel's GPLv2. They accepted the pull
-> request and shortly after reverted the change and so continue to lie
-> about the license.
->
-> So teach the module loader that these modules are proprietary despite
-> their declaration to be GPLv2 compatible "until the legal stuff is
-> sorted out".
+The user process should be able to check that the ifr_name passed to
+SIOCGIFINDEX is empty and avoid the syscall altogether, or am I missing
+something? Even if the kernel gets improved in some way to handle this
+case better, I would still suggest looking at what the application is
+doing and how it ends up making this call.
 
-The relicensing is complete so this patch can be dropped entirely (everything is 
-now GPLv2+)
+> moreover, what 
+> happened in dev_load was quite confusing, please see the code below:
+> 
+>      no_module = !dev;
+>      if (no_module && capable(CAP_NET_ADMIN))
+>          no_module = request_module("netdev-%s", name);
+>      if (no_module && capable(CAP_SYS_MODULE))
+>          request_module("%s", name);
+> 
+> Running the same process, sys admin or root user spends more time than 
+> normal user, it took a while for us to find the cause, that's why i 
+> tried to fix it in kernel.
+> 
+> Similarly, if something should be done in the kernel,
+>> wouldn't it be more straightforward for dev_ioctl()/dev_load() to check
+>> this case?
+> 
+> I thought about it at the beginning, not only dev_ioctl/dev_load but 
+> also other request_module callers should check this case as well, that 
+> would be too much effort, then I switched to check it at the beginning 
+> of request_module which every caller goes through.
+> 
+>>
+>> I think the same should in principle apply to other places that might
+>> invoke request_module() with "%s" and a bogus value. The callers can
+>> appropriately decide if their request makes sense and should be
+>> fixed/improved.
+>>
+> 
+> Callees are obliged to do fault tolerance for callers, or at least let 
+> them know what is going on inside, what kinds of mistake they are 
+> making, there are a lot of such cases in kernel, such as call_modprobe 
+> in kernel/module/kmod.c, it checks if orig_module_name is NULL.
 
-Regards,
+Ok, I see the idea behind checking that a value passed to
+request_module() to format "%s" is non-NULL.
 
-Werner Sembach
+I'm however not sure about rejecting empty strings as is also done by
+the patch. Consider a call to request_module("mod%s", suffix) where the
+suffix could be empty to select the default variant, or non-empty to
+select e.g. some optimized version of the module. Only the caller knows
+if the suffix being empty is valid or not.
 
->
-> Link: https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427
-> Signed-off-by: Uwe Kleine-König <ukleinek@kernel.org>
-> ---
->   kernel/module/main.c | 33 +++++++++++++++++++++++++++++++++
->   1 file changed, 33 insertions(+)
->
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 878191c65efc..46badbb09d5e 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2338,6 +2338,39 @@ static const char *module_license_offenders[] = {
->   
->   	/* lve claims to be GPL but upstream won't provide source */
->   	"lve",
-> +
-> +	/*
-> +	 * Tuxedo distributes their kernel modules under GPLv3, but intentially
-> +	 * lies in their MODULE_LICENSE() calls.
-> +	 * See https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427
-> +	 */
-> +	"gxtp7380",
-> +	"ite_8291",
-> +	"ite_8291_lb",
-> +	"ite_8297",
-> +	"ite_829x",
-> +	"stk8321",
-> +	"tuxedo_compatibility_check",
-> +	"tuxedo_io",
-> +	"tuxedo_nb02_nvidia_power_ctrl",
-> +	"tuxedo_nb04_keyboard",
-> +	"tuxedo_nb04_wmi_ab",
-> +	"tuxedo_nb04_wmi_bs",
-> +	"tuxedo_nb04_sensors",
-> +	"tuxedo_nb04_power_profiles",
-> +	"tuxedo_nb04_kbd_backlight",
-> +	"tuxedo_nb05_keyboard",
-> +	"tuxedo_nb05_kbd_backlight",
-> +	"tuxedo_nb05_power_profiles",
-> +	"tuxedo_nb05_ec",
-> +	"tuxedo_nb05_sensors",
-> +	"tuxedo_nb05_fan_control",
-> +	"tuxi_acpi",
-> +	"tuxedo_tuxi_fan_control",
-> +	"clevo_wmi",
-> +	"tuxedo_keyboard",
-> +	"clevo_acpi",
-> +	"uniwill_wmi",
->   };
->   
->   /*
+I've checked if this pattern is currently used in the kernel and wasn't
+able to find anything, so that is good. However, I'm not sure if
+request_module() should flat-out reject this use.
+
+-- 
+Thanks,
+Petr
