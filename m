@@ -1,82 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AAE1CCEF7;
-	Tue, 19 Nov 2024 20:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D372149C7A;
+	Tue, 19 Nov 2024 20:48:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732047048; cv=none; b=V4sH6C4KvGl/fgkdQEqgygcXVm2K6Rxp8scVdmdFuUmM/NIzFjjy2pnMZkpPbwvZPYEMi+HVOXmOXx1NkeCzRjzuUh+Z1pAVaQKKeDpeu7Fx4bQ2oPHnL1dqA34cnu6DJGMs6QzhfVdhnqa7HPIkQxEp31RqMPQ5wb0uakdViqY=
+	t=1732049312; cv=none; b=TzfdD1/rZ45XClB2GFMDwLWvw0lZ7DZP/kPed++p9ExIuM+u9bXK/T9Qrin0BmUK5/wVfaaEtpxzK9bSX5p215fmv4cpBxWGFK+V+Gb5ex1QPh0Hrn9VFVrRBWyDgjMMkNvjyh9fYhuN0+zMIigLe0dfVI13vCuPqP7+duJC/tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732047048; c=relaxed/simple;
-	bh=80p4u8vFU8cU6neBJorNSyBCRfiu3wL8yP9UDvMnD7o=;
+	s=arc-20240116; t=1732049312; c=relaxed/simple;
+	bh=vahBI6bpELdMwDIw7a2qG/3RIAxR5+JhRyStJfSfnQw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jmRwW36gFEyOsiJgLCrTbsXNXEVHZ0ZrCTKk4IXswSyuuXenXXGEX8mfZwFq54I/58dTG5AmiJH5AFXq5Cl6j7wpUkTR8m65W9w+3kJQGkwa/pdYi+oBENMeA0Qaf3+aLVSTybxoLSL0Uq/qvekU+OPQ9szAa5QSNnWFcfMM/84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uuy7Jd+v; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=XpUJT4+HI+o+k7NEk6aMphVLrJP6TAOo28V9Z7l9ielfJ5RGqlDRusLMTGU3qVrfeQ6egR0VjStnByC+c9sim/3PBzhXg8kp8qH8TFpBEMpVUCb4l2JxAsDrXy5hkRqzO//Ht+1f1fdMIXuVABGwSZLuEPiqzXbCNphK7gqbwys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHYzFeaw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uuy7Jd+v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A46B3C4CECF;
-	Tue, 19 Nov 2024 20:10:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHYzFeaw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBB9C4CECF;
+	Tue, 19 Nov 2024 20:48:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732047047;
-	bh=80p4u8vFU8cU6neBJorNSyBCRfiu3wL8yP9UDvMnD7o=;
+	s=k20201202; t=1732049312;
+	bh=vahBI6bpELdMwDIw7a2qG/3RIAxR5+JhRyStJfSfnQw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uuy7Jd+vQldDusMOoTA5ujAWOpxoWC3hIgk+EQooQ3HcsDFe3FlK/vlHLCtuR1gHG
-	 RxMNB3Zs4G29GqTaSw1Eu00nUctmUvxyenM60QK6Wf2EYS3TtBHST03xkpvsgVeErI
-	 1Z9RW3pz9X+kne3+h/58p2y3GvUBCwci1GuoSRqqv/l7rzYZuuWU8KXiTSq2fx2vVL
-	 SVPTo0qNvFUEm9Yw0mIKFNYeKmtrySo6LIOzq+yQGUTF3J1YsmF86wmovCYL6kSWSO
-	 Q+eA626XtJrhx0WNtyPhf2+UaZugOLjORq8Rs7qXh27dilBbgGe16dGRh9zUEnpYGW
-	 /dZot0wypxOeA==
-Date: Tue, 19 Nov 2024 12:10:45 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, corbet@lwn.net,
-	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
-	akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com,
-	pbrobinson@gmail.com, zbyszek@in.waw.pl, mjg59@srcf.ucam.org,
-	pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com,
-	jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
-	petr.vorel@gmail.com, mzerqung@0pointer.de, kgold@linux.ibm.com,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v6 02/15] module: Introduce ksys_finit_module()
-Message-ID: <ZzzwxdHbG9HynADT@bombadil.infradead.org>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
- <20241119104922.2772571-3-roberto.sassu@huaweicloud.com>
- <20241119121402.GA28228@lst.de>
+	b=kHYzFeawIOkDNoR+JcjvAScu9PDU5sGaL+/bf2hI2i1828FaNPSzdHh7ePQZZc5xP
+	 NVqIZsuMxwZqLfE5MVGCHquXXjLVzo9IiKcW9mcpDdeP3FBfsNI3EFfPDei/YidEoh
+	 ryMK3cCUTrPHh8yHoM7FoVh5K1+qkPH3W4ElLI96CtmiSLnTTRZaukti2hI5JMyIQJ
+	 9GihzCKQ9MYEP0h33ayk5GBufNhlvgiAbuVqd2/w30cOHK50L06xiJvccimyn9Obgi
+	 c90zcauD15EldMFJ4hFqH/EDL57vCmz9tIzWiB9qHy4shHKgZO5MNuQRpmBtzuFF4x
+	 wCHzb/sXoxvcQ==
+Date: Tue, 19 Nov 2024 12:48:29 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthew Maurer <mmaurer@google.com>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>,
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Asahi Linux <asahi@lists.linux.dev>,
+	Sedat Dilek <sedat.dilek@gmail.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v5 01/19] scripts: move genksyms crc32 implementation to
+ a common include
+Message-ID: <20241119204829.GA1926309@frogsfrogsfrogs>
+References: <20241030170106.1501763-21-samitolvanen@google.com>
+ <20241030170106.1501763-22-samitolvanen@google.com>
+ <CAK7LNAShVzrE6uhXxZ7HepKhmOJYsZeigq6w19jRN3OH-T_Jyg@mail.gmail.com>
+ <CABCJKueVjP8V-=3Ehi4QvQzg1FZh2unyVMDzSJ_vJ_E5EE+gLg@mail.gmail.com>
+ <CAK7LNARVK1ZpGXZVTAynuo7CDjgB4uT5bQzcGiWseZfaEu7Tvw@mail.gmail.com>
+ <CABCJKufVpx4dsr7A44qA0ydwTEx+3Qy_OMx9Ch6OKa4nzvRj2g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241119121402.GA28228@lst.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKufVpx4dsr7A44qA0ydwTEx+3Qy_OMx9Ch6OKa4nzvRj2g@mail.gmail.com>
 
-On Tue, Nov 19, 2024 at 01:14:02PM +0100, Christoph Hellwig wrote:
-> On Tue, Nov 19, 2024 at 11:49:09AM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Introduce ksys_finit_module() to let kernel components request a kernel
-> > module without requiring running modprobe.
+On Mon, Nov 18, 2024 at 09:58:09PM +0000, Sami Tolvanen wrote:
+> Hi,
 > 
-> That does sound more than sketchy, even more so because the commit log
-> completely fails to explain why you'd need to do that.
+> On Sat, Nov 16, 2024 at 9:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Thu, Nov 14, 2024 at 2:54 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Mon, Nov 11, 2024 at 8:06 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > > >
+> > > > On Thu, Oct 31, 2024 at 2:01 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> > > > >
+> > > > > To avoid duplication between host programs, move the crc32 code to a
+> > > > > shared header file.
+> > > >
+> > > >
+> > > > Only the motivation to use this long table is to keep compatibility
+> > > > between genksyms and gendwarfksyms.
+> > > > I do not think this should be exposed to other programs.
+> > > >
+> > > >
+> > > > If you avoid the code duplication, you can do
+> > > >
+> > > > // scripts/gendwarfksyms/crc.c
+> > > > #include "../genksyms/crc.c"
+> > >
+> > > Sure, that sounds reasonable. I'll change this in the next version.
+> >
+> >
+> > BTW, is it necessary to share the same crc function
+> > between genksyms and gendwarfksyms?
+> >
+> > If CONFIG_GENKSYMS and CONFIG_GENDWARFKSYMS
+> > were able to produce the same CRC, it would be a good motivation
+> > to share the same function.
+> > However, as far as I tested, gendwarfksyms generates different CRC values.
 
-I also don't think the commit log is correct, I don't see how the
-code is preventing calling modprobe, the indepotent check is intended
-to prevent duplicate module init calls which may allocate extra vmalloc
-space only to release it. You can test to see if your patch has any
-improvments by enabling MODULE_STATS and MODULE_DEBUG_AUTOLOAD_DUPS
-and check before / after results of /sys/kernel/debug/modules/stats  ,
-right now this patch and commit log is not telling me anything useful.
+crc32() is operating on different data, right?  CONFIG_GENDWARFKSYMS
+computes a crc of the DWARF data, whereas CONFIG_GENKSYMS computes a crc
+of a magic string from ... the source code, right?  Hence the crcs will
+never match?
 
-  Luis
+> > When a distro migrates to CONFIG_GENDWARFKSYMS,
+> > the new kernel cannot load old modules built with CONFIG_GENKSYMS.
+> 
+> No, it's not necessary to use the exact same function, this was just
+> to avoid adding more external dependencies.
+> 
+> > So, there is no need to share the old code.
+> > Another solution might be to use crc32() provided by zlib, for example.
+> > It requires another external library, but this already depends on
+> > libdw and libelf.
+> 
+> Makes sense. I'll switch to the zlib implementation in v6.
+> 
+> > > > > Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+> > > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > > > > Acked-by: Neal Gompa <neal@gompa.dev>
+> > > >
+> > > > Does this Ack add any value?
+> > > >
+> > > > Acked-by is meaningful only when it is given by someone who
+> > > > maintains the relevant area or has established a reputation.
+> > > >
+> > > > $ git grep "Neal Gompa"
+> > > > $ git shortlog -n -s | grep "Neal Gompa"
+> > > >      2 Neal Gompa
+> > > >
+> > > > His Ack feels more like "I like it" rather than a qualified endorsement.
+> > >
+> > > Like Neal explained, an Ack from a potential user of this feature
+> > > seemed relevant, but if you don't think it's meaningful, I can
+> > > certainly drop it.
+> >
+> > Tested-by is more suitable if he wants to leave something.
+> 
+> Ack. Neal, I'll drop the acks from v6, but if you end up testing that
+> series, please feel free to add your Tested-by.
 
+Just my 2 cents, but it seems rude to me to *remove* an Ack from an
+existing patchset on the grounds that person doesn't appear often in the
+kernel log.  "We won't hire you for this entry level job because you
+don't have experience" etc.
 
+Also, wouldn't Neal be one of the people shepherding this change into
+distro kernels?  He seems to show up somewhat frequently in the Fedora
+and SUSE ecosystems.
+
+Is the problem here that you all think "Acked-by" isn't appropriate from
+someone who isn't a subsystem maintainer, but the kernel doesn't seem to
+have a tag for "downstream consumer of this change says they're willing
+to put their name on the line for this"?
+
+Maybe should we go full Parks and Rec:
+Not-Against-You-On-This-One: Neal Gompa <neal@gompa.dev>
+
+--D
