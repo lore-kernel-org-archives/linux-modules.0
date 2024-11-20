@@ -1,132 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6A81DD88D;
-	Tue, 19 Nov 2024 23:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43B5F191;
+	Wed, 20 Nov 2024 02:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=183.61.185.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732060652; cv=none; b=pWoQ/UGZjWBoYQsb8O1jDUz6GOU1qVLtTNFjWnO2AT9jmjMLvHgE8uRFIdYJXnagNoR/zJ515CyNRWy0KFIAZmkNGd+wLPp/3c1FnFkaSpmomr+7dRh/rPM2mBTTL1P1k2zbbAMXe9pZRiWdP2+MYk3sCHM2luExBz4m2M+JUvM=
+	t=1732069044; cv=none; b=oEIo7rvS00SEOBTP3k/xTl0CaRcE4C+aaiItjrghwEa8LUp8EsntOqn7v+k0PX4sQmQV7ZfP1k8/N5otZUSS8N7KV9iZsPgoa0Ea1Vy/K9t7AbX+COTaIkZjoKgFPiZoHIfzclgYUpv6wJyAvUfhPoX8SIY6l2+HwnNpUVnWoJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732060652; c=relaxed/simple;
-	bh=MriHjoLoo098ADUIG/s1LI+wIu1wFdjFUIJJjWwoKt4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IMX/MV38HAO5AUGsBNXFYLwb5BSuQBg46Ph3VZ/0Tz/YN2jOIpI0AeeNC71UKBNsM5QZSSYPqieWnTnIwzxSm6tx1DpTfIIpZxcVKSFoKezusWFb1OC2GbGo2+LOvZ9h0TJPdlFX9VUkVSPuiB/5sO2MrF4vCBnIFwy2wk0CGqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C2OPJB0h; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C2OPJB0h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D5DC4CED7;
-	Tue, 19 Nov 2024 23:57:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732060652;
-	bh=MriHjoLoo098ADUIG/s1LI+wIu1wFdjFUIJJjWwoKt4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C2OPJB0hRaT7ieUERNQeSXKNaBEhZWEDCujERRHiUYFPss/FnbRuu2n4yolQKHeDF
-	 vG7hgMGX8secUOEjIy8C4U6Nbns0V7bDMRw8oOz5jRyfKulaERpF0iVri9biBW7D7Q
-	 ZauSytBTHO1vZ18bOiX+F95qYMaC5qn9BTqV6J0WbMW/TGM1r2ZBKuhPoioa6Lcypw
-	 OhN7ndG4EdwAAmuPL5Fo4I0MbImtCZhHYu+SHa15Da3j9SE78AogUalS4MugsqUJCa
-	 w1fxpfmZJhChWXZmIRUpDpL1xCVxxopseMgqPP6xZDT/T7FM8GtowwrP/3OVS5T2i3
-	 8TO2VvkX01xkA==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH 14/15] modpost: rename alias symbol for MODULE_DEVICE_TABLE()
-Date: Wed, 20 Nov 2024 08:56:52 +0900
-Message-ID: <20241119235705.1576946-14-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241119235705.1576946-1-masahiroy@kernel.org>
-References: <20241119235705.1576946-1-masahiroy@kernel.org>
+	s=arc-20240116; t=1732069044; c=relaxed/simple;
+	bh=hVGhOStGSaQAnY+/wqyIUlVbKeyMJCsCDkyvLBNzN9o=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Vu1GSGSqYTxgSYbupLbevl3VX4LxrQBSVEcMUseX/PgobaWDPN6Dskm6QeWi/13rvn9sfeq63OfnCK6Wy8+W7YwFKtgD7O+qrCcjLt+ZwNu1XuMd++7k3oQ6MJnqyyvAsxbCQkfLgNdo+FSjEfOdu92EG9aGI2jUofVxNvzctY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=183.61.185.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
+HMM_SOURCE_IP:10.158.243.18:35581.401365535
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-123.150.8.42 (unknown [10.158.243.18])
+	by 189.cn (HERMES) with SMTP id 4B4DA10296C;
+	Wed, 20 Nov 2024 10:17:10 +0800 (CST)
+Received: from  ([123.150.8.42])
+	by gateway-153622-dep-5c5f88b874-pd459 with ESMTP id 08c685f21664449ab4ea252d4fcee535 for petr.pavlu@suse.com;
+	Wed, 20 Nov 2024 10:17:11 CST
+X-Transaction-ID: 08c685f21664449ab4ea252d4fcee535
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <d3cad11c-a65d-4faf-a636-3d85474d7175@189.cn>
+Date: Wed, 20 Nov 2024 10:17:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Song Chen <chensong_2000@189.cn>
+Subject: Re: [PATCH] kmod: verify module name before invoking modprobe
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: mcgrof@kernel.org, samitolvanen@google.com, da.gomez@samsung.com,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+References: <20241110114233.97169-1-chensong_2000@189.cn>
+ <21423aea-65c3-430e-932d-2ba70b6b9ac3@suse.com>
+ <524b444f-4b81-4005-b93a-39b7d3fd3db1@189.cn>
+ <8ea8dfed-608f-44b9-8adb-fb1798619215@suse.com>
+Content-Language: en-US
+In-Reply-To: <8ea8dfed-608f-44b9-8adb-fb1798619215@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-This commit renames the alias symbol, __mod_<type>__<name>_device_table
-to __mod_device_table__<type>__<name>.
+Hi Petr,
 
-This change simplifies the code slightly, as there is no longer a need
-to check both the prefix and suffix.
+在 2024/11/18 20:54, Petr Pavlu 写道:
+> On 11/13/24 03:15, Song Chen wrote:
+>> 在 2024/11/12 20:56, Petr Pavlu 写道:
+>>> On 11/10/24 12:42, Song Chen wrote:
+>>>> Sometimes when kernel calls request_module to load a module
+>>>> into kernel space, it doesn't pass the module name appropriately,
+>>>> and request_module doesn't verify it as well.
+>>>>
+>>>> As a result, modprobe is invoked anyway and spend a lot of time
+>>>> searching a nonsense name.
+>>>>
+>>>> For example reported from a customer, he runs a user space process
+>>>> to call ioctl(fd, SIOCGIFINDEX, &ifr), the callstack in kernel is
+>>>> like that:
+>>>> dev_ioctl(net/core/dev_iovtl.c)
+>>>>     dev_load
+>>>>        request_module("netdev-%s", name);
+>>>>        or request_module("%s", name);
+>>>>
+>>>> However if name of NIC is empty, neither dev_load nor request_module
+>>>> checks it at the first place, modprobe will search module "netdev-"
+>>>> in its default path, env path and path configured in etc for nothing,
+>>>> increase a lot system overhead.
+>>>>
+>>>> To address this problem, this patch copies va_list and introduces
+>>>> a helper is_module_name_valid to verify the parameters validity
+>>>> one by one, either null or empty. if it fails, no modprobe invoked.
+>>>
+>>> I'm not sure if I fully follow why this should be addressed at the
+>>> request_module() level. If the user repeatedly invokes SIOCGIFINDEX with
+>>> an empty name and this increases their system load, wouldn't it be
+>>> better to update the userspace to prevent this non-sense request in the
+>>> first place?
+>>
+>> If the user process knew, it wouldn't make the mistake.
+> 
+> The user process should be able to check that the ifr_name passed to
+> SIOCGIFINDEX is empty and avoid the syscall altogether, or am I missing
+> something? Even if the kernel gets improved in some way to handle this
+> case better, I would still suggest looking at what the application is
+> doing and how it ends up making this call.
+> 
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+yes, agree, it's the user space process's fault after all.
 
- include/linux/module.h   |  2 +-
- scripts/mod/file2alias.c | 17 +++++++----------
- 2 files changed, 8 insertions(+), 11 deletions(-)
+>> moreover, what
+>> happened in dev_load was quite confusing, please see the code below:
+>>
+>>       no_module = !dev;
+>>       if (no_module && capable(CAP_NET_ADMIN))
+>>           no_module = request_module("netdev-%s", name);
+>>       if (no_module && capable(CAP_SYS_MODULE))
+>>           request_module("%s", name);
+>>
+>> Running the same process, sys admin or root user spends more time than
+>> normal user, it took a while for us to find the cause, that's why i
+>> tried to fix it in kernel.
+>>
+>> Similarly, if something should be done in the kernel,
+>>> wouldn't it be more straightforward for dev_ioctl()/dev_load() to check
+>>> this case?
+>>
+>> I thought about it at the beginning, not only dev_ioctl/dev_load but
+>> also other request_module callers should check this case as well, that
+>> would be too much effort, then I switched to check it at the beginning
+>> of request_module which every caller goes through.
+>>
+>>>
+>>> I think the same should in principle apply to other places that might
+>>> invoke request_module() with "%s" and a bogus value. The callers can
+>>> appropriately decide if their request makes sense and should be
+>>> fixed/improved.
+>>>
+>>
+>> Callees are obliged to do fault tolerance for callers, or at least let
+>> them know what is going on inside, what kinds of mistake they are
+>> making, there are a lot of such cases in kernel, such as call_modprobe
+>> in kernel/module/kmod.c, it checks if orig_module_name is NULL.
+> 
+> Ok, I see the idea behind checking that a value passed to
+> request_module() to format "%s" is non-NULL.
+> 
+> I'm however not sure about rejecting empty strings as is also done by
+> the patch. Consider a call to request_module("mod%s", suffix) where the
+> suffix could be empty to select the default variant, or non-empty to
+> select e.g. some optimized version of the module. Only the caller knows
+> if the suffix being empty is valid or not.
+> 
+> I've checked if this pattern is currently used in the kernel and wasn't
+> able to find anything, so that is good. However, I'm not sure if
+> request_module() should flat-out reject this use.
+> 
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 88ecc5e9f523..3dd79a3d0cbf 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -247,7 +247,7 @@ extern void cleanup_module(void);
- #ifdef MODULE
- /* Creates an alias so file2alias.c can find device table. */
- #define MODULE_DEVICE_TABLE(type, name)					\
--extern typeof(name) __mod_##type##__##name##_device_table		\
-+extern typeof(name) __mod_device_table__##type##__##name		\
-   __attribute__ ((unused, alias(__stringify(name))))
- #else  /* !MODULE */
- #define MODULE_DEVICE_TABLE(type, name)
-diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-index 2374737b9d22..b1291cc7bd80 100644
---- a/scripts/mod/file2alias.c
-+++ b/scripts/mod/file2alias.c
-@@ -121,7 +121,7 @@ typedef struct {
- #include "../../include/linux/mod_devicetable.h"
- 
- struct devtable {
--	const char *device_id; /* name of table, __mod_<name>__*_device_table. */
-+	const char *device_id;
- 	unsigned long id_size;
- 	void (*do_entry)(struct module *mod, void *symval);
- };
-@@ -188,7 +188,7 @@ static void device_id_check(const char *modname, const char *device_id,
- 	int i;
- 
- 	if (size % id_size || size < id_size) {
--		fatal("%s: sizeof(struct %s_device_id)=%lu is not a modulo of the size of section __mod_%s__<identifier>_device_table=%lu.\n"
-+		fatal("%s: sizeof(struct %s_device_id)=%lu is not a modulo of the size of section __mod_device_table__%s__<identifier>=%lu.\n"
- 		      "Fix definition of struct %s_device_id in mod_devicetable.h\n",
- 		      modname, device_id, id_size, device_id, size, device_id);
- 	}
-@@ -1503,6 +1503,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 	char *zeros = NULL;
- 	const char *type, *name;
- 	size_t typelen;
-+	static const char *prefix = "__mod_device_table__";
- 
- 	/* We're looking for a section relative symbol */
- 	if (!sym->st_shndx || get_secindex(info, sym) >= info->num_sections)
-@@ -1512,15 +1513,11 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
- 	if (ELF_ST_TYPE(sym->st_info) != STT_OBJECT)
- 		return;
- 
--	/* All our symbols are of form __mod_<type>__<name>_device_table. */
--	if (!strstarts(symname, "__mod_"))
--		return;
--	type = symname + strlen("__mod_");
--	typelen = strlen(type);
--	if (typelen < strlen("_device_table"))
--		return;
--	if (strcmp(type + typelen - strlen("_device_table"), "_device_table"))
-+	/* All our symbols are of form __mod_device_table__<type>__<name>. */
-+	if (!strstarts(symname, prefix))
- 		return;
-+	type = symname + strlen(prefix);
-+
- 	name = strstr(type, "__");
- 	if (!name)
- 		return;
--- 
-2.43.0
+I accidentally found another problem in request_module when i was 
+testing this patch again, if the caller just passes a empty pointer to 
+request_module, like request_module(NULL), the process will be broken:
 
+[    2.336160]  ? asm_exc_page_fault+0x2b/0x30
+[    2.336160]  ? __pfx_crc64_rocksoft_notify+0x10/0x10
+[    2.336160]  ? vsnprintf+0x5a/0x4f0
+[    2.336160]  __request_module+0x93/0x2b0
+[    2.336160]  ? __pfx_crc64_rocksoft_notify+0x10/0x10
+[    2.336160]  ? notifier_call_chain+0x65/0xd0
+[    2.336160]  ? __pfx_crc64_rocksoft_notify+0x10/0x10
+[    2.336160]  crypto_probing_notify+0x43/0x60
+
+(please ignore the caller, that is a testing code.)
+
+I searched kernel code if this patter exists, and found in 
+__trace_bprintk of kernel/trace/trace_printk.c, it checks fmt at the 
+beginning of the function:
+
+      va_list ap;
+
+      if (unlikely(!fmt))
+          return 0;
+
+Therefore, i would like to suggest we should at least add this check in 
+request_module too. In that sense, why don't we do a little further to 
+verify every parameter's validity to provide better fault tolerance, 
+besides, it costs almost nothing.
+
+If you like this idea, i will send a v2.
+
+Many thanks.
+
+Song
