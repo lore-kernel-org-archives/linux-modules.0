@@ -1,134 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6491B0F0C
-	for <linux-modules@vger.kernel.org>; Wed, 20 Nov 2024 14:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5717F1B5808
+	for <linux-modules@vger.kernel.org>; Wed, 20 Nov 2024 21:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732111902; cv=none; b=nSQhHxw4smZ0F1VHbJIg9bzwcuEyd4nIHj6WRZPuXzQFMqXxRsiLlhLJWhmA3BndfR9WMOMks7jmoznPjsppTrjZiChXlcdXfeKHp1KF6I4fxDAHHmg4Y3faAo7Yp7J7jlW67vCTvKcsKxjbKl+MjFl/lc/vX1aaqUb9u5pgQ4M=
+	t=1732139704; cv=none; b=l0gqWAcwRy52LCdMyBB2Ps+OpwDS1bjq3av4bM1iNtKCwYE7dZISx0jq3y57wpOmKYWBUkyGT3garbeq13oZgvac885o8usbK9hsXLT1IdErPsAuQTVMZZcQdn6/U7Dpc8MABDU5+PUsJmgA2/PTjflXQdwVGDjzi6wALMnX3mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732111902; c=relaxed/simple;
-	bh=FfUNXLNLMYAUKNxyY8yLvAOSk6II0QVXiht1oJ/aXwI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JJ++QkodpbQs0+u+hDIc6mGpOPz0R3JiuGZMt3fNWHJ5+TWCJtTpaA2PxFsVtyVuHaVUgP+pVEc6whoLS1YsC7BmYvhVJFeQkCUSmqHLPZftrBcOdRnBfJ4U6feeKIJcp0BY5xnwvArKgKse8ZgNgnA4QUtzQBD9WCuGB2xki5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dOKoK2g4; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732139704; c=relaxed/simple;
+	bh=p/2HQRb8DSnOeN4sdRAF0ATMaB8otlVUnnqv1o1FzGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rmXFXmpJJoWjJK78pLPCHmU4iO8JJQ0HCeNh+lQ9YAzzN/v2yxlhtJGe0zVb9d7nTaxcjuKUNH2vI62pMf0Sl+1Os263FxjXMT3W+lvtpjeOgWxTMEts8VJjSuL8uX3IdS+W1NMYFBFloTGEhpZkvuGWpVts96OiqO1MJZUu3kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C4Y0f/gF; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dOKoK2g4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732111899;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r1HheHXxH2Lq66Pb3UAs+ct3ExAz5ElR999iJ69jx0Q=;
-	b=dOKoK2g4OJ/9SsbASuYG0q5EjcEwmMtuv6XUihIKbgDD1QETStLQwWMStbfN8kQ/0nFhU2
-	dhJl6RQXYjjL/oeQn29UlTIFh9mZDAJe/tr9+bFgd5dGl2HhBNOr6INEFczH6goFXcSjJ6
-	rYMEPFRXU1hrpTCS6EA9ZvUi4fqOII0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-625-Dw9a1a2ZOWObXtKByxDuYQ-1; Wed, 20 Nov 2024 09:11:36 -0500
-X-MC-Unique: Dw9a1a2ZOWObXtKByxDuYQ-1
-X-Mimecast-MFC-AGG-ID: Dw9a1a2ZOWObXtKByxDuYQ
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5cfff755da9so253118a12.2
-        for <linux-modules@vger.kernel.org>; Wed, 20 Nov 2024 06:11:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C4Y0f/gF"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-211f1a46f7fso42085ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 20 Nov 2024 13:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1732139702; x=1732744502; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KJuMd+zGRgDKZ9hMGh3NL+Uf9ATMzUJl+LIc+tHuySg=;
+        b=C4Y0f/gFqtdzQqNOxa9+YQDrWocL074QKpC6V0Xo4T4sVirP5UJyUolbJXhtl2KcoB
+         mvCoVYzQFhflAHmHgqnKqFUrwV1TkjnNwb4ywWFTAAsWQvqQeM6ETxtn7bG/NJgkZg52
+         dVZlRHGWKXntAcd6YXUsBH6TmfzJONqtSBaXS9eC+oGpUaFI3VmuO9r3E/FS6Z2T2Yct
+         hNKS/XOwneUIzbnC8/typZKVL3XliTMPo2qAxr8zNHzP2fYQ4JkOGaVE82nk5/H+t4Ou
+         uAjaH/iva7OEaRPpbPX342xMr0r9FB+dv4jgjdfGW0bXM7d/knDrHr5Zyho4xrECMY4K
+         wEZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732111895; x=1732716695;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r1HheHXxH2Lq66Pb3UAs+ct3ExAz5ElR999iJ69jx0Q=;
-        b=Q3GA+VAuSv08oh8yQFT5/pv6wAJfONfm2vdOTaaNIYvsiP92oJunXHx5vO1P75N6/G
-         2EWsQqp/vRk5lP8nYaUExT6DnMvf7r6Fb4eTwvngKoBUtCxWE7+8TEw+bFWNkApjFLUQ
-         xeYFkyzuRYIDKOJBmVvHCztyitiRAU+sluq3482Ok++vmp5TP6p/4fxGNffnEe6sDeuX
-         +Zl+dmOCkyK9eTmEvx+dMgSazP5qhAF5xnr7t2EggOcJdkAHqHl7ONniukLvRXMI6d4+
-         aJhSPqADXeTNzepAnAlP7GmC/6btxHyjz7BJYfah0xZuOchB6ltaBOzzLBibA9RUzrWs
-         ZU8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWlXchev41cZQx4R2M/WTAGkRWswhYuOYZCJtCpk2guaAwMnctsZciyBonczBvm2DfM+Tng8X2Fz9xwJMPs@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywen7QAHCNVYUBnvZpp1Snu3BtjeRwFHMAZh+YgnfuMffPEnFX2
-	ho+J42cAIHCj7xsb2JBDO6gEX0q/8Rhk+1ESi5PzfqiXlRKn8aUMs83KTORM5yhtCNiWl9sHJZ/
-	PYwMeIGUDyz7Bojett1Leou512en36U3Ef+gOeOPbCksY8KuV7b8TCnO49GGAu2c=
-X-Received: by 2002:a17:907:971d:b0:a99:c9a4:a4d5 with SMTP id a640c23a62f3a-aa4dd57cf5amr307473966b.29.1732111895283;
-        Wed, 20 Nov 2024 06:11:35 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IElPsBJusCgQQSy0/ZUamPrIprvapmeW+J3BVJ72fqi1ZqWyGC3oczhgmzOu6DsZlUvs2u7Bw==
-X-Received: by 2002:a17:907:971d:b0:a99:c9a4:a4d5 with SMTP id a640c23a62f3a-aa4dd57cf5amr307470466b.29.1732111894916;
-        Wed, 20 Nov 2024 06:11:34 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20dfffcd4sm774935966b.98.2024.11.20.06.11.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Nov 2024 06:11:34 -0800 (PST)
-Message-ID: <bcb447bc-0de2-4c74-8e17-6b0eb186da70@redhat.com>
-Date: Wed, 20 Nov 2024 15:11:33 +0100
+        d=1e100.net; s=20230601; t=1732139702; x=1732744502;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KJuMd+zGRgDKZ9hMGh3NL+Uf9ATMzUJl+LIc+tHuySg=;
+        b=YapRqTpoIDyYi8KxFUeb5yPMEZZGVqytY7FZS+RI6/9Pew7OO3EXUS2Uz6PK18ygNp
+         H4l3slfp+cpDcZncJ4SX7WWwNoqrrfASc2Li924NNKeYSxE8JQYAJjcLfAngkxsozItZ
+         vzUC8LCz9PSssJXXTIiB7Rl+P/BIJFuTvyqJPtRvSRUTUO1x/4/pkvm9bZqpB41mxryA
+         6TIxmsdD8tqNBlUeJbCrE6jGHJbZ8vzbgJfHjHzVrARuBo0WaRobO74/EyBD3NdXp6Xb
+         WmCEtWAz6VI1XEky5nFhAWgsdmIsZibuMRTuhdLk8AMaFv/UAuabXcENkTOoSvC2Cf//
+         34xA==
+X-Forwarded-Encrypted: i=1; AJvYcCXJrTJss8tRUquExH5M8AV4Vch/68ossG5W8S1luv6npUIxFF76gzQ8OO36lk+HzcgwVSnFSist6AkLepY9@vger.kernel.org
+X-Gm-Message-State: AOJu0YyodpvpMPESpjzrza6IiHzQN30BCKHY4Lt/p7e4a4qOSAHL2MH5
+	Sb+vcoUHJEQiE9vamUv5EYfWCj2d6Q6C/sybfXIcRIFga0V7hfOOO512Mur5Rw==
+X-Gm-Gg: ASbGnct1r2IVjLhok311alueRE/VkagLk+HgQfZt19iL++1sjocPmBCIbvIomvOIq1C
+	7Kn2oWvDQvrBhhk9bAdoyraqDd82Zz5RSoKrVmMlfZaz4lGmQ3m4dTE5Jk3ut2L75LV8/VsYKIs
+	/XWWzUYBkGeNTWgA1hlv/2/qKzlmo8cvheEIhMpnWX/h2iDg7UpVfvgXEFT/LrmnTlREWDBCFKY
+	ap517XMpBz+rqK9y99qhJr5k0DNYfWSDKjbc8iAXDCMRSxqiLY/Rl6IhdtH0/zoncAtKO+l8tiU
+	l0ggvUu4XTLB8Os=
+X-Google-Smtp-Source: AGHT+IGKc9ZvPmJIK0nWwQcxR6PLarmpQvpHzkZoZJMXfvRSrnEfA5c5NwlyeWO3fgYs+0aWUjKJ0w==
+X-Received: by 2002:a17:903:178f:b0:1f7:34e4:ebc1 with SMTP id d9443c01a7336-212878a076cmr162705ad.5.1732139701962;
+        Wed, 20 Nov 2024 13:55:01 -0800 (PST)
+Received: from google.com (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-212880d16d4sm271285ad.167.2024.11.20.13.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 13:55:01 -0800 (PST)
+Date: Wed, 20 Nov 2024 21:54:54 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matthew Maurer <mmaurer@google.com>,
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>,
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Asahi Linux <asahi@lists.linux.dev>,
+	Sedat Dilek <sedat.dilek@gmail.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v5 10/19] gendwarfksyms: Limit structure expansion
+Message-ID: <20241120215454.GA3512979@google.com>
+References: <20241030170106.1501763-21-samitolvanen@google.com>
+ <20241030170106.1501763-31-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] module: Block modules by Tuxedo from accessing GPL
- symbols
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>
-Cc: Werner Sembach <wse@tuxedocomputers.com>, tux@tuxedocomputers.com,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Thorsten Leemhuis <linux@leemhuis.info>
-References: <20241114103133.547032-4-ukleinek@kernel.org>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241114103133.547032-4-ukleinek@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241030170106.1501763-31-samitolvanen@google.com>
 
-Hi All,
-
-On 14-Nov-24 11:31 AM, Uwe Kleine-König wrote:
-> Hello,
+On Wed, Oct 30, 2024 at 05:01:17PM +0000, Sami Tolvanen wrote:
 > 
-> the kernel modules provided by Tuxedo on
-> https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers
-> are licensed under GPLv3 or later. This is incompatible with the
-> kernel's license and so makes it impossible for distributions and other
-> third parties to support these at least in pre-compiled form and so
-> limits user experience and the possibilities to work on mainlining these
-> drivers.
-> 
-> This incompatibility is created on purpose to control the upstream
-> process. See https://fosstodon.org/@kernellogger/113423314337991594 for
-> a nice summary of the situation and some further links about the issue.
-> 
-> Note that the pull request that fixed the MODULE_LICENSE invocations to
-> stop claiming GPL(v2) compatibility was accepted and then immediately
-> reverted "for the time being until the legal stuff is sorted out"
-> (https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers/-/commit/a8c09b6c2ce6393fe39d8652d133af9f06cfb427).
+> For pointers, limit structure expansion after the first pointer
+> in the symbol type. This should be plenty for detecting ABI
+> differences, but it stops us from pulling in half the kernel for
+> types that contain pointers to large kernel data structures, like
+> task_struct, for example.
 
-I know I'm a bit late to this discussion.
+We spent some time backtesting gendwarfksyms with android15-6.6
+releases to validate the kABI stability options that are currently
+implemented [1]. While we discovered a few missing knobs that are
+needed, we also realized that pointer expansion limits don't work
+when symbols are removed (which is possible without breaking the
+existing ABI when TRIM_UNUSED_KSYMS is used), as the processing
+cut-off can change. Petr also had some concerns about this earlier,
+so instead of coming up with an alternative solution, I'm going to
+drop the pointer expansion limit in v6.
 
-Still I want to point out that Tuxedo and especially Werner has
-always been a good upstream actor and I do not believe that they
-are operating in bad faith here, but rather that the GPL v3
-licensing is just an unfortunate mistake which is hard to fix
-after the fact.
+I still think that it would be great to come up with a better way to
+limit how deep into internal data structures we go when calculating
+versions, but I suspect that's going to be challenging unless C
+grows an annotation for public / private struct members.
 
-As maintainer of drivers/platform/x86 I have worked quite a bit
-with Tuxedo/Werner and their contributions there are much
-appreciated. They have also helped a lot with sorting out issues
-with the PS/2 keyboard driver on Clevo barebones covering not
-only their own models but all models and helping out with cleaning
-up the quirk code there which was getting a bit messy.
+While looking into another version stability issue compared to
+genksyms, we also came to the conclusion that private structure
+definitions in .c files should be excluded from processing as they
+are opaque outside the CU and cannot change the ABI. I'll include
+this in v6 as well.
 
-Also as you know Werner has already relicensed  all the out of tree
-drivers which Tuxedo could easily relicense to GPL v2 to GPL v2.
+[1] https://github.com/samitolvanen/linux/commits/android15-6.6-2024-11-gendwarfksyms/
 
-TL;DR: I do not believe that Tuxedo/Werner are acting in bad
-faith here and IMHO it would be good to give them some leeway
-here while they sort this out.
-
-Regards,
-
-Hans
-
-
+Sami
