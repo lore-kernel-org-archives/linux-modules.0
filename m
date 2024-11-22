@@ -1,236 +1,369 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A40E1BE23C
-	for <linux-modules@vger.kernel.org>; Thu, 21 Nov 2024 21:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3465E13BAE7;
+	Fri, 22 Nov 2024 01:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732225902; cv=none; b=F6agF6jwGa/K+yChn7TsxKsN/O5NCIx9rSa3hZ0wh3WEfQcey5G40TlTh1Z6NvZmPyEyZ4ypDkmyDEySQtOIG7KJjxoTeboJVykIOP/FaZRIlOVPc4tfRNpyQHQITGkXv2DWTDD5heI+Y+k6WlzGjIqvcspliIlFiTwjumiyqf4=
+	t=1732240309; cv=none; b=RI9DhMKt/pPsZAFOqfCNJIdQdLZpFnLfQbMbETYEuTG1257dPGbjIGWYpLMp/h5rVB+NQBXacSKtG8siJD1W7+kzhWOgSPXjhvlaCshawlEb7N0tHCQKYLokdd3vtKFsQy/q5drOo2MJBa5S/w7+klF4xKWQbFb1bnuei2DFG3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732225902; c=relaxed/simple;
-	bh=CUHno2R/nqM+vBmK7dZ3xoXb1J1KeGJmhbGs1sQeZCk=;
+	s=arc-20240116; t=1732240309; c=relaxed/simple;
+	bh=/aZ5tnhrg58nES9DotuawpjZyBP9ljUcHLWoDrLmcpo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vv4jtXAHnndR7MlkvLcZ03h6Zapheu9YGpkCpFwXsoy7NO9wLNfvX4cGpTAgsa9ISuxGco6OoTuX3qbyDRMN4/Rnj1GsqTtRhXD8yTJjgsuh0jA83nG9rFqp7H/bAflP1NXWFtKBy8KwggDbZjcc+lmjT8Hliey55pg148S6OtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kEIqPTG1; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=mVkjilpi9kUaQeZTfoM7wDd3TEFBBK5ItuLh0BPkt4QDzmF4Yl6QD1YySR+wiHoEWK9g0b7JGVq4knzSe71LF1C9pnGDIatDRE9nzaWEFn+A9V5N8VBZXKddpnCZNzPucmkcIlDEJo+UM0/tMyBgHS/Z4rCurp4bGm1iGQN7Ut4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mv09uMKa; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kEIqPTG1"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5cfc264b8b6so3555a12.0
-        for <linux-modules@vger.kernel.org>; Thu, 21 Nov 2024 13:51:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mv09uMKa"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e63c8678so1762038e87.0;
+        Thu, 21 Nov 2024 17:51:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732225899; x=1732830699; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PHKKmDtuZBsmU0fuCBMeHOOxdDx2/H6XhfP9M3Cqc2M=;
-        b=kEIqPTG1CrpRFE7rljT36R+QGJJRvQbOsXgc6y6bNvGCNHni43f3mM3MT6Oc7/s63H
-         zLjcfQ57L6CaYZi5lyWy6SYSmmgt/u6ZU5qWC99X6XuONXmJCcqbM4HpDPEUeKQ2gmxX
-         BRrTaZBlnVGBdJ1vywdy7Y724MycmflrwQn8ljQ4zJrZ2+/JwOdgknsLMm44FhFZrTiR
-         TXT54MhQyjlQiqG+rBU/DxTx8bMaxzgJ1Mkoc04ULDAV4b3kgjDNpwvSEDsoBm9kW6+W
-         urLgndy088FSRM8FzgOSji1mzdsQMf9NJFARM5Jz+hpDYVBELN+CWPGwc21M50kwU1fm
-         b2og==
+        d=gmail.com; s=20230601; t=1732240305; x=1732845105; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=i8Z+CPVajeJ3Ry1Xl5fp5aaPACwKhtsug1K6GR7nlyg=;
+        b=Mv09uMKafbJ3OUHer8UHJCkRuFpxmvp9+x7eUFQfI31pSGxd2IId+UVJYc17RuCkps
+         C+zUtMjCoT9uMhkU8VoTviCx56KuAtLcepmij09UK5EAAD67D56Sbhp9e1zkHK03rWGO
+         YkUmTOzItNNXLHIl4C8ieJk+t1vDQuB8S28LkE5smCMl6kayTkVuYeGAWmMJ8vP9lfMU
+         drz4Tg0dgD8BZGhnEhuInYYCpa+J2yz/OmkMoIBkineYGEFP5vubzu76mqdipccHEMOB
+         wL1VkkO1/BzKJSdhI8m6riXkJtdohQYYz1uDyE934oRbQw/3bxX4GetzyxuLnh02F8a8
+         x28w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732225899; x=1732830699;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PHKKmDtuZBsmU0fuCBMeHOOxdDx2/H6XhfP9M3Cqc2M=;
-        b=NbUrEugdW08+EcBT6JuuD8y+BjWw0c7SPYSs52PjdHtsHhlbuPCC1XTQIkuAigzHjY
-         mkgo423cZLgyKqxeZmZEUAjoPbMDyxWubMzWym2eE9FtZZYlexFwYJINER9VOegpslOx
-         aUhkB311gGgacFMtwJqzHj9LmwZQf9OnuRn/k6outUoaY+s6Ga4LnXcc/fwjItR6pz9q
-         7AZxOZkr7mX+vFClwVA9wwRuUC8oowTWd5E/fQnw5M130k8wOBptJ5NNzpCdliw7QrYd
-         VVKfkbzqP6dfZqlTWkVU7z0dbDY1sgXu+8omesi7HtZUyMrTIuYQmQZwDH1IBTbtmYLU
-         dz6g==
-X-Forwarded-Encrypted: i=1; AJvYcCWdP3BxapRO1keU+XZyrCUmw7+TaI+l8DFF/UrT5bWWmJtAoAobaepRT4spBYnwWsvcZU1RwaqfG7gwpHwE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz05LST4zG8RK+Y1obwannLSypzWByPvfPBCe+UmQoiIe0CimFU
-	PYfq+udTVaf0XmASQxPZm9HrLBsYMq14TCBhR9X0kuGjmzDNRRkYmgKeVMkDoeLNMgJPtFB7Pjz
-	CZOS/449awXZlEspwj/jzPMbK6HAr3hjE7Q2S
-X-Gm-Gg: ASbGnctf3gv2Z2a3pHhJSRupxPqmQavS1nXpeuJCRMNwJZ6ZSRL3b/bTB768B6qPV3V
-	ghzYY7fw/z5fGKxOpKLKvbq2r664QzKcZbMbz5UUbXVqGB33whTy/7wVTNC8uGcw/
-X-Google-Smtp-Source: AGHT+IHZXqsbw6LTrWSKQk3j6sgwFD4xI5UHXnS7pvVevPPLF9iib3NRzS9gCFTmnjvbHI8Vhd+KqI0rHViR8+rmNRI=
-X-Received: by 2002:aa7:d6cd:0:b0:5cf:bd9a:41ec with SMTP id
- 4fb4d7f45d1cf-5d01dcbf0c4mr18135a12.2.1732225899042; Thu, 21 Nov 2024
- 13:51:39 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732240305; x=1732845105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i8Z+CPVajeJ3Ry1Xl5fp5aaPACwKhtsug1K6GR7nlyg=;
+        b=H/Ocg13d/RRtFiFyirG5AHPdKk/PCr1djtd6qtTZky68a/LektrURkd0S8weC4HPeD
+         6WKxefHa96+d4xETFI/hx6++RlK2X5nYMkhl1iJOKN6TfWHjzSOfVCNlEQqp/JU1Ia0M
+         h+EbZvzFKbiB8IZNdKuMTnjqLc4PU2WcPd6haYb4ezTeIJIDD6ibom55A6L3zg7V+yR4
+         p1j3ptBhZZMVOKiGyRW7MlkoqJQ70ndDyNMrvpow+JrUnFrEExI6QRzVdmZPpSSAmEYv
+         bwauTbvyxSCtQHhWIOIW7mvQsR3zfGgZr6GlhfdyVTKlo2bdDxvqtCv96AUGXF9UQSxO
+         42jA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+ycGvHtoolF+b7HPicaVpXO9JoQ/g2yfb5uGOmFouI3CPIP8YOesB1jbLD9p/xOJb0QNWSH4hq9PbLQY=@vger.kernel.org, AJvYcCUXcCecTx8Mpo5LX62GZOOJ4bklHMcvupt7FgKG3fcI5zC1x6ArnbaxLFjJ2euTxXeOvxagwNA33bas5e8apvE=@vger.kernel.org, AJvYcCUcet5IjtTOqDah+Fu6mweIQ6LpE81GcLuKaBIkXOoa/xrpoJNwPhM1+ZsmvhPZNwslLLnfwvigZUEGAZvV@vger.kernel.org, AJvYcCX70g89Wzw6EYHq2TzOs25aeIi0LsH8pdFOju27NYoQdV6VNn4eTgXR6igORVzpTAoWsAq4K4V6u2X9ESj7xA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyklhIplm44iuQ+Zlf1q6BTUua2xNw66snvidFFqhXDUQcvN2qy
+	RtDtmI2R3dAtyZA0lco4MlrlLLJB6oHGSjOPizdKdBlPVEo5KmVNI5Wd28R1M/LnyGS2T3fqSNU
+	CXVB0sgK5tj2zNHAJCe3JTb3NVbs=
+X-Gm-Gg: ASbGnctrxx81Ytvyh3t9BwdhIaUy+bZEiVl7ufRRouiE3P2YELhrgbTJ2Vj1cbkUfq1
+	zXAlhDGKusAr3WWOiexFOUOdBfkj32HV9kw==
+X-Google-Smtp-Source: AGHT+IFhrF/dTuYAUtNauVsCU2r43xjLhGCO/XkliH18CF905DIz+unOZlD2iAtqVdv86vVM4u4IrbFXUnuFJOYf8n0=
+X-Received: by 2002:a05:6512:1594:b0:53d:a864:2432 with SMTP id
+ 2adb3069b0e04-53dd36aa58bmr457837e87.17.1732240304980; Thu, 21 Nov 2024
+ 17:51:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241030-extended-modversions-v8-0-93acdef62ce8@google.com>
- <20241030-extended-modversions-v8-2-93acdef62ce8@google.com>
- <ZyNr--iMz_6Fj4yq@bombadil.infradead.org> <CAGSQo00F07viDHQkwBS8_1-THxJHYwx9VkS=TXC5rz3i8zSZSw@mail.gmail.com>
- <ZyVDv0mTm3Bgh1BR@bombadil.infradead.org> <CAGSQo02uDZ5QoRMPOn=3Fa9g5d+VPfKW-vmSsS2H+pOdPYCBFw@mail.gmail.com>
- <ZyrRYUD0K1f7SwWg@bombadil.infradead.org> <CAGSQo03+1WjUVj-iQ6zdOST6z=p+=OqS2Xk_c4ZUdHOsxa7g2w@mail.gmail.com>
- <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
-In-Reply-To: <Zy1BVXgnT72Jt_HE@bombadil.infradead.org>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Thu, 21 Nov 2024 13:51:26 -0800
-Message-ID: <CAGSQo03nq5tnqyp8eDZYA7CbjUPZeKs+A33oeSw3znTO9GRF_g@mail.gmail.com>
-Subject: Re: [PATCH v8 2/3] modpost: Produce extended MODVERSIONS information
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>, Lucas De Marchi <lucas.de.marchi@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, linuxppc-dev@lists.ozlabs.org, 
+References: <20241121204220.2378181-20-samitolvanen@google.com>
+In-Reply-To: <20241121204220.2378181-20-samitolvanen@google.com>
+Reply-To: sedat.dilek@gmail.com
+From: Sedat Dilek <sedat.dilek@gmail.com>
+Date: Fri, 22 Nov 2024 02:51:09 +0100
+Message-ID: <CA+icZUX-gf8624z8u+h-W8KeddCruYDng-4vTggNGwC61NzfNA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
+	Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000638ddf062773456e"
-
---000000000000638ddf062773456e
+	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 7, 2024 at 2:38=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org>=
- wrote:
+On Thu, Nov 21, 2024 at 9:42=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
 >
-> On Wed, Nov 06, 2024 at 02:19:38PM -0800, Matthew Maurer wrote:
-> > >
-> > > > If booted against an old kernel, it will
-> > > > behave as though there is no modversions information.
-> > >
-> > > Huh? This I don't get. If you have the new libkmod and boot
-> > > an old kernel, that should just not break becauase well, long
-> > > symbols were not ever supported properly anyway, so no regression.
-> >
-> > Specifically, if you set NO_BASIC_MODVERSIONS, build a module, and
-> > then load said module with a kernel *before* EXTENDED_MODVERSIONS
-> > existed, it will see no modversion info on the module to check. This
-> > will be true regardless of symbol length.
+> Hi,
 >
-> Isn't that just the same as disabling modverisons?
+> Here's v6 of the DWARF modversions series. The main motivation is
+> modversions support for Rust, which is important for distributions
+> like Android that are about to ship Rust kernel modules. Per Luis'
+> request [1], v2 dropped the Rust specific bits from the series and
+> instead added the feature as an option for the entire kernel to
+> make it easier to evaluate the benefits of this approach, and to
+> get better test coverage. Matt is addressing Rust modversion_info
+> compatibility issues in a separate patch set [2] that depends on
+> this series, and actually allows modversions to be enabled with
+> Rust.
 >
-> If you select modversions, you get the options to choose:
+> Short background: Unlike C, Rust source code doesn't have sufficient
+> information about the final ABI, as the compiler has considerable
+> freedom in adjusting structure layout, for example, which makes
+> using a source code parser like genksyms a non-starter. Based on
+> earlier feedback, this series uses DWARF debugging information for
+> computing versions. DWARF is an established and a relatively stable
+> format, which includes all the necessary ABI details, and adding a
+> CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
+> reasonable trade-off as most distributions already enable it.
 >
->   - old modversions
->   - old modversions + extended modversions
->   - extended modversions only
-
-Yes, what I'm pointing out is that kernels before the introduction of
-extended modversions will not know how to read extended modversions,
-and so they will treat modules with *only* extended modversions as
-though they have no modversions.
-
+> The first 15 patches add gendwarfksyms, a tool for computing symbol
+> versions from DWARF. When passed a list of exported symbols and
+> object files, the tool generates an expanded type string for each
+> symbol and computes symbol versions. gendwarfksyms is written in C,
+> uses libdw to process DWARF, and zlib for CRC32. Patch 16 ensures
+> that debugging information is present where we need it, patch 17
+> adds gendwarfksyms as an alternative to genksyms, and the last patch
+> adds documentation.
 >
-> > > I'm not quite sure I understood your last comment here though,
-> > > can you clarify what you meant?
-> > >
-> > > Anyway, so now that this is all cleared up, the next question I have
-> > > is, let's compare a NO_BASIC_MODVERSIONS world now, given that the
-> > > userspace requirements aren't large at all, what actual benefits does
-> > > using this new extended mod versions have? Why wouldn't a distro end
-> > > up preferring this for say a future release for all modules?
-> >
-> > I think a distro will end up preferring using this for all modules,
-> > but was intending to put both in for a transitional period until the
-> > new format was more accepted.
+> v6 has changes to structure expansion and the kABI stability
+> features based on our backtesting results with previous Android
+> release kernels (see the change log below). It's also based on
+> linux-kbuild/for-next to include symtypes build rule clean-ups from
+> Masahiro [3]. For your convenience, the series is also available
+> here:
 >
-> The only thing left I think to test is the impact at runtime, and the
-> only thing I can think of is first we use find_symbol() on resolve_symbol=
-()
-> which it took me a while to review and realize that this just uses a
-> completely different ELF section, the the ksymtab sections which are spli=
-t up
-> between the old and the gpl section. But after that we use check_version(=
-).
-> I suspect the major overhead here is in find_symbol() and that's in no wa=
-y shape
-> or form affected by your changes, and I also suspect that since the
-> way you implemented for_each_modversion_info_ext() is just *one* search
-> there shouldn't be any penalty here at all. Given it took *me* a while
-> to review all this, I think it would be good for you to also expand your
-> cover letter to be crystal clear on these expectations to users and
-> developers and if anything expand on the Kconfig / and add documentation
-> if we don't document any of this.
-
-I can add a commit extending modules.rst, but it's not clear to me
-what piece was surprising here - the existing MODVERSIONS format is
-*also* in a separate section. Nothing written in the "Module
-Versioning" section has been invalidated that I can see.
-
-Things I could think to add:
-
-* Summary of the internal data format (seems odd, since the previous
-one isn't here, and I'd think that an implementation detail anyways)
-* A warning about the effects of NO_BASIC_MODVERSIONS (probably better
-in Kconfig, isn't in the current changeset because the flag isn't
-there)
-
+> https://github.com/samitolvanen/linux/commits/gendwarfksyms-v6
 >
-> I'd still like to see you guys test all this with the new TEST_KALLSYMS.
 
-I've attached the results of running TEST_KALLSYMS - it appears to be
-irrelevant to performance, as you expected.
+Thanks for the update, Sami.
 
+What are your plans to get this upstream?
+
+Is Linux 6.13 the new development base?
+
+Personally, I would like to see a Linux v6.12 LTS version offered.
+
+LTO is not supported - might be worth mentioning this in the
+documentation patch with some explanations?
+
+BTW, I am testing with the latest kmod-git and pahole-git.
+
+I will give this a try when Linux v6.12.1 is released.
+
+Best regards,
+-Sedat-
+
+
+
+
+> If you also want to test the series with actual Rust modules, this
+> branch adds Matt's latest modversion_info series:
 >
->   Luis
-
---000000000000638ddf062773456e
-Content-Type: application/octet-stream; name=extended-log
-Content-Disposition: attachment; filename=extended-log
-Content-Transfer-Encoding: base64
-Content-ID: <f_m3rujd550>
-X-Attachment-Id: f_m3rujd550
-
-VEFQIHZlcnNpb24gMTMKMS4uMQojIHRpbWVvdXQgc2V0IHRvIDQ1CiMgc2VsZnRlc3RzOiBtb2R1
-bGU6IGZpbmRfc3ltYm9sLnNoCiMKIyAgUGVyZm9ybWFuY2UgY291bnRlciBzdGF0cyBmb3IgJy9z
-YmluL21vZHByb2JlIHRlc3Rfa2FsbHN5bXNfYic6CiMKIyAgICAgICAgICAgMjg4OTgwMzIgbnMg
-ICBkdXJhdGlvbl90aW1lCiMgICAgICAgICAgICAyMzY2MDAwIG5zICAgdXNlcl90aW1lCiMgICAg
-ICAgICAgICAgICAgMjA3ICAgICAgcGFnZS1mYXVsdHMKIwojICAgICAgICAwLjAyMDA4NTk5MSBz
-ZWNvbmRzIHRpbWUgZWxhcHNlZAojCiMgICAgICAgIDAuMDAyMzY2MDAwIHNlY29uZHMgdXNlcgoj
-ICAgICAgICAwLjAwMDAwMDAwMCBzZWNvbmRzIHN5cwojCiMKIwojICBQZXJmb3JtYW5jZSBjb3Vu
-dGVyIHN0YXRzIGZvciAnL3NiaW4vbW9kcHJvYmUgdGVzdF9rYWxsc3ltc19iJzoKIwojICAgICAg
-ICAgICAyNTMzMzY0MCBucyAgIGR1cmF0aW9uX3RpbWUKIyAgICAgICAgICAgICAgMzIwMDAgbnMg
-ICB1c2VyX3RpbWUKIyAgICAgICAgICAgIDIzNTcwMDAgbnMgICBzeXN0ZW1fdGltZQojICAgICAg
-ICAgICAgICAgIDIwNyAgICAgIHBhZ2UtZmF1bHRzCiMKIyAgICAgICAgMC4wMjQwODM5NTcgc2Vj
-b25kcyB0aW1lIGVsYXBzZWQKIwojICAgICAgICAwLjAwMDAzMjAwMCBzZWNvbmRzIHVzZXIKIyAg
-ICAgICAgMC4wMDIzNTcwMDAgc2Vjb25kcyBzeXMKIwojCiMKIyAgUGVyZm9ybWFuY2UgY291bnRl
-ciBzdGF0cyBmb3IgJy9zYmluL21vZHByb2JlIHRlc3Rfa2FsbHN5bXNfYic6CiMKIyAgICAgICAg
-ICAgMjUzOTg2MDAgbnMgICBkdXJhdGlvbl90aW1lCiMgICAgICAgICAgICAgIDMwMDAwIG5zICAg
-dXNlcl90aW1lCiMgICAgICAgICAgICAyMjY5MDAwIG5zICAgc3lzdGVtX3RpbWUKIyAgICAgICAg
-ICAgICAgICAyMDggICAgICBwYWdlLWZhdWx0cwojCiMgICAgICAgIDAuMDI0MDk1MjA0IHNlY29u
-ZHMgdGltZSBlbGFwc2VkCiMKIyAgICAgICAgMC4wMDAwMzAwMDAgc2Vjb25kcyB1c2VyCiMgICAg
-ICAgIDAuMDAyMjY5MDAwIHNlY29uZHMgc3lzCiMKIwpvayAxIHNlbGZ0ZXN0czogbW9kdWxlOiBm
-aW5kX3N5bWJvbC5zaAovc2VsZnRlc3RzICMgemNhdCAvcHJvYy9jb25maWcuZ3ogfCBncmVwIEVY
-VEVOREVECiMgQ09ORklHX1g4Nl9FWFRFTkRFRF9QTEFURk9STSBpcyBub3Qgc2V0CkNPTkZJR19F
-WFRFTkRFRF9NT0RWRVJTSU9OUz15CiMgQ09ORklHX05FVENPTlNPTEVfRVhURU5ERURfTE9HIGlz
-IG5vdCBzZXQKQ09ORklHX1NFUklBTF84MjUwX0VYVEVOREVEPXkKL3NlbGZ0ZXN0cyAjCg==
---000000000000638ddf062773456e
-Content-Type: application/octet-stream; name=noextend-log
-Content-Disposition: attachment; filename=noextend-log
-Content-Transfer-Encoding: base64
-Content-ID: <f_m3rujd5y1>
-X-Attachment-Id: f_m3rujd5y1
-
-VEFQIHZlcnNpb24gMTMKMS4uMQojIHRpbWVvdXQgc2V0IHRvIDQ1CiMgc2VsZnRlc3RzOiBtb2R1
-bGU6IGZpbmRfc3ltYm9sLnNoCiMKIyAgUGVyZm9ybWFuY2UgY291bnRlciBzdGF0cyBmb3IgJy9z
-YmluL21vZHByb2JlIHRlc3Rfa2FsbHN5bXNfYic6CiMKIyAgICAgICAgICAgMzA0NzczNDggbnMg
-ICBkdXJhdGlvbl90aW1lCiMgICAgICAgICAgICAyNDk0MDAwIG5zICAgdXNlcl90aW1lCiMgICAg
-ICAgICAgICAgICAgMjA2ICAgICAgcGFnZS1mYXVsdHMKIwojICAgICAgICAwLjAyNDA3ODUyNyBz
-ZWNvbmRzIHRpbWUgZWxhcHNlZAojCiMgICAgICAgIDAuMDAyNDk0MDAwIHNlY29uZHMgdXNlcgoj
-ICAgICAgICAwLjAwMDAwMDAwMCBzZWNvbmRzIHN5cwojCiMKIwojICBQZXJmb3JtYW5jZSBjb3Vu
-dGVyIHN0YXRzIGZvciAnL3NiaW4vbW9kcHJvYmUgdGVzdF9rYWxsc3ltc19iJzoKIwojICAgICAg
-ICAgICAyNTI2NDM4NSBucyAgIGR1cmF0aW9uX3RpbWUKIyAgICAgICAgICAgICAgMzQwMDAgbnMg
-ICB1c2VyX3RpbWUKIyAgICAgICAgICAgIDIzNTEwMDAgbnMgICBzeXN0ZW1fdGltZQojICAgICAg
-ICAgICAgICAgIDIwNyAgICAgIHBhZ2UtZmF1bHRzCiMKIyAgICAgICAgMC4wMjQwODE5ODAgc2Vj
-b25kcyB0aW1lIGVsYXBzZWQKIwojICAgICAgICAwLjAwMDAzNDAwMCBzZWNvbmRzIHVzZXIKIyAg
-ICAgICAgMC4wMDIzNTEwMDAgc2Vjb25kcyBzeXMKIwojCiMKIyAgUGVyZm9ybWFuY2UgY291bnRl
-ciBzdGF0cyBmb3IgJy9zYmluL21vZHByb2JlIHRlc3Rfa2FsbHN5bXNfYic6CiMKIyAgICAgICAg
-ICAgMjUzMDA2NDQgbnMgICBkdXJhdGlvbl90aW1lCiMgICAgICAgICAgICAgIDMzMDAwIG5zICAg
-dXNlcl90aW1lCiMgICAgICAgICAgICAyMzA3MDAwIG5zICAgc3lzdGVtX3RpbWUKIyAgICAgICAg
-ICAgICAgICAyMDcgICAgICBwYWdlLWZhdWx0cwojCiMgICAgICAgIDAuMDI0MTA5NDA5IHNlY29u
-ZHMgdGltZSBlbGFwc2VkCiMKIyAgICAgICAgMC4wMDAwMzMwMDAgc2Vjb25kcyB1c2VyCiMgICAg
-ICAgIDAuMDAyMzA3MDAwIHNlY29uZHMgc3lzCiMKIwpvayAxIHNlbGZ0ZXN0czogbW9kdWxlOiBm
-aW5kX3N5bWJvbC5zaAovc2VsZnRlc3RzICMgemNhdCAvcHJvYy9jb25maWcuZ3ogfCBncmVwIEVY
-VEVORAojIENPTkZJR19YODZfRVhURU5ERURfUExBVEZPUk0gaXMgbm90IHNldAojIENPTkZJR19F
-WFRFTkRFRF9NT0RWRVJTSU9OUyBpcyBub3Qgc2V0CiMgQ09ORklHX05FVENPTlNPTEVfRVhURU5E
-RURfTE9HIGlzIG5vdCBzZXQKQ09ORklHX1NFUklBTF84MjUwX0VYVEVOREVEPXkKL3NlbGZ0ZXN0
-cyAjCgo=
---000000000000638ddf062773456e--
+> https://github.com/samitolvanen/linux/commits/rustmodversions-v6
+>
+> Sami
+>
+>
+> [1] https://lore.kernel.org/lkml/ZnIZEtkkQWEIGf9n@bombadil.infradead.org/
+> [2] https://lore.kernel.org/linux-modules/20241030-extended-modversions-v=
+8-0-93acdef62ce8@google.com/
+> [3] https://lore.kernel.org/linux-modules/CAK7LNAR9c+EEsOvPPn4qSq3gAFskYO=
+XVd=3Ddg8O+bKeeC-HMifw@mail.gmail.com/
+>
+> ---
+>
+> v6:
+> - Dropped pointer expansion limits as this affects version
+>   stability when exported symbols are removed. (Patch 9)
+>
+> - Changed local type definitions (in .c files) that are opaque
+>   to external users to be treated as declarations even if a
+>   definition is available. (Patch 9)
+>
+> - Switched to zlib's CRC32 implementation per Masahiro's
+>   suggestion. (Patch 12)
+>
+> - Renamed struct_declonly kABI rule to simply declonly, as it
+>   applies also to unions and enums, added a new rule for
+>   overriding enumerator values, and refactored the examples.
+>   (Patch 13)
+>
+> - Added --stable support for renamed structure members and
+>   also added examples. (Patch 14)
+>
+> - Rebased on linux-kbuild/for-next for Masahiro's symtypes
+>   build rule clean-ups. (Patch 17)
+>
+> - Updated the documentation reflect --stable changes. (Patch 18)
+>
+> v5: https://lore.kernel.org/lkml/20241030170106.1501763-21-samitolvanen@g=
+oogle.com/
+> - Rebased on v6.12-rc5.
+>
+> - Fixed an issue with limiting structure expansion, and applied
+>   Petr's clean-up. (Patch 10)
+>
+> - Dropped an unnecessary return statement in error path. (Patch
+>   12)
+>
+> - Addressed several other smaller issues Petr brought up. (Patches
+>   13, 14, and 15)
+>
+> - Added a KBUILD_GENDWARFKSYMS_STABLE flag to enable --stable for
+>   the entire kernel build. (Patch 18)
+>
+> - Updated documentation to include KBUILD flags. (Patch 19)
+>
+> - Picked up Reviewed-by tags from v4.
+>
+> v4: https://lore.kernel.org/lkml/20241008183823.36676-21-samitolvanen@goo=
+gle.com/
+> - Rebased on v6.12-rc2, which now includes all the prerequisites.
+>
+> - Dropped unnecessary name_only parameter for symbols.c::for_each
+>   and cleaned up error handling. (Patch 3)
+>
+> - Fixed anonymous scope handling to ensure unnamed DIEs don't get
+>   names. (Patch 4)
+>
+> - Added non-variant children to variant_type output, and included
+>   DW_AT_discr_value attributes for variants. (Patch 9)
+>
+> - Added another symbol pointer test case. (Patch 16)
+>
+> - Picked up (Acked|Reviewed)-by tags from v3.
+>
+> v3: https://lore.kernel.org/lkml/20240923181846.549877-22-samitolvanen@go=
+ogle.com/
+> - Updated SPX license headers.
+>
+> - Squashed the first two patches in v2 and tried to reduce churn as
+>   much as reasonable.
+>
+> - Dropped patch 18 from v2 ("x86/asm-prototypes: Include
+>   <asm/ptrace.h>") as it's addressed by a separate patch.
+>
+> - Changed the error handling code to immediately terminate instead
+>   of propagating the errors back to main, which cleaned up the code
+>   quite a bit.
+>
+> - Switched to the list and hashtable implementations in scripts and
+>   dropped the remaining tools/include dependencies. Added a couple
+>   missing list macros. (patch 1)
+>
+> - Moved the genksyms CRC32 implementation to scripts/include and
+>   dropped the duplicate code. (patches 2 and 14)
+>
+> - Switched from ad-hoc command line parsing to getopt_long (patch 3).
+>
+> - Added structure member and function parameter names to the DIE
+>   output to match genksyms behavior, and tweaked the symtypes format
+>   to be more parser-friendly in general based on Petr's suggestions.
+>
+> - Replaced the declaration-only struct annotations with more generic
+>   kABI stability rules that allow source code annotations to be used
+>   where #ifndef __GENKSYMS__ was previously used.  Added support for
+>   rules that can be used to exclude enumerators from versioning.
+>   (patch 16)
+>
+> - Per Miroslav's suggestion, added an option to hide structure
+>   members from versioning when they're added to existing alignment
+>   holes, for example. (patch 16)
+>
+> - Per Greg's request, added documentation and example macros for the
+>   --stable features, and a couple of test cases. (patches 15, 16, and
+>   20)
+>
+> - Fixed making symtypes files, which need to depend on .o files with
+>   gendwarfksyms. (patch 19)
+>
+> - Addressed several other smaller issues that Petr and Masahiro
+>   kindly pointed out during the v2 review.
+>
+> v2: https://lore.kernel.org/lkml/20240815173903.4172139-21-samitolvanen@g=
+oogle.com/
+> - Per Luis' request, dropped Rust-specific patches and added
+>   gendwarfksyms as an alternative to genksyms for the entire
+>   kernel.
+>
+> - Added support for missing DWARF features needed to handle
+>   also non-Rust code.
+>
+> - Changed symbol address matching to use the symbol table
+>   information instead of relying on addresses in DWARF.
+>
+> - Added __gendwarfksyms_ptr patches to ensure the compiler emits
+>   the necessary type information in DWARF even for symbols that
+>   are defined in other TUs.
+>
+> - Refactored debugging output and moved the more verbose output
+>   behind --dump* flags.
+>
+> - Added a --symtypes flag for generating a genksyms-style
+>   symtypes output based on Petr's feedback, and refactored
+>   symbol version calculations to be based on symtypes instead
+>   of raw --dump-dies output.
+>
+> - Based on feedback from Greg and Petr, added --stable flag and
+>   support for reserved data structure fields and declaration-onl
+>   structures. Also added examples for using these features.
+>
+> - Added a GENDWARFKSYMS option and hooked up kbuild support
+>   for both C and assembly code. Note that with gendwarfksyms,
+>   we have to actually build a temporary .o file for calculating
+>   assembly modversions.
+>
+> v1: https://lore.kernel.org/lkml/20240617175818.58219-17-samitolvanen@goo=
+gle.com/
+>
+> ---
+>
+> Sami Tolvanen (18):
+>   tools: Add gendwarfksyms
+>   gendwarfksyms: Add address matching
+>   gendwarfksyms: Expand base_type
+>   gendwarfksyms: Add a cache for processed DIEs
+>   gendwarfksyms: Expand type modifiers and typedefs
+>   gendwarfksyms: Expand subroutine_type
+>   gendwarfksyms: Expand array_type
+>   gendwarfksyms: Expand structure types
+>   gendwarfksyms: Limit structure expansion
+>   gendwarfksyms: Add die_map debugging
+>   gendwarfksyms: Add symtypes output
+>   gendwarfksyms: Add symbol versioning
+>   gendwarfksyms: Add support for kABI rules
+>   gendwarfksyms: Add support for reserved and ignored fields
+>   gendwarfksyms: Add support for symbol type pointers
+>   export: Add __gendwarfksyms_ptr_ references to exported symbols
+>   kbuild: Add gendwarfksyms as an alternative to genksyms
+>   Documentation/kbuild: Add DWARF module versioning
+>
+>  Documentation/kbuild/gendwarfksyms.rst     |  308 ++++++
+>  Documentation/kbuild/index.rst             |    1 +
+>  include/linux/export.h                     |   15 +
+>  kernel/module/Kconfig                      |   31 +
+>  scripts/Makefile                           |    3 +-
+>  scripts/Makefile.build                     |   35 +-
+>  scripts/gendwarfksyms/.gitignore           |    2 +
+>  scripts/gendwarfksyms/Makefile             |   12 +
+>  scripts/gendwarfksyms/cache.c              |   51 +
+>  scripts/gendwarfksyms/die.c                |  166 +++
+>  scripts/gendwarfksyms/dwarf.c              | 1158 ++++++++++++++++++++
+>  scripts/gendwarfksyms/examples/kabi.h      |  157 +++
+>  scripts/gendwarfksyms/examples/kabi_ex.c   |   30 +
+>  scripts/gendwarfksyms/examples/kabi_ex.h   |  263 +++++
+>  scripts/gendwarfksyms/examples/symbolptr.c |   33 +
+>  scripts/gendwarfksyms/gendwarfksyms.c      |  185 ++++
+>  scripts/gendwarfksyms/gendwarfksyms.h      |  301 +++++
+>  scripts/gendwarfksyms/kabi.c               |  333 ++++++
+>  scripts/gendwarfksyms/symbols.c            |  339 ++++++
+>  scripts/gendwarfksyms/types.c              |  477 ++++++++
+>  20 files changed, 3893 insertions(+), 7 deletions(-)
+>  create mode 100644 Documentation/kbuild/gendwarfksyms.rst
+>  create mode 100644 scripts/gendwarfksyms/.gitignore
+>  create mode 100644 scripts/gendwarfksyms/Makefile
+>  create mode 100644 scripts/gendwarfksyms/cache.c
+>  create mode 100644 scripts/gendwarfksyms/die.c
+>  create mode 100644 scripts/gendwarfksyms/dwarf.c
+>  create mode 100644 scripts/gendwarfksyms/examples/kabi.h
+>  create mode 100644 scripts/gendwarfksyms/examples/kabi_ex.c
+>  create mode 100644 scripts/gendwarfksyms/examples/kabi_ex.h
+>  create mode 100644 scripts/gendwarfksyms/examples/symbolptr.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
+>  create mode 100644 scripts/gendwarfksyms/kabi.c
+>  create mode 100644 scripts/gendwarfksyms/symbols.c
+>  create mode 100644 scripts/gendwarfksyms/types.c
+>
+>
+> base-commit: 3596c721c4348b2a964e43f9296a0c01509ba927
+> --
+> 2.47.0.371.ga323438b13-goog
+>
