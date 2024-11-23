@@ -1,369 +1,222 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3465E13BAE7;
-	Fri, 22 Nov 2024 01:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B22F17588
+	for <linux-modules@vger.kernel.org>; Sat, 23 Nov 2024 00:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732240309; cv=none; b=RI9DhMKt/pPsZAFOqfCNJIdQdLZpFnLfQbMbETYEuTG1257dPGbjIGWYpLMp/h5rVB+NQBXacSKtG8siJD1W7+kzhWOgSPXjhvlaCshawlEb7N0tHCQKYLokdd3vtKFsQy/q5drOo2MJBa5S/w7+klF4xKWQbFb1bnuei2DFG3I=
+	t=1732321160; cv=none; b=A6b+jU0kxrM7BDpkwfQm86p8DCrdLWN91khYgl3/tuDlakdLHqdw6jtB/OYdnFhRnC/R+YXH7cBF5Qk0EVEhC/ZQT0WWN8tLXRGvnyIKMQsq9HF034rWWJ1prVvJAStO4Nki3TTmRHt7VqDRlrlsVZO/KG7ZekrVJ0xX04q4/3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732240309; c=relaxed/simple;
-	bh=/aZ5tnhrg58nES9DotuawpjZyBP9ljUcHLWoDrLmcpo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mVkjilpi9kUaQeZTfoM7wDd3TEFBBK5ItuLh0BPkt4QDzmF4Yl6QD1YySR+wiHoEWK9g0b7JGVq4knzSe71LF1C9pnGDIatDRE9nzaWEFn+A9V5N8VBZXKddpnCZNzPucmkcIlDEJo+UM0/tMyBgHS/Z4rCurp4bGm1iGQN7Ut4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mv09uMKa; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732321160; c=relaxed/simple;
+	bh=AHCdX8/xinJ6RwqG4IEXhJMejLQ5bAM2pfpvjXgd0xQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EJGgAAMqtJ1Tl/cOEqTnnwwQm3xNjNDGIkOeHCuD//Aom43nSiikG2v7ZBV0ujOlHIROnbC+Ays9w9155CJuTUXwT4uXr3VC38UEFq9w18+oYrCTDL0hDAqvOTqDygU+L32Ub+/wFYxFDOeaXRB+PW4hzrFESlwCKCY4V3OD+Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RIDrISO9; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mv09uMKa"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-539e63c8678so1762038e87.0;
-        Thu, 21 Nov 2024 17:51:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RIDrISO9"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6ee57ae1133so38283197b3.0
+        for <linux-modules@vger.kernel.org>; Fri, 22 Nov 2024 16:19:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732240305; x=1732845105; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+        d=google.com; s=20230601; t=1732321158; x=1732925958; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=i8Z+CPVajeJ3Ry1Xl5fp5aaPACwKhtsug1K6GR7nlyg=;
-        b=Mv09uMKafbJ3OUHer8UHJCkRuFpxmvp9+x7eUFQfI31pSGxd2IId+UVJYc17RuCkps
-         C+zUtMjCoT9uMhkU8VoTviCx56KuAtLcepmij09UK5EAAD67D56Sbhp9e1zkHK03rWGO
-         YkUmTOzItNNXLHIl4C8ieJk+t1vDQuB8S28LkE5smCMl6kayTkVuYeGAWmMJ8vP9lfMU
-         drz4Tg0dgD8BZGhnEhuInYYCpa+J2yz/OmkMoIBkineYGEFP5vubzu76mqdipccHEMOB
-         wL1VkkO1/BzKJSdhI8m6riXkJtdohQYYz1uDyE934oRbQw/3bxX4GetzyxuLnh02F8a8
-         x28w==
+        bh=PzyWd1Ozzz3SQNuZyfgRru/W6uNkQPbCi35gmVjFow4=;
+        b=RIDrISO91OaAYkNhFKw9MKOnbrYXCUvYbRULRJ6Q+l+Nj+wzPcGwzO7SEe8LfP+f+Y
+         FuEWJXvop5BGia+dpwtHcoujm+VGplAuI4NuS40OBCskMRGzBppsBvZjEXxRmiehzcVo
+         dWYfuITIs8vEqw479Lr83X6ZQ09R8noop9myNqdrSqwOW3/yRJWtUTOX2OWGVmMyDuPe
+         neO80vL+g7/PEO/SwHSxl6aIF+Y2qoWp4FHL/Ojc29DB+oOnU7weZzBAtSOjnKPJMZQc
+         KJSR6atyLPURJGt8E1Wt6DtsJjmseRvsmzfrcC8pHRMhT8/NlGjFNW/X0Pyk3+6qY3gu
+         iuLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732240305; x=1732845105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+        d=1e100.net; s=20230601; t=1732321158; x=1732925958;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=i8Z+CPVajeJ3Ry1Xl5fp5aaPACwKhtsug1K6GR7nlyg=;
-        b=H/Ocg13d/RRtFiFyirG5AHPdKk/PCr1djtd6qtTZky68a/LektrURkd0S8weC4HPeD
-         6WKxefHa96+d4xETFI/hx6++RlK2X5nYMkhl1iJOKN6TfWHjzSOfVCNlEQqp/JU1Ia0M
-         h+EbZvzFKbiB8IZNdKuMTnjqLc4PU2WcPd6haYb4ezTeIJIDD6ibom55A6L3zg7V+yR4
-         p1j3ptBhZZMVOKiGyRW7MlkoqJQ70ndDyNMrvpow+JrUnFrEExI6QRzVdmZPpSSAmEYv
-         bwauTbvyxSCtQHhWIOIW7mvQsR3zfGgZr6GlhfdyVTKlo2bdDxvqtCv96AUGXF9UQSxO
-         42jA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+ycGvHtoolF+b7HPicaVpXO9JoQ/g2yfb5uGOmFouI3CPIP8YOesB1jbLD9p/xOJb0QNWSH4hq9PbLQY=@vger.kernel.org, AJvYcCUXcCecTx8Mpo5LX62GZOOJ4bklHMcvupt7FgKG3fcI5zC1x6ArnbaxLFjJ2euTxXeOvxagwNA33bas5e8apvE=@vger.kernel.org, AJvYcCUcet5IjtTOqDah+Fu6mweIQ6LpE81GcLuKaBIkXOoa/xrpoJNwPhM1+ZsmvhPZNwslLLnfwvigZUEGAZvV@vger.kernel.org, AJvYcCX70g89Wzw6EYHq2TzOs25aeIi0LsH8pdFOju27NYoQdV6VNn4eTgXR6igORVzpTAoWsAq4K4V6u2X9ESj7xA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyklhIplm44iuQ+Zlf1q6BTUua2xNw66snvidFFqhXDUQcvN2qy
-	RtDtmI2R3dAtyZA0lco4MlrlLLJB6oHGSjOPizdKdBlPVEo5KmVNI5Wd28R1M/LnyGS2T3fqSNU
-	CXVB0sgK5tj2zNHAJCe3JTb3NVbs=
-X-Gm-Gg: ASbGnctrxx81Ytvyh3t9BwdhIaUy+bZEiVl7ufRRouiE3P2YELhrgbTJ2Vj1cbkUfq1
-	zXAlhDGKusAr3WWOiexFOUOdBfkj32HV9kw==
-X-Google-Smtp-Source: AGHT+IFhrF/dTuYAUtNauVsCU2r43xjLhGCO/XkliH18CF905DIz+unOZlD2iAtqVdv86vVM4u4IrbFXUnuFJOYf8n0=
-X-Received: by 2002:a05:6512:1594:b0:53d:a864:2432 with SMTP id
- 2adb3069b0e04-53dd36aa58bmr457837e87.17.1732240304980; Thu, 21 Nov 2024
- 17:51:44 -0800 (PST)
+        bh=PzyWd1Ozzz3SQNuZyfgRru/W6uNkQPbCi35gmVjFow4=;
+        b=M7UrJZPO8xeP+1GL7MSzwg3raZ9OTCr2t6dyFB0jDf826nFb2uvx/l3n+k7Qc10JDm
+         frj6gm0CM3F/udQavo85xSf29bcbgC830IgAFoYjdHl8Yh68SEZ/qKYXkHPBbqUVOM0Y
+         vnsJZjh5n/lWRdsaSzldD1TqXHH48xXXaqatSuyVCRCYUEmDULbjMrFLpB1/PS6XMEWs
+         GsMHpIDNUhE5wkcnoSNK41V0Nroavo7/8csIv/etAT1BcOSDOxLrIz8E78HcaSlT/167
+         jU0c8+oypY0rLVWdHgQJAmRPUMc8cTovEqpx0/Lu4926UN6X6jXspm6zw0g4A/fEcQub
+         l5Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCXpl/xH1LptUTusZujlR5WRaYOnlIsMEZf1iRw3cL6hgBCPG4EjeLtFxO3f6egFxmRjPXwta76uoefV6D9y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSPRovEvkcC14rratb+scSKlhKf77GHT2JWToZ14V1eYe3b6Wz
+	59m2VSbpezPapkgYPKDpHCoSOOOoxqXnAye/KuMdYq0vUmcJ6XX8ORUtHjZBBxnQ4eniGMUmGlE
+	498emmg==
+X-Google-Smtp-Source: AGHT+IGaHsvNgSBBFeb1KNK1VHScVmnycGaGvWkQd+Oy8DpEaKXryKh9jKUOlebIrijGejNroleRwAK5Bosy
+X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
+ (user=mmaurer job=sendgmr) by 2002:a81:8d0a:0:b0:6ec:aa45:a975 with SMTP id
+ 00721157ae682-6eee08a975fmr29537b3.1.1732321157317; Fri, 22 Nov 2024 16:19:17
+ -0800 (PST)
+Date: Sat, 23 Nov 2024 00:18:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241121204220.2378181-20-samitolvanen@google.com>
-In-Reply-To: <20241121204220.2378181-20-samitolvanen@google.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Fri, 22 Nov 2024 02:51:09 +0100
-Message-ID: <CA+icZUX-gf8624z8u+h-W8KeddCruYDng-4vTggNGwC61NzfNA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAHEfQWcC/23QwW6EIBAG4FcxnDsGBq1omqbv0fSAOijJIltwz
+ TYb371oPdhkj38yfMz8DxYpWIqsyR4s0GKj9VMK9UvGulFPA4HtU2bIsRAcEeg+09RTD873C4V
+ tPoKu2qLoTWuMESw9vQYy9r6zn18pm+AdzGMgfcJEiVLUWOZSlQVKDgKc07dA4WPwfrhQ3nl3a
+ IG+b2m3+Y9kjmLU+25N9rZrAgXyApHnKCsllADkELWzs78seqLpZL5vaKsjQQpposmmdBUcDrJ
+ t49HG2YefvZel2j89KpDPK1gq4CBlXanUhZSVPB+xiYs6Kena54pKSi1115N5xY7UP2Vd11/W8 irAsQEAAA==
+X-Change-Id: 20241022-extended-modversions-a7b44dfbfff1
+X-Mailer: b4 0.15-dev
+Message-ID: <20241123-extended-modversions-v9-0-bc0403f054bf@google.com>
+Subject: [PATCH v9 0/5] Extended MODVERSIONS Support
+From: Matthew Maurer <mmaurer@google.com>
+To: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?q?Bj=C3=B6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Jonathan Corbet <corbet@lwn.net>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Matthew Maurer <mmaurer@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Thu, Nov 21, 2024 at 9:42=E2=80=AFPM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> Hi,
->
-> Here's v6 of the DWARF modversions series. The main motivation is
-> modversions support for Rust, which is important for distributions
-> like Android that are about to ship Rust kernel modules. Per Luis'
-> request [1], v2 dropped the Rust specific bits from the series and
-> instead added the feature as an option for the entire kernel to
-> make it easier to evaluate the benefits of this approach, and to
-> get better test coverage. Matt is addressing Rust modversion_info
-> compatibility issues in a separate patch set [2] that depends on
-> this series, and actually allows modversions to be enabled with
-> Rust.
->
-> Short background: Unlike C, Rust source code doesn't have sufficient
-> information about the final ABI, as the compiler has considerable
-> freedom in adjusting structure layout, for example, which makes
-> using a source code parser like genksyms a non-starter. Based on
-> earlier feedback, this series uses DWARF debugging information for
-> computing versions. DWARF is an established and a relatively stable
-> format, which includes all the necessary ABI details, and adding a
-> CONFIG_DEBUG_INFO dependency for Rust symbol versioning seems like a
-> reasonable trade-off as most distributions already enable it.
->
-> The first 15 patches add gendwarfksyms, a tool for computing symbol
-> versions from DWARF. When passed a list of exported symbols and
-> object files, the tool generates an expanded type string for each
-> symbol and computes symbol versions. gendwarfksyms is written in C,
-> uses libdw to process DWARF, and zlib for CRC32. Patch 16 ensures
-> that debugging information is present where we need it, patch 17
-> adds gendwarfksyms as an alternative to genksyms, and the last patch
-> adds documentation.
->
-> v6 has changes to structure expansion and the kABI stability
-> features based on our backtesting results with previous Android
-> release kernels (see the change log below). It's also based on
-> linux-kbuild/for-next to include symtypes build rule clean-ups from
-> Masahiro [3]. For your convenience, the series is also available
-> here:
->
-> https://github.com/samitolvanen/linux/commits/gendwarfksyms-v6
->
+This patch series is intended for use alongside the Implement DWARF
+modversions series [1] to enable RUST and MODVERSIONS at the same
+time.
 
-Thanks for the update, Sami.
+Elsewhere, we've seen a desire for long symbol name support for LTO
+symbol names [2], and the previous series came up [3] as a possible
+solution rather than hashing, which some have objected [4] to.
 
-What are your plans to get this upstream?
+This series adds a MODVERSIONS format which uses a section per column.
+This avoids userspace tools breaking if we need to make a similar change
+to the format in the future - we would do so by adding a new section,
+rather than editing the struct definition. In the new format, the name
+section is formatted as a concatenated sequence of NUL-terminated
+strings, which allows for arbitrary length names.
 
-Is Linux 6.13 the new development base?
+Emitting the extended format is guarded by CONFIG_EXTENDED_MODVERSIONS,
+but the kernel always knows how to validate both the original and
+extended formats.
 
-Personally, I would like to see a Linux v6.12 LTS version offered.
+Emitting the existing format is now guarded by CONFIG_BASIC_MODVERSIONS,
+but it is enabled by default when MODVERSIONS is enabled and must be
+explicitly disabled by the user.
 
-LTO is not supported - might be worth mentioning this in the
-documentation patch with some explanations?
+Disabling CONFIG_BASIC_MODVERSIONS may cause some userspace tools to be
+unable to retrieve CRCs until they are patched to understand the new
+location. Even with CONFIG_BASIC_MODVERSIONS enabled, those tools will
+be unable to read the CRCs for long symbols until they are updated to
+read the new format. This is not expected to interfere with normal
+operation, as the primary use for CRCs embedded in the module is
+load-time verification by the kernel. Recording and monitoring of CRCs
+is typically done through Module.symvers.
 
-BTW, I am testing with the latest kmod-git and pahole-git.
+Selecting RUST and MODVERSIONS is now possible if GENDWARFKSYMS is
+selected, and will implicitly select EXTENDED_MODVERSIONS.
 
-I will give this a try when Linux v6.12.1 is released.
+This series depends upon the module verification refactor patches [5]
+that were split off of v5 (now in modules-next)
+and DWARF-based versions [1].
+
+[1] https://lore.kernel.org/all/20241121204220.2378181-20-samitolvanen@google.com/	
+[2] https://lore.kernel.org/lkml/20240605032120.3179157-1-song@kernel.org/
+[3] https://lore.kernel.org/lkml/ZoxbEEsK40ASi1cY@bombadil.infradead.org/
+[4] https://lore.kernel.org/lkml/0b2697fd-7ab4-469f-83a6-ec9ebc701ba0@suse.com/
+[5] https://lore.kernel.org/linux-modules/20241015231651.3851138-1-mmaurer@google.com/T/#t
+
+Changes in v9:
+- Rebased onto the latest version of Sami's series, on top of linux-next
+- Added BASIC_MODVERSIONS to allow using *only* EXTENDED_MODVERSIONS
+- Documented where symbol data is stored and format limitations
+
+v8: https://lore.kernel.org/r/20241030-extended-modversions-v8-0-93acdef62ce8@google.com
+- Rebased onto latest version of Sami's series, on top of v6.12-rc5
+- Pass --stable when KBUILD_GENDWARFKSYMS_STABLE is set.
+- Flipped MODVERSIONS/GENDWARFKSYMS order in deps for CONFIG_RUST
+- Picked up trailers
+
+v7: https://lore.kernel.org/r/20241023-extended-modversions-v7-0-339787b43373@google.com
+- Fix modpost to detect EXTENDED_MODVERSIONS based on a flag
+- Drop patches to fix export_report.pl
+- Switch from conditional compilation in .mod.c to conditional emission
+  in modpost
+- Factored extended modversion emission into its own function
+- Allow RUST + MODVERSIONS if GENDWARFKSYMS is enabled by selecting
+  EXTENDED_MODVERSIONS
+
+v6: https://lore.kernel.org/lkml/20241015231925.3854230-1-mmaurer@google.com/
+- Splits verification refactor Luis requested out to a separate change
+- Clarifies commits around export_report.pl repairs
+- Add CONFIG_EXTENDED_MODVERSIONS to control whether extended
+  information is included in the module, per Luis's request.
+
+v5: https://lore.kernel.org/all/20240925233854.90072-1-mmaurer@google.com/
+- Addresses Sami's comments from v3 that I missed in v4 (missing early
+  return, extra parens)
+
+v4: https://lore.kernel.org/asahi/20240924212024.540574-1-mmaurer@google.com/
+- Fix incorrect dot munging in PPC
+
+v3: https://lore.kernel.org/lkml/87le0w2hop.fsf@mail.lhotse/T/
+- Split up the module verification refactor into smaller patches, per
+  Greg K-H's suggestion.
+
+v2: https://lore.kernel.org/all/20231118025748.2778044-1-mmaurer@google.com/
+- Add loading/verification refactor before modifying, per Luis's request
+
+v1: https://lore.kernel.org/rust-for-linux/20231115185858.2110875-1-mmaurer@google.com/
+
+--
+2.47.0.rc1.288.g06298d1525-goog
+
+---
+Matthew Maurer (4):
+      modules: Support extended MODVERSIONS info
+      modpost: Produce extended MODVERSIONS information
+      modules: Allow extended modversions without basic MODVERSIONS
+      Documentation/kbuild: Document storage of symbol information
+
+Sami Tolvanen (1):
+      rust: Use gendwarfksyms + extended modversions for CONFIG_MODVERSIONS
+
+ Documentation/kbuild/modules.rst | 20 +++++++++
+ arch/powerpc/kernel/module_64.c  | 24 ++++++++++-
+ init/Kconfig                     |  3 +-
+ kernel/module/Kconfig            | 25 +++++++++++
+ kernel/module/internal.h         | 11 +++++
+ kernel/module/main.c             | 92 ++++++++++++++++++++++++++++++++++++----
+ kernel/module/version.c          | 45 ++++++++++++++++++++
+ rust/Makefile                    | 34 ++++++++++++++-
+ scripts/Makefile.modpost         |  2 +
+ scripts/mod/modpost.c            | 70 +++++++++++++++++++++++++++---
+ 10 files changed, 308 insertions(+), 18 deletions(-)
+---
+base-commit: 96ba0247d78ef4078e1de58b7e73715b93ee2c0b
+change-id: 20241022-extended-modversions-a7b44dfbfff1
+prerequisite-message-id: <20241121204220.2378181-20-samitolvanen@google.com>
+prerequisite-patch-id: 43f1286f3e4b991fda2aa093539631a01fadf5fb
+prerequisite-patch-id: 32a05b89083cfed15e5b877664b0c8138c40d09b
+prerequisite-patch-id: e192e2a692c40d96cba919e3baae68c441ab25e4
+prerequisite-patch-id: 50e884d28c720e90f201aae7801590d19736541b
+prerequisite-patch-id: 4d6a826429c519b581d01215e1d9c7373fdfd8c6
+prerequisite-patch-id: 0dcd84187b222adf52696dbcab303d683d087dd2
+prerequisite-patch-id: 0abe8634eb844a85e8dc51c1cd3970cf96cc494a
+prerequisite-patch-id: 5fabb630792f9304f200b5996314f3c2ae4c83ae
+prerequisite-patch-id: ff82b9794147dc28504e46a0170cd269623e73bf
+prerequisite-patch-id: a5cf20d27871bf63be64ac79cc81e5eb9d117b89
+prerequisite-patch-id: 2a317596a3288f9b8e06d73df53737bbfafb1d16
+prerequisite-patch-id: cac33b6e6672cf3f9f7f798a928ce7b147db271d
+prerequisite-patch-id: 62664c468be8afff72a3edaf2c1bcd2f4936a1b2
+prerequisite-patch-id: 5157d0421200858de3cc449bf39b3513efba3b24
+prerequisite-patch-id: 5a190c60e140cdf33caf4f4da03186a2bd75a531
+prerequisite-patch-id: 57d2fe708769154a6494fb1fece56911dea00687
+prerequisite-patch-id: 25255d6bc70d3ba38e45fb6a2c13038df293bd9e
+prerequisite-patch-id: 91c6131ab67a6f0fd8cf8bc95fa45144a868f095
 
 Best regards,
--Sedat-
+-- 
+Matthew Maurer <mmaurer@google.com>
 
-
-
-
-> If you also want to test the series with actual Rust modules, this
-> branch adds Matt's latest modversion_info series:
->
-> https://github.com/samitolvanen/linux/commits/rustmodversions-v6
->
-> Sami
->
->
-> [1] https://lore.kernel.org/lkml/ZnIZEtkkQWEIGf9n@bombadil.infradead.org/
-> [2] https://lore.kernel.org/linux-modules/20241030-extended-modversions-v=
-8-0-93acdef62ce8@google.com/
-> [3] https://lore.kernel.org/linux-modules/CAK7LNAR9c+EEsOvPPn4qSq3gAFskYO=
-XVd=3Ddg8O+bKeeC-HMifw@mail.gmail.com/
->
-> ---
->
-> v6:
-> - Dropped pointer expansion limits as this affects version
->   stability when exported symbols are removed. (Patch 9)
->
-> - Changed local type definitions (in .c files) that are opaque
->   to external users to be treated as declarations even if a
->   definition is available. (Patch 9)
->
-> - Switched to zlib's CRC32 implementation per Masahiro's
->   suggestion. (Patch 12)
->
-> - Renamed struct_declonly kABI rule to simply declonly, as it
->   applies also to unions and enums, added a new rule for
->   overriding enumerator values, and refactored the examples.
->   (Patch 13)
->
-> - Added --stable support for renamed structure members and
->   also added examples. (Patch 14)
->
-> - Rebased on linux-kbuild/for-next for Masahiro's symtypes
->   build rule clean-ups. (Patch 17)
->
-> - Updated the documentation reflect --stable changes. (Patch 18)
->
-> v5: https://lore.kernel.org/lkml/20241030170106.1501763-21-samitolvanen@g=
-oogle.com/
-> - Rebased on v6.12-rc5.
->
-> - Fixed an issue with limiting structure expansion, and applied
->   Petr's clean-up. (Patch 10)
->
-> - Dropped an unnecessary return statement in error path. (Patch
->   12)
->
-> - Addressed several other smaller issues Petr brought up. (Patches
->   13, 14, and 15)
->
-> - Added a KBUILD_GENDWARFKSYMS_STABLE flag to enable --stable for
->   the entire kernel build. (Patch 18)
->
-> - Updated documentation to include KBUILD flags. (Patch 19)
->
-> - Picked up Reviewed-by tags from v4.
->
-> v4: https://lore.kernel.org/lkml/20241008183823.36676-21-samitolvanen@goo=
-gle.com/
-> - Rebased on v6.12-rc2, which now includes all the prerequisites.
->
-> - Dropped unnecessary name_only parameter for symbols.c::for_each
->   and cleaned up error handling. (Patch 3)
->
-> - Fixed anonymous scope handling to ensure unnamed DIEs don't get
->   names. (Patch 4)
->
-> - Added non-variant children to variant_type output, and included
->   DW_AT_discr_value attributes for variants. (Patch 9)
->
-> - Added another symbol pointer test case. (Patch 16)
->
-> - Picked up (Acked|Reviewed)-by tags from v3.
->
-> v3: https://lore.kernel.org/lkml/20240923181846.549877-22-samitolvanen@go=
-ogle.com/
-> - Updated SPX license headers.
->
-> - Squashed the first two patches in v2 and tried to reduce churn as
->   much as reasonable.
->
-> - Dropped patch 18 from v2 ("x86/asm-prototypes: Include
->   <asm/ptrace.h>") as it's addressed by a separate patch.
->
-> - Changed the error handling code to immediately terminate instead
->   of propagating the errors back to main, which cleaned up the code
->   quite a bit.
->
-> - Switched to the list and hashtable implementations in scripts and
->   dropped the remaining tools/include dependencies. Added a couple
->   missing list macros. (patch 1)
->
-> - Moved the genksyms CRC32 implementation to scripts/include and
->   dropped the duplicate code. (patches 2 and 14)
->
-> - Switched from ad-hoc command line parsing to getopt_long (patch 3).
->
-> - Added structure member and function parameter names to the DIE
->   output to match genksyms behavior, and tweaked the symtypes format
->   to be more parser-friendly in general based on Petr's suggestions.
->
-> - Replaced the declaration-only struct annotations with more generic
->   kABI stability rules that allow source code annotations to be used
->   where #ifndef __GENKSYMS__ was previously used.  Added support for
->   rules that can be used to exclude enumerators from versioning.
->   (patch 16)
->
-> - Per Miroslav's suggestion, added an option to hide structure
->   members from versioning when they're added to existing alignment
->   holes, for example. (patch 16)
->
-> - Per Greg's request, added documentation and example macros for the
->   --stable features, and a couple of test cases. (patches 15, 16, and
->   20)
->
-> - Fixed making symtypes files, which need to depend on .o files with
->   gendwarfksyms. (patch 19)
->
-> - Addressed several other smaller issues that Petr and Masahiro
->   kindly pointed out during the v2 review.
->
-> v2: https://lore.kernel.org/lkml/20240815173903.4172139-21-samitolvanen@g=
-oogle.com/
-> - Per Luis' request, dropped Rust-specific patches and added
->   gendwarfksyms as an alternative to genksyms for the entire
->   kernel.
->
-> - Added support for missing DWARF features needed to handle
->   also non-Rust code.
->
-> - Changed symbol address matching to use the symbol table
->   information instead of relying on addresses in DWARF.
->
-> - Added __gendwarfksyms_ptr patches to ensure the compiler emits
->   the necessary type information in DWARF even for symbols that
->   are defined in other TUs.
->
-> - Refactored debugging output and moved the more verbose output
->   behind --dump* flags.
->
-> - Added a --symtypes flag for generating a genksyms-style
->   symtypes output based on Petr's feedback, and refactored
->   symbol version calculations to be based on symtypes instead
->   of raw --dump-dies output.
->
-> - Based on feedback from Greg and Petr, added --stable flag and
->   support for reserved data structure fields and declaration-onl
->   structures. Also added examples for using these features.
->
-> - Added a GENDWARFKSYMS option and hooked up kbuild support
->   for both C and assembly code. Note that with gendwarfksyms,
->   we have to actually build a temporary .o file for calculating
->   assembly modversions.
->
-> v1: https://lore.kernel.org/lkml/20240617175818.58219-17-samitolvanen@goo=
-gle.com/
->
-> ---
->
-> Sami Tolvanen (18):
->   tools: Add gendwarfksyms
->   gendwarfksyms: Add address matching
->   gendwarfksyms: Expand base_type
->   gendwarfksyms: Add a cache for processed DIEs
->   gendwarfksyms: Expand type modifiers and typedefs
->   gendwarfksyms: Expand subroutine_type
->   gendwarfksyms: Expand array_type
->   gendwarfksyms: Expand structure types
->   gendwarfksyms: Limit structure expansion
->   gendwarfksyms: Add die_map debugging
->   gendwarfksyms: Add symtypes output
->   gendwarfksyms: Add symbol versioning
->   gendwarfksyms: Add support for kABI rules
->   gendwarfksyms: Add support for reserved and ignored fields
->   gendwarfksyms: Add support for symbol type pointers
->   export: Add __gendwarfksyms_ptr_ references to exported symbols
->   kbuild: Add gendwarfksyms as an alternative to genksyms
->   Documentation/kbuild: Add DWARF module versioning
->
->  Documentation/kbuild/gendwarfksyms.rst     |  308 ++++++
->  Documentation/kbuild/index.rst             |    1 +
->  include/linux/export.h                     |   15 +
->  kernel/module/Kconfig                      |   31 +
->  scripts/Makefile                           |    3 +-
->  scripts/Makefile.build                     |   35 +-
->  scripts/gendwarfksyms/.gitignore           |    2 +
->  scripts/gendwarfksyms/Makefile             |   12 +
->  scripts/gendwarfksyms/cache.c              |   51 +
->  scripts/gendwarfksyms/die.c                |  166 +++
->  scripts/gendwarfksyms/dwarf.c              | 1158 ++++++++++++++++++++
->  scripts/gendwarfksyms/examples/kabi.h      |  157 +++
->  scripts/gendwarfksyms/examples/kabi_ex.c   |   30 +
->  scripts/gendwarfksyms/examples/kabi_ex.h   |  263 +++++
->  scripts/gendwarfksyms/examples/symbolptr.c |   33 +
->  scripts/gendwarfksyms/gendwarfksyms.c      |  185 ++++
->  scripts/gendwarfksyms/gendwarfksyms.h      |  301 +++++
->  scripts/gendwarfksyms/kabi.c               |  333 ++++++
->  scripts/gendwarfksyms/symbols.c            |  339 ++++++
->  scripts/gendwarfksyms/types.c              |  477 ++++++++
->  20 files changed, 3893 insertions(+), 7 deletions(-)
->  create mode 100644 Documentation/kbuild/gendwarfksyms.rst
->  create mode 100644 scripts/gendwarfksyms/.gitignore
->  create mode 100644 scripts/gendwarfksyms/Makefile
->  create mode 100644 scripts/gendwarfksyms/cache.c
->  create mode 100644 scripts/gendwarfksyms/die.c
->  create mode 100644 scripts/gendwarfksyms/dwarf.c
->  create mode 100644 scripts/gendwarfksyms/examples/kabi.h
->  create mode 100644 scripts/gendwarfksyms/examples/kabi_ex.c
->  create mode 100644 scripts/gendwarfksyms/examples/kabi_ex.h
->  create mode 100644 scripts/gendwarfksyms/examples/symbolptr.c
->  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
->  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
->  create mode 100644 scripts/gendwarfksyms/kabi.c
->  create mode 100644 scripts/gendwarfksyms/symbols.c
->  create mode 100644 scripts/gendwarfksyms/types.c
->
->
-> base-commit: 3596c721c4348b2a964e43f9296a0c01509ba927
-> --
-> 2.47.0.371.ga323438b13-goog
->
