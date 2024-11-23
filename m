@@ -1,124 +1,91 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81007257D;
-	Sat, 23 Nov 2024 00:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BF51F949
+	for <linux-modules@vger.kernel.org>; Sat, 23 Nov 2024 01:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732323220; cv=none; b=F38dRzGNUQvuB9YXZDkwMv8NXwXCanKsBLdTw17aoCcIS+M6P26MGqzbKQALnCW0Yx4wfJYjr7R+qWWErTe80V/AYRutrwMupbFg3bZDUjXgQDEPCBv3xT4BOHsgogHWhjlzaIajTxKe6V1CegtH9aPkpJvG3ZkTteixISBSw7k=
+	t=1732326292; cv=none; b=UdldnRWuDp3T+teJOgDXTZcJ9maG856feKQj7tr2FRNs5qlwgr5DpuMVz+9LZsj2vkd3WSLLxvQEZMKwIqGUDfK1MSFyEYb9JT2DAc2QgGVUGNBA6WGec/gTvsPwQLBEwmrdGEBQUutSXxZP7BtL/KpwHsy7Qu0gomTpr76ZDGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732323220; c=relaxed/simple;
-	bh=ZOzgDCszNpXOPabHGe4wYbuuBiKrW5VJPNfRwhtW3h8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bivi2hIgcb4gsgaCJVeGQmHEXHiO7b0IjRwE2H9ipxTUpLsV8Ju/eHYUX0ojZ9hd5tp3V1jtYOVCwv2s+vlRkEe9u5xkWWjywLDuKi3i0YqcEdBrVyYltG5Kb+RJC1/OXkqhdKBcAdGvEpHjSZH00yYwGY5AAALXJ+4k1pySuHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QU2tVmvz; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1732326292; c=relaxed/simple;
+	bh=TJ0g2uv+fOikKVeaJE+ufAGsb288vXYEqQmALJOQXLY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XcroCZNeyfZ/QSDygo1zyiimUTPMdFLMjtIhzuctF8UIiYAETTevDsotenFAtmkLXM2Kb0zowPGqKIdvs0dcg60PmZHhPyZDxsTKN2X5FVzCNMVoitInC+Sxj/TA6XnLDnm1KXfiOzoRDvbfhpsYfHTd6LltfPpUblFKckXzoVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l+q2HpI3; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QU2tVmvz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=MySxW6Yvv72K+z2FlW9SiPYONLnpcffXjHrq0N51mFU=; b=QU2tVmvz9D0LyQZn/2E6OR0PhY
-	KqXPwT+XvUFmnjhx5IsgFic9byvXjamh8g3lJVkl/jKjHX/h8Ggf7+w5Ghw4Lsdg5GIoWmsnqZm8D
-	ePaR9EfPcQPX34JQkfJmVVzE5ZIupnCRIXKH0w9Cn54RS3pY8r0/hB+sE7/0f+3W1WYsM8fEo8AFg
-	BRh4wa4LCvl8zk7i8GQXoG0u7/6solDBLYQ181K8Kg8OIy4rr4QMBbrE2+f4NwBdqvFtp5bs0iRPO
-	1IIaqwvExMrR54msJqJW+LFghYYaBHjDtNT7UZSRQDrevYXT/7znfak++IuQLvgyD86oKT27WPwRa
-	HPwW7zZw==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tEeOj-00000008XJ3-3vvj;
-	Sat, 23 Nov 2024 00:53:19 +0000
-Message-ID: <eac20e8d-d08c-4be7-a34f-b511798f0a57@infradead.org>
-Date: Fri, 22 Nov 2024 16:53:07 -0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l+q2HpI3"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cfb81a0af9so1907a12.0
+        for <linux-modules@vger.kernel.org>; Fri, 22 Nov 2024 17:44:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1732326289; x=1732931089; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S3VAkynSndmVHDi0F0L9SQm1sisxlAWh9z4fRkq2KhY=;
+        b=l+q2HpI3rmv14EZhGlpRHtZZ5ocQkNsQDuln++6dvJjNb/HfbnfwDigtcrQA8nVkfV
+         qRo2Ix4bP6GLPmlTk9dYdpdqsvecuq1XnzzPaUfI3l5pcyEBVAiwZD5p2F9Tr4BtqQA2
+         9HGl0BiiMyOadlC/dlThphN9GVaAdHSDFTUqAXD2ZfVi8DH5nTEBOOwLUjcb2J2RM36h
+         s7cjuzQVC2H+U+sw1UfKZIIHglvrby8iJvSfLOZXnNnJEqhYtF4xHoGHTnI5Ad+KAe2D
+         ne2agVufHfdjfEUYsj8DhittcXQnRr8uqvhljnudGt0yIX0E0k/4p9/Xhoko4K0/sfGc
+         9iCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732326289; x=1732931089;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S3VAkynSndmVHDi0F0L9SQm1sisxlAWh9z4fRkq2KhY=;
+        b=B9hwXAzcuVEu4SwyjepDgVggXHDgSfHA+lHZbsFsgQTAXgzbGgMy64d7VZCBdoFdfL
+         QOK1o1M730MFbNTAWMEQF05QzlLkw/3x6Ecd4pMxRoMCC/+QAf3AhuL4h0+I5EbAJ853
+         6zjyMREVLWnXOZztUFT7mSV2GdrsK7v5U26Dsdyd6MnYjweXu5+Z6Hxf+tWjJqyDQvhn
+         uX7fdlqD/2LzMKsMsm0ggBWO89A324H0KxzBBOv2o0bgRMYmmY3nGNj+i8c0oJMswKFB
+         F06mhN013BC5DpsgYcZo3C6tPhiubwOkSkyLHsoZLbNP3Uap/7KTcTsnCQY/oyZVxbE3
+         nVFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXmzO7qUmiydRmzDrZ+XqAMk8Vie3hRJGj05X4px+Ay40vs/qUmtb2cLQvC245RdgB+fwiFueOYH49py9Yk@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaFxjnt666Xfh8YnWgYxqp5m3mdcnswHEVFD3Cl8MMHJvpdyRv
+	ldNWmNO38zn1w72q9kAC5ld+C3htCRhv7c0UxgZeToz/2Cgs1qo18j6oWWsW5N5lBDGInn6pNzA
+	H0kC7j8WJy4LY7abMicjYf8k0K3AYPQkPxQej
+X-Gm-Gg: ASbGncuHRn6NAzbxZD2ugozju9jYo9voEngc4+jU75LP1BLzy6e4pr+ViXOKrxzLjIY
+	1TCExhlO1wb8059/+uVEA8H3Y/zeMHaR2cn1oJDjcoZvSPtxzwXiDjeCUUThpCp5W
+X-Google-Smtp-Source: AGHT+IGL77AC2bNXg1gDSicOAbEhb3ZzKW1ZO63HPbNunVMxHMFLSIMrlQMvQthUYrEvM5iHSpLMrwWh4Y5yA5ldlD0=
+X-Received: by 2002:aa7:c249:0:b0:5cf:deaf:ac2 with SMTP id
+ 4fb4d7f45d1cf-5d035db0d11mr37256a12.2.1732326289218; Fri, 22 Nov 2024
+ 17:44:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/5] modules: Allow extended modversions without basic
- MODVERSIONS
-To: Matthew Maurer <mmaurer@google.com>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Jonathan Corbet <corbet@lwn.net>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org
 References: <20241123-extended-modversions-v9-0-bc0403f054bf@google.com>
- <20241123-extended-modversions-v9-3-bc0403f054bf@google.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20241123-extended-modversions-v9-3-bc0403f054bf@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <20241123-extended-modversions-v9-3-bc0403f054bf@google.com> <eac20e8d-d08c-4be7-a34f-b511798f0a57@infradead.org>
+In-Reply-To: <eac20e8d-d08c-4be7-a34f-b511798f0a57@infradead.org>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Fri, 22 Nov 2024 17:44:37 -0800
+Message-ID: <CAGSQo02-o_T7LY4Ld3EyQRyWcuryzw1YSnt=fi6CBiN4NAmYDw@mail.gmail.com>
+Subject: Re: [PATCH v9 3/5] modules: Allow extended modversions without basic MODVERSIONS
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Jonathan Corbet <corbet@lwn.net>, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> >       depends on !COMPILE_TEST
+> > +     selects BASIC_MODVERSIONS
+>
+> tested?  'selects' is not valid.
+>
 
-
-On 11/22/24 4:19 PM, Matthew Maurer wrote:
-> If you know that your kernel modules will only ever be loaded by a newer
-> kernel, you can disable BASIC_MODVERSIONS to save space. This also
-> allows easy creation of test modules to seee how tooling will respond to
-> modules that only have the new format.
-> 
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
->  kernel/module/Kconfig    | 15 +++++++++++++++
->  scripts/Makefile.modpost |  1 +
->  scripts/mod/modpost.c    | 19 +++++++++++--------
->  3 files changed, 27 insertions(+), 8 deletions(-)
-> 
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index a31c617cd67d3d66b24d2fba34cbd5cc9c53ab78..f28b361494c4b4cc2446d683589f9452a0043b2b 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -161,6 +161,7 @@ config MODULE_UNLOAD_TAINT_TRACKING
->  config MODVERSIONS
->  	bool "Module versioning support"
->  	depends on !COMPILE_TEST
-> +	selects BASIC_MODVERSIONS
-
-tested?  'selects' is not valid.
-
->  	help
->  	  Usually, you have to use modules compiled with your kernel.
->  	  Saying Y here makes it sometimes possible to use modules
-> @@ -218,6 +219,20 @@ config EXTENDED_MODVERSIONS
->  	  The most likely reason you would enable this is to enable Rust
->  	  support. If unsure, say N.
->  
-> +config BASIC_MODVERSIONS
-> +	bool "Basic Module Versioning Support"
-> +	depends on MODVERSIONS
-> +	help
-> +	  This enables basic MODVERSIONS support, allowing older tools or
-> +	  kernels to potentially load modules.
-> +
-> +	  Disabling this may cause older `modprobe` or `kmod` to be unable
-> +	  to read MODVERSIONS information from built modules. With this
-> +	  disabled, older kernels may treat this module as unversioned.
-> +
-> +	  This is enabled by default when MODVERSIONS are enabled.
-> +	  If unsure, say Y.
-> +
->  config MODULE_SRCVERSION_ALL
->  	bool "Source checksum for all modules"
->  	help
-
-
--- 
-~Randy
-
+Apologies. Tested before making BASIC_MODVERSIONS default. I've fixed
+this locally, and will re-test with the whole stack before resending.
