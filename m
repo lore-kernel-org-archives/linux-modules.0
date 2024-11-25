@@ -1,94 +1,129 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 729D21922E9
-	for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 14:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EA32746C;
+	Mon, 25 Nov 2024 14:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732545035; cv=none; b=YMfQEY79gpJzY7GsA6PHy8gw4lSpsLlNCkAKtKKPhc4OfNpg0TNOR/SvByOSdGQoYoW3+nbUGQm0arupBgmb7T0OKjIUO38RUJhFP6Bo/8cE8APzU21GDjZ+R1WgWz7mU0Xe8e8fmMGfM9A7MrgjYz9NVC/ZVbI8vaHWLspDOUw=
+	t=1732545698; cv=none; b=jVrRTiEZbpQVrJ682wODD7k7URxnhBUzF/d7fyM9bUkVxHEh0Srefs8YsWpArcRs+67WnkQ9BEgMG1fiPlUOpoMab+5qTvZ7UxHx7OAm+VqQwDHdd3RwXi0djD4K/WBx+cAmhoibuHsIiKhSdfLrkIgOW3fot+Fqgw2qEixRjkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732545035; c=relaxed/simple;
-	bh=dmYeT7WagzkwY7FoSyZv+LRd3sqPOyrA/5puocpIySw=;
+	s=arc-20240116; t=1732545698; c=relaxed/simple;
+	bh=hKchmO2WDRxCHT7Jx9boQ3vWleTZKJaMpXI2cFPNwo8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VQk6B/E2BNnt+jb50GM82rtjpK1WlayIIgVu/xZBnH+P1i8eKEMaNuUBiLoCNZsjXlonH/kXRGG+ZwZWYZc6BN0dr/4nTQE5JXchhHAbMhe+fX2beh8sBRQvRjEppkT23r4JR3lGqReboGhvPPMPweKvFnC6EdVhhES7yI9uomo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ol6YLCIK; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=VzcOWPxiCSxsrz9ncuFqLUZB0Iz6Fg2RLjkkPWGIbKbzLX8CzqaVFiR8hae1b8+CQ7Cgs030hAUjlXM0rtCn+0cgyN0nVaJEmz5inquq1YpPScNayYAuNO//oaQZQ+4mDH2OKC9rH0I7B76ZlYDFc2bx5JSMQVjON4N5U9xH4GE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FKSxC4Tb; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ol6YLCIK"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5cfc264b8b6so11590a12.0
-        for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 06:30:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FKSxC4Tb"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2edbe217f00so272492a91.3;
+        Mon, 25 Nov 2024 06:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732545032; x=1733149832; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dmYeT7WagzkwY7FoSyZv+LRd3sqPOyrA/5puocpIySw=;
-        b=ol6YLCIKEEREbo9liHfVf0ccFFuoJ+G4UTKvlW3s9ax0W7rwxAs2rv2opqra1OSVog
-         Fc0qrajL8RHU4TQuhO6jEYmDdTOJtLBoBKK+39xt242YNTjQ7bsxGc0I7wXEcuTduEbq
-         JMhf4/aH0nYR3ocDy/S4dV5OEmU4Jva2zw+Mnbz/arU1i5NtVzqnasAJUl9A67n/Jjsf
-         QO8tye20IEmNUdsU0kQVvt7n5w3ALnNzFHJXbQogQL9kUDa092qka5SBIzE96jD+YY5J
-         Rg6mzTn3W2bShGXlWojcaQM9uX3nHQrJ8ffWmOA6Y1khk3Htvqh9F+4I+s2b4s/60y7O
-         F2IA==
+        d=gmail.com; s=20230601; t=1732545696; x=1733150496; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OyNHGDdr/bbhmu+9pKCigFAMTb5SHnCy56oapFhW6XY=;
+        b=FKSxC4Tbc6BB6OoQ8TwlUpq2a+R3slcoOke9vBpC/T7sXSRBK67L0XbtVj2eKwMMgr
+         pqNwvtljkbjw3SoLVybEDp2z9+sGMduI3VgpYsRj98rECD9J8ZG5iNftUOvOLMC4+MTh
+         FyVb1SyP2+9R+8SAIg2Fn1IaCMfYc5LfINK94p5dT7ui1Mc3Pj+jwjPtVAxwN9vGEJex
+         CndfBoLrwPxD/R1m6PaOk1+0FKmMd5kzdLElH33/NI8yezN+vSS8pndZcrpzS5qeb3rK
+         Ui9+h/nOJ9MXaQ8GPiEjS89atZvvQOVfH9EHN0GpbND8Z7cD0XUXg58c+f+bQu+HDG+O
+         BW+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732545032; x=1733149832;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dmYeT7WagzkwY7FoSyZv+LRd3sqPOyrA/5puocpIySw=;
-        b=QhjKkGobddQLbDWNb6d0iOwT3pW2DhOAGQn+HAdUHHVZB6V5Np0v7jZVJhytabeQL/
-         bomLijASWPgM6nNKY4dwG9Qho8Mq35cB3tLywwDuKTETXGd5POKOSsdsuTBuUN1cgq9c
-         yzKpJodVZrkSGUWqpe59G6/T7ppAims+UW2vGMDtlX1eYQhtdUzuGaVFQoG+pmGfrM2L
-         fa9WYRBHK54J+EfRkE+5+DOw7UOKvW72gdp3HZUUQ+335+fn9zG5vGLtrYnOFsmLKgz1
-         kTzE3KHBquF/hNbv2tATcVDoHjqHp4Btum5YmAS1VrYXyixQiB0CP+tufximdImdjJIo
-         pAew==
-X-Forwarded-Encrypted: i=1; AJvYcCXB/0KV4pVeHFwZffwNxI0jeMtAiX3UQXiaOAwj8d8Jgfo7YrEIodVyaTpPx74IjHvXOo21orFSe8gpxw1f@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ/NdFpMEc521UQgxKAQ1tIHDVWs5hC2RmloM3wvpy3pLlVACE
-	VcH2Ruk1M0GW7X27aLLPcMPgo2HHUMdzyIZdB4oZNeEN9xsWcQrnp418MOYZRe5Qjiziibzr0GQ
-	aMvUtR6oGSy5jC5V2xTxzyeXPaYx2zBTcuzok
-X-Gm-Gg: ASbGncuZf9I3xdKiAfDNchgDyoiNMnWHPDPh4mRRvm0VBFwQMMmflpw8tYgglWkRgJz
-	7oZQcrRwUyPHTlDmcB7R3QxOckUknNyVigFjjVlW38EFzGm0Rn2Xz82vCmiPu8ALD
-X-Google-Smtp-Source: AGHT+IFWKEzbGpUOrfyOjGRqTC5/oGFC/C8dANhbCDJLguS07R1QYiU2nCXA2rPbI2+60Dcss+8N/xSO3iPMdyVL4co=
-X-Received: by 2002:a05:6402:d48:b0:5d0:28dc:b2cd with SMTP id
- 4fb4d7f45d1cf-5d037fffe79mr164939a12.1.1732545031685; Mon, 25 Nov 2024
- 06:30:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732545696; x=1733150496;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OyNHGDdr/bbhmu+9pKCigFAMTb5SHnCy56oapFhW6XY=;
+        b=sdEbyI0NyH616bw4cRwEvY6oNNZI/rFL2Eh/neQNTWZdnhxvDnVrfjCJPPGyOA7tCa
+         hSVAG4vNntjAuIpe5mjw1hK5onePyMzWyALl8JojrpZKxYXMIiYQ5pgx2vDFzlaVI189
+         A2O9onn4/1gRUI5zc2sARY/NdImOVfz0JT1e/YdQVhu3BZD5s7E097GUXeFk2sn7xn8e
+         C7AJ3OtZfyrC8CCuIxIUSuaSGPjbtd98fyiBJ2PfE+jO7wzNU7WN23I7hqDz0DvsnejI
+         XoWARAzohJwHO7IXcIz/d4ipTyxi8T6TuixOTqZ0TdUcH4K1L+IuGzFVw2/gH7Zw+L4j
+         Ctzw==
+X-Forwarded-Encrypted: i=1; AJvYcCVKpWw0bO51X9xhUwjChzVK73l6LCppms3PXr68oQ5GTjtQiavEXtDmdLUIQ6VsgwbzS6uAIJnBfb5p+iWZlQ==@vger.kernel.org, AJvYcCVc+9pFcENIQOxsl8R68aoJOwr2uqg4ZW35bWfn6Mfu8UTYqM8ixdM/fS99ylSBOeLK0AxWJTKA4y/5CVw=@vger.kernel.org, AJvYcCVnU1E3PNblv+DXPXL2/GYarODw9BeouVz9waJML8wTFq2Kq+scSA4UXx8ljjeI8W/Jf4GNpR3jSwZ2QTXSFpE=@vger.kernel.org, AJvYcCWbPhEP7k80Qv+noEh+sC6pI73Iz/d9MkxIIyuH7GZgvizgDM/Rz3E3HQmRg2go9DtoIFx7QTrdbAy6JDNn@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFg0DLvXcpGrhnfO1UmQsS1eGzVLOu9Fu6h1Z6kZUz7FVMqBHs
+	bxgBXhmnRS0+gsNZCfN0NC2Bl4sSP7bUbTmcjMuiIKAAqIyRJQsJXaOo1v+43RzO1rIM6SOl/0X
+	NM9ifNCCjT8xXWkQoFGKC75m/cDY=
+X-Gm-Gg: ASbGnctYGSFClRCOCyE0kQf5T05FY15NtP4xbi9yyq691UewIV4oVkQFyvWf/0bmgt/
+	UvPJGu1ARp5AozfM3q8oGKzISdWO7oJo=
+X-Google-Smtp-Source: AGHT+IGUUfMqZ7Ksdh9fDCHJKZhC4rrxnKvWE7KOas6EI0MDojhpBH438SIr7nU6YUTcwPqa7tAeUT4MYakkcrTwWBw=
+X-Received: by 2002:a17:90b:1d07:b0:2eb:12ee:cf0b with SMTP id
+ 98e67ed59e1d1-2ede7d8e536mr173275a91.1.1732545696207; Mon, 25 Nov 2024
+ 06:41:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241123-extended-modversions-v10-0-0fa754ffdee3@google.com>
- <20241123-extended-modversions-v10-1-0fa754ffdee3@google.com> <87mshntv10.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87mshntv10.fsf@mpe.ellerman.id.au>
-From: Matthew Maurer <mmaurer@google.com>
-Date: Mon, 25 Nov 2024 06:30:20 -0800
-Message-ID: <CAGSQo02PiWgAVR2x38JxQgCQr5UVHyn+S7+TQ9oto-hTSh32tQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/5] modules: Support extended MODVERSIONS info
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Jonathan Corbet <corbet@lwn.net>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org
+References: <20241121204220.2378181-20-samitolvanen@google.com> <CAEg-Je-h4NitWb2ErFGCOqt0KQfXuyKWLhpnNHCdRzZdxi018Q@mail.gmail.com>
+In-Reply-To: <CAEg-Je-h4NitWb2ErFGCOqt0KQfXuyKWLhpnNHCdRzZdxi018Q@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 25 Nov 2024 15:41:24 +0100
+Message-ID: <CANiq72m4fea15Z0fFZauz8N2madkBJ0G7Dc094OwoajnXmROOA@mail.gmail.com>
+Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
+To: Neal Gompa <neal@gompa.dev>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
+	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	"Darrick J. Wong" <djwong@kernel.org>, Donald Zickus <dzickus@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Nov 25, 2024 at 2:29=E2=80=AFPM Neal Gompa <neal@gompa.dev> wrote:
 >
-> I already acked version 8, which AFAICS is identical to this version
-> (for this patch at least).
+> As my Acked-by was removed, I'm sorry to say that there is no point
+> for me to provide feedback since it is unwanted.
 >
-> Not sure if you dropped my ack on purpose, but here have another one :)
->
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
->
-> cheers
+> I hope it lands soon, but I also hope the people here who decided that
+> a person's efforts aren't worth recording because they don't
+> personally know them should reflect on this too. It's a good way to
+> keep people from coming into the community for the long term.
 
-It was not removed intentionally, thanks for the re-ack :)
+Hopefully this reply helps -- apologies to anyone if I am overstepping.
+
+On one side, it is true that Acked-by is typically used by people that
+is responsible for the code one way or another, because the tag is
+meant for them to acknowledge they are OK with the change going in,
+and so I can see the argument that restricting it for that purpose
+only may help avoid confusion later on reading the log.
+
+On the other hand, someone being willing to put their name on a patch
+is very valuable, whoever they are, and whatever the tag name is.
+Moreover, it is also true that, Acked-by may be used here in a "as a
+key user downstream, this looks reasonable and satisfies our needs"
+sense.
+
+Finally, sometimes new tags are invented on the fly because there is
+no good fit, too.
+
+Either way, I don't think anyone wanted to disregard your efforts or
+to be rude to you in particular, but rather wanted to keep tags usage
+aligned to how they view them or how they use them in their subsystem.
+The Tested-by was still wanted, so I doubt their goal was to remove
+you from the log or to make you feel unwelcomed.
+
+Two solutions here that could be OK for both sides:
+
+  - Would you be OK with another tag name? For instance,
+"Acked-by-User:" or similar? That may help the maintainer keep the
+Acked-bys the way they prefer, yet record your own Acked-by in a
+separate category.
+
+  - Another idea that the maintainer may accept is an Acked-by with a
+"# suffix" comment that clarifies the meaning in this particular case,
+e.g.:
+
+      Acked-by: Neal Gompa <neal@gompa.dev> # As primary consumer
+(Fedora Asahi kernel maintainer).
+
+Cheers,
+Miguel
