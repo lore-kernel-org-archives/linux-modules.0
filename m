@@ -1,125 +1,110 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915763A1BF
-	for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 15:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07702194ACA;
+	Mon, 25 Nov 2024 23:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732548897; cv=none; b=Zwd/cCF1bKRLe92wulBzQ/92/6YqSw8HKLOVHEspewwCYlweFmwX1+QO/YamRpDAylBiLBbl6GiL2DpFaEkmKHiLMAqdxaPVwUDwhLFnEnAjR8qkhrlzIj/rq+TyiWSnXQxuRFqpmzMXw/qTJJhWnaQcIm6uMpHQxFnOFpb2qxY=
+	t=1732577128; cv=none; b=pd7u/uK3Juzt2htBy/TMwUKZgvZJbbRR1suFyAsg8KoLdfge74yOfCvH1uRblIH+O4zu6wUIZuxRnS4lXer7kq7Vp1iPn8SzDvrXhS5ivayWRyhlU/XGTfHojh4VDOdPPOdKF/waOevLVkbkcpNWpMbHBr6mRZ7d1ASWAMHGK+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732548897; c=relaxed/simple;
-	bh=rEFJdZSwH2wd+21uchAY2/iTR59ZVMr1M18odRCoI1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B71MX8/6m4HYYFs+7DkzbsaJdNhHliOMyl+miYVolE7+2/b46E3LNUKg3eHlGKXcOtmnswH7A/hrhFK8m6NbXda2sMS628JxPWDLXFTGCDaM7tiKKm0TABnUUjziQMZrWTsF/jeWz5tvUWAs4Z5OcWSnCtm8To2v5oaEHJMMzvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JCQPbVr7; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1732577128; c=relaxed/simple;
+	bh=Ef9YOhkT6dvq3u1nt9fT6DrzSKWjzvz3OpMEiybONBA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EyMr8eI86ZtS3NBKcu+xZCwGEtPYfvM5gbzgAHfar6TYRSXNM44lsJjLOC/KRb1A/CJQ2Nh/QUph2EG4hhDyPc2lbRl935g1CeqO1bZ6eyPfpLn3em6LlFO1WaQ4EYohMcw7LYjbwEJcVI3TxU//Wq1OjF6ZfXHexVayGOzFRcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E4sdpDu+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JCQPbVr7"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5cfb81a0af9so11701a12.0
-        for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 07:34:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732548894; x=1733153694; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rEFJdZSwH2wd+21uchAY2/iTR59ZVMr1M18odRCoI1Q=;
-        b=JCQPbVr7wnofDau/L49eky1TxDcaQzWk4/fmNrAn47ts2yPZ7AHYovhP1cmdp7ar1G
-         TVycJ+46WnLlHgtt61tvuvUs/YqVszj7JKYQOAI233EXVZCtQV8DLT/1rCocUcWWXPMN
-         vyRmKGpRpXyXXQt0Gx/6p1zptJO8UAdetj53gxzEzLZqgfAyx7xlVJlCblanL0uf6xQa
-         8oYIMtGX4wId93qwALyi9dnGDy0J9b3udeO59b0ASLqo9Lk03BhmhVD1KhRwak1OusxW
-         cYZS4iT6xkG1KROp1sIXKcThABf8+/rpy6Vh73Kh/HohjKAAztsSLA4VI95RnOZzPhgY
-         pUPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732548894; x=1733153694;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rEFJdZSwH2wd+21uchAY2/iTR59ZVMr1M18odRCoI1Q=;
-        b=q2SaN3/VhjxYFOiChgsLvzM81Z1T5Y3FKsI/eKd34D9A8KUm/bVUsuX37hGbcTB3Cb
-         CroSKqBa6ou1xgdVSCFf0t+MGmbkHCBaepWte9MYAewjn5TrkMNftJ8kr8b00ZmxQa5m
-         hjNJxg5WUMNLHS7HbWZIkMFuRu5I6bTBd2F1IxdRTOOSUn+qtCMRPGnuqIgKPLAs5jPH
-         ahBmAkHt/GhXr4D8k+Co9LmpkOhFNqbW/KYdzQqQqaS/KgfrobOMH+7lImiK36Jq7Q3G
-         NS/qlpGdZrwH/b54ZLA8vofQOarnQqY1ShrF3sbKQFs7m8rHYYcDMHumLpT2AlM32RXO
-         +01w==
-X-Forwarded-Encrypted: i=1; AJvYcCUHZrLzcswKQw9aaQBRhkBsREf9VgNQbe7OXkDcrGw0VwhtuLh5RpLNMS4KOODBkBagVbh2DOuWE90rC2g7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5Bgf7u9GoyppWHarck9boAvOGnPlV7a49XfvMKkXiWQiXZxiI
-	2/l3zI0C+9xToBr0yghsIcg78GjFo1nVl0hVcp3bz29hDB+KRxX00uprtE2yfw54tYIFWSabEQf
-	ZAlSkYlevIIgwR2RIRn8I0buF5h+eWk1bBJhn
-X-Gm-Gg: ASbGncvEsJ2G2bmib693foFIJcqvNMrHb9dz8Dj+MsYhVFi6vALsPC2yzWnAVztLERu
-	dxFqV7btKh0GSQl0yZtBVlCBOzJHtKlim
-X-Google-Smtp-Source: AGHT+IE62Erf6kbiue7Q5RpwnMVj1FvBBMrksPcQ0CAHn5mGwDMlww3cSZdxQ5Drpgle+KMsT0aQiif1LekyY7uoXNo=
-X-Received: by 2002:aa7:c504:0:b0:5d0:3dcc:16bb with SMTP id
- 4fb4d7f45d1cf-5d03dcc1934mr98711a12.4.1732548893632; Mon, 25 Nov 2024
- 07:34:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E4sdpDu+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BD3C4CECE;
+	Mon, 25 Nov 2024 23:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732577127;
+	bh=Ef9YOhkT6dvq3u1nt9fT6DrzSKWjzvz3OpMEiybONBA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E4sdpDu+7U4uKBYbHed2GEqt4mz1AZox50i+VMTL3yOe2Vlwn6iksIGS+oaZ5zgR+
+	 T2v9pOMKQN6AWpt0pGFj+9UnkxSMvpaXHACjzfPOKYLPdl8Y7Bh0TyX40b3h6Z7oeu
+	 W6JLpiyIYTPsM2KmtkFSXDIkVfEBZrGgvBDKcn4eyj0T3MR126uvCv0Llmape3RCev
+	 exSY16RQ6sDiCHqdkLrBZQixK4WgbTjdhU0DFfwogb28Y/U2UwSflm9WbelUImPLTg
+	 YQhVnkAeNI6bGfszun5dCDdNcB2zYbqzaLNmDIuJF634mrHyIJ0hAdWGHISZAnrmP3
+	 BYT8sC13RStIg==
+Date: Mon, 25 Nov 2024 15:25:25 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Jonathan Corbet <corbet@lwn.net>, linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] Extended MODVERSIONS Support
+Message-ID: <Z0UHZQErgTDpie0y@bombadil.infradead.org>
+References: <20241123-extended-modversions-v10-0-0fa754ffdee3@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121204220.2378181-20-samitolvanen@google.com>
- <CAEg-Je-h4NitWb2ErFGCOqt0KQfXuyKWLhpnNHCdRzZdxi018Q@mail.gmail.com> <CANiq72m4fea15Z0fFZauz8N2madkBJ0G7Dc094OwoajnXmROOA@mail.gmail.com>
-In-Reply-To: <CANiq72m4fea15Z0fFZauz8N2madkBJ0G7Dc094OwoajnXmROOA@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 25 Nov 2024 17:34:17 +0200
-Message-ID: <CABCJKudozEhZXLZVxVixsO5YuZg0nOEmgo3=vMyhcrEw+6Xo5w@mail.gmail.com>
-Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Neal Gompa <neal@gompa.dev>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	"Darrick J. Wong" <djwong@kernel.org>, Donald Zickus <dzickus@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241123-extended-modversions-v10-0-0fa754ffdee3@google.com>
 
-On Mon, Nov 25, 2024 at 4:41=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Mon, Nov 25, 2024 at 2:29=E2=80=AFPM Neal Gompa <neal@gompa.dev> wrote=
-:
-> >
-> > As my Acked-by was removed, I'm sorry to say that there is no point
-> > for me to provide feedback since it is unwanted.
-> >
-> > I hope it lands soon, but I also hope the people here who decided that
-> > a person's efforts aren't worth recording because they don't
-> > personally know them should reflect on this too. It's a good way to
-> > keep people from coming into the community for the long term.
->
-> Hopefully this reply helps -- apologies to anyone if I am overstepping.
->
-> On one side, it is true that Acked-by is typically used by people that
-> is responsible for the code one way or another, because the tag is
-> meant for them to acknowledge they are OK with the change going in,
-> and so I can see the argument that restricting it for that purpose
-> only may help avoid confusion later on reading the log.
->
-> On the other hand, someone being willing to put their name on a patch
-> is very valuable, whoever they are, and whatever the tag name is.
-> Moreover, it is also true that, Acked-by may be used here in a "as a
-> key user downstream, this looks reasonable and satisfies our needs"
-> sense.
->
-> Finally, sometimes new tags are invented on the fly because there is
-> no good fit, too.
->
-> Either way, I don't think anyone wanted to disregard your efforts or
-> to be rude to you in particular, but rather wanted to keep tags usage
-> aligned to how they view them or how they use them in their subsystem.
-> The Tested-by was still wanted, so I doubt their goal was to remove
-> you from the log or to make you feel unwelcomed.
+On Sat, Nov 23, 2024 at 02:42:14AM +0000, Matthew Maurer wrote:
+> This patch series is intended for use alongside the Implement DWARF
+> modversions series [1] to enable RUST and MODVERSIONS at the same
+> time.
+> 
+> Elsewhere, we've seen a desire for long symbol name support for LTO
+> symbol names [2], and the previous series came up [3] as a possible
+> solution rather than hashing, which some have objected [4] to.
+> 
+> This series adds a MODVERSIONS format which uses a section per column.
+> This avoids userspace tools breaking if we need to make a similar change
+> to the format in the future - we would do so by adding a new section,
+> rather than editing the struct definition. In the new format, the name
+> section is formatted as a concatenated sequence of NUL-terminated
+> strings, which allows for arbitrary length names.
+> 
+> Emitting the extended format is guarded by CONFIG_EXTENDED_MODVERSIONS,
+> but the kernel always knows how to validate both the original and
+> extended formats.
+> 
+> Emitting the existing format is now guarded by CONFIG_BASIC_MODVERSIONS,
+> but it is enabled by default when MODVERSIONS is enabled and must be
+> explicitly disabled by the user.
+> 
+> Disabling CONFIG_BASIC_MODVERSIONS may cause some userspace tools to be
+> unable to retrieve CRCs until they are patched to understand the new
+> location. Even with CONFIG_BASIC_MODVERSIONS enabled, those tools will
+> be unable to read the CRCs for long symbols until they are updated to
+> read the new format. This is not expected to interfere with normal
+> operation, as the primary use for CRCs embedded in the module is
+> load-time verification by the kernel. Recording and monitoring of CRCs
+> is typically done through Module.symvers.
+> 
+> Selecting RUST and MODVERSIONS is now possible if GENDWARFKSYMS is
+> selected, and will implicitly select EXTENDED_MODVERSIONS.
+> 
+> This series depends upon the module verification refactor patches [5]
+> that were split off of v5 (now in modules-next)
+> and DWARF-based versions [1].
 
-Thank you for putting this more eloquently than I could, Miguel. Neal,
-I do appreciate your feedback, and I'm sorry if I didn't make it clear
-enough in my previous emails. I would very much welcome your
-Tested-by, or another suitable tag that's acceptable to both you and
-Masahiro.
+Thanks for doing all this.
 
-Sami
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+
+ Luis
