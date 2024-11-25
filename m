@@ -1,56 +1,57 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1910154BFB;
-	Sat, 23 Nov 2024 11:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9B518FDBE
+	for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 09:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732360995; cv=none; b=PHhDeKw1xgRYDkyGTHJ7zPRzNXq1u+Tjmjkjgtdnoy81Si4u5AXkGVkRGP7vdIBxItMiOGuGLqXpmrGsURKufFTbl17s0S3vsP0M5b57WbTdN0ZCoxgPPGBOstOkW/XgfFMnKG0FONGqHylGEYXv7iirROTYKnCOcW1h8O92ru4=
+	t=1732526527; cv=none; b=B2v4OE8DOi39yjmckuAkk3L9i72AP5/LHHdd6EnbdpjdLIiLd60PRdWAJY/qorMw014/2EMkVP3yXTPnXApc1SkjseloqXNYla+NyAJBBiNlx0AhQhOjPg6r8xjFooOy0FbFqwuS4WqAkl5AfE/3w6Qsj/52Kqc/0jCqOcAQ/pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732360995; c=relaxed/simple;
-	bh=u/EP1S+viKGpmTrQ8yI3KxsDbuyUkdLIpl2IkM7RyRs=;
+	s=arc-20240116; t=1732526527; c=relaxed/simple;
+	bh=FCYlpekwLX29y1babPtkl5hhwfzqAWLF9A3oe2+5id0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kBpa7UWWk8zDD03ZP4s+yrxXkgjstWBwECKQNSwwCtYNqGyRbp5H9sKFYScuDKPLio6QLM5uvAYWqAl1cfL+K/86XTt2Q1BHBqDaIYRRLlCO2Bp2WXatcTGdorzV7Xa9929zizSl2UC5ph3hnHJWpUv2g/e+L9qlQAbyyw1mfa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QX7zEFi1; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=NlZlykeWxF14QFBIRpqoePFimmE0i6gNBEhuANHwuMGF10v7Bxb2VAUVktxfg0+GA50YmxSzWJQNtuzLk0tDwffNJXVEYP9M4atr8GWAsCu9IDrRXKdWvNR5S9woIEipYi+rH4HUyONY6lnSGEsJ4kGNHX/Sh42Xc/kkLR0n9Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=L/QApVvC; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QX7zEFi1"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-53dd59a2bc1so1783540e87.2;
-        Sat, 23 Nov 2024 03:23:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="L/QApVvC"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5cfc264b8b6so8223a12.0
+        for <linux-modules@vger.kernel.org>; Mon, 25 Nov 2024 01:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732360992; x=1732965792; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/EP1S+viKGpmTrQ8yI3KxsDbuyUkdLIpl2IkM7RyRs=;
-        b=QX7zEFi1wFY/uD3jkok8lfHTByJ2aNleRCbOXvNUXvJHNNNRYsDSMeXIdtuXwJAl5H
-         nClVUwKKIYQKFNoCJIpu3wCP0AXoxObBLiaQaIJcISuGAZF2E7Msmfu00u/kkAdGZEOP
-         Kek8z4DaMshzkmnfzMw8zfvT5/YvJzp1iDp62P3h8tSJzIGEwsTW9H8ne+6dv5h4YkdN
-         PSE+vgkjr7EbMNka536HxpVfB/WPVb1zJKmjg3JpZvtZBR2M8aHKkOa1iLW+txiUyvOn
-         YcRXU+vP/ieIovXgVbWIki1lEajZNH3icl72OKCEEu6KDxgYODb2GDf7GogsL+ucGZBd
-         aSSg==
+        d=google.com; s=20230601; t=1732526524; x=1733131324; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FCYlpekwLX29y1babPtkl5hhwfzqAWLF9A3oe2+5id0=;
+        b=L/QApVvCl2TEfZGYYEfTC3A1hQNfZH2vjBTq86eD/zjHUJ54iRzh51xj3aYuIKBuUv
+         YHUejdIuGeK4KTPZ4p4MVGpV9KX1wfCemqd0ciGNreYL8at1hJVYiDvamxYmz96qz0GL
+         sDXHtdhWoEK/iGnani5i3vzGP+qpSQVXE6HxYedijsvrLlstYYhLxPxNPvUlaFkPfqmt
+         zEhRnIwbUXq43jiXU2o+hdZBEAueRG1pjOSQoLf3R5bNjJVU4MGLhUzse2juThQKgsiC
+         mkXMThFP1UqRsiIJmzr8IvZFvEYXtfvSqLgPWNGY/dclfQbUKAf/SBjZlglyKAYLSE4c
+         wdgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732360992; x=1732965792;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u/EP1S+viKGpmTrQ8yI3KxsDbuyUkdLIpl2IkM7RyRs=;
-        b=VnWZW6pZuZWQNJJR/66h/ZzuHFg9ecMJyX4ZQivpDkbRzbvZusWFiGEDuyPx0EuMzL
-         7oq+nS9tyUbhyd1L6SZiqR6lQjpafXx071+y+WlBnBu2/iNVAvUFMYJel5VrHtqbIgaT
-         RC+vEjrP/iijpYVIGhVNX93MCQHssE5+XjSVC24IvNhiqj1DIL6QDHr7KtV6anJgz5Lo
-         XW3Nsy4VgPq6tW1no9e7Cft1o3mW/lm0RDp4rxp3mCZ0CU7Qt33s1zMYZcw3a6brH6tP
-         2j4Zs3w9Ok7J6PGc6BXfgOeC6w9H9EfZuUBK8pwlVn1YzaUjZ/zjz2bKCafuyfxs+yuy
-         yfRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6QY6fpqRdXGGTKuOqIh2PtKWu1xxzrEaXqIalaaoXE3zWA/29ZRiU+4FE1PhIorYEX63sgz/CUwGQtDzm@vger.kernel.org, AJvYcCVtZKJZGHM5uSNFm8WeKH0MEREdvBj2zoncN/H3V6y8CXf9e/opkLvJhrk5Pl/FIEQ6/4ZmRSBdPgTPgSV1l0o=@vger.kernel.org, AJvYcCWbb6oXiqwXOl2f2nQdb6dzC8OBqaJMBe1eFoI2nhItdbCfQiz5WoWc1SCUWRrvqXQrFiF3qqlUhyv1fn1fYQ==@vger.kernel.org, AJvYcCX+ZpqOv+UcEnplXjzvJasIE+6Am8yEc1CJAc79vtEwDXmTN0n+I9UkWgdduR3n4dA1omPjCug3QjBq6gU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP0v6rC+5+Sk+Mlu8v8I4wiiTMYdP8Docgsk1WhCN0vl2BlQbQ
-	mVMA1L/WPUNsK9/snrgMm/XFj8Cs4z/yGCqEwyHhvKLLUEC6VNKJvATziz2Dy9HIVLrx8ftRXVI
-	+5SoyeuBdB6DT3coQKJU1Lo6lEts=
-X-Gm-Gg: ASbGncsGFGgpLICVdo4Eo6EmRAO7tv/8jjdPNXtOwuk/NYIaCuTafdKBxwMEw8Q3cf2
-	q3iRPZtue1ary66qu08+sP3Y6xphpDTm4EX+ej7FDgOsqzCgFFbXZvaBq2NNJvg==
-X-Google-Smtp-Source: AGHT+IF0iUq4b7Ych9A6xW9HMPkRzg3eqN5Ybs8vt/ejefOR7PyZW6CtBCOharUBfJO5wJ8zXGhjtReeIFOtxTdYdEU=
-X-Received: by 2002:a05:6512:2391:b0:53d:d5be:4bd9 with SMTP id
- 2adb3069b0e04-53dd5be4bebmr3155701e87.22.1732360991729; Sat, 23 Nov 2024
- 03:23:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732526524; x=1733131324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FCYlpekwLX29y1babPtkl5hhwfzqAWLF9A3oe2+5id0=;
+        b=UmECN+iqaBW5dTAqYqD44CU9PEnAq47/0lr2cVrUyx5m0tIH2llflG9uosr/GLoh/4
+         vfyKpnjPa6q4/PCmOWxERx0tUooTDmz+d6VSVvgTzLPwUI1fYTLXGIM+bbFC6xK185SC
+         VelllZK9oSPj1iWHyw7x6YSUS/fM/fTaTM++b/qtoaArHZaizgYuUP3WuSONp5v6ngX3
+         JTThVXol+crEgQL4R8+nHg6mX6ewWYNHolEuAVYcBPKP0KhNJDCuhBBA3J+Eyw/mKnOW
+         htWWqt2T6OODnrGuH2ru/Va9zc/ZPXRVxvx+taqc4rizAOPMmiULjfcA6IxSuBIRI7zC
+         zn2A==
+X-Forwarded-Encrypted: i=1; AJvYcCXsiNyW+0vAB+sDotFG0nXy/Z94tcXqs/nlsKwMKM6lOFTMgmqs6caqpkSKAWEULFMyY30KClfpNvvApEjt@vger.kernel.org
+X-Gm-Message-State: AOJu0YxU0Vq7rfreFmG9hcaXH2rvJABSeTmeV0yqLa715y8r8DM37l6q
+	/fe3d5VVX06Fi80d14ujwIKdqsao7wO7GusPRbwF1YLJ5B6pws2/qNqGKV4wQtFmzUSiY7X0U1Z
+	ZkYZAWzdQVOWuZA1sjiALYRpm/P1Y/zLUMDt6
+X-Gm-Gg: ASbGncshq5NWPAWa+Wz8IrF5+zGpNNzl4VZmD8S0VIR8X0YCZqj4jQSgGkMZhUY+JI1
+	WkjZlqqopzt0jbfrzcDHErfVhIG/jCt4d
+X-Google-Smtp-Source: AGHT+IEyjVc+w4xYMWK45ReBVdh5zSSYk8/svaq/gH5CeUai6F225gz3gVyn1zbIlnkBPYmtw02u4vkN3IF6RImReBs=
+X-Received: by 2002:a05:6402:1ca2:b0:5d0:3807:bcbd with SMTP id
+ 4fb4d7f45d1cf-5d03807bf0amr89021a12.6.1732526523672; Mon, 25 Nov 2024
+ 01:22:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,12 +60,11 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241121204220.2378181-20-samitolvanen@google.com> <CA+icZUX-gf8624z8u+h-W8KeddCruYDng-4vTggNGwC61NzfNA@mail.gmail.com>
 In-Reply-To: <CA+icZUX-gf8624z8u+h-W8KeddCruYDng-4vTggNGwC61NzfNA@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Sat, 23 Nov 2024 12:22:35 +0100
-Message-ID: <CA+icZUWSKygQJNiODzdauNiHz2Di-2eSGGmd-fgBrFpdyh_HgA@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 25 Nov 2024 11:21:26 +0200
+Message-ID: <CABCJKufb7SLY3j7EqRwFkNbrp22moJ51rDJm8madpUQdOhV9kQ@mail.gmail.com>
 Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
-To: Sami Tolvanen <samitolvanen@google.com>
+To: sedat.dilek@gmail.com
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
@@ -74,16 +74,30 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
 	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
 	rust-for-linux@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> BTW, I am testing with the latest kmod-git and pahole-git.
+Hi Sedat,
+
+On Fri, Nov 22, 2024 at 3:51=E2=80=AFAM Sedat Dilek <sedat.dilek@gmail.com>=
+ wrote:
 >
-> I will give this a try when Linux v6.12.1 is released.
+> Thanks for the update, Sami.
 >
+> What are your plans to get this upstream?
 
-I have a prolonged build-time of +22,75 per cent.
-Compared gendwarfksyms-v5 + Linux-v6.12.0 VS. gendwarfksyms-v6 + Linux-v6.12.1
+Once everything has been reviewed, I'm suspect it would be up to
+Masahiro to decide if he wants to pick this up.
 
-Is this a known issue?
+> Is Linux 6.13 the new development base?
+>
+> Personally, I would like to see a Linux v6.12 LTS version offered.
 
-Best regards,
--Sedat-
+This version is based on linux-kbuild/for-next, which at the time was
+based on 6.12-rc6, I think. It should apply cleanly to 6.12.
+
+> LTO is not supported - might be worth mentioning this in the
+> documentation patch with some explanations?
+
+Sure, it's probably worthwhile to add a note.
+
+Sami
