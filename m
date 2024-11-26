@@ -1,112 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373262940D;
-	Tue, 26 Nov 2024 03:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4790A17C208;
+	Tue, 26 Nov 2024 07:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732593086; cv=none; b=q8XO6fafax5L8LjWWr7D4FUeKpE/bach8Eg9a4/VQqSgBw+7RPX89uyXkqWxdsYPpq6WLSo6nugI0GkHVgoZ6tIw5fbG1fAqNxINnHnBAtlMlJwECZJEbM4jcwzwJ7Adov9A60MiPUFjrOhxnO7kkiXuNCk/ct1Npfmyp/+1aUc=
+	t=1732607802; cv=none; b=V6zouQ5YBN5+HLhrcB2IgNDfcAF46zC0NBdVf3ooL6OQ0Yy5a8rQHDnC/wW4pU8m4JZhcMFozd4akE2o9oUVL0c+UGxEnYkJyE9hq6pP8N4GN850BcTgPLe9RiCTdBOwpkyvjhQmm1wrtqlKqtifLGif5Y8oS9DGau3ucYDRXYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732593086; c=relaxed/simple;
-	bh=zMONBQMoYUxKJcmzdRpne6c+qzfU1TZwryMh/qwAkig=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=euKcqGIH4TlnUvkIKdWRo9h6UeL19ra+TVObGRS9B5KFW36wn/g20f6IFRG/gJcTm5uPGq5gHsAhOQWBG4IY3NZZXEDUReFD0or2OhT4RlR54gnUDbAFLJ9tor1KBdjdzdTJfGyWn+Hs16KNTcyZX+kSBxPsvVVmtSBRD85VdDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GcbB6cmk; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GcbB6cmk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB442C4CECF;
-	Tue, 26 Nov 2024 03:51:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732593085;
-	bh=zMONBQMoYUxKJcmzdRpne6c+qzfU1TZwryMh/qwAkig=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GcbB6cmkPNgfmPY+L6M4TOdJi1U5I5Mt+1Eh1luEb/wFRjsMhQAJIdwMp43gsQIjk
-	 6tR/K4RyGQEnju0MfVfMPIil1Jqqrc/VUMup/jI/9DwTiyEDtMOYzkAd+BfF3skNLc
-	 j+iZ0HANiYqQ8ADZKa2qX2vS5Lpu/m7AeDCC5JM4die1O2F5zKyBR60xnmHfGkwzna
-	 bh8mNc1tnyNr9wdgselSM5KLOdzQHQdCMDPxFDbvnp5mcfgvvAUEMVcw7eHYhQQ78f
-	 q2K2Y6h7nbnZ6thk36coy/7EKCJCnEXwZuUqxoc63S+ID1SGPHr09wnnuiIYPYbHJn
-	 H8wCzU0eXDb6Q==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53dded7be84so2804405e87.1;
-        Mon, 25 Nov 2024 19:51:25 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUJgmHqCG1yHN+37OJ///3NZ0TwllREA8Fwd4dflotA0Jegi/gr8d3s/Y30p/l/qgUsi6GuDYfBOb+C5zSqfg==@vger.kernel.org, AJvYcCVprOPm/J2NtcrNh05SyptVVLWlxMeMxcbgVTXm4/EkxXd557QW0p/bClhkMnwcwOeC05OVt+XPnaSeoXw=@vger.kernel.org, AJvYcCWY86mF58zhikO222FWvTl2KnqePCWua2ycRAjaFjr8yFCzFA/tw6V9dJgUjvu6p8LzsbePS7mRiZXxLsAZylQ=@vger.kernel.org, AJvYcCX/qou4i6R2aBBtibuKnXSX9RKx5gi5F58NLR/lzhqbEoXZ8tDjv0/cTBgwokZJXWM6MNLqVu8NPIxlf0NP@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzGZEEk3dovSHcnO/3sacaXhlNlJJ9HSDa/Y52kMcx2ZJ7JkDD
-	7brqv+s9Xp0TUPpgcFtBrA+2J9jd0FqNvwP/UrpMEzv8nPfdwR0QsXjpSZOweYQxz7DQm3ZKUA7
-	jS6vajWEb9uqskZlBQZ7DY++J/6s=
-X-Google-Smtp-Source: AGHT+IGfZbCGxLVNWV4gijGeosGJ443DngbeOpxPOn45AImk4jYRfXEGZyQcjNG4hqqjcdHxcChMPYKgSDJiicl7DPQ=
-X-Received: by 2002:a05:6512:e83:b0:53d:df26:b782 with SMTP id
- 2adb3069b0e04-53ddf26b7cbmr3805477e87.31.1732593084382; Mon, 25 Nov 2024
- 19:51:24 -0800 (PST)
+	s=arc-20240116; t=1732607802; c=relaxed/simple;
+	bh=s43ZtC0cw/RGoVojffgur6NuC7rhSPw/KecGEuXixqg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IzBPIEQBcAWzIiNqcpCACAOjMAnk6ktWEZfloU5BjkcBxvKTusnVQXIPza7L5C19Fgpo9YFicA6BZfEoSdosJTUFyIHuarLtDFyiH4hOmgzrn6DvOiE7/lyTLxvXx3PRJdsruE7IpNJhPoNE9dunHkYXYY7nFTWjd7fKDMlOwjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4XyDrS1FFQz9v7Nd;
+	Tue, 26 Nov 2024 15:35:36 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 31E0514022D;
+	Tue, 26 Nov 2024 15:56:36 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwBHADEef0VnFOBQAg--.55978S2;
+	Tue, 26 Nov 2024 08:56:35 +0100 (CET)
+Message-ID: <7b83391cfa1150f96ff81f727c3bd2a1dbf902bb.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 02/15] module: Introduce ksys_finit_module()
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, zohar@linux.ibm.com, 
+ dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, corbet@lwn.net, 
+ petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com, 
+ akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org, 
+ serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
+ alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-api@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ wufan@linux.microsoft.com, pbrobinson@gmail.com, zbyszek@in.waw.pl, 
+ mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
+ dhowells@redhat.com,  jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com,
+ petr.vorel@gmail.com,  mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto
+ Sassu <roberto.sassu@huawei.com>
+Date: Tue, 26 Nov 2024 08:56:11 +0100
+In-Reply-To: <Z0UK4Zm85GzeLt20@bombadil.infradead.org>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <20241119104922.2772571-3-roberto.sassu@huaweicloud.com>
+	 <20241119121402.GA28228@lst.de> <ZzzwxdHbG9HynADT@bombadil.infradead.org>
+	 <70952351d25817211509bf1cf43d3e665aef1481.camel@huaweicloud.com>
+	 <Z0UK4Zm85GzeLt20@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121204220.2378181-20-samitolvanen@google.com>
- <20241121204220.2378181-21-samitolvanen@google.com> <Z0UIdmDHYQtUTR1i@bombadil.infradead.org>
-In-Reply-To: <Z0UIdmDHYQtUTR1i@bombadil.infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 26 Nov 2024 12:50:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATK9rSm4AUSneq=aYbADatPL=1eUXuYRChX+WU+zNTyKw@mail.gmail.com>
-Message-ID: <CAK7LNATK9rSm4AUSneq=aYbADatPL=1eUXuYRChX+WU+zNTyKw@mail.gmail.com>
-Subject: Re: [PATCH v6 01/18] tools: Add gendwarfksyms
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:LxC2BwBHADEef0VnFOBQAg--.55978S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYV7kC6x804xWl14x267AKxVWrJVCq3wAF
+	c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xv
+	wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjc
+	xK6I8E87Iv6xkF7I0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+	FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr
+	0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+	04v7MxAIw28IcxkI7VAKI48JMxAqzxv26xkF7I0En4kS14v26rWY6Fy7MxC20s026xCaFV
+	Cjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWl
+	x4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07UQZ2-UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGdFMnMBFAACsh
 
-On Tue, Nov 26, 2024 at 8:30=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Thu, Nov 21, 2024 at 08:42:22PM +0000, Sami Tolvanen wrote:
-> > Add a basic DWARF parser, which uses libdw to traverse the debugging
-> > information in an object file and looks for functions and variables.
-> > In follow-up patches, this will be expanded to produce symbol versions
-> > for CONFIG_MODVERSIONS from DWARF.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> > ---
-> >  kernel/module/Kconfig                 |   8 ++
-> >  scripts/Makefile                      |   1 +
-> >  scripts/gendwarfksyms/.gitignore      |   2 +
->
-> This doesn't add scripts/gendwarfksyms to MAINTAINERS
-> but then again   scripts/genksyms/ is not there either
-> but it does got to Masahiro.
+On Mon, 2024-11-25 at 15:40 -0800, Luis Chamberlain wrote:
+> On Wed, Nov 20, 2024 at 10:16:23AM +0100, Roberto Sassu wrote:
+> > Again, maybe I misunderstood, but I'm not introducing any functional
+> > change to the current behavior, the kernel side also provides a file
+> > descriptor and module arguments as user space would do (e.g. by
+> > executing insmod).
+>=20
+> The commit log does an extremely poor job to make this clear, all you
+> are doing here is adding a helper. The commit log should be super clear
+> on that and it is not.
 
-scripts/genksyms/ is a very old tool with no maintainer.
+Correct, yes. Will do a much better and clear commit message for next
+version.
 
-It defaults to the maintainer of the scripts/ directory (i.e. me)
+Thanks
 
+Roberto
 
-
->
-> Masahiro, should we just add both to KERNEL BUILD and add
-> Sami as a Reviewer to help with gendwarfksyms?
-
-I think it is better to have a separate entry for
-
-F:  scripts/gendwarfksyms/
-
-with Sami as the maintainer.
-
-
-
-
->
->   Luis
-
-
-
-
---
-Best Regards
-Masahiro Yamada
