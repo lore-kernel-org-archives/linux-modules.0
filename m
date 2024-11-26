@@ -1,56 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B5C16F0E8;
-	Tue, 26 Nov 2024 19:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86751CF284;
+	Tue, 26 Nov 2024 19:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732647874; cv=none; b=dOgZL+rjFBs1vOzzfVHxaOGOaRI/Z0b4jjMeQ9Y8kOWiWpP6tUdv4AVKOMbxQg2xhCr+eZPMRAq12Mimx5jyAF9PgwIPhLrjaK5lRPnp6sJ/V+Hrhn9Saux/9kC1ZF1xjHoNEb1bTxkAqjhyW92MYX/bmN7EQB5h2KI8p8vmo8Y=
+	t=1732651086; cv=none; b=FA7AWBmOq9LtoDQbai3YH+4ckn/qBAK9jL+Npx9KQp6Nt28EyJ9mOoYFRsBKGj7wWDhvGCG/FYctWJTui/mG9Q3RN4exrLcLLSpwWmRp7fuMy3sndrYHXVo25NlIta/+eaFeWlOslJYfDh+NLHqkNKnRXtHNSb2/ZmQf8Q3pT40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732647874; c=relaxed/simple;
-	bh=E18gfvq447oO7905Vj2Agqf4+xGXFE0FgW3F4b7o0Zs=;
+	s=arc-20240116; t=1732651086; c=relaxed/simple;
+	bh=dWUZ64bCRV/Y+gcm4cJBoHTThoGpVSgCTCr7MIBr9IU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TM2VlsMQ2Mx9hX8h8cOcCyQ8EkMILUEQKS05a42mzsXSrWaMnpJKg0rJ/UUsCsfso+Fk1/ZVYurpTpVf5pxZyCNNmxvxnYHMU606vSqBhQRYC0+zmwHXrxVyEVfN/DDdTKz655i3W5EoQHmYMYFqFyc48AoiOB5r+/SZOqYK2AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evq0lHqQ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yo/CoQ91aEZrvUcDP9nBSosRkk3pbElq+u/Q28VrWDcr6azPUCycgS28Mel+9KZ9EcmVQApfFksRg66WZCO3aeRoSnDIJFkkle/OPMt0YFR2miZn7AXejdD/7ZGC7IKKW5wv6+9+HYIScTRcxmy30YAPx7LEvnjFxp2B3/vw2Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bW94JTtd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evq0lHqQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0614CC4CECF;
-	Tue, 26 Nov 2024 19:04:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bW94JTtd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F358C4CECF;
+	Tue, 26 Nov 2024 19:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732647873;
-	bh=E18gfvq447oO7905Vj2Agqf4+xGXFE0FgW3F4b7o0Zs=;
+	s=k20201202; t=1732651085;
+	bh=dWUZ64bCRV/Y+gcm4cJBoHTThoGpVSgCTCr7MIBr9IU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=evq0lHqQcRyOWBXrClvl/1VAJ8nO2sr/dOC3x1+WlqqujfoTC4ZXYWcwPVbv4gwTy
-	 OlIFx9XYY/w/liF5WJE1p42IrMOx2KrHMc6gcnVrLCaJGdyzXSCMo1Mi3Ffdivj0O1
-	 MSxb7kSw9B0zNQADgLbAdFyKr7+ucf9mLTvuP+5oVxOYGGyBYq+TzlBq/a/1lF8cry
-	 kjXpsCCFcl38DIliPVPFAu7C3QUHNhlXNxNLrbh6SfwA6rlyZiGebaMp+rsDBmB+8s
-	 NYM60vsi3Lia2B4/GrzeutZhCFQLYqENG5UBcXrNqz6UM1R3KMgJwguPZ3yyThIUSi
-	 iYwe37ciSIjJQ==
-Date: Tue, 26 Nov 2024 11:04:31 -0800
+	b=bW94JTtdNb5bW1Ty3xyLF+eg/qDhd/JRrUtfR93+jB/5IFrtMV0zfzhjIm0AFYsMJ
+	 xPNvM+OC8ydfoTVZJ3WBdguS7iQJRghr+U89wnvw3kAVnmFfYr903HSBkBX7T8A/66
+	 WLYQzK5sploB1XIj01WslWf6beJkI0TWQHugMXIcvXN/7uUOU2UFVg4vtbICjZ2DZu
+	 fv6csQGcOhM6cT4wHk6itEw8UJd3z9Gs4RYmhrF0FbPJ71wbgbYV5zVODXPT6QSqLo
+	 nlm5XyMlfQj87pSjG6rS69DhD2V04DGX0NH1GgqNgTQJCwtOycHcAWQCpgwR7SB64e
+	 N7Ms9mJXGOMng==
+Date: Tue, 26 Nov 2024 11:58:02 -0800
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com, corbet@lwn.net, petr.pavlu@suse.com,
-	samitolvanen@google.com, da.gomez@samsung.com,
-	akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org,
-	serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com,
-	pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,
-	mjg59@srcf.ucam.org, pmatilai@redhat.com, jannh@google.com,
-	dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com,
-	ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de,
-	kgold@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest list
- parsers
-Message-ID: <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
- <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
- <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
- <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 1/3] module: Split module_enable_rodata_ro()
+Message-ID: <Z0YoSrSNCIcvHsBl@bombadil.infradead.org>
+References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,44 +45,20 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
+In-Reply-To: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
 
-On Tue, Nov 26, 2024 at 11:25:07AM +0100, Roberto Sassu wrote:
-> On Mon, 2024-11-25 at 15:53 -0800, Luis Chamberlain wrote:
+On Sat, Nov 09, 2024 at 11:35:35AM +0100, Christophe Leroy wrote:
+> module_enable_rodata_ro() is called twice, once before module init
+> to set rodata sections readonly and once after module init to set
+> rodata_after_init section readonly.
 > 
-> Firmware, eBPF programs and so on are supposed
-
-Keyword: "supposed". 
-
-> As far as the LSM infrastructure is concerned, I'm not adding new LSM
-> hooks, nor extending/modifying the existing ones. The operations the
-> Integrity Digest Cache is doing match the usage expectation by LSM (net
-> denying access, as discussed with Paul Moore).
-
-If modules are the only proven exception to your security model you are
-not making the case for it clearly.
-
-> The Integrity Digest Cache is supposed to be used as a supporting tool
-> for other LSMs to do regular access control based on file data and
-> metadata integrity. In doing that, it still needs the LSM
-> infrastructure to notify about filesystem changes, and to store
-> additional information in the inode and file descriptor security blobs.
+> The second time, only the rodata_after_init section needs to be
+> set to read-only, no need to re-apply it to already set rodata.
 > 
-> The kernel_post_read_file LSM hook should be implemented by another LSM
-> to verify the integrity of a digest list, when the Integrity Digest
-> Cache calls kernel_read_file() to read that digest list.
+> Split module_enable_rodata_ro() in two.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-If LSM folks *do* agree that this work is *suplementing* LSMS then sure,
-it was not clear from the commit logs. But then you need to ensure the
-parsers are special snowflakes which won't ever incur other additional
-kernel_read_file() calls.
-
-> Supporting kernel modules opened the road for new deadlocks, since one
-> can ask a digest list to verify a kernel module, but that digest list
-> requires the same kernel module. That is why the in-kernel mechanism is
-> 100% reliable,
-
-Are users of this infrastructure really in need of modules for these
-parsers?
+Didn't see a respin so this will have to be a post v6.13-rc1 fix.
 
   Luis
