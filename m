@@ -1,126 +1,118 @@
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4DF11CCB4B;
-	Tue, 26 Nov 2024 10:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2820BBA49;
+	Tue, 26 Nov 2024 13:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732617748; cv=none; b=WJpb5XOFwb8PKTtrvjGz+TjgaZChYBgY2UrUfzc7OtVWTm0VwWLe2V7f05sFRtAwSF0wdnetUkqA4NAEFsIuz9I1Nu910GMfDs+jzV4ImialcPWYsdUut81nrvxrazhre/TprnEl1XqRp8NT+B64PtkwbPIfqVFOCuVcyKaDPH8=
+	t=1732628140; cv=none; b=cmFH4iFqNIqlcZaAi9zoRNPoyTlkIP3QbLVMmY3zvWv5cXmJma9vzsSsrpKeXYHcKZ+mjxgPQljiB/B+ew1uzCsWof68+HI4MqYU5JOXckruwlW4/MacMiX5i2zVMDnQbEPQ3Rksmtwbs//t94/YXKvDKtu/QM9WL93YvZZFO4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732617748; c=relaxed/simple;
-	bh=HcXBZKhKro8Mrm0E19xPfTjpRCVC9cZacjQApk3mIXk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m12FSE4yYU18QM2PmTUsb62/zqTusnM+ci3yZyvTSmFmXhHvyxCRJSY7emOEoH0wAPjf+ZvYyDBgHWijjMe2C4Q5R7cPtL1Ggh9CDz1hEG8tysqV6WnNpjIA0HYnH0LbJEKAXAxOEzK7TPdw9MFIzpT1BHZhdp+RMq0kGchhEB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4XyJWh21vLz9v7Vv;
-	Tue, 26 Nov 2024 18:21:20 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 5937B140535;
-	Tue, 26 Nov 2024 18:42:13 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwB3IyTspUVnG6xSAg--.24828S2;
-	Tue, 26 Nov 2024 11:42:07 +0100 (CET)
-Message-ID: <17ef4f662e594c8431a00fe423507af4f6a82286.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 00/15] integrity: Introduce the Integrity Digest Cache
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>, "corbet@lwn.net" <corbet@lwn.net>, 
- "mcgrof@kernel.org" <mcgrof@kernel.org>, "petr.pavlu@suse.com"
- <petr.pavlu@suse.com>,  "samitolvanen@google.com"
- <samitolvanen@google.com>, "da.gomez@samsung.com" <da.gomez@samsung.com>, 
- Andrew Morton <akpm@linux-foundation.org>, "paul@paul-moore.com"
- <paul@paul-moore.com>, "jmorris@namei.org" <jmorris@namei.org>,
- "serge@hallyn.com" <serge@hallyn.com>, "shuah@kernel.org"
- <shuah@kernel.org>, "mcoquelin.stm32@gmail.com"
- <mcoquelin.stm32@gmail.com>,  "alexandre.torgue@foss.st.com"
- <alexandre.torgue@foss.st.com>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-api@vger.kernel.org"
- <linux-api@vger.kernel.org>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
- <linux-kselftest@vger.kernel.org>, "wufan@linux.microsoft.com"
- <wufan@linux.microsoft.com>, "pbrobinson@gmail.com" <pbrobinson@gmail.com>,
-  "zbyszek@in.waw.pl" <zbyszek@in.waw.pl>, "hch@lst.de" <hch@lst.de>,
- "mjg59@srcf.ucam.org" <mjg59@srcf.ucam.org>, "pmatilai@redhat.com"
- <pmatilai@redhat.com>,  "jannh@google.com" <jannh@google.com>,
- "dhowells@redhat.com" <dhowells@redhat.com>,  "jikos@kernel.org"
- <jikos@kernel.org>, "mkoutny@suse.com" <mkoutny@suse.com>,
- "ppavlu@suse.com" <ppavlu@suse.com>, "petr.vorel@gmail.com"
- <petr.vorel@gmail.com>,  "mzerqung@0pointer.de" <mzerqung@0pointer.de>,
- "kgold@linux.ibm.com" <kgold@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Tue, 26 Nov 2024 11:41:44 +0100
-In-Reply-To: <C4BE31F8-1FA3-4AD1-A712-ED2AA7E61E96@oracle.com>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
-	 <C4BE31F8-1FA3-4AD1-A712-ED2AA7E61E96@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1732628140; c=relaxed/simple;
+	bh=eEdgeH8RAM4gsztBcwR0qWURd6umlZnREyPmTlInX0I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cGp3wIGDwVGqoYjvdqEcNkWUwTj6+/11GoewAHz2C5t58aA+TN/ROIeNRithOyzWzRLfez6b+pYamhn5AdAVxAZjyGvjU2fxlHKXyBdt6+pe/xMPW3E8NFrIxZCrTkwmRDxvlNdiae0qNGq/VoDArL8SlpwP+5L+MLrC3AoTw8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aNLtLnEj; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNLtLnEj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4205C4CED0;
+	Tue, 26 Nov 2024 13:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732628139;
+	bh=eEdgeH8RAM4gsztBcwR0qWURd6umlZnREyPmTlInX0I=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aNLtLnEjYZSFSOlX20iTbsUk/iK3tj/E/scLGoYmYpXiWRnZHz3P8wMzPS7AbJSG6
+	 hxNtAff/ppQQn9VL1B2a6gMJutYIzddwirhbdoHY38w15JG00Ia+SyHyobGs4lnnvd
+	 pgf3ABFHWiQUHraJtEQg7GsF3ONgoorpUFv8jjiSP0CEpa85DcNM9wtGKE7yzWllz7
+	 WqrAaA/Wkiq/8DiyvIVV+cc7yKvkvqhOu3OurrCJDJguxERTGblgucoYRb1I0jBnwd
+	 R0efp1awg1Ueqfn3z4uptWTkphBGRX6+TOqNDqs0jJynyJhZTB8pTMC4ZVAMl/dfgP
+	 iEwa9dt5E3clA==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53de8ecb39bso891833e87.2;
+        Tue, 26 Nov 2024 05:35:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUCyGk2pmv8h3ifSYjUrJ2B8VQQEI133zaCaU3Ahu3qrf3KzhLG1NqJK7Rg6x+fOdQsJ0gwxQ5WulSPlz+mpQ==@vger.kernel.org, AJvYcCUt6YDR0ObN99q1/OkFS299ldSx5hAaYzyKb3qvyM+N0b4dawyF51BmzyN/+prBQqSkRlEpOCJ7jIZPXjg=@vger.kernel.org, AJvYcCWV94m0ZV5lsUMeWUQT0QjQyt3/cedUkdDJOdfCbOTovO0L4LQanbSb/rpS8YfKoLA3luOdNJ4/O1zU54Us@vger.kernel.org, AJvYcCX4Qxt3xfM5dlDlLlT9Ypq0mCVFzwHOMr1tJKEWFBfDDNXrPJ7XOJ9wx5ua2GpInx5OPQslSQUmGaKZ3u7C87M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywzn5BfrHfPqaw1b1MA0NixcTjLbKc1PsdkiCEoDul3QvhbCKrC
+	lGjl9DqqOFlTtG7MAV6yb9jOgTFYp/bwsgWhaALctFfK1lq4OQTw/B9Iwo20StN9bjn1btHHowj
+	2JUjVSCQpnA6vGi8qcHSSgK0ovzY=
+X-Google-Smtp-Source: AGHT+IF+dFvhlgin3zLG1WzH4Jppws42ttM+/X4kFx7RuGrhS2XMsjXtwtSwj19beqzn6FQMSzIX7ockErZbmN0AesU=
+X-Received: by 2002:a05:6512:3da3:b0:53d:e7b6:c702 with SMTP id
+ 2adb3069b0e04-53de7b6c987mr2767749e87.50.1732628138542; Tue, 26 Nov 2024
+ 05:35:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwB3IyTspUVnG6xSAg--.24828S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7JF15KFWxWFWrtrWxJryUtrb_yoW8JF13pa
-	ySga4UKr9Y9r10yF13Aa15ZryFkwsrtr1DZrn8Jry5ArWruryI9348Ca15uFykKr1kJw1a
-	qw12ga4xGan8C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUVZ2-UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBGdFMjUC7gAAsf
+References: <20241121204220.2378181-20-samitolvanen@google.com> <20241121204220.2378181-21-samitolvanen@google.com>
+In-Reply-To: <20241121204220.2378181-21-samitolvanen@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 26 Nov 2024 22:35:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATzF9++sEcgX3t3KEAH1JFPPdeB9EMVk44KVQ1cBiO8xg@mail.gmail.com>
+Message-ID: <CAK7LNATzF9++sEcgX3t3KEAH1JFPPdeB9EMVk44KVQ1cBiO8xg@mail.gmail.com>
+Subject: Re: [PATCH v6 01/18] tools: Add gendwarfksyms
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
+	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2024-11-26 at 00:13 +0000, Eric Snowberg wrote:
->=20
-> > On Nov 19, 2024, at 3:49=E2=80=AFAM, Roberto Sassu <roberto.sassu@huawe=
-icloud.com> wrote:
-> >=20
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > The Integrity Digest Cache can also help IMA for appraisal. IMA can sim=
-ply
-> > lookup the calculated digest of an accessed file in the list of digests
-> > extracted from package headers, after verifying the header signature. I=
-t is
-> > sufficient to verify only one signature for all files in the package, a=
-s
-> > opposed to verifying a signature for each file.
->=20
-> Is there a way to maintain integrity over time?  Today if a CVE is discov=
-ered=20
-> in a signed program, the program hash can be added to the blacklist keyri=
-ng.=20
-> Later if IMA appraisal is used, the signature validation will fail just f=
-or that=20
-> program.  With the Integrity Digest Cache, is there a way to do this? =
-=20
+On Fri, Nov 22, 2024 at 5:42=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
+>
+> Add a basic DWARF parser, which uses libdw to traverse the debugging
+> information in an object file and looks for functions and variables.
+> In follow-up patches, this will be expanded to produce symbol versions
+> for CONFIG_MODVERSIONS from DWARF.
+>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  kernel/module/Kconfig                 |   8 ++
+>  scripts/Makefile                      |   1 +
+>  scripts/gendwarfksyms/.gitignore      |   2 +
+>  scripts/gendwarfksyms/Makefile        |   8 ++
+>  scripts/gendwarfksyms/dwarf.c         | 166 ++++++++++++++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.c | 126 +++++++++++++++++++
+>  scripts/gendwarfksyms/gendwarfksyms.h | 100 ++++++++++++++++
+>  scripts/gendwarfksyms/symbols.c       |  96 +++++++++++++++
+>  8 files changed, 507 insertions(+)
+>  create mode 100644 scripts/gendwarfksyms/.gitignore
+>  create mode 100644 scripts/gendwarfksyms/Makefile
+>  create mode 100644 scripts/gendwarfksyms/dwarf.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.c
+>  create mode 100644 scripts/gendwarfksyms/gendwarfksyms.h
+>  create mode 100644 scripts/gendwarfksyms/symbols.c
+>
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index 7c6588148d42..f9e5f82fa88b 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -169,6 +169,14 @@ config MODVERSIONS
+>           make them incompatible with the kernel you are running.  If
+>           unsure, say N.
+>
+> +config GENDWARFKSYMS
+> +       bool
 
-As far as I can see, the ima_check_blacklist() call is before
-ima_appraise_measurement(). If it fails, appraisal with the Integrity
-Digest Cache will not be done.
 
-In the future, we might use the Integrity Digest Cache for blacklists
-too. Since a digest cache is reset on a file/directory change, IMA
-would have to revalidate the program digest against a new digest cache.
+You can move the prompt addition from 17/18 to this patch.
 
-Thanks
+-       bool
++       bool "gendwarfksyms (from debugging information)"
 
-Roberto
 
+You split the patch set into a large number of patches, but
+I cannot compile-test each of them until 17/18 is applied.
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
