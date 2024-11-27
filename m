@@ -1,63 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545EB1BC3F;
-	Wed, 27 Nov 2024 18:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526F420124B;
+	Wed, 27 Nov 2024 18:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732732414; cv=none; b=GbNFtln/2iLmUenYfyLUINr51Bj1a4qdW67bDWVWWL8aDCkDl8EKhN+1zFHx2imnMVbypJd33hCocnqTRNq3Z+CeX0RzglnxJ/l3wE99s3EZtRHqHH3GXm401feJh+RfYnFQxrVHVrAX/5vXolMCyB7Y+9fi2BaFU0A29+T+4xk=
+	t=1732733745; cv=none; b=KdC/PahCrZ5l67cEBOUr03nYgq8nR9mCG83RloIRxyBYyoZdRJTI1nU0wAaodaAY+vyflIeiKa5A3kWoC7Odk5nOfrCB2T8e5E27lGnwJAribrfCWo1MW/lWsuhB+oQdt4hTi7I1S2i2CHvA7ouPhph9s3whcrccPQ583WkdQ48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732732414; c=relaxed/simple;
-	bh=eGFFwsQa9bBEQKwqZzR/QnOAW94wEiML8VUkw3AsYl0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=lTLcY3wPuW8wbN6VJg1kSPDZWZ2g2kHdhu3u6WqHhKauC82aJqi9xN716YQHD6W1MUBvROzCPisXLDrh5nUieSFj0S/MVUb4S4tZwhpQgD5Qu7FKcLZOp1+Veu/x6/dEDtQfbNE+m4zY3MTYixpTk7NaUTMrjRdDj0ly0eetdt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQCtusnq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732733745; c=relaxed/simple;
+	bh=CfvF7GEo4vs03zbSWJV+/1/X2jHKiuqpvVQ5vyS7Hbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uspdFSP03PUj/qYVXFhtpdPD+LoZnWSg71Bexg0zU5A8S/NHORB4EQr5Pq1l99BMJrZvK1NeR1J/R+DaRgLWl7706ZSECbc8zp/nEt61WowphXTugQ7Xlm6q05AYPjad1M2eG7NdDk7S9fM7fmU5A7Zinavp9Fxh5HsZESHszrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mYASBb5d; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQCtusnq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC8AC4CECC;
-	Wed, 27 Nov 2024 18:33:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mYASBb5d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F142CC4CECC;
+	Wed, 27 Nov 2024 18:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732732414;
-	bh=eGFFwsQa9bBEQKwqZzR/QnOAW94wEiML8VUkw3AsYl0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=YQCtusnqyKr09sT47h0Dxh4GmExt/WDAswUlWOcLRoRL6Ubt9zf0xOaYmXAZAsZNR
-	 tJoYOvRrxZthqT7R4T9msDZHJiflhiNlHw8r40Vq1vD2pthT3T4+LnASSxsz10vJwB
-	 Qa6NPtSvDdQelpdzy4Md7iLJe1A1xudAlC/mrRhj79Ae/o/X0oXi6qytO2Jc9q/u9p
-	 CpyTJQPXxJzHnD1PVzUWTe7IjH4pX0bkHYVRgv3IODm4QyXn7/MrAqk15qm8pxDldx
-	 LcQJRnckQDoV2rOnVZbpk2Sg1pjoez1Xry6lyIdqyAWAej+Y0SU0Hsj3YJBY6DK6Pi
-	 bwt/9N946sUSg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 721C9380A944;
-	Wed, 27 Nov 2024 18:33:48 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules changes for v6.13-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Z0ZxiLw9hauUynTS@bombadil.infradead.org>
-References: <Z0ZxiLw9hauUynTS@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <patches.lists.linux.dev>
-X-PR-Tracked-Message-Id: <Z0ZxiLw9hauUynTS@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc1
-X-PR-Tracked-Commit-Id: 2466b31201424ccb7eda00277222302a4d6576cb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b5361254c9027c2b3730be1bebcdb37eed42e9a5
-Message-Id: <173273242698.1173535.1621384732319196426.pr-tracker-bot@kernel.org>
-Date: Wed, 27 Nov 2024 18:33:46 +0000
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com, petr.pavlu@suse.com, da.gomez@samsung.com, linux-modules@vger.kernel.org, patches@lists.linux.dev, linux-kernel@vger.kernel.org, masahiroy@kernel.org, mmaurer@google.com, arnd@arndb.de, deller@gmx.de, song@kernel.org, mcgrof@kernel.org
+	s=k20201202; t=1732733745;
+	bh=CfvF7GEo4vs03zbSWJV+/1/X2jHKiuqpvVQ5vyS7Hbc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mYASBb5dpCUDiWMT7GlmXTpSZFRDKFGXrr0sa67jKE8n82H69q8Iiki5cgYqyNyoC
+	 qGJyB1MXM4vOpcnDXWXkbAch7zVwnUvH8P5dyfAWoIWU0K23fZOwjI+mXGpK0bfIA1
+	 m52BillrZI/80NOL9lvo3MLXOOIeogOSaa++a1zAhEGifMpjOhS5FkUbBSsWZr6t0J
+	 /ZyUNHTZ6NaPQt8UjVU4LHtebH2/DN35hVXUHQlyRJiGOjp91PELL7LHZsWTZUozNS
+	 KEYQvOdwTebVTFSxXH2BgqU1HdBqsJg+cnnd1zWJ8dyo59BbugP33QXtp2Lze1CYqW
+	 sexDcogsk/c9g==
+Date: Wed, 27 Nov 2024 10:55:43 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC PATCH 1/3] module: Split module_enable_rodata_ro()
+Message-ID: <Z0drL3oXxkRWiNTs@bombadil.infradead.org>
+References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
+ <Z0YoSrSNCIcvHsBl@bombadil.infradead.org>
+ <15637735-cb71-473b-8b8a-21a6d6c5059b@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <15637735-cb71-473b-8b8a-21a6d6c5059b@csgroup.eu>
 
-The pull request you sent on Tue, 26 Nov 2024 17:10:32 -0800:
+On Wed, Nov 27, 2024 at 02:37:40PM +0100, Christophe Leroy wrote:
+> 
+> 
+> Le 26/11/2024 à 20:58, Luis Chamberlain a écrit :
+> > On Sat, Nov 09, 2024 at 11:35:35AM +0100, Christophe Leroy wrote:
+> > > module_enable_rodata_ro() is called twice, once before module init
+> > > to set rodata sections readonly and once after module init to set
+> > > rodata_after_init section readonly.
+> > > 
+> > > The second time, only the rodata_after_init section needs to be
+> > > set to read-only, no need to re-apply it to already set rodata.
+> > > 
+> > > Split module_enable_rodata_ro() in two.
+> > > 
+> > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > 
+> > Didn't see a respin so this will have to be a post v6.13-rc1 fix.
+> 
+> Indeed I was waiting for v6.13-rc1 before sending the non RFC rebased
+> version, but I can send it now if you prefer.
+> 
+> I expect it to spend a few days in linux-next before being applied to
+> mainline.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc1
+No rush on my end, let's wait as you noted until v6.13-rc1 is out.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b5361254c9027c2b3730be1bebcdb37eed42e9a5
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+  Luis
