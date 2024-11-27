@@ -1,218 +1,83 @@
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9B5A95E;
-	Wed, 27 Nov 2024 09:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73EC5B1FB;
+	Wed, 27 Nov 2024 13:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732701115; cv=none; b=bjR2EJNIwInOEnnJaO/x5ZkyitvMMlVaqAWQA4K82Ep/IrjsRHEFfVvJ3VoqEMhmLBuxw/s9iwe+KsJJgXiDyJ2mvY2jrROCT0KL7aRMM932VJ04cDp0ZKcPPeHvRRyE4d301jH65yhoRvkcZgnRyLgzTt2YUZr56Jw9yUazV6o=
+	t=1732714671; cv=none; b=e2JH/QDz7T5/A30fhWLW5jwLdHwMdYOze1ki34yJFyYEFZ1kfnwsnaPbmEkAawhLdoxS3oBpRV1c2HkohAz2z+QZ1IzGyUq1yFdYy9C5/wHXGV7dKSd2lRlUVj1aspQlzPOOaPCVdZDprIrvwlfN/7t+yZ8dv0xDutTtzT3lt/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732701115; c=relaxed/simple;
-	bh=AdbIqBFr2DX9C4NxpilK5N8h40ZnTWNw2PIzHja54Ws=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fm4Qt53/tyiXu7vUHUIm75TBA0VT2UervyqVmTTOVbX52ZIFwCtKXM9Kq11T3u9XdHKj/etjH9TansW++DjqJVsHnJlOUK708E5ZujvIcRTsDCIHdU0Mx8gLVn84kJFSfCF/alJfRqIxkjTO9aQGQMg2JJF/kOC+BtgaYor9I7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XyvCX4xMtz9v7JS;
-	Wed, 27 Nov 2024 17:24:24 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id C3DE8140452;
-	Wed, 27 Nov 2024 17:51:39 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAX1jaT60ZnO3hhAg--.24999S2;
-	Wed, 27 Nov 2024 10:51:38 +0100 (CET)
-Message-ID: <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
-Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
- list parsers
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
- samitolvanen@google.com, da.gomez@samsung.com,  akpm@linux-foundation.org,
- paul@paul-moore.com, jmorris@namei.org,  serge@hallyn.com,
- shuah@kernel.org, mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
- linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
- linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
- pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
- pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
- jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
- mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Wed, 27 Nov 2024 10:51:11 +0100
-In-Reply-To: <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
-	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
-	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
-	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
-	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1732714671; c=relaxed/simple;
+	bh=7BLDPRjezzrPTylfDKMlVkHNqDFz8czcYJdbiT/QvsE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gQ7F5CmCFBHX9Bj7PBJU8BqmYIzsIY+NTsV98Zlk/esJOtQO7r82wqoe/Rcj44Abt1pGOwf7mV9zLAuJuI0aFDMANqBtmE8JelQNq/tBrR1SjNv8rtkvsGZFviqaKlcLkwWK2NJOmMgbFVTEsz/Rw2Ac18bkFXzC3a1OciltsrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Xz0qn4kLkz9sPd;
+	Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 1E04lGo2aPGq; Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Xz0qn3w8bz9rvV;
+	Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 73D2B8B781;
+	Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id JM7LPTW_LVok; Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+Received: from [192.168.233.90] (unknown [192.168.233.90])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 0F84E8B77C;
+	Wed, 27 Nov 2024 14:37:41 +0100 (CET)
+Message-ID: <15637735-cb71-473b-8b8a-21a6d6c5059b@csgroup.eu>
+Date: Wed, 27 Nov 2024 14:37:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwAX1jaT60ZnO3hhAg--.24999S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF48Ww47WFyfAFW7Gr1kAFb_yoWxXr1xpa
-	yakan0kF4kJr1Ik3Z7Aa1xu3yF9393X3y5Wrn5Jry3Zrn8ur1Fvr1fKa1Uua4jkrs7JF12
-	qr4Yq34ayF1DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	EksDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAABGdGg-MCpAAAsx
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/3] module: Split module_enable_rodata_ro()
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Kees Cook <kees@kernel.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
+ <Z0YoSrSNCIcvHsBl@bombadil.infradead.org>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <Z0YoSrSNCIcvHsBl@bombadil.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-11-26 at 11:04 -0800, Luis Chamberlain wrote:
-> On Tue, Nov 26, 2024 at 11:25:07AM +0100, Roberto Sassu wrote:
-> > On Mon, 2024-11-25 at 15:53 -0800, Luis Chamberlain wrote:
-> >=20
-> > Firmware, eBPF programs and so on are supposed
->=20
-> Keyword: "supposed".=20
 
-It depends if they are in a policy. They can also be verified with
-other methods, such as file signatures.
 
-For eBPF programs we are also in a need for a better way to
-measure/appraise them.
+Le 26/11/2024 à 20:58, Luis Chamberlain a écrit :
+> On Sat, Nov 09, 2024 at 11:35:35AM +0100, Christophe Leroy wrote:
+>> module_enable_rodata_ro() is called twice, once before module init
+>> to set rodata sections readonly and once after module init to set
+>> rodata_after_init section readonly.
+>>
+>> The second time, only the rodata_after_init section needs to be
+>> set to read-only, no need to re-apply it to already set rodata.
+>>
+>> Split module_enable_rodata_ro() in two.
+>>
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> 
+> Didn't see a respin so this will have to be a post v6.13-rc1 fix.
 
-> > As far as the LSM infrastructure is concerned, I'm not adding new LSM
-> > hooks, nor extending/modifying the existing ones. The operations the
-> > Integrity Digest Cache is doing match the usage expectation by LSM (net
-> > denying access, as discussed with Paul Moore).
->=20
-> If modules are the only proven exception to your security model you are
-> not making the case for it clearly.
+Indeed I was waiting for v6.13-rc1 before sending the non RFC rebased 
+version, but I can send it now if you prefer.
 
-The Integrity Digest Cache is not implementing any security model, this
-is demanded to other LSMs which might decide to use the Integrity
-Digest Cache based on a policy.
+I expect it to spend a few days in linux-next before being applied to 
+mainline.
 
-If we want to be super picky, the ksys_finit_module() helper is not
-calling security_kernel_module_request(), which is done when using
-request_module(). On the other hand, ksys_finit_module() is not
-triggering user space, as the description of the function states
-(anyway, apologies for not bringing up this earlier).
-
-Net this, and we can discuss if it is more appropriate to call the LSM
-hook, the helper does not introduce any exception since
-security_file_open() is called when the kernel opens the file
-descriptor, and security_kernel_read_file() and
-security_kernel_post_read_file() are called in the same way regardless
-if it is user space doing insmod or the kernel calling
-ksys_finit_module().
-
-The only exception is that the Integrity Digest Cache is unable to
-verify the kernel modules containing the parsers, but I believe this is
-fine because they are verified with their appended signature.
-
-If there are any other concerns I'm missing, please let me know.
-
-> > The Integrity Digest Cache is supposed to be used as a supporting tool
-> > for other LSMs to do regular access control based on file data and
-> > metadata integrity. In doing that, it still needs the LSM
-> > infrastructure to notify about filesystem changes, and to store
-> > additional information in the inode and file descriptor security blobs.
-> >=20
-> > The kernel_post_read_file LSM hook should be implemented by another LSM
-> > to verify the integrity of a digest list, when the Integrity Digest
-> > Cache calls kernel_read_file() to read that digest list.
->=20
-> If LSM folks *do* agree that this work is *suplementing* LSMS then sure,
-> it was not clear from the commit logs. But then you need to ensure the
-> parsers are special snowflakes which won't ever incur other additional
-> kernel_read_file() calls.
-
-The Integrity Digest Cache was originally called digest_cache LSM, but
-was renamed due to Paul's concern that it is not a proper LSM enforcing
-a security model. If you are interested, I gave a talk at LSS NA 2024:
-
-https://www.youtube.com/watch?v=3DaNwlKYSksg8
-
-Given that the Integrity Digest Cache could not be standalone and use
-the LSM infrastructure facilities, it is going to be directly
-integrated in IMA, although it is not strictly necessary.
-
-I planned to support IPE and BPF LSM as other users.
-
-Uhm, let me clarify your last sentence a bit.
-
-Let's assume that IMA is asked to verify a parser, when invoked through
-the kernel_post_read_file hook. IMA is not handling the exception, and
-is calling digest_cache_get() as usual. Normally, this would succeed,
-but because digest_cache_get() realizes that the file descriptor passed
-as argument is marked (i.e. it was opened by the Integrity Digest Cache
-itself), it returns NULL.
-
-That means that IMA falls back on another verification method, which is
-verifying the appended signature.
-
-The most important design principle that I introduced is that users of
-the Integrity Digest Cache don't need to be aware of any exception,
-everything is handled by the Integrity Digest Cache itself.
-
-The same occurs when a kernel read occurs with file ID
-READING_DIGEST_LIST (introduced in this patch set). Yes, I forbid
-specifying an IMA policy which requires the Integrity Digest Cache to
-verify digest lists, but due to the need of handling kernel modules
-I decided to handle the exceptions in the Integrity Digest Cache itself
-(this is why now I'm passing a file descriptor to digest_cache_get()
-instead of a dentry).
-
-Now, I'm trying to follow you on the additional kernel_read_file()
-calls. I agree with you, if a parser tries to open again the file that
-is being verified it would cause a deadlock in IMA (since the inode
-mutex is already locked for verifying the original file).
-
-In the Integrity Digest Cache itself, this is not going to happen,
-since the file being verified with a digest cache is known and an
-internal open of the same file fails. If it is really necessary, we can
-pass the information to the parsers so that they are aware, it is just
-an additional parameter.
-
-However, I was assuming that a parser just receives the data read by
-the Integrity Digest Cache, and just calls the Parser API to add the
-extracted digests to the new digest cache. Also this can be discussed,
-but I guess there is no immediate need.
-
-> > Supporting kernel modules opened the road for new deadlocks, since one
-> > can ask a digest list to verify a kernel module, but that digest list
-> > requires the same kernel module. That is why the in-kernel mechanism is
-> > 100% reliable,
->=20
-> Are users of this infrastructure really in need of modules for these
-> parsers?
-
-I planned to postpone this to later, and introduced two parsers built-
-in (TLV and RPM). However, due to Linus's concern regarding the RPM
-parser, I moved it out in a kernel module.
-
-Also, a parser cannot be in user space, since the trust anchor is in
-the kernel (the public keys and the signature verification mechanism),
-it is not something that can be established in the initial ram disk
-since the Integrity Digest Cache will be continously used in the
-running system (maybe more parsers will be loaded on demand depending
-on requests from user space).
-
-And finally, the parser cannot run in user space, since it would be at
-the same level of what the kernel is verifying.
-
-Thanks
-
-Roberto
-
+Christophe
