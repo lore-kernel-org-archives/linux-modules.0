@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799FA19882B;
-	Thu, 28 Nov 2024 19:27:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5DFAD4B;
+	Thu, 28 Nov 2024 19:34:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732822022; cv=none; b=lD5abIp/lsseXk/B2tO4OriYDT9Ld3dP9n1zIG/Nk/8UETTIVotta890cBD9iepJpo+8fUqubrDEIRH8lYxcGOU5x51A/lWEcn6qjLrt6+FHsMrvnsTJDKFsfRyxGmkZwEXg6aUBEu8uSMJpufwtVosQ361v9zKPr0luISIB66E=
+	t=1732822448; cv=none; b=lW76/d2wKm35+WAsiPprn51nNQcn+3nHVZYUroTXCJekLRMZAJqUtpM9ppaCH7PGCGBAmOyQ8mGwiiJtJsYMVqzq879rMrJ3Nj1a5UCn2HSpduori0gNgrybW3e7vrC89yTH+K89cGsVz57LVY3zK6Td8OJOg0d7ZWIZyzxllaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732822022; c=relaxed/simple;
-	bh=uhCpIRnB22gOek6/ItoKHE65ZGFfikpPq/Ra+s61V1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hloLtmXH0nnVWpwINUcs0kPVP1OUOlUlRN0hxx9x3JNg58xGCTexBh8xfQ6LRXJUfnfumIEce6jclK3HyEDOhC4pihzJ6NeEDHK44dHkab2YfbHDFmEHXkV+BhttexkKDpNg2zh59HFuhmJJYzzAQ6POpriW5RT3EV0vBBnhk/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CxJcZ1E0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732822448; c=relaxed/simple;
+	bh=gseeCWqiEmclO5yM18nYwsG024dsDV4mFg8cAeAR2sU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GFpEFM+PDc16Zf7ComUAuglrfd6Z247SZK2gXUpHkn1ZwYSOLR/i77zvHotQ17s9vYwP6vPx7ObtBYsc83/n3jdcDUQt5OGK5LotFHa6OZxpRDSare6hNDah9MEhYl10Nvo+8jg0j1/SzFWoRjEmkWuAbXK+jzk6ygeiCl7SEMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9W5VNT7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CxJcZ1E0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85FA9C4CED2;
-	Thu, 28 Nov 2024 19:27:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9W5VNT7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D21A5C4CECE;
+	Thu, 28 Nov 2024 19:34:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732822021;
-	bh=uhCpIRnB22gOek6/ItoKHE65ZGFfikpPq/Ra+s61V1M=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CxJcZ1E0uKkObjtme+VKhayhvIy0ZqUKrWUEuhHtHJdkEG6x3cP0cnlPeOlAX1GJT
-	 tyOf7vPjcGPucWYFc67KodYfVXDIgjkm65L2onsjmp6nTpSfuLBzBLGzWjjOWyXcjB
-	 yOW7dHIbi+8lSFJ0+968aOgi80I3HizmRmN+AlPSTCA0aCWU1NItm1gmSlnP+bFriJ
-	 uWlRWSrYGnyn31C0bxuPwlYfNur6pZVfJoS213vQCBtWjfGXHtqicf1S8SacLemuqT
-	 KDAhj+My0YSDeQkTWK/f5US4WNbWaq+DzFXgOyBx7G+jKG7EHFUD3rw8bXGYM2ktm3
-	 vSVwuekNAR/rA==
-Date: Thu, 28 Nov 2024 11:27:00 -0800
+	s=k20201202; t=1732822448;
+	bh=gseeCWqiEmclO5yM18nYwsG024dsDV4mFg8cAeAR2sU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O9W5VNT7lC8p4Hi3gt79K5IovXmLguJOnCMwKxo52CcOVghHfSNHcLXOC4ibPgUt0
+	 5DrDKxIZIHVSDHIqjCws199DcUUfiJrSlAbxayZBFVqrprGMwD7fPOaQvwhg1YVHBE
+	 QBE38G7/T9zeNR1zuZz9WxUeJ0ZJZwLT4yncG4niW+J4KV1pyNajMuV8dVrdGeREhJ
+	 +ADIv762rtwMTRcpwzF/UisWkkYKMny3r48wLIn85I1CwJlopzUOUIljZbBHUGj7Ia
+	 tkir2vw0jOsutipdE5enupTzfwxsgjU320fYnNvUPOqcE1LSyjLQcsnz7eCvqQJJxn
+	 PTe0vPBtlnI2g==
+Date: Thu, 28 Nov 2024 11:34:06 -0800
 From: Luis Chamberlain <mcgrof@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com,
-	petr.pavlu@suse.com, da.gomez@samsung.com,
-	linux-modules@vger.kernel.org
-Cc: patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	geert@linux-m68k.org, masahiroy@kernel.org, mmaurer@google.com,
-	arnd@arndb.de, deller@gmx.de, song@kernel.org
-Subject: [GIT PULL] Modules fixes for v6.13-rc1
-Message-ID: <Z0jEBLLRoUKoBVPk@bombadil.infradead.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	petr.pavlu@suse.com, samitolvanen@google.com, da.gomez@samsung.com,
+	masahiroy@kernel.org, deller@gmx.de, linux-arch@vger.kernel.org,
+	live-patching@vger.kernel.org, kris.van.hees@oracle.com
+Subject: Re: [PATCH v3] selftests: add new kallsyms selftests
+Message-ID: <Z0jFruPWqtieVLtH@bombadil.infradead.org>
+References: <20241021193310.2014131-1-mcgrof@kernel.org>
+ <CAMuHMdVG3Z63BruhrnQtSadCnaKZ+hpwFDJDnitXST8fRNYoLQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -44,35 +45,30 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CAMuHMdVG3Z63BruhrnQtSadCnaKZ+hpwFDJDnitXST8fRNYoLQ@mail.gmail.com>
 
-The following changes since commit b86545e02e8c22fb89218f29d381fa8e8b91d815:
+On Thu, Nov 28, 2024 at 03:10:34PM +0100, Geert Uytterhoeven wrote:
+> Despite the warning, I gave this a try on m68k (cross-compiled on i7 ;-).
+> However, I didn't notice any extra-ordinary build times.
 
-  Merge tag 'acpi-6.13-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm (2024-11-27 14:50:31 -0800)
+I had some large values before this got merged and due to this
+slowing down builds 2x I reduced the defaults. The current defaults
+are no known as TEST_KALLSYMS_LARGE.
 
-are available in the Git repository at:
+> Also, when running the test manually on ARAnyM, everything runs
+> in the blink of an eye.  I didn't use the script, but ran all commands
+> manually.  I tried insmodding a/b/c/d, c/a/b, a/c/d/b.
+> 
+> Is this expected?
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc1-v2
+I tried to clarify the ranges known we can use to mess with this test
+a bit more in the recent fixes on modules-next [0] so since you want
+to see some things blow up try TEST_KALLSYMS_MAX, on some systems this
+is reported to crash the build.
 
-for you to fetch changes up to c5efad88a94613cf60fed010b96dbc3044389316:
+It is why I had reduced the original values a bit...
 
-  selftests: find_symbol: Actually use load_mod() parameter (2024-11-28 11:17:38 -0800)
+[0] git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git modules-next
 
-----------------------------------------------------------------
-Modules fixes for v6.13-rc1
+  Luis
 
-This consists of 3 fixes, the main one build that we build the kallsyms
-test modules all over again if we just run make twice.
-
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      selftests: find_symbol: Actually use load_mod() parameter
-
-Luis Chamberlain (2):
-      selftests: kallsyms: fix double build stupidity
-      selftests: kallsyms: fix and clarify current test boundaries
-
- lib/Kconfig.debug                             | 32 ++++++++++++++++++++++++++-
- lib/tests/module/Makefile                     | 17 +++++++-------
- lib/tests/module/gen_test_kallsyms.sh         |  9 ++++++--
- tools/testing/selftests/module/find_symbol.sh |  4 ++--
- 4 files changed, 48 insertions(+), 14 deletions(-)
