@@ -1,98 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DC735280;
-	Thu, 28 Nov 2024 03:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC5613FD86;
+	Thu, 28 Nov 2024 08:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732763728; cv=none; b=bAKQmXaFHoG0DBcjfVWxgF2yh9KzmWeRCbMC38i7SrorkCk3kLhRRy7MGk5EaE+XvlTpDQP34VT71AtKIWlYVRn16Ogt8hNIhjp5c1hIefYK+bPobPd6LZ899BLz3GYfyS2mI5/ndc5rN41ZWqVbB/Z31dY89SRWY7az5RBF6RU=
+	t=1732782288; cv=none; b=KYonWhBE5ajGRGs5fAmmmI1e/z03O1UcZEvpUekBjpVM016HcfEbw+V7yHsGJSKSGPm+ULFYZYuMITJmB3ghSHERiHoVKMt/2pjivqPSRbbicogdcy+Yb1jKnvmxJ6QdtUwxFYyp9EIDLgGgjPdQcivLC8GpjG5zcrzsPwQjXr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732763728; c=relaxed/simple;
-	bh=3KPORSOgye9V7mlhDMwS8f+UOYgTd3WwJRxNqx/RErg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b+43VtFauC0aTq0aLcItSMLGv0QE8k5Ptf9LfQOFz9SD/a4BSFAaw80gBhpLAySt/Lb2ihX+M0SLrqmv8Wnpiv0c1A48LUkuIDonqvdo2HvElmX9wqS2fQqCFKEOtLsZKOOP2S7HscHf39m38TKrwbDi7sPkw5kneJqtx5v6gVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjzC4fGH; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjzC4fGH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 022AEC4AF09;
-	Thu, 28 Nov 2024 03:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732763728;
-	bh=3KPORSOgye9V7mlhDMwS8f+UOYgTd3WwJRxNqx/RErg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IjzC4fGHB94VFLl/fkWo2opcDPRDQqLhrVht0Uctaql5LCTlr+/q3jsLNDUlYZ3w+
-	 lv6ChxBRNM0Va0VHIQEJS8ob2wqt/X4GxQoSCxcM5ex4GEAJp0yyDcjW2KCcU2/rac
-	 ZNJ8cPq3+mrQRhvMsX2yt3DQnkA6HmK55FD9QKRWK1flQZAktQyJ0Ts7Xb12OYB6Al
-	 XhqwIAdUrLhYrQH5UdJIwT9APvbe6CL+nLK+31xUkNA8GZKOQn5c4Fa5AYvv7CqKdV
-	 tcIqFklq3E0myHCCw4d/nrBu4JGprbFIGG9jc7cGi81hj2kt0HdIoGtl9IRK7h2B9R
-	 TFrRlstBdT8cA==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2ffa8092e34so3866231fa.1;
-        Wed, 27 Nov 2024 19:15:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVnnrhvAmM6avNEuk0RJuV6lw7gRKtG4V4zP/u1yHCh7SVa41CJV/wq2rKcj4LaB+nZhnzLRFz9Tr3YDCE=@vger.kernel.org, AJvYcCWeDI1sWOUA4u7OdXAnsw4BPlZOSueCpTrpyDOoq6o93Y0UxmdueBNsFoHvAHjiP8XW879VeFtKceJmSkvkBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJuBbKjO7dOjvsjscNckSeMLQNZnCLinTkUN7wLBzzMcoV5Ypd
-	T+Gtf9Y5gZusurHsFNkCvM9PAV56MhPdfzOP+opo5NDfjdPk5muRzupi9O9mhnbls4F2BB9ETqR
-	L+dZcit7+lHIKaDbnNGXrvUoFiUY=
-X-Google-Smtp-Source: AGHT+IGbhHQ1ENBEVbV70RiDRFMrbSKM8OMvLunCuqf6c2DKpLb9Pv0BjaaGl3vtNJ4IMAJVjVQO2JmT/KgCYg5/OFo=
-X-Received: by 2002:a05:651c:2211:b0:2fa:c18c:faba with SMTP id
- 38308e7fff4ca-2ffd60de22fmr29525351fa.30.1732763726655; Wed, 27 Nov 2024
- 19:15:26 -0800 (PST)
+	s=arc-20240116; t=1732782288; c=relaxed/simple;
+	bh=SCu+ISsKCCcd6qkQaEWA3jNZcsdZonCDPyLTB8O/kyY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D+yO0gep3hvj7B3tQbmkJ4egKyv2UO4E5toEDOON7QGkcDoEqL6BEE4KGCMmVw+sD1b8tGGm0oZBBuuFRoH5FVlnm2GMs5tKYAEsxxkntMsLgALKvILt7wuJ4rSEL+OHd1fX0KvDdkLABEmBcuuL57WE/3YWM9Fz1r5oSTm8Iqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4XzTDQ0Gx6z9v7JN;
+	Thu, 28 Nov 2024 15:57:10 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id B8230140762;
+	Thu, 28 Nov 2024 16:24:23 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwDXNXWhKEhn28ZyAg--.30519S2;
+	Thu, 28 Nov 2024 09:24:22 +0100 (CET)
+Message-ID: <10c8fd4b53f946c2d7e933a35c6eb36557e8c592.camel@huaweicloud.com>
+Subject: Re: [PATCH v6 07/15] digest_cache: Allow registration of digest
+ list parsers
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  corbet@lwn.net, petr.pavlu@suse.com,
+ samitolvanen@google.com, da.gomez@samsung.com,  akpm@linux-foundation.org,
+ paul@paul-moore.com, jmorris@namei.org,  serge@hallyn.com,
+ shuah@kernel.org, mcoquelin.stm32@gmail.com,  alexandre.torgue@foss.st.com,
+ linux-integrity@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
+ linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,  wufan@linux.microsoft.com,
+ pbrobinson@gmail.com, zbyszek@in.waw.pl, hch@lst.de,  mjg59@srcf.ucam.org,
+ pmatilai@redhat.com, jannh@google.com, dhowells@redhat.com, 
+ jikos@kernel.org, mkoutny@suse.com, ppavlu@suse.com, petr.vorel@gmail.com, 
+ mzerqung@0pointer.de, kgold@linux.ibm.com, Roberto Sassu
+ <roberto.sassu@huawei.com>
+Date: Thu, 28 Nov 2024 09:23:57 +0100
+In-Reply-To: <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+	 <20241119104922.2772571-8-roberto.sassu@huaweicloud.com>
+	 <Z0UN9ub0iztWvgLi@bombadil.infradead.org>
+	 <d428a5d926d695ebec170e98463f7501a1b00793.camel@huaweicloud.com>
+	 <Z0Ybvzy7ianR-Sx9@bombadil.infradead.org>
+	 <3dc25195b0362b3e5b6d6964df021ff4e7e1b226.camel@huaweicloud.com>
+	 <Z0d4vXuCqjTo_QW1@bombadil.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Z0ZxiLw9hauUynTS@bombadil.infradead.org> <CAHk-=wjCkJsdLageTx6C4n--aYFoO6gSRe0Rwcbk1jQdOdiPfg@mail.gmail.com>
- <Z0eeuCyUGcKgsc5h@bombadil.infradead.org> <Z0eqiayuv1w4a_dc@bombadil.infradead.org>
- <CAHk-=wj+imfGvW73XoYn60bAMzRtPfXFqwFTUqBoEq4=u5_oUg@mail.gmail.com>
- <Z0fT4hC30NISjmi_@bombadil.infradead.org> <Z0fYqZutUzDdxTGf@bombadil.infradead.org>
- <CAK7LNARDwBmvKY4fDmr5K=WLEvWLhFgg50ibu7etJykiRxohOA@mail.gmail.com>
- <Z0fdX6i3inNVJf-e@bombadil.infradead.org> <Z0ffD62YLuVVrCGR@bombadil.infradead.org>
-In-Reply-To: <Z0ffD62YLuVVrCGR@bombadil.infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 28 Nov 2024 12:14:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASj1j5xSP2Df88h2nRUxMbX1WkshrVXdZCa3hrRuOnNkg@mail.gmail.com>
-Message-ID: <CAK7LNASj1j5xSP2Df88h2nRUxMbX1WkshrVXdZCa3hrRuOnNkg@mail.gmail.com>
-Subject: Re: [GIT PULL] Modules changes for v6.13-rc1
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com, 
-	petr.pavlu@suse.com, da.gomez@samsung.com, linux-modules@vger.kernel.org, 
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org, mmaurer@google.com, 
-	arnd@arndb.de, deller@gmx.de, song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:GxC2BwDXNXWhKEhn28ZyAg--.30519S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw15XFyUGry5CF48Zr1DWrg_yoW8uF4xpF
+	WfK3ZIkr4kt3Wqkw4vyw47uFW0k393GrW5G3Z3Gr9ayr15KFya9FyIgw43WFZrKr4vgw4a
+	qr1rZ3sIvw1kZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIccxYrVCFb41lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+	IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+	x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+	DU0xZFpf9x07bhb18UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBGdH1TUBdQAAsw
 
-On Thu, Nov 28, 2024 at 12:10=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.or=
-g> wrote:
->
-> On Wed, Nov 27, 2024 at 07:02:55PM -0800, Luis Chamberlain wrote:
-> > I did. Multiple times.
->
-> I've split this up now in 2 parts, one with your fixes and then the
-> other boundary fixes which are not related.
->
-> From 8e4c903fa3079e1c05c9585f78c57e8067024d99 Mon Sep 17 00:00:00 2001
-> From: Luis Chamberlain <mcgrof@kernel.org>
-> Date: Wed, 27 Nov 2024 14:10:57 -0800
-> Subject: [PATCH 1/2] selftests: kallsyms: fix double build stupidity
->
-> The current arrangement will have the test modules rebuilt on
-> any make without having the script or code actually change.
-> Take Masahiro Yamada's suggested fix and cleanups on the Makefile
-> to fix this.
->
+On Wed, 2024-11-27 at 11:53 -0800, Luis Chamberlain wrote:
+> On Wed, Nov 27, 2024 at 10:51:11AM +0100, Roberto Sassu wrote:
+> > For eBPF programs we are also in a need for a better way to
+> > measure/appraise them.
+>=20
+> I am confused now, I was under the impression this "Integrity Digest
+> Cache" is just a special thing for LSMs, and so I was under the
+> impression that kernel_read_file() lsm hook already would take care
+> of eBPF programs.
 
+Yes, the problem is that eBPF programs are transformed in user space
+before they are sent to the kernel:
 
-Fixes: 84b4a51fce4c ("selftests: add new kallsyms selftests")
+https://lwn.net/Articles/977394/
 
-> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+The Integrity Digest Cache can be used for the measurement/appraisal of
+the initial eBPF ELF file, when they are accessed from the filesystem,
+but the resulting blob sent to the kernel will be different.
 
-Closes: https://lore.kernel.org/all/CAK7LNATRDODmfz1tE=3DinV-DQqPA4G9vKH+38=
-zMbaGdpTuFWZFw@mail.gmail.com/T/#me6c8f98e82acbee6e75a31b34bbb543eb4940b15
+> > Now, I'm trying to follow you on the additional kernel_read_file()
+> > calls. I agree with you, if a parser tries to open again the file that
+> > is being verified it would cause a deadlock in IMA (since the inode
+> > mutex is already locked for verifying the original file).
+>=20
+> Just document this on the parser as a requirement.
 
+Ok, will do.
 
+> > > > Supporting kernel modules opened the road for new deadlocks, since =
+one
+> > > > can ask a digest list to verify a kernel module, but that digest li=
+st
+> > > > requires the same kernel module. That is why the in-kernel mechanis=
+m is
+> > > > 100% reliable,
+> > >=20
+> > > Are users of this infrastructure really in need of modules for these
+> > > parsers?
+> >=20
+> > I planned to postpone this to later, and introduced two parsers built-
+> > in (TLV and RPM). However, due to Linus's concern regarding the RPM
+> > parser, I moved it out in a kernel module.
+>=20
+> OK this should be part of the commit log, ie that it is not desirable to
+> have an rpm parser in-kernel for some users.
 
---=20
-Best Regards
-Masahiro Yamada
+I understand. Will add in the commit log.
+
+Just to clarify, we are not talking about the full blown librpm in the
+kernel, but a 243 LOC that I rewrote to obtain only the information I
+need. I also formally verified it with pseudo/totally random data with
+Frama-C:
+
+https://github.com/robertosassu/rpm-formal/blob/main/validate_rpm.c
+
+Thanks
+
+Roberto
+
