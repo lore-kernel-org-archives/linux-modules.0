@@ -1,40 +1,39 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB71B1FECDE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C2B209F43;
 	Mon,  2 Dec 2024 15:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733152299; cv=none; b=ZTPHsh29Gd2CmBpkXQe42ETFzionB8zG7ImwGDa2SEweWn9yjfTouEOsjKMkxNJfaAnEqF/IFzvSMGMUj/Acu0aPZHqsdGJ9jik02srnwBlGEpMaKp/ovgcEf7HkrT6d6eU2Rl6Ug1LnvhyhV4Hm+GM6F09D4VxFV+WsYHn4Ch8=
+	t=1733152299; cv=none; b=JTf7B0Dh1nvReVM5id7FYTNSSrY2mdMEEEnv/GfcBKJSGIjwoosyjfD2XE/WkuphxD5qvibvIPc8P9k76MHSauTduIt8Ah2XObnj0cEPRUTegIAtYvIFxVW4wVo8wJ2bFmZGtHw3TZel6l6W2AqSsQK9hwUg2VunLR9e4Rz66E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733152299; c=relaxed/simple;
-	bh=XHnTJHOPYtZIDpwCX8Qj4Gyauad1xJ05yQqNtHbIPkY=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=HFJGjNFVaK+2ggPdh3ILHNG9Oa3KHGX6RL7LEB4kjsMIpLibhdCvLdTOkLS9am9r4yHvlmtmi641W9lyjWUpxL9hLL8ZCOLwtwncFLAlTNuCN/2JOClBXEVx82+z52frGdygzdLqHT5ZuI08QJwsq77UObeDEV0lp3ZarbS+6vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TeVV6PeR; arc=none smtp.client-ip=90.155.50.34
+	bh=jCq9Hmkd8YjDFv+26S0VAnOIYjbcyTSuRXRHXq6WfdA=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=D/Q5BWrp20KH5ixhTS5/cKtMBQACn0z+/5I15hgX4HWtZwT2jVaiKiAiBpQ2SzuvQeXs2bYIBiLIlVn3c8ob8C0Y/iuuPhWNimjwY+ao6uHmAnPJn+FEk6w6plCR7+KIMkkpSzNdRvVNFDWQELAdJZrw72n+wissD3TPIPMqbj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Fnbh6psY; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TeVV6PeR"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Fnbh6psY"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:In-Reply-To;
-	bh=aGjvucfOz39yLyUBScLYaZkWFoL5jwssjx5+IvdVnTE=; b=TeVV6PeRrbodIeRA0Peu2iSy1W
-	35Kog7wgqiIar7hDxW/FcHmMlEeOx/TMzcoCNTwv4Jc1/RpD5JyNAx/QIftdgHIHBJvuh6Gl1ltjp
-	TRL5nPu8FulMe/y6i2ZLQjRHyrKl8SNLegDXZmDABrmRURXepAdFk2bRknGvTzJfzifVaTt/WnyWz
-	JpKPzUXZ0Ek1dzHkr/elr/roLRZahPI8KEWCyN9lz8LPzsCGHYmSvIbUN8guKFaL2q167p5rA7GNp
-	Nfh4a7OGTXA4VRZpg3wiXt5mCvcZ/NhHgi6KNOC+NryG5mhL6i4xXYj8yIxxSdj96CyX7BIH7q+1l
-	QTfoSYxQ==;
+	d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+	Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=mIDblaCJImqyIwpr1OpwkjMm/2RN8PKElVUd1eIcx3I=; b=Fnbh6psYu7vE2KG80F+3Jc2ImK
+	1tKsV+L+8Zq4hkp0xEqeO1zJz3rGE34r4lvhDeV7pPYxTuOfjMoyZjiAQtBMXDDJiGscnZb4Xydd3
+	GmnUTH5pJg9Dl9q7tbpv10E56p2DlM4bG7iKmR2ymEvVRhUd1P+/AsAh9h4osXQ/1UzcYbldxIghb
+	ENlWSQiZoIWnpN42MFQb29zp8hTIawa6sJwTMMGq3ga/wZrq+zsl3AOS05OAgu3NjSsE5/6l2HVbG
+	OD6fKww16lQDR0IJgU4/rUTFeUL276xFuGakZr/C1BdUG5OVKkHEgUJfwM4XJSFSK3/pqXrTG3QuP
+	L4JxLFKQ==;
 Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tI859-00000008CPm-17Pt;
+	id 1tI859-00000008CPo-18Xv;
 	Mon, 02 Dec 2024 15:11:28 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id C9DFE300731; Mon,  2 Dec 2024 16:11:27 +0100 (CET)
-Message-ID: <20241202150810.382545529@infradead.org>
+	id BA446300402; Mon,  2 Dec 2024 16:11:27 +0100 (CET)
+Message-ID: <20241202145946.108093528@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 02 Dec 2024 15:59:50 +0100
+Date: Mon, 02 Dec 2024 15:59:46 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -49,110 +48,54 @@ Cc: x86@kernel.org,
  linux-modules@vger.kernel.org,
  linux-kbuild@vger.kernel.org,
  hch@infradead.org,
- gregkh@linuxfoundation.org,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH -v2 4/7] module: Add module specific symbol namespace support
-References: <20241202145946.108093528@infradead.org>
+ gregkh@linuxfoundation.org
+Subject: [PATCH -v2 0/7] module: Strict per-modname namespaces
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 
-Designate the "MODULE_${modname}" symbol namespace to mean: 'only
-export to the named module'.
+Hi!
 
-Notably, explicit imports of anything in the "MODULE_" space is
-forbidden. Modules implicitly get the "MODULE_${modname}" namespace
-added.
+Implement a means for exports to be available only to an explicit list of named
+modules. By explicitly limiting the usage of certain exports, the abuse
+potential/risk is greatly reduced.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- kernel/module/main.c  |   28 ++++++++++++++++++++++++++--
- scripts/mod/modpost.c |    5 +++++
- 2 files changed, 31 insertions(+), 2 deletions(-)
+The first 'patch' is an awk scripts that cleans up the existing module
+namespace code along the same lines of commit 33def8498fdd ("treewide: Convert
+macro and uses of __section(foo) to __section("foo")") and for the same reason,
+it is not desired for the namespace argument to be a macro expansion itself.
 
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1070,6 +1070,13 @@ static int verify_namespace_is_imported(
- 
- 	namespace = kernel_symbol_namespace(sym);
- 	if (namespace && namespace[0]) {
-+		/*
-+		 * Implicitly import MODULE_${mod->name} namespace.
-+		 */
-+		if (strncmp(namespace, "MODULE_", 7) == 0 &&
-+		    strcmp(namespace+7, mod->name) == 0)
-+			return 0;
-+
- 		for_each_modinfo_entry(imported_namespace, info, "import_ns") {
- 			if (strcmp(namespace, imported_namespace) == 0)
- 				return 0;
-@@ -1613,15 +1620,30 @@ static void module_license_taint_check(s
- 	}
- }
- 
--static void setup_modinfo(struct module *mod, struct load_info *info)
-+static int setup_modinfo(struct module *mod, struct load_info *info)
- {
- 	struct module_attribute *attr;
-+	char *imported_namespace;
- 	int i;
- 
- 	for (i = 0; (attr = modinfo_attrs[i]); i++) {
- 		if (attr->setup)
- 			attr->setup(mod, get_modinfo(info, attr->attr.name));
- 	}
-+
-+	for_each_modinfo_entry(imported_namespace, info, "import_ns") {
-+		/*
-+		 * 'MODULE_' prefixed namespaces are implicit, disallow
-+		 * explicit imports.
-+		 */
-+		if (strstarts(imported_namespace, "MODULE_")) {
-+			pr_err("%s: module tries to import module namespace: %s\n",
-+			       mod->name, imported_namespace);
-+			return -EPERM;
-+		}
-+	}
-+
-+	return 0;
- }
- 
- static void free_modinfo(struct module *mod)
-@@ -2935,7 +2957,9 @@ static int load_module(struct load_info
- 		goto free_unload;
- 
- 	/* Set up MODINFO_ATTR fields */
--	setup_modinfo(mod, info);
-+	err = setup_modinfo(mod, info);
-+	if (err)
-+		goto free_modinfo;
- 
- 	/* Fix up syms, so that st_value is a pointer to location. */
- 	err = simplify_symbols(mod, info);
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1565,6 +1565,7 @@ static const char *mod_basename(const ch
- 
- static void read_symbols(const char *modname)
- {
-+	char module_namespace[MODULE_NAME_LEN + 8];
- 	const char *symname;
- 	char *version;
- 	char *license;
-@@ -1600,6 +1601,10 @@ static void read_symbols(const char *mod
- 		     namespace = get_next_modinfo(&info, "import_ns", namespace))
- 			add_namespace(&mod->imported_namespaces, namespace);
- 
-+		snprintf(module_namespace, sizeof(module_namespace), "MODULE_%s",
-+			 mod_basename(mod->name));
-+		add_namespace(&mod->imported_namespaces, module_namespace);
-+
- 		if (extra_warn && !get_modinfo(&info, "description"))
- 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
- 	}
+The remainder of the patches introduce the special "MODULE_<modname-list>"
+namespace, which shall be forbidden from being explicitly imported. A module
+that matches the simple modname-list will get an implicit import.
 
+Lightly tested with something like:
+
+  git grep -l EXPORT_SYMBOL arch/x86/kvm/ | while read file;
+  do
+    sed -i -e 's/EXPORT_SYMBOL_GPL(\(.[^)]*\))/EXPORT_SYMBOL_GPL_FOR(\1, "kvm,kvm-intel,kvm-amd")/g' $file;
+  done
+
+With that, some configs generate:
+
+  ERROR: modpost: module kvmgt uses symbol kvm_write_track_add_gfn from namespace MODULE_kvm,kvm-intel,kvm-amd, but does not import it.
+  ERROR: modpost: module kvmgt uses symbol kvm_write_track_remove_gfn from namespace MODULE_kvm,kvm-intel,kvm-amd, but does not import it.
+  ERROR: modpost: module kvmgt uses symbol kvm_page_track_register_notifier from namespace MODULE_kvm,kvm-intel,kvm-amd, but does not import it.
+  ERROR: modpost: module kvmgt uses symbol kvm_page_track_unregister_notifier from namespace MODULE_kvm,kvm-intel,kvm-amd, but does not import it.
+
+Showing it works :-). Also verified that once booted, the module kvm_intel does
+actually load.
+
+
+Also available at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git module/namespace
+
+Changes since RFC/v1:
+
+ - use awk instead of sed so all changes are a single script (hch)
+ - deal with kbuild mangling the module names like s/-/_/g (sean)
+ - fixup clang-ias 'funnies'
 
