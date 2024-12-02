@@ -1,63 +1,63 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679EA1632C5
-	for <linux-modules@vger.kernel.org>; Mon,  2 Dec 2024 16:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9C3171E43
+	for <linux-modules@vger.kernel.org>; Mon,  2 Dec 2024 16:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733155738; cv=none; b=Tc157Q/UEN4625a2CfyCOneoKMEp/BtlGJKnSykqZQHwsdLZizRow1C5DnEqVbMxKdehAxKSKvFeOEjtm6Ii48VJght7NwozLQ6YXvXDR0AImdlHE7mEZS3nF6q6TVtHlMV+eaqz07TdA+YMMYh1heyE7pBjuD1IMUJ8uDnMXaA=
+	t=1733156070; cv=none; b=uv4OdkaBrGgtqHWgJHtu+vryYRWu/6piDmcgComDQksWVgJYNXycDptsP+AI1Oqr3yfVo8bDdioQHSkkTzaBfCoUY2vfnqJM5eXl6UT5SJBjAAsdtRFOCZjkgk05jlK705fKBrk/XyaIMB48VUSty7aB2Uk8tyEk16wLs11KRgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733155738; c=relaxed/simple;
-	bh=MwB1ACqjAl/x3LNO27/3tM8Pks1XLvEtvtCteP6ruUM=;
+	s=arc-20240116; t=1733156070; c=relaxed/simple;
+	bh=OwIXuOkl98ecBMfXkAdimvKCgH93U2DB6vsnaTQrIw4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dCFinlYvya1X1Bjf2N1wH6PQCqtWySSBE8MsVblHY/WCKnk8p3YtigLYBQclbDacXTbMdQThAP8C9Jv6l/9qvto4nNiC77DRwRcQICEt2ca4ofv1KI7i5Hyghi63H1SEfhKN+pDkpN3jnmtM3luS11DmaArHw2HZtbaJ5IyxHfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IPd7OWB2; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:Content-Type; b=EYp9GBNgxOvvVxW+rxVjvY+RPA1HSclDu1Tj8wCQzaYZ3rcxYYmJC44HtdXpZ7IIuDoIfYncdgBG4Bdf1rT1rUviL1GGOnT4DYo+HIfAXSUqHa9pWXPCPh9E3ctH5Q9rxmrNkjMbgwFHX6y2Dp+7iFTen2M2wgfglky4DZu/Jjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=foiYXTCb; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IPd7OWB2"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-385e2c52c21so1401092f8f.2
-        for <linux-modules@vger.kernel.org>; Mon, 02 Dec 2024 08:08:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="foiYXTCb"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4349f160d62so37819135e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 02 Dec 2024 08:14:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1733155734; x=1733760534; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1733156066; x=1733760866; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wk9t4gJyThohCN5wH/UWKd/DL3WW9bY6aJcRvcTwW+M=;
-        b=IPd7OWB29gqHQCgvYZIT/dkWVaopbBnsYwjBoQXEiEU3lcqlcS0Skvy4p+n7of2xIU
-         QO2bq484PA4IkL9WnrhnRQv42L2vBYbLV0cabcHqFBC/JiAcT1MXM0rD9KlfGSxZbF+S
-         NruSM1vAoFDAarT662Scyd1/3U1pkULdYQy+4JHkst7vXI/Akde+QVqd1V8P1T7kMRjq
-         y6VlTYTsJUW5IlRCMrwKrBRddxaZhM0EYZQyEGypCC422wHZ1/gZFHTDq+wvJOgLJTaD
-         ozstk65PY+jd1/QKcwhTU4eBoyBjufKSUhuDe8HB28rjNxLecT/WfL3iePyampzVtjeE
-         Ga1Q==
+        bh=JkqtF7gf3rzskqYkgv0SBovnNKd2qwXos1/as7nPpuk=;
+        b=foiYXTCb5ubz5C1P3skEksMF9LdXPe0Kee+UfgBu7IEZBRzEiI53KnK1sXdqfSewho
+         E3PYpFf3M8sM0Mgjr5v3wSkDmb/n/qjqHmkb3WRNN0G2O8JZsNq//1xxu0xbXwvHYuaN
+         m3qQx7scKoI+DRZ5xcuxLTDfdLANkIgEfAloJE6WPnV30UAK0PA+aIYBtRd4kQZuKzIq
+         fe41ql8JZgefHy4jGp03muOGGtlMjRAqmKu5IxSE+XpW9Pw5VIs2UfNiAJCd5xXnTrl4
+         eJjUgH0Fclbx6zUUaXUvuAQ41g0hAxD9UomxC4vN3D5Ky6AIoExAm4tXFzI14vTqE54/
+         0yQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733155734; x=1733760534;
+        d=1e100.net; s=20230601; t=1733156066; x=1733760866;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wk9t4gJyThohCN5wH/UWKd/DL3WW9bY6aJcRvcTwW+M=;
-        b=pSqTZ8jjDEc46bLfas9FMtrUVR3zBSre89Ij6sTGvG3rntnL9JVbmusIL1aFyZ5wFe
-         6scPuQMG3VRBMnYw6gPdzlm3L4YOTXjOX4PaBuHknb2htYQaeauhmeROCYWxf+XTwWjc
-         U8vP6wlXEdKNL+YG6wtIuwhS6ZP/H5yTjy/Wz6c/0ilbQzF1c+fuFpGbg61JmoSPATSV
-         YZB8Cd8VMbwNP/Sx8W6vxwt17aUy7u9Y9jN8TZcmQuHUk4ojoOuzVTtIDIh4j1q2K8aG
-         3Ox05FhsafKlbIINS9VA97fQ1fG+ISkBP4Y1OtX7xGuHnKYI5Q+cBckdYBDkb1xVab5L
-         FAaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlXqpXbwS0NpQ+aTqqg8+iSVlMnwGGnNdzQY/GtkB/0JTm3VK17LzmHITuZb0+a0+jJ4P3h+u73gPZWguX@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrnF9tFPmiQg/zjpwKsR2cVZ9+nzfypEy4LSWwP3b5msb2msDT
-	1Aks7I5y0Z/PXuFoTvkDStJ9gJ1zHh//gIUVmrtrEk2iXW8ipm5SugBaYv1+Wq4=
-X-Gm-Gg: ASbGnctOnA0oSmFV4uAxypAuiMK8oFhfo579m6OZY9m2+PhyfuHtXPhVgxAfgwMxxqC
-	J/NNtLRzzbC+NBX3VKtPyu6xRxqOrU3sv6wEpXzU5eg2PwotmXNS+fOgYyORajXO/Aupb/oalOh
-	HNDS/3YKKl7CV7zIMKxObQ91JFT5oX+fQ6p4NCE68mMP5wMeBWutxwLE+aQwrq8ePzEOzyk0UuR
-	+M74VikYPUup3OnsvYPobtXPtjTmpoXsjhPflmnScCPapOBAC4Qag==
-X-Google-Smtp-Source: AGHT+IHdMxsweQVSvkIE89/cartjnOdmknoW4rycIDu/WM156Nv5fZKnY0Cvww8TcwuaRagOlY68cw==
-X-Received: by 2002:a5d:5f46:0:b0:385:fb59:8358 with SMTP id ffacd0b85a97d-385fb598458mr236029f8f.53.1733155732003;
-        Mon, 02 Dec 2024 08:08:52 -0800 (PST)
+        bh=JkqtF7gf3rzskqYkgv0SBovnNKd2qwXos1/as7nPpuk=;
+        b=ZXXBMtXqLwvFznzpfGolh8jkkpk81kN1Ovcqdn2epqR8jajhg/ODMMBr3LkNSVg17L
+         /+T30LMgO4XWbEN6LpCOmfbTexBylVjyWjLjbf1y6VpMjU4ZXB7PhbFZATavoobQR9pJ
+         G8J4PhheKX6cit3sJAy5vN/ox+eWM1t2McsVMm3JbeqisB9Cjfztdfa9dM9vqlOMKD5I
+         jM4SyyMTXGzocvpqjRRUOr0A5oZniarXV23fo0iziX7vWUBtTMzM6dv1vf4nngAUnNa0
+         mjPDbKH7gVP0qnxjlC0A647TFvDS/2rD1OWBSMXS1RQJoqWQuS5z/+Xjf0eSQJW3m7bn
+         hXiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVXiODTsQ23ShDrGdENIC1wmmSxXnoRvXkr0sQZcMvRL0mYVkKK/VhM/70+Vpsw8nVvazd3Ph9d+9icIzbr@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxyt6C89dI80tAUxAMbV1V3U0blqk7xdF8IPplnC6wuVnv1+Yvo
+	qi4f7Gyq1HHYXS/O64onTvEbtfsEF1R+Xe9mCDOMBjjmGDCxIsdvciBfjfwoSPY=
+X-Gm-Gg: ASbGncs8MkxGKNUSj/j5l43LxE0hv15HJUNdniiCUrZR1F9k92cEUKsUVznplgU2Kn4
+	t2VBkShKrhb6mWvY0VT6npLbok5K7/UZjb5I9a8EP6mFHGQ0yS8KjtC1zn6NMdKJqcLg9N1Pxnz
+	dkbEnRBgEkgtnyv1QY/Pl4Vxzqk4clMSeuoeRnyV/zMRmgnUwJQLh4mR6jqV4HCT+XErwDlTAwF
+	Ne+IVW92vSKFe04zz9VtHvzcKfT9Bnru5B8mt2QvGhBzpClTnA2aA==
+X-Google-Smtp-Source: AGHT+IFYutETRRcXML+QIddm9XhVvanLL6JGdMr2H3NcnNfxeBujp0ZUmjFwG3N6uzej8qITOTWbNA==
+X-Received: by 2002:a05:600c:5253:b0:434:9e1d:7629 with SMTP id 5b1f17b1804b1-434a9e07911mr188863885e9.33.1733156065599;
+        Mon, 02 Dec 2024 08:14:25 -0800 (PST)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd68c1bsm13165465f8f.84.2024.12.02.08.08.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa781200sm187506945e9.25.2024.12.02.08.14.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Dec 2024 08:08:51 -0800 (PST)
-Message-ID: <de6b416c-b96a-43aa-ad72-ea365ffbe785@suse.com>
-Date: Mon, 2 Dec 2024 17:08:49 +0100
+        Mon, 02 Dec 2024 08:14:25 -0800 (PST)
+Message-ID: <409987f4-d124-48f7-b49c-dd61a4798bef@suse.com>
+Date: Mon, 2 Dec 2024 17:14:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 02/18] gendwarfksyms: Add address matching
+Subject: Re: [PATCH v6 09/18] gendwarfksyms: Limit structure expansion
 To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
@@ -79,104 +79,95 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>,
  linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
  rust-for-linux@vger.kernel.org
 References: <20241121204220.2378181-20-samitolvanen@google.com>
- <20241121204220.2378181-22-samitolvanen@google.com>
+ <20241121204220.2378181-29-samitolvanen@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20241121204220.2378181-22-samitolvanen@google.com>
+In-Reply-To: <20241121204220.2378181-29-samitolvanen@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 11/21/24 21:42, Sami Tolvanen wrote:
-> The compiler may choose not to emit type information in DWARF for all
-> aliases, but it's possible for each alias to be exported separately.
-> To ensure we find type information for the aliases as well, read
-> {section, address} tuples from the symbol table and match symbols also
-> by address.
+> Expand each structure type only once per exported symbol. This
+> is necessary to support self-referential structures, which would
+> otherwise result in infinite recursion, and it's sufficient for
+> catching ABI changes.
 > 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
-[...]
-> @@ -82,6 +118,130 @@ struct symbol *symbol_get(const char *name)
->  	return sym;
+> Types defined in .c files are opaque to external users and thus
+> cannot affect the ABI. Consider type definitions in .c files to
+> be declarations to prevent opaque types from changing symbol
+> versions.
+
+Thanks for adding support for skipping types defined in .c files. That
+is a useful feature that genksyms has.
+
+I was also recently thinking that it would be great if genksyms could
+skip definitions that are in internal header files, for example,
+kernel/events/internal.h. Perhaps something that could be added in the
+future..
+
+I've noted one nit below, but the patch looks sensible to me, feel free
+to use:
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+
+> @@ -79,6 +80,55 @@ static bool match_export_symbol(struct state *state, Dwarf_Die *die)
+>  	return !!state->sym;
 >  }
 >  
-> +typedef void (*elf_symbol_callback_t)(const char *name, GElf_Sym *sym,
-> +				      Elf32_Word xndx, void *arg);
+> +/* DW_AT_decl_file -> struct srcfile */
+> +static struct cache srcfile_cache;
 > +
-> +static void elf_for_each_global(int fd, elf_symbol_callback_t func, void *arg)
+> +static bool is_definition_private(Dwarf_Die *die)
 > +{
-> +	size_t sym_size;
-> +	GElf_Shdr shdr_mem;
-> +	GElf_Shdr *shdr;
-> +	Elf_Data *xndx_data = NULL;
-> +	Elf_Scn *scn;
-> +	Elf *elf;
+> +	Dwarf_Word filenum;
+> +	Dwarf_Files *files;
+> +	Dwarf_Die cudie;
+> +	const char *s;
+> +	int res;
 > +
-> +	if (elf_version(EV_CURRENT) != EV_CURRENT)
-> +		error("elf_version failed: %s", elf_errmsg(-1));
+> +	/*
+> +	 * Definitions in .c files cannot change the public ABI,
+> +	 * so consider them private.
+> +	 */
+> +	if (!get_udata_attr(die, DW_AT_decl_file, &filenum))
+> +		return false;
 > +
-> +	elf = elf_begin(fd, ELF_C_READ_MMAP, NULL);
-> +	if (!elf)
-> +		error("elf_begin failed: %s", elf_errmsg(-1));
+> +	res = cache_get(&srcfile_cache, filenum);
+> +	if (res >= 0)
+> +		return !!res;
 > +
-> +	scn = elf_nextscn(elf, NULL);
+> +	if (!dwarf_cu_die(die->cu, &cudie, NULL, NULL, NULL, NULL, NULL, NULL))
+> +		error("dwarf_cu_die failed: '%s'", dwarf_errmsg(-1));
 > +
-> +	while (scn) {
-> +		shdr = gelf_getshdr(scn, &shdr_mem);
-> +		if (!shdr)
-> +			error("gelf_getshdr failed: %s", elf_errmsg(-1));
+> +	if (dwarf_getsrcfiles(&cudie, &files, NULL))
+> +		error("dwarf_getsrcfiles failed: '%s'", dwarf_errmsg(-1));
 > +
-> +		if (shdr->sh_type == SHT_SYMTAB_SHNDX) {
-> +			xndx_data = elf_getdata(scn, NULL);
-> +			if (!xndx_data)
-> +				error("elf_getdata failed: %s", elf_errmsg(-1));
-> +			break;
-> +		}
+> +	s = dwarf_filesrc(files, filenum, NULL, NULL);
+> +	if (!s)
+> +		error("dwarf_filesrc failed: '%s'", dwarf_errmsg(-1));
 > +
-> +		scn = elf_nextscn(elf, scn);
-> +	}
+> +	s = strrchr(s, '.');
+> +	res = s && !strcmp(s, ".c");
+> +	cache_set(&srcfile_cache, filenum, res);
 > +
-> +	sym_size = gelf_fsize(elf, ELF_T_SYM, 1, EV_CURRENT);
-> +	scn = elf_nextscn(elf, NULL);
+> +	return !!res;
+> +}
 > +
-> +	while (scn) {
-> +		shdr = gelf_getshdr(scn, &shdr_mem);
-> +		if (!shdr)
-> +			error("gelf_getshdr failed: %s", elf_errmsg(-1));
+> +static bool is_declaration(Dwarf_Die *die)
+> +{
+> +	bool value;
 > +
-> +		if (shdr->sh_type == SHT_SYMTAB) {
-> +			unsigned int nsyms;
-> +			unsigned int n;
-> +			Elf_Data *data = elf_getdata(scn, NULL);
+> +	if (get_flag_attr(die, DW_AT_declaration, &value) && value)
+> +		return true;
 > +
-> +			if (!data)
-> +				error("elf_getdata failed: %s", elf_errmsg(-1));
-> +
-> +			if (shdr->sh_entsize != sym_size)
-> +				error("expected sh_entsize (%lu) to be %zu",
-> +				      shdr->sh_entsize, sym_size);
-> +
-> +			nsyms = shdr->sh_size / shdr->sh_entsize;
-> +
-> +			for (n = 1; n < nsyms; ++n) {
-> +				const char *name = NULL;
-> +				Elf32_Word xndx = 0;
-> +				GElf_Sym sym_mem;
-> +				GElf_Sym *sym;
-> +
-> +				sym = gelf_getsymshndx(data, xndx_data, n,
-> +						       &sym_mem, &xndx);
-> +
-> +				if (!sym ||
-> +				    GELF_ST_BIND(sym->st_info) == STB_LOCAL)
-> +					continue;
+> +	return is_definition_private(die);
+> +}
 
-Doesn't NULL returned by gelf_getsymshndx() indicate an error? If yes
-then I think it should be reported instead of silently skipping the
-symbol.
-
-With this addressed, feel free to add:
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+Nit: When I read the is_declaration() function in isolation, it is not
+clear to me what determining if a definition is private has to do with
+the type being a declaration. I think this and related logic in
+__process_structure_type() would be easier to follow if the return value
+of is_declaration() was negated and the function renamed, for example,
+to is_kabi_definition().
 
 -- 
 Thanks,
