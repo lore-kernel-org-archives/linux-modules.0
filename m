@@ -1,63 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3199A450EE;
-	Fri, 29 Nov 2024 19:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7110C205ACD;
+	Mon,  2 Dec 2024 15:11:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732907994; cv=none; b=duMsZyTmo7/b/Rx92dpcE6kYHTywak2cvpXyIE8pUJXd9bg4MhIO5Zu0FDrnyMHPtiSKvTMi6HEr5aZGb7Do7e8OujqD7Gga6mMP47OSMf1YF8Cs+r1K9pWbUghikP6QxGi7Qzhv8OT2OZAQP+QtWcWRQbSBN2LmMIqpmzauHT4=
+	t=1733152296; cv=none; b=BPdP+j0RlPt/ku4kgy81D8dFnZbU7V8AUV4du/Od4YY+MTn1ZjwvOSXy0ehPZOyqQpDeVp2SczCjcmuIAJgCqJy42KHg0xP0drTT7FiYS64iAA8pgZfwjEvzrxMQcpBlXjgl2witB5rhBt6Qr41Sqtl371SAbFWTRnrDPFAlFSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732907994; c=relaxed/simple;
-	bh=N0R9fuHuP+Aam5eKycEo6pKAy95ex427QgL7eTS5U1c=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=pzqp57i8T+gyrbr8LXPUrsW4sD7lmGIc3fwOcgkv2pNrP4mx9XNJ8J62pPWCOELI9jRt/CZz6x+gXYWhximQujrLH9nRFiXv+1B3YCQ1FuXrsqqmeGSsf9rGFJpMT/LEzdLTGp0bkeCBkJs9bvCTSZu+xbFIdgr9tSFd4mZiKgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9OF0Rpv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733152296; c=relaxed/simple;
+	bh=a10zqHBADACqh+lSa+gIc0SQC3HXeDKZ/DGTcNuXhoA=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=HydttQUEOy1xBqBsKSNvQgYL+2RBjZAJfYmHoPYfVZ7omNlhCOJrO3a15lLhi2kJgDstugYsuWsquNcv6JI2Uj6QsMl0psjSksAPQ6XhCFD/9r9bsA9Gfbpfk1YS8NAV/NPOOwklvYiWHibWYigR2SWulq6Io/msBMtv0vCposs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kB6lrSEm; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9OF0Rpv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D46C4CECF;
-	Fri, 29 Nov 2024 19:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732907994;
-	bh=N0R9fuHuP+Aam5eKycEo6pKAy95ex427QgL7eTS5U1c=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=f9OF0Rpvs0rqL7QqjcDt0cYkXXR8qSKMbD+Vv6HwAbqP+vh6wmtP6atdiR9p/qNng
-	 XfvHNLCifKUV0fB35xnKy9HZ7Rr9Lzzj417kj/E0Y2M5W5OrrcmkkAqAfsCA6YkB6R
-	 4sFnM24kjXCZvGY3PsicmWsN7dowbDW6qH/f/UYSzBl/EBEfiJ8jPfNN5DJZzL6Mij
-	 jpsOLOeSo2FFCTD2kjS18gf13ue9i5iLW62arfw9KiZIvj+FZOtQd7Pc2wHE4wTi6S
-	 TJIOna/j5B9jP1St4/CPQw7BDNPIspVF7ATekNscEG92PczLNjcaq40yVFI4V6P1yg
-	 sKt1tuLeQMOaQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE2F0380A944;
-	Fri, 29 Nov 2024 19:20:08 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v6.13-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Z0jEBLLRoUKoBVPk@bombadil.infradead.org>
-References: <Z0jEBLLRoUKoBVPk@bombadil.infradead.org>
-X-PR-Tracked-List-Id: <linux-modules.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Z0jEBLLRoUKoBVPk@bombadil.infradead.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc1-v2
-X-PR-Tracked-Commit-Id: c5efad88a94613cf60fed010b96dbc3044389316
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 93e064ce854abfacdeb0ac526a13ad29d093e813
-Message-Id: <173290800727.2154162.7216402406203444354.pr-tracker-bot@kernel.org>
-Date: Fri, 29 Nov 2024 19:20:07 +0000
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, samitolvanen@google.com, petr.pavlu@suse.com, da.gomez@samsung.com, linux-modules@vger.kernel.org, patches@lists.linux.dev, linux-kernel@vger.kernel.org, geert@linux-m68k.org, masahiroy@kernel.org, mmaurer@google.com, arnd@arndb.de, deller@gmx.de, song@kernel.org
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kB6lrSEm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To;
+	bh=xFrdyuMgRUUJGyOInxj7bUrT/h7Ni0x8G1WlCO144yg=; b=kB6lrSEm821XI+oiRPpmwx5XvQ
+	pSx3wbtdR4rP3pyHRBatJF4BUIeOW6W5YcrW2OhpGwhNyHxP93sCN9snCldKcvIf+wP58c6tVQRpG
+	GY+BYcVHkLpZzlQLo672VbsIvkbLCGsLicrIXsBDqqDCVwuxTUWZ41rbml82XGwknEqWNA94iuvXV
+	D/RTH3nB2EcEaPtJhYdO97qHmf4RNLac2c3BlIjhS1GWqK3CW1VT74sN+NoW+/oeRzjFC5bZMoGnI
+	qT4l+dgQgSx4z3KcJlb2ugt9OpXKiU26OjxED6YEzd4xPOpDJtr4s2xMlF8o7RXhK8n2uOryOLiNH
+	FFCu0pWQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tI859-00000008CQ4-3iat;
+	Mon, 02 Dec 2024 15:11:29 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
+	id D109F300848; Mon,  2 Dec 2024 16:11:27 +0100 (CET)
+Message-ID: <20241202150810.606849101@infradead.org>
+User-Agent: quilt/0.66
+Date: Mon, 02 Dec 2024 15:59:52 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: mcgrof@kernel.org
+Cc: x86@kernel.org,
+ hpa@zytor.com,
+ petr.pavlu@suse.com,
+ samitolvanen@google.com,
+ da.gomez@samsung.com,
+ masahiroy@kernel.org,
+ nathan@kernel.org,
+ nicolas@fjasle.eu,
+ linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org,
+ linux-kbuild@vger.kernel.org,
+ hch@infradead.org,
+ gregkh@linuxfoundation.org,
+ Sean Christopherson <seanjc@google.com>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH -v2 6/7] module: Account for the build time module name mangling
+References: <20241202145946.108093528@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 
-The pull request you sent on Thu, 28 Nov 2024 11:27:00 -0800:
+Sean noted that scripts/Makefile.lib:name-fix-token rule will mangle
+the module name with s/-/_/g.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc1-v2
+Since this happens late in the build, only the kernel needs to bother
+with this, the modpost tool still sees the original name.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/93e064ce854abfacdeb0ac526a13ad29d093e813
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ kernel/module/main.c |   26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-Thank you!
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1062,6 +1062,30 @@ static char *get_modinfo(const struct lo
+ }
+ 
+ /*
++ * Like strncmp(), except s/-/_/g as per scripts/Makefile.lib:name-fix-token rule.
++ */
++static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
++{
++	for (int i = 0; i < n; i++) {
++		char a = str_a[i];
++		char b = str_b[i];
++		int d;
++
++		if (a == '-') a = '_';
++		if (b == '-') b = '_';
++
++		d = a - b;
++		if (d)
++			return d;
++
++		if (!a)
++			break;
++	}
++
++	return 0;
++}
++
++/*
+  * @namespace ~= "MODULE_foo-*,bar", match @modname to 'foo-*' or 'bar'
+  */
+ static bool verify_module_namespace(const char *namespace, const char *modname)
+@@ -1086,7 +1110,7 @@ static bool verify_module_namespace(cons
+ 		if (*sep)
+ 			sep++;
+ 
+-		if (strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
++		if (mod_strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
+ 			return true;
+ 	}
+ 
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
