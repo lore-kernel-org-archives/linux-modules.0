@@ -1,40 +1,40 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414F52040A7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E824205ACC;
 	Mon,  2 Dec 2024 15:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733152297; cv=none; b=lVVTWCVrsihHo1VP3X4L0TLRK0izVbN3V0UL8UkZfDUX8Jhr8CwNlRclm8ifh2j3k97Ad7P2VHT4z46645WaQMiK7rpDQcYPjsU8RSlMbRC/LAS/OzoQJpne3RXtgph7IX6fVm5Fc/O5o99ssW76iH3+zmiLOEQOHmviH62N0pw=
+	t=1733152297; cv=none; b=ehsONdijU0vnjOYM5tET+juKlocWTd9SHSqT3qVOz6dR2pcDwLfZo1uTwgx6Y2pEq6e4NSxbMl7flKh/cUecOwBiTXWDCXcnfqfOKv/kYd3DBpFQhMKBwPujQaoWOU1PzM1zKTsXBT+cYxu61YWJn8P3aiMbmmq2m+woUiQYtdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733152297; c=relaxed/simple;
-	bh=XhHU543T1F3w14Rm03rZzs+C84JVQ8YZfAkynEfLBx8=;
+	bh=Gh1yFaFkFcr2xJc52xK1w4jF0RWt4DU76CiOwQOb1Hk=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=Fum0A0ujlSPMDS0ve6ocgVZAgayFuKpizowsl93750mY1pYcAx942OA7WoF4pjq8wTNoCQGdR6Vamncz+vSjDo+1Ych5syKS961DUNBkJFrrGeevBz5FhsoshLgdqlSb59lwGFAmile1Pb1K0pmQudC22hxJRK8y4sygF1qcS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=sJnm9gen; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type; b=eXf+ohg0jFNiKpLxF9Xcv1rarJfq4hhY/yMr1JYxBJg9f0/C9UePIFqIHvb9oQBLXizsa4M9Xhfd98+ndkUArlu5ii/h368+Npvo4NJs3sojNoKtK++b9l6u8vqaI99nTxM+58fddf4D0U6MW8Z7ASTKtGlGnnO3CmiDDUuF1Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZffuDRwq; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="sJnm9gen"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZffuDRwq"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=6N0qDSelpM+yvXc7hsTj7XyqDv+BJKuq3m0opDDR0WI=; b=sJnm9genTuMS+qdJXmTcHhqpMk
-	0QCvDJz71FSGYaavs78RRfugwdz/0jzKFEY7oHfIDpjOAmnyeRZIXOERbNlAD5hj/Wc1a3OzZq8fH
-	vkFh8KpePxNfFP18TsMJm7KOj7MJ5g6u3LcGiZ2S8ftGl6tKNXki5jl6zE6Oaqh959E26K/frjOeN
-	idRCOoiJvi/Y7cKLh/0Xu9VlCoFLkPZmHu8ImOrU/q/vLZO1EztapC4RMpyVrmWILtkvfQK6ZKp5L
-	A59hr6aM07FaCMVpHG2CU1G0RodyIo2JKhD78kEKeJ4id9fENm4+4w4X66Sie7IliSE/VXCSTNMAa
-	7GkwlEUA==;
+	bh=jDtXY2bUyMjOXT8/HogIZaen7IxgRS/M1Ecyy8kWGnA=; b=ZffuDRwqBI2/58aAedJbHfQ+je
+	9593YANjszF3dgTgQ+9O4oBIzcI4ofkMzZjLSyU40vrOQb5qlKeLFw/KAXoZI1a7oIjfDFC2TMGz1
+	e52es2buivve00KSoF7oi62hAEM4sc1LBJ3WYwJe4qK4ZQFAxwtyd+5G/5mIkujmBWjupxmWZCTV2
+	rh++1PyAUUWFCOIB+VDgdFIUj6g0ExKHmx/+l4TEf8/TzFNFVCyOmmS20qJezeRSGRALadqyywRdY
+	nxcvO88qcN3l3/0DAJwW4wZw0SdUSRTIZRbR707EfRNeMFf0jztQVZIb75UNuwlUaf4yeOmLbRHKm
+	G/QxGgQQ==;
 Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tI859-00000008CQ5-3q67;
+	id 1tI859-00000008CQ3-3re7;
 	Mon, 02 Dec 2024 15:11:29 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id D4AFF300ABE; Mon,  2 Dec 2024 16:11:27 +0100 (CET)
-Message-ID: <20241202150810.713959190@infradead.org>
+	id CDA44300780; Mon,  2 Dec 2024 16:11:27 +0100 (CET)
+Message-ID: <20241202150810.496784892@infradead.org>
 User-Agent: quilt/0.66
-Date: Mon, 02 Dec 2024 15:59:53 +0100
+Date: Mon, 02 Dec 2024 15:59:51 +0100
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -51,7 +51,7 @@ Cc: x86@kernel.org,
  hch@infradead.org,
  gregkh@linuxfoundation.org,
  "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH -v2 7/7] module: Provide EXPORT_SYMBOL_GPL_FOR() helper
+Subject: [PATCH -v2 5/7] module: Extend the MODULE_ namespace parsing
 References: <20241202145946.108093528@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -61,73 +61,141 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
+Instead of only accepting "MODULE_${name}", extend it with a comma
+separated list of module names and add tail glob support.
 
-Requested-by: Masahiro Yamada <masahiroy@kernel.org>
-Requested-by: Christoph Hellwig <hch@infradead.org>
+That is, something like: "MODULE_foo-*,bar" is now possible.
+
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- include/linux/export.h |   26 ++++++++++++++++++++------
- 1 file changed, 20 insertions(+), 6 deletions(-)
+ kernel/module/main.c  |   39 ++++++++++++++++++++++++++++++++++-----
+ scripts/mod/modpost.c |   40 ++++++++++++++++++++++++++++++++++------
+ 2 files changed, 68 insertions(+), 11 deletions(-)
 
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -24,11 +24,23 @@
- 	.long sym
- #endif
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1061,6 +1061,38 @@ static char *get_modinfo(const struct lo
+ 	return get_next_modinfo(info, tag, NULL);
+ }
  
--#define ___EXPORT_SYMBOL(sym, license, ns)		\
 +/*
-+ * LLVM intregrated assembler refuses to merge adjacent string literals (like
-+ * C and GNU-as) and chokes on:
-+ *
-+ *   .asciz "MODULE_" "kvm" ;
-+ *
-+ * As would be generated when using EXPORT_SYMBOL_GPL_FOR(foo, "kvm"), use
-+ * varargs to assemble it like so:
-+ *
-+ *   .ascii "MODULE_", "kvm", "\0" ;
-+ *
++ * @namespace ~= "MODULE_foo-*,bar", match @modname to 'foo-*' or 'bar'
 + */
-+#define ___EXPORT_SYMBOL(sym, license, ns...)		\
- 	.section ".export_symbol","a"		ASM_NL	\
- 	__export_symbol_##sym:			ASM_NL	\
- 		.asciz license			ASM_NL	\
--		.asciz ns			ASM_NL	\
-+		.ascii ns, "\0"			ASM_NL	\
- 		__EXPORT_SYMBOL_REF(sym)	ASM_NL	\
- 	.previous
- 
-@@ -39,20 +51,20 @@
-  * be reused in other execution contexts such as the UEFI stub or the
-  * decompressor.
-  */
--#define __EXPORT_SYMBOL(sym, license, ns)
-+#define __EXPORT_SYMBOL(sym, license, ns...)
- 
- #elif defined(__GENKSYMS__)
- 
--#define __EXPORT_SYMBOL(sym, license, ns)	__GENKSYMS_EXPORT_SYMBOL(sym)
-+#define __EXPORT_SYMBOL(sym, license, ns...)	__GENKSYMS_EXPORT_SYMBOL(sym)
- 
- #elif defined(__ASSEMBLY__)
- 
--#define __EXPORT_SYMBOL(sym, license, ns) \
-+#define __EXPORT_SYMBOL(sym, license, ns...) \
- 	___EXPORT_SYMBOL(sym, license, ns)
- 
- #else
- 
--#define __EXPORT_SYMBOL(sym, license, ns)			\
-+#define __EXPORT_SYMBOL(sym, license, ns...)			\
- 	extern typeof(sym) sym;					\
- 	__ADDRESSABLE(sym)					\
- 	asm(__stringify(___EXPORT_SYMBOL(sym, license, ns)))
-@@ -70,4 +82,6 @@
- #define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", ns)
- #define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "GPL", ns)
- 
-+#define EXPORT_SYMBOL_GPL_FOR(sym, mods) __EXPORT_SYMBOL(sym, "GPL", "MODULE_", mods)
++static bool verify_module_namespace(const char *namespace, const char *modname)
++{
++	size_t len, modlen = strlen(modname);
++	const char *sep;
++	bool glob;
 +
- #endif /* _LINUX_EXPORT_H */
++	if (strncmp(namespace, "MODULE_", 7) != 0)
++		return false;
++
++	for (namespace += 7; *namespace; namespace = sep) {
++		sep = strchrnul(namespace, ',');
++		len = sep - namespace;
++
++		glob = false;
++		if (sep[-1] == '*') {
++			len--;
++			glob = true;
++		}
++
++		if (*sep)
++			sep++;
++
++		if (strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
++			return true;
++	}
++
++	return false;
++}
++
+ static int verify_namespace_is_imported(const struct load_info *info,
+ 					const struct kernel_symbol *sym,
+ 					struct module *mod)
+@@ -1070,11 +1102,8 @@ static int verify_namespace_is_imported(
+ 
+ 	namespace = kernel_symbol_namespace(sym);
+ 	if (namespace && namespace[0]) {
+-		/*
+-		 * Implicitly import MODULE_${mod->name} namespace.
+-		 */
+-		if (strncmp(namespace, "MODULE_", 7) == 0 &&
+-		    strcmp(namespace+7, mod->name) == 0)
++
++		if (verify_module_namespace(namespace, mod->name))
+ 			return 0;
+ 
+ 		for_each_modinfo_entry(imported_namespace, info, "import_ns") {
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1565,7 +1565,6 @@ static const char *mod_basename(const ch
+ 
+ static void read_symbols(const char *modname)
+ {
+-	char module_namespace[MODULE_NAME_LEN + 8];
+ 	const char *symname;
+ 	char *version;
+ 	char *license;
+@@ -1601,10 +1600,6 @@ static void read_symbols(const char *mod
+ 		     namespace = get_next_modinfo(&info, "import_ns", namespace))
+ 			add_namespace(&mod->imported_namespaces, namespace);
+ 
+-		snprintf(module_namespace, sizeof(module_namespace), "MODULE_%s",
+-			 mod_basename(mod->name));
+-		add_namespace(&mod->imported_namespaces, module_namespace);
+-
+ 		if (extra_warn && !get_modinfo(&info, "description"))
+ 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
+ 	}
+@@ -1687,6 +1682,38 @@ void buf_write(struct buffer *buf, const
+ 	buf->pos += len;
+ }
+ 
++/*
++ * @namespace ~= "MODULE_foo-*,bar", match @modname to 'foo-*' or 'bar'
++ */
++static bool module_namespace(const char *namespace, const char *modname)
++{
++	size_t len, modlen = strlen(modname);
++	const char *sep;
++	bool glob;
++
++	if (strncmp(namespace, "MODULE_", 7) != 0)
++		return false;
++
++	for (namespace += 7; *namespace; namespace = sep) {
++		sep = strchrnul(namespace, ',');
++		len = sep - namespace;
++
++		glob = false;
++		if (sep[-1] == '*') {
++			len--;
++			glob = true;
++		}
++
++		if (*sep)
++			sep++;
++
++		if (strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
++			return true;
++	}
++
++	return false;
++}
++
+ static void check_exports(struct module *mod)
+ {
+ 	struct symbol *s, *exp;
+@@ -1714,7 +1741,8 @@ static void check_exports(struct module
+ 
+ 		basename = mod_basename(mod->name);
+ 
+-		if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
++		if (!module_namespace(exp->namespace, basename) &&
++		    !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+ 			modpost_log(!allow_missing_ns_imports,
+ 				    "module %s uses symbol %s from namespace %s, but does not import it.\n",
+ 				    basename, exp->name, exp->namespace);
 
 
