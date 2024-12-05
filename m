@@ -1,144 +1,108 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3011DACA8
-	for <linux-modules@vger.kernel.org>; Thu,  5 Dec 2024 15:52:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FC11401C;
+	Thu,  5 Dec 2024 16:06:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733413954; cv=none; b=mrTy8O8EylfVdL6OA8Fsm8fuuMAk6WY6FuVR/RZdNSt0SDO7KYnYVNie/d2D/76YgCoOjtWF1hfSDXxNqg/uNoiYlZcqPR4u4T36WeNjb/aPvou+0N/li8aT8n+Yu8cleDB0MwBsCq3WetJc6yKtQl8GxlbOs7rB2NSepxWYT0E=
+	t=1733414767; cv=none; b=BhN8dtbyMtsLTTFRvK4R95UCwRd7ofJf/wD99c0Yslm+YVB5ozdivxN1mf9D30VqbNJYExAOmOy4Y3qMlO6AxR7H4Tl8pNXcQ3kXCkADSbmkpuisan+F1kZ0sYzf82rFDVRs2kv/T4iO32oPAoIHQulT7+q8vl8GDFGNpz0ofFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733413954; c=relaxed/simple;
-	bh=Kij0pMFjp1FIZECulBkulJhs69DMxK/+RRr1dTBi8Mg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ivyT9lrmL6Pp7wwW4YRemdZy1ZL+owLdmwKnhAak1TN7VIgQhyBZQ9Q6ltUojMsJhAvEB4BwQamggjKIJIaUvW1nhRewqNpKJcKuUCh0MtcikYNa+ylWZlT6Y037s1cboK7M3kfzw2IKDSJ9advtB42IzZYq6zR8oh0LJxUE++U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dc+vz+Zi; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1733414767; c=relaxed/simple;
+	bh=/Kdl7bzreorqvX/30Ilif6NOEDW/4fhFjMEfzhYix4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dpwBvOssp2bY/s30EIOpj3/yQnyDmjlbUzLnry6YLQXVp3xLwguTXhzcwjyQuyNwm3KGLpr4ssPhnYy8HHNYkF2SJTdw2M0V/ZG3AtJEV59jfzp98FmgmQHSoK6or9MlcQKiMqPvyF4YZuOAsRE5Y6lcTs8X2m2LY25bazueu5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RbQ8cIof; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=suAw/MWx; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dc+vz+Zi"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5d1228d66a0so9962a12.1
-        for <linux-modules@vger.kernel.org>; Thu, 05 Dec 2024 07:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733413950; x=1734018750; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vEZhIBbCBW5mV7dogz2EkqQC7Av8Las6Bo0OJgolYbA=;
-        b=dc+vz+ZidA4fziyKq7m9Gz/ilKT/1b6MewlT/L7QWKMvRxKWt9FkDY3r1hBtd6mVPp
-         BSJZ1LoosdiJ1DhfYNyP5H8ER+t0X1Fqizgspz4ChX0soXLTtFfzzvxe4wKPp8K4Tu7D
-         uzPGy/BEvY5xu3MFGDoavb1ygNoqzc3lNA1EakpMw4CjreT5taBZSOwihGrFQwlPbBds
-         li1UpGrbBHfor3l8bZSqfeh5Xp8tQ7aL5CA5zDsslA/b/4uJczMpNdoWW/z+ap6V4ASI
-         uo63z4vRQxd3wsl1OMwvCUhLLsNNz/n6CTf4KAN+RQ+/lkVIw2CGpgg7Gq0YKa+NISus
-         sO2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733413950; x=1734018750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vEZhIBbCBW5mV7dogz2EkqQC7Av8Las6Bo0OJgolYbA=;
-        b=o2HHeMMPAtTlhvj+6XvJcAZ8TFz2WEBGC5pApbBkUpGQngRYQywH4ib2BCu8fthhBT
-         i4MqRNGkQKt3//hZPwXk8cfemHf5Aj+JfFmcntei4vW2dDhXAbTUlNXyIFv84U5gVPHx
-         wFjYnctx1Gp7vT0AFwDnONEJSoX0E7yePmDl8d0fCtWEo5yWqxuX+2HGmbAEPl6bWPGF
-         oWtLGTeJOCDKueCc488CYYklrXTK6QJXvmxj/sP35m5IzExZ0RvPKo5xuaCSa7jzTZaL
-         XCv6Iu1UWhuwCKM6Qq/M5BvVx8MLpWxExC/SZP0ALslGBbzAWgynGDmPkZgdAp1eVyOc
-         IrAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUE1X9JMVSQmfoG/wj6SDaSSZ7VTxIPP7Sz2WjLKEeiXnf85kxDEt4yvZbi9h2TfffDYoWgeu51/z1IeT9u@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXo+zK4LIJO+y8xGtbSHUvy3z5kI13TDpLLNPWiogQAXVB9M9Q
-	5U0RqM+t0XGf+6L5/nPGkJvQJZR+BDKYrirZoHRNdKm9EwjSbdSQwqZdxP8lliIYq8opX9l1kl6
-	FpksztEApTEnXIswoNlFpZyGcwksFTSFhv7JF
-X-Gm-Gg: ASbGncv5tK/xF4Ymm0LKKO5+1x5B5weWkY+2gwNSBN7BxqPQf7ziUlR3ATRsG4hXNM2
-	4D4lV89FFlkG4LhOh7kbYnS5yQ+Bl/dT+
-X-Google-Smtp-Source: AGHT+IFBiLz78aKLQ7PSRqfnfxVbdQRhB246a3JGCkTy/Nk+EAvR/wwPlsqF9sjCkYVRcSQoJuYGGxEhlRPuON1Kgqo=
-X-Received: by 2002:a50:ed99:0:b0:5d0:b20c:205c with SMTP id
- 4fb4d7f45d1cf-5d13514ed50mr87120a12.5.1733413949872; Thu, 05 Dec 2024
- 07:52:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RbQ8cIof";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="suAw/MWx"
+Date: Thu, 5 Dec 2024 17:06:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1733414764;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=9p0B4zCa8Sp8P80zJI8PHN0Ymm/O7Rq7034IDOUSF7M=;
+	b=RbQ8cIofNTFOulEHQlvzlMSfuz5lfTe7y1N08piENuJAso4CB4KTP2+vdouIiApDNgT7Po
+	00LYy4vV0xzZIcrtldnpkzSLTDg1OXnkwGovx79T6PMbtm2uZOJG3fcZqYoZ5N3MA3HJvL
+	XEaZutXmH3Md6UByEkScNyNEqHppAtCUkc8TqmtX5GpJVVdOtNnNCGsnEwMvayNTGOkub/
+	5BYK1EKXwAvBVOI5gy7QBzE9v4Hzz8SVQVsp8m8UMfJFmIpc14KA5YUSis7hungLsgeF3s
+	IFCmFxwI9CBeFwnmYSQj4lHjmSkrGe8YkFOSk58U4b9KkIs7pZe5q4WWMPE8Ew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1733414764;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=9p0B4zCa8Sp8P80zJI8PHN0Ymm/O7Rq7034IDOUSF7M=;
+	b=suAw/MWx1P7eIPNrbyhRrEXsPmNzpaEGmK1Bb0J6+MRB2KL1/IbSzp5w6F7vBL0BamgBG4
+	nJKe/dLwTkCVQSDQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Cc: Ben Segall <bsegall@google.com>, Clark Williams <clrkwllms@kernel.org>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, Mel Gorman <mgorman@suse.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] preempt: Move PREEMPT_RT before PREEMPT in vermagic.
+Message-ID: <20241205160602.3lIAsJRT@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121204220.2378181-20-samitolvanen@google.com>
- <20241121204220.2378181-21-samitolvanen@google.com> <Z0UIdmDHYQtUTR1i@bombadil.infradead.org>
- <CAK7LNATK9rSm4AUSneq=aYbADatPL=1eUXuYRChX+WU+zNTyKw@mail.gmail.com>
- <Z0YS1hVWuozpN4Ln@bombadil.infradead.org> <CAK7LNARcECiG0TAJFmFDhmbgzQiETX0i-_mr3StDAUiGTjKnLA@mail.gmail.com>
-In-Reply-To: <CAK7LNARcECiG0TAJFmFDhmbgzQiETX0i-_mr3StDAUiGTjKnLA@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 5 Dec 2024 17:51:52 +0200
-Message-ID: <CABCJKuep1Fk22rpxcZbFzD0_Dhp+1Oonz123jHs8WkNKjQaekA@mail.gmail.com>
-Subject: Re: [PATCH v6 01/18] tools: Add gendwarfksyms
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Hi,
+Since the dynamic preemption has been enabled for PREEMPT_RT we have now
+CONFIG_PREEMPT and CONFIG_PREEMPT_RT set simultaneously. This affects
+the vermagic strings which comes now PREEMPT with PREEMPT_RT enabled.
 
-On Thu, Dec 5, 2024 at 5:46=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Wed, Nov 27, 2024 at 3:26=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.o=
-rg> wrote:
-> >
-> > On Tue, Nov 26, 2024 at 12:50:48PM +0900, Masahiro Yamada wrote:
-> > > On Tue, Nov 26, 2024 at 8:30=E2=80=AFAM Luis Chamberlain <mcgrof@kern=
-el.org> wrote:
-> > > >
-> > > > On Thu, Nov 21, 2024 at 08:42:22PM +0000, Sami Tolvanen wrote:
-> > > > > Add a basic DWARF parser, which uses libdw to traverse the debugg=
-ing
-> > > > > information in an object file and looks for functions and variabl=
-es.
-> > > > > In follow-up patches, this will be expanded to produce symbol ver=
-sions
-> > > > > for CONFIG_MODVERSIONS from DWARF.
-> > > > >
-> > > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > > Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> > > > > ---
-> > > > >  kernel/module/Kconfig                 |   8 ++
-> > > > >  scripts/Makefile                      |   1 +
-> > > > >  scripts/gendwarfksyms/.gitignore      |   2 +
-> > > >
-> > > > This doesn't add scripts/gendwarfksyms to MAINTAINERS
-> > > > but then again   scripts/genksyms/ is not there either
-> > > > but it does got to Masahiro.
-> > >
-> > > scripts/genksyms/ is a very old tool with no maintainer.
-> > >
-> > > It defaults to the maintainer of the scripts/ directory (i.e. me)
-> > >
-> > > > Masahiro, should we just add both to KERNEL BUILD and add
-> > > > Sami as a Reviewer to help with gendwarfksyms?
-> > >
-> > > I think it is better to have a separate entry for
-> > >
-> > > F:  scripts/gendwarfksyms/
-> > >
-> > > with Sami as the maintainer.
-> >
-> > OK do you want this and the extended modversions to go through your tre=
-e
-> > or modules tree?
-> >
-> >   Luis
->
->
-> I guess I can pick up them.
->
-> I was just thinking about a possibility to
-> make this (and the other one) less worse.
+The PREEMPT_RT module usually can not be loaded on a PREEMPT kernel
+because some symbols are missing.
+However if the symbols are fine then it continues and it crashes later.
+The problem is that the struct module has a different layout and the
+num_exentries or init members are at a different position leading to a
+crash later on. This is not necessary caught by the size check in
+elf_validity_cache_index_mod() because the mem member has an alignment
+requirement of __module_memory_align which is big enough keep the total
+size unchanged. Therefore we should keep the string accurate instead of
+removing it.
 
-Note that I'm planning to send out v7 with the recent feedback
-addressed ~mid-December when I'm back in the office, and I'm sure Matt
-is also happy to make any improvements to his patches that you have in
-mind.
+Move the PREEMPT_RT check before the PREEMPT so that it takes precedence
+if both symbols are enabled.
 
-Sami
+Fixes: 35772d627b55c ("sched: Enable PREEMPT_DYNAMIC for PREEMPT_RT")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ include/linux/vermagic.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/vermagic.h b/include/linux/vermagic.h
+index a54046bf37e55..939ceabcaf06f 100644
+--- a/include/linux/vermagic.h
++++ b/include/linux/vermagic.h
+@@ -15,10 +15,10 @@
+ #else
+ #define MODULE_VERMAGIC_SMP ""
+ #endif
+-#ifdef CONFIG_PREEMPT_BUILD
+-#define MODULE_VERMAGIC_PREEMPT "preempt "
+-#elif defined(CONFIG_PREEMPT_RT)
++#ifdef CONFIG_PREEMPT_RT
+ #define MODULE_VERMAGIC_PREEMPT "preempt_rt "
++#elif defined(CONFIG_PREEMPT_BUILD)
++#define MODULE_VERMAGIC_PREEMPT "preempt "
+ #else
+ #define MODULE_VERMAGIC_PREEMPT ""
+ #endif
+-- 
+2.45.2
+
