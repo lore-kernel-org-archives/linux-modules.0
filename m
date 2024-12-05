@@ -1,38 +1,38 @@
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07FE19E961;
-	Thu,  5 Dec 2024 19:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC18722E419;
+	Thu,  5 Dec 2024 19:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733427992; cv=none; b=rc3R9ZTIojmtUMdKxbQWU3B5P6rX8eokQUV55AV60WyldkHLS4RM167YPC7JYIs3+xL6T5waEZHJj1o1i4RW1mBtKCyIkMYnbc/9axshic2u6x4vsH7rha+DWhKX63wIOvjJr5DDhn9zw3kpCuVFUyplwRIKt0FzWgqdsitDjBU=
+	t=1733427997; cv=none; b=hwLNhyTZ468ra9id95g1flcLpiSnIJ38GsS8qJT04mPCcswAW4TGCdSP75EmN1eeRjizr6jYZ3S4JMR91EJTDE3bKTipUc6KejLX4TYhYo6ldIik/eBjISqAm7lftfxYteJ+vBQghy72gVnyOMOrRggn9r3EZ4boKy5J1wYaTTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733427992; c=relaxed/simple;
-	bh=6Fm0gx1a6AkZGf3Kqs5LhL/NAVxTyKNyuj72or1ZIYY=;
+	s=arc-20240116; t=1733427997; c=relaxed/simple;
+	bh=8q2j6oY2j7jBVhN9HdnphDr7Cw59vtHJ7ZgyENJ4vY8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YkwiykCsfi8BPKOWXZuTOQeagFjRDmMEnY+FA2QkewK0Zi10f5DYSmHYDN005O0n0o4e2DPb4H9aOFoHTyybi2jSEfIF7/hWWt+KdPGNmthk+aNE2Ta6BuUs1ThnTI3vDV0XxXCrkHqtcaqqXCZdGIn8lPx0qK8rg40XdTiqLGY=
+	 MIME-Version; b=Hy7NYko6ZhjiEs5qpsXziuePLJFcl4tqRQ7gCXyrGH9jBpxYGPMFU33BzRHmtY4cnivP3P6uLZzmp8uQ6p7OI4TJwg/dYvyG7CL7o7x7xemX8W7W6vUFhA45mdgeHxnFHi9pdl2niJtRHrYnr0Kt/tEbWx4o7B0ozpez3RRsSdk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Y44dT0nnHz9svj;
-	Thu,  5 Dec 2024 20:46:21 +0100 (CET)
+	by localhost (Postfix) with ESMTP id 4Y44dV75Kzz9svl;
+	Thu,  5 Dec 2024 20:46:22 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ZR9QcpiaDyPm; Thu,  5 Dec 2024 20:46:21 +0100 (CET)
+	with ESMTP id ODfdm_7cbVPI; Thu,  5 Dec 2024 20:46:22 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Y44dS6dPvz9svg;
-	Thu,  5 Dec 2024 20:46:20 +0100 (CET)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Y44dT2SbZz9svg;
+	Thu,  5 Dec 2024 20:46:21 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id CF9BD8B76E;
-	Thu,  5 Dec 2024 20:46:20 +0100 (CET)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4363C8B76E;
+	Thu,  5 Dec 2024 20:46:21 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id jt0TSl1Xf3E8; Thu,  5 Dec 2024 20:46:20 +0100 (CET)
+	with ESMTP id oX7KGUuo9kQt; Thu,  5 Dec 2024 20:46:21 +0100 (CET)
 Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.232.97])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 53F298B770;
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C98EA8B763;
 	Thu,  5 Dec 2024 20:46:20 +0100 (CET)
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
 To: Luis Chamberlain <mcgrof@kernel.org>,
@@ -44,9 +44,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-kernel@vger.kernel.org,
 	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v1 1/3] module: Split module_enable_rodata_ro()
-Date: Thu,  5 Dec 2024 20:46:15 +0100
-Message-ID: <e3b6ff0df7eac281c58bb02cecaeb377215daff3.1733427536.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v1 2/3] module: Don't fail module loading when setting ro_after_init section RO failed
+Date: Thu,  5 Dec 2024 20:46:16 +0100
+Message-ID: <d6c81f38da76092de8aacc8c93c4c65cb0fe48b8.1733427536.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1733427536.git.christophe.leroy@csgroup.eu>
 References: <cover.1733427536.git.christophe.leroy@csgroup.eu>
@@ -56,97 +56,49 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733427977; l=3253; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=6Fm0gx1a6AkZGf3Kqs5LhL/NAVxTyKNyuj72or1ZIYY=; b=rX1PuStiWXqDboVJ/ZxLvRqUML1O9fmBQJJWxXgBi+Gebgl5x2ONREaqOmaU0VYrBcmavVlSU nnCK+wQiW6CAJteuuuteOgNMszKvle5cXb/GWuYMQNEGV+iAWLBdTP8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733427977; l=1393; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=8q2j6oY2j7jBVhN9HdnphDr7Cw59vtHJ7ZgyENJ4vY8=; b=UEZ+N40ZDpO5GVZVXdCUO5lkkuhyK1548+DIf0nFX4s0jTmwRJ8aLNCoeGDi6LaePdf/ylwVC iMFKHYAxRk+CEnR0tmf/MLAu8OWvklLq2qovuiENuo7URtgxEsuDtbD
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-module_enable_rodata_ro() is called twice, once before module init
-to set rodata sections readonly and once after module init to set
-rodata_after_init section readonly.
+Once module init has succeded it is too late to cancel loading.
+If setting ro_after_init data section to read-only fails, all we
+can do is to inform the user through a warning.
 
-The second time, only the rodata_after_init section needs to be
-set to read-only, no need to re-apply it to already set rodata.
-
-Split module_enable_rodata_ro() in two.
-
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Closes: https://lore.kernel.org/all/20230915082126.4187913-1-ruanjinjie@huawei.com/
+Fixes: d1909c022173 ("module: Don't ignore errors from set_memory_XX()")
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Tested-by: Daniel Gomez <da.gomez@samsung.com>
 ---
- kernel/module/internal.h   |  3 ++-
- kernel/module/main.c       |  4 ++--
- kernel/module/strict_rwx.c | 13 +++++++++----
- 3 files changed, 13 insertions(+), 7 deletions(-)
+v1: Fixed comment from Petr about __func__
+---
+ kernel/module/main.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 2ebece8a789f..994f35a779dc 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -322,7 +322,8 @@ static inline struct module *mod_find(unsigned long addr, struct mod_tree_root *
- }
- #endif /* CONFIG_MODULES_TREE_LOOKUP */
- 
--int module_enable_rodata_ro(const struct module *mod, bool after_init);
-+int module_enable_rodata_ro(const struct module *mod);
-+int module_enable_rodata_ro_after_init(const struct module *mod);
- int module_enable_data_nx(const struct module *mod);
- int module_enable_text_rox(const struct module *mod);
- int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d2e1b8976c7b..39fe5d81b6a8 100644
+index 39fe5d81b6a8..5f922e563fc3 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2673,7 +2673,7 @@ static noinline int do_init_module(struct module *mod)
- 	/* Switch to core kallsyms now init is done: kallsyms may be walking! */
- 	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+@@ -2675,7 +2675,10 @@ static noinline int do_init_module(struct module *mod)
  #endif
--	ret = module_enable_rodata_ro(mod, true);
-+	ret = module_enable_rodata_ro_after_init(mod);
+ 	ret = module_enable_rodata_ro_after_init(mod);
  	if (ret)
- 		goto fail_mutex_unlock;
+-		goto fail_mutex_unlock;
++		pr_warn("%s: module_enable_rodata_ro_after_init() returned %d, "
++			"ro_after_init data might still be writable\n",
++			mod->name, ret);
++
  	mod_tree_remove_init(mod);
-@@ -2843,7 +2843,7 @@ static int complete_formation(struct module *mod, struct load_info *info)
- 	module_bug_finalize(info->hdr, info->sechdrs, mod);
- 	module_cfi_finalize(info->hdr, info->sechdrs, mod);
+ 	module_arch_freeing_init(mod);
+ 	for_class_mod_mem_type(type, init) {
+@@ -2714,8 +2717,6 @@ static noinline int do_init_module(struct module *mod)
  
--	err = module_enable_rodata_ro(mod, false);
-+	err = module_enable_rodata_ro(mod);
- 	if (err)
- 		goto out_strict_rwx;
- 	err = module_enable_data_nx(mod);
-diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-index 239e5013359d..74834ba15615 100644
---- a/kernel/module/strict_rwx.c
-+++ b/kernel/module/strict_rwx.c
-@@ -47,7 +47,7 @@ int module_enable_text_rox(const struct module *mod)
  	return 0;
- }
  
--int module_enable_rodata_ro(const struct module *mod, bool after_init)
-+int module_enable_rodata_ro(const struct module *mod)
- {
- 	int ret;
- 
-@@ -61,12 +61,17 @@ int module_enable_rodata_ro(const struct module *mod, bool after_init)
- 	if (ret)
- 		return ret;
- 
--	if (after_init)
--		return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
--
- 	return 0;
- }
- 
-+int module_enable_rodata_ro_after_init(const struct module *mod)
-+{
-+	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX) || !rodata_enabled)
-+		return 0;
-+
-+	return module_set_memory(mod, MOD_RO_AFTER_INIT, set_memory_ro);
-+}
-+
- int module_enable_data_nx(const struct module *mod)
- {
- 	if (!IS_ENABLED(CONFIG_STRICT_MODULE_RWX))
+-fail_mutex_unlock:
+-	mutex_unlock(&module_mutex);
+ fail_free_freeinit:
+ 	kfree(freeinit);
+ fail:
 -- 
 2.47.0
 
