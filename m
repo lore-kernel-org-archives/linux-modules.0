@@ -1,156 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023911A9B5A;
-	Tue, 10 Dec 2024 14:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E8D1BC9E2;
+	Tue, 10 Dec 2024 19:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733840865; cv=none; b=OIdR928MHZlKcF9bC7W9OBvRYQ29rBAkFtPISDdeYmQv0MUvQnCwkd2I/cGNTjkz7hZwM7xgkak4xCXUGQ6nsehpol7wfYnGFbX9aRlprFXigUky8XGG0vNQ75D3/ZpLTV1QVW/s13KtrQflf462LpV6B6eJ/+IfPZTPrG4l67I=
+	t=1733858256; cv=none; b=tqn1S5aHJ4gbyKEVB2qm0anNEq7itXammtGxbkbq79F1SCRC7FEadzuINVZ6tE/3UcJc3v11eUeUPFq6p8kt1nCopJYQlNzLwOAAX9rJNcXBEoHsTZ9hLVvK57gxu7J8txuNkVzJZztRaKAPjjzeSak+i7OR306+V4ozipgNW+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733840865; c=relaxed/simple;
-	bh=TGFjMSOvA9OzXNs681GT0p8OCfNumj8L09HFYq/mGMc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A73+PsemkVJNucAw7ajy8201uJLwos++Dit85jvrjAhQnJOWrJCHE3DnMOrgMtE4m7Xlx1ybJqDXFESDlB6pepW0Fwu3ZRllRxisaPbBfsgv/f5jteZ8oosMJG/IWCQ2r5LRpvlsf3Au1kiDr3Ult5XOwszuojQnLRMmFP8rjmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDZYVA4x; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733858256; c=relaxed/simple;
+	bh=B1adUjR1VE80f1PTstNu785YA4jDE4rVDXmLSCYT2aI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=dTjXL6YtlcBzVdPq3dFpahLcUlE4PLJEgZYm85rQhNx+szyxUaUdczonyr4yjyej+h97BCYGiZObXlXKOZKKkx/NGcCZ4iNfhQOWwpMwZEftYVKzlYVHFv+ao5fOl32Uq+VP45q6ds0H41tyjVVuV5tSg/U5LaCMzPYCFUZKU4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Q5WLWETe; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDZYVA4x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81323C4CEE1;
-	Tue, 10 Dec 2024 14:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733840864;
-	bh=TGFjMSOvA9OzXNs681GT0p8OCfNumj8L09HFYq/mGMc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XDZYVA4xHCsq7gSS3lms86+L786ua9Fd7xsXDCm87VP0ENAHvCMnJpX3fniovmtmK
-	 nInhMNhO7Dg8W/RAOoalXqvMkHVkXjkgHeU6d4LOR/TFiL3QA0EN94XJTHNj7AahHQ
-	 1GEoiqb0EM4wVp4KUOZIHu0zswq/T1fswA7sfdEboX107RVtntpErUbQIwiXBWz/QX
-	 WmoIWnJs553t+l1MCZRGzwgcaCJ9+ndO5H9E63eTriPv/lKzebiF42g2BICnkM/gJ6
-	 V9kd8LRp361cLxIxqbcjVYF3DLuQ2j2xsUmEVoCgcu1C91mCwYN5ngwYb320cKhCrd
-	 1Vjz6vbQpBFxA==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-30229d5b1caso17186571fa.2;
-        Tue, 10 Dec 2024 06:27:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUcMAqGZTaMomB3as1ZwP8lVB+DgY5o8rgdiCJJ3kw7aLI4HGx21n2E1wC47kVU1jYldVijPZV4nn+/DsIf@vger.kernel.org, AJvYcCVfIUMOqr7wd8jtYDW/vQW7Dh8t7l2HRC39o7WFnrwxmdeyVpKo1bp02G6YgGyNBgop2p753Avxdxw29gg=@vger.kernel.org, AJvYcCVfLzI68FwiBRKqyKjWFSIvDnDLn/6yLaSPWUcIKWeITrWbS1ldlCdLwHxG/TSIDIGnGEkaxu5guJjSanmqGgU=@vger.kernel.org, AJvYcCXuPAFyHamqHJk0iEkjI6cdZvDI4nfbz8TYBeQ9EP8KVDhz0CDDCoEJ2OcttGIeWdavGdt5V8ttUKABBnL2PA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSEYixdAY+/2wDVY4x//2cGi0d7VTCfObNQDgR+Euk7k2SbpTd
-	jtlbSPZwVA3I2IxPUKB8o7wLwcSC9Oscs2qLTgClStn5CAdMAgZIw46yqeGfgSxf+8eIQX31aQw
-	gUvDFBUdFlFF85FzDd78F49ox+Ts=
-X-Google-Smtp-Source: AGHT+IFJxKwaGGCANvoqcVMT71tICaABYmdvdng8GfDx3J9i3uSXTp2LoEvBJO4yzXCtIY+wnTgLfXX9E+lEm/voJI4=
-X-Received: by 2002:a2e:a552:0:b0:300:3fef:a9e8 with SMTP id
- 38308e7fff4ca-3003fefad37mr55935321fa.28.1733840862697; Tue, 10 Dec 2024
- 06:27:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Q5WLWETe"
+Received: from pps.filterd (m0354652.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BAGAf2t018432;
+	Tue, 10 Dec 2024 19:15:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-id:content-transfer-encoding:content-type:date
+	:from:in-reply-to:message-id:mime-version:references:subject:to;
+	 s=default; bh=B1adUjR1VE80f1PTstNu785YA4jDE4rVDXmLSCYT2aI=; b=Q
+	5WLWETej/0uKO6cQ1WldX4CJ3IaLH90EjGr1lkk0cGOEJj9n5PVIBgjR9chPXsbh
+	WXfczIGo4DVHR8tSYL60ElqL20UzdQeCSsvKfZtraVBvxMfQNWA7GJ/+SG0UnDNz
+	aKyYPDoWR4XmnBmuqNDUlpXmXzhsu7tfSKi8/HI7jvRVcAEOEgNbqvgw9dFh+4zI
+	mwo5kSulGhKEyf1/Qm32CpBkx88bzZXpktbqg7i1aCI4I3PP2pU9IC1qmoqodYQA
+	abjRiSXTTPxt3IO7dNESBuZUu7pikklfjV20zIHwzNeudEq0BlTJggjPmdZvr173
+	tg/P8MaftEbtGDXHPrYtg==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 43erxfgjqw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 19:15:15 +0000 (GMT)
+Received: from 04wpexch06.crowdstrike.sys (10.100.11.99) by
+ 04wpexch05.crowdstrike.sys (10.100.11.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Tue, 10 Dec 2024 19:15:13 +0000
+Received: from 04wpexch06.crowdstrike.sys ([fe80::9386:41e4:ec25:9fd5]) by
+ 04wpexch06.crowdstrike.sys ([fe80::9386:41e4:ec25:9fd5%9]) with mapi id
+ 15.02.1544.009; Tue, 10 Dec 2024 19:15:13 +0000
+From: Martin Kelly <martin.kelly@crowdstrike.com>
+To: "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "ojeda@kernel.org"
+	<ojeda@kernel.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>,
+        "james.clark@arm.com" <james.clark@arm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mathieu.desnoyers@efficios.com"
+	<mathieu.desnoyers@efficios.com>,
+        "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "nathan@kernel.org"
+	<nathan@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
+        "surenb@google.com"
+	<surenb@google.com>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "hpa@zytor.com"
+	<hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "zhengyejian@huaweicloud.com" <zhengyejian@huaweicloud.com>,
+        "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+        "bp@alien8.de"
+	<bp@alien8.de>,
+        "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+CC: Amit Dang <amit.dang@crowdstrike.com>,
+        "linux-modules@vger.kernel.org"
+	<linux-modules@vger.kernel.org>,
+        "linux-kbuild@vger.kernel.org"
+	<linux-kbuild@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix
+ weak function issue
+Thread-Topic: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix
+ weak function issue
+Thread-Index: AQHbSzfWIbF4ko3yU0yIDGnRxekZ5w==
+Date: Tue, 10 Dec 2024 19:15:13 +0000
+Message-ID: <44353f4cd4d1cc7170d006031819550b37039dd2.camel@crowdstrike.com>
+References: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+In-Reply-To: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-disclaimer: USA
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <894EEA24DDE3DA4C924E664F311AA9D3@crowdstrike.sys>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241121204220.2378181-20-samitolvanen@google.com>
- <CAEg-Je-h4NitWb2ErFGCOqt0KQfXuyKWLhpnNHCdRzZdxi018Q@mail.gmail.com>
- <CANiq72m4fea15Z0fFZauz8N2madkBJ0G7Dc094OwoajnXmROOA@mail.gmail.com>
- <CABCJKudozEhZXLZVxVixsO5YuZg0nOEmgo3=vMyhcrEw+6Xo5w@mail.gmail.com> <CAEg-Je-58WxKXOFEDBWmZDpt8E+SaRq+kK7ZnfMER2qtnKUD=w@mail.gmail.com>
-In-Reply-To: <CAEg-Je-58WxKXOFEDBWmZDpt8E+SaRq+kK7ZnfMER2qtnKUD=w@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 10 Dec 2024 23:27:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATR0epWogDDDOnAvBJyypdgY-CPsi_mUehOWsvphg4LSA@mail.gmail.com>
-Message-ID: <CAK7LNATR0epWogDDDOnAvBJyypdgY-CPsi_mUehOWsvphg4LSA@mail.gmail.com>
-Subject: Re: [PATCH v6 00/18] Implement DWARF modversions
-To: Neal Gompa <neal@gompa.dev>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	"Darrick J. Wong" <djwong@kernel.org>, Donald Zickus <dzickus@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Authority-Analysis: v=2.4 cv=Td5stQQh c=1 sm=1 tr=0 ts=67589343 cx=c_pps a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17 a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=RZcAm9yDv7YA:10 a=VwQbUJbxAAAA:8 a=i0EeH86SAAAA:8
+ a=pl6vuDidAAAA:8 a=eHuGQ7gFT_7OOu_YEIIA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: mM4J9j6hWFAPRFjVNI4NhQBKWaTtiq1Z
+X-Proofpoint-GUID: mM4J9j6hWFAPRFjVNI4NhQBKWaTtiq1Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=658
+ adultscore=0 clxscore=1011 classifier=spam authscore=0 adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2412100140
 
-On Tue, Dec 10, 2024 at 9:42=E2=80=AFPM Neal Gompa <neal@gompa.dev> wrote:
->
-> On Mon, Nov 25, 2024 at 10:34=E2=80=AFAM Sami Tolvanen <samitolvanen@goog=
-le.com> wrote:
-> >
-> > On Mon, Nov 25, 2024 at 4:41=E2=80=AFPM Miguel Ojeda
-> > <miguel.ojeda.sandonis@gmail.com> wrote:
-> > >
-> > > On Mon, Nov 25, 2024 at 2:29=E2=80=AFPM Neal Gompa <neal@gompa.dev> w=
-rote:
-> > > >
-> > > > As my Acked-by was removed, I'm sorry to say that there is no point
-> > > > for me to provide feedback since it is unwanted.
-> > > >
-> > > > I hope it lands soon, but I also hope the people here who decided t=
-hat
-> > > > a person's efforts aren't worth recording because they don't
-> > > > personally know them should reflect on this too. It's a good way to
-> > > > keep people from coming into the community for the long term.
-> > >
-> > > Hopefully this reply helps -- apologies to anyone if I am oversteppin=
-g.
-> > >
-> > > On one side, it is true that Acked-by is typically used by people tha=
-t
-> > > is responsible for the code one way or another, because the tag is
-> > > meant for them to acknowledge they are OK with the change going in,
-> > > and so I can see the argument that restricting it for that purpose
-> > > only may help avoid confusion later on reading the log.
-> > >
-> > > On the other hand, someone being willing to put their name on a patch
-> > > is very valuable, whoever they are, and whatever the tag name is.
-> > > Moreover, it is also true that, Acked-by may be used here in a "as a
-> > > key user downstream, this looks reasonable and satisfies our needs"
-> > > sense.
-> > >
-> > > Finally, sometimes new tags are invented on the fly because there is
-> > > no good fit, too.
-> > >
-> > > Either way, I don't think anyone wanted to disregard your efforts or
-> > > to be rude to you in particular, but rather wanted to keep tags usage
-> > > aligned to how they view them or how they use them in their subsystem=
-.
-> > > The Tested-by was still wanted, so I doubt their goal was to remove
-> > > you from the log or to make you feel unwelcomed.
-> >
-> > Thank you for putting this more eloquently than I could, Miguel. Neal,
-> > I do appreciate your feedback, and I'm sorry if I didn't make it clear
-> > enough in my previous emails. I would very much welcome your
-> > Tested-by, or another suitable tag that's acceptable to both you and
-> > Masahiro.
-> >
->
-> Honestly, I don't think it's worth it if my tag is going to be
-> stripped simply because someone thinks I'm "unqualified". If you want
-> more people participating in these things, doing stuff like that is
-> definitely not the way to do it. It's not like people haven't had a
-> chance to know me or even just look me up to know I'm not just blowing
-> smoke. I definitely feel like I'm being disregarded. :(
->
-> The sole reason I didn't give a Reviewed-by or Tested-by is that I
-> didn't want to do any integration work to validate it beyond the
-> basics, which would have meant dipping into the Red Hat kernel symbol
-> tracking infrastructure. I don't have time for that right now. If
-> someone else does, they can be my guest. I just don't feel comfortable
-> giving either without *actually* going that far.
-
-
-If you provided a Reviewed-by and/or Tested-by tag, they would not be strip=
-ped.
-
-I would not say you are unqualified in terms of skills or abilities.
-However, this is not how the Acked-by tag is typically used.
-As Miguel mentioned, "Acked-by-User" or "Acked-by: # As primary user"
-could be an option, but I am not sure if they would gain
-sufficient consensus.
-
-Code reviews and tests are always appreciated.
-The Reviewed-by and Tested-by tags are open to everyone.
-
-If you are uncomfortable with a Reviewed-by or Tested-by tag,
-I cannot think of any other alternatives.
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+T24gVHVlLCAyMDI0LTA3LTIzIGF0IDE0OjMyICswODAwLCBaaGVuZyBZZWppYW4gd3JvdGU6DQo+
+IEJhY2tncm91bmQgb2YgdGhpcyBwYXRjaCBzZXQgY2FuIGJlIGZvdW5kIGluIHYxOg0KPiANCj4g
+aHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjQwNjEzMTMzNzExLjI4Njc3NDUtMS16aGVu
+Z3llamlhbjFAaHVhd2VpLmNvbS8NCj4gwqANCj4gDQo+IEhlcmUgYWRkIGEgcmVwcm9kdWN0aW9u
+IHRvIHNob3cgdGhlIGltcGFjdCB0byBsaXZlcGF0Y2g6DQo+IDEuIEFkZCBmb2xsb3dpbmcgaGFj
+ayB0byBtYWtlIGxpdmVwYXRjaC1zYW1wbGUua28gZG8gcGF0Y2ggb24NCj4gZG9fb25lX2luaXRj
+YWxsKCkNCj4gwqDCoCB3aGljaCBoYXMgYW4gb3ZlcnJpZGVuIHdlYWsgZnVuY3Rpb24gYmVoaW5k
+IGluIHZtbGludXgsIHRoZW4gcHJpbnQNCj4gdGhlDQo+IMKgwqAgYWN0dWFsbHkgdXNlZCBfX2Zl
+bnRyeV9fIGxvY2F0aW9uOg0KPiANCg0KSGkgYWxsLCB3aGF0IGlzIHRoZSBzdGF0dXMgb2YgdGhp
+cyBwYXRjaCBzZXJpZXM/IEknZCByZWFsbHkgbGlrZSB0byBzZWUNCml0IG9yIHNvbWUgb3RoZXIg
+Zml4IHRvIHRoaXMgaXNzdWUgbWVyZ2VkLiBUaGUgdW5kZXJseWluZyBidWcgaXMgYQ0Kc2lnbmlm
+aWNhbnQgb25lIHRoYXQgY2FuIGNhdXNlIGZ0cmFjZS9saXZlcGF0Y2gvQlBGIGZlbnRyeSB0byBm
+YWlsDQpzaWxlbnRseS4gSSd2ZSBub3RpY2VkIHRoaXMgYnVnIGluIGFub3RoZXIgY29udGV4dFsx
+XSBhbmQgcmVhbGl6ZWQNCnRoZXkncmUgdGhlIHNhbWUgaXNzdWUuDQoNCkknbSBoYXBweSB0byBo
+ZWxwIHdpdGggdGhpcyBwYXRjaCBzZXJpZXMgdG8gYWRkcmVzcyBhbnkgaXNzdWVzIGFzDQpuZWVk
+ZWQuDQoNClsxXQ0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnBmLzcxMzY2MDVkMjRkZTliMWZj
+NjJkMDJhMzU1ZWYxMWM5NTBhOTQxNTMuY2FtZWxAY3Jvd2RzdHJpa2UuY29tL1QvI21iN2U2Zjg0
+YWM5MGZhNzg5ODllOWUyYzNjZDhkMjlmNjVhNzg4NDViDQo=
