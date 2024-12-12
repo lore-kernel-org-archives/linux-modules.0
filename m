@@ -1,362 +1,139 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB251DE3C3
-	for <linux-modules@vger.kernel.org>; Wed, 11 Dec 2024 08:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3622213CF9C;
+	Thu, 12 Dec 2024 09:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733906795; cv=none; b=tC2nkHseAP7xxdNttMzB9UOnNZk3Ond7OqEY+6wjF0Ii0XgAtZyeA9wD3mSPlJ9/8XE2Lkl7uEGCTbvRC29CZyXhWpR9GHM5Wd4E78mQh20N4R6jNZ540kIBpO0Vl9FIRD73GzyC6peXH6fpBPelCVdqr5fzZqafhi5cxhj4uvk=
+	t=1733997136; cv=none; b=NHB5O3+ueMnYAOVGv7TU/YBbYVU6VvQYtx6Kjlgh+fkRHaIEvr+E366dgTEmFcb2FxRwqIs6JKoFr8rEHRYoaMP6NeEN+FtcRVAszhug6AQ2Si7c1DOGjcWD8EhiVLo4YpMA5j12//Y0WswCDh+3NOZqN1S9NFHp4smfR3nFWVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733906795; c=relaxed/simple;
-	bh=XbRLMyt7k3YKZ3F6ya3+jcNz50GxQf5h0+xJvL74Pow=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:In-Reply-To:
-	 Content-Type:References; b=sjuPc5eieAzQ/C3/tB1Ay57Sn6gOfU0tVJBheQ+aXpKvr1LcQelujF8KKiAOFkzUZXNxYAtK++RD+XAO9NiZfL524obb2Bq0lzUuHmHr5aQV5gn/DVG0PVSTxWrrgZnWmB5o3POB1+p1lrHolrFUhYxy3q4TXvYUCWMWSHDWyqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=E0K4+dOP; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="E0K4+dOP"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20241211084624euoutp018bcd9fea9986f4e970f815ca3553c385~QEwir7qsB0811408114euoutp01y
-	for <linux-modules@vger.kernel.org>; Wed, 11 Dec 2024 08:46:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20241211084624euoutp018bcd9fea9986f4e970f815ca3553c385~QEwir7qsB0811408114euoutp01y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1733906784;
-	bh=cpqClTx7HZk9gCRNzag5+pPyGl+jmhAwfbU/m/DP3YU=;
-	h=Date:Subject:From:To:CC:In-Reply-To:References:From;
-	b=E0K4+dOPYFQtoxXGR5PZrn+g9qJVL1YAsLHecTYuCxelSN8okWOzgnt8By69TsTfN
-	 C1gY1E3nGXp7FZ09yC+C7PnO8nip2TXZboFIVVm2CtJ5w/WTNwBHlbQM5mt0Oq3nv/
-	 4e8Y9ptUgpU4Dt98kpCZ2njjX1zuxis7sdPyOLB8=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20241211084623eucas1p186e11a3d0905842a8dd10a3b46c3b10d~QEwhrQ9xx2927129271eucas1p1C;
-	Wed, 11 Dec 2024 08:46:23 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id D2.D2.20397.F5159576; Wed, 11
-	Dec 2024 08:46:23 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241211084623eucas1p151dc11714ba7c6f5a8168001aaa2107c~QEwhSYGSe2231522315eucas1p1U;
-	Wed, 11 Dec 2024 08:46:22 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241211084622eusmtrp20609eaf6fbbfc312142c815c08d447fa~QEwhRwjX72179421794eusmtrp2b;
-	Wed, 11 Dec 2024 08:46:22 +0000 (GMT)
-X-AuditID: cbfec7f5-e59c770000004fad-d5-6759515f0dc8
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id E9.CD.19654.E5159576; Wed, 11
-	Dec 2024 08:46:22 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20241211084622eusmtip1a4f3d2a1c700ebd620029913b87df5fd~QEwhGm1o92144321443eusmtip1I;
-	Wed, 11 Dec 2024 08:46:22 +0000 (GMT)
-Received: from [106.110.32.87] (106.110.32.87) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Wed, 11 Dec 2024 08:46:21 +0000
-Message-ID: <7274aee6-2f51-4ae8-b085-b9a111c2ac03@samsung.com>
-Date: Wed, 11 Dec 2024 09:46:21 +0100
+	s=arc-20240116; t=1733997136; c=relaxed/simple;
+	bh=+8uKDmRN4MfGNUlWvlfKZ1BxyRgnmiW8rTEDTQe+kkE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pW4yHRhHqTBucXTKvVJyov8Kg7AvV3CE/JlzuvkTEZHNyygAOujYKT9eO83H6ubtKVWv2xLzwmzx3C42NpgvX9cr2v67r/JFtfAHWcjmdWU7aLa3/FzDcqsyUJEUbhlIBO5GAjlnKefEYctpxWpSIa02ujyB8kVNna87SlyBIAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Y876M1Z5jz4f3jqx;
+	Thu, 12 Dec 2024 17:51:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 7A6091A06D7;
+	Thu, 12 Dec 2024 17:52:09 +0800 (CST)
+Received: from [10.67.111.172] (unknown [10.67.111.172])
+	by APP4 (Coremail) with SMTP id gCh0CgCXcYVDslpnkZaEEQ--.63144S3;
+	Thu, 12 Dec 2024 17:52:04 +0800 (CST)
+Message-ID: <1f11e3c4-e8fd-d4ac-23cd-0ab2de9c1799@huaweicloud.com>
+Date: Thu, 12 Dec 2024 17:52:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/3] module: Don't fail module loading when setting
- ro_after_init section RO failed
-Content-Language: en-GB
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Petr Pavlu <petr.pavlu@suse.com>, Kees Cook <kees@kernel.org>
-CC: Christophe Leroy <christophe.leroy@csgroup.eu>, Luis Chamberlain
-	<mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
-	<linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Thomas
-	Gleixner <tglx@linutronix.de>, <linux-hardening@vger.kernel.org>
-In-Reply-To: <95871917-9747-40d4-8305-51bc5d75cf82@samsung.com>
-Content-Type: text/plain; charset="UTF-8"; format="flowed"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLKsWRmVeSWpSXmKPExsWy7djPc7rxgZHpBsu+CFncmfSc3WLd2/Os
-	FvPW/2S0uLxrDptFw+zvrBY3JjxltFj65R2zxdIVb1ktNm+ayuzA6fH15jkmjwWbSj02repk
-	83h37hy7x/otV1k8Pm+SC2CL4rJJSc3JLEst0rdL4Mp409PPVPA8smLqqz/MDYwvvbsYOTkk
-	BEwkNrUcZuxi5OIQEljBKHH16T12COcLo8Sqpl42COczo0R340UWmJb+930sEInljBLXz3cy
-	w1UdvdQF1b+TUeL72kOsIC28AnYSh66+A2tnEVCV6Fy3nQkiLihxcuYTsLiogLzE/Vsz2EFs
-	YYFcibZrz8DizALiEk1fVoLNYRPQlNh3chNYjYiAo8Sba09ZQZYxC0xkkngxazsjSIJTwF7i
-	X+MFoGYOoISVxPQTnhBz5CWat85mhnhBUWLGxJVQ79RKnNpyiwlkjoTAdE6JDd/Os0MkXCRa
-	3z9kgrCFJV4d3wIVl5H4v3M+VDxdYsm6WVCDCiT23J7FCrJXQsBaou9MDkTYUeLu581QYT6J
-	G28FIc7hk5i0bTrzBEbVWUghMQvJx7MQHpiF5IEFjCyrGMVTS4tz01OLjfNSy/WKE3OLS/PS
-	9ZLzczcxAlPU6X/Hv+5gXPHqo94hRiYOxkOMEhzMSiK8N+wj04V4UxIrq1KL8uOLSnNSiw8x
-	SnOwKInzqqbIpwoJpCeWpGanphakFsFkmTg4pRqYHMwkBZ8neJntzs2Ne7J1rbiqjkbzoZse
-	hqVvmrXTvh9/zFfF/m2niomU9OGlfTxdbxl2NLjvqjgtOndWV+dPnSdtU7hrLS4duX1Oq6t7
-	w5+g/FM5z6XeB6l9ZNTdfdNKTGuj49Hb089fvsjq6vu+7OrmVWLPLpyW088rf8AyKXp/M4P6
-	wpf3/zeubHu5aabOZgFl9f4N87wLG38z9+jkH5fWfbFrIaulJ/vsxKq92/9m7chi+vGFtypP
-	YpryzclmHnO6wzc/6izK2LyyZV526KUPecK31pWxbZuz8HiQQafEkacCalk/WbuPfzZ7vabj
-	5nWh2g2B/2OyzU4UuqyRbhX/Fr7o2UsxfauvPqqLlFiKMxINtZiLihMBJU73FsADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMIsWRmVeSWpSXmKPExsVy+t/xu7pxgZHpBnPPWFjcmfSc3WLd2/Os
-	FvPW/2S0uLxrDptFw+zvrBY3JjxltFj65R2zxdIVb1ktNm+ayuzA6fH15jkmjwWbSj02repk
-	83h37hy7x/otV1k8Pm+SC2CL0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXS
-	t7NJSc3JLEst0rdL0Mt409PPVPA8smLqqz/MDYwvvbsYOTkkBEwk+t/3sYDYQgJLGSX+fLKB
-	iMtIbPxylRXCFpb4c62LrYuRC6jmI6PEy41bmCGcnYwSW//OZwap4hWwkzh09R3YJBYBVYnO
-	dduZIOKCEidnPgGLiwrIS9y/NYMdxBYWyJVou/YMLM4sIC7R9GUl2DY2AU2JfSc3gdWICDhK
-	vLn2lBVkGbPARCaJrnmL2CFOfcoiMWkPN4jNKWAv8a/xAtQgC4nFbw6yQ9jyEs1bZzNDvKAo
-	MWPiShYIu1bi899njBMYRWchuW8WkjtmIRk1C8moBYwsqxhFUkuLc9Nzi430ihNzi0vz0vWS
-	83M3MQJje9uxn1t2MK589VHvECMTB+MhRgkOZiUR3hv2kelCvCmJlVWpRfnxRaU5qcWHGE2B
-	gTSRWUo0OR+YXPJK4g3NDEwNTcwsDUwtzYyVxHnZrpxPExJITyxJzU5NLUgtgulj4uCUamBS
-	/PT/zKXKhOCC2YkXAzLDTpb9MWOcYxZUf0b0o7vohnPXJik/FpmSz2wwzTLA9Ejjca6DuYoP
-	rPjvu7NXLb8vflnlRhLD/lA2kRkndN7n3bBX6mw+sqj90SePWqOZmckKNtKeU5ICFq+Y6dE2
-	+eqzOtuHy/Nlwj1bCjvX7Gx3KWJnrfm2Jbh28vHiyriI5Wm9ExMO72FdaP37YaFj7jH/81/T
-	pJ40rDS0DPXcUpO3uyDJoSL17YWd3WpfzMO+z03zX+qx4NalVvfGM8d/9yRsfn/3X2b0H8/D
-	X9kr9Gd+errm373Zq0ySj/066jGv7c7P3qZF12tC9lTPjZ4p/P7gqpqFSwqfPU5d5ieSGrtJ
-	iaU4I9FQi7moOBEAZdWRn3YDAAA=
-X-CMS-MailID: 20241211084623eucas1p151dc11714ba7c6f5a8168001aaa2107c
-X-Msg-Generator: CA
-X-RootMTR: 20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be
-References: <737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy@csgroup.eu>
-	<CGME20241109103554eucas1p1548e0da57cccb9546a88402f1f5c94be@eucas1p1.samsung.com>
-	<164e5f22f8ab59d1d516e3c992efdd9f83ab4819.1731148254.git.christophe.leroy@csgroup.eu>
-	<D5HZV4A6SC9A.25U3Q0WUVDJHZ@samsung.com>
-	<b74f0845-4916-47eb-945b-eb91ae05fc91@csgroup.eu>
-	<D5K3PNXEIKYK.11GZ8BMY02OA4@samsung.com>
-	<7fdcf601-524b-4530-861d-e4b0f8c1023b@suse.com>
-	<9734d93d-73c8-464e-8f32-6117c6f6c952@samsung.com>
-	<cee55e3b-9028-4f56-8ac6-9895ca383334@suse.com>
-	<95871917-9747-40d4-8305-51bc5d75cf82@samsung.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix
+ weak function issue
+Content-Language: en-US
+To: Martin Kelly <martin.kelly@crowdstrike.com>,
+ "masahiroy@kernel.org" <masahiroy@kernel.org>,
+ "ojeda@kernel.org" <ojeda@kernel.org>,
+ "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+ "pasha.tatashin@soleen.com" <pasha.tatashin@soleen.com>,
+ "mhiramat@kernel.org" <mhiramat@kernel.org>,
+ "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+ "james.clark@arm.com" <james.clark@arm.com>,
+ "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+ "mingo@redhat.com" <mingo@redhat.com>,
+ "rostedt@goodmis.org" <rostedt@goodmis.org>,
+ "nathan@kernel.org" <nathan@kernel.org>,
+ "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+ "tglx@linutronix.de" <tglx@linutronix.de>,
+ "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
+ "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+ "npiggin@gmail.com" <npiggin@gmail.com>,
+ "mark.rutland@arm.com" <mark.rutland@arm.com>, "hpa@zytor.com"
+ <hpa@zytor.com>, "surenb@google.com" <surenb@google.com>,
+ "peterz@infradead.org" <peterz@infradead.org>,
+ "naveen.n.rao@linux.ibm.com" <naveen.n.rao@linux.ibm.com>,
+ "kent.overstreet@linux.dev" <kent.overstreet@linux.dev>,
+ "bp@alien8.de" <bp@alien8.de>, "mcgrof@kernel.org" <mcgrof@kernel.org>,
+ Ye Weihua <yeweihua4@huawei.com>
+Cc: Amit Dang <amit.dang@crowdstrike.com>,
+ "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+ "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+ "x86@kernel.org" <x86@kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+ "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+ <44353f4cd4d1cc7170d006031819550b37039dd2.camel@crowdstrike.com>
+ <364aaf7c-cdc4-4e57-bb4c-f62e57c23279@csgroup.eu>
+ <d25741d8a6f88d5a6c219fb53e8aa0bcc1fea982.camel@crowdstrike.com>
+From: Zheng Yejian <zhengyejian@huaweicloud.com>
+In-Reply-To: <d25741d8a6f88d5a6c219fb53e8aa0bcc1fea982.camel@crowdstrike.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgCXcYVDslpnkZaEEQ--.63144S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww48WrWrXF4DKF4ftr43Wrg_yoW8XrWrpF
+	WfKFW5CF4DCF48J3Z2krs7ZF1Yyws3W3y7Wwn8Jw1UurZ8JFy3Ar4Sqr4jgrWDZF93Ww4U
+	ZF17tF95X34kZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9ab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+	WwC2zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
+	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
+	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
+	UvcSsGvfC2KfnxnUUI43ZEXa7IU0EksDUUUUU==
+X-CM-SenderInfo: x2kh0w51hmxt3q6k3tpzhluzxrxghudrp/
 
-Hi Kees,
+On 2024/12/11 04:49, Martin Kelly wrote:
+> On Tue, 2024-12-10 at 21:01 +0100, Christophe Leroy wrote:
+>>>
+>>> Hi all, what is the status of this patch series? I'd really like to
+>>> see
+>>> it or some other fix to this issue merged. The underlying bug is a
+>>> significant one that can cause ftrace/livepatch/BPF fentry to fail
+>>> silently. I've noticed this bug in another context[1] and realized
+>>> they're the same issue.
+>>>
+>>> I'm happy to help with this patch series to address any issues as
+>>> needed.
+>>
+>> As far as I can see there are problems on build with patch 1, see
+>> https://patchwork.kernel.org/project/linux-modules/patch/20240723063258.2240610-2-zhengyejian@huaweicloud.com/
+>>   
+>>
+>>
+> 
+> Yeah, I see those. Additionally, this patch no longer applies cleanly
+> to current master, though fixing it up to do so is pretty easy. Having
+> done that, this series appears to resolve the issues I saw in the other
+> linked thread.
+> 
+> Zheng, do you plan to send a v3? I'd be happy to help out with this
+> patch series if you'd like, as I'm hoping to get this issue resolved
+> (though I am not an ftrace expert).
 
+Sorry to rely so late. Thanks for your feedback!
 
-Could you help clarify the handling of __ro_after_init? What do you 
-think is the best approach when a second attempt fails at setting a 
-section to RO after a module is already initialized? (please find the 
-deatils in this pach series or in [1]. Reporting the failure to the 
-caller seems logical to me but adds some complexity. On the other hand, 
-logging alone feels insufficient but may be the simplest option. Could 
-you advice on handling this corner case and if it's relevant to KSPP?
+Steve recently started a discussion of the issue in:
+https://lore.kernel.org/all/20241014210841.5a4764de@gandalf.local.home/
+but there's no conclusion.
+  
+I can rebase this patch series and send a new version first, and
+I'm also hoping to get more feedbacks and help to resolve the issue.
 
-You can find below the conversation. And the v1 PATCH series here [1].
-
-[1] 
-https://lore.kernel.org/all/cover.1733427536.git.christophe.leroy@csgroup.eu/
-
+-- 
 Thanks,
-Daniel
-
-
-On 12/10/2024 11:49 AM, Daniel Gomez wrote:
-> On 12/4/2024 4:14 PM, Petr Pavlu wrote:
->> On 11/28/24 21:23, Daniel Gomez wrote:
->>> On 11/12/2024 3:35 PM, Petr Pavlu wrote:
->>>> On 11/12/24 10:43, Daniel Gomez wrote:
->>>>> On Mon Nov 11, 2024 at 7:53 PM CET, Christophe Leroy wrote:
->>>>>>
->>>>>>
->>>>>> Le 09/11/2024 à 23:17, Daniel Gomez a écrit :
->>>>>>> On Sat Nov 9, 2024 at 11:35 AM CET, Christophe Leroy wrote:
->>>>>>>> Once module init has succeded it is too late to cancel loading.
->>>>>>>> If setting ro_after_init data section to read-only fails, all we
->>>>>>>> can do is to inform the user through a warning.
->>>>>>>>
->>>>>>>> Reported-by: Thomas Gleixner <tglx@linutronix.de>
->>>>>>>> Closes: https://protect2.fireeye.com/v1/url?k=d3deb284-b2a35ac3- 
->>>>>>>> d3df39cb-74fe485fff30-288375d7d91e4ad9&q=1&e=701066ca-634d-4525- 
->>>>>>>> a77d-1a44451f897a&u=https%3A%2F%2Feur01.safelinks.protection.outlook.com%2F%3Furl%3Dhttps%253A%252F%252Flore.kernel.org%252Fall%252F20230915082126.4187913-1-ruanjinjie%2540huawei.com%252F%26data%3D05%257C02%257Cchristophe.leroy%2540csgroup.eu%257C26b5ca7363e54210439b08dd010c4865%257C8b87af7d86474dc78df45f69a2011bb5%257C0%257C0%257C638667874457200373%257CUnknown%257CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%253D%253D%257C0%257C%257C%257C%26sdata%3DZeJ%252F3%252B2Nx%252FBf%252FWLFEkhxKlDhZk8LNkz0fs%252Fg2xMcOjY%253D%26reserved%3D0
->>>>>>>> Fixes: d1909c022173 ("module: Don't ignore errors from 
->>>>>>>> set_memory_XX()")
->>>>>>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>>>>>>> ---
->>>>>>>>     kernel/module/main.c | 6 +++---
->>>>>>>>     1 file changed, 3 insertions(+), 3 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/kernel/module/main.c b/kernel/module/main.c
->>>>>>>> index 2de4ad7af335..1bf4b0db291b 100644
->>>>>>>> --- a/kernel/module/main.c
->>>>>>>> +++ b/kernel/module/main.c
->>>>>>>> @@ -2583,7 +2583,9 @@ static noinline int do_init_module(struct 
->>>>>>>> module *mod)
->>>>>>>>     #endif
->>>>>>>>         ret = module_enable_rodata_ro_after_init(mod);
->>>>>>>>         if (ret)
->>>>>>>> -        goto fail_mutex_unlock;
->>>>>>>> +        pr_warn("%s: %s() returned %d, ro_after_init data might 
->>>>>>>> still be writable\n",
->>>>>>>> +            mod->name, __func__, ret);
->>>>>>>> +
->>>>>>>>         mod_tree_remove_init(mod);
->>>>>>>>         module_arch_freeing_init(mod);
->>>>>>>>         for_class_mod_mem_type(type, init) {
->>>>>>>> @@ -2622,8 +2624,6 @@ static noinline int do_init_module(struct 
->>>>>>>> module *mod)
->>>>>>>>         return 0;
->>>>>>>
->>>>>>> I think it would make sense to propagate the error. But that would
->>>>>>> require changing modprobe.c. What kind of error can we expect 
->>>>>>> when this
->>>>>>> happens?
->>>>>>
->>>>>> AFAIK, on powerpc it fails with EINVAL when
->>>>>> - The area is a vmalloc or module area and is a hugepage area
->>>>>> - The area is not vmalloc or io register and MMU is not powerpc 
->>>>>> radix MMU
->>>>>>
->>>>>> Otherwise it propagates the error from 
->>>>>> apply_to_existing_page_range().
->>>>>> IIUC it will return EINVAL when it hits a leaf PTE in upper 
->>>>>> directories.
->>>>>
->>>>> Looking at that path I see we can also fail at __apply_to_page_range()
->>>>> -> apply_to_p4d_range() and return with -ENOMEM.
->>>>>
->>>>> My proposal was to do something like the change below in modprobe:
->>>>>
->>>>> diff --git a/tools/modprobe.c b/tools/modprobe.c
->>>>> index ec66e6f..8876e27 100644
->>>>> --- a/tools/modprobe.c
->>>>> +++ b/tools/modprobe.c
->>>>> @@ -572,6 +572,11 @@ static int insmod_insert(struct kmod_module 
->>>>> *mod, int flags, const char *extra_o
->>>>>                   err = 0;
->>>>>           else {
->>>>>                   switch (err) {
->>>>> +               case -EINVAL:
->>>>> +                       ERR("module '%s'inserted: ro_after_init 
->>>>> data might"
->>>>> +                           "still be writable (see dmesg)\n",
->>>>> +                           kmod_module_get_name(mod));
->>>>> +                       break;
->>>>>                   case -EEXIST:
->>>>>                           ERR("could not insert '%s': Module 
->>>>> already in kernel\n",
->>>>>                               kmod_module_get_name(mod));
->>>>>
->>>>> But I think these error codes may be also be reported in other parts
->>>>> such as simplify_symbols() so may not be a good idea after all.
->>>>
->>>> It isn't really possible to make a sensible use of the return code from
->>>> init_module(), besides some basic check for -EEXIST. The problem is 
->>>> that
->>>> any error code from a module's init function is also propagated as
->>>> a result from the syscall.
->>>>
->>>>>
->>>>> Maybe we just need to change the default/catch all error message in
->>>>> modprobe.c and to indicate/include this case:
->>>>>
->>>>> diff --git a/tools/modprobe.c b/tools/modprobe.c
->>>>> index ec66e6f..3647d37 100644
->>>>> --- a/tools/modprobe.c
->>>>> +++ b/tools/modprobe.c
->>>>> @@ -582,7 +582,8 @@ static int insmod_insert(struct kmod_module 
->>>>> *mod, int flags, const char *extra_o
->>>>>                               kmod_module_get_name(mod));
->>>>>                           break;
->>>>>                   default:
->>>>> -                       ERR("could not insert '%s': %s\n", 
->>>>> kmod_module_get_name(mod),
->>>>> +                       ERR("could not insert '%s' or inserted with 
->>>>> error %s, "
->>>>> +                           "(see dmesg)\n", 
->>>>> kmod_module_get_name(mod),
->>>>>                               strerror(-err));
->>>>>                           break;
->>>>>                   }
->>>>>
->>>>>
->>>>>>
->>>>>> On other architectures it can be different, I know some 
->>>>>> architecture try
->>>>>> to split the pages when they hit hugepages and that can fail.
->>>>>
->>>>> Is it worth it adding an error code for this case in case we want to
->>>>> report it back?
->>>>
->>>> I feel that the proposed kernel warning about this situation is
->>>> sufficient and the loader should then return 0 to indicate that the
->>>> module got loaded. It would be more confusing to return an error but
->>>> with the module actually remaining inserted.
->>>>
->>>> A module loaded without having its RO-after-init section changed
->>>> properly to RO is still fully functional. In practice, if this final
->>>> set_memory_ro() call fails, the system is already in such a state where
->>>> the additional warning is the least of the issues?
->>>>
->>>
->>> __ro_after_init is used for kernel self protection. We are loading
->>> "successfully" the module yes, but variables with this attribute are
->>> marked read-only to reduce the attack surface [1]. Since we have
->>> considered this stage already too late to unload the module, IMHO we
->>> should at least indicate that there was an error during the module
->>> initialization and propagate that to the loader, so it can decide the
->>> best action for their particular case. Warning once in the kernel log
->>> system, does not seem sufficient to me.
->>>
->>> [1] Documentation/security/self-protection.rst
->>
->> I'd be careful about introducing this new state where (f)init_module()
->> returns an error, yet the module actually gets loaded.
-> 
-> Perhaps we just need this new stage? module loaded with permission/ 
-> security error?
-> 
->>
->> The init_module() interface has one return value which can originate
->> from anywhere during the load process, including from the module's own
->> init function. As mentioned, this means that the userspace cannot
->> distinguish why the module load failed. It would be needed to have
->> a specific error code returned only for this case, or to extend the
->> interface further in some way.
->>
->> Another concern is consistency of the module loader interface as
->> a whole. Returning an error from init_module() in this case would mean
->> that only the specific caller is made aware that the module was loaded
->> with some issues. A different task that then decides to check the module
->> state under /sys/module would see it as normally loaded, and similarly a
-> 
-> Maybe we need to change this state too to indicate the problem.
-> 
->> task trying to insert it again would get -EEXIST. That likely would need
->> changing too.
->>
->> What I'd like to understand is how reporting this as an error to the
->> userspace would help in practice. I think the userspace can decide to
->> report it as a warning and continue, or treat is as a hard problem and
->> stop the system? I would expect that most tools/systems would opt for
->> the former, but then this doesn't seem much different to me than when
->> the kernel produces the warning itself. The second option, with some
->> stretch, could be implemented with panic_on_warn=1.
-> 
-> Ideally, we would reverse the module initialization when encountering 
-> this error [1]. However, since it's not feasible to undo it correctly at 
-> this stage, reporting the error back to the caller allows them to assess 
-> and decide whether to accept the risk.
-> 
-> [1] https://lore.kernel.org/all/Zuv0nmFblHUwuT8v@bombadil.infradead.org/
->>
->> Do you envision that the userspace would handle this problem differently
->> and it is worth adding the complexity?
-> 
-> What complexity do you mean?
-> 
-> A module driver has ro_after_init for the purpose of protecting the 
-> kernel from attack [2]. If we ignore it by warning once, the caller will 
-> not be aware of such risk (unless the caller it's parsing the kernel log).
-> 
-> [2] https://lore.kernel.org/all/1455748879-21872-1-git-send-email- 
-> keescook@chromium.org/
-> 
-> Another option could be adding a kconfig to decide to report or not 
-> which I would strongly suggest to report by default.
-> 
-> 
->>
->> As a side node, I've noticed that the module loader could mark also
->> static_call sections as ro_after_init. I'll post patches for that.
->> Additionally, both __jump_table and static_call sections could be
->> possibly turned RO earlier, after prepare_coming_module() ->
->> blocking_notifier_call_chain_robust() -> ... ->
->> jump_label_add_module()/static_call_add_module().
->>
-> 
+Zheng Yejian
 
