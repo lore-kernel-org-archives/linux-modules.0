@@ -1,77 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAAF1EF0B0;
-	Fri, 13 Dec 2024 19:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B2D383;
+	Sat, 14 Dec 2024 08:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734118867; cv=none; b=tNZ2nuDoat0CG34derytOH6Seov+XU7VQ/LAr+2zMQt/K3vhEAtvkEGwGJfGIY/c908Rnj2oXSiN/Wkn7Wu3aj+8PGBAjX4ZIc2clcDOYe9Um7fFkwWRwbAlIDBxg1v6eiPmAENOqa9t0Xe7Ip6dWemfsFjno3RR70xtGj5CbTw=
+	t=1734165510; cv=none; b=oS4DUd0x+Rz3nMzIQlcyztk1kuChfmdjoU3h+tmSZZGI0w6fqmCtV8qF1SeokQJrSh4ijIzRlwcM138WrjZjiQnux0Tqy569eTXiBJdRFqIJvTgImYiBlT25fn/aG+N8r/QjOb6E8SWrUpeLJVJKEJPzIbz2M2GMkGS/gpr1pHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734118867; c=relaxed/simple;
-	bh=sWRxcuS7aYrOVTz1zArZCe1GvCu8/32TCwPStGAG0SE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MK/92ZllUHejd2y4Ry0w3wlmScv0Ik+QKWPotoflR9K4CJ4VEFQUXAN5sOjKHeYczYyeyi6/Z+b9J7U37zQNbxTdXV+uXjz6Oc685Bml0+41ykSiH0C60NSC8ktSc+hSFp1kP8bjcru0OJyM8iWyvX9OOmNaWdGm30Q9q64FU4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5dpB9SL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5dpB9SL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDD1CC4CED0;
-	Fri, 13 Dec 2024 19:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734118867;
-	bh=sWRxcuS7aYrOVTz1zArZCe1GvCu8/32TCwPStGAG0SE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a5dpB9SL29juyuTEERAzdVEpcNVB8nkkYiGNEuVCUcRHn4T0ZUYLRRXmbECgpa+pV
-	 zImQR+4nFI41MFNc2Au3IbGJ57p/Iw3KZbTrzJsP27dYuo/22yTHMtCdebgvqJG+mz
-	 pfeGOlP96q8pgAEbhLBRfDlIxfqpZ0lcrDcE7NjvwM+i4przJDDI6o4HyQYtlFJiG1
-	 +7LoxJ0VnKXVNvYkCm/3pCkLNVs1eujeM97z2GhLkXd0y+HVqqGKtH46FhtThkdd4m
-	 o128EdAES492pv2RVU2abVahz0X/jYbTpbWadsAizVU3yXdkHyULpQ7AC+w8Y0FjUu
-	 EGnwZZbxIoTLg==
-Date: Fri, 13 Dec 2024 11:41:05 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Trevor Gross <tmgross@umich.edu>,
-	Adam Bratschi-Kaye <ark.email@gmail.com>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] rust: extend `module!` macro with integer
- parameter support
-Message-ID: <Z1yN0ZB_ghIwRG-m@bombadil.infradead.org>
-References: <xK59-BGgPeRPn4PEeT498C5hexwXQ1H5sDle5WuMs3OtTzS0cA4NTRiBh1zLr_4p6o64eXKYOlEka_xzUHG5jA==@protonmail.internalid>
- <20241213-module-params-v3-v3-0-485a015ac2cf@kernel.org>
- <87bjxfephw.fsf@kernel.org>
+	s=arc-20240116; t=1734165510; c=relaxed/simple;
+	bh=1/yIy1SrlcaNV2kPAIqau8laoWMKllp8+UijVCDcJAo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=d3ITfWZ21vvrTNiqsgZIpxMBKUDlPUoNK9Ph1btsbkQntTqtRvjHRKQ9IECC1HXdv1A7DbBhF+Hn7oD2iY7YJeSjkmF8TVVs5PKf9wGn/43eK8y2W7OmYn7IAYZr53y3Zgp2QCAzcL8zbUcGhZJNe3Emx7VvhAbkgjwEhJ5qJZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Y9KNp5ZCgz20lpM;
+	Sat, 14 Dec 2024 16:38:34 +0800 (CST)
+Received: from kwepemo500008.china.huawei.com (unknown [7.202.195.163])
+	by mail.maildlp.com (Postfix) with ESMTPS id 33C09180044;
+	Sat, 14 Dec 2024 16:38:17 +0800 (CST)
+Received: from [10.67.111.172] (10.67.111.172) by
+ kwepemo500008.china.huawei.com (7.202.195.163) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 14 Dec 2024 16:38:15 +0800
+Message-ID: <7266ee61-3085-74fc-2560-c62fc34c2148@huawei.com>
+Date: Sat, 14 Dec 2024 16:37:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bjxfephw.fsf@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix
+ weak function issue
+Content-Language: en-US
+To: Martin Kelly <martin.kelly@crowdstrike.com>, "masahiroy@kernel.org"
+	<masahiroy@kernel.org>, "ojeda@kernel.org" <ojeda@kernel.org>,
+	"jpoimboe@kernel.org" <jpoimboe@kernel.org>, "pasha.tatashin@soleen.com"
+	<pasha.tatashin@soleen.com>, "mhiramat@kernel.org" <mhiramat@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"james.clark@arm.com" <james.clark@arm.com>, "mpe@ellerman.id.au"
+	<mpe@ellerman.id.au>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>, "nicolas@fjasle.eu"
+	<nicolas@fjasle.eu>, "tglx@linutronix.de" <tglx@linutronix.de>,
+	"christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+	"nathan@kernel.org" <nathan@kernel.org>, "npiggin@gmail.com"
+	<npiggin@gmail.com>, "mark.rutland@arm.com" <mark.rutland@arm.com>,
+	"hpa@zytor.com" <hpa@zytor.com>, "surenb@google.com" <surenb@google.com>,
+	"peterz@infradead.org" <peterz@infradead.org>, "naveen.n.rao@linux.ibm.com"
+	<naveen.n.rao@linux.ibm.com>, "kent.overstreet@linux.dev"
+	<kent.overstreet@linux.dev>, "bp@alien8.de" <bp@alien8.de>,
+	"yeweihua4@huawei.com" <yeweihua4@huawei.com>,
+	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+	"mcgrof@kernel.org" <mcgrof@kernel.org>
+CC: Amit Dang <amit.dang@crowdstrike.com>, "linux-modules@vger.kernel.org"
+	<linux-modules@vger.kernel.org>, "linux-kbuild@vger.kernel.org"
+	<linux-kbuild@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>
+References: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+ <44353f4cd4d1cc7170d006031819550b37039dd2.camel@crowdstrike.com>
+ <364aaf7c-cdc4-4e57-bb4c-f62e57c23279@csgroup.eu>
+ <d25741d8a6f88d5a6c219fb53e8aa0bcc1fea982.camel@crowdstrike.com>
+ <1f11e3c4-e8fd-d4ac-23cd-0ab2de9c1799@huaweicloud.com>
+ <30ee9989044dad1a7083a85316d77b35f838e622.camel@crowdstrike.com>
+From: Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <30ee9989044dad1a7083a85316d77b35f838e622.camel@crowdstrike.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemo500008.china.huawei.com (7.202.195.163)
 
-On Fri, Dec 13, 2024 at 01:28:27PM +0100, Andreas Hindborg wrote:
+On 2024/12/14 03:31, Martin Kelly wrote:
+> On Thu, 2024-12-12 at 17:52 +0800, Zheng Yejian wrote:
+>> On 2024/12/11 04:49, Martin Kelly wrote:
+>>>
+>>>
+>>> Zheng, do you plan to send a v3? I'd be happy to help out with this
+>>> patch series if you'd like, as I'm hoping to get this issue
+>>> resolved
+>>> (though I am not an ftrace expert).
+>>
+>> Sorry to rely so late. Thanks for your feedback!
+>>
+>> Steve recently started a discussion of the issue in:
+>>
+>> https://lore.kernel.org/all/20241015100111.37adfb28@gandalf.local.home/
+>> but there's no conclusion.
+>>    
+>> I can rebase this patch series and send a new version first, and
+>> I'm also hoping to get more feedbacks and help to resolve the issue.
+>>
 > 
-> Hi Luis, Petr, Sami, Dani,
+> Hi Zheng,
 > 
-> I just noticed that I failed in email and forgot to add you to the
-> recipient list of this series. Do you want a resend, or is this
-> sufficient?
+> I may have misunderstood, but based on the final message from Steven, I
+> got the sense that the idea listed in that thread didn't work out and
+> we should proceed with your current approach.
 
-If the patches didn't go to linux-modules, then yes, a resend would be
-good so that others subscribed to that list can also review. You can
-also wait for a v2. Up to you. I won't read it until I get it on my
-inbox.
+This patch set attempts to add length information of symbols to kallsyms,
+which can then ensure that there is only one valid fentry within the range
+of function length.
 
-  Luis
+However, I think this patch set actually has some performance implications,
+including：
+   1. Adding hole symbols may cause the symbol table to grow significantly;
+   2. When parsing fentry tables, excluding invalid fentries through kallsyms lookups
+      may also increase boot or module load times slightly.
+
+The direct cause of this issue is the wrong fentry being founded by ftrace_location(),
+following the approach of "FTRACE_MCOUNT_MAX_OFFSET", narrowing down the search range
+and re-finding may also solve this problem, demo patch like below (not
+fully tested):
+
+     diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+     index 9b17efb1a87d..7d34320ca9d1 100644
+     --- a/kernel/trace/ftrace.c
+     +++ b/kernel/trace/ftrace.c
+     @@ -1678,8 +1678,11 @@ unsigned long ftrace_location(unsigned long ip)
+                             goto out;
+     
+                     /* map sym+0 to __fentry__ */
+     -               if (!offset)
+     +               if (!offset) {
+                             loc = ftrace_location_range(ip, ip + size - 1);
+     +                       while (loc > ip && loc - ip > FTRACE_MCOUNT_MAX_OFFSET)
+     +                               loc = ftrace_location_range(ip, loc - 1);
+     +               }
+             }
+
+Steve, Peter, what do you think?
+
+> 
+> Please consider me an interested party for this patch series, and let
+> me know if there's anything I can do to help speed it along (co-
+> develop, test, anything else). And of course, thanks very much for your
+> work thus far!
+
+-- 
+Thanks,
+Zheng Yejian
+
