@@ -1,63 +1,63 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5CC205AB6
-	for <linux-modules@vger.kernel.org>; Mon, 16 Dec 2024 13:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D541E193430
+	for <linux-modules@vger.kernel.org>; Mon, 16 Dec 2024 16:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734355539; cv=none; b=GFQepRi59EjriK4DFmu92NRimaRdDc4CaGhrEGMoXnnnFY7eKQSPmTFt/e1iyF6ousKvJPcMJZ1bMVxa3vo2ej8Udr6OAiug668QwcZBD2cPNddd+Z/tXkK7MOLjwFk1kWX4I+3X9JQfXHys5IiWr3eVBmWljTVZ298+dfZQqa0=
+	t=1734367423; cv=none; b=uB+4vtjm3Qne19IsXDbpIl6jVUPTapkHpZBYu+kV5m+jVaXPA2+GqDWbo9Gn747SVdncTRTelx+JzR3VbyyA+CNGWbP2TVwvpEFyMY032FwxRwB/2qTjvtclwhgc1qtaPuqKGY15lgAYeJMQ02qN98R0U8PwMaTHbQZv+fzO8iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734355539; c=relaxed/simple;
-	bh=NndeOH6sd65ORicRkF+Jky+H97Q2/FBkQEok6InkZT0=;
+	s=arc-20240116; t=1734367423; c=relaxed/simple;
+	bh=QQWdPEYlmc+nZpMpl4HW1ioNsquXtY6DnMtqhLHrBBE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TJ2spYz6mRepW8WzpF08VO5Oe9gS8D3vOgFTI8biaV+cuz1LGyqB6WQ0G8ygpnwbvBMaS1QXqOSrC5QpWENCl4ozl74okxA2oHV38FDZS3aoh9+RJwy78SbfXtVS5gZLc0+ObAeC5RI2BYcYpATBlWLfVEzwmO8ikg7B2R7LNuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EUpcv9Jh; arc=none smtp.client-ip=209.85.221.49
+	 In-Reply-To:Content-Type; b=XJjQa+41Yd9WC0uFibgAwXekd+ApUjopPj/K+INfJr/VfT0joNS6w+043u3RQHcf9W9hn5LL8NP7r2ElbZx3oUI7BmCvZrU2eoEgfc68O8GmrxYGwA4I3Tq3ckJIanboEzQzI6Tk6oIoaDbb4lbKz6IlV+IUe6TqdGhzDUBP9IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dmusf8Hm; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EUpcv9Jh"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385e2880606so3769196f8f.3
-        for <linux-modules@vger.kernel.org>; Mon, 16 Dec 2024 05:25:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dmusf8Hm"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso28444465e9.3
+        for <linux-modules@vger.kernel.org>; Mon, 16 Dec 2024 08:43:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1734355536; x=1734960336; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1734367419; x=1734972219; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=STePF4alhOUCMJb60WwslpIUy0epmImIHj5n/B736B8=;
-        b=EUpcv9JhDG+2+g4LGiJBH1hjfimm5Q0kzVNJbo3NAy1yLnwroXqbQ0NS/QZp5EYQVV
-         /5ImGO+ypVik5s8CR5Vcas9g9zsw8KiGgkktNCkfbrVT30JlWJRm9JScQfidsojKDP6F
-         LyqMVkm8eXmX87BJzpX5OFKwwtXff544hFQJS57sNf3lS6PQqdZwViSyNgKWRHDwq0ZR
-         MLC0oapa2oLutHV2lmPGbmwHMklOpIvP2sXkAK1dLPzoPodLhxemY1HBI/g7W0KhqPCM
-         HAJtOW1vcBxejpgdrTVniY212gDzGYMNv5gNiB1JYwHGtNVuSIMr1GVxc/Gvq8XdaJiP
-         /rLg==
+        bh=eizGnDqNqlNpffP7llVarsh21KPFCtOjd1jz0iLgr2U=;
+        b=dmusf8HmSeJWpefuvUAMrMSBUAq9wAznbx0p8qh+HHRrJVJg9njwCmJEw7WNpVw/+N
+         5Ih3TaMKWNxx6eQB8uvw88wWBkhuhSg3Dind/PM8kojQrf5PMdZIZ0aR7Z72vDwt+7+v
+         F2w9ZXr7ysXlrtm1j39z+fijjEkuuC2VEQpq9p81ptD4ERxMwuMmVAQLDGrWCaSToA+3
+         vUdNLCMNlnwjX0uNqigu9CHhx+ijXdov2NtoFLWvsE5txcMlkwn2uJOuMJ/pBPzEZHJi
+         AoHO/boldi0lFIQ6/buiuV0D43mqW57vWGBI+cR1zHruhB+0Tb3385VCBVFXYCPxxQMN
+         vQhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734355536; x=1734960336;
+        d=1e100.net; s=20230601; t=1734367419; x=1734972219;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=STePF4alhOUCMJb60WwslpIUy0epmImIHj5n/B736B8=;
-        b=E4DVZW9eguNl6coxWV0Uugx6Gy99fgJTkWU4JCZ+2Ch3L9tFnfrbwFaUJP6HZw/p2I
-         SMf7Kwwg71K/NmA3spx4oI5q7JbA6RXFvlA3coDVg8sGRvBnxfNImJ/QDeMJcSnnvt3e
-         N82tB23X9EWGp3w6xJcEdgve04zojHZShlOWsxQ3B0qjV0fn8lXwf0m8UlU8ulvh+RON
-         4R5FE8TUAxKrrl4HUk+XiP4WJm6xvKC/lycLH8P4+n6Ct6PcuhyjHGF8TVb0GE97Ga0U
-         fIyoNufjLenX3eBy1rcFh2VJZOvyFj1OzDx6OSu4paKzN/wxVPuDAZsVA5lswC7QnHJW
-         KVig==
-X-Forwarded-Encrypted: i=1; AJvYcCXD9PPISxFOH8b5M6NQI4oey/9qlaCUWu7Frgvq1M2idM+xWNEPZx1TZ3oqNB0px+vT0+F21CNlo5rB7weM@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKUEI8PpP4NRTCuiUgDXb2IWyAsNlMBdQ9e7VibDTwXe8JnaM8
-	6nw6u/ac2t+TBDZkmw7xNHZTwhfNjhEfmIIvsJykEI8XCuNKOFEXqFvqZHDjBQk=
-X-Gm-Gg: ASbGncteTzuu2n1my1JWL+zLlCKBWpEqHxOAbc8mWTNh8EB/fHUOYlmx9P0tf+UgLxX
-	e0X3Mz4vLKMvM2SEedrI3l2zlHH18uPfoRJvtxbAQz+KzKKs1lQSvuDusytmBihu4kyvJQ+Pu/8
-	hdQpO0g59+DrycSh6zYbM3yBmyysa4JPMA2JVE6ZEHT9QXdnV5Lzy7SfqHf0e3h/mClCWfNPA/Q
-	nNVo2cRY4IoTD9ftcdf/da/OumI4xdfoGlBADx3/aiU95F+9jr3EjOOqdx0
-X-Google-Smtp-Source: AGHT+IGqoSYH/VA6fKloW87cFzqLGeD30iZmGbWZZas/HuP1gKITI6KUoUpWyXXkXirFAcpa9znGog==
-X-Received: by 2002:adf:eec3:0:b0:388:c75d:be97 with SMTP id ffacd0b85a97d-388c75dbeaamr7310161f8f.11.1734355535593;
-        Mon, 16 Dec 2024 05:25:35 -0800 (PST)
+        bh=eizGnDqNqlNpffP7llVarsh21KPFCtOjd1jz0iLgr2U=;
+        b=Oe4onSuaJTbSXs5BWWDAa3KpuPvoQukX05EJrjXwygaI7FZdWt/cgm7/yvgNgHUZMN
+         L4MPCdNmoT0KqiBguMN0P57O0lwjOkRUibDdQUKHMN4F4qVuLRmOrczQ7ITg02nBC1Nu
+         fywDNeqMs9sc/QyoO4gZGwxwIBghrK0EYHivQ+udjlaCSF6O0KtHGxNpCwTMZwFfuYj0
+         KTboq4bTWmjqqndBwC7IAHd6TUcqocN3epbRwvRdJ7dwcGV7swcn/I64EvrrCinkhQih
+         w3cD7ZA19/gzwB6WbjHTCUObta0Gv7fFO7wGVEaOMBlIIJMb1G5ld7UVmGM+HBRTcFQ5
+         RN+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVcJ6iOHVI7r/Wcxu88aefmWWB4vMGFOJQmaoojsD3qZf53gezMrqvYX+CLurI3J7/H3Dg/W3I1IMLhWBir@vger.kernel.org
+X-Gm-Message-State: AOJu0YzppxbUKxZFydHCeJg6TxWkdzB3aP1Qox81nzs9W7Fr3slzU6vs
+	0fxzPRZZ1smojLzImjO8qpCeSHHiq5UpuCC4UIpyCkMKilbx4YHN7NHtS/EpHsg=
+X-Gm-Gg: ASbGncsu1AACLM/WyIUXzsUs/w02ng8AhLr4dACBX1CnnFeee+4lgtfivljXDNHXjcy
+	WvmOrhMQ17fNvVTPOoGy3v07bf2NZAEqmZO6dQbSBS6vJnU4QNKDcEeiFYvXwnwxtGL1Wt4Gj0D
+	k1PoNnXUiPXCFc+6pq+LqpBL3zirhuL0HKB7nmuhRjPoU8ZiSpLm5dmJcaYe3PhL4EAPT6Alxwj
+	fLN1AmjUSfWZfU3MrVxPOhI3UATFaxPklBwOmYOZoD09TnpuAn4Vd6IB3WK
+X-Google-Smtp-Source: AGHT+IEnPqo6gzVE3wILQI2tAtOM1/JutXdXz6dZd9o0VO/c42CFODH3r558QfMtWWjDDh1uD5CYkw==
+X-Received: by 2002:a05:600c:510c:b0:436:1c04:aa8e with SMTP id 5b1f17b1804b1-4362aa3e398mr132593275e9.16.1734367419204;
+        Mon, 16 Dec 2024 08:43:39 -0800 (PST)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c804a34fsm8253045f8f.76.2024.12.16.05.25.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436362b64a5sm91261215e9.29.2024.12.16.08.43.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2024 05:25:35 -0800 (PST)
-Message-ID: <e522ec59-6ee6-4c11-8a4f-91a683e6435c@suse.com>
-Date: Mon, 16 Dec 2024 14:25:33 +0100
+        Mon, 16 Dec 2024 08:43:38 -0800 (PST)
+Message-ID: <94bf84a7-13a3-4701-807e-fc0f10d4dc88@suse.com>
+Date: Mon, 16 Dec 2024 17:43:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,78 +65,38 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 4/5] Documentation/kbuild: Document storage of symbol
- information
-To: Matthew Maurer <mmaurer@google.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Jonathan Corbet <corbet@lwn.net>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20241123-extended-modversions-v10-0-0fa754ffdee3@google.com>
- <20241123-extended-modversions-v10-4-0fa754ffdee3@google.com>
+Subject: Re: [PATCH -v2 0/7] module: Strict per-modname namespaces
+To: masahiroy@kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, mcgrof@kernel.org, x86@kernel.org,
+ hpa@zytor.com, petr.pavlu@suse.com, samitolvanen@google.com,
+ da.gomez@samsung.com, nathan@kernel.org, nicolas@fjasle.eu,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, hch@infradead.org, gregkh@linuxfoundation.org
+References: <20241202145946.108093528@infradead.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20241123-extended-modversions-v10-4-0fa754ffdee3@google.com>
+In-Reply-To: <20241202145946.108093528@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/23/24 03:42, Matthew Maurer wrote:
-> Document where exported and imported symbols are kept, format options,
-> and limitations.
+On 12/2/24 15:59, Peter Zijlstra wrote:
+> Hi!
 > 
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
->  Documentation/kbuild/modules.rst | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> Implement a means for exports to be available only to an explicit list of named
+> modules. By explicitly limiting the usage of certain exports, the abuse
+> potential/risk is greatly reduced.
 > 
-> diff --git a/Documentation/kbuild/modules.rst b/Documentation/kbuild/modules.rst
-> index 101de236cd0c9abe1f5684d80063ff3f9a7fc673..c32e3ed67cd26070f6929f6ad98c4308a1ab71f8 100644
-> --- a/Documentation/kbuild/modules.rst
-> +++ b/Documentation/kbuild/modules.rst
-> @@ -423,6 +423,26 @@ Symbols From the Kernel (vmlinux + modules)
->  	1) It lists all exported symbols from vmlinux and all modules.
->  	2) It lists the CRC if CONFIG_MODVERSIONS is enabled.
->  
-> +Version Information Formats
-> +---------------------------
-> +
-> +	Exported symbols have information stored in __ksymtab or __ksymtab_gpl
-> +	sections. Symbol names and namespaces are stored in __kstrtab and
-> +	__kstrtabns respectively, using a format similar to the string table
-> +	used for ELF. If CONFIG_MODVERSIONS is enabled, the CRCs corresponding
-> +	to exported symbols will be added to the __kcrctab or __kcrctab_gpl.
+> The first 'patch' is an awk scripts that cleans up the existing module
+> namespace code along the same lines of commit 33def8498fdd ("treewide: Convert
+> macro and uses of __section(foo) to __section("foo")") and for the same reason,
+> it is not desired for the namespace argument to be a macro expansion itself.
+> 
+> The remainder of the patches introduce the special "MODULE_<modname-list>"
+> namespace, which shall be forbidden from being explicitly imported. A module
+> that matches the simple modname-list will get an implicit import.
 
-The second sentence should be that symbol names and namespaces of
-exported symbols are both stored in the __ksymtab_strings section.
-
-> +
-> +	If CONFIG_BASIC_MODVERSIONS is enabled (default with
-> +	CONFIG_MODVERSIONS), imported symbols will have their symbol name and
-> +	CRC stored in the __versions section of the importing module. This
-> +	mode only supports symbols of length up to 64 bytes.
-> +
-> +	If CONFIG_EXTENDED_MODVERSIONS is enabled (required to enable both
-> +	CONFIG_MODVERSIONS and CONFIG_RUST at the same time), imported symbols
-> +	will have their symbol name recorded in the __version_ext_names
-> +	section as a series of concatenated, null-terminated strings. CRCs for
-> +	these symbols will be recorded in the __version_ext_crcs section.
-> +
->  Symbols and External Modules
->  ----------------------------
->  
-> 
+@Masahiro, I'd like to take this on the modules tree for 6.14. Can I get
+an Acked-by you for the changes?
 
 -- 
 Thanks,
