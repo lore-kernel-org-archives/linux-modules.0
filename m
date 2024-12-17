@@ -1,171 +1,122 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC93207663;
-	Mon, 16 Dec 2024 19:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00709A933
+	for <linux-modules@vger.kernel.org>; Tue, 17 Dec 2024 00:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734376626; cv=none; b=iXaTcnv5VE8gAqLny70iSRh88518Kew9mfopLf2+NKyMRA2j9UIvNFb+zOMusiKRPPSpp4CQqrO4ye0hpIN62bF2cA4yfiagMeun5XWsIxXmngAEYKWTFuFIt/oLz63A9il9IUPUtxwstyJiIH9WDaf/ncluvaGSTHAsKe7GvCs=
+	t=1734395373; cv=none; b=SnusSzxY0XVhjI5ZOsbiUz/VRvl7oFFcJldceKo59xg/n0GubfwxyPHdPaKb1ISk4XYWLZO/p7+27O/1Nzg7O3547lKL8AEp6XWOZgSzgQfWIkZw3tq1qGB+QapiW0Oxxu9OuzMonVQ6zYVN7qdGtHzDun1sA0qLre1oIYKFMWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734376626; c=relaxed/simple;
-	bh=UrilX0/oMRPi/el9YKtu6ujZduP8bEv5oeUtYlJxC5I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pznJJkGfNWQjGENQQJIrr2HHk/35PoG2SrpeItlUUYrK5R9/VGUk21UadSKmamE8UQuTZX42afvuOs8KRfDU8+IprGLypGJqiRFn5eT3JTfFelMXGLwP2PvQ5TWnAW/hB/egTZzYA3HpAI8qkjLHfJs8Ce6UZ0v7t/sUXx37MAg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=tikSpEqq; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1734395373; c=relaxed/simple;
+	bh=EcMHthg8w1+nS6G5Zs4+7mc0M0kkZqrbK9TwcDBa+AQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cLt5C1FfBgYtlSbD9Uq7Ru5wIJgwXX7YNtRsOXs827GJmp7iZ4EMezBHMnfRMkk2WKV4XE4jlGqjqMeF1VSgYnt9jo2hricHrFPS4zY7HWCHoMpQzNvMfR5ghIRCHDRC5XiYBA4kWyCu4RWncjEZP5SUuQiEXf+4CUxhTBmIwM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mN5EcNW9; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="tikSpEqq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734376618;
-	bh=UrilX0/oMRPi/el9YKtu6ujZduP8bEv5oeUtYlJxC5I=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=tikSpEqqo5hZNVLAH+2kNQvdMK1rm0+OrjE44FCAReXDRqKSzfJjJTdvaGKWhr5Eb
-	 W0T3vG94ZnxfU2bBTnWJKdRM+5kOEYzNXpHgSJ/S3TkNfdqalodXLwEFI+L7/lELs/
-	 o3w9VxUS6oYaceRe5HOO6Y/E+Qk8PHdbc6UPkKdg=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 16 Dec 2024 20:16:43 +0100
-Subject: [PATCH 3/4] module: sysfs: Add notes attributes through
- attribute_group
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mN5EcNW9"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d3cfdc7e4fso4339a12.0
+        for <linux-modules@vger.kernel.org>; Mon, 16 Dec 2024 16:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1734395370; x=1735000170; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EcMHthg8w1+nS6G5Zs4+7mc0M0kkZqrbK9TwcDBa+AQ=;
+        b=mN5EcNW99p0a/m15MLCy5FgbzR73l83cvVDY3nylpKt0BVLymchG1XSdFYwt9t1Vve
+         THoJ9JjfazCJdHEAe0vcXCvOcRzdBy++hcTPwL7b3v5DA/phnxi3+4Pb4AmpywvjofCn
+         NfiL4PXGfESvLpCcyGnc20f4G81c7bfM3KfHdlokpu/HMSRQkn3dYQR/Af/saEvHu4lh
+         FaoWYpc+/fnqYZ7Icu1Nm4eMl6NWE8Z/SpvWEwhloiBlDDbgeg2AiHqQZzmLQX9lTSXj
+         3uDA5k5HA9ab0HlTbNbSCPDdt5x7VoncrmaS3+3OvwhiyIxxbRmCrBMzA/hppgw20lmk
+         7uPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734395370; x=1735000170;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EcMHthg8w1+nS6G5Zs4+7mc0M0kkZqrbK9TwcDBa+AQ=;
+        b=nMhk2cj/U6mnfvWgYT0OzI2HgcaezhddcMwi3cqa5qFcl2NHFbMt4ErOSVXVBnEoTg
+         qbK836g3bbNarbt18vbcHEzMfZ2+VFXLmhwS4nT2bEZfTuk9+mhyT9S6EArOi8lZLJmm
+         LHi9CYzGo+HIAcv06fATNX6Bgf8CwQCOjibLee6jcdrctaaENavKJVyKsedmajl6+kcM
+         y8tOr4jpsZ1UuI07xTlIZAvyxX5A0JOyE+3aYUX7fKodgZAIYvwT+GjXB8f05Dpaloc5
+         xM3Y6WvZOlY3nKB63iAdjNKHokURtCB1+FCihD/V6de39gS1XFtfbSLtP/t5ffFqdFKN
+         flXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWU+vhGNhh+4ZaSGV1khtghV5Jn/MZlQHdF1nj/YgJ+vGO98wMz9Di7n+eiENSa2LdqGasPwyMIxiwg+vtG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzH09vJthLOUV5dyrxqLFcG29uWs6wFuB992r9FtnkOIC+7vJKm
+	F2WUwVJY7VvOwO9NF1GpbJVKFBAVcum0HISED8NLxS3rbnmXmbz0QbsUzB4yrazKvVeh+wn3H7N
+	CyGPZe4qqHCBbC3UIVz3MX7EOzpKAhCMDIJH8
+X-Gm-Gg: ASbGncuT7iv9a87Jey4QiSElwSqKAHU8Xep+KVLe7+M4T/2HTu/CpdHzJFHTOhEhLSq
+	kQloW31g9UpEPcb4WWlGLJNwFLhz85ORtbmU=
+X-Google-Smtp-Source: AGHT+IGJ2vMJeNxhiowuw33Qt/H3cjobYWBekImH6tWUBKuxTu+odWdOFkVa8jp2BkFSKsaw+CS/TQ1/n07AUP5JKDM=
+X-Received: by 2002:aa7:d3d2:0:b0:5d0:d7ca:7bf4 with SMTP id
+ 4fb4d7f45d1cf-5d7d638f84dmr41885a12.0.1734395370189; Mon, 16 Dec 2024
+ 16:29:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241216-sysfs-const-bin_attr-module-v1-3-f81e49e54ce4@weissschuh.net>
-References: <20241216-sysfs-const-bin_attr-module-v1-0-f81e49e54ce4@weissschuh.net>
-In-Reply-To: <20241216-sysfs-const-bin_attr-module-v1-0-f81e49e54ce4@weissschuh.net>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>, 
- "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-hardening@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734376617; l=3421;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UrilX0/oMRPi/el9YKtu6ujZduP8bEv5oeUtYlJxC5I=;
- b=31XnL0mUqI8uayYuGN5y9mOjvZY7z6cfqm0oKFU4CbjuTP7VDA+6R1Ve5d9xDQbsqY8aonsNC
- 68QVXDAb+eXAkO0IrZ/iymZuVBskCVi7MshPd1nsAySiRGcOAPen7sL
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20241121204220.2378181-20-samitolvanen@google.com>
+ <20241121204220.2378181-38-samitolvanen@google.com> <CAK7LNAS7Pi9=Hcm7Kr=Ju4fMWK4taXEPLOqYombSLqGQ3ehR+w@mail.gmail.com>
+In-Reply-To: <CAK7LNAS7Pi9=Hcm7Kr=Ju4fMWK4taXEPLOqYombSLqGQ3ehR+w@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 16 Dec 2024 16:28:53 -0800
+X-Gm-Features: AbW1kvaGgMMEILJN5boY_yIqECmEZxfHxS0KrWFUsA14957v4WM1ex3EXvwLDI0
+Message-ID: <CABCJKudLD15R1YoR37NcKGZPqdwrwBVLcoCiH1m-HDZYUt+Gfw@mail.gmail.com>
+Subject: Re: [PATCH v6 18/18] Documentation/kbuild: Add DWARF module versioning
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
+	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
+	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A kobject is meant to manage the lifecycle of some resource.
-However the module sysfs code only creates a kobject to get a
-"notes" subdirectory in sysfs.
-This can be achieved easier and cheaper by using a sysfs group.
-Switch the notes attribute code to such a group, similar to how the
-section allocation in the same file already works.
+Hi,
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- kernel/module/sysfs.c | 48 +++++++++++++++++++++++-------------------------
- 1 file changed, 23 insertions(+), 25 deletions(-)
+On Sat, Dec 14, 2024 at 3:34=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Fri, Nov 22, 2024 at 5:43=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
+e.com> wrote:
+> >
+> > +When a symbol pointer is found in DWARF, gendwarfksyms can use its
+> > +type for calculating symbol versions even if the symbol is defined
+> > +elsewhere. The name of the symbol pointer is expected to start with
+> > +`__gendwarfksyms_ptr_`, followed by the name of the exported symbol.
+>
+> I am interested in this sentence.
+>
+> __GENDWARFKSYMS_EXPORT() is primarily introduced to handle
+> EXPORT_SYMBOL() in *.S files.
+> In fact, .discard.gendwarfksyms is always output for EXPORT_SYMBOL()
+> from *.c files.
+>
+> Can we make it faster by processing only symbol references in the
+> .dscard.gendwarfksyms section, and skipping all other sections entirely?
 
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index 935629ac21fa16504ddb5f3762af5539572c3bf1..4f37970f99c999589257713926395686f03103e6 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -145,20 +145,17 @@ static void remove_sect_attrs(struct module *mod)
-  */
- 
- struct module_notes_attrs {
--	struct kobject *dir;
--	unsigned int notes;
--	struct bin_attribute attrs[] __counted_by(notes);
-+	struct attribute_group grp;
-+	struct bin_attribute attrs[];
- };
- 
--static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
--			     unsigned int i)
-+static void free_notes_attrs(struct module_notes_attrs *notes_attrs)
- {
--	if (notes_attrs->dir) {
--		while (i-- > 0)
--			sysfs_remove_bin_file(notes_attrs->dir,
--					      &notes_attrs->attrs[i]);
--		kobject_put(notes_attrs->dir);
--	}
-+	struct bin_attribute **bin_attr;
-+
-+	for (bin_attr = notes_attrs->grp.bin_attrs; *bin_attr; bin_attr++)
-+		kfree((*bin_attr)->attr.name);
-+	kfree(notes_attrs->grp.bin_attrs);
- 	kfree(notes_attrs);
- }
- 
-@@ -166,6 +163,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
- {
- 	unsigned int notes, loaded, i;
- 	struct module_notes_attrs *notes_attrs;
-+	struct bin_attribute **gattr;
- 	struct bin_attribute *nattr;
- 	int ret;
- 
-@@ -184,7 +182,15 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
- 	if (!notes_attrs)
- 		return -ENOMEM;
- 
--	notes_attrs->notes = notes;
-+	gattr = kcalloc(notes + 1, sizeof(*gattr), GFP_KERNEL);
-+	if (!gattr) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	notes_attrs->grp.name = "notes";
-+	notes_attrs->grp.bin_attrs = gattr;
-+
- 	nattr = &notes_attrs->attrs[0];
- 	for (loaded = i = 0; i < info->hdr->e_shnum; ++i) {
- 		if (sect_empty(&info->sechdrs[i]))
-@@ -196,35 +202,27 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
- 			nattr->size = info->sechdrs[i].sh_size;
- 			nattr->private = (void *)info->sechdrs[i].sh_addr;
- 			nattr->read = sysfs_bin_attr_simple_read;
--			++nattr;
-+			*(gattr++) = nattr++;
- 		}
- 		++loaded;
- 	}
- 
--	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
--	if (!notes_attrs->dir) {
--		ret = -ENOMEM;
-+	ret = sysfs_create_group(&mod->mkobj.kobj, &notes_attrs->grp);
-+	if (ret)
- 		goto out;
--	}
--
--	for (i = 0; i < notes; ++i) {
--		ret = sysfs_create_bin_file(notes_attrs->dir, &notes_attrs->attrs[i]);
--		if (ret)
--			goto out;
--	}
- 
- 	mod->notes_attrs = notes_attrs;
- 	return 0;
- 
- out:
--	free_notes_attrs(notes_attrs, i);
-+	free_notes_attrs(notes_attrs);
- 	return ret;
- }
- 
- static void remove_notes_attrs(struct module *mod)
- {
- 	if (mod->notes_attrs)
--		free_notes_attrs(mod->notes_attrs, mod->notes_attrs->notes);
-+		free_notes_attrs(mod->notes_attrs);
- }
- 
- #else /* !CONFIG_KALLSYMS */
+I don't think we can, because the DWARF type information is still all
+in the same .debug_info section no matter where we place the actual
+symbol references. Also, locating exported symbols from the debugging
+information is already pretty quick, the slow part is actually
+recursing through the types, which would still be the same amount of
+work even if we had separate debugging information only for
+.discard.gendwarfksyms.
 
--- 
-2.47.1
+> > +4.3. Adding structure members
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+> > +
+> > +Perhaps the most common ABI compatible changeis adding a member to a
+>
+> changeis -> change is
 
+Thanks, I'll fix this.
+
+Sami
