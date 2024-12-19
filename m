@@ -1,135 +1,136 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23BEA1957FC
-	for <linux-modules@vger.kernel.org>; Wed, 18 Dec 2024 22:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3A013D279
+	for <linux-modules@vger.kernel.org>; Thu, 19 Dec 2024 20:24:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734560149; cv=none; b=Citxpms/lp4GcIBNo11bZL3IfeyBFhIIsG+H9txJ3B4Tg9sdkifF1e0IDP27lRbJ8lkBfvYclcyv+tuxIFdxwSiKWOyKFjUxGFMPi3m93JbIzsm741rBLBgvDPBWnJN5VRF/+vVxGdACdFGpNELDv/RR7/s7nPmnY73dunsdJFU=
+	t=1734639894; cv=none; b=jOxUdHMnbSF73k5XIRwP7bQPsmWG8Be5gegGPuRPP6/XZAY96OOQGYlhu4GRJTbDVBO9K/jMhQNv2HNHsiIbWeXwbpDybzSuoZY4WJf9OmWZqggrf95+UT+lMP8s2ag36T/t9QDFClXZeudyjOE57ED7m0dSs2TTl6owR5kP/hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734560149; c=relaxed/simple;
-	bh=gfK8yw5GZtFA1H4YDR+ZEscz5dgSAagi9RjzBHcTiHM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mzWObEE9T3ipdg7Y5e5kRtspl46bkt+ai2HPMgaxVQCU2GOxFeeEkFOsJC56Wf6ce/zqnk5ozUYbfMVbnIG6Gcy88qBRgsNodbQrvqBR8Bn4wynEGj/aiEcd5nMGNtk1C8U1NALn95T6rW9Ua53IXWNhx4HUUafwaj1o2DWPrLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bbzCHOgf; arc=none smtp.client-ip=209.85.166.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1734639894; c=relaxed/simple;
+	bh=7lgQsH8NX8mDnCc0P10zr6M+O+s+xUlql7l2lUJ4JoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uXkiKK0EQSjJFDVACExfvTyNb5XJ/xkaDDHr5Csv5KLyUWIs39wXNUgMB/FbMl8mdLrEU7RD4JLm5xGINhe8lAhnzQapoz4+GhjVKEKlMO+78LmBzE4kD+btS/W513HjBcQe5miCo5AwGyjm3yUBbJNXBlEqH4xMsJOc8rKY3q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U2ovsR7T; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bbzCHOgf"
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3a7dfcd40fcso6535ab.1
-        for <linux-modules@vger.kernel.org>; Wed, 18 Dec 2024 14:15:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734560147; x=1735164947; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9iEyY7H5QyR4V3sDp8DxPOt1LhhOuR956xQLjdTOQCg=;
-        b=bbzCHOgf1USq/c7j8CXlP8WxsEZsGUg9wFuAqgDrm63Okr4tOZo8BL+/x9TB9uv9w2
-         V9s90qJUIxeaP09Ww0D2CpW2ks/8UUiJDdYQ2epIrkNnWDys7OOYyHPAG19NX2SSaZ4+
-         7EQDasRnZaLqBNO3MU7N608lMUVOQVLjUNVkuiTIMvaMvHT+sLfOqxYMwNn7eVYt0otD
-         Qng/HEujoITTORkbiYmAwoOPFbX7W3U7T2phQc/n8lJfS5ct4NsiD05SHUwjSGjysM7X
-         ygS//r67gNGhFoj1D7PeCoPiX8DJOHCe7zHYHclpm1zzRN9z5uYA7UIrKYtuv+FgHgC3
-         1ZFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734560147; x=1735164947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9iEyY7H5QyR4V3sDp8DxPOt1LhhOuR956xQLjdTOQCg=;
-        b=o6DCwhxlLF8iHCc8iQUhcT7Ahw+Ct49LiCA6MrAtH9+D4bCNyB8vkHq4Pzpg2xh6F8
-         MYVEoG09jWJA9Q3sQ2GlE3k4kOMG1AcL8H/HMzQW9xPGk3PRACiWxHPFytr0PibHl0cn
-         i+Bz29j5EK7tmHxr5vr78H13IjFHPRbtdeMt8LykAZ65kDQUeJcnlMds5I3GnJrBmlbc
-         tSvivqnYdZl6oqgBWb2MZMlzoL66HpINMhol1X84JdZIWEHuC37PSCz1AiyyRTpKGuxn
-         ABQJRxZbd8OIF8VLPZivS2DFur+FWQJIkO6QundaNThqgOS1yh28eoCMIhGTgRa4lil8
-         SjwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbeaXOt9o4LovL/JqZOsXWOUQ9wGZO+KHrfbo5ZgWVsA+maaBxv0lcaYeYeTQviDIV+Bd4Q4GB1Hm1zYmU@vger.kernel.org
-X-Gm-Message-State: AOJu0YxO3MN0FiAoi3q0Remvlxsv46EnS3NxFsJGZODvrYZHG6RxbWYy
-	cHdrTmOhAgVesl1FFcx0XNkpmlCcwTF27oIjD2fb1XGWMvekJljgL9cjP/isduI71aNLh5ZPRDh
-	yJi8xYeviFJJAkx3ak+vY9gFcah+okOw/K/PE
-X-Gm-Gg: ASbGncsDpUZgE7hGfO+jhRiT2ueKNMkLHqd3/3DEt0OQbkbhi9kseQlW70EDgfrdvWm
-	bPiHNwwrZp3zCZyz9sr5JQAq4UVEpyEehrI3qQlI=
-X-Google-Smtp-Source: AGHT+IFktz1kwfxf4wUpOJemBhnW9Ni462vER14JJB6O86RIw6Jbvtmg0HyEiDJcph5Hz+YLVxPRSuGQMRTV+4e0lbw=
-X-Received: by 2002:a92:b05:0:b0:3a7:a629:b0dc with SMTP id
- e9e14a558f8ab-3c0579abb83mr841425ab.2.1734560147055; Wed, 18 Dec 2024
- 14:15:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U2ovsR7T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734639892; x=1766175892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7lgQsH8NX8mDnCc0P10zr6M+O+s+xUlql7l2lUJ4JoI=;
+  b=U2ovsR7Tntn8q7XkY9e0mtvoIy7R1ARdTL+4GyURprA4XXGuuNUZf2sr
+   I4kpKfzGRI62oG9M8EcE3mXvmaUbe30hL3AZQX7AVvzv8wIQbFdjX4KCN
+   gL8qwejFowWqJJuFcNGOIIbzG+EFQ0nr/5ece9RNIJcnu+0fMQabVt3vV
+   Zq0xcQuhrlksxbHH3ENSt14XgtFuoV1L0IfF7ckhR784q9hJCbhUoVidw
+   3jlK5/Tc4cgvVyEbntxsYFs42ayMfWD3s1yUD9SfY+rsrYnHGuk3D+mzh
+   iIpFSfhmMDWsnzn92c3mo+uqdCUV0oB1lC12/coPzCTcHJsAxsWnPvrQJ
+   A==;
+X-CSE-ConnectionGUID: sy4O+yj9RtyJxPmbkg8W3g==
+X-CSE-MsgGUID: ryaiiqkKSqeEqATjuRptzw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35393082"
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="35393082"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 12:24:51 -0800
+X-CSE-ConnectionGUID: OKXSwb2MSx2w0zi8JgH16A==
+X-CSE-MsgGUID: KN7MAmkoQLCyqPGXbsmpVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="98784695"
+Received: from cmdeoliv-mobl4.amr.corp.intel.com (HELO ldmartin-desk2) ([10.125.108.82])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 12:24:45 -0800
+Date: Thu, 19 Dec 2024 14:20:45 -0600
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Cc: igt-dev@lists.freedesktop.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH i-g-t 2/2] lib/igt_kmod: Do not explicitly unload intel
+ mei driver
+Message-ID: <pkxihhlzuxpbhkl4woyz5fkri7nmrw7unqtbqwjb2ekeziweru@qwiwezhgwi4j>
+References: <20241218233830.2444510-1-daniele.ceraolospurio@intel.com>
+ <20241218233830.2444510-2-daniele.ceraolospurio@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218220453.203069-1-namhyung@kernel.org>
-In-Reply-To: <20241218220453.203069-1-namhyung@kernel.org>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 18 Dec 2024 14:15:35 -0800
-Message-ID: <CAP-5=fX2Pj+Gv89LoO8SakqwVoaiT2A9BZEKmLjnbYmc4ZRo4w@mail.gmail.com>
-Subject: Re: [PATCH] perf tools: Fixup end address of modules
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Kan Liang <kan.liang@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-perf-users@vger.kernel.org, 
-	Blake Jones <blakejones@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20241218233830.2444510-2-daniele.ceraolospurio@intel.com>
 
-On Wed, Dec 18, 2024 at 2:04=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
+On Wed, Dec 18, 2024 at 03:38:30PM -0800, Daniele Ceraolo Spurio wrote:
+>The mei driver is a child of i915 on discrete, but not on integrated.
+>This means we want to unplug it before removing i915 in the former case
+>but not in the latter. Therefore, instead of manually unloading the mei
+>driver, we can unbind i915 and leave it to the kernel to unplug all the
+>dependencies. This also means that we don't need to explicitly disable
+>the vtcon anymore.
 >
-> In machine__create_module(), it reads /proc/modules to get a list of
-> modules in the system.  The file shows the start address (of text) and
-> the size of the module so it uses the info to reconstruct system memory
-> maps for symbol resolution.
->
-> But module memory consists of multiple segments and they can be
-> scaterred.  Currently perf tools assume they are contiguous and see some
+>The other 2 dependencies are left untouched:
+>- intel_ips uses symbol_get, so the automatic dependency detection won't
+>  unload it.
 
-nit: s/scaterred/scattered/
+and it shouldn't - that's a hack and from the linux-modules perspective
+we'd like to drop symbol_get() users. Btw, symbol_get/symbol_put only
+guarantees the module can't be removed (since there's code in the kernel
+that can still call into them). It doesn't mean the hardware can't go
+away (hotplugged or unbound from the driver). The module should be
+prepared for that. At the very least, it should handle errors from the
+function and release the symbols, but it's probably a candidate for a
+component driver.
 
-> overlaps.  This can confuse the tool when it finds a map containing a
-> given address.
+>- the hotunplug test mentions that the sound driver can throw errors on
+>  i915 unbind, so we need to keep the explicit unload.
 >
-> As we mostly care about the function symbols in the text segment, it can
-> fixup the size or end address of modules when there's an overlap.  We
-> can use maps__fixup_end() which updates the end address using the start
-> address of the next map.
->
-> Ideally it should be able to track other segments (like data/rodata),
-> but that would require some changes in /proc/modules IMHO.
->
-> Reported-by: Blake Jones <blakejones@google.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Daniel Gomez <da.gomez@samsung.com>
-> Cc: linux-modules@vger.kernel.org
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+>Cc: Lucas De Marchi <lucas.demarchi@intel.com>
 
-Acked-by: Ian Rogers <irogers@google.com>
+the bigger hammer is blocked on audio driver not getting the refcount
+right: https://patchwork.freedesktop.org/series/141532/
 
-Thanks,
-Ian
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-> ---
->  tools/perf/util/machine.c | 2 ++
->  1 file changed, 2 insertions(+)
+
+Lucas De Marchi
+
+>---
+> lib/igt_kmod.c | 9 ++-------
+> 1 file changed, 2 insertions(+), 7 deletions(-)
 >
-> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> index 27d5345d2b307a97..8bb34689e3ceeec4 100644
-> --- a/tools/perf/util/machine.c
-> +++ b/tools/perf/util/machine.c
-> @@ -1468,6 +1468,8 @@ static int machine__create_modules(struct machine *=
-machine)
->         if (modules__parse(modules, machine, machine__create_module))
->                 return -1;
+>diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+>index a8b0339b9..fa9541d72 100644
+>--- a/lib/igt_kmod.c
+>+++ b/lib/igt_kmod.c
+>@@ -620,16 +620,9 @@ int __igt_intel_driver_unload(char **who, const char *driver)
+> 	const char *aux[] = {
+> 		/* gen5: ips uses symbol_get() so only a soft module dependency */
+> 		"intel_ips",
+>-		/* mei_gsc uses an i915 aux dev and the other mei mods depend on it */
+>-		"mei_pxp",
+>-		"mei_hdcp",
+>-		"mei_gsc",
+> 		NULL,
+> 	};
 >
-> +       maps__fixup_end(machine__kernel_maps(machine));
-> +
->         if (!machine__set_modules_path(machine))
->                 return 0;
+>-	/* unbind vt */
+>-	bind_fbcon(false);
+>-
+> 	ret = igt_audio_driver_unload(who);
+> 	if (ret)
+> 		return ret;
+>@@ -648,6 +641,8 @@ int __igt_intel_driver_unload(char **who, const char *driver)
+> 	}
 >
-> --
-> 2.47.1.613.gc27f4b7a9f-goog
+> 	if (igt_kmod_is_loaded(driver)) {
+>+		igt_kmod_unbind(driver);
+>+
+> 		ret = igt_kmod_unload(driver);
+> 		if (ret) {
+> 			if (who)
+>-- 
+>2.43.0
 >
