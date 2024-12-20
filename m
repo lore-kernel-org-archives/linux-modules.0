@@ -1,22 +1,22 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F4522913D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF6C22915F;
 	Fri, 20 Dec 2024 17:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734716870; cv=none; b=d81Co2yGlKqo3ApZYJ//u0uh12riZ6m6qJSkzwcJt3vIu6jvLBRj37V4reSbd+OvDTnwIvuFgBOOsojpj+ZS7i0CAsY1BXUA7NdEUqnmuxSAN2/YSYTjf69wLkD++412J3274lRpu56hdZynMFw5EBmTfSH2M/lh1ViZXu+V8Ac=
+	t=1734716871; cv=none; b=XeiYB3PRRlC7dnrkma3HhdioXdq+dHug6AlsKugn9gjl6s34kqu5mIUuhDBuWcGc8JQ1hDaWVSYdBOCSPlQ9AKQIJM1zMnMKrehGfxUhxktoOg83RLoW/VOISOci125RwDfTn3yFD4y0EtOTdz9p/a9M1hyQ82cAg4gWINybQko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734716870; c=relaxed/simple;
-	bh=szZNjdiDOEbAPd7FllNALlPuBiIF6DYqyTi5RLt33+I=;
+	s=arc-20240116; t=1734716871; c=relaxed/simple;
+	bh=RXxizPVXirBfVfQbgsJ3kSHvA7FoXQLVDWdkWj59TPE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FaObGH9NHRwhYGmLUJGzOENtBk7PnIjs+gR8vCd6gCjHIifvOg8Em1eZDcGI2WaSCVIg8PcEYAnHPc3q08ThIMfVLH7uPGEl7CZdrZjR0BTEJb1XwGQrkEWovzKEfESYcKOgGQSc9b6p/7IXxgH9SKHMbhMc/uYEk1r5QCXJC9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=L3KpbHi1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WgdOINiI; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=jjnJ161IXzGENVd7d77rr99Uxw59rDkk2xIES5s0QWBSM8pcauU+tpOW+fJqcm6nENGa637TFdfBEbd8W8kt8XPz/C2TpGZ2FmyqdqUV5Kp+3d1XfqGtx9W4fwwCMs+itGKtqoef4J691YeD2ZjdQSxao+vJsmUvL0++h/WD/0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E4Tm8ah9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JZvdk6Xk; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="L3KpbHi1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WgdOINiI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E4Tm8ah9";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JZvdk6Xk"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020; t=1734716866;
@@ -24,21 +24,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nbrqJ09qm4S44mrWUWsD4EMkSiLFUJiV1ZfIl3x0Psc=;
-	b=L3KpbHi1MSob3yXJdwsUs3J9glYVEaJwI77qPch7dyC3dNvwgxkEbJJmSPnoTzHELfUcyi
-	LitspVMYt2bew92nRpbBFiOEm6BZ931FJ+wj7bOm4HxHyrKxc8/sbx7OJI6GL3F6kiEuVU
-	WsPiIBJctMxcQT14lXLm5gPj6bnhEBC8+u9BP6mMKHn7Dslke0aOtGCg9GnDRY7mwOGi/m
-	uKe8GcL/Wgg8U9dEGFfHNbotIyl2qAKOhOx5b33d2pNjTF6I7hv2JLcT0Rr6IVKFPc2hCH
-	4osXuTh/VvRW3ZDbPhhf2/vz06ndcRUvwU+F5TRgYREtTmXhsNiA8/USS47LfA==
+	bh=pRK0w0tqhurswwZaNufUaRKsGvAocCKzSLzr6eB0tBg=;
+	b=E4Tm8ah9OC2LBwwBB4oSR/ST/BDvArTaReTdwUxjz+fC82d4enrwL38sZa153iGMwMYm6H
+	DtS/hp0x5+nrLycPQn40kqx3KwCmdSZDbGeuDEcaW/+oddxCol70P0JrfhAKbanhnYhVPS
+	cTyBxpueATZ5iP85MmcP0uL21XpC9m8ES1MFgJi7+bQP9kZprVXx/aL6lsK9Q8kfUUtqsi
+	RoXhdKHc9ncR+VnzlcMhSXNYx+yEisRsXAMNG/wZoi+vp2cy38ZDSFNQpcw35gV7CZPib4
+	3WVCh70heYfB5gbUPNdgfpiZtt8Y98FBKk/65SnEaL8FH08gkE00JhHukbzczA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1734716866;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nbrqJ09qm4S44mrWUWsD4EMkSiLFUJiV1ZfIl3x0Psc=;
-	b=WgdOINiIuSgdwN+o+2EqLai5hSMpj5PCm6svRJWhnTPJLBAV4AxUjncgM0oXQ+7BIddkWA
-	sBCCUccuDBJVEKBQ==
+	bh=pRK0w0tqhurswwZaNufUaRKsGvAocCKzSLzr6eB0tBg=;
+	b=JZvdk6XkJ3G2R3/NWfo3BXLpAVNxdlwod7c9d6PG98RN0SuBqNuwRh9acZfbB92qtF4gqv
+	ub0qzWrpnMxjwNAQ==
 To: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Daniel Gomez <da.gomez@samsung.com>,
@@ -48,10 +48,11 @@ Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 26/28] static_call: Use RCU in all users of __module_text_address().
-Date: Fri, 20 Dec 2024 18:41:40 +0100
-Message-ID: <20241220174731.514432-27-bigeasy@linutronix.de>
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH v2 27/28] bug: Use RCU instead RCU-sched to protect module_bug_list.
+Date: Fri, 20 Dec 2024 18:41:41 +0100
+Message-ID: <20241220174731.514432-28-bigeasy@linutronix.de>
 In-Reply-To: <20241220174731.514432-1-bigeasy@linutronix.de>
 References: <20241220174731.514432-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -62,42 +63,68 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-__module_text_address() can be invoked within a RCU section, there is no
-requirement to have preemption disabled.
+The list module_bug_list relies on module_mutex for writer
+synchronisation. The list is already RCU style.
+The list removal is synchronized with modules' synchronize_rcu() in
+free_module().
 
-Replace the preempt_disable() section around __module_text_address()
-with RCU.
+Use RCU read lock protection instead of RCU-sched.
 
+Cc: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/static_call_inline.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ lib/bug.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
-index 5259cda486d05..06b14d8362b9b 100644
---- a/kernel/static_call_inline.c
-+++ b/kernel/static_call_inline.c
-@@ -325,13 +325,12 @@ static int __static_call_mod_text_reserved(void *star=
-t, void *end)
+diff --git a/lib/bug.c b/lib/bug.c
+index e0ff219899902..b1f07459c2ee3 100644
+--- a/lib/bug.c
++++ b/lib/bug.c
+@@ -66,23 +66,19 @@ static LIST_HEAD(module_bug_list);
+=20
+ static struct bug_entry *module_find_bug(unsigned long bugaddr)
+ {
++	struct bug_entry *bug;
  	struct module *mod;
- 	int ret;
+-	struct bug_entry *bug =3D NULL;
 =20
--	preempt_disable();
--	mod =3D __module_text_address((unsigned long)start);
--	WARN_ON_ONCE(__module_text_address((unsigned long)end) !=3D mod);
--	if (!try_module_get(mod))
--		mod =3D NULL;
--	preempt_enable();
+-	rcu_read_lock_sched();
++	guard(rcu)();
+ 	list_for_each_entry_rcu(mod, &module_bug_list, bug_list) {
+ 		unsigned i;
+=20
+ 		bug =3D mod->bug_table;
+ 		for (i =3D 0; i < mod->num_bugs; ++i, ++bug)
+ 			if (bugaddr =3D=3D bug_addr(bug))
+-				goto out;
++				return bug;
+ 	}
+-	bug =3D NULL;
+-out:
+-	rcu_read_unlock_sched();
 -
-+	scoped_guard(rcu) {
-+		mod =3D __module_text_address((unsigned long)start);
-+		WARN_ON_ONCE(__module_text_address((unsigned long)end) !=3D mod);
-+		if (!try_module_get(mod))
-+			mod =3D NULL;
-+	}
- 	if (!mod)
- 		return 0;
+-	return bug;
++	return NULL;
+ }
 =20
+ void module_bug_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+@@ -235,11 +231,11 @@ void generic_bug_clear_once(void)
+ #ifdef CONFIG_MODULES
+ 	struct module *mod;
+=20
+-	rcu_read_lock_sched();
+-	list_for_each_entry_rcu(mod, &module_bug_list, bug_list)
+-		clear_once_table(mod->bug_table,
+-				 mod->bug_table + mod->num_bugs);
+-	rcu_read_unlock_sched();
++	scoped_guard(rcu) {
++		list_for_each_entry_rcu(mod, &module_bug_list, bug_list)
++			clear_once_table(mod->bug_table,
++					 mod->bug_table + mod->num_bugs);
++	}
+ #endif
+=20
+ 	clear_once_table(__start___bug_table, __stop___bug_table);
 --=20
 2.45.2
 
