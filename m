@@ -1,44 +1,44 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4644F225A49;
-	Fri, 20 Dec 2024 17:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C084C225A23;
+	Fri, 20 Dec 2024 17:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734716865; cv=none; b=CiKhJcpx2D5Wi0dR/OYIVU8k3eHtnyi74T7PaglfgqhAe9Wb83TNwg1nu2h4AVEvuVGzz/flpFoYmzid9U/WgecEWyfcK/qNgVVk2xitfmwh26ObGIH323ept8QIBrnBT7KBCmCtvE5qqfbguphD9Cb6RrZ5FUATMPnLHnQlqh8=
+	t=1734716865; cv=none; b=ullcMJudfBOzphkCZA/UK6XbOz0TTU3XULjFjF5aOXP/jup7G/by0EF3xrXYG/e2bKQTD/xzE0bjhMVjzXv6p8lB0xjLvUK/GxOT8kX5X6f1hbabRmTCF75kEvg9IncXLeksNqz019PfMQtKnK8LWkXu/tR0R0CYvuDVoBnRaG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734716865; c=relaxed/simple;
-	bh=VdI5h+LUrY15pCOe9PvBPANJxeKtXWjDJLIoPFNZvc8=;
+	bh=XeX9Wfr/ate0+cmWN4pQDA5SZgUW3jGRJaYXMkHeWio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IHwbkbsvQhmdOCJ6eRP8taDkyGJRLef+K+/zllo76Dc5GlCk24n04d5+X6vCQlxhMAhODYdSbBMTA4O+UuuroNmwKUO/SdX7WPKRa4FxfTrCDaCiBrrLcmh3Rmhfy9uwshBn9Py9UwQ2NNkfEYgsVt7LsCrEcnsl0jKlIBeBLq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IGUMNEDb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Oygx32kJ; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=Zlr5geUMDhONo9XTUYYNqRTIH/aoEqsxA9uAIsITr/TByaUABdacj+qIlsiXGuVfRF7A9hLn02IDBIIwdkYU91CByye+Nu2CkFvuR71hkk/QodBVyaVrqgNIeppftKld+oHRI9LzQq8q/bx88t4AjWFCkcwjyJg5bF3nu8w66Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NDgm5Pz8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Dn+69Yco; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IGUMNEDb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Oygx32kJ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NDgm5Pz8";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Dn+69Yco"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1734716861;
+	s=2020; t=1734716859;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=A3RpndSc/R2r+/8h7P3FIFwE0RAdhRhdzrnR4zSM1ig=;
-	b=IGUMNEDbNoyyp3UgaroxfQ4g96xPTUzfUR2Z+DUheCst/3cKrhZ+4MYRsqAbCbF8jHov5M
-	/WPHI56DrlJZ+XjrqvgUQyS8E5zx7a+IHfrodSfOLteF5lSSYF91TRD8yonhic1Yg092FE
-	ZhivyWuR4dNFSz/A//pclipK68hu6CIrSBvNik8rSz6ggE5WW2XpvuSUTSikJ4BHo1hqQq
-	nmdIZYDCn1diGKW92qSJ5dCYdr2i3YmrTiAwKSY0CP4PjOXREGeDh1pfkqdeJU7dKIrq4c
-	WzRBOIaCF/T0kGA1UJd/q7Gjz/3niEzuVXmiQAcOWmU8exTSHGMg4Khwt4eFLw==
+	bh=IqVQDyEYACd6Buc8karGtHVOgbp3vA8Z1uEZRkvpdV8=;
+	b=NDgm5Pz8jcpfVzjsGvRFFOtKI3kmtbLqbOMuszc5W3Q2PErvUqQ/Wh8TICFzD2lP1Uhqqc
+	qaTqhxNuIek97XnwB46dBEccInMpJ7GeSJ+7UAjO7dF76niXqnVYVbgP+gNv6WwFF4X5nY
+	1LUyQe6KRewZ9D7sEqjlQ47txkWyl7y6DICtQ+8WrRn8xp1nWgd0KtphtiorZPn+pCAmGL
+	FFKDOS0hIDV3QPiEDtFX16O/hvSUZ6Y2c3G+Cs82AcwR3r3RzaJLUjrVB6x3wHYirl4Sx9
+	fX2ld3vLHq7vDOlcVijYrVV/UrfkT3P1WYIZJAZ/+bDXvsH5pw7kbr7jTEl3eg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1734716861;
+	s=2020e; t=1734716859;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=A3RpndSc/R2r+/8h7P3FIFwE0RAdhRhdzrnR4zSM1ig=;
-	b=Oygx32kJ8ZxkNrsoYVpFGbhc9XOk4lQxp5Vl1nYCAya/wYAxjrWY7rUZSt8jysjtucjJQ+
-	ikTssShzU2V3q4AQ==
+	bh=IqVQDyEYACd6Buc8karGtHVOgbp3vA8Z1uEZRkvpdV8=;
+	b=Dn+69Yco3oJO/j3hc7IxM2yhf1qEoaCjQl9ydL+nYFwj+9b9H2YgtSVbkIsFS77baZuJVS
+	j+Cab1xrBbsDkSAQ==
 To: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Daniel Gomez <da.gomez@samsung.com>,
@@ -49,9 +49,9 @@ Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v2 14/28] module: Use RCU in all users of __module_address().
-Date: Fri, 20 Dec 2024 18:41:28 +0100
-Message-ID: <20241220174731.514432-15-bigeasy@linutronix.de>
+Subject: [PATCH v2 07/28] module: Use RCU in __find_kallsyms_symbol_value().
+Date: Fri, 20 Dec 2024 18:41:21 +0100
+Message-ID: <20241220174731.514432-8-bigeasy@linutronix.de>
 In-Reply-To: <20241220174731.514432-1-bigeasy@linutronix.de>
 References: <20241220174731.514432-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -62,91 +62,61 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-__module_address() can be invoked within a RCU section, there is no
-requirement to have preemption disabled.
+module::kallsyms can be accessed under RCU assumption.
 
-Replace the preempt_disable() section around __module_address() with
-RCU.
+Use rcu_dereference() to access module::kallsyms.
+Update callers.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/linux/kallsyms.h | 3 +--
- kernel/module/kallsyms.c | 5 +----
- kernel/module/main.c     | 9 ++-------
- 3 files changed, 4 insertions(+), 13 deletions(-)
+ kernel/module/kallsyms.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 1c6a6c1704d8d..d5dd54c53ace6 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -55,12 +55,11 @@ static inline void *dereference_symbol_descriptor(void =
-*ptr)
- 	if (is_ksym_addr((unsigned long)ptr))
- 		return ptr;
-=20
--	preempt_disable();
-+	guard(rcu)();
- 	mod =3D __module_address((unsigned long)ptr);
-=20
- 	if (mod)
- 		ptr =3D dereference_module_function_descriptor(mod, ptr);
--	preempt_enable();
- #endif
- 	return ptr;
- }
 diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 0e8ec6486d95c..00a60796327c0 100644
+index 3cba9f933b24f..e3c55bc879c11 100644
 --- a/kernel/module/kallsyms.c
 +++ b/kernel/module/kallsyms.c
-@@ -316,7 +316,7 @@ void * __weak dereference_module_function_descriptor(st=
-ruct module *mod,
+@@ -407,7 +407,7 @@ int module_get_kallsym(unsigned int symnum, unsigned lo=
+ng *value, char *type,
+ static unsigned long __find_kallsyms_symbol_value(struct module *mod, cons=
+t char *name)
+ {
+ 	unsigned int i;
+-	struct mod_kallsyms *kallsyms =3D rcu_dereference_sched(mod->kallsyms);
++	struct mod_kallsyms *kallsyms =3D rcu_dereference(mod->kallsyms);
 =20
- /*
-  * For kallsyms to ask for address resolution.  NULL means not found.  Car=
-eful
-- * not to lock to avoid deadlock on oopses, simply disable preemption.
-+ * not to lock to avoid deadlock on oopses, RCU is enough.
-  */
- int module_address_lookup(unsigned long addr,
- 			  unsigned long *size,
-@@ -330,7 +330,6 @@ int module_address_lookup(unsigned long addr,
- 	struct module *mod;
-=20
+ 	for (i =3D 0; i < kallsyms->num_symtab; i++) {
+ 		const Elf_Sym *sym =3D &kallsyms->symtab[i];
+@@ -447,24 +447,15 @@ static unsigned long __module_kallsyms_lookup_name(co=
+nst char *name)
+ /* Look for this name: can be of form module:name. */
+ unsigned long module_kallsyms_lookup_name(const char *name)
+ {
+-	unsigned long ret;
+-
+ 	/* Don't lock: we're in enough trouble already. */
  	guard(rcu)();
 -	preempt_disable();
- 	mod =3D __module_address(addr);
- 	if (mod) {
- 		if (modname)
-@@ -348,8 +347,6 @@ int module_address_lookup(unsigned long addr,
- 		if (sym)
- 			ret =3D strscpy(namebuf, sym, KSYM_NAME_LEN);
- 	}
+-	ret =3D __module_kallsyms_lookup_name(name);
 -	preempt_enable();
--
- 	return ret;
+-	return ret;
++	return __module_kallsyms_lookup_name(name);
  }
 =20
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 74b9e9ddb4b65..80877741ac7e5 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3649,13 +3649,8 @@ const struct exception_table_entry *search_module_ex=
-tables(unsigned long addr)
-  */
- bool is_module_address(unsigned long addr)
+ unsigned long find_kallsyms_symbol_value(struct module *mod, const char *n=
+ame)
  {
--	bool ret;
+-	unsigned long ret;
 -
 -	preempt_disable();
--	ret =3D __module_address(addr) !=3D NULL;
+-	ret =3D __find_kallsyms_symbol_value(mod, name);
 -	preempt_enable();
--
 -	return ret;
 +	guard(rcu)();
-+	return __module_address(addr) !=3D NULL;
++	return __find_kallsyms_symbol_value(mod, name);
  }
 =20
- /**
+ int module_kallsyms_on_each_symbol(const char *modname,
 --=20
 2.45.2
 
