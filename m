@@ -1,59 +1,61 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61AF11922CC
-	for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2024 09:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DD1192B73
+	for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2024 09:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734946751; cv=none; b=QbbS94N3UW3f48SV9VfLbOISeEsssfYpWE5nB7ZcNY7vtX4aRoKrFGgwQGz2LAG5/2iydFPmUxpL54cJhYw3Exm/EZZdX/Wg+oDZAJ4mIRFXn/wbaR2ABoDClPDOPRIapmKWQqMIgx2ue9/gdrSjwi2V/9BtT1GamhsKXUF5x4M=
+	t=1734946752; cv=none; b=MbY2vdn0dVKuCnEh3UxzIXydLx4WVGtuKsh/G39NQsQn9GiyLI9bIkxrYrLwsU0JVDRqT3S036n0XKMXJl7f+vz5lDhVuctgs/YcsZ6s7s7ZiaaoKzbLX95QVi74AXDmig+8S5t3qgD63pYP9d0+xmJ5uP5K3Bl6COxuDuqajF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734946751; c=relaxed/simple;
-	bh=u2pbYXao7gSBkL9N3hiVi/YA5ogzqx6GtUP21gPXpJo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J+9XksuFcRxKXgORRRINmTYrp5ZfqDNCgyTAL0UZI3GZRG9j350AZNuwvWjYL04ee2erXHZCOKfQlbCsG2o2Iv50d+o2Vro7UXcAOOGUgwdUBuX3cPmnsJlAyjzwKWdg2IaIQQmKsVicS1ZN/xRnF300F3EA3ULpxnKd8gnea28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KG6lrfRR; arc=none smtp.client-ip=209.85.221.48
+	s=arc-20240116; t=1734946752; c=relaxed/simple;
+	bh=UH4xbEe0zmFXOwPUKrl24/lhmUI7cbLTQl/c73IEBaw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=GhXIvictY7lXLAIKgDBX1R6tFDiU4QQNynM3PAgJ4SOuQxsgFfQ6zdR6n6U8XH+KVM/BQ7NPX/1BWyDDY09fJrdgEeOFPCiJjrxpyvmaTFJ5madHMXMISQC/ZpNpQJLPbj52/PGSXigzumzHILsJqAyjh6Zla1JCvyu4V6TjSHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fxR+k1WO; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KG6lrfRR"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-38632b8ae71so2987405f8f.0
-        for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2024 01:39:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fxR+k1WO"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-385e27c75f4so2912452f8f.2
+        for <linux-modules@vger.kernel.org>; Mon, 23 Dec 2024 01:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1734946747; x=1735551547; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dpB5AXQXFoUsjUJ3T1UA5h3wIALVsUUYh2PJwRQg/x0=;
-        b=KG6lrfRR/BstlyYDgAA+e6ynTPVl2MK8+fYttl5CdG0ZKZlB0I4LmaReYKZkIYsJQR
-         btwRbtoRgAUkgL2VcijAMrz1ZT6Bfj0aR4Xmk0LPU6iH9rJtcp7OLxgA5cO7tmvyM7zz
-         W0ZigLzki1yYhX5rcMYASImBebB5dcayYibEzx+zUM3cxIas2D+K875zzll7kPkxX4nE
-         ArsCt8TOOgxVNnIYVDNv2QamhKnZ4k3JIRRrMCOtAOSsrJepZL0YFCh6NS1bkU4zKoBs
-         NlxJk/WcqYNkYZlq9OrNwcb0Sm/PcADV2cnizUJW/1zEuLEfIxR1+GDW7eKaNgY6KpW1
-         ADuA==
+        d=suse.com; s=google; t=1734946748; x=1735551548; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HLu09/IZb76vH1AepGLoCNTFGrmu/5Ir8RKortKBDcM=;
+        b=fxR+k1WOP+yrLzNAlMDe3uKprLZKgG/wgPAJpEQFWc4omwMB4MGvtsscFZBbKd4K6Z
+         FGpqC8dSg1Q1uzWEbcNxnx46ameWzFpk2lLG9I9S943XqtOdl3wxBVDqlva9Ilecx0hK
+         m84uPkygCY3v+85a3XFdPy0Kg/UYj5Qe43Z1gHB+myP8tby2XR2dlcx2XbOm/XLtI6Cc
+         qbzMGBKLHMi+WQN0Lu4BZ/I/8wo013G1mG9njLAbf2rfdSfYVbTo7XIAMXLE3RaW43Gh
+         ivMYeu01k9kYROg2TQ3YJByYotYao0ISMkRrEJTeDe29dAmfe1yVmVyBoaouy11QFhjp
+         gAiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734946747; x=1735551547;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dpB5AXQXFoUsjUJ3T1UA5h3wIALVsUUYh2PJwRQg/x0=;
-        b=TFUROgqNIK9ZpRuYAt1RplDE9ZsdBdo80BdGBjDKaVZH6JTSsY4aquyh05XQb2ssc/
-         Jbc4Ju9rSJGBc0FnExgAp3PE+AbEoYE1khuhW8ZIGZ/mLkiZLdUA6kJKVQBMtZspOQxP
-         Uzs2+yLOaRoanpP5I1W6UAFpriQu/FurHd3RxELpqIPt2+wjy2fmBMbFeuDc0ycOJOzW
-         Af3pu80hAFCFkNx5jHJQDXCdaBsIDd4useIGUg3iBEJ8MovgVSKpe6X+n5qAJehEcUF5
-         hD9oxRSBANfFSZt4uo9hHu+t1yNPKYLZrjIlJV5Rq0VpKC8zAFjh8un085y5Gi9lmJnz
-         XCng==
-X-Gm-Message-State: AOJu0Yy8nTCVT6t9VdMo1z3NpfmZ49QKIGoeqs2cwndDPI9eQdhYk8I1
-	8OehiowiOQX3owexi7TaEClv5hZs25vxjjMfrdL1glTSFFDi9fOe71azFvU2wFPQ/yEzoALxhgr
-	o
-X-Gm-Gg: ASbGncsLYNp1fpyC38rIKtX+TalSaA+Xy1F0oCyAsC+1GIomY5/u3comnxr/PzQ7NrL
-	RR+y4RB0ULaAf1rcATXQDOhMehj/G0YesavDXHN45hd0P3WloeQ4uiULntkcQwB0DOMblZaeRgc
-	9v1bOBcQWx3487fwZ0MoRHhudDUqS/0wigBHoJm9lLQXtSzeOZwb+06L/pQivoLjsQZQQkeD/HI
-	U6UZIhHcvU8EkPZL1RuLftiOZO40be1i+KtrtHGouDh7yMzhBJixFJoJd2L
-X-Google-Smtp-Source: AGHT+IFcf7gk6ft69jYRmrDzLuvuFBRs68NZ4Ocwea3I49yZ/EifY7LVldN/imD2Xv9xt2LBJpl4gA==
-X-Received: by 2002:a05:6000:470c:b0:385:f5c4:b318 with SMTP id ffacd0b85a97d-38a221f9186mr8513739f8f.31.1734946746556;
-        Mon, 23 Dec 2024 01:39:06 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734946748; x=1735551548;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HLu09/IZb76vH1AepGLoCNTFGrmu/5Ir8RKortKBDcM=;
+        b=dPT2fmtyKOKrkJExyMJY71nT5QAnBiIl+5fuL+tJeXZ6gUEdEj/lrFRjsQrOxloATw
+         Sxdq6G4F0ebzfOsPxy3C8uDDcmqgzqtFRLFzAwGbSC1zpkfi7GH+hoEthDc6KJTJ2nxp
+         KQAz/wf9yT/QxTCA6Gyb7zUqf3J9A3iYwS5N/ZgejMF7Ilp5S64DNuN/MDNYApvMMANP
+         TG3coKpTdsMWkvwjhyNvUdMpOQVA00iDwXiES67iu3UTqSD7VszEJ4PlqNdiI+XO9dcC
+         VOpQxK3A7Z4K94tB3qLiVeq3+hCmB7kAmRHoyaaZQqYUCknz7aIJ5Z0b4AR7Xeqa0aCE
+         Sddw==
+X-Gm-Message-State: AOJu0YxI1kEYNeL000C004CTFkVejDPysuJE10CaitaYu6QXnp7tHmuR
+	gu0KK4QG70iT+6l4e+sn5I07yjtNbDJd34N0kiaAkMjtEoj/HUpkySY29TgbrY6TM31uiJNHos2
+	2
+X-Gm-Gg: ASbGncsJzJRjpXw8zaDN7lsUW1jUYWfBH3u1DDRoFNuqKFXUHEEiQl7MzF2HqYXnRFQ
+	bT6qxEFLEU55ZoZfAg9+Fbmj/o6NsH3NG0305+6g3Y6fyUPxDS5UU5XaCAcpbfWMQeorprcJVbA
+	gb+N29Zb+ndM2m2LImm+u7kqTQypWqxU+Oxb2ZekR0Z0e8MhKibA5O/Zaz8jKxTtJaw4XHRlyqZ
+	qtthCVIpMp5jSvAsIULsMNauUIbAnUf4ihbkKR5DItbl8D/1G5p42gPJx6z
+X-Google-Smtp-Source: AGHT+IH/O/K2z2kiA821Hde63hWbwa0B+QD6rT/zP3IoMk1MAKsl29HlJV0aQSy+OLPVN88I+iGbAg==
+X-Received: by 2002:a5d:5f48:0:b0:385:faaa:9d1d with SMTP id ffacd0b85a97d-38a221fae50mr11914975f8f.35.1734946748435;
+        Mon, 23 Dec 2024 01:39:08 -0800 (PST)
 Received: from dhcp161.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c829235sm10773868f8f.15.2024.12.23.01.39.06
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c829235sm10773868f8f.15.2024.12.23.01.39.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Dec 2024 01:39:06 -0800 (PST)
+        Mon, 23 Dec 2024 01:39:08 -0800 (PST)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -66,10 +68,12 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	Ard Biesheuvel <ardb@kernel.org>
 Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] module: Make .static_call_sites read-only after init
-Date: Mon, 23 Dec 2024 10:37:46 +0100
-Message-ID: <20241223093840.29417-1-petr.pavlu@suse.com>
+Subject: [PATCH 3/3] module: Make .static_call_sites read-only after init
+Date: Mon, 23 Dec 2024 10:37:49 +0100
+Message-ID: <20241223093840.29417-4-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241223093840.29417-1-petr.pavlu@suse.com>
+References: <20241223093840.29417-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -79,23 +83,38 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Section .static_call_sites holds data structures that need to be sorted and
-processed only at module load time. The section is never modified afterwards.
-Make it therefore read-only after module initialization to avoid any
-(non-)accidental modifications.
+processed only at module load time. This initial processing happens in
+static_call_add_module(), which is invoked as a callback to the
+MODULE_STATE_COMING notification from prepare_coming_module().
 
-Petr Pavlu (3):
-  module: Constify parameters of module_enforce_rwx_sections()
-  module: Add a separate function to mark sections as read-only after
-    init
-  module: Make .static_call_sites read-only after init
+The section is never modified afterwards. Make it therefore read-only after
+module initialization to avoid any (non-)accidental modifications.
 
- kernel/module/internal.h   |  7 ++++--
- kernel/module/main.c       | 18 +++------------
- kernel/module/strict_rwx.c | 47 ++++++++++++++++++++++++++++++++++++--
- 3 files changed, 53 insertions(+), 19 deletions(-)
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ kernel/module/strict_rwx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-
-base-commit: 4bbf9020becbfd8fc2c3da790855b7042fad455b
+diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+index 598f89195336..4ae5facab569 100644
+--- a/kernel/module/strict_rwx.c
++++ b/kernel/module/strict_rwx.c
+@@ -115,6 +115,15 @@ static const char *const ro_after_init[] = {
+ 	 * section, which are marked as such at module load time.
+ 	 */
+ 	"__jump_table",
++
++#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
++	/*
++	 * Section .static_call_sites holds data structures that need to be
++	 * sorted and processed at module load time but are never modified
++	 * afterwards.
++	 */
++	".static_call_sites",
++#endif
+ };
+ 
+ void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 -- 
 2.43.0
 
