@@ -1,63 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1BE212D75;
-	Tue, 24 Dec 2024 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A581B653E;
+	Wed, 25 Dec 2024 22:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735061392; cv=none; b=JdKIJU4JfGYXIhHJAoPUsmEba3+kkNxArbhLwTwuptUo+kf33wbCakrHTEJ1QwQnbOeG6x/kdvwbyKmJyIOM6K42QJBebuC/sgZPCss2AwQgHoaaIlYC5y2Rmxd7TfhWuaVNpn3zHoOH2ID4Un0woAEIJGkKJhQYprhCGy6QKyE=
+	t=1735167170; cv=none; b=MxY+PzFlTWelCrSdKPxr2K6VT5iGbg/Mx8LRAeKCw6uSS+lzmwEq6Tlfgzp0oE4QRGNIvB8IgSpEse/JTNVecpez4zycie1PAbSRq/wMK9kFGEXXHMET3FiEe6oAS01XPN69L2uUnFbkKgiKyaT4fSC8rpsX+2niYs2kWUwu4qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735061392; c=relaxed/simple;
-	bh=phhf35B31kK98Vgz6hVplqQPi5UpGvFRCxrr6RUKcI4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=Gqbjo73pPCizEReXlCdJkVDRrYwT0HV1Ya11FtBnRhzqlfjIPHY2NeN0gbdVbhgd3+vPgCHUkWXHQ0N6zZ7Q48vSM7jU4ciMGZ4ULUK6YPcQwnqusFOoy/Pls+S2CGSA//CfEpQh5BWEUK2SSbZ3lZaZEUbzrt1OkR+Cw+7rrIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaxQFylV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735167170; c=relaxed/simple;
+	bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=DAi6XYTMc3eHbVflw1wTEsplprbPuk+7dgLBZkQPW4NQd1E9iQ60BSmDRB+EEFCFZmDFiHDBi8H+K6IoQeu9jf/n4hXH/EJeez1rE8SBNogAFa9UbmOIDllY2d+2b6OXKOJjY38TNQy09vyORT6H4tvLLxDAQHb7VmxViek+d1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HTLLIxTO; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaxQFylV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3B5C4CED7;
-	Tue, 24 Dec 2024 17:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735061392;
-	bh=phhf35B31kK98Vgz6hVplqQPi5UpGvFRCxrr6RUKcI4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=uaxQFylVW02Elp2xjSKrGym80cfxqqyVCSz84veIK+FkyK2pesi2PyA+hniHefi1j
-	 5kHM8z2Q0/5qTQIKzuXmiZAxge7JDcD69EGNeQZyaQQ9TgXBPFjMz6BmnX5wEyDoCH
-	 VsCXKO9G63vpxWyYPcxE/NBjSbuHQloHrvYMk2653GzStj/E3iCaI++XS195//QL+Q
-	 A59MJH7FIAvo4UXhLbCcIQ9pAexTexC5/lE0VBlHembWpBpThLqYOuBpxN9+eQ8xHB
-	 vk9fJSGCFSncAH72Q7CI+UglHdY/1LZQA7lrqsxHPpxra2CFZC1y2Q7/qlFQkvvaJL
-	 5BF3P0SD7KISA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 73A32380A955;
-	Tue, 24 Dec 2024 17:30:12 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v6.14-rc5
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <fedd0c6b-a870-4b8f-8f52-6e11df936678@suse.com>
-References: <fedd0c6b-a870-4b8f-8f52-6e11df936678@suse.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <fedd0c6b-a870-4b8f-8f52-6e11df936678@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc5
-X-PR-Tracked-Commit-Id: 0b7a66a2c864859fbf9bb16229c03172eef02c05
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ef49c460ab89d3d0ccc01c0ac3b55a47927ec6d5
-Message-Id: <173506141095.4160820.961831018391178078.pr-tracker-bot@kernel.org>
-Date: Tue, 24 Dec 2024 17:30:10 +0000
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HTLLIxTO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1735167158;
+	bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=HTLLIxTOk29n6S4nW8ho6AJBqXH4iCrANrB3B49ttizqq5tsUOQ3zChKbrPDuoJn3
+	 vllUCzMJymFTDiMXrcfKJx3Rqrz3qPAmKGgHURtuMi4dETHzRu1UmLnh+8P6wXazL8
+	 1yI9kAcTzoEV7L6EyEvrPZT0VwUIsIsRVCRUzzrE=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH RFC 0/2] module: Introduce hash-based integrity checking
+Date: Wed, 25 Dec 2024 23:51:58 +0100
+Message-Id: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI+MbGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDIyNT3dz8lNKcVN2MxOKM1GJd80RTg0Tz5GSjRGMDJaCegqLUtMwKsHn
+ RSkFuzkqxtbUA2vinumQAAAA=
+X-Change-ID: 20241225-module-hashes-7a50a7cc2a30
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735167158; l=2299;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=BJ1bkF2bRq7DapBeVwwaT8+V5w9s4oEj9HKu5YbUkNM=;
+ b=uaPTOjI5sdkA/RCGSdoTlP3tvvx1abfZ1w4GNiwYxIPrHSzYG/Vam7ZjWI0KgQg7PbXOLoGhs
+ 0vXhHWKXHk9BOq3HHgB5RyDeUmhB8mdy1vUurhPUlB03fGG1EpdQKMz
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The pull request you sent on Mon, 23 Dec 2024 11:55:26 +0100:
+The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds:
+Either the module signing key is generated at build time, which makes
+the build unreproducible, or a static key is used, which precludes
+rebuilds by third parties and makes the whole build and packaging
+process much more complicated.
+Introduce a new mechanism to ensure only well-known modules are loaded
+by embedding a list of hashes of all modules built as part of the full
+kernel build into vmlinux.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.13-rc5
+To properly test the reproducibility in combination with BTF the patch
+"[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
+is also needed.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ef49c460ab89d3d0ccc01c0ac3b55a47927ec6d5
+Questions for current patch:
+* Naming
+* Can the number of built-in modules be retrieved while building
+  kernel/module/hashes.o? This would remove the need for the
+  preallocation step in link-vmlinux.sh.
 
-Thank you!
+Further improvements:
+* Use a LSM/IMA/Keyring to store and validate hashes
+* Make compatible with lockdown
+* Use MODULE_SIG_HASH for configuration
+* Enable coexistence with MODULE_SIG
+* Set mod->sig_ok()
+* UAPI for discovery?
 
+[0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (2):
+      kbuild: add stamp file for vmlinux BTF data
+      module: Introduce hash-based integrity checking
+
+ Makefile                          |  8 +++++-
+ include/asm-generic/vmlinux.lds.h | 11 +++++++++
+ include/linux/module_hashes.h     | 17 +++++++++++++
+ kernel/module/Kconfig             | 11 +++++++++
+ kernel/module/Makefile            |  1 +
+ kernel/module/hashes.c            | 51 +++++++++++++++++++++++++++++++++++++++
+ kernel/module/internal.h          |  9 +++++++
+ kernel/module/main.c              |  4 +++
+ scripts/Makefile.modfinal         |  4 +--
+ scripts/Makefile.vmlinux          |  5 ++++
+ scripts/link-vmlinux.sh           | 31 +++++++++++++++++++++++-
+ scripts/module-hashes.sh          | 26 ++++++++++++++++++++
+ 12 files changed, 174 insertions(+), 4 deletions(-)
+---
+base-commit: f722972b5df307d8c93c706c62d2e27e963c8f66
+change-id: 20241225-module-hashes-7a50a7cc2a30
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thomas Weißschuh <linux@weissschuh.net>
+
