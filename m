@@ -1,114 +1,149 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB15D7082D;
-	Fri, 27 Dec 2024 06:49:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D077513DDD3;
+	Fri, 27 Dec 2024 07:28:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735282199; cv=none; b=lrlNUTLABUGOLSlo+Af7P9VhLYrFXHD8sO8cPfx89c6FZAv7uukQUuDcUZvc/nOTrd6QMaz9uHGokkD9LQoxk+S2aPz6707v162fFQbB3z8o1zrtUfadKdSj7jAMrZ+f+vLf2+sN11Vkma7h6um5fvad9wPCqdy6tFBqvDO4zbI=
+	t=1735284526; cv=none; b=S6Ba99Hcy970ECNLXm9NlgyzNBJmKB/z21e/wE0gMzHbeD/xFzmg4lZ0XuD3+al+TVL78vTvhU7KpMRaEdv3Cxt9DXI9n0A6kRae21h3l0HzWyIhtN2ia1XWM96aLGvpoQnaD61NJ5/HICKv2VVNVQRlF/ZtQOXH5mVua/3ANA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735282199; c=relaxed/simple;
-	bh=hoLcZ+iT2dPn/slVVxv5fcZZF+pgka9JveM30viNiMg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LcK7p1c4XiWw9Zy58H5pNlEP7rb8OfFOSWzE5HCFWibFQEbRYR2iJKloYNPal0nQ6Hg7OitbloUK7tiFUCiau7qafhL4lMeqCMZEf8llJk6IEMNoN0p6nV/fzX2jTUvAGwpBjAjx3E2I20R++SrBPGBus1E+NrLWWpY1yab0QCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pk4tX6D2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735284526; c=relaxed/simple;
+	bh=jbs+82vTwYkxQ3EpjI+1yvm0nBPBr9HhcF8xhKMgyb4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sryd9bmshc9uGklD1hy/cCeXzwuudDVAqYTBr2h/FF3nkaO2bxTqKTlf4SpAnIVm3sfr1yKHcaILypQaL3MBH5RwZvGzJaIo7wLNrBRB+cmcGZOUdEH6lY401p9DCiltyMS8sCHsbmrMoiilfz58KbZTGpcejaOh6S+cJC27kW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWflVN7V; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pk4tX6D2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9F1C4CEDF;
-	Fri, 27 Dec 2024 06:49:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWflVN7V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BECBC4CED0;
+	Fri, 27 Dec 2024 07:28:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735282198;
-	bh=hoLcZ+iT2dPn/slVVxv5fcZZF+pgka9JveM30viNiMg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Pk4tX6D29jsCMtwnAvNvxrSrih/vzfBSdcvD8vkIgdKLeLk9sATjFybus2OU9E9Sh
-	 T/aNUr8TXUhInanpcfKjUANfyOS2V2WAxtgMiqPfuF/CH4qsiNwuUfYJzPVUuYSoIH
-	 s9jkBwrUWn8yIzTVjvVZGY6TMZ4++SU6hWdQu/bpHcrxAeej4bsi2qZZyq318DSZjm
-	 1yMiS2ZcrjBiCjIgK/FJNZV+tBNzQYXZYLRU+vscFJJub8e0ZVeVJ4XQRJOWwuJMl0
-	 HOvLddb4jAJ3iZWn2VppuRz8yUxkbou4BRoGNUxpoCTGulKsack2zq1gJJrczEsbDp
-	 7EWiYQtqb1KnA==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5401c52000dso8057190e87.3;
-        Thu, 26 Dec 2024 22:49:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVQwoR6cc3qcjbB97WN500DQsvEMwTiE5VfltZwePHQyoNCKihGd2XQraURt+68MnGYEggG1736srd9LMTK@vger.kernel.org, AJvYcCVu2vYZtwPnMY1lHyMqc1WkDARXLFAvNeYqoc0WkyalKiXIKNxJOoHwEODShXmyKOpbuxWVKfffL2k=@vger.kernel.org, AJvYcCXES1E8IhETp5Q9gG81edEpxtgzWcfuWCmUEneziPnXKdxZ3uEiTxWEYVI9y0+ONrFGMCiQwR0tiT7ZMoUs@vger.kernel.org, AJvYcCXJTWu4QIX8vnetPd8AtDfRI646A3wc/K3RcK6fe/h1SPrMz7Y64yHa6oDcxn6RdLSQJWxeqkNk3+4SOeJp4Nc=@vger.kernel.org, AJvYcCXrixZUEGfNo6aJuTj23yrGPOlMVgpn/hQNPof/7Wmm/akE69Ho9Bnz2ULnxhN5m79sBa6hYMidMlH4Go02fQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI7XQElrfRPr64Kz8/9Ry+RaM7XEEJoNTXlPJduFJKwF0vb19a
-	gzzdXSZ7ZhbYzWBk4ZTPZGBCI3kBiYiESRpfRK5wLANga4AGrp/4Bx/J05Hjp6+y5Sz2pxwVRaj
-	NkjoY261A/xKEfkEblFkgPZY6HSg=
-X-Google-Smtp-Source: AGHT+IEfRIbAUfDGKqjk6EcYuB0PBijqceiyA7AyuHs+mi/poGZ6JbhNivinK0tX7pp0w8VpBEdhwiU4O5CAAZ1FhBA=
-X-Received: by 2002:a05:6512:e98:b0:541:21d7:7056 with SMTP id
- 2adb3069b0e04-542295301b4mr8226939e87.17.1735282196979; Thu, 26 Dec 2024
- 22:49:56 -0800 (PST)
+	s=k20201202; t=1735284525;
+	bh=jbs+82vTwYkxQ3EpjI+1yvm0nBPBr9HhcF8xhKMgyb4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VWflVN7Vf0mMrePAw/GmezMrZdtva3K3h36HGmBxa/KroU575WF5NJHeh0C6TXNjF
+	 qQhJ4X9PGAqzjrUVpQRiVvwIGMd+mISM5MQXFvk45sfhmzlny3nUqVMIbeY6kdii/w
+	 zWWKCDoOIlTrr71quUFFRbqLg+DHcfKtQtVHdMmb1lnaMhGLAzyiY7V3autquhweL9
+	 gpxz7kV3lQ4EAySR1yDZ2syQZsNyGHLgB/w6HxDmV2RAqrWKXeYkMQOMk5oc3c8Pn5
+	 sSBAIqOuQ0ZL0h2iDfLAfuFMjvlnSpx46Mfk1CVcx/gQmlnCTUUVbl2c6KeEM5cwGT
+	 y+LUWaqHdI5Jg==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Rae Moar <rmoar@google.com>,
+	Richard Weinberger <richard@nod.at>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	kgdb-bugreport@lists.sourceforge.net,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	live-patching@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH 0/8] x86/module: rework ROX cache to avoid writable copy
+Date: Fri, 27 Dec 2024 09:28:17 +0200
+Message-ID: <20241227072825.1288491-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241223-extended-modversions-v11-0-221d184ee9a7@google.com> <20241223-extended-modversions-v11-3-221d184ee9a7@google.com>
-In-Reply-To: <20241223-extended-modversions-v11-3-221d184ee9a7@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 27 Dec 2024 15:49:20 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARGJ8UMaiGC71f_wfk5ZqwhV2WD_Zf3NsQuS-+u_uT-iA@mail.gmail.com>
-Message-ID: <CAK7LNARGJ8UMaiGC71f_wfk5ZqwhV2WD_Zf3NsQuS-+u_uT-iA@mail.gmail.com>
-Subject: Re: [PATCH v11 3/5] modules: Allow extended modversions without basic MODVERSIONS
-To: Matthew Maurer <mmaurer@google.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Jonathan Corbet <corbet@lwn.net>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 24, 2024 at 5:13=E2=80=AFAM Matthew Maurer <mmaurer@google.com>=
- wrote:
->
-> If you know that your kernel modules will only ever be loaded by a newer
-> kernel, you can disable BASIC_MODVERSIONS to save space. This also
-> allows easy creation of test modules to seee how tooling will respond to
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
+Hi,
 
-seee -> see
+Following Peter's comments [1] these patches rework handling of ROX caches
+for module text allocations. 
 
+Instead of using a writable copy that really complicates alternatives
+patching, temporarily remap parts of a large ROX page as RW for the time of
+module formation and then restore it's ROX protections when the module is
+ready.
 
-> modules that only have the new format.
->
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
->  kernel/module/Kconfig    | 15 +++++++++++++++
->  scripts/Makefile.modpost |  1 +
->  scripts/mod/modpost.c    | 19 +++++++++++--------
->  3 files changed, 27 insertions(+), 8 deletions(-)
->
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 9568b629a03ce8289d3f3597eefc66fc96445720..5f701391ab12c7d1b3ca496c9=
-b3443c5a76a8745 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -217,6 +217,21 @@ config EXTENDED_MODVERSIONS
->           The most likely reason you would enable this is to enable Rust
->           support. If unsure, say N.
->
-> +config BASIC_MODVERSIONS
-> +       bool "Basic Module Versioning Support"
-> +       depends on MODVERSIONS
-> +       default MODVERSIONS
+To keep the ROX memory mapped with large pages, make set_memory code
+capable of restoring large pages (more details are in patch 3).
 
-Nit:
+The patches also available in git
+https://git.kernel.org/rppt/h/execmem/x86-rox/v8
 
-            default y
+[1] https://lore.kernel.org/all/20241209083818.GK8562@noisy.programming.kicks-ass.net
 
-is simpler.
+Kirill A. Shutemov (1):
+  x86/mm/pat: Restore large pages after fragmentation
 
+Mike Rapoport (Microsoft) (7):
+  x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
+  x86/mm/pat: drop duplicate variable in cpa_flush()
+  execmem: add API for temporal remapping as RW and restoring ROX
+    afterwards
+  module: introduce MODULE_STATE_GONE
+  modules: switch to execmem API for remapping as RW and restoring ROX
+  Revert "x86/module: prepare module loading for ROX allocations of
+    text"
+  module: drop unused module_writable_address()
 
---
-Best Regards
+ arch/um/kernel/um_arch.c                      |  11 +-
+ arch/x86/entry/vdso/vma.c                     |   3 +-
+ arch/x86/include/asm/alternative.h            |  14 +-
+ arch/x86/include/asm/pgtable_types.h          |   2 +
+ arch/x86/kernel/alternative.c                 | 181 ++++++---------
+ arch/x86/kernel/ftrace.c                      |  30 ++-
+ arch/x86/kernel/module.c                      |  45 ++--
+ arch/x86/mm/pat/cpa-test.c                    |   2 +-
+ arch/x86/mm/pat/set_memory.c                  | 216 +++++++++++++++++-
+ include/linux/execmem.h                       |  31 +++
+ include/linux/module.h                        |  21 +-
+ include/linux/moduleloader.h                  |   4 -
+ include/linux/vm_event_item.h                 |   2 +
+ kernel/module/kallsyms.c                      |   8 +-
+ kernel/module/kdb.c                           |   2 +-
+ kernel/module/main.c                          |  86 ++-----
+ kernel/module/procfs.c                        |   2 +-
+ kernel/module/strict_rwx.c                    |   9 +-
+ kernel/tracepoint.c                           |   2 +
+ lib/kunit/test.c                              |   2 +
+ mm/execmem.c                                  | 118 ++++++++--
+ mm/vmstat.c                                   |   2 +
+ samples/livepatch/livepatch-callbacks-demo.c  |   1 +
+ .../test_modules/test_klp_callbacks_demo.c    |   1 +
+ .../test_modules/test_klp_callbacks_demo2.c   |   1 +
+ .../livepatch/test_modules/test_klp_state.c   |   1 +
+ .../livepatch/test_modules/test_klp_state2.c  |   1 +
+ 27 files changed, 511 insertions(+), 287 deletions(-)
 
-Masahiro Yamada
+-- 
+2.45.2
+
