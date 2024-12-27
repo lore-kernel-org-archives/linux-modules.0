@@ -1,31 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799D11F37AE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7995E1F37AD;
 	Fri, 27 Dec 2024 13:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735305821; cv=none; b=AnRQMHordknCfObVwPsYfRs0rhxfwzEqs4gcWdf969mRMKP0rAv5JO4R52u/V7AkIGVO434wAjqR+XED6pqszJFBRimHSsD86RmfQJm5MGJ1P3cssKCvQ8vX+FFe+8vWP9rnVRs+f6Jy/lYOr+NrI7TihjLE9d97A112tdPM3SY=
+	t=1735305821; cv=none; b=qttBwbinkKr919ugDxpxTPo6o8Od6cBiRcXfPiEWjdbb1hCIKbqiir95fnkPp3MJDMaSMvmTtR/OXvzUFmswqe3u3hZSdRUMDWYt3BYrS4Cdo7SVkzKx8MZnSeUvCAbPwlnC++9XrSn/iEohS/MM2JObC7TrJkdhBsymbxfcggI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735305821; c=relaxed/simple;
-	bh=QoqqZMdscJifL85sSU4W8OY4Djn0uzs7qpMPaw0acy0=;
+	bh=K02KJuxHoyR3doDRIJgCmzfosr6MYLp9M2UJxLzc+pw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=raYTK0SE0WP/163n7PqtYXErCIFx79RyS9rsOHSyylZxtpLYEP5TEyW4kx/0XiK3YcReCcTEAydIwaarrx/zeXypANP/m6/VGjoEoDU2ogZcFGg2Zgi54Pr1gzmB7ltDFfArIL8Le+JBnXNn5EZoY83xy2HcGTB/h06JugoHhQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IZweKvep; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=bCbDdrq4lwlH7knbuqst0nia63bz92q2yaWo2Or5DNc6Au3caSutO8gbnytUtt8f8b+rDunDQovN5DbpF9K25RSt3Qv9jKhTZwkPSKUJQ1dZ8DpNCW9PWh6khbxscwEpwmtM0y1MvDnM74la12v6YK6kjbpvw3yqpzI0sI9HSYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WxAzzrvX; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IZweKvep"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WxAzzrvX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1735305810;
-	bh=QoqqZMdscJifL85sSU4W8OY4Djn0uzs7qpMPaw0acy0=;
+	bh=K02KJuxHoyR3doDRIJgCmzfosr6MYLp9M2UJxLzc+pw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IZweKvepjmNrroQf7LtKcfatQkN+yorL/6R2ymJD7ZCmmEI792MIwp1sXzBlT1C5O
-	 3hMJiXYij7GpMFTGDmdiv82vSLgrisgIAP0PxVCxLS+pHNmswNhLsOBxfbmwPBC0/n
-	 7/932UB1IfmN76G5BULIDU0Ms16jHDdS67GpC/mQ=
+	b=WxAzzrvX6I9x+DRGo4tI5HllXQSsE23PnCt+7cUWcxn4ZXOwOAP4lZbEhH5zJhary
+	 uTHlRtjf5A4ZVWteDBW7zU80a1E9mmvyRX4sC8UnWSZLlpZ/iJeo8+8OVaVE1irCvC
+	 8u/nwk5Kwerx6bJwLcX0hUKjdxVg1gN0OYM7cFvw=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Fri, 27 Dec 2024 14:23:25 +0100
-Subject: [PATCH v2 6/6] module: sysfs: Use const 'struct bin_attribute'
+Date: Fri, 27 Dec 2024 14:23:24 +0100
+Subject: [PATCH v2 5/6] module: sysfs: Add notes attributes through
+ attribute_group
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -34,7 +35,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241227-sysfs-const-bin_attr-module-v2-6-e267275f0f37@weissschuh.net>
+Message-Id: <20241227-sysfs-const-bin_attr-module-v2-5-e267275f0f37@weissschuh.net>
 References: <20241227-sysfs-const-bin_attr-module-v2-0-e267275f0f37@weissschuh.net>
 In-Reply-To: <20241227-sysfs-const-bin_attr-module-v2-0-e267275f0f37@weissschuh.net>
 To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
@@ -45,103 +46,130 @@ Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-hardening@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1735305809; l=3169;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735305809; l=3549;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=QoqqZMdscJifL85sSU4W8OY4Djn0uzs7qpMPaw0acy0=;
- b=GuaY64bsgH40d08xbPdonBvAes0cdWVElxunF+rL4jI1VlFfWopEe02t5GzNyq1ZVbNcu+jj/
- TxfzRl6frftArjL8DhH1HxBUujw56qi592q0GzRInSqBG+odDVfhKHW
+ bh=K02KJuxHoyR3doDRIJgCmzfosr6MYLp9M2UJxLzc+pw=;
+ b=7xBBtyCfmRqKo+9VgUdWzdBI8PeiiNgD0iy3kGRotz2l4vcAuDwJWpicTJfUsFaVZOZi4T4uv
+ F8PZPjR29StCHtT72pSrMPC781lI64QHJSDMlfYbKDXfcZyGHjyYKci
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The sysfs core is switching to 'const struct bin_attribute's.
-Prepare for that.
+A kobject is meant to manage the lifecycle of some resource.
+However the module sysfs code only creates a kobject to get a
+"notes" subdirectory in sysfs.
+This can be achieved easier and cheaper by using a sysfs group.
+Switch the notes attribute code to such a group, similar to how the
+section allocation in the same file already works.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/module/sysfs.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ kernel/module/sysfs.c | 54 ++++++++++++++++++++++++++-------------------------
+ 1 file changed, 28 insertions(+), 26 deletions(-)
 
 diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index d04cb12eac7be63dd0bb65bd55e97280e7875e4e..853745e353381204161541c6f29bf97c42ec6df3 100644
+index 4b1a963b712b609cde1c4375e789a6ee7f359c7a..d04cb12eac7be63dd0bb65bd55e97280e7875e4e 100644
 --- a/kernel/module/sysfs.c
 +++ b/kernel/module/sysfs.c
-@@ -26,7 +26,7 @@ struct module_sect_attrs {
+@@ -138,20 +138,13 @@ static void remove_sect_attrs(struct module *mod)
+  */
  
- #define MODULE_SECT_READ_SIZE (3 /* "0x", "\n" */ + (BITS_PER_LONG / 4))
- static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
--				struct bin_attribute *battr,
-+				const struct bin_attribute *battr,
- 				char *buf, loff_t pos, size_t count)
+ struct module_notes_attrs {
+-	struct kobject *dir;
+-	unsigned int notes;
+-	struct bin_attribute attrs[] __counted_by(notes);
++	struct attribute_group grp;
++	struct bin_attribute attrs[];
+ };
+ 
+-static void free_notes_attrs(struct module_notes_attrs *notes_attrs,
+-			     unsigned int i)
++static void free_notes_attrs(struct module_notes_attrs *notes_attrs)
  {
- 	char bounce[MODULE_SECT_READ_SIZE + 1];
-@@ -54,18 +54,18 @@ static ssize_t module_sect_read(struct file *file, struct kobject *kobj,
- 
- static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
- {
--	struct bin_attribute **bin_attr;
-+	const struct bin_attribute *const *bin_attr;
- 
--	for (bin_attr = sect_attrs->grp.bin_attrs; *bin_attr; bin_attr++)
-+	for (bin_attr = sect_attrs->grp.bin_attrs_new; *bin_attr; bin_attr++)
- 		kfree((*bin_attr)->attr.name);
--	kfree(sect_attrs->grp.bin_attrs);
-+	kfree(sect_attrs->grp.bin_attrs_new);
- 	kfree(sect_attrs);
- }
- 
- static int add_sect_attrs(struct module *mod, const struct load_info *info)
- {
- 	struct module_sect_attrs *sect_attrs;
--	struct bin_attribute **gattr;
-+	const struct bin_attribute **gattr;
- 	struct bin_attribute *sattr;
- 	unsigned int nloaded = 0, i;
- 	int ret;
-@@ -86,7 +86,7 @@ static int add_sect_attrs(struct module *mod, const struct load_info *info)
- 
- 	/* Setup section attributes. */
- 	sect_attrs->grp.name = "sections";
--	sect_attrs->grp.bin_attrs = gattr;
-+	sect_attrs->grp.bin_attrs_new = gattr;
- 
- 	sattr = &sect_attrs->attrs[0];
- 	for (i = 0; i < info->hdr->e_shnum; i++) {
-@@ -101,7 +101,7 @@ static int add_sect_attrs(struct module *mod, const struct load_info *info)
- 			ret = -ENOMEM;
- 			goto out;
- 		}
--		sattr->read = module_sect_read;
-+		sattr->read_new = module_sect_read;
- 		sattr->private = (void *)sec->sh_addr;
- 		sattr->size = MODULE_SECT_READ_SIZE;
- 		sattr->attr.mode = 0400;
-@@ -144,7 +144,7 @@ struct module_notes_attrs {
- 
- static void free_notes_attrs(struct module_notes_attrs *notes_attrs)
- {
--	kfree(notes_attrs->grp.bin_attrs);
-+	kfree(notes_attrs->grp.bin_attrs_new);
+-	if (notes_attrs->dir) {
+-		while (i-- > 0)
+-			sysfs_remove_bin_file(notes_attrs->dir,
+-					      &notes_attrs->attrs[i]);
+-		kobject_put(notes_attrs->dir);
+-	}
++	kfree(notes_attrs->grp.bin_attrs);
  	kfree(notes_attrs);
  }
  
-@@ -152,7 +152,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
+@@ -159,6 +152,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
  {
  	unsigned int notes, loaded, i;
  	struct module_notes_attrs *notes_attrs;
--	struct bin_attribute **gattr;
-+	const struct bin_attribute **gattr;
++	struct bin_attribute **gattr;
  	struct bin_attribute *nattr;
  	int ret;
  
-@@ -178,7 +178,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
- 	}
+@@ -177,7 +171,15 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
+ 	if (!notes_attrs)
+ 		return -ENOMEM;
  
- 	notes_attrs->grp.name = "notes";
--	notes_attrs->grp.bin_attrs = gattr;
-+	notes_attrs->grp.bin_attrs_new = gattr;
- 
+-	notes_attrs->notes = notes;
++	gattr = kcalloc(notes + 1, sizeof(*gattr), GFP_KERNEL);
++	if (!gattr) {
++		kfree(notes_attrs);
++		return -ENOMEM;
++	}
++
++	notes_attrs->grp.name = "notes";
++	notes_attrs->grp.bin_attrs = gattr;
++
  	nattr = &notes_attrs->attrs[0];
  	for (loaded = i = 0; i < info->hdr->e_shnum; ++i) {
+ 		if (sect_empty(&info->sechdrs[i]))
+@@ -189,35 +191,35 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
+ 			nattr->size = info->sechdrs[i].sh_size;
+ 			nattr->private = (void *)info->sechdrs[i].sh_addr;
+ 			nattr->read = sysfs_bin_attr_simple_read;
+-			++nattr;
++			*(gattr++) = nattr++;
+ 		}
+ 		++loaded;
+ 	}
+ 
+-	notes_attrs->dir = kobject_create_and_add("notes", &mod->mkobj.kobj);
+-	if (!notes_attrs->dir) {
+-		ret = -ENOMEM;
++	ret = sysfs_create_group(&mod->mkobj.kobj, &notes_attrs->grp);
++	if (ret)
+ 		goto out;
+-	}
+-
+-	for (i = 0; i < notes; ++i) {
+-		ret = sysfs_create_bin_file(notes_attrs->dir, &notes_attrs->attrs[i]);
+-		if (ret)
+-			goto out;
+-	}
+ 
+ 	mod->notes_attrs = notes_attrs;
+ 	return 0;
+ 
+ out:
+-	free_notes_attrs(notes_attrs, i);
++	free_notes_attrs(notes_attrs);
+ 	return ret;
+ }
+ 
+ static void remove_notes_attrs(struct module *mod)
+ {
+-	if (mod->notes_attrs)
+-		free_notes_attrs(mod->notes_attrs, mod->notes_attrs->notes);
++	if (mod->notes_attrs) {
++		sysfs_remove_group(&mod->mkobj.kobj,
++				   &mod->notes_attrs->grp);
++		/*
++		 * We are positive that no one is using any notes attrs
++		 * at this point.  Deallocate immediately.
++		 */
++		free_notes_attrs(mod->notes_attrs);
++		mod->notes_attrs = NULL;
++	}
+ }
+ 
+ #else /* !CONFIG_KALLSYMS */
 
 -- 
 2.47.1
