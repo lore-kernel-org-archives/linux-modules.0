@@ -1,108 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F2E01F7557;
-	Fri, 27 Dec 2024 17:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C6F35958;
+	Sat, 28 Dec 2024 08:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735319928; cv=none; b=WF/gvtMQIzvQp4Ov6H1FrOA9J3DXaa7wdslg9c+KxnBedtRU2+rLu+3C56YSXyr2TxaXsmVsGUZqaq77ppblVZxXR0RIAzgQHCvsvynkrXtqy6prVobjFC9XCIbxONutLyEgMC5KG5cosQ+cerUlRHM/6u3otRuJZu0Pz/ugLqQ=
+	t=1735375431; cv=none; b=RiyMWjdGeTqGhsRGYaKU1nxTMbajrrrzVwqASnUByD/76y1zvtthOrnG0v78tIJzi2m59Xeq/mRdYJAaINnR66LCrckL+ljCDe2ECyhGKlnR/JVXfZgf1heqLWXPr5nHQDrjGuIkx/ZKyG6gJ54n73sjP04N3Rss0wJJFt7LoTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735319928; c=relaxed/simple;
-	bh=cyPvuQG7rkgpWUrFujtHBOQ2InrAHxiLlkoqpRdbE34=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TQ902vtB8hl1OXLOgwJF4UDUW0ScJaIMHWCz29+dxudQW1kjpT02E8k5hgrRaOHjoC1wvsmAkVSkI1zG5M2X6/ebnVQK7S100I0WwcREfQtJoPaXeDSkFNGzjq4xxKqiakxGB4s/dXVCDR/bd5IVNOFNCpxtUTW/Ym+d2y4mFLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3E66C4CED0;
-	Fri, 27 Dec 2024 17:18:45 +0000 (UTC)
-Date: Fri, 27 Dec 2024 12:19:46 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, Daniel
- Gomez <da.gomez@samsung.com>, Luis Chamberlain <mcgrof@kernel.org>, "Paul E
- . McKenney" <paulmck@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Thomas Gleixner <tglx@linutronix.de>, Huacai Chen <chenhuacai@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Subject: Re: [PATCH v2 19/28] LoongArch: ftrace: Use RCU in all users of
- __module_text_address().
-Message-ID: <20241227121946.1643decf@gandalf.local.home>
-In-Reply-To: <20241220174731.514432-20-bigeasy@linutronix.de>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
-	<20241220174731.514432-20-bigeasy@linutronix.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1735375431; c=relaxed/simple;
+	bh=sZiTPlQI0gHuQF1THsJA4vQwmsj1H9KFzGpKq1nF9WY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CR8B/MToIRHGsoawRjxgp/MsCJyHUf+eyO8zSbqH7FwsVUWFZY5roMkmqGjwjgC3qT6gSUkcPFnhJtk+ZG8/N+rJRXAxl1JXWAexUs38vsVoAjC+naIxcLe7c0MFNQh8g8CivHtjDWzV84Q7AT87gp5OLy+RfH09hINUefOTqNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=WbIl0pma; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="WbIl0pma"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1735375425;
+	bh=sZiTPlQI0gHuQF1THsJA4vQwmsj1H9KFzGpKq1nF9WY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=WbIl0pmaTig4WqXVNlApAm/gyb1WPNf8/CGCDRFQ2XLpxpT+PxPxg35UzP1JJZETh
+	 Q3KoWLjcxjBFclgDc1ljqUCgtj4BCRz5KJBBOSXNf7cg+q81h/i93BCRmMjQtSEtaN
+	 DbKS7/3vht381rnDmgZWnDgHmB2Ws47fM4EcHsIg=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v2 0/3] sysfs: constify bin_attribute argument of
+ sysfs_bin_attr_simple_read()
+Date: Sat, 28 Dec 2024 09:43:40 +0100
+Message-Id: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADy6b2cC/33NQQ6CMBCF4auQrh3TjjUkrryHIQbawU6ihXQqS
+ gh3t+Le5f8W31uUUGISdaoWlWhi4SGWwF2lXGjjjYB9aYUarTGIILP0Am6IkqHjeG1zTiD8GO8
+ EtdPed9i73qAqwpio5/emX5rSgSUPad7OJvNdfy7q4193MqDBtpasI18bOpxfxCLiwjPsI2XVr
+ Ov6AWq7vmfLAAAA
+X-Change-ID: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
+To: Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735375424; l=1255;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=sZiTPlQI0gHuQF1THsJA4vQwmsj1H9KFzGpKq1nF9WY=;
+ b=bVK06F6W/XTwjZZrk9th4YWgZvI6fDp2ksynQwNyKsR4oUOGuKOfH8ZIpuVDiMoiNN90vtbQT
+ fuheImUmzLGCCXSuRqocGwLuU0HITJO2We5q3ZL4M71LsJ3R3lMP4k4
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Fri, 20 Dec 2024 18:41:33 +0100
-Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
+Most users use this function through the BIN_ATTR_SIMPLE* macros,
+they can handle the switch transparently.
 
-> --- a/arch/loongarch/kernel/ftrace_dyn.c
-> +++ b/arch/loongarch/kernel/ftrace_dyn.c
-> @@ -85,14 +85,13 @@ static bool ftrace_find_callable_addr(struct dyn_ftrace *rec, struct module *mod
->  	 * dealing with an out-of-range condition, we can assume it
->  	 * is due to a module being loaded far away from the kernel.
->  	 *
-> -	 * NOTE: __module_text_address() must be called with preemption
-> -	 * disabled, but we can rely on ftrace_lock to ensure that 'mod'
-> +	 * NOTE: __module_text_address() must be called within a RCU read
-> +	 * section, but we can rely on ftrace_lock to ensure that 'mod'
->  	 * retains its validity throughout the remainder of this code.
->  	 */
->  	if (!mod) {
-> -		preempt_disable();
-> +		guard(rcu)();
->  		mod = __module_text_address(pc);
-> -		preempt_enable();
->  	}
->  
->  	if (WARN_ON(!mod))
-> -- 
+This series is meant to be merged through the driver core tree.
 
-I personally dislike swapping one line of protection for the guard() code.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v2:
+- Rebase on torvalds/master
+- Drop wmi-bmof patch
+- Pick up Acks from Andrii
+- Link to v1: https://lore.kernel.org/r/20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net
 
-Although, I do think scoped_guard() can work.
+---
+Thomas Weißschuh (3):
+      sysfs: constify bin_attribute argument of sysfs_bin_attr_simple_read()
+      btf: Switch vmlinux BTF attribute to sysfs_bin_attr_simple_read()
+      btf: Switch module BTF attribute to sysfs_bin_attr_simple_read()
 
-That is:
+ arch/powerpc/platforms/powernv/opal.c |  2 +-
+ fs/sysfs/file.c                       |  2 +-
+ include/linux/sysfs.h                 |  4 ++--
+ kernel/bpf/btf.c                      | 15 ++-------------
+ kernel/bpf/sysfs_btf.c                | 12 ++----------
+ kernel/module/sysfs.c                 |  2 +-
+ 6 files changed, 9 insertions(+), 28 deletions(-)
+---
+base-commit: d6ef8b40d075c425f548002d2f35ae3f06e9cf96
+change-id: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
 
-	if (!mod) {
-		read_rcu_lock();
-		mod = __module_text_address(pc);
-		read_rcu_unlock();
-	}
-
-Is easier to understand than:
-
-	if (!mod) {
-		guard(rcu)();
-		mod = __module_text_address(pc);
-	}
-
-Because it makes me wonder, why use a guard() for a one liner?
-
-But, when I saw your other patch, if we had:
-
-	if (!mod) {
-		scoped_guard(rcu)()
-			mod = __module_text_address(pc);
-	}
-
-To me, hat looks much better than the guard() as it is obvious to what the
-code is protecting. Even though, I still prefer the explicit, lock/unlock.
-Maybe, just because I'm more used to it.
-
-IMHO, guard() is for complex functions that are error prone. A single line
-is not something that is error prone (unless you don't match the lock and
-unlock properly, but that's pretty obvious when that happens).
-
-But this is just my own opinion.
-
--- Steve
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
