@@ -1,92 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467642111;
-	Sat, 28 Dec 2024 16:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06910370
+	for <linux-modules@vger.kernel.org>; Mon, 30 Dec 2024 00:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735403343; cv=none; b=KLdXQJwdLL2pDsISlYrqjRd3qFDQ+2OWzWKBFbazpdZVK8arqUitheNYyxDVFAWhnfgstk0SLNvIXUMJssKP7B5wXDWtoA6PBzZCy7KkTgWmGbabfuQCdl3DOeKuAuLfR2PUyevkwLGDIxIYiUIixYu7Ey2o/j0J9dgzSyE4MYM=
+	t=1735517383; cv=none; b=cu7Gne97RoDltHljJZchsriKQuxJnhfyrfToiuulvv5uC5J2DlkXENPINrcbfk+WDjDSeb83cz6/6PvlQaL/7f2YdqwbmFwjjPoAbWT1jgu8B3g/7DdRiXnH5AjwC9staGyxcF7y+mlzNypj2MiMU0TM//N/Hj+96Zh2y2r4w8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735403343; c=relaxed/simple;
-	bh=fELjdXfci/f3oqFrTANTWQpQItWmCHjVaGRvt5XorsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=agYKu+yTz4Zkq8BicQbZtnaqxylBumnj52KhfvCky6XvBP67J0cIgeR2G+ijzpuwcWEcgl16r/dZ3X80gJZbhrrToitvxkn8XPndSkcRS6+jrpvA68nzdRwJo+PEv/TXirxwGxHnLT4o1yTUl3Ry/i+poQjWjDM6hNMAzm/TnhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYKfeVE5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1735517383; c=relaxed/simple;
+	bh=BUtQMCSg1Oj0Chy5Kbp17AuO/+h+n58htkK175/Z7iA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZKStmdW/fEDRw4CDTHA0Qjo2/SNtGtj5AOsMMLN2whwp5Vf2IB3bpqwgi8qz7IzMPIYjkmywWbzlovQGi62vPmdunvSbSYnJj4sqh4joqXTAO35ANt3Bi/FFyqBR5lsmaEiw7l04PIqkAGp3nhOTgO0yn8F2lWzwmia+yGc3cuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wRD9CAUS; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYKfeVE5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20946C4CEE1;
-	Sat, 28 Dec 2024 16:29:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735403343;
-	bh=fELjdXfci/f3oqFrTANTWQpQItWmCHjVaGRvt5XorsA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FYKfeVE5x7tNYxnPhaxlTGE36Um9i9E1v6TLyncVlcHWkBHUXAJD1B+uOsOCcJmi0
-	 cigBLqOuvcDVFAoTSqas2sQ26jD/zTdOs7xtrLMzEdhCNDjut4Os70NrHlPtx+E4tC
-	 BCaF8ru+0of7NjX7IJYMhEHhsz4rpCfuSlCJ/nHEdLJIyuzjkT940QZecyD5q3ngho
-	 p/CukpXyfWidJdm324Ud0jViTcqiI5yccPDxaGINVMnEelXDJxS8AOGAj1AtMVQCcS
-	 +EmjcfflKwGNSSqgceCWMPqMCP6Dr6sn/aIUUsqcNMMixrULqB/CQ+jxAc2eCMGCS3
-	 qgixf9rNxtjnQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-30167f4c1e3so12862321fa.3;
-        Sat, 28 Dec 2024 08:29:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW+JHPFCD64K3FVBPUce9ZzTT+b0sNaR1PPNt3iVgqYlRTy2ulRjK9sgEE0ja9E234ZGg2iOnoX+UhbmScbcw==@vger.kernel.org, AJvYcCW8M0kkctFuEVJCJPX+gLOjQPMF+non/JB24MHq/RnhxUR8mMr9L0N7pLNejKC1q7n4UEaXnSrEOLAhXxtV@vger.kernel.org, AJvYcCWz66y9u3W6M6IuZZNKhIhlF3twl8xFmIg2590LdkDupUGBSlohNbVePsj226cZllOgNQ9xG3GN08VpAsk=@vger.kernel.org, AJvYcCXen8Kqd+WQJftxbxikXdrZZWnhryBeWpOTCJWglsDzyJXqxz42u9J4yvlfDEiYupUszbhR48oaRKulyS1oSgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7z158HceTESJxuZa7xvHRZpCfhIiFp3j0XKLj077YAi0vNgof
-	+p9ZSgB/Qg1l06JTM9H2Lz5BUTtvjys/XqeYTaoDwc1ahJcpYEPVxN3yUDGxcNDzVHZdrmL+IOH
-	4z/si+a6WxFHv5b74X8dGkTSNlZs=
-X-Google-Smtp-Source: AGHT+IHRQ1+8BgTqaH4EqEuyozTsZbSR8wnAt/ZYNGhZ0LwS0KidYtqAFAaBQ66v0Y70jKqULyfNGocHlh3tOhXVsJw=
-X-Received: by 2002:a05:6512:ba9:b0:542:232c:d3eb with SMTP id
- 2adb3069b0e04-54229530111mr7302108e87.19.1735403341601; Sat, 28 Dec 2024
- 08:29:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wRD9CAUS"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-215740b7fb8so1061225ad.0
+        for <linux-modules@vger.kernel.org>; Sun, 29 Dec 2024 16:09:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1735517380; x=1736122180; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=s5aXoDdVCtXt3iybNZCPNId+3b30Me5/dyFiUes8QNc=;
+        b=wRD9CAUS8cNEXfeSkXAgCwkt/Gso66KbUMzL7YvKKeFWh4tTDAsi1zpiYYL39itNE4
+         kRS70ZFV4d1xgACgwgmqBleUm9dunNETudfVq258l6DWlECGMWB0AhMfhtVdyzuf7EYu
+         mXzq+I9XFQPr6TsVdFaxiCEUr2CxHDe2N3xnS5UWncX0gm5Fvq2wFGiuMZmYlay6mfhh
+         sAJpFPCus7QrZL0XnMuTPE3j3oO5+x+QeyJrPzRf0nqXPd42Fzg2zIVXr0UnWoxTwU3F
+         Pph1Z3HLh1aKla49Lzsg23xNOevAJ5NMRAuDft5R9Zdc6R2Z9TnCnKZ75lQhQFr7ZM14
+         r4Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735517380; x=1736122180;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s5aXoDdVCtXt3iybNZCPNId+3b30Me5/dyFiUes8QNc=;
+        b=cw2ntOKglzwlnhzFSIxoVgrE3/Cso2rBZOptjuy/kp61n2fE1YBNgnB32J1PmzSphV
+         1t6fjHTHfNQxnXh4+3N+fLIWFv0O6Ed9DCOBgZ+6hJJe2SNWcVtFuW4OOtr0mFRZ/J47
+         grNvwT64BIEw1BhBWTvYb1fkw6JvIZSilS0l8KCbisTahsKeA5Wg5i3csiFbpk8F8zWT
+         M9mM7SO71nyAby3d2cq0z3p/qM9P49lQ9BP0n8TRCxjrsOsuooh6VmwAcS7B/D/+eG6Q
+         06an44miJMgAx5n09UGtQWbK/nGzJYYfXX0zs49QXH2tKcorYpGV2qvXiW4SmSTSsuZm
+         0Yfw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAMGa64c+PXu7mUY301CI3GCBx4ty1js/B+qKcfPJe4Q41YNlFlX8tlbcZ8llbTNVQdcvoobLE6iZDU9iG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUJ0HhXU/jwEdEL8Twr4tRUY40ZTr4n4neX0PZN0m9l3yxeYpg
+	w6PNPhO/wuqf0JUkLdqPlej+t6BJbmUZ2e9WEi5o4OgdrCNvgl7I+hcWPgKyeV6e1qyRQmfPmuY
+	dPrs6U/TjLLaVPLqQHCKtsT4WZ3P91htKNTYRR1Ae4m7Td3ikL+ceJuY=
+X-Gm-Gg: ASbGncsp6YIAfI3dWcNEAdmU/g4d3NNdxevR0Esa9NXs7JZmTT0HE5uCRIu9daGzTZJ
+	jwnywbPMtc6vsIjCTVB3U4EobDzggtEGSLTJ0
+X-Google-Smtp-Source: AGHT+IED0OOOeYrHXZaLoyVsabfnYVRzwby1oeJPfnt9kAFzELRgCktOS5laqmNdNl1xrBm57Qduh7AC85xJGT7lOaU=
+X-Received: by 2002:a17:902:e5c1:b0:216:4d90:47af with SMTP id
+ d9443c01a7336-219e7769cdcmr13926205ad.29.1735517379928; Sun, 29 Dec 2024
+ 16:09:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241219210736.2990838-20-samitolvanen@google.com> <20241219210736.2990838-22-samitolvanen@google.com>
-In-Reply-To: <20241219210736.2990838-22-samitolvanen@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 29 Dec 2024 01:28:25 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR=kBi_LN7UkO_qzUQh8fMd1BMf=ZZMQMPph5smZRzSSQ@mail.gmail.com>
-Message-ID: <CAK7LNAR=kBi_LN7UkO_qzUQh8fMd1BMf=ZZMQMPph5smZRzSSQ@mail.gmail.com>
-Subject: Re: [PATCH v7 02/18] gendwarfksyms: Add address matching
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matthew Maurer <mmaurer@google.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, Neal Gompa <neal@gompa.dev>, 
-	Hector Martin <marcan@marcan.st>, Janne Grunau <j@jannau.net>, Miroslav Benes <mbenes@suse.cz>, 
-	Asahi Linux <asahi@lists.linux.dev>, Sedat Dilek <sedat.dilek@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org
+From: =?UTF-8?Q?Marek_Ma=C5=9Blanka?= <mmaslanka@google.com>
+Date: Mon, 30 Dec 2024 01:09:13 +0100
+Message-ID: <CAGcaFA2hdThQV6mjD_1_U+GNHThv84+MQvMWLgEuX+LVbAyDxg@mail.gmail.com>
+Subject: ROX allocations broke livepatch for modules since 6.13-rc1
+To: rppt@kernel.org, akpm@linux-foundation.org, mcgrof@kernel.org
+Cc: regressions@lists.linux.dev, linux-modules@vger.kernel.org, 
+	linux-mm@kvack.org, live-patching@vger.kernel.org, joe.lawrence@redhat.com, 
+	jpoimboe@kernel.org, pmladek@suse.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 20, 2024 at 6:07=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symb=
-ols.c
-> index 7adf2ed9b89b..98febb524dd5 100644
-> --- a/scripts/gendwarfksyms/symbols.c
-> +++ b/scripts/gendwarfksyms/symbols.c
-> @@ -6,8 +6,39 @@
->  #include "gendwarfksyms.h"
->
->  #define SYMBOL_HASH_BITS 12
-> +
-> +/* struct symbol_addr -> struct symbol */
-> +static HASHTABLE_DEFINE(symbol_addrs, 1 << SYMBOL_HASH_BITS);
-> +/* name -> struct symbol */
+Hi Mike and others,
 
-I think this comment addition should belong to 01/18 instead of 02/18.
+I discovered that the patch "[v7,4/8] module: prepare to handle ROX allocations
+for text" has disrupted livepatch functionality. Specifically, this occurs when
+livepatch is prepared to patch a kernel module and when the livepatch module
+contains a "special" relocation section named
+".klp.rela.<MODULE_NAME>.<SECTION_NAME>" to access local symbols.
+The problem is caused by this changes:
 
+@@ -2454,7 +2497,24 @@  static int post_relocation(struct module *mod,
+const struct load_info *info)
+  add_kallsyms(mod, info);
 
->  static HASHTABLE_DEFINE(symbol_names, 1 << SYMBOL_HASH_BITS);
+  /* Arch-specific module finalizing. */
+- return module_finalize(info->hdr, info->sechdrs, mod);
++ ret = module_finalize(info->hdr, info->sechdrs, mod);
++ if (ret)
++ return ret;
++
++ for_each_mod_mem_type(type) {
++ struct module_memory *mem = &mod->mem[type];
++
++ if (mem->is_rox) {
++ if (!execmem_update_copy(mem->base, mem->rw_copy,
++ mem->size))
++ return -ENOMEM;
++
++ vfree(mem->rw_copy);
++ mem->rw_copy = NULL;
++ }
++ }
++
++ return module_post_finalize(info->hdr, info->sechdrs, mod);
+ }
 
+Specifically these lines:
++ vfree(mem->rw_copy);
++ mem->rw_copy = NULL;
+which frees the "mem->rw_copy" too early. It's called from:
+load_module (kernel/module/main.c:3312)
+  post_relocation
 
+The "mem->rw_copy" is needed later:
+load_module (kernel/module/main.c:3339)
+  prepare_coming_module
+    klp_module_coming
+      klp_init_object_loaded
+        klp_apply_object_relocs
+          klp_write_object_relocs
+            klp_write_section_relocs
+              apply_relocate_add
+                write_relocate_add
+                  __write_relocate_add
+                    module_writable_address
+                      __module_writable_address
+                        return loc + (mem->rw_copy - mem->base);
+                                                       ^
 
+Here's example OOPS:
+[   25.823395] deku: loading out-of-tree module taints kernel.
+[   25.823521] deku: tainting kernel with TAINT_LIVEPATCH
+[   25.827238] BUG: unable to handle page fault for address: 00000000000012ba
+[   25.827819] #PF: supervisor read access in kernel mode
+[   25.828153] #PF: error_code(0x0000) - not-present page
+[   25.828588] PGD 0 P4D 0
+[   25.829063] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   25.829742] CPU: 2 UID: 0 PID: 452 Comm: insmod Tainted: G
+ O  K    6.13.0-rc4-00078-g059dd502b263 #7820
+[   25.830417] Tainted: [O]=OOT_MODULE, [K]=LIVEPATCH
+[   25.830768] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+[   25.831651] RIP: 0010:memcmp+0x24/0x60
+[   25.832190] Code: 90 90 90 90 90 90 f3 0f 1e fa 49 89 f0 48 89 d6
+48 83 fa 07 77 3a 31 d2 48 85 f6 74 1a 31 c0 eb 09 48 83 c0 01 48 39
+c6 74 0d <0f> b6 14 07 41 0f b6 0c 00 29 ca 74 ea 89 d0 c3 cc cc cc cc
+48 83
+[   25.833378] RSP: 0018:ffffa40b403a3ae8 EFLAGS: 00000246
+[   25.833637] RAX: 0000000000000000 RBX: ffff93bc81d8e700 RCX: ffffffffc0202000
+[   25.834072] RDX: 0000000000000000 RSI: 0000000000000004 RDI: 00000000000012ba
+[   25.834548] RBP: ffffa40b403a3b68 R08: ffffa40b403a3b30 R09: 0000004a00000002
+[   25.835088] R10: ffffffffffffd222 R11: f000000000000000 R12: 0000000000000000
+[   25.835666] R13: ffffffffc02032ba R14: ffffffffc007d1e0 R15: 0000000000000004
+[   25.836139] FS:  00007fecef8c3080(0000) GS:ffff93bc8f900000(0000)
+knlGS:0000000000000000
+[   25.836519] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   25.836977] CR2: 00000000000012ba CR3: 0000000002f24000 CR4: 00000000000006f0
+[   25.837442] Call Trace:
+[   25.838297]  <TASK>
+[   25.838803]  ? __die+0x29/0x70
+[   25.839067]  ? page_fault_oops+0x15f/0x450
+[   25.839299]  ? exc_page_fault+0x6e/0x160
+[   25.839506]  ? asm_exc_page_fault+0x26/0x30
+[   25.839978]  ? uinput_ioctl_handler_isra_0+0x120/0xe66 [deku]
+[   25.840519]  ? uinput_misc_exit+0x3e0/0x3e0 [uinput]
+[   25.840892]  ? memcmp+0x24/0x60
+[   25.841083]  __write_relocate_add.constprop.0+0xc7/0x2b0
+[   25.841460]  ? __pfx_text_poke+0x10/0x10
+[   25.841701]  apply_relocate_add+0x75/0xa0
+[   25.841973]  klp_write_section_relocs+0x10e/0x140
+[   25.842304]  klp_write_object_relocs+0x70/0xa0
+[   25.842682]  klp_init_object_loaded+0x21/0xf0
+[   25.842972]  klp_enable_patch+0x43d/0x900
+[   25.843227]  ? deku_exit+0x30/0x30 [deku]
+[   25.843572]  do_one_initcall+0x4c/0x220
+[   25.843936]  ? do_init_module+0x28/0x260
+[   25.844186]  do_init_module+0x6a/0x260
+[   25.844423]  init_module_from_file+0x9c/0xe0
+[   25.844702]  idempotent_init_module+0x172/0x270
+[   25.845008]  __x64_sys_finit_module+0x69/0xc0
+[   25.845253]  do_syscall_64+0x9e/0x1a0
+[   25.845498]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[   25.846056] RIP: 0033:0x7fecef9eb25d
+[   25.846444] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e
+fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
+08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8b bb 0d 00 f7 d8 64 89
+01 48
+[   25.847563] RSP: 002b:00007ffd0c5d6de8 EFLAGS: 00000246 ORIG_RAX:
+0000000000000139
+[   25.848082] RAX: ffffffffffffffda RBX: 000055b03f05e470 RCX: 00007fecef9eb25d
+[   25.848456] RDX: 0000000000000000 RSI: 000055b001e74e52 RDI: 0000000000000003
+[   25.848969] RBP: 00007ffd0c5d6ea0 R08: 0000000000000040 R09: 0000000000004100
+[   25.849411] R10: 00007fecefac7b20 R11: 0000000000000246 R12: 000055b001e74e52
+[   25.849905] R13: 0000000000000000 R14: 000055b03f05e440 R15: 0000000000000000
+[   25.850336]  </TASK>
+[   25.850553] Modules linked in: deku(OK+) uinput
+[   25.851408] CR2: 00000000000012ba
+[   25.852085] ---[ end trace 0000000000000000 ]---
 
+Please let me know if you need help to test or reproduce this issue.
 
---=20
-Best Regards
-Masahiro Yamada
+Best regards,
+Marek
