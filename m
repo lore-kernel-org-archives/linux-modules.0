@@ -1,88 +1,118 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8E813D521;
-	Tue, 31 Dec 2024 10:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD324AEE0
+	for <linux-modules@vger.kernel.org>; Tue, 31 Dec 2024 15:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735641425; cv=none; b=ptE4bPan0kktAudBErgHNHFb9FRyIAeYhVT9sijO/wfO51PvS84N3CKXYpBj3XHdenf55t8FlxY5exM7dfofzpASyaSP86b6SOVXhR7CBiYN4O5iVclLWBG4lCvm+y/ARcoLzEhw8dLiVBVUwuWIHHZlHuDtwF9EVno6i/E4cOY=
+	t=1735657665; cv=none; b=HS/qhHvQTqkGBwxAdAU7rucgw8NzFDeCDBCYqyrIC9GlouO1ZreBAmRL4vK19WXYQPtiwlajYJfwmF8OIS1FjIiHtD006+Pg/XJYtSgS8HcuPxYppM8ldpAbO8TvZtm8x9wWBFTjBr+qULXdtcrsY4HIOg3GIhDkkK9jlB0+ttY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735641425; c=relaxed/simple;
-	bh=4WpB7p6ZcZfKydZjt9Pw6SFgQmWRdOIiB6z20vQcdqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4ITaCkmLPVQ6jHJHL1lcpHar/gDDv0T7fTshudDC236slBMl9DzxkeChYc0YElvXj8iLxpfywdOm4Ok5hgULLdvYhvwkRqsaSOIufoKArthKUadCRGOv5mJGes3dsGJRc5cvuwTq+sTUFebDGvWKZyeo65EmbLe89XKtKLesg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UEC2ZwhD; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1735657665; c=relaxed/simple;
+	bh=7T4DV0auzHCqWowukXCz6tn0seEM3YlHEBwNUYhro+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iJFQFuodOkNAFGsWecHS4clDeSpo+BHQu9lUPCHfCog7bhk12p0RqI4pU5ToaeHQGnjH4NiOD5D+P97rHqbKhCqVWCz/XxdkkEDnp4+hdY9J0u0LlzdLFKTMbjC75itu6WGhkqvDTtcZ+dBHcxUL6HndpLwce7tA4Be6qXjBjGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M62PwmXM; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UEC2ZwhD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1735641050;
-	bh=4WpB7p6ZcZfKydZjt9Pw6SFgQmWRdOIiB6z20vQcdqg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UEC2ZwhDxV5XTXZrc9RSUrw990XCjxNtuzV1rt4h9taux0InFTexNqNvKISUQnu9M
-	 ANQRa+jNB+4qFDnWpi4a4kRn2pMBslONPxV4D4jq32v+cuC03aKz2cIlMx2ocJ1GXg
-	 MS+kr7jeBlqxCdj2D+xwmyVbnKSSvy+11GntmUOI=
-Date: Tue, 31 Dec 2024 11:30:50 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-modules@vger.kernel.org, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] sysfs: constify bin_attribute argument of
- sysfs_bin_attr_simple_read()
-Message-ID: <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
-References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
- <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M62PwmXM"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-436281c8a38so72632375e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 31 Dec 2024 07:07:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1735657662; x=1736262462; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YGH6gwG5Xb5ESfXY/MA29Qmw2CKnxkBUQBkmVQ01IGI=;
+        b=M62PwmXM48WyY6v7i4+AhAIm1tYKmtc/hIiMM7QwAzv+lQdYa8fOiPeD/7A61gNuv9
+         r59dXfZ8914XBQhIYNrpAFESwHQ+/Za+cwdx9VSRDEdzmR66bccyGoDvXQPioc0RIedM
+         h6uyFx+lAo7JaAFxTPSOrvgcR2IdYub53VWNFNaaoEokeTAS0eOoXSFXofl1xoyUZylY
+         eQp5tOfUb+gjoYad5XizlAmB53wRpp7ezIWEDuSld1Tzk9qnXDv8olGL7BjFFThubJTs
+         xJm7c1xKDhJlf12J+pk81jr6rJZAvpRIynwWbxC55Z7YWXK4rFlpsR481SGSM3Mz+JV4
+         Pldw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735657662; x=1736262462;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YGH6gwG5Xb5ESfXY/MA29Qmw2CKnxkBUQBkmVQ01IGI=;
+        b=WDoLcmluwT8P6GufsBdJkz30PHoKwWT8wog942HuVcuUmSIl5EmSqxOxHHcBPjnlnZ
+         L0pKefxu29k/azZSNrzF8tYiBJD07Wq0dLKpj3CKuVSnINPMQOzVYREFKZ+sohUTXSa9
+         BvErXs2WeQp/ASavIjQI883AHxqz7DSG7Gn3oaae/+30wrNIlN0oDI00hdoH21RGItZe
+         4ZQe3zblaubWnC2s14JvgNhpiOBiKM38A4cezuVhADwwIRHI5mwsudAySskYfC8dc1xZ
+         CAwE1S9QkaYPOn93dE4ac3590i3fOz8qmQGIpxsUP8FsJT+LarwgO5JSd/TWzTBmCegj
+         wC/g==
+X-Forwarded-Encrypted: i=1; AJvYcCUKwlfZR5wzLDbr/g54nZYkpamp8B28NuS2wJboKAheKyz8elGateEoPWp1Zmj89cs1F2RCzF7NKJtfr3x/@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQdUBIFI42VQl/MiSkT9rA/BR4BuypnCNmYbNISOZfOnCnllLl
+	ir2Ud6L/qR97AgqF5ZHHYi+yu3FJ2arxx+KYlCRy2oCCWndJDrOkF6JSXg2NToo=
+X-Gm-Gg: ASbGncuGW1CQsrHrFKtK358/AtCR+otNQ9g05Ic1WYVwz9YuAWkzv/f5dO/546dbc9A
+	Uk7s5jp1JhMnfPdFj22u+A6p9Z+oyZvQQgFekg1tIQD39RVW0V5xHw40PPsOjlmNztDCittUVHh
+	jUVvUmNjVSC5Y0V/Fq6165ZZUveUJmsoDsYss0F2e6mATWJuGHWLxWaaEKYOjuvgtNIUvt+K72W
+	EodrwmUs6/oTYvnQ7SQaf1dw04gM6iAtxMskqRQw1bftadueeslUx7pzF9Q
+X-Google-Smtp-Source: AGHT+IEQX7+jmDBfEFlPjoa5E+KUjabDz97fq64ACPOl/s0+xNhI+LwPww6Bq08B/1q6pymIBBKlkw==
+X-Received: by 2002:a5d:5f8b:0:b0:385:fc70:826 with SMTP id ffacd0b85a97d-38a223fd808mr30893285f8f.52.1735657661777;
+        Tue, 31 Dec 2024 07:07:41 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8a6abesm33021317f8f.90.2024.12.31.07.07.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Dec 2024 07:07:41 -0800 (PST)
+Message-ID: <6f2d2843-e676-4d4a-86aa-881378b1adf1@suse.com>
+Date: Tue, 31 Dec 2024 16:07:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/6] module: sysfs: Cleanups and preparation for const
+ struct bin_attribute
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20241227-sysfs-const-bin_attr-module-v2-0-e267275f0f37@weissschuh.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20241227-sysfs-const-bin_attr-module-v2-0-e267275f0f37@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com>
 
-On 2024-12-30 16:50:41-0800, Alexei Starovoitov wrote:
-> On Sat, Dec 28, 2024 at 12:43 AM Thomas Weißschuh <linux@weissschuh.net> wrote:
-> >
-> > Most users use this function through the BIN_ATTR_SIMPLE* macros,
-> > they can handle the switch transparently.
-> >
-> > This series is meant to be merged through the driver core tree.
+On 12/27/24 14:23, Thomas Weißschuh wrote:
+> The sysfs core is switching to 'const struct bin_attribute's.
+> Prepare for that.
 > 
-> hmm. why?
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Changes in v2:
+> - Avoid NULL-deref in free_sect_attrs()
+> - Avoid double-free and NULL-deref in free_notes_attrs()
+> - Also drop 'struct module_sect_attr'
+> - Link to v1: https://lore.kernel.org/r/20241216-sysfs-const-bin_attr-module-v1-0-f81e49e54ce4@weissschuh.net
+> 
+> ---
+> Thomas Weißschuh (6):
+>       module: sysfs: Drop member 'module_sect_attrs::nsections'
+>       module: sysfs: Drop member 'module_sect_attr::address'
+>       module: sysfs: Drop 'struct module_sect_attr'
+>       module: sysfs: Simplify section attribute allocation
+>       module: sysfs: Add notes attributes through attribute_group
+>       module: sysfs: Use const 'struct bin_attribute'
+> 
+>  kernel/module/sysfs.c | 116 ++++++++++++++++++++++++--------------------------
+>  1 file changed, 55 insertions(+), 61 deletions(-)
+> ---
+> base-commit: d6ef8b40d075c425f548002d2f35ae3f06e9cf96
+> change-id: 20241215-sysfs-const-bin_attr-module-be05346937a6
 
-Patch 1 changes the signature of sysfs_bin_attr_simple_read().
-Before patch 1 sysfs_bin_attr_simple_read() needs to be assigned to the
-callback member .read, after patch 1 it's .read_new.
-(Both callbacks work exactly the same, except for their signature,
-.read_new is only a transition mechanism and will go away again)
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-> I'd rather take patches 2 and 3 into bpf-next to avoid
-> potential conflicts.
-> Patch 1 looks orthogonal and independent.
+I'm going to wait for a few days if others want to comment and then plan
+to queue this on the modules tree for the 6.14 merge window.
 
-If you pick up 2 and 3 through bpf-next you would need to adapt these
-assignments. As soon as both patch 1 and the modified 2 and 3 hit
-Linus' tree, the build would break due to mismatches function pointers.
-(Casting function pointers to avoid the mismatch will blow up with KCFI)
-Of course Linus can fix this up easily, but it somebody would need to
-keep track of it and I wanted to avoid manual intervention.
-Or we spread out both parts over two development cycles; maybe Greg can
-even pick up patch 1 late in the 6.13 cycle.
-
-Personally I am fine with any approach.
+-- 
+Thanks,
+Petr
