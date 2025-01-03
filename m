@@ -1,255 +1,203 @@
-Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331C81B87FF
-	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 06:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625181940B1;
+	Fri,  3 Jan 2025 08:56:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735887501; cv=none; b=QTckfBKJ7zAVX1iB8blaydYYNX3zjsGhoPlCVtKYn+jYFuo+P0NFsldAK49i7K/3btwmRjC0NXmo1y/XB/gQCBWGBih2T2dC8SXZ1Ylj4zIzUx4FAAHyYBhq/oSmNNtTQnu/IdPn3i8px9+N9destqLEd8Rtq5JhTn0IHrYawoM=
+	t=1735894613; cv=none; b=KwoV31SiO3h+DIdPUV+ewYbhYS8myYP21GSY11fZCc0MOpwdgjDTkZ+RMx7B5+bATPrpThuUfwgRzVamOIIVJmktjEt+49dWS7epXImtyySoYi9N3cNijSd6dYhElcfa3Fs8Lc2h7Tz1c7OxyghwjZtBP12GXF12TkfOvmF7jyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735887501; c=relaxed/simple;
-	bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P+ufb+VlrCXrfCKNN2mYht8szRfLTWdIRVDWC7qeAGmEKSbWap/9MxJoWhJVHmg9ouTt/nYqZHmhRYLVa64GyzHfRgMNQhfAaeraETTpGzhhqpgtz1hav1R/cf7TfopzWoeuZBhjvTkPhwBc01jH5J54Uo6MSYY0+FyLiZ2I4LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fv3QmmTB; arc=none smtp.client-ip=209.85.221.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1735894613; c=relaxed/simple;
+	bh=7Ss2tdLw4JYGn715IrB5t0jg2EMHFGEGprdpzEJVU9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gyjcHa3aPs9e36zx3jqgXo3zPlJWDDpK8SsVjy1+7mcj9XqlM5kfGWq/ZnR1762vhBntUCkxJjqm2ETbv/4l+2j10asFuEraAUh83VRUAOrrmKzvhzB92msrIbfB5hvC9SIh0IilWSArDfcWh/MC3bUB60qQsApQiyrV418AFwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=X117eB7C; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fv3QmmTB"
-Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-3863703258fso7589322f8f.1
-        for <linux-modules@vger.kernel.org>; Thu, 02 Jan 2025 22:58:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1735887496; x=1736492296; darn=vger.kernel.org;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-        b=fv3QmmTBlD7xvvE/GGchQPWnfhzKrUhqj66OtzmuQOn4gn6E1t7DLZSEblLdIKQ0EB
-         yQbUje9Z7qCxxV4n2g15ST2H1elW7XVOobPZnz2WhJk2X2FJdgmW6vOKSjN+mH/fOl04
-         yM/eCO0Q2E8j5mdXIp+36LyTowi492so/VAxMZbS+FtA4kXcF5k4yXE5YeglfLYPYq6n
-         cb63T0+0/lS2+TBurO4PQ1hzw+y0ZF1pxJd+tH2UlGqjxECbQHNIggJQODV2FM786kFo
-         slOW+Wb0ZY2CKPHJ1PFiRt1GMV9XdjjVSthhWzaITLlGJkkT8GrY3Rj6BQnUqlGmaKet
-         tEwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735887496; x=1736492296;
-        h=in-reply-to:autocrypt:from:content-language:references:cc:to
-         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uZvmFNXraGxVUvTGYtVZ/ME0RVp73Xzv7aLP6o5YXhc=;
-        b=aDLYruLHBeNaSSVJMBCYKKyAmJxfc936ScJrt3NWmFhpKDnQOPQA4dxaRvmgVF+gb9
-         iXcqhsRnJxV7p5kFjryWhyALL4h/+x17P0fEelh0M48WPcgN3ZYCZHg95JUCPOfIPSLt
-         9gAuTO1UGEy9L+p++h308QbXFqP3Nx5Bvtk1GVsqQnKlUtk4UXlRnMGmFJ3JuxMMnGWT
-         JAa8e4I2ziKBCuDg/rxadMH1G7yDSoS0Xqd5sHX6iKUaS6fHZLe+i/xsvICLzaLX2QJF
-         uHVBv82mpSn9Fl5hZFmeMx/y5uYuIkItWcIAmCwfkYdLANzum03ewbNX7tb/hDlD29ae
-         p8Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCUJTDS2CJAm71bvOdZYDnuYWxdfS18wpmfupMNRTUJxGS3I3v7ti6+UFtuT5Fa/ERkvzjgKgFJGjA6oq6Yn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6QnLCW0NWmeXGV5rZneg+ML7+VpKfoxelmiIX0LvXdXCpM0ly
-	6xr7eQUPkWwkFkGnFMIW9ZopDOTEw6u0iZ3BIdORRlXggzifPSg84KPYT1SVwec=
-X-Gm-Gg: ASbGnct/rDwgUjXFl5ahozRn6/kgGvQsEXfp1aG9jM2xRRT+INx0BgWRkRqH/Pg5oh+
-	o3SKalzaObkLXGz0tPVbWghYMnHE/j2+LRSR2g0zb+8BPv5dYeop9it51nSMC0bHwHm/7RP7qr/
-	Lao+PREx0HIKZ1t18+QBB5Cy60wIT5tczWSSesefjuYGhiO+orwejXkSt01yy188ggAgtkX/hBw
-	hM1WXX8wc3xaO6YFZHTssMCqAXCEhdS0sRD4WAZ3bNCXE4rliizWf0jGTT6LwCo5cESkn29iaEG
-	YITjg5XsjiK8Hw5XBq3ExSEvL9wpiLf7+dJoP7XBl9W7GZVL1Mrmv4xxmO2kTmQUlPv0KJ0hsB7
-	hI0eVWQ==
-X-Google-Smtp-Source: AGHT+IH0GAtrEtOzyc8yCFlj/GI2tQ+enhDK8ABHkVTraKDu3aontF3mFgvrkrxtUKrD1XyGNRWMNw==
-X-Received: by 2002:a5d:64a4:0:b0:386:374b:e8bc with SMTP id ffacd0b85a97d-38a1a221d7amr44309704f8f.15.1735887496434;
-        Thu, 02 Jan 2025 22:58:16 -0800 (PST)
-Received: from ?IPV6:2003:e5:8731:2800:842d:42a0:5992:3595? (p200300e587312800842d42a059923595.dip0.t-ipconnect.de. [2003:e5:8731:2800:842d:42a0:5992:3595])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e219sm40466083f8f.84.2025.01.02.22.58.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2025 22:58:16 -0800 (PST)
-Message-ID: <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
-Date: Fri, 3 Jan 2025 07:58:13 +0100
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="X117eB7C"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50385jdP003689;
+	Fri, 3 Jan 2025 08:56:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:to; s=pp1;
+	 bh=s5va7eFiA9dG7vhU6jSc3zqR8LZhCiejq3E0UYp0dWk=; b=X117eB7CXD4B
+	jD00+cvGVsHeQOimiGneESqDtsjCuZmuMi89n1wh8SGsB6L9Zp8hLmpL8NIP8Coq
+	ZiJHvvqfubm5SzkuHBnk3+1dVJ/QlVzGJ5sfi8283+M4wirirkF/gyWy9UGjvraR
+	5W1sAof5PZlFAcTPJKu5PI7PM/bL4kpEd7hPfqbH0f6afF6wVj98i5Bjmd/SwOfc
+	C/5/gDxJqW+9T7B/wMW1EydKwMn1Bb0GP9YY97o0S4ZiHvzVkjdQI0SUiJgMIxNY
+	rJ2g3MRQbATs1uhOuBqppyT3zhFl/IypKtfJVY8AX1M0SEe0d+FljlX/IUF2Hzb4
+	iL44JrpJ6A==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43xc32r5es-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jan 2025 08:56:00 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5038txHe006325;
+	Fri, 3 Jan 2025 08:55:59 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43xc32r5en-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jan 2025 08:55:59 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50352vJw014589;
+	Fri, 3 Jan 2025 08:55:59 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43tunswsgj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jan 2025 08:55:58 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5038tvwU12452120
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 3 Jan 2025 08:55:57 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 41FB920043;
+	Fri,  3 Jan 2025 08:55:57 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 02CB020040;
+	Fri,  3 Jan 2025 08:55:52 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.113.191.13])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri,  3 Jan 2025 08:55:51 +0000 (GMT)
+Date: Fri, 3 Jan 2025 14:25:41 +0530
+From: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Daniel Gomez <da.gomez@samsung.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-modules@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] sysfs: constify bin_attribute argument of
+ sysfs_bin_attr_simple_read()
+Message-ID: <jpu4rjggipafjlg67t6t6htpvmcg3xukmepldfzgglrgqnmwwp@m5ijtdihc37t>
+Reply-To: mahesh@linux.ibm.com
+References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
+ <20241228-sysfs-const-bin_attr-simple-v2-1-7c6f3f1767a3@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-To: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com
-Cc: akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, bp@alien8.de,
- brendan.higgins@linux.dev, da.gomez@samsung.com, danielt@kernel.org,
- dave.hansen@linux.intel.com, davidgow@google.com, dianders@chromium.org,
- hpa@zytor.com, jason.wessel@windriver.com, jikos@kernel.org,
- joe.lawrence@redhat.com, johannes@sipsolutions.net, jpoimboe@kernel.org,
- kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, live-patching@vger.kernel.org,
- luto@kernel.org, mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
- mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
- petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, rmoar@google.com,
- rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
- shuah@kernel.org, song@kernel.org, tglx@linutronix.de, x86@kernel.org,
- =?UTF-8?Q?Marek_Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-Content-Language: en-US
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-Autocrypt: addr=jgross@suse.com; keydata=
- xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOB
- ycWxw3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJve
- dYm8Of8Zd621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJ
- NwQpd369y9bfIhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvx
- XP3FAp2pkW0xqG7/377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEB
- AAHNH0p1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT7CwHkEEwECACMFAlOMcK8CGwMH
- CwkIBwMCAQYVCAIJCgsEFgIDAQIeAQIXgAAKCRCw3p3WKL8TL8eZB/9G0juS/kDY9LhEXseh
- mE9U+iA1VsLhgDqVbsOtZ/S14LRFHczNd/Lqkn7souCSoyWsBs3/wO+OjPvxf7m+Ef+sMtr0
- G5lCWEWa9wa0IXx5HRPW/ScL+e4AVUbL7rurYMfwCzco+7TfjhMEOkC+va5gzi1KrErgNRHH
- kg3PhlnRY0Udyqx++UYkAsN4TQuEhNN32MvN0Np3WlBJOgKcuXpIElmMM5f1BBzJSKBkW0Jc
- Wy3h2Wy912vHKpPV/Xv7ZwVJ27v7KcuZcErtptDevAljxJtE7aJG6WiBzm+v9EswyWxwMCIO
- RoVBYuiocc51872tRGywc03xaQydB+9R7BHPzsBNBFOMcBYBCADLMfoA44MwGOB9YT1V4KCy
- vAfd7E0BTfaAurbG+Olacciz3yd09QOmejFZC6AnoykydyvTFLAWYcSCdISMr88COmmCbJzn
- sHAogjexXiif6ANUUlHpjxlHCCcELmZUzomNDnEOTxZFeWMTFF9Rf2k2F0Tl4E5kmsNGgtSa
- aMO0rNZoOEiD/7UfPP3dfh8JCQ1VtUUsQtT1sxos8Eb/HmriJhnaTZ7Hp3jtgTVkV0ybpgFg
- w6WMaRkrBh17mV0z2ajjmabB7SJxcouSkR0hcpNl4oM74d2/VqoW4BxxxOD1FcNCObCELfIS
- auZx+XT6s+CE7Qi/c44ibBMR7hyjdzWbABEBAAHCwF8EGAECAAkFAlOMcBYCGwwACgkQsN6d
- 1ii/Ey9D+Af/WFr3q+bg/8v5tCknCtn92d5lyYTBNt7xgWzDZX8G6/pngzKyWfedArllp0Pn
- fgIXtMNV+3t8Li1Tg843EXkP7+2+CQ98MB8XvvPLYAfW8nNDV85TyVgWlldNcgdv7nn1Sq8g
- HwB2BHdIAkYce3hEoDQXt/mKlgEGsLpzJcnLKimtPXQQy9TxUaLBe9PInPd+Ohix0XOlY+Uk
- QFEx50Ki3rSDl2Zt2tnkNYKUCvTJq7jvOlaPd6d/W0tZqpyy7KVay+K4aMobDsodB3dvEAs6
- ScCnh03dDAFgIq5nsB11j3KPKdVoPlfucX2c7kGNH+LUMbzqV6beIENfNexkOfxHfw==
-In-Reply-To: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------AdhG8ToVhAfNI4L0hQ66iNcN"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241228-sysfs-const-bin_attr-simple-v2-1-7c6f3f1767a3@weissschuh.net>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Nxm_m42Whr8-j5y42LFTPkwe2lks3Kqs
+X-Proofpoint-ORIG-GUID: WxQvIOazIZSmyqH_ffQp36JLk5UoiDZp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 impostorscore=0 clxscore=1011
+ malwarescore=0 adultscore=0 suspectscore=0 mlxlogscore=920 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501030073
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------AdhG8ToVhAfNI4L0hQ66iNcN
-Content-Type: multipart/mixed; boundary="------------3WUDo4UJMp9BYldWFyaC18GU";
- protected-headers="v1"
-From: =?UTF-8?B?SsO8cmdlbiBHcm/Dnw==?= <jgross@suse.com>
-To: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com
-Cc: akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, bp@alien8.de,
- brendan.higgins@linux.dev, da.gomez@samsung.com, danielt@kernel.org,
- dave.hansen@linux.intel.com, davidgow@google.com, dianders@chromium.org,
- hpa@zytor.com, jason.wessel@windriver.com, jikos@kernel.org,
- joe.lawrence@redhat.com, johannes@sipsolutions.net, jpoimboe@kernel.org,
- kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, live-patching@vger.kernel.org,
- luto@kernel.org, mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
- mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
- petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, rmoar@google.com,
- rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
- shuah@kernel.org, song@kernel.org, tglx@linutronix.de, x86@kernel.org,
- =?UTF-8?Q?Marek_Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-Message-ID: <9878d90f-faf3-4853-9a79-a21b4f58ab4c@suse.com>
-Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
- and restoring ROX
-References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
- <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
-In-Reply-To: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+On 2024-12-28 09:43:41 Sat, Thomas Weiﬂschuh wrote:
+> Most users use this function through the BIN_ATTR_SIMPLE* macros,
+> they can handle the switch transparently.
+> Also adapt the two non-macro users in the same change.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  arch/powerpc/platforms/powernv/opal.c | 2 +-
+>  fs/sysfs/file.c                       | 2 +-
+>  include/linux/sysfs.h                 | 4 ++--
+>  kernel/module/sysfs.c                 | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
 
---------------3WUDo4UJMp9BYldWFyaC18GU
-Content-Type: multipart/mixed; boundary="------------63xrDYqOCLn00LODgHDKUWxX"
+Looks good to me.
 
---------------63xrDYqOCLn00LODgHDKUWxX
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Reviewed-by: Mahesh Salgaonkar <mahesh@linux.ibm.com>
 
-T24gMDMuMDEuMjUgMDM6MDYsIEFuZHJldyBDb29wZXIgd3JvdGU6DQo+PiBIaSBNaWtlLA0K
-Pj4NCj4+IFRoaXMgY29tbWl0IGlzIG1ha2luZyBteSBpbnRlbCBib3ggbm90IGJvb3QgaW4g
-bW0tdW5zdGFibGUgOj4pIEkgYmlzZWN0ZWQgaXQgdG8NCj4+IHRoaXMgY29tbWl0Lg0KPiAN
-Cj4gRm9yIHdoYXQgaXQncyB3b3J0aCwgd2UndmUgZm91bmQgdGhlIHNhbWUgdW5kZXIgWGVu
-IHRvby4NCj4gDQo+IFRoZXJlJ3Mgb25lIGNvbmNyZXRlIGJ1ZyBpbiB0aGUgc2VyaWVzLCBm
-YWlsaW5nIHRvIGNvcGUgd2l0aCB0aGUgYWJzZW5jZQ0KPiBvZiBzdXBlcnBhZ2VzIChmaXgg
-aW4NCj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcveGVuLWRldmVsLzZiYjAzMzMzLTc0Y2Et
-NGMyYy04NWE4LTcyNTQ5Yjg1YTViNEBzdXNlLmNvbS8NCj4gYnV0IG5vdCBmb3JtYWxseSBw
-b3N0ZWQgeWV0IEFGQUlDVCkuDQoNCk5vdyBzZW50IG91dDoNCg0KaHR0cHM6Ly9sb3JlLmtl
-cm5lbC5vcmcvbGttbC8yMDI1MDEwMzA2NTYzMS4yNjQ1OS0xLWpncm9zc0BzdXNlLmNvbS9U
-LyN1DQoNCg0KSnVlcmdlbg0K
---------------63xrDYqOCLn00LODgHDKUWxX
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Thanks,
+-Mahesh.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> 
+> diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
+> index 5d0f35bb917ebced8c741cd3af2c511949a1d2ef..013637e2b2a8e6a4ec6b93a520f8d5d9d3245467 100644
+> --- a/arch/powerpc/platforms/powernv/opal.c
+> +++ b/arch/powerpc/platforms/powernv/opal.c
+> @@ -818,7 +818,7 @@ static int opal_add_one_export(struct kobject *parent, const char *export_name,
+>  	sysfs_bin_attr_init(attr);
+>  	attr->attr.name = name;
+>  	attr->attr.mode = 0400;
+> -	attr->read = sysfs_bin_attr_simple_read;
+> +	attr->read_new = sysfs_bin_attr_simple_read;
+>  	attr->private = __va(vals[0]);
+>  	attr->size = vals[1];
+>  
+> diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
+> index 785408861c01c89fc84c787848243a13c1338367..6931308876c4ac3b4c19878d5e1158ad8fe4f16f 100644
+> --- a/fs/sysfs/file.c
+> +++ b/fs/sysfs/file.c
+> @@ -817,7 +817,7 @@ EXPORT_SYMBOL_GPL(sysfs_emit_at);
+>   * Returns number of bytes written to @buf.
+>   */
+>  ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
+> -				   struct bin_attribute *attr, char *buf,
+> +				   const struct bin_attribute *attr, char *buf,
+>  				   loff_t off, size_t count)
+>  {
+>  	memcpy(buf, attr->private + off, count);
+> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+> index 0f2fcd244523f050c5286f19d4fe1846506f9214..2205561159afdb57d0a250bb0439b28c01d9010e 100644
+> --- a/include/linux/sysfs.h
+> +++ b/include/linux/sysfs.h
+> @@ -511,7 +511,7 @@ __printf(3, 4)
+>  int sysfs_emit_at(char *buf, int at, const char *fmt, ...);
+>  
+>  ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
+> -				   struct bin_attribute *attr, char *buf,
+> +				   const struct bin_attribute *attr, char *buf,
+>  				   loff_t off, size_t count);
+>  
+>  #else /* CONFIG_SYSFS */
+> @@ -774,7 +774,7 @@ static inline int sysfs_emit_at(char *buf, int at, const char *fmt, ...)
+>  
+>  static inline ssize_t sysfs_bin_attr_simple_read(struct file *file,
+>  						 struct kobject *kobj,
+> -						 struct bin_attribute *attr,
+> +						 const struct bin_attribute *attr,
+>  						 char *buf, loff_t off,
+>  						 size_t count)
+>  {
+> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+> index 456358e1fdc43e6b5b24f383bbefa37812971174..254017b58b645d4afcf6876d29bcc2e2113a8dc4 100644
+> --- a/kernel/module/sysfs.c
+> +++ b/kernel/module/sysfs.c
+> @@ -196,7 +196,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
+>  			nattr->attr.mode = 0444;
+>  			nattr->size = info->sechdrs[i].sh_size;
+>  			nattr->private = (void *)info->sechdrs[i].sh_addr;
+> -			nattr->read = sysfs_bin_attr_simple_read;
+> +			nattr->read_new = sysfs_bin_attr_simple_read;
+>  			++nattr;
+>  		}
+>  		++loaded;
+> 
+> -- 
+> 2.47.1
+> 
+> 
 
-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
-kt+z4drzFUyEjLM1vVvIMjkUoJs=3D
-=3DeeAB
------END PGP PUBLIC KEY BLOCK-----
-
---------------63xrDYqOCLn00LODgHDKUWxX--
-
---------------3WUDo4UJMp9BYldWFyaC18GU--
-
---------------AdhG8ToVhAfNI4L0hQ66iNcN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmd3ioYFAwAAAAAACgkQsN6d1ii/Ey+c
-fgf/UYpXMGX7CcsGrANTtlW7HBt7eur3Q96rFTVnTBejNHfIm/TemXv9C9/w5NhEcq9sqmeIDxOe
-8DTdPK/EM5qfS06x4EFYjxdJgORMczX4P0IvRZHJY6T7hojulK2dyumKZNaCPY1ceUV3nERaBWKl
-csa1KbWcBMA7uMBCl1w8M8aL3+0T0UBDu3oV2jUGR4dKJdaHqRqGJCZKE2pztzSGmiboOTfmOnr2
-CxpyEu6JVMTl782cRiOS/KfVmVWY8jfA0D14iopSM0cKYF0W9Bo2XbTiD8Vp/pCCDBDOWlllYtlC
-c63hcFoml+h9kNfEU4Yl4H4kAWki0dCgwk3RbXj3rA==
-=xSk+
------END PGP SIGNATURE-----
-
---------------AdhG8ToVhAfNI4L0hQ66iNcN--
+-- 
+Mahesh J Salgaonkar
