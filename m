@@ -1,112 +1,153 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D374C79
-	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 00:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0581DFD1
+	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 02:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735863903; cv=none; b=b0wZJUfKOsKcIYBmtXTsRk5zeD2r17O0W7psMBnZ53sm6NLDtzuVYpMgd7ZrZOAdF9X/cNH525+3fIBExIfHNdS/wO6w5qr715Il4wr7NoJcirCVy26+RukkmwGgQJL25aTYa2/I8153xNE1VjoWw3lJaiJoCqC0lY8Hb1aCMWg=
+	t=1735869975; cv=none; b=NlhrkJMeS5bernR2DX8a/vjmX5CaMjij0cfdjepdcq0Kfk1qAHBBPB3kssAKt0E21gRKE3XGg9ZFOJb8JAwvYdoxtbtHwktzA9HQbTqTHaASdu9V9Stnl+U7GqhJZMFmzSdbDqKKkKU22PkEzKHlwwTXGfu0HhDZRMqHJv5Wzsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735863903; c=relaxed/simple;
-	bh=JZYO9PPavHcBEPWGuTcvM+j/t3gJIxWN7YL4o4FoqJs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rb07bWIM4ieB7hE509wCo0+EXVpyKPLaevHa/Jimti4U99jQ1NO1RbJuJTKfP8tNxYKQA+857TI3ho0zxBAIT5z7ljS7F57HLBNTggMXHF+qXze9vbkh6+PDu/AHvhgvpWmJYD0FkpqMxFQvpz/VN+pSqjD0w8/jVZxhvvbWfVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xmSsE/TM; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1735869975; c=relaxed/simple;
+	bh=6XxDgsDh63Hd8YUnQX8bX7YEs2+jNWGRYTJCUK51Cww=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=RqW5BU+GHwJrJSkucU0yvKmDCm7z0wdkMrte/TbUj7EfBQnxDtc/+s5fFvKkJHi1Wib435QcDCP4ngzfcdyw+0duEASK0ac3vEY7gCjvDJWnFE4LnUAwtuNOViMBYC21xK+vWKziosCcmZx6rktGa/AuNK2BcNdPkwpfkDYJmQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=cloud.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=G/S+fHVn; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloud.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xmSsE/TM"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5d0c939ab78so3220a12.0
-        for <linux-modules@vger.kernel.org>; Thu, 02 Jan 2025 16:25:01 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="G/S+fHVn"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4361815b96cso78225005e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 02 Jan 2025 18:06:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1735863900; x=1736468700; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vNzpgmoCzAwb514bhoD5BPCvyAJMbaE9RvBKoPbv384=;
-        b=xmSsE/TMQR2PPor0CkR/mv6aFFeqREMHN+4CgmGqwSsHXw/dbmV+EqF5TeX0CII+Mr
-         K+KOka0ODyp/Q6onQCvVj5msBb8p+BEFw5VRTYIleZLl9gXmCO9egWJWcogGueOxR41R
-         DSXwb7eYmA40PvPqhbWuAY2gGsJSfGzm4/5NyH9m0P+zdcGLmAW7MyiILWQouQCkC2VW
-         nS1mb4BaVP6qJXta0mDbwnI9XoDAwMpETa5mx1szi5eUtqE1ormRKa42pfxMHtWds8x5
-         BIj8wUkLfEtSAZM+T0zAbThaTGeIbcuFpnc+yMCn5e2aRmXK4hv6z/qyq/Qf3WQSWzD4
-         zXfA==
+        d=citrix.com; s=google; t=1735869973; x=1736474773; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:subject:references:cc:to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6XxDgsDh63Hd8YUnQX8bX7YEs2+jNWGRYTJCUK51Cww=;
+        b=G/S+fHVnbWbAONAVtd22PAE7Z4zPtYI2bW4ZzxfdiSoyogWRlo2abTDF8AIywIvBNg
+         6yZ3ivx3x4QmptrRicoEDyvh7xIe7gMxkbkk1WRPEkIzgbdP1mQfPqL58ZRquBhfYizb
+         4dboeaE/d4Q0tjFPPRjW9hU4HrznyoWDRb9fM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735863900; x=1736468700;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vNzpgmoCzAwb514bhoD5BPCvyAJMbaE9RvBKoPbv384=;
-        b=fmXBcvxPyW9NDfo5ApK1IX9Sp4uWGtrGIVgInpQpBytJ2Brg0rHG5yfM7qsZ4IY1Yf
-         3HcMyp72zZW/UYlRdgxmXXHQ9eg9StWbssBjKWY9oRAVmaA3VN1MvgbqNXnt8t70cHAG
-         u2VDlItaQ+JCkQpkTrNuOhMpP9Mpg6o14TjL5ZslK3Hm0fa1Cb4lsJ0ddPET0oz/jKmG
-         NxP3uYHmI4XEG4WUCrc2UuHtBfEwXGBdIosOWy5LI7cl/EvNDfp3aWC3ZE0Me5NjHQEX
-         egTNAvxu5pFT0F865qHAiI6P83S8XPnu4QvZ0YQewuJqs/3XBpv5jxz3UDlp99H48Xgf
-         mB5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWLwGmqFxaZFO0N9i24q/1j7xlaJHYZGJq4AZhtABI0X66Zv6N0l9PueWgkIOLjS/EEW9qr7BqCF+WgMxct@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDj6qJDS64RIcb0SeaNOs+7zxMOF1Sb6Uop6OBy5ocy5MtoVRO
-	7u+acBME1JNOYtybj2nVqqSh9ROZwhKjM4MerHAuNdHN1lTpefhF9I58bRVBTcUry4mPWELxSha
-	oZzGdoJNZ1ghTcow/EI9RGb2hAiJt9dJYQnHg
-X-Gm-Gg: ASbGncuNLOYgSNK4ptQf3Jvpie0ziORcxk+amWK+mwb5daqbKFGd5xzAQplhnPxyrhT
-	h/GU/zdrU3KWceDD58YgsfcBXuFLFBXKnldY=
-X-Google-Smtp-Source: AGHT+IGQAbpr8horQ2fysiJ3MPMS+mcd+xtgrtyaVmH+uGzcUwbPEeJQouzoojRERX+UqkPJPlPOptSJ/ishqBAiBkI=
-X-Received: by 2002:a50:8712:0:b0:5d0:acf3:e3a6 with SMTP id
- 4fb4d7f45d1cf-5d917875c13mr5922a12.1.1735863899573; Thu, 02 Jan 2025 16:24:59
- -0800 (PST)
+        d=1e100.net; s=20230601; t=1735869973; x=1736474773;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:subject:references:cc:to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6XxDgsDh63Hd8YUnQX8bX7YEs2+jNWGRYTJCUK51Cww=;
+        b=HK4uRsUJNL2aMU9MEaxmAy5WZf6/vchCMjCLKdGY9H8k7pIvLDCkKPTqaA+TJniMt1
+         MxJ4l1IJK6KZAMgca3oicSpF5vaB55a5pV6GYff42qvP0rf9kNGcDue6+Z6RBEos+yL1
+         YgFdyLz0Qw/2bJzzNaOilELst7Hcbj4WzAQYUW+TMD00ZHXyCpZxka+4QWmq1q+FqgdP
+         uUgcIczVaToS1DVMqtjQ9VZqiSrBzJbH7PmJKU8W3XaP+1FGKhpQJ5hdoLVH6KHj6ctN
+         yZGlZXQCjX1Duxaa2iuCn4TynPKZHwy97F7oITZtuAo60YKgDKe82+3gZeDuFM3rufhI
+         vm4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXmkQxa0bS2qxJVsV3xCuA+OZsxmzwqVeFe4ESvWlDHkYvyoRXhW5Vrxxq4p8jmA79TtUpizyYznDJQgVAT@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsPv7g/fC21bNW43I5/qDWG3oGCwkDBQ2BuGypPZRTXm4ODQQn
+	BLGpC1OTCOHA5VbVen8U8yRrKP8J0dQewaNa3uxUW+aWeMioCQIW2la8w+niRSE=
+X-Gm-Gg: ASbGncsBSW4e8uoUVd0vWAM1mlbkojH7uNSqsH3Q5sWHYaLlacU9wKnRc0Ib1YsuPfd
+	k49R8jaXt6+uULGeKTQxJT5fTlfy7BSoK0biBD2IRdZXLaNk+DGqIrhj4lzavqUvRCpHtWWaM1b
+	brSvHYHADioP3nAvm2FoBPDTjxFgjDJruaZdawpfaAC6X3jKM0vLAreN+E/Rgkb/4DrVFsm+MlA
+	qrnSCwaChXOL14DsEz/IwIcqZBJHZZ7Ik2M1M5TgPyiqt9WlxsLoPNfYrUVWEq+1JfomquVhhOY
+	EgOTfHPMzCZ4YzXCUhur
+X-Google-Smtp-Source: AGHT+IFX7s7OIdyOwqMqiHQ7Dij0fiev/6kDOgtgCa70BnwOXZiReSdRdJxFbmyfksFhQWRa5CI5/Q==
+X-Received: by 2002:a05:600c:1c09:b0:434:9e46:5bc with SMTP id 5b1f17b1804b1-43668643750mr507478795e9.10.1735869972697;
+        Thu, 02 Jan 2025 18:06:12 -0800 (PST)
+Received: from [192.168.1.10] (host-92-26-98-202.as13285.net. [92.26.98.202])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4366127c508sm468771585e9.33.2025.01.02.18.06.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jan 2025 18:06:12 -0800 (PST)
+Message-ID: <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+Date: Fri, 3 Jan 2025 02:06:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
- <20241220174731.514432-29-bigeasy@linutronix.de> <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
-In-Reply-To: <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 2 Jan 2025 16:24:22 -0800
-X-Gm-Features: AbW1kvaRDs2xYpGZgla1RZEmBOvM7PAkjYw9im4dG5fjLKcfN-MGKXe4WhweCw4
-Message-ID: <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
-To: Elliot Berman <elliot.berman@oss.qualcomm.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Elliot Berman <quic_eberman@quicinc.com>, 
-	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+To: lorenzo.stoakes@oracle.com
+Cc: akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com, bp@alien8.de,
+ brendan.higgins@linux.dev, da.gomez@samsung.com, danielt@kernel.org,
+ dave.hansen@linux.intel.com, davidgow@google.com, dianders@chromium.org,
+ hpa@zytor.com, jason.wessel@windriver.com, jikos@kernel.org,
+ joe.lawrence@redhat.com, johannes@sipsolutions.net, jpoimboe@kernel.org,
+ kgdb-bugreport@lists.sourceforge.net, kirill.shutemov@linux.intel.com,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org, live-patching@vger.kernel.org,
+ luto@kernel.org, mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
+ mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+ petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at, rmoar@google.com,
+ rostedt@goodmis.org, rppt@kernel.org, samitolvanen@google.com,
+ shuah@kernel.org, song@kernel.org, tglx@linutronix.de, x86@kernel.org,
+ Juergen Gross <jgross@suse.com>,
+ =?UTF-8?Q?Marek_Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
+Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
+ and restoring ROX
+Content-Language: en-GB
+From: Andrew Cooper <andrew.cooper3@citrix.com>
+Autocrypt: addr=andrew.cooper3@citrix.com; keydata=
+ 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
+ 6+ahAA==
+In-Reply-To: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Elliot,
-
-On Mon, Dec 30, 2024 at 7:33=E2=80=AFPM Elliot Berman
-<elliot.berman@oss.qualcomm.com> wrote:
+> Hi Mike,
 >
-> On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior wrote=
-:
-> > __module_address() can be invoked within a RCU section, there is no
-> > requirement to have preemption disabled.
-> >
-> > I'm not sure if using rcu_read_lock() will introduce the regression tha=
-t
-> > has been fixed in commit 14c4c8e41511a ("cfi: Use
-> > rcu_read_{un}lock_sched_notrace").
-> >
->
-> You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
-> Regular rcu lock doesn't generate function traces, so the recursive loop
-> isn't possible.
->
-> I've tested:
->  - the current kernel (no recursive loop)
->  - Revert back to rcu_read_lock_sched() (fails)
+> This commit is making my intel box not boot in mm-unstable :>) I bisected it to
+> this commit.
 
-Which kernel version did you test? I assume something pre-KCFI as
-arm64 doesn't use this code since v6.1.
+For what it's worth, we've found the same under Xen too.
 
->  - Your series as-is (no recurisve loop)
+There's one concrete bug in the series, failing to cope with the absence
+of superpages (fix in
+https://lore.kernel.org/xen-devel/6bb03333-74ca-4c2c-85a8-72549b85a5b4@suse.com/
+but not formally posted yet AFAICT).
 
-Note that this patch only adds a comment to is_module_cfi_trap(), so I
-wouldn't expect a functional change.
+The rest of the thread then found a crash looking to be the same as
+reported here, but you've made better progress narrowing it down than we
+have.
 
-Sami
+~Andrew
