@@ -1,203 +1,158 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625181940B1;
-	Fri,  3 Jan 2025 08:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD081885B8;
+	Fri,  3 Jan 2025 10:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735894613; cv=none; b=KwoV31SiO3h+DIdPUV+ewYbhYS8myYP21GSY11fZCc0MOpwdgjDTkZ+RMx7B5+bATPrpThuUfwgRzVamOIIVJmktjEt+49dWS7epXImtyySoYi9N3cNijSd6dYhElcfa3Fs8Lc2h7Tz1c7OxyghwjZtBP12GXF12TkfOvmF7jyQ=
+	t=1735901860; cv=none; b=FFTVRw6AnGT1/l9RMx5gUV7MehAhUre1c2F5yryKoXQE7p9Ms5QB8bdzeACQzIp9VI45StWQiw9M6Ap9MJzCHJhkpsdPkp+4WYE2GVjhO/00/AhGATHK3cdpf+LwOGlCAq1NIE3Xp1z/IJDvVyh5ION8ZxjNVcGRVjMu2XffyPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735894613; c=relaxed/simple;
-	bh=7Ss2tdLw4JYGn715IrB5t0jg2EMHFGEGprdpzEJVU9U=;
+	s=arc-20240116; t=1735901860; c=relaxed/simple;
+	bh=tjJndhs7c7VoSdQ6xue+WdqiQcB0hWTPgYm6AKFajI8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyjcHa3aPs9e36zx3jqgXo3zPlJWDDpK8SsVjy1+7mcj9XqlM5kfGWq/ZnR1762vhBntUCkxJjqm2ETbv/4l+2j10asFuEraAUh83VRUAOrrmKzvhzB92msrIbfB5hvC9SIh0IilWSArDfcWh/MC3bUB60qQsApQiyrV418AFwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=X117eB7C; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:In-Reply-To; b=l2NAJ6bBWVhnjWWEkNsDHTenGQ+GdCB58+sJCmHmKLBnc8GaQgL0F5zOE3kp7kRa85A19qfcWnz19eCr1qt9/AyyGGyl9MLyoYOyBzuB9U0Hqi+V4rHwY/jAK2hIptscgE1b+QuvcTDyrX0jAjGGzKcDbOXI1Uj0KAgyHZLIpTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com; spf=pass smtp.mailfrom=invisiblethingslab.com; dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b=JuerdEJ1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=GcajOF2v; arc=none smtp.client-ip=202.12.124.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=invisiblethingslab.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=invisiblethingslab.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="X117eB7C"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50385jdP003689;
-	Fri, 3 Jan 2025 08:56:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:to; s=pp1;
-	 bh=s5va7eFiA9dG7vhU6jSc3zqR8LZhCiejq3E0UYp0dWk=; b=X117eB7CXD4B
-	jD00+cvGVsHeQOimiGneESqDtsjCuZmuMi89n1wh8SGsB6L9Zp8hLmpL8NIP8Coq
-	ZiJHvvqfubm5SzkuHBnk3+1dVJ/QlVzGJ5sfi8283+M4wirirkF/gyWy9UGjvraR
-	5W1sAof5PZlFAcTPJKu5PI7PM/bL4kpEd7hPfqbH0f6afF6wVj98i5Bjmd/SwOfc
-	C/5/gDxJqW+9T7B/wMW1EydKwMn1Bb0GP9YY97o0S4ZiHvzVkjdQI0SUiJgMIxNY
-	rJ2g3MRQbATs1uhOuBqppyT3zhFl/IypKtfJVY8AX1M0SEe0d+FljlX/IUF2Hzb4
-	iL44JrpJ6A==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43xc32r5es-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Jan 2025 08:56:00 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5038txHe006325;
-	Fri, 3 Jan 2025 08:55:59 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 43xc32r5en-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Jan 2025 08:55:59 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50352vJw014589;
-	Fri, 3 Jan 2025 08:55:59 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43tunswsgj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Jan 2025 08:55:58 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5038tvwU12452120
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 3 Jan 2025 08:55:57 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 41FB920043;
-	Fri,  3 Jan 2025 08:55:57 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02CB020040;
-	Fri,  3 Jan 2025 08:55:52 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.113.191.13])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri,  3 Jan 2025 08:55:51 +0000 (GMT)
-Date: Fri, 3 Jan 2025 14:25:41 +0530
-From: Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Daniel Gomez <da.gomez@samsung.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] sysfs: constify bin_attribute argument of
- sysfs_bin_attr_simple_read()
-Message-ID: <jpu4rjggipafjlg67t6t6htpvmcg3xukmepldfzgglrgqnmwwp@m5ijtdihc37t>
-Reply-To: mahesh@linux.ibm.com
-References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
- <20241228-sysfs-const-bin_attr-simple-v2-1-7c6f3f1767a3@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=invisiblethingslab.com header.i=@invisiblethingslab.com header.b="JuerdEJ1";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="GcajOF2v"
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id E13981D40AB0;
+	Fri,  3 Jan 2025 05:57:35 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Fri, 03 Jan 2025 05:57:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1735901855; x=1735909055; bh=423Vj5fZsG
+	V5eJGSXq4heFmx7126IRBdG9xAKxYQ7SM=; b=JuerdEJ1tAgll50QlC4YxQajBf
+	DkgtwccDxlugt0VAiPqTYmOx3GXlMhMKhInAHOhPHtCUJNVjyBIs8RCY6PmlgpPd
+	xjLcTrvjispwERy/WyDFaFCq44v2e9hYfmST5JDKKoCtNQAdDxPM7g2pWmcNIY8l
+	u+d1SFw9C0Oj8nBwS58aWGssWJC174PqAvBZ++Jl35N2Rp2ST42JS/1xPQuCWGuB
+	uzNHPEZbLVOj3JElOSs4/va2bTWToNKvpCgV1oXlORCOrAs+PBSaquoBLoELmm6k
+	qrzyAnzURUQhidmjBnTvvLUKfN6MZru2w/B99p4zUHA0t9IyaG3GOmEd0mMg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1735901855; x=
+	1735909055; bh=423Vj5fZsGV5eJGSXq4heFmx7126IRBdG9xAKxYQ7SM=; b=G
+	cajOF2vlD6eM2BhItchNYObDe20cSKdE7QdHWS3S4zXB201VqahnXDUkhhCiI/Oa
+	7boz+JhhU+xUc3f9Q61PUJi6PCNy6gHu5Vy2AE8TMXwUJepQ7OTHmO6nHbXzqhXP
+	5wZKIRsd8h43f2+M6Aa0K5COGyPslerP3NPAAvnLWzj418SzIl/c4Cn02vLT/6t9
+	MH8LJjiuaiadIx1iLE1XEKOPBtX76ZhMcmqtgzG18nTj7HPNwkKJKR8uTQvLV5pj
+	dnUeUPcA3zIoiLlzyomyZAG/83zl83w6LcvXKdit3G8TtXQReL8yXf7vFJaeKZqa
+	vDZZtBKg6qDqRt+mQBlPw==
+X-ME-Sender: <xms:ncJ3Z6CXVWyExCYlgmBZdOs6uG3V0GYZ8GxhhWzgeULLUuScarTgMw>
+    <xme:ncJ3Z0hrIdZeHDl9chKR8qX0FAfe0xnC3zbnBZ_BynCHY7kuWJTtSbb--5j1pW28u
+    XAOmloVnrT0Ig>
+X-ME-Received: <xmr:ncJ3Z9m1XYDfuQmpOwos3HoM0I0-2Se522cNPFJ64z61BySOCJsFCJqnGXKgktMJqPuZQuYkJaArSpfl_gEKUjXrvRlAkRFMwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudefgedgvddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtgfgjgesthekredttddtjeen
+    ucfhrhhomhepofgrrhgvkhcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomh
+    grrhhmrghrvghksehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggft
+    rfgrthhtvghrnhepveeuheffhedtffeivdffudehieekkeelleehhfevgefggffgjeejtd
+    ffheejgfegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhesihhnvhhish
+    hisghlvghthhhinhhgshhlrggsrdgtohhmpdhnsggprhgtphhtthhopeegiedpmhhouggv
+    pehsmhhtphhouhhtpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtih
+    honhdrohhrghdprhgtphhtthhopegrnhgurhgvfidrtghoohhpvghrfeestghithhrihig
+    rdgtohhmpdhrtghpthhtoheplhhorhgvnhiiohdrshhtohgrkhgvshesohhrrggtlhgvrd
+    gtohhmpdhrtghpthhtoheprghnthhonhdrihhvrghnohhvsegtrghmsghrihgughgvghhr
+    vgihshdrtghomhdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhope
+    gsrhgvnhgurghnrdhhihhgghhinhhssehlihhnuhigrdguvghvpdhrtghpthhtohepuggr
+    rdhgohhmvgiisehsrghmshhunhhgrdgtohhmpdhrtghpthhtohepuggrnhhivghltheskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvrdhhrghnshgvnheslhhinhhugidr
+    ihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:ncJ3Z4zPNvCOjmc1oKkrAYZ9xaG0fyawlsfb_9ujyU1cR20qR2SiHQ>
+    <xmx:ncJ3Z_TqIX8N6jwrirsSXns9bdjWEmxb5qLaSpMfRfKmd7zOLSLvpw>
+    <xmx:ncJ3ZzbeXkzGZLYn9eDgxNT7PS59Rmxit9htXHx6_ndO8uaxw3OOgQ>
+    <xmx:ncJ3Z4SybuD-tbCQ01TzhidgZIEhKMy9QHnKqhApQ2nSmKbYzzUrHw>
+    <xmx:n8J3Z28oyn0Vw20TlJT55P_RAeGNO_Dj-NJTH4vhK9jKgcdUPujFBW6n>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Jan 2025 05:57:27 -0500 (EST)
+Date: Fri, 3 Jan 2025 11:57:25 +0100
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andrew Cooper <andrew.cooper3@citrix.com>, lorenzo.stoakes@oracle.com,
+	anton.ivanov@cambridgegreys.com, bp@alien8.de,	brendan.higgins@linux.dev,
+ da.gomez@samsung.com, danielt@kernel.org,	dave.hansen@linux.intel.com,
+ davidgow@google.com,	dianders@chromium.org, hpa@zytor.com,
+ jason.wessel@windriver.com,	jikos@kernel.org, joe.lawrence@redhat.com,
+	johannes@sipsolutions.net, jpoimboe@kernel.org,
+	kgdb-bugreport@lists.sourceforge.net,	kirill.shutemov@linux.intel.com,
+ kunit-dev@googlegroups.com,	linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,	linux-mm@kvack.org,
+ linux-modules@vger.kernel.org,	linux-trace-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org,	live-patching@vger.kernel.org,
+ luto@kernel.org,	mark.rutland@arm.com, mbenes@suse.cz, mcgrof@kernel.org,
+	mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+	petr.pavlu@suse.com, pmladek@suse.com, richard@nod.at,	rmoar@google.com,
+ rostedt@goodmis.org, rppt@kernel.org,	samitolvanen@google.com,
+ shuah@kernel.org, song@kernel.org,	tglx@linutronix.de, x86@kernel.org,
+ Juergen Gross <jgross@suse.com>
+Subject: Re: [PATCH 6/8] modules: switch to execmem API for remapping as RW
+ and restoring ROX
+Message-ID: <Z3fClUqJ_sMp1HL9@mail-itl>
+References: <86eba318-464b-4b9b-a79e-64039b17be34@lucifer.local>
+ <d48193a3-65fe-4aa9-98f6-dd5869bd9127@citrix.com>
+ <20250102215714.a37e828cf073ea6a14d30559@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8; x-action=pgp-signed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241228-sysfs-const-bin_attr-simple-v2-1-7c6f3f1767a3@weissschuh.net>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Nxm_m42Whr8-j5y42LFTPkwe2lks3Kqs
-X-Proofpoint-ORIG-GUID: WxQvIOazIZSmyqH_ffQp36JLk5UoiDZp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 clxscore=1011
- malwarescore=0 adultscore=0 suspectscore=0 mlxlogscore=920 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501030073
+In-Reply-To: <20250102215714.a37e828cf073ea6a14d30559@linux-foundation.org>
 
-On 2024-12-28 09:43:41 Sat, Thomas Weiﬂschuh wrote:
-> Most users use this function through the BIN_ATTR_SIMPLE* macros,
-> they can handle the switch transparently.
-> Also adapt the two non-macro users in the same change.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+On Thu, Jan 02, 2025 at 09:57:14PM -0800, Andrew Morton wrote:
+> On Fri, 3 Jan 2025 02:06:10 +0000 Andrew Cooper <andrew.cooper3@citrix.com> wrote:
 > 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  arch/powerpc/platforms/powernv/opal.c | 2 +-
->  fs/sysfs/file.c                       | 2 +-
->  include/linux/sysfs.h                 | 4 ++--
->  kernel/module/sysfs.c                 | 2 +-
->  4 files changed, 5 insertions(+), 5 deletions(-)
-
-Looks good to me.
-
-Reviewed-by: Mahesh Salgaonkar <mahesh@linux.ibm.com>
-
-Thanks,
--Mahesh.
-
+> > > Hi Mike,
+> > >
+> > > This commit is making my intel box not boot in mm-unstable :>) I bisected it to
+> > > this commit.
+> > 
+> > For what it's worth, we've found the same under Xen too.
+> > 
+> > There's one concrete bug in the series, failing to cope with the absence
+> > of superpages (fix in
+> > https://lore.kernel.org/xen-devel/6bb03333-74ca-4c2c-85a8-72549b85a5b4@suse.com/
+> > but not formally posted yet AFAICT).
+> > 
+> > The rest of the thread then found a crash looking to be the same as
+> > reported here, but you've made better progress narrowing it down than we
+> > have.
+> > 
 > 
-> diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
-> index 5d0f35bb917ebced8c741cd3af2c511949a1d2ef..013637e2b2a8e6a4ec6b93a520f8d5d9d3245467 100644
-> --- a/arch/powerpc/platforms/powernv/opal.c
-> +++ b/arch/powerpc/platforms/powernv/opal.c
-> @@ -818,7 +818,7 @@ static int opal_add_one_export(struct kobject *parent, const char *export_name,
->  	sysfs_bin_attr_init(attr);
->  	attr->attr.name = name;
->  	attr->attr.mode = 0400;
-> -	attr->read = sysfs_bin_attr_simple_read;
-> +	attr->read_new = sysfs_bin_attr_simple_read;
->  	attr->private = __va(vals[0]);
->  	attr->size = vals[1];
->  
-> diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-> index 785408861c01c89fc84c787848243a13c1338367..6931308876c4ac3b4c19878d5e1158ad8fe4f16f 100644
-> --- a/fs/sysfs/file.c
-> +++ b/fs/sysfs/file.c
-> @@ -817,7 +817,7 @@ EXPORT_SYMBOL_GPL(sysfs_emit_at);
->   * Returns number of bytes written to @buf.
->   */
->  ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
-> -				   struct bin_attribute *attr, char *buf,
-> +				   const struct bin_attribute *attr, char *buf,
->  				   loff_t off, size_t count)
->  {
->  	memcpy(buf, attr->private + off, count);
-> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-> index 0f2fcd244523f050c5286f19d4fe1846506f9214..2205561159afdb57d0a250bb0439b28c01d9010e 100644
-> --- a/include/linux/sysfs.h
-> +++ b/include/linux/sysfs.h
-> @@ -511,7 +511,7 @@ __printf(3, 4)
->  int sysfs_emit_at(char *buf, int at, const char *fmt, ...);
->  
->  ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
-> -				   struct bin_attribute *attr, char *buf,
-> +				   const struct bin_attribute *attr, char *buf,
->  				   loff_t off, size_t count);
->  
->  #else /* CONFIG_SYSFS */
-> @@ -774,7 +774,7 @@ static inline int sysfs_emit_at(char *buf, int at, const char *fmt, ...)
->  
->  static inline ssize_t sysfs_bin_attr_simple_read(struct file *file,
->  						 struct kobject *kobj,
-> -						 struct bin_attribute *attr,
-> +						 const struct bin_attribute *attr,
->  						 char *buf, loff_t off,
->  						 size_t count)
->  {
-> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-> index 456358e1fdc43e6b5b24f383bbefa37812971174..254017b58b645d4afcf6876d29bcc2e2113a8dc4 100644
-> --- a/kernel/module/sysfs.c
-> +++ b/kernel/module/sysfs.c
-> @@ -196,7 +196,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
->  			nattr->attr.mode = 0444;
->  			nattr->size = info->sechdrs[i].sh_size;
->  			nattr->private = (void *)info->sechdrs[i].sh_addr;
-> -			nattr->read = sysfs_bin_attr_simple_read;
-> +			nattr->read_new = sysfs_bin_attr_simple_read;
->  			++nattr;
->  		}
->  		++loaded;
-> 
-> -- 
-> 2.47.1
-> 
-> 
+> Thanks.  I removed this series from mm.git while this is worked on.
 
--- 
-Mahesh J Salgaonkar
+The issue under Xen that Andrew linked happens on 6.13-rc5 which AFAICT
+doesn't this series yet. So, it's probably a different issue.
+
+- -- 
+Best Regards,
+Marek Marczykowski-G√≥recki
+Invisible Things Lab
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmd3wpUACgkQ24/THMrX
+1yzmigf/XurIB/pN9J44SKwSeCWCQMVu3ZjFfeQ7XiAl3IpiALExuGFtEiAX8sY/
+BqA3MWs9AKpBz7qfUQGU3+tRUbEVQz/rHh8FBo3OBwZQJuxntlT291E4/FzIHUzN
+JZ0b6AAgU9MaSdOC0A0XGwFDbhTPbbqbHanyaVyCf+2QVCEW4OFcgnlUVBdIs6sW
+tXzKWNr70Jkq/XguvrWVBHgg5C3E/SfXZzoRIFCKfMuXfpqVVpa35X/Zf3+V8my/
+n0Di7xZXQaXMSv72tQayI+/y2dT4PbLqTE+lhLf2UCXDn15WBHpmyppX9Nn3huEG
+L0NRHVLneeo25kRQuzGj04vWFem6MQ==
+=0Iqv
+-----END PGP SIGNATURE-----
