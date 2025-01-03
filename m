@@ -1,93 +1,89 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9401D1527AC;
-	Fri,  3 Jan 2025 11:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2973B1FA171;
+	Fri,  3 Jan 2025 14:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735903233; cv=none; b=L8/ASUXvVThDtkM6oxXVi+nCkpCF4pNOEC9SsyA+HaAPdiasimdHJlcwhGEmdplyvfER4eUxN/oGZ6OPpLlAKbMFezfohGn6Jj65ZIJOexJD4deXvjjk4gb3MTjJb17v6VB16ipjxbtLCdfaTS9lhwEsiZw3nQGxhPIo5A9u79o=
+	t=1735914006; cv=none; b=oBwaXrZjPlHwSMIMDhCO7gy/7jkjh8GjDNwdeKxqIHcIvCZPuVmCHihExVU/6CXsgWuOsxtQdWPZp+qOVyJUDjfVZoLLY+z3wHBr5N4Zvaj5aS5C/cedbyVhaCgvcag+RX998ZSxdTXEhmhm3j1JgAKQNtWPNTxyaIm5t8FLgEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735903233; c=relaxed/simple;
-	bh=5MGbxOku246M5y/dHAEZXhGTv+90s60izXW9ASoKzic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UTyQ1pFeJJ15pcwgKlHB4xSSWUEP/W0l1xwNLe5Wv4v2ESSY3ceH6WMojxYbg8Ya/Dj5aAe4Wjp8neDFZQRogl3iFrkPqfBCjAQ2Js2KU0l+XTrpG6CWZ2RBXIBqrnnmsExH728I1IxuuIZigwFynLinIia1w7xcBYI4mSPN0T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DaRgJ6Ze; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DaRgJ6Ze"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=+e20JDJu3VwrmlmlVVpxrvFlU6CuxSxftw52pQXGnog=; b=DaRgJ6ZeouUFnjZ11up8spR4oW
-	o3qngr9xYj85lxVEWvhjfekmFNWYSpBpnDXfgrnmBcXz21BVnbWSjwF7FJpVqC3515Zz7xoNghOSN
-	DH+Y2PmIRLQ12UwBno8GZvcaEK1tyJyBcOeuOEqZZDyo61EUcCWq7+pFRb99cLZH0ChNWFaY8ue4g
-	z8w5w37xbByYWZ1U79CbSnvZ1WHPtTWr6jtlQX4rjTXRfc9uIqBUMMP6yizCWyO7qbPQ54fvQbCrO
-	XqWipiJzxMZluWZYjJQzRjkUSapDbZoOBeoCu74phuj0VrMCuywG6Sfo3qD6+BsfXkShHAV3onqo/
-	yYIJfPJw==;
-Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tTfih-00000008NOv-2fvw;
-	Fri, 03 Jan 2025 11:19:59 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 3A6C93003AF; Fri,  3 Jan 2025 12:19:59 +0100 (CET)
-Date: Fri, 3 Jan 2025 12:19:59 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Daniel Thompson <danielt@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Gow <davidgow@google.com>,
-	Douglas Anderson <dianders@chromium.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jason Wessel <jason.wessel@windriver.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
-	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
-	Rae Moar <rmoar@google.com>, Richard Weinberger <richard@nod.at>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	live-patching@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 1/8] x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
-Message-ID: <20250103111959.GD22934@noisy.programming.kicks-ass.net>
-References: <20241227072825.1288491-1-rppt@kernel.org>
- <20241227072825.1288491-2-rppt@kernel.org>
+	s=arc-20240116; t=1735914006; c=relaxed/simple;
+	bh=xGYx8KQUYRh88PfcTd2X83icK1ce1R0hFTwkdW3f9xM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cMDiOqraWxu8+bavWHJAF0M3aHqMPlrxeUlbewOWO9rIlnMe05XrQCaKfiY468jFLzADsdQxAS/z6aZAEcsnwlp2hD/a09Bs+ySq8NJCetdIfqdWSfmatLMGKSVrvZHaQnxBaFLi/1dj2fXCWahe3CatO6Bf/P9BNdNWvsS1U0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4YPljx0NQ0z9sT8;
+	Fri,  3 Jan 2025 15:06:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id rrxuhVcRJ5Sy; Fri,  3 Jan 2025 15:06:28 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4YPljw6jQNz9sT7;
+	Fri,  3 Jan 2025 15:06:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id D42BB8B767;
+	Fri,  3 Jan 2025 15:06:28 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id V7MDq83ezafQ; Fri,  3 Jan 2025 15:06:28 +0100 (CET)
+Received: from [192.168.232.97] (unknown [192.168.232.97])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 56F7D8B763;
+	Fri,  3 Jan 2025 15:06:28 +0100 (CET)
+Message-ID: <97beceb2-dd87-4b7f-a269-b6612e5557a3@csgroup.eu>
+Date: Fri, 3 Jan 2025 15:06:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241227072825.1288491-2-rppt@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] module: Make .static_call_sites read-only after init
+To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Peter Zijlstra <peterz@infradead.org>,
+ Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron <jbaron@akamai.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20241223093840.29417-1-petr.pavlu@suse.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20241223093840.29417-1-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 27, 2024 at 09:28:18AM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> The CPA_ARRAY test always uses len[1] as numpages argument to
-> change_page_attr_set() although the addresses array is different each
-> iteration of the test loop.
-> 
-> Replace len[1] with len[i] to have numpages matching the addresses array.
+Hi Petr,
 
-D'oh..
+Le 23/12/2024 à 10:37, Petr Pavlu a écrit :
+> Section .static_call_sites holds data structures that need to be sorted and
+> processed only at module load time. The section is never modified afterwards.
+> Make it therefore read-only after module initialization to avoid any
+> (non-)accidental modifications.
+> 
+> Petr Pavlu (3):
+>    module: Constify parameters of module_enforce_rwx_sections()
+>    module: Add a separate function to mark sections as read-only after
+>      init
+>    module: Make .static_call_sites read-only after init
+> 
+>   kernel/module/internal.h   |  7 ++++--
+>   kernel/module/main.c       | 18 +++------------
+>   kernel/module/strict_rwx.c | 47 ++++++++++++++++++++++++++++++++++++--
+>   3 files changed, 53 insertions(+), 19 deletions(-)
+> 
+> 
+
+We have a problem at the moment with ro_after_init sections, isn't it 
+better to fix it before adding new stuff to ro_after_init ?
+
+This series conflicts with my series which aims at fixing up 
+ro_after_init handling in modules, see 
+https://patchwork.kernel.org/project/linux-modules/cover/cover.1733427536.git.christophe.leroy@csgroup.eu/
+
+I was expecting my series to land in modules-next, do you or Luis plan 
+to take it anytime soon ?
+
+Christophe
