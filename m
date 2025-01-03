@@ -1,55 +1,55 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8B71C1F20
-	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 20:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07BAD1C2323
+	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 20:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735937172; cv=none; b=ORVYg0bQimQ+2Q259WUDZoGp/4eT3GehFfAHbt0n/es9l5f7OYc9GBsiiJhYL4vLbNwPVFdHkgk5aAIW8OikORhG5R83T5t7uWUec6lip0DREkoYKH6TAqRuJKY9me+3czJ7XIX/WBhf+8Txmpsq3lAZJsSSJ5pZvckn4QTNLwI=
+	t=1735937178; cv=none; b=X6heuvWclw22m1KDu64jUJXJa0VqbOoiwLaNoj3CuTAKeiIuwMOxkE7VhQ7zpkXAHrenhfHadw6W0a45RQq7tHWj3Z8EQJ2EO/WVjvAXxMXNlbN+CSm3OWHM4ZqJFzLeszs3tQfif/SVQyISX58uQAPFR5TTv4evfhX2xURfyWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735937172; c=relaxed/simple;
-	bh=p7WWEhhYSoB9EsyiZb7zkPmioP1Ghg8VnlGqhauZXHQ=;
+	s=arc-20240116; t=1735937178; c=relaxed/simple;
+	bh=eBWSrd2j7HvMb7oRH1RLo5t203oukOJEVtlknSsCqM0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XJvh/7QlRogSJan0e9ATsI9TFNLaBjIViTn50fl6eYx9igO6VpoDkks7v1y9yeFGysI2iQUJ7JBkKIgRA1wE64dvR/fhDr4iLa7VoPjIfBHt3LqjgAS4V6RRSLBpMwV/uIW8K8hWu9J8ideFZA8oTzYOzse7/MkdiOoP1O9Vvy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wahCOztK; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=dlAqZwwVDFPBkh0PpZZ/osozpZisM3/kLRlI7rFLOqR+pt++bGHv2wGcVTlXDRvN+NOocFLCCX1H94SZkrhBlXQrQGTYA53us6WCBIXuJFxmA6WVM8I7o92CfrspIM+C5TNYMDolZJDVJ4F5L+RuGa/5RY5qksBRCI4Nr8y8bM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JozwMZyp; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wahCOztK"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ef909597d9so26104658a91.3
-        for <linux-modules@vger.kernel.org>; Fri, 03 Jan 2025 12:46:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JozwMZyp"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2164fad3792so164832175ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 03 Jan 2025 12:46:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1735937160; x=1736541960; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1735937162; x=1736541962; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9QWQProj0DRDekjJKvkceMs2crMPK7X9JqHuvPddMI=;
-        b=wahCOztK+/anGG7toJ0I7pSc/RNIPUZLDWWGsiZ9uAf8wCrCQGi6YwwpZbqfVp3L9i
-         qTR/SacX15it2JyvtxJ1UL5DWIZSChuaBNIKB1q+8IaeoJfXEiBN+C0yZuOJ4aYamqZO
-         fIINvoW9uzYqBKVkGTzcCKUlrUQqZKNR3USxbpOX/ayXrHxqSk9LouGklJLw9nLWkCzF
-         OzTMLikCVRV/GBC9cttRAiRDaN5Nh9hCZC79iPZ8xg2fKgvwllj7a1eeoqozK5dDGGPC
-         2umhbOiJ+GpWQytz2hutkaBE2UJR6iKR5vyohN/t2sVCCXRtT2febFPKNoBrNqf1wycu
-         2vNA==
+        bh=clWazEynvGGklOBHtSTCV/CnP6B5ZIpWEbRoz38skJM=;
+        b=JozwMZyp0osmuYIkwvSGzbVhASxngowsyktW2/n3D7GBu1K3tdTtm7XuQOD55pbsJb
+         lbAuwGwCfJA3Rs0EC5k/ecVXtvvwLA0UOZ0kufIg3iGsottVp2q/I+88cIAIgQZf8v8O
+         3oIdvJRTQpqzZWJjLPmk9ExZXb4YXsKBA1hhWt2W6Tco30zSu4DpdjnVba1PVkIN3WZB
+         YP/c0MRPcA3RUWiow+VX/PBgPPpbJEYla4O8FLW2csvj6gwhyQbdTa88n75AQ/FkO3Ib
+         eXYT2n4DhmFY/k4gR7RVRGFCKIEQTHbwYbWxtgGA3c/M/wHGW0P2xNRTtxm1a3xxKRmM
+         aOGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735937160; x=1736541960;
+        d=1e100.net; s=20230601; t=1735937162; x=1736541962;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K9QWQProj0DRDekjJKvkceMs2crMPK7X9JqHuvPddMI=;
-        b=Jz8LT2rFO9TXkxM0NLbEBKPGMEfHX3tVV7pbFf0M5enmPHy4QU7ItcHz6/ufrDVw7i
-         vFPh7nwZKj5ASMLF50gNAdNb17Z59B9gR+XvdnLFKxx+cWxeolVzr3Tu6FP9jhUAr+Vg
-         3bdENkCCQrNWQyElKC69b3aneUYj7zc45Tyj8OkzdNNdccI+Y3d6X6qkqJ4s09Q6nCfB
-         KyO39k101DK0ENapN4LXkllS/9GCk9VQjUoQNmafUUAAm5JckPjpWgpsde61BrvHAfaB
-         QJKODknUjxvzBA8d4dEfDFH/y8aUKyXejsl+/2jsG9hYYDDOMcOI11J2G2+udh48b4xh
-         BLng==
-X-Forwarded-Encrypted: i=1; AJvYcCWq6l6AgD8DjCzums+qPF8CspbjxXE+UG5STkJqa4BBlh66VJ/m9mwW7FCxDLjg2WgZ64rpZf5aZBVRO8n7@vger.kernel.org
-X-Gm-Message-State: AOJu0YybLwhjN9of9jsn5syi1n1U1M3KQcha3NckNdWrWFP/WtPbEwqx
-	8VQjcr7tpFFufdG5wo2kRSfhfKbFLc305nuZYnR6vk0Dt0fGckYDxRxEp1CR1v8wz++UzhIzQyS
-	0lUnSc7IqGT0b9NGlcct3f+UOfA==
-X-Google-Smtp-Source: AGHT+IFEm8J+gsElnrGpl5/AfgJpxNbFJkyqHTQwSLP5FrL6G8Q/PWRkkGpoYWof6TTcLrgCKS59Y0YKNt96tu+LRgo=
-X-Received: from pfwz5.prod.google.com ([2002:a05:6a00:1d85:b0:725:3321:1f0c])
+        bh=clWazEynvGGklOBHtSTCV/CnP6B5ZIpWEbRoz38skJM=;
+        b=YCKNHR+pWeEKCFM5iTBE40jcgmkCsl6O4Yg5GjX1erk9BQUKWEQB0DewDNp5LlPu0n
+         IG6hFPVnpQnUD257ezQW0yBYLmNFUihfx2vJSHGqEuoPUBgBSNQoe8PVCnoW3OO4rqyR
+         sglNTQb6sZFrBTTzr5axJsoONGCF+ioQ6pNwyoMCgGNZHXJRYvaAdMSI0x9G0gfomZDz
+         D+lnvr+gfZX3mH68e7GJdhoQVfWv8RYASMd58ccSvvBosoDGLIvGg1y7PqTmz/85G2Uq
+         WSyhm2wFkX3KgzOgru7pl+N8thVpyDA2y4fmPy8WQnRoCx0bz3rFIf42rpcwZVuEMOQd
+         WWHw==
+X-Forwarded-Encrypted: i=1; AJvYcCW1uS0xbB85Tjxhjk4CH122gbzwML77Hh1+kIeLp1bz/M/fxEtG+8KmPA7x/kZ9mUEZlhooVHrdT4DmnUqU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTxLt1RvNmvD+FwaQY5CSZp279m46az1wAHX5hURBcUhfRO2Z2
+	MNhL/rXAKlLK+Ryh+HRAalQ3Uoc/P+8lmm20gVu+2ASnSpaHeL3BVH2R3UuTaJc2gDaCfyZ1h4Y
+	RKx0Q2W8VIw0CH8vJ4W1BAW3xSw==
+X-Google-Smtp-Source: AGHT+IGLyTzOJJ6/0if35z65hVNTpDzMzZ6NoLshCfrLk515ZZtfLFUGTkTmXT7U0Mntn378mCWUDsghMUjmO0m42/k=
+X-Received: from pfbcv5.prod.google.com ([2002:a05:6a00:44c5:b0:725:e37e:7451])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:1944:b0:71d:f4ef:6b3a with SMTP id d2e1a72fcca58-72abdeb6e80mr73707162b3a.21.1735937160342;
- Fri, 03 Jan 2025 12:46:00 -0800 (PST)
-Date: Fri,  3 Jan 2025 20:45:39 +0000
+ 2002:a05:6a20:7f8b:b0:1d9:4837:ada2 with SMTP id adf61e73a8af0-1e5e0801d62mr92055473637.35.1735937161746;
+ Fri, 03 Jan 2025 12:46:01 -0800 (PST)
+Date: Fri,  3 Jan 2025 20:45:40 +0000
 In-Reply-To: <20250103204521.1885406-20-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,14 +59,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250103204521.1885406-20-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4688; i=samitolvanen@google.com;
- h=from:subject; bh=p7WWEhhYSoB9EsyiZb7zkPmioP1Ghg8VnlGqhauZXHQ=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDOkVPlnpVpoOXc0C/cZ2+8v1jIQnyB/b0b27ZNIizpV2c
- 8q4BUI6SlkYxDgYZMUUWVq+rt66+7tT6qvPRRIwc1iZQIYwcHEKwEQqvBj+5y+O2LRUL8JY+r/t
- xMVdZVz762/Fz5ZabbyIUy1upvTvS4wMSzkbOCsj0t9dYRBYoVylenrSmt8Ghvtv/WitDmsMcM5 mBgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13480; i=samitolvanen@google.com;
+ h=from:subject; bh=eBWSrd2j7HvMb7oRH1RLo5t203oukOJEVtlknSsCqM0=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDOkVPlmd+jsvGHmXBTVfdF5xgmPTtuBjx6prCrbKNNsIp
+ l1ZkDO7o5SFQYyDQVZMkaXl6+qtu787pb76XCQBM4eVCWQIAxenAExk/g+G/z5zOPvTVaZ6dJXM
+ Kzy6obUl0DFZ7cCCzlsG4atudkX27GP4X9Tvq1Z4eBbfVYbaBFHf53d+fdPRq1Z+oHMr/67XqT0 +jAA=
 X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-Message-ID: <20250103204521.1885406-37-samitolvanen@google.com>
-Subject: [PATCH v8 17/18] kbuild: Add gendwarfksyms as an alternative to genksyms
+Message-ID: <20250103204521.1885406-38-samitolvanen@google.com>
+Subject: [PATCH v8 18/18] Documentation/kbuild: Add DWARF module versioning
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -79,131 +79,343 @@ Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
 	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When MODVERSIONS is enabled, allow selecting gendwarfksyms as the
-implementation, but default to genksyms.
+Add documentation for gendwarfksyms changes, and the kABI stability
+features that can be useful for distributions even though they're not
+used in mainline kernels.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 ---
- kernel/module/Kconfig  | 22 ++++++++++++++++++++++
- scripts/Makefile       |  2 +-
- scripts/Makefile.build | 35 +++++++++++++++++++++++++++++------
- 3 files changed, 52 insertions(+), 7 deletions(-)
+ Documentation/kbuild/gendwarfksyms.rst | 308 +++++++++++++++++++++++++
+ Documentation/kbuild/index.rst         |   1 +
+ 2 files changed, 309 insertions(+)
+ create mode 100644 Documentation/kbuild/gendwarfksyms.rst
 
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index 4637f063d0fc..d443fc504ffc 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -169,6 +169,22 @@ config MODVERSIONS
- 	  make them incompatible with the kernel you are running.  If
- 	  unsure, say N.
+diff --git a/Documentation/kbuild/gendwarfksyms.rst b/Documentation/kbuild/gendwarfksyms.rst
+new file mode 100644
+index 000000000000..e4beaae7e456
+--- /dev/null
++++ b/Documentation/kbuild/gendwarfksyms.rst
+@@ -0,0 +1,308 @@
++=======================
++DWARF module versioning
++=======================
++
++1. Introduction
++===============
++
++When CONFIG_MODVERSIONS is enabled, symbol versions for modules
++are typically calculated from preprocessed source code using the
++**genksyms** tool.  However, this is incompatible with languages such
++as Rust, where the source code has insufficient information about
++the resulting ABI. With CONFIG_GENDWARFKSYMS (and CONFIG_DEBUG_INFO)
++selected, **gendwarfksyms** is used instead to calculate symbol versions
++from the DWARF debugging information, which contains the necessary
++details about the final module ABI.
++
++1.1. Usage
++==========
++
++gendwarfksyms accepts a list of object files on the command line, and a
++list of symbol names (one per line) in standard input::
++
++        Usage: gendwarfksyms [options] elf-object-file ... < symbol-list
++
++        Options:
++          -d, --debug          Print debugging information
++              --dump-dies      Dump DWARF DIE contents
++              --dump-die-map   Print debugging information about die_map changes
++              --dump-types     Dump type strings
++              --dump-versions  Dump expanded type strings used for symbol versions
++          -s, --stable         Support kABI stability features
++          -T, --symtypes file  Write a symtypes file
++          -h, --help           Print this message
++
++
++2. Type information availability
++================================
++
++While symbols are typically exported in the same translation unit (TU)
++where they're defined, it's also perfectly fine for a TU to export
++external symbols. For example, this is done when calculating symbol
++versions for exports in stand-alone assembly code.
++
++To ensure the compiler emits the necessary DWARF type information in the
++TU where symbols are actually exported, gendwarfksyms adds a pointer
++to exported symbols in the `EXPORT_SYMBOL()` macro using the following
++macro::
++
++        #define __GENDWARFKSYMS_EXPORT(sym)                             \
++                static typeof(sym) *__gendwarfksyms_ptr_##sym __used    \
++                        __section(".discard.gendwarfksyms") = &sym;
++
++
++When a symbol pointer is found in DWARF, gendwarfksyms can use its
++type for calculating symbol versions even if the symbol is defined
++elsewhere. The name of the symbol pointer is expected to start with
++`__gendwarfksyms_ptr_`, followed by the name of the exported symbol.
++
++3. Symtypes output format
++=========================
++
++Similarly to genksyms, gendwarfksyms supports writing a symtypes
++file for each processed object that contain types for exported
++symbols and each referenced type that was used in calculating symbol
++versions. These files can be useful when trying to determine what
++exactly caused symbol versions to change between builds. To generate
++symtypes files during a kernel build, set `KBUILD_SYMTYPES=1`.
++
++Matching the existing format, the first column of each line contains
++either a type reference or a symbol name. Type references have a
++one-letter prefix followed by "#" and the name of the type. Four
++reference types are supported::
++
++        e#<type> = enum
++        s#<type> = struct
++        t#<type> = typedef
++        u#<type> = union
++
++Type names with spaces in them are wrapped in single quotes, e.g.::
++
++        s#'core::result::Result<u8, core::num::error::ParseIntError>'
++
++The rest of the line contains a type string. Unlike with genksyms that
++produces C-style type strings, gendwarfksyms uses the same simple parsed
++DWARF format produced by **--dump-dies**, but with type references
++instead of fully expanded strings.
++
++4. Maintaining a stable kABI
++============================
++
++Distribution maintainers often need the ability to make ABI compatible
++changes to kernel data structures due to LTS updates or backports. Using
++the traditional `#ifndef __GENKSYMS__` to hide these changes from symbol
++versioning won't work when processing object files. To support this
++use case, gendwarfksyms provides kABI stability features designed to
++hide changes that won't affect the ABI when calculating versions. These
++features are all gated behind the **--stable** command line flag and are
++not used in the mainline kernel. To use stable features during a kernel
++build, set `KBUILD_GENDWARFKSYMS_STABLE=1`.
++
++Examples for using these features are provided in the
++**scripts/gendwarfksyms/examples** directory, including helper macros
++for source code annotation. Note that as these features are only used to
++transform the inputs for symbol versioning, the user is responsible for
++ensuring that their changes actually won't break the ABI.
++
++4.1. kABI rules
++===============
++
++kABI rules allow distributions to fine-tune certain parts
++of gendwarfksyms output and thus control how symbol
++versions are calculated. These rules are defined in the
++`.discard.gendwarfksyms.kabi_rules` section of the object file and
++consist of simple null-terminated strings with the following structure::
++
++	version\0type\0target\0value\0
++
++This string sequence is repeated as many times as needed to express all
++the rules. The fields are as follows:
++
++- `version`: Ensures backward compatibility for future changes to the
++  structure. Currently expected to be "1".
++- `type`: Indicates the type of rule being applied.
++- `target`: Specifies the target of the rule, typically the fully
++  qualified name of the DWARF Debugging Information Entry (DIE).
++- `value`: Provides rule-specific data.
++
++The following helper macro, for example, can be used to specify rules
++in the source code::
++
++	#define __KABI_RULE(hint, target, value)                             \
++		static const char __PASTE(__gendwarfksyms_rule_,             \
++					  __COUNTER__)[] __used __aligned(1) \
++			__section(".discard.gendwarfksyms.kabi_rules") =     \
++				"1\0" #hint "\0" #target "\0" #value
++
++
++Currently, only the rules discussed in this section are supported, but
++the format is extensible enough to allow further rules to be added as
++need arises.
++
++4.1.1. Managing definition visibility
++=====================================
++
++A declaration can change into a full definition when additional includes
++are pulled into the translation unit. This changes the versions of any
++symbol that references the type even if the ABI remains unchanged. As
++it may not be possible to drop includes without breaking the build, the
++`declonly` rule can be used to specify a type as declaration-only, even
++if the debugging information contains the full definition.
++
++The rule fields are expected to be as follows:
++
++- `type`: "declonly"
++- `target`: The fully qualified name of the target data structure
++  (as shown in **--dump-dies** output).
++- `value`: This field is ignored.
++
++Using the `__KABI_RULE` macro, this rule can be defined as::
++
++	#define KABI_DECLONLY(fqn) __KABI_RULE(declonly, fqn, )
++
++Example usage::
++
++	struct s {
++		/* definition */
++	};
++
++	KABI_DECLONLY(s);
++
++4.1.2. Adding enumerators
++=========================
++
++For enums, all enumerators and their values are included in calculating
++symbol versions, which becomes a problem if we later need to add more
++enumerators without changing symbol versions. The `enumerator_ignore`
++rule allows us to hide named enumerators from the input.
++
++The rule fields are expected to be as follows:
++
++- `type`: "enumerator_ignore"
++- `target`: The fully qualified name of the target enum
++  (as shown in **--dump-dies** output) and the name of the
++  enumerator field separated by a space.
++- `value`: This field is ignored.
++
++Using the `__KABI_RULE` macro, this rule can be defined as::
++
++	#define KABI_ENUMERATOR_IGNORE(fqn, field) \
++		__KABI_RULE(enumerator_ignore, fqn field, )
++
++Example usage::
++
++	enum e {
++		A, B, C, D,
++	};
++
++	KABI_ENUMERATOR_IGNORE(e, B);
++	KABI_ENUMERATOR_IGNORE(e, C);
++
++If the enum additionally includes an end marker and new values must
++be added in the middle, we may need to use the old value for the last
++enumerator when calculating versions. The `enumerator_value` rule allows
++us to override the value of an enumerator for version calculation:
++
++- `type`: "enumerator_value"
++- `target`: The fully qualified name of the target enum
++  (as shown in **--dump-dies** output) and the name of the
++  enumerator field separated by a space.
++- `value`: Integer value used for the field.
++
++Using the `__KABI_RULE` macro, this rule can be defined as::
++
++	#define KABI_ENUMERATOR_VALUE(fqn, field, value) \
++		__KABI_RULE(enumerator_value, fqn field, value)
++
++Example usage::
++
++	enum e {
++		A, B, C, LAST,
++	};
++
++	KABI_ENUMERATOR_IGNORE(e, C);
++	KABI_ENUMERATOR_VALUE(e, LAST, 2);
++
++4.3. Adding structure members
++=============================
++
++Perhaps the most common ABI compatible change is adding a member to a
++kernel data structure. When changes to a structure are anticipated,
++distribution maintainers can pre-emptively reserve space in the
++structure and take it into use later without breaking the ABI. If
++changes are needed to data structures without reserved space, existing
++alignment holes can potentially be used instead. While kABI rules could
++be added for these type of changes, using unions is typically a more
++natural method. This section describes gendwarfksyms support for using
++reserved space in data structures and hiding members that don't change
++the ABI when calculating symbol versions.
++
++4.3.1. Reserving space and replacing members
++============================================
++
++Space is typically reserved for later use by appending integer types, or
++arrays, to the end of the data structure, but any type can be used. Each
++reserved member needs a unique name, but as the actual purpose is usually
++not known at the time the space is reserved, for convenience, names that
++start with `__kabi_` are left out when calculating symbol versions::
++
++        struct s {
++                long a;
++                long __kabi_reserved_0; /* reserved for future use */
++        };
++
++The reserved space can be taken into use by wrapping the member in a
++union, which includes the original type and the replacement member::
++
++        struct s {
++                long a;
++                union {
++                        long __kabi_reserved_0; /* original type */
++                        struct b b; /* replaced field */
++                };
++        };
++
++If the `__kabi_` naming scheme was used when reserving space, the name
++of the first member of the union must start with `__kabi_reserved`. This
++ensures the original type is used when calculating versions, but the name
++is again left out. The rest of the union is ignored.
++
++If we're replacing a member that doesn't follow this naming convention,
++we also need to preserve the original name to avoid changing versions,
++which we can do by changing the first union member's name to start with
++`__kabi_renamed` followed by the original name.
++
++The examples include `KABI_(RESERVE|USE|REPLACE)*` macros that help
++simplify the process and also ensure the replacement member is correctly
++aligned and its size won't exceed the reserved space.
++
++4.3.2. Hiding members
++=====================
++
++Predicting which structures will require changes during the support
++timeframe isn't always possible, in which case one might have to resort
++to placing new members into existing alignment holes::
++
++        struct s {
++                int a;
++                /* a 4-byte alignment hole */
++                unsigned long b;
++        };
++
++
++While this won't change the size of the data structure, one needs to
++be able to hide the added members from symbol versioning. Similarly
++to reserved fields, this can be accomplished by wrapping the added
++member to a union where one of the fields has a name starting with
++`__kabi_ignored`::
++
++        struct s {
++                int a;
++                union {
++                        char __kabi_ignored_0;
++                        int n;
++                };
++                unsigned long b;
++        };
++
++With **--stable**, both versions produce the same symbol version.
+diff --git a/Documentation/kbuild/index.rst b/Documentation/kbuild/index.rst
+index cee2f99f734b..e82af05cd652 100644
+--- a/Documentation/kbuild/index.rst
++++ b/Documentation/kbuild/index.rst
+@@ -21,6 +21,7 @@ Kernel Build System
+     reproducible-builds
+     gcc-plugins
+     llvm
++    gendwarfksyms
  
-+choice
-+	prompt "Module versioning implementation"
-+	depends on MODVERSIONS
-+	help
-+	  Select the tool used to calculate symbol versions for modules.
-+
-+	  If unsure, select GENKSYMS.
-+
-+config GENKSYMS
-+	bool "genksyms (from source code)"
-+	help
-+	  Calculate symbol versions from pre-processed source code using
-+	  genksyms.
-+
-+	  If unsure, say Y.
-+
- config GENDWARFKSYMS
- 	bool "gendwarfksyms (from debugging information)"
- 	depends on DEBUG_INFO
-@@ -176,6 +192,12 @@ config GENDWARFKSYMS
- 	depends on !DEBUG_INFO_REDUCED && !DEBUG_INFO_SPLIT
- 	# Requires ELF object files.
- 	depends on !LTO
-+	help
-+	  Calculate symbol versions from DWARF debugging information using
-+	  gendwarfksyms. Requires DEBUG_INFO to be enabled.
-+
-+	  If unsure, say N.
-+endchoice
+ .. only::  subproject and html
  
- config ASM_MODVERSIONS
- 	bool
-diff --git a/scripts/Makefile b/scripts/Makefile
-index d7fec46d38c0..8533f4498885 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -53,7 +53,7 @@ hostprogs += unifdef
- targets += module.lds
- 
- subdir-$(CONFIG_GCC_PLUGINS) += gcc-plugins
--subdir-$(CONFIG_MODVERSIONS) += genksyms
-+subdir-$(CONFIG_GENKSYMS) += genksyms
- subdir-$(CONFIG_GENDWARFKSYMS) += gendwarfksyms
- subdir-$(CONFIG_SECURITY_SELINUX) += selinux
- subdir-$(CONFIG_SECURITY_IPE) += ipe
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index c16e4cf54d77..81d9dacad03c 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -107,13 +107,24 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
- $(obj)/%.i: $(obj)/%.c FORCE
- 	$(call if_changed_dep,cpp_i_c)
- 
-+getexportsymbols = $(NM) $@ | sed -n 's/.* __export_symbol_\(.*\)/$(1)/p'
-+
-+gendwarfksyms = $(objtree)/scripts/gendwarfksyms/gendwarfksyms	\
-+	$(if $(KBUILD_SYMTYPES), --symtypes $(@:.o=.symtypes))	\
-+	$(if $(KBUILD_GENDWARFKSYMS_STABLE), --stable)
-+
- genksyms = $(objtree)/scripts/genksyms/genksyms		\
- 	$(if $(KBUILD_SYMTYPES), -T $(@:.o=.symtypes))	\
- 	$(if $(KBUILD_PRESERVE), -p)			\
- 	$(addprefix -r , $(wildcard $(@:.o=.symref)))
- 
- # These mirror gensymtypes_S and co below, keep them in synch.
-+ifdef CONFIG_GENDWARFKSYMS
-+cmd_gensymtypes_c = $(if $(skip_gendwarfksyms),,	\
-+	$(call getexportsymbols,\1) | $(gendwarfksyms) $@)
-+else
- cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
-+endif # CONFIG_GENDWARFKSYMS
- 
- # LLVM assembly
- # Generate .ll files from .c
-@@ -286,14 +297,26 @@ $(obj)/%.rs: $(obj)/%.rs.S FORCE
- # This is convoluted. The .S file must first be preprocessed to run guards and
- # expand names, then the resulting exports must be constructed into plain
- # EXPORT_SYMBOL(symbol); to build our dummy C file, and that gets preprocessed
--# to make the genksyms input.
-+# to make the genksyms input or compiled into an object for gendwarfksyms.
- #
- # These mirror gensymtypes_c and co above, keep them in synch.
--cmd_gensymtypes_S =                                                         \
--   { echo "\#include <linux/kernel.h>" ;                                    \
--     echo "\#include <asm/asm-prototypes.h>" ;                              \
--     $(NM) $@ | sed -n 's/.* __export_symbol_\(.*\)/EXPORT_SYMBOL(\1);/p' ; } | \
--    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
-+getasmexports =								\
-+   { echo "\#include <linux/kernel.h>" ;				\
-+     echo "\#include <linux/string.h>" ;				\
-+     echo "\#include <asm/asm-prototypes.h>" ;				\
-+     $(call getexportsymbols,EXPORT_SYMBOL(\1);) ; }
-+
-+ifdef CONFIG_GENDWARFKSYMS
-+cmd_gensymtypes_S =							\
-+	$(getasmexports) |						\
-+	$(CC) $(c_flags) -c -o $(@:.o=.gendwarfksyms.o) -xc -;		\
-+	$(call getexportsymbols,\1) |					\
-+	$(gendwarfksyms) $(@:.o=.gendwarfksyms.o)
-+else
-+cmd_gensymtypes_S =							\
-+	$(getasmexports) |						\
-+	$(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
-+endif # CONFIG_GENDWARFKSYMS
- 
- quiet_cmd_cpp_s_S = CPP $(quiet_modtag) $@
- cmd_cpp_s_S       = $(CPP) $(a_flags) -o $@ $<
 -- 
 2.47.1.613.gc27f4b7a9f-goog
 
