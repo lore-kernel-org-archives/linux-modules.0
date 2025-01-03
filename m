@@ -1,55 +1,55 @@
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DE61BD9D0
-	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 20:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A4F1C1F30
+	for <linux-modules@vger.kernel.org>; Fri,  3 Jan 2025 20:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735937167; cv=none; b=S8k9yj/B+c34lJikHhR40yyj9AI/EY3/5gYnOitDyHFkefIY7OVdCEe0uMkuonlneXhoXrHhOrFgIzKYqkGgRFdOYRflGfIpdR6o21++B/eqzbe1kUIjrE4K/dNvLu/n5xa3qkavVVBZSx0uutrc/53SwpyewcHnu53K7hrH5cM=
+	t=1735937170; cv=none; b=CZaNaXgg3zXQ2jaj8UgrQfy7xtq8WtfgHRpKzP7DmxTE5Is6HMQ++g6p4elbZyJE6Uaq6pPHMH826VLEFkQ0d5uRKFjeTHaHsHt95b4wHGF23PbFYhWseiwh2gsAFT0ix4JZ0F8AwZGUoBdf6+Mbq2Ywm8gz6A1uITTaV1VdHkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735937167; c=relaxed/simple;
-	bh=2I6+5mRVEzedj/9b4YFKht/No6clzeKuLkOFB8vBvoE=;
+	s=arc-20240116; t=1735937170; c=relaxed/simple;
+	bh=7W2aGp05kJKnJUD6bZE4MziFgiLMkwgrNufoHK2Xnt0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=J60g/InvKZGwLE3D3ZJrYIJRI4bk1Se1hgYdAnVeUu7CUtbQD0kWfJMNc75B1w8R5Zu9WRdTI8tNjQwb8lt37VzcfLn2QHr5DEslxJSu04o/+KD80RHmRx4CZYrluu860yAcQVHYy5FoUheWhrC3ujH1Ch8b/3SDmIGqY2O4VIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I7elvJyu; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=D2+3kRgIOwyG+vCLIKyHfA8N6resKlkxhWGuGWGEUAjKL/hrt/MSqjCUc677hKPM9oqNMjX9fsmK2JLgt3gRGl5cO0mkAnwXbc7lFb5TBTqIyg8exZkuofOCGkX/Q6hPnZBu1/saEGg2if60pAVpI/bpM7c+zqCMiInXTWzYHbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xmywo7QT; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I7elvJyu"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2ee6dccd3c9so17168157a91.3
-        for <linux-modules@vger.kernel.org>; Fri, 03 Jan 2025 12:45:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xmywo7QT"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2eedd15c29eso16908967a91.3
+        for <linux-modules@vger.kernel.org>; Fri, 03 Jan 2025 12:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1735937153; x=1736541953; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1735937156; x=1736541956; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNqYHIW71u+6X/f8JmEopzkF7E1emF5oKVf/aI2D9uQ=;
-        b=I7elvJyuwJ3f0/aGZiYx2Hmux+HjrJ0hyGSK5bicdju3EQHQTl/TAJwy3Gph541JOE
-         k+KIP7LajvnhIHDo9ojXlNyhbzb2rNABLCzOk/6ltSBFzgaZDElOy0u2fO9v7Zwo2UcJ
-         RrZ3jJkblUSYC8WYXEmrqoOcqeiW6gO6lZeK5q2btZw/F63IbOzItWCU7QzgjrRE/Dbx
-         vXfkocTfHiJnmUk8e007E5834U/aBNKQ6wwZsLhOsehvy5XVvq7/xEyfxK8JUA0MBnEF
-         AtQaE5L+T47W5mr8jAQ6M78gHRjipQs+eZtG4Z5YbmZ7oMNm4kK3U+g1XYkTMyGWQ3t2
-         t9GQ==
+        bh=tUuRzCa6rGp0zLolmMgSi+Fq+2YRWA9tSP3uXfn3qjQ=;
+        b=xmywo7QTdNoFYHRnVIgDKYY0jsWoLHkzDUWNRzy8QIQKYVzxF53w3+b/IPKqubpdMc
+         CTGh+BWN8enVlrq3BHdd+8QrTXarnmJeNaEJupJGR6AyZRE2a4zn3vbU7lqKtozVv2yg
+         e6gpOHUlP/UpmdQJo3GCaDtDPwkOiNyYVkrbpYZnEPf1vJFMe2qq75AA8ybnITEnTy/+
+         ISzNC5awprWPQpMmEUndCxTAxxIBTj59Gpse9sdrtCpT0yXD0GzwD5XivEkb/2oT3JJq
+         ZpQod7jOWKRQgxiatPnXUPXZ/LRN15J7Um20pgw0LRxNmvlxFv95gjgFXjKM/V3D14Ki
+         G8lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735937153; x=1736541953;
+        d=1e100.net; s=20230601; t=1735937156; x=1736541956;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNqYHIW71u+6X/f8JmEopzkF7E1emF5oKVf/aI2D9uQ=;
-        b=m2IBpwbhy8bUb/s4GiX8Qnt0tEHL8Hs7dHY7+KiwQUToqSzMI0LVYOd217OxW4gKoa
-         E40/YLavXYcPh+7joCxidYBT6yzTCH3HTEqsomGNnrngOUu618z4fP5imQRSxNElls2T
-         srGoFc0sIH/aE29NV2StnUJmUwiKIXxsm+oLHxI7IjGg3v4aBKAHE73FBzChJvFiY41+
-         tZ+hdfgLv4Pq6F+/Pl7YI+QU5XIl0TxCr5bs8J8EzFoo0+se/XxdmUs/eiWDfO3ZVaAc
-         TTIPeDMx4+lz3L7e0R0cnk3MlEWPYu8uAjbgDJNtcI/BdABb6y9/ARvoPwBglbhP0FgM
-         /BFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxehIC6l604Q94M5jdpeFhr8nkUzFO6xULI26rXeQUz9ZVeIef9QRY4nFv709s/LDm3AgZqb/swMt+8lOC@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ2BHblFCPW237uBV2blredNjiFbSPDiax6DGRw9UrUR6rkMl9
-	yOuXv8hD23BNFKLquwA/UVXAXR0U/0aqQstSAN4MLvKW6Q0QkzTTR4X7MqhPXmrXN5Onak29jZ0
-	jjfmL96N7POVn/1w28bQWFgSwJQ==
-X-Google-Smtp-Source: AGHT+IGmLxBetaEDDRNB9ZIAmXbfVRra/1Gai3e1DX73ekAIbmb/DWcI6WN3SQ5GB/LUrutwOvxpOvkIjkr2Sae+Iv8=
-X-Received: from pfbct11.prod.google.com ([2002:a05:6a00:f8b:b0:725:ceac:b484])
+        bh=tUuRzCa6rGp0zLolmMgSi+Fq+2YRWA9tSP3uXfn3qjQ=;
+        b=HWXg9SApb8IAoheLuvepMhJNJV/ltnBkAz7ODAsUvpQ45Bgq14UFVWH4hIJJTtOQEP
+         6ANeTNlyFn1RaQxSNgMjlEs4uydzZ5rOds+20KktvYoyDClCQ0NJT/P++DGAkmfWZS43
+         l6AtTZQzTsNoqqzNnHHM2jLRwuSLa2RaPrK0RgmnOVUs5hkHWx7LrCRqMgHV2lsleMBj
+         VEvgCxjw4hn+7yR9KuODrmu/4j4uU6XjDZblswLxUiCz26WRV57fwMrumoEWC8mH6piv
+         uTpSLxzl+8jax7M5kdIL7yVPeKLhZD/nexpxAdXitU5RWL70Azd7Tjta8tOnXlCMGH2n
+         pqWw==
+X-Forwarded-Encrypted: i=1; AJvYcCW/qOMsNy2MbAuHhQcCDL24muh7AMMzU0KUWapWvi1eOPq3CRxOIFhEuPReZOR8O66Pl08Pz2wXIzl0CZQS@vger.kernel.org
+X-Gm-Message-State: AOJu0YykE9LwsInMmuZby/N4px5LpOkPGfx/gA3AMebB+ZMaj2sq1S+z
+	uBmsD22OoJ35eyHtaHRWQIXlIIwWNYSACqjbceeQFTBkrl+Pm2tFJwbKVSlm/NoHoDvzPCZl+Xf
+	0zQUk9SfAi3OBOb1T5Wp/lt/bDg==
+X-Google-Smtp-Source: AGHT+IHaPBbXzp7/Tc/17gnqjXkr6Ig3DXvqWIPfeeBQqypelDTrEchGbceSz/4YRX9vQre2oMldHg/5d++6Q4ot2ec=
+X-Received: from pjbqd7.prod.google.com ([2002:a17:90b:3cc7:b0:2e5:5ffc:1c36])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:35ca:b0:724:f86e:e3d9 with SMTP id d2e1a72fcca58-72abdecbdb4mr68020791b3a.14.1735937153616;
- Fri, 03 Jan 2025 12:45:53 -0800 (PST)
-Date: Fri,  3 Jan 2025 20:45:34 +0000
+ 2002:a17:90b:1b47:b0:2ee:bbd8:2b9d with SMTP id 98e67ed59e1d1-2f452eeb6c0mr65461731a91.34.1735937156279;
+ Fri, 03 Jan 2025 12:45:56 -0800 (PST)
+Date: Fri,  3 Jan 2025 20:45:36 +0000
 In-Reply-To: <20250103204521.1885406-20-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -59,14 +59,14 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250103204521.1885406-20-samitolvanen@google.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12907; i=samitolvanen@google.com;
- h=from:subject; bh=2I6+5mRVEzedj/9b4YFKht/No6clzeKuLkOFB8vBvoE=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDOkVPulyH688n+a2UefoevtrQue+NujriIgf+tu+aW5Mz
- EyL0+JKHaUsDGIcDLJiiiwtX1dv3f3dKfXV5yIJmDmsTCBDGLg4BWAik5wY/ul/uDb3zJf3C/ZK
- GC/mvVv1flNhZ53+k5M+drGvfQpkbrow/OGrrX9TvJHH+rTpzjWeVwSudcw54uOkMXNa58b+1FL jQ2wA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=22891; i=samitolvanen@google.com;
+ h=from:subject; bh=7W2aGp05kJKnJUD6bZE4MziFgiLMkwgrNufoHK2Xnt0=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDOkVPhmhRbKzbJLnduzYorlGb+Imtqfz3V+FLqsyeKzWo
+ xE6SflrRykLgxgHg6yYIkvL19Vbd393Sn31uUgCZg4rE8gQBi5OAZjI9r+MDGsOn/m579e6bxb6
+ bDPL/jExlgjVM023bluy8PjyBPafU74zMizVavw65733g2h5Ty3/n9mcmTdSrYN+JlzuWhNuP4U niQMA
 X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-Message-ID: <20250103204521.1885406-32-samitolvanen@google.com>
-Subject: [PATCH v8 12/18] gendwarfksyms: Add symbol versioning
+Message-ID: <20250103204521.1885406-34-samitolvanen@google.com>
+Subject: [PATCH v8 14/18] gendwarfksyms: Add support for reserved and ignored fields
 From: Sami Tolvanen <samitolvanen@google.com>
 To: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Miguel Ojeda <ojeda@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -79,438 +79,741 @@ Cc: Matthew Maurer <mmaurer@google.com>, Alex Gaynor <alex.gaynor@gmail.com>,
 	rust-for-linux@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Calculate symbol versions from the fully expanded type strings in
-type_map, and output the versions in a genksyms-compatible format.
+Distributions that want to maintain a stable kABI need the ability
+to make ABI compatible changes to kernel data structures without
+affecting symbol versions, either because of LTS updates or backports.
+
+With genksyms, developers would typically hide these changes from
+version calculation with #ifndef __GENKSYMS__, which would result
+in the symbol version not changing even though the actual type has
+changed.  When we process precompiled object files, this isn't an
+option.
+
+Change union processing to recognize field name prefixes that allow
+the user to ignore the union completely during symbol versioning with
+a __kabi_ignored prefix in a field name, or to replace the type of a
+placeholder field using a __kabi_reserved field name prefix.
+
+For example, assume we want to add a new field to an existing
+alignment hole in a data structure, and ignore the new field when
+calculating symbol versions:
+
+  struct struct1 {
+    int a;
+    /* a 4-byte alignment hole */
+    unsigned long b;
+  };
+
+To add `int n` to the alignment hole, we can add a union that includes
+a __kabi_ignored field that causes gendwarfksyms to ignore the entire
+union:
+
+  struct struct1 {
+    int a;
+    union {
+      char __kabi_ignored_0;
+      int n;
+    };
+    unsigned long b;
+  };
+
+With --stable, both structs produce the same symbol version.
+
+Alternatively, when a distribution expects future modification to a
+data structure, they can explicitly add reserved fields:
+
+  struct struct2 {
+    long a;
+    long __kabi_reserved_0; /* reserved for future use */
+  };
+
+To take the field into use, we can again replace it with a union, with
+one of the fields keeping the __kabi_reserved name prefix to indicate
+the original type:
+
+  struct struct2 {
+    long a;
+    union {
+      long __kabi_reserved_0;
+      struct {
+          int b;
+          int v;
+      };
+    };
+
+Here gendwarfksyms --stable replaces the union with the type of the
+placeholder field when calculating versions.
 
 Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- scripts/gendwarfksyms/Makefile        |   2 +-
- scripts/gendwarfksyms/dwarf.c         |  25 +++++-
- scripts/gendwarfksyms/gendwarfksyms.c |  10 ++-
- scripts/gendwarfksyms/gendwarfksyms.h |  13 ++-
- scripts/gendwarfksyms/symbols.c       |  53 +++++++++++
- scripts/gendwarfksyms/types.c         | 122 +++++++++++++++++++++++++-
- 6 files changed, 216 insertions(+), 9 deletions(-)
+ scripts/gendwarfksyms/dwarf.c            | 248 ++++++++++++++++++++++-
+ scripts/gendwarfksyms/examples/kabi.h    |  87 ++++++++
+ scripts/gendwarfksyms/examples/kabi_ex.c |  16 ++
+ scripts/gendwarfksyms/examples/kabi_ex.h | 199 ++++++++++++++++++
+ scripts/gendwarfksyms/gendwarfksyms.h    |   9 +
+ 5 files changed, 558 insertions(+), 1 deletion(-)
 
-diff --git a/scripts/gendwarfksyms/Makefile b/scripts/gendwarfksyms/Makefile
-index 6540282dc746..e889b958957b 100644
---- a/scripts/gendwarfksyms/Makefile
-+++ b/scripts/gendwarfksyms/Makefile
-@@ -8,4 +8,4 @@ gendwarfksyms-objs += dwarf.o
- gendwarfksyms-objs += symbols.o
- gendwarfksyms-objs += types.o
- 
--HOSTLDLIBS_gendwarfksyms := -ldw -lelf
-+HOSTLDLIBS_gendwarfksyms := -ldw -lelf -lz
 diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-index a9966a23167a..bdf899d60707 100644
+index 17f7e6b9a7ff..746a89d9e3d4 100644
 --- a/scripts/gendwarfksyms/dwarf.c
 +++ b/scripts/gendwarfksyms/dwarf.c
-@@ -740,12 +740,33 @@ static int process_type(struct state *state, struct die *parent, Dwarf_Die *die)
- /*
-  * Exported symbol processing
-  */
-+static struct die *get_symbol_cache(struct state *state, Dwarf_Die *die)
-+{
-+	struct die *cache;
-+
-+	cache = die_map_get(die, DIE_SYMBOL);
-+
-+	if (cache->state != DIE_INCOMPLETE)
-+		return NULL; /* We already processed a symbol for this DIE */
-+
-+	cache->tag = dwarf_tag(die);
-+	return cache;
-+}
-+
- static void process_symbol(struct state *state, Dwarf_Die *die,
- 			   die_callback_t process_func)
- {
-+	struct die *cache;
-+
-+	symbol_set_die(state->sym, die);
-+
-+	cache = get_symbol_cache(state, die);
-+	if (!cache)
-+		return;
-+
- 	debug("%s", state->sym->name);
--	check(process_func(state, NULL, die));
--	state->sym->state = SYMBOL_MAPPED;
-+	check(process_func(state, cache, die));
-+	cache->state = DIE_SYMBOL;
- 	if (dump_dies)
- 		fputs("\n", stderr);
- }
-diff --git a/scripts/gendwarfksyms/gendwarfksyms.c b/scripts/gendwarfksyms/gendwarfksyms.c
-index 1d30f42cbd14..b0e13c37c6c2 100644
---- a/scripts/gendwarfksyms/gendwarfksyms.c
-+++ b/scripts/gendwarfksyms/gendwarfksyms.c
-@@ -23,6 +23,8 @@ int dump_dies;
- int dump_die_map;
- /* Print out type strings (i.e. type_map) */
- int dump_types;
-+/* Print out expanded type strings used for symbol versions */
-+int dump_versions;
- /* Write a symtypes file */
- int symtypes;
- static const char *symtypes_file;
-@@ -35,6 +37,7 @@ static void usage(void)
- 	      "      --dump-dies      Dump DWARF DIE contents\n"
- 	      "      --dump-die-map   Print debugging information about die_map changes\n"
- 	      "      --dump-types     Dump type strings\n"
-+	      "      --dump-versions  Dump expanded type strings used for symbol versions\n"
- 	      "  -T, --symtypes file  Write a symtypes file\n"
- 	      "  -h, --help           Print this message\n"
- 	      "\n",
-@@ -69,9 +72,10 @@ static int process_module(Dwfl_Module *mod, void **userdata, const char *name,
- 	} while (cu);
- 
- 	/*
--	 * Use die_map to expand type strings and write them to `symfile`.
-+	 * Use die_map to expand type strings, write them to `symfile`, and
-+	 * calculate symbol versions.
- 	 */
--	generate_symtypes(symfile);
-+	generate_symtypes_and_versions(symfile);
- 	die_map_free();
- 
- 	return DWARF_CB_OK;
-@@ -93,6 +97,7 @@ int main(int argc, char **argv)
- 		{ "dump-dies", 0, &dump_dies, 1 },
- 		{ "dump-die-map", 0, &dump_die_map, 1 },
- 		{ "dump-types", 0, &dump_types, 1 },
-+		{ "dump-versions", 0, &dump_versions, 1 },
- 		{ "symtypes", 1, NULL, 'T' },
- 		{ "help", 0, NULL, 'h' },
- 		{ 0, 0, NULL, 0 }
-@@ -166,6 +171,7 @@ int main(int argc, char **argv)
- 	if (symfile)
- 		check(fclose(symfile));
- 
-+	symbol_print_versions();
- 	symbol_free();
- 
- 	return 0;
-diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksyms/gendwarfksyms.h
-index 98d5b2315f21..203534abcd35 100644
---- a/scripts/gendwarfksyms/gendwarfksyms.h
-+++ b/scripts/gendwarfksyms/gendwarfksyms.h
-@@ -23,6 +23,7 @@ extern int debug;
- extern int dump_dies;
- extern int dump_die_map;
- extern int dump_types;
-+extern int dump_versions;
- extern int symtypes;
- 
- /*
-@@ -95,6 +96,7 @@ static inline unsigned int addr_hash(uintptr_t addr)
- enum symbol_state {
- 	SYMBOL_UNPROCESSED,
- 	SYMBOL_MAPPED,
-+	SYMBOL_PROCESSED
- };
- 
- struct symbol_addr {
-@@ -109,6 +111,7 @@ struct symbol {
- 	struct hlist_node name_hash;
- 	enum symbol_state state;
- 	uintptr_t die_addr;
-+	unsigned long crc;
- };
- 
- typedef void (*symbol_callback_t)(struct symbol *, void *arg);
-@@ -116,6 +119,10 @@ typedef void (*symbol_callback_t)(struct symbol *, void *arg);
- void symbol_read_exports(FILE *file);
- void symbol_read_symtab(int fd);
- struct symbol *symbol_get(const char *name);
-+void symbol_set_die(struct symbol *sym, Dwarf_Die *die);
-+void symbol_set_crc(struct symbol *sym, unsigned long crc);
-+void symbol_for_each(symbol_callback_t func, void *arg);
-+void symbol_print_versions(void);
- void symbol_free(void);
- 
- /*
-@@ -126,7 +133,8 @@ enum die_state {
- 	DIE_INCOMPLETE,
- 	DIE_UNEXPANDED,
- 	DIE_COMPLETE,
--	DIE_LAST = DIE_COMPLETE
-+	DIE_SYMBOL,
-+	DIE_LAST = DIE_SYMBOL
- };
- 
- enum die_fragment_type {
-@@ -156,6 +164,7 @@ static inline const char *die_state_name(enum die_state state)
- 	CASE_CONST_TO_STR(DIE_INCOMPLETE)
- 	CASE_CONST_TO_STR(DIE_UNEXPANDED)
- 	CASE_CONST_TO_STR(DIE_COMPLETE)
-+	CASE_CONST_TO_STR(DIE_SYMBOL)
- 	}
- 
- 	error("unexpected die_state: %d", state);
-@@ -252,6 +261,6 @@ void process_cu(Dwarf_Die *cudie);
-  * types.c
+@@ -3,10 +3,33 @@
+  * Copyright (C) 2024 Google LLC
   */
  
--void generate_symtypes(FILE *file);
-+void generate_symtypes_and_versions(FILE *file);
- 
- #endif /* __GENDWARFKSYMS_H */
-diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbols.c
-index 0d2ce7284a53..4c499ba6c86d 100644
---- a/scripts/gendwarfksyms/symbols.c
-+++ b/scripts/gendwarfksyms/symbols.c
-@@ -66,6 +66,36 @@ static unsigned int for_each(const char *name, symbol_callback_t func,
- 	return 0;
- }
- 
-+static void set_crc(struct symbol *sym, void *data)
-+{
-+	unsigned long *crc = data;
-+
-+	if (sym->state == SYMBOL_PROCESSED && sym->crc != *crc)
-+		warn("overriding version for symbol %s (crc %lx vs. %lx)",
-+		     sym->name, sym->crc, *crc);
-+
-+	sym->state = SYMBOL_PROCESSED;
-+	sym->crc = *crc;
-+}
-+
-+void symbol_set_crc(struct symbol *sym, unsigned long crc)
-+{
-+	if (for_each(sym->name, set_crc, &crc) == 0)
-+		error("no matching symbols: '%s'", sym->name);
-+}
-+
-+static void set_die(struct symbol *sym, void *data)
-+{
-+	sym->die_addr = (uintptr_t)((Dwarf_Die *)data)->addr;
-+	sym->state = SYMBOL_MAPPED;
-+}
-+
-+void symbol_set_die(struct symbol *sym, Dwarf_Die *die)
-+{
-+	if (for_each(sym->name, set_die, die) == 0)
-+		error("no matching symbols: '%s'", sym->name);
-+}
-+
- static bool is_exported(const char *name)
- {
- 	return for_each(name, NULL, NULL) > 0;
-@@ -120,6 +150,16 @@ struct symbol *symbol_get(const char *name)
- 	return sym;
- }
- 
-+void symbol_for_each(symbol_callback_t func, void *arg)
-+{
-+	struct hlist_node *tmp;
-+	struct symbol *sym;
-+
-+	hash_for_each_safe(symbol_names, sym, tmp, name_hash) {
-+		func(sym, arg);
-+	}
-+}
-+
- typedef void (*elf_symbol_callback_t)(const char *name, GElf_Sym *sym,
- 				      Elf32_Word xndx, void *arg);
- 
-@@ -246,6 +286,19 @@ void symbol_read_symtab(int fd)
- 	elf_for_each_global(fd, elf_set_symbol_addr, NULL);
- }
- 
-+void symbol_print_versions(void)
-+{
-+	struct hlist_node *tmp;
-+	struct symbol *sym;
-+
-+	hash_for_each_safe(symbol_names, sym, tmp, name_hash) {
-+		if (sym->state != SYMBOL_PROCESSED)
-+			warn("no information for symbol %s", sym->name);
-+
-+		printf("#SYMVER %s 0x%08lx\n", sym->name, sym->crc);
-+	}
-+}
-+
- void symbol_free(void)
- {
- 	struct hlist_node *tmp;
-diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksyms/types.c
-index 21d7a34228eb..6c03265f4d10 100644
---- a/scripts/gendwarfksyms/types.c
-+++ b/scripts/gendwarfksyms/types.c
-@@ -6,6 +6,7 @@
- #define _GNU_SOURCE
++#include <assert.h>
  #include <inttypes.h>
- #include <stdio.h>
-+#include <zlib.h>
- 
+ #include <stdarg.h>
  #include "gendwarfksyms.h"
  
-@@ -178,6 +179,33 @@ static void type_map_free(void)
- 	hash_init(type_map);
- }
- 
-+/*
-+ * CRC for a type, with an optional fully expanded type string for
-+ * debugging.
-+ */
-+struct version {
-+	struct type_expansion type;
-+	unsigned long crc;
++/* See get_union_kabi_status */
++#define KABI_PREFIX "__kabi_"
++#define KABI_PREFIX_LEN (sizeof(KABI_PREFIX) - 1)
++#define KABI_RESERVED_PREFIX "reserved"
++#define KABI_RESERVED_PREFIX_LEN (sizeof(KABI_RESERVED_PREFIX) - 1)
++#define KABI_RENAMED_PREFIX "renamed"
++#define KABI_RENAMED_PREFIX_LEN (sizeof(KABI_RENAMED_PREFIX) - 1)
++#define KABI_IGNORED_PREFIX "ignored"
++#define KABI_IGNORED_PREFIX_LEN (sizeof(KABI_IGNORED_PREFIX) - 1)
++
++static inline bool is_kabi_prefix(const char *name)
++{
++	return name && !strncmp(name, KABI_PREFIX, KABI_PREFIX_LEN);
++}
++
++enum kabi_status {
++	/* >0 to stop DIE processing */
++	KABI_NORMAL = 1,
++	KABI_RESERVED,
++	KABI_IGNORED,
 +};
 +
-+static void version_init(struct version *version)
-+{
-+	version->crc = crc32(0, NULL, 0);
-+	type_expansion_init(&version->type);
-+}
-+
-+static void version_free(struct version *version)
-+{
-+	type_expansion_free(&version->type);
-+}
-+
-+static void version_add(struct version *version, const char *s)
-+{
-+	version->crc = crc32(version->crc, (void *)s, strlen(s));
-+	if (dump_versions)
-+		type_expansion_append(&version->type, s, NULL);
-+}
-+
- /*
-  * Type reference format: <prefix>#<name>, where prefix:
-  * 	s -> structure
-@@ -187,6 +215,12 @@ static void type_map_free(void)
-  *
-  * Names with spaces are additionally wrapped in single quotes.
-  */
-+static inline bool is_type_prefix(const char *s)
-+{
-+	return (s[0] == 's' || s[0] == 'u' || s[0] == 'e' || s[0] == 't') &&
-+	       s[1] == '#';
-+}
-+
- static char get_type_prefix(int tag)
- {
- 	switch (tag) {
-@@ -214,6 +248,8 @@ static char *get_type_name(struct die *cache)
- 		warn("found incomplete cache entry: %p", cache);
- 		return NULL;
- 	}
-+	if (cache->state == DIE_SYMBOL)
-+		return NULL;
- 	if (!cache->fqn || !*cache->fqn)
- 		return NULL;
+ static bool do_linebreak;
+ static int indentation_level;
  
-@@ -231,6 +267,39 @@ static char *get_type_name(struct die *cache)
- 	return name;
+@@ -353,13 +376,23 @@ static void __process_list_type(struct state *state, struct die *cache,
+ {
+ 	const char *name = get_name_attr(die);
+ 
++	if (stable) {
++		if (is_kabi_prefix(name))
++			name = NULL;
++		state->kabi.orig_name = NULL;
++	}
++
+ 	process_list_comma(state, cache);
+ 	process(cache, type);
+ 	process_type_attr(state, cache, die);
++
++	if (stable && state->kabi.orig_name)
++		name = state->kabi.orig_name;
+ 	if (name) {
+ 		process(cache, " ");
+ 		process(cache, name);
+ 	}
++
+ 	process_accessibility_attr(cache, die);
+ 	process_bit_size_attr(cache, die);
+ 	process_data_bit_offset_attr(cache, die);
+@@ -486,11 +519,208 @@ static void process_variant_part_type(struct state *state, struct die *cache,
+ 	process(cache, "}");
  }
  
-+static void __calculate_version(struct version *version, struct list_head *list)
++static int get_kabi_status(Dwarf_Die *die, const char **suffix)
 +{
-+	struct type_list_entry *entry;
-+	struct type_expansion *e;
++	const char *name = get_name_attr(die);
 +
-+	/* Calculate a CRC over an expanded type string */
-+	list_for_each_entry(entry, list, list) {
-+		if (is_type_prefix(entry->str)) {
-+			check(type_map_get(entry->str, &e));
++	if (suffix)
++		*suffix = NULL;
 +
-+			/*
-+			 * It's sufficient to expand each type reference just
-+			 * once to detect changes.
-+			 */
-+			if (cache_was_expanded(&expansion_cache, e)) {
-+				version_add(version, entry->str);
-+			} else {
-+				cache_mark_expanded(&expansion_cache, e);
-+				__calculate_version(version, &e->expanded);
++	if (is_kabi_prefix(name)) {
++		name += KABI_PREFIX_LEN;
++
++		if (!strncmp(name, KABI_RESERVED_PREFIX,
++			     KABI_RESERVED_PREFIX_LEN))
++			return KABI_RESERVED;
++		if (!strncmp(name, KABI_IGNORED_PREFIX,
++			     KABI_IGNORED_PREFIX_LEN))
++			return KABI_IGNORED;
++
++		if (!strncmp(name, KABI_RENAMED_PREFIX,
++			     KABI_RENAMED_PREFIX_LEN)) {
++			if (suffix) {
++				name += KABI_RENAMED_PREFIX_LEN;
++				*suffix = name;
 +			}
-+		} else {
-+			version_add(version, entry->str);
++			return KABI_RESERVED;
 +		}
 +	}
++
++	return KABI_NORMAL;
 +}
 +
-+static void calculate_version(struct version *version, struct list_head *list)
++static int check_struct_member_kabi_status(struct state *state,
++					   struct die *__unused, Dwarf_Die *die)
 +{
-+	version_init(version);
-+	__calculate_version(version, list);
-+	cache_free(&expansion_cache);
-+}
++	int res;
 +
- static void __type_expand(struct die *cache, struct type_expansion *type,
- 			  bool recursive);
- 
-@@ -337,7 +406,49 @@ static void expand_type(struct die *cache, void *arg)
- 	free(name);
- }
- 
--void generate_symtypes(FILE *file)
-+static void expand_symbol(struct symbol *sym, void *arg)
-+{
-+	struct type_expansion type;
-+	struct version version;
-+	struct die *cache;
++	assert(dwarf_tag(die) == DW_TAG_member_type);
 +
 +	/*
-+	 * No need to expand again unless we want a symtypes file entry
-+	 * for the symbol. Note that this means `sym` has the same address
-+	 * as another symbol that was already processed.
++	 * If the union member is a struct, expect the __kabi field to
++	 * be the first member of the structure, i.e..:
++	 *
++	 * union {
++	 * 	type new_member;
++	 * 	struct {
++	 * 		type __kabi_field;
++	 * 	}
++	 * };
 +	 */
-+	if (!symtypes && sym->state == SYMBOL_PROCESSED)
++	res = get_kabi_status(die, &state->kabi.orig_name);
++
++	if (res == KABI_RESERVED &&
++	    !get_ref_die_attr(die, DW_AT_type, &state->kabi.placeholder))
++		error("structure member missing a type?");
++
++	return res;
++}
++
++static int check_union_member_kabi_status(struct state *state,
++					  struct die *__unused, Dwarf_Die *die)
++{
++	Dwarf_Die type;
++	int res;
++
++	assert(dwarf_tag(die) == DW_TAG_member_type);
++
++	if (!get_ref_die_attr(die, DW_AT_type, &type))
++		error("union member missing a type?");
++
++	/*
++	 * We expect a union with two members. Check if either of them
++	 * has a __kabi name prefix, i.e.:
++	 *
++	 * union {
++	 * 	...
++	 * 	type memberN; // <- type, N = {0,1}
++	 *	...
++	 * };
++	 *
++	 * The member can also be a structure type, in which case we'll
++	 * check the first structure member.
++	 *
++	 * In any case, stop processing after we've seen two members.
++	 */
++	res = get_kabi_status(die, &state->kabi.orig_name);
++
++	if (res == KABI_RESERVED)
++		state->kabi.placeholder = type;
++	if (res != KABI_NORMAL)
++		return res;
++
++	if (dwarf_tag(&type) == DW_TAG_structure_type)
++		res = checkp(process_die_container(
++			state, NULL, &type, check_struct_member_kabi_status,
++			match_member_type));
++
++	if (res <= KABI_NORMAL && ++state->kabi.members < 2)
++		return 0; /* Continue */
++
++	return res;
++}
++
++static int get_union_kabi_status(Dwarf_Die *die, Dwarf_Die *placeholder,
++				 const char **orig_name)
++{
++	struct state state;
++	int res;
++
++	if (!stable)
++		return KABI_NORMAL;
++
++	/*
++	 * To maintain a stable kABI, distributions may choose to reserve
++	 * space in structs for later use by adding placeholder members,
++	 * for example:
++	 *
++	 * struct s {
++	 * 	u32 a;
++	 *	// an 8-byte placeholder for future use
++	 * 	u64 __kabi_reserved_0;
++	 * };
++	 *
++	 * When the reserved member is taken into use, the type change
++	 * would normally cause the symbol version to change as well, but
++	 * if the replacement uses the following convention, gendwarfksyms
++	 * continues to use the placeholder type for versioning instead,
++	 * thus maintaining the same symbol version:
++	 *
++	 * struct s {
++	 * 	u32 a;
++	 *	union {
++	 * 		// placeholder replaced with a new member `b`
++	 * 		struct t b;
++	 * 		struct {
++	 * 			// the placeholder type that is still
++	 *			// used for versioning
++	 * 			u64 __kabi_reserved_0;
++	 * 		};
++	 * 	};
++	 * };
++	 *
++	 * I.e., as long as the replaced member is in a union, and the
++	 * placeholder has a __kabi_reserved name prefix, we'll continue
++	 * to use the placeholder type (here u64) for version calculation
++	 * instead of the union type.
++	 *
++	 * It's also possible to ignore new members from versioning if
++	 * they've been added to alignment holes, for example, by
++	 * including them in a union with another member that uses the
++	 * __kabi_ignored name prefix:
++	 *
++	 * struct s {
++	 * 	u32 a;
++	 *	// an alignment hole is used to add `n`
++	 * 	union {
++	 * 		u32 n;
++	 *		// hide the entire union member from versioning
++	 * 		u8 __kabi_ignored_0;
++	 * 	};
++	 * 	u64 b;
++	 * };
++	 *
++	 * Note that the user of this feature is responsible for ensuring
++	 * that the structure actually remains ABI compatible.
++	 */
++	memset(&state.kabi, 0, sizeof(struct kabi_state));
++
++	res = checkp(process_die_container(&state, NULL, die,
++					   check_union_member_kabi_status,
++					   match_member_type));
++
++	if (res == KABI_RESERVED) {
++		if (placeholder)
++			*placeholder = state.kabi.placeholder;
++		if (orig_name)
++			*orig_name = state.kabi.orig_name;
++	}
++
++	return res;
++}
++
++static bool is_kabi_ignored(Dwarf_Die *die)
++{
++	Dwarf_Die type;
++
++	if (!stable)
++		return false;
++
++	if (!get_ref_die_attr(die, DW_AT_type, &type))
++		error("member missing a type?");
++
++	return dwarf_tag(&type) == DW_TAG_union_type &&
++	       checkp(get_union_kabi_status(&type, NULL, NULL)) == KABI_IGNORED;
++}
++
+ static int ___process_structure_type(struct state *state, struct die *cache,
+ 				     Dwarf_Die *die)
+ {
+ 	switch (dwarf_tag(die)) {
+ 	case DW_TAG_member:
++		if (is_kabi_ignored(die))
++			return 0;
++		return check(process_type(state, cache, die));
+ 	case DW_TAG_variant_part:
+ 		return check(process_type(state, cache, die));
+ 	case DW_TAG_class_type:
+@@ -547,7 +777,23 @@ static void __process_structure_type(struct state *state, struct die *cache,
+ 
+ DEFINE_PROCESS_STRUCTURE_TYPE(class)
+ DEFINE_PROCESS_STRUCTURE_TYPE(structure)
+-DEFINE_PROCESS_STRUCTURE_TYPE(union)
++
++static void process_union_type(struct state *state, struct die *cache,
++			       Dwarf_Die *die)
++{
++	Dwarf_Die placeholder;
++
++	int res = checkp(get_union_kabi_status(die, &placeholder,
++					       &state->kabi.orig_name));
++
++	if (res == KABI_RESERVED)
++		check(process_type(state, cache, &placeholder));
++	if (res > KABI_NORMAL)
 +		return;
 +
-+	if (__die_map_get(sym->die_addr, DIE_SYMBOL, &cache))
-+		return; /* We'll warn about missing CRCs later. */
-+
-+	type_expand(cache, &type, false);
-+
-+	/* If the symbol already has a version, don't calculate it again. */
-+	if (sym->state != SYMBOL_PROCESSED) {
-+		calculate_version(&version, &type.expanded);
-+		symbol_set_crc(sym, version.crc);
-+		debug("%s = %lx", sym->name, version.crc);
-+
-+		if (dump_versions) {
-+			checkp(fputs(sym->name, stderr));
-+			checkp(fputs(" ", stderr));
-+			type_list_write(&version.type.expanded, stderr);
-+			checkp(fputs("\n", stderr));
-+		}
-+
-+		version_free(&version);
++	__process_structure_type(state, cache, die, "union_type",
++				 ___process_structure_type, match_all);
++}
+ 
+ static void process_enumerator_type(struct state *state, struct die *cache,
+ 				    Dwarf_Die *die)
+diff --git a/scripts/gendwarfksyms/examples/kabi.h b/scripts/gendwarfksyms/examples/kabi.h
+index fcd0300e5b58..97a5669b083d 100644
+--- a/scripts/gendwarfksyms/examples/kabi.h
++++ b/scripts/gendwarfksyms/examples/kabi.h
+@@ -43,6 +43,28 @@
+ 		__section(".discard.gendwarfksyms.kabi_rules") =     \
+ 			"1\0" #hint "\0" #target "\0" #value
+ 
++#define __KABI_NORMAL_SIZE_ALIGN(_orig, _new)                                             \
++	union {                                                                           \
++		_Static_assert(                                                           \
++			sizeof(struct { _new; }) <= sizeof(struct { _orig; }),            \
++			__FILE__ ":" __stringify(__LINE__) ": " __stringify(              \
++				_new) " is larger than " __stringify(_orig));             \
++		_Static_assert(                                                           \
++			__alignof__(struct { _new; }) <=                                  \
++				__alignof__(struct { _orig; }),                           \
++			__FILE__ ":" __stringify(__LINE__) ": " __stringify(              \
++				_orig) " is not aligned the same as " __stringify(_new)); \
 +	}
 +
-+	/* These aren't needed in type_map unless we want a symtypes file. */
-+	if (symtypes)
-+		type_map_add(sym->name, &type);
++#define __KABI_REPLACE(_orig, _new)                    \
++	union {                                        \
++		_new;                                  \
++		struct {                               \
++			_orig;                         \
++		};                                     \
++		__KABI_NORMAL_SIZE_ALIGN(_orig, _new); \
++	}
 +
-+	type_expansion_free(&type);
-+}
-+
-+void generate_symtypes_and_versions(FILE *file)
- {
- 	cache_init(&expansion_cache);
+ /*
+  * KABI_DECLONLY(fqn)
+  *   Treat the struct/union/enum fqn as a declaration, i.e. even if
+@@ -67,4 +89,69 @@
+ #define KABI_ENUMERATOR_VALUE(fqn, field, value) \
+ 	__KABI_RULE(enumerator_value, fqn field, value)
  
-@@ -355,7 +466,14 @@ void generate_symtypes(FILE *file)
- 	die_map_for_each(expand_type, NULL);
- 
- 	/*
--	 *   2. If a symtypes file is requested, write type_map contents to
-+	 *   2. For each exported symbol, expand the die_map type, and use
-+	 *      type_map expansions to calculate a symbol version from the
-+	 *      fully expanded type string.
-+	 */
-+	symbol_for_each(expand_symbol, NULL);
++/*
++ * KABI_RESERVE
++ *   Reserve some "padding" in a structure for use by LTS backports.
++ *   This is normally placed at the end of a structure.
++ *   number: the "number" of the padding variable in the structure.  Start with
++ *   1 and go up.
++ */
++#define KABI_RESERVE(n) unsigned long __kabi_reserved##n
 +
-+	/*
-+	 *   3. If a symtypes file is requested, write type_map contents to
- 	 *      the file.
- 	 */
- 	type_map_write(file);
++/*
++ * KABI_RESERVE_ARRAY
++ *   Same as _BACKPORT_RESERVE but allocates an array with the specified
++ *   size in bytes.
++ */
++#define KABI_RESERVE_ARRAY(n, s) \
++	unsigned char __aligned(8) __kabi_reserved##n[s]
++
++/*
++ * KABI_IGNORE
++ *   Add a new field that's ignored in versioning.
++ */
++#define KABI_IGNORE(n, _new)                     \
++	union {                                  \
++		_new;                            \
++		unsigned char __kabi_ignored##n; \
++	}
++
++/*
++ * KABI_REPLACE
++ *   Replace a field with a compatible new field.
++ */
++#define KABI_REPLACE(_oldtype, _oldname, _new) \
++	__KABI_REPLACE(_oldtype __kabi_renamed##_oldname, struct { _new; })
++
++/*
++ * KABI_USE(number, _new)
++ *   Use a previous padding entry that was defined with KABI_RESERVE
++ *   number: the previous "number" of the padding variable
++ *   _new: the variable to use now instead of the padding variable
++ */
++#define KABI_USE(number, _new) __KABI_REPLACE(KABI_RESERVE(number), _new)
++
++/*
++ * KABI_USE2(number, _new1, _new2)
++ *   Use a previous padding entry that was defined with KABI_RESERVE for
++ *   two new variables that fit into 64 bits.  This is good for when you do not
++ *   want to "burn" a 64bit padding variable for a smaller variable size if not
++ *   needed.
++ */
++#define KABI_USE2(number, _new1, _new2)        \
++	__KABI_REPLACE(                        \
++		KABI_RESERVE(number), struct { \
++			_new1;                 \
++			_new2;                 \
++		})
++/*
++ * KABI_USE_ARRAY(number, bytes, _new)
++ *   Use a previous padding entry that was defined with KABI_RESERVE_ARRAY
++ *   number: the previous "number" of the padding variable
++ *   bytes: the size in bytes reserved for the array
++ *   _new: the variable to use now instead of the padding variable
++ */
++#define KABI_USE_ARRAY(number, bytes, _new) \
++	__KABI_REPLACE(KABI_RESERVE_ARRAY(number, bytes), _new)
++
+ #endif /* __KABI_H__ */
+diff --git a/scripts/gendwarfksyms/examples/kabi_ex.c b/scripts/gendwarfksyms/examples/kabi_ex.c
+index 799552ea6679..0b7ffd830541 100644
+--- a/scripts/gendwarfksyms/examples/kabi_ex.c
++++ b/scripts/gendwarfksyms/examples/kabi_ex.c
+@@ -12,3 +12,19 @@
+ 
+ struct s e0;
+ enum e e1;
++
++struct ex0a ex0a;
++struct ex0b ex0b;
++struct ex0c ex0c;
++
++struct ex1a ex1a;
++struct ex1b ex1b;
++struct ex1c ex1c;
++
++struct ex2a ex2a;
++struct ex2b ex2b;
++struct ex2c ex2c;
++
++struct ex3a ex3a;
++struct ex3b ex3b;
++struct ex3c ex3c;
+diff --git a/scripts/gendwarfksyms/examples/kabi_ex.h b/scripts/gendwarfksyms/examples/kabi_ex.h
+index fca1e07c78e2..1736e0f65208 100644
+--- a/scripts/gendwarfksyms/examples/kabi_ex.h
++++ b/scripts/gendwarfksyms/examples/kabi_ex.h
+@@ -59,6 +59,205 @@ KABI_ENUMERATOR_VALUE(e, D, 123456789);
+  * STABLE-NEXT:   enumerator A = 0 ,
+  * STABLE-NEXT:   enumerator D = 123456789
+  * STABLE-NEXT: } byte_size(4)
++*/
++
++/*
++ * Example: Reserved fields
++ */
++struct ex0a {
++	int a;
++	KABI_RESERVE(0);
++	KABI_RESERVE(1);
++};
++
++/*
++ * STABLE:      variable structure_type ex0a {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG:long unsigned int|unsigned long]] byte_size(8) encoding(7) data_member_location(8) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) data_member_location(16)
++ * STABLE-NEXT: } byte_size(24)
++ */
++
++struct ex0b {
++	int a;
++	KABI_RESERVE(0);
++	KABI_USE2(1, int b, int c);
++};
++
++/*
++ * STABLE:      variable structure_type ex0b {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) data_member_location(8) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) data_member_location(16)
++ * STABLE-NEXT: } byte_size(24)
++ */
++
++struct ex0c {
++	int a;
++	KABI_USE(0, void *p);
++	KABI_USE2(1, int b, int c);
++};
++
++/*
++ * STABLE:      variable structure_type ex0c {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) data_member_location(8) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) data_member_location(16)
++ * STABLE-NEXT: } byte_size(24)
++ */
++
++/*
++ * Example: A reserved array
++ */
++
++struct ex1a {
++	unsigned int a;
++	KABI_RESERVE_ARRAY(0, 64);
++};
++
++/*
++ * STABLE:      variable structure_type ex1a {
++ * STABLE-NEXT:   member base_type unsigned int byte_size(4) encoding(7) a data_member_location(0) ,
++ * STABLE-NEXT:   member array_type[64] {
++ * STABLE-NEXT:     base_type unsigned char byte_size(1) encoding(8)
++ * STABLE-NEXT:   } data_member_location(8)
++ * STABLE-NEXT: } byte_size(72)
++ */
++
++struct ex1b {
++	unsigned int a;
++	KABI_USE_ARRAY(
++		0, 64, struct {
++			void *p;
++			KABI_RESERVE_ARRAY(1, 56);
++		});
++};
++
++/*
++ * STABLE:      variable structure_type ex1b {
++ * STABLE-NEXT:   member base_type unsigned int byte_size(4) encoding(7) a data_member_location(0) ,
++ * STABLE-NEXT:   member array_type[64] {
++ * STABLE-NEXT:     base_type unsigned char byte_size(1) encoding(8)
++ * STABLE-NEXT:   } data_member_location(8)
++ * STABLE-NEXT: } byte_size(72)
++ */
++
++struct ex1c {
++	unsigned int a;
++	KABI_USE_ARRAY(0, 64, void *p[8]);
++};
++
++/*
++ * STABLE:      variable structure_type ex1c {
++ * STABLE-NEXT:   member base_type unsigned int byte_size(4) encoding(7) a data_member_location(0) ,
++ * STABLE-NEXT:   member array_type[64] {
++ * STABLE-NEXT:     base_type unsigned char byte_size(1) encoding(8)
++ * STABLE-NEXT:   } data_member_location(8)
++ * STABLE-NEXT: } byte_size(72)
++ */
++
++/*
++ * Example: An ignored field added to an alignment hole
++ */
++
++struct ex2a {
++	int a;
++	unsigned long b;
++	int c;
++	unsigned long d;
++};
++
++/*
++ * STABLE:      variable structure_type ex2a {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG:long unsigned int|unsigned long]] byte_size(8) encoding(7) b data_member_location(8)
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) c data_member_location(16) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) d data_member_location(24)
++ * STABLE-NEXT: } byte_size(32)
++ */
++
++struct ex2b {
++	int a;
++	KABI_IGNORE(0, unsigned int n);
++	unsigned long b;
++	int c;
++	unsigned long d;
++};
++
++_Static_assert(sizeof(struct ex2a) == sizeof(struct ex2b), "ex2a size doesn't match ex2b");
++
++/*
++ * STABLE:      variable structure_type ex2b {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) b data_member_location(8)
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) c data_member_location(16) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) d data_member_location(24)
++ * STABLE-NEXT: } byte_size(32)
++ */
++
++struct ex2c {
++	int a;
++	KABI_IGNORE(0, unsigned int n);
++	unsigned long b;
++	int c;
++	KABI_IGNORE(1, unsigned int m);
++	unsigned long d;
++};
++
++_Static_assert(sizeof(struct ex2a) == sizeof(struct ex2c), "ex2a size doesn't match ex2c");
++
++/*
++ * STABLE:      variable structure_type ex2c {
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) a data_member_location(0) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) b data_member_location(8)
++ * STABLE-NEXT:   member base_type int byte_size(4) encoding(5) c data_member_location(16) ,
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) d data_member_location(24)
++ * STABLE-NEXT: } byte_size(32)
++ */
++
++
++/*
++ * Example: A replaced field
++ */
++
++struct ex3a {
++	unsigned long a;
++	unsigned long unused;
++};
++
++/*
++ * STABLE:      variable structure_type ex3a {
++ * STABLE-NEXT:   member base_type [[ULONG:long unsigned int|unsigned long]] byte_size(8) encoding(7) a data_member_location(0)
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) unused data_member_location(8)
++ * STABLE-NEXT: } byte_size(16)
++ */
++
++struct ex3b {
++	unsigned long a;
++	KABI_REPLACE(unsigned long, unused, unsigned long renamed);
++};
++
++_Static_assert(sizeof(struct ex3a) == sizeof(struct ex3b), "ex3a size doesn't match ex3b");
++
++/*
++ * STABLE:      variable structure_type ex3b {
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) a data_member_location(0)
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) unused data_member_location(8)
++ * STABLE-NEXT: } byte_size(16)
++ */
++
++struct ex3c {
++	unsigned long a;
++	KABI_REPLACE(unsigned long, unused, long replaced);
++};
++
++_Static_assert(sizeof(struct ex3a) == sizeof(struct ex3c), "ex3a size doesn't match ex3c");
++
++/*
++ * STABLE:      variable structure_type ex3c {
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) a data_member_location(0)
++ * STABLE-NEXT:   member base_type [[ULONG]] byte_size(8) encoding(7) unused data_member_location(8)
++ * STABLE-NEXT: } byte_size(16)
+  */
+ 
+ #endif /* __KABI_EX_H__ */
+diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksyms/gendwarfksyms.h
+index c0207ca10e19..fe49730fe623 100644
+--- a/scripts/gendwarfksyms/gendwarfksyms.h
++++ b/scripts/gendwarfksyms/gendwarfksyms.h
+@@ -236,6 +236,12 @@ struct expansion_state {
+ 	const char *current_fqn;
+ };
+ 
++struct kabi_state {
++	int members;
++	Dwarf_Die placeholder;
++	const char *orig_name;
++};
++
+ struct state {
+ 	struct symbol *sym;
+ 	Dwarf_Die die;
+@@ -246,6 +252,9 @@ struct state {
+ 	/* Structure expansion */
+ 	struct expansion_state expand;
+ 	struct cache expansion_cache;
++
++	/* Reserved or ignored members */
++	struct kabi_state kabi;
+ };
+ 
+ typedef int (*die_callback_t)(struct state *state, struct die *cache,
 -- 
 2.47.1.613.gc27f4b7a9f-goog
 
