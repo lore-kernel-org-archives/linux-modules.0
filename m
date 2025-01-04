@@ -1,180 +1,92 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF8914F123;
-	Sat,  4 Jan 2025 06:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491FA8F5A;
+	Sat,  4 Jan 2025 07:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735972248; cv=none; b=nohYPRiryor5GO8sxofSCwxdZNVMbD0t3ipWT3OdnHtYNWNaNg4Mef/ZjS5372yuNB4vVt29IidTRa1D2YVQVsSUGQyVfBi9MdkK9KhctybQnbSbYK1Jo3hbsu8fsBu1zbdVstfoyAWlJszhNHP/wEmpTz3pe355C6Jh2+2u8u0=
+	t=1735977006; cv=none; b=qJl/y7hXwZwE8iWBnh8Ui/zfqjBlbs8JeXcthSAoconH6eaQTZCsdGKA7gUi64xfELper+8EUpFiLLrUGX6StTu+PZHRUWDFzJiWn93DsRR8+GZs8+yqbLNZKqRwwni0nhF6vbDAUaq2XeRKUA/38RpeUpJzprAr61PeBQkAw8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735972248; c=relaxed/simple;
-	bh=+VQlci/lpWUmZtr7JVADCGsdOB2jTAKsJBZPjdGGBYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nwTt9ERmrqFg/hGAw62KEOdxS7WarJz+/+Plc1EKUvfEjiybmmOGX6BT4/v5MNoGOow3paAqn7tGuh10yFzxD/vaRlS40anLRBdCfYKKP1ic/LLoJhchH4M81AV2+q7ZOZzwiTHszp9DjvfV4V9PeRuSBRFP4TEHlB8O8YnVOLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=QJmLbxxK; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="QJmLbxxK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1735972239;
-	bh=+VQlci/lpWUmZtr7JVADCGsdOB2jTAKsJBZPjdGGBYc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QJmLbxxKkr86pkCAnynomJW9gzFgc8oHiUWfTE31PQu8+BN5xbKz3N47y05pW12Zc
-	 NDBf1GvgvkQJvtk9u9FKRNPn8HJvlBgxHHRfB7yyRFqgY9UQofMABPv6A+oHyLT3wJ
-	 QSAFPQlWqh2U/LefgvkI1f8DiDKaibGnHBehVIHs=
-Date: Sat, 4 Jan 2025 07:30:39 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Arnd Bergmann <arnd@arndb.de>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
-Message-ID: <5c2ef82a-7558-4397-827d-523f8fe4895b@t-8ch.de>
-References: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
- <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
- <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
+	s=arc-20240116; t=1735977006; c=relaxed/simple;
+	bh=rnERQSRc9VbgAoql2qdy22rvm/Qtmnybq4mYJFpAz3E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BT96G+nHnumgcJpU/YbOgKtstauflKfCII9dSQVa9jJfnUHw0rKbvGkeftva6bjRGcaVzEIzYVXLxix0Vf/3a1E1IDJnDlFPjdH6kNgeX2aT2UIOSV6NKvOKA6ouUflhbVqcFAFF63pGve6d1AH8o6ZD5WKuqHnTZaWd+CFaMHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4YQC4S1L5Nz9shx;
+	Sat,  4 Jan 2025 08:39:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f4o1KxS0RS-V; Sat,  4 Jan 2025 08:39:04 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4YQC4S0QWPz9sSs;
+	Sat,  4 Jan 2025 08:39:04 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id EF2808B76D;
+	Sat,  4 Jan 2025 08:39:03 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id Ox2ziK35jecc; Sat,  4 Jan 2025 08:39:03 +0100 (CET)
+Received: from [192.168.232.97] (unknown [192.168.232.97])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8527B8B763;
+	Sat,  4 Jan 2025 08:39:03 +0100 (CET)
+Message-ID: <3a961c7a-d793-4319-ab78-af11f46587ff@csgroup.eu>
+Date: Sat, 4 Jan 2025 08:39:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] module: Don't fail module loading when setting
+ ro_after_init section RO failed
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, Mike Rapoport <rppt@kernel.org>
+References: <cover.1733427536.git.christophe.leroy@csgroup.eu>
+ <f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
 
-Hi Luis,
 
-On 2025-01-03 17:37:52-0800, Luis Chamberlain wrote:
-> On Wed, Dec 25, 2024 at 11:52:00PM +0100, Thomas Weißschuh wrote:
-> > diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> > index 7b329057997ad2ec310133ca84617d9bfcdb7e9f..57d317a6fa444195d0806e6bd7a2af6e338a7f01 100644
-> > --- a/kernel/module/Kconfig
-> > +++ b/kernel/module/Kconfig
-> > @@ -344,6 +344,17 @@ config MODULE_DECOMPRESS
-> >  
-> >  	  If unsure, say N.
-> >  
-> > +config MODULE_HASHES
-> > +	bool "Module hash validation"
-> > +	depends on !MODULE_SIG
+
+Le 03/01/2025 à 17:13, Petr Pavlu a écrit :
+> On 12/5/24 20:46, Christophe Leroy wrote:
+>> This series reworks module loading to avoid leaving the module in a
+>> stale state when protecting ro_after_init section fails.
+>>
+>> Once module init has succeded it is too late to cancel loading.
+>> If setting ro_after_init data section to read-only fails, all we can
+>> do is to inform the user through a warning. This is what patch 2 does.
+>>
+>> Then patch 3 tries to go a bit further by testing the ability to write
+>> protect ro-after-init section prior to initialising the module.
 > 
-> Why are these mutually exclusive? Can't you want module signatures *and*
-> this as well? What distro which is using module signatures would switch
-> to this as an alternative instead? The help menu does not clarify any of
-> this at all, and neither does the patch.
-
-The exclusivity is to keep the initial RFC patch small.
-The cover letter lists "Enable coexistence with MODULE_SIG" as
-a further improvement.
-
-In general this MODULE_HASHES would be used by distros which are
-currently using the build-time generated signing key with
-CONFIG_MODULE_SIG_KEY=certs/signing_key.pem.
-
-More concretely the Arch Linux team has expressed interest.
-
-> > +	select CRYPTO_LIB_SHA256
-> > +	help
-> > +	  Validate modules by their hashes.
-> > +	  Only modules built together with the main kernel image can be
-> > +	  validated that way.
-> > +
-> > +	  Also see the warning in MODULE_SIG about stripping modules.
-> > +
-> >  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
-> >  	bool "Allow loading of modules with missing namespace imports"
-> >  	help
-> > diff --git a/kernel/module/Makefile b/kernel/module/Makefile
-> > index 50ffcc413b54504db946af4dce3b41dc4aece1a5..6fe0c14ca5a05b49c1161fcfa8aaa130f89b70e1 100644
-> > --- a/kernel/module/Makefile
-> > +++ b/kernel/module/Makefile
-> > @@ -23,3 +23,4 @@ obj-$(CONFIG_KGDB_KDB) += kdb.o
-> >  obj-$(CONFIG_MODVERSIONS) += version.o
-> >  obj-$(CONFIG_MODULE_UNLOAD_TAINT_TRACKING) += tracking.o
-> >  obj-$(CONFIG_MODULE_STATS) += stats.o
-> > +obj-$(CONFIG_MODULE_HASHES) += hashes.o
-> > diff --git a/kernel/module/hashes.c b/kernel/module/hashes.c
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..f19eccb0e3754e3edbf5cdea6d418da5c6ae6c65
-> > --- /dev/null
-> > +++ b/kernel/module/hashes.c
-> > @@ -0,0 +1,51 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +#define pr_fmt(fmt) "module/hash: " fmt
-> > +
-> > +#include <linux/int_log.h>
-> > +#include <linux/module_hashes.h>
-> > +#include <linux/module.h>
-> > +#include <crypto/sha2.h>
-> > +#include "internal.h"
-> > +
-> > +static inline size_t module_hashes_count(void)
-> > +{
-> > +	return (__stop_module_hashes - __start_module_hashes) / MODULE_HASHES_HASH_SIZE;
-> > +}
-> > +
-> > +static __init __maybe_unused int module_hashes_init(void)
-> > +{
-> > +	size_t num_hashes = module_hashes_count();
-> > +	int num_width = (intlog10(num_hashes) >> 24) + 1;
-> > +	size_t i;
-> > +
-> > +	pr_debug("Builtin hashes (%zu):\n", num_hashes);
-> > +
-> > +	for (i = 0; i < num_hashes; i++)
-> > +		pr_debug("%*zu %*phN\n", num_width, i,
-> > +			 (int)sizeof(module_hashes[i]), module_hashes[i]);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +#ifdef DEBUG
+> I've been holding off on applying this series to modules-next because
+> there was still some discussion on the previous RFC version [1], and
+> I wanted to give people more time to potentially comment.
 > 
-> We have MODULE_DEBUG so just add depend on that and leverage that for
-> this instead.
+> Mike Rapoport also recently posted a series with a patch [2] that
+> proposes restoring of large pages after fragmentation. Should the last
+> patch here be then dropped?
 
-Ack.
+Indeed, if the large pages are restored when bringing back the 
+ro_after_init to RW, it defeats the purpose of patch 3.
 
-> > diff --git a/scripts/module-hashes.sh b/scripts/module-hashes.sh
-> > new file mode 100755
-> > index 0000000000000000000000000000000000000000..7ca4e84f4c74266b9902d9f377aa2c901a06f995
-> > --- /dev/null
-> > +++ b/scripts/module-hashes.sh
-> > @@ -0,0 +1,26 @@
-> > +#!/bin/bash
-> > +# SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +set -e
-> > +set -u
-> > +set -o pipefail
-> > +
-> > +prealloc="${1:-}"
-> > +
-> > +echo "#include <linux/module_hashes.h>"
-> > +echo
-> > +echo "const u8 module_hashes[][MODULE_HASHES_HASH_SIZE] __module_hashes_section = {"
-> > +
-> > +for mod in $(< modules.order); do
-> > +	mod="${mod/%.o/.ko}"
-> > +	if [ "$prealloc" = "prealloc" ]; then
-> > +		modhash=""
-> > +	else
-> > +		modhash="$(cksum -a sha256 --raw "$mod" | hexdump -v -e '"0x" 1/1 "%02x, "')"
-> > +	fi
-> > +	echo "	/* $mod */"
-> > +	echo "	{ $modhash },"
-> > +	echo
-> > +done
-> > +
-> > +echo "};"
+So I agree, let's first apply patches 1 and 2 in order to fix the actual 
+bug then see how we can improve as a second step.
+
 > 
-> Parallelize this.
+> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-modules%2F737f952790c96a09ad5e51689918b97ef9b29174.1731148254.git.christophe.leroy%40csgroup.eu%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7Ce1338eec4ee742a40b6208dd2c1192dc%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638715176198708012%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=B7qL4g0NUqBqdREndab5kywoOu2wsNYej6hqnIH10tk%3D&reserved=0
+> [2] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-modules%2F20241227072825.1288491-4-rppt%40kernel.org%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7Ce1338eec4ee742a40b6208dd2c1192dc%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638715176198723794%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=eMxPsu43ByOjr7ny9Xg81ylWS6853dTU5MmU3J9e2hc%3D&reserved=0
+> 
 
-Ack.
