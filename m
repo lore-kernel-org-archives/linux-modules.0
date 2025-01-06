@@ -1,127 +1,128 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1B81DFDB9
-	for <linux-modules@vger.kernel.org>; Mon,  6 Jan 2025 19:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078721DF983
+	for <linux-modules@vger.kernel.org>; Mon,  6 Jan 2025 21:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736192707; cv=none; b=ewlQRp86ER7tSa7k+tzSU3Qd3c169NFXJRmcpvc3Oo/vfwWlBBI+56DTGusLauc/QMwrFYD5xmaB7j8dLzi+ETYjms9uK9F/VXG5v8f2vwIys9hwAUE8DBWqSTtS4dZNrJi7EaHC+WIWivwhdEJbEQ/aRRfuHu8tgiU4MYVx7j8=
+	t=1736198708; cv=none; b=Yoig6Y5kku3KRZtDYPx0y1fMb//+ieHb55paDP/vm5J7CqrWXIzKY35N6hfiXSfp6GEc5iTU9bAm/UhlHTQA8XCits71L4B3DLqQxc66RejlRho3Re6a3YeLIWzPtQPvIHYqyeZVTXz11NSAGDrbrttFzyoDp+riM5DyLTtRDeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736192707; c=relaxed/simple;
-	bh=zQ3dDNxwAVqmUONVZQGHhMKpUxfHfRjY40yicSGUeAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=uq4MiASenpT9+NI1xOrA2woZFs/pYTPZj+TwF8BouQtN5tiR/BqEgL5wRnaC+RqygvUrsxXQsMiUazhaLzYj9KBaGc0T6Uo8x8UxVcykqgAREUTiPqMW3VbAHD4x58pRFFuE0sDp3oimzNewQw8EysXCkgUd21R9/PCKMaNOA2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PGZAwgVp; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1736198708; c=relaxed/simple;
+	bh=p4J4PAy2tYWT7PoePXeGlsHxjWsDWfXEDLRMS94pf48=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Lxc6fQtTPJPgFsJym29A7dbgra3sQ7gQl9NwcIPkcXjJyFSSsssuy+kCnFnQNvJPM/RX5GCL1ep1o++aO3mPUW1/uCdiJkxUJjVf46BGhzlQ40Re7k5B4WbcUAbC8v0eS3Cmbj6cYxajUltFqFnLvoppfFFsfI2vT66oqhE6c28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=um8vT7dd; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PGZAwgVp"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43624b2d453so152576175e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 06 Jan 2025 11:45:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="um8vT7dd"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so456a12.1
+        for <linux-modules@vger.kernel.org>; Mon, 06 Jan 2025 13:25:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1736192703; x=1736797503; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0aLwuHOfqts1r2RamlRiGd6YK3rscuDAhXgMPSkYQ/I=;
-        b=PGZAwgVpjBrPdePP4Qwn3cWInbRollvCxbhGAXxX9UZ8jYwvfY07tNGb2PDMd1EeSg
-         8D6Ohen3Ej7OrSJsU+nqkVaEnjToaDr3WZR3x+0xFF5lYWcMHyG1RD99yJpoV465Eb0W
-         rc8fsNmKXOPjYds8I2NvRmvScNs1q4qO90ahjmytjMK/uwlalRv+UdIKzFbDf26xhqDD
-         xp+sq9/k7lg2ZZrRleQGJGAspQXpXgBYryEfI6Gk7eDURvWTgYXlUSeD7MSbQQCuV1WV
-         tS/T7oMXkbesInyGv62VqmhT2bFdg3dJh4+Jm8m+zB7PD0UcmDICYrOW2nPwOtUWWFYM
-         5H/w==
+        d=google.com; s=20230601; t=1736198705; x=1736803505; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ln1xgM2oStVuWhoEQmusatYJbTnshkZKwHgkCtpswhE=;
+        b=um8vT7ddJVPiZ63UO3lGMFwVf9n2hmCe+9qWi7EgzMNd2fw5gJCDd3w2bOlo/XmXCA
+         AS80tkdMJchFSrh1GGx1+G935B38Sa6b8t/FxVWxgOS100E2HvDd5VgM/M6N+W0xLQ1X
+         fLvsXKkvOrxgGwSECY/sSFgn/R/j4zjp7teTk9JMMjQ0e0bYsXxK1qzygASFf5Sczijr
+         +vjZXJfcub26+3CyXQ/maJQG3RALa4kWYrCXq0W6HCuyxZWK0TG43YJEC1thy1jEzNVY
+         ifFXolyBjlkCDu/ox5YTLZtcHUEYBUirhf2CPn9FTmTrw4RcQ3i0D0z1Usv7R64K7TTe
+         qP0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736192703; x=1736797503;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0aLwuHOfqts1r2RamlRiGd6YK3rscuDAhXgMPSkYQ/I=;
-        b=iPU2N1Z/gSRX78Kf+pk0ei4TLQ/4ijUygndHHktzHZMAoX5gqexP2m5kIkU0y6opy1
-         nRTZd41+ItN2LNoX3R6Zvo9Fo1PnL9Ynp7GV0aOx035k1TOoPMg2ova0KgJ860aVkwar
-         nmBYsdkp373Z5Lf/aDLhnGpI2hadWfklOBZvguMbPE1bMI8FOcqdFZcJl30W3qbdaMWH
-         mKDc5vF2CCL1Z1EKOx7xOeA1rfLkWH5uw72r5UjY1FZqDczJLJfpVP4GMuk5v0OgrtjC
-         K5/tpp9Lx3aRlsOKbhTl89YWkSit+UDV1LQ1gkjpW72aodfklshUmAF+7sKJBqeOMQ0C
-         loLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVKqOfp+mrVEu6ERfEcsNw4dC/RMAo+Q+onT27uoc7QqYNjXQT5Rd+UXgWLdvdKHTUPQ2BYarjsHwVOBoiP@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5K6batqnnoCzWJ6pwkixlHokOWHvaP7wiS3mlLzP0ZHltcOMf
-	fyWExcOgj98m29wmzZJG7OBx9ul5ehd+AAB8HdE+jukpjaxOhPtA5/PaALSJUcI=
-X-Gm-Gg: ASbGnctzcN7le7XpLs+RKyE8S+F3NKwTR1oRrZrjafADOf9XrxfrSssULeUDnMnwgR9
-	rYxG4gsWAF62YmdPCSvP0c+tfbDvic1HEfJN9CEu1yRETcgcfekrovOLhtybmYqzjjvt5EG/Kh1
-	LWWixH6lgh1JHw5T7mF1z9HpfaaDgXhOcgnGwymoT377LZJjSMtyVK25ZwvILhU2qIkCipaxVVo
-	IabiV1/dg80QkjXjeCSoVwlf55BfhW2q9jxyZO58QLuo2r7ICvv2lR3hsfe
-X-Google-Smtp-Source: AGHT+IH2BY0sTS8enQiAP1KtexhKyJ6/pVUM0cYmW/vvBj8QsCYf2kLQBIcE4NYHTcKNybVDe0O0QA==
-X-Received: by 2002:a05:600c:3b13:b0:436:488f:4f5 with SMTP id 5b1f17b1804b1-4366864420bmr511100335e9.19.1736192702985;
-        Mon, 06 Jan 2025 11:45:02 -0800 (PST)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b013a1sm614843995e9.11.2025.01.06.11.45.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jan 2025 11:45:02 -0800 (PST)
-Message-ID: <0530eee7-f329-4786-bea3-c9c66d5f0bed@suse.com>
-Date: Mon, 6 Jan 2025 20:45:01 +0100
+        d=1e100.net; s=20230601; t=1736198705; x=1736803505;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ln1xgM2oStVuWhoEQmusatYJbTnshkZKwHgkCtpswhE=;
+        b=UXE4wx8kTc4MFC/2YJY1/UiRRaJELz9lmYjLZUeFIIxf7vz9kCemKIYhWXUasETLyP
+         zlA3wKjozy6MeNDJF7rrLYaTWX9UhIYqA7p2LRLwBsj4LwHC6MPZ3LkpQhzoch+SGf1i
+         N17PMsvsUhul71Z1oaXGqtCpIPM2wl4qDRtkTQX3EB9huBkeYBD0HJCIBj9uzhGrNtG1
+         uxjeLaJhUY+V9LXJgxVMyeXV99kOi2NFkLl1oKSKf0OOg5Il9OflBgIjxrgvewMYD0is
+         IpdPDiQbgbiEjaBpQoIZoLrkLCu2OL73xq+w+VwEmF76g+WHijoboDeTUG6n2+Uhfqn/
+         ZtGg==
+X-Forwarded-Encrypted: i=1; AJvYcCX1gWT0P9UP7SvH9D8u5cU73Md/z05oUk6ruZNw+zZNFpc9LcyxcmipX41wDBPcs+PqIy8+MHvjqsg/iez7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd5LxP67A+mv9L11D8PfVfhyghAxuRlrKnn2uhbemXnvfAlHt8
+	/KGNBazGfwNpbl6mwRYdz8D3j2D4vCmRstu+vfHIvN4+B9KHBrNIhZhHeyxCXe6cmwvHGVBw2sw
+	wlo878sLE4/7GNJKQ9IwDbCvoWP0WdIWTWlV+
+X-Gm-Gg: ASbGncuKf3wiyTfHfq7bfvw3AyTALGK9NXwceREt901zpcUG+m64dTHiLzJqUyEsiEr
+	dw5XGWPLd/HdidpjPS0NapkzUbqH1Ix/iZ94=
+X-Google-Smtp-Source: AGHT+IH41nFR4XjznMl40Um9p1ogmkX1bwJtAiR7xoIgiSg+CzLikN/2L1bWntFHz6ID5Nht/Mau7+LGgOJyS3n7MqI=
+X-Received: by 2002:a50:9f67:0:b0:5d0:84a6:f1a1 with SMTP id
+ 4fb4d7f45d1cf-5d95fd9ba7emr16336a12.6.1736198705050; Mon, 06 Jan 2025
+ 13:25:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: ROX allocations broke livepatch for modules since 6.13-rc1
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: rppt@kernel.org, akpm@linux-foundation.org
-Cc: =?UTF-8?Q?Marek_Ma=C5=9Blanka?= <mmaslanka@google.com>,
- mcgrof@kernel.org, regressions@lists.linux.dev,
- linux-modules@vger.kernel.org, linux-mm@kvack.org,
- live-patching@vger.kernel.org, joe.lawrence@redhat.com, jpoimboe@kernel.org,
- pmladek@suse.com
-References: <CAGcaFA2hdThQV6mjD_1_U+GNHThv84+MQvMWLgEuX+LVbAyDxg@mail.gmail.com>
- <c37395e2-1ab5-4175-9920-5144cf60e25e@suse.com>
-Content-Language: en-US
-In-Reply-To: <c37395e2-1ab5-4175-9920-5144cf60e25e@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20241220174731.514432-1-bigeasy@linutronix.de>
+ <20241220174731.514432-29-bigeasy@linutronix.de> <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com> <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
+In-Reply-To: <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 6 Jan 2025 13:24:28 -0800
+X-Gm-Features: AbW1kvaJo1nyTcxgxrH-hOUFMC8ycywlnsAQAeEU4OUg47oM9mviVzwMlb8sMhs
+Message-ID: <CABCJKucPR7ty7oPn1NYkJidv_Mk46+E0B0vmGhBXz4Stt+vujA@mail.gmail.com>
+Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
+To: Elliot Berman <elliot.berman@oss.qualcomm.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Elliot Berman <quic_eberman@quicinc.com>, 
+	Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/5/25 15:51, Petr Pavlu wrote:
-> On 12/30/24 01:09, Marek Maślanka wrote:
->> Hi Mike and others,
->>
->> I discovered that the patch "[v7,4/8] module: prepare to handle ROX allocations
->> for text" has disrupted livepatch functionality. Specifically, this occurs when
->> livepatch is prepared to patch a kernel module and when the livepatch module
->> contains a "special" relocation section named
->> ".klp.rela.<MODULE_NAME>.<SECTION_NAME>" to access local symbols.
-> 
-> Thank you for the report. It is possible for me to reproduce the issue
-> on my system. An annoying part is to create the
-> .klp.rela.<objname>.<secname> data, for which I eventually used one
-> floating variant of klp-convert [1]. To hit the problem, <objname> must
-> point to an object that is different from vmlinux. Such relocations are
-> processed by the livepatch code later than regular module relocations,
-> as you pointed out after mod->rw_copy is already reset.
-> 
-> I think the bug should be addressed in principle by Mike's recently
-> posted rework of the feature [2] but unfortunately, its current version
-> makes my system also unbootable [3].
+Hi,
 
-A simpler fix could be:
+On Mon, Jan 6, 2025 at 10:00=E2=80=AFAM Elliot Berman
+<elliot.berman@oss.qualcomm.com> wrote:
+>
+> On Thu, Jan 02, 2025 at 04:24:22PM -0800, Sami Tolvanen wrote:
+> > Hi Elliot,
+> >
+> > On Mon, Dec 30, 2024 at 7:33=E2=80=AFPM Elliot Berman
+> > <elliot.berman@oss.qualcomm.com> wrote:
+> > >
+> > > On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior w=
+rote:
+> > > > __module_address() can be invoked within a RCU section, there is no
+> > > > requirement to have preemption disabled.
+> > > >
+> > > > I'm not sure if using rcu_read_lock() will introduce the regression=
+ that
+> > > > has been fixed in commit 14c4c8e41511a ("cfi: Use
+> > > > rcu_read_{un}lock_sched_notrace").
+> > > >
+> > >
+> > > You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
+> > > Regular rcu lock doesn't generate function traces, so the recursive l=
+oop
+> > > isn't possible.
+> > >
+> > > I've tested:
+> > >  - the current kernel (no recursive loop)
+> > >  - Revert back to rcu_read_lock_sched() (fails)
+> >
+> > Which kernel version did you test? I assume something pre-KCFI as
+> > arm64 doesn't use this code since v6.1.
+> >
+>
+> Ah, thanks for calling me out. I dug a bit more, I thought I was looking
+> at a recursive loop in the ftrace buffers, but was actually the expected
+> behavior. When I tested on the other configurations, the stm dummy
+> driver hadn't kicked in yet by the time I looked at the ftrace. Indeed,
+> this function code is not used on arm64.
+>
+> I experimented with an x86 build as well and I was able to get the hang
+> I remember seeing after some tweaks to force a CFI failure. Still,
+> guard(rcu)() is okay by me :)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 94acbacdcdf1..b3a643435357 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -773,7 +773,8 @@ void *__module_writable_address(struct module *mod, void *loc);
- 
- static inline void *module_writable_address(struct module *mod, void *loc)
- {
--	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod)
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod ||
-+	    mod->state != MODULE_STATE_UNFORMED)
- 		return loc;
- 	return __module_writable_address(mod, loc);
- }
+OK, great. That makes sense. Thanks for taking the time to test this!
 
-Hm, is it expected that Mike's rework to drop rw_copy will make it into
-6.13 or should I properly post this minimal fix for review?
-
--- 
-Thanks,
-Petr
+Sami
