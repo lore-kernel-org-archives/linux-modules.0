@@ -1,162 +1,155 @@
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77521D63CD;
-	Mon,  6 Jan 2025 14:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00831DF24B
+	for <linux-modules@vger.kernel.org>; Mon,  6 Jan 2025 18:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736173490; cv=none; b=O1BkSCjRQOaSEPUNpPc4SzabVj4joXVj1bk99m8C9HnlV07BDY7RI0wD0gYkHVWbf9dhx4DEdojS69J/Q52589O3DMZnllH0PO4ax1lxbOGS1EfEZPSjkCJPcJxX84bIHHq50egE2OcpfIiDfHUW7kNW8KyYKRc/X0aun5P+yM0=
+	t=1736186455; cv=none; b=sLtF45bd/Q8x3UDfYJKqBwihxIzQV2rWIAewq6ObsZgM2sw+Y8ITgJBTJ9ep6//GHPjiZ10e4StN7dZQl9kb9yKAmkHkWxpSFXGVs5OJ5w9PcbUD+S3QRaLIwHKBVT71+r7pTJhWFlGjVIPhhYzemgBN9MFVEgAdPQAgxZvAqQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736173490; c=relaxed/simple;
-	bh=GG6nDcOu7RCbFaHsTxclIxA9AQqLyYRUXVZwXgY9ICY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FsWT4Y+JSFVCLzzX9SPITTeP1NPGBteiPjWzL3lirKW1J/EMcSG0PIx5OHxLfGuob6/OC45YB6VPB/gQqRm/zc/lM90fHZdQlnwvwi8R1UFYgPwtm1eM5Yw1jVgsprpG5e7tyT5nfEYJc3U6o6z+2KSw+/Kn90BnKyP8byycm0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=HZ+DKolC; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+	s=arc-20240116; t=1736186455; c=relaxed/simple;
+	bh=C/tw2D77F66nxRbbmCdQXH6xlG644LkMa0e1oRlDt0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GU07uXfSqRK3jJveE3T3BqJsv7mYZaEypc0fa1JrH29HsFODc617HVCDOHa3kArCzDJODWD+yhTqzRlpQ5g9XYIuX1cX03IMHsVwX3jZu/oQy9M1AtpHKR1RaikOjwUzvlJhrqlRsUq8lMrdhWW3OBenaj4lJ0xcqBWA695AhMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lQy88ilq; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="HZ+DKolC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=t+t+UsduK+tz2j1G79cwfcBzf0nPtUaMZjchxgJoIus=; t=1736173488;
-	x=1736605488; b=HZ+DKolCXKxKzMpRmMILgRVCeflPcqYP0BGr5gITK3q+pf6TiF93BncTsSJIY
-	foY+hc3URILgwxRUj1VNnj5mQhvQj4l+odKTRZc1gmCbMIAu9jK73i31y87uJJhTpFtfyZ1hPFdLV
-	AlJELxmkgYapk2OwK5ZPslDy6bVphDMX+qNjZZHe/fFLFPAbBtmwqKQA1p/WO4ABLvRw48AGynEad
-	4Cz+GEWlwRaOUdjnC813Cy4TDPMzPw4UhYFLOvg4anwGigrJHziHhOGNiSwSc7/1dZu2wcNFEeobF
-	Mh/5K0jhTpplmjouOeLUzYtmwxlnw2EtKnPB9NSQ7F3eFT3hCw==;
-Received: from [2a02:8108:8980:2478:87e9:6c79:5f84:367d]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1tUo24-00E8VR-1G;
-	Mon, 06 Jan 2025 15:24:40 +0100
-Message-ID: <c5e7cf16-4a2b-4fb5-9fe7-a25c6768bf36@leemhuis.info>
-Date: Mon, 6 Jan 2025 15:24:37 +0100
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lQy88ilq"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506FqYlM010669
+	for <linux-modules@vger.kernel.org>; Mon, 6 Jan 2025 18:00:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=; b=lQy88ilqDlzqL+GY
+	QjMXbWJNWzNE+pzyiXnFKIe/Gby4pM+TT+wDSXe+srfCXcaqFavJDs/Rpz0Y6BAz
+	/ZgVkfKeH4s0cO3BGdMC5IZAlR2gclRS8b8+/q8sc3tl5FyLjvIC/iSP5mogbkLT
+	4AcIqRhJmvamSFF/XdqinujJ2WPYZrG8JFE57MpDqVq1o+2H5R7aiGyb/bFvTFBC
+	U38gBezXgUzuZ/b83/BKPbUYpqybUXoMK/BAH3JsSYi4iKQaxBsyec27HYavXQDw
+	g1ALEWybu+8yuVQJbMZ7Bah4RBPZaNjWWGiyVZ2icrTHlHBM7jv+GgzhWQIrQp4q
+	Oja+5w==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440j7009bm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-modules@vger.kernel.org>; Mon, 06 Jan 2025 18:00:51 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-21648ddd461so263362835ad.0
+        for <linux-modules@vger.kernel.org>; Mon, 06 Jan 2025 10:00:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736186451; x=1736791251;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/cfr5P4dE8MjkGs8GrCOadceWYbHsj0bsOjSYvd4Cog=;
+        b=uCdKS8PbnaDGyMES/l7ipHMghGjmEBLnW43HCcvsvdEZdv1DOF60XhaWwIn29F0njJ
+         JhdY3z9pcjgctOxp7sfVuVJba2CJrv+WhJFcNd5hJEWjC1JRC0o/92v9e03szRQXcd4J
+         B3Ygkxp3bq2iordaLIfpMFYEz/6LBVa0Rhdr+iG5uyAcDxQMsFfW0HW38UXZGI0SnpGV
+         b+cWvPAw0YDH9PnDKtHz4LdyCTwhEkr1vsA2DG/TV2IrSSkKMABVZxPsbRMMI/aQEK2V
+         ZkXVxNjoINE4YAewo70HHN5vASa6+ECHhfCsfYWzP5UAMc6EgHaB+Hsk4bJt4MpWVkou
+         HkAg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0DZSr6zjV5N0mclDxdc5/RbENA7y+spMu8hu5zw3IF9Dyk0wC0Fw2VJdxWtA1alGBeOpVqm2hKwx0J7yG@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHvC4INFBg3mPCW+ofWe8cLC9gJplSbBbdHXXhFNxBEM3Cp2iU
+	ph7Qrfm9MeCSO83XiInMQzpzuD2GTv2pkTlMTmlaKQG74GxRv0DEKXQM3UGs+BwXED7Uhhen9vn
+	irjPoQr6sA/TEdCNINQxMMYaOE0OYE1DPCJRCQeR14P9e8kHTZlSMw2MWPFYOwW5a
+X-Gm-Gg: ASbGncv3dJdnnvMzr//Ij7SwjZsVGDu9gncrD04Vy3PszfkIs99l91p5QCocks7wwun
+	mXVMXGjNf6B3pXu/YRhqyqdpOeLTqZkD5WvNy9XxlozAPYM7Y4L1f5qY/eIKisfbKW4LD3UF4N0
+	TiD3TUN2FjE41BQY2uwQfVI/Xz0h8+LBt8d2mmWVEGcHa+VhuMVhBtwWFhFbRtUHJY+S6zjNK1n
+	s6FQFRtyI5Y47C7k1qfaO5W5RfrWht/MqSv/PkUVdlSwr/rOY3OIsSVMfg3jthsEqkSy/caph/a
+	s0OM5MNvUQr+3O+hphrDlDrmCP37SrRrJfgF
+X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718595ad.47.1736186450479;
+        Mon, 06 Jan 2025 10:00:50 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHKxeP0fYXWNRSuBo63GlatOZdUBa1wq+1u6CfOeT7r7LLcU9ZygtK9cUJtqM9KXRbYsaYzoA==
+X-Received: by 2002:a17:903:320a:b0:216:4cc0:aa4e with SMTP id d9443c01a7336-219e6f37f88mr877718005ad.47.1736186449960;
+        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
+Received: from hu-eberman-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f7457sm289404095ad.201.2025.01.06.10.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 10:00:49 -0800 (PST)
+Date: Mon, 6 Jan 2025 10:00:47 -0800
+From: Elliot Berman <elliot.berman@oss.qualcomm.com>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Gomez <da.gomez@samsung.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Pavlu <petr.pavlu@suse.com>, Thomas Gleixner <tglx@linutronix.de>,
+        Elliot Berman <quic_eberman@quicinc.com>, Kees Cook <kees@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 28/28] cfi: Use RCU while invoking __module_address().
+Message-ID: <20250103101357180-0800.eberman@hu-eberman-lv.qualcomm.com>
+References: <20241220174731.514432-1-bigeasy@linutronix.de>
+ <20241220174731.514432-29-bigeasy@linutronix.de>
+ <20241230185812429-0800.eberman@hu-eberman-lv.qualcomm.com>
+ <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module: sign with sha512 instead of sha1 by default
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <52ee32c0c92afc4d3263cea1f8a1cdc809728aff.1729088288.git.linux@leemhuis.info>
- <ZxQ5QJAa-iv4S6sw@bombadil.infradead.org>
- <54fc582e-1da0-410d-b410-316792e3472b@leemhuis.info>
- <d9ace384-07bb-4fa4-9590-9f739be8e3f5@suse.com>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <d9ace384-07bb-4fa4-9590-9f739be8e3f5@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1736173488;62161ff2;
-X-HE-SMSGID: 1tUo24-00E8VR-1G
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKucZKvFcTQEqbKNUfdYv-upxsH6cmw1=iHUORPFJc+vKHQ@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: nJX_FbLYf05Tmh7LYo_20LD3PcYmVhiz
+X-Proofpoint-GUID: nJX_FbLYf05Tmh7LYo_20LD3PcYmVhiz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=999 lowpriorityscore=0
+ mlxscore=0 clxscore=1015 suspectscore=0 impostorscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501060158
 
-
-
-On 06.01.25 15:05, Petr Pavlu wrote:
-> On 1/4/25 10:43, Thorsten Leemhuis wrote:
->> On 20.10.24 00:57, Luis Chamberlain wrote:
->>> On Wed, Oct 16, 2024 at 04:18:41PM +0200, Thorsten Leemhuis wrote:
->>>> Switch away from using sha1 for module signing by default and use the
->>>> more modern sha512 instead, which is what among others Arch, Fedora,
->>>> RHEL, and Ubuntu are currently using for their kernels.
->>>>
->>>> Sha1 has not been considered secure against well-funded opponents since
->>>> 2005[1]; since 2011 the NIST and other organizations furthermore
->>>> recommended its replacement[2]. This is why OpenSSL on RHEL9, Fedora
->>>> Linux 41+[3], and likely some other current and future distributions
->>>> reject the creation of sha1 signatures, which leads to a build error of
->>>> allmodconfig configurations:
->>>>
->>>>   80A20474797F0000:error:03000098:digital envelope routines:do_sigver_init:invalid digest:crypto/evp/m_sigver.c:342:
->>>>   make[4]: *** [.../certs/Makefile:53: certs/signing_key.pem] Error 1
->>>>   make[4]: *** Deleting file 'certs/signing_key.pem'
->>>>   make[4]: *** Waiting for unfinished jobs....
->>>>   make[3]: *** [.../scripts/Makefile.build:478: certs] Error 2
->>>>   make[2]: *** [.../Makefile:1936: .] Error 2
->>>>   make[1]: *** [.../Makefile:224: __sub-make] Error 2
->>>>   make[1]: Leaving directory '...'
->>>>   make: *** [Makefile:224: __sub-make] Error 2
->>>>
->>>> This change makes allmodconfig work again and sets a default that is
->>>> more appropriate for current and future users, too.
->>>>
->>>> Link: https://www.schneier.com/blog/archives/2005/02/cryptanalysis_o.html [1]
->>>> Link: https://csrc.nist.gov/projects/hash-functions [2]
->>>> Link: https://fedoraproject.org/wiki/Changes/OpenSSLDistrustsha1SigVer [3]
->>>> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
->>>
->>> Thanks!
->>>
->>> Tested-by: kdevops <kdevops@lists.linux.dev> [0]
->>> Links: https://github.com/linux-kdevops/linux-modules-kpd/actions/runs/11420092929/job/31775404330 # [0]
->>>
->>> Applied and pushed!
->>
->> Lo! Just wandering:
-             ^
-
-Seems it was "let's start the year with a stupid typo in a public
-message" time... :-D
-
->> what happened to that patch? That reply made me
->> assume that the patch was heading towards mainline, but it seems it's
->> not even in -next. Were there problems and it was dropped or something?
+On Thu, Jan 02, 2025 at 04:24:22PM -0800, Sami Tolvanen wrote:
+> Hi Elliot,
 > 
-> I can't recall that there was any problem with this patch, I assume it
-> felt through by some accident. I've now queued it on modules-next.
+> On Mon, Dec 30, 2024 at 7:33 PM Elliot Berman
+> <elliot.berman@oss.qualcomm.com> wrote:
+> >
+> > On Fri, Dec 20, 2024 at 06:41:42PM +0100, Sebastian Andrzej Siewior wrote:
+> > > __module_address() can be invoked within a RCU section, there is no
+> > > requirement to have preemption disabled.
+> > >
+> > > I'm not sure if using rcu_read_lock() will introduce the regression that
+> > > has been fixed in commit 14c4c8e41511a ("cfi: Use
+> > > rcu_read_{un}lock_sched_notrace").
+> > >
+> >
+> > You can replace the rcu_read_lock_sched_notrace() with guard(rcu)().
+> > Regular rcu lock doesn't generate function traces, so the recursive loop
+> > isn't possible.
+> >
+> > I've tested:
+> >  - the current kernel (no recursive loop)
+> >  - Revert back to rcu_read_lock_sched() (fails)
+> 
+> Which kernel version did you test? I assume something pre-KCFI as
+> arm64 doesn't use this code since v6.1.
+> 
 
-Great, thx!
+Ah, thanks for calling me out. I dug a bit more, I thought I was looking
+at a recursive loop in the ftrace buffers, but was actually the expected
+behavior. When I tested on the other configurations, the stm dummy
+driver hadn't kicked in yet by the time I looked at the ftrace. Indeed,
+this function code is not used on arm64.
 
-Ciao, Thorsten
+I experimented with an x86 build as well and I was able to get the hang
+I remember seeing after some tweaks to force a CFI failure. Still,
+guard(rcu)() is okay by me :)
+
+> >  - Your series as-is (no recurisve loop)
+> 
+> Note that this patch only adds a comment to is_module_cfi_trap(), so I
+> wouldn't expect a functional change.
+> 
+
+Agreed I wouldn't expect it to make any issues; I mentioned it for
+completeness sake.
+
+Regards,
+Elliot
