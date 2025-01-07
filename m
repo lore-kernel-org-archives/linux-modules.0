@@ -1,166 +1,179 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5711EC012
-	for <linux-modules@vger.kernel.org>; Tue,  7 Jan 2025 13:09:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2B7C1F0E3C
+	for <linux-modules@vger.kernel.org>; Tue,  7 Jan 2025 15:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736255362; cv=none; b=MltNH1Cw+K02Nwa8i0Qh/VVU9toomgZx8DxpLS7A+wpx+CzOPLinX716hL1i4Lx+7pS8sHh81HvQtxJ+yAWib9oYT6InVYoHzZqAy20/nskEWNSfokO6NqI2K/9LFzUAtqxgHaZLaqbkyqyUc8E6ptk44KIaNFdL/ARHqs2PzHo=
+	t=1736264150; cv=none; b=qA0Edf5kVLM2hc/4oV2oz3PvB5GJ8lR8gO6PT0w3JUx7aB6PxNR6Coo9PhvvZRwwwksM8hRWvbeWatPOtQteQUuv2ATM+czjWs9sA+5YX8Kzn4NKwxEH1JYlY/tbXQJBbsGJRetiWrnPmSWzQ7jeZg5XeHFDn2tsGgKHlrgrK5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736255362; c=relaxed/simple;
-	bh=jCKA14jAdMLukE9hbjtwtVsHqD7XRQxyYxSyx40LAYs=;
-	h=Date:From:To:CC:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To:References; b=uCHzXoVPa1uxxRr9kfnz0SR46ZziAMaR08IIjc73InRqCgmJaIPUD8Ft7LF9wSQpZqZ7xLoQJGfvvvpuCZBq6NamD+ULSodv3tkeIMbhuvXqhA7+8H1JHlZNH55+4T2fjwZu37lAWagqUdupcgKJbzBqI1h89XoPXalxkrWVTqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=L8ipS0N6; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1736264150; c=relaxed/simple;
+	bh=8m+4KRHGoTieA8CvCwunlUTmUJfNG8C6GYQjAJmMtP8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dAQV+cs8iqYaAQTgcUOQ4u1oWsthntAzjpp5yveATSrcww+ShPUN0SN1KTub7pCSEgYkIIAPyi+axEcCQkwf5plXlIPcxaJAH7MaF4JObuQz/FLWO45lEupPQ0ZkXqsB9Uxi8FlONYs6nCktwLMmuGt7b4daRZgmLoFOSlvj44U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=F38w/WAw; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="L8ipS0N6"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250107130011euoutp02988a5512bf6a0b1d61f04c67bc080198~Yao1hNryU2262522625euoutp029
-	for <linux-modules@vger.kernel.org>; Tue,  7 Jan 2025 13:00:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250107130011euoutp02988a5512bf6a0b1d61f04c67bc080198~Yao1hNryU2262522625euoutp029
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1736254811;
-	bh=7ldK6dNcZzHpOULmajqZfkl7838Z8XKw07ksv9JKsJo=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=L8ipS0N63bZUR3vufgH8hbYA5KqugIG1CboPl3h4xeo1yAVB2zhm2ZJ+NTGMPHgBq
-	 FXol5evbR+kSZ0AFq1rgHodMol2cdN9tFJCsKuZDvuiWyijoDNzQcbdBzq8z9ECDGC
-	 A+v7AzjHUXuJJEM6kd8IeR9zuwINHy6bgP2KhVsg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250107130011eucas1p135d81e59b3ef150364e8eb6bfe7dd2fb~Yao1SBoEx0893608936eucas1p1Q;
-	Tue,  7 Jan 2025 13:00:11 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id CD.3F.20397.B552D776; Tue,  7
-	Jan 2025 13:00:11 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250107130011eucas1p13fba0f5a7b3321a6b56c639da94b0807~Yao03LnvM3035230352eucas1p1j;
-	Tue,  7 Jan 2025 13:00:11 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250107130011eusmtrp1552f0433f53834b23f805d7a1a2a5fcd~Yao0yPXW31906019060eusmtrp1V;
-	Tue,  7 Jan 2025 13:00:11 +0000 (GMT)
-X-AuditID: cbfec7f5-e59c770000004fad-8b-677d255bde0b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id C8.79.19920.A552D776; Tue,  7
-	Jan 2025 13:00:10 +0000 (GMT)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250107130010eusmtip11265951a09a4c1befa35696f1f2888df~Yao0YTa5-3182131821eusmtip1c;
-	Tue,  7 Jan 2025 13:00:10 +0000 (GMT)
-Received: from localhost (106.110.32.87) by CAMSVWEXC01.scsc.local
-	(2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id
-	15.0.1497.48; Tue, 7 Jan 2025 13:00:09 +0000
-Date: Tue, 7 Jan 2025 14:00:08 +0100
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Kees Cook <kees@kernel.org>
-CC: Petr Pavlu <petr.pavlu@suse.com>, Christophe Leroy
-	<christophe.leroy@csgroup.eu>, Luis Chamberlain <mcgrof@kernel.org>, Sami
-	Tolvanen <samitolvanen@google.com>, <linux-modules@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Mike
-	Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v1 0/3] module: Don't fail module loading when setting
- ro_after_init section RO failed
-Message-ID: <20250107130008.nieaxsjpptwbwe5d@AALNPWDAGOMEZ1.aal.scsc.local>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="F38w/WAw"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43675b1155bso150194655e9.2
+        for <linux-modules@vger.kernel.org>; Tue, 07 Jan 2025 07:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1736264144; x=1736868944; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XZbzK7gNJ8VfH7wLPW3weuF06YbkZOBy++EFlcgPDK4=;
+        b=F38w/WAwJoX3pcVnGjV8J7XlWalcURR2MEWSG9HN34S+4I8Pq3+g4PNgHEynT7fQ9V
+         ymN+1ivU0YRCbJU6HQRf7gj9XSaeqKyX7WV2r8RcAfk0Mtio0d6uicYeyZe7kJzFn3co
+         bsbksRREl1AOGmIkVTMBGbhJT+5srnOqm1dIhmDO6YP7wdRODj0ERX6PJG1U0lgYYHEh
+         zYAeYubDERYVtAroJxeqJYEmGcNOwu3ksHppr732kW11lSpb3BFi0kVoDhlEImHV8Fpf
+         BdyXVVEx/4Iwuy8woMzUKr+mLiejpnUsnEAOUFiDfOmUy/W3wrIq2kzzHNVZdymAC5+u
+         oZnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736264144; x=1736868944;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XZbzK7gNJ8VfH7wLPW3weuF06YbkZOBy++EFlcgPDK4=;
+        b=S/gc1c8vf/ctxM61qHMXyXq3m2p2qu5BARKQ2U6rBP4nc4E69k0lNU9cPC/mzroVD6
+         HtoLD/uj9ybG2KG0cwJf98OCrrgJ1VBA9E8stfDIB7UKm2z2RUqAulIj1DXfoor4Uw7i
+         r9WhpHkAQ9FQM3DqJN3yRXf05aQwSnvc0XOuqYf3hAg9lsyyZhLALPaq9EPcGwHRg6t4
+         XmdLkkuZstR9zWbVb4HYLmWMNRUilHqMHfSocVNH4k2Nzet8izzwCyhGpMhFj9tSTpeP
+         NET46CvUUucl9TuzBXyJa6GLCjqArFK5sVFhVkuSboxPELUlAsj80lsxJUvnZpmW4wzN
+         mfTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWf3S5Rkzp4YLLODhL9ykAfP+ne2+A+NiTN7I4fq94CiyWr3rSve/9AKWoK4zKmH/lONzR8t1Oh4nSyBKaU@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywdg+aS4bOB4qrf9k4kgbMpV165rQueb6w9I8lh6ikkJiJ/HCvt
+	I170C6cT76JNcaV+ZX4KOtUP5YfkUEeoyNyrqsG9nLGldFD3nrpVRxNf4+qzGpM=
+X-Gm-Gg: ASbGncsDMXbEenoW6nlOiNhRxLvsuoaP9Z9irIdjes6Oz1Aky7nsv9jT8fjpZlxykgR
+	sMuWoDANJsZpaCDe39lpiw5jI0NCCMEj0BhAmJVtcYnaaFXR3m3xZsbZMIkHRAQB08zwnPAxxtc
+	iy2bCio1H8/oweGJsRdKvuQR+ohY5qFM5O6+A5zybvi6e+6Vl6G4CKbSMMjE/ufbPSYHAOc4Pts
+	yP7PaGSoZMHeifxDb6wKG0D2/VgZnSLZ6+odiEmRVfanyWz5n/Aen/rhAPr
+X-Google-Smtp-Source: AGHT+IHT+uGKdYWP32nNdYuxCzKEUEtl7jwYI4PJVc6e7CGReWgq+hVxrrrOXvulnKWZaYLl+U73CA==
+X-Received: by 2002:a05:600c:4f84:b0:434:f7ea:fb44 with SMTP id 5b1f17b1804b1-43668644255mr533777585e9.14.1736264144046;
+        Tue, 07 Jan 2025 07:35:44 -0800 (PST)
+Received: from dhcp161.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c833149sm50170082f8f.39.2025.01.07.07.35.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2025 07:35:43 -0800 (PST)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: petr.pavlu@suse.com,
+	rppt@kernel.org,
+	akpm@linux-foundation.org
+Cc: mmaslanka@google.com,
+	mcgrof@kernel.org,
+	regressions@lists.linux.dev,
+	linux-modules@vger.kernel.org,
+	linux-mm@kvack.org,
+	live-patching@vger.kernel.org,
+	joe.lawrence@redhat.com,
+	jpoimboe@kernel.org,
+	pmladek@suse.com
+Subject: [PATCH] module: Fix writing of livepatch relocations in ROX text
+Date: Tue,  7 Jan 2025 16:34:57 +0100
+Message-ID: <20250107153507.14733-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <0530eee7-f329-4786-bea3-c9c66d5f0bed@suse.com>
+References: <0530eee7-f329-4786-bea3-c9c66d5f0bed@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202501061610.203636A9C@keescook>
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUyMcRz3e57n7p7OLk/H+JJE7qIQeZkn75R2ExbzssXG0bPr7U7dizhO
-	Z2FqNEKli9pId5LOU+kiabe6FEozRvM+77siXVo2xfWcl/8+38/L7/v5bj8SFxfyxpHxKi2j
-	VsmTAvhC4rqjv23GFqlBMcvxdAL9LPuDgL7a2cajH94o4NNGUx+PfnLiHaKLXV043VBejdHF
-	5k4eXcGewZd5yXqftmKyIlYnYy9n8GVdra0CWXnlI0LWw06I5scIF8UySfG7GfXMJduFcdaW
-	jyjZ5r0nPVNmRNbhmciLBGoumK9VY5lISIopM4JrNdU4N7gQ2AtsBDf0IGhztfH/RG4XtvM5
-	oQTBlawMwV9XVdUzT6QCwUlb7W8bSRKUBEodwe40nwqCumZW4MajKH+wnXcN7cOpCgyeG88S
-	bmEklQTOcxcxNxZRUVBeWsznsA80n3075MGp6VB089vQ+zjlCyUDpJv2okLgkcXkaToJ8k5a
-	CA4boMxxb6goUIMkdDy2YJwQAS8vlAo4PBI+N1V68Hi4e+qYJ5wI9/tqEYe1MPD1h4dfCINl
-	zz38cmhtYDF3H6C84UmnD1fTG7Kv5+IcLYKjR8ScOxBKXziJE2hy/n+H5f93WP6/w4oQfhmN
-	YXQapYLRzFExqSEauVKjUylCdu5Ssuj3H7o70NRrQ+bP3SF2hJHIjoDEA0aJwvwMCrEoVr5X
-	z6h3bVPrkhiNHfmSRMAYkTTWnxFTCrmWSWSYZEb9R8VIr3FGbIXVNAwsAuGqlpaG6a5G6x3n
-	Pt2XGwdORRriqpiIaTWBdUeRX8zrj+vICF/l7DRWmdBv/pYyz/94b3xdhkk+adryw/WNKz80
-	lb0/xETmhgU96E4JfRdWc3DZlPQHM65Ejx5RKO897bu5o0af9RNFO/MerjVuWjO7/tKUtxJq
-	YXj5xfSfqX0LUgraewRjt6KEjJj9ZFhj195203praE7RYmlPrVTpnPqKZ07+nvJ68o7R4aBP
-	zHPecnQ3Zbq+1m/I8TMsTlshSfCvlAj9NirZQ2lSe+O2T1u12onmZEu26nyLPrVWpc9ZR1xd
-	PXdQ3Szrlwa9KVgqWT+/PyrY1XGGCA8gNHHy0GBcrZH/Ampk+BuyAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsVy+t/xu7pRqrXpBm9Om1vcmfSc3WLd2/Os
-	Fpd3zWGzaJj9ndXixoSnjBZLv7xjtjiyfjuTxdIVb1ktNm+ayuzA6fH15jkmjwWbSj02repk
-	83h37hy7x/otV1k8Pm+SC2CL0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXS
-	t7NJSc3JLEst0rdL0MvYcOoFY8EOvormLo8Gxg3cXYycHBICJhL7519k62Lk4hASWMoosX3p
-	NxaIhIzExi9XWSFsYYk/17rYQGwhgY+MEgsvikE0bGaUuH91JVADBweLgIrE6mNaIDVsApoS
-	+05uYgexRQTkJXbM+8IMUs8ssJlJ4urkiWBDhQVyJN7MXcIEYvMKeEusX70U6ooXjBInJ59k
-	h0gISpyc+QTsImYBHYkFuz+xgSxjFpCWWP6PAyTMKaAncXXlbDaIQxUlZkxcCfVArcSr+7sZ
-	JzAKz0IyaRaSSbMQJi1gZF7FKJJaWpybnltsqFecmFtcmpeul5yfu4kRGI3bjv3cvINx3quP
-	eocYmTgYDzFKcDArifBaytamC/GmJFZWpRblxxeV5qQWH2I0BQbFRGYp0eR8YDrIK4k3NDMw
-	NTQxszQwtTQzVhLndbt8Pk1IID2xJDU7NbUgtQimj4mDU6qBaXfIo0DpMwzz/SqXivj7ewd2
-	JvxeclrjYdv0dS6NM3d+sSq/UTDF6Hz0/t8b3lxp8O7WEbGyfFWjcfzEntQvl9wyLA3/qm09
-	vslt28SgDJW6U0HJqzZ5cPxvfXxrspF94qpKfUObtsyuNS5NbvcX8xZ6XZ695mzRurc9n7S1
-	fn8Uthc8ci5bT/dswrvcneXvkoyn7fprzLvG/9gB+8VNi9n/yCy9ln7EOXOxycL6XK/ZkxdU
-	tFvcCRALUs6Z0Nje2yd3yb/e9O/hs2eeZU0OS24ocojSK7UTi9sSfuZEl3lU6PYZy46L9ZRK
-	lkzd42Pp+yFy68q1gaWz07bNrJwz922r5g7xhLM7JOpPNrlzK7EUZyQaajEXFScCABIj92tP
-	AwAA
-X-CMS-MailID: 20250107130011eucas1p13fba0f5a7b3321a6b56c639da94b0807
-X-Msg-Generator: CA
-X-RootMTR: 20250107001338eucas1p24b8d0a4f5076e74d435a9c6bf73c82aa
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250107001338eucas1p24b8d0a4f5076e74d435a9c6bf73c82aa
-References: <cover.1733427536.git.christophe.leroy@csgroup.eu>
-	<f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
-	<CGME20250107001338eucas1p24b8d0a4f5076e74d435a9c6bf73c82aa@eucas1p2.samsung.com>
-	<202501061610.203636A9C@keescook>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 06, 2025 at 04:13:29PM -0800, Kees Cook wrote:
-> On Fri, Jan 03, 2025 at 05:13:32PM +0100, Petr Pavlu wrote:
-> > On 12/5/24 20:46, Christophe Leroy wrote:
-> > > This series reworks module loading to avoid leaving the module in a
-> > > stale state when protecting ro_after_init section fails.
-> > > 
-> > > Once module init has succeded it is too late to cancel loading.
-> 
-> Is there at least a big WARN about the ro failing? That should let more
-> sensitive system owners react to the situation if it looks like an
-> active attack on memory protections.
+A livepatch module can contain a special relocation section
+.klp.rela.<objname>.<secname> to apply its relocations at the appropriate
+time and to additionally access local and unexported symbols. When
+<objname> points to another module, such relocations are processed
+separately from the regular module relocation process. For instance, only
+when the target <objname> actually becomes loaded.
 
-Yes, there is. But I think only the first time a module fails. IIUC,
-any subsequent modules failing will not warn anything, is that right?
-However, I think this should suffice to know a system is vulnerable but
-will not know the full list of the actual vulnerable modules.
+With CONFIG_STRICT_MODULE_RWX, when the livepatch core decides to apply
+these relocations, their processing results in the following bug:
 
-> 
-> (And maybe we should set a TAINT flag, but perhaps this is too specific
-> a failure mode for that?)
-> 
-> Also, why is it too late to cancel? Can we set the module to the
-> "Unloading" state to stop any dependent modules from loading on top of
-> it, and then request it unload?
+[   25.827238] BUG: unable to handle page fault for address: 00000000000012ba
+[   25.827819] #PF: supervisor read access in kernel mode
+[   25.828153] #PF: error_code(0x0000) - not-present page
+[   25.828588] PGD 0 P4D 0
+[   25.829063] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+[   25.829742] CPU: 2 UID: 0 PID: 452 Comm: insmod Tainted: G O  K    6.13.0-rc4-00078-g059dd502b263 #7820
+[   25.830417] Tainted: [O]=OOT_MODULE, [K]=LIVEPATCH
+[   25.830768] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
+[   25.831651] RIP: 0010:memcmp+0x24/0x60
+[   25.832190] Code: [...]
+[   25.833378] RSP: 0018:ffffa40b403a3ae8 EFLAGS: 00000246
+[   25.833637] RAX: 0000000000000000 RBX: ffff93bc81d8e700 RCX: ffffffffc0202000
+[   25.834072] RDX: 0000000000000000 RSI: 0000000000000004 RDI: 00000000000012ba
+[   25.834548] RBP: ffffa40b403a3b68 R08: ffffa40b403a3b30 R09: 0000004a00000002
+[   25.835088] R10: ffffffffffffd222 R11: f000000000000000 R12: 0000000000000000
+[   25.835666] R13: ffffffffc02032ba R14: ffffffffc007d1e0 R15: 0000000000000004
+[   25.836139] FS:  00007fecef8c3080(0000) GS:ffff93bc8f900000(0000) knlGS:0000000000000000
+[   25.836519] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   25.836977] CR2: 00000000000012ba CR3: 0000000002f24000 CR4: 00000000000006f0
+[   25.837442] Call Trace:
+[   25.838297]  <TASK>
+[   25.841083]  __write_relocate_add.constprop.0+0xc7/0x2b0
+[   25.841701]  apply_relocate_add+0x75/0xa0
+[   25.841973]  klp_write_section_relocs+0x10e/0x140
+[   25.842304]  klp_write_object_relocs+0x70/0xa0
+[   25.842682]  klp_init_object_loaded+0x21/0xf0
+[   25.842972]  klp_enable_patch+0x43d/0x900
+[   25.843572]  do_one_initcall+0x4c/0x220
+[   25.844186]  do_init_module+0x6a/0x260
+[   25.844423]  init_module_from_file+0x9c/0xe0
+[   25.844702]  idempotent_init_module+0x172/0x270
+[   25.845008]  __x64_sys_finit_module+0x69/0xc0
+[   25.845253]  do_syscall_64+0x9e/0x1a0
+[   25.845498]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[   25.846056] RIP: 0033:0x7fecef9eb25d
+[   25.846444] Code: [...]
+[   25.847563] RSP: 002b:00007ffd0c5d6de8 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[   25.848082] RAX: ffffffffffffffda RBX: 000055b03f05e470 RCX: 00007fecef9eb25d
+[   25.848456] RDX: 0000000000000000 RSI: 000055b001e74e52 RDI: 0000000000000003
+[   25.848969] RBP: 00007ffd0c5d6ea0 R08: 0000000000000040 R09: 0000000000004100
+[   25.849411] R10: 00007fecefac7b20 R11: 0000000000000246 R12: 000055b001e74e52
+[   25.849905] R13: 0000000000000000 R14: 000055b03f05e440 R15: 0000000000000000
+[   25.850336]  </TASK>
+[   25.850553] Modules linked in: deku(OK+) uinput
+[   25.851408] CR2: 00000000000012ba
+[   25.852085] ---[ end trace 0000000000000000 ]---
 
-I think Luis summarized it here [1]. Quoting him from that thread:
+The problem is that the .klp.rela.<objname>.<secname> relocations are
+processed after the module was already formed and mod->rw_copy was reset.
+However, the code in __write_relocate_add() calls module_writable_address()
+which translates the target address 'loc' still to
+'loc + (mem->rw_copy - mem->base)', with mem->rw_copy now being 0.
 
-	Sadly there are a few issues with trying to get to call mod->exit():
-	
-	- We should try try_stop_module()  and that can fail
-	- source_list may not be empty and that would block removal
-	- mod->exit may not exist
+Fix the problem by returning directly 'loc' in module_writable_address()
+when the module is already formed. Function __write_relocate_add() knows to
+use text_poke() in such a case.
 
-https://lore.kernel.org/all/Zuv0nmFblHUwuT8v@bombadil.infradead.org/
+Fixes: 0c133b1e78cd ("module: prepare to handle ROX allocations for text")
+Reported-by: Marek Maslanka <mmaslanka@google.com>
+Closes: https://lore.kernel.org/linux-modules/CAGcaFA2hdThQV6mjD_1_U+GNHThv84+MQvMWLgEuX+LVbAyDxg@mail.gmail.com/
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ include/linux/module.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Module loading goes from UNFORMED to LIVE during the initialization.
-And once it's LIVE we do the ro_after_init memory protection. I'm not
-sure if an intermediate stage can be added so ro_after_init is performed
-and module is unloaded when this fails? I guess init does not necessary
-mean LIVE.
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 94acbacdcdf1..b3a643435357 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -773,7 +773,8 @@ void *__module_writable_address(struct module *mod, void *loc);
+ 
+ static inline void *module_writable_address(struct module *mod, void *loc)
+ {
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod)
++	if (!IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX) || !mod ||
++	    mod->state != MODULE_STATE_UNFORMED)
+ 		return loc;
+ 	return __module_writable_address(mod, loc);
+ }
 
-Daniel
+base-commit: 9d89551994a430b50c4fffcb1e617a057fa76e20
+-- 
+2.43.0
 
-> 
-> -- 
-> Kees Cook
