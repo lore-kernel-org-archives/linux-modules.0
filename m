@@ -1,72 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16739EEB2;
-	Tue,  7 Jan 2025 00:13:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8101DF987;
+	Tue,  7 Jan 2025 08:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736208813; cv=none; b=Vrz59e6f5whUNRAjpp8tjZHmXGoWWhS9IWOvoJl2oACqwdwKCqgoTkpqElLw9oZP7F+XA1QbLRV+jLasax8S70AzQfQeo8O0w7C8EPnqxw49FsquN9kGplc7Y5oE2nmXrpJ5+4s2knPynciqLM8G+MVMqUToxHEpgC421+3ba6U=
+	t=1736239738; cv=none; b=T1PaxIuR+DnSfslG4FKafE2vnHDp2aB5EaUtM/Qwh+5Edqi4ohhCNBQsYdupyM/vZMLLAuF+cCSGFdl0DcTbsM89onvQExn0w7yJxhD0pkWGu04ft9NphrGqWZitFx2oyDqEyvzf+gqTiNZK+uvYj7e6Ug+0JnPlP0esC3he0UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736208813; c=relaxed/simple;
-	bh=xyYLNDQCGZPfnhHO/2SmdY256WPnKEfpvNumyWQ6dxc=;
+	s=arc-20240116; t=1736239738; c=relaxed/simple;
+	bh=75qSoARujHFKrxawR0blzosOlHUziYhK6L/R2vdTEek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PhqivzTBwIOY2YJAsbudyRBDJnrTrv40SXzYK2XpR8eneglEkO+I5A4hhK7Pxi6e3JCA2XtYuSNg4fLbJ6fvwAPV35BKuMZv70mTgBxy0CcMI4mXo85DpRwuKOr4SEE62sJVRhmQDUsGLvAUYBjdxc7UGGcU3An1Osa1Sk5CVvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=biFd9cI+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=bw5nbbW6MYZ3F6ljS7HlQQjv1RA8QES+14w7STYy0nBMJDxe8zJPUZ42DK6Nn0CqzjNyaVZgtlpLbciLTZwAhSDOJKqEnZrtwBa9ih5Kc64hxpHn8oyKj8ZGI0CxQ+SnVzz4uGA3JcPfH57/lYfmYMrZ8mG0T8+vn032AEZPUQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L7zH7+wl; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="biFd9cI+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 712ADC4CED2;
-	Tue,  7 Jan 2025 00:13:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736208812;
-	bh=xyYLNDQCGZPfnhHO/2SmdY256WPnKEfpvNumyWQ6dxc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=biFd9cI+PZjzaZCYoGeOjLehURgJOE4iJI3VVIdjibzTWlcD7Gh2tcQG22PhaKppA
-	 C9jCaCJq2zVkfGzM4kcenmq9ssM2QJiYEKYaKnASWdUeo/vnaAnB3MjHlzRq4sBKvZ
-	 UfgM+E4pHMMbsGJLKGVvHtgcrpKW290WJDPcR59/Rp7M/CoT3LJshvlCsmRtvBklL/
-	 2rqDnzzjxPhEC4NNazOXwiS9emd54jMZELYE62fsH2ztJOXeojnJGh+NMoAMUSqgFd
-	 HlyQtMjqqMi5iBSPdKG4ctq/QHrqs7LUgJ0VJQwVEC4kaecFZ5mQ17qXqrA2K2Ld3r
-	 izvC1m1V2Y5gA==
-Date: Mon, 6 Jan 2025 16:13:29 -0800
-From: Kees Cook <kees@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L7zH7+wl"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=WwRVnzV3CDoYfoXPZ2biLNd0Ko3ydMKPZgxSyZnn16Y=; b=L7zH7+wlOdtHvMj5rcLSTdTA9C
+	NHxoT45+BXSDgAbhvBwLRXVa3itr1LEFY4SocJjCsIzyKHM4j5V/R1xEEtrsZzpP/NDyOcVrevGnE
+	sbuBUk1CgQ3Do77iq4gxWbG7QuOqHd+qSGb0zSYlNfE9Jym8YSXpYD2KXZlX5SwMGn4HLcH5v+MQ1
+	ilouiBEihhWi0HhhR0u/HDSSGEhWDY+88J4yZAJKgEyfNAToQWVk34uL8hJSZb0gKMmGA3D/+h4j8
+	XRE/MPTh8HvbZh0j7IElzzLcPiJfbZTrusKjD95TwrDhR0BS6S5pdxOoFY4VtkO06MfAsriJyQv4P
+	xL/2WVGQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tV5GV-000000059Jt-2WSo;
+	Tue, 07 Jan 2025 08:48:43 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 11CE630057A; Tue,  7 Jan 2025 09:48:43 +0100 (CET)
+Date: Tue, 7 Jan 2025 09:48:42 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Gomez <da.gomez@samsung.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v1 0/3] module: Don't fail module loading when setting
- ro_after_init section RO failed
-Message-ID: <202501061610.203636A9C@keescook>
-References: <cover.1733427536.git.christophe.leroy@csgroup.eu>
- <f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2 00/28] module: Use RCU instead of RCU-sched.
+Message-ID: <20250107084842.GH20870@noisy.programming.kicks-ass.net>
+References: <20241220174731.514432-1-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241220174731.514432-1-bigeasy@linutronix.de>
 
-On Fri, Jan 03, 2025 at 05:13:32PM +0100, Petr Pavlu wrote:
-> On 12/5/24 20:46, Christophe Leroy wrote:
-> > This series reworks module loading to avoid leaving the module in a
-> > stale state when protecting ro_after_init section fails.
-> > 
-> > Once module init has succeded it is too late to cancel loading.
+On Fri, Dec 20, 2024 at 06:41:14PM +0100, Sebastian Andrzej Siewior wrote:
+> Hi,
+> 
+> This is an updated version of the inital post after PeterZ made me aware
+> that there are users outside of the module directory.
+> The goal is replace the mix auf rcu_read_lock(), rcu_read_lock_sched()
+> and preempt_disable() with just rcu_read_lock().
+> 
+> I've splitted it into smaller chunks which can be applied/ reviewed
+> independently. I'm just not sure about the cfi patch (28/28) so I added
+> just a comment instead.
+> 
+> v1…v2: https://lore.kernel.org/all/20241205215102.hRywUW2A@linutronix.de/
+>   - Splitted into smaller patches.
+>   - Converted all users.
 
-Is there at least a big WARN about the ro failing? That should let more
-sensitive system owners react to the situation if it looks like an
-active attack on memory protections.
+Thanks for doing the cleanup!
 
-(And maybe we should set a TAINT flag, but perhaps this is too specific
-a failure mode for that?)
-
-Also, why is it too late to cancel? Can we set the module to the
-"Unloading" state to stop any dependent modules from loading on top of
-it, and then request it unload?
-
--- 
-Kees Cook
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
