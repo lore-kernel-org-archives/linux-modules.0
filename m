@@ -1,44 +1,44 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29C91F426E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38B01F427A;
 	Wed,  8 Jan 2025 09:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736327121; cv=none; b=FRn3nqEijM1Wt3aygc3hNy8wNxHw1cJKXNhV/KWni1Fhj7VNqKbWbNghSF3cviRm+HQRwiQAhUcxNvc6Qq0azkCMD/kZxKfmKHdYcDbl0O22UfkFhEdKu1Ry+iv0LYctqLaG6+jO2eV+AYpZfllJ1bX787OATjKBBOp6d6+bxac=
+	t=1736327122; cv=none; b=hmsMiHAa6uXmpd85JCIgHJhrnN0xR13fDoThOsoYpICFtpfkH9SJnGdvhPmF+Zvw+iZo5Qjj/WobHOA+k8ckFFtqX2dYUz5KYo8ImkimrURY2ONHT+oeJVbkdYmgPQ1kndghEu9O4Tu6sO4PgUcaVCV9d3Gcsy9qC2g6pStrpCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736327121; c=relaxed/simple;
-	bh=axvyxnWooo75BTWGLQAmaIhNJhO70bD+tkHMIyPTibk=;
+	s=arc-20240116; t=1736327122; c=relaxed/simple;
+	bh=4qjk4ZgYgYdcxmkh6VNIf6ytI19yT8vGBa1ibzSe1MQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hHVFRbaq6rW5Wsey6RpwTR9FujWJHpf4gn2kLAdz1/wqjgj8/5QIflywCJhCgOktm/TYWl7exr9poS3gQQ+KxfSCusOVEC1uQvXpf/e8Oj3l605uTn4Y9Gt5eL2z6ynL8eKapDshcjW0MUse8DlHbLwQRTgfyWZslTcRRk+PDcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=l6Vstg6w; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jIGs/Hd3; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=BidQGwwNNWQ6D2L2DAPPz//qtRf2QsYqw/DWVvg8e0QnM8WViRhOWvrdghlNiNMRGtQnaO8KFSLrKRK9A2tdGvtxp7HqISPUEyfJxxYz6Xmyluy22BCCfUVJmTP1T5dQWa0DopgjRv+6FDMIbtM9vc68uLcWQCklX93o9257KD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=c2P2D9eS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7o7UMwa2; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l6Vstg6w";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jIGs/Hd3"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="c2P2D9eS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7o7UMwa2"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736327118;
+	s=2020; t=1736327117;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=71h+qS2tty8Z0drmH+HaOoie0zIG/EW33SGidtl3NOY=;
-	b=l6Vstg6wTnoul4HLT4y0awP4b0tbXsHV+yWypjiAlreQ/QNUjbS+Pxuff7eam5HTXr9UG+
-	yv9HGOD2UNaSaT8DPcG30gdXM9roaKq8AXVVOso/A5/lsBKDZw0HyuJYo444Qbm8n3JqNf
-	nxd5QssopBV/Egvimusx/zYOswEHL4bq9m4msKre6/rOiDQL4G+63VxTnFtDMPSLZh1KQA
-	ucJv1l1/5klwBOmvP81Utr4+ypyKHpEYw33vNSc7Bk3uXYCHqFubgzYGEIQCCUka4bPTTg
-	AOlX9vpaTmiJCqVi6k/6+1eNvtuloOD6E4HZ9rNU7Kes2XLbWRr+L4yRcSIksg==
+	bh=UeRBwot1ZOna4cw61E4j7JYR+wcb0jWq9QvmlD1DT/0=;
+	b=c2P2D9eSh4XHo2/Blrmx/hYuzX2oqNMwhAse4kcS895ethl2GkmDlBGqOCU4Tibyb+94oC
+	cS0EZOvclEU832SmZR0w00BVA4IFLqmnQia47ZsjYPa+Bya97m8b+NCpoAN/b8LghduC5V
+	/aGK4ict8yPZ+xe0lLPH23HxbIenAtafWiuguOJpw143QWK//BOgqVXUmfRZLx3Pp6Dyl4
+	ru8UuXp26Ae06H6z0ENF/ITy3m5C0BcX3Risa2XPJSdfnpPnu5KZgSElfHIMpKoFPaRFOR
+	Dw/X19vjyf7O84n1ODSXUJhMc70bUToLZxhE39cYuLkPTQCIxUKQg9wlbBZw8A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736327118;
+	s=2020e; t=1736327117;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=71h+qS2tty8Z0drmH+HaOoie0zIG/EW33SGidtl3NOY=;
-	b=jIGs/Hd3yi8VlbPOb0ijPhLNJNFP8QFisXKRp7RidRarCiy2ykn1jovqfH2ZfK8xnt/4ng
-	57elPqhDvvFT55BA==
+	bh=UeRBwot1ZOna4cw61E4j7JYR+wcb0jWq9QvmlD1DT/0=;
+	b=7o7UMwa2KRtBbBqfWNQiapLOAixcH6GT8QOILrmP52Dm1bFGOU6/Fgo5AZwrmOfIbIBwoa
+	ikm+YjGPUrlTyFDA==
 To: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Daniel Gomez <da.gomez@samsung.com>,
@@ -49,9 +49,9 @@ Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v3 12/28] module: Allow __module_address() to be called from RCU section.
-Date: Wed,  8 Jan 2025 10:04:41 +0100
-Message-ID: <20250108090457.512198-13-bigeasy@linutronix.de>
+Subject: [PATCH v3 10/28] module: Use RCU in find_symbol().
+Date: Wed,  8 Jan 2025 10:04:39 +0100
+Message-ID: <20250108090457.512198-11-bigeasy@linutronix.de>
 In-Reply-To: <20250108090457.512198-1-bigeasy@linutronix.de>
 References: <20250108090457.512198-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -62,68 +62,118 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-mod_find() uses either the modules list to find a module or a tree
-lookup (CONFIG_MODULES_TREE_LOOKUP). The list and the tree can both be
-iterated under RCU assumption (as well as RCU-sched).
+module_assert_mutex_or_preempt() is not needed in find_symbol(). The
+function checks for RCU-sched or the module_mutex to be acquired. The
+list_for_each_entry_rcu() below does the same check.
 
-Remove module_assert_mutex_or_preempt() from __module_address() and
-entirely since __module_address() is the last user.
-Update comments.
+Remove module_assert_mutex_or_preempt() from try_add_tainted_module().
+Use RCU protection to invoke find_symbol() and update callers.
 
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/module/internal.h | 11 -----------
- kernel/module/main.c     |  4 +---
- 2 files changed, 1 insertion(+), 14 deletions(-)
+ kernel/module/main.c    | 30 ++++++++++++------------------
+ kernel/module/version.c | 14 +++++++-------
+ 2 files changed, 19 insertions(+), 25 deletions(-)
 
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index daef2be839022..030d2ed175fa8 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -122,17 +122,6 @@ char *module_next_tag_pair(char *string, unsigned long=
- *secsize);
- #define for_each_modinfo_entry(entry, info, name) \
- 	for (entry =3D get_modinfo(info, name); entry; entry =3D get_next_modinfo=
-(info, name, entry))
-=20
--static inline void module_assert_mutex_or_preempt(void)
--{
--#ifdef CONFIG_LOCKDEP
--	if (unlikely(!debug_locks))
--		return;
--
--	WARN_ON_ONCE(!rcu_read_lock_sched_held() &&
--		     !lockdep_is_held(&module_mutex));
--#endif
--}
--
- static inline unsigned long kernel_symbol_value(const struct kernel_symbol=
- *sym)
- {
- #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 126f7f05dedf8..686b74c7c17f5 100644
+index 5aa56ec8e203e..71e73deed76c0 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -3667,7 +3667,7 @@ bool is_module_address(unsigned long addr)
-  * __module_address() - get the module which contains an address.
-  * @addr: the address.
-  *
-- * Must be called with preempt disabled or module mutex held so that
-+ * Must be called within RCU read section or module mutex held so that
-  * module doesn't get freed during this.
-  */
- struct module *__module_address(unsigned long addr)
-@@ -3685,8 +3685,6 @@ struct module *__module_address(unsigned long addr)
- 	return NULL;
+@@ -331,7 +331,7 @@ static bool find_exported_symbol_in_section(const struc=
+t symsearch *syms,
 =20
- lookup:
+ /*
+  * Find an exported symbol and return it, along with, (optional) crc and
+- * (optional) module which owns it.  Needs preempt disabled or module_mute=
+x.
++ * (optional) module which owns it. Needs RCU or module_mutex.
+  */
+ bool find_symbol(struct find_symbol_arg *fsa)
+ {
+@@ -345,8 +345,6 @@ bool find_symbol(struct find_symbol_arg *fsa)
+ 	struct module *mod;
+ 	unsigned int i;
+=20
 -	module_assert_mutex_or_preempt();
 -
- 	mod =3D mod_find(addr, &mod_tree);
- 	if (mod) {
- 		BUG_ON(!within_module(addr, mod));
+ 	for (i =3D 0; i < ARRAY_SIZE(arr); i++)
+ 		if (find_exported_symbol_in_section(&arr[i], NULL, fsa))
+ 			return true;
+@@ -812,10 +810,9 @@ void __symbol_put(const char *symbol)
+ 		.gplok	=3D true,
+ 	};
+=20
+-	preempt_disable();
++	guard(rcu)();
+ 	BUG_ON(!find_symbol(&fsa));
+ 	module_put(fsa.owner);
+-	preempt_enable();
+ }
+ EXPORT_SYMBOL(__symbol_put);
+=20
+@@ -1369,21 +1366,18 @@ void *__symbol_get(const char *symbol)
+ 		.warn	=3D true,
+ 	};
+=20
+-	preempt_disable();
+-	if (!find_symbol(&fsa))
+-		goto fail;
+-	if (fsa.license !=3D GPL_ONLY) {
+-		pr_warn("failing symbol_get of non-GPLONLY symbol %s.\n",
+-			symbol);
+-		goto fail;
++	scoped_guard(rcu) {
++		if (!find_symbol(&fsa))
++			return NULL;
++		if (fsa.license !=3D GPL_ONLY) {
++			pr_warn("failing symbol_get of non-GPLONLY symbol %s.\n",
++				symbol);
++			return NULL;
++		}
++		if (strong_try_module_get(fsa.owner))
++			return NULL;
+ 	}
+-	if (strong_try_module_get(fsa.owner))
+-		goto fail;
+-	preempt_enable();
+ 	return (void *)kernel_symbol_value(fsa.sym);
+-fail:
+-	preempt_enable();
+-	return NULL;
+ }
+ EXPORT_SYMBOL_GPL(__symbol_get);
+=20
+diff --git a/kernel/module/version.c b/kernel/module/version.c
+index 53f43ac5a73e9..65ef8f2a821da 100644
+--- a/kernel/module/version.c
++++ b/kernel/module/version.c
+@@ -62,17 +62,17 @@ int check_modstruct_version(const struct load_info *inf=
+o,
+ 		.name	=3D "module_layout",
+ 		.gplok	=3D true,
+ 	};
++	bool have_symbol;
+=20
+ 	/*
+ 	 * Since this should be found in kernel (which can't be removed), no
+-	 * locking is necessary -- use preempt_disable() to placate lockdep.
++	 * locking is necessary. Regardless use a RCU read section to keep
++	 * lockdep happy.
+ 	 */
+-	preempt_disable();
+-	if (!find_symbol(&fsa)) {
+-		preempt_enable();
+-		BUG();
+-	}
+-	preempt_enable();
++	scoped_guard(rcu)
++		have_symbol =3D find_symbol(&fsa);
++	BUG_ON(!have_symbol);
++
+ 	return check_version(info, "module_layout", mod, fsa.crc);
+ }
+=20
 --=20
 2.47.1
 
