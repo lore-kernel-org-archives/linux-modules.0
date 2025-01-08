@@ -1,122 +1,97 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C3C25949C;
-	Wed,  8 Jan 2025 17:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768A81FF1D5;
+	Wed,  8 Jan 2025 19:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736358359; cv=none; b=b7d0l89XH3Dg1QiSl+APAWGLUCr0PmwFYzpt7pFteLK7AbyyvOINfy3Xme5B1uBTKz2Cy8hhf5Fbz6J+mn+lSYeYfB4dxofpilChM+ThWSXG5cB117iossHhSzqn2O/RynXmYZVce7YvBtbfGCkAI36raSOKY4j9KB+sSn376Tw=
+	t=1736363293; cv=none; b=ZPToBZl3g+m5fVvmp9ols8AXT2nwfW/5RATMDA3oCQq8z6HIjMnJBRgG1ytgnrTuuW5aBs4lOsSY9HmXXzoZixKGzXuGXbjBSOXmmqiCcqyhyxdfmsqM6exT+0ZxqnZoRhxcwAm93QC6GoRynsfDXfCHPHpG1rFe7ymHGCN6W1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736358359; c=relaxed/simple;
-	bh=CntFd34V+ZehwA1bDAGud6oqD/tsVSgbkgAOGItU+Es=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QLbScgYEwVPwUdy3s7m66/0iDfgoz+jD3bB+7YbrHNM18E/KfidRCruy5V8emCzYagH3WHONSheJJ64zVJKQk+W6chVzAhrfOARHl3j/XoqsHH5AvL3WJOqXHKLB51JyExcEQohG7edA5uQTZHnf355kTGvfag1HqxouBxbYjjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VfBm/1Sb; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736363293; c=relaxed/simple;
+	bh=3PUWUE0j8aX0wTHTz/AyJlaIPaFYJp4EEy+cErusWM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e8Jon2fkSTSUp9vmdy3pMcIBEZGUJ54w8IGPWk2DcBlcHZgGg0M708Mwax7/5wEhDZHyI5mQAeHnnYagM8tRpLXmcsuVytbFS7uW4k+TSvLchm8fP/SALOhctYJKhykiQttk8saOjVlys92QSJNZHtDwJfkOjdEboJR0oPnMCAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlOfZCHh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VfBm/1Sb"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43634b570c1so862085e9.0;
-        Wed, 08 Jan 2025 09:45:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736358356; x=1736963156; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CntFd34V+ZehwA1bDAGud6oqD/tsVSgbkgAOGItU+Es=;
-        b=VfBm/1SbsmR5dbV/9tp+k9FCYp7YDNzW3V8xGFQpOlwhcJ2eXO/uEwYdAnI6DZ8InF
-         x3BrMwBAzs8KQ7XE84KHH37Aas+pvSxVhhyyCfPD3ozaeVL3VgFVXE1QU8QAbKXsU5sb
-         Jw9JjwTfI7Kx3fFKBVE2bu56tqjzNLJL4VMEnhprg84qp6e9y1JdWCtowte7YC6jBo22
-         3NoiBqIOgJ1yUjaRWlVi3MLcYdk5bsgAKGktKSVr8860iKP+ihz6fOhzHo1hBL6JW0EV
-         OF8CjxdhRx7fL/YfzWysFYxDY8AUczOy6u9O4Kgo6N2ikMlvfgbcJD5D7EorSC49f63U
-         d/eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736358356; x=1736963156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CntFd34V+ZehwA1bDAGud6oqD/tsVSgbkgAOGItU+Es=;
-        b=EumVb5cIjIeYb4Qlh95UH1Oxxz6NiAa0KvHz5uXmBnLZE6yyjAC7r2WRuQ4tW2P8mk
-         P2QA25RE1F0fGZDp28ZW6QHmjhd4QOHlDy/AVxpgoVCKGPfkwtGTQ83YIWovGmgSTlkb
-         YM+mWGYituBMcDXfEZPapu8Y4JeZayM1ZFqDTKkeXfWUohsr7Z2V77RsbPJBF7ZXNPVz
-         Vn45f8VIx9x48tSL+y0XomsztCZQVlF0fH/ofQ4Qoq0ZfQAX3up+JlgHnP7s6UeBqpW2
-         dFpt74iRWLN3VVYD4B73aaMwz3T7tOjxKdmRCECVFvx4ATGgvKYbuiEz4ydXmdgcqyNf
-         D3yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUNNeUJClauN6yl3rmENVAx1TfYVQuTkT15dhP7szm0kLvS7ks2Mrm7vRX8cHngCYInCIE=@vger.kernel.org, AJvYcCURB1mybRQymJuNLc1Sgq9jDW9MWUfWSwyYY3wvTkauR7utzxNYfaDFO3i7ceaD/BfqaGknIQkh6ge+ljnO@vger.kernel.org, AJvYcCVAO+UhwZDCi6Dp1s9BIMzJ0e1MNmTGfGhU5xnkGAVXC7Rc6mP3RABGmkF452wrqARJPfn1YinbHLr38UaZFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUHpj29Ul67xYROSbsfoIc19jSb9hlED9nEdlzdMRrolJKz4qs
-	OzJKSbWyFSGsWjKHLEHdX3z6SjshGdRcQRoCPeUHGNKxjYCyV6tvjuN1/lZZ2tZlvNMuvhIBAEd
-	fM45KXXY67x1FtrNkV8ZnCzaFn2g=
-X-Gm-Gg: ASbGncuq1fAFQbf1uIk1+QubnhB5HrCyxCx+jsmBQ3Evxf9d5BaMdcpzHk8lPv+CRSC
-	andZXIh3Ro7mYih2bOlkA1W+4edJhvRUmD2YdkdYS
-X-Google-Smtp-Source: AGHT+IENYaJN9qJzVvS74XH6AptDhLta++2dMAjueUTCbMsr4OTDR6rI80EcBDLV3vhFQ2EURExJxkFEPfZHEixQvQg=
-X-Received: by 2002:a05:6000:18a3:b0:385:f0dc:c9fd with SMTP id
- ffacd0b85a97d-38a8730dcf2mr3304762f8f.27.1736358356386; Wed, 08 Jan 2025
- 09:45:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlOfZCHh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7925C4CED3;
+	Wed,  8 Jan 2025 19:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736363293;
+	bh=3PUWUE0j8aX0wTHTz/AyJlaIPaFYJp4EEy+cErusWM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LlOfZCHhdVqInUc2ds5Ab/TSYejNly7psB4Gt6ZNCrBP/FonXZelAArjwYx4++zpg
+	 G6uQpgORv/JrWJDqYAIfENqrqGH2pBdKPgtjY0e6ADbuTUeV23WtE9RrGPh6ZvXrX6
+	 21bt1alGX6Wm8vrKCO0ud5is0F9fZwc0MOd8aV+LZaz9SNVfelnJ+u+6fB5vL8XS5R
+	 QfGDfpq27YCX3V6xIa46Kqed7Vooo2jtSODb2TpBtS94VFx614O1myFaFz0V3lvnNp
+	 LpUvPx61gkuHUiPSs7ggvtgFcB/x77nBBd+ufX3v6g382HOc10fueHzrbr06XrS5/M
+	 bUZKMcn61J19Q==
+Date: Wed, 8 Jan 2025 11:08:11 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Arnd Bergmann <arnd@arndb.de>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
+Message-ID: <Z37NGzxnUznefi8x@bombadil.infradead.org>
+References: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
+ <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
+ <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
+ <5c2ef82a-7558-4397-827d-523f8fe4895b@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
- <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com> <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
-In-Reply-To: <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 8 Jan 2025 09:45:45 -0800
-X-Gm-Features: AbW1kvYKPSAAqEJsfNmyLOCD7SVL_sAo95rJ07iFN2FuKSqH132N8xtEs5_kMIo
-Message-ID: <CAADnVQJMV-zRcDKftZ-MbKEJQ7XGmPteMYCS0Bm5siBEXUK=Fw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] sysfs: constify bin_attribute argument of sysfs_bin_attr_simple_read()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, ppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5c2ef82a-7558-4397-827d-523f8fe4895b@t-8ch.de>
 
-On Tue, Dec 31, 2024 at 2:30=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> On 2024-12-30 16:50:41-0800, Alexei Starovoitov wrote:
-> > On Sat, Dec 28, 2024 at 12:43=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@w=
-eissschuh.net> wrote:
-> > >
-> > > Most users use this function through the BIN_ATTR_SIMPLE* macros,
-> > > they can handle the switch transparently.
-> > >
-> > > This series is meant to be merged through the driver core tree.
-> >
-> > hmm. why?
->
-> Patch 1 changes the signature of sysfs_bin_attr_simple_read().
-> Before patch 1 sysfs_bin_attr_simple_read() needs to be assigned to the
-> callback member .read, after patch 1 it's .read_new.
-> (Both callbacks work exactly the same, except for their signature,
-> .read_new is only a transition mechanism and will go away again)
->
-> > I'd rather take patches 2 and 3 into bpf-next to avoid
-> > potential conflicts.
-> > Patch 1 looks orthogonal and independent.
->
-> If you pick up 2 and 3 through bpf-next you would need to adapt these
-> assignments. As soon as both patch 1 and the modified 2 and 3 hit
-> Linus' tree, the build would break due to mismatches function pointers.
-> (Casting function pointers to avoid the mismatch will blow up with KCFI)
+On Sat, Jan 04, 2025 at 07:30:39AM +0100, Thomas Weißschuh wrote:
+> Hi Luis,
+> 
+> On 2025-01-03 17:37:52-0800, Luis Chamberlain wrote:
+> > On Wed, Dec 25, 2024 at 11:52:00PM +0100, Thomas Weißschuh wrote:
+> > > diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> > > index 7b329057997ad2ec310133ca84617d9bfcdb7e9f..57d317a6fa444195d0806e6bd7a2af6e338a7f01 100644
+> > > --- a/kernel/module/Kconfig
+> > > +++ b/kernel/module/Kconfig
+> > > @@ -344,6 +344,17 @@ config MODULE_DECOMPRESS
+> > >  
+> > >  	  If unsure, say N.
+> > >  
+> > > +config MODULE_HASHES
+> > > +	bool "Module hash validation"
+> > > +	depends on !MODULE_SIG
+> > 
+> > Why are these mutually exclusive? Can't you want module signatures *and*
+> > this as well? What distro which is using module signatures would switch
+> > to this as an alternative instead? The help menu does not clarify any of
+> > this at all, and neither does the patch.
+> 
+> The exclusivity is to keep the initial RFC patch small.
+> The cover letter lists "Enable coexistence with MODULE_SIG" as
+> a further improvement.
 
-I see. All these steps to constify is frankly a mess.
-You're wasting cpu and memory for this read vs read_new
-when const is not much more than syntactic sugar in C.
-You should have done one tree wide patch without doing this _new() hack.
+Looking forward to that.
 
-Anyway, rant over. Carry patches 2,3. Hopefully they won't conflict.
-But I don't want to see any constification patches in bpf land
-that come with such pointless runtime penalty.
+> In general this MODULE_HASHES would be used by distros which are
+> currently using the build-time generated signing key with
+> CONFIG_MODULE_SIG_KEY=certs/signing_key.pem.
+
+The Kconfig needs to describe this, otherwise no one would sensibly
+enable this.
+
+> More concretely the Arch Linux team has expressed interest.
+
+Interest sure, but will it be used? If not there is no point to this.
+What do the other distro have to think about this?
+
+  Luis
