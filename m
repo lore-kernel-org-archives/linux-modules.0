@@ -1,22 +1,22 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31491F3D46;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29C91F426E;
 	Wed,  8 Jan 2025 09:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736327121; cv=none; b=qj6Ima8Tzu4X3lmrVZODAbxYOQvEB7thGpM1pzS1A9pdic9ohoCa8oN/DFLNMifnj+kEa+18lmUX5gmuQRrjpcLOq5LcCvptU+UUfRwM1WHViBRrS5bn4nMQ15odvDvsAYlPW05z/RzzrhUlmiEmPAEG/GooRI/6zDmVU/dJ/RI=
+	t=1736327121; cv=none; b=FRn3nqEijM1Wt3aygc3hNy8wNxHw1cJKXNhV/KWni1Fhj7VNqKbWbNghSF3cviRm+HQRwiQAhUcxNvc6Qq0azkCMD/kZxKfmKHdYcDbl0O22UfkFhEdKu1Ry+iv0LYctqLaG6+jO2eV+AYpZfllJ1bX787OATjKBBOp6d6+bxac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736327121; c=relaxed/simple;
-	bh=oB83UaSp1qFOvtEHzn7IJKhNapwXigzAWoUq9jK7Ea4=;
+	bh=axvyxnWooo75BTWGLQAmaIhNJhO70bD+tkHMIyPTibk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nmBmUPdUIQGtDHBtvCTiYfXPbQdiHOqDTMs0ZdZoFuqfds0GUxIjnnIhywHjhBAnseKBNUMlvz82hLNMwU7ToR6MpeOKAwS2U0n9RIoHAG/O/e7dOLGqxPbX2ySDU+4pA38dYMicls4jCyvTvGWmKVyh2cTSwHPGqgEFBa4WOp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IErKknma; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GAgVeDmt; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=hHVFRbaq6rW5Wsey6RpwTR9FujWJHpf4gn2kLAdz1/wqjgj8/5QIflywCJhCgOktm/TYWl7exr9poS3gQQ+KxfSCusOVEC1uQvXpf/e8Oj3l605uTn4Y9Gt5eL2z6ynL8eKapDshcjW0MUse8DlHbLwQRTgfyWZslTcRRk+PDcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=l6Vstg6w; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jIGs/Hd3; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IErKknma";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GAgVeDmt"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l6Vstg6w";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jIGs/Hd3"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020; t=1736327118;
@@ -24,21 +24,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x8wtAHd+IQLsYzDyMqjprxSKD9xTpu50XdFLIZhS7qA=;
-	b=IErKknmaTjKyf/ql5Yi7VQF+PuYgnEy+x2GQ1Cz8L/ERZ79EH18luUh06m3i0/4+zZmQuG
-	W+740ujZcRgji/gtPd2zzau6hd3kQsuL41EYnQqH9ZTp3kbChzwFyu8JxJjy+7DUutgHAR
-	pxOi3YROCaK4yPiU/TrPqXdMmEt2tM7i3+QcZPb1NZdoisxXWu9B+BXnBvVf+HpaTuiqEp
-	jO8Ya6R2c+MAiejAGx+CbQEa19jrnnJmL4Crzl5pwUmSLlX3NLYCrLHQ0CZDRudU1x2VCe
-	a/tfeKYomasIi9PPuzsA2Fx6e2SiKNk8+5X/9ljUFjCE7RGRMcQGBZt/i2XrMg==
+	bh=71h+qS2tty8Z0drmH+HaOoie0zIG/EW33SGidtl3NOY=;
+	b=l6Vstg6wTnoul4HLT4y0awP4b0tbXsHV+yWypjiAlreQ/QNUjbS+Pxuff7eam5HTXr9UG+
+	yv9HGOD2UNaSaT8DPcG30gdXM9roaKq8AXVVOso/A5/lsBKDZw0HyuJYo444Qbm8n3JqNf
+	nxd5QssopBV/Egvimusx/zYOswEHL4bq9m4msKre6/rOiDQL4G+63VxTnFtDMPSLZh1KQA
+	ucJv1l1/5klwBOmvP81Utr4+ypyKHpEYw33vNSc7Bk3uXYCHqFubgzYGEIQCCUka4bPTTg
+	AOlX9vpaTmiJCqVi6k/6+1eNvtuloOD6E4HZ9rNU7Kes2XLbWRr+L4yRcSIksg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1736327118;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=x8wtAHd+IQLsYzDyMqjprxSKD9xTpu50XdFLIZhS7qA=;
-	b=GAgVeDmtMa9JnOOzyU3MLouTXlmfKpg+HWb0/q93SUIaGTWzuN+sutJfiPnsazTyBbCXdM
-	o6j5ieribl667JBQ==
+	bh=71h+qS2tty8Z0drmH+HaOoie0zIG/EW33SGidtl3NOY=;
+	b=jIGs/Hd3yi8VlbPOb0ijPhLNJNFP8QFisXKRp7RidRarCiy2ykn1jovqfH2ZfK8xnt/4ng
+	57elPqhDvvFT55BA==
 To: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Daniel Gomez <da.gomez@samsung.com>,
@@ -49,9 +49,9 @@ Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH v3 11/28] module: Use RCU in __is_module_percpu_address().
-Date: Wed,  8 Jan 2025 10:04:40 +0100
-Message-ID: <20250108090457.512198-12-bigeasy@linutronix.de>
+Subject: [PATCH v3 12/28] module: Allow __module_address() to be called from RCU section.
+Date: Wed,  8 Jan 2025 10:04:41 +0100
+Message-ID: <20250108090457.512198-13-bigeasy@linutronix.de>
 In-Reply-To: <20250108090457.512198-1-bigeasy@linutronix.de>
 References: <20250108090457.512198-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -62,46 +62,68 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The modules list can be accessed under RCU assumption.
+mod_find() uses either the modules list to find a module or a tree
+lookup (CONFIG_MODULES_TREE_LOOKUP). The list and the tree can both be
+iterated under RCU assumption (as well as RCU-sched).
 
-Use RCU protection instead preempt_disable().
+Remove module_assert_mutex_or_preempt() from __module_address() and
+entirely since __module_address() is the last user.
+Update comments.
 
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/module/main.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ kernel/module/internal.h | 11 -----------
+ kernel/module/main.c     |  4 +---
+ 2 files changed, 1 insertion(+), 14 deletions(-)
 
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index daef2be839022..030d2ed175fa8 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -122,17 +122,6 @@ char *module_next_tag_pair(char *string, unsigned long=
+ *secsize);
+ #define for_each_modinfo_entry(entry, info, name) \
+ 	for (entry =3D get_modinfo(info, name); entry; entry =3D get_next_modinfo=
+(info, name, entry))
+=20
+-static inline void module_assert_mutex_or_preempt(void)
+-{
+-#ifdef CONFIG_LOCKDEP
+-	if (unlikely(!debug_locks))
+-		return;
+-
+-	WARN_ON_ONCE(!rcu_read_lock_sched_held() &&
+-		     !lockdep_is_held(&module_mutex));
+-#endif
+-}
+-
+ static inline unsigned long kernel_symbol_value(const struct kernel_symbol=
+ *sym)
+ {
+ #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 71e73deed76c0..126f7f05dedf8 100644
+index 126f7f05dedf8..686b74c7c17f5 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -450,8 +450,7 @@ bool __is_module_percpu_address(unsigned long addr, uns=
-igned long *can_addr)
- 	struct module *mod;
- 	unsigned int cpu;
+@@ -3667,7 +3667,7 @@ bool is_module_address(unsigned long addr)
+  * __module_address() - get the module which contains an address.
+  * @addr: the address.
+  *
+- * Must be called with preempt disabled or module mutex held so that
++ * Must be called within RCU read section or module mutex held so that
+  * module doesn't get freed during this.
+  */
+ struct module *__module_address(unsigned long addr)
+@@ -3685,8 +3685,6 @@ struct module *__module_address(unsigned long addr)
+ 	return NULL;
 =20
--	preempt_disable();
+ lookup:
+-	module_assert_mutex_or_preempt();
 -
-+	guard(rcu)();
- 	list_for_each_entry_rcu(mod, &modules, list) {
- 		if (mod->state =3D=3D MODULE_STATE_UNFORMED)
- 			continue;
-@@ -468,13 +467,10 @@ bool __is_module_percpu_address(unsigned long addr, u=
-nsigned long *can_addr)
- 						per_cpu_ptr(mod->percpu,
- 							    get_boot_cpu_id());
- 				}
--				preempt_enable();
- 				return true;
- 			}
- 		}
- 	}
--
--	preempt_enable();
- 	return false;
- }
-=20
+ 	mod =3D mod_find(addr, &mod_tree);
+ 	if (mod) {
+ 		BUG_ON(!within_module(addr, mod));
 --=20
 2.47.1
 
