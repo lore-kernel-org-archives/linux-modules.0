@@ -1,65 +1,54 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2296118A943;
-	Tue,  7 Jan 2025 17:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C6714B95A;
+	Wed,  8 Jan 2025 09:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736269972; cv=none; b=Z8M7jQOzejpiqPghU0QkRCfONxIX7uDqoMSdILWD82GRjypCl2b3VoLwEY9fko9Qj7phbA9NgQ68vceqV1PLpkd1Xw4rL3+6GRGK6Gr2FjZ3HZuXtE9296edkjcICYXYumsfV/ra1vwCLOxz2l0XR/E4Qo99VS4ko5RGuXWgKMk=
+	t=1736327109; cv=none; b=cvwWORH5GMt9L9Ck1Z9YoPwoUQsvRypqw43agDrSp40CF86+c1tY/26fq/Zm3yGbY5TyT+PVNUYfP6w/ctIRqpWlYI7mE70ZNCVV+4/gxb6ZmQvZgWanTsNghpJmnNMY9GGlPeH6do+ZOZh2XFAfNDUuAquBu0LFZ4ARpz3QB40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736269972; c=relaxed/simple;
-	bh=XT3uWSyIyKjlrTiSLLqRYxSd8tnvnMF2POEYJodfnP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FOlpnMicKirSc9n4Y/qhpVd5A2IyUL0I2ssAo4pbUdHvT5eBQSiXuHptk87RqJJU2Ztmu9O4ekLJx1wXmAYMY0hq3Bh22H9QvtUOZsgrCeg2d7fAcUAQm9sR+R6CpNVRWYPM323h6Q0J0r+2rMIeC4B4qVBErY1REcVbV7zjEeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cVwsuPzv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iCw7LlWz; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1736327109; c=relaxed/simple;
+	bh=kwfNMejAdMo5HrQqhxS078PhwTh0n+3I/nDs5yDiY00=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F5G2srDlRDKT3BMCBYmT+BKAdhBUsIGte+2tyu660eGlSZ+FdvPpO89ipzIilSflaUJNWKfNhHHoUVDz3/4J7qk6W5Uv7SE8o0fTENoDpSq2MtPgmwZYqA2wHy/L2IKIDjHf6RcecZLthQJzT6aRApezS5mjkJ+q0t8R97EOanI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=w2W33BsJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DcD6OLcc; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cVwsuPzv";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iCw7LlWz"
-Date: Tue, 7 Jan 2025 18:12:47 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736269969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xsNnuziyNpOSTD/Cp5DOy3MZvA294grDpf4nsHeVMI8=;
-	b=cVwsuPzvQdzTTAe1TW+BTAPiBZBoJMFjGOGfIiWa03zhooCI8x24/wt1uMkD0QgB9ukpTG
-	+2e0rf3abqxIEQ99upY3h/tKbltUJUI0bXC9nYkNJCF/CvT9PcPhoFRlBAOLHkt1tES55a
-	2Q8ceuvzqrsmHDAPNg8yDyP5Ql3P2UldS+favGeozrm9DIzQjuu9Kq9DOXooZyty3rN1Ok
-	ssXhOE0c4EWMFr7ivQwjfFywAChHMJN+veryrT9i4Wm4fMQYIZb7dK2XJCAdG3SU1EmydP
-	yYj+P3srQNhI0MT8QF5taD+uG71M/TE3IF0pWW0P8HTpK9ttJNi5HRXMu1BhuQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736269969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xsNnuziyNpOSTD/Cp5DOy3MZvA294grDpf4nsHeVMI8=;
-	b=iCw7LlWzWbcnA2qYMjWzFfhpgv8rVYQHF67jKKd3znR4ykiP9hkcG0sOr02Wv55uQR2HFA
-	E5zfxsCrV3EF//CQ==
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="w2W33BsJ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DcD6OLcc"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Gomez <da.gomez@samsung.com>,
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1736327105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4LNuLH55aligHmXIA5M9Xm1sUCkIpJgG2Sby21sss9c=;
+	b=w2W33BsJUJS/dCSdcvJHW+/2sBOtxSWq/QqSYTx41k78wencKdIeqxG2vPyVmjkTEfoNmd
+	EL8ta+6uKvFeStVZLLBOW3NFkOoL5EQypb2CrWRR8VDndeD2QVeiYwRYorevMruH37Pk6b
+	SSvKcawcUlg0SvPUza9u5pqCjqtmvoFoHO/cL21tiCKUohEUFz0K99teZXikHUs7MFu4rM
+	wCMdBMsSbfhg3Oa1u1asLcIvBB33mVoVkLvHovSHzK/8pW9otDifzKBL1+n2zoXts77e2s
+	SxMt8TE7QNNidwJCNtj7E36/88dyEBsmB9FNpvyXCX1Ysx+f8YDgT6KIlpsMAw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1736327105;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=4LNuLH55aligHmXIA5M9Xm1sUCkIpJgG2Sby21sss9c=;
+	b=DcD6OLccuaUeC4M6HErFfL0Ob42odcxrTLtX4wAuh1fPCdPFXg05skamATK/B5k2fRd0Mh
+	2TCGwB35MVP0a5Cg==
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	"Paul E . McKenney" <paulmck@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, linux-trace-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev
-Subject: Re: [PATCH v2 19/28] LoongArch: ftrace: Use RCU in all users of
- __module_text_address().
-Message-ID: <20250107171247.gzibqLkQ@linutronix.de>
-References: <20241220174731.514432-1-bigeasy@linutronix.de>
- <20241220174731.514432-20-bigeasy@linutronix.de>
- <20241227121946.1643decf@gandalf.local.home>
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH v3 00/28] module: Use RCU instead of RCU-sched.
+Date: Wed,  8 Jan 2025 10:04:29 +0100
+Message-ID: <20250108090457.512198-1-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -67,52 +56,85 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20241227121946.1643decf@gandalf.local.home>
 
-On 2024-12-27 12:19:46 [-0500], Steven Rostedt wrote:
-=E2=80=A6
-> Is easier to understand than:
->=20
-> 	if (!mod) {
-> 		guard(rcu)();
-> 		mod =3D __module_text_address(pc);
-> 	}
->=20
-> Because it makes me wonder, why use a guard() for a one liner?
+Hi,
 
-Why not? The context ends immediately after.
+This is an updated version of the initial post after PeterZ made me
+aware that there are users outside of the module directory.
+The goal is replace the mix auf rcu_read_lock(), rcu_read_lock_sched()
+and preempt_disable() with just rcu_read_lock().
 
-> But, when I saw your other patch, if we had:
->=20
-> 	if (!mod) {
-> 		scoped_guard(rcu)()
-> 			mod =3D __module_text_address(pc);
-> 	}
+I've split it into smaller chunks which can be applied/ reviewed
+independently.
 
-Okay, if this looks better, let me update it. It just you already have a
-scope (the {} after the if) and then we start yet another block. But if
-this looks better so be it.
+v2=E2=80=A6v3: https://lore.kernel.org/all/20241220174731.514432-1-bigeasy@=
+linutronix.de/
+  - Converted cfi to use RCU.
+  - Use scoped_guard() in LoongArch's ftrace code after Steven suggested
+    it.
 
-> To me, hat looks much better than the guard() as it is obvious to what the
-> code is protecting. Even though, I still prefer the explicit, lock/unlock.
-> Maybe, just because I'm more used to it.
+v1=E2=80=A6v2: https://lore.kernel.org/all/20241205215102.hRywUW2A@linutron=
+ix.de/
+  - Split into smaller patches.
+  - Converted all users.
 
-I'm probably also used to the explicit part but numerous people said to
-use this from now on. And it results in less lines and you don't have to
-worry about each return statement. So it somehow looks/ feels line an
-upgrade.
+Sebastian Andrzej Siewior (28):
+  module: Extend the preempt disabled section in
+    dereference_symbol_descriptor().
+  module: Begin to move from RCU-sched to RCU.
+  module: Use proper RCU assignment in add_kallsyms().
+  module: Use RCU in find_kallsyms_symbol().
+  module: Use RCU in module_get_kallsym().
+  module: Use RCU in find_module_all().
+  module: Use RCU in __find_kallsyms_symbol_value().
+  module: Use RCU in module_kallsyms_on_each_symbol().
+  module: Remove module_assert_mutex_or_preempt() from
+    try_add_tainted_module().
+  module: Use RCU in find_symbol().
+  module: Use RCU in __is_module_percpu_address().
+  module: Allow __module_address() to be called from RCU section.
+  module: Use RCU in search_module_extables().
+  module: Use RCU in all users of __module_address().
+  module: Use RCU in all users of __module_text_address().
+  ARM: module: Use RCU in all users of __module_text_address().
+  arm64: module: Use RCU in all users of __module_text_address().
+  LoongArch/orc: Use RCU in all users of __module_address().
+  LoongArch: ftrace: Use RCU in all users of __module_text_address().
+  powerpc/ftrace: Use RCU in all users of __module_text_address().
+  cfi: Use RCU while invoking __module_address().
+  x86: Use RCU in all users of __module_address().
+  jump_label: Use RCU in all users of __module_address().
+  jump_label: Use RCU in all users of __module_text_address().
+  bpf: Use RCU in all users of __module_text_address().
+  kprobes: Use RCU in all users of __module_text_address().
+  static_call: Use RCU in all users of __module_text_address().
+  bug: Use RCU instead RCU-sched to protect module_bug_list.
 
-> IMHO, guard() is for complex functions that are error prone. A single line
-> is not something that is error prone (unless you don't match the lock and
-> unlock properly, but that's pretty obvious when that happens).
-
-True but this is now a one liner which might be extended later on. Also
-the context is one line.
-
-> But this is just my own opinion.
->=20
-> -- Steve
+ arch/arm/kernel/module-plts.c            |   4 +-
+ arch/arm64/kernel/ftrace.c               |   7 +-
+ arch/loongarch/kernel/ftrace_dyn.c       |   9 +-
+ arch/loongarch/kernel/unwind_orc.c       |   4 +-
+ arch/powerpc/kernel/trace/ftrace.c       |   6 +-
+ arch/powerpc/kernel/trace/ftrace_64_pg.c |   6 +-
+ arch/x86/kernel/callthunks.c             |   3 +-
+ arch/x86/kernel/unwind_orc.c             |   4 +-
+ include/linux/kallsyms.h                 |   3 +-
+ include/linux/module.h                   |   2 +-
+ kernel/cfi.c                             |   5 +-
+ kernel/jump_label.c                      |  31 ++++---
+ kernel/kprobes.c                         |   4 +-
+ kernel/livepatch/core.c                  |   4 +-
+ kernel/module/internal.h                 |  11 ---
+ kernel/module/kallsyms.c                 |  73 ++++++----------
+ kernel/module/main.c                     | 103 ++++++++---------------
+ kernel/module/tracking.c                 |   2 -
+ kernel/module/tree_lookup.c              |   8 +-
+ kernel/module/version.c                  |  14 +--
+ kernel/static_call_inline.c              |  13 ++-
+ kernel/trace/bpf_trace.c                 |  19 ++---
+ kernel/trace/trace_kprobe.c              |   9 +-
+ lib/bug.c                                |  22 ++---
+ 24 files changed, 136 insertions(+), 230 deletions(-)
 
 Sebastian
