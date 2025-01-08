@@ -1,44 +1,44 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307761F9420;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E461F9F4B;
 	Wed,  8 Jan 2025 09:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736327128; cv=none; b=gtO8456BIoKB8MfFGnXFgh/MD8pifedZY0NvLjdYPrwYs/WIPnYK4FJPi5+jXNaAW5WTV+ViM9KnFrXBBL3/d8oyEOZp4XMVnpjoCwrkoYBM8c1U35N1LaxztsAnQ25MCUwZQUWY/PKxxE7HOPUML3y5GJHu4vfS9kSrg/I/b5k=
+	t=1736327128; cv=none; b=in7H8NqhYWQRFO1VsM7PVbFAD5ao7fs0Lq4a6r95eIt8UwbttxiUqscFMgP8Ub6PMgujkxeeP9UxS7vqF4QlvMzHny/lSUo99TDFrVfyE2DTB/gVemVOD+b5mI+w0qcYn69hH7kgLPL/WsKP11K2nP4aQEGUPQsmFKfSyyeFUeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736327128; c=relaxed/simple;
-	bh=Rfno/WDBaQo6Megi5n9CLWuW+Sf5W7R4mY0Et7Ub/lI=;
+	bh=SWUj/yhWok0jltP13k4QR36kJUgakop4QNztiZCnCiU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WMYzjwuoNmJyU+XpLsWNpZx3IEhLvlOWTFKZBHJ37ZjreyakRmIM44cduHc2r3cty5PSKzvwgvxzKBzQ4J70wZP46KxEUb9WXBtII66UfeFR7pJgY94yy+TAVwzCqLBJN7SuxhLl+CBRV8nC3tJ0vh+n1hyrZP2+nXx1qc+GDcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OlQxyPTc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Pi0E5pkC; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=XO2UBkqQI/sDlOHegamRghSwI8wr53uEBnlX/ecvDJTwoo/EwIoeiD4tB6wN0o3OWXfVZJV8zud5opXd72Jqgqsin7ge51E6Pt32R3Y/Dxo78z+1oy23UQ5UCS0snASeXN1XZN0DpvkCoE7fZkyE00JFkAoxgr+1MJ8CVz61PGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=l6Xaa3Zk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EH4h1WB8; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OlQxyPTc";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Pi0E5pkC"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="l6Xaa3Zk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EH4h1WB8"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736327124;
+	s=2020; t=1736327125;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aWZxQxOJaEGd9SElXjI4Z9tZyIiipQdtqCaCraspLAk=;
-	b=OlQxyPTc4KXCBeZGT3TJa+bbkReub6yPnM2lqBeJYit76X+ZTMq2yA0QoY08+401skoxFX
-	dYJ40n67dA+bywAEOToIEQlia/tRRCRY8AbYUF7kOK5dgWaih7fk9FejvNIjyGgDX/rkYS
-	fZCnagS96iMzk5UG0V+o/n5m7OGktAptW2Uhze9UoCeKXif7Csjsohks9L1nt6Zi0Bi0uR
-	Skw19b5vmyf7Fk/A6MPJM4Zs4OpVPjdt5+xI+/8/7gh5esgz0OslIDcPrgbTRWeDurLemF
-	O9SxQ7WM65wZHD2m54kgPfWgHyupWGbr3mY+3/23khr8bWuCp8a6bkqx2y7Y9Q==
+	bh=sk+WapeZw3AyhQlyz/y1GT+qnQ8et4haJZXe3SpiSPM=;
+	b=l6Xaa3ZkuhLoLRb3L6QHEEtslE0cbJtrTLx++mukG7hdl/wlrUasaWxUbqZRljO/bEkIk5
+	7E44spQtMQ7BO8CzrWoqNY7R8LFlA/eLrFVt/3ExR1wz/dnF8ypsZRaiSDy5ppKflGeK+f
+	dM3O2ocYj3/0lvoNC2bFfPRa/X37RVFGyn9JR/aejP+YCSAE8vIp8zmpDbpUoggR88OsBa
+	ZG5/2zfFPMQL9IqBggckIU8tDzEigNP7khCkJ3k3K7O5O3/pZ/O0uw0XGDbAHp6WnDbHb0
+	hcFHw3NP2Xf/DGjO60ymRk4ptJ/LaiK3aemUk+SWzmtuVvyvZ4mKuKC5eI4M6g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736327124;
+	s=2020e; t=1736327125;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aWZxQxOJaEGd9SElXjI4Z9tZyIiipQdtqCaCraspLAk=;
-	b=Pi0E5pkCHo/POaYqtA2D8zPpOtGjm4FDBWb3u3Jd9uYvwb5+wePI0na9fXkwzIO4roKQ81
-	vwjUMv0cYkSEvMDg==
+	bh=sk+WapeZw3AyhQlyz/y1GT+qnQ8et4haJZXe3SpiSPM=;
+	b=EH4h1WB8+5vUrKERLEa4IhKQK955bSJDwtWd0t1bpuUqaDt4xU7l+k19U0ExI84Kgc5KPX
+	zl5TqptJCoav67DQ==
 To: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Daniel Gomez <da.gomez@samsung.com>,
@@ -48,28 +48,10 @@ Cc: Daniel Gomez <da.gomez@samsung.com>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v3 25/28] bpf: Use RCU in all users of __module_text_address().
-Date: Wed,  8 Jan 2025 10:04:54 +0100
-Message-ID: <20250108090457.512198-26-bigeasy@linutronix.de>
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH v3 27/28] static_call: Use RCU in all users of __module_text_address().
+Date: Wed,  8 Jan 2025 10:04:56 +0100
+Message-ID: <20250108090457.512198-28-bigeasy@linutronix.de>
 In-Reply-To: <20250108090457.512198-1-bigeasy@linutronix.de>
 References: <20250108090457.512198-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -80,78 +62,43 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-__module_address() can be invoked within a RCU section, there is no
+__module_text_address() can be invoked within a RCU section, there is no
 requirement to have preemption disabled.
 
-Replace the preempt_disable() section around __module_address() with
-RCU.
+Replace the preempt_disable() section around __module_text_address()
+with RCU.
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Matt Bobrowski <mattbobrowski@google.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@fomichev.me>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-Cc: linux-trace-kernel@vger.kernel.org
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/trace/bpf_trace.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ kernel/static_call_inline.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 1b8db5aee9d38..020df7b6ff90c 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2336,10 +2336,9 @@ void bpf_put_raw_tracepoint(struct bpf_raw_event_map=
- *btp)
- {
+diff --git a/kernel/static_call_inline.c b/kernel/static_call_inline.c
+index bb7d066a7c397..c2c59e6ef35d0 100644
+--- a/kernel/static_call_inline.c
++++ b/kernel/static_call_inline.c
+@@ -325,13 +325,12 @@ static int __static_call_mod_text_reserved(void *star=
+t, void *end)
  	struct module *mod;
+ 	int ret;
 =20
 -	preempt_disable();
-+	guard(rcu)();
- 	mod =3D __module_address((unsigned long)btp);
- 	module_put(mod);
+-	mod =3D __module_text_address((unsigned long)start);
+-	WARN_ON_ONCE(__module_text_address((unsigned long)end) !=3D mod);
+-	if (!try_module_get(mod))
+-		mod =3D NULL;
 -	preempt_enable();
- }
+-
++	scoped_guard(rcu) {
++		mod =3D __module_text_address((unsigned long)start);
++		WARN_ON_ONCE(__module_text_address((unsigned long)end) !=3D mod);
++		if (!try_module_get(mod))
++			mod =3D NULL;
++	}
+ 	if (!mod)
+ 		return 0;
 =20
- static __always_inline
-@@ -2907,16 +2906,14 @@ static int get_modules_for_addrs(struct module ***m=
-ods, unsigned long *addrs, u3
- 	for (i =3D 0; i < addrs_cnt; i++) {
- 		struct module *mod;
-=20
--		preempt_disable();
--		mod =3D __module_address(addrs[i]);
--		/* Either no module or we it's already stored  */
--		if (!mod || has_module(&arr, mod)) {
--			preempt_enable();
--			continue;
-+		scoped_guard(rcu) {
-+			mod =3D __module_address(addrs[i]);
-+			/* Either no module or we it's already stored  */
-+			if (!mod || has_module(&arr, mod))
-+				continue;
-+			if (!try_module_get(mod))
-+				err =3D -EINVAL;
- 		}
--		if (!try_module_get(mod))
--			err =3D -EINVAL;
--		preempt_enable();
- 		if (err)
- 			break;
- 		err =3D add_module(&arr, mod);
 --=20
 2.47.1
 
