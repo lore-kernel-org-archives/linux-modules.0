@@ -1,91 +1,108 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B90216604
-	for <linux-modules@vger.kernel.org>; Thu,  9 Jan 2025 12:06:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45421BA2E;
+	Thu,  9 Jan 2025 13:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736424418; cv=none; b=KIybNADt/QWr8CZd266oMu/Bvldi3knjeJiGyipvDI+BwbwrNhOJxGTqAx0dMzYM7K+QVT314GnI52evi8Qj6AAzBADA3v659CRAebmAl50BQOHV7BeZnuYyHu3bIlVxN2blW9Y5tkQh0HSk5pKoN81Vn6kE0nhxF5pmZxpU/u0=
+	t=1736427832; cv=none; b=DVIHlgPLuKixlipNgBFxM/TG66ytuRYVOaCekiXlBqcLmEkXBvXC12xxITJ8jPknu1zixzyC0UiU75e74QLYGm/dTfMgvQ+L5i3AXyzhFE3lgXgHKKsRD5EobIFZB7b905JOWIluP/xKVMqXBBYWZ91Fv/mwt0jMBQIxOf0scwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736424418; c=relaxed/simple;
-	bh=7GhU3IehkQzrfLYSiA7FecBMD8WTWJNaVN0XyrbZ/Wc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mjJ9dGmmtzvY11m1l/h1fINr1t/XWQdxCwqfEuQZH32MMMdbzJ4c4/vgOn6fSj7etbFOj3qV5x/qRV7ufEnEHVjsMzePpfl2JlZ/31gO0XdzBR4Ce+wtLqBfOXyGVl474n3aifddyFMCWgo18BmmAZhFZioUZtzuk+mIYMJVOUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=urPxAkQN; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1736427832; c=relaxed/simple;
+	bh=xZ0gVmDsstMSYzIv3w5jumTWe+H72YqJT/OlG8njRww=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JltfLyC2AUWUiHvrZ33bhIb/myCFbXuyepGc7ZzqxxpCeODcO+DUxfZBYZZ0JNgFySmtRG8/0P6ikqWWf516+EXeVhtFTGXAcvZzwUb1xRMkjkfsm6XPbL9Y0rJgJji3wQnuhN+OVJS2PI0joh5sds3ZDWDh1PwROYlsiQ6k7CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aVmUKx15; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="urPxAkQN"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-385dece873cso441539f8f.0
-        for <linux-modules@vger.kernel.org>; Thu, 09 Jan 2025 04:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736424415; x=1737029215; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7GhU3IehkQzrfLYSiA7FecBMD8WTWJNaVN0XyrbZ/Wc=;
-        b=urPxAkQNSAsWf4iNzDX+znRdi2+TEMV9bwcl60v4Ugplo10jXTwkXh/Quoc2XFpwuQ
-         I3hUjTfQjZ9/INBtLxTnzOkWnobElh5Y4NRd4A863F+i4yM3/LRrsJVdlj5qXs7ksPiF
-         gkb1HVMApknJas2O515Syp0moEgRH1t9WFFDJO7Lz444fOnY8IjDBRXpKm6jM9pHjzCg
-         T1mPMWonE8lbsH9Rq+JvYjRSthZne6NzDPFQkfafMq4ObhjsqrXs5BVxPpsyj8Ujs+4N
-         fpwx+f08rsQYaCIgmls+ZCyv/tq/QZb7xpyhr+jSjPljVoU62LcVIUXxAQjoZbKsvvx4
-         QGNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736424415; x=1737029215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7GhU3IehkQzrfLYSiA7FecBMD8WTWJNaVN0XyrbZ/Wc=;
-        b=JU7pDJ+gTS2go04DRaxxh55IxYVYLiYAzirc+LcQ4eVPTKtlKY2z9vQ8C4OI4J0kaX
-         hLFX7pFEfrw0AOKjJqAzOIAPHtMS9dZ2IsLnDcxgaWV7qKr2Wsjxuu1uCB9N+cgNugGS
-         8fgElSsM/vTYboIlGte/mvkmF8JrK0+sJ0icifYBsI0wdhdQXurEJG7HLggmXVLvdqeT
-         ItR85o2D5OJb/C4VxtwzJAKW27wg0fbV0QP7HpUjhXUVPhhvaiS4fCx98JNTt+FpvFbM
-         5C/M5jUh8H8bpay6j2n0qX3xBJ8tqmV3x406Orn/wuC/5Tr+Z7L06qw+i6NRY4dDJs2C
-         62Tw==
-X-Forwarded-Encrypted: i=1; AJvYcCXWVraKG+1j5HGTETYg5Pjs1FS2qtOUijx+MUphvtI8nOicEA71XlPTrGjB2a7vG/aBjncXcI3IFJEV31YJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwPOa7j6IeNEkhpkD8+FlvGQICm07Oh0jCf+O2MHpEyMQ5/iW6
-	Sn0L2n/cANcmaNxKDzRml20/q855lfcUyHrQFV0UGe9Jj3rZj7Bux/fbJI0sHKQn2xV6Ajz/ewe
-	/GEtsLh1xPeFozeti6t1tsSIUsMz2vjk3pHXJ
-X-Gm-Gg: ASbGnctCUniu2mCRxVpk+hx5WaUhEr8qS+Yj/t9KskbpCxbtBXKunvImMEqEU8v70ne
-	ONWWom3uk2Uhmw7jrRuKbfGX82VocD0davh9+S5E=
-X-Google-Smtp-Source: AGHT+IE2PTdrWh31/0PhZhHiWvPO9sdaJoq3CdwDOjQxrfzNeEXVkPE7TAlhiZZUNTYNoC0l1cMz7zePU+26quoCRb0=
-X-Received: by 2002:a05:6000:1864:b0:385:f071:a1c9 with SMTP id
- ffacd0b85a97d-38a87357964mr5290951f8f.50.1736424415438; Thu, 09 Jan 2025
- 04:06:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aVmUKx15"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79AE1C4CED3;
+	Thu,  9 Jan 2025 13:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736427831;
+	bh=xZ0gVmDsstMSYzIv3w5jumTWe+H72YqJT/OlG8njRww=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=aVmUKx157wVFnijvEiQx/kkkJMAP7Q1/9OqCG1kELi6iXJX66FFMcft78tOx426o1
+	 RAurfMs7z3W+TK/3ZaugmRtKFdnVCKBasqafw/vBlgu/kGEOfButbPLntvbjBlA6Yv
+	 0glyuINURtPnKnVyxQJUBbEziD61FSNAIhSan1XbOp/m8pkifeX9DorcWhenE5/XYg
+	 mdOqc5fOC69sX/jHTKIOXoirM59/Pt2s5nXfg90FOgNN+6Boi0VV3+VJQVmij2yHPO
+	 UXIt6Cp1s6xLg3xVDX+yYpJ58MBcAfnXSDdep2eKpYrIZGKP/5Tlwv6ALGlTgVzZ/e
+	 IIl9gwZpyLgNA==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Greg KH" <gregkh@linuxfoundation.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Benno
+ Lossin" <benno.lossin@proton.me>,  "Alice Ryhl" <aliceryhl@google.com>,
+  "Masahiro Yamada" <masahiroy@kernel.org>,  "Nathan Chancellor"
+ <nathan@kernel.org>,  "Nicolas Schier" <nicolas@fjasle.eu>,  "Luis
+ Chamberlain" <mcgrof@kernel.org>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] rust: add parameter support to the `module!` macro
+In-Reply-To: <2025010953-saint-share-fc41@gregkh> (Greg KH's message of "Thu,
+	09 Jan 2025 12:27:10 +0100")
+References: <20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org>
+	<20250109-module-params-v3-v4-4-c208bcfbe11f@kernel.org>
+	<wC8h91AfnWSBFa03McC40iatGVtxZIiezOJ2etM0H4rvoRkvoI50VOELVTmhk3VDHjF7UR3rIlezUyHLP9H_aA==@protonmail.internalid>
+	<2025010953-saint-share-fc41@gregkh>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Thu, 09 Jan 2025 14:03:39 +0100
+Message-ID: <87h6689m1g.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org> <20250109-module-params-v3-v4-2-c208bcfbe11f@kernel.org>
-In-Reply-To: <20250109-module-params-v3-v4-2-c208bcfbe11f@kernel.org>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Thu, 9 Jan 2025 13:06:43 +0100
-X-Gm-Features: AbW1kvZaoK88cOn9DnUUz3dnowBx-JuJN3St-wf2WsYbDen8KQce6Bx2-TlyoWc
-Message-ID: <CAH5fLgh5iTTu_q4N3MmfwEMWb7HzAjLvKeqC-okDhbaB4uMPBg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] rust: str: implement `strip_prefix` for `BStr`
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Greg KH <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Jan 9, 2025 at 11:56=E2=80=AFAM Andreas Hindborg <a.hindborg@kernel=
-.org> wrote:
->
-> Implement `strip_prefix` for `BStr` by deferring to `slice::strip_prefix`
-> on the underlying `&[u8]`.
->
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+"Greg KH" <gregkh@linuxfoundation.org> writes:
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> On Thu, Jan 09, 2025 at 11:54:59AM +0100, Andreas Hindborg wrote:
+>> This patch includes changes required for Rust kernel modules to utilize
+>> module parameters. This code implements read only support for integer
+>> types without `sysfs` support.
+>
+> I know you want to keep this simple for now, but will you have to go and
+> touch all users of this when you do add the sysfs support later?  sysfs
+> wants the mode of the file to be set here, so how do you think of that
+> happening?
+
+We would add the required fields to the `module!` macro as optional
+fields. No need to touch everyone. Leaving out the sysfs file permission
+field would cause the parameter to not show up in sysfs.
+
+> And don't you need that for your null block driver?
+
+Yes I need it eventually.
+
+> Also, what about all the other "types" of module parameters that are
+> currently able to be done, like call-back, hardware control, and unsafe?
+> Are we just not going to do that for rust code (no objection from me,
+> just wanting to be sure.)
+
+Someone told me "no dead code", so I would defer those features to when
+we have a user.
+
+We have blueprints for strings and arrays based on Adams earlier
+work.
+
+I don't imagine any rust code relying on hw param and the use in the
+kernel seems to be very limited.
+
+Not sure about cb params. While it might be nice for the user to be able
+to pass a callback to decode/sanitize , the same effect could be
+achieved by putting the logic elsewhere. I don't have an idea of how to
+implement this in Rust at the moment, but I am sure we can come up with
+a solution if we need to.
+
+
+Best regards,
+Andreas Hindborg
+
+
+
