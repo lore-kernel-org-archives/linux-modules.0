@@ -1,94 +1,117 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1385B77102;
-	Thu,  9 Jan 2025 08:23:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9F221518C;
+	Thu,  9 Jan 2025 10:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736410990; cv=none; b=g8uBTCJzAg2k7oTNvy6pmlAXrVdeqYYZYQBqnS/DwHpDH9ZozlY7v6n61goEkHL2RtLcIP/+g/QVuGRPnICbltmDY+JrbZfsdm+bseisDJYhSErDYwEBe7QHAioxb6TBt2eA7oYHvdvqzjI4Hj6uP8J0EKBp0BMYfPJW2XGxYWE=
+	t=1736419956; cv=none; b=qgk4R5DLLO8X2M0oZv0b3o0G92XPz00yDmEciZGHs+QLp8o0heL4cDF8BWdEnZI8KPfo5yYJnoSOCP3FTlX0Q/KZMFbl79zL/nAJBhblTshQBxKevHMNsHV+rlQaom65jDWc7NQ/bUYjI2F+b3MQe0xqAaUNZPwYh6anrYuoPJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736410990; c=relaxed/simple;
-	bh=N58UFaY6c8ONQZFsaFTgGtv6rECWQYrW8BZJsXhwfGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ug6nnmLpYY2Db164+ECZcFWjudpH7wpFLJdLjDhUhSA2V7fjuHYwifQo1eyitxqm3kF1RwSKAtlybf41nmFxloijaYbJPS7UjpY+njkp9CDVHnS6E8XY4kmpYn2MQ95+HT4goEKIbUWF2VwcF3+PGeWGVyJB1/b5fuzTgc7emkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=wwTNL5o2; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1736419956; c=relaxed/simple;
+	bh=0Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OkSw+cQLXofKYW2SQ3w5294rJFm3TxKeSGUaF3dCu1D6yAhpEMTQz6uJbPD1yN7hewHhIguETV0ZHhuWVkEdO20HshBrEzJJglMi8aTZOM7dfvVK5HegbEK34ExNiUDHkIJluQJ/XKCucxy/kDT/GE4JdkVbWKNnr8RDh8AsUSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net; spf=pass smtp.mailfrom=bzzt.net; dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b=qs6XAYPz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lWZqs6uC; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bzzt.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wwTNL5o2"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Y+Vh7rfq/7OoaD/IsISKN4B/bJgLMs6nBckWnFw2QEY=; b=wwTNL5o2PrJNFVNsz/xKhWJmSM
-	ZDxd+ffCCbK0fUJEEGHCLabsv2VV0dOLB+IdTzr4+LJfTi5QvYgwKcWlAz/keEGERfaPYuLzj3dyO
-	a5/N5TPgpmRAAF2CutF/IpXUqTXHjmRnEH6w7jM+XHG6yQpHaAG/KaOde8ZCUDAI5BjqwYpdBA/Vu
-	ZMXdBowhIu4gc2MuBwS165ER8BGQX19a3bh8g4TK9TfvOHbNmwNK4s6KcW9zI5/2mu/jfiP7CXg05
-	VfF02b1KVHBIqL9w5SY1spNsk2dXG+BY5EOKGjqVGjUIR5rXkFZuwP4YZlD0HEhGzWAfc1eeHQrt4
-	vdo0i/iw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1tVnoj-0000000BAUc-1uqF;
-	Thu, 09 Jan 2025 08:23:01 +0000
-Date: Thu, 9 Jan 2025 00:23:01 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
-	bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] sysfs: constify bin_attribute argument of
- sysfs_bin_attr_simple_read()
-Message-ID: <Z3-HZT5kwt18QSQn@infradead.org>
-References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
- <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com>
- <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
- <CAADnVQJMV-zRcDKftZ-MbKEJQ7XGmPteMYCS0Bm5siBEXUK=Fw@mail.gmail.com>
- <2025010914-gangly-trodden-aa96@gregkh>
- <Z3-DcbY60SxoM0dN@infradead.org>
- <2025010930-resurrect-attest-94c9@gregkh>
+	dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b="qs6XAYPz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lWZqs6uC"
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 067C5114013F;
+	Thu,  9 Jan 2025 05:52:32 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Thu, 09 Jan 2025 05:52:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bzzt.net; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1736419952; x=
+	1736506352; bh=0Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=; b=q
+	s6XAYPzKBCBjqqOdz5/p51QDezFlR4f8kSiGFNYEGg5vEFZjvB4Hta9j0AZPEjLd
+	J5WrYgr4PWh8xgmnub/PHP0UCXQEb7E9cxn8Qeyh8CY2eL/klOGjn+9iYMgC2oHv
+	WgLACbsgT0RM03bJPcUQt2a6CsPhNjUL9fU11UZGbmEivbovz6NzSI3/UCGY3mHE
+	zxelcnqnVyN8HSaforauaX5WmigOx88zGdQ9oSbHez4D0RsmjzDE/NW0gTNZcFUu
+	FXpjhXvCSyxy5E1mldOImx1mzKIBmJis+/aVgoliwT8p0B5ECksdxPFdOUEHH/jr
+	DUj59EqcOXID0d4TQESiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm2; t=1736419952; x=1736506352; bh=0
+	Kk7HYgdqKsT6Lkza+YhbUZPhCeM+pIpPHtXmY2BxSI=; b=lWZqs6uCGyR2e6Ct2
+	erxoR8ZhaG0aX9zaddmwiQq3MulqZxIvbbB1Q6gOHhfDS37DHLth562MJjxUG7ZY
+	MLkc9KiGp3+ONrw/J1ilUsS1/9cKGQPwsxbsx77bPAU89faU5OOrUup7ogij1Obb
+	gB7bvKJ/idbtcumDyjCRPgC57CF0jjSmXuFUihIdEE4Gvu19MfFrA7q8zfn7tuIa
+	99fAXFY1f1k2qQwbeEOlCO2LxiGPeX3yc3aXcUPCiWOPWBffjNCC+0zFUH8ZQsHL
+	6IwoZlLgywvRwtu9uNtvyyfroTljH+DV4VhTIymPZjqkarKiEKOBQmVwcqJx7NNp
+	RNrUg==
+X-ME-Sender: <xms:bqp_ZwSeWdhWqtywrSnjUO3eQI6M4BA6phCQQhZ9uASRFCu3KQ0IMQ>
+    <xme:bqp_Z9z7xQ2autj-d-G7-XmazD4knM8swQQjhoojKMr53x-NxKZsxnfas9_KZvfE2
+    KQpE4Z1Ql5kWehAxBg>
+X-ME-Received: <xmr:bqp_Z908xKtwoL5qpcWw9b4mp6g7Sww9LjJn8gMpG2kNrr71fRvKMdWuXbqELGTaSaRPz9Tc2WZLE_qZ-b9T4Q99tYRSxjE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegiedgudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevuf
+    ffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeetrhhnohhuthcugfhnghgvlhgv
+    nhcuoegrrhhnohhuthessgiiiihtrdhnvghtqeenucggtffrrghtthgvrhhnpefgiedutd
+    ehffehfeevieelhfefueejgfehveeljeettddugeehvdekjeetveehgeenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnohhuthessgiiii
+    htrdhnvghtpdhnsggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtoheplhhinhhugiesfigvihhsshhstghhuhhhrdhnvghtpdhrtghpthhtoheprghrnh
+    gusegrrhhnuggsrdguvgdprhgtphhtthhopegurgdrghhomhgviiesshgrmhhsuhhnghdr
+    tghomhdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehlihhnuhigqdhksghuihhlugesvhhgvghrrdhkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuhhlvghssehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtohepmhgrshgrhhhirhhohieskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepmhgtghhrohhfsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:bqp_Z0Dk23fMFhiDqy_Cc2coLs40rI-v0QZoCACMG2qRm_hlftwFkQ>
+    <xmx:bqp_Z5hz9b4EDtjewMTL8V4O0IiaBmYJSshUTKl35WIc5Iv6INRhEg>
+    <xmx:bqp_ZwpkY7UUJlhUomwHsuYzcRJTsBG3K8VLG5oHmqxJuIbTv0h8hw>
+    <xmx:bqp_Z8glCN_IXqIFv6MeQM4CcPHp3TLYel23nAaPK8q1ffgkThZewQ>
+    <xmx:cKp_Z8S3geGCAJdB4xKDWZbjtN3MVgtLJnud2BWBQIRJTnwU6u6s8FMm>
+Feedback-ID: i8a1146c4:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 9 Jan 2025 05:52:28 -0500 (EST)
+From: Arnout Engelen <arnout@bzzt.net>
+To: linux@weissschuh.net
+Cc: arnd@arndb.de,
+	da.gomez@samsung.com,
+	linux-arch@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	masahiroy@kernel.org,
+	mcgrof@kernel.org,
+	nathan@kernel.org,
+	nicolas@fjasle.eu,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com
+Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
+Date: Thu,  9 Jan 2025 11:52:27 +0100
+Message-ID: <20250109105227.1012778-1-arnout@bzzt.net>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
+References: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025010930-resurrect-attest-94c9@gregkh>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 09, 2025 at 09:12:03AM +0100, Greg Kroah-Hartman wrote:
-> > Hey, when I duplicated the method to convert sysfs over to a proper
-> > seq_file based approach that avoids buffer overflows you basically
-> > came up with the same line that Alexei had here.
-> 
-> I did?  Sorry about that, I don't remember that.
+On Fri, 3 Jan 2025 17:37:52 -0800, Luis Chamberlain wrote:
+> What distro which is using module signatures would switch
+> to this as an alternative instead?
 
-It's been a while..
+In NixOS, we disable MODULE_SIG by default (because we value
+reproducibility over having module signatures). Enabling
+MODULE_HASHES on systems that do not need to load out-of-tree
+modules would be a good step forward.
 
-> As for seq_file for sysfs, is that for binary attributes only, or for
-> all?  I can't recall that at all.
 
-Non-binary ones.
+Kind regards,
 
+Arnout Engelen
