@@ -1,73 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638B286333;
-	Wed,  8 Jan 2025 19:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534661714D7;
+	Thu,  9 Jan 2025 07:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736363823; cv=none; b=GWPUV3n+kPe+d95ujCsv79DkHlE/HPU0r732hqmtIevV8yKrIZP9tK9cWgUGTu79/n0FuePBR1XeMxArdo2nidmr8PP5Tn4eVKmLGgSC4UD4AcRnt/YyfsON4nsmggumebgtLEjXwYwn75dEm3m8LHFBYSubd8rD7QLEHgOA04A=
+	t=1736409449; cv=none; b=NTR3Ba3HyRSz0Zqo184RmiYFdurJqOkuH9luuCOt810U7SUzbFjgGgmMGObSf/TK8e8TIrNyqsvoHs8VyPk+Kts9QpgY2Pi+KHS6kAJNELw1dxmiWs5JF4ZS8NvrXSdTe5aKPVPfPNGk91j2oX+9bDuEXIp8VsVCzhM8K+jFJuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736363823; c=relaxed/simple;
-	bh=jGvUUgBb5r0pOAeKKtF/A/HSUQcWln1ioZSAjG0jdLw=;
+	s=arc-20240116; t=1736409449; c=relaxed/simple;
+	bh=la/AGYY75gNYY12SISkKn5wPrr5eGjIcyo23Hqc0rAE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zapxm+K25JKNf2bKtQgdJ//p9ihs98VG4pBQueUrxYbtITE34F0tss81hM5Cxo4jpuh9dCKFC0JaBmRShaJNEgr0S11JFKL5Z4B8VQ7veVzWklOA904ukPB9Z0nvp2N+7TAGspdaerqoRaV/qG3OXeZH8Yr4vJcf4IyelwPGJ48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ka14tEAR; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kwwk98C8N6dIa/jGoVGbQzBpCBw6Mi/MvK9uXNZaEA0h3XHia89YnN8opwubwbgk2wetuCnzmaV2soPEI+XOb1tUevObFvXmP6TwhhB954dnIXxSlBXikAkZWdLT0Uikz3OOwfRQGw3L4SzDSjJ+40Q+VoHcNCL6BXAI1AgRtFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0eH39eGh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ka14tEAR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94FFC4CED3;
-	Wed,  8 Jan 2025 19:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736363823;
-	bh=jGvUUgBb5r0pOAeKKtF/A/HSUQcWln1ioZSAjG0jdLw=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0eH39eGh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B10C4CED2;
+	Thu,  9 Jan 2025 07:57:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1736409447;
+	bh=la/AGYY75gNYY12SISkKn5wPrr5eGjIcyo23Hqc0rAE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ka14tEARPZy8pKUUBKv0oDsbnzFUS6yul2vGTxMj6RF8/DzUJ+AgYL8V/sKjidwHc
-	 fqaJDfQC4W/S7hmbmzpmrNf6pHgvq88WD08IgTZkxcAFPwy3J+hhU3uyMRibC3puw1
-	 Bs/7aZoCGD/ma/N3AAVxp5dovh+xzmubwrpqXqW8qNWhmQl2fKEc8M0h9ajDZxArhB
-	 hJwq+keCIJrLiNjWs5+Q7mu2DMlC1uf5bLjvNnrDsu9GRjCcxn7CaPf3VZQPg0m6qx
-	 ttbtma+lRRLROV6s30NT537B/kyDRh8NXTrQXuzIJJAWZ7/tEylHeucykSKH9JwGjP
-	 aAzfmszq4WjfQ==
-Date: Wed, 8 Jan 2025 11:17:01 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	b=0eH39eGhMX8OPsBsF7mpcicMTjnKnyc/btU0UDMpYSoY0cwPEtwdkrCg9jt9cqc72
+	 xwWOru/ApEbXd3aWI4vXRsBtmP8wiHiw+BjJC1kck32CnkKzl8kcjeNvjlJNVSiE8Q
+	 lNHzio/+K8tM2k5MTABboHo3dwIFP5ucwxktGhNA=
+Date: Thu, 9 Jan 2025 08:56:37 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v1 0/3] module: Don't fail module loading when setting
- ro_after_init section RO failed
-Message-ID: <Z37PLciJqq5xMvTf@bombadil.infradead.org>
-References: <cover.1733427536.git.christophe.leroy@csgroup.eu>
- <f0e892c7-43cd-4310-9d60-1d6e839f5bb2@suse.com>
- <202501061610.203636A9C@keescook>
+	Daniel Gomez <da.gomez@samsung.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] sysfs: constify bin_attribute argument of
+ sysfs_bin_attr_simple_read()
+Message-ID: <2025010914-gangly-trodden-aa96@gregkh>
+References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
+ <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com>
+ <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
+ <CAADnVQJMV-zRcDKftZ-MbKEJQ7XGmPteMYCS0Bm5siBEXUK=Fw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202501061610.203636A9C@keescook>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJMV-zRcDKftZ-MbKEJQ7XGmPteMYCS0Bm5siBEXUK=Fw@mail.gmail.com>
 
-On Mon, Jan 06, 2025 at 04:13:29PM -0800, Kees Cook wrote:
-> On Fri, Jan 03, 2025 at 05:13:32PM +0100, Petr Pavlu wrote:
-> > On 12/5/24 20:46, Christophe Leroy wrote:
-> > > This series reworks module loading to avoid leaving the module in a
-> > > stale state when protecting ro_after_init section fails.
-> > > 
-> > > Once module init has succeded it is too late to cancel loading.
+On Wed, Jan 08, 2025 at 09:45:45AM -0800, Alexei Starovoitov wrote:
+> On Tue, Dec 31, 2024 at 2:30 AM Thomas Weißschuh <linux@weissschuh.net> wrote:
+> >
+> > On 2024-12-30 16:50:41-0800, Alexei Starovoitov wrote:
+> > > On Sat, Dec 28, 2024 at 12:43 AM Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > > >
+> > > > Most users use this function through the BIN_ATTR_SIMPLE* macros,
+> > > > they can handle the switch transparently.
+> > > >
+> > > > This series is meant to be merged through the driver core tree.
+> > >
+> > > hmm. why?
+> >
+> > Patch 1 changes the signature of sysfs_bin_attr_simple_read().
+> > Before patch 1 sysfs_bin_attr_simple_read() needs to be assigned to the
+> > callback member .read, after patch 1 it's .read_new.
+> > (Both callbacks work exactly the same, except for their signature,
+> > .read_new is only a transition mechanism and will go away again)
+> >
+> > > I'd rather take patches 2 and 3 into bpf-next to avoid
+> > > potential conflicts.
+> > > Patch 1 looks orthogonal and independent.
+> >
+> > If you pick up 2 and 3 through bpf-next you would need to adapt these
+> > assignments. As soon as both patch 1 and the modified 2 and 3 hit
+> > Linus' tree, the build would break due to mismatches function pointers.
+> > (Casting function pointers to avoid the mismatch will blow up with KCFI)
 > 
-> Is there at least a big WARN about the ro failing? That should let more
-> sensitive system owners react to the situation if it looks like an
-> active attack on memory protections.
+> I see. All these steps to constify is frankly a mess.
+> You're wasting cpu and memory for this read vs read_new
+> when const is not much more than syntactic sugar in C.
+> You should have done one tree wide patch without doing this _new() hack.
 > 
-> (And maybe we should set a TAINT flag, but perhaps this is too specific
-> a failure mode for that?)
+> Anyway, rant over. Carry patches 2,3. Hopefully they won't conflict.
+> But I don't want to see any constification patches in bpf land
+> that come with such pointless runtime penalty.
 
-I don't see a taint flag too far fetched in value. I think its a
-sensible compromise, and may be useful for other future set_memory_*()
-failures.
+The "pointless" penalty will go away once we convert all instances, and
+really, it's just one pointer check, sysfs files should NOT be a hot
+path for anything real, and one more pointer check should be cached and
+not measurable compared to the real logic behind the binary data coming
+from the hardware/kernel, right?
 
- Luis
+sysfs is NOT tuned for speed at all, so adding more checks like this
+should be fine.
+
+thanks,
+
+greg k-h
