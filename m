@@ -1,116 +1,66 @@
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36EB20A5F2;
-	Fri, 10 Jan 2025 10:37:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F9720E31A;
+	Fri, 10 Jan 2025 14:02:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736505441; cv=none; b=igxpbWAD4FF1jSKKLB6Z4Qrfa3tLo4QbFZE8TRfe8cxezfRqSCQ3lQ6Z7V2aEwuDOBlPy1M019UvBuHbaaFCWj1QFBA7yud5/1lTxQZLNm4BPXvLgK61y8jGRdwlXFyWUpkcbvYNTF7aW7DN7g4vm2AT1TQTh4Xywe7Bv3mlB9g=
+	t=1736517770; cv=none; b=tJUwmB059zBahWJPkrV6zXn/nzHDAhtK1LyafDLYjTgRzRc7crZ1j48aLkEXD8+14tGvTUwbll5S/pbH93JpqfF9Ez1/oQgS0kwhWjDjswYNJj4M7wrpwSnjQgW+5xCoE08QvmY61ej2ROsQ8pvM+M7a9OL+cueZvKcQFZqFoH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736505441; c=relaxed/simple;
-	bh=I1oVtbaOlFFHu0DmV8zdRMs9cNx4ils+QPsuoigo9rI=;
+	s=arc-20240116; t=1736517770; c=relaxed/simple;
+	bh=PiHOuTmg4zVKpJegF6ABeMDuMTjgr4kkSmGq4TpISGQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NRMKgE2lREn7KtrSz7ie9gu5bdCswunhVPZ/ZmV+ttpFmqNgKwtARNTRuI2S+vPL7C5SaWLWKcbaK33n0jaAXgpA1qswLDQWFbFz8X2BTIwPc+J47dchTDdmhTkZIgSijxZaK67dXD5Lx4rP1W26k6QgfeRm5P6ROm/6efPf60s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lF9l1Oxg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rD9VT4L+; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	 Content-Type:Content-Disposition:In-Reply-To; b=V7ZTKsesnPf+87V/TP/y/MMeWc1alOv27L3K4NhjvhBQ4VWm3hPRI74n2MBE3qFIFlC9THWdAiMqJ0s5QFt/McsJFjGhcjW1ahxDrnmI5p1ABwxLlrw+Yk2D/ZQ9/ScWLas9TZs9bkMi0yCw9nY66+fZC3766l907Q1/uulPyRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=1UgEq73O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lF9l1Oxg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rD9VT4L+"
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailflow.phl.internal (Postfix) with ESMTP id D91B32010D6;
-	Fri, 10 Jan 2025 05:37:17 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-08.internal (MEProxy); Fri, 10 Jan 2025 05:37:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1736505437; x=
-	1736512637; bh=Km4XzsnzHBTNNJzmGN8m2TrMMSFreEGVyXvVDroQ2DY=; b=l
-	F9l1OxgwNCSVpVzHNp2jvRIgcZtfmBz/E4/CO27dbRnPpywlZHXNuQhSufjq09iR
-	0Q1ceb1IRZSS/fN6814PVfVlDFZc/EVLYl2vi58mWFhJp18o89cYZreU1XtVLRmD
-	19T4xnFzlXyyyMJOMNOqGvLHe6C60LN2xggK+JESVtgZPwAH5HJRI5xPshZSfrlZ
-	GcMXvirGEd1tDeBMy5m8L171rno7Opv+KWlrx+H6cbu757OIulT2KyrYFRI4HfHI
-	IeQFsKKAHooUKWsb04Ck1WkK+W3OgtdvrKfxU53JSObu8cpzKureitBsWxKiHuto
-	y3zwRAmHw1P1k+RSkV1RQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736505437; x=1736512637; bh=Km4XzsnzHBTNNJzmGN8m2TrMMSFreEGVyXv
-	VDroQ2DY=; b=rD9VT4L+x6wScm0MmUZeIMvpHgMx8qAL83gowQ/aifn4QOfo3nw
-	18acnJdLdQvErdaVPbYP4SqjyKSQJGLB3E5eZzuJ9Dtxvp3QeH2dP/hfVmiAoRmf
-	GWim3pv96frkdHzWOHix2M5qmmBHHkE2E9qlP4U6LV/Ha5ZxKqk10JuNAvA27n30
-	qdxMfQmD+i4hm5mNMNftbXsWI4fysYE9pymAWInDaeeeVJifSUXB3JzOL2PwBEE2
-	azJQJpPCW1nC9N+YVplzgJm6rVTgPozOzsC1XEmejWeWoA3KkM4A98S8XvWF96jp
-	o69S196+kqgvwK+y07aXY0dqMcuZxp6uqiQ==
-X-ME-Sender: <xms:W_iAZ00nxgJw64svIet4IdZP3JkbK1OhjQjIlVOQzlhHOwiSX9jkow>
-    <xme:W_iAZ_EFoH6iwh3lMqZ8MhM0WyE1LksqHeyql6hCcSzFXriLt6zgQj9KcqBOVeqFR
-    14FSvtmUagZUhrYj1g>
-X-ME-Received: <xmr:W_iAZ85lBR8fS3KVrpwwP-tcfcdKyK7KrEupA9vygKO6KEH9a87CckaGqhGuGKt21qAemA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudegkedgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdttddtvden
-    ucfhrhhomhepfdfmihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlse
-    hshhhuthgvmhhovhdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeeltedugedtgfehuddu
-    hfetleeiuedvtdehieejjedufeejfeegteetuddtgefgudenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
-    rhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhope
-    egfedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorh
-    hgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhht
-    ohhnrdhivhgrnhhovhestggrmhgsrhhiughgvghgrhgvhihsrdgtohhmpdhrtghpthhtoh
-    epsghpsegrlhhivghnkedruggvpdhrtghpthhtohepsghrvghnuggrnhdrhhhighhgihhn
-    sheslhhinhhugidruggvvhdprhgtphhtthhopegurgdrghhomhgviiesshgrmhhsuhhngh
-    drtghomhdprhgtphhtthhopegurghnihgvlhhtsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopegurghvvgdrhhgrnhhsvghnsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-ME-Proxy: <xmx:W_iAZ93YjtGqyQ_KhyMe78rNVusaOBrYpJoPXwMLehTvKhN1WUbxyg>
-    <xmx:W_iAZ3GoqF6B8L2mTflFziY9ijfyGAomHfUPxnFZQ_ui45RQ_ik4tw>
-    <xmx:W_iAZ2_aN5wdvfhDfYaCp4mM9S-7Ff2DFoYQYHii7uiepbjsstVyLA>
-    <xmx:W_iAZ8lM-cSB7BXqi74IqSxpaazEX5g3lCuiI9gwh0GEiOvb_BC0bg>
-    <xmx:XfiAZ17mYS2-77H8F-lcSSO9soujJP_-GYVn8onu-R3c3sOdSsV828s5>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 10 Jan 2025 05:37:03 -0500 (EST)
-Date: Fri, 10 Jan 2025 12:36:59 +0200
-From: "Kirill A. Shutemov" <kirill@shutemov.name>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- 	Andy Lutomirski <luto@kernel.org>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- 	Borislav Petkov <bp@alien8.de>,
- Brendan Higgins <brendan.higgins@linux.dev>,
- 	Daniel Gomez <da.gomez@samsung.com>,
- Daniel Thompson <danielt@kernel.org>,
- 	Dave Hansen <dave.hansen@linux.intel.com>,
- David Gow <davidgow@google.com>,
- 	Douglas Anderson <dianders@chromium.org>,
- Ingo Molnar <mingo@redhat.com>,
- 	Jason Wessel <jason.wessel@windriver.com>,
- Jiri Kosina <jikos@kernel.org>, 	Joe Lawrence <joe.lawrence@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- 	Josh Poimboeuf <jpoimboe@kernel.org>,
- "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
- 	Luis Chamberlain <mcgrof@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- 	Masami Hiramatsu <mhiramat@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- 	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- 	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
- Rae Moar <rmoar@google.com>, 	Richard Weinberger <richard@nod.at>,
- Sami Tolvanen <samitolvanen@google.com>, 	Shuah Khan <shuah@kernel.org>,
- Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- 	Thomas Gleixner <tglx@linutronix.de>,
- kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
- 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, 	linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- 	live-patching@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 3/8] x86/mm/pat: Restore large pages after fragmentation
-Message-ID: <jut35igb2kstpz24apqdeubv5rvyl3vmp2s43xtivpz54uiedj@wmd2onulv4xw>
-References: <20241227072825.1288491-1-rppt@kernel.org>
- <20241227072825.1288491-4-rppt@kernel.org>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="1UgEq73O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F6AC4CED6;
+	Fri, 10 Jan 2025 14:02:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1736517770;
+	bh=PiHOuTmg4zVKpJegF6ABeMDuMTjgr4kkSmGq4TpISGQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=1UgEq73O4FHpe2ME6QHxe7teMM6bDpyu8MXMdN9O8AaLkv60GwON/KHpjZUgYVvmR
+	 Ry1Dhq+iyNhko0bi34d1pq+B+TjcxHfguJ0Ye49THfp7BuRgEtJt5K+Ap9BrbOlPnI
+	 aeoCFckJv7amvcq7csX9bujUVnd56/4c9I2Y0wo8=
+Date: Fri, 10 Jan 2025 15:02:46 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] sysfs: constify bin_attribute argument of
+ sysfs_bin_attr_simple_read()
+Message-ID: <2025011017-tubeless-hanky-0e99@gregkh>
+References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
+ <CAADnVQ+E0z8mY4BF9qamPh1XV9qs2jZ03bfYz2tVw8E4nFVWBw@mail.gmail.com>
+ <0cbfd352-ee3b-4670-afae-8e56d888e8c3@t-8ch.de>
+ <CAADnVQJMV-zRcDKftZ-MbKEJQ7XGmPteMYCS0Bm5siBEXUK=Fw@mail.gmail.com>
+ <2025010914-gangly-trodden-aa96@gregkh>
+ <Z3-DcbY60SxoM0dN@infradead.org>
+ <2025010930-resurrect-attest-94c9@gregkh>
+ <Z3-HZT5kwt18QSQn@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -119,57 +69,34 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241227072825.1288491-4-rppt@kernel.org>
+In-Reply-To: <Z3-HZT5kwt18QSQn@infradead.org>
 
-On Fri, Dec 27, 2024 at 09:28:20AM +0200, Mike Rapoport wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+On Thu, Jan 09, 2025 at 12:23:01AM -0800, Christoph Hellwig wrote:
+> On Thu, Jan 09, 2025 at 09:12:03AM +0100, Greg Kroah-Hartman wrote:
+> > > Hey, when I duplicated the method to convert sysfs over to a proper
+> > > seq_file based approach that avoids buffer overflows you basically
+> > > came up with the same line that Alexei had here.
+> > 
+> > I did?  Sorry about that, I don't remember that.
 > 
-> Change of attributes of the pages may lead to fragmentation of direct
-> mapping over time and performance degradation as result.
+> It's been a while..
 > 
-> With current code it's one way road: kernel tries to avoid splitting
-> large pages, but it doesn't restore them back even if page attributes
-> got compatible again.
+> > As for seq_file for sysfs, is that for binary attributes only, or for
+> > all?  I can't recall that at all.
 > 
-> Any change to the mapping may potentially allow to restore large page.
-> 
-> Hook up into cpa_flush() path to check if there's any pages to be
-> recovered in PUD_SIZE range around pages we've just touched.
-> 
-> CPUs don't like[1] to have to have TLB entries of different size for the
-> same memory, but looks like it's okay as long as these entries have
-> matching attributes[2]. Therefore it's critical to flush TLB before any
-> following changes to the mapping.
-> 
-> Note that we already allow for multiple TLB entries of different sizes
-> for the same memory now in split_large_page() path. It's not a new
-> situation.
-> 
-> set_memory_4k() provides a way to use 4k pages on purpose. Kernel must
-> not remap such pages as large. Re-use one of software PTE bits to
-> indicate such pages.
-> 
-> [1] See Erratum 383 of AMD Family 10h Processors
-> [2] https://lore.kernel.org/linux-mm/1da1b025-cabc-6f04-bde5-e50830d1ecf0@amd.com/
-> 
-> [rppt@kernel.org:
->  * s/restore/collapse/
->  * update formatting per peterz
->  * use 'struct ptdesc' instead of 'struct page' for list of page tables to
->    be freed
->  * try to collapse PMD first and if it succeeds move on to PUD as peterz
->    suggested
->  * flush TLB twice: for changes done in the original CPA call and after
->    collapsing of large pages
-> ]
-> 
-> Link: https://lore.kernel.org/all/20200416213229.19174-1-kirill.shutemov@linux.intel.com
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Non-binary ones.
 
-When I originally attempted this, the patch was dropped because of
-performance regressions. Was it addressed somehow?
+Ah, yeah, well the churn for "one single value" sysfs files would be
+rough and seq_file doesn't really do much, if anything, for them as they
+should be all simple strings that never overflow or are complex.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Yes, there are exceptions, so maybe for just them?  I don't want to make
+it easier to abuse sysfs files, but if you feel it would really help
+out, I'm willing to reconsider it.
+
+thanks,
+
+greg k-h
+
+
+> 
