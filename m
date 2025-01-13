@@ -1,120 +1,132 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A4D22C9F3
-	for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 15:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF481CA8D;
+	Mon, 13 Jan 2025 15:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736780958; cv=none; b=E2vaTxyofaftjV/SsYeLvMGnVDphkDKxfWfZ9eSThH+2kMlkp6JhOBOl79xuwvNjIWZvBpu9QEvQ7827lrFMwCBPpXlnS38wkoPuSv3dlLB6VqrrQ4DyKtTlOc5OAANORN44USiN5ngn5SSEg7XkD2iuOMqdaRHwA8VhXTDWRoE=
+	t=1736783148; cv=none; b=ESuW8UcZNsUCqayUfUiw2L7xGilfAxnzNIaIx4OyPX9D0gGTo584UYYop8CLhzUoljUAugGxgsF9zoYpI3Kx8ljQ6Po/WDRnVnNx0BWrj7psvhYcPegxXUiggrWjn9ErLeH6ySwQx7e5gL8KbKlapdo4EVJl0s9rSfPRZcLIRI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736780958; c=relaxed/simple;
-	bh=kRhkE5n7v4Whpf8fVWtjsSx5QcAs1w8kpM+1riSUPMc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kv63BPGTSI+Z64IhBlbXPg9TiFNPcHekO7ByApRDJCLCTjvPbVzj8BVsG/50yHDbOPeUz6z6o9DZuMIM8nO3ThMw1++Rgc17bHHFTAcJaNSqTkXeIWmfIIEvO7QcwPmqccDYZ5WvIBiuLVRxJPuLmJRPPCD7g3iHgskceTuIYYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ezS9Zan6; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1736783148; c=relaxed/simple;
+	bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lMVVRI1Kwb87wJnK14x7oTRyEZ4ZzkV20rjaJc2Np2AgV8nuKqICXBgInkuBoH/i8ai+1cduoEZAMKQv7ZcU6EfHABnHMfz5TQo/FqpfZ8FulpAU0MA9N8N58EQJ7cRKcyipo/VSVzHpfqyX6uaa4zcWeewCqzby/KOajuzRY54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CaYg3fuh; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ezS9Zan6"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso31019315e9.3
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 07:09:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1736780954; x=1737385754; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9ObLtarfixbuoeU4sYBvXiHlMBkt4zlHaerO6eMC7G8=;
-        b=ezS9Zan6aFB4fwtUVr+qGWMrowQXWc4kz8fChye5r0blUpdRTv6qref1NlbsYkcqjB
-         POEGkDcCgzKItEhlEjb9u07bLwuX41mcm14ZJFod4dyR/7BRNZtcQ66g0GN4692ssqoE
-         MMDLRhtqiTDWeTaMQw0X8vhWa2sp342h83sW0JL9lzb2l0dpZBhL45j/iIndd56GsaxG
-         WzyvE5yRM7r9aO+9lqlrNOBHEgBrsG/476rGPiczl10PeTfT5dlJX+T5kYqXfFW6LGEW
-         YdnwCjsZtneV3xbZMgPZ76b4Koj9cgxwibhszAZrTfMorrKByyzS/a9HrVZEEs9aHlvi
-         qWfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736780955; x=1737385755;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ObLtarfixbuoeU4sYBvXiHlMBkt4zlHaerO6eMC7G8=;
-        b=uMvRO4ZI6UMvU4Rg33E5w21XCL+6R0KusmRctUtksx5qVLPiw4m51MymiUvrCGS7E+
-         r7aRRPirYrqb2om1wDe35z2BomstJyvWIDcnBPukRtssU3ZCKKv7EmDzjOLXABM1s5Uf
-         G2VpbXf8xUl3kloNF7jRuFCrwtq89Hjgc02y3mYqhg0PwTy6AB7e9uYYx2ZnHvHbvZmH
-         47ENmvQ7e5ulcXx9wdndWrJdopH86E/RlvAeoVDCuYZizJ1BHwjXxG9T3G8mgUlFhd/y
-         5FRbPndq82qRrc/ldDt8pqhC2x96eFik7FyHqWUwklJarFd1FEa+SLHtbaFqu3gnVLLu
-         uAvA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyILV6rER9cUphxS9W9fX90YHonQRRNfrRxE2SQgfe4NWcii/BqG47px9ZBvJ+cBXVegkocZDrMRB3VkDB@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuYC7zp4+0X/ur7YuOCWnAKEHu2NJ3oVjL4spxr2T0LA3dCSUo
-	xvAgoywCIEdTWReEhNfaqYtd34uuu25SNKSlPict8lwk2+fsHTull0g9rSEL+/GtNayesOHDOfW
-	X
-X-Gm-Gg: ASbGncuvnnF81tTpXImHHCBq9XyRT8aMRtuqPZFIAJluTAEqwtLUOko3cRIexCQIO0k
-	XRih1g1qs5HnQmV6IKyqzsLg8K5+Op3zx7pY6utwOMCJOauhVix9EjF8sskf5kjap+FBORx05Du
-	uEIm0Lgqjp/fzY6Uow9zjrxhJLSf93BbAtBMwhBBOZN/9Z2AwFqy6pwBwOAUQ7f9MRD4uv1mGO1
-	UfymboXlNtC2xEmOxVNgzRD8BqZpegJwCpB/rCAzxyVyY7e9lo8T64Hdycd
-X-Google-Smtp-Source: AGHT+IEsbWMFnleSfxZtUy8qfCZDcHp6iHBDwND8NHE6D8XDA1Ya1X/7dUhnhfiTLdJ7vz3kEw7s+w==
-X-Received: by 2002:a05:600c:1c14:b0:436:1ac2:1ad2 with SMTP id 5b1f17b1804b1-436e26c0400mr171652465e9.19.1736780954585;
-        Mon, 13 Jan 2025 07:09:14 -0800 (PST)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2dc0f69sm179356045e9.13.2025.01.13.07.09.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 07:09:14 -0800 (PST)
-Message-ID: <ebbd79c2-50fb-4d9e-aabf-a55ea463c494@suse.com>
-Date: Mon, 13 Jan 2025 16:09:13 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CaYg3fuh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736783147; x=1768319147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
+  b=CaYg3fuhcxr4GemQ4Txnf8G1L7Idva5ZgdhvG+4fhnZ/GB33X/fSERO3
+   iJ9sIUHGaVCT+VS58317Va0bLii7n8BOIMuTTkwvOa6elLZg3CD1lBK4i
+   Zmxe70ncX81GoeC/crdPlLARMuMET83kGht3tYuwDSK/hhgjuotbDXojJ
+   4oqRHZUl6O0zkpHpyCBufhynujiSuVB/UfDuynPEXmz4SmUpwRb1w4imy
+   BsTkLUsRVJfz+gQ414FJdTzvABynsA+T2g/2RMICnJHFDqNCYAtHavoZ8
+   MrBOD1Eu3mdhS35sazKw0lyBy+2QTEO78EQvt+gK+lMDB6/ZjfSysYxn+
+   A==;
+X-CSE-ConnectionGUID: HRt2wGq8R4SGirM2oZ6T/w==
+X-CSE-MsgGUID: /LhkySK1QSa43thfN/MF6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="36340461"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="36340461"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 07:45:45 -0800
+X-CSE-ConnectionGUID: Ol8QfgiyQwSLVDwPBFYHzA==
+X-CSE-MsgGUID: hKZ+hXyrRXSC8nJOTWvklg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="104692355"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
+  by fmviesa008.fm.intel.com with SMTP; 13 Jan 2025 07:45:33 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 13 Jan 2025 17:45:32 +0200
+Date: Mon, 13 Jan 2025 17:45:32 +0200
+From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.o
+Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
+ for module text on 64 bit
+Message-ID: <Z4U1HGUfFLJH8Y55@intel.com>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-9-rppt@kernel.org>
+ <Z4QM_RFfhNX_li_C@intel.com>
+ <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
-To: Luis Chamberlain <mcgrof@kernel.org>, linux@weissschuh.net
-Cc: Arnout Engelen <arnout@bzzt.net>, arnd@arndb.de, da.gomez@samsung.com,
- linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- masahiroy@kernel.org, nathan@kernel.org, nicolas@fjasle.eu,
- samitolvanen@google.com
-References: <20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
- <20250109105227.1012778-1-arnout@bzzt.net>
- <Z4FyGEXBK4EUi_Oq@bombadil.infradead.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <Z4FyGEXBK4EUi_Oq@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
+X-Patchwork-Hint: comment
 
-On 1/10/25 20:16, Luis Chamberlain wrote:
-> On Thu, Jan 09, 2025 at 11:52:27AM +0100, Arnout Engelen wrote:
->> On Fri, 3 Jan 2025 17:37:52 -0800, Luis Chamberlain wrote:
->>> What distro which is using module signatures would switch
->>> to this as an alternative instead?
->>
->> In NixOS, we disable MODULE_SIG by default (because we value
->> reproducibility over having module signatures). Enabling
->> MODULE_HASHES on systems that do not need to load out-of-tree
->> modules would be a good step forward.
->>
+On Sun, Jan 12, 2025 at 08:07:55PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrjälä wrote:
+> > On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> > > text allocations on 64 bit.
+> > 
+> > Hi,
+> > 
+> > This breaks resume from hibernation on my Alderlake laptop.
+> > 
+> > Fortunately this still reverts cleanly.
 > 
-> Mentioning this in the cover letter will also be good. So two
-> distros seemt to want this.
+> Does that hunk in the mail here fix it?
+> 
+> https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
 
-I'm aware that folks from the reproducible build community have been
-interested in this functionality [1, 2].
-
-Some people at SUSE have been eyeing this as well. I've let them know
-about this series. It would help with the mentioned build
-reproducibility and from what I understood, it should also avoid in SUSE
-case some bottlenecks with HSM needing to sign all modules.
-
-I agree that we should make sure that whatever ends up added is
-something that some distributions actually check it works for them and
-they intend to use it.
-
-From the SUSE side, I can also support that the feature should work
-seamlessly with the current MODULE_SIG.
-
-[1] https://lists.reproducible-builds.org/pipermail/rb-general/2024-September/003530.html
-[2] https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/merge_requests/1
+Still blows up with that one.
 
 -- 
-Thanks,
-Petr
+Ville Syrjälä
+Intel
