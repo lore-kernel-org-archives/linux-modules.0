@@ -1,95 +1,122 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D886721ADAB
-	for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 11:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F44187554;
+	Mon, 13 Jan 2025 11:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736766571; cv=none; b=JCs1yZc8zwQDMMTJhfMdTdBXm+3ArbUA/kn15wjtVb1OxudRK9vi7mkNtvt1dm5hq8BKM2yGwhkd2+f51fg1eF5VX74veVQzkX4wIsDFRuNKy9bpwcvLohVxpNLFELoecQy0pls/S0nWpZ9/O3U3rTDk3c5SufEX2nuyIw7IF8w=
+	t=1736766683; cv=none; b=Ywv/nPpmIafdiydBuhEHJXT5nk5EGDr80OSeYKwPmlMLDrhDHjWarw0/PgS4PUQGLLVknqS9HBcQZ4Nyl/Ksm8OlE8PETBrzPHWXYF+V/ZqMJ+sUSBFO3giHL/669RpbpGihVezOkVMYcIxiFCGOyW3c1EnoK6v1xMbjR1ZeeNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736766571; c=relaxed/simple;
-	bh=ZBe0sfnc7zg6JURaS/7mGb9fnjhzTgloK+gGjDevo7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vz/woMw+gjY9KB9r7qL8p4TBnWl1uADCiqnNAHfLHOkwVBi6d3tNvtcvAbfqpDx2tJLKHkhmMM49amZ2GZ8XZSOuqImoxYPJWWB2DMY//+fpwD9xqjAqAA/npjU5lh4krt4GkdmLGqyY/1V2PErJGJ3PEQEiR1gOM5P5yigTF0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aeEvQD+c; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1736766683; c=relaxed/simple;
+	bh=ONKN8fq0iP0VC62UEpQtN5Nmm165/LMTCyM9flI8nJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NdSlismQnPk2L1Bcyx47XceufHVyS0FCLCykC+UJS1M8PoUz1jU/hCbFZuWUL0OwMRHht/DIVSnUlnsVR2Frhmv7mcaMaqGt3gk7ROmJg07GcgAj0aWc/yKlIN8DyfJbSWr7nOOk+9MiXdtTjuDT+kPcWRIqPLqfSjALNidS88s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QyUDxo68; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aeEvQD+c"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43618283d48so29319965e9.1
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 03:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1736766568; x=1737371368; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yO9jB5U55CFpa8FrMbQGZSIRIawhRGDMMcZsD4aYNRg=;
-        b=aeEvQD+ctOGeqc8Mi+Yf6atL96YkH3wy7sxAQXX/SefAekeD4I6jQO3us8UnXiPsoL
-         fwtZdJLoKqyIt2rgq/QjxGU9Wb0rzdGEW58zfAHFXIyepHjf75rRbiGuj5Lr58x+svdw
-         MRg6+j2zA2SSl9UcU5rLu9KE6YFW/8s4xTFmCaD9DaEePR+r0Shbn7pdv9LC0lzFjkK0
-         /d9Blp2i+ubwwI9hlaXSAGX6wzhgFO86hK+c/kxc+IGyQ0ZYh3jvuk7yfVyrHaYdXmq6
-         Ev/VZ0OyLI9u67+P/OWFr1LW63XpVF07k9y5WzRFkJahJ3VEDr4VeHCdpFShyjv1CwK9
-         biyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736766568; x=1737371368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yO9jB5U55CFpa8FrMbQGZSIRIawhRGDMMcZsD4aYNRg=;
-        b=b+xD890NtnpTHsj5II86EtGNOqWu6s9m66dJA7HCVSOBwyFmjKtvrTIZzDNNLSMcxp
-         Kow2r+iDUcZHUFXraqiCmDq9o3sVZ8MBi9tmXINvzQrklyafKY0co7Hkpuf4JfFZv/GB
-         lrywijQGuWoJ3bIMLxhbbDHFg9KySSEt01oTLNrrwPvxZPhYaJKUe6zpQ3TT6DqA9H1F
-         uH0C7MX/tLpzb0W/3yRSI1n7QE6g1blEt/Uh+6pp3UgmOMwJxT0f2fqYnr9qCl5UQ1Ko
-         +QggLYwNOPx3InkfyZKdsxaUVyV42LdYr9zuyugyYaiY56qhEU/7MB2Vngm/J/yfZJ6u
-         s8BA==
-X-Gm-Message-State: AOJu0Yw1sl+JKw1kNAgN1jziicYQ+5pmpvHFjwp5IpW1kRI7nB8iwgld
-	CZ5qgaseIskgX8QZ9aGtRAHp2+F+3HQaPEsvwrP0F/3N+YHnM0uQj9WfMB6+qrtO1SM88Sbbyj3
-	b
-X-Gm-Gg: ASbGncu8TlvqftEuUpEWsB8tc9NRcAv255nMcA+TTdO/Y4XqRVGouM84BR9VXTfwAdM
-	mY3G9JegaDWRwwq+DZD6+nvwEeUenLCnWeiwZu/Q79tDicpcwWUlvzxVnD0ZdPv1j8dEm43ZPwq
-	rsj13diabb+tYfsTm/TPHaOMwiKqOPpxajchO6N2DgZ8UmRf39X+Hdi82kEvFI/3CwCyDJzFENv
-	1/vGjK8sleJo2up15P8UiQZ9lNdCTIynTyCbs9rsh+sLQn7+5hcKkNjsaha
-X-Google-Smtp-Source: AGHT+IENA+enFa1LzVadzvoc7JlGnknzs3GtfFMxYVtUJ6zon2z4vMH3vBcpISCENkUttlp97mJA0Q==
-X-Received: by 2002:a05:600c:3588:b0:434:fdbc:5cf7 with SMTP id 5b1f17b1804b1-436e26f4aecmr163912805e9.27.1736766568030;
-        Mon, 13 Jan 2025 03:09:28 -0800 (PST)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2da6336sm174905805e9.8.2025.01.13.03.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 03:09:27 -0800 (PST)
-Message-ID: <f4e953a4-4458-4034-b91b-7a433f20114b@suse.com>
-Date: Mon, 13 Jan 2025 12:09:27 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QyUDxo68"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=qj0XqtoExeVFzH/0zurjfq7xU6GfRici48V+bRozJOU=; b=QyUDxo6884XncYuqYHzTOCqFhP
+	MJCHu9a4GRwdc2gzh5B2GGjOVCLjQQf/G/U7qmHwI17hAY1iN75xRQXZxeLGWu2r1IqKnZpyhJLDh
+	hIuO5PZHdwSPf5wZW6TqT3qcud0nyXMDVNWDhVWthft1Bnu+Kcj3mv+vxETbGCx0QJOf9qMcwsms+
+	nqHs/Wgi5QapoBbNUV5Co3c/+0Nu0ObKp+3f0PdvoSv/EyJ2MD7vobCUSztpqsbNNqvMOm1sEmva6
+	MTgfeJGjb7Ed6OquAEAdfsZxBI82GyxEwWFFo9IdPl3Yqv95YLHEjIJQwF7fzvfeJC+e9a3V3YyCz
+	FdRvrBKQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tXILk-0000000AHYu-4BnK;
+	Mon, 13 Jan 2025 11:11:18 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 27A6730057A; Mon, 13 Jan 2025 12:11:16 +0100 (CET)
+Date: Mon, 13 Jan 2025 12:11:16 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.or
+Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
+ for module text on 64 bit
+Message-ID: <20250113111116.GF5388@noisy.programming.kicks-ass.net>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-9-rppt@kernel.org>
+ <Z4QM_RFfhNX_li_C@intel.com>
+ <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/28] module: Use RCU instead of RCU-sched.
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain <mcgrof@kernel.org>,
- "Paul E . McKenney" <paulmck@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Sami Tolvanen <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>
-References: <20250108090457.512198-1-bigeasy@linutronix.de>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250108090457.512198-1-bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 
-On 1/8/25 10:04, Sebastian Andrzej Siewior wrote:
-> This is an updated version of the initial post after PeterZ made me
-> aware that there are users outside of the module directory.
-> The goal is replace the mix auf rcu_read_lock(), rcu_read_lock_sched()
-> and preempt_disable() with just rcu_read_lock().
+On Sun, Jan 12, 2025 at 08:07:55PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrjälä wrote:
+> > On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> > > text allocations on 64 bit.
+> > 
+> > Hi,
+> > 
+> > This breaks resume from hibernation on my Alderlake laptop.
+> > 
+> > Fortunately this still reverts cleanly.
+> 
+> Does that hunk in the mail here fix it?
+> 
+> https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
 
-Thanks for this cleanup. I've queued the fix in patch #1 on
-modules-fixes. For the rest, I plan to give folks more time to look at
-the changes as this affects a number of subsystems. If there are no
-other concerns, I'd then add the series on modules-next.
+There's definiltely breakage with that module_writable_address()
+nonsense in alternative.c that will not be fixed by that patch.
 
--- 
-Cheers,
-Petr
+The very simplest thing at this point is to remove:
+
+     select ARCH_HAS_EXECMEM_ROX             if X86_64
+
+and try again next cycle.
