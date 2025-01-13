@@ -1,70 +1,116 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55AD1AAC4;
-	Mon, 13 Jan 2025 13:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A556D22CF31
+	for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 13:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736774643; cv=none; b=uwritUSsgWlaV+5gak+WNImZ2cM8/92UfM7Q9ZuY1CvUaZ1IEAseXpV/C6ImCKdyeiv00I12nRw0qqo0wJ5MnPWyfZdHVmU/l1g+fvMT9yr0v/Ipr9DrQxW5FinmjZ6DETluLpf4e3xTZd8VnTh2qH/rpSiAqRL4yswrdw/S44A=
+	t=1736775750; cv=none; b=IOGoxfUnu1/99u91jtZt6WjShtX4njWwiGUjQp+qq0lDepVdpSFBI5mHISCzb+ocfi+wybib3aQpJpPQ/r96w3IWfFopg26ypoX9pi9R+fWxVHo8fZpx7vH+ZlJZoa0u3yFfMY1Qm7uLfIhGrY4EV3JGH8GNmcqmjyLHGyvkDIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736774643; c=relaxed/simple;
-	bh=O75hgMd62P1EPuXfhIAOpl/gshAtFrxDvn0E2P9yawI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uy07cbyfOamu8efFtd5ofrIPtv7fkqrzlkUP06tVxeG4QX0R5AxQjz7tzwamq9SCPzvGvr353Ga1NWqJd2Uf1WEop1Bqh30alXslKmlwgotsex4YFm/+jzlNMGT4SPZM3wmFzbmZFHDfI7oNsCu8hP31n9q28NjVMJV69uC7W+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Br96jGJr; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+1i9U8mk; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1736775750; c=relaxed/simple;
+	bh=3QJHsmMTM6dH0YGCptmQLoKTJZOe4cB2lFQfVgJQnjc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=q/P0RAgdAlVgjinJa+ZYjH+woIA9PgoyUN0/QkCAZP2GuRiywSvEwN6MW4g2cR49zK3oZZOPdJlA/cUF4HJPaxfF0hVIZ0yolKVs3ork9ZnekiWSZHyhlpjRHf3EFeS2acPWHGGnVfNk/ZCuj56bDg6xX0KrjypiMc/ocV2RzSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SceRTCQI; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Br96jGJr";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+1i9U8mk"
-Date: Mon, 13 Jan 2025 14:23:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1736774640;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O75hgMd62P1EPuXfhIAOpl/gshAtFrxDvn0E2P9yawI=;
-	b=Br96jGJrvDSHaSugKVLAgUTELR/QUxkALuPzk6QAuIc/LWE8E2gjMXkAlvnsjFvVJBlLCW
-	VEa99UyIR/718Lwy9sdQ9o2Gz4yPYquCWEd9sPjBuvv7IpY4fG/jFjHuikK/591LJZYSav
-	XRbfbJ1U4qiKMTRQ3OUAY7/grOnCxknVk/vWUiByTU8g0fAS2sCS7x5Uf0HHJDuYCIxZF4
-	I8k/RdNwIlca0emx5K/v3zqBGLvILisk4yfmFChRXV4InAwIT1PYQlLNZ6AHfaCI5xsR8G
-	1IOSZnVH9SWAPzEM66pIkX1i4lTYRR89VPp1hUwXqB9YrYMsCiFN+D3LNOBLAg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1736774640;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O75hgMd62P1EPuXfhIAOpl/gshAtFrxDvn0E2P9yawI=;
-	b=+1i9U8mk50lDF4FM9liZAzx1RUV0HkELpGNvfF/FBz5K8heceDsoKcovh3mEq4PK2urs4f
-	FgztqfDzxfQE5qDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v3 00/28] module: Use RCU instead of RCU-sched.
-Message-ID: <20250113132358.qk1UL6-h@linutronix.de>
-References: <20250108090457.512198-1-bigeasy@linutronix.de>
- <f4e953a4-4458-4034-b91b-7a433f20114b@suse.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SceRTCQI"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436341f575fso44557795e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 05:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1736775747; x=1737380547; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X97wGoya4UQq1kA6RNcK33LUWiHL/CoWKGoyQkqMvkk=;
+        b=SceRTCQIXjz2NY6DCDr2VSwznHXMPSEW0duUH5cisc8AsDBTbPkp3Kw1m5nVghZQea
+         DvdGVkVyhNFdkpFvHGEDPNwvVbnHeHw/5FBrmhJDHVYUT7ZBFsPcoeFZhoTiPiEP8jDc
+         CDdAMcytpN0Z3VrW1nA94Zocb6evceX1DnxoRXEIf0jYlB95o0Da5UFrAhY9/x94vOIo
+         Xgpz/QSHpyqEWeDeVrUeDtbHtf1BUyX+GNuNnXOVjY4hNH1ZGj9ijDBcVaJiTXvdy/s4
+         4+qe17EA9NvNq7yxNdbX+dZPAbBe7GQ6OJ9viubfF3koabanESTva02omATG/ft/FsLp
+         jEEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736775747; x=1737380547;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X97wGoya4UQq1kA6RNcK33LUWiHL/CoWKGoyQkqMvkk=;
+        b=uzN8TjhDHq2So8spxe8tINqsfurJXLHUsBLBSqyRQLKp311WbXwvFH+p9pKAaLIctK
+         +4STBNRzAyPo+jJDDpahN/Cv4ZrJu6UKuR/aliDnXr8B0DAJRYkCD77a2Rgw2MoVhlEl
+         8NG2mC/QYftpv4gaKtQWRxSLKNakiYmjTo5o7mAK+mipUvZYLZDyeH7ROgIGvoaI4jJv
+         El3mUvf2mJvUwFmJ9AL7/mI2H/y2ci5k5nqOzVKE96marVsFkS9WiZvuCM8qqB950dMM
+         xPYyPcC155ABRvtMhI/cKZzz4cn4xC33iEsBqWUmEVC6yZVHYnc9pSJ8cvnha+2LgTNj
+         Xmbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUon8QJ6Cb54+++K9IE6jC1gOG97iTOUW9vvWVZN2Ud44JzXATK130ZX+WWfcbkXYacBGOrcaGzfAgE3ykx@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu7pMNirJes5NEdl/GB0bZoeD/wMzzDyH0/ibYoqBCgxlLBn/o
+	nJoshMVwrXQ75MdYJ4OxYy8NGZmkkuLAQBPVa8O7Olei1upQnLs8WEnAUJQCjU0=
+X-Gm-Gg: ASbGncuMcoVPtgy744A9UqBpY3MJkDWrqFThrT+qh1kr721yylub0OHiAxeZMrguIWf
+	14FWLnlKD63iD9z1WX6ULxwxnTCa+v1phbOBffUienk+gzfa5zsAzOC7TBYT5VU/BSOL50//RNX
+	bW6Kc2sBBjeTlQQKhKBO0m8DrLextdepjRc7x0LdtgLqjIQz3aReLPVEeP2T6LfaXBgF8qtH5SC
+	a7lQRikQQAN6Z1lr7w/qKpBTBfb4gpKIRhZO7pwR8jz2x9aT64Mlj4geCl+
+X-Google-Smtp-Source: AGHT+IGapJ+VZSro2x8LJDMDSAh3VRB+eJpi9PBbS1ECgvlLeDPwXL4yp/4ArB4ipngaE2Loe1Qmbg==
+X-Received: by 2002:a05:600c:450d:b0:434:a734:d279 with SMTP id 5b1f17b1804b1-436e26a8927mr234858635e9.16.1736775747037;
+        Mon, 13 Jan 2025 05:42:27 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e8a326sm178970895e9.35.2025.01.13.05.42.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2025 05:42:26 -0800 (PST)
+Message-ID: <d76bfa59-8515-43ff-967d-fa7f779bf6c2@suse.com>
+Date: Mon, 13 Jan 2025 14:42:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f4e953a4-4458-4034-b91b-7a433f20114b@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] loadpin: remove MODULE_COMPRESS_NONE as it is no longer
+ supported
+To: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
+Cc: linux-security-module@vger.kernel.org, linux-modules@vger.kernel.org,
+ stable@vger.kernel.org, cedric.hombourger@siemens.com,
+ srikanth.krishnakar@siemens.com
+References: <20250113093115.72619-1-arulpandiyan.vadivel@siemens.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250113093115.72619-1-arulpandiyan.vadivel@siemens.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2025-01-13 12:09:27 [+0100], Petr Pavlu wrote:
-> Thanks for this cleanup. I've queued the fix in patch #1 on
-> modules-fixes. For the rest, I plan to give folks more time to look at
-> the changes as this affects a number of subsystems. If there are no
-> other concerns, I'd then add the series on modules-next.
-Good, thanks for the update.
+On 1/13/25 10:31, Arulpandiyan Vadivel wrote:
+> Commit c7ff693fa2094ba0a9d0a20feb4ab1658eff9c33 ("module: Split
+> modules_install compression and in-kernel decompression") removed the
+> MODULE_COMPRESS_NONE, but left it loadpin's Kconfig, and removing it
+> 
+> Signed-off-by: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
 
-Sebastian
+Please use a Fixes tag to record the problematic commit:
+
+Fixes: c7ff693fa209 ("module: Split modules_install compression and in-kernel decompression")
+
+> ---
+>  security/loadpin/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+> index 848f8b4a60190..94348e2831db9 100644
+> --- a/security/loadpin/Kconfig
+> +++ b/security/loadpin/Kconfig
+> @@ -16,7 +16,7 @@ config SECURITY_LOADPIN_ENFORCE
+>  	depends on SECURITY_LOADPIN
+>  	# Module compression breaks LoadPin unless modules are decompressed in
+>  	# the kernel.
+> -	depends on !MODULES || (MODULE_COMPRESS_NONE || MODULE_DECOMPRESS)
+> +	depends on !MODULES || MODULE_DECOMPRESS
+>  	help
+>  	  If selected, LoadPin will enforce pinning at boot. If not
+>  	  selected, it can be enabled at boot with the kernel parameter
+
+I think this should be updated to:
+
+	depends on !MODULES || (!MODULE_COMPRESS || MODULE_DECOMPRESS)
+
+-- 
+Thanks,
+Petr
