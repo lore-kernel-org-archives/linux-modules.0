@@ -1,72 +1,74 @@
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ABAD233D92;
-	Mon, 13 Jan 2025 09:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46E02397BD
+	for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 09:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736759753; cv=none; b=WJyp4RbCeL9uQ+8PMwI8SaflQfcs2L39hbvTz6YzSR8NMXJlx7y35KZ7DbmykyqUvM/3vcF12a8P4OVzSxQW0tumebevLvt3P3WzFcP5D1fC3SXmKft52lBZgc7wUche3WwAdecb4XxX7QPlzCAvKix56k83nNxXRVDlbCEIVPM=
+	t=1736760608; cv=none; b=bl73eHuUDzml6Ld1QD8lkF6Onkoc0qfDn62V5QOrnOYHpobkk4qA45zP6OjjuqgtwIzBaeS6aT3Vydg/Yy/7ctFEizq/8Ww4uF/auTiXe+B1PnJwReOA6WMt+atMO8goeKfNvppskEc8P9I94CnEHJTGv7W/XwOF6Jv2T2TwnN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736759753; c=relaxed/simple;
-	bh=ykO6ROWoK/m4H4zwfcwB0m3Uc355ddIHyPlQ76bVw+8=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:MIME-Version:
-	 Message-Id:Content-Type; b=ilePaz5WXnj/QP6ztTwtWGOxxI7qlGxT4DcS62vMC4P/y19GAQCh9kgXclkcG9o/DipLxHEqe+oUKsFayjTRv1P1Qw4A1FBGo0CV3QKf3Dqvb0Wcee0JJ/jM6mlGxRviAxYRMPHcPaC2iagj2tEFP1gpNEfQtxgBFCnykke0VZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 2C8B44434F;
-	Mon, 13 Jan 2025 10:15:43 +0100 (CET)
-Date: Mon, 13 Jan 2025 10:15:39 +0100
-From: Fabian =?iso-8859-1?q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>
-Subject: Re: [PATCH RFC 2/2] module: Introduce hash-based integrity checking
-To: Thomas =?iso-8859-1?q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Daniel Gomez <da.gomez@samsung.com>,
-	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Masahiro Yamada
-	<masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
-	<nicolas@fjasle.eu>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
-	<samitolvanen@google.com>
-References: <20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net>
-	<20241225-module-hashes-v1-2-d710ce7a3fd1@weissschuh.net>
-	<Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
-In-Reply-To: <Z3iQ8FI4J7rCzICF@bombadil.infradead.org>
+	s=arc-20240116; t=1736760608; c=relaxed/simple;
+	bh=1zi8MlsS3J5PlC4lpGeqtVvP1KN7EE+OfpMnnqp770s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fbacc7+9UVi4CoIdq0IMtEAzfLznLktaI0j/9xS7GoeLamzloiQyfoPHdszUa/clm/c6YHPHRz+ExuM6JgQRtfKRn8ESd+8wP+AgVJJF3pwBIoUBgI0jyoXZ2pbGoA3AQqOc19ndX/IqxcLhwdZXTh2l4Wkacm3bS0efZXmQNLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=arulpandiyan.vadivel@siemens.com header.b=rEHZV9wY; arc=none smtp.client-ip=185.136.65.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=arulpandiyan.vadivel@siemens.com header.b="rEHZV9wY"
+Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 20250113093001986451c944ebf54d1e
+        for <linux-modules@vger.kernel.org>;
+        Mon, 13 Jan 2025 10:30:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=arulpandiyan.vadivel@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=Ap/B4kbOsbDfWWRsm2B9OFISQzBCwAWhfhE4q/nKKXc=;
+ b=rEHZV9wY+yHgsaNPwT/tZHAYQDlACNL1y8eU7pDyHk5psepUq8D+Bx57q7D+meM7pksBT6
+ FtFB72T+hbbrEeUnfKPaOqmkNwHizAkUM7EGLrT1ApRT6mQSsqCNwFkCDsevDoJBZIPCyPb2
+ 0OdeK4CvhsWH53cRlDh+2zwrvYAy6Qist1RbUSvaHWVwL4Rr3sEulVreXE28bVlpCVgjtOHK
+ W04wg7xs1ie0BxSQf0/Bs1dnnBYnEov1uEtMD7flKiZJHTrAvnv2fRpxpcHE+rqvJevtXjDW
+ +Sv3G3yPFr54OXxqKHQBUvwufwTnUt+KDWe0bikX9KrtfbZdV61LAp6g==;
+From: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
+To: linux-security-module@vger.kernel.org
+Cc: linux-modules@vger.kernel.org,
+	stable@vger.kernel.org,
+	cedric.hombourger@siemens.com,
+	srikanth.krishnakar@siemens.com,
+	Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
+Subject: [PATCH] loadpin: remove MODULE_COMPRESS_NONE as it is no longer supported
+Date: Mon, 13 Jan 2025 15:01:15 +0530
+Message-Id: <20250113093115.72619-1-arulpandiyan.vadivel@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1736759530.44f6v98g9c.astroid@yuna.none>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1328317:519-21489:flowmailer
 
-On January 4, 2025 2:37 am, Luis Chamberlain wrote:
-> On Wed, Dec 25, 2024 at 11:52:00PM +0100, Thomas Wei=C3=9Fschuh wrote:
->> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
->> index 7b329057997ad2ec310133ca84617d9bfcdb7e9f..57d317a6fa444195d0806e6b=
-d7a2af6e338a7f01 100644
->> --- a/kernel/module/Kconfig
->> +++ b/kernel/module/Kconfig
->> @@ -344,6 +344,17 @@ config MODULE_DECOMPRESS
->> =20
->>  	  If unsure, say N.
->> =20
->> +config MODULE_HASHES
->> +	bool "Module hash validation"
->> +	depends on !MODULE_SIG
->=20
-> Why are these mutually exclusive? Can't you want module signatures *and*
-> this as well? What distro which is using module signatures would switch
-> to this as an alternative instead? The help menu does not clarify any of
-> this at all, and neither does the patch.
+Commit c7ff693fa2094ba0a9d0a20feb4ab1658eff9c33 ("module: Split
+modules_install compression and in-kernel decompression") removed the
+MODULE_COMPRESS_NONE, but left it loadpin's Kconfig, and removing it
 
-FWIW, I think we (Proxmox, a Debian derivative) would consider switching
-to MODULE_HASHES for the modules shipped with our kernel packages, once
-MODULE_HASHES does not conflict with user/MOK-signatures on DKMS- or
-manually-built modules. we do prefer reproducible builds, but
-extensibility via third-party modules is an important use case for us
-(and I except many other more general purpose distros).
+Signed-off-by: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
+---
+ security/loadpin/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+index 848f8b4a60190..94348e2831db9 100644
+--- a/security/loadpin/Kconfig
++++ b/security/loadpin/Kconfig
+@@ -16,7 +16,7 @@ config SECURITY_LOADPIN_ENFORCE
+ 	depends on SECURITY_LOADPIN
+ 	# Module compression breaks LoadPin unless modules are decompressed in
+ 	# the kernel.
+-	depends on !MODULES || (MODULE_COMPRESS_NONE || MODULE_DECOMPRESS)
++	depends on !MODULES || MODULE_DECOMPRESS
+ 	help
+ 	  If selected, LoadPin will enforce pinning at boot. If not
+ 	  selected, it can be enabled at boot with the kernel parameter
+-- 
+2.39.5
 
