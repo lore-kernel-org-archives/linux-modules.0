@@ -1,57 +1,41 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7B4A1C9EAA
-	for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 20:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82FC224B10;
+	Tue, 14 Jan 2025 01:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736798672; cv=none; b=q8IzgiTbDJl5qmEDb1XbJH8cr0BknNb5kxnW7IkTE1tfi9tPyqUeWk+zbwhYUnMnWJwMb3iwvsgu+INIV4AMkB741NimVjhTqvr22DhLD6ieMOitwhNOYMe4rhgBoeSxoDckq9/AY0J4qGB37JBtsdSxhIURbzhEgyyMoj/s05s=
+	t=1736817775; cv=none; b=Juty4H7ym3I4Ce0vtXsfoOF7FCYZGxqhzzhgyAa1FkWihFhpdCafH/Orc8HKPKUxbNpgOMsNcM/+MUzYbdo90uWLntO91g0fMuddS85WgqwtkDDdptXPJ9ZC2DdilQCTU9IjFUuKevkOY4WhawISoxu63bNFFSIHQBwdUH1vYzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736798672; c=relaxed/simple;
-	bh=headnAKnIPgzcpaskLaA1PfeshfYjP8pQyA8Rn/VBbk=;
+	s=arc-20240116; t=1736817775; c=relaxed/simple;
+	bh=WWAWhrPDVE4hZLjlIHHtG5mo67QW053tLTfug92Cmg0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gRHXqDntrx08mt4kyMl9AJAOGRvU1bTLeuE5ygXc1RPje8BWurC3xd1c6foGH986wc088vdCjMtOE0Keb8NouTo1PacDMiqAHpEm20VvAKMg5dzcTIO3C4ACOuS7Usu2vj1x7xw2vln+fgD/dyq6ysN+C9tNDEJ68tvBHeZaESk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZLJuh9AU; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=DJOUmR+p9uOg1Pi74LP47uNxpaugc0zvpUKAGPTg/4WYW0afAdU9NGtmHVKRN6QJetNSZnPDWBrt/fw3RvnmggMmkkaoLFi78hojUFYUgCw8GkmIQBnyGcRgiT/5N/5Z9SsAfXZ7saZGUJ2RY7WXJyxXGR9ElxmcyCaeZttQBig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q8yhNI73; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZLJuh9AU"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so1325a12.1
-        for <linux-modules@vger.kernel.org>; Mon, 13 Jan 2025 12:04:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736798668; x=1737403468; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yHTlphgauUE0MdQoq+J6Kpo0ZGTAu35Dgo6BpbFsY+0=;
-        b=ZLJuh9AUooiSThryAsFYfRUi66QySjzA/MB8PQKhyPaLkfFWpYnFk/+xittwDKgSDZ
-         sLb4+cRJ8iWGqXBIUHF5r/96qP7+LUOE0N2TXjyftnRy7Yl5IY6/mGnf7ZeeJQkbFxVy
-         lV+J58p5ajIuOwDK2qoUXb5CXq8ndoXL8FwGthWUHEepOL8Zcka3OWWTiutbw9nM3Ju4
-         OXFqnmuEVeS83pNCY+7E+57/w6QwJTN4sK5w5dM3Ac39oMgeXiWgjAox7grtvXAhbrKw
-         Dzk6DD0U43i9B00E3wQDSQjsILObBJnpIGZ5vd1TXCJ/EG3e6Lm0mwaFdE+Ue8Sj3yFO
-         DoGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736798668; x=1737403468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yHTlphgauUE0MdQoq+J6Kpo0ZGTAu35Dgo6BpbFsY+0=;
-        b=lv54ysANfvOepMZDgMj1PJ5y01gDai785I2JUGb4kmsB65yJ8lO8FfKC4oX6ZeKfR9
-         Wg5G8oCSt3fJc0lQ5tHtNABwrPjK2CHydx+webuXPdWdbUqUs3d+GJwZYBWjIlbaMGMe
-         TK6DA3EpeJXkzfNEdvrTvwYnFdgORA6OH8R+Da0AptCFWvHS7B9+T+nk3v2sV+ga1Kgf
-         /41FNwZXUk3Myf1NEEh9/2QWhGMGEpKExp/iuqGEC0OVybZZlHVUHxXP4i8GCxEC0VGY
-         Cit75VK5AG4Bd4WcfWhWwNuD9V8J48AZllBOclT3pZKP+dbbWUa37FMD4vB4fDK7HY2c
-         mirQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBCzEkvQoeqwJ9IbysiYizjCbxYsXrE2Ywas+lg1Zgl0Nx4d0QTc3/FqY7NXaYtKDjDygdM1C1EiD//fAL@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqJA9bhmvIXSNFmuIrGVFmP/26GoSWTnaxh8XD/cbmiE/Yw2yV
-	ik7rTMVNLDtQiKkGJbbkisCt3alk8WeSf229o2alXlNJGJZrSCHNBIJf1KDmcZzZb4y+V1d4jQ2
-	pGK2tbfHrjORq0nGWQPDhAK7ssTMPguPlfE1y
-X-Gm-Gg: ASbGncsOjdAhuSDa96mBRoETnnpah4c22XOmzhmVZp4q+tzA+NkoygD558bsXgCXbaT
-	C0E5WCl4gU9RzwVwHMpEtSv0Wk5JW6aYGbLQ=
-X-Google-Smtp-Source: AGHT+IF0ImtytlLOuNBIguPAjeH7U4hIPd2noWdWrMGEBo3lMmqYucAvmrJESKCyXWngvaXS5pNjrcV4IkidF9a/DB4=
-X-Received: by 2002:a50:ccdb:0:b0:5d9:5a5c:f2f9 with SMTP id
- 4fb4d7f45d1cf-5d9f6c2c39bmr4420a12.7.1736798667639; Mon, 13 Jan 2025 12:04:27
- -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q8yhNI73"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F07C4CEE7;
+	Tue, 14 Jan 2025 01:22:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736817774;
+	bh=WWAWhrPDVE4hZLjlIHHtG5mo67QW053tLTfug92Cmg0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Q8yhNI73qWjJaT8OH+GgCaS0wKO61ripZky5L63DMuH/gwDmFtPtlg6RSHsIeGRhu
+	 QrAp3w4FHYFA6BZpsJAhm8wkcdiIz9TZKRwhQYsJuAXuN3YoALsXYDHHvJnVs8zNrk
+	 FZqhVUroeEGRPgqx90majKMGFrKVUK13ytatOZrtpVpWRDN0Gl6d+HBri5c9tOnMjJ
+	 p4XmhP91mTYDMZyBrCLBYA9ZzJZhz22Zl/h8YFsp0v3sfaI5IEpgzcvOGeBgD/QC1K
+	 R/Tm7tMwoSUMoq0Wt/gEEQ1VYriFszEm+yGgmgQdaqrXLt0/VV7WsAY6iA0CyN16SA
+	 61DRdFhGl5HAA==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54024aa9febso4275192e87.1;
+        Mon, 13 Jan 2025 17:22:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVR3wmuPQ/E69jyxL6DMOOr9/PRFYTBCbMXuFa4tT2UDF3jhy9r1lV3xazzVSkzQyIP5lU6tDDklwNYRK1u@vger.kernel.org, AJvYcCVTbFNXLtMzCJYZnoSp0/0skZlX+p5bW2e51F+tN4rS4Z/inLuLamWGhGcav7A3oWE2+IYQAA9WB0nf0O/v6hU=@vger.kernel.org, AJvYcCVxUl8dgmi/Y1RjKgYZv+em/qt7g3RtO+uasQ8pl6jaxjXV5Iz8CSxwKRX81dlGE76tOEI9588TBaFwDcl81w==@vger.kernel.org, AJvYcCXlmTVYg+OpszBxSnEvq+YHLODSgwQoMZa4UCGkTn19OGfNVdrFHhLZN+/JhAIADb9f8PFHajD0w2o=@vger.kernel.org, AJvYcCXtadWIvSQFIpBmoifiwokg8uTQkypBvyWV3sjbEIpcJpGYlOLBHuR4NlXQ7Cu0DW1YMB7qax5Z67vPG1io@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyUpSA9d0rWOCWeVl2peTAveuf80Yjgd4H8ahn88wjtcR+5owe
+	YmLw0t4FUVRkiAjq0g3X2jPTjGBcuHspIPa0LUmyjjnexuV8O0DlxelUJmFS9Kz9X7AnR0x7FjH
+	mXijI5Ia3o8wcxjWc/z9cq87g0gw=
+X-Google-Smtp-Source: AGHT+IESxyAm24XzrUgZGUb3R8oQ76pDssd8o0arSr9yWSbiBxQ8obkHFuQd2lZ3xWB3P/UgR+hVajnNX4k9qFATBCk=
+X-Received: by 2002:ac2:4e0c:0:b0:542:2e04:e9b8 with SMTP id
+ 2adb3069b0e04-542845af12emr6189443e87.8.1736817772856; Mon, 13 Jan 2025
+ 17:22:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -59,15 +43,17 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250103-extended-modversions-v13-0-35d87c65ee04@google.com>
- <20250103-extended-modversions-v13-5-35d87c65ee04@google.com> <CAK7LNATGw-m_dcdjTBHsFwCZh7mTt8q8yNZQ7VFP=hMU8NvUvg@mail.gmail.com>
-In-Reply-To: <CAK7LNATGw-m_dcdjTBHsFwCZh7mTt8q8yNZQ7VFP=hMU8NvUvg@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 13 Jan 2025 12:03:51 -0800
-X-Gm-Features: AbW1kvYivGs5dyWgDAa0jLS9Y99MI1ugBfYsduBbEB5OZ0TEDoer8gpSmAU-ynQ
-Message-ID: <CABCJKuf-w1puUsypU-cr5BH8uvCdPPQmhZZ1qVKDDg3Y-iQhSg@mail.gmail.com>
+ <20250103-extended-modversions-v13-5-35d87c65ee04@google.com>
+ <CAK7LNATGw-m_dcdjTBHsFwCZh7mTt8q8yNZQ7VFP=hMU8NvUvg@mail.gmail.com> <CABCJKuf-w1puUsypU-cr5BH8uvCdPPQmhZZ1qVKDDg3Y-iQhSg@mail.gmail.com>
+In-Reply-To: <CABCJKuf-w1puUsypU-cr5BH8uvCdPPQmhZZ1qVKDDg3Y-iQhSg@mail.gmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 14 Jan 2025 10:22:15 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASh4xMN8nN5vwR6R1OCNW9u4MJz=CSwW4_4hvFOhczmWA@mail.gmail.com>
+X-Gm-Features: AbW1kva0Jrhvekt3XU_K0jJaW4gEA0CCxv9uoIHGVV-XYlKHjUpGlKLny-Lkcbo
+Message-ID: <CAK7LNASh4xMN8nN5vwR6R1OCNW9u4MJz=CSwW4_4hvFOhczmWA@mail.gmail.com>
 Subject: Re: [PATCH v13 5/5] rust: Use gendwarfksyms + extended modversions
  for CONFIG_MODVERSIONS
-To: Masahiro Yamada <masahiroy@kernel.org>
+To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Matthew Maurer <mmaurer@google.com>, Michael Ellerman <mpe@ellerman.id.au>, 
 	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
 	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
@@ -85,88 +71,98 @@ Cc: Matthew Maurer <mmaurer@google.com>, Michael Ellerman <mpe@ellerman.id.au>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Masahiro,
+On Tue, Jan 14, 2025 at 5:04=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
+>
+> Hi Masahiro,
+>
+> On Fri, Jan 10, 2025 at 6:26=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > On Sat, Jan 4, 2025 at 2:37=E2=80=AFAM Matthew Maurer <mmaurer@google.c=
+om> wrote:
+> > >
+> > > From: Sami Tolvanen <samitolvanen@google.com>
+> > >
+> > > Previously, two things stopped Rust from using MODVERSIONS:
+> > > 1. Rust symbols are occasionally too long to be represented in the
+> > >    original versions table
+> > > 2. Rust types cannot be properly hashed by the existing genksyms
+> > >    approach because:
+> > >         * Looking up type definitions in Rust is more complex than C
+> > >         * Type layout is potentially dependent on the compiler in Rus=
+t,
+> > >           not just the source type declaration.
+> > >
+> > > CONFIG_EXTENDED_MODVERSIONS addresses the first point, and
+> > > CONFIG_GENDWARFKSYMS the second. If Rust wants to use MODVERSIONS, al=
+low
+> > > it to do so by selecting both features.
+> > >
+> > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> > > Co-developed-by: Matthew Maurer <mmaurer@google.com>
+> > > Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> > > ---
+> > >  init/Kconfig  |  3 ++-
+> > >  rust/Makefile | 34 ++++++++++++++++++++++++++++++++--
+> > >  2 files changed, 34 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/init/Kconfig b/init/Kconfig
+> > > index c1f9eb3d5f2e892e977ba1425599502dc830f552..b60acfd9431e0ac2bf401=
+ecb6523b5104ad31150 100644
+> > > --- a/init/Kconfig
+> > > +++ b/init/Kconfig
+> > > @@ -1959,7 +1959,8 @@ config RUST
+> > >         bool "Rust support"
+> > >         depends on HAVE_RUST
+> > >         depends on RUST_IS_AVAILABLE
+> > > -       depends on !MODVERSIONS
+> > > +       select EXTENDED_MODVERSIONS if MODVERSIONS
+> > > +       depends on !MODVERSIONS || GENDWARFKSYMS
+> > >         depends on !GCC_PLUGIN_RANDSTRUCT
+> > >         depends on !RANDSTRUCT
+> > >         depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
+> > > diff --git a/rust/Makefile b/rust/Makefile
+> > > index a40a3936126d603836e0ec9b42a1285916b60e45..80f970ad81f7989afe5ff=
+2b5f633f50feb7f6006 100644
+> > > --- a/rust/Makefile
+> > > +++ b/rust/Makefile
+> > > @@ -329,10 +329,11 @@ $(obj)/bindings/bindings_helpers_generated.rs: =
+private bindgen_target_extra =3D ;
+> > >  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/helper=
+s.c FORCE
+> > >         $(call if_changed_dep,bindgen)
+> > >
+> > > +rust_exports =3D $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/=
+ && $$3!~/__cfi/ { printf $(2),$(3) }'
+> > > +
+> > >  quiet_cmd_exports =3D EXPORTS $@
+> > >        cmd_exports =3D \
+> > > -       $(NM) -p --defined-only $< \
+> > > -               | awk '$$2~/(T|R|D|B)/ && $$3!~/__cfi/ {printf "EXPOR=
+T_SYMBOL_RUST_GPL(%s);\n",$$3}' > $@
+> > > +       $(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n",$$3) >=
+ $@
+> >
+> > I noticed a nit:
+> >
+> > Both of the two callsites of rust_exports pass
+> > '$$3' to the last parameter instead of hardcoding it.
+> >
+> > Is it a flexibility for future extensions?
+> >
+> > I cannot think of any other use except for printing
+> > the third column, i.e. symbol name.
+>
+> Good catch, the last parameter isn't necessary anymore. It was used in
+> early versions of the series to also pass symbol addresses to
+> gendwarfksyms, but that's not needed since we read the symbol table
+> directly now.
 
-On Fri, Jan 10, 2025 at 6:26=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> On Sat, Jan 4, 2025 at 2:37=E2=80=AFAM Matthew Maurer <mmaurer@google.com=
-> wrote:
-> >
-> > From: Sami Tolvanen <samitolvanen@google.com>
-> >
-> > Previously, two things stopped Rust from using MODVERSIONS:
-> > 1. Rust symbols are occasionally too long to be represented in the
-> >    original versions table
-> > 2. Rust types cannot be properly hashed by the existing genksyms
-> >    approach because:
-> >         * Looking up type definitions in Rust is more complex than C
-> >         * Type layout is potentially dependent on the compiler in Rust,
-> >           not just the source type declaration.
-> >
-> > CONFIG_EXTENDED_MODVERSIONS addresses the first point, and
-> > CONFIG_GENDWARFKSYMS the second. If Rust wants to use MODVERSIONS, allo=
-w
-> > it to do so by selecting both features.
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > Co-developed-by: Matthew Maurer <mmaurer@google.com>
-> > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > ---
-> >  init/Kconfig  |  3 ++-
-> >  rust/Makefile | 34 ++++++++++++++++++++++++++++++++--
-> >  2 files changed, 34 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index c1f9eb3d5f2e892e977ba1425599502dc830f552..b60acfd9431e0ac2bf401ec=
-b6523b5104ad31150 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -1959,7 +1959,8 @@ config RUST
-> >         bool "Rust support"
-> >         depends on HAVE_RUST
-> >         depends on RUST_IS_AVAILABLE
-> > -       depends on !MODVERSIONS
-> > +       select EXTENDED_MODVERSIONS if MODVERSIONS
-> > +       depends on !MODVERSIONS || GENDWARFKSYMS
-> >         depends on !GCC_PLUGIN_RANDSTRUCT
-> >         depends on !RANDSTRUCT
-> >         depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
-> > diff --git a/rust/Makefile b/rust/Makefile
-> > index a40a3936126d603836e0ec9b42a1285916b60e45..80f970ad81f7989afe5ff2b=
-5f633f50feb7f6006 100644
-> > --- a/rust/Makefile
-> > +++ b/rust/Makefile
-> > @@ -329,10 +329,11 @@ $(obj)/bindings/bindings_helpers_generated.rs: pr=
-ivate bindgen_target_extra =3D ;
-> >  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/helpers.=
-c FORCE
-> >         $(call if_changed_dep,bindgen)
-> >
-> > +rust_exports =3D $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D|B)/ &=
-& $$3!~/__cfi/ { printf $(2),$(3) }'
-> > +
-> >  quiet_cmd_exports =3D EXPORTS $@
-> >        cmd_exports =3D \
-> > -       $(NM) -p --defined-only $< \
-> > -               | awk '$$2~/(T|R|D|B)/ && $$3!~/__cfi/ {printf "EXPORT_=
-SYMBOL_RUST_GPL(%s);\n",$$3}' > $@
-> > +       $(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n",$$3) > $=
-@
->
-> I noticed a nit:
->
-> Both of the two callsites of rust_exports pass
-> '$$3' to the last parameter instead of hardcoding it.
->
-> Is it a flexibility for future extensions?
->
-> I cannot think of any other use except for printing
-> the third column, i.e. symbol name.
+If you submit a diff, I will squash it to 5/5.
+(You do not need to input commit description body)
 
-Good catch, the last parameter isn't necessary anymore. It was used in
-early versions of the series to also pass symbol addresses to
-gendwarfksyms, but that's not needed since we read the symbol table
-directly now.
 
-Sami
+--=20
+Best Regards
+Masahiro Yamada
