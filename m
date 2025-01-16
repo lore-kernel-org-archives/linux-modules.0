@@ -1,308 +1,192 @@
-Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022125.outbound.protection.outlook.com [52.101.96.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3F71D5AC3;
-	Wed, 15 Jan 2025 19:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.125
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736970156; cv=fail; b=VpenQ+l9Y7OxQIvJ5yzM1jVspRijaUwWCVPU3B8wk/iirPlDaN+0hDW64FGKb2YO4PXcsRdng7cxFPjHeehjqrEhRLx1wzUpgXajBIMdv5wLW6IZec5wtSk6jjPmYJg+AqBNMDDBVEqj+YodjAy+ZpejhO1+Ax1CWASlgGUhqWw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736970156; c=relaxed/simple;
-	bh=3cVDv46WhssFxWTBRQKQgO6hvO7CsBbzK/Mr9berkZM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NNbH9TNP5i6WylnSDU3yHf2ccxGXIexshQJjsu4OLDg/Jml9HiLLhk5XWCik7bpFlRo7hW1wi12Hfvsl/fiBKRmMYpOYtN8YkaMMPey74mQfZZTSg3H+BIR3LS+GMtDzmtPwQqrUpafy0Nb/pjvqEwc5gxJ+SBDlDQ4R9lYpb0U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=xDIPDpbl; arc=fail smtp.client-ip=52.101.96.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E3041925A0
+	for <linux-modules@vger.kernel.org>; Thu, 16 Jan 2025 07:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737014362; cv=none; b=Gj+J16Im/8HYjDUAkb67nfbcuMGUh9CVC6khoG5r9psw7vWRyuORB38OyMZnjseoJklU6D4ZmdL/1NQRY+yZM7WR/+oco6IHHimxjKFc5c2Wblr0A5vlkuRPLSOifWdpYbVCWFnBY4YLR8vY90jLbO8090tRy3dSSFIPBBqIJws=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737014362; c=relaxed/simple;
+	bh=J2XwIiL4XYVVvcC11VwQC6Q4KQywqA2c2F2DiApgnVo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TqWO7FYq73MwS/Sh08y4q2Osxvb82kJDwaShCrHBXGC9FSe99yDEk/v1HrADJX8hVSS5XKBfEHVDK5yXH7x/uYEvyVU2HfFpzkCt3gMzulIhsIyRlxj9eZ4/cJbT7MWBCXTLHRnj0UybCOmQNI2yREkQyTLFK6IP5zFFPJa1GUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A971schL; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="xDIPDpbl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=u1MW9XEt3xI/WUwdc2m0xkmXNvWCzTXrA6eY4YunqOk/dyJ3OgYDVXoqFde1xpAmd6pTtFc6FgnSXIJxiG0C2+cT2Bkz1Z6HvXskM2H5arLXPa9jUEwCgEq1ieZYtklpBzA9//y41y4pomuk8rKvjGranCKzavoz1qSTcS9muIAZSRuAHSKb9sD0x54S+38Cw0vpqrKMqCEmpJ78jZsQSnO4H5LpoI/YsI0b2dtNIucCw8wiJmpU4ZwCPpX2R+jO2yNwkq6dHdjsjr1oRzz1Drq/01pPiwX1dQ/pDWoyQ1xdqficosu861t8CgIM4X8AtVloB2Vc45zsbzM6gVf2/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+lYbatbeqIuDwdjhewBDe9mfh9q5h0/eFIbz7WRo1O0=;
- b=gXAkYeQO/LBGgakTXMi0LwfEHfHAR9iRI9Zeay1fuyQ9zbVBXiGygSCTeNueb6xl/SIlU9hgK4dkQk5IHShTaebjL3HsqrLUTdh+In76jCWHyM6ivOfk+/Jrrt/sL91KV2tPdpuqUqh8sPvqP2pqmLo/s6Eul+SfIOx/ye81Fv7Gatenze7ZHIBNwmVPLdnS/5aCv9P4JsWr9ip1yntaUpQk6GwN9MiXU0AXHqm+0Phgu8ZzIZefUptBOMZYMd2u82EAx8qjR/aRe5lGIUUJPcRSOChUQjvJRWkBs06zcIjSD6SKyKVuS8sY/6LgjsQly8AuPmDe9ek7tI7yFYDD5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+lYbatbeqIuDwdjhewBDe9mfh9q5h0/eFIbz7WRo1O0=;
- b=xDIPDpblOsue23Vypi5+MySalLSL06L2i/TtJZBXoOMbuWbLIEdhAJIW+VBpJG9nS+2qPFvK3y4nR+36jzS9Oj0M1WPlOMOVERz49wQBpfyshqfk070y9tH3f/oapV3KM8n2M64Pt0QKMIAzWAUNqgz/pRELpGyGMFm96cKd+vU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO3P265MB2092.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:103::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Wed, 15 Jan
- 2025 19:42:31 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%5]) with mapi id 15.20.8356.010; Wed, 15 Jan 2025
- 19:42:31 +0000
-Date: Wed, 15 Jan 2025 19:42:29 +0000
-From: Gary Guo <gary@garyguo.net>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Alice
- Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Luis
- Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>, Adam
- Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, Petr Pavlu
- <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, Daniel
- Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, Greg
- KH <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] rust: str: add radix prefixed integer parsing
- functions
-Message-ID: <20250115194229.04cd1068.gary@garyguo.net>
-In-Reply-To: <20250109-module-params-v3-v4-3-c208bcfbe11f@kernel.org>
-References: <20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org>
-	<20250109-module-params-v3-v4-3-c208bcfbe11f@kernel.org>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0222.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::18) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A971schL"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-436202dd730so3128635e9.2
+        for <linux-modules@vger.kernel.org>; Wed, 15 Jan 2025 23:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1737014359; x=1737619159; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qs2ifX3pk+mgn6ciIknx54bjB1UYrVSbW++3djKTznw=;
+        b=A971schLsBEor8CANwHuUiQY8ynozgJhm+xtchqARzYtfNgxgBgh2l6zGgOIsF8NzZ
+         vwr0foLNPJABQ9VBpGptSULOJEc4ESVjnl0BPTB9U2XVqlakYn61lDzurzPPa0UGvDpD
+         X/nd0zRduxFSz9zlD3WMH2Zw3nuy/ZWa3phpVQSb/p2mTM4zSd7cCYwkF2QpbwcV/Ib5
+         gNuCA55wZVyLgXccNrgSMGo11LwfpwXAQ5fHfwCwhI3Y+vkhAk3+XW01y0kIUFtr8XAb
+         5vpc+M/oz2c51J/uBifIQORoHmYOTBCalCpbFj8KsHcYM1dfzCnWhPA8RPI703EyuWiJ
+         VQGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737014359; x=1737619159;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qs2ifX3pk+mgn6ciIknx54bjB1UYrVSbW++3djKTznw=;
+        b=cvzXQWCQKuDPYWQRWWW3fqFux2v3zjt/ekGr3AtP2PiwGp8HIHh6gsTH4uI41XfoVX
+         Y7LXVAG9JECqd5Pfay9q7zKro0LUdA9bFjHTGGLHpM1nTj9Fmay3wPq+Duk+zDEwjp1e
+         3T76q15uM4iSu5OGQ4aB0Ct2/eQ6kI8AxRH5UUhiDFX9c0q1510eK+KInmIgZ7rCdFiy
+         lWzQUrRZizmI4v3l6u9I8wGG6hBcXpAhFYXSQVd/IjNCIF2Zae1O9BLvc2redAgLs1W8
+         4Tic2A34PAfA8SJn6ixJ79Bap3z4WQawrbesJUmltABH+7O9u6NV7ftvBrc6IFcN8JJm
+         TdoA==
+X-Forwarded-Encrypted: i=1; AJvYcCVH2U+cx1/UxsI+1e0WzsZUJ5fhiuZwKZpZi+mfzggjzpfMhRmyLXYkCy+y1d8wd8QAiaL1qpk7u7qd2uKo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1ptKTp8l5Fl8wW3OynbaTsBKjKhVM84psYdrxJCl7ZL8EZO9K
+	v+S/tjCp0T3Y2ahuI20RN8plpO1hiQXmU6wEOKizUAoneeozn/ng4ccNpy51Eg==
+X-Gm-Gg: ASbGncuJy0kg51H5n2WL5bVJiKuVb37wVxLxMojLw+oydF+Q3bkNuq9/ep9qGvGYVOC
+	fZ9tq7e4ZxP7UvrQL0jkX3lK5WBgiUx1DemUl3IqRnQGllutCIN4JWk4TGTvy0sLcyc65Z+Kd3W
+	ZTExlunsOCurWSMfgTWX5Qfdq+2+9z64ukfAZwBLNbHe/koHhMZ+n4hGXzYoCQ8iNeExJMkjfhl
+	JtzZPcQ9hvxEuvtmLNe4mYWk1IGdqcYK0oTGfY0tmR1AsWFZNYnWIjOrN98N6aDFxyWTeOhe0NY
+	xUTSbOEOXb11E/39InvCzvxTWc263a4AiTTEbAR/xA==
+X-Google-Smtp-Source: AGHT+IHVozHkMCzrbtLkNrMg5jL+FAcSYQfVVR5k9FWOoQx76/wgrdvd+dlFhJ0P9AyZVS0xdveE0g==
+X-Received: by 2002:a05:600c:138d:b0:433:c76d:d57e with SMTP id 5b1f17b1804b1-436e26849f2mr67155315e9.5.1737014358851;
+        Wed, 15 Jan 2025 23:59:18 -0800 (PST)
+Received: from [10.156.60.236] (ip-037-024-206-209.um08.pools.vodafone-ip.de. [37.24.206.209])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b8124sm19455879f8f.81.2025.01.15.23.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2025 23:59:18 -0800 (PST)
+Message-ID: <16bf04b0-64ad-4614-957e-2971f053949d@suse.com>
+Date: Thu, 16 Jan 2025 08:59:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB2092:EE_
-X-MS-Office365-Filtering-Correlation-Id: f3fd9302-fa1f-4b8e-2e6e-08dd359cc052
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|10070799003|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?kglXaiiiHCSlqGtCRlQvX4SOx6WVh1rTWcOsHx1W147iNTKqTKKc23ZW4/f5?=
- =?us-ascii?Q?heOsEEpAuczhPgkSBHTP+39lu70Z8+veTM9EzbqddCCWv6z2PRWsUTA7Dn9K?=
- =?us-ascii?Q?QSpIzx/4NZJYIyxqco1f37/K7N7FJYDG5uOwVVnALvIY7J2d8btHbZFf9XOo?=
- =?us-ascii?Q?FsrG56urAyQDFiZm97nCl5dAtOco44M0Ttj6cDTSXKr0oCPwROLaGLqlrB+x?=
- =?us-ascii?Q?V8K2mAxDwRt3dTipafeVF6qvzhHL95v6uH4OPMYrFqXPDEP9Yic2MOaUtzAT?=
- =?us-ascii?Q?eJL3YLFGq8V032F3UzKtLTFdU75LzexeCZcywq7GTw12yraRiraHyjyvDpBJ?=
- =?us-ascii?Q?3gtunWvxVb5HtGDoWfZrpDHpTxxSz6T9WRLt+mc+E88j/BoF/MLAXMDMyyGy?=
- =?us-ascii?Q?AEWOy8CKcbPM9TYJJ7AolF9caY50tlR+yw32KNTf4MHNX4gJe8jWHvz+4HpK?=
- =?us-ascii?Q?aq/Ap7GAvyGJ3GxdY6qujglLc0W1Hskut+u5ycViMWDYsnKzzQCAC7Zz6VCU?=
- =?us-ascii?Q?LTGQKKUuWnutalsoXxJvPxdszIw/+Uadg6xYhTY3xXw02IZ8X8W2yldev+lj?=
- =?us-ascii?Q?aa34ThRo2lSyxuhSsQ8EMavq5vmKJsY34I6+N+tg9PsOz6U4+BGQIolUuUBI?=
- =?us-ascii?Q?RMvtFqeu/jd2vuBqtBfj/qrGbAqCMINCIHBYrxewpQ/ubOW8lWLa2oAUho2A?=
- =?us-ascii?Q?p272S+BA2BISC85holkd6wFQ8h85KXpwrxH/zcE5iDMuVd3VsTjnaZFrEZ3v?=
- =?us-ascii?Q?3XlYrA5R4TzKpIpZdKSLiQ3RqWGcRLn05nLrD0jkNR46BHwFq2hyo79XrlgV?=
- =?us-ascii?Q?8RjU5nauE5RKndfCrO8OuNTSDTQiSdASlUmNJKWTxg5S3EwVhOVKL2c/QbYT?=
- =?us-ascii?Q?x2i6yCzT5g7xiZ05ul8DV3xegTuqpbdYxuBqtXL9WfvABpN32CHN2Cwxyodx?=
- =?us-ascii?Q?x/I4z/Uk28JtowhBToA4VgwBiTxlnymxw7QvLFtnSqWkvmmnO6K5BjPCfTxY?=
- =?us-ascii?Q?k7JTIr6yIaXQLTnGqvPj9v+DrREm6l4C6YYpWSe9JYyah6lx4VL5faHPSWRf?=
- =?us-ascii?Q?T/bEj6PNoivUh2ipnKPbJ/iNjJVEVKrUBz12czZK6r3Qe5c7bCIJ0wV3xOyG?=
- =?us-ascii?Q?Su0Z/x1U8ModqKmrpAXhXyc6O7AB+BBn1+AuhLXyaGRSBEZiLfFOJnqfVIuO?=
- =?us-ascii?Q?CAYyNuC97aZ6c5/xUOQWpiQX2ANUea9VSfdUwXb2i69wNHiCioH/XsrxI96L?=
- =?us-ascii?Q?00RjR+1kAkwmLodwpmxP6xRG2nMhdmhf7AgDsXfSvEOQnIHrozoB6Vinpdaz?=
- =?us-ascii?Q?/PlAj+NS7O5IrMfECRSx3FyqH51T3VAimj+62Pk9TE3NCg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(10070799003)(376014)(7416014)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?45YE3EgA6w8uepbjPlC57BIF55YgftP1i/NrqdnBJIMDu9mAN4mnBRv59NuD?=
- =?us-ascii?Q?J0jdCYmY1F238ZE48ySBnO+V1EKNzfWcxJ3RCecU3Xo4Nn979Ht4fn72dJcm?=
- =?us-ascii?Q?AApbjU2X+3196Gr89eRKqxwoL3cMJgWWsiF62F468a8AyRfYEio0VXDX4e4A?=
- =?us-ascii?Q?oBbv8n5KMJSiZvCE4engULzqK3DXgfL5e2r9rW9nlVtB5B1OnfFb2Yp0PxaD?=
- =?us-ascii?Q?48Vk7tKHjfrN3QORYatxAhekLZx6LJNiviC74t8l7y4MRjQjimeKLZe5PB0e?=
- =?us-ascii?Q?jKuTjU5vlV0TsLzS/UUou4aaFO7+4lAGEg9z5P2afFSJhap3mGJEkM+lDwIU?=
- =?us-ascii?Q?LgppN6rJ4mNk8rNqdIEbMOjYesbCcdwtcRacNcm68DcvrtHZoDoIXc7ZFpJt?=
- =?us-ascii?Q?dRjc87k6Trk2/NzPMPwX3FZZSefo2u6aU24gDLm0+A4WiaG+Ml185oW9dDyR?=
- =?us-ascii?Q?cf+wAvH1reK7IeTTQ1q46t2dAyl2TZU+p8xyAGEWA4kDNyUd083Y3Yu31mYz?=
- =?us-ascii?Q?iYTVM70gkL7XTkdjHKeL7iXhyNNMWomhxxZ51maXxNMUNCjugO3LqzzU5vIt?=
- =?us-ascii?Q?YRUNtjlKXDPNjADGo7C2Bk1rLC7fsuI27SyCI2ZqEL64wuzUtcGByzucuDQi?=
- =?us-ascii?Q?fx/B1PzFUjmUaiTZHOAneXlFd0TPBPJBuAj+reL/t5VvNjCVJUCQ5kZ//qQU?=
- =?us-ascii?Q?jqHYbuKGlRQTOH9dMi/dkCm/1KPDa4rJbcpinDZDQYhG0W8HM1jkJN/M9oM7?=
- =?us-ascii?Q?uek4sO0vhREf6BHu/DyETHLXT5WTn6qKLa/e+TYypE1sZRmM16adLSOc59rm?=
- =?us-ascii?Q?6GcRbKLT1x4OoR3ZU+kJPDm1HEW+hymQqz6DzurbG8l7Uc7GLYyTOT0jMAUq?=
- =?us-ascii?Q?fo6BWTGdDhS5RRoSwtOWGIhKeL4fkk984huje/alNfeVRctTz37QYiXm6V0Z?=
- =?us-ascii?Q?Ki66fC4VNow6dQxM8nqCvaf4rKXnMQnqGO6WYqMF0Ifwb65d7Gsat0otGjPR?=
- =?us-ascii?Q?iGDy6oxS2AcVYE0tHyWchtPqYzDCEs5My3AVWv7KyT/IsQdKmpYLStCKNzHi?=
- =?us-ascii?Q?cW0+G2VtdmaO4GGQbiGXLqbGL4rmKSQ6D9C2WXTsIGOqhYMv7VafrGEC1fR2?=
- =?us-ascii?Q?0Ciu8u/dSSykFrG8MYOqvTHV7sKQb7WWbAJEZOLoBIVffIkukmFeZIkwUa7+?=
- =?us-ascii?Q?c6Kv3BQ5BeQf0eHSDbD/bX5HY1tsHrleHnLK8I+xCnjUVarqmLaOjayOBrSR?=
- =?us-ascii?Q?PPQOduMN6pGnN1oUO5NDwovsi5q2lZTqvcZZj5tXlIOBrIlMcZl+w70ciWFD?=
- =?us-ascii?Q?OqYCoc5Qf1kaYVBrQu1YI7+YsCJop/6CMsmjS+8Kof8Z5/CJ4TJXojJs90T0?=
- =?us-ascii?Q?RH1TFHNBTnvtuu+pq4DJw3pvz2Y7M0QT0uf33GljKOO15cMLKGmsS4ESGQ0L?=
- =?us-ascii?Q?b0KXZkynwTXjSFck8VEJ0lu/ZQAxTZw+c4WAzdkkuJV/j3E1jYwzbmfF9+Ha?=
- =?us-ascii?Q?U4WXgWufPsGjyIg49xnWMD+sATSMp08ofGQoHb8BlxA1km7kpiF1OrGUQp53?=
- =?us-ascii?Q?lBR5anhCRyywtJoMxXN4mybH7k7vR/v2IkWnh1gbxT52vZa3wc+aOTMbzpNz?=
- =?us-ascii?Q?uA=3D=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3fd9302-fa1f-4b8e-2e6e-08dd359cc052
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2025 19:42:31.5598
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 44y+62XBdTDTRj4YnBWKyA8H6EhJyqlW60+/wx807K4+jgYtwnqaDr1zPRTFnnxaT5ySyx91NctGZNR7z8/AwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB2092
+User-Agent: Mozilla Thunderbird
+Subject: Re: Unaligned accesses when loading modules
+To: Mikulas Patocka <mpatocka@redhat.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@samsung.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
+ Sami Tolvanen <samitolvanen@google.com>
+References: <1665d54c-178f-ff72-e627-776e7c76798b@redhat.com>
+ <CABCJKud9RCJzVZ2VuTRoaBavOC9bnyTv_W_-AC3mGOy9AY7dWA@mail.gmail.com>
+ <aedcb0fd-040b-0dcc-8c28-34a0b07d5a7e@redhat.com>
+Content-Language: en-US
+From: Jan Beulich <jbeulich@suse.com>
+Autocrypt: addr=jbeulich@suse.com; keydata=
+ xsDiBFk3nEQRBADAEaSw6zC/EJkiwGPXbWtPxl2xCdSoeepS07jW8UgcHNurfHvUzogEq5xk
+ hu507c3BarVjyWCJOylMNR98Yd8VqD9UfmX0Hb8/BrA+Hl6/DB/eqGptrf4BSRwcZQM32aZK
+ 7Pj2XbGWIUrZrd70x1eAP9QE3P79Y2oLrsCgbZJfEwCgvz9JjGmQqQkRiTVzlZVCJYcyGGsD
+ /0tbFCzD2h20ahe8rC1gbb3K3qk+LpBtvjBu1RY9drYk0NymiGbJWZgab6t1jM7sk2vuf0Py
+ O9Hf9XBmK0uE9IgMaiCpc32XV9oASz6UJebwkX+zF2jG5I1BfnO9g7KlotcA/v5ClMjgo6Gl
+ MDY4HxoSRu3i1cqqSDtVlt+AOVBJBACrZcnHAUSuCXBPy0jOlBhxPqRWv6ND4c9PH1xjQ3NP
+ nxJuMBS8rnNg22uyfAgmBKNLpLgAGVRMZGaGoJObGf72s6TeIqKJo/LtggAS9qAUiuKVnygo
+ 3wjfkS9A3DRO+SpU7JqWdsveeIQyeyEJ/8PTowmSQLakF+3fote9ybzd880fSmFuIEJldWxp
+ Y2ggPGpiZXVsaWNoQHN1c2UuY29tPsJgBBMRAgAgBQJZN5xEAhsDBgsJCAcDAgQVAggDBBYC
+ AwECHgECF4AACgkQoDSui/t3IH4J+wCfQ5jHdEjCRHj23O/5ttg9r9OIruwAn3103WUITZee
+ e7Sbg12UgcQ5lv7SzsFNBFk3nEQQCACCuTjCjFOUdi5Nm244F+78kLghRcin/awv+IrTcIWF
+ hUpSs1Y91iQQ7KItirz5uwCPlwejSJDQJLIS+QtJHaXDXeV6NI0Uef1hP20+y8qydDiVkv6l
+ IreXjTb7DvksRgJNvCkWtYnlS3mYvQ9NzS9PhyALWbXnH6sIJd2O9lKS1Mrfq+y0IXCP10eS
+ FFGg+Av3IQeFatkJAyju0PPthyTqxSI4lZYuJVPknzgaeuJv/2NccrPvmeDg6Coe7ZIeQ8Yj
+ t0ARxu2xytAkkLCel1Lz1WLmwLstV30g80nkgZf/wr+/BXJW/oIvRlonUkxv+IbBM3dX2OV8
+ AmRv1ySWPTP7AAMFB/9PQK/VtlNUJvg8GXj9ootzrteGfVZVVT4XBJkfwBcpC/XcPzldjv+3
+ HYudvpdNK3lLujXeA5fLOH+Z/G9WBc5pFVSMocI71I8bT8lIAzreg0WvkWg5V2WZsUMlnDL9
+ mpwIGFhlbM3gfDMs7MPMu8YQRFVdUvtSpaAs8OFfGQ0ia3LGZcjA6Ik2+xcqscEJzNH+qh8V
+ m5jjp28yZgaqTaRbg3M/+MTbMpicpZuqF4rnB0AQD12/3BNWDR6bmh+EkYSMcEIpQmBM51qM
+ EKYTQGybRCjpnKHGOxG0rfFY1085mBDZCH5Kx0cl0HVJuQKC+dV2ZY5AqjcKwAxpE75MLFkr
+ wkkEGBECAAkFAlk3nEQCGwwACgkQoDSui/t3IH7nnwCfcJWUDUFKdCsBH/E5d+0ZnMQi+G0A
+ nAuWpQkjM1ASeQwSHEeAWPgskBQL
+In-Reply-To: <aedcb0fd-040b-0dcc-8c28-34a0b07d5a7e@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 09 Jan 2025 11:54:58 +0100
-Andreas Hindborg <a.hindborg@kernel.org> wrote:
-
-> Add the trait `ParseInt` for parsing string representations of integers
-> where the string representations are optionally prefixed by a radix
-> specifier. Implement the trait for the primitive integer types.
+On 15.01.2025 19:02, Mikulas Patocka wrote:
+> On Tue, 14 Jan 2025, Sami Tolvanen wrote:
+>> On Tue, Jan 14, 2025 at 6:07 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
+>>> On PA-RISC, with the kernel 6.12.9, I get unaligned pointer warnings when
+>>> a module is loaded. The warnings are caused by the fact that the
+>>> .gnu.linkonce.this_module section is not aligned to the appropriate
+>>> boundary. If I dump the module content with "objdump -h configs.ko", I get
+>>> this. Note that the .gnu.linkonce.this_module has "File off 000042d2" and
+>>> "Algn 2**4".
+>>>
+>>> On x86-64, the same misalignment can be seen, but it doesn't cause
+>>> warnings because unaligned pointers are handled in hardware.
+>>>
+>>> This seems to be a bug in the linker, because when I compile an old kernel
+>>> with a new linker, I also get the misalignment. Do you have an idea how to
+>>> work around this bug?
+>>
+>> Does explicitly specifying section alignment in the module linker
+>> script fix this by any chance?
+>>
+>>> kernel-6.12.9, binutils from Debian ports:
+>>> [...]
+>>> kernel 6.10, older binutils:
+>>
+>> Which exact versions of binutils were used here? I don't see the
+>> alignment issue with binutils 2.42 on either x86_64 or parisc64, so I
+>> assume you're testing with something newer?
+>>
+>> $ hppa64-linux-gnu-ld.bfd --version
+>> GNU ld (GNU Binutils for Debian) 2.42.50.20240625
+>>
+>> $ hppa64-linux-gnu-objdump -h configs.ko | grep -E '(format|this_module)'
+>> configs.ko:     file format elf64-hppa-linux
+>>  17 .gnu.linkonce.this_module 00000300  0000000000000000
+>> 0000000000000000  00005c50  2**4
+>>
+>> Sami
 > 
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
-> ---
->  rust/kernel/str.rs | 118 +++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 118 insertions(+)
+> Hi
 > 
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index 9c446ff1ad7adba7ca09a5ae9df00fd369a32899..14da40213f9eafa07a104eba3129efe07c8343f3 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-> @@ -914,3 +914,121 @@ fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
->  macro_rules! fmt {
->      ($($f:tt)*) => ( core::format_args!($($f)*) )
->  }
-> +
-> +pub mod parse_int {
-> +    //! Integer parsing functions for parsing signed and unsigned integers
-> +    //! potentially prefixed with `0x`, `0o`, or `0b`.
-> +
-> +    use crate::alloc::flags;
-> +    use crate::prelude::*;
-> +    use crate::str::BStr;
-> +
-> +    /// Trait that allows parsing a [`&BStr`] to an integer with a radix.
-> +    ///
-> +    /// [`&BStr`]: kernel::str::BStr
-> +    // This is required because the `from_str_radix` function on the primitive
-> +    // integer types is not part of any trait.
-> +    pub trait FromStrRadix: Sized {
-> +        /// Parse `src` to `Self` using radix `radix`.
-> +        fn from_str_radix(src: &BStr, radix: u32) -> Result<Self, crate::error::Error>;
-> +    }
-> +
-> +    /// Extract the radix from an integer literal optionally prefixed with
-> +    /// one of `0x`, `0X`, `0o`, `0O`, `0b`, `0B`, `0`.
-> +    fn strip_radix(src: &BStr) -> (u32, &BStr) {
-> +        if let Some(n) = src.strip_prefix(b_str!("0x")) {
-> +            (16, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0X")) {
-> +            (16, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0o")) {
-> +            (8, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0O")) {
-> +            (8, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0b")) {
-> +            (2, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0B")) {
-> +            (2, n)
-> +        } else if let Some(n) = src.strip_prefix(b_str!("0")) {
-> +            (8, n)
-> +        } else {
-> +            (10, src)
-> +        }
-
-This can be done better with a match:
-
-match src.deref() {
-    [b'0', b'x' | b'X', ..] => (16, &src[2..]),
-    [b'0', b'o' | b'O', ..] => (8, &src[2..]),
-    [b'0', b'b' | b'B', ..] => (2, &src[2..]),
-    [b'0', ..] => (8, &src[1..]),
-    _ => (10, src),
-}
-
-> +    }
-> +
-> +    /// Trait for parsing string representations of integers.
-> +    ///
-> +    /// Strings beginning with `0x`, `0o`, or `0b` are parsed as hex, octal, or
-> +    /// binary respectively. Strings beginning with `0` otherwise are parsed as
-> +    /// octal. Anything else is parsed as decimal. A leading `+` or `-` is also
-> +    /// permitted. Any string parsed by [`kstrtol()`] or [`kstrtoul()`] will be
-> +    /// successfully parsed.
-> +    ///
-> +    /// [`kstrtol()`]: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#c.kstrtol
-> +    /// [`kstrtoul()`]: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#c.kstrtoul
-> +    ///
-> +    /// # Example
-> +    /// ```
-> +    /// use kernel::str::parse_int::ParseInt;
-> +    /// use kernel::b_str;
-> +    ///
-> +    /// assert_eq!(Ok(0xa2u8), u8::from_str(b_str!("0xa2")));
-> +    /// assert_eq!(Ok(-0xa2i32), i32::from_str(b_str!("-0xa2")));
-> +    ///
-> +    /// assert_eq!(Ok(-0o57i8), i8::from_str(b_str!("-0o57")));
-> +    /// assert_eq!(Ok(0o57i8), i8::from_str(b_str!("057")));
-> +    ///
-> +    /// assert_eq!(Ok(0b1001i16), i16::from_str(b_str!("0b1001")));
-> +    /// assert_eq!(Ok(-0b1001i16), i16::from_str(b_str!("-0b1001")));
-> +    ///
-> +    /// assert_eq!(Ok(127), i8::from_str(b_str!("127")));
-> +    /// assert!(i8::from_str(b_str!("128")).is_err());
-> +    /// assert_eq!(Ok(-128), i8::from_str(b_str!("-128")));
-> +    /// assert!(i8::from_str(b_str!("-129")).is_err());
-> +    /// assert_eq!(Ok(255), u8::from_str(b_str!("255")));
-> +    /// assert!(u8::from_str(b_str!("256")).is_err());
-> +    /// ```
-> +    pub trait ParseInt: FromStrRadix {
-> +        /// Parse a string according to the description in [`Self`].
-> +        fn from_str(src: &BStr) -> Result<Self> {
-> +            match src.iter().next() {
-> +                None => Err(EINVAL),
-> +                Some(sign @ b'-') | Some(sign @ b'+') => {
-> +                    let (radix, digits) = strip_radix(BStr::from_bytes(&src[1..]));
-> +                    let mut n_digits: KVec<u8> =
-> +                        KVec::with_capacity(digits.len() + 1, flags::GFP_KERNEL)?;
-
-I don't think we should allocate for parsing. This can trivially be a
-non-allocating. Just check that the next byte is an ASCII digit (reject
-if so, in case people give multiple signs), and then from_str_radix and
-return as is or use `checked_neg`.
-
-> +                    n_digits.push(*sign, flags::GFP_KERNEL)?;
-> +                    n_digits.extend_from_slice(digits, flags::GFP_KERNEL)?;
-> +                    Self::from_str_radix(BStr::from_bytes(&n_digits), radix).map_err(|_| EINVAL)
-> +                }
-> +                Some(_) => {
-> +                    let (radix, digits) = strip_radix(src);
-> +                    Self::from_str_radix(digits, radix).map_err(|_| EINVAL)
-> +                }
-> +            }
-> +        }
-> +    }
-> +
-> +    macro_rules! impl_parse_int {
-> +        ($ty:ty) => {
-> +            impl FromStrRadix for $ty {
-> +                fn from_str_radix(src: &BStr, radix: u32) -> Result<Self, crate::error::Error> {
-> +                    <$ty>::from_str_radix(core::str::from_utf8(src).map_err(|_| EINVAL)?, radix)
-> +                        .map_err(|_| EINVAL)
-> +                }
-> +            }
-> +
-> +            impl ParseInt for $ty {}
-> +        };
-> +    }
-> +
-> +    impl_parse_int!(i8);
-> +    impl_parse_int!(u8);
-> +    impl_parse_int!(i16);
-> +    impl_parse_int!(u16);
-> +    impl_parse_int!(i32);
-> +    impl_parse_int!(u32);
-> +    impl_parse_int!(i64);
-> +    impl_parse_int!(u64);
-> +    impl_parse_int!(isize);
-> +    impl_parse_int!(usize);
-> +}
+> I use version "GNU ld (GNU Binutils for Debian) 2.43.50.20250108".
 > 
+> It was broken in the commit 1f1b5e506bf0d9bffef8525eb9bee19646713eb6 in 
+> the binutils-gdb git and partially fixed in the commit 
+> d41df13ab36b224a622c0bdf28a96a0dee79db77 - the section is still not 
+> aligned at their specified boundary (16), but at least it is aligned on 8 
+> bytes, which avoids the warnings.
+
+When you say "broken", can you please explain what it is that is _broken_?
+Things have changed, yes, but the produced ELF is - afaict - still within
+spec. The "partial fix" as you call it wasn't really a fix, but a band-aid
+for some broken consumers of ELF. Plus modpost, being one such example,
+was supposedly corrected already (Linux commit 8fe1a63d3d99). Said "partial
+fix" was also confirmed to help modpost [1] - are you saying that wasn't
+quite true?
+
+Jan
+
+[1] https://sourceware.org/bugzilla/show_bug.cgi?id=32435
+
+> With binutils from git, I no longer see warnings when loading modules, but 
+> there are warnings in modpost when compiling the kernel:
+> 
+> 2025-01-15T17:09:29.408347+01:00 phoebe kernel: handle_unaligned: 2165 callbacks suppressed
+> 2025-01-15T17:09:29.408433+01:00 phoebe kernel: modpost(9283): unaligned access to 0xf9096bd5 at ip 0x015d03 (iir 0xf381086)
+> 2025-01-15T17:09:29.602490+01:00 phoebe kernel: modpost(9283): unaligned access to 0xf9096bd1 at ip 0x015d07 (iir 0xf301088)
+> 2025-01-15T17:09:29.700610+01:00 phoebe kernel: modpost(9283): unaligned access to 0xf9096be9 at ip 0x015d0b (iir 0x4b3c0040)
+> 2025-01-15T17:09:29.700653+01:00 phoebe kernel: modpost(9283): unaligned access to 0xf9096bdd at ip 0x015d0f (iir 0x4b240028)
+> 2025-01-15T17:09:29.897081+01:00 phoebe kernel: modpost(9283): unaligned access to 0xf9096bd9 at ip 0x015d13 (iir 0x4b270020)
+> 
+> The affected instructions are in the function do_pci_entry:
+>    15d00:       0f 38 10 86     ldw c(r25),r6
+>    15d04:       0f 30 10 88     ldw 8(r25),r8
+>    15d08:       4b 3c 00 40     ldw 20(r25),ret0
+>    15d0c:       4b 24 00 28     ldw 14(r25),r4
+>    15d10:       4b 27 00 20     ldw 10(r25),r7
+>    15d14:       0f 28 10 89     ldw 4(r25),r9
+>    15d18:       82 93 20 e0     cmpb,= r19,r20,15d90 <do_pci_entry+0xcc>
+>    15d1c:       0f 20 10 8a     ldw 0(r25),r10
+> they happen in the expansion of the macro DEF_FIELD.
+> 
+> Mikulas
 
