@@ -1,184 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AC9197A92;
-	Fri, 17 Jan 2025 23:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F103398B;
+	Mon, 20 Jan 2025 10:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737158046; cv=none; b=JhqeHCnKIvhICgTB+Bo2MomfLo5sHmboxg9aj8G12W0ozlaXJpZp6W9PRNMfKHzOiHxElMTjiOjMOqy1uGe2fIiKhkOJl4K2PB445fJVsMU3mTUvZlEXExSjSApObZD26f1NyGpwpC//P9WTxPWZYZqhYj6NdK3IXr9EVYRQdpE=
+	t=1737367841; cv=none; b=uy5P1yzn4X4u56ve4UWB8iJvW8FDrv8BF16ACM0aRo3j6CrVPKWjqmbCMPEmvbT6EwztELgcOgSa4xel/tqFzuBjXSDE+UKolli3ha5IG3j6ryoPXm755BfAN9v7NAJAVHHx+Fnh7SpcrTMrDyENrvUo33xOfaWyn3LlMahqD0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737158046; c=relaxed/simple;
-	bh=m8ZfCoz+QGoeKH7gpzr+DtbpzkszLlope3/7aqelGNo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aBGhjDbb0d4MndQeiBR2gWy4ulh179Qm/SebJdWFtg3+s+bftI1xcmHqQ+mj1L57LHKgcQ689Mvbr7N34OBrxiasBG7D6MKR1pGT9TsahvYdKxdEQwJnBqlj/CjJEE9teDwAsybKevLkqlWvsG3Y2XKy3HX+wDFlkmLwoiuANOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVsY3WJ/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1737367841; c=relaxed/simple;
+	bh=Cjhg3UrrFp8D01VY4OoJzV8vlgfXvqulfmkjFvBAqJo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YtQoV2y2C+HkUsX8/C0OzYrlNIUrL++oOXn9TK9xmfRteclsr2UDv3UJsDfhomt7d/Aq2HnuOVVs9MGd0O4mWAyXuJ9U1puRJz1CkYp3CVoDVORxtgvvJAWia4djfV7HpfYW4GYEQBeoSlgx0YPtA65ePMxr7b5dL2PqxQ0GA2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tEccHcZ2; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVsY3WJ/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6959DC4CEEA;
-	Fri, 17 Jan 2025 23:54:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737158045;
-	bh=m8ZfCoz+QGoeKH7gpzr+DtbpzkszLlope3/7aqelGNo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gVsY3WJ/q+t/rFDdtrcaqnSSa1hVY4YQAAXAgcBMkqbh3QmONSC0De4NhSYmQTVPu
-	 GjuY0zxIGQkjxerzBHXZ8sYt/CzeOUCwQGpuSkKrngnJHcajmqk2wXp4jQzY2aeZkr
-	 J8La2wsP2j5hzCBtEZM7W8hRhUjrokxi9Xdsat0O+7T3zkg/ZJULWKNrbXo+1aH+bX
-	 Ke7D/vXir/EBBx2Y9wZMN/aMRAae9NzdVI16VZk4z9Y2YL6kk6lSR2PRqpa2yHEDVN
-	 X+HI+zv4S1RNhMVO7V3z5RT8NajxXqZ+6BKe5KuxMYiX0xFv9afO1D1butRJHz9YZk
-	 mEIOoeXZsb9ww==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54024ecc33dso2513087e87.0;
-        Fri, 17 Jan 2025 15:54:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUIJlWwcwzYJM8aIgCdqbjkpgXR2wljADBYZ8aE0Q9BJvxiT3PvSqeaa5uEkTncnw3o3SY76D5ElHhd/ZMwFg==@vger.kernel.org, AJvYcCVREfN9MoG5NupQekeYSIJl7dMNfaqIR9sz446/GL1JRYDFjJfpIOH7gp3H0714jmVYjrc3Rn1sja7IW/ve@vger.kernel.org, AJvYcCVhxksNVyNgiAClyIOLppBtMiNO3pYaVEH0nRKiVttNpznbsB9BbTL+NxfqKVkqNS8YK0z4n/MY9cSu9Kkosog=@vger.kernel.org, AJvYcCVoXGnvrbCFoIevcGWK/ecyi1okpTLmtsvyaibZ8Ujw6gsZvCE1GnMgpv11AIN3VJmygBB4lzIkx9g=@vger.kernel.org, AJvYcCVw7KVz6AwUaFvmb+WnOP3j4uyGJ5IukCNq5wAJAR8kAtTtJZT7HLHgIV7W8wjLxlhiK24/JAtRWLVgQHJp@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxhz9DDhSKmPQsAQ1h8wLMZz9iJLncV+ctbn6sezbd5xzF/yo0x
-	9tXsX52bvRuiOa/xs3jgLMqJm9v8gS5RMtc4KOXuCs8DnnhoXerOiqGs2fHJTpCApUrLo2NYpUK
-	cxoL3bbls1B92+C2G7tUWMetUFwo=
-X-Google-Smtp-Source: AGHT+IExF/k3Se+h2APx/UW58ua4xWf/ZRu8ZQvl0deaJxQpL77zmMnsyOKqNs5x4WdzpyLPqC1//WGF4Am0tjc/OHU=
-X-Received: by 2002:a05:6512:3b9d:b0:540:1be6:f15f with SMTP id
- 2adb3069b0e04-5439c1bfd49mr1612216e87.0.1737158043976; Fri, 17 Jan 2025
- 15:54:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tEccHcZ2"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50K5NlpR002996;
+	Mon, 20 Jan 2025 10:10:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=9UQq6V
+	AGnHg3um68FsouhZBJ/1T15FdfUDIuKZW//7U=; b=tEccHcZ26PcZeBgjRxiYh+
+	7AZiDyVVj8cn9x23FWWwdKUAgozwR9Jgdb6Gz/2v9pS2bisAcxFJboK3j6AM37l0
+	bWKBK0PlFeB8RjEsrdDekq13Lwiyp6aVFwyc178p+OEV2HjIlUroQlWzq0QQnlms
+	ycp7eYjSoMzfpmQOJL8HNU2VljDEk0QLIb7Zp6DjgyB+Adi7LC5C0SALs7M1/2wx
+	zjsMcElUYnexjYfIcX6rC5Sr6vyVBU+CAyzi9OYDAcMiGcYHymYFht6gtfFCY3UU
+	3uv5KoqQcN0JPLdSFo0l7ZU7asMfay2XfCPCVoUeVceUlDniGKqmVMKQiKs1Jc8g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 449ga7987c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Jan 2025 10:10:06 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50KA3pCR021938;
+	Mon, 20 Jan 2025 10:10:05 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 449ga79875-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Jan 2025 10:10:05 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50K8pZcY032223;
+	Mon, 20 Jan 2025 10:10:04 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 448rujdj01-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Jan 2025 10:10:04 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50KAA2dh34472338
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Jan 2025 10:10:02 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 875F92004B;
+	Mon, 20 Jan 2025 10:10:02 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4E1E22004D;
+	Mon, 20 Jan 2025 10:09:59 +0000 (GMT)
+Received: from [9.109.215.252] (unknown [9.109.215.252])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 20 Jan 2025 10:09:59 +0000 (GMT)
+Message-ID: <671a14f1-55a1-4d80-ae5c-83f20bf3037c@linux.ibm.com>
+Date: Mon, 20 Jan 2025 15:39:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250103-extended-modversions-v13-0-35d87c65ee04@google.com>
- <20250103-extended-modversions-v13-5-35d87c65ee04@google.com>
- <CAK7LNATGw-m_dcdjTBHsFwCZh7mTt8q8yNZQ7VFP=hMU8NvUvg@mail.gmail.com>
- <CABCJKuf-w1puUsypU-cr5BH8uvCdPPQmhZZ1qVKDDg3Y-iQhSg@mail.gmail.com>
- <CAK7LNASh4xMN8nN5vwR6R1OCNW9u4MJz=CSwW4_4hvFOhczmWA@mail.gmail.com> <20250114185819.GA2222429@google.com>
-In-Reply-To: <20250114185819.GA2222429@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 18 Jan 2025 08:53:27 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARD5GV6rxMQc0Hu97LmsUDoREstNAgHGkVUmNk8dcAj+g@mail.gmail.com>
-X-Gm-Features: AbW1kvZvVs_nJfbEUH3iAOiRf4pxKgGnbT-H8Stwhl79ZTob5w_6kEzM6PlRNxI
-Message-ID: <CAK7LNARD5GV6rxMQc0Hu97LmsUDoREstNAgHGkVUmNk8dcAj+g@mail.gmail.com>
-Subject: Re: [PATCH v13 5/5] rust: Use gendwarfksyms + extended modversions
- for CONFIG_MODVERSIONS
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Matthew Maurer <mmaurer@google.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Jonathan Corbet <corbet@lwn.net>, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jan 15, 2025 at 3:58=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
-com> wrote:
->
-> On Tue, Jan 14, 2025 at 10:22:15AM +0900, Masahiro Yamada wrote:
-> > On Tue, Jan 14, 2025 at 5:04=E2=80=AFAM Sami Tolvanen <samitolvanen@goo=
-gle.com> wrote:
-> > >
-> > > Hi Masahiro,
-> > >
-> > > On Fri, Jan 10, 2025 at 6:26=E2=80=AFPM Masahiro Yamada <masahiroy@ke=
-rnel.org> wrote:
-> > > >
-> > > > On Sat, Jan 4, 2025 at 2:37=E2=80=AFAM Matthew Maurer <mmaurer@goog=
-le.com> wrote:
-> > > > >
-> > > > > From: Sami Tolvanen <samitolvanen@google.com>
-> > > > >
-> > > > > Previously, two things stopped Rust from using MODVERSIONS:
-> > > > > 1. Rust symbols are occasionally too long to be represented in th=
-e
-> > > > >    original versions table
-> > > > > 2. Rust types cannot be properly hashed by the existing genksyms
-> > > > >    approach because:
-> > > > >         * Looking up type definitions in Rust is more complex tha=
-n C
-> > > > >         * Type layout is potentially dependent on the compiler in=
- Rust,
-> > > > >           not just the source type declaration.
-> > > > >
-> > > > > CONFIG_EXTENDED_MODVERSIONS addresses the first point, and
-> > > > > CONFIG_GENDWARFKSYMS the second. If Rust wants to use MODVERSIONS=
-, allow
-> > > > > it to do so by selecting both features.
-> > > > >
-> > > > > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > > Co-developed-by: Matthew Maurer <mmaurer@google.com>
-> > > > > Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> > > > > ---
-> > > > >  init/Kconfig  |  3 ++-
-> > > > >  rust/Makefile | 34 ++++++++++++++++++++++++++++++++--
-> > > > >  2 files changed, 34 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > > index c1f9eb3d5f2e892e977ba1425599502dc830f552..b60acfd9431e0ac2b=
-f401ecb6523b5104ad31150 100644
-> > > > > --- a/init/Kconfig
-> > > > > +++ b/init/Kconfig
-> > > > > @@ -1959,7 +1959,8 @@ config RUST
-> > > > >         bool "Rust support"
-> > > > >         depends on HAVE_RUST
-> > > > >         depends on RUST_IS_AVAILABLE
-> > > > > -       depends on !MODVERSIONS
-> > > > > +       select EXTENDED_MODVERSIONS if MODVERSIONS
-> > > > > +       depends on !MODVERSIONS || GENDWARFKSYMS
-> > > > >         depends on !GCC_PLUGIN_RANDSTRUCT
-> > > > >         depends on !RANDSTRUCT
-> > > > >         depends on !DEBUG_INFO_BTF || PAHOLE_HAS_LANG_EXCLUDE
-> > > > > diff --git a/rust/Makefile b/rust/Makefile
-> > > > > index a40a3936126d603836e0ec9b42a1285916b60e45..80f970ad81f7989af=
-e5ff2b5f633f50feb7f6006 100644
-> > > > > --- a/rust/Makefile
-> > > > > +++ b/rust/Makefile
-> > > > > @@ -329,10 +329,11 @@ $(obj)/bindings/bindings_helpers_generated.=
-rs: private bindgen_target_extra =3D ;
-> > > > >  $(obj)/bindings/bindings_helpers_generated.rs: $(src)/helpers/he=
-lpers.c FORCE
-> > > > >         $(call if_changed_dep,bindgen)
-> > > > >
-> > > > > +rust_exports =3D $(NM) -p --defined-only $(1) | awk '$$2~/(T|R|D=
-|B)/ && $$3!~/__cfi/ { printf $(2),$(3) }'
-> > > > > +
-> > > > >  quiet_cmd_exports =3D EXPORTS $@
-> > > > >        cmd_exports =3D \
-> > > > > -       $(NM) -p --defined-only $< \
-> > > > > -               | awk '$$2~/(T|R|D|B)/ && $$3!~/__cfi/ {printf "E=
-XPORT_SYMBOL_RUST_GPL(%s);\n",$$3}' > $@
-> > > > > +       $(call rust_exports,$<,"EXPORT_SYMBOL_RUST_GPL(%s);\n",$$=
-3) > $@
-> > > >
-> > > > I noticed a nit:
-> > > >
-> > > > Both of the two callsites of rust_exports pass
-> > > > '$$3' to the last parameter instead of hardcoding it.
-> > > >
-> > > > Is it a flexibility for future extensions?
-> > > >
-> > > > I cannot think of any other use except for printing
-> > > > the third column, i.e. symbol name.
-> > >
-> > > Good catch, the last parameter isn't necessary anymore. It was used i=
-n
-> > > early versions of the series to also pass symbol addresses to
-> > > gendwarfksyms, but that's not needed since we read the symbol table
-> > > directly now.
-> >
-> > If you submit a diff, I will squash it to 5/5.
-> > (You do not need to input commit description body)
->
-> Thanks, here's a diff that drops the last parameter.
-
-Squashed.
-Thanks!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 20/28] powerpc/ftrace: Use RCU in all users of
+ __module_text_address().
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain
+ <mcgrof@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Thomas Gleixner
+ <tglx@linutronix.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naveen N Rao <naveen@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250108090457.512198-1-bigeasy@linutronix.de>
+ <20250108090457.512198-21-bigeasy@linutronix.de>
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <20250108090457.512198-21-bigeasy@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: W23kHP3fl5d9f8v3moATuooEveeLO-eN
+X-Proofpoint-GUID: qkIVtfA37V68gBFWsUiduV7x__Ekg-Wm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-20_02,2025-01-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ impostorscore=0 suspectscore=0 clxscore=1011 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 bulkscore=0 adultscore=0
+ phishscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2501200083
 
 
 
+On 1/8/25 14:34, Sebastian Andrzej Siewior wrote:
+> __module_text_address() can be invoked within a RCU section, there is no
+> requirement to have preemption disabled.
+> 
+> Replace the preempt_disable() section around __module_text_address()
+> with RCU.
+> 
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Naveen N Rao <naveen@kernel.org>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: linux-trace-kernel@vger.kernel.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>   arch/powerpc/kernel/trace/ftrace.c       | 6 ++----
+>   arch/powerpc/kernel/trace/ftrace_64_pg.c | 6 ++----
+>   2 files changed, 4 insertions(+), 8 deletions(-)
+> 
 
---=20
-Best Regards
-Masahiro Yamada
+Ran ftrace (function graph) on preempt=full kernel with rcutorture while doing modprobe/rmmod.
+rcutorture succeeded and didn't see any splats.
+If there is any other method to test it out, please let me know.
+
+So for powerpc bits:
+Tested-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+
+> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+> index 5ccd791761e8f..558d7f4e4bea6 100644
+> --- a/arch/powerpc/kernel/trace/ftrace.c
+> +++ b/arch/powerpc/kernel/trace/ftrace.c
+> @@ -115,10 +115,8 @@ static unsigned long ftrace_lookup_module_stub(unsigned long ip, unsigned long a
+>   {
+>   	struct module *mod = NULL;
+>   
+> -	preempt_disable();
+> -	mod = __module_text_address(ip);
+> -	preempt_enable();
+> -
+> +	scoped_guard(rcu)
+> +		mod = __module_text_address(ip);
+>   	if (!mod)
+>   		pr_err("No module loaded at addr=%lx\n", ip);
+>   
+> diff --git a/arch/powerpc/kernel/trace/ftrace_64_pg.c b/arch/powerpc/kernel/trace/ftrace_64_pg.c
+> index 98787376eb87c..531d40f10c8a1 100644
+> --- a/arch/powerpc/kernel/trace/ftrace_64_pg.c
+> +++ b/arch/powerpc/kernel/trace/ftrace_64_pg.c
+> @@ -120,10 +120,8 @@ static struct module *ftrace_lookup_module(struct dyn_ftrace *rec)
+>   {
+>   	struct module *mod;
+>   
+> -	preempt_disable();
+> -	mod = __module_text_address(rec->ip);
+> -	preempt_enable();
+> -
+> +	scoped_guard(rcu)
+> +		mod = __module_text_address(rec->ip);
+>   	if (!mod)
+>   		pr_err("No module loaded at addr=%lx\n", rec->ip);
+>   
+
