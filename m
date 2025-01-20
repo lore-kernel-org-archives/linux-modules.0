@@ -1,179 +1,90 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F103398B;
-	Mon, 20 Jan 2025 10:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFCE1DFE14;
+	Mon, 20 Jan 2025 17:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737367841; cv=none; b=uy5P1yzn4X4u56ve4UWB8iJvW8FDrv8BF16ACM0aRo3j6CrVPKWjqmbCMPEmvbT6EwztELgcOgSa4xel/tqFzuBjXSDE+UKolli3ha5IG3j6ryoPXm755BfAN9v7NAJAVHHx+Fnh7SpcrTMrDyENrvUo33xOfaWyn3LlMahqD0U=
+	t=1737395144; cv=none; b=fWNE3xaEsCe8lKQNaXCUkSQu5nW80OpTwezd4J6iFUQUl2/JkxttyH6S2nsSJ+GeqqDXcX4iFDULIykBTqHCbgFjf6ilsfvrc8gg5Q9BEm9edQGKFHQjxvH78akIif20brdz98sIdXcLq28bvnL5AcGQBObQn5YeLLtSmQm9v2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737367841; c=relaxed/simple;
-	bh=Cjhg3UrrFp8D01VY4OoJzV8vlgfXvqulfmkjFvBAqJo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YtQoV2y2C+HkUsX8/C0OzYrlNIUrL++oOXn9TK9xmfRteclsr2UDv3UJsDfhomt7d/Aq2HnuOVVs9MGd0O4mWAyXuJ9U1puRJz1CkYp3CVoDVORxtgvvJAWia4djfV7HpfYW4GYEQBeoSlgx0YPtA65ePMxr7b5dL2PqxQ0GA2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tEccHcZ2; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1737395144; c=relaxed/simple;
+	bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=YoWsUOwYXZSUoW321LP3wInegDIXWnBH72R8BK3R5ej0DTReC0jChPuglvJrtEdIZeOgsFG03O4N1FJ+d0OjelSPurnNAtsgo3z+Gm9LpMTCayOJtAXJhD8DGPCeyoBLNQWswuMdsYNZzpUwikc2gMqtuwQZ+VTwAdX2IMwFW8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pvkeEPHr; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tEccHcZ2"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50K5NlpR002996;
-	Mon, 20 Jan 2025 10:10:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=9UQq6V
-	AGnHg3um68FsouhZBJ/1T15FdfUDIuKZW//7U=; b=tEccHcZ26PcZeBgjRxiYh+
-	7AZiDyVVj8cn9x23FWWwdKUAgozwR9Jgdb6Gz/2v9pS2bisAcxFJboK3j6AM37l0
-	bWKBK0PlFeB8RjEsrdDekq13Lwiyp6aVFwyc178p+OEV2HjIlUroQlWzq0QQnlms
-	ycp7eYjSoMzfpmQOJL8HNU2VljDEk0QLIb7Zp6DjgyB+Adi7LC5C0SALs7M1/2wx
-	zjsMcElUYnexjYfIcX6rC5Sr6vyVBU+CAyzi9OYDAcMiGcYHymYFht6gtfFCY3UU
-	3uv5KoqQcN0JPLdSFo0l7ZU7asMfay2XfCPCVoUeVceUlDniGKqmVMKQiKs1Jc8g
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 449ga7987c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 Jan 2025 10:10:06 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50KA3pCR021938;
-	Mon, 20 Jan 2025 10:10:05 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 449ga79875-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 Jan 2025 10:10:05 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50K8pZcY032223;
-	Mon, 20 Jan 2025 10:10:04 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 448rujdj01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 Jan 2025 10:10:04 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50KAA2dh34472338
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 Jan 2025 10:10:02 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 875F92004B;
-	Mon, 20 Jan 2025 10:10:02 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4E1E22004D;
-	Mon, 20 Jan 2025 10:09:59 +0000 (GMT)
-Received: from [9.109.215.252] (unknown [9.109.215.252])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 20 Jan 2025 10:09:59 +0000 (GMT)
-Message-ID: <671a14f1-55a1-4d80-ae5c-83f20bf3037c@linux.ibm.com>
-Date: Mon, 20 Jan 2025 15:39:58 +0530
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pvkeEPHr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1737395133;
+	bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=pvkeEPHrKRw+yfyKuOPjl3X46G0uP5F+Wg36ErvPQhBHP6vUXdrpZjXrw9NcMcmtK
+	 pnRHrNi0dbUlvHnhfakwdOPhXl6r71BLvGs7jYe6Hw9dYkW0nQJ9PWdiIw+7eNvEY/
+	 7mh2ctMUYT94pg0iN2/DrP7wCoVBtiNxN1T3a8IY=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Mon, 20 Jan 2025 18:44:24 +0100
+Subject: [PATCH v2 5/6] lockdown: Make the relationship to MODULE_SIG a
+ dependency
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 20/28] powerpc/ftrace: Use RCU in all users of
- __module_text_address().
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Daniel Gomez <da.gomez@samsung.com>, Luis Chamberlain
- <mcgrof@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Thomas Gleixner
- <tglx@linutronix.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Naveen N Rao <naveen@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250108090457.512198-1-bigeasy@linutronix.de>
- <20250108090457.512198-21-bigeasy@linutronix.de>
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <20250108090457.512198-21-bigeasy@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: W23kHP3fl5d9f8v3moATuooEveeLO-eN
-X-Proofpoint-GUID: qkIVtfA37V68gBFWsUiduV7x__Ekg-Wm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-20_02,2025-01-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- impostorscore=0 suspectscore=0 clxscore=1011 spamscore=0
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 adultscore=0
- phishscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2501200083
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250120-module-hashes-v2-5-ba1184e27b7f@weissschuh.net>
+References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
+In-Reply-To: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+ kpcyrd <kpcyrd@archlinux.org>, linux-kbuild@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-doc@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737395132; l=874;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=eFE8eKbO4pWZaL11j78KVv6utQAl0cUhH525xL6hI5o=;
+ b=8dA83wKAd3Hc6tOftrWqF/p7g+4ibEoT3lyBhHTbTQ7dsE2V7oG4U+strj5pxZV+ykpvxhAI6
+ AgAp3mLUgFkCx2AaxTMMLuYhpt+4Znru3wpqIF3NmQX8OMDaR7EOI78
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
+The new hash-based module integrity checking will also be able to
+satisfy the requirements of lockdown.
+Such an alternative is not representable with "select", so use
+"depends on" instead.
 
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ security/lockdown/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 1/8/25 14:34, Sebastian Andrzej Siewior wrote:
-> __module_text_address() can be invoked within a RCU section, there is no
-> requirement to have preemption disabled.
-> 
-> Replace the preempt_disable() section around __module_text_address()
-> with RCU.
-> 
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Naveen N Rao <naveen@kernel.org>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: linux-trace-kernel@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->   arch/powerpc/kernel/trace/ftrace.c       | 6 ++----
->   arch/powerpc/kernel/trace/ftrace_64_pg.c | 6 ++----
->   2 files changed, 4 insertions(+), 8 deletions(-)
-> 
+diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
+index e84ddf48401010bcc0829a32db58e6f12bfdedcb..155959205b8eac2c85897a8c4c8b7ec471156706 100644
+--- a/security/lockdown/Kconfig
++++ b/security/lockdown/Kconfig
+@@ -1,7 +1,7 @@
+ config SECURITY_LOCKDOWN_LSM
+ 	bool "Basic module for enforcing kernel lockdown"
+ 	depends on SECURITY
+-	select MODULE_SIG if MODULES
++	depends on !MODULES || MODULE_SIG
+ 	help
+ 	  Build support for an LSM that enforces a coarse kernel lockdown
+ 	  behaviour.
 
-Ran ftrace (function graph) on preempt=full kernel with rcutorture while doing modprobe/rmmod.
-rcutorture succeeded and didn't see any splats.
-If there is any other method to test it out, please let me know.
-
-So for powerpc bits:
-Tested-by: Shrikanth Hegde <sshegde@linux.ibm.com>
-
-> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-> index 5ccd791761e8f..558d7f4e4bea6 100644
-> --- a/arch/powerpc/kernel/trace/ftrace.c
-> +++ b/arch/powerpc/kernel/trace/ftrace.c
-> @@ -115,10 +115,8 @@ static unsigned long ftrace_lookup_module_stub(unsigned long ip, unsigned long a
->   {
->   	struct module *mod = NULL;
->   
-> -	preempt_disable();
-> -	mod = __module_text_address(ip);
-> -	preempt_enable();
-> -
-> +	scoped_guard(rcu)
-> +		mod = __module_text_address(ip);
->   	if (!mod)
->   		pr_err("No module loaded at addr=%lx\n", ip);
->   
-> diff --git a/arch/powerpc/kernel/trace/ftrace_64_pg.c b/arch/powerpc/kernel/trace/ftrace_64_pg.c
-> index 98787376eb87c..531d40f10c8a1 100644
-> --- a/arch/powerpc/kernel/trace/ftrace_64_pg.c
-> +++ b/arch/powerpc/kernel/trace/ftrace_64_pg.c
-> @@ -120,10 +120,8 @@ static struct module *ftrace_lookup_module(struct dyn_ftrace *rec)
->   {
->   	struct module *mod;
->   
-> -	preempt_disable();
-> -	mod = __module_text_address(rec->ip);
-> -	preempt_enable();
-> -
-> +	scoped_guard(rcu)
-> +		mod = __module_text_address(rec->ip);
->   	if (!mod)
->   		pr_err("No module loaded at addr=%lx\n", rec->ip);
->   
+-- 
+2.48.1
 
