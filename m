@@ -1,105 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F6D1E9B38;
-	Tue, 21 Jan 2025 17:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854891F8907;
+	Tue, 21 Jan 2025 21:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737481733; cv=none; b=mVjdLnTz0jpjDb328ykOsFNoedvvnmFisgTmG4Z8QhQDRpDJbkcrFlH+SPNF52ZFda/UnYw6uCx7yOmERJGPhBrA6vzi8LKaObezbqe6ngUifs4d2/eZArfXP1RufxGzwqAuQJjBmFmeXZZw5cWZpaw54DfAVs3vVRIvheMmHQk=
+	t=1737495763; cv=none; b=fmTW46vOTiOB4O8fGAikePPl4FcoEbfqJHfYHC5MfYFLAsNSr3CnLVhjpOTrQfVGQUlHSYFOsXsSLmOsCtDaAnP+sXYD/XxnCwvjzqVAmtXM3eogTET2RUf7vbEga6Jb8+UVN9zCYUmIduJDt9DJ7uDflVLJIx3wBiA9nJhfNPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737481733; c=relaxed/simple;
-	bh=ztUEr/unB+JeIwDrhsWA/ZFfS2Wgl+f2h9EGKMuuKbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ds/AqsxyrXo4f/2Iov13XEtVXxn3LjCodEm6Z57+UB/4y5tfe98QwD7ytSqZwV4D1D+V4hn5H5/I3M964DZBH9kNNzgIn1yhdv7SfIWejfJb56twkHcyWDrwSbfg6RcY2XD/jwqYXyhefDzAB1aU/zrGhl9RD/IpHgd+iVEIDyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2403C4CEDF;
-	Tue, 21 Jan 2025 17:48:48 +0000 (UTC)
-Date: Tue, 21 Jan 2025 12:48:51 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: Martin Kelly <martin.kelly@crowdstrike.com>, "masahiroy@kernel.org"
- <masahiroy@kernel.org>, "ojeda@kernel.org" <ojeda@kernel.org>,
- "jpoimboe@kernel.org" <jpoimboe@kernel.org>, "pasha.tatashin@soleen.com"
- <pasha.tatashin@soleen.com>, "mhiramat@kernel.org" <mhiramat@kernel.org>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
- "james.clark@arm.com" <james.clark@arm.com>, "mpe@ellerman.id.au"
- <mpe@ellerman.id.au>, "akpm@linux-foundation.org"
- <akpm@linux-foundation.org>, "mingo@redhat.com" <mingo@redhat.com>,
- "nicolas@fjasle.eu" <nicolas@fjasle.eu>, "tglx@linutronix.de"
- <tglx@linutronix.de>, "christophe.leroy@csgroup.eu"
- <christophe.leroy@csgroup.eu>, "nathan@kernel.org" <nathan@kernel.org>,
- "npiggin@gmail.com" <npiggin@gmail.com>, "mark.rutland@arm.com"
- <mark.rutland@arm.com>, "hpa@zytor.com" <hpa@zytor.com>,
- "surenb@google.com" <surenb@google.com>, "peterz@infradead.org"
- <peterz@infradead.org>, "naveen.n.rao@linux.ibm.com"
- <naveen.n.rao@linux.ibm.com>, "kent.overstreet@linux.dev"
- <kent.overstreet@linux.dev>, "bp@alien8.de" <bp@alien8.de>,
- "yeweihua4@huawei.com" <yeweihua4@huawei.com>,
- "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
- "mcgrof@kernel.org" <mcgrof@kernel.org>, Amit Dang
- <amit.dang@crowdstrike.com>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-kbuild@vger.kernel.org"
- <linux-kbuild@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix
- weak function issue
-Message-ID: <20250121124851.2205a8b2@gandalf.local.home>
-In-Reply-To: <7266ee61-3085-74fc-2560-c62fc34c2148@huawei.com>
-References: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
-	<44353f4cd4d1cc7170d006031819550b37039dd2.camel@crowdstrike.com>
-	<364aaf7c-cdc4-4e57-bb4c-f62e57c23279@csgroup.eu>
-	<d25741d8a6f88d5a6c219fb53e8aa0bcc1fea982.camel@crowdstrike.com>
-	<1f11e3c4-e8fd-d4ac-23cd-0ab2de9c1799@huaweicloud.com>
-	<30ee9989044dad1a7083a85316d77b35f838e622.camel@crowdstrike.com>
-	<7266ee61-3085-74fc-2560-c62fc34c2148@huawei.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1737495763; c=relaxed/simple;
+	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OC+4T2LTYZZZ4vnTSnkmAc52YP2K8gQj4+Jo6mozQLC7OHrggvJ+7q8OyB81nzvKy7SWwICEme1YWa1O0Hw6KAAbHB0LQmTqjMyN8AaWtx/rhjQBLI9nDGX0X7PagZ6SscznACwUOPZM+otgbnE3FKDG/g4/S/YzOSrjVMa3vkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UAaiESDb; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UAaiESDb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1737495749;
+	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UAaiESDbbzPdmNmoLHqaSS32neGSY4I4ypNS43cOa1opJYbIFzp5lwCRIdBJAVUg1
+	 SJ/flduuaUI2McTECmdux8LoW+AFAtJ4YYQarZbEhhxciSfztwrJAY4gnYGR1DKCnm
+	 yvGK4nzYCbAgq6qyPhkj/UqjJ4HCwmc0d+ihxV5k=
+Date: Tue, 21 Jan 2025 22:42:28 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, corbet@lwn.net, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, akpm@linux-foundation.org, 
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
+	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com, pbrobinson@gmail.com, 
+	zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, 
+	jannh@google.com, dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com, 
+	ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de, kgold@linux.ibm.com, 
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: Re: [PATCH v6 01/15] lib: Add TLV parser
+Message-ID: <74b5c88d-7ab6-49f2-9b96-ac96cb4daf6e@t-8ch.de>
+References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
+ <20241119104922.2772571-2-roberto.sassu@huaweicloud.com>
+ <c316b1be-d18f-4bb0-8434-bcc9236619df@t-8ch.de>
+ <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
 
+On 2025-01-21 15:55:28+0100, Roberto Sassu wrote:
+> On Tue, 2025-01-21 at 14:29 +0100, Thomas Weißschuh wrote:
+> > On 2024-11-19 11:49:08+0100, Roberto Sassu wrote:
 
-Sorry for the late reply. Forgot about this as I was focused on other end-of-year issues.
+[..]
 
-On Sat, 14 Dec 2024 16:37:59 +0800
-Zheng Yejian <zhengyejian1@huawei.com> wrote:
-
-> The direct cause of this issue is the wrong fentry being founded by ftrace_location(),
-> following the approach of "FTRACE_MCOUNT_MAX_OFFSET", narrowing down the search range
-> and re-finding may also solve this problem, demo patch like below (not
-> fully tested):
+> > > +typedef int (*callback)(void *callback_data, __u16 field,
+> > > +			const __u8 *field_data, __u32 field_len);
+> > 
+> > No need for __underscore types in kernel-only signatures.
 > 
->      diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
->      index 9b17efb1a87d..7d34320ca9d1 100644
->      --- a/kernel/trace/ftrace.c
->      +++ b/kernel/trace/ftrace.c
->      @@ -1678,8 +1678,11 @@ unsigned long ftrace_location(unsigned long ip)
->                              goto out;
->      
->                      /* map sym+0 to __fentry__ */
->      -               if (!offset)
->      +               if (!offset) {
->                              loc = ftrace_location_range(ip, ip + size - 1);
->      +                       while (loc > ip && loc - ip > FTRACE_MCOUNT_MAX_OFFSET)
->      +                               loc = ftrace_location_range(ip, loc - 1);
->      +               }
->              }
+> It is just for convenience. I'm reusing the same file for the userspace
+> counterpart digest-cache-tools. In that case, the parser is used for
+> example to show the content of the digest list.
+
+This reuse leads to quite some ugly constructs.
+Given that the single function will be really simple after removing the
+unnecessary parts, maybe two clean copies are easier.
+One copy is needed for Frama-C anyways.
+
+> > > +
+> > > +int tlv_parse(callback callback, void *callback_data, const __u8 *data,
+> > > +	      size_t data_len, const char **fields, __u32 num_fields);
+> > > +
+> > > +#endif /* _LINUX_TLV_PARSER_H */
+> > > diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
+> > > new file mode 100644
+> > > index 000000000000..171d0cfd2c4c
+> > > --- /dev/null
+> > > +++ b/include/uapi/linux/tlv_parser.h
+> > > @@ -0,0 +1,41 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > > +/*
+> > > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
+> > > + *
+> > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> > > + *
+> > > + * Implement the user space interface for the TLV parser.
+> > > + */
+> > 
+> > Can you explain in the commit message where this will be exposed to
+> > userspace as binary?
 > 
-> Steve, Peter, what do you think?
+> I see that my explanation is not ideal.
+> 
+> This is the format for data exchange between user space and kernel
+> space, but it is still the kernel that reads and parses the TLV-
+> formatted file for extracting the digests and adding them to the digest
+> cache.
 
-Hmm, removing the weak functions from the __mcount_loc location should also
-solve this, as the ftrace_location_range() will not return a weak function
-if it's not part of the __mcount_loc table.
+I figured that out :-)
+It should be clear from the commit itself, though.
 
-That is, would this patchset work?
+> > > +
+> > > +#ifndef _UAPI_LINUX_TLV_PARSER_H
+> > > +#define _UAPI_LINUX_TLV_PARSER_H
+> > > +
+> > > +#include <linux/types.h>
+> > > +
+> > > +/*
+> > > + * TLV format:
+> > > + *
+> > > + * +--------------+--+---------+--------+---------+
+> > > + * | field1 (u16) | len1 (u32) | value1 (u8 len1) |
+> > > + * +--------------+------------+------------------+
+> > > + * |     ...      |    ...     |        ...       |
+> > > + * +--------------+------------+------------------+
+> > > + * | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
+> > > + * +--------------+------------+------------------+
+> > > + */
+> > > +
+> > > +/**
+> > > + * struct tlv_entry - Entry of TLV format
+> > > + * @field: Field identifier
+> > > + * @length: Data length
+> > > + * @data: Data
+> > > + *
+> > > + * This structure represents an entry of the TLV format.
+> > > + */
+> > > +struct tlv_entry {
+> > > +	__u16 field;
+> > > +	__u32 length;
 
-  https://lore.kernel.org/all/20250102232609.529842248@goodmis.org/
+Looking at this again, the "length" field is unaligned by default.
 
--- Steve
+Also FYI there is already a TLV implementation in
+include/uapi/linux/tipc_config.
+
+> > > +} __attribute__((packed));
+
+[..]
+
+> > Some kunit tests would be great.
+> 
+> I implemented kselftests also injecting errors (patch 13). If it is not
+> enough, I implement kunit tests too.
+
+These selftests are for the digest_cache.
+If the TLV library is meant to be used alone, some dedicated tests would
+be nice. kunit has the advantage that it can directly call kernel
+functions with arbitrary parameters and does not require any userspace
+setup.
