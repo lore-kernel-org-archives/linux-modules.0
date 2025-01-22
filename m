@@ -1,752 +1,758 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BAF212FB0
-	for <linux-modules@vger.kernel.org>; Wed, 22 Jan 2025 13:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE08214203
+	for <linux-modules@vger.kernel.org>; Wed, 22 Jan 2025 16:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737551525; cv=none; b=uScw1E3z+7ziBHfg0bv9xTzPODpw4nFtMKch/ONBrg0Au+/y7pgQ5sy8hB412p58ObdWYyk1Jbi0A+Lb/yNKHpy/yyWCfkioLiPsoQt5hwCQdlwKx2sDUM7ELvEbevEsg+9M7anabhhJz5y3EqN/t0ztiqUACY9PsEbFz0zy1s8=
+	t=1737561704; cv=none; b=lckjupS79IN1arN+T//MtvjgzVMr4ZcbwZbA0rFOVPV4zCBNLm6KiDAwOjYCzYYCCr8wcJLWktMz5cD8pYQcmYjotS4OMbj5XeoSlGqhjbUvpu1T1vnYJnJU3+LQTj6GNmO39U8esx5RLLn81wCC/iPJ0dur9ErRIYa0GOP91qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737551525; c=relaxed/simple;
-	bh=MbU5Hw2NrLk73hMJf5KX8qD3kbzHOA7c/mMUYxH4Syc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:
-	 In-Reply-To:To:CC:References; b=NwrM+VjTgjPVqImoxLCXwT9geUO7YyTu2pdXExWg3M4UiaV87vvgpm3Y2z5B8mAirNAJA0yu6EuOMlPhIQzIBc7ipb/xgkFWXgSNkd0bsIxk+bdfRziAJS+xohBW0dpi0YKCoEbDgwQ7+13ENbVd/hD9rIuPTtfe/5mEIt9MaM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=go5uqKuo; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1737561704; c=relaxed/simple;
+	bh=XzSFjmD86Sa0qPhMQsfSVd/Oep0edh0U7KfzHVbvBvs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g4KSW7L7E0Ss1dpiq8LI4CZNGjuxCmVbjogx75h65mIJJPISK9NgGX2DBQZkLafts+Z7MrMjYMUCvzkCMmfvjZxKdcQ3hRK3KHhw3QgwVDR9StpT+7vLGGqP7BhFH9Z15aGy3SoVcRKSpWU6DdG4L9wGDA/nf/EnlNW9gru6SxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RgKgYm0a; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="go5uqKuo"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250122131200euoutp01ecd90492f7283e86e8f028bb857eb5d1~dBebSDm4k0209402094euoutp01k
-	for <linux-modules@vger.kernel.org>; Wed, 22 Jan 2025 13:12:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250122131200euoutp01ecd90492f7283e86e8f028bb857eb5d1~dBebSDm4k0209402094euoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1737551520;
-	bh=AQSHP5JpmUfq+hzDVRcryuFhQ34puHtIRq2CRpsyNAM=;
-	h=From:Date:Subject:In-Reply-To:To:CC:References:From;
-	b=go5uqKuoWqqeLCDIwiH/lCasZjoSPNWgHCetAF2cwG6hU71ccnSAcgKzA5WmjEsb3
-	 /7HbUhgxcQn21l8+oWyiQ8etrAJNsFCudiotzho6of3rJZ4gzs8IThQId2R0JcBRz4
-	 ekVpZ+TPClpF8VET8/3y3EAd0J4ERLtSfOdpoFkU=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250122131159eucas1p1142f0f4848b1362552270be6d32365a1~dBea-zQvY2302923029eucas1p1d;
-	Wed, 22 Jan 2025 13:11:59 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 21.85.20821.F9EE0976; Wed, 22
-	Jan 2025 13:11:59 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c~dBeag14Ss2303723037eucas1p1d;
-	Wed, 22 Jan 2025 13:11:59 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250122131159eusmtrp2b8e689e35105e5b26262c5c6214aeda7~dBeagDFsR0895308953eusmtrp2S;
-	Wed, 22 Jan 2025 13:11:59 +0000 (GMT)
-X-AuditID: cbfec7f2-b09c370000005155-41-6790ee9f0b8f
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 4D.A2.19920.F9EE0976; Wed, 22
-	Jan 2025 13:11:59 +0000 (GMT)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250122131159eusmtip286f64d8a3d84a40be30419b852a81ae3~dBeaPM6BZ1589415894eusmtip2-;
-	Wed, 22 Jan 2025 13:11:59 +0000 (GMT)
-Received: from localhost (106.110.32.87) by CAMSVWEXC01.scsc.local
-	(2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id
-	15.0.1497.48; Wed, 22 Jan 2025 13:11:58 +0000
-From: Daniel Gomez <da.gomez@samsung.com>
-Date: Wed, 22 Jan 2025 14:11:14 +0100
-Subject: [PATCH 2/2] moderr: add module error injection tool
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RgKgYm0a"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so3846201f8f.0
+        for <linux-modules@vger.kernel.org>; Wed, 22 Jan 2025 08:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1737561699; x=1738166499; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RfvVuhcBqHRzGD9FL0p9rhOYQmzMeY9GF5SEo3KCKn4=;
+        b=RgKgYm0aFDZVKOKVte16NXFwTyPLDscbT+fuRAHctJodPgtb6G1GKnWP0AuzJfXWCh
+         Ti6rYKzsXqh756vP/9gvyJPjJZjjzUusdJrR+u3DRGuXk6sHlG4ANFJAFQsl87J7B8lM
+         Kka+EFryaFHSNAm1HhvEikSr9GDpn+KH3B65EVuLK2g7eAzklLGPkyvm2aY99CmtjHPl
+         QQqqRflghKKNlqFz2YQ/v0fugbchncfR0D/c0oQbOrL49UnEUMo9CvCwbW8sVGB5C1eO
+         G9JuOgdjLVZkLalB7ZBB/jhV4t6on7yIk+tKG3AX5jzzx3ioXL7xpTgCfiBz7SU+kRQG
+         uEiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737561699; x=1738166499;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RfvVuhcBqHRzGD9FL0p9rhOYQmzMeY9GF5SEo3KCKn4=;
+        b=i77wzh+5hB52Djg5iviM/9vH4enbzor31nnLvUg3TBEo+Kg6Ozf+DTXBytra4C+KGg
+         VIe/Z5Lj+cLXlaDPOHQdq8/6Y8QWyBNUAoBrWXAtds9BfgqpvtMBy99PXu0cqv9Xz/m2
+         wn3r0IjiTAFX6ZiNuzkbIBAitc0jkh1PAG8lqMEYLh/I1wUHl55Gy0/i7HNAyEKhFmDa
+         4vSUy8/UKfxwU2G0UJiS+JazpMSpcGCI0ZIcAvWByQGg/Q7XAeyWe6UZle+FftFaYsaq
+         sYWQfa2wNyUhMQ1L1Ffs3c7xJOIo6rFbQyHnnxiJ86BIq5uyyxNK98Ns3hylBY1KNb1U
+         +99w==
+X-Forwarded-Encrypted: i=1; AJvYcCXDfSbdfeLG5MB5vCLeXfYml+y7kGkrFIfnapgDUmtGZ6ABrdIwmekRU+/8pW5vWZ1dZHrqFbGnsFlhkpNl@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNCWywN/1yYXkNbU7zfIDPsNv73Xy1neCT5LbTa7usny3GS4BS
+	BcKlR8F/J5Hk6vK9N7ktZUFCay3l46/2OwnzB81I5optR8osIXLbGTdi/A0gFMY=
+X-Gm-Gg: ASbGnctgCLEHdaY1iaNY055WSWCR7l7yW2RmWTJv3TFSpg73HhU7xvxHgoyWXZOrgI7
+	r19L/rn7u5HUFxM+w13uHpAUfx0wuYWCJYNkb/Z21t7FjGXVZ5bbBHQakEYpcTgWj7Km9Mwn7wg
+	knO174FCXW0+WlgM86eSqlpaly2rlAu8Tp8iE6fHxY+GqwW8avVBvGkdn4T9LmoH7wVmXI31vQS
+	mJEVHbb83dPaTHGqlQftaIaMsUGGYBZ+6mEk7DwZOObT1NbUQnT3NlGlBI9Y0fAeIo6ZFuN6A==
+X-Google-Smtp-Source: AGHT+IHZ0lQ7oiXH1Doak7hByIDH6uTWViUgFrSOcxKNrr+sYeMZAJh0GiK+40krEIkCpuILsebrqA==
+X-Received: by 2002:a05:6000:1f81:b0:385:eb8b:3ec6 with SMTP id ffacd0b85a97d-38bf5674369mr21967415f8f.29.1737561696496;
+        Wed, 22 Jan 2025 08:01:36 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf322ad81sm16808454f8f.52.2025.01.22.08.01.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jan 2025 08:01:35 -0800 (PST)
+Message-ID: <04419f26-1411-4e47-a0f0-f774064bc2f0@suse.com>
+Date: Wed, 22 Jan 2025 17:01:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/4] rust: add parameter support to the `module!` macro
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ Luis Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>,
+ Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>,
+ Greg KH <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org
+References: <20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org>
+ <20250109-module-params-v3-v4-4-c208bcfbe11f@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250109-module-params-v3-v4-4-c208bcfbe11f@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-ID: <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
-In-Reply-To: <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
-	Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, "KP
- Singh" <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-CC: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<iovisor-dev@lists.iovisor.org>, <gost.dev@samsung.com>, Daniel Gomez
-	<da.gomez@samsung.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737551516; l=17312;
-	i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
-	bh=MbU5Hw2NrLk73hMJf5KX8qD3kbzHOA7c/mMUYxH4Syc=;
-	b=3ASmzQ/7ChWwXKdLj0GcxXs4rURe/NQbtqQo+guV0rSYZwgxR86vmgKsOOq+APhffW6MNYnSX
-	VacFH3Q1C1fDYM9GhQI78CawTHSpUrx7vuk813J/BcOkQa3iaXomWvT
-X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
-	pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxjGPffe3pa6skuL4YShYhO3uGjFzJmTwRaWEXchW7ZMErMlC+vg
-	rqhATcvH5moCEi2gzM4xhUoDyKptoeusoNixFjugCGwaKbVxIwFpZXXU4UqohWBHP8z873ee
-	533ec57kcHB+DZnKOVBWzsjKxCVCkktcHQ7d2tH2SCXJCHu2o+DKeRwthv5go8Cgg0SdHUs4
-	cuuacWR32NjoidYJ0LE+HYYGm9Q4OtvVSaI5ayOGJiytJKo+H2QhT5ONRN31ehZyq7wAmScC
-	LKTUe0m0oApjSLv4CEdanZ+FJlssGHJcWiXRdNdVVjak3dZRjL6unmLT7eYKusF9B6fNhnqS
-	7qj+HqeHThwj6L+utADa1DNJ0AHzpg+5n3CzipiSA5WMbOdbn3GLPRenicMXlODLwNQVUA1m
-	pQ0ggQOp3VC/4mQ1AC6HT+kA1Du72RGDTy0C+KA2J8YBAH8dYD0LdM1Xg1jgEoDjF51Y7LA2
-	5G7qj6/qAfDy4lg0QlLboPWmObqWoLZC710jEWEBlQVn7zZHmUclwZstnjXmcPC1eZNlZ0TG
-	qc3wmr8Vj8g86j048ntRRE6g3odnh7xE5KpkysWC1+7diB5wygVg46SWjD11A1z5zhI1IDWA
-	wTu+IB4zGKi7/2ect8Dmb/VEjI9C4/A4OxYwcuFE8Kf4phxo+DGMxVgAHzp62DFOg+HrbXH9
-	EPwt2A9iXA6fLizHl2bCsHEqrr8NZ7oN0ZaQSoRuf5IKvKx+rr/6//7q5/q3A9wAUpgKeamE
-	ke8qY6pEcnGpvKJMIiqUlprB2i8de+r4tw9oHj4W2QHGAXYAObgwmRf2qCR8XpH4qyOMTFog
-	qyhh5HbwEocQpvAu2I5L+JREXM4cYpjDjOyZi3ESUquxvfdD7jNJ4vqGH9rCOaXW1BpR58cd
-	gtyD+bc/qhuZMi18PV85mG45vpyct93dXT89D9KVLxasX/p8n+HcO2m+uQW79u9XukLv1u15
-	IprafYolbPQVtgrrx9aPn9xb3Jubd06hyNhU0T6344ZR+2BGI5JusFm+GFg93Tm0sSY9k83+
-	lDDfvld5cDgte4lRhqZPrdvXO9n3QePPLr9x85kt+/e3vDaoKDhZV5gkatZorbcUmTOzVVnr
-	3viHnbGN/6bAvJHhLvse86UOib+2NT33BY25Cl7uz/6mxKs8kZhYYFIMnc7vPeJSjo68niU4
-	2m+yuXz5zjwP/ctWzZ6i1dGU2lkhIS8W73oVl8nF/wG8fQEIFAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEKsWRmVeSWpSXmKPExsVy+t/xe7rz301IN5j0hNPi++/ZzBZfft5m
-	t/h85DibxeKF35gtbqyYwWxx6Ph+dosfS68wWjTtWMFkcWTKLGaLaasXs1k839fLZHF51xw2
-	i4bZ31ktnkzZz2axpnMlq8WNCU8ZLTZd/sxq0b7yKZvFhwn/mSyWfnnHbLF0xVtWi6szdzFZ
-	HF/+l83iweptrA4SHjf2nWLy2DnrLrvHgk2lHl03LjF7bFrVyeaxsGEqs8fRtiYWjxebZzJ6
-	rN9ylcXj8ya5AK4oPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzM
-	stQifbsEvYwnyx6wFCxqZ6z4fHczYwPj4/wuRk4OCQETidVvGhi7GLk4hASWMkp0bd7FBJGQ
-	kdj45SorhC0s8edaFxtE0UdGia+fdrJCOFsYJRo/PGUDqWIT0JTYd3ITO4jNIqAq8fT6WhYQ
-	W1jARuLx9RlgNq+AoMTJmU+AbA4OZqD69bv0QcLMAvIS29/OYQYJ8wr4SJw4lwISFgIyv61d
-	DtbJKeArMe3oUxaQtSIC11glpsw7BXY1s8A1Roneq0vZIC4Vlfg9eRcLhH2ASWL3IgcIO1Vi
-	+5UlUDWKEjMmroSqqZV4dX834wRGsVlIzpuFcN4sJOctYGRexSiSWlqcm55bbKhXnJhbXJqX
-	rpecn7uJEZiYth37uXkH47xXH/UOMTJxMB5ilOBgVhLh/f9kQroQb0piZVVqUX58UWlOavEh
-	RlNgEE1klhJNzgemxrySeEMzA1NDEzNLA1NLM2MlcV63y+fThATSE0tSs1NTC1KLYPqYODil
-	GpiEDvMYukw7Ka/+rpvBrucQr0hj6N/ueHfR7E/5Uy6fDU+0l062YHwUqLrJ48HZZ3M/2ey0
-	a+koLv1xxZTBcnO2qI8fC6POpbLQ64ed86PLN73ma4hiaomweJIgyJa25qgW28/X/AeZHC+U
-	2jyc8inxyI82xsIpHxwZ25/5K0WxrZL30ty5cdZr4x/stUJXNnvcNX8WtPata9TOzGVntORX
-	Rxwzf6GuPSOsdNVrkfKtfSk2ddU6ixsDNm9KSr5VtXutaZlWWe3E+bURxdddIzOdjrjPOxMS
-	Lys/0UTpxeLN2QsXfnSqvZ9+sffU6v9ysxhvmD1SSuSv2Lnj15Zj969940m/2WQyqZijSDO3
-	W4mlOCPRUIu5qDgRAP0fIqfVAwAA
-X-CMS-MailID: 20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c
-X-Msg-Generator: CA
-X-RootMTR: 20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c
-References: <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
-	<CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
 
-Add support for a module error injection tool. The tool
-can inject errors in the annotated module kernel functions
-such as complete_formation(), do_init_module() and
-module_enable_rodata_after_init(). Module name and module function are
-required parameters to have control over the error injection.
+On 1/9/25 11:54, Andreas Hindborg wrote:
+> This patch includes changes required for Rust kernel modules to utilize
+> module parameters. This code implements read only support for integer
+> types without `sysfs` support.
+> 
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+> ---
+>  rust/kernel/lib.rs           |   1 +
+>  rust/kernel/module_param.rs  | 225 +++++++++++++++++++++++++++++++++++++++++++
+>  rust/macros/helpers.rs       |  14 +++
+>  rust/macros/lib.rs           |  31 ++++++
+>  rust/macros/module.rs        | 188 ++++++++++++++++++++++++++++++++----
+>  samples/rust/rust_minimal.rs |  10 ++
+>  6 files changed, 451 insertions(+), 18 deletions(-)
+> 
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 4253c9a7fe7df935dc714bc3036d299bd80054a0..707ec81411c7aecccdd14e02cbf011642bc02e07 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -46,6 +46,7 @@
+>  pub mod kunit;
+>  pub mod list;
+>  pub mod miscdevice;
+> +pub mod module_param;
+>  #[cfg(CONFIG_NET)]
+>  pub mod net;
+>  pub mod once_lite;
+> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..6cb64096090a37c4f9c4ce73e23b7ac049e32d20
+> --- /dev/null
+> +++ b/rust/kernel/module_param.rs
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Types for module parameters.
+> +//!
+> +//! C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
+> +
+> +use crate::prelude::*;
+> +use crate::str::BStr;
+> +
+> +/// Newtype to make `bindings::kernel_param` [`Sync`].
+> +#[repr(transparent)]
+> +#[doc(hidden)]
+> +pub struct RacyKernelParam(pub ::kernel::bindings::kernel_param);
+> +
+> +// SAFETY: C kernel handles serializing access to this type. We never access
+> +// from Rust module.
+> +unsafe impl Sync for RacyKernelParam {}
+> +
+> +/// Types that can be used for module parameters.
+> +///
+> +/// Note that displaying the type in `sysfs` will fail if
+> +/// [`Display`](core::fmt::Display) implementation would write more than
+> +/// [`PAGE_SIZE`] - 1 bytes.
+> +///
+> +/// [`PAGE_SIZE`]: `bindings::PAGE_SIZE`
+> +pub trait ModuleParam: Sized {
+> +    /// The [`ModuleParam`] will be used by the kernel module through this type.
+> +    ///
+> +    /// This may differ from `Self` if, for example, `Self` needs to track
+> +    /// ownership without exposing it or allocate extra space for other possible
+> +    /// parameter values.
+> +    // This is required to support string parameters in the future.
+> +    type Value: ?Sized;
+> +
+> +    /// Parse a parameter argument into the parameter value.
+> +    ///
+> +    /// `Err(_)` should be returned when parsing of the argument fails.
+> +    ///
+> +    /// Parameters passed at boot time will be set before [`kmalloc`] is
+> +    /// available (even if the module is loaded at a later time). However, in
+> +    /// this case, the argument buffer will be valid for the entire lifetime of
+> +    /// the kernel. So implementations of this method which need to allocate
+> +    /// should first check that the allocator is available (with
+> +    /// [`crate::bindings::slab_is_available`]) and when it is not available
+> +    /// provide an alternative implementation which doesn't allocate. In cases
+> +    /// where the allocator is not available it is safe to save references to
+> +    /// `arg` in `Self`, but in other cases a copy should be made.
+> +    ///
+> +    /// [`kmalloc`]: srctree/include/linux/slab.h
+> +    fn try_from_param_arg(arg: &'static [u8]) -> Result<Self>;
+> +}
+> +
+> +/// Set the module parameter from a string.
+> +///
+> +/// Used to set the parameter value at kernel initialization, when loading
+> +/// the module or when set through `sysfs`.
+> +///
+> +/// `param.arg` is a pointer to `*mut T` as set up by the [`module!`]
+> +/// macro.
+> +///
+> +/// See `struct kernel_param_ops.set`.
+> +///
+> +/// # Safety
+> +///
+> +/// If `val` is non-null then it must point to a valid null-terminated
+> +/// string. The `arg` field of `param` must be an instance of `T`.
+> +///
+> +/// # Invariants
+> +///
+> +/// Currently, we only support read-only parameters that are not readable
+> +/// from `sysfs`. Thus, this function is only called at kernel
+> +/// initialization time, or at module load time, and we have exclusive
+> +/// access to the parameter for the duration of the function.
+> +///
+> +/// [`module!`]: macros::module
+> +unsafe extern "C" fn set_param<T>(
+> +    val: *const core::ffi::c_char,
+> +    param: *const crate::bindings::kernel_param,
+> +) -> core::ffi::c_int
+> +where
+> +    T: ModuleParam,
+> +{
+> +    // NOTE: If we start supporting arguments without values, val _is_ allowed
+> +    // to be null here.
+> +    if val.is_null() {
+> +        crate::pr_warn_once!("Null pointer passed to `module_param::set_param`");
+> +        return crate::error::code::EINVAL.to_errno();
+> +    }
+> +
+> +    // SAFETY: By function safety requirement, val is non-null and
+> +    // null-terminated. By C API contract, `val` is live and valid for reads
+> +    // for the duration of this function.
+> +    let arg = unsafe { CStr::from_char_ptr(val).as_bytes() };
+> +
+> +    crate::error::from_result(|| {
+> +        let new_value = T::try_from_param_arg(arg)?;
+> +
+> +        // SAFETY: `param` is guaranteed to be valid by C API contract
+> +        // and `arg` is guaranteed to point to an instance of `T`.
+> +        let old_value = unsafe { (*param).__bindgen_anon_1.arg as *mut T };
+> +
+> +        // SAFETY: `old_value` is valid for writes, as we have exclusive
+> +        // access. `old_value` is pointing to an initialized static, an
 
-Example: Inject error -22 to module_enable_rodata_ro_after_init for
-brd module:
+Typo: an -> and
 
-sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
---error=-22 --trace
-Monitoring module error injection... Hit Ctrl-C to end.
-MODULE     ERROR FUNCTION
-brd        -22   module_enable_rodata_after_init()
+> +        // so it is properly initialized.
+> +        unsafe { core::ptr::replace(old_value, new_value) };
+> +        Ok(0)
+> +    })
+> +}
+> +
+> +/// Drop the parameter.
+> +///
+> +/// Called when unloading a module.
+> +///
+> +/// # Safety
+> +///
+> +/// The `arg` field of `param` must be an initialized instance of `T`.
+> +unsafe extern "C" fn free<T>(arg: *mut core::ffi::c_void)
+> +where
+> +    T: ModuleParam,
+> +{
+> +    // SAFETY: By function safety requirement, `arg` is an initialized
+> +    // instance of `T`. By C API contract, `arg` will not be used after
+> +    // this function returns.
+> +    unsafe { core::ptr::drop_in_place(arg as *mut T) };
+> +}
+> +
+> +macro_rules! impl_int_module_param {
+> +    ($ty:ident) => {
+> +        impl ModuleParam for $ty {
+> +            type Value = $ty;
+> +
+> +            fn try_from_param_arg(arg: &'static [u8]) -> Result<Self> {
+> +                let bstr = BStr::from_bytes(arg);
+> +                <$ty as crate::str::parse_int::ParseInt>::from_str(bstr)
+> +            }
+> +        }
+> +    };
+> +}
+> +
+> +impl_int_module_param!(i8);
+> +impl_int_module_param!(u8);
+> +impl_int_module_param!(i16);
+> +impl_int_module_param!(u16);
+> +impl_int_module_param!(i32);
+> +impl_int_module_param!(u32);
+> +impl_int_module_param!(i64);
+> +impl_int_module_param!(u64);
+> +impl_int_module_param!(isize);
+> +impl_int_module_param!(usize);
+> +
+> +/// A wrapper for kernel parameters.
+> +///
+> +/// This type is instantiated by the [`module!`] macro when module parameters are
+> +/// defined. You should never need to instantiate this type directly.
+> +#[repr(transparent)]
+> +pub struct ModuleParamAccess<T> {
+> +    data: core::cell::UnsafeCell<T>,
+> +}
+> +
+> +// SAFETY: We only create shared references to the contents of this container,
+> +// so if `T` is `Sync`, so is `ModuleParamAccess`.
+> +unsafe impl<T: Sync> Sync for ModuleParamAccess<T> {}
+> +
+> +impl<T> ModuleParamAccess<T> {
+> +    #[doc(hidden)]
+> +    pub const fn new(value: T) -> Self {
+> +        Self {
+> +            data: core::cell::UnsafeCell::new(value),
+> +        }
+> +    }
+> +
+> +    /// Get a shared reference to the parameter value.
+> +    // Note: When sysfs access to parameters are enabled, we have to pass in a
+> +    // held lock guard here.
+> +    pub fn get(&self) -> &T {
+> +        // SAFETY: As we only support read only parameters with no sysfs
+> +        // exposure, the kernel will not touch the parameter data after module
+> +        // initialization.
+> +        unsafe { &*self.data.get() }
+> +    }
+> +
+> +    /// Get a mutable pointer to the parameter value.
+> +    pub const fn as_mut_ptr(&self) -> *mut T {
+> +        self.data.get()
+> +    }
+> +}
+> +
+> +#[doc(hidden)]
+> +#[macro_export]
+> +/// Generate a static [`kernel_param_ops`](srctree/include/linux/moduleparam.h) struct.
+> +///
+> +/// # Examples
+> +///
+> +/// ```ignore
+> +/// make_param_ops!(
+> +///     /// Documentation for new param ops.
+> +///     PARAM_OPS_MYTYPE, // Name for the static.
+> +///     MyType // A type which implements [`ModuleParam`].
+> +/// );
+> +/// ```
+> +macro_rules! make_param_ops {
+> +    ($ops:ident, $ty:ty) => {
+> +        ///
+> +        /// Static [`kernel_param_ops`](srctree/include/linux/moduleparam.h)
+> +        /// struct generated by `make_param_ops`
+> +        #[doc = concat!("for [`", stringify!($ty), "`].")]
+> +        pub static $ops: $crate::bindings::kernel_param_ops = $crate::bindings::kernel_param_ops {
+> +            flags: 0,
+> +            set: Some(set_param::<$ty>),
+> +            get: None,
+> +            free: Some(free::<$ty>),
+> +        };
+> +    };
+> +}
+> +
+> +make_param_ops!(PARAM_OPS_I8, i8);
+> +make_param_ops!(PARAM_OPS_U8, u8);
+> +make_param_ops!(PARAM_OPS_I16, i16);
+> +make_param_ops!(PARAM_OPS_U16, u16);
+> +make_param_ops!(PARAM_OPS_I32, i32);
+> +make_param_ops!(PARAM_OPS_U32, u32);
+> +make_param_ops!(PARAM_OPS_I64, i64);
+> +make_param_ops!(PARAM_OPS_U64, u64);
+> +make_param_ops!(PARAM_OPS_ISIZE, isize);
+> +make_param_ops!(PARAM_OPS_USIZE, usize);
+> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+> index 563dcd2b7ace5e8322d0fddb409571cca2dd31ea..5efed578e3d5d851b460f83b29a4a95e2f106e64 100644
+> --- a/rust/macros/helpers.rs
+> +++ b/rust/macros/helpers.rs
+> @@ -107,6 +107,20 @@ pub(crate) struct Generics {
+>      pub(crate) ty_generics: Vec<TokenTree>,
+>  }
+>  
+> +/// Parse a token stream of the form `expected_name: "value",` and return the
+> +/// string in the position of "value".
+> +///
+> +/// # Panics
+> +///
+> +/// - On parse error.
+> +pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
+> +    assert_eq!(expect_ident(it), expected_name);
+> +    assert_eq!(expect_punct(it), ':');
+> +    let string = expect_string(it);
+> +    assert_eq!(expect_punct(it), ',');
+> +    string
+> +}
+> +
+>  /// Parses the given `TokenStream` into `Generics` and the rest.
+>  ///
+>  /// The generics are not present in the rest, but a where clause might remain.
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index 4ab94e44adfe3206faad159e81417ea41a35815b..0fe581fbc53266bf22fe07f5c35495affbe0d67d 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -24,6 +24,30 @@
+>  /// The `type` argument should be a type which implements the [`Module`]
+>  /// trait. Also accepts various forms of kernel metadata.
+>  ///
+> +/// The `params` field describe module parameters. Each entry has the form
+> +///
+> +/// ```ignore
+> +/// parameter_name: type {
+> +///     default: default_value,
+> +///     description: "Description",
+> +/// }
+> +/// ```
+> +///
+> +/// `type` may be one of
+> +///
+> +/// - [`i8`]
+> +/// - [`u8`]
+> +/// - [`i8`]
+> +/// - [`u8`]
+> +/// - [`i16`]
+> +/// - [`u16`]
+> +/// - [`i32`]
+> +/// - [`u32`]
+> +/// - [`i64`]
+> +/// - [`u64`]
+> +/// - [`isize`]
+> +/// - [`usize`]
+> +///
+>  /// C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
+>  ///
+>  /// [`Module`]: ../kernel/trait.Module.html
+> @@ -40,6 +64,12 @@
+>  ///     description: "My very own kernel module!",
+>  ///     license: "GPL",
+>  ///     alias: ["alternate_module_name"],
+> +///     params: {
+> +///         my_parameter: i64 {
+> +///             default: 1,
+> +///             description: "This parameter has a default of 1",
+> +///         },
+> +///     },
+>  /// }
+>  ///
+>  /// struct MyModule(i32);
+> @@ -48,6 +78,7 @@
+>  ///     fn init(_module: &'static ThisModule) -> Result<Self> {
+>  ///         let foo: i32 = 42;
+>  ///         pr_info!("I contain:  {}\n", foo);
+> +///         pr_info!("i32 param is:  {}\n", module_parameters::my_parameter.read());
+>  ///         Ok(Self(foo))
+>  ///     }
+>  /// }
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index 2587f41b0d3929af7ceac5f42b4711f70b4f8749..627279cf318b14b50128045bce980f9d60b9c6d0 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -26,6 +26,7 @@ struct ModInfoBuilder<'a> {
+>      module: &'a str,
+>      counter: usize,
+>      buffer: String,
+> +    param_buffer: String,
+>  }
+>  
+>  impl<'a> ModInfoBuilder<'a> {
+> @@ -34,10 +35,11 @@ fn new(module: &'a str) -> Self {
+>              module,
+>              counter: 0,
+>              buffer: String::new(),
+> +            param_buffer: String::new(),
+>          }
+>      }
+>  
+> -    fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+> +    fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
+>          let string = if builtin {
+>              // Built-in modules prefix their modinfo strings by `module.`.
+>              format!(
+> @@ -51,8 +53,14 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+>              format!("{field}={content}\0", field = field, content = content)
+>          };
+>  
+> +        let buffer = if param {
+> +            &mut self.param_buffer
+> +        } else {
+> +            &mut self.buffer
+> +        };
+> +
+>          write!(
+> -            &mut self.buffer,
+> +            buffer,
+>              "
+>                  {cfg}
+>                  #[doc(hidden)]
+> @@ -75,20 +83,113 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+>          self.counter += 1;
+>      }
+>  
+> -    fn emit_only_builtin(&mut self, field: &str, content: &str) {
+> -        self.emit_base(field, content, true)
+> +    fn emit_only_builtin(&mut self, field: &str, content: &str, param: bool) {
+> +        self.emit_base(field, content, true, param)
+>      }
+>  
+> -    fn emit_only_loadable(&mut self, field: &str, content: &str) {
+> -        self.emit_base(field, content, false)
+> +    fn emit_only_loadable(&mut self, field: &str, content: &str, param: bool) {
+> +        self.emit_base(field, content, false, param)
+>      }
+>  
+>      fn emit(&mut self, field: &str, content: &str) {
+> -        self.emit_only_builtin(field, content);
+> -        self.emit_only_loadable(field, content);
+> +        self.emit_internal(field, content, false);
+> +    }
+> +
+> +    fn emit_internal(&mut self, field: &str, content: &str, param: bool) {
+> +        self.emit_only_builtin(field, content, param);
+> +        self.emit_only_loadable(field, content, param);
+> +    }
+> +
+> +    fn emit_param(&mut self, field: &str, param: &str, content: &str) {
+> +        let content = format!("{param}:{content}", param = param, content = content);
+> +        self.emit_internal(field, &content, true);
+> +    }
+> +
+> +    fn emit_params(&mut self, info: &ModuleInfo) {
+> +        let Some(params) = &info.params else {
+> +            return;
+> +        };
+> +
+> +        for param in params {
+> +            let ops = param_ops_path(&param.ptype);
+> +
+> +            // Note: The spelling of these fields is dictated by the user space
+> +            // tool `modinfo`.
+> +            self.emit_param("parmtype", &param.name, &param.ptype);
+> +            self.emit_param("parm", &param.name, &param.description);
+> +
+> +            write!(
+> +                self.param_buffer,
+> +                "
+> +                    pub(crate) static {param_name}:
+> +                        ::kernel::module_param::ModuleParamAccess<{param_type}> =
+> +                            ::kernel::module_param::ModuleParamAccess::new({param_default});
+> +
+> +                    #[link_section = \"__param\"]
+> +                    #[used]
+> +                    static __{module_name}_{param_name}_struct:
+> +                        ::kernel::module_param::RacyKernelParam =
+> +                        ::kernel::module_param::RacyKernelParam(::kernel::bindings::kernel_param {{
+> +                            name: if cfg!(MODULE) {{
+> +                                c\"{module_name}.{param_name}\"
+> +                            }} else {{
+> +                                c\"{param_name}\"
+> +                            }}.as_ptr(),
 
-Kernel messages:
-[   89.463690] brd: module loaded
-[   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
-ro_after_init data might still be writable
+This should be the other way around? Running
+'insmod rust_minimal.ko test_parameter=2' reports for me that the
+parameter is unknown while specifying 'rust_minimal.test_parameter=2'
+works. The prefix should be used only if the module is built-in so the
+parameter can be distinguished on the kernel command line.
 
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
----
- tools/bpf/Makefile            |  13 ++-
- tools/bpf/moderr/.gitignore   |   2 +
- tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
- tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
- tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
- tools/bpf/moderr/moderr.h     |  40 +++++++
- 6 files changed, 510 insertions(+), 3 deletions(-)
-
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 243b79f2b451e52ca196f79dc46befd1b3dab458..018cab5102e7e42b8b7b2749f4f463bf55c5119b 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -38,7 +38,7 @@ FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
- FEATURE_DISPLAY = libbfd
- 
- check_feat := 1
--NON_CHECK_FEAT_TARGETS := clean bpftool_clean runqslower_clean resolve_btfids_clean
-+NON_CHECK_FEAT_TARGETS := clean bpftool_clean moderr_clean runqslower_clean resolve_btfids_clean
- ifdef MAKECMDGOALS
- ifeq ($(filter-out $(NON_CHECK_FEAT_TARGETS),$(MAKECMDGOALS)),)
-   check_feat := 0
-@@ -76,7 +76,7 @@ $(OUTPUT)%.lex.o: $(OUTPUT)%.lex.c
- 
- PROGS = $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg $(OUTPUT)bpf_asm
- 
--all: $(PROGS) bpftool runqslower
-+all: $(PROGS) bpftool moderr runqslower
- 
- $(OUTPUT)bpf_jit_disasm: CFLAGS += -DPACKAGE='bpf_jit_disasm'
- $(OUTPUT)bpf_jit_disasm: $(OUTPUT)bpf_jit_disasm.o
-@@ -92,7 +92,7 @@ $(OUTPUT)bpf_exp.lex.c: $(OUTPUT)bpf_exp.yacc.c
- $(OUTPUT)bpf_exp.yacc.o: $(OUTPUT)bpf_exp.yacc.c
- $(OUTPUT)bpf_exp.lex.o: $(OUTPUT)bpf_exp.lex.c
- 
--clean: bpftool_clean runqslower_clean resolve_btfids_clean
-+clean: bpftool_clean moderr_clean runqslower_clean resolve_btfids_clean
- 	$(call QUIET_CLEAN, bpf-progs)
- 	$(Q)$(RM) -r -- $(OUTPUT)*.o $(OUTPUT)bpf_jit_disasm $(OUTPUT)bpf_dbg \
- 	       $(OUTPUT)bpf_asm $(OUTPUT)bpf_exp.yacc.* $(OUTPUT)bpf_exp.lex.*
-@@ -118,6 +118,12 @@ bpftool_install:
- bpftool_clean:
- 	$(call descend,bpftool,clean)
- 
-+moderr:
-+	$(call descend,moderr)
-+
-+moderr_clean:
-+	$(call descend,moderr,clean)
-+
- runqslower:
- 	$(call descend,runqslower)
- 
-@@ -131,5 +137,6 @@ resolve_btfids_clean:
- 	$(call descend,resolve_btfids,clean)
- 
- .PHONY: all install clean bpftool bpftool_install bpftool_clean \
-+	moderr moderr_clean \
- 	runqslower runqslower_clean \
- 	resolve_btfids resolve_btfids_clean
-diff --git a/tools/bpf/moderr/.gitignore b/tools/bpf/moderr/.gitignore
-new file mode 100644
-index 0000000000000000000000000000000000000000..ffdb70230c8bc308efcc8b7d2084856e2225da91
---- /dev/null
-+++ b/tools/bpf/moderr/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+/.output
-diff --git a/tools/bpf/moderr/Makefile b/tools/bpf/moderr/Makefile
-new file mode 100644
-index 0000000000000000000000000000000000000000..e6331179f7800e6c1d1945ca713e34f74f7d805d
---- /dev/null
-+++ b/tools/bpf/moderr/Makefile
-@@ -0,0 +1,95 @@
-+# SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
-+include ../../scripts/Makefile.include
-+include ../../scripts/Makefile.arch
-+
-+OUTPUT ?= $(abspath .output)/
-+
-+BPFTOOL_OUTPUT := $(OUTPUT)bpftool/
-+DEFAULT_BPFTOOL := $(BPFTOOL_OUTPUT)bootstrap/bpftool
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+LIBBPF_SRC := $(abspath ../../lib/bpf)
-+BPFOBJ_OUTPUT := $(OUTPUT)libbpf/
-+BPFOBJ := $(BPFOBJ_OUTPUT)libbpf.a
-+BPF_DESTDIR := $(BPFOBJ_OUTPUT)
-+BPF_INCLUDE := $(BPF_DESTDIR)include
-+INCLUDES := -I$(OUTPUT) -I$(BPF_INCLUDE) -I$(abspath ../../include/uapi)
-+CFLAGS := -g -Wall $(CLANG_CROSS_FLAGS)
-+CFLAGS += $(EXTRA_CFLAGS)
-+LDFLAGS += $(EXTRA_LDFLAGS)
-+LDLIBS += -lelf -lz
-+
-+# Try to detect best kernel BTF source
-+KERNEL_REL := $(shell uname -r)
-+VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
-+	$(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) \
-+	../../../vmlinux /sys/kernel/btf/vmlinux	\
-+	/boot/vmlinux-$(KERNEL_REL)
-+VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
-+					  $(wildcard $(VMLINUX_BTF_PATHS))))
-+
-+ifeq ($(V),1)
-+Q =
-+else
-+Q = @
-+MAKEFLAGS += --no-print-directory
-+submake_extras := feature_display=0
-+endif
-+
-+.DELETE_ON_ERROR:
-+
-+.PHONY: all clean moderr libbpf_hdrs
-+all: moderr
-+
-+moderr: $(OUTPUT)moderr
-+
-+clean:
-+	$(call QUIET_CLEAN, moderr)
-+	$(Q)$(RM) -r $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT)
-+	$(Q)$(RM) $(OUTPUT)*.o $(OUTPUT)*.d
-+	$(Q)$(RM) $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
-+	$(Q)$(RM) $(OUTPUT)moderr
-+	$(Q)$(RM) -r .output
-+
-+libbpf_hdrs: $(BPFOBJ)
-+
-+$(OUTPUT)moderr: $(OUTPUT)moderr.o $(BPFOBJ)
-+	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
-+
-+$(OUTPUT)moderr.o: moderr.h $(OUTPUT)moderr.skel.h	      \
-+			$(OUTPUT)moderr.bpf.o | libbpf_hdrs
-+
-+$(OUTPUT)moderr.bpf.o: $(OUTPUT)vmlinux.h moderr.h | libbpf_hdrs
-+
-+$(OUTPUT)%.skel.h: $(OUTPUT)%.bpf.o | $(BPFTOOL)
-+	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
-+
-+$(OUTPUT)%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
-+	$(QUIET_GEN)$(CLANG) -g -O2 --target=bpf $(INCLUDES) \
-+		 -D__TARGET_ARCH_$(SRCARCH)						 \
-+		 -c $(filter %.c,$^) -o $@ &&				     \
-+	$(LLVM_STRIP) -g $@
-+
-+$(OUTPUT)%.o: %.c | $(OUTPUT)
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
-+
-+$(OUTPUT) $(BPFOBJ_OUTPUT) $(BPFTOOL_OUTPUT):
-+	$(QUIET_MKDIR)mkdir -p $@
-+
-+$(OUTPUT)vmlinux.h: $(VMLINUX_BTF_PATH) | $(OUTPUT) $(BPFTOOL)
-+ifeq ($(VMLINUX_H),)
-+	$(Q)if [ ! -e "$(VMLINUX_BTF_PATH)" ] ; then \
-+		echo "Couldn't find kernel BTF; set VMLINUX_BTF to"	       \
-+			"specify its location." >&2;			       \
-+		exit 1;\
-+	fi
-+	$(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
-+else
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+$(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(BPFOBJ_OUTPUT)
-+	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC) OUTPUT=$(BPFOBJ_OUTPUT) \
-+		    DESTDIR=$(BPFOBJ_OUTPUT) prefix= $(abspath $@) install_headers
-+
-+$(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
-+	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT) bootstrap
-diff --git a/tools/bpf/moderr/moderr.bpf.c b/tools/bpf/moderr/moderr.bpf.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..1c5d03336dd87a2f065ef6b608f077a8b988e5cf
---- /dev/null
-+++ b/tools/bpf/moderr/moderr.bpf.c
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Samsung */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+#include "moderr.h"
-+
-+const volatile bool filter_modname = false;
-+const volatile char targ_modname[MODULE_NAME_LEN];
-+const volatile bool set_errinj = false;
-+const volatile int targ_errinj = 0;
-+const volatile bool filter_modfunc = false;
-+const volatile int targ_modfunc = 0;
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+	__uint(max_entries, 2097152);
-+} rb SEC(".maps");
-+
-+static __always_inline bool filter_module_name(struct module *mod)
-+{
-+	char modname[MODULE_NAME_LEN];
-+
-+	bpf_probe_read_str(modname, sizeof(modname), mod->name);
-+
-+	if (!filter_modname ||
-+	    filter_modname && bpf_strncmp(modname, MODULE_NAME_LEN,
-+					  (const char *)targ_modname) != 0)
-+		return false;
-+
-+	return true;
-+}
-+
-+static __always_inline bool filter_module_func(enum modfunc fc)
-+{
-+	if (!filter_modfunc || filter_modfunc && targ_modfunc != fc)
-+		return false;
-+
-+	return true;
-+}
-+
-+static __always_inline bool
-+generate_errinj_event(struct pt_regs *ctx, struct module *mod, enum modfunc fc)
-+{
-+	struct event *e;
-+
-+	e = bpf_ringbuf_reserve(&rb, sizeof(*e), 0);
-+	if (!e)
-+		return false;
-+
-+	e->err = 0;
-+	e->func = fc;
-+	bpf_probe_read_str(e->modname, sizeof(e->modname), mod->name);
-+
-+	if (set_errinj) {
-+		bpf_override_return(ctx, targ_errinj);
-+		e->err = targ_errinj;
-+	}
-+
-+	bpf_ringbuf_submit(e, 0);
-+	return true;
-+}
-+
-+static __always_inline bool generate_debug_event(struct pt_regs *ctx,
-+						 struct module *mod,
-+						 enum modfunc fc,
-+						 const char *fmt)
-+{
-+	struct event *e;
-+
-+	e = bpf_ringbuf_reserve(&rb, sizeof(*e), 0);
-+	if (!e)
-+		return false;
-+
-+	e->dbg = BPF_SNPRINTF(e->msg, sizeof(e->msg), "[%s:%s]: %s", mod->name,
-+			      modfunc_to_string(fc), fmt);
-+
-+	bpf_ringbuf_submit(e, 0);
-+	return true;
-+}
-+
-+static __always_inline int
-+module_error_injection(struct pt_regs *ctx, struct module *mod, enum modfunc fc)
-+{
-+	if (!filter_module_name(mod)) {
-+		generate_debug_event(ctx, mod, fc,
-+				     "Target module does not match");
-+		return 0;
-+	}
-+
-+	if (!filter_module_func(fc)) {
-+		generate_debug_event(ctx, mod, fc,
-+				     "Target function does not match");
-+		return 0;
-+	}
-+
-+	if (!generate_errinj_event(ctx, mod, fc)) {
-+		generate_debug_event(
-+			ctx, mod, fc,
-+			"Error injection event cannot be generated");
-+		return 0;
-+	}
-+
-+	return 0;
-+}
-+
-+SEC("kprobe/complete_formation")
-+int BPF_KPROBE(complete_formation, struct module *mod, struct load_info *info)
-+{
-+	return module_error_injection(ctx, mod, COMPLETE_FORMATION);
-+}
-+
-+SEC("kprobe/do_init_module")
-+int BPF_KPROBE(do_init_module, struct module *mod, struct load_info *info)
-+{
-+	return module_error_injection(ctx, mod, DO_INIT_MODULE);
-+}
-+
-+SEC("kprobe/module_enable_rodata_ro_after_init")
-+int BPF_KPROBE(module_enable_rodata_ro_after_init, struct module *mod)
-+{
-+	return module_error_injection(ctx, mod,
-+				      MODULE_ENABLE_RODATA_AFTER_INIT);
-+}
-diff --git a/tools/bpf/moderr/moderr.c b/tools/bpf/moderr/moderr.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..dce18b02b55d1ad1f7e304cb49985d570b115aa4
---- /dev/null
-+++ b/tools/bpf/moderr/moderr.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Samsung */
-+#include <argp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <bpf/libbpf.h>
-+#include <bpf/bpf.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include "moderr.h"
-+#include "moderr.skel.h"
-+
-+static struct env {
-+	bool verbose;
-+	char modname[MODULE_NAME_LEN];
-+	enum modfunc func;
-+	bool trace;
-+	int errinj;
-+} env;
-+
-+const char *argp_program_version = "moderr 0.1";
-+const char *argp_program_bug_address = "<da.gomez@samsung.com>";
-+const char argp_program_doc[] =
-+"BPF moderr application.\n"
-+"\n"
-+"It injects errors in module initialization\n"
-+"\nUSAGE: "
-+"moderr [-m <module_name>] [-f <function_name>] [-e <errno>]\n";
-+
-+static volatile bool exiting = false;
-+
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
-+
-+static const struct argp_option opts[] = {
-+	{ "verbose", 'v', NULL, 0, "Verbose debug output" },
-+	{ "trace", 't', NULL, 0, "Enable trace output", 0 },
-+	{ "modname", 'm', "MODNAME", 0, "Trace this module name only", 0 },
-+	{ "modfunc", 'f', "MODFUNC", 0, "Trace this module function only", 0 },
-+	{ "list", 'l', NULL, 0, "List available module functions", 0 },
-+	{ "error", 'e', "ERROR", 0, "Inject this error", 0 },
-+	{ NULL, 'h', NULL, OPTION_HIDDEN, "Show the full help", 0 },
-+	{},
-+};
-+
-+static void help_modfunc(void)
-+{
-+	printf("\nAvailable modfunc options are:\n"
-+	       "- complete_formation\n"
-+	       "- do_init_module\n"
-+	       "- module_enable_rodata_ro_after_init\n\n");
-+}
-+
-+static enum modfunc string_to_modfunc(char *arg)
-+{
-+	if (strncmp(arg, "complete_formation", strlen(arg)) == 0)
-+		return COMPLETE_FORMATION;
-+
-+	if (strncmp(arg, "do_init_module", strlen(arg)) == 0)
-+		return DO_INIT_MODULE;
-+
-+	if (strncmp(arg, "module_enable_rodata_ro_after_init", strlen(arg)) ==
-+	    0)
-+		return MODULE_ENABLE_RODATA_AFTER_INIT;
-+
-+	return UNKNOWN;
-+}
-+
-+static error_t parse_arg(int key, char *arg, struct argp_state *state)
-+{
-+	switch (key) {
-+	case 'h':
-+		argp_state_help(state, stderr, ARGP_HELP_STD_HELP);
-+		break;
-+	case 'l':
-+		help_modfunc();
-+		argp_usage(state);
-+		break;
-+	case 'v':
-+		env.verbose = true;
-+		break;
-+	case 'm':
-+		if (strlen(arg) + 1 > MODULE_NAME_LEN) {
-+			fprintf(stderr, "module name error\n");
-+			argp_usage(state);
-+		}
-+		strncpy(env.modname, arg, sizeof(env.modname) - 1);
-+		break;
-+	case 'f':
-+		if (strlen(arg) + 1 > MODULE_FUNC_LEN) {
-+			fprintf(stderr, "module function too long\n");
-+			argp_usage(state);
-+		}
-+		env.func = string_to_modfunc(arg);
-+		if (!env.func) {
-+			fprintf(stderr, "invalid module function\n");
-+			help_modfunc();
-+			argp_usage(state);
-+		}
-+		break;
-+	case 'e':
-+		env.errinj = atoi(arg);
-+		break;
-+	case 't':
-+		env.trace = true;
-+		break;
-+	case ARGP_KEY_ARG:
-+		argp_usage(state);
-+		break;
-+	default:
-+		return ARGP_ERR_UNKNOWN;
-+	}
-+	return 0;
-+}
-+
-+static const struct argp argp = {
-+	.options = opts,
-+	.parser = parse_arg,
-+	.doc = argp_program_doc,
-+};
-+
-+static int libbpf_print_fn(enum libbpf_print_level level, const char *format,
-+			   va_list args)
-+{
-+	if (level == LIBBPF_DEBUG && !env.verbose)
-+		return 0;
-+	return vfprintf(stderr, format, args);
-+}
-+
-+static void sig_handler(int sig)
-+{
-+	exiting = true;
-+}
-+
-+static int handle_event(void *ctx, void *data, size_t data_sz)
-+{
-+	const struct event *e = data;
-+
-+	if (!env.trace)
-+		return 0;
-+
-+	if (e->dbg) {
-+		if (env.verbose)
-+			printf("%s\n", e->msg);
-+		return 0;
-+	}
-+
-+	printf("%-10s %-5d %-20s\n", e->modname, e->err,
-+	       modfunc_to_string(e->func));
-+
-+	return 0;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct ring_buffer *rb = NULL;
-+	struct moderr_bpf *obj;
-+	int err;
-+
-+	err = argp_parse(&argp, argc, argv, 0, NULL, NULL);
-+	if (err)
-+		return err;
-+
-+	if (!strlen(env.modname) || !env.func) {
-+		fprintf(stderr, "missing arguments\n");
-+		return EXIT_FAILURE;
-+	}
-+
-+	libbpf_set_print(libbpf_print_fn);
-+
-+	signal(SIGINT, sig_handler);
-+	signal(SIGTERM, sig_handler);
-+
-+	obj = moderr_bpf__open();
-+	if (!obj) {
-+		fprintf(stderr, "failed to open and load BPF object\n");
-+		return 1;
-+	}
-+
-+	obj->rodata->filter_modname = true;
-+	strncpy(obj->rodata->targ_modname, env.modname, MODULE_NAME_LEN - 1);
-+	obj->rodata->targ_modname[MODULE_NAME_LEN - 1] = '\0';
-+
-+	obj->rodata->filter_modfunc = true;
-+	obj->rodata->targ_modfunc = env.func;
-+
-+	if (env.errinj) {
-+		obj->rodata->set_errinj = true;
-+		obj->rodata->targ_errinj = env.errinj;
-+	}
-+
-+	err = moderr_bpf__load(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to load and verify BPF object\n");
-+		goto cleanup;
-+	}
-+
-+	err = moderr_bpf__attach(obj);
-+	if (err) {
-+		fprintf(stderr, "failed to attach BPF object\n");
-+		goto cleanup;
-+	}
-+
-+	printf("Monitoring module error injection... Hit Ctrl-C to end.\n");
-+
-+	rb = ring_buffer__new(bpf_map__fd(obj->maps.rb), handle_event, NULL,
-+			      NULL);
-+	if (!rb) {
-+		err = -1;
-+		fprintf(stderr, "failed to create ring buffer\n");
-+		goto cleanup;
-+	}
-+
-+	if (env.trace)
-+		printf("%-10s %-5s %-20s\n", "MODULE", "ERROR", "FUNCTION");
-+
-+	while (!exiting) {
-+		err = ring_buffer__poll(rb, 100);
-+		if (err == -EINTR) {
-+			err = 0;
-+			break;
-+		}
-+		if (err < 0) {
-+			fprintf(stderr, "error polling ring buffer: %d\n", err);
-+			break;
-+		}
-+	}
-+
-+	printf("\n");
-+
-+cleanup:
-+	ring_buffer__free(rb);
-+	moderr_bpf__destroy(obj);
-+
-+	return err < 0 ? -err : 0;
-+}
-diff --git a/tools/bpf/moderr/moderr.h b/tools/bpf/moderr/moderr.h
-new file mode 100644
-index 0000000000000000000000000000000000000000..e17440cf4bd5fe09b927cb83807a88f66861bba5
---- /dev/null
-+++ b/tools/bpf/moderr/moderr.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2025 Samsung */
-+#ifndef __MODERR_H
-+#define __MODERR_H
-+
-+#define MAX_PARAM_PREFIX_LEN (64 - sizeof(unsigned long))
-+#define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
-+#define MODULE_FUNC_LEN 128
-+#define MESSAGE_LEN 128
-+
-+enum modfunc {
-+	UNKNOWN,
-+	COMPLETE_FORMATION = 1,
-+	DO_INIT_MODULE,
-+	MODULE_ENABLE_RODATA_AFTER_INIT,
-+};
-+
-+struct event {
-+	char modname[MODULE_NAME_LEN];
-+	int err;
-+	int func;
-+	char msg[MESSAGE_LEN];
-+	int dbg;
-+};
-+
-+static inline const char *modfunc_to_string(enum modfunc fc)
-+{
-+	switch (fc) {
-+	case COMPLETE_FORMATION:
-+		return "complete_formation()";
-+	case DO_INIT_MODULE:
-+		return "do_init_module()";
-+	case MODULE_ENABLE_RODATA_AFTER_INIT:
-+		return "module_enable_rodata_after_init()";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
-+#endif /* __MODERR_H */
+> +                            // SAFETY: `__this_module` is constructed by the kernel at load time
+> +                            // and will not be freed until the module is unloaded.
+> +                            #[cfg(MODULE)]
+> +                            mod_: unsafe {{
+> +                                (&::kernel::bindings::__this_module
+> +                                    as *const ::kernel::bindings::module)
+> +                                    .cast_mut()
+> +                            }},
+> +                            #[cfg(not(MODULE))]
+> +                            mod_: ::core::ptr::null_mut(),
+> +                            ops: &{ops} as *const ::kernel::bindings::kernel_param_ops,
+> +                            perm: 0, // Will not appear in sysfs
+> +                            level: -1,
+> +                            flags: 0,
+> +                            __bindgen_anon_1:
+> +                                ::kernel::bindings::kernel_param__bindgen_ty_1 {{
+> +                                    arg: {param_name}.as_mut_ptr().cast()
+> +                                }},
+> +                        }});
+> +                ",
+> +                module_name = info.name,
+> +                param_type = param.ptype,
+> +                param_default = param.default,
+> +                param_name = param.name,
+> +                ops = ops,
+> +            )
+> +            .unwrap();
+> +        }
+> +    }
+> +}
+> +
+> +fn param_ops_path(param_type: &str) -> &'static str {
+> +    match param_type {
+> +        "i8" => "::kernel::module_param::PARAM_OPS_I8",
+> +        "u8" => "::kernel::module_param::PARAM_OPS_U8",
+> +        "i16" => "::kernel::module_param::PARAM_OPS_I16",
+> +        "u16" => "::kernel::module_param::PARAM_OPS_U16",
+> +        "i32" => "::kernel::module_param::PARAM_OPS_I32",
+> +        "u32" => "::kernel::module_param::PARAM_OPS_U32",
+> +        "i64" => "::kernel::module_param::PARAM_OPS_I64",
+> +        "u64" => "::kernel::module_param::PARAM_OPS_U64",
+> +        "isize" => "::kernel::module_param::PARAM_OPS_ISIZE",
+> +        "usize" => "::kernel::module_param::PARAM_OPS_USIZE",
+> +        t => panic!("Unsupported parameter type {}", t),
+>      }
+>  }
+>  
+> +fn expect_param_default(param_it: &mut token_stream::IntoIter) -> String {
+> +    assert_eq!(expect_ident(param_it), "default");
+> +    assert_eq!(expect_punct(param_it), ':');
+> +    let default = try_literal(param_it).expect("Expected default param value");
+> +    assert_eq!(expect_punct(param_it), ',');
+> +    default
+> +}
+> +
+>  #[derive(Debug, Default)]
+>  struct ModuleInfo {
+>      type_: String,
+> @@ -98,6 +199,50 @@ struct ModuleInfo {
+>      description: Option<String>,
+>      alias: Option<Vec<String>>,
+>      firmware: Option<Vec<String>>,
+> +    params: Option<Vec<Parameter>>,
+> +}
+> +
+> +#[derive(Debug)]
+> +struct Parameter {
+> +    name: String,
+> +    ptype: String,
+> +    default: String,
+> +    description: String,
+> +}
+> +
+> +fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
+> +    let params = expect_group(it);
+> +    assert_eq!(params.delimiter(), Delimiter::Brace);
+> +    let mut it = params.stream().into_iter();
+> +    let mut parsed = Vec::new();
+> +
+> +    loop {
+> +        let param_name = match it.next() {
+> +            Some(TokenTree::Ident(ident)) => ident.to_string(),
+> +            Some(_) => panic!("Expected Ident or end"),
+> +            None => break,
+> +        };
+> +
+> +        assert_eq!(expect_punct(&mut it), ':');
+> +        let param_type = expect_ident(&mut it);
+> +        let group = expect_group(&mut it);
+> +        assert_eq!(group.delimiter(), Delimiter::Brace);
+> +        assert_eq!(expect_punct(&mut it), ',');
+> +
+> +        let mut param_it = group.stream().into_iter();
+> +        let param_default = expect_param_default(&mut param_it);
+> +        let param_description = expect_string_field(&mut param_it, "description");
+> +        expect_end(&mut param_it);
+> +
+> +        parsed.push(Parameter {
+> +            name: param_name,
+> +            ptype: param_type,
+> +            default: param_default,
+> +            description: param_description,
+> +        })
+> +    }
+> +
+> +    parsed
+>  }
+>  
+>  impl ModuleInfo {
+> @@ -112,6 +257,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+>              "license",
+>              "alias",
+>              "firmware",
+> +            "params",
+>          ];
+>          const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
+>          let mut seen_keys = Vec::new();
+> @@ -140,6 +286,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+>                  "license" => info.license = expect_string_ascii(it),
+>                  "alias" => info.alias = Some(expect_string_array(it)),
+>                  "firmware" => info.firmware = Some(expect_string_array(it)),
+> +                "params" => info.params = Some(expect_params(it)),
+>                  _ => panic!(
+>                      "Unknown key \"{}\". Valid keys are: {:?}.",
+>                      key, EXPECTED_KEYS
+> @@ -183,28 +330,30 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+>      let info = ModuleInfo::parse(&mut it);
+>  
+>      let mut modinfo = ModInfoBuilder::new(info.name.as_ref());
+> -    if let Some(author) = info.author {
+> -        modinfo.emit("author", &author);
+> +    if let Some(author) = &info.author {
+> +        modinfo.emit("author", author);
+>      }
+> -    if let Some(description) = info.description {
+> -        modinfo.emit("description", &description);
+> +    if let Some(description) = &info.description {
+> +        modinfo.emit("description", description);
+>      }
+>      modinfo.emit("license", &info.license);
+> -    if let Some(aliases) = info.alias {
+> +    if let Some(aliases) = &info.alias {
+>          for alias in aliases {
+> -            modinfo.emit("alias", &alias);
+> +            modinfo.emit("alias", alias);
+>          }
+>      }
+> -    if let Some(firmware) = info.firmware {
+> +    if let Some(firmware) = &info.firmware {
+>          for fw in firmware {
+> -            modinfo.emit("firmware", &fw);
+> +            modinfo.emit("firmware", fw);
+>          }
+>      }
+>  
+>      // Built-in modules also export the `file` modinfo string.
+>      let file =
+>          std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
+> -    modinfo.emit_only_builtin("file", &file);
+> +    modinfo.emit_only_builtin("file", &file, false);
+> +
+> +    modinfo.emit_params(&info);
+>  
+>      format!(
+>          "
+> @@ -358,14 +507,17 @@ unsafe fn __exit() {{
+>                              __MOD.assume_init_drop();
+>                          }}
+>                      }}
+> -
+>                      {modinfo}
+>                  }}
+>              }}
+> +            mod module_parameters {{
+> +                {params}
+> +            }}
+>          ",
+>          type_ = info.type_,
+>          name = info.name,
+>          modinfo = modinfo.buffer,
+> +        params = modinfo.param_buffer,
+>          initcall_section = ".initcall6.init"
+>      )
+>      .parse()
+> diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+> index 4aaf117bf8e3c0cc77e188b1ad0708e3650a6654..d999a77c6eb9a0db9acf5fa03d4feca5e6525fc8 100644
+> --- a/samples/rust/rust_minimal.rs
+> +++ b/samples/rust/rust_minimal.rs
+> @@ -10,6 +10,12 @@
+>      author: "Rust for Linux Contributors",
+>      description: "Rust minimal sample",
+>      license: "GPL",
+> +    params: {
+> +        test_parameter: i64 {
+> +            default: 1,
+> +            description: "This parameter has a default of 1",
+> +        },
+> +    },
+>  }
+>  
+>  struct RustMinimal {
+> @@ -20,6 +26,10 @@ impl kernel::Module for RustMinimal {
+>      fn init(_module: &'static ThisModule) -> Result<Self> {
+>          pr_info!("Rust minimal sample (init)\n");
+>          pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
+> +        pr_info!(
+> +            "My parameter: {}\n",
+> +            *module_parameters::test_parameter.get()
+> +        );
+>  
+>          let mut numbers = KVec::new();
+>          numbers.push(72, GFP_KERNEL)?;
+> 
 
 -- 
-2.39.5
-
+Thanks,
+Petr
