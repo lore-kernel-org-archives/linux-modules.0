@@ -1,127 +1,130 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F53F1527B1;
-	Wed, 22 Jan 2025 17:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1826F1B6CE0;
+	Wed, 22 Jan 2025 20:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737565354; cv=none; b=rauvdwW1QV7NBX9aS8NYTh0zeXadR3Y5nsdYqYGXU931czEqIx95oV29mfisNdeFv50k1++fVglj34jj8NT6nW06nkATev4CrfA2e2Fg00BAE0QdvpXpHGh8ziF8mwVvBBwDfe7xqMKL6lhqrc+kilgnvZNWHA+gigXgh+JUKB4=
+	t=1737576376; cv=none; b=NzYtfFbwvJ550vkakpUQLRAlexz+PziF1KMPY/GMQlvQVt7dWzlflsKZlUupsuFduujIyIJxO9ngJAUwC6rfYw9y26rPLQcGxmkxZ5R8OT4nYX8YxCXiqhDg8m3zgOPYMk02AcOy/uBcFfLyaIbIhvCregTqtwPNI55kn9oMsds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737565354; c=relaxed/simple;
-	bh=qII0OcQL3uVEtdhXOov0WSjojSDt1i39EyG+M6OTm4w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J57uZOG5/qe+XdT/k/DvA2CnVNGnAqJmN+KlKP8/deTZR86R31K7DVZxjOYym1tBBE0s0Zh5GovvcnA+dJdN7XnYfS0tI8MJMy8wx9mCfH/PxHWt1VBMIPfeW+k4Puxb5bZs03HTOlQDhbgoVgAgELx9M3CfzhsU/kCTa21sQeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b9PviVkX; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737576376; c=relaxed/simple;
+	bh=S5TTnFvAJPPSSH0AY88qF4Q33YOQ5/7GfsUezm6tuHY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JrNbO0RBBKfs73+CErdEqWcjUnBYbEVIVGEmGJ9AD+rTfV+8ckTVna1uIuhxP6OdYAJf892CKbcCJzNypp/tRvRbLwN51mEWb3MaL67Xi79iD6L3N8V8FwhPx8/SkQnZFCO5lNqHM0qUhMomwCVXCa9ouVWShhexIyP0ctr3ahM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjJcG2Z6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b9PviVkX"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-385e0e224cbso3818877f8f.2;
-        Wed, 22 Jan 2025 09:02:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737565351; x=1738170151; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vOBYe7hKKWrQVbbMlG221tX99JGFkXrB+lL0aGAMCbo=;
-        b=b9PviVkXqRABVGYss6gR/EIsxQ8WvGLx1me6dJMYVOi67qAMh/IIbiFcgXbW5ZN+os
-         2qVoW3jNSVrbOr9HfuI3KPYy+kvf20OqT2mwDxBZTJkkb2qIEVPJraRiFajR2hUzsMki
-         nZqd+mhNn3j6R9EycJD8EBm6NIlDAj9jmi0Mj4GBKNl70qWkhUN0eY2YjzqzSvSOzvFX
-         eXFZ+4qdDzxQcVUqtW3+hcWbo7DOCUBxM8VdKeHNobJRzDLGCGMOgBqT6xZLH3nhSIlU
-         aXGikjjTReAZDEX+buI0UQXrNg7dUFTuq2HaIMtB57wRIwNu5+Yq2LBP3YcxQxkdcJYk
-         oWoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737565351; x=1738170151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vOBYe7hKKWrQVbbMlG221tX99JGFkXrB+lL0aGAMCbo=;
-        b=r869/gt+qIlE8QJfdlU+QT5He+GZpyfb1W7gUJtM8wuKcc5ncOHUPe/QgzZZ1+l5qT
-         ygSmcddjlQl1azsGmXv/iPncGPHERRxAoX+Y0OaaDfvjEMPKebbhPPN6qs5gQIhd/sXq
-         Poru17tFTgEHZ+eTE20j7R2b3EtXTO0e+ntJqio9aY8rlPETwpaX5zN+DAy0FU4A8qqB
-         E4b+CUtJ246exG3qQxgz027SFRQ6y5cTh9qD7eMC6e/EwMPUcooBHATjKgWWwZEH5sXU
-         8LbKpAVh1ZaESQpJfPlDA8UmcCSE8Tn4cSZu1J1bfDrd6nD5bYwdW8pv39BhfsycF/o6
-         bPPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVOMWN+p/UMoJvCIwKUhN3e4UqBzm7sPqXx7Sh+BLYgG94Zi0AXqBJw2Bx4OguhB4iYOjVZNVcZecqzmKA7zg==@vger.kernel.org, AJvYcCVaS0hGO7KcVaeNpAgOE7vB9EWiO/K4DEldksSXdtL2wX332s2bXgEOAE0dPuLEkGAkv34=@vger.kernel.org, AJvYcCXYf9fjZY5w8R4YQnO5CRYq0aIcz83l25dRhzc80WplVnqZYdKG0ngpObnczzJb+eu7ZgfIb3xyleyDdEON@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrJdyPqRvmVNV1/ZDCYN2WC2Y9c+dPR5cdZsiB4eoIyu55I1nV
-	dCORb/PDmf/JcGFSLGzFO8tLFlN5vXaMHrHy9B8CAKsb9G2ZM/NSy1zn7KppQ03AZC82bXgxzOP
-	VEfVEU0pUBe0qCl9ygj5kzQCKNDA=
-X-Gm-Gg: ASbGncsj00OO/7pPIsGb/T9XWsUfYLQJrH4RSGUj1BKqW/lyWaiQ8wKb1RFrvOh0KoY
-	I1LcqLeLsK08+qnHUrBH6sZSQyGOI398cPjYHtze+h7Ax+U4QKHFh0xErWL2a8+z2IBd+goGata
-	UntWijHnU=
-X-Google-Smtp-Source: AGHT+IEso7FyrlnWyoMakPOiYmt/PWGxB55N/abpHk+7pmcuierztBMBZu5jYE24VGcqprVRxSX7Xofsnoaoi/GZz7M=
-X-Received: by 2002:a5d:4d8f:0:b0:38a:6807:f86 with SMTP id
- ffacd0b85a97d-38bf5662417mr15301581f8f.17.1737565350296; Wed, 22 Jan 2025
- 09:02:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjJcG2Z6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60920C4CED2;
+	Wed, 22 Jan 2025 20:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737576374;
+	bh=S5TTnFvAJPPSSH0AY88qF4Q33YOQ5/7GfsUezm6tuHY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=EjJcG2Z66JJlh9mImcdD7SeVperH0zRWeaXzqZx1y6HpMbv1EuJrfAseTFRTFDRT2
+	 4dYZddDKMnsHPfAciwhrI7Dyg6Z44Nui6JWwBW2wHtIXNsM6LmStoIHbJQ9MGIULl8
+	 n7h5ok6ypAzMIhbHd2PI5OhNje8S4XYwimGLiEFJt5+mbe5Q9gDhAc7t0UuaYhoOvc
+	 9nROdsYl2QPbFD07pMAXXMJ9+rfL+91nTQlHTaAh7nG7ibDhsv+L5uUtdrfuNDCzu5
+	 Sj9bQmSd1Lp/1D55sHm2N2NZBdrTIPU+2gjgs+QPkxZfynS4N9htgdrwu3PGRCCeBg
+	 ZFqyDsmQGqgdg==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Petr Pavlu" <petr.pavlu@suse.com>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Benno
+ Lossin" <benno.lossin@proton.me>,  "Alice Ryhl" <aliceryhl@google.com>,
+  "Masahiro Yamada" <masahiroy@kernel.org>,  "Nathan Chancellor"
+ <nathan@kernel.org>,  "Nicolas Schier" <nicolas@fjasle.eu>,  "Luis
+ Chamberlain" <mcgrof@kernel.org>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Sami Tolvanen"
+ <samitolvanen@google.com>,  "Daniel Gomez" <da.gomez@samsung.com>,
+  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg KH"
+ <gregkh@linuxfoundation.org>,  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] rust: add parameter support to the `module!` macro
+In-Reply-To: <04419f26-1411-4e47-a0f0-f774064bc2f0@suse.com> (Petr Pavlu's
+	message of "Wed, 22 Jan 2025 17:01:32 +0100")
+References: <20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org>
+	<20250109-module-params-v3-v4-4-c208bcfbe11f@kernel.org>
+	<XHW3ISBydpd3OFamhThxUUd97oEcmOAxv3ro0WP6nAbUALocUp3qw62jNCuDv66LoSL_8shwbFH660c1GhekiA==@protonmail.internalid>
+	<04419f26-1411-4e47-a0f0-f774064bc2f0@suse.com>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Wed, 22 Jan 2025 21:06:00 +0100
+Message-ID: <874j1q1umv.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com> <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
-In-Reply-To: <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 22 Jan 2025 09:02:19 -0800
-X-Gm-Features: AWEUYZmVm4oP6wOtkq7sVcFiVog35GahkeJfBhYYmlM8eZhXpLkseZyiVq1qGeg
-Message-ID: <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] moderr: add module error injection tool
-To: Daniel Gomez <da.gomez@samsung.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-modules@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, iovisor-dev <iovisor-dev@lists.iovisor.org>, 
-	gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Jan 22, 2025 at 5:12=E2=80=AFAM Daniel Gomez <da.gomez@samsung.com>=
- wrote:
->
-> Add support for a module error injection tool. The tool
-> can inject errors in the annotated module kernel functions
-> such as complete_formation(), do_init_module() and
-> module_enable_rodata_after_init(). Module name and module function are
-> required parameters to have control over the error injection.
->
-> Example: Inject error -22 to module_enable_rodata_ro_after_init for
-> brd module:
->
-> sudo moderr --modname=3Dbrd --modfunc=3Dmodule_enable_rodata_ro_after_ini=
-t \
-> --error=3D-22 --trace
-> Monitoring module error injection... Hit Ctrl-C to end.
-> MODULE     ERROR FUNCTION
-> brd        -22   module_enable_rodata_after_init()
->
-> Kernel messages:
-> [   89.463690] brd: module loaded
-> [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
-> ro_after_init data might still be writable
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  tools/bpf/Makefile            |  13 ++-
->  tools/bpf/moderr/.gitignore   |   2 +
->  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
->  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
->  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++=
-++++++
->  tools/bpf/moderr/moderr.h     |  40 +++++++
->  6 files changed, 510 insertions(+), 3 deletions(-)
+"Petr Pavlu" <petr.pavlu@suse.com> writes:
 
-The tool looks useful, but we don't add tools to the kernel repo.
-It has to stay out of tree.
+> On 1/9/25 11:54, Andreas Hindborg wrote:
+>> This patch includes changes required for Rust kernel modules to utilize
+>> module parameters. This code implements read only support for integer
+>> types without `sysfs` support.
+>>
 
-The value of error injection is not clear to me.
-Other places in the kernel use it to test paths in the kernel
-that are difficult to do otherwise.
-These 3 functions don't seem to be in this category.
+[cut]
+
+>> +
+>> +        // SAFETY: `old_value` is valid for writes, as we have exclusive
+>> +        // access. `old_value` is pointing to an initialized static, an
+>
+> Typo: an -> and
+
+Thanks.
+
+[cut]
+
+>> +
+>> +    fn emit_params(&mut self, info: &ModuleInfo) {
+>> +        let Some(params) = &info.params else {
+>> +            return;
+>> +        };
+>> +
+>> +        for param in params {
+>> +            let ops = param_ops_path(&param.ptype);
+>> +
+>> +            // Note: The spelling of these fields is dictated by the user space
+>> +            // tool `modinfo`.
+>> +            self.emit_param("parmtype", &param.name, &param.ptype);
+>> +            self.emit_param("parm", &param.name, &param.description);
+>> +
+>> +            write!(
+>> +                self.param_buffer,
+>> +                "
+>> +                    pub(crate) static {param_name}:
+>> +                        ::kernel::module_param::ModuleParamAccess<{param_type}> =
+>> +                            ::kernel::module_param::ModuleParamAccess::new({param_default});
+>> +
+>> +                    #[link_section = \"__param\"]
+>> +                    #[used]
+>> +                    static __{module_name}_{param_name}_struct:
+>> +                        ::kernel::module_param::RacyKernelParam =
+>> +                        ::kernel::module_param::RacyKernelParam(::kernel::bindings::kernel_param {{
+>> +                            name: if cfg!(MODULE) {{
+>> +                                c\"{module_name}.{param_name}\"
+>> +                            }} else {{
+>> +                                c\"{param_name}\"
+>> +                            }}.as_ptr(),
+>
+> This should be the other way around? Running
+> 'insmod rust_minimal.ko test_parameter=2' reports for me that the
+> parameter is unknown while specifying 'rust_minimal.test_parameter=2'
+> works. The prefix should be used only if the module is built-in so the
+> parameter can be distinguished on the kernel command line.
+
+Thanks for testing! This actually gave me quite a headache when I was
+using the series elsewhere. I forgot to resend the series with the fix,
+sorry.
+
+
+Best regards,
+Andreas Hindborg
+
+
+
