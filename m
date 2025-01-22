@@ -1,159 +1,122 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854891F8907;
-	Tue, 21 Jan 2025 21:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD0D1F76B5;
+	Wed, 22 Jan 2025 09:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737495763; cv=none; b=fmTW46vOTiOB4O8fGAikePPl4FcoEbfqJHfYHC5MfYFLAsNSr3CnLVhjpOTrQfVGQUlHSYFOsXsSLmOsCtDaAnP+sXYD/XxnCwvjzqVAmtXM3eogTET2RUf7vbEga6Jb8+UVN9zCYUmIduJDt9DJ7uDflVLJIx3wBiA9nJhfNPs=
+	t=1737539488; cv=none; b=GqN0NlbJD3anDwS36KUiQbozCZ+Y0TF+MwPFBB1WLTkjNV/cqOMqmYTSKY8xsI1sMGlliK8McNSOeVNkvnrIOi/09OS41hiboW1J0vBWaOA8ds1GXSCmaRr2eUghny31u5JLunXdUGnZpgTJGt/Jyo63mD+rc7xRVqsDwG4Nz44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737495763; c=relaxed/simple;
-	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
+	s=arc-20240116; t=1737539488; c=relaxed/simple;
+	bh=hezJtK/d+zwrRIVfZtLHoCQtTdX9Yg1OWMiDDjqhfxo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OC+4T2LTYZZZ4vnTSnkmAc52YP2K8gQj4+Jo6mozQLC7OHrggvJ+7q8OyB81nzvKy7SWwICEme1YWa1O0Hw6KAAbHB0LQmTqjMyN8AaWtx/rhjQBLI9nDGX0X7PagZ6SscznACwUOPZM+otgbnE3FKDG/g4/S/YzOSrjVMa3vkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UAaiESDb; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=CuwZcWStw+0+Ao6RCfFznDmMpNpBBZy9u9CDBeGU2qf1dxp/w6VWuSWHQoedzsHdgF+/rahEfjbI7g/qm7U8r5pGJeXWxp1ldseZDJZEhaqSD7w0Q1YrQbN9y/17seB9jCKxSPfPxPxtUB6Tv4Sj0U/KJvQcz2bHt75ygUmDqKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MKnkgi6h; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UAaiESDb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1737495749;
-	bh=n4RD4dubYEheuUHrbVhCJJ//W+/igb2v1YzPOqVxCQ8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UAaiESDbbzPdmNmoLHqaSS32neGSY4I4ypNS43cOa1opJYbIFzp5lwCRIdBJAVUg1
-	 SJ/flduuaUI2McTECmdux8LoW+AFAtJ4YYQarZbEhhxciSfztwrJAY4gnYGR1DKCnm
-	 yvGK4nzYCbAgq6qyPhkj/UqjJ4HCwmc0d+ihxV5k=
-Date: Tue, 21 Jan 2025 22:42:28 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, corbet@lwn.net, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, akpm@linux-foundation.org, 
-	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, linux-integrity@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com, pbrobinson@gmail.com, 
-	zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org, pmatilai@redhat.com, 
-	jannh@google.com, dhowells@redhat.com, jikos@kernel.org, mkoutny@suse.com, 
-	ppavlu@suse.com, petr.vorel@gmail.com, mzerqung@0pointer.de, kgold@linux.ibm.com, 
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: Re: [PATCH v6 01/15] lib: Add TLV parser
-Message-ID: <74b5c88d-7ab6-49f2-9b96-ac96cb4daf6e@t-8ch.de>
-References: <20241119104922.2772571-1-roberto.sassu@huaweicloud.com>
- <20241119104922.2772571-2-roberto.sassu@huaweicloud.com>
- <c316b1be-d18f-4bb0-8434-bcc9236619df@t-8ch.de>
- <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MKnkgi6h"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=R2vVfjEoF0Ie9PHykSVzRRqFF+sOncqHqtvT5+6/DaM=; b=MKnkgi6hXTGhjN0zMurpz8SNpE
+	ymCkZhFC61LwgD4TM+uvL9f94W7ieK+NlcINltXhi5P7zaThC8LDbygxQwYvl2vjqUbtLZxhyuCAy
+	wG9Z+Ldin3RK5nfuM0GkwyoHYphh4xlIzb3ZwPqDqe/Md1bpCVSc/kEnmcmll20W+wRIsVeKhYXLu
+	Icsm6CQIqin5i3mHwdxptDspOvpa/TLyj91bi3vFiZtukWqpolG9eXFgrM5se3DpV3tWyn1O5XwlG
+	y7jf8tM3H0Aa42/D8J7lIspHZTlrky+YN4nvimy9DUKwuN39znXE18o2HcEui26BmtlwFsHg8i9X0
+	ELdyxdQA==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1taXO2-000000011ZD-0WUk;
+	Wed, 22 Jan 2025 09:51:02 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 46E9A300599; Wed, 22 Jan 2025 10:51:01 +0100 (CET)
+Date: Wed, 22 Jan 2025 10:51:01 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: x86@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Gow <davidgow@google.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+	Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Rae Moar <rmoar@google.com>, Richard Weinberger <richard@nod.at>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	kgdb-bugreport@lists.sourceforge.net, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v2 00/10] x86/module: rework ROX cache to avoid writable
+ copy
+Message-ID: <20250122095101.GK8385@noisy.programming.kicks-ass.net>
+References: <20250121095739.986006-1-rppt@kernel.org>
+ <20250121123646.GC7145@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b14358075fa56f7250d5c9000ab8ee181003ff13.camel@huaweicloud.com>
+In-Reply-To: <20250121123646.GC7145@noisy.programming.kicks-ass.net>
 
-On 2025-01-21 15:55:28+0100, Roberto Sassu wrote:
-> On Tue, 2025-01-21 at 14:29 +0100, Thomas Weißschuh wrote:
-> > On 2024-11-19 11:49:08+0100, Roberto Sassu wrote:
-
-[..]
-
-> > > +typedef int (*callback)(void *callback_data, __u16 field,
-> > > +			const __u8 *field_data, __u32 field_len);
-> > 
-> > No need for __underscore types in kernel-only signatures.
+On Tue, Jan 21, 2025 at 01:36:47PM +0100, Peter Zijlstra wrote:
+> On Tue, Jan 21, 2025 at 11:57:29AM +0200, Mike Rapoport wrote:
 > 
-> It is just for convenience. I'm reusing the same file for the userspace
-> counterpart digest-cache-tools. In that case, the parser is used for
-> example to show the content of the digest list.
-
-This reuse leads to quite some ugly constructs.
-Given that the single function will be really simple after removing the
-unnecessary parts, maybe two clean copies are easier.
-One copy is needed for Frama-C anyways.
-
-> > > +
-> > > +int tlv_parse(callback callback, void *callback_data, const __u8 *data,
-> > > +	      size_t data_len, const char **fields, __u32 num_fields);
-> > > +
-> > > +#endif /* _LINUX_TLV_PARSER_H */
-> > > diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
-> > > new file mode 100644
-> > > index 000000000000..171d0cfd2c4c
-> > > --- /dev/null
-> > > +++ b/include/uapi/linux/tlv_parser.h
-> > > @@ -0,0 +1,41 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > > +/*
-> > > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > > + *
-> > > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > > + *
-> > > + * Implement the user space interface for the TLV parser.
-> > > + */
-> > 
-> > Can you explain in the commit message where this will be exposed to
-> > userspace as binary?
+> > Kirill A. Shutemov (1):
+> >   x86/mm/pat: restore large ROX pages after fragmentation
 > 
-> I see that my explanation is not ideal.
+> The duplication between pmd and pud collapse is a bit annoying, but so
+> be it.
 > 
-> This is the format for data exchange between user space and kernel
-> space, but it is still the kernel that reads and parses the TLV-
-> formatted file for extracting the digests and adding them to the digest
-> cache.
-
-I figured that out :-)
-It should be clear from the commit itself, though.
-
-> > > +
-> > > +#ifndef _UAPI_LINUX_TLV_PARSER_H
-> > > +#define _UAPI_LINUX_TLV_PARSER_H
-> > > +
-> > > +#include <linux/types.h>
-> > > +
-> > > +/*
-> > > + * TLV format:
-> > > + *
-> > > + * +--------------+--+---------+--------+---------+
-> > > + * | field1 (u16) | len1 (u32) | value1 (u8 len1) |
-> > > + * +--------------+------------+------------------+
-> > > + * |     ...      |    ...     |        ...       |
-> > > + * +--------------+------------+------------------+
-> > > + * | fieldN (u16) | lenN (u32) | valueN (u8 lenN) |
-> > > + * +--------------+------------+------------------+
-> > > + */
-> > > +
-> > > +/**
-> > > + * struct tlv_entry - Entry of TLV format
-> > > + * @field: Field identifier
-> > > + * @length: Data length
-> > > + * @data: Data
-> > > + *
-> > > + * This structure represents an entry of the TLV format.
-> > > + */
-> > > +struct tlv_entry {
-> > > +	__u16 field;
-> > > +	__u32 length;
-
-Looking at this again, the "length" field is unaligned by default.
-
-Also FYI there is already a TLV implementation in
-include/uapi/linux/tipc_config.
-
-> > > +} __attribute__((packed));
-
-[..]
-
-> > Some kunit tests would be great.
+> > Mike Rapoport (Microsoft) (9):
+> >   x86/mm/pat: cpa-test: fix length for CPA_ARRAY test
+> >   x86/mm/pat: drop duplicate variable in cpa_flush()
+> >   execmem: don't remove ROX cache from the direct map
+> >   execmem: add API for temporal remapping as RW and restoring ROX afterwards
+> >   module: introduce MODULE_STATE_GONE
+> >   module: switch to execmem API for remapping as RW and restoring ROX
+> >   Revert "x86/module: prepare module loading for ROX allocations of text"
+> >   module: drop unused module_writable_address()
+> >   x86: re-enable EXECMEM_ROX support
 > 
-> I implemented kselftests also injecting errors (patch 13). If it is not
-> enough, I implement kunit tests too.
+> All these look good on a first reading, let me go build and test the
+> various options.
 
-These selftests are for the digest_cache.
-If the TLV library is meant to be used alone, some dedicated tests would
-be nice. kunit has the advantage that it can directly call kernel
-functions with arbitrary parameters and does not require any userspace
-setup.
+I've tested:
+
+GCC:  ibt=off
+      ibt=on
+LLVM: ibt-off,cfi=off
+      ibt=off,cfi=kcfi
+      ibt=on,cfi=off
+      ibt=on,cfi=kcfi
+      ibt=on,cfi=fineibt
+
+And all of them were able to load a module, so yay!
+
+My plan is to merge these patches into tip/x86/mm once we have -rc1.
+
