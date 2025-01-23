@@ -1,143 +1,132 @@
-Received: from mail.archlinux.org (mail.archlinux.org [95.216.189.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67011185B62;
-	Wed, 22 Jan 2025 23:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.189.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420B520F09C
+	for <linux-modules@vger.kernel.org>; Thu, 23 Jan 2025 14:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737588871; cv=none; b=HUherR4o2PZ8MnAqgjNildmhNu3w9HN/jKAJ1PL28FVzwTJ9aWs/cN31nen71s5iVu0IxL/ZW3lt0M2UD7vQ9MXCfi4iRFOprRNcihFMQ6xmKbbu6BTiUsoEYdukZ7AraonkgTVoJbJemFyJrSfP3Z9jgdeD8q5aEf67KNi/1vw=
+	t=1737641795; cv=none; b=tzwtT3fiF4cvxdSXgfF9ytRB3Qnw2i4hnxkXhz0HCtgVipd5mCaNNpEBEJltTZroAKf1CbeuUByWDWQpfHp9us5Av//X2mOhHVG38BJJL2n7SVFPM5wICL0ER0nZvliUH1PEObQqynsp1CnkSKOqQnF/nQj8QVpBZgWHJCZJsss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737588871; c=relaxed/simple;
-	bh=y9Q8HEE6q0vmvrQ9y+XwfgTOy+3p3frBcuPef11CoPo=;
+	s=arc-20240116; t=1737641795; c=relaxed/simple;
+	bh=6V3W+o+MWoic0jA4thqpS40vCUdZ/uudiQaYYdeTdEo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l9rXmgwajrbo+sB0K1Fx9YOWEzqMn+JRLZqPCcg2qY4P2/TqU95g9osIW4XnhPuZLL7u9dzgHiUSCK0KX9+JoCheZTtC4oxFvIwzHn79dIrA4rZz2TahhTa9LmSKjEq6p4VA0yvUDZgVVM+nyXmqBAOHEsXDE99ZD6k6aSmG9W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org; spf=pass smtp.mailfrom=archlinux.org; dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=VFnQzv5P; dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=Euh2GBG3; arc=none smtp.client-ip=95.216.189.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=archlinux.org
+	 In-Reply-To:Content-Type; b=p4ZpPUT7XbKUJ7aI+7DpMRIPJdcfmd6x6Y8Z5HnV/BBg+hqJ9Tq2H1RSjzzbUrBelZcdxvV3UBRGBahPQcn2+FhnWuiLNKQ5KFIB8FJ059i4Zd2IKfzP15Ugn1TDPdHMlVCsGfn9ZY9iZF0oyj1KVsXWN8zZgf+fMi2zy3F4L+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Vvlx3XyL; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="VFnQzv5P";
-	dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="Euh2GBG3"
-Message-ID: <8e5b171d-78fa-4cba-8217-1a661d23785b@archlinux.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-rsa; t=1737588523;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nN8ZPByiAs2yKdwLh5W4fO3m7Re8B0wU6vIlJ5ZWJ6U=;
-	b=VFnQzv5PEHo+boR7sYtwv3SvjQNrMce7nfWtbHdM4vxonnsLc+EQPaJObToIm2zIe0H5dc
-	Dd3vYJdPEOtGoAYr/pKWs/Bxv7kkhyy/hSuMuUppZ2kkD5A7NAzO7HrFaSUozPhdnz3koF
-	LS6rsq25cvrJHrm+rk8VJ3K1wCUqs8Y8WzHS3z/yQtavQGj3xROYyJLITrBOeGWY2LHr+6
-	CrD4DtsD50Id6KahUobwnvGqKzIRAwHpMHYS4nQM71yHb0sryuyZwG1W7vweZEnRN8UFGc
-	XBEPPo41c8T1lnnwVy6eNyZD7UWjTNdG5bE9FyWlazPr/e43Vvg/X4asGsoso/fIBRloM+
-	aRYZquTWAvLlR4ACSkhH+N3GHc8k2AhwRdFBKL16gjI51oBjo+0NdVYhSelNaT6Z2romhT
-	ZnJvbOGhpMWNoc36jwbZWGh8SZlM39gpdGrFsCJKhVbd+WDFwZXqSZIkB8+43ixtksv8Ix
-	8oDaELwyHiUVnCFUqBqntV2UmcLUgxozoFPcTFJJ7UPo+0gRCwmgHSJkM5bSAj5UNXw+Ac
-	KO5UW7A9oX/ktq9A5JrOmwHDwB8alHpAh3Y1OlBCmvjsrO7QKRRNEwQ9IjGzLSnlOWKgPY
-	ZYjcY3fIOMQkbiFByM49TmxK6ltNK+EkNjJnMmyYMQ0BtLRzf71dQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=archlinux.org;
-	s=dkim-ed25519; t=1737588523;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nN8ZPByiAs2yKdwLh5W4fO3m7Re8B0wU6vIlJ5ZWJ6U=;
-	b=Euh2GBG39NEZKnmrDmzHEp7zEz7La8UboW2/Llrndh0TjmRCgzYt9pSb0oQW9Pb2RFA9cv
-	AXC5ElgjGj/UKHAw==
-Authentication-Results: mail.archlinux.org;
-	auth=pass smtp.auth=kpcyrd smtp.mailfrom=kpcyrd@archlinux.org
-Date: Thu, 23 Jan 2025 00:28:40 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Vvlx3XyL"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436345cc17bso7128555e9.0
+        for <linux-modules@vger.kernel.org>; Thu, 23 Jan 2025 06:16:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1737641791; x=1738246591; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QDz8608lNaW0P9BTT1X9DLek8Kcys+jnF/tb6a9Lcbw=;
+        b=Vvlx3XyLK269fz/1nd7DHEn9lt1dWkSZnvM3xyPmFiKFF3X7dyXNsy6zu1opJhq7hC
+         aDzl/gHg/lgksQ7mvGxoZtK1t64sNknbAsP2AKTTG0qLPQvwYo0mMfWfRGUWfMxznEAl
+         agVvTe4A6e+RzelX9HSh3Z4N6LqWh11u5I0TllfBz+yxao2lU4djR1AFhjAVrqKPf70l
+         ycH2feDrUvUqlXoAKSnCAHfjjSEyUANOkvsYkjSD03bdgkiCkq2tURFxWbFvoMBUdSei
+         NpI4Z7cJqZEmT5ecg1EdCDgX4NisstLkbn/QYeQAh0Qe6CwOEnJBSOol0JlW/9lOgELI
+         uFUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737641791; x=1738246591;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDz8608lNaW0P9BTT1X9DLek8Kcys+jnF/tb6a9Lcbw=;
+        b=fbmtK4XEn5XRV1ovtj/x4O7goauYSg3FXM9psKcPs5i+Z21JkCHryoyuQAwrxeQ8/2
+         0j2IQWeLveqIa29WgG21fWCGguqZjOlRxOntZD9SC7xhdyCvNZBh4zxlQqAuZD0cCP7F
+         JWswKFAy/U974p67DZwb/ZeR5q1g63C49fjsczUEnaU7IRF9JKuLeV9I3FlWwArG1bFP
+         Dn0RDly84RsIWLU9eP41J7d1PE8n0lUsQsCaFLz405ONLe1QY0TVA0ol5RHSsqPXxXBa
+         qcbZL3ygHqUgw54ygreTLgUFEJSVKm+cuITOHUfjIBiQsRDMqiWSpYwHalpJZo8o4aiL
+         48DA==
+X-Forwarded-Encrypted: i=1; AJvYcCVLv3y7sf1nxSzRLUNVxBYmfT0P+KVw5JiVFziX3fvcCVELtHhdGYElsK4d3JC0RJ4kgCL7dCVISBPlKx/J@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHH/wsvJ4b+t/6pKGdszpB8EwegvkiDWc5lG2L3CR4H4CvLDtk
+	Y/pxyahyi/5I7CGYh8cY/LbRvsFPSnGNCGXPy1bgmEkXldZEWmu0gydtRlVzTvk=
+X-Gm-Gg: ASbGncsbxWiHdnscaD4csNQrsuvrQjprHDPYNIy9qbNfJoJvnWIVtrhnWhQLUMjdSow
+	cytfpz/07H9mzCVj5rjSiDsZh0Jvd+L756X+v+b6TpSqOoyX8i4mJ8Q3WdxHks56by0pkZSbXoW
+	g3UPIyS2+vmkGQWN+wXfFVDvL4HIo9plAONsAVVTbl9Bu1VophBNmLQgcI5PgoEvBkVKo15SF34
+	nwNjlB93D1JWeSGu+1uHrCNfeg4VUa9YFdxTuJcOzuTdm8N+L5evP7/pPzUOZwDBuNNEKsu2QUM
+	O9aTen9q
+X-Google-Smtp-Source: AGHT+IEZ3PnxYGUvf8/rU964wji50OH+SsshrvGk6eo7bEmtZzJZRo7kuLNRZ25HdqIFvqguWQOL1A==
+X-Received: by 2002:a5d:4243:0:b0:386:2a3b:8aa with SMTP id ffacd0b85a97d-38bf57b3f56mr16813575f8f.37.1737641791528;
+        Thu, 23 Jan 2025 06:16:31 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf3275595sm19543698f8f.67.2025.01.23.06.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2025 06:16:31 -0800 (PST)
+Message-ID: <4a9ca024-fc25-4fe0-94d5-65899b2cec6b@suse.com>
+Date: Thu, 23 Jan 2025 15:16:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 6/6] module: Introduce hash-based integrity checking
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net>
- <20250120-module-hashes-v2-6-ba1184e27b7f@weissschuh.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 06/10] module: introduce MODULE_STATE_GONE
+To: Mike Rapoport <rppt@kernel.org>
+Cc: x86@kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Andy Lutomirski <luto@kernel.org>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Borislav Petkov <bp@alien8.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ Daniel Gomez <da.gomez@samsung.com>, Daniel Thompson <danielt@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, David Gow <davidgow@google.com>,
+ Douglas Anderson <dianders@chromium.org>, Ingo Molnar <mingo@redhat.com>,
+ Jason Wessel <jason.wessel@windriver.com>, Jiri Kosina <jikos@kernel.org>,
+ Joe Lawrence <joe.lawrence@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Josh Poimboeuf <jpoimboe@kernel.org>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
+ Rae Moar <rmoar@google.com>, Richard Weinberger <richard@nod.at>,
+ Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>,
+ Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Thomas Gleixner <tglx@linutronix.de>, kgdb-bugreport@lists.sourceforge.net,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-um@lists.infradead.org, live-patching@vger.kernel.org
+References: <20250121095739.986006-1-rppt@kernel.org>
+ <20250121095739.986006-7-rppt@kernel.org>
 Content-Language: en-US
-From: kpcyrd <kpcyrd@archlinux.org>
-In-Reply-To: <20250120-module-hashes-v2-6-ba1184e27b7f@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250121095739.986006-7-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi!
+On 1/21/25 10:57, Mike Rapoport wrote:
+> In order to use execmem's API for temporal remapping of the memory
+> allocated from ROX cache as writable, there is a need to distinguish
+> between the state when the module is being formed and the state when it is
+> deconstructed and freed so that when module_memory_free() is called from
+> error paths during module loading it could restore ROX mappings.
+> 
+> Replace open coded checks for MODULE_STATE_UNFORMED with a helper
+> function module_is_formed() and add a new MODULE_STATE_GONE that will be
+> set when the module is deconstructed and freed.
 
-Thanks for reaching out, also your work on this is much appreciated and 
-followed with great interest. <3
+I don't fully follow why this case requires a new module state. My
+understanding it that the function load_module() has the necessary
+context that after calling layout_and_allocate(), the updated ROX
+mappings need to be restored. I would then expect the function to be
+appropriately able to unwind this operation in case of an error. It
+could be done by having a helper that walks the mappings and calls
+execmem_restore_rox(), or if you want to keep it in module_memory_free()
+as done in the patch #7 then a flag could be passed down to
+module_deallocate() -> free_mod_mem() -> module_memory_free()?
 
-On 1/20/25 6:44 PM, Thomas Weißschuh wrote:
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index effe1db02973d4f60ff6cbc0d3b5241a3576fa3e..094ace81d795711b56d12a2abc75ea35449c8300 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3218,6 +3218,12 @@ static int module_integrity_check(struct load_info *info, int flags)
->   {
->   	int err = 0;
->   
-> +	if (IS_ENABLED(CONFIG_MODULE_HASHES)) {
-> +		err = module_hash_check(info, flags);
-> +		if (!err)
-> +			return 0;
-> +	}
-> +
->   	if (IS_ENABLED(CONFIG_MODULE_SIG))
->   		err = module_sig_check(info, flags);
->   
+It is at least good that MODULE_STATE_GONE is only set in free_module()
+past the sysfs teardown, so it never shows in
+/sys/module/<mod>/initstate. Otherwise, this would require teaching kmod
+about this state as well.
 
- From how I'm reading this (please let me know if I'm wrong):
-
-## !CONFIG_MODULE_HASHES && !CONFIG_MODULE_SIG
-
-No special checks, CAP_SYS_MODULE only.
-
-## !CONFIG_MODULE_HASHES && CONFIG_MODULE_SIG
-
-No change from how things work today:
-
-- if the module signature verifies the module is permitted
-- else, if sig_enforce=1, the module is rejected
-- else, if lockdown mode is enabled, the module is rejected
-- else, the module is permitted
-
-## CONFIG_MODULE_HASHES && CONFIG_MODULE_SIG
-
-This configuration is the one relevant for Arch Linux:
-
-- if the module is in the set of allowed module_hashes it is permitted
-- else, if the module signature verifies, the module is permitted
-- else, if sig_enforce=1, the module is rejected
-- else, if lockdown mode is enabled, the module is rejected
-- else, the module is permitted
-
-## CONFIG_MODULE_HASHES && !CONFIG_MODULE_SIG
-
-This one is new:
-
-- if the module is in the set of allowed module_hashes it is permitted
-- else, if lockdown mode is enabled, the module is rejected
-- else, the module is permitted
-
----
-
-This all seems reasonable to me, maybe the check for 
-is_module_sig_enforced() could be moved from kernel/module/signing.c to 
-kernel/module/main.c, otherwise `sig_enforce=1` would not have any 
-effect for a `CONFIG_MODULE_HASHES && !CONFIG_MODULE_SIG` kernel.
-
-cheers,
-kpcyrd
+-- 
+Thanks,
+Petr
