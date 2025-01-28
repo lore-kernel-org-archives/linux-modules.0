@@ -1,76 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEBB1684AE;
-	Tue, 28 Jan 2025 17:29:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FCC1DB34E;
+	Tue, 28 Jan 2025 20:57:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738085394; cv=none; b=L1atDF1UsyKPOAPdq3ibkD7gayAFQxhYkL46ZuBh1RPo01xvythbO/KNpEUiA6TCqWQew0SdET83fZjfNONarmtWDvlmss9qiBt70+lPMqzgh2niqy/YyVcc5SCk9WHbtDaR//sFB9sGSOK68Iz97v7xCZctpDbSmRqyLW3xVC4=
+	t=1738097827; cv=none; b=ZoDmEsRYIVwsf0X2cKXIHVEpPV6vtl27QSpw0rt7+NCOxmx3A9FGAlP2L4C+Nr2GBghPW72mjNgbvGBtRRvcJSL3hbgSIbZKak3NQOXAm2TtN2BFz2A6INGyTexr3BXUWGQTpiKFSPaKf3OocTC8HMqLrj87k/OSjLdI1VnzzCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738085394; c=relaxed/simple;
-	bh=DOU+9MlLC3uVBrFcq107Fc2agt863+p/C4A0YylxAE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IX0ycsxTZ3xweCJ3YfbHYudv32kgkaQEaFCCTxbq221PZ07JHbkwozMLihO3IUOPkOOPBoyuPiXhl+kaR5K2nuQFgWoDmGrvN1OXpYXWd/khZZwhJ3WZv+zqaekKlueoVBuCH9YWQfTEjJmp1igGkP8HxQKGMWQEVr7BgQ5x7yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F5A6C4CEE2;
-	Tue, 28 Jan 2025 17:29:52 +0000 (UTC)
-Date: Tue, 28 Jan 2025 12:30:12 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org
-Subject: Re: [RFC PATCH 0/3] tracing: Introduce relative stacktrace
-Message-ID: <20250128123012.4f425227@gandalf.local.home>
-In-Reply-To: <c3842632-cb15-469f-a6e8-8e9ccb3fff56@efficios.com>
-References: <173807861687.1525539.15082309716909038251.stgit@mhiramat.roam.corp.google.com>
-	<a7a171c4-7feb-4f26-a832-18d38a3ee973@efficios.com>
-	<20250128112733.37d7c771@gandalf.local.home>
-	<c3842632-cb15-469f-a6e8-8e9ccb3fff56@efficios.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1738097827; c=relaxed/simple;
+	bh=x7YDvWsOV1m58zdR2LDHr+xA2bpMI4bdPxmrUqwKaVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TgSAPNP5UCOx9VqkiJI5lbZ37Kc0h91+8psm07YrfnT1QQoqjmQdMK4KcW6DehO5eD6TVQYa6TcspyzZCfZWkQqRppJ04b33hiD0QN1GwGjkiYU09lEHFb935CtrjNQkKi4W473731QgadvnSWcxuSP0ogI6K8Lo29TIiZU0i9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Za2arqJ0; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Za2arqJ0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EA7C4CED3;
+	Tue, 28 Jan 2025 20:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738097827;
+	bh=x7YDvWsOV1m58zdR2LDHr+xA2bpMI4bdPxmrUqwKaVk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Za2arqJ0+MdRp9VrNuTSkUE0m9ZlIJLFTH6G1gaasLOGHnKWK2f9778vk6sjbGq26
+	 eFH9ruA+gt6GwOrp+JAmscY08ZtZR0WhR2TfZo6DOWIK0x69i+glwC00OY9F9GZk+c
+	 dJCTJ/qI12VIi119XEf76D31svgmaKqo13IOh9pu4XfOldKg74uenWWH8W3SWjdeGB
+	 rbcHYb5/rqzCvmNAbfFpyyHJBMPlJIFOlcKPbTc7Nyz1AVOdgUHWAvSEbA6Rp0DsQ1
+	 961sE2cjbtwiMlFy3jIXYwHJgqmcGLRF16QeYgz4ephmzrlcbzwAun5ANlF6f7reZr
+	 7/kkr4xXmQAhw==
+Date: Tue, 28 Jan 2025 12:57:05 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Gomez <da.gomez@samsung.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+	iovisor-dev <iovisor-dev@lists.iovisor.org>, gost.dev@samsung.com
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+Message-ID: <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
+References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
 
-On Tue, 28 Jan 2025 11:46:25 -0500
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
+On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
+> On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+> >
+> > Add support for a module error injection tool. The tool
+> > can inject errors in the annotated module kernel functions
+> > such as complete_formation(), do_init_module() and
+> > module_enable_rodata_after_init(). Module name and module function are
+> > required parameters to have control over the error injection.
+> >
+> > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > brd module:
+> >
+> > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
+> > --error=-22 --trace
+> > Monitoring module error injection... Hit Ctrl-C to end.
+> > MODULE     ERROR FUNCTION
+> > brd        -22   module_enable_rodata_after_init()
+> >
+> > Kernel messages:
+> > [   89.463690] brd: module loaded
+> > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
+> > ro_after_init data might still be writable
+> >
+> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > ---
+> >  tools/bpf/Makefile            |  13 ++-
+> >  tools/bpf/moderr/.gitignore   |   2 +
+> >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
+> >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> >  6 files changed, 510 insertions(+), 3 deletions(-)
+> 
+> The tool looks useful, but we don't add tools to the kernel repo.
+> It has to stay out of tree.
 
-> I'm trying to wrap my head around what you are trying to achieve here.
-> 
-> So AFAIU you are aiming to store the relative offset from kernel _text
-> and module base text address into the traced events rather than the
-> actual address.
-> 
-> Based on Masami's cover letter, this appears to be  done to make sure
-> users can get to this base+offset information even if they cannot read
-> kallsyms.
-> 
-> Why make the tracing fast path more complex for a simple matter of
-> accessing this base address information ?
-> 
-> All you need to have to convert from kernel address to base + offset is:
-> 
-> - The kernel _text base address,
-> - Each loaded module text base address,
-> - Unloaded modules events to prune this information.
-> 
-> What is wrong with simply exporting this base address information in the
-> trace buffers rather than rely on kallsyms, and deal with the conversion
-> to module name / base+offset at post-processing ?
+For selftests we do add random tools.
 
-Hmm, we could probably get away with that too. I think we were focused on
-kallsyms, where we wanted a way to not have to distinguish between current
-boot info and previous boot info. But when we started pulling in the module
-info, it may be possible to do a post processing.
+> The value of error injection is not clear to me.
 
-I have said in the past that I wanted module information in the persistent
-memory. By doing that this may not be needed. I'll look into it.
+It is of great value, since it deals with corner cases which are
+otherwise hard to reproduce in places which a real error can be
+catostrophic.
 
--- Steve
+> Other places in the kernel use it to test paths in the kernel
+> that are difficult to do otherwise.
+
+Right.
+
+> These 3 functions don't seem to be in this category.
+
+That's the key here we should focus on. The problem is when a maintainer
+*does* agree that adding an error injection entry is useful for testing,
+and we have a developer willing to do the work to help test / validate
+it. In this case, this error case is rare but we do want to strive to
+test this as we ramp up and extend our modules selftests.
+
+Then there is the aspect of how to mitigate how instrusive code changes
+to allow error injection are. In 2021 we evaluated the prospect of error
+injection in-kernel long ago for other areas like the block layer for
+add_disk() failures [0] but the minimal interface to enable this from
+userspace with debugfs was considered just too intrusive.
+
+This effort tried to evaluate what this could look like with eBPF to
+mitigate the required in-kernel code, and I believe the light weight
+nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
+suffices to my taste.
+
+So, perhaps the tools aspect can just go in:
+
+tools/testing/selftests/module/
+
+[0] https://www.spinics.net/lists/linux-block/msg68159.html
+
+  Luis
