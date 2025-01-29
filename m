@@ -1,110 +1,87 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830F578F58;
-	Tue, 28 Jan 2025 21:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5914B7FD;
+	Wed, 29 Jan 2025 00:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738100687; cv=none; b=rDZITPnB88EQFGJI7AZrgjF9lXurHpRYsampqVuLs/3LCliiPTyeI7QgcVUV2kdcr/tpCVRvMbLqpvlTvlACZdhVHxH0rfPj1dbbBLiMf8nP/+I64Kscr99zX/b+BA5lonHoGPiFvwjQo0s+YQv9gNBGT7mQzWuAiHQN/hZ07aA=
+	t=1738109651; cv=none; b=MN3veys9omkcvRCWA67veQHnMh3Ba7s1XGAOrqUJ01xq+8vs+UWNJsAMZHkwznuyFutfWAQudfva8yM9edNkfKyXr50gbACOjLWVw5j0DbVt/42B6NzxsEII0H7+Efrvzk5aKGhprEFQ74SfO+nTpGdNJwV9+DNmZnMDA2akkhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738100687; c=relaxed/simple;
-	bh=/ZVfTjb6OB6mwOq5oov2dfGCKk9jKalsU95smqbbt3M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sHmt/BIyerDtUkTGM4fGzezct0pZPacMYTYauJzNQmw9h//CPvipm4X39ECeKl3FEWh7cBsCN3ctIgGn12Ky/uDWgSiqtupBr4Mz3sU0pWJXYhvYR56Rru4GKeyJWbWYASjizo9NQfhC6tDmE0WRbsIqIGcKnmDt1Ktz5sIZMno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=e9DpxoKe; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1738109651; c=relaxed/simple;
+	bh=OMFJc0JoBQ8IgFwPGAsl7WSzObXZ/0rzZ211wDUhOYQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hL7LYY5j/Y8AeRWkM5BUNQ4f//v5nnyN7zUpXMAtLFIqk+jk7/a7kdldtB4cyrRPoexL+9PtLFa7fIc0NK79aBAl+Q0UNjfifQ1k3Z2B2+eNMnqcIoydv9CQTkzqqhaQdfmpQnvsjtA9CSsbZPuw3ZqfLEeLtIFkKGxi5a1DDq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReIz/VrD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="e9DpxoKe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1738100682;
-	bh=/ZVfTjb6OB6mwOq5oov2dfGCKk9jKalsU95smqbbt3M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e9DpxoKedhbbEEwT6cJk8l+hJKEnzOeN6eIPyv+mEHwWnhhERrdM7T12crNn9FfXZ
-	 m4IK1QIwqBd37RjmvZrFW7U8x2uk8y3GejhrhiXglitMco3yIU9suq3SQzK6imzfZy
-	 9/bMPULruTldNrbPcRild5kQvmhlE8fR6BEDF0b4=
-Date: Tue, 28 Jan 2025 22:44:42 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Daniel Gomez <da.gomez@samsung.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	llvm@lists.linux.dev, iovisor-dev@lists.iovisor.org, gost.dev@samsung.com
-Subject: Re: [PATCH 1/2] module: allow for module error injection
-Message-ID: <559c6c43-e081-454b-9e87-c30600a97ae1@t-8ch.de>
-References: <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
- <CGME20250122131158eucas1p133e9989e5b972e0658b4ef7255901085@eucas1p1.samsung.com>
- <20250122-modules-error-injection-v1-1-910590a04fd5@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReIz/VrD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C442C4CED3;
+	Wed, 29 Jan 2025 00:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738109650;
+	bh=OMFJc0JoBQ8IgFwPGAsl7WSzObXZ/0rzZ211wDUhOYQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ReIz/VrDzk8E5pTA01lmaQFR9x+gIZBmib5bTe61wEhdLcB55KI9gJJ5l/ui0iqya
+	 gv++mPuACKRBkqBy2hpxH9jXdOymlX3RnyrPvWsG3tP3hO5DtnyXdYzxDj+akJ1siS
+	 2DIdaCrfCBb9sZ1jx7iGDWR9anyEiGYeVQ9hDtDyQClHM0nDG/giT0xFLZwm24WZGO
+	 ygM2Ds1sAJXGoEjFQwz9B3oayzJwhmyGImED6aMty02XkWXW91h65eCbVTe1CKiVis
+	 3lcSEzNmPxESHw6DHzy/VvPQqHoIwh/lq15f05/Os9lqkoxWftvMesH25Gmita3Pfk
+	 1Hi/1iwujPQNw==
+Date: Wed, 29 Jan 2025 09:14:06 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] tracing: Introduce "rel_stack" option
+Message-Id: <20250129091406.a086021e0633c488e5c22ae3@kernel.org>
+In-Reply-To: <20250128110700.741e68cd@gandalf.local.home>
+References: <173807861687.1525539.15082309716909038251.stgit@mhiramat.roam.corp.google.com>
+	<173807863557.1525539.14465198884840039000.stgit@mhiramat.roam.corp.google.com>
+	<20250128110700.741e68cd@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250122-modules-error-injection-v1-1-910590a04fd5@samsung.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2025-01-22 14:11:13+0100, Daniel Gomez wrote:
-> Allow to test kernel module initialization with eBPF error injection
-> by forcing errors when any of the below annotated functions with
-> ALLOW_ERROR_INJECTION() return.
-> 
-> Allow to debug and test module load error behaviour when:
-> 
-> complete_formation(): when module initialization switches from
-> MODULE_STATE_UNFORMED to MODULE_STATE_COMING stage.
-> 
-> do_init_module(): when an error occurs during module initialization and
-> before we switch from MODULE_STATE_COMING to MODULE_STATE_LIVE stage.
-> 
-> module_enable_rodata_ro_after_init(): when an error occurs while
-> setting memory to RO after module initialization. This is when module
-> initialization reaches MODULE_STATE_LIVE stage.
-> 
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  kernel/module/main.c       | 3 +++
->  kernel/module/strict_rwx.c | 2 ++
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 1fb9ad289a6f8f328fc37c6d93730882d0e6e613..54e6c4d0aab23ae5001a52c26417e7e7957ea3fd 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -59,6 +59,7 @@
->  #include <linux/codetag.h>
->  #include <linux/debugfs.h>
->  #include <linux/execmem.h>
-> +#include <linux/bpf.h>
+On Tue, 28 Jan 2025 11:07:00 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-This should be <linux/error-injection.h>, no?
+> On Wed, 29 Jan 2025 00:37:15 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Since the relative offset stacktrace requires a special module loading
+> > events to decode binary, it should be an optional for normal use case.
+> > User can enable this feature via `options/relative-stacktrace`.
+> > 
+> 
+> Let's make this an entirely new event and not based on an option. Reason
+> being, there's no way for libtraceevent to know which this is. We could
+> even have a mixture of these in the trace.
+> 
+> Instead of an option, we can add a new trigger: stacktrace_rel that will do
+> a relative stack trace. And the event can be kernel_stack_rel
+> 
+> Then it can be enabled via:
+> 
+>   echo 'stacktrace_rel if prev_state & 3' > events/sched/sched_switch/trigger
 
->  #include <uapi/linux/module.h>
->  #include "internal.h"
->  
-> @@ -3089,6 +3090,7 @@ static noinline int do_init_module(struct module *mod)
->  
->  	return ret;
->  }
-> +ALLOW_ERROR_INJECTION(do_init_module, ERRNO);
->  
->  static int may_init_module(void)
->  {
-> @@ -3225,6 +3227,7 @@ static int complete_formation(struct module *mod, struct load_info *info)
->  	mutex_unlock(&module_mutex);
->  	return err;
->  }
-> +ALLOW_ERROR_INJECTION(complete_formation, ERRNO);
->  
->  static int prepare_coming_module(struct module *mod)
->  {
+Oh, I thought this was another feature, adding a new trigger action.
+Can't we do this with the event defined by FTRACE_ENTRY_DUP()?
 
-<snip>
+Thank you,
+
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
