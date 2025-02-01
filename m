@@ -1,103 +1,115 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CB71EBFF7
-	for <linux-modules@vger.kernel.org>; Thu, 30 Jan 2025 16:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0E80A935;
+	Sat,  1 Feb 2025 07:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738254354; cv=none; b=sXoMMYCj+ncAPXZgt9K7k+uZtSm0/Q9GM+yQESCNPf9UMqhSPzQGJct0Kj/j3S51ZWZ6LfRkv2iRp4tgSWFkXJbBYM6ln+mhJVi+vHu85PTwHb96K4143zKGAEAxHwvDcP3i38igWirGBEET+/RKPuVnvhlXyClr9PJmEyDUgik=
+	t=1738394586; cv=none; b=MKMoQBlSryR3n/e1kVG8xBS+Kwi0HszoRHE3IKA42iVdchhgSK+KG3G6RmkeCdov4hKrcwRQQjHeHWdrHdFt8D30JxJv/cCRnscBdwXH2eaNC6aJWXJuwT+vka26urYvdPxYxBI/vuE167EzGvYXWJToeWfsSpjLJlJ8q9Bs9ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738254354; c=relaxed/simple;
-	bh=7MbILsjhKj2s5zvjXYe+wMzspmEdlv0lccPETbKTUcc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pYrT/p4WLt7sFtjNKp//54K17Z870lmGZje5PbqO2gydEK6NlSGqRHDeE1HMKs3RL7F77fFnNepfIAs8j0lX3QUfreaYl/0KwFCue+IRsTEAlHIu9MUct6/3EfpYN2v8Qfsb9xGvPMmQbPDxR7T37HjmWYgzFepzja16cor+gZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=v8GyktGu; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1738394586; c=relaxed/simple;
+	bh=Bw6zEIvwBS1md1QcsSs+l/VCAnNG/P2sUBn8/0QbnrM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pmjJS9Q8L2O7Wv8DqL0v3gqVjOC3LhzfY/2od5FGlHorBbKpQe+8BgxS9TOt0jU232fFlexuKXh9EzUoYBlMf6wJg/nZiX2TB8GMXcEP4FW8tyGNcokZC01m1hby2Qn69XnX51M0IDeb5NEldKw/3EUTmMJSfv/6GWl10FTNPjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABlxxDWw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v8GyktGu"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dc5722eeaaso8297a12.1
-        for <linux-modules@vger.kernel.org>; Thu, 30 Jan 2025 08:25:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738254351; x=1738859151; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1VbyvNf60Kf8EUF9uihS44Al/9bqOoO9TPYohytuLs=;
-        b=v8GyktGu3oIdtVizEDSzsTCiPf0rD2ziPEApSJVovnRL5RtWb2OQwpIrZcouqZgnDH
-         IPEkFDVFAo9T6RCr8wAmaTR6PKbpdNk+cpCuTNPE9k806yfnCLz6oIt9ewZupH5qYJtq
-         nGrxuOQByHILujq5FWguDCN6R4BLVUXPikBILiPhHRXkCfmI7pII8d8HXlfVfG1IwkyZ
-         vrwZk870Ad9xYvRWTe3fooLuB2QQM53k3Ho1KiiJAJdp0wdS+b5rW+G5GYm9NTkxg49A
-         UwHYsLNNHh7BeZFo+d0z9oD13E/dRZleFNrTd50ChC8bFEEUEKGeQjbuWkpqVJh4RYep
-         MWVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738254351; x=1738859151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D1VbyvNf60Kf8EUF9uihS44Al/9bqOoO9TPYohytuLs=;
-        b=Ja6vvdaRjFtHFokV39Ls7kXZdh0Q+FgiDE4CK8HRGMMyGGqoctgM+TF1SxrS5vGPsr
-         ww6MuwuSKflB4pl99ZAQlYnqNw5Jg5PWDVnjhh4o91LA8tTDr/G0vLhqIwZ4sjKIPzcP
-         M4tSRAtvgWdq4Tocj8g1PoFaSJEkEueyA9xodxE1klze/ULNK/uc3rRSQn6KhzjW3KYm
-         ulCAOUcMmaQr5yCWSFmPRX5YTPbgwKtwJY06juz0SAy5CQ83vH9i1EA6OBeC2+y2uJJW
-         U575x42Qj2ZGafI8dwAyFRgq1lcFl4OqvoBI9iuoto+SDZiZE4Tlpxdfc1+nwAQkD4Oc
-         wbRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVdvx9BXxFjXy7BJ9RqPvNbaTH0sso6wqRQ3zgHujx/aNuF7M2sl+vAOWtRwYBoyL6bhoEDLn+KoXAQGv84@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB1Vxsg5yOMxUfblXkA+Z7CGCDVw4/6sG7FZDoes+Oz88CcHRz
-	AOxzOH2qSlYW6ctokzaRmMCgm9F1P2vxIgfgWkSb9grHE7K5YwuUkVxlv1pUx6UZEWJLW2/dD/s
-	kzHXyJf1zrihS6iVkDCDNPhaVqOarkGqPVC72
-X-Gm-Gg: ASbGnctl9h5SJolEAHySpKtuCl3M1z4FKwcHnUbEqjmsq1fKxux/XraUtr0+AAjn0u0
-	FbzmJSOMnqEyFz2Q7YCNAL9+9ZgO5tf7W/PgCSU5T2LHOWGMlH9oRv318nGMOdFp3t7Q1BA==
-X-Google-Smtp-Source: AGHT+IHhDr3WLmHS020qYiDGqruH/H5KWsGKCNm6bAmGyAHM/dAndCBO2vfKx9M5/upYX5fbRvFEKaH+41A2H/O8RSI=
-X-Received: by 2002:a50:cc94:0:b0:5db:e72d:b084 with SMTP id
- 4fb4d7f45d1cf-5dc7f8f2eb1mr6594a12.0.1738254350731; Thu, 30 Jan 2025 08:25:50
- -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABlxxDWw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFA57C4CED3;
+	Sat,  1 Feb 2025 07:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738394585;
+	bh=Bw6zEIvwBS1md1QcsSs+l/VCAnNG/P2sUBn8/0QbnrM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ABlxxDWwthL+zhVkSahvybhum4JPn9ELgp0/+AB6+w/bUCTTHtt0JZLAybTuQqVbv
+	 SXdd773zOhFO5EPorlAHl9Vri41+OHqBmgUVc9yEl3CZL1SfYbkTXPnw/gqw2V8F82
+	 Ib5mmQN3xxj1df/dIAWK3ZfiCGqh6z0QyHnvzL8cOFhdBJNLvcgA+XvA7x57zT3rwm
+	 4l2wFl41aMOpL9hWy+zdSkhs+OlFN4yfEdte2dPBDYC03Yy3ZhM92SYs7/fibspvvc
+	 yR0Mu+nVGWZANuFhUrqEO7RMHpexf10FkSxJyLWlNYbzjsfnlXGdkiq1polWwSJjBj
+	 FeGFHqhk4jBbw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: [PATCH v2 0/2] tracing: Introduce relative stacktrace
+Date: Sat,  1 Feb 2025 16:23:00 +0900
+Message-ID: <173839458022.2009498.14495253908367838065.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <679b7c95.050a0220.d7c5a.0014.GAE@google.com>
-In-Reply-To: <679b7c95.050a0220.d7c5a.0014.GAE@google.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 30 Jan 2025 08:25:13 -0800
-X-Gm-Features: AWEUYZmrBV1U2WTS48Ggt1n7BFcW0T5BPP0zexNotres2EAXXsig32k122LDFns
-Message-ID: <CABCJKufpND1qvBhUMwpJ4OE7Umo9EuaNTLOi-GmAXFdXRqhoFQ@mail.gmail.com>
-Subject: Re: [syzbot] linux-next build error (19)
-To: syzbot <syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-next@vger.kernel.org, 
-	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 30, 2025 at 5:20=E2=80=AFAM syzbot
-<syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    a13f6e0f405e Add linux-next specific files for 20250130
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D10221ddf98000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D3445081dab637=
-16c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D62ba359e1dfec14=
-73c57
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+62ba359e1dfec1473c57@syzkaller.appspotmail.com
->
-> scripts/gendwarfksyms/gendwarfksyms.h:6:10: fatal error: dwarf.h: No such=
- file or directory
+Hi,
 
-gendwarfksyms depends on libdw, so on a Debian system, I assume
-libdw-dev would be required to build with CONFIG_GENDWARFKSYMS.
+Here is the 2nd version of adding relative stacktrace for tracing.
+The previous version is here;
 
-Sami
+https://lore.kernel.org/all/173807861687.1525539.15082309716909038251.stgit@mhiramat.roam.corp.google.com/
+
+In this version, I changed the idea to only use the first 32bit of
+the build_id of the modules instead of using live hash/id to identify
+the module. Also, save the offset from the .text section for each
+module instead of using the offset from the _stext for the module
+address. (For the core kernel text address, keep using the offset
+from _stext.)
+
+This brings the following benefits:
+ - Do not need to save the live module allocation information on
+   somewhere in the reserved memory.
+ - Easy to find the module offline.
+ - We can ensure there are only offsets from the base, no KASLR info.
+
+Moreover, encode/decode module build_id, we can show the module name
+with the symbols on stacktrace.
+
+Thus, this relative stacktrace is a better option for the persistent
+ring buffer with security restricted environment (e.g. no kallsyms
+access from user.)
+
+ # echo 1 > options/relative-stacktrace 
+ # modprobe trace_events_sample
+ # echo stacktrace > events/sample-trace/foo_bar/trigger 
+ # cat trace 
+    event-sample-1622    [004] ...1.   397.542659: <stack trace>
+ => event_triggers_post_call
+ => trace_event_raw_event_foo_bar [trace_events_sample]
+ => do_simple_thread_func [trace_events_sample]
+ => simple_thread [trace_events_sample]
+ => kthread
+ => ret_from_fork
+ => ret_from_fork_asm
+
+Thank you,
+---
+
+Masami Hiramatsu (Google) (2):
+      modules: Add __module_build_id() to find module by build_id
+      tracing: Add relative-stacktrace option
+
+
+ include/linux/module.h       |    8 +++++
+ include/linux/trace.h        |    5 +++
+ kernel/module/Kconfig        |    3 ++
+ kernel/module/kallsyms.c     |    4 +--
+ kernel/module/main.c         |   29 ++++++++++++++++++++
+ kernel/trace/Kconfig         |    1 +
+ kernel/trace/trace.c         |   50 ++++++++++++++++++++++++++++++----
+ kernel/trace/trace.h         |    3 ++
+ kernel/trace/trace_entries.h |   18 ++++++++++++
+ kernel/trace/trace_output.c  |   62 ++++++++++++++++++++++++++++++++++++++++++
+ lib/Kconfig.debug            |    1 +
+ 11 files changed, 175 insertions(+), 9 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
