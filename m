@@ -1,29 +1,30 @@
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A882D25A624;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE29E25A635;
 	Tue,  4 Feb 2025 05:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738646592; cv=none; b=Hk8KXcyQyS67VSvYxf1IhzeWqTP/p0TRElJa1GW4MtG6O+SzI48AMwe9XO9wdG0ygoCy2MY29ZD4qS7mobdttXTb1+0ZuPoDHTkDZiFm7Z35LiHv87KXobdhCwsBNN+uoScRXUSWgG7L8N40nufCbb7rxPyjvrCc28Tu43NR+UA=
+	t=1738646592; cv=none; b=YGOwY6boxwKYz0NCeRaRueE9Zf4n9Smv8WpM6tHGuab1QzxkLqkAg2r2iTpdNUVaeWBp5GJBETUbSCuYqWnlBxaD2cEPF8EjMw/w+xp+v96YpaWsiG5/2mngNWi4grs7yB0JdCM7ziswzumBIYQH1sVQQTpgxbM6kATQWWoy/tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738646592; c=relaxed/simple;
-	bh=X/yzi+coHV5/cYGjlPHg/pxvlu5jrjizMTaLYXFk6B4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I/JXNAUx1hUMw77ePwJvSpn2mSS96rEzJC0HITKxVhX8rCwsPwQH7bZDe/Qbm+U6Q9hnTKDO8RtP1v77rdflnbi5+EyDowXzj79GpnH5caw27JJlPO1Lt6h+0sFVsAPOEhcOu8L/FWIYX23OStYeVVhsdBa5vsvvBnL1jN46Exg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rEuu0EIK; arc=none smtp.client-ip=13.77.154.182
+	bh=/UDhm/vaWOmQBD2Ymv1yhU7aLHSoK2nAEDtBJRfoU58=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=FkUt+oxsYc41Ro9Aqu29UsVapv/S6OmEBiuLerUURhAd8c/KQBVfTTSBfpG0tPquD9n2hg2M3Cv1uE/S68/0Y4Yu3ceyWuh5FKW8kmJ0aSvhqnOI44DUKSChslEVNakzLX8jmCvMf1+b6PZT0na55wDdrUyeaIwwWIwV2nQNrR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=EePQux87; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rEuu0EIK"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="EePQux87"
 Received: from thinkpad-p16sg1.corp.microsoft.com (unknown [20.236.11.42])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 0604C20BCAF2;
-	Mon,  3 Feb 2025 21:23:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0604C20BCAF2
+	by linux.microsoft.com (Postfix) with ESMTPSA id 567A3205721D;
+	Mon,  3 Feb 2025 21:23:10 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 567A3205721D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1738646590;
-	bh=eyFQv13S+2rnfEacnpOtHZaX3OWrYu4+GpTGgoO/GtI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rEuu0EIKr41pqalTWx1KhKi02pSP0XVVXbQ4zGtI/aumWZ7p+0nEDn1nGdVO2tmI2
-	 jVIo1nVaHdQZV2zFKh9OceO+GrbUQwo9qEfomyd1IUubI/flLnlkmPT/4uhegRvrmd
-	 YqmTbV5o8ep94ebYzdPmPa75lD3oEbCViPBb1yII=
+	bh=csRcyVR+eazDhu8zA5aLUmc3OVGKk3oiP6AFa429sl0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EePQux87gxUelpWpxJzIu/HscLLmmNpNJAa16aRL4Mn1hZVk4e9b9v7ulwJEkS3MU
+	 3gjMX50I8yFOv0DMOzKt2ZC9b4elPtmJpmxievXOfChkfAPiSX0mjMJZYUt5oKlG4y
+	 G5oI51QM517ucJlYn6fxBO0orAbBb9zZSm5AoMlw=
 From: Shyam Saini <shyamsaini@linux.microsoft.com>
 To: linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org
@@ -39,10 +40,12 @@ Cc: code@tyhicks.com,
 	gregkh@linuxfoundation.org,
 	rafael@kernel.org,
 	dakr@kernel.org
-Subject: [v1 0/3]  Properly handle module_kboject creation
-Date: Mon,  3 Feb 2025 21:22:19 -0800
-Message-Id: <20250204052222.1611510-1-shyamsaini@linux.microsoft.com>
+Subject: [v1 1/3] kernel: param: rename locate_module_kobject
+Date: Mon,  3 Feb 2025 21:22:20 -0800
+Message-Id: <20250204052222.1611510-2-shyamsaini@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250204052222.1611510-1-shyamsaini@linux.microsoft.com>
+References: <20250204052222.1611510-1-shyamsaini@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -51,56 +54,56 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Everyone,
+locate_module_kobject() look up for existing module_kobject
+For given module name locate_module_kobject() look up for
+corresponding module_kobject if it exists. If it coudln't
+find its corresponding module_kobject then it creates one
+for the given name.
+Rename locate_module_kobject() to lookup_or_create_module_kobject(),
+to better describe its operations.
 
-This patch series fixes handling of module_kboject creation.
-A driver expect module_kset list populated with its corresponding
-module_kboject to create its /sys/module/<built-in-module>/drivers
-directory.
+This doesn't change anything functionality wise.
 
-Since,
-[1] commit 96a1a2412acb ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
-Call to populate module_kset list is deffered to save init time so that
-external watchdog doesn't fireup on some boards and Linux can take
-responsibility of feeding watchdog before it spuriously resets the
-system. However, [1] this fix caused another issue i.e, consumers
-of module_kset can't get related module_kboject during driver
-initialisation and hence can't create their
-/sys/module/<built-in-module>/drivers directory.
+Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Signed-off-by: Shyam Saini <shyamsaini@linux.microsoft.com>
+---
+ kernel/params.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Consequently, [1] breaks user-space applications for eg: DPDK, which
-expects /sys/module/vfio_pci/drivers/pci:vfio-pci/new_id to be present.
-
-The second issue was reported and the [2] revert of [1] was
-proposed. However, [2] the Revert doesn't address original issue
-reported in [1].
-
-This patch series addresses both issues reported in [1] and [2].
-
-Changes since initial RFC(Based on Rasmus's suggestions):
-Patch 1: Renames locate_module_kobject() to lookup_or_create_module_kobject(),
-         to accurately describe its operations.
-Patch 2: Moves lookup_or_create_module_kobject() and to_module* macros to
-         module.h, so that driver code can use these.
-Patch 3: Handles module_kboject creation and population of module_kset list
-         to fix [1] and [2] issues.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=96a1a2412acb
-[2] https://lore.kernel.org/lkml/20250130225803.321004-1-shyamsaini@linux.microsoft.com/
-
-Thanks,
-Shyam
-
-Shyam Saini (3):
-  kernel: param: rename locate_module_kobject
-  include: move lookup_or_create_module_kobject()/to_module* to module.h
-  drivers: base: handle module_kboject creation
-
- drivers/base/module.c  | 13 +++++--------
- include/linux/module.h | 39 +++++++++++++++++++++++++++++++++++++
- kernel/params.c        | 44 ++----------------------------------------
- 3 files changed, 46 insertions(+), 50 deletions(-)
-
+diff --git a/kernel/params.c b/kernel/params.c
+index 0074d29c9b80..4b43baaf7c83 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -763,7 +763,7 @@ void destroy_params(const struct kernel_param *params, unsigned num)
+ 			params[i].ops->free(params[i].arg);
+ }
+ 
+-static struct module_kobject * __init locate_module_kobject(const char *name)
++static struct module_kobject * __init lookup_or_create_module_kobject(const char *name)
+ {
+ 	struct module_kobject *mk;
+ 	struct kobject *kobj;
+@@ -805,10 +805,9 @@ static void __init kernel_add_sysfs_param(const char *name,
+ 	struct module_kobject *mk;
+ 	int err;
+ 
+-	mk = locate_module_kobject(name);
++	mk = lookup_or_create_module_kobject(name);
+ 	if (!mk)
+ 		return;
+-
+ 	/* We need to remove old parameters before adding more. */
+ 	if (mk->mp)
+ 		sysfs_remove_group(&mk->kobj, &mk->mp->grp);
+@@ -876,7 +875,7 @@ static void __init version_sysfs_builtin(void)
+ 	int err;
+ 
+ 	for (vattr = __start___modver; vattr < __stop___modver; vattr++) {
+-		mk = locate_module_kobject(vattr->module_name);
++		mk = lookup_or_create_module_kobject(vattr->module_name);
+ 		if (mk) {
+ 			err = sysfs_create_file(&mk->kobj, &vattr->mattr.attr);
+ 			WARN_ON_ONCE(err);
 -- 
 2.34.1
 
