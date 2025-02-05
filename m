@@ -1,161 +1,110 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E48922A4C3
-	for <linux-modules@vger.kernel.org>; Wed,  5 Feb 2025 08:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1036022A80B
+	for <linux-modules@vger.kernel.org>; Wed,  5 Feb 2025 10:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738744999; cv=none; b=pdnYQU6ukkh06T5X883wXKySVXiknrluyzhQqAOL1AO3Ap2mJwFWCK0wJQeiDxPj3GG1RXPoxYw0t1NrgyXqhFDvnDvIcGssMZ2FLDfNTRzsuyA9vgPifWqGQWqkBIz5c2TY+PuPiXhBkop33eNWVbjXex7sKYXo8E47bysboHg=
+	t=1738750478; cv=none; b=TT0sAxrk9YHJiDWb8jH5itUqmPVvGNLTgakKDIZRMBHt2kKCBV1wuJ1Pko5FORngK+sH6RTWAQxWe6ff2L5NIwtIzmUmL+oOmKlncJiGgQc3OtBgwSt9+YBNgFIR/7bwCIxGqDVSM3PZRMG9WG/W6NDxPnDEXHI90XRTvmqA1NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738744999; c=relaxed/simple;
-	bh=p0ibE0imzJrzuTS00bOK/Id3Y9/SeHlbskz2XeE+f3c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NvmAkn24SyI1mWYsJzqBUVrgizXNF+1q7oa++/IcxVhgoTR7kml5VVMW+WmntA44e8JKtOJln4rW3Odci28X9usBs/QUpZGjz6CKxv3VKrzZIdDwp5wyTG8aBFlKGXUsfg6avPNR805qsy6FM3MsLW8jgb+97GtH67pz1s9+N2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk; spf=pass smtp.mailfrom=rasmusvillemoes.dk; dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b=ThTFi8Yr; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rasmusvillemoes.dk
+	s=arc-20240116; t=1738750478; c=relaxed/simple;
+	bh=cl3s2u4k8LqaA7VoeY6ZsMAhGEyET2LwEcvJM2G729c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z443itIbCOkfBz2PELVmyOd9gkl2fUtkUSebaMkNsoCYNiz2poGZMk3vSpIq75rr5G6KqklU74Fk+wCgvFl7DGB6KntYLQ1zOpX7hhXGAS3K4sewpaDXQZBPb9IPi/fh6YWgjWOkZ7xxQaqdm/yFMXlA/Lmh+ZiCtFujUjEtAm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VhePItP0; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="ThTFi8Yr"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53e389d8dc7so6479677e87.0
-        for <linux-modules@vger.kernel.org>; Wed, 05 Feb 2025 00:43:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VhePItP0"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436202dd7f6so75395825e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 05 Feb 2025 02:14:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1738744994; x=1739349794; darn=vger.kernel.org;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+e+hBHhv2/Q+FPnc04pk6OB54D2kTpJhA7pWv3JJQyA=;
-        b=ThTFi8YrYfEMUaI4c7IGuw1Y25VaBiNgGzQPd98qMow4CYsBxh84hcryJ7I1r4DH0Q
-         ve/WVmE8H3Qmd0p/FSAsEAK7jUVLQaiXPQgBtmOMVfemryyiRZaXkdqrgC9MLlz13Orv
-         hn+TxMcCikftehseLaEQVsArzfDvBzKJ7Ahy8=
+        d=suse.com; s=google; t=1738750474; x=1739355274; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4TpE+w64W/w0pZz2iY3aYODrTAmBDToH0rXVM/D9B+U=;
+        b=VhePItP0iFUehcJB8Og+OGWbacraWABzNa1xFhjuTDP1+Hs7zLEvdgQ03uWhP0kG3J
+         VP9f3+36uaDMpOTbl1qKA8xN0qB/vxFRN52DqzZC1k2j1Op9q2FF24jP2qJTpFrleSCL
+         8TlikM9jGiR0f/+G2xG7BlMZCjmPFt2d91L1YZd3/t2t+WlSHc16hZv8HOwERhhk7j3h
+         AKGAY6IahTjLIERzBYb596D5/f8tSNZhgcarbuJlBINx5R+i35JpgSxEhZCbDh2oJyfs
+         4ZPk4bC/x53Lauo7QH4xQyplnJdzar9gKo4LBAnI/MGW575jhqQ4aat3fqQzsokxWLnr
+         DdcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738744994; x=1739349794;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+e+hBHhv2/Q+FPnc04pk6OB54D2kTpJhA7pWv3JJQyA=;
-        b=vhlNPXSCOJaA2iefQ0qynmxQ+dWrgkUl9Pfp/NnuK3EVACHSmh+8vobTHxnfhKqtYI
-         reeUYFHyoMUOPoLtUn0r/S0k22ONhyZFH96D4JjcwSkp6fig8hNl7SuWeMXSW86FUl7q
-         hWG/PbG2RRRcyB+3LN7Kc1jFsvwkqdueepT4Ma41JWbJfoBH4zme1QLhY259lsSWEcaH
-         RwoLBIM3ZIMOHPNNq4oNXDHui6jpEtxTvKFWzP9Ei5JmNPj15lb/3Rak/g9pU5ywgkon
-         dOTh41n0mZMnBNhEg/N4Yte3a28dunIbWOLIEnLMbVYIgSOUoP55UjSbUpnnmj1C+u0q
-         zJLg==
-X-Forwarded-Encrypted: i=1; AJvYcCULNde/3mRMnyWL6lUEQyzjNBtluFOnigfadDrIZ9U0TM67FzBbcjMoV9WH1/lpF8wb/W/tHHt4r/mQJiAK@vger.kernel.org
-X-Gm-Message-State: AOJu0YyE8EovVeZYxLgVd4ftPEZqGHi3iTU9SdhVJofZSeW4IjnfvFlb
-	YetWEKL1Tw9YDkObxoTEMUjBpRlH1xl/RL6DS5JyOEDIofvTTtqJMceOAAbzIfw=
-X-Gm-Gg: ASbGncvWLqO6IEMbYMuNV0eW3HRW2WNIIXM/ti0VnA0oX378o3hA1ORr7hm8QxoCqRo
-	G9hoKADtgb7GVHnww7yChIGPYr/W3Uo0kNHXTRz99x6jWFGVG9PI1y+5rZUcd+Isr528MqnXaFW
-	Ujlj7PiDIE9D2jrQ1Teju1FacbYxo0xPvX3wK/58DSKJxuCGM2tIzF7PrkPxno/iEwu6pHkaYMr
-	YB+78jLJyzOqhV6kN9JiTwxfhuKPDIP6mQfdxvCLLi5rugEYzr2uV7tGV7R/mxqHrvxlLgZh8dh
-	2dgepovmuaywre8x
-X-Google-Smtp-Source: AGHT+IGdeze+FGm6RJ6kK0EmlM0IzS1+jIlMHYzfJceotO2M3xr68jPPBD2PPXE1VqhcZHZypTYtiw==
-X-Received: by 2002:a05:6512:ba4:b0:53d:dd02:7cc5 with SMTP id 2adb3069b0e04-544059fd016mr420040e87.7.1738744993888;
-        Wed, 05 Feb 2025 00:43:13 -0800 (PST)
-Received: from localhost ([81.216.59.226])
-        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-543ebe15778sm1810443e87.104.2025.02.05.00.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 00:43:13 -0800 (PST)
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: Shyam Saini <shyamsaini@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org,  linux-modules@vger.kernel.org,
-  code@tyhicks.com,  mcgrof@kernel.org,  frkaya@linux.microsoft.com,
-  vijayb@linux.microsoft.com,  petr.pavlu@suse.com,  linux@weissschuh.net,
-  samitolvanen@google.com,  da.gomez@samsung.com,
-  gregkh@linuxfoundation.org,  rafael@kernel.org,  dakr@kernel.org
-Subject: Re: [v1 2/3] include: move
- lookup_or_create_module_kobject()/to_module* to module.h
-In-Reply-To: <20250204052222.1611510-3-shyamsaini@linux.microsoft.com> (Shyam
-	Saini's message of "Mon, 3 Feb 2025 21:22:21 -0800")
-References: <20250204052222.1611510-1-shyamsaini@linux.microsoft.com>
-	<20250204052222.1611510-3-shyamsaini@linux.microsoft.com>
-Date: Wed, 05 Feb 2025 09:43:12 +0100
-Message-ID: <87h658u6hr.fsf@prevas.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        d=1e100.net; s=20230601; t=1738750474; x=1739355274;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TpE+w64W/w0pZz2iY3aYODrTAmBDToH0rXVM/D9B+U=;
+        b=MiTGHwvPuckRQcJzyUQrJ4pDhTTfv6ktC18SRvI4/Co2U1l+MC16QdKoOfE4hAo7PW
+         HIuHWFZ6vSoKp+Ez8cHdM4/6Yb0ZTq7ez3tGr96YCNrbPMaXVXftVIUzBR8ovpyXQVsD
+         SztBBT/yNiO73bjuH2nVvOOJxXrCVFSgqM+MR5raHva0o6Tn0jbVWpTOYuKxQwwch5O3
+         SvWWWzGuLJIqFmrFL6Br0rhUQ1dDuqB25eMPywkZyYkXuDuBVtmiYv1l2HWa+qdpYnat
+         CQRR1Y0h7CMqZq5gDDRsuW06NmH7xNKQDikQ+yI8S9LRCX702S4ffBTzv0F49MjsWbHO
+         vnXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZdgSpvWkfSc5/zkVZ1uFdVqKNkQIzlUZearWExbp5/8yHS15k5e5/sx4Ok5UU6o9SjS30YS0TnbaOJZA8@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyCn2GBoTvSy9AYiFYyP0yZGGgeIMtm1D8hhX3RWzw8n4Ne2Wp
+	xBu+Edz9cmF/tl6yb5kY99snfNHxgH7odqdtGkR8E647hhJnOwRMDrk0M7iz6zs=
+X-Gm-Gg: ASbGncvkZtE2BPA7clrs5R3pIH2YeLnBzAhhtZZbKompyHRMfQyMDtgJtPlyOPVhk0h
+	TXOVmd5nmA1tjFTJEnZh7aWauVtc6KmJ373wLSlKWIR8t9xY/fspGRfyV43XgVl77BA3tQnkO53
+	1NV54esXjyE5Rwx2gG5YCWdYYByXv0hH9vrefaGT2MQzKnfiENV8TN8phfeFczkm5tIVy5INlzX
+	Gx9Pjw6LNlZR1Z7R+psFUfarsBtNc8Ul+eBSAixmO86H5enBpt2lY+2Tf5EQfN2OXgTVTAEOy4n
+	TkwsgHO1PyOztgquqLY=
+X-Google-Smtp-Source: AGHT+IGrKqVhCP3AqODgr/FPITUVbZ9hb54g8ST6SnNmmjRUjIBUB7Ppw2hDlDy1xMw/NeyEYRNS1A==
+X-Received: by 2002:a05:6000:1208:b0:385:f72a:a3b0 with SMTP id ffacd0b85a97d-38db490d6b2mr1196407f8f.55.1738750474338;
+        Wed, 05 Feb 2025 02:14:34 -0800 (PST)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dac5a3e79sm4267717f8f.63.2025.02.05.02.14.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Feb 2025 02:14:34 -0800 (PST)
+Message-ID: <b35737df-01ed-46a2-ae67-e56547d6c824@suse.com>
+Date: Wed, 5 Feb 2025 11:14:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -v2 0/7] module: Strict per-modname namespaces
+To: masahiroy@kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>, mcgrof@kernel.org, x86@kernel.org,
+ hpa@zytor.com, samitolvanen@google.com, da.gomez@samsung.com,
+ nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ hch@infradead.org, gregkh@linuxfoundation.org
+References: <20241202145946.108093528@infradead.org>
+ <94bf84a7-13a3-4701-807e-fc0f10d4dc88@suse.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <94bf84a7-13a3-4701-807e-fc0f10d4dc88@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 03 2025, Shyam Saini <shyamsaini@linux.microsoft.com> wrote:
+On 12/16/24 17:43, Petr Pavlu wrote:
+> On 12/2/24 15:59, Peter Zijlstra wrote:
+>> Hi!
+>>
+>> Implement a means for exports to be available only to an explicit list of named
+>> modules. By explicitly limiting the usage of certain exports, the abuse
+>> potential/risk is greatly reduced.
+>>
+>> The first 'patch' is an awk scripts that cleans up the existing module
+>> namespace code along the same lines of commit 33def8498fdd ("treewide: Convert
+>> macro and uses of __section(foo) to __section("foo")") and for the same reason,
+>> it is not desired for the namespace argument to be a macro expansion itself.
+>>
+>> The remainder of the patches introduce the special "MODULE_<modname-list>"
+>> namespace, which shall be forbidden from being explicitly imported. A module
+>> that matches the simple modname-list will get an implicit import.
+> 
+> @Masahiro, I'd like to take this on the modules tree for 6.14. Can I get
+> an Acked-by you for the changes?
 
-> Move the following to module.h to allow common usages:
->  - lookup_or_create_module_kobject()
->  - to_module_attr
->  - to_module_kobject
->
-> This makes lookup_or_create_module_kobject() as inline.
->
-> Signed-off-by: Shyam Saini <shyamsaini@linux.microsoft.com>
-> ---
->  include/linux/module.h | 39 +++++++++++++++++++++++++++++++++++++++
->  kernel/params.c        | 39 ---------------------------------------
->  2 files changed, 39 insertions(+), 39 deletions(-)
->
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 12f8a7d4fc1c..ba5f5e6c3927 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -894,8 +894,47 @@ static inline void *module_writable_address(struct module *mod, void *loc)
->  #endif /* CONFIG_MODULES */
->  
->  #ifdef CONFIG_SYSFS
-> +/* sysfs output in /sys/modules/XYZ/parameters/ */
-> +#define to_module_attr(n) container_of_const(n, struct module_attribute, attr)
-> +#define to_module_kobject(n) container_of(n, struct module_kobject, kobj)
->  extern struct kset *module_kset;
->  extern const struct kobj_type module_ktype;
-> +
-> +static inline struct module_kobject * __init lookup_or_create_module_kobject(const char *name)
+Ping, this still applies mostly cleanly. I plan to take the series on
+modules-next, or let me know if you prefer for this to go through the
+kbuild tree.
 
-As others have said, this is way too big for an inline. Also, __init is
-at best harmless (if it is indeed inlined into all callers), but if for
-whatever reason the compiler decides to emit an OOL version, we
-definitely do not want that in .init.text as we are now calling it from
-non-init code.
-
-> +{
-> +	struct module_kobject *mk;
-> +	struct kobject *kobj;
-> +	int err;
-> +
-> +	kobj = kset_find_obj(module_kset, name);
-> +	if (kobj) {
-> +		mk = to_module_kobject(kobj);
-> +	} else {
-> +		mk = kzalloc(sizeof(struct module_kobject), GFP_KERNEL);
-> +		BUG_ON(!mk);
-> +
-
-And while the BUG_ON() is borderline acceptable in the current,
-only-used-during-init, state, that definitely must go away once the
-function can be called from non-init code.
-
-This is what I alluded to when I said that the function might need some
-refactoring before module_add_driver can start using it.
-
-I'd say that the BUG_ON can simply be removed and replaced by a return
-NULL; an "impossible" error case that can already be hit by some of the
-code below, so callers have to be prepared for it anyway. If the
-allocation fails (during early boot or later), the allocator already
-makes a lot of noise, so there's no reason to even do a WARN_ON, and
-since it "only" affects certain /sys objects, it's probably better to
-let the machine try to complete boot instead of killing it.
-
-Also, I agree with the suggestion to drop/outdent the whole else{} branch by
-changing the if() to do "return to_module_kobject(kobj);".
-
-To summarize:
-
-- refactor to do an early return
-
-- drop BUG_ON, replace by return NULL.
-
-- drop static and __init, perhaps change __init to __modinit (which is a
-  pre-existing #define in params.c, so the function remains __init if
-  !CONFIG_MODULES), add an appropriate declaration somewhere, and if you
-  like, also do the rename
-
-- make use of it from module_add_driver()
-
-Rasmus
+-- 
+Thanks,
+Petr
