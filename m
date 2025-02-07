@@ -1,180 +1,143 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF9A198A32;
-	Fri,  7 Feb 2025 07:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 131A816088F;
+	Fri,  7 Feb 2025 08:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738913743; cv=none; b=PHGSMBnZSthY+vUZ5T9No8GOXmH7HGqGDtf8bualxJD2+XlgXe9tONmaJwC/8UikqUcgJY2t98FU2vJk9KZayVFIkfSlVd6rsBBY8BGRY0TPohOc0a6XOBU4MYiAbDrqYwB3dpfNoQASQiUXbHnACOaFVr4/BHdttzAJdt/hkyc=
+	t=1738915824; cv=none; b=K0i2AJgL6birCPL4ikHm2aCR5lWHJrVw4wcPZwTyrCR7MYybVEbhjvNTU3AGJGuczrkQ3IQyPXNAzytX7B9mGGK6ZiUmauwur95VTHoH32aQ/P3yS4SiOP+nbfBMZH6E/vGH2yQRgi+5b1UggN0tj/Ai6DKKGTQ9b0IL8Bl2CAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738913743; c=relaxed/simple;
-	bh=3qtlZUpkljhlwXCzjKXTxq/EfyYT6h7RYLWB5MlNTbE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m6vJuKV0A7kYZxINs42FYci1XqHCWWqdIh3vm22ujy6OTDhDmFwiGlKi1i0KXCUkFlHYDQrdqlsd/N9JQ2TvGuZOZRRioPstFkAoG6TGffkGGDnICzbkgRdzB9tUvBZ4dcNj6OCoJJosUxe9ZZMKM60Ar35Ht14fYWKyTr8v2WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=XvlTym/+; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1738915824; c=relaxed/simple;
+	bh=+2h32vCsFsCVR2UeqvdByI3SDEN4kJzFmNB19aAc2j8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uy/GsRPdEINN3YPV/V/uGyurjBVhzm2ye1B9qSqDSi/AMugra3//j9bhvZLg5LdoYzx/urTiEtkYVlUwfipjVQNw6jJhXqSlodOkXPChNEipCWyU65m4gP1yEF5S+Zxl/YLDRmof5d/E4GuZulDSiqC1yVwsJkM6lQoe+vJAe1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBnAA/qB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="XvlTym/+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1738913729;
-	bh=3qtlZUpkljhlwXCzjKXTxq/EfyYT6h7RYLWB5MlNTbE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XvlTym/+4lFBs9M6lla/muHeMDVjvx/S1iHz9ISboiWyEB0t72/TE0wW4dn2QcKr4
-	 /3yBOpwwNN/sjJKaozTwTnhyLzTpUcEy5uvdvV9JjX7LK8epznPEx+ht7+l85m6iho
-	 sZgw6fqcKBtZ5v+QiSW8HfN7d0eNbzRANEdJXMIg=
-Date: Fri, 7 Feb 2025 08:35:28 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Shyam Saini <shyamsaini@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	code@tyhicks.com, linux@rasmusvillemoes.dk, christophe.leroy@csgroup.eu, 
-	hch@infradead.org, mcgrof@kernel.org, frkaya@linux.microsoft.com, 
-	vijayb@linux.microsoft.com, petr.pavlu@suse.com, samitolvanen@google.com, 
-	da.gomez@samsung.com, gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org
-Subject: Re: [v2 2/3] kernel: refactor and globalize
- lookup_or_create_module_kobject()
-Message-ID: <307ec0eb-df8e-4031-9bfa-227b1cd2fcb7@t-8ch.de>
-References: <20250207054538.1110340-1-shyamsaini@linux.microsoft.com>
- <20250207054538.1110340-3-shyamsaini@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBnAA/qB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72DF5C4AF0E;
+	Fri,  7 Feb 2025 08:10:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738915823;
+	bh=+2h32vCsFsCVR2UeqvdByI3SDEN4kJzFmNB19aAc2j8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=UBnAA/qB4Ex72toYR9gBNuCHGz3IGTvkcYb5mP4q78QGBYZf3DkuoZZzVjDxO9yPy
+	 ZGxGrreCFzY7FibNRpx7P9d4jYaAQGWHOvhOpRV7ipZJIgWMgA7Pq+9xJPTgprWrzf
+	 9bYw33SFKr79smex0frlseIc5glwJ+LiDrFNzHjZvAsu8rYcZLTi6BrosUnLwanii0
+	 PZ9go5q5u/WAea0k5vCv/LcA7h2uD6IwAZuueopqVW+uUVTxljC0u3KnaYN3e0MWwq
+	 vHO0/du9EOIRtAM8q4YCrJ0mLSd3j96SDMNvxFz7HN6kC+bb2b5aQRb3OZDfVJgQY7
+	 16OBDbdxETRWQ==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-53e3778bffdso1857118e87.0;
+        Fri, 07 Feb 2025 00:10:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVecrYbAhG+tINLxS81K4jJWoWyC8dUl2FjweyGooKHp8wYxh7RK50PISiRaZAmwXBKGMgfLTvRemgCjCD9@vger.kernel.org, AJvYcCW0FtPciJBNNwIdIYHp8x9ux+oxbAjloA1XFHPWhnq3hmmoZ4bYvTQdjoRZTws0hVieHa1bQX2yqb2UmGoItw==@vger.kernel.org, AJvYcCXrEYtrhCmGGIrWJKUQrZleE9TapJsv3g5D6xDFTGmAl/CZwa0aS8icHYqmgd4m5+Fq8qwTl9V7O0F3E+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgErZrG+ziMwzG6nedYxGmguiiYVExfvf/vZjIVGOYjJajjPJR
+	hF0PrtgiqwbW83F1Sxd2f77jfKP3vxzAnOYhmT48okh41u0/lTwzeqhkLF1tI7EZ6Lt2riPGuef
+	YiboLxkY5MHEq65dYzE4PPlz5cbg=
+X-Google-Smtp-Source: AGHT+IEHGiAPFG3S4/fmLtEuoeqzMSwk+73x6T1FNxc9URebwvw4k3C9lvtOMmSvSOvBIMS+WTDnvPP/KnGfVRxBtsQ=
+X-Received: by 2002:a05:6512:31d5:b0:540:1a40:ab0f with SMTP id
+ 2adb3069b0e04-54414aa8777mr616664e87.27.1738915821800; Fri, 07 Feb 2025
+ 00:10:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207054538.1110340-3-shyamsaini@linux.microsoft.com>
+References: <20241202145946.108093528@infradead.org> <20241202150810.713959190@infradead.org>
+In-Reply-To: <20241202150810.713959190@infradead.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 7 Feb 2025 17:09:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATaf=HyCBhZu-CPCGDG6PqHDVMXJFaiygBH3s-BmZE8tA@mail.gmail.com>
+X-Gm-Features: AWEUYZlhy01T_ZhUUMzhXs6P6i5eRskQitdnvDLcTUh-ZFze9KOXJhefIKSR7y0
+Message-ID: <CAK7LNATaf=HyCBhZu-CPCGDG6PqHDVMXJFaiygBH3s-BmZE8tA@mail.gmail.com>
+Subject: Re: [PATCH -v2 7/7] module: Provide EXPORT_SYMBOL_GPL_FOR() helper
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
+	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	hch@infradead.org, gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-02-06 21:45:37-0800, Shyam Saini wrote:
-> lookup_or_create_module_kobject() is static and marked as __init,
-> this is not ideal for global usage.
+On Tue, Dec 3, 2024 at 12:11=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
 
-FYI missing "PATCH" in patch subject.
+Commit description is needed.
 
-> Fix this limitation by refactoring and declaring this as global:
->  - Refactor it by removing BUG_ON() and 'if else' construct by returning
->    early
 
-This does look like an unrelated change, could be in its own patch.
+[bikeshed]
+Perhaps, I slightly prefer EXPORT_SYMBOL_GPL_FOR_MODULES().
 
->  - Remove static and __init markers from the function and add its
->    declaration in module.h
->  - Mark this function as "__modinit". To facilitate this, move the
->    __modinit macro construct to module.h
-> 
-> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Signed-off-by: Shyam Saini <shyamsaini@linux.microsoft.com>
-> ---
->  include/linux/module.h |  8 +++++++
->  kernel/params.c        | 48 ++++++++++++++++++------------------------
->  2 files changed, 29 insertions(+), 27 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 12f8a7d4fc1c..57d09b4e4385 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -162,6 +162,14 @@ extern void cleanup_module(void);
->  #define __INITRODATA_OR_MODULE __INITRODATA
->  #endif /*CONFIG_MODULES*/
->  
-> +#ifdef CONFIG_MODULES
-> +#define __modinit
-> +#else
-> +#define __modinit __init
-> +#endif
-> +
-> +struct module_kobject __modinit * lookup_or_create_module_kobject(const char *name);
 
-__init / __modinit is not necessary on the declaration.
-You can remove it here and keep the #define private.
 
-> +
->  /* Generic info of form tag = "info" */
->  #define MODULE_INFO(tag, info) __MODULE_INFO(tag, tag, info)
->  
-> diff --git a/kernel/params.c b/kernel/params.c
-> index 4b43baaf7c83..5d16696b1daa 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -595,12 +595,6 @@ static ssize_t param_attr_store(const struct module_attribute *mattr,
->  }
->  #endif
->  
-> -#ifdef CONFIG_MODULES
-> -#define __modinit
-> -#else
-> -#define __modinit __init
-> -#endif
-> -
->  #ifdef CONFIG_SYSFS
->  void kernel_param_lock(struct module *mod)
->  {
-> @@ -763,38 +757,38 @@ void destroy_params(const struct kernel_param *params, unsigned num)
->  			params[i].ops->free(params[i].arg);
->  }
->  
-> -static struct module_kobject * __init lookup_or_create_module_kobject(const char *name)
-> +struct module_kobject __modinit * lookup_or_create_module_kobject(const char *name)
->  {
->  	struct module_kobject *mk;
->  	struct kobject *kobj;
->  	int err;
->  
->  	kobj = kset_find_obj(module_kset, name);
-> -	if (kobj) {
-> -		mk = to_module_kobject(kobj);
-> -	} else {
-> -		mk = kzalloc(sizeof(struct module_kobject), GFP_KERNEL);
-> -		BUG_ON(!mk);
-> -
-> -		mk->mod = THIS_MODULE;
-> -		mk->kobj.kset = module_kset;
-> -		err = kobject_init_and_add(&mk->kobj, &module_ktype, NULL,
-> +	if (kobj)
-> +		return to_module_kobject(kobj);
-> +
-> +	mk = kzalloc(sizeof(struct module_kobject), GFP_KERNEL);
-> +	if (!mk)
-> +		return NULL;
-> +
-> +	mk->mod = THIS_MODULE;
-> +	mk->kobj.kset = module_kset;
-> +	err = kobject_init_and_add(&mk->kobj, &module_ktype, NULL,
->  					   "%s", name);
->  #ifdef CONFIG_MODULES
 
-As you are cleaning this up anyways: The #ifdef above should become
+>
+> -#define ___EXPORT_SYMBOL(sym, license, ns)             \
+> +/*
+> + * LLVM intregrated assembler refuses to merge adjacent string literals =
+(like
 
-if (IS_ENABLED(CONFIG_MODULES))
+ "intregrated"  is a typo.
 
-> -		if (!err)
-> -			err = sysfs_create_file(&mk->kobj, &module_uevent.attr);
-> +	if (!err)
-> +		err = sysfs_create_file(&mk->kobj, &module_uevent.attr);
->  #endif
-> -		if (err) {
-> -			kobject_put(&mk->kobj);
-> -			pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n",
-> -				name, err);
-> -			return NULL;
-> -		}
-> -
-> -		/* So that we hold reference in both cases. */
-> -		kobject_get(&mk->kobj);
-> +	if (err) {
-> +		kobject_put(&mk->kobj);
-> +		pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n",
-> +			name, err);
-> +		return NULL;
->  	}
->  
-> +	/* So that we hold reference in both cases. */
-> +	kobject_get(&mk->kobj);
-> +
->  	return mk;
->  }
->  
-> -- 
-> 2.34.1
-> 
+
+
+
+> + * C and GNU-as) and chokes on:
+> + *
+> + *   .asciz "MODULE_" "kvm" ;
+> + *
+> + * As would be generated when using EXPORT_SYMBOL_GPL_FOR(foo, "kvm"), u=
+se
+> + * varargs to assemble it like so:
+> + *
+> + *   .ascii "MODULE_", "kvm", "\0" ;
+
+
+But, you do not need  comma separators, right?
+
+
+
+The following less-invasive diff worked for me with LLVM=3D1.
+
+
+
+diff --git a/include/linux/export.h b/include/linux/export.h
+index a8c23d945634..546279f4d0c2 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -24,11 +24,17 @@
+        .long sym
+ #endif
+
++/*
++ * LLVM integrated assembler can merge adjacent string literals (like
++ * C and GNU-as) passed to '.ascii', but not to '.asciz' and chokes on:
++ *
++ *   .asciz "MODULE_" "kvm" ;
++ */
+ #define ___EXPORT_SYMBOL(sym, license, ns)             \
+        .section ".export_symbol","a"           ASM_NL  \
+        __export_symbol_##sym:                  ASM_NL  \
+                .asciz license                  ASM_NL  \
+-               .asciz ns                       ASM_NL  \
++               .ascii ns "\0"                  ASM_NL  \
+                __EXPORT_SYMBOL_REF(sym)        ASM_NL  \
+        .previous
+
+@@ -85,4 +91,6 @@
+ #define EXPORT_SYMBOL_NS(sym, ns)      __EXPORT_SYMBOL(sym, "", ns)
+ #define EXPORT_SYMBOL_NS_GPL(sym, ns)  __EXPORT_SYMBOL(sym, "GPL", ns)
+
++#define EXPORT_SYMBOL_GPL_FOR(sym, mods) __EXPORT_SYMBOL(sym, "GPL",
+"MODULE_" mods)
++
+
+
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
