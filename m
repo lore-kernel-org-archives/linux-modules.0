@@ -1,55 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5AC23C8DE;
-	Fri,  7 Feb 2025 16:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FB6175D5D;
+	Fri,  7 Feb 2025 17:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738946372; cv=none; b=DsozGRsGT/oIORsuO/YTr7Pr+LeL9w2Wsk9ioDSZZxLiWYH1XjhH5W1XlvWYoaNVk5UE/svmOVx6h0SKzFXOa7N/sUrwtXDZPNillWjawFuG6Oh7pkUaPFrOCs890qaBKuzQxbnZOqVTG635AT4wx+FlNULYrpDBal61Rypr7Wk=
+	t=1738951020; cv=none; b=UlMCQ5Hd3s7cVz2ZDxOr+JIkFjC42irJe3uxiq+qoXBpHMVEaRKjs/01Vfdzu8ayb/zVbf7mv3K6/oFNQxgdWnuCmgnJ3p1DmkuRMoHddAwP4EwwK+WCaVrLolJ8Rk37YViYOU0y5fWjz131AhJbRsDSIAa8Ci6SYPybvkueVfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738946372; c=relaxed/simple;
-	bh=C93Ar0OUMhlatbU/xgJriXUtaoW/woq7HZZVVyCc3Ow=;
+	s=arc-20240116; t=1738951020; c=relaxed/simple;
+	bh=/CRmU47qBUXyWSoahHnGiQo1Gh5hufSUGDC76WwudzE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ig6sT6UcJPGuXv9irEYAEzsNmJE148pvi281Ty5QKVZmh+uL7mr9mMmmaTcNrgbz+ENsTJP+XCpD3RRSsa5m273/uypzwCzyC1kGPkp8DClvtt83+gKnY6tyMRvkPOWM3u+aQPmj5+oANCpO/WfVdJMO0/uNpa4YbBnwXQZO7sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fFqaNwJx; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=jztN0/ajabi9BjVLYiGJFRWP99ONnXdM6ugVLV6qmoCINtsIUZlIi8jf5F3gF3y6I+zupqlci+pTeKiJk/H/o1bhPDveLqQRrr9qh3jKw15lQDw51LVWKpLhBVVXftpoOQl1QO3o2LoonMVYb5b0YJ10L4gFgNEZI87tonQsueU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icKPAsOr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fFqaNwJx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF961C4CEDF;
-	Fri,  7 Feb 2025 16:39:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icKPAsOr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D20FCC4CEE7;
+	Fri,  7 Feb 2025 17:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738946371;
-	bh=C93Ar0OUMhlatbU/xgJriXUtaoW/woq7HZZVVyCc3Ow=;
+	s=k20201202; t=1738951019;
+	bh=/CRmU47qBUXyWSoahHnGiQo1Gh5hufSUGDC76WwudzE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fFqaNwJxZrRRETkx1vIb0oePN93Fk/uDBq1Qe9ugWsOXIcQr1zu2g2ssN8sxxkm+x
-	 AP2XR9T4GHtWSn04bBkMomJx7Qe3GtEXoLgY2qmQYm+AZf3LL+cT4X8sE6o8NqjwZA
-	 +6Za0zvk5zYThrDycUTCMBZGQW5QSijfvcCSxr2626c3x2NlYNUhjrKdWBRk3JE+Lh
-	 ZqrKm3GoOVuwGOmNbGU7gVnRR4K52GoDPxWF3LcmYHKpplXdVWxmtGRjdbHbH6s6NL
-	 R4iM3Cxq/PcUUgDBtb8+5AfNaHXsrwNKg/gpYULsx6JqbAYFq6Iqgfe6eTceHOGn+O
-	 IfVkfTKlQMLsw==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5439a6179a7so2442445e87.1;
-        Fri, 07 Feb 2025 08:39:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVy6upZjYj288KGszBGYFH+Bbd+NvgzS2SWdrrS4zHPmgDxjOhkGD0bqv5XrrVmt5U4IqiLDf6GxWUWu060@vger.kernel.org, AJvYcCW6EvosZzS9zN0POYa6oogixqw/DnzrLdBzA57YUfJWr6NGP6D8LjI2itqhb4dVmZgBFQrr524e87p38Aj5EA==@vger.kernel.org, AJvYcCWF8ZB9wvguHWqqS3rJmTXha8aWZOemSGPSzBITXniu2Cvyx0k2U+sVnF/Bvax8F2WLoag9VNJeCh2o33Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yykezs9f0HKw9i36a7DIcCQ7+Z6mNDaZGZqeVQKZDCjd8Nz+K3q
-	peuAoyoibXJu/fmzy8jh5UAgtIPkiAG8x+UoCbPl4Gyvfs1LuEY6zXAhsmWd1mDz6GiUdi3vqzg
-	i2kUHZi2XJsP1s6dKaDeGmMVTN0o=
-X-Google-Smtp-Source: AGHT+IEJA0eBAzMswdnQXgXUE3WHYC1kVYv4aGKd+lz0n8pzxs4VJcx1cIbCfL243+Z+SQrtSRjOaMLX3kKvJBHoZJI=
-X-Received: by 2002:a05:6512:3484:b0:542:91a5:4df with SMTP id
- 2adb3069b0e04-54414a7f94cmr880865e87.5.1738946370614; Fri, 07 Feb 2025
- 08:39:30 -0800 (PST)
+	b=icKPAsOryE5yUn1OdcnElBDtixzasxxfRyZxl5K4pbf7ipD0Ea8QDnwM9EegS+ECG
+	 SXv4DRcBN4fXLyxY0uvRKVRisinIuqw0McHUsPYjGS34esdmeohTqPr8YsVajQeFRw
+	 IYNqlns6rYh7Y/QqfCgXa75U+I8NDdW7i3TSsD9f/rFMKfcoN06ZzzodVzW6dinR5G
+	 TY0MwxDB5/l2IX3u6eFR54EkYFg8rM0+y6B3fTQRz1NR4sNkQm2SuNHtnIjf7Wzt5B
+	 JI6zu7gCUhKyJhVckn7l5M0w1rTzE96XmUt1pVXvITCMFXtBy5TqQQBFjVHnkx0sNk
+	 U0ury35OO3fKw==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-5439e331cceso2756276e87.1;
+        Fri, 07 Feb 2025 09:56:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTVftUPYFjFLWua4FkGJHuVen7e0oid6L3KHljI09A+dd6eo0UOLNQ2fkXsbto91T1L46jgZ/s5Lc9fKs=@vger.kernel.org, AJvYcCWG0P8yd4zoidGQ5QxVtz02YrWNQVtmNKX8m8Ma3iG1RCpZK4Y+0AcdsMczVJDP2XfWLnJ2RURIB72CO/qY@vger.kernel.org, AJvYcCWLNsL7hbSfKYuNFTAhqfzOKsQ8uIYnTPp51IKQ00TCTnN/CYzARcuZQaOuvinIZDoUSexSLr0VqeQSnxI9JA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQWtuy8zZOFcl8G54C9F3cHGnjYUGMK3iAhuNVOHWopjxwF9WP
+	qej4gEb+tgt3clwF1C0CQE6yw66/DBjprM1Dtdyfg5e6yQ5buNKGlpzN3O9mMGLrDAs9ZvB5Hsv
+	/ucnsXHFKcuojOffz4mtQRH/ZRuY=
+X-Google-Smtp-Source: AGHT+IHwjdwtFZ+zisuBvM13DLarDF6ZcKsOicNPr/5NRq0RpmjPPZ+MC0Q5FJl5Quf/K9jXHq68OLsQA/TrjJaaMV4=
+X-Received: by 2002:a05:6512:745:b0:540:2201:57d2 with SMTP id
+ 2adb3069b0e04-54414ae6406mr1132896e87.49.1738951018503; Fri, 07 Feb 2025
+ 09:56:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202145946.108093528@infradead.org> <20241202150810.160972089@infradead.org>
-In-Reply-To: <20241202150810.160972089@infradead.org>
+References: <20241202145946.108093528@infradead.org> <20241202150810.270511329@infradead.org>
+In-Reply-To: <20241202150810.270511329@infradead.org>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 8 Feb 2025 01:38:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQyuJSgm2gb36saoeyOJmFSMuT_qmz+HrsdQuiC4WF8Rg@mail.gmail.com>
-X-Gm-Features: AWEUYZluhka-8FcjcuL9y4PYkm8KRFSSAGbQPIL9MESBGPp5HRihV4V9n4Kmmak
-Message-ID: <CAK7LNAQyuJSgm2gb36saoeyOJmFSMuT_qmz+HrsdQuiC4WF8Rg@mail.gmail.com>
-Subject: Re: [PATCH -v2 2/7] module/modpost: Use for() loop
+Date: Sat, 8 Feb 2025 02:56:20 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ3gG61cyP0cRKXbCogcu9JwuNPHWcYvRQhJDQbx-PyUg@mail.gmail.com>
+X-Gm-Features: AWEUYZkdnXJ8vXWq0iGmffzxhPa06o4t_vek2BGUPhIQQ7X-0n-QgZSyDJZhqyI
+Message-ID: <CAK7LNAQ3gG61cyP0cRKXbCogcu9JwuNPHWcYvRQhJDQbx-PyUg@mail.gmail.com>
+Subject: Re: [PATCH -v2 3/7] module/modpost: Add basename helper
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
 	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
@@ -59,20 +59,77 @@ Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The commit subject prefix should be "modpost: "
-instead of "module/modpost: "
-
-You are touching only modpost in this patch.
-
-
 On Tue, Dec 3, 2024 at 12:11=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
 g> wrote:
->
+
+
+I do not think you need this helper (at least in your purpose).
+
+You will use this helper in the 4/7 patch.
+Then, you will immediately revert it in the 5/7 patch.
+
+If you look at the final result, you did not need to add
+mod_basename() in the first place.
+(There is just one call site, which does not save any
+duplicated code).
+
+I suggest adding verify_module_namespace() in the 4/7 patch
+instead of using the helper.
+
+
+BTW, I think this helper is useful for cleaning up the current code,
+but you are not even aware that this common pattern appears multiple times.
+
+https://lore.kernel.org/all/20250207175024.412054-1-masahiroy@kernel.org/T/=
+#u
+
+
+
 >
 > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > ---
->  scripts/mod/modpost.c |    7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>  scripts/mod/modpost.c |   16 +++++++++++-----
+>  1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1553,6 +1553,16 @@ static void mod_set_crcs(struct module *
+>         free(buf);
+>  }
+>
+> +static const char *mod_basename(const char *modname)
+> +{
+> +       const char *basename =3D strrchr(modname, '/');
+> +       if (basename)
+> +               basename++;
+> +       else
+> +               basename =3D modname;
+> +       return basename;
+> +}
+> +
+>  static void read_symbols(const char *modname)
+>  {
+>         const char *symname;
+> @@ -1697,11 +1707,7 @@ static void check_exports(struct module
+>                 s->crc_valid =3D exp->crc_valid;
+>                 s->crc =3D exp->crc;
+>
+> -               basename =3D strrchr(mod->name, '/');
+> -               if (basename)
+> -                       basename++;
+> -               else
+> -                       basename =3D mod->name;
+> +               basename =3D mod_basename(mod->name);
+>
+>                 if (!contains_namespace(&mod->imported_namespaces, exp->n=
+amespace)) {
+>                         modpost_log(!allow_missing_ns_imports,
+>
+>
+
+
 --
 Best Regards
+
+
 Masahiro Yamada
