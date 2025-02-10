@@ -1,79 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98352221DA9;
-	Mon, 10 Feb 2025 13:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA53231C93;
+	Mon, 10 Feb 2025 14:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739194607; cv=none; b=TehNJ1ufG6o5XPe9G9WeI2Mf8+NUnJSS7ys7SUxC93OqW+uImZDoDJwmTtqhr+GQEmUBErhgMUCgl6IbibSp1/bOz7iqbRFfUNT5zgf3IQH7jrIywqvWWwBGFoA/sZEPuzipaBakgjaYbCroOcLA+D5ylQtRrWVGXQ4jZ63/7xw=
+	t=1739196488; cv=none; b=KnuISCdwMY8baIXGF5IeU1w1Vn2M+g/8CcLyim7b2Ki6U1cr39aIBnQUcV6u2lOGRK2VVIMUeXgWMAtZ2dr8dSZ6EnAlSLbq9y2IADiOW9kp3qqHKzMmjT5vXOWEgichNdcASBbSf7J16lJBkSW/XeuOrNDtsjyuzDGjXtayKcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739194607; c=relaxed/simple;
-	bh=h771ztDzs2jfdkBrqnFiwMYhaHEI0wB9nvXB8oF9E38=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=CRPzpNOUexyjQ8cgDvEb0tQnTLcW7a8gGWJnMCE0CcBAvcNK/vE63VHy2M2/trc7zdsnELTRagNC6X+S5PuzqhSrUdGAD4lgDW3C591N5stTZD35yqNF2rZ2olxOU/aXaFDb/7WJcPszRd6NEKIT6x1NWIovNuqqxdu1+sfDiAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CWMpaFlt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739196488; c=relaxed/simple;
+	bh=5qakHaALKLsOB+vcC6ycI0FYINkz1vC62D8Nb9BJAF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+WALU89ewdl7BQW1BJ2EpE3xeXZNKOzmNoaT0HiTMAXGgcmhcxWzFFf5j+WU53dHZG1w9NzpOg9SYtN+OofjRq7l3Hof3C+alxFaPYBp5go68H/aLQKFBU0vq3l8t3cp3okA3rO4iW7gg0rvmx+aseAfie0x6ytdz/w9lyn1Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ja26NgX0; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/93SeBLK; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CWMpaFlt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B35C4CEE9;
-	Mon, 10 Feb 2025 13:36:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739194607;
-	bh=h771ztDzs2jfdkBrqnFiwMYhaHEI0wB9nvXB8oF9E38=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=CWMpaFltvqP211df82f4cu4rTI+mZfQOXTqesEtg5rZvHpraftAlI+xmadAwUfVLD
-	 lNj7HjrwJpoo0REO/yi7Rm5ptdbKGW5P6mqA+jUxDFnKMkyGXbTmaL5O7o2qa8jI0q
-	 8r1xzGMYZi7+zTkMp58iYU+w/QHtcfCE+qkY+fo/Lc11XUhnW1Y1KztGNo4V0YV6AM
-	 XoMkd+flj9+edhoQhW9me8NxaE0VFKx8sEWpeQe3+Q+5PUhvNSEERqkuo2iJvwJDbb
-	 CNK4UhMDDabCS/+7z8hCT70f5k7GA6kxMaj6dusJywUIeDL0CUmlMcZ/ewJC5mOuJA
-	 q7KKmAf8ARd7A==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: "Miguel Ojeda" <ojeda@kernel.org>
-Cc: "Alex Gaynor" <alex.gaynor@gmail.com>,  "Boqun Feng"
- <boqun.feng@gmail.com>,  "Gary Guo" <gary@garyguo.net>,  =?utf-8?Q?Bj?=
- =?utf-8?Q?=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  "Benno Lossin" <benno.lossin@proton.me>,
-  "Alice Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada"
- <masahiroy@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,
-  "Nicolas Schier" <nicolas@fjasle.eu>,  "Luis Chamberlain"
- <mcgrof@kernel.org>,  "Trevor Gross" <tmgross@umich.edu>,  "Adam
- Bratschi-Kaye" <ark.email@gmail.com>,  <rust-for-linux@vger.kernel.org>,
-  <linux-kernel@vger.kernel.org>,  <linux-kbuild@vger.kernel.org>,  "Petr
- Pavlu" <petr.pavlu@suse.com>,  "Sami Tolvanen" <samitolvanen@google.com>,
-  "Daniel Gomez" <da.gomez@samsung.com>,  "Simona Vetter"
- <simona.vetter@ffwll.ch>,  "Greg KH" <gregkh@linuxfoundation.org>,
-  <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v5 4/5] rust: str: add radix prefixed integer parsing
- functions
-In-Reply-To: <20250204-module-params-v3-v5-4-bf5ec2041625@kernel.org> (Andreas
-	Hindborg's message of "Tue, 04 Feb 2025 13:02:11 +0100")
-References: <20250204-module-params-v3-v5-0-bf5ec2041625@kernel.org>
-	<-rai5J5j5SdFTOIxdaN3KunfUOmtwEtBUxAshbqeA7fJOzy1QRyUJGwIJVz-QEfw8NGmvoMsrxFSh_1Q39glYQ==@protonmail.internalid>
-	<20250204-module-params-v3-v5-4-bf5ec2041625@kernel.org>
-User-Agent: mu4e 1.12.7; emacs 29.4
-Date: Mon, 10 Feb 2025 14:36:32 +0100
-Message-ID: <87bjv9j50f.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ja26NgX0";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/93SeBLK"
+Date: Mon, 10 Feb 2025 15:08:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739196484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zOssjLjrkY6BJ3wqKjlN1VufX0Of1JYjkgwNs2mmKAE=;
+	b=Ja26NgX09VkPaOE+vhW6eQr/hdpGw/DuDK3AHunYmgnMLNu8U6tHQidt+jNptSbVLmTYrH
+	4SRYEF/1l/hdl45NxgipBp8rV0f3sbO4y+IAroEryYggPl+pmciwdPf0YK4G0CF9iTQul+
+	6yBgDcvaIAtI5NTba6KfWO7ynTHXu8WmFFccML+iUJs2f476LJ5a7+P8IZdoJtwWeRyXrO
+	Lfe2E/+R2GSwKhCFoyI2T1Lkthmt3u0DYgEeGrOPMQZhN7JonUQWz6fyKeDSKpvpnnXYEt
+	ocyIjxGPmrfpfyGdH/+EG11m7ar84RUhWTb9rts79ifkXkB8754U4EZcM78qzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739196484;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zOssjLjrkY6BJ3wqKjlN1VufX0Of1JYjkgwNs2mmKAE=;
+	b=/93SeBLKh22ONlv6A+rCsDY76VFQG7VMnkrll8mGJcg5RYZ59N8PN6QYRBrX2N9+pMpdI/
+	gVRzBGhZFPp3pvDQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 5/8] module: Add module_for_each_mod() function
+Message-ID: <20250210140803.yAy54W0Q@linutronix.de>
+References: <20250205225031.799739376@goodmis.org>
+ <20250205225103.760856859@goodmis.org>
+ <20250206142817.91853f475c681bc2ef7ca962@kernel.org>
+ <20250206102720.0fd57129@gandalf.local.home>
+ <bfe05b54-9714-46bc-9b59-ad091897c62d@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bfe05b54-9714-46bc-9b59-ad091897c62d@suse.com>
 
-"Andreas Hindborg" <a.hindborg@kernel.org> writes:
+On 2025-02-10 14:04:35 [+0100], Petr Pavlu wrote:
+> >> BTW, do we really need to disable preempt or is it enough to call
+> >> rcu_read_lock()?
+> > 
+> > Bah, as I expected this function to be changed, I didn't spend too much
+> > time on looking at its implementation. I just cut and pasted how the other
+> > loops worked. But yes, it should not be disabling preemption. In fact, I
+> > think the module code itself should not be disabling preemption!
+> > 
+> > I'll have to go and look into that.
+> 
+> The series "module: Use RCU instead of RCU-sched" from Sebastian Andrzej
+> Siewior cleans this up [1]. It is currently queued on modules-next (for
+> 6.15-rc1).
+> 
+> The new function module_for_each_mod() should then use "guard(rcu)();".
 
-> Add the trait `ParseInt` for parsing string representations of integers
-> where the string representations are optionally prefixed by a radix
-> specifier. Implement the trait for the primitive integer types.
->
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
-> ---
+So the removal of the preempt-disable statements here already pays off.
+Nice.
 
-There is a bug in `ParseInt::from_str` that prevents parsing the string
-"0" to zero. Will fix for next version.
-
-
-Best regards,
-Andreas Hindborg
-
-
+Sebastian
