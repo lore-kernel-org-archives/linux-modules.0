@@ -1,97 +1,86 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CA91D516A
-	for <linux-modules@vger.kernel.org>; Thu, 13 Feb 2025 15:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8849F227BA3;
+	Fri, 14 Feb 2025 08:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739462370; cv=none; b=PcEKIR8MDIOJaKoZI+PO8Fcmeeji6z/tniCxzrVNwYBlyW70a7pXWYrlvN3v8pPDgZVM0ZmQRZDokKcXRO5kfWk9JWpHQptCZleL0xFqneueM9cZ2ogYAiRX8c3VYSIyRgYVxwe1AWSiVn0xVB+MGkH6X22P0aASLptlEHW2fYY=
+	t=1739522744; cv=none; b=Y6thfMcrOSDJBNw9mbkr6mKuGg+q1AdPaGUu6qN/IwfX4cjU6wp7sGzY/AHxm+KARWZTJWl3RbVCB54D7Icwj9cKCJtQxw6xezehdngX7B1wWBj5sDNnnceoPOoFms81CEumeUVUSME2LXIcigEamMK9nIZhwpfrmSftEsqpY4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739462370; c=relaxed/simple;
-	bh=xPGcVznUvLeFy3uiczY40uRubCYunGOPAh3g1r5/5j8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WhMFIiPkhQIODQyFzyTSr1NkQrOjMnQZcb63UgZF62aHP94ZOViHyZF6OvyLgEyMefCVciDSgsKV1sC2c996ZyEhzhdKfQ0xQPKHxP2VCFy8q38uEzIIi73ZVkNTmKpNMixddAU6qQulvBBv3Tz95y2095fYheFMnd4faWl4aVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JwXF4ZR+; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1739522744; c=relaxed/simple;
+	bh=Jfc7H7jl7D+i12XJhv+Pu+5TzsvZiCzzGUULroEicnM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fS5nZGOKME0kX8tQvsNq3CjgEhNrxsPR7hcX+ukYym0Ihz7bUszmAXOj79E6gCJEBgvnebejK+ss/DX02GwRSwauR4+dimx4w0NuzgzAmBE4HHXnqvAi9lOO07WiyO9fM0ithXXm1XKy5+AXfZ+FNMifoRDzgWhC9sJ/i2pryaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WG9i7WlS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JwXF4ZR+"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ab7ca64da5dso204310766b.0
-        for <linux-modules@vger.kernel.org>; Thu, 13 Feb 2025 07:59:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1739462367; x=1740067167; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xPGcVznUvLeFy3uiczY40uRubCYunGOPAh3g1r5/5j8=;
-        b=JwXF4ZR+zSLQklfH8u39dxGYOiW9H08Tlvar1VUnElOC00ZbPYluj9HoQ6cND1ES3u
-         LY0JvnyTWfEYhUYyCRnGSNL1Qm0OOQBS38VfMQUQFUqlFiAT8i+7fIxTRD3bgywgC3Wx
-         2QodNpZyw2ylOdunv+rZGN3jun8U1LFxmnipa11uPEdYUSwskh/dcZ4Q341dnZo74eCX
-         KZpVxA837SlUBn5u1GmBvLX3BkEg0USzBNZy0saN0OZRaLuKyxxDj8iGcM0kv8svuHYh
-         gMjf3VDt262hXNusWT6ufoPH4Pq2WknOB9OswvDuU4Mctvw5YKAn51PtCFigFBKyk7cg
-         mXRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739462367; x=1740067167;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xPGcVznUvLeFy3uiczY40uRubCYunGOPAh3g1r5/5j8=;
-        b=JJ700hGn67wD3u8bh/qCAiUIeyxwv9680/CB2blFFAluKN3PF9/5JfeDRM7VNNbXOR
-         dsIhXkR5m+ca1kLj8BpZ6YhvLFsn6V9rmQlQX6SZD3wITdcCnfmeN0nDGt0xuMG7Lt52
-         2qEU0cXljwvMZFoWObqjyNJ1wsGpTd4NakYv788K6sUuZ4djKU9Qp5hBo2CF47qA6/kQ
-         bZZbh1uuex63YK//Zvkmn90FhKMAnUlgYprnX60yAERlXaWWemxe79KQYiShSuT2Wh2S
-         h7GqM1cHAGhG5Jit/lbSYrviPwZqeHL7Oqc9Akkqjw6flTbC7tgGF+26TlfUPFhaKOF3
-         d58g==
-X-Forwarded-Encrypted: i=1; AJvYcCXAQJ+OlPcLgx+UWtM3sdwD6H1x4O4Fw08Tg5d12FOISV4ywU2pSIdWpwOtI1mPR5x2dUp8SfU5p+TsI8wI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6i7yay/NKlDjMhJUpsT6cTTm9MFaZepNvwquemRuo7x+RyLiQ
-	cjTvN+Xc1dgzK0MaaWFXqus8NPr+Nj0ZrfGUw03XoKPBbD13drMNfoEilTVEvKtr+5IAluNNj8s
-	t
-X-Gm-Gg: ASbGncsiS0DoG29G3khqcVluRGDQCwTUzwdbSamkZ9YgfQjJvKynRDgxycstzNZP490
-	E0OubUwitj7CBen+mYDoSX5PSFsHsiHpAG1q+CW9XjQztBO7DmmbiL4dT51Ho/l9O0iLIzsB8hO
-	aCiMuSh3TrU8u63Hfji/bi/H9TUWSAhMElLHbMOPLZTPvT7jTvwkHHvJdTTPl7MQceXqyddVblg
-	os+J2+diiFeRhAE+Y9cw25kOfSbdyl7CW+PHNYPIxMUyqX5T4now6oaDPKP0p/IoSwil7KLLOl9
-	Q7FcKyE5nv29+9Rmf84=
-X-Google-Smtp-Source: AGHT+IE1Ar+qat8FNp9iK4XzjwY3o0QaCkr8h1CdQyqi/nSCp7oGodOaTwvP54IAi0qXjPHA1g7F8g==
-X-Received: by 2002:a17:907:c283:b0:ab7:cd14:2472 with SMTP id a640c23a62f3a-aba5150b35bmr293992266b.23.1739462366827;
-        Thu, 13 Feb 2025 07:59:26 -0800 (PST)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba533be1e7sm156907466b.171.2025.02.13.07.59.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Feb 2025 07:59:26 -0800 (PST)
-Message-ID: <450e8088-c239-4738-a996-834734f770a5@suse.com>
-Date: Thu, 13 Feb 2025 16:59:25 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WG9i7WlS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF82FC4CEE2;
+	Fri, 14 Feb 2025 08:45:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739522744;
+	bh=Jfc7H7jl7D+i12XJhv+Pu+5TzsvZiCzzGUULroEicnM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WG9i7WlSjlGwi045U6qpWsp5mcx9fWTW1aW/EP293XnC2Z+VaU2q6Vb4JJbuN9/Nb
+	 i9nZNvC2uMe6EgD6yarHr8XXEC82rokrRHsqG/bjtadI3cK+9t/uA3FOPjz8uU9taB
+	 LSGZ9Prft1mwhgSDMZ3bl9y+rzcxVp3K6yPWfmNc5Myqe1GvUja6BIHNt38ffNYw6u
+	 d7vCiGE+iH4b4IXHoG10TPCeXrs3jhKmzhIk9563oF10Z+8q2uhmImaHgH0aCrlV5T
+	 g5nvT3N/qAb5NyInyqKWwOamTOvIPDiPIJQpFBsJC1We2ESTSKriU12t80wWh2O4Ct
+	 ZWd7411qBTzlQ==
+From: Mike Rapoport <rppt@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>
+Cc: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH] module: don't annotate ROX memory as kmemleak_not_leak()
+Date: Fri, 14 Feb 2025 10:45:31 +0200
+Message-ID: <20250214084531.3299390-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] kernel: globalize
- lookup_or_create_module_kobject()
-To: Shyam Saini <shyamsaini@linux.microsoft.com>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- code@tyhicks.com, linux@rasmusvillemoes.dk, christophe.leroy@csgroup.eu,
- hch@infradead.org, mcgrof@kernel.org, frkaya@linux.microsoft.com,
- vijayb@linux.microsoft.com, petr.pavlu@suse.com, linux@weissschuh.net,
- samitolvanen@google.com, da.gomez@samsung.com, gregkh@linuxfoundation.org,
- rafael@kernel.org, dakr@kernel.org
-References: <20250211214842.1806521-1-shyamsaini@linux.microsoft.com>
- <20250211214842.1806521-4-shyamsaini@linux.microsoft.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250211214842.1806521-4-shyamsaini@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/11/25 22:48, Shyam Saini wrote:
-> lookup_or_create_module_kobject() is marked as static and __init,
-> to make it global drop static keyword.
-> Since this function can be called from non-init code, use __modinit
-> instead of __init, __modinit marker will make it __init if
-> CONFIG_MODULES is not defined.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Hm, we should later clean up kernel/params.c to use __init_or_module
-from include/linux/module.h instead of its own __modinit implementation.
+The ROX memory allocations are part of a larger vmalloc allocation and
+annotating them with kmemleak_not_leak() confuses kmemleak.
 
--- Petr
+Skip kmemleak_not_leak() annotations for the ROX areas.
+
+Fixes: c287c0723329 ("module: switch to execmem API for remapping as RW and restoring ROX")
+Fixes: 64f6a4e10c05 ("x86: re-enable EXECMEM_ROX support")
+Reported-by: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+
+Peter, can you take it via tip tree?
+Or you prefer for Luis to pick this up?
+
+ kernel/module/main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 974821d6e85a..3dbe23098433 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1250,7 +1250,8 @@ static int module_memory_alloc(struct module *mod, enum mod_mem_type type)
+ 	 * *do* eventually get freed, but let's just keep things simple
+ 	 * and avoid *any* false positives.
+ 	 */
+-	kmemleak_not_leak(ptr);
++	if (!mod->mem[type].is_rox)
++		kmemleak_not_leak(ptr);
+ 
+ 	memset(ptr, 0, size);
+ 	mod->mem[type].base = ptr;
+-- 
+2.47.2
+
