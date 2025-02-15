@@ -1,121 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846831624F5;
-	Sat, 15 Feb 2025 03:43:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1EB19DF41;
+	Sat, 15 Feb 2025 13:00:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739591031; cv=none; b=ngyG8kH0F1UFVdtruqKmcw5RQejnIGOpKGvURvUh2UvAywXVpwOo6QOSnQeJsvwxVCXqxQmzdCF++j20p3YMLfhyyRv9ELfUrOoMngvnS5Y2lyDVmZcCiSp7/H6s3onjJuPhQTxlB6LBv0ifabZi5BuOnYJwsfd13x0ETmgqaTw=
+	t=1739624420; cv=none; b=BfZdIr8S5vBY5SPp1hybN81bKEUHwvRJ7HmZ4XT+RaD9S6D4geO4dd6pbfK3U2P3maYLAfnpMokVyv5ggOKrkA1k2N/R2YDP5ltT7SU1wWDN7EgPzhTPZFBf4Divo+JGpHBzy7vR5/YQtg8/mYtIOeJg1bfZA13J30NOSX+DqUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739591031; c=relaxed/simple;
-	bh=uJnQyG8i5lyHH/RkjjPSKWtqaqlnhy1DWyeFiqlXDKo=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=CS2yzl78yybG55E51o9x3SQ0QJrJkRM+oR2MOf593BSGiebiBGxmmGDCD6YIrstNKGc692B39Nv0Sn3pmmkCmHDDEXvHgNXOcz5sw6sKsf1BQp9dbDGWOHXzA3O3sjrqm6pNPo24NdUDc+Jk8g8s8QK5XKlvYaIdP6tmqHlYC0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E72AC4CEE6;
-	Sat, 15 Feb 2025 03:43:51 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1tj965-00000002gwJ-0Dzx;
-	Fri, 14 Feb 2025 22:44:05 -0500
-Message-ID: <20250215034404.902259250@goodmis.org>
-User-Agent: quilt/0.68
-Date: Fri, 14 Feb 2025 22:43:06 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>,
- linux-modules@vger.kernel.org
-Subject: [PATCH v2 5/8] module: Add module_for_each_mod() function
-References: <20250215034301.624019422@goodmis.org>
+	s=arc-20240116; t=1739624420; c=relaxed/simple;
+	bh=w0pvTueIzTQegjN1z53/vVeHmRIdv6Lu6iiqdN/PLW0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QAeH6GT10lJr/cDaQGtGA4YgefIT8dk0bhMk1HPcPhD0ASHDRSuku2hBOCg0j62VTPwY+iWvMEesJhRKvBi/IM20DVz1OMcE1LlCd2MisZAyu0H3whOvgLZLoxpZKWPFA5pjeuqByr2owak4mZEvd/0THbCasvvC8FIoLorr30c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8tNpDey; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8tNpDey"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4403EC4CEDF;
+	Sat, 15 Feb 2025 13:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739624420;
+	bh=w0pvTueIzTQegjN1z53/vVeHmRIdv6Lu6iiqdN/PLW0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j8tNpDeyRwGsXOm7OszB7vHJKZvtXlN83ND/q4OhnEPQhvv5brox20QVx7nAlntVg
+	 dMHSA/+eUrexzikHpby6abWi8lv/3WeVx3yUSknl4BVj/LWDlAny4fqAnCXYZDa+F3
+	 PEO9l6vdf07wBIYH0owe105+hcE9SCZL1mC+QLmU4QRaMAfqOkBAjxmqvRJ9YucLcl
+	 ur/NRs8vE2sr3RFW0N7ad0G5gz+SKxCaUHnOunJRUeSut3VblM6gqaL7q1ZPl9rFIR
+	 F0+hnwyVrop03fxTUW+qzeE+D8pam2xcRHPRrajEhTTrYi61hh+dQ2+QC+1Dj9truR
+	 /gOSpgpoBYLzw==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-307c13298eeso29486661fa.0;
+        Sat, 15 Feb 2025 05:00:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUe4fjQVkVB1UXPhreH2+pcSGlr47L3dqhqiaR32r2nlzOuEo+v/CG9c9nDtNDm4ZzZx5yQeWO4B6/ngpMuWb4=@vger.kernel.org, AJvYcCVQLtVjzpP3fc5hqHH4arC3uPhTm+PboXMzFVxSq0AkWXyQ1mGu7DydIhRqxMpcpws2SY3HMn8UOKWb7xbh@vger.kernel.org, AJvYcCVw2yyaAMK2eXgN+w8WnGPWbJmzi94V5OUkNNdpO9esNQfoGKXJ7RQHllG2a3uZGmkyFnbQjAaa7FT4tAc=@vger.kernel.org, AJvYcCXUEZ+WthbUFX+gHHP6sj72XpIl5ksrUJXNHxthrS5iK39SLQoZgyEzUNP+8FxbRD4Wu2W+ulWPaKmBuCp22Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9dFMoXo0/ymaU3pZLzuL2YNCYUTnQTZRpOgMnqlqO49/3EO8N
+	7Tq0ZRAVe4JjhCLFZGO8QWHlbod6mDHKR26ww1vPqTM1LTGQGUaGnWcJifmtU/bElw78i5f9onK
+	eJymLVEnlJwahvnvzt/kACvxM8k0=
+X-Google-Smtp-Source: AGHT+IFSUPXvnmrMQIyQbKKEJMl6/WzRVPKaodRlZzvePIrXQzTw7tqA3FMC13U3PDsUYyGy56BeFSxbu0i7HoVQkbY=
+X-Received: by 2002:a2e:a3d2:0:b0:308:f53a:ed31 with SMTP id
+ 38308e7fff4ca-309288b1b15mr8653751fa.3.1739624418975; Sat, 15 Feb 2025
+ 05:00:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20250203212631.565818-2-samitolvanen@google.com>
+In-Reply-To: <20250203212631.565818-2-samitolvanen@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 15 Feb 2025 21:59:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARwZ4YO4=w5ESenwNrEiW+_qV7HYNO0VgrWRrog1TSS-A@mail.gmail.com>
+X-Gm-Features: AWEUYZn5I6jeoZtUtSgKhQecrGLZl5Br1Rb7Etl05VSFZmf8WVKA1X0KT6WJmoI
+Message-ID: <CAK7LNARwZ4YO4=w5ESenwNrEiW+_qV7HYNO0VgrWRrog1TSS-A@mail.gmail.com>
+Subject: Re: [PATCH] gendwarfksyms: Add a separate pass to resolve FQNs
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Matthew Maurer <mmaurer@google.com>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Sedat Dilek <sedat.dilek@gmail.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, Giuliano Procida <gprocida@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Steven Rostedt <rostedt@goodmis.org>
-
-The tracing system needs a way to save all the currently loaded modules
-and their addresses into persistent memory so that it can evaluate the
-addresses on a reboot from a crash. When the persistent memory trace
-starts, it will load the module addresses and names into the persistent
-memory. To do so, it will call the module_for_each_mod() function and pass
-it a function and data structure to get called on each loaded module. Then
-it can record the memory.
-
-This only implements that function.
-
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Daniel Gomez <da.gomez@samsung.com>
-Cc: linux-modules@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/linux/module.h |  6 ++++++
- kernel/module/main.c   | 14 ++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 30e5b19bafa9..9a71dd2cb11f 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -782,6 +782,8 @@ static inline void *module_writable_address(struct module *mod, void *loc)
- 	return __module_writable_address(mod, loc);
- }
- 
-+void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
-+
- #else /* !CONFIG_MODULES... */
- 
- static inline struct module *__module_address(unsigned long addr)
-@@ -894,6 +896,10 @@ static inline void *module_writable_address(struct module *mod, void *loc)
- {
- 	return loc;
- }
-+
-+static inline void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
-+{
-+}
- #endif /* CONFIG_MODULES */
- 
- #ifdef CONFIG_SYSFS
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1fb9ad289a6f..ea1fe313fb89 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3809,6 +3809,20 @@ bool is_module_text_address(unsigned long addr)
- 	return ret;
- }
- 
-+void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
-+{
-+	struct module *mod;
-+
-+	preempt_disable();
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		if (func(mod, data))
-+			break;
-+	}
-+	preempt_enable();
-+}
-+
- /**
-  * __module_text_address() - get the module whose code contains an address.
-  * @addr: the address.
--- 
-2.47.2
+On Tue, Feb 4, 2025 at 6:26=E2=80=AFAM Sami Tolvanen <samitolvanen@google.c=
+om> wrote:
+>
+> Using dwarf_getscopes_die to resolve fully-qualified names turns out to
+> be rather slow, and also results in duplicate scopes being processed,
+> which doesn't help. Simply adding an extra pass to resolve names for all
+> DIEs before processing exports is noticeably faster.
 
 
+Applied to linux-kbuild. Thanks!
+
+--=20
+Best Regards
+Masahiro Yamada
