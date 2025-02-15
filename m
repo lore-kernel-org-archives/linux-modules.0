@@ -1,90 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3857B1DE2B4;
-	Fri, 14 Feb 2025 22:30:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846831624F5;
+	Sat, 15 Feb 2025 03:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739572207; cv=none; b=jkWBR81VSMc7BTswVo+bfqT1n8/aRrPlR1/cp2bUaFio9rHT0V8LJjHh3iLn58djwln0MS1ZfP7OEgzMh35VzcMXNO2KnMMXdiPGoBHwEbfHKZzBZclMbe6/HJDTd2Y9Uft3hrF+C+OG9CLTXeH7QUS2DAXHAFORyu0dRvwdstI=
+	t=1739591031; cv=none; b=ngyG8kH0F1UFVdtruqKmcw5RQejnIGOpKGvURvUh2UvAywXVpwOo6QOSnQeJsvwxVCXqxQmzdCF++j20p3YMLfhyyRv9ELfUrOoMngvnS5Y2lyDVmZcCiSp7/H6s3onjJuPhQTxlB6LBv0ifabZi5BuOnYJwsfd13x0ETmgqaTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739572207; c=relaxed/simple;
-	bh=YrG3eqr3JuNDaow29YjpUS4/F477rGkaY7COfj9rjYo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CWFa7Rr79ZPijwKDA1uu6QD3PEHa5Wn2vTvpMrOtP0d/ZEpQ4BZBihzIiMyDWgz7reinslLQf3jwvRlSFu5WNRog7w4Syz04YlFvOAJWAA2X9dfS6rSUoG3PV2C9QEiQwV/2nXrbvANX0HlFzqn06aM8n6T+HtKzQthbGZf0RH8=
+	s=arc-20240116; t=1739591031; c=relaxed/simple;
+	bh=uJnQyG8i5lyHH/RkjjPSKWtqaqlnhy1DWyeFiqlXDKo=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=CS2yzl78yybG55E51o9x3SQ0QJrJkRM+oR2MOf593BSGiebiBGxmmGDCD6YIrstNKGc692B39Nv0Sn3pmmkCmHDDEXvHgNXOcz5sw6sKsf1BQp9dbDGWOHXzA3O3sjrqm6pNPo24NdUDc+Jk8g8s8QK5XKlvYaIdP6tmqHlYC0o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A44DC4CED1;
-	Fri, 14 Feb 2025 22:30:05 +0000 (UTC)
-Date: Fri, 14 Feb 2025 17:30:17 -0500
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E72AC4CEE6;
+	Sat, 15 Feb 2025 03:43:51 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.98)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1tj965-00000002gwJ-0Dzx;
+	Fri, 14 Feb 2025 22:44:05 -0500
+Message-ID: <20250215034404.902259250@goodmis.org>
+User-Agent: quilt/0.68
+Date: Fri, 14 Feb 2025 22:43:06 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Mark
- Rutland <mark.rutland@arm.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Andrew Morton
- <akpm@linux-foundation.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami
- Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>,
  linux-modules@vger.kernel.org
-Subject: Re: [PATCH 5/8] module: Add module_for_each_mod() function
-Message-ID: <20250214173017.07b0b250@gandalf.local.home>
-In-Reply-To: <20250206102720.0fd57129@gandalf.local.home>
-References: <20250205225031.799739376@goodmis.org>
-	<20250205225103.760856859@goodmis.org>
-	<20250206142817.91853f475c681bc2ef7ca962@kernel.org>
-	<20250206102720.0fd57129@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: [PATCH v2 5/8] module: Add module_for_each_mod() function
+References: <20250215034301.624019422@goodmis.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
 
-On Thu, 6 Feb 2025 10:27:20 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+From: Steven Rostedt <rostedt@goodmis.org>
 
-> > BTW, do we really need to disable preempt or is it enough to call
-> > rcu_read_lock()?  
-> 
-> Bah, as I expected this function to be changed, I didn't spend too much
-> time on looking at its implementation. I just cut and pasted how the other
-> loops worked. But yes, it should not be disabling preemption. In fact, I
-> think the module code itself should not be disabling preemption!
-> 
-> I'll have to go and look into that.
+The tracing system needs a way to save all the currently loaded modules
+and their addresses into persistent memory so that it can evaluate the
+addresses on a reboot from a crash. When the persistent memory trace
+starts, it will load the module addresses and names into the persistent
+memory. To do so, it will call the module_for_each_mod() function and pass
+it a function and data structure to get called on each loaded module. Then
+it can record the memory.
 
-It really looks like it requires preempt_disable(), as the code in
-kernel/module/main.c has in several places:
+This only implements that function.
 
-	preempt_disable();
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-modules@vger.kernel.org
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/module.h |  6 ++++++
+ kernel/module/main.c   | 14 ++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-	list_for_each_entry_rcu(mod, &modules, list) {
-		[..]
-	}
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 30e5b19bafa9..9a71dd2cb11f 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -782,6 +782,8 @@ static inline void *module_writable_address(struct module *mod, void *loc)
+ 	return __module_writable_address(mod, loc);
+ }
+ 
++void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
++
+ #else /* !CONFIG_MODULES... */
+ 
+ static inline struct module *__module_address(unsigned long addr)
+@@ -894,6 +896,10 @@ static inline void *module_writable_address(struct module *mod, void *loc)
+ {
+ 	return loc;
+ }
++
++static inline void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
++{
++}
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 1fb9ad289a6f..ea1fe313fb89 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3809,6 +3809,20 @@ bool is_module_text_address(unsigned long addr)
+ 	return ret;
+ }
+ 
++void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
++{
++	struct module *mod;
++
++	preempt_disable();
++	list_for_each_entry_rcu(mod, &modules, list) {
++		if (mod->state == MODULE_STATE_UNFORMED)
++			continue;
++		if (func(mod, data))
++			break;
++	}
++	preempt_enable();
++}
++
+ /**
+  * __module_text_address() - get the module whose code contains an address.
+  * @addr: the address.
+-- 
+2.47.2
 
-	preempt_enable();
 
-Or
-
-	module_assert_mutex_or_preempt();
-
-	[..]
-
-	list_for_each_entry_rcu(mod, &modules, list,
-				lockdep_is_held(&module_mutex)) {
-
-
-So it looks like it either requires preempt_disable or holding the
-module_mutex.
-
-As I need to call this with trace_types_lock held, and there's a place
-where trace_types_lock is within a module callback, I don't think it's safe
-to take that lock in that loop, otherwise we have the ABBA deadlock.
-
-Luis,
-
-Is this patch OK, and also is there any plan to move the module code to
-using just rcu_read_lock instead of preempt_disable?
-
--- Steve
