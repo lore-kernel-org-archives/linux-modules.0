@@ -1,41 +1,41 @@
 Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5102139DD;
-	Fri, 21 Feb 2025 15:52:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825D621506B;
+	Fri, 21 Feb 2025 15:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740153142; cv=pass; b=abiUVTPSS1b+v/lcmVAlt8wVD+21gkuKT6/xBLiv6iGVR1AdL3yEDOsscztm+yER8CGSH6pU6nsYUOWJ9ZMyJ7z7YbsTDjhO1AZK2DCsKIbgsucu9HPOqIeSnAMHoJMdfX88I79RZm56uJGASjhS/AY7kmJR7SIQYqMmiN3Dwxg=
+	t=1740153579; cv=pass; b=LAdzO4eOLuncSxhxALSsOErr0guUzz2S+aLK5Z7nqoCR9T5e+Mg/okWAdOoYpoGapFX6YEYgG5r+xDhxG3OydzHxXCqcMx4JsTWJUWi+jVix7T/t+u1C/O8gSaYev23ajYacVWAHwGYyTMfdIv31sHn8+//X1ttsV1yCn6ieYRA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740153142; c=relaxed/simple;
-	bh=iaQ+8410xKoAcD7janib56GRmsqyMB9cJ17s5UofjeM=;
+	s=arc-20240116; t=1740153579; c=relaxed/simple;
+	bh=ntiVJXzkZTZjsdeI5IdrDhxqLX4AiOQr3+403vBJSnI=;
 	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=riU1lRuy2eBGjlP3YLlscfk2IeTRrQuex8Qv05SgUyDibFQt5FcQzCLJJl6WPvvcL0xkwAhnNptFiF3AImcgcKM8zNH/f4p6hQFSYHPslVdxVELBsVjA5JRUEdhsd30la8XLqVGbWv1JaWLFnAbWpdMdc2Jnl0PA1B9HE3xd09w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=hmxIeYl4; arc=pass smtp.client-ip=136.143.188.112
+	 Message-Id:References:To; b=ilo86LQ1DuZi8BlFuHA2bZRmE4hPqzNNqxbpv+d8gBdxFFA5zO/YEkJmfOn6GuWcb0CS3qxlgP29Sf/X/59D177+iJABkYnV8454YIMXScX8vi0FeAHRHWgR6gJCng6jG5Qh0oHLCXe1hl2ua+XmLcYzYAkxcENsVdvsFUR+T5E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=d9RyPqF/; arc=pass smtp.client-ip=136.143.188.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="hmxIeYl4"
-ARC-Seal: i=1; a=rsa-sha256; t=1740153098; cv=none; 
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="d9RyPqF/"
+ARC-Seal: i=1; a=rsa-sha256; t=1740153544; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=Ur8DFaCXw/kfGxqm2t3KTY/RqUQ9/Hm7NPzbLZo907lsoPJtfhPofBmeoRETtZIzKy7XKnfr8jM3E04GcOp00g11fWii7pTAQepqxHLlntonTdcfv1if8m5QwME8VMmMI1rDrnrIASCZlNmizdQViJ9psupxliVrXjqGx8xzkVY=
+	b=Nn1BpqQX78RRt0sY8e9CKmdBeBFf3st0Sbf+2kPjRqbrxIPZZN2Og7TO5iFdMxCWDmuYZFUWvX7d6BjFcUdIPEfeQBEs4f/5mUG3Z7zqVZvKs4mkNO04haCW7nPvbSvo673VZt3FmihGouWdFQxTPOzF10lAcDXcgdv0GMRr8J0=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1740153098; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=HlQHYE1pagm2zjFO6/6LR3Vvs32N93jmTgtwHYFPo48=; 
-	b=CUb+cps4DvmJ92jWd4kjfM772bDK7IebZrfq41FAMwBGajdgF5Rd6gxT2k2+ZDuudFT97gaJdvSBhmbj15u4CGbkoSO2GZRL5okUbxbo3QyM7ey85aCy+KnO2H2Trgd0oLAAblmrDOAIxCwwf2UfkZfEfEgpzEUOMcQ2Z1hRzrc=
+	t=1740153544; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=VMzhihZ2XljnljV6PhP6eOJIJ/ST5xaErOjkBTRaQ9k=; 
+	b=L2GAaaJpyc50eu/ChVdfRWf9bIfqr6PeJSyCONhDf+nq+nv/vjx6Zupx3Df3JfL0b0FEjQaijPZ/mGiGNmgDXR1oZpuf8bVUL763Jx3ECMkhWx/tizYDPj8lK04WT1N3hm7ozXrc8aMsmW9sVPuT86DwMa9yn0U1rgz21O6mki8=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
 	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740153098;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740153544;
 	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
 	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=HlQHYE1pagm2zjFO6/6LR3Vvs32N93jmTgtwHYFPo48=;
-	b=hmxIeYl48SOWkT35ShjoRjzHy48BbupoVwnc1RTMvjQ1bWk8RvIqEDg52ggG87fH
-	D4qJ/Ctk4ZlA5imdzpkQQfG6jW/3P2u2JTTMKbUymnMnArX/2xgBGEZwS9uaBUSSF+e
-	goUrc3U3SI2GT1d5tWzDiLFRFFksjDzXz1MUwRkA=
-Received: by mx.zohomail.com with SMTPS id 1740153097184404.12164099489894;
-	Fri, 21 Feb 2025 07:51:37 -0800 (PST)
+	bh=VMzhihZ2XljnljV6PhP6eOJIJ/ST5xaErOjkBTRaQ9k=;
+	b=d9RyPqF/6qrMyi29DkZ44eIpR7Bn4PjpU1W3GdDNsdqFF7SJr04SmUmsa2hgz38z
+	p/CnJVJ2mtVIY40upH2QaDkGqoviSCmklvJUvzAjldz/vwXGTVnmtHIZcFDIsYnIYr/
+	ZMj3ECxbboHDXy7bcgpyhl1+HIUMdTy8M2jhbbTU=
+Received: by mx.zohomail.com with SMTPS id 1740153542341460.47491147955066;
+	Fri, 21 Feb 2025 07:59:02 -0800 (PST)
 Content-Type: text/plain;
 	charset=us-ascii
 Precedence: bulk
@@ -44,10 +44,10 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
-Subject: Re: [PATCH v7 1/6] rust: str: implement `PartialEq` for `BStr`
+Subject: Re: [PATCH v7 2/6] rust: str: implement `Index` for `BStr`
 From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20250218-module-params-v3-v7-1-5e1afabcac1b@kernel.org>
-Date: Fri, 21 Feb 2025 12:51:20 -0300
+In-Reply-To: <20250218-module-params-v3-v7-2-5e1afabcac1b@kernel.org>
+Date: Fri, 21 Feb 2025 12:58:45 -0300
 Cc: Miguel Ojeda <ojeda@kernel.org>,
  Alex Gaynor <alex.gaynor@gmail.com>,
  Boqun Feng <boqun.feng@gmail.com>,
@@ -71,9 +71,9 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,
  Greg KH <gregkh@linuxfoundation.org>,
  linux-modules@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <FB41A276-5A3A-4878-8DA6-CE0EA751E768@collabora.com>
+Message-Id: <56BF12A8-F632-428B-ACC2-0847F95CB8E9@collabora.com>
 References: <20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org>
- <20250218-module-params-v3-v7-1-5e1afabcac1b@kernel.org>
+ <20250218-module-params-v3-v7-2-5e1afabcac1b@kernel.org>
 To: Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: Apple Mail (2.3826.300.87.4.3)
 X-ZohoMailClient: External
@@ -83,26 +83,33 @@ X-ZohoMailClient: External
 > On 18 Feb 2025, at 10:00, Andreas Hindborg <a.hindborg@kernel.org> =
 wrote:
 >=20
-> Implement `PartialEq` for `BStr` by comparing underlying byte slices.
+> The `Index` implementation on `BStr` was lost when we switched `BStr` =
+from
+> a type alias of `[u8]` to a newtype. This patch adds back `Index` by
+> implementing `Index` for `BStr` when `Index` would be implemented for
+> `[u8]`.
 >=20
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 > ---
-> rust/kernel/str.rs | 6 ++++++
-> 1 file changed, 6 insertions(+)
+> rust/kernel/str.rs | 11 +++++++++++
+> 1 file changed, 11 insertions(+)
 >=20
 > diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index 28e2201604d67..002dcddf7c768 100644
+> index 002dcddf7c768..ba6b1a5c4f99d 100644
 > --- a/rust/kernel/str.rs
 > +++ b/rust/kernel/str.rs
-> @@ -108,6 +108,12 @@ fn deref(&self) -> &Self::Target {
+> @@ -114,6 +114,17 @@ fn eq(&self, other: &Self) -> bool {
 >     }
 > }
 >=20
-> +impl PartialEq for BStr {
-> +    fn eq(&self, other: &Self) -> bool {
-> +        self.deref().eq(other.deref())
+> +impl<Idx> Index<Idx> for BStr
+> +where
+> +    [u8]: Index<Idx, Output =3D [u8]>,
+> +{
+> +    type Output =3D Self;
+> +
+> +    fn index(&self, index: Idx) -> &Self::Output {
+> +        BStr::from_bytes(&self.0[index])
 > +    }
 > +}
 > +
@@ -117,4 +124,5 @@ non-ASCII
 >=20
 >=20
 
-Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>=
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+
