@@ -1,96 +1,119 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1640420101F
-	for <linux-modules@vger.kernel.org>; Fri, 21 Feb 2025 10:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740134904; cv=none; b=Gm3jgz93SCrT8cQxdMnNrGuF8Ep0avcpqtmGCx2dkrpF+sLRNy58r8fyqYTZ2m+QjSiB9JCokvOpYiy3ktWu0PDKFs537EjCRKDKPN2SQN9QhY8tAExx663gao+VdMnGGYnFABtnO9i7yF3hbOqQOAbPNM4CuaLTv/sTtESJweU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740134904; c=relaxed/simple;
-	bh=6vR+TEiH5suPoSHJ1QLKsqeNt+6EiaZqxxQ/iGHjpSs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FVdMWno7XIkq70LPLLndI0z5XHqc8GtGpOy7A4xE+03ZG48M/IGpNYuX9MlPMZnkWEW2oN12QYkEYDh9hD4u+Ek7CBNTz6Tlgoify6oxOqYSua+hr64YLZGOgzjUos1JEfnyCysbAZzLtKAyQn7yN7uX9ZjP9HRuLkeyS5xCI+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk; spf=pass smtp.mailfrom=rasmusvillemoes.dk; dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b=bShylq91; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rasmusvillemoes.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rasmusvillemoes.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFC11E7640;
+	Fri, 21 Feb 2025 15:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740152804; cv=pass; b=fPjEfGGhSVBOfMWyYktf0Nx1i8AK0YfMLQs3i0+VffKFq+OMyjFk6RsZc5j4fYN/ZGWBDaLWOFMvEkr5lBnmxfqQfPHAi5LotcUpWxXkUK/0+veRJ5cMpGplZxXyLsMgIlz1XWUvFsOmE6D/xXkLkPqsLLjmaO/IiwoFF7kDoAQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740152804; c=relaxed/simple;
+	bh=pn2MuqrPPywukUfVG1Tn4il5fz+cXCZkczWE+P6YzHQ=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=QF/X3up895yKgnHpsIdAbGFyqNkSIyQ+xCoexGXAs9SJQpY2g4J/4CRYFugiZABCazGYgm28fkJ8QLfnfQ95pztmdbFfl+N6I2F/MSX5MP9UfIfO+uMMoPav8pYUn1F43yWe80TZuk49TSvbowv1rKpkwdB2uItJKKa4QqVHM1U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=P0PAcyep; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="bShylq91"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-30a440effcfso30396501fa.0
-        for <linux-modules@vger.kernel.org>; Fri, 21 Feb 2025 02:48:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1740134901; x=1740739701; darn=vger.kernel.org;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6vR+TEiH5suPoSHJ1QLKsqeNt+6EiaZqxxQ/iGHjpSs=;
-        b=bShylq91Xww3U2dPUsZr831raOnEXMxqm5dAGlIkcTwWQ5B4kyFY/bNcmZBsDLTjPD
-         bnwgyLA/qTtjD6wDi3RNvb4S1aUaS5j3XF0tu/cPLmVrvziK+ah1+hkcE5adIUsW4v+o
-         OauoHHp9WkRSyzGymyQj1bUWQ0zw5+CrsjyxE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740134901; x=1740739701;
-        h=mime-version:user-agent:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6vR+TEiH5suPoSHJ1QLKsqeNt+6EiaZqxxQ/iGHjpSs=;
-        b=CWjBL7gwpRDVwlJZOwE9q/YYI7GULMvWjvQtco/AxmPxMzBoQybwPOJds+lLfI2HLm
-         4VxkiTWYoq5pF9HxUIO7gSYXexrzf+UNhcBdynRTo8FadCMY1w9e1QaXAUspiZ5vM2KZ
-         NJjbVyZHI3pZSeQ9kLnPw1dIVKnGB/n6iCchOQQRcte7+CyqL6QjMhem+TOfw7PU2w7X
-         V5GRk161o826Us4pMCs5cnwDYWxg0F3Zo8ZxiM043junUguHpLiVML5IFp2d78C5k0v5
-         Hct9zS9Dz+Jv0dyHJQ4cFAWk4KoJ+ydXpe62MqsY+EBqfW98yTd4DgY8BA8X7ECWG9Eb
-         HfyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWc6w88zkvZWaBWdznvr3LlNELsek6AV79MLrtJLB9sGxlO4rtYS6/FRgK6KQN4f+CyoqXfPmpDlkc8pWrR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8C27VNx3sy5j7s7J0/HkUjCVehOTy+VJudqsfUba/YFQnkLTo
-	P6uHhPwzQPC1U83ZRw8+i+xJfYdjFBqiUAE1YoV5P0qqfpAZc0yBAuB849hLuew=
-X-Gm-Gg: ASbGncvGPmByEc53vsRBH2MS1V4aTGNn7PXmhQDfyuBmMGi5Hgn65ka5LLySGwYLK+s
-	ec+XQ7ORcNcM7IVQUsb5w8+l5jNs1xrvoYdq+xt3o+r7ynV5GPnJjf04/fzddMPTvHB1U2ZH8LC
-	rg6NEJONbPKyhG5CIRTV9T/cNrXyCA5YBwfYM6k+S3dhHU82fDUXIJIWVDFlx/tSXP3At0E5kqP
-	svslts8qS8ebISfaDsebTWfOna9T2rLr2szHeRPqVrEEqlAX52rbxm5/46drfdAeAZDnTCl/aKF
-	2gyl/tH2G7jjcSxv/SINlJiYhfY=
-X-Google-Smtp-Source: AGHT+IEuI2ueJ54VQyWBbWJeHfFpz3nm7mH8Jqru0OTTgwkkKtB2v0B9s5ZZn+FWongNN/eNaVdGaQ==
-X-Received: by 2002:a2e:98ce:0:b0:30a:2b40:af0a with SMTP id 38308e7fff4ca-30a505bbbb3mr22231871fa.2.1740134901015;
-        Fri, 21 Feb 2025 02:48:21 -0800 (PST)
-Received: from localhost ([81.216.59.226])
-        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-30a29ab47adsm17629081fa.97.2025.02.21.02.48.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 02:48:20 -0800 (PST)
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Shyam Saini <shyamsaini@linux.microsoft.com>,
-  linux-kernel@vger.kernel.org,  linux-modules@vger.kernel.org,
-  code@tyhicks.com,  christophe.leroy@csgroup.eu,  hch@infradead.org,
-  mcgrof@kernel.org,  frkaya@linux.microsoft.com,
-  vijayb@linux.microsoft.com,  linux@weissschuh.net,
-  samitolvanen@google.com,  da.gomez@samsung.com,
-  gregkh@linuxfoundation.org,  rafael@kernel.org,  dakr@kernel.org
-Subject: Re: [PATCH v3 3/4] kernel: globalize lookup_or_create_module_kobject()
-In-Reply-To: <450e8088-c239-4738-a996-834734f770a5@suse.com> (Petr Pavlu's
-	message of "Thu, 13 Feb 2025 16:59:25 +0100")
-References: <20250211214842.1806521-1-shyamsaini@linux.microsoft.com>
-	<20250211214842.1806521-4-shyamsaini@linux.microsoft.com>
-	<450e8088-c239-4738-a996-834734f770a5@suse.com>
-Date: Fri, 21 Feb 2025 11:48:19 +0100
-Message-ID: <87pljbo9os.fsf@prevas.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="P0PAcyep"
+ARC-Seal: i=1; a=rsa-sha256; t=1740152768; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=fEgPaftwiozQnitf44S47NOq3cGA765xGRmrLZK6Sv3ypHwd0sOcHHQBYY/g0zOzRfZfLhXULDWAugrpAKwlz3mkoo6qh19HQjrA0fc/ZPK0dyA+th5DQk8aOCDgc4UvqW8EA+bj1MTWJ5XQgnLLUSPRwtVNay9mR72ZTsANy5w=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740152768; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=CgG3qgCstWdH24HcDyLIW/wtQ4JGMB+RlmP0pIdS1Lw=; 
+	b=lHE4vmXcYUF3YdMuFKVCuo7dUd33aSvyV9EqAL5vVM5xyaeCU9si7PAGJy8XeFohGAlvNTNkhg61+rDmf5HiEZUoIbTnMrlUuZdlQLEAMZGk0zxSy5z7W/YqSqe4J14SIiXOy44AyPrCZwKjn2HNdOKpHASkT7rNI7GWT9cbg68=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740152768;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=CgG3qgCstWdH24HcDyLIW/wtQ4JGMB+RlmP0pIdS1Lw=;
+	b=P0PAcyepf6usrkvthJZSHWojSPwAEcyiKMjZrkIcG6lJqEsbJsm4zCqEmsJYOuIn
+	3pnnDJNDQmNjJuo/dCx33cgE+ZXa8qRq8tWPHwMa1WWzf3Gt9C2PAg+YDmUIym+BPUM
+	olWFM6uxhyoh7FSykeJ6zSu6KD4GRKFDm7g2U8PQ=
+Received: by mx.zohomail.com with SMTPS id 1740152765928241.70092754235043;
+	Fri, 21 Feb 2025 07:46:05 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
+Subject: Re: [PATCH v7 0/6] rust: extend `module!` macro with integer
+ parameter support
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org>
+Date: Fri, 21 Feb 2025 12:45:48 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas@fjasle.eu>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Adam Bratschi-Kaye <ark.email@gmail.com>,
+ linux-kbuild@vger.kernel.org,
+ Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>,
+ Greg KH <gregkh@linuxfoundation.org>,
+ linux-modules@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F882BB02-A795-4F79-A2AF-CBA9608470A5@collabora.com>
+References: <20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+X-Mailer: Apple Mail (2.3826.300.87.4.3)
+X-ZohoMailClient: External
 
-On Thu, Feb 13 2025, Petr Pavlu <petr.pavlu@suse.com> wrote:
+Hi Andreas,
 
-> On 2/11/25 22:48, Shyam Saini wrote:
->> lookup_or_create_module_kobject() is marked as static and __init,
->> to make it global drop static keyword.
->> Since this function can be called from non-init code, use __modinit
->> instead of __init, __modinit marker will make it __init if
->> CONFIG_MODULES is not defined.
->
-> Hm, we should later clean up kernel/params.c to use __init_or_module
-> from include/linux/module.h instead of its own __modinit implementation.
+> On 18 Feb 2025, at 10:00, Andreas Hindborg <a.hindborg@kernel.org> =
+wrote:
+>=20
+> This series extends the `module!` macro with support module =
+parameters. It
+> also adds some string to integer parsing functions and updates `BStr` =
+with
+> a method to strip a string prefix.
+>=20
+> This series stated out as code by Adam Bratschi-Kaye lifted from the =
+original
+> `rust` branch [1].
+>=20
+> After a bit of discussion on v3 about whether or not module parameters
+> is a good idea, it seems that module parameters in Rust has a place
+> in the kernel for now. This series is a dependency for `rnull`, the =
+Rust
+> null block driver [2].
+>=20
 
-Good catch, yes. Mind sending the patch?
+```
+$ sudo modprobe rust_minimal test_parameter=3D2
+[  251.384125] rust_minimal: Rust minimal sample (init)
+[  251.384600] rust_minimal: Am I built-in? false
+[  251.385010] rust_minimal: My parameter: 2
+```
 
-Rasmus
+Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+
+IMHO, this is slightly confusing, since the parameter is named
+=E2=80=9Ctest_parameter=E2=80=9D, but you=E2=80=99re printing =E2=80=9CMy =
+parameter=E2=80=9D.
+
+This is of course very minor. Overall, congrats on getting this to work =
+:)
+
+=E2=80=94 Daniel=20=
