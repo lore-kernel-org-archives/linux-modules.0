@@ -1,191 +1,177 @@
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021080.outbound.protection.outlook.com [52.101.100.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430822505D3;
-	Fri, 21 Feb 2025 18:53:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740163986; cv=fail; b=Bvi8ehOrUTGTx4nooYFTiCL9l3/m/8Eb81kXyIuHKDDdMAKpjYp5GC8yqs4Wc+8aczlb8vPdgTIHiSyiqgaodoUmjkNyOuzEj5CAdAw725dI1InzzuvagFTTh2WQW1iGh12eDrt+k92++Mq7dc9btJsUqITr1sVTMd3B9VogRmk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740163986; c=relaxed/simple;
-	bh=IrSryUHmZOD2oOBt0mxnudgaRznAHEwmQDeYiS5o3UQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oZ6K82uvQjDDjUhRzaNN0ECXCs696IKyCeSv+jXEkQnqHNCr4Y772GmnlznoBrilt6wlxy9oBDMHmo5olYzpUllhLe7toNShYjBNvSz+tvnS9EL/iXhkNVmx5LZETZIt9+vnPOLdpYzvzG90e48xY4219h1PeNjxghOto+YqkJ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=kry8Cziz; arc=fail smtp.client-ip=52.101.100.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FAB2AE74;
+	Fri, 21 Feb 2025 20:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740168943; cv=none; b=uFXy5bOsLMrlpYWxGdNwePdb2OtsrfZSgXsFtqj4aOWXQ0UB8D1sGppmxlXe6Te7vsyRdDK00apZ3+NXLfv+LnWzz/HRUtroYfK+R+S0uIKjT1WBZD5a8TJvzArkDelYLw12JS8hCBariV9d+spVAxUAuQPsLrplbTbeGh0dw2s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740168943; c=relaxed/simple;
+	bh=jqnFF+WFFXdW89+9fbLNDFScUC4mQYBXnE5q30DOZZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hdSAkryPDMVK7cf00Nr6vn0pUP7sati0aTHTwll4Xk5Ib4eOoyQ6RClWWUkTLR6SFAiOzSKKwWQyIt59EieD7dEsXsyEWG2qb5pgSXHFkKffjF0RgEgmspwlk7KF43M4z0MZzU4ei/T+6BMPsSSD6BK28PAslGsGtbBOWMMbm4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JxJf/Vaa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="kry8Cziz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=v0f3s4SAfbhfFAoaQW6busiv3R0GU/J3pB5w0B4e1hlnQsKIJH+f7uWo49nfklQtNhygr3meeBmchxQy0rcqoBHnDYIIbndZlBzLR3Yf7nDHFvvK0HsyF0bJiSnBmq3b8ucEAqKqfkWOGF1abtvUKxwU9kw7ab/J/Q8VkQ3R+752vZMtui9b+x9XR7q0yE8XXlg1yyAzIvGHAWZK0bShfsimRZGst/JYkvuRAhu8wK6Q0kS0G6vKE9OhY5yrERtknosPO8rwQ12yty+qii3TRS1HC/fgY7BcXrty9CncdQYokH4dNEx8h8VZew27oeK7TuzWmMQNcxU1aVJUvqUu0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dKYHj+Pz0kxowbKeASvTi1uFgp61Zwp47aIwiTORX6s=;
- b=EuJI8Lu9b6KnNhv44GZoqalpS1IP3jOUJkFrdgsKLOXP5EKB9mPrRl6XrAFvdXxgjOyLePWYs4JRwnUzJHRW+ubeHcSn5dtufq4k4KA32CtnXLHm7y+jm2MreTK63vHNxQCpH1gJSFBYscOts+Ha8GHZUKWzdTks2Z0YkchY4ty+D8TC2YKvnS65EZ1ih3tM3kKgHj4AvRAZumEPyFlXwxVYjXfHD+nNH4jHxkBXMjdm+7iI324+GrFXeGa6mJnWdi05w5XwI0/mnSfcGUAfQ6A28m3E/qJgv4RPuuv0CaKpSlc4jsxd9jXOCinIUaCx1bzmAAlJoJvnd86mtHvxeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dKYHj+Pz0kxowbKeASvTi1uFgp61Zwp47aIwiTORX6s=;
- b=kry8CzizdtUllhlVPc2rNEvW2IljdzxLCxFpB2Y9NcYgNwJu2ajTDQaj16bhPWLka3fksM+fd8gkcJ7sMYe1tucGKnB1XACQQK1KzVAXcRfYjgfXumrsf7wCTgstSddcQnU1BsU+kSx7gZHYTUkMtgVrzd1SXT6sn4n4p2UyTl0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB7207.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:335::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.17; Fri, 21 Feb
- 2025 18:52:59 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%4]) with mapi id 15.20.8466.016; Fri, 21 Feb 2025
- 18:52:59 +0000
-Date: Fri, 21 Feb 2025 18:52:55 +0000
-From: Gary Guo <gary@garyguo.net>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Alice
- Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Masahiro
- Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas@fjasle.eu>, Luis Chamberlain <mcgrof@kernel.org>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, Adam
- Bratschi-Kaye <ark.email@gmail.com>, linux-kbuild@vger.kernel.org, Petr
- Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Simona Vetter
- <simona.vetter@ffwll.ch>, Greg KH <gregkh@linuxfoundation.org>,
- linux-modules@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] rust: str: implement `AsRef<BStr>` for `[u8]`
- and `BStr`
-Message-ID: <20250221185255.6cc33367@eugeo>
-In-Reply-To: <20250218-module-params-v3-v7-3-5e1afabcac1b@kernel.org>
-References: <20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org>
-	<20250218-module-params-v3-v7-3-5e1afabcac1b@kernel.org>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO0P123CA0002.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:354::13) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxJf/Vaa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD97C4CED6;
+	Fri, 21 Feb 2025 20:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740168942;
+	bh=jqnFF+WFFXdW89+9fbLNDFScUC4mQYBXnE5q30DOZZI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JxJf/Vaa3Lx5zXYIyjZJztjQ2mX/MQPb3ufDsbcHsmE/ap/oUw3BtC5N7ZmZyStwV
+	 ItNOLEF5499EzpywDbzAf4aGvVSgu2axmmS+SGl4xqpQqeZ69ioAc/oOJA+TsTS1mU
+	 KzyCQH3JYCsGkZRvzQAmEYTxt2ocLfhLLXVJPTHmCtCYwltsySF0oSvUavqJXGCplE
+	 kZvl76VjDhHIF3IRjnpZzH9Wu/9pP/7DMpyaJifXJVuACoOlAxXN0v0kaoVkI1RH9Y
+	 rT0OOt0q+z54D4W4vuLRKcsZsR2YT8N6qn/YtbPn+i2ffdKhTv76Vw0ZFraMho+XMf
+	 yhzCrCep7M8Fg==
+Date: Fri, 21 Feb 2025 12:15:40 -0800
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-modules@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+	bpf <bpf@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>,
+	iovisor-dev <iovisor-dev@lists.iovisor.org>, gost.dev@samsung.com
+Subject: Re: [PATCH 2/2] moderr: add module error injection tool
+Message-ID: <Z7je7Kryipdq6AV4@bombadil.infradead.org>
+References: <CGME20250122131159eucas1p17693e311a9b7674288eb3c34014b6f2c@eucas1p1.samsung.com>
+ <20250122-modules-error-injection-v1-0-910590a04fd5@samsung.com>
+ <20250122-modules-error-injection-v1-2-910590a04fd5@samsung.com>
+ <CAADnVQJ8tYSx-ujszq54m2XyecoJUgQZ6HQheTrohhfQS6Y9sQ@mail.gmail.com>
+ <Z5lEoUxV4fBzKf4i@bombadil.infradead.org>
+ <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB7207:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2014e4e8-d853-45db-2229-08dd52a8f5ec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?SLZ2vGzruWu2eYPliggPXN2RQzyEi7O+hzH45xpFuYNIpB2OcVBnRFuup/R4?=
- =?us-ascii?Q?BFpy2Dxdwq8r7FXxkCNc3ZDC1a2eeMbOtKVXw6JJIRHefQ91WBFprbcKcU+f?=
- =?us-ascii?Q?mJ2I+VrT3jUoBpqRBNyN9gmgfafz8xPOFUu4r84fnfMQpyezKww7CYcrY7Qf?=
- =?us-ascii?Q?EHtaZlLGt/CrlYdY0/qyFvzvWAFmZpBj+JdPucFrGlsrfTdmXFg9kroJmVQY?=
- =?us-ascii?Q?s0K37nBJ96kwqGI0kW7ZCbmbnPyF5zL6Ezs1nmVc8jIVckJphF6Q2iSWCtSV?=
- =?us-ascii?Q?GVtwPfpScIOxaUKOmlv0IGJqiD7rvbG2IMrQbQywv+8/ZXNXRfg4FQCsY0wc?=
- =?us-ascii?Q?oAk5FOFig6KQHam/tEXtL1cII9Z14siQdJ1CumxMzic6fElcIYLKmovZJh0U?=
- =?us-ascii?Q?38C1EuOh7c1U9tUPwcI9VKww9+fFbZzYx+nCqIsJBU94QhA12y1w+i6DZgmN?=
- =?us-ascii?Q?dZURcMn1GFVLhmwqiAXdqYzBHK9Q5v7vR1UhuFRcwYj1e5QcB8RekTBnB2rD?=
- =?us-ascii?Q?AL1r3bepyD+RSXbJBXEvIRieubEqTl8PnI651PanbhlHb2bltLBJ+4h044hY?=
- =?us-ascii?Q?Wru/nKxRH9EuL+mF9pIOlWrEBEbSZdzOxNwNiFku1tzRIbc5DqmcOF2h5d/X?=
- =?us-ascii?Q?1d4c9blPrJen/05fQiROhpyTfHUci3fJF3RNNxI6p4Ehtn40I3d18VXo9DLI?=
- =?us-ascii?Q?jwBXKQkr/Cez6eqLClIWxLLmc5PQXPsI4pZ87wJz/hLc48cq43VvPTH0X9zo?=
- =?us-ascii?Q?fbW5AIJ6EWIPLPaT/tl10SwFlqeer+frTwn8GHVQxis+EeG4HANVbWU8qd0n?=
- =?us-ascii?Q?GTHe0olSj6lmCLvyD95hp9lkhLKbhVYCVAVGIm94Xre/O4iFMmQylLNuZyhS?=
- =?us-ascii?Q?Iyzep44ttYuO9kOsnBKO7NONmVA0q6qOrG86HVqBwe1mQ2CbHru0K9Pwma6+?=
- =?us-ascii?Q?0lAGy7uarFS4QLgTjwhKZibKlnSIKxuazTTJRTVkQIMOtmzR/3+Go95oIpFz?=
- =?us-ascii?Q?hyIidPTnOGkiyVu8gXVvvxM7n/Nhib4ZiZrRLsp2F8/3g6D6i2AN9tQ23JHh?=
- =?us-ascii?Q?x/GmI73i7Jff2PMEI1RUKgLDPHbhMaO0S1+u3yvzqsBz/D2aA7jtRlyu2h96?=
- =?us-ascii?Q?hEXhV+f1J5G4ZP9soOUXTbMRlpHnsRwVlLAD2ZNGNyMvrs3SB3t6biyXJXDP?=
- =?us-ascii?Q?wpV1vCjMQ5vDfMvFalqz1db88HOV9GRspbawZgBqsJwj/6+h9cjCpMDIrYwZ?=
- =?us-ascii?Q?InkvjXxMPjVoETpOUL8+1DWRlb2zMdHqeyLI/g5pyltk5p9AUo+lEuad4hW7?=
- =?us-ascii?Q?FF8SYWgWlJZ1r9mdLhfFedNkKQyhEazDfBGwAQlP3SqM5vQ8tCq+PmneR2VS?=
- =?us-ascii?Q?HrKEzpNEtcoyawXXUCLmaYjELDHJ?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?YvkUcxg1mkydjsj0INFoAzulJtBbFWyvtvqE7FjP7ozknImnezswIOLi//Kg?=
- =?us-ascii?Q?/FBFl8iHYIIhn+NJ3AfkADIKQ5MtAHKylbp1O8qRUIW/z42Gm/XLZB8hvEMc?=
- =?us-ascii?Q?VJqBDhHcNRFGrn3KpQKeEzFVFiutiT2K7neWa9mIfAK2ls+pJZDSIQNA4EDQ?=
- =?us-ascii?Q?Sz+n2ru/2HNleHT8IKDUVDuweoEoQBIBifnI7wNEg9Yk0RnHW5FIr1+Eb1t7?=
- =?us-ascii?Q?YTgrR3Y2ril1LnbbgGWw14KrIyWke8TW0OPYTbQzn0Jb5DS8hrBn0SLPhg8T?=
- =?us-ascii?Q?4UUT1XEtZXbOYq0ZcZKjhXGwf8/t3S1AfkdE8tJ6x66C4KMV7kel74Q8MYNc?=
- =?us-ascii?Q?DcYPW5M3aP6kl/VR2AR9nlhA4dJkghT2xa5GQ4/4+CPb3vdSJMCCPr5oupfR?=
- =?us-ascii?Q?22Lc8mFtb1lWVEEXeRzOFrHieMz9MYJ1YTDF0QoJ49VhnYswhb4M/h+FEhSu?=
- =?us-ascii?Q?xYHPxzV58XZx8fIGmxlCIb2pNScIHymdaqfXe2xfJLFEV5Z1bS7uE0IaK6A2?=
- =?us-ascii?Q?GdrFSM/hGYj3uBr5/WmP765qiN4i6Jh5xKLrjeBHuAQYjJGwROKyj+eg9YyJ?=
- =?us-ascii?Q?/jb3xxaM4O/2qnEjiZQR29cQEMDqxc4Ml9ss+wyg5mmivy8/uZWGLf7u3wEy?=
- =?us-ascii?Q?s3/wmGw9dW6mvgAAfgJbpgbUI4HgEiPpus2Llx6VY064z/tbu8uPTBLVfI+0?=
- =?us-ascii?Q?mV3WqsB1kOF/dYIk+zzFKd6mQAnmZMiJ9F9dDrkBM8LqpMJeKhvZyFRpty5N?=
- =?us-ascii?Q?cQGEJoqAO73TMCfYttkhlSUSi223cK4POe5NtzgZGmWVnqR4Pyl4GlUaZE/N?=
- =?us-ascii?Q?SMjwdCLlAyjXUPugOWf6PoVBkmJCohdloccsOAcjNALXFfaLlhgEcmQTewcA?=
- =?us-ascii?Q?CM/nqijOkYePJ85sgTIBO/Re8oyZ/upkV9XB9XaXkM/vfbMoop5WDkZwn/4s?=
- =?us-ascii?Q?qgkHBLGThx9aSsTBqRUoVzcsmQrwRi+3AGLBMAIRmjynTet6Qily12byXtmf?=
- =?us-ascii?Q?sqw3/tS1XE3eTkkDReMQ30q7I85AzWbDcmbTgcxMiY+5FoOT8F2Owhmh5v9Z?=
- =?us-ascii?Q?rMysmuE0uyFropp5FoILu3s6zq7hss6RdBYrV2p7TDcLB6NU/Nz27CUMzyUE?=
- =?us-ascii?Q?OAI6z//qHzYD2lb8C7Bpv+p2hHS8zS5x6nUf17+KtggtxsmCfk5rPv6qI5+l?=
- =?us-ascii?Q?IaziyRGz6npPzI+arrqu40fh5l/fJAvWGONm8LNx2LsDoFNhtCr6x/FfUZS8?=
- =?us-ascii?Q?TYNVYnjqIczRJ10NZYeie9vivDxrhER+LGR45TFxXL3VvdIDws1Z6v/l5d8R?=
- =?us-ascii?Q?tcWT94V0DjvNg2qGtRy90nfUZ1sPyo9hr4gE3i7H1bP1ZyTyVAOrGXlSadRE?=
- =?us-ascii?Q?a33B9KXAi1AhC0cM035xm3RyCrr7OG8YfGcVnJafdF494AJNiLCwTVRAY8JJ?=
- =?us-ascii?Q?S6kPzKzQMaGzNTC058opwz4hs4hvPGDCp6nGIKJbYYlkLfJYAWH+s0nECkhn?=
- =?us-ascii?Q?rE5JfAqQo8HCB9/1/6Avf3yDWb9G0eICg9a544StjEi+fbORR3sfNptQFENw?=
- =?us-ascii?Q?QqRXunQjjc1Wh7qo0Tc=3D?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2014e4e8-d853-45db-2229-08dd52a8f5ec
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2025 18:52:59.2289
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tJvWbzVidw/jLShOYq0YnCtLdHmTaECn/vdFKd6ifd5qT5ouQCGm+qHF4SejQKJGAW2rYJF0k0igBQpmgsxfIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB7207
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <qnfhjhyqlagmrmk3dwfb2ay37ihi6dlkzs67bzxpu7izz6wqc5@aiohaxlgzx5r>
 
-On Tue, 18 Feb 2025 14:00:45 +0100
-Andreas Hindborg <a.hindborg@kernel.org> wrote:
-
-> Implement `AsRef<BStr>` for `[u8]` and `BStr` so these can be used
-> interchangeably for operations on `BStr`.
+On Wed, Feb 19, 2025 at 02:17:48PM -0600, Lucas De Marchi wrote:
+> On Tue, Jan 28, 2025 at 12:57:05PM -0800, Luis Chamberlain wrote:
+> > On Wed, Jan 22, 2025 at 09:02:19AM -0800, Alexei Starovoitov wrote:
+> > > On Wed, Jan 22, 2025 at 5:12 AM Daniel Gomez <da.gomez@samsung.com> wrote:
+> > > >
+> > > > Add support for a module error injection tool. The tool
+> > > > can inject errors in the annotated module kernel functions
+> > > > such as complete_formation(), do_init_module() and
+> > > > module_enable_rodata_after_init(). Module name and module function are
+> > > > required parameters to have control over the error injection.
+> > > >
+> > > > Example: Inject error -22 to module_enable_rodata_ro_after_init for
+> > > > brd module:
+> > > >
+> > > > sudo moderr --modname=brd --modfunc=module_enable_rodata_ro_after_init \
+> > > > --error=-22 --trace
+> > > > Monitoring module error injection... Hit Ctrl-C to end.
+> > > > MODULE     ERROR FUNCTION
+> > > > brd        -22   module_enable_rodata_after_init()
+> > > >
+> > > > Kernel messages:
+> > > > [   89.463690] brd: module loaded
+> > > > [   89.463855] brd: module_enable_rodata_ro_after_init() returned -22,
+> > > > ro_after_init data might still be writable
+> > > >
+> > > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > > > ---
+> > > >  tools/bpf/Makefile            |  13 ++-
+> > > >  tools/bpf/moderr/.gitignore   |   2 +
+> > > >  tools/bpf/moderr/Makefile     |  95 +++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.bpf.c | 127 +++++++++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.c     | 236 ++++++++++++++++++++++++++++++++++++++++++
+> > > >  tools/bpf/moderr/moderr.h     |  40 +++++++
+> > > >  6 files changed, 510 insertions(+), 3 deletions(-)
+> > > 
+> > > The tool looks useful, but we don't add tools to the kernel repo.
+> > > It has to stay out of tree.
+> > 
+> > For selftests we do add random tools.
+> > 
+> > > The value of error injection is not clear to me.
+> > 
+> > It is of great value, since it deals with corner cases which are
+> > otherwise hard to reproduce in places which a real error can be
+> > catostrophic.
+> > 
+> > > Other places in the kernel use it to test paths in the kernel
+> > > that are difficult to do otherwise.
+> > 
+> > Right.
+> > 
+> > > These 3 functions don't seem to be in this category.
+> > 
+> > That's the key here we should focus on. The problem is when a maintainer
+> > *does* agree that adding an error injection entry is useful for testing,
+> > and we have a developer willing to do the work to help test / validate
+> > it. In this case, this error case is rare but we do want to strive to
+> > test this as we ramp up and extend our modules selftests.
+> > 
+> > Then there is the aspect of how to mitigate how instrusive code changes
+> > to allow error injection are. In 2021 we evaluated the prospect of error
+> > injection in-kernel long ago for other areas like the block layer for
+> > add_disk() failures [0] but the minimal interface to enable this from
+> > userspace with debugfs was considered just too intrusive.
+> > 
+> > This effort tried to evaluate what this could look like with eBPF to
+> > mitigate the required in-kernel code, and I believe the light weight
+> > nature of it by just requiring a sprinkle with ALLOW_ERROR_INJECTION()
+> > suffices to my taste.
+> > 
+> > So, perhaps the tools aspect can just go in:
+> > 
+> > tools/testing/selftests/module/
 > 
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+> but why would it be module-specific?
 
-Reviewed-by: Gary Guo <gary@garyguo.net>
+Gotta start somewhere.
 
-> ---
->  rust/kernel/str.rs | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+> Based on its current implementation
+> and discussion about inject.py it seems to be generic enough to be
+> useful to test any function annotated with ALLOW_ERROR_INJECTION().
 > 
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index ba6b1a5c4f99d..c6bd2c69543dc 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-> @@ -125,6 +125,18 @@ fn index(&self, index: Idx) -> &Self::Output {
->      }
->  }
->  
-> +impl AsRef<BStr> for [u8] {
-> +    fn as_ref(&self) -> &BStr {
-> +        BStr::from_bytes(self)
-> +    }
-> +}
-> +
-> +impl AsRef<BStr> for BStr {
-> +    fn as_ref(&self) -> &BStr {
-> +        self
-> +    }
-> +}
-> +
->  /// Creates a new [`BStr`] from a string literal.
->  ///
->  /// `b_str!` converts the supplied string literal to byte string, so non-ASCII
+> As xe driver maintainer, it may be interesting to use such a tool:
 > 
+> 	$ git grep ALLOW_ERROR_INJECT -- drivers/gpu/drm/xe | wc -l  	23
+> 
+> How does this approach compare to writing the function name on debugfs
+> (the current approach in xe's testsuite)?
+> 
+> 	fail_function @ https://docs.kernel.org/fault-injection/fault-injection.html#fault-injection-capabilities-infrastructure
+> 	https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/master/tests/intel/xe_fault_injection.c?ref_type=heads#L108
+> 
+> If you decide to have the tool to live somewhere else, then kmod repo
+> could be a candidate.
 
+Would we install this upon install target?
+
+Danny can decide on this :)
+
+> Although I think having it in kernel tree is
+> simpler maintenance-wise.
+
+I think we have at least two users upstream who can make use of it. If
+we end up going through tools/testing/selftests/module/ first, can't
+you make use of it later?
+
+  Luis
