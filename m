@@ -1,65 +1,64 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF3F21505E
-	for <linux-modules@vger.kernel.org>; Tue, 25 Feb 2025 08:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE742676E9
+	for <linux-modules@vger.kernel.org>; Tue, 25 Feb 2025 10:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740472395; cv=none; b=qM/o/EQrk28hVYIzzglx57eZTwmIYnlQMEwWrBDHQi8j+0RzEfee/+sLMmHzyQByUBul0brfwRmM2lcZj4Us96b+kDMRc01o++uROBgb+N3timBN8uqqiFLvJOGB3eKnlMTVl4sxt+aHc1m9FnQiPjIKYKRmPNPXVqR2HxuOOts=
+	t=1740478933; cv=none; b=qIet78zHNtuLGBqx+fC0zt8kFKRbhxjqO0qNvrUOJL+Qrk7mhb58KNLzbbRQfFEMp+l9TJEo2Xmn/yGvpZV+W/CPsHZr+Len2od8S3mSUGsi3FV4jAt8s/DXRBOqEHMX9LQBXCkZEVS8ZmVO0AGFwmhxP+pAJ2CTy0SQY+t9Rp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740472395; c=relaxed/simple;
-	bh=hUvGcbX1M8/8NOUDvmKTRtGA8/5aU1g/Qz0Zf/5sQ4I=;
+	s=arc-20240116; t=1740478933; c=relaxed/simple;
+	bh=7jS32IN9BvBO2WdCNC43qfDUQ12l0omi15BL6gdKjSA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JjwMKIpa/Dq5rf/vkEnmniiDwd33nH3U7l3QXqF3ZFukMWxKVqqbD+cR7IBgd5fz7vq7vtiffR0iI+vEUwVoYClMAGBe9M2v2Kf/oUcN0ULS0iOgOxN3w/xCXp7r+Pim2WAFdsw+u063TqkrelDlRVYSfMgT2tY9AsfrFDwd0g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PhL/teWz; arc=none smtp.client-ip=209.85.208.48
+	 In-Reply-To:Content-Type; b=Imjencbke05uTQM0GZZerl1DOpBaTPEUBf+oY5mzyFrAr1XIKVC2Lv9ylhKpWPY8RdY11XRSLZGb2iwTAcBxJj+v0NiX+icpf0mL/SPRjlujC8aJW5t8r7CESpBDhZZqjBNQvggQLOK9Zpq2Do74KUrW5QLaCe8JNesVir6hDjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BYmSE/vw; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PhL/teWz"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5dec817f453so8891778a12.2
-        for <linux-modules@vger.kernel.org>; Tue, 25 Feb 2025 00:33:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BYmSE/vw"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e08064b4ddso7242397a12.1
+        for <linux-modules@vger.kernel.org>; Tue, 25 Feb 2025 02:22:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1740472392; x=1741077192; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1740478929; x=1741083729; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2uQEE0vqGhPs5ZeLO92iI9oa2Rk21hDTj79zQ7HG9aw=;
-        b=PhL/teWzLJTa8BXHL5sSJzN62RWzkQzvKHEd6TvQP9C1QwkApqmRurO28WXJfnHnAB
-         kvetew5oShJ/P49Q4pv6g5pq9UwaxIZvCiNs81wrDNeKVDjcT8vhWLS7QpCOsHJixIG0
-         BLNyq9G2FE299LFpJjqbLvDziVUQQsqvTzC3K34zlVvCbpqt7Oj+pvmgWa0MNh+sf0Q9
-         hlOUDK+61LYHVMk1lyIRUr16e4vCkC+8ATRAHNbRXn+HqewprwN3GmbRGaiAZ6aLhHmy
-         YQ24oag3N3V5Vp0VvLJjltvsLdQFa2lc0VsnIYjXpga7ZEZsclQBpZsz2fgW+fvJW21A
-         3AEg==
+        bh=tirQLw4kKN2n7nJcTTMNgrKBrHBCr4gOSdhS88B+7TQ=;
+        b=BYmSE/vwCQqhOVHnXgdu2OnPBHYSAN0tc0MAV0xqBuUsGDzq8lNT0fCAr2oLfrk1df
+         ssJ+NPzNKFdg3DOfwx6mbmYp/hDrT4yxQC/2f1NXN+sR1jUL1Ri6eB9tvLpZUPIG9EtN
+         TD8MVQSZG3KrJw0FEiwcJYw7pQgyJOFWhoYmGJtbdJw1kuwuJ5R50lwDirRMd34u/St+
+         lqbx2/K6XAaXn/+RsqQOYnirwuAhmae+df/oXjmdXBkQlDxrT9NBreqjZdKZFg58cyBS
+         UdHYpYL+56yqXoraJv+i7epmRGp7AxfcexqKsSjtA5TRszKp2kfoC3McVOjyS4cK6RyF
+         OSAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740472392; x=1741077192;
+        d=1e100.net; s=20230601; t=1740478929; x=1741083729;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2uQEE0vqGhPs5ZeLO92iI9oa2Rk21hDTj79zQ7HG9aw=;
-        b=sDG4NwpHySyMlGQzTv4s3Nmq/GGjDz3ePwLaTGCOkDztKfDs1nK23mDaiU5U9S33Td
-         l15tQ17CWspc0uxmKhUnVi32+xBIIYaD1n+fvBPq63vbdIv+9k7wHll5fBE8SdVd3/94
-         i3iDvKJnu4XazZghUlPDX6JeN8YaNLkMCY8UcN8wDaFtPI9MfRiEnOPV3awhGseUCn/9
-         4DHvoImtZkFR/Vuh/md2pShNqrMPRUsuS3Z3HII4pOfLZiKWSRaAzJhnhj9duIYFnxee
-         pdDFKvo7CRAmv9LYZX08Uqqr+e28xbd3lNptXnwSfLu/3nX7VYCnc7EJ7Slwwb5w1pqF
-         47bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUhuJnt0J007mGu50GdFJj1qPqJiEg6bJFohBd+dhHEbTLjgKVcNdJzveloZEmeuWdUnaumyzc28K9sKwH/@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPiVCTiLueakRXAKVitTkvh3/V+kBOP1MWWl3HG6iL+AsUwHAe
-	r6/byU4NkOUQBJdW1EjVdXLksSad6DGrNKn78DAcBALH1Xe1jMDmVvRTY9b17Mpf6WPtm9pBB3f
-	V
-X-Gm-Gg: ASbGncuV9L8+sHUqLzRnS8Fu5Tmtv2CBG+bu834lWm3FWWgTtbCuawpIXEp/QFnMK2p
-	+YqIvuNUpF4t4n3EC9OKUdnoo1oZ6XPEph12cKamoGgGu16ZUuYbBUJxsN+ilNWM6aU2CE6D9+g
-	vbK8b60RnA/9jbSmVhGda7Sl0gP/LoOMHnLph26kYT6/mn6B05o1LKuBCcatLSdrn5wcBXsSRdz
-	Xns4YcfvXRXP/c0EgwztkOv6Rj7RnpYhzKge3DXVA9Srq8wfeGXBErfy4WsjPqFvidx9Ohm5Kbv
-	WSuwXLWz58+wD3X8n80m/MP4UaKR4w==
-X-Google-Smtp-Source: AGHT+IGqRG1lJV/HKH+NlkKHzrYTEOwjEu01RN89meeh0XD7zNegvzrfS3k6QKTJYI1ZKFpVt/u56Q==
-X-Received: by 2002:a05:6402:3488:b0:5e0:51a9:d425 with SMTP id 4fb4d7f45d1cf-5e0b724ecfcmr15530079a12.29.1740472391943;
-        Tue, 25 Feb 2025 00:33:11 -0800 (PST)
+        bh=tirQLw4kKN2n7nJcTTMNgrKBrHBCr4gOSdhS88B+7TQ=;
+        b=RXkrkIdglWpvgvmi1WLmuI/XTtgl9kCzGmkw0TjzFcSm0osejuFXzF30MxbzBAlpYm
+         7ztePGgTVX0B4EHUdVsaCwfMIARCC2NMpm+Wq7STQrS0KWwySQdiBvs5/537POTgokTR
+         UD3646raXCe6o304bejn6PwxUp8KAp4dwhGUHD6xk1vSd0DNff9ALQmnxIP6bcGx16Zq
+         ZncAIJlal0HZWRhd1N/uvmoNcbNSWyK3O0sG5+lSKtLl5jA2pxhHRgM6Wtc5EWxAagvH
+         XfnG5S6RriMeSU7d7yzW0pw8p+DZezv00/kO9gZ3LOhXNtYMD+a9ab3spuhCaLt0md7A
+         KCBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7WICm2hRHUTNmig8DEzqBxG5AGyfN6r5lAjISknAgr537RNGKP+PkbFOanpldB8Q1TyzC2PVpNkplVDr9@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7C5B0wp7ZfGsPWHHI0Mto/TIHwHX1QwzT6VHyRO/gTz1DpPFC
+	1ueeQFefF7I9kIjcNC9Zoa+IWN8fKg8DapmYzfpoLegHwkQmz8bFtXo/wHD1zTA=
+X-Gm-Gg: ASbGncvgq4jBk2AmD484Q2T2hVvaw78uvC37Kf/1eSQIjrtFq74daVfZaEr4zNQkPdr
+	iIbjZW20N0uJZs2ikzb8wJrDmQn7wAvzYNF5IhRILhWLsGR4T321EYJacDPqg76GKSCPO5WbMZ3
+	NRQUVMnUM11cFc70dmprNChGhF+4b2QPNK9XKkYtS0OCal/xi8mDI7hmI1n78ngAsiG1/CQkEQf
+	1u+FVZAGWaSblbxecmU8KEcBV+T/RqUnCaass5ru5/8Ze/K99z42YC/Bg7zutjMEBFCNtBhVWb5
+	56aU3zAojoX7b3zbgKPlC5ifUSCsNQ==
+X-Google-Smtp-Source: AGHT+IGt6pTVXx3wx/wRIHWsfSGAMt1cqb6es2jvkO8FnqdPuOZ02O/dkb0pjA9QIhd5xREqhWrTXg==
+X-Received: by 2002:a05:6402:e87:b0:5e0:82a0:50d7 with SMTP id 4fb4d7f45d1cf-5e0b70db116mr11539027a12.8.1740478929084;
+        Tue, 25 Feb 2025 02:22:09 -0800 (PST)
 Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e460ff8694sm846813a12.50.2025.02.25.00.33.11
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45a8b8c06sm1001139a12.22.2025.02.25.02.22.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2025 00:33:11 -0800 (PST)
-Message-ID: <e8ba9f36-e33d-4c53-9d34-ff611cb1c221@suse.com>
-Date: Tue, 25 Feb 2025 09:33:10 +0100
+        Tue, 25 Feb 2025 02:22:08 -0800 (PST)
+Message-ID: <0d9e596a-5316-4e00-862b-fd77552ae4b5@suse.com>
+Date: Tue, 25 Feb 2025 11:22:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -67,124 +66,72 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] kernel: refactor lookup_or_create_module_kobject()
-To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Shyam Saini <shyamsaini@linux.microsoft.com>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- code@tyhicks.com, christophe.leroy@csgroup.eu, hch@infradead.org,
- mcgrof@kernel.org, frkaya@linux.microsoft.com, vijayb@linux.microsoft.com,
- linux@weissschuh.net, samitolvanen@google.com, da.gomez@samsung.com,
- gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org
-References: <20250211214842.1806521-1-shyamsaini@linux.microsoft.com>
- <20250211214842.1806521-3-shyamsaini@linux.microsoft.com>
- <4039ec74-8b46-417e-ad71-eff22239b90f@suse.com> <87wmdjo9yp.fsf@prevas.dk>
+Subject: Re: [PATCH v7 0/6] rust: extend `module!` macro with integer
+ parameter support
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ Luis Chamberlain <mcgrof@kernel.org>, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Adam Bratschi-Kaye <ark.email@gmail.com>,
+ linux-kbuild@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Greg KH
+ <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org,
+ Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+References: <JKqjFnoTeEbURcTQ5PpmUZWDS2VMEt0eZl68dWkgk3e8ROFpb2eTWH2mStKkkXJw__Ql5DdYvIR9I7qYks-lag==@protonmail.internalid>
+ <20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org>
+ <87ldtv1t1c.fsf@kernel.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <87wmdjo9yp.fsf@prevas.dk>
+In-Reply-To: <87ldtv1t1c.fsf@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2/21/25 11:42, Rasmus Villemoes wrote:
-> On Thu, Feb 13 2025, Petr Pavlu <petr.pavlu@suse.com> wrote:
+On 2/24/25 12:27, Andreas Hindborg wrote:
+> Hi Petr,
 > 
->> On 2/11/25 22:48, Shyam Saini wrote:
->>> In the unlikely event of the allocation failing, it is better to let
->>> the machine boot with a not fully populated sysfs than to kill it with
->>> this BUG_ON(). All callers are already prepared for
->>> lookup_or_create_module_kobject() returning NULL.
->>>
->>> This is also preparation for calling this function from non __init
->>> code, where using BUG_ON for allocation failure handling is not
->>> acceptable.
->>
->> I think some error reporting should be cleaned up here.
->>
->> The current situation is that locate_module_kobject() can fail in
->> several cases and all these situations are loudly reported by the
->> function, either by BUG_ON() or pr_crit(). Consistently with that, both
->> its current callers version_sysfs_builtin() and kernel_add_sysfs_param()
->> don't do any reporting if locate_module_kobject() fails; they simply
->> return.
->>
->> The series seems to introduce two somewhat suboptimal cases.
->>
->> With this patch, when either version_sysfs_builtin() or
->> kernel_add_sysfs_param() calls lookup_or_create_module_kobject() and it
->> fails because of a potential kzalloc() error, the problem is silently
->> ignored.
->>
+> "Andreas Hindborg" <a.hindborg@kernel.org> writes:
 > 
-> No, because (IIUC) when a basic allocation via kzalloc fails, the kernel
-> complains loudly already; there's no reason for every caller of
-> kmalloc() and friends to add their own pr_err("kmalloc failed"), that
-> just bloats the kernel .text.
+>> This series extends the `module!` macro with support module parameters. It
+>> also adds some string to integer parsing functions and updates `BStr` with
+>> a method to strip a string prefix.
+>>
+>> This series stated out as code by Adam Bratschi-Kaye lifted from the original
+>> `rust` branch [1].
+>>
+>> After a bit of discussion on v3 about whether or not module parameters
+>> is a good idea, it seems that module parameters in Rust has a place
+>> in the kernel for now. This series is a dependency for `rnull`, the Rust
+>> null block driver [2].
+> 
+> 
+> Luis told me you are the one wearing the modules hat for the moment. How
+> do you want to handle merging of patch 6 and subsequent maintenance of
+> the code?
 
-I wasn't suggesting to log a kmalloc() error specifically. The idea was
-that if lookup_or_create_module_kobject() fails for whatever reason,
-kernel_add_sysfs_param() and version_sysfs_builtin() should log the
-failure to create/get the kobject.
+I'd say the easiest is for the entire series to go through the Rust
+tree. I'd also propose that any updates go primarily through that tree
+as well.
 
 > 
->> Similarly, in the patch #4, when module_add_driver() calls
->> lookup_or_create_module_kobject() and the function fails, the problem
->> may or may not be reported, depending on the error.
->>
->> I'd suggest something as follows:
->> * Drop the pr_crit() reporting in lookup_or_create_module_kobject().
-> 
-> No, because that reports on something other than an allocation failing
-> (of course, it could be that the reason kobject_init_and_add or
-> sysfs_create_file failed was an allocation failure, but it could
-> also be something else), so reporting there is the right thing to do.
+> I think we discussed you guys taking this under the current module
+> maintainer entry? If that is correct, will you add the new files to your
+> entry yourself, or should I include an update to MAINTAINERS in the next
+> version of this series?
 
-The error message says:
-pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n", name, err);
+Makes sense, I think it is useful for all changes to this code to be
+looked at by both Rust and modules people. To that effect, we could add
+the following under the MODULES SUPPORT entry:
+F:	rust/kernel/module_param.rs
+F:	rust/macros/module.rs
 
-I think it was appropriate for locate_module_kobject() to do this error
-reporting when the function was only called by code in kernel/params.c
-and in the boot context. Now that the patch makes the function available
-to external callers, I'm not sure if it should remain reporting this
-error.
-
-The function itself shouldn't directly make the system unstable when it
-fails. Each caller can appropriately determine how to handle the error.
-Functions kernel_add_sysfs_param() and version_sysfs_builtin() don't
-have much of an option and can only log it, but module_add_driver()
-could roll back its operation.
-
-That's it, I guess my question is really whether module_add_driver()
-should do that and handle errors from lookup_or_create_module_kobject()
-by propagating them up the call stack. That would be my default if
-writing this code from scratch. I don't quite see why calling
-lookup_or_create_module_kobject() is special in this regard.
-
-The rest of my suggestion flows from that. Function
-lookup_or_create_module_kobject() should then similarly propagate any
-error upwards. However, functions kernel_add_sysfs_param() and
-version_sysfs_builtin() can't really do that and so actually need to
-report the error themselves.
-
-What do you think?
-
-> 
->> * Have version_sysfs_builtin() and kernel_add_sysfs_param() log an error
->>   when lookup_or_create_module_kobject() fails. Using BUG_ON() might be
->>   appropriate, as that is already what is used in
->>   kernel_add_sysfs_param()?
-> 
-> No, BUG_ON is almost never appropriate, and certainly not for something
-> which the machine can easily survice, albeit perhaps with some
-> functionality not available. That this had a BUG_ON is simply a
-> historical artefact, nothing more, and borderline acceptable as lazy
-> error handling in __init code, as small allocations during system init
-> simply don't fail (and if they did, the system would be unusable
-> anyway).
-
-I agree, just to clarify.. the reason why I mentioned using BUG_ON() in
-this case was only for consistency with what's already in
-kernel_add_sysfs_param(). I think it would be good to clean up other
-BUG_ON() calls in that function later, but it didn't seem immediately
-necessary to me as part of this series.
+My slight worry is that this might suggest the entirety of maintenance
+is on the modules folks. Fortunately, adding the above and running
+get_maintainer.pl on rust/kernel/module_param.rs gives me a list of
+people for both Rust and modules, so this could be ok?
 
 -- 
 Thanks,
