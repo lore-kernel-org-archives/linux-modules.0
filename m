@@ -1,30 +1,30 @@
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41421EB5F1;
-	Thu, 27 Feb 2025 18:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F08C1F5820;
+	Thu, 27 Feb 2025 18:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740682189; cv=none; b=TYOUrTnS8lRvoYuqPSF6wR9gnN96mvugCMFXW11qbcpcKECjCXVgut+XXqt3lQjQj/pzsK5arPkKiwV0YehhBWhe70OBXQuFg+rYjVwZ6fBtJL3GEsxeuU3XPgsko013pBoQcD0BJeD4yfXHx9/VpA2MJdAqNZ5VpJqUlqJN3Mw=
+	t=1740682189; cv=none; b=sK4gep1IdBxra4jSreX4fwObgEF1/+mdqJ6Vzt7tbRa4BDNlFaFPNwK3xgujDMx1y8tguBpULszb3NvDeT8Zbn+xg3vbJ9MwI1tUiSHxNDnG6nYd9Ud12KuQDRdjW6qsER0e8w41zgLJSgOzQR4rTfTZ3LAMQWPZPtZPZ1CxUFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740682189; c=relaxed/simple;
-	bh=zkUVQbXZA6UfRml83pvNEgbbiCOVrW+hq3234lsHr/w=;
+	bh=jD8IrSFKJ+w8OwiRwskbeXe3GSuxpQOGZpZcLLSKcp8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FtG4gwJFPHdpKle7bIBL4dveR90/HDxojkftJb8+Awwn5YPopVEmc1d/oxw59sC07xGzHWpX+TqPsm2QiNYcINfPUeCPszlPqYIls8E8U4/ukHL/Jnxt+L/YW/tfZBy3sRwaYf5Vst7vUrT0JFYo0JrQKUlHxdF+TxJy0xWqKGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=WiFfz5sQ; arc=none smtp.client-ip=13.77.154.182
+	 MIME-Version; b=Gu8ylHbEIjTf1cSAGb81rRLl3zyfdGaAre0HXntlWGCjf0ptNC5uIIM2+/y3pSjtc1pY5FHakYaBOkH+j8uvViusZ2ZdE2Xdw3t4zs4oO+J9WKKfhn+UjoCsNNobL+939LhQuY+shEb99Ug65lP9aYxgEo5vv9WGs08bcq8CmWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GlCtr5W9; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="WiFfz5sQ"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GlCtr5W9"
 Received: from thinkpad-p16sg1.corp.microsoft.com (unknown [20.236.10.206])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 4B50A210EAC0;
+	by linux.microsoft.com (Postfix) with ESMTPSA id A4279210EAC1;
 	Thu, 27 Feb 2025 10:49:47 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4B50A210EAC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4279210EAC1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
 	s=default; t=1740682187;
-	bh=e4CgCLqwxELPOdnQb3Zoj43eln0chDtI/SKnWIfVtfg=;
+	bh=nz70CBPIYU1n5UuvgHW65DgzacxtlZnlMe0KudNX5Uo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WiFfz5sQjFVZRlZ9WYnbhtEIh/Uo08Mlwu7WCy4D+eiPUQc1pc6DHArghKpcOZdU0
-	 phoIa9sLpERyzCfKT/kUVWrK+BkCCSwgon+umXbP7i9muxxYxUShBq/BkqMNARG+i4
-	 BD/2xmkUud6Aqlsc+pjzwp20iWCldVe14GxSmFc8=
+	b=GlCtr5W9NTY1BR4vDbGgcZSQoYn3+qfCRMDJAv2LO2ZhAfsHt7ie9A6zC3XeNqbpj
+	 RH81gHKezlv57RQ8kdkkuC6Fr3QUudb87hIs2NMvozkSoyMKSHTk8Ps8lg9r/hRN3l
+	 KdtPQtSMEe96dxCDjN0YZtpV8dN4LsvjacmxujR8=
 From: Shyam Saini <shyamsaini@linux.microsoft.com>
 To: linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org
@@ -43,9 +43,9 @@ Cc: petr.pavlu@suse.com,
 	rafael@kernel.org,
 	dakr@kernel.org,
 	stable@kernel.org
-Subject: [PATCH v4 3/4] kernel: globalize lookup_or_create_module_kobject()
-Date: Thu, 27 Feb 2025 10:49:29 -0800
-Message-Id: <20250227184930.34163-4-shyamsaini@linux.microsoft.com>
+Subject: [PATCH v4 4/4] drivers: base: handle module_kobject creation
+Date: Thu, 27 Feb 2025 10:49:30 -0800
+Message-Id: <20250227184930.34163-5-shyamsaini@linux.microsoft.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
 References: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
@@ -57,47 +57,55 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-lookup_or_create_module_kobject() is marked as static and __init,
-to make it global drop static keyword.
-Since this function can be called from non-init code, use __modinit
-instead of __init, __modinit marker will make it __init if
-CONFIG_MODULES is not defined.
+module_add_driver() relies on module_kset list for
+/sys/module/<built-in-module>/drivers directory creation.
+
+Since,
+commit 96a1a2412acba ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
+drivers which are initialized from subsys_initcall() or any other
+higher precedence initcall couldn't find the related kobject entry
+in the module_kset list because module_kset is not fully populated
+by the time module_add_driver() refers it. As a consequence,
+module_add_driver() returns early without calling make_driver_name().
+Therefore, /sys/module/<built-in-module>/drivers is never created.
+
+Fix this issue by letting module_add_driver() handle module_kobject
+creation itself.
 
 Fixes: 96a1a2412acb ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
 Cc: stable@kernel.org
 Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Signed-off-by: Shyam Saini <shyamsaini@linux.microsoft.com>
 ---
- include/linux/module.h | 2 ++
- kernel/params.c        | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/base/module.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index d9a5183a9fe7..57044f2838be 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -162,6 +162,8 @@ extern void cleanup_module(void);
- #define __INITRODATA_OR_MODULE __INITRODATA
- #endif /*CONFIG_MODULES*/
+diff --git a/drivers/base/module.c b/drivers/base/module.c
+index 5bc71bea883a..218aaa096455 100644
+--- a/drivers/base/module.c
++++ b/drivers/base/module.c
+@@ -42,16 +42,13 @@ int module_add_driver(struct module *mod, const struct device_driver *drv)
+ 	if (mod)
+ 		mk = &mod->mkobj;
+ 	else if (drv->mod_name) {
+-		struct kobject *mkobj;
+-
+-		/* Lookup built-in module entry in /sys/modules */
+-		mkobj = kset_find_obj(module_kset, drv->mod_name);
+-		if (mkobj) {
+-			mk = container_of(mkobj, struct module_kobject, kobj);
++		/* Lookup or create built-in module entry in /sys/modules */
++		mk = lookup_or_create_module_kobject(drv->mod_name);
++		if (mk) {
+ 			/* remember our module structure */
+ 			drv->p->mkobj = mk;
+-			/* kset_find_obj took a reference */
+-			kobject_put(mkobj);
++			/* lookup_or_create_module_kobject took a reference */
++			kobject_put(&mk->kobj);
+ 		}
+ 	}
  
-+struct module_kobject *lookup_or_create_module_kobject(const char *name);
-+
- /* Generic info of form tag = "info" */
- #define MODULE_INFO(tag, info) __MODULE_INFO(tag, tag, info)
- 
-diff --git a/kernel/params.c b/kernel/params.c
-index 787662663e34..e668fc90b83e 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -760,7 +760,7 @@ void destroy_params(const struct kernel_param *params, unsigned num)
- 			params[i].ops->free(params[i].arg);
- }
- 
--static struct module_kobject * __init lookup_or_create_module_kobject(const char *name)
-+struct module_kobject __modinit * lookup_or_create_module_kobject(const char *name)
- {
- 	struct module_kobject *mk;
- 	struct kobject *kobj;
 -- 
 2.34.1
 
