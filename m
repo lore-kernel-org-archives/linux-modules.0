@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA10D2376EC;
-	Thu, 27 Feb 2025 14:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE86A236425;
+	Thu, 27 Feb 2025 14:39:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740667156; cv=none; b=StAGfNOK4ovixSwnGO6rT4WKrf+4r/4vyecyC6U9ADRjE/YK8TrLKKh9aGSxBk3/DWDDt392e4sXxNPPMAMD5HfmgkPttF5uYCHOBGOamCsXwaFqi8wHyJVL9aJ1pDKCGlyESWcfKRUUj3p41mUsHK6FiyyBE6Ir1s4baX/oLyI=
+	t=1740667163; cv=none; b=CPb57hDYZXacbj0aGQScNrCUPmA3v47jztV3VHmBrUktmnCCxcoHk2QzbuE2QNt1aN1+6T5P8jJNiEVizIMZCTUVAjhNF6Vn2sFxvboDoUbRMf/VV2v7x0+p0M98vCY7Wr8UYEbUXMqi1yZz0Tvo8Tur6hrDnHSKRYHrUp2OwOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740667156; c=relaxed/simple;
-	bh=OySWTm574DZzpwLkR2PCYrng2IQgljsEmaIYlLs8Xyo=;
+	s=arc-20240116; t=1740667163; c=relaxed/simple;
+	bh=y61tYQBOzvQT13se+wj4PsD5CpV5viHok2MH3MQVUsw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VxlNmmFJgqI/UWziCnUY+TZGnBCWVi12v4HFuGgVIPd6u0hhKhX+cvS1OJnvqnmpJ6b7KaPnqTPrktMCu6L8rR4wtmoWU/G3EL95/RGcUzUzIeKwcrx7tVLNCG2BL3fkNDXuiC8lY9SVHywF9fkYkNG+6JeyEZCTpkRfr+mxWl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kHC7U99n; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=DbmHjTtLAcTmJb0wwZH6CeRQQ6uV8TjnVV6qkpNyqOdWpnX+LEc1WkmAhlM4ZCr1GhJ3pj+9NYwW0+TCv3CtJUSH4/Lpr2U8PHVcykCCo/E20NPJxwatNr4Dsz6/fPnml5DCPwrk0koHqyNA2iBDZ75O7eStxRIzO9UctCzIJjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QA4tL/L0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kHC7U99n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5B32C4CEDD;
-	Thu, 27 Feb 2025 14:39:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QA4tL/L0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05250C4CEDD;
+	Thu, 27 Feb 2025 14:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740667156;
-	bh=OySWTm574DZzpwLkR2PCYrng2IQgljsEmaIYlLs8Xyo=;
+	s=k20201202; t=1740667162;
+	bh=y61tYQBOzvQT13se+wj4PsD5CpV5viHok2MH3MQVUsw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kHC7U99nsxRozj7g/9YoNg8IYWqzNASaEgfu4ZBow02Hel2KROPLrHuv13oImerrP
-	 qzQHU1TvlW9A4FC5x+GNRa2KUD+AwlthxxFmB+Q32fGPyauk5gJXewy4TG6DHxpZqL
-	 +KoX/+lbdh6hz9JsEJ/oZbyurme2bHY0rvzLKWQkX7S3z5sLlImQA12SuXpBH1cb4l
-	 hVJkDKI9F+5gmDFVp21rkl9TTQLJMgL0pQrK5w89gzqRx9GQCMgb3vwFjFdvxk/BeP
-	 0WRFyGciE2aR3HsCjwTgmRgxUBdepeLcjwhj0JfE2Y97gZM2M6u3FzBGFgutc5eF1o
-	 tJB9AWXVfzl2g==
+	b=QA4tL/L05Yy3kZT2LhyG/ajf57qo2SGAErx034vB89DrdQ4SNakcQHhwfbQ3we90J
+	 Bxtk9YOLY8J0lEg76YFeD/vUh0ZnBESTIKiizf5La3cAUHITehNNp5LXOmovrMSlxh
+	 3IIbqqohDh9LoFpjENxLJcD3lpNuELsSukWgsfzqArTokkwZb0M1mvWgHz/t32nbGl
+	 zJ3JPZdabVE3IPobp/oQONZ7DQxHhggkUUjKmPamKqP3emW/vdvHSEbVkHMuDgTgeR
+	 5FaYqp5n+yPb+GlsF23mWzIIVDjVOA/Bkl4yiCMALkvwrRo2zJeQf0AD0COClIqOGq
+	 pL+gqqawbPzTQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Thu, 27 Feb 2025 15:38:11 +0100
-Subject: [PATCH v8 5/7] rust: str: add radix prefixed integer parsing
- functions
+Date: Thu, 27 Feb 2025 15:38:09 +0100
+Subject: [PATCH v8 3/7] rust: str: implement `AsRef<BStr>` for `[u8]` and
+ `BStr`
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250227-module-params-v3-v8-5-ceeee85d9347@kernel.org>
+Message-Id: <20250227-module-params-v3-v8-3-ceeee85d9347@kernel.org>
 References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
 In-Reply-To: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -57,197 +57,57 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7204; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=OySWTm574DZzpwLkR2PCYrng2IQgljsEmaIYlLs8Xyo=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBnwHjUkFkn16gv6H6LSf5baz2a8g4LO8GjvKcTZ
- RpaXPyAxDSJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCZ8B41AAKCRDhuBo+eShj
- d+71EACdd9f5nUxDwGR7GWeaetwlMaQ93Fwv/l6kSFTxk16CXgrqRfha3ndVq/GZUQTEe/ebE0D
- nSa6PxAUmrwZzUa9nmqmplONPZ4rDcS+VIVWWCF73g+qIBH5f2VsLPVseSrAb/eMkTcdTQBkRDA
- 6ah/H0aHBKmkNWe+8Ofa/VAKUyOxi/H9YwJ+2WQYkirirOzoFbfoeJgNgRqjt1rtvvquAkv53fy
- w4jImwfbzGoKEsT0ZN38BxLf9A1eBGyvxgBV50SCGmHn1IVEaMWa4+VZIIAV51LF4ssHWfbSoiA
- 9WkqfSf6h7UPHaaq+vTtb05wnokNW2K42hAZQAfMApd/rgLTwG//KZdUHy4lppCPip1corEbG/O
- aCFtC3+XRBfMSH3pYNokfx3gdV/TSz3wuIMpscHlrtaihoUIP0UWtcDL46gcTZat8zpgsF1L6sx
- Ba63Al9f99Vo58m/ygh8NY2cs+W5uYHoBWl2o9x/NH/xuhgZzqAqt7pPNezK2oiC4K1p1Anv3nl
- IS1DhVUIr3cwRBggDds3B6keDarqLW+TsTpT6He2/+kmaBNO7B310KkOX8f6H7kS7UCSSsvmRPH
- 0AC8/wC2p7B4DFYpbciuLGAAUjqTuXb0MIT2xOJ77KPPJc7lmdjOMLKYiPuMA5vWt7gRdtOLGRv
- g1tVJEtzNA/Pcdg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1002; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=y61tYQBOzvQT13se+wj4PsD5CpV5viHok2MH3MQVUsw=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBnwHjSLiqwqmIm6F5SfrtT7rO15l7n0S0sY1Fne
+ wmWAtG2mhSJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCZ8B40gAKCRDhuBo+eShj
+ dyKhEACm1VAvi9EwhBdVdbF6jykLLlxpF5TrA52pr63Q0BUvMrammDD+I+zpzRp5OOkrtVRsk1o
+ G28P+Waxuj+uup1uu21fB8qgRPUvVzGy97g9zUgzxkRXsBRVnbEXR73AzUHpXXaFmwIcdM8HdMH
+ KSCiR7zZtVLUtQJw00ThsViULXCRjq4ygmFtjXYj/WKfjSFz57i1sRO6HpUTOKcA4tku/1wVw1X
+ juJEZEfqziyE4ktlx3zh1/raTWFp+sW4IN/kJMunrT3J9HiokyAeZ2WU/EY7O0wQPl5N3Z0Eh7r
+ sk48w01w5pkivKNr3S2MQ//LmhdnrIymlsbSku/6+yVpEwLRAkh9q32RK/wH+F0sSHnoMMVZgNG
+ soin67nssp5Q7nBPOt/DGhpCWnvJWiLN81BwtLPDY7jUnjeihM4t1bekga8V5XGBk672B0cvidT
+ XxRfgc20xjn2DtJRZE7XdEUTDKjq2iNQ8UTWhuymjLw5yWqCqw8MYIu52nb/90lUQwWX3uESVel
+ LF/KQRupGqVfqGI1z9YIoG+yfvi3V72R/8zPXqQ9Bywr8DjDwEy1HXChaw8k9h+hiztFgfX65C+
+ JwIlwR92VkoinrYGv0dugRU64Fe7AdZ6dM7DAo8kqUeEx+jC1aPqYiXgFIUBhZJ3zOAmDxX7EW6
+ ezjZ8a5tkRN2ThA==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Add the trait `ParseInt` for parsing string representations of integers
-where the string representations are optionally prefixed by a radix
-specifier. Implement the trait for the primitive integer types.
+Implement `AsRef<BStr>` for `[u8]` and `BStr` so these can be used
+interchangeably for operations on `BStr`.
 
+Reviewed-by: Gary Guo <gary@garyguo.net>
 Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
 Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/str.rs | 155 +++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 155 insertions(+)
+ rust/kernel/str.rs | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index db272d2198fc..a708cf219348 100644
+index ba6b1a5c4f99..c6bd2c69543d 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
-@@ -945,3 +945,158 @@ fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
- macro_rules! fmt {
-     ($($f:tt)*) => ( core::format_args!($($f)*) )
+@@ -125,6 +125,18 @@ fn index(&self, index: Idx) -> &Self::Output {
+     }
  }
-+
-+pub mod parse_int {
-+    //! Integer parsing functions for parsing signed and unsigned integers
-+    //! potentially prefixed with `0x`, `0o`, or `0b`.
-+
-+    use crate::prelude::*;
-+    use crate::str::BStr;
-+    use core::ops::Deref;
-+
-+    // Make `FromStrRadix` a public type with a private name. This seals
-+    // `ParseInt`, that is, prevents downstream users from implementing the
-+    // trait.
-+    mod private {
-+        use crate::str::BStr;
-+
-+        /// Trait that allows parsing a [`&BStr`] to an integer with a radix.
-+        ///
-+        /// [`&BStr`]: kernel::str::BStr
-+        // This is required because the `from_str_radix` function on the primitive
-+        // integer types is not part of any trait.
-+        pub trait FromStrRadix: Sized {
-+            /// Parse `src` to `Self` using radix `radix`.
-+            fn from_str_radix(src: &BStr, radix: u32) -> Result<Self, crate::error::Error>;
-+
-+            /// Return the absolute value of Self::MIN.
-+            fn abs_min() -> u64;
-+
-+            /// Perform bitwise 2's complement on `self`.
-+            ///
-+            /// Note: This function does not make sense for unsigned integers.
-+            fn complement(self) -> Self;
-+        }
+ 
++impl AsRef<BStr> for [u8] {
++    fn as_ref(&self) -> &BStr {
++        BStr::from_bytes(self)
 +    }
-+
-+    /// Extract the radix from an integer literal optionally prefixed with
-+    /// one of `0x`, `0X`, `0o`, `0O`, `0b`, `0B`, `0`.
-+    fn strip_radix(src: &BStr) -> (u32, &BStr) {
-+        match src.deref() {
-+            [b'0', b'x' | b'X', rest @ ..] => (16, rest.as_ref()),
-+            [b'0', b'o' | b'O', rest @ ..] => (8, rest.as_ref()),
-+            [b'0', b'b' | b'B', rest @ ..] => (2, rest.as_ref()),
-+            // NOTE: We are including the leading zero to be able to parse
-+            // literal 0 here. If we removed it as a radix prefix, we would not
-+            // be able to parse `0`.
-+            [b'0', ..] => (8, src),
-+            _ => (10, src),
-+        }
-+    }
-+
-+    /// Trait for parsing string representations of integers.
-+    ///
-+    /// Strings beginning with `0x`, `0o`, or `0b` are parsed as hex, octal, or
-+    /// binary respectively. Strings beginning with `0` otherwise are parsed as
-+    /// octal. Anything else is parsed as decimal. A leading `+` or `-` is also
-+    /// permitted. Any string parsed by [`kstrtol()`] or [`kstrtoul()`] will be
-+    /// successfully parsed.
-+    ///
-+    /// [`kstrtol()`]: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#c.kstrtol
-+    /// [`kstrtoul()`]: https://www.kernel.org/doc/html/latest/core-api/kernel-api.html#c.kstrtoul
-+    ///
-+    /// # Example
-+    /// ```
-+    /// use kernel::str::parse_int::ParseInt;
-+    /// use kernel::b_str;
-+    ///
-+    /// assert_eq!(Ok(0), u8::from_str(b_str!("0")));
-+    ///
-+    /// assert_eq!(Ok(0xa2u8), u8::from_str(b_str!("0xa2")));
-+    /// assert_eq!(Ok(-0xa2i32), i32::from_str(b_str!("-0xa2")));
-+    ///
-+    /// assert_eq!(Ok(-0o57i8), i8::from_str(b_str!("-0o57")));
-+    /// assert_eq!(Ok(0o57i8), i8::from_str(b_str!("057")));
-+    ///
-+    /// assert_eq!(Ok(0b1001i16), i16::from_str(b_str!("0b1001")));
-+    /// assert_eq!(Ok(-0b1001i16), i16::from_str(b_str!("-0b1001")));
-+    ///
-+    /// assert_eq!(Ok(127), i8::from_str(b_str!("127")));
-+    /// assert!(i8::from_str(b_str!("128")).is_err());
-+    /// assert_eq!(Ok(-128), i8::from_str(b_str!("-128")));
-+    /// assert!(i8::from_str(b_str!("-129")).is_err());
-+    /// assert_eq!(Ok(255), u8::from_str(b_str!("255")));
-+    /// assert!(u8::from_str(b_str!("256")).is_err());
-+    /// ```
-+    pub trait ParseInt: private::FromStrRadix + TryFrom<u64> {
-+        /// Parse a string according to the description in [`Self`].
-+        fn from_str(src: &BStr) -> Result<Self> {
-+            match src.deref() {
-+                [b'-', rest @ ..] => {
-+                    let (radix, digits) = strip_radix(rest.as_ref());
-+                    // 2's complement values range from -2^(b-1) to 2^(b-1)-1.
-+                    // So if we want to parse negative numbers as positive and
-+                    // later multiply by -1, we have to parse into a larger
-+                    // integer. We choose u64 as sufficiently large. NOTE: 128
-+                    // bit integers are not available on all platforms, hence
-+                    // the choice of 64 bit.
-+                    let val = u64::from_str_radix(
-+                        core::str::from_utf8(digits).map_err(|_| EINVAL)?,
-+                        radix,
-+                    )
-+                    .map_err(|_| EINVAL)?;
-+
-+                    if val > Self::abs_min() {
-+                        return Err(EINVAL);
-+                    }
-+
-+                    // SAFETY: We checked that `val` will fit in `Self` above.
-+                    let val: Self = unsafe { val.try_into().unwrap_unchecked() };
-+
-+                    Ok(val.complement())
-+                }
-+                _ => {
-+                    let (radix, digits) = strip_radix(src);
-+                    Self::from_str_radix(digits, radix).map_err(|_| EINVAL)
-+                }
-+            }
-+        }
-+    }
-+
-+    macro_rules! impl_parse_int {
-+        ($ty:ty) => {
-+            impl private::FromStrRadix for $ty {
-+                fn from_str_radix(src: &BStr, radix: u32) -> Result<Self, crate::error::Error> {
-+                    <$ty>::from_str_radix(core::str::from_utf8(src).map_err(|_| EINVAL)?, radix)
-+                        .map_err(|_| EINVAL)
-+                }
-+
-+                fn abs_min() -> u64 {
-+                    #[allow(unused_comparisons)]
-+                    if Self::MIN < 0 {
-+                        1u64 << (Self::BITS - 1)
-+                    } else {
-+                        0
-+                    }
-+                }
-+
-+                fn complement(self) -> Self {
-+                    (!self).wrapping_add((1 as $ty))
-+                }
-+            }
-+
-+            impl ParseInt for $ty {}
-+        };
-+    }
-+
-+    impl_parse_int!(i8);
-+    impl_parse_int!(u8);
-+    impl_parse_int!(i16);
-+    impl_parse_int!(u16);
-+    impl_parse_int!(i32);
-+    impl_parse_int!(u32);
-+    impl_parse_int!(i64);
-+    impl_parse_int!(u64);
-+    impl_parse_int!(isize);
-+    impl_parse_int!(usize);
 +}
++
++impl AsRef<BStr> for BStr {
++    fn as_ref(&self) -> &BStr {
++        self
++    }
++}
++
+ /// Creates a new [`BStr`] from a string literal.
+ ///
+ /// `b_str!` converts the supplied string literal to byte string, so non-ASCII
 
 -- 
 2.47.0
