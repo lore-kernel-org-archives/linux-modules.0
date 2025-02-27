@@ -1,145 +1,120 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604F21A2567;
-	Tue, 25 Feb 2025 17:24:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920F1E56F
+	for <linux-modules@vger.kernel.org>; Thu, 27 Feb 2025 00:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740504294; cv=none; b=efwb7XZ+INT5WV3Tn5RVcJyiRVMuXsPPgO0Ambu6KIMNab9KzAGdP/IPXLsEX3wyJi4EVdVwP49ZkiuhyDNLl1Ousm4F190AEdWyAWZU10nY/RkGEq28nSfYv0RYpzqM1uH2IIIhHPA2+I4u77vhVmFicqe+Ggo3NLR8Manz60g=
+	t=1740615467; cv=none; b=bStM9/xWkSz3QSWU6nQ/kgD8H0FdEl796m7lxl2hxgzDAJS8A7Z5YHjklHyydvbUt2qeylXB+f4opzes3n8uutFeeN5asnq+xOsIxN3Hxw7wKKZVR05+ycI/zvFncrJtDMEBBfqa5PC+EbTB7gLboXFrr56DrjV8KnNGpCAM8iQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740504294; c=relaxed/simple;
-	bh=aDY7TR4VTCyrtKDgPwDtxqtP5TeeW3MyhnHze/eIGxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sIEsU0a/FfMVQHnwisKYJugMKHJyjdGOP46qAPGZvaiNR7ocnesXS7oxt8yBjNmC1eqHprrcVh7tPxUFEcmRP8orik3d8aFJRfuAaZdTyXnmDZ4XcS6LJHA+LkdBKieVH5ajITl2RAhMIPVe1nQ83VbnsIE4XgadBBcNXuGoYdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=BSdiKB3i; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1740615467; c=relaxed/simple;
+	bh=95vP5oO74tokr4BkurE5S3y21f+wNnfjDr7XC/BGAU0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vEWWgYwfVxUGm4/xa0SaFMDPBXA0M/qtIvC35y5NwizbmzsWAF/DFpdvwezdSozqi7bJpaq9Ep6J/i3UPgLGjeOQMahYEn9POhkN78PoVvlJ9cxJb21LGMd4z4n5P9oVMtV5bLDOBoNotqPhI2dM0ZFvoRtDEF9H3j2pAUyHCX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=c4eBt2l8; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="BSdiKB3i"
-Received: by linux.microsoft.com (Postfix, from userid 1152)
-	id EAB6A203CDED; Tue, 25 Feb 2025 09:24:45 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EAB6A203CDED
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740504285;
-	bh=plsJhPJfP5AMhTGoZAobBxfnGCypJcfkAH+Ajvih/uE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BSdiKB3inbR3DLGJIOt6h+/rE0ZLTI6+fMQCfbGGcvPOc78AGZAp4kbCsMRcLOpwO
-	 SJ/rxaScF9xxJ43Me+3dtGYwaaCSlchcAOnx8qZvKtaDIF0KPbuJge8xqEqcCswi23
-	 zyNNcqRfFsBfSU2wNRRavAmCD8P4QIiFxKQlJ1K8=
-Date: Tue, 25 Feb 2025 09:24:45 -0800
-From: Shyam Saini <shyamsaini@linux.microsoft.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	code@tyhicks.com, christophe.leroy@csgroup.eu, hch@infradead.org,
-	mcgrof@kernel.org, frkaya@linux.microsoft.com,
-	vijayb@linux.microsoft.com, linux@weissschuh.net,
-	samitolvanen@google.com, da.gomez@samsung.com,
-	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org
-Subject: Re: [PATCH v3 2/4] kernel: refactor lookup_or_create_module_kobject()
-Message-ID: <20250225172445.GA28595@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20250211214842.1806521-1-shyamsaini@linux.microsoft.com>
- <20250211214842.1806521-3-shyamsaini@linux.microsoft.com>
- <4039ec74-8b46-417e-ad71-eff22239b90f@suse.com>
- <87wmdjo9yp.fsf@prevas.dk>
- <e8ba9f36-e33d-4c53-9d34-ff611cb1c221@suse.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="c4eBt2l8"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6f679788fd1so3353647b3.2
+        for <linux-modules@vger.kernel.org>; Wed, 26 Feb 2025 16:17:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1740615464; x=1741220264; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J/8pOkRdkavFiHcWKEd5sA0HUSbssEIq4tj0O2hK2RA=;
+        b=c4eBt2l8CbcJoRlKyyQ/cjSlxKK2oBfQVCWZ4Pu48hjjJck5HoE/BGWQmHzcWE4p66
+         tUDyP+XoGeHYNu57d2p/Lnl02I1KdGq3H19EuIS4gY4gxiw1CJXR64hzAUf6nOf5Sezl
+         L1GKVmLl7miRsh0kxbvRZMVwZTSM7yD6L6266gCs0+LBVtO+AZkq0zuq9hJ5IBgkglAn
+         k5gtL7vObIGfQbEXZ0oqX3pgnh4zTGK4/SFYr8x+Yey0txrlwR1XZeItx2Z9Vk8idc8S
+         D68HMmHwWcACdYbj1ox3ZswNQcVxGiKUsJZA+XW7awr70U/9xY71z4M2FoKJRrOugXAM
+         45CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740615464; x=1741220264;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J/8pOkRdkavFiHcWKEd5sA0HUSbssEIq4tj0O2hK2RA=;
+        b=qfmJ8L++CKwmPk5pCe6EvFoD6rLKzTSmMoX0eM+DHlzOQD8dS97NaFbt+dBXYuCJin
+         ZeaOaH4tKtobcgMji1oveoCZgO8WY8E170ZMH6iJ37qExTGGJ4HNXgz3blA13rxDKEzs
+         ysuSAmbGi6ecTzmQwPzT/2vgOAZupSDRtOKW1eztlmrKQReC+XqUDN5Fe+AFcexhW4gy
+         ihYoTM0kXH4tvCVITrxHMkPiBQ6I/R0OwajOlXJWnysfkurqIUyIlmMNVYaDua9ef1GJ
+         8dcWwT4ywZLaPUdx7MZCfmdfz22kFZhwRxwo4cA7YAobXKxknZi16FxHVAiHYCh4pBPl
+         y/Hg==
+X-Forwarded-Encrypted: i=1; AJvYcCUeBA79LFXWr3nnqHNrViP1vxVf+uIsl8KP19SxTfHq052EwGqJkAWPcDa0Rqld5NcY3tCPliXvvBGwpTAx@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeJc3/54V73MBX7AoGYIcWdr+ffqEvM/NcDBRwH33iwanaXK6O
+	Wq/KNyzWAXcGwcZiCm3fWHVy4mQYthj1bsA0xZXxdq0kCqZ6ojJiRHyQoRbFPmy94aTL+TIHg3T
+	dFo2MnjeX+erPdsbYQlpIveNc5gFbah2PSbuZ
+X-Gm-Gg: ASbGnculG2P6UazLyOtwFMJ3zRo5GGQuOaOuYJORfJXGASVAWOz4nwi3986ZbCDwrgB
+	UcS9jKNgJ1d097G2izEI/7bZTsz+NaRG1ZMzTZyO4k09MNdqQsCch9ADOWIjqXaM8GQdCVLn1yw
+	Agzakego8=
+X-Google-Smtp-Source: AGHT+IHe4X02T2euH7liqYMP6jiJfMZtT6v1W3CIFOciiH/l39472KYlGO244KC2IT1ddKL6wDC2WrqJNGGfRmugYAg=
+X-Received: by 2002:a05:690c:6201:b0:6fd:2fcf:1323 with SMTP id
+ 00721157ae682-6fd2fcf1784mr39373967b3.21.1740615464498; Wed, 26 Feb 2025
+ 16:17:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8ba9f36-e33d-4c53-9d34-ff611cb1c221@suse.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20250114161729.77142-1-arulpandiyan.vadivel@siemens.com> <CAHC9VhR8Ny3McMo7ZDw06ry0VdUHEQcym8yvSJHdYdUUoVMAKQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhR8Ny3McMo7ZDw06ry0VdUHEQcym8yvSJHdYdUUoVMAKQ@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 26 Feb 2025 19:17:33 -0500
+X-Gm-Features: AQ5f1JqyY6G7naGSxupk9C14H3Zkfd_SH7ynbGHRa2yBgJJ7pms3QzIzx43eRMQ
+Message-ID: <CAHC9VhR41PLeO-TZvDt8jM2j5oDr_VyHPmsWh-B0ND4Ynot4HQ@mail.gmail.com>
+Subject: Re: [PATCH] loadpin: remove MODULE_COMPRESS_NONE as it is no longer supported
+To: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>, Kees Cook <keescook@chromium.org>
+Cc: linux-security-module@vger.kernel.org, linux-modules@vger.kernel.org, 
+	cedric.hombourger@siemens.com, srikanth.krishnakar@siemens.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Petr,
+On Tue, Jan 14, 2025 at 10:20=E2=80=AFPM Paul Moore <paul@paul-moore.com> w=
+rote:
+> On Tue, Jan 14, 2025 at 11:16=E2=80=AFAM Arulpandiyan Vadivel
+> <arulpandiyan.vadivel@siemens.com> wrote:
+> >
+> > Updated the MODULE_COMPRESS_NONE with MODULE_COMPRESS as it was no long=
+er
+> > available from kernel modules.
+> >
+> > Fixes: c7ff693fa209 ("module: Split modules_install compression and in-=
+kernel decompression")
+> > Signed-off-by: Arulpandiyan Vadivel <arulpandiyan.vadivel@siemens.com>
+> > ---
+> > Changes in v2:
+> > Reword the commit message
+> > Modify logic and add Fixes tag.
+> > ---
+> >  security/loadpin/Kconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> For what it's worth, this looks fine to me.
+>
+> Reviewed-by: Paul Moore <paul@paul-moore.com>
 
-Thank you for the reviews
+Kees, did you ever merge this into your LoadPin tree?
 
-On Tue, Feb 25, 2025 at 09:33:10AM +0100, Petr Pavlu wrote:
-> On 2/21/25 11:42, Rasmus Villemoes wrote:
-> > On Thu, Feb 13 2025, Petr Pavlu <petr.pavlu@suse.com> wrote:
-> > 
-> >> On 2/11/25 22:48, Shyam Saini wrote:
-> >>> In the unlikely event of the allocation failing, it is better to let
-> >>> the machine boot with a not fully populated sysfs than to kill it with
-> >>> this BUG_ON(). All callers are already prepared for
-> >>> lookup_or_create_module_kobject() returning NULL.
-> >>>
-> >>> This is also preparation for calling this function from non __init
-> >>> code, where using BUG_ON for allocation failure handling is not
-> >>> acceptable.
-> >>
-> >> I think some error reporting should be cleaned up here.
-> >>
-> >> The current situation is that locate_module_kobject() can fail in
-> >> several cases and all these situations are loudly reported by the
-> >> function, either by BUG_ON() or pr_crit(). Consistently with that, both
-> >> its current callers version_sysfs_builtin() and kernel_add_sysfs_param()
-> >> don't do any reporting if locate_module_kobject() fails; they simply
-> >> return.
-> >>
-> >> The series seems to introduce two somewhat suboptimal cases.
-> >>
-> >> With this patch, when either version_sysfs_builtin() or
-> >> kernel_add_sysfs_param() calls lookup_or_create_module_kobject() and it
-> >> fails because of a potential kzalloc() error, the problem is silently
-> >> ignored.
-> >>
-> > 
-> > No, because (IIUC) when a basic allocation via kzalloc fails, the kernel
-> > complains loudly already; there's no reason for every caller of
-> > kmalloc() and friends to add their own pr_err("kmalloc failed"), that
-> > just bloats the kernel .text.
-> 
-> I wasn't suggesting to log a kmalloc() error specifically. The idea was
-> that if lookup_or_create_module_kobject() fails for whatever reason,
-> kernel_add_sysfs_param() and version_sysfs_builtin() should log the
-> failure to create/get the kobject.
-> 
-> > 
-> >> Similarly, in the patch #4, when module_add_driver() calls
-> >> lookup_or_create_module_kobject() and the function fails, the problem
-> >> may or may not be reported, depending on the error.
-> >>
-> >> I'd suggest something as follows:
-> >> * Drop the pr_crit() reporting in lookup_or_create_module_kobject().
-> > 
-> > No, because that reports on something other than an allocation failing
-> > (of course, it could be that the reason kobject_init_and_add or
-> > sysfs_create_file failed was an allocation failure, but it could
-> > also be something else), so reporting there is the right thing to do.
-> 
-> The error message says:
-> pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n", name, err);
-> 
-> I think it was appropriate for locate_module_kobject() to do this error
-> reporting when the function was only called by code in kernel/params.c
-> and in the boot context. Now that the patch makes the function available
-> to external callers, I'm not sure if it should remain reporting this
-> error.
-> 
-> The function itself shouldn't directly make the system unstable when it
-> fails. Each caller can appropriately determine how to handle the error.
-> Functions kernel_add_sysfs_param() and version_sysfs_builtin() don't
-> have much of an option and can only log it, but module_add_driver()
-> could roll back its operation.
-> 
+> > diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+> > index 848f8b4a60190..d82bcdb34cc8a 100644
+> > --- a/security/loadpin/Kconfig
+> > +++ b/security/loadpin/Kconfig
+> > @@ -16,7 +16,7 @@ config SECURITY_LOADPIN_ENFORCE
+> >         depends on SECURITY_LOADPIN
+> >         # Module compression breaks LoadPin unless modules are decompre=
+ssed in
+> >         # the kernel.
+> > -       depends on !MODULES || (MODULE_COMPRESS_NONE || MODULE_DECOMPRE=
+SS)
+> > +       depends on !MODULES || (!MODULE_COMPRESS || MODULE_DECOMPRESS)
+> >         help
+> >           If selected, LoadPin will enforce pinning at boot. If not
+> >           selected, it can be enabled at boot with the kernel parameter
+> > --
+> > 2.39.5
 
-before this patch series [1] kset_find_obj() was called in module_add_driver()
-and the function immediately returned when no valid module_kobject was found,
-
-module_add_driver returns immediately if some error is encountered or module_kobject
-is not found in lookup_or_create_module_kobject()
-Since module_kobject() is anyway no-op if it [2] returns early so it shouldn't require
-any rollback, right?
-
-Assuming rollback is not required for module_add_driver() in lookup_or_create_module_kobject()
-failure scenario, what should be the appropriate messaging from pr_crit() if it
-fails in module_add_driver()?
-
-[1] https://elixir.bootlin.com/linux/v6.14-rc4/source/drivers/base/module.c#L48
-[2] https://elixir.bootlin.com/linux/v6.14-rc4/source/drivers/base/module.c#L58
-
-Thanks,
-Shyam
+--=20
+paul-moore.com
