@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FEEC23BCE3;
-	Thu, 27 Feb 2025 14:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2D3238D34;
+	Thu, 27 Feb 2025 14:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740667188; cv=none; b=FeTceNZnDbkYL50WuYJ1gAT4ljR0R5JIzLthKIa7sj2p4MA70Alagek+7+Kot+7aoE/YphjRIhN4JV9WbSFjVdkU2Bw4JRIvgu7KuuD8IC1AYzlA1DZ2XoBM4jX3xBUcgKWxbTeoKsE3Yxs81tr0tWiQFapjFCpMKTcuEZqokQQ=
+	t=1740667194; cv=none; b=gyfqWNRGaeLA2Ri//WD0r/Rh5yy1XpzuWsrb9cYSOMYDBbCzjTnkf+xuzVo/X5PrLnIVbJUvYbd6HDmRg2IdRoDGTMcZ+p/2C2fkUfE13FurYCmcp/sxGE1ac/ULAsJywKWf4jbFITFhJCf4v+njTHtdYqRwSTemvrnqgz9jwoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740667188; c=relaxed/simple;
-	bh=9xEh8xnuonl+Y4DJJTe3psqTruSkTcctIO2KOz8LZ3U=;
+	s=arc-20240116; t=1740667194; c=relaxed/simple;
+	bh=K318bV0GaEBm1LLBOaM7D6mMUZFcC9BNiYbR/qpbYnw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dV0G8Y+DpZ2DMkI0C37cVOuuwBt0iC+lJ6nHqWC5IiGLNQ2+uKiLZ+CvGiHnCrYP14h8G86tAvyhWeSNGujzT5xv9s1X1iU01ZcCxyxQ3Zi81s0Q/b7vMq7J+lzZGlxXxJvVx6kQUT+iLCCHO3ytjwUJerFg30AlqQcwmdKlB2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FOlhyc63; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=a2mmP6u0l2KK/0fdww5y4Kqkh5k7PQzfwHh4Y1iQq/ybHhGTXlZ5OhsTYjKgDLyvtSbvyD7J3gNIihYsBx7oBBvKkYZq1/Ax3hlq8HXmYQTFZh0rt/Y0gZFDzmPU7rG4z82UyVWL4OdVLwUvocW7iaemHuZCKK8Q8FKCH98QwNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8Qa5Wd2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FOlhyc63"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF35C4CEE9;
-	Thu, 27 Feb 2025 14:39:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8Qa5Wd2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA55C4CEDD;
+	Thu, 27 Feb 2025 14:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740667187;
-	bh=9xEh8xnuonl+Y4DJJTe3psqTruSkTcctIO2KOz8LZ3U=;
+	s=k20201202; t=1740667193;
+	bh=K318bV0GaEBm1LLBOaM7D6mMUZFcC9BNiYbR/qpbYnw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=FOlhyc63NdTvMRnEoTKfKrBjtuf99xMXITmk8vn+5L376KocYDLukN+HFCaX/rgCW
-	 5t2SXyNf33h8lnRwWXJtKYi+MoEISMK5U1gz1qhIQyFT1n/W1feor0njQzmJoQcXbm
-	 NaOa3YGBuD445tb6MWpt0vdHH03bHSJUdQh8SrO/g3/+Ae5sqfxqpLICah9V4gUWry
-	 XjtHd3n6ttmWwh5tvrdMLHF1gnmmfokMfoofsTlMk9dG5sNiCQb/Sygd0d0OdeVEwl
-	 /dokBoIy1QHi71WM47bpJKxw4KRPnQz6303E1H20AllBPux82NP5zk4R1Adc5MnrE1
-	 KT7coRs5T1jAw==
+	b=W8Qa5Wd2dvUlpzK3EzbqyGoeIYK0Wu/gk9f2fs1FwZYmbJPnY1ST66O0fKK38lJVw
+	 mo9aNWKASJy9NX/Db0nJD6vXYKZFsWnMSipjPAl8VUJ7lKcAJkUgYCTjnMbv61pWJQ
+	 GAVfk6XlWk2FsIBIM/UkUWCcAr0ABvgI0Vk03ZRyRMTnQXtz8Hs/1isDlPf4kxUooG
+	 +R8Sde37o/WGLqywkgRuwvcrxo4DtzVwybr9DRIAncNMKfAvsdardMtYCLy8jZR0Ur
+	 nudSb5e0uxG1uZqQHI02U34elc8kzCvpE6583kva8v6lnO6nloUuMZBzK+a2RDmNpX
+	 oIvP8GldpoDfw==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Thu, 27 Feb 2025 15:38:07 +0100
-Subject: [PATCH v8 1/7] rust: str: implement `PartialEq` for `BStr`
+Date: Thu, 27 Feb 2025 15:38:10 +0100
+Subject: [PATCH v8 4/7] rust: str: implement `strip_prefix` for `BStr`
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250227-module-params-v3-v8-1-ceeee85d9347@kernel.org>
+Message-Id: <20250227-module-params-v3-v8-4-ceeee85d9347@kernel.org>
 References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
 In-Reply-To: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -56,51 +56,67 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=911; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=9xEh8xnuonl+Y4DJJTe3psqTruSkTcctIO2KOz8LZ3U=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBnwHjQmudfccCCA3TVrg15lT/He0OPHIxRmsZZ+
- L7YWtBKcOSJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCZ8B40AAKCRDhuBo+eShj
- d0rpD/wMpVT+8AVIxXiBvtFG3pZADIaZoJ24E0rNtHqYQypZA7B2alFifWZZw4ddWAxdFX0qeYq
- 5YrOQSx/euZCaVbHbOPTGmzY2S4zItr2Dp6BOElkXL1LshFw5uE9yOkwVCPymSy2dFqjqTHavyK
- +ZlA0w4tViBL6WZbk3zvAqxqtig5Q6YbkClnP0UJQbtW35GUcaYrdotmPXPLQb9Z/cIkWO9LJFQ
- d21DzzNLrBmhXe0J2fuxG6d/5JzqBOi0UnZCLz2u1rOVZ4oqcr44h2ajLMPf26BLhYNkRoupi9f
- TzHZ2SdpVgzoMOd3B+1RH4bCSZcnY7xggFIx3s/R4KVuigmNe2TMSyBIWzW6VYka/Wne6Xpd2Ql
- gQBjCcgzm7ciiOwuaP3XIe3FBglnT4QG9A68+E7MjIzWmW/7CxH86soDQP563Brgevm0+KXFPu3
- T9DnDklxvccRZNQQp9OJ8IzXGZKfVkD3nELOSYyjJKxz+QmrQqn84yXICTSliBnYAqw6YTwMfzX
- MdHy2I2zGPf/D1k/+BtWEDxSWXlglNsi+xD95cnKmD6D352Ms4/BwRUtyk5HeJppn7o073Cv+IH
- g1hQPdxSx5o1vGEw1O2kTME/nuMzlLrjt5snEaykkrNNglkoRKY4n4jbOepR4L7DjEXnyyvV1In
- 0AT3Y7F66VjQAOQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=K318bV0GaEBm1LLBOaM7D6mMUZFcC9BNiYbR/qpbYnw=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBnwHjTVMvjPqeTRD5th5GEu03/Xwxi8SJ2/Zi0r
+ wVlKT5/bK+JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCZ8B40wAKCRDhuBo+eShj
+ dwJAEACx/RHG4m20bbfs0jUSPCZ7+sbyD47sY3x7apz9kc//edLA7IkDUEltGLb7TWh9yCG7KA8
+ BgHt+MdnLDJOGgwDAaUwE1XDh1p0lygvUaJDmygfQGsvLuhK+uyCOjQdPgY74ozjUsQweBhgnIL
+ H+mekQ+0w21YdItK+EZvOJhkwhSWdq2D8rJpvR7C0/K5k1cS61aBmJuocaog3SZUZlHOobLVtLD
+ GQUhw95rLOEOmejVzONC80GDqa4uLN0FuGUd1S2OLDDQkfVb24s+/9387QwE6PxzafJ/i+3xBRl
+ k29iGWekEe5E9hqBJv9twO6J444wwE7xGdVEYvjK+ctUFg2qd274BUeBHpi2BQyW+VIXuBhyRzj
+ tM6tXTIkddZ0+Xjr1QSGGRHfgO3u0LhsP9zjwi9Tk+1OGYYhKbg1UrRNTYNRri9s8LNjlJWbc/f
+ cLxyrBUgNXKJwW1gyepiDY4lf5gyts4QKw/S1r/0lnrmNzjDLqd8hb5yE3JSe6PIses8udO+Nw9
+ MLTDQRUQh//zP/v3IHEHNE15u8yu3r8wvll9JVk2eWvw4ufDSVvqHyySUyCs1cFNOQ45VlvSC7B
+ 8agJPgR/Or3KtoxhU2SIk0nRm9D4Zfjq4xBYg3NFs6GDYiCXXZ/SHn62hM2O5KuvdFmvfC3nRW4
+ HUrGvsfrKxxPc2A==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Implement `PartialEq` for `BStr` by comparing underlying byte slices.
+Implement `strip_prefix` for `BStr` by deferring to `slice::strip_prefix`
+on the underlying `&[u8]`.
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Gary Guo <gary@garyguo.net>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
 Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/str.rs | 6 ++++++
- 1 file changed, 6 insertions(+)
+
+It is also possible to get this method by implementing
+`core::slice::SlicePattern` for `BStr`. `SlicePattern` is unstable, so this
+seems more reasonable.
+---
+ rust/kernel/str.rs | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index 28e2201604d6..002dcddf7c76 100644
+index c6bd2c69543d..db272d2198fc 100644
 --- a/rust/kernel/str.rs
 +++ b/rust/kernel/str.rs
-@@ -108,6 +108,12 @@ fn deref(&self) -> &Self::Target {
+@@ -31,6 +31,22 @@ pub const fn from_bytes(bytes: &[u8]) -> &Self {
+         // SAFETY: `BStr` is transparent to `[u8]`.
+         unsafe { &*(bytes as *const [u8] as *const BStr) }
      }
++
++    /// Strip a prefix from `self`. Delegates to [`slice::strip_prefix`].
++    ///
++    /// # Example
++    /// ```
++    /// use kernel::b_str;
++    /// assert_eq!(Some(b_str!("bar")), b_str!("foobar").strip_prefix(b_str!("foo")));
++    /// assert_eq!(None, b_str!("foobar").strip_prefix(b_str!("bar")));
++    /// assert_eq!(Some(b_str!("foobar")), b_str!("foobar").strip_prefix(b_str!("")));
++    /// assert_eq!(Some(b_str!("")), b_str!("foobar").strip_prefix(b_str!("foobar")));
++    /// ```
++    pub fn strip_prefix(&self, pattern: impl AsRef<Self>) -> Option<&BStr> {
++        self.deref()
++            .strip_prefix(pattern.as_ref().deref())
++            .map(Self::from_bytes)
++    }
  }
  
-+impl PartialEq for BStr {
-+    fn eq(&self, other: &Self) -> bool {
-+        self.deref().eq(other.deref())
-+    }
-+}
-+
- /// Creates a new [`BStr`] from a string literal.
- ///
- /// `b_str!` converts the supplied string literal to byte string, so non-ASCII
+ impl fmt::Display for BStr {
 
 -- 
 2.47.0
