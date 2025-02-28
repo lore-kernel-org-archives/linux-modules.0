@@ -1,111 +1,98 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F08C1F5820;
-	Thu, 27 Feb 2025 18:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7977F253B57
+	for <linux-modules@vger.kernel.org>; Fri, 28 Feb 2025 09:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740682189; cv=none; b=sK4gep1IdBxra4jSreX4fwObgEF1/+mdqJ6Vzt7tbRa4BDNlFaFPNwK3xgujDMx1y8tguBpULszb3NvDeT8Zbn+xg3vbJ9MwI1tUiSHxNDnG6nYd9Ud12KuQDRdjW6qsER0e8w41zgLJSgOzQR4rTfTZ3LAMQWPZPtZPZ1CxUFs=
+	t=1740733852; cv=none; b=EmtjWTqpAL0zF6R8AZ1y1MJ8lXBy4Nv8T+CromKER4z57wsjMaPoBgXzLAOWjxjai5GhTQZ/oobzXsshCgi7PnOSgsbnwO09YTeKYAZ4ouEzivKxKA19FxSx7usTdPtYkMBIYEXIFRfW9md2gx+mpYSIs347/NoLPAbNHwclj/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740682189; c=relaxed/simple;
-	bh=jD8IrSFKJ+w8OwiRwskbeXe3GSuxpQOGZpZcLLSKcp8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Gu8ylHbEIjTf1cSAGb81rRLl3zyfdGaAre0HXntlWGCjf0ptNC5uIIM2+/y3pSjtc1pY5FHakYaBOkH+j8uvViusZ2ZdE2Xdw3t4zs4oO+J9WKKfhn+UjoCsNNobL+939LhQuY+shEb99Ug65lP9aYxgEo5vv9WGs08bcq8CmWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=GlCtr5W9; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1740733852; c=relaxed/simple;
+	bh=B+KZR9U+QNu7SUxJ+i8T3VOmdEx/39PbN2GtIhllJPc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pXtQPyB/ID6YWRpgButdzpZAdm3Uf46o510sTILfgewG4KKyVa5sdO8lWN9Ve7916u2W6TBdNWgLCJxhityjfv8TzSQfjLzWr2LmYSS7jdBheXrrhUQY/ATNBT6hHGm49iGNwNPoSbvJb5Li6LSVYCA4+nJPWtN10XY56BjPb1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YrdBKK1G; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="GlCtr5W9"
-Received: from thinkpad-p16sg1.corp.microsoft.com (unknown [20.236.10.206])
-	by linux.microsoft.com (Postfix) with ESMTPSA id A4279210EAC1;
-	Thu, 27 Feb 2025 10:49:47 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A4279210EAC1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1740682187;
-	bh=nz70CBPIYU1n5UuvgHW65DgzacxtlZnlMe0KudNX5Uo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GlCtr5W9NTY1BR4vDbGgcZSQoYn3+qfCRMDJAv2LO2ZhAfsHt7ie9A6zC3XeNqbpj
-	 RH81gHKezlv57RQ8kdkkuC6Fr3QUudb87hIs2NMvozkSoyMKSHTk8Ps8lg9r/hRN3l
-	 KdtPQtSMEe96dxCDjN0YZtpV8dN4LsvjacmxujR8=
-From: Shyam Saini <shyamsaini@linux.microsoft.com>
-To: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Cc: petr.pavlu@suse.com,
-	code@tyhicks.com,
-	linux@rasmusvillemoes.dk,
-	christophe.leroy@csgroup.eu,
-	hch@infradead.org,
-	mcgrof@kernel.org,
-	frkaya@linux.microsoft.com,
-	vijayb@linux.microsoft.com,
-	linux@weissschuh.net,
-	samitolvanen@google.com,
-	da.gomez@samsung.com,
-	gregkh@linuxfoundation.org,
-	rafael@kernel.org,
-	dakr@kernel.org,
-	stable@kernel.org
-Subject: [PATCH v4 4/4] drivers: base: handle module_kobject creation
-Date: Thu, 27 Feb 2025 10:49:30 -0800
-Message-Id: <20250227184930.34163-5-shyamsaini@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
-References: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YrdBKK1G"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so1118444f8f.0
+        for <linux-modules@vger.kernel.org>; Fri, 28 Feb 2025 01:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1740733848; x=1741338648; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B+KZR9U+QNu7SUxJ+i8T3VOmdEx/39PbN2GtIhllJPc=;
+        b=YrdBKK1Gc8taDPwF3BXslAm+4RyH1VD/8Y4MpBK18oEBxGYhAXV32Ixzwr979xnnfI
+         X1XGf3igKoEAUZ5I11awrSNmbn9bMboYqs/4vY2FUouqYIK5LXuc9954EGcBDr4kUCM6
+         6nDnFZ0Ni/nhoP43QfIWAki9ebSSxrz2lxV3yTxi0uvYPNdaYV8dZE9u9bFMzf3yhOtM
+         bJuhBoR2FxtP13b6TuvKo9l5x3yseZ2Lsz9Q8hsudHLRgc1alY9ZJ+OMfNUTfc80/2az
+         Q3reEXuXNt3ed9ugMzBGI4WxzZFZiS6qQn7K8Ds4IzXmvSQJSvAeRCM16zpPDwKkO/a5
+         WbLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740733848; x=1741338648;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B+KZR9U+QNu7SUxJ+i8T3VOmdEx/39PbN2GtIhllJPc=;
+        b=lHXRKAv4hVJaf5Ahdf6oj2k2eJdk22uFKozWOzBNiK1iyvc94vOTLRbzmAqrromca3
+         8pGGL/w/s285IVpy0Q2yi42QFs85M+I3Ay+5YbwgOtS/nDVBSG6Q+XfDdTKA8KZ5S8Lm
+         xdKBLcBhDihNinXPbODVIQykg1r/ufagvkfi/Qkf0iCxsBaqITo5n1PlD9XyVeH6/BY6
+         l8//kxpXv3pyc0OOoaczAGPqCvPUVXocOcRkrQkyXGQpRUons5FtWiHAc1vhRE758BeQ
+         6dkby05DgA7QgKxkwJVXyUiMNfcSC3Dj1L4kQ2rVPX4ZcmLdaVHc3iPFCA/lHlAjTPJC
+         n9Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCXtXuOpnEPwj5MZDtb/41SJgZcdT7JJzLpzuBcg+Y9U3tSz9Z7XCT8BMETtMCm+UGIhl3MZ9lbCBgf6a3pN@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKig0gbbNsXgAT85sNkuAZSe9ufRkzD+28Lj2pYDP2iwPzdT0S
+	FZzqkcj3miGiX8kmcXecTLuf0K302f31mcrkLdYDDsW8hkKiPO+MCeESUV9Wg36d7Ui29rxWYdX
+	Ul8VxWlQMgC8rkbLVoWl6QCg7hqKVZcBSA0xb
+X-Gm-Gg: ASbGncu3ipDBvT7g86DQZwsc9/3/AFZm3jMP1TEnIERgJCGkVxN9cAaKQIBKdztfghP
+	TMmNX72pL4rd48PCJWZhk+pXbVnrLX0kMvPg/nLGL+h+hcycZymuUJMiExovgNzovHS4ehD6o3x
+	uOeqTBSdK2dlYs1ZBfWry6+77YWYAg2BN1zYK8
+X-Google-Smtp-Source: AGHT+IERGpvzIDS0sWelP51+WNxcT7yjVOKO5ZFHLOo3Y6uovfZdy2A/BnsEEhMwf3nYmys4gVtLG8EpMJrjOz8W398=
+X-Received: by 2002:a05:6000:4029:b0:38f:2726:bc0e with SMTP id
+ ffacd0b85a97d-390eca138d2mr2034057f8f.44.1740733847661; Fri, 28 Feb 2025
+ 01:10:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org> <20250227-module-params-v3-v8-2-ceeee85d9347@kernel.org>
+In-Reply-To: <20250227-module-params-v3-v8-2-ceeee85d9347@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Fri, 28 Feb 2025 10:10:36 +0100
+X-Gm-Features: AQ5f1JqSvSbT0FH7s_hhnc_jNCyh2EVcbOEFqp5yXZR56yXssuri7XnydNHPcvw
+Message-ID: <CAH5fLghKoWQqOC8jRES_ZdSg_PJHd22bQWngaQ4fRHJPHYLB6Q@mail.gmail.com>
+Subject: Re: [PATCH v8 2/7] rust: str: implement `Index` for `BStr`
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-module_add_driver() relies on module_kset list for
-/sys/module/<built-in-module>/drivers directory creation.
+On Thu, Feb 27, 2025 at 3:39=E2=80=AFPM Andreas Hindborg <a.hindborg@kernel=
+.org> wrote:
+>
+> The `Index` implementation on `BStr` was lost when we switched `BStr` fro=
+m
+> a type alias of `[u8]` to a newtype. Add back `Index` by implementing
+> `Index` for `BStr` when `Index` would be implemented for `[u8]`.
+>
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Reviewed-by: Fiona Behrens <me@kloenk.dev>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-Since,
-commit 96a1a2412acba ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
-drivers which are initialized from subsys_initcall() or any other
-higher precedence initcall couldn't find the related kobject entry
-in the module_kset list because module_kset is not fully populated
-by the time module_add_driver() refers it. As a consequence,
-module_add_driver() returns early without calling make_driver_name().
-Therefore, /sys/module/<built-in-module>/drivers is never created.
-
-Fix this issue by letting module_add_driver() handle module_kobject
-creation itself.
-
-Fixes: 96a1a2412acb ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
-Cc: stable@kernel.org
-Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Signed-off-by: Shyam Saini <shyamsaini@linux.microsoft.com>
----
- drivers/base/module.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/base/module.c b/drivers/base/module.c
-index 5bc71bea883a..218aaa096455 100644
---- a/drivers/base/module.c
-+++ b/drivers/base/module.c
-@@ -42,16 +42,13 @@ int module_add_driver(struct module *mod, const struct device_driver *drv)
- 	if (mod)
- 		mk = &mod->mkobj;
- 	else if (drv->mod_name) {
--		struct kobject *mkobj;
--
--		/* Lookup built-in module entry in /sys/modules */
--		mkobj = kset_find_obj(module_kset, drv->mod_name);
--		if (mkobj) {
--			mk = container_of(mkobj, struct module_kobject, kobj);
-+		/* Lookup or create built-in module entry in /sys/modules */
-+		mk = lookup_or_create_module_kobject(drv->mod_name);
-+		if (mk) {
- 			/* remember our module structure */
- 			drv->p->mkobj = mk;
--			/* kset_find_obj took a reference */
--			kobject_put(mkobj);
-+			/* lookup_or_create_module_kobject took a reference */
-+			kobject_put(&mk->kobj);
- 		}
- 	}
- 
--- 
-2.34.1
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
