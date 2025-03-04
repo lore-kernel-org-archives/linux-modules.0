@@ -1,124 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gimli.kloenk.de (gimli.kloenk.de [49.12.72.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C877513212A;
-	Tue,  4 Mar 2025 01:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46901FCF60;
+	Tue,  4 Mar 2025 11:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.12.72.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741051494; cv=none; b=j+hOF4crmBWB0X5L+E1SQHao1hKAM+6fvWMy/B0rXt+8dw/lx6gBLNhyHl55PLUQ651Tcge78ow1HBHhhPhXjRXuCFF+HQo/rUip/3lqOT+oC7VZMB45jyvGvvCkezNB5awAbmEADsSrhZkpR1cTasC2EovYW0jDfRAlztOm5O4=
+	t=1741086463; cv=none; b=d/eKV7dy4FFN6FGskje4fAxy1U+ABbn5B9/aIgl0T7ybkBWQlPHO+JCkBtjDGOBnNePts+n2D4WtSWgURmbEYUKeuwJG2IK0tGB2c73CwSNOLqZw5L2z+TA8X9HY03MLXH0fgaqbnbLxV4fX1jWrwZ/HfDs5V8BqI9raJnJ68b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741051494; c=relaxed/simple;
-	bh=uwP4DOo17w5bMID/vK/+QW5Yb0LcCl7y2kyQrYSQMBk=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=TxP35qbdWnzivR8wuhIp2dNkKB23eCou1/CkG8rPqRVWhDBeg7akD73h7cvDXYer7w4xQGqp7yNY5NGAesLZuF+kwTxswcOFFHY/uxXzUWbbMzO4UznpNUiFQHXPc+qV9fJW8SqBj6YBsrI7re40uoluFNu7fPQgDv4ana3xv/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9E1C4CEED;
-	Tue,  4 Mar 2025 01:24:54 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1tpH2a-0000000CC6r-2RUI;
-	Mon, 03 Mar 2025 20:25:48 -0500
-Message-ID: <20250304012548.433669427@goodmis.org>
-User-Agent: quilt/0.68
-Date: Mon, 03 Mar 2025 20:25:21 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>,
- linux-modules@vger.kernel.org
-Subject: [PATCH v3 5/8] module: Add module_for_each_mod() function
-References: <20250304012516.282694507@goodmis.org>
+	s=arc-20240116; t=1741086463; c=relaxed/simple;
+	bh=Du7MZsOIDKOjbNlXu3JaKpDxFRTp/orNDFob1H41r7g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TdUA6hjhbW692/9mXhqDJvmR8E42oIC5Qe4sRthf+uC3hb0bQkxfl2hGByDtRJ00oKQAU3O3eV9n+VR9nwOQzP0Xz1rC9WMPMHiTfvCfTHetilqSLVErOUEajaVqUA0PU6gvDc7Dv9IBUNq9B/tDTTLqmrgOczeLT+Zl+OP513Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kloenk.dev; spf=pass smtp.mailfrom=kloenk.dev; dkim=pass (1024-bit key) header.d=kloenk.dev header.i=@kloenk.dev header.b=GBFpSHDl; arc=none smtp.client-ip=49.12.72.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kloenk.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kloenk.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=kloenk.dev header.i=@kloenk.dev header.b="GBFpSHDl"
+From: Fiona Behrens <me@kloenk.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kloenk.dev; s=mail;
+	t=1741086451; bh=oONgIxzK+8/o9sj2P7jZLoDOLJDTkcQZb3hUnWfl6o0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=GBFpSHDlAydUtZbG7niyZVHYfKk1RE4ABbCLC8z6ePratb2mJcWn3n9TILykbIc/K
+	 FU1XBlHDiuNqmkebnV4r8iZiR1ca6Exl3D5emEVuv48LGV/B1M+sqj4aJPwBf/DKbs
+	 GcnfjBssl2cvihZLjtj2NULV6LoITCCOt9POX59k=
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,
+  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,
+  =?utf-8?Q?Bj=C3=B6rn?=
+ Roy Baron <bjorn3_gh@protonmail.com>,  Benno Lossin
+ <benno.lossin@proton.me>,  Alice Ryhl <aliceryhl@google.com>,  Masahiro
+ Yamada <masahiroy@kernel.org>,  Nathan Chancellor <nathan@kernel.org>,
+  Nicolas Schier <nicolas@fjasle.eu>,  Luis Chamberlain
+ <mcgrof@kernel.org>,  Trevor Gross <tmgross@umich.edu>,  Adam
+ Bratschi-Kaye <ark.email@gmail.com>,  rust-for-linux@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kbuild@vger.kernel.org,  Petr Pavlu
+ <petr.pavlu@suse.com>,  Sami Tolvanen <samitolvanen@google.com>,  Daniel
+ Gomez <da.gomez@samsung.com>,  Simona Vetter <simona.vetter@ffwll.ch>,
+  Greg KH <gregkh@linuxfoundation.org>,  Daniel Almeida
+ <daniel.almeida@collabora.com>,  linux-modules@vger.kernel.org
+Subject: Re: [PATCH v8 1/7] rust: str: implement `PartialEq` for `BStr`
+In-Reply-To: <20250227-module-params-v3-v8-1-ceeee85d9347@kernel.org> (Andreas
+	Hindborg's message of "Thu, 27 Feb 2025 15:38:07 +0100")
+References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
+	<20250227-module-params-v3-v8-1-ceeee85d9347@kernel.org>
+Date: Tue, 04 Mar 2025 12:07:29 +0100
+Message-ID: <m2o6yhjbpq.fsf@kloenk.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain
 
-From: Steven Rostedt <rostedt@goodmis.org>
+Andreas Hindborg <a.hindborg@kernel.org> writes:
 
-The tracing system needs a way to save all the currently loaded modules
-and their addresses into persistent memory so that it can evaluate the
-addresses on a reboot from a crash. When the persistent memory trace
-starts, it will load the module addresses and names into the persistent
-memory. To do so, it will call the module_for_each_mod() function and pass
-it a function and data structure to get called on each loaded module. Then
-it can record the memory.
+> Implement `PartialEq` for `BStr` by comparing underlying byte slices.
+>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-This only implements that function.
+Reviewed-by: Fiona Behrens <me@kloenk.dev>
 
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Daniel Gomez <da.gomez@samsung.com>
-Cc: linux-modules@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-Changes since v2: https://lore.kernel.org/20250215034404.902259250@goodmis.org
-
-- Use RCU guard instead of disabling preemption
-
- include/linux/module.h |  6 ++++++
- kernel/module/main.c   | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 30e5b19bafa9..9a71dd2cb11f 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -782,6 +782,8 @@ static inline void *module_writable_address(struct module *mod, void *loc)
- 	return __module_writable_address(mod, loc);
- }
- 
-+void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
-+
- #else /* !CONFIG_MODULES... */
- 
- static inline struct module *__module_address(unsigned long addr)
-@@ -894,6 +896,10 @@ static inline void *module_writable_address(struct module *mod, void *loc)
- {
- 	return loc;
- }
-+
-+static inline void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
-+{
-+}
- #endif /* CONFIG_MODULES */
- 
- #ifdef CONFIG_SYSFS
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1fb9ad289a6f..927a2e0ffd5f 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3809,6 +3809,19 @@ bool is_module_text_address(unsigned long addr)
- 	return ret;
- }
- 
-+void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
-+{
-+	struct module *mod;
-+
-+	guard(rcu)();
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		if (func(mod, data))
-+			break;
-+	}
-+}
-+
- /**
-  * __module_text_address() - get the module whose code contains an address.
-  * @addr: the address.
--- 
-2.47.2
-
-
+> ---
+>  rust/kernel/str.rs | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index 28e2201604d6..002dcddf7c76 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+> @@ -108,6 +108,12 @@ fn deref(&self) -> &Self::Target {
+>      }
+>  }
+>  
+> +impl PartialEq for BStr {
+> +    fn eq(&self, other: &Self) -> bool {
+> +        self.deref().eq(other.deref())
+> +    }
+> +}
+> +
+>  /// Creates a new [`BStr`] from a string literal.
+>  ///
+>  /// `b_str!` converts the supplied string literal to byte string, so non-ASCII
