@@ -1,95 +1,133 @@
-Received: from gimli.kloenk.de (gimli.kloenk.de [49.12.72.200])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4641FECCC;
-	Tue,  4 Mar 2025 11:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.12.72.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F680205E0D;
+	Tue,  4 Mar 2025 14:56:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741086589; cv=none; b=jSuDiFV/AWDAGMuyhpuhMuDJa37RS44az6qQXLhkOwOQDJHNrsaybwrrmUTAaOA2Rcxt5jUksVxXxHt/uYelEhh4UZel3mLTfCvZQLS1RRDfXaFojAhx1Q2emyqKYZrfVhmCl7xaiKD/RrfptQFwSRvyWyEuqr47nJ9KigYVHQg=
+	t=1741100182; cv=none; b=C72sywMTkszysXtWG6wmv1bY6xdALuzGrL6eyvpMxGTpCetEWWamqr/Z8p5cqcxt1BImvs3NPjPsBT+LeWkzuQ74q6dn5lr+OArjaZqLhFNDxbPK6h9QyRVRVtNcKUDPhv+/iMVK0aSWromotXiHQO7i6hmXa84JR5VIn2iSMak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741086589; c=relaxed/simple;
-	bh=eTDdXRdWUrl2WnDoH0LuvBWrsYt8mWjcwSfM4twc78M=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KGUFPudMytHsOl5y0QOBGOpj1XPyiB0FJpuvPbNFx4EFqXzTHUKhdrd/q5e59uzYlZeOsVZX5x+p1I7hHGYADywDdP7f8D+ludItMkFdAJyzKbCSChGSYyfdaQ7kH199V1NwA5KBqyxLX7neOUCoDVmS0Pl2B6K3AAGBx9RxTes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kloenk.dev; spf=pass smtp.mailfrom=kloenk.dev; dkim=pass (1024-bit key) header.d=kloenk.dev header.i=@kloenk.dev header.b=TT4KhdQV; arc=none smtp.client-ip=49.12.72.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kloenk.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kloenk.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=kloenk.dev header.i=@kloenk.dev header.b="TT4KhdQV"
-From: Fiona Behrens <me@kloenk.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kloenk.dev; s=mail;
-	t=1741086584; bh=q+Qf0imOm4losyj00ntII/wA3h21QUgSLnhXaMx09gE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=TT4KhdQVKjFKdHN9QwzIhGsw0j9IcIWjsAiR1DKTslT+tv9odBgGs6rH4rHQ4Cr8J
-	 l/NYI0DF72Trv6u8YOk19qkSwlw2BF1n3jgTB5ZTuyBJLQNKm1yu0eOkRHEUFKZSSX
-	 KPCSRRllbG9W10aYfO+W0MXff/nTdGGZTTpUqUnc=
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor <alex.gaynor@gmail.com>,
-  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo <gary@garyguo.net>,
-  =?utf-8?Q?Bj=C3=B6rn?=
- Roy Baron <bjorn3_gh@protonmail.com>,  Benno Lossin
- <benno.lossin@proton.me>,  Alice Ryhl <aliceryhl@google.com>,  Masahiro
- Yamada <masahiroy@kernel.org>,  Nathan Chancellor <nathan@kernel.org>,
-  Nicolas Schier <nicolas@fjasle.eu>,  Luis Chamberlain
- <mcgrof@kernel.org>,  Trevor Gross <tmgross@umich.edu>,  Adam
- Bratschi-Kaye <ark.email@gmail.com>,  rust-for-linux@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kbuild@vger.kernel.org,  Petr Pavlu
- <petr.pavlu@suse.com>,  Sami Tolvanen <samitolvanen@google.com>,  Daniel
- Gomez <da.gomez@samsung.com>,  Simona Vetter <simona.vetter@ffwll.ch>,
-  Greg KH <gregkh@linuxfoundation.org>,  Daniel Almeida
- <daniel.almeida@collabora.com>,  linux-modules@vger.kernel.org
-Subject: Re: [PATCH v8 3/7] rust: str: implement `AsRef<BStr>` for `[u8]`
- and `BStr`
-In-Reply-To: <20250227-module-params-v3-v8-3-ceeee85d9347@kernel.org> (Andreas
-	Hindborg's message of "Thu, 27 Feb 2025 15:38:09 +0100")
-References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
-	<20250227-module-params-v3-v8-3-ceeee85d9347@kernel.org>
-Date: Tue, 04 Mar 2025 12:09:43 +0100
-Message-ID: <m2ikopjbm0.fsf@kloenk.dev>
+	s=arc-20240116; t=1741100182; c=relaxed/simple;
+	bh=WkcT4BROTdtshKrn7PVipZZH5jr5YuyR+1h0Ukj8X/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jAUrOLnru5HoQx9Ljvc8Nd90ys9OaTw7EXq+DY0c90BPJ7EXcK1ROoxN/UpzvRZwv6UMK0sozrfpi7A20uNEt2Jh9pFXNARfNRXLIMAc/x2elTqgq5dWBzCQ4O44k7UZL8sI6OsK+ySy5baXKTy4wB4+Grr+s1ZChr6XN9mJJEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 781FFC4CEE5;
+	Tue,  4 Mar 2025 14:56:20 +0000 (UTC)
+Date: Tue, 4 Mar 2025 09:57:14 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami
+ Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ linux-modules@vger.kernel.org
+Subject: Re: [PATCH v3 5/8] module: Add module_for_each_mod() function
+Message-ID: <20250304095714.47a171fa@gandalf.local.home>
+In-Reply-To: <20250304012548.433669427@goodmis.org>
+References: <20250304012516.282694507@goodmis.org>
+	<20250304012548.433669427@goodmis.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Andreas Hindborg <a.hindborg@kernel.org> writes:
 
-> Implement `AsRef<BStr>` for `[u8]` and `BStr` so these can be used
-> interchangeably for operations on `BStr`.
->
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> Tested-by: Daniel Almeida <daniel.almeida@collabora.com>
-> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+Luis,
 
-Reviewed-by: Fiona Behrens <me@kloenk.dev>
+Can I get an Acked-by from you?
 
+This follows the changes you have in linux-next.
+
+Thanks,
+
+-- Steve
+
+
+
+
+On Mon, 03 Mar 2025 20:25:21 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> From: Steven Rostedt <rostedt@goodmis.org>
+> 
+> The tracing system needs a way to save all the currently loaded modules
+> and their addresses into persistent memory so that it can evaluate the
+> addresses on a reboot from a crash. When the persistent memory trace
+> starts, it will load the module addresses and names into the persistent
+> memory. To do so, it will call the module_for_each_mod() function and pass
+> it a function and data structure to get called on each loaded module. Then
+> it can record the memory.
+> 
+> This only implements that function.
+> 
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Daniel Gomez <da.gomez@samsung.com>
+> Cc: linux-modules@vger.kernel.org
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  rust/kernel/str.rs | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index ba6b1a5c4f99..c6bd2c69543d 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-> @@ -125,6 +125,18 @@ fn index(&self, index: Idx) -> &Self::Output {
->      }
+> Changes since v2: https://lore.kernel.org/20250215034404.902259250@goodmis.org
+> 
+> - Use RCU guard instead of disabling preemption
+> 
+>  include/linux/module.h |  6 ++++++
+>  kernel/module/main.c   | 13 +++++++++++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 30e5b19bafa9..9a71dd2cb11f 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -782,6 +782,8 @@ static inline void *module_writable_address(struct module *mod, void *loc)
+>  	return __module_writable_address(mod, loc);
 >  }
 >  
-> +impl AsRef<BStr> for [u8] {
-> +    fn as_ref(&self) -> &BStr {
-> +        BStr::from_bytes(self)
-> +    }
+> +void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
+> +
+>  #else /* !CONFIG_MODULES... */
+>  
+>  static inline struct module *__module_address(unsigned long addr)
+> @@ -894,6 +896,10 @@ static inline void *module_writable_address(struct module *mod, void *loc)
+>  {
+>  	return loc;
+>  }
+> +
+> +static inline void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
+> +{
+> +}
+>  #endif /* CONFIG_MODULES */
+>  
+>  #ifdef CONFIG_SYSFS
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 1fb9ad289a6f..927a2e0ffd5f 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3809,6 +3809,19 @@ bool is_module_text_address(unsigned long addr)
+>  	return ret;
+>  }
+>  
+> +void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data)
+> +{
+> +	struct module *mod;
+> +
+> +	guard(rcu)();
+> +	list_for_each_entry_rcu(mod, &modules, list) {
+> +		if (mod->state == MODULE_STATE_UNFORMED)
+> +			continue;
+> +		if (func(mod, data))
+> +			break;
+> +	}
 > +}
 > +
-> +impl AsRef<BStr> for BStr {
-> +    fn as_ref(&self) -> &BStr {
-> +        self
-> +    }
-> +}
-> +
->  /// Creates a new [`BStr`] from a string literal.
->  ///
->  /// `b_str!` converts the supplied string literal to byte string, so non-ASCII
+>  /**
+>   * __module_text_address() - get the module whose code contains an address.
+>   * @addr: the address.
+
