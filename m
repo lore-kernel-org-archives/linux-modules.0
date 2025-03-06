@@ -1,114 +1,218 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3537B16130C;
-	Thu,  6 Mar 2025 17:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32DD151990
+	for <linux-modules@vger.kernel.org>; Thu,  6 Mar 2025 21:41:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741283406; cv=none; b=Fwa22Iez/J5fe9FaymaDsfAV/JCXKP+Wf5iQZ+NoY476cLfVmSZ2hf+kBBjd2vhnEY45EUVUSAYFp/nZw//RCOWYAYurckTN7LfS0Hhxl7PPhu+PDTHp5gVJIhihaE8ccwvVhsTbDFsRpWd/WY5y3M7jb3SAQb+JyvNIqqfO0V0=
+	t=1741297318; cv=none; b=uyI64v4vunkCETj/mqxrVXJXwVShk1g1VVpXz3ndRJwSnBZ7j6Zec3a3Fpv5zGPn2QT0x1+EDblXdfAEaITvfWc8vv6Edtd+fmJ9kWWiavSY+qdpsWGa0be0N95ja1RHr3g6cEeLtVQdjmvIxC6Yd6kZy8yrR0EmQHMva7wS5hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741283406; c=relaxed/simple;
-	bh=x1XoYdOx/gYcoUR3hT9TCku6gQ7eFxbTIQOY5Da/ErQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uv1Q1hRLQHA/7uX1Knt3ivSyJxDrA/Wv4/8L+apDP3v921oAxsY8d71h+QoOTgkcMdzHvsaIiQMZMFySMpPk/IpVkYjK+cLEwD8dsInRiuklTGpEz6AHqZHZf1gesxpEzlR3m5OxDgmMz8FfJKPujOcuDbVC1pzn1zUkkv0hYg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Z7xGz3ljwz9stM;
-	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j75WxZwarWB9; Thu,  6 Mar 2025 18:28:59 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z7xGz2wQTz9stL;
-	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4FAE48B77B;
-	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 0nXO3ADxucWW; Thu,  6 Mar 2025 18:28:59 +0100 (CET)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id BDF6D8B76C;
-	Thu,  6 Mar 2025 18:28:58 +0100 (CET)
-Message-ID: <481a3ef9-6d4e-4e29-9d50-a6338604c873@csgroup.eu>
-Date: Thu, 6 Mar 2025 18:28:58 +0100
+	s=arc-20240116; t=1741297318; c=relaxed/simple;
+	bh=aVLNVrLZKEE5KjPg3WoLESe9UeDSDRif4oI55x9IxgQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oLsObH9/EqcIPbSBMvcyl6XIWuR7lA/ZeofNAw/R4rXiyKtaiNY/WJGiADIxt0hEENSRZh5oxYtJJwqu9VDN3KpitHHUFLsazOge+eKs5+YXOat7r7OToIkmgEE61XPuNLL8OUMuTqaEjQJICgiVSZoPibyfeXToeKERg8qAIas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cH1OnXee; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cH1OnXee"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1741297315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uJcVPcLs2/wJB/DwRRqED94e382CQGBRjYRlsnr3NXo=;
+	b=cH1OnXeeohQxzPZrSYtmIyvTPvxLCNwpXxDEAgVG0kCJXvggrI260YffjFwj4PnKye29AI
+	msnbH0YusgW9bTu7sv/LGrRU8IpuPdr0ogLB+JIL72YtHV9bUQG+ehLfzfjZ/wRm/2ww9z
+	rZxTSIswdLAEz1bvZRKIEOiJQdR7HM4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-441-sGn5ivZoPGKNn9WVVT6acQ-1; Thu,
+ 06 Mar 2025 16:41:47 -0500
+X-MC-Unique: sGn5ivZoPGKNn9WVVT6acQ-1
+X-Mimecast-MFC-AGG-ID: sGn5ivZoPGKNn9WVVT6acQ_1741297306
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 81F6D1800266;
+	Thu,  6 Mar 2025 21:41:45 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.58.19])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 191631828A83;
+	Thu,  6 Mar 2025 21:41:42 +0000 (UTC)
+Date: Thu, 6 Mar 2025 16:41:40 -0500
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+	Eric Paris <eparis@parisplace.org>, Steve Grubb <sgrubb@redhat.com>
+Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
+ case
+Message-ID: <Z8oWlAwgKWW+M8yL@madcap2.tricolour.ca>
+References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
+ <b7f8e0d11b6cfc7547709c7efc472021@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] module: Make .static_call_sites read-only after
- init
-To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jason Baron <jbaron@akamai.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Steven Rostedt <rostedt@goodmis.org>,
- Ard Biesheuvel <ardb@kernel.org>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250306131430.7016-1-petr.pavlu@suse.com>
- <20250306131430.7016-4-petr.pavlu@suse.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250306131430.7016-4-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b7f8e0d11b6cfc7547709c7efc472021@paul-moore.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-
-
-Le 06/03/2025 à 14:13, Petr Pavlu a écrit :
-> Section .static_call_sites holds data structures that need to be sorted and
-> processed only at module load time. This initial processing happens in
-> static_call_add_module(), which is invoked as a callback to the
-> MODULE_STATE_COMING notification from prepare_coming_module().
+On 2024-10-24 16:41, Paul Moore wrote:
+> On Oct 23, 2024 Richard Guy Briggs <rgb@redhat.com> wrote:
+> > The move of the module sanity check to earlier skipped the audit logging
+> > call in the case of failure and to a place where the previously used
+> > context is unavailable.
+> > 
+> > Add an audit logging call for the module loading failure case and get
+> > the module name when possible.
+> > 
+> > Link: https://issues.redhat.com/browse/RHEL-52839
+> > Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  kernel/module/main.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 49b9bca9de12..1f482532ef66 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > @@ -3057,8 +3057,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+> >  	 * failures once the proper module was allocated and
+> >  	 * before that.
+> >  	 */
+> > -	if (!module_allocated)
+> > +	if (!module_allocated) {
+> > +		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+> >  		mod_stat_bump_becoming(info, flags);
+> > +	}
 > 
-> The section is never modified afterwards. Make it therefore read-only after
-> module initialization to avoid any (non-)accidental modifications.
+> We probably should move the existing audit_log_kern_module() to just
+> after the elf_validity_cache_copy() call as both info->name and
+> info->mod->name should be as valid as they are going to get at that
+> point.  If we do that then we only have two cases we need to worry about,
+> a failed module_sig_check() or a failed elf_validity_cache_copy(), and
+> in both cases we can use "(unavailable)" without having to check
+> info->name first.
 
-Maybe this suggestion is stupid, I didn't investigate the feasability 
-but: why don't we group everything that is ro_after_init in a single 
-section just like we do in vmlinux ? That would avoid having to add 
-every new possible section in the C code.
+Fair enough.
 
-Like we have in asm-generic/vmlinux.lds.h:
+> However, assuming we move the audit_log_kern_module() call up a bit as
+> described above, I'm not sure there is much value in calling
+> audit_log_kern_module() with an "(unavailable)" module name in those
+> early two cases.  We know it's an attempted module load based on the
+> SYSCALL record, seeing an associated "(unavailable)" KERN_MODULE record
+> doesn't provide us with any more information than if we had simply
+> skipped the KERN_MODULE record.
 
-#define RO_AFTER_INIT_DATA						\
-	. = ALIGN(8);							\
-	__start_ro_after_init = .;					\
-	*(.data..ro_after_init)						\
-	JUMP_TABLE_DATA							\
-	STATIC_CALL_DATA						\
-	__end_ro_after_init = .;
+Understood.  I wonder if the absence of the record in the error case
+will leave us guessing if we lost a record from the event?  We will have
+the error code from the SYSCALL record but not much more than that, and
+some of those error codes could just as well be generated after that
+point too.  This would be a similar situation to the vanishing fields in
+an existing record, but is likely easier to mitigate than a
+non-last-field vanishing or shifting around in an existing record.
 
+Steve?  Atilla?  Any comments?
 
+> Untested, but this is what I'm talking about:
 > 
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->   kernel/module/strict_rwx.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
-> index fa701dad4ed1..a3fc8d603750 100644
-> --- a/kernel/module/strict_rwx.c
-> +++ b/kernel/module/strict_rwx.c
-> @@ -120,6 +120,15 @@ static const char *const ro_after_init[] = {
->   	 * section, which are marked as such at module load time.
->   	 */
->   	"__jump_table",
+> diff --git a/include/linux/audit.h b/include/linux/audit.h
+> index 0050ef288ab3..eaa10e3c7eca 100644
+> --- a/include/linux/audit.h
+> +++ b/include/linux/audit.h
+> @@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
+>  extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+>  extern void __audit_mmap_fd(int fd, int flags);
+>  extern void __audit_openat2_how(struct open_how *how);
+> -extern void __audit_log_kern_module(char *name);
+> +extern void __audit_log_kern_module(const char *name);
+>  extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+>  extern void __audit_tk_injoffset(struct timespec64 offset);
+>  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+> @@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how *how)
+>                 __audit_openat2_how(how);
+>  }
+>  
+> -static inline void audit_log_kern_module(char *name)
+> +static inline void audit_log_kern_module(const char *name)
+>  {
+>         if (!audit_dummy_context())
+>                 __audit_log_kern_module(name);
+> @@ -677,7 +677,7 @@ static inline void audit_mmap_fd(int fd, int flags)
+>  static inline void audit_openat2_how(struct open_how *how)
+>  { }
+>  
+> -static inline void audit_log_kern_module(char *name)
+> +static inline void audit_log_kern_module(const char *name)
+>  {
+>  }
+>  
+> diff --git a/kernel/audit.h b/kernel/audit.h
+> index a60d2840559e..5156ecd35457 100644
+> --- a/kernel/audit.h
+> +++ b/kernel/audit.h
+> @@ -199,7 +199,7 @@ struct audit_context {
+>                         int                     argc;
+>                 } execve;
+>                 struct {
+> -                       char                    *name;
+> +                       const char              *name;
+>                 } module;
+>                 struct {
+>                         struct audit_ntp_data   ntp_data;
+> diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> index 0627e74585ce..f79eb3a5a789 100644
+> --- a/kernel/auditsc.c
+> +++ b/kernel/auditsc.c
+> @@ -2870,7 +2870,7 @@ void __audit_openat2_how(struct open_how *how)
+>         context->type = AUDIT_OPENAT2;
+>  }
+>  
+> -void __audit_log_kern_module(char *name)
+> +void __audit_log_kern_module(const char *name)
+>  {
+>         struct audit_context *context = audit_context();
+>  
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 49b9bca9de12..3acb65073c53 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2884,6 +2884,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>         if (err)
+>                 goto free_copy;
+>  
+> +       audit_log_kern_module(info->name);
 > +
-> +#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
-> +	/*
-> +	 * Section .static_call_sites holds data structures that need to be
-> +	 * sorted and processed at module load time but are never modified
-> +	 * afterwards.
-> +	 */
-> +	".static_call_sites",
-> +#endif
->   };
->   
->   void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+>         err = early_mod_check(info, flags);
+>         if (err)
+>                 goto free_copy;
+> @@ -2897,8 +2899,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  
+>         module_allocated = true;
+>  
+> -       audit_log_kern_module(mod->name);
+> -
+>         /* Reserve our place in the list. */
+>         err = add_unformed_module(mod);
+>         if (err)
+> 
+> --
+> paul-moore.com
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+Upstream IRC: SunRaycer
+Voice: +1.613.860 2354 SMS: +1.613.518.6570
 
