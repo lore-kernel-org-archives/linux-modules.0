@@ -1,109 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314BF2571DA;
-	Thu,  6 Mar 2025 17:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3537B16130C;
+	Thu,  6 Mar 2025 17:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741281679; cv=none; b=WRtOjKe5RMHrMCp8uoH8/b+fZfff0ckJNtVbKstc1SVnMFwjpQBqPtd64Infsmywn8t4xANRw5vA4EofkmOWhJeFRaM1R43yuly8cUNQ4k6xfoUdqEMGFUTIRTDbP2HvkUNsYppLX55hYGOl85IWn3dvc+sIGjL3sFZL6MrPDDM=
+	t=1741283406; cv=none; b=Fwa22Iez/J5fe9FaymaDsfAV/JCXKP+Wf5iQZ+NoY476cLfVmSZ2hf+kBBjd2vhnEY45EUVUSAYFp/nZw//RCOWYAYurckTN7LfS0Hhxl7PPhu+PDTHp5gVJIhihaE8ccwvVhsTbDFsRpWd/WY5y3M7jb3SAQb+JyvNIqqfO0V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741281679; c=relaxed/simple;
-	bh=5Bvc9ud5a8OdhEve9BLHR7b9ZedTTQHeaVFBFAY4FR0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ojfsY3gCyeBZWQ55MLa6D44vz3vK0Hb/PVT3UVkPR0iN0rI80BmtaPran+0rl9cxT7ouuGDEZzwmKWFvajuSMo8eYNHL407D/crDYYFH66SqXyUqIbL5X2LyXxQk1cDpIOk9+gKVZSQ0dJ2htVQ0xMJZkZnKXTiyM5F/zWaVVs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CfujXFgp; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfujXFgp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77ED1C4CEE0;
-	Thu,  6 Mar 2025 17:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741281678;
-	bh=5Bvc9ud5a8OdhEve9BLHR7b9ZedTTQHeaVFBFAY4FR0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CfujXFgpWWVo7fel5Oz/JKpf24MqlqpTw9dq4IkKJa4YCbqn+PUb2iXsVaxDH5aHw
-	 G+fhzYbpAxFNlHXUxPz+5NYLL3lbZqxGqUNJuBGtH2HZIw1zEMJUf9PGOUxB9dDzcs
-	 Gd6i/CVLNqA57y7slRNbtUVkGPeOuGz0d7yqX22/AOXV6gaGQ6RTCQ7YkpRijosLhU
-	 wW8YAVA9MOOJcneZA4M5Hnejrd9EElLrhGlcWUjbQrDHj6DG3p6CPPa7os2h2/6syD
-	 GLK6kCEfNq9e3Gt32lNG3KUHpfegerlOOfW9tS7EOzHuIaeGk8Bx4i6fIgkO6o/hg3
-	 ZifSJk1BybIWg==
-Date: Thu, 6 Mar 2025 09:21:17 -0800
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Steven Rostedt <rostedt@goodmis.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Update the MODULE SUPPORT section
-Message-ID: <Z8nZjcKKLmFDh4ZP@bombadil.infradead.org>
-References: <20250306162117.18876-1-petr.pavlu@suse.com>
+	s=arc-20240116; t=1741283406; c=relaxed/simple;
+	bh=x1XoYdOx/gYcoUR3hT9TCku6gQ7eFxbTIQOY5Da/ErQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uv1Q1hRLQHA/7uX1Knt3ivSyJxDrA/Wv4/8L+apDP3v921oAxsY8d71h+QoOTgkcMdzHvsaIiQMZMFySMpPk/IpVkYjK+cLEwD8dsInRiuklTGpEz6AHqZHZf1gesxpEzlR3m5OxDgmMz8FfJKPujOcuDbVC1pzn1zUkkv0hYg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Z7xGz3ljwz9stM;
+	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j75WxZwarWB9; Thu,  6 Mar 2025 18:28:59 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Z7xGz2wQTz9stL;
+	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4FAE48B77B;
+	Thu,  6 Mar 2025 18:28:59 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 0nXO3ADxucWW; Thu,  6 Mar 2025 18:28:59 +0100 (CET)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id BDF6D8B76C;
+	Thu,  6 Mar 2025 18:28:58 +0100 (CET)
+Message-ID: <481a3ef9-6d4e-4e29-9d50-a6338604c873@csgroup.eu>
+Date: Thu, 6 Mar 2025 18:28:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250306162117.18876-1-petr.pavlu@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] module: Make .static_call_sites read-only after
+ init
+To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jason Baron <jbaron@akamai.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Ard Biesheuvel <ardb@kernel.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250306131430.7016-1-petr.pavlu@suse.com>
+ <20250306131430.7016-4-petr.pavlu@suse.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20250306131430.7016-4-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 06, 2025 at 05:20:59PM +0100, Petr Pavlu wrote:
-> Change my role for MODULE SUPPORT from a reviewer to a maintainer. We
-> started to rotate its maintainership and I currently look after the modules
-> tree. This not being reflected in MAINTAINERS proved to confuse folks.
+
+
+Le 06/03/2025 à 14:13, Petr Pavlu a écrit :
+> Section .static_call_sites holds data structures that need to be sorted and
+> processed only at module load time. This initial processing happens in
+> static_call_add_module(), which is invoked as a callback to the
+> MODULE_STATE_COMING notification from prepare_coming_module().
 > 
-> Add lib/tests/module/ and tools/testing/selftests/module/ to maintained
-> files. They were introduced previously by commit 84b4a51fce4c ("selftests:
-> add new kallsyms selftests").
+> The section is never modified afterwards. Make it therefore read-only after
+> module initialization to avoid any (non-)accidental modifications.
+
+Maybe this suggestion is stupid, I didn't investigate the feasability 
+but: why don't we group everything that is ro_after_init in a single 
+section just like we do in vmlinux ? That would avoid having to add 
+every new possible section in the C code.
+
+Like we have in asm-generic/vmlinux.lds.h:
+
+#define RO_AFTER_INIT_DATA						\
+	. = ALIGN(8);							\
+	__start_ro_after_init = .;					\
+	*(.data..ro_after_init)						\
+	JUMP_TABLE_DATA							\
+	STATIC_CALL_DATA						\
+	__end_ro_after_init = .;
+
+
 > 
 > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-
 > ---
->  MAINTAINERS | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>   kernel/module/strict_rwx.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8e0736dc2ee0..0c8a00b0b49b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15982,7 +15982,7 @@ F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
->  
->  MODULE SUPPORT
->  M:	Luis Chamberlain <mcgrof@kernel.org>
-> -R:	Petr Pavlu <petr.pavlu@suse.com>
-> +M:	Petr Pavlu <petr.pavlu@suse.com>
->  R:	Sami Tolvanen <samitolvanen@google.com>
->  R:	Daniel Gomez <da.gomez@samsung.com>
->  L:	linux-modules@vger.kernel.org
-> @@ -15993,8 +15993,10 @@ F:	include/linux/kmod.h
->  F:	include/linux/module*.h
->  F:	kernel/module/
->  F:	lib/test_kmod.c
-> +F:	lib/tests/module/
->  F:	scripts/module*
->  F:	tools/testing/selftests/kmod/
-> +F:	tools/testing/selftests/module/
->  
->  MONOLITHIC POWER SYSTEM PMIC DRIVER
->  M:	Saravanan Sekar <sravanhome@gmail.com>
-> 
-> base-commit: 848e076317446f9c663771ddec142d7c2eb4cb43
+> diff --git a/kernel/module/strict_rwx.c b/kernel/module/strict_rwx.c
+> index fa701dad4ed1..a3fc8d603750 100644
+> --- a/kernel/module/strict_rwx.c
+> +++ b/kernel/module/strict_rwx.c
+> @@ -120,6 +120,15 @@ static const char *const ro_after_init[] = {
+>   	 * section, which are marked as such at module load time.
+>   	 */
+>   	"__jump_table",
+> +
+> +#ifdef CONFIG_HAVE_STATIC_CALL_INLINE
+> +	/*
+> +	 * Section .static_call_sites holds data structures that need to be
+> +	 * sorted and processed at module load time but are never modified
+> +	 * afterwards.
+> +	 */
+> +	".static_call_sites",
+> +#endif
+>   };
+>   
+>   void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 
-And as a further note to Linus:
-
-Petr, Sami and Daniel had volunteered to help with maintenance to help
-with Rust module support. My requesto to the Rust community was that
-while I don't speak Rust I'd be happy to support Rust provided we get
-volunteers from the Rust community to help with maintenance of *both*
-the C and Rust code. The Rust community came back strong with 3
-volunteers.
-
-To help with ramp up I decided that after a few months of them being
-reviewers we'd rotate them to be the main maintainer for 6 months each.
-Petr has been doing this since around November of last year and he's
-been doing an incredible job. Next up will be Daniel and then 6 months
-after Sami.
-
-  Luis
