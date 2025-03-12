@@ -1,64 +1,80 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D299E14F117
-	for <linux-modules@vger.kernel.org>; Wed, 12 Mar 2025 12:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0694288BA
+	for <linux-modules@vger.kernel.org>; Wed, 12 Mar 2025 15:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741781127; cv=none; b=lH7JQ10ueQq9GvuJcxm/mld/f+B8X7bvRReZ2bZPH/peCgCdjI+c9MC5bbM26uRhDgy4Pk4e9Vt8xEYt2gQH/CxQbV00JWnG/SX1woclViYNhJZOsx4NNC4yI8AvkDkHlP/kFqkOXXY4P12Sqh6we+Va1GhW2Q+YVCUbUyJpH6s=
+	t=1741794332; cv=none; b=ZGl9gHa48NakcbSp52Qu0QJ0gRQvB6IKAt2pivuPVqhq7CaAe4nqZHfDJBB11WRwY34ckkJbQ/JB3r15Hkk7R9jwiRniQahpRC4f8zGP28lCPOIfcvf4kPiDa/jf6Y7pAkDqKnRfPySevxhBHiONnEClXNdNZhPUe5TlVenGUtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741781127; c=relaxed/simple;
-	bh=I3eeBWE/LMZynG2czAXHMWKMLPqllq8LervyeDvhne8=;
+	s=arc-20240116; t=1741794332; c=relaxed/simple;
+	bh=drMtDWOEa8mL65eG8MdXsGgCEPAFzQ+/rYSX1ummn5Q=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eMu7JpkJ+gNU93tPhaNchd0Ce0iLEPGFV4noBPIa6u/fXpYr63KB2pl4BZun9DXeamdNTJjm+WjiT1DvB8GFjEAPoyT5MCb0xu5Gxm6KJ2Zj2+mKHmWHeH/gWS+5ndgFl037KZL5TfCEwI5tbeGsjMQSdENBmvgUpA8doUOiTa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=c54+rNTD; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=SZQw6IgjUe99MEgPZHCqS/MFWg7AP/N5qg9INkv/OvMpNkx3GdEpSJbFVjm/VUz60XaCLRNzOV1Z/XFWD9RGyAxnf/34OrS+10hKqacg7wDuhwq7wDitVaSeWtWMQL3oA8caXfvppYfQPzVVVHmerlUSptq8kabflue5xIGAM/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=olXtCEfp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=dLQuRPBm; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=aVMdF2mR; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AesxH4bi; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="c54+rNTD"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso39836925e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 12 Mar 2025 05:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741781124; x=1742385924; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eiqsf0HzzlGLhSgy/0lgckThk5pKGLIU6m9bddwieEo=;
-        b=c54+rNTD2YZ/126Mzkmv4B6/hlF8/fHXU4gNKCUKZDDukmMBY6TIkszM0s7QD/EuTp
-         ITMvodCW8bffyL8/IHPSPdklQb46wRuAJe5PzYEUsqNN76G3p+q7yxzweSaVr/m52ks2
-         bBmDsdmADMSO7w22PguIOq8kXByCeVDwe1MxGEY3oXm+huwfQNdzpzz8mWq1NY8wMuNz
-         ML9hXj0x8yAjSRYfrEDdp8Cn7vZK6WmAlFq5DqZvs7UVznBa//M5L0YeW0Q+Oym34geN
-         4i6iD8uvAPY4xEfAF1WftGTvpB4NSXd53UOpCCUfvkkST81ekGqrrxhCFMJ6bcXLZ61n
-         48gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741781124; x=1742385924;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eiqsf0HzzlGLhSgy/0lgckThk5pKGLIU6m9bddwieEo=;
-        b=BDx2Zn9QgNlt2964zwA+Pv8XEiMglAsBMuNk44Eh/iM8Av/rZ7r70C6+e+SlDEwf62
-         3vJioJEeN9EKlbCtmnyUq5O3KHOzmg64CyFMDCrvktrxXVoSULtBqu/nG5j/N15oU21s
-         o/eVq/dbDDY07REdfzwrpA8W8sy7i6mDAwJkbeQQJEY1bgG7F7c64nLLaDDFdFTvWU2o
-         TGCLp4il7v83byE5Fhf0INDFEXDC/zwR3InaNms42d2fxf4nwLyxUEd3PxWRipA+CfEI
-         gyaCidt5AqE6JuuiamdzcdD98CF9XTT0LdX6/n0/+LAmOCduiHSnceueoRhQvjN8JuwU
-         tgPg==
-X-Forwarded-Encrypted: i=1; AJvYcCUE4daZ+ssBsshOzw9gVTMz0l5RmKtsrPXFZ5339etNco9M0KrV6SWKEoaLi6IL0kgy7+/2vKnKXlm6tgWa@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw52sOU/eKaWHVGwFxZ53MyxIdNFCctPiu3A2exki/QdClwDeXQ
-	UUgJRCouxOj8MfzXPENVnBEZgFFDI+D1lIn6CvpekxsiJZqirqmJIfD7i4IsOcU=
-X-Gm-Gg: ASbGnctMHr8fZVF1Q5Bp4kfDRwrrUNCuHKm2QxDwC72hFdVw8Nu5ogV7IBGiswlYPaX
-	2ZSKoh9LP8emrbyc+VkT7scYlWFkOlWzn0T0VGSjJUliXd8e82O8at0SbRjWwqg+kkk/0fsWl2T
-	NRlLg9e+YVOY8G/558lpz1ThDof0U25AMpqxLqqyPTwYtj+FXftj1BEn3Cvv7LyXHJRYzOI2Irg
-	F0RvTf5ja+469JqkrA0+De7kMtOA6DhzBykg25nTV9zMNBpChFg5ToWdIan3xk5liYEdrgS3NQO
-	iEt96GioKjycU/pEVxkBF542zAWgTtwyDM7MPoCoIs3qsHZQ
-X-Google-Smtp-Source: AGHT+IFf2RijMv0k8lptg1AGDY2v+JyK5+tf/2Ywarp4agmGIrZlKJfK/ANZT3Qn+8OJjIC2rilIDQ==
-X-Received: by 2002:a7b:c4d4:0:b0:43c:f513:9591 with SMTP id 5b1f17b1804b1-43cf5139abdmr130987575e9.14.1741781124038;
-        Wed, 12 Mar 2025 05:05:24 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d0a74cf8bsm19369895e9.12.2025.03.12.05.05.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Mar 2025 05:05:23 -0700 (PDT)
-Message-ID: <3ad23825-d249-4108-b5c3-693e359fd12e@suse.com>
-Date: Wed, 12 Mar 2025 13:05:22 +0100
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="olXtCEfp";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="dLQuRPBm";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="aVMdF2mR";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AesxH4bi"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E80A51F7F8;
+	Wed, 12 Mar 2025 15:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741794328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3XwIXcy6Q4Evz4UAeNpQ3991S5L6PKz3XLAG/glkfk=;
+	b=olXtCEfpeSorEzV45WKrZ2r2Ouq4IxAjOk3zB/seWjY8MIBeysk4Tqq8JbrJ5gfWM9uUKQ
+	+CmhmzY7BFVMb+eIyYoRgj9FAAfhqXDVhX0c4sChXiFPF2oUf9EC91V5V+gxBDOoHBz84X
+	1WfuaF/xvaFhCUHKQnkTTaGkvPg0f8Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741794328;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3XwIXcy6Q4Evz4UAeNpQ3991S5L6PKz3XLAG/glkfk=;
+	b=dLQuRPBmpsKyH26izDH0fetWpGa9I7gVDc6LEc5h4vneALykUgxmjddxucFQ9vw3zKZxEt
+	0DK+1LGQFPxoOwCg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1741794324; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3XwIXcy6Q4Evz4UAeNpQ3991S5L6PKz3XLAG/glkfk=;
+	b=aVMdF2mRQrNVZet/OVwNGpXxby1ZBuUMaynUnBbUhe/aJQXEpqhlFKKHwlqLls2XWbz5Z9
+	nJlPPBKUXjvtN1eU2JZzI1X4bSazeWe2wi4ykhc7jFADFggXcqoaABw4+eG5zIX3xbK46l
+	xUB8v7JLQ3FEqXUP/pfzG86bctjl+/M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1741794324;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3XwIXcy6Q4Evz4UAeNpQ3991S5L6PKz3XLAG/glkfk=;
+	b=AesxH4biFaIDiLv4SIhg0jG3C+ZftOWnl6Aka+Kfgl98OrHaHD0OTvuBp2Ahri/nclt/tf
+	kaAwNxF9M9199DCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C947F1377F;
+	Wed, 12 Mar 2025 15:45:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id P4LHMBSs0WfKEgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 12 Mar 2025 15:45:24 +0000
+Message-ID: <c25939c5-d6e8-4450-873b-0a9c774b845b@suse.cz>
+Date: Wed, 12 Mar 2025 16:45:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -66,73 +82,128 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] module: Make .static_call_sites read-only after
- init
-To: Sami Tolvanen <samitolvanen@google.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jason Baron <jbaron@akamai.com>, Daniel Gomez <da.gomez@samsung.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250306131430.7016-1-petr.pavlu@suse.com>
- <20250306131430.7016-4-petr.pavlu@suse.com>
- <481a3ef9-6d4e-4e29-9d50-a6338604c873@csgroup.eu>
- <20250307001256.GA2276503@google.com>
+Subject: Re: [PATCH] module: Taint the kernel when write-protecting
+ ro_after_init fails
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250307001256.GA2276503@google.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+ Petr Mladek <pmladek@suse.com>, Jani Nikula <jani.nikula@intel.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ John Ogness <john.ogness@linutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-mm <linux-mm@kvack.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250306103712.29549-1-petr.pavlu@suse.com>
+ <Z8nT8PCPThnfb3Cq@bombadil.infradead.org>
+From: Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Z8nT8PCPThnfb3Cq@bombadil.infradead.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	URIBL_BLOCKED(0.00)[suse.cz:mid,suse.com:email,imap1.dmz-prg2.suse.org:helo];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email]
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-On 3/7/25 01:12, Sami Tolvanen wrote:
-> On Thu, Mar 06, 2025 at 06:28:58PM +0100, Christophe Leroy wrote:
->> Le 06/03/2025 à 14:13, Petr Pavlu a écrit :
->>> Section .static_call_sites holds data structures that need to be sorted and
->>> processed only at module load time. This initial processing happens in
->>> static_call_add_module(), which is invoked as a callback to the
->>> MODULE_STATE_COMING notification from prepare_coming_module().
->>>
->>> The section is never modified afterwards. Make it therefore read-only after
->>> module initialization to avoid any (non-)accidental modifications.
->>
->> Maybe this suggestion is stupid, I didn't investigate the feasability but:
->> why don't we group everything that is ro_after_init in a single section just
->> like we do in vmlinux ? That would avoid having to add every new possible
->> section in the C code.
->>
->> Like we have in asm-generic/vmlinux.lds.h:
->>
->> #define RO_AFTER_INIT_DATA						\
->> 	. = ALIGN(8);							\
->> 	__start_ro_after_init = .;					\
->> 	*(.data..ro_after_init)						\
->> 	JUMP_TABLE_DATA							\
->> 	STATIC_CALL_DATA						\
->> 	__end_ro_after_init = .;
+On 3/6/25 17:57, Luis Chamberlain wrote:
+> + linux-mm since we're adding TAINT_BAD_PAGE
 > 
-> I like this idea. Grouping the sections in the module linker script
-> feels cleaner than having an array of section names in the code. To be
-> fair, I think this code predates v5.10, where scripts/module.lds.S was
-> first added.
+> On Thu, Mar 06, 2025 at 11:36:55AM +0100, Petr Pavlu wrote:
+>> In the unlikely case that setting ro_after_init data to read-only fails, it
+>> is too late to cancel loading of the module. The loader then issues only
+>> a warning about the situation. Given that this reduces the kernel's
+>> protection, it was suggested to make the failure more visible by tainting
+>> the kernel.
+>> 
+>> Allow TAINT_BAD_PAGE to be set per-module and use it in this case. The flag
+>> is set in similar situations and has the following description in
+>> Documentation/admin-guide/tainted-kernels.rst: "bad page referenced or some
+>> unexpected page flags".
+>> 
+>> Adjust the warning that reports the failure to avoid references to internal
+>> functions and to add information about the kernel being tainted, both to
+>> match the style of other messages in the file. Additionally, merge the
+>> message on a single line because checkpatch.pl recommends that for the
+>> ability to grep for the string.
+>> 
+>> Suggested-by: Kees Cook <kees@kernel.org>
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>> I opted to use TAINT_BAD_PAGE for now because it seemed unnecessary to me
+>> to introduce a new flag only for this specific case. However, if we end up
+>> similarly checking set_memory_*() in the boot context, a separate flag
+>> would be probably better.
+>> ---
+>>  kernel/module/main.c | 7 ++++---
+>>  kernel/panic.c       | 2 +-
+>>  2 files changed, 5 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index 1fb9ad289a6f..8f424a107b92 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -3030,10 +3030,11 @@ static noinline int do_init_module(struct module *mod)
+>>  	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+>>  #endif
+>>  	ret = module_enable_rodata_ro_after_init(mod);
+>> -	if (ret)
+>> -		pr_warn("%s: module_enable_rodata_ro_after_init() returned %d, "
+>> -			"ro_after_init data might still be writable\n",
+>> +	if (ret) {
+>> +		pr_warn("%s: write-protecting ro_after_init data failed with %d, the data might still be writable - tainting kernel\n",
+>>  			mod->name, ret);
+>> +		add_taint_module(mod, TAINT_BAD_PAGE, LOCKDEP_STILL_OK);
+>> +	}
+>>  
+>>  	mod_tree_remove_init(mod);
+>>  	module_arch_freeing_init(mod);
+>> diff --git a/kernel/panic.c b/kernel/panic.c
+>> index d8635d5cecb2..794c443bfb5c 100644
+>> --- a/kernel/panic.c
+>> +++ b/kernel/panic.c
+>> @@ -497,7 +497,7 @@ const struct taint_flag taint_flags[TAINT_FLAGS_COUNT] = {
+>>  	TAINT_FLAG(CPU_OUT_OF_SPEC,		'S', ' ', false),
+>>  	TAINT_FLAG(FORCED_RMMOD,		'R', ' ', false),
+>>  	TAINT_FLAG(MACHINE_CHECK,		'M', ' ', false),
+>> -	TAINT_FLAG(BAD_PAGE,			'B', ' ', false),
+>> +	TAINT_FLAG(BAD_PAGE,			'B', ' ', true),
+>>  	TAINT_FLAG(USER,			'U', ' ', false),
+>>  	TAINT_FLAG(DIE,				'D', ' ', false),
+>>  	TAINT_FLAG(OVERRIDDEN_ACPI_TABLE,	'A', ' ', false),
+> 
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> 
+> For our needs this makes sense, however I am curious if TAINT_BAD_PAGE
+> is too broadly generic, and also if we're going to add it, if there are
+> other mm uses for such a thing.
 
-I agree in principle. I like that the information about ro_after_init
-sections for vmlinux and modules would be in the same source form, in
-linker scripts. This could eventually allow us to share the definition
-of ro_after_init sections between vmlinux and modules.
+I'm not sure BAD_PAGE is a good fit. If there was a new flag that meant "a
+hardening measure failed", would that have other possible uses? The
+semantics would be that the kernel self-protection was weakened wrt
+expectations, even if not yet a corruption due to attack would be detected.
+Some admins could opt-in to panic in such case anyway, etc. Any other
+hardening features where such "failure to harden" is possible and could use
+this too? Kees?
 
-The problem is however how to find the location of the __jump_table and
-static_call_sites data. In vmlinux, as a final binary, they are
-annotated with start and end symbols. In modules, as relocatable files,
-the approach is to rely on them being separate sections, see function
-find_module_sections().
+>   Luis
+> 
 
-I could add start+end symbols for __jump_table and static_call_sites
-data in scripts/module.lds.S and use them by the module loader, but this
-would create an inconsistency in how various data is looked up. Another
-problem is that I can't find a way to tell the linker to add these
-symbols only if the specific data is actually present.
-
--- 
-Cheers,
-Petr
