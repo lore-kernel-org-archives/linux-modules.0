@@ -1,285 +1,103 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833B3269803
-	for <linux-modules@vger.kernel.org>; Thu, 13 Mar 2025 15:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADDC156237
+	for <linux-modules@vger.kernel.org>; Thu, 13 Mar 2025 17:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741879158; cv=none; b=IsyryqAZecwVMCu855w9qwM26pIj4po8qs4L2ia7xQgf5K8WpIlMnm2kotxtrETHwzh9q/7YNEs+ORgG8E1ugguhDCsVntLYKMPmsB7oWsStnEKWF5hDbcM2sFYOhpYgu62GBTi3HoPBQmCv1GA9fu+p38bhgqgFMYsAdCRNtpo=
+	t=1741886191; cv=none; b=EhaLTNoxhcu6SZMNi9zvN9S1j+LdVjMiX4bCSfYeXtNv7XrFgRg3nrQemUeKRtbiiNZAwxOsOM6FPnCNOFavcE2DcBovrfeLYRC7Hok1hzr27XZOJWx+IFgmq7Csw+s0AF7GvB+zq4Sm2HGKpqGfGklpBC8vvBjY6rcRl7PE9Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741879158; c=relaxed/simple;
-	bh=Dahx4YCeDFazmQDtfk0gy0C6DwC6v3J6Nwvt1/nlFxs=;
+	s=arc-20240116; t=1741886191; c=relaxed/simple;
+	bh=65ynb6Gh/C7olI1InBJQjf4Uy45Ac4TLwO1SIzO2cEs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pDGHHJ/Ni48IJ7iD+KHdUVA+qk7fRd3DiNCvHtyr7dmSESvkk5sUofvxcb3qquvtCS9Or8R5qI5UTFIte+57V6uCQLRzqkrUCundwLvnnmbh6eBoLGFWMibkdqnDl9Ll3AKcKwCCT7xVePXeYEs6TatNI6GNcP5Rcc5mRSfwht4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L5Yzwm/p; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufznLHVN6qkZIirz3BaB9OehaTeI6QEbK24arIP8lhvF41iSWLWwjw+LB8GO8BfTSOJikGp9Z2N2DbG3/b4TH5ioxHFisbtr99E3HgwYARPeKx0f0Pe332tSM3MyI0gGfC4uylpexgDIKtAPk+4vlSNmvtsypSANcsv3jjK7wpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fhhKPC2o; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L5Yzwm/p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1741879154;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fhhKPC2o"
+Date: Thu, 13 Mar 2025 13:16:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1741886176;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=G9zaHgixonSILPYIqqBFAZyXZsf0jbzyGyxAoGfZOaA=;
-	b=L5Yzwm/pJ7/bMg0dpU007Wuwgc3+b9WN5ersKY0eWqnNuZSM5bkspxA6Xt+COzf8GeNNKj
-	1WILfi8kF1QvhJbJWV/V+Vy/EDM1eUzyhRJEuu5gpPwIqa7DE3fh5NQl/BuC5DjM0jQ2+I
-	Fo9RYoP0Oymevu420KO3VlHWVMK/mOo=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-527-Gji8Z6jlOeSsyoEMH6KeKw-1; Thu,
- 13 Mar 2025 11:19:10 -0400
-X-MC-Unique: Gji8Z6jlOeSsyoEMH6KeKw-1
-X-Mimecast-MFC-AGG-ID: Gji8Z6jlOeSsyoEMH6KeKw_1741879148
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 646961800258;
-	Thu, 13 Mar 2025 15:19:08 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.76.11])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 36B5A300376F;
-	Thu, 13 Mar 2025 15:19:03 +0000 (UTC)
-Date: Thu, 13 Mar 2025 11:18:59 -0400
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Steve Grubb <sgrubb@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
-	Eric Paris <eparis@parisplace.org>
-Subject: Re: [PATCH v1] audit,module: restore audit logging in load failure
- case
-Message-ID: <Z9L3YwDxHcRI5EWp@madcap2.tricolour.ca>
-References: <999cdd694f951acd2f4ad665fe7ab97d0834e162.1729717542.git.rgb@redhat.com>
- <b7f8e0d11b6cfc7547709c7efc472021@paul-moore.com>
- <Z8oWlAwgKWW+M8yL@madcap2.tricolour.ca>
- <2743964.lGaqSPkdTl@x2>
+	bh=z4SmU3b6wHvKk5inE+NGrQrAKfK6zUobXoS9IuHdb+o=;
+	b=fhhKPC2oco7UjaBJOsogS04mjpzCsBkg8j1JUmpJsBlIHIDibW+PD1yCWrJATcNl6r0k87
+	EIJBIkwUMhDBp8uc7lTpuGyzDPUyc+PETkkGofKE4E88fb/aycah0RYCIvQWLnKkfSn3dC
+	/YCsyIilB71nWTzp7xfzM53gPeRh1nA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Suren Baghdasaryan <surenb@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] codetag: Avoid unused alloc_tags sections/symbols
+Message-ID: <jmcazyqlkimqhswwqn2du7ik5sbm5fommonrgovy5d6knqbqcr@xebmu4akkkoy>
+References: <20250313143002.9118-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2743964.lGaqSPkdTl@x2>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20250313143002.9118-1-petr.pavlu@suse.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 2025-03-07 14:41, Steve Grubb wrote:
-> On Thursday, March 6, 2025 4:41:40 PM Eastern Standard Time Richard Guy 
-> Briggs wrote:
-> > On 2024-10-24 16:41, Paul Moore wrote:
-> > > On Oct 23, 2024 Richard Guy Briggs <rgb@redhat.com> wrote:
-> > > > The move of the module sanity check to earlier skipped the audit
-> > > > logging
-> > > > call in the case of failure and to a place where the previously used
-> > > > context is unavailable.
-> > > > 
-> > > > Add an audit logging call for the module loading failure case and get
-> > > > the module name when possible.
-> > > > 
-> > > > Link: https://issues.redhat.com/browse/RHEL-52839
-> > > > Fixes: 02da2cbab452 ("module: move check_modinfo() early to
-> > > > early_mod_check()") Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
-> > > > ---
-> > > > 
-> > > >  kernel/module/main.c | 4 +++-
-> > > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > > > index 49b9bca9de12..1f482532ef66 100644
-> > > > --- a/kernel/module/main.c
-> > > > +++ b/kernel/module/main.c
-> > > > @@ -3057,8 +3057,10 @@ static int load_module(struct load_info *info,
-> > > > const char __user *uargs,> > 
-> > > >  	 * failures once the proper module was allocated and
-> > > >  	 * before that.
-> > > >  	 */
-> > > > 
-> > > > -	if (!module_allocated)
-> > > > +	if (!module_allocated) {
-> > > > +		audit_log_kern_module(info->name ? info->name : 
-> "(unavailable)");
-> > > > 
-> > > >  		mod_stat_bump_becoming(info, flags);
-> > > > 
-> > > > +	}
-> > > 
-> > > We probably should move the existing audit_log_kern_module() to just
-> > > after the elf_validity_cache_copy() call as both info->name and
-> > > info->mod->name should be as valid as they are going to get at that
-> > > point.  If we do that then we only have two cases we need to worry about,
-> > > a failed module_sig_check() or a failed elf_validity_cache_copy(), and
-> > > in both cases we can use "(unavailable)" without having to check
-> > > info->name first.
-> > 
-> > Fair enough.
-> > 
-> > > However, assuming we move the audit_log_kern_module() call up a bit as
-> > > described above, I'm not sure there is much value in calling
-> > > audit_log_kern_module() with an "(unavailable)" module name in those
-> > > early two cases.  We know it's an attempted module load based on the
-> > > SYSCALL record, seeing an associated "(unavailable)" KERN_MODULE record
-> > > doesn't provide us with any more information than if we had simply
-> > > skipped the KERN_MODULE record.
-> > 
-> > Understood.  I wonder if the absence of the record in the error case
-> > will leave us guessing if we lost a record from the event?  We will have
-> > the error code from the SYSCALL record but not much more than that, and
-> > some of those error codes could just as well be generated after that
-> > point too.  This would be a similar situation to the vanishing fields in
-> > an existing record, but is likely easier to mitigate than a
-> > non-last-field vanishing or shifting around in an existing record.
-> > 
-> > Steve?  Atilla?  Any comments?
+On Thu, Mar 13, 2025 at 03:29:20PM +0100, Petr Pavlu wrote:
+> With CONFIG_MEM_ALLOC_PROFILING=n, vmlinux and all modules unnecessarily
+> contain the symbols __start_alloc_tags and __stop_alloc_tags, which define
+> an empty range. In the case of modules, the presence of these symbols also
+> forces the linker to create an empty .codetag.alloc_tags section.
 > 
-> We should only get the events if we have syscall rules that would result in 
-> kernel module loading/unloading events. I suppose that by the time audit 
-> loads it's rules, many modules have already loaded. So, I don't think we need 
-> to worry about early cases. But when we do get a kernel module load/unload 
-> event based on the rules, we need it's name - even in failures. We need to be 
-> able to determine what was attempted since this could affect system 
-> integrity.
-
-Ok, yes, agreed.  But that information isn't available yet for a number
-of error cases.  It hasn't even been looked for yet after
-module_sig_check() and can't be reliably found until halfway through
-elf_validity_cache_copy().
-
-So, we should provide the record and make a best effort to fill in that
-information if we can.  We could try more aggressively to extract it
-from the info blob, but I don't know if that is worth the effort because
-a number of the steps leading up to it are necessary to check the
-validity and set up structures to extract it.
-
-> -Steve
+> Update codetag.lds.h to make the data conditional on
+> CONFIG_MEM_ALLOC_PROFILING.
 > 
-> > > Untested, but this is what I'm talking about:
-> > > 
-> > > diff --git a/include/linux/audit.h b/include/linux/audit.h
-> > > index 0050ef288ab3..eaa10e3c7eca 100644
-> > > --- a/include/linux/audit.h
-> > > +++ b/include/linux/audit.h
-> > > @@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm
-> > > *bprm,> 
-> > >  extern void __audit_log_capset(const struct cred *new, const struct cred
-> > >  *old); extern void __audit_mmap_fd(int fd, int flags);
-> > >  extern void __audit_openat2_how(struct open_how *how);
-> > > 
-> > > -extern void __audit_log_kern_module(char *name);
-> > > +extern void __audit_log_kern_module(const char *name);
-> > > 
-> > >  extern void __audit_fanotify(u32 response, struct
-> > >  fanotify_response_info_audit_rule *friar); extern void
-> > >  __audit_tk_injoffset(struct timespec64 offset);
-> > >  extern void __audit_ntp_log(const struct audit_ntp_data *ad);
-> > > 
-> > > @@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how
-> > > *how)> 
-> > >                 __audit_openat2_how(how);
-> > >  
-> > >  }
-> > > 
-> > > -static inline void audit_log_kern_module(char *name)
-> > > +static inline void audit_log_kern_module(const char *name)
-> > > 
-> > >  {
-> > >  
-> > >         if (!audit_dummy_context())
-> > >         
-> > >                 __audit_log_kern_module(name);
-> > > 
-> > > @@ -677,7 +677,7 @@ static inline void audit_mmap_fd(int fd, int flags)
-> > > 
-> > >  static inline void audit_openat2_how(struct open_how *how)
-> > >  { }
-> > > 
-> > > -static inline void audit_log_kern_module(char *name)
-> > > +static inline void audit_log_kern_module(const char *name)
-> > > 
-> > >  {
-> > >  }
-> > > 
-> > > diff --git a/kernel/audit.h b/kernel/audit.h
-> > > index a60d2840559e..5156ecd35457 100644
-> > > --- a/kernel/audit.h
-> > > +++ b/kernel/audit.h
-> > > @@ -199,7 +199,7 @@ struct audit_context {
-> > > 
-> > >                         int                     argc;
-> > >                 
-> > >                 } execve;
-> > >                 struct {
-> > > 
-> > > -                       char                    *name;
-> > > +                       const char              *name;
-> > > 
-> > >                 } module;
-> > >                 struct {
-> > >                 
-> > >                         struct audit_ntp_data   ntp_data;
-> > > 
-> > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > index 0627e74585ce..f79eb3a5a789 100644
-> > > --- a/kernel/auditsc.c
-> > > +++ b/kernel/auditsc.c
-> > > @@ -2870,7 +2870,7 @@ void __audit_openat2_how(struct open_how *how)
-> > > 
-> > >         context->type = AUDIT_OPENAT2;
-> > >  
-> > >  }
-> > > 
-> > > -void __audit_log_kern_module(char *name)
-> > > +void __audit_log_kern_module(const char *name)
-> > > 
-> > >  {
-> > >  
-> > >         struct audit_context *context = audit_context();
-> > > 
-> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > > index 49b9bca9de12..3acb65073c53 100644
-> > > --- a/kernel/module/main.c
-> > > +++ b/kernel/module/main.c
-> > > @@ -2884,6 +2884,8 @@ static int load_module(struct load_info *info,
-> > > const char __user *uargs,> 
-> > >         if (err)
-> > >         
-> > >                 goto free_copy;
-> > > 
-> > > +       audit_log_kern_module(info->name);
-> > > +
-> > > 
-> > >         err = early_mod_check(info, flags);
-> > >         if (err)
-> > >         
-> > >                 goto free_copy;
-> > > 
-> > > @@ -2897,8 +2899,6 @@ static int load_module(struct load_info *info,
-> > > const char __user *uargs,> 
-> > >         module_allocated = true;
-> > > 
-> > > -       audit_log_kern_module(mod->name);
-> > > -
-> > > 
-> > >         /* Reserve our place in the list. */
-> > >         err = add_unformed_module(mod);
-> > >         if (err)
-> > > 
-> > > --
-> > > paul-moore.com
-> > 
-> > - RGB
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-- RGB
+Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-Upstream IRC: SunRaycer
-Voice: +1.613.860 2354 SMS: +1.613.518.6570
-
+> ---
+>  include/asm-generic/codetag.lds.h | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
+> index 372c320c5043..0ea1fa678405 100644
+> --- a/include/asm-generic/codetag.lds.h
+> +++ b/include/asm-generic/codetag.lds.h
+> @@ -2,6 +2,12 @@
+>  #ifndef __ASM_GENERIC_CODETAG_LDS_H
+>  #define __ASM_GENERIC_CODETAG_LDS_H
+>  
+> +#ifdef CONFIG_MEM_ALLOC_PROFILING
+> +#define IF_MEM_ALLOC_PROFILING(...) __VA_ARGS__
+> +#else
+> +#define IF_MEM_ALLOC_PROFILING(...)
+> +#endif
+> +
+>  #define SECTION_WITH_BOUNDARIES(_name)	\
+>  	. = ALIGN(8);			\
+>  	__start_##_name = .;		\
+> @@ -9,7 +15,7 @@
+>  	__stop_##_name = .;
+>  
+>  #define CODETAG_SECTIONS()		\
+> -	SECTION_WITH_BOUNDARIES(alloc_tags)
+> +	IF_MEM_ALLOC_PROFILING(SECTION_WITH_BOUNDARIES(alloc_tags))
+>  
+>  /*
+>   * Module codetags which aren't used after module unload, therefore have the
+> @@ -28,6 +34,6 @@
+>   * unload them individually once unused.
+>   */
+>  #define MOD_SEPARATE_CODETAG_SECTIONS()		\
+> -	MOD_SEPARATE_CODETAG_SECTION(alloc_tags)
+> +	IF_MEM_ALLOC_PROFILING(MOD_SEPARATE_CODETAG_SECTION(alloc_tags))
+>  
+>  #endif /* __ASM_GENERIC_CODETAG_LDS_H */
+> 
+> base-commit: 80e54e84911a923c40d7bee33a34c1b4be148d7a
+> -- 
+> 2.43.0
+> 
