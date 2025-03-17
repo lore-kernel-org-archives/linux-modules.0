@@ -1,134 +1,173 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC091AA1E0
-	for <linux-modules@vger.kernel.org>; Mon, 17 Mar 2025 16:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B67B1E1DE8
+	for <linux-modules@vger.kernel.org>; Mon, 17 Mar 2025 19:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742229706; cv=none; b=jsU1iN5QIZNPhSQ8f5cPXq7z3ozPC69TpMF50Osxwx+guNe6TrCLraFMV+UNmusmNMX+EpfZYKSLa37r/A6/s1w9uU1AV0MFlrxWspdmFhJzrKA00Pbvg7R+SuG0oiv19E6nwEUcrI0XcwQyZhhZFoO3TCT/4PsKFKO118OMn+U=
+	t=1742241504; cv=none; b=g05JYNssQtOvCZUNLyu90hEDedVpmWhJHdRvKUUIpzXijZY/ggQ5IQ8BaIiYYUgBg8jdw9gHVNTRCHe52v/6ofnTYxorZBDVmm3h9ewytPiP3P+o46tPTFCJtuOzn1Tumf1xO9DF7sdf+zsRUutoL10Lj6WkwvToJJKo+JaI7k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742229706; c=relaxed/simple;
-	bh=5iUIlaBwM9u3v5QQqv3rwUuNzswIS61vXVZ9uDI3UDY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UOc3JnWoEoDS2eoeBVk6ruGnYpkAJXw36kEqv3kQ8b8yj+p3uO3Uc3A02dulmpD1QD8kKoRGKz2p4FTi3alN4IewRJwSWtQpgKoRYFBGEKyIbFO4VLsYk0Dy2dgMiFNg0MmITS+qmA/FV+OieZwUZCMJ/s29sQJmM5FOrF7wI+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=IU4DAywv; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1742241504; c=relaxed/simple;
+	bh=xCTU3OBwU9jJ4TjWyzIDZXqQ2uRG46LwG0WRjRy8Jws=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=rVvL9OJpKHFhP9jxDJqbgRpfA/84azOxaa6B2fJLRBPoOIPjBJMSjeIn/3IPVQPkqf4NwchejtK/MRIDcGNjy5bZVoK6b458r5AQdAdKs1E46uZIb+YYDDO3CLh4eoE74TIwb6KOo++DdiicFYEgeM//BTA5icqR0RFRfTRS5Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LDQDUM/3; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="IU4DAywv"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ac2af2f15d1so676268366b.1
-        for <linux-modules@vger.kernel.org>; Mon, 17 Mar 2025 09:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742229702; x=1742834502; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SP15XEs4ihxSPIGfYJR7aJt2lx0C1YHnw8AJSADx2mM=;
-        b=IU4DAywvNRq4hjnFcoIEnVIWr4eBoyyDTq9CZBfAhIAyA3jXWFNkbKbzJI3Nlms8lU
-         yuCsm7Phz4MItJ8yScCFNOISKgPmuWgAMUHksfYepHeKXS5vCdpH3Bx6uG55c05svNJa
-         i6YFg9x1Pcp+hIp8qQ6MFsaCJ457T1NPow6brUbdsW+IO2nNJ7nCTQCxrGlefbR3Zw/w
-         mx3e9U69zs70LtvXwpTvfWmvFl2yVZLs6ZqyUHZYJu43yrAbOom8zzWuxOxhmjeiYIrE
-         nMmg9kt1W90lhrAzy2e/A9uOd5bUNoEzT+KtXE44mwIsQHY+BbqYWRl+6uptEjXo/6nZ
-         lZhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742229702; x=1742834502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SP15XEs4ihxSPIGfYJR7aJt2lx0C1YHnw8AJSADx2mM=;
-        b=b2x2zgdLhI+xzFgkkbRlWtW6g2XUIa4+JEp1oyzf4cFyCNkfKqWnONtxLAXmL8LQo9
-         ztkjWasXNYNsNmjNeqJkoXpGmCPdqAqDepnYOo6DXH6BYNsy1Rbl1rjPc7iq1RP/1Nfx
-         s584LMGPjJRR/OPPeElescu5zIXUG+iBphIJ2eeWjMu+NWoaRxre7TEa7TfFx+bFXLCf
-         S31Mjabh4CBwAPKxY2XuvyL4P78/9abbz5Ky9XJm1DcL98HKjS6mLJP38i/jGn4qXtcS
-         YrcOysu4nZqJnUZ2bWsJjR5sehBvzTTAx25Z/P6bIzWvYilbwIAv5BtxQzCiJ9uhk25b
-         cG9Q==
-X-Gm-Message-State: AOJu0Ywm2X/1WMYMUR2mgUw9UFLSYIyvGJN3Fx2x7GVMha5LfoSSYb/K
-	ONInKa57D3pqDYULz80Mv4e2YQ9z5WnLpH78qDNTusHz1RBLqgPYhh7ylsFfoZdNgZOKWAHY8aY
-	E
-X-Gm-Gg: ASbGnct3zSKIuLgz86X6Voeqs5CuWf/gcmU3tW4FadrxQIn9j3CaphNO5rEDaiNIZtl
-	7niCERgzChwZW+D3S7xEncC0t5Q5THnr1D0qqtpsVy7d7R3af/ElPj2UXsoZ3f0sooFsCSgJWGU
-	jwzRHfjStAkNe+KPo2cW/kfo4kL+ah0DIs5aUI4j3zZmQQZCsGCJIwe1O9M6QnIm5ZCN0neUGZ9
-	pHiYJOXeYdrXvMNUOQ+hO6/E1/iBOpaEc6yv/TR2/T+X7nogg1edPMBw+0gG5YHjmAv1kgsnztn
-	UvCM/8CA/xpODrhn37+D5dkRhbKSDjQ3UkrDqUNid58X0Fx5jr/C9ex/s6s=
-X-Google-Smtp-Source: AGHT+IFoLOD3jAxOmX2klAd8yu/dVdRFFJgGIVbntXlZeKBEbrCYBaa21+HHzjSV2+fGh80HEXS5/w==
-X-Received: by 2002:a05:600c:c10:b0:43b:cbe2:ec03 with SMTP id 5b1f17b1804b1-43d389ec82dmr3861535e9.27.1742229239634;
-        Mon, 17 Mar 2025 09:33:59 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43d1ffc49adsm109352555e9.24.2025.03.17.09.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Mar 2025 09:33:59 -0700 (PDT)
-Message-ID: <0d4d5530-7e0f-4ccb-ba53-135e1eb65b89@suse.com>
-Date: Mon, 17 Mar 2025 17:33:58 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDQDUM/3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742241502;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fe9M2Oa4I5OBxyse7ylLRME/AasjszWQ8rkyKb61Ngg=;
+	b=LDQDUM/3JJZ7NLtvyOdLqSQGrfeHQ1VtbxIa7mmOiJmdXOEqAyiIySW/+2+GeHrOuwUARG
+	LU1ZedEq/8dPyWBKjrsfBze+m0uf5dlamcizO/pzDPl17QBFXCLP4i463gQEdcO6RY9Wym
+	nDrHaAGp9H83bnzjKaUVtMgZ0911dVk=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-ZiMJzCSFMFSU3VpcFKK_9w-1; Mon,
+ 17 Mar 2025 15:58:18 -0400
+X-MC-Unique: ZiMJzCSFMFSU3VpcFKK_9w-1
+X-Mimecast-MFC-AGG-ID: ZiMJzCSFMFSU3VpcFKK_9w_1742241497
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1976618001E3;
+	Mon, 17 Mar 2025 19:58:17 +0000 (UTC)
+Received: from madcap2.tricolour.com (unknown [10.22.76.11])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 915B71801755;
+	Mon, 17 Mar 2025 19:58:14 +0000 (UTC)
+From: Richard Guy Briggs <rgb@redhat.com>
+To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-modules@vger.kernel.org,
+	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Steve Grubb <sgrubb@redhat.com>,
+	Richard Guy Briggs <rgb@redhat.com>
+Subject: [PATCH v2] audit,module: restore audit logging in load failure case
+Date: Mon, 17 Mar 2025 15:57:44 -0400
+Message-ID: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: Use rcuref_t for module::refcnt.
-To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc: linux-modules@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-References: <20250309121914.pN6eBMvI@breakpoint.cc>
- <2362aa50-67fc-4535-b0eb-26f50066710b@suse.com>
- <20250310212416.K2OGvLw7@breakpoint.cc>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250310212416.K2OGvLw7@breakpoint.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 3/10/25 22:24, Sebastian Andrzej Siewior wrote:
-> On 2025-03-10 15:28:23 [+0100], Petr Pavlu wrote:
->> On 3/9/25 13:19, Sebastian Andrzej Siewior wrote:
->>> By using rcuref_t the atomic_inc_not_zero() and atomic_dec_if_positive()
->>> can disappear. By design rcuref_t does not allow decrementing past the
->>> "0" reference and increment once it has been released. It will spill
->>> warnings if there are more puts than initial gets.
->>> This also makes the put/ get attempt in try_release_module_ref() a
->>> little simpler. Should the get in try_release_module_ref() fail then
->>> there should be another warning originating from module_put() which is
->>> the only race I can imagine.
->>>
->>> Use rcuref_t for module::refcnt.
->>>
->>> Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
->>
->> I'd understand changing module::refcnt from atomic_t to refcount_t, but
->> it isn't clear to me from the above description what using rcuref_t
->> actually gains. Could you please explain why you think it is more
->> appropriate over refcount_t here?
-> 
-> I seems easier to handle without the atomic_inc_not_zero() and
-> atomic_dec_if_positive().
+The move of the module sanity check to earlier skipped the audit logging
+call in the case of failure and to a place where the previously used
+context is unavailable.
 
-I think the use of atomic_inc_not_zero()/refcount_inc_not_zero() is
-a common pattern. The call to atomic_dec_if_positive() would be with
-refcount_t in this case replaced by refcount_dec(). That looks fairly
-comparable to me to the rcuref_t version.
+Add an audit logging call for the module loading failure case and get
+the module name when possible.
 
-> rcuref_get() is implemented as an implicit inc and succeeds always as
-> long as the counter is not negative. Negative means the counter has been
-> probably released and the slowpath decides if it is released or not.
-> Eitherway you get rid of all the WARN_ON()s and the dec/ inc dance in
-> try_release_module_ref() where you simply attempt the final "put" and if
-> this one fails (because a refence is still held) you attempt to get the
-> inital reference and can decice if it was successfull or not.
-> If the puts outweight the gets then you see a warning from the rcuref()
-> code itself.
+Link: https://issues.redhat.com/browse/RHEL-52839
+Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+---
+Changelog:
+v2
+- use info->name for both audit_log_kern_module() calls and add const
+---
+ include/linux/audit.h | 9 ++++-----
+ kernel/audit.h        | 2 +-
+ kernel/auditsc.c      | 2 +-
+ kernel/module/main.c  | 6 ++++--
+ 4 files changed, 10 insertions(+), 9 deletions(-)
 
-Sure, but having these warnings would be the case also with refcount_t,
-no?
-
-I see that rcuref_t is so far used by dst_entry::__rcuref, for which it
-was originally added, and k_itimer::rcuref. I'm not sure if there's any
-guidance or prior consensus on when to use refcount_t vs rcuref_t.
-I understand some of the performance advantage of rcuref_t, but I wonder
-if code that doesn't substantially benefit from that, such
-module::refcnt, should now use it, or if it should stick to the more
-common refcount_t.
-
+diff --git a/include/linux/audit.h b/include/linux/audit.h
+index 0050ef288ab3..a394614ccd0b 100644
+--- a/include/linux/audit.h
++++ b/include/linux/audit.h
+@@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
+ extern void __audit_log_capset(const struct cred *new, const struct cred *old);
+ extern void __audit_mmap_fd(int fd, int flags);
+ extern void __audit_openat2_how(struct open_how *how);
+-extern void __audit_log_kern_module(char *name);
++extern void __audit_log_kern_module(const char *name);
+ extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
+ extern void __audit_tk_injoffset(struct timespec64 offset);
+ extern void __audit_ntp_log(const struct audit_ntp_data *ad);
+@@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how *how)
+ 		__audit_openat2_how(how);
+ }
+ 
+-static inline void audit_log_kern_module(char *name)
++static inline void audit_log_kern_module(const char *name)
+ {
+ 	if (!audit_dummy_context())
+ 		__audit_log_kern_module(name);
+@@ -677,9 +677,8 @@ static inline void audit_mmap_fd(int fd, int flags)
+ static inline void audit_openat2_how(struct open_how *how)
+ { }
+ 
+-static inline void audit_log_kern_module(char *name)
+-{
+-}
++static inline void audit_log_kern_module(const char *name)
++{ }
+ 
+ static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
+ { }
+diff --git a/kernel/audit.h b/kernel/audit.h
+index 0211cb307d30..2a24d01c5fb0 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -200,7 +200,7 @@ struct audit_context {
+ 			int			argc;
+ 		} execve;
+ 		struct {
+-			char			*name;
++			const char		*name;
+ 		} module;
+ 		struct {
+ 			struct audit_ntp_data	ntp_data;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 9c853cde9abe..7bc0462e86f3 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -2866,7 +2866,7 @@ void __audit_openat2_how(struct open_how *how)
+ 	context->type = AUDIT_OPENAT2;
+ }
+ 
+-void __audit_log_kern_module(char *name)
++void __audit_log_kern_module(const char *name)
+ {
+ 	struct audit_context *context = audit_context();
+ 
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 1fb9ad289a6f..efa62ace1b23 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 
+ 	module_allocated = true;
+ 
+-	audit_log_kern_module(mod->name);
++	audit_log_kern_module(info->name);
+ 
+ 	/* Reserve our place in the list. */
+ 	err = add_unformed_module(mod);
+@@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 	 * failures once the proper module was allocated and
+ 	 * before that.
+ 	 */
+-	if (!module_allocated)
++	if (!module_allocated) {
++		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+ 		mod_stat_bump_becoming(info, flags);
++	}
+ 	free_copy(info, flags);
+ 	return err;
+ }
 -- 
-Thanks,
-Petr
+2.43.5
+
