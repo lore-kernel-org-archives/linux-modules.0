@@ -1,173 +1,98 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B67B1E1DE8
-	for <linux-modules@vger.kernel.org>; Mon, 17 Mar 2025 19:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 375D521127E;
+	Tue, 18 Mar 2025 16:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742241504; cv=none; b=g05JYNssQtOvCZUNLyu90hEDedVpmWhJHdRvKUUIpzXijZY/ggQ5IQ8BaIiYYUgBg8jdw9gHVNTRCHe52v/6ofnTYxorZBDVmm3h9ewytPiP3P+o46tPTFCJtuOzn1Tumf1xO9DF7sdf+zsRUutoL10Lj6WkwvToJJKo+JaI7k4=
+	t=1742315027; cv=none; b=Ndk8qNAx3iVfT7RdZlx1YjEOaWQlNZFInrrhlr8WY0EawEF17m9BDQP7NeosekPCOngqykhGszRG5dCsrX/jUTVuWDwEy3ce34k0RZu+FZaYk5SOg86RIiuzO0kwrlzLhsIcvGN7Yn/x0WD97+1qLKECtDCjZDzly4kRqphDCbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742241504; c=relaxed/simple;
-	bh=xCTU3OBwU9jJ4TjWyzIDZXqQ2uRG46LwG0WRjRy8Jws=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=rVvL9OJpKHFhP9jxDJqbgRpfA/84azOxaa6B2fJLRBPoOIPjBJMSjeIn/3IPVQPkqf4NwchejtK/MRIDcGNjy5bZVoK6b458r5AQdAdKs1E46uZIb+YYDDO3CLh4eoE74TIwb6KOo++DdiicFYEgeM//BTA5icqR0RFRfTRS5Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LDQDUM/3; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1742315027; c=relaxed/simple;
+	bh=H0VyU5niPt2Corc3rgjQq4JMZQW1ybxG++hZ0Pgp9lA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IamuT6v4UBuzB1iXZaTkkyQMckNLUmqDfavnnJAG6fF1d87wyXK8J8itpaB4LKNaiBVNuOs5D8Z9lggQS64JfoD5K6aBC79ll88YfWX7FN+NHqwbW+UN/gggyRN9Wy1raS8RPq+0gDQhNsFpfwWHuEjtrnXiFrRr/ULz5QPZf2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=WtYCInzU; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDQDUM/3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1742241502;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fe9M2Oa4I5OBxyse7ylLRME/AasjszWQ8rkyKb61Ngg=;
-	b=LDQDUM/3JJZ7NLtvyOdLqSQGrfeHQ1VtbxIa7mmOiJmdXOEqAyiIySW/+2+GeHrOuwUARG
-	LU1ZedEq/8dPyWBKjrsfBze+m0uf5dlamcizO/pzDPl17QBFXCLP4i463gQEdcO6RY9Wym
-	nDrHaAGp9H83bnzjKaUVtMgZ0911dVk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-ZiMJzCSFMFSU3VpcFKK_9w-1; Mon,
- 17 Mar 2025 15:58:18 -0400
-X-MC-Unique: ZiMJzCSFMFSU3VpcFKK_9w-1
-X-Mimecast-MFC-AGG-ID: ZiMJzCSFMFSU3VpcFKK_9w_1742241497
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1976618001E3;
-	Mon, 17 Mar 2025 19:58:17 +0000 (UTC)
-Received: from madcap2.tricolour.com (unknown [10.22.76.11])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 915B71801755;
-	Mon, 17 Mar 2025 19:58:14 +0000 (UTC)
-From: Richard Guy Briggs <rgb@redhat.com>
-To: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
-	LKML <linux-kernel@vger.kernel.org>,
-	linux-modules@vger.kernel.org,
-	Linux Kernel Audit Mailing List <audit@vger.kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	Richard Guy Briggs <rgb@redhat.com>
-Subject: [PATCH v2] audit,module: restore audit logging in load failure case
-Date: Mon, 17 Mar 2025 15:57:44 -0400
-Message-ID: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="WtYCInzU"
+Received: by linux.microsoft.com (Postfix, from userid 1152)
+	id C1547210B142; Tue, 18 Mar 2025 09:23:44 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C1547210B142
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1742315024;
+	bh=UYVcYJMuH7XdIAr0gl7kC0+gfugmYJMN1BRCXLDbk1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WtYCInzUBtOxmwdCZuliQKhgyN3DcFxVBeU4m+M2qQ7uv54cpwFSffVWBEl318FTp
+	 JqdcpNXI+HOvFpkC5ANXDoWqmvTqiyfUyWfYJDHa3m0j5lgTNc9Y9Pef7X4kmZQPZt
+	 fB/KhvAA0JKnAPnmL9U6XnwipWGgkBEIfSQ4d75c=
+Date: Tue, 18 Mar 2025 09:23:44 -0700
+From: Shyam Saini <shyamsaini@linux.microsoft.com>
+To: Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, code@tyhicks.com,
+	linux@rasmusvillemoes.dk, christophe.leroy@csgroup.eu,
+	hch@infradead.org, mcgrof@kernel.org, frkaya@linux.microsoft.com,
+	vijayb@linux.microsoft.com, linux@weissschuh.net,
+	samitolvanen@google.com, da.gomez@samsung.com, rafael@kernel.org,
+	dakr@kernel.org
+Subject: Re: [PATCH v4 0/4] Properly handle module_kobject creation
+Message-ID: <20250318162344.GA21474@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
+ <ae1f74bd-4e8c-4031-8175-240f5f8d7f17@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae1f74bd-4e8c-4031-8175-240f5f8d7f17@suse.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-The move of the module sanity check to earlier skipped the audit logging
-call in the case of failure and to a place where the previously used
-context is unavailable.
+Hi Greg,
 
-Add an audit logging call for the module loading failure case and get
-the module name when possible.
+> On 2/27/25 19:49, Shyam Saini wrote:
+> > Hi Everyone,
+> > 
+> > This patch series fixes handling of module_kobject creation.
+> > A driver expect module_kset list populated with its corresponding
+> > module_kobject to create its /sys/module/<built-in-module>/drivers
+> > directory.
+> > 
+> > Since,
+> > [1] commit 96a1a2412acb ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
+> > Call to populate module_kset list is deferred to save init time so that
+> > external watchdog doesn't fireup on some boards and Linux can take
+> > responsibility of feeding watchdog before it spuriously resets the
+> > system. However, [1] this fix caused another issue i.e, consumers
+> > of module_kset can't get related module_kobject during driver
+> > initialisation and hence can't create their
+> > /sys/module/<built-in-module>/drivers directory.
+> > 
+> > Consequently, [1] breaks user-space applications for eg: DPDK, which
+> > expects /sys/module/vfio_pci/drivers/pci:vfio-pci/new_id to be present.
+> > 
+> > The second issue was reported and the [2] revert of [1] was
+> > proposed. However, [2] the Revert doesn't address the original issue
+> > reported in [1].
+> > 
+> > This patch series addresses both issues reported in [1] and [2].
+> > 
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=96a1a2412acb
+> > [2] https://lore.kernel.org/lkml/20250130225803.321004-1-shyamsaini@linux.microsoft.com/
+> 
+> This looks ok to me. I only think the Fixes: tag should have remained
+> solely on the last patch in the series as that is the actual fix. I'll
+> adjust it when picking up the patches.
+> 
+> I'm going to wait for a few days if others still would like to comment
+> and then plan to queue this on modules-next.
+> 
+> @Greg, could I please get an Acked-by from you on the last patch in the
+> series as this affects the code in the driver core?
+>
 
-Link: https://issues.redhat.com/browse/RHEL-52839
-Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
-Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
----
-Changelog:
-v2
-- use info->name for both audit_log_kern_module() calls and add const
----
- include/linux/audit.h | 9 ++++-----
- kernel/audit.h        | 2 +-
- kernel/auditsc.c      | 2 +-
- kernel/module/main.c  | 6 ++++--
- 4 files changed, 10 insertions(+), 9 deletions(-)
+do you have any feedback on last patch of this series?
 
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 0050ef288ab3..a394614ccd0b 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -417,7 +417,7 @@ extern int __audit_log_bprm_fcaps(struct linux_binprm *bprm,
- extern void __audit_log_capset(const struct cred *new, const struct cred *old);
- extern void __audit_mmap_fd(int fd, int flags);
- extern void __audit_openat2_how(struct open_how *how);
--extern void __audit_log_kern_module(char *name);
-+extern void __audit_log_kern_module(const char *name);
- extern void __audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar);
- extern void __audit_tk_injoffset(struct timespec64 offset);
- extern void __audit_ntp_log(const struct audit_ntp_data *ad);
-@@ -519,7 +519,7 @@ static inline void audit_openat2_how(struct open_how *how)
- 		__audit_openat2_how(how);
- }
- 
--static inline void audit_log_kern_module(char *name)
-+static inline void audit_log_kern_module(const char *name)
- {
- 	if (!audit_dummy_context())
- 		__audit_log_kern_module(name);
-@@ -677,9 +677,8 @@ static inline void audit_mmap_fd(int fd, int flags)
- static inline void audit_openat2_how(struct open_how *how)
- { }
- 
--static inline void audit_log_kern_module(char *name)
--{
--}
-+static inline void audit_log_kern_module(const char *name)
-+{ }
- 
- static inline void audit_fanotify(u32 response, struct fanotify_response_info_audit_rule *friar)
- { }
-diff --git a/kernel/audit.h b/kernel/audit.h
-index 0211cb307d30..2a24d01c5fb0 100644
---- a/kernel/audit.h
-+++ b/kernel/audit.h
-@@ -200,7 +200,7 @@ struct audit_context {
- 			int			argc;
- 		} execve;
- 		struct {
--			char			*name;
-+			const char		*name;
- 		} module;
- 		struct {
- 			struct audit_ntp_data	ntp_data;
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index 9c853cde9abe..7bc0462e86f3 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2866,7 +2866,7 @@ void __audit_openat2_how(struct open_how *how)
- 	context->type = AUDIT_OPENAT2;
- }
- 
--void __audit_log_kern_module(char *name)
-+void __audit_log_kern_module(const char *name)
- {
- 	struct audit_context *context = audit_context();
- 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 1fb9ad289a6f..efa62ace1b23 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 
- 	module_allocated = true;
- 
--	audit_log_kern_module(mod->name);
-+	audit_log_kern_module(info->name);
- 
- 	/* Reserve our place in the list. */
- 	err = add_unformed_module(mod);
-@@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	 * failures once the proper module was allocated and
- 	 * before that.
- 	 */
--	if (!module_allocated)
-+	if (!module_allocated) {
-+		audit_log_kern_module(info->name ? info->name : "(unavailable)");
- 		mod_stat_bump_becoming(info, flags);
-+	}
- 	free_copy(info, flags);
- 	return err;
- }
--- 
-2.43.5
-
+Thanks,
+Shyam
