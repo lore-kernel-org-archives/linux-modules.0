@@ -1,106 +1,131 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0238F22172B;
-	Thu, 20 Mar 2025 12:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9767D139E;
+	Thu, 20 Mar 2025 12:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742472033; cv=none; b=jS0qvvEBhABI6YeZqDV88JRFcsRMIfA8H8PvL1gH7V5QHlFU2m4OMZXnUmhR2S2C3n2DHVoC3ltWGYKeLozo/T5O6y+LKJKYzOd84DEQBq6TYJXgO96fT+hx3Sy6fcFU1Lhlool9tXwkXUPkbmgkmHEixeQdmPq3FdN98kSiA3Q=
+	t=1742473995; cv=none; b=j5LWE3wz3LgU2CoVQuEB5vDxmE8Fnfquqd6Os2Lu4zGne+r/FmRCPCtCxQebLbrSCpZ8l416oHUgHnIazOGjHU5PTG1iiJ7mSiG08iN94fqUIk4WblfbCoA7bv/7hLu+engloojk9OFbXQdek8gHIn8/w3vIKDADCqthgrtPKDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742472033; c=relaxed/simple;
-	bh=+JpqTZlUDUYwRI2Af2UJVSssidKLH53a8o68argLTeo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HHJZA5/kWUZFLg6XXv/NTOYcGh79wtJG3AjsPu+nX9ANFRB2P0c9CZEiXhI/S8xGI5mQF67f9guVgyQyM4T1TQlGVhpAN2OIqOi+G17Fl0Bo2Uh1yuks4wFZsliLO7ikK6faW9Hq8u8MLx9REwYeh/KoNzRl0VEXpId54j6qs7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjBrpQx0; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1742473995; c=relaxed/simple;
+	bh=8G0b6aj9wz9P0NoVVC9GJR8BMwPTa2rqfrK2RhHdplM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cmbvNiwVa4EApOocSED3/oqN9wISp41JzTxEARUex+yVYWH993NQB0sqRD+ZVOGB9gV8ExpJjIfcvZS9rjh0dzRba0oKoX5DmMRQecE/VmseAevEw00t9jOngP81WzBCM0dCbHeXmoajxlmGhjKdb6e/lgqlW258p+4d5mBrLAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bTjbgLvX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjBrpQx0"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-30144a72db9so165559a91.1;
-        Thu, 20 Mar 2025 05:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742472031; x=1743076831; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+JpqTZlUDUYwRI2Af2UJVSssidKLH53a8o68argLTeo=;
-        b=jjBrpQx0XwE4t13JwPSpuKEQ+CWt8ARiWNUyWj24H0JhGmtVZ7R1Tcuzkym03laZ19
-         NGwV6zIkxySIsccdbm/uOofp2tM3Cj0hdIBc2HqXsgMoECXYkWUbVfq7UFd6Q72vvHPa
-         RypwT7+98nIlmN15rXAaQeM+/zQugZuYXpaMMlDswzI1vb2aDFhAcQSTebD8xOuMfmp+
-         7FtrRraTqS0tXBCqSI91COVdOXC8yneITQnH52scu2iWi7rQY1BmHiGp76ApfX9/yGZU
-         OqccOwtskBOusqwEB0Y/HegA4Eb4QxoufBjhgFmNoqJpdCeW/d7ERXqIFMwkg392gX9/
-         NUkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742472031; x=1743076831;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+JpqTZlUDUYwRI2Af2UJVSssidKLH53a8o68argLTeo=;
-        b=DYhRBXIZN8lQeyQ/hqIUd0N7XxjlJJQ4yoWmXOPh6wh8/NTXosgkGSNAanZDnUqqsA
-         SAsZBA8PCBtEvUTEUIdfXcdA4IQjMaxpbs3k4Mg8EzRlrOArs6K5X/GyxuPY8S2JZuC8
-         OpohG/pFFV3g0JB5nMeZBgYzoTO9WMSB507WJNcV9A58S05IY8jpf9krkPaLC90XDzZn
-         pl97k/uM5Ns+fYrHOc+U68a+EM9AjTezDr/mRbTFZGkUrIGGdmFePXy5L5ZB/o72G4AS
-         KRDrCWKVMN++xrBdUJtkShv4BiVhNtuw9WPxAZDJU8FQ/1kffB84wuPsvhUGmHxuiYDB
-         jToQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZjn9NgStZxV/BdmP6oCjwCeYU3lfM+wtxjyhc3NvMiIasTqZey1HnKI1NGXEqjrhr9NdfxR1IMcYrbeFhMg==@vger.kernel.org, AJvYcCVN8M7etE/Cv3GHbTTlkwLQ4262774Db6OOMj3Ruvdx7eM3LoKhZibVj+TMgLS4iIe+pV9UF1VofQUQCqw=@vger.kernel.org, AJvYcCWV4/Gvnbx22P8aOMGVftQ/5pGfjmE7lIT2XICGUYTYtCeNf53jC1jFUzNOx2w+QpY5zKlo/XyDe6MoDpVD/KI=@vger.kernel.org, AJvYcCWippg9bRZ/yuBGHx7uJBnmm7BszaJC8KZNEpKBf5GwOT+IVVFlnhZP+5qdHKieBh351rNuOS048VqF3Ls6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc5OJzcB7SESW8M9RTO7wI9uyuuGipsZEsXNEQUutiygnx5Zns
-	19j+s4BdtQU0h8RUpBdsp6F2Hzlc8hkQG/+Vnlf4P12edV1QEWFQWf9C/BlODlW5K+fo16lN5rb
-	WS20aavDSCuaVQ7OBsmVRZCOT928=
-X-Gm-Gg: ASbGnctSw8QT8P/ya7o5RVD/q5QXrp15yMswBSNZfbMMJstOSOWUj991VbK8MQeraR3
-	/tLXShSujVbRe/WDWEYpYFcatFd9bbmPoECM+ZWZFU/mLdYGOvkltE/roL6pfmiiqjVUePoNuQ3
-	9x23VYLiSn5Ko4a9IdO/KvROgN6A==
-X-Google-Smtp-Source: AGHT+IGLnHem81pSy849Xj5e5pWE83gWruoVX126M+G8/5J8tR1iaCU2Org4jEG9DcYNth8MQP8v31q+vtP6uB3x6JE=
-X-Received: by 2002:a17:90b:4a03:b0:2ff:682b:b754 with SMTP id
- 98e67ed59e1d1-301bfbd457fmr3463081a91.2.1742472031169; Thu, 20 Mar 2025
- 05:00:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bTjbgLvX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88562C4CEDD;
+	Thu, 20 Mar 2025 12:33:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742473995;
+	bh=8G0b6aj9wz9P0NoVVC9GJR8BMwPTa2rqfrK2RhHdplM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bTjbgLvXivLxdxDwR/uQQTB2BWwiOcbehfh/Dg+pWiz+BXP1sgTL8MW3JikJrMCwR
+	 K0Vj7DzWCTInPcV9CdsxXJ8or0R0foJrFB2XqbY7BHC1I3suwivpa26LKkJr4uM5pJ
+	 DrKAbgRRK2dDT5CIrvZKyJiyGWOIh1tGp1EwXSFkOnrN+Ci9WcbwHAcu7jUnQlxA3s
+	 GtNLaZDgSC28Y+6CBCUQvlE+rttwN+33DXNNApY6QvoFdcj/hAhTcnv/+xMnbKZh59
+	 igxsNz96VbGH2jyXc3ZutOJQFliELZjwd2ibwczdbjXKqnVq2i7JtUUOmNxNyIW1tG
+	 0VS9AjEh9Bfaw==
+Date: Thu, 20 Mar 2025 13:33:12 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>, 
+	Petr Mladek <pmladek@suse.com>, Jani Nikula <jani.nikula@intel.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, John Ogness <john.ogness@linutronix.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: Taint the kernel when write-protecting
+ ro_after_init fails
+Message-ID: <d65wbmp54onniprsai73siwa4pqcmmzlzag53l72sucq6irp6r@vwhbn2bkvptu>
+References: <20250306103712.29549-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
- <Q_mSCTsSMDQ6DylWZTrkH1Wru3fQ1LFIiuk1pHElSsTc12fDdaCrgzWvEEQRE2_WBxOBzPuCE-qBJjw7LhHbjQ==@protonmail.internalid>
- <nh23cbbpf5yk6mafn7gz7urlau22egilideytnnh7paagusaih@t7y7q7jha4fz> <87frj8dmlb.fsf@kernel.org>
-In-Reply-To: <87frj8dmlb.fsf@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 20 Mar 2025 13:00:19 +0100
-X-Gm-Features: AQ5f1JqT0bJ1nCq6lcjr_QnPneXhQ7sT5zkUrLM9y47BNLBzjIHnH9YbYE6UIy0
-Message-ID: <CANiq72kyAx=wbvYWBTmPb4eppfvGuFsjVMa49nZBrXGbLEDiCw@mail.gmail.com>
-Subject: Re: [PATCH v8 0/7] rust: extend `module!` macro with integer
- parameter support
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Daniel Gomez <da.gomez@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Luis Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, Greg KH <gregkh@linuxfoundation.org>, 
-	Fiona Behrens <me@kloenk.dev>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250306103712.29549-1-petr.pavlu@suse.com>
 
-On Thu, Mar 20, 2025 at 11:26=E2=80=AFAM Andreas Hindborg <a.hindborg@kerne=
-l.org> wrote:
->
-> As far as I understand, Miguel would take patch 1-5 for v6.15 and
-> modules would take patch 6-7 for v6.16. At least that is my
-> understanding from [1], @Petr and @Miguel please correct me if I am
-> wrong.
+On Thu, Mar 06, 2025 at 11:36:55AM +0100, Petr Pavlu wrote:
+> In the unlikely case that setting ro_after_init data to read-only fails, it
+> is too late to cancel loading of the module. The loader then issues only
+> a warning about the situation. Given that this reduces the kernel's
+> protection, it was suggested to make the failure more visible by tainting
+> the kernel.
+> 
+> Allow TAINT_BAD_PAGE to be set per-module and use it in this case. The flag
+> is set in similar situations and has the following description in
+> Documentation/admin-guide/tainted-kernels.rst: "bad page referenced or some
+> unexpected page flags".
+> 
+> Adjust the warning that reports the failure to avoid references to internal
+> functions and to add information about the kernel being tainted, both to
+> match the style of other messages in the file. Additionally, merge the
+> message on a single line because checkpatch.pl recommends that for the
+> ability to grep for the string.
+> 
+> Suggested-by: Kees Cook <kees@kernel.org>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+> I opted to use TAINT_BAD_PAGE for now because it seemed unnecessary to me
+> to introduce a new flag only for this specific case. However, if we end up
+> similarly checking set_memory_*() in the boot context, a separate flag
+> would be probably better.
+> ---
+>  kernel/module/main.c | 7 ++++---
+>  kernel/panic.c       | 2 +-
+>  2 files changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 1fb9ad289a6f..8f424a107b92 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3030,10 +3030,11 @@ static noinline int do_init_module(struct module *mod)
+>  	rcu_assign_pointer(mod->kallsyms, &mod->core_kallsyms);
+>  #endif
+>  	ret = module_enable_rodata_ro_after_init(mod);
+> -	if (ret)
+> -		pr_warn("%s: module_enable_rodata_ro_after_init() returned %d, "
+> -			"ro_after_init data might still be writable\n",
+> +	if (ret) {
+> +		pr_warn("%s: write-protecting ro_after_init data failed with %d, the data might still be writable - tainting kernel\n",
 
-So I offered that as an option -- I assume it is OK since nobody said
-anything (please correct me if I am wrong), and it would help get
-things moving.
+This is quite large. Can we simplify it?
 
-So I will take 1-5 later today or tomorrow unless someone shouts.
+For 1 line grep parsing we can start writing at the beginning of the line as
+it's done in some cases in fs/xfs/xfs_super.c. Proposals:
 
-Thanks!
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 6d1094c6dea8..fc5510b8aa14 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2982,7 +2982,8 @@ static noinline int do_init_module(struct module *mod)
+ #endif
+        ret = module_enable_rodata_ro_after_init(mod);
+        if (ret) {
+-               pr_warn("%s: write-protecting ro_after_init data failed with %d, the data might still be writable - tainting kernel\n",
++               pr_warn(
++"%s: write-protecting ro_after_init failed with %d - tainting kernel\n",
+                        mod->name, ret);
+                add_taint_module(mod, TAINT_BAD_PAGE, LOCKDEP_STILL_OK);
+        }
 
-Cheers,
-Miguel
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 6d1094c6dea8..4fa0c80b2bb4 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2982,7 +2982,8 @@ static noinline int do_init_module(struct module *mod)
+ #endif
+        ret = module_enable_rodata_ro_after_init(mod);
+        if (ret) {
+-               pr_warn("%s: write-protecting ro_after_init data failed with %d, the data might still be writable - tainting kernel\n",
++               pr_warn(
++"%s: ro_after_init failed with %d, data might be writable - tainting kernel\n",
+                        mod->name, ret);
+                add_taint_module(mod, TAINT_BAD_PAGE, LOCKDEP_STILL_OK);
+        }
+
+Daniel
