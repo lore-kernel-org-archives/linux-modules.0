@@ -1,92 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED79A215162;
-	Thu, 20 Mar 2025 08:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC5522173F
+	for <linux-modules@vger.kernel.org>; Thu, 20 Mar 2025 09:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742460854; cv=none; b=K4UX5W4RpouqPD3bvBPtqH4rjQEqVfMRgKJa276nzF+mtpovdmQOFqH4XCyJuzrVNLfO4amPtCjZWCwd+Qe6ojCK+V2m7aS/jCdLb2g7LAYOF1YxVtBihWjwLFGorovm66LYb/SA58gYU5Wm9FBtOdOYG/3Nz8ELo23BIpRfHcc=
+	t=1742462577; cv=none; b=LYUR0K0pnKita0msxsDPum6L4Vk/f9yz/mGZPy98gO76AxoiLgEalAxDaPDJCyp7yJ8Rf6PujXzEnfbMI6eCUWgC4M7IHpW/0/wBdSW+4wEPejysgjdYvndIRHkufqTzx2sfmltHJ+FbqSd33KREUPRmFbyuRrVrq/o97Z/uEDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742460854; c=relaxed/simple;
-	bh=F55ugxVH5lNvnYmcUAixAJ8y/QoIFHaC+YlixKioZyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XCua+9yx25WLiB+9trNgm48bM2TcPf5ZRurBKGXYwMJs6LM4+CjqioQC6BVJSc4o1Oi3yNsPMLo3WY69m+cauKAfvgo4fjSF/IPYwsMPaMZCrYA+81lJjoTauM2HT2UjJ7OK2io8r1QyZgfInEjJwYTrqRZoy4tHaEYAC8XfVY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BJAl2gYF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1742462577; c=relaxed/simple;
+	bh=v1HzjTFaFAns1qXAyZ3BA8WOSz6IElFgZDI4xKBb5Qw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F8fXO2i+hPq16qSmfW0pIoc6EsPzKuJ7PXvJ+a8MjjV9WnYHJTzX4TDR80zc0geWC6fmMgiwS9s0ztYcfsKHD7tDnQ30kpx9x0DJEO8I4LNOdCXPih4R/eVcu6BCW/wRAfyHbHO0nVf6s4pSSv/qk2TjTTkR61jRN5SapjGxEOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J8X46BQa; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BJAl2gYF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFEDC4CEDD;
-	Thu, 20 Mar 2025 08:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742460853;
-	bh=F55ugxVH5lNvnYmcUAixAJ8y/QoIFHaC+YlixKioZyM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BJAl2gYFIZV5wPyhf3FaQZcfrMy00B6eSZGPHh0y5cAkaHkEZfLX69dPmlg6N1huu
-	 20wai01+6nkllBGBUjGp3oZ0HaoJ2SJU/faJXornK+ckGpG4KIPFyXsLys7dia7RJ/
-	 isu3SFKPqwf+3mHq06v2p8LsrTCbOs8GmL4USTJULfwRNbhGz0o4wZtwZfx8okAXmH
-	 13x4BjHncNaFywu29DCMGlP9HByYGIa/ubhP/SL5AGhUCIxSbpyytYxm/DS5DReG+x
-	 ko6ueCQIFdk7YOJuDlqZQCLAFCpXHx9vCmhJBF/WQCCkcbqvwp+GgGEQe3CVO5MjlD
-	 J1/6/+v0PPzqg==
-Date: Thu, 20 Mar 2025 09:54:11 +0100
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Andreas Hindborg <a.hindborg@kernel.org>, R@macos
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, Greg KH <gregkh@linuxfoundation.org>, 
-	Fiona Behrens <me@kloenk.dev>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	linux-modules@vger.kernel.org
-Subject: Re: [PATCH v8 7/7] modules: add rust modules files to MAINTAINERS
-Message-ID: <cdudbtd7qkspxgglsdfjmd665cqij7u57sdvakyj3wudobsqzm@t7lpbrc3byqy>
-References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
- <20250227-module-params-v3-v8-7-ceeee85d9347@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J8X46BQa"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43d04ea9d9aso2228485e9.3
+        for <linux-modules@vger.kernel.org>; Thu, 20 Mar 2025 02:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1742462574; x=1743067374; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=myg67gk9wPhxLbBgzBdtkm9d24LaKIZKxjxSO7e8nL8=;
+        b=J8X46BQayLn6KljvOk0Sc8yPh/qBtxKMIdJLUr6jtEte8vmoBJ24WEW8oyooDzkObB
+         /edN/3FhrZ2zL6nQDw/o4PI/NNSUI3e68y2kERGg+fum8TTpDwPfS25gmm6W2vsxmqXI
+         pEmbI8rM0TnlTgAsZESjJngs6UomGdHtLoSJR3yi5cTaPKtdtLjvTnUplN2YIDAs3I0Q
+         Ub+tAeA6ru1NoCZLlxXn/+bkvR/Kcrw5mbcaHHK0ydgin/tT15gas9szddwnW+k3783K
+         d/5aRsF5CzdjCUw6Si/CMy4ZMH3cAM570WVriteHjCxlG5KAPU25xPN7xlxBZD+odhJg
+         bxAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742462574; x=1743067374;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=myg67gk9wPhxLbBgzBdtkm9d24LaKIZKxjxSO7e8nL8=;
+        b=PWPSiDmjKVj+81WbOydV7X7KAcDow0xPxVyOvI48TYZzZle7ir89RqZVbf+VfQcLto
+         Fpiqs2a1TCaBV/EIKW1KyraeqyIcRRLvdsPijkgxueAe7tqMFhCjbyRtJl51t1U+stQc
+         zJi48B5JRfBw3IefTH19/1jCCVLpWaDgIw4nVaTTmoPlZMIaMRjLdRUNdW67woVoUt/i
+         mqX98luFMyUqb/TOgpzte3ITZlSbq2P4D51ILSaggUMy4Tfl2KGgCXIKAoCAIzKUArwI
+         Uz58JDBP652dMqXCIQVvh43BpcjXgWh6OKiRciyDsnSpck0j7lIpbpGa6oZ5P8xhT/hs
+         ImlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdpCLH08YAH1MFQKQRpWJO9dFLuemYV9i6Akquaqu4r388U/DrV1UShN+m/s5DczPGNXkGqHDB3U8pvW8u@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCXBpPKrdh1Ig6nK+dwu3wfIAiT269PFbhIyTK4l0mUBbbFfL4
+	FkL1pbXNAX8vAqyjw47+eaJRVV1FR0KYdOmpGUjdiIPzM9pqWcvcbeVjx9NjGfU=
+X-Gm-Gg: ASbGncsleUJdrM/MQmJNKGqkJ3zsOcHGsSijOTpvt8AfPgmjuBCEo7KXjq7NYqvIqbC
+	XkIHOEjHxqMtqv6581YVtJADIr1HzbTtFeKdppMLff1sN3Ps+evtqtvRRQNx+BbzeRMs+eHIN+k
+	U4jLJFB/0dugvDWktnOZr/WrAnRs7oB6ida0T8ZOOYHq8HSS9YRjULJQcBR/2mL87/r9URijJPX
+	vF9ybl4UnsvOHoySKVXFoho1DOxNpVOLn8d/eVP749C42Ct7kuo8pP3HH4AODBIawkl2FPFIQGJ
+	/Ku7yfMwx/3Of9Orewt6jPqwVyo86SRHCHk/1cc0eBuLMQd5
+X-Google-Smtp-Source: AGHT+IEMUCCcXqS90NjR0ffhPXJJO2ODfxWqE3skotURWyXG5oZbBCdgiIvZjGWPov7RW/+OZqmhDQ==
+X-Received: by 2002:a5d:64c3:0:b0:391:3028:c779 with SMTP id ffacd0b85a97d-39973b03ebemr4709575f8f.45.1742462573769;
+        Thu, 20 Mar 2025 02:22:53 -0700 (PDT)
+Received: from [10.100.51.161] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdafsm23399381f8f.62.2025.03.20.02.22.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Mar 2025 02:22:53 -0700 (PDT)
+Message-ID: <ea258e7f-85fe-4dc8-8150-90c78b6e3962@suse.com>
+Date: Thu, 20 Mar 2025 10:22:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250227-module-params-v3-v8-7-ceeee85d9347@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] audit,module: restore audit logging in load failure
+ case
+To: Richard Guy Briggs <rgb@redhat.com>
+Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+ LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+ Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
+ Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>,
+ Steve Grubb <sgrubb@redhat.com>
+References: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 27, 2025 at 03:38:13PM +0100, Andreas Hindborg wrote:
-> The module subsystem people agreed to maintain rust support for modules
-> [1]. Thus, add entries for relevant files to modules entry in MAINTAINERS.
+On 3/17/25 20:57, Richard Guy Briggs wrote:
+> The move of the module sanity check to earlier skipped the audit logging
+> call in the case of failure and to a place where the previously used
+> context is unavailable.
 > 
-> Link: https://lore.kernel.org/all/0d9e596a-5316-4e00-862b-fd77552ae4b5@suse.com/ [1]
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
-
-And this is what we signed up for here:
-
-https://lore.kernel.org/all/ZsPANzx4-5DrOl5m@bombadil.infradead.org/
-
-Acked-by: Daniel Gomez <da.gomez@samsung.com>
-
-> ---
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
+> Add an audit logging call for the module loading failure case and get
+> the module name when possible.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 896a307fa065..ff65178f6e06 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15991,6 +15991,8 @@ F:	include/linux/kmod.h
->  F:	include/linux/module*.h
->  F:	kernel/module/
->  F:	lib/test_kmod.c
-> +F:	rust/kernel/module_param.rs
-> +F:	rust/macros/module.rs
->  F:	scripts/module*
->  F:	tools/testing/selftests/kmod/
+> Link: https://issues.redhat.com/browse/RHEL-52839
+> Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+
+The change looks reasonable to me from the modules perspective.
+
+Nit: Viewing the linked address requires a login, so I'm not sure it's
+appropriate for the commit message.
+
+[...]
+
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 1fb9ad289a6f..efa62ace1b23 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
 >  
-> 
-> -- 
-> 2.47.0
-> 
-> 
+>  	module_allocated = true;
+>  
+> -	audit_log_kern_module(mod->name);
+> +	audit_log_kern_module(info->name);
+>  
+>  	/* Reserve our place in the list. */
+>  	err = add_unformed_module(mod);
+> @@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  	 * failures once the proper module was allocated and
+>  	 * before that.
+>  	 */
+> -	if (!module_allocated)
+> +	if (!module_allocated) {
+> +		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+>  		mod_stat_bump_becoming(info, flags);
+> +	}
+>  	free_copy(info, flags);
+>  	return err;
+>  }
+
+Nit:
+		audit_log_kern_module(info->name ? info->name : "(unavailable)");
+->
+		audit_log_kern_module(info->name ?: "(unavailable)");
+
+-- 
+Thanks,
+Petr
