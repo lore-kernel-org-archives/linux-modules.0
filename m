@@ -1,136 +1,184 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC5522173F
-	for <linux-modules@vger.kernel.org>; Thu, 20 Mar 2025 09:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38F2224253;
+	Thu, 20 Mar 2025 10:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742462577; cv=none; b=LYUR0K0pnKita0msxsDPum6L4Vk/f9yz/mGZPy98gO76AxoiLgEalAxDaPDJCyp7yJ8Rf6PujXzEnfbMI6eCUWgC4M7IHpW/0/wBdSW+4wEPejysgjdYvndIRHkufqTzx2sfmltHJ+FbqSd33KREUPRmFbyuRrVrq/o97Z/uEDQ=
+	t=1742466414; cv=none; b=OyXLbVgttAHRI952fjUsdwUapRfe7VDlQgt/TGkqZ9ewZmGEeZ3xgbpfX4FhfIR+CDoIc60qtWlY2CqvOii9FJOgjDEE5ipz9+boS7pjSiLH1S6cN3n3OBrZ3WQ1q1WrVrlt1EreVZ8tx1IHQHljLt0LCwBOL7U+9UbO30weutI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742462577; c=relaxed/simple;
-	bh=v1HzjTFaFAns1qXAyZ3BA8WOSz6IElFgZDI4xKBb5Qw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F8fXO2i+hPq16qSmfW0pIoc6EsPzKuJ7PXvJ+a8MjjV9WnYHJTzX4TDR80zc0geWC6fmMgiwS9s0ztYcfsKHD7tDnQ30kpx9x0DJEO8I4LNOdCXPih4R/eVcu6BCW/wRAfyHbHO0nVf6s4pSSv/qk2TjTTkR61jRN5SapjGxEOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J8X46BQa; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1742466414; c=relaxed/simple;
+	bh=2INiMlEgtKjR+OIVK8ORlyTWDnWHNjO8BiiHuQYIXlU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=HNTkT4qNAB4WfO5S+XDnAsH6xQUSlbzdQDM3ilW6WBmC+Cdb3NDbGBLsxgJt3asbQx/ys30Y8AH5wJXnUushKmAMwuFQJq+oIFEmB0irbYqwWVOP2zlIEyV8KAJOoYFxBscvfMRl3/lT9ZSxYOaUFKMXrDZMy66BaUNqNDKio/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JhsvhQfJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J8X46BQa"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43d04ea9d9aso2228485e9.3
-        for <linux-modules@vger.kernel.org>; Thu, 20 Mar 2025 02:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742462574; x=1743067374; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=myg67gk9wPhxLbBgzBdtkm9d24LaKIZKxjxSO7e8nL8=;
-        b=J8X46BQayLn6KljvOk0Sc8yPh/qBtxKMIdJLUr6jtEte8vmoBJ24WEW8oyooDzkObB
-         /edN/3FhrZ2zL6nQDw/o4PI/NNSUI3e68y2kERGg+fum8TTpDwPfS25gmm6W2vsxmqXI
-         pEmbI8rM0TnlTgAsZESjJngs6UomGdHtLoSJR3yi5cTaPKtdtLjvTnUplN2YIDAs3I0Q
-         Ub+tAeA6ru1NoCZLlxXn/+bkvR/Kcrw5mbcaHHK0ydgin/tT15gas9szddwnW+k3783K
-         d/5aRsF5CzdjCUw6Si/CMy4ZMH3cAM570WVriteHjCxlG5KAPU25xPN7xlxBZD+odhJg
-         bxAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742462574; x=1743067374;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=myg67gk9wPhxLbBgzBdtkm9d24LaKIZKxjxSO7e8nL8=;
-        b=PWPSiDmjKVj+81WbOydV7X7KAcDow0xPxVyOvI48TYZzZle7ir89RqZVbf+VfQcLto
-         Fpiqs2a1TCaBV/EIKW1KyraeqyIcRRLvdsPijkgxueAe7tqMFhCjbyRtJl51t1U+stQc
-         zJi48B5JRfBw3IefTH19/1jCCVLpWaDgIw4nVaTTmoPlZMIaMRjLdRUNdW67woVoUt/i
-         mqX98luFMyUqb/TOgpzte3ITZlSbq2P4D51ILSaggUMy4Tfl2KGgCXIKAoCAIzKUArwI
-         Uz58JDBP652dMqXCIQVvh43BpcjXgWh6OKiRciyDsnSpck0j7lIpbpGa6oZ5P8xhT/hs
-         ImlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdpCLH08YAH1MFQKQRpWJO9dFLuemYV9i6Akquaqu4r388U/DrV1UShN+m/s5DczPGNXkGqHDB3U8pvW8u@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCXBpPKrdh1Ig6nK+dwu3wfIAiT269PFbhIyTK4l0mUBbbFfL4
-	FkL1pbXNAX8vAqyjw47+eaJRVV1FR0KYdOmpGUjdiIPzM9pqWcvcbeVjx9NjGfU=
-X-Gm-Gg: ASbGncsleUJdrM/MQmJNKGqkJ3zsOcHGsSijOTpvt8AfPgmjuBCEo7KXjq7NYqvIqbC
-	XkIHOEjHxqMtqv6581YVtJADIr1HzbTtFeKdppMLff1sN3Ps+evtqtvRRQNx+BbzeRMs+eHIN+k
-	U4jLJFB/0dugvDWktnOZr/WrAnRs7oB6ida0T8ZOOYHq8HSS9YRjULJQcBR/2mL87/r9URijJPX
-	vF9ybl4UnsvOHoySKVXFoho1DOxNpVOLn8d/eVP749C42Ct7kuo8pP3HH4AODBIawkl2FPFIQGJ
-	/Ku7yfMwx/3Of9Orewt6jPqwVyo86SRHCHk/1cc0eBuLMQd5
-X-Google-Smtp-Source: AGHT+IEMUCCcXqS90NjR0ffhPXJJO2ODfxWqE3skotURWyXG5oZbBCdgiIvZjGWPov7RW/+OZqmhDQ==
-X-Received: by 2002:a5d:64c3:0:b0:391:3028:c779 with SMTP id ffacd0b85a97d-39973b03ebemr4709575f8f.45.1742462573769;
-        Thu, 20 Mar 2025 02:22:53 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-395cb40cdafsm23399381f8f.62.2025.03.20.02.22.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Mar 2025 02:22:53 -0700 (PDT)
-Message-ID: <ea258e7f-85fe-4dc8-8150-90c78b6e3962@suse.com>
-Date: Thu, 20 Mar 2025 10:22:52 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JhsvhQfJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF74FC4CEDD;
+	Thu, 20 Mar 2025 10:26:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742466413;
+	bh=2INiMlEgtKjR+OIVK8ORlyTWDnWHNjO8BiiHuQYIXlU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=JhsvhQfJVfPOA1EoFHN3t8VuXSJ4eRZfNzUeSFZMtkHbROzRIn4dpCSZDfSyU4dkz
+	 JlDpEtYKrBKpc7x6kGh9zeBT1h6YVYY+HzHpFlNO2Ab2c/qdpk8sZff1tj5YPtJ81g
+	 zlPEYDbKQmOLfGmk3U2trUuByJVu1We0UlN+5K03XOeCXAGevGaEgOvyhz4CPna4MJ
+	 vDSaItWbqD9ve/fmZE41TmKT115ASYSsPK9Ow2cVySIWvJVIhvG/gfHlvPrdVvByyi
+	 sF8doRPHMmY5c7IuFme3ktgNdTZPm81Z+1sDUYETQPY9DkRzC6MpuQdbNhUBh84Jbr
+	 w2kWKuqs0g2DA==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Daniel Gomez" <da.gomez@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Alex Gaynor" <alex.gaynor@gmail.com>,  "Boqun Feng"
+ <boqun.feng@gmail.com>,  "Gary Guo" <gary@garyguo.net>,  =?utf-8?Q?Bj?=
+ =?utf-8?Q?=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Benno Lossin" <benno.lossin@proton.me>,
+  "Alice Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada"
+ <masahiroy@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,
+  "Nicolas Schier" <nicolas@fjasle.eu>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Trevor Gross" <tmgross@umich.edu>,  "Adam
+ Bratschi-Kaye" <ark.email@gmail.com>,  <rust-for-linux@vger.kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <linux-kbuild@vger.kernel.org>,  "Sami
+ Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v8 0/7] rust: extend `module!` macro with integer
+ parameter support
+In-Reply-To: <nh23cbbpf5yk6mafn7gz7urlau22egilideytnnh7paagusaih@t7y7q7jha4fz>
+	(Daniel Gomez's message of "Thu, 20 Mar 2025 09:41:58 +0100")
+References: <20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org>
+	<Q_mSCTsSMDQ6DylWZTrkH1Wru3fQ1LFIiuk1pHElSsTc12fDdaCrgzWvEEQRE2_WBxOBzPuCE-qBJjw7LhHbjQ==@protonmail.internalid>
+	<nh23cbbpf5yk6mafn7gz7urlau22egilideytnnh7paagusaih@t7y7q7jha4fz>
+User-Agent: mu4e 1.12.7; emacs 29.4
+Date: Thu, 20 Mar 2025 11:26:40 +0100
+Message-ID: <87frj8dmlb.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] audit,module: restore audit logging in load failure
- case
-To: Richard Guy Briggs <rgb@redhat.com>
-Cc: Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
- LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
- Linux Kernel Audit Mailing List <audit@vger.kernel.org>,
- Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>,
- Steve Grubb <sgrubb@redhat.com>
-References: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <b96c64d522cf1c46dce1b8987e83f2f41ff2e5ee.1742231027.git.rgb@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 3/17/25 20:57, Richard Guy Briggs wrote:
-> The move of the module sanity check to earlier skipped the audit logging
-> call in the case of failure and to a place where the previously used
-> context is unavailable.
-> 
-> Add an audit logging call for the module loading failure case and get
-> the module name when possible.
-> 
-> Link: https://issues.redhat.com/browse/RHEL-52839
-> Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
-> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+"Daniel Gomez" <da.gomez@kernel.org> writes:
 
-The change looks reasonable to me from the modules perspective.
+> Hi,
+> On Thu, Feb 27, 2025 at 03:38:06PM +0100, Andreas Hindborg wrote:
+>> Extend the `module!` macro with support module parameters. Also add some string
+>> to integer parsing functions and updates `BStr` with a method to strip a string
+>> prefix.
+>>
+>> Based on code by Adam Bratschi-Kaye lifted from the original `rust` branch [1].
+>>
+>> Link: https://github.com/Rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f [1]
+>> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>
+> I've tested this series including the following patches from Andreas' tree [1]
+> as dependency for module testing parameters with the Rust Null Block driver:
+>
+> [1] https://web.git.kernel.org/pub/scm/linux/kernel/git/a.hindborg/linux.git/log/?h=rnull-v6.14-rc1
+>
+> 51d304103b7f rust: refactor: rename `RawWriter` to `BufferWriter`
+> 544811b24574 LIST: [PATCH v2 1/3] rust: sync: change `<Arc<T> as ForeignOwnable>::PointedTo` to `T`
+> 3f097abd58de LIST: [PATCH v15 1/3] rust: types: add `ForeignOwnable::PointedTo`
+> 0525eda0ff8d LIST: [PATCH v7 3/14] rust: sync: add `Arc::as_ptr`
+> ce7343b48e63 LIST: [PATCH v2 2/3] rust: configfs: introduce rust support for configfs
+> 6efae1a9a226 rust: rnull: add module parameter support
+> b6545e0eaf94 rust: rnull: enable configuration via `configfs`
+> 6a3bc0dc31d0 rust: rnull: move driver to separate directory
+>
+> * modinfo
+> sudo modinfo rnull_mod
+> filename:       /lib/modules/6.14.0-rc6-00015-g51d304103b7f/kernel/drivers/block/rnull/rnull_mod.ko
+> author:         Andreas Hindborg
+> description:    Rust implementation of the C null block driver
+> license:        GPL v2
+> name:           rnull_mod
+> intree:         Y
+> depends:
+> vermagic:       6.14.0-rc6-00015-g51d304103b7f mod_unload modversions
+> parm:           nr_devices:Number of devices to register (u64)
+> parm:           bs:Block size (in bytes) (u32)
+> parm:           rotational:Set the rotational feature for the device (0 for false, 1 for true). Default: 0 (u8)
+> parm:           gb:Device capacity in MiB (u64)
+>
+> * Testing nr_devices parameter:
+> sudo modprobe rnull_mod nr_devices=100
+>
+> sudo ls /dev/rnullb* | wc -l
+> 100
+>
+> * Testing block size and capacity parameters:
+> sudo rmmod rnull_mod
+> sudo modprobe rnull_mod nr_devices=1 bs=512 gb=1024
+>
+> sudo fdisk -l /dev/rnullb0
+> Disk /dev/rnullb0: 1 GiB, 1073741824 bytes, 2097152 sectors
+> Units: sectors of 1 * 512 = 512 bytes
+> Sector size (logical/physical): 512 bytes / 512 bytes
+> I/O size (minimum/optimal): 512 bytes / 512 bytes
+>
+> * Testing block size with fio and blkalgn [1] (tool for validating driver block
+> size):
+>
+> [1] blkalgn is an eBPF-based tool for tracing block operations that also reports
+> block granularity and alignment histograms:
+> https://github.com/dkruces/bcc/tree/blkalgn
+>
+> Install:
+> https://github.com/dkruces/bcc/releases/latest/download/blkalgn-$(uname -m) \
+> --output /usr/sbin/blkalgn \
+> && sudo chmod +x /usr/sbin/blkalgn
+>
+> sudo modprobe rnull_mod nr_devices=1 bs=1024 gb=1024
+> sudo curl --location \
+>
+> sudo blkalgn --disk=rnullb0 --ops=Write
+> sudo fio --name=test --direct=1 --rw=write --bs=1024 --size=512k \
+> --filename=/dev/rnullb0 --loop=1000
+>
+> I/O Granularity Histogram for Device rnullb0 (lbads: 10 - 1024 bytes)
+> Total I/Os: 10748
+>      Bytes         : count    distribution
+>         1024       : 10748    |****************************************|
+>
+> I/O Alignment Histogram for Device rnullb0
+>      Bytes               : count    distribution
+>          0 -> 1          : 0        |                                        |
+>          2 -> 3          : 0        |                                        |
+>          4 -> 7          : 0        |                                        |
+>          8 -> 15         : 0        |                                        |
+>         16 -> 31         : 0        |                                        |
+>         32 -> 63         : 0        |                                        |
+>         64 -> 127        : 0        |                                        |
+>        128 -> 255        : 0        |                                        |
+>        256 -> 511        : 0        |                                        |
+>        512 -> 1023       : 0        |                                        |
+>       1024 -> 2047       : 10748    |****************************************|
+>
+> Tested-by: Daniel Gomez <da.gomez@samsung.com>
+>
+>
+> Andreas, Petr, Miguel,
+>
+> Based on the discussion in v7, it seems that all these patches will go through
+> the Rust tree. Is that correct? What would be missing from the module's side?
+>
+> I agree with Petr in that thread that if the changes are mostly limited to
+> rust-module files, they can go through the module's tree. However, that is not
+> the case yet.
 
-Nit: Viewing the linked address requires a login, so I'm not sure it's
-appropriate for the commit message.
+As far as I understand, Miguel would take patch 1-5 for v6.15 and
+modules would take patch 6-7 for v6.16. At least that is my
+understanding from [1], @Petr and @Miguel please correct me if I am
+wrong.
 
-[...]
 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 1fb9ad289a6f..efa62ace1b23 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3346,7 +3346,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  
->  	module_allocated = true;
->  
-> -	audit_log_kern_module(mod->name);
-> +	audit_log_kern_module(info->name);
->  
->  	/* Reserve our place in the list. */
->  	err = add_unformed_module(mod);
-> @@ -3506,8 +3506,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	 * failures once the proper module was allocated and
->  	 * before that.
->  	 */
-> -	if (!module_allocated)
-> +	if (!module_allocated) {
-> +		audit_log_kern_module(info->name ? info->name : "(unavailable)");
->  		mod_stat_bump_becoming(info, flags);
-> +	}
->  	free_copy(info, flags);
->  	return err;
->  }
+Best regards,
+Andreas Hindborg
 
-Nit:
-		audit_log_kern_module(info->name ? info->name : "(unavailable)");
-->
-		audit_log_kern_module(info->name ?: "(unavailable)");
+[1] https://lore.kernel.org/all/CANiq72mW94Y-bsJFMHqF8fbXhvAizEn7-NnxawTW+5brbxJHBg@mail.gmail.com
 
--- 
-Thanks,
-Petr
+
