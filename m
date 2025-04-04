@@ -1,41 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0341EDA34;
-	Fri,  4 Apr 2025 14:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAA11F417E;
+	Fri,  4 Apr 2025 14:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743775611; cv=none; b=tL2i7kYHVbwmvRahvLPQfr87KeVuu6xnHgiSzHsfEIb5gyZmf2EJGXugxtBLJ95W2olYYn/DHQ/ZCNvS/7pn8w9N3shm15+rs3lQcp6/sRzsnHUfWO+fojFEmdpswJEZ7mkKYwMwyJHUcFwVgTRtb9Z9HHKVOVcozBQZXdC6Xhc=
+	t=1743777467; cv=none; b=Q/2knKbskCUm2k0HeAeapN3OzRaO9CChFJvRRI6eAel04tNggZsblMOO+wWG0M381CsCj3BKt8Xyb3nFrZ37KtuaqtbihPL/hXX+bFnhjHVlJqJJGe1ppkFhkuUeVJSIbNpvAWcjlQdSVRHkM4O4kzChPw1+t9dygMpbgDT/bYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743775611; c=relaxed/simple;
-	bh=dlTMdTr2De1XmJ58WqL6zRxnciJjXRMN5Yowymzujsg=;
+	s=arc-20240116; t=1743777467; c=relaxed/simple;
+	bh=YqDMor6o9KI305eh6RadR+0TcbnGSJ3Ae01+cgP/Mds=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tS+Jgx9dPuNbpQZJsN5bhuu/FkFsInsZZzUGPtGVUrEfpnukSOesEAiX6GBUqlRBpbYCE9C8Q/H6M1ghvm4k+aONiuuw23BZNEEPzE+jkaC68Z4zH+OYxHeaIv26gxs6Y9GAlSMvcW4mn6zDNgdqwadI+XLTmEUthBOPfYY1xRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pL/f2y9N; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=KdhVAdvSLS+lyOoDFKm1ggs1FPzkEjHa6k/OZxNZNKmHAVFcKpI0xkg9bWtTw0H/O3wtQD50mPRsk8YPA7OyK03SlWkOWagUaGHdwpsqQH9QUfO5OSwd+oPppbOBXWdyrbKU0tHPjLChS+xmTaQ1at3DzBzyrf3qiBQ1Lf9KeVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiyrM54B; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pL/f2y9N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D38C4CEEB;
-	Fri,  4 Apr 2025 14:06:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743775610;
-	bh=dlTMdTr2De1XmJ58WqL6zRxnciJjXRMN5Yowymzujsg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pL/f2y9NS0JveX+yUNgzMZsq/Dw3sjV6c0L0YMEePQpJqijExu0Mcy7pw4gyIZ88Z
-	 I+/7kQDj2cmLg7Xba3geV8KcFpJUJwAa+bwdLqYtoIwthH0AYySCjLQlODb6omCbNz
-	 3XVjOqKIjopfxwIu52QcBjwx7uoyq87IKkLwDtYu8lykxqkKYOVk2dkv85oq7XNcot
-	 g8pRnUWLbkNl7pD0FNResy0bBvd1JuOeULOEzltobE/43rnBuYwkOJfDI6C6KpjxnT
-	 NkRqqBCPGzyAuQmCyxH7T/uBhwEJNA9etKiTT9aJ4/XVne9Lne3mIhPbzazkuTAjuw
-	 rtCfQqHXnGuxg==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54af20849adso2020050e87.1;
-        Fri, 04 Apr 2025 07:06:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVybzw1F4OOCghWhGu5Lg3AA1YFrhhgxvVtZMLTg6E76lL7JrgPi2nhYIuWL0OAs6ZBQuXsB+x0+c0ZYOc=@vger.kernel.org, AJvYcCXl/dxz/VN8aCh5OxizlXpC+Rz2po2uue+EYC2o9sEtz5gZ3xCFhM66GT+imRejMXi3kevACX5QhY9CVvR9@vger.kernel.org
-X-Gm-Message-State: AOJu0YyO7OHmbEmXKP5o770MtJoSIp6rHkw/lEfz+nfqEtkPnNceXBp4
-	EiCGybq9Rhyie4ibhqn/MXgY6kF5lp15/5zUQgPisvsZ0wmnJqu73uWapAAoZrHkJTUw4T4B2RE
-	WcHOK6WiQntvyeggYpRvlQP2gMbE=
-X-Google-Smtp-Source: AGHT+IGzHPV4Ijvg/jSgwoi9Iou6eeQJHKq9kJXztvRO6Qu67pds9mGYv2PPcXBm554NzEkkqjpbU0NmHVi5sbNEGNA=
-X-Received: by 2002:a05:6512:3697:b0:549:91bd:2d86 with SMTP id
- 2adb3069b0e04-54c1ca8c075mr2266422e87.26.1743775609214; Fri, 04 Apr 2025
- 07:06:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiyrM54B"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-54c0fa6d455so2574970e87.1;
+        Fri, 04 Apr 2025 07:37:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743777463; x=1744382263; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ansAIEqHOdqhr/BlqzHJj/9+MuifCE4y7FGwh31nks=;
+        b=FiyrM54B4CgsjYVzKqWCFPEohgLYnmNE7dGCVLY1MA8ykQcAOLq2NjeRAyIo1E0nt5
+         DCYpIzIC6o2XZ0IqEilHOqCBf7wOu8+325Ai4yq6pwGtM3Lf6Dy9/0Vg7uFiaVzRKyio
+         Cs7F6jtQlIifcskn2li3q+Amx4h1/dcq90uNcVkQGsh8YYlHKdmcChGh+xeau+p9wABe
+         BoScC/44l3sr9V1jODv2JUuwc+dpAuNgpNLo09yaFkBlXPrUzsvhIiMOiocjVt87W+Ox
+         E9zHSDiLAuTks/BMvfJWUdLo//XXnurGD7LCadg9Qi3Q+kKhdVKpbU+w/oi6oAwRTw6z
+         0Pkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743777463; x=1744382263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9ansAIEqHOdqhr/BlqzHJj/9+MuifCE4y7FGwh31nks=;
+        b=lD6NVk40W8XtflE67J2f6Bh/CEflSm67PwUGEta2m8OVIrUGov2KmXEBGSxAdfPA/f
+         fwWQ1xt97Ed9MwwUZtoF0RWA938hOSvEPuZ/f+/QF6PGF2b7C3LkA04GV4R2yL+1/drj
+         YQHqN8mw0Zg3LCIjjW2KaQHl+397U27rx0tl5x+6CqM+D62/faWNUSx8cgGU//QUKet2
+         T4h0H+Moji+2VzQc6IoAJNvLlQwdPWlrigTXiXy6Ew+syp+DkBwlDkZI+xD79DLE2JTK
+         bfPA53YwjOzlbYBtXvQRH0JetHkf1Qs1G/Ewhgh3UueNlcXBMx87vVSosbADAIPWPmyc
+         apJA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgidjl4FOn9SDmP8zHidp8nN/K8Vq4mbwmFZLPbNpbFuo18y1DgrXHF+dS+9igDXp7D29ukVFeQx4LJcw0@vger.kernel.org, AJvYcCX7E3ZsUtEuD+Yi7AOzAHR72tBi462BqCzWlP2oPypwULw4op4WAlS4Ax1pgQxQV1bFgMc9pp6L13MwDdE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgVUrzH71qehumt6xA+6VNQ78jDxr6z1IU+qeceJJv0QEfpeaU
+	4/2grXaJlT8e7Bv3FTYC/4lJiB+bZ6FYbGrJjC89kzs5d9cNork/Pm4wHW9FW+4BNZtB3exUJ+S
+	J1UK3/Ad27Z0tWaQzFCO0N88A/X0=
+X-Gm-Gg: ASbGncvDhJK8EqaQl7XkfOD33MiWr/xwEDA+gcDy/poDDbtm/YTgbR0InMIB8lQrkd7
+	Geo8rbVb9WE776jMlXtpCzP819+dk0cre3HNwG7VYJaU3CAQ3HfsoSSU8xuEjeEfEbPrf2jqtDX
+	UHAPxG0uRyZulNxEwG+bTEPyR1IQ==
+X-Google-Smtp-Source: AGHT+IHUwAyMXwZ7nTwa5Pdk8hBK90Mf1yR2C9DJh+uhCtwyRT12lKmJa+SPe4ZU+eO0c7owpRmkHptlUnogvP5xuLc=
+X-Received: by 2002:a05:651c:908:b0:30d:e104:cb72 with SMTP id
+ 38308e7fff4ca-30f0a192140mr14612551fa.39.1743777463158; Fri, 04 Apr 2025
+ 07:37:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -43,63 +60,58 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250404102535.705090-1-ubizjak@gmail.com> <CAK7LNATO1RfACvWhHJuLi-FYWMnSn6+Tp67-EZtVWNk+RCSTVQ@mail.gmail.com>
- <CAFULd4bx9BGKo_4kn14rsVr44otpdjpjn_o6=zMp8iu98f9Upg@mail.gmail.com>
-In-Reply-To: <CAFULd4bx9BGKo_4kn14rsVr44otpdjpjn_o6=zMp8iu98f9Upg@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 4 Apr 2025 23:06:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATnactfA2U0CB2VcoE1eDc+bj=Jjye-Khsc3xG-iZ2XVQ@mail.gmail.com>
-X-Gm-Features: ATxdqUEgEcjlrExqyVXX21WPPkwTmuO9oioeIgrH53vKuTzP8mVQPSUDIMgFn-Y
-Message-ID: <CAK7LNATnactfA2U0CB2VcoE1eDc+bj=Jjye-Khsc3xG-iZ2XVQ@mail.gmail.com>
+ <CAFULd4bx9BGKo_4kn14rsVr44otpdjpjn_o6=zMp8iu98f9Upg@mail.gmail.com> <CAK7LNATnactfA2U0CB2VcoE1eDc+bj=Jjye-Khsc3xG-iZ2XVQ@mail.gmail.com>
+In-Reply-To: <CAK7LNATnactfA2U0CB2VcoE1eDc+bj=Jjye-Khsc3xG-iZ2XVQ@mail.gmail.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Fri, 4 Apr 2025 16:37:31 +0200
+X-Gm-Features: ATxdqUHaaND3bdLnb6MftUV3OsQvLaF7fsBq2r-5LL9FyP6o3GJZsEjHZO93ysg
+Message-ID: <CAFULd4b25r5wf31DJputSOZhhMTrejQ_3-2P5rpeOL8H=4_mcA@mail.gmail.com>
 Subject: Re: [PATCH] compiler.h: Avoid the usage of __typeof_unqual__() when
  __GENKSYMS__ is defined
-To: Uros Bizjak <ubizjak@gmail.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>, 
 	Sami Tolvanen <samitolvanen@google.com>, Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 4, 2025 at 10:11=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wro=
-te:
->
-> On Fri, Apr 4, 2025 at 2:56=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
-> >
-> > On Fri, Apr 4, 2025 at 7:25=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> =
-wrote:
+On Fri, Apr 4, 2025 at 4:06=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+
+> > > > Current version of genksyms doesn't know anything about __typeof_un=
+qual__()
+> > > > operator.  Avoid the usage of __typeof_unqual__() with genksyms to =
+prevent
+> > > > errors when symbols are versioned.
+> > > >
+> > > > There were no problems with gendwarfksyms.
+> > > >
+> > > > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> > > > Fixes: ac053946f5c40 ("compiler.h: introduce TYPEOF_UNQUAL() macro"=
+)
+> > > > Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > > > Closes: https://lore.kernel.org/lkml/81a25a60-de78-43fb-b56a-131151=
+e1c035@molgen.mpg.de/
+> > > > Cc: Sami Tolvanen <samitolvanen@google.com>
+> > > > Cc: Andrew Morton <akpm@linux-foundation.org>
+> > > > ---
 > > >
-> > > Current version of genksyms doesn't know anything about __typeof_unqu=
-al__()
-> > > operator.  Avoid the usage of __typeof_unqual__() with genksyms to pr=
-event
-> > > errors when symbols are versioned.
 > > >
-> > > There were no problems with gendwarfksyms.
-> > >
-> > > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> > > Fixes: ac053946f5c40 ("compiler.h: introduce TYPEOF_UNQUAL() macro")
-> > > Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > > Closes: https://lore.kernel.org/lkml/81a25a60-de78-43fb-b56a-131151e1=
-c035@molgen.mpg.de/
-> > > Cc: Sami Tolvanen <samitolvanen@google.com>
-> > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > ---
+> > > Why don't you add it to the genksyms keyword table?
 > >
+> > It doesn't work, even if I patch it with an even more elaborate patch
+> > (attached).
 > >
-> > Why don't you add it to the genksyms keyword table?
+> > I guess some more surgery will be needed, but for now a fallback works
+> > as expected.
+> >
+> > Uros.
 >
-> It doesn't work, even if I patch it with an even more elaborate patch
-> (attached).
->
-> I guess some more surgery will be needed, but for now a fallback works
-> as expected.
->
-> Uros.
+> The attached patch looks good to me.
 
-The attached patch looks good to me.
+FAOD - do you refer to the submitted one for compiler.h or to the one
+for scripts/genksyms/keywords.c? (The latter doesn't fix the warning,
+though).
 
-
-
---=20
-Best Regards
-Masahiro Yamada
+Thanks,
+Uros.
