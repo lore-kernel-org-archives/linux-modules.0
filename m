@@ -1,120 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F00713D531;
-	Fri,  4 Apr 2025 19:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08C142A83;
+	Sun,  6 Apr 2025 13:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743794055; cv=none; b=gXD78OLe5/f1yfwgwfvS66rMVzGHznCwtzHhBA/37x45Zakp5dakZPXaLQRZ89uywEyB7ZHoykNMGh+ngcLcuBDWnzzMGtodw2UaUL4IycKZTCu9EktWp82mNe4G7alNpNtPf1TM0WGtpAxz36rv7M0kTGlCWqDalfct/EgOHr4=
+	t=1743945711; cv=none; b=b8pJbKTnnFIjrYbR1vAURSIjBOp227fKmzRToqDYofdqf7R4EipgAVpX20XQ7rkEMvrA4UPBqCokBnIOjwvHz85JZD+sKqeceJEdSuEk5EHj6z8V+BzaRaEsTZQyTI1E8ri/qFTnRO7TZLXKU1CzJ/6bYXTci6VyCcjIqqjTPVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743794055; c=relaxed/simple;
-	bh=GK+D2xH4mkrxRKPj7PvUUgbKX8MxtbEYJKBgNsU0E5U=;
+	s=arc-20240116; t=1743945711; c=relaxed/simple;
+	bh=zTNfeivIEWeB/M6GhlSV/pUKytPsSpCbfrPiWp9Y2HI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A8g3onYDWI1WMTczpboHGVL5ncXbhdgZBtlwoy66FIsMYqD7eMW74uJ325pxQJ7UJM991FvnXR6I2IKjLRzZoBAD5Enmxf93rKqbLyJL46eZ8oRIHEzI3kwu83JijrSHcXTuhQXf0hDPs5ChUVkGIP0ILaPyvM5sk9wlRHAbeKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUmaRHyI; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=GeVxO4I7E9soFc9LE6QzW9FhKZRnAm9/j75OPDu5zmZjalqK0JLAYNSRd0aFZqLfh2ij25mlkyDU1mrVUyuq1lLXiF4gcvG3lb8ich6koEVb6Vyr0dAhrJVLHHN9XOwewpYzjDoBuENo1gQSFX6aSLF96KR2+aB46cfvq4LY/g8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFpZJz6U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUmaRHyI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5799C4CEE4;
-	Fri,  4 Apr 2025 19:14:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFpZJz6U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23181C4CEE3;
+	Sun,  6 Apr 2025 13:21:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743794054;
-	bh=GK+D2xH4mkrxRKPj7PvUUgbKX8MxtbEYJKBgNsU0E5U=;
+	s=k20201202; t=1743945711;
+	bh=zTNfeivIEWeB/M6GhlSV/pUKytPsSpCbfrPiWp9Y2HI=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qUmaRHyItvJ8EJ+roxxHS5ngiJEPJy7E70pySwNt0yNmDmyh+MZS8x4cS5MCysGoX
-	 LZcaEB4/h43lwEI3J9qO3tVnjgaoEJIlnb6DWbaoNEABqg7zlNtpmi4rmN0ZZahBsE
-	 pNgCACpxrcTxx0s8OFKdKyBXxrDmeyd8kHAJyDWv0yPw5Q/pNR5pHc5FMlIv3Se0BV
-	 0zAA3xqQQhKYqCGqqz2zGKmoqdVnKd3PFlxyJLuwhisf0+cZbtlWiB/oJPFuwNtB4E
-	 FYvxOydZoorTtEoTZ5RGzp5fL9ZPLjdA680incHxM1QvXac4ohr43aK+VbRje6ttY8
-	 RzqInD3laftmg==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54c090fc7adso2723753e87.2;
-        Fri, 04 Apr 2025 12:14:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+epOPttJm3DWs7Z6Cz6+XwEN8xodcVuSr+XwSQdPmyZikCmMCygwkdFmk+fSFIQDrg93Rac8xUr5SBxc=@vger.kernel.org, AJvYcCV3OCUz/AxwS4w+MqBtnlbUcRue8BBTzbrcxKCf+PzD2hTntUHcTetXVuUtSGXcYOFK99Dq0AQLY5bWwp3J@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZh09qtzoR1nSCOfMqIZMSgQ4dXVIP0IzwXxKk0ZAIv4pfu9jE
-	6GpEjPUaIy1Al0z1ML2/xrS9SIo9qyG5zpWpnxfoLA8f8Z4zAF3QOdOQ8c/Z22lE+TBG9RHtHR1
-	r2F9/jBPHiqqyIbg9xDGIPz73Pjg=
-X-Google-Smtp-Source: AGHT+IHo8Zqk50+G/P2S5Zi88hZgN1tRYEpbqnYOoFkbSvSmjZn7bFkhRjH/37/ERpHR7IE42aQ9+wiL+E1VemAHEvY=
-X-Received: by 2002:a05:6512:1092:b0:545:1e2d:6b73 with SMTP id
- 2adb3069b0e04-54c232de6e0mr1113271e87.13.1743794053586; Fri, 04 Apr 2025
- 12:14:13 -0700 (PDT)
+	b=aFpZJz6UGxLU3myo3bIa+q0RouY9tpiVkBd8T6FiFvWjRnWcfSYWgUJtGLlsJ5OT+
+	 B3iBm8vgs16M86Qg9yytycqdz9AM/a4MPS+8pUPSahGhfWywBg82XpQz3PeU7FNCYy
+	 0IeWJRFymRWvNqTzLiIborBOadlQQtDuosiHd/juJry6ZCnzykSxNpW5qlLJazlCbc
+	 Jcj0JdrLvsrVHVEdoXqXwlFASrrJZuOfZdHM3c26M1RBrRLvUYZCnDwf6mBIuiUamt
+	 WpVZ+3NEuQWErop6pVwuF+R7hkDS3T14I72uqMf56NRda6n8mDHU61xasCwfHlH27O
+	 4VW9eptDeYTVA==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-54991d85f99so4607984e87.1;
+        Sun, 06 Apr 2025 06:21:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVxwnKKbdRASaVGSzE37oZd0tCi5e97TVtl6RFpK3RfiHLDVn8p2LO1AaRXXtHt8YVthM4US6BAtnmJJ2Q=@vger.kernel.org, AJvYcCWIIyqzyT+9B4nqvIuWOgynkTsakCu14lMlmRphmN2T8SStFHGjCW7X5edfEiux16bFBFk4E8zcZ66gzGfKtg==@vger.kernel.org, AJvYcCXW8UO0Rs7YV85KuGigCvddRH5FZMSzBEgJxDin5RnUUCM5sJcEUTjcfBfmgGDXx+Y2rbkyheZj/Pqpo1bJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM/nLZbZxxNdtloQyjE+MmFRpl8HV/z7RbV8uz07ZfA8oQJ/Jl
+	htYMingOz2lBtVG8ais2Xu8bhzOe53NnMuBqRqQYGSEsEb6Azaf+BISl4BFBGH3WWBLi30tviWO
+	O9sgg5C6QIk6aecizAY9yN7v3GNA=
+X-Google-Smtp-Source: AGHT+IFNDXzr9hs4vw9S61miB6pkLcxLyV2mIohX3MBPX4KqVSwl6e9m5RFhXoLvVbZizwWbO17Zc1DxUFi/Q5Tqqr8=
+X-Received: by 2002:a05:6512:340d:b0:549:9643:68d0 with SMTP id
+ 2adb3069b0e04-54c1ca86841mr4357622e87.17.1743945709846; Sun, 06 Apr 2025
+ 06:21:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250404102535.705090-1-ubizjak@gmail.com> <CAK7LNATO1RfACvWhHJuLi-FYWMnSn6+Tp67-EZtVWNk+RCSTVQ@mail.gmail.com>
- <CAFULd4bx9BGKo_4kn14rsVr44otpdjpjn_o6=zMp8iu98f9Upg@mail.gmail.com>
- <CAK7LNATnactfA2U0CB2VcoE1eDc+bj=Jjye-Khsc3xG-iZ2XVQ@mail.gmail.com> <CAFULd4b25r5wf31DJputSOZhhMTrejQ_3-2P5rpeOL8H=4_mcA@mail.gmail.com>
-In-Reply-To: <CAFULd4b25r5wf31DJputSOZhhMTrejQ_3-2P5rpeOL8H=4_mcA@mail.gmail.com>
+References: <20250320232757.2283956-2-samitolvanen@google.com>
+In-Reply-To: <20250320232757.2283956-2-samitolvanen@google.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 5 Apr 2025 04:13:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQVbwnnX5TJLmEShtmUtLCwr=rnZgwX9NoAke+PqzsqiA@mail.gmail.com>
-X-Gm-Features: ATxdqUFMOH72JyC-qPh1E-3hdWpTn9ObjU69eNYz1Gu2sxaIJ7P9ql1xkBZcGqQ
-Message-ID: <CAK7LNAQVbwnnX5TJLmEShtmUtLCwr=rnZgwX9NoAke+PqzsqiA@mail.gmail.com>
-Subject: Re: [PATCH] compiler.h: Avoid the usage of __typeof_unqual__() when
- __GENKSYMS__ is defined
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>, 
-	Sami Tolvanen <samitolvanen@google.com>, Andrew Morton <akpm@linux-foundation.org>
+Date: Sun, 6 Apr 2025 22:21:13 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ8t-O2Y-47MEQA2cPYKq2NB+FURbZ8zJKWgT0grG90rQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFiUVPy_g6yejilb8bFsi5t1TaoLTJnmDeq8YAMXTg6rlhuRGpWbTH7mNE
+Message-ID: <CAK7LNAQ8t-O2Y-47MEQA2cPYKq2NB+FURbZ8zJKWgT0grG90rQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Require pahole >v1.29 with GENDWARFKSYMS and BTF
+ on X86
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Paolo Pisati <paolo.pisati@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 4, 2025 at 11:37=E2=80=AFPM Uros Bizjak <ubizjak@gmail.com> wro=
-te:
+On Fri, Mar 21, 2025 at 8:28=E2=80=AFAM Sami Tolvanen <samitolvanen@google.=
+com> wrote:
 >
-> On Fri, Apr 4, 2025 at 4:06=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
+> With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr variables are added
+> to the kernel in EXPORT_SYMBOL() to ensure DWARF type information
+> is available for exported symbols in the TUs where they're actually
+> exported. These symbols are dropped when linking vmlinux, but
+> dangling references to them remain in DWARF.
 >
-> > > > > Current version of genksyms doesn't know anything about __typeof_=
-unqual__()
-> > > > > operator.  Avoid the usage of __typeof_unqual__() with genksyms t=
-o prevent
-> > > > > errors when symbols are versioned.
-> > > > >
-> > > > > There were no problems with gendwarfksyms.
-> > > > >
-> > > > > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> > > > > Fixes: ac053946f5c40 ("compiler.h: introduce TYPEOF_UNQUAL() macr=
-o")
-> > > > > Reported-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > > > > Closes: https://lore.kernel.org/lkml/81a25a60-de78-43fb-b56a-1311=
-51e1c035@molgen.mpg.de/
-> > > > > Cc: Sami Tolvanen <samitolvanen@google.com>
-> > > > > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > > > > ---
-> > > >
-> > > >
-> > > > Why don't you add it to the genksyms keyword table?
-> > >
-> > > It doesn't work, even if I patch it with an even more elaborate patch
-> > > (attached).
-> > >
-> > > I guess some more surgery will be needed, but for now a fallback work=
-s
-> > > as expected.
-> > >
-> > > Uros.
-> >
-> > The attached patch looks good to me.
+> With CONFIG_DEBUG_INFO_BTF enabled on X86, pahole versions
+> before commit 9810758003ce ("btf_encoder: Verify 0 address
+> DWARF variables are in ELF section") place these symbols in the
+> .data..percpu section, which results in an "Invalid offset" error in
+> btf_datasec_check_meta() during boot, as all the variables are at
+> zero offset and have non-zero size. If CONFIG_DEBUG_INFO_BTF_MODULES
+> is enabled, this also results in a failure to load modules with:
 >
-> FAOD - do you refer to the submitted one for compiler.h or to the one
-> for scripts/genksyms/keywords.c? (The latter doesn't fix the warning,
-> though).
+>   failed to validate module [$module] BTF: -22
+>
+> The pahole commit that adds 0 address DWARF variable verification
+> was merged after v1.29 was released, so later versions of pahole
+> shouldn't have this issue. Require pahole >v1.29 when GENDWARFKSYMS
+> is enabled with DEBUG_INFO_BTF on X86.
+>
+> Reported-by: Paolo Pisati <paolo.pisati@canonical.com>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+
+The issue occurs with
+47dcb534e253 ("btf_encoder: Stop indexing symbols for VARs"),
+then fixed by  9810758003ce ("btf_encoder: Verify 0 address
+DWARF variables are in ELF section")
+
+
+Perhaps, does it make sense to do this?
+
+ depends on !X86 || !DEBUG_INFO_BTF || (PAHOLE_VERSION > 129 ||
+PAHOLE_VERSION < 128)
 
 
 
-You are still seeing the warnings because __typeof_unqual__
-is not only the issue.
+> ---
+>  kernel/module/Kconfig | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index d7762ef5949a..7c75832aa1af 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -192,6 +192,10 @@ config GENDWARFKSYMS
+>         depends on !DEBUG_INFO_REDUCED && !DEBUG_INFO_SPLIT
+>         # Requires ELF object files.
+>         depends on !LTO
+> +       # Requires pahole commit 9810758003ce ("btf_encoder: Verify 0 add=
+ress
+> +       # DWARF variables are in ELF section") on X86 to avoid conflicts =
+with
+> +       # __gendwarfksyms_ptr symbols.
+> +       depends on !X86 || !DEBUG_INFO_BTF || PAHOLE_VERSION > 129
+>         help
+>           Calculate symbol versions from DWARF debugging information usin=
+g
+>           gendwarfksyms. Requires DEBUG_INFO to be enabled.
+>
+> base-commit: 4701f33a10702d5fc577c32434eb62adde0a1ae1
+> --
+> 2.49.0.395.g12beb8f557-goog
+>
 
-Hint:
 
-$ make -s KCFLAGS=3D-D__GENKSYMS__  arch/x86/kernel/setup_percpu.i
-$ grep  'this_cpu_off;'  arch/x86/kernel/setup_percpu.i
-
-
-
-
---
+--=20
 Best Regards
 Masahiro Yamada
