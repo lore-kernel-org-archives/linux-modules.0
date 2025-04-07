@@ -1,112 +1,123 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0CA1CAA8D
-	for <linux-modules@vger.kernel.org>; Mon,  7 Apr 2025 14:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE5B224252
+	for <linux-modules@vger.kernel.org>; Mon,  7 Apr 2025 23:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744035280; cv=none; b=ACEfkLms+NLhvXazdubuh5583Y7G9Xp0f3VYTImrF0dkyT9W10RJZfeiopcOv9tNhOADoZHARyd7G1r4qn/erLPei+r3SSI3KIAF47pgSfTcdMTTdpS1jX+NrR3jgbjUNJts/OgzlvXVyjoMF7FgvN8bSoEUjjNz/AJD9esOj9s=
+	t=1744067201; cv=none; b=Vo7rXqFYMBYYTb0Mdf4qC2eo1XmBtbhXqtVCRj6m24YWRomyj+pPLOLqX7w+56uxHx8EbR3UTJ+4ZHG4yQSHyN4SUNlZFls1rI/A7G8A5kjxdVtoOGCLn72XqXtgnYJ2eobZDvBuqQN11aoH9SKjR9dcXnsciGZntYrJjPpyznk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744035280; c=relaxed/simple;
-	bh=GQArtUB6gCNUMkL83HMpvJlYZwJql0yUBupjif7ZGak=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kMo1/OxJslEb+h068LAN2o9ohJKFHwYh4cQAJz1NcbCiWShrN6W906AuFeEEJ8bqwCvlfnfxtk1asPBmTC2Wt8mJnjjzsvC5KDa1QYALlYCJAHTjd6EsRXGn+AoUJwZNBn5gQqhNWzfujE8A7LXm+QhDGY8hmlgvA4NUHjOhyK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=drcJQ9Hz; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1744067201; c=relaxed/simple;
+	bh=NnpMR//R+lE0HzsOk3Sqk4S2BtKa0vwBWH2sSUWKfnU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pSfSyPW5Gnz12RIZ+d7F+99n614zetLbDz7kugel2lfuct3W0mwEQyhxk8T18UAML/8r3fYjv/TGZC3TgVMdcKI4ugkkSfCiRwBPvtNUp/hhOeEfNx70cQ96XMUP0Uqgi8eQtGf865XEzvNkFJJUe+fDmbLG1GuhCEJ8CcXKeHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4WhjCcnt; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="drcJQ9Hz"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43cfb6e9031so41221505e9.0
-        for <linux-modules@vger.kernel.org>; Mon, 07 Apr 2025 07:14:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4WhjCcnt"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5dbfc122b82so4639a12.0
+        for <linux-modules@vger.kernel.org>; Mon, 07 Apr 2025 16:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744035276; x=1744640076; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UtxPoMiwi2zSOTSOjpjQSX1tRQki1Xeprd03zQbP9dI=;
-        b=drcJQ9Hz8S04Mt91GHUzknmKhPAEBsKh/0UHvRSs+GFCzKjB3I9pLQzngCJ5tG9xOz
-         bKiTCRSJPHC724wQnmqMWWUu5GOUgHJ2O6MFz84/CWNhg/k9wzOwwP4kS/YoWkCzRIfV
-         DEMdDTZgC7Dfk1gdtp1u1KuC5VyBujCivoyGWLWvDmuFO1wpyTQSsPbR0pZE4MdpPkzr
-         HYwuSj9oW33Pg1al9RPOCouiFRPfI8rferUhjpK0cumVXtXHQDwyYL6Thcma7+v7/5nf
-         w3FNLcFskN83tz92VDOzqUBC5saWJ14akE2LO1ZLt12/9fMe51ozsva/N3ZMufouLRKb
-         Eq7A==
+        d=google.com; s=20230601; t=1744067198; x=1744671998; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K6ZU8/5kXxHvtLmBpOqeu36t6PMkH8wk6iaMboo1oUk=;
+        b=4WhjCcntCPmbLzJzbDIej7JAeA5fafx5VCkpzzUGcGsNq0A3HgH6sPXczPvkJB222L
+         RQCSflsLL0rDyz5lj1AJ8ZUEuGLR7Yc+10hiBI/3C9VJVq9sQe2ZIYX8uVyqbPGTC+Mj
+         MaTK9RbSFi0krpzV4KXEfAdwrVHWDx+1BicZ0mXecivSilcVKArkQ4XqKxd19s5q3uDz
+         bXvRwdZeTclQJmRf8iWuuoga9TJNhjxr8BSUxL+jKEWvfu3Aty5JYFmJypsW311NN3s5
+         5IAVWnBIK1nN0EnDVq9fZl9TvIbU7jovQNKFBzG8+UeGTpEYdkEkZysj6Z6ns+i5Xu2g
+         5x2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744035276; x=1744640076;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtxPoMiwi2zSOTSOjpjQSX1tRQki1Xeprd03zQbP9dI=;
-        b=QxTG5B9OUmwbygPEH+J0hHm+oemr3GOeJl9c5MVHQtB/kBF4DeC9vWg/eU26ThMB13
-         +ZlwxkO+eow3Vvp3fxBvLzd+QqW6qj6gBGTtKLwa5MaFEFW/We0oTq4b/bCK0F1i24aH
-         QMFJdS781Sxawwdq8vk3icwSltBQq6XWMo3GoXg7BAO7IKIfc93HiIo+1uuBZS+lwbcv
-         vx2s7BxoymAmZLL+v3lorj+1Lc6vYRIaDft2yuaU0S7Yq4EZgOKw9+vtyFLioa+mUQWq
-         aRSpkZ4VXqpFVJ6uGPn77mbSlii7cEeuARZkNdndUgwdHcdZQ88YEy+5bTUYFH/6iWNH
-         z9Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCWfpkohD5QTYZoTMPHJ0+3Pl6rY/5gb1/yACBmngpEGwA+Ir4KOb9gDyzZqd12ipz70P29NUq3F2+ILbjQN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCc/jmy+BTGIZ2PiWFsM8ZlyuZMPo/o7cpxXZ50t00DYF2oAkt
-	gSNv7dWCyV3BKOmfUqnyN8M6dYPHmc0Bp6v0r9NonWKKa/v1kXCNDa9GFSJJQrQ=
-X-Gm-Gg: ASbGncuchUlJ/IdWKNtg3LxBzItNhPe2wLC7exwTRRoncg8oTxjJvsynGN/W/0OC3Gw
-	X3N6ulL6T8otJ/6tSk/ud67pCc8eiGbX2cu3F9ABgumjUXF6T1OMTcjI/IPG0BlIYsRUEUCMoNN
-	SqH8ViafHaZvTzrT+COZeNSYQMR4C4pilB89nxP2bRaxblLMImTIGae6F4//8oBXmvSvsuKlhNe
-	ZoGMSmtxDIc7ANhf2Q6mqGAwpx7dW3ThMgd1zg/eO1Wm0oyQ8/DOB5nc/bD9gDqBSXmcdX0NyHn
-	njQc+H0In7GHG1NyMLnF4PjPqW2lQ4XrY70AiURoxsNz3OY8
-X-Google-Smtp-Source: AGHT+IHDA9BzZ1Chj4rRxu5Fej1PRG/jtdH0WBKyf55PHfts7unW3vUtQLAglw7Ovgjzdlsv/V2h+A==
-X-Received: by 2002:a05:6000:2702:b0:39c:1257:cc28 with SMTP id ffacd0b85a97d-39cbc73213cmr7202015f8f.59.1744035276349;
-        Mon, 07 Apr 2025 07:14:36 -0700 (PDT)
-Received: from [10.100.51.161] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c301a7045sm12385085f8f.39.2025.04.07.07.14.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Apr 2025 07:14:36 -0700 (PDT)
-Message-ID: <fc5a960f-21d4-4110-88db-20c103491af6@suse.com>
-Date: Mon, 7 Apr 2025 16:14:34 +0200
+        d=1e100.net; s=20230601; t=1744067198; x=1744671998;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K6ZU8/5kXxHvtLmBpOqeu36t6PMkH8wk6iaMboo1oUk=;
+        b=Wg4cec26Uouf1hIAux7rCJwaUJSLZCrUwJFxGC+9OK0YJn5tCmJ8YMsji67mA40/h/
+         eV5HLBv5aZ77+dUGxG2L+osBwalFMp2oRie2MSF0mk9Ojwr6KuFCRDRRZ9ag6ahOETZ+
+         h1uvx+ME8q15DEcDIH9cAqPQwkwngDTm7EKzEWyZUVm5mbarVCCdlw4oAO0ui0bhr9DK
+         sFccJa65CjKMRC3E08GDQRfGBWnRGb5abyRaggH5YvDWwjsrrMgVv9AR111gQ8aIzXI8
+         CAYtBTTzqZc/e30Z1m7Ihbm3cKuBi5yHQ7ackm4Z0mjdLrrYDYdG6QtyRSlA3HEZcYXd
+         XPiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVc70yseJDmTtQJZHDIj5DsYGd4omDEmQIiyX5xx9A1rGflABf6+D3PO4Wen66058Zd57rNBw47vV8q2VfU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhDvJ4YUo9BcbH7hzNZTNhaUgc46+0b53hrYMgwsyicpVTlTXn
+	gPkZmZWXD6XZyFiv3srDgK50Zq2I1AFCLWKFjHKmu70Btywph2zT47y8WoeyBxsc9eTzNcGxNtG
+	TGIkWze5Se093BIZ+QkEb/tXHl+X9A+1AAUCk
+X-Gm-Gg: ASbGncvf8WwLauSPpyovbozy2tZJWTGHhIGJQkCAL6B+OTcxHwyFYkNIN8a8ZY5lP+p
+	PliEemTICjMPn+hcxPHTKC23BYj0fIUmXn1Mh0fMYx4IY5K4NgIfvJuj9Jll5SKvLIUI7hF0p7J
+	ivgItbaL5wFzN7nus8Z2aeJfruT2lNK1cEHRRTJnuocMYkQUmLIP/Wig==
+X-Google-Smtp-Source: AGHT+IGwqCibUtvZ7zXUKoLw/9l4mbZWNa3k4PRsHBInjoFnc3gA8HPUr5aBeYPf7FZ1MhHrVbTftQ1BznakccCAUeY=
+X-Received: by 2002:a05:6402:8d3:b0:5de:c832:89ad with SMTP id
+ 4fb4d7f45d1cf-5f26a698aa5mr22942a12.6.1744067197193; Mon, 07 Apr 2025
+ 16:06:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] module: Make .static_call_sites read-only after
- init
-To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jason Baron <jbaron@akamai.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Steven Rostedt <rostedt@goodmis.org>,
- Ard Biesheuvel <ardb@kernel.org>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250306131430.7016-1-petr.pavlu@suse.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250306131430.7016-1-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250320232757.2283956-2-samitolvanen@google.com> <CAK7LNAQ8t-O2Y-47MEQA2cPYKq2NB+FURbZ8zJKWgT0grG90rQ@mail.gmail.com>
+In-Reply-To: <CAK7LNAQ8t-O2Y-47MEQA2cPYKq2NB+FURbZ8zJKWgT0grG90rQ@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Mon, 7 Apr 2025 23:05:59 +0000
+X-Gm-Features: ATxdqUH8gwXDjnSDaoNdK4s6L04JtZ--H42vGnrNEIhr4DeJpws2XPsHyTPSZa4
+Message-ID: <CABCJKudb3GVL-nfUvd=1rhyH_ZWnxQCQkZBdGXQ16pA5fg3yng@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Require pahole >v1.29 with GENDWARFKSYMS and BTF
+ on X86
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Paolo Pisati <paolo.pisati@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 3/6/25 14:13, Petr Pavlu wrote:
-> Section .static_call_sites holds data structures that need to be sorted and
-> processed only at module load time. The section is never modified
-> afterwards. Make it therefore read-only after module initialization to
-> avoid any (non-)accidental modifications.
-> 
-> Changes since v1 [1]:
-> * Rebase the patches. The kernel now has commit 110b1e070f1d ("module:
->   Don't fail module loading when setting ro_after_init section RO failed")
->   which addresses a previous problem with handling ro_after_init sections.
-> 
-> [1] https://lore.kernel.org/linux-modules/20241223093840.29417-1-petr.pavlu@suse.com/
-> 
-> Petr Pavlu (3):
->   module: Constify parameters of module_enforce_rwx_sections()
->   module: Add a separate function to mark sections as read-only after
->     init
->   module: Make .static_call_sites read-only after init
-> 
->  kernel/module/internal.h   |  7 ++++--
->  kernel/module/main.c       | 18 +++------------
->  kernel/module/strict_rwx.c | 47 ++++++++++++++++++++++++++++++++++++--
->  3 files changed, 53 insertions(+), 19 deletions(-)
+Hi Masahiro,
 
-Queued now on modules-next, for 6.16-rc1.
+On Sun, Apr 6, 2025 at 1:21=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> On Fri, Mar 21, 2025 at 8:28=E2=80=AFAM Sami Tolvanen <samitolvanen@googl=
+e.com> wrote:
+> >
+> > With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr variables are added
+> > to the kernel in EXPORT_SYMBOL() to ensure DWARF type information
+> > is available for exported symbols in the TUs where they're actually
+> > exported. These symbols are dropped when linking vmlinux, but
+> > dangling references to them remain in DWARF.
+> >
+> > With CONFIG_DEBUG_INFO_BTF enabled on X86, pahole versions
+> > before commit 9810758003ce ("btf_encoder: Verify 0 address
+> > DWARF variables are in ELF section") place these symbols in the
+> > .data..percpu section, which results in an "Invalid offset" error in
+> > btf_datasec_check_meta() during boot, as all the variables are at
+> > zero offset and have non-zero size. If CONFIG_DEBUG_INFO_BTF_MODULES
+> > is enabled, this also results in a failure to load modules with:
+> >
+> >   failed to validate module [$module] BTF: -22
+> >
+> > The pahole commit that adds 0 address DWARF variable verification
+> > was merged after v1.29 was released, so later versions of pahole
+> > shouldn't have this issue. Require pahole >v1.29 when GENDWARFKSYMS
+> > is enabled with DEBUG_INFO_BTF on X86.
+> >
+> > Reported-by: Paolo Pisati <paolo.pisati@canonical.com>
+> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+>
+> The issue occurs with
+> 47dcb534e253 ("btf_encoder: Stop indexing symbols for VARs"),
+> then fixed by  9810758003ce ("btf_encoder: Verify 0 address
+> DWARF variables are in ELF section")
+>
+>
+> Perhaps, does it make sense to do this?
+>
+>  depends on !X86 || !DEBUG_INFO_BTF || (PAHOLE_VERSION > 129 ||
+> PAHOLE_VERSION < 128)
 
--- Petr
+That's a good point. I confirmed that v1.27 works fine too. I'll send v2.
+
+Sami
