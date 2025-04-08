@@ -1,74 +1,98 @@
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20C53FB1B;
-	Tue,  8 Apr 2025 03:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60A07158DD8;
+	Tue,  8 Apr 2025 19:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744081473; cv=none; b=oIXPlrkQCc6KnQX3M2FqZ9Ls92MhhUGaJz6nuaX4ZaVKXdarja2ggrfeT2sXiep2z8phTiYAsBwZueE+3qHlKFLGOivmkfdkoLg6ixAh3tG/bZCZuUYATDIyhjsmTAjhu8cWhh+u6vPfbpStL7JI37DlYN0GQqj8TsowmQNSCo8=
+	t=1744139964; cv=none; b=P0xX7goX5kGqqb4QFvZkv4dn6MEELrvZHW2pkmfRGuGMhulpwuYHvB2dakTA43tv181iOEnqCsyQL+MBONVq2Qv05nLiaS3vYOSamL6JH4O4b+iABZxHSLxyGukUCjpVjvmy3+sBpEBlVGA1mNbIIJfOwXqOqaNZQAFOTYDWZzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744081473; c=relaxed/simple;
-	bh=VfnRq1oKSfUnhZQg4yKYM/OaeRV0QmfAoOuhpbQZ6dw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IA7/g0uhtTO/vfiOcR691YKOMYEY8+shOrTQv9hxzgOwAH402mQrMbThHerjL724bL0hHYvAVSNp9N02gjQtTyAqADCXKl7Mk6tG1BpWxnt7VnZsy481yU/m2stOqxhdP7xPIoyBnoLgMjCQvBls/fR1lsWdMdaA2GkJ/zNC0qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from mop.sam.mop (unknown [82.8.138.118])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sam)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id DF37234307D;
-	Tue, 08 Apr 2025 03:04:28 +0000 (UTC)
-From: Sam James <sam@gentoo.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: dwarves@vger.kernel.org,  da.gomez@samsung.com,
-  linux-kbuild@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-modules@vger.kernel.org,  masahiroy@kernel.org,  mcgrof@kernel.org,
-  paolo.pisati@canonical.com,  petr.pavlu@suse.com,
-  samitolvanen@google.com,  Matthias Schwarzott <zzam@gentoo.org>
-Subject: Re: [PATCH] kbuild: Require pahole >v1.29 with GENDWARFKSYMS and
- BTF on X86
-In-Reply-To: <7b0bd9be-c3ef-40d4-9465-92f3e69a07d1@oracle.com>
-Organization: Gentoo
-References: <87o6x8idk1.fsf@gentoo.org>
-	<7b0bd9be-c3ef-40d4-9465-92f3e69a07d1@oracle.com>
-User-Agent: mu4e 1.12.9; emacs 31.0.50
-Date: Tue, 08 Apr 2025 04:04:26 +0100
-Message-ID: <87semj4amd.fsf@gentoo.org>
+	s=arc-20240116; t=1744139964; c=relaxed/simple;
+	bh=A7IwUd4QZ8+UrR9RJGg2Ngbu0P/FJmrd+5uVDcuUtnk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Md70XWEE5rmLiBHISQCyT3EpZkCnwzvs+A1lUj5MIYrkpmOPfrw0MkW013B8V1GCxCeYzQHjzYBz58Tlij3F2KLssMK0V1pnKf45ioVZgyst5yqLwLccE76ffRcv3Vg56z7FQxyS13NNkBS7Iar5PerkS5A6cZ3eIS96pdUKj+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=R2qbf+px; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="R2qbf+px"
+Received: by linux.microsoft.com (Postfix, from userid 1152)
+	id DEDE52113E93; Tue,  8 Apr 2025 12:19:22 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DEDE52113E93
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744139962;
+	bh=WBCPzbnAp+2ozc5rW0RmWhRD4Gw4jg0TidVEx4G5Bxw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R2qbf+pxf405gn++jArGSz3Z2sAZlfjEIVS8kqQppbFgECEOigRVfl2deveRiLG+Q
+	 bxHy0f60mCOlRPt1cW3k/Zp1ns/8nePbOk35Cahlaovp6AsyzklOy/ypolXl0IMSUw
+	 lwBlBUMIuvTzbJ4iGLSXDwhNIgqph8A+/jpHIca4=
+Date: Tue, 8 Apr 2025 12:19:22 -0700
+From: Shyam Saini <shyamsaini@linux.microsoft.com>
+To: Petr Pavlu <petr.pavlu@suse.com>, gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	code@tyhicks.com, linux@rasmusvillemoes.dk,
+	christophe.leroy@csgroup.eu, hch@infradead.org, mcgrof@kernel.org,
+	frkaya@linux.microsoft.com, vijayb@linux.microsoft.com,
+	linux@weissschuh.net, samitolvanen@google.com, da.gomez@samsung.com,
+	rafael@kernel.org, dakr@kernel.org
+Subject: Re: [PATCH v4 0/4] Properly handle module_kobject creation
+Message-ID: <20250408191922.GA21875@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20250227184930.34163-1-shyamsaini@linux.microsoft.com>
+ <ae1f74bd-4e8c-4031-8175-240f5f8d7f17@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae1f74bd-4e8c-4031-8175-240f5f8d7f17@suse.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-Alan Maguire <alan.maguire@oracle.com> writes:
+Hi Greg,
 
-> On 07/04/2025 09:25, Sam James wrote:
->> [with regard to
->> https://lore.kernel.org/linux-kbuild/20250320232757.2283956-2-samitolvanen@google.com/]
->> 
->> Would it be possible to have a new release with that fix, to avoid
->> distros all having to cherrypick the fix commit?
->> 
->> Thanks in advance,
->> sam
->> 
->
-> We're planning to release 1.30 shortly to follow the recent 6.14 kernel
-> release - hopefully this week, or perhaps early next week if any bugs
-> are discovered during final testing.
->
-> If folks can help by testing the next branch of
->
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git
->
-> ...prior to that, that would be great. Thanks!
+> On 2/27/25 19:49, Shyam Saini wrote:
+> > Hi Everyone,
+> > 
+> > This patch series fixes handling of module_kobject creation.
+> > A driver expect module_kset list populated with its corresponding
+> > module_kobject to create its /sys/module/<built-in-module>/drivers
+> > directory.
+> > 
+> > Since,
+> > [1] commit 96a1a2412acb ("kernel/params.c: defer most of param_sysfs_init() to late_initcall time")
+> > Call to populate module_kset list is deferred to save init time so that
+> > external watchdog doesn't fireup on some boards and Linux can take
+> > responsibility of feeding watchdog before it spuriously resets the
+> > system. However, [1] this fix caused another issue i.e, consumers
+> > of module_kset can't get related module_kobject during driver
+> > initialisation and hence can't create their
+> > /sys/module/<built-in-module>/drivers directory.
+> > 
+> > Consequently, [1] breaks user-space applications for eg: DPDK, which
+> > expects /sys/module/vfio_pci/drivers/pci:vfio-pci/new_id to be present.
+> > 
+> > The second issue was reported and the [2] revert of [1] was
+> > proposed. However, [2] the Revert doesn't address the original issue
+> > reported in [1].
+> > 
+> > This patch series addresses both issues reported in [1] and [2].
+> > 
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=96a1a2412acb
+> > [2] https://lore.kernel.org/lkml/20250130225803.321004-1-shyamsaini@linux.microsoft.com/
+> 
+> This looks ok to me. I only think the Fixes: tag should have remained
+> solely on the last patch in the series as that is the actual fix. I'll
+> adjust it when picking up the patches.
+> 
+> I'm going to wait for a few days if others still would like to comment
+> and then plan to queue this on modules-next.
+> 
+> @Greg, could I please get an Acked-by from you on the last patch in the
+> series as this affects the code in the driver core?
+> 
 
-Will do, thanks!
+sorry for the frequent pings, could you please Ack last patch of this series
+or perhaps provide any feedback ?
 
->
-> Alan
+Thanks,
+Shyam
