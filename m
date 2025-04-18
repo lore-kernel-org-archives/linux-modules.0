@@ -1,152 +1,259 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA47211491
-	for <linux-modules@vger.kernel.org>; Fri, 18 Apr 2025 16:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9536213E97
+	for <linux-modules@vger.kernel.org>; Fri, 18 Apr 2025 16:50:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744994794; cv=none; b=e7EXxI0W+SZdv6if5eM7wJ2hMx6ClrHKjJT3MiNXr2O/5velAjP2OXwJRMzM3s8R/6krypUdbMRikRz6ei3H0iZhah8351WJ3Jpzvg/75V+CduOUq2kNPUrhoTCsW6WTFxWDxgQwW5xpeUTx3TY8F8ka0KhA3H2r9zMMp/yyi8A=
+	t=1744995057; cv=none; b=dXjUDYw58Mc4AxSwlBuI+GJL1KM+1CKXi5pcrRZ9U//U0Ep/W8dksfjQIx1SHNSzoEiL6YxWu0z2LOFpQZ0z1/RfCvqehZipzLOSb2AFkkltWu/WnMzcyRVOwmoeRwzhC2IjAlDgKjxvs/BGmcIiJqJkLXOlHy0anOKF1Z173Ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744994794; c=relaxed/simple;
-	bh=B2O/Gspz1Le8Dpdt/hJq1P6tX6Y+3COZWoh3DyLF374=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EX0V50UsWUadkqHB7u5Cu1h+fskAOSPTknDFiqZdTCi2s3gzGByzrp3HiA2yfSNtjwen5Xmvo1EFvY74b2EMM8oYaa3GQzFeFgrnZw+KYY1SrBpWO1Zxj5t3L6ZdLTxO1Aab89CCGOteVLvUKFavNMqZCBO0naCjDLw4R8A992Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F9EHaAD5; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1744995057; c=relaxed/simple;
+	bh=WE+4kcegKFumEU2/cCwpl70p8Q1yafjeQmFvljLxkuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gciru5lFYDq1WuZKRJ0B79SdRdmNTHC1cl9Rjh9zgjMRAwYxqU2YfI2Kk5rURhMGovuZ6XIclhRZ97hL1b84sJ+9tRq6FvEIC37F6SFIWY/QIku1De/GZCtnGBduyTfmsH03DrghFBF9ehvF9o4qlWtIJnvz4sIYCRpv1U2ZjTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gfcTRceH; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F9EHaAD5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gfcTRceH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744994792;
+	s=mimecast20190719; t=1744995054;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sXISLttdp4Stt1jgFUlPHh5G81JdIsLDJqti/qjxK3U=;
-	b=F9EHaAD5iFtoz2vCEnXLlMtnpPdm3rVnPZPthUVESX7brdnAEosyd+XfWjgvnBoB6aYTkx
-	UP1v3za2AGUARBKzgk9dZF7DUS7OPDeTfhJ6g9OZ4IXBmOOTOZewy036wxKD+XAUXIwAEq
-	Jre6x+VX9i/ktFWgFLYR3W4qVL+coNo=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-358-JxOwZVY4M_yu4scF5KMSmA-1; Fri, 18 Apr 2025 12:46:30 -0400
-X-MC-Unique: JxOwZVY4M_yu4scF5KMSmA-1
-X-Mimecast-MFC-AGG-ID: JxOwZVY4M_yu4scF5KMSmA_1744994789
-Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-30c2e219d47so12025551fa.3
-        for <linux-modules@vger.kernel.org>; Fri, 18 Apr 2025 09:46:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744994788; x=1745599588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sXISLttdp4Stt1jgFUlPHh5G81JdIsLDJqti/qjxK3U=;
-        b=fjuith3XygTEl98C5T0HN5jsWRqbaDxqrUZjQlLHN3Fh4Atp31bRsshUPOmdNyrOCr
-         k5Nd/teFP3VwgOBa/Ol0yjctTvHXUpzVNCxA32Ar9ddMGqNq0rxS/pva+LawrPNHBCmn
-         nVJrPgllmqNfHhnCW4QI7bau4CSvaKK3yicXsaL4YXTOI3EbROAo9+7Lu4LYrfpS/xgx
-         lBwrlKQSdh/+JdOGf2O2DqnldAve8Aly+PYg28ysPFBkgla4xAHvKVX0ValDo0F9RS08
-         iIwm3OyydOF3YXwgr07WXiLvZO6dxFhQh87VX0GUUahwh/AzHZehQbSPpN4tjtNKU3FG
-         3tPg==
-X-Gm-Message-State: AOJu0YyR5OyCp6c49ACLFXzNk8XVfxr5x+SpMh/vMzxgZWVyWS3S/ewG
-	bpNa5yr5r7Ks0FhFI2hnKgMQzYGLafqhEyKJxYAtI0ib15ZZ+9ENdHL9MbVNELmkZSKdJ8W3ETm
-	zs8J33oiGUP4eewKR+GrSglC+DcI5BS35Ab8lg7f3ma1p2Jdj5XZLJf/L/D7ysyjpO2ajWoRuYR
-	kdEhr5qwDLWrLmdQWY5bpcFsjiBoUbKnIypwL0T9tt0ys+eY8m
-X-Gm-Gg: ASbGncvETYuh7yPchfYsnqgLrszjra2Bsr7wM90f8zhZTiaMSwbfXkrqK/GuhAPxxF4
-	2SsiJN5QVo9M0F2qshCndCaJff1Ms1Q3FOLihyn8Q6/EqXgJBlbaE4k/tU5Mxaq60TjcgnV22BV
-	Y6Euh+C+jrTcAMOTRVoitHdCGHog==
-X-Received: by 2002:a05:651c:884:b0:30c:518e:452 with SMTP id 38308e7fff4ca-310904dafe3mr11403541fa.13.1744994788111;
-        Fri, 18 Apr 2025 09:46:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFC8XRPOnxIuvHQdgVNgUalUWGkmYje20l8oa3eP/0kCqW28Zy4fKraow99TA0b7uAR33mRN5OeXt86kGaQflc=
-X-Received: by 2002:a05:651c:884:b0:30c:518e:452 with SMTP id
- 38308e7fff4ca-310904dafe3mr11403491fa.13.1744994787751; Fri, 18 Apr 2025
- 09:46:27 -0700 (PDT)
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IwYvfZYZHKsg0xrd3I7bSHuR9+QYC+M2RfO1isygVyE=;
+	b=gfcTRceHHZVb8+FXlyozEzM/vWUjvVGPeTmyBZQFqDN5D3a7PUUfRpC4RgI45PxRDmbCYk
+	tJYnrG7FBXkJHWJaq/tn05esEcRaoQLgPmu76LUQYbxSJ+bCiZws+rvl/G9RkTKZ9sj49l
+	9RpJCH3pHMPqc88sCn/0YDNJVqoL5GE=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-9-__br2OdSO92IMyOgKTTcsQ-1; Fri,
+ 18 Apr 2025 12:50:51 -0400
+X-MC-Unique: __br2OdSO92IMyOgKTTcsQ-1
+X-Mimecast-MFC-AGG-ID: __br2OdSO92IMyOgKTTcsQ_1744995049
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83A0319560BC;
+	Fri, 18 Apr 2025 16:50:49 +0000 (UTC)
+Received: from redhat.com (unknown [10.96.134.19])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 859611954B0B;
+	Fri, 18 Apr 2025 16:50:48 +0000 (UTC)
+From: "Herton R. Krzesinski" <herton@redhat.com>
+To: linux-modules@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	da.gomez@samsung.com,
+	herton@redhat.com,
+	nathan@kernel.org
+Subject: [PATCH v2] lib/test_kmod: do not hardcode/depend on any filesystem
+Date: Fri, 18 Apr 2025 13:50:47 -0300
+Message-ID: <20250418165047.702487-1-herton@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250418000834.672343-1-herton@redhat.com> <aAGZe_mDBZ7DcG2o@bombadil.infradead.org>
-In-Reply-To: <aAGZe_mDBZ7DcG2o@bombadil.infradead.org>
-From: Herton Krzesinski <hkrzesin@redhat.com>
-Date: Fri, 18 Apr 2025 13:46:15 -0300
-X-Gm-Features: ATxdqUEZOONVcWteu9JX-s24qC2ILTT1BAu4NXZrhJH4HWLz_YH7IazkwItI_Do
-Message-ID: <CAJmZWFFhqGv+gu2BmZZRKxELDoOLyjXdn-UQuU6CAZ_JZP7UHg@mail.gmail.com>
-Subject: Re: [PATCH] lib/test_kmod: do not hardcode/depend on any filesystem
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	akpm@linux-foundation.org, petr.pavlu@suse.com, samitolvanen@google.com, 
-	da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Thu, Apr 17, 2025 at 9:14=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Thu, Apr 17, 2025 at 09:08:34PM -0300, Herton R. Krzesinski wrote:
-> > Right now test_kmod has hardcoded dependencies on btrfs/xfs. That
-> > is not optimal since you end up needing to select/build them, but it
-> > is not really required since other fs could be selected for the testing=
-.
-> > Also, we can't change the default/driver module used for testing on
-> > initialization.
-> >
-> > Thus make it more generic: introduce two module parameters (start_drive=
-r
-> > and start_test_fs), which allow to select which modules/fs to use for
-> > the testing on test_kmod initialization. Then it's up to the user to
-> > select which modules/fs to use for testing based on his config. However=
-,
-> > keep test_module as required default.
-> >
-> > This way, config/modules becomes selectable as when the testing is done
-> > from selftests (userspace).
-> >
-> > While at it, also change trigger_config_run_type, since at module
-> > initialization we already set the defaults at __kmod_config_init and
-> > should not need to do it again in test_kmod_init(), thus we can
-> > avoid to again set test_driver/test_fs.
-> >
-> > Signed-off-by: Herton R. Krzesinski <herton@redhat.com>
-> > ---
-> >  lib/Kconfig.debug |  6 -----
-> >  lib/test_kmod.c   | 64 +++++++++++++++++++++++++----------------------
-> >  2 files changed, 34 insertions(+), 36 deletions(-)
-> >
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index 9fe4d8dfe578..1e0f8cbf0365 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -2983,13 +2983,7 @@ config TEST_DYNAMIC_DEBUG
-> >  config TEST_KMOD
-> >       tristate "kmod stress tester"
-> >       depends on m
-> > -     depends on NETDEVICES && NET_CORE && INET # for TUN
-> > -     depends on BLOCK
-> > -     depends on PAGE_SIZE_LESS_THAN_256KB # for BTRFS
->
-> Please read the commit log that added PAGE_SIZE_LESS_THAN_256KB, what
-> do we want to do about those complaining about that? Maybe Cc the
-> author of that patch.
+Right now test_kmod has hardcoded dependencies on btrfs/xfs. That
+is not optimal since you end up needing to select/build them, but it
+is not really required since other fs could be selected for the testing.
+Also, we can't change the default/driver module used for testing on
+initialization.
 
-afaik that problem only happens because of selecting BTRFS. Since I'm remov=
-ing
-selection of BTRFS now it shouldn't be a problem.
+Thus make it more generic: introduce two module parameters (start_driver
+and start_test_fs), which allow to select which modules/fs to use for
+the testing on test_kmod initialization. Then it's up to the user to
+select which modules/fs to use for testing based on his config. However,
+keep test_module as required default.
 
->
-> Other than that, it looks good to me. Did you run the selftest?
+This way, config/modules becomes selectable as when the testing is done
+from selftests (userspace).
 
-Yes, I did both load the module with force_init_test and without, and
-run the kmod.sh selftest and arbitrarily chose vfat module for fs test
-(in my config
-xfs is loaded/used and ext4 is builtin).
+While at it, also change trigger_config_run_type, since at module
+initialization we already set the defaults at __kmod_config_init and
+should not need to do it again in test_kmod_init(), thus we can
+avoid to again set test_driver/test_fs.
 
-But now I noticed that I forgot to update
-tools/testing/selftests/kmod/config, I'll
-send a v2 shortly.
+v2: also update tools/testing/selftests/kmod/config with the removed
+dependencies.
 
->
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
->
->   Luis
->
+Signed-off-by: Herton R. Krzesinski <herton@redhat.com>
+---
+ lib/Kconfig.debug                   |  6 ---
+ lib/test_kmod.c                     | 64 +++++++++++++++--------------
+ tools/testing/selftests/kmod/config |  5 ---
+ 3 files changed, 34 insertions(+), 41 deletions(-)
+
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 9fe4d8dfe578..1e0f8cbf0365 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2983,13 +2983,7 @@ config TEST_DYNAMIC_DEBUG
+ config TEST_KMOD
+ 	tristate "kmod stress tester"
+ 	depends on m
+-	depends on NETDEVICES && NET_CORE && INET # for TUN
+-	depends on BLOCK
+-	depends on PAGE_SIZE_LESS_THAN_256KB # for BTRFS
+ 	select TEST_LKM
+-	select XFS_FS
+-	select TUN
+-	select BTRFS_FS
+ 	help
+ 	  Test the kernel's module loading mechanism: kmod. kmod implements
+ 	  support to load modules using the Linux kernel's usermode helper.
+diff --git a/lib/test_kmod.c b/lib/test_kmod.c
+index 064ed0fce75a..f0dd092860ea 100644
+--- a/lib/test_kmod.c
++++ b/lib/test_kmod.c
+@@ -28,14 +28,20 @@
+ 
+ #define TEST_START_NUM_THREADS	50
+ #define TEST_START_DRIVER	"test_module"
+-#define TEST_START_TEST_FS	"xfs"
+ #define TEST_START_TEST_CASE	TEST_KMOD_DRIVER
+ 
+-
+ static bool force_init_test = false;
+-module_param(force_init_test, bool_enable_only, 0644);
++module_param(force_init_test, bool_enable_only, 0444);
+ MODULE_PARM_DESC(force_init_test,
+ 		 "Force kicking a test immediately after driver loads");
++static char *start_driver;
++module_param(start_driver, charp, 0444);
++MODULE_PARM_DESC(start_driver,
++		 "Module/driver to use for the testing after driver loads");
++static char *start_test_fs;
++module_param(start_test_fs, charp, 0444);
++MODULE_PARM_DESC(start_test_fs,
++		 "File system to use for the testing after driver loads");
+ 
+ /*
+  * For device allocation / registration
+@@ -508,6 +514,11 @@ static int __trigger_config_run(struct kmod_test_device *test_dev)
+ 	case TEST_KMOD_DRIVER:
+ 		return run_test_driver(test_dev);
+ 	case TEST_KMOD_FS_TYPE:
++		if (!config->test_fs) {
++			dev_warn(test_dev->dev,
++				 "No fs type specified, can't run the test\n");
++			return -EINVAL;
++		}
+ 		return run_test_fs_type(test_dev);
+ 	default:
+ 		dev_warn(test_dev->dev,
+@@ -721,26 +732,20 @@ static ssize_t config_test_fs_show(struct device *dev,
+ static DEVICE_ATTR_RW(config_test_fs);
+ 
+ static int trigger_config_run_type(struct kmod_test_device *test_dev,
+-				   enum kmod_test_case test_case,
+-				   const char *test_str)
++				   enum kmod_test_case test_case)
+ {
+-	int copied = 0;
+ 	struct test_config *config = &test_dev->config;
+ 
+ 	mutex_lock(&test_dev->config_mutex);
+ 
+ 	switch (test_case) {
+ 	case TEST_KMOD_DRIVER:
+-		kfree_const(config->test_driver);
+-		config->test_driver = NULL;
+-		copied = config_copy_test_driver_name(config, test_str,
+-						      strlen(test_str));
+ 		break;
+ 	case TEST_KMOD_FS_TYPE:
+-		kfree_const(config->test_fs);
+-		config->test_fs = NULL;
+-		copied = config_copy_test_fs(config, test_str,
+-					     strlen(test_str));
++		if (!config->test_fs) {
++			mutex_unlock(&test_dev->config_mutex);
++			return 0;
++		}
+ 		break;
+ 	default:
+ 		mutex_unlock(&test_dev->config_mutex);
+@@ -751,11 +756,6 @@ static int trigger_config_run_type(struct kmod_test_device *test_dev,
+ 
+ 	mutex_unlock(&test_dev->config_mutex);
+ 
+-	if (copied <= 0 || copied != strlen(test_str)) {
+-		test_dev->test_is_oom = true;
+-		return -ENOMEM;
+-	}
+-
+ 	test_dev->test_is_oom = false;
+ 
+ 	return trigger_config_run(test_dev);
+@@ -800,19 +800,24 @@ static unsigned int kmod_init_test_thread_limit(void)
+ static int __kmod_config_init(struct kmod_test_device *test_dev)
+ {
+ 	struct test_config *config = &test_dev->config;
++	const char *test_start_driver = start_driver ? start_driver :
++						       TEST_START_DRIVER;
+ 	int ret = -ENOMEM, copied;
+ 
+ 	__kmod_config_free(config);
+ 
+-	copied = config_copy_test_driver_name(config, TEST_START_DRIVER,
+-					      strlen(TEST_START_DRIVER));
+-	if (copied != strlen(TEST_START_DRIVER))
++	copied = config_copy_test_driver_name(config, test_start_driver,
++					      strlen(test_start_driver));
++	if (copied != strlen(test_start_driver))
+ 		goto err_out;
+ 
+-	copied = config_copy_test_fs(config, TEST_START_TEST_FS,
+-				     strlen(TEST_START_TEST_FS));
+-	if (copied != strlen(TEST_START_TEST_FS))
+-		goto err_out;
++
++	if (start_test_fs) {
++		copied = config_copy_test_fs(config, start_test_fs,
++					     strlen(start_test_fs));
++		if (copied != strlen(start_test_fs))
++			goto err_out;
++	}
+ 
+ 	config->num_threads = kmod_init_test_thread_limit();
+ 	config->test_result = 0;
+@@ -1178,12 +1183,11 @@ static int __init test_kmod_init(void)
+ 	 * lowering the init level for more fun.
+ 	 */
+ 	if (force_init_test) {
+-		ret = trigger_config_run_type(test_dev,
+-					      TEST_KMOD_DRIVER, "tun");
++		ret = trigger_config_run_type(test_dev, TEST_KMOD_DRIVER);
+ 		if (WARN_ON(ret))
+ 			return ret;
+-		ret = trigger_config_run_type(test_dev,
+-					      TEST_KMOD_FS_TYPE, "btrfs");
++
++		ret = trigger_config_run_type(test_dev, TEST_KMOD_FS_TYPE);
+ 		if (WARN_ON(ret))
+ 			return ret;
+ 	}
+diff --git a/tools/testing/selftests/kmod/config b/tools/testing/selftests/kmod/config
+index 259f4fd6b5e2..1f1e63494af9 100644
+--- a/tools/testing/selftests/kmod/config
++++ b/tools/testing/selftests/kmod/config
+@@ -1,7 +1,2 @@
+ CONFIG_TEST_KMOD=m
+ CONFIG_TEST_LKM=m
+-CONFIG_XFS_FS=m
+-
+-# For the module parameter force_init_test is used
+-CONFIG_TUN=m
+-CONFIG_BTRFS_FS=m
+-- 
+2.47.1
 
