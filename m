@@ -1,77 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24416217F5C;
-	Fri, 18 Apr 2025 17:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D2121884B
+	for <linux-modules@vger.kernel.org>; Tue, 22 Apr 2025 13:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744998862; cv=none; b=JWG+X7mAAZlaxjruv+MEkTTWuEEXJSGhswQhzXhtzUDtuw99h+EZyg5G2y6IXEbwb2+/i+IMzM29234CKlUIbGcIo4wKvFY6HjDTqQvY8wIT2p45hCoYeJgqQugxVuww6aCaPuI6NE9O6ltvKgpKiWDX3lG6HZ+QIGHc+VVSBbs=
+	t=1745328140; cv=none; b=WLuGPISK3utKJAsuwoYrzhOFhBYXDng0Ug+GYGw168yxJihG3Lu9UOIiplhT7vHKmQH4Uqpc5v+ra2TvQ8QSTWYV41k1CcdAu/TQlaDif0fgFJIPWTARL6BH9ZbgBCMvxRaC3n17ikL2jiBEJz/w6Iy6TvPQJf52+9cC7k4xiaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744998862; c=relaxed/simple;
-	bh=9cYa1Hm/dFyTJ7WGFSaj4hjXw2maM5HCA6uwj7QdIxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kBjUe57eHJ0UgGMY95e8S4LyqKnNzGX100DQxOGKMs8rY4wl7rIDUBoDnCYGFxEtyKNRcgC461G9pm1BFJXhdrkqenl+kif9ZmEdv0zFHYjrfgkS/nLBTihfnsZRAK/6+rnWyor4XH/tpZPtdDuJzWfgMMeNV4H/pbyhb5c/l7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ttdsx5d1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745328140; c=relaxed/simple;
+	bh=iBeERhynzVtABJ17zsJg2c4wme0BjEpBgTwXNfdYvBg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LdMUK6QVsyoWgM9fS38s3mKxzRChLW85WkmLdpE31PBrS68vmIRM3yHFbcXJ+5QusP+djMCk4uMU8MI63hyAB/WIplePGw1FHbgUQq1Zd+NDmKImK3v1YSDgnPPdHhLgLqjzEZFcSChYq+COR57StovHB9NgR9ThoMTkf2Y7aSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dkcpLLjr; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ttdsx5d1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6F3C4CEE2;
-	Fri, 18 Apr 2025 17:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744998860;
-	bh=9cYa1Hm/dFyTJ7WGFSaj4hjXw2maM5HCA6uwj7QdIxg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ttdsx5d10ynpzoY1bodLZebYNr8zFQyvsRK9Fu19mESmvye77khnlf7OuOUl+HD6y
-	 uOygUTmkj5SAFQNB6ZvlhmdnNADCvVU1cMjrJOgFwSo+x11lX3aGXbTPGkYNNM+itX
-	 JX8FGI1glMVpVrJeErhf3Mt4izT+S1bAA7+Yv2MdAbuE/wYjtcnZfQQ6QUXOnGDU+e
-	 DhaR8XWlGyeq49n2gWAJ6e8dr3SYrH86aK8yrFfAMMETu/QDD7YJV9Bro3e/yKeZFU
-	 b3htj7DEcSeCH3tTdcnoj2vXGUsECeUM4TZdlQMMWopyzQIEkaFQmbcNtBHayIFvsm
-	 R1d8yD5hWk/KA==
-Date: Fri, 18 Apr 2025 10:54:18 -0700
-From: Luis Chamberlain <mcgrof@kernel.org>
-To: "Herton R. Krzesinski" <herton@redhat.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	akpm@linux-foundation.org, petr.pavlu@suse.com,
-	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org
-Subject: Re: [PATCH v2] lib/test_kmod: do not hardcode/depend on any
- filesystem
-Message-ID: <aAKRygQdkdlyZ_ai@bombadil.infradead.org>
-References: <20250418165047.702487-1-herton@redhat.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dkcpLLjr"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-acb5ec407b1so695468566b.1
+        for <linux-modules@vger.kernel.org>; Tue, 22 Apr 2025 06:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1745328135; x=1745932935; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N3XNp6FOG0YBB40BSQ5b9F0xQ6kk+DLGoBOj2lK3UkU=;
+        b=dkcpLLjrEpCHq1nKnXuvvnE7Ty4INfDd501NyXXelhCX068hkJZUQFJ2WtGlJxJYwb
+         2UJj0GgcisWHxN74+x+RBnf7Lj9iYg5CVEMq7BgG7Hmja/RTtO79Y9yxRjiDqfgOHTXa
+         Ise0dlanH071NWrvuKch+JiakrzjohIzbzBdjyxMxwERMGz+R0DO+zg3V74FjSX58qJs
+         Hs5onzICDyTxD08TCTQycBc5Lxpnq/538QXDGfTYnb89zuSI6YnLHlhxQZKWLYHNVZgp
+         AyxzcjIKOlBHAR4hQ9ZgdcaKXxb9E118KROawqpHJzJ7fTeDG3mdqWOzp+d3pm/WGuT5
+         1FgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745328135; x=1745932935;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N3XNp6FOG0YBB40BSQ5b9F0xQ6kk+DLGoBOj2lK3UkU=;
+        b=uZg+5cwXwLpSxAh/p51eiRoyXMgW+EKMo7UQY9Vl80RMaNal+3wVdV4wYuTO+ub+8/
+         ucg6VBeDvXjqa5kA1hAzCzZV1W1AK9sMXNHH6Kxn1ppvG+EdckyosRt/PxTjpYG4LI1N
+         3LppEwsWrWhVcWjvpOJhy1i/gaK+dBzKwdD6IlkvNK8Q9tg2lBHfrqJpJ5txSjhZJvBI
+         8XE1Bb456vqnzPy7k9XPr1e4RQePa9naoRzVBWAayde9Jms8zXzeIv8YLgBmAYf3jr7B
+         EGElBVYCg3RflShNM0H+wVmwHpmNZj6rq+8qrvc1xG0D9sK8Y4CvPlKyrmXvgLXIcmUm
+         kcZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGb9n99ugpJRzw2DO5q3Rf+ccdDvL/FiH0J2cHtVvdNvbryaabvTwVz/9hYR/UUmHEwOQEpxOMxOUDo5Be@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlwQcXAq2qj5ueT4lX9jIIUqwQD7NUqOZlK/qFVtyNwdkNgWSs
+	FV+vs538Ik5x/dAYcAwAV9QLYvlEI5FeJJyBXyigqPn+wYayOusHP4bM0Y0Xws4=
+X-Gm-Gg: ASbGnct9/3/POnRl5um89bXshoSRmNrLlOzNP4Sr44Kd6A8h89ILEDrZwBTfiAd9McV
+	D1wQ/OATSDDX5bHNSKmYKvOlh6+rApTFupdX0gaHHJTq6KWzoqtmSOZg05g2BXnExytwpKmbjHO
+	M9vK0/8UEjoaCUf5f+S0o3MifCZmKxo+CQfFRHhu2983xjJkcoWxtoGdIuut7vvoYY2PKLx1/VC
+	PqkRLrbE8oeolzTedKTCdmBEC4hCVDPm2e4RdB4U3UbGY3poGAxgRU69OrI9GbqI5lb1K7ifXUh
+	WB6bdrpy/IQG1FDTSUx4Sx9uI1BO0kLQQKsxsLkWdi4=
+X-Google-Smtp-Source: AGHT+IFaXpflFI86k8u3dSw6HVkF/uY8OBEaZ5S2zW87LgBRnFduZGRJWQUonbqQbt0m5a26poCJnA==
+X-Received: by 2002:a17:907:9727:b0:acb:5f9a:7303 with SMTP id a640c23a62f3a-acb74bcc517mr1311357066b.35.1745328135152;
+        Tue, 22 Apr 2025 06:22:15 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-acb6ec0b6fbsm668648166b.19.2025.04.22.06.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Apr 2025 06:22:14 -0700 (PDT)
+Message-ID: <7f707d8e-f2e4-49cc-8d7e-e8c4c4193cec@suse.com>
+Date: Tue, 22 Apr 2025 15:22:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250418165047.702487-1-herton@redhat.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 0/3] rust: extend `module!` macro with integer
+ parameter support
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
+ Luis Chamberlain <mcgrof@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>, Adam Bratschi-Kaye <ark.email@gmail.com>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>,
+ Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>,
+ Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
+References: <20250321-module-params-v3-v9-0-28b905f2e345@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250321-module-params-v3-v9-0-28b905f2e345@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 18, 2025 at 01:50:47PM -0300, Herton R. Krzesinski wrote:
-> Right now test_kmod has hardcoded dependencies on btrfs/xfs. That
-> is not optimal since you end up needing to select/build them, but it
-> is not really required since other fs could be selected for the testing.
-> Also, we can't change the default/driver module used for testing on
-> initialization.
+On 3/21/25 10:17, Andreas Hindborg wrote:
+> Extend the `module!` macro with support module parameters. Also add some string
+> to integer parsing functions and updates `BStr` with a method to strip a string
+> prefix.
 > 
-> Thus make it more generic: introduce two module parameters (start_driver
-> and start_test_fs), which allow to select which modules/fs to use for
-> the testing on test_kmod initialization. Then it's up to the user to
-> select which modules/fs to use for testing based on his config. However,
-> keep test_module as required default.
+> Based on code by Adam Bratschi-Kaye lifted from the original `rust` branch [1].
 > 
-> This way, config/modules becomes selectable as when the testing is done
-> from selftests (userspace).
+> Link: https://github.com/Rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f [1]
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+[...]
+> ---
+> Andreas Hindborg (3):
+>       rust: str: add radix prefixed integer parsing functions
+>       rust: add parameter support to the `module!` macro
+>       modules: add rust modules files to MAINTAINERS
 > 
-> While at it, also change trigger_config_run_type, since at module
-> initialization we already set the defaults at __kmod_config_init and
-> should not need to do it again in test_kmod_init(), thus we can
-> avoid to again set test_driver/test_fs.
-> 
-> v2: also update tools/testing/selftests/kmod/config with the removed
-> dependencies.
-> 
-> Signed-off-by: Herton R. Krzesinski <herton@redhat.com>
+>  MAINTAINERS                  |   2 +
+>  rust/kernel/lib.rs           |   1 +
+>  rust/kernel/module_param.rs  | 221 +++++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/str.rs           | 170 +++++++++++++++++++++++++++++++++
+>  rust/macros/helpers.rs       |  25 +++++
+>  rust/macros/lib.rs           |  31 ++++++
+>  rust/macros/module.rs        | 195 ++++++++++++++++++++++++++++++++++----
+>  samples/rust/rust_minimal.rs |  10 ++
+>  8 files changed, 635 insertions(+), 20 deletions(-)
 
-Reviewed-by: Luis Chambelrain <mcgrof@kernel.org>
+I'd like to pick these remaining patches on modules-next around rc5/6,
+so they can sit on linux-next for a bit before going into 6.16-rc1. It
+is a new code with no users so I don't expect much fallout, but still.
 
-  Luis
+Could you please post an updated series that includes the cleanup from
+Miguel?
+
+-- 
+Thanks,
+Petr
