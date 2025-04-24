@@ -1,48 +1,51 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C670149C41;
-	Thu, 24 Apr 2025 14:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1641A3BA1;
+	Thu, 24 Apr 2025 15:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745506059; cv=none; b=K2B8+DDqFJjGYcUwYIoDzWCNfkzy8htAK8xbON4x0ydnU6HqRAFhOLqioNGyz96V/D+yMJTgN5cElgqjfE0Dk8Q6FWKWhgbu+9bd6kyADsViJUzvSVTudc5gN+ZeV1gRaqMyKLz5TNo+rZqOB19Dkc2dV9HxRqGTZRbei/LvQuw=
+	t=1745507843; cv=none; b=SERh8jQ0pjB0Qlc76aOE/wRLRT+drQ+8gKjXVf8pC/a//RI3VyJ1qM2malNOk+qEb50D+mHFOvsDHC8xnjGkIxw8gdbZ+7+Ew1WjkjFNYELR7BkXe7KH4sHsORpd+F/6vgOl+BY4U50YNEzR1jUiW9Mo+kYnEqG0qVFcmggWDqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745506059; c=relaxed/simple;
-	bh=aI+0J8pNI48g/nj9AVjzAh0Eq0xcHXjVInXIA5TOWqw=;
+	s=arc-20240116; t=1745507843; c=relaxed/simple;
+	bh=i5zQo+ZbmXhXlpKA0PxW7GVqKWnTwvj3UM7NmLcRBq0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EGioGVzL7vCeiw1F1xRCdHWERCodvK3OSkiCnra7G5nHJ5xZhQWUug322ZGJKdBX8Z9MdX82VMHSIqewdpT+QlfffqCGhro3kRlwCazEl/FMmaZj6oWsu7qjWMXSkHFvh0dvieznxJyNRkFU1uegjpbkNvcI6fDoQZtuds8ENfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eN9AYyRT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=kqFocAq9o6EUMayxMfHhvxdw4pAA0tRZjGYNJI5Pd9SrswiVzc8LQ8GIlfdu8Cym0oq/TOYehJigi3TrCSWjghvsTw2XF1pW1LaalrnorRVt+jdYCsyygxGwPQ12NHwYeDfLznjGyAStChjNhMPjoACN36rLby1n0xA1uF9donY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=F/cBTzER; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eN9AYyRT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1877C4CEE3;
-	Thu, 24 Apr 2025 14:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745506059;
-	bh=aI+0J8pNI48g/nj9AVjzAh0Eq0xcHXjVInXIA5TOWqw=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=eN9AYyRTJunIPoIKnx1LWKGqL9hiQRVPIsv4MSxykjdGtV6LBxOyy5b4R70iop/0G
-	 JKtPScOyukzAKGsw8w8+h+j9JW4Y4cCf9toc5ETZksoW1Hf4HD1lnqRK/5O0qYz69J
-	 ZBRDdm2CfF0xQ2Ont3qAIpwVac7yyEwgKG67G/9eFPjw7UyIp7jGCFlXsTfubIMIWD
-	 DAuQ3/yTqle0JPLu/aRHrnI76L8+RhPI8XWtdwHJc2iGnMRc/aPmv6tnBZRUSYQbVz
-	 JNeXpYhSqAXIB5lKj60oLLx+E+12RplIBgLtS8r5n+pTLXtHWRHbC0xVQBHILdGhNm
-	 05Ys2OsCleNRw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 94F42CE191C; Thu, 24 Apr 2025 07:47:38 -0700 (PDT)
-Date: Thu, 24 Apr 2025 07:47:38 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="F/cBTzER"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=i5zQo+ZbmXhXlpKA0PxW7GVqKWnTwvj3UM7NmLcRBq0=; b=F/cBTzERGsPjUZ7LTI3oLSK5vp
+	G2bszn/q/yJZ4a6vUl5M1DRld859/iBLasTsPq1DF0MAj8LPt2uMUhU/RK3ExROxDnt6RjSYeoCLc
+	pij00dSo/Ok8y/QwQllmpkApl33JIY24pQkvQOroLeB/zk1AvABphUxYcl5dnSpCSES3RWd7cSYjT
+	vAm/208jspVYndt7VdmTUl5GdvtYRo4HInRjZuNXKsvB3aLLaBcXMMINnLIweX3YRnd7kg8z8jB6s
+	kkn1O5VVLIMGxE7rypgA+QUGkuhp4YLR7L4qjXzUdosMfewNygyicpqtsWnM1qfb98zOAQ7tm7Kzl
+	0aNn1ofA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1u7yKB-0000000BqUv-09Vd;
+	Thu, 24 Apr 2025 15:17:15 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5D927300642; Thu, 24 Apr 2025 17:17:14 +0200 (CEST)
+Date: Thu, 24 Apr 2025 17:17:14 +0200
+From: Peter Zijlstra <peterz@infradead.org>
 To: Benjamin Berg <benjamin@sipsolutions.net>
 Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
 	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
 	johannes@sipsolutions.net, Daniel Gomez <da.gomez@samsung.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Thomas Gleixner <tglx@linutronix.de>
 Subject: Re: [PATCH v3 15/28] module: Use RCU in all users of
  __module_text_address().
-Message-ID: <2219e88b-61a5-4176-bec8-73e6db9a36cc@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+Message-ID: <20250424151714.GA18306@noisy.programming.kicks-ass.net>
 References: <20250108090457.512198-1-bigeasy@linutronix.de>
  <20250108090457.512198-16-bigeasy@linutronix.de>
  <db0f8ec385762e6edb3edf5054a76ea189135e6e.camel@sipsolutions.net>
@@ -55,96 +58,11 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <bc9896f2470c70519c3b9257a1a2dd32e5e9c6e9.camel@sipsolutions.net>
 
 On Thu, Apr 24, 2025 at 11:30:39AM +0200, Benjamin Berg wrote:
-> On Thu, 2025-04-24 at 11:05 +0200, Sebastian Andrzej Siewior wrote:
-> > On 2025-04-23 11:16:49 [-0700], Paul E. McKenney wrote:
-> > > On Wed, Apr 23, 2025 at 05:17:31PM +0200, Benjamin Berg wrote:
-> > > > Hi,
-> > > > 
-> > > > On Wed, 2025-01-08 at 10:04 +0100, Sebastian Andrzej Siewior wrote:
-> > > > > __module_text_address() can be invoked within a RCU section, there is no
-> > > > > requirement to have preemption disabled.
-> > > > > 
-> > > > > Replace the preempt_disable() section around __module_text_address()
-> > > > > with RCU.
-> > > > 
-> > > > Unfortunately, this patch causes a performance regression for us. The
-> > > > trouble is that we enable kmemleak and run trace-cmd so a lot of stack
-> > > > traces need to be collected. Obviously, we also have lockdep enabled.
-> > > > 
-> > > > Now, combine this with the UML stack dumping code calling into
-> > > > __kernel_text_address a lot[1] and it really has a relevant performance
-> > > > impact. I saw the kernel spending 40% of its own CPU time just on the
-> > > > lock in is_module_text_address.
-> > > > 
-> > > > Maybe kernel_text_address should leave the RCU handling to the caller
-> > > > and assume that the RCU read lock is already taken?
-> > > > 
-> > > > Benjamin
-> > > > 
-> > > > [1] The UM arch dump_stack function reads every "unsigned long" on the
-> > > > stack and tests it using __kernel_text_address.
-> > > 
-> > > Use of a single guard(rcu)() is regressing performance?  Interesting and
-> > > quite unexpected.  That said, tiven the amount of debug you have enabled,
-> > > I am not so sure that people are going to be all that excited about a
-> > > further performance regression.
-> > > 
-> > > But is this regression due to the cleanup hook that guard(rcu)()
-> > > registers?  If so, please feel free to try using rcu_read_lock()
-> > > and rcu_read_unlock() instead.  I would be surprised if this makes a
-> > > difference, but then again, your initial regression report also comes
-> > > as a surprise, so...
-> > > 
-> > > Another way to reduce guard(rcu)() overhead is to build your kernel
-> > > with CONFIG_PREEMPT_NONE=y.  Not so good for real-time response, but
-> > > then again, neither are your debug options.
-> > 
-> > The guard notation is not regression I guess it is just the plenty of
-> > rcu_read_lock()/ unlock(). We had one regression which was "fixed" by
-> > commit ee57ab5a32129 ("locking/lockdep: Disable KASAN instrumentation of lockdep.c").
-> 
-> Yup, we really pretty much created a micro-benchmark for grabbing stack
-> traces.
-> 
-> > My guess would be that this is a preemptible kernel and the preempt
-> > disable/ enable is cheaper that the RCU version. So going back to a
-> > non-preemtible kernel should "fix" it.
-> 
-> Yes, preempt_disable() is extremely cheap.
-> 
-> > Looking at kernel_text_address(), is_bpf_text_address() has also a
-> > RCU read section so probably subject to the same trouble. And
-> > is_ftrace_trampoline() could be also converted to RCU which would
-> > increase the trouble. 
-> > 
-> > Improving the stack trace on UM or caching some of the most common one
-> > might help. Not sure if disabling kmemleak for lockdep is possible/
-> > makes a difference.
-> 
-> What does seem to help is to simply disable lockdep inside dump_trace.
-> That should be good enough for us at least, bringing the overhead down
-> to a manageable amount when running these tests.
-> Some unscientific numbers:
-> 
-> config                               dump_trace     locking
-> ----
-> no locking (preempt_disable)            6 %         -
-> guard(rcu)() + lockdep_off             15 %         58 % of that
-> rcu_read_lock + lockdep_off            17 %         60 % of that
-> guard(rcu)()                           48 %         91 % of that
-> 
-> That confirms that guard(rcu)() really is not a problem. There might be
-> slight overhead, but it is probably within the margin of error. Turning
-> lockdep off/on inside the UML dump_trace() function brings down the
-> overhead a lot and I guess that should be an acceptable level for us.
-
-Whew!!!  ;-)
 
 > Not sure if something like that would be desirable upstream. This is
 > happening for us when running the hostap "hwsim" tests inside UML (with
@@ -152,18 +70,8 @@ Whew!!!  ;-)
 > the lockdep_off()/lockdep_on() to dump_trace in order to work around
 > it[1].
 
-That makes sense to me, but I am not the maintainer of that code.  ;-)
+Urgh, so lockdep_off() usage is a really bad sign.
 
-							Thanx, Paul
+Having just done a git-grep, I see there's crap to clean out :-(
 
-> Benjamin
-> 
-> [1] Actually, now I am reminded that we already have that for kmemleak
-> as lockdep was considerably slowing down the scanning.
-> 
-> > 
-> > > 							Thanx, Paul
-> > 
-> > Sebastian
-> > 
-> 
+Some day I'll manage to remove that thing.
