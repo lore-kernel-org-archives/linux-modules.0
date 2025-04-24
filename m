@@ -1,37 +1,45 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2122018DF86;
-	Wed, 23 Apr 2025 18:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3EA31DED49;
+	Thu, 24 Apr 2025 09:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745432211; cv=none; b=DBaYY3DTaYamvZia1L+W4GYyCfLxOsKzXfkWKW+dh1p7NVKq7svH05a3326LHNK2VnJVFqCwSAPn33OfaDcaDQuCWDTaCIzHAfrB7unjhzrZlRlsgPLEyZASPWURnB9QRyJzUiLftKuv1AJ0acIYcmUKeT/vVsyJpTT33OeguGs=
+	t=1745485545; cv=none; b=qu7Ob4p7a05TqO1u+Zag7fstuzkDpJKKyisX8EBKb0t/KClTEQKDUZ872rsCeIuu1o2xN0K6LjILGD8fHZrh/V08otfuNhLTNK501UrPsEYvVDRydk9H6nmaYoNZ/j3SNIwnIBsZCay1sTRq0H6wrJ4i5qPVmAv9OXQslissX8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745432211; c=relaxed/simple;
-	bh=UCMgqoUk/35E+0AbklcegPwWnbbccv3El9DIubtxTbA=;
+	s=arc-20240116; t=1745485545; c=relaxed/simple;
+	bh=BvJcgZPL7Y6NtEbnl10qscW0JW8vgaTOZZiY4RK3Y2I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sjSSV1CVeFii86prIFZZCq0FZx173dplr9KlqOxk7Dq6pCV1JNr0c0HUg+dlMzlziBo1cSiZh7xbBAMZWpJTT377vlAHimPcknA8zEuTVa5vIdcc7QhtnTpHE4KT4JW8YO7G8/2t2LVHmTWpU3COzEqI+ZgHmmxU+4/B6UKaSXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kbVgA2W7; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=GCzIhko3eNXHiqi81Fv5zjKUE0wLIkRcfnjEFVyLeICNViBsFUgMZBLe0a09ic50r7m+rx+0r0HQ2LzapADLNedfs5U8DxIG8LgTbpQsBz/fvI4uyD0zsJ+g8ejNRxcAydRQskN6om3yUAvV7Gd+lTck50jC6ac8Qj4cDYmz0mA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MRCPDEiP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zUqgaLWG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kbVgA2W7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC3CC4CEE2;
-	Wed, 23 Apr 2025 18:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745432210;
-	bh=UCMgqoUk/35E+0AbklcegPwWnbbccv3El9DIubtxTbA=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=kbVgA2W7BzGd24i9NZuPM5D1kKlokI9fRXpflISX/6YJ1QJEoqxHGs2S2/7a/htw8
-	 GwkgO2DlW6rqb3KavlQWXeOfABadxRNzO8cQj4sjug1tLbpV3DokH6q1XF/4sVrrGN
-	 uiTytMLFteY9fhzTR4XWbJQE6uA8AVNgVH/TtVMSAr80LTNEOZOJiyR6vEdYZaAziV
-	 leJVlJWfHrLQsV9kivxEVHa4uP9Z9iGJXRw9KkPIJQ0yjIUi9lsyq/+kiT6fB2v+gX
-	 ispA8YeqtUs3xbQ1GwCWFMPt5Z+hxZ0t0FPf5nMzyQJhfe4GgeKlF1rKHP6VVRNB99
-	 QP0sDdHG9CA/g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 3E58DCE0B75; Wed, 23 Apr 2025 11:16:49 -0700 (PDT)
-Date: Wed, 23 Apr 2025 11:16:49 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Benjamin Berg <benjamin@sipsolutions.net>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MRCPDEiP";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zUqgaLWG"
+Date: Thu, 24 Apr 2025 11:05:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1745485541;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=l5BC3iHnKNhjS4kP0x8raSp+c/AcRUFkJZZ5qX+a0VE=;
+	b=MRCPDEiPn5KsNzGkee9SfI/b4QIGM/LU+SLnCprxMe2GNSdUsgVZdbFGovbrjDaIAPtuSA
+	Bxci2k0xoGP7faCASbNJyy7dMAYykT9WZUub+k8cXQ+TAOWpaCpQDND6niwShdMEVRIoaF
+	0vWFtOPqscmSKumm2K8dLugHltDGi4qbehDVLAEQFZ+6aP0Q1HlYpjCDyMTmIxYUoEIXmG
+	x33i+Cco+RaZosvY4vX+hvJ8y0HqmZur2gcR5c9i5zG7SgcRiMs2QtUZp4BxDj6zNNEI/2
+	V5w2db1/M6dVAfPQ31vVWpWH2zbcDZYr7zf+TxGXzB3MA2aIoxcCEhmO09XTdg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1745485541;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=l5BC3iHnKNhjS4kP0x8raSp+c/AcRUFkJZZ5qX+a0VE=;
+	b=zUqgaLWGxpg74RdcI0+Bnd019mRPg4PVHttM47/20CiVVso8Oj/Bw5lEi7bQoWdItrTh+W
+	/tvib0jZhDHb+HCQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Benjamin Berg <benjamin@sipsolutions.net>,
 	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
 	johannes@sipsolutions.net, Daniel Gomez <da.gomez@samsung.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -41,120 +49,81 @@ Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Thomas Gleixner <tglx@linutronix.de>
 Subject: Re: [PATCH v3 15/28] module: Use RCU in all users of
  __module_text_address().
-Message-ID: <4446525f-4e89-41bb-91a0-89c72dd0e8f8@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+Message-ID: <20250424090539.0O37K8vN@linutronix.de>
 References: <20250108090457.512198-1-bigeasy@linutronix.de>
  <20250108090457.512198-16-bigeasy@linutronix.de>
  <db0f8ec385762e6edb3edf5054a76ea189135e6e.camel@sipsolutions.net>
+ <4446525f-4e89-41bb-91a0-89c72dd0e8f8@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <db0f8ec385762e6edb3edf5054a76ea189135e6e.camel@sipsolutions.net>
+In-Reply-To: <4446525f-4e89-41bb-91a0-89c72dd0e8f8@paulmck-laptop>
 
-On Wed, Apr 23, 2025 at 05:17:31PM +0200, Benjamin Berg wrote:
-> Hi,
-> 
-> On Wed, 2025-01-08 at 10:04 +0100, Sebastian Andrzej Siewior wrote:
-> > __module_text_address() can be invoked within a RCU section, there is no
-> > requirement to have preemption disabled.
+On 2025-04-23 11:16:49 [-0700], Paul E. McKenney wrote:
+> On Wed, Apr 23, 2025 at 05:17:31PM +0200, Benjamin Berg wrote:
+> > Hi,
 > > 
-> > Replace the preempt_disable() section around __module_text_address()
-> > with RCU.
-> 
-> Unfortunately, this patch causes a performance regression for us. The
-> trouble is that we enable kmemleak and run trace-cmd so a lot of stack
-> traces need to be collected. Obviously, we also have lockdep enabled.
-> 
-> Now, combine this with the UML stack dumping code calling into
-> __kernel_text_address a lot[1] and it really has a relevant performance
-> impact. I saw the kernel spending 40% of its own CPU time just on the
-> lock in is_module_text_address.
-> 
-> Maybe kernel_text_address should leave the RCU handling to the caller
-> and assume that the RCU read lock is already taken?
-> 
-> Benjamin
-> 
-> [1] The UM arch dump_stack function reads every "unsigned long" on the
-> stack and tests it using __kernel_text_address.
-
-Use of a single guard(rcu)() is regressing performance?  Interesting and
-quite unexpected.  That said, tiven the amount of debug you have enabled,
-I am not so sure that people are going to be all that excited about a
-further performance regression.
-
-But is this regression due to the cleanup hook that guard(rcu)()
-registers?  If so, please feel free to try using rcu_read_lock()
-and rcu_read_unlock() instead.  I would be surprised if this makes a
-difference, but then again, your initial regression report also comes
-as a surprise, so...
-
-Another way to reduce guard(rcu)() overhead is to build your kernel
-with CONFIG_PREEMPT_NONE=y.  Not so good for real-time response, but
-then again, neither are your debug options.
-
-							Thanx, Paul
-
-> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > ---
-> >  kernel/module/main.c | 16 +++++-----------
-> >  1 file changed, 5 insertions(+), 11 deletions(-)
+> > On Wed, 2025-01-08 at 10:04 +0100, Sebastian Andrzej Siewior wrote:
+> > > __module_text_address() can be invoked within a RCU section, there is no
+> > > requirement to have preemption disabled.
+> > > 
+> > > Replace the preempt_disable() section around __module_text_address()
+> > > with RCU.
 > > 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 80877741ac7e5..6a99076146cbc 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -823,13 +823,12 @@ void symbol_put_addr(void *addr)
-> >  
-> >  	/*
-> >  	 * Even though we hold a reference on the module; we still
-> > need to
-> > -	 * disable preemption in order to safely traverse the data
-> > structure.
-> > +	 * RCU read section in order to safely traverse the data
-> > structure.
-> >  	 */
-> > -	preempt_disable();
-> > +	guard(rcu)();
-> >  	modaddr = __module_text_address(a);
-> >  	BUG_ON(!modaddr);
-> >  	module_put(modaddr);
-> > -	preempt_enable();
-> >  }
-> >  EXPORT_SYMBOL_GPL(symbol_put_addr);
-> >  
-> > @@ -3694,20 +3693,15 @@ struct module *__module_address(unsigned long
-> > addr)
-> >   */
-> >  bool is_module_text_address(unsigned long addr)
-> >  {
-> > -	bool ret;
-> > -
-> > -	preempt_disable();
-> > -	ret = __module_text_address(addr) != NULL;
-> > -	preempt_enable();
-> > -
-> > -	return ret;
-> > +	guard(rcu)();
-> > +	return __module_text_address(addr) != NULL;
-> >  }
-> >  
-> >  /**
-> >   * __module_text_address() - get the module whose code contains an
-> > address.
-> >   * @addr: the address.
-> >   *
-> > - * Must be called with preempt disabled or module mutex held so that
-> > + * Must be called within RCU read section or module mutex held so
-> > that
-> >   * module doesn't get freed during this.
-> >   */
-> >  struct module *__module_text_address(unsigned long addr)
+> > Unfortunately, this patch causes a performance regression for us. The
+> > trouble is that we enable kmemleak and run trace-cmd so a lot of stack
+> > traces need to be collected. Obviously, we also have lockdep enabled.
+> > 
+> > Now, combine this with the UML stack dumping code calling into
+> > __kernel_text_address a lot[1] and it really has a relevant performance
+> > impact. I saw the kernel spending 40% of its own CPU time just on the
+> > lock in is_module_text_address.
+> > 
+> > Maybe kernel_text_address should leave the RCU handling to the caller
+> > and assume that the RCU read lock is already taken?
+> > 
+> > Benjamin
+> > 
+> > [1] The UM arch dump_stack function reads every "unsigned long" on the
+> > stack and tests it using __kernel_text_address.
 > 
+> Use of a single guard(rcu)() is regressing performance?  Interesting and
+> quite unexpected.  That said, tiven the amount of debug you have enabled,
+> I am not so sure that people are going to be all that excited about a
+> further performance regression.
+> 
+> But is this regression due to the cleanup hook that guard(rcu)()
+> registers?  If so, please feel free to try using rcu_read_lock()
+> and rcu_read_unlock() instead.  I would be surprised if this makes a
+> difference, but then again, your initial regression report also comes
+> as a surprise, so...
+> 
+> Another way to reduce guard(rcu)() overhead is to build your kernel
+> with CONFIG_PREEMPT_NONE=y.  Not so good for real-time response, but
+> then again, neither are your debug options.
+
+The guard notation is not regression I guess it is just the plenty of
+rcu_read_lock()/ unlock(). We had one regression which was "fixed" by
+commit ee57ab5a32129 ("locking/lockdep: Disable KASAN instrumentation of lockdep.c").
+
+My guess would be that this is a preemptible kernel and the preempt
+disable/ enable is cheaper that the RCU version. So going back to a
+non-preemtible kernel should "fix" it.
+
+Looking at kernel_text_address(), is_bpf_text_address() has also a
+RCU read section so probably subject to the same trouble. And
+is_ftrace_trampoline() could be also converted to RCU which would
+increase the trouble. 
+
+Improving the stack trace on UM or caching some of the most common one
+might help. Not sure if disabling kmemleak for lockdep is possible/
+makes a difference.
+
+> 							Thanx, Paul
+
+Sebastian
