@@ -1,119 +1,52 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpauth.rollernet.us (smtpauth.rollernet.us [208.79.240.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2085C25E451;
-	Sat, 26 Apr 2025 16:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F254414
+	for <linux-modules@vger.kernel.org>; Sat, 26 Apr 2025 23:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=208.79.240.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745684335; cv=none; b=HOmYgJ2Vq/3IFfTTnuLyhb0e5lgLv8fOGjpq4PQz6xPVqJEzQL6S2KFwjJAkjv88mGuNt6n6fE8zWM3965QFRzYBO770C8auPyfUioMlW942c6B7Lb5htk6VSYonUSGnguG5kcqvkIxPrY34ayJPDZMwVmoI+lUk57UuiWZv8BM=
+	t=1745709785; cv=none; b=PVcc91h4IaEp0dUZa1KtRyp78DeMRHLxvAt/mx7mCow+cZyIP8JeVHVT/BEV0mcJs88NOmPNiInjIS5+h8TyionoS1DxRX8bI7lr8dBoZWYZQT1aHl1vmwiiYS/kUSvq3NA355JTw29vWIE5nJzYY/uda+QIycNEi5tLBEC/Kyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745684335; c=relaxed/simple;
-	bh=VB+M5vAwIzWGp+MpkOLUXHL28PE4kRrexHY6v8U4zLU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pa7UsGy+2eramv1jb2RT4VmfSU1ICd3ViNzQn5OcUoU/lrlQdy/DfzGDjAhun0nzANnk9zz4NzDfkCOP5tV0UgGC6spD31mU3lBanBDvjO6Q2j0wjnnEZnsl2anSwgrzEF1Hy3sO4iXMP/ZDY5jCRRLGg4w1pI34JgU3VhBI4+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahkBZ2VG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745709785; c=relaxed/simple;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=odXkz6LQbCRhlKgget0q51sW1kjh6tkA7JzpjS80gQVCSabbI59SLW0qPcpysDeR3DP1MwKkPgjmLCgtUGft/mt97VHRe8tybw0rB/p8zqGsSdDIrbvXpotbWHY5ta3lryDeViM9xOlIagqwJLWqfUnEY8UPN3b1NJTpwQ5qjWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aronetics.com; spf=pass smtp.mailfrom=aronetics.com; dkim=pass (2048-bit key) header.d=aronetics.com header.i=@aronetics.com header.b=zpm+2n+A; arc=none smtp.client-ip=208.79.240.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aronetics.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aronetics.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahkBZ2VG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326BAC4CEEB;
-	Sat, 26 Apr 2025 16:18:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745684334;
-	bh=VB+M5vAwIzWGp+MpkOLUXHL28PE4kRrexHY6v8U4zLU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ahkBZ2VG8KOYJCSIaJNvshkA2tLT4y/Nsa2VbPsM2W8BIT18sr84FZIzv/7QM5MdP
-	 De/cB2J/s0iOM2JwkxniJZG9/6HkJBs1fErLjz+eTM/vl3o/CTUfMgwjlHzOIK4iua
-	 5DvyHDrkFzfyXVATEM8QbG+Sv3nsMSFgOCfx0c4UnKulC/i2mFgYwt6DnvuPS0+dmQ
-	 OjcskL/xAmT0914Cudq/Pwtobvk0JGMAPowg12rNsTCcoalOCZBHMetodJHTnSgK8n
-	 Q9ZbqWXrxQGHT76HKKsG3lN2a909uT4brC2xD0jWQ+ie+ob/1Kkw8i7N8sOtsdrZxG
-	 lGKUgtUg3b9RQ==
-From: Alexey Gladkov <legion@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	Alexey Gladkov <legion@kernel.org>
-Subject: [PATCH v1 7/7] kbuild: Create modules.builtin.modinfo for modpost results
-Date: Sat, 26 Apr 2025 18:16:38 +0200
-Message-ID: <16dc06bb9edc122a2067a882701f5257d9c5d4e0.1745591072.git.legion@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <cover.1745591072.git.legion@kernel.org>
-References: <cover.1745591072.git.legion@kernel.org>
+	dkim=pass (2048-bit key) header.d=aronetics.com header.i=@aronetics.com header.b="zpm+2n+A"
+Received: from smtpauth.rollernet.us (localhost [127.0.0.1])
+	by smtpauth.rollernet.us (Postfix) with ESMTP id 2D4BB280087D
+	for <linux-modules@vger.kernel.org>; Sat, 26 Apr 2025 16:15:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aronetics.com;
+	 h=from:to:subject:date:message-id:mime-version:content-type
+	:content-transfer-encoding; s=roll2210; t=1745709350; bh=47DEQpj
+	8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=; b=zpm+2n+A9Y/cViX2MmeadrB
+	g0wkgGGEC7725ty3mgBtqGvQfjBhJ68tkRhv4Dp6DNHIafCCGg1c44TVGvkWqXyL
+	C/HHfCdpuarB0b4QnvjSRjbAyMxmOI4de3wqss4tpiN3xAq3gtG4W2ebRp1RwBh+
+	99Xm3iRf3epyh/NzL/KxsF3FJ26Qbbfe2oT/uDsy4WBALzZa2C+IDI/PEPZNTGKF
+	GopI0CIN+GqLCskIVVtFU6JuTkOM18Tp4b/wOYHIWEBuMdFjwp2wq/ihmwYDW8i/
+	EHr3/U9FiZCpgtEHS3Vh6LJ0TurBvZeTrebxd2DQYfuVJeaj9hdxUNB78MbvJAg=
+	=
+From: <john@aronetics.com>
+To: <linux-modules@vger.kernel.org>
+Subject: JOIN
+Date: Sat, 26 Apr 2025 19:15:44 -0400
+Message-ID: <009a01dbb701$23eb8710$6bc29530$@aronetics.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: Adu3AOCh/EiEb1Z4RtaMUTPDgpQEcA==
+Content-Language: en-us
+X-Rollernet-Abuse: mailto:abuse@rollernet.us https://www.rollernet.us/policy
+X-Rollernet-Submit: Submit ID 19af.680d6925.ca833.0
 
-Create modules.builtin.modinfo as a combination of modinfo from vmlinux
-and the result of generating modalias by modpost.
 
-Signed-off-by: Alexey Gladkov <legion@kernel.org>
----
- scripts/Makefile.vmlinux | 30 +++++++++++++++++++++++++++---
- 1 file changed, 27 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index 033c22c807b5..7a3a21040c4c 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -70,6 +70,18 @@ endif
- ifdef CONFIG_MODULES
- targets += .vmlinux.export.o
- $(vmlinux-final): .vmlinux.export.o
-+
-+# .module.builtin.modinfo.modpost
-+# ---------------------------------------------------------------------------
-+__default: .modules.builtin.modinfo.modpost
-+
-+OBJCOPYFLAGS_.modules.builtin.modinfo.modpost := -j .modinfo -O binary
-+
-+targets += .modules.builtin.modinfo.modpost
-+.modules.builtin.modinfo.modpost: .vmlinux.export.o FORCE
-+	$(call if_changed,objcopy)
-+
-+modules.builtin.modinfo: .modules.builtin.modinfo.modpost
- endif
- 
- ifdef CONFIG_ARCH_WANTS_PRE_LINK_VMLINUX
-@@ -97,15 +109,27 @@ ifdef CONFIG_BUILDTIME_TABLE_SORT
- vmlinux: scripts/sorttable
- endif
- 
-+# .module.builtin.modinfo.vmlinux
-+# ---------------------------------------------------------------------------
-+__default: .modules.builtin.modinfo.vmlinux
-+
-+OBJCOPYFLAGS_.modules.builtin.modinfo.vmlinux := -j .modinfo -O binary
-+
-+targets += .modules.builtin.modinfo.vmlinux
-+.modules.builtin.modinfo.vmlinux: vmlinux.o FORCE
-+	$(call if_changed,objcopy)
-+
- # module.builtin.modinfo
- # ---------------------------------------------------------------------------
- __default: modules.builtin.modinfo
- 
--OBJCOPYFLAGS_modules.builtin.modinfo := -j .modinfo -O binary
-+quiet_cmd_modules_builtin_modinfo = GEN     $@
-+      cmd_modules_builtin_modinfo = \
-+	cat $< $(wildcard .modules.builtin.modinfo.modpost) > $@
- 
- targets += modules.builtin.modinfo
--modules.builtin.modinfo: vmlinux.o FORCE
--	$(call if_changed,objcopy)
-+modules.builtin.modinfo: .modules.builtin.modinfo.vmlinux FORCE
-+	$(call if_changed,modules_builtin_modinfo)
- 
- # module.builtin
- # ---------------------------------------------------------------------------
--- 
-2.49.0
 
