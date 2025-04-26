@@ -1,86 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E9A1C8606;
-	Sat, 26 Apr 2025 06:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3224BA944;
+	Sat, 26 Apr 2025 16:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745648645; cv=none; b=hAWOYk3rZXej+21DiB9gYTyHvTiRs/5RdEAQq5axiN/Xu298krJU6usem/jgTwk5aIYA/8ABkixaBZWRzXxJ97DNtm0zdS9PLpgeOwq1l8YwoYnEQgXD6TVxXmDIHOKMLiwOp3dPhxlbeykAEsLV6x/ljK/gho6ois8EbJYw6wU=
+	t=1745684315; cv=none; b=d7r+fJ0ScyX2AFAT5gnrwyNVGVtrtCED2GfDCz25A7ISS4jkL3ADPlol8fMx2tGCQmciesVFCuy3V3tq5frO965HBasBsorb6QM/Wt3+H2LbqBsKrsxoR67IMcykH55+AR1PrnfCtJCuh53rfLDhst3MaTAyNrlGjufACAw4DPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745648645; c=relaxed/simple;
-	bh=yez/cfhVZ1vJtH4ueunCt4/6+v7Qxj9PSi9szUEY0Rs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TCfixHU7wApAqYae0PELppE9ZFVeIIjKL5kCiH6T7fV6U2fkm7gtKXtN9EK16UQ5cOJpjBiB27+gT43v7m3ONbqRVHTsyQGhlfYnIwdlr2Pl7q5BH0L8/lid6ZAD8ZQYlYiunyd0whfhTI/NpV9r3PJ/HXFSMbi7hy2sjpIznrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l3BYUhDJ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1745684315; c=relaxed/simple;
+	bh=xhOmpn4iMQ7fOeW0MB6dXeNqAIdJgexldFWCP70d+FU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bi0I779MhddCjSmW0fN6x5JAGDhdvkQc3hshA0eEBrMnxoogN2ZyrFzHOJYEAkrsjM5+y0Tam8QK5rsBlZ9oRiYyIuEWLiA7pz5nUKlIGouTIA0c5ItYS9REFuoE4AJoEel/ubOZVEM2kSsi8CRAyVRbRmV8CPYRKV1epaZA0kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHOrANK6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l3BYUhDJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97FDC4CEE2;
-	Sat, 26 Apr 2025 06:24:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHOrANK6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5134DC4CEE2;
+	Sat, 26 Apr 2025 16:18:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745648644;
-	bh=yez/cfhVZ1vJtH4ueunCt4/6+v7Qxj9PSi9szUEY0Rs=;
+	s=k20201202; t=1745684313;
+	bh=xhOmpn4iMQ7fOeW0MB6dXeNqAIdJgexldFWCP70d+FU=;
 	h=From:To:Cc:Subject:Date:From;
-	b=l3BYUhDJhzTJqpqal/6ebfjqJ+65JZc5XV9uOqv9MWsfC8OkbkKZjTS0wKv8qjcab
-	 wFQr6mtORgu5ZnF3xjqQuJtavTpMMItqemkq2fgLt+xCJoELgYXYgrBI6jrPjz236z
-	 jX3Gc1BgLc/F4lkQzs3Sw1uBVnVnzDckSZ4ryr9HVr2NxHwdP9rudIWfNYHdDG89t8
-	 mSzsjA3bBu2GVhxsAgsP1Hk/52GCElRKeNUVVAfYmds/ntFj9VGEUzD8se8ok2nY8n
-	 ZUozJoJPTxiu7WTjyxItj0FSd5oQGx2qxGw6VUsD3z9qEm+u5Qh9dusGHblMEQjJR7
-	 Yvc1+yzKE6glQ==
-From: Kees Cook <kees@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
+	b=nHOrANK6bt6o7hHFX/2Nz5EYQu8bCXnKXLD9kjOkxUnUjPkDX+rHA6N1I/ii0Cv9z
+	 g1CVYZmlmqQ9iY5KowsLYwwqZGpGoYjDcr4WW+Y74TOtrX3wptV4cNFqKc3ItVOowX
+	 Bs5Iyl7yMgdDvcUeqiPr/rARA5AqnkD2mwhUJd+zZKgfapWXjXNf+wbX4ZrBMqdM1W
+	 3e2vty08qi6hxVZbnxHC9B51R4zzsQWualmx/+UlQeNPDP0pgBhIxmbgZSzC+zyjrh
+	 cav1b/k1iZ193GI+tFO24kEsvaruFcn6AAx4y+BsTN1Rq9+woh/ED1SQBWFWp2UyzB
+	 do3flU2vuKN9w==
+From: Alexey Gladkov <legion@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>
+Cc: linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] module/decompress: Adjust module_extend_max_pages() allocation type
-Date: Fri, 25 Apr 2025 23:24:00 -0700
-Message-Id: <20250426062359.work.358-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	linux-kbuild@vger.kernel.org,
+	Alexey Gladkov <legion@kernel.org>
+Subject: [PATCH v1 0/7] Add generated modalias to modules.builtin.modinfo
+Date: Sat, 26 Apr 2025 18:16:31 +0200
+Message-ID: <cover.1745591072.git.legion@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1365; i=kees@kernel.org; h=from:subject:message-id; bh=yez/cfhVZ1vJtH4ueunCt4/6+v7Qxj9PSi9szUEY0Rs=; b=owGbwMvMwCVmps19z/KJym7G02pJDBk8NQzcZ54JMRQ7LH7/O7Op4JvAE++PF5Jf+4uIfbt5+ Jycb/LzjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIkcjmBkWGpc/2Txy2lclxIk rzROyZq6Qe7oypTNtoH3lFTWG5lVCTEyfHS8fKo5uHqi3CQBddbtj0NLp+ZuD3y51iuvolvU7Kg kJwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 
-In preparation for making the kmalloc family of allocators type aware,
-we need to make sure that the returned type from the allocation matches
-the type of the variable being assigned. (Before, the allocator would
-always return "void *", which can be implicitly cast to any pointer type.)
+The modules.builtin.modinfo file is used by userspace (kmod to be specific) to
+get information about builtin modules. Among other information about the module,
+information about module aliases is stored. This is very important to determine
+that a particular modalias will be handled by a module that is inside the
+kernel.
 
-The assigned type is "struct page **" but the returned type will be
-"struct page ***". These have the same allocation size (pointer size), but
-the types don't match. Adjust the allocation type to match the assignment.
+There are several mechanisms for creating modalias for modules:
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Cc: Daniel Gomez <da.gomez@samsung.com>
-Cc: <linux-modules@vger.kernel.org>
----
- kernel/module/decompress.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The first is to explicitly specify the MODULE_ALIAS of the macro. In this case,
+the aliases go into the '.modinfo' section of the module if it is compiled
+separately or into vmlinux.o if it is builtin into the kernel.
 
-diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-index 474e68f0f063..bbb2a55568cd 100644
---- a/kernel/module/decompress.c
-+++ b/kernel/module/decompress.c
-@@ -19,7 +19,7 @@ static int module_extend_max_pages(struct load_info *info, unsigned int extent)
- 	struct page **new_pages;
- 
- 	new_pages = kvmalloc_array(info->max_pages + extent,
--				   sizeof(info->pages), GFP_KERNEL);
-+				   sizeof(*new_pages), GFP_KERNEL);
- 	if (!new_pages)
- 		return -ENOMEM;
- 
+The second is the use of MODULE_DEVICE_TABLE followed by the use of the
+modpost utility. In this case, vmlinux.o no longer has this information and
+does not get it into modules.builtin.modinfo.
+
+For example:
+
+$ modinfo pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+modinfo: ERROR: Module pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30 not found.
+
+$ modinfo xhci_pci
+name:           xhci_pci
+filename:       (builtin)
+license:        GPL
+file:           drivers/usb/host/xhci-pci
+description:    xHCI PCI Host Controller Driver
+
+The builtin module is missing alias "pci:v*d*sv*sd*bc0Csc03i30*" which will be
+generated by modpost if the module is built separately.
+
+To fix this it is necessary to add the generated by modpost modalias to
+modules.builtin.modinfo.
+
+Fortunately modpost already generates .vmlinux.export.c for exported symbols. It
+is possible to use this file to create a '.modinfo' section for builtin modules.
+The modules.builtin.modinfo file becomes a composite file. One part is extracted
+from vmlinux.o, the other part from .vmlinux.export.o.
+
+
+Alexey Gladkov (7):
+  mfd: stmpe-spi: Correct the name used in MODULE_DEVICE_TABLE
+  scsi: Define MODULE_DEVICE_TABLE only if necessary
+  modules: Add macros to specify modinfo prefix
+  modpost: Make mod_device_table aliases more unique
+  modpost: Create modalias for builtin modules
+  kbuild: Move modules.builtin.modinfo to another makefile
+  kbuild: Create modules.builtin.modinfo for modpost results
+
+ drivers/mfd/stmpe-spi.c     |  2 +-
+ drivers/scsi/BusLogic.c     |  2 +-
+ include/linux/module.h      | 21 +++++++++++-----
+ include/linux/moduleparam.h |  7 ++++--
+ scripts/Makefile.vmlinux    | 50 +++++++++++++++++++++++++++++++++++++
+ scripts/Makefile.vmlinux_o  | 26 +------------------
+ scripts/mod/file2alias.c    | 31 +++++++++++++++++++----
+ scripts/mod/modpost.c       | 21 +++++++++++++---
+ scripts/mod/modpost.h       |  7 +++++-
+ 9 files changed, 123 insertions(+), 44 deletions(-)
+
 -- 
-2.34.1
+2.49.0
 
