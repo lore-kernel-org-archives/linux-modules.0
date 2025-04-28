@@ -1,33 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6B670810;
-	Sun, 27 Apr 2025 11:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D131FBC8B
+	for <linux-modules@vger.kernel.org>; Mon, 28 Apr 2025 10:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745751691; cv=none; b=inbuGd3DvtPUZo8VcwFOv+pVse/Zk54Ql59EkBn11efY91kNr/bq/C2KtjgDHARKq2Cm2kGG5EaSOF/r2Sw15qBvNM18JUiyL0uNlgo6XBPfeUD5b54T2Zk/fETufbrdOLXDtFMsigWEP9HWhIA7i54t+2+CX7vrxb2L+25piWg=
+	t=1745836208; cv=none; b=tee33izTigFswqo+EPWblKiMisRnOGMBGMPxEO7wajg6nNtSMjnTs6BMl9z9kD0f3Y21G0AUgpNRiFh/mNSBOxsTlYTTSSbE8d9fi7Pi9wfEBSaZrYa/6HwWjuAs6lxEjQYXzyWk1PecYRRKx1EE30WaruPh9n4WYEY8vxKW6sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745751691; c=relaxed/simple;
-	bh=YeMt7dkQnhXF4IfSaEU3l4RDYBOk60yfTsaLfgVWoCo=;
+	s=arc-20240116; t=1745836208; c=relaxed/simple;
+	bh=gELjKvJp2t5ySbAVJZJ2+VVCCxZmtZHZpmT45i+SY4I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q/VexGZogs+cT5J6hlofSLsvSy29I8VYQsLCTeIFhes4wwbnRhTVwoZHcGd3Jp4EtoYfCsbr+5xIv3iMXbfTy4bUc59UCd30RJq1TsU8WkiNXD9c0hrsB+KFXPH7ZevlTyRz46AmbQNrgQvCttN0AguaEZACsXEtCa+/ksJ3lE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBKVT71c; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=bwfDuV05DhXZDwmardVLdc83AGI/wWKTpa0DrIWqEFlLfdux9u4OAaRQc5JecJr9G/rK9erq4W2UnvcrBXF/kqgs1yc5iJn+BLaggaD18cPiz6GdAKBg2pckzq3/5A6RSzpz/zsAekDACFFC0Qlzc9wRVMQy0uJGy9ow2UJ2/Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=U5fbYIcA; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBKVT71c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CACB1C4CEE3;
-	Sun, 27 Apr 2025 11:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745751691;
-	bh=YeMt7dkQnhXF4IfSaEU3l4RDYBOk60yfTsaLfgVWoCo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jBKVT71c3wmReKX5McZmbDtXMgNi/5jB7ibfdyuYCxN/WPxPVZzO6T1j6YTaCI3R2
-	 27mMbadPQeUqj6KUoSqNk2lYCCSJ/hyhx5YPID9u+nmVo0ir7W30fWT0Ale/z84SOB
-	 iBTE9uK9VKiRbReppaFXYDpGR38rfb8q+hkdFjai0zDdN9Py+2u2L4mZ02u7AXFlRC
-	 FNR3sj/qqyDr5+Wjr3+pT6MCHiIZO6cJMToPOtffqi9Kcm/M90XZs1byFhTAP8ZVib
-	 WAyqtRUenDzPoAlhiFGcv7IizOn0fxMgmbBjKtRereizGFS4ZlSLlHyMNZGle+xwoK
-	 RZ2bU9KVDCEng==
-Message-ID: <60b92fba-8170-4e9a-bdae-1ad7dd6beefb@kernel.org>
-Date: Sun, 27 Apr 2025 13:01:25 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="U5fbYIcA"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ace3b03c043so697373866b.2
+        for <linux-modules@vger.kernel.org>; Mon, 28 Apr 2025 03:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1745836205; x=1746441005; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u0X0zwlsw4qUSlbhCxa4+BodiCh0Q7u9EJXcW8gHza8=;
+        b=U5fbYIcAi54/ReCj4w03oWTfA27Pozcsc1VuALjuUo5hxEuAK2MeiK5LTjO3WKno1h
+         5OPIIu1G+9qHd4Btz4mlGYD2ZHdhhiILtvMkNBHLS+wUcS2g3W9FAVcdNK7jq32SfWRz
+         M9LspV2imIpYM21ttvuLam8mjyTqb5tvXFCP72Qe5bqhoB0SBEd8+STz6Y+LJk1jOPI+
+         7WhXnRHz1IzJ3dAHdkynbiCaBTLbRCVBPq3u4bhcs8pWIqztTOJniP4oH3QsvWzuA7LT
+         2c86Y3kzorim2UgEcmvGp8/eysDQYRP5pZGNFpCszldI+PZP5g4An5GOEYVmNPxpCrs2
+         LfFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745836205; x=1746441005;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0X0zwlsw4qUSlbhCxa4+BodiCh0Q7u9EJXcW8gHza8=;
+        b=pbMgCa7YylBJBIIhbjSbamWQns2KOhEnirCrlozHksEWSTuUtNRF9eomlD1MtcYuNl
+         75E3yabaQVAGPnCw62VsxRctoq1j1YXQ15ar2noKVD0wkGVzvOHQ1QFEi2OnLBvZXIBt
+         KojuKRNOlHqYWzJKb4yJ9keNyZ1ODqcfzl2JHR2yyN5jjtSh17ka7yoi6wG2vIsEUD7Q
+         JAjUnym+qM+GnxyzmYDFmPE5YQvgJwp2ssR2+7QQ9G9Mjrk6FRTouWAq9OmLYJTUtCZh
+         8oizkwwJzbRxd5AutX0ZJB6v+IPNfK+qNLfXA0U5uQPSSLEkOSZbcKYCnppIrGuFXV3q
+         D1Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCWl1DJoYf0CVAP7naTt4DwWPiWs4hjRP0/+0ufWBKkxBsPt7HjYexM9BLcjtG48oMCCr4YYU+XBBdDy9nIk@vger.kernel.org
+X-Gm-Message-State: AOJu0YzslDrVJJEZwjptHt8CtMtlZEo+SccdcIZ1v8Sc11HB99ux7pDQ
+	LOFzyTwFaRw85ZKJqp3C3RUpLNDeRTdrLnr1PxkYYk3wzZ0RDg2/KZib+yztMPI=
+X-Gm-Gg: ASbGncuCwbznCFVNQRe1NGcWJJiHr7bgZ+KCRTFMRdDCAAXmvVeAhGjNoRMI8E3fliu
+	Y5wHCeErmxOX5z5MVeNnb1LF4wvbNJTQncualVCd3oGtuvpYOvXIujjddBFLvDT7HZKEmMxgiUy
+	Ros+d4waY8x0NCsOkqG8WQALiJB9QVPO6dmys/HEuKhkoiMaYk7yD4V1ANjEGDs5yCGPPMNR301
+	bZo8zSkeiq6fEhefQxF4Cs+Ui8dMfZLuvrKRnMm23YOKhC9cwom6vJ8BNZiTTI7ukAc2tBJTaHN
+	O1kndaMOJNq7+3lP8gzSnvDv6pQb2V4LbmgPaG89VA0=
+X-Google-Smtp-Source: AGHT+IFrsAckfnQZpitNp6/6THiwG6jBaY8J15t3yrKOGYkSn7ibxSU+FNTcjZoRtyc0GmSJWsluUA==
+X-Received: by 2002:a17:906:9fc7:b0:aca:cde4:fac1 with SMTP id a640c23a62f3a-ace71131c2dmr1175485766b.31.1745836204759;
+        Mon, 28 Apr 2025 03:30:04 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6e41cf4esm596033466b.29.2025.04.28.03.30.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Apr 2025 03:30:04 -0700 (PDT)
+Message-ID: <d7382c8a-cfb2-4389-b120-f01a17e248ab@suse.com>
+Date: Mon, 28 Apr 2025 12:30:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -35,83 +66,65 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/7] mfd: stmpe-spi: Correct the name used in
- MODULE_DEVICE_TABLE
-To: Alexey Gladkov <legion@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Lee Jones <lee@kernel.org>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-References: <cover.1745591072.git.legion@kernel.org>
- <79d5a847303e45a46098f2d827d3d8a249a32be3.1745591072.git.legion@kernel.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] module/decompress: Adjust module_extend_max_pages()
+ allocation type
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20250426062359.work.358-kees@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <79d5a847303e45a46098f2d827d3d8a249a32be3.1745591072.git.legion@kernel.org>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250426062359.work.358-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/04/2025 18:16, Alexey Gladkov wrote:
-> The name used in the macro does not exist.
+On 4/26/25 08:24, Kees Cook wrote:
+> In preparation for making the kmalloc family of allocators type aware,
+> we need to make sure that the returned type from the allocation matches
+> the type of the variable being assigned. (Before, the allocator would
+> always return "void *", which can be implicitly cast to any pointer type.)
 > 
-> drivers/mfd/stmpe-spi.c:132:26: error: use of undeclared identifier 'stmpe_id'
->   132 | MODULE_DEVICE_TABLE(spi, stmpe_id);
->       |                          ^
-> 1 error generated.
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-P.S. You can trim the error messages to relevant parts, e.g. "1 error
-generated" is really redundant and not needed to store in git history.
-
+> The assigned type is "struct page **" but the returned type will be
+> "struct page ***". These have the same allocation size (pointer size), but
+> the types don't match. Adjust the allocation type to match the assignment.
 > 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Daniel Gomez <da.gomez@samsung.com>
+> Cc: <linux-modules@vger.kernel.org>
+> ---
+>  kernel/module/decompress.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+> index 474e68f0f063..bbb2a55568cd 100644
+> --- a/kernel/module/decompress.c
+> +++ b/kernel/module/decompress.c
+> @@ -19,7 +19,7 @@ static int module_extend_max_pages(struct load_info *info, unsigned int extent)
+>  	struct page **new_pages;
+>  
+>  	new_pages = kvmalloc_array(info->max_pages + extent,
+> -				   sizeof(info->pages), GFP_KERNEL);
+> +				   sizeof(*new_pages), GFP_KERNEL);
+>  	if (!new_pages)
+>  		return -ENOMEM;
+>  
 
-Best regards,
-Krzysztof
+The function has a similar type mismatch a few lines below:
+
+memcpy(new_pages, info->pages, info->max_pages * sizeof(info->pages));
+
+The sizeof operator is used on 'struct page **', but it should be really
+on 'struct page *'.
+
+Could you please fix this as well? For consistency with your patch,
+I suggest changing it to 'sizeof(*new_pages)'.
+
+-- 
+Thanks,
+Petr
