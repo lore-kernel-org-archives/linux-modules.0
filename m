@@ -1,434 +1,817 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7092A2D4B5A
-	for <linux-modules@vger.kernel.org>; Tue, 29 Apr 2025 11:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA4D2C2593;
+	Tue, 29 Apr 2025 12:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927191; cv=none; b=f8wiSrMXL5tNKf6N1JHw/zaT98qLhgFhZ94W6T38b9+tfjAA603phNyoVYo24tbNlzSIz3sBRRiOLfhWplxHxzAzXOCpnPETIw2bXaEJiHjuyhmOhn1jhLE4MnaxhEI+qguXazfTo+ERAKGSLeYeMrVBIBnNCf4MLlHVzRxrqy4=
+	t=1745930966; cv=none; b=gmLAqUZ44abPIsPYt52FPp87afXIMCkr2O5jVW90oM7NN6p06eB7ON2459vg/WAE17SHf9xJhqmbxw6uaQdIFcQf0qHFzRYz6bya/uEvvrHws003VdhW5a1qjaaedtoGkc5WNWPrso2jPsuVACpA4U7aMRj0c/g2Z/vlXurnyvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927191; c=relaxed/simple;
-	bh=//7Q4pa0cyHdD4P62SOM8iLoDYvBplXZ4+xR7j8wswY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mFW/3GUZGWFiUtRVvvC+gmT3lrEczb2d0tW10pWe+lh2kBHywnv8SZ1ZM3RbaiY8Y3TE3PxrwT0l0C4ILoTub2OBC9a0GFzhAmrUnDMGaZpGm87eVroMreOgNoY97NVBciWlJNAox6orQCUrMJz2WmpuM9YUng2YaqCjPVKwhr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bpfvjltT; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1745930966; c=relaxed/simple;
+	bh=HPSFu6tUOm6zr5iB/JxZyEnedJD0+8WjnyHjE+FLqzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R0Fgu5j7NojZEBhI+dWkKCykC2H+GrxgALzGj6yI+u5+iatjiKQXo0imvncB90glOvSBzkugjO6V3e3I5KpvRp6iCdqeelWhhR17o5G2G+ZYjh3UiXg8OrVIhANVuu/tFagvyekt99MIWQFEYPAGKamTIVmBISNmtvd3ByAg5UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtczWTO1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bpfvjltT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745927187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UNP0/g1fsLvLBQS0mp5T4cvzk2DsJdERKWqgqviWFK4=;
-	b=bpfvjltTUW+i2iQ6I6dlm0qUuj3ijOjCw9zy/HKdw0llJxRqEI6WEvfsUpMAoRaLX9CbLO
-	oGNrDv7ba1lUg/1McpFQf7j4c9duXxGxfgJRaFu6h+aKjGLNCVh8OPgTMoyzm+nqN3rLrg
-	RKOQcC6j8l5OVNjiD2GzqPOItKBfSwM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-155-r7bLT26sNc-abpjlyaV0Qg-1; Tue,
- 29 Apr 2025 07:46:25 -0400
-X-MC-Unique: r7bLT26sNc-abpjlyaV0Qg-1
-X-Mimecast-MFC-AGG-ID: r7bLT26sNc-abpjlyaV0Qg_1745927181
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BEDBC1800264;
-	Tue, 29 Apr 2025 11:46:21 +0000 (UTC)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (unknown [10.45.225.102])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C51B19560A3;
-	Tue, 29 Apr 2025 11:45:52 +0000 (UTC)
-From: Valentin Schneider <vschneid@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	rcu@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Marcelo Tosatti <mtosatti@redhat.com>,
-	Yair Podemsky <ypodemsk@redhat.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Daniel Wagner <dwagner@suse.de>,
-	Petr Tesarik <ptesarik@suse.com>,
-	Nicolas Saenz Julienne <nsaenz@amazon.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.amakhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtczWTO1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8A8C4CEE3;
+	Tue, 29 Apr 2025 12:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745930965;
+	bh=HPSFu6tUOm6zr5iB/JxZyEnedJD0+8WjnyHjE+FLqzw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QtczWTO1Yn5qjYzrMBPegFyjaIZ/3Ez0OkB2QiWOCYxlH+0DU80KB037cSmrbYGM7
+	 8Nqska5nU7MHvgyBobAs57ysuvQKYGjNQVKXzrmnw5gU2KfWuDeh2SmvvW9n7OKmNz
+	 JhC3hxMUJwNnyoQN2UvlMXnJsjSWipKQWQVNqplrO6QgqCJEns2NepPSqSCB3pJh2A
+	 Q45WdGPEEXDlyFbUFbh0B/r1DAx8oTwWpTfhZ7FI1akIwaCZxQ6+kCR15n6Mxd4Adi
+	 LyRDtboSpaQHRh7dKJsEf/9sohJfIYxGB4Ijuf88nzcM5qO9inBFsK186gXek9QhfZ
+	 Qy9ndSCixlN1w==
+Date: Tue, 29 Apr 2025 14:49:20 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Rong Xu <xur@google.com>,
-	Rafael Aquini <aquini@redhat.com>,
-	Song Liu <song@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	Benjamin Berg <benjamin.berg@intel.com>,
-	Vishal Annapurve <vannapurve@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	John Stultz <jstultz@google.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH v5 25/25] context_tracking,x86: Defer kernel text patching IPIs
-Date: Tue, 29 Apr 2025 13:32:42 +0200
-Message-ID: <20250429113242.998312-26-vschneid@redhat.com>
-In-Reply-To: <20250429113242.998312-1-vschneid@redhat.com>
-References: <20250429113242.998312-1-vschneid@redhat.com>
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v1 5/7] modpost: Create modalias for builtin modules
+Message-ID: <aBDK0G6OUUcEmzvZ@example.org>
+References: <cover.1745591072.git.legion@kernel.org>
+ <bb0d887760a474e5e7f9db0e9933eee81a5d9ea3.1745591072.git.legion@kernel.org>
+ <cf3ff619-6177-42e1-8f64-74cf4cbb8672@suse.com>
+ <aBCkNh0Q2hwpMchj@example.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aBCkNh0Q2hwpMchj@example.org>
 
-text_poke_bp_batch() sends IPIs to all online CPUs to synchronize
-them vs the newly patched instruction. CPUs that are executing in userspace
-do not need this synchronization to happen immediately, and this is
-actually harmful interference for NOHZ_FULL CPUs.
+On Tue, Apr 29, 2025 at 12:04:44PM +0200, Alexey Gladkov wrote:
+> > I'm not sure it's best to overload this data in this way. I think mixing
+> > actual files and "logical" modules in the modules list is somewhat
+> > confusing.
+> > 
+> > An alternative would be to keep a single module struct for vmlinux and
+> > record the discovered aliases under it?
+> 
+> It is possible to extend struct module_alias and add the module name. The
+> problem is that alias is added by module_alias_printf() and we will have
+> to add the module name to the arguments to each do_entry handler in
+> addition to struct module where there is already a name (but in our case
+> it is vmlinux).
+> 
+> I can do that if you think it's a better way.
 
-As the synchronization IPIs are sent using a blocking call, returning from
-text_poke_bp_batch() implies all CPUs will observe the patched
-instruction(s), and this should be preserved even if the IPI is deferred.
-In other words, to safely defer this synchronization, any kernel
-instruction leading to the execution of the deferred instruction
-sync (ct_work_flush()) must *not* be mutable (patchable) at runtime.
+If I don't add separate entries for each builtin module, the patch will
+look like this:
 
-This means we must pay attention to mutable instructions in the early entry
-code:
-- alternatives
-- static keys
-- static calls
-- all sorts of probes (kprobes/ftrace/bpf/???)
-
-The early entry code leading to ct_work_flush() is noinstr, which gets rid
-of the probes.
-
-Alternatives are safe, because it's boot-time patching (before SMP is
-even brought up) which is before any IPI deferral can happen.
-
-This leaves us with static keys and static calls.
-
-Any static key used in early entry code should be only forever-enabled at
-boot time, IOW __ro_after_init (pretty much like alternatives). Exceptions
-are explicitly marked as allowed in .noinstr and will always generate an
-IPI when flipped.
-
-The same applies to static calls - they should be only updated at boot
-time, or manually marked as an exception.
-
-Objtool is now able to point at static keys/calls that don't respect this,
-and all static keys/calls used in early entry code have now been verified
-as behaving appropriately.
-
-Leverage the new context_tracking infrastructure to defer sync_core() IPIs
-to a target CPU's next kernel entry.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- arch/x86/include/asm/context_tracking_work.h |  6 ++-
- arch/x86/include/asm/text-patching.h         |  1 +
- arch/x86/kernel/alternative.c                | 39 +++++++++++++++++---
- arch/x86/kernel/kprobes/core.c               |  4 +-
- arch/x86/kernel/kprobes/opt.c                |  4 +-
- arch/x86/kernel/module.c                     |  2 +-
- include/asm-generic/sections.h               | 15 ++++++++
- include/linux/context_tracking_work.h        |  4 +-
- 8 files changed, 60 insertions(+), 15 deletions(-)
-
-diff --git a/arch/x86/include/asm/context_tracking_work.h b/arch/x86/include/asm/context_tracking_work.h
-index 5f3b2d0977235..485b32881fde5 100644
---- a/arch/x86/include/asm/context_tracking_work.h
-+++ b/arch/x86/include/asm/context_tracking_work.h
-@@ -2,11 +2,13 @@
- #ifndef _ASM_X86_CONTEXT_TRACKING_WORK_H
- #define _ASM_X86_CONTEXT_TRACKING_WORK_H
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 7250b4a527ec..6225793ddcd4 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -257,14 +257,10 @@ extern void cleanup_module(void);
+ 	__PASTE(type,			\
+ 	__PASTE(__, name)))))))
  
-+#include <asm/sync_core.h>
+-#ifdef MODULE
+ /* Creates an alias so file2alias.c can find device table. */
+ #define MODULE_DEVICE_TABLE(type, name)			\
+ extern typeof(name) __mod_device_table(type, name)	\
+   __attribute__ ((unused, alias(__stringify(name))))
+-#else  /* !MODULE */
+-#define MODULE_DEVICE_TABLE(type, name)
+-#endif
+ 
+ /* Version of form [<epoch>:]<version>[-<extra-version>].
+  * Or for CVS/RCS ID version, everything but the number is stripped.
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index dff1799a4c79..efb5e1e3fa1f 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -37,6 +37,21 @@ typedef Elf64_Addr	kernel_ulong_t;
+ #include <ctype.h>
+ #include <stdbool.h>
+ 
++struct module_info {
++	struct module *module;
++	const char *modname;
++	size_t modnamelen;
++};
 +
- static __always_inline void arch_context_tracking_work(enum ct_work work)
- {
- 	switch (work) {
--	case CT_WORK_n:
--		// Do work...
-+	case CT_WORK_SYNC:
-+		sync_core();
- 		break;
- 	case CT_WORK_MAX:
- 		WARN_ON_ONCE(true);
-diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-index ab9e143ec9fea..9dfa46f721c1d 100644
---- a/arch/x86/include/asm/text-patching.h
-+++ b/arch/x86/include/asm/text-patching.h
-@@ -33,6 +33,7 @@ extern void apply_relocation(u8 *buf, const u8 * const instr, size_t instrlen, u
-  */
- extern void *text_poke(void *addr, const void *opcode, size_t len);
- extern void text_poke_sync(void);
-+extern void text_poke_sync_deferrable(void);
- extern void *text_poke_kgdb(void *addr, const void *opcode, size_t len);
- extern void *text_poke_copy(void *addr, const void *opcode, size_t len);
- #define text_poke_copy text_poke_copy
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index bf82c6f7d6905..8c73ac6243809 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -18,6 +18,7 @@
- #include <linux/mmu_context.h>
- #include <linux/bsearch.h>
- #include <linux/sync_core.h>
-+#include <linux/context_tracking.h>
- #include <asm/text-patching.h>
- #include <asm/alternative.h>
- #include <asm/sections.h>
-@@ -2450,9 +2451,24 @@ static void do_sync_core(void *info)
- 	sync_core();
- }
- 
-+static bool do_sync_core_defer_cond(int cpu, void *info)
++/* Does modnamelen bytes of modname exactly match the module name? */
++static bool modname_is(const char *modname, size_t modnamelen, const char *name)
 +{
-+	return !ct_set_cpu_work(cpu, CT_WORK_SYNC);
-+}
++	if (modnamelen != strlen(name))
++		return false;
 +
-+static void __text_poke_sync(smp_cond_func_t cond_func)
-+{
-+	on_each_cpu_cond(cond_func, do_sync_core, NULL, 1);
-+}
-+
- void text_poke_sync(void)
- {
--	on_each_cpu(do_sync_core, NULL, 1);
-+	__text_poke_sync(NULL);
-+}
-+
-+void text_poke_sync_deferrable(void)
-+{
-+	__text_poke_sync(do_sync_core_defer_cond);
- }
- 
- /*
-@@ -2623,6 +2639,7 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
-+	smp_cond_func_t cond = do_sync_core_defer_cond;
- 	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
-@@ -2658,11 +2675,21 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 * First step: add a int3 trap to the address that will be patched.
- 	 */
- 	for (i = 0; i < nr_entries; i++) {
--		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
--		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
-+		void *addr = text_poke_addr(&tp[i]);
-+
-+		/*
-+		 * There's no safe way to defer IPIs for patching text in
-+		 * .noinstr, record whether there is at least one such poke.
-+		 */
-+		if (is_kernel_noinstr_text((unsigned long)addr) ||
-+		    is_module_noinstr_text_address((unsigned long)addr))
-+			cond = NULL;
-+
-+		tp[i].old = *((u8 *)addr);
-+		text_poke(addr, &int3, INT3_INSN_SIZE);
- 	}
- 
--	text_poke_sync();
-+	__text_poke_sync(cond);
- 
- 	/*
- 	 * Second step: update all but the first byte of the patched range.
-@@ -2724,7 +2751,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 		 * not necessary and we'd be safe even without it. But
- 		 * better safe than sorry (plus there's not only Intel).
- 		 */
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 	}
- 
- 	/*
-@@ -2745,7 +2772,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	}
- 
- 	if (do_sync)
--		text_poke_sync();
-+		__text_poke_sync(cond);
- 
- 	/*
- 	 * Remove and wait for refs to be zero.
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 09608fd936876..687e6805b7511 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -808,7 +808,7 @@ void arch_arm_kprobe(struct kprobe *p)
- 	u8 int3 = INT3_INSN_OPCODE;
- 
- 	text_poke(p->addr, &int3, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	perf_event_text_poke(p->addr, &p->opcode, 1, &int3, 1);
- }
- 
-@@ -818,7 +818,7 @@ void arch_disarm_kprobe(struct kprobe *p)
- 
- 	perf_event_text_poke(p->addr, &int3, 1, &p->opcode, 1);
- 	text_poke(p->addr, &p->opcode, 1);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- }
- 
- void arch_remove_kprobe(struct kprobe *p)
-diff --git a/arch/x86/kernel/kprobes/opt.c b/arch/x86/kernel/kprobes/opt.c
-index 36d6809c6c9e1..b2ce4d9c3ba56 100644
---- a/arch/x86/kernel/kprobes/opt.c
-+++ b/arch/x86/kernel/kprobes/opt.c
-@@ -513,11 +513,11 @@ void arch_unoptimize_kprobe(struct optimized_kprobe *op)
- 	       JMP32_INSN_SIZE - INT3_INSN_SIZE);
- 
- 	text_poke(addr, new, INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 	text_poke(addr + INT3_INSN_SIZE,
- 		  new + INT3_INSN_SIZE,
- 		  JMP32_INSN_SIZE - INT3_INSN_SIZE);
--	text_poke_sync();
-+	text_poke_sync_deferrable();
- 
- 	perf_event_text_poke(op->kp.addr, old, JMP32_INSN_SIZE, new, JMP32_INSN_SIZE);
- }
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index a7998f3517017..d89c9de0ca9f5 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -206,7 +206,7 @@ static int write_relocate_add(Elf64_Shdr *sechdrs,
- 				   write, apply);
- 
- 	if (!early) {
--		text_poke_sync();
-+		text_poke_sync_deferrable();
- 		mutex_unlock(&text_mutex);
- 	}
- 
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index 0755bc39b0d80..7d2403014010e 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -199,6 +199,21 @@ static inline bool is_kernel_inittext(unsigned long addr)
- 	       addr < (unsigned long)_einittext;
- }
- 
-+
-+/**
-+ * is_kernel_noinstr_text - checks if the pointer address is located in the
-+ *                    .noinstr section
-+ *
-+ * @addr: address to check
-+ *
-+ * Returns: true if the address is located in .noinstr, false otherwise.
-+ */
-+static inline bool is_kernel_noinstr_text(unsigned long addr)
-+{
-+	return addr >= (unsigned long)__noinstr_text_start &&
-+	       addr < (unsigned long)__noinstr_text_end;
++	return memcmp(modname, name, modnamelen) == 0;
 +}
 +
  /**
-  * __is_kernel_text - checks if the pointer address is located in the
-  *                    .text section
-diff --git a/include/linux/context_tracking_work.h b/include/linux/context_tracking_work.h
-index c68245f8d77c5..2facc621be067 100644
---- a/include/linux/context_tracking_work.h
-+++ b/include/linux/context_tracking_work.h
-@@ -5,12 +5,12 @@
- #include <linux/bitops.h>
+  * module_alias_printf - add auto-generated MODULE_ALIAS()
+  *
+@@ -45,10 +60,11 @@ typedef Elf64_Addr	kernel_ulong_t;
+  * @fmt: printf(3)-like format
+  */
+ static void __attribute__((format (printf, 3, 4)))
+-module_alias_printf(struct module *mod, bool append_wildcard,
++module_alias_printf(struct module_info *modi, bool append_wildcard,
+ 		    const char *fmt, ...)
+ {
+ 	struct module_alias *new, *als;
++	char *modname;
+ 	size_t len;
+ 	int n;
+ 	va_list ap;
+@@ -68,7 +84,7 @@ module_alias_printf(struct module *mod, bool append_wildcard,
+ 	if (append_wildcard)
+ 		len++;	/* extra byte for '*' */
  
- enum {
--	CT_WORK_n_OFFSET,
-+	CT_WORK_SYNC_OFFSET,
- 	CT_WORK_MAX_OFFSET
+-	new = xmalloc(sizeof(*new) + len);
++	new = xmalloc(sizeof(*new) + len + modi->modnamelen + 1);
+ 
+ 	/* Now, really print it to the allocated buffer */
+ 	va_start(ap, fmt);
+@@ -87,14 +103,31 @@ module_alias_printf(struct module *mod, bool append_wildcard,
+ 	}
+ 
+ 	/* avoid duplication */
+-	list_for_each_entry(als, &mod->aliases, node) {
+-		if (!strcmp(als->str, new->str)) {
++	list_for_each_entry(als, &modi->module->aliases, node) {
++		if (modi->module->is_vmlinux &&
++		    !modname_is(modi->modname, modi->modnamelen, als->modname))
++			continue;
++		if (!strcmp(als->alias, new->str)) {
+ 			free(new);
+ 			return;
+ 		}
+ 	}
+ 
+-	list_add_tail(&new->node, &mod->aliases);
++	modname = new->str + n + 1;
++	len = modi->modnamelen + 1;	/* extra byte for '\0' */
++
++	n = snprintf(modname, len, "%s", modi->modname);
++
++	if (n < len) {
++		error("snprintf failed\n");
++		free(new);
++		return;
++	}
++
++	new->alias = new->str;
++	new->modname = modname;
++
++	list_add_tail(&new->node, &modi->module->aliases);
+ }
+ 
+ typedef uint32_t	__u32;
+@@ -125,7 +158,7 @@ typedef struct {
+ struct devtable {
+ 	const char *device_id;
+ 	unsigned long id_size;
+-	void (*do_entry)(struct module *mod, void *symval);
++	void (*do_entry)(struct module_info *mod, void *symval);
  };
  
- enum ct_work {
--	CT_WORK_n        = BIT(CT_WORK_n_OFFSET),
-+	CT_WORK_SYNC     = BIT(CT_WORK_SYNC_OFFSET),
- 	CT_WORK_MAX      = BIT(CT_WORK_MAX_OFFSET)
+ /* Define a variable f that holds the value of field f of struct devid
+@@ -182,7 +215,7 @@ static inline void add_guid(char *str, guid_t guid)
+ static void do_usb_entry(void *symval,
+ 			 unsigned int bcdDevice_initial, int bcdDevice_initial_digits,
+ 			 unsigned char range_lo, unsigned char range_hi,
+-			 unsigned char max, struct module *mod)
++			 unsigned char max, struct module_info *mod)
+ {
+ 	char alias[500];
+ 	DEF_FIELD(symval, usb_device_id, match_flags);
+@@ -284,7 +317,7 @@ static unsigned int incbcd(unsigned int *bcd,
+ 	return init;
+ }
+ 
+-static void do_usb_entry_multi(struct module *mod, void *symval)
++static void do_usb_entry_multi(struct module_info *mod, void *symval)
+ {
+ 	unsigned int devlo, devhi;
+ 	unsigned char chi, clo, max;
+@@ -349,7 +382,7 @@ static void do_usb_entry_multi(struct module *mod, void *symval)
+ 	}
+ }
+ 
+-static void do_of_entry(struct module *mod, void *symval)
++static void do_of_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[500];
+ 	int len;
+@@ -376,7 +409,7 @@ static void do_of_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: hid:bNvNpN */
+-static void do_hid_entry(struct module *mod, void *symval)
++static void do_hid_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -394,7 +427,7 @@ static void do_hid_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: ieee1394:venNmoNspNverN */
+-static void do_ieee1394_entry(struct module *mod, void *symval)
++static void do_ieee1394_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -417,7 +450,7 @@ static void do_ieee1394_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: pci:vNdNsvNsdNbcNscNiN or <prefix>_pci:vNdNsvNsdNbcNscNiN. */
+-static void do_pci_entry(struct module *mod, void *symval)
++static void do_pci_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256];
+ 	/* Class field can be divided into these three. */
+@@ -460,7 +493,7 @@ static void do_pci_entry(struct module *mod, void *symval)
+ 	    || (subclass_mask != 0 && subclass_mask != 0xFF)
+ 	    || (interface_mask != 0 && interface_mask != 0xFF)) {
+ 		warn("Can't handle masks in %s:%04X\n",
+-		     mod->name, class_mask);
++		     mod->module->name, class_mask);
+ 		return;
+ 	}
+ 
+@@ -472,7 +505,7 @@ static void do_pci_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "ccw:tNmNdtNdmN" */
+-static void do_ccw_entry(struct module *mod, void *symval)
++static void do_ccw_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -495,7 +528,7 @@ static void do_ccw_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "ap:tN" */
+-static void do_ap_entry(struct module *mod, void *symval)
++static void do_ap_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, ap_device_id, dev_type);
+ 
+@@ -503,7 +536,7 @@ static void do_ap_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "css:tN" */
+-static void do_css_entry(struct module *mod, void *symval)
++static void do_css_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, css_device_id, type);
+ 
+@@ -511,7 +544,7 @@ static void do_css_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: "serio:tyNprNidNexN" */
+-static void do_serio_entry(struct module *mod, void *symval)
++static void do_serio_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -535,7 +568,7 @@ static void do_serio_entry(struct module *mod, void *symval)
+  *       or _CLS. Also, bb, ss, and pp can be substituted with ??
+  *       as don't care byte.
+  */
+-static void do_acpi_entry(struct module *mod, void *symval)
++static void do_acpi_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, acpi_device_id, id);
+ 	DEF_FIELD(symval, acpi_device_id, cls);
+@@ -563,7 +596,7 @@ static void do_acpi_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "pnp:dD" */
+-static void do_pnp_device_entry(struct module *mod, void *symval)
++static void do_pnp_device_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, pnp_device_id, id);
+ 	char acpi_id[sizeof(*id)];
+@@ -576,7 +609,7 @@ static void do_pnp_device_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "pnp:dD" for every device of the card */
+-static void do_pnp_card_entry(struct module *mod, void *symval)
++static void do_pnp_card_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, pnp_card_device_id, devs);
+ 
+@@ -598,7 +631,7 @@ static void do_pnp_card_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: pcmcia:mNcNfNfnNpfnNvaNvbNvcNvdN. */
+-static void do_pcmcia_entry(struct module *mod, void *symval)
++static void do_pcmcia_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -632,7 +665,7 @@ static void do_pcmcia_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, true, "pcmcia:%s", alias);
+ }
+ 
+-static void do_vio_entry(struct module *mod, void *symval)
++static void do_vio_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256];
+ 	char *tmp;
+@@ -662,7 +695,7 @@ static void do_input(char *alias,
+ }
+ 
+ /* input:b0v0p0e0-eXkXrXaXmXlXsXfXwX where X is comma-separated %02X. */
+-static void do_input_entry(struct module *mod, void *symval)
++static void do_input_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -719,14 +752,14 @@ static void do_input_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, false, "input:%s", alias);
+ }
+ 
+-static void do_eisa_entry(struct module *mod, void *symval)
++static void do_eisa_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, eisa_device_id, sig);
+ 	module_alias_printf(mod, false, EISA_DEVICE_MODALIAS_FMT "*", *sig);
+ }
+ 
+ /* Looks like: parisc:tNhvNrevNsvN */
+-static void do_parisc_entry(struct module *mod, void *symval)
++static void do_parisc_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -744,7 +777,7 @@ static void do_parisc_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: sdio:cNvNdN. */
+-static void do_sdio_entry(struct module *mod, void *symval)
++static void do_sdio_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -760,7 +793,7 @@ static void do_sdio_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: ssb:vNidNrevN. */
+-static void do_ssb_entry(struct module *mod, void *symval)
++static void do_ssb_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -776,7 +809,7 @@ static void do_ssb_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: bcma:mNidNrevNclN. */
+-static void do_bcma_entry(struct module *mod, void *symval)
++static void do_bcma_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -794,7 +827,7 @@ static void do_bcma_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: virtio:dNvN */
+-static void do_virtio_entry(struct module *mod, void *symval)
++static void do_virtio_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -812,7 +845,7 @@ static void do_virtio_entry(struct module *mod, void *symval)
+  * Each byte of the guid will be represented by two hex characters
+  * in the name.
+  */
+-static void do_vmbus_entry(struct module *mod, void *symval)
++static void do_vmbus_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, hv_vmbus_device_id, guid);
+ 	char guid_name[sizeof(*guid) * 2 + 1];
+@@ -824,7 +857,7 @@ static void do_vmbus_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: rpmsg:S */
+-static void do_rpmsg_entry(struct module *mod, void *symval)
++static void do_rpmsg_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, rpmsg_device_id, name);
+ 
+@@ -832,14 +865,14 @@ static void do_rpmsg_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: i2c:S */
+-static void do_i2c_entry(struct module *mod, void *symval)
++static void do_i2c_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, i2c_device_id, name);
+ 
+ 	module_alias_printf(mod, false, I2C_MODULE_PREFIX "%s", *name);
+ }
+ 
+-static void do_i3c_entry(struct module *mod, void *symval)
++static void do_i3c_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -857,7 +890,7 @@ static void do_i3c_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, false, "i3c:%s", alias);
+ }
+ 
+-static void do_slim_entry(struct module *mod, void *symval)
++static void do_slim_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, slim_device_id, manf_id);
+ 	DEF_FIELD(symval, slim_device_id, prod_code);
+@@ -866,7 +899,7 @@ static void do_slim_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: spi:S */
+-static void do_spi_entry(struct module *mod, void *symval)
++static void do_spi_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, spi_device_id, name);
+ 
+@@ -905,7 +938,7 @@ static void dmi_ascii_filter(char *d, const char *s)
+ }
+ 
+ 
+-static void do_dmi_entry(struct module *mod, void *symval)
++static void do_dmi_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 	int i, j;
+@@ -927,14 +960,14 @@ static void do_dmi_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, false, "dmi*%s:", alias);
+ }
+ 
+-static void do_platform_entry(struct module *mod, void *symval)
++static void do_platform_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, platform_device_id, name);
+ 
+ 	module_alias_printf(mod, false, PLATFORM_MODULE_PREFIX "%s", *name);
+ }
+ 
+-static void do_mdio_entry(struct module *mod, void *symval)
++static void do_mdio_entry(struct module_info *mod, void *symval)
+ {
+ 	char id[33];
+ 	int i;
+@@ -957,7 +990,7 @@ static void do_mdio_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: zorro:iN. */
+-static void do_zorro_entry(struct module *mod, void *symval)
++static void do_zorro_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 	DEF_FIELD(symval, zorro_device_id, id);
+@@ -968,7 +1001,7 @@ static void do_zorro_entry(struct module *mod, void *symval)
+ }
+ 
+ /* looks like: "pnp:dD" */
+-static void do_isapnp_entry(struct module *mod, void *symval)
++static void do_isapnp_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, isapnp_device_id, vendor);
+ 	DEF_FIELD(symval, isapnp_device_id, function);
+@@ -981,7 +1014,7 @@ static void do_isapnp_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: "ipack:fNvNdN". */
+-static void do_ipack_entry(struct module *mod, void *symval)
++static void do_ipack_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 	DEF_FIELD(symval, ipack_device_id, format);
+@@ -1043,7 +1076,7 @@ static void append_nibble_mask(char **outp,
+  * N is exactly 8 digits, where each is an upper-case hex digit, or
+  *	a ? or [] pattern matching exactly one digit.
+  */
+-static void do_amba_entry(struct module *mod, void *symval)
++static void do_amba_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256];
+ 	unsigned int digit;
+@@ -1053,7 +1086,7 @@ static void do_amba_entry(struct module *mod, void *symval)
+ 
+ 	if ((id & mask) != id)
+ 		fatal("%s: Masked-off bit(s) of AMBA device ID are non-zero: id=0x%08X, mask=0x%08X.  Please fix this driver.\n",
+-		      mod->name, id, mask);
++		      mod->module->name, id, mask);
+ 
+ 	for (digit = 0; digit < 8; digit++)
+ 		append_nibble_mask(&p,
+@@ -1069,7 +1102,7 @@ static void do_amba_entry(struct module *mod, void *symval)
+  * N is exactly 2 digits, where each is an upper-case hex digit, or
+  *	a ? or [] pattern matching exactly one digit.
+  */
+-static void do_mips_cdmm_entry(struct module *mod, void *symval)
++static void do_mips_cdmm_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, mips_cdmm_device_id, type);
+ 
+@@ -1082,7 +1115,7 @@ static void do_mips_cdmm_entry(struct module *mod, void *symval)
+  * complicated.
+  */
+ 
+-static void do_x86cpu_entry(struct module *mod, void *symval)
++static void do_x86cpu_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1102,7 +1135,7 @@ static void do_x86cpu_entry(struct module *mod, void *symval)
+ }
+ 
+ /* LOOKS like cpu:type:*:feature:*FEAT* */
+-static void do_cpu_entry(struct module *mod, void *symval)
++static void do_cpu_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, cpu_feature, feature);
+ 
+@@ -1110,7 +1143,7 @@ static void do_cpu_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: mei:S:uuid:N:* */
+-static void do_mei_entry(struct module *mod, void *symval)
++static void do_mei_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1126,7 +1159,7 @@ static void do_mei_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: rapidio:vNdNavNadN */
+-static void do_rio_entry(struct module *mod, void *symval)
++static void do_rio_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1144,7 +1177,7 @@ static void do_rio_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: ulpi:vNpN */
+-static void do_ulpi_entry(struct module *mod, void *symval)
++static void do_ulpi_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, ulpi_device_id, vendor);
+ 	DEF_FIELD(symval, ulpi_device_id, product);
+@@ -1153,7 +1186,7 @@ static void do_ulpi_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: hdaudio:vNrNaN */
+-static void do_hda_entry(struct module *mod, void *symval)
++static void do_hda_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1169,7 +1202,7 @@ static void do_hda_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: sdw:mNpNvNcN */
+-static void do_sdw_entry(struct module *mod, void *symval)
++static void do_sdw_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1187,7 +1220,7 @@ static void do_sdw_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: fsl-mc:vNdN */
+-static void do_fsl_mc_entry(struct module *mod, void *symval)
++static void do_fsl_mc_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, fsl_mc_device_id, vendor);
+ 	DEF_FIELD_ADDR(symval, fsl_mc_device_id, obj_type);
+@@ -1196,7 +1229,7 @@ static void do_fsl_mc_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: tbsvc:kSpNvNrN */
+-static void do_tbsvc_entry(struct module *mod, void *symval)
++static void do_tbsvc_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1220,7 +1253,7 @@ static void do_tbsvc_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: typec:idN */
+-static void do_typec_entry(struct module *mod, void *symval)
++static void do_typec_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, typec_device_id, svid);
+ 
+@@ -1228,7 +1261,7 @@ static void do_typec_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: tee:uuid */
+-static void do_tee_entry(struct module *mod, void *symval)
++static void do_tee_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, tee_client_device_id, uuid);
+ 
+@@ -1241,13 +1274,13 @@ static void do_tee_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: wmi:guid */
+-static void do_wmi_entry(struct module *mod, void *symval)
++static void do_wmi_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, wmi_device_id, guid_string);
+ 
+ 	if (strlen(*guid_string) != UUID_STRING_LEN) {
+ 		warn("Invalid WMI device id 'wmi:%s' in '%s'\n",
+-				*guid_string, mod->name);
++				*guid_string, mod->module->name);
+ 		return;
+ 	}
+ 
+@@ -1255,14 +1288,14 @@ static void do_wmi_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: mhi:S */
+-static void do_mhi_entry(struct module *mod, void *symval)
++static void do_mhi_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, mhi_device_id, chan);
+ 	module_alias_printf(mod, false, MHI_DEVICE_MODALIAS_FMT, *chan);
+ }
+ 
+ /* Looks like: mhi_ep:S */
+-static void do_mhi_ep_entry(struct module *mod, void *symval)
++static void do_mhi_ep_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, mhi_device_id, chan);
+ 
+@@ -1270,7 +1303,7 @@ static void do_mhi_ep_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: ishtp:{guid} */
+-static void do_ishtp_entry(struct module *mod, void *symval)
++static void do_ishtp_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 	DEF_FIELD_ADDR(symval, ishtp_device_id, guid);
+@@ -1280,7 +1313,7 @@ static void do_ishtp_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, false, ISHTP_MODULE_PREFIX "{%s}", alias);
+ }
+ 
+-static void do_auxiliary_entry(struct module *mod, void *symval)
++static void do_auxiliary_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, auxiliary_device_id, name);
+ 
+@@ -1292,7 +1325,7 @@ static void do_auxiliary_entry(struct module *mod, void *symval)
+  *
+  * N is exactly 2 digits, where each is an upper-case hex digit.
+  */
+-static void do_ssam_entry(struct module *mod, void *symval)
++static void do_ssam_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256] = {};
+ 
+@@ -1312,7 +1345,7 @@ static void do_ssam_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: dfl:tNfN */
+-static void do_dfl_entry(struct module *mod, void *symval)
++static void do_dfl_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, dfl_device_id, type);
+ 	DEF_FIELD(symval, dfl_device_id, feature_id);
+@@ -1321,7 +1354,7 @@ static void do_dfl_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: cdx:vNdN */
+-static void do_cdx_entry(struct module *mod, void *symval)
++static void do_cdx_entry(struct module_info *mod, void *symval)
+ {
+ 	char alias[256];
+ 
+@@ -1355,7 +1388,7 @@ static void do_cdx_entry(struct module *mod, void *symval)
+ 	module_alias_printf(mod, false, "%s", alias);
+ }
+ 
+-static void do_vchiq_entry(struct module *mod, void *symval)
++static void do_vchiq_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD_ADDR(symval, vchiq_device_id, name);
+ 
+@@ -1363,7 +1396,7 @@ static void do_vchiq_entry(struct module *mod, void *symval)
+ }
+ 
+ /* Looks like: coreboot:tN */
+-static void do_coreboot_entry(struct module *mod, void *symval)
++static void do_coreboot_entry(struct module_info *mod, void *symval)
+ {
+ 	DEF_FIELD(symval, coreboot_device_id, tag);
+ 
+@@ -1382,14 +1415,14 @@ static bool sym_is(const char *name, unsigned namelen, const char *symbol)
+ static void do_table(const char *name, void *symval, unsigned long size,
+ 		     unsigned long id_size,
+ 		     const char *device_id,
+-		     void (*do_entry)(struct module *mod, void *symval),
+-		     struct module *mod)
++		     void (*do_entry)(struct module_info *mod, void *symval),
++		     struct module_info *mod)
+ {
+ 	unsigned int i;
+ 
+ 	if (size % id_size || size < id_size) {
+ 		error("%s: type mismatch between %s[] and MODULE_DEVICE_TABLE(%s, ...)\n",
+-		      mod->name, name, device_id);
++		      mod->module->name, name, device_id);
+ 		return;
+ 	}
+ 
+@@ -1397,7 +1430,7 @@ static void do_table(const char *name, void *symval, unsigned long size,
+ 	for (i = size - id_size; i < size; i++) {
+ 		if (*(uint8_t *)(symval + i)) {
+ 			error("%s: %s[] is not terminated with a NULL entry\n",
+-			      mod->name, name);
++			      mod->module->name, name);
+ 			return;
+ 		}
+ 	}
+@@ -1478,6 +1511,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 	char *zeros = NULL;
+ 	const char *type, *name, *modname;
+ 	size_t typelen, modnamelen;
++	struct module_info modi;
+ 	static const char *prefix = "__mod_device_table__";
+ 
+ 	/* We're looking for a section relative symbol */
+@@ -1509,6 +1543,10 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 	typelen = name - type;
+ 	name += strlen("__");
+ 
++	modi.module = mod;
++	modi.modname = modname;
++	modi.modnamelen = modnamelen;
++
+ 	/* Handle all-NULL symbols allocated into .bss */
+ 	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {
+ 		zeros = calloc(1, sym->st_size);
+@@ -1522,7 +1560,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 
+ 		if (sym_is(type, typelen, p->device_id)) {
+ 			do_table(name, symval, sym->st_size, p->id_size,
+-				 p->device_id, p->do_entry, mod);
++				 p->device_id, p->do_entry, &modi);
+ 			break;
+ 		}
+ 	}
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index be89921d60b6..f97f2565c1e2 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -2021,11 +2021,21 @@ static void write_if_changed(struct buffer *b, const char *fname)
+ static void write_vmlinux_export_c_file(struct module *mod)
+ {
+ 	struct buffer buf = { };
++	struct module_alias *alias, *next;
+ 
+ 	buf_printf(&buf,
+-		   "#include <linux/export-internal.h>\n");
++		   "#include <linux/export-internal.h>\n"
++		   "#include <linux/module.h>\n");
+ 
+ 	add_exported_symbols(&buf, mod);
++
++	list_for_each_entry_safe(alias, next, &mod->aliases, node) {
++		buf_printf(&buf, "MODULE_ALIAS_MODNAME(\"%s\", \"%s\");\n",
++				alias->modname, alias->alias);
++		list_del(&alias->node);
++		free(alias);
++	}
++
+ 	write_if_changed(&buf, ".vmlinux.export.c");
+ 	free(buf.p);
+ }
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 9133e4c3803f..e08646632e19 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -103,6 +103,8 @@ buf_write(struct buffer *buf, const char *s, int len);
+  */
+ struct module_alias {
+ 	struct list_head node;
++	const char *modname;
++	const char *alias;
+ 	char str[];
  };
  
 -- 
-2.49.0
+Rgrds, legion
 
