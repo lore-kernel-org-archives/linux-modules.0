@@ -1,110 +1,108 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D59825A33A
-	for <linux-modules@vger.kernel.org>; Wed, 30 Apr 2025 13:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AB52609C5;
+	Wed, 30 Apr 2025 17:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746018736; cv=none; b=HDiXN9FgduXDPiSXrzyzZvWLz5ek/l/SdIw2y1XQKjxCxcTr3S5x0Y6JT1AvQMw3ftLM8JRQ3m1EbLgZp5tvMt+MbzlIrK8xckEeQPPvwRXf3d6kwR3O8Ls3ryAZJvxHE8awtyZhQ9DGgstUjGrOcVQkWsTjmF4VhNKLKgPq298=
+	t=1746033655; cv=none; b=po5KW45EueBSa+Ip5hdMDNBwI+m/dcFETDy4mNNzAL5zQPGniKI5t5dSnTYnGtIMxVWyLEPRC68OsV2yY1CBMO5bxP9o0/bdaE7x9ObePsQe8RVA/UtFMO5ZyNcCk5REATmZ+3Pqc89Z2HiEn5cldt0jppzqKzJDEXObsKX10ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746018736; c=relaxed/simple;
-	bh=PIY85mKxHJ+UI+JYvM5nYj4nxGSfQYk+edb5eO6mGwU=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=sNmgEe3ZV/E2e9oNlvbQwa82R/DFLhXANfmVUJwIiRr9bpU6C5qXIfsWkNFpqIXtlT1UpWTm4yPZrNOP9TF60wi56NxB/zqVE+TKLVPJLXJZR+RZLpldu8FD43/R/0MA0p9paxJLn6qXc3ZwP38qg0KRgDIrdY/vMxnD7M9794E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FpV+rXuV; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FpV+rXuV"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5f4d0da2d2cso13958201a12.3
-        for <linux-modules@vger.kernel.org>; Wed, 30 Apr 2025 06:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746018732; x=1746623532; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjL1WsPsnsYmnWqXBUM0+iVtLhuhJsfn7GTamqYJHzY=;
-        b=FpV+rXuVxEMyAIOv39lSq7WdWHbFs4cs34XtDbuohYbR6saOIG4TafjT5egHC74Og4
-         kd0WoyTRilVQ0KAT+YwxB5JippkGc6cM6VSZsaumsHMZl3df7ctthoAPhcDatqldJZDt
-         8qWJ8Bv3U++Iw/gjaPplZuM4SvhtkfSUtieOb53ya3b19YEgtYLGFCgto4IwTfi+U6Vp
-         qDIkpJnY/XzxAoh00KE5U31j/gZ2iiDJ7Or16vE9MThCvnB0VkRjBqXz/vy0KKDagwDV
-         jVrMCzMhNTVK/lN+65UEZAjs7LeNSEfG09P7TTfeg7jfSurbBD/iJLs2rptCpYqsBy6i
-         8phg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746018732; x=1746623532;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wjL1WsPsnsYmnWqXBUM0+iVtLhuhJsfn7GTamqYJHzY=;
-        b=uAcYpszMU87jBMXnoQ9aEoQmrz4A20J6Qd9ITXj8hFaCfw+Sz2et0wa23fQdTaWwDi
-         XKRkv8Q15kSLHmTsrDAGcCFo5z5uAthsfVxE4sZJhTLgGtA8Pl5BQXusNoI2vrbzGQZO
-         Vvql6DnWwaW3vyJZzHvMLOcssKl5UUQUu8bDR9i8t46itukVuY12YTGAyCyS8DOMV2nq
-         iZkrBlNhkXEAqM4ybxw/rVzGJjqTlgRAF8yBwh/zsDqosRGV7r95JbuC4hLcP6fWrqVo
-         Bv9nq56GTAl0mZU7/q5o3xz100SKmKxkWqIJXCnw1Y7RVCN9ZSfiRMCqSKMBe27ty3bN
-         mNWw==
-X-Forwarded-Encrypted: i=1; AJvYcCWs8hG0le5zJni6MmzebsvDdaMG0BFVsr/bcPpPyr+Fj5IyanaW4zCWAEJKjK0KJRMKNZcbMkIFDC9UPC3O@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzGud5n3S6kC6rCaMQ0+288OEAg6clR5OD0CMwuSH990sf/cN+
-	gx2uwEK8m3XkeKIqGZV4VoIpnt6rC3W8zYjQvN2q4LKar6Cb5Q84xPkNGF4Ne8g=
-X-Gm-Gg: ASbGnctM1IzP8LX4v5XVfy4g8MPiPezdpTliKUslJxuOj+6SkzwPlvEYxRtNPDGvZFN
-	tKBBO82KqnML4gcnGTWiU9Jvb8qPjSnV1FpsJL3xFAbBOrvWpKc/K6RWE4PIguj+r7c2al13tsI
-	VkEjQvONdrzlJfuXxd9cwDrzhuO+YNz1849Y/gILKX17ChkVpuNkd0B6eztWaHfQzKhDAzCmFj7
-	6D0k5Vzpc7STgYPgUFTvtIye6pbRreCb+gWFfgRj3ky4IxhTn0jreIr7TUClOJbHDuNR2L4c69w
-	CNroRKDLjZGx7OWYLfZMLizDKI0k8aF4cyLlIdQA76wEGZtyu5P1sw==
-X-Google-Smtp-Source: AGHT+IETi/U1rnwgErZQDP2Zc6pA5YllvKPlYnjKU6evHX11NFKR9wcmYXjnkl4EVs84aMfZNsIkIA==
-X-Received: by 2002:a17:907:969f:b0:ace:3f00:25f5 with SMTP id a640c23a62f3a-acee21567bemr247077866b.2.1746018732276;
-        Wed, 30 Apr 2025 06:12:12 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ed6af86sm926769066b.133.2025.04.30.06.12.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Apr 2025 06:12:11 -0700 (PDT)
-Message-ID: <223a3bc5-0696-4547-b6ca-ab6882510259@suse.com>
-Date: Wed, 30 Apr 2025 15:12:11 +0200
+	s=arc-20240116; t=1746033655; c=relaxed/simple;
+	bh=39KWSZA/+5ZTjQd4vRuOPIK2i+N4nybWhXUJllaBu/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b5KntVeZGijtm27y0qoRBsKEEiFDMkIKwEvZM0FeCpVtTB54aV5+y+O5v2hyhZBSCsjWQVAw7nEzVvV5/Qmb0KAoEiU+o+OeCC8SjkJEB3be28rMTHxDNpWwUpG2iLO9pMjr2o4vb/8ZzBaKa5X2sLL0bWAcXuBH8s0RJTK3efY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD676C4CEEB;
+	Wed, 30 Apr 2025 17:20:43 +0000 (UTC)
+Date: Wed, 30 Apr 2025 13:20:47 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Valentin Schneider <vschneid@redhat.com>, linux-kernel@vger.kernel.org,
+ virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>, Marcelo Tosatti
+ <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Daniel Wagner <dwagner@suse.de>, Petr Tesarik
+ <ptesarik@suse.com>, Nicolas Saenz Julienne <nsaenz@amazon.com>, Frederic
+ Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Juergen Gross <jgross@suse.com>, Ajay Kaher
+ <ajay.kaher@broadcom.com>, Alexey Makhalov <alexey.amakhalov@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, "H.
+ Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron
+ <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Naveen N
+ Rao <naveen@kernel.org>, Anil S Keshavamurthy
+ <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>, Josh
+ Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda
+ <ojeda@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Rong Xu
+ <xur@google.com>, Rafael Aquini <aquini@redhat.com>, Song Liu
+ <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, Benjamin Berg
+ <benjamin.berg@intel.com>, Vishal Annapurve <vannapurve@google.com>, Randy
+ Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>, Tiezhu
+ Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+Message-ID: <20250430132047.01d48647@gandalf.local.home>
+In-Reply-To: <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+	<fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shyam Saini <shyamsaini@linux.microsoft.com>
-From: Petr Pavlu <petr.pavlu@suse.com>
-Subject: [GIT PULL] Modules fixes for v6.15-rc5
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 8ffd015db85fea3e15a77027fda6c02ced4d2444:
+On Tue, 29 Apr 2025 09:11:57 -0700
+Dave Hansen <dave.hansen@intel.com> wrote:
 
-  Linux 6.15-rc2 (2025-04-13 11:54:49 -0700)
+> I don't think we should do this series.
 
-are available in the Git repository at:
+Could you provide more rationale for your decision.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.15-rc5
+>=20
+> If folks want this functionality, they should get a new CPU that can
+> flush the TLB without IPIs.
 
-for you to fetch changes up to f95bbfe18512c5c018720468959edac056a17196:
+That's a pretty heavy handed response. I'm not sure that's always a
+feasible solution.
 
-  drivers: base: handle module_kobject creation (2025-04-16 15:10:55 +0200)
+=46rom my experience in the world, software has always been around to fix the
+hardware, not the other way around ;-)
 
-----------------------------------------------------------------
-Modules fixes for v6.15-rc5
+-- Steve
 
-A single series is present to properly handle the module_kobject creation.
-It fixes a problem with missing /sys/module/<module>/drivers for built-in
-modules.
-
-The fix has been on linux-next for two weeks with no reported issues.
-
-----------------------------------------------------------------
-Shyam Saini (4):
-      kernel: param: rename locate_module_kobject
-      kernel: refactor lookup_or_create_module_kobject()
-      kernel: globalize lookup_or_create_module_kobject()
-      drivers: base: handle module_kobject creation
-
- drivers/base/module.c  | 13 +++++--------
- include/linux/module.h |  2 ++
- kernel/params.c        | 47 ++++++++++++++++++++++-------------------------
- 3 files changed, 29 insertions(+), 33 deletions(-)
