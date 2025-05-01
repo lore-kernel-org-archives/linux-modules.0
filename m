@@ -1,110 +1,74 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB73155A4E;
-	Thu,  1 May 2025 09:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201CD19A297;
+	Thu,  1 May 2025 12:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746092853; cv=none; b=JxFUoFH+/k6fAEFjN6g6vV7VvnAu2XqEmVAEU9giWv4QVzRTGPGn9r+NUu/iiNhGJcFJKwXHNYzYTwtSYcto6MO23/Xj8YYFYT7wOhU/uLudaVL4S5THi+5k0RoP+UHKp0gQRwAghWG1TlADzKe4cOaBUWDh8wYeR5tOgtanOXs=
+	t=1746102458; cv=none; b=TBwI8oul8q7OMM0YB9Vs1o04paa9xK2Vsxa4mkD68W0DVNroPNO3uZ0v4YWqp21hNGK2Jx+xMfluxoDtsgRR+UiS8BRHl80GQkvHVrzFQmE+RdNu0XSfdDcMf2uQ40l7tzVPotSnELVt99vkCUKIiYJQC/6AX2IHpTIuYGOq9FU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746092853; c=relaxed/simple;
-	bh=hRKuolhB1zUftYWN3jwmzDkr5XOnbczclIJqoj9/VVI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pAHmnQJgDM2RV5tuMt8TRmKZ/JQgVwFGrOTtyccjQ4z0op4kKJQ0/CgSXo1wflIspCbF5UlrbF02Fq7oRNAI3J9TUtuEKtxj9JfEZluJsOM43Eq7khrW62AlrwSoVUgHWhFt5pG4qoVeQV7ONvNblrUGoDGhchl2Lk7potiM+1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0RPdiu7; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746102458; c=relaxed/simple;
+	bh=HexxN5nBN6eJcubonn7zpFcCsGz6O39RwpRUeRqXaN4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=JvQE0N9LnLRs/dUXDiesdhFl2aRXP/bT9N/wba46f2b6Co2OcV7VW7EBsSI6zCD14d6WNvfPay5xRuWtpud7FRk67Mmhfa0R84i/P80FLnEk5rjkQ59wNB6evRZ8PI1gDQd2GW9A0ybbUAX3+ISMfsTCLsz169LnvpBWSHej/d0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ceArrZif; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0RPdiu7"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2240b4de10eso1524795ad.1;
-        Thu, 01 May 2025 02:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746092851; x=1746697651; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GqI0gPUkc+GqxzU4hYi7psCHGG3LY42LoszC9MvYK74=;
-        b=b0RPdiu7Bw3JffNbMg+hivogLs8Uz6rwlRtWls9/jL3GMbhqZETi5J1sU7VA/j8T5l
-         7vvlnt3D0xjZrnS0XaBfAbhbfQSR4kKECCFVlpcxsWyFCbbnz8bie5eK6Or6rRIAZdKM
-         9hkQR/QpDd6bXK4YK8tw3IBHSKxwE5tB2xsgGYnowNqnJgiIZTf3UR5LjFrMPtfJsw/z
-         WMsiX/KboP7hBD3lVYybLY8veihEUnURiIwaeLVTx5AfstZfCpEdNUfWBCuXRIbjV9Mw
-         3yfvwfVlI0uaRN9djFPEy3je/gkW1vPrNZ+xnX3TxpdKIv4aFW2Siad+mdw1/lqAAEib
-         nieQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746092851; x=1746697651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GqI0gPUkc+GqxzU4hYi7psCHGG3LY42LoszC9MvYK74=;
-        b=Najwqs8pPJr7W57Epjt9ql41a2sOib5BZIllhMZmO0AP0BSLJvYmLenn77S6fYzPHI
-         sCkAu9fHUu5enhStapbIWGi2j/B6XWv1s7Dg+tgjWIEac9qi0kryNFAf3+UDxC0a0tvz
-         aL/Mz8kLGTxMfIHFXuHB5Dsi0pt3ZvLhQ8YePg+wbvaO+5AYHvw53MXhNyqUhOihaeLJ
-         6JfDLi2R0YhEEz0so+aVlF/LcLFB2IW/vS603wuW78tMZMzO9AnZ48MegrAkHI8mhgrW
-         k2GFuwZdgH9ztuoBdPUfqnKTdAYkxSZMNDm2zVl2qQzNFB5YEPY5k9k0khREwLi+gQIC
-         WBxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMDctPKwJPV0H76g1R8Dw25zG6wvNm6KOwQt709KJq1M0wBHd9285OIwaCIe/kOECiTw8vyVhZVwdXz1E=@vger.kernel.org, AJvYcCUuchYy/hG2FcTZgTBAqbXwsI21a0xhd2jpw7FRENxO/yWIrxDaQ2qff8cNEvkrhyfIQHvQlxVyWIo8rXMa@vger.kernel.org, AJvYcCVmIziPWGFphTP/XAmeO3D4auWVpuV+s3heTrKQZY8zfPgL9YR5mgjVF/s/D0jienQVx1By2iWlYxJiI78i2R8=@vger.kernel.org, AJvYcCW0W/gQIqL93uT9JVGey5hhlCjJFl+wpktRn27y9myS81cxCZxYxpIqzN5fWecdBWWlgHL5ZIOMLMG+ps7yvA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzoz16mHzF1HEvBjG6GxbFyPzFMlWBeKqeXZ8ZRfcbMnGxVc5um
-	G2ijPeZ+NqIyG7BCK9PeyAqmfGBy5WxQGnZC7Wc8qqasF0oVWNAsjPjyu1D7WbS7osuDV7occgj
-	c/zMVVDx4nttNRf+Bqdv8bBvPIMY=
-X-Gm-Gg: ASbGncsRD4jIRr1BRSI1TqQ+Le2GbzXZQ2pW7fSMqMamuqh8RdewAS4RYFzxxzjFMWd
-	wlhYdixm/9+0eX7zOL+Vi+pDTeg9ftl7YvBxtktSNJGkGfc8/sPj8JuaGJsow7uMxI/Ei/rydLj
-	p5yjROiiXQLSTVk5xSx8NAoQ==
-X-Google-Smtp-Source: AGHT+IEXx0kSSeSYJHLyIvXT1uulEpBF/3kwRrJXnzbNxGZrVmgpdWeuJxtPO6esb5TFIVxd0e/OV+f7KAkBY5x2MMU=
-X-Received: by 2002:a17:902:d2cb:b0:224:88c:9253 with SMTP id
- d9443c01a7336-22df578c625mr34721945ad.6.1746092851191; Thu, 01 May 2025
- 02:47:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ceArrZif"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D30C4CEE3;
+	Thu,  1 May 2025 12:27:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746102457;
+	bh=HexxN5nBN6eJcubonn7zpFcCsGz6O39RwpRUeRqXaN4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ceArrZifcuDTLlxaQF68cB0zhaTwXEmSLucN+FavQ3D2uLaTllnzM+78CB4U2YP22
+	 fgicl9TAAwhrQ42sRIjTaA1Ki5IdC2YnNbzRLDVfnITOHEAOGTiG2UFkHHUKiyDSqv
+	 wpyt3cf2GCsrp3MUDb0n+JgvCbim4q60h0gSO274t2q2bvI5rTCIG7WprwQEnsp4Wr
+	 RyNsMxUcuvoRF9fy1x6qwYnSsIrObncwIPEIIBMrmHtrvUDZHDnXm9P/O48deajuJd
+	 L2y7sI9+Zs/xoVqyxWmGPj4IAEtYU93QXTosjK9Ge+F7/rtZI0LL+/u0S6RReV/0Mx
+	 2VGr5DanzpJYw==
+From: Lee Jones <lee@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Alexey Gladkov <legion@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, Lee Jones <lee@kernel.org>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+In-Reply-To: <79d5a847303e45a46098f2d827d3d8a249a32be3.1745591072.git.legion@kernel.org>
+References: <cover.1745591072.git.legion@kernel.org>
+ <79d5a847303e45a46098f2d827d3d8a249a32be3.1745591072.git.legion@kernel.org>
+Subject: Re: (subset) [PATCH v1 1/7] mfd: stmpe-spi: Correct the name used
+ in MODULE_DEVICE_TABLE
+Message-Id: <174610245466.3816002.10815099602264061906.b4-ty@kernel.org>
+Date: Thu, 01 May 2025 13:27:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250501-module-params-v3-v10-0-4da485d343d5@kernel.org> <20250501-module-params-v3-v10-1-4da485d343d5@kernel.org>
-In-Reply-To: <20250501-module-params-v3-v10-1-4da485d343d5@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 1 May 2025 11:47:19 +0200
-X-Gm-Features: ATxdqUGUXLPG0IIgmjYwkvDtZbTXlfwbnd-BpsPS8lomYgTKKSQtI3bnTkvdIpM
-Message-ID: <CANiq72=_gheZdZmgwoB2q6HSssoXLk4TRkJVagJKjmFTd+LDcQ@mail.gmail.com>
-Subject: Re: [PATCH v10 1/3] rust: str: add radix prefixed integer parsing functions
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-39345
 
-On Thu, May 1, 2025 at 9:55=E2=80=AFAM Andreas Hindborg <a.hindborg@kernel.=
-org> wrote:
->
-> +pub mod parse_int {
-> +
-> +    use crate::prelude::*;
+On Sat, 26 Apr 2025 18:16:32 +0200, Alexey Gladkov wrote:
+> The name used in the macro does not exist.
+> 
+> drivers/mfd/stmpe-spi.c:132:26: error: use of undeclared identifier 'stmpe_id'
+>   132 | MODULE_DEVICE_TABLE(spi, stmpe_id);
+>       |                          ^
+> 1 error generated.
+> 
+> [...]
 
-Spurious newline.
+Applied, thanks!
 
-> +    use crate::str::BStr;
-> +    use core::ops::Deref;
+[1/7] mfd: stmpe-spi: Correct the name used in MODULE_DEVICE_TABLE
+      commit: 7e5d7dcd96e29bb30fe7b105c53ae63a8edcd3e1
 
-> +    /// # Examples
-> +    /// ```
+--
+Lee Jones [李琼斯]
 
-Missing newline.
-
-> +                    // integer. We choose u64 as sufficiently large.
-
-`u64`
-
-(These were all in the range-diff :)
-
-Cheers,
-Miguel
