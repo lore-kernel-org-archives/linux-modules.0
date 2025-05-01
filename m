@@ -1,231 +1,226 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D162D0276
-	for <linux-modules@vger.kernel.org>; Wed, 30 Apr 2025 21:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3C527700B;
+	Thu,  1 May 2025 07:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746049263; cv=none; b=ZZpujso37IDPL6VraDPnqlVFsW9/LWnNZsChawMwUGDh/FttHJ9jF95iCSpod5tX3NOVqDnwZcIML9MY8v7RgQ/3hHWMzy9OSTcVLlu2iXuRIezzx0QlIZtfWN2TJO4zfBdIy7rgD6O8ev7nhIwChLRFlb094ryVNQWm/pzjzh0=
+	t=1746086094; cv=none; b=nlbEejNpovSP01+DBSdbuaEMfQZgsped52CQRn29m6WBRcS95FlisaHlWzCb6+rhM5XjZrmgYC5usoJL2psB4b2DwGrIy/DEwZUJcLdbeaO4BLFDoz+cxApBY+01KZ39G+RTiaFyhQFBWn8xxrToLYVSy5lpNgf4dUGWCxjK7cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746049263; c=relaxed/simple;
-	bh=BXxzO4skt6xJol8bYXVYkap2MgomdSVnQvJsmZd5Rv4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=k7D6i9iqb4UtpBuQ5vX7aZ6RdGG4Ltu68yxbEMLZs9eTuxepsZMV3J9z0T5nTpX4WipRi38eK2g3Ow6ArHAb1MqJTWvlmgv55IiJ5OVnwQ2rBqVSnBU6gb3qWDDF5LzJ1Y/mQR7g/50iVvZ87tBq7HqSAQuLLuIpYCaYVRXTqYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i3EOgRSu; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1746086094; c=relaxed/simple;
+	bh=ZucPlAzXlvyE5gmDzndkAzXDoCFWRluH9j0zb6OrssA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cVP1lUKviHEfp8fHrqImgZPV6+IUSVIRPKip5t7cj/KbusdoxAS2WwUXN/5Ons/LjyrvtGy28OtlKhk1G6d4FEncx7uvyaf0ctn4qQAoDLzdJFvO/DcOXzdlZXvVVNY6dwLYCiEZ7H5NjnX8AofnrofM4gdmtSKBeRv5sI+9AuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vCUxrJTF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i3EOgRSu"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-224347aef79so4142095ad.2
-        for <linux-modules@vger.kernel.org>; Wed, 30 Apr 2025 14:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746049261; x=1746654061; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2CKngrC6O9cGcVCCxaaxP3YTy+M2SG0vauU8yNbnhDM=;
-        b=i3EOgRSufBc/N5ThQuZ5iT154iaFRHxunyWoD6+bPGsfaIjwvndU7BZCXVD/QMqzes
-         VqR5Vj7Nyd9Qqggvjtg3oegkZGIJ+66iaCzQHuIeJxCv7x+TdTFLBZ+ZQ9gTHOl0S89C
-         bb94zg6vaqo9dPM92VpXFw/bw1Vyd/MdB5amNOYk7jJux+tsZLy9EPI/r2D7r6p2Utfz
-         iRQbFZu/9f98Rx/bEixN62N0aqKX7DshPu5rWy4xyy9Un1AN04wIeuWKTYXQoJwKRprf
-         O3nH5ESnC1flnx2X8fXJujCoIXMgJ+TEWvTVBC2t+vAGJuWhP3Z2oO6eV756eyyc2Gci
-         Aepg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746049261; x=1746654061;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2CKngrC6O9cGcVCCxaaxP3YTy+M2SG0vauU8yNbnhDM=;
-        b=rfZMtrkSB6s24rdMA1dokaePPUgUhrR5J34tpXv+tj8cMLKWMy4uFVmAzeDlXK3i8h
-         UVcHWOV+9QemvuwkBi2aNTrRWoOn9i8TcExuFKpMTYoluJ/ooliswbB9a4QEH9d2XVnC
-         WeiM89AdngzWC+YlRlPsv+TeTDdy0lMX/4SIu60GyKmtaJ9Gli1rfhv9azOPvOXHLsrU
-         8fB7jdqD4kt4kekKw1tRReFyZpdA9n/jGgbBLfbU4a9dI5Sl1FHQnh/ySo56PtWBVh+W
-         SB8QWxx8zgZUShnbcFSturyoSMTR6zkpJ1nDuWR9+jsnGyneC2FwergFgR/8WZUAnqRn
-         7tSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjU/g9Obb4WfFqUdCjxazvpzWgMUTVpgxfkMHZGOh6M77BRCtbEKyxAVDaq+wb6HpLvDbWQ3FVBMA6B0lO@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGA5vecCnAsLfmie9T9yblOrqm7UsdR8zDmTDGTwF8U4Eqzuca
-	WgWRduv70w66+wLUmSksx05mdkbFRlyYdjatzXHTOp+SIST0klJj14vjV79+OsRKbStJLd7Berj
-	B7HwK10S8F5tb8tvBaSfaDAUZzQ==
-X-Google-Smtp-Source: AGHT+IETLi4YUB9i3nzd3B7QsdSWK9DWkyN6lL+7n7jW5K1EkSKzr6FtERyyusMh4VkNLRFF1ZSS0b66BdWXyA6THqM=
-X-Received: from pll21.prod.google.com ([2002:a17:902:c215:b0:223:6c8e:eaf1])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:4407:b0:224:8bf:6d81 with SMTP id d9443c01a7336-22e04127919mr10994115ad.46.1746049261149;
- Wed, 30 Apr 2025 14:41:01 -0700 (PDT)
-Date: Wed, 30 Apr 2025 21:40:54 +0000
-In-Reply-To: <20250430214049.2658716-6-samitolvanen@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vCUxrJTF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4D3C4CEE3;
+	Thu,  1 May 2025 07:54:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746086093;
+	bh=ZucPlAzXlvyE5gmDzndkAzXDoCFWRluH9j0zb6OrssA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=vCUxrJTFb6fIgWPlBFwFBWKdIYDKEqDQdInpCV7BMT2s9tnoguye3UUo4rhK9p1yy
+	 bs9nP+uI144TvXjMv6SG9+lm0u9EOXaNv/J4tfyRu3PCce6h1higq/AfAEoaMCdlQF
+	 weEUK21796OeG9F39w4tkdUvxWPcj1GutrXLoXssO4orSHRbSl1Q0iKZS+X4hWkG4+
+	 5EMTSi/qxvYD+vVhM24vPD25rxZqeYzC3d375MiDCUO08FtelQ4dOTf7A6Qu6PfBAK
+	 33Xp7QCY4DFGIbZh0ppKyXUgyC4sr19fPDG8V5c84dSEsz4ErfA50pMRxKxTPO1Uke
+	 w8wKv16n9gu+g==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+Subject: [PATCH v10 0/3] rust: extend `module!` macro with integer
+ parameter support
+Date: Thu, 01 May 2025 09:53:36 +0200
+Message-Id: <20250501-module-params-v3-v10-0-4da485d343d5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250430214049.2658716-6-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5930; i=samitolvanen@google.com;
- h=from:subject; bh=BXxzO4skt6xJol8bYXVYkap2MgomdSVnQvJsmZd5Rv4=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDBlCMx5L2m+O0vn6QC11ve2dbb5Sd9Vef4ss0pZaZnfww
- 47frSpvO0pZGMQ4GGTFFFlavq7euvu7U+qrz0USMHNYmUCGMHBxCsBELmcxMlxZOVv5iVGJ59kZ
- H693pRRfjF1hXKdzLvP+Yh2Lot0z5bYx/E/co1qW9LmpM79BQHUru7xa2MX3N65OrxM81/efnef aNHYA
-X-Mailer: git-send-email 2.49.0.906.g1f30a19c02-goog
-Message-ID: <20250430214049.2658716-10-samitolvanen@google.com>
-Subject: [PATCH 4/4] Documentation/kbuild: Add new gendwarfksyms kABI rules
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIAoE2gC/23SzW7DIAwA4FepOI+JPwey095j2oEf06K1SUfaa
+ FPVdx/pVjUTIC625A/Z5kImzAkn8rK5kIxzmtI4lICzpw3xOztskaZQEkQwobjgnB7GcN4jPdp
+ sDxOdJbWoEbwJxoElpeyYMaavm/n2XuJdmk5j/r49Mcsle8dkjZXLqDJgGQfrhY+vH5gH3D+Pe
+ UsWbVZ3ARhnfUNQRfCCGeejQ85rAR6CYKohQBFcBCyK4p2ASuhWQmskc1cEoZzodQheyVAJei2
+ YhqCLAMhttM5bz10lmJUgdEMwyxywHAOhl0pXQv8QpGh10S9dGNcziAKl+j+H6++qM36ey685/
+ e37ev0BAkuY7VMCAAA=
+X-Change-ID: 20241211-module-params-v3-ae7e5c8d8b5a
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, 
+ Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: Trevor Gross <tmgross@umich.edu>, 
+ Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+ Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6807; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=ZucPlAzXlvyE5gmDzndkAzXDoCFWRluH9j0zb6OrssA=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoEyiaiMLBBV6ZEjTMa3zUUUNz68rqGWNzlnude
+ qOqU5ehr3+JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaBMomgAKCRDhuBo+eShj
+ d/o0EACTYXUv6d0BVoEvjNHyIBO0SmN7ENiHBchNzwSs1GvgQvyGHAaq7jk1XJFXv7YHlJVEnIq
+ qwhqyG0tmm5hvqjECZQpeiOXxaQ+WPd9Fw4luH930mTuWu/NHMm0auClmTx1MEMCaQXTnsUd1uY
+ iz0Kb/0PR2kY8TcRs0RVDZYrXm45TR8V7EyJVzMbQpZVr2yzD4Sr9lEu0XR+rVWSWd4nrekWc19
+ rJ50OysaLjfK0OJo4lU8tEGXBdslS0fgyx9oxWl7F2tKDa69s5+RqU+vcZK0GAV8cHQYiJOw2to
+ ZbLMDmAOE4DFTiHWlyVM+dLLRzaruCQFIPd9MRJPQI9J7up9xZPn5uIw79ZIP2hY6hqXdejrDvj
+ 1otADfTlZiSs/SsBx5eTm9T6uH148WMbGfNU2kwriLItu/4enuFO5VBm4a76jepRPzeFkWbItk6
+ QQc9zNcsaS2ZKvgsy5zI9UaAeSJ2V4Y8kSVHS0zRUAqgMSSt3JdYU6bMFF5heXJdixNwgUxScMq
+ dUt9QACmZIAweUAXb/t7wQAyaTl/b4iLx2DlneDA/QK1xPrlTy/z+x/EoKOBgDBC/DWCgPTeCBl
+ oVa98xg9oPN+n4bGTKqF5RxvrONlUsNS9jfh44aewpVJ6q20V2/RZvgdUXq9BvLvGAyzf0lR8c4
+ 6ws1c82opeuXZ6w==
+X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
+ fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Document byte_size and type_string kABI stability rules. Also fix
-the section numbers while we're at it.
+Extend the `module!` macro with support module parameters. Also add some string
+to integer parsing functions and updates `BStr` with a method to strip a string
+prefix.
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Based on code by Adam Bratschi-Kaye lifted from the original `rust` branch [1].
+
+Link: https://github.com/Rust-for-Linux/linux/tree/bc22545f38d74473cfef3e9fd65432733435b79f [1]
+Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- Documentation/kbuild/gendwarfksyms.rst | 103 +++++++++++++++++++++++--
- 1 file changed, 95 insertions(+), 8 deletions(-)
+Changes in v10:
+- Apply fixups from Miguel:
+  - Add integer type suffixes to `assert!` in tests.
+  - Fix links to docs.kernel.org.
+  - Applyy markdown and intra-doc links where possible.
+  - Change to `///` for `mod` docs.
+  - Slightly reword a comment.
+  - Pluralize "Examples" section name.
+  - Hide `use`s in example.
+  - Removed `#[expect]` for the `rusttest` target.
+- Link to v9: https://lore.kernel.org/r/20250321-module-params-v3-v9-0-28b905f2e345@kernel.org
 
-diff --git a/Documentation/kbuild/gendwarfksyms.rst b/Documentation/kbuild/gendwarfksyms.rst
-index e4beaae7e456..8b0d7ebbb084 100644
---- a/Documentation/kbuild/gendwarfksyms.rst
-+++ b/Documentation/kbuild/gendwarfksyms.rst
-@@ -125,14 +125,17 @@ the rules. The fields are as follows:
-   qualified name of the DWARF Debugging Information Entry (DIE).
- - `value`: Provides rule-specific data.
- 
--The following helper macro, for example, can be used to specify rules
-+The following helper macros, for example, can be used to specify rules
- in the source code::
- 
--	#define __KABI_RULE(hint, target, value)                             \
--		static const char __PASTE(__gendwarfksyms_rule_,             \
-+	#define ___KABI_RULE(hint, target, value)			    \
-+		static const char __PASTE(__gendwarfksyms_rule_,	     \
- 					  __COUNTER__)[] __used __aligned(1) \
- 			__section(".discard.gendwarfksyms.kabi_rules") =     \
--				"1\0" #hint "\0" #target "\0" #value
-+				"1\0" #hint "\0" target "\0" value
-+
-+	#define __KABI_RULE(hint, target, value) \
-+		___KABI_RULE(hint, #target, #value)
- 
- 
- Currently, only the rules discussed in this section are supported, but
-@@ -223,7 +226,88 @@ Example usage::
- 	KABI_ENUMERATOR_IGNORE(e, C);
- 	KABI_ENUMERATOR_VALUE(e, LAST, 2);
- 
--4.3. Adding structure members
-+4.1.3. Managing structure size changes
-+======================================
-+
-+A data structure can be partially opaque to modules if its allocation is
-+handled by the core kernel, and modules only need to access some of its
-+members. In this situation, it's possible to append new members to the
-+structure without breaking the ABI, as long as the layout for the original
-+members remains unchanged.
-+
-+To append new members, we can hide them from symbol versioning as
-+described in section :ref:`Hiding members <hiding_members>`, but we can't
-+hide the increase in structure size. The `byte_size` rule allows us to
-+override the structure size used for symbol versioning.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "byte_size"
-+- `target`: The fully qualified name of the target data structure
-+  (as shown in **--dump-dies** output).
-+- `value`: A positive decimal number indicating the structure size
-+  in bytes.
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+        #define KABI_BYTE_SIZE(fqn, value) \
-+                __KABI_RULE(byte_size, fqn, value)
-+
-+Example usage::
-+
-+	struct s {
-+                /* Unchanged original members */
-+		unsigned long a;
-+                void *p;
-+
-+                /* Appended new members */
-+                KABI_IGNORE(0, unsigned long n);
-+	};
-+
-+	KABI_BYTE_SIZE(s, 16);
-+
-+4.1.4. Overriding type strings
-+==============================
-+
-+In rare situations where distributions must make significant changes to
-+otherwise opaque data structures that have inadvertently been included
-+in the published ABI, keeping symbol versions stable using the more
-+targeted kABI rules can become tedious. The `type_string` rule allows us
-+to override the full type string for a type or a symbol, and even add
-+types for versioning that no longer exist in the kernel.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "type_string"
-+- `target`: The fully qualified name of the target data structure
-+  (as shown in **--dump-dies** output) or symbol.
-+- `value`: A valid type string (as shown in **--symtypes**) output)
-+  to use instead of the real type.
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+	#define KABI_TYPE_STRING(type, str) \
-+		___KABI_RULE("type_string", type, str)
-+
-+Example usage::
-+
-+	/* Override type for a structure */
-+	KABI_TYPE_STRING("s#s",
-+		"structure_type s { "
-+			"member base_type int byte_size(4) "
-+				"encoding(5) n "
-+			"data_member_location(0) "
-+		"} byte_size(8)");
-+
-+	/* Override type for a symbol */
-+	KABI_TYPE_STRING("my_symbol", "variable s#s");
-+
-+The `type_string` rule should be used only as a last resort if maintaining
-+a stable symbol versions cannot be reasonably achieved using other
-+means. Overriding a type string increases the risk of actual ABI breakages
-+going unnoticed as it hides all changes to the type.
-+
-+4.2. Adding structure members
- =============================
- 
- Perhaps the most common ABI compatible change is adding a member to a
-@@ -237,7 +321,7 @@ natural method. This section describes gendwarfksyms support for using
- reserved space in data structures and hiding members that don't change
- the ABI when calculating symbol versions.
- 
--4.3.1. Reserving space and replacing members
-+4.2.1. Reserving space and replacing members
- ============================================
- 
- Space is typically reserved for later use by appending integer types, or
-@@ -276,7 +360,9 @@ The examples include `KABI_(RESERVE|USE|REPLACE)*` macros that help
- simplify the process and also ensure the replacement member is correctly
- aligned and its size won't exceed the reserved space.
- 
--4.3.2. Hiding members
-+.. _hiding_members:
-+
-+4.2.2. Hiding members
- =====================
- 
- Predicting which structures will require changes during the support
-@@ -305,4 +391,5 @@ member to a union where one of the fields has a name starting with
-                 unsigned long b;
-         };
- 
--With **--stable**, both versions produce the same symbol version.
-+With **--stable**, both versions produce the same symbol version. The
-+examples include a `KABI_IGNORE` macro to simplify the code.
+Changes in v9:
+- Remove UB when parsing the minimum integer values.
+- Make `FromStr` trait unsafe, since wrong implementations can cause UB.
+- Drop patches that were applied to rust-next.
+- Link to v8: https://lore.kernel.org/r/20250227-module-params-v3-v8-0-ceeee85d9347@kernel.org
+
+Changes in v8:
+- Change print statement in sample to better communicate parameter name.
+- Use imperative mode in commit messages.
+- Remove prefix path from `EINVAL`.
+- Change `try_from_param_arg` to accept `&BStr` rather than `&[u8]`.
+- Parse integers without 128 bit integer types.
+- Seal trait `FromStrRadix`.
+- Strengthen safety requirement of `set_param`.
+- Remove comment about Display and `PAGE_SIZE`.
+- Add note describing why `ModuleParamAccess` is pub.
+- Typo and grammar fixes for documentation.
+- Update MAINTAINERS with rust module files.
+- Link to v7: https://lore.kernel.org/r/20250218-module-params-v3-v7-0-5e1afabcac1b@kernel.org
+
+Changes in v7:
+- Remove dependency on `pr_warn_once` patches, replace with TODO.
+- Rework `ParseInt::from_str` to avoid allocating.
+- Add a comment explaining how we parse "0".
+- Change trait bound on `Index` impl for `BStr` to match std library approach.
+- Link to v6: https://lore.kernel.org/r/20250211-module-params-v3-v6-0-24b297ddc43d@kernel.org
+
+Changes in v6:
+- Fix a bug that prevented parsing of negative default values for
+  parameters in the `module!` macro.
+- Fix a bug that prevented parsing zero in `strip_radix`. Also add a
+  test case for this.
+- Add `AsRef<BStr>` for `[u8]` and `BStr`.
+- Use `impl AsRef<BStr>` as type of prefix in `BStr::strip_prefix`.
+- Link to v5: https://lore.kernel.org/r/20250204-module-params-v3-v5-0-bf5ec2041625@kernel.org
+
+Changes in v5:
+- Fix a typo in a safety comment in `set_param`.
+- Use a match statement in `parse_int::strip_radix`.
+- Add an implementation of `Index` for `BStr`.
+- Fix a logic inversion bug where parameters would not be parsed.
+- Use `kernel::ffi::c_char` in `set_param` rather than the one in `core`.
+- Use `kernel::c_str!` rather than `c"..."` literal in module macro.
+- Rebase on v6.14-rc1.
+- Link to v4: https://lore.kernel.org/r/20250109-module-params-v3-v4-0-c208bcfbe11f@kernel.org
+
+Changes in v4:
+- Add module maintainers to Cc list (sorry)
+- Add a few missing [`doc_links`]
+- Add panic section to `expect_string_field`
+- Fix a typo in safety requirement of `module_params::free`
+- Change `assert!` to `pr_warn_once!` in `module_params::set_param`
+- Remove `module_params::get_param` and install null pointer instead
+- Remove use of the unstable feature `sync_unsafe_cell`
+- Link to v3: https://lore.kernel.org/r/20241213-module-params-v3-v3-0-485a015ac2cf@kernel.org
+
+Changes in v3:
+- use `SyncUnsafeCell` rather than `static mut` and simplify parameter access
+- remove `Display` bound from `ModuleParam`
+- automatically generate documentation for `PARAM_OPS_.*`
+- remove `as *const _ as *mut_` phrasing
+- inline parameter name in struct instantiation in  `emit_params`
+- move `RacyKernelParam` out of macro template
+- use C string literals rather than byte string literals with explicit null
+- template out `__{name}_{param_name}` in `emit_param`
+- indent template in `emit_params`
+- use let-else expression in `emit_params` to get rid of an indentation level
+- document `expect_string_field`
+- move invication of `impl_int_module_param` to be closer to macro def
+- move attributes after docs in `make_param_ops`
+- rename `impl_module_param` to impl_int_module_param`
+- use `ty` instead of `ident` in `impl_parse_int`
+- use `BStr` instead of `&str` for string manipulation
+- move string parsing functions to seperate patch and add examples, fix bugs
+- degrade comment about future support from doc comment to regular comment
+- remove std lib path from `Sized` marker
+- update documentation for `trait ModuleParam`
+- Link to v2: https://lore.kernel.org/all/20240819133345.3438739-1-nmi@metaspace.dk/
+
+Changes in v2:
+- Remove support for params without values (`NOARG_ALLOWED`).
+- Improve documentation for `try_from_param_arg`.
+- Use prelude import.
+- Refactor `try_from_param_arg` to return `Result`.
+- Refactor `ParseInt::from_str` to return `Result`.
+- Move C callable functions out of `ModuleParam` trait.
+- Rename literal string field parser to `expect_string_field`.
+- Move parameter parsing from generation to parsing stage.
+- Use absolute type paths in macro code.
+- Inline `kparam`and `read_func` values.
+- Resolve TODO regarding alignment attributes.
+- Remove unnecessary unsafe blocks in macro code.
+- Improve error message for unrecognized parameter types.
+- Do not use `self` receiver when reading parameter value.
+- Add parameter documentation to `module!` macro.
+- Use empty `enum` for parameter type.
+- Use `addr_of_mut` to get address of parameter value variable.
+- Enabled building of docs for for `module_param` module.
+- Link to v1: https://lore.kernel.org/rust-for-linux/20240705111455.142790-1-nmi@metaspace.dk/
+
+---
+Andreas Hindborg (3):
+      rust: str: add radix prefixed integer parsing functions
+      rust: add parameter support to the `module!` macro
+      modules: add rust modules files to MAINTAINERS
+
+ MAINTAINERS                  |   2 +
+ rust/kernel/lib.rs           |   1 +
+ rust/kernel/module_param.rs  | 221 +++++++++++++++++++++++++++++++++++++++++++
+ rust/kernel/str.rs           | 172 ++++++++++++++++++++++++++++++++-
+ rust/macros/helpers.rs       |  25 +++++
+ rust/macros/lib.rs           |  31 ++++++
+ rust/macros/module.rs        | 195 ++++++++++++++++++++++++++++++++++----
+ samples/rust/rust_minimal.rs |  10 ++
+ 8 files changed, 636 insertions(+), 21 deletions(-)
+---
+base-commit: b4432656b36e5cc1d50a1f2dc15357543add530e
+change-id: 20241211-module-params-v3-ae7e5c8d8b5a
+
+Best regards,
 -- 
-2.49.0.906.g1f30a19c02-goog
+Andreas Hindborg <a.hindborg@kernel.org>
+
 
