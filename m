@@ -1,40 +1,40 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F32623A562;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84338255F4E;
 	Fri,  2 May 2025 14:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746195909; cv=none; b=hRCzvs7pka8R1NZ8XxPsQc1i6JdIUKEz2hHSsKjcyEzRhPnLH8MnAkooRGL7499y+I6tR+mza7h/y16/xt7UbVd9EZ9Lf3dywGint7rL9vZkAA1z/ZzJKd+o82+qBcamZHROUfsSmGf34k/OsxRErL/6NfkLsEh2PqNYvXEaLlo=
+	t=1746195909; cv=none; b=gzARrMOccH/gxpyT7m+IulQ1oNuC7CvhWTc1Lz0F9wgRRWbhdrZpncidNckCkQ+LgLsCowXDTJVJHI8o58Wawoo07CglX9PrmZLuANGQzEsO7OOqCmsytBuGInRgX7DmGHMBp8cS5nxIJHlIyL8u2WUK5Urlp/DBKQXeXHyQJsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1746195909; c=relaxed/simple;
-	bh=32/4+qmrGM/xnIFFxa4eHYZW/9RkizeOtr7qMjIWSHk=;
+	bh=jRjBKw4YOqZTbdVmrR6qZ/i4ZyoyCPf7+SVKGt83R/k=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=rUGmziZ9Lclw9XQJMqaHkCNdCBG9KPQuL/F/04kI+JYfwqGuEChlru+xPeqRd8nY+rfHStg4CiNFrSncWepqJ+FaZ7sI4l1WPcakWHos11jm8KGNgfavdQ2GlYA8/8RXRWU28Mv6Pbgx8kR4cZn7TcNHPXOTpiM8NQoh3HvjTWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CTTHQzKJ; arc=none smtp.client-ip=90.155.92.199
+	 Content-Type; b=pE5jEPYxuuzgtzMy+vcRhuwUKh7KYbuDUOpi4NB0FtdrvasayWnjLmbQsZR5twQaFdleafCWXYaa0TeI3+ElsUMDdSART2VAXUSwDaUAZRg1RvJFkPIwUJpea+L83CoeWR2iwgZNdymMLPR9egraOvQm2cG5G4BMPa16qwrPVJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jOCdhI43; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CTTHQzKJ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jOCdhI43"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=WUExRaEQQnsPbw/eE+wP4SXVeUzVT4DYtJ6VYKm6RJk=; b=CTTHQzKJDVw6WuXZTThKx+OeIO
-	eYjbrEQz2JDcu8DFhxMoFGger3VPyg7yimLDQFdspR1RcJD3T0/0NVHn+Jyh5+wMzW0ZqzyLXE4/3
-	yr2/y1fQ5ilUCDjD8cCZu9V1J293H7ZXpAWOscv3Mn9i7nQvM8SDwknMlaf86Dg7xU1H7nabjBR24
-	uy/A7J1wpxMD1bNkTIW9WLGkvPEIAGY0RBC46h9PQZP863sduzYxqydV2O4qCR7F55LSK3KHFrnWy
-	Pi3pCJBrHUmFsEpAkihVG27mAOYsgzPpW2e+lCkPBvGymms6D36yWoD+fEuyt8VWSKc+GTs+s6OUp
-	S/OR9ewg==;
+	bh=wSEofVt37+OE35DFLYfF1av+a4A68i6wp+MZRME4os4=; b=jOCdhI43EtUJ6ce96sPwbhJOu6
+	3WfqKCd/O0nHmlLZEG3mHGuAhVQoXqeh5jdnt1DGphdBQVlOrX8sWuh5NyvtXrbiV3jQYxhgIY3We
+	t9lT2q2t7ei474Cad0di45lO/K14mcywFxLJVxBsLxZUhRO+vrymre+fPOs/EDnI6tSzoTph7Eist
+	Nf4fSC6IXZOnpiw19das0+Axy83BPznXCZ228I+gfhNbsPDpbKzJVBuR5sMhvc+kSnDrMR6C5TT7r
+	QmYcKVr2QVT7doSgaRSmv/tblCk9szfvPLFID7zM+Hajw+XcNzpDHp2as/0Hg1ZWsCzJ+G/56hzMt
+	tJI3MUiw==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
 	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uArK2-0000000EzDq-0NeD;
-	Fri, 02 May 2025 14:25:02 +0000
+	id 1uArK1-0000000EzDd-16cX;
+	Fri, 02 May 2025 14:25:01 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id 037DD3001AE; Fri,  2 May 2025 16:24:59 +0200 (CEST)
-Message-ID: <20250502141844.369838967@infradead.org>
+	id E4ADA300777; Fri,  2 May 2025 16:24:59 +0200 (CEST)
+Message-ID: <20250502141843.937580735@infradead.org>
 User-Agent: quilt/0.66
-Date: Fri, 02 May 2025 16:12:09 +0200
+Date: Fri, 02 May 2025 16:12:05 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -52,7 +52,7 @@ Cc: x86@kernel.org,
  gregkh@linuxfoundation.org,
  roypat@amazon.co.uk,
  "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH v3 5/5] module: Provide EXPORT_SYMBOL_GPL_FOR_MODULES() helper
+Subject: [PATCH v3 1/5] modpost: Use for() loop
 References: <20250502141204.500293812@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -62,95 +62,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Helper macro to more easily limit the export of a symbol to a given
-list of modules.
+Slight cleanup by using a for() loop instead of while(). This makes it
+clearer what is the iteration and what is the actual work done.
 
-Eg:
-
-  EXPORT_SYMBOL_GPL_FOR_MODULES(preempt_notifier_inc, "kvm");
-
-will limit the use of said function to kvm.ko, any other module trying
-to use this symbol will refure to load (and get modpost build
-failures).
-
-Requested-by: Masahiro Yamada <masahiroy@kernel.org>
-Requested-by: Christoph Hellwig <hch@infradead.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- Documentation/core-api/symbol-namespaces.rst |   22 ++++++++++++++++++++++
- include/linux/export.h                       |   12 ++++++++++--
- 2 files changed, 32 insertions(+), 2 deletions(-)
+ scripts/mod/modpost.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/Documentation/core-api/symbol-namespaces.rst
-+++ b/Documentation/core-api/symbol-namespaces.rst
-@@ -28,6 +28,9 @@ kernel. As of today, modules that make u
- are required to import the namespace. Otherwise the kernel will, depending on
- its configuration, reject loading the module or warn about a missing import.
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1595,12 +1595,10 @@ static void read_symbols(const char *mod
+ 			license = get_next_modinfo(&info, "license", license);
+ 		}
  
-+Additionally, it is possible to put symbols into a module namespace, strictly
-+limiting which modules are allowed to use these symbols.
-+
- 2. How to define Symbol Namespaces
- ==================================
+-		namespace = get_modinfo(&info, "import_ns");
+-		while (namespace) {
++		for (namespace = get_modinfo(&info, "import_ns");
++		     namespace;
++		     namespace = get_next_modinfo(&info, "import_ns", namespace))
+ 			add_namespace(&mod->imported_namespaces, namespace);
+-			namespace = get_next_modinfo(&info, "import_ns",
+-						     namespace);
+-		}
  
-@@ -83,6 +86,22 @@ A second option to define the default na
- within the corresponding compilation unit before the #include for
- <linux/export.h>. Typically it's placed before the first #include statement.
- 
-+2.3 Using the EXPORT_SYMBOL_GPL_FOR_MODULES() macro
-+===================================================
-+
-+Symbols exported using this macro are put into a module namespace. This
-+namespace cannot be imported.
-+
-+The macro takes a comma separated list of module names, allowing only those
-+modules to access this symbol. Simple tail-globs are supported.
-+
-+For example:
-+
-+  EXPORT_SYMBOL_GPL_FOR_MODULES(preempt_notifier_inc, "kvm,kvm-*")
-+
-+will limit usage of this symbol to modules whoes name matches the given
-+patterns.
-+
- 3. How to use Symbols exported in Namespaces
- ============================================
- 
-@@ -154,3 +173,6 @@ Again, ``make nsdeps`` will eventually a
- You can also run nsdeps for external module builds. A typical usage is::
- 
- 	$ make -C <path_to_kernel_src> M=$PWD nsdeps
-+
-+Note: it will happily generate an import statement for the module namespace;
-+which will not work and generates build and runtime failures.
---- a/include/linux/export.h
-+++ b/include/linux/export.h
-@@ -24,11 +24,17 @@
- 	.long sym
- #endif
- 
--#define ___EXPORT_SYMBOL(sym, license, ns)		\
-+/*
-+ * LLVM integrated assembler cam merge adjacent string literals (like
-+ * C and GNU-as) passed to '.ascii', but not to '.asciz' and chokes on:
-+ *
-+ *   .asciz "MODULE_" "kvm" ;
-+ */
-+#define ___EXPORT_SYMBOL(sym, license, ns...)		\
- 	.section ".export_symbol","a"		ASM_NL	\
- 	__export_symbol_##sym:			ASM_NL	\
- 		.asciz license			ASM_NL	\
--		.asciz ns			ASM_NL	\
-+		.ascii ns "\0"			ASM_NL	\
- 		__EXPORT_SYMBOL_REF(sym)	ASM_NL	\
- 	.previous
- 
-@@ -85,4 +91,6 @@
- #define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", ns)
- #define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "GPL", ns)
- 
-+#define EXPORT_SYMBOL_GPL_FOR_MODULES(sym, mods) __EXPORT_SYMBOL(sym, "GPL", "module:" mods)
-+
- #endif /* _LINUX_EXPORT_H */
+ 		if (!get_modinfo(&info, "description"))
+ 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
 
 
