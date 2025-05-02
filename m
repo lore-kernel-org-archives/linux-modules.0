@@ -1,138 +1,205 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACC81D554;
-	Fri,  2 May 2025 06:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F22D2356DD
+	for <linux-modules@vger.kernel.org>; Fri,  2 May 2025 09:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746168798; cv=none; b=qVvAvWmfh0pGb1v+56+tEfcByZW96ygD2dE7c4N0C+cHK0fpawi/xWvbWEt6dSJ1F39hFRmA8KFdXCEuXvYvu2T6HE68UKr+LgdRJPiWCBkLZFYHa2ovHfppaU7QTemObD4dC5mbiPxn9DsizOc+Ot5A7T8TO0FXsAiUucotPbo=
+	t=1746179732; cv=none; b=sxdhqa3e6SYqnEhhf6wdDTOPYBbRAfado2zUUjZ1wu3FoHmPNCGg6105tqEzCYRD3M2GxOFJoYFmIn+0kJHMdliAPK1ham/j9X5ScBrW7jKbnfs9klKIGpMyoIk+y4StYBCXmqUt6Vf2qNAdKCrSkc4mwEuj2hU4yLTUSN23aIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746168798; c=relaxed/simple;
-	bh=AEdRU+ogQrE6gQAgP/rybtN8TOhshZ7X86ciQDX554g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msPR/UMfLyCejRg06M6wo+pKtRMNTiBPAxVkHPQTXjXgNqa/A0sDLR1ZSn1JoD+K/BaqeNhvAsfAznKTLTdSYA/2F+aEJr6nmcjtkucmwXRXzBCdtYDui6NGPKHNntdiYKgsWfCCr64P+ity25p5dfglEUvekY2F//o9YL3hTAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=CxKUsKab; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1746179732; c=relaxed/simple;
+	bh=DbOmruiDXqyCFuxtwBSQJBYz2MVx6spaIxjAgcz+Oj8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P3zHLu20V+QYjekwQP8wRJZhV6/RZcSDn3FPqW4215hCzbPXXAZgfMFvq0KF1F9eKd19cgRPPkfEVVOeWqoUHsR6uZ4ypzAN8ypT4LZTfKQVzrMa+miwSdxE9nkPPZ163HwqkMOJWpCS7ksPLR06cEf/pDE2135r4028ZY18UxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NeKatkF9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="CxKUsKab"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1746168790;
-	bh=AEdRU+ogQrE6gQAgP/rybtN8TOhshZ7X86ciQDX554g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CxKUsKabvVQtCyoctO8MV2iUdgbSXO1OeNK+W2RsL9m4NVcoUrzpeI7zuNg2eC3IS
-	 ZL0Jz4TZ9bVREPe8YN+Ocj0q2Hc+biSc2XfA95gtj8Z+2GrX2G118bp/uIjQ0QmRMk
-	 XDnIezQvPUDxsyD5F02EsfUCEVYsV3PK2uLBkSiQ=
-Date: Fri, 2 May 2025 08:53:09 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-Message-ID: <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NeKatkF9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746179729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Lg/z+bj6Vp6Uwot26MZjMyBdidDV8u4Eq/gx3z2pwHw=;
+	b=NeKatkF9dKxlRB8lOdaII8+V7da1tydBeXe7MbTIv2DjdpbqA0ZIexlgv4fyNjHBYF91Zd
+	hx7trX5K+c5289zD2Exir+bGLqjgQBpCqtzVZo9AWItN43qBDcdy/b5MjC7t9inJH7wZWL
+	ss+n3KY/kMqY1z+oR7AFnHTp1qtpgBI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-192-AdfeiEmONhCqv_71ztavqg-1; Fri, 02 May 2025 05:55:27 -0400
+X-MC-Unique: AdfeiEmONhCqv_71ztavqg-1
+X-Mimecast-MFC-AGG-ID: AdfeiEmONhCqv_71ztavqg_1746179726
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3912fe32a30so571430f8f.1
+        for <linux-modules@vger.kernel.org>; Fri, 02 May 2025 02:55:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746179726; x=1746784526;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lg/z+bj6Vp6Uwot26MZjMyBdidDV8u4Eq/gx3z2pwHw=;
+        b=nB1+7RaVOEs80vK3XtlBGRvPC/mvMmXzL5jNxMTGljnvpuMF/KZ6/vka92g92tXCix
+         fpNROwHQjH3pMSqsFy03clspPDw7aY9XcVKpmMPUUdZ0Y4AvifbBwvFHmJ9LHN8zIk3S
+         YVfeOwHXgES+hYOUELZy26C4srUDxXoTBtLLtk9QmJWzFjXUAZ1RtteHGoWIwTjMHXWP
+         wBChuffr/q0Yui4hkA4cqf1rC6RVBWIDosDlXY9AReOpbUwLIRsmd1Zjp3xI6d9HgGjf
+         XruX7kLP0wcirLpetaQpHHau3qLmKkn39J/ag1aq3N/rgkx58PH6N4rDcy3RiFfB4p0v
+         4s3w==
+X-Forwarded-Encrypted: i=1; AJvYcCX0Zo04FRuH1bF5vHaa79brdmKyaNn3s2Ty5PDPEXGk092uaJe0B4fumAVcxngzOI2dTD5RMHkpBjY6ADrj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2Wuoaei0qpcCJ8J1sdVkZx3F1lpUkpoOcYt/A11uipwWudH4h
+	5Mu1GybtoAj4gOkH1BAg0K8buaPWTYdfBVJJOu35/BoVgqwXg67aNHkyIB5rPC93sUnw2Xmw0x2
+	VdRbJI/jx322r7pqUuzByRMCq/QXAorlL6uSrWo5VbHMeJaH6MbMCO3QQaxBnH80=
+X-Gm-Gg: ASbGncuKc2+U4kAwZrV5MyklVv9sfUPyoZPrTB4XC/xQ0ghZuWl4zp8GBMwKBkkwpuQ
+	WTGdSozPAJkAXOfTDDQP5sA5MysNfBhyczhAH8wD3Tmd7SZFG2oHC1U/D4FbtAf0ZNutU/s6iPK
+	xAg2Av4WmUbzRBiZUs0X3x0sonpVD3zd9EpyJunPCJM/n0NZavhcgvb3bIRSmlbDlNtUH6GLp7o
+	wwrSXgm0hBgBKwJj2GPLiNRQgZ5ueQrR9O49PSwm01rLFrJA+WF3TiAm40MYJIqe0gGsmupZxVp
+	kKk7UWMxQ49gHq1t+9PjrfdxG2awFS4dz/q8JMFH7+h7ZC6M
+X-Received: by 2002:a05:6000:40cd:b0:391:4873:7940 with SMTP id ffacd0b85a97d-3a099aef847mr1613224f8f.54.1746179725709;
+        Fri, 02 May 2025 02:55:25 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGpWssSttWyCeyGY3CsU2VpUSZWAU4rNhFXcV+QIILeKOWgOhhc72G0KBYplClE77XLY5f7yg==
+X-Received: by 2002:a05:6000:40cd:b0:391:4873:7940 with SMTP id ffacd0b85a97d-3a099aef847mr1613170f8f.54.1746179725069;
+        Fri, 02 May 2025 02:55:25 -0700 (PDT)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb ([2001:861:43c1:5950:3e51:b684:9982:d4a2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a099ae3ccdsm1693329f8f.38.2025.05.02.02.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 02:55:24 -0700 (PDT)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ kvm@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ rcu@vger.kernel.org, linux-hardening@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, Juri Lelli
+ <juri.lelli@redhat.com>, Marcelo Tosatti <mtosatti@redhat.com>, Yair
+ Podemsky <ypodemsk@redhat.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Daniel Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>, Nicolas
+ Saenz Julienne <nsaenz@amazon.com>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Dave
+ Hansen <dave.hansen@linux.intel.com>, Sean Christopherson
+ <seanjc@google.com>, Juergen Gross <jgross@suse.com>, Ajay Kaher
+ <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Russell King
+ <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
+ <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, x86@kernel.org, "H.
+ Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Pawan
+ Gupta <pawan.kumar.gupta@linux.intel.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Arnd Bergmann <arnd@arndb.de>, Jason Baron
+ <jbaron@akamai.com>, Ard Biesheuvel <ardb@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Naveen N
+ Rao <naveen@kernel.org>, Anil S Keshavamurthy
+ <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Vincent Guittot
+ <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, Kees Cook
+ <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda
+ <ojeda@kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>, Rong Xu
+ <xur@google.com>, Rafael Aquini <aquini@redhat.com>, Song Liu
+ <song@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Dan Carpenter
+ <dan.carpenter@linaro.org>, Brian Gerst <brgerst@gmail.com>, "Kirill A.
+ Shutemov" <kirill.shutemov@linux.intel.com>, Benjamin Berg
+ <benjamin.berg@intel.com>, Vishal Annapurve <vannapurve@google.com>, Randy
+ Dunlap <rdunlap@infradead.org>, John Stultz <jstultz@google.com>, Tiezhu
+ Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v5 00/25] context_tracking,x86: Defer some IPIs until a
+ user->kernel transition
+In-Reply-To: <a6b3a331-1ff3-4490-b300-a62b3c21578d@intel.com>
+References: <20250429113242.998312-1-vschneid@redhat.com>
+ <fefcd1a6-f146-4f3c-b28b-f907e7346ddd@intel.com>
+ <20250430132047.01d48647@gandalf.local.home>
+ <019f6713-cfbd-466b-8fb5-dcd982cf8644@intel.com>
+ <20250430154228.1d6306b4@gandalf.local.home>
+ <a6b3a331-1ff3-4490-b300-a62b3c21578d@intel.com>
+Date: Fri, 02 May 2025 11:55:21 +0200
+Message-ID: <xhsmhr0179w1i.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
+Content-Type: text/plain
 
-Hi James,
+On 30/04/25 13:00, Dave Hansen wrote:
+> On 4/30/25 12:42, Steven Rostedt wrote:
+>>> Look at the syscall code for instance:
+>>>
+>>>> SYM_CODE_START(entry_SYSCALL_64)
+>>>>         swapgs
+>>>>         movq    %rsp, PER_CPU_VAR(cpu_tss_rw + TSS_sp2)
+>>>>         SWITCH_TO_KERNEL_CR3 scratch_reg=%rsp
+>>> You can _trivially_ audit this and know that swapgs doesn't touch memory
+>>> and that as long as PER_CPU_VAR()s and the process stack don't have
+>>> their mappings munged and flushes deferred that this would be correct.
+>> Hmm, so there is still a path for this?
+>>
+>> At least if it added more ways to debug it, and some other changes to make
+>> the locations where vmalloc is dangerous smaller?
+>
+> Being able to debug it would be a good start. But, more generally, what
+> we need is for more people to be able to run the code in the first
+> place. Would a _normal_ system (without setups that are trying to do
+> NOHZ_FULL) ever be able to defer TLB flush IPIs?
+>
+> If the answer is no, then, yeah, I'll settle for some debugging options.
+>
+> But if you shrink the window as small as I'm talking about, it would
+> look very different from this series.
+>
+> For instance, imagine when a CPU goes into the NOHZ mode. Could it just
+> unconditionally flush the TLB on the way back into the kernel (in the
+> same SWITCH_TO_KERNEL_CR3 spot)? Yeah, it'll make entry into the kernel
+> expensive for NOHZ tasks, but it's not *THAT* bad. And if the entire
+> point of a NOHZ_FULL task is to minimize the number of kernel entries
+> then a little extra overhead there doesn't sound too bad.
+>
 
-On 2025-04-29 10:05:04-0400, James Bottomley wrote:
-> On Tue, 2025-04-29 at 15:04 +0200, Thomas Weißschuh wrote:
-> > The current signature-based module integrity checking has some
-> > drawbacks in combination with reproducible builds:
-> > Either the module signing key is generated at build time, which makes
-> > the build unreproducible,
-> 
-> I don't believe it does: as long as you know what the key was, which
-> you can get from the kernel keyring, you can exactly reproduce the core
-> build (it's a public key after all and really equivalent to built in
-> configuration).  Is the fact that you have to boot the kernel to get
-> the key the problem?  In which case we could insist it be shipped in
-> the kernel packaging.
+Right, so my thought per your previous comments was to special case the
+TLB flush, depend on kPTI and do it uncondtionally in SWITCH_TO_KERNEL_CR3
+just like you've described - but keep the context tracking mechanism for
+other deferrable operations.
 
-See below.
+My gripe with that was having two separate mechanisms
+- super early entry around SWITCH_TO_KERNEL_CR3)
+- later entry at context tracking
 
-> >  or a static key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more
-> > complicated. 
-> 
-> No, it's the same as above ... as long as you have the public key you
-> can reproduce the core build with the same end to end hash.
+Shifting everything to SWITCH_TO_KERNEL_CR3 means we lose the
+context_tracking infra to dynamically defer operations (atomically reading
+and writing to context_tracking.state), which means we unconditionally run
+all possible deferrable operations. This doesn't scream scalable, even
+though as you say NOHZ_FULL kernel entry is already a "you lose" situation.
 
-While the scheme you propose does allow verification of rebuildability,
-it does not satisfy the requirements for a reproducible build as
-understood by the general reproducible builds community:
+Yet another option is to duplicate the context tracking state specifically
+for IPI deferral and have it driven in/by SWITCH_TO_KERNEL_CR3, which is
+also not super savoury.
 
-	When is a build reproducible?
+I suppose I can start poking around running deferred ops in that
+SWITCH_TO_KERNEL_CR3 region, and add state/infra on top. Let's see where
+this gets me :-)
 
-	A build is reproducible if given the same source code, build environment
-	and build instructions, any party can recreate bit-by-bit identical
-	copies of all specified artifacts.
+Again, thanks for the insight and the suggestions Dave!
 
-	The relevant attributes of the build environment, the build instructions
-	and the source code as well as the expected reproducible artifacts are
-	defined by the authors or distributors. The artifacts of a build are the
-	parts of the build results that are the desired primary output.
+> Also, about the new hardware, I suspect there's some mystery customer
+> lurking in the shadows asking folks for this functionality. Could you at
+> least go _talk_ to the mystery customer(s) and see which hardware they
+> care about? They might already even have the magic CPUs they need for
+> this, or have them on the roadmap. If they've got Intel CPUs, I'd be
+> happy to help figure it out.
 
-https://reproducible-builds.org/docs/definition/
-
-Specifically the output of a previous build (the public key, module
-signatures) is not available during the rebuild or verification.
-
-> However, is there also a corresponding question of how we verify
-> reproduceability of kernel builds (and the associated modules ... I
-> assume for the modules you do strip the appended signature)?
-
-Currently distros either don't enforce the reproducibility of the
-kernel package at all or disable MODULE_SIG.
-With the proposed scheme there would be no signatures on builtin modules.
-
-> I assume
-> you're going by the secure boot hash (authenticode hash of the efi stub
-> and the compressed payload which includes the key).  However, if we had
-> the vmlinux.o we could do a much more nuanced hash to verify the build,
-> say by placing the keyring data in a section that isn't hashed.
-
-The currently existing tooling does not have any nuance in its
-verifications. It just compares bit-by-bit.
-I think this is intentional as any bespoke per-package logic would
-introduce possible failure modes and stand in the way of implementing
-multiple completely independent verification toolsets.
-While bespoke tools like diffoscope exist, these are only for
-development and debugging. Not not for the reproducibiliy check itself.
-
-How to handle secure-boot with distro keys is not yet clearly defined.
-I see two possibilities, which should be possible with the proposed
-scheme, both starting with the build of an unsigned kernel package.
-Then a signature would be computed on private infrastructure and either
-* shipped in a standalone package, to be combined with the kernel when
-  that is installed to the ESP/flash etc.
-* used as input of a signed kernel package where it is combined with the
-  unsigned kernel image.
-
-
-Thomas
