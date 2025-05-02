@@ -1,40 +1,40 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6976E2561C7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698182561D4;
 	Fri,  2 May 2025 14:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746195961; cv=none; b=LofyoGBIBCp53XjHPnqWkbfhBBFiN2spLvTlC4+zsENgK4FYmRPP2mJV7LLENXjCJ/ugE9V/VPEg6k/aeiZ81/NvKWFrTlCJQ50n+IfVOmIoTFS9c2gL0/fWAfyzsMnclY1usf9Zq1m0iWun0n4B2U2xZOXbj1mDhyP6+X3lWAg=
+	t=1746195965; cv=none; b=IyNc3k15o3ALpPj6RSpdx+jNqIDT7bsp/r88GGKnmPfxV9nSRrKqMIznPSSt4AcEIoaTFNcANHvop0EcE7EYcaUr0WuCsHl+YC7qM1wim7WZB3csc9LGlydOOqpb1m54GwukryC0id6g6ZVMg4UYrIxypRsBb/m4UBwQFtGR41Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746195961; c=relaxed/simple;
-	bh=REB2eBCK+R9hPD7UeAqPnHnHhVOyXX6Q/mLp4WgtHlA=;
+	s=arc-20240116; t=1746195965; c=relaxed/simple;
+	bh=Ev5in1o5uPO+eUSus0eAQkz9t8/6/6cCR+cECSU4aPc=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=LZUbpChxspsH733MbNuvVjV8BJF1CiCjH5LVeB0OyEITOTs9G6AWpDzgzWwUb+RkmJIfvo7xFWXKfdad9NapkKurG7NUtTx2cMNl4Cil6zmAGA6wtTmyJqh76ktTQ4bQJ8VlT7U8Ouqm2JxUNwV0OQK7PpLbM/6p1JqdWh8nsjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QpXStV5Y; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type; b=MBFe6Cp1rVgS0yeHGh1Vbr06DXSuqtDMsUHMYaAzws4ejXOfHptQZM+jBurX0g5c5PBS0GjFj5v6SeExjB/CGMxhwjftAhojXrijtzAWBQf1L93B91FkhJ5GJFMcJ9iQIFv9plU97DGHUIP5LApGQQSTWlSZm4jnvRbMm+6rLr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nbODw3Ow; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QpXStV5Y"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nbODw3Ow"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=/UvIJyPu4PFnUbnZPb6KkO/nGn6jmjyInuZMnh8rDj0=; b=QpXStV5YToMC6plCNaJSXQHB4K
-	YeJQE2XoMrdquYIoXPUBk+07E3YFIRiR03BC6Sl3g/96xyck/qYGSG7l8DfopcijtmaXCUQtphmQu
-	EqLGsV38TUMPW3xfkKjbPFtRmJ9yBxHSVlg0csvlcx0rEPzv4mPiVHaq4pQL0qxWD86DNaIRXYX8v
-	5Ei5pBUEkorSP81YRVxhNB81C4BbTs3K1+pcqn4d6CPuNuC9a/Gt6hWH6uikwTzoKaY/U/T3OFXqu
-	Oheu+VX0aL4eHbqTcbRle78lAfD5kPneD/1doeEmlUDhYLXjtIKXLGcjv6JO1HMRm8HRlbj04WsUS
-	ON6yzVxg==;
+	bh=orH9pxNknjY+XgTLI4Ne4ZRWvYOjc6KHHMNe5II3pf4=; b=nbODw3Owl/GGA/xJnl/eCynY6n
+	5tIcrA2tYzQtT68Cq/PYDddPQvx+nVKFpmerX7zfXvDq6lOZDOqfWM33HF+kjC1Bhn9XYsZjOFNkq
+	iFpmiFPlWmn0J0ro1tTPEAyCBmoZmpLZ+uavk0vUofn46snq55aalIK9JM4wH8vuPN15/kbAhBjtt
+	YTLCy2M08Q7g+Wkp3AzhhLfokUTsz9DSyK4OYJju5Uy9W/9tA+eBSssmyAaBonOmPqDNHZH4er85z
+	Xl/hv+0NGpnrqdd3XGGujE9KO4ucBWxGAJK/Axq3au7aSf/RIsbxzuz6xAV4A5S6C6Du3Vkg/Q3O4
+	oM7Eaeyg==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
 	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uArKD-00000002iJj-3aSK;
-	Fri, 02 May 2025 14:25:14 +0000
+	id 1uArKC-00000002iJi-3DtM;
+	Fri, 02 May 2025 14:25:13 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id F16A830081F; Fri,  2 May 2025 16:24:59 +0200 (CEST)
-Message-ID: <20250502141844.263611823@infradead.org>
+	id E81DD300780; Fri,  2 May 2025 16:24:59 +0200 (CEST)
+Message-ID: <20250502141844.046738270@infradead.org>
 User-Agent: quilt/0.66
-Date: Fri, 02 May 2025 16:12:08 +0200
+Date: Fri, 02 May 2025 16:12:06 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -51,9 +51,8 @@ Cc: x86@kernel.org,
  hch@infradead.org,
  gregkh@linuxfoundation.org,
  roypat@amazon.co.uk,
- Sean Christopherson <seanjc@google.com>,
  "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH v3 4/5] module: Account for the build time module name mangling
+Subject: [PATCH v3 2/5] module: Add module specific symbol namespace support
 References: <20250502141204.500293812@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -63,60 +62,115 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Sean noted that scripts/Makefile.lib:name-fix-token rule will mangle
-the module name with s/-/_/g.
+Designate the "module:${modname}" symbol namespace to mean: 'only
+export to the named module'.
 
-Since this happens late in the build, only the kernel needs to bother
-with this, the modpost tool still sees the original name.
+Notably, explicit imports of anything in the "module:" space is
+forbidden.
 
-Reported-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Sean Christopherson <seanjc@google.com>
 ---
- kernel/module/main.c |   26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ kernel/module/main.c  |   33 +++++++++++++++++++++++++++++++--
+ scripts/mod/modpost.c |   11 ++++++++++-
+ 2 files changed, 41 insertions(+), 3 deletions(-)
 
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -170,6 +170,30 @@ static inline void add_taint_module(stru
+@@ -1083,6 +1083,14 @@ static char *get_modinfo(const struct lo
+ 	return get_next_modinfo(info, tag, NULL);
  }
  
- /*
-+ * Like strncmp(), except s/-/_/g as per scripts/Makefile.lib:name-fix-token rule.
-+ */
-+static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
++static bool verify_module_namespace(const char *namespace, const char *modname)
 +{
-+	for (int i = 0; i < n; i++) {
-+		char a = str_a[i];
-+		char b = str_b[i];
-+		int d;
++	const char *prefix = "module:";
 +
-+		if (a == '-') a = '_';
-+		if (b == '-') b = '_';
++	return strstarts(namespace, prefix) &&
++	       !strsmp(namespace + strlen(prefix), modname);
++}
 +
-+		d = a - b;
-+		if (d)
-+			return d;
+ static int verify_namespace_is_imported(const struct load_info *info,
+ 					const struct kernel_symbol *sym,
+ 					struct module *mod)
+@@ -1092,6 +1100,10 @@ static int verify_namespace_is_imported(
+ 
+ 	namespace = kernel_symbol_namespace(sym);
+ 	if (namespace && namespace[0]) {
 +
-+		if (!a)
-+			break;
++		if (verify_module_namespace(namespace, mod->name))
++			return 0;
++
+ 		for_each_modinfo_entry(imported_namespace, info, "import_ns") {
+ 			if (strcmp(namespace, imported_namespace) == 0)
+ 				return 0;
+@@ -1659,15 +1671,30 @@ static void module_license_taint_check(s
+ 	}
+ }
+ 
+-static void setup_modinfo(struct module *mod, struct load_info *info)
++static int setup_modinfo(struct module *mod, struct load_info *info)
+ {
+ 	const struct module_attribute *attr;
++	char *imported_namespace;
+ 	int i;
+ 
+ 	for (i = 0; (attr = modinfo_attrs[i]); i++) {
+ 		if (attr->setup)
+ 			attr->setup(mod, get_modinfo(info, attr->attr.name));
+ 	}
++
++	for_each_modinfo_entry(imported_namespace, info, "import_ns") {
++		/*
++		 * 'module:' prefixed namespaces are implicit, disallow
++		 * explicit imports.
++		 */
++		if (strstarts(imported_namespace, "module:")) {
++			pr_err("%s: module tries to import module namespace: %s\n",
++			       mod->name, imported_namespace);
++			return -EPERM;
++		}
 +	}
 +
 +	return 0;
+ }
+ 
+ static void free_modinfo(struct module *mod)
+@@ -3335,7 +3362,9 @@ static int load_module(struct load_info
+ 		goto free_unload;
+ 
+ 	/* Set up MODINFO_ATTR fields */
+-	setup_modinfo(mod, info);
++	err = setup_modinfo(mod, info);
++	if (err)
++		goto free_modinfo;
+ 
+ 	/* Fix up syms, so that st_value is a pointer to location. */
+ 	err = simplify_symbols(mod, info);
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1682,6 +1682,14 @@ void buf_write(struct buffer *buf, const
+ 	buf->pos += len;
+ }
+ 
++static bool verify_module_namespace(const char *namespace, const char *modname)
++{
++	const char *prefix = "module:";
++
++	return strstarts(namespace, prefix) &&
++	       !strcmp(namespace + strlen(prefix), modname);
 +}
 +
-+/*
-  * A thread that wants to hold a reference to a module only while it
-  * is running can call this to safely exit.
-  */
-@@ -1116,7 +1140,7 @@ static bool verify_module_namespace(cons
- 		if (*sep)
- 			sep++;
+ static void check_exports(struct module *mod)
+ {
+ 	struct symbol *s, *exp;
+@@ -1709,7 +1717,8 @@ static void check_exports(struct module
  
--		if (strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
-+		if (mod_strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
- 			return true;
- 	}
+ 		basename = get_basename(mod->name);
  
+-		if (!contains_namespace(&mod->imported_namespaces, exp->namespace)) {
++		if (!verify_module_namespace(exp->namespace, basename) &&
++		    !contains_namespace(&mod->imported_namespaces, exp->namespace)) {
+ 			modpost_log(!allow_missing_ns_imports,
+ 				    "module %s uses symbol %s from namespace %s, but does not import it.\n",
+ 				    basename, exp->name, exp->namespace);
 
 
