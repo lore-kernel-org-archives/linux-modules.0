@@ -1,40 +1,40 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84338255F4E;
-	Fri,  2 May 2025 14:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6976E2561C7;
+	Fri,  2 May 2025 14:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746195909; cv=none; b=gzARrMOccH/gxpyT7m+IulQ1oNuC7CvhWTc1Lz0F9wgRRWbhdrZpncidNckCkQ+LgLsCowXDTJVJHI8o58Wawoo07CglX9PrmZLuANGQzEsO7OOqCmsytBuGInRgX7DmGHMBp8cS5nxIJHlIyL8u2WUK5Urlp/DBKQXeXHyQJsY=
+	t=1746195961; cv=none; b=LofyoGBIBCp53XjHPnqWkbfhBBFiN2spLvTlC4+zsENgK4FYmRPP2mJV7LLENXjCJ/ugE9V/VPEg6k/aeiZ81/NvKWFrTlCJQ50n+IfVOmIoTFS9c2gL0/fWAfyzsMnclY1usf9Zq1m0iWun0n4B2U2xZOXbj1mDhyP6+X3lWAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746195909; c=relaxed/simple;
-	bh=jRjBKw4YOqZTbdVmrR6qZ/i4ZyoyCPf7+SVKGt83R/k=;
+	s=arc-20240116; t=1746195961; c=relaxed/simple;
+	bh=REB2eBCK+R9hPD7UeAqPnHnHhVOyXX6Q/mLp4WgtHlA=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=pE5jEPYxuuzgtzMy+vcRhuwUKh7KYbuDUOpi4NB0FtdrvasayWnjLmbQsZR5twQaFdleafCWXYaa0TeI3+ElsUMDdSART2VAXUSwDaUAZRg1RvJFkPIwUJpea+L83CoeWR2iwgZNdymMLPR9egraOvQm2cG5G4BMPa16qwrPVJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jOCdhI43; arc=none smtp.client-ip=90.155.92.199
+	 Content-Type; b=LZUbpChxspsH733MbNuvVjV8BJF1CiCjH5LVeB0OyEITOTs9G6AWpDzgzWwUb+RkmJIfvo7xFWXKfdad9NapkKurG7NUtTx2cMNl4Cil6zmAGA6wtTmyJqh76ktTQ4bQJ8VlT7U8Ouqm2JxUNwV0OQK7PpLbM/6p1JqdWh8nsjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QpXStV5Y; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jOCdhI43"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QpXStV5Y"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+	d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
 	Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
 	Content-ID:Content-Description:In-Reply-To;
-	bh=wSEofVt37+OE35DFLYfF1av+a4A68i6wp+MZRME4os4=; b=jOCdhI43EtUJ6ce96sPwbhJOu6
-	3WfqKCd/O0nHmlLZEG3mHGuAhVQoXqeh5jdnt1DGphdBQVlOrX8sWuh5NyvtXrbiV3jQYxhgIY3We
-	t9lT2q2t7ei474Cad0di45lO/K14mcywFxLJVxBsLxZUhRO+vrymre+fPOs/EDnI6tSzoTph7Eist
-	Nf4fSC6IXZOnpiw19das0+Axy83BPznXCZ228I+gfhNbsPDpbKzJVBuR5sMhvc+kSnDrMR6C5TT7r
-	QmYcKVr2QVT7doSgaRSmv/tblCk9szfvPLFID7zM+Hajw+XcNzpDHp2as/0Hg1ZWsCzJ+G/56hzMt
-	tJI3MUiw==;
+	bh=/UvIJyPu4PFnUbnZPb6KkO/nGn6jmjyInuZMnh8rDj0=; b=QpXStV5YToMC6plCNaJSXQHB4K
+	YeJQE2XoMrdquYIoXPUBk+07E3YFIRiR03BC6Sl3g/96xyck/qYGSG7l8DfopcijtmaXCUQtphmQu
+	EqLGsV38TUMPW3xfkKjbPFtRmJ9yBxHSVlg0csvlcx0rEPzv4mPiVHaq4pQL0qxWD86DNaIRXYX8v
+	5Ei5pBUEkorSP81YRVxhNB81C4BbTs3K1+pcqn4d6CPuNuC9a/Gt6hWH6uikwTzoKaY/U/T3OFXqu
+	Oheu+VX0aL4eHbqTcbRle78lAfD5kPneD/1doeEmlUDhYLXjtIKXLGcjv6JO1HMRm8HRlbj04WsUS
+	ON6yzVxg==;
 Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uArK1-0000000EzDd-16cX;
-	Fri, 02 May 2025 14:25:01 +0000
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uArKD-00000002iJj-3aSK;
+	Fri, 02 May 2025 14:25:14 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 0)
-	id E4ADA300777; Fri,  2 May 2025 16:24:59 +0200 (CEST)
-Message-ID: <20250502141843.937580735@infradead.org>
+	id F16A830081F; Fri,  2 May 2025 16:24:59 +0200 (CEST)
+Message-ID: <20250502141844.263611823@infradead.org>
 User-Agent: quilt/0.66
-Date: Fri, 02 May 2025 16:12:05 +0200
+Date: Fri, 02 May 2025 16:12:08 +0200
 From: Peter Zijlstra <peterz@infradead.org>
 To: mcgrof@kernel.org
 Cc: x86@kernel.org,
@@ -51,8 +51,9 @@ Cc: x86@kernel.org,
  hch@infradead.org,
  gregkh@linuxfoundation.org,
  roypat@amazon.co.uk,
+ Sean Christopherson <seanjc@google.com>,
  "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: [PATCH v3 1/5] modpost: Use for() loop
+Subject: [PATCH v3 4/5] module: Account for the build time module name mangling
 References: <20250502141204.500293812@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -62,31 +63,60 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-Slight cleanup by using a for() loop instead of while(). This makes it
-clearer what is the iteration and what is the actual work done.
+Sean noted that scripts/Makefile.lib:name-fix-token rule will mangle
+the module name with s/-/_/g.
 
+Since this happens late in the build, only the kernel needs to bother
+with this, the modpost tool still sees the original name.
+
+Reported-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Sean Christopherson <seanjc@google.com>
 ---
- scripts/mod/modpost.c |    8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ kernel/module/main.c |   26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1595,12 +1595,10 @@ static void read_symbols(const char *mod
- 			license = get_next_modinfo(&info, "license", license);
- 		}
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -170,6 +170,30 @@ static inline void add_taint_module(stru
+ }
  
--		namespace = get_modinfo(&info, "import_ns");
--		while (namespace) {
-+		for (namespace = get_modinfo(&info, "import_ns");
-+		     namespace;
-+		     namespace = get_next_modinfo(&info, "import_ns", namespace))
- 			add_namespace(&mod->imported_namespaces, namespace);
--			namespace = get_next_modinfo(&info, "import_ns",
--						     namespace);
--		}
+ /*
++ * Like strncmp(), except s/-/_/g as per scripts/Makefile.lib:name-fix-token rule.
++ */
++static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
++{
++	for (int i = 0; i < n; i++) {
++		char a = str_a[i];
++		char b = str_b[i];
++		int d;
++
++		if (a == '-') a = '_';
++		if (b == '-') b = '_';
++
++		d = a - b;
++		if (d)
++			return d;
++
++		if (!a)
++			break;
++	}
++
++	return 0;
++}
++
++/*
+  * A thread that wants to hold a reference to a module only while it
+  * is running can call this to safely exit.
+  */
+@@ -1116,7 +1140,7 @@ static bool verify_module_namespace(cons
+ 		if (*sep)
+ 			sep++;
  
- 		if (!get_modinfo(&info, "description"))
- 			warn("missing MODULE_DESCRIPTION() in %s\n", modname);
+-		if (strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
++		if (mod_strncmp(namespace, modname, len) == 0 && (glob || len == modlen))
+ 			return true;
+ 	}
+ 
 
 
