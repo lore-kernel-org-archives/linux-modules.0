@@ -1,171 +1,137 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAE519D88F;
-	Sat,  3 May 2025 08:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BC81D9A5F
+	for <linux-modules@vger.kernel.org>; Sat,  3 May 2025 10:26:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746260413; cv=none; b=m1q1bx20BjdgIhfO4P3s0HgHbsM/fpKrTl9CFkCjmdRU6WKoL3C57ZFw7UdS4DviHzVlTsQzYbAtYEqLDYOz5aLB/8eOYvYJTGq+AXA6WV9KQXfOEvOMTtjL5KHFIfHbn60qeHNa28NJ1Blx9jY9HR1k7pcY2DffiZWO1WlOfZA=
+	t=1746268009; cv=none; b=lbrvFOnmy6LSmbwVTJNdnoZ6ARJn8evnaMSB4SX3YWtbuvXAjyttSKgd1pJHzhYSO9rvlMv0o3pQK7uUYPLb7vlDIu+H1VztQ7KIi8uPEe0DjozmJZtJksCy/52yGK6j1qhfdcQnyNGNE2++2VDAAMnQ/rkhh0txYeyvEaRyNwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746260413; c=relaxed/simple;
-	bh=ei8/7RiSTXiaMF7UScqRp75x2SJvv5c6SsLgsKo1TT4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=XY26tnH6ww+E9iInIxNkH14SbQljxZNhsUeWIxz5y+EaU3jlExvZcYPIQps5TGNtgqhT94qlSnc7BS1wkhNLymcj9+p/F4IgpLjMdrQBYoWrJl66AMg9xiKayQhYEfSwHxsOSGYR10pcNq3R+kh0fendOZh8pXv6GzD/3qnNA98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net; spf=pass smtp.mailfrom=bzzt.net; dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b=aJJGaPF7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PvTjBSuG; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bzzt.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bzzt.net
+	s=arc-20240116; t=1746268009; c=relaxed/simple;
+	bh=W+xMqx3fuPFovNkVPldJNMyMSK/vtL9pBT70f5EItxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=POeZetrCinjSpBdOCwS+DffmcEFrPZsrjvkuRYuY7LAvEQZctykNUznD+Bzn9DdzboYivX7hl9h1yfqeUznLgNtGu+wgnNjs9JJdUu8qqxDZawu8iXmLraQdu3PFKPVxB7za3rFt/A0DdcxBCtJ3GPfEuDSF3G4Nb/20AViL33o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ohfj/Wpf; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bzzt.net header.i=@bzzt.net header.b="aJJGaPF7";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PvTjBSuG"
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id 1101E114021A;
-	Sat,  3 May 2025 04:20:09 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-12.internal (MEProxy); Sat, 03 May 2025 04:20:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bzzt.net; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1746260408;
-	 x=1746346808; bh=YbA3t4O0ws4/G+0KLAK9b+z79wK2zrxCaAB1nZbeZZ0=; b=
-	aJJGaPF7fdUue464isXL5YmMzDuzeFfRcAA0wKMSkLP3aWuphivhrsMgBEmQ16I2
-	skXiyG8jkumDkHl+mZZzMdJndgcwm+Cb3kJK98qzJXanfLWONNqF4dVlWxqPFdQQ
-	W0D6JkvUXbZn03VRDfp/I8FVtPWo3OA/8bA49qoEzGBglpJ4rsE/h7mBPJKLCxXM
-	sR/9kFCYPSZETFkF2nVQPwE18X9Wy+r4lIegqls9GrzZMMDqYaJNfjXjqt5MchZX
-	ykwUvI27vV/f+G311ataVt1xXxVZ+zQrJa1RbndlWkC3rKpEfVW54gRrbQMn7g69
-	VVSWGItUEr+2kfBSSe7v8A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1746260408; x=
-	1746346808; bh=YbA3t4O0ws4/G+0KLAK9b+z79wK2zrxCaAB1nZbeZZ0=; b=P
-	vTjBSuGdzuqTgkEwHI7dqZD+5GNb2UZMjiQXrZxUj+KPQWFKz2uzV77mBvOsvlkn
-	GNp2LQytg4kaoczzpI0s0PlIlKwdyduqKEuzeIN0LINtPkRutw+fPqJEUi4IEKcb
-	5pivJlpAj1m4j1aiwsq2KlwqdcT91xGe2vfrmRHJ34p2dMWqsldTrtCuaiijiIf4
-	7pEiPH26wm4bKV+E5GwKThV16eXfotsLRPbG1k05dXshvxe13DYGwYqlAh242npy
-	nm8p3SUpDJf17MZ8VWn6hHP8YHVhBdIpRuKwJRj9fQKWcu0UXQqWdUty1jldaH+r
-	zRKi/IzQFC6cV3CQJfidA==
-X-ME-Sender: <xms:ttEVaEN4-c5CykjET8U5O4qfKyTV82EMPzDgpH2MlURIPXOAshWuHQ>
-    <xme:ttEVaK-C_oGDdo2dol2NikafdeZphPbK8hFlqLLBGxjN_pxkv6E4eZ8VtdyM9X-5G
-    ZM9fDAGjRQU4U9zEl8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjeegkeefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedftehrnhhouhhtucfgnhhgvghlvghnfdcuoegrrhhnohhuthessg
-    iiiihtrdhnvghtqeenucggtffrrghtthgvrhhnpefhveeiffelkeffueelteevieekudev
-    hffggfduledvveehjeefudehueeftdeuleenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpegrrhhnohhuthessgiiiihtrdhnvghtpdhnsggprhgt
-    phhtthhopeefiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhptgihrhguse
-    grrhgthhhlihhnuhigrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdp
-    rhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupd
-    hrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtohepughm
-    ihhtrhihrdhkrghsrghtkhhinhesghhmrghilhdrtghomhdprhgtphhtthhopehmtggrjh
-    huleehsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhhpihhgghhinhesghhmrghilhdr
-    tghomhdprhgtphhtthhopehsrghmihhtohhlvhgrnhgvnhesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtohepshgvrhhgvgeshhgrlhhlhihnrdgtohhm
-X-ME-Proxy: <xmx:ttEVaLQ2ezVd3AW0DYeyq3k6apNlWDSIcWbME8z6FnOLP3G_KDW0Yw>
-    <xmx:ttEVaMtub0N_YcTjSA4MOhIRPEB4-BfDE-ToKHFozzMoZKmSOiCF_Q>
-    <xmx:ttEVaMdSZD0ig7FBV4fV5-yZ-4GcriyyGU9CrVB2S7iW8BBUcqRbhA>
-    <xmx:ttEVaA2lcKj49OvnrUhp08UM0Y0_8cPbeijTalhUCJzz_-9ZtIpxnA>
-    <xmx:uNEVaLWpRs2Cg5vusRl9jLRByoYl2wtuESQCRNFl3-PEemUef6AhZDxG>
-Feedback-ID: i8a1146c4:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 57EA118A006B; Sat,  3 May 2025 04:20:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ohfj/Wpf"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ace333d5f7bso522055666b.3
+        for <linux-modules@vger.kernel.org>; Sat, 03 May 2025 03:26:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1746268005; x=1746872805; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=brJWAHxt7c4PhTiLh0rTDLz2d6d0poBPqgDwkWrVqs0=;
+        b=Ohfj/WpfRa2YubyqiVrMZLTOqhvIpc+KIIRk2oZTYbI+nuhFfaWEsa+gp9DAiGsOuB
+         PNPLmuz9fHX5G4XZu522wxfQGY3oX/+Wy/b8LNnKvaN6TzO0IIedAiNkLqC637fsQPbX
+         V7T+7qXtrqviv/A1i2Q685B+CQXSZUFEA5R8nY15Y/Gx07Aic9r0MMXFuRb5l+7JnQd9
+         GJxGt3qmlxChxmHdVDKS1La3M7y0Co71FasTXMJWRPd8852fgRVBKjQYtladcRdfzlcB
+         gg/fUuaMqaFutVjZd/Fk2j/0IDokO8/p62mAK9ctiOES5DQbhDT/a2MAqsFNm2njSdz4
+         6pDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746268005; x=1746872805;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=brJWAHxt7c4PhTiLh0rTDLz2d6d0poBPqgDwkWrVqs0=;
+        b=eAUIskgafadsPDu/jz7Zqti9I4N0O+4WzUK/AvRWmE7Hh3dQrB5wt7cwop+oMZFb/r
+         xxGZ53Lpk69/djOXc1zhHHE2aDrm46PhlME5wC/+ohKkhSfa2fj6fjcRz6QYn9z/Ugnd
+         5ymFJoVUKG8u1TgthII0aBbzwkcegv57p3WjaBO73tF4WS4mJRkqUePPxnFfa9XmDDGd
+         Zqf2y1N2NQzrX6j2Ic5DFXBbE62rT9+lf5JL/kFCWXS/Jy7tYqrTDOi8QVFMrb4/Xyuo
+         CHglHCyDSz/i+KXD9e3NtOSdVqH3WUIwGfqXQQ85CmiHJ6crnb/U8TlOrLWVQlGlg1pU
+         rVZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVeuMa5sK30xdQg/pvmD7bgWdKVAP/Fg+qS0kR3KFUanYstS9feBTuIClxARhDvaLBR+DXBoD5V2US7F/Oo@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6dsUaXOoFpQW1tF1w12WVqMb7F/CbsLSePOJ9u43W1zUkDrQK
+	OzlbNUJoHyff7lrtr6er6+cSIcBX934+gUFuvaPsVVqAEkfuuf6Z6iUm8169b/g3aYtS1O+kvo1
+	j
+X-Gm-Gg: ASbGncslKDuPuua9BQ0epCpQfvvXGTN97NbufQKEYx6T1r2d0omMuU2148ElakEe6IG
+	TmeN4RQMilV7/AEk4D/4Z0WdwSAJKTVoEwHhJqKKWWLerZj1jdNQ9zhDf+f5rOx2xb9Q9seFG4/
+	YY2SOOUPC8wBYZTrXemo3bGUXVU2O5S/XXeJa7wstRb9lMgnRS1bvU/n0ghlEKC/AlHSwd7fGek
+	CnCB8rep6Y6vYiVkPYQjV7/rLUiEkzxqgEPtzIbtTFXUjR0Ehfd2uWnOqaQZPr6XIUBgWcIaIis
+	ma3tO8K8PPrr04f3n3e0yYK2nvoNe3uZPPzLPigjiXk=
+X-Google-Smtp-Source: AGHT+IHiNdfTG1Lwe53VSOBsvssZocvCjEijhJyzDWm1Py+VylIB04fuJ+7LtlEQiEGfC9bylP5eug==
+X-Received: by 2002:a17:907:948e:b0:acb:4cd7:2963 with SMTP id a640c23a62f3a-ad1a49e34famr53282566b.33.1746268005458;
+        Sat, 03 May 2025 03:26:45 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad189148a18sm177429666b.27.2025.05.03.03.26.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 May 2025 03:26:45 -0700 (PDT)
+Message-ID: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com>
+Date: Sat, 3 May 2025 12:26:44 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T5f9a5891fefab612
-Date: Sat, 03 May 2025 10:19:17 +0200
-From: "Arnout Engelen" <arnout@bzzt.net>
-To: "James Bottomley" <James.Bottomley@hansenpartnership.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Daniel Gomez" <da.gomez@samsung.com>,
- "Paul Moore" <paul@paul-moore.com>, "James Morris" <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, "Jonathan Corbet" <corbet@lwn.net>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>, "Mimi Zohar" <zohar@linux.ibm.com>,
- "Roberto Sassu" <roberto.sassu@huawei.com>,
- "Dmitry Kasatkin" <dmitry.kasatkin@gmail.com>,
- "Eric Snowberg" <eric.snowberg@oracle.com>,
- "Nicolas Schier" <nicolas.schier@linux.dev>,
- =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
- "Mattia Rizzolo" <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
- "Christian Heusel" <christian@heusel.eu>,
- =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Message-Id: <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
-In-Reply-To: 
- <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
- <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
- <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 5/7] modpost: Create modalias for builtin modules
+To: Alexey Gladkov <legion@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
+References: <cover.1745591072.git.legion@kernel.org>
+ <bb0d887760a474e5e7f9db0e9933eee81a5d9ea3.1745591072.git.legion@kernel.org>
+ <cf3ff619-6177-42e1-8f64-74cf4cbb8672@suse.com>
+ <aBCkNh0Q2hwpMchj@example.org> <aBDK0G6OUUcEmzvZ@example.org>
+ <7b13da9f-39f2-4007-931b-519d8e7d1ab6@suse.com>
+ <aBDs_Unta7-vOPk4@example.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <aBDs_Unta7-vOPk4@example.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 2, 2025, at 15:30, James Bottomley wrote:
-> On Fri, 2025-05-02 at 08:53 +0200, Thomas Wei=C3=9Fschuh wrote:
-> > Specifically the output of any party can recreate bit-by-bit
-> > identical copies of all specified artifacta previous build (the
-> > public key, module signatures) is not available during the rebuild or
-> > verification.
->=20
-> You just strip the signatures before verifying reproducibility.
+On 4/29/25 17:15, Alexey Gladkov wrote:
+> On Tue, Apr 29, 2025 at 04:14:13PM +0200, Petr Pavlu wrote:
+>> On 4/29/25 14:49, Alexey Gladkov wrote:
+>>> On Tue, Apr 29, 2025 at 12:04:44PM +0200, Alexey Gladkov wrote:
+>>>>> I'm not sure it's best to overload this data in this way. I think mixing
+>>>>> actual files and "logical" modules in the modules list is somewhat
+>>>>> confusing.
+>>>>>
+>>>>> An alternative would be to keep a single module struct for vmlinux and
+>>>>> record the discovered aliases under it?
+>>>>
+>>>> It is possible to extend struct module_alias and add the module name. The
+>>>> problem is that alias is added by module_alias_printf() and we will have
+>>>> to add the module name to the arguments to each do_entry handler in
+>>>> addition to struct module where there is already a name (but in our case
+>>>> it is vmlinux).
+>>>>
+>>>> I can do that if you think it's a better way.
+>>>
+>>> If I don't add separate entries for each builtin module, the patch will
+>>> look like this:
+>>> [...]
+>>
+>> I see, that didn't turn out as well as I envisioned. One more approach
+>> would be to track builtin modules separately. A patch is below. I'm not
+>> sure if it's better.
+> 
+> I'm not sure I get it. What do you mean when you say I need to track
+> builtin modules separately ?
 
-If the goal is: "verify the Linux Kernel is reproducible", that could wo=
-rk.
-It gets increasingly cumbersome when you're trying to check the reproduc=
-ibility
-of some larger artifact that embeds the Linux kernel (and lots of other =
-stuff),
-like an ISO or disk image, though: you'd have to unpack/mount it, check =
-all its
-contents individually (perhaps recursively), and strip signatures in 'ju=
-st the
-right places'.
+The patch that I sent in my reply introduces a new list called
+builtin_modules. This is what I meant by tracking builtin modules
+separately. This implementation has the advantage of not conceptually
+mixing the modules and allows the function write_vmlinux_export_c_file()
+to directly use the new list.
 
-Writing such tooling is a chore, but of course feasible: diffoscope alre=
-ady
-comes a long way (though checking large images may take some resources).=
- The
-problem is trusting such tooling: instead of 'simply' checking the image=
-s are
-identical, suddenly I now have to convince myself there's no shenanigans
-possible in the disk image interpretation and other check tooling, which=
- gets
-nontrivial fast.
+On the other hand, keeping everything in one list and introducing a flag
+for builtin modules (or maybe replacing module.is_vmlinux with some
+module.type enum) allows functions that take only a module pointer to
+know which module they are dealing with, which I imagine could be
+useful.
 
-> All current secure
-> build processes (hermetic builds, SLSA and the like) are requiring
-> output provenance (i.e. signed artifacts).  If you try to stand like
-> Canute against this tide saying "no signed builds", you're simply
-> opposing progress for the sake of it
+I don't have a clear preference, as long as we avoid misusing
+module.dump_file.
 
-I don't think anyone is saying 'no signed builds', but we'd enjoy being =
-able to
-keep the signatures as detached metadata instead of having to embed them=
- into
-the 'actual' artifacts.
-
-
-Kind regards,
-
-Arnout
+-- 
+Thanks,
+Petr
