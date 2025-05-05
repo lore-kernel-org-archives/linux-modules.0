@@ -1,115 +1,247 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F7AF22D4C5;
-	Sat,  3 May 2025 12:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0D21D54EF;
+	Mon,  5 May 2025 09:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746275459; cv=none; b=EtyObXXIKBsFubl3v9yoDW82mUPWkW8BWZ2WN6vnIIj3FbZbsotmnauq2vp0ZmTK2l88uQZImTIl+fhbe1/3UcsMgZUDZa1Wh7g/vTAx8oCmU3rWuhaPkGJsw12atujeaeLePK2TKrMpOdZ8iLgGd9f+w5wMDVW1Tm6Ts6JlyPU=
+	t=1746437953; cv=none; b=dZa8S5a+ag2wD0hjSGBDh/zOXmtqFVkN3EkcopUGYlyICeSqNWT137z6LyiXSEQ3gHvC/NpyUx77oyoMUEmPWV9cIKLQmNridE1hAUw1h6uXjwgioLKJonM9LKiZ10f0Dez3CdSMQ6gLLE3QPB3s9nYrbtM/GRocxNeLBDxGBFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746275459; c=relaxed/simple;
-	bh=F3iwU5W0ytAG5DZzAz0Pko7BcqXYuXoReD9umCq5y9I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KK7i9PwMM3jodqkc917vIp23OWNok350YJ9ekW2w3Rhb84YyVgEeZkc/ByYnEoaLZYIVcfRggoW2FzBMRCw7ZOxe1WG1kt/SMlY4cksiVwrpiBz1xlp5VqoDD86QuLkFISvD1lGEZjJDxXgtgNGwU7SGgyTvP7Eq4A+pCvOxF7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DryTNpCN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746437953; c=relaxed/simple;
+	bh=xwwc4ndRJjO2Z++ZadBpZDcEDVZqHZtE3WdeKXJGUog=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u0rGbuFprpOvESp65B6lBxUctBHCsIT7rz/TAHGJ7Iuhjl7g8DxNdsFOOkBHzQsiiKzRl37oq37ddUQSuGmIffPVvZZb20fNGG6a5cXybWoSfojT0Y5lJ6qkbfBvO/qWQeHek7KTNB+ukPPp/UEG9Sm+7VgoO0HBByZuB0XM3rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvFGTbjK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DryTNpCN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C231BC4CEF0;
-	Sat,  3 May 2025 12:30:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvFGTbjK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F973C4CEE4;
+	Mon,  5 May 2025 09:39:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746275458;
-	bh=F3iwU5W0ytAG5DZzAz0Pko7BcqXYuXoReD9umCq5y9I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DryTNpCNV/P8VTvvl0iFClplGzorNqqgJ5PePgMPnpb2RdK9lwYxx4gcoZu77IUHc
-	 I8XgbpRwEBPi9R9TDZ8AbqZNUfL7hWLBNKsIMdCBay0/xs4n4LAEPeRCMXAox6PhbL
-	 amXWB3M2XgQQoAJKEyfCC8NCbDVliD7qh6tZljhenQfbdOAfOFNyDlqaJlm7F5k2Ex
-	 jqGYuzscPmTsXWcyqOl9kkKYXIdNxt+ewcJ2IJyNddKFcMHuuMXwXtVJhHbflawugG
-	 CKV65m7rlff6WhZJ4C0QzIkSylaeqT33kdLFH20xVKd1lDrqPlOvRG2/g2+8cRqjP4
-	 jxSMMV6lsc/Qg==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30bee278c2aso43350861fa.0;
-        Sat, 03 May 2025 05:30:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUpN9Q+unzKZlnj0smO8bPfLklfxde/KRmFz+0CE+ZEaj8bFLydK+4BORaFsTrglblyKLbgmD5XbbyDwGg=@vger.kernel.org, AJvYcCVZwkCUBLA/VprlVHcgTCwikQHcJcFTpgz7TNZHljdqreG15wa0E6toifaeu1yVe741Q9dEcnk77th1EhDgXg==@vger.kernel.org, AJvYcCXlT9Qiyb2tgqQOvVC+7W6ravtVWvUy4pjFJuigYNAN8Sh/v7YMG7q1ANw/ufA45k89YXPLjgfqFBo1zR2M@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc+I7Oe3SidOEhBElrLGuTFEv/CwVLNHa1/DYMwfh0X56LBPMw
-	PRN6j6a0+d1R9AC2q7oSFCLx5MEysdYPSzVnIoRxyMK5JO/1RsLzGClkRadupN5IqZJ2rTrkANu
-	1UgAgZo10x+VdkC5Q0/VZE/FPnxc=
-X-Google-Smtp-Source: AGHT+IHdHYcdxqrU0jxedHiIX/DSHN9bJqdJ17KruC0sSGUND1apkQDk4JNLlIIRBpD12/tqSX1r3rXG1qQEIyd4eEk=
-X-Received: by 2002:a2e:bd81:0:b0:30b:ab00:846a with SMTP id
- 38308e7fff4ca-320aada845bmr21042721fa.3.1746275457474; Sat, 03 May 2025
- 05:30:57 -0700 (PDT)
+	s=k20201202; t=1746437952;
+	bh=xwwc4ndRJjO2Z++ZadBpZDcEDVZqHZtE3WdeKXJGUog=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=fvFGTbjKC0TLuNNuruyy+b7IUsLLfzk6S/iL96G1GtchIzGrHoo0xxF5MgYULKbbC
+	 AWhRnic1WLeVvFmYTEfSzYNoNhnI58GmVn92thL9pq30DKEn1eQnCf+uZccqQRakWG
+	 jU5SdGfT2QaxKYKoVBFu2tcfrCUMif6dZs0A1Cd7XHm6vctTSnvejO99KdqrblZezd
+	 osCtk/9vCa1WKsComqy/7hymYKCRmm6A9SvDXvMAdQ78wY/9PdLOoduxaw8fdHyAlF
+	 9oxSt7cLTUna2lsPbaTrgd5rL36J1ltper1hHcnN6V6Efc+Vi4V304/3HJYFDMGsY8
+	 2OVsL1BnOucKg==
+From: Alexey Gladkov <legion@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>
+Cc: linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Alexey Gladkov <legion@kernel.org>
+Subject: [PATCH v2 5/7] modpost: Create modalias for builtin modules
+Date: Mon,  5 May 2025 11:38:29 +0200
+Message-ID: <20250505093830.25688-1-legion@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com>
+References: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502141204.500293812@infradead.org> <20250502141844.046738270@infradead.org>
-In-Reply-To: <20250502141844.046738270@infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 3 May 2025 21:30:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQkRoPNnCuhgXZUhHSFdFp2Uj7tnbw3k4QwuW+LXZ9e=w@mail.gmail.com>
-X-Gm-Features: ATxdqUGuUX0K-0vXXSyYkLfKuGao-VeiZU_DoB0ygbRGOceLMoJ2jc2-zfcs2ik
-Message-ID: <CAK7LNAQkRoPNnCuhgXZUhHSFdFp2Uj7tnbw3k4QwuW+LXZ9e=w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/5] module: Add module specific symbol namespace support
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
-	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 2, 2025 at 11:26=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Designate the "module:${modname}" symbol namespace to mean: 'only
-> export to the named module'.
->
-> Notably, explicit imports of anything in the "module:" space is
-> forbidden.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/module/main.c  |   33 +++++++++++++++++++++++++++++++--
->  scripts/mod/modpost.c |   11 ++++++++++-
->  2 files changed, 41 insertions(+), 3 deletions(-)
->
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1083,6 +1083,14 @@ static char *get_modinfo(const struct lo
->         return get_next_modinfo(info, tag, NULL);
->  }
->
-> +static bool verify_module_namespace(const char *namespace, const char *m=
-odname)
-> +{
-> +       const char *prefix =3D "module:";
-> +
-> +       return strstarts(namespace, prefix) &&
-> +              !strsmp(namespace + strlen(prefix), modname);
+For some modules, modalias is generated using the modpost utility and
+the section is added to the module file.
 
-Apparently, you did not spend time for per-commit compile testing.
+When a module is added inside vmlinux, modpost does not generate
+modalias for such modules and the information is lost.
 
-I believe it is a typo of "strcmp()".
+As a result kmod (which uses modules.builtin.modinfo in userspace)
+cannot determine that modalias is handled by a builtin kernel module.
 
-I got this build error.
+$ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
+pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
 
-../kernel/module/main.c: In function 'verify_module_namespace':
-../kernel/module/main.c:1091:17: error: implicit declaration of
-function 'strsmp'; did you mean 'strsep'?
-[-Wimplicit-function-declaration]
- 1091 |                !strsmp(namespace + strlen(prefix), modname);
-      |                 ^~~~~~
-      |                 strsep
+$ modinfo xhci_pci
+name:           xhci_pci
+filename:       (builtin)
+license:        GPL
+file:           drivers/usb/host/xhci-pci
+description:    xHCI PCI Host Controller Driver
 
+Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
+modpost if the module is built separately.
 
+To fix this it is necessary to generate the same modalias for vmlinux as
+for the individual modules. Fortunately '.vmlinux.export.o' is already
+generated from which '.modinfo' can be extracted in the same way as for
+vmlinux.o.
 
+Signed-off-by: Alexey Gladkov <legion@kernel.org>
+---
 
+v2: As Petr Pavlu suggested, I separated the builtin modules from the external
+    modules. I've also added a search for duplicate modules.
 
+---
+ include/linux/module.h   |  4 ----
+ scripts/mod/file2alias.c |  5 +++++
+ scripts/mod/modpost.c    | 35 +++++++++++++++++++++++++++--------
+ scripts/mod/modpost.h    | 15 ++++++++++++++-
+ 4 files changed, 46 insertions(+), 13 deletions(-)
 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 7250b4a527ec..6225793ddcd4 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -257,14 +257,10 @@ extern void cleanup_module(void);
+ 	__PASTE(type,			\
+ 	__PASTE(__, name)))))))
+ 
+-#ifdef MODULE
+ /* Creates an alias so file2alias.c can find device table. */
+ #define MODULE_DEVICE_TABLE(type, name)			\
+ extern typeof(name) __mod_device_table(type, name)	\
+   __attribute__ ((unused, alias(__stringify(name))))
+-#else  /* !MODULE */
+-#define MODULE_DEVICE_TABLE(type, name)
+-#endif
+ 
+ /* Version of form [<epoch>:]<version>[-<extra-version>].
+  * Or for CVS/RCS ID version, everything but the number is stripped.
+diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+index dff1799a4c79..be221923f582 100644
+--- a/scripts/mod/file2alias.c
++++ b/scripts/mod/file2alias.c
+@@ -1509,6 +1509,11 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+ 	typelen = name - type;
+ 	name += strlen("__");
+ 
++	if (mod->is_vmlinux) {
++		mod = find_module(NULL, modname, modnamelen);
++		mod = mod ?: new_builtin_module(modname, modnamelen);
++	}
++
+ 	/* Handle all-NULL symbols allocated into .bss */
+ 	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {
+ 		zeros = calloc(1, sym->st_size);
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index be89921d60b6..db3c172d4528 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -168,22 +168,26 @@ char *get_line(char **stringp)
+ 	return orig;
+ }
+ 
+-/* A list of all modules we processed */
++/* A list of all modules (vmlinux or *.ko) we processed */
+ LIST_HEAD(modules);
+ 
+-static struct module *find_module(const char *filename, const char *modname)
++/* A list of all builtin modules we processed */
++LIST_HEAD(builtin_modules);
++
++struct module *find_module(const char *filename, const char *name, size_t namelen)
+ {
+ 	struct module *mod;
+ 
+ 	list_for_each_entry(mod, &modules, list) {
+-		if (!strcmp(mod->dump_file, filename) &&
+-		    !strcmp(mod->name, modname))
++		if ((mod->dump_file && !strcmp(mod->dump_file, filename)) &&
++		    namelen != strlen(mod->name) &&
++		    !strncmp(mod->name, name, namelen))
+ 			return mod;
+ 	}
+ 	return NULL;
+ }
+ 
+-static struct module *new_module(const char *name, size_t namelen)
++struct module *create_module(const char *name, size_t namelen, bool is_builtin)
+ {
+ 	struct module *mod;
+ 
+@@ -207,7 +211,10 @@ static struct module *new_module(const char *name, size_t namelen)
+ 	 */
+ 	mod->is_gpl_compatible = true;
+ 
+-	list_add_tail(&mod->list, &modules);
++	if (is_builtin)
++		list_add_tail(&mod->list, &builtin_modules);
++	else
++		list_add_tail(&mod->list, &modules);
+ 
+ 	return mod;
+ }
+@@ -2021,11 +2028,23 @@ static void write_if_changed(struct buffer *b, const char *fname)
+ static void write_vmlinux_export_c_file(struct module *mod)
+ {
+ 	struct buffer buf = { };
++	struct module_alias *alias, *next;
+ 
+ 	buf_printf(&buf,
+-		   "#include <linux/export-internal.h>\n");
++		   "#include <linux/export-internal.h>\n"
++		   "#include <linux/module.h>\n");
+ 
+ 	add_exported_symbols(&buf, mod);
++
++	list_for_each_entry(mod, &builtin_modules, list) {
++		list_for_each_entry_safe(alias, next, &mod->aliases, node) {
++			buf_printf(&buf, "MODULE_ALIAS_MODNAME(\"%s\", \"%s\");\n",
++					mod->name, alias->str);
++			list_del(&alias->node);
++			free(alias);
++		}
++	}
++
+ 	write_if_changed(&buf, ".vmlinux.export.c");
+ 	free(buf.p);
+ }
+@@ -2112,7 +2131,7 @@ static void read_dump(const char *fname)
+ 			continue;
+ 		}
+ 
+-		mod = find_module(fname, modname);
++		mod = find_module(fname, modname, strlen(modname));
+ 		if (!mod) {
+ 			mod = new_module(modname, strlen(modname));
+ 			mod->dump_file = fname;
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 9133e4c3803f..1d0dd4ee944a 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -107,7 +107,7 @@ struct module_alias {
+ };
+ 
+ /**
+- * struct module - represent a module (vmlinux or *.ko)
++ * struct module - represent a module (vmlinux, a builtin module, or *.ko)
+  *
+  * @dump_file: path to the .symvers file if loaded from a file
+  * @aliases: list head for module_aliases
+@@ -199,6 +199,19 @@ static inline bool is_valid_name(struct elf_info *elf, Elf_Sym *sym)
+ 	return !is_mapping_symbol(name);
+ }
+ 
++struct module *find_module(const char *filename, const char *name, size_t namelen);
++struct module *create_module(const char *name, size_t namelen, bool is_builtin);
++
++static inline struct module *new_module(const char *name, size_t namelen)
++{
++	return create_module(name, namelen, false);
++}
++
++static inline struct module *new_builtin_module(const char *name, size_t namelen)
++{
++	return create_module(name, namelen, true);
++}
++
+ /* symsearch.c */
+ void symsearch_init(struct elf_info *elf);
+ void symsearch_finish(struct elf_info *elf);
+-- 
+2.49.0
 
-
-
---
-Best Regards
-Masahiro Yamada
