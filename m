@@ -1,189 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783E11DE3AF;
-	Mon,  5 May 2025 09:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D4920966B
+	for <linux-modules@vger.kernel.org>; Mon,  5 May 2025 11:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746438945; cv=none; b=E5IBC+opG1V12WxDcg5dmoojFHR8SNncUXGhf7mAVEWHF+oR4CKzj1VatAjyPJKASusFnMuUeZnkl2mGLF4RQic97eOIkWCIaQVUcnK1rv4BZwjbh4o0EkXCDeB1iZlunSOrrCHuUECriRubB0RaakjxoeuCBA0pUlbVuHdl9lM=
+	t=1746446182; cv=none; b=R7kb07fu32sbUpUUIj8PuAPcGWkld4Jz/MT3B+trh/83QHPzYKj608RT+bN2b8Sh5kQ6fbo2+ivam5JJLsw6RjzVqGfFqKAQTwno3DV6OPqERaS0tX9WBR84R3rL216meMdoS0wy0X2b1X+fLwENNVL4tLohBvhlQXCDS9N1MdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746438945; c=relaxed/simple;
-	bh=C+qofN41T9ZGZV/Yauz2+1+PKYZmi9DihY6aLigOKSI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kvN5/jnEA0Q2i+sOqYyTd8iwS8bIBErs4UAIlIrZbkPjG3P5SR3ZnWglPaoRDVEKnStHpcXQVtXdnRvgRuSU3NdArTcZP/Nlt4sI9iny/qyHGz8L6tmb4KrwyWbAENvXTRUi3MEAvJdcVPqsyk4B2LzujebhexYKEhhNn2Qy+nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIG6OFKK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746446182; c=relaxed/simple;
+	bh=jg5T4KVLUhTRrdF939eO28MIkOvTR/v7HOz5BEHUbdY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EiekRBxz5OecJto0enzWGM3ujiqqbaKVHTNHlN2JEdyQs1B7zMoyF3e189tqECN03Zo3UXsTHLJqi/FGqtRcbb3Exru/J5w9VBvbbg+vHsup2Y2paTu82qCiz2Wi+LRHR/1f7MeSUp3F8xBumxsjJBtkYuphkXL+O3Ab8UIrERY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=f4r0LqxB; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIG6OFKK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC56C4CEE4;
-	Mon,  5 May 2025 09:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746438945;
-	bh=C+qofN41T9ZGZV/Yauz2+1+PKYZmi9DihY6aLigOKSI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lIG6OFKKuZoF45Xa5t+XOx2zCpIrNGnvG4tQ+MSOPD8cmpNfuqXBeXEQJCQvzV+Tr
-	 TVb9iR3kx5r/nLo6Ivm3btPA3XlQ1WlJcKlQqOVMIlcMTrRvwmjmMdJuvInwuiCPPZ
-	 j8/qiNiZSyf80yMW3JYb2+5Jlr3gxr2/Mfow6l+49fECTvMk6Q2I0ypz0+JQrlAxho
-	 m1CyDA2fbsGuf3vuEmN7m4xX165tSxjwDG616sOdZ1kPN3eRCQ1k9Z188xhX/3gZw9
-	 MdcMGURjj6qG05hThenfkuXn/UuLCyj0UebROnk9llUV1GLIsasAYQwNUqb9Agw06X
-	 q3+FbTdn7wyzw==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: "Alice Ryhl" <aliceryhl@google.com>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
- <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  "Benno
- Lossin" <benno.lossin@proton.me>,  "Masahiro Yamada"
- <masahiroy@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,  "Luis
- Chamberlain" <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,
-  "Nicolas Schier" <nicolas.schier@linux.dev>,  "Trevor Gross"
- <tmgross@umich.edu>,  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
-  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
-  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
-  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
- <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
- KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
-  "Daniel Almeida" <daniel.almeida@collabora.com>,
-  <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v11 2/3] rust: add parameter support to the `module!` macro
-In-Reply-To: <aBTMMHWNXS7wK7zS@google.com> (Alice Ryhl's message of "Fri, 02
-	May 2025 13:44:16 +0000")
-References: <20250502-module-params-v3-v11-0-6096875a2b78@kernel.org>
-	<20250502-module-params-v3-v11-2-6096875a2b78@kernel.org>
-	<WroEJHY8a-y8vbSQkUvGJJs7yTQGKMsHJqmWFYGkz5bZ_PsiE8GAozjSaNpWjWina1XanjVNpV0Av3woiaUtJg==@protonmail.internalid>
-	<aBTMMHWNXS7wK7zS@google.com>
-User-Agent: mu4e 1.12.7; emacs 30.1
-Date: Mon, 05 May 2025 11:55:33 +0200
-Message-ID: <878qnbxtyi.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="f4r0LqxB"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5fab81d6677so57376a12.1
+        for <linux-modules@vger.kernel.org>; Mon, 05 May 2025 04:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1746446179; x=1747050979; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jz68Uzn+xh70gzvNlWX0MbH0mKkRQyVFSCgz33BJirc=;
+        b=f4r0LqxBXh6i+rDxN+IG/2eOhOZ5I73nXOkeVS7dPspT1gBn6Obn0xt8LjEADAogjQ
+         F55krbcKtdSvvVioWONZdrr2NqdeXhFXu7KrrFA9Fs6+5W3reD+yoFWZBGEYiqrKA9xy
+         kxDbcKVHlNGkC+B8kZF7RZ8/yxWFjFF88ymv4w/A68mQaW49jvDx6+3aNSY8ukQezoZC
+         gHFJ1g20wuGu/5XgS7EYFLi5S3OFhPfPJWFzodeWVY6Ql2d+UOzRwls80rCNZGVcisvi
+         C2p9TdfuuJkmHVZijAu9/sjztJ8JiDjHu7L87e34kjPG3UdwOafc7lVG1ARXjbMyLLe2
+         yTPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746446179; x=1747050979;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jz68Uzn+xh70gzvNlWX0MbH0mKkRQyVFSCgz33BJirc=;
+        b=WOY7NuIxvO58iPVwatbd3X6Tb76lMZBkEclcRWKcYv15W7+0KBP0cp6hpg9Hr8GaSc
+         FMXuLqRhbE4AzAZBuSzvjV8Mnz6S5ACT+O4KlbVOde8tsgJmactVa518Iyg4Zk39cohN
+         bAK2QmOiREDlKP1qKBicbKMgypcuUtBrwyIqn6npDtLoCfAIRdujMhpfYzQ85Sx/tA6h
+         pQQgCWPH+LShMJGjYmoV4QlyeQwwDsQVKl47+suXMdLrDe6iu/kWGAv5TSzB+KAVUUQM
+         pbOmE4Z5xJxAbq1c0GnCD7qt0bqoNmwjxdTB9erj10rzdXpTeZv1c8Kr9EU1yHd8Ikkc
+         ZRKA==
+X-Forwarded-Encrypted: i=1; AJvYcCXNnSsyVysTP8Jigf1/qRJIGTPbEz8eEFibHD5DjynMiGwuwgvbkhFy8ZjWzGMS8l3G1CrQGe09cWku+0yE@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3EQErE/9UkSROZGWBfuQEWRhmTaayjSHRQsJGft/udtdiaCRZ
+	BL8MIA9nRbzN90R7qNzLeyTR6AukvrjOh649VhoZhTbE7Qa72Wzvf6CpzOShf6A=
+X-Gm-Gg: ASbGncvV9G+uRd8kml+PxmbiX11hhYqaEf44aWOg1jmGPVXRjQLg6+Dp4yAHYyU7Vp6
+	6Xz/hD67X+1qSicu3zjB6uZ+XlF2zRVZH4jEPyl6NRzQj9BYladGSl6sE2UI0J7Oe8MVo9USOM1
+	Gg49vpqKWTNFgVi1VmGKmCelGMNTTS34QLjKJAijdfriCYTO3qyn73J/4GHR1Z6TX/+NewDdI4K
+	9fDPPrbxN26NTZ9/q0mIHyPmh2F74SqD7Kb2jkB/+NhxFhGmpxuxvGjNn5gSMNKufQIawzHDB92
+	d6cxhUTZ9fG2fJmppY80tW9CPUbkr3jY25JDiblBBKU=
+X-Google-Smtp-Source: AGHT+IEt+litOx42ovMOLvvM7tdUauKBNtX/69p1CCT5Gm7nZ2lwM2QfZn0MkxZtRqgHhhDURf79rw==
+X-Received: by 2002:a05:6402:5215:b0:5e5:b388:2a0e with SMTP id 4fb4d7f45d1cf-5fab056de14mr6858941a12.7.1746446178782;
+        Mon, 05 May 2025 04:56:18 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa77c04411sm5281064a12.67.2025.05.05.04.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 May 2025 04:56:18 -0700 (PDT)
+Message-ID: <18f96f82-8d26-4773-878a-5110b19d42f2@suse.com>
+Date: Mon, 5 May 2025 13:56:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] gendwarfksyms: Clean up kABI rule look-ups
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@samsung.com>,
+ linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250430214049.2658716-6-samitolvanen@google.com>
+ <20250430214049.2658716-7-samitolvanen@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250430214049.2658716-7-samitolvanen@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-"Alice Ryhl" <aliceryhl@google.com> writes:
+On 4/30/25 23:40, Sami Tolvanen wrote:
+> Reduce code duplication by moving kABI rule look-ups to separate
+> functions.
+> 
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
 
-> On Fri, May 02, 2025 at 02:16:35PM +0200, Andreas Hindborg wrote:
->> Add support for module parameters to the `module!` macro. Implement read
->> only support for integer types without `sysfs` support.
->>
->> Acked-by: Petr Pavlu <petr.pavlu@suse.com> # from modules perspective
->> Tested-by: Daniel Gomez <da.gomez@samsung.com>
->> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
->
->> +unsafe extern "C" fn set_param<T>(
->> +    val: *const kernel::ffi::c_char,
->> +    param: *const crate::bindings::kernel_param,
->> +) -> core::ffi::c_int
->> +where
->> +    T: ModuleParam,
->> +{
->> +    // NOTE: If we start supporting arguments without values, val _is_ =
-allowed
->> +    // to be null here.
->> +    if val.is_null() {
->> +        // TODO: Use pr_warn_once available.
->> +        crate::pr_warn!("Null pointer passed to `module_param::set_para=
-m`");
->> +        return EINVAL.to_errno();
->> +    }
->> +
->> +    // SAFETY: By function safety requirement, val is non-null and
->> +    // null-terminated. By C API contract, `val` is live and valid for =
-reads
->> +    // for the duration of this function.
->> +    let arg =3D unsafe { CStr::from_char_ptr(val) };
->> +
->> +    crate::error::from_result(|| {
->> +        let new_value =3D T::try_from_param_arg(arg)?;
->> +
->> +        // SAFETY: `param` is guaranteed to be valid by C API contract
->> +        // and `arg` is guaranteed to point to an instance of `T`.
->> +        let old_value =3D unsafe { (*param).__bindgen_anon_1.arg as *mu=
-t T };
->> +
->> +        // SAFETY: `old_value` is valid for writes, as we have exclusive
->> +        // access. `old_value` is pointing to an initialized static, and
->> +        // so it is properly initialized.
->> +        unsafe { core::ptr::replace(old_value, new_value) };
->
-> You don't use the return value of this, so this is equivalent to
-> unsafe { *old_value =3D new_value };
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Thanks.
-
->
->> +macro_rules! make_param_ops {
->> +    ($ops:ident, $ty:ty) =3D> {
->> +        ///
->> +        /// Static [`kernel_param_ops`](srctree/include/linux/modulepar=
-am.h)
->> +        /// struct generated by `make_param_ops`
->> +        #[doc =3D concat!("for [`", stringify!($ty), "`].")]
->> +        pub static $ops: $crate::bindings::kernel_param_ops =3D $crate:=
-:bindings::kernel_param_ops {
->> +            flags: 0,
->> +            set: Some(set_param::<$ty>),
->> +            get: None,
->> +            free: Some(free::<$ty>),
->
-> You could potentially only include `free` if
-> `core::mem::needs_drop::<T>()` as an optimization.
-
-Right, nice =F0=9F=91=8D
-
->
->> +    fn emit_params(&mut self, info: &ModuleInfo) {
->> +        let Some(params) =3D &info.params else {
->> +            return;
->> +        };
->> +
->> +        for param in params {
->> +            let ops =3D param_ops_path(&param.ptype);
->> +
->> +            // Note: The spelling of these fields is dictated by the us=
-er space
->> +            // tool `modinfo`.
->> +            self.emit_param("parmtype", &param.name, &param.ptype);
->> +            self.emit_param("parm", &param.name, &param.description);
->> +
->> +            write!(
->> +                self.param_buffer,
->> +                "
->> +                    pub(crate) static {param_name}:
->> +                        ::kernel::module_param::ModuleParamAccess<{para=
-m_type}> =3D
->> +                            ::kernel::module_param::ModuleParamAccess::=
-new({param_default});
->
-> Is this global accessible to the user?
-
-Yes.
-
-> It would be a use-after-free to
-> access it during module teardown. For example, what if I access this
-> static during its own destructor? Or during the destructor of another
-> module parameter?
-
-Yes, that is a problem.
-
-We can get around it for now by just not calling `free` for now. We only
-support simple types that do not need drop. I think we would have to
-seal the `ModuleParam` trait for this.
-
-For a proper solution, we could
- - Require a token to read the parameter.
- - Synchronize on a module private field and return an option from the
-   parameter getter. This would require module exit to run before param
-   free. I think this is the case, but I did not check.
- - Use a `Revocable` and revoke the parameter in `free`.
-
-Any other ideas or comments on the outlined solutions?
-
-
-Best regards,
-Andreas Hindborg
-
-
+-- Petr
