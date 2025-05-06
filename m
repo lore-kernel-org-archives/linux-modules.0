@@ -1,135 +1,117 @@
-Received: from forward100b.mail.yandex.net (forward100b.mail.yandex.net [178.154.239.147])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC2F27990C
-	for <linux-modules@vger.kernel.org>; Tue,  6 May 2025 11:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F13027B51F;
+	Tue,  6 May 2025 11:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746530331; cv=none; b=IMuG4/vh09GbziWjCNf1MqQM6h2ErjeN2/NBlo9njQSoS6bAeDVgRtRTX+7POLWHyg/LXVJVriqKues4kuTIMn7O809eD9DfbxDy4YdYuS16hObjXi6jygv4Yexw105YJAMyOm0JOHQDYPZT/6omlq8XeFPBUaByzUK/p+EowSc=
+	t=1746532400; cv=none; b=C1OFGjZ8sjc+3MTTsNXDpSikVrP1TCK7H2M7CQNfOIL1MSr2/DAFx2x7Vz93Bow590jAtaHcj2dpso+hO1p44LIONICVeYSddqokBEUTHRY1sHY8G8gypK98SR7zaXLo4UaWu6GfHwy7344arqbuLJJX2uM6XAM6TDiYHOgyn70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746530331; c=relaxed/simple;
-	bh=YVk29pr4jxdTxuOL5/uKItZoROJiA9b9HABqIaoG4dw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gEZFmuGTFbucvmAGSv+Q9J43Nv93ZnXHqbmC72prcwXRrh37W4bBlXACSWu/zGBvPHDJ7K4jjgYKkZtQL9HD7C+C9W3na81QuY8sK3u7ASypenIPxJLi36Ldt417ux44x8a47WvdFSIRKWJl87i5ZsdqeedUDmpvfugrdLyRP7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=fVcfaAZv; arc=none smtp.client-ip=178.154.239.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+	s=arc-20240116; t=1746532400; c=relaxed/simple;
+	bh=phKhwzwBBsKUNTwTuCqGqFtLytQEhltV8oTOiryixAw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=spO8ud7BgRaz+TqwYfaJQEcFJYJqE0VPagyIXXMTDmgaNb7KGEeEImMlAXihT8UXEKIiLFMZlFu8j+xXtpPWvYos4+QylvRfCGEV/PxHiUk0cdLhOZR34eU0UVGaXQdAeDd/2d8YKNZzq8PaRJrXOa4UXp2vdHBh8MASSwfxMP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BuJXK8f3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="fVcfaAZv"
-Received: from mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net [IPv6:2a02:6b8:c10:2ca6:0:640:bc98:0])
-	by forward100b.mail.yandex.net (Yandex) with ESMTPS id 356E660AE7;
-	Tue,  6 May 2025 14:18:40 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id aIaYHl0Ll4Y0-5bCcLZ7J;
-	Tue, 06 May 2025 14:18:39 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1746530319; bh=a5fsHHJiZVYEhDHu9ZOaaeBNoaRTfCgya5lUq8I4gAo=;
-	h=Message-ID:Date:Cc:Subject:To:From;
-	b=fVcfaAZvVnPMzojVK+DYQYlRCRYDk8I/YXI1+8g2Zw18bkaS0pCBD3hB1693ouTHO
-	 o9mKzxFj5EUdvlHtxly38gIQt5ETXoSBdPOhkazu8Ij1xqsWhtvYKJQzluUmwkGBLr
-	 5pt8iM2YEk25xYLLevBvw1OG9bpDBpzcpzvz7I2A=
-Authentication-Results: mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From: Dmitry Antipov <dmantipov@yandex.ru>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Shyam Saini <shyamsaini@linux.microsoft.com>,
-	linux-modules@vger.kernel.org,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
-Subject: [PATCH] kernel: fix error handling in lookup_or_create_module_kobject()
-Date: Tue,  6 May 2025 14:17:42 +0300
-Message-ID: <20250506111742.3109640-1-dmantipov@yandex.ru>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BuJXK8f3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C16C4CEED;
+	Tue,  6 May 2025 11:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746532400;
+	bh=phKhwzwBBsKUNTwTuCqGqFtLytQEhltV8oTOiryixAw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=BuJXK8f3+6nrBJZh0HBI891bC/OR1WxkU+iQAKcDASsi4/nJdYeI8vLjcVaxGe3P6
+	 Se26eRn0cDqIVbUqfi8A9cDyUQEufUYPOY0owQw2r34LWmHOIEKWB+LSU/c6CP8bCD
+	 8FSeySu6MCjlBKrBvqLn4W3CqWBjZa7XPaZQVKwve5nreGsK6XnCO4JUHhc5x7TuqQ
+	 0j3EyF29AKQ0L+EakP0hIJndY4mE28l9on11E71DV5Sw5uksmXAG6wsXDfdcwRqCHo
+	 Kkb6s3yDACNb47S7Kil81NA+VKaSnium/RdsC4jAlcYgOVyOf0mYP8hHFWdS0ocXGh
+	 AkcKqAtSE0FHQ==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Alice Ryhl" <aliceryhl@google.com>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Benno
+ Lossin" <benno.lossin@proton.me>,  "Masahiro Yamada"
+ <masahiroy@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,  "Luis
+ Chamberlain" <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,
+  "Nicolas Schier" <nicolas.schier@linux.dev>,  "Trevor Gross"
+ <tmgross@umich.edu>,  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v11 2/3] rust: add parameter support to the `module!` macro
+In-Reply-To: <aBnQpWJeiRKIMJ5D@google.com> (Alice Ryhl's message of "Tue, 06
+	May 2025 09:04:37 +0000")
+References: <20250502-module-params-v3-v11-0-6096875a2b78@kernel.org>
+	<20250502-module-params-v3-v11-2-6096875a2b78@kernel.org>
+	<WroEJHY8a-y8vbSQkUvGJJs7yTQGKMsHJqmWFYGkz5bZ_PsiE8GAozjSaNpWjWina1XanjVNpV0Av3woiaUtJg==@protonmail.internalid>
+	<aBTMMHWNXS7wK7zS@google.com> <878qnbxtyi.fsf@kernel.org>
+	<I9aVTs-nIPqYQrXB9KHd84xis2sWTBG-c8R8JQfCa23WzZopwS4vt4mA07cO3byOUNYf9sYUxrFi-O_kWdQGxQ==@protonmail.internalid>
+	<aBnQpWJeiRKIMJ5D@google.com>
+User-Agent: mu4e 1.12.7; emacs 30.1
+Date: Tue, 06 May 2025 13:53:08 +0200
+Message-ID: <87wmauot0b.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-In 'lookup_or_create_module_kobject()', an internal kobject is created
-using 'module_ktype'. So plain 'kobject_put()' causes an attempt to use
-an uninitialied completion pointer in 'module_kobject_release()' and
-'mod_kobject_put()' should be used instead. But if the driver (e.g. USB
-gadget as in this particular case reported by syzkaller) is configured
-as compiled-in, THIS_MODULE is NULL and there is no relevant module
-object to call the latter against. So introduce an internal wrapper
-'__module_kobject_put()' which is expected 'struct module_kobject' and
-so fix error handling in 'lookup_or_create_module_kobject()'.
+"Alice Ryhl" <aliceryhl@google.com> writes:
 
-Reported-by: syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=7fb8a372e1f6add936dd
-Fixes: 1c7777feb0e2 ("kernel: refactor lookup_or_create_module_kobject()")
-Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
----
- include/linux/module.h |  3 +++
- kernel/module/sysfs.c  | 15 ++++++++++-----
- kernel/params.c        |  3 ++-
- 3 files changed, 15 insertions(+), 6 deletions(-)
+> On Mon, May 05, 2025 at 11:55:33AM +0200, Andreas Hindborg wrote:
+>> "Alice Ryhl" <aliceryhl@google.com> writes:
+>>
+>> > On Fri, May 02, 2025 at 02:16:35PM +0200, Andreas Hindborg wrote:
+>> > It would be a use-after-free to
+>> > access it during module teardown. For example, what if I access this
+>> > static during its own destructor? Or during the destructor of another
+>> > module parameter?
+>>
+>> Yes, that is a problem.
+>>
+>> We can get around it for now by just not calling `free` for now. We only
+>> support simple types that do not need drop. I think we would have to
+>> seal the `ModuleParam` trait for this.
+>>
+>> For a proper solution, we could
+>>  - Require a token to read the parameter.
+>>  - Synchronize on a module private field and return an option from the
+>>    parameter getter. This would require module exit to run before param
+>>    free. I think this is the case, but I did not check.
+>>  - Use a `Revocable` and revoke the parameter in `free`.
+>>
+>> Any other ideas or comments on the outlined solutions?
+>
+> I think the simplest you can do right now is
+>
+> trait ModuleParam: Copy
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index b3329110d668..2b4ab389c1bc 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -891,6 +891,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
- #ifdef CONFIG_SYSFS
- extern struct kset *module_kset;
- extern const struct kobj_type module_ktype;
-+void __module_kobject_put(struct module_kobject *mkobj);
-+#else /* not CONFIG_SYSFS */
-+static inline void __module_kobject_put(struct module_kobject *mkobj) { }
- #endif /* CONFIG_SYSFS */
- 
- #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index b401ff4b02d2..7519920f4f55 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -323,11 +323,7 @@ static int module_add_modinfo_attrs(struct module *mod)
- 
- static void mod_kobject_put(struct module *mod)
- {
--	DECLARE_COMPLETION_ONSTACK(c);
--
--	mod->mkobj.kobj_completion = &c;
--	kobject_put(&mod->mkobj.kobj);
--	wait_for_completion(&c);
-+	__module_kobject_put(&mod->mkobj);
- }
- 
- static int mod_sysfs_init(struct module *mod)
-@@ -362,6 +358,15 @@ static int mod_sysfs_init(struct module *mod)
- 	return err;
- }
- 
-+void __module_kobject_put(struct module_kobject *mkobj)
-+{
-+	DECLARE_COMPLETION_ONSTACK(c);
-+
-+	mkobj->kobj_completion = &c;
-+	kobject_put(&mkobj->kobj);
-+	wait_for_completion(&c);
-+}
-+
- int mod_sysfs_setup(struct module *mod,
- 		    const struct load_info *info,
- 			   struct kernel_param *kparam,
-diff --git a/kernel/params.c b/kernel/params.c
-index e668fc90b83e..2cf1f17840e0 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -780,7 +780,8 @@ struct module_kobject __modinit * lookup_or_create_module_kobject(const char *na
- 	if (IS_ENABLED(CONFIG_MODULES) && !err)
- 		err = sysfs_create_file(&mk->kobj, &module_uevent.attr);
- 	if (err) {
--		kobject_put(&mk->kobj);
-+		/* Not 'mod_kobject_put()' because THIS_MODULE may be NULL. */
-+		__module_kobject_put(mk);
- 		pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n",
- 			name, err);
- 		return NULL;
--- 
-2.49.0
+Cool =F0=9F=91=8D
+
+>
+> so that it can't contain any non-trivial values. That way you don't need
+> Drop either.
+>
+> Long term, I think we need a way to detect whether it's safe to access
+> module globals. The exact same problem applies to the existing global
+> for the module itself - except it's worse there because we can't access
+> that one during init either.
+
+Yep.
+
+
+
+Best regards,
+Andreas Hindborg
+
+
 
