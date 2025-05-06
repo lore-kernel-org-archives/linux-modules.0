@@ -1,119 +1,135 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward100b.mail.yandex.net (forward100b.mail.yandex.net [178.154.239.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F24E525D54E
-	for <linux-modules@vger.kernel.org>; Tue,  6 May 2025 09:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC2F27990C
+	for <linux-modules@vger.kernel.org>; Tue,  6 May 2025 11:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746523520; cv=none; b=gaddUDFKJK0cBfpi72cSGF1inxZGoepIcgcovHWktZ+GNcctRYgj4Rf5euSVZeRelUYDMpqpizR65pOk+46G7MGKeM0v2NVc+ta2vBr/8QBa5Vv6WFnOH4CsLZ8HxwgcegEgaqHwCnSgRYaSXliVvIeHVgnnp6EJlUwAN2nMH/4=
+	t=1746530331; cv=none; b=IMuG4/vh09GbziWjCNf1MqQM6h2ErjeN2/NBlo9njQSoS6bAeDVgRtRTX+7POLWHyg/LXVJVriqKues4kuTIMn7O809eD9DfbxDy4YdYuS16hObjXi6jygv4Yexw105YJAMyOm0JOHQDYPZT/6omlq8XeFPBUaByzUK/p+EowSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746523520; c=relaxed/simple;
-	bh=u/fjceFFYQeTWywO/Seg4JF6qIiA9+WAhSikZDLBgdg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LvNIXrskud/jl69QQLHovww6udCkKOuBenD/tm3TTcPVuVNHX03XK0ihfVnjy9TzOuY/pnszlo6tYSFCRkkbMVXAE7wv2KbPNDkYSpCFLtvWmFK8RO2OcgOKy5Rb7OV4zFCsi2PVKNi9hzBkunzzojufl1fNrMQN+5WjIXKAZbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SVjZVqlC; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746530331; c=relaxed/simple;
+	bh=YVk29pr4jxdTxuOL5/uKItZoROJiA9b9HABqIaoG4dw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gEZFmuGTFbucvmAGSv+Q9J43Nv93ZnXHqbmC72prcwXRrh37W4bBlXACSWu/zGBvPHDJ7K4jjgYKkZtQL9HD7C+C9W3na81QuY8sK3u7ASypenIPxJLi36Ldt417ux44x8a47WvdFSIRKWJl87i5ZsdqeedUDmpvfugrdLyRP7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=fVcfaAZv; arc=none smtp.client-ip=178.154.239.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SVjZVqlC"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5f5bef591d6so10951772a12.1
-        for <linux-modules@vger.kernel.org>; Tue, 06 May 2025 02:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746523517; x=1747128317; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DdF+CAHcMRS7HlmyHTj6/cf2/xdE8uY87Wf9zE4PiJU=;
-        b=SVjZVqlC3G7FQ2kaxMZ3ibJaVdQN8m1rQPsTUyG0o1xk6d5I21X0ditdtcenVa1mCl
-         vKjtATTjQG/nmT/pn+W44ub9n0oQVpp7dcdg6bPxdPhNNeFr1ayz/e2SasKajQCYKL7z
-         13GQTwlPLMH8dSzbXG8gUVj4jY9gfgOgpEt3noyw9qYo3mJvlB9p0QdYy5SdG4QNc9FF
-         IV5Jm4mo777Wm1OuMf3XDnBFPrlt210KSoTpFlao+mZee9Y2OBffaO4daSzFQ/6DuDR2
-         u8nU0lEvpD/lSDJPIJF4YQs2N+PX/n24rajR0AeSUa1wDryRq1CL8KZeUF+kSmxj/Hdy
-         PT9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746523517; x=1747128317;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdF+CAHcMRS7HlmyHTj6/cf2/xdE8uY87Wf9zE4PiJU=;
-        b=ZNyw4sVDaHmx5ckti0t+lZIAg+CEcA841Ucbgqk/QxTzT45MOTLZzwXSuDYxuti6sI
-         eSDz/cyJXuC0oROyuB/CH1hIvP/w1ZbCyJSyxJueu9x+yomHicQ3qXYyL80C40IMu7Wv
-         gbS47iiehkiWY9nBXn+yZnC7l5pevQvJLC3+pTx4fXU6bFT3Igf1dvLZhCSc32E5yqMx
-         x/S7x3QV88vL/373ZXeCJ/8B0dY+M+sQof5zugBex1fJBJIVG6xyQ5+sEUm8zF/P3+E/
-         UnKtHtT3SahSwuUCpTdo42be9lpwcZqDHYECrhVBFUL86+rolwLGckXkFchr78MEWQUk
-         veFg==
-X-Forwarded-Encrypted: i=1; AJvYcCWsQWjp2DnnBlWH3W3A/aWMBb14zspyptCVHy0hZ/Q1Hn3/NUchxvOfyCKF4R4aF55qqKDiQu/m63vjH0cO@vger.kernel.org
-X-Gm-Message-State: AOJu0YxA9d0uc9LuZ2k+aLHxAtdpVsEfDuHS7eLNfmsFy+u/UY1jdkTC
-	GrMzYVTDGEFbkmuUiChYxMKweORw4PBEBkBK9x5d6ynw15T3BnoLTY2DvjUIbe0=
-X-Gm-Gg: ASbGncshkHa5pGWqSh0w7hENH5PHQdFdEh+tzFPvAuccXy3+3ob2g+u0CkE393YBfvQ
-	v1yo2dAhfoQ/lpk0+NoXMgQmEmj20Bv0fcrQqWWYQVpWq6P+wRAKYS+bFn2d7rSlS/fPhpfBQ+m
-	cW8o99vtaa7jZBhObd6hJ63b8X296s4jri/ChBbBAYCI2ILpj1m8Xm3GOTfbE+KRLHEhlk0OAwB
-	sloccrzXOU1pGhrijnIJQtu370rkkdRYZTavvW+pHqVRqOZoOxCv0AI2Mj6T2GqLV+clIfT5m2s
-	xoNTAPTJl3/aOOBcm/NJJvPE9lwE8nxi2QXQBQxa5Pw=
-X-Google-Smtp-Source: AGHT+IFJwd3zspYui36u1KUzmHMVo7G43aqyrNepvwB6J1nr5ibdR0TaraM6KsH+9IsD5N40UWm8xA==
-X-Received: by 2002:a05:6402:268c:b0:5fb:3ca1:fb3c with SMTP id 4fb4d7f45d1cf-5fb3ca1fcdamr3871684a12.27.1746523517074;
-        Tue, 06 May 2025 02:25:17 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fa7781d7d9sm7310792a12.47.2025.05.06.02.25.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 May 2025 02:25:16 -0700 (PDT)
-Message-ID: <7803cd39-8b40-4956-86de-f2750d8e3b13@suse.com>
-Date: Tue, 6 May 2025 11:25:16 +0200
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="fVcfaAZv"
+Received: from mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net [IPv6:2a02:6b8:c10:2ca6:0:640:bc98:0])
+	by forward100b.mail.yandex.net (Yandex) with ESMTPS id 356E660AE7;
+	Tue,  6 May 2025 14:18:40 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id aIaYHl0Ll4Y0-5bCcLZ7J;
+	Tue, 06 May 2025 14:18:39 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1746530319; bh=a5fsHHJiZVYEhDHu9ZOaaeBNoaRTfCgya5lUq8I4gAo=;
+	h=Message-ID:Date:Cc:Subject:To:From;
+	b=fVcfaAZvVnPMzojVK+DYQYlRCRYDk8I/YXI1+8g2Zw18bkaS0pCBD3hB1693ouTHO
+	 o9mKzxFj5EUdvlHtxly38gIQt5ETXoSBdPOhkazu8Ij1xqsWhtvYKJQzluUmwkGBLr
+	 5pt8iM2YEk25xYLLevBvw1OG9bpDBpzcpzvz7I2A=
+Authentication-Results: mail-nwsmtp-smtp-production-main-98.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From: Dmitry Antipov <dmantipov@yandex.ru>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Shyam Saini <shyamsaini@linux.microsoft.com>,
+	linux-modules@vger.kernel.org,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
+Subject: [PATCH] kernel: fix error handling in lookup_or_create_module_kobject()
+Date: Tue,  6 May 2025 14:17:42 +0300
+Message-ID: <20250506111742.3109640-1-dmantipov@yandex.ru>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] gendwarfksyms: Add a kABI rule to override type
- strings
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@samsung.com>,
- linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, Giuliano Procida <gprocida@google.com>
-References: <20250505212401.3379699-6-samitolvanen@google.com>
- <20250505212401.3379699-9-samitolvanen@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250505212401.3379699-9-samitolvanen@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/5/25 23:24, Sami Tolvanen wrote:
-> In rare situations where distributions must make significant
-> changes to otherwise opaque data structures that have
-> inadvertently been included in the published ABI, keeping
-> symbol versions stable using the existing kABI macros can
-> become tedious.
-> 
-> For example, Android decided to switch to a newer io_uring
-> implementation in the 5.10 GKI kernel "to resolve a huge number
-> of potential, and known, problems with the codebase," requiring
-> "horrible hacks" with genksyms:
-> 
->   "A number of the io_uring structures get used in other core
->   kernel structures, only as "opaque" pointers, so there is
->   not any real ABI breakage.  But, due to the visibility of
->   the structures going away, the CRC values of many scheduler
->   variables and functions were changed."
->     -- https://r.android.com/2425293
-> 
-> While these specific changes probably could have been hidden
-> from gendwarfksyms using the existing kABI macros, this may not
-> always be the case.
-> 
-> Add a last resort kABI rule that allows distribution
-> maintainers to fully override a type string for a symbol or a
-> type. Also add a more informative error message in case we find
-> a non-existent type references when calculating versions.
-> 
-> Suggested-by: Giuliano Procida <gprocida@google.com>
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+In 'lookup_or_create_module_kobject()', an internal kobject is created
+using 'module_ktype'. So plain 'kobject_put()' causes an attempt to use
+an uninitialied completion pointer in 'module_kobject_release()' and
+'mod_kobject_put()' should be used instead. But if the driver (e.g. USB
+gadget as in this particular case reported by syzkaller) is configured
+as compiled-in, THIS_MODULE is NULL and there is no relevant module
+object to call the latter against. So introduce an internal wrapper
+'__module_kobject_put()' which is expected 'struct module_kobject' and
+so fix error handling in 'lookup_or_create_module_kobject()'.
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+Reported-by: syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=7fb8a372e1f6add936dd
+Fixes: 1c7777feb0e2 ("kernel: refactor lookup_or_create_module_kobject()")
+Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+---
+ include/linux/module.h |  3 +++
+ kernel/module/sysfs.c  | 15 ++++++++++-----
+ kernel/params.c        |  3 ++-
+ 3 files changed, 15 insertions(+), 6 deletions(-)
 
+diff --git a/include/linux/module.h b/include/linux/module.h
+index b3329110d668..2b4ab389c1bc 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -891,6 +891,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
+ #ifdef CONFIG_SYSFS
+ extern struct kset *module_kset;
+ extern const struct kobj_type module_ktype;
++void __module_kobject_put(struct module_kobject *mkobj);
++#else /* not CONFIG_SYSFS */
++static inline void __module_kobject_put(struct module_kobject *mkobj) { }
+ #endif /* CONFIG_SYSFS */
+ 
+ #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
+diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
+index b401ff4b02d2..7519920f4f55 100644
+--- a/kernel/module/sysfs.c
++++ b/kernel/module/sysfs.c
+@@ -323,11 +323,7 @@ static int module_add_modinfo_attrs(struct module *mod)
+ 
+ static void mod_kobject_put(struct module *mod)
+ {
+-	DECLARE_COMPLETION_ONSTACK(c);
+-
+-	mod->mkobj.kobj_completion = &c;
+-	kobject_put(&mod->mkobj.kobj);
+-	wait_for_completion(&c);
++	__module_kobject_put(&mod->mkobj);
+ }
+ 
+ static int mod_sysfs_init(struct module *mod)
+@@ -362,6 +358,15 @@ static int mod_sysfs_init(struct module *mod)
+ 	return err;
+ }
+ 
++void __module_kobject_put(struct module_kobject *mkobj)
++{
++	DECLARE_COMPLETION_ONSTACK(c);
++
++	mkobj->kobj_completion = &c;
++	kobject_put(&mkobj->kobj);
++	wait_for_completion(&c);
++}
++
+ int mod_sysfs_setup(struct module *mod,
+ 		    const struct load_info *info,
+ 			   struct kernel_param *kparam,
+diff --git a/kernel/params.c b/kernel/params.c
+index e668fc90b83e..2cf1f17840e0 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -780,7 +780,8 @@ struct module_kobject __modinit * lookup_or_create_module_kobject(const char *na
+ 	if (IS_ENABLED(CONFIG_MODULES) && !err)
+ 		err = sysfs_create_file(&mk->kobj, &module_uevent.attr);
+ 	if (err) {
+-		kobject_put(&mk->kobj);
++		/* Not 'mod_kobject_put()' because THIS_MODULE may be NULL. */
++		__module_kobject_put(mk);
+ 		pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n",
+ 			name, err);
+ 		return NULL;
 -- 
-Thanks,
-Petr
+2.49.0
+
