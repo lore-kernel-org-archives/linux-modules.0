@@ -1,231 +1,136 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5AF274FD9
-	for <linux-modules@vger.kernel.org>; Mon,  5 May 2025 21:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F3A12B93;
+	Tue,  6 May 2025 07:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746480254; cv=none; b=t1VQt6MdRbNQDvMES3w7l5eTlD/kqBSVnTOMlN97uawZOh8A/p/MJCyrZfocKH9JoQU/THuVVEi5ZO0N8qznnb5Yht08yt4VX/TBJk2EKUK0W6XZ1Vxe58eCo6/ud0YyOpfXH7V+zfimI/YtnfIYa3abZM4mBQZP5KmC2VTlziI=
+	t=1746515079; cv=none; b=qnTG+nD8mOE8ikR5VWCfnHPrLjdTVSwq9AueGlW0SdHIkNC8CZ+1rQURzDK5c0wLpJG+O53GWHNUdO1v5dizWHdGNR+z9dbHbWHPjzx2JGcj7QxzZohd3gIlkxCd1134nG18fdOuf055cppSxHa+Tr4bz3gN3yCr1GC32qt25Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746480254; c=relaxed/simple;
-	bh=7s/E4m10J6aoRvjV1yW2+j2HRnsx8mgBbM/r51ocW5A=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=IbTxFbGoGiJWvMnQwCtC4jx5ecx6+1uukaiPE6E9rTMmwZ74ZN097AdWxlZxLi3CqXCBsWpbkxLcScabNTfgTGRrsKeCFOoTrLkvOJyWjt5MrKd0KBrfKNb6tIJfndy74L+bQAbiMXBXOVkjkBKSuuOSky8he4zzma5phREm4ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Uqv2uDdA; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1746515079; c=relaxed/simple;
+	bh=U7vPQzIh/TPqjXhn3LlZrogq0OsLAzFu5cmMvri3CzI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QkIgQd+MMrmDqk78J8ZTOSqcygBqV5nFgjDN+Ll7z9fPuF3oBO64i7wfcpVB0j4UH7c9LqZzXmcilDetRe064ymbvyjR0l9chSvFXALKBgO8KDVasMh7ntQ4orMnIo6lstGRbjcNecRWFD+UoDJdI7JZGUqLDQwDjCDtZmkjGCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cy8dYRUX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uqv2uDdA"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b078af4b07dso2814277a12.3
-        for <linux-modules@vger.kernel.org>; Mon, 05 May 2025 14:24:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1746480252; x=1747085052; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GIPnE82b6i61LEjBTUCqfcsHkZywrijK+35yah+PyEc=;
-        b=Uqv2uDdAt2blx9XF9webmgwyTyPUWjStjeqWDIA9Taow1KF9UtFk8lM1cquMwZT49E
-         mnoL2L+/E/1NOxJEFA4ZiwdAO38u8DinDRM8NYikj5sND3t8P0qrezVISULaRqCHo6fH
-         lM3AWZHFRdGR09wbhdJtBdGQHbAkPy9aZTTlMA993+jIvVWBpEzARDylk8VyjM7cklSa
-         ZgOO8vd47NkA+CcNa0I4UZCLHe0DFB0VcucwSLtKD6/VeXWVEJR7ELplvLmO1r8Sv/IS
-         90XhBuUX+FuBmvVoQC9qmZaIA4JMXlO7iWaQ90UlsSoQTHNRs+Ctviou2myTkAaxQ3W1
-         esaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746480252; x=1747085052;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GIPnE82b6i61LEjBTUCqfcsHkZywrijK+35yah+PyEc=;
-        b=Ja//ic5ou41CIs423df5LQ+ZkJLfjNbB0901wcPhSqkPCEA6tYYDEDTnTgO1MOIFdx
-         y+WCwPYOlvYAHR62TTuaj1aWEwQwsPISeZCp9lSsyE/9/xAhDlEldPT3rEuNuAAMP2M0
-         NOsJzHrHVS7+MasEq8ZyKLGoHj4FBl7sn0qHx2nT8ncL6dWTxOYV4qScZBOhvmO/qZkE
-         DrAMSSGHCUJBeD8+ySyAijz1Y0ba2nGeJXvYV/Vg1fCI2n2iNGz6pLcRo9btuIxB+bcB
-         aYuCwfuc7oh7pjp9TZTHOBxJZRumjz+ezZZf3VeGQUBmeNkq9w5My99Z8IXkODp2V128
-         BTfA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRNE7KEX5XOeNp6Udd+xJVlJOKQSgAkNSRsKTPRg582RdascwaRmYdotluVldTK03lxxO5R1ZyH7lKVrHk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXvHT/P/DR1E0PJRFmI5KtZsbz049TR98Goezuf0mpZytnMA24
-	aUSOv/OlTbfnMR6ZZHo10W4TBJu89sipslkbZy1AF5xjE1K95uZtm1Bn189uDKyL4UfvT4/w+/O
-	c54LTHHPifNzm1wX3yR2vxeUXQg==
-X-Google-Smtp-Source: AGHT+IFFmAMe7NdEnE0TKIzz/g3neM1rXjl2OzQV2Y1xfStACjI4PFgGfGajlr+SLVSFArOxlcz0O91imM1sw8QoRSA=
-X-Received: from pfbfn24.prod.google.com ([2002:a05:6a00:2fd8:b0:736:6fb6:7fc])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:6d84:b0:1f5:8e33:c417 with SMTP id adf61e73a8af0-21180774d80mr1067658637.2.1746480252274;
- Mon, 05 May 2025 14:24:12 -0700 (PDT)
-Date: Mon,  5 May 2025 21:24:06 +0000
-In-Reply-To: <20250505212401.3379699-6-samitolvanen@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cy8dYRUX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 992D4C4CEE4;
+	Tue,  6 May 2025 07:04:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746515078;
+	bh=U7vPQzIh/TPqjXhn3LlZrogq0OsLAzFu5cmMvri3CzI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Cy8dYRUXdLag9ya92zrbGqsEiENiuJSOTOmJFKpBuSyjlrwv4jYknsg9HpjV0EH6e
+	 xwXDbiu8CuRRMGVHNk/DeariGcxDqOB9nfB2gRD5UinXfuwEEMstx1IxElrVOxl5Gt
+	 ndIoINPzjzjpPv2Lm2e0NwiykfFZSNGCYo3Pfqyvm3qt0FWef2M7MK94ibZrmI3/oj
+	 ycmAhmDwIaH5Pmhjs+x/JZStSG8goaXxjj1b7NQCjfvUoWYchJN54v/GzzHFQaQgX0
+	 urRqcKJcZhS59yJPden2VjKAT4ad2rNb8ZNZziC4+3jmZ5jxbHUoHb2gx735G+4ZS9
+	 LxFglxlqjfzeA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54d65cb6e8aso6681858e87.1;
+        Tue, 06 May 2025 00:04:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU3dDhjEvXgRDNdNlKq1dG7My0mP05BGsoNWVU8or0GrOV08MjhqWZfA1Knh3Y9Vwa2QtE/MzybhF2zDL79@vger.kernel.org, AJvYcCW3uU2nEG21f5twj7RpunBBR9Ee9b+a0u4mqLyjIlAV+ACb2J73N40oXYYTaS4fkI7YUnf3YwQF1gkhvbtZ3w==@vger.kernel.org, AJvYcCXAyaFOQQvfC5PxMoB9uNSYh927pckCivCEbh1EFi0UHAMjZ4JbXk+cM7IPiHL0triTc1GrLnD5wKffyuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhizR9Cv/R0Rcj/ww6FV650BTEaHwz1sinktAdjuiY0oiwa8mE
+	9zN06NauSE3LbIporpiFsbiZb5SKa5en9TWgMR7lNxrU4gta2zcPe2q+7DB7GfgJ8ANcLQsblC1
+	/laWA//JFGJydEr980/6jj2JCjmI=
+X-Google-Smtp-Source: AGHT+IGY075FvxCyQwotSzfgDZIEaPEf40nFfkQvQ3BK2NzlWcurXunCQmDPuAjgxC94sIVjzvnCIuyFOtnIV5m20xI=
+X-Received: by 2002:a05:6512:1087:b0:54b:117b:dc9d with SMTP id
+ 2adb3069b0e04-54fb4aa2c32mr631166e87.55.1746515077321; Tue, 06 May 2025
+ 00:04:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250505212401.3379699-6-samitolvanen@google.com>
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5930; i=samitolvanen@google.com;
- h=from:subject; bh=7s/E4m10J6aoRvjV1yW2+j2HRnsx8mgBbM/r51ocW5A=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDBmSOsUe+i0i6yYU7rNJ0C9jy3eYH6NS0n/i4qyFNirzV
- 56aZFnaUcrCIMbBICumyNLydfXW3d+dUl99LpKAmcPKBDKEgYtTACZSfojhf0w1N8vmO6vNl058
- NFP5k7FD0dLEfM15wsmLJrWVix9OvMrwizmNvehiE0P66Zx2nQbezeoxFStkfRdMvL+XM5d7xet mRgA=
-X-Mailer: git-send-email 2.49.0.967.g6a0df3ecc3-goog
-Message-ID: <20250505212401.3379699-10-samitolvanen@google.com>
-Subject: [PATCH v2 4/4] Documentation/kbuild: Add new gendwarfksyms kABI rules
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
+MIME-Version: 1.0
+References: <20250407230843.1952850-2-samitolvanen@google.com>
+In-Reply-To: <20250407230843.1952850-2-samitolvanen@google.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 6 May 2025 16:03:59 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARSsMF2E57fTNk6jYfb3OocB1RYgZKShfPoEDYdU_fQoA@mail.gmail.com>
+X-Gm-Features: ATxdqUGJb3RnUBCvP04tim1O15c5qPAMrbUKSntNdzalPfODIJxEsDgAcdt7S2E
+Message-ID: <CAK7LNARSsMF2E57fTNk6jYfb3OocB1RYgZKShfPoEDYdU_fQoA@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Require pahole <v1.28 or >v1.29 with
+ GENDWARFKSYMS on X86
+To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>
+	Paolo Pisati <paolo.pisati@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document byte_size and type_string kABI stability rules. Also fix
-the section numbers while we're at it.
+On Tue, Apr 8, 2025 at 8:08=E2=80=AFAM Sami Tolvanen <samitolvanen@google.c=
+om> wrote:
+>
+> With CONFIG_GENDWARFKSYMS, __gendwarfksyms_ptr variables are
+> added to the kernel in EXPORT_SYMBOL() to ensure DWARF type
+> information is available for exported symbols in the TUs where
+> they're actually exported. These symbols are dropped when linking
+> vmlinux, but dangling references to them remain in DWARF.
+>
+> With CONFIG_DEBUG_INFO_BTF enabled on X86, pahole versions after
+> commit 47dcb534e253 ("btf_encoder: Stop indexing symbols for
+> VARs") and before commit 9810758003ce ("btf_encoder: Verify 0
+> address DWARF variables are in ELF section") place these symbols
+> in the .data..percpu section, which results in an "Invalid
+> offset" error in btf_datasec_check_meta() during boot, as all
+> the variables are at zero offset and have non-zero size. If
+> CONFIG_DEBUG_INFO_BTF_MODULES is enabled, this also results in a
+> failure to load modules with:
+>
+>   failed to validate module [$module] BTF: -22
+>
+> As the issue occurs in pahole v1.28 and the fix was merged
+> after v1.29 was released, require pahole <v1.28 or >v1.29 when
+> GENDWARFKSYMS is enabled with DEBUG_INFO_BTF on X86.
+>
+> Reported-by: Paolo Pisati <paolo.pisati@canonical.com>
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>
 
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- Documentation/kbuild/gendwarfksyms.rst | 103 +++++++++++++++++++++++--
- 1 file changed, 95 insertions(+), 8 deletions(-)
+Applied to linux-kbuild.
 
-diff --git a/Documentation/kbuild/gendwarfksyms.rst b/Documentation/kbuild/gendwarfksyms.rst
-index e4beaae7e456..8b0d7ebbb084 100644
---- a/Documentation/kbuild/gendwarfksyms.rst
-+++ b/Documentation/kbuild/gendwarfksyms.rst
-@@ -125,14 +125,17 @@ the rules. The fields are as follows:
-   qualified name of the DWARF Debugging Information Entry (DIE).
- - `value`: Provides rule-specific data.
- 
--The following helper macro, for example, can be used to specify rules
-+The following helper macros, for example, can be used to specify rules
- in the source code::
- 
--	#define __KABI_RULE(hint, target, value)                             \
--		static const char __PASTE(__gendwarfksyms_rule_,             \
-+	#define ___KABI_RULE(hint, target, value)			    \
-+		static const char __PASTE(__gendwarfksyms_rule_,	     \
- 					  __COUNTER__)[] __used __aligned(1) \
- 			__section(".discard.gendwarfksyms.kabi_rules") =     \
--				"1\0" #hint "\0" #target "\0" #value
-+				"1\0" #hint "\0" target "\0" value
-+
-+	#define __KABI_RULE(hint, target, value) \
-+		___KABI_RULE(hint, #target, #value)
- 
- 
- Currently, only the rules discussed in this section are supported, but
-@@ -223,7 +226,88 @@ Example usage::
- 	KABI_ENUMERATOR_IGNORE(e, C);
- 	KABI_ENUMERATOR_VALUE(e, LAST, 2);
- 
--4.3. Adding structure members
-+4.1.3. Managing structure size changes
-+======================================
-+
-+A data structure can be partially opaque to modules if its allocation is
-+handled by the core kernel, and modules only need to access some of its
-+members. In this situation, it's possible to append new members to the
-+structure without breaking the ABI, as long as the layout for the original
-+members remains unchanged.
-+
-+To append new members, we can hide them from symbol versioning as
-+described in section :ref:`Hiding members <hiding_members>`, but we can't
-+hide the increase in structure size. The `byte_size` rule allows us to
-+override the structure size used for symbol versioning.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "byte_size"
-+- `target`: The fully qualified name of the target data structure
-+  (as shown in **--dump-dies** output).
-+- `value`: A positive decimal number indicating the structure size
-+  in bytes.
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+        #define KABI_BYTE_SIZE(fqn, value) \
-+                __KABI_RULE(byte_size, fqn, value)
-+
-+Example usage::
-+
-+	struct s {
-+                /* Unchanged original members */
-+		unsigned long a;
-+                void *p;
-+
-+                /* Appended new members */
-+                KABI_IGNORE(0, unsigned long n);
-+	};
-+
-+	KABI_BYTE_SIZE(s, 16);
-+
-+4.1.4. Overriding type strings
-+==============================
-+
-+In rare situations where distributions must make significant changes to
-+otherwise opaque data structures that have inadvertently been included
-+in the published ABI, keeping symbol versions stable using the more
-+targeted kABI rules can become tedious. The `type_string` rule allows us
-+to override the full type string for a type or a symbol, and even add
-+types for versioning that no longer exist in the kernel.
-+
-+The rule fields are expected to be as follows:
-+
-+- `type`: "type_string"
-+- `target`: The fully qualified name of the target data structure
-+  (as shown in **--dump-dies** output) or symbol.
-+- `value`: A valid type string (as shown in **--symtypes**) output)
-+  to use instead of the real type.
-+
-+Using the `__KABI_RULE` macro, this rule can be defined as::
-+
-+	#define KABI_TYPE_STRING(type, str) \
-+		___KABI_RULE("type_string", type, str)
-+
-+Example usage::
-+
-+	/* Override type for a structure */
-+	KABI_TYPE_STRING("s#s",
-+		"structure_type s { "
-+			"member base_type int byte_size(4) "
-+				"encoding(5) n "
-+			"data_member_location(0) "
-+		"} byte_size(8)");
-+
-+	/* Override type for a symbol */
-+	KABI_TYPE_STRING("my_symbol", "variable s#s");
-+
-+The `type_string` rule should be used only as a last resort if maintaining
-+a stable symbol versions cannot be reasonably achieved using other
-+means. Overriding a type string increases the risk of actual ABI breakages
-+going unnoticed as it hides all changes to the type.
-+
-+4.2. Adding structure members
- =============================
- 
- Perhaps the most common ABI compatible change is adding a member to a
-@@ -237,7 +321,7 @@ natural method. This section describes gendwarfksyms support for using
- reserved space in data structures and hiding members that don't change
- the ABI when calculating symbol versions.
- 
--4.3.1. Reserving space and replacing members
-+4.2.1. Reserving space and replacing members
- ============================================
- 
- Space is typically reserved for later use by appending integer types, or
-@@ -276,7 +360,9 @@ The examples include `KABI_(RESERVE|USE|REPLACE)*` macros that help
- simplify the process and also ensure the replacement member is correctly
- aligned and its size won't exceed the reserved space.
- 
--4.3.2. Hiding members
-+.. _hiding_members:
-+
-+4.2.2. Hiding members
- =====================
- 
- Predicting which structures will require changes during the support
-@@ -305,4 +391,5 @@ member to a union where one of the fields has a name starting with
-                 unsigned long b;
-         };
- 
--With **--stable**, both versions produce the same symbol version.
-+With **--stable**, both versions produce the same symbol version. The
-+examples include a `KABI_IGNORE` macro to simplify the code.
--- 
-2.49.0.967.g6a0df3ecc3-goog
+Thanks.
 
+
+
+> Changes in v2:
+> - Also allow pahole <v1.28.
+> - Update comment to include the affected commit range.
+>
+> ---
+>  kernel/module/Kconfig | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+> index d7762ef5949a..39278737bb68 100644
+> --- a/kernel/module/Kconfig
+> +++ b/kernel/module/Kconfig
+> @@ -192,6 +192,11 @@ config GENDWARFKSYMS
+>         depends on !DEBUG_INFO_REDUCED && !DEBUG_INFO_SPLIT
+>         # Requires ELF object files.
+>         depends on !LTO
+> +       # To avoid conflicts with the discarded __gendwarfksyms_ptr symbo=
+ls on
+> +       # X86, requires pahole before commit 47dcb534e253 ("btf_encoder: =
+Stop
+> +       # indexing symbols for VARs") or after commit 9810758003ce ("btf_=
+encoder:
+> +       # Verify 0 address DWARF variables are in ELF section").
+> +       depends on !X86 || !DEBUG_INFO_BTF || PAHOLE_VERSION < 128 || PAH=
+OLE_VERSION > 129
+>         help
+>           Calculate symbol versions from DWARF debugging information usin=
+g
+>           gendwarfksyms. Requires DEBUG_INFO to be enabled.
+>
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> --
+> 2.49.0.504.g3bcea36a83-goog
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
