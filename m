@@ -1,65 +1,36 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837A58F7D
-	for <linux-modules@vger.kernel.org>; Tue,  6 May 2025 14:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4763F1D61BC
+	for <linux-modules@vger.kernel.org>; Wed,  7 May 2025 06:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746542984; cv=none; b=hfUuPXEJNwqwn68eCQ2fKWDrI/LjiHjN81qjVhJJBQP92SM9XsM9M7t8So8rTJSnOcL5YWDDyEv1ZecisW2F+/vGQakBszogco75xxDu4ntGkc+wzPkeJStuUxJ4Q2sGzBXiG19eS5I/gCpJcmZWn8IQ4ICBWlWNmv+eO4ivFD8=
+	t=1746598347; cv=none; b=iLrvZzrcVjue9yjnBx7MFmKu5fZcUAaWvbNgUftagm/nqd5PDCSDpYKFz9wYukz2hqfZTE6gCWfo9URKW96bYw2KtUC1kNWzxUiINqdn2YEH5xlEKto/1huLzAz3PxI4MINN5z/iJ+vlwjOdU+OqS7ZSTB9VoAffwWZsk8I9rPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746542984; c=relaxed/simple;
-	bh=m9nk5zfJ4XrB9POeeLCvYgB1CboqaBEws4iQQH/bdfs=;
+	s=arc-20240116; t=1746598347; c=relaxed/simple;
+	bh=LBvqOHa5i/eC5mjtMqbWEKKPim6LCpPnz0smpxs8rlQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sY1Gw7UJrKPldWRW52kjJgDkEwUdeQtM8wQe6Uo7EYFnn8pAKmj4iQZmW6t8lnvqi/KUj3UD6vgyAbuVN5B1fA/wSOlmB0SKelT3hchZqF40R6JaWJq6yfaYYHR5saGJg5fFGC88uquMr7k4Neiz6rhvWvdHsiMGqBAe07sS9JE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=APPjBkye; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=SbelaKDOedVVC8PPxph7a4agsEfhG2PsKyRqyvwRrrx2RkihuYWaaWen0TsJRhGtZpOOAQ3JzolplaIdSNIv5Hkt17Q4E+HG/+A/VhG63lFVDd16mZZIKvClwZvwY6SBhjuq9ixdfQ8e1VUTQdIqhmjVHxRMPGz6B3rfuKmmQgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=gnraZSc/; arc=none smtp.client-ip=178.154.239.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="APPjBkye"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ace3b03c043so879308166b.2
-        for <linux-modules@vger.kernel.org>; Tue, 06 May 2025 07:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746542981; x=1747147781; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LLm3kMm3ILayWCfux8ao/n0VoWx916s4kxMfMwenZNI=;
-        b=APPjBkyeWHsvURMwHHcE9pZqbohC6W7LDFF0I9Ndmt7xIvAa/BUBhiLvoth2TzUxmy
-         Gsr16vwhI5NaQUB1jBbdt890G6ar3wKHwzalf0Tm297az0WhScd0fMVOEwDoTsGKePve
-         l7InTRRJGsC1tSOQ8Ky7ht6m6lOBXYoVzuz/eux3047HOjShtHBEbnP0lTpjeecCfsFI
-         Lb18PH/TS6j7zSRq1Eb24lIjI/fqDLhYPQtExy9oXz9j7yKhmypdLodHvGpwOonvTlc8
-         Iv7AJF9WUtDD4f/TocK5MUaDRs2lZPEBIksGT4OumhpGwkIsAXQdbQItabw7RTFNMWvW
-         rCTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746542981; x=1747147781;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LLm3kMm3ILayWCfux8ao/n0VoWx916s4kxMfMwenZNI=;
-        b=mu5BqwvAPWtCgpVeHHRuTbIQHNS7T9da9hJv3ct3HI1UNhU6VDDPY0RpH1fqU9H/xD
-         /ew9FStNS4THvDtEx572e+zGhJjSgJbIZp0LqzpsQmrlITUU/Lrgr8vs5RgBFJEtjA34
-         /STCupXz4JPtj5Zib7DTdrAg+wcmpAml6FEZ32fKHNxjECoJ/QuSCoicDbBsrqZONAWE
-         Ki8tc/wBdtSfjJRh+55aPilBossq4GdJQwy3sbPSJntieuII2qbPlhveUKspxg/9vpoA
-         C6DEVa2IE+vnhwn/s/I3xOsthzvzi8rDGpkWidx1EeL6xm84Vdr4wglVVsP1/YwbUh6j
-         y/cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWv4/sRMQDj4D3eQkF8UPGNHgI6+BLA/G/lmrMnlTCUdkUHRdH9p7KrA7tmUzSQduzTKNVLfVVy1dl9XZ8O@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQc/8Bj41504KF2tCHiCrRdYdHBUEapVcGegSZFvp0DtcCkQLj
-	e8SHFWVY42jZ+HSKp8Ol02jLJyvknb8IZf5oZBlTIkkrQCgOtypxsA1+R4Cugs/HFlUo7kQU9yI
-	4rt8=
-X-Gm-Gg: ASbGncunCm5hoJY67bcEITgi8CTXFNutpOKzOunAedVKa0PKoFXxO7FAMHfvmSv2+dy
-	paGTzkdzvAZSFo2N2yy/oQGhQeX/Pj/olN+QoFDEhpnj2Coa/Av4qhtleXnUfVPr62yAuENUHN5
-	l/qwzoFPpIJABc9gUnA3eT2Zv+NGUpKZOVZLmT1cPKO/L/TfQZQpgfMdmFDpnMiMZxD/sxNjYbi
-	K4laHQ2rYP3NKqjgIqRRbP4ZOyJYE6VTeiTcv+tkxqII6pfDewbtrKFpqy3lcpHNWM2PkGeHQbi
-	WLFZVp4OoTe/rQIWspSrVTLABt2tqjtz6yWebFFUJy8=
-X-Google-Smtp-Source: AGHT+IE8VrZLLqKslcL188rLajfAM34SilsnBbD9W0WnpdKzzh54APHGTR/FM4gVgTAiG44i8wR3zg==
-X-Received: by 2002:a17:907:6ea5:b0:ad1:8f1f:6961 with SMTP id a640c23a62f3a-ad1d469315amr303992366b.43.1746542980641;
-        Tue, 06 May 2025 07:49:40 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1895090a1sm719542666b.137.2025.05.06.07.49.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 May 2025 07:49:40 -0700 (PDT)
-Message-ID: <443b9765-3677-4bff-a6b6-a89f6c73cb67@suse.com>
-Date: Tue, 6 May 2025 16:49:39 +0200
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="gnraZSc/"
+Received: from mail-nwsmtp-smtp-production-main-70.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-70.sas.yp-c.yandex.net [IPv6:2a02:6b8:c23:2129:0:640:f8ac:0])
+	by forward500b.mail.yandex.net (Yandex) with ESMTPS id AB8B161156;
+	Wed,  7 May 2025 09:05:50 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-70.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id m5WYc9CLiOs0-9866LMaW;
+	Wed, 07 May 2025 09:05:49 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1746597949; bh=LBvqOHa5i/eC5mjtMqbWEKKPim6LCpPnz0smpxs8rlQ=;
+	h=In-Reply-To:To:From:Cc:Date:References:Subject:Message-ID;
+	b=gnraZSc/PGbT90VEfZ8ioK0OoDaHONfZPyqQjCHOKUoUIQ2uClOO3mfSt/SPTbkX3
+	 yHu02W77YEoAlD8XfiIwmgGm2YiWPjJJ9lNLsfQ9kjqH2lZrGLzvJGXPyjJ87bLp0m
+	 QoSg5lv/a8FDamRnF4N9WipC+JkbkNdALYtkwzao=
+Authentication-Results: mail-nwsmtp-smtp-production-main-70.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <363c53d9-f25c-499d-a5e3-b89cdbdf0c84@yandex.ru>
+Date: Wed, 7 May 2025 09:05:48 +0300
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,106 +40,60 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] kernel: fix error handling in
  lookup_or_create_module_kobject()
-To: Dmitry Antipov <dmantipov@yandex.ru>
+Content-Language: en-MW
+To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
  <da.gomez@samsung.com>, Shyam Saini <shyamsaini@linux.microsoft.com>,
  linux-modules@vger.kernel.org,
  syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
 References: <20250506111742.3109640-1-dmantipov@yandex.ru>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250506111742.3109640-1-dmantipov@yandex.ru>
-Content-Type: text/plain; charset=UTF-8
+ <443b9765-3677-4bff-a6b6-a89f6c73cb67@suse.com>
+From: Dmitry Antipov <dmantipov@yandex.ru>
+Autocrypt: addr=dmantipov@yandex.ru; keydata=
+ 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
+ A/UwwXBRuvydGV0=
+In-Reply-To: <443b9765-3677-4bff-a6b6-a89f6c73cb67@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/6/25 13:17, Dmitry Antipov wrote:
-> In 'lookup_or_create_module_kobject()', an internal kobject is created
-> using 'module_ktype'. So plain 'kobject_put()' causes an attempt to use
-> an uninitialied completion pointer in 'module_kobject_release()' and
-> 'mod_kobject_put()' should be used instead. But if the driver (e.g. USB
-> gadget as in this particular case reported by syzkaller) is configured
-> as compiled-in, THIS_MODULE is NULL and there is no relevant module
-> object to call the latter against. So introduce an internal wrapper
-> '__module_kobject_put()' which is expected 'struct module_kobject' and
-> so fix error handling in 'lookup_or_create_module_kobject()'.
-> 
-> Reported-by: syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=7fb8a372e1f6add936dd
-> Fixes: 1c7777feb0e2 ("kernel: refactor lookup_or_create_module_kobject()")
+On 5/6/25 5:49 PM, Petr Pavlu wrote:
 
-I think this specific commit is harmless, rather the underlying problem
-was introduced already in 942e443127e9 ("module: Fix mod->mkobj.kobj
-potentially freed too early"). Commit f95bbfe18512 ("drivers: base:
-handle module_kobject creation") now allowed the problematic code to be
-reached by more paths and enabled syzkaller to find it.
+> This looks as a valid fix, but I wonder if it wouldn't be simpler to
+> have module_kobj_release() check if mk->kobj_completion is NULL.
 
-> [...]
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index b3329110d668..2b4ab389c1bc 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -891,6 +891,9 @@ static inline void module_for_each_mod(int(*func)(struct module *mod, void *data
->  #ifdef CONFIG_SYSFS
->  extern struct kset *module_kset;
->  extern const struct kobj_type module_ktype;
-> +void __module_kobject_put(struct module_kobject *mkobj);
-> +#else /* not CONFIG_SYSFS */
-> +static inline void __module_kobject_put(struct module_kobject *mkobj) { }
->  #endif /* CONFIG_SYSFS */
->  
->  #define symbol_request(x) try_then_request_module(symbol_get(x), "symbol:" #x)
-> diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-> index b401ff4b02d2..7519920f4f55 100644
-> --- a/kernel/module/sysfs.c
-> +++ b/kernel/module/sysfs.c
-> @@ -323,11 +323,7 @@ static int module_add_modinfo_attrs(struct module *mod)
->  
->  static void mod_kobject_put(struct module *mod)
->  {
-> -	DECLARE_COMPLETION_ONSTACK(c);
-> -
-> -	mod->mkobj.kobj_completion = &c;
-> -	kobject_put(&mod->mkobj.kobj);
-> -	wait_for_completion(&c);
-> +	__module_kobject_put(&mod->mkobj);
->  }
->  
->  static int mod_sysfs_init(struct module *mod)
-> @@ -362,6 +358,15 @@ static int mod_sysfs_init(struct module *mod)
->  	return err;
->  }
->  
-> +void __module_kobject_put(struct module_kobject *mkobj)
-> +{
-> +	DECLARE_COMPLETION_ONSTACK(c);
-> +
-> +	mkobj->kobj_completion = &c;
-> +	kobject_put(&mkobj->kobj);
-> +	wait_for_completion(&c);
-> +}
-> +
->  int mod_sysfs_setup(struct module *mod,
->  		    const struct load_info *info,
->  			   struct kernel_param *kparam,
-> diff --git a/kernel/params.c b/kernel/params.c
-> index e668fc90b83e..2cf1f17840e0 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -780,7 +780,8 @@ struct module_kobject __modinit * lookup_or_create_module_kobject(const char *na
->  	if (IS_ENABLED(CONFIG_MODULES) && !err)
->  		err = sysfs_create_file(&mk->kobj, &module_uevent.attr);
->  	if (err) {
-> -		kobject_put(&mk->kobj);
-> +		/* Not 'mod_kobject_put()' because THIS_MODULE may be NULL. */
-> +		__module_kobject_put(mk);
->  		pr_crit("Adding module '%s' to sysfs failed (%d), the system may be unstable.\n",
->  			name, err);
->  		return NULL;
+Indeed. Just submitted to syzbot and will send v2 if passed.
 
-This looks as a valid fix, but I wonder if it wouldn't be simpler to
-have module_kobj_release() check if mk->kobj_completion is NULL.
+Dmitry
 
--- 
-Thanks,
-Petr
