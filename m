@@ -1,110 +1,92 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A7428CF48
-	for <linux-modules@vger.kernel.org>; Wed,  7 May 2025 18:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7C328DEF3
+	for <linux-modules@vger.kernel.org>; Wed,  7 May 2025 22:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746642037; cv=none; b=buypY0jjWAi2R2n5z9QqgMf8LmrcBIMqbL6L5uX3XKh4FujiI1Q5O8riP4/wCdcdkBmVGlj4yPiddktkBUpq1vlc+WvaZdhjsS+wm1+ICsFjoa229Nc877zf/IiKwmvaTFpIk760ndR50lQuQnA52GB7qXvkLLTdTnlGoniJc/0=
+	t=1746658749; cv=none; b=IBqk++DVQc8HNpbjE+d4pR6VEIRPcZX/0S6bQCrRDC2NavzlomZME5+QJs6B5Aac+NT0zNJJd4hn8BOmL3eLKjFLYtlDo2ekLN3bF5hq/DWl79resFdHLf5gb+BZQDEDLhjTnUnO1pTF6cYESad2Rw+aEA0fyEef3/6QcymWTN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746642037; c=relaxed/simple;
-	bh=z18XYgcChS8zXxNh9QVEEmab39x+LJVWC0Ype+RFzD8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sEr/wrQLIPA0xsjFjhXfxhxlWrE7c4IO6wrHlu3p2FjBHvmTtrutdR2fKwO2mjRyQwDkW7iUq+h94RmSAyh9yUai+uuuFl4/0hJnD5mH1nrxMD5O1j0CGXAvvWEeY/wyfTCXtRF5/Ok+1KMmVrHeoVMd10jqnbjg18IRQ8bRgwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WVJ/+A5U; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746658749; c=relaxed/simple;
+	bh=4qznrIQd9heCD85pUFAjDNFme4Ro9HM6p9y3geLJfT8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MEQzPRqtThfLMZGD3mPmD1KSw+p1ravywgbGpvfHaViG3IX0AblY5Cl7vnNuR8UdWpIVKHmas6Ktttl2JKFzyGfrhznMrd64zbgi2QGisXFOrP6v/nLEG4sLul15XSPGw/p1qLMwb4OBH0NQPOs2SOJM+vO4WDllVVbfVURH1zA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sugdTwtC; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WVJ/+A5U"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5fbee929e56so258998a12.0
-        for <linux-modules@vger.kernel.org>; Wed, 07 May 2025 11:20:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sugdTwtC"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso2221a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 07 May 2025 15:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746642033; x=1747246833; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6KmTwub5XIvzQEqAnm2rWJBVIWH4S6tV1qp7ip13xz4=;
-        b=WVJ/+A5UK0SgmRwV+bkUGkU/GOChgCtrEE4KcIHQ0YesFc/SEpeyR8N/m1G6CZVpd6
-         /ZrR10gc6lMxjlQlkV8XQwGPL8ypU4Wh3gId8YUkT9h/b5aNzqzgxeI7p8tVBOKTKXsf
-         6KU62Ai5Qy2IYO2BSM4fdcmn18Lm4/KBgneJlx1301MTm+a3/8HGTinTfLMCZRqbFT0r
-         7aO1PzOhi5U0vUbKlRE1v43RbrQpkZsacrYomjgIaqiRxLL0USq9GhRDtVQzGgsyBml5
-         6s+0MdJgdgC1QpPzsFlIltqx3/E7b8St1N2NMvRVQldgu2KCIAWtImPBLWaGkGQu4hJp
-         inQQ==
+        d=google.com; s=20230601; t=1746658746; x=1747263546; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4qznrIQd9heCD85pUFAjDNFme4Ro9HM6p9y3geLJfT8=;
+        b=sugdTwtCFYvGjVFdweSDSrE0kpQ09IL+Jip36nQTXjB0TdLKr/tZJIlN7jt8ukf2DY
+         w5SO2yNGzy7Q4cVWIoqnlLt/nAwaSgVFsKijS2XZ8MFyTKTZvkSX5hm9qVvpmzJ6l38q
+         tVrBuI13GAl/r2paHdv1EaskwPtkqV5GUMdcoitnQ7YNAH0+V/u9R7akJQwpV+dRHlwE
+         qpeStstt3hwxwfGfcjBu+yAEOlRFfmAUcKDLNJzA06JHw7OGCF6GQM4Eyn+9huMvoL7d
+         Ff1Va48luWQMwjfeOJJfDP3eCLkFedKXU72xcNr4DvlzCKuPO5PFfbcgbzl0gvlLFEWT
+         aQgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746642033; x=1747246833;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6KmTwub5XIvzQEqAnm2rWJBVIWH4S6tV1qp7ip13xz4=;
-        b=GctxXBJ25LSV1nZkvW2aIchBhkXwJLZYsU4vTBUSFB9YFM4R+s1i4BUPt9ByGWTZR5
-         /FiXLtPCL9to9j4jnBHDNIpamgKNY/VgzL3n05HjThvGbsOikfWSzRs+zzgf0PFZH9N/
-         WmtgiRvJH32NqdXHtbiX7RzgLcTfQ0G6bXdLUdQ7Y/3a90An36BT3OZUdCQk6n1S415N
-         xJcpR0VY5A0Jf0zsSLTmRcep/7m7ehmWSUwPUFQxZbHe4FgnqA+EU27CHsr3duzuS5Zk
-         Tv78O3AD8HGKREoWLYQIeoWahA8ECKUzLW3RqPU41XrVX3Pywc5ZB51BOKaxWWPndF+L
-         MwDA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZaawVIdnANq/bIP+EqDjU1jFsgToiQrUeMKOVn8/SmApns97o4ZlWvMU8bkxx3x8pL4KltdbEiBcuNLgC@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4p3PjxS2davKrf6AzJl1GwlyYU6Dwq26pRkcNW/vWeiOrU4JE
-	XKN0Z8/3lC/PhTSLwQEWmXfPt0mnfUK6XYAZCIq2DL1Lt2SSicF6azxaUUf4J1w=
-X-Gm-Gg: ASbGnctmj0BB1zKaMrEs4qIzmFEe9TA6braHVf5uLGfWqY3hj2KBRGL6my7DP3hguFN
-	Ca6nl28ednZycKz1yfBPboUOi/DCj/mEHlOpUjMvsQiqCj1nrRRX5zYH9BKFWrFHoI8kv2hXTuZ
-	8X0eZkEAsY4E+0HkytDzpCYqSjapSuQWTfXm72t2axDGYUkQWK2SvTL9oCcEgrOMH6zLPQiduOo
-	5XFY+CQPERwE+mL63s2MEKu4XDiEaCZcc/pbUR/fNGe+fyPyutxeQ/Um+qrqQ0DZ/7AB5MJshYg
-	Jyf8Lh6r6WOMmtWjMFJm8phFDSHWRNnR0QRzptlmFnQ=
-X-Google-Smtp-Source: AGHT+IFhovQZrxUkJO1Cd/g09v88kM+KY2DagbzTEVR+sEJpE2K8UB9dnM4lHSRFg9sLxb7lehAbLQ==
-X-Received: by 2002:a17:906:ba86:b0:ad1:825f:e326 with SMTP id a640c23a62f3a-ad1e8e2b533mr365610566b.52.1746642033065;
-        Wed, 07 May 2025 11:20:33 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad189508dd9sm947958766b.144.2025.05.07.11.20.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 May 2025 11:20:32 -0700 (PDT)
-Message-ID: <a5543fda-6dbf-461a-9bcb-5750a459e140@suse.com>
-Date: Wed, 7 May 2025 20:20:31 +0200
+        d=1e100.net; s=20230601; t=1746658746; x=1747263546;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4qznrIQd9heCD85pUFAjDNFme4Ro9HM6p9y3geLJfT8=;
+        b=wMiUjzZiFswZ1TsARiK2vUxK4Qjik+cVKGkpopPOvOOxvonWWbGAD0kWXVZ9wOAsHu
+         OliCW3A656N8SrZi+LoOKEh8b6HHm2t0ilWch58E2THLR7CVyZzasg/mWxy6yNopAlyy
+         boza9s/ZeABA/EFM0tiCjmgDPYreKv8m40gBSsOBjMkn47FVD+Glzrbti+Ij9LwrkWSF
+         BdODCEdvpVgRKMXRrB+SgIJDb1TjXdJC/PIAUdHDq9Adu/D+3f2NyonzvZIa6V7VKghM
+         dL2ElppBcbr1S3Jyi136Gx3f18QyQq5YGf2qpLDYtzW0HmvD0hxA0r3ZUXjiCO/HShN/
+         xYsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVAp+9ru20Koga0i4uXoh6uJAEmGYRIx3Xr43bDnHSPzM3DVJ+fiGRjD1bj5ywnzJKYilVZ/ge9vLOy0vrt@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7uv6xuKQRHHqclPgHoTbGzlxTG0gdvksuYyb01GgXa3o+OCjM
+	BKii616RaOlQkypvi5vAste0vxCgnwD9cEZ1t7dvX8aAxyYlDtLTerJv4w74w4muw43cVzQMLsM
+	axGgPQvelcCBb17Se2kiLjx6aB/A+/KxQAocK
+X-Gm-Gg: ASbGncuXhA3sI+If0INWNTblQ8IfMGpOV/GZRbIW3hA+tRZGrq87UxJM6PIgMquqNRC
+	gAQKMziPjH5/bVjDYF73cTeCvejgfN67+uDCwqHtChEms/EffKqUU3y2lxU5s0PzeNngLHHxQ/4
+	PDBhiMNvNj+An/UbNEoqVv35BfHW2Bvde2/+fHfARBdj5wfHSv9Q==
+X-Google-Smtp-Source: AGHT+IG5UM76A79+IbRtPyKJbFmyzXpMUKCWJ9hqDVsiMGpyhjFhDGSChhn6i9wySXk6B9CqU0BGHm8UgBUgVRm87Zg=
+X-Received: by 2002:a05:6402:1a27:b0:5fb:ee5d:b5a2 with SMTP id
+ 4fb4d7f45d1cf-5fc6d4d522dmr15802a12.3.1746658746142; Wed, 07 May 2025
+ 15:59:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: ensure that kobject_put() is safe for module type
- kobjects
-To: Dmitry Antipov <dmantipov@yandex.ru>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Shyam Saini <shyamsaini@linux.microsoft.com>,
- linux-modules@vger.kernel.org,
- syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
-References: <443b9765-3677-4bff-a6b6-a89f6c73cb67@suse.com>
- <20250507065044.86529-1-dmantipov@yandex.ru>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250507065044.86529-1-dmantipov@yandex.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250505212401.3379699-6-samitolvanen@google.com>
+ <20250505212401.3379699-10-samitolvanen@google.com> <CAK7LNAS0Obe-ye1ba06EfZ+mgmc6ter+xMa+mKCw6aRM14L35Q@mail.gmail.com>
+In-Reply-To: <CAK7LNAS0Obe-ye1ba06EfZ+mgmc6ter+xMa+mKCw6aRM14L35Q@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Wed, 7 May 2025 22:58:28 +0000
+X-Gm-Features: ATxdqUH75sjGKquTsxZiAfvNfjaDztMLHXgmmKdCV2-0xtfGeIwBKHIdY6DuK4s
+Message-ID: <CABCJKueJ2+TpUyJsLOuy3_Q324iOhmKm50vf4UvRot51Hbi87A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] Documentation/kbuild: Add new gendwarfksyms kABI rules
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/7/25 08:50, Dmitry Antipov wrote:
-> In 'lookup_or_create_module_kobject()', an internal kobject is created
-> using 'module_ktype'. So call to 'kobject_put()' on error handling
-> path causes an attempt to use an uninitialized completion pointer in
-> 'module_kobject_release()'. In this scenario, we just want to release
-> kobject without an extra synchronization required for a regular module
-> unloading process, so adding an extra check whether 'complete()' is
-> actually required makes 'kobject_put()' safe.
-> 
-> Reported-by: syzbot+7fb8a372e1f6add936dd@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=7fb8a372e1f6add936dd
-> Fixes: 942e443127e9 ("module: Fix mod->mkobj.kobj potentially freed too early")
-> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
-> Signed-off-by: Dmitry Antipov <dmantipov@yandex.ru>
+Hi Masahiro,
 
-Added on modules-fixes.
+On Wed, May 7, 2025 at 12:28=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> Hmm, renumbering is annoying.
+>
+> Maybe, better to stop managing section numbers?
+>
+> For example, see this commit
+> 1a4c1c9df72ec266f94631edc59f9f2a9dc5aa8c
 
-I plan to send the fix to Linus on Friday. While the underlying problem
-was already there, commit f95bbfe18512 ("drivers: base: handle
-module_kobject creation"), merged in v6.15-rc5, made it more exposed and
-I think it's better to have it fixed in this cycle. The patch itself is
-also safe.
+Agreed, that looks much better. I'll send v3 that drops the section numbers=
+.
 
--- 
-Thanks,
-Petr
+Sami
