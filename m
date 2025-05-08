@@ -1,196 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BDAEACE;
-	Thu,  8 May 2025 15:43:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06105233129;
+	Thu,  8 May 2025 23:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746718997; cv=none; b=dMp1S59YtpP8H2hT9VVtENopovxc/2Z9PaRnZLgCy8b+i9TiQo/99kPYqt96G9BG2RAQ+NY3GyuYV3S00agH2Fi54wF2qD7VzIX83+IqPX3EyqafRoM1oIEvmE7M/bfCmzAUzWjzhvfZcKIe0JZhoU8S64+y+z4TNwjjAsT1Hc4=
+	t=1746747777; cv=none; b=NOfRLceXacpbfuhbEJuERwc4RHSJW/BfWrfgn/PRPy0iu/YkT9IWoNGiyE9zzfxwcTlOwhytGOkAzbyr1amH/RZQCCx8qTTRVlZISzUq7u80TsmN8y3/cgTajnBng9NFq8Ns3rpH9EDmqDkGIuscIx/hiukdX7ZLY6K4sSwOS9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746718997; c=relaxed/simple;
-	bh=8dzT9t3cVq9uoCuSIQ90NVeEcbBB9+by5+ie8IMugQ8=;
+	s=arc-20240116; t=1746747777; c=relaxed/simple;
+	bh=0HUJOi3Q80Hprk30UXwi1aPiSk0vyf8b/ThO0wu7JTU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ln5wHt0pmC4DDWLh+bHRWkW9L/PJJsCOvhwoGEiCRcrgec4WOLPNYsZtTId/GXVRkK9f6A4fi6UDKdCfEInyd6175my3SzO8eP9MtjTTWeL0c0HksiX8/ef9pYSCWTVHkuDOblT3J16w/U0UNB/0aC0OQM3Kbh4jE5Quqv+vCHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zm7vS+iy; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=cZQf/BHGwyb4C477hueIAA7s1phBnFS2lHiDjdbQmLei1hLThcmW9cwVsW9GKiZ89hyaUBiWU8pgHpIbvN6dK4k/5ESwJnzpuAjyjap3uZH5n02890P/T8Fum+FzzkQbKbs3bPdPXRqH/66EnmOxK0xtGPShRiFSb+6urdpv/9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nN+Uhtc4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zm7vS+iy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DE1C4CEE7;
-	Thu,  8 May 2025 15:43:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nN+Uhtc4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E528C4CEEF;
+	Thu,  8 May 2025 23:42:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746718997;
-	bh=8dzT9t3cVq9uoCuSIQ90NVeEcbBB9+by5+ie8IMugQ8=;
+	s=k20201202; t=1746747776;
+	bh=0HUJOi3Q80Hprk30UXwi1aPiSk0vyf8b/ThO0wu7JTU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Zm7vS+iyGUjtuMhrIIMoGMOy8ZH/dco8HscodTM5iaJHXjUEFwiL7QmiUDjiKu4av
-	 DJLPpxJ7QMZk1LiFxYpj0jsbzItKGw175pbmFlwf0vwIYDN3VClObTH8vUhuzFDdYM
-	 9we0p756dfothH8b/jLpcmpTTVeZjGlMGbPwXsNqIM5mfg+DVPaIaKB2SKJBDjFfFz
-	 yNR0uv87S26b8RbhT5XfPxZQZu9JQteNpGrIxvjLEZzyJ6isQEu5KaFvq3+UjsdDrM
-	 Auluf6nHmuovJIwO18OIh7WsA/x2efocBn8C2xRlSExu8y5rv/PDvbCIWGqsMYqliP
-	 iMlZPElawSAyg==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54e8e5d2cf0so353280e87.2;
-        Thu, 08 May 2025 08:43:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUcwXsFl4UPUHYFDUFMZsXWrBD27JRr7HRjoOON/GodURcaW/qrkP5niPK5Uh84Hq3p+BGD1fBdt9M+7Ao=@vger.kernel.org, AJvYcCUrqrPGbiYFPYLtljHWyBpAHxq6C6WISDoUKQiFUjeLMevbgb6boAOBmR3P6gx0xYWQJSsm6uEDUGAY94DH/w==@vger.kernel.org, AJvYcCVic/vG+PhMRzroa2Dv8RRNbRQA59lWjdS9rNm6nziePWhqxE/sw6aDySBwgxJZ1tpus4E4nH/OqbxRBxky@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3qIibiC9HZsdmFukxkwNM+CqZoB1sHUQEiA11A+0ZYc3zWqG9
-	2x1ljxRJv7A9v97P84oPDB67DxBkI4OF5tAdBSq0yVEacIFu/BjIKhbkc2+/LQSp7HY7YFtwBiR
-	c99Cb6/xGee4/830Sz1hI929xEWU=
-X-Google-Smtp-Source: AGHT+IHXPDlkKTVZsliqMRiUEIj6GXUnprks7pBvqNumLiMMlV8tS9d0Wtj0K810wh9q93R0tGlAj8OhA2xgxdLBCeo=
-X-Received: by 2002:a05:6512:6312:b0:54f:c57d:d52 with SMTP id
- 2adb3069b0e04-54fc57d1068mr290248e87.53.1746718996032; Thu, 08 May 2025
- 08:43:16 -0700 (PDT)
+	b=nN+Uhtc462Hu+w/2C3kAAaTTRqv9Ak/xNFa/6zE1GtbE8Hid/gAx2Lx6ZYddSplug
+	 /oe6k6FGX+6ov8SIplmw+8dp6ccDDGtp7VkSmOMcoDRKrAKeIzXRre2QY0CT9GdyJX
+	 TsF/5N2bsa5FDw70uGkYZuti1nY610rqNOiWeli5a9gJu5ij2U1IFJZp5WMXfRqZJz
+	 Rrv8+ZS0x1l9+MyuXnXgvz3OPtgTQeLXwXsK3yzj0urs9fjPWGOwOXeoA9zLMuRPiY
+	 rNeTqq+cMGXtm7sBkHoAc7YqvSZDOmdwZH1ooMsuLld6UwPd6pwPUsr2LXlunSW7ii
+	 qOrUUDtKae7Mg==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-326c77c40b7so910741fa.1;
+        Thu, 08 May 2025 16:42:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUte0B/ItH8UXSHaCnWF08wpHn+tJnjYxHCenqgMDiS3dMupdMtcI/NrCCMCnvj4dBiQHjzFV4BLrs8N7mF@vger.kernel.org, AJvYcCVq31QE4hXYGW7j9WO2ibGMRJNwjDrTe13QdyeaSUr3OrTpcd1pDGE/UfUEq37+lHyEaQHNRwtQ8ivWLhc=@vger.kernel.org, AJvYcCXWJY7mC8vZUaHjjGz+dhK6tkq3vEM93N0+894mcVEWwVi4Mq6sjhDGxClCnyoUYCiSd0GUtyV6W0we8jdRxw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMx0rTO9qVv2gVoyuOVXeqfZPycBregYKXouAtDRLdcWjx7ktd
+	trV/8pdZ7JCCcvT0YvRnXExcOgsP8XMHyIXNne1Tf7IgYtcq+Uag9OxemgFCT2yjaYSIjX/1wyw
+	2LrMJG6Ir4zNWdT1/zrmWXbfI2ls=
+X-Google-Smtp-Source: AGHT+IFutgJYGooy1gvSEVR+svX/xeEYLIPC6W5LG+HLCFIxGaiTojj5a8p3cZK/OwyE1rr2/SV0O4b5KV2idQTmwYM=
+X-Received: by 2002:a2e:a581:0:b0:30b:e3d9:37db with SMTP id
+ 38308e7fff4ca-326c46b0e3bmr5332311fa.26.1746747775141; Thu, 08 May 2025
+ 16:42:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com> <20250505093830.25688-1-legion@kernel.org>
-In-Reply-To: <20250505093830.25688-1-legion@kernel.org>
+References: <20250507231403.377725-7-samitolvanen@google.com>
+In-Reply-To: <20250507231403.377725-7-samitolvanen@google.com>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 9 May 2025 00:42:39 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
-X-Gm-Features: ATxdqUHtZwsNu7DYGBednPNaFe6cUsZ-BkNU4fcNRiLkOWnrzj0BkgeIiM396kk
-Message-ID: <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] modpost: Create modalias for builtin modules
-To: Alexey Gladkov <legion@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000048174e0634a1b5b9"
-
---00000000000048174e0634a1b5b9
+Date: Fri, 9 May 2025 08:42:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATt2hgPZyp_MP8DN=vYJ_TuvUQjU-U33ekbeVsLosE5uQ@mail.gmail.com>
+X-Gm-Features: ATxdqUFE3-GdXPp4I15WWFcPl25L6hm_U-yW6eCb7BzZSyDSLNfJ9cyOlThFr1E
+Message-ID: <CAK7LNATt2hgPZyp_MP8DN=vYJ_TuvUQjU-U33ekbeVsLosE5uQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] gendwarfksyms: Add more kABI rules
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 5, 2025 at 6:39=E2=80=AFPM Alexey Gladkov <legion@kernel.org> w=
-rote:
+On Thu, May 8, 2025 at 8:14=E2=80=AFAM Sami Tolvanen <samitolvanen@google.c=
+om> wrote:
 >
-> For some modules, modalias is generated using the modpost utility and
-> the section is added to the module file.
+> Hi,
 >
-> When a module is added inside vmlinux, modpost does not generate
-> modalias for such modules and the information is lost.
+> While looking deeper into the genksyms hacks that have been
+> needed during Android's 5.10 and 5.15 GKI lifecycles so far,
+> we found a few instances that are not covered by the existing
+> gendwarfksyms kABI stability rules. The first case involved
+> appending new members to a partially opaque data structure, and
+> the second case completely changing opaque types due to a large
+> backport that was necessary for both stability and security.
 >
-> As a result kmod (which uses modules.builtin.modinfo in userspace)
-> cannot determine that modalias is handled by a builtin kernel module.
+> These patches add rules that allow distribution maintainers
+> to deal with structure size changes, and as a last resort, to
+> completely override a type string used for version calculation.
+
+Applied to linux-kbuild.
+Thanks.
+
+
+> Sami
 >
-> $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
-> pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
->
-> $ modinfo xhci_pci
-> name:           xhci_pci
-> filename:       (builtin)
-> license:        GPL
-> file:           drivers/usb/host/xhci-pci
-> description:    xHCI PCI Host Controller Driver
->
-> Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
-> modpost if the module is built separately.
->
-> To fix this it is necessary to generate the same modalias for vmlinux as
-> for the individual modules. Fortunately '.vmlinux.export.o' is already
-> generated from which '.modinfo' can be extracted in the same way as for
-> vmlinux.o.
->
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
 > ---
 >
-> v2: As Petr Pavlu suggested, I separated the builtin modules from the ext=
-ernal
->     modules. I've also added a search for duplicate modules.
+> v3:
+> - Added a patch to drop documentation section numbers based
+>   on Masahiro's suggestion.
 >
-
-
-
+> v2: https://lore.kernel.org/r/20250505212401.3379699-6-samitolvanen@googl=
+e.com/
+> - Cleaned up type string parsing based on Petr's feedback.
+>
+> v1: https://lore.kernel.org/r/20250430214049.2658716-6-samitolvanen@googl=
+e.com/
+>
 > ---
->  include/linux/module.h   |  4 ----
->  scripts/mod/file2alias.c |  5 +++++
->  scripts/mod/modpost.c    | 35 +++++++++++++++++++++++++++--------
->  scripts/mod/modpost.h    | 15 ++++++++++++++-
->  4 files changed, 46 insertions(+), 13 deletions(-)
-
-
-I can implement this with less code change.
-
-I attached my patch.
-
-
-
-
+>
+> Sami Tolvanen (5):
+>   gendwarfksyms: Clean up kABI rule look-ups
+>   gendwarfksyms: Add a kABI rule to override byte_size attributes
+>   gendwarfksyms: Add a kABI rule to override type strings
+>   Documentation/kbuild: Drop section numbers
+>   Documentation/kbuild: Add new gendwarfksyms kABI rules
+>
+>  Documentation/kbuild/gendwarfksyms.rst   | 141 +++++++++++++++++-----
+>  scripts/gendwarfksyms/dwarf.c            |  14 ++-
+>  scripts/gendwarfksyms/examples/kabi.h    |  21 +++-
+>  scripts/gendwarfksyms/examples/kabi_ex.c |   7 ++
+>  scripts/gendwarfksyms/examples/kabi_ex.h | 101 +++++++++++++++-
+>  scripts/gendwarfksyms/gendwarfksyms.h    |   2 +
+>  scripts/gendwarfksyms/kabi.c             | 143 ++++++++++++++---------
+>  scripts/gendwarfksyms/types.c            | 140 +++++++++++++++++++---
+>  8 files changed, 470 insertions(+), 99 deletions(-)
+>
+>
+> base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
+> --
+> 2.49.0.987.g0cc8ee98dc-goog
+>
+>
 
 
 --=20
 Best Regards
 Masahiro Yamada
-
---00000000000048174e0634a1b5b9
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-Another-simple-implementation.patch"
-Content-Disposition: attachment; 
-	filename="0001-Another-simple-implementation.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_mafj37ap0>
-X-Attachment-Id: f_mafj37ap0
-
-RnJvbSAyOGI4NDMxZGI2OTZiMTVhNTgxMmQ2Y2EwYTczNzJhMzBlMDYwY2ZiIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3Jn
-PgpEYXRlOiBGcmksIDkgTWF5IDIwMjUgMDA6MjI6NDYgKzA5MDAKU3ViamVjdDogW1BBVENIXSBB
-bm90aGVyIHNpbXBsZSBpbXBsZW1lbnRhdGlvbgoKU2lnbmVkLW9mZi1ieTogTWFzYWhpcm8gWWFt
-YWRhIDxtYXNhaGlyb3lAa2VybmVsLm9yZz4KLS0tCiBpbmNsdWRlL2xpbnV4L21vZHVsZS5oICAg
-fCAgNCAtLS0tCiBzY3JpcHRzL21vZC9maWxlMmFsaWFzLmMgfCAxNiArKysrKysrKysrKysrKysr
-CiBzY3JpcHRzL21vZC9tb2Rwb3N0LmMgICAgfCAxNCArKysrKysrKysrKysrLQogc2NyaXB0cy9t
-b2QvbW9kcG9zdC5oICAgIHwgIDIgKysKIDQgZmlsZXMgY2hhbmdlZCwgMzEgaW5zZXJ0aW9ucygr
-KSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L21vZHVsZS5oIGIv
-aW5jbHVkZS9saW51eC9tb2R1bGUuaAppbmRleCAwMWZjZWNhNDdhNWIuLjE3ZTY5ZTRhMTgwMiAx
-MDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC9tb2R1bGUuaAorKysgYi9pbmNsdWRlL2xpbnV4L21v
-ZHVsZS5oCkBAIC0yNTksMTQgKzI1OSwxMCBAQCBzdHJ1Y3QgbW9kdWxlX2tvYmplY3QgKmxvb2t1
-cF9vcl9jcmVhdGVfbW9kdWxlX2tvYmplY3QoY29uc3QgY2hhciAqbmFtZSk7CiAJX19QQVNURSh0
-eXBlLAkJCVwKIAlfX1BBU1RFKF9fLCBuYW1lKSkpKSkpKQogCi0jaWZkZWYgTU9EVUxFCiAvKiBD
-cmVhdGVzIGFuIGFsaWFzIHNvIGZpbGUyYWxpYXMuYyBjYW4gZmluZCBkZXZpY2UgdGFibGUuICov
-CiAjZGVmaW5lIE1PRFVMRV9ERVZJQ0VfVEFCTEUodHlwZSwgbmFtZSkJCQlcCiBleHRlcm4gdHlw
-ZW9mKG5hbWUpIF9fbW9kX2RldmljZV90YWJsZSh0eXBlLCBuYW1lKQlcCiAgIF9fYXR0cmlidXRl
-X18gKCh1bnVzZWQsIGFsaWFzKF9fc3RyaW5naWZ5KG5hbWUpKSkpCi0jZWxzZSAgLyogIU1PRFVM
-RSAqLwotI2RlZmluZSBNT0RVTEVfREVWSUNFX1RBQkxFKHR5cGUsIG5hbWUpCi0jZW5kaWYKIAog
-LyogVmVyc2lvbiBvZiBmb3JtIFs8ZXBvY2g+Ol08dmVyc2lvbj5bLTxleHRyYS12ZXJzaW9uPl0u
-CiAgKiBPciBmb3IgQ1ZTL1JDUyBJRCB2ZXJzaW9uLCBldmVyeXRoaW5nIGJ1dCB0aGUgbnVtYmVy
-IGlzIHN0cmlwcGVkLgpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9tb2QvZmlsZTJhbGlhcy5jIGIvc2Ny
-aXB0cy9tb2QvZmlsZTJhbGlhcy5jCmluZGV4IGRmZjE3OTlhNGM3OS4uZDQyZjJjNzQyZmQ2IDEw
-MDY0NAotLS0gYS9zY3JpcHRzL21vZC9maWxlMmFsaWFzLmMKKysrIGIvc2NyaXB0cy9tb2QvZmls
-ZTJhbGlhcy5jCkBAIC0xNTI3LDUgKzE1MjcsMjEgQEAgdm9pZCBoYW5kbGVfbW9kZGV2dGFibGUo
-c3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgZWxmX2luZm8gKmluZm8sCiAJCX0KIAl9CiAKKwlp
-ZiAobW9kLT5pc192bWxpbnV4KSB7CisJCXN0cnVjdCBtb2R1bGVfYWxpYXMgKmFsaWFzOworCisJ
-CS8qCisJCSAqIElmIHRoaXMgaXMgdm1saW51eCwgcmVjb3JkIHRoZSBuYW1lIG9mIHRoZSBidWls
-dGluIG1vZHVsZS4KKwkJICogVHJhdmVyc2UgdGhlIGxpbmtlZCBsaXN0IGluIHRoZSByZXZlcnNl
-IG9yZGVyLCBhbmQgc2V0IHRoZQorCQkgKiBidWlsdGluX21vZG5hbWUgdW5sZXNzIGl0IGhhcyBh
-bHJlYWR5IGJlZW4gc2V0IGluIHRoZQorCQkgKiBwcmV2aW91cyBjYWxsLgorCQkgKi8KKwkJbGlz
-dF9mb3JfZWFjaF9lbnRyeV9yZXZlcnNlKGFsaWFzLCAmbW9kLT5hbGlhc2VzLCBub2RlKSB7CisJ
-CQlpZiAoYWxpYXMtPmJ1aWx0aW5fbW9kbmFtZSkKKwkJCQlicmVhazsKKwkJCWFsaWFzLT5idWls
-dGluX21vZG5hbWUgPSB4c3RybmR1cChtb2RuYW1lLCBtb2RuYW1lbGVuKTsKKwkJfQorCX0KKwog
-CWZyZWUoemVyb3MpOwogfQpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9tb2QvbW9kcG9zdC5jIGIvc2Ny
-aXB0cy9tb2QvbW9kcG9zdC5jCmluZGV4IGJlODk5MjFkNjBiNi4uMjg1YjZjMjBjNzYwIDEwMDY0
-NAotLS0gYS9zY3JpcHRzL21vZC9tb2Rwb3N0LmMKKysrIGIvc2NyaXB0cy9tb2QvbW9kcG9zdC5j
-CkBAIC0yMDIxLDExICsyMDIxLDIzIEBAIHN0YXRpYyB2b2lkIHdyaXRlX2lmX2NoYW5nZWQoc3Ry
-dWN0IGJ1ZmZlciAqYiwgY29uc3QgY2hhciAqZm5hbWUpCiBzdGF0aWMgdm9pZCB3cml0ZV92bWxp
-bnV4X2V4cG9ydF9jX2ZpbGUoc3RydWN0IG1vZHVsZSAqbW9kKQogewogCXN0cnVjdCBidWZmZXIg
-YnVmID0geyB9OworCXN0cnVjdCBtb2R1bGVfYWxpYXMgKmFsaWFzLCAqbmV4dDsKIAogCWJ1Zl9w
-cmludGYoJmJ1ZiwKLQkJICAgIiNpbmNsdWRlIDxsaW51eC9leHBvcnQtaW50ZXJuYWwuaD5cbiIp
-OworCQkgICAiI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC1pbnRlcm5hbC5oPlxuIgorCQkgICAiI2lu
-Y2x1ZGUgPGxpbnV4L21vZHVsZS5oPlxuIik7CiAKIAlhZGRfZXhwb3J0ZWRfc3ltYm9scygmYnVm
-LCBtb2QpOworCisJbGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKGFsaWFzLCBuZXh0LCAmbW9kLT5h
-bGlhc2VzLCBub2RlKSB7CisJCWJ1Zl9wcmludGYoJmJ1ZiwgIk1PRFVMRV9BTElBU19NT0ROQU1F
-KFwiJXNcIiwgXCIlc1wiKTtcbiIsCisJCQkgICBhbGlhcy0+YnVpbHRpbl9tb2RuYW1lLCBhbGlh
-cy0+c3RyKTsKKwkJbGlzdF9kZWwoJmFsaWFzLT5ub2RlKTsKKwkJcHJpbnRmKCJidWlsdGluIG1v
-ZG5hbWUgPSAlc1xuIiwgYWxpYXMtPmJ1aWx0aW5fbW9kbmFtZSk7CisJCWZyZWUoYWxpYXMtPmJ1
-aWx0aW5fbW9kbmFtZSk7CisJCWZyZWUoYWxpYXMpOworCX0KKwogCXdyaXRlX2lmX2NoYW5nZWQo
-JmJ1ZiwgIi52bWxpbnV4LmV4cG9ydC5jIik7CiAJZnJlZShidWYucCk7CiB9CmRpZmYgLS1naXQg
-YS9zY3JpcHRzL21vZC9tb2Rwb3N0LmggYi9zY3JpcHRzL21vZC9tb2Rwb3N0LmgKaW5kZXggOTEz
-M2U0YzM4MDNmLi4yYWVjYjhmMjVjODcgMTAwNjQ0Ci0tLSBhL3NjcmlwdHMvbW9kL21vZHBvc3Qu
-aAorKysgYi9zY3JpcHRzL21vZC9tb2Rwb3N0LmgKQEAgLTk5LDEwICs5OSwxMiBAQCBidWZfd3Jp
-dGUoc3RydWN0IGJ1ZmZlciAqYnVmLCBjb25zdCBjaGFyICpzLCBpbnQgbGVuKTsKICAqIHN0cnVj
-dCBtb2R1bGVfYWxpYXMgLSBhdXRvLWdlbmVyYXRlZCBNT0RVTEVfQUxJQVMoKQogICoKICAqIEBu
-b2RlOiBsaW5rZWQgdG8gbW9kdWxlOjphbGlhc2VzCisgKiBAbW9kbmFtZTogbmFtZSBvZiB0aGUg
-YnVpbHRpbiBtb2R1bGUgKG9ubHkgZm9yIHZtbGludXgpCiAgKiBAc3RyOiBhIHN0cmluZyBmb3Ig
-TU9EVUxFX0FMSUFTKCkKICAqLwogc3RydWN0IG1vZHVsZV9hbGlhcyB7CiAJc3RydWN0IGxpc3Rf
-aGVhZCBub2RlOworCWNoYXIgKmJ1aWx0aW5fbW9kbmFtZTsKIAljaGFyIHN0cltdOwogfTsKIAot
-LSAKMi40My4wCgo=
---00000000000048174e0634a1b5b9--
