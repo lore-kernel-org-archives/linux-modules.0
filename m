@@ -1,294 +1,196 @@
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A768F205E3E;
-	Thu,  8 May 2025 07:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.136.29.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BDAEACE;
+	Thu,  8 May 2025 15:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746691067; cv=none; b=VhtrXPFQppWBGfwteGytr0oPSP07QvD0phjFpxlVEibRJKWHxFZQf51A70NGmDgUz9yLfOBkI1HIQV6lL3uzSRvsl+JluBg7p2Fciye93K+FVxS2Sp02LcKVOiu5z482urxEESRW7oK1r4zxXJs4Yvw8J3lm8h0FeQCzTEHt698=
+	t=1746718997; cv=none; b=dMp1S59YtpP8H2hT9VVtENopovxc/2Z9PaRnZLgCy8b+i9TiQo/99kPYqt96G9BG2RAQ+NY3GyuYV3S00agH2Fi54wF2qD7VzIX83+IqPX3EyqafRoM1oIEvmE7M/bfCmzAUzWjzhvfZcKIe0JZhoU8S64+y+z4TNwjjAsT1Hc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746691067; c=relaxed/simple;
-	bh=vHvfFeQoNuO3261AXhQ0ELQU+4a4g0bhmooGcXbPOXw=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:MIME-Version:
-	 Message-Id:Content-Type; b=Hh/Wh7L1iz8ARmSC6yJvUd2tsIH0XCQPR4ZihiihEqlijn7zGq2qEKoO/7Dq4WBBqUoq8wBf2A4+N+vyScdqRK3eATvFntbicPCJKmpQTRGbLJpq9O2+uphbE4aGkeJhfBPymsrHl6wVsKIuetPGv58qkXJs30z/AoLokPoG4iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com; spf=pass smtp.mailfrom=proxmox.com; arc=none smtp.client-ip=94.136.29.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=proxmox.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proxmox.com
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-	by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 3421842BEA;
-	Thu,  8 May 2025 09:57:36 +0200 (CEST)
-Date: Thu, 08 May 2025 09:57:31 +0200
-From: Fabian =?iso-8859-1?q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-To: Arnout Engelen <arnout@bzzt.net>, James Bottomley
-	<James.Bottomley@HansenPartnership.com>, Thomas =?iso-8859-1?q?Wei=DFschuh?=
-	<linux@weissschuh.net>
-Cc: Arnd Bergmann <arnd@arndb.de>, Christian Heusel <christian@heusel.eu>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Jonathan Corbet
-	<corbet@lwn.net>, Daniel Gomez <da.gomez@samsung.com>, Dmitry Kasatkin
-	<dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>,
-	James Morris <jmorris@namei.org>, kpcyrd <kpcyrd@archlinux.org>,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-security-module@vger.kernel.org,
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Masahiro Yamada
-	<masahiroy@kernel.org>, Mattia Rizzolo <mattia@mapreri.org>,
-	=?iso-8859-1?b?Q+JqdQ==?= Mihai-Drosi <mcaju95@gmail.com>, Luis Chamberlain
-	<mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, Nathan Chancellor
-	<nathan@kernel.org>, Naveen N Rao <naveen@kernel.org>, Nicolas Schier
-	<nicolas.schier@linux.dev>, =?iso-8859-1?q?Nicholas=0A?= Piggin
-	<npiggin@gmail.com>, Paul Moore <paul@paul-moore.com>, Petr Pavlu
-	<petr.pavlu@suse.com>, =?iso-8859-1?q?Roberto=0A?= Sassu
-	<roberto.sassu@huawei.com>, Sami Tolvanen <samitolvanen@google.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-	<f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
-	<840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
-	<b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-	<072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
-	<2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
-	<6615efdc-3a84-4f1c-8a93-d7333bee0711@app.fastmail.com>
-	<7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
-In-Reply-To: <7e2d25f9abb13468e5b8bb8207149999de318725.camel@HansenPartnership.com>
+	s=arc-20240116; t=1746718997; c=relaxed/simple;
+	bh=8dzT9t3cVq9uoCuSIQ90NVeEcbBB9+by5+ie8IMugQ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ln5wHt0pmC4DDWLh+bHRWkW9L/PJJsCOvhwoGEiCRcrgec4WOLPNYsZtTId/GXVRkK9f6A4fi6UDKdCfEInyd6175my3SzO8eP9MtjTTWeL0c0HksiX8/ef9pYSCWTVHkuDOblT3J16w/U0UNB/0aC0OQM3Kbh4jE5Quqv+vCHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zm7vS+iy; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zm7vS+iy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DE1C4CEE7;
+	Thu,  8 May 2025 15:43:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746718997;
+	bh=8dzT9t3cVq9uoCuSIQ90NVeEcbBB9+by5+ie8IMugQ8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Zm7vS+iyGUjtuMhrIIMoGMOy8ZH/dco8HscodTM5iaJHXjUEFwiL7QmiUDjiKu4av
+	 DJLPpxJ7QMZk1LiFxYpj0jsbzItKGw175pbmFlwf0vwIYDN3VClObTH8vUhuzFDdYM
+	 9we0p756dfothH8b/jLpcmpTTVeZjGlMGbPwXsNqIM5mfg+DVPaIaKB2SKJBDjFfFz
+	 yNR0uv87S26b8RbhT5XfPxZQZu9JQteNpGrIxvjLEZzyJ6isQEu5KaFvq3+UjsdDrM
+	 Auluf6nHmuovJIwO18OIh7WsA/x2efocBn8C2xRlSExu8y5rv/PDvbCIWGqsMYqliP
+	 iMlZPElawSAyg==
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-54e8e5d2cf0so353280e87.2;
+        Thu, 08 May 2025 08:43:17 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUcwXsFl4UPUHYFDUFMZsXWrBD27JRr7HRjoOON/GodURcaW/qrkP5niPK5Uh84Hq3p+BGD1fBdt9M+7Ao=@vger.kernel.org, AJvYcCUrqrPGbiYFPYLtljHWyBpAHxq6C6WISDoUKQiFUjeLMevbgb6boAOBmR3P6gx0xYWQJSsm6uEDUGAY94DH/w==@vger.kernel.org, AJvYcCVic/vG+PhMRzroa2Dv8RRNbRQA59lWjdS9rNm6nziePWhqxE/sw6aDySBwgxJZ1tpus4E4nH/OqbxRBxky@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3qIibiC9HZsdmFukxkwNM+CqZoB1sHUQEiA11A+0ZYc3zWqG9
+	2x1ljxRJv7A9v97P84oPDB67DxBkI4OF5tAdBSq0yVEacIFu/BjIKhbkc2+/LQSp7HY7YFtwBiR
+	c99Cb6/xGee4/830Sz1hI929xEWU=
+X-Google-Smtp-Source: AGHT+IHXPDlkKTVZsliqMRiUEIj6GXUnprks7pBvqNumLiMMlV8tS9d0Wtj0K810wh9q93R0tGlAj8OhA2xgxdLBCeo=
+X-Received: by 2002:a05:6512:6312:b0:54f:c57d:d52 with SMTP id
+ 2adb3069b0e04-54fc57d1068mr290248e87.53.1746718996032; Thu, 08 May 2025
+ 08:43:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1746688246.p9f7lm4alu.astroid@yuna.none>
-Content-Type: text/plain; charset=utf-8
+References: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com> <20250505093830.25688-1-legion@kernel.org>
+In-Reply-To: <20250505093830.25688-1-legion@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 9 May 2025 00:42:39 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
+X-Gm-Features: ATxdqUHtZwsNu7DYGBednPNaFe6cUsZ-BkNU4fcNRiLkOWnrzj0BkgeIiM396kk
+Message-ID: <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] modpost: Create modalias for builtin modules
+To: Alexey Gladkov <legion@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000048174e0634a1b5b9"
+
+--00000000000048174e0634a1b5b9
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On May 7, 2025 6:41 pm, James Bottomley wrote:
-> On Wed, 2025-05-07 at 09:47 +0200, Arnout Engelen wrote:
->> On Tue, May 6, 2025, at 15:24, James Bottomley wrote:
->> > I'll repeat the key point again: all modern hermetic build systems
->> > come with provenance which is usually a signature.
->>=20
->> I'm not sure the 'hermetic build' parallel is so applicable here:
->> typically a hermetic build will produce an artifact and a signature,
->> and when you embed that result in a larger aggregate, you only embed
->> the artifact (not the signature) and sign the aggregate.
->=20
-> That depends whether you want to demonstrate the provenance of the
-> result to someone consuming your aggregate or not; Some people are OK
-> with the trust my signature approach, others want tracing to point of
-> origin.
+On Mon, May 5, 2025 at 6:39=E2=80=AFPM Alexey Gladkov <legion@kernel.org> w=
+rote:
+>
+> For some modules, modalias is generated using the modpost utility and
+> the section is added to the module file.
+>
+> When a module is added inside vmlinux, modpost does not generate
+> modalias for such modules and the information is lost.
+>
+> As a result kmod (which uses modules.builtin.modinfo in userspace)
+> cannot determine that modalias is handled by a builtin kernel module.
+>
+> $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
+> pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+>
+> $ modinfo xhci_pci
+> name:           xhci_pci
+> filename:       (builtin)
+> license:        GPL
+> file:           drivers/usb/host/xhci-pci
+> description:    xHCI PCI Host Controller Driver
+>
+> Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
+> modpost if the module is built separately.
+>
+> To fix this it is necessary to generate the same modalias for vmlinux as
+> for the individual modules. Fortunately '.vmlinux.export.o' is already
+> generated from which '.modinfo' can be extracted in the same way as for
+> vmlinux.o.
+>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>
+> v2: As Petr Pavlu suggested, I separated the builtin modules from the ext=
+ernal
+>     modules. I've also added a search for duplicate modules.
+>
 
-Debian (and derivaties) handle it that way - build results are signed
-but the aggregate (repository) has its own signature, and only that is
-used as trust anchor by apt. source packages have indiviual signatures
-by whoever uploaded them, so you can verify that if you (want to)
-rebuild.
 
->>  With module signatures, the module *and* their signatures are
->> embedded in the aggregate (e.g. ISO, disk image), which is
->> where (at least in my case) the friction comes from.
->=20
-> For Linux in particular, most people won't be booting any image unless
-> the binary is secure boot signed, so this problem doesn't go away if
-> you strip module signatures.
 
-it is reduced in complexity though, see below.
+> ---
+>  include/linux/module.h   |  4 ----
+>  scripts/mod/file2alias.c |  5 +++++
+>  scripts/mod/modpost.c    | 35 +++++++++++++++++++++++++++--------
+>  scripts/mod/modpost.h    | 15 ++++++++++++++-
+>  4 files changed, 46 insertions(+), 13 deletions(-)
 
->> > Plus, you've got to remember that a signature is a cryptographic
->> > function of the hash over the build minus the signature.=C2=A0 You can=
-'t
->> > verify a signature unless you know how to get the build minus the
->> > signature.=C2=A0 So the process is required to be deterministic.
->>=20
->> Right: there is no friction validating the module signatures, that is
->> fine. There is friction validating the aggregate artifact (e.g. ISO,
->> disk image), though, because of those signatures embedded into it.
->=20
-> I think we understand the problem with signatures (particularly the
-> ones which add entropy and can thus change every time the same object
-> is signed).  However, I don't think we can accept that no signatures
-> can be on the ISO ... we'll have to have at least secure boot
-> signatures and if there's a way of doing that then there should be a
-> way of doing other signatures.
 
-secure boot signatures (other than for kernel modules) are added as a
-separate step at least in Debian(-based distros). this means that for
-every -signed package you have an unsigned counter part that is
-(hopefully) reproducible, and the difference is only the signature(s)
-(which might be detached or attached, depending on the package).
+I can implement this with less code change.
 
-building such a package boils down to:
-- build the unsigned package(s) + a helper package instructing the signing
-  machinery which files to sign with which key
-- pass the helper package to the signing infrastructure
-- signing infrastructure calculates digest and generates signature
-  value, and puts that into another source package for the -signed
-  variant
-- "build" that source package (e.g., [0]), which might mean attaching
-  the signature to the corresponding binary artifact, or just storing
-  the signature somewhere to be handled later
+I attached my patch.
 
-this way, the part of infrastructure that handles signing (and thus
-access to the corresponding secret key material) is decoupled from the
-regular build infrastructure and can have a vastly reduced attack
-surface. it has the additional side-effect that the actual "build" steps
-are each reproducible (modulo bugs affecting that, of course). the
-signing step obviously isn't, but that isn't really a problem..
 
->> As you mentioned earlier, of course this is *possible* to do (for
->> example by adding the signatures as inputs to the second
->> 'independent' build or by creating a hard-to-validate 'check recipe'
->> running the build in reverse). Still, checking modules at run time by
->> hash instead of by signature would be a much simpler option for such
->> scenario's.
->=20
-> Well, my objection was merely to the description saying verifying
-> reproducibility with signatures was not possible (it is).
 
-verifying reproducibility of the *unsigned* kernel package doesn't
-require any special hacks or mangling if the modules themselves are not
-signed using an ephemeral key. (there are currently still other issues
-affecting reproducibility, but that would be the goal!)
 
-> However, the problem with distros adopting an immutable hash list for
-> module loading would be DKMS, but I think the distributions that go
-> that route have all solved the reproducibility issues with signatures
-> anyway, so perhaps that's not an issue.
 
-DKMS usually uses MOK as trust anchor, and that key is not
-provided/managed by the distro, all the signing happens on the user
-side, DKMS packages just ship the module source code + build scripts.
 
-so this is orthogonal - yes, if you want to support DKMS (or other
-out-of-tree modules), those modules cannot be included in an in-tree
-hash list and would still need to be signed somehow by a trusted key.
+--=20
+Best Regards
+Masahiro Yamada
 
-basically, both current solutions have downsides:
+--00000000000048174e0634a1b5b9
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-Another-simple-implementation.patch"
+Content-Disposition: attachment; 
+	filename="0001-Another-simple-implementation.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mafj37ap0>
+X-Attachment-Id: f_mafj37ap0
 
-- signing modules after the build, similar to the kernel image itself,
-  is rather impractical with the number of modules shipped by the usual
-  distro packages, and relies on other safeguards/invariants not being
-  broken to prevent downgrade attacks
-- signing modules during the build using an ephemeral key requires
-  stripping the signatures when verifying reproducibility (this
-  discussion ;)), but also requires enough entropy and not even
-  read-only access to the build environment by a potential attacker,
-  since if they can read/leak the ephemeral key, they can later attack
-  all systems running this particular kernel build
-
-in practice many distros combine both approaches - ephemeral keys for
-modules shipped as part of the kernel build, other trusted keys for
-out-of-tree modules like DKMS, proprietary drivers, livepatching, ..
-
-the module hash approach (provided it has an opt-in escape hatch for
-trusted out-of-tree modules like DKMS) solves all those downsides, as
-far as I can tell. you still need all the safeguards/invariants if you
-use signed out-of-tree modules of course, if that is part of your use
-case. but e.g. AFAIK for Debian (and us as downstream), the only modules
-not built as part of the kernel build are built by DKMS on user systems,
-and those are signed by the MOK managed by the user/admin.
-
->> > > > All current secure build processes (hermetic builds, SLSA and
->> > > > the like) are requiring output provenance (i.e. signed
->> > > > artifacts).=C2=A0 If you try to stand like Canute against this tid=
-e
->> > > > saying "no signed builds", you're simply opposing progress for
->> > > > the sake of it
->> > >=20
->> > > I don't think anyone is saying 'no signed builds', but we'd enjoy
->> > > being able to keep the signatures as detached metadata instead of
->> > > having to embed them into the 'actual' artifacts.
->> >=20
->> > We had this debate about 15 years ago when Debian first started
->> > reproducible builds for the kernel.=C2=A0 Their initial approach was
->> > detached module signatures.=C2=A0 This was the original patch set:
->> >=20
->> > https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.=
-org.uk/
->> >=20
->> > And this is the reason why Debian abandoned it:
->> >=20
->> > https://lists.debian.org/debian-kernel/2016/05/msg00384.html
->>=20
->> That is interesting history, thanks for digging that up. Of the 2
->> problems Ben mentions running into there, '1' does not seem universal
->> (I think this feature is indeed mainly interesting for systems where
->> you don't _want_ anyone to be able to load locally-built modules),
->> and '2' is a problem that detached signatures have but module hashes
->> don't have.
->=20
-> I think Debian ended up going with 2, but since they also provide DKMS
-> infrastructure, hash module lists won't work for them anyway.
-
-Debian switched to using an ephemeral key 1.5 years ago for the modules
-shipped with the kernel package itself (the dkms package ships MOK
-integration to streamline that usecase)[1].
-
-build artifacts in Debian are signed in a way that makes reproducing
-them straightforward - the (provenance) signatures are not embedded into
-the packages. it's basically just secure boot where Debian generates the
-signature and *has* to store it inside a package, and there the actual
-build and the signature handling are decoupled to minimize the fallout.
-
->> > The specific problem is why detached signatures are almost always a
->> > problem: after a period of time, particularly if the process for
->> > creating updated artifacts gets repeated often matching the output
->> > to the right signature becomes increasingly error prone.
->>=20
->> I haven't experienced that issue with the module hashes yet.
->=20
-> Heh, I'll repeat this question after you've done umpteen builds of the
-> same kernel for debugging purposes. The problem that will bite me is
-> that I often just rebuild a single module and reinsert to try to chase
-> a bug down.  With this scheme I can't simply reinsert, I'd have to
-> rebuild the hash list and reboot the entire vmlinux.
-
-or you could sign the module with a MOK - supporting that in combination
-with the hash list is a requirement for pretty much every distro out
-there anyway to support DKMS?
-
->> > Debian was, however, kind enough to attach what they currently do
->> > to get reproducible builds to the kernel documentation:
->> >=20
->> > https://docs.kernel.org/kbuild/reproducible-builds.html
->>=20
->> Cool, I was aware of that page but didn't know it was initially
->> contributed by Debian.
->>=20
->> > However, if you want to detach the module signatures for packaging,
->> > so the modules can go in a reproducible section and the signatures
->> > elsewhere, then I think we could accommodate that (the output of
->> > the build is actually unsigned modules, they just get signed on
->> > install).
->>=20
->> At least I don't really come to this from the packaging perspective,
->> but from the "building an independently verifiable ISO/disk image"
->> perspective. Separating the modules and the signatures into separate
->> packages doesn't help me there, since they'd still both need to be
->> present on the image.
->=20
-> So how do you cope with secure boot?  I mean if the object is to
-> produce an ISO that is demonstrably reproducible but otherwise
-> unusable, we can certainly script a way to excise all the signatures
-> including the secure boot one.
-
-although I am not the one you directed this question at, I'd still like
-to give an answer from my PoV:
-
-by simply treating both the -unsigned and -signed source packages as
-separate input for determining reproducibility, you can work around this
-issue. the signature is part of the "source" of the latter, and as long
-as the unsigned package is reproducible, the signed counterpart is as
-well, even if you haven't "reproduced" the signature creation.
-
-this is exactly the reason why ephemeral keys used for signing are
-breaking reproducible builds, it's no longer possible to reproduce the
-"partially-signed"[2] kernel package in the usual fashion (without
-mangling).
-
-0: https://buildd.debian.org/status/fetch.php?pkg=3Dfwupd-amd64-signed&arch=
-=3Damd64&ver=3D1%3A1.7%2B1&stamp=3D1726899394&raw=3D0
-1: https://tracker.debian.org/news/1482751/accepted-linux-663-1exp1-source-=
-into-experimental/
-2: i.e., with just the modules signed, but the image itself not
-
+RnJvbSAyOGI4NDMxZGI2OTZiMTVhNTgxMmQ2Y2EwYTczNzJhMzBlMDYwY2ZiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXNhaGlybyBZYW1hZGEgPG1hc2FoaXJveUBrZXJuZWwub3Jn
+PgpEYXRlOiBGcmksIDkgTWF5IDIwMjUgMDA6MjI6NDYgKzA5MDAKU3ViamVjdDogW1BBVENIXSBB
+bm90aGVyIHNpbXBsZSBpbXBsZW1lbnRhdGlvbgoKU2lnbmVkLW9mZi1ieTogTWFzYWhpcm8gWWFt
+YWRhIDxtYXNhaGlyb3lAa2VybmVsLm9yZz4KLS0tCiBpbmNsdWRlL2xpbnV4L21vZHVsZS5oICAg
+fCAgNCAtLS0tCiBzY3JpcHRzL21vZC9maWxlMmFsaWFzLmMgfCAxNiArKysrKysrKysrKysrKysr
+CiBzY3JpcHRzL21vZC9tb2Rwb3N0LmMgICAgfCAxNCArKysrKysrKysrKysrLQogc2NyaXB0cy9t
+b2QvbW9kcG9zdC5oICAgIHwgIDIgKysKIDQgZmlsZXMgY2hhbmdlZCwgMzEgaW5zZXJ0aW9ucygr
+KSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L21vZHVsZS5oIGIv
+aW5jbHVkZS9saW51eC9tb2R1bGUuaAppbmRleCAwMWZjZWNhNDdhNWIuLjE3ZTY5ZTRhMTgwMiAx
+MDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC9tb2R1bGUuaAorKysgYi9pbmNsdWRlL2xpbnV4L21v
+ZHVsZS5oCkBAIC0yNTksMTQgKzI1OSwxMCBAQCBzdHJ1Y3QgbW9kdWxlX2tvYmplY3QgKmxvb2t1
+cF9vcl9jcmVhdGVfbW9kdWxlX2tvYmplY3QoY29uc3QgY2hhciAqbmFtZSk7CiAJX19QQVNURSh0
+eXBlLAkJCVwKIAlfX1BBU1RFKF9fLCBuYW1lKSkpKSkpKQogCi0jaWZkZWYgTU9EVUxFCiAvKiBD
+cmVhdGVzIGFuIGFsaWFzIHNvIGZpbGUyYWxpYXMuYyBjYW4gZmluZCBkZXZpY2UgdGFibGUuICov
+CiAjZGVmaW5lIE1PRFVMRV9ERVZJQ0VfVEFCTEUodHlwZSwgbmFtZSkJCQlcCiBleHRlcm4gdHlw
+ZW9mKG5hbWUpIF9fbW9kX2RldmljZV90YWJsZSh0eXBlLCBuYW1lKQlcCiAgIF9fYXR0cmlidXRl
+X18gKCh1bnVzZWQsIGFsaWFzKF9fc3RyaW5naWZ5KG5hbWUpKSkpCi0jZWxzZSAgLyogIU1PRFVM
+RSAqLwotI2RlZmluZSBNT0RVTEVfREVWSUNFX1RBQkxFKHR5cGUsIG5hbWUpCi0jZW5kaWYKIAog
+LyogVmVyc2lvbiBvZiBmb3JtIFs8ZXBvY2g+Ol08dmVyc2lvbj5bLTxleHRyYS12ZXJzaW9uPl0u
+CiAgKiBPciBmb3IgQ1ZTL1JDUyBJRCB2ZXJzaW9uLCBldmVyeXRoaW5nIGJ1dCB0aGUgbnVtYmVy
+IGlzIHN0cmlwcGVkLgpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9tb2QvZmlsZTJhbGlhcy5jIGIvc2Ny
+aXB0cy9tb2QvZmlsZTJhbGlhcy5jCmluZGV4IGRmZjE3OTlhNGM3OS4uZDQyZjJjNzQyZmQ2IDEw
+MDY0NAotLS0gYS9zY3JpcHRzL21vZC9maWxlMmFsaWFzLmMKKysrIGIvc2NyaXB0cy9tb2QvZmls
+ZTJhbGlhcy5jCkBAIC0xNTI3LDUgKzE1MjcsMjEgQEAgdm9pZCBoYW5kbGVfbW9kZGV2dGFibGUo
+c3RydWN0IG1vZHVsZSAqbW9kLCBzdHJ1Y3QgZWxmX2luZm8gKmluZm8sCiAJCX0KIAl9CiAKKwlp
+ZiAobW9kLT5pc192bWxpbnV4KSB7CisJCXN0cnVjdCBtb2R1bGVfYWxpYXMgKmFsaWFzOworCisJ
+CS8qCisJCSAqIElmIHRoaXMgaXMgdm1saW51eCwgcmVjb3JkIHRoZSBuYW1lIG9mIHRoZSBidWls
+dGluIG1vZHVsZS4KKwkJICogVHJhdmVyc2UgdGhlIGxpbmtlZCBsaXN0IGluIHRoZSByZXZlcnNl
+IG9yZGVyLCBhbmQgc2V0IHRoZQorCQkgKiBidWlsdGluX21vZG5hbWUgdW5sZXNzIGl0IGhhcyBh
+bHJlYWR5IGJlZW4gc2V0IGluIHRoZQorCQkgKiBwcmV2aW91cyBjYWxsLgorCQkgKi8KKwkJbGlz
+dF9mb3JfZWFjaF9lbnRyeV9yZXZlcnNlKGFsaWFzLCAmbW9kLT5hbGlhc2VzLCBub2RlKSB7CisJ
+CQlpZiAoYWxpYXMtPmJ1aWx0aW5fbW9kbmFtZSkKKwkJCQlicmVhazsKKwkJCWFsaWFzLT5idWls
+dGluX21vZG5hbWUgPSB4c3RybmR1cChtb2RuYW1lLCBtb2RuYW1lbGVuKTsKKwkJfQorCX0KKwog
+CWZyZWUoemVyb3MpOwogfQpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9tb2QvbW9kcG9zdC5jIGIvc2Ny
+aXB0cy9tb2QvbW9kcG9zdC5jCmluZGV4IGJlODk5MjFkNjBiNi4uMjg1YjZjMjBjNzYwIDEwMDY0
+NAotLS0gYS9zY3JpcHRzL21vZC9tb2Rwb3N0LmMKKysrIGIvc2NyaXB0cy9tb2QvbW9kcG9zdC5j
+CkBAIC0yMDIxLDExICsyMDIxLDIzIEBAIHN0YXRpYyB2b2lkIHdyaXRlX2lmX2NoYW5nZWQoc3Ry
+dWN0IGJ1ZmZlciAqYiwgY29uc3QgY2hhciAqZm5hbWUpCiBzdGF0aWMgdm9pZCB3cml0ZV92bWxp
+bnV4X2V4cG9ydF9jX2ZpbGUoc3RydWN0IG1vZHVsZSAqbW9kKQogewogCXN0cnVjdCBidWZmZXIg
+YnVmID0geyB9OworCXN0cnVjdCBtb2R1bGVfYWxpYXMgKmFsaWFzLCAqbmV4dDsKIAogCWJ1Zl9w
+cmludGYoJmJ1ZiwKLQkJICAgIiNpbmNsdWRlIDxsaW51eC9leHBvcnQtaW50ZXJuYWwuaD5cbiIp
+OworCQkgICAiI2luY2x1ZGUgPGxpbnV4L2V4cG9ydC1pbnRlcm5hbC5oPlxuIgorCQkgICAiI2lu
+Y2x1ZGUgPGxpbnV4L21vZHVsZS5oPlxuIik7CiAKIAlhZGRfZXhwb3J0ZWRfc3ltYm9scygmYnVm
+LCBtb2QpOworCisJbGlzdF9mb3JfZWFjaF9lbnRyeV9zYWZlKGFsaWFzLCBuZXh0LCAmbW9kLT5h
+bGlhc2VzLCBub2RlKSB7CisJCWJ1Zl9wcmludGYoJmJ1ZiwgIk1PRFVMRV9BTElBU19NT0ROQU1F
+KFwiJXNcIiwgXCIlc1wiKTtcbiIsCisJCQkgICBhbGlhcy0+YnVpbHRpbl9tb2RuYW1lLCBhbGlh
+cy0+c3RyKTsKKwkJbGlzdF9kZWwoJmFsaWFzLT5ub2RlKTsKKwkJcHJpbnRmKCJidWlsdGluIG1v
+ZG5hbWUgPSAlc1xuIiwgYWxpYXMtPmJ1aWx0aW5fbW9kbmFtZSk7CisJCWZyZWUoYWxpYXMtPmJ1
+aWx0aW5fbW9kbmFtZSk7CisJCWZyZWUoYWxpYXMpOworCX0KKwogCXdyaXRlX2lmX2NoYW5nZWQo
+JmJ1ZiwgIi52bWxpbnV4LmV4cG9ydC5jIik7CiAJZnJlZShidWYucCk7CiB9CmRpZmYgLS1naXQg
+YS9zY3JpcHRzL21vZC9tb2Rwb3N0LmggYi9zY3JpcHRzL21vZC9tb2Rwb3N0LmgKaW5kZXggOTEz
+M2U0YzM4MDNmLi4yYWVjYjhmMjVjODcgMTAwNjQ0Ci0tLSBhL3NjcmlwdHMvbW9kL21vZHBvc3Qu
+aAorKysgYi9zY3JpcHRzL21vZC9tb2Rwb3N0LmgKQEAgLTk5LDEwICs5OSwxMiBAQCBidWZfd3Jp
+dGUoc3RydWN0IGJ1ZmZlciAqYnVmLCBjb25zdCBjaGFyICpzLCBpbnQgbGVuKTsKICAqIHN0cnVj
+dCBtb2R1bGVfYWxpYXMgLSBhdXRvLWdlbmVyYXRlZCBNT0RVTEVfQUxJQVMoKQogICoKICAqIEBu
+b2RlOiBsaW5rZWQgdG8gbW9kdWxlOjphbGlhc2VzCisgKiBAbW9kbmFtZTogbmFtZSBvZiB0aGUg
+YnVpbHRpbiBtb2R1bGUgKG9ubHkgZm9yIHZtbGludXgpCiAgKiBAc3RyOiBhIHN0cmluZyBmb3Ig
+TU9EVUxFX0FMSUFTKCkKICAqLwogc3RydWN0IG1vZHVsZV9hbGlhcyB7CiAJc3RydWN0IGxpc3Rf
+aGVhZCBub2RlOworCWNoYXIgKmJ1aWx0aW5fbW9kbmFtZTsKIAljaGFyIHN0cltdOwogfTsKIAot
+LSAKMi40My4wCgo=
+--00000000000048174e0634a1b5b9--
