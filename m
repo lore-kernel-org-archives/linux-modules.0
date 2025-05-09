@@ -1,63 +1,72 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5AA235047
-	for <linux-modules@vger.kernel.org>; Fri,  9 May 2025 15:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BDA22CBF9
+	for <linux-modules@vger.kernel.org>; Fri,  9 May 2025 15:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746803400; cv=none; b=DKzLLwx9h5scaM9gl76CySkdMS0PRIof8nekC1HOm1LwIvvNZoe6DKV3cRLFis2h6D4F/Y72svxfe7q5HsHum+mCGOcDN6lV+Yl/2uKXZKhyeamo9Cy31u1/vEELHBcbymEEwt8iINKtXfTEXIngyAmyil9UGZVvLhhbbQxDZkI=
+	t=1746805777; cv=none; b=HkTgLiIm2P7BtXrX32n0ngfV+d1qqSM1xFmgANhAnuy/kb80AcMu9ecFXocooYArAOBzqBPFs3AqMqwlbxdXOK/NZLvenTSVub13t+1AcHPNM5cWP3v+l02sxdvHogcqt4Gl4CDOIrD5mBv7j0/1h0qlhiaSK2qHYYtSqp20c8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746803400; c=relaxed/simple;
-	bh=0raLsyvmspZO8KIh4Qq2YkCiCP1OpO5e3/Ms4xo0uMU=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=N2TIKzTJrwl3bCnuyklS15eYSTj9ycUJ7MKzfpPZiYpzsdHti1/9APXYOXLC5ggtilbIreNQ8RxifMhJ9NBlDzqJPCxb513Ua4A2d9AoXZWLqHcvn0ZYL81505ebvdcayNlJXffhvmzsCIYG/GULolFU0m6QTeqzPQPUjKU73LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M20AqgXm; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746805777; c=relaxed/simple;
+	bh=iWnuHZ1c6WWRfLUTfyVlkUtx3F8YoEu/5kxSnDTmjaw=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=qHNwigWNYjbAAEEOo6gv/eOvZt2KBVpwh8ELWisWFt7rWml8Ue00XZ9ZtfneQi7Lsl4/UhYt4umP8dViNHIK9pmCER/FmiYpPcoGYyjvE+c4ciPI/+1puiLIT58879B8UtySDIXiXPEglINE/At2KGInn+qrd5oUZQr5oMyCNio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I7ODV1q6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M20AqgXm"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ad1d1f57a01so414811266b.2
-        for <linux-modules@vger.kernel.org>; Fri, 09 May 2025 08:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746803396; x=1747408196; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WtXiKhyTTbKRLQNr8fessPI0nm/AMjfgZ5fWE4GnCgU=;
-        b=M20AqgXmsAmCMBOJZvtASPR3Q8vdVZbJ8FJNp7m/ICFs3oQhgRrR330u1nBoRXsJd6
-         VExP9Slac3NC4E1MOWhPDb82G3dyQnKi2YF0yiWMcfw8bI7rBXAPc2t1OrLrocsOEaCN
-         KRFJVSBvJsNzIstgH4RETK6K79GyiZTPfcqkeu1Ns0Wp9IIjxG26s85ZOJhBlav91n7Z
-         BPl9tf3NOHE7/FOL70kmPjGj6NHltgQBH5U5lh7t5bbQtZ0Ez0ntPlwZV2Kb5YifBh7S
-         N91nFHwHX3naykn0fUIDSG5+ucvjst1Wo0HxsC5lxJ7skeXL+vdH3SvYtv0rYYZ3QQ1w
-         ZHQw==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I7ODV1q6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746805774;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bTgQu7bXXJwDyG63O7O6nk0DUKrmaXIkhDqMVuS1nM8=;
+	b=I7ODV1q6PX1cLJD/nFyuIuUAB1EqyPriYOiEdQeLkTpxdpl52fZJH25hclmMaHPAO+ubTi
+	NG5+4K9P8mJ19n5+27hG9VAfJi7CG7O7bycO7ZFXeUvFTrRz6WyWWWYEkPer1jQzKHEvHV
+	zkRHlF6zvTRqNEn1xt/lHSr3P0P/P5A=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-99-WjbbsJU4OgWSKop-zo4xfA-1; Fri, 09 May 2025 11:49:33 -0400
+X-MC-Unique: WjbbsJU4OgWSKop-zo4xfA-1
+X-Mimecast-MFC-AGG-ID: WjbbsJU4OgWSKop-zo4xfA_1746805772
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7caee988153so408784485a.1
+        for <linux-modules@vger.kernel.org>; Fri, 09 May 2025 08:49:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746803396; x=1747408196;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WtXiKhyTTbKRLQNr8fessPI0nm/AMjfgZ5fWE4GnCgU=;
-        b=JShvUnly/Dw2NIblkTF2Vjozx5z5kuilImJfuMsm2abOwuTakjo5l/n31ZsfsIgDdo
-         hDn3KZQyMnWT5kdvLX7db0E2BLwFAr8GcJqZ1iTI4Gu8KVJpBU2NllnUzxc01ngpmhwv
-         HVfigj/m+XZiwJKeT5j7JNsbYU1Q8Pdkjdzx6ztuF2msvq8SUVrcDQJ9RVfewngs4PQH
-         SMA+EcW/BArqmOd950qXU/dAdDwhtoHDL0i6bk/OjdWzD7SSbP0ebEDke2ddpIQAR6rG
-         ilV6hWSwCo0giuaQeNC9+Tux6zge7sDfedJyOnR7+s44CnSsSska6VBGdkoTAJKQflH3
-         H+3g==
-X-Forwarded-Encrypted: i=1; AJvYcCVjYhymUGvg78OjYbHkjBfYxMg7/703+Gq6unAEE4kyfE3BjUIC9bNcRivMDOi0qqJBg1imP3aPcxiBnnSX@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM/Cr46GSLgTQtiIoX8AKmmj0LumlATBAvU83peWhoDi5Dc0cJ
-	HaYxBZj51t9CKIBcYxcUy3A+5syfVYicU2FQH9s7/Dyj8ik8P6zkUbASVpZIwQg=
-X-Gm-Gg: ASbGncs+1ShZVEC5lonePQLTXSulvWzy2wwoCOOSWnpAvH3MHBZlPA63B6CSI9zUFR7
-	BmRIPfYlMaWbNlETWdtESTBFdhwsMiz+4n5ZNsO1cMVW08aY1qRAJWXhCSgpP4kC2K+5Ml0mWd3
-	4rkYbubOqUCz7wA5KCaXrlDwU3fAqoRIKk2/057YS0mlDud0Y/jje9kiMMmvQTbzIbBhOWuCIaH
-	eOaOnNE828MG+FHlGVwfHufRw5KzkQyJ6gG6aYp9IxVN3ZIcvPHYD9Vlz7i7IhC5oBxMk+5jNie
-	LkSTxHA3/zVda4CKVv+WU27c0FyAzzSM3QGjjzSVB3w=
-X-Google-Smtp-Source: AGHT+IHcnFBxME8/PbbpkOaUefPkHynw9shIy4X2lxZw57yC0g7k6KUCMMkKDMKsDoJWYa7NGmZS7Q==
-X-Received: by 2002:a17:906:c102:b0:ad0:688e:57d5 with SMTP id a640c23a62f3a-ad21917102cmr352225766b.44.1746803396346;
-        Fri, 09 May 2025 08:09:56 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad2192d4a1dsm165870666b.17.2025.05.09.08.09.55
+        d=1e100.net; s=20230601; t=1746805772; x=1747410572;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bTgQu7bXXJwDyG63O7O6nk0DUKrmaXIkhDqMVuS1nM8=;
+        b=G/yG1dmEeit3Q24/emFjDaf3KNFpE5grzcJ+L9IE8Rf9lBlRJvJWDhtUkyS1nnDYdY
+         s5bAuVEX0u0Dtjhtmrj0NUSpRdIEs+zrXlxAydOaYL5LKtlDdXeDJW19CSeDeQnHEuYI
+         XJ5MASfWZ002dJ4He4iA0oLr0Iq1QP1nvbuQJzSe0yllvoMXQgva6hkqOQPmQcU8KStN
+         HTqHY54WGb7Ou3sJ8YI15XMQxbXhgHkR5P+jewqw+Zr4OSeWhfP4rJh9Z+dOsBB/rl9q
+         tQqYnTVtDwxckloSAjTjwrGQj9QCgIXx89lwzNu4H1lgLzCjAPDKOS/pJEhELilPb3/W
+         FMIQ==
+X-Gm-Message-State: AOJu0YwO6jXpYz+LxACExC40gZapOgctl4zD3PZWdOb87uYuqqm5ngtK
+	6kp7bfqyG1D7A1DTCwyCWcsvM3Qw7vHE793n7Fhg7a6tKHBQBVzGXMP9s5kkh5gjaYDtHA1U+Pk
+	lyqiq0yrkA38RLvYGogTlmz2ouB9k/R7iasxMjeJsXCGt2huo2TmHzbV1uorpXmE=
+X-Gm-Gg: ASbGncsHPO0fT1uQxz86GnhsudG/ZeRrKKAFFg0bVWpm/Z43Sm2pq6u0WoV+X/cpbl+
+	lA1mWgzB47+6hYr87Ch4F22C+vMT10/7SEKWnnUbYixQlT8JehJojY6Ne9VxMIW6AmrUAMW9qQV
+	U5BknT/4cYKycBMcL5HP3rtdSIIUvgXl5jXr4r2FwnDiuDydZU7xa1Yn5NsUHqNQdClRkyfYSIJ
+	IZYfSkbxuZYtc1WmAX3R6fvN2eXnKfCXw60VoxNek75YB5PRihjpZD1DJkA4VgoeLqJ4/XUX7+o
+	TsLSpevKl98XGDnkHq/SX+LtXGbV1pXnceSShRBI3yKIkcEo52orbkzi9Q==
+X-Received: by 2002:a05:620a:29c8:b0:7c7:a5e1:f204 with SMTP id af79cd13be357-7cd01178f38mr647781685a.56.1746805772420;
+        Fri, 09 May 2025 08:49:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHJkQOqWjGp1exWeBQyTD+TGxOr9R3jwYtLHE0ov1mymITAbAKVgPbavKihGj+3kArRZ7+/Mw==
+X-Received: by 2002:a05:620a:29c8:b0:7c7:a5e1:f204 with SMTP id af79cd13be357-7cd01178f38mr647778385a.56.1746805772038;
+        Fri, 09 May 2025 08:49:32 -0700 (PDT)
+Received: from ?IPV6:2601:188:c102:9c40:1f42:eb97:44d3:6e9a? ([2601:188:c102:9c40:1f42:eb97:44d3:6e9a])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7cd00f9a35dsm153891385a.54.2025.05.09.08.49.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 08:09:55 -0700 (PDT)
-Message-ID: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
-Date: Fri, 9 May 2025 17:09:54 +0200
+        Fri, 09 May 2025 08:49:31 -0700 (PDT)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <9490adcb-de88-4ff9-9548-1fe4c246ea86@redhat.com>
+Date: Fri, 9 May 2025 11:49:29 -0400
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,42 +74,146 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
+Subject: Re: [PATCH 02/12] locking/rtmutex: Move max_lock_depth into rtmutex.c
+To: Joel Granados <joel.granados@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
  Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
-From: Petr Pavlu <petr.pavlu@suse.com>
-Subject: [GIT PULL] Modules fixes for v6.15-rc6
-Content-Type: text/plain; charset=UTF-8
+ <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
+ linux-parisc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
+ <20250509-jag-mv_ctltables_iter2-v1-2-d0ad83f5f4c3@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20250509-jag-mv_ctltables_iter2-v1-2-d0ad83f5f4c3@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-The following changes since commit 92a09c47464d040866cf2b4cd052bc60555185fb:
 
-  Linux 6.15-rc5 (2025-05-04 13:55:04 -0700)
+On 5/9/25 8:54 AM, Joel Granados wrote:
+> Move the max_lock_depth sysctl table element and variable into
+> rtmutex.c. Make the variable static as it no longer needs to be
+> exported. Removed the rtmutex.h include from sysctl.c.
+>
+> This is part of a greater effort to move ctl tables into their
+> respective subsystems which will reduce the merge conflicts in
+> kernel/sysctl.c.
+>
+> Signed-off-by: Joel Granados <joel.granados@kernel.org>
+> ---
+>   include/linux/rtmutex.h      |  2 --
+>   kernel/locking/rtmutex.c     | 23 +++++++++++++++++++++++
+>   kernel/locking/rtmutex_api.c |  5 -----
+>   kernel/sysctl.c              | 12 ------------
+>   4 files changed, 23 insertions(+), 19 deletions(-)
+>
+> diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
+> index 7d049883a08ace049384d70b4c97e3f4fb0e46f8..dc9a51cda97cdb6ac8e12be5209071744101b703 100644
+> --- a/include/linux/rtmutex.h
+> +++ b/include/linux/rtmutex.h
+> @@ -18,8 +18,6 @@
+>   #include <linux/rbtree_types.h>
+>   #include <linux/spinlock_types_raw.h>
+>   
+> -extern int max_lock_depth; /* for sysctl */
+> -
+>   struct rt_mutex_base {
+>   	raw_spinlock_t		wait_lock;
+>   	struct rb_root_cached   waiters;
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index c80902eacd797c669dedcf10966a8cff38524b50..705a0e0fd72ab8da051e4227a5b89cb3d1539524 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -29,6 +29,29 @@
+>   #include "rtmutex_common.h"
+>   #include "lock_events.h"
+>   
+> +/*
+> + * Max number of times we'll walk the boosting chain:
+> + */
+> +static int max_lock_depth = 1024;
+> +
+> +static const struct ctl_table rtmutex_sysctl_table[] = {
+> +	{
+> +		.procname	= "max_lock_depth",
+> +		.data		= &max_lock_depth,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec,
+> +	},
+> +};
+> +
+> +static int __init init_rtmutex_sysctl(void)
+> +{
+> +	register_sysctl_init("kernel", rtmutex_sysctl_table);
+> +	return 0;
+> +}
+> +
+> +subsys_initcall(init_rtmutex_sysctl);
+> +
+>   #ifndef WW_RT
+>   # define build_ww_mutex()	(false)
+>   # define ww_container_of(rtm)	NULL
+> diff --git a/kernel/locking/rtmutex_api.c b/kernel/locking/rtmutex_api.c
+> index 191e4720e546627aed0d7ec715673b1b8753b130..2b5da8af206da6ee72df1234a4db94f5c4f6f882 100644
+> --- a/kernel/locking/rtmutex_api.c
+> +++ b/kernel/locking/rtmutex_api.c
+> @@ -8,11 +8,6 @@
+>   #define RT_MUTEX_BUILD_MUTEX
+>   #include "rtmutex.c"
+>   
+> -/*
+> - * Max number of times we'll walk the boosting chain:
+> - */
+> -int max_lock_depth = 1024;
+> -
+>   /*
+>    * Debug aware fast / slowpath lock,trylock,unlock
+>    *
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 473133d9651eac4ef44b8b63a44b77189818ac08..a22f35013da0d838ef421fc5d192f00d1e70fb0f 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -59,9 +59,6 @@
+>   #include <asm/nmi.h>
+>   #include <asm/io.h>
+>   #endif
+> -#ifdef CONFIG_RT_MUTEXES
+> -#include <linux/rtmutex.h>
+> -#endif
+>   
+>   /* shared constants to be used in various sysctls */
+>   const int sysctl_vals[] = { 0, 1, 2, 3, 4, 100, 200, 1000, 3000, INT_MAX, 65535, -1 };
+> @@ -1709,15 +1706,6 @@ static const struct ctl_table kern_table[] = {
+>   		.proc_handler	= proc_dointvec,
+>   	},
+>   #endif
+> -#ifdef CONFIG_RT_MUTEXES
+> -	{
+> -		.procname	= "max_lock_depth",
+> -		.data		= &max_lock_depth,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec,
+> -	},
+> -#endif
+>   #ifdef CONFIG_TREE_RCU
+>   	{
+>   		.procname	= "panic_on_rcu_stall",
+>
+Acked-by: Waiman Long <longman@redhat.com>
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.15-rc6
-
-for you to fetch changes up to a6aeb739974ec73e5217c75a7c008a688d3d5cf1:
-
-  module: ensure that kobject_put() is safe for module type kobjects (2025-05-07 20:24:59 +0200)
-
-----------------------------------------------------------------
-Modules fixes for v6.15-rc6
-
-A single fix to prevent use of an uninitialized completion pointer when
-releasing a module_kobject in specific situations.
-
-This addresses a latent bug exposed by commit f95bbfe18512 ("drivers: base:
-handle module_kobject creation"), which was merged in 6.15-rc5. The fix has
-been on modules-next only since yesterday but should be safe.
-
-----------------------------------------------------------------
-Dmitry Antipov (1):
-      module: ensure that kobject_put() is safe for module type kobjects
-
- kernel/params.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
