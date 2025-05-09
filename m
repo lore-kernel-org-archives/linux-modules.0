@@ -1,83 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8080321ABC9;
-	Fri,  9 May 2025 14:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5AA235047
+	for <linux-modules@vger.kernel.org>; Fri,  9 May 2025 15:09:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746802181; cv=none; b=sb7vsT7eVIKS4GGToi6ecIBeuMvudfpM0gTYKzsLfGhNkTC5CLbI7u5d5bCRw3fU1kxIQU9lLl8AL4DSDz55svcGrgsJkdjSdIYiXW9ueEeinODR0K7HSNqfa8SfIJsTikYzd6iSChd3kCfoDZUFx5lpBNdZYS3WOMQruwlJyH4=
+	t=1746803400; cv=none; b=DKzLLwx9h5scaM9gl76CySkdMS0PRIof8nekC1HOm1LwIvvNZoe6DKV3cRLFis2h6D4F/Y72svxfe7q5HsHum+mCGOcDN6lV+Yl/2uKXZKhyeamo9Cy31u1/vEELHBcbymEEwt8iINKtXfTEXIngyAmyil9UGZVvLhhbbQxDZkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746802181; c=relaxed/simple;
-	bh=gGdOF/gEQWgew/HXHrjutcqpvcvaJtkPg4JwuG5uiak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gfdgeg+GQG68RmaNmG3c+5t9a95HIKjtk3zF3qzbNep4Zh5EVbf+KebxfxJXVBPl/WVna+jGKumZ2MKATCjes0jeSdmdJWdirUiFPa/a0Nn90H6YI1lNNDMxB8sH2zYYNUr+hMzBhWj+rd98iUu4YjnW3ZNszmo+/xEwAXc2WPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=J0hUZ5Ed; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746803400; c=relaxed/simple;
+	bh=0raLsyvmspZO8KIh4Qq2YkCiCP1OpO5e3/Ms4xo0uMU=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=N2TIKzTJrwl3bCnuyklS15eYSTj9ycUJ7MKzfpPZiYpzsdHti1/9APXYOXLC5ggtilbIreNQ8RxifMhJ9NBlDzqJPCxb513Ua4A2d9AoXZWLqHcvn0ZYL81505ebvdcayNlJXffhvmzsCIYG/GULolFU0m6QTeqzPQPUjKU73LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=M20AqgXm; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J0hUZ5Ed"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65305C4CEE4;
-	Fri,  9 May 2025 14:49:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746802180;
-	bh=gGdOF/gEQWgew/HXHrjutcqpvcvaJtkPg4JwuG5uiak=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J0hUZ5EdSyLDJCBhJ5SNSc14A9+lLvOpmSPKdzfb0KuJsAQUzl5nNxTc5MID5/aDN
-	 MO68D2WF9sFPPJ/RL3bByKzfhC7gBCWA/PuBWJRg/hsFmhfluDV8o0Pbr1juXKFyEa
-	 f5MPWPllM1AWjmmYp1m0zTDfVu6yrczte0FzZoPs=
-Date: Fri, 9 May 2025 16:47:55 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Joel Granados <joel.granados@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Jiri Slaby <jirislaby@kernel.org>,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-mm@kvack.org, linux-parisc@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: Re: [PATCH 07/12] Input: sysrq: mv sysrq into drivers/tty/sysrq.c
-Message-ID: <2025050947-override-pulp-cc9f@gregkh>
-References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
- <20250509-jag-mv_ctltables_iter2-v1-7-d0ad83f5f4c3@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="M20AqgXm"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ad1d1f57a01so414811266b.2
+        for <linux-modules@vger.kernel.org>; Fri, 09 May 2025 08:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1746803396; x=1747408196; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WtXiKhyTTbKRLQNr8fessPI0nm/AMjfgZ5fWE4GnCgU=;
+        b=M20AqgXmsAmCMBOJZvtASPR3Q8vdVZbJ8FJNp7m/ICFs3oQhgRrR330u1nBoRXsJd6
+         VExP9Slac3NC4E1MOWhPDb82G3dyQnKi2YF0yiWMcfw8bI7rBXAPc2t1OrLrocsOEaCN
+         KRFJVSBvJsNzIstgH4RETK6K79GyiZTPfcqkeu1Ns0Wp9IIjxG26s85ZOJhBlav91n7Z
+         BPl9tf3NOHE7/FOL70kmPjGj6NHltgQBH5U5lh7t5bbQtZ0Ez0ntPlwZV2Kb5YifBh7S
+         N91nFHwHX3naykn0fUIDSG5+ucvjst1Wo0HxsC5lxJ7skeXL+vdH3SvYtv0rYYZ3QQ1w
+         ZHQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746803396; x=1747408196;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WtXiKhyTTbKRLQNr8fessPI0nm/AMjfgZ5fWE4GnCgU=;
+        b=JShvUnly/Dw2NIblkTF2Vjozx5z5kuilImJfuMsm2abOwuTakjo5l/n31ZsfsIgDdo
+         hDn3KZQyMnWT5kdvLX7db0E2BLwFAr8GcJqZ1iTI4Gu8KVJpBU2NllnUzxc01ngpmhwv
+         HVfigj/m+XZiwJKeT5j7JNsbYU1Q8Pdkjdzx6ztuF2msvq8SUVrcDQJ9RVfewngs4PQH
+         SMA+EcW/BArqmOd950qXU/dAdDwhtoHDL0i6bk/OjdWzD7SSbP0ebEDke2ddpIQAR6rG
+         ilV6hWSwCo0giuaQeNC9+Tux6zge7sDfedJyOnR7+s44CnSsSska6VBGdkoTAJKQflH3
+         H+3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVjYhymUGvg78OjYbHkjBfYxMg7/703+Gq6unAEE4kyfE3BjUIC9bNcRivMDOi0qqJBg1imP3aPcxiBnnSX@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM/Cr46GSLgTQtiIoX8AKmmj0LumlATBAvU83peWhoDi5Dc0cJ
+	HaYxBZj51t9CKIBcYxcUy3A+5syfVYicU2FQH9s7/Dyj8ik8P6zkUbASVpZIwQg=
+X-Gm-Gg: ASbGncs+1ShZVEC5lonePQLTXSulvWzy2wwoCOOSWnpAvH3MHBZlPA63B6CSI9zUFR7
+	BmRIPfYlMaWbNlETWdtESTBFdhwsMiz+4n5ZNsO1cMVW08aY1qRAJWXhCSgpP4kC2K+5Ml0mWd3
+	4rkYbubOqUCz7wA5KCaXrlDwU3fAqoRIKk2/057YS0mlDud0Y/jje9kiMMmvQTbzIbBhOWuCIaH
+	eOaOnNE828MG+FHlGVwfHufRw5KzkQyJ6gG6aYp9IxVN3ZIcvPHYD9Vlz7i7IhC5oBxMk+5jNie
+	LkSTxHA3/zVda4CKVv+WU27c0FyAzzSM3QGjjzSVB3w=
+X-Google-Smtp-Source: AGHT+IHcnFBxME8/PbbpkOaUefPkHynw9shIy4X2lxZw57yC0g7k6KUCMMkKDMKsDoJWYa7NGmZS7Q==
+X-Received: by 2002:a17:906:c102:b0:ad0:688e:57d5 with SMTP id a640c23a62f3a-ad21917102cmr352225766b.44.1746803396346;
+        Fri, 09 May 2025 08:09:56 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad2192d4a1dsm165870666b.17.2025.05.09.08.09.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 May 2025 08:09:55 -0700 (PDT)
+Message-ID: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
+Date: Fri, 9 May 2025 17:09:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250509-jag-mv_ctltables_iter2-v1-7-d0ad83f5f4c3@kernel.org>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
+From: Petr Pavlu <petr.pavlu@suse.com>
+Subject: [GIT PULL] Modules fixes for v6.15-rc6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 09, 2025 at 02:54:11PM +0200, Joel Granados wrote:
-> Move both sysrq ctl_table and supported sysrq_sysctl_handler helper
-> function into drivers/tty/sysrq.c. Replaced the __do_proc_dointvec in
-> helper function with do_proc_dointvec as the former is local to
-> kernel/sysctl.c.
-> 
-> This is part of a greater effort to move ctl tables into their
-> respective subsystems which will reduce the merge conflicts in
-> kernel/sysctl.c.
-> 
-> Signed-off-by: Joel Granados <joel.granados@kernel.org>
-> ---
->  drivers/tty/sysrq.c | 38 ++++++++++++++++++++++++++++++++++++++
->  kernel/sysctl.c     | 30 ------------------------------
->  2 files changed, 38 insertions(+), 30 deletions(-)
-> 
+The following changes since commit 92a09c47464d040866cf2b4cd052bc60555185fb:
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  Linux 6.15-rc5 (2025-05-04 13:55:04 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.15-rc6
+
+for you to fetch changes up to a6aeb739974ec73e5217c75a7c008a688d3d5cf1:
+
+  module: ensure that kobject_put() is safe for module type kobjects (2025-05-07 20:24:59 +0200)
+
+----------------------------------------------------------------
+Modules fixes for v6.15-rc6
+
+A single fix to prevent use of an uninitialized completion pointer when
+releasing a module_kobject in specific situations.
+
+This addresses a latent bug exposed by commit f95bbfe18512 ("drivers: base:
+handle module_kobject creation"), which was merged in 6.15-rc5. The fix has
+been on modules-next only since yesterday but should be safe.
+
+----------------------------------------------------------------
+Dmitry Antipov (1):
+      module: ensure that kobject_put() is safe for module type kobjects
+
+ kernel/params.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
