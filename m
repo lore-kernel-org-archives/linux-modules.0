@@ -1,110 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D2386352;
-	Fri,  9 May 2025 16:44:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5F8238C16;
+	Fri,  9 May 2025 17:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746809060; cv=none; b=GnykbbOExsDxaeLJ5Vpj7zG0oWPdiJJHMF+4IHa5xj/4ZQo3J1KWUUjuQ+IP63OspdMAol9hARRtk6XBassT5VUyWVtKrRuFjxv0V2SaT9vV+MNO7cDIEnT+vz3jETIOnrWuoYjqCRIZp09KKdNSRSVJkNWRbxR4TrCoOujh1aI=
+	t=1746810272; cv=none; b=ImVILovvjSKdbqHBJVeZe4AKgkzqeICFNK9jbewNexVHGcUG/xGdsZOsMpwKnZP+SAVl2zzuHsgeNz+R3FWpba+ga0O2dxTMTYChzJIknPyTtqzTepYvLmORun0BXuwMzfT6isoZ7xqLNnkFGRubTgtAR458aYdNH3MI6fwdJXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746809060; c=relaxed/simple;
-	bh=OrTNaCqTg7Wb7eMC4CKBGXhU7TgUADg/DO19JPUXwU0=;
+	s=arc-20240116; t=1746810272; c=relaxed/simple;
+	bh=Nkv6IKHXCYUek8fh7AoYuM8l9DOttVnrkqI5DhG25sw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GbUqbOk2s8vW9AoeJ0aNGxPP1ltFYZIjrhqhwK5RYuDIAnXpp9dk6BdLAxzYGriu2MbSVigJ+1P4FJ5+EA/7aRjR/PPonX0XMPUbgUn+pc4x3FIGkVYgCbDBlJq19/hdXAw8YFC7+KZb0Nw8yzt6sfI/nwizVTv5gfPWScQ+Hus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lV1v+cf7; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nif6r22FWJDAubvY9ZFPjvbuwXd+XS//18N9KNj9iw/ODSgFfNjcJvwii28/EuRAgjyjJgMj5nFTDiqdwadQWevmjGO1Rqj+GuRK/fgCc/u1wodfvZ97NViWK4HoUNo6M/R+BbpEdraD4w4icLLWqDq9k5P2rU7Uw/84ahqDEH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AjzK/3ae; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lV1v+cf7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1AD8C4CEE4;
-	Fri,  9 May 2025 16:44:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjzK/3ae"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CADCC4CEE4;
+	Fri,  9 May 2025 17:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746809059;
-	bh=OrTNaCqTg7Wb7eMC4CKBGXhU7TgUADg/DO19JPUXwU0=;
+	s=k20201202; t=1746810271;
+	bh=Nkv6IKHXCYUek8fh7AoYuM8l9DOttVnrkqI5DhG25sw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lV1v+cf72fQB087lLvvCenKTqn7huyMihzvEETU5ZtRrcU3mqqTGUinHYjf1qHRla
-	 Y0U4c/d4Q4FmelPFoNstuctW+TP/eyDt8Rc5pskC2WQmg7ixmTZ9j/6rRYpFB5v8EV
-	 qn4flEjSzN8N6863HeKZqmxe5Yf2JFTcjdWkqewTe2lvl9Udryrk0qkSJDDuKeTPQD
-	 +OSLt84NKaEF1CrFBl1Nc0YJQM5mv2lKlO4moCVfQFMglHn2gMDM9kH1gMkKKKGbVI
-	 D1yCnVhOG2nA7Hp9JyOZWuJbv8/qT2gbGgv7qsrGn5nUQyR6Pyx2jLam8+VNU7GuZn
-	 69LgY5rDIDt9A==
-Date: Fri, 9 May 2025 18:44:14 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	b=AjzK/3aeSYXIF8bhlpxZPZO6jjh180oKxg+OAj9qPXFU9ntAY8K6RJWo4P+eHOGpm
+	 Ad7LnN9reiWLrtjB6/mdI8kxzx08pv4GVK84bUjVme/teEOuQTmAPhvKuHLO1Y3g5U
+	 ZI8MTiH5ocNl1R+2CHhv7UODcLpqDb58QMpHzVf0l0+QMDDlaBVtjvYSXsjxDSmJxk
+	 sop16G6oygpTYCfh//O70fepRaRBcBMKXrVSSTcmsovKqa3VlWgxylpbRg4b0cA7UR
+	 2yQdYr50VE7pNPxO2GkB3ogTfl81PHcJSWU/I1zEJCvWuDWEFI1fKr5VrBd9fu9Fx7
+	 iwm4xaR87qRoA==
+Date: Fri, 9 May 2025 10:04:28 -0700
+From: Kees Cook <kees@kernel.org>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] modpost: Create modalias for builtin modules
-Message-ID: <aB4w3jYu8lavZl3E@example.org>
-References: <efd64a6f-d6e5-4790-96b6-0776cd3a7f5a@suse.com>
- <20250505093830.25688-1-legion@kernel.org>
- <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	rcu@vger.kernel.org, linux-mm@kvack.org,
+	linux-parisc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 10/12] sysctl: Move sysctl_panic_on_stackoverflow to
+ kernel/panic.c
+Message-ID: <202505091003.FCBA48E47D@keescook>
+References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
+ <20250509-jag-mv_ctltables_iter2-v1-10-d0ad83f5f4c3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNARzreJXDX6X_L2iTfb86pKgk7jkFrAp-8UdktZm7BqObg@mail.gmail.com>
+In-Reply-To: <20250509-jag-mv_ctltables_iter2-v1-10-d0ad83f5f4c3@kernel.org>
 
-On Fri, May 09, 2025 at 12:42:39AM +0900, Masahiro Yamada wrote:
-> On Mon, May 5, 2025 at 6:39 PM Alexey Gladkov <legion@kernel.org> wrote:
-> >
-> > For some modules, modalias is generated using the modpost utility and
-> > the section is added to the module file.
-> >
-> > When a module is added inside vmlinux, modpost does not generate
-> > modalias for such modules and the information is lost.
-> >
-> > As a result kmod (which uses modules.builtin.modinfo in userspace)
-> > cannot determine that modalias is handled by a builtin kernel module.
-> >
-> > $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
-> > pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
-> >
-> > $ modinfo xhci_pci
-> > name:           xhci_pci
-> > filename:       (builtin)
-> > license:        GPL
-> > file:           drivers/usb/host/xhci-pci
-> > description:    xHCI PCI Host Controller Driver
-> >
-> > Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
-> > modpost if the module is built separately.
-> >
-> > To fix this it is necessary to generate the same modalias for vmlinux as
-> > for the individual modules. Fortunately '.vmlinux.export.o' is already
-> > generated from which '.modinfo' can be extracted in the same way as for
-> > vmlinux.o.
-> >
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > ---
-> >
-> > v2: As Petr Pavlu suggested, I separated the builtin modules from the external
-> >     modules. I've also added a search for duplicate modules.
-> >
+On Fri, May 09, 2025 at 02:54:14PM +0200, Joel Granados wrote:
+> This is part of a greater effort to move ctl tables into their
+> respective subsystems which will reduce the merge conflicts in
+> kernel/sysctl.c.
 > 
-> 
-> 
-> > ---
-> >  include/linux/module.h   |  4 ----
-> >  scripts/mod/file2alias.c |  5 +++++
-> >  scripts/mod/modpost.c    | 35 +++++++++++++++++++++++++++--------
-> >  scripts/mod/modpost.h    | 15 ++++++++++++++-
-> >  4 files changed, 46 insertions(+), 13 deletions(-)
-> 
-> 
-> I can implement this with less code change.
-> 
-> I attached my patch.
+> Signed-off-by: Joel Granados <joel.granados@kernel.org>
 
-That is a good point. I'm gonna do it this way. Thanks!
+Another undocumented sysctl. ;) This one should be called
+"panic_on_stack_exhaustion", but so be it. :)
+
+Reviewed-by: Kees Cook <kees@kernel.org>
+
+> ---
+>  kernel/panic.c  | 10 ++++++++++
+>  kernel/sysctl.c | 10 ----------
+>  2 files changed, 10 insertions(+), 10 deletions(-)
+> 
+> diff --git a/kernel/panic.c b/kernel/panic.c
+> index 213c6c9d6a750ff3d17f3cf530b37c619cd816f4..401f0997f654797acc3351040bbbda1845ce00c1 100644
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -183,6 +183,16 @@ static const struct ctl_table kern_panic_table[] = {
+>  		.mode           = 0644,
+>  		.proc_handler   = proc_douintvec,
+>  	},
+> +#if (defined(CONFIG_X86_32) || defined(CONFIG_PARISC)) && \
+> +	defined(CONFIG_DEBUG_STACKOVERFLOW)
+> +	{
+> +		.procname	= "panic_on_stackoverflow",
+> +		.data		= &sysctl_panic_on_stackoverflow,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dointvec,
+> +	},
+> +#endif
+>  };
+>  
+>  static __init int kernel_panic_sysctls_init(void)
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index d5bebdd02cd4f1def7d9dd2b85454a9022b600b7..446d77ec44f57a4929389b64fc23d3b180f550b4 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -1552,16 +1552,6 @@ static const struct ctl_table kern_table[] = {
+>  		.mode		= 0444,
+>  		.proc_handler	= proc_dointvec,
+>  	},
+> -#if (defined(CONFIG_X86_32) || defined(CONFIG_PARISC)) && \
+> -	defined(CONFIG_DEBUG_STACKOVERFLOW)
+> -	{
+> -		.procname	= "panic_on_stackoverflow",
+> -		.data		= &sysctl_panic_on_stackoverflow,
+> -		.maxlen		= sizeof(int),
+> -		.mode		= 0644,
+> -		.proc_handler	= proc_dointvec,
+> -	},
+> -#endif
+>  #ifdef CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN
+>  	{
+>  		.procname	= "ignore-unaligned-usertrap",
+> 
+> -- 
+> 2.47.2
+> 
+> 
 
 -- 
-Rgrds, legion
-
+Kees Cook
