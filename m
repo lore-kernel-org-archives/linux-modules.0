@@ -1,107 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1B3FC7;
-	Fri,  9 May 2025 00:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F1126FDA7;
+	Fri,  9 May 2025 07:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746751676; cv=none; b=FyKpqqfkzsT9d9EQ1L0MuRt8mfgPg/yomSjPIDgBPqNmPMhoT7YsDAX5xcQE+yRkGJw9St2sb1WjJ0biGhea6C8pgH3a43jMkIrYGDZdYB69AEUs/il7TozE0B2FiIOLoU0Mq0V/aUEYtGSfaOWrmc6AaF1hoe5QtpjGu3Hwikk=
+	t=1746775691; cv=none; b=l9foF/VMF8kWo/9FIPUd+9kMaUwsojhuAzVa1l0UJtfYDiri8LnUesKRcmt+xRb8J+Ls4ytx/qRT4LJ8rJp0ByyKmWbEC3Pxe06Erdhemdpy5EKHqX7uY6Sy+H/nMFAIk8ncwLfu9COblQEGxCgo8y9YSYJEnPBTfTtc3S2A90g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746751676; c=relaxed/simple;
-	bh=bMakgoMCuiRE72u/z+hJBAzxNQv9g+Mt/nWMliQW9cs=;
+	s=arc-20240116; t=1746775691; c=relaxed/simple;
+	bh=Ov6WTSmPcRqqmbQnF9ivBjIVimf0CJ35r0KM5SNX83M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gFgE3SYqK5wG7zWyrK3dfTI3ptOp8i0iE4B+45X5mA1Z+4Gx2PiV73+V/9e8lpU9Ne5Ucag/Iqh95xd4wQNXB5PFQMlxWBag6x6GBnTY6JvG+OYCgQpPjFOysgr3pg+0Dfpd9u5G+qEbwQAHvJq7pSJRkrMcSDlcphkmbwy1WNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XhYED6Sd; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=auFJEewrieAzkF5iT3m0wju8++8d+obOv4ajm1qcO3tlwGcRyMh+GHSAiIUsp6rEfkLoUw0XTRxe4FgIlxji3H+PtR8T2ikjR1kzg13fNmKc9pAjzrNS8UoodYUYHTELOhXrfQsFpuE3Zt0lZ4GMiDqC6v6l7bFsgqwCuMZKRos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OExiCV7i; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XhYED6Sd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DB3C4CEE7;
-	Fri,  9 May 2025 00:47:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746751675;
-	bh=bMakgoMCuiRE72u/z+hJBAzxNQv9g+Mt/nWMliQW9cs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=XhYED6Sd5TjEoox6RCu60AkqsdrkeQ+XbMCsWxO/VYqx0YuIemCzYjffuEbFIIftg
-	 1XdkJ+J4CJoMBOa+uIzdTRvzJ+niJ3nv9TcBdvpaMWYEJ0CsiJmAhPPpBQubTxU6e+
-	 juZ793W+uXqvPi6zYeqJXEoIzBxLXzJF8LI3HFKGF8WhhpdXxTHhKXcF0uvAUazKkg
-	 yTLG/9gljKa2TwdIhKPRjNodB2pQk2+O3POiu+WV4j0EHtd8yYRm31bx2SGFe6RdpE
-	 +cCrGbklk3lLBixRS2mcB//FkiDIOQSjds3fI0sH9co/to1gBySjSmqWUr36M8PmJY
-	 aVPjo+eI2EJbg==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54b10956398so793193e87.0;
-        Thu, 08 May 2025 17:47:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUvgH76pF8RJL1sBG4qBIET830lUTAhZyVTpGAUgO15aRkEhE7C3B6gikOqXSLxG/m6AUtQvpjtTpnlWal0VA==@vger.kernel.org, AJvYcCVKzrG4e4vt8NSerdnleFtIz8UX+GXfwFSjZVtNe3K/W/DxeRAV7SNmLrVzmZfWV1jqWtY4r+8kTbgA7g0=@vger.kernel.org, AJvYcCXS0/WUOyk34oW5JTUlVNOPfMZ83e7IQWr8mVaGnxlElXHQYcMpGsackt6XE+Dy48rI4hb3EEZs9pxEZ1ti@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqhSFSEjA/UQoAxZQfFH2Jv49Pp8NGGX981uPb9SqPTAMedn2C
-	DXOZCNJO98liZpitbyV9s+THQSY5IGl7TMqXHt6gsXSUUKf9by+wS4BBGcz/awoG9HhAsGK+7aO
-	BIVax8anM2WuOHuCn4kpQaG+qLII=
-X-Google-Smtp-Source: AGHT+IFv19RUNrFsCEhoEdrdZSMlUKojQE9ydSn84wpWSlEvgoaEXcsWoPuOwYb8qhFkDFA1A40/QAjvvOqk9FF2nQw=
-X-Received: by 2002:a05:6512:6094:b0:549:7c5f:d961 with SMTP id
- 2adb3069b0e04-54fc679583amr418503e87.17.1746751674642; Thu, 08 May 2025
- 17:47:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OExiCV7i"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-af5f28ecbcaso141831a12.0;
+        Fri, 09 May 2025 00:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746775689; x=1747380489; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ov6WTSmPcRqqmbQnF9ivBjIVimf0CJ35r0KM5SNX83M=;
+        b=OExiCV7i96IvO3Sf6x2FpNwxFeEMaon03TDc/JSz2btp1u4MOsWvJnVtC2+YLJ/WBJ
+         qRiQJUuSMqqpw0J+O5OD9F4WFdNE60jvyqyvDjt7vSlC0F3qNrDAcvdioBCdqZFDjD03
+         MKBniYvW1P5rnHEpujHem0hg/w2vytPwzN654wkJzbf0Mt6dU4TdRTh9G6BOA51RpGTa
+         fOOhrGoirOp6HSrv5DiORyJztAZBIZGQpvOPPc4YkkNXkrNyO7tRfaIOVtNNiP1IeVpd
+         DJTrTaXU+diPVeP0UcpGvxZ5fMxcI6mR7VmQvA7FdvRBwOwWB9ZvHuyJUchGZYkFwwge
+         XEFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746775689; x=1747380489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ov6WTSmPcRqqmbQnF9ivBjIVimf0CJ35r0KM5SNX83M=;
+        b=EUb2DsjnBcqedS+XSL9teOvmIEKtpKVfoGMwJdFMmM8+55DnIwQm49Fvk71Ni/7oA1
+         JZojtT20yx6nE/6ob6KL+OuMNFDBefbZHXoHU0Dhye/ieNdycN1Qf2p3XrjEKWGGqd9S
+         kSWybMedlaql0TwmRSGDthyJVjfUsDEx2O77kYJULlDcfElVPJgTZztTdAkZ64Xa5kSs
+         OT1M2Qs+Sci4SHZiqGIeClf0WdAt/0Tc4TpLkHim1NgSXpYlajqzJ9YC9iDo+HNZ0MlJ
+         xItOG6YKsJW9heaZ+vBWQG99e+ai8uY3xPOXD0rvcHK3S+FXOFqF5I2dy/MM3VX32apT
+         NmCg==
+X-Forwarded-Encrypted: i=1; AJvYcCVj5IlbrcN9M+wQ+crmdNCD1qHriiXwp4MJQCtHgX0wOAKI9IZLVAz3BjP3vyTpgF6vNhr+N8aEmyB4hLdGqIA=@vger.kernel.org, AJvYcCXnYYzr+yWZyTD2nFmUfjfvpoy0CnTWZqLsfP+Vfwp5SPiUvvzgOzEBBaUVVIu3QwVHXB1A2L7c5nXzkxE0@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAysvHEZBmUPf57+sZqx8m5T5ALXe7Y+v7jy9gramAbVuMNCxM
+	SL2FzcptQ2iigl75B+DAes9Dl2to8+hHOjPOyxfQPwq+ZR5DoGs9MxUJymU9sJ0WxiMAmXHsYn8
+	Z+WOlQqMUrcB2op4kAiQrrS7Op9A=
+X-Gm-Gg: ASbGnct+927Gh1oDhPglWHmc5lXLNcaFgUe4vXG0HiSU0RUCfaD+NZ9CD+kRLD/PTo6
+	4OOepc+HUAZKY1/8EsuTFRyxCW+c5bMANMMlvK9if+2LBRiJqntTxLb+gJ0wYgazfKunDAD8bzd
+	9A2PiJIfGt7FssGFuIgdSatg==
+X-Google-Smtp-Source: AGHT+IEYeN5v5TsmNAVX5/zFyrsgqTLSTqDluUCaA0q90511E9XGc3V3Wl2WPMD86tu44NTBwH7DpnodAwumQZ0G3oY=
+X-Received: by 2002:a17:903:3a8d:b0:22e:7913:d360 with SMTP id
+ d9443c01a7336-22fc8b5bea1mr13956745ad.7.1746775688981; Fri, 09 May 2025
+ 00:28:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250502141204.500293812@infradead.org> <20250502141843.937580735@infradead.org>
-In-Reply-To: <20250502141843.937580735@infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 9 May 2025 09:47:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARCQ6_yWiUCwVLEAeqJ_zN4pw73uLaJ7pWd02dqiSDa4w@mail.gmail.com>
-X-Gm-Features: ATxdqUGI3Y68vP87Uwm_DYEQHZajtw-tHyZdm5jP7oRxwSU3uhUsZJ1CM3C6U2o
-Message-ID: <CAK7LNARCQ6_yWiUCwVLEAeqJ_zN4pw73uLaJ7pWd02dqiSDa4w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] modpost: Use for() loop
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
-	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
+References: <20250308044506.14458-1-fujita.tomonori@gmail.com>
+ <CANiq72=LEma8DEgpy-z6hCK_xv2Vk91MLbGGC5=votDAVP-3mg@mail.gmail.com> <20250509.131622.164788613577030480.fujita.tomonori@gmail.com>
+In-Reply-To: <20250509.131622.164788613577030480.fujita.tomonori@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 9 May 2025 09:27:55 +0200
+X-Gm-Features: AX0GCFv8sE8RswZuY7qr6HM6GTumnWf-keuvFmnzyQeQSg0OqA-suiQU3GQQJCI
+Message-ID: <CANiq72n_ySP_K_2m28C9L3FOqRtqn8ohkWqtX1Fe9L0szGxSzA@mail.gmail.com>
+Subject: Re: [PATCH v1] rust: module: place cleanup_module() in .exit.text section
+To: FUJITA Tomonori <fujita.tomonori@gmail.com>
+Cc: ojeda@kernel.org, alex.gaynor@gmail.com, rust-for-linux@vger.kernel.org, 
+	boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+	benno.lossin@proton.me, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	linux-modules@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 2, 2025 at 11:25=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
+On Fri, May 9, 2025 at 6:16=E2=80=AFAM FUJITA Tomonori
+<fujita.tomonori@gmail.com> wrote:
 >
-> Slight cleanup by using a for() loop instead of while(). This makes it
-> clearer what is the iteration and what is the actual work done.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  scripts/mod/modpost.c |    8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+> Do I need to update the commit message and submit a v2 of this patch?
 
-Applied to linux-kbuild.
-Thanks.
+I think it is OK, i.e. we can add what you wrote above when applying
+(though it always helps to do it on your side when it is a non-trivial
+change).
 
+By the way, Cc'ing MODULE SUPPORT in case they want to say something
+(or even take it themselves).
 
+Thanks!
 
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1595,12 +1595,10 @@ static void read_symbols(const char *mod
->                         license =3D get_next_modinfo(&info, "license", li=
-cense);
->                 }
->
-> -               namespace =3D get_modinfo(&info, "import_ns");
-> -               while (namespace) {
-> +               for (namespace =3D get_modinfo(&info, "import_ns");
-> +                    namespace;
-> +                    namespace =3D get_next_modinfo(&info, "import_ns", n=
-amespace))
->                         add_namespace(&mod->imported_namespaces, namespac=
-e);
-> -                       namespace =3D get_next_modinfo(&info, "import_ns"=
-,
-> -                                                    namespace);
-> -               }
->
->                 if (!get_modinfo(&info, "description"))
->                         warn("missing MODULE_DESCRIPTION() in %s\n", modn=
-ame);
->
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+Cheers,
+Miguel
