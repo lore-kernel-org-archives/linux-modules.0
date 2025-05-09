@@ -1,207 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE9E800;
-	Fri,  9 May 2025 17:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5692163BD;
+	Fri,  9 May 2025 18:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746810632; cv=none; b=AwCYsssTVc0CunX0rtBZI6Zi48QpqAgT76vD81pyOojgQenFSjTuwZZ8/U+y2fEAqq5Lfrw98i1kjgTgVyds1T+Tmq644wuZVnoVDQMsyW+urQgBretqS8r+6XmlffLrKOlHwQuNDXWBqw38RHMVVp+42CJPhdqnUnLbsVBtE1M=
+	t=1746815425; cv=none; b=HmfauslxBRo/bNx4VdRubcijA/GnLrI3+/QP4i575iTvfMmucnHXZX+rWMd8AzHCPE06vcwShBC5C2K6aMFUEFV+o20pm/6AR2Vh7ab8RnqH+KBorx8WnOF7/gyF6iIiLtRwanNU5zaJ+WFm6PDKwF7wjzl9uznb2tO5Dr+gAg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746810632; c=relaxed/simple;
-	bh=Rg26xVepbKv+GhXzyO57+ntaAAUnjE9KukxV2nugKoU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s1OLEh7OTZMKZoOYg8LjmVikpt/7w0rTHKUqPaF54i7o6n5bQo3CiArGn6wkA46s7d67o1H/ayKSpv0rPhzm7eUTotCtPGixdPexH+l4fU+sobmXm0D3ZqU3Mmawl3HaRRhWrO0RA7TXNFLnOSre0cnfE7z+dv7jLxSatFQRtV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgcJs+2g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1746815425; c=relaxed/simple;
+	bh=eyudijV92ATWN/C1/x0IdcKPdJPWJbgeClE8iGejXyA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=G6gZ98wVVAShRLe/f/DAxq33yWwq3Szb/MBe5szcXqV4i5hugar69GGVy0e5kbme8sI3uPZGkxglCQsycSGvhTMYzdu9ob0gxrbdAN4qBsSYI3AE3Tolmpt52HeckXsiIf34nkexfUxVRjkOIZMkxZhXkeUTzxmKxtIgzuCzYac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qt1vLv2Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgcJs+2g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01317C4CEE4;
-	Fri,  9 May 2025 17:10:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qt1vLv2Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D2D8C4CEE4;
+	Fri,  9 May 2025 18:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746810632;
-	bh=Rg26xVepbKv+GhXzyO57+ntaAAUnjE9KukxV2nugKoU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EgcJs+2gmQcQQRtPJko2aZpyTLaujeLaSLfxYN4PC77ilDL+fivFo95iZkjr2coCg
-	 x3R30fiwAmxHH9wGoQbqyklQqyRuT8riDJwThw+sKP4ZJCefANJEyCG4aeCAvpMWtf
-	 aCqWWPayvy8jp1rXDkjzswwulALDGa5NPOGL7euPyopTMMr/9a4W6YEX8zGMD/Y7e7
-	 G9tXQcmIUIi/Rf6SjgTsAQNdCHMtrfmMRHO6GqKSKT4HrZIRz6LtaPFMZ8ZefKa48L
-	 mBq/mDOO2dQ2h1QiRWRllwyWGZeY/14OeTnRo0sOh6CwDm4Ur1Gfwauj6fpVIYY6rs
-	 vopmEhIyNh3Bg==
-Date: Fri, 9 May 2025 10:10:28 -0700
-From: Kees Cook <kees@kernel.org>
-To: Joel Granados <joel.granados@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	rcu@vger.kernel.org, linux-mm@kvack.org,
-	linux-parisc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 07/12] Input: sysrq: mv sysrq into drivers/tty/sysrq.c
-Message-ID: <202505091010.F2F8C676@keescook>
-References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
- <20250509-jag-mv_ctltables_iter2-v1-7-d0ad83f5f4c3@kernel.org>
+	s=k20201202; t=1746815424;
+	bh=eyudijV92ATWN/C1/x0IdcKPdJPWJbgeClE8iGejXyA=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Qt1vLv2QQZWH+NCn5unYHIStwyySshSLp+Bh8Sp2zON2pGJR88IEPNIpQ7e7tPRET
+	 i9Pfet7Zsj6LwxMWB05M3xk5fluysGM4PXx06MrarIq6NQIh8qpfvVRWcebKTkbUpL
+	 jddYWszGThCPFcmHlw+Mi+MTgRGHgWIUsp+r7T3UVJmSMX70tRiWpwe9KkLtdFiEnI
+	 jDgDgPLVxzS9uFhtwmLnHUuTqTyFtAMWz1WIAvpCpPUDFlILW7D516VkshBBCqczcI
+	 WFP5zkl6/jRTpF1HmZ9YllbkcW2i3aXktAg7jdTenuAvbwRjFx0VYeBgpe44OKlo59
+	 b8MB0ihDgQTuw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D9E380DBCB;
+	Fri,  9 May 2025 18:31:04 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules fixes for v6.15-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
+References: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.15-rc6
+X-PR-Tracked-Commit-Id: a6aeb739974ec73e5217c75a7c008a688d3d5cf1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 29fe5d50dfa6b61043e2e89206389ae56b5596eb
+Message-Id: <174681546282.3713200.4462491147537738643.pr-tracker-bot@kernel.org>
+Date: Fri, 09 May 2025 18:31:02 +0000
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250509-jag-mv_ctltables_iter2-v1-7-d0ad83f5f4c3@kernel.org>
 
-On Fri, May 09, 2025 at 02:54:11PM +0200, Joel Granados wrote:
-> Move both sysrq ctl_table and supported sysrq_sysctl_handler helper
-> function into drivers/tty/sysrq.c. Replaced the __do_proc_dointvec in
-> helper function with do_proc_dointvec as the former is local to
-> kernel/sysctl.c.
+The pull request you sent on Fri, 9 May 2025 17:09:54 +0200:
 
-nit: do_proc_dointvec_minmax
+> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.15-rc6
 
-> 
-> This is part of a greater effort to move ctl tables into their
-> respective subsystems which will reduce the merge conflicts in
-> kernel/sysctl.c.
-> 
-> Signed-off-by: Joel Granados <joel.granados@kernel.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/29fe5d50dfa6b61043e2e89206389ae56b5596eb
 
-But yes, this looks correct.
-
-Reviewed-by: Kees Cook <kees@kernel.org>
-
--Kees
-
-> ---
->  drivers/tty/sysrq.c | 38 ++++++++++++++++++++++++++++++++++++++
->  kernel/sysctl.c     | 30 ------------------------------
->  2 files changed, 38 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-> index 6853c4660e7c2586487fea83c12f0b7780db1ee1..8a304189749f3e33af48141a1aba5e456616c7de 100644
-> --- a/drivers/tty/sysrq.c
-> +++ b/drivers/tty/sysrq.c
-> @@ -1119,6 +1119,44 @@ int sysrq_toggle_support(int enable_mask)
->  }
->  EXPORT_SYMBOL_GPL(sysrq_toggle_support);
->  
-> +static int sysrq_sysctl_handler(const struct ctl_table *table, int write,
-> +				void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	int tmp, ret;
-> +	struct ctl_table t = *table;
-> +
-> +	tmp = sysrq_mask();
-> +	t.data = &tmp;
-> +
-> +	ret = proc_dointvec_minmax(&t, write, buffer, lenp, ppos);
-> +
-> +	if (ret || !write)
-> +		return ret;
-> +
-> +	if (write)
-> +		sysrq_toggle_support(tmp);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct ctl_table sysrq_sysctl_table[] = {
-> +	{
-> +		.procname	= "sysrq",
-> +		.data		= NULL,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= sysrq_sysctl_handler,
-> +	},
-> +};
-> +
-> +static int __init init_sysrq_sysctl(void)
-> +{
-> +	register_sysctl_init("kernel", sysrq_sysctl_table);
-> +	return 0;
-> +}
-> +
-> +subsys_initcall(init_sysrq_sysctl);
-> +
->  static int __sysrq_swap_key_ops(u8 key, const struct sysrq_key_op *insert_op_p,
->  				const struct sysrq_key_op *remove_op_p)
->  {
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index febf328054aa5a7b2462a256598f86f5ded87c90..ebcc7d75acd9fecbf3c10f31480c3cb6960cb53e 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -31,7 +31,6 @@
->  #include <linux/kernel.h>
->  #include <linux/kobject.h>
->  #include <linux/net.h>
-> -#include <linux/sysrq.h>
->  #include <linux/highuid.h>
->  #include <linux/writeback.h>
->  #include <linux/ratelimit.h>
-> @@ -964,26 +963,6 @@ int proc_dou8vec_minmax(const struct ctl_table *table, int write,
->  }
->  EXPORT_SYMBOL_GPL(proc_dou8vec_minmax);
->  
-> -#ifdef CONFIG_MAGIC_SYSRQ
-> -static int sysrq_sysctl_handler(const struct ctl_table *table, int write,
-> -				void *buffer, size_t *lenp, loff_t *ppos)
-> -{
-> -	int tmp, ret;
-> -
-> -	tmp = sysrq_mask();
-> -
-> -	ret = __do_proc_dointvec(&tmp, table, write, buffer,
-> -			       lenp, ppos, NULL, NULL);
-> -	if (ret || !write)
-> -		return ret;
-> -
-> -	if (write)
-> -		sysrq_toggle_support(tmp);
-> -
-> -	return 0;
-> -}
-> -#endif
-> -
->  static int __do_proc_doulongvec_minmax(void *data,
->  		const struct ctl_table *table, int write,
->  		void *buffer, size_t *lenp, loff_t *ppos,
-> @@ -1612,15 +1591,6 @@ static const struct ctl_table kern_table[] = {
->  		.proc_handler	= proc_dostring,
->  	},
->  #endif
-> -#ifdef CONFIG_MAGIC_SYSRQ
-> -	{
-> -		.procname	= "sysrq",
-> -		.data		= NULL,
-> -		.maxlen		= sizeof (int),
-> -		.mode		= 0644,
-> -		.proc_handler	= sysrq_sysctl_handler,
-> -	},
-> -#endif
->  #ifdef CONFIG_PROC_SYSCTL
->  	{
->  		.procname	= "cad_pid",
-> 
-> -- 
-> 2.47.2
-> 
-> 
+Thank you!
 
 -- 
-Kees Cook
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
