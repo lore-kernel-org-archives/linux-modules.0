@@ -1,121 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06105233129;
-	Thu,  8 May 2025 23:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1B3FC7;
+	Fri,  9 May 2025 00:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746747777; cv=none; b=NOfRLceXacpbfuhbEJuERwc4RHSJW/BfWrfgn/PRPy0iu/YkT9IWoNGiyE9zzfxwcTlOwhytGOkAzbyr1amH/RZQCCx8qTTRVlZISzUq7u80TsmN8y3/cgTajnBng9NFq8Ns3rpH9EDmqDkGIuscIx/hiukdX7ZLY6K4sSwOS9w=
+	t=1746751676; cv=none; b=FyKpqqfkzsT9d9EQ1L0MuRt8mfgPg/yomSjPIDgBPqNmPMhoT7YsDAX5xcQE+yRkGJw9St2sb1WjJ0biGhea6C8pgH3a43jMkIrYGDZdYB69AEUs/il7TozE0B2FiIOLoU0Mq0V/aUEYtGSfaOWrmc6AaF1hoe5QtpjGu3Hwikk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746747777; c=relaxed/simple;
-	bh=0HUJOi3Q80Hprk30UXwi1aPiSk0vyf8b/ThO0wu7JTU=;
+	s=arc-20240116; t=1746751676; c=relaxed/simple;
+	bh=bMakgoMCuiRE72u/z+hJBAzxNQv9g+Mt/nWMliQW9cs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cZQf/BHGwyb4C477hueIAA7s1phBnFS2lHiDjdbQmLei1hLThcmW9cwVsW9GKiZ89hyaUBiWU8pgHpIbvN6dK4k/5ESwJnzpuAjyjap3uZH5n02890P/T8Fum+FzzkQbKbs3bPdPXRqH/66EnmOxK0xtGPShRiFSb+6urdpv/9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nN+Uhtc4; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=gFgE3SYqK5wG7zWyrK3dfTI3ptOp8i0iE4B+45X5mA1Z+4Gx2PiV73+V/9e8lpU9Ne5Ucag/Iqh95xd4wQNXB5PFQMlxWBag6x6GBnTY6JvG+OYCgQpPjFOysgr3pg+0Dfpd9u5G+qEbwQAHvJq7pSJRkrMcSDlcphkmbwy1WNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XhYED6Sd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nN+Uhtc4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E528C4CEEF;
-	Thu,  8 May 2025 23:42:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XhYED6Sd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DB3C4CEE7;
+	Fri,  9 May 2025 00:47:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746747776;
-	bh=0HUJOi3Q80Hprk30UXwi1aPiSk0vyf8b/ThO0wu7JTU=;
+	s=k20201202; t=1746751675;
+	bh=bMakgoMCuiRE72u/z+hJBAzxNQv9g+Mt/nWMliQW9cs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nN+Uhtc462Hu+w/2C3kAAaTTRqv9Ak/xNFa/6zE1GtbE8Hid/gAx2Lx6ZYddSplug
-	 /oe6k6FGX+6ov8SIplmw+8dp6ccDDGtp7VkSmOMcoDRKrAKeIzXRre2QY0CT9GdyJX
-	 TsF/5N2bsa5FDw70uGkYZuti1nY610rqNOiWeli5a9gJu5ij2U1IFJZp5WMXfRqZJz
-	 Rrv8+ZS0x1l9+MyuXnXgvz3OPtgTQeLXwXsK3yzj0urs9fjPWGOwOXeoA9zLMuRPiY
-	 rNeTqq+cMGXtm7sBkHoAc7YqvSZDOmdwZH1ooMsuLld6UwPd6pwPUsr2LXlunSW7ii
-	 qOrUUDtKae7Mg==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-326c77c40b7so910741fa.1;
-        Thu, 08 May 2025 16:42:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUte0B/ItH8UXSHaCnWF08wpHn+tJnjYxHCenqgMDiS3dMupdMtcI/NrCCMCnvj4dBiQHjzFV4BLrs8N7mF@vger.kernel.org, AJvYcCVq31QE4hXYGW7j9WO2ibGMRJNwjDrTe13QdyeaSUr3OrTpcd1pDGE/UfUEq37+lHyEaQHNRwtQ8ivWLhc=@vger.kernel.org, AJvYcCXWJY7mC8vZUaHjjGz+dhK6tkq3vEM93N0+894mcVEWwVi4Mq6sjhDGxClCnyoUYCiSd0GUtyV6W0we8jdRxw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMx0rTO9qVv2gVoyuOVXeqfZPycBregYKXouAtDRLdcWjx7ktd
-	trV/8pdZ7JCCcvT0YvRnXExcOgsP8XMHyIXNne1Tf7IgYtcq+Uag9OxemgFCT2yjaYSIjX/1wyw
-	2LrMJG6Ir4zNWdT1/zrmWXbfI2ls=
-X-Google-Smtp-Source: AGHT+IFutgJYGooy1gvSEVR+svX/xeEYLIPC6W5LG+HLCFIxGaiTojj5a8p3cZK/OwyE1rr2/SV0O4b5KV2idQTmwYM=
-X-Received: by 2002:a2e:a581:0:b0:30b:e3d9:37db with SMTP id
- 38308e7fff4ca-326c46b0e3bmr5332311fa.26.1746747775141; Thu, 08 May 2025
- 16:42:55 -0700 (PDT)
+	b=XhYED6Sd5TjEoox6RCu60AkqsdrkeQ+XbMCsWxO/VYqx0YuIemCzYjffuEbFIIftg
+	 1XdkJ+J4CJoMBOa+uIzdTRvzJ+niJ3nv9TcBdvpaMWYEJ0CsiJmAhPPpBQubTxU6e+
+	 juZ793W+uXqvPi6zYeqJXEoIzBxLXzJF8LI3HFKGF8WhhpdXxTHhKXcF0uvAUazKkg
+	 yTLG/9gljKa2TwdIhKPRjNodB2pQk2+O3POiu+WV4j0EHtd8yYRm31bx2SGFe6RdpE
+	 +cCrGbklk3lLBixRS2mcB//FkiDIOQSjds3fI0sH9co/to1gBySjSmqWUr36M8PmJY
+	 aVPjo+eI2EJbg==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54b10956398so793193e87.0;
+        Thu, 08 May 2025 17:47:55 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUvgH76pF8RJL1sBG4qBIET830lUTAhZyVTpGAUgO15aRkEhE7C3B6gikOqXSLxG/m6AUtQvpjtTpnlWal0VA==@vger.kernel.org, AJvYcCVKzrG4e4vt8NSerdnleFtIz8UX+GXfwFSjZVtNe3K/W/DxeRAV7SNmLrVzmZfWV1jqWtY4r+8kTbgA7g0=@vger.kernel.org, AJvYcCXS0/WUOyk34oW5JTUlVNOPfMZ83e7IQWr8mVaGnxlElXHQYcMpGsackt6XE+Dy48rI4hb3EEZs9pxEZ1ti@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqhSFSEjA/UQoAxZQfFH2Jv49Pp8NGGX981uPb9SqPTAMedn2C
+	DXOZCNJO98liZpitbyV9s+THQSY5IGl7TMqXHt6gsXSUUKf9by+wS4BBGcz/awoG9HhAsGK+7aO
+	BIVax8anM2WuOHuCn4kpQaG+qLII=
+X-Google-Smtp-Source: AGHT+IFv19RUNrFsCEhoEdrdZSMlUKojQE9ydSn84wpWSlEvgoaEXcsWoPuOwYb8qhFkDFA1A40/QAjvvOqk9FF2nQw=
+X-Received: by 2002:a05:6512:6094:b0:549:7c5f:d961 with SMTP id
+ 2adb3069b0e04-54fc679583amr418503e87.17.1746751674642; Thu, 08 May 2025
+ 17:47:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250507231403.377725-7-samitolvanen@google.com>
-In-Reply-To: <20250507231403.377725-7-samitolvanen@google.com>
+References: <20250502141204.500293812@infradead.org> <20250502141843.937580735@infradead.org>
+In-Reply-To: <20250502141843.937580735@infradead.org>
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 9 May 2025 08:42:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATt2hgPZyp_MP8DN=vYJ_TuvUQjU-U33ekbeVsLosE5uQ@mail.gmail.com>
-X-Gm-Features: ATxdqUFE3-GdXPp4I15WWFcPl25L6hm_U-yW6eCb7BzZSyDSLNfJ9cyOlThFr1E
-Message-ID: <CAK7LNATt2hgPZyp_MP8DN=vYJ_TuvUQjU-U33ekbeVsLosE5uQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] gendwarfksyms: Add more kABI rules
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Fri, 9 May 2025 09:47:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARCQ6_yWiUCwVLEAeqJ_zN4pw73uLaJ7pWd02dqiSDa4w@mail.gmail.com>
+X-Gm-Features: ATxdqUGI3Y68vP87Uwm_DYEQHZajtw-tHyZdm5jP7oRxwSU3uhUsZJ1CM3C6U2o
+Message-ID: <CAK7LNARCQ6_yWiUCwVLEAeqJ_zN4pw73uLaJ7pWd02dqiSDa4w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] modpost: Use for() loop
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
+	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 8, 2025 at 8:14=E2=80=AFAM Sami Tolvanen <samitolvanen@google.c=
-om> wrote:
+On Fri, May 2, 2025 at 11:25=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> Hi,
+> Slight cleanup by using a for() loop instead of while(). This makes it
+> clearer what is the iteration and what is the actual work done.
 >
-> While looking deeper into the genksyms hacks that have been
-> needed during Android's 5.10 and 5.15 GKI lifecycles so far,
-> we found a few instances that are not covered by the existing
-> gendwarfksyms kABI stability rules. The first case involved
-> appending new members to a partially opaque data structure, and
-> the second case completely changing opaque types due to a large
-> backport that was necessary for both stability and security.
->
-> These patches add rules that allow distribution maintainers
-> to deal with structure size changes, and as a last resort, to
-> completely override a type string used for version calculation.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  scripts/mod/modpost.c |    8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 
 Applied to linux-kbuild.
 Thanks.
 
 
-> Sami
+
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1595,12 +1595,10 @@ static void read_symbols(const char *mod
+>                         license =3D get_next_modinfo(&info, "license", li=
+cense);
+>                 }
 >
-> ---
+> -               namespace =3D get_modinfo(&info, "import_ns");
+> -               while (namespace) {
+> +               for (namespace =3D get_modinfo(&info, "import_ns");
+> +                    namespace;
+> +                    namespace =3D get_next_modinfo(&info, "import_ns", n=
+amespace))
+>                         add_namespace(&mod->imported_namespaces, namespac=
+e);
+> -                       namespace =3D get_next_modinfo(&info, "import_ns"=
+,
+> -                                                    namespace);
+> -               }
 >
-> v3:
-> - Added a patch to drop documentation section numbers based
->   on Masahiro's suggestion.
->
-> v2: https://lore.kernel.org/r/20250505212401.3379699-6-samitolvanen@googl=
-e.com/
-> - Cleaned up type string parsing based on Petr's feedback.
->
-> v1: https://lore.kernel.org/r/20250430214049.2658716-6-samitolvanen@googl=
-e.com/
->
-> ---
->
-> Sami Tolvanen (5):
->   gendwarfksyms: Clean up kABI rule look-ups
->   gendwarfksyms: Add a kABI rule to override byte_size attributes
->   gendwarfksyms: Add a kABI rule to override type strings
->   Documentation/kbuild: Drop section numbers
->   Documentation/kbuild: Add new gendwarfksyms kABI rules
->
->  Documentation/kbuild/gendwarfksyms.rst   | 141 +++++++++++++++++-----
->  scripts/gendwarfksyms/dwarf.c            |  14 ++-
->  scripts/gendwarfksyms/examples/kabi.h    |  21 +++-
->  scripts/gendwarfksyms/examples/kabi_ex.c |   7 ++
->  scripts/gendwarfksyms/examples/kabi_ex.h | 101 +++++++++++++++-
->  scripts/gendwarfksyms/gendwarfksyms.h    |   2 +
->  scripts/gendwarfksyms/kabi.c             | 143 ++++++++++++++---------
->  scripts/gendwarfksyms/types.c            | 140 +++++++++++++++++++---
->  8 files changed, 470 insertions(+), 99 deletions(-)
->
->
-> base-commit: 92a09c47464d040866cf2b4cd052bc60555185fb
-> --
-> 2.49.0.987.g0cc8ee98dc-goog
+>                 if (!get_modinfo(&info, "description"))
+>                         warn("missing MODULE_DESCRIPTION() in %s\n", modn=
+ame);
 >
 >
 
