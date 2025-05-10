@@ -1,103 +1,151 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A43578F24
-	for <linux-modules@vger.kernel.org>; Sat, 10 May 2025 05:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAFE9444
+	for <linux-modules@vger.kernel.org>; Sat, 10 May 2025 21:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746854724; cv=none; b=OQV6ZRp9tgWUG6j5VbMR/rwst9KgLz6TqQFHFHHtPZxdwemgLg1NYMkUW4QTjhiv1teMZsA2+tHGue8G0mxPZQO4sT1KId+TbXT7mwfcElfxj3VK777pMBLdFdossCOIblRsohMFbURJmQV+886g0xMKQ5rpzx54u1OxAgV/PBA=
+	t=1746910900; cv=none; b=umfpE1hdvPscz8NCGXnsH3LDxpiHRc3shfAHswekoeCvEeFs9KZ2S94n1mqbAOiCRJIsum8E2egOw9SJEXN/hpovG733nEprJAN5LNT10CZegW9GPKUogQWkhrwICObLX8XiGY4H4/GB8I4AAxQrHpVM/y4/nyfR/ZcxozF9tcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746854724; c=relaxed/simple;
-	bh=wnSpCN0SlQvDTbj5w2gtJ0EQde4v02WPBAxkEXxIs6Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cquOOUQPiLLJU+jStq7iUzA8TqG+h9LgQ1LXpTkGRqW5cUqpeZKfOxh7S+R6Kn3wxQGKfYb2ii7Daf/F9QHRvAC9PM1LKqoig00bNfoQei/aeDhtnOTTY86IsVgAVZm4oPTmKnaSDnxCwdoml+RWxBP7zflilCkwwUEBb0iQOcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CFJywd4P; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1746910900; c=relaxed/simple;
+	bh=CqyaO56/um0r7+07UnuOVscO2huajZ+XOTAMEA9PjAs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HCc98RF2DXjlhCYeEVBXMvIXrb0WpWteDb7sBUBhwIYzlypeRQPtFcM0mwTZm3aDsa3QhkzOHMGEq3Z0M832N7VlINtZtCRr+0XUKEkA5uX53efHlfaVpTD8cu6MXkCEvtVXhZLHAdFWP2hhA1VraG7vDB4mYpp5r6rlyt27zMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Tba9+g+h; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CFJywd4P"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5fcac09313cso1984627a12.2
-        for <linux-modules@vger.kernel.org>; Fri, 09 May 2025 22:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1746854721; x=1747459521; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NAPjzM4sAakR9ZKfNitQt3KlBJ5tW4NoE0Hpkn5Csq0=;
-        b=CFJywd4PeoeDdFo8Xj8bAnJVGpsQFkxoXW/Uh9vS/F5YJVsAJJSQyQCYrTRKgTwG7H
-         k1hdKWMCmnviLiNBE0uzkmSEcStLLjFOtM5C4ymx50negBRtgCharL2XT1kPt3JJSH0E
-         4KoK9YY2rL+1fUBsSrtRsYRuetU3CMpOJLJo21sjf8Y0iEESTSrtjXMQ+fwU5xtj0PeD
-         r630MiNo4/No4dIC36wWUT2mTWIRrfBDwM9J/jJIpZUHiU+QMsWYpg8It0DyKUSius9f
-         Tx8EDMBjf/RlYs+YjOaxhDLKIDtGoLmL5fXM3RXt9IGKpL6gBpBq80PIZU/VfnC6Efog
-         Acxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746854721; x=1747459521;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NAPjzM4sAakR9ZKfNitQt3KlBJ5tW4NoE0Hpkn5Csq0=;
-        b=rOYLGrPESgGR8dCN05x3GniP5bcHSQ7t/8jCE1FTXGeVF/0BWEs15PXLMw6N8NKAUE
-         k/mO+mbbgWEF/aV9T4PXNZ76YYYnoFKzTtbwAkb6uNxFgTRTec0Vnad0pz1zOoBjoaUB
-         5AbNpogNMPNkzksI3HsexDtpqxHsejQJlJctcD1sVfHeo0LpGds/VGhWWEMkX8bjFvEA
-         uzLGzYP/1HLp/Krbw9evEaEUeoq11Kuj9IE5VfD9rrHlHKoIepWJri45djxBGl0BsGHA
-         MSJU1k8b+ZiGzsq9y8emTpYEEkVp74SHFCVJtGla5B+BIXTeYroIXZIiNXDehdugqs2k
-         NDwA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeTXqzPx9XmftkMgwIAhhEcjrY4Tg1OR8KdLdDSPNVgxdhGYqD/A06oS3JmJKeY/5H6Kh5cbxU8ypczN9D@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt0s/uSX2daTXg/HIjlae0zfuf1DjRE47i4CzKWWwiGcyMbuq1
-	vXhXgFUVPOQEfjjUihHVT2JwxLP4sqSvwiNc3wUiGlAZUs7vRlZlvnEfHteB61E=
-X-Gm-Gg: ASbGncud5QNaMZ3k7fWCuCUsdofDMoz/W+3afEqCvW5Xpx78Geoi80tsGI90a+Sy+MT
-	8KEEpMA5UlfsKwbXh3ovKnCiMiKIxb48DAaFCgKZoQXHWFS1gihFz6ZYFFcvSr/P9XKMRUqoY9u
-	91I95SarTWxkQRovY645XhJRcEIXibfRD18pNQuuYE7fOXkv3eN8NRX9uXvSryyhY0MMy6fr/fI
-	Nu5dkdfaMkRLE83aSiTB0OOJSkCa3ga9lYLXj7MlgvclxvET/rq1ps6m+x4U3wt4+i5iEk/wEWy
-	Js9TCDswFBnWpC7vRyIwU00maKfK6E/CBXea/4fmrRdGCW6madG39A==
-X-Google-Smtp-Source: AGHT+IGRmRcIxaVSii8qJ1fAKjH2Bcn8Hmyb1tMv2VrSZGKJXfOxDkWWHmeUJttXj/PSzLp0og3pSA==
-X-Received: by 2002:a17:907:8687:b0:ad2:3efc:dd7a with SMTP id a640c23a62f3a-ad23efce2b7mr34772366b.4.1746854720571;
-        Fri, 09 May 2025 22:25:20 -0700 (PDT)
-Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad2198532d7sm260830366b.170.2025.05.09.22.25.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 May 2025 22:25:20 -0700 (PDT)
-Message-ID: <c804cbe9-3777-46ec-9df2-db76c1139137@suse.com>
-Date: Sat, 10 May 2025 07:25:19 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Tba9+g+h"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746910894;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SbT4EkS9jDwls1/MWPzR6fUxNMkTZUGDTe7h7TpT/ko=;
+	b=Tba9+g+hj5ohfWOFe9qq5iXS40bSZ7Tj2ikBvDOSHh6Fe+fLHL18HEe/hpl+yKriILmQrn
+	dtWpOGN+mFOEOG1DAXVSNqjoBpU/B0U1PVmuaU4llaGy+J7UUtpM5Aju1jpCdrxsWGXmmj
+	VyKBjKpvlwL+rUHfcVW64oG6C8VyaQQ=
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: linux-kernel@vger.kernel.org
+Cc: Kent Overstreet <kent.overstreet@linux.dev>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	linux-modules@vger.kernel.org
+Subject: [PATCH] params: Add support for static keys
+Date: Sat, 10 May 2025 17:01:26 -0400
+Message-ID: <20250510210126.4032840-1-kent.overstreet@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Modules fixes for v6.15-rc6
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Dmitry Antipov <dmantipov@yandex.ru>
-References: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
- <CAHk-=wjNj0vHh9v6-LTrbgtq=o6OS+RN3u3m03nV3n9V+urGtg@mail.gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <CAHk-=wjNj0vHh9v6-LTrbgtq=o6OS+RN3u3m03nV3n9V+urGtg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 5/9/25 18:19, Linus Torvalds wrote:
-> On Fri, 9 May 2025 at 08:09, Petr Pavlu <petr.pavlu@suse.com> wrote:
->>
->> The fix has been on modules-next only since yesterday but should be safe.
-> 
-> Hmm.
-> 
-> At a minimum, the *description* of this bug is garbage.
-> 
-> It talks about an "uninitialized completion pointer", but then the fix
-> actually depends on it being initialized - just initialized to NULL.
-> 
-> I do believe that it always is initialized, and I have pulled this.
-> but I really think the explanations here are actively misleading.
-> 
-> Because there's a big difference between "uninitialized" and "not
-> pointing to a completion".
+Static keys can now be a module parameter, e.g.
 
-Right, the description is in this aspect misleading, my bad.
+module_param_named(foo, foo.key, static_key_t, 0644)
 
--- Petr
+bcachefs is now using this.
+
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-modules@vger.kernel.org
+Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+---
+ include/linux/jump_label.h  |  2 ++
+ include/linux/moduleparam.h |  6 ++++++
+ kernel/params.c             | 35 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index fdb79dd1ebd8..0fc9b71db56f 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -107,6 +107,8 @@ struct static_key {
+ #endif	/* CONFIG_JUMP_LABEL */
+ };
+ 
++typedef struct static_key static_key_t;
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #ifdef CONFIG_JUMP_LABEL
+diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+index bfb85fd13e1f..2494e7e67453 100644
+--- a/include/linux/moduleparam.h
++++ b/include/linux/moduleparam.h
+@@ -488,6 +488,12 @@ extern int param_set_bint(const char *val, const struct kernel_param *kp);
+ #define param_get_bint param_get_int
+ #define param_check_bint param_check_int
+ 
++/* A static key, which can only be set like a bool */
++extern const struct kernel_param_ops param_ops_static_key_t;
++extern int param_set_static_key_t(const char *val, const struct kernel_param *kp);
++extern int param_get_static_key_t(char *buffer, const struct kernel_param *kp);
++#define param_check_static_key_t(name, p) __param_check(name, p, struct static_key)
++
+ /**
+  * module_param_array - a parameter which is an array of some type
+  * @name: the name of the array variable
+diff --git a/kernel/params.c b/kernel/params.c
+index 2509f216c9f3..991f49e138e7 100644
+--- a/kernel/params.c
++++ b/kernel/params.c
+@@ -14,6 +14,7 @@
+ #include <linux/overflow.h>
+ #include <linux/security.h>
+ #include <linux/slab.h>
++#include <linux/static_key.h>
+ #include <linux/string.h>
+ 
+ #ifdef CONFIG_SYSFS
+@@ -412,6 +413,40 @@ const struct kernel_param_ops param_ops_bint = {
+ };
+ EXPORT_SYMBOL(param_ops_bint);
+ 
++int param_set_static_key_t(const char *val, const struct kernel_param *kp)
++{
++	/* Match bool exactly, by re-using it. */
++	struct kernel_param boolkp = *kp;
++	bool v;
++	int ret;
++
++	boolkp.arg = &v;
++
++	ret = param_set_bool(val, &boolkp);
++	if (ret)
++		return ret;
++	if (v)
++		static_key_enable(kp->arg);
++	else
++		static_key_disable(kp->arg);
++	return 0;
++}
++EXPORT_SYMBOL(param_set_static_key_t);
++
++int param_get_static_key_t(char *buffer, const struct kernel_param *kp)
++{
++	struct static_key *key = kp->arg;
++	return sprintf(buffer, "%c\n", static_key_enabled(key) ? 'N' : 'Y');
++}
++EXPORT_SYMBOL(param_get_static_key_t);
++
++const struct kernel_param_ops param_ops_static_key_t = {
++	.flags = KERNEL_PARAM_OPS_FL_NOARG,
++	.set = param_set_static_key_t,
++	.get = param_get_static_key_t,
++};
++EXPORT_SYMBOL(param_ops_static_key_t);
++
+ /* We break the rule and mangle the string. */
+ static int param_array(struct module *mod,
+ 		       const char *name,
+-- 
+2.49.0
+
