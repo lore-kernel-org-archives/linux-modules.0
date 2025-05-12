@@ -1,108 +1,115 @@
-Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC0B297A45;
-	Mon, 12 May 2025 18:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC67925290E
+	for <linux-modules@vger.kernel.org>; Mon, 12 May 2025 18:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747073704; cv=none; b=JDWrX1qYFSXfiFUKWKOknfgh2RRzgOCOWTzZLRLUJObaKgOyfw+ykYwFaVfdjhe21425sse3JZKjbbPm4Qj+Y1V94HsnCSVeqhdo/4ySqNmXgFyab+YrOaKnKHkf4cpxcDY+1G1LDv3V5QjUgW5HYmgxM3f1KNHPE0fw6s/nMoA=
+	t=1747076238; cv=none; b=nlsfuq9c1sDLK1ZcoZHCrAY5UjoKMMeIIGwFuetwsg3VAg+p2CoqdAXwNs3f2e9J7NYw8u3DQaLPGcNoH/FdBvKzuxgsNw2c5GhNezbtgFKY9rbO7De8KhA5WeSV8PfulBZhM/2ym77IuQGicC3kZMpUyOAvPeYD+GLuGj4Xp3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747073704; c=relaxed/simple;
-	bh=Vqe5AmLOxv2544pzcRLMoQPFYWzIjs2Axn9+CmQDJUE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
-	 In-Reply-To:Content-Type; b=Wxjj8I3qrtbJprCzk2fAAxSG0STrZ9FTM752bePQW/UOZeVKuswjd6YjC9XuDz3IRBxq51hjA60gJCS1mlrC4TNYgj5wAIzyHws+8cGUfJbL1t0SyRHMHn0pn8rnUHj8PxqhbGtsV06ZK996vGC7r3opiZHxFWmdOLw+DRvZv54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=MI4gu6RF; arc=none smtp.client-ip=178.154.239.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+	s=arc-20240116; t=1747076238; c=relaxed/simple;
+	bh=fbI3cjbsK0JUY5ujCpjGR4ienjUE2nrxQFRpNKrreTs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j8smnuVQfnOA4bHYxjoXah6IGDewJXOByYMvSKLesO8mV4yEWcmCahl5ux/yORge6Sj6agMcRKVRGI7VIM6T85rh9OmAA8zM6ID7MYsF2d4mXZZ36ty/SJG3WYUBERpBVOon1P+Qc6Gu1TZLx6AB91m2fX/2drHdatPW+vzNXa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gZOYMYZt; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="MI4gu6RF"
-Received: from mail-nwsmtp-smtp-production-main-87.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-87.sas.yp-c.yandex.net [IPv6:2a02:6b8:c23:2ea3:0:640:da3e:0])
-	by forward500b.mail.yandex.net (Yandex) with ESMTPS id 8248660F73;
-	Mon, 12 May 2025 21:14:52 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-87.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id oEKTJA2LjeA0-igIVqRQm;
-	Mon, 12 May 2025 21:14:51 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1747073691; bh=sKWFY9qzdW+cQL8kjiBG6SWhUDBg0xlq9ULolK89XaU=;
-	h=In-Reply-To:Subject:To:From:Cc:Date:References:Message-ID;
-	b=MI4gu6RF6+85eSlPYRhUhzGaC+5VKy5S0DDvYSq6CcDZ3TI12P0OrVgd3Bo3EhWpx
-	 4PFzWocdvxM7l0KxySacO4gpOBPW5gxRWrDy7vshPN8O5+7zjaSYev2jzZuAQhUx3N
-	 mizfOsMaon039aNX6epo/RKBTraI7p5sFRw8YNBg=
-Authentication-Results: mail-nwsmtp-smtp-production-main-87.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <f40c3d5c-edf8-4d3d-a50a-506c5b6d7bc0@yandex.ru>
-Date: Mon, 12 May 2025 21:14:50 +0300
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gZOYMYZt"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5fbf007ea38so7926545a12.3
+        for <linux-modules@vger.kernel.org>; Mon, 12 May 2025 11:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1747076233; x=1747681033; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cQkfO4hWqu1bvvz/7yqOd/ghHOaUeErpEqA6FiF+TmQ=;
+        b=gZOYMYZtsjbVzqL8AegXuNmHz15qomaZTEjLoaMf01DQKvFFefpDB/1NAg/WnDeuUI
+         ZWiHDVc2AnxRDzS3PisAMzn8npuxa448MLHrCccVPtyhH84leHPdqFTQ1MWqreTAg+Ei
+         oTdA9nXGy4v1YGOZIdRaAvrmSjrpM068yoQkk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747076233; x=1747681033;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cQkfO4hWqu1bvvz/7yqOd/ghHOaUeErpEqA6FiF+TmQ=;
+        b=wMu7YvD/jHHARTpU+eVcl7H05YwgyvIz4HcZI7N3Hvh664BVAGeVxJleppsOtFfRrm
+         JIBgcRXH5Kk6VQTV5bLTPYDriLMc0s11ABKYtkHCJFol3eU2xrlAt8K49WJeVtR3ArFf
+         9kypPwk2jeX8zyfrBf2hOT3CZmG+takrYEPYoqGMzZT2r/k9wqIgqDMWapltb8VLq1BM
+         2J2gwb+awvvDyG/f2piKXx05UG7OmUlOw0fkAHUpR2VnVfaVUurxx5vrgYdWwEY6tnDV
+         bf9Hb33Rjqf9vueGeVEpf6WPoMkML42EQ0G7SZmxjGc7sUt965//ttf5FOhgm9J/PL7s
+         Lghw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8kwQwPBOk0std8ZOwg15laaCLnRLdcnEF2hZ1tV0aEEIe4dqddYcYh4fF8Se4QrltwnrySznmuXVuQfoP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLwbqX4MlkAyFQH6KswCRSE106tAv99z/qQFGPryPGjl3urQkJ
+	VGBgwJndxQmz6KZcxTRhwKX8x2UcnSNzhOAJU/OOlIAfI9qLLk0qE2wcA2pHx4IBwL+g7w9Ti1T
+	eRDY=
+X-Gm-Gg: ASbGncvPeV3f7uE2eTC+c8lqwuAKqxzRL9re9xD+O6hnNOjzi1zqbm80VExOlamZTKt
+	i9vhJPLHHul7PmsMKtK5dZnvG2UfnhF5OZQ9BrnqQi6gtH/w/dWXoTSz4KfkKStpCMwMhwHDyS3
+	tahCREXMrl7GN9wIyBtPz8vJ0sRcOnNTTzLZGjNRWFHVolyL1E2JB6In3TL3AZxoUTpNY19p37Q
+	sYYfDyuk8uD9VWcHjxl+KeJD2XMYjhg7cdgLMsXkVzWtXqe4vXjE19TcZBLra1y/J0u9rK+P3vJ
+	ucx+nESCR7d4GQdizeSdGhgOnVTCZhq6LsPGYNbFbfIBL0DteAMUvnpLaqmOKDaxOt5BbwPUS77
+	kRLL5yEVUY2K9PkJBEPMIG57S8giD2mZNodxc
+X-Google-Smtp-Source: AGHT+IEg7bdtAIpafWqRJxvpcuioWYXNTeacoG6N7lzdELkO4xR+MIJKLaTiuqINOC+daUz6Dk9QGA==
+X-Received: by 2002:a17:907:9453:b0:aca:a3da:80b8 with SMTP id a640c23a62f3a-ad21917d128mr1656756366b.55.1747076233434;
+        Mon, 12 May 2025 11:57:13 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad24085b44fsm397064966b.149.2025.05.12.11.57.09
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 May 2025 11:57:10 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ad24677aaf6so248224466b.2
+        for <linux-modules@vger.kernel.org>; Mon, 12 May 2025 11:57:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWPMvMaTZ66oUAz/DxF8Xtjzliz9lWMij9dM+Sw4HKtY639Rbp0bMfpZazNyAMmbsq8/++xmcoA9tfQC7FC@vger.kernel.org
+X-Received: by 2002:a17:907:a0ca:b0:acf:b8:f5d2 with SMTP id
+ a640c23a62f3a-ad219007735mr1331166866b.36.1747076229361; Mon, 12 May 2025
+ 11:57:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-MW
-To: Linus Torvalds <torvalds@linux-foundation.org>,
- Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
 References: <0e82be0f-a305-4aba-b9ab-79596f595277@suse.com>
- <CAHk-=wjNj0vHh9v6-LTrbgtq=o6OS+RN3u3m03nV3n9V+urGtg@mail.gmail.com>
-From: Dmitry Antipov <dmantipov@yandex.ru>
-Autocrypt: addr=dmantipov@yandex.ru; keydata=
- xsDNBGBYjL8BDAC1iFIjCNMSvYkyi04ln+5sTl5TCU9O5Ot/kaKKCstLq3TZ1zwsyeqF7S/q
- vBVSmkWHQaj80BlT/1m7BnFECMNV0M72+cTGfrX8edesMSzv/id+M+oe0adUeA07bBc2Rq2V
- YD88b1WgIkACQZVFCo+y7zXY64cZnf+NnI3jCPRfCKOFVwtj4OfkGZfcDAVAtxZCaksBpTHA
- tf24ay2PmV6q/QN+3IS9ZbHBs6maC1BQe6clFmpGMTvINJ032oN0Lm5ZkpNN+Xcp9393W34y
- v3aYT/OuT9eCbOxmjgMcXuERCMok72uqdhM8zkZlV85LRdW/Vy99u9gnu8Bm9UZrKTL94erm
- 0A9LSI/6BLa1Qzvgwkyd2h1r6f2MVmy71/csplvaDTAqlF/4iA4TS0icC0iXDyD+Oh3EfvgP
- iEc0OAnNps/SrDWUdZbJpLtxDrSl/jXEvFW7KkW5nfYoXzjfrdb89/m7o1HozGr1ArnsMhQC
- Uo/HlX4pPHWqEAFKJ5HEa/0AEQEAAc0kRG1pdHJ5IEFudGlwb3YgPGRtYW50aXBvdkB5YW5k
- ZXgucnU+wsEJBBMBCAAzFiEEgi6CDXNWvLfa6d7RtgcLSrzur7cFAmYEXUsCGwMFCwkIBwIG
- FQgJCgsCBRYCAwEAAAoJELYHC0q87q+3ghQL/10U/CvLStTGIgjRmux9wiSmGtBa/dUHqsp1
- W+HhGrxkGvLheJ7KHiva3qBT++ROHZxpIlwIU4g1s6y3bqXqLFMMmfH1A+Ldqg1qCBj4zYPG
- lzgMp2Fjc+hD1oC7k7xqxemrMPstYQKPmA9VZo4w3+97vvnwDNO7iX3r0QFRc9u19MW36wq8
- 6Yq/EPTWneEDaWFIVPDvrtIOwsLJ4Bu8v2l+ejPNsEslBQv8YFKnWZHaH3o+9ccAcgpkWFJg
- Ztj7u1NmXQF2HdTVvYd2SdzuJTh3Zwm/n6Sw1czxGepbuUbHdXTkMCpJzhYy18M9vvDtcx67
- 10qEpJbe228ltWvaLYfHfiJQ5FlwqNU7uWYTKfaE+6Qs0fmHbX2Wlm6/Mp3YYL711v28b+lp
- 9FzPDFqVPfVm78KyjW6PcdFsKu40GNFo8gFW9e8D9vwZPJsUniQhnsGF+zBKPeHi/Sb0DtBt
- enocJIyYt/eAY2hGOOvRLDZbGxtOKbARRwY4id6MO4EuSs7AzQRgWIzAAQwAyZj14kk+OmXz
- TpV9tkUqDGDseykicFMrEE9JTdSO7fiEE4Al86IPhITKRCrjsBdQ5QnmYXcnr3/9i2RFI0Q7
- Evp0gD242jAJYgnCMXQXvWdfC55HyppWazwybDiyufW/CV3gmiiiJtUj3d8r8q6laXMOGky3
- 7sRlv1UvjGyjwOxY6hBpB2oXdbpssqFOAgEw66zL54pazMOQ6g1fWmvQhUh0TpKjJZRGF/si
- b/ifBFHA/RQfAlP/jCsgnX57EOP3ALNwQqdsd5Nm1vxPqDOtKgo7e0qx3sNyk05FFR+f9px6
- eDbjE3dYfsicZd+aUOpa35EuOPXS0MC4b8SnTB6OW+pmEu/wNzWJ0vvvxX8afgPglUQELheY
- +/bH25DnwBnWdlp45DZlz/LdancQdiRuCU77hC4fnntk2aClJh7L9Mh4J3QpBp3dh+vHyESF
- dWo5idUSNmWoPwLSYQ/evKynzeODU/afzOrDnUBEyyyPTknDxvBQZLv0q3vT0UiqcaL7ABEB
- AAHCwPYEGAEIACAWIQSCLoINc1a8t9rp3tG2BwtKvO6vtwUCZgRdSwIbDAAKCRC2BwtKvO6v
- t9sFC/9Ga7SI4CaIqfkye1EF7q3pe+DOr4NsdsDxnPiQuG39XmpmJdgNI139TqroU5VD7dyy
- 24YjLTH6uo0+dcj0oeAk5HEY7LvzQ8re6q/omOi3V0NVhezdgJdiTgL0ednRxRRwNDpXc2Zg
- kg76mm52BoJXC7Kd/l5QrdV8Gq5WJbLA9Kf0pTr1QEf44bVR0bajW+0Lgyb7w4zmaIagrIdZ
- fwuYZWso3Ah/yl6v1//KP2ppnG0d9FGgO9iz576KQZjsMmQOM7KYAbkVPkZ3lyRJnukrW6jC
- bdrQgBsPubep/g9Ulhkn45krX5vMbP3wp1mJSuNrACQFbpJW3t0Da4DfAFyTttltVntr/ljX
- 5TXWnMCmaYHDS/lP20obHMHW1MCItEYSIn0c5DaAIfD+IWAg8gn7n5NwrMj0iBrIVHBa5mRp
- KkzhwiUObL7NO2cnjzTQgAVUGt0MSN2YfJwmSWjKH6uppQ7bo4Z+ZEOToeBsl6waJnjCL38v
- A/UwwXBRuvydGV0=
+ <CAHk-=wjNj0vHh9v6-LTrbgtq=o6OS+RN3u3m03nV3n9V+urGtg@mail.gmail.com> <f40c3d5c-edf8-4d3d-a50a-506c5b6d7bc0@yandex.ru>
+In-Reply-To: <f40c3d5c-edf8-4d3d-a50a-506c5b6d7bc0@yandex.ru>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 12 May 2025 11:56:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whBF_ikhpCa_uW6Ahh-2TWh=5g8WydY6P4_Fy3sT9EmMA@mail.gmail.com>
+X-Gm-Features: AX0GCFuKupDElWgaZY92g6wcpisiuYtRjjFMNH5ooBdLaCB7fzmVdT_PTNET0h0
+Message-ID: <CAHk-=whBF_ikhpCa_uW6Ahh-2TWh=5g8WydY6P4_Fy3sT9EmMA@mail.gmail.com>
 Subject: Re: [GIT PULL] Modules fixes for v6.15-rc6
-In-Reply-To: <CAHk-=wjNj0vHh9v6-LTrbgtq=o6OS+RN3u3m03nV3n9V+urGtg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Dmitry Antipov <dmantipov@yandex.ru>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 5/9/25 7:19 PM, Linus Torvalds wrote:
+On Mon, 12 May 2025 at 11:14, Dmitry Antipov <dmantipov@yandex.ru> wrote:
+>
+> Technically speaking you're right, and I will take notice on that for
+> further commits. OTOH replying with "please adjust commit message and
+> send v2" could be the way faster.
 
-> At a minimum, the *description* of this bug is garbage.
-> 
-> It talks about an "uninitialized completion pointer", but then the fix
-> actually depends on it being initialized - just initialized to NULL.
-> 
-> I do believe that it always is initialized, and I have pulled this.
-> but I really think the explanations here are actively misleading.
-> 
-> Because there's a big difference between "uninitialized" and "not
-> pointing to a completion".
+I suspect it ends up depending on the people.
 
-Technically speaking you're right, and I will take notice on that for
-further commits. OTOH replying with "please adjust commit message and
-send v2" could be the way faster.
+Personally, I tend to dislike being on the receiving end of the
+back-and-forth of "fix this nit before I'll apply things", so I
+generally try to avoid doing that to others.
 
-Dmitry
+Yes, I will do it for things that I think matter, where I really don't
+want to have some bad thing show up to then be fixed later.
 
+But I feel we sometimes have *too* much of that code review attitude
+going on, where you end up with patch series that go on for multiple
+versions because people keep reacting to various small details.
+
+So most of the time, I'd rather just get the code fixed - get it over
+with and leave the issue behind.
+
+I'll point out something I think was wrong, but not fatal to the
+codebase, and hopefully just make people aware and avoid future
+occurrences.
+
+IOW, I didn't expect my comment to result in any particular action
+this time, just a "please think more about the explanations".
+
+              Linus
