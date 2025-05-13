@@ -1,115 +1,176 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD172AEE1
-	for <linux-modules@vger.kernel.org>; Mon, 12 May 2025 21:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C274315E;
+	Tue, 13 May 2025 07:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747084973; cv=none; b=H/TENSXTN18aj0H8BVItK9B+dSfprH4u6Vx4KHVKCn/vbyuwmWBklm/Vq5mBeiKeRWiFOT1ngtqwIA7Jy9HlfV3NjRfpMwdMNhFTiO5Vcn0RolOsOyfcG5HUoh3BwbgGLSwJmjahie/XqPnAeUcOgtAG7QEiY7GPMcarZnP2Lrw=
+	t=1747121609; cv=none; b=OK6tE3Wn8RmaaVe7hcx3jEL3twH1WBbsheu4gmYwrWsXtg5TtmcGWyO5g36ZhGEkMRzuZojHigtGiBXNCFUJMoYQL30a97zKvY8cmziGTwX6ZMTdaCM+yfFSK5VfyVVeAjW6vPSnzb1OMfYuonJLp9i5Vr44mvJkCSKtMCTnETY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747084973; c=relaxed/simple;
-	bh=SMBDwkB6ZO5EjlFwvEAuX+WqRipKGqgUOkdjOXdx+10=;
+	s=arc-20240116; t=1747121609; c=relaxed/simple;
+	bh=oydnFwFzyvTFZLytjGu4FLOFoRfASVhdPt5sskdlZPs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gj8XB072Oa5RtyMuRksJUNnzqI3foWyvR99U8rvN5H1dysPj2ZTA6lP6YqEQOy3aQAV2baHjeWAvCj4FH29W+1PFR+gC3RrCtPFLOteDhFnl0BoQntM95Jj2m77orw7YVpbKcUJ0Bq+tAEsHnedDbwTUWov3MDq2Do+9nopX4LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=breakpoint.cc; spf=pass smtp.mailfrom=breakpoint.cc; dkim=pass (2048-bit key) header.d=breakpoint.cc header.i=@breakpoint.cc header.b=Fi0EJro8; dkim=permerror (0-bit key) header.d=breakpoint.cc header.i=@breakpoint.cc header.b=DsLgap4S; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=breakpoint.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=breakpoint.cc
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/ZrQwHzlUuGaHtfyGcTxFRDPXA3Fa24/HAWubz+wKwcAnApYmKcarAiB/wsNup6f7r+5btGIoRlC0DTZ85x5owSA2NlEi638C8dxHTpIXyIOc9BngBHF7fy7Gj5UESwMtWnAZMV9G+d7rTFPRhZ7W8pWCNO9yzU1PZfo9lGwNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1cuC8NK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=breakpoint.cc header.i=@breakpoint.cc header.b="Fi0EJro8";
-	dkim=permerror (0-bit key) header.d=breakpoint.cc header.i=@breakpoint.cc header.b="DsLgap4S"
-Date: Mon, 12 May 2025 23:22:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=breakpoint.cc;
-	s=2025; t=1747084964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Kc0U8uxLzvsmQSs0slkCejhK8ZuVOJ6poNnn3hgdMUU=;
-	b=Fi0EJro8n8C2K5LBxV7hQt5hzApCIGTV+U2xaYECnU6SaMKahDecEKFLZQjuaJUl2PW/wE
-	NFUEmGhDaLUdN4KVN89WLnrTXQWEK1/x+ed2TgQKgBOeB651PKPx9/LZaGYYeevlkUO74h
-	NWHB+Z96qk/87sjxerSCcBcv8J34fCJ81CYgBjP11OrUHnpz7f/8/xmqAcpQW3WnXk4FBW
-	AQfhElVx57A6m5Fg39FT/FptLJFrcYDqOJMnU55delPelmTvTxs6yrppqtbO02xCmMjoBh
-	Nm7haMbKANPn9HzwtkmqrX5irxcx8ryrFXggQYTxIuH+UgwsCqbKZnIVrz+9Ww==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=breakpoint.cc;
-	s=2025e; t=1747084964;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Kc0U8uxLzvsmQSs0slkCejhK8ZuVOJ6poNnn3hgdMUU=;
-	b=DsLgap4SotO5gYLBziaFz9yA794vm8wo+IunNIY1r2rmDqQB3VorQk7VPMFSSwOCL0mCTH
-	UWrORXZQsG8L9FDQ==
-From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Subject: Re: [PATCH] module: Use rcuref_t for module::refcnt.
-Message-ID: <20250512212241.Jtv69FX7@breakpoint.cc>
-References: <20250309121914.pN6eBMvI@breakpoint.cc>
- <2362aa50-67fc-4535-b0eb-26f50066710b@suse.com>
- <20250310212416.K2OGvLw7@breakpoint.cc>
- <0d4d5530-7e0f-4ccb-ba53-135e1eb65b89@suse.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1cuC8NK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38272C4CEE4;
+	Tue, 13 May 2025 07:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747121608;
+	bh=oydnFwFzyvTFZLytjGu4FLOFoRfASVhdPt5sskdlZPs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=h1cuC8NKAbWGk5N4z9eoNPIQ6NBkZHWfTFBOMG6WcDqpnNYaelJWfkZf82BqvkDSl
+	 P/SajPouty4fKsU9symCU24kVd6HIGfDEqjl8fysrHGn06p2mqEb6M0ny0gYBoxxBk
+	 KeV2K9sjGbcqfaahL5nhnRXWUj06irpfg80ARwqSV7eG2SqwwBAwTjvK/K/HmYNC+3
+	 ClsSUW2zxuP5+BIRP9Uh8Sg+1e8cC47UVPi/e6Hv3UN5bc6ttmhPXS1uHrb7nlx2Hl
+	 1bxJvfmr+aeiyc8BpGfu5tpnm9UEP2MWYHDM53CjBoe7hXKGFQZU+2v+E1qoSj2UG6
+	 EapmAmIgZLQyQ==
+Date: Tue, 13 May 2025 09:33:23 +0200
+From: Joel Granados <joel.granados@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes <joel@joelfernandes.org>, 
+	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org, 
+	linux-parisc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 09/12] sysctl: move cad_pid into kernel/pid.c
+Message-ID: <hqklj5woeb3hl3n4btn6xognyw63tkp7x2ht6dkw52nmhwfioo@ssagrmnhg2bu>
+References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
+ <20250509-jag-mv_ctltables_iter2-v1-9-d0ad83f5f4c3@kernel.org>
+ <202505091200.FC2683DD@keescook>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5fouo2tqrgcca44q"
 Content-Disposition: inline
-In-Reply-To: <0d4d5530-7e0f-4ccb-ba53-135e1eb65b89@suse.com>
+In-Reply-To: <202505091200.FC2683DD@keescook>
 
-On 2025-03-17 17:33:58 [+0100], Petr Pavlu wrote:
-> >> I'd understand changing module::refcnt from atomic_t to refcount_t, but
-> >> it isn't clear to me from the above description what using rcuref_t
-> >> actually gains. Could you please explain why you think it is more
-> >> appropriate over refcount_t here?
-> > 
-> > I seems easier to handle without the atomic_inc_not_zero() and
-> > atomic_dec_if_positive().
-> 
-> I think the use of atomic_inc_not_zero()/refcount_inc_not_zero() is
-> a common pattern. The call to atomic_dec_if_positive() would be with
-> refcount_t in this case replaced by refcount_dec(). That looks fairly
-> comparable to me to the rcuref_t version.
 
-It is a common pattern. The difference is that atomic_inc_not_zero() is
-implemented as cmpxchg loop while rcuref_get() is implemented as an
-unconditional get. Now: The cmpxchg loop might need a retry if there are
-two simultaneous gets while rcuref_get() does always the increment. So
-if you have simultaneous gets you can see a performance improvement with
-rcuref_t, see for instance
-	https://lore.kernel.org/all/202504221604.38512645-lkp@intel.com/
+--5fouo2tqrgcca44q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > rcuref_get() is implemented as an implicit inc and succeeds always as
-> > long as the counter is not negative. Negative means the counter has been
-> > probably released and the slowpath decides if it is released or not.
-> > Eitherway you get rid of all the WARN_ON()s and the dec/ inc dance in
-> > try_release_module_ref() where you simply attempt the final "put" and if
-> > this one fails (because a refence is still held) you attempt to get the
-> > inital reference and can decice if it was successfull or not.
-> > If the puts outweight the gets then you see a warning from the rcuref()
-> > code itself.
-> 
-> Sure, but having these warnings would be the case also with refcount_t,
-> no?
+On Fri, May 09, 2025 at 12:01:24PM -0700, Kees Cook wrote:
+> On Fri, May 09, 2025 at 02:54:13PM +0200, Joel Granados wrote:
+> > Move cad_pid as well as supporting function proc_do_cad_pid into
+> > kernel/pic.c. Replaced call to __do_proc_dointvec with proc_dointvec
+> > inside proc_do_cad_pid which requires the copy of the ctl_table to
+> > handle the temp value.
+> >=20
+> > This is part of a greater effort to move ctl tables into their
+> > respective subsystems which will reduce the merge conflicts in
+> > kernel/sysctl.c.
+> >=20
+> > Signed-off-by: Joel Granados <joel.granados@kernel.org>
+> > ---
+> >  kernel/pid.c    | 32 ++++++++++++++++++++++++++++++++
+> >  kernel/sysctl.c | 31 -------------------------------
+> >  2 files changed, 32 insertions(+), 31 deletions(-)
+> >=20
+> > diff --git a/kernel/pid.c b/kernel/pid.c
+> > index 4ac2ce46817fdefff8888681bb5ca3f2676e8add..bc87ba08ae8b7c67f3457b3=
+1309b56b5d90f8c52 100644
+> > --- a/kernel/pid.c
+> > +++ b/kernel/pid.c
+> > @@ -717,6 +717,29 @@ static struct ctl_table_root pid_table_root =3D {
+> >  	.set_ownership	=3D pid_table_root_set_ownership,
+> >  };
+> > =20
+> > +static int proc_do_cad_pid(const struct ctl_table *table, int write, v=
+oid *buffer,
+> > +		size_t *lenp, loff_t *ppos)
+> > +{
+> > +	struct pid *new_pid;
+> > +	pid_t tmp_pid;
+> > +	int r;
+> > +	struct ctl_table tmp_table =3D *table;
+> > +
+> > +	tmp_pid =3D pid_vnr(cad_pid);
+> > +	tmp_table.data =3D &tmp_pid;
+> > +
+> > +	r =3D proc_dointvec(&tmp_table, write, buffer, lenp, ppos);
+> > +	if (r || !write)
+> > +		return r;
+> > +
+> > +	new_pid =3D find_get_pid(tmp_pid);
+> > +	if (!new_pid)
+> > +		return -ESRCH;
+> > +
+> > +	put_pid(xchg(&cad_pid, new_pid));
+> > +	return 0;
+> > +}
+> > +
+> >  static const struct ctl_table pid_table[] =3D {
+> >  	{
+> >  		.procname	=3D "pid_max",
+> > @@ -727,6 +750,15 @@ static const struct ctl_table pid_table[] =3D {
+> >  		.extra1		=3D &pid_max_min,
+> >  		.extra2		=3D &pid_max_max,
+> >  	},
+> > +#ifdef CONFIG_PROC_SYSCTL
+> > +	{
+> > +		.procname	=3D "cad_pid",
+> > +		.data		=3D NULL,
+>=20
+> nit: this is redundant, any unspecified member will be zero-initialized.
+Thx. Changed it locally, but will not resend for this.
+>=20
+> Regardless:
+>=20
+> Reviewed-by: Kees Cook <kees@kernel.org>
+=2E..
+> > -		.data		=3D NULL,
+> > -		.maxlen		=3D sizeof (int),
+> > -		.mode		=3D 0600,
+> > -		.proc_handler	=3D proc_do_cad_pid,
+> > -	},
+> >  #endif
+> >  	{
+> >  		.procname	=3D "overflowuid",
+> >=20
+> > --=20
+> > 2.47.2
+> >=20
+> >=20
+>=20
+> --=20
+> Kees Cook
 
-The first put will fail, so it will attempt a get. If the get succeeds
-then the initial reference has been obtained and the object will remain.
-If the get fails, then the object has been properly released (there was
-a put in between). So the state is eitehr/ or.
+--=20
 
-> I see that rcuref_t is so far used by dst_entry::__rcuref, for which it
-> was originally added, and k_itimer::rcuref. I'm not sure if there's any
-> guidance or prior consensus on when to use refcount_t vs rcuref_t.
-> I understand some of the performance advantage of rcuref_t, but I wonder
-> if code that doesn't substantially benefit from that, such
-> module::refcnt, should now use it, or if it should stick to the more
-> common refcount_t.
+Joel Granados
 
-It is kind of new, yes. The big performance benefit comes when you have
-multiple puts/gets in parallel. But if you don't you don't lose
-anything. There is also file_ref_t which is the same as rcuref_t from
-the principle of operating but different in terms of counter size and
-memory barriers.
+--5fouo2tqrgcca44q
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Sebastian
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmgi9bkACgkQupfNUreW
+QU9gYwv9HmmGGJZHXMl5xZnY6+FsJWyyJPwiDmBpHKqnKUS42gx1LYy2Q2iMzgFt
+YcxKJxmpLBMq0zNs1c7WNKOBf/3YXplkC/1ZGQPADy/fPhZIqjoZgE9IY7rlPuRW
+ZqHGdVvpT6hjyjx9buwt+BAt7LbMZFrpH+KgqIy27NUu6icIQiZv5p1QTqHW4/MP
+mwk0aJcMZnCExOxBdRgKDzhiQRnKFgDZcbM2QeOLuuPZsLA/rPQA5UxlnXVGJ82s
+1bm/UR896mg8Ziq42SuV2yl9S4cT/mNKoNgxTtVAOrNYajc5mcjQPalvDCitBQTk
+L9ieGsR6I/+jYgJVCoc9vHuYkJuX7B52HcHH2rC/9bmSKqr1ea7xFcG7eA3iViJz
+rQzlj+z9wxfi+81TJSPXsUZmFkFhKXaZNQEgt7rhjtwiv2aafkFpOp6vN7dlrkrW
+OyvLd59uapsslRXXBAlyqMbnHEhg69c/Pqk5bup1Cj5WU4zhK2OmMk3sR2Vu80cD
+/fMGl+l+
+=zOoe
+-----END PGP SIGNATURE-----
+
+--5fouo2tqrgcca44q--
