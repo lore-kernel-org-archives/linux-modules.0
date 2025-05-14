@@ -1,186 +1,89 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C01E278163;
-	Wed, 14 May 2025 15:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DF827A137
+	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 16:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747235477; cv=none; b=iTfLaWXqNOvDtY17lT3hUHLSyNO4oMY7Pbq8qHN9pY5xkgQtei9Q457y1m7RE6rkiV7Hm54Ao+uqadNbxQp+NPouSciBsdus30bQCAOKCvdLrrB6+gNBK9XoSCiSc3/Inm+fyKMdfpGdc6mydpS0vlFaUeaoJ0n/pqSrTPN04Zw=
+	t=1747241820; cv=none; b=Vnnh6aOmXPZ4f+LWZ/R3em4b2m2OrEmiFv5zM6780kxzk6R/05twX3k8VNM1PTCAtzNZjJFcnhVjO/d1F9ovTwjhbJC5wxS4oYpHS+ocLASJfNkfqmTkDKU+XqpfhiAI9kDA7k4OZIN8oTov3j976ZBv3QqQTUTnVOgml6yeHTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747235477; c=relaxed/simple;
-	bh=ODl9UQqPd95AnZ5qIfWScfOTC8V1uuA2mDhjBIjFohc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=e7FSjojR3VJwNHhm8hL6te1SKc2ETwRwySCgftDKCVTEJNYg2j/1io1mxY6tvBfqJdAxR4FI7DDGavXlxnqN7fZixddUzHayvFwDZb+aosRd/+DkdIuUIesePW/UDpMAXXIKo9RCszhGrIoUnZi/BOD+huJQ1ywDQyKX/mIdW9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EDeEF4IO; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1747241820; c=relaxed/simple;
+	bh=j3LsEv6zAG5BsGwFMa43nOdKxce61E7HPZutt0VNDRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j8cZlnlQbpSmOU6b2hinqM2STwJpjSGAz7Lxtf+P8PukiX5UfxkwZiZAEnaTI0bjoki+SFeK+QvZqxejEVJnXrEup4nec49tIqnIvkCzQBJKkcVyASSNvHqinrNMsk/HKosZwpIx8K93niIoyC0Q6OCRr3ApERcio+0VjAsDbRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HAVEEbeu; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EDeEF4IO"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54EEn9jI025341;
-	Wed, 14 May 2025 15:09:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=SGLS4m
-	X8Cr6nBhXohVGb4hxEdStSi2AhSRa+lOkd6Rc=; b=EDeEF4IOYx2AE+f7lPQiyF
-	IRyvtU0UyyfLRz/m/EGB2YPnrJj9LgYYnyKusAffnlttd89Nis4X+sz92EjzQjpd
-	jwWTsThw+Y5GLOMoGOaVRMfV0OIZuKKtHGSOKF/3U3aCRx6MlSPpa8KnmJhef1VP
-	aN0cNxncPfkE7KPekD8F3idZQdgoQUBsveGNHXvz7wwQbEnYCE8lqtt4iwtDXWi4
-	CRAafK2tdRSH6gutURszp7nStU4k4ZayI86IjkNBuD7e4q5LDAL/8q+NRhvdodVD
-	z0xzgPw0UIRz+jrbwxRGYTycmQN76r39KZq4wMWTuDGk5HgF+HaIttAexs8pYn9Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46mbs6mygm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 15:09:21 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54EF3ppg015552;
-	Wed, 14 May 2025 15:09:20 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46mbs6mygh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 15:09:20 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54EDIrZ4026656;
-	Wed, 14 May 2025 15:09:19 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46mbfpcun1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 15:09:19 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54EF9JUY61669786
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 May 2025 15:09:19 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F3F885805D;
-	Wed, 14 May 2025 15:09:18 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F2A225805C;
-	Wed, 14 May 2025 15:09:15 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.139.222])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 May 2025 15:09:15 +0000 (GMT)
-Message-ID: <10ca077d6d51fac10e56c94db4205a482946d15f.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/9] ima: efi: Drop unnecessary check for
- CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Masahiro
- Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Pavlu
- <petr.pavlu@suse.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Daniel
- Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
-        James
- Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jonathan
- Corbet <corbet@lwn.net>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael
- Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao
- <naveen@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry
- Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg
- <eric.snowberg@oracle.com>,
-        Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Fabian =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-        Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
-        kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
-        =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Date: Wed, 14 May 2025 11:09:15 -0400
-In-Reply-To: <20250429-module-hashes-v3-2-00e9258def9e@weissschuh.net>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-	 <20250429-module-hashes-v3-2-00e9258def9e@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HAVEEbeu"
+Date: Wed, 14 May 2025 12:56:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1747241815;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PitS4W388Eigg05a5/D0HAoDz3yzgmvZnFZpVitTBk0=;
+	b=HAVEEbeuQWrb3MR6DTDdIng7sSPKkQRDqO7HffwW4a2XDC3f7kaEJghMudZYYY4icsSlxb
+	IPVkiPb1o4c5XlMikOx7aBQxBybm3LGJT3LDZawyHxMssbHat4nSysUZKy9L2K5nLhGIeT
+	ImGnfZ74c2kAnBITDLdsJdrYozdQRXE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] params: Add support for static keys
+Message-ID: <oepzs4fbygpbbjq5icrxpsvn6jpsrzghnt76rjmnyw7o35pbdl@2yjw6pxng5ay>
+References: <20250510210126.4032840-1-kent.overstreet@linux.dev>
+ <a4700ad8-1e6d-4f57-b160-e7b6d172ef60@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDEzNSBTYWx0ZWRfXxHBh49BiMB+Z MOVdYBkj3WfGeCvyIQdcjIWtbvhdgBJDYmtH6aIKRjRnMJBKYgzpPmkHWOOqemh7EtoawfXuMN4 eKKgq7Ry6EeCtJw7jp7/S2fYItn19YaPW+hBVQRi+4t3a5UAZNQ5UPInke8w30g5b8se68ZT7Ax
- uyX1Mp5KfZEBF1+6kD3JyFEbD6Ba5ORKHBGX2UYN+mA+u9b5PNgiZ4CrEnefA6hvAWwSLzSGVz5 lfZsKkS3N4Z5aAyu4/uL9doUnd4OJRE2qSwiQt6qWZvzc77oDfFAmcU2G+ATyRKgE9IvpviTCgs UWQHCPNHhWFnBgTjcLgT6zGCCSV8LvhiQkuSOBWZC40lmYxl/++p50z0pqMJ3qtG/nPGT+SAqw5
- AgDBYLW1PLqYSYudLSRYQO3vcficUjVtjVwE+OfIpvmnKwF2qJ8sxjnazQ4TXbapLUyVp0K4
-X-Proofpoint-ORIG-GUID: j22mpxTFY4WP2OwphhpcY-gxyz0D7Xyv
-X-Authority-Analysis: v=2.4 cv=d5f1yQjE c=1 sm=1 tr=0 ts=6824b221 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VTue-mJiAAAA:8 a=GYJFTEJjVrNzjNUGXfAA:9 a=QEXdDO2ut3YA:10
- a=S9YjYK_EKPFYWS37g-LV:22
-X-Proofpoint-GUID: DQ7JcpUJJQk_GINm-Q0_GETzDy7ehAm2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-14_04,2025-05-14_03,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- spamscore=0 clxscore=1011 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 impostorscore=0 adultscore=0 phishscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505140135
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a4700ad8-1e6d-4f57-b160-e7b6d172ef60@csgroup.eu>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2025-04-29 at 15:04 +0200, Thomas Wei=C3=9Fschuh wrote:
-> When configuration settings are disabled the guarded functions are
-> defined as empty stubs, so the check is unnecessary.
-> The specific configuration option for set_module_sig_enforced() is
-> about to change and removing the checks avoids some later churn.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->=20
-> ---
-> This patch is not strictly necessary right now, but makes looking for
-> usages of CONFIG_MODULE_SIG easier.
-> ---
-> =C2=A0security/integrity/ima/ima_efi.c | 6 ++----
-> =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/im=
-a_efi.c
-> index
-> 138029bfcce1e40ef37700c15e30909f6e9b4f2d..a35dd166ad47beb4a7d46cc3e8fc604=
-f57e03ecb
-> 100644
-> --- a/security/integrity/ima/ima_efi.c
-> +++ b/security/integrity/ima/ima_efi.c
-> @@ -68,10 +68,8 @@ static const char * const sb_arch_rules[] =3D {
-> =C2=A0const char * const *arch_get_ima_policy(void)
-> =C2=A0{
-> =C2=A0	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot(=
-)) {
-> -		if (IS_ENABLED(CONFIG_MODULE_SIG))
-> -			set_module_sig_enforced();
-> -		if (IS_ENABLED(CONFIG_KEXEC_SIG))
-> -			set_kexec_sig_enforced();
-> +		set_module_sig_enforced();
-> +		set_kexec_sig_enforced();
-> =C2=A0		return sb_arch_rules;
+On Tue, May 13, 2025 at 07:51:57PM +0200, Christophe Leroy wrote:
+> 
+> 
+> Le 10/05/2025 à 23:01, Kent Overstreet a écrit :
+> > Static keys can now be a module parameter, e.g.
+> > 
+> > module_param_named(foo, foo.key, static_key_t, 0644)
+> > 
+> > bcachefs is now using this.
+> > 
+> > Cc: Luis Chamberlain <mcgrof@kernel.org>
+> > Cc: Petr Pavlu <petr.pavlu@suse.com>
+> > Cc: Sami Tolvanen <samitolvanen@google.com>
+> > Cc: Daniel Gomez <da.gomez@samsung.com>
+> > Cc: linux-modules@vger.kernel.org
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > ---
+> >   include/linux/jump_label.h  |  2 ++
+> >   include/linux/moduleparam.h |  6 ++++++
+> >   kernel/params.c             | 35 +++++++++++++++++++++++++++++++++++
+> >   3 files changed, 43 insertions(+)
+> > 
+> > diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+> > index fdb79dd1ebd8..0fc9b71db56f 100644
+> > --- a/include/linux/jump_label.h
+> > +++ b/include/linux/jump_label.h
+> > @@ -107,6 +107,8 @@ struct static_key {
+> >   #endif	/* CONFIG_JUMP_LABEL */
+> >   };
+> > +typedef struct static_key static_key_t;
+> > +
+> 
+> Please read https://docs.kernel.org/process/coding-style.html#typedefs
+> 
+> I can't see the reason for a new typedef here. If there is a valid reason
+> please explain in the commit message.
 
-Hi Thomas,
-
-I'm just getting to looking at this patch set.  Sorry for the delay.
-
-Testing whether CONFIG_MODULE_SIG and CONFIG_KEXEC_SIG are configured gives=
- priority
-to them, rather than to the IMA support.  Without any other changes, both s=
-ignature
-verifications would be enforced.  Is that the intention?
-
-Mimi
-
-> =C2=A0	}
-> =C2=A0	return NULL;
->=20
-
+You can't token paste with a type that's two tokens - that's basic C.
