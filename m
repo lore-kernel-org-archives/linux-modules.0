@@ -1,64 +1,64 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E753221288
-	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 08:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4178F2116F6
+	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 08:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747211736; cv=none; b=JIkxnTfOj3D5+4kwcca0Lkg2gMB/aRuH6bC4p0Xrwu8hcTt3xhv2c/jTB+Ga2CgBWhGSsQvJytzJTN85ySk+J8F2g1kZOLi785ub2Eo7/Sk04fovhDaQI56+i2trmUFsrwOCHMcL2i4WmJ6R3zNk89XoeevS6YL6AQSZwl1+HZE=
+	t=1747211895; cv=none; b=gS4/6E9XaPfY/CeQFP2f2G2jqrZRa4TxhupDHWbOjfTDnUpT2z+FiR0pt6lA6vXQjW2VUkyba5YRx5T7/WlP7X1FhWaNW1j97DfZSA4WapgTdw30YKebgWO3FkuVqt/BeO3sC2a4cs2QqkpSFABgLrHKCbjZy1SgbcS20k9ikMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747211736; c=relaxed/simple;
-	bh=LnsVWhwJpBAkpZDh+52MQNw22R/I9maYDg8qpRVBVKE=;
+	s=arc-20240116; t=1747211895; c=relaxed/simple;
+	bh=v3bAcO92mgzkH7OCDOt9w7M93EuoBxmV5z7loDAnBuE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qrEkOdX+wjGAV5UGGEdhfOcPVhGlB1xBaNZHPEFlMF4jHNX91jwaZj+CyoAuZmJcvifVRMNk5qBPgCuxaI04ppksTQr3R2+lbLMw+T9un2Jpv/nLXvGO7prLq/Jdjzba1hi3XBEOGzgJdLfZ0nKp6MM+JqYWor4xrFCZXfkSqBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=daTGaeUU; arc=none smtp.client-ip=209.85.221.47
+	 In-Reply-To:Content-Type; b=uaIVkxVACAvTHO1DAIBvKdgBj11yf21Htn6H92fuKBy0ehRp9SCv/GDA9B8sf0s4LATzEBexJxWdO8oU+X8CqWNMNqFGRYEzfSRry908HC7rDDGTs6Gn8gXjzuoP1nqnuBwvKHoISiHu7pOf9H2bW2u4ZcTA5KsN+pZtbkE/ksY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZhkZAO55; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="daTGaeUU"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a1fa0d8884so3111797f8f.3
-        for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 01:35:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZhkZAO55"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a0ebf39427so5391836f8f.3
+        for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 01:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1747211733; x=1747816533; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1747211891; x=1747816691; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=V9zd+GoKgmj0lz1D+LN0r99cnHBgUgWB63kqIPzuCsc=;
-        b=daTGaeUU6AmMCswrVFzQZN1mjZrlMIXH9TuBa85yg9Ria2TVuVhHfIbn/0i8kNyUL2
-         xrovdREeqNFk9mRsJf/yoQOIchMOc+TjrWwc7ormUT673FVPjRAbsabyjHOPXqOfFpm/
-         IcEvn3N8klO1XBsFzlxuGikxrhOfaxr33b+Ye8piOOaA7H4gD3Q8D5YlWAUWj1KQ0jXF
-         LyLVvKZXnqrFq4onSKfU8ZeGd38rFm3R2IMoSqwog9ngVs40tbvowOtw4OOFkFwHR8+Q
-         0ag0BDyqcBTIHJXX6xy6RXhjzB4O34TPXoDSLtO7n4olCEbmS/1VfKEU4DNrtUPQ4oi3
-         95Ww==
+        bh=QuS3rpk01oe59tAY91l0mlGNbZV+w+wwZIkg9yAUzvM=;
+        b=ZhkZAO55n0ryFMXrDFb5HKYgvgQrxFx08NgE0N9VgVSgn1fTXBJF49j7xxaxuvw0yR
+         zmSxBFTZt5XBasUGK8+AiBC6RZjuFRJuMM7mhJOTRjyvWrP8qYYnrpWjv2Io9ZzZCYsv
+         tyfvLjkIF6vH4DRrZQlKfivRVZ2Luxj1E91w8LboCLQ0XzJuUrk5rq/3DrIFsUiVa1xI
+         6x5mtZTL/bRt/ZpJTP0js+3qw5cDujZQJeB6nRJ+qZG1W9d9C27ngzJd2pN8h/TfcuxG
+         EvmrmPhE+NBdQ2eUM1EoHpWNCof2ntx9+gHv4nBndQBjzbflpsafmVOPaL7t9vF91S0t
+         sUXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747211733; x=1747816533;
+        d=1e100.net; s=20230601; t=1747211891; x=1747816691;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V9zd+GoKgmj0lz1D+LN0r99cnHBgUgWB63kqIPzuCsc=;
-        b=TTP5XcbNVJwR/EoGH/b/h/1oi4i+gKxvwEHhAvt/YSi/IDyxJz8whqmBLiKgvw6q8w
-         zPbdwMH53wJBH3pRPICHsmkDgWah5ErvZrdle+5ZnZhmKL1W4qpxP0bQgRkkweO1+rTT
-         Wwyq/9EMGe9cMzO4gEO52idMjWCASc2wr0msw+X8GnPmPAOB1Z2gfke2rMwf5bMgJ8LX
-         9Gzd9fEAFl/n5bd++2mdcuS51FxCp0A0EO1bfYYB702tInBE2igvQw5U8Dk2LQn43IaD
-         uYaUcYCiSWswCYhQBIPwjrgUn+0bnKDjXrrqLdqsA+TcR+M75V4CW2+Mcku0EuK+17lT
-         u0nw==
-X-Forwarded-Encrypted: i=1; AJvYcCVOeA8VTl0M62fCqNR+1/73yiAyq0QoGdG6e6he9AMoIRKCzZEdu/66zs8Oiw5d7NzEXaj0an8chSSsTRdU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yysqw6nzCMveKwatdXMNtn2QanIMchQC2l4D7QhddQg08HU86tP
-	5NfqweI2uwx8sbVVENmmCLDtC3Im1uVbAQtSi5KnbTrWWMyNNn1HHBoo8eEaGsU=
-X-Gm-Gg: ASbGncviIoHImHj86Y9NJ86KymWPdK5ynKxLs7W3LnW7JDsiTtLwgB/sm5mN1PL+64V
-	NohmJImVr6L0+X48JrrmtTUlKbat50wopLE+nWN2tXSWLRZa+HXdk6Zyo9cfeGiwUPORhv+m7p0
-	aCIOY7QlGj328Oj7nUxLr2V+CmssouG5s7Ni/t3TmwgBz2itUirdWP/xIQ2hZs6LIFDcxEDhxtZ
-	Zwu592QvIuVXO986MQ74PC1tIci1gKn+iNGHp8/j+piQjYTRNvF8hYjYm/Yg3AU6a5dXxp5HGCt
-	iqU4wtvRtIA9y+1al8hnwZMuxQFqVY+9S5NPnwCTAPiEKn7Cs02ECQ==
-X-Google-Smtp-Source: AGHT+IGT6wMyIUernPhTKllof9XQpCI1zQrbycT2cwRsu9zmtZYLZ5dRauNiPAUk32i9JzaAtr/pSg==
-X-Received: by 2002:a05:6000:2481:b0:3a0:b550:ded4 with SMTP id ffacd0b85a97d-3a3496a47f9mr1500267f8f.13.1747211733319;
-        Wed, 14 May 2025 01:35:33 -0700 (PDT)
+        bh=QuS3rpk01oe59tAY91l0mlGNbZV+w+wwZIkg9yAUzvM=;
+        b=vxaLC+2/374dVcDsy1Uq+HRdW4opYpzMGxG2TWVC9CmYQnKfQKeoD4hLQNh4z5C0JU
+         9Z12yeq7wHZ1Nez+kXpEcpI7g7XKgNdz/qwy6Tiz4Bj8kRsC330ILBcnagpKWt9iWtQJ
+         Ne/nLx+vSHbF/W5aZEC2BRPCR4HPb4AhSDKd/MwCtRqxzKopzU1DhQMA5yolxBIFby5+
+         ezDHeYhN+y+51B9I4JHqz0prP+ZSERqxArl8VokHo2elK12FfUsbvgi6qilFylgSkXsg
+         t0kfuZexIJXdxYMBB4Bc2Zqtz4TJGT58qmbViwYbmFK9x9eV6GvbzR9s5JEB/evgX5Jv
+         mHJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVy2eZbjp/h06ucEACyW34k/qzy9zaU7KYs385l0N8iEeUVeR0OJxaSqmoh0nIQZXMTlSgcQCjvVPDCFAaV@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXut3Y2JzSrxthVjXxBBw1c8XRDc3FhCdYH/fBPNq4VzA48BBM
+	OG0MMQ4/UGV/XoO0ZVGw1EJshWXtqcEqaCIMwnMyGqA4SI9Gmr8oLdad6HITD68=
+X-Gm-Gg: ASbGnctGrr3+C3Z31jT+CLuzckIc9T2zQ8tV9A9CM7Pibd4hNYWsgs6MwvaURCpKBWZ
+	vjN8q/KyvAZ0MyXDeXkttuXhZFp5MdwbIJvXWMzugQE8Q7KdAxE0fqwLdoN2Uj6eQy+9O+73UfG
+	MSIM++sP6ncpfR2h82w8xKZLyY5jNaXAkyW1yvpzvzYyhyazmK0xve3W5ARG1iPAtKABbIF3jRB
+	0sQguwoe4vLMkO6kY6ofNaqfkJ6qLH5ZP5CF5BAv3lZ8e2tXenThKBbsoUzRSdFKtrHYRGPu2ia
+	fwCPamKhtcXUOZsxL+tEZG4EuNn4RoXnXTF3a5gcR9C+vdXrt3Yymg==
+X-Google-Smtp-Source: AGHT+IHyTzdduROE+Wg2w8XB61vo2bG33XhlahD4daZpMp6hYwmVe0Tbz/IVhZE17N/e//M2fErR6A==
+X-Received: by 2002:a5d:64c6:0:b0:3a0:b84c:52b4 with SMTP id ffacd0b85a97d-3a349695581mr2013629f8f.10.1747211891494;
+        Wed, 14 May 2025 01:38:11 -0700 (PDT)
 Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4df3fe369b7sm6319632137.16.2025.05.14.01.35.26
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dea8580188sm8048020137.4.2025.05.14.01.38.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 01:35:32 -0700 (PDT)
-Message-ID: <eb13d6b4-3c6d-42e6-ae58-bb4454297c5c@suse.com>
-Date: Wed, 14 May 2025 10:35:23 +0200
+        Wed, 14 May 2025 01:38:11 -0700 (PDT)
+Message-ID: <0dff052c-3857-4af3-a809-30ba124c4686@suse.com>
+Date: Wed, 14 May 2025 10:38:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -66,29 +66,73 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/5] module: Extend the MODULE_ namespace parsing
+Subject: Re: [PATCH v3 4/5] module: Account for the build time module name
+ mangling
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com,
  samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
  nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
  linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
- hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
+ hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk,
+ Sean Christopherson <seanjc@google.com>
 References: <20250502141204.500293812@infradead.org>
- <20250502141844.154517322@infradead.org>
+ <20250502141844.263611823@infradead.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250502141844.154517322@infradead.org>
+In-Reply-To: <20250502141844.263611823@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 5/2/25 16:12, Peter Zijlstra wrote:
-> Instead of only accepting "module:${name}", extend it with a comma
-> separated list of module names and add tail glob support.
+> Sean noted that scripts/Makefile.lib:name-fix-token rule will mangle
+> the module name with s/-/_/g.
 > 
-> That is, something like: "module:foo-*,bar" is now possible.
+> Since this happens late in the build, only the kernel needs to bother
+> with this, the modpost tool still sees the original name.
 > 
+> Reported-by: Sean Christopherson <seanjc@google.com>
 > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Tested-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  kernel/module/main.c |   26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -170,6 +170,30 @@ static inline void add_taint_module(stru
+>  }
+>  
+>  /*
+> + * Like strncmp(), except s/-/_/g as per scripts/Makefile.lib:name-fix-token rule.
+> + */
+> +static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
+> +{
+> +	for (int i = 0; i < n; i++) {
+
+Nit: This could be 'size_t i' for consistency. I can adjust it when
+picking up the series.
 
 Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
 -- Petr
+
+> +		char a = str_a[i];
+> +		char b = str_b[i];
+> +		int d;
+> +
+> +		if (a == '-') a = '_';
+> +		if (b == '-') b = '_';
+> +
+> +		d = a - b;
+> +		if (d)
+> +			return d;
+> +
+> +		if (!a)
+> +			break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> [...]
