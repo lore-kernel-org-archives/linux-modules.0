@@ -1,64 +1,64 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357F521B9E0
-	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 08:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E753221288
+	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 08:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747211677; cv=none; b=NK93TC6HMIcT8UNg5ki4L5kbCk7Nzd/+PLL7FumD2rDmF18VzS6HgWfxzlRZreB7zcZL/wq0C7phw39xyDBeEow1tT2v5Pgfa4jCTkzBQbpON1Bc6XR/Kbn65BQ33o4asqeEywOLbdRxckCHSu+h5mH+emsHGyoLCC89fusDo2A=
+	t=1747211736; cv=none; b=JIkxnTfOj3D5+4kwcca0Lkg2gMB/aRuH6bC4p0Xrwu8hcTt3xhv2c/jTB+Ga2CgBWhGSsQvJytzJTN85ySk+J8F2g1kZOLi785ub2Eo7/Sk04fovhDaQI56+i2trmUFsrwOCHMcL2i4WmJ6R3zNk89XoeevS6YL6AQSZwl1+HZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747211677; c=relaxed/simple;
-	bh=413HM5eboYj1vCQAGypKKKAbvRddV4u80mvB/tL2F9Q=;
+	s=arc-20240116; t=1747211736; c=relaxed/simple;
+	bh=LnsVWhwJpBAkpZDh+52MQNw22R/I9maYDg8qpRVBVKE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OzGM9JmtxPi2DU2knJzVRmt5zIrbNdOhU8Nlwg38vrdfc49wM997BXDgwaxBRsg0erPwS7rQ40f6nrK7xCWU3g7WO5rbyZ0iNT1RUPLiOgpibaPFmZsjW/cr09LuvBxCnUIbdQp5EZVhT3x0YF/9lMza8NsUREq9QeUwRsivQ84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SrUIcqaP; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:Content-Type; b=qrEkOdX+wjGAV5UGGEdhfOcPVhGlB1xBaNZHPEFlMF4jHNX91jwaZj+CyoAuZmJcvifVRMNk5qBPgCuxaI04ppksTQr3R2+lbLMw+T9un2Jpv/nLXvGO7prLq/Jdjzba1hi3XBEOGzgJdLfZ0nKp6MM+JqYWor4xrFCZXfkSqBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=daTGaeUU; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SrUIcqaP"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-441d1ed82dbso69311505e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 01:34:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="daTGaeUU"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3a1fa0d8884so3111797f8f.3
+        for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 01:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1747211673; x=1747816473; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1747211733; x=1747816533; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pmPxzvplp27sf0Mh5TNQ3UmGJf69Of2vzLV4ej7YVkA=;
-        b=SrUIcqaPODojagnPoRW+EgNHSzbIpuBYPruB6ViPMGqoWp97FIvecSlIJ9uDylMavK
-         c+Gv4QFDYTXd5PTeupnbsBREDXj15BaTcDV9YTCvz2N98yQFV3v6M6oqsFqpsPkIslFJ
-         sIHjtvuuwsVzmNrfa9xXRCLBUL2k1YQ3EAl1bP0fBAgdEAVHsZ04GzYB0WHio/Gdv0PC
-         eLErMCCqLjeyEI6VCzzS+rKWhX8k4Uydyd/aCZLbhk4js22y1x9+oUULlKNqaq4+/l/7
-         4Xu2OMObHFjrvR4UEADeMmgGj0+2CoGpO5yUOvVIydLvWp8HmUq9LGZPHCiHNfI4Rs5X
-         xrYw==
+        bh=V9zd+GoKgmj0lz1D+LN0r99cnHBgUgWB63kqIPzuCsc=;
+        b=daTGaeUU6AmMCswrVFzQZN1mjZrlMIXH9TuBa85yg9Ria2TVuVhHfIbn/0i8kNyUL2
+         xrovdREeqNFk9mRsJf/yoQOIchMOc+TjrWwc7ormUT673FVPjRAbsabyjHOPXqOfFpm/
+         IcEvn3N8klO1XBsFzlxuGikxrhOfaxr33b+Ye8piOOaA7H4gD3Q8D5YlWAUWj1KQ0jXF
+         LyLVvKZXnqrFq4onSKfU8ZeGd38rFm3R2IMoSqwog9ngVs40tbvowOtw4OOFkFwHR8+Q
+         0ag0BDyqcBTIHJXX6xy6RXhjzB4O34TPXoDSLtO7n4olCEbmS/1VfKEU4DNrtUPQ4oi3
+         95Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747211673; x=1747816473;
+        d=1e100.net; s=20230601; t=1747211733; x=1747816533;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pmPxzvplp27sf0Mh5TNQ3UmGJf69Of2vzLV4ej7YVkA=;
-        b=b9GWZM86urbvf82c/WBQMVmFljBQP97h7wYcPeMjp/eFkH9DtHnUSseb/ikYZYZFCS
-         u1HxO9MpbJr6TYyVnVwcxB7JmcLn7BA7QYBbw5KDg1DKuBEKcVmTrV+4Vzg/Ka4f4dOF
-         Hadlg7ENx8Alqj+ibKTrOaXbeaWgRr2JOOP4QEriwv9ecQIP49PTNKsZDw/2btpz26fj
-         XvHr2CzgSSZgifW/BbLC5hyZ0T1oVmbq0as8icl8kD18VEBftDNileq8u/0EZcmXCuN4
-         Mpxfws0KHE/bVSOhiQ5/1lCIEKt5Q5vXlnJcw9wDHB2KyDwWpE5DgrAmwb8Cu9bTGzZN
-         QPmw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2+UzBqagI1OdBsRymHEN3p0xa8+0V9VXfE7utH0MEazK0i1UkEWPYoww1lrUzNlrHooi/zO9Hy5COrcJJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yynhs4RoNcUTRBhc3XaVKBW0MWYydAs2UQdXTlIlJ+sKjDtQBYB
-	eN7YWtbp8d9jb3FdrqLH1s1hFlroCiDkE/yLXovKT4x9i7JSTXEBWDAFwV4Bh8w=
-X-Gm-Gg: ASbGncubX4UdogI8BTf52UIcNQ5EUtcJM3POv2UveDZXj5GhX6J0u0WDVkW6q8OaOsp
-	EWgBhLbBSuI4avjbIXdwW7QvI4N80EbTuHgOedY/NrFvMLW7cCqWpK/dkA476YNZlwaVjGTcXPc
-	qxLNcuIZOlMkPLSJvajFA7QExJaL71zxu3cgbYO3fP2BEAn7YDyjbw3wIeQ/2LLNCHCvUXaF2nt
-	468E9FL+P4F81z6pA+t2kXRcGec4jRYhIZl+31EPcaJlWbRcpSIek9yd+qDT9w+jDZSpQFtp+EV
-	EDa0Yzqmz5i00hDhk4b/DajCqO7IchviC0b8phIRTHPvvto+ZD1asA==
-X-Google-Smtp-Source: AGHT+IGMrizPwMYXPEGeYJfqWtlgiQDVjgsMQKbEsCq+MVhFWOKzPY77w7J6frRmGyePbOUN4M6Vhw==
-X-Received: by 2002:a05:6000:2dc4:b0:3a0:bb2b:14e3 with SMTP id ffacd0b85a97d-3a3496e7095mr1945171f8f.33.1747211673499;
-        Wed, 14 May 2025 01:34:33 -0700 (PDT)
+        bh=V9zd+GoKgmj0lz1D+LN0r99cnHBgUgWB63kqIPzuCsc=;
+        b=TTP5XcbNVJwR/EoGH/b/h/1oi4i+gKxvwEHhAvt/YSi/IDyxJz8whqmBLiKgvw6q8w
+         zPbdwMH53wJBH3pRPICHsmkDgWah5ErvZrdle+5ZnZhmKL1W4qpxP0bQgRkkweO1+rTT
+         Wwyq/9EMGe9cMzO4gEO52idMjWCASc2wr0msw+X8GnPmPAOB1Z2gfke2rMwf5bMgJ8LX
+         9Gzd9fEAFl/n5bd++2mdcuS51FxCp0A0EO1bfYYB702tInBE2igvQw5U8Dk2LQn43IaD
+         uYaUcYCiSWswCYhQBIPwjrgUn+0bnKDjXrrqLdqsA+TcR+M75V4CW2+Mcku0EuK+17lT
+         u0nw==
+X-Forwarded-Encrypted: i=1; AJvYcCVOeA8VTl0M62fCqNR+1/73yiAyq0QoGdG6e6he9AMoIRKCzZEdu/66zs8Oiw5d7NzEXaj0an8chSSsTRdU@vger.kernel.org
+X-Gm-Message-State: AOJu0Yysqw6nzCMveKwatdXMNtn2QanIMchQC2l4D7QhddQg08HU86tP
+	5NfqweI2uwx8sbVVENmmCLDtC3Im1uVbAQtSi5KnbTrWWMyNNn1HHBoo8eEaGsU=
+X-Gm-Gg: ASbGncviIoHImHj86Y9NJ86KymWPdK5ynKxLs7W3LnW7JDsiTtLwgB/sm5mN1PL+64V
+	NohmJImVr6L0+X48JrrmtTUlKbat50wopLE+nWN2tXSWLRZa+HXdk6Zyo9cfeGiwUPORhv+m7p0
+	aCIOY7QlGj328Oj7nUxLr2V+CmssouG5s7Ni/t3TmwgBz2itUirdWP/xIQ2hZs6LIFDcxEDhxtZ
+	Zwu592QvIuVXO986MQ74PC1tIci1gKn+iNGHp8/j+piQjYTRNvF8hYjYm/Yg3AU6a5dXxp5HGCt
+	iqU4wtvRtIA9y+1al8hnwZMuxQFqVY+9S5NPnwCTAPiEKn7Cs02ECQ==
+X-Google-Smtp-Source: AGHT+IGT6wMyIUernPhTKllof9XQpCI1zQrbycT2cwRsu9zmtZYLZ5dRauNiPAUk32i9JzaAtr/pSg==
+X-Received: by 2002:a05:6000:2481:b0:3a0:b550:ded4 with SMTP id ffacd0b85a97d-3a3496a47f9mr1500267f8f.13.1747211733319;
+        Wed, 14 May 2025 01:35:33 -0700 (PDT)
 Received: from [10.100.51.48] ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-879f6297d9esm8160828241.28.2025.05.14.01.34.26
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4df3fe369b7sm6319632137.16.2025.05.14.01.35.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 May 2025 01:34:33 -0700 (PDT)
-Message-ID: <81444b38-e0af-4278-89ad-e25cfe08179d@suse.com>
-Date: Wed, 14 May 2025 10:34:24 +0200
+        Wed, 14 May 2025 01:35:32 -0700 (PDT)
+Message-ID: <eb13d6b4-3c6d-42e6-ae58-bb4454297c5c@suse.com>
+Date: Wed, 14 May 2025 10:35:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -66,8 +66,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] module: Add module specific symbol namespace
- support
+Subject: Re: [PATCH v3 3/5] module: Extend the MODULE_ namespace parsing
 To: Peter Zijlstra <peterz@infradead.org>
 Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com,
  samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
@@ -75,30 +74,21 @@ Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com,
  linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
  hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
 References: <20250502141204.500293812@infradead.org>
- <20250502141844.046738270@infradead.org>
+ <20250502141844.154517322@infradead.org>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250502141844.046738270@infradead.org>
+In-Reply-To: <20250502141844.154517322@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 5/2/25 16:12, Peter Zijlstra wrote:
-> Designate the "module:${modname}" symbol namespace to mean: 'only
-> export to the named module'.
+> Instead of only accepting "module:${name}", extend it with a comma
+> separated list of module names and add tail glob support.
 > 
-> Notably, explicit imports of anything in the "module:" space is
-> forbidden.
+> That is, something like: "module:foo-*,bar" is now possible.
 > 
 > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Sorry, I thought this was already reviewed from the modules perspective,
-but I'll make it explicit.
-
-Looks ok to me, besides the already mentioned "strsmp" typo. I can fix
-it when picking up the series.
-
 Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
--- 
-Thanks,
-Petr
+-- Petr
