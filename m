@@ -1,92 +1,104 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23A71D79A5
-	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 03:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357F521B9E0
+	for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 08:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747194024; cv=none; b=pEMl7LEhbv7yG5oSyH5XQDQRgeGEeFHR7bzeGWJRDI0g13B0Qxe/54YYdySWJPHRen+OBNcm5WeNYIHGKYn87A7dHU2aJEnmJvJvD0irKOdqlFISeu43Uw1fMnUPz21xlr2r/kENnJha2N3JwKLglBwVQfjElYl8w+/ww45dssI=
+	t=1747211677; cv=none; b=NK93TC6HMIcT8UNg5ki4L5kbCk7Nzd/+PLL7FumD2rDmF18VzS6HgWfxzlRZreB7zcZL/wq0C7phw39xyDBeEow1tT2v5Pgfa4jCTkzBQbpON1Bc6XR/Kbn65BQ33o4asqeEywOLbdRxckCHSu+h5mH+emsHGyoLCC89fusDo2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747194024; c=relaxed/simple;
-	bh=I3R+rQ27w0UGwmfv882mYWoYHzH7py1R9rJyM6PQRvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=epeLdz3wtyGNXwHfmRPzg4nNZfO/5T1D67szHjhJ7G7xqTKXXs+eb3yhqLPq08eR6PzMDCH/UUTrPF5JIgvRkOY1DcUPt/gEvCYwz1JxVNCVe8O5Brzz25trCZBT/1hKAtOoMCM3dyzUIVpcEyzIgVK4WbKcx0PUC/T1e5PbQXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EnBedwyx; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1747211677; c=relaxed/simple;
+	bh=413HM5eboYj1vCQAGypKKKAbvRddV4u80mvB/tL2F9Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OzGM9JmtxPi2DU2knJzVRmt5zIrbNdOhU8Nlwg38vrdfc49wM997BXDgwaxBRsg0erPwS7rQ40f6nrK7xCWU3g7WO5rbyZ0iNT1RUPLiOgpibaPFmZsjW/cr09LuvBxCnUIbdQp5EZVhT3x0YF/9lMza8NsUREq9QeUwRsivQ84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SrUIcqaP; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EnBedwyx"
-Date: Tue, 13 May 2025 23:40:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1747194009;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NA7E2kJOA5MHkkOq+Sx2r/MfVDTe3tDwcatQiM1q45w=;
-	b=EnBedwyx6gTTOnGeSctw7qq5IFCGnAFUceh5SCoKottoFx/PB9ZOAvlsaI4k9D7birp4K3
-	vmcl6MeeIwpgJfcJqcQ1tDIJ2QewUD71dBlwFyRTO3C4D8VqQF8HaE3JywPd2JKuAD8GOL
-	SFUkpzSR9cCQ0Vdlg/NegdypV8aX3Fo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
-	Peter Zijlstra <peterz@infradead.org>, Jason Baron <jbaron@akamai.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2] params: Add support for static keys
-Message-ID: <ecslihevvegiywtch4ckdw27x3h6mnekj7gf3lrbrtjwwzfodo@k5ks4ixf5i7j>
-References: <20250513130734.370280-1-kent.overstreet@linux.dev>
- <zgifi763q2zdj2xn2535daboorumz4g64ospsukp4e6btmosir@xrbhtw777ytw>
- <tjqz5spozvd35egxtfn2n3csvqu2qsaobbkfzf52ovhsokq47y@eq5xl2ugyydq>
- <zljx4swb6eyhf67kwm32gcfboedxvikige3p5c7kt5lqo6c2jj@jjoa4g6375re>
- <jgdcnclxhw62rs2jb67n4wmmvnmc7l6mnnmlyhzkec3gb6zovp@rccwil2bi4bb>
- <ft6buh2oquxdygzxzobfmnjnatpuf6k6eetjtlqi2o3myv5qu3@vdt3t2yyprsv>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SrUIcqaP"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-441d1ed82dbso69311505e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 14 May 2025 01:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1747211673; x=1747816473; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pmPxzvplp27sf0Mh5TNQ3UmGJf69Of2vzLV4ej7YVkA=;
+        b=SrUIcqaPODojagnPoRW+EgNHSzbIpuBYPruB6ViPMGqoWp97FIvecSlIJ9uDylMavK
+         c+Gv4QFDYTXd5PTeupnbsBREDXj15BaTcDV9YTCvz2N98yQFV3v6M6oqsFqpsPkIslFJ
+         sIHjtvuuwsVzmNrfa9xXRCLBUL2k1YQ3EAl1bP0fBAgdEAVHsZ04GzYB0WHio/Gdv0PC
+         eLErMCCqLjeyEI6VCzzS+rKWhX8k4Uydyd/aCZLbhk4js22y1x9+oUULlKNqaq4+/l/7
+         4Xu2OMObHFjrvR4UEADeMmgGj0+2CoGpO5yUOvVIydLvWp8HmUq9LGZPHCiHNfI4Rs5X
+         xrYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747211673; x=1747816473;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmPxzvplp27sf0Mh5TNQ3UmGJf69Of2vzLV4ej7YVkA=;
+        b=b9GWZM86urbvf82c/WBQMVmFljBQP97h7wYcPeMjp/eFkH9DtHnUSseb/ikYZYZFCS
+         u1HxO9MpbJr6TYyVnVwcxB7JmcLn7BA7QYBbw5KDg1DKuBEKcVmTrV+4Vzg/Ka4f4dOF
+         Hadlg7ENx8Alqj+ibKTrOaXbeaWgRr2JOOP4QEriwv9ecQIP49PTNKsZDw/2btpz26fj
+         XvHr2CzgSSZgifW/BbLC5hyZ0T1oVmbq0as8icl8kD18VEBftDNileq8u/0EZcmXCuN4
+         Mpxfws0KHE/bVSOhiQ5/1lCIEKt5Q5vXlnJcw9wDHB2KyDwWpE5DgrAmwb8Cu9bTGzZN
+         QPmw==
+X-Forwarded-Encrypted: i=1; AJvYcCW2+UzBqagI1OdBsRymHEN3p0xa8+0V9VXfE7utH0MEazK0i1UkEWPYoww1lrUzNlrHooi/zO9Hy5COrcJJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yynhs4RoNcUTRBhc3XaVKBW0MWYydAs2UQdXTlIlJ+sKjDtQBYB
+	eN7YWtbp8d9jb3FdrqLH1s1hFlroCiDkE/yLXovKT4x9i7JSTXEBWDAFwV4Bh8w=
+X-Gm-Gg: ASbGncubX4UdogI8BTf52UIcNQ5EUtcJM3POv2UveDZXj5GhX6J0u0WDVkW6q8OaOsp
+	EWgBhLbBSuI4avjbIXdwW7QvI4N80EbTuHgOedY/NrFvMLW7cCqWpK/dkA476YNZlwaVjGTcXPc
+	qxLNcuIZOlMkPLSJvajFA7QExJaL71zxu3cgbYO3fP2BEAn7YDyjbw3wIeQ/2LLNCHCvUXaF2nt
+	468E9FL+P4F81z6pA+t2kXRcGec4jRYhIZl+31EPcaJlWbRcpSIek9yd+qDT9w+jDZSpQFtp+EV
+	EDa0Yzqmz5i00hDhk4b/DajCqO7IchviC0b8phIRTHPvvto+ZD1asA==
+X-Google-Smtp-Source: AGHT+IGMrizPwMYXPEGeYJfqWtlgiQDVjgsMQKbEsCq+MVhFWOKzPY77w7J6frRmGyePbOUN4M6Vhw==
+X-Received: by 2002:a05:6000:2dc4:b0:3a0:bb2b:14e3 with SMTP id ffacd0b85a97d-3a3496e7095mr1945171f8f.33.1747211673499;
+        Wed, 14 May 2025 01:34:33 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-879f6297d9esm8160828241.28.2025.05.14.01.34.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 May 2025 01:34:33 -0700 (PDT)
+Message-ID: <81444b38-e0af-4278-89ad-e25cfe08179d@suse.com>
+Date: Wed, 14 May 2025 10:34:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ft6buh2oquxdygzxzobfmnjnatpuf6k6eetjtlqi2o3myv5qu3@vdt3t2yyprsv>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] module: Add module specific symbol namespace
+ support
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com,
+ samitolvanen@google.com, da.gomez@samsung.com, masahiroy@kernel.org,
+ nathan@kernel.org, nicolas@fjasle.eu, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
+References: <20250502141204.500293812@infradead.org>
+ <20250502141844.046738270@infradead.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250502141844.046738270@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, May 13, 2025 at 08:38:57PM -0700, Josh Poimboeuf wrote:
-> On Tue, May 13, 2025 at 08:44:49PM -0400, Kent Overstreet wrote:
-> > On Tue, May 13, 2025 at 05:37:11PM -0700, Josh Poimboeuf wrote:
-> > > On Tue, May 13, 2025 at 07:34:59PM -0400, Kent Overstreet wrote:
-> > > > On Tue, May 13, 2025 at 02:24:46PM -0700, Josh Poimboeuf wrote:
-> > > > > > +++ b/include/linux/moduleparam.h
-> > > > > > @@ -122,6 +122,7 @@ struct kparam_array
-> > > > > >   *	charp: a character pointer
-> > > > > >   *	bool: a bool, values 0/1, y/n, Y/N.
-> > > > > >   *	invbool: the above, only sense-reversed (N = true).
-> > > > > > + *	static_key_t: same as bool, but updates a 'struct static_key'
-> > > > > 
-> > > > > The static_key_*() interfaces are deprecated because they're really easy
-> > > > > to use incorrectly.  I don't think we want to propagate that misuse to
-> > > > > modules.
-> > > > > 
-> > > > > It would be better to have type(s) based on static_key_false and/or
-> > > > > static_key_true, depending on whatever the default is.
-> > > > 
-> > > > Except those are just wrappers around struct static_key, so why does
-> > > > that matter here?
-> > > 
-> > > Those struct wrappers are needed to work with static_branch_likely() and
-> > > static_branch_unlikely().
-> > 
-> > Sure, but this has no bearing on that - unless I've missed them, there
-> > aren't separate methods for just setting and checking the value, which
-> > is all we're doing here.
+On 5/2/25 16:12, Peter Zijlstra wrote:
+> Designate the "module:${modname}" symbol namespace to mean: 'only
+> export to the named module'.
 > 
-> To make use of this feature, wouldn't the module need to use
-> static_key_false() or so to actually insert the static branch to check
-> the value?  Otherwise what's the point of using static keys here?
+> Notably, explicit imports of anything in the "module:" space is
+> forbidden.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-I'm not sure I follow?
+Sorry, I thought this was already reviewed from the modules perspective,
+but I'll make it explicit.
 
-You just pass the inner static_key to the modparam, you still use
-static_key_true or static_key_false as normal.
+Looks ok to me, besides the already mentioned "strsmp" typo. I can fix
+it when picking up the series.
+
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+
+-- 
+Thanks,
+Petr
