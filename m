@@ -1,211 +1,172 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9149761FF2;
-	Wed, 14 May 2025 21:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7F22820D0
+	for <linux-modules@vger.kernel.org>; Thu, 15 May 2025 08:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747258641; cv=none; b=QLseGd0vF+anYwHtCMSStRy+4lTGE2lMWZ0HcK8cCFlrixP3auShjh2lqy6pII28fAH1/BgjlwSyWdo+hk/HHhfsu7k3pqYS/89/9H24rkbAPoZHARftqHUkyXRcEQDwj32kQBeCnKKC4lpvh1L4YiI/eEjcYcrXZBj7qwlLR0g=
+	t=1747296315; cv=none; b=WZCGFkytAUTmcQnCpw/I8raqhU5AFuCf16CvwP0GQ6/psYNLAIFbNvulDqBc7kvDOPjK9c1gqPMvvhijoDPHNX+VF4OdFneqbf4NReEriMAvI2Dk5UjqPv3OASEBoilDQKlT2glUsxq1Z4ogDPLCsP6lRQStHFXuABMgMeuIxIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747258641; c=relaxed/simple;
-	bh=xRFOVzuv9WFmt0OA/lEjVrkz1nJAEAvQhv3PjcQUuUc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=d49vKWuOw+R2sGHETNeaenFjPz2iy7fuEjEVmbT9MwY4Csvfo2uKNSQVP+iCC3MeHCmRBcXiDrhQ1sWdZ3yheGDrGaFh9aHE8JVTGfpIr/681wbAyct4kjfRk3o6gbevnh7jshZelE+ABBhvhbgk/w23GjKVFBeUf8YMMohKhgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qnFQzg7H; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1747296315; c=relaxed/simple;
+	bh=0tGKkkemugSf6qbz3gshaWCoVsCRbxCI+SQBbX3dIFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=COcuADjP9JN/tbu/pT0tqJ77Ds5lNh3ISzjaTc0zwlnyMKbxJ2XcFkyFvmM/KboGII4uPltDlLJSYVMwDQ8aHEUBaD1pJpta/uknxRlQYuZDcrFzVfH11M4DPD2PsVh/eMDy2sXa8zD2gnJuwNY1AW17QJYFb5liNh5bN0zKRbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QleRWDJ1; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qnFQzg7H"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54EIsOfN012674;
-	Wed, 14 May 2025 21:36:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=xRFOVz
-	uv9WFmt0OA/lEjVrkz1nJAEAvQhv3PjcQUuUc=; b=qnFQzg7HUiK+nls3CnYth2
-	E65MbfXC4F7eIKUnxhjoxc2QNG9QskMUZofNp9wV+dyFBlM1N43/gSxtAzLB0Umu
-	NwiYVLio++qMzar+i3Ay/xz8ctDRy8AIHNwwVJG28mSDJbDOUVdCQ27ye5kXkNi4
-	thdVHNtQk5c18yvGFni8gUH09/BXB0OtwYP5SsqO3ta8KmaHcinJZVpQByhuKy/P
-	3lZnAHqiX6jyl2QKQASRr/PPH2oh8KQkkUtIvOvzRZkuGMr98zXAbQZzK2tloR+f
-	1YE7YOrtytMi9/L37H35fcyImDjfqX4bZo45VQ8BTE/WrHe2G7dy8WDnQa0art+g
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46n0v6gsv5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 21:36:25 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54ELaOks014072;
-	Wed, 14 May 2025 21:36:25 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46n0v6gsv2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 21:36:24 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54EJbtR5024288;
-	Wed, 14 May 2025 21:36:23 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46mbfs6ppb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 May 2025 21:36:23 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54ELaM1A28508780
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 May 2025 21:36:23 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A87175805A;
-	Wed, 14 May 2025 21:36:22 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 00EAC5805C;
-	Wed, 14 May 2025 21:36:20 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 May 2025 21:36:19 +0000 (GMT)
-Message-ID: <3bc7c90c620d46378978f30e03cf8375dc0cbc42.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 2/9] ima: efi: Drop unnecessary check for
- CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor
- <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Luis Chamberlain
- <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>,
-        Sami Tolvanen
- <samitolvanen@google.com>,
-        Daniel Gomez <da.gomez@samsung.com>, Paul Moore
- <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn"
- <serge@hallyn.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Madhavan Srinivasan
- <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas
- Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg
- <eric.snowberg@oracle.com>,
-        Nicolas Schier <nicolas.schier@linux.dev>,
-        Fabian =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-        Arnout
- Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
-        kpcyrd
- <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
-        =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Date: Wed, 14 May 2025 17:36:19 -0400
-In-Reply-To: <17aaa56b-5ee7-4a7f-a3c1-206e2114645d@weissschuh.net>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-	 <20250429-module-hashes-v3-2-00e9258def9e@weissschuh.net>
-	 <10ca077d6d51fac10e56c94db4205a482946d15f.camel@linux.ibm.com>
-	 <edeb23e7884e94006d560898b7f9d2dd257a275e.camel@linux.ibm.com>
-	 <17aaa56b-5ee7-4a7f-a3c1-206e2114645d@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QleRWDJ1"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a108684f90so355734f8f.1
+        for <linux-modules@vger.kernel.org>; Thu, 15 May 2025 01:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1747296311; x=1747901111; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=edff1LhptN7FQ5Bq2oruaEckY3n2IP7/Je81wTRfspE=;
+        b=QleRWDJ1MjKGuTARD+JMrNkTAxf4HJRsTFLkXkCVtL9CbWW4H8867e4gRrYe6EwAgm
+         XPMtN/ccgxu1Iakt4TGULyjyPIWkeK++REj8S0mb+Lp0Y5BdRQJ1RgMKofZ+1rn3lsyW
+         bxi4phbRhYV5kVMHXtDrnLPMbUHaadKUFkpJh31Uhr5GNhzN3CoyH06OzrvpRMWIGd1p
+         lPNsa58+0OPS7jisV6aHdqQaXvnPOoiqqmJRmt4T6k338Xqel0OrIM7fT7Wlbtpc6I1K
+         tJpyOs9c9HSn4DpSUK56f70L5Bp4sMOeG4KS6HeQFC/D8fEHOlBzkrpRaFUFsy+XNvVH
+         FJ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747296311; x=1747901111;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=edff1LhptN7FQ5Bq2oruaEckY3n2IP7/Je81wTRfspE=;
+        b=L4p6qcUHKEaqf2BweKkSi4VxM4NBEpJKD7PTZQM86LCvKy0uSWpwB8OvNe64iNFQ9b
+         cYpcACFynQw+zJDom6Wdw3LwYM9HG+y8WaYb8Lj2eo8D5viSWNx16WjbyBmbb9IzK20N
+         nl3qfdINEm2QBg4nF/WjPPM9D2txU1NfrN3QtjMiHWS/Za+bkd3Sw1y1/UIeXbd3QV/N
+         24dRQd/Frc+JQgLv5b1a7XhWF8T/Ke+piivdNySWwmlwY0OI/qzMwz/hrF++20rmO5xS
+         ju3ru1UhlQq8h7pAA+DGctW4vMIBJUl1IpmwpFuTRNSq1CPhV91DHyI3kCYL5ao623qR
+         V5fg==
+X-Forwarded-Encrypted: i=1; AJvYcCU7mEg2rObh5tumDQNeYCR910TgJrt5zRTPASfANHp1yqpK0gtZ1bDFpxMob25s02njAk5ell021XwhOzha@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAKPcbrb2CUtn4JicoblYH5cHW2wVMnmu4+/OG9navjxrPj5GW
+	/o6md4aCiikqCpbQ6al2ulVw9mjY3WeUPcANuJbqHcGnhxrZGrxat1tLndHMIRY=
+X-Gm-Gg: ASbGnctwnYqMOpEZPtFmM1A4Dv/1VQuGGoe1LSMkxHbkN2+U2CkRKGCSb/oavS1/NEu
+	ka/8TvVmh5BMT/Pw8SX2m+cQpti2K0AerJsZKmsQUJkU35wrH7ICAE4vKi2l8TLfARowmm8DJWS
+	m2n4S0KGMmLSCKd+LHe1DjxOGLbEHEPSu2NlM0B1ybAF1PKzNXSWIKFWsrKx7sLGIyrvWKhzv6V
+	H63gcqpYCTMhV2b7cPcOxko01JuJGpwaxWaREICRzuGeEVz/0abR9CbaipuXKJUK2KND92n+Km6
+	I7boeUoHSAW7u7JoZeBaOP0/dMzRS5HVvRDaDbOwQ2WUQxMHbAjZow==
+X-Google-Smtp-Source: AGHT+IGXvziHODCht+twr6uozgFfTyAclIKdnZuTVey4CsU1/XVbIcw96mTLNhe3rmJT4ESA13CsYg==
+X-Received: by 2002:a05:6000:2911:b0:39e:dbb0:310f with SMTP id ffacd0b85a97d-3a34992746amr5945525f8f.39.1747296311397;
+        Thu, 15 May 2025 01:05:11 -0700 (PDT)
+Received: from [10.100.51.48] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dea85df68fsm9441727137.18.2025.05.15.01.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 May 2025 01:05:10 -0700 (PDT)
+Message-ID: <e2ebf88d-46a2-4f38-a0c8-940c3d3bee49@suse.com>
+Date: Thu, 15 May 2025 10:04:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=IqAecK/g c=1 sm=1 tr=0 ts=68250cd9 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=VTue-mJiAAAA:8 a=KLImt8Xm0npdB1J_YwkA:9 a=QEXdDO2ut3YA:10
- a=S9YjYK_EKPFYWS37g-LV:22
-X-Proofpoint-ORIG-GUID: f5XBtQh4mBIUFD0svQ8WZ4natbLj1BXZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDIwMSBTYWx0ZWRfX0J/q+sNmdfdm i1ZHU47UsEXxhb9YRuiVfLyTUlkU8TH00xq7HIG19po+fL1JGIpvZjM/uX6q5+4t0NPh5dp4k4A uN7188bKesc49xrTc6GBTy7lOMs+ZNjaWji652m5L6f1AxxoZd/vEoWK+Kuo+ncsW4y8DHTRM7p
- R6fGlTFx5BEJHKJnQaF5K8E1e00WUGwmeibIplYY4v8jFk1SvdHod2h8Nvl+2aCydTecEoo+n2L vSxA3VNRMDV35wrChVwg5zFikRo5P7f2GYU6VboeHo7mguezLscbb4UFmlb2+dU11GdR62pNfTH EqfQwq6lweOyKgkbd7Vp1A4adwXhKyw8C6BaU4Dd+SyySDBKc9yjiTWTRQqlZ+cUd2MW2Iv5eSZ
- CLMdhE4i1h3uz8OTg/w+xX0bvEzrampxKZGJR0T8KnUmpNAA9Aq1CKvRJUMlTq/5jsMGFxqX
-X-Proofpoint-GUID: mwVJ5c7YLe1v2I9fxeVNmrltNyZdPkRw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-14_04,2025-05-14_03,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
- priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505140201
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/12] module: Move modprobe_path and modules_disabled
+ ctl_tables into the module subsys
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Kees Cook <kees@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Waiman Long <longman@redhat.com>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joel@joelfernandes.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, rcu@vger.kernel.org, linux-mm@kvack.org,
+ linux-parisc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20250509-jag-mv_ctltables_iter2-v1-0-d0ad83f5f4c3@kernel.org>
+ <20250509-jag-mv_ctltables_iter2-v1-1-d0ad83f5f4c3@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250509-jag-mv_ctltables_iter2-v1-1-d0ad83f5f4c3@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 2025-05-14 at 20:25 +0200, Thomas Wei=C3=9Fschuh wrote:
-> May 14, 2025 19:39:37 Mimi Zohar <zohar@linux.ibm.com>:
->=20
-> > On Wed, 2025-05-14 at 11:09 -0400, Mimi Zohar wrote:
-> > > On Tue, 2025-04-29 at 15:04 +0200, Thomas Wei=C3=9Fschuh wrote:
-> > > > When configuration settings are disabled the guarded functions are
-> > > > defined as empty stubs, so the check is unnecessary.
-> > > > The specific configuration option for set_module_sig_enforced() is
-> > > > about to change and removing the checks avoids some later churn.
-> > > >=20
-> > > > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> > > >=20
-> > > > ---
-> > > > This patch is not strictly necessary right now, but makes looking f=
-or
-> > > > usages of CONFIG_MODULE_SIG easier.
-> > > > ---
-> > > > =C2=A0security/integrity/ima/ima_efi.c | 6 ++----
-> > > > =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
-> > > >=20
-> > > > diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/=
-ima/ima_efi.c
-> > > > index
-> > > > 138029bfcce1e40ef37700c15e30909f6e9b4f2d..a35dd166ad47beb4a7d46cc3e=
-8fc604f57e03ecb
-> > > > 100644
-> > > > --- a/security/integrity/ima/ima_efi.c
-> > > > +++ b/security/integrity/ima/ima_efi.c
-> > > > @@ -68,10 +68,8 @@ static const char * const sb_arch_rules[] =3D {
-> > > > =C2=A0const char * const *arch_get_ima_policy(void)
-> > > > =C2=A0{
-> > > > =C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_i=
-ma_get_secureboot()) {
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_MODULE_=
-SIG))
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_m=
-odule_sig_enforced();
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_KEXEC_S=
-IG))
-> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_k=
-exec_sig_enforced();
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_module_sig_enforced();
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_kexec_sig_enforced();
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return sb_arch_rules;
-> > >=20
-> > > Hi Thomas,
-> > >=20
-> > > I'm just getting to looking at this patch set.=C2=A0 Sorry for the de=
-lay.
-> > >=20
-> > > Testing whether CONFIG_MODULE_SIG and CONFIG_KEXEC_SIG are configured=
- gives priority
-> > > to them, rather than to the IMA support.=C2=A0 Without any other chan=
-ges, both signature
-> > > verifications would be enforced.=C2=A0 Is that the intention?
-> >=20
-> > Never mind, got it.
-> >=20
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->=20
-> Thanks for the review!
->=20
-> Given that this series has no chance
-> of getting into the next merge window,
-> would it be possible to take the two IMA preparation patches
-> through the IMA tree to have them out of the way?
+On 5/9/25 14:54, Joel Granados wrote:
+> Move module sysctl (modprobe_path and modules_disabled) out of sysctl.c
+> and into the modules subsystem. Make the modprobe_path variable static
+> as it no longer needs to be exported. Remove module.h from the includes
+> in sysctl as it no longer uses any module exported variables.
+> 
+> This is part of a greater effort to move ctl tables into their
+> respective subsystems which will reduce the merge conflicts in
+> kernel/sysctl.c.
+> 
+> Signed-off-by: Joel Granados <joel.granados@kernel.org>
+> [...]
+> --- a/kernel/module/kmod.c
+> +++ b/kernel/module/kmod.c
+> @@ -60,7 +60,7 @@ static DEFINE_SEMAPHORE(kmod_concurrent_max, MAX_KMOD_CONCURRENT);
+>  /*
+>  	modprobe_path is set via /proc/sys.
+>  */
+> -char modprobe_path[KMOD_PATH_LEN] = CONFIG_MODPROBE_PATH;
+> +static char modprobe_path[KMOD_PATH_LEN] = CONFIG_MODPROBE_PATH;
+>  
+>  static void free_modprobe_argv(struct subprocess_info *info)
+>  {
+> @@ -177,3 +177,33 @@ int __request_module(bool wait, const char *fmt, ...)
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(__request_module);
+> +
+> +#ifdef CONFIG_MODULES
+> +static const struct ctl_table kmod_sysctl_table[] = {
+> +	{
+> +		.procname	= "modprobe",
+> +		.data		= &modprobe_path,
+> +		.maxlen		= KMOD_PATH_LEN,
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_dostring,
+> +	},
+> +	{
+> +		.procname	= "modules_disabled",
+> +		.data		= &modules_disabled,
+> +		.maxlen		= sizeof(int),
+> +		.mode		= 0644,
+> +		/* only handle a transition from default "0" to "1" */
+> +		.proc_handler	= proc_dointvec_minmax,
+> +		.extra1		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_ONE,
+> +	},
 
-I'm fine with picking up the two patches simply as code cleanup, meaning dr=
-opping the last
-sentence of the patch description, after some testing.
+This is minor.. but the file kernel/module/kmod.c contains the logic to
+request direct modprobe invocation by the kernel. Registering the
+modprobe_path sysctl here is appropriate. However, the modules_disabled
+setting affects the entire module loader so I don't think it's best to
+register it here.
 
-Mimi
+I suggest keeping a single table for the module sysctl values but moving
+it to kernel/module/main.c. This means the variable modprobe_path must
+retain external linkage, on the other hand, modules_disabled can be made
+static.
 
+-- 
+Thanks,
+Petr
 
+> +};
+> +
+> +static int __init init_kmod_sysctl(void)
+> +{
+> +	register_sysctl_init("kernel", kmod_sysctl_table);
+> +	return 0;
+> +}
+> +
+> +subsys_initcall(init_kmod_sysctl);
+> +#endif
