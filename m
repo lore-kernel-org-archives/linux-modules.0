@@ -1,87 +1,77 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176D01DEFE9
-	for <linux-modules@vger.kernel.org>; Sat, 17 May 2025 17:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFC751DA3D;
+	Sun, 18 May 2025 10:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747504238; cv=none; b=plVbtLN2KahtOxnCHWgEtWsUeFd64ZNE6y2GGwNqFrgmtVfmDxxVun3APVLFXCdEais4hvgPAjOee2iqCnGZXFT45FcZFnSS2woMXp0Pi5DTC1CWJChW1lT5q88i71unY6cpgAXZRUw7PIj5IJ4kyW90L9Kcwt8tSbY3wAEI39Y=
+	t=1747563187; cv=none; b=jOem9epToRDoL0ZdbfNcl2AvdvtR1wPGVbGojgVgy47CYPwSQG6IfXKiWWV3g7Jdr8QKk1zyTRjLdSvMQfFM2LBLQuvAy3TNMJJ1l+hcxInjNTPQ9BM4zNGDihV0sEU97paPT5M/szso9mfCgDgRNqJjU9TpluA+shUvzhtnZt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747504238; c=relaxed/simple;
-	bh=Bn0wAGqZHTjn9PqrGuc27qP6e3HVTBYUm5T+e1pNQcs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=EXf3wGVXVhcesOsIjVQXnp2Dm7+BcqI1cxg53iksnu/Y5/oOUjIH5vDZZSk5sB3RZYuPCVQbkMBvw8EKQBDzr/LNz2HLozkqnLp4R2I7CwPyQBs9FY9LI18jmdA1sKkkRJC6NNu4WgXqRACpQ/5eglOS842aZKVdLba9FQDC9F0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4b09p649qhz9sWd;
-	Sat, 17 May 2025 19:25:50 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 0kOzLs8HarK8; Sat, 17 May 2025 19:25:50 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4b09p63MxDz9sVS;
-	Sat, 17 May 2025 19:25:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6E5438B767;
-	Sat, 17 May 2025 19:25:50 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id Vg09AF3dGqEw; Sat, 17 May 2025 19:25:50 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3448D8B763;
-	Sat, 17 May 2025 19:25:50 +0200 (CEST)
-Message-ID: <e55bd90e-8bbf-4eb2-95e2-cc636725a0ae@csgroup.eu>
-Date: Sat, 17 May 2025 19:25:49 +0200
+	s=arc-20240116; t=1747563187; c=relaxed/simple;
+	bh=NXp7EgDL0f5TU0KptoBP7XRodmOo3VL990R8lYNfyb0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YI9Y8/g8Q844EVyv0yFcpuEU+Y2BrpDUAR3ROaN2O5ssoO9anXm8p59NVpuyaQ3h3wlJCbxJHtLG1KuPY+tyeg/G2dS3cFpgMTZkiZWx1oJkra2szMbscBznX9LA05MA4ByyEyP7Hki+ugSGnV/3OeKasZgnnUsYy76vcLL9+To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TkzbssGV; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TkzbssGV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=s+
+	VSHine5PNrjaH5R325/+aTiBVv/4/hpNggGi1YjwA=; b=TkzbssGVcbFtd94MNj
+	cAndO183Zy2wPRXKD9QNjJxZDsfSiZ0AD4RxjUqEZZxx3127lRgWujySXQeNRyzI
+	dcM91GOIA68kD9OQdD9JtdzRFFNWmEQgmxImwRlowiAqEHSbNirpIXN/ZnpNy14i
+	BBYFFd49GN/pDQLNilTIAkwxo=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wBHHmF9siloIaeOCQ--.36267S4;
+	Sun, 18 May 2025 18:12:26 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: surenb@google.com,
+	mcgrof@kernel.org,
+	petr.pavlu@suse.com
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Wang <00107082@163.com>
+Subject: [PATCH] module: release codetag section when module load fails
+Date: Sun, 18 May 2025 18:12:12 +0800
+Message-Id: <20250518101212.19930-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Question: a module for wiping userspace RAM before
- shutdown/reboot/halt
-To: Danill Klimuk <daniil.klimuk@3mdeb.com>, linux-modules@vger.kernel.org,
- "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <bfe72929-ba4c-4732-9f80-25cc7b95a0c8@3mdeb.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <bfe72929-ba4c-4732-9f80-25cc7b95a0c8@3mdeb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBHHmF9siloIaeOCQ--.36267S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw18Jr1fuF4xWryrWw47CFg_yoWftwc_Xw
+	48X348Wr1Dtw409w4rt3Z3WrsYgry8Gr9Y9a4xtay5ta47Zw13Awnxtr9xWF1DWrZ7AFs3
+	ZFnxJ3Wq9r1rCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRXSdgUUUUUU==
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqBhRqmgpq6Y3TQACs-
 
+When module load failed after memory for codetag sections ready,
+codetag section memory was not properly released. This
+causes memory leak, and if next module load happens to got the
+same module address, codetag may pick the uninitialized section
+when manipulating tags during module unload, and lead to
+"unable to handle page fault" BUG.
 
+Closes: https://lore.kernel.org/all/20250516131246.6244-1-00107082@163.com/
+Signed-off-by: David Wang <00107082@163.com>
+---
+ kernel/module/main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Le 15/05/2025 à 15:30, Danill Klimuk a écrit :
-
-> Hello everyone. I have received a request to write a Linux kernel module
-> that will wipe any processes leftovers from userspace RAM during/before
-> Linux kernel shutdown/reboot/halt sequences. The reason I am going to do
-> it inside a module is to do it in a more deterministic way that does not
-> depend on any processes. AFAIK Linux kernel does not have any other
-> functionalities to wipe leftovers from RAM apart from the command line
-> arguments "init_on_free" and "init_on_alloc" that results in memory
-> poisoning only during memory allocation and memory deallocation. These
-> arguments cause the kernel to clean processes memory several times
-> during runtime, that is not deterministic because of processes
-> non-deterministic behavior. Hence, I want to bring the memory wiping
-> mechanism in one place and make it more deterministic. The question is:
-> 
-> Maybe the Linux kernel already have such functionalities implemented?
-
-Linux memory management topics should be sent to linux-mm@kvack.org
-
-> 
-> Currently I am planning to implement the wiping process to be triggered
-> by "reboot_notifier_callback", so to wipe RAM after PID 1 process
-> finishes and no other processes are executing. I am looking forward to
-> merging the module into Linux kernel upstream too.
-
-What do you mean by 'wiping', do you mean 'clearing' ?
-
-Can you explain the reason this is needed ?
-
-Christophe
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a2859dc3eea6..5c6ab20240a6 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2829,6 +2829,7 @@ static void module_deallocate(struct module *mod, struct load_info *info)
+ {
+ 	percpu_modfree(mod);
+ 	module_arch_freeing_init(mod);
++	codetag_free_module_sections(mod);
+ 
+ 	free_mod_mem(mod);
+ }
+-- 
+2.39.2
 
