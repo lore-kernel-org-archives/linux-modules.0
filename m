@@ -1,76 +1,81 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A56D13B5A9;
-	Mon, 19 May 2025 16:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842AB1E573F;
+	Mon, 19 May 2025 16:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747672237; cv=none; b=JTmu2ptFwCrnZFpO14his/5HT/OD/L1uVzcG2Y4N4S6LrVvNRMVVy2m8ODnRmr3lrAL1CUy3ZdCIsYWzS4ESeHqGNFlCt6NuIqNt7iyaCB4kD+07q9qUglcx7bBIYNW+50LPjD7CctNsNRsA8Wqzm/y90Sod7KNaMrQCgqH2f7k=
+	t=1747672743; cv=none; b=NflIbW3VJFqlUwGz35TeV65tgiw1jEDFR8a48YPIjCGoeaNRms5kCtpPWF3u5Hzk4bS6t2bKSIZ7s0knVc2T8EKFIp9QINHPD0LMIxi0lAZHYWYMDy8m/L3t7bzTUZUBaTCWPuKf7PovAAw9oLqN22bkF7qxFulpyEpd2OFdU68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747672237; c=relaxed/simple;
-	bh=2Af1XbfqiXmdqDTBK/s5PrxMtPCjQZrdKyRpyxcOonQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=EJK8nCjAE/kunj0mCWYXSaQKyfZLDVZe90I0SgCwITTFfZrvogqk0xpci/902XZMfQTuKSvUDjqb0XiSeC+9Zv3J+a9C83Cs/D8tMHaiLWX+olx62zbh7PhR48Xiab05lu9rhnZxRYql6r15MYYM8kvcXulyygeUkRT2HnJLKaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=fail (1024-bit key) header.d=163.com header.i=@163.com header.b=g7Os8QVe reason="signature verification failed"; arc=none smtp.client-ip=220.197.31.4
+	s=arc-20240116; t=1747672743; c=relaxed/simple;
+	bh=uZOe9lmbBGmuo5/Ne4Zed6Db+GO58gvc24zPWbDmp6A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=olDntqB+ongvxeA23fO116Q4hFXs5GBZG9pgGaOr7iD2iCESt3CwiF9XZv3JzmoK/E6TQhnlEG6aAt4qkid0+yxROHXBwjsg9k8FSX3xRJEazcJLu8KqjJOM8hCDO5lWDtLH51YxlMuPfrpmXLXbRataOKMbopkFeMLG/k6o8js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=gOu2sx/1; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="g7Os8QVe"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="gOu2sx/1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=sAzTA48n/eYJNSrWoAOWU7Sy/2yJF9yIhP5DF6ozIVs=; b=g
-	7Os8QVe16OpkcKGj3G9+lkyzfYy9mCTJCWpnG49oJqGNPqHnAOBLCP3WhleF2Vdm
-	71D+CD/AtvCELOVxY1a7I/75qFvPGNEci5xUEMJ2FJt0L7UeOLlYkl0wq+OGjsxm
-	rOu+kVDJkuHSPVrANXQYPFXIGgfIyy9tEcUh5A1jAY=
-Received: from 00107082$163.com ( [111.35.189.95] ) by
- ajax-webmail-wmsvr-40-100 (Coremail) ; Tue, 20 May 2025 00:30:00 +0800
- (CST)
-Date: Tue, 20 May 2025 00:30:00 +0800 (CST)
-From: "David Wang" <00107082@163.com>
-To: "Suren Baghdasaryan" <surenb@google.com>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: release codetag section when module load fails
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2025 www.mailtech.cn 163com
-In-Reply-To: <CAJuCfpEeo2qKcyan9BnYGvEaYeso24wQT1eX-CxnBkjbEuY7sg@mail.gmail.com>
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=jo
+	TivAkSBjTqIfYZ5iBOY30EupsNyTxNclneiFMNbWM=; b=gOu2sx/1vEfOzmwAOP
+	pVu5u0pi4VOKX3gVQclR2Fp2ldcKFiRll5NsuLSbuZhclcPN2BSf0bHKRleVYRk5
+	ksAvqWzSFhPydhNW50AWWlFeRK6KC9X3eZ+fEFrrryH8D5Dyvpr1R73UumOgoc39
+	XJX292elyt5a0+ATk63E5vjOc=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wAXgUmCXitoAHEECg--.49698S4;
+	Tue, 20 May 2025 00:38:39 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: surenb@google.com,
+	petr.pavlu@suse.com,
+	mcgrof@kernel.org
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Wang <00107082@163.com>
+Subject: [PATCH v2] module: release codetag section when module load fails
+Date: Tue, 20 May 2025 00:38:23 +0800
+Message-Id: <20250519163823.7540-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20250518101212.19930-1-00107082@163.com>
 References: <20250518101212.19930-1-00107082@163.com>
- <CAJuCfpEeo2qKcyan9BnYGvEaYeso24wQT1eX-CxnBkjbEuY7sg@mail.gmail.com>
-X-NTES-SC: AL_Qu2fBfqcvUor5iidY+kXn0oTju85XMCzuv8j3YJeN500siTO0zsPZm9tA0XZ986TCwWhoAiWXQFt5/h2VrZ9YIlMxtpkHqIAt5CIvGGC0YnG
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <3e1bf257.c0a6.196e961769d.Coremail.00107082@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:ZCgvCgD3X0OJXCto4hIIAA--.48605W
-X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqA1SqmgrVgYIBwABsA
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAXgUmCXitoAHEECg--.49698S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKry7KFWDWryxJFyUXFWxXrb_yoWDWwb_X3
+	y8JryxWr1UJw409w4rt3ZagrsYgry8Gr95u3s7tay5t3W7Aw13ArnxKr9xXFn8GrZ7AFs3
+	AFnxJ3Wq9r1rCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRWBT5UUUUUU==
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/xtbB0h1SqmgrV7WIRwAAsZ
 
-CkF0IDIwMjUtMDUtMjAgMDA6MDM6MTYsICJTdXJlbiBCYWdoZGFzYXJ5YW4iIDxzdXJlbmJAZ29v
-Z2xlLmNvbT4gd3JvdGU6Cj5PbiBTdW4sIE1heSAxOCwgMjAyNSBhdCAzOjEy4oCvQU0gRGF2aWQg
-V2FuZyA8MDAxMDcwODJAMTYzLmNvbT4gd3JvdGU6Cj4+Cj4+IFdoZW4gbW9kdWxlIGxvYWQgZmFp
-bGVkIGFmdGVyIG1lbW9yeSBmb3IgY29kZXRhZyBzZWN0aW9ucyByZWFkeSwKPgo+bml0OiBzL3Jl
-YWR5L2lzIHJlYWR5Cj4KPj4gY29kZXRhZyBzZWN0aW9uIG1lbW9yeSB3YXMgbm90IHByb3Blcmx5
-IHJlbGVhc2VkLiBUaGlzCj4+IGNhdXNlcyBtZW1vcnkgbGVhaywgYW5kIGlmIG5leHQgbW9kdWxl
-IGxvYWQgaGFwcGVucyB0byBnb3QgdGhlCj4KPm5pdDogcy9oYXBwZW5zIHRvIGdvdC9oYXBwZW5z
-IHRvIGdldAo+CgpUaGFua3MsIEkgd2lsbCBzZW5kIG5ldyB2ZXJzaW9uLgo+Cj4+IHNhbWUgbW9k
-dWxlIGFkZHJlc3MsIGNvZGV0YWcgbWF5IHBpY2sgdGhlIHVuaW5pdGlhbGl6ZWQgc2VjdGlvbgo+
-PiB3aGVuIG1hbmlwdWxhdGluZyB0YWdzIGR1cmluZyBtb2R1bGUgdW5sb2FkLCBhbmQgbGVhZCB0
-bwo+PiAidW5hYmxlIHRvIGhhbmRsZSBwYWdlIGZhdWx0IiBCVUcuCj4+Cj4+IENsb3NlczogaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjUwNTE2MTMxMjQ2LjYyNDQtMS0wMDEwNzA4MkAx
-NjMuY29tLwo+PiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBXYW5nIDwwMDEwNzA4MkAxNjMuY29tPgo+
-Cj5BY2tlZC1ieTogU3VyZW4gQmFnaGRhc2FyeWFuIDxzdXJlbmJAZ29vZ2xlLmNvbT4KPgo+PiAt
-LS0KPj4gIGtlcm5lbC9tb2R1bGUvbWFpbi5jIHwgMSArCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBp
-bnNlcnRpb24oKykKPj4KPj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9tb2R1bGUvbWFpbi5jIGIva2Vy
-bmVsL21vZHVsZS9tYWluLmMKPj4gaW5kZXggYTI4NTlkYzNlZWE2Li41YzZhYjIwMjQwYTYgMTAw
-NjQ0Cj4+IC0tLSBhL2tlcm5lbC9tb2R1bGUvbWFpbi5jCj4+ICsrKyBiL2tlcm5lbC9tb2R1bGUv
-bWFpbi5jCj4+IEBAIC0yODI5LDYgKzI4MjksNyBAQCBzdGF0aWMgdm9pZCBtb2R1bGVfZGVhbGxv
-Y2F0ZShzdHJ1Y3QgbW9kdWxlICptb2QsIHN0cnVjdCBsb2FkX2luZm8gKmluZm8pCj4+ICB7Cj4+
-ICAgICAgICAgcGVyY3B1X21vZGZyZWUobW9kKTsKPj4gICAgICAgICBtb2R1bGVfYXJjaF9mcmVl
-aW5nX2luaXQobW9kKTsKPj4gKyAgICAgICBjb2RldGFnX2ZyZWVfbW9kdWxlX3NlY3Rpb25zKG1v
-ZCk7Cj4+Cj4+ICAgICAgICAgZnJlZV9tb2RfbWVtKG1vZCk7Cj4+ICB9Cj4+IC0tCj4+IDIuMzku
-Mgo+Pgo=
+When module load fails after memory for codetag section is ready,
+codetag section memory will not be properly released. This
+causes memory leak, and if next module load happens to get the
+same module address, codetag may pick the uninitialized section
+when manipulating tags during module unload, and leads to
+"unable to handle page fault" BUG.
+
+Closes: https://lore.kernel.org/all/20250516131246.6244-1-00107082@163.com/
+Signed-off-by: David Wang <00107082@163.com>
+Acked-by: Suren Baghdasaryan <surenb@google.com>
+---
+ kernel/module/main.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a2859dc3eea6..5c6ab20240a6 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2829,6 +2829,7 @@ static void module_deallocate(struct module *mod, struct load_info *info)
+ {
+ 	percpu_modfree(mod);
+ 	module_arch_freeing_init(mod);
++	codetag_free_module_sections(mod);
+ 
+ 	free_mod_mem(mod);
+ }
+-- 
+2.39.2
+
