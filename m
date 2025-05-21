@@ -1,197 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8E979CF;
-	Wed, 21 May 2025 12:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5874C211710
+	for <linux-modules@vger.kernel.org>; Wed, 21 May 2025 16:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747829376; cv=none; b=PsnV9ffIxpG05oYGOYwCDy5d6+ZhX2w+ziw0L3tBS1YoRj605GSeTvfajuHtJbwTyVLVu8SEZVgTF5EQmq6NMNIB40wUatPi3CiHyfth5ismfKSNTdRPtJtg7WR2LtqH+wdE7XABKXb1usr8j0TmWTEAkyVLve3Hg19Xd7WsVtw=
+	t=1747843568; cv=none; b=cdfbMzUF/JwkJmL+UKmBUQJK8kRQnvDXed9o7Tiaqi/E7bP6kDlZwU6t55NQJxZf78dYTTQqHgjysvw8hCyMXtgtqr+EWZpcYcNBJNr488DOfwkwV8Q4XENut/2gBAKnLsyT73bYLMyROqqdDEvwRKyum0h7EbjlkW7i/76R+A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747829376; c=relaxed/simple;
-	bh=QbBFInRhrTN4KDhywq/vnOvp9a2LY9RftYFum+CHSXo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qw39G8edN4xcyulSUpQTs8BiASWo+HidWAf1v5536j02Y+CKpuYXtEj7+mKvttd4plTk6vf8rrrbnpfyLnLTLyegystQUxwpnDdmId5Qm7jKtuEO/rhsbvEOU17rUZRRKcxBzeeyGsLe9CMVZ7i3jOr192wc59o8Qr9ftFgu9Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKUN5jzZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1747843568; c=relaxed/simple;
+	bh=PCifrGMaHBClbKvmZWajsTE53B2GxDcUEm+7czXcSdM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SxUx84iZm+nblNAixxRhw3YCZFdREp9DYPMm64VtRpxPyO/hHibtyAwOdsv4eQhkjmViaUgG6ZwdvSGcnFp+bWx089KpBfOiMaLHpAbL+OEBmvzis3ieyofdZxfJkbS1zcSN3C+LtMI2ZvAnhsOf+NN7uk2PQOBjrOCKrOuAX9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a6QPRHob; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKUN5jzZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81B7C4CEED;
-	Wed, 21 May 2025 12:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747829374;
-	bh=QbBFInRhrTN4KDhywq/vnOvp9a2LY9RftYFum+CHSXo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iKUN5jzZGfOcKcKOcno8V02aRoH7HXn1QFnaVJFs3HguUCiSIACY7NR8jt7kyveSC
-	 iwS+f2tNANhyKN4RUWDqvgM89rbbUr0HyxhMf6Zq6yWF8RBty05Qlkqn27FEgTC1l4
-	 DrSStlQWHXBsu3jAHTwfECOMxEGxlZ/dpDmxKV7goCl/s7zmdGJSqVM8Tb9oW+fJd/
-	 vP7nwfVQMt/EIpGf2HagnLfXQlPRj9NhzCxZgoMhFxeLhaey35atEFz5CtxMafoMfq
-	 kKju2brWElM06F9gEOzJzeySwRGiBusub1U+yqS1CwLMT8b0+/AJrpmksUGgY+oVsq
-	 b6j3ymnL7JUWw==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-551f14dc30dso3417123e87.1;
-        Wed, 21 May 2025 05:09:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWGSJSl/ouN8leWQP00iKPMVSRT8rGZx+a2XIJPTCNh7odsA+FzMABScAgkbWjQxGgJC0db+wKSaNAD2ftKtA==@vger.kernel.org, AJvYcCX+SMutUj0Qx4A/s/SXZSXiNjwQBpltWcCFHFMMCZYKjPF089trzsQyLe/liA7hJvVhaQGnVn5ymxUwy2o=@vger.kernel.org, AJvYcCXW3A/YZ6zQHsw1eyoom9qXj1GmGK+ho5Osmpqz+Eu0XzTl1LtXqlNrKONhZT6LsPl60eewE1oWtnBl7OPw@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfquQnZpmFa/ZOGVoTzgL0D2IcB7s11+3A/iyEsgeR6C/7QZ/z
-	jPycJe3Pm9tQOGi8onZa7a52tX0vo/RUjkB7sKmxFYCVWsyNH+kgj9XXH1ouxqhJAxu6ZNRZdq+
-	p76dsxJGNBHNGbs9hYnX1raB0VnGEjfc=
-X-Google-Smtp-Source: AGHT+IE4K6APqfjUeSvRb94BF0tZHVC6iMoFKV3E8RE2KbgSVe5eWa5g7ZmD5QlzTBATnVWBmwAss+FAt4XJMLgvLBE=
-X-Received: by 2002:a05:6512:6703:b0:550:ecb4:94e with SMTP id
- 2adb3069b0e04-550ecb409b5mr4393437e87.9.1747829373491; Wed, 21 May 2025
- 05:09:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a6QPRHob"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-231de0beccbso38028265ad.0
+        for <linux-modules@vger.kernel.org>; Wed, 21 May 2025 09:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1747843565; x=1748448365; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ql9Z9xm5K7XH9O9hnF7qelsAjP39T8fR3nTvKKw0nvo=;
+        b=a6QPRHobOh2SxPmxrkGIaySJwcLM+IGdX1QMnwYQaGACd+tGXBXcyFT6Me9M17p0bR
+         CJJszXfgOg3glD+XAEkNpaFxh/NXwyk2WMVYZGytCrxvnkkpA+4H8pNRfOUz0LYHA4sh
+         SEhNuso2NqWKRCe/fId6Sq3rLm5h4efMEXIJ/txp7LEi74oNWuX4U7KN+W8G68zSBdG+
+         GzVQYUe3c0WTS16eDhRjA+U4Leb95j1QWpu73ZQ4CdT1StiSLJrAN63qq7tU72FNs6v5
+         sri2Fx80sqYGukPruwaF+dlrUD0zfDkiyN9b6poQNZRIaYb/X6b+FlnqCQxtFgSmDVa0
+         GXWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747843565; x=1748448365;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ql9Z9xm5K7XH9O9hnF7qelsAjP39T8fR3nTvKKw0nvo=;
+        b=U38nQVWogIhF76Nn+ilvh57MoyNHK2YmdpY96uFvfhXN4T/KD9IfgyZPA+S3Apys13
+         OOUlATufUw/GzxiwJkl6FMUoG71Ho57IaCLYytQ2B6i3dx2jMbHX8XJ8FxaZclAacd/K
+         6/qDJxvxRQVDyJdhntA55PW7+p4EjlhTkq0IaJ8tw25fUeYhkUF1zf6bOVRjLIYhaO+8
+         ea+zynVeHfYTkNSCc3sqkK9DsOpJrOZjVdl+l5Qg3c5KqNyuDzHOOK1TeZxdyiYej0Bk
+         ZcyV6+mwLqv1/bWwoPOiVEdYya76zBTb8KMy6cARj9gK4P9Dg988/HA2QZtkQCXcncFj
+         wlRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXgwhnH6v1Y8TfjAhkcT04SwjhDy+VDSHQZ2POolRy5DjbinSpKg1zNGQl+RhZ3eUytpadv7Pk+hbfQHjz9@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTjM+8Kh9b6/GPByZ4lcutEKf+ghPOIyp9DZEXoD3DLp+TLpxH
+	XuT90WIyK7xXuz+dGH6zO3SYYmGWPCFDfGEvbh/G/va4K4CgnrZWQkHlSLoPZl1wRh7sY1iFrc6
+	56alylQ==
+X-Google-Smtp-Source: AGHT+IFNeaIVQ685CZL/ir/FqHiM6qg4cufw1xi0AGG2BDj+FgfngqEqs+kjHu3RZknxYhNp6O6Iptv6chk=
+X-Received: from plke8.prod.google.com ([2002:a17:903:1948:b0:232:afa:7ca1])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ce91:b0:232:219c:2a4f
+ with SMTP id d9443c01a7336-232219c2f99mr194334555ad.1.1747843565544; Wed, 21
+ May 2025 09:06:05 -0700 (PDT)
+Date: Wed, 21 May 2025 09:06:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250502141204.500293812@infradead.org> <20250502141844.154517322@infradead.org>
-In-Reply-To: <20250502141844.154517322@infradead.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 21 May 2025 21:08:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATHQ2b3mA0rYM2vX0-6BwOEj4tU_MBQ9FNa_uZ9_q17zg@mail.gmail.com>
-X-Gm-Features: AX0GCFv4CD8KhcOlwIlISwOo4tF1S6w4DNWVSb1VvqJGD_aVV0MK1weAJdbqQUE
-Message-ID: <CAK7LNATHQ2b3mA0rYM2vX0-6BwOEj4tU_MBQ9FNa_uZ9_q17zg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] module: Extend the MODULE_ namespace parsing
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: mcgrof@kernel.org, x86@kernel.org, hpa@zytor.com, petr.pavlu@suse.com, 
-	samitolvanen@google.com, da.gomez@samsung.com, nathan@kernel.org, 
-	nicolas@fjasle.eu, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	hch@infradead.org, gregkh@linuxfoundation.org, roypat@amazon.co.uk
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.49.0.1112.g889b7c5bd8-goog
+Message-ID: <20250521160602.1940771-1-surenb@google.com>
+Subject: [PATCH 1/1] alloc_tag: handle module codetag load errors as module
+ load failures
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: kent.overstreet@linux.dev, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, da.gomez@samsung.com, 00107082@163.com, 
+	cachen@purestorage.com, linux-kernel@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-mm@kvack.org, stable@vger.kernel.org, 
+	surenb@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-I think the patch subject is stale.
+Failures inside codetag_load_module() are currently ignored. As a
+result an error there would not cause a module load failure and freeing
+of the associated resources. Correct this behavior by propagating the
+error code to the caller and handling possible errors. With this change,
+error to allocate percpu counters, which happens at this stage, will not
+be ignored and will cause a module load failure and freeing of resources.
+With this change we also do not need to disable memory allocation
+profiling when this error happens, instead we fail to load the module.
 
-MODULE_ was the prefix in the previous v2 series.
+Fixes: 10075262888b ("alloc_tag: allocate percpu counters for module tags dynamically")
+Reported-by: Casey Chen <cachen@purestorage.com>
+Closes: https://lore.kernel.org/all/20250520231620.15259-1-cachen@purestorage.com/
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Cc: stable@vger.kernel.org
+---
+ include/linux/codetag.h |  8 ++++----
+ kernel/module/main.c    |  5 +++--
+ lib/alloc_tag.c         | 12 +++++++-----
+ lib/codetag.c           | 34 +++++++++++++++++++++++++---------
+ 4 files changed, 39 insertions(+), 20 deletions(-)
 
-Now, the prefix part is module:
+diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+index 0ee4c21c6dbc..5f2b9a1f722c 100644
+--- a/include/linux/codetag.h
++++ b/include/linux/codetag.h
+@@ -36,8 +36,8 @@ union codetag_ref {
+ struct codetag_type_desc {
+ 	const char *section;
+ 	size_t tag_size;
+-	void (*module_load)(struct module *mod,
+-			    struct codetag *start, struct codetag *end);
++	int (*module_load)(struct module *mod,
++			   struct codetag *start, struct codetag *end);
+ 	void (*module_unload)(struct module *mod,
+ 			      struct codetag *start, struct codetag *end);
+ #ifdef CONFIG_MODULES
+@@ -89,7 +89,7 @@ void *codetag_alloc_module_section(struct module *mod, const char *name,
+ 				   unsigned long align);
+ void codetag_free_module_sections(struct module *mod);
+ void codetag_module_replaced(struct module *mod, struct module *new_mod);
+-void codetag_load_module(struct module *mod);
++int codetag_load_module(struct module *mod);
+ void codetag_unload_module(struct module *mod);
+ 
+ #else /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
+@@ -103,7 +103,7 @@ codetag_alloc_module_section(struct module *mod, const char *name,
+ 			     unsigned long align) { return NULL; }
+ static inline void codetag_free_module_sections(struct module *mod) {}
+ static inline void codetag_module_replaced(struct module *mod, struct module *new_mod) {}
+-static inline void codetag_load_module(struct module *mod) {}
++static inline int codetag_load_module(struct module *mod) { return 0; }
+ static inline void codetag_unload_module(struct module *mod) {}
+ 
+ #endif /* defined(CONFIG_CODE_TAGGING) && defined(CONFIG_MODULES) */
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5c6ab20240a6..9861c2ac5fd5 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3399,11 +3399,12 @@ static int load_module(struct load_info *info, const char __user *uargs,
+ 			goto sysfs_cleanup;
+ 	}
+ 
++	if (codetag_load_module(mod))
++		goto sysfs_cleanup;
++
+ 	/* Get rid of temporary copy. */
+ 	free_copy(info, flags);
+ 
+-	codetag_load_module(mod);
+-
+ 	/* Done! */
+ 	trace_module_load(mod);
+ 
+diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
+index 45dae7da70e1..d48b80f3f007 100644
+--- a/lib/alloc_tag.c
++++ b/lib/alloc_tag.c
+@@ -607,15 +607,16 @@ static void release_module_tags(struct module *mod, bool used)
+ 	mas_unlock(&mas);
+ }
+ 
+-static void load_module(struct module *mod, struct codetag *start, struct codetag *stop)
++static int load_module(struct module *mod, struct codetag *start, struct codetag *stop)
+ {
+ 	/* Allocate module alloc_tag percpu counters */
+ 	struct alloc_tag *start_tag;
+ 	struct alloc_tag *stop_tag;
+ 	struct alloc_tag *tag;
+ 
++	/* percpu counters for core allocations are already statically allocated */
+ 	if (!mod)
+-		return;
++		return 0;
+ 
+ 	start_tag = ct_to_alloc_tag(start);
+ 	stop_tag = ct_to_alloc_tag(stop);
+@@ -627,12 +628,13 @@ static void load_module(struct module *mod, struct codetag *start, struct codeta
+ 				free_percpu(tag->counters);
+ 				tag->counters = NULL;
+ 			}
+-			shutdown_mem_profiling(true);
+-			pr_err("Failed to allocate memory for allocation tag percpu counters in the module %s. Memory allocation profiling is disabled!\n",
++			pr_err("Failed to allocate memory for allocation tag percpu counters in the module %s\n",
+ 			       mod->name);
+-			break;
++			return -ENOMEM;
+ 		}
+ 	}
++
++	return 0;
+ }
+ 
+ static void replace_module(struct module *mod, struct module *new_mod)
+diff --git a/lib/codetag.c b/lib/codetag.c
+index de332e98d6f5..650d54d7e14d 100644
+--- a/lib/codetag.c
++++ b/lib/codetag.c
+@@ -167,6 +167,7 @@ static int codetag_module_init(struct codetag_type *cttype, struct module *mod)
+ {
+ 	struct codetag_range range;
+ 	struct codetag_module *cmod;
++	int mod_id;
+ 	int err;
+ 
+ 	range = get_section_range(mod, cttype->desc.section);
+@@ -190,11 +191,20 @@ static int codetag_module_init(struct codetag_type *cttype, struct module *mod)
+ 	cmod->range = range;
+ 
+ 	down_write(&cttype->mod_lock);
+-	err = idr_alloc(&cttype->mod_idr, cmod, 0, 0, GFP_KERNEL);
+-	if (err >= 0) {
+-		cttype->count += range_size(cttype, &range);
+-		if (cttype->desc.module_load)
+-			cttype->desc.module_load(mod, range.start, range.stop);
++	mod_id = idr_alloc(&cttype->mod_idr, cmod, 0, 0, GFP_KERNEL);
++	if (mod_id >= 0) {
++		if (cttype->desc.module_load) {
++			err = cttype->desc.module_load(mod, range.start, range.stop);
++			if (!err)
++				cttype->count += range_size(cttype, &range);
++			else
++				idr_remove(&cttype->mod_idr, mod_id);
++		} else {
++			cttype->count += range_size(cttype, &range);
++			err = 0;
++		}
++	} else {
++		err = mod_id;
+ 	}
+ 	up_write(&cttype->mod_lock);
+ 
+@@ -295,17 +305,23 @@ void codetag_module_replaced(struct module *mod, struct module *new_mod)
+ 	mutex_unlock(&codetag_lock);
+ }
+ 
+-void codetag_load_module(struct module *mod)
++int codetag_load_module(struct module *mod)
+ {
+ 	struct codetag_type *cttype;
++	int ret = 0;
+ 
+ 	if (!mod)
+-		return;
++		return 0;
+ 
+ 	mutex_lock(&codetag_lock);
+-	list_for_each_entry(cttype, &codetag_types, link)
+-		codetag_module_init(cttype, mod);
++	list_for_each_entry(cttype, &codetag_types, link) {
++		ret = codetag_module_init(cttype, mod);
++		if (ret)
++			break;
++	}
+ 	mutex_unlock(&codetag_lock);
++
++	return ret;
+ }
+ 
+ void codetag_unload_module(struct module *mod)
 
+base-commit: 9f3e87f6c8d4b28b96eb8bddb22d3ba4b846e10b
+-- 
+2.49.0.1112.g889b7c5bd8-goog
 
-On Fri, May 2, 2025 at 11:25=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> Instead of only accepting "module:${name}", extend it with a comma
-> separated list of module names and add tail glob support.
->
-> That is, something like: "module:foo-*,bar" is now possible.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/module/main.c  |   36 ++++++++++++++++++++++++++++++++++--
->  scripts/mod/modpost.c |   36 ++++++++++++++++++++++++++++++++++--
->  2 files changed, 68 insertions(+), 4 deletions(-)
->
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1083,12 +1083,44 @@ static char *get_modinfo(const struct lo
->         return get_next_modinfo(info, tag, NULL);
->  }
->
-> +/**
-> + * verify_module_namespace() - does @modname have access to this symbol'=
-s @namespace
-> + * @namespace: export symbol namespace
-> + * @modname: module name
-> + *
-> + * If @namespace is prefixed with "module:" to indicate it is a module n=
-amespace
-> + * then test if @modname matches any of the comma separated patterns.
-> + *
-> + * The patterns only support tail-glob.
-> + */
->  static bool verify_module_namespace(const char *namespace, const char *m=
-odname)
->  {
-> +       size_t len, modlen =3D strlen(modname);
->         const char *prefix =3D "module:";
-> +       const char *sep;
-> +       bool glob;
->
-> -       return strstarts(namespace, prefix) &&
-> -              !strsmp(namespace + strlen(prefix), modname);
-> +       if (!strstarts(namespace, prefix))
-> +               return false;
-> +
-> +       for (namespace +=3D strlen(prefix); *namespace; namespace =3D sep=
-) {
-> +               sep =3D strchrnul(namespace, ',');
-> +               len =3D sep - namespace;
-> +
-> +               glob =3D false;
-> +               if (sep[-1] =3D=3D '*') {
-> +                       len--;
-> +                       glob =3D true;
-> +               }
-> +
-> +               if (*sep)
-> +                       sep++;
-> +
-> +               if (strncmp(namespace, modname, len) =3D=3D 0 && (glob ||=
- len =3D=3D modlen))
-> +                       return true;
-> +       }
-> +
-> +       return false;
->  }
->
->  static int verify_namespace_is_imported(const struct load_info *info,
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1682,12 +1682,44 @@ void buf_write(struct buffer *buf, const
->         buf->pos +=3D len;
->  }
->
-> +/**
-> + * verify_module_namespace() - does @modname have access to this symbol'=
-s @namespace
-> + * @namespace: export symbol namespace
-> + * @modname: module name
-> + *
-> + * If @namespace is prefixed with "module:" to indicate it is a module n=
-amespace
-> + * then test if @modname matches any of the comma separated patterns.
-> + *
-> + * The patterns only support tail-glob.
-> + */
->  static bool verify_module_namespace(const char *namespace, const char *m=
-odname)
->  {
-> +       size_t len, modlen =3D strlen(modname);
->         const char *prefix =3D "module:";
-> +       const char *sep;
-> +       bool glob;
->
-> -       return strstarts(namespace, prefix) &&
-> -              !strcmp(namespace + strlen(prefix), modname);
-> +       if (!strstarts(namespace, prefix))
-> +               return false;
-> +
-> +       for (namespace +=3D strlen(prefix); *namespace; namespace =3D sep=
-) {
-> +               sep =3D strchrnul(namespace, ',');
-> +               len =3D sep - namespace;
-> +
-> +               glob =3D false;
-> +               if (sep[-1] =3D=3D '*') {
-> +                       len--;
-> +                       glob =3D true;
-> +               }
-> +
-> +               if (*sep)
-> +                       sep++;
-> +
-> +               if (strncmp(namespace, modname, len) =3D=3D 0 && (glob ||=
- len =3D=3D modlen))
-> +                       return true;
-> +       }
-> +
-> +       return false;
->  }
->
->  static void check_exports(struct module *mod)
->
->
-
-
---=20
-Best Regards
-Masahiro Yamada
