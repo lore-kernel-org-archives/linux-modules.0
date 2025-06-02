@@ -1,131 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8C822424C;
-	Mon,  2 Jun 2025 13:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EF121C9EF
+	for <linux-modules@vger.kernel.org>; Mon,  2 Jun 2025 13:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748869611; cv=none; b=TmOrdkypOKYbEfkS76XzfLTJEzxsbsv7uom/TX28NAo47q62UnJKDIz2qf26Uz+HVRwoZc+6wLYwe1FpWoUJA61Q83TFraafDJkXaCv8/cR6jtUjlF8Zrai3k4mN0LY5HzuIxZvcJMANa67bMwyLA3vacAzSazvT5MDq/O+2Pts=
+	t=1748870758; cv=none; b=K3X4F6Bw7vghqKY4Ub3bF+vtxFEM6zjlNS18jttpoM332YKk7kBc3L6oqv5MxBJRdQavIzU2DGk9sePuKaHwN0UgHOMhRAZkK7D2KdWmNhEVNU55ULTZ9MCjtNtfwhPZA3p/XAR+W9psXVK8XlsVSjOkSiCJ31TqL7hIGM+P9ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748869611; c=relaxed/simple;
-	bh=ADbnYsa65bvXTe9eG8sDy/Kp7GEJDwl9jGtzi10wXjs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p83JmR9I0S+6LEp6GYd7V2LeQPMLbFSdqO4IfclvAE2jZ4z7KE+M1h7u6bl9HC6cb/0GBHYyr++6PZubbidN8voGKcmrbAVBm1IqCcauPvXp9kflo1HT04Qc75tKlRc8cufJnPcfP3qkOKgEn32EFeTuZPFdEg15hmTEuZNyEf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qGOPujj8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748870758; c=relaxed/simple;
+	bh=bfes8zZB5azdrucRkZ0R+StBkCNzaum0W5A5blaEZAE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ECf/jWphHU+aunfqIGi4BK7F2dJ3PfXYfGTuMv+jytMQ7irjsvOWKzvbCVXl0Z/dc258QJT2T3ofByBC4pkm7kPua1DIYp+yPys2Cmyo/4w1h1Qhkq81WJbMMQPyVwwmcMHYQ8jkkOtTX7KCDe71mN+Fiis4K7/SMAfO6K5N8JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZnbEgXYy; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qGOPujj8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E786FC4CEF3;
-	Mon,  2 Jun 2025 13:06:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748869611;
-	bh=ADbnYsa65bvXTe9eG8sDy/Kp7GEJDwl9jGtzi10wXjs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=qGOPujj8rbuPfdNJjqeofvAKW6x8xdVNIfLO5ycjZLdaMWmEhIz8o+nvSr+l7s25g
-	 6hb+YZmasJf99KJ42h3KvLU1wQYcdPFmPRgETB4gaoOVsdhL00v+tNS05gtWBYL2DG
-	 zkhYQX7oc5gB7u+yktAOcgRVhFFrjOj1ByZxiwmCOxxf7IztLpAOqC/iq4YuvXmUY8
-	 UiymrO/+O0QxpJV10OT54V6bagM5CiqsioXsiVjF18n6ffgOa2peyU1xSYldeotI5a
-	 V9Z+SDA7rjVmwJZ8zIxOWRLNf/0WsAYHcdzbCBUDVSqdB3Hqo73wxqCWTOyAHTD4Qb
-	 cq/UMDxcuxHyA==
-From: Masahiro Yamada <masahiroy@kernel.org>
-To: linux-kbuild@vger.kernel.org
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZnbEgXYy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748870755;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=badVlBQqQnqQ+WuvslSW3Ky30eTx0uVb3Tc6t4qkrJM=;
+	b=ZnbEgXYy/CoJgUtY59BlR+Yj1AKJpeVy+yAGE0rzAAFyd7wTlfocR7inDmlc4dGncgN/L/
+	yFlPO6RJahH4BOku9lDFBWLW3Hf6y9iHNB4NWkayleK1TGSnyR+2/wuu8VAwCXWtFw5ZsN
+	/pU4ZivvlLIeugjv9S9qdTHhuAYda/s=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-618-7h5M09zkPwSRZFablYj2gw-1; Mon,
+ 02 Jun 2025 09:25:50 -0400
+X-MC-Unique: 7h5M09zkPwSRZFablYj2gw-1
+X-Mimecast-MFC-AGG-ID: 7h5M09zkPwSRZFablYj2gw_1748870746
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C5F3E1800366;
+	Mon,  2 Jun 2025 13:25:45 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.44.34.87])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B353818003FD;
+	Mon,  2 Jun 2025 13:25:36 +0000 (UTC)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-modules@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Lucas De Marchi <lucas.de.marchi@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Daniel Gomez <da.gomez@samsung.com>,
+	linux-doc@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Jonathan Corbet <corbet@lwn.net>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] kbuild: stop module name mangling
-Date: Mon,  2 Jun 2025 22:06:02 +0900
-Message-ID: <20250602130609.402581-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	Daniel Gomez <da.gomez@samsung.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Jones <pjones@redhat.com>,
+	Robert Holmes <robeholmes@gmail.com>,
+	Jeremy Cline <jcline@redhat.com>,
+	Coiby Xu <coxu@redhat.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Gerd Hoffmann <kraxel@redhat.com>
+Subject: [PATCH RFC 0/1] module: Optionally use .platform keyring for signatures verification
+Date: Mon,  2 Jun 2025 15:25:34 +0200
+Message-ID: <20250602132535.897944-1-vkuznets@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-In the old days, KBUILD_MODNAME was passed to C without double quotes,
-and then handled by __stringify() on the C side. This was the reason
-why KBUILD_MODNAME was mangled: characters such as commas (,) and
-hyphens (-) are not allowed in C identifiers, so they were replaced
-with underscores (_) in Kbuild.
+UEFI SecureBoot 'db' keys are currently not trusted for modules signatures
+verification. RedHat based downstream distros (RHEL, Fedora, ...) carry a
+patch changing that for many years (since 2019 at least). This RFC is an
+attempt to upstream it as the functionality seems to be generally useful.
 
-Since commit f83b5e323f57 ("kbuild: set correct KBUILD_MODNAME when
-using well known kernel symbols as module names"), KBUILD_MODNAME has
-been passed to C as a string literal, which allows any characters.
+Previously, pre-boot keys (SecureBoot 'db', MOK) were not trusted within
+kernel at all. Things have changed since '.machine' keyring got introduced
+making MOK keys optionally trusted. Before that, there was a discussion to
+make .platform trusted by default:
+https://lore.kernel.org/lkml/1556116431-7129-1-git-send-email-robeholmes@gmail.com/
+which didn't go very far because the assumption was that this is only useful
+when the user has control over 'db'. I believe there's a fairly common
+use-case where this is true.
 
-Aside from this historical behavior in the build system, there is no
-longer a reason for mangling. In fact, it is rather annoying, as we
-now need to convert between hyphens and underscores in some places,
-but not in others. See commit 0267cbf297bf ("module: Account for the
-build time module name mangling").
+The use-case: virtualized and cloud infrastructure generally provide an
+ability to customize SecureBoot variables, in particular, it is possible
+to bring your own SecureBoot 'db'. This may come handy when a user wants to
+load a third party kernel module (self built or provided by a third party
+vendor) while still using a distro provided kernel. Generally, distro
+provided kernels sign modules with an ephemeral key and discard the private
+part during the build. While MOK can sometimes be used to sign something
+out-of-tree, it is a tedious process requiring either a manual intervention
+with shim or a 'certmule' 
+(see https://blogs.oracle.com/linux/post/the-machine-keyring). In contrast,
+the beauty of using SecureBoot 'db' in this scenario is that for public
+clouds and virtualized infrastructure it is normally a property of the OS
+image (or the whole infrastructure/host) and not an individual instance;
+this means that all instances created from the same template will have 'db'
+keys in '.platform' by default.
 
-This commit eliminates that oddity, so the module name will now match
-the filename. For example, the module name of "foo-bar.ko" will be
-"foo-bar", not "foo_bar".
+The suggested approach is not to change the default, but to introduce a
+Kconfig variable (CONFIG_MODULE_SIG_PLATFORM) doing the job. Note, the 
+kernel already trusts '.platform' for kexec (see commit 278311e417be 
+("kexec, KEYS: Make use of platform keyring for signature verify"))
+and dm-verity (see commit 6fce1f40e951 ("dm verity: add support for
+signature verification with platform keyring")) so maybe changing the
+default or introducing a generic '.plarform is fully trusted' option
+would actually be better.
 
-However, this oddity persisted for so long and also affected the
-userspace. To adapt to this behavior, when a user runs "rmmod foo-bar",
-kmod converts hyphens to underscores, and passes "foo_bar" to the
-delete_module syscall.
+Vitaly Kuznetsov (1):
+  module: Make use of platform keyring for module signature verify
 
-Therefore, the mod_strncmp() needs to remain in find_module_all(),
-otherwise, we cannot unload modules.
+ Documentation/admin-guide/module-signing.rst |  6 ++++++
+ kernel/module/Kconfig                        | 11 +++++++++++
+ kernel/module/signing.c                      |  9 ++++++++-
+ security/integrity/Kconfig                   |  2 +-
+ 4 files changed, 26 insertions(+), 2 deletions(-)
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- kernel/module/main.c | 8 ++++++--
- scripts/Makefile.lib | 4 ++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index b8440b0887e3..1fa90a95e0c5 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -410,7 +410,11 @@ struct module *find_module_all(const char *name, size_t len,
- 				lockdep_is_held(&module_mutex)) {
- 		if (!even_unformed && mod->state == MODULE_STATE_UNFORMED)
- 			continue;
--		if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
-+		/*
-+		 * For historical reasons, kmod passes a module name with
-+		 * a hyphen replaced with an underscore.
-+		 */
-+		if (!mod_strncmp(mod->name, name, len))
- 			return mod;
- 	}
- 	return NULL;
-@@ -1135,7 +1139,7 @@ static bool module_match(const char *modname, const char *patterns)
- 		if (*sep)
- 			sep++;
- 
--		if (mod_strncmp(patterns, modname, len) == 0 && (glob || len == modlen))
-+		if (strncmp(patterns, modname, len) == 0 && (glob || len == modlen))
- 			return true;
- 	}
- 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 336fb0d763c7..e37e2db5f528 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -18,8 +18,8 @@ target-stem = $(basename $(patsubst $(obj)/%,%,$@))
- # end up in (or would, if it gets compiled in)
- name-fix-token = $(subst $(comma),_,$(subst -,_,$1))
- name-fix = $(call stringify,$(call name-fix-token,$1))
--basename_flags = -DKBUILD_BASENAME=$(call name-fix,$(basetarget))
--modname_flags  = -DKBUILD_MODNAME=$(call name-fix,$(modname)) \
-+basename_flags = -DKBUILD_BASENAME=$(call stringify,$(basetarget))
-+modname_flags  = -DKBUILD_MODNAME=$(call stringify,$(modname)) \
- 		 -D__KBUILD_MODNAME=kmod_$(call name-fix-token,$(modname))
- modfile_flags  = -DKBUILD_MODFILE=$(call stringify,$(modfile))
- 
 -- 
-2.43.0
+2.49.0
 
