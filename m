@@ -1,93 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B34253F3D;
-	Tue, 27 May 2025 14:06:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4956B12B63;
+	Mon,  2 Jun 2025 07:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748354804; cv=none; b=hWVQoeLqfvxU8o9eB8IOR1CCyjCNLw0J5KuRx4WoHqmzAhW0UO/ytqB6hmrKphmrWsk+/g+DJsoWDwK9Z24HJxZfoP8WNcmyMqGJG+0DKkYSDzY5e4/+RWw62LIfM7JYc0/z+2jx7dtmt31HHQ+RBVC6/Ab/UvDtAKPIAraJ5WQ=
+	t=1748850375; cv=none; b=sZAPh6Axi+O2ijW9shi+6rKuD8l5TBY2qv41nWQL8kvwif70HlshE4vlRreEsrAZ5XAQvc17BFmU+evV2rijKK6kzywxX0wewmxAKTsq8Q8t2Sxg7V3yGnAgknQJ0d3/T34dJtsoK3aPSHLg/K/s51g0FKYbp0Ee2Yw427Mzmpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748354804; c=relaxed/simple;
-	bh=cXATu5WHYSddNew6hPBjs/f3aIkMJ3j64KCP2miazbo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CK35B81fNZzS0uKNx6xA9mftv/yKSkwpUwlx52x43BjkpSX5wnCOS8n72SYYtCTAWY1g389QG45Cflr/cXg9L0mTudg1ifT7UXA0hU/yVoufLA4EQWZPuQUyxqsWPyDjEBEnQ5DpRZ5fvNk07CIaPIcDlTvz8n15HKx+R2ghzgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IkeFT7iW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748850375; c=relaxed/simple;
+	bh=uVAozsXr/oNj+YFTr6OY6Oik9BlTn3N71tlKGqsiVt4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iLJ70BUlKH5C8KNoi7KE1XquuecFLp5Ev2YmxDUkVHOZmmRZghKsy06wI4ncbjVZjSmnlf72PHFpmQnt0GfrZOrVWMHTGN8pb4JF9K5pPr/utxo2h13JPptdTcCumUMEXyGnoOOSue4yrQDPPSFf+sMq7DIgJqtrmNaufSkC3N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0IOkhFi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IkeFT7iW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8331C4CEE9;
-	Tue, 27 May 2025 14:06:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0IOkhFi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA221C4CEF1;
+	Mon,  2 Jun 2025 07:46:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748354802;
-	bh=cXATu5WHYSddNew6hPBjs/f3aIkMJ3j64KCP2miazbo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IkeFT7iW8HfmGs5YBA0pl5ucKIivrXEuZAtNoB4MNXAYf2gUKKzg88bCYwXGHYx92
-	 GiWYdxtkJOoE+mxPSWU3r0YVnvKPw5vl769zaYv4CxRdRBz8a1Kor+oMNlVPRezhTo
-	 PdERM0T/KJIRhiMVG8gsyZK51zeZXLSo5u365g4LNKo2U54cOz85lgFctGZGOD8WCK
-	 K+GsQ+H3ZdPofxp4pU6AEAKY4pSS7rRYuzbIYvllhj4wo/x9vA00a6k3/6craqz0+Y
-	 nJa/Frgr3fF7xLwKowxOMHjL3oTkJIGlqaYT6RrSjPwGFXLD1mYZO2pjVAIPtf7xr4
-	 kalPgBtISkNWA==
-From: Alexey Gladkov <legion@kernel.org>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Khalid Aziz <khalid@gonehiking.org>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Alexey Gladkov <legion@kernel.org>
-Subject: [PATCH v4 1/6] scsi: Always define blogic_pci_tbl structure
-Date: Tue, 27 May 2025 16:06:06 +0200
-Message-ID: <20250527140606.68526-1-legion@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <628e85f1b7e9d0423a8b83ac3150b3e151c9c4e3.1748335606.git.legion@kernel.org>
-References: <628e85f1b7e9d0423a8b83ac3150b3e151c9c4e3.1748335606.git.legion@kernel.org>
+	s=k20201202; t=1748850374;
+	bh=uVAozsXr/oNj+YFTr6OY6Oik9BlTn3N71tlKGqsiVt4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=k0IOkhFiHLF5kqSD5xKmEQgUboiSSaEY+++B5Fh6a6ODVbdXU0ddhlPL0MF2yh/aw
+	 83x8zGTOg2fBwxmdvca0sOoaLCyrbr/aYFCZ6C65saO9feyjJUemd31sKokSFO5rVK
+	 0srBMNd7laIIW1Kw7l61En2PBAvMTFcTuG4CVBWxumNT0KSkXg4OAS9sRXV6t8mqpl
+	 3Kg18DzdESjMjO21t4IJttcOcrdHQP39hd1yxeZAvyB6yuqaujieYifR+np3fB+Nml
+	 QoU8GHowlVXQo4UuuJh6fpiVED8YPkVmIyuMpShZWVewlR77M6dWRrr4MBeHbsB6QH
+	 sIU8UTeXU8sJw==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-552206ac67aso4643220e87.2;
+        Mon, 02 Jun 2025 00:46:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVvXk7ydfRN8mi03C038MAJORyyGnKe+5bKl4B7sibKKJI9OEfXoD9tkJhGxHC7SL19mQAuavOvK/53tfkoLQ==@vger.kernel.org, AJvYcCXeP60PKqyvuf8TbsUljNKeg/DKFGMRMV9xXH1AwZ8GwIju2rQCbStKIUkPdBg2k+nADFU2L+9B4QjInlQe@vger.kernel.org, AJvYcCXuk1s42pEc6fE+8p2GJ938/KoTzT8+DlMU+Ssm3+8uxaNG+ng+//6zhu1HBEkb4VR2dcp7sINhl+MeDQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyudbfhbIlQeGxcZU7sR2DeXixY8fd5qMrih/9zWRyjStn7agk
+	A22iXeSJsrWuuoZGTGiZnyJ3v/dTX0+fZMLmJmupdkRrXvtGqWEGx9bvKdB3DvMWglsGUKEPyaK
+	hqTWqGWZDCMr4FKkU9alksxKaQAVJWcw=
+X-Google-Smtp-Source: AGHT+IGKqgJX+VzS8lV08fTwK9CM4TagFtsvhcZZ/s/fHmQEPH2wR0EGnZeZLj3rgvZ8b4/Gm0fI5Hv89uGDVtbCqno=
+X-Received: by 2002:a05:6512:3b89:b0:553:2868:635e with SMTP id
+ 2adb3069b0e04-5533d16bf33mr2717254e87.23.1748850373433; Mon, 02 Jun 2025
+ 00:46:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1748335606.git.legion@kernel.org> <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
+In-Reply-To: <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 2 Jun 2025 16:45:36 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
+X-Gm-Features: AX0GCFsbkhuJESm6mcSj7ybga10eKsiKOu4FrMnfYxsLs-CpksPCTsdLzOcjEcE
+Message-ID: <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/6] modpost: Make mod_device_table aliases more unique
+To: Alexey Gladkov <legion@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The blogic_pci_tbl structure is used by the MODULE_DEVICE_TABLE macro.
-There is no longer a need to protect it with the MODULE condition, since
-this no longer causes the compiler to warn about an unused variable.
+On Tue, May 27, 2025 at 6:08=E2=80=AFPM Alexey Gladkov <legion@kernel.org> =
+wrote:
+>
+> In order to avoid symbol conflicts if they appear in the same binary, a
+> more unique alias identifier can be generated.
 
-Cc: Khalid Aziz <khalid@gonehiking.org>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Suggested-by: James Bottomley <James.Bottomley@HansenPartnership.com>
-Signed-off-by: Alexey Gladkov <legion@kernel.org>
----
- drivers/scsi/BusLogic.c | 2 --
- 1 file changed, 2 deletions(-)
+Why must this be unique?
 
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index 1f100270cd38..08e12a3d6703 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -3715,7 +3715,6 @@ static void __exit blogic_exit(void)
- 
- __setup("BusLogic=", blogic_setup);
- 
--#ifdef MODULE
- /*static const struct pci_device_id blogic_pci_tbl[] = {
- 	{ PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_MULTIMASTER,
- 	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-@@ -3731,7 +3730,6 @@ static const struct pci_device_id blogic_pci_tbl[] = {
- 	{PCI_DEVICE(PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_FLASHPOINT)},
- 	{0, },
- };
--#endif
- MODULE_DEVICE_TABLE(pci, blogic_pci_tbl);
- 
- module_init(blogic_init);
--- 
-2.49.0
+What problem would happen if the same symbol names
+appear in MODULE_DEVICE_TABLE()?
 
+
+>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  include/linux/module.h   | 14 ++++++++++++--
+>  scripts/mod/file2alias.c | 18 ++++++++++++++----
+>  2 files changed, 26 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 88048561360f..e7506684069d 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -249,10 +249,20 @@ struct module_kobject *lookup_or_create_module_kobj=
+ect(const char *name);
+>  /* What your module does. */
+>  #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _descr=
+iption)
+>
+> +/* Format: __mod_device_table__<counter>__kmod_<modname>__<type>__<name>=
+ */
+> +#define __mod_device_table(type, name) \
+> +       __PASTE(__mod_device_table__,   \
+> +       __PASTE(__COUNTER__,            \
+> +       __PASTE(__,                     \
+> +       __PASTE(__KBUILD_MODNAME,       \
+> +       __PASTE(__,                     \
+> +       __PASTE(type,                   \
+> +       __PASTE(__, name)))))))
+> +
+>  #ifdef MODULE
+>  /* Creates an alias so file2alias.c can find device table. */
+> -#define MODULE_DEVICE_TABLE(type, name)                                 =
+       \
+> -extern typeof(name) __mod_device_table__##type##__##name               \
+> +#define MODULE_DEVICE_TABLE(type, name)                        \
+> +extern typeof(name) __mod_device_table(type, name)     \
+>    __attribute__ ((unused, alias(__stringify(name))))
+>  #else  /* !MODULE */
+>  #define MODULE_DEVICE_TABLE(type, name)
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 00586119a25b..dff1799a4c79 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -1476,8 +1476,8 @@ void handle_moddevtable(struct module *mod, struct =
+elf_info *info,
+>  {
+>         void *symval;
+>         char *zeros =3D NULL;
+> -       const char *type, *name;
+> -       size_t typelen;
+> +       const char *type, *name, *modname;
+> +       size_t typelen, modnamelen;
+>         static const char *prefix =3D "__mod_device_table__";
+>
+>         /* We're looking for a section relative symbol */
+> @@ -1488,10 +1488,20 @@ void handle_moddevtable(struct module *mod, struc=
+t elf_info *info,
+>         if (ELF_ST_TYPE(sym->st_info) !=3D STT_OBJECT)
+>                 return;
+>
+> -       /* All our symbols are of form __mod_device_table__<type>__<name>=
+. */
+> +       /* All our symbols are of form __mod_device_table__<counter>__kmo=
+d_<modname>__<type>__<name>. */
+>         if (!strstarts(symname, prefix))
+>                 return;
+> -       type =3D symname + strlen(prefix);
+> +
+> +       modname =3D strstr(symname, "__kmod_");
+> +       if (!modname)
+> +               return;
+> +       modname +=3D strlen("__kmod_");
+> +
+> +       type =3D strstr(modname, "__");
+> +       if (!type)
+> +               return;
+> +       modnamelen =3D type - modname;
+> +       type +=3D strlen("__");
+>
+>         name =3D strstr(type, "__");
+>         if (!name)
+> --
+> 2.49.0
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
