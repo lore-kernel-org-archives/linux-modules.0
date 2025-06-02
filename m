@@ -1,115 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139DF2253EE;
-	Mon,  2 Jun 2025 16:19:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B71E6ADD;
+	Mon,  2 Jun 2025 17:09:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748881145; cv=none; b=XQZJ7no2Udr1r/cfWj9L/MKYPCECvU47uTx1/RxYI3cSmp1sCNuCOJuSoWqHxTL1QbIEwE3dF/iuceW+xCviWeHYoLSoxClyL8T0DsPNmHskRapxGTZo/2xrXjfpEGRDqXy2wECsWuihHoW5rI0AvGbBgKTDtg/d+g3OuGRaGoc=
+	t=1748884172; cv=none; b=GMR+1QMTgVEi4h3Dw88QYB3mlpv2MWElIE0xWlE+lVKbayfkjYBaE9lIAM6I3tbZI53g0Dc8tOeC40ywQuzXxI9V77m4aMX/X62SF0h6fz868wi/uWfDvzEa+K2DAQdU/AjSQGsps0gc5XuCdIig5CtjYpY2NA/KcOfi+Iwy9qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748881145; c=relaxed/simple;
-	bh=w4GNZGKCnMuVrnT2luhPZIvQbPqpJNG/7BjnllWT5J8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q2WuYnROiSvacRjz8qx4f/Qqb50IqWW7tQ0WhfZ3GARc4H1ErNFdkXK1JYL90FDYtWWe+JkSefUW1OKUvoQud7ePoiwTKrmpwD+6zOyP0BSXgrpVQb2rQ2BNYlayQh/VHdwu8cD/PbguV98LhSJHbroH9876i4yS/YOFgwbI5Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AjnnLwXT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1748884172; c=relaxed/simple;
+	bh=n4G8cLLjdWhr4e4qI7+x9BnZNiru6KmV1+k7R3AAlMM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H/PIPnXmBPJh+crQ0vVEJ+o1UHqu4jhxvP2fXi5H9w5HDNCUwn2dlZL3abniC/PwZhJ1OL9SM8IIDOR6MDHu/Cd70b7UKINJJdcSgSOYft/Ss2zNGU1thB7sjapBrOG4kzPuk0S2e762Bt7bbozA0hlPDrDw1aYOJNt5YVb0tV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGFEkQHw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AjnnLwXT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD7D2C4CEF3;
-	Mon,  2 Jun 2025 16:19:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGFEkQHw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B733C4CEEB;
+	Mon,  2 Jun 2025 17:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748881144;
-	bh=w4GNZGKCnMuVrnT2luhPZIvQbPqpJNG/7BjnllWT5J8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AjnnLwXTNTfj3ZpcAcudTqg1eFKgo6IzWCaJn6P3jPxV47DKiWRKmyFEQaEtlF4Ym
-	 V+h6tU73KAvdNc7s57qzIbynzTnR/QVEe6SqA2Qgq1FYShkFnb0crP5WBMY5FTsKzB
-	 BIGgDvDaO3gON/+JWoJ2yXcFSwCu1lns+g27hAvgp4/mrJKtvMjXO6Ta8NiPyOhLUP
-	 pOCzWAaXEJlKx5tZYcEI2iKE+VqqHTgSoVQXI6AnZ2hMbmvoUxSuP+yaUYWyOTvWDs
-	 fVCTxUUMWGVHLpulrXe3WIiDn/7Hy2kTjuRvdYtI3JKmHK5nOdZBLNLz/zSUyi63I+
-	 UrSp1arkvy50A==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54afb5fcebaso5987107e87.3;
-        Mon, 02 Jun 2025 09:19:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUx4JSV0Lpm/Z+IqJcWcHSlcJPZegOrNIQWkg2dk6AyokCa+h0W36yVUTEWTa57ilW5hUxZgnQsIVgC5pJ7sw==@vger.kernel.org, AJvYcCXMgQJSxiLMJUH/JMXx9aISEQVbaka65BJR1isgSjR7bSPBFLLGKD45wtOfijUNuAu0UBEAYnJ6hr64fX2o@vger.kernel.org, AJvYcCXkdrIOc125kdCac52vb+MUFmIrR4FEvk0oq5nXQEjPMWmanb/ZYBwfxbslU7CuwS/7N71cgcygDXJsrGQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz08Vka8diEZNTX9Flt1e86uAhTbdIrEAo0C2k3gP+BFr1iEhTp
-	fp+4a/GFeEpaULIVG7Dgc1T+JU/urS3PgD4lCtpZEa3xP7/PLTtCWlBJb2h0rWWb19kidtxHe1m
-	bkS26aciDrWVielM8Uhuyyq0PjHqLYXg=
-X-Google-Smtp-Source: AGHT+IGYPFecV61XbkyteZ3KbMYJTnWYcLpwrId9KrTbGw/PikbnEzIYnXGjLoYT7Hf9e+3yU0F49e2jJDEhxrmPnZU=
-X-Received: by 2002:a05:6512:3350:b0:553:51db:69d4 with SMTP id
- 2adb3069b0e04-55351db6b88mr170859e87.2.1748881143554; Mon, 02 Jun 2025
- 09:19:03 -0700 (PDT)
+	s=k20201202; t=1748884171;
+	bh=n4G8cLLjdWhr4e4qI7+x9BnZNiru6KmV1+k7R3AAlMM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sGFEkQHwV8owV5qQ0ZL4r7AOXme9L9olE8N51lKUsDwih6NcEBm3YPjsXixSCjtYD
+	 fGGJ2CUxdr1MLrpKxpoxKGCqbDKyFPihK7bDzObIt6SAArwO5MrokbZNfjeeBVfue5
+	 wsphzUrvkMdwFPs9mQ4herj48IneGuNzq0CwLjM7/1N9lXSmfmRyBDTC0+FaNBkzgz
+	 IEJNPtf5B/zBGWrYv6JViXNW+6Di4M4EZARhXE/rku8tCLahTJtszyisnmHB6BJpWe
+	 olcGrozb8/oPAilRRf+EmxkZYgIk6GeVOpBEbQS09Cg6qEzVzkycbgBYf2r/YC7i2w
+	 iaUHghQuS9Abw==
+Date: Mon, 2 Jun 2025 19:09:25 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] modpost: Make mod_device_table aliases more unique
+Message-ID: <aD3axclxzkOAA-Sf@example.org>
+References: <cover.1748335606.git.legion@kernel.org>
+ <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
+ <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
+ <aD1bozP0l67f_wbs@example.org>
+ <CAK7LNAQmQtvB4PfmH4MkRM123wySON6cF6TG79fi0WER1sz4Gw@mail.gmail.com>
+ <aD2vSnZhofEPilcL@example.org>
+ <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1748335606.git.legion@kernel.org> <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
- <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
- <aD1bozP0l67f_wbs@example.org> <CAK7LNAQmQtvB4PfmH4MkRM123wySON6cF6TG79fi0WER1sz4Gw@mail.gmail.com>
- <aD2vSnZhofEPilcL@example.org>
-In-Reply-To: <aD2vSnZhofEPilcL@example.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 3 Jun 2025 01:18:25 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
-X-Gm-Features: AX0GCFvC8AkwemNi9HM5_Ul-zmuk0WhYExH4YAV8wbXFYLlxEH8AxRqP-u1kWcA
-Message-ID: <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] modpost: Make mod_device_table aliases more unique
-To: Alexey Gladkov <legion@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
 
-On Mon, Jun 2, 2025 at 11:04=E2=80=AFPM Alexey Gladkov <legion@kernel.org> =
-wrote:
->
-> On Mon, Jun 02, 2025 at 07:58:41PM +0900, Masahiro Yamada wrote:
-> > On Mon, Jun 2, 2025 at 5:07=E2=80=AFPM Alexey Gladkov <legion@kernel.or=
-g> wrote:
-> > >
-> > > On Mon, Jun 02, 2025 at 04:45:36PM +0900, Masahiro Yamada wrote:
-> > > > On Tue, May 27, 2025 at 6:08=E2=80=AFPM Alexey Gladkov <legion@kern=
-el.org> wrote:
+On Tue, Jun 03, 2025 at 01:18:25AM +0900, Masahiro Yamada wrote:
+> On Mon, Jun 2, 2025 at 11:04 PM Alexey Gladkov <legion@kernel.org> wrote:
+> >
+> > On Mon, Jun 02, 2025 at 07:58:41PM +0900, Masahiro Yamada wrote:
+> > > On Mon, Jun 2, 2025 at 5:07 PM Alexey Gladkov <legion@kernel.org> wrote:
+> > > >
+> > > > On Mon, Jun 02, 2025 at 04:45:36PM +0900, Masahiro Yamada wrote:
+> > > > > On Tue, May 27, 2025 at 6:08 PM Alexey Gladkov <legion@kernel.org> wrote:
+> > > > > >
+> > > > > > In order to avoid symbol conflicts if they appear in the same binary, a
+> > > > > > more unique alias identifier can be generated.
 > > > > >
-> > > > > In order to avoid symbol conflicts if they appear in the same bin=
-ary, a
-> > > > > more unique alias identifier can be generated.
+> > > > > Why must this be unique?
+> > > > >
+> > > > > What problem would happen if the same symbol names
+> > > > > appear in MODULE_DEVICE_TABLE()?
 > > > >
-> > > > Why must this be unique?
+> > > > Before these patches this was not a problem as non-unique characters are
+> > > > in separate object files when the module is compiled separately.
 > > > >
-> > > > What problem would happen if the same symbol names
-> > > > appear in MODULE_DEVICE_TABLE()?
+> > > > But when the modules are compiled into the kernel, there is a symbol
+> > > > conflict when linking vmlinuz. We have modules that export multiple device
+> > > > tables from different object files.
 > > >
-> > > Before these patches this was not a problem as non-unique characters =
-are
-> > > in separate object files when the module is compiled separately.
+> > > This is because the __mod_device_table__* symbols are global, but
+> > > I suspect they do not need to be.
 > > >
-> > > But when the modules are compiled into the kernel, there is a symbol
-> > > conflict when linking vmlinuz. We have modules that export multiple d=
-evice
-> > > tables from different object files.
+> > > Let's test this
+> > > https://lore.kernel.org/lkml/20250602105539.392362-1-masahiroy@kernel.org/T/#u
 > >
-> > This is because the __mod_device_table__* symbols are global, but
-> > I suspect they do not need to be.
+> > I tested this patch with the config:
 > >
-> > Let's test this
-> > https://lore.kernel.org/lkml/20250602105539.392362-1-masahiroy@kernel.o=
-rg/T/#u
->
-> I tested this patch with the config:
->
-> make allmodconfig
-> make mod2yesconfig
->
-> and it works.
+> > make allmodconfig
+> > make mod2yesconfig
+> >
+> > and it works.
+> 
+> Good.
+> Then, __COUNTER__ is unnecessary.
 
-Good.
-Then, __COUNTER__ is unnecessary.
+I will send a new version asap. Thanks!
 
+-- 
+Rgrds, legion
 
-
---=20
-Best Regards
-Masahiro Yamada
