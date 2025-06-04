@@ -1,87 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2388A28E5F3;
-	Wed,  4 Jun 2025 11:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E0B1953BB;
+	Wed,  4 Jun 2025 15:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749036376; cv=none; b=Ly2Yz1K2lUeAivZFsmbLA8BI+79Fvc5gcLfk8RYlCtmNGNIRsp2v83ez85BDlxfD+n1j0cQj1t9W8sP6w3Kgn6VQc8y25COvg/K5BKQ+LjOhfPrvJaZD+iO+l++a2dEo3ai03nRddTk3tUkMxeGklWTzmaw+gMQ/osL/pJMIyKo=
+	t=1749050832; cv=none; b=SebTGB7sr6PxRXkHA/zQHSgh/ugnXr7vRkNCOyurENmM4Rs6TYADH1VMYoZP/eHCb3EmXgJ9pq/JaWC0LVcyC99TD91/brdvguAhyYf+hsRcOZ2dOkKit7xmeSQ0hMAHsR3THhDQ6ZYtqBnwq/NDgynM4lfW/OyXsnxuXIBBgRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749036376; c=relaxed/simple;
-	bh=CXvat76UgqTuizaTTXk2cggB6YuXzgU2clBrFmOcy4k=;
+	s=arc-20240116; t=1749050832; c=relaxed/simple;
+	bh=ECBw3mcegDKUHOLSOkINmT0psmeYZUxNdiRS0riunZY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DUgZ6BHBlLsjifl66+JDTyOCpYHXQXNxvnXlV5ERwQ4N12FunAnRDeYjm3JAKi/cFYfV+Esu1YF+dMAK0bf1Y+sVN8OdHa9dmuE0CeuXleWO6I3XGaxrN1EadEVVjlHUsDpNO8tVpw/Humomo6JWKQ+cvmYW/mLQjlRwshdqyhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ljaBft0+; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZZ6EEJFWBPx2X9BpSN5a7ji1mMKlswjB6SsrMTegP0slKcxp/z/av5raWAkucQybjnpS2BFzUAPZItWpB3P3Vs78z+f8Ou3B49M7LocJsv+y9MbxKqdGa8fXr8KuSMNvSlJnEYTQ+Kd9HCVQRTZLvN2Mf1Ruqkq4cK+v3hV9iDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=34Q7dwG4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YpY9q+Q6; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ljaBft0+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690BDC4CEEF;
-	Wed,  4 Jun 2025 11:26:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749036375;
-	bh=CXvat76UgqTuizaTTXk2cggB6YuXzgU2clBrFmOcy4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ljaBft0+5o5l8U7L+cwauxQk9qvCh4kVXGRfdGZVA1ROBRHWH5akSlf/ixTX8QSXv
-	 F0F1OoO5/8isOq0Vji3evVVauluzAli766s+7nGCrIPEhMKPwNxIzoKzgXhcAqf96y
-	 D1JC1ggNgMtL+MfXpNwBYQJhisyJYHiahUnKOGpCh1u7TThRRsu6rvyaV2npiPdeco
-	 igDsVATDmDJvF+z8YPw6R69ufXIxFplUOunXsOcL/aXjZauStbdwcPESMF8c1J2Frk
-	 9bLxlCcy9po6Oo2lYXjKorpaLHJmbzRR3l0vWBV8pmWsOPgrpO8FqRWN8pIhJk9FKZ
-	 0U+zWQ0/dOtxQ==
-Date: Wed, 4 Jun 2025 13:26:09 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="34Q7dwG4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YpY9q+Q6"
+Date: Wed, 4 Jun 2025 17:27:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1749050829;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KeczW7bWlrnXwwKkhxyWJXZmEyyc0PgR7tMYRMUOC6I=;
+	b=34Q7dwG4LxD4q21PPvVoIzD3+E69BsgoN/OBVM3uCHFuMo6TtTovefwoogy9xK7FXCyyY3
+	NO9stWBO8jpUM3OhReD5Jq8Dfr8E05aGAdrzx2JKgF5FjXsAt7z8GuNVZqpphi9pofgmsm
+	voihIm2NFF3iFuq3EQcJ+2JgT8WGKb/ThSJiVut4k/dqR7foSWF5acrrkw7vlii4k+Boe/
+	aqe/5/Eh9BRrbxA+Q9ODz/YFnGeBydNi9MuZsMNNhAOG5Vd0J6jOE7P6d1DHui5PLCaEMP
+	W20IXFmeUiAQIthDnr88Z7Wr2L5ZuJe6TzcjSXocJjah8GN0O+V+sc7IUd0Vgw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1749050829;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KeczW7bWlrnXwwKkhxyWJXZmEyyc0PgR7tMYRMUOC6I=;
+	b=YpY9q+Q6UGXz9kl8L+b9cC1SlKw7LULJmhHnZ4iD8pQxAMJ4TPc1zScPQ3/9UTTHoCuEQE
+	IKZGrmrYMtn8LRBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: linux-modules@vger.kernel.org
+Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
+	kernel test robot <oliver.sang@intel.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Allison Henderson <allison.henderson@oracle.com>,
+	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+	rds-devel@oss.oracle.com, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v3 3/6] modpost: Make mod_device_table aliases more unique
-Message-ID: <aEAtUc6OTyvu-ThM@example.org>
-References: <cover.1748335606.git.legion@kernel.org>
- <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
- <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
- <aD1bozP0l67f_wbs@example.org>
- <CAK7LNAQmQtvB4PfmH4MkRM123wySON6cF6TG79fi0WER1sz4Gw@mail.gmail.com>
- <aD2vSnZhofEPilcL@example.org>
- <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] module: Make sure relocations are applied to the per-CPU
+ section
+Message-ID: <20250604152707.CieD9tN0@linutronix.de>
+References: <202506041623.e45e4f7d-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
+In-Reply-To: <202506041623.e45e4f7d-lkp@intel.com>
 
-On Tue, Jun 03, 2025 at 01:18:25AM +0900, Masahiro Yamada wrote:
-> > > > Before these patches this was not a problem as non-unique characters are
-> > > > in separate object files when the module is compiled separately.
-> > > >
-> > > > But when the modules are compiled into the kernel, there is a symbol
-> > > > conflict when linking vmlinuz. We have modules that export multiple device
-> > > > tables from different object files.
-> > >
-> > > This is because the __mod_device_table__* symbols are global, but
-> > > I suspect they do not need to be.
-> > >
-> > > Let's test this
-> > > https://lore.kernel.org/lkml/20250602105539.392362-1-masahiroy@kernel.org/T/#u
-> >
-> > I tested this patch with the config:
-> >
-> > make allmodconfig
-> > make mod2yesconfig
-> >
-> > and it works.
-> 
-> Good.
-> Then, __COUNTER__ is unnecessary.
+The per-CPU data section is handled differently than the other sections.
+The memory allocations requires a special __percpu pointer and then the
+section is copied into the view of each CPU. Therefore the SHF_ALLOC
+flag is removed to ensure move_module() skips it.
 
-I didn't immediately notice. The patch you suggested works, but these
-symbols remain in System.map and it seems in vmlinuz.
+Later, relocations are applied and apply_relocations() skips sections
+without SHF_ALLOC because they have not been copied. This also skips the
+per-CPU data section.
 
+The missing relocations result in a NULL pointer on x86-64 and very
+small values on x86-32. This results in a crash because it is not
+skipped like NULL pointer would and it can't be dereferenced.
+
+Such an assignment happens during compile time per-CPU lock
+initialisation with lockdep enabled.
+
+Add the SHF_ALLOC flag back for the per-CPU section after move_module().
+
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
+Fixes: 8d8022e8aba85 ("module: do percpu allocation after uniqueness check.  No, really!")
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ kernel/module/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 5c6ab20240a6d..35abb5f13d7dc 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2816,6 +2816,9 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	if (err)
+ 		return ERR_PTR(err);
+ 
++	/* Add SHF_ALLOC back so that relocations are applied. */
++	info->sechdrs[info->index.pcpu].sh_flags |= SHF_ALLOC;
++
+ 	/* Module has been copied to its final place now: return it. */
+ 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
+ 	kmemleak_load_module(mod, info);
 -- 
-Rgrds, legion
+2.49.0
 
