@@ -1,140 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0095625DCF6
-	for <linux-modules@vger.kernel.org>; Thu,  5 Jun 2025 13:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC8D25E818
+	for <linux-modules@vger.kernel.org>; Thu,  5 Jun 2025 13:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749131011; cv=none; b=YN1ycPgW7alI72BgXTyS2zfwVFm2L/gvrZx3pDngwWlkZRJLdvDnnC9RpcLvKRAkV3FhMLtMHaG2NzhFR4Y6snUEvSQjD9bnPliSplFYpyOCENAVGutCsKMeJ9whNoslAvfeqHQyl/fEu8prnrIk0v2tdf/9pECo4JAHsGac93E=
+	t=1749131069; cv=none; b=sssYqpDLx5ZLpdrRBj76+G0eZo6BD/LKtzuYz464tq1AspT67y0qLEOc64JdXEAyh8ASppuf95hNyRQRqqoL7BzjRwWNROt+np3grGzc2KE4GB2ck08QVf0ccZrPOUMo4nooF9YjanDxUDqsx59Wy/szP46ThPhowfKWPfgXB48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749131011; c=relaxed/simple;
-	bh=Ibr9kab54z+bb8Bbxb6yjOzT0aoFx9OQrLydi6uSjbk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J6BWO7otvO046ynPJsPwBR/7CDVjdq4PZpnJ5hj8RW8zhIOOYAeybPWIVMO0qlsAwINeyDQ1pEsvMu3rYGwYllQx38NiQKOPvwfZURXcX3pnTHE+ylTZrvqgksdMyCXGNNPoq7NI1DyislUiOMRQFUdmvToNwSkEKsGGN7oMBGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iNA15Cd8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749131069; c=relaxed/simple;
+	bh=rCO97t5tY3E5x9tBF5MM51T7nX5k5kOJxQqu9YByUYc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F+BnKUcxPWWQ5JU1UuZu59I1HW0TdhdRSFtexG35SdOoWZS5yt8/1n5YVQhvfwDdjyC77pIMw+IyzcW7Yg3y0GNCs7VR5DjxIVfoLjN8dewy9snO1MKrE3M7wmFnjhUh+04tchUguZgAwxFafF5NvRmauwmGvavY/qiRkvPJu0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Kr9Id81S; arc=none smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iNA15Cd8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749131008;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WyJG+3VB/l9E5cKEG16NYCx4C/OXUyDFX/570MgrW70=;
-	b=iNA15Cd8S78GMHiqmTtJRRE+4RsyJuou/0TODwYIt6Pw37ZKG03qiTII9LwMP4Z1WjBF0J
-	zXgh/lJNFm8wgi75BbyArz5n4fw5NHMaK8UIwzgFeg/5zmrEsvF+/5gm9jOW+d63mLHziO
-	ras70z0OPRE/WllhI4vnANyj5IH1mIo=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-114-XZxkpyrZM3q0qwMf9v2lhQ-1; Thu, 05 Jun 2025 09:43:26 -0400
-X-MC-Unique: XZxkpyrZM3q0qwMf9v2lhQ-1
-X-Mimecast-MFC-AGG-ID: XZxkpyrZM3q0qwMf9v2lhQ_1749131005
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3a50816cc58so386752f8f.3
-        for <linux-modules@vger.kernel.org>; Thu, 05 Jun 2025 06:43:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Kr9Id81S"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-3a51d552de4so578659f8f.0
+        for <linux-modules@vger.kernel.org>; Thu, 05 Jun 2025 06:44:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1749131065; x=1749735865; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kQdIuSTATuzb/lH9GWsSgTLyKRDQtpfdIWX4HXG5tVQ=;
+        b=Kr9Id81Sb1GR3sMZ3YtsKIYQhLqsGiDv5tZqVbu/cb74ByVLmEwaOyjMeG2DM95QaA
+         XK1IjD4wa5jCqTLwqEFuEJfceyBX56DM34xzwhUAx9m9O+cqQb0R1aDeKQInzXWHbA3a
+         dGVpq7tmG/nXAshI9IBQrcp5+b8WlF43evlFmWdxV97Y/k9Io20JaF3VT6GCTJi/Mcv+
+         AbMsQLaa8tajF+n80XD7UV/bLO/oc6LQhwtGcT+PkPzcNcPxh7ijhco6mBSbO24MWsfF
+         djkPdjMkU5jtuJyttk7z7aufJ2XrtuGW61D9ToOIf2Le7bM5MlNGP+QVLPVyPx+m1Gmw
+         Pguw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749131005; x=1749735805;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WyJG+3VB/l9E5cKEG16NYCx4C/OXUyDFX/570MgrW70=;
-        b=iVkLaI9eBDZJgFLiWB/ycCqEaeNXsIIR4nKAM/MLpOakPRiOnpFV71MX3n2pttVGAz
-         Oh5EIvFx7ooraLGb961JUth4fYzq2L/r9vNnofZavhTfwZfTxgtXcE4s1f2PQMBQtjFb
-         /1/bYRv88+4Nbbl9Erk+zF3Ed4m4dNUtt7NXkC/x3xRqDnrMgaXZzgaoUCHmxpSmMyHC
-         U+J6bW27CqwWZLPfmjETjMUYn+Vg4HzDlPWc1queD0XuJoDSuI3IQZNutTs3iEF9Y8t2
-         i9GM8jd/VjIU7UIKIW8hUyhMI/uJNxasRbfGHGF3p1mJV5mEUU9U9aZVnhrJ8xV6ZhL8
-         M6Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUUuAnv7Fe1Hbl9NRgLh1oK1owNRnXub/o8u67qHNSVM9JKuvE+ApfmkXkKuUalKt16OmrfGdZWpufVdpAI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0laBuDIbi15bx/DQR6pmTw2W097Ly+K9svAmMdzknPFdcArfP
-	IwvlZfHxxSIsXauw/9Y5A4SWJYHaWHtIt+JNIMOsH9oCgIxNoznLB0JG/lue4Iu2EB5p4AU9EEn
-	jyU2fFC+HBnBscrgCAgTO1xpn0wvTgS80xJ7BjR+QCkByf4q/CUu1WxgDQmis75K8rxk=
-X-Gm-Gg: ASbGncu7gm66QGiF6XWzZTb/vcu98PbAT33E4AiM4B4vR6NfPTCqq9BrQsxX393r2Cm
-	gG5XMrZc9V8gUvVzeABcfiTDJrXKV/UT7MWM6T+HtODjoKjhh1R08j85i0h997am5QoFX3CwLkh
-	ChKvgn3+vYz0/P85UEWAf3oK/LO/Bq+AaP7Cp0RhpMrTONbFkTlbbW4YrY9IJ5bnRG+6sRQeh0c
-	b/0IpZEzEXUgzWgtTFgcBpZM04M6CnlEdJ5gMEJjxUG1oRslBFUkZZm5WYMW/ZXHGdaIX83eljq
-	5sysMrA=
-X-Received: by 2002:a05:6000:144c:b0:3a4:fc37:70e4 with SMTP id ffacd0b85a97d-3a51d97408amr5757689f8f.58.1749131005256;
-        Thu, 05 Jun 2025 06:43:25 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH06+3a1Kbk78BFgL3ZwbDTDTsWsomlMTVTUM+GFt6c6uDgEbkD9kGtXYidxIou37MFPIzdSQ==
-X-Received: by 2002:a05:6000:144c:b0:3a4:fc37:70e4 with SMTP id ffacd0b85a97d-3a51d97408amr5757647f8f.58.1749131004775;
-        Thu, 05 Jun 2025 06:43:24 -0700 (PDT)
-Received: from fedora (g3.ign.cz. [91.219.240.17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4efe5b8f0sm24267394f8f.6.2025.06.05.06.43.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jun 2025 06:43:24 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>, Eric Snowberg
- <eric.snowberg@oracle.com>
-Cc: "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
- Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami
- Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
- E. Hallyn" <serge@hallyn.com>, Peter Jones <pjones@redhat.com>, Robert
- Holmes <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>, Coiby Xu
- <coxu@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
-Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
- signatures verification
-In-Reply-To: <e4e838d03b3619df5523d429e0cd8160a8aef9f8.camel@HansenPartnership.com>
-References: <20250602132535.897944-1-vkuznets@redhat.com>
- <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
- <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
- <87zfemoc76.fsf@redhat.com>
- <e4e838d03b3619df5523d429e0cd8160a8aef9f8.camel@HansenPartnership.com>
-Date: Thu, 05 Jun 2025 15:43:23 +0200
-Message-ID: <87tt4unw1w.fsf@redhat.com>
+        d=1e100.net; s=20230601; t=1749131065; x=1749735865;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQdIuSTATuzb/lH9GWsSgTLyKRDQtpfdIWX4HXG5tVQ=;
+        b=BsNGIR6t2HEFBoLrQtSpE06A9zUZlqbX74MdLGmM8Loy01CEsxZrpzNruVZapAJieP
+         6/i/gNj/BQ586lWbS7pPGa5oIQBOXfMr6qlVj/odFVDyCHsZXTQ/0/mc62B/EJXUeA+u
+         imNzi6Vh913TiXlqPWSesRKy9rrw7Z4Z3x7eulABqn5q7Y0Lc2eNRTcJ1jj9V6TGf2p6
+         pY0xD6jrDRbl8Z9C5a2t7nqbrWkUo7ljLH/ZCcNawUu31pijLAGliJoq3sgSHgiO9Wpn
+         xOsuklJnA8HxglTUjKDekwxToGVuvIkawiMYan845gl99zRjtH73OjH2z4UnFlmFLA7c
+         ZCfw==
+X-Gm-Message-State: AOJu0YwRMrWqETeDrrH204LQd09wV5ebJN3yiSGHlLyc8NiFywe1ljjS
+	UD/O9tfUIyL4pWwHWrdm4uYLchzZezBfGCByQH/kyt5Ef/ZrXzJz2xXJuuYTWB74BN0=
+X-Gm-Gg: ASbGncv7MmN+StaqF6gFPdJ9GRbDv39yn7vZXJ0usZwAn/5LFXSFVn5eLfAo6SLwLjI
+	M0TAB3DSIjSk4bepo0IaF9V60F4rcyB6h2e0dCqlSaK+mgyJXqaPacFW+XAgrhjbSlrU+u59DZh
+	g00CK5NboR2FfQ7lnE0vNEQ02h75SrPxR0TxdxAGjR5iL4gf/66VnsabaOkPnCv1v8PQoHWFm1p
+	rab2CDsfhw1Oq5HeNvZ20ZvKSWHzWHuIwzYfSk599lU2aE9D3UV77+A4QMcvfB+bFwxRocXfMNI
+	b0PfmcFE/NZBVPuFtL6+zcu1o1mQvwQtMCcjB0thuNG9HCgeOTSn6NoFpW2Oje7FTuB73ngZ5B+
+	2T/Ym
+X-Google-Smtp-Source: AGHT+IEZBXkNJsZax09ksMSFFsYVIlL2lvRHaY0jmuIMadt7kKvrCMXnThYERvTqZ4mq0dgdqgi/bQ==
+X-Received: by 2002:a05:6000:25ca:b0:3a5:1c71:432a with SMTP id ffacd0b85a97d-3a51d91c1f0mr5935337f8f.14.1749131064750;
+        Thu, 05 Jun 2025 06:44:24 -0700 (PDT)
+Received: from [10.0.1.22] (109-81-1-248.rct.o2.cz. [109.81.1.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4efe6ca46sm25077312f8f.31.2025.06.05.06.44.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Jun 2025 06:44:24 -0700 (PDT)
+Message-ID: <beb343ec-6349-4f9c-9fea-588b04eb49ee@suse.com>
+Date: Thu, 5 Jun 2025 15:44:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] module: Make sure relocations are applied to the
+ per-CPU section
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-modules@vger.kernel.org, oe-lkp@lists.linux.dev, lkp@intel.com,
+ linux-kernel@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+ Paolo Abeni <pabeni@redhat.com>,
+ Allison Henderson <allison.henderson@oracle.com>, netdev@vger.kernel.org,
+ linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
+References: <202506041623.e45e4f7d-lkp@intel.com>
+ <20250604152707.CieD9tN0@linutronix.de>
+ <20250605060738.SzA3UESe@linutronix.de>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250605060738.SzA3UESe@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-James Bottomley <James.Bottomley@HansenPartnership.com> writes:
+On 6/5/25 8:07 AM, Sebastian Andrzej Siewior wrote:
+> The per-CPU data section is handled differently than the other sections.
+> The memory allocations requires a special __percpu pointer and then the
+> section is copied into the view of each CPU. Therefore the SHF_ALLOC
+> flag is removed to ensure move_module() skips it.
+> 
+> Later, relocations are applied and apply_relocations() skips sections
+> without SHF_ALLOC because they have not been copied. This also skips the
+> per-CPU data section.
+> The missing relocations result in a NULL pointer on x86-64 and very
+> small values on x86-32. This results in a crash because it is not
+> skipped like NULL pointer would and can't be dereferenced.
+> 
+> Such an assignment happens during static per-CPU lock initialisation
+> with lockdep enabled.
+> 
+> Add the SHF_ALLOC flag back for the per-CPU section (if found) after
+> move_module().
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
+> Fixes: 8d8022e8aba85 ("module: do percpu allocation after uniqueness check.  No, really!")
 
-> On Thu, 2025-06-05 at 09:54 +0200, Vitaly Kuznetsov wrote:
->> One additional consideration is the fact that we already trust 'db'
->> for dm-verity (since 6fce1f40e951) and kexec (since 278311e417be) and
->> especially the later gives someone who is able to control 'db' access
->> to CPL0; a 'db'-signed module (IMO) wouldn't change much.
->
-> Well, the kexec case is because kexec has to verify the new kernel as
-> shim would and shim would use the UEFI keys.  The dm-verity one was
-> added for a cloud use case by pressuring the maintainers in spite of
-> the objection to using the platform keyring (it went to dm-devel only
-> so not many integrity people saw it):
->
-> https://lore.kernel.org/all/20240617220037.594792-1-luca.boccassi@gmail.com/
->
-> The point here is I do think the cloud use case is legitimate, but it
-> can't be supported simply by ignoring the bare metal security domain
-> separation concerns of the integrity community.  The argument that
-> distros have done it so it must be safe isn't really a winning one
-> (especially as there's no clear explanation of why they did it).  So
-> either you need a better argument or we need a way to support both sets
-> of communities ... which is why I was wondering about a runtime
-> differentiator.
+Isn't this broken earlier by "Don't relocate non-allocated regions in modules."
+(pre-Git, [1])?
 
-So far, I got two 'runtime' ideas:
-- Observe MokListTrustedRT and distrust .platform when it is
-non-empty. This can, of course, be combine with a Kconfig for those, who
-do not want it at all.
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+> v1…v2: https://lore.kernel.org/all/20250604152707.CieD9tN0@linutronix.de/
+>   - Add the flag back only on SMP if the per-CPU section was found.
+> 
+>  kernel/module/main.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 5c6ab20240a6d..4f6554dedf8ea 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2816,6 +2816,10 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+>  	if (err)
+>  		return ERR_PTR(err);
+>  
+> +	/* Add SHF_ALLOC back so that relocations are applied. */
+> +	if (IS_ENABLED(CONFIG_SMP) && info->index.pcpu)
+> +		info->sechdrs[info->index.pcpu].sh_flags |= SHF_ALLOC;
+> +
+>  	/* Module has been copied to its final place now: return it. */
+>  	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
+>  	kmemleak_load_module(mod, info);
 
-and/or
-- Sysctl toggle. Keep things as they are by default but make .platform
-trusted (either for modules or for everything) when switched 'on'. This
-can (optionally) by combined with a previous idea and have e.g. an
-'auto' state for the toggle which follows MokListTrustedRT.
+This looks like a valid fix. The info->sechdrs[info->index.pcpu].sh_addr
+is set by rewrite_section_headers() to point to the percpu data in the
+userspace-passed ELF copy. The section has SHF_ALLOC reset, so it
+doesn't move and the sh_addr isn't adjusted by move_module(). The
+function apply_relocations() then applies the relocations in the initial
+ELF copy. Finally, post_relocation() copies the relocated percpu data to
+their final per-CPU destinations.
+
+However, I'm not sure if it is best to manipulate the SHF_ALLOC flag in
+this way. It is ok to reset it once, but if we need to set it back again
+then I would reconsider this.
+
+An alternative approach could be to teach apply_relocations() that the
+percpu section is special and should be relocated even though it doesn't
+have SHF_ALLOC set. This would also allow adding a comment explaining
+that we're relocating the data in the original ELF copy, which I find
+useful to mention as it is different to other relocation processing.
+
+For instance:
+
+	/*
+	 * Don't bother with non-allocated sections.
+	 *
+	 * An exception is the percpu section, which has separate allocations
+	 * for individual CPUs. We relocate the percpu section in the initial
+	 * ELF template and subsequently copy it to the per-CPU destinations.
+	 */
+	if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC) &&
+	    infosec != info->index.pcpu)
+		continue;
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=b3b91325f3c77ace041f769ada7039ebc7aab8de
 
 -- 
-Vitaly
-
+Thanks,
+Petr
