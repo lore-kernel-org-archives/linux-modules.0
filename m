@@ -1,62 +1,96 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7151E1FC8;
-	Thu,  5 Jun 2025 06:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2731FE44A
+	for <linux-modules@vger.kernel.org>; Thu,  5 Jun 2025 07:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749103664; cv=none; b=HXzqH/Rz9J+Is0X02mcQmeCXxb5j5tK0+wh/+gSAzdWBjkUtoUL250TjNdmdBNdGxG/m3rovaPOiwqFbZvFwAs6r+9wGcFYnV/2xp8Mq/b/mnZoMZA8WH7MCFk2P+ei+qtai7NEXK6/aJEJw2pbLvYGZaLBkrVFdAxssZe/xdls=
+	t=1749110085; cv=none; b=GckYjZG2AAO4xQlILKCi8uaPANUc6WRPu0s7ZFWFrej0TmbnIzr6qBOt2gJ0XVDNf9MB0ppi0LAmRopbKEcPA16ELsChyulXTozr8rnXXiQu5iqUxIwh9sSi15w+OE3ENIDNJeJEtWiQLIoJZ/ClfJbGksSIdS234oprGz5kfCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749103664; c=relaxed/simple;
-	bh=+uBO42iXZqtDYIQMA9gA6/zv4IsrwRUl3RAt4NSUZlo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pI/D2d8kU9yO5HTicS5xYTTMuMx6h2BlgDyAmrTZaWgd4QwbYqxFj3ac3lVOgxJMPeaxNUtzt8i9OzWbC0bL17w6lS6Y+VhetD2SjkO3va2q0uC8T+MHO2rU9TR+aUj3NLT8cg8JXY/EJHH/qM2opR78GDhOakT68+JNGHBNBhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yhNiMwGK; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=t+p8jzgb; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1749110085; c=relaxed/simple;
+	bh=NNFSE2fFzpiSASQWnZwDpNqWAbQXEhYo1W4bEKJ2yGQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AczHg3EANC9gHfciERxiWES5T2/+0Llk8foUFFyW/pGpwX8wkDqDD9FPZE4lX5RGxwGbL1Uq7+rbuOglFrUlNVQBBq937lUUOStLWdSN80k4O8wkAI+ft996OYi4JAoTic8qurpTGMkUYAxuRqd0ilJlR8eomO3UXXjigVGDbZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MTPPh3gQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yhNiMwGK";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="t+p8jzgb"
-Date: Thu, 5 Jun 2025 08:07:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749103660;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MTPPh3gQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749110083;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8HZ71isqmSlxdQ2pUqhCUqFJFnnu4E61MVtczgwOP6Q=;
-	b=yhNiMwGKmUXfkBKAQLXO/d3mTwEE3QnYl4xV5r+GwmyOgacZhEdCH7UCbTWj+WIOfYhk7o
-	gMraDmikgcjndOHfvnKxjxPOaTbfnnyN2P8T2/SaoLlq8pKh8Hp5+BDOBXkPnVhAPxsxH0
-	sxK6rmYkHRbOPKejL8DCcCzBE8tHNjquvrFCIxCrVTdpX7lp/zVRECytzKf7oGfji/aeYW
-	e5lNKkifBjnHRKlop2T3odJ7zO5va2eIdPb5hny7XhhWUatVJi2kKA/Ix4305mWU9nODAw
-	kVD6s8qRcaMxsSAs387s0Xr3jdXVnt/Vb18P9nt/OtaIzh0FFxajK8AFrdfWPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749103660;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8HZ71isqmSlxdQ2pUqhCUqFJFnnu4E61MVtczgwOP6Q=;
-	b=t+p8jzgbDKKet5/oPbEz5/zhqjCZj2Q3KQu7QZtaWafXE22DK5hbl4cjUZPD8GgwU2y4rb
-	fgWZI2jQ5RTsTmBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: linux-modules@vger.kernel.org
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com, linux-kernel@vger.kernel.org,
-	kernel test robot <oliver.sang@intel.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Allison Henderson <allison.henderson@oracle.com>,
-	netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-	rds-devel@oss.oracle.com, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v2] module: Make sure relocations are applied to the per-CPU
- section
-Message-ID: <20250605060738.SzA3UESe@linutronix.de>
-References: <202506041623.e45e4f7d-lkp@intel.com>
- <20250604152707.CieD9tN0@linutronix.de>
+	bh=EsWFMFas7O2Lvk4gjiHkVtt4n83KeM8DN/r9KQDAJpg=;
+	b=MTPPh3gQR8aKTm01kPJ5h6JxFHhTXoYLqZlJ7I//3iDtOxd+D+p+Hb1DaFui51Qcp6zEmy
+	K1bw1+3mq+FvEY2y3JVpqUxJJcekND6iXZj3hv+zQ5KIl0K95jP7cs0YF3MOm7X/9ycgCp
+	C5Wi+h2qor16sJWGJvyhtnW64JHLiLc=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-459-UgyVT7fQPV-7UwPcjddBqA-1; Thu, 05 Jun 2025 03:54:41 -0400
+X-MC-Unique: UgyVT7fQPV-7UwPcjddBqA-1
+X-Mimecast-MFC-AGG-ID: UgyVT7fQPV-7UwPcjddBqA_1749110080
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-450787c8626so3391275e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 05 Jun 2025 00:54:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749110080; x=1749714880;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EsWFMFas7O2Lvk4gjiHkVtt4n83KeM8DN/r9KQDAJpg=;
+        b=OmaWsWuxqQ2a5JTVrpsJspdLtZan77JyJIwwX4jOSwYqeKbOPuEYVILe2x4ZP/YwgN
+         +HOTWIz1XCYr3vCr5USxXOq08UYMOFxmjOVF9wQQ8vKfjvubfau9EHjQTkjUa50i9M1F
+         Wp+9L+Q64ixm5TBOqYns9OpCv0W+c8U5e4Sv5PPA22KVrh/Gn6OzsBHcV1ZjJQmWzMlg
+         pr4a5ZyAr+hs6yAfE0E3QnzJUSUkqgNnEgc0h+Cu7pS2in4FWxFxeKWMUiy1bSbcqsjP
+         Yame9BuzvQFGp7or0FrSYD/lyRKTVntRaMJgnmt6UrvVrdvXY9kdEZL+/g5XwWdBY8bi
+         bAOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1JHEoPaDXr9FvVzAo4INp0USF5zz42eLG70CH7U2fG8XZHXi5RmcbokYEoJAmpW9wlfi8unSKaA7JLy82@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEO8SSUewoiDP61bKsgauqgvFmXiQ9/fvwP9K++eu+HLZL69ot
+	KzXWZprZ00r7agOEOM39v4FLKiziAtC778ybkqjRMd0B3PMtPz/yR/KEexBwOL2/tKyQWY72wP7
+	zLyHISwtjkvFghcNoIdk0ee9aEFCJ5PuAhzC1Ao6Q10FfSipXiZSFDe0gmlBlMIv8KtE=
+X-Gm-Gg: ASbGnctxTn4RAYZIpXgqKZEeUYsbMxHatowYooNjkzeBLY09eKF4xn7MHIO/qSFhFJg
+	m3T2/PCEBhtC93hGCbKxkCf2kMk1MeUII5VXhrpkPXLzwtBdzio9dmeIT9fcEzRBllsdnk9qPeF
+	ax9ZS/G9WzG3A5P+M6m1EDOqdS32/tldM0G9EQ4eCtv5F7HV7VHcBpFM+Je6YU1p9nVFhGCSJKF
+	saQ0IobnknzZ8Pf2mms4ofE5oYxDTnxxuzIanWAf8O5m+Iw3xTYJPd4AkbSt+kfq8vMWDftWotq
+	1EPYHWM=
+X-Received: by 2002:a05:600c:1382:b0:43d:300f:fa3d with SMTP id 5b1f17b1804b1-451f0a5fe0amr51091985e9.5.1749110080154;
+        Thu, 05 Jun 2025 00:54:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG1SRbImSlbGm32npkuOoSxiRgAXup0UEUY8LHi/iQ53+IYu08XHv+Q7OLZVb45/K6v+57Beg==
+X-Received: by 2002:a05:600c:1382:b0:43d:300f:fa3d with SMTP id 5b1f17b1804b1-451f0a5fe0amr51091785e9.5.1749110079698;
+        Thu, 05 Jun 2025 00:54:39 -0700 (PDT)
+Received: from fedora (g3.ign.cz. [91.219.240.17])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-451f97f85casm16199575e9.4.2025.06.05.00.54.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Jun 2025 00:54:38 -0700 (PDT)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, Eric Snowberg
+ <eric.snowberg@oracle.com>
+Cc: "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
+ <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
+ <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
+ Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
+ Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami
+ Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
+ E. Hallyn" <serge@hallyn.com>, Peter Jones <pjones@redhat.com>, Robert
+ Holmes <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>, Coiby Xu
+ <coxu@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
+Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
+ signatures verification
+In-Reply-To: <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
+References: <20250602132535.897944-1-vkuznets@redhat.com>
+ <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
+ <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
+Date: Thu, 05 Jun 2025 09:54:37 +0200
+Message-ID: <87zfemoc76.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -64,57 +98,69 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250604152707.CieD9tN0@linutronix.de>
 
-The per-CPU data section is handled differently than the other sections.
-The memory allocations requires a special __percpu pointer and then the
-section is copied into the view of each CPU. Therefore the SHF_ALLOC
-flag is removed to ensure move_module() skips it.
+James Bottomley <James.Bottomley@HansenPartnership.com> writes:
 
-Later, relocations are applied and apply_relocations() skips sections
-without SHF_ALLOC because they have not been copied. This also skips the
-per-CPU data section.
-The missing relocations result in a NULL pointer on x86-64 and very
-small values on x86-32. This results in a crash because it is not
-skipped like NULL pointer would and can't be dereferenced.
+> On Wed, 2025-06-04 at 17:01 +0000, Eric Snowberg wrote:
+>> > On Jun 2, 2025, at 7:25=E2=80=AFAM, Vitaly Kuznetsov <vkuznets@redhat.=
+com>=20
+>> > The use-case: virtualized and cloud infrastructure generally
+>> > provide an ability to customize SecureBoot variables, in
+>> > particular, it is possible to bring your own SecureBoot 'db'. This
+>> > may come handy when a user wants to load a third party kernel
+>> > module (self built or provided by a third party vendor) while still
+>> > using a distro provided kernel. Generally, distro provided kernels
+>> > sign modules with an ephemeral key and discard the private part
+>> > during the build. While MOK can sometimes be used to sign something
+>> > out-of-tree, it is a tedious process requiring either a manual
+>> > intervention with shim or a 'certmule' (see
+>> > https://blogs.oracle.com/linux/post/the-machine-keyring). In
+>> > contrast, the beauty of using SecureBoot 'db' in this scenario is
+>> > that for public clouds and virtualized infrastructure it is
+>> > normally a property of the OS image (or the whole
+>> > infrastructure/host) and not an individual instance; this means
+>> > that all instances created from the same template will have 'db'
+>> > keys in '.platform' by default.
+>>=20
+>> Hasn=E2=80=99t this approach been rejected multiple times in the past?
+>
+> Well not rejected, just we always thought that people (like me) who
+> take control of their secure boot systems are a tiny minority who can
+> cope with being different.  I have to say the embedding of all the
+> variable manipulations in shim made it quite hard.  However you can use
+> the efitools KeyTool to get a graphical method for adding MoK keys even
+> in the absence of shim.
+>
+> The question is, is there a growing use case for db users beyond the
+> exceptions who own their own keys on their laptop, in which case we
+> should reconsider this.
 
-Such an assignment happens during static per-CPU lock initialisation
-with lockdep enabled.
+Yes, exactly; I may had missed some of the discussions but what I found
+gave me the impression that the idea was never implemented just because
+'db' was normally considered to be outside of user's control ("just a few
+evil certs from MS"). This may still be true for bare metal but over the
+last few years things have changed in a way that major cloud providers
+started moving towards offering UEFI booted instances by default (or, in
+some cases, UEFI-only instances). At least the three major hyperscalers
+(AWS, GCP, Azure) offer fairly straightforward ways to customize 'db'
+for SecureBoot; it is also possible to have a custom UEFI setup with
+KVM/QEMU+OVMF based infrastructures.=20
 
-Add the SHF_ALLOC flag back for the per-CPU section (if found) after
-move_module().
+'certwrapper' offers _a_ solution which is great. It may, however, not
+be very convenient to use when a user wants to re-use the same OS image
+(e.g. provided by the distro vendor) for various different use-cases as
+proper 'certwrapper' binary needs to be placed on the ESP (and thus
+we'll end up with a bunch of images instead of one). 'db' is different
+because it normally lives outside of the OS disk so it is possible to
+register the exact same OS image with different properties (e.g. with
+and without a custom cert which allows to load third party modules).
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
-Fixes: 8d8022e8aba85 ("module: do percpu allocation after uniqueness check.=
-  No, really!")
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v1=E2=80=A6v2: https://lore.kernel.org/all/20250604152707.CieD9tN0@linutron=
-ix.de/
-  - Add the flag back only on SMP if the per-CPU section was found.
+One additional consideration is the fact that we already trust 'db' for
+dm-verity (since 6fce1f40e951) and kexec (since 278311e417be) and
+especially the later gives someone who is able to control 'db' access to
+CPL0; a 'db'-signed module (IMO) wouldn't change much.
 
- kernel/module/main.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 5c6ab20240a6d..4f6554dedf8ea 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2816,6 +2816,10 @@ static struct module *layout_and_allocate(struct loa=
-d_info *info, int flags)
- 	if (err)
- 		return ERR_PTR(err);
-=20
-+	/* Add SHF_ALLOC back so that relocations are applied. */
-+	if (IS_ENABLED(CONFIG_SMP) && info->index.pcpu)
-+		info->sechdrs[info->index.pcpu].sh_flags |=3D SHF_ALLOC;
-+
- 	/* Module has been copied to its final place now: return it. */
- 	mod =3D (void *)info->sechdrs[info->index.mod].sh_addr;
- 	kmemleak_load_module(mod, info);
 --=20
-2.49.0
+Vitaly
 
