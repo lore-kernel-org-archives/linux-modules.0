@@ -1,177 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDF32882A6;
-	Fri,  6 Jun 2025 11:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE182F3E
+	for <linux-modules@vger.kernel.org>; Sat,  7 Jun 2025 16:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749208845; cv=none; b=L2O1kI4nzBn8hHLaQM8Ir6iHnNHg9pn7Fg0548DNtLOqsfuO+tIX2drVAr9YR0gQhF7LlXXHODA5550YudM9xx6B454qRMW2vLz1XY4qwO8Dx2UlMazJO6n4zsDskRbToAP5BRWiH0k662y6oQutk5/6PejgvUvdhR7BWBlm0vk=
+	t=1749313281; cv=none; b=DhKQYUurcOYDQCGDzhB5p2klH6OHvCojlLKHOnXZf2+1SORQQAF5KexhS3UWKqZ84/UsNi2VNp79O5SsbJcc3SpbYvS1l0WgynfVQKJN0cvcTMBYnNiWK+B2Oqpv1YQdB6nbR8jau6T9g+8eqLs1blPyZBuo1PGfu/v15ohWKRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749208845; c=relaxed/simple;
-	bh=ti9oOmqvMGZUuTjapj1Ojl85o/P6e6+srSzCZvIrPug=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qy7JRyCLWPSiiXJfc+ee/wbyZX+d09yGnaGtqroma8n9rAUP4ne/Ds2QTxcM5007rMiPiQzu/Tl2vVtPjhuSi5sS/bRG5IxXCosikYW1mLcaBZssPQAgZyC2G77dMwCqGETkgfy8GwmYIrivP3zeQAczL8xAwa3ghf6tSsi6yoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fMroN5Hd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749313281; c=relaxed/simple;
+	bh=B9B8CL00f5okZzseXePU8fDMvR6p/T1oTFKZDQLR6dw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B86rhnLOdSEcTLT651aIKQcr+8ANvlsp3HDhfwi/l7gmMOSoBglNPc1qLzZd8Ox2BhKj9keTWCXiOQrSxQEQxjV3bFgHm+vXozHDAXYpBdNPwQcGSxfMoi7k/BeCqkBdeKg+ybXqb6DjKfnsbIxXGLrBLUhMgr54t5SReDWQBs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I49aWw+F; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fMroN5Hd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6215C4CEEE;
-	Fri,  6 Jun 2025 11:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749208843;
-	bh=ti9oOmqvMGZUuTjapj1Ojl85o/P6e6+srSzCZvIrPug=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fMroN5Hdeoj2fXFeiuFwDDjk29HJ9r8Y7fJlr2wZfQAoznnCRxu5oOIm1CHqdGdOp
-	 FKVj028MKePTDNPvPOdDct0TvUwm568Qn1Y7mLUhHgtdMPECFSLdHbjgz02Lyht6mT
-	 QB0db8ECRW70WsDiQFxoUhEeZwaEvo2uGHWJlL7/OWN6on2aLwaopBOnyBk5aQ9tMy
-	 f81dczgn4CJ3onCGWovbuVpjdO996Fa2ANMyAaxaxvKJpZz5gSwPfxpzPp0tfNBy/T
-	 chQz4FEfkjt/rHtJRfpsMaxi4e9+FpWcVw8dNLfwr2mtI2m8Q/Bd14jKDs356yVBeQ
-	 VqXVlo0jTX6kw==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5533c562608so1936637e87.3;
-        Fri, 06 Jun 2025 04:20:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU2qzND37PXL78bSalAej4hSnJKFApTZn98EWaT8R87EDJt3zWeM5gpEkLSC0qCTSKcXjFExwksQAie6E+v@vger.kernel.org, AJvYcCVHeCQ3DZru0fUGHlwkLaDzVma7Jv4HxpGNSie1WN2qQlELvE5wJvMBksFue8XoQVX9r+skFOBDXUhmjEU=@vger.kernel.org, AJvYcCWxqUhrLSfq20KP8LCu4Rvrud9ZSDt3YaxHl8QBmZyGwovQMGB6QJbUzHa/AxlxrF2eGf40BEJpOElslMizJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb2bOSzh4TsNKPHBIbf445LI72zf85jxYDLrpVHmy7Zyu66qaQ
-	5lO0KQUnr7S/T2lSXUI2mIv/Aq23wSvXVEJVpzMCERWkuabfVT6AZqszA9ibxSLQ4lDcJh1AHsG
-	NpKzTAaBdDkOw28JFY4ZTqVd/KUc7CwM=
-X-Google-Smtp-Source: AGHT+IGotelMifHvfI0kxQU1GKWrH79dTAXyh8hKDUGCX9NIBElz/uLWQ5uFvZmiHGQprCmA6Xpe6plpyrH+73inxxE=
-X-Received: by 2002:a05:6512:234e:b0:553:3621:efee with SMTP id
- 2adb3069b0e04-55366c433e2mr755126e87.50.1749208842441; Fri, 06 Jun 2025
- 04:20:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I49aWw+F"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so37562555e9.1
+        for <linux-modules@vger.kernel.org>; Sat, 07 Jun 2025 09:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1749313277; x=1749918077; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E4rQelngGKehQALYMiJrfMrYjtUVNtoEIJLttLq/RFs=;
+        b=I49aWw+FUyQah5BlokoW8IQjH/fTLcf5bFz5vPmItcvjJMFG0Apsl9tpSdq3i9F6wY
+         c6DftSp8HXcZh00pyuk+WqV+KS9p7aUhO4eEFVBR4+sUR16g60kHJ+eROXWwe43KN9j9
+         PEow/x6h1f3pl7AxhXH8AcvGdF+GqFqXG2+5iqv8Lhw4t08sCa6gbmqSv0w6vpaOC3ZS
+         BtCn8vUVTByKKs/qrGoIPNkWwsmZfH55ws6ugVL18FnjUM8YRCpzx2FMlyYwpJegz3gr
+         pcM7bUQ/rxLSAI57F2fBRZhpbhNhFpX12PmRQDx/xtuso533l9P2mlWpBRTXQaUWTg8q
+         4Y9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749313277; x=1749918077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E4rQelngGKehQALYMiJrfMrYjtUVNtoEIJLttLq/RFs=;
+        b=TA61NvySrihnxVy7YqDIIEu5YMNz3YEravMjJ1fYAQq9Ks8ZlxlkstvnRh1+dAyRfA
+         mxRHuM06X/79ADRCgQVzXke3Q2p3MCcThxPzH9NKyL6A4wfi09cbdsopTAUgAeQwaSm+
+         P5QfWlYTYXYRz20LUdgZfRwn5maTkcQfMFdHUEwo4qVMFLQEHyt2+sVAoFowo+MVUeJ2
+         DViYn9K6eJndS8/xMuB223GH9bOgsPfSEaU+9kSL3uNhkODVU/4HeBgyWcRO6COO+GHS
+         jjK4PKjTIvfiu95bym2B0XRDy2hWeVnh4DvKVpo37+UNos7OUAybF/4EWg+Dr5Wnaf3r
+         T1WQ==
+X-Gm-Message-State: AOJu0Yxw5WnEpLeUnEMoOiwzSrkUhXjhqtpd4n6O+lYF6mI9Rg/bKgBj
+	Dr2fR8XTevW60UQ/cUwndJ/9DC0/4T98ZSrS6zwblku1UwSZKsTXD1nZ4x8nGoKTR0c=
+X-Gm-Gg: ASbGncurnlFiBQNXl0XzWK7+4qQhV3mdLMyE8n7d0GKYD5IPTdQU3RIQ1bUH0WZMYgz
+	VmoDxnyx4VbCfM9TawT9N4+xTx/LyTh+UIKaF0LusG94gnGPZYdAiBwOAhdohSccuVSJ/qi/l14
+	AhiEuPshKFEpP54bg87uevLM+3k5GBSiRN8vhY/9+TZMwe5v6r0XTQT+Wiwf9rJuCxP10H2s6Fm
+	vY5Jl5WAaMDT7pVDeZbNj35pvWbczcWsjlcEYrkiMSgy34ENE8ylUUCZEenm0w+p4CQ2Z0NKE05
+	5s9qcjFXiuO5/FLoMN7IDxLaPQtdcxpa6d6t702qxAX848RW3nK1vQc6PzYSen0dVs5UQQlUNz9
+	ierLAlw==
+X-Google-Smtp-Source: AGHT+IEMUd1rojejMaAVMOnFhwaC8vasaKBxpW0zK+VFaSmb4+qfkjNz3jQgXGGgXstDEhktYuTK/w==
+X-Received: by 2002:a05:6000:2913:b0:3a3:5ae4:6e81 with SMTP id ffacd0b85a97d-3a5319b1941mr5726232f8f.8.1749313276676;
+        Sat, 07 Jun 2025 09:21:16 -0700 (PDT)
+Received: from zovi.suse.cz (109-81-1-248.rct.o2.cz. [109.81.1.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a5324364f1sm5088096f8f.58.2025.06.07.09.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Jun 2025 09:21:16 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] module: Fix memory deallocation on error path in move_module()
+Date: Sat,  7 Jun 2025 18:16:26 +0200
+Message-ID: <20250607161823.409691-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1748335606.git.legion@kernel.org> <ecf0ebdda5bcf82464ed1cebbf50afdcd8b5b23a.1748335606.git.legion@kernel.org>
- <CAK7LNARkhc40UfrmmqsqmqkCn60=7zHc=pDFGR4o=k2p7CsABA@mail.gmail.com>
- <aD1bozP0l67f_wbs@example.org> <CAK7LNAQmQtvB4PfmH4MkRM123wySON6cF6TG79fi0WER1sz4Gw@mail.gmail.com>
- <aD2vSnZhofEPilcL@example.org> <CAK7LNATfUzCXmCb5kKOJOKOw=CJvk7viGgYtrGLwbSAkq7VtyA@mail.gmail.com>
- <aEAtUc6OTyvu-ThM@example.org> <CAK7LNAQhnA50EyccG2hVqnNHjfFk-JC6zYTkqzUR4Pibg2mzWA@mail.gmail.com>
-In-Reply-To: <CAK7LNAQhnA50EyccG2hVqnNHjfFk-JC6zYTkqzUR4Pibg2mzWA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 6 Jun 2025 20:20:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATY+11zvrpfGnnxFENKyXjKC2qfmt3-i5tjVjHs9wiZKg@mail.gmail.com>
-X-Gm-Features: AX0GCFu68IzIGUZHtnHJayFYfspqR6O5akw101n6HxgF3TEX6o0MmWVsTfedvHs
-Message-ID: <CAK7LNATY+11zvrpfGnnxFENKyXjKC2qfmt3-i5tjVjHs9wiZKg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/6] modpost: Make mod_device_table aliases more unique
-To: Alexey Gladkov <legion@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jun 6, 2025 at 2:10=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Wed, Jun 4, 2025 at 8:26=E2=80=AFPM Alexey Gladkov <legion@kernel.org>=
- wrote:
-> >
-> > On Tue, Jun 03, 2025 at 01:18:25AM +0900, Masahiro Yamada wrote:
-> > > > > > Before these patches this was not a problem as non-unique chara=
-cters are
-> > > > > > in separate object files when the module is compiled separately=
-.
-> > > > > >
-> > > > > > But when the modules are compiled into the kernel, there is a s=
-ymbol
-> > > > > > conflict when linking vmlinuz. We have modules that export mult=
-iple device
-> > > > > > tables from different object files.
-> > > > >
-> > > > > This is because the __mod_device_table__* symbols are global, but
-> > > > > I suspect they do not need to be.
-> > > > >
-> > > > > Let's test this
-> > > > > https://lore.kernel.org/lkml/20250602105539.392362-1-masahiroy@ke=
-rnel.org/T/#u
-> > > >
-> > > > I tested this patch with the config:
-> > > >
-> > > > make allmodconfig
-> > > > make mod2yesconfig
-> > > >
-> > > > and it works.
-> > >
-> > > Good.
-> > > Then, __COUNTER__ is unnecessary.
-> >
-> > I didn't immediately notice. The patch you suggested works, but these
-> > symbols remain in System.map and it seems in vmlinuz.
-> >
->
-> Ah, yes, if your patch set is applied.
->
-> Currently, MODULE_DEVICE_TABLE() is no-op in vmlinux.
->
-> This makes me realize that your v3 4/6
-> increased the vmlinux image, as MODULE_DEVICE_TABLE()
-> is kept for modpost.
+The first patch is an actual fix. The second patch is a minor related
+cleanup.
+
+Petr Pavlu (2):
+  module: Fix memory deallocation on error path in move_module()
+  module: Avoid unnecessary return value initialization in move_module()
+
+ kernel/module/main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 
-With your patch set, __mod_device_table_* will be
-included in vmlinux.
+base-commit: bdc7f8c5adad50dad2ec762e317f8b212f5782ac
+-- 
+2.49.0
 
-My patch changes them from global to local  ('D' is changed to 'd'),
-but there is no difference in the fact that v3 4/6 will grow
-the symbol table in vmlinux.
-
-
-
-
-(1) Your patch set
-
-$ arm-linux-gnueabihf-nm  vmlinux | grep __mod_device | head -n 10
-c0527678 D __mod_device_table__164__kmod_clk_scmi__scmi__scmi_id_table
-c053f458 D __mod_device_table__164__kmod_reset_scmi__scmi__scmi_id_table
-c05421bc D __mod_device_table__164__kmod_reset_uniphier_glue__of__uniphier_=
-glue_reset_match
-c05334ac D __mod_device_table__164__kmod_scmi_pm_domain__scmi__scmi_id_tabl=
-e
-c054cbd0 D __mod_device_table__164__kmod_twl4030_power__of__twl4030_power_o=
-f_match
-c0548e8c D __mod_device_table__165__kmod_omap3_rom_rng__of__omap_rom_rng_ma=
-tch
-c05124a0 D __mod_device_table__165__kmod_simple_pm_bus__of__simple_pm_bus_o=
-f_match
-c05559ac D __mod_device_table__165__kmod_timer_ti_dm__of__omap_timer_match
-c0528a68 D __mod_device_table__166__kmod_adpll__of__ti_adpll_match
-c0520a68 D __mod_device_table__166__kmod_gpio_en7523__of__airoha_gpio_of_ma=
-tch
-
-(2) Your patch set + my one (extern -> static)
-
-$ arm-linux-gnueabihf-nm  vmlinux | grep __mod_device | head -n 10
-c0527678 d __mod_device_table__164__kmod_clk_scmi__scmi__scmi_id_table
-c053f458 d __mod_device_table__164__kmod_reset_scmi__scmi__scmi_id_table
-c05421bc d __mod_device_table__164__kmod_reset_uniphier_glue__of__uniphier_=
-glue_reset_match
-c05334ac d __mod_device_table__164__kmod_scmi_pm_domain__scmi__scmi_id_tabl=
-e
-c054cbd0 d __mod_device_table__164__kmod_twl4030_power__of__twl4030_power_o=
-f_match
-c0548e8c d __mod_device_table__165__kmod_omap3_rom_rng__of__omap_rom_rng_ma=
-tch
-c05124a0 d __mod_device_table__165__kmod_simple_pm_bus__of__simple_pm_bus_o=
-f_match
-c05559ac d __mod_device_table__165__kmod_timer_ti_dm__of__omap_timer_match
-c0528a68 d __mod_device_table__166__kmod_adpll__of__ti_adpll_match
-c0520a68 d __mod_device_table__166__kmod_gpio_en7523__of__airoha_gpio_of_ma=
-tch
-
-
-
-
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
