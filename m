@@ -1,124 +1,192 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7325115D1
-	for <linux-modules@vger.kernel.org>; Sun,  8 Jun 2025 07:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B476204680
+	for <linux-modules@vger.kernel.org>; Sun,  8 Jun 2025 11:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749367540; cv=none; b=CirheSpuY9VkfpvsQ05rwmm9kOwGhXHChjbsW19oOG2FE53A49fvfi0U0KGktS07keyFACZ3bzqiBwMVq05dLf8QCla6EwrgQiMnAu20vUIZ/fQawDYeDzdMMgcgv7C04lKWMJMw9B6fohow/eFhy8g2ZtKDCu0pheMpIoDAKME=
+	t=1749381344; cv=none; b=Je+Sc2t6q8f59stOCs1rdXa3MpH6bOC43mBcDmlf9JdKthaxvvE08Y/yIXVWwps9/HwnNbuKE/+YX6bPqo0PZ57ANgj+cwsRSV1ISdJJBhwWuHcjQmw6tjNDmNWNBHN+AGgkYAidyP36fqPYy0BDBggIU5ossqR32ZRhcvkNewY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749367540; c=relaxed/simple;
-	bh=CjBYKoeh+JUKRiVHmPnsj1xPsz1WrazHWtHcqg6xjhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AoFQnjp0WDDzC0IW2BYV/WXVcFjAzaVHwXFSxr/jtKR/HTuID/NJRHo28bTQMLSgdwnhmV+HdCGheWb+of1x3oyk3dzvY6Svjho+vFygKGLnoJ9i0u5q745ZISgPvDDCDNbu99qi1KDGs3ntrG6ChuMvgDmAQYI/TDeWpJ9IqDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dO6hgtBL; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1749381344; c=relaxed/simple;
+	bh=s44Ig4kD0uOE75vgxSLhr3DyJEpmo23BSCxo3Cwy50U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ElIPwWUZD8ycM7XEgEWrHSq0M9Gz5wGEKMO5F65aClfjSdXgdUN6uvVPoODsQ2UH+yCgtXRGZHLaQcHv65DRSkUOJqCU4uDx13XHMldTRUnvSgYSjjYsoXMZEfo5xqoAKQfSdMqcOkVww5dXbyumP3qLb+sTCGlcKO25qdIP7MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dvFAxypS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dO6hgtBL"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43edecbfb94so39541585e9.1
-        for <linux-modules@vger.kernel.org>; Sun, 08 Jun 2025 00:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1749367536; x=1749972336; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U5zxKH1RRPFE+pq7qzzrPXBdTSkahxpWL82kTyaPaww=;
-        b=dO6hgtBLENEsjmIlf2spsPRu1O5YEurQAXwTlM+ZKvpXbhtyjsXXOPJrYjqJ5WCcmz
-         4swoMVswMGwYpL8YGPN9B0iCHXQpJJqGwt7AIAp1IC3Nt3yhhHd4hSY/3PgieJrCe9jj
-         cQSUB1K/A23Uhnxq1yZshaMP6ODGCuieTq+PpFHgZOxKRgFN0lUi+ZigiNNgReKaOD6f
-         UbcbtZYwjnt943IjT5+ku+9bLNl2dK1v3wkQebqFMmT5SSWfPpNKyTmtLJE9IHaEmKcd
-         /ZGl7zQ1B8l+tPcrHG6slaE/gCSZBgB7OFrGmPgV4NOZgwYJbWAAjZUwk5RM7ifIR9hU
-         FBvQ==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dvFAxypS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749381340;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cGxQhYTVWXecvAAHBQvF+aNN/9v/2PuaedzbvW3oVXc=;
+	b=dvFAxypSFtAxckGN2Js1d4c03um4178fhBbc+jX0mLNCSjdDB46U6k8777cVasmnO2w88x
+	+zoljbeJXxPDP76EMJRB4yepxB0TBEbYbWuGPL3zkicxw7awQG01ilZiJfLlEUWwtpZj2C
+	Ie4XXUngTDrlirUlQshICo3LVi07NDI=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-670-0ZJMjrspNQ-DT9uHeL4d9g-1; Sun, 08 Jun 2025 07:15:38 -0400
+X-MC-Unique: 0ZJMjrspNQ-DT9uHeL4d9g-1
+X-Mimecast-MFC-AGG-ID: 0ZJMjrspNQ-DT9uHeL4d9g_1749381338
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-311ae2b6647so2580076a91.0
+        for <linux-modules@vger.kernel.org>; Sun, 08 Jun 2025 04:15:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749367536; x=1749972336;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1749381337; x=1749986137;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5zxKH1RRPFE+pq7qzzrPXBdTSkahxpWL82kTyaPaww=;
-        b=iwOwyE2VopTm2WDPg7IXK41bmHsK3AxJUGEXwJMjebR0hmA6GetOge1gUzxBDrokpZ
-         BKzvUUeI+zlzVupuCc6DhSswNjrsR0o3dzWnoFLQUYvYfF5A7Ns+D/dzGzRChbXGPQTt
-         h/hm8eIL4IT9qsbjte8TXUNlFcLkLXxB+nM42BYjIuobj7o9XBJljId+LJ7EAFw7p2o5
-         eFdTx+FAynbOJM7fHozL+lwq8PLachD+MNyn8TVC0/3F+6ll9E9hGWTBfnACYr1q7ITe
-         VJq9lorPFVXA7Wk9inFOr2IZ+ZbS7R2w2yYnlG3ceqtPtN9gwM004/JP4U1WNeXKqZHo
-         L5aA==
-X-Gm-Message-State: AOJu0Yya70Kby+eX9jVMARH9Jjxn29foMwxkXtrpraHz37Tppkrk/jcM
-	lSLAvbf3LkTzh+nUKDWMxnmhOPUr74E9djEkvryzkKq/cyI+RZYahlJfwwTDvV6k9+Y=
-X-Gm-Gg: ASbGncsdpUcMeVHdflRtVYnF5MAUXEQyOVDLM0emVLAC5YJzC7J898vREGGrw/LfED7
-	Dys/x4eOGn51CRqUmV8N4rFXoBVXb5sVzEH+4WtBjSD6PGpM/ZZdLQ1mEgDnJm+/5yMsoMl25iW
-	2II1Xhkgghm0N5E46e71QhX3HKx4l0IYDanxpmJ6Mn0hX3lLughhGw+VzzCjRu8k22QNAo3pdOj
-	/YqhrTmhGkJJMnIzEay4cJwTrcSFmIN2SUzntUpg6P+YOQaj6liURqQybsje0ztFdEluiAirEGG
-	whVoazo7Y7sJmJeFkq5FTi19ijWAx4R4UG7jxNdrwz/70RL5xtibr8OXZw5VPeecWr04yA==
-X-Google-Smtp-Source: AGHT+IF/TT9gpo9gWlFm0wUaY6aLXBpdcRMEPm4klh6YKqHJVpnZ2y/4vfFm+DSI/hGsGt0wqWEm6w==
-X-Received: by 2002:a05:600c:1913:b0:453:9bf:6f7c with SMTP id 5b1f17b1804b1-45309bf71a7mr19489325e9.9.1749367535678;
-        Sun, 08 Jun 2025 00:25:35 -0700 (PDT)
-Received: from [10.0.1.22] (109-81-1-248.rct.o2.cz. [109.81.1.248])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45213754973sm77337195e9.35.2025.06.08.00.25.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jun 2025 00:25:35 -0700 (PDT)
-Message-ID: <f6fa3df3-38d5-4191-96d1-9a8a2152cedf@suse.com>
-Date: Sun, 8 Jun 2025 09:25:34 +0200
+        bh=cGxQhYTVWXecvAAHBQvF+aNN/9v/2PuaedzbvW3oVXc=;
+        b=Fz6vQylx1CAAW2N8itkKtEnsysWFCD2cN0WomU62O8S3Oj/9fEV62oSXyKcXJKMzVF
+         ylaF0fYcW4EjViMMf7ByG4XX3gT6w66R749n5f+ekRiyYcgR9u2E4I2EnVeqRMXNNjkt
+         2maylhc9Vt3rNuWGAmOBze9rPlATwiTepXVp5C6rkCkz9rBeBGgaYplXQAWZs6q77qq6
+         6y+Wx/Q6a2x+QVyEEicFZrVW1pW6xJqGlNf03kZtkcYYcZpaZ0K0H2gF77fNnBv85kiV
+         dNzkSjMWRhn5lk4OMQPRzQZdODPpgR/nJzS0ZEuDizRKqv0xxN+cvnOCyM9S7bUt5buK
+         mgNw==
+X-Forwarded-Encrypted: i=1; AJvYcCXlrPSXAnGBYfTrDuybadlUNjxFsRzBm+1SV9tmhiMpRkSw24vlePdDOB1MOsbI+kgA51kkATyGmFYc5VnL@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZXhJSO7YaPG6ROrkol00dW48QQLFxGNpNjGZQAtn4o6EisTRu
+	sojFSm3mLPQBZ/cv0fDW3qnJZ6Ybg0/r8fN9kM9ze+9GvcjXWPoCsy+ItX4V0HxTFqpiAtvpemR
+	DifZn2iTtJzxXru809GwGgxEwMnKzSxgwYyU1LL/1SeeT+jm+BjRqmmvZSF+F6S17kUCsIxqb89
+	Htg02O
+X-Gm-Gg: ASbGncu8/1+8ZXsLk0v9K55NJnNLQwhUY8yv4V3vLH24y0CpFXpyEFFU2eisG59EQNu
+	kIW/ny+Oja8IJ4kbeFlodkD5Mob7nUBj22Frixl3qKxzh0vc36054f85N5u6C6QSrmJydbper5L
+	qh/bA0DTXj5iZp6GK4ZIVixy0TRy2nWgC1BkJaRedbXQMR5n2U03raFmzwejnvBCl+rIZcWqMOq
+	6fWig/Gm7AgUs0WtHOClRDH6fAFK3IRWj1M9w082glVpScgmZqfMPtNEEzjF2edAK5X4xVAAAeD
+	5Co=
+X-Received: by 2002:a17:90b:274a:b0:312:1b53:5e98 with SMTP id 98e67ed59e1d1-31347695f46mr10946843a91.34.1749381337366;
+        Sun, 08 Jun 2025 04:15:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHm1tY9duQEiqT3DInIdSJiLgysCyNwHiX31kI2nR++f2zCJN2MhXR/VhrT6h4PgjvT4OdRdw==
+X-Received: by 2002:a17:90b:274a:b0:312:1b53:5e98 with SMTP id 98e67ed59e1d1-31347695f46mr10946804a91.34.1749381336969;
+        Sun, 08 Jun 2025 04:15:36 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23603092f21sm38098935ad.66.2025.06.08.04.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jun 2025 04:15:36 -0700 (PDT)
+Date: Sun, 8 Jun 2025 19:14:40 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, keyrings@vger.kernel.org, 
+	David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Peter Jones <pjones@redhat.com>, Robert Holmes <robeholmes@gmail.com>, 
+	Jeremy Cline <jcline@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
+Subject: Re: [PATCH RFC 1/1] module: Make use of platform keyring for module
+ signature verify
+Message-ID: <mqciidnqf3itdh6fzz53nxvoqg3zhc2fjiwpvz46ytunsmmzrx@r3vhrnrgi637>
+References: <20250602132535.897944-1-vkuznets@redhat.com>
+ <20250602132535.897944-2-vkuznets@redhat.com>
+ <948f5567fe4d9ae39aa2528965f123e42bf82b46.camel@HansenPartnership.com>
+ <87r001yzob.fsf@redhat.com>
+ <d34555e2b0c4746fc01d5295959a434befcf8b18.camel@HansenPartnership.com>
+ <ibosm332sa2kz6vqrru5qsfk4tybsxepo4vascc3zsetmyckvv@pml7puc5jyl6>
+ <bec46b16778d9292ab90b3e1c71be6c56c8a5a50.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] module: Fix memory deallocation on error path in
- move_module()
-To: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250607161823.409691-1-petr.pavlu@suse.com>
- <20250607161823.409691-2-petr.pavlu@suse.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250607161823.409691-2-petr.pavlu@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bec46b16778d9292ab90b3e1c71be6c56c8a5a50.camel@HansenPartnership.com>
 
-On 6/7/25 6:16 PM, Petr Pavlu wrote:
-> The function move_module() uses the variable t to track how many memory
-> types it has allocated and consequently how many should be freed if an
-> error occurs.
-> 
-> The variable is initially set to 0 and is updated when a call to
-> module_memory_alloc() fails. However, move_module() can fail for other
-> reasons as well, in which case t remains set to 0 and no memory is freed.
-> 
-> Fix the problem by setting t to MOD_MEM_NUM_TYPES after all memory types
-> have been allocated. Additionally, make the deallocation loop more robust
-> by not relying on the mod_mem_type_t enum having a signed integer as its
-> underlying type.
-> 
-> Fixes: c7ee8aebf6c0 ("module: add stop-grap sanity check on module memcpy()")
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> ---
->  kernel/module/main.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 08b59c37735e..322b38c0a782 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> [...]
->  	pr_debug("Final section addresses for %s:\n", mod->name);
-> @@ -2693,8 +2694,8 @@ static int move_module(struct module *mod, struct load_info *info)
->  	return 0;
->  out_err:
->  	module_memory_restore_rox(mod);
-> -	for (t--; t >= 0; t--)
-> -		module_memory_free(mod, t);
-> +	for (; t > 0; t--)
-> +		module_memory_free(mod, t - 1);
->  	if (codetag_section_found)
->  		codetag_free_module_sections(mod);
->  
+On Thu, Jun 05, 2025 at 08:05:56AM -0400, James Bottomley wrote:
+>On Thu, 2025-06-05 at 16:34 +0800, Coiby Xu wrote:
+>> On Tue, Jun 03, 2025 at 09:03:22AM -0400, James Bottomley wrote:
+>> > On Tue, 2025-06-03 at 10:52 +0200, Vitaly Kuznetsov wrote:
+>> > > James Bottomley <James.Bottomley@HansenPartnership.com> writes:
+>> > [...]
+>> > > > Also, are you sure a config option is the right thing? 
+>> > > > Presumably Red Hat wants to limit its number of kernels and the
+>> > > > design of just linking the machine keyring (i.e. MoK) was for
+>> > > > the use case where trust is being pivoted away from db by shim,
+>> > > > so users don't want to trust the db keys they don't control. 
+>> > > > If the same kernel gets used for both situations (trusted and
+>> > > > untrusted db) you might want a runtime means to distinguish
+>> > > > them.
+>> > >
+>> > > I was not personally involved when RH put the patch downstream
+>> > > (and wasn't very successful in getting the background story) but
+>> > > it doesn't even have an additional Kconfig, e.g.:
+>> > > https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-10/-/commit/03d4694fa6511132989bac0da11fa677ea5d29f6
+>> > > so apparently there's no desire to limit anything, basically,
+>> > > .platform is always trusted on Fedora/RHEL systems (for a long
+>> > > time already).
+>> >
+>> > It sounds like that's just distro politics:  RH wants to enable
+>> > binary modules (by allowing them to be signed) but doesn't want to
+>> > be seen to be signing them (so they can't be signed with the
+>> > embedded RH key) so that gamers can have performant graphics
+>> > drivers and the like.  Thus it mixes in the db keyring, which
+>> > usually contains several Microsoft certificates and also one from
+>> > the ODM manufacturer, so now it can send would be shippers of
+>> > binary modules to those groups to get them signed. If you only have
+>> > the built in and MoK keyrings, the only possible signers are either
+>> > RH or the machine owner ... who isn't a single entity to deal
+>> > with.  Personally I think this is a bit daft: Debian manages an out
+>> > of tree module infrastructure using DKMS and MoK signing, so I
+>> > can't see why RH can't get it to work in the same way.
+>>
+>> It's interesting to find that although Debian's wiki page [1] only
+>> mentions DKMS and MOK, it actually has the same downstream kernel
+>> patch [2][3] as Fedora/RHEL to allow using db keys to verify kernel
+>> modules.
+>> [1] https://wiki.debian.org/SecureBoot
+>> [2]
+>> https://salsa.debian.org/kernel-team/linux/-/blob/debian/latest/debian/patches/features/all/db-mok-keyring/KEYS-Make-use-of-platform-keyring-for-module-signature.patch?ref_type=heads
+>> [3]
+>> https://sources.debian.org/patches/linux/6.12.30-1/features/all/db-mok-keyring/KEYS-Make-use-of-platform-keyring-for-module-signature.patch/
+>>
+>
+>Well if you read the attached bug reports:
 
-This can actually be simply:
+Thanks for listing the bug reports!
 
-	while (t--)
-		module_memory_free(mod, t);
+>
+>https://bugs.debian.org/935945
 
--- Petr
+This bug was filed on Aug 2019 and the downstream patch was merged on
+Nov 20219 whereas Eric's machine keyring work was merged on Mar 2022. So
+I don't think it has anything to do with
+CONFIG_INTEGRITY_MACHINE_KEYRING despite the bug reporter used MOK key
+to sign an external module. And before Eric's work, all MOK keys were
+loaded to the .platform keyring.
+
+>https://bugs.debian.org/1030200
+
+For this second bug which titled ".platform keyring (EFI DB variable) no
+longer trusted to sign modules, regression against 6.0", the bug
+reporter was requesting to allow DB keys to verify kernel modules
+(again).
+
+>
+>You can see that it's people trying to get an external module to work
+>(actually zfs locally signed) by adding keys to MoK and it failed
+>because of a configuration error (CONFIG_INTEGRITY_MACHINE_KEYRING
+>wasn't set).  They added this patch as part of the thrashing around
+>trying to fix the problem because they found it in Fedora.
+
+So I think Debian includes the downstream patch exactly to allow using
+platform keys to verify custom/third-party kernel modules.
+
+>
+>Regards,
+>
+>James
+>
+
+-- 
+Best regards,
+Coiby
+
