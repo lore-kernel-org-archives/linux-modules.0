@@ -1,228 +1,130 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8976218A6A5
-	for <linux-modules@vger.kernel.org>; Mon,  9 Jun 2025 15:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DA92940D
+	for <linux-modules@vger.kernel.org>; Mon,  9 Jun 2025 22:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749484173; cv=none; b=urI3q38lrA82IBrs313c+fMJ/5APrN63teYVxgGUbP5i1j8iufZqqUGES+vZI3x30aXIFS2WLWS93dzr6/zp86ClcATe/XzRAdolRTsNkxj0plfKOUEFL7+cWOuKiTuKhSKJ17zhAwQcJ3pTI4qi6wnQ9KTbOhbQlXcxHZHlLp8=
+	t=1749507132; cv=none; b=m3ltC0BzvsQMhOoc8VNRomamixtOvczt4pTTrMIG+S6RSyGFz/zcI/A4Xu4+m/RJyf+nMaLi1drKaAia5qGWO3Ahw7hJ5XN3wPIkugyf+xePzVS6A8tfZ0eRGy3ewd2udbHwUO4stAuDeLOUfz9qkKq+sjbHs0QihrMv5/cRvOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749484173; c=relaxed/simple;
-	bh=O16/i8ImN1omRqIDkVizfBKxq029hgU/VoUr9M+AMV4=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oYQqStVKbeyFboDzk6ug8Uqv73waMo5iqdbfC7aceR6E+QLWN/9IemoT3mgMoHkWZr3WVnp0Ax8fckyS3MHnipd4idWcQq1EfWH2LpZDLv0LmaK9MePBmFKCellv2LdcLAg8RKU/iKrztEIS/zBXXj9+jcldAFlhCNYTbJ70iic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LTV1pVZp; arc=none smtp.client-ip=209.85.215.201
+	s=arc-20240116; t=1749507132; c=relaxed/simple;
+	bh=Q096VwiTTUVf+mPt3DUqJJru+Vb3D0DDUtk3t41e+mI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qiTzyvB3uK1kpwf3eo0dSTAUYTNtawcmD9B0D1MSa2fa3LbJEMvMb/8wxAKXIKbaYOSYEfVL2dE/1GMWLroQmXNwfN6rkSUD0DY+/sBrdrbcVpixXC7EtDvYCICcJRs+o4xyQ9rjanNVNASrD9tmWP4KDLgUDOSH3cmrhTl0xnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T/bxh2O+; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LTV1pVZp"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b2fb347b3e6so641621a12.1
-        for <linux-modules@vger.kernel.org>; Mon, 09 Jun 2025 08:49:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T/bxh2O+"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2348ac8e0b4so18435ad.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 Jun 2025 15:12:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1749484170; x=1750088970; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GbDXTAZxIXygNZLsCst7kpU0mT+2twAyV2birPGbUuE=;
-        b=LTV1pVZpd7OAOhKmd1jfLcoQ/EA0VPa0tvaxCJ7K732qTLPQV+6pS0dpXHKtuE6CFa
-         ZlO0ElWWkKHIsFe/rdWtr8gk4UbGtvKp1EkoRkREkqV/92daXLBawKqSh2rZOhzFo3q0
-         MJzIljsNv325bTPJQL4ucAMvGKYtyzDDvKGjVXKT7EfIClsiMWOm11WfG732D0erVeZD
-         GVdekJExKYJSQw87c7RE+E4SmdNU/l98ZYcuzttUSR81hSLeQNFz1NJgT8XrrQRISP8k
-         5Lz9iL+nxIhIoTj2Y1NAxVH84w/GqoT91enekMgU4HdH7315WPwPLzTWvVaB3M9ORQvd
-         eSSg==
+        d=google.com; s=20230601; t=1749507130; x=1750111930; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HOEpQR48459oRBgMpH+r3088NqHoqtjm5LRzsigSh8M=;
+        b=T/bxh2O+Gbr5dVl97lML/A6ZxR+uehVTdoljFXZkysaypggDFM5ejiXqrHpcNcP3TB
+         BErk8t6V9h6+ZcD8toi6oKiWNsuf37WhqmFPRbrkqgDW1NP9I/R7NHOk8fZezv82jHh+
+         BjymawOPmBNELarNMPirCcRJji5RPy/IAxP3SReT20UVetTGEm+LaEgKhhKDS5kD5UMJ
+         /pCTp5w58REiJvgiJsj/StWLI+jgbXjbNRBtsRHiQhcU8fBfnKgk4NFP0i7sI9GPoFhO
+         VQiNbIxa5TxH7qziWd8lKz8CbSCMcYn/CKoTnaKMM7SiwTUk39nIekSw85Rgwz1lhgXk
+         ViUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749484170; x=1750088970;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GbDXTAZxIXygNZLsCst7kpU0mT+2twAyV2birPGbUuE=;
-        b=VktN2O/aetvzAw8AbvquicNWuTCvVKGvjKzJa7fUAsm/xdpy3743UVoKh5boTBFnDj
-         KLvW4XSdU/J0jmfIT30Sl/w9qulVKC4JbtmA1GHMx8USrDa1JnkzgN9Fezcmu/L/Z2YX
-         D/dKntTGwZL2JuBhyhnmBn1O+dwVGZyg3W+ExAd4mWpEAGVe0bJxyZxgi6kvgX3Z4CN5
-         5Z+Czey2Bvhg2d1aisGUApOgAZ9YRaA2uI3oNH2Z8BYPI3NKytmMXkA1F7pNx6p625eu
-         YnFM7H5yhFI8HSPkcEHU55y/nOdG8F90FamIHdw95Q7aN/7OKrIW9DsH96cF+AzZJaZE
-         a0Wg==
-X-Forwarded-Encrypted: i=1; AJvYcCVhJnFxner1Sr7DDCvzbHDRgqoBC+Vz0HbD5FTIxm8WJAoh9CQVj86O2YHC1Z0o7aDHsKeV2Xz6yF/miNHG@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTWtZX3EYgd5STbep5DuAehc1b4QyZ57tvEPbP+x9NH5zB5nTo
-	Vv+i20ZSfVrPCErclUNUUgL09GpjrB9zai11LdtHSauluKIis1Ni4ojMIEVKi9zFK+zyjXEm8W+
-	HMF/pqVV0Ms8sz9Ht3q7Ca9CRAKBgLQ==
-X-Google-Smtp-Source: AGHT+IFrXkiR8WR8iG3nbOmJqUxBsjH3gTSS4afmh9YumbsXjLp04RKCNCIYb7Enm3IB8vOPOnUJONfHpnLgUPk2lAo=
-X-Received: from pfbdw27.prod.google.com ([2002:a05:6a00:369b:b0:747:a8e8:603e])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:9203:b0:1f5:8622:5ed5 with SMTP id adf61e73a8af0-21ee24e1c1cmr23128880637.3.1749484169917;
- Mon, 09 Jun 2025 08:49:29 -0700 (PDT)
-Date: Mon,  9 Jun 2025 15:49:27 +0000
+        d=1e100.net; s=20230601; t=1749507130; x=1750111930;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HOEpQR48459oRBgMpH+r3088NqHoqtjm5LRzsigSh8M=;
+        b=mn4xoJQ9rpN2vmZmbt/OSzvLIt3FlOqWdTyNWh2+S7+HjSXkZJRUQKidfDp1Vh56/F
+         Dtlqr3kSyzq018pWSQfhLnsfA6PYGQwTUi+D3kTzSugjG2YgiMEETm3z+7NjQoPTp7xl
+         3xTJWW+toqbUbCfPN8k3OheHGOCLGSv+r/GBjj9sQO8p8xsgV7mGGqiFiaKGbvRMEZOQ
+         1CCODFuzMj1tEWB1NfsPnfNNU5+gP2/ld1Xl20R0wK4nZPXACYFabQaw2LpAE1rLcZsN
+         yJdmZ8XvpkIfIRzFCHipCRdoQ+WCi1RBZxXeRoKqOEZpDSX9vWHSWnVD0KiQi9zjYDz+
+         jA8A==
+X-Forwarded-Encrypted: i=1; AJvYcCUmdjOL2i2rX/n2gmAfPAadsbyut+ftUviW6QGmwhqlNGrfkYEyJMdeV/kNz6COi9nBZMHs/WJM2CKmJ9X5@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOPU2C9v3n0VwPoFYXXq8N/W2HXJ0kb4Zm0gu1s/tYkpZ0B1AK
+	/lJBYgTeNvPCjGCl3aGC6VQAZGZ+mAS1EiTfsFIUOpvxzjdvXzxy7MmaZHIUR0jgzQ==
+X-Gm-Gg: ASbGncvd5+IcQRJkNT+xJWG6uazJJQ6f2q5Rv3ei9YhdS9iPxacQrufQdL+yfq6LEIJ
+	FJprgopcvNQos9GxSRc8W4TABLkLVDYrJJ1t4ZDzmDKWSOMVRgvZiJvsOufERXfapWs/Iy5Ejkn
+	MmTBrRsRx4LyDFBb7BZ6M4NDV8qq/uLwY7YIRmg3N7TPd3F1Mc7+FSGIQNZAFRmg9O2R27sWPNT
+	xpnlFepfZSRy/CbXBPaUlrx15+NLkWVPgKTH/tzhM4kLKnLNlYqHwB0ifS3PypN4R7f/x/ZDhcO
+	ZybaBFeP9rZtk53CuRCa2XDlx9OGDqPBvNtgEag7krnxHPPaEVOOUDL1RQXzZnh/H+pMqcRS+rp
+	4Pkc5BUrs9xwsUpzVqoetoegza06HkDoU
+X-Google-Smtp-Source: AGHT+IF2AY3T20FOy8DmpoVu7vdEGvItzPx4tSajszVB/X4+P5zS/jWc325IG5gFLeSy31rddi6wAg==
+X-Received: by 2002:a17:903:1b4f:b0:215:f0c6:4dbf with SMTP id d9443c01a7336-23611fd8362mr6331895ad.14.1749507130159;
+        Mon, 09 Jun 2025 15:12:10 -0700 (PDT)
+Received: from google.com (164.135.233.35.bc.googleusercontent.com. [35.233.135.164])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-313286f38c4sm6694653a91.0.2025.06.09.15.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 15:12:09 -0700 (PDT)
+Date: Mon, 9 Jun 2025 22:12:05 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] module: Fix memory deallocation on error path in
+ move_module()
+Message-ID: <20250609221205.GA1439779@google.com>
+References: <20250607161823.409691-1-petr.pavlu@suse.com>
+ <20250607161823.409691-2-petr.pavlu@suse.com>
+ <f6fa3df3-38d5-4191-96d1-9a8a2152cedf@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4947; i=samitolvanen@google.com;
- h=from:subject; bh=O16/i8ImN1omRqIDkVizfBKxq029hgU/VoUr9M+AMV4=;
- b=owGbwMvMwCEWxa662nLh8irG02pJDBnuTG2Xpn3ULs9iaeX6fGIX85sQl4Rttj6+Atx9574xM
- qX8ZN3ZUcrCIMbBICumyNLydfXW3d+dUl99LpKAmcPKBDKEgYtTACbyZCUjw/eYyw5Lr3l4F0rw
- 7Dw31y/ntubxo15fE+5mGyxpEU05lc7wP3Lt/ZXTfKTy5m278shFOeD70azNMa/2SOUY3pf4ppD tzQYA
-X-Mailer: git-send-email 2.50.0.rc0.604.gd4ff7b7c86-goog
-Message-ID: <20250609154926.1237033-2-samitolvanen@google.com>
-Subject: [PATCH] gendwarfksyms: Fix structure type overrides
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sami Tolvanen <samitolvanen@google.com>, Giuliano Procida <gprocida@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6fa3df3-38d5-4191-96d1-9a8a2152cedf@suse.com>
 
-As we always iterate through the entire die_map when expanding
-type strings, recursively processing referenced types in
-type_expand_child() is not actually necessary. Furthermore,
-the type_string kABI rule added in commit c9083467f7b9
-("gendwarfksyms: Add a kABI rule to override type strings") can
-fail to override type strings for structures due to a missing
-kabi_get_type_string() check in this function.
+On Sun, Jun 08, 2025 at 09:25:34AM +0200, Petr Pavlu wrote:
+> On 6/7/25 6:16 PM, Petr Pavlu wrote:
+> > The function move_module() uses the variable t to track how many memory
+> > types it has allocated and consequently how many should be freed if an
+> > error occurs.
+> > 
+> > The variable is initially set to 0 and is updated when a call to
+> > module_memory_alloc() fails. However, move_module() can fail for other
+> > reasons as well, in which case t remains set to 0 and no memory is freed.
+> > 
+> > Fix the problem by setting t to MOD_MEM_NUM_TYPES after all memory types
+> > have been allocated. Additionally, make the deallocation loop more robust
+> > by not relying on the mod_mem_type_t enum having a signed integer as its
+> > underlying type.
+> > 
+> > Fixes: c7ee8aebf6c0 ("module: add stop-grap sanity check on module memcpy()")
+> > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> > ---
+> >  kernel/module/main.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > index 08b59c37735e..322b38c0a782 100644
+> > --- a/kernel/module/main.c
+> > +++ b/kernel/module/main.c
+> > [...]
+> >  	pr_debug("Final section addresses for %s:\n", mod->name);
+> > @@ -2693,8 +2694,8 @@ static int move_module(struct module *mod, struct load_info *info)
+> >  	return 0;
+> >  out_err:
+> >  	module_memory_restore_rox(mod);
+> > -	for (t--; t >= 0; t--)
+> > -		module_memory_free(mod, t);
+> > +	for (; t > 0; t--)
+> > +		module_memory_free(mod, t - 1);
+> >  	if (codetag_section_found)
+> >  		codetag_free_module_sections(mod);
+> >  
+> 
+> This can actually be simply:
+> 
+> 	while (t--)
+> 		module_memory_free(mod, t);
 
-Fix the issue by dropping the unnecessary recursion and moving
-the override check to type_expand(). Note that symbol versions
-are otherwise unchanged with this patch.
+Looks correct to me either way.
 
-Fixes: c9083467f7b9 ("gendwarfksyms: Add a kABI rule to override type strings")
-Reported-by: Giuliano Procida <gprocida@google.com>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
----
- scripts/gendwarfksyms/types.c | 65 ++++++++++-------------------------
- 1 file changed, 19 insertions(+), 46 deletions(-)
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksyms/types.c
-index 39ce1770e463..7bd459ea6c59 100644
---- a/scripts/gendwarfksyms/types.c
-+++ b/scripts/gendwarfksyms/types.c
-@@ -333,37 +333,11 @@ static void calculate_version(struct version *version,
- 	cache_free(&expansion_cache);
- }
- 
--static void __type_expand(struct die *cache, struct type_expansion *type,
--			  bool recursive);
--
--static void type_expand_child(struct die *cache, struct type_expansion *type,
--			      bool recursive)
--{
--	struct type_expansion child;
--	char *name;
--
--	name = get_type_name(cache);
--	if (!name) {
--		__type_expand(cache, type, recursive);
--		return;
--	}
--
--	if (recursive && !__cache_was_expanded(&expansion_cache, cache->addr)) {
--		__cache_mark_expanded(&expansion_cache, cache->addr);
--		type_expansion_init(&child);
--		__type_expand(cache, &child, true);
--		type_map_add(name, &child);
--		type_expansion_free(&child);
--	}
--
--	type_expansion_append(type, name, name);
--}
--
--static void __type_expand(struct die *cache, struct type_expansion *type,
--			  bool recursive)
-+static void __type_expand(struct die *cache, struct type_expansion *type)
- {
- 	struct die_fragment *df;
- 	struct die *child;
-+	char *name;
- 
- 	list_for_each_entry(df, &cache->fragments, list) {
- 		switch (df->type) {
-@@ -379,7 +353,12 @@ static void __type_expand(struct die *cache, struct type_expansion *type,
- 				error("unknown child: %" PRIxPTR,
- 				      df->data.addr);
- 
--			type_expand_child(child, type, recursive);
-+			name = get_type_name(child);
-+			if (name)
-+				type_expansion_append(type, name, name);
-+			else
-+				__type_expand(child, type);
-+
- 			break;
- 		case FRAGMENT_LINEBREAK:
- 			/*
-@@ -397,12 +376,17 @@ static void __type_expand(struct die *cache, struct type_expansion *type,
- 	}
- }
- 
--static void type_expand(struct die *cache, struct type_expansion *type,
--			bool recursive)
-+static void type_expand(const char *name, struct die *cache,
-+			struct type_expansion *type)
- {
-+	const char *override;
-+
- 	type_expansion_init(type);
--	__type_expand(cache, type, recursive);
--	cache_free(&expansion_cache);
-+
-+	if (stable && kabi_get_type_string(name, &override))
-+		type_parse(name, override, type);
-+	else
-+		__type_expand(cache, type);
- }
- 
- static void type_parse(const char *name, const char *str,
-@@ -416,8 +400,6 @@ static void type_parse(const char *name, const char *str,
- 	if (!*str)
- 		error("empty type string override for '%s'", name);
- 
--	type_expansion_init(type);
--
- 	for (pos = 0; str[pos]; ++pos) {
- 		bool empty;
- 		char marker = ' ';
-@@ -478,7 +460,6 @@ static void type_parse(const char *name, const char *str,
- static void expand_type(struct die *cache, void *arg)
- {
- 	struct type_expansion type;
--	const char *override;
- 	char *name;
- 
- 	if (cache->mapped)
-@@ -504,11 +485,7 @@ static void expand_type(struct die *cache, void *arg)
- 
- 	debug("%s", name);
- 
--	if (stable && kabi_get_type_string(name, &override))
--		type_parse(name, override, &type);
--	else
--		type_expand(cache, &type, true);
--
-+	type_expand(name, cache, &type);
- 	type_map_add(name, &type);
- 	type_expansion_free(&type);
- 	free(name);
-@@ -518,7 +495,6 @@ static void expand_symbol(struct symbol *sym, void *arg)
- {
- 	struct type_expansion type;
- 	struct version version;
--	const char *override;
- 	struct die *cache;
- 
- 	/*
-@@ -532,10 +508,7 @@ static void expand_symbol(struct symbol *sym, void *arg)
- 	if (__die_map_get(sym->die_addr, DIE_SYMBOL, &cache))
- 		return; /* We'll warn about missing CRCs later. */
- 
--	if (stable && kabi_get_type_string(sym->name, &override))
--		type_parse(sym->name, override, &type);
--	else
--		type_expand(cache, &type, false);
-+	type_expand(sym->name, cache, &type);
- 
- 	/* If the symbol already has a version, don't calculate it again. */
- 	if (sym->state != SYMBOL_PROCESSED) {
-
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
--- 
-2.50.0.rc0.604.gd4ff7b7c86-goog
-
+Sami
