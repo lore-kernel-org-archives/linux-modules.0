@@ -1,157 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F726C133;
-	Mon,  9 Jun 2025 09:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8976218A6A5
+	for <linux-modules@vger.kernel.org>; Mon,  9 Jun 2025 15:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749461864; cv=none; b=IS5OSWhUChuSTwIdzMn14QhLnIDgOWnOX8Bp/6ue804+vSi1VObYp1hqTgcxuj/MywzyUCVCu2KLHbymxOBdqjryUTiWR2XzYmtY8X6yYnSq9HZz/MHBaSC4kNbs0raUhjQuvotJ14z/5u587uWgEUDsXEVuISge9Bu2efJyuZ0=
+	t=1749484173; cv=none; b=urI3q38lrA82IBrs313c+fMJ/5APrN63teYVxgGUbP5i1j8iufZqqUGES+vZI3x30aXIFS2WLWS93dzr6/zp86ClcATe/XzRAdolRTsNkxj0plfKOUEFL7+cWOuKiTuKhSKJ17zhAwQcJ3pTI4qi6wnQ9KTbOhbQlXcxHZHlLp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749461864; c=relaxed/simple;
-	bh=XwpFufb+SDXSj2ejHO2odwMZAl/fSCLYz1xkpvW9CS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TxalHECEsmoYGq2phVJYHE907YiINBk25Ogs5Q7hqiHe9lt3uL1JuV7joYU/YP/sFOA9bpEAwLqpCpCTwEx3Kv0Hbb9u+EGWUZGBqCzZ1BLbRS7awtWUf+/4CIf4u97kt/UfGJcMHZKa9KxmKJGtEVhM9r2Qq/13Wxsc1VQLu5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgOAmjTI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749484173; c=relaxed/simple;
+	bh=O16/i8ImN1omRqIDkVizfBKxq029hgU/VoUr9M+AMV4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=oYQqStVKbeyFboDzk6ug8Uqv73waMo5iqdbfC7aceR6E+QLWN/9IemoT3mgMoHkWZr3WVnp0Ax8fckyS3MHnipd4idWcQq1EfWH2LpZDLv0LmaK9MePBmFKCellv2LdcLAg8RKU/iKrztEIS/zBXXj9+jcldAFlhCNYTbJ70iic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LTV1pVZp; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgOAmjTI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19326C4CEEB;
-	Mon,  9 Jun 2025 09:37:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749461864;
-	bh=XwpFufb+SDXSj2ejHO2odwMZAl/fSCLYz1xkpvW9CS4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KgOAmjTIuN6UDbFDyVwRuMVof2MC3ON+k5R3Yqnh40cpJ3nkD2XVrkJntiNv9YmzJ
-	 9kDAMpwInUY/N7A37y/mMxx7gjqxmsJ8Gy7v0grPtUhFZfDg22/GE2y+Dwgb33ZcRy
-	 711dsrI9/RLdx9T3sOcVfCHcUZzO8v2Y2TcuN9jDAUC2Au5pdXJFHXatqJTUpbIxYV
-	 xs13XYTM9GIVsUjZFX2Eou3ZRZX5ILI4HCHLHRoLIHATyLgeP24YGZ8Kc/dqCOnTFy
-	 bXwaccwBvbU8I0ynwq51zYs4e9tgJbHTLRpkQzoDqL1tR7C5V6z82X8/GB8ygw/3ni
-	 YDsRgb8QoCYag==
-Date: Mon, 9 Jun 2025 11:37:38 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] modules: Add macros to specify modinfo prefix
-Message-ID: <aEarYndP4uo-a0eL@example.org>
-References: <cover.1748335606.git.legion@kernel.org>
- <5cd53f6a4bca5186d3c9c47c070883131826c5eb.1748335606.git.legion@kernel.org>
- <CAK7LNATkXFqKLPcHFg-WDynRrVy3BRs6twvcyo2YJQqZBy9xsQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LTV1pVZp"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b2fb347b3e6so641621a12.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 Jun 2025 08:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1749484170; x=1750088970; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GbDXTAZxIXygNZLsCst7kpU0mT+2twAyV2birPGbUuE=;
+        b=LTV1pVZpd7OAOhKmd1jfLcoQ/EA0VPa0tvaxCJ7K732qTLPQV+6pS0dpXHKtuE6CFa
+         ZlO0ElWWkKHIsFe/rdWtr8gk4UbGtvKp1EkoRkREkqV/92daXLBawKqSh2rZOhzFo3q0
+         MJzIljsNv325bTPJQL4ucAMvGKYtyzDDvKGjVXKT7EfIClsiMWOm11WfG732D0erVeZD
+         GVdekJExKYJSQw87c7RE+E4SmdNU/l98ZYcuzttUSR81hSLeQNFz1NJgT8XrrQRISP8k
+         5Lz9iL+nxIhIoTj2Y1NAxVH84w/GqoT91enekMgU4HdH7315WPwPLzTWvVaB3M9ORQvd
+         eSSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749484170; x=1750088970;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GbDXTAZxIXygNZLsCst7kpU0mT+2twAyV2birPGbUuE=;
+        b=VktN2O/aetvzAw8AbvquicNWuTCvVKGvjKzJa7fUAsm/xdpy3743UVoKh5boTBFnDj
+         KLvW4XSdU/J0jmfIT30Sl/w9qulVKC4JbtmA1GHMx8USrDa1JnkzgN9Fezcmu/L/Z2YX
+         D/dKntTGwZL2JuBhyhnmBn1O+dwVGZyg3W+ExAd4mWpEAGVe0bJxyZxgi6kvgX3Z4CN5
+         5Z+Czey2Bvhg2d1aisGUApOgAZ9YRaA2uI3oNH2Z8BYPI3NKytmMXkA1F7pNx6p625eu
+         YnFM7H5yhFI8HSPkcEHU55y/nOdG8F90FamIHdw95Q7aN/7OKrIW9DsH96cF+AzZJaZE
+         a0Wg==
+X-Forwarded-Encrypted: i=1; AJvYcCVhJnFxner1Sr7DDCvzbHDRgqoBC+Vz0HbD5FTIxm8WJAoh9CQVj86O2YHC1Z0o7aDHsKeV2Xz6yF/miNHG@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTWtZX3EYgd5STbep5DuAehc1b4QyZ57tvEPbP+x9NH5zB5nTo
+	Vv+i20ZSfVrPCErclUNUUgL09GpjrB9zai11LdtHSauluKIis1Ni4ojMIEVKi9zFK+zyjXEm8W+
+	HMF/pqVV0Ms8sz9Ht3q7Ca9CRAKBgLQ==
+X-Google-Smtp-Source: AGHT+IFrXkiR8WR8iG3nbOmJqUxBsjH3gTSS4afmh9YumbsXjLp04RKCNCIYb7Enm3IB8vOPOnUJONfHpnLgUPk2lAo=
+X-Received: from pfbdw27.prod.google.com ([2002:a05:6a00:369b:b0:747:a8e8:603e])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:9203:b0:1f5:8622:5ed5 with SMTP id adf61e73a8af0-21ee24e1c1cmr23128880637.3.1749484169917;
+ Mon, 09 Jun 2025 08:49:29 -0700 (PDT)
+Date: Mon,  9 Jun 2025 15:49:27 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNATkXFqKLPcHFg-WDynRrVy3BRs6twvcyo2YJQqZBy9xsQ@mail.gmail.com>
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4947; i=samitolvanen@google.com;
+ h=from:subject; bh=O16/i8ImN1omRqIDkVizfBKxq029hgU/VoUr9M+AMV4=;
+ b=owGbwMvMwCEWxa662nLh8irG02pJDBnuTG2Xpn3ULs9iaeX6fGIX85sQl4Rttj6+Atx9574xM
+ qX8ZN3ZUcrCIMbBICumyNLydfXW3d+dUl99LpKAmcPKBDKEgYtTACbyZCUjw/eYyw5Lr3l4F0rw
+ 7Dw31y/ntubxo15fE+5mGyxpEU05lc7wP3Lt/ZXTfKTy5m278shFOeD70azNMa/2SOUY3pf4ppD tzQYA
+X-Mailer: git-send-email 2.50.0.rc0.604.gd4ff7b7c86-goog
+Message-ID: <20250609154926.1237033-2-samitolvanen@google.com>
+Subject: [PATCH] gendwarfksyms: Fix structure type overrides
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Sami Tolvanen <samitolvanen@google.com>, Giuliano Procida <gprocida@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jun 02, 2025 at 04:49:24PM +0900, Masahiro Yamada wrote:
-> On Tue, May 27, 2025 at 6:08 PM Alexey Gladkov <legion@kernel.org> wrote:
-> >
-> > The __MODULE_INFO macros always use __MODULE_INFO_PREFIX. The only way
-> > to use a different prefix is to override __MODULE_INFO_PREFIX, which is
-> > not very useful.
-> 
-> Not necessarily.
-> This would be a very special case only used in modpost,
-> and modpost can use MODULE_INFO() instead.
-> 
-> 
->         list_for_each_entry_safe(alias, next, &mod->aliases, node) {
-> -               buf_printf(&buf, "MODULE_ALIAS_MODNAME(\"%s\", \"%s\");\n",
-> +               buf_printf(&buf, "MODULE_INFO(\"%s\".alias, \"%s\");\n",
->                            alias->builtin_modname, alias->str);
->                 list_del(&alias->node);
->                 free(alias->builtin_modname);
+As we always iterate through the entire die_map when expanding
+type strings, recursively processing referenced types in
+type_expand_child() is not actually necessary. Furthermore,
+the type_string kABI rule added in commit c9083467f7b9
+("gendwarfksyms: Add a kABI rule to override type strings") can
+fail to override type strings for structures due to a missing
+kabi_get_type_string() check in this function.
 
-You can't do that because a character can't contain quotation marks
-and periods.
+Fix the issue by dropping the unnecessary recursion and moving
+the override check to type_expand(). Note that symbol versions
+are otherwise unchanged with this patch.
 
-.vmlinux.export.c:16163:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘.’ token
-16163 | MODULE_INFO(ahci.alias, "pci:v*d*sv*sd*bc01sc06i01*");
-      |                 ^
-././include/linux/compiler_types.h:83:23: note: in definition of macro ‘___PASTE’
-   83 | #define ___PASTE(a,b) a##b
-      |                       ^
+Fixes: c9083467f7b9 ("gendwarfksyms: Add a kABI rule to override type strings")
+Reported-by: Giuliano Procida <gprocida@google.com>
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ scripts/gendwarfksyms/types.c | 65 ++++++++++-------------------------
+ 1 file changed, 19 insertions(+), 46 deletions(-)
 
-The same thing for variant with quotes:
+diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksyms/types.c
+index 39ce1770e463..7bd459ea6c59 100644
+--- a/scripts/gendwarfksyms/types.c
++++ b/scripts/gendwarfksyms/types.c
+@@ -333,37 +333,11 @@ static void calculate_version(struct version *version,
+ 	cache_free(&expansion_cache);
+ }
+ 
+-static void __type_expand(struct die *cache, struct type_expansion *type,
+-			  bool recursive);
+-
+-static void type_expand_child(struct die *cache, struct type_expansion *type,
+-			      bool recursive)
+-{
+-	struct type_expansion child;
+-	char *name;
+-
+-	name = get_type_name(cache);
+-	if (!name) {
+-		__type_expand(cache, type, recursive);
+-		return;
+-	}
+-
+-	if (recursive && !__cache_was_expanded(&expansion_cache, cache->addr)) {
+-		__cache_mark_expanded(&expansion_cache, cache->addr);
+-		type_expansion_init(&child);
+-		__type_expand(cache, &child, true);
+-		type_map_add(name, &child);
+-		type_expansion_free(&child);
+-	}
+-
+-	type_expansion_append(type, name, name);
+-}
+-
+-static void __type_expand(struct die *cache, struct type_expansion *type,
+-			  bool recursive)
++static void __type_expand(struct die *cache, struct type_expansion *type)
+ {
+ 	struct die_fragment *df;
+ 	struct die *child;
++	char *name;
+ 
+ 	list_for_each_entry(df, &cache->fragments, list) {
+ 		switch (df->type) {
+@@ -379,7 +353,12 @@ static void __type_expand(struct die *cache, struct type_expansion *type,
+ 				error("unknown child: %" PRIxPTR,
+ 				      df->data.addr);
+ 
+-			type_expand_child(child, type, recursive);
++			name = get_type_name(child);
++			if (name)
++				type_expansion_append(type, name, name);
++			else
++				__type_expand(child, type);
++
+ 			break;
+ 		case FRAGMENT_LINEBREAK:
+ 			/*
+@@ -397,12 +376,17 @@ static void __type_expand(struct die *cache, struct type_expansion *type,
+ 	}
+ }
+ 
+-static void type_expand(struct die *cache, struct type_expansion *type,
+-			bool recursive)
++static void type_expand(const char *name, struct die *cache,
++			struct type_expansion *type)
+ {
++	const char *override;
++
+ 	type_expansion_init(type);
+-	__type_expand(cache, type, recursive);
+-	cache_free(&expansion_cache);
++
++	if (stable && kabi_get_type_string(name, &override))
++		type_parse(name, override, type);
++	else
++		__type_expand(cache, type);
+ }
+ 
+ static void type_parse(const char *name, const char *str,
+@@ -416,8 +400,6 @@ static void type_parse(const char *name, const char *str,
+ 	if (!*str)
+ 		error("empty type string override for '%s'", name);
+ 
+-	type_expansion_init(type);
+-
+ 	for (pos = 0; str[pos]; ++pos) {
+ 		bool empty;
+ 		char marker = ' ';
+@@ -478,7 +460,6 @@ static void type_parse(const char *name, const char *str,
+ static void expand_type(struct die *cache, void *arg)
+ {
+ 	struct type_expansion type;
+-	const char *override;
+ 	char *name;
+ 
+ 	if (cache->mapped)
+@@ -504,11 +485,7 @@ static void expand_type(struct die *cache, void *arg)
+ 
+ 	debug("%s", name);
+ 
+-	if (stable && kabi_get_type_string(name, &override))
+-		type_parse(name, override, &type);
+-	else
+-		type_expand(cache, &type, true);
+-
++	type_expand(name, cache, &type);
+ 	type_map_add(name, &type);
+ 	type_expansion_free(&type);
+ 	free(name);
+@@ -518,7 +495,6 @@ static void expand_symbol(struct symbol *sym, void *arg)
+ {
+ 	struct type_expansion type;
+ 	struct version version;
+-	const char *override;
+ 	struct die *cache;
+ 
+ 	/*
+@@ -532,10 +508,7 @@ static void expand_symbol(struct symbol *sym, void *arg)
+ 	if (__die_map_get(sym->die_addr, DIE_SYMBOL, &cache))
+ 		return; /* We'll warn about missing CRCs later. */
+ 
+-	if (stable && kabi_get_type_string(sym->name, &override))
+-		type_parse(sym->name, override, &type);
+-	else
+-		type_expand(cache, &type, false);
++	type_expand(sym->name, cache, &type);
+ 
+ 	/* If the symbol already has a version, don't calculate it again. */
+ 	if (sym->state != SYMBOL_PROCESSED) {
 
-.vmlinux.export.c:16163:13: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before string constant
-16163 | MODULE_INFO("ahci".alias, "pci:v*d*sv*sd*bc01sc06i01*");
-      |             ^~~~~~
-
-But I can do something like this to make it work:
-
-	buf_printf(&buf,
-		   "#undef __MODULE_INFO_PREFIX\n"
-		   "#define __MODULE_INFO_PREFIX\n");
-
-	list_for_each_entry_safe(alias, next, &mod->aliases, node) {
-		buf_printf(&buf, "__MODULE_INFO(%s.alias, unused, \"%s\");\n",
-			   alias->builtin_modname, alias->str);
-
-> 
-> > The new macro will be used in file2alias.c to generate modalias for
-> > builtin modules.
-> >
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-> > ---
-> >  include/linux/module.h      | 3 +++
-> >  include/linux/moduleparam.h | 7 +++++--
-> >  2 files changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index 8050f77c3b64..88048561360f 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -170,6 +170,9 @@ struct module_kobject *lookup_or_create_module_kobject(const char *name);
-> >  /* For userspace: you can also call me... */
-> >  #define MODULE_ALIAS(_alias) MODULE_INFO(alias, _alias)
-> >
-> > +#define MODULE_ALIAS_MODNAME(_modname, _alias) \
-> > +       __MODULE_INFO_WITH_PREFIX(_modname ".", alias, alias, _alias)
-> > +
-> >  /* Soft module dependencies. See man modprobe.d for details.
-> >   * Example: MODULE_SOFTDEP("pre: module-foo module-bar post: module-baz")
-> >   */
-> > diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
-> > index bfb85fd13e1f..3f819fc67c43 100644
-> > --- a/include/linux/moduleparam.h
-> > +++ b/include/linux/moduleparam.h
-> > @@ -20,10 +20,13 @@
-> >  /* Chosen so that structs with an unsigned long line up. */
-> >  #define MAX_PARAM_PREFIX_LEN (64 - sizeof(unsigned long))
-> >
-> > -#define __MODULE_INFO(tag, name, info)                                   \
-> > +#define __MODULE_INFO_WITH_PREFIX(prefix, tag, name, info)               \
-> >         static const char __UNIQUE_ID(name)[]                             \
-> >                 __used __section(".modinfo") __aligned(1)                 \
-> > -               = __MODULE_INFO_PREFIX __stringify(tag) "=" info
-> > +               = prefix __stringify(tag) "=" info
-> > +
-> > +#define __MODULE_INFO(tag, name, info)                                   \
-> > +       __MODULE_INFO_WITH_PREFIX(__MODULE_INFO_PREFIX, tag, name, info)
-> >
-> >  #define __MODULE_PARM_TYPE(name, _type)                                          \
-> >         __MODULE_INFO(parmtype, name##type, #name ":" _type)
-> > --
-> > 2.49.0
-> >
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
-> 
-
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
 -- 
-Rgrds, legion
+2.50.0.rc0.604.gd4ff7b7c86-goog
 
