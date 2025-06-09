@@ -1,164 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BA422A7FE
-	for <linux-modules@vger.kernel.org>; Mon,  9 Jun 2025 08:58:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F726C133;
+	Mon,  9 Jun 2025 09:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749459489; cv=none; b=uvUKQc03r8QNUfxIAKFDYHE8HMc0z6VGyxhXEJZr7rRV8b4fslxeCpGuEelGE1ODNNdxYuNWuuASovPtktctmLh+BNACObaPJefPR4i/3+hXJtmMzygxg8uK8R9GYqIzs4B1lnffdrcR/5A2SM603aOgoxVBbDg+QZVT5KQgklY=
+	t=1749461864; cv=none; b=IS5OSWhUChuSTwIdzMn14QhLnIDgOWnOX8Bp/6ue804+vSi1VObYp1hqTgcxuj/MywzyUCVCu2KLHbymxOBdqjryUTiWR2XzYmtY8X6yYnSq9HZz/MHBaSC4kNbs0raUhjQuvotJ14z/5u587uWgEUDsXEVuISge9Bu2efJyuZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749459489; c=relaxed/simple;
-	bh=tObexuNu5puy0S/zrHD6bJ96PlTpeqIfPPG17mA0siE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=p0ew6CTgBAFZGdkmcxIlezwXH1PbDp/s7vciMtY9QRyEAo4D6oFo4eKXORfiA3csRVv/R0lyqutVdwMzJxGK3hPvs532n2oOez2QzrBg9dSNMBv7x5x5sR6SH101IuAEGfvAPImW9FzA06RS95+7OD1QO9x2Znd4Ih5Q2DVJAjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cKsRQe6d; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1749461864; c=relaxed/simple;
+	bh=XwpFufb+SDXSj2ejHO2odwMZAl/fSCLYz1xkpvW9CS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TxalHECEsmoYGq2phVJYHE907YiINBk25Ogs5Q7hqiHe9lt3uL1JuV7joYU/YP/sFOA9bpEAwLqpCpCTwEx3Kv0Hbb9u+EGWUZGBqCzZ1BLbRS7awtWUf+/4CIf4u97kt/UfGJcMHZKa9KxmKJGtEVhM9r2Qq/13Wxsc1VQLu5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KgOAmjTI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cKsRQe6d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749459486;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EAX9gR6Ry+BCiLbmBNWFHsPfQj/lBkDp4XOdgquTNsY=;
-	b=cKsRQe6dUTDzZ/u7ywx5Hh+KHOVIw4dLuQUWZkZXaJkI7I4nggKjmF+i2W/Aq8TPbHAA/J
-	87Q25IWnG06oCMKbXQK3JqP0pNvUkIXXXjncduR8aXvUSaWLrzgsWHs/YRqj9THmOqha+C
-	4qua3RKkow0D6VoTV0sVEBT1ML61GRU=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-94-bdH7wn7IPoeCzIORhtNCNA-1; Mon, 09 Jun 2025 04:58:04 -0400
-X-MC-Unique: bdH7wn7IPoeCzIORhtNCNA-1
-X-Mimecast-MFC-AGG-ID: bdH7wn7IPoeCzIORhtNCNA_1749459483
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a50816cc58so1228982f8f.3
-        for <linux-modules@vger.kernel.org>; Mon, 09 Jun 2025 01:58:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749459483; x=1750064283;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EAX9gR6Ry+BCiLbmBNWFHsPfQj/lBkDp4XOdgquTNsY=;
-        b=RvS295+jxF8TAaKAHvbrDSKIW92OEcmqK4pdCIly7fQrarBeWXRuNeug2uIMgYsC4t
-         KffUT3GP8OJifcC3BYkzVw6CylkJCYVa8Mesej1uv7aoxVu7QQcTt9rgy9FRd1tzrE7j
-         iEh4dET8LmwYPQNtq8Dl8mR+8FJhBNVX8NlucsH7kJZDc3TmABygCyWnQGTaphSsXZ2H
-         EgVnBXEtYTObJu5q9FMt4vsRzr5x5bK67icsWKU12J1rUyaMpmPPItMvmmaNIKp6rCCA
-         0XzzZxysHMU2ADUfagqEymqpBHa+cHDYltVF8jAtSuCUwtb6n8Tq44ITqZ9arGAZHA+B
-         u/9g==
-X-Forwarded-Encrypted: i=1; AJvYcCWoKUyTpZ47AOGDcAbqJa4rIKUPyvN5TdTtJgCpXBwhiPA9W6u2oARs/aRcmN1RiAkXOzxHwwWH98X5cS8G@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpJZf1cTKIG/DBKMkLM1I8nBTauxkiCPttbwzYVyWzz4QCiObA
-	UqzIwcZruvMvi1pZfNgZ0wh1ej3HSfRq34qe7NZpIZM0xWdaj9/rp0X0pa0eDXFyeGCYT4XPvbh
-	b76bV2OSS+t8GqRfrulozaUMhhsWylAsXbvtSZeP59kRdAVzeEqsWJx27wFrBH2Bx0as=
-X-Gm-Gg: ASbGncuhcywvPu3mZGoaRiT5+jGxQ2DyGaeIke7eKqcHWzrXVkCnMk7fGQt9tEffENO
-	USqbASMbXe53a85GvWSR1HEGORKA5wFLK3VFFGYg5mX7gdtBubqPPqzEXFZgRIIvo7QqOYyJ26l
-	UGi4CaMRFPg2zpHvbpCxv3QSK4Tsem9kWhlASa0uNBq+SdIsbjpiSPVKimKYlM+k11FpRUPa4dF
-	NIY+fdMfSBF+0qBg9K1kKglB4BlZ2AiaBDm8o6zXUZiO9ropS7ZWRtwbi+OpQFDG9WlqKc9zD0e
-	kg5sick=
-X-Received: by 2002:a05:6000:420a:b0:3a4:fc37:70e4 with SMTP id ffacd0b85a97d-3a531cf5be1mr8000732f8f.58.1749459483387;
-        Mon, 09 Jun 2025 01:58:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEGKstU+gvDYJRoCuhWj9Uy3B0R5FuTJdpuAKJpWIzyKGQze6gxwv3jbQl0SI7KqRYCXE0l/g==
-X-Received: by 2002:a05:6000:420a:b0:3a4:fc37:70e4 with SMTP id ffacd0b85a97d-3a531cf5be1mr8000722f8f.58.1749459483016;
-        Mon, 09 Jun 2025 01:58:03 -0700 (PDT)
-Received: from fedora (g3.ign.cz. [91.219.240.17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a5323be604sm8881091f8f.42.2025.06.09.01.58.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 01:58:02 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>, Eric Snowberg
- <eric.snowberg@oracle.com>, Peter Jones <pjones@redhat.com>
-Cc: "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
- Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
- Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami
- Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
- E. Hallyn" <serge@hallyn.com>, Robert Holmes <robeholmes@gmail.com>,
- Jeremy Cline <jcline@redhat.com>, Coiby Xu <coxu@redhat.com>, Gerd
- Hoffmann <kraxel@redhat.com>
-Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
- signatures verification
-In-Reply-To: <a9bb8b0cfd1af85443ff8ee615b3be0fc705ce02.camel@HansenPartnership.com>
-References: <20250602132535.897944-1-vkuznets@redhat.com>
- <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
- <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
- <87zfemoc76.fsf@redhat.com>
- <e4e838d03b3619df5523d429e0cd8160a8aef9f8.camel@HansenPartnership.com>
- <87tt4unw1w.fsf@redhat.com>
- <a9bb8b0cfd1af85443ff8ee615b3be0fc705ce02.camel@HansenPartnership.com>
-Date: Mon, 09 Jun 2025 10:58:01 +0200
-Message-ID: <87ldq1nvfq.fsf@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KgOAmjTI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19326C4CEEB;
+	Mon,  9 Jun 2025 09:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749461864;
+	bh=XwpFufb+SDXSj2ejHO2odwMZAl/fSCLYz1xkpvW9CS4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KgOAmjTIuN6UDbFDyVwRuMVof2MC3ON+k5R3Yqnh40cpJ3nkD2XVrkJntiNv9YmzJ
+	 9kDAMpwInUY/N7A37y/mMxx7gjqxmsJ8Gy7v0grPtUhFZfDg22/GE2y+Dwgb33ZcRy
+	 711dsrI9/RLdx9T3sOcVfCHcUZzO8v2Y2TcuN9jDAUC2Au5pdXJFHXatqJTUpbIxYV
+	 xs13XYTM9GIVsUjZFX2Eou3ZRZX5ILI4HCHLHRoLIHATyLgeP24YGZ8Kc/dqCOnTFy
+	 bXwaccwBvbU8I0ynwq51zYs4e9tgJbHTLRpkQzoDqL1tR7C5V6z82X8/GB8ygw/3ni
+	 YDsRgb8QoCYag==
+Date: Mon, 9 Jun 2025 11:37:38 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] modules: Add macros to specify modinfo prefix
+Message-ID: <aEarYndP4uo-a0eL@example.org>
+References: <cover.1748335606.git.legion@kernel.org>
+ <5cd53f6a4bca5186d3c9c47c070883131826c5eb.1748335606.git.legion@kernel.org>
+ <CAK7LNATkXFqKLPcHFg-WDynRrVy3BRs6twvcyo2YJQqZBy9xsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNATkXFqKLPcHFg-WDynRrVy3BRs6twvcyo2YJQqZBy9xsQ@mail.gmail.com>
 
-James Bottomley <James.Bottomley@HansenPartnership.com> writes:
+On Mon, Jun 02, 2025 at 04:49:24PM +0900, Masahiro Yamada wrote:
+> On Tue, May 27, 2025 at 6:08 PM Alexey Gladkov <legion@kernel.org> wrote:
+> >
+> > The __MODULE_INFO macros always use __MODULE_INFO_PREFIX. The only way
+> > to use a different prefix is to override __MODULE_INFO_PREFIX, which is
+> > not very useful.
+> 
+> Not necessarily.
+> This would be a very special case only used in modpost,
+> and modpost can use MODULE_INFO() instead.
+> 
+> 
+>         list_for_each_entry_safe(alias, next, &mod->aliases, node) {
+> -               buf_printf(&buf, "MODULE_ALIAS_MODNAME(\"%s\", \"%s\");\n",
+> +               buf_printf(&buf, "MODULE_INFO(\"%s\".alias, \"%s\");\n",
+>                            alias->builtin_modname, alias->str);
+>                 list_del(&alias->node);
+>                 free(alias->builtin_modname);
 
-> On Thu, 2025-06-05 at 15:43 +0200, Vitaly Kuznetsov wrote:
->> James Bottomley <James.Bottomley@HansenPartnership.com> writes:
->> 
->> > On Thu, 2025-06-05 at 09:54 +0200, Vitaly Kuznetsov wrote:
->> 
->> So far, I got two 'runtime' ideas:
->> - Observe MokListTrustedRT and distrust .platform when it is
->> non-empty. This can, of course, be combine with a Kconfig for those,
->> who do not want it at all.
->
-> Well, not sure about that specific variable.  It seems to be set but
-> not used by shim (however it is used in the kernel to decide whether to
-> import the MoK list), so how would someone with a current distrusted db
-> get it set?  But there's also MokIgnoreDB (which is actually a RT
-> import of MokDBState) which is used to prevent importing the db certs
-> into the platform keyring in the first place.
->
-> I think the reason this is so fragmented is because we didn't really
-> co-ordinate with shim when all the variables and switches were added. 
-> Perhaps we should document all the variables and expectations before
-> deciding on a mechanism? 
+You can't do that because a character can't contain quotation marks
+and periods.
 
-I was hoping Peter (pjones@) can help us here) Generally, I agree that
-as these variables originate in shim, we should describe them there and
-not try to give them some potentially undesired meaning in kernel.
+.vmlinux.export.c:16163:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘.’ token
+16163 | MODULE_INFO(ahci.alias, "pci:v*d*sv*sd*bc01sc06i01*");
+      |                 ^
+././include/linux/compiler_types.h:83:23: note: in definition of macro ‘___PASTE’
+   83 | #define ___PASTE(a,b) a##b
+      |                       ^
 
->
-> The one thing we can guarantee is if the cloud use case is booting
-> without shim (is it?) then none of the RT variables will get created,
-> so checking any (or a set) of them would work.
+The same thing for variant with quotes:
 
-Personally, I always advocate for injecting shim in the boot chain at
-least when distro kernels are used: shim provides SBAT revocation
-mechanism which is likely going to be used when a new secureboot related
-vulnerability is discovered. SBAT was used for UKIs only but a mechanism
-for embedding it into the Linux kernel itself is coming (already merged
-for 'zboot' arches, pending for x86). If, however, someone is signing
-his own kernels and can use 'dbx' or even revoke the cert in case of a
-problem, then I guess shim can be avoided.
+.vmlinux.export.c:16163:13: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before string constant
+16163 | MODULE_INFO("ahci".alias, "pci:v*d*sv*sd*bc01sc06i01*");
+      |             ^~~~~~
 
->> and/or
->> - Sysctl toggle. Keep things as they are by default but make
->> .platform trusted (either for modules or for everything) when
->> switched 'on'. This can (optionally) by combined with a previous idea
->> and have e.g. an 'auto' state for the toggle which follows
->> MokListTrustedRT.
->
-> I'm less keen on user specifiable runtime because the security policy
-> of the system using a lockdown to make root less privileged than ring 0
-> can't allow a malicious root to weaken it.  However, let's see if we
-> can get a proposal that would mitigate that concern.
->
-> Ideally, if we can get to something that works for everyone at runtime,
-> we can remove the current Kconfig explosion which is definitely adding
-> to the confusion (as shown in the Debian bug reports).
+But I can do something like this to make it work:
+
+	buf_printf(&buf,
+		   "#undef __MODULE_INFO_PREFIX\n"
+		   "#define __MODULE_INFO_PREFIX\n");
+
+	list_for_each_entry_safe(alias, next, &mod->aliases, node) {
+		buf_printf(&buf, "__MODULE_INFO(%s.alias, unused, \"%s\");\n",
+			   alias->builtin_modname, alias->str);
+
+> 
+> > The new macro will be used in file2alias.c to generate modalias for
+> > builtin modules.
+> >
+> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> > Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+> > ---
+> >  include/linux/module.h      | 3 +++
+> >  include/linux/moduleparam.h | 7 +++++--
+> >  2 files changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/linux/module.h b/include/linux/module.h
+> > index 8050f77c3b64..88048561360f 100644
+> > --- a/include/linux/module.h
+> > +++ b/include/linux/module.h
+> > @@ -170,6 +170,9 @@ struct module_kobject *lookup_or_create_module_kobject(const char *name);
+> >  /* For userspace: you can also call me... */
+> >  #define MODULE_ALIAS(_alias) MODULE_INFO(alias, _alias)
+> >
+> > +#define MODULE_ALIAS_MODNAME(_modname, _alias) \
+> > +       __MODULE_INFO_WITH_PREFIX(_modname ".", alias, alias, _alias)
+> > +
+> >  /* Soft module dependencies. See man modprobe.d for details.
+> >   * Example: MODULE_SOFTDEP("pre: module-foo module-bar post: module-baz")
+> >   */
+> > diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+> > index bfb85fd13e1f..3f819fc67c43 100644
+> > --- a/include/linux/moduleparam.h
+> > +++ b/include/linux/moduleparam.h
+> > @@ -20,10 +20,13 @@
+> >  /* Chosen so that structs with an unsigned long line up. */
+> >  #define MAX_PARAM_PREFIX_LEN (64 - sizeof(unsigned long))
+> >
+> > -#define __MODULE_INFO(tag, name, info)                                   \
+> > +#define __MODULE_INFO_WITH_PREFIX(prefix, tag, name, info)               \
+> >         static const char __UNIQUE_ID(name)[]                             \
+> >                 __used __section(".modinfo") __aligned(1)                 \
+> > -               = __MODULE_INFO_PREFIX __stringify(tag) "=" info
+> > +               = prefix __stringify(tag) "=" info
+> > +
+> > +#define __MODULE_INFO(tag, name, info)                                   \
+> > +       __MODULE_INFO_WITH_PREFIX(__MODULE_INFO_PREFIX, tag, name, info)
+> >
+> >  #define __MODULE_PARM_TYPE(name, _type)                                          \
+> >         __MODULE_INFO(parmtype, name##type, #name ":" _type)
+> > --
+> > 2.49.0
+> >
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+> 
 
 -- 
-Vitaly
+Rgrds, legion
 
