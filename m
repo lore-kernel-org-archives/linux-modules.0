@@ -1,146 +1,119 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1771523C4F5
-	for <linux-modules@vger.kernel.org>; Tue, 10 Jun 2025 16:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAC623AE83
+	for <linux-modules@vger.kernel.org>; Tue, 10 Jun 2025 16:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749572594; cv=none; b=sorhBecIM3ZpeKwPR99AW36klwfkaRemOZfWabfuJOK2d+iHCjWiRW60DZVctcvAiYRKVIr+QAJ3ZR9pgI+pktj/+ldbuedgaZO7LxGDAg5WPiX8QWV8KeKzLrowNlRQx+ocx5NkmDWVyBHa8JFdn0Ttn4JIAvHcMEwFoG8zAOE=
+	t=1749573213; cv=none; b=rbPe+phfd6lD8bSOJtSaR6gz/7rCBBnXoBBfJSLJkeN604y0pDrvgfjhnQsOHfPQ6oV/j1C4XanOGwNwz9BQp6FGzhcU+6VCqbOpLunGOOnnGWS9xgiaGcXGRPNQ0gaSrKB7AywUIlHvNaWS4iswnStnlocOYCMyjJwqjoXkeSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749572594; c=relaxed/simple;
-	bh=pSarTRCzQuRL/R7ATW6/ZUy90+VuBzjUwmj0wBd4rF4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oX8xy+PS/29d0jOoG/F+zUM3szbn6U4ChkN3NMQuu3yB8n/JO7uUjlGl+FYsIVLi6+Cq6AWISM0RYv1+0JKvrYmK0ziZJ/9wK6CQisXbLrEW4pZ3XLzxMgsQX9Nt0s6yv0toU9FYpihCYjKCSYC1ZitZCaez0ujYTBUWRa91vRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=cfGWd+OD; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1749573213; c=relaxed/simple;
+	bh=g3TNmXww8cBEJF1oOMz1epvTxpOGSQWOftZvwN/TNT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bI808BmMdFS8AwGmAHm27DGos5irh8TPK7VJxXEuTsCj9nn0S5c5C6HAVVHMmGSZYoYw6NigE54E2ZZxh3gJGB1DCs7CPmFppCI83261zHHXuFHXBzXI1zS5SvjKDlPssIupQiPG2J2GgiqALQwi6w2hmEsM3U8humrRHCKkTiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UX9YyulD; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eJX5HMWP; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="cfGWd+OD"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-23496600df1so6693025ad.2
-        for <linux-modules@vger.kernel.org>; Tue, 10 Jun 2025 09:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1749572592; x=1750177392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Duyi2eYfEOWURmM5RwkHbBgHFP1RL7l3Jtl3iemhVW0=;
-        b=cfGWd+ODd8qHlJ+BRwzQe3sqboRtM6FnENCpdWYK/eGxcjLLdw6Zpcl8FhibUZiHds
-         qNnYzh9A9g6lK4rEMWOiNx2owJxwiiL6Of+FN2wf2EWzzZQuC0Vi6Ho10ntZ1n8Hju4R
-         qbMUFu7qKbJTHng+tWPpz0w6u1G2x78oLlx20iI7TJR5p5Phagf3XOgFxW7LlaOpCLHT
-         zv9Op7f8+QsH62ZlbXy3DGh7OhuwV+yFvKHmKvJ9UM9os8ZdNG4h/24V/D/2Om/jjGV7
-         KlRAusGeDZamr1HjUnA4nkKdoQ63FLsb5D5JmDkX70WezzHmsbwkxCN0dFOavi9USVY0
-         uJnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749572592; x=1750177392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Duyi2eYfEOWURmM5RwkHbBgHFP1RL7l3Jtl3iemhVW0=;
-        b=RQOnkFAG8XBzUUH+mCJkv+9x4eZtv21L+ZwuPGG+DIF54XKUQi7ktVc16rRiXX/eVx
-         AuESnMlbnF/+BJJvNeLDDBZTBG09j99FKnZDCM04YisdefLqEpfEUb0DGcxHK2d8I/90
-         n0Jlgya2xlGX48RKHH1etKgv4rhoesk7MLj+Fw58psd9IHW4YKVJNuILKfs/4sdbI/fz
-         pgsX0421M/H+J+EP3pEWbVpxY+HvtdQwbkV8s5PrFoDJAdWI6SeyZtjBB3EfG0MPNtuG
-         JwaN9mr3rjULABEFYpTFQxyeulIIcIfTF84r6X14/GeauNCQNImsLcfJEzS9tLcqOS35
-         1Jdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXM8PPu2YkpoZs11geurgu17RQVnmS/XiqnocvVWcBn3XwD+v9RAwE0n9i5X8uLtNT9NcrKh6bhaAz6I4KF@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHFPjNlxcjV2HAYFy0NAvVwSMkaQozwQVAvwBbOsAEphDfAjbw
-	r/yXtTwVrV2s1Fge/AARlkUhkoj7RfdYQTwWydFOYYaG0UQ53+BS0nNMuw1Mt+KWg2o=
-X-Gm-Gg: ASbGncuZJYAJeKSHq8hLApwEpk5L47sLdLLvwnXTziu0BsafMq/ytKUPYnm+7/9+Nzh
-	AsY9RQb21ZyQwzlaSMYKCx5L0aXGjI4O+fn/zIZp3Ppr/Ak+LHtiCbUjfnu7ap5Gj/E268oHmjA
-	KobTN08hu2525Ql8bK3JPkXJvt7vyIciT0lnw8jphPx657aIA6zg5QtB/F1sjLWksB1nBBSr9RW
-	4mnHZBop2GRviCbO0RrJDjFQ9OFtsX98Iz54DLF/ZQIwtOLEMSOvWdg9lpkEwXGralfhiENkfq0
-	z3FWLBv/tghlvWTDAONpn9lwnQi6P/pzbYiuBiM+aeTIEZ+2YFis+HbwrDHOQpHzVsj/uGXbhr+
-	HDNrYI7iWgbo/ScE5
-X-Google-Smtp-Source: AGHT+IFzRZ/2ilv/TWo2BZioT8NNZBq3mXBKm6pZaGbBq5g4DcH/rH2061k7qbX3Bt49Qj9jZ8ssgQ==
-X-Received: by 2002:a17:902:e80e:b0:234:c549:da0c with SMTP id d9443c01a7336-23603f4afa2mr100700265ad.0.1749572592309;
-        Tue, 10 Jun 2025 09:23:12 -0700 (PDT)
-Received: from dev-cachen2.dev.purestorage.com ([208.88.159.129])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-236032ff2f7sm73294405ad.92.2025.06.10.09.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jun 2025 09:23:11 -0700 (PDT)
-From: Casey Chen <cachen@purestorage.com>
-To: akpm@linux-foundation.org
-Cc: linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	surenb@google.com,
-	kent.overstreet@linux.dev,
-	arnd@arndb.de,
-	mcgrof@kernel.org,
-	pasha.tatashin@soleen.com,
-	yzhong@purestorage.com,
-	Casey Chen <cachen@purestorage.com>
-Subject: [PATCH] alloc_tag: remove empty module tag section
-Date: Tue, 10 Jun 2025 10:22:58 -0600
-Message-Id: <20250610162258.324645-1-cachen@purestorage.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UX9YyulD";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eJX5HMWP"
+Date: Tue, 10 Jun 2025 18:33:28 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1749573209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZnCSYmDm63EgTgy4wiT9gZ6ewenn5vKtM65WhtlV+84=;
+	b=UX9YyulDweOZGzSGULQPqY4P1MwyS9+7BHVxVkEUR5bosa+o+RDLEPf+rLvINcxVgdDUPR
+	u5/RXA/3Bg/+Vuw44s2jyxC1nNb/GiZxxuEFbereMhc9Q8MD5xlTDqG8vsMfL2MTS5VqpC
+	NtKjHMsr6MJQsRpzO+3NvGM6aWU/0w3KQ3MGZpOuyylW9z+8vK6S0qzI671YeLrf5IS9RD
+	mqiWS5NfofqUK/JWUqmzy0gGVLrm73+ceTfh6pcBpvTwphG2umJe+NkSkVDMYLsY+PJMsK
+	/3TLfaLTF1W3ogULRpNTITv6GQj0xyGJ6sDBTiWCLbZ1CWwnSWvyPzdbjXbIxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1749573209;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZnCSYmDm63EgTgy4wiT9gZ6ewenn5vKtM65WhtlV+84=;
+	b=eJX5HMWPaQGO8S3knGPfZ3WQOaEJ0cgYONVvjk5iDBurIuUxI8WCcREe+Kj0oKGp8nFf6d
+	YkNkjn7CMif+amCQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: linux-modules@vger.kernel.org
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH v3] module: Make sure relocations are applied to the per-CPU
+ section
+Message-ID: <20250610163328.URcsSUC1@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The empty MOD_CODETAG_SECTIONS() macro added an incomplete .data
-section in module linker script, which caused symbol lookup tools
-like gdb to misinterpret symbol addresses e.g., __ib_process_cq
-incorrectly mapping to unrelated functions like below.
+The per-CPU data section is handled differently than the other sections.
+The memory allocations requires a special __percpu pointer and then the
+section is copied into the view of each CPU. Therefore the SHF_ALLOC
+flag is removed to ensure move_module() skips it.
 
-  (gdb) disas __ib_process_cq
-  Dump of assembler code for function trace_event_fields_cq_schedule:
+Later, relocations are applied and apply_relocations() skips sections
+without SHF_ALLOC because they have not been copied. This also skips the
+per-CPU data section.
+The missing relocations result in a NULL pointer on x86-64 and very
+small values on x86-32. This results in a crash because it is not
+skipped like NULL pointer would and can't be dereferenced.
 
-Removing the empty section restores proper symbol resolution and
-layout, ensuring .data placement behaves as expected.
+Such an assignment happens during static per-CPU lock initialisation
+with lockdep enabled.
 
-Fixes: 0db6f8d7820a ("alloc_tag: load module tags into separate contiguous memory")
-       22d407b164ff ("lib: add allocation tagging support for memory allocation profiling")
-Signed-off-by: Casey Chen <cachen@purestorage.com>
-Reviewed-by: Yuanyuan Zhong <yzhong@purestorage.com>
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+Allow relocation processing for the per-CPU section even if SHF_ALLOC is
+missing.
+
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
+Fixes: 1a6100caae425 ("Don't relocate non-allocated regions in modules.") #=
+v2.6.1-rc3
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/asm-generic/codetag.lds.h | 6 ------
- scripts/module.lds.S              | 5 -----
- 2 files changed, 11 deletions(-)
+v2=E2=80=A6v3: https://lore.kernel.org/all/20250605060738.SzA3UESe@linutron=
+ix.de/
+  - Check for assigned per-CPU section instead of adding the SHF_ALLOC
+    flag back.
 
-diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
-index 372c320c5043..a45fe3d141a1 100644
---- a/include/asm-generic/codetag.lds.h
-+++ b/include/asm-generic/codetag.lds.h
-@@ -11,12 +11,6 @@
- #define CODETAG_SECTIONS()		\
- 	SECTION_WITH_BOUNDARIES(alloc_tags)
- 
--/*
-- * Module codetags which aren't used after module unload, therefore have the
-- * same lifespan as the module and can be safely unloaded with the module.
-- */
--#define MOD_CODETAG_SECTIONS()
--
- #define MOD_SEPARATE_CODETAG_SECTION(_name)	\
- 	.codetag.##_name : {			\
- 		SECTION_WITH_BOUNDARIES(_name)	\
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 711c6e029936..c071ca4beedd 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -50,17 +50,12 @@ SECTIONS {
- 	.data : {
- 		*(.data .data.[0-9a-zA-Z_]*)
- 		*(.data..L*)
--		MOD_CODETAG_SECTIONS()
- 	}
- 
- 	.rodata : {
- 		*(.rodata .rodata.[0-9a-zA-Z_]*)
- 		*(.rodata..L*)
- 	}
--#else
--	.data : {
--		MOD_CODETAG_SECTIONS()
--	}
- #endif
- 	MOD_SEPARATE_CODETAG_SECTIONS()
- }
--- 
-2.34.1
+v1=E2=80=A6v2: https://lore.kernel.org/all/20250604152707.CieD9tN0@linutron=
+ix.de/
+  - Add the flag back only on SMP if the per-CPU section was found.
 
+ kernel/module/main.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 413ac6ea37021..cb281e82226cd 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1573,8 +1573,14 @@ static int apply_relocations(struct module *mod, con=
+st struct load_info *info)
+ 		if (infosec >=3D info->hdr->e_shnum)
+ 			continue;
+=20
+-		/* Don't bother with non-allocated sections */
+-		if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC))
++		/*
++		 * Don't bother with non-allocated sections.
++		 * An exception is the percpu section, which has separate allocations
++		 * for individual CPUs. We relocate the percpu section in the initial
++		 * ELF template and subsequently copy it to the per-CPU destinations.
++		 */
++		if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC) &&
++		    (!infosec || infosec !=3D info->index.pcpu))
+ 			continue;
+=20
+ 		if (info->sechdrs[i].sh_flags & SHF_RELA_LIVEPATCH)
+--=20
+2.49.0
