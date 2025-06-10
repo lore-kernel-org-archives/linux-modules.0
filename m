@@ -1,119 +1,125 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAC623AE83
-	for <linux-modules@vger.kernel.org>; Tue, 10 Jun 2025 16:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5D7D248F73;
+	Tue, 10 Jun 2025 18:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749573213; cv=none; b=rbPe+phfd6lD8bSOJtSaR6gz/7rCBBnXoBBfJSLJkeN604y0pDrvgfjhnQsOHfPQ6oV/j1C4XanOGwNwz9BQp6FGzhcU+6VCqbOpLunGOOnnGWS9xgiaGcXGRPNQ0gaSrKB7AywUIlHvNaWS4iswnStnlocOYCMyjJwqjoXkeSU=
+	t=1749581474; cv=none; b=nEP2LgYSng+q7Crwd8SVki21qRftbjzCCK45HkAj3D/o8sf+Rqu21Ce7z6V9EVzNhC5Eoqot+8hw5FBrtdCXiOmy+2bqGsbBx6SQbqEkRDv/QNS5CrJ/P0VJiOPHGeNci1evc0E8KpUcCaREwwoPolvuv1xbzrPiohPN9PADEHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749573213; c=relaxed/simple;
-	bh=g3TNmXww8cBEJF1oOMz1epvTxpOGSQWOftZvwN/TNT4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bI808BmMdFS8AwGmAHm27DGos5irh8TPK7VJxXEuTsCj9nn0S5c5C6HAVVHMmGSZYoYw6NigE54E2ZZxh3gJGB1DCs7CPmFppCI83261zHHXuFHXBzXI1zS5SvjKDlPssIupQiPG2J2GgiqALQwi6w2hmEsM3U8humrRHCKkTiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UX9YyulD; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eJX5HMWP; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1749581474; c=relaxed/simple;
+	bh=m9y2P9EaULw/gmgZbggcLisvtPPWJ0chjfyR/LQuqt4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NDJHGVXCkowuECK3v4UKsFEt+lj2DOyq2ZCB/vKSF9gY9suOrYEPw8YxbJuxChTc5yFR99hsYRn6F7r+P7+/i5dtosLHD5KCqFh+KaE8nhvBaWUasL5RE4glql4/X8ot4QbnIwn076xwrRDY/ZEz41Lc+AaqXXqDgdtYGowvV2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qb0EshtA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UX9YyulD";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eJX5HMWP"
-Date: Tue, 10 Jun 2025 18:33:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1749573209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZnCSYmDm63EgTgy4wiT9gZ6ewenn5vKtM65WhtlV+84=;
-	b=UX9YyulDweOZGzSGULQPqY4P1MwyS9+7BHVxVkEUR5bosa+o+RDLEPf+rLvINcxVgdDUPR
-	u5/RXA/3Bg/+Vuw44s2jyxC1nNb/GiZxxuEFbereMhc9Q8MD5xlTDqG8vsMfL2MTS5VqpC
-	NtKjHMsr6MJQsRpzO+3NvGM6aWU/0w3KQ3MGZpOuyylW9z+8vK6S0qzI671YeLrf5IS9RD
-	mqiWS5NfofqUK/JWUqmzy0gGVLrm73+ceTfh6pcBpvTwphG2umJe+NkSkVDMYLsY+PJMsK
-	/3TLfaLTF1W3ogULRpNTITv6GQj0xyGJ6sDBTiWCLbZ1CWwnSWvyPzdbjXbIxA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1749573209;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZnCSYmDm63EgTgy4wiT9gZ6ewenn5vKtM65WhtlV+84=;
-	b=eJX5HMWPaQGO8S3knGPfZ3WQOaEJ0cgYONVvjk5iDBurIuUxI8WCcREe+Kj0oKGp8nFf6d
-	YkNkjn7CMif+amCQ==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: linux-modules@vger.kernel.org
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH v3] module: Make sure relocations are applied to the per-CPU
- section
-Message-ID: <20250610163328.URcsSUC1@linutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qb0EshtA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8426C4CEED;
+	Tue, 10 Jun 2025 18:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749581473;
+	bh=m9y2P9EaULw/gmgZbggcLisvtPPWJ0chjfyR/LQuqt4=;
+	h=Date:Subject:To:Cc:References:From:Reply-To:In-Reply-To:From;
+	b=Qb0EshtAiMHY/HarTJpAGEVcSi2EkI4TDnAtSGHZ+mPlDm1jqEIjqMSnvdr8YpweB
+	 YaZWwqvqYkFLppGnM9h9Y/9pLpOcHQTSXf+N/wTcFysUogsZrikIX3FSCY479fU5IX
+	 Q8xWx+zZqZfVUulgvEEreNUaZkQGHeRso8G43rCf2d1ClohfMqRlFtFXl/Vb+RUSP0
+	 dYxH+7mLtV9bTeoWDrCfVHY/ElUYFU861WLYnkX/GxWmIkvYhC1vpI9UdgAZw73jhC
+	 R5ZY/IvZCsYL77vAR933GBsBxT1qszy95qaQMp3p6wo/G6hfHNU7kN9/Ebud/bHk0O
+	 R9HIXFcpSznZA==
+Message-ID: <ae967353-71fa-4438-a84b-8f7e2815f485@kernel.org>
+Date: Tue, 10 Jun 2025 20:51:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] module: Fix memory deallocation on error path in
+ move_module()
+To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250607161823.409691-1-petr.pavlu@suse.com>
+ <20250607161823.409691-2-petr.pavlu@suse.com>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Reply-To: da.gomez@kernel.org
+Organization: kernel.org
+In-Reply-To: <20250607161823.409691-2-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The per-CPU data section is handled differently than the other sections.
-The memory allocations requires a special __percpu pointer and then the
-section is copied into the view of each CPU. Therefore the SHF_ALLOC
-flag is removed to ensure move_module() skips it.
+On 07/06/2025 18.16, Petr Pavlu wrote:
+> The function move_module() uses the variable t to track how many memory
+> types it has allocated and consequently how many should be freed if an
+> error occurs.
+> 
+> The variable is initially set to 0 and is updated when a call to
+> module_memory_alloc() fails. However, move_module() can fail for other
+> reasons as well, in which case t remains set to 0 and no memory is freed.
 
-Later, relocations are applied and apply_relocations() skips sections
-without SHF_ALLOC because they have not been copied. This also skips the
-per-CPU data section.
-The missing relocations result in a NULL pointer on x86-64 and very
-small values on x86-32. This results in a crash because it is not
-skipped like NULL pointer would and can't be dereferenced.
+Do you have a way to reproduce the leak?
 
-Such an assignment happens during static per-CPU lock initialisation
-with lockdep enabled.
+> 
+> Fix the problem by setting t to MOD_MEM_NUM_TYPES after all memory types
+> have been allocated. Additionally, make the deallocation loop more robust
+> by not relying on the mod_mem_type_t enum having a signed integer as its
+> underlying type.
+> 
+> Fixes: c7ee8aebf6c0 ("module: add stop-grap sanity check on module memcpy()")
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> ---
+>  kernel/module/main.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 08b59c37735e..322b38c0a782 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -2614,7 +2614,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+>  static int move_module(struct module *mod, struct load_info *info)
+>  {
+>  	int i;
+> -	enum mod_mem_type t = 0;
+> +	enum mod_mem_type t;
+>  	int ret = -ENOMEM;
+>  	bool codetag_section_found = false;
+>  
+> @@ -2630,6 +2630,7 @@ static int move_module(struct module *mod, struct load_info *info)
+>  			goto out_err;
+>  		}
+>  	}
+> +	t = MOD_MEM_NUM_TYPES;
 
-Allow relocation processing for the per-CPU section even if SHF_ALLOC is
-missing.
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
-Fixes: 1a6100caae425 ("Don't relocate non-allocated regions in modules.") #=
-v2.6.1-rc3
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v2=E2=80=A6v3: https://lore.kernel.org/all/20250605060738.SzA3UESe@linutron=
-ix.de/
-  - Check for assigned per-CPU section instead of adding the SHF_ALLOC
-    flag back.
-
-v1=E2=80=A6v2: https://lore.kernel.org/all/20250604152707.CieD9tN0@linutron=
-ix.de/
-  - Add the flag back only on SMP if the per-CPU section was found.
-
- kernel/module/main.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Why forcing to this? I think we want to loop from the last type found, in case
+move_module() fails after this point. Here's my suggestion:
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 413ac6ea37021..cb281e82226cd 100644
+index ada44860a868..c66881d2fb62 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1573,8 +1573,14 @@ static int apply_relocations(struct module *mod, con=
-st struct load_info *info)
- 		if (infosec >=3D info->hdr->e_shnum)
- 			continue;
-=20
--		/* Don't bother with non-allocated sections */
--		if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC))
-+		/*
-+		 * Don't bother with non-allocated sections.
-+		 * An exception is the percpu section, which has separate allocations
-+		 * for individual CPUs. We relocate the percpu section in the initial
-+		 * ELF template and subsequently copy it to the per-CPU destinations.
-+		 */
-+		if (!(info->sechdrs[infosec].sh_flags & SHF_ALLOC) &&
-+		    (!infosec || infosec !=3D info->index.pcpu))
- 			continue;
-=20
- 		if (info->sechdrs[i].sh_flags & SHF_RELA_LIVEPATCH)
---=20
-2.49.0
+@@ -2697,7 +2697,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ static int move_module(struct module *mod, struct load_info *info)
+ {
+        int i;
+-       enum mod_mem_type t;
++       enum mod_mem_type t = MOD_TEXT;
+        int ret;
+        bool codetag_section_found = false;
+
+@@ -2708,12 +2708,10 @@ static int move_module(struct module *mod, struct load_info *info)
+                }
+
+                ret = module_memory_alloc(mod, type);
+-               if (ret) {
+-                       t = type;
++               t = type;
++               if (ret)
+                        goto out_err;
+-               }
+        }
+-       t = MOD_MEM_NUM_TYPES;
+
+        /* Transfer each section which specifies SHF_ALLOC */
+        pr_debug("Final section addresses for %s:\n", mod->name)
