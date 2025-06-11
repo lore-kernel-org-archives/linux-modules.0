@@ -1,98 +1,99 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90723253F08;
-	Wed, 11 Jun 2025 12:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3BD286D45;
+	Wed, 11 Jun 2025 13:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749645585; cv=none; b=eMUZ6E+Jzp0ZW+105PIHecJBhGu6cHqljjCUfrYA5+8MIixBToOpuQvS0PRndMCDUEyWcfTCvPrDKmtXxxwRTEk8ib52kaagaaLQsT736LJEIPa0STUy+P/dc0aJYtX7hq98ayYDNXd40IfVJ08o/2dextEjnoeufSK+SDsRGsQ=
+	t=1749648542; cv=none; b=B0DrGeZztynpEETvXyejm6c5N2Vov4RfQmJhQPFzeIaxDXPA34n1XpEx5oyGaHFeKnCYl/6rZ166/XYmTw1xEQZpdVKuKnTYCE3S6tUsUMmGC+9FZ340SvFa5/uUp8jhZ40x2eGIazE7YpmpvQDddCtNb0MVxqd8VUknj3nJM0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749645585; c=relaxed/simple;
-	bh=x4MivqVOz+jtZ681vyuC1Ele+akf1aAotf2Sx94R0ac=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NFNd/l1AmkvRWFxH0hbPdTOi+/ywjqCumzGDYKVQSwPIRGT8MwJhlfRSRqgzQDhlVVgqkQhFAI8muiTX0uUqsJfE/pDuJIfN+TIZk+wM8vOmNAKTNU1MfBhUU98xCG8xOpDmN6VFbjxdjX6Tj7t1JfsaWdMyB5E9RcfEX4wsXl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CPV5R1dT; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1749648542; c=relaxed/simple;
+	bh=RClr3x0WNuSzf2ZubOLtWGjnZaITNyNPnDjjvfXlAiE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mnZWEN6Xq/QfdDYPBqRp1fNGp7Wzb844xl7wfe6EE0yGwHBF/c8JgdLDSV6pcvbxKlCcbmhOdrEVuP6b6+GeTg3+f5LiXbRxKdQ+R46wZWpMnmWNIG15g842cVG33S/+k+h4zx/d+lQUmJ/gw8ZSHPHg+NzNNmhXyUH0FiXXsGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hCpfIroU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CPV5R1dT"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-313290ea247so50287a91.3;
-        Wed, 11 Jun 2025 05:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749645584; x=1750250384; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SPptyJtkdt3bR0imyRTv5uUbfy/9H4Z05Yj4r4qt7Zo=;
-        b=CPV5R1dTdI6knDTrMfBPECgoCZRGvCpzHQiZa7qx/UtLl6MalZ/Evlz8JIC+otslk2
-         5FmUUzZi5DzOn33l7dBZ4+81VBAvgqEHOCC6rAuSJ6VVhR717QrEBbhApvna7brvblNs
-         TdR4aiecSovvwef+FF4afFGZBUNRIY2BVMq1xdJYHJhX/GfOR13mbhZ7yIC95U4m/1ah
-         uHtBzG23pNtmlyXyk6dGPTrCGKGl5+a38ent2SiXMAeEj1IVcgeF9IwazLBC9Q92THR1
-         TwhkV6AtEY9izF6I8tiRQu59OFUiq0YIn15cDe3AlJ3mMZESNfwcDE+X0jyyh3CKI8JD
-         DKjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749645584; x=1750250384;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SPptyJtkdt3bR0imyRTv5uUbfy/9H4Z05Yj4r4qt7Zo=;
-        b=gB6wAE9DUjhSEaLZ7Xmi6Bt3SgJgkvFMWhi6GZ6HjJCQTlS0IYAEMwGb1O5nfNbafl
-         jzk7GPsRETlgy6J0fcwxZ94/v7CQXIislofufNISw3g6EgqjhKomqw8Z47+zzo/YRkHi
-         K5UOfq83IdMVut7FXJniibT5A/IGVPZJIzQHw50wzB4lraLJB6/clxEWh0evhy4lmy/n
-         QF6JULsFkO28vehtd6JwGeoMB03HmwT37H2jWMCcPzC7bbvcmUOqfLJldCUc3vdC8hKi
-         +HZT9nP7UYbcNCtrrEQyOioYFuSceaR5uj3bwWs8pWP9YFFAR89y2v22WXhMVk2OSgse
-         O00A==
-X-Forwarded-Encrypted: i=1; AJvYcCUz0btZXvJ2QIIVfcFQ804YugqxJsvwRBMnR68m1PHshbZcXNVsZUJAXQmz2BI6o2hpaR1oyDUd8VoYVmXF@vger.kernel.org, AJvYcCVxP9GjFa4eo1ZUvBCTjAwOh637Xnag3txe2BGEF2P4BeLByRz9UKVnAc2muQK+Gt9o3zvU8xV5Fx7Yy7lfwA==@vger.kernel.org, AJvYcCWQUbF/7Db3zPw5Hp8/UU0Tz9Pv5SeHbbqg08nxhzPBbREMuLbbQKXsNRq1FCuY2zkmBaYLUb/xGeDtSIKZRHo=@vger.kernel.org, AJvYcCXBAeG/msltYkYEKzbNBWDZc+Fxwc6IkPhNI74cQSIpXEaOAJCkx5ROL2E9dk9CzSUKTcaUobg1ulZo7l4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTZAJC79La1mXJoARuEqTwIpMO3pgqIVCFSPG8PmFAKq4Q/89j
-	thZ48SRqsVqWHeqSfKsEYYyWmcwqA7tCMAz9bdAWNtFD1MrcP3lBv9UXLSHEVzSfTXP3pg0fGFY
-	XCf0YN7Mu3AxzlR6eSwFPp7rLXFJaVUs=
-X-Gm-Gg: ASbGncsKSmKdwJO1O4IDvXajvjxmecOLgS9R6VfKK02PLbEvwE12Yj4sDH7lJv3fgi6
-	9mSt4mAGwW7gjpFwXFA2/cmjoUL7IhxxNxMmQZGR9qYKGl7SvPichUhwdoUlRmfaGhIBWe3gGBo
-	C94ZEsrd0H8XVJYt7Rh9ZY6oAB2u7olPSmgDuJNP8E4QA=
-X-Google-Smtp-Source: AGHT+IH+bQyEyq6sDsXwbDZZg89F+RW6fj++1an3yE4uvHwTMd4PMVVY6ZhYj3V5tERWpXQvQ0G9A/5t5fijdnpQRdk=
-X-Received: by 2002:a17:90b:3ec5:b0:311:c939:c855 with SMTP id
- 98e67ed59e1d1-313af1a5f6dmr1615584a91.3.1749645583832; Wed, 11 Jun 2025
- 05:39:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCpfIroU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75377C4CEEE;
+	Wed, 11 Jun 2025 13:28:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749648541;
+	bh=RClr3x0WNuSzf2ZubOLtWGjnZaITNyNPnDjjvfXlAiE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=hCpfIroUSDomqKWzgRniCxFLoGglynZVDJ50MwjJxbeGhOkqqUQWQcJn5UowuQ07E
+	 8nkTyV0TuzRJDSAQTpjmgpUAjQKFw/320QBultivGDJP52FKuNElnUbV9DRvjMITyH
+	 Q1FWnHRgHsxODGZqXgU3ihX6fKMz/6USBfa2srVfnEc51jYdtCAlDGmBHxOn1axdpM
+	 wzmp5KIovoiE1jXglpwbuN0cPN8eYkoSVImYg5ITC25ae+BcnxnYomdSdF24iAnFqX
+	 9nkELSuKEZXuWbGnr5pUQmJORqabdR6FtbguEE9HPfIFt3+jI+vZvmeN2rMzBVXnk5
+	 4Qw/WXGeXLXIA==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
+Cc: "Benno Lossin" <lossin@kernel.org>,  "Miguel Ojeda" <ojeda@kernel.org>,
+  "Alex Gaynor" <alex.gaynor@gmail.com>,  "Boqun Feng"
+ <boqun.feng@gmail.com>,  "Gary Guo" <gary@garyguo.net>,  =?utf-8?Q?Bj?=
+ =?utf-8?Q?=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Benno Lossin" <benno.lossin@proton.me>,
+  "Alice Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada"
+ <masahiroy@kernel.org>,  "Nathan Chancellor" <nathan@kernel.org>,  "Luis
+ Chamberlain" <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,
+  "Nicolas Schier" <nicolas.schier@linux.dev>,  "Trevor Gross"
+ <tmgross@umich.edu>,  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v12 2/3] rust: add parameter support to the `module!` macro
+In-Reply-To: <CANiq72kJtA3L3ja9ff7GuNUD8YW=Zd9bMycjMupgSaaaU_uufw@mail.gmail.com>
+ (Miguel
+	Ojeda's message of "Wed, 11 Jun 2025 14:36:01 +0200")
+References: <20250506-module-params-v3-v12-0-c04d80c8a2b1@kernel.org>
+	<20250506-module-params-v3-v12-2-c04d80c8a2b1@kernel.org>
+	<D9PW1NI2S6FV.8LA53J87VCML@kernel.org> <87plfazi13.fsf@kernel.org>
+	<87wm9ixy8n.fsf@kernel.org>
+	<lCbs63S4-QAb6tcnRuG7iQ6JIDnB5VbSqfCplFN7QmvJBXURj2IWSiowJPLH-OfOlWFITmU9XMqBE66e_07hYQ==@protonmail.internalid>
+	<CANiq72kJtA3L3ja9ff7GuNUD8YW=Zd9bMycjMupgSaaaU_uufw@mail.gmail.com>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Wed, 11 Jun 2025 15:28:46 +0200
+Message-ID: <87o6uuxv8x.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250506-module-params-v3-v12-0-c04d80c8a2b1@kernel.org>
- <20250506-module-params-v3-v12-2-c04d80c8a2b1@kernel.org> <D9PW1NI2S6FV.8LA53J87VCML@kernel.org>
-In-Reply-To: <D9PW1NI2S6FV.8LA53J87VCML@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 11 Jun 2025 14:39:31 +0200
-X-Gm-Features: AX0GCFsVvNoeNo5dJVKQqiHYIICApoPQ7dENSopl4E8cSOlBnUT1aSNuB4syId4
-Message-ID: <CANiq72kwj9f8EZJocJx=ZtV4otaexbu1_vgDdTU_oy812yAJAg@mail.gmail.com>
-Subject: Re: [PATCH v12 2/3] rust: add parameter support to the `module!` macro
-To: Benno Lossin <lossin@kernel.org>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 7, 2025 at 1:23=E2=80=AFPM Benno Lossin <lossin@kernel.org> wro=
-te:
+"Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com> writes:
+
+> On Wed, Jun 11, 2025 at 2:24=E2=80=AFPM Andreas Hindborg <a.hindborg@kern=
+el.org> wrote:
+>>
+>> So either we need to `#[allow(missing_docs)]` or just add the line back.=
+ What do you prefer?
 >
-> > +unsafe extern "C" fn set_param<T>(
-> > +    val: *const kernel::ffi::c_char,
-> > +    param: *const crate::bindings::kernel_param,
-> > +) -> core::ffi::c_int
+> Do you mean if you remove the `concat!` too, right?
 
-New instance of `core::ffi::` (and both these `c_*` should be unqualified).
+Yes, all of it.
 
-Cheers,
-Miguel
+>
+> It would need to be `expect`, but I think even an
+> `expect(missing_docs)` is not really useful vs. having some docs.
+>
+> But another question is: if the docs are not useful, should an item be
+> hidden to begin with?
+
+That is probably the best solution, yes.
+
+> (By the way, that one is `rustc`, not Clippy)
+
+Right.
+
+
+Best regards,
+Andreas Hindborg
+
+
