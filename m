@@ -1,188 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F6A234971;
-	Thu, 12 Jun 2025 11:05:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216F01442F4
+	for <linux-modules@vger.kernel.org>; Thu, 12 Jun 2025 11:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749726343; cv=none; b=ELiBgyTCT7bgNHpI01z7nILYPPKc/YKVeMLsXbj9c222DqLzvaUsukKJvrK5VlEGwpuBfuYIj9CF/u6MB08jjDJSvg8Sq2xu4iCdM610oqo3o8V+u2NJg1MI3rFSvZRupgV26teE8ApJaH4wuS5OCV5fVoyDmN0f4yGbdScFI7Y=
+	t=1749728845; cv=none; b=W1ZKy1Sj+xe5T4q6AR2HVfEiluxHhzcgyiJKZEwQZVenraRe8EuVO4lXD8XqWcp2Il2rj5X62FRRyVMExXZ2rZjXQobKFIvzGAQq1EuGaTRMZp7MI96Si1yZ909j0YKfJKvFPjHeDizg6KXnCUjsY/+Fd5OGHGDLmJX33UOTuiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749726343; c=relaxed/simple;
-	bh=nLSFvNhhkH/i0AW4xZZyeVQQGE39E68tSVlCKIweu8U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qecp6fc5ByBtxrjn44cgLbaxqJj9dK2td29uwJYb8QxJMBys4JsNVc/md1AxIQ7hAi4yPMzrbSZv4jLKtgW20wi9qIflLb3POXlDinLbtu9l5sdP3WMVcsTHfpUMs/o4Dj/n9omeE9+UiH6nLS0w5r0D4e7Im/WzrDWSUxCrOXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qDdWQQHx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1749728845; c=relaxed/simple;
+	bh=mDOZZv4brJY4/QapOk8eT0uTuWK+79TDLNRGhMWLFZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j8uw+7T2Ker02hmedhLvsPBMI46Gc22pI4uMEzal7BOgGTBtV/stX62v2juNgNfHIJooHSHEWwjMVAJ/gLUEuIAlpWE6Kn2UvMzfC6urJP8sFB8jpHlYXqkPNmsFpNkJMiqX7LciZ2bfs6sgWwKXmpGPsUnF+Dn67BTF922W33c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=V5BdoBah; arc=none smtp.client-ip=209.85.221.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qDdWQQHx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DCAC4CEEA;
-	Thu, 12 Jun 2025 11:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749726342;
-	bh=nLSFvNhhkH/i0AW4xZZyeVQQGE39E68tSVlCKIweu8U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=qDdWQQHxflEwGgvLGrA7yFYTJaUyXMY2fWh33EJgxUQf54sqNCRzWvq76JLo+wqKI
-	 wi3//16+vXlwMPBe+pMBxdCoW1pvfstM/90sFC6bYA4GKXJ/DLO/RZxmYHp9Lno0w+
-	 2R937/rFXe/6yomj5pTMk1Gf1JtK2KJ4KfIspUApGy4+FMb0U0+QsZ1bRhrt14Bc3h
-	 fBgKSF5Qnm0sXp8MqYuolV1Z1evNWPWq5k7aTJd+f3igWa3/8h9n/DO2UJvUXfWCap
-	 d/WkhRasnbpjeKRrIuV4W1x2gm694q5S79rMhRutgVESoT516W6GsN0lhDFbFaINY/
-	 uS4LAnQAnBqOA==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: "Benno Lossin" <lossin@kernel.org>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
- <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  "Benno
- Lossin" <benno.lossin@proton.me>,  "Alice Ryhl" <aliceryhl@google.com>,
-  "Masahiro Yamada" <masahiroy@kernel.org>,  "Nathan Chancellor"
- <nathan@kernel.org>,  "Luis Chamberlain" <mcgrof@kernel.org>,  "Danilo
- Krummrich" <dakr@kernel.org>,  "Nicolas Schier"
- <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,  "Adam
- Bratschi-Kaye" <ark.email@gmail.com>,  <rust-for-linux@vger.kernel.org>,
-  <linux-kernel@vger.kernel.org>,  <linux-kbuild@vger.kernel.org>,  "Petr
- Pavlu" <petr.pavlu@suse.com>,  "Sami Tolvanen" <samitolvanen@google.com>,
-  "Daniel Gomez" <da.gomez@samsung.com>,  "Simona Vetter"
- <simona.vetter@ffwll.ch>,  "Greg KH" <gregkh@linuxfoundation.org>,  "Fiona
- Behrens" <me@kloenk.dev>,  "Daniel Almeida"
- <daniel.almeida@collabora.com>,  <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v12 2/3] rust: add parameter support to the `module!` macro
-In-Reply-To: <DAKE43J2GFVF.18KWPFWPZKDM@kernel.org> (Benno Lossin's message of
-	"Thu, 12 Jun 2025 09:52:30 +0200")
-References: <20250506-module-params-v3-v12-0-c04d80c8a2b1@kernel.org>
-	<20250506-module-params-v3-v12-2-c04d80c8a2b1@kernel.org>
-	<D9PW1NI2S6FV.8LA53J87VCML@kernel.org> <87plfazi13.fsf@kernel.org>
-	<V29kiTfRcPU-AK3Dk6vAhU4ERR2auWVQO6PRp1TJrOmq3AgagkEMmShjxYAQSx9IkfVtHEVwhYM93UQQhiElJA==@protonmail.internalid>
-	<DAKE43J2GFVF.18KWPFWPZKDM@kernel.org>
-User-Agent: mu4e 1.12.9; emacs 30.1
-Date: Thu, 12 Jun 2025 13:05:31 +0200
-Message-ID: <87ikl1xls4.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="V5BdoBah"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-3a361b8a664so773490f8f.3
+        for <linux-modules@vger.kernel.org>; Thu, 12 Jun 2025 04:47:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1749728841; x=1750333641; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IkRlDYSNjelZTYRzyvEVnicQpoztUlVI19tQWHJuwsU=;
+        b=V5BdoBahnJLRKJ+Kkrv+X3mqEg+BRu+p4sUDUKw6f715HTQd8uW+cY9dnSHA1qhfDU
+         FeRr+AYRaGUwue9vd1Ti26xm54Z9b7rGA1mI32HzjqYqNgFyYJODde5c/Uj0QCANeJcY
+         m4/GJnuTFwrLdAEDaz2lXsWAFAh4HZcrT8rZCOLMYsigPtOOHGNu7U0lklyF6Wu/KQOa
+         /yIg2vf63Vn6n4j2K5CAmCjW0NMEHLvMMgCG3PsVEO30xFoganz0J1TqtfRbPEZWR6x3
+         CfyhJ5FXEju3ixMOR0g8jdcMIy4mI7fHowOA3hXMJh3I6mDRHTkeWlzi2NbKIZwSEO9o
+         NX6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749728841; x=1750333641;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkRlDYSNjelZTYRzyvEVnicQpoztUlVI19tQWHJuwsU=;
+        b=i3J6bYnTDVdxmozeZtHjUWxxkrN9JyBoienuWVmUB8Hsn2k8tjReqgY8oiE5/S3ijU
+         mUMEZuzSNAWDcxCZzWRor20N2NTDQkL7mfvWcrHnY/MKTL84YHCcIZs8ro4VfzKa4Ehz
+         VvbavS6OWhxGwI6Kv7bRiS+tZVAE6aQTd8RS0stkFDsLB8glRJdVAFfYYWxczsQIqmiU
+         lPVtlN4OTkDaVl+MDqFOmKOhH9keYAVErkp/76LpsIOF72xLm2h6lLNGczlhxLCkz+wQ
+         Ts/QwfCXSz5kjmGYZDky3axTXRguJL1/BRZXBX3HrdcgrzvfHyua457iWyXGAkD/Px4S
+         iZGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvBzDZqnbGr/NsvxNrmKwet9CRftAWIWfNXfG1uXeV0XNoyt/n95ylsXvvbikg/Ov3hTS1cciVJsU5k2sp@vger.kernel.org
+X-Gm-Message-State: AOJu0YydEEuxyWyoYRSyGrJ6LMHN2MmBzDw7usyP+aVXhUWTwY6NV1Sq
+	HRgtNMLaPwcSqjiy0HX4Jpnx7ghxYU2WJTT5FqKkurPvb4JxIVhn5dHQoLx5LQ+TqbW7uZfOXnt
+	VVAt7Btq8Kw==
+X-Gm-Gg: ASbGncvt3x/7BmcjjPeiZ8gTMiGJ+xQXlAihP0sM90BNKxwhoTBg1GPI+v3XnDVPVpE
+	Grx0lTYu08YWvdSwbku4FkZp9EboY3n50kK2mURJDzgPYBjtDKmrSRrgnRL5WuTNk0qGS5VQnN5
+	myXemDEtPEoFqETyex2mmQ0nlIO2eGqV5MhbZV+2O46rFLZ/bI7cnO2+LKujjlb/Y3NLUNPPgkF
+	ro9m4Pe7Zumsx32tKsuqi0rVdT2HDbxJNrabA6lbs5oUzGxwPofs+8u8bKNAnikg6i1YBbOmFLU
+	qZbwI4vF+C18nCuFe/RtohxXQkPxBraAPDc/xUKuZiLvyQyyajZtggpCjDUOU8DdzWoi3/p0Xy5
+	ajGum
+X-Google-Smtp-Source: AGHT+IGzA6c/9Ksw51jAcAdQ9/4Zanxxg8q2o+OhtN8FkIYA91VuOepHLC6Iijz6lOz1M5zSupPVXA==
+X-Received: by 2002:a05:6000:26c5:b0:3a4:d0fe:428a with SMTP id ffacd0b85a97d-3a558a27540mr6074151f8f.28.1749728841536;
+        Thu, 12 Jun 2025 04:47:21 -0700 (PDT)
+Received: from [10.0.1.22] (109-81-1-248.rct.o2.cz. [109.81.1.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a561a3c763sm1769577f8f.62.2025.06.12.04.47.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Jun 2025 04:47:21 -0700 (PDT)
+Message-ID: <a16d9e82-3c26-4954-a767-a7c46b01f348@suse.com>
+Date: Thu, 12 Jun 2025 13:47:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] module: Make sure relocations are applied to the
+ per-CPU section
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-modules@vger.kernel.org
+References: <20250610163328.URcsSUC1@linutronix.de>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250610163328.URcsSUC1@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-"Benno Lossin" <lossin@kernel.org> writes:
+On 6/10/25 6:33 PM, Sebastian Andrzej Siewior wrote:
+> The per-CPU data section is handled differently than the other sections.
+> The memory allocations requires a special __percpu pointer and then the
+> section is copied into the view of each CPU. Therefore the SHF_ALLOC
+> flag is removed to ensure move_module() skips it.
+> 
+> Later, relocations are applied and apply_relocations() skips sections
+> without SHF_ALLOC because they have not been copied. This also skips the
+> per-CPU data section.
+> The missing relocations result in a NULL pointer on x86-64 and very
+> small values on x86-32. This results in a crash because it is not
+> skipped like NULL pointer would and can't be dereferenced.
+> 
+> Such an assignment happens during static per-CPU lock initialisation
+> with lockdep enabled.
+> 
+> Allow relocation processing for the per-CPU section even if SHF_ALLOC is
+> missing.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202506041623.e45e4f7d-lkp@intel.com
+> Fixes: 1a6100caae425 ("Don't relocate non-allocated regions in modules.") #v2.6.1-rc3
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-> On Wed Jun 11, 2025 at 12:31 PM CEST, Andreas Hindborg wrote:
->> "Benno Lossin" <lossin@kernel.org> writes:
->>> On Tue May 6, 2025 at 3:02 PM CEST, Andreas Hindborg wrote:
->>>> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
->>>> index a3ee27e29a6f..16d300ad3d3b 100644
->>>> --- a/rust/macros/helpers.rs
->>>> +++ b/rust/macros/helpers.rs
->>>> @@ -10,6 +10,17 @@ pub(crate) fn try_ident(it: &mut token_stream::Into=
-Iter) -> Option<String> {
->>>>      }
->>>>  }
->>>>
->>>> +pub(crate) fn try_sign(it: &mut token_stream::IntoIter) -> Option<cha=
-r> {
->>>> +    let peek =3D it.clone().next();
->>>> +    match peek {
->>>> +        Some(TokenTree::Punct(punct)) if punct.as_char() =3D=3D '-' =
-=3D> {
->>>
->>> Should we also allow a leading `+`?
->>
->> I would argue no, because rust literals cannot start with `+`.
->
-> Makes sense.
->
->>>> +            let _ =3D it.next();
->>>> +            Some(punct.as_char())
->>>> +        }
->>>> +        _ =3D> None,
->>>> +    }
->>>> +}
->>>> +
->>>>  pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<=
-String> {
->>>>      if let Some(TokenTree::Literal(literal)) =3D it.next() {
->>>>          Some(literal.to_string())
->>>> @@ -86,3 +97,17 @@ pub(crate) fn function_name(input: TokenStream) -> =
-Option<Ident> {
->>>>      }
->>>>      None
->>>>  }
->>>> +
->>>> +/// Parse a token stream of the form `expected_name: "value",` and re=
-turn the
->>>> +/// string in the position of "value".
->>>> +///
->>>> +/// # Panics
->>>> +///
->>>> +/// - On parse error.
->>>> +pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, ex=
-pected_name: &str) -> String {
->>>> +    assert_eq!(expect_ident(it), expected_name);
->>>> +    assert_eq!(expect_punct(it), ':');
->>>> +    let string =3D expect_string(it);
->>>> +    assert_eq!(expect_punct(it), ',');
->>>
->>> This won't allow omitting the trailing comma.
->>
->> This is in line with the rest of the module macro.
->
-> Then we should change that:
->
->     https://github.com/Rust-for-Linux/linux/issues/1172
->
->>>> +    string
->>>> +}
->>>
->>> [...]
->>>
->>>> @@ -186,33 +336,35 @@ pub(crate) fn module(ts: TokenStream) -> TokenSt=
-ream {
->>>>      let info =3D ModuleInfo::parse(&mut it);
->>>>
->>>>      let mut modinfo =3D ModInfoBuilder::new(info.name.as_ref());
->>>> -    if let Some(author) =3D info.author {
->>>> -        modinfo.emit("author", &author);
->>>> +    if let Some(author) =3D &info.author {
->>>> +        modinfo.emit("author", author);
->>>>      }
->>>> -    if let Some(authors) =3D info.authors {
->>>> +    if let Some(authors) =3D &info.authors {
->>>>          for author in authors {
->>>> -            modinfo.emit("author", &author);
->>>> +            modinfo.emit("author", author);
->>>>          }
->>>>      }
->>>> -    if let Some(description) =3D info.description {
->>>> -        modinfo.emit("description", &description);
->>>> +    if let Some(description) =3D &info.description {
->>>> +        modinfo.emit("description", description);
->>>>      }
->>>>      modinfo.emit("license", &info.license);
->>>> -    if let Some(aliases) =3D info.alias {
->>>> +    if let Some(aliases) =3D &info.alias {
->>>>          for alias in aliases {
->>>> -            modinfo.emit("alias", &alias);
->>>> +            modinfo.emit("alias", alias);
->>>>          }
->>>>      }
->>>> -    if let Some(firmware) =3D info.firmware {
->>>> +    if let Some(firmware) =3D &info.firmware {
->>>>          for fw in firmware {
->>>> -            modinfo.emit("firmware", &fw);
->>>> +            modinfo.emit("firmware", fw);
->>>
->>> I don't like that you have to change all of these.
->>
->> Why not? If I was to write this code in the first place, I would have
->> used a reference rather than pass by value.
->
-> That's fine, but do it in a separate commit then.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-OK, I can do that =F0=9F=91=8D
-
-
-Best regards,
-Andreas Hindborg
-
-
-
+-- 
+Thanks,
+Petr
