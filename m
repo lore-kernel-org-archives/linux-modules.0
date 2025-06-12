@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA95B24337C;
-	Thu, 12 Jun 2025 13:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037D4246BD6;
+	Thu, 12 Jun 2025 13:41:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749735709; cv=none; b=O0Qlpt4rMugzCYMlrJJOPdM1xnU9aPIGCI3kqMFPqGzmiwMVEfwQPGvcwylrqSZT225jB0tq4nMOa5s+Ip4X/mwmvfv0CuyFMke6mM2MOtkUvk3dnr8BGkcEVKcYzaw+upqhUOCCNVSoTsbOolJGXUZkXSaJG0Mgp9KASqGajYo=
+	t=1749735715; cv=none; b=ua0gIJX0Ewhb7IQH2eAg4Fdov4CHJiOqOmHNG8v5R/1alZ6OJ/ozBuu+Mk33AxPk0OABLLZ9xjdNbKfkQIeOAuHve+ifC9H5hcQ9QT6mdghX+smnKP2imKYdgCLsXucfWCNeYBIi9uj5nQdJdMBbHG2KdXpOWQcZENQnTiLV4WU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749735709; c=relaxed/simple;
-	bh=8wvcbq9+DnI/RWLQdNcGsjq/+GisGIanDf6U3XseGIs=;
+	s=arc-20240116; t=1749735715; c=relaxed/simple;
+	bh=93O4r+kmKDFCOxEuHQOYGOvJph9EXJLBbFPup2aAaiw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l3/ua51Dca2nCg4e4a821H0LgfNrE02X9gCbxefY8WBd/OBlN7B3hm63Q2A6/rq1kl+ZqKDAnI6TWpUoLwtyDKT0M3x6+ad16eRKfZG0g0S08cNghpZUzYmxzfl8hyWgwjU/yTvERSEa06QXEzCiLhBxRjQ4dRhcVHKQeAsDV/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9LMk6It; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=pJpaRwpK7bnouCAV+T7pG+QNyjUmO9ZZdBAadiVFcvY/KRphOZI2g2OwAGHrY8GmHqoR9RH7wtN7bQG7R2JiQWcbxfBGslzu5JMecWLTauj7h5OnOipxN2JoBKYF6eIMd8n7Ln2ACeB8aTlzNghhmENLdfL6ktjB4/PITl5e85k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgUR1uNB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9LMk6It"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6547BC116B1;
-	Thu, 12 Jun 2025 13:41:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgUR1uNB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6608C4CEEA;
+	Thu, 12 Jun 2025 13:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749735709;
-	bh=8wvcbq9+DnI/RWLQdNcGsjq/+GisGIanDf6U3XseGIs=;
+	s=k20201202; t=1749735714;
+	bh=93O4r+kmKDFCOxEuHQOYGOvJph9EXJLBbFPup2aAaiw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=T9LMk6Itp33K9CMrNq08fcThcyfgk4jkE5/GmZzIFJJBIIgZYLsR3AjnEN4v9zvz9
-	 xEkHquR/PV2IchPDGebok8ZkOW4gv2xXUr7sTdGIGuvnUy787UezlMof4AYBxwi80g
-	 1vP+GNWn6bXOhqJscwQjGSwEb4znGoN3pmMUo+2lqlHIxk0f3ySzBdlV6b0kHyphXi
-	 eDohr9DD/NfauNqVram++4hIDHohCcjrgE9PTWIk/pyEr1uX58GsmRkVW+4IHxote/
-	 qQmLO97EDi9ICeyeXj5PEIBImrqE4tRlSiVDe2yINTuW1rvhL9zBpInPKzGh7YRDPs
-	 9sDdKFq7LfsLA==
+	b=UgUR1uNBDrsb0LYLj6wKDMtlcK9go+5fkWHxGNZrGWWcmVxhmGb4PBQGQEWDzQwf9
+	 TMfpEY4ugwSp5GiWEvNCHrXPP9TgTlfqfaS1b77xFXE3JAny+rBfCF9VTpJgHj6MiO
+	 cmER3CsQpJavQxyLCUYucOGLgDzMFX2B0xz1MDI7PKwLoybRZUsqvwOdgsWM/VqzHD
+	 hynjsTUVz8ghHnrpftwUDcq3vT4//3bB3OnX4QNYQyrvpNStu3JPMMmFrJggBQKGqC
+	 FeJLi7JPCeuxLGEcC5Lv9vqbmOYBuELhi8UUzxihvSIzrnFUhdayMBq/XJZ8SNrBB/
+	 pERZD/fZkylSQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Thu, 12 Jun 2025 15:40:03 +0200
-Subject: [PATCH v13 2/6] rust: introduce module_param module
+Date: Thu, 12 Jun 2025 15:40:06 +0200
+Subject: [PATCH v13 5/6] rust: samples: add a module parameter to the
+ rust_minimal sample
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
+Message-Id: <20250612-module-params-v3-v13-5-bc219cd1a3f8@kernel.org>
 References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
 In-Reply-To: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -56,250 +57,59 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8174; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=8wvcbq9+DnI/RWLQdNcGsjq/+GisGIanDf6U3XseGIs=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoSti3zN6H0ZNtg4erMbXF67x6t+OCVyAIgQLmR
- sxj6QFDHamJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaErYtwAKCRDhuBo+eShj
- d+9yD/42ZhzXzby4Vkxe4Lkhx3KTkVkiveq7I/cvjYhZXDPCnZGAKc2dtXPC9vd+MjKMyTqTRRJ
- Qkn/LLqFhA6Rm+8pFaat1J45XNwnVa/5d7e10SHdlXfQj1jpXzvmdmnL6LsIW9fo7Bf0WWcR5Bb
- fzDP98LxHNPNliR0Qi5VyCXhTXUbt5UXikDhYutE0XpqTR3AgcTexwG7OqXyu8zbuXvzgsaN6Y9
- 0nuTy9UzYZUGnuO7z5MRzD9tDtjlyGjA6JEeBPcllxzvaUwvWJnVf8qmWVH+VBWtFmLnrQ1is61
- o0e2Jb7pLmldPXznlQQ4duMjhr8ZUYBwt159vaEcIdemrYzxum3CZbgQBoQg+J3pZe3PaRH/OaE
- 30iqspzIXb+up8hDP4keRtYljgmXomSAF+KzK+caqA/Wxwhcf9fwzy5mat+5sVJKf87dLM2kFgZ
- 3um9wVWRFgrtv+pmCkCyvBdqyJrgu8nnFfXnpmyuatdPi16b/l28QEOyx/fPrCf4aO7t3w6e7x1
- pjAEaGDVlQQnXUXd65oXpppUv+NnqSixlAqKwVPMxAdZXn96cgHMEypK5l0vIU1nj6szMQjVScD
- tGhnXSSFOiSkDPPAK28/93s/FfxW2hso/5DU9bKi6/87jH2foVmaXfE9Xl5ObBhG2tmeQo+hw3K
- x1j3ilKotq0iIuw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1217; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=93O4r+kmKDFCOxEuHQOYGOvJph9EXJLBbFPup2aAaiw=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoSti6KC9qPLWJ8930ZgrcjFzngIpyDLpikU0UG
+ vLM3onGBEyJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaErYugAKCRDhuBo+eShj
+ d0B9EACrkqVn40B92a0VhRagql+NDwZY5jE8WoFDiLVLlnJa9t5rb3HCpnYqZFng/dfgUtKWC2M
+ 6SbzbVuaWw/DxtgLGNfiJ2MGzBg6yy1ekiAJbeXhAiIeVkjmAxp8NPgvMPyypK6DAGlnZQ4lRcy
+ 2ngi7ek7CNnASahd3mDl7O4F/n8bgEiJ1XX58iU5nvLSReUiA78I7pEV0c+P+Lwl7fWPwxx40jS
+ QMVOnrmI1/wQiEN+PaEym+l2dAu4P1W89/4sYhJ4Mp7+szLcV50yTPFu6H0AjKdGp56yOuE7F9d
+ ziPEJ67RZhQ1RyTyzV47YxyaItyT8S3lbv9t7+macjEUA/GLv7bzl9CmsP+7eKtN6lpfs0Cdec/
+ iFqw0/d8YyvhC+HYgMx/3p+K43PlEoNpEqDRdWeeHOgSW0qfGsSd1gm1YAJJMNVPoYQTBsHetCc
+ sPKwfqBcaj5+tOurY0xZJMBF+e8KXD6PYcN1JvklizYTNNVxPY4GDu4ekoECKpvKIMaUJkOVtVn
+ 3MsRxN5xykmQyx859tWDGyYsOIsAdZVicg7p7xN1hAHRd8WqqAhAqzODwpU0HXXnGc6quC6e3q/
+ +ljVzeoaiSYJz5ntE033FYJFgek6Ff/W6zcXNiMH0duuPvRCOrukDLsHtSgxQql/C7Azm5xDk6y
+ hJ7LvHpnKYyk87g==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Add types and traits for interfacing the C moduleparam API.
+Showcase the rust module parameter support by adding a module parameter to
+the `rust_minimal` sample.
 
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/lib.rs          |   1 +
- rust/kernel/module_param.rs | 201 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 202 insertions(+)
+ samples/rust/rust_minimal.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 6b4774b2b1c3..2b439ea06185 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -87,6 +87,7 @@
- pub mod list;
- pub mod miscdevice;
- pub mod mm;
-+pub mod module_param;
- #[cfg(CONFIG_NET)]
- pub mod net;
- pub mod of;
-diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-new file mode 100644
-index 000000000000..fd167df8e53d
---- /dev/null
-+++ b/rust/kernel/module_param.rs
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Support for module parameters.
-+//!
-+//! C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
-+
-+use crate::prelude::*;
-+use crate::str::BStr;
-+
-+/// Newtype to make `bindings::kernel_param` [`Sync`].
-+#[repr(transparent)]
-+#[doc(hidden)]
-+pub struct RacyKernelParam(pub ::kernel::bindings::kernel_param);
-+
-+// SAFETY: C kernel handles serializing access to this type. We never access it
-+// from Rust module.
-+unsafe impl Sync for RacyKernelParam {}
-+
-+/// Types that can be used for module parameters.
-+pub trait ModuleParam: Sized + Copy {
-+    /// The [`ModuleParam`] will be used by the kernel module through this type.
-+    ///
-+    /// This may differ from `Self` if, for example, `Self` needs to track
-+    /// ownership without exposing it or allocate extra space for other possible
-+    /// parameter values.
-+    // This is required to support string parameters in the future.
-+    type Value: ?Sized;
-+
-+    /// Parse a parameter argument into the parameter value.
-+    ///
-+    /// `Err(_)` should be returned when parsing of the argument fails.
-+    ///
-+    /// Parameters passed at boot time will be set before [`kmalloc`] is
-+    /// available (even if the module is loaded at a later time). However, in
-+    /// this case, the argument buffer will be valid for the entire lifetime of
-+    /// the kernel. So implementations of this method which need to allocate
-+    /// should first check that the allocator is available (with
-+    /// [`crate::bindings::slab_is_available`]) and when it is not available
-+    /// provide an alternative implementation which doesn't allocate. In cases
-+    /// where the allocator is not available it is safe to save references to
-+    /// `arg` in `Self`, but in other cases a copy should be made.
-+    ///
-+    /// [`kmalloc`]: srctree/include/linux/slab.h
-+    fn try_from_param_arg(arg: &'static BStr) -> Result<Self>;
-+}
-+
-+/// Set the module parameter from a string.
-+///
-+/// Used to set the parameter value at kernel initialization, when loading
-+/// the module or when set through `sysfs`.
-+///
-+/// See `struct kernel_param_ops.set`.
-+///
-+/// # Safety
-+///
-+/// - If `val` is non-null then it must point to a valid null-terminated string that must be valid
-+///   for reads for the duration of the call.
-+/// - `parm` must be a pointer to a `bindings::kernel_param` that is valid for reads for the
-+///   duration of the call.
-+/// - `param.arg` must be a pointer to an initialized `T` that is valid for writes for the duration
-+///   of the function.
-+///
-+/// # Note
-+///
-+/// - The safety requirements are satisfied by C API contract when this function is invoked by the
-+///   module subsystem C code.
-+/// - Currently, we only support read-only parameters that are not readable from `sysfs`. Thus, this
-+///   function is only called at kernel initialization time, or at module load time, and we have
-+///   exclusive access to the parameter for the duration of the function.
-+///
-+/// [`module!`]: macros::module
-+unsafe extern "C" fn set_param<T>(
-+    val: *const c_char,
-+    param: *const crate::bindings::kernel_param,
-+) -> c_int
-+where
-+    T: ModuleParam,
-+{
-+    // NOTE: If we start supporting arguments without values, val _is_ allowed
-+    // to be null here.
-+    if val.is_null() {
-+        // TODO: Use pr_warn_once available.
-+        crate::pr_warn!("Null pointer passed to `module_param::set_param`");
-+        return EINVAL.to_errno();
-+    }
-+
-+    // SAFETY: By function safety requirement, val is non-null, null-terminated
-+    // and valid for reads for the duration of this function.
-+    let arg = unsafe { CStr::from_char_ptr(val) };
-+
-+    crate::error::from_result(|| {
-+        let new_value = T::try_from_param_arg(arg)?;
-+
-+        // SAFETY: By function safety requirements `param` is be valid for reads.
-+        let old_value = unsafe { (*param).__bindgen_anon_1.arg as *mut T };
-+
-+        // SAFETY: By function safety requirements, the target of `old_value` is valid for writes
-+        // and is initialized.
-+        unsafe { *old_value = new_value };
-+        Ok(0)
-+    })
-+}
-+
-+macro_rules! impl_int_module_param {
-+    ($ty:ident) => {
-+        impl ModuleParam for $ty {
-+            type Value = $ty;
-+
-+            fn try_from_param_arg(arg: &'static BStr) -> Result<Self> {
-+                <$ty as crate::str::parse_int::ParseInt>::from_str(arg)
-+            }
-+        }
-+    };
-+}
-+
-+impl_int_module_param!(i8);
-+impl_int_module_param!(u8);
-+impl_int_module_param!(i16);
-+impl_int_module_param!(u16);
-+impl_int_module_param!(i32);
-+impl_int_module_param!(u32);
-+impl_int_module_param!(i64);
-+impl_int_module_param!(u64);
-+impl_int_module_param!(isize);
-+impl_int_module_param!(usize);
-+
-+/// A wrapper for kernel parameters.
-+///
-+/// This type is instantiated by the [`module!`] macro when module parameters are
-+/// defined. You should never need to instantiate this type directly.
-+///
-+/// Note: This type is `pub` because it is used by module crates to access
-+/// parameter values.
-+#[repr(transparent)]
-+pub struct ModuleParamAccess<T> {
-+    data: core::cell::UnsafeCell<T>,
-+}
-+
-+// SAFETY: We only create shared references to the contents of this container,
-+// so if `T` is `Sync`, so is `ModuleParamAccess`.
-+unsafe impl<T: Sync> Sync for ModuleParamAccess<T> {}
-+
-+impl<T> ModuleParamAccess<T> {
-+    #[doc(hidden)]
-+    pub const fn new(value: T) -> Self {
-+        Self {
-+            data: core::cell::UnsafeCell::new(value),
-+        }
-+    }
-+
-+    /// Get a shared reference to the parameter value.
-+    // Note: When sysfs access to parameters are enabled, we have to pass in a
-+    // held lock guard here.
-+    pub fn get(&self) -> &T {
-+        // SAFETY: As we only support read only parameters with no sysfs
-+        // exposure, the kernel will not touch the parameter data after module
-+        // initialization.
-+        unsafe { &*self.data.get() }
-+    }
-+
-+    /// Get a mutable pointer to the parameter value.
-+    pub const fn as_mut_ptr(&self) -> *mut T {
-+        self.data.get()
-+    }
-+}
-+
-+#[doc(hidden)]
-+#[macro_export]
-+/// Generate a static [`kernel_param_ops`](srctree/include/linux/moduleparam.h) struct.
-+///
-+/// # Examples
-+///
-+/// ```ignore
-+/// make_param_ops!(
-+///     /// Documentation for new param ops.
-+///     PARAM_OPS_MYTYPE, // Name for the static.
-+///     MyType // A type which implements [`ModuleParam`].
-+/// );
-+/// ```
-+macro_rules! make_param_ops {
-+    ($ops:ident, $ty:ty) => {
-+        #[doc(hidden)]
-+        pub static $ops: $crate::bindings::kernel_param_ops = $crate::bindings::kernel_param_ops {
-+            flags: 0,
-+            set: Some(set_param::<$ty>),
-+            get: None,
-+            free: None,
-+        };
-+    };
-+}
-+
-+make_param_ops!(PARAM_OPS_I8, i8);
-+make_param_ops!(PARAM_OPS_U8, u8);
-+make_param_ops!(PARAM_OPS_I16, i16);
-+make_param_ops!(PARAM_OPS_U16, u16);
-+make_param_ops!(PARAM_OPS_I32, i32);
-+make_param_ops!(PARAM_OPS_U32, u32);
-+make_param_ops!(PARAM_OPS_I64, i64);
-+make_param_ops!(PARAM_OPS_U64, u64);
-+make_param_ops!(PARAM_OPS_ISIZE, isize);
-+make_param_ops!(PARAM_OPS_USIZE, usize);
+diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+index 1fc7a1be6b6d..c04cc07b3249 100644
+--- a/samples/rust/rust_minimal.rs
++++ b/samples/rust/rust_minimal.rs
+@@ -10,6 +10,12 @@
+     authors: ["Rust for Linux Contributors"],
+     description: "Rust minimal sample",
+     license: "GPL",
++    params: {
++        test_parameter: i64 {
++            default: 1,
++            description: "This parameter has a default of 1",
++        },
++    },
+ }
+ 
+ struct RustMinimal {
+@@ -20,6 +26,10 @@ impl kernel::Module for RustMinimal {
+     fn init(_module: &'static ThisModule) -> Result<Self> {
+         pr_info!("Rust minimal sample (init)\n");
+         pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
++        pr_info!(
++            "test_parameter: {}\n",
++            *module_parameters::test_parameter.get()
++        );
+ 
+         let mut numbers = KVec::new();
+         numbers.push(72, GFP_KERNEL)?;
 
 -- 
 2.47.2
