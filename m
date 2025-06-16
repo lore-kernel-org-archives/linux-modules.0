@@ -1,64 +1,64 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3DA61D6DB6
-	for <linux-modules@vger.kernel.org>; Sun, 15 Jun 2025 12:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB9C285C96
+	for <linux-modules@vger.kernel.org>; Mon, 16 Jun 2025 13:55:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749990020; cv=none; b=HtdnG4MdAGBHduKq3ZRBVW4QRZlMNSXV+KcZO0zetU9QcN9fozkH7i9L59QbghH9qTEhqMhwvVPwe8lx4k0HiE5aKs+IF5KLzFQNUuHkV4B22ciz+W2PumZQr4AGJtyAVejtfpBCcGuflkFypwznpK+5AAozKJsYm8mHCP8mhb0=
+	t=1750082149; cv=none; b=oPi5ep7tRT7JpdT14apabhvK2tGoBChhglrN04+32473VWy0i4aQo8iMRvWiN30Ilu0HNMt/ICDdIX20YB3mlun6fp1CXsiXTA/uC2GtwN/1ESKkSDvxkxdMGhHiXAAE9irMg6mAYB4DXXTQlLjfDvKe1SDwtxdUmnyFxBtvnlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749990020; c=relaxed/simple;
-	bh=wIhvCyHenbk/sVdlCti6MRYC9lpi+XF//kz3NqOCkXY=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=ckF+PEO8ith4QhUaz7YhWIbr50DfmbbRZ9POtYJ2l+eex0n90QNVINzq1uXKt3tb5dStTQaEdS/c7UoXhTsUmVdWj79PEhAgYw9yVy57hPd9Cg6BH4YSKv88NxNVzffO4OhsERpE52lxV2/oaI8alkno74Yi7IxWgfLfLIJoqGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hNOAMzJM; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750082149; c=relaxed/simple;
+	bh=3e3eB4muD3EpvcsC9L6Q0h5kVqMreAfRRRIj6lFfMjI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Yo3vFo1nPfpegSt1WBKp657i+aDV+IuazMAR81yNUt84Faaw5c4I0Gl6COJCrOK7T+76NgzjCydvVCVZtz3N1mjWoLVQ6SmOqOwMc3yCkUHeT31L4nS1UeoTGWRIiHwGc0jsOuVaMdx5CAiHWHdcbHZRWfhRHz+R2rUroYvUA58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=C7l26tzL; arc=none smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNOAMzJM"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-450ce671a08so21542445e9.3
-        for <linux-modules@vger.kernel.org>; Sun, 15 Jun 2025 05:20:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="C7l26tzL"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-45300c82c1cso14546925e9.3
+        for <linux-modules@vger.kernel.org>; Mon, 16 Jun 2025 06:55:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749990017; x=1750594817; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YJJafeHgufsOx/lcevjPumN03tcLip0acs6zBF7M3UI=;
-        b=hNOAMzJMmSoFdJQj8ub/kwqKJjq7SQrAm1trjDUUx/dk4ZzKg38O1st62HjCJnIG8K
-         Ssk2hdxOEEI6UGIZUI+cCBG2CzRwMECJ8EK5YsQqeT6wuxey/xxt3miSIn0xiXRehpZX
-         4GROtuxAdU5Z7CoH2YdMbni/Ijkbz649MHN3YBpdijfCX1XQnrBaWO7gEmtdE4bU6uuz
-         jPbm9ViLPif1StYBkSmgGTQbvrtHrVU+FqVovosLdJbbgERRW6IgzaIAF2rblA4gU1bW
-         vAxfXV6pH77EvB6z8Ivx3396bnzDG3IpN2XoDkFDP27KFSkzrotEKCj86j4L9xqWKcKb
-         9O1w==
+        d=suse.com; s=google; t=1750082146; x=1750686946; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0CEry3X85ozS8Z1Uce4c2f0+5kW2c09B3vCuZTGfDKo=;
+        b=C7l26tzLFY5+QVD/YWv8OeByVcL/rij7VKbuSG6HHVkkbJ1bgwW5Nk04x5Jnve+EVW
+         BTcOJmg4xdlR2l4xpETxks0jzLyCqQ9jY/ev4NPYmd7KKzrKMli/BOE3Al59hc5dKb/f
+         0lvV3GkWo1mwKswDscEXSZLhcz4tLp4ZrkPKnQSYJb0vbpoPmbqaeIdF320MJIxpbKPK
+         3cxNkaoHKULtAfkhnuOPLuo0bk+KZNdq+rsg52rLEtwqljPzCVyEVVxcsgF46h4f537m
+         xCutLZ8fDE+wPP4MK8StfmGU7hT31haYfeos3jTXXs3Q16Y9ai15FFkQa+sUAi0I1ab/
+         gj7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749990017; x=1750594817;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YJJafeHgufsOx/lcevjPumN03tcLip0acs6zBF7M3UI=;
-        b=oV0wRRUa72zamJkfLR88JoOEDbmrLp0oM7LFoIhpuA/XPMQKb9/6fCG2wtWJDWvAYH
-         6xEXnkZ5ivVM7bej4EFyvP3RGurt4S1rzAc4TopR45uKtK0E3+GDVzAra4M5v13xjkG9
-         sQGiW3zIv/OEbxUTOAhCKnEfNdO+PV2S75QZgaghgHAlAaW36Lpd3bFgZdNG+quAIoaA
-         50KbrUTNdfUD39cvZlK5mdg8EhTGfj1xGL+GrUwtVbjomZwTFG3wzsGGWm+JMU5BE1HS
-         FsdoUq+SMZ/dsTO64DtKjr7nCPBW60P/rP5Hv70AVUdhYj5CkCpCIgLv7CeyJeAlW9TB
-         /yKg==
-X-Gm-Message-State: AOJu0Yw80667Wd/9SQv/2jgE1gr6UzWfZ8wMQi5FAx2CRckbFF8NCLbl
-	qLJGJ0J0ameYTDmbi3rF3WRfHAq3m3dmdXcf1Miyjg1jc0Dbwoh+B1bZbPyxPAi+
-X-Gm-Gg: ASbGnctgBDHlH6EjDNczYakj0C1rJpMg/jRANhbSuyURScPU9VU6N+1loXgOBCwDSkf
-	rv03TgkYwnclL1R7ZrIRhQC9k2oC4MMAoMoMNVbVvwVuwZpC4qqbCyAeFAKzS7IJDy1JtyAOw9W
-	kuq5oK8P6hyaPXWZdGPE7Q/wOK0DnZJfYVl2uVa4E2nSS0kiyxz9bhsFHdGw5aFuJ9CXnGZRyjY
-	BxVSQdcMzqz4mqq3wNkCYJ4oZdO5U05ih+CW5SrCw/ikSSuW2CupcYwYGSpAYQ9I3NZOBO34mqZ
-	OwfEIHRwayULIxtz4hxNMESE9adUk9xAEO8p9y40NIyAQ4fI1sYp611zQAr47fPr+spuSTPXwsL
-	HuSmkKTGubdd8zAa0NrWs65tcGTYTquIpMgUpsw==
-X-Google-Smtp-Source: AGHT+IHgDm1XVbAr6Q3ZSzWVJwq7iNrxHurSLIIOWQMzdAJ2h7Rpp5mIh8XgQ6yuyDrTW9kPwoNbwA==
-X-Received: by 2002:a05:600c:470c:b0:442:f482:c429 with SMTP id 5b1f17b1804b1-4533caf534cmr56686005e9.8.1749990016615;
-        Sun, 15 Jun 2025 05:20:16 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:22d:4d0:1ac0:4dff:fe8b:a3c7? ([2a01:e0a:22d:4d0:1ac0:4dff:fe8b:a3c7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e2354fbsm106242075e9.15.2025.06.15.05.20.15
-        for <linux-modules@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1750082146; x=1750686946;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0CEry3X85ozS8Z1Uce4c2f0+5kW2c09B3vCuZTGfDKo=;
+        b=sVy+EQrKKPAYt2bAfVfxItWUqWfLdj/VrVZUhTbOTs7rD9G3sHv5edmc1rKoa462u1
+         mDWluDy4pN+W3xuofoYcVBXIwrEGK8Qyc8yuRcoh7t3SobGZ+1UilDd8SPkpxIK/ldFY
+         ee3Ckbnaj4y1BTt5mK31PoVSemKmtbAkUGBFMKZZEgtdBMi8rR476Qq3EdLnhuKJTJzj
+         2SN/lZN4my2CfMXt6/5vU7VDMN6ewI680v5Obbtbg1y8HPnQJpMJ5OtJ8kWG/LArreR9
+         DbL328RRsyZqeqKyFh479Hkq5mukwy5/EWWuNH3G37qObyO+kKInbI2g+uyl6Qun+Q6D
+         cIKg==
+X-Forwarded-Encrypted: i=1; AJvYcCWyPHX2hJgssLDn7Gib7XzLlxxOmWakGX0FdmLLkBXnt9/Hx9OtzmZmSpG3y+i4icVSyx2eKKmcDu0Z/aj6@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmLtqpxehOWOWMqf6pWZlzpTCTGrcIxteGPdHfSzVJnb1roTwu
+	239nJShYlaUFqu2J/SUGyLEIDsgTnNWDMleEJ8ZKvXgahduGWXIFRbZp4tGF0sTcd0Q=
+X-Gm-Gg: ASbGncswNUFCJhWAE4xJgR7CN7vI7+MxGkQvFUf/VIz0FyMF77JhigL6cKshkYu96T6
+	HIOmslRGp0h55US8V0w11spb0s91+AdHquINLPQ3t2U5yRCYRqZR6E1roV+hyy//nRWEAMNuDCA
+	GrdBElU+GohSAwK0vJy69q/ldSMAKAuZpkQIQRvbTxU/igB5is7f7tJbOfgDxqvnmLkzX6otWiA
+	HFVrB96HB4Fr0QNXBd4n3+fa+BJMMuzw2ikGCnNr5740Nq8CVMF8/iSeCS/uAZtOZWvF6jn9zRd
+	64Z9bXvzpggAbsKKwajVies8OXKak3xhPPwh2ZEnmDESs0feVNGBLTUFuWUvKY7mXQ==
+X-Google-Smtp-Source: AGHT+IE7aNvrL801nce5K/gCd4B0EbDVYCJl9pyUvZAsnQZSq9qyx+zKtCFrtCQyL2xM4CQ5A+4QYA==
+X-Received: by 2002:a05:600c:3587:b0:43d:4e9:27ff with SMTP id 5b1f17b1804b1-4533cacf27fmr81249365e9.7.1750082146044;
+        Mon, 16 Jun 2025 06:55:46 -0700 (PDT)
+Received: from [10.100.51.209] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a568b19b32sm11311798f8f.67.2025.06.16.06.55.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Jun 2025 05:20:15 -0700 (PDT)
-Message-ID: <a1abfdbe-5aee-4307-abce-5fe15bff6266@gmail.com>
-Date: Sun, 15 Jun 2025 14:20:15 +0200
+        Mon, 16 Jun 2025 06:55:45 -0700 (PDT)
+Message-ID: <e12739f9-bb54-4e9d-b70c-f4b5f99a7920@suse.com>
+Date: Mon, 16 Jun 2025 15:55:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -66,49 +66,37 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] audit,module: restore audit logging in load failure
+ case
+To: Richard Guy Briggs <rgb@redhat.com>
+Cc: Paul Moore <paul@paul-moore.com>, Eric Paris <eparis@parisplace.org>,
+ Steve Grubb <sgrubb@redhat.com>,
+ Linux-Audit Mailing List <linux-audit@lists.linux-audit.osci.io>,
+ LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org,
+ Linux Kernel Audit Mailing List <audit@vger.kernel.org>
+References: <9b7b21e5f37f5718fe9176a36ebf670bbdfdd54a.1748462545.git.rgb@redhat.com>
 Content-Language: en-US
-To: linux-modules@vger.kernel.org
-From: PF <pierre.forstmann@gmail.com>
-Subject: How to run tests ?
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <9b7b21e5f37f5718fe9176a36ebf670bbdfdd54a.1748462545.git.rgb@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hello,
+On 6/13/25 9:58 PM, Richard Guy Briggs wrote:
+> The move of the module sanity check to earlier skipped the audit logging
+> call in the case of failure and to a place where the previously used
+> context is unavailable.
+> 
+> Add an audit logging call for the module loading failure case and get
+> the module name when possible.
+> 
+> Link: https://issues.redhat.com/browse/RHEL-52839
+> Fixes: 02da2cbab452 ("module: move check_modinfo() early to early_mod_check()")
+> Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
 
+Looks ok to me from the modules perspective.
 
-I'm trying to run tests on Debian 12 ou Fedora 38.
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Following command runs without any error:
-
-meson setup --native-file build-dev.ini builddir/
-
-But following command always fails (here on Debian 12 but on Fedora 38 I 
-get similar error)
-
-$ ninja -C builddir test
-ninja: Entering directory `builddir'
-[0/68] Generating testsuite/build-module-playground with a custom command
-make: Entering directory 
-'/home/pierre/kmod/builddir/testsuite/module-playground'
-make -C /lib/modules/$(uname -r)/build M=$PWD modules
-make[1]: Entering directory '/usr/lib/modules/6.1.0-37-amd64/build'
-make[1]: *** No rule to make target 'modules'. Stop.
-make[1]: Leaving directory '/usr/lib/modules/6.1.0-37-amd64/build'
-make: *** [Makefile:23: modules] Error 2
-make: Leaving directory 
-'/home/pierre/kmod/builddir/testsuite/module-playground'
-[0/68] Linking target testsuite/delete_module.so
-FAILED: testsuite/bb-rootfs
-/home/pierre/kmod/scripts/setup-modules.sh /home/pierre/kmod 
-testsuite/module-playground
-[3/68] Linking target kmod
-ninja: build stopped: subcommand failed.
-
-(First run says that the directory "build" does not exist. But creating 
-the directory does not help)
-
-What am I doing wrong ?
-
-
-Thanks.
-
+-- 
+Thanks,
+Petr
