@@ -1,96 +1,78 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D82E7F34;
-	Wed, 18 Jun 2025 14:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3732D16B3B7;
+	Wed, 18 Jun 2025 19:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750255377; cv=none; b=H7XvgRcq1C/8GCIHnARaXlh/Q/M9+WUwl7qSOeCrMohvgDUKW2iH6WNy6o4dmeeaVxpJj50mcPKXUbe4UEDWkf6mTeV76nBBoK4XZMTv8YKKSBqK4Zr51mPoYwzXdDz+BR78PoUIwRQeaNlTvpsx8ffP6h7JQi/HBIEoZWWYvTk=
+	t=1750276137; cv=none; b=t/8IpKt/nPx47KiDCFuUt2GWeIfOdG14opMahuSlrUC/LeAtj9HwzgBhQXOVNckx2oqH3M7o5aSPhVCFxXs6Zzrc+eXpKZhnotn9jhUHWLID9blrppSa/NChTx2NVLM9m8imVQyWjpd46VDMrPnJ4iZbvkls44RXSxLG1k54ho4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750255377; c=relaxed/simple;
-	bh=G79munEcYtIpW+6TIz0FYZTbqw1Q12VEgJ/b2Srg43M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XNKuiFwJ/77uxw91G789GOzKk8ustAjkLMgHQwPwhdDwSvj7LdYiTkRy3TINwcnbWJcqsqKcfoZUXehvmSUqf1oLLwHXXbZUulZPRkqSF7vGtt65HN1bVhuMggemZlnpcotg/Yts8odtG2fhCt8XDoPgAR0YuG3qjVDAlbrVlsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PriHkIOu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750276137; c=relaxed/simple;
+	bh=FZzI6adUeBKtCN+hzD8CtOSpXbsit36US1Vf9DPcRbA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=f/LduGVGuXAAk8dQTO7qgV5JLnNs6PTbqX5B9scZWnE9lroy+8sOQH4eyvrz06Dw5nMb8fxSS9kUrlMf2UAW6O6AZT2oBrVoh/f8QUnQCnPELIU+qK7YE27QpbL4NEvIIPWVFQ+koNsZV3JL+TNWsxXjM5x+sV2XiH6dP22dLXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t3VipRQm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PriHkIOu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA14C4CEE7;
-	Wed, 18 Jun 2025 14:02:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t3VipRQm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46789C4CEE7;
+	Wed, 18 Jun 2025 19:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750255377;
-	bh=G79munEcYtIpW+6TIz0FYZTbqw1Q12VEgJ/b2Srg43M=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PriHkIOu+8RGIE2DZpBOq20BWXVxnTMcXRwcYgIg8eTi7T7edVakZSQ5x8HeBtipb
-	 WzjfZ02sERcA7W4gpqHUlsq1qWfKYnPXQYjIuj8c5v9x4g6yA8uBlFqhQ4h3U8nVvr
-	 8DlI1PjtYlo/U39bdbYkVL4HR+ASmG4tOmQan/PuNj8HvlSlJ7qEIuxVwHpCxTPT+Y
-	 RYQNroYhj0pOPqNsUOPrPZMZ7hM+0xQDchqtyf4rJSnX+jJSSLgi3Y/HvY8HrPRMVB
-	 Lj1IhNrV1UeEMG6wCch3hjxFhNYb8hJ+m5J6mUyfD+Sc6ARLjY5GbY26b7PQPsUmxL
-	 /ialfmOrjwgiw==
-Message-ID: <c74f3241-1184-49e8-b6c0-7f08c9c63814@kernel.org>
-Date: Wed, 18 Jun 2025 16:02:54 +0200
+	s=k20201202; t=1750276136;
+	bh=FZzI6adUeBKtCN+hzD8CtOSpXbsit36US1Vf9DPcRbA=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=t3VipRQmRHZ0SY2shy6+Z2DyfeCr5nQC5ufVuHdyU5Ph0N/Q8B8XSlaW4GVjvBF5H
+	 zt58EQHyOb7rgRQqgS77g38xj96QVVqn2tVlyJo/lnWus6bTZcWvBLuYQPGrTHCOl1
+	 tHPSEvNUTU2gYqAoHB8nTqwagVRbyt66J6HwYP6jqJzi9Ko/ky3pKp3Qoy3MUrtC/c
+	 gN9Y8j4o00uyYi5ymdpmAiucvaEYpIRRxW6iyDl8ogNrEInT7qI0LaNi8gQF5m0K1u
+	 1EfAh5t+fqTaX+uBDcHEF649gTaAsCH1Lj0sBG9xMr46NA6JBuX9Ue7613qTU4a476
+	 idbdsT8OTLXrA==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH v2 1/2] module: Fix memory deallocation on error path in
- move_module()
-To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250618122730.51324-1-petr.pavlu@suse.com>
- <20250618122730.51324-2-petr.pavlu@suse.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20250618122730.51324-2-petr.pavlu@suse.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Wed, 18 Jun 2025 21:48:50 +0200
+Message-Id: <DAPX3U7TF728.2YCGGSXQ03AQI@kernel.org>
+Cc: "Trevor Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye"
+ <ark.email@gmail.com>, <rust-for-linux@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Petr
+ Pavlu" <petr.pavlu@suse.com>, "Sami Tolvanen" <samitolvanen@google.com>,
+ "Daniel Gomez" <da.gomez@samsung.com>, "Simona Vetter"
+ <simona.vetter@ffwll.ch>, "Greg KH" <gregkh@linuxfoundation.org>, "Fiona
+ Behrens" <me@kloenk.dev>, "Daniel Almeida" <daniel.almeida@collabora.com>,
+ <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 5/6] rust: samples: add a module parameter to the
+ rust_minimal sample
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Andreas Hindborg" <a.hindborg@kernel.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Alice Ryhl"
+ <aliceryhl@google.com>, "Masahiro Yamada" <masahiroy@kernel.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Danilo Krummrich" <dakr@kernel.org>, "Nicolas Schier"
+ <nicolas.schier@linux.dev>
+X-Mailer: aerc 0.20.1
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+ <20250612-module-params-v3-v13-5-bc219cd1a3f8@kernel.org>
+In-Reply-To: <20250612-module-params-v3-v13-5-bc219cd1a3f8@kernel.org>
 
-On 18/06/2025 14.26, Petr Pavlu wrote:
-> The function move_module() uses the variable t to track how many memory
-> types it has allocated and consequently how many should be freed if an
-> error occurs.
-> 
-> The variable is initially set to 0 and is updated when a call to
-> module_memory_alloc() fails. However, move_module() can fail for other
-> reasons as well, in which case t remains set to 0 and no memory is freed.
-> 
-> Fix the problem by initializing t to MOD_MEM_NUM_TYPES. Additionally, make
-> the deallocation loop more robust by not relying on the mod_mem_type_t enum
-> having a signed integer as its underlying type.
-> 
-> Fixes: c7ee8aebf6c0 ("module: add stop-grap sanity check on module memcpy()")
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+On Thu Jun 12, 2025 at 3:40 PM CEST, Andreas Hindborg wrote:
+> Showcase the rust module parameter support by adding a module parameter t=
+o
+> the `rust_minimal` sample.
+>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+
+Reviewed-by: Benno Lossin <lossin@kernel.org>
+
+---
+Cheers,
+Benno
+
 > ---
->  kernel/module/main.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 413ac6ea3702..9ac994b2f354 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2697,7 +2697,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
->  static int move_module(struct module *mod, struct load_info *info)
->  {
->  	int i;
-> -	enum mod_mem_type t = 0;
-> +	enum mod_mem_type t = MOD_MEM_NUM_TYPES;
->  	int ret = -ENOMEM;
->  	bool codetag_section_found = false;
->  
-> @@ -2776,7 +2776,7 @@ static int move_module(struct module *mod, struct load_info *info)
->  	return 0;
->  out_err:
->  	module_memory_restore_rox(mod);
-> -	for (t--; t >= 0; t--)
-> +	while (t--)
->  		module_memory_free(mod, t);
->  	if (codetag_section_found)
->  		codetag_free_module_sections(mod);
-
-Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+>  samples/rust/rust_minimal.rs | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
