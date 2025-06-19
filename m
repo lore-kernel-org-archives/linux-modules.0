@@ -1,159 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156F1221F13;
-	Wed, 18 Jun 2025 21:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C5D221F30;
+	Thu, 19 Jun 2025 11:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750280857; cv=none; b=kPzREyPSpcipxrTthWq29skhKaDBOCUcRekZhMLOsXOrIGyi0zSBq/wlOWSleafBDA/naFLbO+hx38vPnwPEK4h4FeZy+dvBSx2U5GazvjjI2xvdq0+SUHDXwMEL4I6XDnuPAgsOIKALxxgNBWZTRZEMwJhligVTU0RWnS+XZXQ=
+	t=1750331564; cv=none; b=aL0SHeNn5lHpNTaF8/Z0DkdBFLzNfW03vLurHGkjE5lWkbkne9vIALe3LYJcOuM2L5uF4xNnB0MrPAYJIO/crXSdqbpaAdj/lwGaFc+vgiN9uCrQFBz+nJOAn7TDA8s9biPVJ40Sm9plMOvVloh2OVBjBtRM04GaQga+fOqzcss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750280857; c=relaxed/simple;
-	bh=2Fa+CiaEKDG/45664bJOrW49zdOHbkEpkERvvIlutq0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=gyE5FU2ckIz3C75LMFpamV4xrLW0bu74asUiC9pzjCBRUM83Lf0sw3vuR7gK1iVwkzWFSkl6VbqeVlIg+KLn9XUUshn6p0Q6Y10/KZ4J7FUw4z4SMUR2+jwPh+7Dbc2Jl/y9ThiBNbB/FrjgdB+F1cZZpWB2vGSqPhVMdWSNIdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=skniixjL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750331564; c=relaxed/simple;
+	bh=0u88sDT/q65KVfR5hIDnrWSdvSt9Ru54yMvadeBOFqc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=q0d8DracoIYXQT4O47SvvmjnamiAvcizjffX3kLu0u0r69tcDjlMJ0qFX1XBZfGCIkVBt4XiXRrpNskZ7rQdi/vArBJdzG3j0eBuHcfZHLHBUC9cNRjQLFuTx5w6WDSlwSI8eFp+CZ9JpX16lCZIhJAn+HRafzmBxW8C5FPHl4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+JJHpce; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="skniixjL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4782DC4CEE7;
-	Wed, 18 Jun 2025 21:07:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+JJHpce"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0066FC4CEEA;
+	Thu, 19 Jun 2025 11:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750280856;
-	bh=2Fa+CiaEKDG/45664bJOrW49zdOHbkEpkERvvIlutq0=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=skniixjLc6Xk7NhihFRDAoeHa5UgkQsF7Z6/21kBw+4kyjEN8dtQS5OXz1p12yGeH
-	 OpzL+ucZQU/eywKTHzoBJ8qW3760+VcpII5vACym3HP6v0qRGKaiyUZP41XCd1wPQR
-	 U6djoCblprKp58Td6qROaMhD784yWsAfBeOg02XiU1acA9GmdYwNU+v3kgkQleHGe9
-	 OWKpE3pWuSUEvFl3/wIM9RootP39i6udLWiRqkjSXY15+/NvszXn8P/XCb2UzrLEx9
-	 0CMKkHxsMKVkHMFVk3TQDl0WhVYKpnTpYtsQ52+K3j8TS7BkhxM8yRSKRO657iA9Tx
-	 iexYksS+fQjog==
+	s=k20201202; t=1750331563;
+	bh=0u88sDT/q65KVfR5hIDnrWSdvSt9Ru54yMvadeBOFqc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=f+JJHpcebDoGLAiQoKVcSV4vvPEeM7EYIN5xxv6fEWkCF+mVHQMwzBhghOpZKCghQ
+	 7/Td7l838WQdl5744jAdc8yVM7VI4Jncb+XKdHTGVGaJzz0YyLV37Vz6rxmolow8Uu
+	 JRTK+6hqUG+5XmnL3kjsYAE4NO34MW/XGNu7uw4VKAGlq1scb2Pp9u1Osxry71PAss
+	 LJc2oRs8NUFbDeSm3zI7FQ9D3rReyBIXXszKJ0bTkSQKD//b1Uy8bjqWNOEkStyTCS
+	 x1syDEa9r2lrlCbKbjL3wBvHTinnPdRlnCGZbJDABkMYsoJbeMdLlw7GYx6i9qzCCK
+	 0Vxys58LqCw9w==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Benno Lossin" <lossin@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Alice
+ Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada" <masahiroy@kernel.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,  "Nicolas
+ Schier" <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 1/6] rust: str: add radix prefixed integer parsing
+ functions
+In-Reply-To: <DAPY5HF9HGXC.FCEKAMLPFY1H@kernel.org> (Benno Lossin's message of
+	"Wed, 18 Jun 2025 22:38:00 +0200")
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+	<20250612-module-params-v3-v13-1-bc219cd1a3f8@kernel.org>
+	<bbRxeBHCiFQl9UTC1hFQYdzkdAIV5HcRTuFf9ucPUEZZ-uJmaHAZXfd8Tk-k9vzROgFsCyNhGBBCn5J_HnbUSA==@protonmail.internalid>
+	<DAPY5HF9HGXC.FCEKAMLPFY1H@kernel.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Thu, 19 Jun 2025 13:12:30 +0200
+Message-ID: <871prg7zoh.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 18 Jun 2025 23:07:30 +0200
-Message-Id: <DAPYS2D9HNBT.1ZTN1VHCPN4XA@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Masahiro Yamada" <masahiroy@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
- "Danilo Krummrich" <dakr@kernel.org>, "Nicolas Schier"
- <nicolas.schier@linux.dev>
-Cc: "Trevor Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye"
- <ark.email@gmail.com>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Sami Tolvanen" <samitolvanen@google.com>,
- "Daniel Gomez" <da.gomez@samsung.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Greg KH" <gregkh@linuxfoundation.org>, "Fiona
- Behrens" <me@kloenk.dev>, "Daniel Almeida" <daniel.almeida@collabora.com>,
- <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v13 4/6] rust: module: update the module macro with
- module parameter support
-From: "Benno Lossin" <lossin@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
- <20250612-module-params-v3-v13-4-bc219cd1a3f8@kernel.org>
-In-Reply-To: <20250612-module-params-v3-v13-4-bc219cd1a3f8@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Thu Jun 12, 2025 at 3:40 PM CEST, Andreas Hindborg wrote:
-> +
-> +    fn emit_params(&mut self, info: &ModuleInfo) {
-> +        let Some(params) =3D &info.params else {
-> +            return;
-> +        };
-> +
-> +        for param in params {
-> +            let ops =3D param_ops_path(&param.ptype);
-> +
-> +            // Note: The spelling of these fields is dictated by the use=
-r space
-> +            // tool `modinfo`.
-> +            self.emit_param("parmtype", &param.name, &param.ptype);
-> +            self.emit_param("parm", &param.name, &param.description);
+"Benno Lossin" <lossin@kernel.org> writes:
 
-I just read this part again and I want to voice my dissatisfaction with
-these key names. (not that you can do anything about that :)
+> On Thu Jun 12, 2025 at 3:40 PM CEST, Andreas Hindborg wrote:
+>> +pub trait ParseInt: private::FromStrRadix + TryFrom<u64> {
+>> +    /// Parse a string according to the description in [`Self`].
+>> +    fn from_str(src: &BStr) -> Result<Self> {
+>> +        match src.deref() {
+>> +            [b'-', rest @ ..] => {
+>> +                let (radix, digits) = strip_radix(rest.as_ref());
+>> +                // 2's complement values range from -2^(b-1) to 2^(b-1)-1.
+>> +                // So if we want to parse negative numbers as positive and
+>> +                // later multiply by -1, we have to parse into a larger
+>> +                // integer. We choose `u64` as sufficiently large.
+>> +                //
+>> +                // NOTE: 128 bit integers are not available on all
+>> +                // platforms, hence the choice of 64 bits.
+>> +                let val =
+>> +                    u64::from_str_radix(core::str::from_utf8(digits).map_err(|_| EINVAL)?, radix)
+>> +                        .map_err(|_| EINVAL)?;
+>> +
+>> +                if val > Self::abs_min() {
+>> +                    return Err(EINVAL);
+>> +                }
+>> +
+>> +                if val == Self::abs_min() {
+>> +                    return Ok(Self::MIN);
+>> +                }
+>> +
+>> +                // SAFETY: We checked that `val` will fit in `Self` above.
+>
+> Sorry that it took me this long to realize, but this seems pretty weird.
+> I guess this is why the `FromStrRadix` is `unsafe`.
+>
+> Can we just move this part of the code to `FromStrRadix` and make that
+> trait safe?
+>
+> So essentially have:
+>
+>     fn from_u64(value: u64) -> Result<Self>;
+>
+> in `FromStrRadix` and remove `MIN`, `abs_min` and `complement`. Then
+> implement it like this in the macro below:
+>
+>     const ABS_MIN = /* existing abs_min impl */;
+>     if value > ABS_MIN {
+>         return Err(EINVAL);
+>     }
+>     if val == ABS_MIN {
+>         return Ok(<$ty>::MIN);
+>     }
+>     // SAFETY: We checked that `val` will fit in `Self` above.
+>     let val: $ty = unsafe { val.try_into().unwrap_unchecked() };
+>     (!val).wrapping_add(1)
+>
+> The reason that this is fine and the above is "weird" is the following:
+> The current version only has `Self: FromStrRadix` which gives it access
+> to the following guarantee from the `unsafe` trait:
+>
+>     /// The member functions of this trait must be implemented according to
+>     /// their documentation.
+>     ///
+>     /// [`&BStr`]: kernel::str::BStr
+>
+> This doesn't mention `TryFrom<u64>` and thus the comment "We checked
+> that `val` will fit in `Self` above" doesn't really apply: how does
+> checking with the bounds given in `FromStrRadix` make `TryFrom` return
+> `Ok`?
 
-> +
-> +            write!(
-> +                self.param_buffer,
-> +                "
-> +                    pub(crate) static {param_name}:
+I'm having a difficult time parsing. Are you suggesting that we guard
+against implementations of `TryInto<u64>` that misbehave?
 
-Does this need to be accessed by anything else except the static below?
-If no, then can we move it inside of that static? So
 
-    #[link_section =3D \"__param\"]
-    #[used]
-    static __{module_name}_{param_name}_struct: ::kernel::module_param::Rac=
-yKernelParam =3D {
-        static {param_name}:
-            ::kernel::module_param::ModuleParamAccess<{param_type}> =3D
-                ::kernel::module_param::ModuleParamAccess::new({param_defau=
-lt});
-        // ...
-    };
+Best regards,
+Andreas Hindborg
 
----
-Cheers,
-Benno
 
-> +                        ::kernel::module_param::ModuleParamAccess<{param=
-_type}> =3D
-> +                            ::kernel::module_param::ModuleParamAccess::n=
-ew({param_default});
-> +
-> +                    #[link_section =3D \"__param\"]
-> +                    #[used]
-> +                    static __{module_name}_{param_name}_struct:
-> +                        ::kernel::module_param::RacyKernelParam =3D
-> +                        ::kernel::module_param::RacyKernelParam(::kernel=
-::bindings::kernel_param {{
-> +                            name: if cfg!(MODULE) {{
-> +                                ::kernel::c_str!(\"{param_name}\").as_by=
-tes_with_nul()
-> +                            }} else {{
-> +                                ::kernel::c_str!(\"{module_name}.{param_=
-name}\").as_bytes_with_nul()
-> +                            }}.as_ptr(),
-> +                            // SAFETY: `__this_module` is constructed by=
- the kernel at load time
-> +                            // and will not be freed until the module is=
- unloaded.
-> +                            #[cfg(MODULE)]
-> +                            mod_: unsafe {{
-> +                                (&::kernel::bindings::__this_module
-> +                                    as *const ::kernel::bindings::module=
-)
-> +                                    .cast_mut()
-> +                            }},
-> +                            #[cfg(not(MODULE))]
-> +                            mod_: ::core::ptr::null_mut(),
-> +                            ops: &{ops} as *const ::kernel::bindings::ke=
-rnel_param_ops,
-> +                            perm: 0, // Will not appear in sysfs
-> +                            level: -1,
-> +                            flags: 0,
-> +                            __bindgen_anon_1:
-> +                                ::kernel::bindings::kernel_param__bindge=
-n_ty_1 {{
-> +                                    arg: {param_name}.as_mut_ptr().cast(=
-)
-> +                                }},
-> +                        }});
-> +                ",
-> +                module_name =3D info.name,
-> +                param_type =3D param.ptype,
-> +                param_default =3D param.default,
-> +                param_name =3D param.name,
-> +                ops =3D ops,
-> +            )
-> +            .unwrap();
-> +        }
-> +    }
-> +}
