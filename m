@@ -1,136 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B42DD188CB1;
-	Thu, 19 Jun 2025 13:15:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351B63085B2;
+	Thu, 19 Jun 2025 16:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750338907; cv=none; b=kp28w68vaDr+pqQXmDhJz7toyOZEkMNnvJb4d963W7cfIy/u7430jbJ3TthtGteulM+t7XFSX7YOQmpiW8AjV5j+fo1OUFAPYpbOD84HZI4GDhSHEQJrLRmTpQ76TSvLxV8FOXWdlHpk6tjh2CZsWRRI9Tzex0nF+USFbpk11VU=
+	t=1750350443; cv=none; b=RIhp0MR3p2/qTLViOCRxWwAUYUL6+EuY3cMJ2yAW3WJnKk+U2xKhI36Jv8Wob9uTBGULY+NemvV/KDiDS1UBVA9zZrkIkoCma06t+SJI2nkjxs42ejDo6NspEJq4hkPAM6sFZk5UorOq3WF8S38szPKKO/hQD3YlTzhORJixoj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750338907; c=relaxed/simple;
-	bh=XmA/rDaxVSJIKxYDrc79WLUOEQA0G2rxhfSxcF0bi0w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=V6rhNcajfAv2HUPXWMCdTSUfKRHITB6xfz5cbUvBHkuAekpuWhlQx4732ogAWb79s1/nnykyvoy/1PKfeRL6Jb37TaU5UiK0fijgZV/b+OfGpv4U+IsR7a46AhZuCvM5lkHWoWA6VjVZDuGSKWCWisK0OzS/8P7dykwoB9AU+gE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HN89VgSY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1750350443; c=relaxed/simple;
+	bh=ut7sBnFRrF7Mqh47DfQbuG68oA6w2Zz7sw0xx8b8S6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VnWSQqLk18jJ7qSCMaaiB09q4D7ARe7X9lmQRNb0U6cLl5yuDoaX44NBwLeWllXDk26kdVq+UU1S6H1SBxc1zcBDwn351GnUZh3mWIJjSsMCAkxxXN12M3JdvzEVPd9FmqW5J/54pQt8PsX31rrh6bXdap15UDpzmRxol7dTBYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FJEkvDDr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HN89VgSY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6ABCC4CEEA;
-	Thu, 19 Jun 2025 13:15:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FJEkvDDr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 761E3C4CEEA;
+	Thu, 19 Jun 2025 16:27:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750338907;
-	bh=XmA/rDaxVSJIKxYDrc79WLUOEQA0G2rxhfSxcF0bi0w=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To:From;
-	b=HN89VgSYMF+Q0+qxAHhMd+/MiXoZSysZyeTDqWfJKVQJET4+UsnMZqbsxtRQf/+HH
-	 46G3I5+J9OVvl61r/Bg5Ii+6EPOuhHS4dQku/J+1hgG2X6ajxmpQZENAPTMoJ9BLtd
-	 RWybwEPXjtkwQVoMrAi43WExx8OcRbHqxGvbjZalxzjzGERH+FiminnpsTrEjEdjAg
-	 D/pQIRBJAtaARHnL9Nc379AsQWnXNMdhc9/BevFVJtlRGq5Xr0FHqmTGjED6Fyi4nQ
-	 MxdBlX9dNLFNtUCI5tckB4dLFmX+m5doQ5u9bEryuKaiuci8CIigmNvksH6cPWg9B0
-	 FyI5enUD1ezzQ==
+	s=k20201202; t=1750350442;
+	bh=ut7sBnFRrF7Mqh47DfQbuG68oA6w2Zz7sw0xx8b8S6g=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FJEkvDDruVAykG1bun51wz0patqolTYo6wGXEy+dzHZmtcmsQ03UAy0Hm012GEORL
+	 MSkpczCrEztNz3k8osJYKaEU7TilWHQtsqxDtRfQwmGJEg7g2CTARWQXiozKWmcdRv
+	 zEjeKFP9QQSXBIHpssKwJVBMMQeVZYKjfz6LAMv1P6YKm4quJWyRkV2RehkBNPxoyW
+	 KNd0bgGglA7uKKPW3KU6iO6kypXn4fCiJpYsCJovkmacX6fAol55yKd4bflvCVh5Fy
+	 eFF1WCzTwIoPaPVhHPtQz5MtMu/61p5uL/OXiAucZlelZw5ThyCNIim78dB3k2FiiK
+	 Ufs/LrsP7yquw==
+Message-ID: <c5e3b6fc-e9dc-4551-b632-25dd2db9ec08@kernel.org>
+Date: Thu, 19 Jun 2025 18:27:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH 1/3] module: move 'struct module_use' to internal.h
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
+ <20250612-kunit-ifdef-modules-v1-1-fdccd42dcff8@linutronix.de>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <20250612-kunit-ifdef-modules-v1-1-fdccd42dcff8@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 19 Jun 2025 15:15:00 +0200
-Message-Id: <DAQJCUE1C2JE.204A8IS7LBIVZ@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Masahiro Yamada" <masahiroy@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
- "Danilo Krummrich" <dakr@kernel.org>, "Nicolas Schier"
- <nicolas.schier@linux.dev>
-Cc: "Trevor Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye"
- <ark.email@gmail.com>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Sami Tolvanen" <samitolvanen@google.com>,
- "Daniel Gomez" <da.gomez@samsung.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Greg KH" <gregkh@linuxfoundation.org>, "Fiona
- Behrens" <me@kloenk.dev>, "Daniel Almeida" <daniel.almeida@collabora.com>,
- <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
-From: "Benno Lossin" <lossin@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
- <20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
-In-Reply-To: <20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Thu Jun 12, 2025 at 3:40 PM CEST, Andreas Hindborg wrote:
-> +/// A wrapper for kernel parameters.
-> +///
-> +/// This type is instantiated by the [`module!`] macro when module param=
-eters are
-> +/// defined. You should never need to instantiate this type directly.
-> +///
-> +/// Note: This type is `pub` because it is used by module crates to acce=
-ss
-> +/// parameter values.
-> +#[repr(transparent)]
-> +pub struct ModuleParamAccess<T> {
-> +    data: core::cell::UnsafeCell<T>,
-> +}
-> +
-> +// SAFETY: We only create shared references to the contents of this cont=
-ainer,
-> +// so if `T` is `Sync`, so is `ModuleParamAccess`.
-> +unsafe impl<T: Sync> Sync for ModuleParamAccess<T> {}
-> +
-> +impl<T> ModuleParamAccess<T> {
-> +    #[doc(hidden)]
-> +    pub const fn new(value: T) -> Self {
-> +        Self {
-> +            data: core::cell::UnsafeCell::new(value),
-> +        }
-> +    }
-> +
-> +    /// Get a shared reference to the parameter value.
-> +    // Note: When sysfs access to parameters are enabled, we have to pas=
-s in a
-> +    // held lock guard here.
-> +    pub fn get(&self) -> &T {
-> +        // SAFETY: As we only support read only parameters with no sysfs
-> +        // exposure, the kernel will not touch the parameter data after =
-module
-> +        // initialization.
+On 12/06/2025 16.53, Thomas WeiÃschuh wrote:
+> The struct was moved to the public header file in
+> commit c8e21ced08b3 ("module: fix kdb's illicit use of struct module_use.").
+> Back then the structure was used outside of the module core.
+> Nowadays this is not true anymore, so the structure can be made internal.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-This should be a type invariant. But I'm having difficulty defining one
-that's actually correct: after parsing the parameter, this is written
-to, but when is that actually? Would we eventually execute other Rust
-code during that time? (for example when we allow custom parameter
-parsing)
-
-This function also must never be `const` because of the following:
-
-    module! {
-        // ...
-        params: {
-            my_param: i64 {
-                default: 0,
-                description: "",
-            },
-        },
-    }
-
-    static BAD: &'static i64 =3D module_parameters::my_param.get();
-
-AFAIK, this static will be executed before loading module parameters and
-thus it makes writing to the parameter UB.
-
-So maybe we should just use some sort of synchronization tool here...
-
----
-Cheers,
-Benno
-
-> +        unsafe { &*self.data.get() }
-> +    }
-> +
-> +    /// Get a mutable pointer to the parameter value.
-> +    pub const fn as_mut_ptr(&self) -> *mut T {
-> +        self.data.get()
-> +    }
-> +}
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
