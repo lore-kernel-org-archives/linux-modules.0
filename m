@@ -1,153 +1,123 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519E229B224
-	for <linux-modules@vger.kernel.org>; Wed, 25 Jun 2025 16:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4955725A33F;
+	Wed, 25 Jun 2025 23:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750867661; cv=none; b=erE+MCJ5iUQjFswcAln92h8k50043oqQx6iO7b+7KvdjH7eGi6KBgcWN1Livk1fo/Qphk+7ChGQmL7pbbPAkqIkl4kg/Vq9nIm0vftbrKHCNgbUftooofB0+T5+E1dAKKB/HDTjZrgjey8geJk20aqX5XsLtkic/ypVkXrW+7fs=
+	t=1750893189; cv=none; b=aUC6pN4IAxNrTYSoZrtnrI9jq6rn38Mv/67nAqN3flOboAWo+LaeUR1rXnbyspc50Af7AM0UEIgwMPBO1QbM+t4HKHOHqnCwyA+Pdv9uTxhR8+/Mm8vH6BdM7RXAd8u0zUttGBk9vGESTWcH9EXhNnpCETI6foUcnmsansKg1fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750867661; c=relaxed/simple;
-	bh=PmLKnatmcArjaqzkFbJF6iubiesxiEHtv6p0vrH87PU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cyx7y0rkGjS617nwVunAAd0u90AnpPjj8lj/xoU1idSSTiyTjYW7jvxsNsfShNMLZg4iPZdvcaOmL+1vQsMZolWCiiRPKiuuCEbfGU+Ml1xyGPBO2IzGX1mejvHI7xfEFIr4AurJDAJ1KNr2e+jQgj313ReHWPWGmrV3Q2PET58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l+o3JLEU; arc=none smtp.client-ip=209.85.160.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1750893189; c=relaxed/simple;
+	bh=qCNf3yjCbeA85cA6kY5mUVbxNXuxynZhYCnNAeM6/qM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HPE6Vz2C5VKd1JdBdt1jZgXroJTJRFUn+MDtnRCoE9YszJ+oi5DAuPDUOZqE7aSiFFl3gQdu2zgnOPoYNGBHsDCEerir5v546/MgG138wAoVyorbw6XEMsEkxjTyGrL1FRARjJlmTavhff/zkdeO+BXMQwpXiXiiW3Qzv41Ht7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=L3i7mbNO; arc=none smtp.client-ip=192.19.144.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l+o3JLEU"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-47e9fea29easo464721cf.1
-        for <linux-modules@vger.kernel.org>; Wed, 25 Jun 2025 09:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1750867658; x=1751472458; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B2kSE53PozQNQP+6R+o2GRPmYUVj66J2/LIU6nQDQ3k=;
-        b=l+o3JLEUQoOmHPFFARPZm1hTn5iY0YGuBa2KshP4nCLy9AUToOH9dARTwT6kkBanan
-         4iJdu6H8Exv/bXotGvYNXNAV7bcO6AijeckcaInSYStYCFbkHCBNaTKk2M3UVcZDaXfT
-         36k0y4LxgzNeVyUmYHQQZrevFJ/zTDIBw2W1hITGpYb7U4M15bVyA4aFlWTWN3VzsJRe
-         n/sBW98Q0B3llrcKSj2P63rHnAClg3rv+QUv6b8TVO44TJ0tmdzHy1nmu4QO3TsyIUap
-         l4bsxdxJQubna77VPV1Tw4QbZihI0eXc1YU4c2TxS/dpGatPa/62uVru0pBTw9SYreBo
-         AC4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750867658; x=1751472458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B2kSE53PozQNQP+6R+o2GRPmYUVj66J2/LIU6nQDQ3k=;
-        b=Uq+E33NGax8U13stiy/iZrVuf1c5879usJ4kfrkXOF87LGiwWCZlZKTdc3FRPOz1r6
-         eNxTn5ySIvhdHETOVdVtOWPg5jltQbg5LereIs/MA7ZDQkRRXc32n/yfCUE8BetRQw0y
-         aR5VW5FjNOEevljQJ8y5jZkyDYLPbvNd8lYGCTCsyoFOfLJyCmu1ER4oKV8N89DP3ezC
-         FeMwpFkkMHDL322SquALQdGNsnTdGJNgBfMlR4sTctRGRk/TcjhLOjmHGGhFC2KMMjQP
-         Vu4zQuI8NjspqXONXLWEmcNVdp5ZXHcKUJFP6KUqPrETLd0TCQyxRl8uObvvC7altu+E
-         iEYw==
-X-Forwarded-Encrypted: i=1; AJvYcCXhe89q/7qVcnA/BeuSbnQ6EZYELcAvYTSsK4GhZPtkGMGf+7ytDpPFmdzuY1F8GJbK/Bx+yuyVBV5oQCuu@vger.kernel.org
-X-Gm-Message-State: AOJu0YytoQ/f/qNQ5WYwMU/apOOfj1sQ8CZ1oIbTrZO7OCz0MfifGyC2
-	k/M/LZmCeVjNTMA6/WIL6fU6p6lb4IWbShfqN3Hprsd7seeLduuqK7mTp95UGPYWEN2R+8lse8w
-	amHs91atlqH2wNWuQFIyynHuZWBR4abInYDxmqezHPkXct3kzKjQjmQeuqsI=
-X-Gm-Gg: ASbGnctFDRcJNcGyY/kBqrO9b9kmhvgokt+04tOYtuw7Gl0ihR/eKzSEmOgW7Ey9HAk
-	5LRyBWR28k6szJqqOaQnavXo+rtN6T08ay36cPG261Axle0ZxIM1DFd/z2L3HHBheEoUNFKrjoQ
-	IJNLXmiRqy1HG+RVMWCvnwUhC8hoDfdlQ5T7ghc81tEA==
-X-Google-Smtp-Source: AGHT+IEKTFo972c6FUomRFX6TTuvtcbQhZlTwD1AoLa3bGcnE2hHiBorQJ20QzhOgsiiVShTDRPJT+ULmhy04NwuUhM=
-X-Received: by 2002:a05:622a:8d1c:b0:471:f34d:1d83 with SMTP id
- d75a77b69052e-4a7c70b82bemr2870931cf.7.1750867657865; Wed, 25 Jun 2025
- 09:07:37 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="L3i7mbNO"
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id E3FB6C00282F;
+	Wed, 25 Jun 2025 16:13:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com E3FB6C00282F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1750893187;
+	bh=qCNf3yjCbeA85cA6kY5mUVbxNXuxynZhYCnNAeM6/qM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=L3i7mbNOOPE5/aTRKHTYI/azAJT31NyEOBxrS2IvQ4ijfPXH16lbJVSKIYebd8Xlc
+	 DWvgzncH7DKLphrrzvSbCGND8cYscZp3DbskD/iHc+fPt0GvOJ4EpdJ/pd8Pal6K2/
+	 B1PCuyG5JSTSSb8hGrpbjF+WRv9MYw5aS9wcNKos=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 3913418000530;
+	Wed, 25 Jun 2025 16:13:06 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: linux-kernel@vger.kernel.org
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Alexander Potapenko <glider@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Etienne Buira <etienne.buira@free.fr>,
+	Antonio Quartulli <antonio@mandelbit.com>,
+	Illia Ostapyshyn <illia@yshyn.com>,
+	linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+	linux-mm@kvack.org (open list:PER-CPU MEMORY ALLOCATOR),
+	linux-pm@vger.kernel.org (open list:GENERIC PM DOMAINS),
+	kasan-dev@googlegroups.com (open list:KASAN),
+	maple-tree@lists.infradead.org (open list:MAPLE TREE),
+	linux-modules@vger.kernel.org (open list:MODULE SUPPORT),
+	linux-fsdevel@vger.kernel.org (open list:PROC FILESYSTEM)
+Subject: [PATCH 02/16] MAINTAINERS: Include device.py under DRIVER CORE entry
+Date: Wed, 25 Jun 2025 16:10:39 -0700
+Message-ID: <20250625231053.1134589-3-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
+References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250618125037.53182-1-petr.pavlu@suse.com>
-In-Reply-To: <20250618125037.53182-1-petr.pavlu@suse.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 25 Jun 2025 09:07:26 -0700
-X-Gm-Features: Ac12FXwWUvrVId3iEH6F7cARj25951BIhaDjfYAOAdNuZpJPAx-cEVSASoHkK9o
-Message-ID: <CAJuCfpGeLXn4UGudJZywOJWUECE6oJUm9OyCvQ__SWE4qCLHbA@mail.gmail.com>
-Subject: Re: [PATCH v2] codetag: Avoid unused alloc_tags sections/symbols
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Arnd Bergmann <arnd@arndb.de>, Casey Chen <cachen@purestorage.com>, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 18, 2025 at 5:50=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> With CONFIG_MEM_ALLOC_PROFILING=3Dn, vmlinux and all modules unnecessaril=
-y
-> contain the symbols __start_alloc_tags and __stop_alloc_tags, which defin=
-e
-> an empty range. In the case of modules, the presence of these symbols als=
-o
-> forces the linker to create an empty .codetag.alloc_tags section.
->
-> Update codetag.lds.h to make the data conditional on
-> CONFIG_MEM_ALLOC_PROFILING.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+Include the GDB scripts file under scripts/gdb/linux/device.py under the
+DRIVER CORE, KOBJECTS, DEBUGFS AND SYSFS subsystem since it parses
+internal data structures that depend upon that subsystem.
 
-Thanks!
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 27521a01d462..d92a78bf66e9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7381,6 +7381,7 @@ F:	rust/kernel/faux.rs
+ F:	rust/kernel/platform.rs
+ F:	samples/rust/rust_driver_platform.rs
+ F:	samples/rust/rust_driver_faux.rs
++F:	scripts/gdb/linux/device.py
+ 
+ DRIVERS FOR OMAP ADAPTIVE VOLTAGE SCALING (AVS)
+ M:	Nishanth Menon <nm@ti.com>
+-- 
+2.43.0
 
-> ---
->
-> Changes since v1 [1]:
-> - Trivially rebased the patch on top of "alloc_tag: remove empty module t=
-ag
->   section" [2].
->
-> [1] https://lore.kernel.org/all/20250313143002.9118-1-petr.pavlu@suse.com=
-/
-> [2] https://lore.kernel.org/all/20250610162258.324645-1-cachen@purestorag=
-e.com/
->
->  include/asm-generic/codetag.lds.h | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/code=
-tag.lds.h
-> index a45fe3d141a1..a14f4bdafdda 100644
-> --- a/include/asm-generic/codetag.lds.h
-> +++ b/include/asm-generic/codetag.lds.h
-> @@ -2,6 +2,12 @@
->  #ifndef __ASM_GENERIC_CODETAG_LDS_H
->  #define __ASM_GENERIC_CODETAG_LDS_H
->
-> +#ifdef CONFIG_MEM_ALLOC_PROFILING
-> +#define IF_MEM_ALLOC_PROFILING(...) __VA_ARGS__
-> +#else
-> +#define IF_MEM_ALLOC_PROFILING(...)
-> +#endif
-> +
->  #define SECTION_WITH_BOUNDARIES(_name) \
->         . =3D ALIGN(8);                   \
->         __start_##_name =3D .;            \
-> @@ -9,7 +15,7 @@
->         __stop_##_name =3D .;
->
->  #define CODETAG_SECTIONS()             \
-> -       SECTION_WITH_BOUNDARIES(alloc_tags)
-> +       IF_MEM_ALLOC_PROFILING(SECTION_WITH_BOUNDARIES(alloc_tags))
->
->  #define MOD_SEPARATE_CODETAG_SECTION(_name)    \
->         .codetag.##_name : {                    \
-> @@ -22,6 +28,6 @@
->   * unload them individually once unused.
->   */
->  #define MOD_SEPARATE_CODETAG_SECTIONS()                \
-> -       MOD_SEPARATE_CODETAG_SECTION(alloc_tags)
-> +       IF_MEM_ALLOC_PROFILING(MOD_SEPARATE_CODETAG_SECTION(alloc_tags))
->
->  #endif /* __ASM_GENERIC_CODETAG_LDS_H */
->
-> base-commit: 52da431bf03b5506203bca27fe14a97895c80faf
-> prerequisite-patch-id: acb6e2f6708cd75488806308bfecf682b2367dc9
-> --
-> 2.49.0
->
