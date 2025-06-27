@@ -1,63 +1,73 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8552E9EBB
-	for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 16:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 004B71E49F
+	for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 17:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751040602; cv=none; b=JYTe/bE11St9lyr5g+AxMBV9UQ0xsccYcY5+InrYPfW/7h+ZDJg3KNHY4b9oWgcsPTfvvFXU7K2QX7VvdbwgxoWAGtq6dAuFzBmuOdCgJ4z65Ahujk9FsulI0btYfMwEs90O1GbqinNzG9ShjQlogKtf4aOlGTfXzDT/dB9tX7g=
+	t=1751044215; cv=none; b=DrwBEoBXYB1cciE2oTHXOReeNUsh/rh0UnlvPIy8/yht+AdVA5WFCpJUDBDZ6cfL9Z9P60roU9YFc/pdZIzguBifxUcYrHHpLRDJ3RpHaDjVTGv6Qu4SAPcZeDQiPMlRjYNmx23hTMVbHrupwfG0ntYruaFvFjVCpJq+lnPKP3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751040602; c=relaxed/simple;
-	bh=IH2+O5cU6bMl3dQgfqyetZYxS7jXnkdNLnvW+qxsQ88=;
+	s=arc-20240116; t=1751044215; c=relaxed/simple;
+	bh=ppdYl7lHbi/tBjei3K4fVc93zG6F8OmMk6u5o6UCQ60=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WTHkvq7uXjr0bZWdANqDE39zKlkOSiyzoKnTuwF3hzELjXIS/xxGK1UQSezJInHOb9BhAUxPMHGVLMXFvoBcsVMZAVRvp3klySPezvkCR/X2/nP8s6SG79MQZNeNJRtznFLUe2QDle49L1aWM4hK/L8RsymEsobuJvvm1k7orhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=H4dCPw8k; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	 In-Reply-To:Content-Type; b=HwCm8uh3E1uR+mzlhrql1/IVQcIQWYr33P6YsugeiRwzOcp96vMUgYCY3xt91ue/De2FuYcaopV4b4E377IXmWZZnkR+Grtn5CBmAF8gcNcyJFkEHAMHI3PwTxttnd/bpSAFfgWlOE99pU3OdYv+gs43BVT90iZLoLjJANx7XTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F8leUrTE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="H4dCPw8k"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7494999de5cso1860998b3a.3
-        for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 09:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1751040600; x=1751645400; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=6tajG5R3MCsrP/w0wwPMIBf3LF9dc2Wm7Uf1cjFJKdc=;
-        b=H4dCPw8kainQkV3U88q1ykgWUxcyaUhGqNx70wITre5B9Uqg0J5ACangeMO0rF8x6v
-         I86lecQmRle0IXAfhBiPjb3MOiHCqYYTthU4m0LlPGixC1QoSv64F+UuBk7yeSTdgtsy
-         2VaZFR3XhvRA9jigy235+wgd3/xBOuEZOA5KE=
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F8leUrTE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751044213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NmwfJQJV+c9wJ1hezhGH5ZiqOmaiPpTqYKUu0exw8Qg=;
+	b=F8leUrTEQvdTp9Zx27Ox321ZPO8RG7wVAAzKeQF5C41WPUT8YMqHSdTJIzFvkYWruinwkh
+	sxgGPYuwWHK8Yd2OuJ7AlkBdxcu837O5MQy1ppd/IhkRy7GO9OYVE4oLlvx8OAtS/Cc803
+	ynmHCVvdrxrjIYvXDd1ULonOm7A+1Yg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-208-H02QaFKYOIqEZ98ayQsvEw-1; Fri, 27 Jun 2025 13:10:11 -0400
+X-MC-Unique: H02QaFKYOIqEZ98ayQsvEw-1
+X-Mimecast-MFC-AGG-ID: H02QaFKYOIqEZ98ayQsvEw_1751044210
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-450d6768d4dso543065e9.2
+        for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 10:10:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751040600; x=1751645400;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6tajG5R3MCsrP/w0wwPMIBf3LF9dc2Wm7Uf1cjFJKdc=;
-        b=Ao+T7DEvI8Kj4u1hgOJaq6wIxaKVuWReBzOtlmSsKhjIwpdPbKeAwMtcMS/uKTy++2
-         SHs8epYmfP22mE+sSRXSXaCb8fChO4WZYO5XkoAKgSQFcRMZDL54Kj9kUogYwJFjak80
-         raMlmuymLYe3NNwU+G4vVxbR5rz72U6Poz1aGoRoFgMKFxzdMjYNoOQrRZ8EAiT07MvJ
-         +UyEh8bSgt55kSYjG8dbht5lFDE/HTd3yVm+z5gTnqYVwpSKyELcajDofFhDsROYJi9H
-         FPKLcyefaRe5g854Yg933Pmkcf7LnSpuYMCaMOQx4rkd7Js/Lf+oVhLI3NtPaWKtZ/hM
-         8vPg==
-X-Forwarded-Encrypted: i=1; AJvYcCW3YwgLpKEaCn69qIbJa1WzSLWfQ/oaPoTOsd2xBLtNRGQM/fF7V6wvQP80gwuEgT7x8+FW57ivX+kBya1t@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkU/0Vg0jVRNLvk6iDg9M/1VUVolnmXpjQGFL+KdlTC26EI8Iq
-	5CjJY0zJEXnZR2xD0jHs9DHuR/nw2Ph2sTPAYk4x6spBX+LKVOVIFvu4J5FimQH3wg==
-X-Gm-Gg: ASbGnctrBsTOtFtxneIaIQvBk1/YiiHBgfAnvD3sAlXxwKCoexXdCdmSlL2hLxHDnBe
-	XC9Y85rVoVASCaDM19qCV9AE/8WGvP+1/0d6Dd16VisLnktzn/roHrl61n4gVnAwjn+isYy1Dcw
-	VcCw5Yh3Xo5MrWQMCzgCZK0xHD2JYyKRAS5Cts5ffnqjdYkGwN5oqHliCj/ghuz0wISnCjWuWMB
-	kSDbyB1c3Y6OuwlI1UWxMPRKk62ReF6r0UPJpZiN56MmUXTUpAW/8V0tbxENfKwXRZ/DRaAhbvC
-	DNUI+27r1QtVG70NznfHzcBdgVke4Blk8auQzj93w6mcs7GHjwA+WCmvweuHCU+kSRTSg7cDqoQ
-	+1LFg0ILIdQ5NDt45jxmUbGUifQ==
-X-Google-Smtp-Source: AGHT+IGphu6TPIxsadsg8AJvhSvpk9h0/WSLUUO4UG0XTFbdDPP5hlzrX20zsMC3uarGOiW78rocGg==
-X-Received: by 2002:a17:902:f709:b0:235:779:edea with SMTP id d9443c01a7336-23ac465d24fmr64232725ad.38.1751040599657;
-        Fri, 27 Jun 2025 09:09:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e1b3esm18966805ad.35.2025.06.27.09.09.54
+        d=1e100.net; s=20230601; t=1751044210; x=1751649010;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NmwfJQJV+c9wJ1hezhGH5ZiqOmaiPpTqYKUu0exw8Qg=;
+        b=TYvbBLsNJY3MxU8cmRib3XM3Dr+acqyXJWsgOqc2lNLf1w53XTqaGGo3mMJUmQfsW9
+         Mdyhprf5nzpzNSX+H33WJUB63elTs5NXT2GCNkA3TqdDo9IyIi6QEddLTOl6T/P3ldU/
+         /+7b3fqUVDlq/egwiicYqderiB8vJyuzvAscRlQk2Vay8dqcl+mnZEjUova+H6xD4Nsh
+         i/sp9nWSpKDXewEJgXO3c7DGSZFZ8VNcgDkqWIofmSu112GxjVDLOlt2ustRRF75cXh2
+         +asa9bL5+G1djT/HsDGvVyju5hNrVgQrMOUyDe0s2FN/f+68vvWGxWQcjFSOdmu+/Vnd
+         RjtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUytygevs+jq/U1WtQCIPokpQErbb5/62kEvrv38PdfYrzSPn7dlpVkHkamTUUYGAVG7KH2XV5/eOvMeAzg@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAwYt8uE7DkdAB0O4zBMtdKlH8XDSiISNY6C0mkh4qNdjlYwU5
+	wMKkjLHNrKme3iHBE85x1YPgr+bnLjdA402BFqNHSuikJmzkPsExlEoW6xtRInwE0C5wn0w8WPY
+	YUH8JZNdn8+RJAuyb0vOGnGe7U5cXgewbzZ/Gw9ent4V/9eOEALZSO3HQtO7gjEBmS00=
+X-Gm-Gg: ASbGncuykRQDyvU3q2QcXl0TUZ6rNnjcEnAPPkiB0IrsFJOM2zzUSkF1Z8l6FIHqQFh
+	HCRdq84YaDKvHsoQbrQnlk/b4r1VaAKNY4GOn7Yb4bFVv6JhfTkjxt2xCZP0Z2GuPsWGk6DvxwG
+	LuH040kTip5KvTtljHuV9bN4it9wwSO+XeOb0NN3zUwuRParYyoaNPtPem8onj32WfwztwJM/Bq
+	YX24tHTdEhFQh+CxtPmRcDGS0tdwhV6VrsAtrdkltxddI0vuHgvxcI2UKr2EwUz5lUvIJ1AFEPO
+	YZ2e81T+UwOn0r74sARhJgO//Y7ngOn+5CCypBH5P61c7OPbjL8MqE4xl4dQTtqBbnYaujKIqZc
+	fb/Kd1ayeRc2RBgauEHrVdKmRO/IblVB+uoswIv61PfrPXOxfdw==
+X-Received: by 2002:a05:600c:4f4f:b0:442:d9fb:d9f1 with SMTP id 5b1f17b1804b1-453918aefb4mr33153925e9.4.1751044210234;
+        Fri, 27 Jun 2025 10:10:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFejtdyP+lgBSZANc8+ODwaGeOy8e3cABckJGW0iKDwJz7VcuhqUT4sLBN4DTsX9Nc58Z5tEw==
+X-Received: by 2002:a05:600c:4f4f:b0:442:d9fb:d9f1 with SMTP id 5b1f17b1804b1-453918aefb4mr33153355e9.4.1751044209704;
+        Fri, 27 Jun 2025 10:10:09 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2d:5d00:f1a3:2f30:6575:9425? (p200300d82f2d5d00f1a32f3065759425.dip0.t-ipconnect.de. [2003:d8:2f2d:5d00:f1a3:2f30:6575:9425])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453823c3c7csm85945735e9.36.2025.06.27.10.10.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Jun 2025 09:09:58 -0700 (PDT)
-Message-ID: <cc36310a-c390-42f0-9c82-5b0236a9abfa@broadcom.com>
-Date: Fri, 27 Jun 2025 09:09:53 -0700
+        Fri, 27 Jun 2025 10:10:09 -0700 (PDT)
+Message-ID: <04116d0f-2815-4583-853e-e4295fb3d014@redhat.com>
+Date: Fri, 27 Jun 2025 19:10:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,14 +75,13 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/16] MAINTAINERS: Include GDB scripts under their
- relevant subsystems
-To: Jan Kara <jack@suse.cz>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
- Kieran Bingham <kbingham@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+Subject: Re: [PATCH 08/16] MAINTAINERS: Include GDB scripts under MEMORY
+ MANAGEMENT entry
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ linux-kernel@vger.kernel.org
+Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
+ <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
  Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
@@ -84,6 +93,7 @@ Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  Alexander Potapenko <glider@google.com>,
  Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
  Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
  Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
@@ -91,8 +101,8 @@ Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  Anna-Maria Behnsen <anna-maria@linutronix.de>,
  Frederic Weisbecker <frederic@kernel.org>,
  Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
- Matthew Wilcox <willy@infradead.org>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Uladzislau Rezki <urezki@gmail.com>, Matthew Wilcox <willy@infradead.org>,
  Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
  Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>,
  Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn
@@ -105,142 +115,85 @@ Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
  "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
 References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
- <fynmrmsglw4liexcb37ykutf724lh7zbibilcjpysbmvgtkmes@mtjrfkve4av7>
- <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
- <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
+ <20250625231053.1134589-9-florian.fainelli@broadcom.com>
+From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
+ AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
+ 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
+ rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
+ wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
+ 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
+ pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
+ KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
+ BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
+ 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
+ 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
+ M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
+ Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
+ T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
+ 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
+ CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
+ NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
+ 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
+ 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
+ lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
+ AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
+ N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
+ AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
+ boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
+ 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
+ XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
+ a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
+ Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
+ 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
+ kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
+ th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
+ jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20250625231053.1134589-9-florian.fainelli@broadcom.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 6/27/25 00:55, Jan Kara wrote:
-> On Thu 26-06-25 09:39:36, Florian Fainelli wrote:
->> On 6/26/25 09:17, Liam R. Howlett wrote:
->>> * Florian Fainelli <florian.fainelli@broadcom.com> [250625 19:13]:
->>>> Linux has a number of very useful GDB scripts under scripts/gdb/linux/*
->>>> that provide OS awareness for debuggers and allows for debugging of a
->>>> variety of data structures (lists, timers, radix tree, mapletree, etc.)
->>>> as well as subsystems (clocks, devices, classes, busses, etc.).
->>>>
->>>> These scripts are typically maintained in isolation from the subsystem
->>>> that they parse the data structures and symbols of, which can lead to
->>>> people playing catch up with fixing bugs or updating the script to work
->>>> with updates made to the internal APIs/objects etc. Here are some
->>>> recents examples:
->>>>
->>>> https://lore.kernel.org/all/20250601055027.3661480-1-tony.ambardar@gmail.com/
->>>> https://lore.kernel.org/all/20250619225105.320729-1-florian.fainelli@broadcom.com/
->>>> https://lore.kernel.org/all/20250625021020.1056930-1-florian.fainelli@broadcom.com/
->>>>
->>>> This patch series is intentionally split such that each subsystem
->>>> maintainer can decide whether to accept the extra
->>>> review/maintenance/guidance that can be offered when GDB scripts are
->>>> being updated or added.
->>>
->>> I don't see why you think it was okay to propose this in the way you
->>> have gone about it.  Looking at the mailing list, you've been around for
->>> a while.
->>
->> This should probably have been posted as RFC rather than PATCH, but as I
->> indicate in the cover letter this is broken down to allow maintainers like
->> yourself to accept/reject
->>
->>>
->>> The file you are telling me about seems to be extremely new and I needed
->>> to pull akpm/mm-new to discover where it came from.. because you never
->>> Cc'ed me on the file you are asking me to own.
->>
->> Yes, that file is very new indeed, and my bad for not copying you on it.
->>
->> I was not planning on burning an entire day worth of work to transition the
->> GDB scripts dumping the interrupt tree away from a radix tree to a maple
->> tree. All of which happens with the author of that conversion having
->> absolutely no idea that broke anything in the tree because very few people
->> know about the Python GDB scripts that Linux has. It is not pleasant to be
->> playing catch when it would have take maybe an extra couple hours for
->> someone intimately familiar with the maple tree to come up with a suitable
->> implementation replacement for mtree_load().
->>
->> So having done it felt like there is a maintenance void that needs to be
->> filled, hence this patch set.
+On 26.06.25 01:10, Florian Fainelli wrote:
+> Include the GDB scripts file under scripts/gdb/linux/ that deal with
+> memory mamagenement code under the MEMORY MANAGEMENT subsystem since
+> they parses internal data structures that depend upon that subsystem.
 > 
-> I can see that it takes a lot of time to do a major update of a gdb
-> debugging script after some refactoring like this. OTOH mandating some gdb
-> scripts update is adding non-trivial amount of work to changes that are
-> already hard enough to do as is. 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>   MAINTAINERS | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cad5d613cab0..52b37196d024 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15812,6 +15812,10 @@ F:	include/linux/mmu_notifier.h
+>   F:	include/linux/pagewalk.h
+>   F:	include/trace/events/ksm.h
+>   F:	mm/
+> +F:	scripts/gdb/linux/mm.py
+> +F:	scripts/gdb/linux/page_owner.py
+> +F:	scripts/gdb/linux/pgtable.py
+> +F:	scripts/gdb/linux/slab.py
 
-This really should have been posted as RFC, because I can see how 
-posting this as PATCH would be seen as coercing maintainers into taking 
-those GDB scripts under their umbrella.
+Probably they should go to the corresponding sub-sections. At least slab.py?
 
-> And the obvious question is what is the
-> value? I've personally never used these gdb scripts and never felt a strong
-> need for something like that. People have various debugging aids (like BPF
-> scripts, gdb scripts, there's crash tool and drgn, and many more) lying
-> around. 
-
-Those are valuable tools in the tool box, but GDB scripts can work when 
-your only debug tool accessible is JTAG for instance, I appreciate this 
-is typically miles away from what most of the kernel community does, but 
-this is quite typical and common in embedded systems. When you operate 
-in that environment, having a decent amount of debugger awareness of 
-what is being debugged is immensely valuable in saving time.
-
-> I'm personally of an opinion that it is not a responsibility of
-> the person doing refactoring to make life easier for them or even fixing
-> them and I don't think that the fact that some debug aid is under
-> scripts/gdb/ directory is making it more special. 
-
-That is really the question that I am trying to get answered with this 
-patch series. IMHO as a subsystem maintainer it is not fair to be 
-completely oblivious to scripts that live in the source tree, even if 
-you are not aware of those.
-
- > So at least as far as I'm> concerned (VFS, fsnotify and other 
-filesystem related stuff) I don't plan
-> on requiring updates to gdb scripts from people doing changes or otherwise
-> actively maintain them.
-
-vfs.py script is beyond trivial, the largest and most complicated IMHO 
-is mapletree.py which had to be recently developed to continue to 
-support parsing the interrupt descriptor tree in the kernel, I can 
-maintain that one now that I know a lot more than I ever wished I knew 
-about maple trees. So really the burden is not as big as it may seem but 
-it's fair not to be taking on more work as a maintainer, I get that.
-
-Thanks for your feedback!
 -- 
-Florian
+Cheers,
+
+David / dhildenb
+
