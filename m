@@ -1,213 +1,277 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643C12264A7
-	for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 07:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7902264A8;
+	Fri, 27 Jun 2025 07:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751010925; cv=none; b=KLrnY4sOH3zWbxhfK3G7TWhrWY4ZrCCTtPK203UeV5OAwV5qBvlkgtzGbKsN2CLG81tSDkCp9L1XldKcezMH+26K+qLqrKO677KczkibSop1Up1daAmt6gVR+EVKCeG2nYRXeurP8mqnZlyhgz0vY5iHnapsE9w+j65r+hn58D8=
+	t=1751011105; cv=none; b=BWsj9Ksz5cht+Y+cmlGHumKJNQqzeuGkO8KT0DJfEQAIB0ykutp17Kv2ZW8aMkuGxIC5NHKuvDNoqreAf4MaSHg9PwRWmfZMtbJEJoQsWjQiL3gnE0mbC7nTFljlQuVaZzLzyOkLuQmJoeB7KAVkTFFgbUEEO2XVbsXIcN3PPJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751010925; c=relaxed/simple;
-	bh=W43fmgGb+2NzyqFCSS0630HfRedK2fz7xXA7ehGegzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m+EVdC/9abP4diUa1e8BBygs+FGwgKv/C6sHV8sSLJ8tgSIVNcGdaVN0kGzj6KmQCKX7PWARis5/6hYClVkcHHial632uiC2sd8BAR/c3z7/046errl+vnRD7FBTcnEAvZTp/+P5dMtJkyMsof/nmh34bEm1toFWPEYCulAMhTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FbbeNE/T; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Kty7AgHZ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2fJ8jZ9U; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Hpagzk4S; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1751011105; c=relaxed/simple;
+	bh=UpsiR6zd6bu4MlnICqiapGGFAB8luTnRxLbAdopgwY8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GBHtJa2KN6MKSYCOdVHcnaUK0TNf9ypeUKDoAymREnHj3Tuwa/u6ab/ML1THG//FpwHTeC1K59dz2r8S/MjkKgGCXk2JNUww6Ov22bVJaFr6HkJRU40z8btHb43KDUEApisWdgyM+9X1dHcBYGXJMCcaq8uFsRgSjuDyBnC7FzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lA9YIfVe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FbbeNE/T";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Kty7AgHZ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2fJ8jZ9U";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Hpagzk4S"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6A5C021174;
-	Fri, 27 Jun 2025 07:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751010921; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=FbbeNE/TjNlk4A5o+6fTzCVPxDsccqxkglkAUwvwXESso0vOSRA93wslhbMWSdcgx2I9A1
-	FxsYl8peLk6l5FlB8AleHM4sdaXJe+cEOsXjVgIMGRYviXwc03H/7rf2+6l1NPsoASQO8Z
-	wzfkH8nr4OzuWShSLrvWP5nrRCOcpbg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751010921;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=Kty7AgHZB6YBFhZcKRw2mTyW6CJChk6RVH9k5j8RNgF+vqOqoDBVsN3ynKtce9dk3L4P2Z
-	9VKCowIUIdiFr1CQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1751010920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=2fJ8jZ9UnZlpBq7wdYctaRSdNpHrqZzHhjN/Plxy+wxWVUpw93g2jWHdviq1K8Z9WZkhjb
-	tL7jzDF3f1yKYcyY69EhbD6WS85W5KiM1KDVbp62R7ZM9CBX94CmJISxLdgPi6korVp0S2
-	k5TJhnCTONmdTMdl3bJVHLNGlUr3awU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1751010920;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ptecp9XDD5qXUjm1CHcOI25++V3ZYV625LMiuMqRD10=;
-	b=Hpagzk4Sk2vJIqYpZVOghUpIQqL6dR5KUuMdCT2yVko6zVkWWutCvArYyCSpKT1jNDVWP9
-	c0nvjxBxvkOKNUDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5894713786;
-	Fri, 27 Jun 2025 07:55:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id IbGcFWhOXmgIUQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Fri, 27 Jun 2025 07:55:20 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id D996FA099D; Fri, 27 Jun 2025 09:55:19 +0200 (CEST)
-Date: Fri, 27 Jun 2025 09:55:19 +0200
-From: Jan Kara <jack@suse.cz>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Kieran Bingham <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	John Ogness <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Uladzislau Rezki <urezki@gmail.com>, 
-	Matthew Wilcox <willy@infradead.org>, Kuan-Ying Lee <kuan-ying.lee@canonical.com>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>, 
-	Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn <illia@yshyn.com>, 
-	"open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>, "open list:PER-CPU MEMORY ALLOCATOR" <linux-mm@kvack.org>, 
-	"open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>, "open list:KASAN" <kasan-dev@googlegroups.com>, 
-	"open list:MAPLE TREE" <maple-tree@lists.infradead.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>, 
-	"open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH 00/16] MAINTAINERS: Include GDB scripts under their
- relevant subsystems
-Message-ID: <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
-References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
- <fynmrmsglw4liexcb37ykutf724lh7zbibilcjpysbmvgtkmes@mtjrfkve4av7>
- <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lA9YIfVe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C5DC4CEEB;
+	Fri, 27 Jun 2025 07:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751011105;
+	bh=UpsiR6zd6bu4MlnICqiapGGFAB8luTnRxLbAdopgwY8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lA9YIfVesFUSJyxyUiHtmeadCw8GjAKjj/xwnxI1NGVoFt1a8SFY12ox1c/AWUYqU
+	 MUcHmXdVnNEhlnBMp6EoBQvwo6rOZ8/ISh/vBlSAR0qSC4gIauiifVV3wwL61o0c3l
+	 tYWG8+uhLEg8zOzoMl/hzmnqn8DtTOIzgKYNQkzUigCr4Om+AzOkMTG7nl7y/DONee
+	 1i+v2H6NqrKTUTa+5WwYRrJwcOXksjnOde5Vh5/y2mIjrIA/DXU5veRpatvEp/u0LA
+	 OVEDw5ztPXHDwYuM8JGhnVRHLIgzDPpLI90oX2XBAleoJysH+axBb7yxdDMZyIzgi5
+	 kPHCR73v6sogQ==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Benno Lossin" <lossin@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Alice
+ Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada" <masahiroy@kernel.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,  "Nicolas
+ Schier" <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
+In-Reply-To: <878qlh4aj1.fsf@kernel.org> (Andreas Hindborg's message of "Tue,
+	24 Jun 2025 13:57:38 +0200")
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+	<20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
+	<COU2bqJOzCHRf6g4rwFpu2NY3wLY0G0AmNjRaU9aGEqu1HaPZ5X4KzfDT_CEB3Okh5BV50sJS10sKhmtHut8ew==@protonmail.internalid>
+	<DAQJCUE1C2JE.204A8IS7LBIVZ@kernel.org> <87ikkq648o.fsf@kernel.org>
+	<smOfUo2mEmQu-lykKKMiNOUWq2ze6p_CoEEpgGE0dtAnoJDGEpvQMkP1q-n13MiUxLK1xAiM-4QLsivPrG57sg==@protonmail.internalid>
+	<DARCZYNPIJVZ.3JJSZ6PSAEMEC@kernel.org> <877c126bce.fsf@kernel.org>
+	<Mg1_h6lRpg9tdi0VjiyDfIEy2juzgDWxOhYX61qSUfyEpeMMksWW1e-blTka_G1dXUvpZVktdD-zL3X1a6T6Cg==@protonmail.internalid>
+	<DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org>
+	<RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid>
+	<DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Fri, 27 Jun 2025 09:57:54 +0200
+Message-ID: <87plepzke5.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
-X-Spam-Flag: NO
-X-Spam-Score: -2.30
-X-Spamd-Result: default: False [-2.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_TWELVE(0.00)[49];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[free.fr,gmail.com];
-	R_RATELIMIT(0.00)[to_ip_from(RLb9dmf7wrehepajhg9kqn5udf)];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,vger.kernel.org,siemens.com,kernel.org,baylibre.com,gentwo.org,linuxfoundation.org,suse.com,goodmis.org,linutronix.de,chromium.org,linaro.org,gmail.com,google.com,arm.com,linux-foundation.org,samsung.com,linux.dev,zeniv.linux.org.uk,suse.cz,infradead.org,canonical.com,linux.ibm.com,free.fr,mandelbit.com,yshyn.com,kvack.org,googlegroups.com,lists.infradead.org];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
+Content-Type: text/plain
 
-On Thu 26-06-25 09:39:36, Florian Fainelli wrote:
-> On 6/26/25 09:17, Liam R. Howlett wrote:
-> > * Florian Fainelli <florian.fainelli@broadcom.com> [250625 19:13]:
-> > > Linux has a number of very useful GDB scripts under scripts/gdb/linux/*
-> > > that provide OS awareness for debuggers and allows for debugging of a
-> > > variety of data structures (lists, timers, radix tree, mapletree, etc.)
-> > > as well as subsystems (clocks, devices, classes, busses, etc.).
-> > > 
-> > > These scripts are typically maintained in isolation from the subsystem
-> > > that they parse the data structures and symbols of, which can lead to
-> > > people playing catch up with fixing bugs or updating the script to work
-> > > with updates made to the internal APIs/objects etc. Here are some
-> > > recents examples:
-> > > 
-> > > https://lore.kernel.org/all/20250601055027.3661480-1-tony.ambardar@gmail.com/
-> > > https://lore.kernel.org/all/20250619225105.320729-1-florian.fainelli@broadcom.com/
-> > > https://lore.kernel.org/all/20250625021020.1056930-1-florian.fainelli@broadcom.com/
-> > > 
-> > > This patch series is intentionally split such that each subsystem
-> > > maintainer can decide whether to accept the extra
-> > > review/maintenance/guidance that can be offered when GDB scripts are
-> > > being updated or added.
-> > 
-> > I don't see why you think it was okay to propose this in the way you
-> > have gone about it.  Looking at the mailing list, you've been around for
-> > a while.
-> 
-> This should probably have been posted as RFC rather than PATCH, but as I
-> indicate in the cover letter this is broken down to allow maintainers like
-> yourself to accept/reject
-> 
-> > 
-> > The file you are telling me about seems to be extremely new and I needed
-> > to pull akpm/mm-new to discover where it came from.. because you never
-> > Cc'ed me on the file you are asking me to own.
-> 
-> Yes, that file is very new indeed, and my bad for not copying you on it.
-> 
-> I was not planning on burning an entire day worth of work to transition the
-> GDB scripts dumping the interrupt tree away from a radix tree to a maple
-> tree. All of which happens with the author of that conversion having
-> absolutely no idea that broke anything in the tree because very few people
-> know about the Python GDB scripts that Linux has. It is not pleasant to be
-> playing catch when it would have take maybe an extra couple hours for
-> someone intimately familiar with the maple tree to come up with a suitable
-> implementation replacement for mtree_load().
-> 
-> So having done it felt like there is a maintenance void that needs to be
-> filled, hence this patch set.
+Andreas Hindborg <a.hindborg@kernel.org> writes:
 
-I can see that it takes a lot of time to do a major update of a gdb
-debugging script after some refactoring like this. OTOH mandating some gdb
-scripts update is adding non-trivial amount of work to changes that are
-already hard enough to do as is. And the obvious question is what is the
-value? I've personally never used these gdb scripts and never felt a strong
-need for something like that. People have various debugging aids (like BPF
-scripts, gdb scripts, there's crash tool and drgn, and many more) lying
-around.  I'm personally of an opinion that it is not a responsibility of
-the person doing refactoring to make life easier for them or even fixing
-them and I don't think that the fact that some debug aid is under
-scripts/gdb/ directory is making it more special. So at least as far as I'm
-concerned (VFS, fsnotify and other filesystem related stuff) I don't plan
-on requiring updates to gdb scripts from people doing changes or otherwise
-actively maintain them.
+> "Benno Lossin" <lossin@kernel.org> writes:
+>
+>> On Mon Jun 23, 2025 at 4:31 PM CEST, Andreas Hindborg wrote:
+>>> "Benno Lossin" <lossin@kernel.org> writes:
+>>>
+>>>> On Mon Jun 23, 2025 at 11:44 AM CEST, Andreas Hindborg wrote:
+>>>>> "Benno Lossin" <lossin@kernel.org> writes:
+>>>>>
+>>>>>> On Fri Jun 20, 2025 at 1:29 PM CEST, Andreas Hindborg wrote:
+>>>>>>> "Benno Lossin" <lossin@kernel.org> writes:
+>>>>>>>> On Thu Jun 12, 2025 at 3:40 PM CEST, Andreas Hindborg wrote:
+>>>>>>>>> +/// A wrapper for kernel parameters.
+>>>>>>>>> +///
+>>>>>>>>> +/// This type is instantiated by the [`module!`] macro when module parameters are
+>>>>>>>>> +/// defined. You should never need to instantiate this type directly.
+>>>>>>>>> +///
+>>>>>>>>> +/// Note: This type is `pub` because it is used by module crates to access
+>>>>>>>>> +/// parameter values.
+>>>>>>>>> +#[repr(transparent)]
+>>>>>>>>> +pub struct ModuleParamAccess<T> {
+>>>>>>>>> +    data: core::cell::UnsafeCell<T>,
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>> +// SAFETY: We only create shared references to the contents of this container,
+>>>>>>>>> +// so if `T` is `Sync`, so is `ModuleParamAccess`.
+>>>>>>>>> +unsafe impl<T: Sync> Sync for ModuleParamAccess<T> {}
+>>>>>>>>> +
+>>>>>>>>> +impl<T> ModuleParamAccess<T> {
+>>>>>>>>> +    #[doc(hidden)]
+>>>>>>>>> +    pub const fn new(value: T) -> Self {
+>>>>>>>>> +        Self {
+>>>>>>>>> +            data: core::cell::UnsafeCell::new(value),
+>>>>>>>>> +        }
+>>>>>>>>> +    }
+>>>>>>>>> +
+>>>>>>>>> +    /// Get a shared reference to the parameter value.
+>>>>>>>>> +    // Note: When sysfs access to parameters are enabled, we have to pass in a
+>>>>>>>>> +    // held lock guard here.
+>>>>>>>>> +    pub fn get(&self) -> &T {
+>>>>>>>>> +        // SAFETY: As we only support read only parameters with no sysfs
+>>>>>>>>> +        // exposure, the kernel will not touch the parameter data after module
+>>>>>>>>> +        // initialization.
+>>>>>>>>
+>>>>>>>> This should be a type invariant. But I'm having difficulty defining one
+>>>>>>>> that's actually correct: after parsing the parameter, this is written
+>>>>>>>> to, but when is that actually?
+>>>>>>>
+>>>>>>> For built-in modules it is during kernel initialization. For loadable
+>>>>>>> modules, it during module load. No code from the module will execute
+>>>>>>> before parameters are set.
+>>>>>>
+>>>>>> Gotcha and there never ever will be custom code that is executed
+>>>>>> before/during parameter setting (so code aside from code in `kernel`)?
+>>>>>>
+>>>>>>>> Would we eventually execute other Rust
+>>>>>>>> code during that time? (for example when we allow custom parameter
+>>>>>>>> parsing)
+>>>>>>>
+>>>>>>> I don't think we will need to synchronize because of custom parameter
+>>>>>>> parsing. Parameters are initialized sequentially. It is not a problem if
+>>>>>>> the custom parameter parsing code name other parameters, because they
+>>>>>>> are all initialized to valid values (as they are statics).
+>>>>>>
+>>>>>> If you have `&'static i64`, then the value at that reference is never
+>>>>>> allowed to change.
+>>>>>>
+>>>>>>>> This function also must never be `const` because of the following:
+>>>>>>>>
+>>>>>>>>     module! {
+>>>>>>>>         // ...
+>>>>>>>>         params: {
+>>>>>>>>             my_param: i64 {
+>>>>>>>>                 default: 0,
+>>>>>>>>                 description: "",
+>>>>>>>>             },
+>>>>>>>>         },
+>>>>>>>>     }
+>>>>>>>>
+>>>>>>>>     static BAD: &'static i64 = module_parameters::my_param.get();
+>>>>>>>>
+>>>>>>>> AFAIK, this static will be executed before loading module parameters and
+>>>>>>>> thus it makes writing to the parameter UB.
+>>>>>>>
+>>>>>>> As I understand, the static will be initialized by a constant expression
+>>>>>>> evaluated at compile time. I am not sure what happens when this is
+>>>>>>> evaluated in const context:
+>>>>>>>
+>>>>>>>     pub fn get(&self) -> &T {
+>>>>>>>         // SAFETY: As we only support read only parameters with no sysfs
+>>>>>>>         // exposure, the kernel will not touch the parameter data after module
+>>>>>>>         // initialization.
+>>>>>>>         unsafe { &*self.data.get() }
+>>>>>>>     }
+>>>>>>>
+>>>>>>> Why would that not be OK? I would assume the compiler builds a dependency graph
+>>>>>>> when initializing statics?
+>>>>>>
+>>>>>> Yes it builds a dependency graph, but that is irrelevant? The problem is
+>>>>>> that I can create a `'static` reference to the inner value *before* the
+>>>>>> parameter is written-to (as the static is initialized before the
+>>>>>> parameters).
+>>>>>
+>>>>> I see, I did not consider this situation. Thanks for pointing this out.
+>>>>>
+>>>>> Could we get around this without a lock maybe? If we change
+>>>>> `ModuleParamAccess::get` to take a closure instead:
+>>>>>
+>>>>>     /// Call `func` with a reference to the parameter value stored in `Self`.
+>>>>>     pub fn read(&self, func: impl FnOnce(&T)) {
+>>>>>         // SAFETY: As we only support read only parameters with no sysfs
+>>>>>         // exposure, the kernel will not touch the parameter data after module
+>>>>>         // initialization.
+>>>>>         let data = unsafe { &*self.data.get() };
+>>>>>
+>>>>>         func(data)
+>>>>>     }
+>>>>>
+>>>>> I think this would bound the lifetime of the reference passed to the
+>>>>> closure to the duration of the call, right?
+>>>>
+>>>> Yes that is correct. Now you can't assign the reference to a static.
+>>>> However, this API is probably very clunky to use, since you always have
+>>>> to create a closure etc.
+>>>>
+>>>> Since you mentioned in the other reply that one could spin up a thread
+>>>> and do something simultaneously, I don't think this is enough. You could
+>>>> have a loop spin over the new `read` function and read the value and
+>>>> then the write happens.
+>>>
+>>> Yes you are right, we have to treat it as if it could be written at any
+>>> point in time.
+>>>
+>>>> One way to fix this issue would be to use atomics to read the value and
+>>>> to not create a reference to it. So essentially have
+>>>>
+>>>>     pub fn read(&self) -> T {
+>>>>         unsafe { atomic_read_unsafe_cell(&self.data) }
+>>>>     }
+>>>
+>>> That could work.
+>>>
+>>>> Another way would be to use a `Once`-like type (does that exist on the C
+>>>> side?) so a type that can be initialized once and then never changes.
+>>>> While it doesn't have a value set, we return some default value for the
+>>>> param and print a warning, when it's set, we just return the value. But
+>>>> this probably also requires atomics...
+>>>
+>>> I think atomic bool is not that far away. Either that, or we can lock.
+>>>
+>>>> Is parameter accessing used that often in hot paths? Can't you just copy
+>>>> the value into your `Module` struct?
+>>>
+>>> I don't imagine this being read in a hot path. If so, the user could
+>>> make a copy.
+>>
+>> That's good to know, then let's try to go for something simple.
+>>
+>> I don't think that we can just use a `Mutex<T>`, because we don't have a
+>> way to create it at const time... I guess we could have
+>>
+>>     impl<T> Mutex<T>
+>>         /// # Safety
+>>         ///
+>>         /// The returned value needs to be pinned and then `init` needs
+>>         /// to be called before any other methods are called on this.
+>>         pub unsafe const fn const_new() -> Self;
+>>
+>>         pub unsafe fn init(&self);
+>>     }
+>>
+>> But that seems like a bad idea, because where would we call the `init`
+>> function? That also needs to be synchronized...
+>
+> Ah, that is unfortunate. The init function will not run before this, so
+> we would need a `Once` or an atomic anyway to initialize the lock.
+>
+> I am not sure if we are allowed to sleep during this, I would have to
+> check. But then we could use a spin lock.
+>
+> We will need the locking anyway, when we want to enable sysfs write
+> access to the parameters.
+>
+>>
+>> Maybe we can just like you said use an atomic bool?
+>
+> Sigh, I will have to check how far that series has come.
+>
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I think I am going to build some kind of `Once` feature on top of
+Boqun's atomic series [1], so that we can initialize a lock in these
+statics. We can't use `global_lock!`, because that depends on module
+init to initialize the lock before first use.
+
+As far as I can tell, atomics may not land in v6.17, so this series
+will probably not be ready for merge until v6.18 at the earliest.
+
+Thanks for the input, Benno!
+
+
+Best regards,
+Andreas Hindborg
+
+
+[1] https://lore.kernel.org/all/20250618164934.19817-1-boqun.feng@gmail.com
+
