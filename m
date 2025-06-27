@@ -1,163 +1,246 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E6F234994;
-	Fri, 27 Jun 2025 08:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8552E9EBB
+	for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 16:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751012603; cv=none; b=kI9jVb8KJN5Ls3brucPMnT0I0If+LUdGsMqeH5qjS2SZdgWeHruYNMuNCeWDipHGeLlej8PvV/0jiTdvK2VIywrvFUQ1owS16aQVYjzchqI405n7Sl0vpZdXB8RZJpy5kC5nF5Ys8wmuOovb1YISPR4kMdM4P01Ysslkg6QFTcM=
+	t=1751040602; cv=none; b=JYTe/bE11St9lyr5g+AxMBV9UQ0xsccYcY5+InrYPfW/7h+ZDJg3KNHY4b9oWgcsPTfvvFXU7K2QX7VvdbwgxoWAGtq6dAuFzBmuOdCgJ4z65Ahujk9FsulI0btYfMwEs90O1GbqinNzG9ShjQlogKtf4aOlGTfXzDT/dB9tX7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751012603; c=relaxed/simple;
-	bh=uN/D8dqiB5VYUFly92uE7+enUWgNCKOFbWJkaVmg9qA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=pB5fCV0SBhNpvMOlOuyXHiSQuIxbJV0vs/ZMudiB1xNybjJV5kP+NHoPAgN8eCVZiZF1gAYoWPry09+VqyB8lXQjHCj5kk0edUwBddxUhKlwMb6ETWMVr/IngYQiN/i94T6Y7EtuUvXxCtwBn7fj9aJcfQqZzczwfdxfLlJHwfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XgDlZYlR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751040602; c=relaxed/simple;
+	bh=IH2+O5cU6bMl3dQgfqyetZYxS7jXnkdNLnvW+qxsQ88=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WTHkvq7uXjr0bZWdANqDE39zKlkOSiyzoKnTuwF3hzELjXIS/xxGK1UQSezJInHOb9BhAUxPMHGVLMXFvoBcsVMZAVRvp3klySPezvkCR/X2/nP8s6SG79MQZNeNJRtznFLUe2QDle49L1aWM4hK/L8RsymEsobuJvvm1k7orhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=H4dCPw8k; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XgDlZYlR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4B1C4CEF0;
-	Fri, 27 Jun 2025 08:23:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751012602;
-	bh=uN/D8dqiB5VYUFly92uE7+enUWgNCKOFbWJkaVmg9qA=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=XgDlZYlRR03OoCIqDOBeRU4oLrgs71elLSS/qGk/G2DlO88AvkkDIqF6F/Ns5XYFr
-	 bBTvujelzy6neisx4LvhnKPgCQxrq/M5odUoba+UGq0x+dLDMZVqprpeaOw4D6xqhA
-	 fTeYWukLLqRHBwnnKzQbq8tlPX0H/4PYfiTaDCfkSjG97GFpCMXEq/kFQ3Cx7ghiia
-	 bsQrXnY+3aCP0fd5tlZ4lZCkncR+PcebFVPzEqTuXcm7Csp5ivhgDTJARZ4hKwbsmi
-	 B8I9D83riALQ8iY+dptih3ew7XOw+0G8YGoW3pgRWb9TI6ZbCH0qd5bJ39OsGqIKhP
-	 SaSLksICej/iQ==
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="H4dCPw8k"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7494999de5cso1860998b3a.3
+        for <linux-modules@vger.kernel.org>; Fri, 27 Jun 2025 09:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1751040600; x=1751645400; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=6tajG5R3MCsrP/w0wwPMIBf3LF9dc2Wm7Uf1cjFJKdc=;
+        b=H4dCPw8kainQkV3U88q1ykgWUxcyaUhGqNx70wITre5B9Uqg0J5ACangeMO0rF8x6v
+         I86lecQmRle0IXAfhBiPjb3MOiHCqYYTthU4m0LlPGixC1QoSv64F+UuBk7yeSTdgtsy
+         2VaZFR3XhvRA9jigy235+wgd3/xBOuEZOA5KE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751040600; x=1751645400;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6tajG5R3MCsrP/w0wwPMIBf3LF9dc2Wm7Uf1cjFJKdc=;
+        b=Ao+T7DEvI8Kj4u1hgOJaq6wIxaKVuWReBzOtlmSsKhjIwpdPbKeAwMtcMS/uKTy++2
+         SHs8epYmfP22mE+sSRXSXaCb8fChO4WZYO5XkoAKgSQFcRMZDL54Kj9kUogYwJFjak80
+         raMlmuymLYe3NNwU+G4vVxbR5rz72U6Poz1aGoRoFgMKFxzdMjYNoOQrRZ8EAiT07MvJ
+         +UyEh8bSgt55kSYjG8dbht5lFDE/HTd3yVm+z5gTnqYVwpSKyELcajDofFhDsROYJi9H
+         FPKLcyefaRe5g854Yg933Pmkcf7LnSpuYMCaMOQx4rkd7Js/Lf+oVhLI3NtPaWKtZ/hM
+         8vPg==
+X-Forwarded-Encrypted: i=1; AJvYcCW3YwgLpKEaCn69qIbJa1WzSLWfQ/oaPoTOsd2xBLtNRGQM/fF7V6wvQP80gwuEgT7x8+FW57ivX+kBya1t@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkU/0Vg0jVRNLvk6iDg9M/1VUVolnmXpjQGFL+KdlTC26EI8Iq
+	5CjJY0zJEXnZR2xD0jHs9DHuR/nw2Ph2sTPAYk4x6spBX+LKVOVIFvu4J5FimQH3wg==
+X-Gm-Gg: ASbGnctrBsTOtFtxneIaIQvBk1/YiiHBgfAnvD3sAlXxwKCoexXdCdmSlL2hLxHDnBe
+	XC9Y85rVoVASCaDM19qCV9AE/8WGvP+1/0d6Dd16VisLnktzn/roHrl61n4gVnAwjn+isYy1Dcw
+	VcCw5Yh3Xo5MrWQMCzgCZK0xHD2JYyKRAS5Cts5ffnqjdYkGwN5oqHliCj/ghuz0wISnCjWuWMB
+	kSDbyB1c3Y6OuwlI1UWxMPRKk62ReF6r0UPJpZiN56MmUXTUpAW/8V0tbxENfKwXRZ/DRaAhbvC
+	DNUI+27r1QtVG70NznfHzcBdgVke4Blk8auQzj93w6mcs7GHjwA+WCmvweuHCU+kSRTSg7cDqoQ
+	+1LFg0ILIdQ5NDt45jxmUbGUifQ==
+X-Google-Smtp-Source: AGHT+IGphu6TPIxsadsg8AJvhSvpk9h0/WSLUUO4UG0XTFbdDPP5hlzrX20zsMC3uarGOiW78rocGg==
+X-Received: by 2002:a17:902:f709:b0:235:779:edea with SMTP id d9443c01a7336-23ac465d24fmr64232725ad.38.1751040599657;
+        Fri, 27 Jun 2025 09:09:59 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e1b3esm18966805ad.35.2025.06.27.09.09.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 09:09:58 -0700 (PDT)
+Message-ID: <cc36310a-c390-42f0-9c82-5b0236a9abfa@broadcom.com>
+Date: Fri, 27 Jun 2025 09:09:53 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 27 Jun 2025 10:23:16 +0200
-Message-Id: <DAX65TRN0TGP.25VZ9DYV86XWY@kernel.org>
-Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Masahiro
- Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
- Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
- "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
- <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
- Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
- <20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
- <COU2bqJOzCHRf6g4rwFpu2NY3wLY0G0AmNjRaU9aGEqu1HaPZ5X4KzfDT_CEB3Okh5BV50sJS10sKhmtHut8ew==@protonmail.internalid> <DAQJCUE1C2JE.204A8IS7LBIVZ@kernel.org> <87ikkq648o.fsf@kernel.org> <smOfUo2mEmQu-lykKKMiNOUWq2ze6p_CoEEpgGE0dtAnoJDGEpvQMkP1q-n13MiUxLK1xAiM-4QLsivPrG57sg==@protonmail.internalid> <DARCZYNPIJVZ.3JJSZ6PSAEMEC@kernel.org> <877c126bce.fsf@kernel.org> <Mg1_h6lRpg9tdi0VjiyDfIEy2juzgDWxOhYX61qSUfyEpeMMksWW1e-blTka_G1dXUvpZVktdD-zL3X1a6T6Cg==@protonmail.internalid> <DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org> <RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid> <DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org> <87plepzke5.fsf@kernel.org>
-In-Reply-To: <87plepzke5.fsf@kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/16] MAINTAINERS: Include GDB scripts under their
+ relevant subsystems
+To: Jan Kara <jack@suse.cz>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ linux-kernel@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+ Kieran Bingham <kbingham@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+ John Ogness <john.ogness@linutronix.de>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Kent Overstreet <kent.overstreet@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Matthew Wilcox <willy@infradead.org>,
+ Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
+ Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>,
+ Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn
+ <illia@yshyn.com>, "open list:COMMON CLK FRAMEWORK"
+ <linux-clk@vger.kernel.org>,
+ "open list:PER-CPU MEMORY ALLOCATOR" <linux-mm@kvack.org>,
+ "open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>,
+ "open list:KASAN" <kasan-dev@googlegroups.com>,
+ "open list:MAPLE TREE" <maple-tree@lists.infradead.org>,
+ "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
+ "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
+References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
+ <fynmrmsglw4liexcb37ykutf724lh7zbibilcjpysbmvgtkmes@mtjrfkve4av7>
+ <c66deb8f-774e-4981-accf-4f507943e08c@broadcom.com>
+ <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <iup2plrwgkxlnywm3imd2ctkbqzkckn4t3ho56kq4y4ykgzvbk@cefy6hl7yu6c>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri Jun 27, 2025 at 9:57 AM CEST, Andreas Hindborg wrote:
-> Andreas Hindborg <a.hindborg@kernel.org> writes:
->> "Benno Lossin" <lossin@kernel.org> writes:
->>> That's good to know, then let's try to go for something simple.
+On 6/27/25 00:55, Jan Kara wrote:
+> On Thu 26-06-25 09:39:36, Florian Fainelli wrote:
+>> On 6/26/25 09:17, Liam R. Howlett wrote:
+>>> * Florian Fainelli <florian.fainelli@broadcom.com> [250625 19:13]:
+>>>> Linux has a number of very useful GDB scripts under scripts/gdb/linux/*
+>>>> that provide OS awareness for debuggers and allows for debugging of a
+>>>> variety of data structures (lists, timers, radix tree, mapletree, etc.)
+>>>> as well as subsystems (clocks, devices, classes, busses, etc.).
+>>>>
+>>>> These scripts are typically maintained in isolation from the subsystem
+>>>> that they parse the data structures and symbols of, which can lead to
+>>>> people playing catch up with fixing bugs or updating the script to work
+>>>> with updates made to the internal APIs/objects etc. Here are some
+>>>> recents examples:
+>>>>
+>>>> https://lore.kernel.org/all/20250601055027.3661480-1-tony.ambardar@gmail.com/
+>>>> https://lore.kernel.org/all/20250619225105.320729-1-florian.fainelli@broadcom.com/
+>>>> https://lore.kernel.org/all/20250625021020.1056930-1-florian.fainelli@broadcom.com/
+>>>>
+>>>> This patch series is intentionally split such that each subsystem
+>>>> maintainer can decide whether to accept the extra
+>>>> review/maintenance/guidance that can be offered when GDB scripts are
+>>>> being updated or added.
 >>>
->>> I don't think that we can just use a `Mutex<T>`, because we don't have =
-a
->>> way to create it at const time... I guess we could have
->>>
->>>     impl<T> Mutex<T>
->>>         /// # Safety
->>>         ///
->>>         /// The returned value needs to be pinned and then `init` needs
->>>         /// to be called before any other methods are called on this.
->>>         pub unsafe const fn const_new() -> Self;
->>>
->>>         pub unsafe fn init(&self);
->>>     }
->>>
->>> But that seems like a bad idea, because where would we call the `init`
->>> function? That also needs to be synchronized...
+>>> I don't see why you think it was okay to propose this in the way you
+>>> have gone about it.  Looking at the mailing list, you've been around for
+>>> a while.
 >>
->> Ah, that is unfortunate. The init function will not run before this, so
->> we would need a `Once` or an atomic anyway to initialize the lock.
->>
->> I am not sure if we are allowed to sleep during this, I would have to
->> check. But then we could use a spin lock.
->>
->> We will need the locking anyway, when we want to enable sysfs write
->> access to the parameters.
+>> This should probably have been posted as RFC rather than PATCH, but as I
+>> indicate in the cover letter this is broken down to allow maintainers like
+>> yourself to accept/reject
 >>
 >>>
->>> Maybe we can just like you said use an atomic bool?
+>>> The file you are telling me about seems to be extremely new and I needed
+>>> to pull akpm/mm-new to discover where it came from.. because you never
+>>> Cc'ed me on the file you are asking me to own.
 >>
->> Sigh, I will have to check how far that series has come.
+>> Yes, that file is very new indeed, and my bad for not copying you on it.
 >>
->
-> I think I am going to build some kind of `Once` feature on top of
-> Boqun's atomic series [1], so that we can initialize a lock in these
-> statics. We can't use `global_lock!`, because that depends on module
-> init to initialize the lock before first use.
+>> I was not planning on burning an entire day worth of work to transition the
+>> GDB scripts dumping the interrupt tree away from a radix tree to a maple
+>> tree. All of which happens with the author of that conversion having
+>> absolutely no idea that broke anything in the tree because very few people
+>> know about the Python GDB scripts that Linux has. It is not pleasant to be
+>> playing catch when it would have take maybe an extra couple hours for
+>> someone intimately familiar with the maple tree to come up with a suitable
+>> implementation replacement for mtree_load().
+>>
+>> So having done it felt like there is a maintenance void that needs to be
+>> filled, hence this patch set.
+> 
+> I can see that it takes a lot of time to do a major update of a gdb
+> debugging script after some refactoring like this. OTOH mandating some gdb
+> scripts update is adding non-trivial amount of work to changes that are
+> already hard enough to do as is. 
 
-Sounds good, though we probably don't want to name it `Once`. Since it
-is something that will be populated in the future, but not by some
-random accessor, but rather a specific populator.
+This really should have been posted as RFC, because I can see how 
+posting this as PATCH would be seen as coercing maintainers into taking 
+those GDB scripts under their umbrella.
 
-So maybe:
+> And the obvious question is what is the
+> value? I've personally never used these gdb scripts and never felt a strong
+> need for something like that. People have various debugging aids (like BPF
+> scripts, gdb scripts, there's crash tool and drgn, and many more) lying
+> around. 
 
-    pub struct Delayed<T> {
-        dummy: T,
-        real: Opaque<T>,
-        populated: Atomic<bool>, // or Atomic<Flag>
-        writing: Atomic<bool>, // or Atomic<Flag>
-    }
+Those are valuable tools in the tool box, but GDB scripts can work when 
+your only debug tool accessible is JTAG for instance, I appreciate this 
+is typically miles away from what most of the kernel community does, but 
+this is quite typical and common in embedded systems. When you operate 
+in that environment, having a decent amount of debugger awareness of 
+what is being debugged is immensely valuable in saving time.
 
-    impl<T> Delayed<T> {
-        pub fn new(dummy: T) -> Self {
-            Self {
-                dummy,
-                real: Opaque::uninit(),
-                populated: Atomic::new(false),
-                writing: Atomic::new(false),
-            }
-        }
+> I'm personally of an opinion that it is not a responsibility of
+> the person doing refactoring to make life easier for them or even fixing
+> them and I don't think that the fact that some debug aid is under
+> scripts/gdb/ directory is making it more special. 
 
-        pub fn get(&self) -> &T {
-            if self.populated.load(Acquire) {
-                unsafe { &*self.real.get() }
-            } else {
-                // maybe print a warning here?
-                // or maybe let the user configure this in `new()`?
-                &self.dummy
-            }
-        }
+That is really the question that I am trying to get answered with this 
+patch series. IMHO as a subsystem maintainer it is not fair to be 
+completely oblivious to scripts that live in the source tree, even if 
+you are not aware of those.
 
-        pub fn populate(&self, value: T) {
-            if self.writing.cmpxchg(false, true, Release) {
-                unsafe { *self.real.get() =3D value };
-                self.populated.store(true, Release);
-            } else {
-                pr_warn!("`Delayed<{}>` written to twice!\n", core::any::ty=
-pe_name::<T>());
-            }
-        }
-    }
+ > So at least as far as I'm> concerned (VFS, fsnotify and other 
+filesystem related stuff) I don't plan
+> on requiring updates to gdb scripts from people doing changes or otherwise
+> actively maintain them.
 
-(no idea if the orderings are correct, I always have to think way to
-much about that... especially since our atomics seem to only take one
-ordering in compare_exchange?)
+vfs.py script is beyond trivial, the largest and most complicated IMHO 
+is mapletree.py which had to be recently developed to continue to 
+support parsing the interrupt descriptor tree in the kernel, I can 
+maintain that one now that I know a lot more than I ever wished I knew 
+about maple trees. So really the burden is not as big as it may seem but 
+it's fair not to be taking on more work as a maintainer, I get that.
 
-> As far as I can tell, atomics may not land in v6.17, so this series
-> will probably not be ready for merge until v6.18 at the earliest.
-
-Yeah, sorry about that :(
-
-> Thanks for the input, Benno!
-
-My pleasure!
-
----
-Cheers,
-Benno
+Thanks for your feedback!
+-- 
+Florian
