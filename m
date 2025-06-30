@@ -1,193 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3757628EA76;
-	Mon, 30 Jun 2025 15:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A2643151;
+	Mon, 30 Jun 2025 19:02:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751298098; cv=none; b=uaLykAMtujeFllCpyzHlGe7Y7cVZotwmTOmskR1OqOieaDhYGpfI5tuC7ecvLsmPJj9MY9Z4IF1k/MV83mvtdBMjWTKy38b7AdcdXQSw6iG/Vgfty86GZXBO+4nu6ZHtwZhtki51GqGe48LO5qSedSGsiM/EcpYcx3teMni3EvU=
+	t=1751310165; cv=none; b=gg7C4QpgIlrq3hUupYscOMWQzLkkjLH+SXqQOXqfWQ8dXyMh/5zPs/VpqVnNKndFvutszahCVpDLm0VOujGQcsH+WI9S/OHeLQuZTkAroG3WjwVVowS3ppupYWNVnF8wXtN6iQYNgDBty8gy5QyQCfqg7UnXtCVyommiZGnKaH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751298098; c=relaxed/simple;
-	bh=U/Cox21FflLFj8VZkRclH0nSlm2+lf5+a3+6iHEqdhg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HVheJOrFAja7UPiAInm9ZWG54IPaneR3gPd1ELso3aXdiP/v/xX0ACB03zImU6zj46ONPSF5wYbMYSPj9ALKxaG1bFpVCKiJLpLQ418AudAfT5Mi6bqkoBq8qiatc3tF0pU1Gx2vvHkalAUXDWnSTvEl63ksEaZpKw8iovpRk/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RjNCpwim; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751310165; c=relaxed/simple;
+	bh=3ZviabXAPMdMjrA9k+SYU8j0EE5YIyw3lU8BHpP0Ee0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=kltGd0qbsVyrtcp0cWVoUfWrRyw2wiJ/Gq3GGQZgGCc9gxJvSV2ZfHtuhuOHHbHCKKl8OLNTTraeKpg0zlcwfebBbNK9brUPl6S0u4flE83jpr7qybWlUuETfadB8lWmOYrgmygTWXQ4TmwuPWzDNOfI2OR5AGIaX4qVCozhYIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y3HRpiCM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RjNCpwim"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1C1C4CEEF;
-	Mon, 30 Jun 2025 15:41:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y3HRpiCM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EAC7C4CEE3;
+	Mon, 30 Jun 2025 19:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751298096;
-	bh=U/Cox21FflLFj8VZkRclH0nSlm2+lf5+a3+6iHEqdhg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RjNCpwimw2bncyOG4/NcCqnnn6i504PvtEG1ewWFF+WznPYjs4f31Y3JoiJ6ffReU
-	 Rb14n6OW3scOzyiAwcIfI9wezDWhJVV7CVpVa3wom2WopxH8rlyrixJX41b+dok3c7
-	 Yv5GLEDdFOgw3mOKAK5CCC92v4NYZCRWxce44qcBqM/6Rcve9rkbqkSmSEUKiEJnxt
-	 i7Cx6lqCi7n5fhr9SxaIgmBx8id6RA0e/lXRpWE1wKcEzpEW74yqk9B211QyA9UeLs
-	 eGGYb9v3QGvnLbqSVSk4W1XWyngqvJce7mwOM/aWE98VM/OVIaSSU/3ehTKOrmHGik
-	 zJ6YzUVUMOReA==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-55502821bd2so2519892e87.2;
-        Mon, 30 Jun 2025 08:41:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUfOLzyWMYpuwzEfQz8RBKrV1w8/pFr63neqbWWMwVhKtrVR4dYW7bx5vu2QwBC6wDcDmaDlf3sAhqQYZ9R@vger.kernel.org, AJvYcCVjYXQKqyMGZEhlDkbKcU0ubz1l+ztPuMEv2Z+I+D/XdZxDEyv8wdVsSYF+Kl9EuLtJ59bWViE/tBdLk6s=@vger.kernel.org, AJvYcCWSbr636inK6oYHqO99cnIUqInPmvDTasmoewnc5MxJIJfF8h+7spqzWwMNn3h45Km0aVaeWswQu5CNIsY9Fw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt+bVheeWtrEPvMrnZJYmAoMIcAZYJqi2Gua1YYPgxL8HCVU+Z
-	XrIhWwMW1nQVEH312M2hw6OKs4T+HbbywcSlyvl+MY/KFJXLMfVy/Hb8K794TrthKED3Rh8l1KU
-	MxwSf56D+VYA22GW9UChmaIgZcQOjT1o=
-X-Google-Smtp-Source: AGHT+IE7MU1OSdE0HWcTbqB/Z2gZNtSZo8xi396BsJAN275lk+KqWpRFVTfKZmP9/jZXHGVo6J1z+B9oYIGiaH3L3rw=
-X-Received: by 2002:a05:6512:15a5:b0:553:2e0f:96c with SMTP id
- 2adb3069b0e04-5550b84cdd0mr4095199e87.23.1751298095233; Mon, 30 Jun 2025
- 08:41:35 -0700 (PDT)
+	s=k20201202; t=1751310164;
+	bh=3ZviabXAPMdMjrA9k+SYU8j0EE5YIyw3lU8BHpP0Ee0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y3HRpiCMZeaha7LTlG3YTPJUXrhyvdpEgyTeZwt1v87WQe+xdqXfnC1jXlNNv2Jla
+	 bP2vX8MvmfsagwTgAAySOB3xpDGaGl5h78M3HGhQrQ4Z+wlN0fkmnTEbny1+i0i2xj
+	 0cnNnSDrn+PzjX7/i3SFrcbqD/7VYgFsSRTUfmFWx9d+i7oSmjSokW4BOkHQb+Xs2c
+	 QNAbGed9RpQPSxXNUtES/EztOB3+v22I3aSdZB42jLbZv/7hL+CP4bSdJAqRGH+1B9
+	 aJUdnbowWXoCkoI+yjdcl7+MoS48WqSUZF4KBHZk3V9MKd3n+J2Y9CivoqqCtfMq1f
+	 no5Wiy5fsinsA==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250623092350.3261118-2-gprocida@google.com> <20250625095215.4027938-1-gprocida@google.com>
- <CAK7LNASNVh8fDErjSbcR1TiCfy=LM-j3iYSNpqAvp8OhGmsKjQ@mail.gmail.com>
- <CAGvU0HnzfLxGhLT3Se4wNvyzEkpTKmd8ATFFgBRBVNrOKDXcgA@mail.gmail.com>
- <CAK7LNATp1n2c9RqNoe0oztRtLoMy8JqHF1KqSRsj5avp3vjHCQ@mail.gmail.com> <CAGvU0HkKacQKB1q9NWcqChLGoMB+1vu9UdqYc+tBRbTTc3++GQ@mail.gmail.com>
-In-Reply-To: <CAGvU0HkKacQKB1q9NWcqChLGoMB+1vu9UdqYc+tBRbTTc3++GQ@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 1 Jul 2025 00:40:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQo0CyMdsVSg4dfWjVU+uYUSMdmwgLEdpRfTVcgOTuwzg@mail.gmail.com>
-X-Gm-Features: Ac12FXyyzl9OrOby5-5Dtzs7KHIbfWmtldkF9gESl3FWHywGg2_mXLcsMMx9C-M
-Message-ID: <CAK7LNAQo0CyMdsVSg4dfWjVU+uYUSMdmwgLEdpRfTVcgOTuwzg@mail.gmail.com>
-Subject: Re: [PATCH] gendwarfksyms: order -T symtypes output by name
-To: Giuliano Procida <gprocida@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 30 Jun 2025 21:02:37 +0200
+Message-Id: <DB03MZI2FCOW.2JBFL3TY38FK@kernel.org>
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Andreas Hindborg" <a.hindborg@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Masahiro
+ Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
+ <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
+ Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
+ "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
+ <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
+ Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
+X-Mailer: aerc 0.20.1
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+ <20250612-module-params-v3-v13-2-bc219cd1a3f8@kernel.org>
+ <COU2bqJOzCHRf6g4rwFpu2NY3wLY0G0AmNjRaU9aGEqu1HaPZ5X4KzfDT_CEB3Okh5BV50sJS10sKhmtHut8ew==@protonmail.internalid> <DAQJCUE1C2JE.204A8IS7LBIVZ@kernel.org> <87ikkq648o.fsf@kernel.org> <smOfUo2mEmQu-lykKKMiNOUWq2ze6p_CoEEpgGE0dtAnoJDGEpvQMkP1q-n13MiUxLK1xAiM-4QLsivPrG57sg==@protonmail.internalid> <DARCZYNPIJVZ.3JJSZ6PSAEMEC@kernel.org> <877c126bce.fsf@kernel.org> <Mg1_h6lRpg9tdi0VjiyDfIEy2juzgDWxOhYX61qSUfyEpeMMksWW1e-blTka_G1dXUvpZVktdD-zL3X1a6T6Cg==@protonmail.internalid> <DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org> <RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid> <DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org> <87plepzke5.fsf@kernel.org> <xFouVLxX1_t1mH69FDYwlIhBlI72M0IzQEKn0ntG_wT9z7V5DtbxiwVP_frH_yiS-Gf0q_AhqetbLmuvJ_yP5Q==@protonmail.internalid> <DAX65TRN0TGP.25VZ9DYV86XWY@kernel.org> <87wm8txysl.fsf@kernel.org>
+ <9G3W1seaM7elcwWXaeoaa2nfpFYCf-AmBdvZhACGP13KGUtTPVMwGNYdTQsdtp8ru7GIP3-UYTzXscC1MRUKrg==@protonmail.internalid> <DAZV8OGL8BMH.11SLXBXQ17ZJ9@kernel.org> <87h5zxxtdw.fsf@kernel.org>
+In-Reply-To: <87h5zxxtdw.fsf@kernel.org>
 
-On Mon, Jun 30, 2025 at 10:46=E2=80=AFPM Giuliano Procida <gprocida@google.=
-com> wrote:
+On Mon Jun 30, 2025 at 3:15 PM CEST, Andreas Hindborg wrote:
+> "Benno Lossin" <lossin@kernel.org> writes:
+>> On Mon Jun 30, 2025 at 1:18 PM CEST, Andreas Hindborg wrote:
+>>> "Benno Lossin" <lossin@kernel.org> writes:
+>>>> (no idea if the orderings are correct, I always have to think way to
+>>>> much about that... especially since our atomics seem to only take one
+>>>> ordering in compare_exchange?)
+>>>>
+>>>>> As far as I can tell, atomics may not land in v6.17, so this series
+>>>>> will probably not be ready for merge until v6.18 at the earliest.
+>>>>
+>>>> Yeah, sorry about that :(
+>>>
+>>> Actually, perhaps we could aim at merging this code without this
+>>> synchronization?
+>>
+>> I won't remember this issue in a few weeks and I fear that it will just
+>> get buried. In fact, I already had to re-read now what the actual issue
+>> was...
+>>
+>>> The lack of synchronization is only a problem if we
+>>> support custom parsing. This patch set does not allow custom parsing
+>>> code, so it does not suffer this issue.
+>>
+>> ... In doing that, I saw my original example of UB:
+>>
+>>     module! {
+>>         // ...
+>>         params: {
+>>             my_param: i64 {
+>>                 default: 0,
+>>                 description: "",
+>>             },
+>>         },
+>>     }
+>>
+>>     static BAD: &'static i64 =3D module_parameters::my_param.get();
+>>
+>> That can happen without custom parsing, so it's still a problem...
 >
-> On Mon, 30 Jun 2025 at 14:24, Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
-> >
-> > On Mon, Jun 30, 2025 at 7:05=E2=80=AFPM Giuliano Procida <gprocida@goog=
-le.com> wrote:
-> > >
-> > > Hi.
-> > >
-> > > On Sun, 29 Jun 2025 at 18:51, Masahiro Yamada <masahiroy@kernel.org> =
-wrote:
-> > > >
-> > > > On Wed, Jun 25, 2025 at 6:52=E2=80=AFPM Giuliano Procida <gprocida@=
-google.com> wrote:
-> > > > >
-> > > > > When writing symtypes information, we iterate through the entire =
-hash
-> > > > > table containing type expansions. The key order varies unpredicta=
-bly
-> > > > > as new entries are added, making it harder to compare symtypes be=
-tween
-> > > > > builds.
-> > > > >
-> > > > > Resolve this by sorting the type expansions by name before output=
-.
-> > > > >
-> > > > > Signed-off-by: Giuliano Procida <gprocida@google.com>
-> > > > > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-> > > > > ---
-> > > > >  scripts/gendwarfksyms/types.c | 29 ++++++++++++++++++++++++++---
-> > > > >  1 file changed, 26 insertions(+), 3 deletions(-)
-> > > > >
-> > > > > [Adjusted the first line of the description. Added reviewer tags.
-> > > > >  Added missing CC to linux-modules.]
-> > > > >
-> > > > > diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksym=
-s/types.c
-> > > > > index 7bd459ea6c59..51c1471e8684 100644
-> > > > > --- a/scripts/gendwarfksyms/types.c
-> > > > > +++ b/scripts/gendwarfksyms/types.c
-> > > > > @@ -6,6 +6,8 @@
-> > > > >  #define _GNU_SOURCE
-> > > > >  #include <inttypes.h>
-> > > > >  #include <stdio.h>
-> > > > > +#include <stdlib.h>
-> > > > > +#include <string.h>
-> > > > >  #include <zlib.h>
-> > > > >
-> > > > >  #include "gendwarfksyms.h"
-> > > > > @@ -179,20 +181,41 @@ static int type_map_get(const char *name, s=
-truct type_expansion **res)
-> > > > >         return -1;
-> > > > >  }
-> > > > >
-> > > > > +static int cmp_expansion_name(const void *p1, const void *p2)
-> > > > > +{
-> > > > > +       struct type_expansion *const *e1 =3D p1;
-> > > > > +       struct type_expansion *const *e2 =3D p2;
-> > > > > +
-> > > > > +       return strcmp((*e1)->name, (*e2)->name);
-> > > > > +}
-> > > > > +
-> > > > >  static void type_map_write(FILE *file)
-> > > > >  {
-> > > > >         struct type_expansion *e;
-> > > > >         struct hlist_node *tmp;
-> > > > > +       struct type_expansion **es;
-> > > > > +       size_t count =3D 0;
-> > > > > +       size_t i =3D 0;
-> > > > >
-> > > > >         if (!file)
-> > > > >                 return;
-> > > > >
-> > > > > -       hash_for_each_safe(type_map, e, tmp, hash) {
-> > > > > -               checkp(fputs(e->name, file));
-> > > > > +       hash_for_each_safe(type_map, e, tmp, hash)
-> > > > > +               ++count;
-> > > > > +       es =3D xmalloc(count * sizeof(struct type_expansion *));
-> > > >
-> > > > Just a nit:
-> > > >
-> > > >            es =3D xmalloc(count * sizeof(*es));
-> > > >
-> > > > is better?
-> > > >
-> > > > > +       hash_for_each_safe(type_map, e, tmp, hash)
-> > > > > +               es[i++] =3D e;
-> > > > > +
-> > > > > +       qsort(es, count, sizeof(struct type_expansion *), cmp_exp=
-ansion_name);
-> > > >
-> > > > qsort(es, count, sizeof(*es), cmp_expansion_name);
-> > > >
-> > >
-> > > That's a fair point.
-> > >
-> > > However, in the gendwarfksyms code, all but one of the sizeofs uses a=
-n
-> > > explicit type name. The exception is sizeof(stats) where stats is an =
-array.
-> > >
-> > > I'll leave Sami's code as it is.
-> >
-> >
-> > This rule is clearly documented with rationale.
-> >
-> > See this:
-> > https://github.com/torvalds/linux/blob/v6.15/Documentation/process/codi=
-ng-style.rst?plain=3D1#L941
-> >
-> >
->
-> I can follow up with a change that adjusts all occurrences. That
-> shouldn't take long at all.
+> Ah, got it. Thanks.
 
-I expected a new patch version (I do not know whether it is v2 or v3 since
-you do not add such a prefix),
-instead of breaking the style, and fixing it in a follow-up patch.
+On second thought, we *could* just make the accessor function `unsafe`.
+Of course with a pinky promise to make the implementation safe once
+atomics land. But I think if it helps you get your driver faster along,
+then we should do it.
 
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+---
+Cheers,
+Benno
