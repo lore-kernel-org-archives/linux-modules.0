@@ -1,146 +1,198 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A062283C9F
-	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8063E28C2C2
+	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751293275; cv=none; b=kzXjrvBFrZRfEX138HQdEC7BPktYQQ8fUFN/t++WPZitUOD1tjIhnnWYJxzCuSQ/7K0PfJcQKliCfF6iaeM+8tVN2xN6cEo428t8HqG8PuezkiXw4fnrh9DBAzcjFydiruZd4CQ1TTgMg5LGR2g5tEbL1CEX+dbgqHtnxAz8Ptk=
+	t=1751293653; cv=none; b=AYyxyXp+chlQPp4PPgtZP1OjRb5QL89A9nwTkYF4xzjZuDIT8GSyjIJmuQHs8Ih8p8NbRgTo8PxsegngHrKYgOq0+lyCbFspeuZSJJWm2vsFgXJwezO5Ylp0x8tj10IYE3/AVQo+IVEu/1Z+5bCoCPIcnv8y5CcSJAugZImLAWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751293275; c=relaxed/simple;
-	bh=tTwQjFP7H7Ve5sz5rII+oLqb+GY2UIzpGUJSSJir0uA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YYQuPCT7uYcB2GidSHmmZeGw6AK2wGNW/5FEXLTc4PkJHVjQEjiHkSEEIovmyU3fND+Ec3a+kuIYjAkuyydD2uyN4w7O3uEnDktiXF09oiUTUMgKR0/CUU4NOte+fC35tPIgePC+v6LZ7wKpaLDqsjkiYAYpeVVWrwX27ncjFeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1UgUZ0ug; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=siyLMqoD; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1UgUZ0ug; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=siyLMqoD; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1751293653; c=relaxed/simple;
+	bh=9db6x0EMOe6E9j32qrzyr5EJwVkIl5FELxN4JFxD+Vo=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=KJnpjWHDQW4pRzY1BVmmMTuWf+P4aThsCf8Nv9+qyBwZHoNzs4Jgd2seumxZfs22WYFI1FSAVUrm/nRzq2SVHA4OakLJetZ59d8pAOE8HFzKx/q6+S/VBxxhAsFsi3/A11uj5vwWDr5dGB5wIRzpznZ1J/dPYX801glWzfaN2l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C1YWcxWl; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1UgUZ0ug";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="siyLMqoD";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1UgUZ0ug";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="siyLMqoD"
-Received: from hawking.nue2.suse.org (unknown [10.168.4.11])
-	by smtp-out2.suse.de (Postfix) with ESMTP id 235161F393
-	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1751293271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=oqVhvoZgJll8Km1rap2acelvANBj2O2t93CsPJai2mw=;
-	b=1UgUZ0ug7K4mzpyxyn/JBrlIoeE7eiVyvySuIQ98K5Nk2R1tkzEdNuUQRTEjVqRcz02Y1J
-	kGtLN07sTw5mtsRLS+b876LKiSZS7sqa0jNKQRP3/eHccn6eF39/j2ZKKbHCh/6XkqYerE
-	bOPvOk1u9HxOS5aseITQrXL7MjcqE+U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1751293271;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=oqVhvoZgJll8Km1rap2acelvANBj2O2t93CsPJai2mw=;
-	b=siyLMqoDXhrXdMsc26k3Z0m8j3eTjarE/NgG7kO9RxgU9D9xsRjAWx9cNkuhhVG5jDQTTN
-	z4xqBXEKmh3iEIDw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1751293271; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=oqVhvoZgJll8Km1rap2acelvANBj2O2t93CsPJai2mw=;
-	b=1UgUZ0ug7K4mzpyxyn/JBrlIoeE7eiVyvySuIQ98K5Nk2R1tkzEdNuUQRTEjVqRcz02Y1J
-	kGtLN07sTw5mtsRLS+b876LKiSZS7sqa0jNKQRP3/eHccn6eF39/j2ZKKbHCh/6XkqYerE
-	bOPvOk1u9HxOS5aseITQrXL7MjcqE+U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1751293271;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type;
-	bh=oqVhvoZgJll8Km1rap2acelvANBj2O2t93CsPJai2mw=;
-	b=siyLMqoDXhrXdMsc26k3Z0m8j3eTjarE/NgG7kO9RxgU9D9xsRjAWx9cNkuhhVG5jDQTTN
-	z4xqBXEKmh3iEIDw==
-Received: by hawking.nue2.suse.org (Postfix, from userid 17005)
-	id 135134A05B5; Mon, 30 Jun 2025 16:21:11 +0200 (CEST)
-From: Andreas Schwab <schwab@suse.de>
-To: linux-modules@vger.kernel.org
-Subject: [PATCH] testsuite/init_module: Handle __NR_riscv_hwprobe in syscall
- wrapper
-Date: Mon, 30 Jun 2025 16:21:11 +0200
-Message-ID: <mvmms9p2tuw.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C1YWcxWl"
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-3a4fabcafecso2020052f8f.0
+        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751293650; x=1751898450; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jA1+PqXVtq5JGGyS5bMqoIcyAvEWva/WB/dyQOqqHmU=;
+        b=C1YWcxWldsyRsfw5atRt3hcl6Q/3ThDImMsaj5pdObRaAl656fgCPpQ56T3UiycROw
+         MZVfJs4dur9pjWmuGEUbtRCvc4HWxg7m2Qs9BwDWO3EPJjq5XD8zHEC2YxzTHrec8The
+         tM1Bi5WPxS4HGcivDb1MCOE771QltsSwpBunAGRVQ6sHLAEG1a7wlo0sNdaKXWtdZXVn
+         t/mcPBeUR4z+QTFnUY0pYi3SevSp0y0EI2KVwRwujvnOVILyEWQ23KRdW+xCbeK24q8z
+         OjDswGQuIuvv58fYY3bbSE6djrFciRlKGZIrONwLBhBhquRajAgPXKVAIhnga4YO3S/i
+         Q98A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751293650; x=1751898450;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jA1+PqXVtq5JGGyS5bMqoIcyAvEWva/WB/dyQOqqHmU=;
+        b=tvBKhGeFKnU84HFRmRhB9GM3zHV3LuEW34uP71UVQTlpBm9MlFJ/G5bNqBYff4HB5C
+         5H0IkY88Mr0jYRW0CYgW3I4buc+wNu40TI+qQm5R0Sz7WSHHISjiVilJmh5tro6fg+nG
+         QuA7z+jzdHo9CZ1TqxrOxFkLC2v+mXNxuK7BheWGHnhiu9oXwbJv/MC5te4jTbKjIF81
+         s/z07KONqhTxDyM+kcaz30YqgE6g3liO1nz0apYNd19pLLjya7gio1AtPCWzcWzvsUC7
+         2fl79d2n5srYvOs+Ji65L9iek8eqGihXO7y4poqBKzMKpdRg0FC3hAMPOK+IH1e9irR6
+         rnVw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUwePlQNxSk1NDCKi7+lgckuhfY1mC4+7by9Z2rYCBpEshDFT+SwtkLOtDYXIb6X5jBm/5AwxTKsYTgkyu@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWwMFh329ajdH1ZamLic14XOUc2EigDKFQuo8aoTFtLFuQe+pw
+	3Eaz60T32nuHt+z9leGcXQhc1oxtt7x8CbG3ClJHJHpuF+jPtkOKbo2WELxgB9TR9twKl498y8D
+	x9S0P5Wbza7Ilcg==
+X-Google-Smtp-Source: AGHT+IGBSz5ftj1hVRQWPOaVGaFLmn6ZsnaOVoP8vhVwAtD0CuhsE+mmDdNHq577mQqHbTmGbmGPqxLU19jd1Q==
+X-Received: from wmbay32.prod.google.com ([2002:a05:600c:1e20:b0:453:910:1a18])
+ (user=gprocida job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:c10c:b0:43c:fe90:1282 with SMTP id 5b1f17b1804b1-4538ef7f8d3mr97825305e9.7.1751293649607;
+ Mon, 30 Jun 2025 07:27:29 -0700 (PDT)
+Date: Mon, 30 Jun 2025 15:27:02 +0100
+In-Reply-To: <CAGvU0HkKacQKB1q9NWcqChLGoMB+1vu9UdqYc+tBRbTTc3++GQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Flag: NO
-X-Spam-Score: -4.20
-X-Spamd-Result: default: False [-4.20 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_NO_TLS_LAST(0.10)[];
-	RCPT_COUNT_ONE(0.00)[1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_ONE(0.00)[1];
-	FROM_EQ_ENVFROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email]
-X-Spam-Level: 
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
+Message-ID: <20250630142713.1816049-1-gprocida@google.com>
+Subject: [PATCH] gendwarfksyms: use preferred form of sizeof for allocation
+From: Giuliano Procida <gprocida@google.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Giuliano Procida <gprocida@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The libcrypto library constructor calls the riscv_hwprobe syscall through
-the syscall wrapper.  Forward it to the __riscv_hwprobe function.
+The preferred form is to supply the variable being allocated to rather
+than an explicit type name which might become stale.
 
-Signed-off-by: Andreas Schwab <schwab@suse.de>
+Also do this for memset and qsort arguments.
+
+Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Giuliano Procida <gprocida@google.com>
 ---
- testsuite/init_module.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ scripts/gendwarfksyms/cache.c   | 2 +-
+ scripts/gendwarfksyms/die.c     | 4 ++--
+ scripts/gendwarfksyms/dwarf.c   | 2 +-
+ scripts/gendwarfksyms/kabi.c    | 2 +-
+ scripts/gendwarfksyms/symbols.c | 2 +-
+ scripts/gendwarfksyms/types.c   | 8 ++++----
+ 6 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/testsuite/init_module.c b/testsuite/init_module.c
-index 8ff2699..3516c1d 100644
---- a/testsuite/init_module.c
-+++ b/testsuite/init_module.c
-@@ -26,6 +26,9 @@
- #include <sys/syscall.h>
- #include <sys/types.h>
- #include <sys/utsname.h>
-+#ifdef __riscv
-+#include <sys/hwprobe.h>
-+#endif
+diff --git a/scripts/gendwarfksyms/cache.c b/scripts/gendwarfksyms/cache.c
+index c9c19b86a686..1c640db93db3 100644
+--- a/scripts/gendwarfksyms/cache.c
++++ b/scripts/gendwarfksyms/cache.c
+@@ -15,7 +15,7 @@ void cache_set(struct cache *cache, unsigned long key, int value)
+ {
+ 	struct cache_item *ci;
  
- #include <shared/util.h>
+-	ci = xmalloc(sizeof(struct cache_item));
++	ci = xmalloc(sizeof(*ci));
+ 	ci->key = key;
+ 	ci->value = value;
+ 	hash_add(cache->cache, &ci->hash, hash_32(key));
+diff --git a/scripts/gendwarfksyms/die.c b/scripts/gendwarfksyms/die.c
+index 6183bbbe7b54..052f7a3f975a 100644
+--- a/scripts/gendwarfksyms/die.c
++++ b/scripts/gendwarfksyms/die.c
+@@ -33,7 +33,7 @@ static struct die *create_die(Dwarf_Die *die, enum die_state state)
+ {
+ 	struct die *cd;
  
-@@ -370,6 +373,24 @@ TS_EXPORT long int syscall(long int __sysno, ...)
- 		return nextlib_syscall(__NR_gettid);
- 	}
+-	cd = xmalloc(sizeof(struct die));
++	cd = xmalloc(sizeof(*cd));
+ 	init_die(cd);
+ 	cd->addr = (uintptr_t)die->addr;
  
-+#ifdef __NR_riscv_hwprobe
-+	if (__sysno == __NR_riscv_hwprobe) {
-+		struct riscv_hwprobe *pairs;
-+		size_t pair_count, cpusetsize;
-+		unsigned long int *cpus;
-+		unsigned int flags;
-+
-+		va_start (ap, __sysno);
-+		pairs = va_arg (ap, struct riscv_hwprobe *);
-+		pair_count = va_arg (ap, size_t);
-+		cpusetsize = va_arg (ap, size_t);
-+		cpus = va_arg (ap, unsigned long int *);
-+		flags = va_arg (ap, unsigned int);
-+
-+		return __riscv_hwprobe (pairs, pair_count, cpusetsize, cpus, flags);
-+	}
-+#endif
-+
- 	/*
- 	 * FIXME: no way to call the libc function due since this is a
- 	 * variadic argument function and we don't have a vsyscall() variant
+@@ -123,7 +123,7 @@ static struct die_fragment *append_item(struct die *cd)
+ {
+ 	struct die_fragment *df;
+ 
+-	df = xmalloc(sizeof(struct die_fragment));
++	df = xmalloc(sizeof(*df));
+ 	df->type = FRAGMENT_EMPTY;
+ 	list_add_tail(&df->list, &cd->fragments);
+ 	return df;
+diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
+index 13ea7bf1ae7d..3538a7d9cb07 100644
+--- a/scripts/gendwarfksyms/dwarf.c
++++ b/scripts/gendwarfksyms/dwarf.c
+@@ -634,7 +634,7 @@ static int get_union_kabi_status(Dwarf_Die *die, Dwarf_Die *placeholder,
+ 	 * Note that the user of this feature is responsible for ensuring
+ 	 * that the structure actually remains ABI compatible.
+ 	 */
+-	memset(&state.kabi, 0, sizeof(struct kabi_state));
++	memset(&state.kabi, 0, sizeof(state.kabi));
+ 
+ 	res = checkp(process_die_container(&state, NULL, die,
+ 					   check_union_member_kabi_status,
+diff --git a/scripts/gendwarfksyms/kabi.c b/scripts/gendwarfksyms/kabi.c
+index b3ade713778f..e3c2a3ccf51a 100644
+--- a/scripts/gendwarfksyms/kabi.c
++++ b/scripts/gendwarfksyms/kabi.c
+@@ -228,7 +228,7 @@ void kabi_read_rules(int fd)
+ 		if (type == KABI_RULE_TYPE_UNKNOWN)
+ 			error("unsupported kABI rule type: '%s'", field);
+ 
+-		rule = xmalloc(sizeof(struct rule));
++		rule = xmalloc(sizeof(*rule));
+ 
+ 		rule->type = type;
+ 		rule->target = xstrdup(get_rule_field(&rule_str, &left));
+diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbols.c
+index 327f87389c34..35ed594f0749 100644
+--- a/scripts/gendwarfksyms/symbols.c
++++ b/scripts/gendwarfksyms/symbols.c
+@@ -146,7 +146,7 @@ void symbol_read_exports(FILE *file)
+ 			continue;
+ 		}
+ 
+-		sym = xcalloc(1, sizeof(struct symbol));
++		sym = xcalloc(1, sizeof(*sym));
+ 		sym->name = name;
+ 		sym->addr.section = SHN_UNDEF;
+ 		sym->state = SYMBOL_UNPROCESSED;
+diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksyms/types.c
+index 51c1471e8684..9c3b053bf061 100644
+--- a/scripts/gendwarfksyms/types.c
++++ b/scripts/gendwarfksyms/types.c
+@@ -45,7 +45,7 @@ static int type_list_append(struct list_head *list, const char *s, void *owned)
+ 	if (!s)
+ 		return 0;
+ 
+-	entry = xmalloc(sizeof(struct type_list_entry));
++	entry = xmalloc(sizeof(*entry));
+ 	entry->str = s;
+ 	entry->owned = owned;
+ 	list_add_tail(&entry->list, list);
+@@ -122,7 +122,7 @@ static struct type_expansion *type_map_add(const char *name,
+ 	struct type_expansion *e;
+ 
+ 	if (__type_map_get(name, &e)) {
+-		e = xmalloc(sizeof(struct type_expansion));
++		e = xmalloc(sizeof(*e));
+ 		type_expansion_init(e);
+ 		e->name = xstrdup(name);
+ 
+@@ -202,11 +202,11 @@ static void type_map_write(FILE *file)
+ 
+ 	hash_for_each_safe(type_map, e, tmp, hash)
+ 		++count;
+-	es = xmalloc(count * sizeof(struct type_expansion *));
++	es = xmalloc(count * sizeof(*es));
+ 	hash_for_each_safe(type_map, e, tmp, hash)
+ 		es[i++] = e;
+ 
+-	qsort(es, count, sizeof(struct type_expansion *), cmp_expansion_name);
++	qsort(es, count, sizeof(*es), cmp_expansion_name);
+ 
+ 	for (i = 0; i < count; ++i) {
+ 		checkp(fputs(es[i]->name, file));
 -- 
-2.50.0
+2.50.0.727.gbf7dc18ff4-goog
 
-
--- 
-Andreas Schwab, SUSE Labs, schwab@suse.de
-GPG Key fingerprint = 0196 BAD8 1CE9 1970 F4BE  1748 E4D4 88E3 0EEA B9D7
-"And now for something completely different."
