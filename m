@@ -1,59 +1,59 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1567E28C2C7
-	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C2CD28C5C1
+	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751294176; cv=none; b=Lx5CXFY7MMOKv1n0vD/jiXXPEmd10gdMQplot83YgW3jvkUlmOlIYqXdvkzlbxelqQFEMlAUKGkEHaA0ePyvaJ6D2eHXElKVuRu+BbSAdzPKB21evXZFB4O69O3PuIISFxjtG6nfMcgpOCT1hsR7ZbSkySubGY92Mgw7rC6nFZc=
+	t=1751294176; cv=none; b=IaiPd3FjjmeMceWXvTH6fxW35h2NBcstWBID1ts7s9ab02qQkUMBAqdGeOivR9+RAwtEJ54MuTAAif/a+e6VIPRUzFYGOfoTl6o8gAVtoeiJLQpMy2N+bzsuSDunm/IVHBpT636cO8HLnA9KDL7txs4xoGi6+YtFihcInYh60/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751294176; c=relaxed/simple;
-	bh=GcqUSQ1qcmz/7ZeeKmvY5jkflwUDRB3NFv+8GdhdPdE=;
+	bh=WGV704Eo/1OZH4+nrAQdrHsDuKUNEEzinf+2Kc0d6hc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MydtOO03YBsMOx9tsq8HHusiilNGhQRfCPZxLfliDvVxi5YEMCZEmLA988jC407VF2p9uIjVPR97j5UFhHgDcFgxGtDwNvouCgHJMTtHWA9DvbXbzEWz14RogLcxcjGxzdKsnhqdQ41pBaJqgLPnB8jovt3nUQFzbMxUndk4AuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aRzpc+sx; arc=none smtp.client-ip=209.85.128.45
+	 MIME-Version; b=TxXjxBfJjScYfgxzO7UqSIxaqDkBnIr6Y3OQnKXEVLGRoIoU8XmREHp93ZATkhMfsxXiEMLYRt3P8A72sOZPqOVGGmVqWf370SPM4Us1zBD/Wacd6Gjf2dnqTfE8JsTZ51qG1dw/2+IdP0ZV9l6nC2ltn8Na+C65eypS5vMLzfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UEf1HAsj; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aRzpc+sx"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-450cb2ddd46so25940225e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UEf1HAsj"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-453398e90e9so17295615e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751294172; x=1751898972; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1751294173; x=1751898973; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CdmllR+tX3Z721QiQkxJd2Ok2zA1l/euwA16MKRoano=;
-        b=aRzpc+sxo8QYXVYsSFsuJtsXBTlWUpVL/rXRnLqwbgEWzd97vPf8b+Si9nmDXDIyPK
-         XTD+APbrcDs5cImjTcEIcCIqwBroI1cu6RJzymGZvi5LF3Q95Us2xGM8+eh4RXvU5D/C
-         Raqg2VFtDUIlUb0eeh6f5LNdue1At00QxBubI9xGQ7fEYj4PDVZVbISbAFrKfGSP9XGB
-         QfKrSmh/MhJESFcqkO6tYAvUefssPU24PtZIY+1eO8J/AV4qDyM8EVjIl4PTptKlVj8y
-         upzqEi+jN/NOgViCGjyTlSKDHR6bSZZ2JPbzIAvgIKFrxiPL+HIvy7kQrDWXCGKnN8tZ
-         VcjQ==
+        bh=CYGr+w4GfcUkgYiVXycPX4UxZzSKxs2cIGs5isKRNhY=;
+        b=UEf1HAsjZsitoMXcpw7QOe+2Fw5eHKJeBoA2QBD5Euxn9+YmBOeRDhzmOHJhl/ide5
+         qWiXiB/eOJFXDCJWwxL/+GjmVqvL/RNQoF+PQTdwmnbwkC+MFWp/fzAHid+WIwVCRH7R
+         1/2h+BZ2NbCtsL8yrGNWbpn8kUlaA9roZ4z9PWwL3tgnWZM7nopXwh2twC4B+yT/idgP
+         ntP6zKwp9wV5D+mFFS3lcmfuiFvNFsNAwafC6hQjSpQDu4xri4jRT6cJrT2Rtr0y9ZWb
+         Vvg0Kc/iM/EduRv5UvAC/OLdM2rlNEKzZMUgUHRHB/Sc0F0GELoIv/S2bcWGODPrSMTx
+         8AZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751294172; x=1751898972;
+        d=1e100.net; s=20230601; t=1751294173; x=1751898973;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CdmllR+tX3Z721QiQkxJd2Ok2zA1l/euwA16MKRoano=;
-        b=Srpfwx/jRNFGxihIl7Sq5LM2CU7uCbtVr6EcZ/OUoxxAhw0CIOZO3N0SjSK6dhrc9A
-         +L6o2jA4Hxn43OdaMlqmPrSo2a8l/crbJ1l/Z9q2KRSgUStirTiRFsAZhvejB8dBdC3V
-         CSN8yZNtPnaCNIl7bztVhq+yLuM0U2QrQEpFQXJwyrwQ8UT6j89Ll/FaOZALVc0s7tTc
-         ZDV6UwhlLPcFgFOXdYc2DaFPVllMB0TakehAHmxm+w3RLwhlZ9enPDOD5oWnbKLtR5lc
-         794KxqvdVHjORYmPAQ4uVNrw4kfgNxikggoC7o+470gSmwbq3Ng5f6LdiHuG4ShQdzHg
-         axyA==
-X-Gm-Message-State: AOJu0YwQ7q2d6UG/GjWTvxTnx+XRc4t+ubDvwm5Lqt0KLT+6lh5/KB/U
-	3nNUn3rAQlYQe0KJP+QaEvAstUy7EIVyMKIPBtWlH5id9fUhY2icTJriFmp0XVjemfo=
-X-Gm-Gg: ASbGncuWnaTw23hKva5o1Ylm09V2K5e1B8yE1PVbOOiOHwtMd/04RgrQ72Dg+73vXxt
-	ofVmtM5m4T65RaWfch1vUX3oICkkMtIvWJJqdpMjcLM0NNGaOacVsh6hLNNHloU38U0eC4tDdub
-	AmrOG4IVpblnzcuAp5GTOdv+TaR8raaSm2bRC2R8Jx+ahobX+LepQmEbw6e3pgOdLtQY7xsHfFK
-	L8BxBsWTBTmgaUA2eN738PB2i0Q6RRGCaONPoJfHsTycOCKgZyKy0eByIGV5rEIn1CvUB32Hvl4
-	ggFE1FOhKQ5FLGtfjaTpEeKo9rXaAAWmmmLZt98io8W+7wl7nMYAKNjXGvky6g==
-X-Google-Smtp-Source: AGHT+IHplNB2XhqH2vF81/rVmM2u2fb85B4S67wVN0ofQUkT3FQ10OfKl5FvFxECzW46dMrxe1/+2A==
-X-Received: by 2002:a05:600c:1d28:b0:453:cd0:903c with SMTP id 5b1f17b1804b1-4538fd62fa8mr149537915e9.2.1751294172350;
+        bh=CYGr+w4GfcUkgYiVXycPX4UxZzSKxs2cIGs5isKRNhY=;
+        b=NlR3uugGt55XZmbA88ogsywJq7lAy9n9XMVBJSMJ8Iq05pECMt9snmdvH+WPvWGqsx
+         av6e7KuYZLShEFb/HCwJ0QqdH7OVpVsMzWGl+Q4Ounjfa5YSfIC58GoyCu7VoxvMXWIG
+         Vt/ebEF7X76R11jQFajhcr7J7vcsYK21mwZwqeItBYb6wCwq9xeU/BjyV+iMqCi9RDgs
+         RMWXmRRUCk6bfxt/NfOuQm0x6NZY5m94wKkFXdQMZF0Xys7s59/Z71GiRAsu5f5O76rw
+         J8EpyuvhVAiptnGkMzSLr3yXIEdRu3XNBFPe0bHcS5O+At8nqxfX4iUgiiawI7N471bb
+         4LPw==
+X-Gm-Message-State: AOJu0YyzAmOgWDg+6FUs2sinYHVm48YSpYfIr+e+IaaSVTDwHBSkJdZo
+	A7JC3MaComp0OEKGhVav2rc63nKLNmt+UOk8CooQKK4+fAMReqOUISV1s47snHU4lF0=
+X-Gm-Gg: ASbGnctsg7XQHHVBkjSDEEr/kjmv69Z7Y9GKc3JimSQGb5hvHWyZb5RqZ6/bw2VwIDo
+	MqiVlmoYC/vkkg84e0cGIESSoDewJDLqk7cXLulBcDn6n4B15A0xViQnNj3o2HSBwDE9r9bIclh
+	lmjnfRLllzIZx7qsCTZzwaEzfi8Kc8CWESLBJDhT9BrjpO3Lj8w83VtoVjxT4/rxIhvlBh9SdJD
+	2DoriwWEIRSSMGxQJmPTDMZT37B8ui1HJpTP4PBr/BPXuCK0x/SLOoWJW1h8UnsFsInotyozkB+
+	pK++T+jJtqyjxTWDssNFqpAcgySKh50AZVTE7EDgW2hXgBjG+fRp3aaeyc3lxA==
+X-Google-Smtp-Source: AGHT+IFKdSX/7On1Q0wj0XjtBIz1cLSj6YHaIR75PLNUipp/xh/X/AUZR64SxbA4mNUTIjWDWDxDXg==
+X-Received: by 2002:a05:600c:3112:b0:43d:26e3:f2f6 with SMTP id 5b1f17b1804b1-4539ebf5521mr48135765e9.5.1751294172898;
         Mon, 30 Jun 2025 07:36:12 -0700 (PDT)
 Received: from zovi.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 30 Jun 2025 07:36:12 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
@@ -63,9 +63,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	Daniel Gomez <da.gomez@samsung.com>
 Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] module: Remove unnecessary +1 from last_unloaded_module::name size
-Date: Mon, 30 Jun 2025 16:32:33 +0200
-Message-ID: <20250630143535.267745-3-petr.pavlu@suse.com>
+Subject: [PATCH 3/5] module: Restore the moduleparam prefix length check
+Date: Mon, 30 Jun 2025 16:32:34 +0200
+Message-ID: <20250630143535.267745-4-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250630143535.267745-1-petr.pavlu@suse.com>
 References: <20250630143535.267745-1-petr.pavlu@suse.com>
@@ -77,31 +77,51 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The variable last_unloaded_module::name tracks the name of the last
-unloaded module. It is a string copy of module::name, which is
-MODULE_NAME_LEN bytes in size and includes the NUL terminator. Therefore,
-the size of last_unloaded_module::name can also be just MODULE_NAME_LEN,
-without the need for an extra byte.
+The moduleparam code allows modules to provide their own definition of
+MODULE_PARAM_PREFIX, instead of using the default KBUILD_MODNAME ".".
 
-Fixes: e14af7eeb47e ("debug: track and print last unloaded module in the oops trace")
+Commit 730b69d22525 ("module: check kernel param length at compile time,
+not runtime") added a check to ensure the prefix doesn't exceed
+MODULE_NAME_LEN, as this is what param_sysfs_builtin() expects.
+
+Later, commit 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking
+for sysfs perms.") removed this check, but there is no indication this was
+intentional.
+
+Since the check is still useful for param_sysfs_builtin() to function
+properly, reintroduce it in __module_param_call(), but in a modernized form
+using static_assert().
+
+While here, clean up the __module_param_call() comments. In particular,
+remove the comment "Default value instead of permissions?", which comes
+from commit 9774a1f54f17 ("[PATCH] Compile-time check re world-writeable
+module params"). This comment was related to the test variable
+__param_perm_check_##name, which was removed in the previously mentioned
+commit 58f86cc89c33.
+
+Fixes: 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking for sysfs perms.")
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- kernel/module/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/moduleparam.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 933a9854cb7d..04173543639c 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -580,7 +580,7 @@ MODINFO_ATTR(version);
- MODINFO_ATTR(srcversion);
+diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+index bfb85fd13e1f..110e9d09de24 100644
+--- a/include/linux/moduleparam.h
++++ b/include/linux/moduleparam.h
+@@ -282,10 +282,9 @@ struct kparam_array
+ #define __moduleparam_const const
+ #endif
  
- static struct {
--	char name[MODULE_NAME_LEN + 1];
-+	char name[MODULE_NAME_LEN];
- 	char taints[MODULE_FLAGS_BUF_SIZE];
- } last_unloaded_module;
- 
+-/* This is the fundamental function for registering boot/module
+-   parameters. */
++/* This is the fundamental function for registering boot/module parameters. */
+ #define __module_param_call(prefix, name, ops, arg, perm, level, flags)	\
+-	/* Default value instead of permissions? */			\
++	static_assert(sizeof(""prefix) - 1 <= MAX_PARAM_PREFIX_LEN);	\
+ 	static const char __param_str_##name[] = prefix #name;		\
+ 	static struct kernel_param __moduleparam_const __param_##name	\
+ 	__used __section("__param")					\
 -- 
 2.49.0
 
