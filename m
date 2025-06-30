@@ -1,59 +1,59 @@
 Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBC228D8CF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE2328DB7D
 	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751294177; cv=none; b=soXBbPwlj7e7aqpaLjIhlSCWbgks+K7dRlf6cFd6u3yl5miQWKjGV6Vbfy6EYXi/p1HUun28GpT3xiHfeH2MYdookILNdmJKlnTYiIRzobAP5RTMwxCfYBlfdlTB4M1PO/vdYvUYxtfqfYwZuQP3VRFoiVWxvm72GLb0mhgpSlI=
+	t=1751294179; cv=none; b=TY1vGJXvjJYMC83yvVE6topjno+330GbU0e01IdblQWvDfjJDeGv26bES+Hj/wBJ+Gcgpx5N2xxvzkeKQlp/a0LFUcv+Y4UuhK2BAx3sZzBfQyEwJq86KelwA2Ee2AKAMyxy/k/HvDj8lFggPYk6KrTKpPuKtZp3xCIIvBtt8bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751294177; c=relaxed/simple;
-	bh=PirEDsPKzKZfF4lma/U6ABELtX2SsjTdnouDkKmFdHs=;
+	s=arc-20240116; t=1751294179; c=relaxed/simple;
+	bh=pwspzJd4AZigPvmdBQBc5YI54moVabhP2BKPyRa45tY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FsTNmed2HnZWm0/Owa1S7uE0gsEnkykWUTHC1s6WtxjwjFrME+xht/pUa8gCZvxNrOwgg0TmyyyO0hkclDMIjBS9q5Wlvw04VTAPIeGIl7gX8jstPJ9ABnOPMTEqyr7ywggRaL8IQZ4Kun/v7gS3g/pcPayq1G1gsxL1+6G+OzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Fdc/Ksoy; arc=none smtp.client-ip=209.85.128.42
+	 MIME-Version; b=M+W4vTmvXBUPhZZvGuNtiTR/SNjOLP6tJYBwUObQ6AWIFCj4GGmEE3vsJsiM5cQDWFrqXosSMgraHzQU+DhufcNMOQrj+1/p72sEerA5Ch2PTmoz4RdD0FMPcpvHCdxvdTdTB9Wu7EuFbzku+baMBdQXYDEHK5W1p0KvImMuCYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DpZRHAAG; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Fdc/Ksoy"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4538bc52a8dso29083715e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DpZRHAAG"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4537deebb01so11076425e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751294173; x=1751898973; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1751294174; x=1751898974; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mtpZAHSxzBc52yNVlVB1MC/4zpT1HtcP/IJyN7kdpFo=;
-        b=Fdc/KsoyxO07X+4I1KFRHthpL1FloKU88LNyvrysXSZ5opWS9U46fOH7pTYeeNg+bM
-         O5euxNbL4LzB15ObmkRDTqfwIjomyuDaXf7kNRlqGwKTB+mssv+5CBeEkM9Jt5XoTJTf
-         OZ3qaA79sKVFGUR3E2562pQcYRXMq9D7x5DFdNhtuQnz9VUcIzdFEoMU0DVDG4/4l8oi
-         OOHTkmgoqfWyHwv9G5d+RLAOFPNICijIIeFzB+YMVtzqix7uo/Lt1AFh3Kp9UEeEEFyj
-         TqT7+5w54JakWldteR6PHa76I9/qrhdkrrQMx7n3+IXlbqQ8VdZ8+EPcget2iGDOysXH
-         NVdQ==
+        bh=hxXlGnhc5HV9WUqIY4yXx7sDZm8dL+Zm0TPRhpOl1ew=;
+        b=DpZRHAAGnfQredqN11vxaA/4PuNGbgVITubbNYjwThNiu3FG470qMNrpgoZQF4IXp8
+         OE9INoBnLGduDaszKG/o44CX8G6XM/chP/KfMPclx8R0r2Hh7DP6P9t/LgW8kU09Xsqk
+         Nmqiebf6JfmYPuxK7iwR1ODDdmLKIoxwskkKlE7Ithjy0HJTXRmREMCEK4IYDoarGS/u
+         G7Ufk91XwI+b0U2ZH/AomXXFK4a4XAV4NWej+MkJ/i2rv/n3c7Zc1WK/zg9ciLHqTm4E
+         O9YjYTGX7LGUYCaotqGl6XsoK2Q+OoZBfUH7tp0Bye4k0sdroyoGFhcRw01D3/lUotOj
+         CyMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751294173; x=1751898973;
+        d=1e100.net; s=20230601; t=1751294174; x=1751898974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mtpZAHSxzBc52yNVlVB1MC/4zpT1HtcP/IJyN7kdpFo=;
-        b=NK+1nwDniHQiqyjI6Cv5JK5jqJb9qeNu6HZZ8AGL1UNI7+I3vjAokYgb5ez5tIj3aH
-         4qHS+rctMoZY0Y9IJnNJqtx6ims4AbXscEb1gWyZRU81PqDm4pO3kcfsvKlRoCp3EGdj
-         yqxuKQj6b5B4udaqOKwDJPVSpOOQ68hrKzMIO0Dbt+XmU2w8O1xfseEEhRXsQ9JtkWeB
-         IFHCwGasW/KZG6jfkzc6xS/6g2UXkFet3YmN++/pZNTTeFt73Uldk3K9lzxJlCB0zm3w
-         Jf4wtpgsM6b+anLsx0v6de7ATc3TarIgy8qHgU19Me7+4cNYCCqx2Eq5N5hqacvOlUdp
-         iW0A==
-X-Gm-Message-State: AOJu0Yynb+hLpmWGRdmGXCZgykCJ0ivj9VYRNaPgAUrVH81zhnID6yBJ
-	s0sUDt0lCJBrJUQWcVcLufo33vgvJFXDGRnIru3T2Gf4DZfQEdtaFKJno7JUNeZ6MGY=
-X-Gm-Gg: ASbGncvsLvucCTpr/hGE0y3D2ZlWswlepaw+TmgqbpOt4QBSrVONjU8Vbo4GHE4LwhR
-	rxR0R2SBEmMB8xoV/UWNJhL/OLCb+ZIVZNl8qnZC1JLsGS7/y1FQCbNKjlQxbuJaVfsPKIhilT/
-	QjJn4Ts1GItxMhSXb6Ei2h00Xjyj6/JUWhR7p+gwF3imiMwGlCJShkyugJCr96RmRNqJm8tEAoC
-	uvzn8NOR+gQbHW/AsYMI6Z8R+UqgfCyzBOMOYp2YX+yGYJ5j5265xb3RKehs5aXT0iHibMG80Md
-	t0ulJy0D766siogAc8Ip45CujlLHA5ob7XW/6eu3i12NHoSrdnifemj1jsKmJQ==
-X-Google-Smtp-Source: AGHT+IE65xiXePmfkTNzrE3cu741b/HUQtQk5TEnp05EileMIiACkLUMMykov2/RQ02qlLbUlc+wEw==
-X-Received: by 2002:a05:600c:1549:b0:450:d019:263 with SMTP id 5b1f17b1804b1-4538ee5d63emr156951575e9.18.1751294173517;
-        Mon, 30 Jun 2025 07:36:13 -0700 (PDT)
+        bh=hxXlGnhc5HV9WUqIY4yXx7sDZm8dL+Zm0TPRhpOl1ew=;
+        b=bMA2oFC51VevQkD8HSsPQwSWdw9PTk3+6DnUmIqw3RqfHI5LIw2yi7Gu9QlCjg8hZ1
+         //HaMsVRvVgfx341I26+vJ2kPkj2tv+b0vXd2hGClcPpbCz3PIv9hI5NpDVp6df1zOhH
+         tk9SSJMjYH5wGWsSQDb9AhydYfTe2X5N+gisHXHNNW1VPoUt7vANJRBGvXZ1WLTdwWdg
+         wedRAhkp4DoNcca3mB8D/M+5B5QTw+CaeUY9en0tpWZwSFGLMG5B3OOdijSeM5cyn2GX
+         Ue2SFAh23BdZ7Cec5ItwWuxWWfU2Mr0mtW1k62kJ/xL8cEk3Eu/JAz06jYKEEMDbsJ6m
+         uFcg==
+X-Gm-Message-State: AOJu0Yzf1YPTz261Usu3L+7eX/Uo2No+SR9xtk4fnivm+Is7Ms3bcm6H
+	p+m1C2lJrzT/ONJL+6mtlIMwSzmt00oARxA5YmZ7ccNByNqj4pz3Kf/PwZI5dRKgAuk=
+X-Gm-Gg: ASbGnctfEyFIvEdwiIQOqdZGi4yap1VM32IpNlZon2TcQJT8Hr8dsDFSGMeFPLfJYHX
+	1OpSQYuBNSnabec7XHD11OsVFyv9/Q/A+wTcU8bb3YMGNUwALeMoZtLFENEEGXzuKnG37j06zjz
+	TnsWI9CkoYAkyb26QzweBaN0Lb01kWCfXbagBnHdf/ZfwtmCgzvfjdhRpCmefbZn/z58eQrwfsV
+	kg+jWS88DgU+ttoa9SO5pa4+jRIgUJyb+VODumdsKsTjMel7mZqS/fBQPIM7Sczi+jqB3cTLDrV
+	ns0m9vzW4NfeaZzoGG+p4YOb3ixK4/tfeNdnku8B+BECiXoUdNU2iVQ/CIQcWw==
+X-Google-Smtp-Source: AGHT+IHN5CLUSWO1xiRD+qqKfFwkQtfevB21L0QtujyoJrVD0RIup44F3ZYXGZ/DDsSpOXdt+Yp6ew==
+X-Received: by 2002:a05:6000:410f:b0:3a5:3a3b:6a3a with SMTP id ffacd0b85a97d-3a90075f95cmr8351749f8f.54.1751294174091;
+        Mon, 30 Jun 2025 07:36:14 -0700 (PDT)
 Received: from zovi.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.12
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 30 Jun 2025 07:36:13 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
@@ -62,12 +62,10 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>
 Cc: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 4/5] tracing: Replace MAX_PARAM_PREFIX_LEN with MODULE_NAME_LEN
-Date: Mon, 30 Jun 2025 16:32:35 +0200
-Message-ID: <20250630143535.267745-5-petr.pavlu@suse.com>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN
+Date: Mon, 30 Jun 2025 16:32:36 +0200
+Message-ID: <20250630143535.267745-6-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250630143535.267745-1-petr.pavlu@suse.com>
 References: <20250630143535.267745-1-petr.pavlu@suse.com>
@@ -79,38 +77,78 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Use the MODULE_NAME_LEN definition in module_exists() to obtain the maximum
-size of a module name, instead of using MAX_PARAM_PREFIX_LEN. The values
-are the same but MODULE_NAME_LEN is more appropriate in this context.
-MAX_PARAM_PREFIX_LEN was added in commit 730b69d22525 ("module: check
-kernel param length at compile time, not runtime") only to break a circular
-dependency between module.h and moduleparam.h, and should mostly be limited
-to use in moduleparam.h.
+The maximum module name length (MODULE_NAME_LEN) is somewhat confusingly
+defined in terms of the maximum parameter prefix length
+(MAX_PARAM_PREFIX_LEN), when in fact the dependency is in the opposite
+direction.
+
+This split originates from commit 730b69d22525 ("module: check kernel param
+length at compile time, not runtime"). The code needed to use
+MODULE_NAME_LEN in moduleparam.h, but because module.h requires
+moduleparam.h, this created a circular dependency. It was resolved by
+introducing MAX_PARAM_PREFIX_LEN in moduleparam.h and defining
+MODULE_NAME_LEN in module.h in terms of MAX_PARAM_PREFIX_LEN.
+
+Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN for clarity. This matches
+the similar approach of defining MODULE_INFO in module.h and __MODULE_INFO
+in moduleparam.h.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
 ---
+ include/linux/module.h      |  2 +-
+ include/linux/moduleparam.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-As a side note, I suspect the function module_exists() would be better
-replaced with !!find_module() + RCU locking, but that is a separate issue.
-
- kernel/trace/trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 95ae7c4e5835..b9da0c4661a0 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -10373,7 +10373,7 @@ bool module_exists(const char *module)
- {
- 	/* All modules have the symbol __this_module */
- 	static const char this_mod[] = "__this_module";
--	char modname[MAX_PARAM_PREFIX_LEN + sizeof(this_mod) + 2];
-+	char modname[MODULE_NAME_LEN + sizeof(this_mod) + 2];
- 	unsigned long val;
- 	int n;
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 5faa1fb1f4b4..0f1dde3996d9 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -32,7 +32,7 @@
+ #include <linux/percpu.h>
+ #include <asm/module.h>
  
+-#define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
++#define MODULE_NAME_LEN __MODULE_NAME_LEN
+ 
+ struct modversion_info {
+ 	unsigned long crc;
+diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+index 110e9d09de24..a04a2bc4f51e 100644
+--- a/include/linux/moduleparam.h
++++ b/include/linux/moduleparam.h
+@@ -6,6 +6,13 @@
+ #include <linux/stringify.h>
+ #include <linux/kernel.h>
+ 
++/*
++ * The maximum module name length, including the NUL byte.
++ * Chosen so that structs with an unsigned long line up, specifically
++ * modversion_info.
++ */
++#define __MODULE_NAME_LEN (64 - sizeof(unsigned long))
++
+ /* You can override this manually, but generally this should match the
+    module name. */
+ #ifdef MODULE
+@@ -17,9 +24,6 @@
+ #define __MODULE_INFO_PREFIX KBUILD_MODNAME "."
+ #endif
+ 
+-/* Chosen so that structs with an unsigned long line up. */
+-#define MAX_PARAM_PREFIX_LEN (64 - sizeof(unsigned long))
+-
+ #define __MODULE_INFO(tag, name, info)					  \
+ 	static const char __UNIQUE_ID(name)[]				  \
+ 		__used __section(".modinfo") __aligned(1)		  \
+@@ -284,7 +288,7 @@ struct kparam_array
+ 
+ /* This is the fundamental function for registering boot/module parameters. */
+ #define __module_param_call(prefix, name, ops, arg, perm, level, flags)	\
+-	static_assert(sizeof(""prefix) - 1 <= MAX_PARAM_PREFIX_LEN);	\
++	static_assert(sizeof(""prefix) - 1 <= __MODULE_NAME_LEN);	\
+ 	static const char __param_str_##name[] = prefix #name;		\
+ 	static struct kernel_param __moduleparam_const __param_##name	\
+ 	__used __section("__param")					\
 -- 
 2.49.0
 
