@@ -1,60 +1,61 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5DD28B7FE
-	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1567E28C2C7
+	for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 14:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751294175; cv=none; b=UKtlnq1/BL967x4qQC8skVATQfWjdWtbiwMZ9pcIubNBTC1ob6e1X3S6FRlE1sJ6L6XuWRe60RXRLWtmOESlD73ilXN0/6lh1eNeLwDjyg/Tf7rwrl1XQMrQiERHflbB8Q52lmZ/8LZ3CCvYuxMyc0AIxf3fWud5A4UgtLmhUiw=
+	t=1751294176; cv=none; b=Lx5CXFY7MMOKv1n0vD/jiXXPEmd10gdMQplot83YgW3jvkUlmOlIYqXdvkzlbxelqQFEMlAUKGkEHaA0ePyvaJ6D2eHXElKVuRu+BbSAdzPKB21evXZFB4O69O3PuIISFxjtG6nfMcgpOCT1hsR7ZbSkySubGY92Mgw7rC6nFZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751294175; c=relaxed/simple;
-	bh=ijmcaIoa3T+v1e2tSEIgWQRy27wlu82NxAcWi7tyNVo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s7VnxERMXKQ++UJToz9bZS9Xxqo5fw8TUizt6cTgZnWZP+5HaBtLtR8nAxzGJbCE+Y2mx2Cq6FBNMemiJKFlr8jTfe3HsOJwocEAakeIgy/cRAmeu6Gg9HImjTtdlWsVEnNn587gSdq+dpTT2bU23kA2fE8ZDDEnLUqQEFigo18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KNf3ykGG; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1751294176; c=relaxed/simple;
+	bh=GcqUSQ1qcmz/7ZeeKmvY5jkflwUDRB3NFv+8GdhdPdE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MydtOO03YBsMOx9tsq8HHusiilNGhQRfCPZxLfliDvVxi5YEMCZEmLA988jC407VF2p9uIjVPR97j5UFhHgDcFgxGtDwNvouCgHJMTtHWA9DvbXbzEWz14RogLcxcjGxzdKsnhqdQ41pBaJqgLPnB8jovt3nUQFzbMxUndk4AuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=aRzpc+sx; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KNf3ykGG"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-450cf0120cdso22556105e9.2
-        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="aRzpc+sx"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-450cb2ddd46so25940225e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 30 Jun 2025 07:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1751294171; x=1751898971; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrJ26ovUMBn5wPlmSYUHRqvSgt1eO3iWTStApxaLMIE=;
-        b=KNf3ykGGMUGqTEfmMNqWc/Pg+V2g20cXO0Ux0R7q/JiV8yVqNfDLt9XIAQw+zqSfCU
-         tU0p1QDmUeJhoPTxlzALjMqJSYlYk5HiuDQau2MHnzRfxIdIeI8ZInEcjS2n6WpHN+Jw
-         MSH7k2kpJdNEISWkG/poRVqNZPXoofGgxWiWMViEsR1vGw11StkNga1p3AT1bIi97pG4
-         t5Ft2SA8aYdM7G8DRTtk96Hm5/sbiDcbtkvoEFxa+P4NNBzTqcuQugjPWIcqFn+zZd7c
-         y4kW262o6qtpSEcNMEks0z3IMd17zVwXQNvp5AkLGAwXT466NccH/d6U9Jccs/iG4szB
-         WA6Q==
+        d=suse.com; s=google; t=1751294172; x=1751898972; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CdmllR+tX3Z721QiQkxJd2Ok2zA1l/euwA16MKRoano=;
+        b=aRzpc+sxo8QYXVYsSFsuJtsXBTlWUpVL/rXRnLqwbgEWzd97vPf8b+Si9nmDXDIyPK
+         XTD+APbrcDs5cImjTcEIcCIqwBroI1cu6RJzymGZvi5LF3Q95Us2xGM8+eh4RXvU5D/C
+         Raqg2VFtDUIlUb0eeh6f5LNdue1At00QxBubI9xGQ7fEYj4PDVZVbISbAFrKfGSP9XGB
+         QfKrSmh/MhJESFcqkO6tYAvUefssPU24PtZIY+1eO8J/AV4qDyM8EVjIl4PTptKlVj8y
+         upzqEi+jN/NOgViCGjyTlSKDHR6bSZZ2JPbzIAvgIKFrxiPL+HIvy7kQrDWXCGKnN8tZ
+         VcjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751294171; x=1751898971;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yrJ26ovUMBn5wPlmSYUHRqvSgt1eO3iWTStApxaLMIE=;
-        b=bMs13NiqGs7VHWfU92+SilLYQR/Ip9104fEO11HhugqLQm3fta8Iyvaj9jpY5XcHpa
-         PXWvEV8yrHTmH7DvoookfTBbD2qqq/ne36+h0Fh5pia5wi7G6ktbscJSWmK8TfY+clTa
-         zxZUXxN8P2TsqDYF5icuM2arwveHyPQ0Yvyl7BdRa93QbRqYSmSrAXxhOHc0we98ugTe
-         c34QVcJ3sFcldRfSNtrI4SN5K1qbe7MwvaQktvL2vnbErfOTxxH8C8o6KX1n69Xwob1R
-         HeZgU8KrIoqCm1niUAQCHButdjhsKtd/jnwFgpjG6qkaATR4tI2wAwCXbLrOvfOw9GKh
-         mosw==
-X-Gm-Message-State: AOJu0YyBwmpCoUUKoxP8WAKlX8RlL/4q/5M9svlocNPKDsIEUgl8V/qy
-	2khnYFgTC08MBpPdhQcqCCP7ndO23CsM9BVouqCP0iyfGHkYvd6R+PHCNU18OAJSTD9ue+q4dUD
-	2PAn1qwE=
-X-Gm-Gg: ASbGncuhCaA4Aiagq9r9/E1vf9CHg+PulCMiuQ1WB3EzwCHuEqNwu1oq7iCo7yhOTpo
-	l29/2+EX/tG9nh8JJi3khjG6wkekUM7I6DHBnAM4vgroC8E+FH9zSx/wgOHNumGK12TN137f6RO
-	S0mAYqvt6KhFbwDgBvDtMGAVKT2le0v2kEraW5qdGZbthdQFegwJUxPPDa8lOWUyOQvJIuJunE+
-	2fs2DXgV/LQ30MTGfKvmQDsoznPAbM5N9+7XKWiORYTxirxyTt+w+1pq/XQ1T27L7LEur7ZJ61o
-	RcQApEiwsbsIo8GZ1Ogs0YoZmyx0zmMoOaeokZoNXE//PCSy81LcA16IUTzekA==
-X-Google-Smtp-Source: AGHT+IHmF91CXXbMG1elqcOHyJHe0oSVxoNF5JEELyTlvftZNeN1Qp2AI1Kgqc2JrBLSS9DwFOwyMw==
-X-Received: by 2002:a05:6000:2d81:b0:3a4:cfbf:51ae with SMTP id ffacd0b85a97d-3a8f435e16dmr8103859f8f.4.1751294171089;
-        Mon, 30 Jun 2025 07:36:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1751294172; x=1751898972;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CdmllR+tX3Z721QiQkxJd2Ok2zA1l/euwA16MKRoano=;
+        b=Srpfwx/jRNFGxihIl7Sq5LM2CU7uCbtVr6EcZ/OUoxxAhw0CIOZO3N0SjSK6dhrc9A
+         +L6o2jA4Hxn43OdaMlqmPrSo2a8l/crbJ1l/Z9q2KRSgUStirTiRFsAZhvejB8dBdC3V
+         CSN8yZNtPnaCNIl7bztVhq+yLuM0U2QrQEpFQXJwyrwQ8UT6j89Ll/FaOZALVc0s7tTc
+         ZDV6UwhlLPcFgFOXdYc2DaFPVllMB0TakehAHmxm+w3RLwhlZ9enPDOD5oWnbKLtR5lc
+         794KxqvdVHjORYmPAQ4uVNrw4kfgNxikggoC7o+470gSmwbq3Ng5f6LdiHuG4ShQdzHg
+         axyA==
+X-Gm-Message-State: AOJu0YwQ7q2d6UG/GjWTvxTnx+XRc4t+ubDvwm5Lqt0KLT+6lh5/KB/U
+	3nNUn3rAQlYQe0KJP+QaEvAstUy7EIVyMKIPBtWlH5id9fUhY2icTJriFmp0XVjemfo=
+X-Gm-Gg: ASbGncuWnaTw23hKva5o1Ylm09V2K5e1B8yE1PVbOOiOHwtMd/04RgrQ72Dg+73vXxt
+	ofVmtM5m4T65RaWfch1vUX3oICkkMtIvWJJqdpMjcLM0NNGaOacVsh6hLNNHloU38U0eC4tDdub
+	AmrOG4IVpblnzcuAp5GTOdv+TaR8raaSm2bRC2R8Jx+ahobX+LepQmEbw6e3pgOdLtQY7xsHfFK
+	L8BxBsWTBTmgaUA2eN738PB2i0Q6RRGCaONPoJfHsTycOCKgZyKy0eByIGV5rEIn1CvUB32Hvl4
+	ggFE1FOhKQ5FLGtfjaTpEeKo9rXaAAWmmmLZt98io8W+7wl7nMYAKNjXGvky6g==
+X-Google-Smtp-Source: AGHT+IHplNB2XhqH2vF81/rVmM2u2fb85B4S67wVN0ofQUkT3FQ10OfKl5FvFxECzW46dMrxe1/+2A==
+X-Received: by 2002:a05:600c:1d28:b0:453:cd0:903c with SMTP id 5b1f17b1804b1-4538fd62fa8mr149537915e9.2.1751294172350;
+        Mon, 30 Jun 2025 07:36:12 -0700 (PDT)
 Received: from zovi.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4538a4064b1sm139691695e9.29.2025.06.30.07.36.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Jun 2025 07:36:10 -0700 (PDT)
+        Mon, 30 Jun 2025 07:36:12 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -62,10 +63,12 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	Daniel Gomez <da.gomez@samsung.com>
 Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] module: Fix minor problems related to MODULE_NAME_LEN
-Date: Mon, 30 Jun 2025 16:32:31 +0200
-Message-ID: <20250630143535.267745-1-petr.pavlu@suse.com>
+Subject: [PATCH 2/5] module: Remove unnecessary +1 from last_unloaded_module::name size
+Date: Mon, 30 Jun 2025 16:32:33 +0200
+Message-ID: <20250630143535.267745-3-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250630143535.267745-1-petr.pavlu@suse.com>
+References: <20250630143535.267745-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -74,24 +77,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fix a few minor problems related to MODULE_NAME_LEN and
-MAX_PARAM_PREFIX_LEN, and clean up their usage.
+The variable last_unloaded_module::name tracks the name of the last
+unloaded module. It is a string copy of module::name, which is
+MODULE_NAME_LEN bytes in size and includes the NUL terminator. Therefore,
+the size of last_unloaded_module::name can also be just MODULE_NAME_LEN,
+without the need for an extra byte.
 
-Petr Pavlu (5):
-  module: Prevent silent truncation of module name in delete_module(2)
-  module: Remove unnecessary +1 from last_unloaded_module::name size
-  module: Restore the moduleparam prefix length check
-  tracing: Replace MAX_PARAM_PREFIX_LEN with MODULE_NAME_LEN
-  module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN
+Fixes: e14af7eeb47e ("debug: track and print last unloaded module in the oops trace")
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ kernel/module/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- include/linux/module.h      |  2 +-
- include/linux/moduleparam.h | 15 +++++++++------
- kernel/module/main.c        | 12 +++++++-----
- kernel/trace/trace.c        |  2 +-
- 4 files changed, 18 insertions(+), 13 deletions(-)
-
-
-base-commit: d0b3b7b22dfa1f4b515fd3a295b3fd958f9e81af
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 933a9854cb7d..04173543639c 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -580,7 +580,7 @@ MODINFO_ATTR(version);
+ MODINFO_ATTR(srcversion);
+ 
+ static struct {
+-	char name[MODULE_NAME_LEN + 1];
++	char name[MODULE_NAME_LEN];
+ 	char taints[MODULE_FLAGS_BUF_SIZE];
+ } last_unloaded_module;
+ 
 -- 
 2.49.0
 
