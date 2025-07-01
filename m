@@ -1,146 +1,104 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F589279DA6
-	for <linux-modules@vger.kernel.org>; Tue,  1 Jul 2025 15:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6DD1D618E;
+	Tue,  1 Jul 2025 15:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751383231; cv=none; b=BiP6dsilBNDtH04KGi5PpaDXKBq85aOErTJXs4zMPF4RexaVGN+2neWgjkWvvE8xnAfj1IOlhXJtsaTNxIDOM+v4S858YCQwPBww/ObMyix4bRylkCbnMSvpU6oRcK231NL7zAA81YkFaD54EutuhO2+x9dDqMYrCklp9G6EYWo=
+	t=1751384618; cv=none; b=rpfhKgAm2tn32MS/bP+6uQqPVgXH7B7FPSkCk3Qj47VDt1ugbtTQ2sqxYZJqMrUMrq2cIHifns24Q3/NgD1jkNwnXZrSrWubCuBBAkDVZqfaP/XaAJIRRMHp/fpGKAk7wRjZouClsyog4/7krX3Stdgbkh5iAMJXMCcVaLlnsmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751383231; c=relaxed/simple;
-	bh=0LZPlTOzhDgN4M2JFCpvyuUvtX08QaSuKLicDKE1N5E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=F9LyN7L5fTwvaoABYqGW5vKVscurDGidrOeoqX19JO7eEToUDPCQ4oUIN1mABMzrXDQZ20zSa9Jx5t6vJQ8qImg8YCNNeydAxFYlSk8KPCeOc1U+vjxpfbq4J8dfwXgSkaGzbzfFlLI0zSWlXLDzc/h5bS+pTSyLNyCr/c2XuJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aPwe4tPY; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com
+	s=arc-20240116; t=1751384618; c=relaxed/simple;
+	bh=GmFWLrGBSZdojzb5yeGcOhRuy7723mG21OKyyQ30XPY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=IK/K5c9pwfaqYHBaQfBKsWdPfCRpMP9ytrj8g2GlIxghLLq9A9/MbRyhgcusR3TBoA9DuUP6SgEjoE3fQp1DK9YJduhnwzZ20IWUD2QaqT6EhzbocELNL2sD9+mMjyLPErYfnTo1Mpz7oaaXLjtzLmIEYUtSvIw0JCTs/pwQizQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgQ45D4e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aPwe4tPY"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-450d290d542so37248655e9.1
-        for <linux-modules@vger.kernel.org>; Tue, 01 Jul 2025 08:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1751383228; x=1751988028; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQj2YyKGGYHlLV8Kxk75PVsyeBZE5VokyKievIbbY3k=;
-        b=aPwe4tPYb+sNoUnlRggdhJTYu+HaWZ+bC4Pfe9ufJbdjneviNvrQ/gJYWRJsGoiYUN
-         velH5B2s2JcmE/5aiP/e3m3DhoCNnuEgqqM6P0Ctywz65b3QRuEWSf+GeWf0zDF3vRCv
-         khvJez74+gRM4E/cD3rPwyxuyWYD7epxT+ZStHaZDENMMsFvX3Tz2wdUmTwGq34wloCp
-         PxMvaN5MhMrXe+nFwEkF38jHx96jKUAJoyBqdQxhvxDlwvQjq54jBHXUDoqgodHSx+QN
-         8ZAYnfz3XfCTthXvLxVEJFfFFdE+FFv/vfgp4rj1Cx7e77g2bDHgdk/0hiDyMJX/aWDO
-         Csyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751383228; x=1751988028;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQj2YyKGGYHlLV8Kxk75PVsyeBZE5VokyKievIbbY3k=;
-        b=DIJD9Ez+h3KAIE0AXj9PwemOiJ+AoD+CKNIeMemP2WMVGCGGpc0QHkKMopUQw/7qxm
-         gVCLBT0WNJt4U7ngk/QpShkqZ+Ch4IwVUMM8KZOR0ctJLpTWgCbKuI3IHfcUgn6Ib8U8
-         rwgueNsg64X43b8CmJxs8qLX4UP/1S7BNJAgipGlLRG9fhgmZSGYanchcebQ/JJl+QrI
-         LdSusoTwEbS/iKwU7aswdvkQU2v68W80XskyiWl8owtMJGMdAYNvo7SmxcszYk1Irvki
-         iChPufjTxObNXcsWmUPHbFaBUL0yF736uHUU+lDZUG8PoBXyjj0j6qzfDXrc94Jj4in3
-         AgfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXuc9a53SehWNpsgYtZanbqMZ3Kh6YOSjrJmOktCJjw4gm9aaZof6yDZyA0txgxMNyysBWES9rfPGumDdSm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yytm4CCcH54rzQ1HZiRG5hOFPEENd5OwJ4up3aw/Ry+/Pv4Nt+J
-	jfDVsw8oW9hVmLf4kGXGoy1Rvl3SeG5SPz3D3vci5WrFVs/D1VZqi0Jx59BIhE/MBm9NG2T7ay/
-	SxKgmVHhUOCzesg==
-X-Google-Smtp-Source: AGHT+IElh3PYpbuoTAc35/xRfrNx9S2QQcNvE6QJPF2din6i4y4W48x8gXxZ/sqDfxdlN+vEmIzdSckX/yxw2w==
-X-Received: from wmte15.prod.google.com ([2002:a05:600c:8b2f:b0:44f:f406:f4f2])
- (user=gprocida job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3ba6:b0:442:d5dd:5b4b with SMTP id 5b1f17b1804b1-4538eeac21fmr192770235e9.31.1751383227988;
- Tue, 01 Jul 2025 08:20:27 -0700 (PDT)
-Date: Tue,  1 Jul 2025 16:19:11 +0100
-In-Reply-To: <20250701152000.2477659-1-gprocida@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgQ45D4e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E33EC4CEEB;
+	Tue,  1 Jul 2025 15:43:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751384616;
+	bh=GmFWLrGBSZdojzb5yeGcOhRuy7723mG21OKyyQ30XPY=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=ZgQ45D4e9fh85CIBRT85kGukRTNPnT/4oPh38PgpYAwtxwPp5u62ziD5bxmatg6lE
+	 uxieHeVivqSp5U0b+zYQxz7pNnvjg1xEdJCnZUyZA4ESRHMLxyAWKQ7ePPhopcdl1z
+	 rMStGNl0sF9y9wXv8dbiPwJM/1ZnQweGHlCihqO9hQzjE3sjiZQzFeP/Jt5DWrcfmD
+	 sB+/tm3091cYzO4IxHaGGsIjpcjlGHxfovLlkqNUe60xSJG8PXV6YL23BkOgw2L97J
+	 Va54TfXLL0eKoVDc7AQg5NIhJshUH2pILknPEPOxe6w2jDQ636ER9+Vn1hIL8vD8Bo
+	 KZxbz1yF7fGQw==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <CAK7LNASzE1CtRo9T4byPXJtB-HtuWsGe=OLba+8JU9fB28Chow@mail.gmail.com>
- <20250701152000.2477659-1-gprocida@google.com>
-X-Mailer: git-send-email 2.50.0.727.gbf7dc18ff4-goog
-Message-ID: <20250701152000.2477659-3-gprocida@google.com>
-Subject: [PATCH v2 2/2] gendwarfksyms: order -T symtypes output by name
-From: Giuliano Procida <gprocida@google.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Giuliano Procida <gprocida@google.com>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 01 Jul 2025 17:43:29 +0200
+Message-Id: <DB0U12HAEVZ6.JKFPI2UQHDRY@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Masahiro
+ Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
+ <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
+ Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
+ "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
+ <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
+ Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Andreas Hindborg" <a.hindborg@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+ <DARCZYNPIJVZ.3JJSZ6PSAEMEC@kernel.org> <877c126bce.fsf@kernel.org>
+ <Mg1_h6lRpg9tdi0VjiyDfIEy2juzgDWxOhYX61qSUfyEpeMMksWW1e-blTka_G1dXUvpZVktdD-zL3X1a6T6Cg==@protonmail.internalid> <DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org> <RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid> <DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org> <87plepzke5.fsf@kernel.org> <xFouVLxX1_t1mH69FDYwlIhBlI72M0IzQEKn0ntG_wT9z7V5DtbxiwVP_frH_yiS-Gf0q_AhqetbLmuvJ_yP5Q==@protonmail.internalid> <DAX65TRN0TGP.25VZ9DYV86XWY@kernel.org> <87wm8txysl.fsf@kernel.org> <9G3W1seaM7elcwWXaeoaa2nfpFYCf-AmBdvZhACGP13KGUtTPVMwGNYdTQsdtp8ru7GIP3-UYTzXscC1MRUKrg==@protonmail.internalid> <DAZV8OGL8BMH.11SLXBXQ17ZJ9@kernel.org> <87h5zxxtdw.fsf@kernel.org> <H78pT7YnQEhAXdxzl_hhnGVUiQuFpibB21_bjH658fMz_5JYbwsPLYYVh8u1gYnzK3N3ilTEAvqOpkuptVx3rg==@protonmail.internalid> <DB03MZI2FCOW.2JBFL3TY38FK@kernel.org> <87bjq4xpv7.fsf@kernel.org>
+ <ffROWpeKczrWSBlKYov2atJG-QD5l5fUOb2dVCNkWlcT9h6DJpa4joGQpjqtYyLP7HX227fCAayyDQunZ464XQ==@protonmail.internalid> <DB0LKI8BO3HZ.3FF03JN4364RM@kernel.org> <87zfdovvz4.fsf@kernel.org>
+In-Reply-To: <87zfdovvz4.fsf@kernel.org>
 
-When writing symtypes information, we iterate through the entire hash
-table containing type expansions. The key order varies unpredictably
-as new entries are added, making it harder to compare symtypes between
-builds.
+On Tue Jul 1, 2025 at 4:14 PM CEST, Andreas Hindborg wrote:
+> "Benno Lossin" <lossin@kernel.org> writes:
+>> On Tue Jul 1, 2025 at 10:43 AM CEST, Andreas Hindborg wrote:
+>>> No, I am OK for now with configfs.
+>>>
+>>> But, progress is still great. How about if we add a copy accessor
+>>> instead for now, I think you proposed that a few million emails ago:
+>>>
+>>>     pub fn get(&self) -> T;
+>>>
+>>> or maybe rename:
+>>>
+>>>     pub fn copy(&self) -> T;
+>>>
+>>> Then we are fine safety wise for now, right? It is even sensible for
+>>> these `T: Copy` types.
+>>
+>> That is better than getting a reference, but still someone could read at
+>> the same time that a write is happening (though we need some new
+>> abstractions AFAIK?). But I fear that we forget about this issue,
+>> because it'll be some time until we land parameters that are `!Copy` (if
+>> at all...)
+>
+> No, that could not happen when we are not allowing custom parsing or
+> sysfs access. Regarding forgetting, I already added a `NOTE` on `!Copy`,
+> and I would add one on this issue as well.
 
-Resolve this by sorting the type expansions by name before output.
+Ultimately this is something for Miguel to decide. I would support an
+unsafe accessor (we should also make it `-> T`), since there it "can't
+go wrong", any UB is the fault of the user of the API. It also serves as
+a good reminder, since a `NOTE` comment shouldn't be something
+guaranteeing safety (we do have some of these global invariants, but I
+feel like this one is too tribal and doesn't usually come up, so I feel
+like it's more dangerous).
 
-Signed-off-by: Giuliano Procida <gprocida@google.com>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+I think we should also move this patchset along, we could also opt for
+no accessor at all :) Then it isn't really useful without the downstream
+accessor function, but that can come after.
+
 ---
- scripts/gendwarfksyms/types.c | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/gendwarfksyms/types.c b/scripts/gendwarfksyms/types.c
-index 5344c7b9a9ce..9c3b053bf061 100644
---- a/scripts/gendwarfksyms/types.c
-+++ b/scripts/gendwarfksyms/types.c
-@@ -6,6 +6,8 @@
- #define _GNU_SOURCE
- #include <inttypes.h>
- #include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
- #include <zlib.h>
- 
- #include "gendwarfksyms.h"
-@@ -179,20 +181,41 @@ static int type_map_get(const char *name, struct type_expansion **res)
- 	return -1;
- }
- 
-+static int cmp_expansion_name(const void *p1, const void *p2)
-+{
-+	struct type_expansion *const *e1 = p1;
-+	struct type_expansion *const *e2 = p2;
-+
-+	return strcmp((*e1)->name, (*e2)->name);
-+}
-+
- static void type_map_write(FILE *file)
- {
- 	struct type_expansion *e;
- 	struct hlist_node *tmp;
-+	struct type_expansion **es;
-+	size_t count = 0;
-+	size_t i = 0;
- 
- 	if (!file)
- 		return;
- 
--	hash_for_each_safe(type_map, e, tmp, hash) {
--		checkp(fputs(e->name, file));
-+	hash_for_each_safe(type_map, e, tmp, hash)
-+		++count;
-+	es = xmalloc(count * sizeof(*es));
-+	hash_for_each_safe(type_map, e, tmp, hash)
-+		es[i++] = e;
-+
-+	qsort(es, count, sizeof(*es), cmp_expansion_name);
-+
-+	for (i = 0; i < count; ++i) {
-+		checkp(fputs(es[i]->name, file));
- 		checkp(fputs(" ", file));
--		type_list_write(&e->expanded, file);
-+		type_list_write(&es[i]->expanded, file);
- 		checkp(fputs("\n", file));
- 	}
-+
-+	free(es);
- }
- 
- static void type_map_free(void)
--- 
-2.50.0.727.gbf7dc18ff4-goog
-
+Cheers,
+Benno
