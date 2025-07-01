@@ -1,98 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545E02737EE;
-	Tue,  1 Jul 2025 16:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679BF26F45F
+	for <linux-modules@vger.kernel.org>; Tue,  1 Jul 2025 17:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751388864; cv=none; b=BX+x4ffySt4bbArb3/lcOA2snvrusM1RGG6HbFrK3BuIXV9sptBmX5VS2iyiFVQfW1kWyfCeqbtav+NwCRuwmwEH0A4RF4viayc9WLPcVizHWJGxDxc24sRPJnvt6TD/Vyt3QWNP1HLkDHs0OfKxU1dp8qVvfFtYOXOpgl+wn8Q=
+	t=1751389614; cv=none; b=eot0Y2+SE7Y+DfX3SIzo5ohqOp9YmiHw/YUGzSly+XtQEjK3zW2njsTicp3Xb/KokRFvVyefXKqrqKoH+m3S4sfUc04Qz8Z/HdrwhhNy2ukuN1cjNdvCaaUad3GZ7bGbEF+JoiOIg+kLZpADBEbAC5lVk4oSsaXyQFSVWhkWyIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751388864; c=relaxed/simple;
-	bh=1+3vg/zcoknj5CNtt2fI/fvugWzLylZAThTmozfd2T0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Bfaa8peOH7ELrh+VUwjLRaD+OdvwXj6vWCH/toI1d+9c7X85tY+8I8Py2HcUX8VVmpmYScQhMsiFv6UMHzUCl0ku7jfDCbPd7BomquZtSHRE/ezamwkPGm6uqzWzlW1sSQUCjWQ3ceuYHzugUKCsul4eGg8JbnNaa8aObEWYuAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cjTP4Cjg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751389614; c=relaxed/simple;
+	bh=WpjLH/E4cjfGcA5aVL0NX4+IgiTYP+bFhGzng+IGIMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YpUj33nnRimD/bxTpzAEOZkvDn8xE6qL5PV7a6fP0RdWdl/Y1jNKzfQxfw04w+Jbkckf9kmTft+2HKcf5/Ya6eWNEkGXyT7+k7NzFFhh2qDxb1xRMKnSMiZFBtlycxEpxUZIgnXW5ZAR6Blhy4kia9xG0KtAjsit1Gg+T0ek6sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QlzYJrh+; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cjTP4Cjg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28305C4CEEB;
-	Tue,  1 Jul 2025 16:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751388863;
-	bh=1+3vg/zcoknj5CNtt2fI/fvugWzLylZAThTmozfd2T0=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=cjTP4CjglFq69TzZto2YkmcX6/C7ZNv28mnh9AgDEuhJOIUT927ObGGXqas1KFbtM
-	 f1C+fiZ3YupfXos9/wRxQJzsicUjKU7e6Ioh7MnV53rCAmRIaEYFEzSPHttRnjL4ZB
-	 XKSsF9I02+8CvW5KukJooRRAZVtBvwzhuxW0C9oJfCTV5DhT7eUGKMsTXRBScDzB7W
-	 etq9XgPFSr45JT32yhfr+03b8uG8bNsrveui1Cp6xt70R8w24RfW2wmPk5qBqINA+x
-	 euU+wag8GoK/GZumIDc7W+9pG4QEorfu4prSu72NlqD7tiWKwVruPAZKbz7EG/K3Vv
-	 xf07OWDySblvQ==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QlzYJrh+"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-237f18108d2so235735ad.0
+        for <linux-modules@vger.kernel.org>; Tue, 01 Jul 2025 10:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751389613; x=1751994413; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RuV+zYZlBXFCb4jtObBSN/YWaKNaSZemTX8LVanYMvQ=;
+        b=QlzYJrh+fZUfghsUEeLpz/OaWHx8XzqL6Uzlv4+voMGqBx6tst4zId8luAvNhP/XVO
+         RIf/2an7ZxyqFyCIwpArc/BzS/6m6wm6+BKO7kv/vID3OXcIJGAG1q7I3KLtTvfLrsXA
+         +YKH+a1IrqdHHzPbfNwYBKJ9DgMeis+o+3621tQi+fjl/b26iAQVvlpYg5DVsBXOtLqL
+         rkezz0drkUKU4Yd/pyp5T0b35TU4qS/BSdWdHFOknb5YdwyVddvb0Ffl82i5QULqXbE5
+         HWn1TM4i77zZiQnCDOecj/z+yM7BuPoWxefI5++3Zn3ZCejWCtU1fAMp7LM8l5teAoJv
+         7YfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751389613; x=1751994413;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RuV+zYZlBXFCb4jtObBSN/YWaKNaSZemTX8LVanYMvQ=;
+        b=Yg+H4cOjF8OWPoGbtdd3wYtZYzWL6nCmGccHryqbnLyjxxYIu0q6pzxl8sUKNFwQoT
+         rAAVXs15r+DsRWL/xUIDAPBgrJtiA4rwKKQXVkKXGaQzP5wxQv4V2Qc7n8Q2xiu4ChJR
+         AqRIbft9GoCw2sPKjzTiUCFQRXR8BgIcCtSrkFM71magob1FXWHZOP/pVNVJQZhw5Jjo
+         Ms1xxfneY2tbSCcshTO3xPZggi4oQVLfD6iYMlyj287JZr0tK0ogLmUK1lemrSxrtLkv
+         Ha245wpmGgrn0au1ywsLkAtkLR5oTw55N9HhYCxMEVBl66RcS6ORz7VDtjXjn75AC9M8
+         H73g==
+X-Forwarded-Encrypted: i=1; AJvYcCXJW/1P3XD4hZn1tZ9tpe+TieQ8S95TlA9HY09jvg9FZULBgQxKS3s4jzrSlpQ/MeOPTQ/3OiAYWV7JHjLi@vger.kernel.org
+X-Gm-Message-State: AOJu0YxesJweTtrckT5ROjMjFf25/z0huWkvB6kcBMDw+6I+y+5AsKO0
+	6/zZ5oPXsVepxdFcvt1p6ccwNxtzzzSIboo33+k4AkvsKfPIN7uVQ8cYlPTH45J/rA==
+X-Gm-Gg: ASbGncsS8xXwyUd//iwMvSK29zgp4UuQrw+cobHC7H6jao/9v2nloBKO84B47BsDHVL
+	ZVUeBfcASWSh6HBlbRr1bvRN9Dr8bYBtN25vrKc6ZOjjNSWwyMzIgbM9gBKuQlRWGcXTkAs6saW
+	sBk0nM9swdqWd8SNcKtpekbGsM3Sp9lh4dzFQjnJKqmOOqyE5A18D4IzyOcF03S410tePGY/Se8
+	XbMHnwLCZln5cbTH5o2IfKd0vSg4M4f2YTTArV0diQburo8R2A9PhoC5lA9vzx1EIG2VCy4/QU+
+	d4hTrWXZ7Li+vKY7MhHwGgAseY0vlwIEnSDhXnNF79ERV2EwQLRnVxN+5KKpT71k3bTDmsgkWw6
+	yjoEIrcbYBHKeQ96f0niEWd0dwiIgsg==
+X-Google-Smtp-Source: AGHT+IH3gvTNWjgUOSwEDk0Lnl1+DmC8Fu1pmwaP64IY32Oe1R+ZFxuAFpTFlieVchNMl10+qUaQLA==
+X-Received: by 2002:a17:902:c407:b0:215:42a3:e844 with SMTP id d9443c01a7336-23c5ffbdd35mr3174365ad.17.1751389612305;
+        Tue, 01 Jul 2025 10:06:52 -0700 (PDT)
+Received: from google.com (106.81.125.34.bc.googleusercontent.com. [34.125.81.106])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2e2423sm109764245ad.37.2025.07.01.10.06.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jul 2025 10:06:51 -0700 (PDT)
+Date: Tue, 1 Jul 2025 17:06:47 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Giuliano Procida <gprocida@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] gendwarfksyms: use preferred form of sizeof for
+ allocation
+Message-ID: <20250701170647.GA2234472@google.com>
+References: <CAK7LNASzE1CtRo9T4byPXJtB-HtuWsGe=OLba+8JU9fB28Chow@mail.gmail.com>
+ <20250701152000.2477659-1-gprocida@google.com>
+ <20250701152000.2477659-2-gprocida@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 01 Jul 2025 18:54:16 +0200
-Message-Id: <DB0VJ9HRT0VG.GT9HOT7J29EL@kernel.org>
-Cc: "Andreas Hindborg" <a.hindborg@kernel.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Masahiro Yamada" <masahiroy@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
- "Danilo Krummrich" <dakr@kernel.org>, "Nicolas Schier"
- <nicolas.schier@linux.dev>, "Trevor Gross" <tmgross@umich.edu>, "Adam
- Bratschi-Kaye" <ark.email@gmail.com>, <rust-for-linux@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, "Sami Tolvanen" <samitolvanen@google.com>,
- "Daniel Gomez" <da.gomez@samsung.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Greg KH" <gregkh@linuxfoundation.org>, "Fiona
- Behrens" <me@kloenk.dev>, "Daniel Almeida" <daniel.almeida@collabora.com>,
- <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
- <DARCZYNPIJVZ.3JJSZ6PSAEMEC@kernel.org> <877c126bce.fsf@kernel.org>
- <Mg1_h6lRpg9tdi0VjiyDfIEy2juzgDWxOhYX61qSUfyEpeMMksWW1e-blTka_G1dXUvpZVktdD-zL3X1a6T6Cg==@protonmail.internalid> <DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org> <RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid> <DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org> <87plepzke5.fsf@kernel.org> <xFouVLxX1_t1mH69FDYwlIhBlI72M0IzQEKn0ntG_wT9z7V5DtbxiwVP_frH_yiS-Gf0q_AhqetbLmuvJ_yP5Q==@protonmail.internalid> <DAX65TRN0TGP.25VZ9DYV86XWY@kernel.org> <87wm8txysl.fsf@kernel.org> <9G3W1seaM7elcwWXaeoaa2nfpFYCf-AmBdvZhACGP13KGUtTPVMwGNYdTQsdtp8ru7GIP3-UYTzXscC1MRUKrg==@protonmail.internalid> <DAZV8OGL8BMH.11SLXBXQ17ZJ9@kernel.org> <87h5zxxtdw.fsf@kernel.org> <H78pT7YnQEhAXdxzl_hhnGVUiQuFpibB21_bjH658fMz_5JYbwsPLYYVh8u1gYnzK3N3ilTEAvqOpkuptVx3rg==@protonmail.internalid> <DB03MZI2FCOW.2JBFL3TY38FK@kernel.org> <87bjq4xpv7.fsf@kernel.org>
- <ffROWpeKczrWSBlKYov2atJG-QD5l5fUOb2dVCNkWlcT9h6DJpa4joGQpjqtYyLP7HX227fCAayyDQunZ464XQ==@protonmail.internalid> <DB0LKI8BO3HZ.3FF03JN4364RM@kernel.org> <87zfdovvz4.fsf@kernel.org> <DB0U12HAEVZ6.JKFPI2UQHDRY@kernel.org> <CANiq72kFUSFgBv7Es3Mhe4HUaSPZk0EVW=JaMdaAGHsQOxYN6w@mail.gmail.com>
-In-Reply-To: <CANiq72kFUSFgBv7Es3Mhe4HUaSPZk0EVW=JaMdaAGHsQOxYN6w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250701152000.2477659-2-gprocida@google.com>
 
-On Tue Jul 1, 2025 at 6:27 PM CEST, Miguel Ojeda wrote:
-> On Tue, Jul 1, 2025 at 5:43=E2=80=AFPM Benno Lossin <lossin@kernel.org> w=
-rote:
->>
->> Ultimately this is something for Miguel to decide.
->
-> Only if you all cannot get to an agreement ;)
+On Tue, Jul 01, 2025 at 04:19:10PM +0100, Giuliano Procida wrote:
+> The preferred form is to use the variable being allocated to, rather
+> than explicitly supplying a type name which might become stale.
+> 
+> Also do this for memset.
+> 
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
 
-:)
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-> If Andreas wants to have it already added, then I would say just mark
-> it `unsafe` as Benno recommends (possibly with an overbearing
-> precondition), given it has proven subtle/forgettable enough and that,
-> if I understand correctly, it would actually become unsafe if someone
-> "just" added "reasonably-looking code" elsewhere.
-
-Yeah, if we added code that ran at the same time as the parameter
-parsing (such as custom parameter parsing or a way to start a "thread"
-before the parsing is completed) it would be a problem.
-
-> That way we have an incentive to make it safe later on and, more
-> importantly, to think again about it when such a patch lands,
-> justifying it properly. And it could plausibly protect out-of-tree
-> users, too.
->
-> This is all assuming that we will not have many users of this added
-> right away (in a cycle or two), i.e. assuming it will be easy to
-> change callers later on (if only to remove the `unsafe {}`).
-
-Yeah we would add internal synchronization and could keep the API the
-same (except removing unsafe of course).
-
----
-Cheers,
-Benno
+Sami
