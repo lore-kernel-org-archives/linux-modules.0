@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE502877DF;
-	Wed,  2 Jul 2025 13:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28312798E1;
+	Wed,  2 Jul 2025 13:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462386; cv=none; b=BHaj3a6AhHdEEK8VKDbWutRjZGCDprKgq55PJ7QCSfKv6LBCkugP2IFjbY/KMmFO+Uz+2qSbtfWOp/dQgv7/68nacrNSJUpCxL1A+71I33ADeXvzg8RI9x61vVNXJzsHkjjrch3DQtasDVRSx6LB1Zb/LHWBdxsV3G8GouGhxRk=
+	t=1751462392; cv=none; b=fkJKdyTKhtCPQPKLyD6xrtEOLKoX8aGjzE/4IQSM748mjjyn+CVGKcYWjr5vediqD3cmnBifHpleTQF2yOBtOzPLHxzIhw78q4MX37ve7Ykp17sMLDgqRZ6E/JzEx7fe+dksQGrFNiy9aUker8GVE9ab52zDo5bGamsbZTyamtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462386; c=relaxed/simple;
-	bh=aO+G2LBOUth+c97kiCVNHXHQOAnd4TaRXt0Dw/VnL7U=;
+	s=arc-20240116; t=1751462392; c=relaxed/simple;
+	bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aSvrVEvf2LKpSeGUYruju+236SHh1aIXQh2jHLzzOh0Tjo4fLFkeV9ObXs5tvwbPfPYJRL/MXfv6xkwUXkrFqvHaPjmQ+dcxQyPoJupdThwu7UE1uyudTqgOnwjTTMw7jwsUGIfw3ZG1cp4GI6rPrzJe86Y+jThVWHS7thzpDu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gBBwjg9Y; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=SXQBRbzWEHifpFrBdKZ6i4Ra190W7nSlr/7H4+ZK3i2P5bqe3HTBYswVThhTBITygdMBOh4gCC1GwY+xpImVo0uuW613rghPVDL9JGLmdImmthTp5NBxjs6ZDSHvhVHMTBr5x+f909SuOIAjVDVuUeWxPZbtDot8f0MaZQ5E2gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZgzWGGi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gBBwjg9Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95B0EC4CEED;
-	Wed,  2 Jul 2025 13:19:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZgzWGGi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5A1C4CEED;
+	Wed,  2 Jul 2025 13:19:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751462386;
-	bh=aO+G2LBOUth+c97kiCVNHXHQOAnd4TaRXt0Dw/VnL7U=;
+	s=k20201202; t=1751462392;
+	bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=gBBwjg9Y24fXcgDP1qQZsVeITJKRdng7K0amoWMngzr3h5EdtT/8d8jdqwaLPXdRj
-	 xVIAjH5gU0+HS3NKSga711FW6FmHmEZhZiUJJ5LSAQmAt5QyoS2UIsIrstMkMwIWPk
-	 Hl0/BcPpjV/IkwGlrGQGsLj9GeMN5HjOJ8+CnK8meE9OJo5HOez2dXzmcGJSUrjQV+
-	 hALDcU0q/ZSKqKnddVb0TwHTe4oSaOBWJRZ2ll5vtWo7wSyFa5mIydMDQg+9vqzmT8
-	 j38bpA8g36snCx3hcOrg9meQITDhkWvo1H0+ne+VevrgLBONpOGdivcXYZC1j67cz6
-	 wJCzw5jqmXsuQ==
+	b=IZgzWGGi2dxQSMqZJhmpmwZsmnpLY/k1RRKrY7Yw+mn9F2OFC73B9T7s8x3Y4Lrj0
+	 FfA5ImoQMFkUaP9LyqjX8YS3N/zvjipCZRjroL65Riju+EmAbKIKii/lpRqhaiNTzO
+	 YQVAxNXvJ3dxT2JbQIkVbT0lZNceSUHd8wvi5GEVLbZj5ZCtO+UPpjfLPyfQVrEets
+	 Y67AA9+RBTEneU4j57aIJAZau3I0cCiTyLFIqlMrjGTHLu/1MXhrqtWfypz2BNGaZ4
+	 lQBLuoo53RYdidm9j9VdYjZ5mUDaF3pwj1kRv2FDZGzzc75QRgdPFTpOVWkFKjVJWO
+	 RQyzRAww9ubRA==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 02 Jul 2025 15:18:34 +0200
-Subject: [PATCH v14 2/7] rust: str: add radix prefixed integer parsing
- functions
+Date: Wed, 02 Jul 2025 15:18:37 +0200
+Subject: [PATCH v14 5/7] rust: module: update the module macro with module
+ parameter support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-module-params-v3-v14-2-5b1cc32311af@kernel.org>
+Message-Id: <20250702-module-params-v3-v14-5-5b1cc32311af@kernel.org>
 References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 In-Reply-To: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -57,203 +57,393 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7153; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=aO+G2LBOUth+c97kiCVNHXHQOAnd4TaRXt0Dw/VnL7U=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTGzZw5aqY3V0bF0bZEjwP/QabmpTL/nU1aU+
- HhcjC9gvAuJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxswAKCRDhuBo+eShj
- d4yRD/kBUhvi3BOLZNdcXMPl5fQKqHnSsOKNxTeYALdlB0RuW4N019o42seCGIbG6sln5/il7AV
- MpNroZQ6Qf5+PjoVcbn5ALrkDSqDABQRWduiXU9XMuhw9I0lQLOa5VZnGS5Bs356cgtMZqEqrOg
- ACPhxXfE4SFn8JTuQyPfvVDH9p1jitHHCmsOwJUbM4Oob1Ug/3BRqJMv0HXQ0hg5vcsFoMCKKw9
- xjGJNBAq0eJdncrP63RWTQ34mhk1LZ7xLfsCB8Wp8XC/B2OXXBcC1wBo4p6NGzYezFGMKH2o9yr
- nk719wNv2XuO3byTbRJcKMG8ZLYh8rSUKQlocQU+gyoohwGr3GQzn742A016FTcbaPjGje4sui1
- vYfQmUa/4vLTUZhYWGJh+vx0z9eFKRsjl1FJ7GLrx5uIfzbkPJj7DHeiGvjGwDDn271yad7Led3
- N+J3wNqD6z/ojJwx4kx7uJLkHTva3ULok4XZ9zpwkTFeWSWuFYMqJtfcYB6RDydHWwb5fHDy+r3
- Mx42onGB7r8Kgb2i9C48hWnaCEdn41sQKaAfz9kUQybOOA+GOSZ8geSjEZFPQ7CDUwxaoFyFiGf
- gJ9rLckj936RtXhlcpteUCMQl7hsY5nlvtMlQO2BOiinBHdC8GWlJrip9UH9BUqSQ87E0Is6ghl
- O+DkJeWYiXu2JzQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13415;
+ i=a.hindborg@kernel.org; h=from:subject:message-id;
+ bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTG2SGk38fuu6/kZ1wrzPLTn9Hzk+W+EqeBcX
+ IUcOyXuX8WJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxtgAKCRDhuBo+eShj
+ d+ObD/9DBhxQ+JDEcSTSfS2koQXQgStBAvO4Nib2Qt4CtkBatLKs4NnDXlx2ng6FRLEcvuIyZLq
+ aDKBrGN5rs/UmytDYqXazVcaTOJl5YYrAV4HdEarTHuSFAkpHlZPXhfmvh0e4niNItj6Xc4DZcu
+ i/NdtzU+nKyzI7xXHB5k1lKJhhYKrN5hbghNBVgAX1JyZke/nPWESL4wzwCL1dgqNgPAmipIIZu
+ yCaXDls7fA/xGXpolwDnsmBXTSNRh7SJcOXFnBKcqrjwmzQcyy3n5PUfuorxPMFXA9Ex3/zWZpB
+ n5P83BLXcPXa1+zKwtVLbV1fr2E50H63hvATSSoJa0vY+6w1i23+var5cTdFqR+qcfovbzbOW2r
+ rLx0SqYniOI/zCmXWg5qPpxJ+B8Qq0mf2BL6rITmLkxi5R3tS6d0zs7IRjDaKGFeavOojrBeATt
+ /tqpjyPOwJ8r75JrFxl9tkVgNr7g3Vopp4YXpRQA8SXdSHtnO/Fn2Tkz7HbQgh7OJaclfiG4+34
+ w8wAeYvXesofyW9VFD5DFvw9L7uoxFNmb0ucDlVJp9duXcGACyPLtvsdTmhEW/XVb9fIopm47vA
+ T09HoWQ/60bVvqdcKrxWV3K7ohQb07uEsgZMHRgO1/Whzjf2q49v/00/FFEVRo9YLMZWbxVnSNs
+ ffV82UudqCgyxjw==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Add the trait `ParseInt` for parsing string representations of integers
-where the string representations are optionally prefixed by a radix
-specifier. Implement the trait for the primitive integer types.
+Allow module parameters to be declared in the rust `module!` macro.
 
-Tested-by: Daniel Gomez <da.gomez@samsung.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Benno Lossin <benno.lossin@proton.me>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/str.rs           |   2 +
- rust/kernel/str/parse_int.rs | 148 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 150 insertions(+)
+ rust/macros/helpers.rs |  25 +++++++
+ rust/macros/lib.rs     |  31 +++++++++
+ rust/macros/module.rs  | 177 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 223 insertions(+), 10 deletions(-)
 
-diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index a927db8e079c..2b6c8b4a0ae4 100644
---- a/rust/kernel/str.rs
-+++ b/rust/kernel/str.rs
-@@ -8,6 +8,8 @@
+diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+index e2602be402c1..365d7eb499c0 100644
+--- a/rust/macros/helpers.rs
++++ b/rust/macros/helpers.rs
+@@ -10,6 +10,17 @@ pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
+     }
+ }
  
- use crate::prelude::*;
- 
-+pub mod parse_int;
-+
- /// Byte string without UTF-8 validity guarantee.
- #[repr(transparent)]
- pub struct BStr([u8]);
-diff --git a/rust/kernel/str/parse_int.rs b/rust/kernel/str/parse_int.rs
-new file mode 100644
-index 000000000000..48eb4c202984
---- /dev/null
-+++ b/rust/kernel/str/parse_int.rs
-@@ -0,0 +1,148 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! Integer parsing functions.
-+//!
-+//! Integer parsing functions for parsing signed and unsigned integers
-+//! potentially prefixed with `0x`, `0o`, or `0b`.
-+
-+use crate::prelude::*;
-+use crate::str::BStr;
-+use core::ops::Deref;
-+
-+// Make `FromStrRadix` a public type with a private name. This seals
-+// `ParseInt`, that is, prevents downstream users from implementing the
-+// trait.
-+mod private {
-+    use crate::prelude::*;
-+    use crate::str::BStr;
-+
-+    /// Trait that allows parsing a [`&BStr`] to an integer with a radix.
-+    pub trait FromStrRadix: Sized {
-+        /// Parse `src` to [`Self`] using radix `radix`.
-+        fn from_str_radix(src: &BStr, radix: u32) -> Result<Self>;
-+
-+        /// Tries to convert `value` into [`Self`] and negates the resulting value.
-+        fn from_u64_negated(value: u64) -> Result<Self>;
++pub(crate) fn try_sign(it: &mut token_stream::IntoIter) -> Option<char> {
++    let peek = it.clone().next();
++    match peek {
++        Some(TokenTree::Punct(punct)) if punct.as_char() == '-' => {
++            let _ = it.next();
++            Some(punct.as_char())
++        }
++        _ => None,
 +    }
 +}
 +
-+/// Extract the radix from an integer literal optionally prefixed with
-+/// one of `0x`, `0X`, `0o`, `0O`, `0b`, `0B`, `0`.
-+fn strip_radix(src: &BStr) -> (u32, &BStr) {
-+    match src.deref() {
-+        [b'0', b'x' | b'X', rest @ ..] => (16, rest.as_ref()),
-+        [b'0', b'o' | b'O', rest @ ..] => (8, rest.as_ref()),
-+        [b'0', b'b' | b'B', rest @ ..] => (2, rest.as_ref()),
-+        // NOTE: We are including the leading zero to be able to parse
-+        // literal `0` here. If we removed it as a radix prefix, we would
-+        // not be able to parse `0`.
-+        [b'0', ..] => (8, src),
-+        _ => (10, src),
-+    }
-+}
+ pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<String> {
+     if let Some(TokenTree::Literal(literal)) = it.next() {
+         Some(literal.to_string())
+@@ -103,3 +114,17 @@ pub(crate) fn file() -> String {
+         proc_macro::Span::call_site().file()
+     }
+ }
 +
-+/// Trait for parsing string representations of integers.
++/// Parse a token stream of the form `expected_name: "value",` and return the
++/// string in the position of "value".
 +///
-+/// Strings beginning with `0x`, `0o`, or `0b` are parsed as hex, octal, or
-+/// binary respectively. Strings beginning with `0` otherwise are parsed as
-+/// octal. Anything else is parsed as decimal. A leading `+` or `-` is also
-+/// permitted. Any string parsed by [`kstrtol()`] or [`kstrtoul()`] will be
-+/// successfully parsed.
++/// # Panics
 +///
-+/// [`kstrtol()`]: https://docs.kernel.org/core-api/kernel-api.html#c.kstrtol
-+/// [`kstrtoul()`]: https://docs.kernel.org/core-api/kernel-api.html#c.kstrtoul
++/// - On parse error.
++pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
++    assert_eq!(expect_ident(it), expected_name);
++    assert_eq!(expect_punct(it), ':');
++    let string = expect_string(it);
++    assert_eq!(expect_punct(it), ',');
++    string
++}
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index fa847cf3a9b5..2fb520dc930a 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -28,6 +28,30 @@
+ /// The `type` argument should be a type which implements the [`Module`]
+ /// trait. Also accepts various forms of kernel metadata.
+ ///
++/// The `params` field describe module parameters. Each entry has the form
 +///
-+/// # Examples
-+///
++/// ```ignore
++/// parameter_name: type {
++///     default: default_value,
++///     description: "Description",
++/// }
 +/// ```
-+/// # use kernel::str::parse_int::ParseInt;
-+/// # use kernel::b_str;
 +///
-+/// assert_eq!(Ok(0u8), u8::from_str(b_str!("0")));
++/// `type` may be one of
 +///
-+/// assert_eq!(Ok(0xa2u8), u8::from_str(b_str!("0xa2")));
-+/// assert_eq!(Ok(-0xa2i32), i32::from_str(b_str!("-0xa2")));
++/// - [`i8`]
++/// - [`u8`]
++/// - [`i8`]
++/// - [`u8`]
++/// - [`i16`]
++/// - [`u16`]
++/// - [`i32`]
++/// - [`u32`]
++/// - [`i64`]
++/// - [`u64`]
++/// - [`isize`]
++/// - [`usize`]
 +///
-+/// assert_eq!(Ok(-0o57i8), i8::from_str(b_str!("-0o57")));
-+/// assert_eq!(Ok(0o57i8), i8::from_str(b_str!("057")));
-+///
-+/// assert_eq!(Ok(0b1001i16), i16::from_str(b_str!("0b1001")));
-+/// assert_eq!(Ok(-0b1001i16), i16::from_str(b_str!("-0b1001")));
-+///
-+/// assert_eq!(Ok(127i8), i8::from_str(b_str!("127")));
-+/// assert!(i8::from_str(b_str!("128")).is_err());
-+/// assert_eq!(Ok(-128i8), i8::from_str(b_str!("-128")));
-+/// assert!(i8::from_str(b_str!("-129")).is_err());
-+/// assert_eq!(Ok(255u8), u8::from_str(b_str!("255")));
-+/// assert!(u8::from_str(b_str!("256")).is_err());
-+/// ```
-+pub trait ParseInt: private::FromStrRadix + TryFrom<u64> {
-+    /// Parse a string according to the description in [`Self`].
-+    fn from_str(src: &BStr) -> Result<Self> {
-+        match src.deref() {
-+            [b'-', rest @ ..] => {
-+                let (radix, digits) = strip_radix(rest.as_ref());
-+                // 2's complement values range from -2^(b-1) to 2^(b-1)-1.
-+                // So if we want to parse negative numbers as positive and
-+                // later multiply by -1, we have to parse into a larger
-+                // integer. We choose `u64` as sufficiently large.
-+                //
-+                // NOTE: 128 bit integers are not available on all
-+                // platforms, hence the choice of 64 bits.
-+                let val =
-+                    u64::from_str_radix(core::str::from_utf8(digits).map_err(|_| EINVAL)?, radix)
-+                        .map_err(|_| EINVAL)?;
-+                Self::from_u64_negated(val)
-+            }
-+            _ => {
-+                let (radix, digits) = strip_radix(src);
-+                Self::from_str_radix(digits, radix).map_err(|_| EINVAL)
-+            }
+ /// C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
+ ///
+ /// [`Module`]: ../kernel/trait.Module.html
+@@ -44,6 +68,12 @@
+ ///     description: "My very own kernel module!",
+ ///     license: "GPL",
+ ///     alias: ["alternate_module_name"],
++///     params: {
++///         my_parameter: i64 {
++///             default: 1,
++///             description: "This parameter has a default of 1",
++///         },
++///     },
+ /// }
+ ///
+ /// struct MyModule(i32);
+@@ -52,6 +82,7 @@
+ ///     fn init(_module: &'static ThisModule) -> Result<Self> {
+ ///         let foo: i32 = 42;
+ ///         pr_info!("I contain:  {}\n", foo);
++///         pr_info!("i32 param is:  {}\n", module_parameters::my_parameter.read());
+ ///         Ok(Self(foo))
+ ///     }
+ /// }
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 1a867a1e787e..2b8123fe9fb0 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -26,6 +26,7 @@ struct ModInfoBuilder<'a> {
+     module: &'a str,
+     counter: usize,
+     buffer: String,
++    param_buffer: String,
+ }
+ 
+ impl<'a> ModInfoBuilder<'a> {
+@@ -34,10 +35,11 @@ fn new(module: &'a str) -> Self {
+             module,
+             counter: 0,
+             buffer: String::new(),
++            param_buffer: String::new(),
+         }
+     }
+ 
+-    fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
++    fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
+         let string = if builtin {
+             // Built-in modules prefix their modinfo strings by `module.`.
+             format!(
+@@ -51,8 +53,14 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+             format!("{field}={content}\0")
+         };
+ 
++        let buffer = if param {
++            &mut self.param_buffer
++        } else {
++            &mut self.buffer
++        };
++
+         write!(
+-            &mut self.buffer,
++            buffer,
+             "
+                 {cfg}
+                 #[doc(hidden)]
+@@ -75,20 +83,118 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+         self.counter += 1;
+     }
+ 
+-    fn emit_only_builtin(&mut self, field: &str, content: &str) {
+-        self.emit_base(field, content, true)
++    fn emit_only_builtin(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_base(field, content, true, param)
+     }
+ 
+-    fn emit_only_loadable(&mut self, field: &str, content: &str) {
+-        self.emit_base(field, content, false)
++    fn emit_only_loadable(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_base(field, content, false, param)
+     }
+ 
+     fn emit(&mut self, field: &str, content: &str) {
+-        self.emit_only_builtin(field, content);
+-        self.emit_only_loadable(field, content);
++        self.emit_internal(field, content, false);
++    }
++
++    fn emit_internal(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_only_builtin(field, content, param);
++        self.emit_only_loadable(field, content, param);
++    }
++
++    fn emit_param(&mut self, field: &str, param: &str, content: &str) {
++        let content = format!("{param}:{content}", param = param, content = content);
++        self.emit_internal(field, &content, true);
++    }
++
++    fn emit_params(&mut self, info: &ModuleInfo) {
++        let Some(params) = &info.params else {
++            return;
++        };
++
++        for param in params {
++            let ops = param_ops_path(&param.ptype);
++
++            // Note: The spelling of these fields is dictated by the user space
++            // tool `modinfo`.
++            self.emit_param("parmtype", &param.name, &param.ptype);
++            self.emit_param("parm", &param.name, &param.description);
++
++            write!(
++                self.param_buffer,
++                "
++                    pub(crate) static {param_name}:
++                        ::kernel::module_param::ModuleParamAccess<{param_type}> =
++                            ::kernel::module_param::ModuleParamAccess::new({param_default});
++
++                    #[link_section = \"__param\"]
++                    #[used]
++                    static __{module_name}_{param_name}_struct:
++                        ::kernel::module_param::RacyKernelParam =
++                        ::kernel::module_param::RacyKernelParam::new(
++                          ::kernel::bindings::kernel_param {{
++                            name: if cfg!(MODULE) {{
++                                ::kernel::c_str!(\"{param_name}\").as_bytes_with_nul()
++                            }} else {{
++                                ::kernel::c_str!(\"{module_name}.{param_name}\").as_bytes_with_nul()
++                            }}.as_ptr(),
++                            // SAFETY: `__this_module` is constructed by the kernel at load time
++                            // and will not be freed until the module is unloaded.
++                            #[cfg(MODULE)]
++                            mod_: unsafe {{
++                                (&::kernel::bindings::__this_module
++                                    as *const ::kernel::bindings::module)
++                                    .cast_mut()
++                            }},
++                            #[cfg(not(MODULE))]
++                            mod_: ::core::ptr::null_mut(),
++                            ops: &{ops} as *const ::kernel::bindings::kernel_param_ops,
++                            perm: 0, // Will not appear in sysfs
++                            level: -1,
++                            flags: 0,
++                            __bindgen_anon_1:
++                                ::kernel::bindings::kernel_param__bindgen_ty_1 {{
++                                    arg: {param_name}.as_void_ptr()
++                                }},
++                          }}
++                        );
++                ",
++                module_name = info.name,
++                param_type = param.ptype,
++                param_default = param.default,
++                param_name = param.name,
++                ops = ops,
++            )
++            .unwrap();
 +        }
 +    }
 +}
 +
-+macro_rules! impl_parse_int {
-+    ($($ty:ty),*) => {
-+        $(
-+            impl private::FromStrRadix for $ty {
-+                fn from_str_radix(src: &BStr, radix: u32) -> Result<Self> {
-+                    <$ty>::from_str_radix(core::str::from_utf8(src).map_err(|_| EINVAL)?, radix)
-+                        .map_err(|_| EINVAL)
-+                }
-+
-+                fn from_u64_negated(value: u64) -> Result<Self> {
-+                    const ABS_MIN: u64 = {
-+                        #[allow(unused_comparisons)]
-+                        if <$ty>::MIN < 0 {
-+                            1u64 << (<$ty>::BITS - 1)
-+                        } else {
-+                            0
-+                        }
-+                    };
-+
-+                    if value > ABS_MIN {
-+                        return Err(EINVAL);
-+                    }
-+
-+                    if value == ABS_MIN {
-+                        return Ok(<$ty>::MIN);
-+                    }
-+
-+                    // SAFETY: The above checks guarantee that `value` fits into `Self`:
-+                    // - if `Self` is unsigned, then `ABS_MIN == 0` and thus we have returned above
-+                    //   (either `EINVAL` or `MIN`).
-+                    // - if `Self` is signed, then we have that `0 <= value < ABS_MIN`. And since
-+                    //   `ABS_MIN - 1` fits into `Self` by construction, `value` also does.
-+                    let value: Self = unsafe { value.try_into().unwrap_unchecked() };
-+
-+                    Ok((!value).wrapping_add(1))
-+                }
-+            }
-+
-+            impl ParseInt for $ty {}
-+        )*
-+    };
++fn param_ops_path(param_type: &str) -> &'static str {
++    match param_type {
++        "i8" => "::kernel::module_param::PARAM_OPS_I8",
++        "u8" => "::kernel::module_param::PARAM_OPS_U8",
++        "i16" => "::kernel::module_param::PARAM_OPS_I16",
++        "u16" => "::kernel::module_param::PARAM_OPS_U16",
++        "i32" => "::kernel::module_param::PARAM_OPS_I32",
++        "u32" => "::kernel::module_param::PARAM_OPS_U32",
++        "i64" => "::kernel::module_param::PARAM_OPS_I64",
++        "u64" => "::kernel::module_param::PARAM_OPS_U64",
++        "isize" => "::kernel::module_param::PARAM_OPS_ISIZE",
++        "usize" => "::kernel::module_param::PARAM_OPS_USIZE",
++        t => panic!("Unsupported parameter type {}", t),
+     }
+ }
+ 
++fn expect_param_default(param_it: &mut token_stream::IntoIter) -> String {
++    assert_eq!(expect_ident(param_it), "default");
++    assert_eq!(expect_punct(param_it), ':');
++    let sign = try_sign(param_it);
++    let default = try_literal(param_it).expect("Expected default param value");
++    assert_eq!(expect_punct(param_it), ',');
++    let mut value = sign.map(String::from).unwrap_or_default();
++    value.push_str(&default);
++    value
 +}
 +
-+impl_parse_int![i8, u8, i16, u16, i32, u32, i64, u64, isize, usize];
+ #[derive(Debug, Default)]
+ struct ModuleInfo {
+     type_: String,
+@@ -99,6 +205,50 @@ struct ModuleInfo {
+     description: Option<String>,
+     alias: Option<Vec<String>>,
+     firmware: Option<Vec<String>>,
++    params: Option<Vec<Parameter>>,
++}
++
++#[derive(Debug)]
++struct Parameter {
++    name: String,
++    ptype: String,
++    default: String,
++    description: String,
++}
++
++fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
++    let params = expect_group(it);
++    assert_eq!(params.delimiter(), Delimiter::Brace);
++    let mut it = params.stream().into_iter();
++    let mut parsed = Vec::new();
++
++    loop {
++        let param_name = match it.next() {
++            Some(TokenTree::Ident(ident)) => ident.to_string(),
++            Some(_) => panic!("Expected Ident or end"),
++            None => break,
++        };
++
++        assert_eq!(expect_punct(&mut it), ':');
++        let param_type = expect_ident(&mut it);
++        let group = expect_group(&mut it);
++        assert_eq!(group.delimiter(), Delimiter::Brace);
++        assert_eq!(expect_punct(&mut it), ',');
++
++        let mut param_it = group.stream().into_iter();
++        let param_default = expect_param_default(&mut param_it);
++        let param_description = expect_string_field(&mut param_it, "description");
++        expect_end(&mut param_it);
++
++        parsed.push(Parameter {
++            name: param_name,
++            ptype: param_type,
++            default: param_default,
++            description: param_description,
++        })
++    }
++
++    parsed
+ }
+ 
+ impl ModuleInfo {
+@@ -114,6 +264,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+             "license",
+             "alias",
+             "firmware",
++            "params",
+         ];
+         const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
+         let mut seen_keys = Vec::new();
+@@ -140,6 +291,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+                 "license" => info.license = expect_string_ascii(it),
+                 "alias" => info.alias = Some(expect_string_array(it)),
+                 "firmware" => info.firmware = Some(expect_string_array(it)),
++                "params" => info.params = Some(expect_params(it)),
+                 _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
+             }
+ 
+@@ -205,7 +357,9 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+     // Built-in modules also export the `file` modinfo string.
+     let file =
+         std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
+-    modinfo.emit_only_builtin("file", &file);
++    modinfo.emit_only_builtin("file", &file, false);
++
++    modinfo.emit_params(&info);
+ 
+     format!(
+         "
+@@ -369,15 +523,18 @@ unsafe fn __exit() {{
+                             __MOD.assume_init_drop();
+                         }}
+                     }}
+-
+                     {modinfo}
+                 }}
+             }}
++            mod module_parameters {{
++                {params}
++            }}
+         ",
+         type_ = info.type_,
+         name = info.name,
+         ident = ident,
+         modinfo = modinfo.buffer,
++        params = modinfo.param_buffer,
+         initcall_section = ".initcall6.init"
+     )
+     .parse()
 
 -- 
 2.47.2
