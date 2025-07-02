@@ -1,35 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429FB27F736;
-	Wed,  2 Jul 2025 13:19:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DDD284689;
+	Wed,  2 Jul 2025 13:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462353; cv=none; b=ljiG6qQmThM63PpJXpQ4/W8h5nkWJBFn7DBbSlwmJ1/ZoEFQIjWhlAzjN2bFCxImCLh0YZVEfoXeDF5+BAYFmnaokBFMJrX8XaPcG5yeiKWZc8Hv43rDx9Hr7iLiXRzcjyj2k/Umb/foH0E4j2AZlHyynygMOnzDANn36ffp+I4=
+	t=1751462358; cv=none; b=GUseZo4T+HVrGtggFj+SYg2Ori+MjhGN/apEMqhdMj73+2RcAkquvKy5C2cFZYSTOPGa17DgKRFuax4m5I3OpxeXkZw4nj9KWAynlOcGODjqW86OIildCp6agsg9cv3svodhXROxk/eC3hGqg1hEXhSR6Vw0gGbFx6HWGiXXt9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462353; c=relaxed/simple;
-	bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
+	s=arc-20240116; t=1751462358; c=relaxed/simple;
+	bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VZZDcI6it+QMaJZL2bLnAs8C/Nskey8ypk7k87jiLxX4keB/9abJuLEya+a8yzHhKHJ+rPo9Q9oTKWcC3KYo3YYt0VUV2CCV5QBpbC1q9SJKByk3qD9XQrJ/lpGWYxvms+dLD3wbrOllDeXFsfveZv9rzo92rHgXPBY7tdZphFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsDXQ60/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=IrvARwfVlzuIj6WDBA2tWscW42XQD1NnZ0eRJZScXWaQpCfXfM2hzE0NRAVTiH5F9CmWXttcZgjK7fxQe/IWkahe5/sriDAN/6skYPmq+w+KYM9gnJELBlF+1RUX3eOUoqUQsGkSFZKvat+LxCnACCoqUI0mqTr7SHVusnJPqJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBmmWh8/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsDXQ60/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4527C4CEF1;
-	Wed,  2 Jul 2025 13:19:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBmmWh8/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6FFC4CEED;
+	Wed,  2 Jul 2025 13:19:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751462352;
-	bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
+	s=k20201202; t=1751462358;
+	bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=EsDXQ60/qp406117PPHHmCxHqj+D+cVO4P+hdBG1wp96pFPSwvIjEYKUMbsYXeI9c
-	 a7e4RQNMYGf56rIltX9YXR1qiXrzNB2baeMMBbaUVkZG81f0PjrY+EQz78E7qNzACP
-	 ouRga63SgTjdLlOMNgkUfUxggDAPOPP/kyvXBlxwNTZuMOs3DQG+x/6CEqXccYGmHR
-	 XbIFVrH7qNIb6MFufAknP4u2HJdbKI0L9Fm3IIj10/r6+NMdUu5f71/sPemN6YzQIJ
-	 lOzlQZOpSSdcl97zwuvT/YBkwRfiWNkP9enrWfmDfhWMDo1uw/jJC7uoHbZb3iSL2b
-	 uvJzeu9d1czeg==
+	b=DBmmWh8/GJlFKbvHf+i6gGkybyQTg3g7OJ3ys8wpGBve2Y/hNXZswhx9DQu6bGtXV
+	 LYoC/1o3lwwANpTYC1EfIcAv8NRdSGAJN6tOcs+UyUuTfRnXUoNRfFX/iSvxh4Fc6b
+	 3RpD0RiCMbwT2rUwPrAaUgkkPLTgJxORHhdD2qdsWi6+KpRKOfNQLsp1tW6MA13aiS
+	 XkO7wYdg7ALI2V/EXNih1P3So30XIMYe3Vyb5YBn7UB9+nPDNctgbDGOYV8SByfkSR
+	 CkyXnR9BZifVmKlteaOS0zsan8nBk5y5h36slo4BrIiU8N8yhc6jMQtLYZlSGgoS3I
+	 ZvL/zxwMqGJAw==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 02 Jul 2025 15:18:36 +0200
-Subject: [PATCH v14 4/7] rust: module: use a reference in
- macros::module::module
+Date: Wed, 02 Jul 2025 15:18:33 +0200
+Subject: [PATCH v14 1/7] rust: sync: add `OnceLock`
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-module-params-v3-v14-4-5b1cc32311af@kernel.org>
+Message-Id: <20250702-module-params-v3-v14-1-5b1cc32311af@kernel.org>
 References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 In-Reply-To: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -57,75 +56,155 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2063; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTG1q7BWJyAZsiU8AbktVyBccUl9DhqyCQrwA
- st3PLRMCqaJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxtQAKCRDhuBo+eShj
- d8ZaEAC93JQofnKZzaTP3AHtWLUIkIXhJ2c216bYIl/vCIhs9QXEv6pnYfc11CNpjudmWFmQwIb
- 0vvpPsTeoGyt7pmGXLZhGez1Y8nfZMeDjU/yGQq5iIgxayKNQXPtYaYktoz+m9WEq8dLY5+f31R
- yIKJK4FRwENvQ6bqeJ3/SdpKV64FZbvEQtXTvXdXuBV2fQhPZ05UeATLUp6Ws683WwBZ2A0JKz9
- wPwdllGt83lJwTTuPC0S5Zs8Z/aK8x3ogKjDcHAHCXFE889kO0R8YgY885ltKB2w4EFksWvZLrk
- ML+wpnZFvmv4IHrdwZ2lDsPEeIbsZIcnUdu7BlauQAJgvM8x1zZ8pGTYrc9a4nFDtY9FoWxDGz4
- 2GBMhZF+r9OYw1TGZPmp9B6Lr0/Axd8pC4T8YPBFrkpXHOr5KJEQ6xPdn8Qm2R+Mc2F/jAhwiSj
- FlW4ZMfZ8kRIv6tI8rxW6ogiyk8wfLjf3/UOKQsMT2FP8Ie5GaijdQoSJq3RRkTvw7/h66s2mzD
- Wx9P0o3SJ6z+xv0rofQRL0WUOe1exH9LoYiKtP30xzkBxJVHDlVmrSwwRywaJ81qg8SkbEtgy2F
- XzvXiq+Kmlgbcoy21q+Po6qJ0/qn9JNNHu3F6yK159oerKiJdmb3bcBLEFRyW5y2b0u1mD+AZd2
- pQmYBO8zQZ3KnlQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4168; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTGzBIyPCDW6CbV9USY9a6bw3bRnhSdW4qSxa
+ icxywq0esCJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxswAKCRDhuBo+eShj
+ d6XhEADFrV+1h2hwOY+GnAAVhukDmoaKdiIjl3+EsCzGbUGDd+KNxnvTas7TVnClCcwjBh9pB1f
+ OSfGloxPrcyx2i8KoRaOuzX4CdV6kLtHW4sOM3UAt8PAc4ijjD/kbjuaSKrh5xfiC9KG6HiQa7F
+ VeVNeOq/8vI6yYEyvoL4CjEe2TEDr9jQekFTJVe86s8VXrNax1vJ7VlRUu8hDxXzH602c3bHuEJ
+ ModCbWl4TdYwtF6t2uKcnL1CkSAeCLCVVXUr853xP5yF4irPYcnwgZTohqpSk/CIEVIByynzSKO
+ MMTln11PjDqQaLd9HTLEZwC0UIX6qI2dsjksLmK6NyAwN4z66z3pKyh6NcisN8VaMe06XlgDPMB
+ zNcC8mWocCwdO+RhLfKSt2HFpn08egmytCFsISkc8Lq6EMGRacgrFVP8zqFGkPkm86Do97snDyb
+ PUPQv+nEbC+deVu/Ih6gdnOgshXevaVFFNLbhwo7ILvdrAb5w0FQqk+GZMr0ixIKl7uDNsKIAk7
+ fKt1blLyOHrgtVgxFqcXPvOK+OmPeu49fCoSu9ic1DcaUVWm8rv0JQ1t7ApvBI4DtGr9SGJ38iO
+ UHUb3AkstIk4hyNuz9fbo/B5pN4RGDH1Vn59gnZHwk1ubxys63BFZKS8F3DFh+o/NT37naOYGns
+ pvjwnmK5Aws25EA==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-When we add parameter support to the module macro, we want to be able to
-pass a reference to `ModuleInfo` to a helper function. That is not possible
-when we move out of the local `modinfo`. So change the function to access
-the local via reference rather than value.
+Introduce the `OnceLock` type, a container that can only be written once.
+The container uses an internal atomic to synchronize writes to the internal
+value.
 
-Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/macros/module.rs | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ rust/kernel/sync.rs           |   1 +
+ rust/kernel/sync/once_lock.rs | 104 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 105 insertions(+)
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 2ddd2eeb2852..1a867a1e787e 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -179,26 +179,26 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-     // Rust does not allow hyphens in identifiers, use underscore instead.
-     let ident = info.name.replace('-', "_");
-     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
--    if let Some(author) = info.author {
--        modinfo.emit("author", &author);
-+    if let Some(author) = &info.author {
-+        modinfo.emit("author", author);
-     }
--    if let Some(authors) = info.authors {
-+    if let Some(authors) = &info.authors {
-         for author in authors {
--            modinfo.emit("author", &author);
-+            modinfo.emit("author", author);
-         }
-     }
--    if let Some(description) = info.description {
--        modinfo.emit("description", &description);
-+    if let Some(description) = &info.description {
-+        modinfo.emit("description", description);
-     }
-     modinfo.emit("license", &info.license);
--    if let Some(aliases) = info.alias {
-+    if let Some(aliases) = &info.alias {
-         for alias in aliases {
--            modinfo.emit("alias", &alias);
-+            modinfo.emit("alias", alias);
-         }
-     }
--    if let Some(firmware) = info.firmware {
-+    if let Some(firmware) = &info.firmware {
-         for fw in firmware {
--            modinfo.emit("firmware", &fw);
-+            modinfo.emit("firmware", fw);
-         }
-     }
+diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+index c7c0e552bafe..f2ee07315091 100644
+--- a/rust/kernel/sync.rs
++++ b/rust/kernel/sync.rs
+@@ -15,6 +15,7 @@
+ mod condvar;
+ pub mod lock;
+ mod locked_by;
++pub mod once_lock;
+ pub mod poll;
+ pub mod rcu;
  
+diff --git a/rust/kernel/sync/once_lock.rs b/rust/kernel/sync/once_lock.rs
+new file mode 100644
+index 000000000000..cd311bea3919
+--- /dev/null
++++ b/rust/kernel/sync/once_lock.rs
+@@ -0,0 +1,104 @@
++//! A container that can be initialized at most once.
++
++use super::atomic::ordering::Acquire;
++use super::atomic::ordering::Release;
++use super::atomic::Atomic;
++use kernel::types::Opaque;
++
++/// A container that can be populated at most once. Thread safe.
++///
++/// Once the a [`OnceLock`] is populated, it remains populated by the same object for the
++/// lifetime `Self`.
++///
++/// # Invariants
++///
++/// `init` tracks the state of the container:
++///
++/// - If the container is empty, `init` is `0`.
++/// - If the container is mutably accessed, `init` is `1`.
++/// - If the container is populated and ready for shared access, `init` is `2`.
++///
++/// # Example
++///
++/// ```
++/// # use kernel::sync::once_lock::OnceLock;
++/// let value = OnceLock::new();
++/// assert_eq!(None, value.as_ref());
++///
++/// let status = value.populate(42u8);
++/// assert_eq!(true, status);
++/// assert_eq!(Some(&42u8), value.as_ref());
++/// assert_eq!(Some(42u8), value.copy());
++///
++/// let status = value.populate(101u8);
++/// assert_eq!(false, status);
++/// assert_eq!(Some(&42u8), value.as_ref());
++/// assert_eq!(Some(42u8), value.copy());
++/// ```
++pub struct OnceLock<T> {
++    init: Atomic<u32>,
++    value: Opaque<T>,
++}
++
++impl<T> Default for OnceLock<T> {
++    fn default() -> Self {
++        Self::new()
++    }
++}
++
++impl<T> OnceLock<T> {
++    /// Create a new [`OnceLock`].
++    ///
++    /// The returned instance will be empty.
++    pub const fn new() -> Self {
++        // INVARIANT: The container is empty and we set `init` to `0`.
++        Self {
++            value: Opaque::uninit(),
++            init: Atomic::new(0),
++        }
++    }
++
++    /// Get a reference to the contained object.
++    ///
++    /// Returns [`None`] if this [`OnceLock`] is empty.
++    pub fn as_ref(&self) -> Option<&T> {
++        if self.init.load(Acquire) == 2 {
++            // SAFETY: As determined by the load above, the object is ready for shared access.
++            Some(unsafe { &*self.value.get() })
++        } else {
++            None
++        }
++    }
++
++    /// Populate the [`OnceLock`].
++    ///
++    /// Returns `true` if the [`OnceLock`] was successfully populated.
++    pub fn populate(&self, value: T) -> bool {
++        // INVARIANT: We obtain exclusive access to the contained allocation and write 1 to
++        // `init`.
++        if let Ok(0) = self.init.cmpxchg(0, 1, Acquire) {
++            // SAFETY: We obtained exclusive access to the contained object.
++            unsafe { core::ptr::write(self.value.get(), value) };
++            // INVARIANT: We release our exclusive access and transition the object to shared
++            // access.
++            self.init.store(2, Release);
++            true
++        } else {
++            false
++        }
++    }
++}
++
++impl<T: Copy> OnceLock<T> {
++    /// Get a copy of the contained object.
++    ///
++    /// Returns [`None`] if the [`OnceLock`] is empty.
++    pub fn copy(&self) -> Option<T> {
++        if self.init.load(Acquire) == 2 {
++            // SAFETY: As determined by the load above, the object is ready for shared access.
++            Some(unsafe { *self.value.get() })
++        } else {
++            None
++        }
++    }
++}
 
 -- 
 2.47.2
