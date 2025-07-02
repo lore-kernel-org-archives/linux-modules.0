@@ -1,89 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB238F77;
-	Wed,  2 Jul 2025 02:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90DCF211F;
+	Wed,  2 Jul 2025 07:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751423443; cv=none; b=aOmhdwz+Y7If3OewIqAkLU4GeJTbI8rsLJI6UeHzWlYCHUXdfK6kgJ6Z/LRIWD9vZtqJUJH5jhBbvd1Iebu3GqcLz6sriyJF48fi4SmpTS4YWEpmh1nv164UfzOKP5HiAmuGkhXZWJlT7ObnRtCkcmCVCDTfL0nLmwCP487tFI4=
+	t=1751443022; cv=none; b=t3T72Ht9UB0PEUfniZlKb+cA8yM9SN4XbAGWEEFxl9Dvx8UWIfs6AN2GPqdKiQ6g2qVEeHqt7MXtPIiz8IAFe221ekZv1bc3QrRDxWjrp1WmPufSK2GnsPqwwAkiYLJ+G2sDFVkVVqApw2FGYjGgTexmp2kIUBAS5LO0n1NWg3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751423443; c=relaxed/simple;
-	bh=nOJFQfwOfss2NyHRh7Sf9V00Sdr8q6zas3oVjvzNpvg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lMpRQR9oQ/UQSoguOj7W8Et2YY5jgYQKZWaeeqvBYUqCnnww6XIyz9DKLPBt926l/XQc3acyMfZbFim7M+5HPDBELX82N+1sM6EoKoQIJey96/cTWqBh9fXa9ftk7kGaKf4jTKdUTLrPcgW0AcTVePUsbBoq3AEVGF6+Op/JJbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SjzbSl/T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751443022; c=relaxed/simple;
+	bh=iPRdlhGWfx9VLtmj4Qr358Ma925NEGSXkWBmva+PDXA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=plkB7jo3AHMw9b8GRYXVf0e6H++nt1Wt5nO9rgDI6HxMSJyDrl6KjdLUXbq3g+S5cH4K978mUalvmEL3kcmwmUw7DNPTovnyF6TJzvSRqhbz0IDmg0dbDrJXPE5GeiD5GBPJXVsZPol9lS1R3kiCkw7l7vurvdtp7TBw7N65/7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jDAJOT7H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SjzbSl/T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7213C4CEEB;
-	Wed,  2 Jul 2025 02:30:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jDAJOT7H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D4BDC4CEED;
+	Wed,  2 Jul 2025 07:56:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751423442;
-	bh=nOJFQfwOfss2NyHRh7Sf9V00Sdr8q6zas3oVjvzNpvg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=SjzbSl/TPrFOocvezBId2X3qbDulB9UGKGJ8Rq1YTyF6X8mpB2ndzkBI38ylvFn7X
-	 IXZuejIZ/mOinCifATVRwL/DwR7Yb4XGE6gZzpP8b3lVkmMf9Zhohq4LoAGnkUe17x
-	 1vWQfIFbytT6ed2HKWvMu8i37ArON0Qpgw2+Bc+XQA9lXt0OPzS+eg4+Q+fSB68wXD
-	 E8h7fsMQ2vEjoA3L9V7P9sBG0vR9jFMYhNOKOynYGCFfIVd4U9T2u1A27QdJ2qIVa2
-	 UrMgKaRhjNfYRTeU8vf+M8CQ2L8ALQ39wiv42BU9GFdpbOMdRP9E7ZVC00OPopZftU
-	 Q1Kp7nA9qijzA==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-32b78b5aa39so38323351fa.1;
-        Tue, 01 Jul 2025 19:30:42 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV7tq0bj/OvjjMr1UDqgO66grEarzoxPxs5uCWSpUpOm7X2ODoCF27hxPW7JMxsfn/aYM2kixquluIOT6I=@vger.kernel.org, AJvYcCWyR1OovcaW78xUcO4grg1lpyEfch8oowiA1JXM0/HY1rP3sz4vmSMJPQMjBtsDQCYpHqgzUF2Fw5VhQeajDw==@vger.kernel.org, AJvYcCXtL7Sh3y+LPsGVI6wwNnsyGKxGTPx44XSuynweaKzfvAErQI/2ImJr0LSwZAHezpAXA7RUO7JEm0iHbdXz@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTOTBFC5prqWonaa7uX8iRgsKJIpoc3LermA4VV6Fu1g6kp1mq
-	fLcACPKYyLpQGR1BTzs9bF/Bdii+Nftr9pP2k2dYVj6kl21eg7TLw1Q4hSAjFv1S+gOwAgHKrdq
-	4d8DB9m1Hnh6al3qZBWknrwGqV5kO+u0=
-X-Google-Smtp-Source: AGHT+IG8qma5BlB/p8uudhBhIOVBWqyt28tuit7Uo1ecmsNa3uMEIakYE9tjYUTQZClYvDp0LFbPMinm6Fs0RucwRAo=
-X-Received: by 2002:a05:651c:31c2:b0:32a:8ac3:93f7 with SMTP id
- 38308e7fff4ca-32dfff87430mr3318591fa.14.1751423441403; Tue, 01 Jul 2025
- 19:30:41 -0700 (PDT)
+	s=k20201202; t=1751443022;
+	bh=iPRdlhGWfx9VLtmj4Qr358Ma925NEGSXkWBmva+PDXA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=jDAJOT7HLum6yiMRluiGc4tMSFC54IRmLsQrSvdr2uOF6JHJgGCg3CpR9fHpPRDNy
+	 j5g2vjUhlis20IrYgZ9S2CfzylqaQ9ayGZ8GA72tEsMogJciaC0a+g9eHB8KXv5YK9
+	 y7XQV8ecp2z/J3SjobB3j/rGb3CVKpQF3wexh+SrXIns+8W70gUfT+NcYlhusCGB/b
+	 tiNebM/8pvcgVwXhS/sIxMbUYIBziCMDvbrVi8jbpUPkcxvakHCJB9QbzY25s2Kke9
+	 AsKGkUI7mW/57u+FwKv0XSEL2Kg1IWZme0S6itxsB8+0y+L+shI39jyHpMg+g6e2RF
+	 JGtMVN77NvWhw==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Benno Lossin" <lossin@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Alice
+ Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada" <masahiroy@kernel.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,  "Nicolas
+ Schier" <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v13 2/6] rust: introduce module_param module
+In-Reply-To: <DB0U12HAEVZ6.JKFPI2UQHDRY@kernel.org> (Benno Lossin's message of
+	"Tue, 01 Jul 2025 17:43:29 +0200")
+References: <20250612-module-params-v3-v13-0-bc219cd1a3f8@kernel.org>
+	<DATW0XWNN45X.1L2WMZ41JJ5O8@kernel.org> <87v7om4jhq.fsf@kernel.org>
+	<RPPvXQKnjK77Kp9mKaiFxbNj1fTHKb_I7_nbY81fZop-Wz8n5TTi4_lpXP9U9AwjocvZKqJPI8PGKufJn9cIzQ==@protonmail.internalid>
+	<DAU0J3T0IEVM.2K7ZRQOVOHF8H@kernel.org> <878qlh4aj1.fsf@kernel.org>
+	<87plepzke5.fsf@kernel.org>
+	<xFouVLxX1_t1mH69FDYwlIhBlI72M0IzQEKn0ntG_wT9z7V5DtbxiwVP_frH_yiS-Gf0q_AhqetbLmuvJ_yP5Q==@protonmail.internalid>
+	<DAX65TRN0TGP.25VZ9DYV86XWY@kernel.org> <87wm8txysl.fsf@kernel.org>
+	<9G3W1seaM7elcwWXaeoaa2nfpFYCf-AmBdvZhACGP13KGUtTPVMwGNYdTQsdtp8ru7GIP3-UYTzXscC1MRUKrg==@protonmail.internalid>
+	<DAZV8OGL8BMH.11SLXBXQ17ZJ9@kernel.org> <87h5zxxtdw.fsf@kernel.org>
+	<H78pT7YnQEhAXdxzl_hhnGVUiQuFpibB21_bjH658fMz_5JYbwsPLYYVh8u1gYnzK3N3ilTEAvqOpkuptVx3rg==@protonmail.internalid>
+	<DB03MZI2FCOW.2JBFL3TY38FK@kernel.org> <87bjq4xpv7.fsf@kernel.org>
+	<ffROWpeKczrWSBlKYov2atJG-QD5l5fUOb2dVCNkWlcT9h6DJpa4joGQpjqtYyLP7HX227fCAayyDQunZ464XQ==@protonmail.internalid>
+	<DB0LKI8BO3HZ.3FF03JN4364RM@kernel.org> <87zfdovvz4.fsf@kernel.org>
+	<UQ6WtusvCeJPizlUr0kA7_g7RGdSRfQ6L29hClAXDKsNlWbtAgmCu_glKbUSeyy3I_NKvN5BJW9HbeHleAhRmw==@protonmail.internalid>
+	<DB0U12HAEVZ6.JKFPI2UQHDRY@kernel.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Wed, 02 Jul 2025 09:56:50 +0200
+Message-ID: <87tt3vvxdp.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAK7LNASzE1CtRo9T4byPXJtB-HtuWsGe=OLba+8JU9fB28Chow@mail.gmail.com>
- <20250701152000.2477659-1-gprocida@google.com>
-In-Reply-To: <20250701152000.2477659-1-gprocida@google.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 2 Jul 2025 11:30:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR3YqsQc_kVfLba8Ti8HtrRWGr=KKB+MRdcKE5j8HOtHQ@mail.gmail.com>
-X-Gm-Features: Ac12FXymuWYHvG3lICt1yLtE4SzCSkfOmdBQFCOI03uSMYviSsyoQoon5NM3XSM
-Message-ID: <CAK7LNAR3YqsQc_kVfLba8Ti8HtrRWGr=KKB+MRdcKE5j8HOtHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] gendwarfksyms - improve symtypes output
-To: Giuliano Procida <gprocida@google.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Jul 2, 2025 at 12:20=E2=80=AFAM Giuliano Procida <gprocida@google.c=
-om> wrote:
->
-> When investigating MODVERSIONS CRC changes from one build to the next,
-> we need to diff corresponding symtypes files. However, gendwarfksyms
-> did not order these files.
->
-> The first change in this series makes gendwarfksyms code conform to
-> the preferred style for the size parameter passed to allocation
-> functions.
->
-> https://github.com/torvalds/linux/blob/v6.15/Documentation/process/coding=
--style.rst?plain=3D1#L941
->
-> The second change in this series ensures symtypes are output in key
-> order.
->
-> The series is marked as v2 to distinguish it from earlier versions
-> where the changes were posted individually.
->
+"Benno Lossin" <lossin@kernel.org> writes:
 
-Both applied to linux-kbuild.
-Thanks!
+> On Tue Jul 1, 2025 at 4:14 PM CEST, Andreas Hindborg wrote:
+>> "Benno Lossin" <lossin@kernel.org> writes:
+>>> On Tue Jul 1, 2025 at 10:43 AM CEST, Andreas Hindborg wrote:
+>>>> No, I am OK for now with configfs.
+>>>>
+>>>> But, progress is still great. How about if we add a copy accessor
+>>>> instead for now, I think you proposed that a few million emails ago:
+>>>>
+>>>>     pub fn get(&self) -> T;
+>>>>
+>>>> or maybe rename:
+>>>>
+>>>>     pub fn copy(&self) -> T;
+>>>>
+>>>> Then we are fine safety wise for now, right? It is even sensible for
+>>>> these `T: Copy` types.
+>>>
+>>> That is better than getting a reference, but still someone could read at
+>>> the same time that a write is happening (though we need some new
+>>> abstractions AFAIK?). But I fear that we forget about this issue,
+>>> because it'll be some time until we land parameters that are `!Copy` (if
+>>> at all...)
+>>
+>> No, that could not happen when we are not allowing custom parsing or
+>> sysfs access. Regarding forgetting, I already added a `NOTE` on `!Copy`,
+>> and I would add one on this issue as well.
+>
+> Ultimately this is something for Miguel to decide. I would support an
+> unsafe accessor (we should also make it `-> T`), since there it "can't
+> go wrong", any UB is the fault of the user of the API. It also serves as
+> a good reminder, since a `NOTE` comment shouldn't be something
+> guaranteeing safety (we do have some of these global invariants, but I
+> feel like this one is too tribal and doesn't usually come up, so I feel
+> like it's more dangerous).
+
+I see no reason for making it unsafe when it is safe?
+
+
+    /// Get a copy of the parameter value.
+    ///
+    /// # Note
+    ///
+    /// When this method is called in `const` context, the default
+    /// parameter value will be returned. During module initialization, the
+    /// kernel will populate the parameter with the value supplied at module
+    /// load time or kernel boot time.
+    // NOTE: When sysfs access to parameters are enabled, we have to pass in a
+    // held lock guard here.
+    //
+    // NOTE: When we begin supporting custom parameter parsing with user
+    // supplied code, this method must be synchronized.
+    pub const fn copy(&self) -> T {
+        // SAFETY: As we only support read only parameters with no sysfs
+        // exposure, the kernel will not touch the parameter data after module
+        // initialization. The kernel will update the parameters serially, so we
+        // will not race with other accesses.
+        unsafe { *self.data.get() }
+    }
+
+>
+> I think we should also move this patchset along, we could also opt for
+> no accessor at all :) Then it isn't really useful without the downstream
+> accessor function, but that can come after.
+
+I would rather not merge it without an access method. Then it is just
+dead code, and we will not notice if we break it.
+
+
+Best regards,
+Andreas Hindborg
 
 
 
---=20
-Best Regards
-Masahiro Yamada
