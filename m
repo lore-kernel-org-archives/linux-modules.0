@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DDD284689;
-	Wed,  2 Jul 2025 13:19:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4051D27A13A;
+	Wed,  2 Jul 2025 13:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462358; cv=none; b=GUseZo4T+HVrGtggFj+SYg2Ori+MjhGN/apEMqhdMj73+2RcAkquvKy5C2cFZYSTOPGa17DgKRFuax4m5I3OpxeXkZw4nj9KWAynlOcGODjqW86OIildCp6agsg9cv3svodhXROxk/eC3hGqg1hEXhSR6Vw0gGbFx6HWGiXXt9c=
+	t=1751462364; cv=none; b=sJswNbQSNx8yBZ9GgzN2eC2t59X/H1Hl2pFDtxlY4jQD6bV+E6Op8jHvutjPoUCENw80dBrdGcZTsFmCEEuLgfGTZO3pzXhD8hStXcCPuuDBTNow2r3tgLPfj09OF3rn+iAb5BRVciNehbPibYwfQtLT6AwJSr1mNdM7IAku8xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462358; c=relaxed/simple;
-	bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
+	s=arc-20240116; t=1751462364; c=relaxed/simple;
+	bh=GINSHYwROTV6WI3RSAoMCRmq0RKzfKvRWX79JeAlh8Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IrvARwfVlzuIj6WDBA2tWscW42XQD1NnZ0eRJZScXWaQpCfXfM2hzE0NRAVTiH5F9CmWXttcZgjK7fxQe/IWkahe5/sriDAN/6skYPmq+w+KYM9gnJELBlF+1RUX3eOUoqUQsGkSFZKvat+LxCnACCoqUI0mqTr7SHVusnJPqJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBmmWh8/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=m6WdQXb++fluejyTDoL07WeWReisxQrSDxiRW/D+TGOiN743qnl5KM4Ra2QktQrEyssWX/TuFLG1jPfHvaat1pq2apkXyeYErbfLbhouYRLlOjkhWbOeUWqL0fVQWebjJmB4JZsdyXVDFSAbH0x7tr3d5fzf53hHtTj3ZExcRc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHKJeoJn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBmmWh8/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6FFC4CEED;
-	Wed,  2 Jul 2025 13:19:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHKJeoJn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDD0EC4CEEF;
+	Wed,  2 Jul 2025 13:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751462358;
-	bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
+	s=k20201202; t=1751462363;
+	bh=GINSHYwROTV6WI3RSAoMCRmq0RKzfKvRWX79JeAlh8Y=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DBmmWh8/GJlFKbvHf+i6gGkybyQTg3g7OJ3ys8wpGBve2Y/hNXZswhx9DQu6bGtXV
-	 LYoC/1o3lwwANpTYC1EfIcAv8NRdSGAJN6tOcs+UyUuTfRnXUoNRfFX/iSvxh4Fc6b
-	 3RpD0RiCMbwT2rUwPrAaUgkkPLTgJxORHhdD2qdsWi6+KpRKOfNQLsp1tW6MA13aiS
-	 XkO7wYdg7ALI2V/EXNih1P3So30XIMYe3Vyb5YBn7UB9+nPDNctgbDGOYV8SByfkSR
-	 CkyXnR9BZifVmKlteaOS0zsan8nBk5y5h36slo4BrIiU8N8yhc6jMQtLYZlSGgoS3I
-	 ZvL/zxwMqGJAw==
+	b=bHKJeoJnTEzbknH914OXRflq+RbJpZ+iW7v7bTgSHZf9jqekqYFRQ8SpsUnTyZvxq
+	 ev/PyaqvGGT8tWMuX5k7BH28fMN9t/lRZKW3CkP+7A1pGKukkpodGldhGHi9FAibrx
+	 bpcWeYd4Nv5yEpjHrkCN6Ox5qwG139W3DF3qV355r43SBNHM2NF7eYoei1uW5gS0Gg
+	 no2HJXh86mcvN2Yty6UyYW6ZqsonzAPV3Luk2hOEu5d5p/eXAGMcZzCcZzdPIdwgdz
+	 j4kKFBvWm36bTzMLLvV1cdTXtakBZ3kmJAo7nrYaiwliLcrsDh5J1YN7gYY23VvfYs
+	 kth86SZ80CO0w==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 02 Jul 2025 15:18:33 +0200
-Subject: [PATCH v14 1/7] rust: sync: add `OnceLock`
+Date: Wed, 02 Jul 2025 15:18:35 +0200
+Subject: [PATCH v14 3/7] rust: introduce module_param module
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +37,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-module-params-v3-v14-1-5b1cc32311af@kernel.org>
+Message-Id: <20250702-module-params-v3-v14-3-5b1cc32311af@kernel.org>
 References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 In-Reply-To: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -56,155 +56,240 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4168; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=9S3TEgnqLYbIT6Io+nOlVEeblcZ/nrr2prk36tq+oH8=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTGzBIyPCDW6CbV9USY9a6bw3bRnhSdW4qSxa
- icxywq0esCJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxswAKCRDhuBo+eShj
- d6XhEADFrV+1h2hwOY+GnAAVhukDmoaKdiIjl3+EsCzGbUGDd+KNxnvTas7TVnClCcwjBh9pB1f
- OSfGloxPrcyx2i8KoRaOuzX4CdV6kLtHW4sOM3UAt8PAc4ijjD/kbjuaSKrh5xfiC9KG6HiQa7F
- VeVNeOq/8vI6yYEyvoL4CjEe2TEDr9jQekFTJVe86s8VXrNax1vJ7VlRUu8hDxXzH602c3bHuEJ
- ModCbWl4TdYwtF6t2uKcnL1CkSAeCLCVVXUr853xP5yF4irPYcnwgZTohqpSk/CIEVIByynzSKO
- MMTln11PjDqQaLd9HTLEZwC0UIX6qI2dsjksLmK6NyAwN4z66z3pKyh6NcisN8VaMe06XlgDPMB
- zNcC8mWocCwdO+RhLfKSt2HFpn08egmytCFsISkc8Lq6EMGRacgrFVP8zqFGkPkm86Do97snDyb
- PUPQv+nEbC+deVu/Ih6gdnOgshXevaVFFNLbhwo7ILvdrAb5w0FQqk+GZMr0ixIKl7uDNsKIAk7
- fKt1blLyOHrgtVgxFqcXPvOK+OmPeu49fCoSu9ic1DcaUVWm8rv0JQ1t7ApvBI4DtGr9SGJ38iO
- UHUb3AkstIk4hyNuz9fbo/B5pN4RGDH1Vn59gnZHwk1ubxys63BFZKS8F3DFh+o/NT37naOYGns
- pvjwnmK5Aws25EA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7330; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=GINSHYwROTV6WI3RSAoMCRmq0RKzfKvRWX79JeAlh8Y=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTG0VAFw3SWRtVJIdAn1HRC955GhaE4foFVRg
+ DGl8dp6xYWJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxtAAKCRDhuBo+eShj
+ d2OfEAC2Ns/toQDjzh0HLTj3WAAEGJcR+4EOHmUNJuw6Wr8ri1cHPmsBccPgKw9vq73OPpdlfbd
+ F9gwfrBVy7XcwB2ernkxz0wBgkab2WkaZNeWwki/XqCNsPYVQJ84C+i/XfHG2fCt0Mg17FihPnV
+ IL8yQSA9FLf61mdERtJ6HwC560GNckvGb0v5QysxfAc+aH7omhUkFFgbIFsM/XNuFGOdyg0bPVQ
+ u86pMsFJMxuTjrrms1MADrnnQV7xKttbtshRR6hNumA4P8SMEEytg6n++EFG/WKLkQ/kvetO7oT
+ K1jBrtLgoqpt4mqIEjBfALiPix6ZaFivCjzf8VQsLdDuBLXgFc4ijV/TTGUOvg7VOvFtqxu6mfB
+ 3Tc7j/reD8phAA04uF9iPESSnnFc4QcXNY8BwA+ziUCL9ul5ERuXJtoQNe0ZFsKtT5AN0N+PTHV
+ 3u6glZ25s1adrSCIHHt8fBFEZuLJEPi//kdhm4ScHzDE2M43mOTEqS1Df84IeThxYdZAXJI6g44
+ 3Rgfb1GcG5MtgRKOrzCU14elE323EEMtaj3Y1H87LlmY5h+gKPFJ87sh7CHi9D62e3hQsY1fmFD
+ kZqo/gMSTKBOqAjH5rLLTZTrfCxCJTuH1zIPskQwxfYL5yhyLlfKyx10x4CVdLYkkIVG0nb3lYv
+ K/hg2B8W7tRsuTg==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Introduce the `OnceLock` type, a container that can only be written once.
-The container uses an internal atomic to synchronize writes to the internal
-value.
+Add types and traits for interfacing the C moduleparam API.
 
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/sync.rs           |   1 +
- rust/kernel/sync/once_lock.rs | 104 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 105 insertions(+)
+ rust/kernel/lib.rs          |   1 +
+ rust/kernel/module_param.rs | 191 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 192 insertions(+)
 
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index c7c0e552bafe..f2ee07315091 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -15,6 +15,7 @@
- mod condvar;
- pub mod lock;
- mod locked_by;
-+pub mod once_lock;
- pub mod poll;
- pub mod rcu;
- 
-diff --git a/rust/kernel/sync/once_lock.rs b/rust/kernel/sync/once_lock.rs
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index 6b4774b2b1c3..2b439ea06185 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -87,6 +87,7 @@
+ pub mod list;
+ pub mod miscdevice;
+ pub mod mm;
++pub mod module_param;
+ #[cfg(CONFIG_NET)]
+ pub mod net;
+ pub mod of;
+diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
 new file mode 100644
-index 000000000000..cd311bea3919
+index 000000000000..ca4be7e45ff7
 --- /dev/null
-+++ b/rust/kernel/sync/once_lock.rs
-@@ -0,0 +1,104 @@
-+//! A container that can be initialized at most once.
++++ b/rust/kernel/module_param.rs
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+use super::atomic::ordering::Acquire;
-+use super::atomic::ordering::Release;
-+use super::atomic::Atomic;
-+use kernel::types::Opaque;
++//! Support for module parameters.
++//!
++//! C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
 +
-+/// A container that can be populated at most once. Thread safe.
-+///
-+/// Once the a [`OnceLock`] is populated, it remains populated by the same object for the
-+/// lifetime `Self`.
-+///
-+/// # Invariants
-+///
-+/// `init` tracks the state of the container:
-+///
-+/// - If the container is empty, `init` is `0`.
-+/// - If the container is mutably accessed, `init` is `1`.
-+/// - If the container is populated and ready for shared access, `init` is `2`.
-+///
-+/// # Example
-+///
-+/// ```
-+/// # use kernel::sync::once_lock::OnceLock;
-+/// let value = OnceLock::new();
-+/// assert_eq!(None, value.as_ref());
-+///
-+/// let status = value.populate(42u8);
-+/// assert_eq!(true, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+///
-+/// let status = value.populate(101u8);
-+/// assert_eq!(false, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+/// ```
-+pub struct OnceLock<T> {
-+    init: Atomic<u32>,
-+    value: Opaque<T>,
-+}
++use crate::prelude::*;
++use crate::str::BStr;
++use bindings;
++use kernel::sync::once_lock::OnceLock;
 +
-+impl<T> Default for OnceLock<T> {
-+    fn default() -> Self {
-+        Self::new()
++/// Newtype to make `bindings::kernel_param` [`Sync`].
++#[repr(transparent)]
++#[doc(hidden)]
++pub struct RacyKernelParam(bindings::kernel_param);
++
++impl RacyKernelParam {
++    #[doc(hidden)]
++    pub const fn new(val: bindings::kernel_param) -> Self {
++        Self(val)
 +    }
 +}
 +
-+impl<T> OnceLock<T> {
-+    /// Create a new [`OnceLock`].
++// SAFETY: C kernel handles serializing access to this type. We never access it
++// from Rust module.
++unsafe impl Sync for RacyKernelParam {}
++
++/// Types that can be used for module parameters.
++// NOTE: This trait is `Copy` because drop could produce unsoundness during teardown.
++pub trait ModuleParam: Sized + Copy {
++    /// The [`ModuleParam`] will be used by the kernel module through this type.
 +    ///
-+    /// The returned instance will be empty.
-+    pub const fn new() -> Self {
-+        // INVARIANT: The container is empty and we set `init` to `0`.
++    /// This may differ from `Self` if, for example, `Self` needs to track
++    /// ownership without exposing it or allocate extra space for other possible
++    /// parameter values.
++    // This is required to support string parameters in the future.
++    type Value: ?Sized;
++
++    /// Parse a parameter argument into the parameter value.
++    fn try_from_param_arg(arg: &BStr) -> Result<Self>;
++}
++
++/// Set the module parameter from a string.
++///
++/// Used to set the parameter value at kernel initialization, when loading
++/// the module or when set through `sysfs`.
++///
++/// See `struct kernel_param_ops.set`.
++///
++/// # Safety
++///
++/// - If `val` is non-null then it must point to a valid null-terminated string that must be valid
++///   for reads for the duration of the call.
++/// - `param` must be a pointer to a `bindings::kernel_param` initialized by the rust module macro.
++///   The pointee must be valid for reads for the duration of the call.
++///
++/// # Note
++///
++/// - The safety requirements are satisfied by C API contract when this function is invoked by the
++///   module subsystem C code.
++/// - Currently, we only support read-only parameters that are not readable from `sysfs`. Thus, this
++///   function is only called at kernel initialization time, or at module load time, and we have
++///   exclusive access to the parameter for the duration of the function.
++///
++/// [`module!`]: macros::module
++unsafe extern "C" fn set_param<T>(val: *const c_char, param: *const bindings::kernel_param) -> c_int
++where
++    T: ModuleParam,
++{
++    // NOTE: If we start supporting arguments without values, val _is_ allowed
++    // to be null here.
++    if val.is_null() {
++        // TODO: Use pr_warn_once available.
++        crate::pr_warn!("Null pointer passed to `module_param::set_param`");
++        return EINVAL.to_errno();
++    }
++
++    // SAFETY: By function safety requirement, val is non-null, null-terminated
++    // and valid for reads for the duration of this function.
++    let arg = unsafe { CStr::from_char_ptr(val) };
++
++    crate::error::from_result(|| {
++        let new_value = T::try_from_param_arg(arg)?;
++
++        // SAFETY: By function safety requirements, this access is safe.
++        let container = unsafe { &*((*param).__bindgen_anon_1.arg as *mut OnceLock<T>) };
++
++        container
++            .populate(new_value)
++            .then_some(0)
++            .ok_or(kernel::error::code::EEXIST)
++    })
++}
++
++macro_rules! impl_int_module_param {
++    ($ty:ident) => {
++        impl ModuleParam for $ty {
++            type Value = $ty;
++
++            fn try_from_param_arg(arg: &BStr) -> Result<Self> {
++                <$ty as crate::str::parse_int::ParseInt>::from_str(arg)
++            }
++        }
++    };
++}
++
++impl_int_module_param!(i8);
++impl_int_module_param!(u8);
++impl_int_module_param!(i16);
++impl_int_module_param!(u16);
++impl_int_module_param!(i32);
++impl_int_module_param!(u32);
++impl_int_module_param!(i64);
++impl_int_module_param!(u64);
++impl_int_module_param!(isize);
++impl_int_module_param!(usize);
++
++/// A wrapper for kernel parameters.
++///
++/// This type is instantiated by the [`module!`] macro when module parameters are
++/// defined. You should never need to instantiate this type directly.
++///
++/// Note: This type is `pub` because it is used by module crates to access
++/// parameter values.
++pub struct ModuleParamAccess<T> {
++    value: OnceLock<T>,
++    default: T,
++}
++
++// SAFETY: We only create shared references to the contents of this container,
++// so if `T` is `Sync`, so is `ModuleParamAccess`.
++unsafe impl<T: Sync> Sync for ModuleParamAccess<T> {}
++
++impl<T> ModuleParamAccess<T> {
++    #[doc(hidden)]
++    pub const fn new(default: T) -> Self {
 +        Self {
-+            value: Opaque::uninit(),
-+            init: Atomic::new(0),
++            value: OnceLock::new(),
++            default,
 +        }
 +    }
 +
-+    /// Get a reference to the contained object.
-+    ///
-+    /// Returns [`None`] if this [`OnceLock`] is empty.
-+    pub fn as_ref(&self) -> Option<&T> {
-+        if self.init.load(Acquire) == 2 {
-+            // SAFETY: As determined by the load above, the object is ready for shared access.
-+            Some(unsafe { &*self.value.get() })
-+        } else {
-+            None
-+        }
++    /// Get a shared reference to the parameter value.
++    // Note: When sysfs access to parameters are enabled, we have to pass in a
++    // held lock guard here.
++    pub fn get(&self) -> &T {
++        self.value.as_ref().unwrap_or(&self.default)
 +    }
 +
-+    /// Populate the [`OnceLock`].
++    /// Get a mutable pointer to `self`.
 +    ///
-+    /// Returns `true` if the [`OnceLock`] was successfully populated.
-+    pub fn populate(&self, value: T) -> bool {
-+        // INVARIANT: We obtain exclusive access to the contained allocation and write 1 to
-+        // `init`.
-+        if let Ok(0) = self.init.cmpxchg(0, 1, Acquire) {
-+            // SAFETY: We obtained exclusive access to the contained object.
-+            unsafe { core::ptr::write(self.value.get(), value) };
-+            // INVARIANT: We release our exclusive access and transition the object to shared
-+            // access.
-+            self.init.store(2, Release);
-+            true
-+        } else {
-+            false
-+        }
++    /// NOTE: In most cases it is not safe deref the returned pointer.
++    pub const fn as_void_ptr(&self) -> *mut c_void {
++        (self as *const Self).cast_mut().cast()
 +    }
 +}
 +
-+impl<T: Copy> OnceLock<T> {
-+    /// Get a copy of the contained object.
-+    ///
-+    /// Returns [`None`] if the [`OnceLock`] is empty.
-+    pub fn copy(&self) -> Option<T> {
-+        if self.init.load(Acquire) == 2 {
-+            // SAFETY: As determined by the load above, the object is ready for shared access.
-+            Some(unsafe { *self.value.get() })
-+        } else {
-+            None
-+        }
-+    }
++#[doc(hidden)]
++/// Generate a static [`kernel_param_ops`](srctree/include/linux/moduleparam.h) struct.
++///
++/// # Examples
++///
++/// ```ignore
++/// make_param_ops!(
++///     /// Documentation for new param ops.
++///     PARAM_OPS_MYTYPE, // Name for the static.
++///     MyType // A type which implements [`ModuleParam`].
++/// );
++/// ```
++macro_rules! make_param_ops {
++    ($ops:ident, $ty:ty) => {
++        #[doc(hidden)]
++        pub static $ops: $crate::bindings::kernel_param_ops = $crate::bindings::kernel_param_ops {
++            flags: 0,
++            set: Some(set_param::<$ty>),
++            get: None,
++            free: None,
++        };
++    };
 +}
++
++make_param_ops!(PARAM_OPS_I8, i8);
++make_param_ops!(PARAM_OPS_U8, u8);
++make_param_ops!(PARAM_OPS_I16, i16);
++make_param_ops!(PARAM_OPS_U16, u16);
++make_param_ops!(PARAM_OPS_I32, i32);
++make_param_ops!(PARAM_OPS_U32, u32);
++make_param_ops!(PARAM_OPS_I64, i64);
++make_param_ops!(PARAM_OPS_U64, u64);
++make_param_ops!(PARAM_OPS_ISIZE, isize);
++make_param_ops!(PARAM_OPS_USIZE, usize);
 
 -- 
 2.47.2
