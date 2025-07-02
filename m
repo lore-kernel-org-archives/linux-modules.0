@@ -1,451 +1,256 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28312798E1;
-	Wed,  2 Jul 2025 13:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19E127A13A
+	for <linux-modules@vger.kernel.org>; Wed,  2 Jul 2025 13:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462392; cv=none; b=fkJKdyTKhtCPQPKLyD6xrtEOLKoX8aGjzE/4IQSM748mjjyn+CVGKcYWjr5vediqD3cmnBifHpleTQF2yOBtOzPLHxzIhw78q4MX37ve7Ykp17sMLDgqRZ6E/JzEx7fe+dksQGrFNiy9aUker8GVE9ab52zDo5bGamsbZTyamtI=
+	t=1751463142; cv=none; b=bgQPZzHR3lqo2yMru9fdvvHI7tPRuZiBtyOR8X9BLnU2OOdzklMfQqFZYJX/dlYVbYIQSK7oSrf8F//WUOeRCENYK6YBwKxBf2fh7VAlumKm6Akb975pJz6FK0IDmAMDTZCPxw6kjrHZ1Qc5a/MnqvbpeSfKcK1yzjHu/W9Q4Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462392; c=relaxed/simple;
-	bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SXQBRbzWEHifpFrBdKZ6i4Ra190W7nSlr/7H4+ZK3i2P5bqe3HTBYswVThhTBITygdMBOh4gCC1GwY+xpImVo0uuW613rghPVDL9JGLmdImmthTp5NBxjs6ZDSHvhVHMTBr5x+f909SuOIAjVDVuUeWxPZbtDot8f0MaZQ5E2gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZgzWGGi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751463142; c=relaxed/simple;
+	bh=z7Gd2ZV19XvvqLtgd16QId8F4kQS/oThQ6mvOseMOeA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QY4jIisfxrV9G2PkP1rv9HJK1CIYpQ6VSCXC1piVRuaUhLOX1FQdMsQM4hwI6azMjU0L0jNjpis9A3+eIE7y9unxVAtKjHSYos37I8W+WUBX0NmxDW5NKyuWt5jlmN4ShJ/ZhLOUtw+MU/7wDKi8RaNUs6s5E9CqdvSg9joKt6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tsgDG4ar; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZgzWGGi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5A1C4CEED;
-	Wed,  2 Jul 2025 13:19:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751462392;
-	bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IZgzWGGi2dxQSMqZJhmpmwZsmnpLY/k1RRKrY7Yw+mn9F2OFC73B9T7s8x3Y4Lrj0
-	 FfA5ImoQMFkUaP9LyqjX8YS3N/zvjipCZRjroL65Riju+EmAbKIKii/lpRqhaiNTzO
-	 YQVAxNXvJ3dxT2JbQIkVbT0lZNceSUHd8wvi5GEVLbZj5ZCtO+UPpjfLPyfQVrEets
-	 Y67AA9+RBTEneU4j57aIJAZau3I0cCiTyLFIqlMrjGTHLu/1MXhrqtWfypz2BNGaZ4
-	 lQBLuoo53RYdidm9j9VdYjZ5mUDaF3pwj1kRv2FDZGzzc75QRgdPFTpOVWkFKjVJWO
-	 RQyzRAww9ubRA==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 02 Jul 2025 15:18:37 +0200
-Subject: [PATCH v14 5/7] rust: module: update the module macro with module
- parameter support
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tsgDG4ar"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b31d489a76dso4090453a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 02 Jul 2025 06:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1751463140; x=1752067940; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rLb/hiHcDswU0D4uNpcn2drPp3SCOUyv9DR9ui8PXlc=;
+        b=tsgDG4arB5k0MWH3m6IqSA4JrJ1cE46VRb7JreDK4X/naTp6liVD07yMDgbAi9z+qo
+         +9JBqnVawGjIc0Vcx6D0HNxn+uaJmRt4tpyk/gENgCZAkTuyolgL9na3PCiZHqndE+98
+         NfJie5wja6L3wRPI0vrOgFCQAswDXyey8Ps1V616s70s9XOkFCMj5uI1wxnXCrO4NL7T
+         HBI5Z1tZA+cYUBJKb4dNp8v/OxUx8UfPtcXvUUc7SA1q0p1Ywg9+PX2GEADWNpe//x3r
+         DFqsKzCbsLWmCJjG54jhf6f6SD7BlIAvM5BzkND8XepL6/zFGWTn567/tA8TvsIyZiRM
+         +/CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751463140; x=1752067940;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rLb/hiHcDswU0D4uNpcn2drPp3SCOUyv9DR9ui8PXlc=;
+        b=r7Yvbd29qloBB2pFL3XkdeD4gRARHccmj2wZtsS6OmV6Mu7/PK5NbXiFdLZkZ7ntyQ
+         Ez+58MZGpLVUEm1Hddz7vihe2BcdhsjivNAiGEl0Okm2tMSuVpi1K0TFp0alXij8rhZh
+         WgJusGVS4xyBLWu6E5PytZtg/aHGwwVUjEqwiou7gBSjDKAQJAsVeaqJ8nSgAjTGDD7P
+         kn3KwcDLBWV5Kivos2NTL324lzAwITHHCgUKQy+g3nlGv8xUVPbUEmRuwk4LWhdOMptL
+         ZzN+IlHd3uhrN5MriJUoM+jSqCwUgKJj1umME49F1CY1ey91RlRK6RTg7T+CI9+nksP4
+         1IbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHZdwUO4z/gim9o7xc0wMxcJV97WwWZxrGch1zKZeMShFGUHTTXALw24TfJ9Gc3MExDDNTaQznfaCUFYqq@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhNWzZjAp9zczU15tX/iBb+LhC/JLPrHNXYwy2t8VHI6WIRKde
+	s8+xRxNL+buCfZL/+9A8Xx492gd4Ppe3XAvg6rPnOYCjjkdy63+k1Te4K8pOYB0Dk2zGH3LHmw0
+	YjRzJ4Tj48oziB8Z3h+2/YU2jqiJ1XUHGdY4l5gIp
+X-Gm-Gg: ASbGnct3TKwzY9q1tDa0pVUT6n8ZWOp2VfFo0L81r0xiDOQNrE35PjVLdO1NLQjSFlN
+	RwQg9DfURQM8EdwRrDGa/95RR37l/UQbE7o5HqX49UaVZVaF6Yx02DWxld3/4AhgcuGY/N5hq7k
+	FQDAaODFmrCAA3TBUlrptXBm3ZTUG7bYFxHN7+i3vwILGNfF1sXCfI7EeqVNE/QkMoVtumWV6z1
+	GL/w84JwA==
+X-Google-Smtp-Source: AGHT+IGl/TSKdQK7b9WQhHkHUkAL99tfbfmIwoIuqDS1wkyiy3yWj1kqtAXrBjAXrNOeDXSrDfXhNvdyiTqbiD64MZ4=
+X-Received: by 2002:a17:90b:5788:b0:312:e91c:e340 with SMTP id
+ 98e67ed59e1d1-31a90c2f8f3mr4423923a91.35.1751463139949; Wed, 02 Jul 2025
+ 06:32:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-module-params-v3-v14-5-5b1cc32311af@kernel.org>
-References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
-In-Reply-To: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
- Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Trevor Gross <tmgross@umich.edu>, 
- Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
- Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13415;
- i=a.hindborg@kernel.org; h=from:subject:message-id;
- bh=S/JJdI/wj8kpTOdAlnf1mLcjQ66qFgptedQaa2V5SzM=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoZTG2SGk38fuu6/kZ1wrzPLTn9Hzk+W+EqeBcX
- IUcOyXuX8WJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGUxtgAKCRDhuBo+eShj
- d+ObD/9DBhxQ+JDEcSTSfS2koQXQgStBAvO4Nib2Qt4CtkBatLKs4NnDXlx2ng6FRLEcvuIyZLq
- aDKBrGN5rs/UmytDYqXazVcaTOJl5YYrAV4HdEarTHuSFAkpHlZPXhfmvh0e4niNItj6Xc4DZcu
- i/NdtzU+nKyzI7xXHB5k1lKJhhYKrN5hbghNBVgAX1JyZke/nPWESL4wzwCL1dgqNgPAmipIIZu
- yCaXDls7fA/xGXpolwDnsmBXTSNRh7SJcOXFnBKcqrjwmzQcyy3n5PUfuorxPMFXA9Ex3/zWZpB
- n5P83BLXcPXa1+zKwtVLbV1fr2E50H63hvATSSoJa0vY+6w1i23+var5cTdFqR+qcfovbzbOW2r
- rLx0SqYniOI/zCmXWg5qPpxJ+B8Qq0mf2BL6rITmLkxi5R3tS6d0zs7IRjDaKGFeavOojrBeATt
- /tqpjyPOwJ8r75JrFxl9tkVgNr7g3Vopp4YXpRQA8SXdSHtnO/Fn2Tkz7HbQgh7OJaclfiG4+34
- w8wAeYvXesofyW9VFD5DFvw9L7uoxFNmb0ucDlVJp9duXcGACyPLtvsdTmhEW/XVb9fIopm47vA
- T09HoWQ/60bVvqdcKrxWV3K7ohQb07uEsgZMHRgO1/Whzjf2q49v/00/FFEVRo9YLMZWbxVnSNs
- ffV82UudqCgyxjw==
-X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
- fpr=3108C10F46872E248D1FB221376EB100563EF7A7
+References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org> <20250702-module-params-v3-v14-1-5b1cc32311af@kernel.org>
+In-Reply-To: <20250702-module-params-v3-v14-1-5b1cc32311af@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 2 Jul 2025 15:32:05 +0200
+X-Gm-Features: Ac12FXyWI8bK1guggG5Rvhs0301hdIxUpCmaYFQClmsVD87QxHCiS9wDlqMCJQk
+Message-ID: <CAH5fLghw5TDrzmFZB=tORR5Lxx4WoG4wer6y5NuFdod2_tb6zg@mail.gmail.com>
+Subject: Re: [PATCH v14 1/7] rust: sync: add `OnceLock`
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Trevor Gross <tmgross@umich.edu>, 
+	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Allow module parameters to be declared in the rust `module!` macro.
+On Wed, Jul 2, 2025 at 3:19=E2=80=AFPM Andreas Hindborg <a.hindborg@kernel.=
+org> wrote:
+>
+> Introduce the `OnceLock` type, a container that can only be written once.
+> The container uses an internal atomic to synchronize writes to the intern=
+al
+> value.
+>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
----
- rust/macros/helpers.rs |  25 +++++++
- rust/macros/lib.rs     |  31 +++++++++
- rust/macros/module.rs  | 177 ++++++++++++++++++++++++++++++++++++++++++++++---
- 3 files changed, 223 insertions(+), 10 deletions(-)
+This type provides no way to wait for initialization to finish if it's
+ongoing. Do you not need that?
 
-diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
-index e2602be402c1..365d7eb499c0 100644
---- a/rust/macros/helpers.rs
-+++ b/rust/macros/helpers.rs
-@@ -10,6 +10,17 @@ pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
-     }
- }
- 
-+pub(crate) fn try_sign(it: &mut token_stream::IntoIter) -> Option<char> {
-+    let peek = it.clone().next();
-+    match peek {
-+        Some(TokenTree::Punct(punct)) if punct.as_char() == '-' => {
-+            let _ = it.next();
-+            Some(punct.as_char())
-+        }
-+        _ => None,
-+    }
-+}
-+
- pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<String> {
-     if let Some(TokenTree::Literal(literal)) = it.next() {
-         Some(literal.to_string())
-@@ -103,3 +114,17 @@ pub(crate) fn file() -> String {
-         proc_macro::Span::call_site().file()
-     }
- }
-+
-+/// Parse a token stream of the form `expected_name: "value",` and return the
-+/// string in the position of "value".
-+///
-+/// # Panics
-+///
-+/// - On parse error.
-+pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
-+    assert_eq!(expect_ident(it), expected_name);
-+    assert_eq!(expect_punct(it), ':');
-+    let string = expect_string(it);
-+    assert_eq!(expect_punct(it), ',');
-+    string
-+}
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index fa847cf3a9b5..2fb520dc930a 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -28,6 +28,30 @@
- /// The `type` argument should be a type which implements the [`Module`]
- /// trait. Also accepts various forms of kernel metadata.
- ///
-+/// The `params` field describe module parameters. Each entry has the form
-+///
-+/// ```ignore
-+/// parameter_name: type {
-+///     default: default_value,
-+///     description: "Description",
-+/// }
-+/// ```
-+///
-+/// `type` may be one of
-+///
-+/// - [`i8`]
-+/// - [`u8`]
-+/// - [`i8`]
-+/// - [`u8`]
-+/// - [`i16`]
-+/// - [`u16`]
-+/// - [`i32`]
-+/// - [`u32`]
-+/// - [`i64`]
-+/// - [`u64`]
-+/// - [`isize`]
-+/// - [`usize`]
-+///
- /// C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
- ///
- /// [`Module`]: ../kernel/trait.Module.html
-@@ -44,6 +68,12 @@
- ///     description: "My very own kernel module!",
- ///     license: "GPL",
- ///     alias: ["alternate_module_name"],
-+///     params: {
-+///         my_parameter: i64 {
-+///             default: 1,
-+///             description: "This parameter has a default of 1",
-+///         },
-+///     },
- /// }
- ///
- /// struct MyModule(i32);
-@@ -52,6 +82,7 @@
- ///     fn init(_module: &'static ThisModule) -> Result<Self> {
- ///         let foo: i32 = 42;
- ///         pr_info!("I contain:  {}\n", foo);
-+///         pr_info!("i32 param is:  {}\n", module_parameters::my_parameter.read());
- ///         Ok(Self(foo))
- ///     }
- /// }
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 1a867a1e787e..2b8123fe9fb0 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -26,6 +26,7 @@ struct ModInfoBuilder<'a> {
-     module: &'a str,
-     counter: usize,
-     buffer: String,
-+    param_buffer: String,
- }
- 
- impl<'a> ModInfoBuilder<'a> {
-@@ -34,10 +35,11 @@ fn new(module: &'a str) -> Self {
-             module,
-             counter: 0,
-             buffer: String::new(),
-+            param_buffer: String::new(),
-         }
-     }
- 
--    fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
-+    fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
-         let string = if builtin {
-             // Built-in modules prefix their modinfo strings by `module.`.
-             format!(
-@@ -51,8 +53,14 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
-             format!("{field}={content}\0")
-         };
- 
-+        let buffer = if param {
-+            &mut self.param_buffer
-+        } else {
-+            &mut self.buffer
-+        };
-+
-         write!(
--            &mut self.buffer,
-+            buffer,
-             "
-                 {cfg}
-                 #[doc(hidden)]
-@@ -75,20 +83,118 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
-         self.counter += 1;
-     }
- 
--    fn emit_only_builtin(&mut self, field: &str, content: &str) {
--        self.emit_base(field, content, true)
-+    fn emit_only_builtin(&mut self, field: &str, content: &str, param: bool) {
-+        self.emit_base(field, content, true, param)
-     }
- 
--    fn emit_only_loadable(&mut self, field: &str, content: &str) {
--        self.emit_base(field, content, false)
-+    fn emit_only_loadable(&mut self, field: &str, content: &str, param: bool) {
-+        self.emit_base(field, content, false, param)
-     }
- 
-     fn emit(&mut self, field: &str, content: &str) {
--        self.emit_only_builtin(field, content);
--        self.emit_only_loadable(field, content);
-+        self.emit_internal(field, content, false);
-+    }
-+
-+    fn emit_internal(&mut self, field: &str, content: &str, param: bool) {
-+        self.emit_only_builtin(field, content, param);
-+        self.emit_only_loadable(field, content, param);
-+    }
-+
-+    fn emit_param(&mut self, field: &str, param: &str, content: &str) {
-+        let content = format!("{param}:{content}", param = param, content = content);
-+        self.emit_internal(field, &content, true);
-+    }
-+
-+    fn emit_params(&mut self, info: &ModuleInfo) {
-+        let Some(params) = &info.params else {
-+            return;
-+        };
-+
-+        for param in params {
-+            let ops = param_ops_path(&param.ptype);
-+
-+            // Note: The spelling of these fields is dictated by the user space
-+            // tool `modinfo`.
-+            self.emit_param("parmtype", &param.name, &param.ptype);
-+            self.emit_param("parm", &param.name, &param.description);
-+
-+            write!(
-+                self.param_buffer,
-+                "
-+                    pub(crate) static {param_name}:
-+                        ::kernel::module_param::ModuleParamAccess<{param_type}> =
-+                            ::kernel::module_param::ModuleParamAccess::new({param_default});
-+
-+                    #[link_section = \"__param\"]
-+                    #[used]
-+                    static __{module_name}_{param_name}_struct:
-+                        ::kernel::module_param::RacyKernelParam =
-+                        ::kernel::module_param::RacyKernelParam::new(
-+                          ::kernel::bindings::kernel_param {{
-+                            name: if cfg!(MODULE) {{
-+                                ::kernel::c_str!(\"{param_name}\").as_bytes_with_nul()
-+                            }} else {{
-+                                ::kernel::c_str!(\"{module_name}.{param_name}\").as_bytes_with_nul()
-+                            }}.as_ptr(),
-+                            // SAFETY: `__this_module` is constructed by the kernel at load time
-+                            // and will not be freed until the module is unloaded.
-+                            #[cfg(MODULE)]
-+                            mod_: unsafe {{
-+                                (&::kernel::bindings::__this_module
-+                                    as *const ::kernel::bindings::module)
-+                                    .cast_mut()
-+                            }},
-+                            #[cfg(not(MODULE))]
-+                            mod_: ::core::ptr::null_mut(),
-+                            ops: &{ops} as *const ::kernel::bindings::kernel_param_ops,
-+                            perm: 0, // Will not appear in sysfs
-+                            level: -1,
-+                            flags: 0,
-+                            __bindgen_anon_1:
-+                                ::kernel::bindings::kernel_param__bindgen_ty_1 {{
-+                                    arg: {param_name}.as_void_ptr()
-+                                }},
-+                          }}
-+                        );
-+                ",
-+                module_name = info.name,
-+                param_type = param.ptype,
-+                param_default = param.default,
-+                param_name = param.name,
-+                ops = ops,
-+            )
-+            .unwrap();
-+        }
-+    }
-+}
-+
-+fn param_ops_path(param_type: &str) -> &'static str {
-+    match param_type {
-+        "i8" => "::kernel::module_param::PARAM_OPS_I8",
-+        "u8" => "::kernel::module_param::PARAM_OPS_U8",
-+        "i16" => "::kernel::module_param::PARAM_OPS_I16",
-+        "u16" => "::kernel::module_param::PARAM_OPS_U16",
-+        "i32" => "::kernel::module_param::PARAM_OPS_I32",
-+        "u32" => "::kernel::module_param::PARAM_OPS_U32",
-+        "i64" => "::kernel::module_param::PARAM_OPS_I64",
-+        "u64" => "::kernel::module_param::PARAM_OPS_U64",
-+        "isize" => "::kernel::module_param::PARAM_OPS_ISIZE",
-+        "usize" => "::kernel::module_param::PARAM_OPS_USIZE",
-+        t => panic!("Unsupported parameter type {}", t),
-     }
- }
- 
-+fn expect_param_default(param_it: &mut token_stream::IntoIter) -> String {
-+    assert_eq!(expect_ident(param_it), "default");
-+    assert_eq!(expect_punct(param_it), ':');
-+    let sign = try_sign(param_it);
-+    let default = try_literal(param_it).expect("Expected default param value");
-+    assert_eq!(expect_punct(param_it), ',');
-+    let mut value = sign.map(String::from).unwrap_or_default();
-+    value.push_str(&default);
-+    value
-+}
-+
- #[derive(Debug, Default)]
- struct ModuleInfo {
-     type_: String,
-@@ -99,6 +205,50 @@ struct ModuleInfo {
-     description: Option<String>,
-     alias: Option<Vec<String>>,
-     firmware: Option<Vec<String>>,
-+    params: Option<Vec<Parameter>>,
-+}
-+
-+#[derive(Debug)]
-+struct Parameter {
-+    name: String,
-+    ptype: String,
-+    default: String,
-+    description: String,
-+}
-+
-+fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
-+    let params = expect_group(it);
-+    assert_eq!(params.delimiter(), Delimiter::Brace);
-+    let mut it = params.stream().into_iter();
-+    let mut parsed = Vec::new();
-+
-+    loop {
-+        let param_name = match it.next() {
-+            Some(TokenTree::Ident(ident)) => ident.to_string(),
-+            Some(_) => panic!("Expected Ident or end"),
-+            None => break,
-+        };
-+
-+        assert_eq!(expect_punct(&mut it), ':');
-+        let param_type = expect_ident(&mut it);
-+        let group = expect_group(&mut it);
-+        assert_eq!(group.delimiter(), Delimiter::Brace);
-+        assert_eq!(expect_punct(&mut it), ',');
-+
-+        let mut param_it = group.stream().into_iter();
-+        let param_default = expect_param_default(&mut param_it);
-+        let param_description = expect_string_field(&mut param_it, "description");
-+        expect_end(&mut param_it);
-+
-+        parsed.push(Parameter {
-+            name: param_name,
-+            ptype: param_type,
-+            default: param_default,
-+            description: param_description,
-+        })
-+    }
-+
-+    parsed
- }
- 
- impl ModuleInfo {
-@@ -114,6 +264,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
-             "license",
-             "alias",
-             "firmware",
-+            "params",
-         ];
-         const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
-         let mut seen_keys = Vec::new();
-@@ -140,6 +291,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
-                 "license" => info.license = expect_string_ascii(it),
-                 "alias" => info.alias = Some(expect_string_array(it)),
-                 "firmware" => info.firmware = Some(expect_string_array(it)),
-+                "params" => info.params = Some(expect_params(it)),
-                 _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
-             }
- 
-@@ -205,7 +357,9 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-     // Built-in modules also export the `file` modinfo string.
-     let file =
-         std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
--    modinfo.emit_only_builtin("file", &file);
-+    modinfo.emit_only_builtin("file", &file, false);
-+
-+    modinfo.emit_params(&info);
- 
-     format!(
-         "
-@@ -369,15 +523,18 @@ unsafe fn __exit() {{
-                             __MOD.assume_init_drop();
-                         }}
-                     }}
--
-                     {modinfo}
-                 }}
-             }}
-+            mod module_parameters {{
-+                {params}
-+            }}
-         ",
-         type_ = info.type_,
-         name = info.name,
-         ident = ident,
-         modinfo = modinfo.buffer,
-+        params = modinfo.param_buffer,
-         initcall_section = ".initcall6.init"
-     )
-     .parse()
+> ---
+>  rust/kernel/sync.rs           |   1 +
+>  rust/kernel/sync/once_lock.rs | 104 ++++++++++++++++++++++++++++++++++++=
+++++++
+>  2 files changed, 105 insertions(+)
+>
+> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
+> index c7c0e552bafe..f2ee07315091 100644
+> --- a/rust/kernel/sync.rs
+> +++ b/rust/kernel/sync.rs
+> @@ -15,6 +15,7 @@
+>  mod condvar;
+>  pub mod lock;
+>  mod locked_by;
+> +pub mod once_lock;
 
--- 
-2.47.2
+I would add a re-export so that users can import this as kernel::sync::Once=
+Lock.
 
+>  pub mod poll;
+>  pub mod rcu;
+>
+> diff --git a/rust/kernel/sync/once_lock.rs b/rust/kernel/sync/once_lock.r=
+s
+> new file mode 100644
+> index 000000000000..cd311bea3919
+> --- /dev/null
+> +++ b/rust/kernel/sync/once_lock.rs
+> @@ -0,0 +1,104 @@
+> +//! A container that can be initialized at most once.
+> +
+> +use super::atomic::ordering::Acquire;
+> +use super::atomic::ordering::Release;
+> +use super::atomic::Atomic;
+> +use kernel::types::Opaque;
+> +
+> +/// A container that can be populated at most once. Thread safe.
+> +///
+> +/// Once the a [`OnceLock`] is populated, it remains populated by the sa=
+me object for the
+> +/// lifetime `Self`.
+> +///
+> +/// # Invariants
+> +///
+> +/// `init` tracks the state of the container:
+> +///
+> +/// - If the container is empty, `init` is `0`.
+> +/// - If the container is mutably accessed, `init` is `1`.
 
+I would phrase this as "being initialized" instead of "mutably
+accessed". I initially thought this was talking about someone calling
+a &mut self method.
+
+> +/// - If the container is populated and ready for shared access, `init` =
+is `2`.
+> +///
+> +/// # Example
+> +///
+> +/// ```
+> +/// # use kernel::sync::once_lock::OnceLock;
+> +/// let value =3D OnceLock::new();
+> +/// assert_eq!(None, value.as_ref());
+> +///
+> +/// let status =3D value.populate(42u8);
+> +/// assert_eq!(true, status);
+> +/// assert_eq!(Some(&42u8), value.as_ref());
+> +/// assert_eq!(Some(42u8), value.copy());
+> +///
+> +/// let status =3D value.populate(101u8);
+> +/// assert_eq!(false, status);
+> +/// assert_eq!(Some(&42u8), value.as_ref());
+> +/// assert_eq!(Some(42u8), value.copy());
+> +/// ```
+> +pub struct OnceLock<T> {
+> +    init: Atomic<u32>,
+> +    value: Opaque<T>,
+
+Opaque does not destroy the inner value. You are missing a destructor.
+
+> +}
+> +
+> +impl<T> Default for OnceLock<T> {
+> +    fn default() -> Self {
+> +        Self::new()
+> +    }
+> +}
+> +
+> +impl<T> OnceLock<T> {
+> +    /// Create a new [`OnceLock`].
+> +    ///
+> +    /// The returned instance will be empty.
+> +    pub const fn new() -> Self {
+> +        // INVARIANT: The container is empty and we set `init` to `0`.
+> +        Self {
+> +            value: Opaque::uninit(),
+> +            init: Atomic::new(0),
+> +        }
+> +    }
+> +
+> +    /// Get a reference to the contained object.
+> +    ///
+> +    /// Returns [`None`] if this [`OnceLock`] is empty.
+> +    pub fn as_ref(&self) -> Option<&T> {
+> +        if self.init.load(Acquire) =3D=3D 2 {
+> +            // SAFETY: As determined by the load above, the object is re=
+ady for shared access.
+> +            Some(unsafe { &*self.value.get() })
+> +        } else {
+> +            None
+> +        }
+> +    }
+> +
+> +    /// Populate the [`OnceLock`].
+> +    ///
+> +    /// Returns `true` if the [`OnceLock`] was successfully populated.
+> +    pub fn populate(&self, value: T) -> bool {
+> +        // INVARIANT: We obtain exclusive access to the contained alloca=
+tion and write 1 to
+> +        // `init`.
+> +        if let Ok(0) =3D self.init.cmpxchg(0, 1, Acquire) {
+
+This acquire can be Relaxed. All other accesses to self.value
+synchronize with the release store below, so you do not need acquire
+here to obtain exclusive access.
+
+> +            // SAFETY: We obtained exclusive access to the contained obj=
+ect.
+> +            unsafe { core::ptr::write(self.value.get(), value) };
+> +            // INVARIANT: We release our exclusive access and transition=
+ the object to shared
+> +            // access.
+> +            self.init.store(2, Release);
+> +            true
+> +        } else {
+> +            false
+> +        }
+> +    }
+> +}
+> +
+> +impl<T: Copy> OnceLock<T> {
+> +    /// Get a copy of the contained object.
+> +    ///
+> +    /// Returns [`None`] if the [`OnceLock`] is empty.
+> +    pub fn copy(&self) -> Option<T> {
+> +        if self.init.load(Acquire) =3D=3D 2 {
+> +            // SAFETY: As determined by the load above, the object is re=
+ady for shared access.
+> +            Some(unsafe { *self.value.get() })
+> +        } else {
+> +            None
+> +        }
+> +    }
+> +}
+>
+> --
+> 2.47.2
+>
+>
