@@ -1,69 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B3A2DE701;
-	Thu,  3 Jul 2025 21:49:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88843281526;
+	Fri,  4 Jul 2025 07:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751579394; cv=none; b=Bz9ttb/DklReJzoYTGUpgdIOGR9SDJLCaqKTcllUhlgIjwppHpWOZYyrGzSSXQUr5FMjj47kthAbJpUFcyMxcixYW5bKVznSspUIvyNWmRtWauqPogrKZFpPF9BOCj3DWjhrL2ZxKTmJINP3cNyZKI8A8/zPBp1ZNeQNu86I2ak=
+	t=1751614199; cv=none; b=ruFqBrptrAq6dSFtDydwCGcvsV+r5EywIvsYIcVCqdwP2sUOVA9LXSIYmt3IFeFP1l68YSWHpyo6l9M7UrIowQGeBJ32RbYDprAlXppktZZ+2UQGKZcJh77xT9yN4lv1xf/6BFfak6O7/rB+r75yi7PSYHS+HjDt1JiAHEYc0+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751579394; c=relaxed/simple;
-	bh=CGX2SPIZ9xHHR7xXxfAWC/JUQPZzoF0O31iWxNQOu/w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r5inA0DFogyCgufVEWnmvr6gJ3Ltk3QbXqJMcCBOh8xhwNy1i/76TdQimWqRTgRhqZi22mNb+qP5+XbB4et4X4gSXc7SrAWKHcILFLOiewevAyq2Xc9iUnA9pmFtK91zcUpJVWALN/ZGCdeswM5pzInSfXLPv9PC+RyW/RSXkcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgzTO+XL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751614199; c=relaxed/simple;
+	bh=J6oObOUfBk6ZQPCzbxTZW8EADuP4lY171WCHLvpfXDc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fuqLX4l6ug8cBTsI9joBVZeAYH4LK/MFsTw6jHCJ2BA8ND9qU5mxRNCQooHN1pymCyaF4nxE4FcmytgGVyLg2gg8LNIoqSsQ4bWLt+qkezYVhzNaa4w5CyV4YIaXAXUAyJdfhIMhhDXqoRHhHCjElXTDaRATIBT3knKceYLwFqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om232DeH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgzTO+XL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F7CC4CEE3;
-	Thu,  3 Jul 2025 21:49:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om232DeH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D91C4CEED;
+	Fri,  4 Jul 2025 07:29:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751579394;
-	bh=CGX2SPIZ9xHHR7xXxfAWC/JUQPZzoF0O31iWxNQOu/w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kgzTO+XLqwCuSwNpaXZACKDE/QvJYSyRQyBOAaO0MinLorg3TvaZTL3j5t1aJP7NV
-	 kKEx/gHmpJz0UjUHuWO59zTx/ywLtJs4MAQ0N9Ul3KUsbKFuVTH7wetUAWIoM7mMc3
-	 2eXJD0D4kES0VX4M4ga0JPF2w7+5pVYfWqXdJErUr49QPtWrp2+0vTDUlVHO1K0j4d
-	 rbPvj0aKxhh/syUyXhZEihGdwIggAvrryynEkyt04ZrX+x6yZrPgXDJWX3qMbhkCF9
-	 ZuH8WDcFq3WK1US5Czl0dP6w8oUjMy3yiz09nbypB/iKGpG/wN/E0MGJiV77PwzQKo
-	 5lh0WWrDGieLA==
-Message-ID: <0e89892f-103e-4b92-a067-e192cb7b89a6@kernel.org>
-Date: Thu, 3 Jul 2025 23:49:47 +0200
+	s=k20201202; t=1751614199;
+	bh=J6oObOUfBk6ZQPCzbxTZW8EADuP4lY171WCHLvpfXDc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=om232DeHuhVU1ZFkNBkvr5sHf3gJYD4vQjRdT92JreUGWaOll2JZAYmASAWSwi3De
+	 SLU2edFQmnwqyytE3BMgwwq0Fk6uEDvOLchQzHwKHezdF6uWNuMA1cBFusmtHwYJUi
+	 +mGoVLqu82csbeo2UD/6eicICFFjJEhERC1g3L4mzvg0MjhkW15/yRaDlBl1C2tR7n
+	 +ZVHXgz+pqNVjVUCk/jaWKlntYC0AdDO+MvHaaLRNfOw0cBptH0FfRrA3c4cgDzJ5a
+	 GUFpyMqaZCtoNaBYkt49zhzSpUDCRkWUP5yLA4mqvqc3+Q40CUNAlonw+FNLGdDOBl
+	 KfOSRhXqCshMQ==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Danilo Krummrich" <dakr@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Alice
+ Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada" <masahiroy@kernel.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Benno Lossin" <lossin@kernel.org>,  "Nicolas
+ Schier" <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v14 3/7] rust: introduce module_param module
+In-Reply-To: <0e89892f-103e-4b92-a067-e192cb7b89a6@kernel.org> (Danilo
+	Krummrich's message of "Thu, 03 Jul 2025 23:49:47 +0200")
+References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
+	<20250702-module-params-v3-v14-3-5b1cc32311af@kernel.org>
+	<aOJo8e9FTJikY-WFnv8a7qAvQS6RFIHTU_gb8fa9RD-8SdGo7o56AoSlWUJUG9NTNB1Wgd09N4p5LJEY8HHXvQ==@protonmail.internalid>
+	<0e89892f-103e-4b92-a067-e192cb7b89a6@kernel.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Fri, 04 Jul 2025 09:29:48 +0200
+Message-ID: <875xg8tnv7.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 3/7] rust: introduce module_param module
-To: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Trevor Gross <tmgross@umich.edu>, Adam Bratschi-Kaye <ark.email@gmail.com>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>,
- Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>,
- Daniel Almeida <daniel.almeida@collabora.com>, linux-modules@vger.kernel.org
-References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
- <20250702-module-params-v3-v14-3-5b1cc32311af@kernel.org>
-From: Danilo Krummrich <dakr@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20250702-module-params-v3-v14-3-5b1cc32311af@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 7/2/25 3:18 PM, Andreas Hindborg wrote:
-> +    /// Get a shared reference to the parameter value.
-> +    // Note: When sysfs access to parameters are enabled, we have to pass in a
-> +    // held lock guard here.
-> +    pub fn get(&self) -> &T {
-> +        self.value.as_ref().unwrap_or(&self.default)
-> +    }
+"Danilo Krummrich" <dakr@kernel.org> writes:
 
-I think you forgot to rename this.
+> On 7/2/25 3:18 PM, Andreas Hindborg wrote:
+>> +    /// Get a shared reference to the parameter value.
+>> +    // Note: When sysfs access to parameters are enabled, we have to pass in a
+>> +    // held lock guard here.
+>> +    pub fn get(&self) -> &T {
+>> +        self.value.as_ref().unwrap_or(&self.default)
+>> +    }
+>
+> I think you forgot to rename this.
+
+Yes, thanks for being persistent on this :)
+
+
+Best regards,
+Andreas Hindborg
+
+
