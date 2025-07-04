@@ -1,115 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE513093DD;
-	Fri,  4 Jul 2025 13:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84DB30748D;
+	Fri,  4 Jul 2025 13:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751637037; cv=none; b=Fl06bo51Ru7ALO8rA2GFnInHBkskmnqDa7YRn08yz4PIBLxLl75yYilth/Elcc9rvTtgPFVxTXCT1/iPpC3rLjJcUQbSp3MNXjoF3RCS/E2mzH+edMClqMXoVwLpOrEEYrid0h6VcIGrQdDGLpc+tU9ojJ9UOpB9HhsJ4bt6/aw=
+	t=1751637101; cv=none; b=PhAos7cHy3/SbKJbtBWLOfm7xODiP4sZYVHFsizjxSSxhqC2h7lPkdA5zdEAhVPeDqf/EM/nAJ7WKVPeVqDeSsL6gUdNkN4wJPKPaN/tZV6lAGi4uxafQobnIE8DYuudjLW/Ya6x6vJKkGEan7is3+m+LP93sgJMQ/Tpm+vm6NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751637037; c=relaxed/simple;
-	bh=N93fx/HWGQ9/7LBI0Q5dx377OnCZ8CrZ/OhiD9v/Z/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JY6Nba9gmq/LFHKeOVjC5qwxO/c+rf+4nTTckwPVGCnTKOLZLkau3XIWYuRQZroS2zC6s42tFt8PoGmLzuvMvbxESJz7P/RMwGiRpBU9S8MSh+7uRyIXTuIpG4ODc9ucun/LAguDlD3jaBXXr+WO3NgxQVMW2TKp0Eqb4o5K01A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IafJ5zhz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751637101; c=relaxed/simple;
+	bh=/OiYSjkCDD0yVzW/zMXSwGUuzicvKJf923CS++qCXzw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S+AZ4bpfvfdExWeJiGUlTpeUoymUrCMc5ap9uea0xnFHDXO1212VicYo8lSmtaww4pI2RkVdWAGgDrviBrA0oYxMYvNIRRQS/QFxyxbgdt4h6xvl4g9WNLWeGzjpKGr7LLrcp0/zJv6ffrqc7RHZfStupSF87DQKoXjSpRoW26A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjnrqUa3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IafJ5zhz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716F3C4CEEB;
-	Fri,  4 Jul 2025 13:50:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjnrqUa3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9B4C4CEE3;
+	Fri,  4 Jul 2025 13:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751637036;
-	bh=N93fx/HWGQ9/7LBI0Q5dx377OnCZ8CrZ/OhiD9v/Z/8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IafJ5zhzJJMzQ5RvGFz9jHElZlpQS/cEpbHiJxGptp5RZk2uaNXSUmlxru9vxG0Kb
-	 my6sw81V2pUOKJO1VNXbXkyX54FcpSGrYkNlcQ/zC2JzREUevQHixwULxSwoZP/0Ao
-	 L57ARhp2EwtWbNo4JI2cnYce4L0oAVLtG4KnJPruYzna/Ruxpq+TTi3Xed2SikeQCx
-	 G0QZsiDA0BAqUNC0WiLG5StfJgJ7NHGRRJSNizFGe+xDAEuQrswFi0JvogCPgcbwwV
-	 53cCDyXsz+5McRnjUaaNiAgEigDmHz7JsdAkKoJqHfzCVV1vqibVOyCx3Q6UJM33Dm
-	 j1LzYJybqnstw==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH 8/8] x86/ftrace: enable EXECMEM_ROX_CACHE for ftrace allocations
-Date: Fri,  4 Jul 2025 16:49:43 +0300
-Message-ID: <20250704134943.3524829-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250704134943.3524829-1-rppt@kernel.org>
-References: <20250704134943.3524829-1-rppt@kernel.org>
+	s=k20201202; t=1751637101;
+	bh=/OiYSjkCDD0yVzW/zMXSwGUuzicvKJf923CS++qCXzw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=DjnrqUa36fkh8FCFhG4sw12ZoEQfFO5inamHW+G/dfchhyYcVkgSTNUaT7VMxNcLQ
+	 n0NMJIE54SJcJTBThl4+lP+1p+nWD+FQsogOMa7LXxWImwDAVkByIIOOAHuQgRbKFd
+	 8cW61XSP+u/00KT/B7YrqlLeuyd3zkSV2zuEtD5knRGXd4NxajCNQHNj21kOFwBoA8
+	 ikzmrCdb3T0ZHWl/jdiG9yTzwTiGfvAsbL2GoEp3DWdP8Gh8PTMjFmAQB/o50DizLx
+	 /jRp0Wci77uzt8oWFXrXsB5VohKUetig9XsWsJROzsP+oCkCMIPrDGsy9LOwjbc3RL
+	 LvfM/eZpDJIEA==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Benno Lossin" <lossin@kernel.org>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,  "Alice
+ Ryhl" <aliceryhl@google.com>,  "Masahiro Yamada" <masahiroy@kernel.org>,
+  "Nathan Chancellor" <nathan@kernel.org>,  "Luis Chamberlain"
+ <mcgrof@kernel.org>,  "Danilo Krummrich" <dakr@kernel.org>,  "Nicolas
+ Schier" <nicolas.schier@linux.dev>,  "Trevor Gross" <tmgross@umich.edu>,
+  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v14 5/7] rust: module: update the module macro with
+ module parameter support
+In-Reply-To: <DB3A6GR3TQON.C9N9U4V48R1D@kernel.org> (Benno Lossin's message of
+	"Fri, 04 Jul 2025 14:48:10 +0200")
+References: <20250702-module-params-v3-v14-0-5b1cc32311af@kernel.org>
+	<20250702-module-params-v3-v14-5-5b1cc32311af@kernel.org>
+	<5fYjUlNFhuBwWOP46ph07KX4CMe0ORT5pZ_pD-l719E0ChkPTI2pV1tYJcN3oxKKcMI8_HGU1InaWBj52Kbbag==@protonmail.internalid>
+	<DB1OK2PQZ790.S317HUWYJR3J@kernel.org> <875xg8rvei.fsf@kernel.org>
+	<32cgJkp6-1w5-FLQMuvqhCiTvKUhR7SiIWtWdQFlkp2UoeAU3YuYmj7EElURj_NxY01OuuWlZ2aNPzX1UksjOg==@protonmail.internalid>
+	<DB3A6GR3TQON.C9N9U4V48R1D@kernel.org>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Fri, 04 Jul 2025 15:51:27 +0200
+Message-ID: <87zfdkqd28.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+"Benno Lossin" <lossin@kernel.org> writes:
 
-For the most part ftrace uses text poking and can handle ROX memory.
-The only place that requires writable memory is create_trampoline() that
-updates the allocated memory and in the end makes it ROX.
+> On Fri Jul 4, 2025 at 2:29 PM CEST, Andreas Hindborg wrote:
+>> "Benno Lossin" <lossin@kernel.org> writes:
+>>> On Wed Jul 2, 2025 at 3:18 PM CEST, Andreas Hindborg wrote:
+>>>> +                            perm: 0, // Will not appear in sysfs
+>>>> +                            level: -1,
+>>>> +                            flags: 0,
+>>>> +                            __bindgen_anon_1:
+>>>> +                                ::kernel::bindings::kernel_param__bindgen_ty_1 {{
+>>>> +                                    arg: {param_name}.as_void_ptr()
+>>>> +                                }},
+>>>
+>>> Formatting?
+>>>
+>>> +                            __bindgen_anon_1: ::kernel::bindings::kernel_param__bindgen_ty_1 {{
+>>> +                                arg: {param_name}.as_void_ptr()
+>>> +                            }},
+>>
+>>
+>> That makes the line more than 100 characters after changing other
+>> formatting things. Perhaps I should just left shift all this?
+>
+> Not sure what you mean by left shift? When I tried it, it was fine, but
+> it could have changed with the other things... Do you have a branch with
+> your changes?
 
-Use execmem_alloc_rw() in x86::ftrace::alloc_tramp() and enable ROX cache
-for EXECMEM_FTRACE when configuration and CPU features allow that.
+Move all the code template so the least indented start at column 0.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/kernel/ftrace.c | 2 +-
- arch/x86/mm/init.c       | 9 ++++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+My WIP branch is here [1].
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 252e82bcfd2f..4450acec9390 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -263,7 +263,7 @@ void arch_ftrace_update_code(int command)
- 
- static inline void *alloc_tramp(unsigned long size)
- {
--	return execmem_alloc(EXECMEM_FTRACE, size);
-+	return execmem_alloc_rw(EXECMEM_FTRACE, size);
- }
- static inline void tramp_free(void *tramp)
- {
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 442fafd8ff52..bb57e93b4caf 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1105,7 +1105,14 @@ struct execmem_info __init *execmem_arch_setup(void)
- 				.pgprot	= PAGE_KERNEL_ROX,
- 				.alignment = MODULE_ALIGN,
- 			},
--			[EXECMEM_FTRACE ... EXECMEM_BPF] = {
-+			[EXECMEM_FTRACE] = {
-+				.flags	= flags,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= pgprot,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_BPF] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
--- 
-2.47.2
+
+Best regards,
+Andreas Hindborg
+
+
+[1] https://github.com/metaspace/linux/tree/module-params
 
