@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E8F194C96;
-	Mon,  7 Jul 2025 13:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D212BE040;
+	Mon,  7 Jul 2025 13:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751895140; cv=none; b=fhKvbdr8Lf2qgXHJjPYGHto31n5wg5N0e+zr6L9isDihCTyi3X9fK91gnWY8suL2cz91DHdJpwKbAzbY3wjMON6CNUBLhQotZ1YFrfGj6aNx3t4LR2zIziINtTiE0nujpR36qkhvyOL2xiFuxMPfcX6HLKpwljM74sZmnHR5hFQ=
+	t=1751895144; cv=none; b=JSfSXuoOGoMBvA1lcrxbNMZNrKpaP1lwrefnyU4aC+o7CwTuQIhHofXYK2rDK9WLvHsmYaD6NKVv0soX/PSEruhYw1s7UuQWUBXfWa1BfCe//eOj+Fb0KiPJ9+9o8tqktp1BRTE4Gt9svuIxkDmQRrYTe+NnLGA9JFGKt/KPIV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751895140; c=relaxed/simple;
-	bh=rC87q+cE6l79VfDDaP1rreH6c58LNoR3ApaI6m+XCGI=;
+	s=arc-20240116; t=1751895144; c=relaxed/simple;
+	bh=K4Z3grvB4L1O4ywtrXjL9L/tEi3YiQY6qMjemNcyFag=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DrPh3iQgmkd6m1DJSa1CJwhOcoLRZyV33Ej+MkYsHS0NJZgbhC/lYTOkI3oUilZ2jrpVC/UDNm7kMJvaeW76U3vkscQMVlphjuIOTN3WTrHlgAihMT5ckIenkf1IDxe59km237fll5EzU6Ix3SK0r3OSI3u2ZuGhaCBAq7u3lx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cQFYRUZ0; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ZXacgac4hMnPLjFnKfT7VVYMuy30HgOm+sFHPopXwZ9Sh6fJUPvqFZeQIt3Hx+xSCQB2bGEFffvqI8XVnoGad6LCCcV2jDbaAsHhLHMcZF8PU/t3ntdkNzP1ALkSLiSvsqLyCN05JnsDkI3j4aWYTI05jzP56t1/eZVDEHudE1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l1M1QsEl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cQFYRUZ0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA555C4CEE3;
-	Mon,  7 Jul 2025 13:32:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l1M1QsEl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5628EC4CEF4;
+	Mon,  7 Jul 2025 13:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751895138;
-	bh=rC87q+cE6l79VfDDaP1rreH6c58LNoR3ApaI6m+XCGI=;
+	s=k20201202; t=1751895144;
+	bh=K4Z3grvB4L1O4ywtrXjL9L/tEi3YiQY6qMjemNcyFag=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=cQFYRUZ0d7xeMJx+pkAhzljIkHcsFhaiuUEia7MJvDNM62TgSV86L2JRHMWH2WibL
-	 /4wY/yQvKLFkVvetKW4MYWbBTxriwdKSobjp+13FwP0gEN/jgC9gjMPbCQjEJ4qu+/
-	 QY/8ajk2CFPC9Fz/T3ArBzJjQzhrWyjz9WmFZgQob2agn4RNWyFONLwLekfmA/ENol
-	 prziF/uZbd3tqd0A6VUtUtc/Cp33Z10jpaThmwZa/k+8SF0PH7eJLIRCCF9FedLFVc
-	 knbPRredNHpEthWK4HF75GJx4rnYGa/btQw+z+FlDdojgonxpHikOZqT0muYlZ510S
-	 NS35ZwSFvAH0w==
+	b=l1M1QsElj1rPW6jMlIh3sGwhN5SxBfnnyGzuewvpLIjivXNpOL4QRl2XRlhP8jBF5
+	 cwCRONh7u7fTN4cwVDejoJBSvLVJpxPUOfcGnFpWHd6Gl406Kf6Oyg3m2JulXRsvvU
+	 Rftohr/HsZ4KKDk2Rc9QtgPTvUOmBehAcTPUR6zJ3sFTilp9amSr20/FcaPF+F/3o0
+	 eIjQjGvaVbhB3T/nwd1Tdiupt4w11CVXKbpbwZuC+ImhFObCua1GASo3yj9osksBdN
+	 AFDvP1w7eowJf4iXGvXtY9WZyCo6p8SUpDPeVqZDwAPZWlrKMqC0oEUnbanQA7L6RB
+	 /HGdvCyfSDtJQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Mon, 07 Jul 2025 15:29:11 +0200
-Subject: [PATCH v15 7/7] modules: add rust modules files to MAINTAINERS
+Date: Mon, 07 Jul 2025 15:29:08 +0200
+Subject: [PATCH v15 4/7] rust: module: use a reference in
+ macros::module::module
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250707-module-params-v3-v15-7-c1f4269a57b9@kernel.org>
+Message-Id: <20250707-module-params-v3-v15-4-c1f4269a57b9@kernel.org>
 References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
 In-Reply-To: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -56,47 +57,75 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=810; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=rC87q+cE6l79VfDDaP1rreH6c58LNoR3ApaI6m+XCGI=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoa8u5TKlqBMqPIfDfZl1ZoFNEqTp/J/82xBY1+
- cZuHse87L6JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGvLuQAKCRDhuBo+eShj
- d9whD/4w45JCrbOwOKSgUnzjVKqHh0Uhp+3oRLIMfHq4QC3kAHEDHhzuVLObDeZ4sN530OhF6qZ
- D7bln8Zxm5/wQDycPyuOu66xdJjHOlbgk/yC+2pp04nx3NFQqNl8QxpeQ1s8TCDpiudvCa33W1T
- fIs/CyohNVMUXN4zJHuSM+gfYMkW1iroglOEWY2fUN8JMW9nlQ1AXzi6G2i8Ys4AGAr8yGJBCR+
- 0a7hL3QMz583YSeJDHod0zsQAskEwqB1aFUBfSCM/eHn0o7x7p6Hp47fZPMR65Vg2VfvwG7dVbp
- ATT5hPaiNoGiP+NlGZNSP5JTth5m8Nww81LD6s8jtJCz2e2tGA8aHZcKXyPIL0H3k5eLkwR3bcv
- DxEeStUCR+5Keh4V4qxecNamGCx3oOYzq/MP9bPqeUiEw3hTSQNfAnJhjFxaiNXqTy/Zc42rA7R
- ug4QJMr38SwmVTagdop5rwZoPTcfqt2AIfUdmKkgLjDda/n8Bt7bCMGolZKLYG0qXLVkfwlrkz0
- egAsCyzhR42uiQYnYywe+SzNypt0NWBdbjN4fagtHk2/jeNPa3vvkZRA+smgaNDJxXEPA5Ha80P
- TGLBz33H5lxN658ue9Zwq4DrnaijNGyRTL5Fi6STDrTiBEBJP5G/3ez1oaguNFb38349Sz8nm6V
- A/GYL1fT5Ogo+bQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2065; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=K4Z3grvB4L1O4ywtrXjL9L/tEi3YiQY6qMjemNcyFag=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoa8u26QT6k4TYweeunaG0ffSARQJFEd+K26YXc
+ DtehNvVllyJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGvLtgAKCRDhuBo+eShj
+ d2ZZD/9MjlHI0Kidi/nqGDLQpApOrjM30pa9+dUCYMTpbNmdJgjxYrOJMeALAdh7+QMD76V+OrS
+ eDjQ3BvavJBBgLTa30pM/P1hgM2dzJFhNa2Li92mRLoaB1HMJ5rbyFnf7IJSqMs1lfZmGcDpURk
+ zJHhW3Y7mxPmvRM8M50Ohffz9jR721uAZnJYRQjeDomaUw9FlwFuG2BKfHPRmfTaxi7Dq7StvUv
+ 3y46oGGsyoc5/WnkoJFSfGpNppSRYekN8GQZK+0rh6pPyC8A5KbT0LGdtmtvOMraSgJvw5BGKPf
+ +Rj1zxlZj13NWBF9dPALjgcJfn04tfyPqEkmQSOJEtqrK/AcjyGakfTuWStV1vF+ZJxnTGP8NKi
+ LrB/y63JluNKtksIKJgQQ0Wt/D1FcgEr+yMOXJn8C8lV4rfjO9k0YdTuQSsHZ1RSFT9XU6kK8H4
+ V0NtDqX1DeIxhpw1GH2Ok1uEqENqTxZVLuIq4ijXs7KkMGoI1ehfMWoALvYU+vbI1d2kbmT/eT0
+ 2GZy27QxpxKZjI70mPlLATpDeJzKO6WV8sOFbTQxhumAEAJTH/e4Elw8ri0q/v4MhiPpQQUd+6M
+ fdUKrCT60mMXK6OS8XoV5/Dn4ibxNaffpO7kB9NlzwtqtQza21UTG9FnkqliPITW68ShvxEb0gD
+ WkXFsdWSxJjrO5A==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-The module subsystem people agreed to maintain rust support for modules
-[1]. Thus, add entries for relevant files to modules entry in MAINTAINERS.
+When we add parameter support to the module macro, we want to be able to
+pass a reference to `ModuleInfo` to a helper function. That is not possible
+when we move out of the local `modinfo`. So change the function to access
+the local via reference rather than value.
 
-Link: https://lore.kernel.org/all/0d9e596a-5316-4e00-862b-fd77552ae4b5@suse.com/ [1]
-
-Acked-by: Daniel Gomez <da.gomez@samsung.com>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+ rust/macros/module.rs | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d431320ed3b2a..afa385ecc5c4c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16835,6 +16835,8 @@ F:	include/linux/module*.h
- F:	kernel/module/
- F:	lib/test_kmod.c
- F:	lib/tests/module/
-+F:	rust/kernel/module_param.rs
-+F:	rust/macros/module.rs
- F:	scripts/module*
- F:	tools/testing/selftests/kmod/
- F:	tools/testing/selftests/module/
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 2ddd2eeb28521..1a867a1e787ed 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -179,26 +179,26 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+     // Rust does not allow hyphens in identifiers, use underscore instead.
+     let ident = info.name.replace('-', "_");
+     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
+-    if let Some(author) = info.author {
+-        modinfo.emit("author", &author);
++    if let Some(author) = &info.author {
++        modinfo.emit("author", author);
+     }
+-    if let Some(authors) = info.authors {
++    if let Some(authors) = &info.authors {
+         for author in authors {
+-            modinfo.emit("author", &author);
++            modinfo.emit("author", author);
+         }
+     }
+-    if let Some(description) = info.description {
+-        modinfo.emit("description", &description);
++    if let Some(description) = &info.description {
++        modinfo.emit("description", description);
+     }
+     modinfo.emit("license", &info.license);
+-    if let Some(aliases) = info.alias {
++    if let Some(aliases) = &info.alias {
+         for alias in aliases {
+-            modinfo.emit("alias", &alias);
++            modinfo.emit("alias", alias);
+         }
+     }
+-    if let Some(firmware) = info.firmware {
++    if let Some(firmware) = &info.firmware {
+         for fw in firmware {
+-            modinfo.emit("firmware", &fw);
++            modinfo.emit("firmware", fw);
+         }
+     }
+ 
 
 -- 
 2.47.2
