@@ -1,137 +1,125 @@
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D93C293C5F;
-	Mon,  7 Jul 2025 10:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0B71C4A0A;
+	Mon,  7 Jul 2025 11:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751883675; cv=none; b=C/YNg9N7ZViUWbOagpRjN5IxjXY4iJyrzbiRjeHkQYdlgpuHnieIc+mzWyBVa/Bk8tFltxwZ9EU87UbZfWUZhkVQUkWRehk51KYxz1WRyhiQiRKyMzI+jz3ELStmRsEkzq6HqxEQ5dbtptTVP3pk6dw+ckK1XmEnHXcbOM0n3JY=
+	t=1751886682; cv=none; b=fiv4ZD5grJiX8UpD1rM/zNMGuZr+m9kRlI93IoktaBatD2KElh2/dG7vZXC66pHD7OfN5E3TBdU+X3ZQYThxK+H2snZKWaWGe4NYMA9ZSmRwnel89RWlmja4f8bH7+V3kpKAqoc8PPySWoJe4yYzq7nvQMiynxwwPI4RvreHy5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751883675; c=relaxed/simple;
-	bh=jt2BXEm3g+Z/1H9Wsd5rbIl3GoPvYR7N6CzX/jo4d8U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nsyeUQmWKxJteFc+PPt6W/PZJbSfjQwhhdQrB2T+O1kLS2AMVWQ2uMDyfv/03lXHLdwfQiaod+4XGEK6A3XANZ8ZtK6d5FG4zHPdRRTBJI6hfv3O2no7C1qFru9HtV6V+URs2uFa7JkMeU0oNrSwzWvBUL55scoC/dPNpUmN4DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4bbKkY1qMhz9sq6;
-	Mon,  7 Jul 2025 12:10:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id m-Y4tmPX2Nye; Mon,  7 Jul 2025 12:10:45 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4bbKkY117sz9snj;
-	Mon,  7 Jul 2025 12:10:45 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 06D048B767;
-	Mon,  7 Jul 2025 12:10:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id G1Qaq7PtQJLm; Mon,  7 Jul 2025 12:10:44 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 13A378B763;
-	Mon,  7 Jul 2025 12:10:44 +0200 (CEST)
-Message-ID: <7e52f721-1d8e-4c50-af33-bee3f0d2ac6e@csgroup.eu>
-Date: Mon, 7 Jul 2025 12:10:43 +0200
+	s=arc-20240116; t=1751886682; c=relaxed/simple;
+	bh=Z0DzFa6Ck8MY9mheY3wDTdFe9/hvBRhpNbyrSmBtew8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R5ZbY1RMs0XvGrT4iQfWrEkHrM9HQm7ThTurLy/V9eAolRh8OkgfEdqp1hD2g5eeHtDkG+9Ox526BpE6yEk9QMq212R1mpjXoZgQ6hSNFG7oem8JJ6AvHw3pzbW8EKEz3zwKERVGu++Qc6WnZxBRb6CYQlFeFx1pYN0SvncizUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qezQPJ3w; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qezQPJ3w"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Y28+p4hX9PEUMHUlBkI77beYKGWjbFcITsIbtfbTURs=; b=qezQPJ3wjgMr442XMPlt9n2Ksu
+	W9LQMhSj5LhBqQ8d/2ilKfw/Xh5faImKUfSTZdYh6ljTF4E3OLJydHHiIcupLMTP05tFfBEQA0sbF
+	gT9oR+Zh2Lsy+lTfffMLvfmMsqqNYxllbjKHnDUdez6wLV57ImIeAnx4b3JGg5NzFTB5cd+EEHjWr
+	IoomUVw1wsJXd7cyIvpG1vJkS/D5iUI7eec0+9Y72SE9cAIOPaVWikrOH6Zyy4lMd93gJUhMjMSoq
+	X0hpjXyRXFPvq88lj2eojs0O3NityG+y9vwZDjbcWWLq8S52H1vlmG52cXp6QfWtjxl1HwrQPnkWo
+	1XK13jmw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uYjkV-00000008TRB-2rx3;
+	Mon, 07 Jul 2025 11:11:04 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id ACA4C300399; Mon, 07 Jul 2025 13:11:02 +0200 (CEST)
+Date: Mon, 7 Jul 2025 13:11:02 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 3/8] execmem: rework execmem_cache_free()
+Message-ID: <20250707111102.GF1613200@noisy.programming.kicks-ass.net>
+References: <20250704134943.3524829-1-rppt@kernel.org>
+ <20250704134943.3524829-4-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] execmem: drop unused execmem_update_copy()
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Daniel Gomez <da.gomez@samsung.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Steven Rostedt
- <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- x86@kernel.org
-References: <20250704134943.3524829-1-rppt@kernel.org>
- <20250704134943.3524829-2-rppt@kernel.org>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250704134943.3524829-2-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250704134943.3524829-4-rppt@kernel.org>
 
+On Fri, Jul 04, 2025 at 04:49:38PM +0300, Mike Rapoport wrote:
+>  static bool execmem_cache_free(void *ptr)
+>  {
+>  	struct maple_tree *busy_areas = &execmem_cache.busy_areas;
+>  	unsigned long addr = (unsigned long)ptr;
+>  	MA_STATE(mas, busy_areas, addr, addr);
+>  	void *area;
+> +	int err;
+> +
+> +	guard(mutex)(&execmem_cache.mutex);
+>  
+>  	area = mas_walk(&mas);
+> +	if (!area)
+>  		return false;
+>  
+> +	err = __execmem_cache_free(&mas, ptr, GFP_KERNEL | __GFP_NORETRY);
+> +	if (err)
+> +		goto err_slowpath;
+>  
+>  	schedule_work(&execmem_cache_clean_work);
+>  
+>  	return true;
+> +
+> +err_slowpath:
+> +	mas_store_gfp(&mas, pending_free_set(ptr), GFP_KERNEL);
+> +	execmem_cache.pending_free_cnt++;
+> +	schedule_delayed_work(&execmem_cache_free_work, FREE_DELAY);
+> +	return true;
+>  }
 
+This is a bit if an anti-pattern, using guard() and error goto. Since
+there is only the one site, its best to write it like so:
 
-Le 04/07/2025 à 15:49, Mike Rapoport a écrit :
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> The execmem_update_copy() that used text poking was required when memory
-> allocated from ROX cache was always read-only. Since now its permissions
-> can be switched to read-write there is no need in a function that updates
-> memory with text poking.
+static bool execmem_cache_free(void *ptr)
+{
+	struct maple_tree *busy_areas = &execmem_cache.busy_areas;
+	unsigned long addr = (unsigned long)ptr;
+	MA_STATE(mas, busy_areas, addr, addr);
+	void *area;
+	int err;
 
-Erm. Looks like I missed the patch that introduced this change.
+	guard(mutex)(&execmem_cache.mutex);
 
-On some variant of powerpc, namely book3s/32, this is not feasible. The 
-granularity for setting the NX (non exec) bit is 256 Mbytes sections.
-So the area dedicated to execmem [MODULES_VADDR; MODULES_END[ always 
-have the NX bit unset.
+	area = mas_walk(&mas);
+	if (!area)
+		return false;
 
-You can change any page within this area from ROX to RWX but you can't 
-make it RW without X. If you want RW without X you must map it in the 
-VMALLOC area, as VMALLOC area have NX bit always set.
+	err = __execmem_cache_free(&mas, ptr, GFP_KERNEL | __GFP_NORETRY);
+	if (err) {
+		mas_store_gfp(&mas, pending_free_set(ptr), GFP_KERNEL);
+		execmem_cache.pending_free_cnt++;
+		schedule_delayed_work(&execmem_cache_free_work, FREE_DELAY);
+		return true;
+	}
 
-Christophe
+	schedule_work(&execmem_cache_clean_work);
+	return true;
+}
 
-> 
-> Remove it.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->   include/linux/execmem.h | 13 -------------
->   mm/execmem.c            |  5 -----
->   2 files changed, 18 deletions(-)
-> 
-> diff --git a/include/linux/execmem.h b/include/linux/execmem.h
-> index 3be35680a54f..734fbe83d98e 100644
-> --- a/include/linux/execmem.h
-> +++ b/include/linux/execmem.h
-> @@ -185,19 +185,6 @@ DEFINE_FREE(execmem, void *, if (_T) execmem_free(_T));
->   struct vm_struct *execmem_vmap(size_t size);
->   #endif
->   
-> -/**
-> - * execmem_update_copy - copy an update to executable memory
-> - * @dst:  destination address to update
-> - * @src:  source address containing the data
-> - * @size: how many bytes of memory shold be copied
-> - *
-> - * Copy @size bytes from @src to @dst using text poking if the memory at
-> - * @dst is read-only.
-> - *
-> - * Return: a pointer to @dst or NULL on error
-> - */
-> -void *execmem_update_copy(void *dst, const void *src, size_t size);
-> -
->   /**
->    * execmem_is_rox - check if execmem is read-only
->    * @type - the execmem type to check
-> diff --git a/mm/execmem.c b/mm/execmem.c
-> index 2b683e7d864d..0712ebb4eb77 100644
-> --- a/mm/execmem.c
-> +++ b/mm/execmem.c
-> @@ -399,11 +399,6 @@ void execmem_free(void *ptr)
->   		vfree(ptr);
->   }
->   
-> -void *execmem_update_copy(void *dst, const void *src, size_t size)
-> -{
-> -	return text_poke_copy(dst, src, size);
-> -}
-> -
->   bool execmem_is_rox(enum execmem_type type)
->   {
->   	return !!(execmem_info->ranges[type].flags & EXECMEM_ROX_CACHE);
-
+And now I have to ask what happens if mas_store_gfp() returns an error?
