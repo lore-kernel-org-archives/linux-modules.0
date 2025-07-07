@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEED7E9;
-	Mon,  7 Jul 2025 13:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109E529AB1D;
+	Mon,  7 Jul 2025 13:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751895122; cv=none; b=a0oABNSY7/a1ejXLIpLVp+aZnMAvO/0Bc1vkCkkUJlbqv0gWOnsejoL4Gt+LzArstBAEj5ktb7M54uqqoZDVFFfILeWUsClGsM2y4n29UY5W2ACHDixrphRY7o1bbIQJnTm1JskTkLNwidHGFgqW+PauokpwpRvZ/cPjO8ipgHY=
+	t=1751895128; cv=none; b=Nunxcm+i+XqnkFGYmzELRtGlxYLIy8KIsS6ze2Yl442XhGzfvPO75sB+kO+OSXdAP91FiqktYLAUoAfaV08zJEPvqb9CuAValAVPBMbSE572CFbRR3CGku/lxm6+h6gDvaaJoMDpUcy399T8mQnKwcXauPElvgKVjWXHp0Isxuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751895122; c=relaxed/simple;
-	bh=Oicv1zaY1KiQez2F3xOz3tFMueOgAoKspr8/HpnHCEA=;
+	s=arc-20240116; t=1751895128; c=relaxed/simple;
+	bh=2YIwwnFSN+fDOy0TmIgAKz1LQndsAk+izFq3MdUVAOE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tbvhvv2Hm9Sb2ZKq4uSyMRrvEYdpalHnLZTHZzMaBAcEEdwChBvxJvKpEQd9rI+U0zfamIF928jkqUJWWgFnJ/TKvSx1/b1Km5gHy+xsXHGWJ0ws9Fs3k98XtTtET3BOZuxRMAS44oHPlyB2Wgu1K4ga1C/8xdfVID7dS+0jSKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kov3HeIU; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=I2w/WDJV0yVQdFn5b3y7CIneRNEFfxskPFvSOwayOmOMmJNRrvP973pKzKQ56MBZtNciK/Kvs/lkwUvLGWhO3UdIFpx98di0hTM+lwJr/DjzOzQBfrq/xS7nHvJVbaJq8LcSwEHzz3Uka5XsRDbbCAw6pH2snUVwIxo0OEIzZeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUeFLERV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kov3HeIU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3F1C4CEE3;
-	Mon,  7 Jul 2025 13:31:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUeFLERV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39A1C4CEF4;
+	Mon,  7 Jul 2025 13:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751895122;
-	bh=Oicv1zaY1KiQez2F3xOz3tFMueOgAoKspr8/HpnHCEA=;
+	s=k20201202; t=1751895127;
+	bh=2YIwwnFSN+fDOy0TmIgAKz1LQndsAk+izFq3MdUVAOE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Kov3HeIU+C5qVhA5SoWYLZtbzPdRqIerqiv3o3W5ToAArz9Gf9nAfk9UPmaBKxIOo
-	 A5ZF0076DY1WI4EEMZ47vwtJyah9ajNYpjrjLJ5mfaISvm4BUiQZmEypO00fKHnMTc
-	 WQg2M0oqieZ8Y3SQmslQGJhOm/oj4V+JRx9Z+Fz6wTmeE8zA/ru6OV4tvV3ALSMhij
-	 TW8jh7oDkgpbTfnG5tnRlR0g1Jh/6n1O1E3OjBNAeDTCH7XOUaV7NQLJ+KfpRui1bq
-	 BWj1sv750Q8j7V/6xcXqHv4QcoNWMNjMgkTUMnFpe+6Duxaf3HIfpcU6akYZ76Ru7m
-	 20hTdmRwwCUPQ==
+	b=eUeFLERVlY2Lz8CDJ68r2ONcfhKseuXe3tRbNb7SrY6a66wKxfTxMNQv27VpF+q1I
+	 +/M5kiK+wmQ6ZPHidPAgkN3bU+gUWyhVhwCQP7eM+gdpPv5dh10pq/TTm3cbA5R343
+	 PBmhFjNw7yGwFe2s/+eGpeRvrOEDkn4ws+r23AbeyFjItOQiAmX2W3gO+OvjrMWQFU
+	 jGsbbGhL+cetoMsnV+grRFLeBXLemq6jY720i1B+QPO+VUQ+QTxslAtRZAdl757Ose
+	 msmRtYYrSaHujDsaepJAXWljWeOSCQV9uy1uEpOJEYFzoVHiI9W+9Xgjtw5MTjrosS
+	 5F6w4mgvAxlWQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Mon, 07 Jul 2025 15:29:05 +0200
-Subject: [PATCH v15 1/7] rust: sync: add `SetOnce`
+Date: Mon, 07 Jul 2025 15:29:09 +0200
+Subject: [PATCH v15 5/7] rust: module: update the module macro with module
+ parameter support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250707-module-params-v3-v15-1-c1f4269a57b9@kernel.org>
+Message-Id: <20250707-module-params-v3-v15-5-c1f4269a57b9@kernel.org>
 References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
 In-Reply-To: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -56,184 +57,395 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5358; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=Oicv1zaY1KiQez2F3xOz3tFMueOgAoKspr8/HpnHCEA=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoa8uzVqlbyRCs/KcL2GwyQ1fhSJroQImbn+yOh
- bTlmrNMEr6JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGvLswAKCRDhuBo+eShj
- d8VWEACAJ3x26Gk1uTQPE6NLKy/wpIIq/9IZTv7FfACSd7BC+XgDo3TWxNN30cZiHT8/cF4jRy8
- MT2uOStfC4IiVLVsi/+GUH6WX5TJFVNX5wSrfdqUYz4PXlEkAuGacg9cKiyB2pPcz2+QkviZCmP
- gHQuQd8MT2DEbkIwts8cbv2uIHnZ0M/V8Mm/mIIJm3t3WChuzu2VmXb1oKrmgNKq0IWJkcFhvVN
- TVwDSpKn7qfynze2Q9pyioouezP4yNVF5TRCns+JIbN7PBBGtmN+1ciEHaxEPPgMqAEhj2WXRB3
- 6h0gQX/BbjTKsbFA9DFTCaDJCMaOSU+5fi2v7JiZJnoTESuWCc7InNL9yhLKUz37TYbT79J39xz
- V1p9o0ynjqueScbyc0SW8QUEdBHGnrZwEyez5CFLkFyq68evco1Iq3IjjO6+bXrt7rjryA39JMR
- flmky1escAmIUDh5O9OcUXZ/4F5NEYhjnTYXgJUZ9CP9UT0ye1tM5saihue5WYZ1CU1JRFtOi7W
- G8QGaWn1rjvSGUPmRdUM5Q8worY5+6x6TX6NS3JAhpLRevDcvo4zPnOX8Zgn3qoSFqthqIVzY88
- w/PVqafIqUTzLa+SBGUJdQIAi6ksfVAkbJ19AqYV+rrLjuo6PdBRUKJcVkjrnCChaCPvB099xMx
- 4stsum3WPEMSRNg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13520;
+ i=a.hindborg@kernel.org; h=from:subject:message-id;
+ bh=2YIwwnFSN+fDOy0TmIgAKz1LQndsAk+izFq3MdUVAOE=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBoa8u3QgQakqkaGtZFh1bxTyECSwDoUc6xm5eQf
+ MWOc/16csmJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaGvLtwAKCRDhuBo+eShj
+ d64PD/4mux3V8xSdg4KgCDnv0BDFmC51T8cvXH9GW37JYImXkPD8uo8e+RD0Vtvz/8ePBpxejUp
+ +eZJ2lwIrB2FO414K3xUT8gcv1uCiYoHrIICoUzdWafiDYlK2y9HsWW8SBtIe80SF9wCYZwwnj5
+ N+pSGxs4bJEKGKfuK+sNNcIQwK63Fn+xc3RivpAbMiCnpBqAHPlktnMDyrUMelWhuidGP8uunt0
+ Q4KAZ8klSMNnOHj9d2ftK5hVeX4v1H2f2Wae72Mg0giIq4EnCttWnBufvazSP0LZ7hR27vEw9gm
+ BuH/p3szLa6gHaBReIonGP1QPo/JmOrkwiB7+l+Zlq8MuxIqlG6yr42uHWPD9tzMl0T66fzP5L+
+ NbrwKjjrXNxzmcPuqAEGXF/dugjbVPPccdYZhd6DQIednjtdi6uiyQuIy/RAQaO6DBBQUaMRQfr
+ YuISOnoqNxY+zXyYHR9gCM6kVZntVucjA2eqDlHkIRWer9stg/I8jEcg1EszJbeJ6058mKphMpm
+ Hve6cm8M0vfOUKhvQY8zJsrcEVzbV1isnVCOio+JIbClUt2q0/Bb5Nm8W4CBbzatUfk+yAjfP7n
+ 4kj7H7XZptvxYhNG0KKNfipGbXaemgzemgr0wAwxBHQq3wSHCHtrH0TFqaU9aazdCdg+5puEBJi
+ o6K7B4af66KSe2g==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Introduce the `SetOnce` type, a container that can only be written once.
-The container uses an internal atomic to synchronize writes to the internal
-value.
+Allow module parameters to be declared in the rust `module!` macro.
 
+Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/sync.rs          |   2 +
- rust/kernel/sync/set_once.rs | 125 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 127 insertions(+)
+ rust/macros/helpers.rs |  25 +++++++
+ rust/macros/lib.rs     |  31 +++++++++
+ rust/macros/module.rs  | 178 ++++++++++++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 224 insertions(+), 10 deletions(-)
 
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index 81e3a806e57e2..13e6bc7fa87ac 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -18,6 +18,7 @@
- mod locked_by;
- pub mod poll;
- pub mod rcu;
-+mod set_once;
+diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+index e2602be402c10..365d7eb499c08 100644
+--- a/rust/macros/helpers.rs
++++ b/rust/macros/helpers.rs
+@@ -10,6 +10,17 @@ pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
+     }
+ }
  
- pub use arc::{Arc, ArcBorrow, UniqueArc};
- pub use completion::Completion;
-@@ -26,6 +27,7 @@
- pub use lock::mutex::{new_mutex, Mutex, MutexGuard};
- pub use lock::spinlock::{new_spinlock, SpinLock, SpinLockGuard};
- pub use locked_by::LockedBy;
-+pub use set_once::SetOnce;
++pub(crate) fn try_sign(it: &mut token_stream::IntoIter) -> Option<char> {
++    let peek = it.clone().next();
++    match peek {
++        Some(TokenTree::Punct(punct)) if punct.as_char() == '-' => {
++            let _ = it.next();
++            Some(punct.as_char())
++        }
++        _ => None,
++    }
++}
++
+ pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<String> {
+     if let Some(TokenTree::Literal(literal)) = it.next() {
+         Some(literal.to_string())
+@@ -103,3 +114,17 @@ pub(crate) fn file() -> String {
+         proc_macro::Span::call_site().file()
+     }
+ }
++
++/// Parse a token stream of the form `expected_name: "value",` and return the
++/// string in the position of "value".
++///
++/// # Panics
++///
++/// - On parse error.
++pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
++    assert_eq!(expect_ident(it), expected_name);
++    assert_eq!(expect_punct(it), ':');
++    let string = expect_string(it);
++    assert_eq!(expect_punct(it), ',');
++    string
++}
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index fa847cf3a9b5f..2fb520dc930af 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -28,6 +28,30 @@
+ /// The `type` argument should be a type which implements the [`Module`]
+ /// trait. Also accepts various forms of kernel metadata.
+ ///
++/// The `params` field describe module parameters. Each entry has the form
++///
++/// ```ignore
++/// parameter_name: type {
++///     default: default_value,
++///     description: "Description",
++/// }
++/// ```
++///
++/// `type` may be one of
++///
++/// - [`i8`]
++/// - [`u8`]
++/// - [`i8`]
++/// - [`u8`]
++/// - [`i16`]
++/// - [`u16`]
++/// - [`i32`]
++/// - [`u32`]
++/// - [`i64`]
++/// - [`u64`]
++/// - [`isize`]
++/// - [`usize`]
++///
+ /// C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
+ ///
+ /// [`Module`]: ../kernel/trait.Module.html
+@@ -44,6 +68,12 @@
+ ///     description: "My very own kernel module!",
+ ///     license: "GPL",
+ ///     alias: ["alternate_module_name"],
++///     params: {
++///         my_parameter: i64 {
++///             default: 1,
++///             description: "This parameter has a default of 1",
++///         },
++///     },
+ /// }
+ ///
+ /// struct MyModule(i32);
+@@ -52,6 +82,7 @@
+ ///     fn init(_module: &'static ThisModule) -> Result<Self> {
+ ///         let foo: i32 = 42;
+ ///         pr_info!("I contain:  {}\n", foo);
++///         pr_info!("i32 param is:  {}\n", module_parameters::my_parameter.read());
+ ///         Ok(Self(foo))
+ ///     }
+ /// }
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 1a867a1e787ed..c1400597774a5 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -26,6 +26,7 @@ struct ModInfoBuilder<'a> {
+     module: &'a str,
+     counter: usize,
+     buffer: String,
++    param_buffer: String,
+ }
  
- /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
- #[repr(transparent)]
-diff --git a/rust/kernel/sync/set_once.rs b/rust/kernel/sync/set_once.rs
-new file mode 100644
-index 0000000000000..e1e31f5faed09
---- /dev/null
-+++ b/rust/kernel/sync/set_once.rs
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! A container that can be initialized at most once.
-+
-+use super::atomic::ordering::Acquire;
-+use super::atomic::ordering::Relaxed;
-+use super::atomic::ordering::Release;
-+use super::atomic::Atomic;
-+use core::ptr::drop_in_place;
-+use kernel::types::Opaque;
-+
-+/// A container that can be populated at most once. Thread safe.
-+///
-+/// Once the a [`SetOnce`] is populated, it remains populated by the same object for the
-+/// lifetime `Self`.
-+///
-+/// # Invariants
-+///
-+/// - `init` may only increase in value.
-+/// - `init` may only assume values in the range `0..=2`.
-+/// - `init == 0` if and only if the container is empty.
-+/// - `init == 1` if and only if being initialized.
-+/// - `init == 2` if and only if the container is populated and valid for shared access.
-+///
-+/// # Example
-+///
-+/// ```
-+/// # use kernel::sync::SetOnce;
-+/// let value = SetOnce::new();
-+/// assert_eq!(None, value.as_ref());
-+///
-+/// let status = value.populate(42u8);
-+/// assert_eq!(true, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+///
-+/// let status = value.populate(101u8);
-+/// assert_eq!(false, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+/// ```
-+pub struct SetOnce<T> {
-+    init: Atomic<u32>,
-+    value: Opaque<T>,
-+}
-+
-+impl<T> Default for SetOnce<T> {
-+    fn default() -> Self {
-+        Self::new()
-+    }
-+}
-+
-+// TODO: change names
-+
-+impl<T> SetOnce<T> {
-+    /// Create a new [`SetOnce`].
-+    ///
-+    /// The returned instance will be empty.
-+    pub const fn new() -> Self {
-+        // INVARIANT: The container is empty and we initialize `init` to `0`.
-+        Self {
-+            value: Opaque::uninit(),
-+            init: Atomic::new(0),
-+        }
-+    }
-+
-+    /// Get a reference to the contained object.
-+    ///
-+    /// Returns [`None`] if this [`SetOnce`] is empty.
-+    pub fn as_ref(&self) -> Option<&T> {
-+        if self.init.load(Acquire) == 2 {
-+            // SAFETY: By the type invariants of `Self`, `self.init == 2` means that `self.value`
-+            // contains a valid value.
-+            Some(unsafe { &*self.value.get() })
+ impl<'a> ModInfoBuilder<'a> {
+@@ -34,10 +35,11 @@ fn new(module: &'a str) -> Self {
+             module,
+             counter: 0,
+             buffer: String::new(),
++            param_buffer: String::new(),
+         }
+     }
+ 
+-    fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
++    fn emit_base(&mut self, field: &str, content: &str, builtin: bool, param: bool) {
+         let string = if builtin {
+             // Built-in modules prefix their modinfo strings by `module.`.
+             format!(
+@@ -51,8 +53,14 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+             format!("{field}={content}\0")
+         };
+ 
++        let buffer = if param {
++            &mut self.param_buffer
 +        } else {
-+            None
-+        }
++            &mut self.buffer
++        };
++
+         write!(
+-            &mut self.buffer,
++            buffer,
+             "
+                 {cfg}
+                 #[doc(hidden)]
+@@ -75,20 +83,119 @@ fn emit_base(&mut self, field: &str, content: &str, builtin: bool) {
+         self.counter += 1;
+     }
+ 
+-    fn emit_only_builtin(&mut self, field: &str, content: &str) {
+-        self.emit_base(field, content, true)
++    fn emit_only_builtin(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_base(field, content, true, param)
+     }
+ 
+-    fn emit_only_loadable(&mut self, field: &str, content: &str) {
+-        self.emit_base(field, content, false)
++    fn emit_only_loadable(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_base(field, content, false, param)
+     }
+ 
+     fn emit(&mut self, field: &str, content: &str) {
+-        self.emit_only_builtin(field, content);
+-        self.emit_only_loadable(field, content);
++        self.emit_internal(field, content, false);
 +    }
 +
-+    /// Populate the [`SetOnce`].
-+    ///
-+    /// Returns `true` if the [`SetOnce`] was successfully populated.
-+    pub fn populate(&self, value: T) -> bool {
-+        // INVARIANT: If the swap succeeds:
-+        //  - We increase `init`.
-+        //  - We write the valid value `1` to `init`.
-+        //  - Only one thread can succeed in this write, so we have exclusive access after the
-+        //    write.
-+        if let Ok(0) = self.init.cmpxchg(0, 1, Relaxed) {
-+            // SAFETY: By the type invariants of `Self`, the fact that we succeeded in writing `1`
-+            // to `self.init` means we obtained exclusive access to the contained object.
-+            unsafe { core::ptr::write(self.value.get(), value) };
-+            // INVARIANT:
-+            //  - We increase `init`.
-+            //  - We write the valid value `2` to `init`.
-+            //  - We release our exclusive access to the contained object and the object is now
-+            //    valid for shared access.
-+            self.init.store(2, Release);
-+            true
-+        } else {
-+            false
-+        }
++    fn emit_internal(&mut self, field: &str, content: &str, param: bool) {
++        self.emit_only_builtin(field, content, param);
++        self.emit_only_loadable(field, content, param);
 +    }
 +
-+    /// Get a copy of the contained object.
-+    ///
-+    /// Returns [`None`] if the [`SetOnce`] is empty.
-+    pub fn copy(&self) -> Option<T>
-+    where
-+        T: Copy,
-+    {
-+        self.as_ref().copied()
++    fn emit_param(&mut self, field: &str, param: &str, content: &str) {
++        let content = format!("{param}:{content}", param = param, content = content);
++        self.emit_internal(field, &content, true);
++    }
++
++    fn emit_params(&mut self, info: &ModuleInfo) {
++        let Some(params) = &info.params else {
++            return;
++        };
++
++        for param in params {
++            let ops = param_ops_path(&param.ptype);
++
++            // Note: The spelling of these fields is dictated by the user space
++            // tool `modinfo`.
++            self.emit_param("parmtype", &param.name, &param.ptype);
++            self.emit_param("parm", &param.name, &param.description);
++
++            write!(
++                self.param_buffer,
++                "
++                pub(crate) static {param_name}:
++                    ::kernel::module_param::ModuleParamAccess<{param_type}> =
++                        ::kernel::module_param::ModuleParamAccess::new({param_default});
++
++                const _: () = {{
++                    #[link_section = \"__param\"]
++                    #[used]
++                    static __{module_name}_{param_name}_struct:
++                        ::kernel::module_param::KernelParam =
++                        ::kernel::module_param::KernelParam::new(
++                            ::kernel::bindings::kernel_param {{
++                                name: if ::core::cfg!(MODULE) {{
++                                    ::kernel::c_str!(\"{param_name}\").as_bytes_with_nul()
++                                }} else {{
++                                    ::kernel::c_str!(\"{module_name}.{param_name}\")
++                                        .as_bytes_with_nul()
++                                }}.as_ptr(),
++                                // SAFETY: `__this_module` is constructed by the kernel at load
++                                // time and will not be freed until the module is unloaded.
++                                #[cfg(MODULE)]
++                                mod_: unsafe {{
++                                    core::ptr::from_ref(&::kernel::bindings::__this_module)
++                                        .cast_mut()
++                                }},
++                                #[cfg(not(MODULE))]
++                                mod_: ::core::ptr::null_mut(),
++                                ops: core::ptr::from_ref(&{ops}),
++                                perm: 0, // Will not appear in sysfs
++                                level: -1,
++                                flags: 0,
++                                __bindgen_anon_1: ::kernel::bindings::kernel_param__bindgen_ty_1 {{
++                                    arg: {param_name}.as_void_ptr()
++                                }},
++                            }}
++                        );
++                }};
++                ",
++                module_name = info.name,
++                param_type = param.ptype,
++                param_default = param.default,
++                param_name = param.name,
++                ops = ops,
++            )
++            .unwrap();
++        }
 +    }
 +}
 +
-+impl<T> Drop for SetOnce<T> {
-+    fn drop(&mut self) {
-+        if self.init.load(Acquire) == 2 {
-+            // SAFETY: By the type invariants of `Self`, `self.init == 2` means that `self.value`
-+            // contains a valid value. We have exclusive access, as we hold a `mut` reference to
-+            // `self`.
-+            unsafe { drop_in_place(self.value.get()) };
-+        }
-+    }
++fn param_ops_path(param_type: &str) -> &'static str {
++    match param_type {
++        "i8" => "::kernel::module_param::PARAM_OPS_I8",
++        "u8" => "::kernel::module_param::PARAM_OPS_U8",
++        "i16" => "::kernel::module_param::PARAM_OPS_I16",
++        "u16" => "::kernel::module_param::PARAM_OPS_U16",
++        "i32" => "::kernel::module_param::PARAM_OPS_I32",
++        "u32" => "::kernel::module_param::PARAM_OPS_U32",
++        "i64" => "::kernel::module_param::PARAM_OPS_I64",
++        "u64" => "::kernel::module_param::PARAM_OPS_U64",
++        "isize" => "::kernel::module_param::PARAM_OPS_ISIZE",
++        "usize" => "::kernel::module_param::PARAM_OPS_USIZE",
++        t => panic!("Unsupported parameter type {}", t),
+     }
+ }
+ 
++fn expect_param_default(param_it: &mut token_stream::IntoIter) -> String {
++    assert_eq!(expect_ident(param_it), "default");
++    assert_eq!(expect_punct(param_it), ':');
++    let sign = try_sign(param_it);
++    let default = try_literal(param_it).expect("Expected default param value");
++    assert_eq!(expect_punct(param_it), ',');
++    let mut value = sign.map(String::from).unwrap_or_default();
++    value.push_str(&default);
++    value
 +}
++
+ #[derive(Debug, Default)]
+ struct ModuleInfo {
+     type_: String,
+@@ -99,6 +206,50 @@ struct ModuleInfo {
+     description: Option<String>,
+     alias: Option<Vec<String>>,
+     firmware: Option<Vec<String>>,
++    params: Option<Vec<Parameter>>,
++}
++
++#[derive(Debug)]
++struct Parameter {
++    name: String,
++    ptype: String,
++    default: String,
++    description: String,
++}
++
++fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
++    let params = expect_group(it);
++    assert_eq!(params.delimiter(), Delimiter::Brace);
++    let mut it = params.stream().into_iter();
++    let mut parsed = Vec::new();
++
++    loop {
++        let param_name = match it.next() {
++            Some(TokenTree::Ident(ident)) => ident.to_string(),
++            Some(_) => panic!("Expected Ident or end"),
++            None => break,
++        };
++
++        assert_eq!(expect_punct(&mut it), ':');
++        let param_type = expect_ident(&mut it);
++        let group = expect_group(&mut it);
++        assert_eq!(group.delimiter(), Delimiter::Brace);
++        assert_eq!(expect_punct(&mut it), ',');
++
++        let mut param_it = group.stream().into_iter();
++        let param_default = expect_param_default(&mut param_it);
++        let param_description = expect_string_field(&mut param_it, "description");
++        expect_end(&mut param_it);
++
++        parsed.push(Parameter {
++            name: param_name,
++            ptype: param_type,
++            default: param_default,
++            description: param_description,
++        })
++    }
++
++    parsed
+ }
+ 
+ impl ModuleInfo {
+@@ -114,6 +265,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+             "license",
+             "alias",
+             "firmware",
++            "params",
+         ];
+         const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
+         let mut seen_keys = Vec::new();
+@@ -140,6 +292,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+                 "license" => info.license = expect_string_ascii(it),
+                 "alias" => info.alias = Some(expect_string_array(it)),
+                 "firmware" => info.firmware = Some(expect_string_array(it)),
++                "params" => info.params = Some(expect_params(it)),
+                 _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
+             }
+ 
+@@ -205,7 +358,9 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+     // Built-in modules also export the `file` modinfo string.
+     let file =
+         std::env::var("RUST_MODFILE").expect("Unable to fetch RUST_MODFILE environmental variable");
+-    modinfo.emit_only_builtin("file", &file);
++    modinfo.emit_only_builtin("file", &file, false);
++
++    modinfo.emit_params(&info);
+ 
+     format!(
+         "
+@@ -369,15 +524,18 @@ unsafe fn __exit() {{
+                             __MOD.assume_init_drop();
+                         }}
+                     }}
+-
+                     {modinfo}
+                 }}
+             }}
++            mod module_parameters {{
++                {params}
++            }}
+         ",
+         type_ = info.type_,
+         name = info.name,
+         ident = ident,
+         modinfo = modinfo.buffer,
++        params = modinfo.param_buffer,
+         initcall_section = ".initcall6.init"
+     )
+     .parse()
 
 -- 
 2.47.2
