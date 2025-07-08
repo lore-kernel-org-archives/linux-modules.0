@@ -1,115 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE1121E08D;
-	Tue,  8 Jul 2025 19:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB6514EC73
+	for <linux-modules@vger.kernel.org>; Tue,  8 Jul 2025 20:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752003527; cv=none; b=J8tBYZZrFeo1VoSCbc3BsnSt5duEREuflLqIzjsmVvIDxsLMoeRbaR+wKT5a9jw8vy3yTqRBXHaoEyIDcJPtLMPw+h1OZ/X1flyaaIC3kEUWQzGEz1S+SyvF0ZpLRdtgEyRcD7Dw6c5duBzjGFCRa6icJMx6iChsx/PacG9u3yU=
+	t=1752006091; cv=none; b=P7Np9VRV1QB2xeioTX83sIMPaw9lwptBNrrmF8z5ucq6Ms6CAmVYPLQ8otW8txDMm7i8mbwwpqkEJzodKt4mjz+WpWiu+288jJf86eyTC2gQt0GkQMIQPBmuqHii6XA+6JArm3IaWz89H7nIj0Mru6KuLIj2M1aR7JN15OVUYyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752003527; c=relaxed/simple;
-	bh=nVC2iS4sClY7u807TQfWCbAZEkUsGmhqWpv9rafvYAw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E/YeqKcOByew58nJDZYml178eObPEtxntSCer1G9F3s8uTm/IcyFmHKpshd6BBFFRqF6oKZQ7j/A7QJdWugaupIue+hD5avl3dk0m4zWXk7WRS0O1WqamhXAQeBFfaCPcJB+gM0qgvmxz5KdOGxj5LaARkYBx4hTS1k3eIpwYmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8bb9bqb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752006091; c=relaxed/simple;
+	bh=rhVANd2CKHs5EuwB4/lOPiX5cc+fBw9k44oRUIqhsUc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k0NxhOLw4mxAsDFDMzlGRMmrDRtRwpMORIxehg3tm/NBKEt/xdMIzFXTt5sxoK7SdHL0tWq55ao1MIj/ku8rvOXO2r72BhJdAI3Ojw7Nh/cOSosIIe2VIEeGWcBB6aB2tsbxO5Dd9RSSYgvbgGNfcQjUfa/vFLmB0AnJb/N0hEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EN3+A39e; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8bb9bqb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E24C4CEED;
-	Tue,  8 Jul 2025 19:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752003526;
-	bh=nVC2iS4sClY7u807TQfWCbAZEkUsGmhqWpv9rafvYAw=;
-	h=From:To:Cc:Subject:Date:From;
-	b=L8bb9bqb3IkVQXrSSgqW5W4t2Z9Fe8rvTVu48ecgoL6Ikb2snsG77o2s00bFsoPPQ
-	 gk7MWl92Ao366aObR18t0yVjOaIb4weVuwP2Lvou7kVGxTPRnunx1AkEJgSSMZOZm5
-	 Pzwmw59U/mXFOk2KqiQ8uJua4fM9KBz+FdIbTcQCKP1SSPlWRwLEg93Uy3807gU4IO
-	 pGUvtXnn0BBniIFI/7I9b3bBnza6vx7lZ8ku7p0TTQhztUbMTUwa3zvy6xY983drfD
-	 AEi6nIEf8LAp/WJdQ35ZykjrR7Rl8aJxkmGGxbFUDrVn7JRcOsJxVSPmbkGZkd2MFE
-	 KLs1MFpTcqvXA==
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	linux-modules@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Modules fixes for v6.16-rc6
-Date: Tue,  8 Jul 2025 21:38:20 +0200
-Message-ID: <20250708193822.45168-1-da.gomez@kernel.org>
-X-Mailer: git-send-email 2.50.0
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EN3+A39e"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ae3cd8fdd77so1014925666b.1
+        for <linux-modules@vger.kernel.org>; Tue, 08 Jul 2025 13:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1752006087; x=1752610887; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ijYJWb4fuKBnre0sB5ESTtw7WT87hnOyRG+mP9wI11E=;
+        b=EN3+A39eFX/KcKfTIQi8D2lr4WwmAjQcB54fYUZE66tHk2QM9hMiN/ccTiX3obtP4Y
+         mc0AJFWH2r5Wu2E+dQJsRRZFQhzFCHRrBU5lcvlTtUPyX231zjx2U5RXlOjj2xniFnp2
+         X7MYHzFeUZQfuouJIqKuMRdEjmIvRTQI8WR0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752006087; x=1752610887;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ijYJWb4fuKBnre0sB5ESTtw7WT87hnOyRG+mP9wI11E=;
+        b=gjDy3NXrJntggGFbt6Svd0APtQytBRgrwMdcC6k7etDwxkZzTpM7p/srfZklSJtLA1
+         WCDoabXmEtjCkUfEVnk1q9l+CoYdxhtR9AeAHvSJg3SbsceHRUQCNWCOluM7RqGWSk6l
+         1XE1O0+bVZkTtKLmIZ2JAjCkzVZAx7mB/Y/498q05Iyb4comJ0ojYd+aNh3duzxaGp6u
+         LRC/zVD9Mc/ye07UKZRkBfHsK0LJspmLloe0R92Zb5VIbQ6hlaXGS35AzNPy5QS7QJlF
+         uv9gEPoHc3phw5yjV+SOU4wUUHdY1Y7GdSYDARv9rmZzxuDrMwbFo5pKzMXRgJBhOJiD
+         bE2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVe8MjcvS1xlqMcLib3NACUYdUolcAKbl0urh7lWNTQ+azmIEYpmsnlpcWeO2NDMHBCu8ZkRtOgfh1mOkZZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBwhK2QigKVD2nAt6QvdC7RMo6ProMVDGMRfEwZSwZ2rctsVsX
+	HVyMBykGBgFb+DxjsxEzb7rCbDPybwRgMOCy1RQipVs0Z96VMCxm0ZD1nTlpCeFkrF3IZOLWQTJ
+	wCWCS2AdW6A==
+X-Gm-Gg: ASbGncs94K4IMmp2SdqwrxHQr9nHluzL5f0XdECUTQjfejGAT6RH+p5SgBRDV4/5l1C
+	KYkkeNrgfMryWTL8TcXG8UZLwIGU/gspbU5C/1N1Cd+a7swrOGq8mPq+4iBZPedl5KKPpzqMvnU
+	jXxV6uMTYt0n+bo67S5wU418x4VEHWqb/pgf/K0plhNix1Lj6vm5UjtfGbDdOCipcoo3RBpZrBq
+	kVPflt6QS9NQlMHQv10mGdWK0eKWK4few1p2JDyyRId2CWbpQc/fP+naxbQztGEXr4PiTfWqxqJ
+	qpLFoEA8R/L0wibo1/zjIdh+0PniA+cbVYscA5LcAAEC7jzDbtDrs92fnxYs7UQj9UjqN8PMEpQ
+	pkTZBs0PgAMMmvKRjNkwcyGHLywbyAdli3emD
+X-Google-Smtp-Source: AGHT+IHE2I0EwykafLOuRvqz8l3U3sGE/o7V3EYfzpDjO5JYl3ajk4QevDv52ARMTLwfxNezz81TKg==
+X-Received: by 2002:a17:907:60d4:b0:ae0:cde3:4bbd with SMTP id a640c23a62f3a-ae3fe73fd29mr1664147766b.44.1752006087362;
+        Tue, 08 Jul 2025 13:21:27 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae3f66e8c31sm965385666b.18.2025.07.08.13.21.26
+        for <linux-modules@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jul 2025 13:21:26 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-60700a745e5so9483537a12.3
+        for <linux-modules@vger.kernel.org>; Tue, 08 Jul 2025 13:21:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWn1pq0Klgi4FEnhfK+7HIvv+jSQgXnaZodpnIuAsDLe1eawcL6+SHy0PpC/R2Z5+JILUeHQ3nMTRVoGAj7@vger.kernel.org
+X-Received: by 2002:a05:6402:13c2:b0:609:aa85:8d78 with SMTP id
+ 4fb4d7f45d1cf-60fd652543cmr14984957a12.8.1752006086225; Tue, 08 Jul 2025
+ 13:21:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250708193822.45168-1-da.gomez@kernel.org>
+In-Reply-To: <20250708193822.45168-1-da.gomez@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 8 Jul 2025 13:21:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whHRv28HBL47x-L5okG+fZDJyX432uxG3AQqbqRAgkAYQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxAhDZRAkaLA0YsEY4-BABaOKocyzik-IBHOi0g_zOdXugIsdaXaIH8dCI
+Message-ID: <CAHk-=whHRv28HBL47x-L5okG+fZDJyX432uxG3AQqbqRAgkAYQ@mail.gmail.com>
+Subject: Re: [GIT PULL] Modules fixes for v6.16-rc6
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	linux-modules@vger.kernel.org, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The following changes since commit d7b8f8e20813f0179d8ef519541a3527e7661d3a:
+On Tue, 8 Jul 2025 at 12:38, Daniel Gomez <da.gomez@kernel.org> wrote:
+>
+> Petr and Sebastian went down to the archive history  (before Git) and
+> found the commit that broke it b3b91325f3c7 ("Don't relocate
+> non-allocated regions in modules.").
 
-  Linux 6.16-rc5 (2025-07-06 14:10:26 -0700)
+When mentioning git commits in other trees, you really do need to
+mention *which* other tree it is.
 
-are available in the Git repository at:
+In this case, it seems to be
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-6.16-rc6.fixes
+    https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/
 
-for you to fetch changes up to af1ccf546e5f2915fbbde26841db43a971d81cf3:
+that has that commit, but that's actually a kind of odd tree.
 
-  MAINTAINERS: update Daniel Gomez's role and email address (2025-07-08 20:52:30 +0200)
+The typical bitkeeper conversion tree (which is where I suspect the
+full-history conversion then got it from, unless somebody did a
+separate conversion) that contains that commit is actually
 
-----------------------------------------------------------------
-Modules fixes for 6.16-rc6
+    https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/
 
-This includes 2 fixes: one introduced in the current release cycle (v6.16-rc1)
-and another introduced back in v6.4-rc1. Both have been in linux-next since
-next-250701 and have passed the modules ci tests using kdevops. Finally, as Petr
-and Luis mentioned in previous pull requests, add myself (Daniel Gomez) to the
-list of modules maintainers.
+and there the commit has commit ID 1a6100caae ("Don't relocate
+non-allocated regions in modules")
 
-The first was reported by Intel's kernel test robot, and it addresses a crash
-exposed by Sebastian's commit c50d295c37f2 ("rds: Use nested-BH locking for
-rds_page_remainder") by allowing relocations for the per-CPU section even if it
-lacks the SHF_ALLOC flag. Petr and Sebastian went down to the archive history
-(before Git) and found the commit that broke it b3b91325f3c7 ("Don't relocate
-non-allocated regions in modules.").
-
-The second fix, reported and fixed by Petr (with additional cleanup), resolves a
-memory leak by ensuring proper deallocation if module loading fails. We couldn't
-find a reproducer other than forcing it manually or leveraging eBPF. So, I
-tested it by enabling error injection in the codetag functions through the error
-path that produces the leak and made it fail until execmem is unable to allocate
-more memory.
-
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEE73Ua4R8Pc+G5xjxTQJ6jxB8ZUfsFAmhta7AACgkQQJ6jxB8Z
-UftulhAAiK78CFOdIcKbGKMD8tBGCHUT6IVCskY0E3aqDmhZiNEXhpmwKnOq56zo
-ztbwg81Acc41t0Y283vgmZuEpJbzmS47qRYIZEhk5BuLdKl3Hn91Iyi3sdZLB9gD
-VaYkpY0y4V3pWL5AM/9rtnLvY7PSLZG0bnAeS2fsOzxN5DIn2IIdD3WsU++96O+k
-LHIik7dXcBQQKOukRClAI+cZiU2IGGG/FcDuMmANcsw+E4GKTBQunZiixTZOjdgi
-e//NMYw1+Y5DJQ/i7C3Fl6+W+r/8/HPkRxyZ3Wt79WBZxwV/Hp5iTG9652vHKE1i
-ybBDwlJkQC/EQsup4NKzDby38bPW1tdYwwK0dNbMRGxNICqNe7rq5fEG4WjTjXAA
-H2O5VZ84Ys1SRx+uXeu83aog6fdiZ9DezGuaxFgrTRHUken2QvxJ/HTXe1BmMNY5
-9BbHPrG22dp+dEDptSVaDWWMQZ6OP73gXrPYowQC8/FOm9NdBXVIH9hvvI7KRSf5
-OC4A7nyZCDNW/Dwzc6yi3qAWMkKCR6IGMqN9vFiR3iIkaHJN1KABFzaVmh3JpR+B
-6TsuO8/EIu9Ue25VgMehSj9LuGFgbhcfg40N2Fj/7+vgAM4Rd5sOw/NyiaD8xUPC
-j0Ql4ehZiOQof8wAhdxpHFQQjO30UdpQgOmUO1yNUdmuPIpdSN0=
-=dQvQ
------END PGP SIGNATURE-----
-
-----------------------------------------------------------------
-Daniel Gomez (1):
-      MAINTAINERS: update Daniel Gomez's role and email address
-
-Petr Pavlu (2):
-      module: Fix memory deallocation on error path in move_module()
-      module: Avoid unnecessary return value initialization in move_module()
-
-Sebastian Andrzej Siewior (1):
-      module: Make sure relocations are applied to the per-CPU section
-
- MAINTAINERS          |  2 +-
- kernel/module/main.c | 17 +++++++++++------
- 2 files changed, 12 insertions(+), 7 deletions(-)
+                 Linus
