@@ -1,161 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE08E19755B;
-	Mon,  7 Jul 2025 19:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5F721B905;
+	Tue,  8 Jul 2025 07:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751915473; cv=none; b=JkHt2Ov3T5RBgB2eGXX0Twx8GHTi5ttIWQwy2xhATF9hALRMTOPowW9ifOvjEBZzVWfCsVRxy93KITc4RJQbuk/vNGm1iyXU9x1zPlWRSvq8XZhCJlQ2WeCIKG5MfBTG6LIKoqPZwj1ICTRp40xktF3wqSU4ASxSmULBPEDOJRs=
+	t=1751958650; cv=none; b=oBUsSDtOqXP394Eqk4EH3JHyGCMInOYDt19zHPDxScqxPh++YFYzv4UE3eaqoE7JDtDMvDa87tpzREF4VdLfjiZ1Nn9F5+hX3SuXZmR+9xiFSFhLdd3o7bDvrJoV6VCAHOwyBFWNlwe+JmVE7PTjffafwhQfPIrWlfRKQU+NKKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751915473; c=relaxed/simple;
-	bh=jyeQQgJy/kgZ+VcJ2KuOWLRT94HaQ85k1BKEOhxnP8I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O/9AYu2wmCy8T1ZI6NX4IDvhHfRC7OCFRU1d9g0v4AqZOA0SAPDZ39Blu7iNWI0RRYKC+poBQrWB5fiDEE02q1qWv31HpE9sTvKIt/8IIk45Qw4/gQdeSPt+e1udWHZ7Qw5lhGiEawz5hH24EqyWQzUn1jOVPYuvsudjqXkKq20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fHHW0nmM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751958650; c=relaxed/simple;
+	bh=CC5iDx0Wrj+Klrk9Ri4aS+NjdvqOQWWSjSxWvVcXFTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rAZYEYU4o4MPwLnbKG5faXn9UD4ztAsSI10rCJgqmAFDShPZVcOynsrB5TTNL+xXStUVeZENzpTzWV1/lF3EO/CLTGB24xcAbDPDZanAQpFAEtvAahsstwCIHQMWu97orMipvag4wiG9lrJoRyAhGCb0KpL9MjxS2Aj4NYW3k1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=afTs5ENv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fHHW0nmM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33E4FC4CEE3;
-	Mon,  7 Jul 2025 19:11:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="afTs5ENv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90835C4CEED;
+	Tue,  8 Jul 2025 07:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751915473;
-	bh=jyeQQgJy/kgZ+VcJ2KuOWLRT94HaQ85k1BKEOhxnP8I=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fHHW0nmMsBwv8rMX00PuOEcDw/lS8dryl6B3FKbBejkZocyYBzl+ji4mMx7loAAzR
-	 ziMU8QyiZPlxlEUTwi7HfPIJ9CwgfE7CWj0C5+tHL50z+Wdjsvd8BitF8pDD6b2UuA
-	 TaLn4NsTSzc6ztgsMFCH2y/OiZf6FKWruiCs8kMzqdh+NZCEzeyR0Twk6oUey7tHiC
-	 Z5x4c095DaXtudKYGi/zFUbAwRkpVa4zdHW9JRHlcW5q/4loDYaPG1CCsr3Z5fxpzH
-	 Q5a8aQfam0AuXLQg758xvMTYFdpGDQJsrb4Do6W61i9/289vF1NQwxVVQnk+kIR000
-	 5wsH+/w7CpG8A==
-Message-ID: <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
-Date: Mon, 7 Jul 2025 21:11:05 +0200
+	s=k20201202; t=1751958649;
+	bh=CC5iDx0Wrj+Klrk9Ri4aS+NjdvqOQWWSjSxWvVcXFTo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=afTs5ENvhkamb0LLqd+IgEiyQGBJe90QeMYZYjcrMkTNC8Yu/NUAMmEf9niXbRH7a
+	 mYJWapF7+xQckyQVQmHOifdktVPPFNQniSX4nriWuNq61s3H7R7txv3USrHQ/l1De8
+	 XwVHB3FItTDK9gJGT0g8XBRf5UxPYBI5VCtKChiCxSy7sh4Twat/vQu4c5wES8cXG/
+	 Qw75thLg7rjQNPPWvLjr9xHmdMxlKoViNHGp6O1/7jjBFU652BDxVZzEiQ/2Pd46u4
+	 se56Zl8WSMr/s0TMKrumCoE+CTJ+R8u8BV9TcygQUFtUFgsXl/nJDWWEYtQz6A2BT/
+	 wly+OikM25RRw==
+Date: Tue, 8 Jul 2025 10:10:39 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Yann Ylavic <ylavic.dev@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 3/8] execmem: rework execmem_cache_free()
+Message-ID: <aGzEbw3BybnWOidx@kernel.org>
+References: <20250704134943.3524829-1-rppt@kernel.org>
+ <20250704134943.3524829-4-rppt@kernel.org>
+ <CAKQ1sVN9KZYt=M5cst+BonDMVL_wO3sbhgZ+JPzc=Rw9Qfz9tw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH 2/3] module: make structure definitions always visible
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
- <20250612-kunit-ifdef-modules-v1-2-fdccd42dcff8@linutronix.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20250612-kunit-ifdef-modules-v1-2-fdccd42dcff8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKQ1sVN9KZYt=M5cst+BonDMVL_wO3sbhgZ+JPzc=Rw9Qfz9tw@mail.gmail.com>
 
-On 12/06/2025 16.53, Thomas WeiÃschuh wrote:
-> To write code that works with both CONFIG_MODULES=y and CONFIG_MODULES=n
-> it is convenient to use "if (IS_ENABLED(CONFIG_MODULES))" over raw #ifdef.
-> The code will still fully typechecked but the unreachable parts are
-> discarded by the compiler. This prevents accidental breakage when a certain
-> kconfig combination was not specifically tested by the developer.
-> This pattern is already supported to some extend by module.h defining
-> empty stub functions if CONFIG_MODULES=n.
-> However some users of module.h work on the structured defined by module.h.
+On Mon, Jul 07, 2025 at 05:32:11PM +0200, Yann Ylavic wrote:
+> On Fri, Jul 4, 2025 at 3:54 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > +
+> > +static void execmem_cache_free_slow(struct work_struct *work)
+> > +{
+> > +       struct maple_tree *busy_areas = &execmem_cache.busy_areas;
+> > +       MA_STATE(mas, busy_areas, 0, ULONG_MAX);
+> > +       void *area;
+> > +
+> > +       guard(mutex)(&execmem_cache.mutex);
+> > +
+> > +       if (!execmem_cache.pending_free_cnt)
+> > +               return;
+> > +
+> > +       mas_for_each(&mas, area, ULONG_MAX) {
+> > +               if (!is_pending_free(area))
+> > +                       continue;
+> > +
+> > +               pending_free_clear(area);
 > 
-> Therefore these structure definitions need to be visible, too.
+> Probably:
+>                   area = pending_free_clear(area);
+> ?
 
-We are missing here which structures are needed. + we are making more things
-visible than what we actually need.
-
+Right, thanks!
+ 
+> > +               if (__execmem_cache_free(&mas, area, GFP_KERNEL))
+> > +                       continue;
+> > +
+> > +               execmem_cache.pending_free_cnt--;
+> > +       }
+> > +
+> > +       if (execmem_cache.pending_free_cnt)
+> > +               schedule_delayed_work(&execmem_cache_free_work, FREE_DELAY);
+> > +       else
+> > +               schedule_work(&execmem_cache_clean_work);
+> > +}
 > 
-> Many structure members are still gated by specific configuration settings.
-> The assumption for those is that the code using them will be gated behind
-> the same configuration setting anyways.
-
-I think code and kconfig need to reflect the actual dependencies. For example,
-if CONFIG_LIVEPATCH depends on CONFIG_MODULES, we need to specify that in
-Kconfig with depends on, as well as keep the code gated by these 2 configs with
-ifdef/IS_ENABLED.
-
 > 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->  include/linux/module.h | 23 ++++++++++++-----------
->  1 file changed, 12 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 52f7b0487a2733c56e2531a434887e56e1bf45b2..7f783e71636542b99db3dd869a9387d14992df45 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -302,17 +302,6 @@ static typeof(name) __mod_device_table__##type##__##name		\
->  
->  struct notifier_block;
->  
-> -#ifdef CONFIG_MODULES
-> -
-> -extern int modules_disabled; /* for sysctl */
-> -/* Get/put a kernel symbol (calls must be symmetric) */
-> -void *__symbol_get(const char *symbol);
-> -void *__symbol_get_gpl(const char *symbol);
-> -#define symbol_get(x)	({ \
-> -	static const char __notrim[] \
-> -		__used __section(".no_trim_symbol") = __stringify(x); \
-> -	(typeof(&x))(__symbol_get(__stringify(x))); })
-> -
->  enum module_state {
->  	MODULE_STATE_LIVE,	/* Normal state. */
->  	MODULE_STATE_COMING,	/* Full formed, running module_init. */
-> @@ -598,6 +587,18 @@ struct module {
->  	struct _ddebug_info dyndbg_info;
->  #endif
->  } ____cacheline_aligned __randomize_layout;
-> +
-> +#ifdef CONFIG_MODULES
-> +
-> +extern int modules_disabled; /* for sysctl */
-> +/* Get/put a kernel symbol (calls must be symmetric) */
-> +void *__symbol_get(const char *symbol);
-> +void *__symbol_get_gpl(const char *symbol);
-> +#define symbol_get(x)	({ \
-> +	static const char __notrim[] \
-> +		__used __section(".no_trim_symbol") = __stringify(x); \
-> +	(typeof(&x))(__symbol_get(__stringify(x))); })
-> +
+> Regards;
+> Yann.
 
-The patch exposes data structures that are not needed. + breaks the
-config dependencies.
-
-For example, before this patch:
-
-#ifdef CONFIG_MODULES
-
-{...}
-
-struct mod_tree_node {
-
-{...}
-
-struct module_memory {
-	void *base;
-	bool is_rox;
-	unsigned int size;
-
-#ifdef CONFIG_MODULES_TREE_LOOKUP
-	struct mod_tree_node mtn;
-#endif
-};
-
-{...}
-#endif /* CONFIG_MODULES */
-
-After the patch, mod_tree_node is not needed externally. And the mtn field
-in module_memory is exposed only under MODULES_TREE_LOOKUP and not MODULES
-+ MODULES_TREE_LOOKUP.
-
-I general, I see the issues I mentioned with LIVEPATCH, mod_tree_node, macros,
-and LOOKUP.
-
->  #define MODULE_ARCH_INIT {}
->  #endif
-> 
+-- 
+Sincerely yours,
+Mike.
