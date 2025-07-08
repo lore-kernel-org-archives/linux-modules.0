@@ -1,120 +1,203 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD57F1D5150;
-	Tue,  8 Jul 2025 09:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63F52309AA
+	for <linux-modules@vger.kernel.org>; Tue,  8 Jul 2025 09:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751965628; cv=none; b=q8epYmUO641nprnnvkqX/XxttNF/iraJH0CkF7tYTT1YqGdRnRXHxG9BdHh4FtCxDxYxPmK1ZpQKpKA+0XkZQk9pOg2GW85NRb+EkzyAZunlOqD5jcDA+AuC3nT+V/H0RNQLA1W9zcAu/arIVzff6I0TdxoD0QYcYXUkzf9EyAg=
+	t=1751967134; cv=none; b=c7vo70kqPpxT4ZcAI5qDG0+9c9Yjqg44nxiheWrtjMHnX6CckRWpRS6tAkUeefzwOrSmVoWaQh41304Y2zoZiPIy0AdJscVwMyfiRSHqjz7zYwf+zTUMWTDapnwB2J3F9kXMcqlf+qenrfj/fbDh1LbnfQqgIy4BLVDjEQon1tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751965628; c=relaxed/simple;
-	bh=al45WhcYx+cfhiLoHHzrSgYvrkI1MfO5KGvm49P1sUE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=oT9JyYOgxB2h8VKbfbCCGtXU9XJXbdsuAHAQgMI8ZFlAe83zjMzjvH1wfUeRABcok0ccGjQwv1a+6PRc1tRT6XyNFN/QPczI/fQvj4+GsUpzLYOMBVFxVb+VVHhQMzx+2wHZRv1QZ2CXhZijB///TPFMNgtfay6hOmanKbKRKWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pbwyDWmg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751967134; c=relaxed/simple;
+	bh=VpT4faI2QrhfOSkR5ZLdixn7ZKU0ZQTFE8Y+uInHVCs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N/UYqZD7YfpTZe+JsAKOO3DiRVsQRERiOI3NQzKR5AXjf/HXgXdZLtp3vMD/IQQ9KgjMylTDgjlq4Bgg6L7E5zux40bpmGdS3BF51t59PHNdBk+tAfHRy1Rs1bQXWO0jMBJpK5o0ST3iMHNMwsqKm6OuTBO/oThueAxzunv/IbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=anLQ5mlv; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pbwyDWmg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD44C4CEED;
-	Tue,  8 Jul 2025 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751965628;
-	bh=al45WhcYx+cfhiLoHHzrSgYvrkI1MfO5KGvm49P1sUE=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=pbwyDWmgKqTSNdqYbXxUOy9WkKykYt/5jWR1HUlyYlk0oJwyak86Ui/RB6B8WWrzl
-	 qDSSy0XSL+t/91MzhAN9K/rfoSFs/urQh3Q5I43r7EwlNaQpvAunkODmnzcDw996I3
-	 CbwCJzPMXEgmQMC0UaKcGZ+HCyjPU7qPLoSujaf9mJutIaLWF5lGNSOp4ubhonhZSY
-	 k1frEetBV/HfVmhBtoEo13AENUWORSqUpl4V0PMHnOlvV1nWEMioqZ4aQpAcWgOHDz
-	 bcagQ3QFJooQVFkI4ERB/MY91taVQvEzBmypNcGkren7jngOj09nDEAmbBynVerws2
-	 Hxf5wpJ/HpBrQ==
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="anLQ5mlv"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-454ac069223so25525815e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 08 Jul 2025 02:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1751967130; x=1752571930; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OGJceIW5govnMWwv0NuUJQBgYLDuIDSURIFJwwyGYJU=;
+        b=anLQ5mlvg1wN9HgBeWDld6tp9HA1BuNaafuz+c0vrSdEqkiFR+y5+t2Zvlv+YVqhMC
+         rjM+vke+CqAbB5a6xNofYdPHWKBbD761gtv0oJSHSFKpuYpGAaPT57r5aX0eUUmv3aF6
+         a7jdP3I86BEOXHfJ1E0gfa6yoVl9UfyDg2ZXMVoJEmsDMaKcFA7i/Mq6y3UWqeiKg/4k
+         zN2/6V6hFsMcOE58rNZ90YAJEpM06noblm9zwomhYDWRqIz9TXrwKYBzZmN77Ev5SUlX
+         AYigs259NdIRjzZyMy0CmT03wKiBfUubQtEvyNMhkVD4I0GdE0YEA+NSQGpXY7EC6hPK
+         zM8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751967130; x=1752571930;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGJceIW5govnMWwv0NuUJQBgYLDuIDSURIFJwwyGYJU=;
+        b=CNRJV9n72wScKB0ydSGimrjXj9E8XQpE9z25FApEiiM26URpf29wjZmE3aFqJ75BER
+         aHlhes3VNdwWcDKxJHKAncwSop8USqmYeVFcQtxzFDQCffE5AUW261/6CPOpfw7zIrMH
+         UFthqcQiwidbq4bMFos5RGHe0pW8+P29UC1BkJ3inePg2yPqgEePmf/cz5dBllUMBRrS
+         sHIeXLBh7rBrb/VD3JrG2CaDcIsYsf9UnugwmburyBMIuJHbd+Wrr9G6U5vfz5fWQ2Dx
+         PgXL8bn4icsHQTqnteKrFub5sDbGY3xbg7bCN8ZpIKjEBdNkQku05GPSAmc4Y9eERrg2
+         eJlg==
+X-Forwarded-Encrypted: i=1; AJvYcCVRFUNcTHaa6e4LuJA+tKDSQlQr4OtzZUc+r5LQest5v53h6b0vhH9QBILejfnlzxCiGrJAaXDQ47+AqWDX@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTInrLjVTaPhj2MddVucRzuF/V7QPXkl9LwcqCsu9SK90Mt5e0
+	Hz239f6ZYINHtQoPEHuZPwlECC2zIvKAylO+gmtRCwvItVGTy/g0YqLbIuayMBcFMdg=
+X-Gm-Gg: ASbGnctvIzRj+sIPJfK6UD2t3tDBvMdd0wkK19dQxAHjmLFxewQy42hfhKdKUxRWwmN
+	GjRITa6WDNEpHSRjTKGoovi7W3pCdNhaujQ/rupWJwot9+1Wg8M59RXGKDzOKLZeap3MuSeqy1Z
+	0gDdA/5gy8AOa2DIOBwZNYk56gN/yovUuq2EXIZXLfhiQdDisuelvbQy5a3pcrOkhZHitbEyKOK
+	7kKDIrwSQJpB9Qh0GMOcrtI+AqgBLiDfaf+P1EPjA/iUZIgGaQ34bq0nB3UbUGkBBtcnIQUfckE
+	f3lfebB3X4Oifz+/2efQUNPVbLUEzt6p6IUbcbqpYRdMRvORcp7lOJaFy/xfmaOTKA==
+X-Google-Smtp-Source: AGHT+IGpfK2RCAo/edKvTlUC+d9AURbdyD484XFqxor+Ht3SNk4f42ge+bO29Nor8b5E8oXUHRj2Iw==
+X-Received: by 2002:a05:6000:240c:b0:3a5:281b:9fac with SMTP id ffacd0b85a97d-3b5de11ea28mr1823078f8f.17.1751967130016;
+        Tue, 08 Jul 2025 02:32:10 -0700 (PDT)
+Received: from [10.100.51.209] ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b47225977dsm12455087f8f.73.2025.07.08.02.32.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jul 2025 02:32:09 -0700 (PDT)
+Message-ID: <9c8b2847-5017-45b8-bbc2-0ba96cc42961@suse.com>
+Date: Tue, 8 Jul 2025 11:32:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] module: make structure definitions always visible
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
+ <20250612-kunit-ifdef-modules-v1-2-fdccd42dcff8@linutronix.de>
+ <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 08 Jul 2025 11:07:02 +0200
-Message-Id: <DB6JZBUSWGKX.3M3M5TSWPLLFN@kernel.org>
-Cc: "Alice Ryhl" <aliceryhl@google.com>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Alex Gaynor" <alex.gaynor@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Masahiro
- Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
- Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
- "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
- <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
- Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v15 1/7] rust: sync: add `SetOnce`
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>, "Boqun Feng"
- <boqun.feng@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
- <20250707-module-params-v3-v15-1-c1f4269a57b9@kernel.org>
- <CAH5fLgiKo=jN_V5cAe_AJqxxp7mQWqhKx7knkEj6js3yiU9sqA@mail.gmail.com>
- <KNYMPkLfLvLb8ocrLqSmk-5hRGhRaaPQ2sDHN5JoPAUxYJWlHNiOW4HRmtDDGkoMRfNwpziT8mkRzlPkdxDVaQ==@protonmail.internalid> <aGvkFbs5caxLSQxa@Mac.home> <877c0joyfo.fsf@kernel.org>
-In-Reply-To: <877c0joyfo.fsf@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue Jul 8, 2025 at 10:54 AM CEST, Andreas Hindborg wrote:
-> "Boqun Feng" <boqun.feng@gmail.com> writes:
->
->> On Mon, Jul 07, 2025 at 03:38:58PM +0200, Alice Ryhl wrote:
->>> On Mon, Jul 7, 2025 at 3:32=E2=80=AFPM Andreas Hindborg <a.hindborg@ker=
-nel.org> wrote:
->>> >
->>> > Introduce the `SetOnce` type, a container that can only be written on=
-ce.
->>> > The container uses an internal atomic to synchronize writes to the in=
-ternal
->>> > value.
->>> >
->>> > Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
->>>
->>> LGTM:
->>> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
->>>
->>> > +impl<T> Drop for SetOnce<T> {
->>> > +    fn drop(&mut self) {
->>> > +        if self.init.load(Acquire) =3D=3D 2 {
->>> > +            // SAFETY: By the type invariants of `Self`, `self.init =
-=3D=3D 2` means that `self.value`
->>> > +            // contains a valid value. We have exclusive access, as =
-we hold a `mut` reference to
->>> > +            // `self`.
->>> > +            unsafe { drop_in_place(self.value.get()) };
->>>
->>> This load does not need to be Acquire. It can be a Relaxed load or
->>> even an unsynchronized one since the access is exclusive.
+On 7/7/25 9:11 PM, Daniel Gomez wrote:
+> On 12/06/2025 16.53, Thomas WeiÃschuh wrote:
+>> To write code that works with both CONFIG_MODULES=y and CONFIG_MODULES=n
+>> it is convenient to use "if (IS_ENABLED(CONFIG_MODULES))" over raw #ifdef.
+>> The code will still fully typechecked but the unreachable parts are
+>> discarded by the compiler. This prevents accidental breakage when a certain
+>> kconfig combination was not specifically tested by the developer.
+>> This pattern is already supported to some extend by module.h defining
+>> empty stub functions if CONFIG_MODULES=n.
+>> However some users of module.h work on the structured defined by module.h.
 >>
->> Right, I think we can do the similar as Revocable here:
+>> Therefore these structure definitions need to be visible, too.
+> 
+> We are missing here which structures are needed. + we are making more things
+> visible than what we actually need.
+> 
 >>
->>         if *self.init.get_mut() =3D=3D 2 { }
+>> Many structure members are still gated by specific configuration settings.
+>> The assumption for those is that the code using them will be gated behind
+>> the same configuration setting anyways.
+> 
+> I think code and kconfig need to reflect the actual dependencies. For example,
+> if CONFIG_LIVEPATCH depends on CONFIG_MODULES, we need to specify that in
+> Kconfig with depends on, as well as keep the code gated by these 2 configs with
+> ifdef/IS_ENABLED.
+> 
 >>
->> Further, with my following Benno's suggestion and making `Atomic<T>` an
->> `UnsafeCell<T>:
+>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>> ---
+>>  include/linux/module.h | 23 ++++++++++++-----------
+>>  1 file changed, 12 insertions(+), 11 deletions(-)
 >>
->> 	https://lore.kernel.org/rust-for-linux/aGhh-TvNOWhkt0JG@Mac.home/
->>
->> compiler can generate a noalias reference here, which allows further
->> optimization.
->>
->
-> You would like to remove `PhantomPinned` to enable noalias? I guess that
-> makes sense in this case. I'll fix that for next spin.
+>> diff --git a/include/linux/module.h b/include/linux/module.h
+>> index 52f7b0487a2733c56e2531a434887e56e1bf45b2..7f783e71636542b99db3dd869a9387d14992df45 100644
+>> --- a/include/linux/module.h
+>> +++ b/include/linux/module.h
+>> @@ -302,17 +302,6 @@ static typeof(name) __mod_device_table__##type##__##name		\
+>>  
+>>  struct notifier_block;
+>>  
+>> -#ifdef CONFIG_MODULES
+>> -
+>> -extern int modules_disabled; /* for sysctl */
+>> -/* Get/put a kernel symbol (calls must be symmetric) */
+>> -void *__symbol_get(const char *symbol);
+>> -void *__symbol_get_gpl(const char *symbol);
+>> -#define symbol_get(x)	({ \
+>> -	static const char __notrim[] \
+>> -		__used __section(".no_trim_symbol") = __stringify(x); \
+>> -	(typeof(&x))(__symbol_get(__stringify(x))); })
+>> -
+>>  enum module_state {
+>>  	MODULE_STATE_LIVE,	/* Normal state. */
+>>  	MODULE_STATE_COMING,	/* Full formed, running module_init. */
+>> @@ -598,6 +587,18 @@ struct module {
+>>  	struct _ddebug_info dyndbg_info;
+>>  #endif
+>>  } ____cacheline_aligned __randomize_layout;
+>> +
+>> +#ifdef CONFIG_MODULES
+>> +
+>> +extern int modules_disabled; /* for sysctl */
+>> +/* Get/put a kernel symbol (calls must be symmetric) */
+>> +void *__symbol_get(const char *symbol);
+>> +void *__symbol_get_gpl(const char *symbol);
+>> +#define symbol_get(x)	({ \
+>> +	static const char __notrim[] \
+>> +		__used __section(".no_trim_symbol") = __stringify(x); \
+>> +	(typeof(&x))(__symbol_get(__stringify(x))); })
+>> +
+> 
+> The patch exposes data structures that are not needed. + breaks the
+> config dependencies.
+> 
+> For example, before this patch:
+> 
+> #ifdef CONFIG_MODULES
+> 
+> {...}
+> 
+> struct mod_tree_node {
+> 
+> {...}
+> 
+> struct module_memory {
+> 	void *base;
+> 	bool is_rox;
+> 	unsigned int size;
+> 
+> #ifdef CONFIG_MODULES_TREE_LOOKUP
+> 	struct mod_tree_node mtn;
+> #endif
+> };
+> 
+> {...}
+> #endif /* CONFIG_MODULES */
+> 
+> After the patch, mod_tree_node is not needed externally. And the mtn field
+> in module_memory is exposed only under MODULES_TREE_LOOKUP and not MODULES
+> + MODULES_TREE_LOOKUP.
+> 
+> I general, I see the issues I mentioned with LIVEPATCH, mod_tree_node, macros,
+> and LOOKUP.
 
-I think you two are talking about different things. Boqun is saying that
-the `Atomic<T>` will use `UnsafeCell` rather than `Opaque`, which will
-potentially allow more optimizations.
+I think the idea is that having unnecessary structures in header files
+isn't particularly harmful, as they won't affect the resulting binary.
+On the other hand, they can help with type checking of conditional code
+as shown by patch #3.
 
-But you are talking about `SetOnce`, right? I think it makes more sense
-for `SetOnce` to use `UnsafeCell<MaybeUninit<T>>` rather than `Opaque`
-too. So feel free to change it in the next version.
+This is different compared to "extern int modules_disabled;" and
+"void *__symbol_get(const char *symbol);" which the patch correctly
+still protects by '#ifdef CONFIG_MODULES'. Not hiding them could result
+in successful compilation but an error only at link time.
 
----
-Cheers,
-Benno
+-- 
+Thanks,
+Petr
