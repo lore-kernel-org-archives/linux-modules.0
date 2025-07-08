@@ -1,128 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF9D223DC6;
-	Tue,  8 Jul 2025 08:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F4E1E231E;
+	Tue,  8 Jul 2025 08:48:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751962967; cv=none; b=ZFHdi8BM+3xqL0FrFemib3fOyjNeW/MD1YACCes4JDz+WFzBaHmdIoOslrf9pLXkSdTOK/Vs5sIXbcHzty7wplm8uEDwfmcEODclL2mtYoRZyCzsUc9BhbtOPKHFIWaWZ8rYGu4+AY4HXborhQ5A7DXTV13sUzp+xTDFeKlGjEw=
+	t=1751964488; cv=none; b=Ny5Dx21eWmiCK6Aha4DwmHhbUAT/8px2IilaC3SVSe0LZyGeCgLH1pYmD0Iz0k74Tzo9Ie//uHA+dlAI5/FHdNacZ3QrVJ+LIsBd/eGSM2XoHumz6kmhMGdZHBW4U9Mi9Gh5c8goJTIwbytJI6c/NoiBw8lDhXiOjifm7uXYEe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751962967; c=relaxed/simple;
-	bh=oRwqOe1brAYvYekojKVNvxAmK4Lubg+YWxdejVSPic8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OXl7plU1n/u675mmJt/PKMDv805jR03S5DFTcjfk72pD/T/stXmCSiRv328NKiuq33XybvxNfURrQoXVTjobpKYCqQ25q/uGY3zpVlsQ5WHKCQ8zUslppZodi+UpS82Tp4JPk/WsnhdN2YGagqPPwxmM2jDa7goL2/rXTgV5+8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u5arvs8f; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751964488; c=relaxed/simple;
+	bh=nu58sHnwkVXGgc5nmEIoVZo4o9oFF2C6+nfFzXZ1s4A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=cT/P/W94YA3t3KYLDoZHibHgiSnihcLtfltbguz4BmAT0SVpqeMFPP/XWtc40fVdxGahCCQc0dpmqKN2Vvls3T/Ew7IySW/gvJL572bkeWEKEwqt7jwWXLXk8LnktODX+Ow39P8kOTNqG9lHsWbuf6yeDVHSjL+8LNw76dM8Tu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVvy2ldA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u5arvs8f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9065C4CEF0;
-	Tue,  8 Jul 2025 08:22:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVvy2ldA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8F4C4CEED;
+	Tue,  8 Jul 2025 08:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751962966;
-	bh=oRwqOe1brAYvYekojKVNvxAmK4Lubg+YWxdejVSPic8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u5arvs8fUGa2VSSCCCZx+qpZf75PEDkfi/z0yr7IfzJRPNZ+Dv8qZa9/AmQiF15xA
-	 VZFsERmwXeI2iXyxDcdvbS5uM7Mb1rHNs2UyVpQJgTLP6Xmb/VmNlFhACZuYJZxvx5
-	 xgnJpeI4vR1D2QlyjmJGtqPkXK4hfZwAQt+ekDYlz2OQaawYMFKxwqtDOKabBE/E1C
-	 TbjFUsJsSMLvgtMr2mXGwb2UrjFB6SnEd2jYHgM+qmNivLYnOktUUB+JgCSeAsCVYn
-	 /E/v4Qjo+poQCiUa01PnM53uioAU2+QpmJAOfHjsCmyG+Pkub7MQeuBuuQ+hdVk6fz
-	 a8dQTTNzqW/dg==
-Date: Tue, 8 Jul 2025 11:22:37 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 1/8] execmem: drop unused execmem_update_copy()
-Message-ID: <aGzVTdfBU_SO7ss9@kernel.org>
-References: <20250704134943.3524829-1-rppt@kernel.org>
- <20250704134943.3524829-2-rppt@kernel.org>
- <7e52f721-1d8e-4c50-af33-bee3f0d2ac6e@csgroup.eu>
- <aGu0Yj08EZvpL5Xv@kernel.org>
- <2ea9c28f-c3d1-4837-b000-10eccaa2775b@csgroup.eu>
+	s=k20201202; t=1751964487;
+	bh=nu58sHnwkVXGgc5nmEIoVZo4o9oFF2C6+nfFzXZ1s4A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=YVvy2ldAkhT+2bdFXVYg9FStclkbIMbVPUBnePtFnpxgTb1yheiuZ97kSj/Vib+H6
+	 Wed/8Gzf+VCi5tctz8zbHmOjcYQn8dzNESpGS8Joiw2iTsO8NYVMnv+SFijCqqKw0f
+	 DoNWy+qbKYjW4sMtRcyha7UKhHBkcexdJsNcAPZ7+hMXaV3LK7PqiUrEN/5raX8SMa
+	 3Qab1pAyKqAonUh4ExikPP0iFf+vmJoa/8UI/WK3QoMaf2ImNKQNbHLD580rHwhNlR
+	 sUYtxSZuesDNwMIMiQ1C43Dxmh+VoosUOH0NacDujfMHER3EVJAUpD8wS1MTdqPkDS
+	 X9rIIfrkG6EVw==
+From: Andreas Hindborg <a.hindborg@kernel.org>
+To: "Alice Ryhl" <aliceryhl@google.com>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>,  "Alex Gaynor"
+ <alex.gaynor@gmail.com>,  "Boqun Feng" <boqun.feng@gmail.com>,  "Gary Guo"
+ <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>,
+  "Masahiro Yamada" <masahiroy@kernel.org>,  "Nathan Chancellor"
+ <nathan@kernel.org>,  "Luis Chamberlain" <mcgrof@kernel.org>,  "Danilo
+ Krummrich" <dakr@kernel.org>,  "Benno Lossin" <lossin@kernel.org>,
+  "Nicolas Schier" <nicolas.schier@linux.dev>,  "Trevor Gross"
+ <tmgross@umich.edu>,  "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+  <rust-for-linux@vger.kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-kbuild@vger.kernel.org>,  "Petr Pavlu" <petr.pavlu@suse.com>,
+  "Sami Tolvanen" <samitolvanen@google.com>,  "Daniel Gomez"
+ <da.gomez@samsung.com>,  "Simona Vetter" <simona.vetter@ffwll.ch>,  "Greg
+ KH" <gregkh@linuxfoundation.org>,  "Fiona Behrens" <me@kloenk.dev>,
+  "Daniel Almeida" <daniel.almeida@collabora.com>,
+  <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v15 1/7] rust: sync: add `SetOnce`
+In-Reply-To: <CAH5fLgiKo=jN_V5cAe_AJqxxp7mQWqhKx7knkEj6js3yiU9sqA@mail.gmail.com>
+ (Alice
+	Ryhl's message of "Mon, 07 Jul 2025 15:38:58 +0200")
+References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
+	<20250707-module-params-v3-v15-1-c1f4269a57b9@kernel.org>
+	<miAy8nyEfpbNOEEKc8GGbUJCVpgjOlfffFKuSdwzwiFTR_Q-U3oUWKShLk_Qed5HHKwUEK-f_UA6nJbhrubQdw==@protonmail.internalid>
+	<CAH5fLgiKo=jN_V5cAe_AJqxxp7mQWqhKx7knkEj6js3yiU9sqA@mail.gmail.com>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Tue, 08 Jul 2025 10:47:54 +0200
+Message-ID: <87cyaboypx.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2ea9c28f-c3d1-4837-b000-10eccaa2775b@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 07, 2025 at 03:02:15PM +0200, Christophe Leroy wrote:
-> 
-> 
-> Le 07/07/2025 à 13:49, Mike Rapoport a écrit :
-> > On Mon, Jul 07, 2025 at 12:10:43PM +0200, Christophe Leroy wrote:
-> > > 
-> > > Le 04/07/2025 à 15:49, Mike Rapoport a écrit :
-> > > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > > > 
-> > > > The execmem_update_copy() that used text poking was required when memory
-> > > > allocated from ROX cache was always read-only. Since now its permissions
-> > > > can be switched to read-write there is no need in a function that updates
-> > > > memory with text poking.
-> > > 
-> > > Erm. Looks like I missed the patch that introduced this change.
-> > > 
-> > > On some variant of powerpc, namely book3s/32, this is not feasible.
-> > 
-> > The only user of EXECMEM_ROX_CACHE for now is x86-64, we can always revisit
-> > when powerpc book3s/32 would want to opt in to cache usage.
-> > 
-> > And it seems that [MODULES_VADDR, MODULES_END] is already mapped with
-> > "large pages", isn't it?
-> 
-> I don't think so. It uses execmem_alloc() which sets VM_ALLOW_HUGE_VMAP only
-> when using EXECMEM_ROX_CACHE. And book3s/32 doesn't have large pages.
-> 
-> Only 8xx has large pages but they are not PMD aligned (PMD_SIZE is 4M while
-> large pages are 512k and 8M) so it wouldn't work well with existing
-> execmem_vmalloc().
- 
-The PMD_SIZE can be replaced with one of arch_vmap size helpers if needed. 
-Or even parametrized in execmem_info.
- 
-> > > The granularity for setting the NX (non exec) bit is 256 Mbytes sections.
-> > > So the area dedicated to execmem [MODULES_VADDR; MODULES_END[ always have
-> > > the NX bit unset.
-> > > 
-> > > You can change any page within this area from ROX to RWX but you can't make
-> > > it RW without X. If you want RW without X you must map it in the VMALLOC
-> > > area, as VMALLOC area have NX bit always set.
-> > 
-> > So what will happen when one callse
-> > 
-> > 	set_memory_nx()
-> > 	set_memory_rw()
-> > 
-> > in such areas?
-> 
-> Nothing will happen. It will successfully unset the X bit on the PTE but
-> that will be ignored by the HW which only relies on the segment's NX bit
-> which is set for the entire VMALLOC area and unset for the entire MODULE
-> area.
+"Alice Ryhl" <aliceryhl@google.com> writes:
 
-And set_memory_rw() will essentially make the mapping RWX if it's in MODULE
-area?
- 
-> Christophe
-> 
+> On Mon, Jul 7, 2025 at 3:32=E2=80=AFPM Andreas Hindborg <a.hindborg@kerne=
+l.org> wrote:
+>>
+>> Introduce the `SetOnce` type, a container that can only be written once.
+>> The container uses an internal atomic to synchronize writes to the inter=
+nal
+>> value.
+>>
+>> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>
+> LGTM:
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>
+>> +impl<T> Drop for SetOnce<T> {
+>> +    fn drop(&mut self) {
+>> +        if self.init.load(Acquire) =3D=3D 2 {
+>> +            // SAFETY: By the type invariants of `Self`, `self.init =3D=
+=3D 2` means that `self.value`
+>> +            // contains a valid value. We have exclusive access, as we =
+hold a `mut` reference to
+>> +            // `self`.
+>> +            unsafe { drop_in_place(self.value.get()) };
+>
+> This load does not need to be Acquire. It can be a Relaxed load or
+> even an unsynchronized one since the access is exclusive.
 
--- 
-Sincerely yours,
-Mike.
+Right, that is actually very cool. My rationale was that if a reference
+has been shared to another thread of execution, we would need to
+synchronize here to see a possible initialization from that other
+thread. But I guess it is impossible to end the lifetime of a reference
+without doing a synchronization somewhere else.
+
+
+Best regards,
+Andreas Hindborg
+
+
