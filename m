@@ -1,86 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FC12DF3F2;
-	Tue,  8 Jul 2025 14:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49BB25B1EA
+	for <linux-modules@vger.kernel.org>; Tue,  8 Jul 2025 15:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751984351; cv=none; b=krbmhkARTA8mFq6aQSgPOMj/uDcA86lISZRrHr134EJVuWi2Vstgtiqz2ovAJ6ceqvsadwaqK2h6Xg572aPYmxp+MKf+d9nro0XUr9QKwPKe3XjTheVLUgn01xl14CPUj4T+yrY++CWCId6wSpP+M3q7PoOsq8VHrw5vjkW1O98=
+	t=1751987329; cv=none; b=g3JlXKeHhALLDPiradX2N4ICucMLLugKD1TRLCnyicHQGNkrIGsbmv1VVQI66c9gxTh0F04WRYko9t6tiVet+N1b/ZS53g4kEYZEimsy/7a2FkPkJAxSp+wgjO4QTpDGJyvh014shZoHTxYT9mgyUHB/3HWZqoMb0ZAcY8UASeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751984351; c=relaxed/simple;
-	bh=Iq0j90w5GB1UMwIBCu5T3PMb/N7aK9m/YbQtD24djNI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=EiGFdUnL8kSq7U6lrJJlktpKj99u1tNdGvSvq8mt5r35Hu5LUA+2JS1EzaKztUFxbmFYDw8huF3tPBr4BitT//LIDYhl+WBU+JZd4RdOI8BjzHkCa3729Hz7NpJ/a2laxJnWbXeN94Qrvau2/9YhmREVkN6qucuik4G8fYMpXrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJdG0bwe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1751987329; c=relaxed/simple;
+	bh=DevAXLQFvCU5eRgJL5QHWLUX9C3/FOHArG51G+VaF3I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M6+MmPggnBiq8vMjUrDBVaWi0JQeZTSnQ7xot/RGfnToncEr+IBid0A+kAfAQqZzTeVlUB30HzTfq8qpf7pZirnPlgGYzGcPjTdxVybqT3+HNhAlExVErEWRofU9GcGgk2o8yX3XsxagYbFDXzQOrL7TVRqOy/ETLRGm8AkJn5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xi0CtHBV; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mZKiHIZB; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xi0CtHBV; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mZKiHIZB; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJdG0bwe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423C3C4CEED;
-	Tue,  8 Jul 2025 14:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751984350;
-	bh=Iq0j90w5GB1UMwIBCu5T3PMb/N7aK9m/YbQtD24djNI=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=mJdG0bwexKPHDEAqDwqRF+Htv4NmJ/nfvmsx9gOvX+HSlsF4nm1vAmj+qfaPO35ej
-	 jRNUi+VHLoaWeDIEmZ8q+iRKi1LC8mfbuIon3R95/CJf1+7V+6pde9EfkqCX3wBsq3
-	 OJbBBBDnpWwpIEYw4986afQ2+J3v21rGxjV6XbLDD/ZWupktHImThisdm4c9UHKl88
-	 aJSdYeNtaGKImxqNPY3HMvnK/ITr7tMid6bO/erPrAMxdOACWEJt/ZOUu2K2RyQrZ9
-	 e88djzdFXGQA/sciXWLMPAeoTKEULYpueW1Aw0KjQGb+CYfy4p52F6SbbiIRA4xsyz
-	 Fg7O7fV3g046g==
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xi0CtHBV";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mZKiHIZB";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xi0CtHBV";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mZKiHIZB"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0176E2115F;
+	Tue,  8 Jul 2025 15:08:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1751987326; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NSMaRJJbnVaI3RsGuTUaNcWj+NMEtTYXU1yPmsTXRwg=;
+	b=xi0CtHBVce0uQXVOWkswAAnZU/4sEQwQbLDtMvnzJdtkCxitvLCCJHJhYfn/A/b9RfTgXs
+	EJ+HOa5YG2wTr7k6pBplG9RTAmBzC6wlcLOkPAOYeeJgxXGFGomvjoKwoBRmPMnK6O/o8n
+	5iRJg3aXi2YoKUmjC+Nrx5P19NhJp1Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1751987326;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NSMaRJJbnVaI3RsGuTUaNcWj+NMEtTYXU1yPmsTXRwg=;
+	b=mZKiHIZBJKB5R96Ak4Wl4xuIU9U+TM6idSJxjBe0x1Gj9yXmhdNOjCH6fshEp9Vp4a/Lhf
+	0qNLFbaMl5TWkrCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1751987326; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NSMaRJJbnVaI3RsGuTUaNcWj+NMEtTYXU1yPmsTXRwg=;
+	b=xi0CtHBVce0uQXVOWkswAAnZU/4sEQwQbLDtMvnzJdtkCxitvLCCJHJhYfn/A/b9RfTgXs
+	EJ+HOa5YG2wTr7k6pBplG9RTAmBzC6wlcLOkPAOYeeJgxXGFGomvjoKwoBRmPMnK6O/o8n
+	5iRJg3aXi2YoKUmjC+Nrx5P19NhJp1Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1751987326;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=NSMaRJJbnVaI3RsGuTUaNcWj+NMEtTYXU1yPmsTXRwg=;
+	b=mZKiHIZBJKB5R96Ak4Wl4xuIU9U+TM6idSJxjBe0x1Gj9yXmhdNOjCH6fshEp9Vp4a/Lhf
+	0qNLFbaMl5TWkrCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C1C8E13A68;
+	Tue,  8 Jul 2025 15:08:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 5nH/Ln00bWhdVgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 08 Jul 2025 15:08:45 +0000
+Message-ID: <39bed180-e21c-4801-8ac4-ba40b57f6df2@suse.cz>
+Date: Tue, 8 Jul 2025 17:08:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] module: Restrict module namespace access to in-tree
+ modules
+Content-Language: en-US
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Matthias Maennich <maennich@google.com>, Jonathan Corbet
+ <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
+ Daniel Gomez <da.gomez@samsung.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Christoph Hellwig <hch@infradead.org>, Peter Zijlstra
+ <peterz@infradead.org>, David Hildenbrand <david@redhat.com>,
+ Shivank Garg <shivankg@amd.com>, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20250708-export_modules-v1-0-fbf7a282d23f@suse.cz>
+ <20250708-export_modules-v1-1-fbf7a282d23f@suse.cz>
+ <CAK7LNATpQrHX_8x4WvhDN7cODCCLr8kihydtfM-6wxhY17xtQw@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAK7LNATpQrHX_8x4WvhDN7cODCCLr8kihydtfM-6wxhY17xtQw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 08 Jul 2025 16:19:04 +0200
-Message-Id: <DB6QM8WOX9FS.2W36R3YF2VS0F@kernel.org>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Alice Ryhl" <aliceryhl@google.com>, "Masahiro
- Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
- "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
- Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
- Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
- "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
- <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
- Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v15 1/7] rust: sync: add `SetOnce`
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
- <20250707-module-params-v3-v15-1-c1f4269a57b9@kernel.org>
- <MsrRzRcWQU4DLY5mlpwajZZaSx_kPRSJTuMGxtI4igY_8NpNBSAbb9v5BcFv2WKZoRkr8QDlcfjlGlH4NwpB8w==@protonmail.internalid> <DB6JVOZLCMBL.3EZQJP50UUB86@kernel.org> <87v7o2omqf.fsf@kernel.org>
-In-Reply-To: <87v7o2omqf.fsf@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -4.30
 
-On Tue Jul 8, 2025 at 3:06 PM CEST, Andreas Hindborg wrote:
-> "Benno Lossin" <lossin@kernel.org> writes:
->> On Mon Jul 7, 2025 at 3:29 PM CEST, Andreas Hindborg wrote:
->>> diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
->>> index 81e3a806e57e2..13e6bc7fa87ac 100644
->>> --- a/rust/kernel/sync.rs
->>> +++ b/rust/kernel/sync.rs
->>> @@ -18,6 +18,7 @@
->>>  mod locked_by;
->>>  pub mod poll;
->>>  pub mod rcu;
->>> +mod set_once;
+On 7/8/25 14:41, Masahiro Yamada wrote:
+> On Tue, Jul 8, 2025 at 4:29 PM Vlastimil Babka <vbabka@suse.cz> wrote:
 >>
->> I would have named this `once`.
->
-> So module `once` and struct `SetOnce`? Struct name `Once` would lead
-> thoughts to `std::sync::Once`, which is a different thing.
+>> The module namespace support has been introduced to allow restricting
+>> exports to specific modules only, and intended for in-tree modules such
+>> as kvm. Make this intention explicit by disallowing out of tree modules
+>> both for the module loader and modpost.
+>>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> 
+> 
+> In my understanding, an external module with the same name
+> can override the internal one.
+> 
+> This change disallows such a use-case.
 
-Hmm I thought that `Once` and `SetOnce` would live in the same module,
-but if they don't then I think it's better to keep the `set_once`
-module as-is.
-
----
-Cheers,
-Benno
+Hmm I'm not familiar with this, but for such cases to be legitimate we can
+assume the external module has to be derived from the internal one and not
+something completely unrelated impersonating the internal one? So in that
+case just patch 2 alone would be sufficient and not break any legitimate use
+cases?
