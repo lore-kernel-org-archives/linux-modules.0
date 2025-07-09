@@ -1,118 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C01E2343C7;
-	Wed,  9 Jul 2025 17:53:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FEE23770D;
+	Wed,  9 Jul 2025 18:22:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752083622; cv=none; b=LVlKx29jf0QtYXdENL9Nmbj8KGDmxjeD7AuJBUIaOpPQHcSnIvqI7KYTLc9Yths+KD7Wg/6ZHo6FmRBaX8MMVFhwXCAEujJJyy/hDneYsSHlQisi8YpbkE/l4Ea/Ji1+/xGHMBGRwznIa7VWRNSibnLFcort5yw0fsUvsdtCjhg=
+	t=1752085343; cv=none; b=c/Cmg77+rbBd7Hs78sC26ZSky3vop0KTXLxKc52wxw6ZRmK49t6zBHxPMP6SAT6ApxnAy69kL5lbxh3x/HsH2kmVGf+9im0/bfcAlUAM0U+btpiT0oizPm9FcPki9NuA+WPrHB7SWQ4Yx5nz4Hsto4xhP5QwDY9w2nOvoAH6qVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752083622; c=relaxed/simple;
-	bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YjD7vDTa8zDi3C49rsUx3WJouufOlpngwSsKxzqX42LBGBN85jS+i04t6eD6f4iyVieX7c4fNhvnMtUIv3q4XWxG+bMQPDYhlX1QRz/dWJydv1k2/lTpbZBWFYL5QKoJnJQPVkzuhCoOU22Qox0ZRDHSvBOl76P6XPSuj3RxbXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mq4ARsVn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752085343; c=relaxed/simple;
+	bh=5CLAa7B3mPRRniciO0gLisy8WVRITPjA7SLk6e8ROHk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Jkq2xjiC/q7w8GogUe46XOFIuvIN47Q9Ijknsf5n7ljC5GfFlLRsUm1MK6c/WP2o18QRVrLNrpSsUR+m/UzEWXjG+B1Lt3QN4WiOq0Lq0JhTIaBjg1eIMfCzDnErhEaEk9e27ka/+fMizHTx6+txARA0eEerFioYs8Iku333xsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pfS/aFI9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mq4ARsVn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4FFC4CEF0;
-	Wed,  9 Jul 2025 17:53:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pfS/aFI9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 892DDC4CEEF;
+	Wed,  9 Jul 2025 18:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752083622;
-	bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mq4ARsVnKCc4ZTvmu6DgC1jdknoJqJmnMQuFWrcBEj8L9zCK6Lrreo8Jf0HrmFh8N
-	 VPCNozWMBR36KBo6+LeFz4rrOltl+PAAKo8PqwY5JULy+j0bPGu4HYPdepztOzacPf
-	 NrG9sEC5MLhhBkEaGSAwP8n7WRB/LmndSYF9wTTSCFZZmhToebp5ypCgs37RztDd4O
-	 iPzxRg3GatC0YgCHwtpwktiTz8oLg3/p/yve2bseYPBmiElwGaN5oJB1hCB338xD/7
-	 GgcFzVkDP0JmDFlh3yzrgqpQGXiCXNhPAZU+GdKUcVrzJSDn7v8+DBg/qfjGndEJG0
-	 lidilXLpoPXNQ==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 09 Jul 2025 19:52:20 +0200
-Subject: [PATCH v16 6/7] rust: samples: add a module parameter to the
- rust_minimal sample
+	s=k20201202; t=1752085343;
+	bh=5CLAa7B3mPRRniciO0gLisy8WVRITPjA7SLk6e8ROHk=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=pfS/aFI9iB0IO4L8LVGX6W06JqphTp4Lxw79qYY49GgGIB38Oy0WZcMin9enqTSBT
+	 emzKnZjXoCjbZAh7x3/2UmFbFZSdU7jTJLoHx8ydf0OwO/mA5MwQJKl5fXvi03ztA8
+	 Pa4emYLgCs7oFecZgD0imV2R0eXbigzLpyBKfQQ/oaZReheIQDhbePnbaegs5ODSOV
+	 7pZoKyglDVwZelrKKJTYz+bpzzoN2VGPaQAbneiM0SpXeMKOvI0DDG7u1Mm5ogFlj/
+	 pO2BFBjGWWscoHwHn/v66QhcSMef/FPZjfShVzSnAdG80V0XPCz/bjYmpQz88w59ac
+	 1dCRiuCXP0m3w==
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250709-module-params-v3-v16-6-4f926bcccb50@kernel.org>
-References: <20250709-module-params-v3-v16-0-4f926bcccb50@kernel.org>
-In-Reply-To: <20250709-module-params-v3-v16-0-4f926bcccb50@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
- Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Trevor Gross <tmgross@umich.edu>, 
- Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
- Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1268; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBobqxeKwvg9OxdRiD78ZWUFs4K0qRoKrC9WULjZ
- GgzlqjrEp+JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaG6sXgAKCRDhuBo+eShj
- dyEHD/oDwHl342wS3vJSfmkcJ8x7dmzi66aQHpRZ66n3S1suxUPTLjkqaemVpUdMCF2VjaQtH7g
- 53Y0DrLT9+gy16qXnzFx4A/XSBVkZgUaeRtrvxhr49/NhU9/UhMGVwSOAdvxul/fRM52RJevCA3
- 5Hh2XcmfzvewlgnRneLUiHqAqxtsNRPbyVvbix0L6l957nrZvT0jc1Tfgg/7uyJ+UwhZ4ThIZru
- yWbm9m4vY/kEV2fa788npb9QVFAsanCGfp4+cnKSWJU8RT5tuKLK2IKqiz7NykEinLM+54mXSYT
- CgCqddGWk5DBXzvojCRV00EZIR0J9zhHCCIt3Ut7w8z3FS0MTY64fUDjZ+PNas8YI5P2EXz7YR/
- Goj7KDHWYnKzEdW4jILPS9JfX29VwZ/7yH89Wr1Z76qedt6Z56DqpAoeWVALcB2TYleXg493FR3
- ABcK9MMuB5XUEhosHcbMP8A3P0K1InGGe7ULvn0+mUklGb5lpl2YPu/8FKdk+OaN+3iF19Ei3qR
- s1CgOyp9YSx9nXbLSPcVBUXX4yhLvSd770pZy872zPKZ4sxoMhKurwBIJVuNS+tDJAswG/uWKvO
- G+30ZwDTTrEDAvk+5ImvVAod4IAyH+xIZ6K1ccfSIFVwaBqs7Q+3ZxYsTLsvw7BSDmChG/4WeGO
- 7kS8ZxnrIjHCBkQ==
-X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
- fpr=3108C10F46872E248D1FB221376EB100563EF7A7
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 09 Jul 2025 20:22:16 +0200
+Message-Id: <DB7QEZNTH2SB.SSRG5H7TXZZT@kernel.org>
+Cc: "Boqun Feng" <boqun.feng@gmail.com>, "Alice Ryhl"
+ <aliceryhl@google.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
+ <alex.gaynor@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Masahiro
+ Yamada" <masahiroy@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Luis Chamberlain" <mcgrof@kernel.org>, "Danilo Krummrich"
+ <dakr@kernel.org>, "Nicolas Schier" <nicolas.schier@linux.dev>, "Trevor
+ Gross" <tmgross@umich.edu>, "Adam Bratschi-Kaye" <ark.email@gmail.com>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Sami
+ Tolvanen" <samitolvanen@google.com>, "Daniel Gomez" <da.gomez@samsung.com>,
+ "Simona Vetter" <simona.vetter@ffwll.ch>, "Greg KH"
+ <gregkh@linuxfoundation.org>, "Fiona Behrens" <me@kloenk.dev>, "Daniel
+ Almeida" <daniel.almeida@collabora.com>, <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v15 1/7] rust: sync: add `SetOnce`
+From: "Benno Lossin" <lossin@kernel.org>
+To: "Andreas Hindborg" <a.hindborg@kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20250707-module-params-v3-v15-0-c1f4269a57b9@kernel.org>
+ <20250707-module-params-v3-v15-1-c1f4269a57b9@kernel.org>
+ <CAH5fLgiKo=jN_V5cAe_AJqxxp7mQWqhKx7knkEj6js3yiU9sqA@mail.gmail.com>
+ <KNYMPkLfLvLb8ocrLqSmk-5hRGhRaaPQ2sDHN5JoPAUxYJWlHNiOW4HRmtDDGkoMRfNwpziT8mkRzlPkdxDVaQ==@protonmail.internalid> <aGvkFbs5caxLSQxa@Mac.home> <877c0joyfo.fsf@kernel.org> <lsO9eeoR7qtPcjbhow9WfkrujYbxWh9JwZCHDO9K4VU6gtpl4pNYJisLImSI7OrRxW7qu-soEy9zjF_3snXZGQ==@protonmail.internalid> <DB6JZBUSWGKX.3M3M5TSWPLLFN@kernel.org> <87ple9lkjr.fsf@kernel.org>
+In-Reply-To: <87ple9lkjr.fsf@kernel.org>
 
-Showcase the rust module parameter support by adding a module parameter to
-the `rust_minimal` sample.
+On Wed Jul 9, 2025 at 12:34 PM CEST, Andreas Hindborg wrote:
+> "Benno Lossin" <lossin@kernel.org> writes:
+>> On Tue Jul 8, 2025 at 10:54 AM CEST, Andreas Hindborg wrote:
+>>> "Boqun Feng" <boqun.feng@gmail.com> writes:
+>>>> On Mon, Jul 07, 2025 at 03:38:58PM +0200, Alice Ryhl wrote:
+>>>>> On Mon, Jul 7, 2025 at 3:32=E2=80=AFPM Andreas Hindborg <a.hindborg@k=
+ernel.org> wrote:
+>>>>> >
+>>>>> > Introduce the `SetOnce` type, a container that can only be written =
+once.
+>>>>> > The container uses an internal atomic to synchronize writes to the =
+internal
+>>>>> > value.
+>>>>> >
+>>>>> > Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>>>>>
+>>>>> LGTM:
+>>>>> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+>>>>>
+>>>>> > +impl<T> Drop for SetOnce<T> {
+>>>>> > +    fn drop(&mut self) {
+>>>>> > +        if self.init.load(Acquire) =3D=3D 2 {
+>>>>> > +            // SAFETY: By the type invariants of `Self`, `self.ini=
+t =3D=3D 2` means that `self.value`
+>>>>> > +            // contains a valid value. We have exclusive access, a=
+s we hold a `mut` reference to
+>>>>> > +            // `self`.
+>>>>> > +            unsafe { drop_in_place(self.value.get()) };
+>>>>>
+>>>>> This load does not need to be Acquire. It can be a Relaxed load or
+>>>>> even an unsynchronized one since the access is exclusive.
+>>>>
+>>>> Right, I think we can do the similar as Revocable here:
+>>>>
+>>>>         if *self.init.get_mut() =3D=3D 2 { }
+>
+> Ok, now I got it. You are saying I don't need to use the atomic load
+> method, because I have mutable access. Sounds good.
+>
+> But I guess a relaxed load and access through a mutable reference should
+> result in the same code generation on most (all?) platforms?
 
-Reviewed-by: Benno Lossin <lossin@kernel.org>
-Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+AFAIK it is not the same on arm.
+
 ---
- samples/rust/rust_minimal.rs | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
-index 1fc7a1be6b6d7..8eb9583571d72 100644
---- a/samples/rust/rust_minimal.rs
-+++ b/samples/rust/rust_minimal.rs
-@@ -10,6 +10,12 @@
-     authors: ["Rust for Linux Contributors"],
-     description: "Rust minimal sample",
-     license: "GPL",
-+    params: {
-+        test_parameter: i64 {
-+            default: 1,
-+            description: "This parameter has a default of 1",
-+        },
-+    },
- }
- 
- struct RustMinimal {
-@@ -20,6 +26,10 @@ impl kernel::Module for RustMinimal {
-     fn init(_module: &'static ThisModule) -> Result<Self> {
-         pr_info!("Rust minimal sample (init)\n");
-         pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
-+        pr_info!(
-+            "test_parameter: {}\n",
-+            *module_parameters::test_parameter.value()
-+        );
- 
-         let mut numbers = KVec::new();
-         numbers.push(72, GFP_KERNEL)?;
-
--- 
-2.47.2
-
-
+Cheers,
+Benno
