@@ -1,95 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF442E5B2A;
-	Fri, 11 Jul 2025 14:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B132E4981;
+	Fri, 11 Jul 2025 14:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752242787; cv=none; b=FCd7h0tOhzgNAZCNi3Ay32absyeSK8gdQni331aepCfz2LaboSyVmM+uBntRnZq+uHSRYGuONtA+fC320/vfA5jdmxpuX7tACmodIuLTypGxfjaz3qneUF8UW388uMEyP6mKuwRRhJELdUhX/OShJwNNEvsy6kzyaEJlhWja6vU=
+	t=1752243605; cv=none; b=FyAALrhLhO8MynQR1SG1Idu+3OJDgnQow4XwNkixM2mwR1ap2XLjnh12itlyEmKX5P+Eo0UGuLc9fgYpUD0/JJKygcxUYoH2k4OUoO1NKxCAoQg9ZZ9hmjgaZ4gwce+GECzcKbfVyja++yCLT34nD95aCl+Oz736DPKQDwl2Mq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752242787; c=relaxed/simple;
-	bh=rha5rNd/+/z1arNhONh6XrU13+BFec0/iI8Uq17rXic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kSB18/UlmKJNCjOepyc9Sw5piBbSOVDpyfnZeH9Vro/UoHQi9fdlhWe4HeAOqJY1h3MhfxuiJvYRBqmmfSRcHXKGG/Q/kt1dWvS9c8UdHdPL2zv3DG+sdZfWB/z1lWPbmfl+4IMZUGgfKyUnmnIJ+/Aq/i5gT4gWXPRw76/x4qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLdx/4Ht; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLdx/4Ht"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0512CC4CEED;
-	Fri, 11 Jul 2025 14:06:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752242787;
-	bh=rha5rNd/+/z1arNhONh6XrU13+BFec0/iI8Uq17rXic=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PLdx/4Htfxna1tnlXVPnyLI6Z2pQUJAyWz4Scj3eP5P9+viOIwVQE4MdVt8ru9HUY
-	 Nzbb6CTVVGOe4H1J7jcn+g/wwHV+KTb9yJdRZ4AYnyj4qXPHN2YpMuY31+ytxJqt3A
-	 Bxgasc+mCTAO3y3mkapu2hj+/dLedbir4aaFbBrmh3bOTWiBA5WkmSI1ocJR73PSOB
-	 Ua52gJAWd/9R3Z1drRHFs2yGfs+GCU3AUPnOzzVTcDXYP5Gqqtc7xSY55EbTJItjHk
-	 +lf3VUS5zYNc6nuTX9pw07E9i3v5K1Ok015iENHrfevGwNbVSpYhZ0jlo5UCrX7kdX
-	 btO+hAWBsz6Ig==
-Message-ID: <2acf7211-e481-4320-b6dd-08b3fa2e48c6@kernel.org>
-Date: Fri, 11 Jul 2025 16:06:23 +0200
+	s=arc-20240116; t=1752243605; c=relaxed/simple;
+	bh=g0FY8KEhs3+5ZwzMuOJoxWtCZ12e+cotRCpz7ImwO0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=scAleIAMIWHSpCO298T0zmcuNRDTuRYdlzk64KwFtOH66yhU5XKV9bfxvhFteXkNsnNjFXyTWRJCzWbA5vpndT8rpchDNwmZ54PUkeBZlZ+8vjSj3TTwtCGqmKuhsbHAW/VyziHcLplTaxtNvVbXDwRfSo6M5tRhAxHPpfI0uPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=avm.de; arc=none smtp.client-ip=212.42.244.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
+Received: from [2001:bf0:244:244::71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.53.4)
+	(envelope-from <n.schier@avm.de>)
+	id 68711c0d-037b-7f0000032729-7f000001a796-1
+	for <multiple-recipients>; Fri, 11 Jul 2025 16:13:33 +0200
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [IPv6:2001:bf0:244:244::71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Fri, 11 Jul 2025 16:13:33 +0200 (CEST)
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+	by mail-auth.avm.de (Postfix) with ESMTPA id 5F78280666;
+	Fri, 11 Jul 2025 16:13:34 +0200 (CEST)
+Received: from l-nschier-aarch64.ads.avm.de (unknown [IPv6:fde4:4c1b:acd5:6472::1])
+	by buildd.core.avm.de (Postfix) with ESMTPS id 07985182D09;
+	Fri, 11 Jul 2025 16:13:32 +0200 (CEST)
+Date: Fri, 11 Jul 2025 16:13:29 +0200
+From: Nicolas Schier <nicolas.schier@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Matthias Maennich <maennich@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Christoph Hellwig <hch@infradead.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	David Hildenbrand <david@redhat.com>,
+	Shivank Garg <shivankg@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to
+ EXPORT_SYMBOL_FOR_MODULES
+Message-ID: <20250711-fascinating-dramatic-mongrel-06bb3d@l-nschier-aarch64>
+References: <20250711-export_modules-v2-1-b59b6fad413a@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH v2 0/3] module: make structure definitions always visible
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Daniel Gomez <da.gomez@samsung.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20250711-kunit-ifdef-modules-v2-0-39443decb1f8@linutronix.de>
- <175224114462.57001.15162198119283395382.b4-ty@samsung.com>
- <20250711155016-f403d5b2-478d-4666-913d-45318cdaa3cf@linutronix.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20250711155016-f403d5b2-478d-4666-913d-45318cdaa3cf@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="vsByBMB2KLXp1vNx"
+Content-Disposition: inline
+In-Reply-To: <20250711-export_modules-v2-1-b59b6fad413a@suse.cz>
+Organization: AVM GmbH
+X-purgate-ID: 149429::1752243213-8E7B2EE7-5F8E945F/0/0
+X-purgate-type: clean
+X-purgate-size: 2145
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-On 11/07/2025 15.51, Thomas WeiÃschuh wrote:
-> On Fri, Jul 11, 2025 at 03:39:04PM +0200, Daniel Gomez wrote:
->>
->> On Fri, 11 Jul 2025 15:31:35 +0200, Thomas Weißschuh wrote:
->>> Code using IS_ENABLED(CONFIG_MODULES) as a C expression may need access
->>> to the module structure definitions to compile.
->>> Make sure these structure definitions are always visible.
->>>
->>> This will conflict with commit 6bb37af62634 ("module: Move modprobe_path
->>> and modules_disabled ctl_tables into the module subsys") from the sysctl
->>> tree, but the resolution is trivial.
->>>
->>> [...]
->>
->> Applied, thanks!
->>
->> [1/3] module: move 'struct module_use' to internal.h
->>       commit: bb02f22eaabc4d878577e2b8c46ed7b6be5f5459
->> [2/3] module: make structure definitions always visible
->>       commit: 02281b559cd1fdfdc8f7eb05bbbe3ab7b35246f0
->> [3/3] kunit: test: Drop CONFIG_MODULE ifdeffery
->>       commit: dffcba8acea3a80b3478750ac32f17bd5345b68e
-> 
-> Thanks!
-> 
-> FYI If you apply a patch you need to add yourself to the Signed-off-by chain.
-> And Link tags are nice. For example:
-> 
-> b4 shazam --add-my-sob --add-link
 
-You're correct. I had a lapse there. Branch updated. Thanks!
+--vsByBMB2KLXp1vNx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1/3] module: move 'struct module_use' to internal.h
-      commit: 6633d3a45a8c075193304d12ba10a1771d1dbf10
-[2/3] module: make structure definitions always visible
-      commit: a55842991352a8b512f40d1424b65c911ffbf6fa
-[3/3] kunit: test: Drop CONFIG_MODULE ifdeffery
-      commit: 699657e8e50ae967ae26f704f6fbfa598fcb0cef
+On Fri, Jul 11, 2025 at 04:05:16PM +0200, Vlastimil Babka wrote:
+> Christoph suggested that the explicit _GPL_ can be dropped from the
+> module namespace export macro, as it's intended for in-tree modules
+> only. It would be possible to resrict it technically, but it was pointed
+
+s/resrict/restrict/
+
+> out [2] that some cases of using an out-of-tree build of an in-tree
+> module with the same name are legitimate. But in that case those also
+> have to be GPL anyway so it's unnecessary to spell it out.
+>=20
+> Link: https://lore.kernel.org/all/aFleJN_fE-RbSoFD@infradead.org/ [1]
+> Link: https://lore.kernel.org/all/CAK7LNATRkZHwJGpojCnvdiaoDnP%2BaeUXgdey=
+5sb_8muzdWTMkA@mail.gmail.com/ [2]
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Reviewed-by: Shivank Garg <shivankg@amd.com>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+
+Looks good to me, thanks!
+
+Acked-by: Nicolas Schier <n.schier@avm.de>
+
+--vsByBMB2KLXp1vNx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmhxHAMACgkQiMa8nIia
+bbhOGw/6A9j10gjqoU3cU58K0DP3tXeBiNGfbAwaAYMhKF5qqCTZoVXYZnXlkoqx
+aonsaV+KHjIcgOP3NchS4R290Y+VexSvnltxjlAPSYn4hJXlkLrkozxkGEs6ptE2
+HKyrlo0JPTF5O2XWwVJAcC9bgwdL5N1xxVZPUrOtkjwCt5CP5S6cQVn9F+8E8j24
+u3ZdBTVBzUDzvpdWijFja3eJInjGv5dTS7njg66q/xcfn7flOu9Fka0yvwmwV4aG
+ClESQCXzKBUohjG+02n1j0x/QJqSn7RVnq+sjG75al9T0ggFKH0FRxpiTbbGMRf/
+VTzicAeBesZy+6YdYL5uDUpBdzSUS2xUihzey/xpovKgmbuG9RRx0TK87XAqr/X+
++4R6q4LwREMB7+dezzlh73DY0NJyROWsocmCcyewbDP7BhXmgVy/8bbWrItVmeyG
+GoBwZn1jI3jw00fRtxXV1JwwD4i9vAnhP4w3w/HfGB7bTMVUaGLwcUfFzOQ083lu
+A41+qAhk71ET9JYF3P6KI5SuINeTX/XzD93F+D5sB//bi4yhVnbjHcWTDgF2n2xT
+kfUZ+7i0xs6OUbFwZdHoy2B92zrShyHNeXkKYRnlPvzt9XBiUMKRfJpnlRUX9/H1
+ij2ZskGClUCirLzrNp3hSfC4vnBmNAopyo8xPSHYyd7/W5lx+XM=
+=XfC4
+-----END PGP SIGNATURE-----
+
+--vsByBMB2KLXp1vNx--
