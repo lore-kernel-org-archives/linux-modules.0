@@ -1,133 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011E51F03D7;
-	Fri, 11 Jul 2025 06:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06BD70810;
+	Fri, 11 Jul 2025 13:24:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752215835; cv=none; b=M1jGrJA6SwXXDqKGn+yeXb7T89YWQH2tyq+S0esapVaabVLcy/PywaQ7EX1IYlvP9PWzVITBzOOqHu94kOONc+zp7m82SnFFSN2utnNSHJCP+ogtdLsUOSW2W8pBp8z8gXmwSZi83A3+AliBXLWC338blWlYZ0mc+i8rrfrgoh4=
+	t=1752240271; cv=none; b=S6uYlxSn6V5U6JumATeF5SqnwxRc8dAxUx7flOWyr52TWD0m5qT663MxWfud+WcTGzSRH+AS/8/7gZdUsFfxZhLaK4zRZfSuSGIMEJxUDJmC2YTC8c5aKXdINbQR2say9DzGpfAJ1eJlepOGnmzt84oP2E2GfNCo/D+CIC3+0SY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752215835; c=relaxed/simple;
-	bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PEkSddzQDwG8prTnqg94+jk5/3TFi142nqEoNqQtqqjuZoaBiMr4mE+tY3PGBKsn/YmAPsinHJFpFWnYNvI2MBIzTNzyh/5sPZB1QP0k2WDar25TwPBGGjDGUe4iVJGz6hJBoWkd2SAeVyRjgEBmfq8QSUb5DFrAc7/qcV9IwWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7XVrsgu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752240271; c=relaxed/simple;
+	bh=+4NNW2YqeuzxeOwxdYm+u0ttWrOey3Yi9xQrrEUAR1I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=asJmCmdocvA0a26k9VpmdhrX0mSBNQ1faKRvOcoRf2GJ8gztCXR1x/wJGXnv7Q3hDRGt51jmI+gqEaNrrbzDXgqc9c/Pe9aXl11HnuHFiTAbdqeogvAR8QMGG6bA/7p2eyVqV+0LgTN4jL0cC+I34PBo8KSDfH1kEMvXkW/AX3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fGw/7bQ1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7XVrsgu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE872C4CEED;
-	Fri, 11 Jul 2025 06:37:08 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGw/7bQ1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03F53C4CEF6;
+	Fri, 11 Jul 2025 13:24:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752215834;
-	bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=j7XVrsguwepmw8ZjfASZccTjN6QZkNUIznz3wLK9S/8jEI+UNrFG0r874OCRZRUbS
-	 2Dy8HCnoTc4IgsI7lbvndC8vBd1Evkm2ANMMYU2tSL4OkTFy0GVAvb3P0p/pIUrS63
-	 j2a990ngwqXsp9PIc0UnWdH2GKhS2B1F4cKiu1ns+0svwYbYZOfeY3Dsod7XCLHp4u
-	 kwqFo/l+1kaaZp88rlny6gyysN9PY8mMq5xa+UA897gl/rV/ejBjdi9vkbfFr/04ip
-	 L78cGG0+sxpg7opQi3NpifgNg+8mt9BgRJ8Q7RPHnBntsRsaNG34u0+8JWzIQvOPy5
-	 XUfOn9KpOaUww==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Fri, 11 Jul 2025 08:35:46 +0200
-Subject: [PATCH v17 4/7] rust: module: use a reference in
- macros::module::module
+	s=k20201202; t=1752240271;
+	bh=+4NNW2YqeuzxeOwxdYm+u0ttWrOey3Yi9xQrrEUAR1I=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fGw/7bQ18cGvpwIqKknl7SqZbYd5xbiZdDPXh5uia3qg3lz+l58wPI0lN5bPUIER0
+	 HTiGNXENDNLx+9TQpB0pqb8D+lk01koQNAPcDRekPUhJAeTYgKfb0xuCG1T2AsIAql
+	 0hqw8XWtuq7dBVH0aP9P3xizCRsBV4iOe6Juo5fgsv4DTlWrKR1Yifax2p+yXe6gl2
+	 2ssix5Aj7pNKEf5tnhDFmiAXjTvrej8slFubOyS76xv4MtZ3CmCbOq42zKASO7HYVm
+	 z6DxxEAZSlZZSyaJvlW+rMilHWgb5xBZHGYs5cD0jIBhS0EhrqMXYwl98GOdLf53Eb
+	 vtmf94RIOyUJQ==
+Message-ID: <7ccb0a97-fc20-4493-8187-48ecfd07bac2@kernel.org>
+Date: Fri, 11 Jul 2025 15:24:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250711-module-params-v3-v17-4-cf9b10d4923d@kernel.org>
-References: <20250711-module-params-v3-v17-0-cf9b10d4923d@kernel.org>
-In-Reply-To: <20250711-module-params-v3-v17-0-cf9b10d4923d@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
- Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Trevor Gross <tmgross@umich.edu>, 
- Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
- Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2063; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=6Qq3JEPyfCyEUyFmISVDX2MQupJGcEbRE4c1O1T+mok=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBocLDXTwiKgisxAT1UbAUOHYJRwdFdGswVZLInN
- PH6b2B5QW2JAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaHCw1wAKCRDhuBo+eShj
- d+AkD/9MBoT2PmyzLR/lq2CJYH+uXNw3liZLoSpKh1/Wgz3PSYbnyvn67EFFkaqYOihsmhpuL0d
- BzNvvHIAksNrDWvn73MuabTRpvI1yn7/O4Fc6E4mZdWIIxvFLqJCfzWfrDI6/hXeQ8y6pcSuLOg
- s1UKKYu1MNHMPhBOvC7i9disi4AST34uKSrFFEfgKAut6b0ZJbYkb2NFRpsIoaQ3T1OZX2J6uFh
- CMqVAozelLfna40h3YMC8Zenjhb+hmL1JfOXTKUn/xPuWJCa+JlAGwGtCbkwrWvkP70iAmPAcAO
- f3YTDQ5cOqD8JGVOWQT8pXZxv2/tZ7PXhaGNdP0HEINoM6Dq9WEYSxIHUrBb7gHk51ZXM4wbMA3
- 2ZaI5NFp7uQ9TfSBhCwRoit4xWGDEbsN+YuRYpwD9Cbgt2aM6jQdJy2TzrjOm5L6iYRty+FxnL2
- cWCtdOuO2W8MI1QmihBSY7H0Ibn3q0OKPOEv3U9EoM7zlffnRzJgRRNBY68TrFn/t5IY+HoLp0A
- uJZLyNssXpT5cKoXCTh3ZOH4FwdQTXDTIPrMLD20bICVCz8L7aGScliWeP9ub/7zgJqXMudtCtd
- NYYrJiPIq9sLUPediDkALiQzFozsMmAT7w4erisv2TJ18OiRZDgB3KxmNTHDq/o/+xzNoUiPkHX
- mduuJWeA59+Ex6w==
-X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
- fpr=3108C10F46872E248D1FB221376EB100563EF7A7
+User-Agent: Mozilla Thunderbird
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH 2/3] module: make structure definitions always visible
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
+ <20250612-kunit-ifdef-modules-v1-2-fdccd42dcff8@linutronix.de>
+ <a9eade27-9b77-431f-b7c8-24c3fb891673@kernel.org>
+ <20250711081047-ea2c1e83-1b87-4331-acad-cbbfe6be67d8@linutronix.de>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <20250711081047-ea2c1e83-1b87-4331-acad-cbbfe6be67d8@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-When we add parameter support to the module macro, we want to be able to
-pass a reference to `ModuleInfo` to a helper function. That is not possible
-when we move out of the local `modinfo`. So change the function to access
-the local via reference rather than value.
+On 11/07/2025 08.29, Thomas WeiÃschuh wrote:
+> On Mon, Jul 07, 2025 at 09:11:05PM +0200, Daniel Gomez wrote:
+>> On 12/06/2025 16.53, Thomas WeiÃschuh wrote:
+>>> To write code that works with both CONFIG_MODULES=y and CONFIG_MODULES=n
+>>> it is convenient to use "if (IS_ENABLED(CONFIG_MODULES))" over raw #ifdef.
+>>> The code will still fully typechecked but the unreachable parts are
+>>> discarded by the compiler. This prevents accidental breakage when a certain
+>>> kconfig combination was not specifically tested by the developer.
+>>> This pattern is already supported to some extend by module.h defining
+>>> empty stub functions if CONFIG_MODULES=n.
+>>> However some users of module.h work on the structured defined by module.h.
+>>>
+>>> Therefore these structure definitions need to be visible, too.
+>>
+>> We are missing here which structures are needed. + we are making more things
+>> visible than what we actually need.
+>>
+>>>
+>>> Many structure members are still gated by specific configuration settings.
+>>> The assumption for those is that the code using them will be gated behind
+>>> the same configuration setting anyways.
+>>
+>> I think code and kconfig need to reflect the actual dependencies. For example,
+>> if CONFIG_LIVEPATCH depends on CONFIG_MODULES, we need to specify that in
+>> Kconfig with depends on, as well as keep the code gated by these 2 configs with
+>> ifdef/IS_ENABLED.
+> 
+> If CONFIG_LIVEPATCH depends on CONFIG_MODULES in kconfig then
+> IS_ENABLED(CONFIG_LIVEPATCH) will depend on CONFIG_MODULES automatically.
+> There is no need for another explicit IS_ENABLED(CONFIG_MODULES).
 
-Reviewed-by: Benno Lossin <lossin@kernel.org>
-Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
----
- rust/macros/module.rs | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+This makes sense to me. My assessment before to reflect in code what we have in
+kconfig does not scale. Thanks.
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 2ddd2eeb2852..1a867a1e787e 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -179,26 +179,26 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-     // Rust does not allow hyphens in identifiers, use underscore instead.
-     let ident = info.name.replace('-', "_");
-     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
--    if let Some(author) = info.author {
--        modinfo.emit("author", &author);
-+    if let Some(author) = &info.author {
-+        modinfo.emit("author", author);
-     }
--    if let Some(authors) = info.authors {
-+    if let Some(authors) = &info.authors {
-         for author in authors {
--            modinfo.emit("author", &author);
-+            modinfo.emit("author", author);
-         }
-     }
--    if let Some(description) = info.description {
--        modinfo.emit("description", &description);
-+    if let Some(description) = &info.description {
-+        modinfo.emit("description", description);
-     }
-     modinfo.emit("license", &info.license);
--    if let Some(aliases) = info.alias {
-+    if let Some(aliases) = &info.alias {
-         for alias in aliases {
--            modinfo.emit("alias", &alias);
-+            modinfo.emit("alias", alias);
-         }
-     }
--    if let Some(firmware) = info.firmware {
-+    if let Some(firmware) = &info.firmware {
-         for fw in firmware {
--            modinfo.emit("firmware", &fw);
-+            modinfo.emit("firmware", fw);
-         }
-     }
- 
+> 
+>>>
+>>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+>>> ---
+>>>  include/linux/module.h | 23 ++++++++++++-----------
+>>>  1 file changed, 12 insertions(+), 11 deletions(-)
 
--- 
-2.47.2
+{...}
 
+>>
+>> After the patch, mod_tree_node is not needed externally.
+> 
+> Can you explain what you mean with "not needed externally"?
+> 'struct mod_tree_node' is only ever used by core module code.
+> It is only public because it is embedded in the public 'struct module'
 
+But only when MODULES_TREE_LOOKUP is enabled. Now, all kernels (regardless of
+that config) will define mod_tree_node data structure.
+
+However, Petr already stated that is harmless to do so. I was trying here to
+not be useless.
+
+With that, changes look good to me:
+
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
