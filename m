@@ -1,64 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E66225409;
-	Fri, 11 Jul 2025 13:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEE12D7801;
+	Fri, 11 Jul 2025 13:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752240320; cv=none; b=PNrAANv+XUtuVfs5eThLj04E/t6RdqV2OP5nsvPl4q4rx1Iu/JICuwUKLtq+sCJrIA/j4yEJOF9Mqqx/Uvoo99+/WgdJxVBQFn3QP6siufJ4bmI4nT+tZ5T7/4uVkBYTeKCXB+YdgsyQCmQlQAkUJ4FWLFowAKOnYG3D4F8qDHA=
+	t=1752240709; cv=none; b=fD5/g4/JXgqG9tHx1nlR2M62ywPxlqQqAyJHhbhTCaKh956WDRhjwFnsKL+Ud9ntdKL/xLcR/sjtSCxLrJ2pQn28MV/j30TrmQgp1NbW1+yXr2apPaZyoGxN8vVLQCcGWL7i5PbVk4lzGiMwzUdmc/s0h5+7kwSD1rQQ39LzP7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752240320; c=relaxed/simple;
-	bh=eJtjrH8gy0v1B2l/1NsY9jCmHSjHw/XmPbkiPv2G4+A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qpg5nidGxMk5EDegZ53lSpCz9FEIXBxbdTVdcu0ufEt+jLCSIt733Pad9inaSE7WU8tNLnkxsTFxN5HxvP/Iqa2Tx6odgwFask6oM93SetvNoGGpAKwQ5QEjlI6Hdb485W3uQrzIncaRuiq4Emti28UryqB2rNQSm7XCoTuvtaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fl0L0ViY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1752240709; c=relaxed/simple;
+	bh=akzqxCJYe3g5iXTVNXCFr1ykXAcvEObIo6AJQjyu3Cg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M+7Au+ucnQDcU/rri65HK0V2q+w/X9IZKYYaQwjkvYjz3ML/uJJZXG/mF8poOnoleTWVHr8wy28ZufSl+ifk76sVsi7632Z9ffsX69XK8EfkSosbVK8zsYa2TDGlzkydGNxyAtcdoIHCjq6UbU0X3HKdtq/t2uSuiJFnQcAKd7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dDH1AoQS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ic8npGb8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fl0L0ViY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9530DC4CEED;
-	Fri, 11 Jul 2025 13:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752240319;
-	bh=eJtjrH8gy0v1B2l/1NsY9jCmHSjHw/XmPbkiPv2G4+A=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Fl0L0ViYW0bNk2kp3CRVmXI4gOiTl/4+o/XGQu6lmjMyGfElPjol3aSh/aWxHMKGe
-	 limKlmHFPM5T3Nf0/smGl8K4CA1mTHyXU2JtFdFAr/xdxqUTPXFPYa9lRoGcSOkkQ2
-	 YIhq1jHrHpQh+W9byUk34rDsKUS7Ug/Y364QcQFOcW6eBVNXY+IjEp1XZ7yql1VSqL
-	 7M35mUCndMRKwzbpf1/NC9wmKxrmYF1sZMAFlbM1BAm9IXgDcyl4z5Ts4F+u9rWZtU
-	 yvd70rgvkC59vLTs6iyMGJJCQTbM1W2ZIxof7Ui2GR+WUNzeqhNfO4eiIgK5S7iKw/
-	 lXcpD+zsICNbA==
-Message-ID: <00cfae5d-1e96-484b-b294-2fd54f5ad2b8@kernel.org>
-Date: Fri, 11 Jul 2025 15:25:15 +0200
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dDH1AoQS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ic8npGb8"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1752240700;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H91oCvwVp0AF+0FGCHevDcHAmkx+mnTbFw3DAYRKe3w=;
+	b=dDH1AoQSpuY2YLOHUTpImvg0c0Uuplby5+Dc0xEj+53det/+Wg+057ZrcmtpBforB06FxS
+	uXUYt2efvYDMidHhVakKfsTp5jtqUR3q0rcSaF64Sp2S+15cPcFwaBf5tZQd8EI4d502jx
+	8/qv9FzaOL8PsmuO12w8R/g/TpVplKnvT/Fp4fhivtQuCmGJa08BhJRbBLSf+Ta5cL7x3R
+	/k9c5Yb1DiYmFEuXQV/HyF4+c9tQeZH8jWvreJuyVcIkWli8ZXiWLZ7SQlimS1Y7VdFPI9
+	dt/hAgdy6HvVAjl9c8Grin1Zp34GCMXcn7fYSncuGtMWunUQm1BQgW8wiajX2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1752240700;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H91oCvwVp0AF+0FGCHevDcHAmkx+mnTbFw3DAYRKe3w=;
+	b=Ic8npGb8VMMWHF4kfz9h73VS9DTvbIHPfAZNnQkw7leybhWe4SsU1alfPGAwXvlI4HuzhO
+	DYdWBrkAro1EyiAA==
+Subject: [PATCH v2 0/3] module: make structure definitions always visible
+Date: Fri, 11 Jul 2025 15:31:35 +0200
+Message-Id: <20250711-kunit-ifdef-modules-v2-0-39443decb1f8@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH 3/3] kunit: test: Drop CONFIG_MODULE ifdeffery
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>,
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de>
- <20250612-kunit-ifdef-modules-v1-3-fdccd42dcff8@linutronix.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20250612-kunit-ifdef-modules-v1-3-fdccd42dcff8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADcScWgC/22NQQrCMBBFryKzdiRJrYgr7yFdlMyMHayJJG2pl
+ N7dWHDn8j347y+QOSlnuOwWSDxp1hgKuP0OfNeGO6NSYXDG1eZkLT7GoAOqEAs+I409ZzTCQrZ
+ q2dYVlOUrsei8VW9N4U7zENN7O5ns1/567m9vsmhQyHs6OvIi52uvYRxSDDofiKFZ1/UDbPxnK
+ boAAAA=
+X-Change-ID: 20250611-kunit-ifdef-modules-0fefd13ae153
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752240698; l=1230;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=akzqxCJYe3g5iXTVNXCFr1ykXAcvEObIo6AJQjyu3Cg=;
+ b=5S1gyVhOvm/2XHJ74lvdpyP7wyGHiib7XBVsxmWmNrjum+DrvcT8Ul+glgZa0WzT6biJk1pMZ
+ Q442ISEajhiBLrSrw2SCKe/ttOQ3ziuy3mv37FtJincYfGXvKf8HFVX
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On 12/06/2025 16.53, Thomas WeiÃschuh wrote:
-> The function stubs exposed by module.h allow the code to compile properly
-> without the ifdeffery. The generated object code stays the same, as the
-> compiler can optimize away all the dead code.
-> As the code is still typechecked developer errors can be detected faster.
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Code using IS_ENABLED(CONFIG_MODULES) as a C expression may need access
+to the module structure definitions to compile.
+Make sure these structure definitions are always visible.
 
-Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+This will conflict with commit 6bb37af62634 ("module: Move modprobe_path
+and modules_disabled ctl_tables into the module subsys") from the sysctl
+tree, but the resolution is trivial.
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Pick up tags from v1
+- Keep MODULE_ARCH_INIT and 'struct module' definitions together
+- Link to v1: https://lore.kernel.org/r/20250612-kunit-ifdef-modules-v1-0-fdccd42dcff8@linutronix.de
+
+---
+Thomas Weißschuh (3):
+      module: move 'struct module_use' to internal.h
+      module: make structure definitions always visible
+      kunit: test: Drop CONFIG_MODULE ifdeffery
+
+ include/linux/module.h   | 29 +++++++++++------------------
+ kernel/module/internal.h |  7 +++++++
+ lib/kunit/test.c         |  8 --------
+ 3 files changed, 18 insertions(+), 26 deletions(-)
+---
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+change-id: 20250611-kunit-ifdef-modules-0fefd13ae153
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
