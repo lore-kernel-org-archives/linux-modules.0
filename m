@@ -1,148 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673661F91C7;
-	Mon, 14 Jul 2025 13:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0669D1A5BA3;
+	Mon, 14 Jul 2025 16:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752500471; cv=none; b=NOFgRwHUFnZ2sJ4AvZHJY5w3IgJ1LYOS92sAdzVLSw7klNa4hVjovSHhhq55PirE61noUgIqbb7C1B4xLVOWbZMm6ElccRF4CFevi/Uqsc67x/mn06anyog/zKzyVjy/9Eiw21fCyAs0kj0tBAgMPIe1V8cQrPl4dO9kWGagQGE=
+	t=1752510175; cv=none; b=ZzGFblZtqjIFhgRG9qCd8sBqkugarMPklvTx3eeAgn8EPZp/CpqxUf7WZ8ynswLTbMhJ6L8b6EqPpwOtPHvmvmWjLvnGY4huw9Zlh49Cj9icwy3bQ568cqMtBHm8qc5AhCmapdgNyPkbzhOvs+Lbu7hEtNIh8Ss7YkTC47HG76I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752500471; c=relaxed/simple;
-	bh=J1b+SwmY1CVMGJKpm02Nut4kM1uOvEucFcJm1VhPLgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=abLHvhjzqsMqBPZs+j1aDiWl61OIjBPmN2A8WtpFKIhMPuHwVNbq4tTIpn0Kc3WPg1biy3XXNAvSgzWwqieqihRHdhBj55ge49bfnnlkZliDZhRMIPwpv3OVr8obhpL5ULU+g+oU9Zw+5c5Pf+N48+i28GXK/Dv+TgmfF3+rLOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ErktvYbW; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ErktvYbW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F544C4CEED;
-	Mon, 14 Jul 2025 13:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752500471;
-	bh=J1b+SwmY1CVMGJKpm02Nut4kM1uOvEucFcJm1VhPLgI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ErktvYbWlkLwrEIJXXKATdVLmuT+DErUqvDi7lUIyBpELgl4/EyjHCK/zfLk4dh9X
-	 jMG42mQXU3UcTy/9MSSVusl1h5qBe3F4LoCP//OnKV41a9Oadj5JYc2KfkVuuWm8ob
-	 Ct6ObRx6s7SQ5UK9s4858074C1hOFqCfHPVVCucNY0Gr5D3wgeu3O6QhCUVOpDP+KM
-	 Ie3sfojY0SSzOM29yIHBWs3VxxJ4L66jDL5CG8lu6b3JPeRKj2f1ZFMcSwPm6mIEAF
-	 b8RVMTQxBU9BmpT2fW02wfrDx2JsTInqpEUsNvBzyE4X86t+LF7wDWuok/44R0JQnM
-	 bcAKz1KHWDdNg==
-Date: Mon, 14 Jul 2025 15:41:04 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v4 0/7] Add generated modalias to modules.builtin.modinfo
-Message-ID: <aHUI8KqD0_dtTY3D@example.org>
-References: <cover.1750511018.git.legion@kernel.org>
+	s=arc-20240116; t=1752510175; c=relaxed/simple;
+	bh=J5BbmABitS/Z56U/21eFenfHagRARnIxhQAY6AH/nvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XX6XsBOmTnlSJic8hVj+rnzleanxuISF0Z6BCfn9AmUVbopepYQEl/Sq6NfMRNlmoDNyVMaswxogJHvsx8I2Qb2g60SgkT+f59B7Uuou1IaRwwQuaXuGN63V4g1wt5/dxRvEToj7Ia+GSkXo0jwgnVgslF7IXXRriekS62GBjEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 0982C14021E;
+	Mon, 14 Jul 2025 16:22:49 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 895B02000E;
+	Mon, 14 Jul 2025 16:22:44 +0000 (UTC)
+Date: Mon, 14 Jul 2025 12:22:43 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski
+ <luto@kernel.org>, Borislav Petkov <bp@alien8.de>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Daniel Gomez <da.gomez@samsung.com>, Dave
+ Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>, "Liam
+ R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain
+ <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+ <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
+ <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, Yann
+ Ylavic <ylavic.dev@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v3 8/8] x86/ftrace: enable EXECMEM_ROX_CACHE for ftrace
+ allocations
+Message-ID: <20250714122243.19c9ab59@batman.local.home>
+In-Reply-To: <20250713071730.4117334-9-rppt@kernel.org>
+References: <20250713071730.4117334-1-rppt@kernel.org>
+	<20250713071730.4117334-9-rppt@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1750511018.git.legion@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: r5wb4pojfof4fa8g781jhh8kxo5zdy18
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 895B02000E
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/oABu5KOy2BGyNBDoF58dzOuDvF5o4bxI=
+X-HE-Tag: 1752510164-377651
+X-HE-Meta: U2FsdGVkX18IZtlRjXFC0Shaa3uvZtomzZV05f7tYUhGt4RkiFauQtQUurUuegTuoLcma+mw8FIVARA/Wj5NN1NslWhNKbTBwkarCYNoTHSkbMcATn/le9x0PhshvTnU8uVrOxG7pycAfALTcc1w3cikw76Rhkqux8yXlXh5WTjksBbCQeCbYMpBNd3INbvKLRw/hnvxlWCLKGtVZ9+yDZC30Ll6nlpiwdG3iVrbKeGPqb/hKi2pJEU3Oqx+wqWA5KH1rGRg7cYtHo5Zj8AMWeak61Y/2Zs92WL9JnS1HNjdUBv0L5qegHctcO56Pol5m+ivZUt/rbVfF9j0dom+ncrMn26ImeGxznLqJ7Kz8xGyzj/8gBNpFF8Rucy78NTn9lGP+OYWa31Abm9XEUayW1Tb47d+HsyCntzFaZksEAl2rM/KM6GRrhZa1XZ5n9x59+tLnFeOGEArptCfL7/bRQ==
 
-On Sat, Jun 21, 2025 at 03:57:12PM +0200, Alexey Gladkov wrote:
-> The modules.builtin.modinfo file is used by userspace (kmod to be specific) to
-> get information about builtin modules. Among other information about the module,
-> information about module aliases is stored. This is very important to determine
-> that a particular modalias will be handled by a module that is inside the
-> kernel.
-> 
-> There are several mechanisms for creating modalias for modules:
-> 
-> The first is to explicitly specify the MODULE_ALIAS of the macro. In this case,
-> the aliases go into the '.modinfo' section of the module if it is compiled
-> separately or into vmlinux.o if it is builtin into the kernel.
-> 
-> The second is the use of MODULE_DEVICE_TABLE followed by the use of the
-> modpost utility. In this case, vmlinux.o no longer has this information and
-> does not get it into modules.builtin.modinfo.
-> 
-> For example:
-> 
-> $ modinfo pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
-> modinfo: ERROR: Module pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30 not found.
-> 
-> $ modinfo xhci_pci
-> name:           xhci_pci
-> filename:       (builtin)
-> license:        GPL
-> file:           drivers/usb/host/xhci-pci
-> description:    xHCI PCI Host Controller Driver
-> 
-> The builtin module is missing alias "pci:v*d*sv*sd*bc0Csc03i30*" which will be
-> generated by modpost if the module is built separately.
-> 
-> To fix this it is necessary to add the generated by modpost modalias to
-> modules.builtin.modinfo.
-> 
-> Fortunately modpost already generates .vmlinux.export.c for exported symbols. It
-> is possible to use this file to create a '.modinfo' section for builtin modules.
-> The modules.builtin.modinfo file becomes a composite file. One part is extracted
-> from vmlinux.o, the other part from .vmlinux.export.o.
+On Sun, 13 Jul 2025 10:17:30 +0300
+Mike Rapoport <rppt@kernel.org> wrote:
 
-Masahiro Yamada, does this version of the patchset look better to you ?
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> For the most part ftrace uses text poking and can handle ROX memory.
+> The only place that requires writable memory is create_trampoline() that
+> updates the allocated memory and in the end makes it ROX.
+> 
+> Use execmem_alloc_rw() in x86::ftrace::alloc_tramp() and enable ROX cache
+> for EXECMEM_FTRACE when configuration and CPU features allow that.
+> 
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-> Notes:
-> - v4:
->   * Rework the patchset based on top of Masahiro Yamada's patches.
->   * Add removal of unnecessary __mod_device_table__* symbols to avoid symbol
->     table growth in vmlinux.
->   * rust code takes into account changes in __mod_device_table__*.
->   * v3: https://lore.kernel.org/all/cover.1748335606.git.legion@kernel.org/
-> 
-> - v3:
->   * Add `Reviewed-by` tag to patches from Petr Pavlu.
->   * Rebase to v6.15.
->   * v2: https://lore.kernel.org/all/20250509164237.2886508-1-legion@kernel.org/
-> 
-> - v2:
->   * Drop patch for mfd because it was already applied and is in linux-next.
->   * The generation of aliases for builtin modules has been redone as
->     suggested by Masahiro Yamada.
->   * Rebase to v6.15-rc5-136-g9c69f8884904
->   * v1: https://lore.kernel.org/all/cover.1745591072.git.legion@kernel.org/
-> 
-> 
-> Alexey Gladkov (3):
->   scsi: Always define blogic_pci_tbl structure
->   modpost: Add modname to mod_device_table alias
->   modpost: Create modalias for builtin modules
-> 
-> Masahiro Yamada (4):
->   module: remove meaningless 'name' parameter from __MODULE_INFO()
->   kbuild: always create intermediate vmlinux.unstripped
->   kbuild: keep .modinfo section in vmlinux.unstripped
->   kbuild: extract modules.builtin.modinfo from vmlinux.unstripped
-> 
->  drivers/scsi/BusLogic.c           |  2 -
->  include/asm-generic/vmlinux.lds.h |  2 +-
->  include/crypto/algapi.h           |  4 +-
->  include/linux/module.h            | 21 ++++-----
->  include/linux/moduleparam.h       |  9 ++--
->  include/net/tcp.h                 |  4 +-
->  rust/kernel/device_id.rs          |  8 ++--
->  scripts/Makefile.vmlinux          | 74 +++++++++++++++++++++----------
->  scripts/Makefile.vmlinux_o        | 26 +----------
->  scripts/mksysmap                  |  6 +++
->  scripts/mod/file2alias.c          | 34 ++++++++++++--
->  scripts/mod/modpost.c             | 17 ++++++-
->  scripts/mod/modpost.h             |  2 +
->  13 files changed, 131 insertions(+), 78 deletions(-)
-> 
-> -- 
-> 2.49.0
-> 
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
--- 
-Rgrds, legion
-
+-- Steve
