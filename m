@@ -1,80 +1,65 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574DC292B54
-	for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 10:40:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751582DAFB8
+	for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 14:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753094438; cv=none; b=HBWRyXaP6R30CcY/8TuZ1WlupvnjoDTojiIg5OhmLyEliYjzjtiBwfu8alf3N0GjtbfrFPj2UxD0czAtKRNAPupXZfwBVzi11HCK9okbolI7z0XqlLl0/6QILV8sjB7kG/+oyEBtEWvBzu7H66stY8aIt+JTIN9ofA/ux4qf1BU=
+	t=1753108834; cv=none; b=p9eCtFwq3fIXUCiXKyY/VykmAHXFM7ZSZeWyw9CnGr9z2jhvadSa/TUy659fmz5lXQ2HP8spJAwQ6dBf/ELjL84zTe4EDikHc1siv3WEREeDxP7pDKXM1sAbaOePvePBcXzNVjXH6tSPJtIXuj9PhBK581JiMZAoY9Ev7I18HA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753094438; c=relaxed/simple;
-	bh=HwJPqklxIi4TxHGwi2RXoqe6O4MmTclYjH3w0n8qsZ4=;
+	s=arc-20240116; t=1753108834; c=relaxed/simple;
+	bh=iGUp0dU/j2ZdmVwOtmcSmdjuk0Qz8lvGofOd2PTtUTE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aooczFFd3LyJOnpLCGM9ZSEaNuQXKB/A/2Tqk4LbVRMELC7lZ6BfwtISU0agBnDsSp8UT64B7aIsChDP+gwNMcWPmS8jX8Vs4HLaQpueRsnMvxbWTMhdaP/sxERE4hLqajZfbP67aDpL9NfWRaHsxZCRE8PnlNZQLuBOSFNJnfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kxMXG9kq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ICSfBX58; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kxMXG9kq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ICSfBX58; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 In-Reply-To:Content-Type; b=qCydp3ZcbqDYyd1mx7XnCqWcX8vaPVZTPQhZphe62/DEPnzj01lXa2+dROdFH5/S8sPwi9iOK6+cqKr7vsfPLy9gmQCy5z1pgUXWV/q5xCeAWtP4GPahjTgA2fXWnf+Yz4jhCNYSmQ9JiGlTu/EiW6ZHkw7bqgZhoDd/DHO69m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TbYFfBz+; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kxMXG9kq";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ICSfBX58";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kxMXG9kq";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ICSfBX58"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6BB362198A;
-	Mon, 21 Jul 2025 10:40:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1753094434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
-	b=kxMXG9kqvqWuM9I/9r/hsVpe6woZ/TQRgAd+XXywmh+ERAds1E1aVPE3z71ebOTZe14d+u
-	OYXNgAAzKhqzqzNlr1dVvAZjqp3fMl7uHHDk0CPvRO2Vcpo10nD0U6S4l+1inYr0brmUpS
-	G3PquTDhBvTJfKgpk1t0jw2uZiBmJEA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1753094434;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
-	b=ICSfBX58lcEx17GB6hJdMgeICEtXc+3j0Tw2OOzMR5Ma3B1jtprylWsf0J4yWQRmocS5HU
-	JqJUpGLo6x/nQKDg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1753094434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
-	b=kxMXG9kqvqWuM9I/9r/hsVpe6woZ/TQRgAd+XXywmh+ERAds1E1aVPE3z71ebOTZe14d+u
-	OYXNgAAzKhqzqzNlr1dVvAZjqp3fMl7uHHDk0CPvRO2Vcpo10nD0U6S4l+1inYr0brmUpS
-	G3PquTDhBvTJfKgpk1t0jw2uZiBmJEA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1753094434;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
-	b=ICSfBX58lcEx17GB6hJdMgeICEtXc+3j0Tw2OOzMR5Ma3B1jtprylWsf0J4yWQRmocS5HU
-	JqJUpGLo6x/nQKDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 41897136A8;
-	Mon, 21 Jul 2025 10:40:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id tKaeDyIZfmhLHwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 21 Jul 2025 10:40:34 +0000
-Message-ID: <24f995fe-df76-4495-b9c6-9339b6afa6be@suse.cz>
-Date: Mon, 21 Jul 2025 12:40:34 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TbYFfBz+"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60c01f70092so7711439a12.3
+        for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 07:40:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1753108831; x=1753713631; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ulo84xZ7t36NNeL6qul+IkvI9anviU2HLbOPblgw/k=;
+        b=TbYFfBz+6aOKX9FecZwEa/TH9P1M1WrZJqFCnlwaOSeDRIn+chIeKyjlpwwpnMS/NL
+         2OkzEMFvaqT5k9GBw60NzYaaG629kO08nY3NBM9B9Ooegos6b5V/dvhTLZ0m9ejmpnct
+         5N/qbN7etEg2C6j+ePwi0SXs4p/79cdgBnFdXoYR/iFBuaNLhiqZioT9MNmqbxgXBSOL
+         b/LFTnzk2QkDWUo/o7acKTvRJrTEx+SIUdK+P8Et8C9u77/DdZUhFG1MYEAVvYbiSyIC
+         F5SQKbKi7VXBMRgU9QLNiEGybfu9fMjJ1ShLa2H+z3qM9bQgtIvISbEuLIrTxmwbD+/3
+         WMXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753108831; x=1753713631;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ulo84xZ7t36NNeL6qul+IkvI9anviU2HLbOPblgw/k=;
+        b=f7TI5yoAbZ6XMotdPcudUEwgDWDuANZPf+FJ91DPe3btxkk6nPkExIyjmlxQzO3Z00
+         7SL4AWkR/bxaJMMBs8wGc4z68yKVvzw65R4HOSqmIyo7aTjzeAJjPU3L2ehVcbmJFgiT
+         V1QOfa9huZWJVc4V4uljqCKG071IvNjeLgClMbz7GhzFwXxvErr8L0XySJX1in8Ytgu8
+         iPHh0gE9pz9tQoK0aq3K8jLMWNCOFKxFY8dvGpmYYD8Y/MLiKx68ZJ2qj67ZNOtEabLO
+         KEmXSO8MmQ5rliH2bbTVQGUGDd5gcLE93Wo2QHvRHswfHqjG0rZvt//oJbGiqdjKriAJ
+         Vt4A==
+X-Forwarded-Encrypted: i=1; AJvYcCXh/LaejDQnGSdCksg499GoXeoyijpgWjdUsXOErwi18wt+Tn8GEBbvGVXGkkvW/0Wo0GdhT0H4rICZdZQo@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCUHXERm/moITXzgzg4TpZEjx0jpUcAX9Kcw5z9zao2SwVU0Ma
+	C6TkTIsjb/o5r8gB3hfGv7Ay1aBJ8XEyGGa9uGfIgGNmyOXuxEM72TrQKs/8Li2rQR4=
+X-Gm-Gg: ASbGncuQJXc2IArhQuFDq8GA5No0DtFPWUeEsqD6rkOq3g3T+c4F5VtjxLy5OkGUdjW
+	mZaVnFjfN4RqZham0Sur7ec/HwGMBeHQEPGON7HXpRVdhtFrmtqduniMLSgPKZ+f35b/RyqTpqS
+	kprZZKEB4hbL1rJqHA762VUWPwJUCqSY8u1/ezsvLUJL4qrUQDC6OQxXgeFS5lsRd5Nx44xdqJ8
+	A809wIxNAHwAbRdAxv/SAbS6AoBhY5pNDlDFWJPT0BKERHHwHjpYFt75zHVSPvA0c9qKOVYzWM6
+	lIRpirJhb0NqkpZM9vIjG3iZgcDS30bLVT8BTcpuOAZT8a47YnuCYtSP6iEnHR61BN7egZvyJ1v
+	tcwkBPgW5nW2xptCrRPnOmWEmb72PU4acE67kMsiBjqM=
+X-Google-Smtp-Source: AGHT+IEH6XXULLKH2PA+RJRxowZuccLIs/Ri/UE41Z0z9+TdJgKpFlvZ4BqpSMCYm1zFe2zzzylsNg==
+X-Received: by 2002:a17:907:c808:b0:ae3:a3f7:ad8e with SMTP id a640c23a62f3a-aec4fb05ee0mr1737210166b.25.1753108830669;
+        Mon, 21 Jul 2025 07:40:30 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af11411f1b5sm28655266b.48.2025.07.21.07.40.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jul 2025 07:40:30 -0700 (PDT)
+Message-ID: <3992b57d-3d8b-4d60-bc4a-f227f712dcca@suse.com>
+Date: Mon, 21 Jul 2025 16:40:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -82,123 +67,105 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to
- EXPORT_SYMBOL_FOR_MODULES
+Subject: Re: [PATCH] module: pr_debug when there is no version info
+To: Wang Jinchao <wangjinchao600@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org
+References: <20250721045224.391745-1-wangjinchao600@gmail.com>
 Content-Language: en-US
-To: Daniel Gomez <da.gomez@kernel.org>, Daniel Gomez <da.gomez@samsung.com>,
- Matthias Maennich <maennich@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
-Cc: Christoph Hellwig <hch@infradead.org>,
- Peter Zijlstra <peterz@infradead.org>, David Hildenbrand <david@redhat.com>,
- Shivank Garg <shivankg@amd.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20250715-export_modules-v3-1-11fffc67dff7@suse.cz>
- <b340eb9f-a336-461c-befe-6b09c68b731e@kernel.org>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <b340eb9f-a336-461c-befe-6b09c68b731e@kernel.org>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20250721045224.391745-1-wangjinchao600@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -4.30
 
-On 7/15/25 20:58, Daniel Gomez wrote:
-> On 15/07/2025 10.43, Vlastimil Babka wrote:
->> Christoph suggested that the explicit _GPL_ can be dropped from the
->> module namespace export macro, as it's intended for in-tree modules
->> only. It would be possible to restrict it technically, but it was
->> pointed out [2] that some cases of using an out-of-tree build of an
->> in-tree module with the same name are legitimate. But in that case those
->> also have to be GPL anyway so it's unnecessary to spell it out in the
->> macro name.
->> 
->> Link: https://lore.kernel.org/all/aFleJN_fE-RbSoFD@infradead.org/ [1]
->> Link: https://lore.kernel.org/all/CAK7LNATRkZHwJGpojCnvdiaoDnP%2BaeUXgdey5sb_8muzdWTMkA@mail.gmail.com/ [2]
->> Suggested-by: Christoph Hellwig <hch@infradead.org>
->> Reviewed-by: Shivank Garg <shivankg@amd.com>
->> Acked-by: David Hildenbrand <david@redhat.com>
->> Acked-by: Nicolas Schier <n.schier@avm.de>
->> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
->> Reviewed-by: Christian Brauner <brauner@kernel.org>
->> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->> ---
->> Daniel, please clarify if you'll take this via module tree or Christian
->> can take it via vfs tree?
+On 7/21/25 6:52 AM, Wang Jinchao wrote:
+> When there is no version information, modprobe and insmod only
+> report "invalid format".
+> Print the actual cause to make it easier to diagnose the issue.
+> This helps developers quickly identify version-related module
+> loading failures.
+> Signed-off-by: Wang Jinchao <wangjinchao600@gmail.com>
+> ---
+>  kernel/module/version.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> Patch 707f853d7fa3 ("module: Provide EXPORT_SYMBOL_GPL_FOR_MODULES() helper")
-> from Peter was merged through Masahiro in v6.16-rc1. Since this is a related
-> fix/rename/cleanup, it'd make sense for it to go through his kbuild tree as
-> well. Masahiro, please let me know if you'd prefer otherwise. If not, I'll queue
-> it up in the modules tree.
+> diff --git a/kernel/module/version.c b/kernel/module/version.c
+> index 2beefeba82d9..bc28c697ff3a 100644
+> --- a/kernel/module/version.c
+> +++ b/kernel/module/version.c
+> @@ -42,8 +42,10 @@ int check_version(const struct load_info *info,
+>  	}
+>  
+>  	/* No versions at all?  modprobe --force does this. */
+> -	if (versindex == 0)
+> +	if (versindex == 0) {
+> +		pr_debug("No version info for module %s\n", info->name);
+>  		return try_to_force_load(mod, symname) == 0;
+> +	}
+>  
+>  	versions = (void *)sechdrs[versindex].sh_addr;
+>  	num_versions = sechdrs[versindex].sh_size
 
-Maybe with no reply, you can queue it then?
+I think it would be better to instead improve the behavior of
+try_to_force_load(). The function should print the error reason prior to
+returning -ENOEXEC. This would also help its two other callers,
+check_modinfo() and check_export_symbol_versions().
 
+Additionally, I suggest moving the check to ensure version information
+is available for imported symbols earlier in the loading process.
+A suitable place might be check_modstruct_version(). This way the check
+is performed only once per module.
+
+The following is a prototype patch:
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c2c08007029d..c1ccd343e8c3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1053,6 +1053,7 @@ int try_to_force_load(struct module *mod, const char *reason)
+ 	add_taint_module(mod, TAINT_FORCED_MODULE, LOCKDEP_NOW_UNRELIABLE);
+ 	return 0;
+ #else
++	pr_err("%s: %s\n", mod->name, reason);
+ 	return -ENOEXEC;
+ #endif
+ }
+diff --git a/kernel/module/version.c b/kernel/module/version.c
+index 2beefeba82d9..4d9ebf0834de 100644
+--- a/kernel/module/version.c
++++ b/kernel/module/version.c
+@@ -41,9 +41,9 @@ int check_version(const struct load_info *info,
+ 		return 1;
+ 	}
+ 
+-	/* No versions at all?  modprobe --force does this. */
++	/* No versions? Ok, already tainted in check_modstruct_version(). */
+ 	if (versindex == 0)
+-		return try_to_force_load(mod, symname) == 0;
++		return 1;
+ 
+ 	versions = (void *)sechdrs[versindex].sh_addr;
+ 	num_versions = sechdrs[versindex].sh_size
+@@ -90,6 +90,11 @@ int check_modstruct_version(const struct load_info *info,
+ 		have_symbol = find_symbol(&fsa);
+ 	BUG_ON(!have_symbol);
+ 
++	/* No versions at all?  modprobe --force does this. */
++	if (!info->index.vers && !info->index.vers_ext_crc)
++		return try_to_force_load(
++			       mod, "no versions for imported symbols") == 0;
++
+ 	return check_version(info, "module_layout", mod, fsa.crc);
+ }
+ 
+
+As a side note, I'm confused why with CONFIG_MODULE_FORCE_LOAD=y, the
+code treats missing modversions for imported symbols as ok, even without
+MODULE_INIT_IGNORE_MODVERSIONS. This is at least consistent with the
+handling of missing vermagic, but it seems this behavior should be
+stricter.
+
+-- 
 Thanks,
-Vlastimil
+Petr
