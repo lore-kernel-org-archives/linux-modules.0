@@ -1,107 +1,148 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0F87DA95;
-	Mon, 21 Jul 2025 04:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E928228C03B
+	for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 09:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753073563; cv=none; b=e4m/ESZnyKctXM9QzNGN/XwrTbyfytmGuSi1MstkArVeAI2XbvBIf3WPXGlpBF/VRfb0qBb9VlRih2PJ3AKcwEwMH471KhDYgY244GEZ4YIg2uvlZDJ4s2CKbd2K/6Rw9Ytr+He8FODuDLVPe38ZkX5TwK1XrbzGlSCllsfnCeM=
+	t=1753089706; cv=none; b=iGiooR1O4kUcHbCEOgub496TSkX4KQjsLlCfDIOlarb6RJ0C0I/JmKZ/FcwwZWB8SI7cM9YJEil077H5f1x5UnAMq/w2LDS5AI1Aw3+T3VXH8WgZQBUuoV87LrrSkPAG9OYzwLeOVp3MhajEzSYfJ9uZkOX1vgOfIisnslL7HDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753073563; c=relaxed/simple;
-	bh=iFIckDhmh46+JBvPEiXW40w2jmhdwOKLz3CH/4sGys4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CfocBkaQaBL8eaM63k6UKGJikqQMiUoSKg+V6LDgJHvXaIp1CNyWL6HQ+QF53peenKBQHetnsBLZJ5ld2/q+E2nJGEVwF5JyvdRdXr1p4/w7BPnVbB33tBUxPtSew4wQtK68ZHBri65gS314h0WxrYZTpKzi8LZXXkfMX3XG41o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XrI1BPNl; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753089706; c=relaxed/simple;
+	bh=RhP7CgPJWuXWazu2ieMATKdgzpZnkmY0/qua2/d0FmQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tMTq5ktnQcrdfT55bPHu6gExnnPGGFBjc4km6HWAVyE+Lo+uK+UGJli5rnWAzu+MhBCIJhtDwggUbyVNEXPwo0C51z7XW1pP98WQMSyaRP10eB26LvLBm/CDs+b692P4o7h0HAYPliUP/RZkcFRQM1v2NYh8Xi71G5OFEQO2ovE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=f0+bl1hs; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XrI1BPNl"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-75001b1bd76so2330615b3a.2;
-        Sun, 20 Jul 2025 21:52:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="f0+bl1hs"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c6fea6742so8713500a12.1
+        for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 02:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753073561; x=1753678361; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/rwEe6pL2DF04u25wQFRb2SlRQeQrgkAGmuOAnxsCs=;
-        b=XrI1BPNl/hARoAVTV3JPwWy6+Sfeuqo11pMlxOrEKOb7KLhe9MdpCDfF4knmEOYsZb
-         kJt1N4dcbdgykx4x77qqB0u4ice3yOobei9WFuKgUr/TWeP4XkitppBGlRmBeCjVC1si
-         V4uCkaTXTKaNdvMhCJKhv1GQc2Z0NSmvxg3EtsOMB+3GWsY6zy7Okq0x3InF5P+4AMzq
-         NPIYeot0BE60iuSop2RmkclxJMPT6k5aO1VTqo5SiAKiDri+9b3ct4ThZwbcTI4Xr+ZO
-         1duGVWqdL17oxChr4+zykV0UMXVwlW1CrCwRDwNQd1hoB7hAm+MmTnD2gCi0xNPsDpAw
-         fdxg==
+        d=suse.com; s=google; t=1753089702; x=1753694502; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L1Th2tPSSojsnumFzHAfZ9R36o8NbqGCC5Gi+YtQXlo=;
+        b=f0+bl1hsJJWvqnPF1ytmuN7TtU3Z4K80XTr2D1JKCME6D26yJTVnv1dIhrtMm5ooGc
+         Gl8dyEXsVhQ+Fr7UvtE9iNZtCSTDyI9+N+OQT6wkU8C09KJ1tmToMsbki+4RxzCRBgKB
+         WuLf5V/3+RPaj5RcveJxbTI/CoJA6SE5vzwNzrOf71wdNdeZpxxv4eInH22cIv1Puqgr
+         By+ooVdVMqCDdmyOAudpoU66L7ED7tXJTJn15nENleo4fWULTSgRBFrCClOgAMR+9dwb
+         pbCDjkKBANjQVFM0WBEdI449pdcddcobZK0oKviiITK3cs/jz4S3doGdH/TZ/BIbZq/g
+         VpGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753073561; x=1753678361;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I/rwEe6pL2DF04u25wQFRb2SlRQeQrgkAGmuOAnxsCs=;
-        b=IgAV+Qjgagqat0YxUJED/bWcOrzIpJe8w3rVLBi9Afuw0OBaRUmknsLuYNFT6LCNXd
-         e1tadn2LAQAco6lHwiFcXNX5I9glOw2neeffC9y9pit+jLaf7VvlOap+AZgtfIEY3q3d
-         FgyNz7TvmRfw1ylVQvTm+J5KACOats5djyukeAlh6lRdNqo6RsOHCkzIf7vi9RiDoodY
-         IXjSxyjEZlLqeHcbGjN8o9F+osXhPsEXkbCcrFppCBzW/Lu60oM6MyXd7jGpm9KqaTfi
-         iQpNEPPGU6U3sYtmAC5Wlmvakq9hjtdY9Wb0NHA/DvmY3252LlLLTVbYImyAojH5dilu
-         ZNHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW0cSWmrcBHOnrBx1tfLWwJRpNcOm4AtGVm34JpGwFmew+B6xPIW2ULd1f2BH6J3mK65DDMv+Jvfk9MPI0e@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqkAAovLEmtDXPrFQEIdYMrDwZgEALwO/hf/gMP+l5L59k94W/
-	/vQux/FLlcjQMYbKx4F17T/8zeETlbO30T8VndJ2GcPLsdfZN5dqHK/jkt/tKXVZfEU=
-X-Gm-Gg: ASbGncsRVqifWdmbnTrqtK24zDtZ+6ZjJbn/U406re3qZATApH6MS3j7QKJEsrwxgf/
-	LEPqOdRFinu5QrqyeH87z9tf4beo9OZHkODImZao1hN/je+ISudsRLNQJ+jRZK6qgrJ17OjlPIv
-	43ibLgXoqBnOu0Ey36zcHGbWkWSrGeCwTXChQt2lQvRcXZxgMIp5QHbqS5rZ6NgrFWzIFyB/qFm
-	jYn8PbTAx9H/YGe3vm+DMv4tvhEI+JSn/cFai+lS/UIJJKsqrBxJt/FBas61vI/GdPQkJkrn4ag
-	9uc4l+WWY8WURqFelLg3Icmq2N7OzqyR85r17VWuOTYzcU0acpqDrrITmZJcDVSWjzVFWu+dafB
-	9l098NEOE0v1BXdAOHcPpOSPufpA=
-X-Google-Smtp-Source: AGHT+IF07eh+CugTSLl+wj5WqVKAOwprNgaoF1PSpy+urZ+jDqq8P+VPJk1dfTzezt3dhZTK1L9Lrg==
-X-Received: by 2002:a05:6a20:6a05:b0:220:2d0f:f8e1 with SMTP id adf61e73a8af0-23810e500f4mr29784210637.3.1753073560750;
-        Sun, 20 Jul 2025 21:52:40 -0700 (PDT)
-Received: from localhost.localdomain ([2a11:3:200::4008])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-759cb155e25sm4927365b3a.94.2025.07.20.21.52.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Jul 2025 21:52:40 -0700 (PDT)
-From: Wang Jinchao <wangjinchao600@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-kernel@vger.kernel.org,
-	Wang Jinchao <wangjinchao600@gmail.com>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] module: pr_debug when there is no version info
-Date: Mon, 21 Jul 2025 12:52:22 +0800
-Message-ID: <20250721045224.391745-1-wangjinchao600@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1753089702; x=1753694502;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L1Th2tPSSojsnumFzHAfZ9R36o8NbqGCC5Gi+YtQXlo=;
+        b=rytd/SWqyn/Cpv1IkneeyBhHB75FNdQ8dLfejZJGNrlH8HcIwOBe/Jn/ebyydB7FrB
+         QwUMBwpNF3c0fiyqU7FZuqTEvuCl8LH4qRG/gtkFPEmRAr67XXv/VlPgvXazbm/qRElW
+         C2eHsLGj3ik7/RVqPIMskgq7ctAzYDg1Z4p8czVjkc5+h8Uh2S6pAtoulrnl2LCe8RbO
+         NPT3y/hKX4ZP5EBRBsKIJ4zRvan6Vw58DhvJUC2DnUdRXPq2o+/r1kvKwDvtu0giWGJU
+         FuhrGJMNk9thyO87CP0qN+7uDSM+zuhtK0UZSb7EYNQHgwDSgxVj6qn/3GZsHGluU43v
+         7tRA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMssFzbnzBYWLss6wx+IcozQxRW+1bIbScbK5/KgJZctkxcxFlCY8ABVt11BzJTzYc9jRROhkXaNian+uh@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXQSWSNBZT1vV6geVS2y9buSl9UjPtay4s8/FQ5i0ZuhjBoOtc
+	acRuYxPiYMBsshVwoGJT+pbGpJiFKI4RJTwwXKm3I/p0BvGZvYpUvhvZ88c/pOa99g0BtPWV1v5
+	sod9o
+X-Gm-Gg: ASbGncuexxZU9OIgdvryEo8LeUrAODbOd0wS+N0qbxOy/RR9dHn5qOsOVxWjmfiOHzf
+	EIolJM8FYrCM6npqStAN8OWCoKIvCog2iummZQiahCQdqT8c6DsGQacAh2O9a2k7GHca0BbvxCX
+	aur3sBSr/2uTTepszMbZEMFvacDUslxrweHVXqR9Tn95Ug1X178lms71GAwoVeJiFb+ApQaXT01
+	+Lx1uy7KTnPcvTREyLURgN88pZmMSHwa4l/jWqhoGPO8sCCNwGgK29CNjDTjlsmrC0eQGx/TWac
+	1bAwScNZ6c+bsFsL7z3rqQG41a0IFXh3mLDIfgCp+bx/vC6D+iJPG4Sp7Sl8CE2ljKWfv7+mont
+	WklMa1O0ckJr41Xj35mZ8JoP6gm88kP0FFfQ3osD32mM=
+X-Google-Smtp-Source: AGHT+IGWlQPKjmMAkrs6jYpIEeaJ7EPZSlgjxs7E2ZjdUx6LDd8jWSkVV7Ei3B5/ualnx6LC3e/mUw==
+X-Received: by 2002:a17:906:c114:b0:ae3:e378:159e with SMTP id a640c23a62f3a-aec6a528140mr1159108566b.26.1753089702031;
+        Mon, 21 Jul 2025 02:21:42 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6ca7e0b1sm641619466b.117.2025.07.21.02.21.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jul 2025 02:21:41 -0700 (PDT)
+Message-ID: <264b23ee-7046-4be9-8e01-d79a517e6256@suse.com>
+Date: Mon, 21 Jul 2025 11:21:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] module: Restore the moduleparam prefix length check
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250630143535.267745-1-petr.pavlu@suse.com>
+ <20250630143535.267745-4-petr.pavlu@suse.com>
+ <15f52f4c-7809-46ab-9e13-bd487f35a80c@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <15f52f4c-7809-46ab-9e13-bd487f35a80c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When there is no version information, modprobe and insmod only
-report "invalid format".
-Print the actual cause to make it easier to diagnose the issue.
-This helps developers quickly identify version-related module
-loading failures.
-Signed-off-by: Wang Jinchao <wangjinchao600@gmail.com>
----
- kernel/module/version.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 7/17/25 9:23 PM, Daniel Gomez wrote:
+> On 30/06/2025 16.32, Petr Pavlu wrote:
+>> The moduleparam code allows modules to provide their own definition of
+>> MODULE_PARAM_PREFIX, instead of using the default KBUILD_MODNAME ".".
+>>
+>> Commit 730b69d22525 ("module: check kernel param length at compile time,
+>> not runtime") added a check to ensure the prefix doesn't exceed
+>> MODULE_NAME_LEN, as this is what param_sysfs_builtin() expects.
+>>
+>> Later, commit 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking
+>> for sysfs perms.") removed this check, but there is no indication this was
+>> intentional.
+>>
+>> Since the check is still useful for param_sysfs_builtin() to function
+>> properly, reintroduce it in __module_param_call(), but in a modernized form
+>> using static_assert().
+>>
+>> While here, clean up the __module_param_call() comments. In particular,
+>> remove the comment "Default value instead of permissions?", which comes
+>> from commit 9774a1f54f17 ("[PATCH] Compile-time check re world-writeable
+>> module params"). This comment was related to the test variable
+>> __param_perm_check_##name, which was removed in the previously mentioned
+>> commit 58f86cc89c33.
+>>
+>> Fixes: 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking for sysfs perms.")
+>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+>> ---
+>>  include/linux/moduleparam.h | 5 ++---
+>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+>> index bfb85fd13e1f..110e9d09de24 100644
+>> --- a/include/linux/moduleparam.h
+>> +++ b/include/linux/moduleparam.h
+>> @@ -282,10 +282,9 @@ struct kparam_array
+>>  #define __moduleparam_const const
+>>  #endif
+>>  
+>> -/* This is the fundamental function for registering boot/module
+>> -   parameters. */
+>> +/* This is the fundamental function for registering boot/module parameters. */
+>>  #define __module_param_call(prefix, name, ops, arg, perm, level, flags)	\
+>> -	/* Default value instead of permissions? */			\
+>> +	static_assert(sizeof(""prefix) - 1 <= MAX_PARAM_PREFIX_LEN);	\
+> 
+> Can you clarify if -1 to remove the dot from prefix?
+> 
+> Final code 
+> 	static_assert(sizeof(""prefix) - 1 <= __MODULE_NAME_LEN);	\
+> 
+> with __MODULE_NAME_LEN being:
+> 
+> #define __MODULE_NAME_LEN (64 - sizeof(unsigned long))
 
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-index 2beefeba82d9..bc28c697ff3a 100644
---- a/kernel/module/version.c
-+++ b/kernel/module/version.c
-@@ -42,8 +42,10 @@ int check_version(const struct load_info *info,
- 	}
- 
- 	/* No versions at all?  modprobe --force does this. */
--	if (versindex == 0)
-+	if (versindex == 0) {
-+		pr_debug("No version info for module %s\n", info->name);
- 		return try_to_force_load(mod, symname) == 0;
-+	}
- 
- 	versions = (void *)sechdrs[versindex].sh_addr;
- 	num_versions = sechdrs[versindex].sh_size
+Correct, -1 is to account for the dot at the end of the prefix.
+
+I actually also wanted to assert that the prefix ends with a dot, but
+unfortunately prefix[sizeof(prefix)-2] (with prefix being a string
+literal) is not a constant expression in C.
+
 -- 
-2.43.0
-
+Thanks,
+Petr
