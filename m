@@ -1,66 +1,80 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E928228C03B
-	for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 09:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 574DC292B54
+	for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 10:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753089706; cv=none; b=iGiooR1O4kUcHbCEOgub496TSkX4KQjsLlCfDIOlarb6RJ0C0I/JmKZ/FcwwZWB8SI7cM9YJEil077H5f1x5UnAMq/w2LDS5AI1Aw3+T3VXH8WgZQBUuoV87LrrSkPAG9OYzwLeOVp3MhajEzSYfJ9uZkOX1vgOfIisnslL7HDI=
+	t=1753094438; cv=none; b=HBWRyXaP6R30CcY/8TuZ1WlupvnjoDTojiIg5OhmLyEliYjzjtiBwfu8alf3N0GjtbfrFPj2UxD0czAtKRNAPupXZfwBVzi11HCK9okbolI7z0XqlLl0/6QILV8sjB7kG/+oyEBtEWvBzu7H66stY8aIt+JTIN9ofA/ux4qf1BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753089706; c=relaxed/simple;
-	bh=RhP7CgPJWuXWazu2ieMATKdgzpZnkmY0/qua2/d0FmQ=;
+	s=arc-20240116; t=1753094438; c=relaxed/simple;
+	bh=HwJPqklxIi4TxHGwi2RXoqe6O4MmTclYjH3w0n8qsZ4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tMTq5ktnQcrdfT55bPHu6gExnnPGGFBjc4km6HWAVyE+Lo+uK+UGJli5rnWAzu+MhBCIJhtDwggUbyVNEXPwo0C51z7XW1pP98WQMSyaRP10eB26LvLBm/CDs+b692P4o7h0HAYPliUP/RZkcFRQM1v2NYh8Xi71G5OFEQO2ovE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=f0+bl1hs; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 In-Reply-To:Content-Type; b=aooczFFd3LyJOnpLCGM9ZSEaNuQXKB/A/2Tqk4LbVRMELC7lZ6BfwtISU0agBnDsSp8UT64B7aIsChDP+gwNMcWPmS8jX8Vs4HLaQpueRsnMvxbWTMhdaP/sxERE4hLqajZfbP67aDpL9NfWRaHsxZCRE8PnlNZQLuBOSFNJnfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kxMXG9kq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ICSfBX58; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=kxMXG9kq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ICSfBX58; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="f0+bl1hs"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c6fea6742so8713500a12.1
-        for <linux-modules@vger.kernel.org>; Mon, 21 Jul 2025 02:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1753089702; x=1753694502; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L1Th2tPSSojsnumFzHAfZ9R36o8NbqGCC5Gi+YtQXlo=;
-        b=f0+bl1hsJJWvqnPF1ytmuN7TtU3Z4K80XTr2D1JKCME6D26yJTVnv1dIhrtMm5ooGc
-         Gl8dyEXsVhQ+Fr7UvtE9iNZtCSTDyI9+N+OQT6wkU8C09KJ1tmToMsbki+4RxzCRBgKB
-         WuLf5V/3+RPaj5RcveJxbTI/CoJA6SE5vzwNzrOf71wdNdeZpxxv4eInH22cIv1Puqgr
-         By+ooVdVMqCDdmyOAudpoU66L7ED7tXJTJn15nENleo4fWULTSgRBFrCClOgAMR+9dwb
-         pbCDjkKBANjQVFM0WBEdI449pdcddcobZK0oKviiITK3cs/jz4S3doGdH/TZ/BIbZq/g
-         VpGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753089702; x=1753694502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L1Th2tPSSojsnumFzHAfZ9R36o8NbqGCC5Gi+YtQXlo=;
-        b=rytd/SWqyn/Cpv1IkneeyBhHB75FNdQ8dLfejZJGNrlH8HcIwOBe/Jn/ebyydB7FrB
-         QwUMBwpNF3c0fiyqU7FZuqTEvuCl8LH4qRG/gtkFPEmRAr67XXv/VlPgvXazbm/qRElW
-         C2eHsLGj3ik7/RVqPIMskgq7ctAzYDg1Z4p8czVjkc5+h8Uh2S6pAtoulrnl2LCe8RbO
-         NPT3y/hKX4ZP5EBRBsKIJ4zRvan6Vw58DhvJUC2DnUdRXPq2o+/r1kvKwDvtu0giWGJU
-         FuhrGJMNk9thyO87CP0qN+7uDSM+zuhtK0UZSb7EYNQHgwDSgxVj6qn/3GZsHGluU43v
-         7tRA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMssFzbnzBYWLss6wx+IcozQxRW+1bIbScbK5/KgJZctkxcxFlCY8ABVt11BzJTzYc9jRROhkXaNian+uh@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXQSWSNBZT1vV6geVS2y9buSl9UjPtay4s8/FQ5i0ZuhjBoOtc
-	acRuYxPiYMBsshVwoGJT+pbGpJiFKI4RJTwwXKm3I/p0BvGZvYpUvhvZ88c/pOa99g0BtPWV1v5
-	sod9o
-X-Gm-Gg: ASbGncuexxZU9OIgdvryEo8LeUrAODbOd0wS+N0qbxOy/RR9dHn5qOsOVxWjmfiOHzf
-	EIolJM8FYrCM6npqStAN8OWCoKIvCog2iummZQiahCQdqT8c6DsGQacAh2O9a2k7GHca0BbvxCX
-	aur3sBSr/2uTTepszMbZEMFvacDUslxrweHVXqR9Tn95Ug1X178lms71GAwoVeJiFb+ApQaXT01
-	+Lx1uy7KTnPcvTREyLURgN88pZmMSHwa4l/jWqhoGPO8sCCNwGgK29CNjDTjlsmrC0eQGx/TWac
-	1bAwScNZ6c+bsFsL7z3rqQG41a0IFXh3mLDIfgCp+bx/vC6D+iJPG4Sp7Sl8CE2ljKWfv7+mont
-	WklMa1O0ckJr41Xj35mZ8JoP6gm88kP0FFfQ3osD32mM=
-X-Google-Smtp-Source: AGHT+IGWlQPKjmMAkrs6jYpIEeaJ7EPZSlgjxs7E2ZjdUx6LDd8jWSkVV7Ei3B5/ualnx6LC3e/mUw==
-X-Received: by 2002:a17:906:c114:b0:ae3:e378:159e with SMTP id a640c23a62f3a-aec6a528140mr1159108566b.26.1753089702031;
-        Mon, 21 Jul 2025 02:21:42 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aec6ca7e0b1sm641619466b.117.2025.07.21.02.21.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jul 2025 02:21:41 -0700 (PDT)
-Message-ID: <264b23ee-7046-4be9-8e01-d79a517e6256@suse.com>
-Date: Mon, 21 Jul 2025 11:21:41 +0200
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kxMXG9kq";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ICSfBX58";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="kxMXG9kq";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ICSfBX58"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6BB362198A;
+	Mon, 21 Jul 2025 10:40:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1753094434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
+	b=kxMXG9kqvqWuM9I/9r/hsVpe6woZ/TQRgAd+XXywmh+ERAds1E1aVPE3z71ebOTZe14d+u
+	OYXNgAAzKhqzqzNlr1dVvAZjqp3fMl7uHHDk0CPvRO2Vcpo10nD0U6S4l+1inYr0brmUpS
+	G3PquTDhBvTJfKgpk1t0jw2uZiBmJEA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1753094434;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
+	b=ICSfBX58lcEx17GB6hJdMgeICEtXc+3j0Tw2OOzMR5Ma3B1jtprylWsf0J4yWQRmocS5HU
+	JqJUpGLo6x/nQKDg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1753094434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
+	b=kxMXG9kqvqWuM9I/9r/hsVpe6woZ/TQRgAd+XXywmh+ERAds1E1aVPE3z71ebOTZe14d+u
+	OYXNgAAzKhqzqzNlr1dVvAZjqp3fMl7uHHDk0CPvRO2Vcpo10nD0U6S4l+1inYr0brmUpS
+	G3PquTDhBvTJfKgpk1t0jw2uZiBmJEA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1753094434;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=DGT86XjEs8yUfWXy1Dj1eOgiciVU8QCPotf/nQIicGA=;
+	b=ICSfBX58lcEx17GB6hJdMgeICEtXc+3j0Tw2OOzMR5Ma3B1jtprylWsf0J4yWQRmocS5HU
+	JqJUpGLo6x/nQKDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 41897136A8;
+	Mon, 21 Jul 2025 10:40:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id tKaeDyIZfmhLHwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 21 Jul 2025 10:40:34 +0000
+Message-ID: <24f995fe-df76-4495-b9c6-9339b6afa6be@suse.cz>
+Date: Mon, 21 Jul 2025 12:40:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -68,81 +82,123 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] module: Restore the moduleparam prefix length check
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250630143535.267745-1-petr.pavlu@suse.com>
- <20250630143535.267745-4-petr.pavlu@suse.com>
- <15f52f4c-7809-46ab-9e13-bd487f35a80c@kernel.org>
+Subject: Re: [PATCH v3] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to
+ EXPORT_SYMBOL_FOR_MODULES
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <15f52f4c-7809-46ab-9e13-bd487f35a80c@kernel.org>
+To: Daniel Gomez <da.gomez@kernel.org>, Daniel Gomez <da.gomez@samsung.com>,
+ Matthias Maennich <maennich@google.com>, Jonathan Corbet <corbet@lwn.net>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>,
+ Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc: Christoph Hellwig <hch@infradead.org>,
+ Peter Zijlstra <peterz@infradead.org>, David Hildenbrand <david@redhat.com>,
+ Shivank Garg <shivankg@amd.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
+References: <20250715-export_modules-v3-1-11fffc67dff7@suse.cz>
+ <b340eb9f-a336-461c-befe-6b09c68b731e@kernel.org>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <b340eb9f-a336-461c-befe-6b09c68b731e@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -4.30
 
-On 7/17/25 9:23 PM, Daniel Gomez wrote:
-> On 30/06/2025 16.32, Petr Pavlu wrote:
->> The moduleparam code allows modules to provide their own definition of
->> MODULE_PARAM_PREFIX, instead of using the default KBUILD_MODNAME ".".
->>
->> Commit 730b69d22525 ("module: check kernel param length at compile time,
->> not runtime") added a check to ensure the prefix doesn't exceed
->> MODULE_NAME_LEN, as this is what param_sysfs_builtin() expects.
->>
->> Later, commit 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking
->> for sysfs perms.") removed this check, but there is no indication this was
->> intentional.
->>
->> Since the check is still useful for param_sysfs_builtin() to function
->> properly, reintroduce it in __module_param_call(), but in a modernized form
->> using static_assert().
->>
->> While here, clean up the __module_param_call() comments. In particular,
->> remove the comment "Default value instead of permissions?", which comes
->> from commit 9774a1f54f17 ("[PATCH] Compile-time check re world-writeable
->> module params"). This comment was related to the test variable
->> __param_perm_check_##name, which was removed in the previously mentioned
->> commit 58f86cc89c33.
->>
->> Fixes: 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking for sysfs perms.")
->> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+On 7/15/25 20:58, Daniel Gomez wrote:
+> On 15/07/2025 10.43, Vlastimil Babka wrote:
+>> Christoph suggested that the explicit _GPL_ can be dropped from the
+>> module namespace export macro, as it's intended for in-tree modules
+>> only. It would be possible to restrict it technically, but it was
+>> pointed out [2] that some cases of using an out-of-tree build of an
+>> in-tree module with the same name are legitimate. But in that case those
+>> also have to be GPL anyway so it's unnecessary to spell it out in the
+>> macro name.
+>> 
+>> Link: https://lore.kernel.org/all/aFleJN_fE-RbSoFD@infradead.org/ [1]
+>> Link: https://lore.kernel.org/all/CAK7LNATRkZHwJGpojCnvdiaoDnP%2BaeUXgdey5sb_8muzdWTMkA@mail.gmail.com/ [2]
+>> Suggested-by: Christoph Hellwig <hch@infradead.org>
+>> Reviewed-by: Shivank Garg <shivankg@amd.com>
+>> Acked-by: David Hildenbrand <david@redhat.com>
+>> Acked-by: Nicolas Schier <n.schier@avm.de>
+>> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+>> Reviewed-by: Christian Brauner <brauner@kernel.org>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 >> ---
->>  include/linux/moduleparam.h | 5 ++---
->>  1 file changed, 2 insertions(+), 3 deletions(-)
->>
->> diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
->> index bfb85fd13e1f..110e9d09de24 100644
->> --- a/include/linux/moduleparam.h
->> +++ b/include/linux/moduleparam.h
->> @@ -282,10 +282,9 @@ struct kparam_array
->>  #define __moduleparam_const const
->>  #endif
->>  
->> -/* This is the fundamental function for registering boot/module
->> -   parameters. */
->> +/* This is the fundamental function for registering boot/module parameters. */
->>  #define __module_param_call(prefix, name, ops, arg, perm, level, flags)	\
->> -	/* Default value instead of permissions? */			\
->> +	static_assert(sizeof(""prefix) - 1 <= MAX_PARAM_PREFIX_LEN);	\
+>> Daniel, please clarify if you'll take this via module tree or Christian
+>> can take it via vfs tree?
 > 
-> Can you clarify if -1 to remove the dot from prefix?
-> 
-> Final code 
-> 	static_assert(sizeof(""prefix) - 1 <= __MODULE_NAME_LEN);	\
-> 
-> with __MODULE_NAME_LEN being:
-> 
-> #define __MODULE_NAME_LEN (64 - sizeof(unsigned long))
+> Patch 707f853d7fa3 ("module: Provide EXPORT_SYMBOL_GPL_FOR_MODULES() helper")
+> from Peter was merged through Masahiro in v6.16-rc1. Since this is a related
+> fix/rename/cleanup, it'd make sense for it to go through his kbuild tree as
+> well. Masahiro, please let me know if you'd prefer otherwise. If not, I'll queue
+> it up in the modules tree.
 
-Correct, -1 is to account for the dot at the end of the prefix.
+Maybe with no reply, you can queue it then?
 
-I actually also wanted to assert that the prefix ends with a dot, but
-unfortunately prefix[sizeof(prefix)-2] (with prefix being a string
-literal) is not a constant expression in C.
-
--- 
 Thanks,
-Petr
+Vlastimil
