@@ -1,109 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B5E2DEA89;
-	Thu, 24 Jul 2025 13:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39EA26A1AC
+	for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 14:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753365039; cv=none; b=afM94P7crHD3lVZBV73J5ZEbs+sbkAhAFkBzrEtn/P1D8NPqWSDhBDfnU7EQR0r8FJzJrEW+H8DLnfAzB8SPsgcA4V1MfrfOc8mFAkPAdMGUkaMDBVJuZnG5SkgC9056oXr35Bshc9rc+koj3hxqzdlJZ/RwDSWr8OunA/rrG4M=
+	t=1753366200; cv=none; b=qetywFYIhU7mSMoR+H1mKq3Dcd5E55EkFr4fL4PRSzFfGVSWi0HzodQOgnEMKHU1q9R7ZTYfjSZzBUgjSiV6/fo0nvtEmee7StmKLlll8vSC6ftYlt/4qEagNq7gmMEUKBc3PnWPorEEmUOCYn4XYeUDbmhMs1IzqaCkMjE91yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753365039; c=relaxed/simple;
-	bh=iJjLNDfFc1+GOOk7iXnO04IQxxZdux2GznFTgHowxBk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pitqFfH4EIzopM3wlDs0FW2tlGGSOg3F5rPhcpybmdcSTbTyGTXS1efaQynBEyfIRWEwZSTcAmvr6cDxv6UnQBKSkLH9u6P2JraDr61m4icMK0qvUkwqwrBHtbsMP2bCjz6JG/bohmXrcn89ICiOx1wvcQXF2Yj+dTeJA5o9jhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OqpCqpa8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1753366200; c=relaxed/simple;
+	bh=h+K0vmC3/TCo0nSo3dM3ozTwdyqP++usnAb3Eyga7r4=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=LmElx6msMf1gqyzJNShTXZ7GdoNIqMt+ftbhhdMDvPKuL9vatOxgr4oB+G0RBnw2+cKNBTwdyORjeLCjqGXIBxqmoi+lweUwE2/q15ENUyFOUsmogBOTrx33gW6oV+hkjHBFmzFgILHwh5jSRPK+tx9Cos7dA0NmppS5eWZI+r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SVnABKCZ; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OqpCqpa8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A40C4CEED;
-	Thu, 24 Jul 2025 13:50:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753365038;
-	bh=iJjLNDfFc1+GOOk7iXnO04IQxxZdux2GznFTgHowxBk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OqpCqpa8IWuCzkJ3Alf+tjYsASPgZIrtdsqjDLkugG365FO7HHKm/9A1Y3rAKIf1I
-	 mrELj6E07kyVhr5+roursPmMQeUhe0cb4TIqEEgZ7c/DT2htlkoshQ8dNKz1JleFtd
-	 G4WYnENA2jclojwypGF2Wwyk4vvZbqRNVWcF3+mGd4+qvSGWlwemCBAmwTkjYJMpTH
-	 krghYq51KSAHWhiu/HjnxfqxQtpog6JnwBKweo6q2kvnhJpfVoqKjuDyv2YH2bY0Fh
-	 k8+HxjJ2sOVGL4X/2YWO6K8emN/kxlCPAygYV5awwPLs9zVuYUyttdJacAF2bj8+g0
-	 3bJNbckxIlSoQ==
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	Alexey Gladkov <legion@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	linux-s390@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v5 10/10] s390: vmlinux.lds.S: Reorder sections
-Date: Thu, 24 Jul 2025 15:49:47 +0200
-Message-ID: <2860d5a5e7c6279b3836537e20b0fa0c40d2ba0f.1753354215.git.legion@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <cover.1753354215.git.legion@kernel.org>
-References: <cover.1753354215.git.legion@kernel.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SVnABKCZ"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4560d176f97so11693635e9.0
+        for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 07:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753366197; x=1753970997; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FtkvbalbhW467Ci/TrHI2JYa3ewJ4y6lRxO5bgqakFk=;
+        b=SVnABKCZJwuYkKSpYod2UM6gnXHDjLv5bpPspemiWXtdO32rcxuAnwj48oioQlHGwT
+         KmXV1IWz5TrJXg760IhJ1N1QmhYYcHjqff12TUHLs4HcBTxDOZNsgwQEv2Ooq0M5ac4J
+         lzPfH6c+ZwoWEMRjHEcF58dYb08mLJFo3j6NOjpeuR03tj4x1AgdIeXNxAc7Z4aoRItq
+         jM4QBHx6zmNjFCu3a/JZ+55BAX1idWLE0CWAT5X1G3f1u9yqbASTckbqUMiTAGri7QgU
+         T7ewQpOnqYuckoyTvo3fMe3wEJbOwkgvg8NTEwQ84r7pyd1E7dJaa0n4sUsAXifvk0fw
+         I6zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753366197; x=1753970997;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FtkvbalbhW467Ci/TrHI2JYa3ewJ4y6lRxO5bgqakFk=;
+        b=eR+CMLWJrNX795U4lL1e3HKEw9hSu4MpM0mLPKpi6zh18pFUGwgt93WocQYSzOyBVm
+         WE3F6yq4PKaXLkDB0GP7+nm0U+N/1jZLj9A4ROBZgFDyxs0eJ+zBdbwzfqbdvPVPEreB
+         DKAtplKBBMGdpNA2U+4vyfsNWY+dOj/ewwI5z3O258/n1qL8ua37kB4nDx4EaVd7X5jR
+         ZpaNZO0lHFhq7FeJxYCmWBmBHgsE+kITgcl9OX8rd8tasFxawf1j9DIJ9dxHome8eHPz
+         k+RK+cB0kXr/FL77LS0NJ0AuTL/2qrYX5o8vWp6+GO+U4g6b+inTgTqy7jdGhgqP4vtP
+         eEYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnbYfj3+bM37X1UmdmOd2b2R2f0oZFkZDPsahZlJvWG3INkcmMiZdF9NUg981EkIHH75tUWXz3WPgzSuz2@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCKYJLyoQ6Y9hx3L2kt8IMS+Hpba0G4K2rMpsHTtil/ITusmEy
+	Sg1QdSE/UWLw2JGZnxhXpznWsUXR9axmYGwE9f5wW5jw6OREytCsFqORJkA17Cn2yPU=
+X-Gm-Gg: ASbGncstwe+OR3YdJddjT5OsPN0uxF7z7b9bZk/h/zv+HcCBJaf2wfABcpxS4GlB1GH
+	U5JHstomfGvnQ6/oV9X5n7C7U8gHhmNkWDN65lNi4KX1c24KcPS1CpPgr9tToH180zpqolAwlIX
+	xZRCqMTJGXjMkW71LztIFK6GySk+AiDCqsn4+EhK6FlmVIh7BVpQd+aXhHeLpHmH8Z+VIgAexbe
+	hLTpCOe39nH6hThxgUMDZUmEr3atd39Uk4badrvHRxommKOqDN/oBNU6sn519abv9cm8cpTewsB
+	L7eV5dVRHrgXWt/nC11HpvAwAJOYWAsEg+pCCV00UAeauaV9D4nIpgmJ/8wXyU5wBUu840BD5nK
+	l8gpQUUlQ6eYU+sJQFCn/AkFUdxT2sHOgm6ZkVW5TprGpyQW8rJhwwW+BK/cQnesUm/nNxrgd7d
+	U=
+X-Google-Smtp-Source: AGHT+IEzBJZjwflpIGZm+EhCnzacJZTC2cyh5NeZ7fWUM4qCv/j+DuKgDh48awMiy/In3FsYO7BG9A==
+X-Received: by 2002:a05:600c:529a:b0:456:26ad:46d2 with SMTP id 5b1f17b1804b1-45868c75dfamr58753125e9.6.1753366197052;
+        Thu, 24 Jul 2025 07:09:57 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:cad:2140:e2d3:d328:dc00:f187? ([2a01:e0a:cad:2140:e2d3:d328:dc00:f187])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458705377dasm22037195e9.4.2025.07.24.07.09.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Jul 2025 07:09:56 -0700 (PDT)
+Message-ID: <d02c400f-d159-451c-b4ac-745e74986591@linaro.org>
+Date: Thu, 24 Jul 2025 16:09:53 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v5 06/10] pinctrl: meson: Fix typo in device table macro
+To: Alexey Gladkov <legion@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Xianwei Zhao <xianwei.zhao@amlogic.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Kevin Hilman
+ <khilman@baylibre.com>, linux-amlogic@lists.infradead.org,
+ linux-gpio@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <cover.1753354215.git.legion@kernel.org>
+ <c47f5e1ab68248cbc4d51dcd822829da8857ea00.1753354215.git.legion@kernel.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <c47f5e1ab68248cbc4d51dcd822829da8857ea00.1753354215.git.legion@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Reorder the sections to be placed in the default segment. The
-.vmlinux.info use :NONE to override the default segment and tell the
-linker to not put the section in any segment at all.
+On 24/07/2025 15:49, Alexey Gladkov wrote:
+> The typo when using the MODULE_DEVICE_TABLE macro was not noticeable
+> because the macro was defined only if the module was built as a separate
+> module.
+> 
+> Cc: Xianwei Zhao <xianwei.zhao@amlogic.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: linux-amlogic@lists.infradead.org
+> Cc: linux-gpio@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202507220009.8HKbNP16-lkp@intel.com/
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>   drivers/pinctrl/meson/pinctrl-amlogic-a4.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/meson/pinctrl-amlogic-a4.c b/drivers/pinctrl/meson/pinctrl-amlogic-a4.c
+> index 385cc619df13..95525e66e5c0 100644
+> --- a/drivers/pinctrl/meson/pinctrl-amlogic-a4.c
+> +++ b/drivers/pinctrl/meson/pinctrl-amlogic-a4.c
+> @@ -1023,7 +1023,7 @@ static const struct of_device_id aml_pctl_of_match[] = {
+>   	{ .compatible = "amlogic,pinctrl-a4", },
+>   	{ /* sentinel */ }
+>   };
+> -MODULE_DEVICE_TABLE(of, aml_pctl_dt_match);
+> +MODULE_DEVICE_TABLE(of, aml_pctl_of_match);
+>   
+>   static struct platform_driver aml_pctl_driver = {
+>   	.driver = {
 
->> s390x-linux-ld: .tmp_vmlinux1: warning: allocated section `.modinfo' not in segment
->> s390x-linux-ld: .tmp_vmlinux2: warning: allocated section `.modinfo' not in segment
->> s390x-linux-ld: vmlinux.unstripped: warning: allocated section `.modinfo' not in segment
-
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202506062053.zbkFBEnJ-lkp@intel.com/
-Signed-off-by: Alexey Gladkov <legion@kernel.org>
----
- arch/s390/kernel/vmlinux.lds.S | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.lds.S
-index ff1ddba96352..3f2f90e38808 100644
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -202,6 +202,11 @@ SECTIONS
- 	. = ALIGN(PAGE_SIZE);
- 	_end = . ;
- 
-+	/* Debugging sections.	*/
-+	STABS_DEBUG
-+	DWARF_DEBUG
-+	ELF_DETAILS
-+
- 	/*
- 	 * uncompressed image info used by the decompressor
- 	 * it should match struct vmlinux_info
-@@ -232,11 +237,6 @@ SECTIONS
- #endif
- 	} :NONE
- 
--	/* Debugging sections.	*/
--	STABS_DEBUG
--	DWARF_DEBUG
--	ELF_DETAILS
--
- 	/*
- 	 * Make sure that the .got.plt is either completely empty or it
- 	 * contains only the three reserved double words.
--- 
-2.50.1
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
