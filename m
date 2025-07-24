@@ -1,63 +1,63 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0AD2EE978
-	for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 21:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37022EE97B
+	for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 21:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753392431; cv=none; b=oAJwp23c360USI+RsFcRI9SLzto45RoqFZ8F7Sn9wMOimhSF3yCt+QCn7Rm7MOMT/v/dY9HHVVD/Cfc5bAtwsC1ESo9mwnoAQv4dTM0GV3yppVfspAAyuHxT5YlF6F4Az2Q4J5VcnPCcJEaXQVdBInaRd+W+rEVWM8Vmwr3u+NU=
+	t=1753392451; cv=none; b=ZwiptonOPnagmVtO/xf6IJhs/r+2OcGtNs/1QNd6HxwCmINcsfvtg7HL/o8gst1exEmbvgPMLemJb3hofDIzjv9UsCKpqyIyY43MUEi7gDXH95FbozcIbf/xXQ/QY/hy1vNQCQAGfiRxTmW6rRZtdLOO4HozkHDEAP17wJrm2Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753392431; c=relaxed/simple;
-	bh=9yo7PAzDWZnWGDhWTQcvkkaMcI5yuLUZBspBv87afKk=;
+	s=arc-20240116; t=1753392451; c=relaxed/simple;
+	bh=wNCd3EJBV8JmYYmxRVMwzijvsmCmObXzyS6voU1YqDg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b6w1nmBKqwAz6WkiyV29zayUO3KIMZY9b+/b9P2ZQawf04+JvEoMLxHa63PjckHk32IhU+u4o4IXXHXP7gPuzH4xfZEsn1i1anUQYBFRT6o9D9fgGqxZ6lw78wY12KrXFlO4Ky/W3u2jNlejvqYnJ55SzUXtRX9iAG6gS1qLJq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Uh0PrygV; arc=none smtp.client-ip=209.85.219.54
+	 In-Reply-To:Content-Type; b=qrEKXQzOObiFzKWcTmRSJ/wo8VqlspS3Pg/LYhvk1aM6DMejFkIzBDrmONulcu1SsSXp1FVLGveITu4Loy8KTHKrCfYhcn5PvWxGZLmZaJSb8iZiwt7vF1MdlCOCKkic3O41AgnzaCRO9eTT8sYWNUDYKfvzyDuvFGToFlncd6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=SM+lRFo7; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Uh0PrygV"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6fd0a7d3949so20606036d6.0
-        for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 14:27:09 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="SM+lRFo7"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6fd0a3cd326so16139186d6.1
+        for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 14:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1753392429; x=1753997229; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1753392448; x=1753997248; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BrQZvefTT8J72h8dUnTdsjaXor2WmZQIMIJXwY4LKOg=;
-        b=Uh0PrygVY/mCdTHTcdOUZsaALA/JD4sqRsUhiX0x4u3R38kw44E0b+x+cAZvc/tHud
-         40VHZypReravUhnHEGSNk5QrQ/7sSct4InVKwI/MZSGI9sDjCzPnZlUXBbiHSA6SoG6j
-         IUP1nF4vqHzKaSuMTaUtJ4FpdWHd0JCcj9vcQ=
+        bh=eb7LwTrwfKZRGwsWl7FQwuOc+LHKc/Q1TZHaaM57R8o=;
+        b=SM+lRFo7N1mbFZfA3hHMXOBmBgQhT2Q5Jqm4GiZ7DzeSol+W2X6WyFPGADIx7r+aB5
+         1rultwrb5EaOiP11okmK8Ot0hzKrfh3mc5nMW6clw8Lgp4HIRPP4dJSuHhXR2pbUxF+v
+         084CeppGGsxQpw9hKcs62wSthkFAkMFGLwKjs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753392429; x=1753997229;
+        d=1e100.net; s=20230601; t=1753392448; x=1753997248;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BrQZvefTT8J72h8dUnTdsjaXor2WmZQIMIJXwY4LKOg=;
-        b=cCfJB0rfJffmMFLqgkNarspStZnj8VVtF85NgXgVUlfp0nIaDb4crHzvLxwukHsQk6
-         8YMSOcHcyZ1myXBMUuAkAO/b7F1QqpiwalRtmB7jkff14YoQ+Mi1cDwKhHtjKbssU68F
-         OAVXrZiKh08NqJYdSoaaZ8M8JPqId19repMXe1+7ImysSxfMCG7RiYhrDPYcLZQKi2Sk
-         qSI68wrZkjz/1EXeH/o6UAvJr8j2zcbIi2THdUohNZcpaEGso8llora3d7xEHndlTWKa
-         /oVKYzqE8EeqR/07i9hI8kgr7/0GxFBU1aed2vdC5ogml7ELTXxDw46VMCLyVvoJcAxM
-         4yYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFO8YnnFElIhzm6rXU3BGU5gIrZsMjIbiOnhN3kQ6o1OIaCzqut+NaHDbg3sLzGGwto/esr7I3x6ehHJ7U@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm3VK+FpAT+dML+nbtm9CaXrbyX+KRNd1lZhFROY5br31zMp3r
-	1Jyq68FJkVMStViaZ0q7FfBmcAXqgh13wrWUCnT7n47eEVGZf/h7BYNmV1cYU5gL5A==
-X-Gm-Gg: ASbGncsaNyHyZ50w1C4/r25bvV/I0lp0rHwEHLmZ0eIlZ5BnsUHQJbJX8UfuZJ+XwWE
-	DUvW5Gz1MJpIsGjQ6h1CC+USVs3PIAz4ieahv7BDomatkKZnbh+eqqjXK06Fcofbnr/XzRtsftP
-	Ri4Lw+BFWL2CYUNDCYJ6GSHrzpxnb0iqx7wWnfVLgRjojw64oWcQzhw4laIU+hVR/ZyImsKBDoe
-	8nAmS08ZeaQOMoaBioylrCezKVzfY3Uyi9fhHeSxDjo/2deoX09f4XQxQORvLwz/jBaujkdMNG3
-	xgcJBDmimbx2zLcB3Emg4iDNaQRIluwZCxJp0Y2zdgK8hXA+iDFez6wzxRTlsEk9ckxriyvwrTM
-	QJLvoAMSiJ+QHCvBwpAKVus/JZHAjqZ8TD8CDjqeapGwdSZY3adw86I6GJChuZw==
-X-Google-Smtp-Source: AGHT+IH/5Hg4SYzXScd2JZ5u442inXbwL+/GXKWv2N03daX9+cThsM2yzxMXOEyM0Xu49jU1K7FUEw==
-X-Received: by 2002:a05:6214:c22:b0:706:ea6d:e161 with SMTP id 6a1803df08f44-707007167e0mr108054966d6.32.1753392428572;
-        Thu, 24 Jul 2025 14:27:08 -0700 (PDT)
+        bh=eb7LwTrwfKZRGwsWl7FQwuOc+LHKc/Q1TZHaaM57R8o=;
+        b=BF7hCa6o2Te5alcOaOTh/zRoveG5kDXsGui2FWKB6qEsNHGPoz/LNouI1hHtFc8Z/e
+         K4RD+F3IsqEuV0x0owoYPEZsQ/sKYltFq8sscCSa9wy0PYHkgmDxJFE48FfZaulTCBxO
+         dkWy2J6s540/F+eychckl8T0YyzratOeoapGEPjeD2RHpvUldcyMjiUK6JdlDc9Mlduu
+         iDS6Y6Z15fl8uUUa3URhMTmMZtgRxHUGabo4HkfKeDR2g2qzozFBM32j/0pMnZDklDXp
+         W+TJRGMzNEZrutHNSObWHM8z6yfBI3C434uUgO7+i1C1tKeK620wNQz/n9znD8mTXuLe
+         YDKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmZzmeNI9dV3TEgtPspOwk5a372o7xMS9wGlp+xeQqPGbn/1xIrHwakmznvFe7A+oWycO6Qob4MH621E77@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd1gREbdL5DHy1+vbo1tOzbbmrxRaXgme65BX0DYWEd3f4sjvR
+	gk/goEfoaRzYNTdRwHIHOX2mSCqErB5s1uf/IyYIYbyDTGZ5Y8Risiv9SBxH7XWgIQ==
+X-Gm-Gg: ASbGnctN3hgU16kNGIuQWyB6WNgWDfPF+ySYa6wkMm79MEiXBz+zhUUTU3B2g3EIHj6
+	U+iqXKwhtsgkBXx2yBLKngB3/ZjvFl7dobgV+2H24mYeARK9xUruCw7Mz73TbW+sMoG4TomGiec
+	xN7fGri1RxgSrNQ7mb9wYaWD1EVp67WClpkmyLFdXG2QLXWuAykZa2NXnDGWYK5c/qu7H2hMKuP
+	Vo35dfVLeQy4RUftZ/q3x4JBgafCfWG7NZMk2iBZg1K9fSMpDnga/D/KpdiViXEIBZjr/ltiDCg
+	1BzqzqXHh/ltmenIJpt8MqiceosCPwAKUx9VtjRTc+BwnW2R+DDJxrhDObM+/di1NwYi/ogLRFm
+	JN4R5/VkGuTo+/OZ++ZfT+s0GINBLMpLrgEzumYhnovKV2OXoOVT2+BKFsS1YErkfj5kWv9lf
+X-Google-Smtp-Source: AGHT+IFXe1AUozr/VBWe0gYnK+qQoY2TYFea6yXJGINXUcVKLGT6eNnGYGkrp3ZYYhKBw7J09w5K5w==
+X-Received: by 2002:a05:6214:500d:b0:6fb:4e82:6e8 with SMTP id 6a1803df08f44-7070051b347mr106591216d6.14.1753392447547;
+        Thu, 24 Jul 2025 14:27:27 -0700 (PDT)
 Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7070fc9d5e3sm18704486d6.53.2025.07.24.14.27.02
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7070faec0b9sm18388806d6.5.2025.07.24.14.27.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jul 2025 14:27:07 -0700 (PDT)
-Message-ID: <f084e692-7fd5-417c-8e49-860c2ce47d33@broadcom.com>
-Date: Thu, 24 Jul 2025 14:27:02 -0700
+        Thu, 24 Jul 2025 14:27:26 -0700 (PDT)
+Message-ID: <136af381-5c31-49dd-98fe-1703a2cd57df@broadcom.com>
+Date: Thu, 24 Jul 2025 14:27:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -65,9 +65,8 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/16] MAINTAINERS: Include GDB scripts under MEMORY
- MANAGEMENT entry
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 12/16] MAINTAINERS: Include dmesg.py under PRINTK entry
+To: John Ogness <john.ogness@linutronix.de>, linux-kernel@vger.kernel.org
 Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
  <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
  Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
@@ -75,7 +74,6 @@ Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
  Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- John Ogness <john.ogness@linutronix.de>,
  Sergey Senozhatsky <senozhatsky@chromium.org>,
  Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
  Andrey Ryabinin <ryabinin.a.a@gmail.com>,
@@ -104,8 +102,8 @@ Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
  "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
  "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
 References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
- <20250625231053.1134589-9-florian.fainelli@broadcom.com>
- <04116d0f-2815-4583-853e-e4295fb3d014@redhat.com>
+ <20250625231053.1134589-13-florian.fainelli@broadcom.com>
+ <84v7oic2qx.fsf@jogness.linutronix.de>
 Content-Language: en-US
 From: Florian Fainelli <florian.fainelli@broadcom.com>
 Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
@@ -140,39 +138,40 @@ Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
  MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
  7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
  95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <04116d0f-2815-4583-853e-e4295fb3d014@redhat.com>
+In-Reply-To: <84v7oic2qx.fsf@jogness.linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/27/25 10:10, David Hildenbrand wrote:
-> On 26.06.25 01:10, Florian Fainelli wrote:
->> Include the GDB scripts file under scripts/gdb/linux/ that deal with
->> memory mamagenement code under the MEMORY MANAGEMENT subsystem since
->> they parses internal data structures that depend upon that subsystem.
+On 6/26/25 01:43, John Ogness wrote:
+> On 2025-06-25, Florian Fainelli <florian.fainelli@broadcom.com> wrote:
+>> Include the GDB scripts file under scripts/gdb/linux/dmesg.py under the
+>> PRINTK subsystem since it parses internal data structures that depend
+>> upon that subsystem.
 >>
 >> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 >> ---
->>   MAINTAINERS | 4 ++++
->>   1 file changed, 4 insertions(+)
+>>   MAINTAINERS | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
 >> diff --git a/MAINTAINERS b/MAINTAINERS
->> index cad5d613cab0..52b37196d024 100644
+>> index 224825ddea83..0931440c890b 100644
 >> --- a/MAINTAINERS
 >> +++ b/MAINTAINERS
->> @@ -15812,6 +15812,10 @@ F:    include/linux/mmu_notifier.h
->>   F:    include/linux/pagewalk.h
->>   F:    include/trace/events/ksm.h
->>   F:    mm/
->> +F:    scripts/gdb/linux/mm.py
->> +F:    scripts/gdb/linux/page_owner.py
->> +F:    scripts/gdb/linux/pgtable.py
->> +F:    scripts/gdb/linux/slab.py
+>> @@ -19982,6 +19982,7 @@ S:	Maintained
+>>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
+>>   F:	include/linux/printk.h
+>>   F:	kernel/printk/
+>> +F:	scripts/gdb/linux/dmesg.py
 > 
-> Probably they should go to the corresponding sub-sections. At least 
-> slab.py?
+> Note that Documentation/admin-guide/kdump/gdbmacros.txt also contains a
+> similar macro (dmesg). If something needs fixing in
+> scripts/gdb/linux/dmesg.py, it usually needs fixing in
+> Documentation/admin-guide/kdump/gdbmacros.txt as well.
 > 
+> So perhaps while at it, we can also add here:
+> 
+> F:	Documentation/admin-guide/kdump/gdbmacros.txt
 
-Sounds good, thanks!
-
+Thanks, v2 coming up.
 -- 
 Florian
