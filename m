@@ -1,100 +1,55 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F0A1DF247;
-	Thu, 24 Jul 2025 16:00:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A0F2EE5F6;
+	Thu, 24 Jul 2025 21:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753372837; cv=none; b=TV0ZcCJcDJYbeB/uL87UiDzLlD3ZpO1y49Zk0lqdBqJ0/O3trScBAdrkfc1fWjhc5yMkrNg5C5D4NZtUswqvxtfIdwWCpNuVUchgIkjhxWMCbF0fjoRdJZEOclM6dfdLZOZboZROiXn4zwlSqFdesPfkiklNgJB7hcjj2lLeREU=
+	t=1753392294; cv=none; b=RURQRrwDS5Jm5CFVlDNXvmYY+A1oz5TUymZJQdQ5k/VsbhRdsLWqQSkSRBCNJ1qE1fJzAm0jO9WMvew+cdkpPOanyzTxpkTtInm2pmgLTidRJxedZ02+obpWxGs5piD2s5sQXOvW73wfe2WRUXhjJKHIQejvIe+8z43xjya3P40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753372837; c=relaxed/simple;
-	bh=FbPmgwrQmhELpPPQh/rwyTALm9IvfeHwHW8BTVv/FLQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uju1IYFtd7KKjYSVZ8Ov87nfA5MBJiyoMrNjwZLhyxkPrrcz9k/a80AhnWURU+/PVj/NiU16p7H/3vNxpqwcWahrtLFnlVNa8ZTxD/BpItAWv+P8reN6OWiowZe8Egpx74BCBpMcogClGwVzyDOJgCIHd9y3GLS9fHKVjjjFzMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nwh1h535; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1753392294; c=relaxed/simple;
+	bh=XF9wki9AjDCraP3PkW3hEqMnoy89UeAnuDiZvWolUoQ=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=d3h7yFYtudKxlIYIT99xRx3GXNSgmzHmglXoKvwae/qPhfbAJh4uLtN5jvmU8G07NHsM3vBuIhnHOmVEa9C4jWOnz05u/7BvhN8W6OsqdaaD87/6DYq/0P+UANe38vq+Cv6523qQvwW8J2e+Pbk0ai/8pjG/GW3XIL2A6wSjNH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TpVDTtmn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nwh1h535"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b3510c22173so134130a12.0;
-        Thu, 24 Jul 2025 09:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753372835; x=1753977635; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FbPmgwrQmhELpPPQh/rwyTALm9IvfeHwHW8BTVv/FLQ=;
-        b=Nwh1h535QPw3DdEuQNdIkiUcXE97ZecNErN9SP7dqyG5Uj8NxI+S/4gjpl7zTTN1t2
-         SLEWK4qBAS547nnu1kJAPdzeEUaWgfxKbQTTEAaQPPCqVoracC8juXICSTd+d2cXVd6R
-         OE/mD0mDu8YjI7a6QSAA8sCQC4F2RrW6EZtfNHtuL5tJmVuhgw5QIR+Ss8jLtztnRGTc
-         GiDTw0yVlxl9obdp4BW1HdbgyrtbO5hloUto941sfTFwdDnyjhPhjTGNUpIK5rxt5dHJ
-         tbd8eMjNJyp3yoKOW6ZPp2J/N5RBL9eG8YefeOW0SsM+xWEUMsaRghBXEAop3Ix6ZLFR
-         vMdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753372836; x=1753977636;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FbPmgwrQmhELpPPQh/rwyTALm9IvfeHwHW8BTVv/FLQ=;
-        b=K6WSlxYAKA0lk8Zy/sHD8tv9LSOl0IdIDJXAbcK/0EHb+mEj+NIBvMqQB1J6oMB1/5
-         XWhEc72I0+nxdu4801bwY7CzF/G29suG81avDjGFNncOy7D4TgPiRiFWvq25Z0qlrxiG
-         YBXL5gggL0+3t+Li+jAEGnIhd8t5k9asEoYBrrVMPGeaNe2Ji26sDUU7Ft7dTh/PkkF+
-         cHTRQ4OXCbKq1JAahFO1zzD7Xq3u3PR4OiJCQA+FzV3IOsYiM0MygFuLl/tCXZ/KRBUV
-         SQao19JCAf7/Lx8JgOxK7jSyQY3Zqtq1wSXMRWxAQDcPTrXsRmKX1OJJB7PvM4hVlslj
-         ti7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVCyYxHtt0zSK45fhtn4yGg2WroA6eK3fMPCH7ajhD7T6g8L9cYJQ4aL95Q5tTV6xOVdJt69TqKhR9MY71a2Q==@vger.kernel.org, AJvYcCVDgPTVuhLffa37cqg0X60zfeavPKLbiTFwUByMRpg3bqnexB0dbCpc7yUcQUqBrKhw5R0CYgWsFjIy4ZY=@vger.kernel.org, AJvYcCW1/WuJPFudFgffNRLbJh57Bhnh1HdxT/TynkC74ukVmIVL2bwn43PSnsekzvLziYFf/8gciZFytmUDZ57qFPM=@vger.kernel.org, AJvYcCXbsJPWF0Zk32ko03lRGZfBgK4+xjF3EwwpqoxuEQxMJlrMavH6fxPDgaXO6bFndB0UA/NgvZTmesJOZJkw@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzygaw+Zmw5umUIKtbsavoacMjXSUPYmkiSoM7kLt/ZyblMjA2r
-	sk7mHu10BjN9/KGtT3IZIJ7Tr4sA3h+1LwJjD4/gQuEn2SbXT3al87oUcpKTuEADF11q5VqmIoR
-	oCk+NzL4A8he5j5DZOOAk2zeXfI/djCQ=
-X-Gm-Gg: ASbGnctoS43YjGXmlFecVYRhH/zViXqTOLCj37QsXUXFnVRaoEWOLhcaQbOk6QbY42e
-	56BFGXNrecq1GmQJBPLT1h6p0XAj1vqCCq4th0CT4TEo7vdZTO6WinUAxdzy4tWKPQ5AL4uw/9Z
-	kk3Xxj5nosz1m1OU8yyfqvuNmRZ6s+aIufW2G332khAb2b893hKq/Mdw3AbsRPJBqEISb2tjF2A
-	BODfOrH
-X-Google-Smtp-Source: AGHT+IEixyq95CchIezC/JloLVj0RsN+UyKsKMSCQC6gQRgajTHmeGZRSoEE5SqrPIOpBBTfzaC+/mr6yDfJmFLpCIY=
-X-Received: by 2002:a17:902:cec6:b0:23d:eb95:da15 with SMTP id
- d9443c01a7336-23f9814bd03mr36628715ad.6.1753372835358; Thu, 24 Jul 2025
- 09:00:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TpVDTtmn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D667CC4CEED;
+	Thu, 24 Jul 2025 21:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753392293;
+	bh=XF9wki9AjDCraP3PkW3hEqMnoy89UeAnuDiZvWolUoQ=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=TpVDTtmnke03qtUEM6XIe7WRETHGZba0w/dTkUEFESVK6kJkUu9ET7u/rEdgl4bGx
+	 2EfRXLHH+i865D9SfrkseELWYD78ivz0BkiFnnzfeHYll1nkdAXSzp9qNT/KigbhAy
+	 T5NiCU8nM+JrweBAZePm38tiRglzXSaeo6nE37mL1qsPw5wL8nRe1MxIARw6gt8vcQ
+	 8sQUw65v/p2D0hPaA7kgvgfml9H9l59fExztLX1CwHYZM2Lu281UiO6W2v2a5oRSb7
+	 sXmpIoxIWLKlTPQkXdbzWLZ3US4iGFhbInUbA7oANY0Ki5BVzlaTW/c4pyT0PuBrxO
+	 eIxpilMnzjWcA==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1753354215.git.legion@kernel.org> <e78d20afcc059cec3cd977ee74a0ec4df06de05b.1753354215.git.legion@kernel.org>
-In-Reply-To: <e78d20afcc059cec3cd977ee74a0ec4df06de05b.1753354215.git.legion@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 24 Jul 2025 18:00:22 +0200
-X-Gm-Features: Ac12FXzX-zdf43RhmmLozngcxIqMNsHW59ozas8iLUbpVV_D5V8Act7CA_O0LmM
-Message-ID: <CANiq72krLSP=xe9tMj5sPaBDmEK09x2J_CsbY5cU0wNAj_ffRw@mail.gmail.com>
-Subject: Re: [PATCH v5 07/10] modpost: Add modname to mod_device_table alias
-To: Alexey Gladkov <legion@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250625231053.1134589-2-florian.fainelli@broadcom.com>
+References: <20250625231053.1134589-1-florian.fainelli@broadcom.com> <20250625231053.1134589-2-florian.fainelli@broadcom.com>
+Subject: Re: [PATCH 01/16] MAINTAINERS: Include clk.py under COMMON CLK FRAMEWORK entry
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>, Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J. Wysocki <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, Sergey Senozhatsky <senozhatsky@chromium.org>, Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Liam R. Howlett <Liam.Howlett@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Kent Overstreet <kent.overstreet@linux.dev>, Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Uladzislau Rezki <urezki@gmail.com>, Matthew Wilcox <willy@infradead.org>, Kuan-Ying Lee <kuan-ying.lee@canonical.com>, Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>, Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn <illia@yshyn.com>, linux-clk@vger.kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, kasan-dev@googlegroups.com, maple-tree@lists.infradead.org, linux-modules@vger.kernel.org, linux-fsdevel@vger.kernel.org
+To: Florian Fainelli <florian.fainelli@broadcom.com>, linux-kernel@vger.kernel.org
+Date: Thu, 24 Jul 2025 14:24:53 -0700
+Message-ID: <175339229300.3513.16413844188162316683@lazor>
+User-Agent: alot/0.11
 
-On Thu, Jul 24, 2025 at 3:50=E2=80=AFPM Alexey Gladkov <legion@kernel.org> =
-wrote:
->
-> At this point, if a symbol is compiled as part of the kernel,
-> information about which module the symbol belongs to is lost.
->
-> To save this it is possible to add the module name to the alias name.
-> It's not very pretty, but it's possible for now.
->
-> Cc: Miguel Ojeda <ojeda@kernel.org>
+Quoting Florian Fainelli (2025-06-25 16:10:38)
+> Include the GDB scripts file under scripts/gdb/linux/clk.py under the
+> COMMON CLK subsystem since it parses internal data structures that
+> depend upon that subsystem.
+>=20
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
 
-Thanks for the ping -- Cc'ing as well Andreas who is working on module
-bits lately (but is away right now) and Danilo who maintains the
-modified file:
-
-Cc: Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Danilo Krummrich <dakr@kernel.org>
-
-Cheers,
-Miguel
+Applied to clk-next
