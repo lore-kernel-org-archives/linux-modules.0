@@ -1,177 +1,137 @@
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37022EE97B
-	for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 21:27:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F52747F;
+	Sat, 26 Jul 2025 10:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753392451; cv=none; b=ZwiptonOPnagmVtO/xf6IJhs/r+2OcGtNs/1QNd6HxwCmINcsfvtg7HL/o8gst1exEmbvgPMLemJb3hofDIzjv9UsCKpqyIyY43MUEi7gDXH95FbozcIbf/xXQ/QY/hy1vNQCQAGfiRxTmW6rRZtdLOO4HozkHDEAP17wJrm2Wc=
+	t=1753527594; cv=none; b=lneEMiTuNoXJlQ6PnIjr2EG3awLMEG3z0UNDfub0PZ9wZtho4WGjfVLmr8Hhh3xA4R4UWjwNpD1imNdl0pUBDRDa+An0TnH1vVTieigZCSP1uq92hSLfmIZrrOjvSRCWQ2EUjq6sQdRUW4s+Es3utmJK08WUKkZI2PcPscvEjQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753392451; c=relaxed/simple;
-	bh=wNCd3EJBV8JmYYmxRVMwzijvsmCmObXzyS6voU1YqDg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qrEKXQzOObiFzKWcTmRSJ/wo8VqlspS3Pg/LYhvk1aM6DMejFkIzBDrmONulcu1SsSXp1FVLGveITu4Loy8KTHKrCfYhcn5PvWxGZLmZaJSb8iZiwt7vF1MdlCOCKkic3O41AgnzaCRO9eTT8sYWNUDYKfvzyDuvFGToFlncd6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=SM+lRFo7; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1753527594; c=relaxed/simple;
+	bh=g+gsOrD6DrMOM9hwmAbfMGxWrCneIpbSg9t1G3B3KiM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c+iJkBoUC4Fd4IH15iPPxzzvo4ZdTXIP7xTI6q2tt9FPatBZ5YLehCCvZJG5V1wdlaFrlvdkOMX5ZPt03N89+qXk5UwGgs+ngrg5i1i1bQhGYd+Q2bzFza+QGX6sA+YaZtGAHlWeQ5JtUnEDdqFeTUxbfiQECDH9HickXrlny1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGMm9Ag5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="SM+lRFo7"
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6fd0a3cd326so16139186d6.1
-        for <linux-modules@vger.kernel.org>; Thu, 24 Jul 2025 14:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1753392448; x=1753997248; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eb7LwTrwfKZRGwsWl7FQwuOc+LHKc/Q1TZHaaM57R8o=;
-        b=SM+lRFo7N1mbFZfA3hHMXOBmBgQhT2Q5Jqm4GiZ7DzeSol+W2X6WyFPGADIx7r+aB5
-         1rultwrb5EaOiP11okmK8Ot0hzKrfh3mc5nMW6clw8Lgp4HIRPP4dJSuHhXR2pbUxF+v
-         084CeppGGsxQpw9hKcs62wSthkFAkMFGLwKjs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753392448; x=1753997248;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eb7LwTrwfKZRGwsWl7FQwuOc+LHKc/Q1TZHaaM57R8o=;
-        b=BF7hCa6o2Te5alcOaOTh/zRoveG5kDXsGui2FWKB6qEsNHGPoz/LNouI1hHtFc8Z/e
-         K4RD+F3IsqEuV0x0owoYPEZsQ/sKYltFq8sscCSa9wy0PYHkgmDxJFE48FfZaulTCBxO
-         dkWy2J6s540/F+eychckl8T0YyzratOeoapGEPjeD2RHpvUldcyMjiUK6JdlDc9Mlduu
-         iDS6Y6Z15fl8uUUa3URhMTmMZtgRxHUGabo4HkfKeDR2g2qzozFBM32j/0pMnZDklDXp
-         W+TJRGMzNEZrutHNSObWHM8z6yfBI3C434uUgO7+i1C1tKeK620wNQz/n9znD8mTXuLe
-         YDKw==
-X-Forwarded-Encrypted: i=1; AJvYcCVmZzmeNI9dV3TEgtPspOwk5a372o7xMS9wGlp+xeQqPGbn/1xIrHwakmznvFe7A+oWycO6Qob4MH621E77@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywd1gREbdL5DHy1+vbo1tOzbbmrxRaXgme65BX0DYWEd3f4sjvR
-	gk/goEfoaRzYNTdRwHIHOX2mSCqErB5s1uf/IyYIYbyDTGZ5Y8Risiv9SBxH7XWgIQ==
-X-Gm-Gg: ASbGnctN3hgU16kNGIuQWyB6WNgWDfPF+ySYa6wkMm79MEiXBz+zhUUTU3B2g3EIHj6
-	U+iqXKwhtsgkBXx2yBLKngB3/ZjvFl7dobgV+2H24mYeARK9xUruCw7Mz73TbW+sMoG4TomGiec
-	xN7fGri1RxgSrNQ7mb9wYaWD1EVp67WClpkmyLFdXG2QLXWuAykZa2NXnDGWYK5c/qu7H2hMKuP
-	Vo35dfVLeQy4RUftZ/q3x4JBgafCfWG7NZMk2iBZg1K9fSMpDnga/D/KpdiViXEIBZjr/ltiDCg
-	1BzqzqXHh/ltmenIJpt8MqiceosCPwAKUx9VtjRTc+BwnW2R+DDJxrhDObM+/di1NwYi/ogLRFm
-	JN4R5/VkGuTo+/OZ++ZfT+s0GINBLMpLrgEzumYhnovKV2OXoOVT2+BKFsS1YErkfj5kWv9lf
-X-Google-Smtp-Source: AGHT+IFXe1AUozr/VBWe0gYnK+qQoY2TYFea6yXJGINXUcVKLGT6eNnGYGkrp3ZYYhKBw7J09w5K5w==
-X-Received: by 2002:a05:6214:500d:b0:6fb:4e82:6e8 with SMTP id 6a1803df08f44-7070051b347mr106591216d6.14.1753392447547;
-        Thu, 24 Jul 2025 14:27:27 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-7070faec0b9sm18388806d6.5.2025.07.24.14.27.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Jul 2025 14:27:26 -0700 (PDT)
-Message-ID: <136af381-5c31-49dd-98fe-1703a2cd57df@broadcom.com>
-Date: Thu, 24 Jul 2025 14:27:20 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGMm9Ag5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FDEC4CEF4;
+	Sat, 26 Jul 2025 10:59:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753527593;
+	bh=g+gsOrD6DrMOM9hwmAbfMGxWrCneIpbSg9t1G3B3KiM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rGMm9Ag5q8RrsMNUHK7IY+2VTiUCBUsrJW59hvvViujoTtrzJWHMtrNj8lFmfFEHQ
+	 iFDrTKCxuHKAE1SabyhdL1Dtcz0TdiaODagaiVEdXJE1Qzevr2ktj6WzuU4haV+WrG
+	 oL/Ca84oO93/StZ5pe9/qk4cXIVEjFNBBTidDZ5znmZ9sTkKUHSzVbz8zljm6sIyQd
+	 wQBSSRAqKNDFGuX0xRh4t/n573hkzbkEmrtz8Ob8eKJb1z1DOZEd5dRqI1pX3m/lVB
+	 CwP+c9JzY5OOa+30ZmcA33vRUrb4Ueck/+OLGTLYfnR1V1MU4TsQRGcdZ9j1CAid9v
+	 tCZPGhE9U68cg==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-553be4d2fbfso2942590e87.0;
+        Sat, 26 Jul 2025 03:59:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWGUuuszqo7e0eQ34hlLt7QB2GSZO5iQc1LggUj2VmJr+h8V/WKnzSz20NfXEDuLWvu6ES/dPv1Wx5EmQ==@vger.kernel.org, AJvYcCWbDOzCJDwRl7E9VeH0V337iWUFLnQl4bLUcniAs3EIrF2KvqTqD3BubkZAEiYXickSiE6TdP0vpHHqJwl9ZA==@vger.kernel.org, AJvYcCWxbNaoa2zLo5lNMBKUUxM889a/pzfZ4H1eZadtJ9IbaIt/F0i2ZJ9jh3R6F2O5NbQ/Rim6rk7Igx9tNfd8@vger.kernel.org, AJvYcCXK7hk+vkJklEcSsrQ8P3Pxewry+Qw8fEGDmsfX0Pdv2BwL9sDiC+sCj3r8UIB6xDF/j6zwCBf1IHMoRmM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8pjKml7+9LwSC1GtJf/vqOYzOb8l5Yc8HncEzpj4P5hm25QoG
+	D+gXOg071aWAj4gduUTMvGPiFXKz+Ktl9n9t5FykYhMbT8aZdqZ5s6o0EkcZB8zl5CPHKnsN9R6
+	8/006ic0PGqOYQFNt6w50CM3BObTcYJ0=
+X-Google-Smtp-Source: AGHT+IHlNlEPyc5mSQJkStepGru4y0Q4yNkOgUcGZgXwg5ckZuEGwpg/qbcmo19sVrfTSq/RGHzvYtX0TkI5gkcfF7c=
+X-Received: by 2002:a05:6512:3996:b0:550:d4f3:8491 with SMTP id
+ 2adb3069b0e04-55b5f496125mr1541036e87.41.1753527592436; Sat, 26 Jul 2025
+ 03:59:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/16] MAINTAINERS: Include dmesg.py under PRINTK entry
-To: John Ogness <john.ogness@linutronix.de>, linux-kernel@vger.kernel.org
-Cc: Jan Kiszka <jan.kiszka@siemens.com>, Kieran Bingham
- <kbingham@kernel.org>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Dennis Zhou <dennis@kernel.org>,
- Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Kent Overstreet <kent.overstreet@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Uladzislau Rezki <urezki@gmail.com>, Matthew Wilcox <willy@infradead.org>,
- Kuan-Ying Lee <kuan-ying.lee@canonical.com>,
- Ilya Leoshkevich <iii@linux.ibm.com>, Etienne Buira <etienne.buira@free.fr>,
- Antonio Quartulli <antonio@mandelbit.com>, Illia Ostapyshyn
- <illia@yshyn.com>, "open list:COMMON CLK FRAMEWORK"
- <linux-clk@vger.kernel.org>,
- "open list:PER-CPU MEMORY ALLOCATOR" <linux-mm@kvack.org>,
- "open list:GENERIC PM DOMAINS" <linux-pm@vger.kernel.org>,
- "open list:KASAN" <kasan-dev@googlegroups.com>,
- "open list:MAPLE TREE" <maple-tree@lists.infradead.org>,
- "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>,
- "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>
-References: <20250625231053.1134589-1-florian.fainelli@broadcom.com>
- <20250625231053.1134589-13-florian.fainelli@broadcom.com>
- <84v7oic2qx.fsf@jogness.linutronix.de>
-Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <84v7oic2qx.fsf@jogness.linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1753354215.git.legion@kernel.org> <2860d5a5e7c6279b3836537e20b0fa0c40d2ba0f.1753354215.git.legion@kernel.org>
+In-Reply-To: <2860d5a5e7c6279b3836537e20b0fa0c40d2ba0f.1753354215.git.legion@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 26 Jul 2025 19:59:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARV+8vZPUtX8iG_hEAt8tCchRPFobK85tv9dbJwVqYgsw@mail.gmail.com>
+X-Gm-Features: Ac12FXwWZK-s9uK4FNdURazz50HqFOZm92a27Khcsg-e7lt7_nQEyv1C0fLpN1I
+Message-ID: <CAK7LNARV+8vZPUtX8iG_hEAt8tCchRPFobK85tv9dbJwVqYgsw@mail.gmail.com>
+Subject: Re: [PATCH v5 10/10] s390: vmlinux.lds.S: Reorder sections
+To: Alexey Gladkov <legion@kernel.org>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/26/25 01:43, John Ogness wrote:
-> On 2025-06-25, Florian Fainelli <florian.fainelli@broadcom.com> wrote:
->> Include the GDB scripts file under scripts/gdb/linux/dmesg.py under the
->> PRINTK subsystem since it parses internal data structures that depend
->> upon that subsystem.
->>
->> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
->> ---
->>   MAINTAINERS | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 224825ddea83..0931440c890b 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19982,6 +19982,7 @@ S:	Maintained
->>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
->>   F:	include/linux/printk.h
->>   F:	kernel/printk/
->> +F:	scripts/gdb/linux/dmesg.py
-> 
-> Note that Documentation/admin-guide/kdump/gdbmacros.txt also contains a
-> similar macro (dmesg). If something needs fixing in
-> scripts/gdb/linux/dmesg.py, it usually needs fixing in
-> Documentation/admin-guide/kdump/gdbmacros.txt as well.
-> 
-> So perhaps while at it, we can also add here:
-> 
-> F:	Documentation/admin-guide/kdump/gdbmacros.txt
+On Thu, Jul 24, 2025 at 10:50=E2=80=AFPM Alexey Gladkov <legion@kernel.org>=
+ wrote:
+>
+> Reorder the sections to be placed in the default segment. The
+> .vmlinux.info use :NONE to override the default segment and tell the
+> linker to not put the section in any segment at all.
+>
+> >> s390x-linux-ld: .tmp_vmlinux1: warning: allocated section `.modinfo' n=
+ot in segment
+> >> s390x-linux-ld: .tmp_vmlinux2: warning: allocated section `.modinfo' n=
+ot in segment
+> >> s390x-linux-ld: vmlinux.unstripped: warning: allocated section `.modin=
+fo' not in segment
 
-Thanks, v2 coming up.
--- 
-Florian
+Thank you for root-causing!
+
+
+
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+
+
+Hi s390 maintainers,
+I need this patch for kbuild tree.
+Ack is appreciated.
+
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202506062053.zbkFBEnJ-lkp@i=
+ntel.com/
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> ---
+>  arch/s390/kernel/vmlinux.lds.S | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/s390/kernel/vmlinux.lds.S b/arch/s390/kernel/vmlinux.ld=
+s.S
+> index ff1ddba96352..3f2f90e38808 100644
+> --- a/arch/s390/kernel/vmlinux.lds.S
+> +++ b/arch/s390/kernel/vmlinux.lds.S
+> @@ -202,6 +202,11 @@ SECTIONS
+>         . =3D ALIGN(PAGE_SIZE);
+>         _end =3D . ;
+>
+> +       /* Debugging sections.  */
+> +       STABS_DEBUG
+> +       DWARF_DEBUG
+> +       ELF_DETAILS
+> +
+>         /*
+>          * uncompressed image info used by the decompressor
+>          * it should match struct vmlinux_info
+> @@ -232,11 +237,6 @@ SECTIONS
+>  #endif
+>         } :NONE
+>
+> -       /* Debugging sections.  */
+> -       STABS_DEBUG
+> -       DWARF_DEBUG
+> -       ELF_DETAILS
+> -
+>         /*
+>          * Make sure that the .got.plt is either completely empty or it
+>          * contains only the three reserved double words.
+> --
+> 2.50.1
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
