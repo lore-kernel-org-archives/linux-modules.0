@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091EF2045B6;
-	Mon, 28 Jul 2025 06:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00F948BE8;
+	Mon, 28 Jul 2025 06:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753685006; cv=none; b=fUnxjEm/cU8Aztjod1tMGBgn3yZjpfIWsWHNCXYyw6yZEdSLw8pFspcO53MO0M4KRaxCxv1cpN0GbNFakeVCWtiaeNi+5EBJtOF1gK7yeVY6ugaiQAdrP3/agx5QZtAez5DB0Z3afiH7IAr78PolJhyUOspUBz9SXpq7dNWDiaE=
+	t=1753685285; cv=none; b=unpBGO2+eA2GZJJaBGx6RgNBClYMsEI5lYNntzWF+0u91Ma9pepCZTwkRYNFmikOlxWWyuh1qvAh4wv+hlo25hSF1kQW1EfMxvnXX0292NGB2uWL+G7mcHardhat8WJQOHaaTxr56fEtOunABV+0GpnG0LOwUUfENS87jnv8L5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753685006; c=relaxed/simple;
-	bh=Bq+6sWaBzV8RyiVyipzxpknJy9Eii8ZzV1x8BKcFMrI=;
+	s=arc-20240116; t=1753685285; c=relaxed/simple;
+	bh=U87FNw2cjUC/aGeen0DnN0R08YPbs6mZ4gYru6nwT2k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uzxEj41QEFpQ6x7NFCTTPA3tEzSPKQpylTRnk8zVmlYYPtzwPJICivleHvUf7P9ZoZ/T+lnoPTEy5110yZIMu0X9VlIwe3vfyUh1e7r6gujfSY6ymYeNQiVklMJ5T3UGb43GX7WfRaczM0s2w8352YWJ0XH7u8A8F62MaSZkP9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dwO2xFl/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=R3WzlqjHG4tiYu2RgdG0jzWafr8cdc4/3QvKC3kFgmmzls1+jCwhricXbhL/2XaOBys1NDfeSx9+6dl1wSd5SoucKGaVGuktwZmDNIAaU+Bm/D2T6iTepzTA289m+4MDFeVN9h8cvD5wzbIjzfqmexbVIRAbhd4bhWhsIXZqC4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8u6lykz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dwO2xFl/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61800C4CEE7;
-	Mon, 28 Jul 2025 06:43:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8u6lykz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10BF0C4CEE7;
+	Mon, 28 Jul 2025 06:48:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753685005;
-	bh=Bq+6sWaBzV8RyiVyipzxpknJy9Eii8ZzV1x8BKcFMrI=;
+	s=k20201202; t=1753685284;
+	bh=U87FNw2cjUC/aGeen0DnN0R08YPbs6mZ4gYru6nwT2k=;
 	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dwO2xFl/t4ZBBQWIV8VjTsueXD9/qrA+WhEJuuMXpk1ObBL8aKMjVW/iJE0p9ZYCK
-	 3Oub45zTYfdyl5gz9PxtQVnLAcg9yERpDe3qIxxkmVFdwkYo+qiflGMMsO47gPIdv1
-	 v2QrzZdfBi96qeLZAgjy8Ccz1wK7ND4Wqs0WI+eQHNwLehjm7HJIz8Noo7BxeVSShA
-	 n4IzHH6Bu1tkKn3dAE2cszOMBe2q56FqxhutdoDwsWOYZuNP97lnlH1DO7W1Ads2Kx
-	 O3Vdqf8IGIAMHXRD99YUolLTa1UwuhWcWAIeY/99z6siJ8uksn8rRz5+iOXdzRXyGT
-	 8MNysmnWeXLzQ==
-Message-ID: <6868be4b-86d8-4b62-b545-9ee1c30c0a26@kernel.org>
-Date: Mon, 28 Jul 2025 08:43:22 +0200
+	b=l8u6lykzFgVHvYLbLAc78I0X8mQdEwQbexFeKIRI1mGSdhHlGB8EGYHGr+Oh46s+m
+	 rPQe7hYFyOKt48FoX0E41N46OcSAb3Skm930EmyPe5Sb3TajxPthS4y2Xd1u9yPfb/
+	 GGZ3CLv2OtVFmAq9JPsx1gbHRlf2TPO8YmRYddvjqtaYdj/AoQdzQ/Z/JIJz5FIwgm
+	 A+eSidu1qtT1qrs4MSN07Q/RkXF+a+uvHM6o3MANbA+TOv79AAL7KU4TIxU66FtowF
+	 jBvChc6fKsMkfsv8xnWZKAkZWhFsB4ri8ip4F7iPzmd7+KNeDFZMd7IxQXRdBsSqiq
+	 xyvQ59No5CVZw==
+Message-ID: <e9caf91d-3a4b-4140-a3bc-0c2b53c0a220@kernel.org>
+Date: Mon, 28 Jul 2025 08:48:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -36,96 +36,63 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH 3/5] module: Restore the moduleparam prefix length check
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
+Subject: Re: [PATCH 4/5] tracing: Replace MAX_PARAM_PREFIX_LEN with
+ MODULE_NAME_LEN
+To: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <da.gomez@samsung.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250630143535.267745-1-petr.pavlu@suse.com>
- <20250630143535.267745-4-petr.pavlu@suse.com>
- <15f52f4c-7809-46ab-9e13-bd487f35a80c@kernel.org>
- <264b23ee-7046-4be9-8e01-d79a517e6256@suse.com>
+ <20250630143535.267745-5-petr.pavlu@suse.com>
 Content-Language: en-US
 From: Daniel Gomez <da.gomez@kernel.org>
 Organization: kernel.org
-In-Reply-To: <264b23ee-7046-4be9-8e01-d79a517e6256@suse.com>
+In-Reply-To: <20250630143535.267745-5-petr.pavlu@suse.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/07/2025 11.21, Petr Pavlu wrote:
-> On 7/17/25 9:23 PM, Daniel Gomez wrote:
->> On 30/06/2025 16.32, Petr Pavlu wrote:
->>> The moduleparam code allows modules to provide their own definition of
->>> MODULE_PARAM_PREFIX, instead of using the default KBUILD_MODNAME ".".
->>>
->>> Commit 730b69d22525 ("module: check kernel param length at compile time,
->>> not runtime") added a check to ensure the prefix doesn't exceed
->>> MODULE_NAME_LEN, as this is what param_sysfs_builtin() expects.
->>>
->>> Later, commit 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking
->>> for sysfs perms.") removed this check, but there is no indication this was
->>> intentional.
->>>
->>> Since the check is still useful for param_sysfs_builtin() to function
->>> properly, reintroduce it in __module_param_call(), but in a modernized form
->>> using static_assert().
->>>
->>> While here, clean up the __module_param_call() comments. In particular,
->>> remove the comment "Default value instead of permissions?", which comes
->>> from commit 9774a1f54f17 ("[PATCH] Compile-time check re world-writeable
->>> module params"). This comment was related to the test variable
->>> __param_perm_check_##name, which was removed in the previously mentioned
->>> commit 58f86cc89c33.
->>>
->>> Fixes: 58f86cc89c33 ("VERIFY_OCTAL_PERMISSIONS: stricter checking for sysfs perms.")
->>> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
->>> ---
->>>  include/linux/moduleparam.h | 5 ++---
->>>  1 file changed, 2 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
->>> index bfb85fd13e1f..110e9d09de24 100644
->>> --- a/include/linux/moduleparam.h
->>> +++ b/include/linux/moduleparam.h
->>> @@ -282,10 +282,9 @@ struct kparam_array
->>>  #define __moduleparam_const const
->>>  #endif
->>>  
->>> -/* This is the fundamental function for registering boot/module
->>> -   parameters. */
->>> +/* This is the fundamental function for registering boot/module parameters. */
->>>  #define __module_param_call(prefix, name, ops, arg, perm, level, flags)	\
->>> -	/* Default value instead of permissions? */			\
->>> +	static_assert(sizeof(""prefix) - 1 <= MAX_PARAM_PREFIX_LEN);	\
->>
->> Can you clarify if -1 to remove the dot from prefix?
->>
->> Final code 
->> 	static_assert(sizeof(""prefix) - 1 <= __MODULE_NAME_LEN);	\
->>
->> with __MODULE_NAME_LEN being:
->>
->> #define __MODULE_NAME_LEN (64 - sizeof(unsigned long))
+On 30/06/2025 16.32, Petr Pavlu wrote:
+> Use the MODULE_NAME_LEN definition in module_exists() to obtain the maximum
+> size of a module name, instead of using MAX_PARAM_PREFIX_LEN. The values
+> are the same but MODULE_NAME_LEN is more appropriate in this context.
+> MAX_PARAM_PREFIX_LEN was added in commit 730b69d22525 ("module: check
+> kernel param length at compile time, not runtime") only to break a circular
+> dependency between module.h and moduleparam.h, and should mostly be limited
+> to use in moduleparam.h.
 > 
-> Correct, -1 is to account for the dot at the end of the prefix.
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+
+Steven, Masami,
+
+I'm planning to merge these series into modules-next. I think and Ack/Review
+would be great from you. Otherwise, let me know if you'd rather take this patch
+through tracing instead (in case it looks good from your side).
+
+> ---
+> 
+> As a side note, I suspect the function module_exists() would be better
+> replaced with !!find_module() + RCU locking, but that is a separate issue.
+> 
+>  kernel/trace/trace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 95ae7c4e5835..b9da0c4661a0 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -10373,7 +10373,7 @@ bool module_exists(const char *module)
+>  {
+>  	/* All modules have the symbol __this_module */
+>  	static const char this_mod[] = "__this_module";
+> -	char modname[MAX_PARAM_PREFIX_LEN + sizeof(this_mod) + 2];
+> +	char modname[MODULE_NAME_LEN + sizeof(this_mod) + 2];
+>  	unsigned long val;
+>  	int n;
+>  
 
 LGTM,
 
 Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
-
-> 
-> I actually also wanted to assert that the prefix ends with a dot, but
-> unfortunately prefix[sizeof(prefix)-2] (with prefix being a string
-> literal) is not a constant expression in C.
-> 
-
-But even if that would be possible, there are some calls that do not have
-a prefix with dot. For example,
-
-#define core_param(name, var, type, perm)				\
-	param_check_##type(name, &(var));				\
-	__module_param_call("", name, &param_ops_##type, &var, perm, -1, 0)
-
-So, you'd have to handle both cases. I mean, where __module_param_call(<prefix>
-is used with either MODULE_PARAM_PREFIX or an empty string "".
