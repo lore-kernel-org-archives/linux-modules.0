@@ -1,67 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794751E492;
-	Thu, 31 Jul 2025 12:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D371E489;
+	Sun,  3 Aug 2025 13:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753963435; cv=none; b=Uif7vLtRCGxgobMUprb5v1gHCsYTlpdaZYhGM9cl9t+nMXmeil04NoDb920VbXLJ1csECJ4SZBd9EGB6idhnfEdtTdD6DRfCLB/E0mYy+gwU8c148zZR4uKe2DF+n5qHGVD0Oobrf8k349MZ9o8RsmfivslQ11DRpqTQ+o7cE8E=
+	t=1754227105; cv=none; b=eQTAwypnTfZSeMeyOHUvG7GjYJZoL/d/o1gX9snZcIoEVdD/ZWwDYjw9nxBYnJQ3fObc6rCsCgqCiAL3uMKh+uc5AQYb5D9r0G7JQpb+57AKYr00wGdfhB2GPf22M2WzLAw84DTg/BeIefcEeXjKDU5mmyhThq2giJZeatQXxT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753963435; c=relaxed/simple;
-	bh=CosuYs8ZAvd05NLXFJPuPdgvF7ECMTPOPZM/5p5FyEE=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ADAKE2x3n5m1/OI+RkGpZWy5U7b3deWr6coGdUi6XO0f0b/YGDVqiiTMvB7kGvIpRJQfTNn7YquoRgOV9+BqtPPgyiBskzrCxR4m4UV0pGxggt+pd84FjaN4c1ZSKhk8ma2knFMba7vtQvJzYP7uyuXLsiNedlzqfqtuFVK/m+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29BC9C4CEEF;
-	Thu, 31 Jul 2025 12:03:52 +0000 (UTC)
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250630143535.267745-1-petr.pavlu@suse.com>
-References: <20250630143535.267745-1-petr.pavlu@suse.com>
-Subject: Re: [PATCH 0/5] module: Fix minor problems related to
- MODULE_NAME_LEN
-Message-Id: <175396343289.28568.3768250551713485412.b4-ty@samsung.com>
-Date: Thu, 31 Jul 2025 14:03:52 +0200
+	s=arc-20240116; t=1754227105; c=relaxed/simple;
+	bh=3x04urBqGU+bb+qudggtjaqvo5T1JR32WxVhv/ZRVpg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tLq6S15WVlDwg4VzzQieFthRAGaRE9bJHiqbKWLRWPIyhkkj7zuWpd17GVeluZukL0M7XFCSERtSnehQlaKf6l6JNZFqcIEpRyWuavltAB5QvZlgdHXRoiRqmBZ5Gde9w1eh56kMuZD9hDgDBaHuCLPOsGhfPs+m2890jk0TeT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1WxsETv; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1WxsETv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E658C4CEEB;
+	Sun,  3 Aug 2025 13:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754227105;
+	bh=3x04urBqGU+bb+qudggtjaqvo5T1JR32WxVhv/ZRVpg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=D1WxsETvlMOcGJF/wrp9Voml6rU1FTnPMogn/n8kMPgBWz61mg1Py0z2DddHfNLsI
+	 w4+S1DF3T+nTzQevtuCCL/K71i6yQ8vzCyja3MwV+rW6NRCp9N0crHxOz/DovKgeNS
+	 QNzIr82LLdB1GJiWyd80uT0Bbs6tq5wYyDQbUf6r3vNXIF10xBrmVoNHFEobM3iXRU
+	 xxzpt94JWiKF9EZ9S3f//DZKZ/iOW6zeMJwakgGyjlU9c2Zt3+C4MYUvLhngPO1dxC
+	 DJ8SItP6GD+6NwmFkLbODl1DjXRIPrpftXu7csWUrlIFIxy2AMEfw7SRH13vBvq5fv
+	 YiKKmMgUDJzog==
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	linux-modules@vger.kernel.org
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Modules changes for v6.17-rc1
+Date: Sun,  3 Aug 2025 15:18:07 +0200
+Message-ID: <20250803131809.4890-1-da.gomez@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+The following changes since commit 260f6f4fda93c8485c8037865c941b42b9cba5d2:
 
-On Mon, 30 Jun 2025 16:32:31 +0200, Petr Pavlu wrote:
-> Fix a few minor problems related to MODULE_NAME_LEN and
-> MAX_PARAM_PREFIX_LEN, and clean up their usage.
-> 
-> Petr Pavlu (5):
->   module: Prevent silent truncation of module name in delete_module(2)
->   module: Remove unnecessary +1 from last_unloaded_module::name size
->   module: Restore the moduleparam prefix length check
->   tracing: Replace MAX_PARAM_PREFIX_LEN with MODULE_NAME_LEN
->   module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN
-> 
-> [...]
+  Merge tag 'drm-next-2025-07-30' of https://gitlab.freedesktop.org/drm/kernel (2025-07-30 19:26:49 -0700)
 
-Applied, thanks!
+are available in the Git repository at:
 
-[1/5] module: Prevent silent truncation of module name in delete_module(2)
-      commit: a6323bd4e611567913e23df5b58f2d4e4da06789
-[2/5] module: Remove unnecessary +1 from last_unloaded_module::name size
-      commit: 6c171b2ccfe677ca97fc5334f853807959f26589
-[3/5] module: Restore the moduleparam prefix length check
-      commit: bdc877ba6b7ff1b6d2ebeff11e63da4a50a54854
-[4/5] tracing: Replace MAX_PARAM_PREFIX_LEN with MODULE_NAME_LEN
-      commit: a7c54b2b41dd1f6ec780e7fbfb13f70c64c9731d
-[5/5] module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN
-      commit: 40a826bd6c82ae45cfd3a19cd2a60a10f56b74c0
+  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.17-rc1
 
-Best regards,
--- 
-Daniel Gomez <da.gomez@samsung.com>
+for you to fetch changes up to 40a826bd6c82ae45cfd3a19cd2a60a10f56b74c0:
 
+  module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN (2025-07-31 13:57:47 +0200)
+
+----------------------------------------------------------------
+This is a small set of changes for modules, primarily to extend module users
+to use the module data structures in combination with the already no-op stub
+module functions, even when support for modules is disabled in the kernel
+configuration. This change follows the kernel's coding style for conditional
+compilation and allows kunit code to drop all CONFIG_MODULES ifdefs, which is
+also part of the changes. This should allow others part of the kernel to do the
+same cleanup.
+
+Note that this had a conflict with sysctl changes [1] but should be fixed now as I
+rebased on top.
+
+The remaining changes include a fix for module name length handling which could
+potentially lead to the removal of an incorrect module, and various cleanups.
+
+The module name fix and related cleanup has been in linux-next since Thursday
+(July 31) while the rest of the changes for a bit more than 3 weeks.
+
+Note that this currently has conflicts in next with kbuild's tree [2].
+
+Link: https://lore.kernel.org/all/20250714175916.774e6d79@canb.auug.org.au/ [1]
+Link: https://lore.kernel.org/all/20250801132941.6815d93d@canb.auug.org.au/ [2]
+
+----------------------------------------------------------------
+Petr Pavlu (5):
+      module: Prevent silent truncation of module name in delete_module(2)
+      module: Remove unnecessary +1 from last_unloaded_module::name size
+      module: Restore the moduleparam prefix length check
+      tracing: Replace MAX_PARAM_PREFIX_LEN with MODULE_NAME_LEN
+      module: Rename MAX_PARAM_PREFIX_LEN to __MODULE_NAME_LEN
+
+Thomas Weißschuh (3):
+      module: move 'struct module_use' to internal.h
+      module: make structure definitions always visible
+      kunit: test: Drop CONFIG_MODULE ifdeffery
+
+ include/linux/module.h      | 29 +++++++++++------------------
+ include/linux/moduleparam.h | 15 +++++++++------
+ kernel/module/internal.h    |  7 +++++++
+ kernel/module/main.c        | 12 +++++++-----
+ kernel/trace/trace.c        |  2 +-
+ lib/kunit/test.c            |  8 --------
+ 6 files changed, 35 insertions(+), 38 deletions(-)
