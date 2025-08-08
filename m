@@ -1,164 +1,156 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D994227F170
-	for <linux-modules@vger.kernel.org>; Fri,  8 Aug 2025 14:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F8D1D61BB;
+	Fri,  8 Aug 2025 15:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754662663; cv=none; b=BhmCdZFnYKRbrroK160UOlcYL3iseEF0d4ZyruvhVdtIlSWA0d5lzTBgBA2ChSX0eM9Ondjye1OV2X/usDte9m9QYJ21rGFNSYJPATb/yjfhXmCfnWBjbv7M5v3J4XX1GoEj/28xM+pO8OpZdoPcOvvq5TkY1Uwk/Avd+VMOCrY=
+	t=1754667075; cv=none; b=cXEkbudRQ3IFEHm9cf9qXtBwts2GfptzpqB51Zlk1HrKMFgijMG6QCE7n8ke4xhfSvVkT7GFNSPn6EA1aiCMMF2unPLCE5zfsagPye6+A4rnMnXGZRKwAgjthOwLOh5FFLb6pPJyC5qeatEDduxT8AMY2oU2eOeZasKwRcKnnj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754662663; c=relaxed/simple;
-	bh=eU0T85JhnrkuKCzugihgR5bR47ZxosUPUFmxGIhbaY4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CCgGAB0dsISdngB4X0Ww2E/q49tzcy/f5QJlinzN5zdkkpgunmrqxaTUbbxSdr7UiFEOn+IMthfULEiIplo8P0VRjfP6ty62Lodt6lz2UmVpIzHXSaKjcLgUML99qJyB3GziFWi/mYOmlR7Hprb5D6ZFqvQmpfc5On6dzue8Xmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FNxRUF5u; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1754667075; c=relaxed/simple;
+	bh=ZZiBwySTiMIPACxPjy9xEobcxAopojqaVmG80aMHTbo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=aWaX7YcTEIceMJGfYqjxgkvTDK1gMpl03v9o/njWo9SP2EK2nhBdyDTdwdlk1mUCDIt8pkR+zbQw/D9nAfv+GS/9Rr1W1Sng9Vo5zDrAeUsPnkBCkKbpm5otUqzU298+walmg5rjT8cXhVt9ELvubJRqT2x3hcazDJ6xdoS+020=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C94//DvB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FNxRUF5u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1754662660;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=rHGDMQaKaiIFBdXakruE0SD84ayhWoaiRDliiR2k738=;
-	b=FNxRUF5uECt6eu7+TLyrAS53XX7Ob5i5rikh25gAd0/yCqxKX2j4/lCO+OngD9QBMbbBYo
-	4iVEFpCYGG3CpwmOFLxoK7Q1UdkrB35XsqZsDFY8DJi2Vnrk1avhE/iYtTMYSqayp0pdCZ
-	rwPCD/9PbncSYxVTMlwvxR6TwUxJjPA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-208-bj9eddRlMPmh_-YX_ASMTQ-1; Fri, 08 Aug 2025 10:17:39 -0400
-X-MC-Unique: bj9eddRlMPmh_-YX_ASMTQ-1
-X-Mimecast-MFC-AGG-ID: bj9eddRlMPmh_-YX_ASMTQ_1754662659
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-459db6e35c3so17189415e9.2
-        for <linux-modules@vger.kernel.org>; Fri, 08 Aug 2025 07:17:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754662658; x=1755267458;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rHGDMQaKaiIFBdXakruE0SD84ayhWoaiRDliiR2k738=;
-        b=oP3RwrV4YQL/LGw+MJ/gvc/399WVILVSoLy9DZulq1IE3ssPimAubJ37nvscKgnOeK
-         WDRKxtOBeatfHj4gH0IK7VpMxzENsXfW6uQECnyVowvNON8rqDZdkYBhV6EiqNENc4aN
-         dThksYIv3DO8U1G1hldLluW+7NWUajDMIijNdF9yqfQrsAfcE7KXqCSCK7wjH9MBxlvg
-         fSe7k7dScX7hW+JIrkjyJRtx00fCYCZ+DUWNUlzOdYaflqPrSuLUsOUoaHsUJnmB2J3c
-         bJh8nOyVEKT3TVwdaPzHIao+H+Np1O59+ce/iHF1hQf5/Qx8F8pxLuMhJwxIhvoNDQfo
-         8CoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxxbLyxSN8fTwSGZAEn7Ewga0X2ZpYsXoO+8JeMI97pHCwxhcztA9xa7BNMaGKec7Umc++X+7VriXCB8wq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzb/PRNWPQyK0XTCHsYVMhvtz6DttgW2sW1gtzvRIv09jRZM33i
-	JIpD+yAb5mMBAE465x2nYn1ihGC+t5ziU+Cu5mplRV5oc54SwZVb/aIiBtGXS+7CAJ4sbjXbNi6
-	T9XLa3iD9ey23REtoXvNQT7bAm6XTOXNc0DmIMILZgOu2aXQeyEeP5inMiqhNgGompvw=
-X-Gm-Gg: ASbGncv2i+2+sR7KQKJY0P3ozjciKmxRSLhPACoeG5mSUZ0ThUHugs1qB2vMr/Hmp1k
-	by1GjqyXjk5gjpJ6YckgpPO3YjurrE2xQ6a0tATrndXcpdzKSnZM1AU73EQsB/1ZxMWr3KGAFbw
-	E66la+ca4zWNdUOzoF3df8OwOP1epcfqfjsvGpXXX6KSqeg+bNAPlQr5i/14e4qS9d2hCCq0Hb7
-	4RnjRbPDFumlcRKF/3Yi3ARhSRx6d3tOwucj3Y4iD0uQ57NapmvzfkIdmcRQFqrFsB8hcKDqg8U
-	IZWf0kfnNiISL67nG5Lhry6zFEcd/48fjhqNTycv1FyjrQLylxO1XayaRoSkFA1e0ud5UPlRQvr
-	a2WT3S2IeebKmZhSp3RM8mIvbbME5Ws2b5o9xmqH30ewX+7DREwcAXMMFrWqsHIHK
-X-Received: by 2002:a05:600c:354a:b0:43c:f8fe:dd82 with SMTP id 5b1f17b1804b1-459f4f0f57fmr31634465e9.18.1754662658481;
-        Fri, 08 Aug 2025 07:17:38 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEuuPjmx204WPCEocS/DfxSAD79SuYd1SKOzgP0BMmm7YItX5BZc+qOZNBJNJk67SvuvcFlQQ==
-X-Received: by 2002:a05:600c:354a:b0:43c:f8fe:dd82 with SMTP id 5b1f17b1804b1-459f4f0f57fmr31633985e9.18.1754662658070;
-        Fri, 08 Aug 2025 07:17:38 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f25:900:2e1e:d717:2543:c4d6? (p200300d82f2509002e1ed7172543c4d6.dip0.t-ipconnect.de. [2003:d8:2f25:900:2e1e:d717:2543:c4d6])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-458b866392csm157921635e9.2.2025.08.08.07.17.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Aug 2025 07:17:37 -0700 (PDT)
-Message-ID: <8334f7f9-065f-40b9-9c1e-95223da7980d@redhat.com>
-Date: Fri, 8 Aug 2025 16:17:36 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C94//DvB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39A9C4CEED;
+	Fri,  8 Aug 2025 15:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754667074;
+	bh=ZZiBwySTiMIPACxPjy9xEobcxAopojqaVmG80aMHTbo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=C94//DvBqUYgtdqxhdZMDl0IwqgAjCp6z1moZLV3LGzVOfBNF2r0SuglJanDztZmb
+	 HPhoKvpYMatMzhLaL2Ll7YcgWB/owvGlAMxgSicLGK0u2/Tr1jWz4ysdvp0b/GTUcQ
+	 vAXVqkegeldjlaDhkErCIBb6/gKo5JbbuXHvwPHD5Wm2LaHTWwN+eMbgHTAuyw38NY
+	 Q9meBtCC9PLKTjRFFwK+WvZ7E+H5B6MjKmCtZOQWEWkIEzkJcQpABkTXrOu2iWUkEG
+	 bi0njVgROJIVkvGQmjs5pK/RBVUko2dOMRW7o4V79i5ey8BTLmu4bCSPQR1pigcJew
+	 niPobaLrbQfFg==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Sasha Levin <sashal@kernel.org>,
+	mcgrof@kernel.org,
+	da.gomez@kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.16-6.1] module: Prevent silent truncation of module name in delete_module(2)
+Date: Fri,  8 Aug 2025 11:30:49 -0400
+Message-Id: <20250808153054.1250675-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250808153054.1250675-1-sashal@kernel.org>
+References: <20250808153054.1250675-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to
- EXPORT_SYMBOL_FOR_MODULES
-To: Vlastimil Babka <vbabka@suse.cz>, Daniel Gomez <da.gomez@samsung.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Matthias Maennich <maennich@google.com>, Jonathan Corbet <corbet@lwn.net>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
-Cc: Christoph Hellwig <hch@infradead.org>,
- Peter Zijlstra <peterz@infradead.org>, Shivank Garg <shivankg@amd.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org
-References: <20250808-export_modules-v4-1-426945bcc5e1@suse.cz>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
- ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
- AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAmgsLPQFCRvGjuMACgkQTd4Q
- 9wD/g1o0bxAAqYC7gTyGj5rZwvy1VesF6YoQncH0yI79lvXUYOX+Nngko4v4dTlOQvrd/vhb
- 02e9FtpA1CxgwdgIPFKIuXvdSyXAp0xXuIuRPQYbgNriQFkaBlHe9mSf8O09J3SCVa/5ezKM
- OLW/OONSV/Fr2VI1wxAYj3/Rb+U6rpzqIQ3Uh/5Rjmla6pTl7Z9/o1zKlVOX1SxVGSrlXhqt
- kwdbjdj/csSzoAbUF/duDuhyEl11/xStm/lBMzVuf3ZhV5SSgLAflLBo4l6mR5RolpPv5wad
- GpYS/hm7HsmEA0PBAPNb5DvZQ7vNaX23FlgylSXyv72UVsObHsu6pT4sfoxvJ5nJxvzGi69U
- s1uryvlAfS6E+D5ULrV35taTwSpcBAh0/RqRbV0mTc57vvAoXofBDcs3Z30IReFS34QSpjvl
- Hxbe7itHGuuhEVM1qmq2U72ezOQ7MzADbwCtn+yGeISQqeFn9QMAZVAkXsc9Wp0SW/WQKb76
- FkSRalBZcc2vXM0VqhFVzTb6iNqYXqVKyuPKwhBunhTt6XnIfhpRgqveCPNIasSX05VQR6/a
- OBHZX3seTikp7A1z9iZIsdtJxB88dGkpeMj6qJ5RLzUsPUVPodEcz1B5aTEbYK6428H8MeLq
- NFPwmknOlDzQNC6RND8Ez7YEhzqvw7263MojcmmPcLelYbfOwU0EVcufkQEQAOfX3n0g0fZz
- Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
- T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
- 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
- CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
- NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
- 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
- 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
- lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
- AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
- N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
- AP+DWgUCaCwtJQUJG8aPFAAKCRBN3hD3AP+DWlDnD/4k2TW+HyOOOePVm23F5HOhNNd7nNv3
- Vq2cLcW1DteHUdxMO0X+zqrKDHI5hgnE/E2QH9jyV8mB8l/ndElobciaJcbl1cM43vVzPIWn
- 01vW62oxUNtEvzLLxGLPTrnMxWdZgxr7ACCWKUnMGE2E8eca0cT2pnIJoQRz242xqe/nYxBB
- /BAK+dsxHIfcQzl88G83oaO7vb7s/cWMYRKOg+WIgp0MJ8DO2IU5JmUtyJB+V3YzzM4cMic3
- bNn8nHjTWw/9+QQ5vg3TXHZ5XMu9mtfw2La3bHJ6AybL0DvEkdGxk6YHqJVEukciLMWDWqQQ
- RtbBhqcprgUxipNvdn9KwNpGciM+hNtM9kf9gt0fjv79l/FiSw6KbCPX9b636GzgNy0Ev2UV
- m00EtcpRXXMlEpbP4V947ufWVK2Mz7RFUfU4+ETDd1scMQDHzrXItryHLZWhopPI4Z+ps0rB
- CQHfSpl+wG4XbJJu1D8/Ww3FsO42TMFrNr2/cmqwuUZ0a0uxrpkNYrsGjkEu7a+9MheyTzcm
- vyU2knz5/stkTN2LKz5REqOe24oRnypjpAfaoxRYXs+F8wml519InWlwCra49IUSxD1hXPxO
- WBe5lqcozu9LpNDH/brVSzHCSb7vjNGvvSVESDuoiHK8gNlf0v+epy5WYd7CGAgODPvDShGN
- g3eXuA==
-Organization: Red Hat
-In-Reply-To: <20250808-export_modules-v4-1-426945bcc5e1@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.16
+Content-Transfer-Encoding: 8bit
 
-On 08.08.25 15:28, Vlastimil Babka wrote:
-> Christoph suggested that the explicit _GPL_ can be dropped from the
-> module namespace export macro, as it's intended for in-tree modules
-> only. It would be possible to restrict it technically, but it was
-> pointed out [2] that some cases of using an out-of-tree build of an
-> in-tree module with the same name are legitimate.
+From: Petr Pavlu <petr.pavlu@suse.com>
 
-I'm wondering if we could revisit that idea later, and have a config 
-option that enables that. The use cases so far were mostly around 
-testing IIRC, where people already run their own debug kernel or sth. 
-like that.
+[ Upstream commit a6323bd4e611567913e23df5b58f2d4e4da06789 ]
 
+Passing a module name longer than MODULE_NAME_LEN to the delete_module
+syscall results in its silent truncation. This really isn't much of
+a problem in practice, but it could theoretically lead to the removal of an
+incorrect module. It is more sensible to return ENAMETOOLONG or ENOENT in
+such a case.
+
+Update the syscall to return ENOENT, as documented in the delete_module(2)
+man page to mean "No module by that name exists." This is appropriate
+because a module with a name longer than MODULE_NAME_LEN cannot be loaded
+in the first place.
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+Link: https://lore.kernel.org/r/20250630143535.267745-2-petr.pavlu@suse.com
+Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+Based on my analysis, here's my assessment:
+
+**Backport Status: YES**
+
+This commit should be backported to stable kernel trees for the
+following reasons:
+
+1. **Security Fix for Silent Truncation**: The commit fixes a security-
+   relevant issue where module names longer than MODULE_NAME_LEN (56
+   bytes on 64-bit systems) are silently truncated in the
+   delete_module() syscall. This could theoretically lead to
+   unintentionally removing the wrong module if two modules share the
+   same truncated prefix.
+
+2. **Minimal and Contained Change**: The fix is very small and localized
+   - it only modifies the delete_module syscall implementation in
+   kernel/module/main.c. The changes are:
+   - Changes from `strncpy_from_user(name, name_user,
+     MODULE_NAME_LEN-1)` to `strncpy_from_user(name, name_user,
+     MODULE_NAME_LEN)`
+   - Adds proper length checking: `if (len == 0 || len ==
+     MODULE_NAME_LEN) return -ENOENT;`
+   - Returns the correct error code (ENOENT) for oversized names
+
+3. **Follows Stable Tree Rules**:
+   - Fixes a bug that could affect users (incorrect module removal)
+   - Very low risk of regression - the change only affects error
+     handling for invalid input
+   - No new features or architectural changes
+   - Improves consistency with documented behavior (delete_module(2) man
+     page)
+
+4. **Prevents Inconsistent Behavior**: The commit message correctly
+   points out that modules with names longer than MODULE_NAME_LEN cannot
+   be loaded in the first place, so returning ENOENT for such names in
+   delete_module makes the behavior consistent across module operations.
+
+5. **Clear Bug Fix**: The old code would accept a 57+ character module
+   name, truncate it to 56 characters, and potentially remove a
+   different module. The new code properly rejects such names with
+   ENOENT, preventing this dangerous silent truncation.
+
+The change is defensive programming that prevents a potential security
+issue without introducing any backward compatibility concerns, making it
+an ideal candidate for stable backporting.
+
+ kernel/module/main.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c2c08007029d..cbd637627eb4 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -751,14 +751,16 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
+ 	struct module *mod;
+ 	char name[MODULE_NAME_LEN];
+ 	char buf[MODULE_FLAGS_BUF_SIZE];
+-	int ret, forced = 0;
++	int ret, len, forced = 0;
+ 
+ 	if (!capable(CAP_SYS_MODULE) || modules_disabled)
+ 		return -EPERM;
+ 
+-	if (strncpy_from_user(name, name_user, MODULE_NAME_LEN-1) < 0)
+-		return -EFAULT;
+-	name[MODULE_NAME_LEN-1] = '\0';
++	len = strncpy_from_user(name, name_user, MODULE_NAME_LEN);
++	if (len == 0 || len == MODULE_NAME_LEN)
++		return -ENOENT;
++	if (len < 0)
++		return len;
+ 
+ 	audit_log_kern_module(name);
+ 
 -- 
-Cheers,
-
-David / dhildenb
+2.39.5
 
