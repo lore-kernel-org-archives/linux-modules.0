@@ -1,156 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F8D1D61BB;
-	Fri,  8 Aug 2025 15:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98536130E58;
+	Mon, 11 Aug 2025 14:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754667075; cv=none; b=cXEkbudRQ3IFEHm9cf9qXtBwts2GfptzpqB51Zlk1HrKMFgijMG6QCE7n8ke4xhfSvVkT7GFNSPn6EA1aiCMMF2unPLCE5zfsagPye6+A4rnMnXGZRKwAgjthOwLOh5FFLb6pPJyC5qeatEDduxT8AMY2oU2eOeZasKwRcKnnj8=
+	t=1754921912; cv=none; b=H9xMuEH9ZN83Sezm9kGbtq1ua5XKL4Xuwp+woVBkmVp66PQizpv4EsDHcRgbub82oY3n4IARyz2ilK7XN13b2ic8YeAE5efEQ1YdC/cEgcABBtqkJsit70+zkW6t3JV1R9LSE8wzZp9fDA/dJsPUiVlKvaNVTqd0shlAFwkuvjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754667075; c=relaxed/simple;
-	bh=ZZiBwySTiMIPACxPjy9xEobcxAopojqaVmG80aMHTbo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aWaX7YcTEIceMJGfYqjxgkvTDK1gMpl03v9o/njWo9SP2EK2nhBdyDTdwdlk1mUCDIt8pkR+zbQw/D9nAfv+GS/9Rr1W1Sng9Vo5zDrAeUsPnkBCkKbpm5otUqzU298+walmg5rjT8cXhVt9ELvubJRqT2x3hcazDJ6xdoS+020=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C94//DvB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1754921912; c=relaxed/simple;
+	bh=BXYbJRElSnllH4SZeeunv/TohKTjoqGqn8JmUZ9gOqg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xv5hn5h/sRGC297bPFz5n6zO5YlwyuTwRAcRDIUA4gd5k+gjbg7SaoByEC995Tc+8dxEYoKhRWPxiOXZHoL4N3P7A6mIYb4fU+M0sqeqm6yDWSfOv7fodxu/gef06aere4A2hO9VXSk5YYyLuf//ulSdTFhzDjGH+Msa0N7eaVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c0UD6s80; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C94//DvB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39A9C4CEED;
-	Fri,  8 Aug 2025 15:31:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c0UD6s80"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5469DC4CEED;
+	Mon, 11 Aug 2025 14:18:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754667074;
-	bh=ZZiBwySTiMIPACxPjy9xEobcxAopojqaVmG80aMHTbo=;
+	s=k20201202; t=1754921911;
+	bh=BXYbJRElSnllH4SZeeunv/TohKTjoqGqn8JmUZ9gOqg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C94//DvBqUYgtdqxhdZMDl0IwqgAjCp6z1moZLV3LGzVOfBNF2r0SuglJanDztZmb
-	 HPhoKvpYMatMzhLaL2Ll7YcgWB/owvGlAMxgSicLGK0u2/Tr1jWz4ysdvp0b/GTUcQ
-	 vAXVqkegeldjlaDhkErCIBb6/gKo5JbbuXHvwPHD5Wm2LaHTWwN+eMbgHTAuyw38NY
-	 Q9meBtCC9PLKTjRFFwK+WvZ7E+H5B6MjKmCtZOQWEWkIEzkJcQpABkTXrOu2iWUkEG
-	 bi0njVgROJIVkvGQmjs5pK/RBVUko2dOMRW7o4V79i5ey8BTLmu4bCSPQR1pigcJew
-	 niPobaLrbQfFg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Sasha Levin <sashal@kernel.org>,
-	mcgrof@kernel.org,
-	da.gomez@kernel.org,
+	b=c0UD6s80FoYmxBwCjDv9almaNyqrceO+X4Bw8QZwM4nIFply47rzGIBBpmww8W/Ee
+	 WQXN06VPAZVyVMzWtEKTmzykvBFXBt81ussWjT9T2g4l+oKhNWo8etUMe+Dkz1Gjyk
+	 rwdUfMKAAVIt/wkTg5ihskTmjJ4F+Jw8ixeomdTE9cyhYEyIpvD9wXIhgheGGnH4pM
+	 m9ONunnAd2nAe8SVHc+xE+5+Ue6XMm6lHUAV5qCjHwtFAvgR1gLy0l2npNG7HG0qcu
+	 dVG4uIoSuOP2eNmSMAijMmXDSJ9mXsmtusO+napUVI7MeRJ7u7jYOk1DzuSZ9Nqnxc
+	 HFJpLVdW4OFKw==
+From: Christian Brauner <brauner@kernel.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Christoph Hellwig <hch@infradead.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	David Hildenbrand <david@redhat.com>,
+	Shivank Garg <shivankg@amd.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16-6.1] module: Prevent silent truncation of module name in delete_module(2)
-Date: Fri,  8 Aug 2025 11:30:49 -0400
-Message-Id: <20250808153054.1250675-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250808153054.1250675-1-sashal@kernel.org>
-References: <20250808153054.1250675-1-sashal@kernel.org>
+	linux-kbuild@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Matthias Maennich <maennich@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v4] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to EXPORT_SYMBOL_FOR_MODULES
+Date: Mon, 11 Aug 2025 16:18:22 +0200
+Message-ID: <20250811-wachen-formel-29492e81ee59@brauner>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250808-export_modules-v4-1-426945bcc5e1@suse.cz>
+References: <20250808-export_modules-v4-1-426945bcc5e1@suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.16
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1513; i=brauner@kernel.org; h=from:subject:message-id; bh=BXYbJRElSnllH4SZeeunv/TohKTjoqGqn8JmUZ9gOqg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTM/L2+TrDMXUBodvxWa9fSxPQH1i3uex6+ObCQKzbu5 /78D1XpHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABNZ84GR4fHu+5mHD68pWSCz OIJP46NU19ZTwfn8R74w9vEWpfboZjEydLteLWVZIfj2Qil/89X2nToqUqe5lHYprpZqfPFZ5/A qPgA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-From: Petr Pavlu <petr.pavlu@suse.com>
+On Fri, 08 Aug 2025 15:28:47 +0200, Vlastimil Babka wrote:
+> Christoph suggested that the explicit _GPL_ can be dropped from the
+> module namespace export macro, as it's intended for in-tree modules
+> only. It would be possible to restrict it technically, but it was
+> pointed out [2] that some cases of using an out-of-tree build of an
+> in-tree module with the same name are legitimate. But in that case those
+> also have to be GPL anyway so it's unnecessary to spell it out in the
+> macro name.
+> 
+> [...]
 
-[ Upstream commit a6323bd4e611567913e23df5b58f2d4e4da06789 ]
+Ok, so last I remember we said that this is going upstream rather sooner
+than later before we keep piling on users. If that's still the case I'll
+take it via vfs.fixes unless I hear objections.
 
-Passing a module name longer than MODULE_NAME_LEN to the delete_module
-syscall results in its silent truncation. This really isn't much of
-a problem in practice, but it could theoretically lead to the removal of an
-incorrect module. It is more sensible to return ENAMETOOLONG or ENOENT in
-such a case.
-
-Update the syscall to return ENOENT, as documented in the delete_module(2)
-man page to mean "No module by that name exists." This is appropriate
-because a module with a name longer than MODULE_NAME_LEN cannot be loaded
-in the first place.
-
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
-Link: https://lore.kernel.org/r/20250630143535.267745-2-petr.pavlu@suse.com
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
-LLM Generated explanations, may be completely bogus:
+Applied to the vfs.fixes branch of the vfs/vfs.git tree.
+Patches in the vfs.fixes branch should appear in linux-next soon.
 
-Based on my analysis, here's my assessment:
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-**Backport Status: YES**
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-This commit should be backported to stable kernel trees for the
-following reasons:
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-1. **Security Fix for Silent Truncation**: The commit fixes a security-
-   relevant issue where module names longer than MODULE_NAME_LEN (56
-   bytes on 64-bit systems) are silently truncated in the
-   delete_module() syscall. This could theoretically lead to
-   unintentionally removing the wrong module if two modules share the
-   same truncated prefix.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.fixes
 
-2. **Minimal and Contained Change**: The fix is very small and localized
-   - it only modifies the delete_module syscall implementation in
-   kernel/module/main.c. The changes are:
-   - Changes from `strncpy_from_user(name, name_user,
-     MODULE_NAME_LEN-1)` to `strncpy_from_user(name, name_user,
-     MODULE_NAME_LEN)`
-   - Adds proper length checking: `if (len == 0 || len ==
-     MODULE_NAME_LEN) return -ENOENT;`
-   - Returns the correct error code (ENOENT) for oversized names
-
-3. **Follows Stable Tree Rules**:
-   - Fixes a bug that could affect users (incorrect module removal)
-   - Very low risk of regression - the change only affects error
-     handling for invalid input
-   - No new features or architectural changes
-   - Improves consistency with documented behavior (delete_module(2) man
-     page)
-
-4. **Prevents Inconsistent Behavior**: The commit message correctly
-   points out that modules with names longer than MODULE_NAME_LEN cannot
-   be loaded in the first place, so returning ENOENT for such names in
-   delete_module makes the behavior consistent across module operations.
-
-5. **Clear Bug Fix**: The old code would accept a 57+ character module
-   name, truncate it to 56 characters, and potentially remove a
-   different module. The new code properly rejects such names with
-   ENOENT, preventing this dangerous silent truncation.
-
-The change is defensive programming that prevents a potential security
-issue without introducing any backward compatibility concerns, making it
-an ideal candidate for stable backporting.
-
- kernel/module/main.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c2c08007029d..cbd637627eb4 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -751,14 +751,16 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
- 	struct module *mod;
- 	char name[MODULE_NAME_LEN];
- 	char buf[MODULE_FLAGS_BUF_SIZE];
--	int ret, forced = 0;
-+	int ret, len, forced = 0;
- 
- 	if (!capable(CAP_SYS_MODULE) || modules_disabled)
- 		return -EPERM;
- 
--	if (strncpy_from_user(name, name_user, MODULE_NAME_LEN-1) < 0)
--		return -EFAULT;
--	name[MODULE_NAME_LEN-1] = '\0';
-+	len = strncpy_from_user(name, name_user, MODULE_NAME_LEN);
-+	if (len == 0 || len == MODULE_NAME_LEN)
-+		return -ENOENT;
-+	if (len < 0)
-+		return len;
- 
- 	audit_log_kern_module(name);
- 
--- 
-2.39.5
-
+[1/1] module: Rename EXPORT_SYMBOL_GPL_FOR_MODULES to EXPORT_SYMBOL_FOR_MODULES
+      https://git.kernel.org/vfs/vfs/c/6d3c3ca4c77e
