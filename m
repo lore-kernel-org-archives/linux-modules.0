@@ -1,134 +1,184 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C02321429;
-	Thu, 14 Aug 2025 14:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505FC1A238C;
+	Thu, 14 Aug 2025 21:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755181043; cv=none; b=mS2sQgAUs2tqEEXbg/MGGujmxWgzD1ZmhEi8lI48qjcbdpaokwabasOaLiJNyZZvioi2iWZqhgtJoN43edIjKDB17gqry993dbImEIfmarCM8FCzMGRcSvAlwLSTrCYImTK7jCqii35FArkcKAhn8VcFq9BhogWdFoFG4pDU31o=
+	t=1755207992; cv=none; b=PG+iUuXdnOZeV3df47cfaTWh0upp5zE/ro6hIqaHCHtLcdJK+Tl5VgKnu1M0oCChw8Ho0t8tEsqF8T+KEvNj1l8mLB3o8s6NSV8e6xqz5RqxYit3b7jmpbw0ItFR96kL5nM8EjPeQJspP9UDO+KDjH4M/GPK7QTMXSVw3jG9lU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755181043; c=relaxed/simple;
-	bh=a5LvrdOjd61BgcujBkjsB9RX4jF3+FOqLq8LJGv2MEA=;
+	s=arc-20240116; t=1755207992; c=relaxed/simple;
+	bh=H5t50i2Arx8cGLKWfYb6yZf07e2LtwSpP7PZAJqXp/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GysKpjO0bchaZ9uO2je0gU00j5Vp0XDvAfjDCu5PhaYizi1n37Icj9Yjt/nOvawudD7s7EKAawfr0xwtRFENPnt39IFkP3yjQNPIU+ZvSD6Wn8Nr+G/I2MJwgC4qJbn4tJXBCEChkis0dSihii2PCctPs0XEpP1WWjaD4fcX/8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dm2g8BH9; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=kMJVvrElGdagDOXV97f2v/i2IpoQm5sxLLQgUD4lWyyM/OUsX3KcAf7BM9qNRr5jW6YTg3TMtLEcP/WKJKg6mKOXcQKHSbkhrJI0VydIz8t/OBW/xCReBua8LJeX8RDngbB4csRBMkDGFsNQ7fAkhUT2IbfjlZccGbjaWvwI7yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXJpknXi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dm2g8BH9"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57EC9eai015942;
-	Thu, 14 Aug 2025 14:17:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=xitHk/pMp/QQRbnoNBeobWtSukHr3B
-	tvqIQXx8tyGSI=; b=dm2g8BH9X+VPUpX0ORW4FXmBPSt0q4HQNVvtqScKT/Y7lR
-	x+ZvZBs4brlmfLxw3tfSolDHU/3qInCOIubRjpFyL59VhiT986Iau4XUhfg/vSJh
-	dogiHlUowgPQl83IVumxbBflYIw0b1fYcHnEcOoE06B7GpESh//GQPxohclOx85S
-	o6KgeEOdZfcBzaq71w+3iNJer4oLZnnR57inLrSu7U5y/YCl4lIRfS6ip3qcA/4C
-	KF5lTrlvO+q9j0XJ4Qe6kXEZz15poLgKGciNc4fGz8OKZH3//ybm10fsMQJSNj+g
-	6SVOmaTI0ur5a1ZPzwHBvSZ9SdLcCqAPmRaU5Gtw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48dx14tges-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Aug 2025 14:17:07 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57EE4nZt021961;
-	Thu, 14 Aug 2025 14:17:06 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48dx14tgep-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Aug 2025 14:17:06 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57EAGHus025623;
-	Thu, 14 Aug 2025 14:17:05 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 48ejvmm91c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Aug 2025 14:17:05 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57EEH19N49414634
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 14 Aug 2025 14:17:02 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E12AE20043;
-	Thu, 14 Aug 2025 14:17:01 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A245720040;
-	Thu, 14 Aug 2025 14:17:01 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.133])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 14 Aug 2025 14:17:01 +0000 (GMT)
-Date: Thu, 14 Aug 2025 16:16:58 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Alexey Gladkov <legion@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXJpknXi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ECAAC4CEED;
+	Thu, 14 Aug 2025 21:46:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755207991;
+	bh=H5t50i2Arx8cGLKWfYb6yZf07e2LtwSpP7PZAJqXp/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NXJpknXinO50P0+vSaRs7K7YYw4Wo4RbRFwUweNTAz5Nk84MifsScECN9mkqAPJfz
+	 8SU0cz4tqZpvri04RpBLcInZpWOOi+L1LslTZUe5sAFUo/C4EPYzAi1oHFhzn5xPRf
+	 78sBywQ+wpIeohQxeuP/86TNWP9NC5vqzt6SaG9atDJ+QaOAfVRmev1qNHTjLykCfB
+	 17ZmC/qHErJa4+TdyyLg5CwJp5vN0S8EbmY75Q6FI0o2Qk4DouzT91XSOpPJB6HC6T
+	 GAKUSJV8Z5yQ2roiQCffAaYgeSUI1qq19G8Eoj3Nb2l2NWOklMOdPLLysQp4aIPgAT
+	 QMSL6YQQhwsfA==
+Date: Thu, 14 Aug 2025 23:46:24 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Danilo Krummrich <dakr@kernel.org>
 Cc: Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas.schier@linux.dev>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 9/9] s390: vmlinux.lds.S: Reorder sections
-Message-ID: <20250814141658.7684Fd6-hca@linux.ibm.com>
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v6 6/9] modpost: Add modname to mod_device_table alias
+Message-ID: <aJ5ZMJC4eCpDb5D8@example.org>
 References: <cover.1755170493.git.legion@kernel.org>
- <919570dc048786c4d07affaec4b761811c6c21c5.1755170493.git.legion@kernel.org>
+ <15724fb8669dae64e3c8d31ab620f977984b2177.1755170493.git.legion@kernel.org>
+ <DC26OG2L7OMH.31RE7460D4DHU@kernel.org>
+ <aJ3qsonmvUUErQx9@example.org>
+ <DC27G409IQGT.H9G83QDQ9V7R@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <919570dc048786c4d07affaec4b761811c6c21c5.1755170493.git.legion@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ZUHBlsY6Q0Jh5y8HGhdRNiGKb4yCQavS
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODEyMDIyNCBTYWx0ZWRfX9xH1VxH7a5Cr
- j7aQo8bnSTLGXMtUWVHu3eWBdPNq3vy8W1uvZKFn0bTkrMUJ+YG7b/dR9HCAWvAkMJwTmkKVBKM
- aEc9V5XagKrDGaD0MMKL8vfSVAk/dVUYbK/LoZ6L/PtlFgkG0rVwj5A3XoTVJx1OIyvgkFmdxZ3
- uT/2sbj4bLRuti4UGbxAu2AY39AKq8ffgpwsetpHnL6ogjNqC/joDWghtFRes7g+nQoHiqltkkt
- huuePs6oP5NLyN/4xJ/+5zyqyTRXdoGuKybPlqVjU13w7R0WY91XRDh1U90wK0tALhuI2JKgP+S
- 4KHK7PAEy8FKzKDxL9frcSAlWo9Z3Y4IKayoQgZxmb+kHwWG/7EdlVhcrqJmldfXr4KD482iiqy
- xspW36pw
-X-Proofpoint-GUID: jO10P_AygBVVuX9ezUhXEJ3Vyix7YA86
-X-Authority-Analysis: v=2.4 cv=fLg53Yae c=1 sm=1 tr=0 ts=689defe3 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=QyXUC8HyAAAA:8
- a=QIhr-27iAAAA:8 a=tkzU3b79AAAA:8 a=VnNF1IyMAAAA:8 a=MT9g-S0Fkuafz34HD30A:9
- a=CjuIK1q_8ugA:10 a=cgaYBWEFosGJW4rWv5Lf:22 a=uCXMw2ptROQ0LevMJYzM:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-13_02,2025-08-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 spamscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0 classifier=typeunknown
- authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
- engine=8.19.0-2507300000 definitions=main-2508120224
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DC27G409IQGT.H9G83QDQ9V7R@kernel.org>
 
-On Thu, Aug 14, 2025 at 03:07:17PM +0200, Alexey Gladkov wrote:
-> Reorder the sections to be placed in the default segment. The
-> .vmlinux.info use :NONE to override the default segment and tell the
-> linker to not put the section in any segment at all.
+On Thu, Aug 14, 2025 at 04:03:01PM +0200, Danilo Krummrich wrote:
+> On Thu Aug 14, 2025 at 3:54 PM CEST, Alexey Gladkov wrote:
+> > On Thu, Aug 14, 2025 at 03:26:53PM +0200, Danilo Krummrich wrote:
+> >> On Thu Aug 14, 2025 at 3:07 PM CEST, Alexey Gladkov wrote:
+> >> > At this point, if a symbol is compiled as part of the kernel,
+> >> > information about which module the symbol belongs to is lost.
+> >> >
+> >> > To save this it is possible to add the module name to the alias name.
+> >> > It's not very pretty, but it's possible for now.
+> >> >
+> >> > Cc: Miguel Ojeda <ojeda@kernel.org>
+> >> > Cc: Andreas Hindborg <a.hindborg@kernel.org>
+> >> > Cc: Danilo Krummrich <dakr@kernel.org>
+> >> > Cc: Alex Gaynor <alex.gaynor@gmail.com>
+> >> > Cc: rust-for-linux@vger.kernel.org
+> >> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> >> > ---
+> >> >  include/linux/module.h   | 14 +++++++++++++-
+> >> >  rust/kernel/device_id.rs |  8 ++++----
+> >> >  scripts/mod/file2alias.c | 18 ++++++++++++++----
+> >> >  3 files changed, 31 insertions(+), 9 deletions(-)
+> >> >
+> >> > diff --git a/include/linux/module.h b/include/linux/module.h
+> >> > index 3319a5269d28..e31ee29fac6b 100644
+> >> > --- a/include/linux/module.h
+> >> > +++ b/include/linux/module.h
+> >> > @@ -244,10 +244,22 @@ struct module_kobject *lookup_or_create_module_kobject(const char *name);
+> >> >  /* What your module does. */
+> >> >  #define MODULE_DESCRIPTION(_description) MODULE_INFO(description, _description)
+> >> >  
+> >> > +/*
+> >> > + * Format: __mod_device_table__kmod_<modname>__<type>__<name>
+> >> > + * Parts of the string `__kmod_` and `__` are used as delimiters when parsing
+> >> > + * a symbol in file2alias.c
+> >> > + */
+> >> > +#define __mod_device_table(type, name)	\
+> >> > +	__PASTE(__mod_device_table__,	\
+> >> > +	__PASTE(__KBUILD_MODNAME,	\
+> >> > +	__PASTE(__,			\
+> >> > +	__PASTE(type,			\
+> >> > +	__PASTE(__, name)))))
+> >> > +
+> >> >  #ifdef MODULE
+> >> >  /* Creates an alias so file2alias.c can find device table. */
+> >> >  #define MODULE_DEVICE_TABLE(type, name)					\
+> >> > -static typeof(name) __mod_device_table__##type##__##name		\
+> >> > +static typeof(name) __mod_device_table(type, name)			\
+> >> >    __attribute__ ((used, alias(__stringify(name))))
+> >> >  #else  /* !MODULE */
+> >> >  #define MODULE_DEVICE_TABLE(type, name)
+> >> > diff --git a/rust/kernel/device_id.rs b/rust/kernel/device_id.rs
+> >> > index 70d57814ff79..62c42da12e9d 100644
+> >> > --- a/rust/kernel/device_id.rs
+> >> > +++ b/rust/kernel/device_id.rs
+> >> > @@ -195,10 +195,10 @@ macro_rules! module_device_table {
+> >> >      ($table_type: literal, $module_table_name:ident, $table_name:ident) => {
+> >> >          #[rustfmt::skip]
+> >> >          #[export_name =
+> >> > -            concat!("__mod_device_table__", $table_type,
+> >> > -                    "__", module_path!(),
+> >> > -                    "_", line!(),
+> >> > -                    "_", stringify!($table_name))
+> >> > +            concat!("__mod_device_table__", line!(),
+> >> 
+> >> Why do we have line!() between "__mod_device_table__" and "__kmod_", while the
+> >> format is defined as "__mod_device_table__kmod_<modname>__<type>__<name>" above?
+> >
+> > The "__mod_device_table__" is used to filter symbols.
+> > The meaning part starts after "__kmod_" part. After that, order becomes
+> > important.
+> >
+> >> The previous logic was to create a unique name with
+> >> using "<module_path>_<line>_<table_name>" as "<name>". So, I think this should
+> >> actually be:
+> >> 
+> >> 	concat!("__mod_device_table__kmod_",
+> >> 		module_path!(),
+> >> 		"__", $table_type,
+> >> 		"__", stringify!($table_name),
+> >> 		"_", line!())
+> >> 
+> >> rather than the below.
+> >
+> > No. "stringify!($table_name)" should be the last thing in this string.
+> > This is the a symbol name that will be searched for in the elf to generate
+> > modalias.
 > 
-> >> s390x-linux-ld: .tmp_vmlinux1: warning: allocated section `.modinfo' not in segment
-> >> s390x-linux-ld: .tmp_vmlinux2: warning: allocated section `.modinfo' not in segment
-> >> s390x-linux-ld: vmlinux.unstripped: warning: allocated section `.modinfo' not in segment
+> $table_name is not guaranteed to be unique for a certain module_path!(), hence
+> we need line!() to guarantee uniqueness.
 > 
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: linux-s390@vger.kernel.org
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202506062053.zbkFBEnJ-lkp@intel.com/
-> Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> ---
->  arch/s390/kernel/vmlinux.lds.S | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> The symbol name will be unique no matter where you place line!() of course, but
+> $table_name + line!() is the unique table name, which I think is what we want?
 
-Is there any reason why you didn't reorder the patches?
-https://lore.kernel.org/all/aIeUq0qYXoNIePwd@example.org/
+Again, no. We need the entire symbol to be unique so that the linker
+doesn't complain. In fact, this symbol will later be removed from the elf.
+It is only needed for the modpost utility.
+
+The modpost requires a format symbol:
+
+__mod_device_table__<random>*__kmod_<modname>__<type>__<name>
+
+"<random>*" may or may not exist. This is a place to add uniqueness if
+needed.
+
+The fields "<modname>”, "<type>" and "<name>" must be very specific and
+must not be random. These values are used for generation.
+
+> 
+> >> 
+> >> > +                    "__kmod_", module_path!(),
+> >> > +                    "__", $table_type,
+> >> > +                    "__", stringify!($table_name))
+> >> >          ]
+> >> >          static $module_table_name: [::core::mem::MaybeUninit<u8>; $table_name.raw_ids().size()] =
+> >> >              unsafe { ::core::mem::transmute_copy($table_name.raw_ids()) };
+> >> 
+> >
+> > -- 
+> > Rgrds, legion
+> 
+
+-- 
+Rgrds, legion
+
