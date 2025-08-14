@@ -1,137 +1,152 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D42911CA0
-	for <linux-modules@vger.kernel.org>; Wed, 13 Aug 2025 14:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9A02FD7B1;
+	Thu, 14 Aug 2025 13:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755094493; cv=none; b=Y6Sr4ZMNbkPLctfBFJf7KWUnJ8qvUMLQFRyngXt6KvsLHPP6uYPwuKl906Rf3CWz2GQhfjeHsvznZqU3QnRLx2qnTjlBXAhPuITwydKksrCDOp7fElnxeONb+1LVzrn/q+BsvZEub2imhTBVUyDN1wl0I4LuwB5IDBUU2H3b5fA=
+	t=1755176876; cv=none; b=u8Lg/phRH7F4/d6WGWyF666EkhwoACrplsolSTln5eNe3H++RmpJbx0Cou62ZDjR5dtDtDDFjzggu3HZgPgOmGT2M1rvBkUqVaDGIE8wqUM5rBcr3mWqpdkk3tHKzYvqg9kbF/1vTVe9VEXl/HY6VJJ+m4y/djpEe+MVjVVSvC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755094493; c=relaxed/simple;
-	bh=QCMLg4dsgOa1eEM81Z73fL6vTE/mmW2kreT6QN5Otjc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C8cOWWwTwq9cgvjgbLKakVv4ZgntOD2eDv3pBg1azro9++Q9gZsx3UMthHXeUI9mtjSWsoAeTxFrz8dOTqNmMI5YmBHJtR9x8vyIqXIbJTv5EU8D2+xnU1PFWBF8P1oynHVhNCbbS4idAOxsyVO3Q9o90j2vCBe38kjXCYk88gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=e/679PPM; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1755176876; c=relaxed/simple;
+	bh=i/ET7s7Tj1J84FEGP9UbodHwBPcPrdFt5gh6RmuE2DU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hpBQYsxo7kYm4L1jPONsaCjxk2pnWfPKOtCIjyMKAWYrtyZ5yIZgF/u4WHkxJaw+65CqO5pyXxlwHy8olN+y5ecqrXlftffXj9h1bAx2nrCWkiiR/0W+nPb6rU2iKPbl+N2gTcVff4sEGyThKoIeElfbGR3UbHnD4k9D8uLhi3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kp932hix; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="e/679PPM"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3b7886bee77so4746792f8f.0
-        for <linux-modules@vger.kernel.org>; Wed, 13 Aug 2025 07:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1755094490; x=1755699290; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KVpG8bVI3r2CBlCksy8TqW11iXXZZJG0tvWEcZ4LZn8=;
-        b=e/679PPM/O3RuSDpuOdIzXjmQ4pM55ed+j+0m5nXOnR0bfq+vnOG7VC5+BmqF4zVSB
-         ZhYW0VTKuN4pxXUaf0PC47SPmpN4iMfeMN4nEDueXScPk1ZHV2KGgKVnzY4OInWuBzgh
-         1JNYcorolGbwOxROP7X4CHEgix5ZVQ6exdZ6znGQQxzig4QscBCttnYC6dWey6C95OV8
-         PiDMTX4ggucA8SiSf8RtjLKKO3G9bWV5rcibM3P//mDZwok4rSdGK6dlbwaQENTVQyp1
-         Ev3hB6VOy/AKTPB2JuTTsCEAwxog05ivo1BTxFBLqJT/Mub8xbhXMelJWWXaUlRUgaXJ
-         pHBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755094490; x=1755699290;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KVpG8bVI3r2CBlCksy8TqW11iXXZZJG0tvWEcZ4LZn8=;
-        b=emJbOfdScImuMBRTeRZsdETYS4dHPx9raK31UPyIjgliCGNDdDtwKYuJLZ7bcAsoS/
-         wjI6LceSvrePNbBSy56mVOrN6Pixn68OoQkeS6fJRwBpTEeXsE3JJkoSed8R/o/lDuJI
-         VaHwTScLtBZmZ1xjmmZYRgktIJgRluWi9kxI3GT2Svsp2Vw4YMHIk0fWZZDnfe05cxbd
-         OkKa6fEzPiRAeDUuTtTzV5Sg15BQ4Djs1VfwtZoyQq2Y3xCKTFUH4XyvRCy6EXXopL77
-         /xFxi3ZmJdJV5161jfAH5foAPxIX6xABmebA0bpr2FcFKfbpZqcOKBIpMASHtRCQSJEJ
-         Kk3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV5BkIso1hZRn4LwufElkPWdiZIQIINln+TZh9jEh5wEEAxWLHcTaS3tUU4vq3hj9TYagbtNuiCi2t1MMct@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7RLfZHaCunugZKxfVk1os4krs50VSsn0CkDI/UYGqX6NCjbB5
-	dM+6J0AjnPZqOV2udSr/J1hdkzvoxsIoGtALVjbgbNoXRb3DJgucVGFqPJTS/5wUE5Y=
-X-Gm-Gg: ASbGncuUvBiyGGzNTOqEXWATCCYmu2cuDcIYWVRrRS41AYI0Dfn9jfaW0VMx6lYkc4B
-	JEB9efOSew9k2tweZqfY/s/VU5Ci5/VVsX79Lw6Aca/NtXhe6Vz15jF/JyR6AwkwNX4m4xF5QPw
-	VtkG86jv6Hj9kRtKFJsTffJTzWYpebFHaj7H4zdPsimJSOzj3NtiS9vnpFtw3ISh9PjzVm7VaTA
-	olO9QJyGnheeBy6pEtz7B5z/0AiCG45f7NGjajxfPitlo89uJscGR+rcRsBG7Zj9oIco0oqJ0Pg
-	oYV5wFS6nsHRyx5V+EisyRRmrMAYeF53F3jSI+xi1J1ERiJiGUaM64riWoTRg/KKLHeyCeQo+0t
-	3TjL3jqtIgbi4SrOUapiRy9cll4N5kIZHtXF0DIcT0GA=
-X-Google-Smtp-Source: AGHT+IFm35SgYBxWt9VgUbIXjFlBOfuZ7PxWsBQOS5oI4umuCBzJ8zHC2Ue8SdOP5RfWHEQF78zD1Q==
-X-Received: by 2002:a05:6000:2dc8:b0:3b8:f863:672c with SMTP id ffacd0b85a97d-3b917ea0f3bmr2554936f8f.33.1755094489545;
-        Wed, 13 Aug 2025 07:14:49 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e1b99ff8asm3084354b3a.57.2025.08.13.07.14.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Aug 2025 07:14:49 -0700 (PDT)
-Message-ID: <f60327bb-6546-4d15-8bd2-a05e85d96b4f@suse.com>
-Date: Wed, 13 Aug 2025 16:14:41 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kp932hix"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 694D1C4CEED;
+	Thu, 14 Aug 2025 13:07:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755176875;
+	bh=i/ET7s7Tj1J84FEGP9UbodHwBPcPrdFt5gh6RmuE2DU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kp932hixuF3y2+woIsJTmdXBF1aSyCxYiRTq6XZA4/d+56vvUBb56i1B4b/jfcHEJ
+	 PiDtciLfO1Xi96U8SbYP8GNR2z34JsKDano7vJXqtGVtuM0BWZAu0UG/y5kJKWVw8W
+	 LZ9LoL49F8lD4wTGo98ZcsnXMQGbdq0Vi143jWMjKSV55kfeMWp3PD7fSLSVGs/4rp
+	 dENEiaoQkP51fIIKRFMnjTvjRkrtyPGAMHFYdhNZKoz7njX4QNH1gwsBA6S6UtS5Ya
+	 b8SQXnWIDdeWT4w6o5MVzlJyo6dfuC70t16wjoJaiJrd2yqEfpP9Iwq2RYV3FAWvCt
+	 xsVJ9wvUH9Tag==
+From: Alexey Gladkov <legion@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Alexey Gladkov <legion@kernel.org>
+Subject: [PATCH v6 0/9] Add generated modalias to modules.builtin.modinfo
+Date: Thu, 14 Aug 2025 15:07:08 +0200
+Message-ID: <cover.1755170493.git.legion@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] params: Replace deprecated strcpy() with strscpy() and
- memcpy()
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Shyam Saini <shyamsaini@linux.microsoft.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Dmitry Antipov <dmantipov@yandex.ru>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- Daniel Gomez <da.gomez@kernel.org>
-References: <20250813132200.184064-2-thorsten.blum@linux.dev>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250813132200.184064-2-thorsten.blum@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/13/25 3:21 PM, Thorsten Blum wrote:
-> strcpy() is deprecated; use strscpy() and memcpy() instead.
-> 
-> In param_set_copystring(), we can safely use memcpy() because we already
-> know the length of the source string 'val' and that it is guaranteed to
-> be NUL-terminated within the first 'kps->maxlen' bytes.
-> 
-> Link: https://github.com/KSPP/linux/issues/88
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
-> Changes in v2:
-> - Use memcpy() in param_set_copystring() as suggested by Petr Pavlu
-> - Link to v1: https://lore.kernel.org/lkml/20250810214456.2236-1-thorsten.blum@linux.dev/
-> ---
->  kernel/params.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/kernel/params.c b/kernel/params.c
-> index b92d64161b75..b96cfd693c99 100644
-> --- a/kernel/params.c
-> +++ b/kernel/params.c
-> @@ -513,13 +513,14 @@ EXPORT_SYMBOL(param_array_ops);
->  int param_set_copystring(const char *val, const struct kernel_param *kp)
->  {
->  	const struct kparam_string *kps = kp->str;
-> +	const size_t len = strnlen(val, kps->maxlen);
->  
-> -	if (strnlen(val, kps->maxlen) == kps->maxlen) {
-> +	if (len == kps->maxlen) {
->  		pr_err("%s: string doesn't fit in %u chars.\n",
->  		       kp->name, kps->maxlen-1);
->  		return -ENOSPC;
->  	}
-> -	strcpy(kps->string, val);
-> +	memcpy(kps->string, val, len + 1);
->  	return 0;
->  }
->  EXPORT_SYMBOL(param_set_copystring);
-> @@ -841,7 +842,7 @@ static void __init param_sysfs_builtin(void)
->  		dot = strchr(kp->name, '.');
->  		if (!dot) {
->  			/* This happens for core_param() */
-> -			strcpy(modname, "kernel");
-> +			strscpy(modname, "kernel");
->  			name_len = 0;
->  		} else {
->  			name_len = dot - kp->name + 1;
+The modules.builtin.modinfo file is used by userspace (kmod to be specific) to
+get information about builtin modules. Among other information about the module,
+information about module aliases is stored. This is very important to determine
+that a particular modalias will be handled by a module that is inside the
+kernel.
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+There are several mechanisms for creating modalias for modules:
+
+The first is to explicitly specify the MODULE_ALIAS of the macro. In this case,
+the aliases go into the '.modinfo' section of the module if it is compiled
+separately or into vmlinux.o if it is builtin into the kernel.
+
+The second is the use of MODULE_DEVICE_TABLE followed by the use of the
+modpost utility. In this case, vmlinux.o no longer has this information and
+does not get it into modules.builtin.modinfo.
+
+For example:
+
+$ modinfo pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+modinfo: ERROR: Module pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30 not found.
+
+$ modinfo xhci_pci
+name:           xhci_pci
+filename:       (builtin)
+license:        GPL
+file:           drivers/usb/host/xhci-pci
+description:    xHCI PCI Host Controller Driver
+
+The builtin module is missing alias "pci:v*d*sv*sd*bc0Csc03i30*" which will be
+generated by modpost if the module is built separately.
+
+To fix this it is necessary to add the generated by modpost modalias to
+modules.builtin.modinfo. Fortunately modpost already generates .vmlinux.export.c
+for exported symbols. It is possible to add `.modinfo` for builtin modules and
+modify the build system so that `.modinfo` section is extracted from the
+intermediate vmlinux after modpost is executed.
+
+---
+Notes:
+- v6:
+  * Rebase to v6.17-rc1-16-g8742b2d8935f to pick up the fixes made by Masahiro Yamada.
+  * Fix an issue on i386 configs caused by the use of string_32.h.
+  * v5: https://lore.kernel.org/all/cover.1753354215.git.legion@kernel.org/
+
+- v5:
+  * Rebase to v6.16-rc6-281-gf4a40a4282f4 to pick up the fixes made by Masahiro Yamada.
+  * Attempt to fix linker warning on s390.
+  * Fix typo in pinctrl/meson found by the kernel test robot.
+  * v4: https://lore.kernel.org/all/cover.1750511018.git.legion@kernel.org/
+
+- v4:
+  * Rework the patchset based on top of Masahiro Yamada's patches.
+  * Add removal of unnecessary __mod_device_table__* symbols to avoid symbol
+    table growth in vmlinux.
+  * rust code takes into account changes in __mod_device_table__*.
+  * v3: https://lore.kernel.org/all/cover.1748335606.git.legion@kernel.org/
+
+- v3:
+  * Add `Reviewed-by` tag to patches from Petr Pavlu.
+  * Rebase to v6.15.
+  * v2: https://lore.kernel.org/all/20250509164237.2886508-1-legion@kernel.org/
+
+- v2:
+  * Drop patch for mfd because it was already applied and is in linux-next.
+  * The generation of aliases for builtin modules has been redone as
+    suggested by Masahiro Yamada.
+  * Rebase to v6.15-rc5-136-g9c69f8884904
+  * v1: https://lore.kernel.org/all/cover.1745591072.git.legion@kernel.org/
+
+
+Alexey Gladkov (6):
+  scsi: Always define blogic_pci_tbl structure
+  pinctrl: meson: Fix typo in device table macro
+  modpost: Add modname to mod_device_table alias
+  modpost: Create modalias for builtin modules
+  kbuild: vmlinux.unstripped should always depend on .vmlinux.export.o
+  s390: vmlinux.lds.S: Reorder sections
+
+Masahiro Yamada (3):
+  kbuild: always create intermediate vmlinux.unstripped
+  kbuild: keep .modinfo section in vmlinux.unstripped
+  kbuild: extract modules.builtin.modinfo from vmlinux.unstripped
+
+ arch/s390/kernel/vmlinux.lds.S             | 10 +--
+ drivers/pinctrl/meson/pinctrl-amlogic-a4.c |  2 +-
+ drivers/scsi/BusLogic.c                    |  4 +-
+ include/asm-generic/vmlinux.lds.h          |  2 +-
+ include/linux/module.h                     | 18 +++--
+ rust/kernel/device_id.rs                   |  8 +--
+ scripts/Makefile.vmlinux                   | 77 ++++++++++++++--------
+ scripts/Makefile.vmlinux_o                 | 26 +-------
+ scripts/link-vmlinux.sh                    |  5 +-
+ scripts/mksysmap                           |  6 ++
+ scripts/mod/file2alias.c                   | 34 ++++++++--
+ scripts/mod/modpost.c                      | 15 +++++
+ scripts/mod/modpost.h                      |  2 +
+ 13 files changed, 130 insertions(+), 79 deletions(-)
 
 -- 
-Thanks,
-Petr
+2.50.1
+
