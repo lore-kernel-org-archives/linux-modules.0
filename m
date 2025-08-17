@@ -1,187 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FF8217730;
-	Sun, 17 Aug 2025 12:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4561E32CF
+	for <linux-modules@vger.kernel.org>; Sun, 17 Aug 2025 16:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755435165; cv=none; b=qk4ychvWcmyXhU3EeA6LUd4YXkQS8/9ZOrxSXmM3IVXSQGHMinoI4iCpcMp9qdIvDoIgPxwoNCl0DiEFKddjhhds+tMvwiF9MCVZJ9Se4eYq2wzegr+cQxLmShX+G+X1AG6ByJZGddV5LLV2EXTDX8yaaHmcPtM+ICD0xdQbXtI=
+	t=1755447637; cv=none; b=KmiHEAfr9YC+pRwdYZ8Y4Wy7LIq/cbLHac9hpOWejk0cgvCOUy9NJy2hVfAbpYHJ7lCpP2bR/zmwwBP5KRO5AlpjqSiQVtdkuWdjKy7RWoW8wcZQQ+hwvHEbywyUqwPSr6XU81HMh3gO5KamhXS87EEjXJfYiZWPd1Nu8cA/9nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755435165; c=relaxed/simple;
-	bh=oV3+jyn62XLBXLWVu/rJ9L9fudX4FVawuqdm6lJhq7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+3RAB/vHul4/6ggZN2CALcJjBEpwLIdBxZKC0J0vvzKGaXW7vIQdTH91f3r0m17zPiJ0pfziWCMR9IPGha6qpp58HZmRbx/CiXmeK31woz9qb+U28gIcwbbosBloBaLmgbl+NIcTqgQYTpDUAn2iVOAUY23oSepKHR4+7YOx38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFgvmGuL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFgvmGuL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A31C4CEEB;
-	Sun, 17 Aug 2025 12:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755435164;
-	bh=oV3+jyn62XLBXLWVu/rJ9L9fudX4FVawuqdm6lJhq7k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lFgvmGuLRnMlhs3uzPT6dzO/0601X701xh5wUSGa8kB8p+tbmNGNUddGn02r2bFvK
-	 nQSdzm+3FQxNehb0XhcfGlcqXNoRKx5mKGkhj8OJbVkcsB8i49ha3ooOGPSKBWVqHZ
-	 Z/GEb20mBg5Un/U8FhC1srOSpgEwMhNE9ZOA1uuxiqOvP4IeulXdD10W6swrR26K64
-	 67kZ9kikUi6lWB1I+YaH+cQe+x03fcJNSE/TJ1dxeXQAmGjeCMquD7k5zf0TicImqC
-	 Ue9K0igLzTCgEOF3BEkWxEicdSCuVZALimhgpPA6nuSYAFqAgUKcZCXkISYNOiWh6u
-	 KFHJ3WDqiE11Q==
-Date: Sun, 17 Aug 2025 14:52:39 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v6 3/9] kbuild: extract modules.builtin.modinfo from
- vmlinux.unstripped
-Message-ID: <aKHQl_XC63-c-81L@example.org>
-References: <cover.1755170493.git.legion@kernel.org>
- <16859d94a2c8e4b1bb305defdb8b7be238499c66.1755170493.git.legion@kernel.org>
- <CAK7LNAR-gD2H6Kk-rZjo0R3weTHCGTm0a=u2tRH1WWW6Sx6=RQ@mail.gmail.com>
+	s=arc-20240116; t=1755447637; c=relaxed/simple;
+	bh=5MMCxLF57qEJ3lYkvenZtY42DV9TzDIN6BRieQyLO3Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kmU9txUdAUpJ98N1rFgqG3ZPnIkHBxp9FFIgZSiKSLaA4+W/cysJZQLJMziWDO6MFbiMt8HrMzqzAmECsN6FpWWC9ZXrbj2B0CieEX+ReMQiOAJIdiwCl2Kc67lJUR+lcz+tjEuqJM8f8tM3rHv7JDMAB7ljL5rBsGRBLDT9sRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4c4gQD1GTFz9sRk;
+	Sun, 17 Aug 2025 17:54:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id qmRaWPbUjW2d; Sun, 17 Aug 2025 17:54:28 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4c4gQD0NScz9sRh;
+	Sun, 17 Aug 2025 17:54:28 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id E7AA18B764;
+	Sun, 17 Aug 2025 17:54:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 78RG67D7hvFG; Sun, 17 Aug 2025 17:54:27 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id ACA808B763;
+	Sun, 17 Aug 2025 17:54:27 +0200 (CEST)
+Message-ID: <8a87656d-577a-4d0a-85b1-5fd17d0346fe@csgroup.eu>
+Date: Sun, 17 Aug 2025 17:54:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: modprobe returns 0 upon -EEXIST from insmod
+To: Phil Sutter <phil@nwl.cc>, linux-modules@vger.kernel.org
+Cc: Yi Chen <yiche@redhat.com>
+References: <aKEVQhJpRdiZSliu@orbyte.nwl.cc>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <aKEVQhJpRdiZSliu@orbyte.nwl.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAR-gD2H6Kk-rZjo0R3weTHCGTm0a=u2tRH1WWW6Sx6=RQ@mail.gmail.com>
 
-On Sun, Aug 17, 2025 at 09:34:52PM +0900, Masahiro Yamada wrote:
-> On Thu, Aug 14, 2025 at 10:08 PM Alexey Gladkov <legion@kernel.org> wrote:
-> >
-> > From: Masahiro Yamada <masahiroy@kernel.org>
-> >
-> > Currently, we assume all the data for modules.builtin.modinfo are
-> > available in vmlinux.o.
-> >
-> > This makes it impossible for modpost, which is invoked after vmlinux.o,
-> > to add additional module info.
-> >
-> > This commit moves the modules.builtin.modinfo rule after modpost.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> 
-> I got this report from Stephen
-> https://lore.kernel.org/lkml/20250730164047.7c4a731a@canb.auug.org.au/
-> 
-> Please make sure to have no regression.
-> If this is difficult to solve, please discard this patch,
-> and consider a different approach.
+Hi,
 
-My emails must have gotten lost somewhere. Because I replied to that
-message right away and provided a fix. Stephen even applied it to the tree
-later. You were in CC whole time.
-
-https://lore.kernel.org/all/20250730090025.2402129-1-legion@kernel.org/
-
-Tomorrow I will make a new version with the corrections I missed. But now,
-I'm not sure to which tree I should send it.
-
+Le 17/08/2025 à 01:33, Phil Sutter a écrit :
+> [Vous ne recevez pas souvent de courriers de phil@nwl.cc. D?couvrez pourquoi ceci est important ? https://aka.ms/LearnAboutSenderIdentification ]
 > 
-> > ---
-> >  scripts/Makefile.vmlinux   | 26 ++++++++++++++++++++++++++
-> >  scripts/Makefile.vmlinux_o | 26 +-------------------------
-> >  2 files changed, 27 insertions(+), 25 deletions(-)
-> >
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index e2ceeb9e168d..fdab5aa90215 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -96,6 +96,32 @@ targets += vmlinux
-> >  vmlinux: vmlinux.unstripped FORCE
-> >         $(call if_changed,strip_relocs)
-> >
-> > +# modules.builtin.modinfo
-> > +# ---------------------------------------------------------------------------
-> > +
-> > +OBJCOPYFLAGS_modules.builtin.modinfo := -j .modinfo -O binary
-> > +
-> > +targets += modules.builtin.modinfo
-> > +modules.builtin.modinfo: vmlinux.unstripped FORCE
-> > +       $(call if_changed,objcopy)
-> > +
-> > +# modules.builtin
-> > +# ---------------------------------------------------------------------------
-> > +
-> > +__default: modules.builtin
-> > +
-> > +# The second line aids cases where multiple modules share the same object.
-> > +
-> > +quiet_cmd_modules_builtin = GEN     $@
-> > +      cmd_modules_builtin = \
-> > +       tr '\0' '\n' < $< | \
-> > +       sed -n 's/^[[:alnum:]:_]*\.file=//p' | \
-> > +       tr ' ' '\n' | uniq | sed -e 's:^:kernel/:' -e 's/$$/.ko/' > $@
-> > +
-> > +targets += modules.builtin
-> > +modules.builtin: modules.builtin.modinfo FORCE
-> > +       $(call if_changed,modules_builtin)
-> > +
-> >  # modules.builtin.ranges
-> >  # ---------------------------------------------------------------------------
-> >  ifdef CONFIG_BUILTIN_MODULE_RANGES
-> > diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> > index b024ffb3e201..23c8751285d7 100644
-> > --- a/scripts/Makefile.vmlinux_o
-> > +++ b/scripts/Makefile.vmlinux_o
-> > @@ -1,7 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >
-> >  PHONY := __default
-> > -__default: vmlinux.o modules.builtin.modinfo modules.builtin
-> > +__default: vmlinux.o
-> >
-> >  include include/config/auto.conf
-> >  include $(srctree)/scripts/Kbuild.include
-> > @@ -73,30 +73,6 @@ vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> >
-> >  targets += vmlinux.o
-> >
-> > -# modules.builtin.modinfo
-> > -# ---------------------------------------------------------------------------
-> > -
-> > -OBJCOPYFLAGS_modules.builtin.modinfo := -j .modinfo -O binary
-> > -
-> > -targets += modules.builtin.modinfo
-> > -modules.builtin.modinfo: vmlinux.o FORCE
-> > -       $(call if_changed,objcopy)
-> > -
-> > -# modules.builtin
-> > -# ---------------------------------------------------------------------------
-> > -
-> > -# The second line aids cases where multiple modules share the same object.
-> > -
-> > -quiet_cmd_modules_builtin = GEN     $@
-> > -      cmd_modules_builtin = \
-> > -       tr '\0' '\n' < $< | \
-> > -       sed -n 's/^[[:alnum:]:_]*\.file=//p' | \
-> > -       tr ' ' '\n' | uniq | sed -e 's:^:kernel/:' -e 's/$$/.ko/' > $@
-> > -
-> > -targets += modules.builtin
-> > -modules.builtin: modules.builtin.modinfo FORCE
-> > -       $(call if_changed,modules_builtin)
-> > -
-> >  # Add FORCE to the prerequisites of a target to force it to be always rebuilt.
-> >  # ---------------------------------------------------------------------------
-> >
-> > --
-> > 2.50.1
-> >
+> Hi,
 > 
+> I admittedly didn't fully analyze the cause, but on my system a call to:
 > 
-> -- 
-> Best Regards
-> Masahiro Yamada
+> # insmod /lib/module/$(uname -r)/kernel/net/netfilter/nf_conntrack_ftp.ko
+> 
+> fails with -EEXIST (due to a previous call to 'nfct add helper ftp inet
+> tcp'). A call to:
+> 
+> # modprobe nf_conntrack_ftp
+> 
+> though returns 0 even though module loading fails. Is there a bug in
+> modprobe error status handling?
 > 
 
--- 
-Rgrds, legion
+Read the man page : https://linux.die.net/man/8/modprobe
 
+In the man page I see:
+
+            Normally, modprobe will succeed (and do nothing) if told to 
+insert a module which is already present or to remove a module which 
+isn't present.
+
+Christophe
