@@ -1,50 +1,45 @@
-Received: from orbyte.nwl.cc (orbyte.nwl.cc [151.80.46.58])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783182765F1;
-	Mon, 18 Aug 2025 11:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=151.80.46.58
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B491B24887E;
+	Mon, 18 Aug 2025 16:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755516150; cv=none; b=QOtBLYT/vVjAz7M4F1YFqoQLub3+oGW4A0goSdA1CcunYKSdXQA0hBEbwFNeTDXFUa7fmtM75nReNe14ZzmirWWDOb8OQ7c8XcM50mI8CVcKyQ9wGECFzgs03UIqPaELrNbyPK/KU6tOhNv3F2pBZ+I8+b7e2HfejtUpvBhmFsQ=
+	t=1755536276; cv=none; b=R49fpsCNGssB1On+6BZFZ3/OieSYL6MkRs0WMxDui+Ew/im28xf98Ij6EzAgA+hqvDP3o4sDbB1wuTsymi/60NrQwA5QG2wdonTxD4O6Ir4m0FTnfcbB+tunC5CcUU0VhwhWhV4rzjP0nEOjGdRWanwo2LxFh1Sf/sP3zx1raI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755516150; c=relaxed/simple;
-	bh=1gbiQY/r9J8++5jEQ3UILKJfZPk6cI6zE5J0Rn9VyGQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hxdsWPEyOj5/EZLWE+8H9FHnC+prvtp2SqMtiAxDof7ASCaelmXGCWRZ7WkIriqWiTjQdnzMjG/r5RyhhceZtghlUefkP8p2xYTA2fixDchYDNhbTCwZE6OwgoiS6Mh3TaexSXn6jTqEel5SO6lhAH7fWj+jpbf/8Xdx5KWKjNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc; spf=pass smtp.mailfrom=nwl.cc; dkim=pass (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b=Ehmc9dPZ; arc=none smtp.client-ip=151.80.46.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nwl.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nwl.cc
+	s=arc-20240116; t=1755536276; c=relaxed/simple;
+	bh=uHvTVjQpH2EmLBjrnZeE66WWk00MAPHFMfX2qH7ipMA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bjS+MyCFG9kPX6nzJkeqIyYRLR6ZE26DOIDRRjJYsLQpfEEKUbWeZdGYV6xLnBf23qxXrpuWFYjJS8gTTt9irIYrO3SQjqDAxEMp8MP6SWhQ9Ng89z4Qry4O/uVgqJcn79nrVg3YmNdpwRQWO77nY2eCLxTQA+qKmAWXwYU8wos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YONCsJii; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nwl.cc header.i=@nwl.cc header.b="Ehmc9dPZ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nwl.cc;
-	s=mail2022; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=rbZ9DHkVW4OtrX4voktvrmKijnsuPEqk2pjb3fx2uYk=; b=Ehmc9dPZpnjHTXMRzJt1Zkbgao
-	1CRJ2FjxDxgmARjAWaj/81Ko8Z2UA8YBCVa1Ecm9gozNhoW3I/+YPndqSZgBFr7JbT0VNchBzznmo
-	9feqVT5N0ucfVmlhQTUES8n6p7mBnUfWYJr24n9lt6rtC6+V0GA2lMnbQfCZ3bcovy4utE+OlKcRv
-	2SDF53cfsv2EXQu4EUOgyBk6X/n744cecjM9V3Z116BIsjkfsqN6531fUc0UE9ZmBrXYH+aZbkdkq
-	sapxhE0SUqcLmtXBj9yk0X1+FhNEQ+uueuJaC6qvbHOT+JwjUKK7kyryxorbGJGCq8KH5NNj/1xJ0
-	IrRsUi8w==;
-Authentication-Results: mail.nwl.cc;
-	iprev=pass (localhost) smtp.remote-ip=::1
-Received: from localhost ([::1] helo=xic)
-	by orbyte.nwl.cc with esmtp (Exim 4.97.1)
-	(envelope-from <phil@nwl.cc>)
-	id 1unxwX-000000006sa-46v5;
-	Mon, 18 Aug 2025 13:22:26 +0200
-From: Phil Sutter <phil@nwl.cc>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: netfilter-devel@vger.kernel.org,
-	Yi Chen <yiche@redhat.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YONCsJii"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21193C4CEEB;
+	Mon, 18 Aug 2025 16:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755536276;
+	bh=uHvTVjQpH2EmLBjrnZeE66WWk00MAPHFMfX2qH7ipMA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YONCsJii+SNu/VR/GUDGOSfh977DjkL4yZ74sntiH2Gq80e4CXyIj0NkXBOAyfdZ5
+	 Y7rY3Mp1zx2mu/YdGsD5sjB0OvHUc1MG0uYzb3Swrw2i66mmaW8mEd++bI5guHpI+k
+	 mnJ9XB43WwYSnTeygK3Ky0wWmjj2hoKNIQzcTbJQGX/s8s556uUlbidQofE/qI/Jid
+	 zzHtAnPG2LjYdoTuvcx+bbzPV/6YOboYDdUfV1XYkYO+2SfWZIaDHSvVeU5MLu0qJn
+	 FzpPu+U9/kfEo1D2hj1NLDuHPzUXlx2kyQTuXGSIf/bDhMRWplkAdo14FvCOHGG+Jh
+	 5StFGiYCgkdcA==
+From: Alexey Gladkov <legion@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>
+Cc: linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [nf PATCH] netfilter: conntrack: helper: Replace -EEXIST by -EBUSY
-Date: Mon, 18 Aug 2025 13:22:20 +0200
-Message-ID: <20250818112220.26641-1-phil@nwl.cc>
-X-Mailer: git-send-email 2.49.0
+	linux-kbuild@vger.kernel.org,
+	Alexey Gladkov <legion@kernel.org>
+Subject: [PATCH v7 0/8] Add generated modalias to modules.builtin.modinfo
+Date: Mon, 18 Aug 2025 18:54:54 +0200
+Message-ID: <cover.1755535876.git.legion@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -53,42 +48,107 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The helper registration return value is passed-through by module_init
-callbacks which modprobe confuses with the harmless -EEXIST returned
-when trying to load an already loaded module.
+The modules.builtin.modinfo file is used by userspace (kmod to be specific) to
+get information about builtin modules. Among other information about the module,
+information about module aliases is stored. This is very important to determine
+that a particular modalias will be handled by a module that is inside the
+kernel.
 
-Make sure modprobe fails so users notice their helper has not been
-registered and won't work.
+There are several mechanisms for creating modalias for modules:
 
-Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Fixes: 12f7a505331e ("netfilter: add user-space connection tracking helper infrastructure")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
+The first is to explicitly specify the MODULE_ALIAS of the macro. In this case,
+the aliases go into the '.modinfo' section of the module if it is compiled
+separately or into vmlinux.o if it is builtin into the kernel.
+
+The second is the use of MODULE_DEVICE_TABLE followed by the use of the
+modpost utility. In this case, vmlinux.o no longer has this information and
+does not get it into modules.builtin.modinfo.
+
+For example:
+
+$ modinfo pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+modinfo: ERROR: Module pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30 not found.
+
+$ modinfo xhci_pci
+name:           xhci_pci
+filename:       (builtin)
+license:        GPL
+file:           drivers/usb/host/xhci-pci
+description:    xHCI PCI Host Controller Driver
+
+The builtin module is missing alias "pci:v*d*sv*sd*bc0Csc03i30*" which will be
+generated by modpost if the module is built separately.
+
+To fix this it is necessary to add the generated by modpost modalias to
+modules.builtin.modinfo. Fortunately modpost already generates .vmlinux.export.c
+for exported symbols. It is possible to add `.modinfo` for builtin modules and
+modify the build system so that `.modinfo` section is extracted from the
+intermediate vmlinux after modpost is executed.
+
 ---
- net/netfilter/nf_conntrack_helper.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Notes:
+- v7:
+  * Reorder patches to avoid unnecessary linker warnings on s390.
+  * Drop the patch for pinctrl since it's already been applied.
+  * v6: https://lore.kernel.org/all/cover.1755170493.git.legion@kernel.org/
 
-diff --git a/net/netfilter/nf_conntrack_helper.c b/net/netfilter/nf_conntrack_helper.c
-index 4ed5878cb25b..ceb48c3ca0a4 100644
---- a/net/netfilter/nf_conntrack_helper.c
-+++ b/net/netfilter/nf_conntrack_helper.c
-@@ -368,7 +368,7 @@ int nf_conntrack_helper_register(struct nf_conntrack_helper *me)
- 			    (cur->tuple.src.l3num == NFPROTO_UNSPEC ||
- 			     cur->tuple.src.l3num == me->tuple.src.l3num) &&
- 			    cur->tuple.dst.protonum == me->tuple.dst.protonum) {
--				ret = -EEXIST;
-+				ret = -EBUSY;
- 				goto out;
- 			}
- 		}
-@@ -379,7 +379,7 @@ int nf_conntrack_helper_register(struct nf_conntrack_helper *me)
- 		hlist_for_each_entry(cur, &nf_ct_helper_hash[h], hnode) {
- 			if (nf_ct_tuple_src_mask_cmp(&cur->tuple, &me->tuple,
- 						     &mask)) {
--				ret = -EEXIST;
-+				ret = -EBUSY;
- 				goto out;
- 			}
- 		}
+- v6:
+  * Rebase to v6.17-rc1-16-g8742b2d8935f to pick up the fixes made by Masahiro Yamada.
+  * Fix an issue on i386 configs caused by the use of string_32.h.
+  * v5: https://lore.kernel.org/all/cover.1753354215.git.legion@kernel.org/
+
+- v5:
+  * Rebase to v6.16-rc6-281-gf4a40a4282f4 to pick up the fixes made by Masahiro Yamada.
+  * Attempt to fix linker warning on s390.
+  * Fix typo in pinctrl/meson found by the kernel test robot.
+  * v4: https://lore.kernel.org/all/cover.1750511018.git.legion@kernel.org/
+
+- v4:
+  * Rework the patchset based on top of Masahiro Yamada's patches.
+  * Add removal of unnecessary __mod_device_table__* symbols to avoid symbol
+    table growth in vmlinux.
+  * rust code takes into account changes in __mod_device_table__*.
+  * v3: https://lore.kernel.org/all/cover.1748335606.git.legion@kernel.org/
+
+- v3:
+  * Add `Reviewed-by` tag to patches from Petr Pavlu.
+  * Rebase to v6.15.
+  * v2: https://lore.kernel.org/all/20250509164237.2886508-1-legion@kernel.org/
+
+- v2:
+  * Drop patch for mfd because it was already applied and is in linux-next.
+  * The generation of aliases for builtin modules has been redone as
+    suggested by Masahiro Yamada.
+  * Rebase to v6.15-rc5-136-g9c69f8884904
+  * v1: https://lore.kernel.org/all/cover.1745591072.git.legion@kernel.org/
+
+
+Alexey Gladkov (5):
+  s390: vmlinux.lds.S: Reorder sections
+  scsi: Always define blogic_pci_tbl structure
+  modpost: Add modname to mod_device_table alias
+  modpost: Create modalias for builtin modules
+  kbuild: vmlinux.unstripped should always depend on .vmlinux.export.o
+
+Masahiro Yamada (3):
+  kbuild: always create intermediate vmlinux.unstripped
+  kbuild: keep .modinfo section in vmlinux.unstripped
+  kbuild: extract modules.builtin.modinfo from vmlinux.unstripped
+
+ arch/s390/kernel/vmlinux.lds.S    | 10 ++--
+ drivers/scsi/BusLogic.c           |  4 +-
+ include/asm-generic/vmlinux.lds.h |  2 +-
+ include/linux/module.h            | 18 ++++++--
+ rust/kernel/device_id.rs          |  8 ++--
+ scripts/Makefile.vmlinux          | 77 ++++++++++++++++++++-----------
+ scripts/Makefile.vmlinux_o        | 26 +----------
+ scripts/link-vmlinux.sh           |  5 +-
+ scripts/mksysmap                  |  6 +++
+ scripts/mod/file2alias.c          | 34 ++++++++++++--
+ scripts/mod/modpost.c             | 15 ++++++
+ scripts/mod/modpost.h             |  2 +
+ 12 files changed, 129 insertions(+), 78 deletions(-)
+
 -- 
-2.49.0
+2.50.1
 
