@@ -1,74 +1,70 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA44233769D
-	for <linux-modules@vger.kernel.org>; Tue, 19 Aug 2025 12:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6512DE1FC
+	for <linux-modules@vger.kernel.org>; Tue, 19 Aug 2025 12:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755605610; cv=none; b=aew3P+6+kN42yJrtaoJiqAPC08RbuBx/k0bNVull6JPwtk57xyRo62CfJ8diaztrFPuMHP/51LrlV3LF0MoHr/SKOPysnuvDIJjwOFFpged8x/50GwfJ2H+Lax3IDaZ5KEv5OyR9KaurAe68DyvXE/nUexLyivOQVp0ZNQmseTM=
+	t=1755605698; cv=none; b=h5onTKWZqt27nYlNHhyiX7fl6mAqNw6zem2o+nxOKrkuYkYb1XSX6tXAwfIjphwpjpMJmTM1RYHBO2j0wFfTOpep/9pIC8cxbr3Nw5SmEFjz5pfCdWJKLC88/PWrHBHs6otB643ikf6NE4dhXmYaybcLci0qrauqpVIf5vPjTVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755605610; c=relaxed/simple;
-	bh=dywSOFLfMogkBmbcyfNdBbCCi1K9eDNR4VWZt+BgoJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tbHhgXHdWmqmwZle4fOE/ImuEXbJsfWeSOyN8eR/+/Anpc8+7jOTQq5hOnIrJEa/wxHdMONac1fr2FOCSHb1lxeTXJNSLKHJqEWIwkqD6ygis+Sx0gr1tZh4fz3EhLWLR+98oQQ4Kxh0/kS5MhgX18OiRtkGvKxj2gYaWmAGcg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bMIymVUD; arc=none smtp.client-ip=209.85.221.45
+	s=arc-20240116; t=1755605698; c=relaxed/simple;
+	bh=r3n24YkeAiFzv8X5Ud5TZiphJux1PzHKFS6EknRtIUU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mnzHvC3AVINrTVU4Td8nXTBuF8uj6k2Ay//8T60JrZ7pGxqx6UAD7pEBQ3Bs42KWN5AFbar4/0ku+3+WJykxkc87RConnqnxOEeuM3LUKF7lC6ozUtwe87uzDLrCY7WhyC2jma4l6Cd4bM2XjSxXT1zk7MKYm7S3fHlWPoGxKBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=F/88lRbz; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bMIymVUD"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3b9d41c1963so2607233f8f.0
-        for <linux-modules@vger.kernel.org>; Tue, 19 Aug 2025 05:13:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="F/88lRbz"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3b9edf4cf6cso4755572f8f.3
+        for <linux-modules@vger.kernel.org>; Tue, 19 Aug 2025 05:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1755605606; x=1756210406; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1755605694; x=1756210494; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3uRtcEd8pcpMinDJcB3a1LhyOu4987652vqrf5zaqCM=;
-        b=bMIymVUDVbiJgz/6YaA5ilZjG6Src21hq2Wu0wTcbIYMuk0ptGVzt2pzFhNtQOoJCT
-         LyN4NSLHqx3wI4Y8B3949p0D+cFhKpEGld9obGLTr+CzLFecTohGDFDBK4OIVvHbNE7W
-         qpvBwdx6dD86YB/+Wea7j1kVAQXKtvKzIWAqwwC5wQuZrgnGWKxbn5/6ZnUvahZio8TG
-         DkidWQT5B0kmWea3mo5FrOACdWYA6PXzFTQb84AgT1Y37sFkopIxI9gWEp85tN6uZzWz
-         vVVrnd0z6Z/oEzMN56lLfxV+cjgQ1uOIYgKFZHQrfLN+aNHMLFWbhlfeUha6UPkGyv3P
-         NHhw==
+        bh=Cv3UADiqbQ2TvjUbAoLCvVlixqzyy4Oo4r3fQdXVk88=;
+        b=F/88lRbzqKUf08vBQP/Upn2ZDki7A6PkSWxOKmFteiexffhPSHZ+L2IPcsqlGem5Ho
+         e1ygf1kCwUO+9o1C+fgPO9ECX0EC5BIh2UUhaLDzZ77/eItfcOlJrONQu+5tm1PM8ReN
+         ixDrKHMmpuDpu2c4arsSW2Vy1/gAFhgvfqUcy2EEO7lyAVSEGx2acM4Cwmdn87DMLxZ9
+         wgq7zt01acBTRz9NFumjElO6v2Pfe0Q+m0If16+mOspgTOT1wfy48sXAIP4DTi6fdtwZ
+         FxHmllIhsjghqT4v7iu3r/3rHXRPD6sjnp0eRw7NbCMKuvBQOBAyw8IPZghRN4pclm5j
+         xyRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755605606; x=1756210406;
+        d=1e100.net; s=20230601; t=1755605694; x=1756210494;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3uRtcEd8pcpMinDJcB3a1LhyOu4987652vqrf5zaqCM=;
-        b=gmb9w+bEWhcZ4a2QICUKX5iLfb4mb7lPtSOqt0c+Wali4rBkhVtQmj3fLLAebZBWYB
-         ZQGXhiXYoxI8W6sEaw5rq3+mEAbN6SdNohhfDj5AQbNoX6Ln0zb9KJrzYQZbBUKjZ0NN
-         RyY6xIu62BTxXcTL5umv1/fKfoZkPr2I3hi2roXMMoCY9ze6o/jW84+p4LY9qqHTfJ8L
-         RLnVm0Cmu0nznyDqzL9LbGBXfdKtuKc3Z0KUpIHxu66MKDAohoKb3SJmLZq353Y+Zilw
-         kNA8B5xv3G2dRD5bsLHrq9qn7qB/t9qsQuHQ+6kJU/s7nKREAiDoT++GCOwZlKe+rXPp
-         BS8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUnc+zMRDis0W1K9OE0p8OU9iqfPq07s20ChNIUY/QW/cmFyMjCN3DVOrIRdWTbJzxPWh+QETiIXK4g6fvt@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLq7YIV2+HYfMifObi/HZXOp6E/SWJVzJWR+/TokMhdjIgf4rR
-	CsoB/HplsNa5bZikX2a6akwa1/FvLWYaUB07dtWYLvJWwbTEY5Retr/qUSAcckgxvT44bQhYQHB
-	uucKb
-X-Gm-Gg: ASbGnctL/qenvyHzs42CnHPB2OvbxYxaVUvawZz6ZHqIp4ngNxPXOKr8Lb/KXtdxkUn
-	AkUi33uS0i9AhHmoF6jKbDgzMUrulj/IvDCOgXkpSPsI8z1FsSbN9+L/jP6tPLA4XESoNU+XTTI
-	lZXnd6Gdz4XpAxYw9KXVYit9sSsTWC03eiWEGAq4b5GUHfuPvIA7LG+nRooJBmO++P7cjVzmx5W
-	JvtW45FHsC0Gmc0YNrm95eJcihpmSESZYWHJYXSX80xdSyLSN2EvBBIivKCp5MtmReQEBGN0qSG
-	wGIvsjVUXDbg4JCFnSXxKJD/4738WDFfvAFPyL7grqb6Mf4+8zkyIEALcq4ZFIvFs5TSb8zZ3f9
-	P+2prhlTKdQXLYGEI5LuxxU6lIcuIwDhJhI3IH8A=
-X-Google-Smtp-Source: AGHT+IEyO17CVHXzd9F1BliU3Ul+TEXJM+jcje2z9wQ3gAvxvj+Mmq6shz2a+l3z2LEnQlSleO7Zcw==
-X-Received: by 2002:a05:6000:402b:b0:3b7:644f:9ca7 with SMTP id ffacd0b85a97d-3c0e9ff5689mr1656146f8f.25.1755605605945;
-        Tue, 19 Aug 2025 05:13:25 -0700 (PDT)
+        bh=Cv3UADiqbQ2TvjUbAoLCvVlixqzyy4Oo4r3fQdXVk88=;
+        b=fTUDxnwfercqEQflfANC0JxW9fWTdVYCZ1nzP2fgR707W2FLEZyh4cpYbRBPdAWvc4
+         Kh44asfj6w3sulyVkrCYkf8c9Xy4NO4QwyuCXVnp74mrtQx+uxN0QSMBEIDs3M5vNiVp
+         pkHMobxVl4rfjqJO5WFHyNpNm8cWD56BAbuVfndC8SD+n3edSpMy6zZLcz406cLnmc5N
+         8wwnhIIVgEiQM6lA5hs3sHyfdVYJeSiR0ncBjSFoA9XsIP8xEkBf0X+JL36a+jR8rqqX
+         IuS28cY25khjx5dT9qIEcgEurQYp/zRkBtfxBAOwlc2kNP3TXCRUFiqAXLLTJ9THs6LW
+         PzcQ==
+X-Gm-Message-State: AOJu0Yw3ptPxTw3O/OpnIsFc/xzJhrYTFJN8KW57VCMPmSe0zMY3JWb/
+	XzZ4e01XrCchOR+Y78+0uj1jIsSKfrJTFKismO7myD4gFxVgNpZuneQIJh4C+6xa10Y=
+X-Gm-Gg: ASbGncsgMx07EweeL87vFsvE3v7haL6K36pTTWMEfBoILIfF7Q2Rn783qtHBz6mY9r6
+	miALJLfrEw2e/jfeW4irDOAg1bQBwlPYmhG3xFILBwX7ZlAGiAbAjuSEBpCMsdwib7WSPf1Pq1z
+	L5SMzqpsq89dFj81G8rp/abKqzutDL7fRCpIJKXcim9HpiqxHP+DghRF2jk74pqKoytTa51vz94
+	4KkdZP9fuYq/NfDuPmtSnMZJRdCtoiq/1nrgG0ohXIgXLYoZV38mOEnZFyJCHB3Jxhe8LCn7Yk2
+	M2geVEPnxYCvt6RZeVVNRyzmw3ZPNVUB0q29ZISfzn3JQAoSPPisfwt0LaJCGvR1Wot2rnZkiGt
+	OTjNglKzgXKDyjLNonycWHxXhOMQzIdmrw77YoQs=
+X-Google-Smtp-Source: AGHT+IE/kD7//F1ivwBIkItT7/N13kE12xwZismDvDilF7dG6FebLdN4vgvroAj3YGiVbETZjeg3Ug==
+X-Received: by 2002:a05:6000:26cc:b0:3b6:936:976c with SMTP id ffacd0b85a97d-3c0e2c89f54mr1719672f8f.17.1755605694332;
+        Tue, 19 Aug 2025 05:14:54 -0700 (PDT)
 Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446d50f6dfsm107897525ad.78.2025.08.19.05.13.19
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2446cb0735csm107977765ad.57.2025.08.19.05.14.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Aug 2025 05:13:25 -0700 (PDT)
+        Tue, 19 Aug 2025 05:14:53 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>
-Cc: Shyam Saini <shyamsaini@linux.microsoft.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-modules@vger.kernel.org,
+Cc: linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] params: Replace __modinit with __init_or_module
-Date: Tue, 19 Aug 2025 14:12:09 +0200
-Message-ID: <20250819121248.460105-1-petr.pavlu@suse.com>
+Subject: [PATCH] module: Remove unused __INIT*_OR_MODULE macros
+Date: Tue, 19 Aug 2025 14:13:37 +0200
+Message-ID: <20250819121423.460156-1-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -78,55 +74,39 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove the custom __modinit macro from kernel/params.c and instead use the
-common __init_or_module macro from include/linux/module.h. Both provide the
-same functionality.
+Remove the __INIT_OR_MODULE, __INITDATA_OR_MODULE and
+__INITRODATA_OR_MODULE macros. These were introduced in commit 8b5a10fc6fd0
+("x86: properly annotate alternatives.c"). Only __INITRODATA_OR_MODULE was
+ever used, in arch/x86/kernel/alternative.c. In 2011, commit dc326fca2b64
+("x86, cpu: Clean up and unify the NOP selection infrastructure") removed
+this usage.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- kernel/params.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ include/linux/module.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/kernel/params.c b/kernel/params.c
-index b92d64161b75..19bb04f10372 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -595,12 +595,6 @@ static ssize_t param_attr_store(const struct module_attribute *mattr,
- }
- #endif
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 3319a5269d28..e9e6eeb042aa 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -151,16 +151,10 @@ extern void cleanup_module(void);
+ #define __init_or_module
+ #define __initdata_or_module
+ #define __initconst_or_module
+-#define __INIT_OR_MODULE	.text
+-#define __INITDATA_OR_MODULE	.data
+-#define __INITRODATA_OR_MODULE	.section ".rodata","a",%progbits
+ #else
+ #define __init_or_module __init
+ #define __initdata_or_module __initdata
+ #define __initconst_or_module __initconst
+-#define __INIT_OR_MODULE __INIT
+-#define __INITDATA_OR_MODULE __INITDATA
+-#define __INITRODATA_OR_MODULE __INITRODATA
+ #endif /*CONFIG_MODULES*/
  
--#ifdef CONFIG_MODULES
--#define __modinit
--#else
--#define __modinit __init
--#endif
--
- #ifdef CONFIG_SYSFS
- void kernel_param_lock(struct module *mod)
- {
-@@ -625,9 +619,9 @@ EXPORT_SYMBOL(kernel_param_unlock);
-  * create file in sysfs.  Returns an error on out of memory.  Always cleans up
-  * if there's an error.
-  */
--static __modinit int add_sysfs_param(struct module_kobject *mk,
--				     const struct kernel_param *kp,
--				     const char *name)
-+static __init_or_module int add_sysfs_param(struct module_kobject *mk,
-+					    const struct kernel_param *kp,
-+					    const char *name)
- {
- 	struct module_param_attrs *new_mp;
- 	struct attribute **new_attrs;
-@@ -760,7 +754,8 @@ void destroy_params(const struct kernel_param *params, unsigned num)
- 			params[i].ops->free(params[i].arg);
- }
- 
--struct module_kobject __modinit * lookup_or_create_module_kobject(const char *name)
-+struct module_kobject * __init_or_module
-+lookup_or_create_module_kobject(const char *name)
- {
- 	struct module_kobject *mk;
- 	struct kobject *kobj;
+ struct module_kobject *lookup_or_create_module_kobject(const char *name);
 
 base-commit: be48bcf004f9d0c9207ff21d0edb3b42f253829e
 -- 
