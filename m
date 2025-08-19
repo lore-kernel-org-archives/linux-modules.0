@@ -1,148 +1,159 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB2727B328
-	for <linux-modules@vger.kernel.org>; Tue, 19 Aug 2025 14:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C1E26D4DA;
+	Tue, 19 Aug 2025 19:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755615039; cv=none; b=a700ncQFJYHkSAOBSJDQGcbYZTp1tfNTryuQqOS5Hz6AY99D2j0qugVBd6JPOdYQ05+A0eAa8qUv+rh7uoEAXqDCz8J1xYbp9nFG3/Yi2QX9+3kgPKIKJZoyNgxubyftUPqCCgoDee4RaNB/Ppp64oUsEo/B4psru9UwZKPkrTY=
+	t=1755630697; cv=none; b=AE2KjfphPkK/dAphPl2R27aD92j67VCXhLd8RpspZKoa5PYEOQLndElV8UohBcnMnSh/n8ypuO01kQa4ZUt3+Dcolv68hIRSw7CDy8VVTyZupdSWTRocxLbdlua5mTEd+gVx5B0PlHCljk2I3fvUSV3659jF7vxbkR/7tmWOyoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755615039; c=relaxed/simple;
-	bh=dfXnpGmZu6otv8S2trWLiAUGAQkEFm6zwDyTZXGzLlE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NZfZtnmzXdhTp/tpRy88rxB8lkInkEwauNAZo0lPdmtDYhaPQk474gCDL2KpXEMvkSaNE+nLqZ6la3X/+aGIhhdlO3Z2jGuxFEvAwCxdQiR1bz0OnDiUc+S8WMQbrc/1JhCOklRuwknTVS8jh5ssLJ29jHnFRnvium2BdHXU0Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c5sVQ5kXRz9sRs;
-	Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id g3z4CdriRej1; Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c5sVQ4gLqz9sRg;
-	Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8A4298B769;
-	Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 8yzwSu50ZqDe; Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 298488B763;
-	Tue, 19 Aug 2025 16:32:14 +0200 (CEST)
-Message-ID: <48f2aad1-a34d-4848-9dd3-2f984d6dd349@csgroup.eu>
-Date: Tue, 19 Aug 2025 16:32:13 +0200
+	s=arc-20240116; t=1755630697; c=relaxed/simple;
+	bh=hHgmX2IlKh+H/jKJLuAW+0yjJbJ/Z7ekhE2zkEc2FNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lmK8dLWvL3zw7eKa5TdWRAVnowi7TH8KyhR6sNYVopXDpnzplCpWuTddobfdNjUkY/CLl5jRsO08YFbrMnFUz/UlqNKKK8r3/+TNBKRF/fjCoEs1SKals/AuMSpgM6c3DWsDH1ovdpbTqbp7FDgP5M/UTn9fCWlmIvUIs6vHe5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft1WgwdJ; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft1WgwdJ"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e2ea79219so6520338b3a.2;
+        Tue, 19 Aug 2025 12:11:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1755630695; x=1756235495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0EiOHPkXHOWRCoxSY55xxvCqttDk+IXhPL7KL7WKckI=;
+        b=Ft1WgwdJ0WhSf3689bJ4lDM+HZzNGhhV4ZLeYkK+6hQsVe8tgAuEXLDNtqjbiy0ZFi
+         QuPQ+Xk76HH67ozdG9sA4EL2f52jrimFdVzqSeJ+u9MfIvij8pKEdzl0ARgQGtEZeEuB
+         /lHXpbU0g9ibZbOOhs+nzTLn7UAc9y5MxXSHZT81eBTpR8frgyBfYHprDntihUCk1cPu
+         byinM+yQYMe6IFiBy407AGsGjr6KjuQL2W0vyGzuX333onHWgqLM7lvu3+YoSfJjwvq3
+         ia274Dwo74TXXKywOtaQzn0IwhfKTJ2trWwgLHCZaclYeGxLLNBmaPxAi5f3Vb5OracT
+         Iqjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755630695; x=1756235495;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0EiOHPkXHOWRCoxSY55xxvCqttDk+IXhPL7KL7WKckI=;
+        b=ivEZ4MeOENiQAf+e/9N9pVEm1hoVb50E8IdpZE2EhK88zPWvN3+OkjQapj79AP/MwU
+         /nFep3gwx65/LI2xx8DrvAKYeMcmtRIMByhp2Fo5v7im9fVZ//oazZxJpRKww/vt4scI
+         I3Q3BhbtAr0B6TJExDP7kno3bGWPmJ2e6HAydLowd9wpijpcpR5WDQ9w6NnBb0afkd3q
+         q1JIhl4W6d9y3Pl9WRM/qYYMQgW6t8gahcBX8b5sQECiPdLl5pcVdu/M9bY3PMRsAS+f
+         yqZ2XWQq33zBI930Lx24n7kBzP75OsN8tdFLfUx1WphuVqi450jTriBTcWav8bbyZVHW
+         32bw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYegeozO8/vSJONjbsbg1JgXsLuWZyVAemPCaZFe2YtC2gDLuFB/6fVKII69APYKwHLXl5mMsIT/sH8UNrkAA=@vger.kernel.org, AJvYcCWu21LYadUyjH4sz0IXGfc9JUzhd45+yBH0Vk7ka4mxtGZ8gth9p5Kav/DcIs6tgmZWWsoyiLNPEsNqMpxt@vger.kernel.org, AJvYcCXU6QQcFKKkaxIiKmSq5nJHVnP3rNYy1EUuO5v7wJlnJSnlkDpeZTwYdb9Wh4EYZLgmFWZeCxQjckUwR9c=@vger.kernel.org, AJvYcCXh7VqfI890i0YNCBc8rHqPk3I5zAqUWOPPJ0IcRMFh2MbwaUa0x3MJD61Fe3NIonTYaGE9GsajwVWmhjXGIA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGJivMXwEzj2H0JiFfaNeoZ7PDdStrgDTX4/3G9+BoW4K4ehef
+	C+5AH0aU0sB9NQtUVEWGLxNIPeSsB1cZKgjF1NWzFh0Pjq6Bt+oagVEu
+X-Gm-Gg: ASbGncvVsdAkFd9p3ZZAZbCEWPO2CiUe7FUwIYNmcm/glRimA6/BfBXbbt8QyAky4JL
+	bmrDcevwaiO6ETB5+RqnnoHZbDb6tVoeLPD1uHHtKr+fsprQlzVzqQXN5lunTgmF/GZRqW98Wz7
+	s0QgJSbyWiOC4ptVzU5Ti/qresNooHXwtI+P083vT+NkW2/zTSygX532RBTjjSlbztVEa49gpAm
+	Tq7VGLCk+wl4DHFJYAnaVVc+Ol+tPfdrmjATTvZ1h0c7+l8Dab2ZU+wqnSokws+9o7xHhTnFQ2H
+	jt82UggiAsZbQYwjQmSgLOrQgW59z6p5xc6INU7flakB5QxIK0rA7Q2WifyLxUXrIQkkoUVIJua
+	m4UHjD0jOF1hXE1QsscBSkcwUPE0jd1LRNA1UKfLFsaECUZe5nN9Z6PJWv6n4OQ==
+X-Google-Smtp-Source: AGHT+IHE6gXoA6t88wZi7ZU7eCEJVWZQezy7yRl0UNN5MWMdprmoF2meOuqADXbXDYLksEeDxMWHeg==
+X-Received: by 2002:a05:6a21:32a0:b0:1f5:72eb:8b62 with SMTP id adf61e73a8af0-2431b7bb318mr630218637.20.1755630694387;
+        Tue, 19 Aug 2025 12:11:34 -0700 (PDT)
+Received: from localhost (75-174-53-95.boid.qwest.net. [75.174.53.95])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b47640b6554sm359877a12.48.2025.08.19.12.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Aug 2025 12:11:33 -0700 (PDT)
+From: Darin Morrison <darinmorrison@gmail.com>
+To: a.hindborg@kernel.org
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Benno Lossin <lossin@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Trevor Gross <tmgross@umich.edu>,
+	Adam Bratschi-Kaye <ark.email@gmail.com>,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Fiona Behrens <me@kloenk.dev>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	linux-modules@vger.kernel.org
+Subject: Re: [v17,6/7] rust: samples: add a module parameter to the rust_minimal sample
+Date: Tue, 19 Aug 2025 13:11:33 -0600
+Message-ID: <20250819191133.39413-1-darinmorrison@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250711-module-params-v3-v17-6-cf9b10d4923d@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: modprobe returns 0 upon -EEXIST from insmod
-To: Lucas De Marchi <lucas.demarchi@intel.com>,
- Petr Pavlu <petr.pavlu@suse.com>
-Cc: Phil Sutter <phil@nwl.cc>, linux-modules@vger.kernel.org,
- Yi Chen <yiche@redhat.com>
-References: <aKEVQhJpRdiZSliu@orbyte.nwl.cc>
- <8a87656d-577a-4d0a-85b1-5fd17d0346fe@csgroup.eu>
- <aKLzsAX14ybEjHfJ@orbyte.nwl.cc>
- <02be4b86-330e-4f93-ba79-8218d05659ba@suse.com>
- <i4ayzta5zgltyubg6bfr4mwqhl6goyh73lyc7j7m3vngvpooi3@boorlngxpi52>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <i4ayzta5zgltyubg6bfr4mwqhl6goyh73lyc7j7m3vngvpooi3@boorlngxpi52>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+> Showcase the rust module parameter support by adding a module parameter to
+> the `rust_minimal` sample.
+> 
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+> ---
+>  samples/rust/rust_minimal.rs | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+> index 1fc7a1be6b6d..8eb9583571d7 100644
+> --- a/samples/rust/rust_minimal.rs
+> +++ b/samples/rust/rust_minimal.rs
+> @@ -10,6 +10,12 @@
+>      authors: ["Rust for Linux Contributors"],
+>      description: "Rust minimal sample",
+>      license: "GPL",
+> +    params: {
+> +        test_parameter: i64 {
+> +            default: 1,
+> +            description: "This parameter has a default of 1",
+> +        },
+> +    },
 
+Thanks for the patches.
 
-Le 19/08/2025 à 16:17, Lucas De Marchi a écrit :
-> On Tue, Aug 19, 2025 at 10:52:16AM +0200, Petr Pavlu wrote:
->> On 8/18/25 11:34 AM, Phil Sutter wrote:
->>> On Sun, Aug 17, 2025 at 05:54:27PM +0200, Christophe Leroy wrote:
->>>> Le 17/08/2025 à 01:33, Phil Sutter a écrit :
->>>>> [Vous ne recevez pas souvent de courriers de phil@nwl.cc. D?couvrez 
->>>>> pourquoi ceci est important ? https://aka.ms/ 
->>>>> LearnAboutSenderIdentification ]
->>>>>
->>>>> Hi,
->>>>>
->>>>> I admittedly didn't fully analyze the cause, but on my system a 
->>>>> call to:
->>>>>
->>>>> # insmod /lib/module/$(uname -r)/kernel/net/netfilter/ 
->>>>> nf_conntrack_ftp.ko
->>>>>
->>>>> fails with -EEXIST (due to a previous call to 'nfct add helper ftp 
->>>>> inet
->>>>> tcp'). A call to:
->>>>>
->>>>> # modprobe nf_conntrack_ftp
->>>>>
->>>>> though returns 0 even though module loading fails. Is there a bug in
->>>>> modprobe error status handling?
->>>>>
->>>>
->>>> Read the man page : https://eur01.safelinks.protection.outlook.com/? 
->>>> url=https%3A%2F%2Flinux.die.net%2Fman%2F8%2Fmodprobe&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C2c842a011e454a06da1708dddf2b37a7%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638912098887559261%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=QFjpi0HYpLQjzCxuNLgEtq44XzUbyKy8VRAGec5H7Ok%3D&reserved=0
->>>>
->>>> In the man page I see:
->>>>
->>>>             Normally, modprobe will succeed (and do nothing) if told to
->>>> insert a module which is already present or to remove a module which
->>>> isn't present.
->>>
->>> This is not a case of already inserted module, it is not loaded before
->>> the call to modprobe. It is the module_init callback
->>> nf_conntrack_ftp_init() which returns -EEXIST it received from
->>> nf_conntrack_helpers_register().
-> 
-> is this a real failure condition or something benign like "if it's
-> already registered, there's nothing to do"?
+I've been using these in a new PCI device driver module and noticed
+that the inclusion of `params:` in the rustdoc test here causes the
+`rusttest` target to fail with a linker error (below) complaining about
+undefined references for `rust_helper_atomic_try_cmpxchg_relaxed` and
+`rust_helper_atomic_set_release`.
 
-My understanding from Phil's explanation is: it is something serious 
-that says something like "There is already something else registered on 
-that UDP Port, I can't register the conntrack helper on that port".
+Building a real module and using the `params:` field seems to work
+fine though so it must be something specific to the test configuration.
 
-Christophe
+Any ideas how to fix this?
 
-> 
->>>
->>> Can't user space distinguish the two causes of -EEXIST? Or in other
->>> words, is use of -EEXIST in module_init callbacks problematic?
->>
->> Unfortunately, error return codes from (f)init_module cannot be reliably
->> depended upon. For instance, cpufreq drivers have similar behavior of
->> returning -EEXIST when another cpufreq driver is already registered.
->> Returning this code unexpectedly can then confuse kmod, as it interprets
->> -EEXIST to mean "the module is already loaded" [1].
-> 
-> well, it's not that it can't be relied on. There's 1 exit code that is
-> treated specially, EEXISTS, because that error is used by the module
-> loading part, before the module_init call, to signify the module is
-> already loaded.
-> 
->>
->> I have thought about this problem before. We might fix the main
->> problematic occurrences, but we can't really audit all the code that
->> module init functions can invoke. I then wonder if it would make sense
->> for the module loader to warn about any -EEXIST returned by a module's
->> init function and translate it to -EBUSY.
-> 
-> If it's a failure condition then yes, -EBUSY looks appropriate.
-> 
-> Lucas De Marchi
-> 
->>
->> Ensuring the reliability of the 0 and -EEXIST return codes from
->> (f)init_module should help user space.
->>
->> [1] https://eur01.safelinks.protection.outlook.com/? 
->> url=https%3A%2F%2Fgithub.com%2Fkmod- 
->> project%2Fkmod%2Fblob%2F695fd084a727cf76f51b129b67d5a4be1d6db32e%2Flibkmod%2Flibkmod-module.c%23L1087&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C2c842a011e454a06da1708dddf2b37a7%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638912098887579771%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=A2B0UH9D47p53Jif4ppLAaiDl6MDIX6ZFjUNik5Cmis%3D&reserved=0
->>
->> -- Petr
+---
 
+  RUSTDOC T rust/macros/lib.rs
+
+running 10 tests
+ii....... 9/10
+rust/macros/lib.rs - module (line 61) --- FAILED
+
+failures:
+
+---- rust/macros/lib.rs - module (line 61) stdout ----
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcVbJoqH/symbols.o" "<2 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "./rust/test/{libkernel.rlib,libuapi.rlib,libbindings.rlib,libbuild_error.rlib,libpin_init.rlib,libffi.rlib}.rlib" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcVbJoqH/raw-dylibs" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "./rust/test" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/tmp/rustdoctestTFYhZ1/rust_out" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: /usr/bin/ld: ./rust/test/libkernel.rlib(kernel.kernel.a8a3768e1a8b2c2e-cgu.3.rcgu.o): in function `kernel::sync::set_once::SetOnce<T>::populate':
+          kernel.a8a3768e1a8b2c2e-cgu.3:(.text._ZN6kernel4sync8set_once16SetOnce$LT$T$GT$8populate17hab8d57b99b7ebbcbE+0xd3): undefined reference to `rust_helper_atomic_try_cmpxchg_relaxed'
+          /usr/bin/ld: kernel.a8a3768e1a8b2c2e-cgu.3:(.text._ZN6kernel4sync8set_once16SetOnce$LT$T$GT$8populate17hab8d57b99b7ebbcbE+0x2a8): undefined reference to `rust_helper_atomic_set_release'
+          collect2: error: ld returned 1 exit status
+          
+  = note: some `extern` functions couldn't be found; some native libraries may need to be installed or have their path specified
+  = note: use the `-l` flag to specify native libraries to link
