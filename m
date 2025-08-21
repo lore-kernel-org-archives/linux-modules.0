@@ -1,93 +1,91 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4724A1F948;
-	Thu, 21 Aug 2025 19:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F09928136B
+	for <linux-modules@vger.kernel.org>; Thu, 21 Aug 2025 23:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755804315; cv=none; b=RiYvaGqTsWBWStynGOECMG0+LZm+T+Du++SozCfu6y94oczLok09Vwx3ZMIBNFOJ+Iybyh6L65iZjak/HEFO5FijsAboovDixiEubI2LBGZceOU94ujq0W0UBuYTc6sTimDyTQoY+QMWEGqeXmryJkT76wsPeyGFZgylwc9+U+0=
+	t=1755817870; cv=none; b=gkcQetemDygbz4V8pveqKG2F0tdbSxBndYfIVL7d3EuQT//FqFMrk5tnWnpd2F61UkV7oK9tiXl225UDGriHr20slX3b89EaNyuUqXLNMNfHzun+1CVG8ltGNuhdJ/J2pBivvtC9Z6g+kRd7oXg0rgElNQsIEqN1aXDxskOhwaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755804315; c=relaxed/simple;
-	bh=hGBRAm2pJ2TGTxPHI6wNV37hN/B9Cqnijx7TVlmJ478=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dOWvvh6W/7jLz8KUoKlRpvnSg8V1W7XHwDrtzJ6UPVaAm1CFDyKROXQSHW0E0iKEDHV8ztp3I1zPxIH3BCMMrptJX8dMQqLzGt8sGY7s3vVD3DiEcaVGQAY0Ccsxf/BdMB/h2yVSNQSZD+LOqptbR6w1Y9vv3QzH2XJQDzloyNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay05.hostedemail.com (Postfix) with ESMTP id DFB08591EC;
-	Thu, 21 Aug 2025 19:25:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 09C846000A;
-	Thu, 21 Aug 2025 19:25:04 +0000 (UTC)
-Date: Thu, 21 Aug 2025 15:25:09 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andy Lutomirski
- <luto@kernel.org>, Borislav Petkov <bp@alien8.de>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Daniel Gomez <da.gomez@samsung.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>, "Liam
- R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain
- <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
- <peterz@infradead.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Thomas Gleixner <tglx@linutronix.de>, Yann
- Ylavic <ylavic.dev@gmail.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v3 8/8] x86/ftrace: enable EXECMEM_ROX_CACHE for ftrace
- allocations
-Message-ID: <20250821152509.391c1ebe@gandalf.local.home>
-In-Reply-To: <aKa4otIF6AbhD2X3@kernel.org>
-References: <20250713071730.4117334-1-rppt@kernel.org>
-	<20250713071730.4117334-9-rppt@kernel.org>
-	<20250820184743.0302a8b5@gandalf.local.home>
-	<aKa4otIF6AbhD2X3@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1755817870; c=relaxed/simple;
+	bh=oyKY07/INwHK5W8rJvhyC42nOS23W04zRzQQa6+Y5HA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C1/0tKD4cIK3Vn5U2Qu1e/oZejRbFrABvAu5LvxN42BjYMgmSFOIjpzBXdUPUv2mA6IKOc0XGb7lPn1jskH8L8hN44IIZASa0LRt7IoFQ86+1zebzeoqBPx/WXscEIpn3Bwkxx+1A+QJYQE+nesUgrEHtg/k+gsZLWnmjKmcfUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FoDWQDRV; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FoDWQDRV"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-24611734e18so33955ad.1
+        for <linux-modules@vger.kernel.org>; Thu, 21 Aug 2025 16:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755817868; x=1756422668; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oyKY07/INwHK5W8rJvhyC42nOS23W04zRzQQa6+Y5HA=;
+        b=FoDWQDRVJdAAy/6b2n/cI05N9Kz0auaOdpSOMm6BjTMuWsuh35Qxqr0IJRnIAWwyb2
+         v49M/SvajLhGEy/gNuJixKIt0XMs+NmeKf1lnZv8+yV5bpDMheBB5eq5AarB/zctIJw8
+         LVhHcXy1UTtiMqFGiWyIdAycNDXhN2JYM0f5iYUPEY0ol1rnYpMv9TMa7ELe0LA1jgiL
+         +fFaKW+KNloi8GuoLo9CrPqLm8/SqMR0XmM9wXbGpIDTSC/NYFyXryoTd0DKYsAPPGsJ
+         l0uLHnf/GrWm972CnEJXM2mPv8JwMdVrY1Mn3mouBvkPP7IEyDMQ9ov/lR8Z/oSRpaNp
+         reKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755817868; x=1756422668;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oyKY07/INwHK5W8rJvhyC42nOS23W04zRzQQa6+Y5HA=;
+        b=H97BL/BaPjxqlhHcf3hOSux7gv4OUq4AuUNBofoYM/Yc8TB8ol4z2hiPnkeNwqybwY
+         o7JVLzWpxXBelpyJYTjomvd645Tvt0eapbrQBccaw03SsmP1FC/h88JJ8QFOlubFijCq
+         GUu88kxYWyQd1SiLuk7iUBQSDpokIzkl28zQvWwk5cHQY4fOnsyX8AmAbKcB0f5JQJaU
+         6tFj6OjtH7wH98+goaMXHy2gituWfri7Ynz+64JJeUU+HJeim7y+APL6O4J7KRywTr1w
+         B1Qdg0HNvwU9ZwT9YVsaNmWjIt1Ktj703HtmrDZwzvrWHnCbaenRNjOy9nePPx81JWL/
+         5SDg==
+X-Forwarded-Encrypted: i=1; AJvYcCUYdE5+RvUEUvWAmDIMenKC9QGWpep+EZ3g+exOTvrXB5bhDZZoB5fkamFJpGtPUVN6MB89U5O8QpR1VrwV@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeqwXznGpcbU8UmpjUCRz9VnN3o3OgAzXy0dms0zVZsR0CUrtL
+	lXWl4D4CcoSScL3+aUmKYwhiA/eC/SC1TIaWJVRJLYVBdSRKgi+/2EqAz7zhpamZCCsCXm2dTsI
+	8QNIerXiGZto9WO/GiVE1Wr5e4bCa95sQKt8uXOea
+X-Gm-Gg: ASbGnctkPXhCyw1Qz7YK7w5Qz10TS+E0QhyHXvA5TDjr/VpQ0jklWxFvtppbVtPeiSC
+	h+YziksZaZ/ubfeVkef3s0iqIobuZVqdz67gMkcNBKRqU2SKDEYnZTBcapXV5fnHVmr1klTpUEk
+	9tQOswN63eZ0/EK5Ne1YPjwkILEN3o4i1wlnpgr/gy3RhVbFT/kDlJRoVXZJEZsiPw/q76Aslfp
+	QNjsBeBOa8=
+X-Google-Smtp-Source: AGHT+IHMkq+K12+g+sEPaH5nrWLu2Vc9mkfwX/OMztYDbNCV9MMh6/uJ9JXM5YbjnlbFQzgQhGYYxAZQd1a2jF+Uodg=
+X-Received: by 2002:a17:902:e809:b0:243:597:a301 with SMTP id
+ d9443c01a7336-246327944afmr1835075ad.2.1755817868075; Thu, 21 Aug 2025
+ 16:11:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: cyn6qk3us8ocdtde5jpyb3zckzedttjn
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 09C846000A
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+CMQG1BETxfdgNxC+cxIEgpiTvO2qKdGo=
-X-HE-Tag: 1755804304-494471
-X-HE-Meta: U2FsdGVkX184fcxufunVUclfn8DfVrb7JSHS5xeDl0+1DGaNCkqXSAQB78+nX+M9qFzJ+XEGE2xq2wEmhekhDhz0ls29PxPTia0KyCKj2DS3zUHhUKuOG29rvKqA+da4TRvTzYXkmRMxM9yYhP18JaBtbtIBqbDN8KtB5JlbHT5fUu9woGnAPIAoY03eAKVC7nP20wT5veRaNV7o/14O3bY+RR1I2T2s4pkHB1P2h+mTipvoybEfHmn99WxpnapDf4+skh9FOH6Xu6SLdfXz2koCvyMhzz1Aqg8laodsKkDWG+QUPEdGygjNSu+CKwtFaktA/6OzKZRKcuRIwbXZLnWXVDAgIOzhUUC3b75/yXlYBgamghT2isHwhNVCZfb5pWzA9SRRaB2BrM3UVRUBdg==
+References: <20250819121248.460105-1-petr.pavlu@suse.com>
+In-Reply-To: <20250819121248.460105-1-petr.pavlu@suse.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 21 Aug 2025 16:10:31 -0700
+X-Gm-Features: Ac12FXwQzn6UYBxjGSTs2pNIL46Ww1C8DAoY0lOp82FnSFRz3SdaQdQtgKNLjWI
+Message-ID: <CABCJKucZ1WxDzROye-7cN3wFujV7k7pLsLXLd3Uk_fpgn0XVfw@mail.gmail.com>
+Subject: Re: [PATCH] params: Replace __modinit with __init_or_module
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Shyam Saini <shyamsaini@linux.microsoft.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 21 Aug 2025 09:11:46 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+On Tue, Aug 19, 2025 at 5:13=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
+ote:
+>
+> Remove the custom __modinit macro from kernel/params.c and instead use th=
+e
+> common __init_or_module macro from include/linux/module.h. Both provide t=
+he
+> same functionality.
+>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-> maple tree is initialized after ftrace, so the patch below should fix it:
-> 
-> diff --git a/init/main.c b/init/main.c
-> index 0ee0ee7b7c2c..5753e9539ae6 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -956,6 +956,7 @@ void start_kernel(void)
->  	sort_main_extable();
->  	trap_init();
->  	mm_core_init();
-> +	maple_tree_init();
->  	poking_init();
->  	ftrace_init();
->  
-> @@ -973,7 +974,6 @@ void start_kernel(void)
->  		 "Interrupts were enabled *very* early, fixing it\n"))
->  		local_irq_disable();
->  	radix_tree_init();
-> -	maple_tree_init();
->  
->  	/*
->  	 * Set up housekeeping before setting up workqueues to allow the unbound
->  
+Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
 
-Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Thanks,
-
--- Steve
+Sami
