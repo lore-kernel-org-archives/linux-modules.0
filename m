@@ -1,62 +1,64 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF39199FAC;
-	Fri, 22 Aug 2025 12:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9842FFDC0;
+	Fri, 22 Aug 2025 12:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755867311; cv=none; b=Qp2sKS2g59Xs3nqRQulzHbBboNY1QgCYSiMa0GUYj63WHALiFrt3R2fGxfCChnGeQ3eO/IK6H7vdAU1T9tJ1GuIipJnhFrYOj/rK/8QRhrB3Q17mOFLTRJWCzI1is2udeKACEvFdlHLUrn7jCxLO4MQiZAHRycVPQ1YAP9phsCY=
+	t=1755867315; cv=none; b=LwBhJ79KsfAU44No6SovjMEA8WplFNHoC9F3Ot1b4k9zsb12cqSM7gEB2qvzgkndwXjFs6DI3ESdcIcFqOsaTdSST+FHOhIDcLIE4dIdbghljxTCVKRRIz8kv7+L8XKBtCYADI9iyQiQGLExQsHUgT7SPPAn3fr3DqH6vr5h2KU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755867311; c=relaxed/simple;
-	bh=O+dmbiGEj8F46QTVyVP57VP1t3B7/OZvoSp/KF+0DlY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g0brTVauRiyu7SaaV7JP+f2lWqFTygMgpcOh9jynchQc2PFfh9A396w6nsm25HV0W/jqG7ggxnOFQFv3N4dCXLSI132uNQ5eZ3hA975CixErKUmghiPackLsVgRsNawsx3iXDZcn7mWUFuSrH/gJNwwvVgDYySuRG8QS99uACio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fpzh8o+b; arc=none smtp.client-ip=209.85.215.181
+	s=arc-20240116; t=1755867315; c=relaxed/simple;
+	bh=cc1YcKNcOVER/BJnebgIiOmQeCW29Uu9swkM5huo7Zw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Mt5sB7Nn+zbl0wwOe5gHeR/qEkSCBF+Zt3SFreDkiL+mcSqh5R91ihYeIc3i8ObHU5z2s+bjWxQfpLpDPRIaJPS6NTvodKCpy+XmnfWVJFCpSRuCNz/y6w7P8YKwHvVwSmE+tYEzs7Ya39CE3HhiCsYR5k8SLePEQMRg0DAe7Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WQ8Favpd; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fpzh8o+b"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b4717330f9eso1448404a12.1;
-        Fri, 22 Aug 2025 05:55:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WQ8Favpd"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2445806d44fso16998575ad.1;
+        Fri, 22 Aug 2025 05:55:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755867310; x=1756472110; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YeEm17f+SxN+MAIvXYQ6rN85sdmuGJRyZf4VEhc4oUU=;
-        b=Fpzh8o+bgXx7VkVR2jAuLfGYkkcH5S6WK+flWtjDo65Ht6DbmiOImY6zsXT+XIC2XZ
-         OGEtMkLI/mti05Hn+Og9PCXb2dTdEfzmb1A6CUf+NyEWt3OvSQ+upDzfkId4J/Bk4VqJ
-         oBgWZJoR2L3BnJOmyvllw9PlJsWhXDE2t5BeMChF95zjmUxJvBuOOpDpy9X3Kgu9SnQN
-         DuIDHqG5ALyT3javrPpY6Ijr+otEXvgR5EA+Eo1DuUy4mGRmIjxMC3LMBvXFROCPbDEB
-         lK4KaC2hm9bDKSekTQl4xD/GwH8WNM0XSl0q8llSaWzJGylHGWg3Yyso2HVOpeg+TkI4
-         0RIw==
+        d=gmail.com; s=20230601; t=1755867313; x=1756472113; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Auao9O9XW0mCi9qR7BGk43RqbCNdwrXU+TczfeHm0X8=;
+        b=WQ8FavpdjF04/k8/xDYOhqvF5PRUCIpf2x5q/lhNC93fNvzJGyREVSxV1F177ObRkS
+         +5+oCeG10pN1+X6cvGzscJ08Qm93eMGReOveRQdMt1xVVCp+AJ6kU2cp4La5nLFKJCqn
+         WhDZpNyUNHI7aphB487f044PEvm6r49Qq131QgYBW8Em2D2OeXzRPCdbFm9dxeKEGFPL
+         OdBbsZlbGKwYLhQ9fe1mEzTPK+KHGN0n03mX9wa7Um+WQ0NWy0cbMgP/fIGo2Jg0K2GP
+         sJGIOstJ6XOxpwpaQi2On61UWcISqdPtP6F1A5JES2fpH+l78E337GFXuOt3Vi3F9Pjy
+         8URQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755867310; x=1756472110;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YeEm17f+SxN+MAIvXYQ6rN85sdmuGJRyZf4VEhc4oUU=;
-        b=p/CjSgJ3tD5D1XypMw22OYEAMWFgwXZtE3F+p2ATUhIJI7RmRWtSkEPNoT8UjTWWQG
-         wJnwnvVNDlr5dgpU5L+iOT3RkLunkfAkcxc/IAt5CiCmU0fL/2DIYrHT6i28KHHb4Q4m
-         UuW4MvAiltZHqL0fnYRV0c+4qCRSoncZf6g4/hI3Z5IRHCncT9v3PfKLe+vxtAskmHXj
-         rnfdprY7vXN4vvSuycX2p7tSWpkXn8q7DZQNQpTq1XY+mARQHTv7WpQv6qiuDp4ettGl
-         rwJrSceAMSfFtBvXqM4BrfTS34DD5J2MVR1Pi4XSyJRKSjn5hJe9cshtfeVJV/E8ebBf
-         UFIw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1yn9Cz6jFJkB3fOSJif4i76wUVK3+3+IZtqS9PnwojG8LxQP5RJ+rWELqmXukcg4+j27cxuIssIpMCLk=@vger.kernel.org, AJvYcCV6luGR0zJ9xSeUiJOtoRIQkAr3D9n3CbCUNyqK/pr7wE8CID2RQ9/gXJGpaZJiTgljkv9o57RS+hKqewTriA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz060gCcltqEE50IAHA4mUwkfw47JnwyCDmu0aqj74QySAgaoQX
-	zcAFVcISJehvLniiI4i3tBj7Y5T1gy/CLDg0NRgpJGhC02DW3Lb3HSpJ
-X-Gm-Gg: ASbGncub+/Zhq1d6KKtkElkmTanDGu7sJ9KKJuNzDZD22aW1J82vs6OFVkMcAbm0xR4
-	DXaXMtoo0LA6AdepD18qsVCtkNGTF4gK39jVUUQCEzGz9tlGND1t8XugVMK2xA7NRfB+xtE8muU
-	Vw774T1QwxR4klLnuduZ1dn4P2T86VCNwqgEIpLh5dBQ9xpy0ZTVkCa5yZ3Xeb58HVORNEIMaNY
-	hDiLVm3Dpw5ByBvIi9xVavF56ltjpIWeVYditraTZlLCl7HPKN9cQys+jDbWFXIeO36W+WYhYiW
-	S5XKUbXFjjhe7aLsBRAS8VSkUvJ1qICI0yh3oyGuSSUcL90AXlDsMZIN+wApWBnXgZDkFPnVFyA
-	jHbR1memM8iqowQS+O3JwMCkoeyEqJZ1IVtdzZKGiTUv0M9Aa5VP8kZniF129/hU1LzUpcM0+MZ
-	A=
-X-Google-Smtp-Source: AGHT+IFgOU+qUZBP02uevKCYNqgjB3GnS0PwtJ2Pjgl76CyFA+zLtwYIxb9Gb7VERWn+wtTilxreIg==
-X-Received: by 2002:a17:903:1251:b0:234:a139:11fb with SMTP id d9443c01a7336-2462ee88d12mr37661165ad.27.1755867309657;
-        Fri, 22 Aug 2025 05:55:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755867313; x=1756472113;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Auao9O9XW0mCi9qR7BGk43RqbCNdwrXU+TczfeHm0X8=;
+        b=C1zDChoe1vsFPUha8wUU2i4YpCEWUwkjE8vZ8bMuyMhhQk7YCzzdyMYjskXQ9U772n
+         8HRjue0VXmB00dHb+sy3g0bSaqA3iuSuIBc2+DDrbPVtadkNNwUJ9ANSyogUccsTzD4I
+         1GrJRm85SGA7v9k2+w2ED6M8VyW6KOhkpddaGxQfhE6SqcB6FXEM7n0HGrdWtSt+Kpcb
+         CIOQbZLeFoz5y+Ekkwzjuv1JY/niVlwf4CMfrT6T5YYapEA0P6e62jyn22M82YCt6yyv
+         NHPa/liBdR63aBCrO3mMAXpInG/BRnO7zT2jbZhUCZVNOdGgebtcmsNgqLeiBhiNMprD
+         3kBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAs4Cl6tIAiPMqrZKood5nCaWcjJEUCMU5nBiDnA+BHNQ9t4OrPUMFyWcBza1QtOvS5dUWNkzGAjvTwc0=@vger.kernel.org, AJvYcCUTyzx8GILdTXt1ivlQaczcL2vcBJ/zmQzenG07p/Eapj7sZyHZO1dhriZKVR4gqh5X3xNVX2w+N15jljBY6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzfl3BM9txZMz4BMQZaSClPzKpXgPUAwvoxM2aLaQhExl8hpT4W
+	P1rHtN3jhOmW4z+a2E1wmgB5dBjgBjkViEpN5LQSPp/QS5ZFSU16y9vUR/cQuEeN6ic=
+X-Gm-Gg: ASbGncuuPH2rnsOtQ5CiQkpMpiYQWFwewBuhSrxKZmmKlPuksxXq4VDkJNHFHNJc1U5
+	U1CGoevC3y848u536a4nZBh6/JRKF0m0aw5eARlym6RcEm+vBzLlLagGlBlGWRxXJa8/egofpci
+	8DpFAc0l5AYxWcdQTfMkOJQMADqNulSm7QTCqet6pkIsP8NDyeKEqnCfeZcn83ZAaPQxYX5j2El
+	voU0t/f6E7vCWcejXdHwI8BwtHgbEBUuu7LtTq6qkbI5OBMDmZPFz/46pYFtRilL10Rtgd1U914
+	cp0naJ8FrpkzVVZ98p+aOoC5fZp2pJby5DXVnUVTJ0U9MX4piIcIVSG8uOoh2PQBX5/MBHwoRL+
+	VbUpc+qU7K7MdO2k9tlxARcBvFbLpiqcCK+H7aryaP2KxW97iPi//ULtGCXi07oF1Jpc7Mqmk+9
+	I=
+X-Google-Smtp-Source: AGHT+IGHI61zvE7JJ234p6bRyxrJOBmVEDE9oigLD8aVog4RR7unS3GkhGneqzRYfXXj/vITAuJ9vQ==
+X-Received: by 2002:a17:902:ecc6:b0:243:485:26a5 with SMTP id d9443c01a7336-2462eeb70abmr40895455ad.34.1755867313236;
+        Fri, 22 Aug 2025 05:55:13 -0700 (PDT)
 Received: from localhost.localdomain ([114.242.33.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed377843sm83617285ad.57.2025.08.22.05.55.05
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed377843sm83617285ad.57.2025.08.22.05.55.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 05:55:09 -0700 (PDT)
+        Fri, 22 Aug 2025 05:55:12 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -65,10 +67,12 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH 0/5] Module loading error handling improvements
-Date: Fri, 22 Aug 2025 20:54:49 +0800
-Message-ID: <20250822125454.1287066-1-wangjinchao600@gmail.com>
+Subject: [PATCH 1/5] module: Fix module_sig_check() for modules with ignored modversions/vermagic
+Date: Fri, 22 Aug 2025 20:54:50 +0800
+Message-ID: <20250822125454.1287066-2-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250822125454.1287066-1-wangjinchao600@gmail.com>
+References: <20250822125454.1287066-1-wangjinchao600@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -77,29 +81,56 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series addresses several issues related to module loading error
-handling, particularly around force loading and signature verification.
+The current signature check logic incorrectly fails modules that have
+valid signatures when the caller specifies MODULE_INIT_IGNORE_MODVERSIONS
+or MODULE_INIT_IGNORE_VERMAGIC flags. This happens because the code
+treats these flags as indicating a "mangled module" and skips signature
+verification entirely.
 
-The most critical fix is in patch 1, which resolves a bug where signed
-modules were incorrectly rejected when loaded with the -f flag (force
-load).
+The key insight is that the intent of the caller (to ignore modversions
+or vermagic) should not affect signature verification. A module with
+a valid signature should be verified regardless of whether the caller
+wants to ignore versioning information.
 
-The others improve the user experience when troubleshooting
-module loading issues while maintaining the security guarantees of
-module signing.
+The signature represents the authenticity and integrity of the module
+content, which is independent of version compatibility checks. By
+removing the mangled_module check, we allow signature verification to
+proceed for modules that have both valid signatures and are being loaded
+with version checking disabled.
 
-Jinchao Wang (5):
-  module: Fix module_sig_check() for modules with ignored modversions/vermagic
-  module: signing: Use pr_err for signature rejection
-  module: show why force load fails
-  module: centralize no-versions force load check
-  module: separate vermagic and livepatch checks
+This fixes cases where modules with correct signatures were being
+rejected when loaded with modversions or vermagic ignored, even though
+the signature itself was valid and should have been verified.
 
- kernel/module/main.c    | 13 +++++++------
- kernel/module/signing.c | 15 +++++----------
- kernel/module/version.c |  9 +++++----
- 3 files changed, 17 insertions(+), 20 deletions(-)
+Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+---
+ kernel/module/signing.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index a2ff4242e623..9e24c79499de 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -73,15 +73,10 @@ int module_sig_check(struct load_info *info, int flags)
+ 	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+ 	const char *reason;
+ 	const void *mod = info->hdr;
+-	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+-				       MODULE_INIT_IGNORE_VERMAGIC);
+-	/*
+-	 * Do not allow mangled modules as a module with version information
+-	 * removed is no longer the module that was signed.
+-	 */
+-	if (!mangled_module &&
+-	    info->len > markerlen &&
+-	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
++
++	if (info->len > markerlen &&
++	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) ==
++		    0) {
+ 		/* We truncate the module to discard the signature */
+ 		info->len -= markerlen;
+ 		err = mod_verify_sig(mod, info);
 -- 
 2.43.0
 
