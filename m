@@ -1,92 +1,105 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEA526F476
-	for <linux-modules@vger.kernel.org>; Thu, 21 Aug 2025 23:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF39199FAC;
+	Fri, 22 Aug 2025 12:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755817932; cv=none; b=f4HiE8NN+fvGFIdvGmwda8q6l+3pK1AhopCZR6MSAdxA/aQMbYAFVnOxmz8/aBZzYMWd6X+gKIg1hRgQYjZAP9HLPM7XSSuwwZ//spjmBufiYsNrO80tuC44MRYLdA4dnuBkBvGR7I43/QF9lnKeOPcMgH5SZpAWcyZcxb2llNI=
+	t=1755867311; cv=none; b=Qp2sKS2g59Xs3nqRQulzHbBboNY1QgCYSiMa0GUYj63WHALiFrt3R2fGxfCChnGeQ3eO/IK6H7vdAU1T9tJ1GuIipJnhFrYOj/rK/8QRhrB3Q17mOFLTRJWCzI1is2udeKACEvFdlHLUrn7jCxLO4MQiZAHRycVPQ1YAP9phsCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755817932; c=relaxed/simple;
-	bh=JIel/FR57SwJcaLONH4epvfKs5IZENednDBecALaL5o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N8ORNKXHKMScrwrUGkyIvkoshwNgBur5QUanPjqC6VqQ9+wYGXnmjLpjlOIBrtOj6wkETP5C5I1bV6PB/4m39R85x5pqMj5yM9A6x9UW9Z6/ILhBvgP6JRSxy3RL3CxCdyvPdD8P6KuHpWJQyPATWS8DhomY+Q9yi1s2dDw6lyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vqYXcXHp; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1755867311; c=relaxed/simple;
+	bh=O+dmbiGEj8F46QTVyVP57VP1t3B7/OZvoSp/KF+0DlY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g0brTVauRiyu7SaaV7JP+f2lWqFTygMgpcOh9jynchQc2PFfh9A396w6nsm25HV0W/jqG7ggxnOFQFv3N4dCXLSI132uNQ5eZ3hA975CixErKUmghiPackLsVgRsNawsx3iXDZcn7mWUFuSrH/gJNwwvVgDYySuRG8QS99uACio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fpzh8o+b; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vqYXcXHp"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-246257e49c8so83255ad.0
-        for <linux-modules@vger.kernel.org>; Thu, 21 Aug 2025 16:12:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fpzh8o+b"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b4717330f9eso1448404a12.1;
+        Fri, 22 Aug 2025 05:55:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755817930; x=1756422730; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIel/FR57SwJcaLONH4epvfKs5IZENednDBecALaL5o=;
-        b=vqYXcXHp5JhOaiVUadP5NSpBdFBBB5wBmhejZKZqrHVeZ04B1HOlNYGrrnnM63shg6
-         zRhNPcYpU14pHCrkb6r3KX1C0IqDrhv1k/h3lZ+nlvgqxS9kiMDkK9RASTPC2r32p4+f
-         KBb0mdbNiTOhmfCxnWL6UmBZafrT3IAUx9A06p7JrpcEozj+nHwA4L4ZcgHCgm+jxRd3
-         NfwaT98HGycA0yOA+5POUKdrfinWfZUb+p6L5VN1qNOh1SbjN5v8f63R161FAJS9Q2st
-         gLbqvlMdsFnkqqkKZTRCuMP79Jz+N5xLgfYVXpwVUIfHgTpQBEYTGr6t2wZXi2nAcu/z
-         SmSA==
+        d=gmail.com; s=20230601; t=1755867310; x=1756472110; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YeEm17f+SxN+MAIvXYQ6rN85sdmuGJRyZf4VEhc4oUU=;
+        b=Fpzh8o+bgXx7VkVR2jAuLfGYkkcH5S6WK+flWtjDo65Ht6DbmiOImY6zsXT+XIC2XZ
+         OGEtMkLI/mti05Hn+Og9PCXb2dTdEfzmb1A6CUf+NyEWt3OvSQ+upDzfkId4J/Bk4VqJ
+         oBgWZJoR2L3BnJOmyvllw9PlJsWhXDE2t5BeMChF95zjmUxJvBuOOpDpy9X3Kgu9SnQN
+         DuIDHqG5ALyT3javrPpY6Ijr+otEXvgR5EA+Eo1DuUy4mGRmIjxMC3LMBvXFROCPbDEB
+         lK4KaC2hm9bDKSekTQl4xD/GwH8WNM0XSl0q8llSaWzJGylHGWg3Yyso2HVOpeg+TkI4
+         0RIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755817930; x=1756422730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JIel/FR57SwJcaLONH4epvfKs5IZENednDBecALaL5o=;
-        b=RqL9PPM8SnFKUXQsWe+Gu63ONTQLjiCGG9+0CtsQwfRHqCjjLTf5/jPIcz6yFcj6d6
-         c71qqxZuZ7F+VidmNzoVHMSpLe2Z4fprcXZKMGLTYleW7RsMXY9Num77wlW4ZFnZJtWM
-         2M4l4jdX2sVqUn0CkUYH/u06i67TOl4B7wwATZZ1ApO1uFoYOafFWa2vfeP4lPl3cx5l
-         746Tig7wWi92FGe/Lr4MT3lOZaYeCnbrgas+O07SE0iMnVHwMAgNNf3SvTP0OScOKnmZ
-         NL9Bvx6BEQjAv+YnNGSjgh6LJpwWdVx7SUg5JPfOUtdfH+HEgsjriba6+VqmPQCAlJp9
-         WtmA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVVBPdc0CZMPO28IDKdTPIxFLOJov3J/SmmcGrv5tLvn4rUeXAqyBc0pbH38nvLXTXl+kXmlVivLZ9sES7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6qeXeEz236/SAHG40hdlEGn9TcWJHsAPS899QU1QVttGvin3T
-	RyZopdtdRQer4ostlEdA+p153kUyEWvsAPo93lekop2bkib+NJCb8sJv77GJKINi2iaOnO1BFLf
-	vCoX2sZeSPX7kPJr8TKeW2lDiLlueFhfA98EtjyHE
-X-Gm-Gg: ASbGncv04IYcBG6TnNuSkd2CYACSUqGZSeqFZWwWHqPiINZEYRWIzdBVrQikIcrwsin
-	lmwq0yVxHLgElPLge9j2FHH27j4riU1fK81PZuMX9YPoLSmYhQl9pCZs72zV2VcJuLLU/bHEFYy
-	C/TpXauG1AmR+yDv6TIccTeriyxHribHt+N+gWk3uMzrdwPRQ2mXnzctunwcMHVDlO0nZX/H2D6
-	GdrWEmxqp7w8XeFvzSa+w==
-X-Google-Smtp-Source: AGHT+IF8QmYd0K/VI5mJAgjeH3O4OfadWqimUtglUq+qrkzfyXjMxzaiIIau5t02eTFPYvM/Nzmw/35u9YfJlun7tWM=
-X-Received: by 2002:a17:903:32c3:b0:240:640a:c564 with SMTP id
- d9443c01a7336-24639f23c10mr767135ad.3.1755817929833; Thu, 21 Aug 2025
- 16:12:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1755867310; x=1756472110;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YeEm17f+SxN+MAIvXYQ6rN85sdmuGJRyZf4VEhc4oUU=;
+        b=p/CjSgJ3tD5D1XypMw22OYEAMWFgwXZtE3F+p2ATUhIJI7RmRWtSkEPNoT8UjTWWQG
+         wJnwnvVNDlr5dgpU5L+iOT3RkLunkfAkcxc/IAt5CiCmU0fL/2DIYrHT6i28KHHb4Q4m
+         UuW4MvAiltZHqL0fnYRV0c+4qCRSoncZf6g4/hI3Z5IRHCncT9v3PfKLe+vxtAskmHXj
+         rnfdprY7vXN4vvSuycX2p7tSWpkXn8q7DZQNQpTq1XY+mARQHTv7WpQv6qiuDp4ettGl
+         rwJrSceAMSfFtBvXqM4BrfTS34DD5J2MVR1Pi4XSyJRKSjn5hJe9cshtfeVJV/E8ebBf
+         UFIw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1yn9Cz6jFJkB3fOSJif4i76wUVK3+3+IZtqS9PnwojG8LxQP5RJ+rWELqmXukcg4+j27cxuIssIpMCLk=@vger.kernel.org, AJvYcCV6luGR0zJ9xSeUiJOtoRIQkAr3D9n3CbCUNyqK/pr7wE8CID2RQ9/gXJGpaZJiTgljkv9o57RS+hKqewTriA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz060gCcltqEE50IAHA4mUwkfw47JnwyCDmu0aqj74QySAgaoQX
+	zcAFVcISJehvLniiI4i3tBj7Y5T1gy/CLDg0NRgpJGhC02DW3Lb3HSpJ
+X-Gm-Gg: ASbGncub+/Zhq1d6KKtkElkmTanDGu7sJ9KKJuNzDZD22aW1J82vs6OFVkMcAbm0xR4
+	DXaXMtoo0LA6AdepD18qsVCtkNGTF4gK39jVUUQCEzGz9tlGND1t8XugVMK2xA7NRfB+xtE8muU
+	Vw774T1QwxR4klLnuduZ1dn4P2T86VCNwqgEIpLh5dBQ9xpy0ZTVkCa5yZ3Xeb58HVORNEIMaNY
+	hDiLVm3Dpw5ByBvIi9xVavF56ltjpIWeVYditraTZlLCl7HPKN9cQys+jDbWFXIeO36W+WYhYiW
+	S5XKUbXFjjhe7aLsBRAS8VSkUvJ1qICI0yh3oyGuSSUcL90AXlDsMZIN+wApWBnXgZDkFPnVFyA
+	jHbR1memM8iqowQS+O3JwMCkoeyEqJZ1IVtdzZKGiTUv0M9Aa5VP8kZniF129/hU1LzUpcM0+MZ
+	A=
+X-Google-Smtp-Source: AGHT+IFgOU+qUZBP02uevKCYNqgjB3GnS0PwtJ2Pjgl76CyFA+zLtwYIxb9Gb7VERWn+wtTilxreIg==
+X-Received: by 2002:a17:903:1251:b0:234:a139:11fb with SMTP id d9443c01a7336-2462ee88d12mr37661165ad.27.1755867309657;
+        Fri, 22 Aug 2025 05:55:09 -0700 (PDT)
+Received: from localhost.localdomain ([114.242.33.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-245ed377843sm83617285ad.57.2025.08.22.05.55.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 05:55:09 -0700 (PDT)
+From: Jinchao Wang <wangjinchao600@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jinchao Wang <wangjinchao600@gmail.com>
+Subject: [PATCH 0/5] Module loading error handling improvements
+Date: Fri, 22 Aug 2025 20:54:49 +0800
+Message-ID: <20250822125454.1287066-1-wangjinchao600@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250819121423.460156-1-petr.pavlu@suse.com>
-In-Reply-To: <20250819121423.460156-1-petr.pavlu@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 21 Aug 2025 16:11:33 -0700
-X-Gm-Features: Ac12FXzZLbDJuAQzCBqrbxADBxinz6u05a7iaZuaDPd8ioxW8irI--KZO5WfYzg
-Message-ID: <CABCJKufX=ayzyb-0pGpLvT5ULdQcp6BeM06AVfLdEEN5-r4-tw@mail.gmail.com>
-Subject: Re: [PATCH] module: Remove unused __INIT*_OR_MODULE macros
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 19, 2025 at 5:14=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> Remove the __INIT_OR_MODULE, __INITDATA_OR_MODULE and
-> __INITRODATA_OR_MODULE macros. These were introduced in commit 8b5a10fc6f=
-d0
-> ("x86: properly annotate alternatives.c"). Only __INITRODATA_OR_MODULE wa=
-s
-> ever used, in arch/x86/kernel/alternative.c. In 2011, commit dc326fca2b64
-> ("x86, cpu: Clean up and unify the NOP selection infrastructure") removed
-> this usage.
->
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+This series addresses several issues related to module loading error
+handling, particularly around force loading and signature verification.
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+The most critical fix is in patch 1, which resolves a bug where signed
+modules were incorrectly rejected when loaded with the -f flag (force
+load).
 
-Sami
+The others improve the user experience when troubleshooting
+module loading issues while maintaining the security guarantees of
+module signing.
+
+Jinchao Wang (5):
+  module: Fix module_sig_check() for modules with ignored modversions/vermagic
+  module: signing: Use pr_err for signature rejection
+  module: show why force load fails
+  module: centralize no-versions force load check
+  module: separate vermagic and livepatch checks
+
+ kernel/module/main.c    | 13 +++++++------
+ kernel/module/signing.c | 15 +++++----------
+ kernel/module/version.c |  9 +++++----
+ 3 files changed, 17 insertions(+), 20 deletions(-)
+
+-- 
+2.43.0
+
