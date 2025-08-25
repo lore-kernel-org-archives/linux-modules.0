@@ -1,64 +1,64 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A542D0616;
-	Mon, 25 Aug 2025 09:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840902D0C72;
+	Mon, 25 Aug 2025 09:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756113358; cv=none; b=NK/baH1WK2BeGf+BFdcl0/BFFDh7IAPwFcRr0+6O6eCJkomcxFNMg8L7rcXCAiUmxmmujiFVbk0gwolWL0/9ABnMlhzyCuAYOKZ8AZvOU1uXUeS4wt/52FXGGIoniIkDF6O0eIkZiL+YEyt7Wvf9qZmC72xZQzVdTjDbjKLsXz4=
+	t=1756113360; cv=none; b=D4AIusnI5kMYAd7e0psouo0j3uM3OzRUg3/10e7Sj2bVTFnBp8dh1dSaxG1QTeaeUdWnYO/S/r3U/X7JFLPXCLTzJmqiBgAQBMSUM+ud4PGmhPH9YF3/MVmrSiIZNP6e/dHeZHjVRNT6TvZ9AvoOpZwJV6TaVG5llG6C7isq6FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756113358; c=relaxed/simple;
-	bh=CNNW8H+2jwpH7GuBz/IxBha2q6AgpHxi1qIELosPvSU=;
+	s=arc-20240116; t=1756113360; c=relaxed/simple;
+	bh=8jjYGS5PeFKcozsVZLXrvKIwWo7k8S7vhYJP/tMr/ss=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FKJ4HXmSTyV7jZ4zweCHOcAF1vmmrp5pQxzv+kUbfFLGUIxslRNv1t8ucw9uxNay4dUu5DkgFJ3fvnhSEOuf7NgCAdTMKDZErrn5j2Z7cdimonP07TYMP6SnKk1NZoo7qcqRlJYRP/8dzF3Gz21ypSYFBn1oihpkJMb9O68PwuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FfM6ij7m; arc=none smtp.client-ip=209.85.214.181
+	 MIME-Version; b=HaWEnaKspLNPh9wFaE6PJdsFMntJshudZWS8Wi0Gircm537o7LqEONbOOlq+qesMriu7BLkwPiyErUOGR2PCxfXX743Z6GFGgRGkNht8iziAs08DFZVK/iWR/cV4MKYZA/zR8ZqW3bndZYzqHCZgF6nT/cltn59atFJ4wboH+iE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tnz870b+; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FfM6ij7m"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2469e32f7c1so7801495ad.2;
-        Mon, 25 Aug 2025 02:15:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tnz870b+"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24458272c00so47785505ad.3;
+        Mon, 25 Aug 2025 02:15:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756113356; x=1756718156; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756113359; x=1756718159; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V9HlGwGT0pLc+kAXQgdPzsVmtLcDrXDu6GbAvNPTmaE=;
-        b=FfM6ij7mlWaHTiXhH9ACKwcMCx1Bldzy6n1APkX8NdFOKlsrMUUwPJr1XFFEBWItCa
-         gqS3TnD7I+WNWaqQXan7YyqVdb9J8IFozSgRAyaTfQuWSpWGY2IS0Dd7Nlfp15ajwE+i
-         II29cXO6L4YqpQIGCzru5/MQ7wRlcxq+jID3MkvFyYdFw1Sd5nmtvR3DAHa/oanideqh
-         FTlbBOeaf6CoDtSStVuxdkmzKzDS2Se8m4joR5B2QfosGiz8gRZTqupCU4VCD50mXhlN
-         AX2dGcY+ZderPNsLSOWRhjy9SXdnaoqoU4J1OaQ4kGCMSoJ10nSOOLD+wUjuJPb1IyEj
-         OAcg==
+        bh=EAU8pFNlFHyGhl4ZEBlmiIHJhRLnwySKV8rZz4maxqE=;
+        b=Tnz870b+4ZyUktpooIoWxXM/7kq5tPZ6G9y9wAx4tAQ4AepBYizP9RSyUTyn5Uw6zi
+         SR5ygkLf9VzhtK+WP+P4UjwPNBJZHqd/JTrVJQ/x1wTUDMmTV5HcdybfkIG8nmhZwZJ9
+         2mb4mfvHv/BzJs54Q+kT4cAChIsTrOt+PN8X96QaH9yCDDar981M5blI/kDKaS2Pljn/
+         zknK5zrJ0Ex7HS630UxtS6sa/bEM/5m3FyjQytPfiQ/mQbZawj7spStoiJWLdnprMZud
+         FZlxT11gwjnoDTm9qKa6YujUHv0hkXJaBEyqPF6+YvXdrhSyTfRV9yWOHbrpCPBEQC7Y
+         Ai5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756113356; x=1756718156;
+        d=1e100.net; s=20230601; t=1756113359; x=1756718159;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V9HlGwGT0pLc+kAXQgdPzsVmtLcDrXDu6GbAvNPTmaE=;
-        b=Nhb/f3tguVi/76umL52ZE4Nq/uTglbnuoR+mX9rvnrGYz2HTET7py/HZQIEfcl/Phm
-         C0k7W8uxAt6zOypLwAVze02H9k5yUmDvalU4pl/pMfH4TAsKz2gzF74WjzOAUjUKuDZ5
-         u4hxrF8J0SkG1n7h11KNkEzLC7SmL6VCnPrdPwhk83a37cgWwMpb8EaADyI7nJyui0Cj
-         b33kNVhednye3cQ5lfd8yqeEPvHX+STgY7i/mHOYabOsGW/jPQOa3OgihHqMypq11cw9
-         qJX2GKDQEfwGTt8LmQhgjQVKdfLypws7GHEifT8Y37Rr/jF7OyuwGFdrLUDG/Ss5H11g
-         q9JQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVE7mTr/rYQDYsv3Vsqz7xT5q/aqmpYNF9SwsnR5jvi59BRygiII72ClIaUx7q9cMkqh4u4b+DiK0CD778=@vger.kernel.org, AJvYcCW9230s/eAu+47GI0CDddF/F6BdcEaUfoCDBvPukxOwj6CaBsawBalGj25LTGumBSSqAtKVmcKFNfohonSKvw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPR5ZCm3mrEWyMOfna7odii26y291qEnhiwIo9D9i127L3Mh/9
-	d+kFUbKlWrk6OBAuKDPkoSGcuxu3hgLEvW6a2Cp8GHEC2hm+H51ZordKBgMP9v7DnKc=
-X-Gm-Gg: ASbGncvgKyDRHkyCizwyV1u2Q9B7eXL+svzD7myuZG9OW7OoxeSr5X16HjOoYj165cR
-	ojincZWMULyG5X45dBQVkrB4VFDiD1LSKAfJ1NOiBR9lFectmSozIciwoLaD8jkOyrDEp+47uRL
-	H/yfuzVN456fL9rCJh0gFDNbJIcHYK3x+kyjzToa5gMStBbxoRpiHoJm0LDq3BTU5AVBVdzmuMU
-	ixREk2/TJ2i/33nnqyZb6LhtBRCR6o5D3w6Yojf12d/Xnp2xTcs/m0B2XaurI8SOqKmc2fR9E2h
-	0e3YteuI0iDKBbVwAXDUKsu4HP8Fq+12vuZe6gjgeMaZqgKg6vT/H0TC/DIY3Od8vF24GUm/4sb
-	/i15wwrNWaiEV8jwDeqOXaucqddrLZmo53YIlo6/0yIZ2a0YpL3FU+OETuUdEluJ+p59groMbnu
-	RBab5Q3NghtA==
-X-Google-Smtp-Source: AGHT+IHTkmLu/6zWl/V1gBMnBb8A3FYn+iQoodvtElUwS+H0DmmNzK5GohGgBbsY+0JWSNKI/Rc0yw==
-X-Received: by 2002:a17:903:22ce:b0:246:e885:46cf with SMTP id d9443c01a7336-246e8854977mr24568255ad.16.1756113355887;
-        Mon, 25 Aug 2025 02:15:55 -0700 (PDT)
+        bh=EAU8pFNlFHyGhl4ZEBlmiIHJhRLnwySKV8rZz4maxqE=;
+        b=fCLkQtedCiRrEApRyJD4SqOnRSdtK26g1U6G0h5h3Ki2vPLtlbz4MNsnsWoeIm2V2j
+         B3NGeU4LRZ58ByFckJlCcZiEReCQ1zcfTYxHjEFM1pmMCFrbiw9wUGJxaVfF22xtdUmb
+         Zzmu8rPZczF0Wmfu40c2/LZsuk8L5BdwjGIkmtiaxbQMSBoWyHjhk60liqEjsIDT9tDW
+         ssVISVHIRXZbbIG7WkldrL3rR8i8LtVjpouWhyBY4wEK2pnYXBtd97diocnXrTZaDxcR
+         GNfCPpvej/QOYeZi8irzHnsJEcKC9d5h2OhN50j5TzSBCxLmRzSsaSiHiJ527/pLSSEN
+         Ojfw==
+X-Forwarded-Encrypted: i=1; AJvYcCUcm8vGXu86gO9hSZj3Vy+RgPvwBuAy8vJcMRuHmOlf9VD7OkI42GI18gJNEbGp57Fuwy6gAtt9u63E7Ig=@vger.kernel.org, AJvYcCV7anEzbckqjCCKiCx2X9UpWUsCh/yDwUTV5c58SfaMlBf2wRHMqqL8MlkoQYRLpPjwRRRDOIY9HlLGXuNb6g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMcuLWABR5PLbtIN9FAIdpvNG4rgg98GjAqLmF09GTxnHE/YF3
+	8v+KtzXDopGh08Y2lR4dJQjlv2MwEk2dTiIGmNAQlNwD+Ru3FSnCYoHU
+X-Gm-Gg: ASbGnctB6YT8IXWtoaYDN1fBOOc41qsOWk69ypXmLJwtQp28SsECM05drJZUh9rDL5n
+	XauYvphY+2dnnGyiRXJU1Xm7WPek+dqEYBVtlNm4l8tZBZYagZzS/jjUjN6vo210xQSMdnlCHww
+	Z09rbNn9uu/2TlVi4K8lnB9lWCoLkKqtPj26iYSf9zX1zI3J8FG/rE0o252X3zc8rTex9O3HkEA
+	kfYGoAvPz7sFiKwXypIphbuEhIjdoWF9akPPDM/SAanWxU8RvO2eAAQXdRa78/CDOB2HAUYa6IN
+	rZWmDqDG/dMXhBTSz73EccIQK9tRYqi4gnKfUY+iiUDK8qE45f+U2RUqPPl83moZHeU4RV94jKY
+	HF+S2eDFLAgHXzYDsxJUGpduI9ITT8ZZ1DBo/puMjC4FM34LQ/L1eClzdp9GFpaG5OLYhyBYKgv
+	s=
+X-Google-Smtp-Source: AGHT+IEg7ykv7ujiyp9Mc0OjHNZy9+fuqP5eB4cL+6mJPmvrW2dGXYWnsywrHVst3J50rChKKyiemA==
+X-Received: by 2002:a17:902:f689:b0:246:d98e:64e with SMTP id d9443c01a7336-246d98e0aa8mr35280235ad.36.1756113358626;
+        Mon, 25 Aug 2025 02:15:58 -0700 (PDT)
 Received: from localhost.localdomain ([114.242.33.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687b1525sm62792245ad.54.2025.08.25.02.15.53
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687b1525sm62792245ad.54.2025.08.25.02.15.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 02:15:55 -0700 (PDT)
+        Mon, 25 Aug 2025 02:15:58 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -67,9 +67,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v2 1/4] module: signing: Use pr_err for signature rejection
-Date: Mon, 25 Aug 2025 17:15:32 +0800
-Message-ID: <20250825091545.18607-2-wangjinchao600@gmail.com>
+Subject: [PATCH v2 2/4] module: show why force load fails
+Date: Mon, 25 Aug 2025 17:15:33 +0800
+Message-ID: <20250825091545.18607-3-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250825091545.18607-1-wangjinchao600@gmail.com>
 References: <20250825091545.18607-1-wangjinchao600@gmail.com>
@@ -81,27 +81,25 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make module signature rejection messages more visible by using pr_err
-instead of pr_notice.
+Include reason in error message when force loading is disabled.
 
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- kernel/module/signing.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/module/main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index a2ff4242e623..557cb795fa31 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -117,7 +117,7 @@ int module_sig_check(struct load_info *info, int flags)
- 	}
- 
- 	if (is_module_sig_enforced()) {
--		pr_notice("Loading of %s is rejected\n", reason);
-+		pr_err("Loading of %s is rejected\n", reason);
- 		return -EKEYREJECTED;
- 	}
- 
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c66b26184936..a426bd8a18b5 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1083,6 +1083,7 @@ int try_to_force_load(struct module *mod, const char *reason)
+ 	add_taint_module(mod, TAINT_FORCED_MODULE, LOCKDEP_NOW_UNRELIABLE);
+ 	return 0;
+ #else
++	pr_err("%s force load is not supported\n", reason);
+ 	return -ENOEXEC;
+ #endif
+ }
 -- 
 2.43.0
 
