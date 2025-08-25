@@ -1,62 +1,64 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3C72C0F7B;
-	Mon, 25 Aug 2025 09:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A542D0616;
+	Mon, 25 Aug 2025 09:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756113355; cv=none; b=QRlvGQT+rHGH3IM2oLMQ0vu7TxRsvfihngmBcdlcXSytn9LH5GCCqkwSYF6GAdHR418zP17Lh4xDUtlDBanTunooQS2U2f9BkIRIstcgu2i0qSY0JN1GAL0UUoj4zfaYPra1VGOLl+NlGsEBGIiAKd5rkW+nhEz8nC+46mYIX7I=
+	t=1756113358; cv=none; b=NK/baH1WK2BeGf+BFdcl0/BFFDh7IAPwFcRr0+6O6eCJkomcxFNMg8L7rcXCAiUmxmmujiFVbk0gwolWL0/9ABnMlhzyCuAYOKZ8AZvOU1uXUeS4wt/52FXGGIoniIkDF6O0eIkZiL+YEyt7Wvf9qZmC72xZQzVdTjDbjKLsXz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756113355; c=relaxed/simple;
-	bh=3ZXsqREqoufGsZLipmttAUsjylpFAnJVVdaq4IIhGzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DrU1EMOwGmE24/jv2GNEkdP0PW+0y+S9khuWdbg38R92QpmcL8j4V7zwhKZhA/dLxj49p4+IbYWQ7GR69+9CdC+m2+wlNNPVhFq3zJnrEYVnXdDrVeORGRmS/NT7HtVJGPUyLzHixR4UU6jnTVoUoa0ALGaEBbFIfy2ZyedbSxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hlfzGdvA; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1756113358; c=relaxed/simple;
+	bh=CNNW8H+2jwpH7GuBz/IxBha2q6AgpHxi1qIELosPvSU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FKJ4HXmSTyV7jZ4zweCHOcAF1vmmrp5pQxzv+kUbfFLGUIxslRNv1t8ucw9uxNay4dUu5DkgFJ3fvnhSEOuf7NgCAdTMKDZErrn5j2Z7cdimonP07TYMP6SnKk1NZoo7qcqRlJYRP/8dzF3Gz21ypSYFBn1oihpkJMb9O68PwuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FfM6ij7m; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hlfzGdvA"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24687a76debso11457665ad.0;
-        Mon, 25 Aug 2025 02:15:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FfM6ij7m"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2469e32f7c1so7801495ad.2;
+        Mon, 25 Aug 2025 02:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756113353; x=1756718153; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0rUDlMA9JVkHsxYy01KICb2t+8xKrpjBn6FOITPjmos=;
-        b=hlfzGdvAqETm82fAMYB9Ov9Kjepe7TOk6uVHF5KMJOLmRzHeTxdsqNbWXE7HOhuzsU
-         pPlMx5coqg+j1uFXAZlFeteIyxTiJLhB7Ljl0ViiVnilsRlBvThgLqNGj7MQ7+PDDxlP
-         jMF+64lE2loR4tRnaDRsEVSHPPkFqeZLaOHzqsGud7RBYDNjJCeMxYiwpOoUZ1Q+5DzF
-         HRc2ebCV8XDQHJdjQctC6uPkWYxePSs7C4xLCywYlJYapeVpMGmZXHra0zm0lAT7uVwb
-         UNJCRwuXJQlCCmWf4ylHgvtSjCljFPvvBOcW5YZ/Ye8D2ZFelejcjdHTN40ihwflnxib
-         5KVw==
+        d=gmail.com; s=20230601; t=1756113356; x=1756718156; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V9HlGwGT0pLc+kAXQgdPzsVmtLcDrXDu6GbAvNPTmaE=;
+        b=FfM6ij7mlWaHTiXhH9ACKwcMCx1Bldzy6n1APkX8NdFOKlsrMUUwPJr1XFFEBWItCa
+         gqS3TnD7I+WNWaqQXan7YyqVdb9J8IFozSgRAyaTfQuWSpWGY2IS0Dd7Nlfp15ajwE+i
+         II29cXO6L4YqpQIGCzru5/MQ7wRlcxq+jID3MkvFyYdFw1Sd5nmtvR3DAHa/oanideqh
+         FTlbBOeaf6CoDtSStVuxdkmzKzDS2Se8m4joR5B2QfosGiz8gRZTqupCU4VCD50mXhlN
+         AX2dGcY+ZderPNsLSOWRhjy9SXdnaoqoU4J1OaQ4kGCMSoJ10nSOOLD+wUjuJPb1IyEj
+         OAcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756113353; x=1756718153;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0rUDlMA9JVkHsxYy01KICb2t+8xKrpjBn6FOITPjmos=;
-        b=QyotUEa4UXUxdMMayTh24uIc0/Sw7KCuNF44JGunGv5/pxQSFjyFRoJS5fMHrpmvys
-         CBun2ita2txw1LazRGrk1pa7E1oegopsYYvyqH3RV6u5tF5Rwefs4Oq4X8YUz0zEu/AY
-         q4JOC/m2M7t1zwT5Xz8ENGAdhS56qcl/3BMqKVHvYuLQzQGEu6fOiy+Yw+kgmeAoQVnQ
-         KHCipvDBfg6CXVxyiLO0dzGKXrfWQjqPclooDa+T4pURPu0EcnpTkbZOfkadqk7BO/8f
-         198DHydbVflfJSZNXa4NGvEqb2MIr/Y5upsDVzCUaO37zGC0xjNKsbNfBL93WnS/xWP1
-         rFPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUXc53Z+G78cjGTN41EIorm9zfsd4tBeNcTCKJMYpalnvPaNxguGQMGe516/dbbCKxZdW1LRwEMycYEREo=@vger.kernel.org, AJvYcCV2PIicUvNFB/zsqqJoNWGeGmdQkUiNPVTtvfJTOV4nmZng1THsU7w75h4dCWEDbVGGD79RSvcpxS7W/u1kxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpYGpEzDYVChyAAigRhABkmMhh56y8uzVLufsuSHVYSuPxnZju
-	37V/TAiRkQ8Y0po07UgTyCGcmvrf1vCQN5rh9W5w1l0ozHEGzBrg7Ibq
-X-Gm-Gg: ASbGncsTq9lXl20JaTeeT0/kGYr4MrIKX7Dg5CaZmDGqcga1E/y5CqmB4JLgrEK9QD6
-	QGh3G7PtCow+6jbIHyGDv9qJEM5WfLyMuGccLbQ4Ouax3hP8MChyYqjLOFp4OWKiynt15+xibwr
-	fV2ZbyFB0kbP7T6VYVyNoTuzSNsmEcJMd6VAlyyahq1JqkdEbGi70DzsH1jJ+BD/NlXhZIsgvZ8
-	vVc0JhEsyFnB97OD6obTKfGyT9cNkjfsIsyggUgSFKLwq2dDwypItfo9wM+t+2VwLVB6Bh71RLo
-	qRoJS3GxZ+Jjl/0P29HWj7gmOR2RRhNLMu5UwmHiSxpBes6nUTkP+dNXRewhqPpGWjlSZPzSxvP
-	w8fp4pTi/V47bn4F9sco5mFCpMm4ze6+nKE3D+N/cwHg87K7L2PsFVOsxnzHfgES+WP7Ztz+i5E
-	k=
-X-Google-Smtp-Source: AGHT+IHzFoiB4RFKJZa0IBEVCArIVCjpShZCto+Fh8aFRBe7LqWUlmLL8yTCkYLt6SYMzTi2PYFFTA==
-X-Received: by 2002:a17:903:234c:b0:231:d0da:5e1f with SMTP id d9443c01a7336-246337acf29mr114424065ad.21.1756113353215;
-        Mon, 25 Aug 2025 02:15:53 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1756113356; x=1756718156;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V9HlGwGT0pLc+kAXQgdPzsVmtLcDrXDu6GbAvNPTmaE=;
+        b=Nhb/f3tguVi/76umL52ZE4Nq/uTglbnuoR+mX9rvnrGYz2HTET7py/HZQIEfcl/Phm
+         C0k7W8uxAt6zOypLwAVze02H9k5yUmDvalU4pl/pMfH4TAsKz2gzF74WjzOAUjUKuDZ5
+         u4hxrF8J0SkG1n7h11KNkEzLC7SmL6VCnPrdPwhk83a37cgWwMpb8EaADyI7nJyui0Cj
+         b33kNVhednye3cQ5lfd8yqeEPvHX+STgY7i/mHOYabOsGW/jPQOa3OgihHqMypq11cw9
+         qJX2GKDQEfwGTt8LmQhgjQVKdfLypws7GHEifT8Y37Rr/jF7OyuwGFdrLUDG/Ss5H11g
+         q9JQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVE7mTr/rYQDYsv3Vsqz7xT5q/aqmpYNF9SwsnR5jvi59BRygiII72ClIaUx7q9cMkqh4u4b+DiK0CD778=@vger.kernel.org, AJvYcCW9230s/eAu+47GI0CDddF/F6BdcEaUfoCDBvPukxOwj6CaBsawBalGj25LTGumBSSqAtKVmcKFNfohonSKvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPR5ZCm3mrEWyMOfna7odii26y291qEnhiwIo9D9i127L3Mh/9
+	d+kFUbKlWrk6OBAuKDPkoSGcuxu3hgLEvW6a2Cp8GHEC2hm+H51ZordKBgMP9v7DnKc=
+X-Gm-Gg: ASbGncvgKyDRHkyCizwyV1u2Q9B7eXL+svzD7myuZG9OW7OoxeSr5X16HjOoYj165cR
+	ojincZWMULyG5X45dBQVkrB4VFDiD1LSKAfJ1NOiBR9lFectmSozIciwoLaD8jkOyrDEp+47uRL
+	H/yfuzVN456fL9rCJh0gFDNbJIcHYK3x+kyjzToa5gMStBbxoRpiHoJm0LDq3BTU5AVBVdzmuMU
+	ixREk2/TJ2i/33nnqyZb6LhtBRCR6o5D3w6Yojf12d/Xnp2xTcs/m0B2XaurI8SOqKmc2fR9E2h
+	0e3YteuI0iDKBbVwAXDUKsu4HP8Fq+12vuZe6gjgeMaZqgKg6vT/H0TC/DIY3Od8vF24GUm/4sb
+	/i15wwrNWaiEV8jwDeqOXaucqddrLZmo53YIlo6/0yIZ2a0YpL3FU+OETuUdEluJ+p59groMbnu
+	RBab5Q3NghtA==
+X-Google-Smtp-Source: AGHT+IHTkmLu/6zWl/V1gBMnBb8A3FYn+iQoodvtElUwS+H0DmmNzK5GohGgBbsY+0JWSNKI/Rc0yw==
+X-Received: by 2002:a17:903:22ce:b0:246:e885:46cf with SMTP id d9443c01a7336-246e8854977mr24568255ad.16.1756113355887;
+        Mon, 25 Aug 2025 02:15:55 -0700 (PDT)
 Received: from localhost.localdomain ([114.242.33.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687b1525sm62792245ad.54.2025.08.25.02.15.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687b1525sm62792245ad.54.2025.08.25.02.15.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Aug 2025 02:15:52 -0700 (PDT)
+        Mon, 25 Aug 2025 02:15:55 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -65,10 +67,12 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v2 0/4] module: logging and code improvements
-Date: Mon, 25 Aug 2025 17:15:31 +0800
-Message-ID: <20250825091545.18607-1-wangjinchao600@gmail.com>
+Subject: [PATCH v2 1/4] module: signing: Use pr_err for signature rejection
+Date: Mon, 25 Aug 2025 17:15:32 +0800
+Message-ID: <20250825091545.18607-2-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250825091545.18607-1-wangjinchao600@gmail.com>
+References: <20250825091545.18607-1-wangjinchao600@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -77,40 +81,27 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series of patches cleans up and refactors the kernel's module loading
-code. The goal is to make the subsystem's logging clearer and its internal
-logic more straightforward for developers to understand.
+Make module signature rejection messages more visible by using pr_err
+instead of pr_notice.
 
-The patches in this series: 
+Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
+---
+ kernel/module/signing.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- module: signing: Use pr_err for signature rejection
-  Makes module signature rejection messages more visible.
-- module: show why force load fails 
-  Adds a reason to the error message when force loading is disabled.
-- module: centralize no-versions force load check
-  Refactors the code to centralize the "no versions" force load check.
-- module: separate vermagic and livepatch checks
-  Improves code organization by separating vermagic and livepatch checks.
-
-Changes from v1:
-A patch was dropped because it was based on a misunderstanding
-of the ignore versioning flag's original intent.
-
-v1 link:
-https://lore.kernel.org/all/20250822125454.1287066-1-wangjinchao600@gmail.com/T/#mf748b6e97934f7a463dfdafbb426965f3e0ad646
-
-
-Jinchao Wang (4):
-  module: signing: Use pr_err for signature rejection
-  module: show why force load fails
-  module: centralize no-versions force load check
-  module: separate vermagic and livepatch checks
-
- kernel/module/main.c    | 13 +++++++------
- kernel/module/signing.c |  2 +-
- kernel/module/version.c |  9 +++++----
- 3 files changed, 13 insertions(+), 11 deletions(-)
-
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index a2ff4242e623..557cb795fa31 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -117,7 +117,7 @@ int module_sig_check(struct load_info *info, int flags)
+ 	}
+ 
+ 	if (is_module_sig_enforced()) {
+-		pr_notice("Loading of %s is rejected\n", reason);
++		pr_err("Loading of %s is rejected\n", reason);
+ 		return -EKEYREJECTED;
+ 	}
+ 
 -- 
 2.43.0
 
