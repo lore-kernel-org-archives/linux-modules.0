@@ -1,66 +1,65 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A67C30BF59
-	for <linux-modules@vger.kernel.org>; Tue, 26 Aug 2025 09:34:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDA32FD1D6
+	for <linux-modules@vger.kernel.org>; Tue, 26 Aug 2025 09:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756200850; cv=none; b=Ea/ojacxpYOsbWwb+befWxGWj4qFEybFK/IfvmEljMnV+prFuLEU+tEw3i8pTXIcmNYdLimPPCSOAkrKm0Xw2cEsjXsY2iv4ruvw7WtCXWbGvdNerVNQRd2wqsEN7pgSolRfBunAuKfZ7XYCIsOIE9CC5nyXCOeiR+d4Xc0OIC0=
+	t=1756201250; cv=none; b=ch5P+gjKFv8CTZL/+VUhA+eZn4hcs8orz8jtlPyhv/Bt98jN/uCE6FdwRpGoZmMhEcivbRv6dp4TLiu3zSjn7VRYpDN/iL1yl0gWOKyuABxyGAxlG3aSZFT4fEEgaDNxcIgcEHHiNoMJwd1bMMx2ApVVLWrxVjC7Hrw4frPTFDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756200850; c=relaxed/simple;
-	bh=o+jb5g1N9AMYY67V/CA+UNo1y0YqSW+9qNLomu8Ob9w=;
+	s=arc-20240116; t=1756201250; c=relaxed/simple;
+	bh=AGBn8Pm5ZQvv47t7Fbng001CdFdEU98XiOFr+OF2kX8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=Lyu7bGtqpDlQ0UMlpmHz51zyrnjnXisHmoZuxP3zRafyDbVC12b4ZTuRmXVbq0A+TgG2R5pVUQKC5IX83R8MDV1pnRcTNQN1AnLsWNKaaVaeI6XIceO2/IkINn9UMJc8mEnhlXGy6blQXpRDKmcTja3rzK6i34Gj5KyCczUr8UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=USQXV8qF; arc=none smtp.client-ip=209.85.221.51
+	 In-Reply-To:Content-Type; b=dlyaa3NE3Z/TAbSZCtWeKYfdadSgxg5jkmHHlL/qTWMG9twOYTIMydLp6lYcM9qpXClY/yOR5HxYoXTfUHmh39RNpPmPfAaaoq6ZZTWGPE5KK0AVmS8vLa7hC96JIv/qus/56/k80IJF+BwK7YmvOQR5fU9h+IU2oFRsCmMbtpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RnhpfBZn; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="USQXV8qF"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3c980bd5f48so1712893f8f.0
-        for <linux-modules@vger.kernel.org>; Tue, 26 Aug 2025 02:34:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RnhpfBZn"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45a1b0c8867so44214135e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 26 Aug 2025 02:40:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1756200847; x=1756805647; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1756201246; x=1756806046; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:cc:content-language
          :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=HW2HUDWRHT4i1n5wE3yCr0uWi9l5RmK2kTtTDTdtzZk=;
-        b=USQXV8qFOiuOjoAhVKHlJO4RST1Mg0DK9BuGkFgNtHAK+JCDbOHl2/mxZcDqGtwWPk
-         /p1EblM16OQG89cwGpPqeuJKtwAWuDS9PmGINzYo8wxoqYwZXf8opIgZE4uj9CoTT1Z4
-         zoSRZ7iAulkt5Bc+3vsBthkZUss6yj4g8eXFnEdx0mTtQNycUL/59VPzWIWwZW1M2zII
-         L0u3fd2GQBEAspnwiJD2koXac32MMTdTdmbrMNMJdZY4FfeJ6pqE1WN7w1ytFykU5DX3
-         Y3BBUDgnSysWwSZqMCRzjOPdk8e8O+8BDJ2dSMUcOh8vgBHUu0XnBtCMAm1g4R3D+KF2
-         Tc8Q==
+        bh=RmW9WVClm3f6KinkC1PQhkR7i8nz98kjlYD1LHvaqNI=;
+        b=RnhpfBZnrBv6+iAI/5vYJcSNUwejx6Twj+j4Tdafr/rfqZ5LzZ6rsjy3NjVqwGYzNI
+         WuaKtquZpR96c+WYAr/HkdxHEOoAeqkEZEt2pY+2wxRXz+wJKlZ6N+eC1W52uKrIKcGQ
+         x4Muy+voz+y/n9aHLE3LkwPxs/O4PZddUv+FS9yQrLZXdymL09X7uUgtfWEJmOKeKyUu
+         EeiKZJuqcGA66h6MdK8IoHDQAklJuUoshX559AuxiB4GRoXA4lNhkE4i66giJg1rgg31
+         jc8ffI4W+ilvtDc+ilvAWyDpeFxifQ0JK362efschcGm31kNCJCGN6JvLt8C3ynosiEC
+         R42g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756200847; x=1756805647;
+        d=1e100.net; s=20230601; t=1756201246; x=1756806046;
         h=content-transfer-encoding:in-reply-to:from:cc:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HW2HUDWRHT4i1n5wE3yCr0uWi9l5RmK2kTtTDTdtzZk=;
-        b=uyko1g7fJkmG+j7x0h92mgCfGXQ3/S+dsLtyjuE52V7c258zUEUSK2k63sHGzJ+UWk
-         MAn5YDJxULu2cWIlS83w9OpxWAXPAiIl5s1/5f1gK/aV2WlRZu9ZHUAKHduY09fUsCkd
-         hcch3bMihGCUoZIRE3B4hUtJT+Y46sQah0RN8YreceYLmt4JchovFminyQD/o6P6aczS
-         bKS81IyA25gENs2b4SWgyPiaS54p44v3inoGDgfWF+Zv+hzP6BXiR8/2YCytiS9TpXxP
-         bFGoQTOEDcYyieUg1kpmNJChlEZ/Viog+oMgYbbBqthqHl166Vmp+B+Acu3eMmwN5N7U
-         G7jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXVOK/RY6wRWkRPA+ERkLk7NA7vkTB4ydFSqGKDyOycXPdU4Sqf24DNKFs/hYqMx4a20hc9raXyFPqMR9Ey@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9jI0XaiY5y8fNnMXASuJSIbbo3Ebpd5gNMURnuikHo2QvEmIX
-	eIneO3uxRd/qRk4JHgrFBwpqcpKRKiNlqtjG0HVQp1j3J6mk35FaS6LCNhSeAwCm2H1rkbUKCpp
-	XFR0t
-X-Gm-Gg: ASbGncsW7ZgB+o2+5vYlGtiZaVYDPYszjCZdJOgvKmHkUE0lxHVlgeJyrN0SAb31XCk
-	atAvd87LqsjxftLUSYPf4p1PmA6ZzPdjHSTdPi/Y2KRlR9Er212QTmU+5gY5aw7Bir1etQcVGKE
-	EKAuEn6HMA6PphRh2q77pZzxHlh/QO9ZRACAp8qtLXC6ItnuuUuRnBY8neouxYrYbu7p9GJZYq7
-	EVyTiXTbSSZAc8dyIuFPcVQLpe3RlF2zinCWkJJFGCuoHJ63dGgxQZk42nBVRIp4l+O70nVdrrK
-	AuTXqzq4r8gef+o+vYOpefIetkmzPfk2BeQ7etFM6b3Qh/c9Utw/YDD1n8bNTcunvx5b10n3J6J
-	EW69aojOZD6RssF4IFKnH2PBp5P0EJOuSeY/iP+Hid+M=
-X-Google-Smtp-Source: AGHT+IHbSrfiU+FOdt+Rd4z6vofZ+29eq0hImMmspUzv4cDgX3oovhP+aFGkM7q4vl/8i0/3uo6+QA==
-X-Received: by 2002:a05:6000:240c:b0:3c9:9ec0:203b with SMTP id ffacd0b85a97d-3c99ec02f4bmr4771108f8f.27.1756200846753;
-        Tue, 26 Aug 2025 02:34:06 -0700 (PDT)
+        bh=RmW9WVClm3f6KinkC1PQhkR7i8nz98kjlYD1LHvaqNI=;
+        b=JQV5xkM2eSuVcbB4rLzcluhipO1uFFKPRngr5BjxBUKHSHcr+OUuZfJypUGjFMgJ7F
+         oPaTifCRlmfZsakT3RMjW2pLivnuyS6WOXaB1xQ7iaC8I1MXSbVFc3pnQk+EVe4fwlql
+         pNAlFuEDjq90LsybYILd0z3zND/+x4epwrQooFVZvhByPVJYfS3zp1d4nouq1qJXLHAS
+         GSENb5iC9jLIw2oxdvfbsdl3PLzjGha107wGzCqYza0a3zBQTslp3IHU1F7Nx+EOhWeb
+         N/JfmtCaQ87AjhZDAy7EoT4ZfWFWwkUlc8uf2+VBcwDTWR8rtkKpKCD73XaK2vaV0JtL
+         /scw==
+X-Forwarded-Encrypted: i=1; AJvYcCXpgwL8Q0v5TOfQd7x3k+ecqgNidBF+Nd5LCsntv9rvOC7qlKLwHK6B7Twp3L1C6g76r3MewHV6T3dW9Pcg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFebMGiEyYHgyEq7oADb1ZymQd/FpAFIYaaBQaNPkQqW5ajbgK
+	jUUaPfce5KK0t+9+vTjXdbgGSU2zCcfS7dsT2iF1FrYMJKtcLOqRoW0DfCF5hEcw+fI=
+X-Gm-Gg: ASbGncuN6w4EQIF9kHGyJW4HBJ/FsatRDGzI57rKfDuzCgvmT4sqrJHQf1fIvZsi/Ad
+	/HWbSyEmwCqvQdHOE0iQzMaIna3e4VzhdN/XUYYVx2EwA26+nHCoWW3R9FNlmnM/vB3d5Sc1WWU
+	158OLBdS0HuLbtEMHbrQBezQAVtuuCLgHAR2JbW30xXTdRH/3nYqAHhcYxsThaIwjDuUmnL1zwo
+	F+y1uYG6oa2yLjB5RZiV+GusGOZcGu003irUiZYyqOwg53YYaskzxblQUczwWAzJWRVn+A9URIp
+	mIFCSmMVaqVIkUL+Q/DMhlCeDp7g0Aw4cN5LO1NHFfs2rC/8bfAWXnfSof6duOx+RCUkkVuP/hm
+	mo/zeUPT8LN+dciT1ggUXOQWiWDfd2yLquxcK1H8bENA=
+X-Google-Smtp-Source: AGHT+IGadEAi5vgTIHfrDTRU1InxzIYf1pFLVSduxjE5Rz0z6YNs/7SKhuJkC+bMVRkDVFaBXt1NrA==
+X-Received: by 2002:a05:6000:26d1:b0:3c9:24f5:46ff with SMTP id ffacd0b85a97d-3c924f54977mr4477737f8f.34.1756201246265;
+        Tue, 26 Aug 2025 02:40:46 -0700 (PDT)
 Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-771f7fe29b0sm1680228b3a.9.2025.08.26.02.34.02
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24882c84b6esm612705ad.6.2025.08.26.02.40.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Aug 2025 02:34:06 -0700 (PDT)
-Message-ID: <52288605-a16c-4a93-9e80-66d32de88847@suse.com>
-Date: Tue, 26 Aug 2025 11:33:59 +0200
+        Tue, 26 Aug 2025 02:40:45 -0700 (PDT)
+Message-ID: <14e0f072-59e6-4657-8ab1-fe1fbc30ac43@suse.com>
+Date: Tue, 26 Aug 2025 11:40:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -68,54 +67,78 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] module: show why force load fails
+Subject: Re: [PATCH v2 3/4] module: centralize no-versions force load check
 To: Jinchao Wang <wangjinchao600@gmail.com>
 References: <20250825091545.18607-1-wangjinchao600@gmail.com>
- <20250825091545.18607-3-wangjinchao600@gmail.com>
+ <20250825091545.18607-4-wangjinchao600@gmail.com>
 Content-Language: en-US
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250825091545.18607-3-wangjinchao600@gmail.com>
+In-Reply-To: <20250825091545.18607-4-wangjinchao600@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/25/25 11:15 AM, Jinchao Wang wrote:
-> Include reason in error message when force loading is disabled.
+> Move try_to_force_load() call from check_version() to
+> check_modstruct_version() to handle "no versions" case only once before
+> other version checks.
+> 
+> This prevents duplicate force load attempts and makes the error message
+> show the proper reason.
 > 
 > Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 > ---
->  kernel/module/main.c | 1 +
->  1 file changed, 1 insertion(+)
+>  kernel/module/version.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index c66b26184936..a426bd8a18b5 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -1083,6 +1083,7 @@ int try_to_force_load(struct module *mod, const char *reason)
->  	add_taint_module(mod, TAINT_FORCED_MODULE, LOCKDEP_NOW_UNRELIABLE);
->  	return 0;
->  #else
-> +	pr_err("%s force load is not supported\n", reason);
->  	return -ENOEXEC;
->  #endif
->  }
+> diff --git a/kernel/module/version.c b/kernel/module/version.c
+> index 2beefeba82d9..3f07fd03cb30 100644
+> --- a/kernel/module/version.c
+> +++ b/kernel/module/version.c
+> @@ -41,10 +41,6 @@ int check_version(const struct load_info *info,
+>  		return 1;
+>  	}
+>  
+> -	/* No versions at all?  modprobe --force does this. */
+> -	if (versindex == 0)
+> -		return try_to_force_load(mod, symname) == 0;
+> -
+>  	versions = (void *)sechdrs[versindex].sh_addr;
+>  	num_versions = sechdrs[versindex].sh_size
+>  		/ sizeof(struct modversion_info);
 
-The module name is already available at all points where
-try_to_force_load() is called, so the new error message should include
-it.
+Removing this return completely means that when versindex == 0, the
+function incorrectly looks at the dummy section #0 and eventually
+calls pr_warn_once("%s: no symbol version for %s\n", ...).
 
-Additionally, we should be careful about the message. In the case of the
-init_module syscall, the missing modversions and vermagic could mean
-that the data was deliberately stripped by kmod because the module was
-inserted with --force, or it could mean that the module lacks this data
-in the first place. In other words, it is not always the case that that
-we're reaching this logic because of a force load.
+As I outlined in my prototype patch previously [1], I think this should
+be changed to:
 
-My suggestion would be to use the following:
+	/* No versions? Ok, already tainted in check_modstruct_version(). */
+	if (versindex == 0)
+		return 1;
 
-pr_err("%s: %s, force load is not supported\n", mod->name, reason);
+> @@ -81,6 +77,11 @@ int check_modstruct_version(const struct load_info *info,
+>  	};
+>  	bool have_symbol;
+>  
+> +	/* No versions at all?  modprobe --force does this. */
+> +	if (info->index.vers == 0 &&
+> +	    try_to_force_load(mod, "no versions module"))
+> +		return 1;
+> +
+>  	/*
+>  	 * Since this should be found in kernel (which can't be removed), no
+>  	 * locking is necessary. Regardless use a RCU read section to keep
+
+I suggest that the reason message should say "no versions for imported
+symbols" to indicate which version data is missing and to be consistent
+with check_export_symbol_versions(), which uses "no versions for
+exported symbols".
+
+[1] https://lore.kernel.org/linux-modules/3992b57d-3d8b-4d60-bc4a-f227f712dcca@suse.com/
 
 -- 
 Thanks,
