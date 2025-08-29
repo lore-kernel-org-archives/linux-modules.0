@@ -1,63 +1,63 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A3A2D8396;
-	Fri, 29 Aug 2025 08:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84D72D878D;
+	Fri, 29 Aug 2025 08:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756457399; cv=none; b=kR0beKQl4t9CCNlqh7PFadDnJMAP3Mw/Pe66w/myfXREsfQ9aQ3US7pB+K9IoUzl7ZJ8ZYRASLt8IXkc0lS7xa/eWDflNxU10ErwBDqfNnHchx+oiYEv5NflVLEIEmYapHLWKrBaxI+tL7Nfk5cUt4RP+SWqbkKF50UVBkux7/I=
+	t=1756457407; cv=none; b=pJLaRNCyi7K+ZwYjxzoey2q2S7gDHQyxkX90SYTcMkPMF68pWtcJNTQtKLhrsQN4vekpatHdpf6CpgkJjlsrECBEWpKOH5h4nGisAdx0HDTZ67noRl+0JPUN6wL1uNCgiaQ/Vm47xeEd57ClNes6L/R4MhTpeVlHpVLLZrhcpTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756457399; c=relaxed/simple;
-	bh=hjGrDsr3uC83afBLDyQ974R48yYRN7PzN3GHmDLxfyk=;
+	s=arc-20240116; t=1756457407; c=relaxed/simple;
+	bh=fpaE0d595CwgrDFlhfV+X1m/1hWBH32tbRMD/0YcFiU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NwqaqGtSb2HnGC6nk7I4ws6zQsT79tIp7Ce3FJkSjitmwinpPlCFm79zSvXD5XH5UIEciSivXZoxTdI39fgKuPK1BPJrk8zHZK2c0l16jR5GN6t2giCOcTO3cjh6BLIC7EhcE4fmFvciObyd60WkdMQQzstnXCABrRBCD/TSZOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N+W4CiPM; arc=none smtp.client-ip=209.85.214.173
+	 MIME-Version; b=nl0AivRyRmquD3TLAbloztrTAVDMMnOPfvUTn1DsCQtWWKRWyI274EDBcnK3Qdf/rniStWN2U3Q6NxSoFRh4wYwEzE6uac38rKL0TlliBGcvSzlkOyx2pKVo7LZIspdhgE92YDmItYo2qAJT8jnpeGMAVtHNTIPIkKJhgIIBgnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+xC8hKv; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+W4CiPM"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-24646202152so22892315ad.0;
-        Fri, 29 Aug 2025 01:49:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+xC8hKv"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2445806df50so15326845ad.1;
+        Fri, 29 Aug 2025 01:50:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756457397; x=1757062197; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756457403; x=1757062203; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wxqSnIoWMjfZQAuq/ccEkan01OYjIRKDD3nXH4XpB/g=;
-        b=N+W4CiPMmAY7iqjJHle8mzRppeocG9bs+WgYJceC/erA6Pqo6+SEKaS+AbuMHVXzt/
-         5Sl9yYCBKA7uHYeUPu0/lEqZ3GT63UGHFf85GgVA7gG8zD9zlwMUVALRJ6uzIPUPIpZE
-         aAIysma655Vr6LMzbOZ84mjgbB1gm8mY//xxhaHb4WgoV27CNqaF+zEolOyQLvxbgeTk
-         mVK7zG1l1Q+LVNWEIy5/DaZuajiDxdVEaH8w5bdC6oYRYTO5EyGK8xtWLOtHcT3nMSpZ
-         GyHLBS0N0mYYiCGOZkhwwDUFTAYVsrfWMhG8zftIlCdNr16rmObF9PjF1reg23mlsfg0
-         /HGg==
+        bh=/Ud+6Xa1z1jB5TLuiA3lgD5kenmdYlZUP1Al5nUROhw=;
+        b=C+xC8hKvVDIAOR43Wn5Q6D/W8OJcNwUXj13YpN0ChTBWWRc6TsGKqlWR9EZr45hHHq
+         9SZzup5BkaT63acvSdaCmFSbYMFWRCh24o5znl8qEf8kxhUYkdaEM34yO1pjCla1M4AU
+         fSeIdNELjBfIH3HY1wkGTEcncVpdywe79E24DAvkKVMDmSzCnK2VKAd2//szFCcQVSVw
+         U0as2AbYD+y3ZEavYEk113JdSBJdwj3/C388w10rD/M2EWAOYGUNeRHO4M00DEhrtshr
+         qGg0T4p0i76VhkTOKeJl89qeHgPOG2bokPPipqv1jPOZ6h9LBwhbKz+pmVa1pXlUFZal
+         nRDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756457397; x=1757062197;
+        d=1e100.net; s=20230601; t=1756457403; x=1757062203;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wxqSnIoWMjfZQAuq/ccEkan01OYjIRKDD3nXH4XpB/g=;
-        b=m3dYqk1UfJllytA0XdxJbZyTkFUKHvXxP4lDyjy9sLXBlE/L2G3iBuy10chM4Hl5eO
-         zsqKHvl759WDi0UWskej8/SEXelFZ4QY0MUIvA0qtc+pXi7nokZJQUTp/WN7ekXSN0EZ
-         3NULu85Te0e6PAdEalbVZld5DnHyf4+XNOjAbA1TOJLIAvx6KNq+MKGmNkz0yGE9x02V
-         zZz1T55W9eI0S41sRqwRgOovLBPMLGLhmUJzypyufEqBpD7DkS68FxC/ivMlTXwIxohS
-         uubzDj0iiJd0BxU9lwxWPqbHjkN50Q1GKSWeUXvLxHyNuYvud6rkfo4eGo+gggE456KS
-         n6CA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeKsERBSKkFhokXro+yRoBIuHiSF6iV5aRALHeJLY9XFtY1pJemtEGm6jADbvIykp+gLbIDSHsB4DTbgU=@vger.kernel.org, AJvYcCWjYFcac1byyz4D9L+WvsHZQF6OG4uAL/tfmbPxrjtj2bnJKGpuYx5C4jgJg5xhs/3Occob0acNyrkImB2OFQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPlEqCf/KTc5edq0vxVlIlcd+WiDRsTvbkG32hAHFrbzdXriOt
-	ZqO08+ZWS1UxrE7SmXZ9kmSYIVDjPZHMK2s5I6tFCZSLXyKd5BnT6M94
-X-Gm-Gg: ASbGncsykc3ok9ejD1Kk/USZUvzKuU2EsJsnV/d4LV2YqTniF44Od8ingXtX8YVGYwb
-	30VyF+ipnjfxAiy+ov/qAVf3j5T/h5S0po6L9AnRzgIcc9ZWDmcE0B9OA6cFSdNWtf2FZeaWFqF
-	p7iN5iyMI8pCSRZhw2qeV6Z9rqybwUhLT/Z3mWKS3J0S48P7IIsjPSA4IObVX0BbEhlfqBljpLD
-	ZThtHfMJbyYoCjqzJf7MG8v616yAe78XBdYrUbtDKUC1W+3VaVyImoC2cLqD9QmRxjzZKyeAXDI
-	Fk9UVdAMJ8PnjpkSCK8Chhsm6SH25VRO55mXG9pdrn/DFmrDgLCwuYzlvSrNV1qQMGcBMLLd/fn
-	Fw8IwP5+G5gwyVHbAVral5d+Hlx12z8/s2n1b7Jv5+JdhBJ2iiMseFuyHXP3Pr7EKp/xVH1s=
-X-Google-Smtp-Source: AGHT+IEIefFei2RlDSwEzatGN0qI66i5+W36h8pnrkIZNHDFd+IIkhhRd3zlZgt/QZ1suX8vEunFeg==
-X-Received: by 2002:a17:903:1a45:b0:246:ddd6:f8b9 with SMTP id d9443c01a7336-246ddd6fd04mr245733245ad.43.1756457397448;
-        Fri, 29 Aug 2025 01:49:57 -0700 (PDT)
+        bh=/Ud+6Xa1z1jB5TLuiA3lgD5kenmdYlZUP1Al5nUROhw=;
+        b=xPOI3oxkA4FccHenvDT2eGQSKbP5NLQiGTiqfMkV6+wH6A1vlwR0Ej9eVcqqIQ+5JS
+         x5tdOlwCpPuBhRFJQBt32BmdNlx282+YrxQ8/VSFgWBrs+/zlLBJapp8oB5kgggOej41
+         hbJ+0n9Kz+LkeNuecwrzVLTqwIYHU9pRMuOTBoft55y7x294abx54pcnkyxCzrc2IK5a
+         JgD/qECeUstyJTjGseN2LY3wj+OYjAdghaX/gZhr4lT3t8bbtuzVAWClIXMDYWpVJbrV
+         4yWQMfuJIGuviBTwC8saUHVoylKV9VhaQPLWChH6qVFYcp//wEQgAhXnnW4JCzEyw3Xk
+         zzGA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8yUw1JT6QI1JOTElX2RMI2ld0NkTemd9dCdqRTdG/hKTiT6mA6x1Qy0pn6ny5h3Ez7PVlC7k7VwFEmuw=@vger.kernel.org, AJvYcCUkmcWNIjLj3VSlKkzEROVOqPUts9ofMN9U2jCO+zOEAu0uwRtCZU8xd62vHDTHcSpqFku7G9/dQJQe2MNt0w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTZjFaFci7pSqUZg4GIm3NEFzBqp7BD5A85bZlzvlEjfBkwdnB
+	7SeHXjBkWNe0ct+7DdJVa7hQtc1HsR/0bAssRw6R6ls7sEqso67njhZX
+X-Gm-Gg: ASbGncsZKwHt6XPl99v0egO4930T1zXjGXkmb/nEbwt1IFB5qK0vjMqUdgrp6tpD5zV
+	LthZdS8mxZ6bY1+0XwibWn2SinryHGGM6F7e59XcAdYxQFWju5d480NxJDTzNzNZIqJfgZHlIsp
+	9eKjaX9EMqCag9hs+5+jOSglRGtRW+QfvdZlu72ZBJnaXpqr1K3uhOMZt60VuOz62gLzg+DSHwj
+	n+QNsyJndtkBD2S9QU0CESYA4F2ZruJ+riA2gcRbjuh8SFh+ChrmzX6ghxEumkmu28CLVoMFbd+
+	HQeJ8SBxVDa47zD2ERhM1Qa4awLoo8SnO+WtC+W1HE7svqXAlscjIb1DvthWZcQIN8oHJKo3WVD
+	CI21NPIBLMdJDWg5H2dmz5S/7syPA2+G73/5lOSAartnfxCiZNpqAwbF3q0fP
+X-Google-Smtp-Source: AGHT+IGJjVrZjcGLD+aYNVVvBsvvvll4RulQAnH99m3XElYYX9NlW09W3j3ChREh88K6yxVOoh/PQQ==
+X-Received: by 2002:a17:902:f607:b0:248:e0a2:aa2d with SMTP id d9443c01a7336-248e0a2b173mr64242025ad.25.1756457402912;
+        Fri, 29 Aug 2025 01:50:02 -0700 (PDT)
 Received: from localhost.localdomain ([103.88.46.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903702980sm18561865ad.13.2025.08.29.01.49.54
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903702980sm18561865ad.13.2025.08.29.01.49.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Aug 2025 01:49:57 -0700 (PDT)
+        Fri, 29 Aug 2025 01:50:02 -0700 (PDT)
 From: Jinchao Wang <wangjinchao600@gmail.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -66,9 +66,9 @@ To: Luis Chamberlain <mcgrof@kernel.org>,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v3 3/4] module: centralize no-versions force load check
-Date: Fri, 29 Aug 2025 16:49:12 +0800
-Message-ID: <20250829084927.156676-4-wangjinchao600@gmail.com>
+Subject: [PATCH v3 4/4] module: separate vermagic and livepatch checks
+Date: Fri, 29 Aug 2025 16:49:13 +0800
+Message-ID: <20250829084927.156676-5-wangjinchao600@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250829084927.156676-1-wangjinchao600@gmail.com>
 References: <20250829084927.156676-1-wangjinchao600@gmail.com>
@@ -80,51 +80,55 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move try_to_force_load() call from check_version() to
-check_modstruct_version() to handle "no versions" case only once before
-other version checks.
+Rename check_modinfo() to check_modinfo_vermagic() to clarify it only
+checks vermagic compatibility.
 
-Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+Move livepatch check to happen after vermagic check in early_mod_check(),
+creating proper separation of concerns.
+No functional changes, just clearer code organization.
+
 Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
 ---
- kernel/module/version.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ kernel/module/main.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/module/version.c b/kernel/module/version.c
-index 2beefeba82d9..7a458c681049 100644
---- a/kernel/module/version.c
-+++ b/kernel/module/version.c
-@@ -41,9 +41,9 @@ int check_version(const struct load_info *info,
- 		return 1;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index e7484c6ce6e3..98a678a18300 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2571,7 +2571,8 @@ static void module_augment_kernel_taints(struct module *mod, struct load_info *i
+ 
+ }
+ 
+-static int check_modinfo(struct module *mod, struct load_info *info, int flags)
++static int check_modinfo_vermagic(struct module *mod, struct load_info *info,
++				  int flags)
+ {
+ 	const char *modmagic = get_modinfo(info, "vermagic");
+ 	int err;
+@@ -2590,10 +2591,6 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 		return -ENOEXEC;
  	}
  
--	/* No versions at all?  modprobe --force does this. */
-+	/* No versions? Ok, already tainted in check_modstruct_version(). */
- 	if (versindex == 0)
--		return try_to_force_load(mod, symname) == 0;
-+		return 1;
- 
- 	versions = (void *)sechdrs[versindex].sh_addr;
- 	num_versions = sechdrs[versindex].sh_size
-@@ -80,6 +80,7 @@ int check_modstruct_version(const struct load_info *info,
- 		.gplok	= true,
- 	};
- 	bool have_symbol;
-+	char *reason;
- 
- 	/*
- 	 * Since this should be found in kernel (which can't be removed), no
-@@ -90,6 +91,11 @@ int check_modstruct_version(const struct load_info *info,
- 		have_symbol = find_symbol(&fsa);
- 	BUG_ON(!have_symbol);
- 
-+	/* No versions at all?  modprobe --force does this. */
-+	if (!info->index.vers && !info->index.vers_ext_crc) {
-+		reason = "no versions for imported symbols";
-+		return try_to_force_load(mod, reason) == 0;
-+	}
- 	return check_version(info, "module_layout", mod, fsa.crc);
+-	err = check_modinfo_livepatch(mod, info);
+-	if (err)
+-		return err;
+-
+ 	return 0;
  }
+ 
+@@ -3334,7 +3331,11 @@ static int early_mod_check(struct load_info *info, int flags)
+ 	if (!check_modstruct_version(info, info->mod))
+ 		return -ENOEXEC;
+ 
+-	err = check_modinfo(info->mod, info, flags);
++	err = check_modinfo_vermagic(info->mod, info, flags);
++	if (err)
++		return err;
++
++	err = check_modinfo_livepatch(info->mod, info);
+ 	if (err)
+ 		return err;
  
 -- 
 2.43.0
