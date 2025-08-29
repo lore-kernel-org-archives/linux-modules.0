@@ -1,135 +1,158 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84D72D878D;
-	Fri, 29 Aug 2025 08:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB4C3093D2
+	for <linux-modules@vger.kernel.org>; Fri, 29 Aug 2025 10:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756457407; cv=none; b=pJLaRNCyi7K+ZwYjxzoey2q2S7gDHQyxkX90SYTcMkPMF68pWtcJNTQtKLhrsQN4vekpatHdpf6CpgkJjlsrECBEWpKOH5h4nGisAdx0HDTZ67noRl+0JPUN6wL1uNCgiaQ/Vm47xeEd57ClNes6L/R4MhTpeVlHpVLLZrhcpTE=
+	t=1756464873; cv=none; b=f88CBT5adMdAzc318kBPiDQxA+wTtMVa3sBFzdZgQ2VBREPAjLCH2V0B42CAyWwqbzi6cp/NF1qN4Qh9AQDbiQJZK2Ocr9zZynU0MBJC/WCeB5uFj1hAb5MHcdhBBdifCULpyai0cEdFH1Ixe2hMBoDIwn7+HmJ1X5ZIS9IJWZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756457407; c=relaxed/simple;
-	bh=fpaE0d595CwgrDFlhfV+X1m/1hWBH32tbRMD/0YcFiU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nl0AivRyRmquD3TLAbloztrTAVDMMnOPfvUTn1DsCQtWWKRWyI274EDBcnK3Qdf/rniStWN2U3Q6NxSoFRh4wYwEzE6uac38rKL0TlliBGcvSzlkOyx2pKVo7LZIspdhgE92YDmItYo2qAJT8jnpeGMAVtHNTIPIkKJhgIIBgnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+xC8hKv; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756464873; c=relaxed/simple;
+	bh=/4lgxBFBXe5YAPib3n1NIP7CqiEc2ADQutfeyO4Ql5Y=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rqoNaQEmQpuujU7d9ZbxPCY4vvskjo7QXFlrkEdlqqF3jxfJlFxUorCumwvHoYHe9zw3YSFPOLvVf6AViwo/O7gln9SGe3KmBXAlGyZou/RDL79VgAgtHHF8xCqT8L8IwGTNudNIKM2DXDJITwXHSVaIE0O0Ph+sCcidqfCPOZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hK53H9p0; arc=none smtp.client-ip=209.85.208.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+xC8hKv"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2445806df50so15326845ad.1;
-        Fri, 29 Aug 2025 01:50:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hK53H9p0"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-61c6e3b4b89so1574659a12.2
+        for <linux-modules@vger.kernel.org>; Fri, 29 Aug 2025 03:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756457403; x=1757062203; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Ud+6Xa1z1jB5TLuiA3lgD5kenmdYlZUP1Al5nUROhw=;
-        b=C+xC8hKvVDIAOR43Wn5Q6D/W8OJcNwUXj13YpN0ChTBWWRc6TsGKqlWR9EZr45hHHq
-         9SZzup5BkaT63acvSdaCmFSbYMFWRCh24o5znl8qEf8kxhUYkdaEM34yO1pjCla1M4AU
-         fSeIdNELjBfIH3HY1wkGTEcncVpdywe79E24DAvkKVMDmSzCnK2VKAd2//szFCcQVSVw
-         U0as2AbYD+y3ZEavYEk113JdSBJdwj3/C388w10rD/M2EWAOYGUNeRHO4M00DEhrtshr
-         qGg0T4p0i76VhkTOKeJl89qeHgPOG2bokPPipqv1jPOZ6h9LBwhbKz+pmVa1pXlUFZal
-         nRDg==
+        d=google.com; s=20230601; t=1756464870; x=1757069670; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MTstZdg+IFpEL06up0r6KWAqHR4urEga4onDvlcfI9I=;
+        b=hK53H9p0jcRVdPqya+uPKYsE+UI/HdLXDRLCNBvBXr/qtQhbeadQ34xmHQ5+KrWo38
+         2Eq6Zx/T66K3xPnqPPLNag/u3kRggtaGRg8JtFtS+gm3/9TTQ0TQbNBufUJuqrdYoOPP
+         mzTLCIWeI9A1JE7QxxE644QpdfTi9XUZe2PA0F7BIhA6h7Ddxp4kPsYQs+yeQIBIRwE5
+         S+0r1HiyQxsc+QnXAcpq+ArS98QUIe3ZYEtWx2jSKhNdFnEPyCvSGTt5bjw+KrXMImPA
+         x1HZv2BN/142pZqv1+aPhUlBGMUli+0E05BHAEqaqXJUIGi9Jp/PdVRzIqjqYaR5KOEA
+         B36A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756457403; x=1757062203;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Ud+6Xa1z1jB5TLuiA3lgD5kenmdYlZUP1Al5nUROhw=;
-        b=xPOI3oxkA4FccHenvDT2eGQSKbP5NLQiGTiqfMkV6+wH6A1vlwR0Ej9eVcqqIQ+5JS
-         x5tdOlwCpPuBhRFJQBt32BmdNlx282+YrxQ8/VSFgWBrs+/zlLBJapp8oB5kgggOej41
-         hbJ+0n9Kz+LkeNuecwrzVLTqwIYHU9pRMuOTBoft55y7x294abx54pcnkyxCzrc2IK5a
-         JgD/qECeUstyJTjGseN2LY3wj+OYjAdghaX/gZhr4lT3t8bbtuzVAWClIXMDYWpVJbrV
-         4yWQMfuJIGuviBTwC8saUHVoylKV9VhaQPLWChH6qVFYcp//wEQgAhXnnW4JCzEyw3Xk
-         zzGA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8yUw1JT6QI1JOTElX2RMI2ld0NkTemd9dCdqRTdG/hKTiT6mA6x1Qy0pn6ny5h3Ez7PVlC7k7VwFEmuw=@vger.kernel.org, AJvYcCUkmcWNIjLj3VSlKkzEROVOqPUts9ofMN9U2jCO+zOEAu0uwRtCZU8xd62vHDTHcSpqFku7G9/dQJQe2MNt0w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTZjFaFci7pSqUZg4GIm3NEFzBqp7BD5A85bZlzvlEjfBkwdnB
-	7SeHXjBkWNe0ct+7DdJVa7hQtc1HsR/0bAssRw6R6ls7sEqso67njhZX
-X-Gm-Gg: ASbGncsZKwHt6XPl99v0egO4930T1zXjGXkmb/nEbwt1IFB5qK0vjMqUdgrp6tpD5zV
-	LthZdS8mxZ6bY1+0XwibWn2SinryHGGM6F7e59XcAdYxQFWju5d480NxJDTzNzNZIqJfgZHlIsp
-	9eKjaX9EMqCag9hs+5+jOSglRGtRW+QfvdZlu72ZBJnaXpqr1K3uhOMZt60VuOz62gLzg+DSHwj
-	n+QNsyJndtkBD2S9QU0CESYA4F2ZruJ+riA2gcRbjuh8SFh+ChrmzX6ghxEumkmu28CLVoMFbd+
-	HQeJ8SBxVDa47zD2ERhM1Qa4awLoo8SnO+WtC+W1HE7svqXAlscjIb1DvthWZcQIN8oHJKo3WVD
-	CI21NPIBLMdJDWg5H2dmz5S/7syPA2+G73/5lOSAartnfxCiZNpqAwbF3q0fP
-X-Google-Smtp-Source: AGHT+IGJjVrZjcGLD+aYNVVvBsvvvll4RulQAnH99m3XElYYX9NlW09W3j3ChREh88K6yxVOoh/PQQ==
-X-Received: by 2002:a17:902:f607:b0:248:e0a2:aa2d with SMTP id d9443c01a7336-248e0a2b173mr64242025ad.25.1756457402912;
-        Fri, 29 Aug 2025 01:50:02 -0700 (PDT)
-Received: from localhost.localdomain ([103.88.46.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903702980sm18561865ad.13.2025.08.29.01.49.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Aug 2025 01:50:02 -0700 (PDT)
-From: Jinchao Wang <wangjinchao600@gmail.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Jinchao Wang <wangjinchao600@gmail.com>
-Subject: [PATCH v3 4/4] module: separate vermagic and livepatch checks
-Date: Fri, 29 Aug 2025 16:49:13 +0800
-Message-ID: <20250829084927.156676-5-wangjinchao600@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250829084927.156676-1-wangjinchao600@gmail.com>
-References: <20250829084927.156676-1-wangjinchao600@gmail.com>
+        d=1e100.net; s=20230601; t=1756464870; x=1757069670;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MTstZdg+IFpEL06up0r6KWAqHR4urEga4onDvlcfI9I=;
+        b=YxhH3R/WzSb2pYJrtAMta6740aOQgpNRqRYqS9Be5twGwSHiE642Nx4Ip/N1LAXGIX
+         IOGnAENynZzXfBqq1aojeC3kuu/i2VCZSobt+4j5XinCy3sHKV08+R0weUF6KNECreLh
+         JDXOZVSV9dTJyv+yk0zR6xcbg6eCeSRLlCG2NmgK7ZwnfbV4bFFbJ1lkjuy36G07Vk/v
+         v1UqDh8uJhEVy10EsAlneb3t1RIqq4HzdSJTnDS4tN14rwoaRoGv7fUN8McG5GYGcPmX
+         xSScjaAJjrWAG87+LUrmSQOzcmDQ8TAEa2CHfpezndLSXPyG98vMTiSlCE9Bnh5i5ZaU
+         IIEw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+DUbwuRgJwazMFNRG+ivMuQxovF4MJHbYEV7R/t4IK7LlDV9Ar6q4pQ8dQgMvCNLi0V1Kd00riFeZHr59@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8Jkc7Fq4d8PxuGEhu5BaoY6E0iM4EUXCk+7fRpj7yblnLM6ry
+	M/fks+OuHd6JiGq6p/0c8Md2Sys1Hk/zU9wqQ+GI3Hqs7iJGrbML5A087aOmGZ9dXesQ7pqA8Fw
+	Vp7frGhgHyYA0QrygTg==
+X-Google-Smtp-Source: AGHT+IGyBZPYAxC2QPneWYAvzHS6WMIz8B1nFWUJPBrnRl3yjjUsDZG3jLzbCQ+RMfQCg25v3V4Tuq3Js9lkLiA=
+X-Received: from edf12.prod.google.com ([2002:a05:6402:21cc:b0:61c:f8dd:a29])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6402:5c8:b0:61c:d4c2:bcfc with SMTP id 4fb4d7f45d1cf-61cd4c2c9aamr4614283a12.18.1756464869977;
+ Fri, 29 Aug 2025 03:54:29 -0700 (PDT)
+Date: Fri, 29 Aug 2025 10:54:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.338.gd7d06c2dae-goog
+Message-ID: <20250829105418.3053274-1-sidnayyar@google.com>
+Subject: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Nicolas Schier <nicolas.schier@linux.dev>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Siddharth Nayyar <sidnayyar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Rename check_modinfo() to check_modinfo_vermagic() to clarify it only
-checks vermagic compatibility.
+Hi everyone,
 
-Move livepatch check to happen after vermagic check in early_mod_check(),
-creating proper separation of concerns.
-No functional changes, just clearer code organization.
+This patch series proposes a new, scalable mechanism to represent
+boolean flags for exported kernel symbols.
 
-Signed-off-by: Jinchao Wang <wangjinchao600@gmail.com>
----
- kernel/module/main.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Problem Statement:
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index e7484c6ce6e3..98a678a18300 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2571,7 +2571,8 @@ static void module_augment_kernel_taints(struct module *mod, struct load_info *i
- 
- }
- 
--static int check_modinfo(struct module *mod, struct load_info *info, int flags)
-+static int check_modinfo_vermagic(struct module *mod, struct load_info *info,
-+				  int flags)
- {
- 	const char *modmagic = get_modinfo(info, "vermagic");
- 	int err;
-@@ -2590,10 +2591,6 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
- 		return -ENOEXEC;
- 	}
- 
--	err = check_modinfo_livepatch(mod, info);
--	if (err)
--		return err;
--
- 	return 0;
- }
- 
-@@ -3334,7 +3331,11 @@ static int early_mod_check(struct load_info *info, int flags)
- 	if (!check_modstruct_version(info, info->mod))
- 		return -ENOEXEC;
- 
--	err = check_modinfo(info->mod, info, flags);
-+	err = check_modinfo_vermagic(info->mod, info, flags);
-+	if (err)
-+		return err;
-+
-+	err = check_modinfo_livepatch(info->mod, info);
- 	if (err)
- 		return err;
- 
+The core architectural issue with kernel symbol flags is our reliance on
+splitting the main symbol table, ksymtab. To handle a single boolean
+property, such as GPL-only, all exported symbols are split across two
+separate tables: __ksymtab and __ksymtab_gpl.
+
+This design forces the module loader to perform a separate search on
+each of these tables for every symbol it needs, for vmlinux and for all
+previously loaded modules.
+
+This approach is fundamentally not scalable. If we were to introduce a
+second flag, we would need four distinct symbol tables. For n boolean
+flags, this model requires an exponential growth to 2^n tables,
+dramatically increasing complexity.
+
+Another consequence of this fragmentation is degraded performance. For
+example, a binary search on the symbol table of vmlinux, that would take
+only 14 comparison steps (assuming ~2^14 or 16K symbols) in a unified
+table, can require up to 26 steps when spread across two tables
+(assuming both tables have ~2^13 symbols). This performance penalty
+worsens as more flags are added.
+
+Proposed Solution:
+
+This series introduces a __kflagstab section to store symbol flags in a
+dedicated data structure, similar to how CRCs are handled in the
+__kcrctab.
+
+The flags for a given symbol in __kflagstab will be located at the same
+index as the symbol's entry in __ksymtab and its CRC in __kcrctab. This
+design decouples the flags from the symbol table itself, allowing us to
+maintain a single, sorted __ksymtab. As a result, the symbol search
+remains an efficient, single lookup, regardless of the number of flags
+we add in the future.
+
+The motivation for this change comes from the Android kernel, which uses
+an additional symbol flag to restrict the use of certain exported
+symbols by unsigned modules, thereby enhancing kernel security. This
+__kflagstab can be implemented as a bitmap to efficiently manage which
+symbols are available for general use versus those restricted to signed
+modules only.
+
+Patch Series Overview:
+
+* Patch 1-8: Introduce the __kflagstab, migrate the existing GPL-only
+  flag to this new mechanism, and clean up the old __ksymtab_gpl
+  infrastructure.
+* Patch 9-10: Add a "symbol import protection" flag,
+  which disallows unsigned modules from importing symbols marked with
+  this flag.
+
+This is an RFC, and I am seeking feedback on the overall approach and
+implementation before moving forward.
+
+Thanks,
+Siddharth Nayyar
+
+Siddharth Nayyar (10):
+  define kernel symbol flags
+  linker: add kflagstab section to vmlinux and modules
+  modpost: create entries for kflagstab
+  module loader: use kflagstab instead of *_gpl sections
+  modpost: put all exported symbols in ksymtab section
+  module loader: remove references of *_gpl sections
+  linker: remove *_gpl sections from vmlinux and modules
+  remove references to *_gpl sections in documentation
+  modpost: add symbol import protection flag to kflagstab
+  module loader: enforce symbol import protection
+
+ Documentation/kbuild/modules.rst  |   6 +-
+ include/asm-generic/vmlinux.lds.h |  21 +++----
+ include/linux/export-internal.h   |  28 ++++++---
+ include/linux/module.h            |   4 +-
+ include/linux/module_symbol.h     |   6 ++
+ kernel/module/internal.h          |   5 +-
+ kernel/module/main.c              | 101 ++++++++++++++----------------
+ scripts/mod/modpost.c             |  27 ++++++--
+ scripts/module.lds.S              |   3 +-
+ 9 files changed, 107 insertions(+), 94 deletions(-)
+
 -- 
-2.43.0
+2.51.0.338.gd7d06c2dae-goog
 
