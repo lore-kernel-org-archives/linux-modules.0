@@ -1,130 +1,122 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDC89476;
-	Tue, 26 Aug 2025 18:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D6B29D292;
+	Fri, 29 Aug 2025 08:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756234723; cv=none; b=aBKOfLwc3m7C0ITJ+hVJOsXMOtwiKUxZiqeTul/Gkljld4O4AI5dta4JTtVxikEJhYw/6ANby9iNB/khVAEtlE4T4B70EbDunHP6bY0YnUiD40PZzEKZCAEave0wyYRdR2/Ay27yt8iFYF0A/vk73NKkkOafNPRHj5b4lk/wAUU=
+	t=1756457387; cv=none; b=gyC/NA+62RVwPXIGCzn3IIn0BScwWebfOxcPi6c8jfw97O3XnkQUAO1OBVSTC7XV6vJ0Cw+P/QgS76X+TJO0J0pnq2nhGbTYMVDYBwmSCNcJaajJIdaOzUwc3tB+H1iyIDlFyWObzbCdsufWb/4V2Y9WZ3rt7SLEM+NxxvVFnuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756234723; c=relaxed/simple;
-	bh=5RnesvrqWbneWkaDrRLIKJSGQ+BJxqPzKrfrwi9jjRk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=DnOadBCiz52VIo2+RGlVL8aq3l3yHlDedHxAR+lQr8FjZ7UFkUW5+MubGg6+vb6wq2rryKaybQFNoJ/lNrDH5dBVuCy53YgHg3ML3YzoLnbEAH9iAvyrQ6Mo9mZ+chw38csPK9bsABzXkRcPQUQUfsGr4zwOOiMzvRRaq3XYw+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
+	s=arc-20240116; t=1756457387; c=relaxed/simple;
+	bh=JbhnwTVYbBKZ246Z3oNAI4358vS7U8t38pnsI6lRz6s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u9FV1kDurCmv3L9KDd4nvCoPTl1sYmd8kr2MtEQl5ZtWp3QG2REs3NzYnhBJHls7wXfGtLr392qYQIXaxkIDT+NgsMWcHX4C5Qmnv3EA2AXE2t/LzsGmefYBuhV0XGDLg5nm4Yt7pC+i7IJgdko682xs9vAYX671HEIcVOsOewM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIQJzK7p; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b49d7a11c0aso557364a12.0;
-        Tue, 26 Aug 2025 11:58:41 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIQJzK7p"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b471737b347so1259223a12.1;
+        Fri, 29 Aug 2025 01:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756457385; x=1757062185; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NbSLf0FRmNd2abuQvWD3Rx+FdoZAzEBxPczsZ+T05a8=;
+        b=gIQJzK7piwRhLRmIyXBzM7L5x4gGXMpTJiYBhdDG2qkMHK2vCkU/Fj06Fk984frCMs
+         8XlQhY8MimLNPa/5CNFGQ8kMraf0PQJlKryq31Hk/fn5ZEvXWgkYH8rPkFjcWQkHNwVV
+         OVJ5WF94SalozfzPk15XoVGtl7/WsxH654kuqsrl/S2gaKuYuC8ylCJI15Efq+w5WVww
+         3qtbs4kQ/pQ9VE6+VMFOpLqQOpw16dN3/Mzw3pQV3RQDCApaLjbFX7iTbne1SHykHjRZ
+         7WO6UJks1HlC647xZ8KVFiSWxo+Ko3xMLukXWkNrv/TsQ3Jv/gSWNO3jr4YtXvw8/xzA
+         bTsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756234721; x=1756839521;
-        h=content-transfer-encoding:organization:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+GnJSs7z1NxEWE4UhegoOllTPFbqENM36ABV1n4d6AA=;
-        b=XqicINBLgOC0qrQOX2OOo2hRIf/uTmdTua0a93K3aoEAet2GmYFekqMUUQhTxBbwUA
-         doFxe2aOimQUjM55WV1mJ5feBTFigY4zOU+EQWJUG6InmrNFczBNNd6H/bGIse28hR4k
-         cg9WXqCR268/4aUYEzas9VYWUTfe31l+M/fNl8SF0nRam266FO4dA/AYFcXh7MMZNHlJ
-         EEmkYaVT5o+ocLX2Zy4t/UGfMA6wehUtC9hRAy+vw6P+MBsta9s8/brlJiysOdEtZxhT
-         RkNIkBjP+rFZ0sxyzJkJxn+kL6zyrUjbwRwKhmb0Y3rEv/J2ZdqIDJ+WyJIec49nWn2o
-         tg5w==
-X-Forwarded-Encrypted: i=1; AJvYcCU2PgKM1s06A4Le4BeF5yjoJOp98ecEEe5KMIiQFIoCsSidEnPenMRGYBa662B3ZAuRzfivtkyh8g==@vger.kernel.org, AJvYcCX62yKnz4G9HFWrTNgRgpMv9Vrivc7DGidS6fS1NZyDqnFDZghLaTjFdrApn7XVUjC6xi9etavT5sTAggmI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0AYruFKOAXX+Y/FXsBqwsYzIasGfi14nojiVkq/H0rK9hXvdj
-	oDF1HQwyACj4oNl5I+roBL2F2G/xqJxnyVjfLnwlx/NOw261ZX5Ny2DQ
-X-Gm-Gg: ASbGncsHWZxO2Ybeja0aG9i51w1ntsurAOQqlAYz3nGJQkjnGxyIBERgTKX/EC3/7Vw
-	S7dMKf+p5rDVY3Fr0heoEgfmDn84nsy6ihQdkDp4yz7TsjilOta0PResZSDoDVW7mvchj583skj
-	lJ5zMEWDMKmUtHgiedXi9v94NerMBBjGIzi6st3EPEbOLzCnzWaX7PijbFl74pqOTQPUrCLFIYw
-	Vdw4tQT/KXoQa6GSWipNubq47ukGnUeaW2FHyTT71iXF2tj6mEDbU9mAQwUnJVFkWzcrb0V91p5
-	I5i5PhM3BMUv8PoWgdDn/gsYU6nmy4SlQmURpsCKcxih1DaO9t4ZEiCRZLTqwB8Tc2Ku9P2vvUd
-	yceGu715/bcEVG2+XUe7+xvzv8FdZ2QO4uV2VsxbWHf5qTRNj5UlInhIqr2VM8ChaBsnHdbRupR
-	5ez+Ki2D6o/fkSvFPcyfzqxLxDgUde
-X-Google-Smtp-Source: AGHT+IGlPCWJla+VIK78TyPqI8GO2lbDHDihFAu9ZjqEGJkUg/QO6oHFPtoau7+xY/JgaBWRWmByJA==
-X-Received: by 2002:a17:90b:1b44:b0:325:5998:751d with SMTP id 98e67ed59e1d1-3255998780amr8209025a91.5.1756234721220;
-        Tue, 26 Aug 2025 11:58:41 -0700 (PDT)
-Received: from [192.168.50.136] ([118.32.98.101])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3276b07f38dsm203072a91.19.2025.08.26.11.58.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Aug 2025 11:58:40 -0700 (PDT)
-Message-ID: <a40e660e-5a45-420a-8d37-51324242ab9b@kzalloc.com>
-Date: Wed, 27 Aug 2025 03:58:35 +0900
+        d=1e100.net; s=20230601; t=1756457385; x=1757062185;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NbSLf0FRmNd2abuQvWD3Rx+FdoZAzEBxPczsZ+T05a8=;
+        b=FHIDer0EVw4QP99mrW/V8VUahPOOA8gz8bY9TIfzr3ST1uni6upxPBguUujs+NSi4k
+         XRxuXYlGJwvzBx9cse1MfDOJDiJxCb5j4pFeL58SD1tcmIhHxjvPHO/Pv7NcEW8YfQxU
+         gzZ/cZfTbO2DIsZtkf5XZg1BQxx2yk7hZOHFZJ+RsNXr6OWk9JSJcgA5/VeR5tsfH4Mb
+         fKD+FUhQ+z/p5towJ1MSQt1nziMjkG9iduiQ+hVNOuWkhEHZnxhgPd6PWRXshGUj0ZTi
+         OeJP2v58QsItu26n1AZZc13TEL9neKgIZKDPP/oz9JQNTihnLPv7QkEeFHC94z0+rw93
+         Fh1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVC3fGim4XIIHDQGdwbd8tKKmA3MCOysXae4u95WhtvtHLesfWEvteBSoPAXImVJUXlSvX7rBHeIfbYKNzZwA==@vger.kernel.org, AJvYcCWTx3HDGXqlCNCiynP2JnqU7OsfdnkNCP79KsRGFrZZ6sfRvu3wWQLp47bNoXkS1IM2h2A6sX4Xm3ehc48=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/oBh13M42pGwPCWlSRs6IS9kwm0M5c/5uETuzL1ARvpbrP530
+	0wt4kNHk51khyGX0xZ7lRNOuWVGlWZeF6hVJysenGkvl30Yf958xcoiU
+X-Gm-Gg: ASbGncvCzTRxGtfLY78672S4EjIz+AepPStSgF2o2sQM7i81cdyuayntBPAniWLxfni
+	JpwJA9xUe1b19Iw31PyjuJEMRwf/WGXWvIsfUKbMoyjSdbPtaRin07fh+EQCGudKbl5oTbPyuWn
+	ovENdYXynlmj5KuxkLSeYMZmZmIUcetp2Wih8/II3rgpBBygZfw+MNX7LPN2mPBGAuM1M4qgmi0
+	7w9Cthg0RpjUssk5xLmY1k3Yry+aF7pSex+VJutZqVCZXzRFYJoltgNePAe4UX9yfothl+j8w65
+	Jw5SckJbNCzGS/dUvSQjP+avMZIWVCsk3ZKr9yDHAy5eaJk86O/uC+ywcD7t5iir6WVs2PUexNb
+	uWeVphHSRlYdc1ByN9/ROxeSmIIQaoAsRswjujkuIH3Mi0F37Q7uS3gPRD2ZJ
+X-Google-Smtp-Source: AGHT+IGtL08S6syuCjaCCp2xwbcRHO5VB6A44I8SoMoGAcrIf5/GzAF9mgZXy9yw4UT3fXKyFKOmSw==
+X-Received: by 2002:a17:903:38cf:b0:240:9dd8:219b with SMTP id d9443c01a7336-2462ef99b9amr367370055ad.49.1756457384920;
+        Fri, 29 Aug 2025 01:49:44 -0700 (PDT)
+Received: from localhost.localdomain ([103.88.46.62])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24903702980sm18561865ad.13.2025.08.29.01.49.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 01:49:44 -0700 (PDT)
+From: Jinchao Wang <wangjinchao600@gmail.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jinchao Wang <wangjinchao600@gmail.com>
+Subject: [PATCH v3 0/4] module: logging and code improvements
+Date: Fri, 29 Aug 2025 16:49:09 +0800
+Message-ID: <20250829084927.156676-1-wangjinchao600@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>,
- "Sami Tolvanen <samitolvanen@google.com> David Howells"
- <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>
-Cc: linux-modules@vger.kernel.org, keyrings@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Yunseong Kim <ysk@kzalloc.com>
-Subject: [Question] Non-usage of PKEY_ID_PGP and PKEY_ID_X509 in module
- signing
-Organization: kzalloc
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-I would like to inquire about the purpose of the PKEY_ID_PGP and
-PKEY_ID_X509 identifiers defined in include/linux/module_signature.h.
+This series of patches cleans up and refactors the kernel's module loading
+code. The goal is to make the subsystem's logging clearer and its internal
+logic more straightforward for developers to understand.
 
-The enum pkey_id_type is defined as follows:
+The patches in this series: 
 
- enum pkey_id_type {
-     PKEY_ID_PGP,        /* OpenPGP generated key ID */
-     PKEY_ID_X509,       /* X.509 arbitrary subjectKeyIdentifier */
-     PKEY_ID_PKCS7,      /* Signature in PKCS#7 message */
- };
+- module: signing: Use pr_err for signature rejection
+  Makes module signature rejection messages more visible.
+- module: show why force load fails 
+  Adds a reason to the error message when force loading is disabled.
+- module: centralize no-versions force load check
+  Refactors the code to centralize the "no versions" force load check.
+- module: separate vermagic and livepatch checks
+  Improves code organization by separating vermagic and livepatch checks.
 
-While examining the module signing and verification process, it appears
-that the current implementation strictly assumes the use of PKCS#7, making
-PKEY_ID_PGP and PKEY_ID_X509 seem unused in this context.
+---
+Changes from v2:
+- show mod->name in try_to_force_load
+- fix a introduced bug in patch 3
 
-I observed the following:
+Changes from v1:
+- A patch was dropped because it was based on a misunderstanding
+  of the ignore versioning flag's original intent.
 
-1. In scripts/sign-file.c, the module_signature structure is explicitly
-initialized assuming PKCS#7:
+v2:
+https://lore.kernel.org/all/20250825091545.18607-1-wangjinchao600@gmail.com/
 
- /* Key identifier type [PKEY_ID_PKCS7] */
- struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
+v1 :
+https://lore.kernel.org/all/20250822125454.1287066-1-wangjinchao600@gmail.com
 
-2. In kernel/module_signature.c, the verification function mod_check_sig()
-strictly enforces this type and rejects others:
+Jinchao Wang (4):
+  module: signing: Use pr_err for signature rejection
+  module: show why force load fails
+  module: centralize no-versions force load check
+  module: separate vermagic and livepatch checks
 
- int mod_check_sig(const struct module_signature *ms, size_t file_len,
-           const char *name)
- {
-     if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
-         return -EBADMSG;
- 
-     if (ms->id_type != PKEY_ID_PKCS7) {
-         pr_err("%s: not signed with expected PKCS#7 message\n",
-                name);
-         return -ENOPKG;
-     }
-     // ...
- }
+ kernel/module/main.c    | 14 ++++++++------
+ kernel/module/signing.c |  2 +-
+ kernel/module/version.c | 10 ++++++++--
+ 3 files changed, 17 insertions(+), 9 deletions(-)
 
+-- 
+2.43.0
 
-3. Furthermore, I noticed that certs/extract-cert.c only defines
-   PKEY_ID_PKCS7 locally, seemingly without utilizing the definitions from
-   the header for the other types:
-
-#define PKEY_ID_PKCS7 2
-
-Given that the module signature infrastructure seems hardcoded to use
-PKCS#7, could anyone clarify if PKEY_ID_PGP and PKEY_ID_X509 are used
-elsewhere in the kernel? Are they perhaps placeholders for future
-implementations or remnants of past ones?
-
-If they are indeed unused and there are no plans to support them, would
-a patch to clean up these unused enum values be welcome? Or is there
-another reason for keeping them?
-
-Thank you for your time and clarification.
-
-
-Best regards,
-Yunseong Kim
