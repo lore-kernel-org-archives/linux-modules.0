@@ -1,65 +1,33 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1DA3277AF
-	for <linux-modules@vger.kernel.org>; Mon,  1 Sep 2025 12:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6AF16132A;
+	Mon,  1 Sep 2025 18:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756729627; cv=none; b=OMfnZcGgww2pkqNgKP9KH9M3AqL8+I5hLUpquhs5xN7hF/daVTmL85QGVRijWF4C8xI3QqHNO435ryy5Sm0pq7AOSaoMN86KHpU1FloIj9gI377jtPLpMeV6E9Vl9pDggtQU+Eqj5vYJgUHL8Lled/V8DOaFgcRU4yZhmc1HmiY=
+	t=1756750739; cv=none; b=HrUFUSKepEMYHMcSJ6fd652ZvKJH9nU3z3SHTgJMN7MzJGUYUKWGI1WSYqrjsGSd9LihKczYoHZ/nAccmZxlS3+wyq8H+3TYOgfUmsh8XUh/7t9PnR8NLbzu24GquuGJEi7k8Jj+dyWTcFtbTaDBhJhHewjYm48VCNM9uM+7LNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756729627; c=relaxed/simple;
-	bh=NI3j//K+uv280Ub1AAwzmSKy0oNo3n7zmmHOVS4hqJw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EQC3Cc7fFOHWvHxLQP5/gVmkE3fHNTxGjD+58B6yxYqzzAvlEa3wpYJSQnc/OGGf8L/OCFIiMpZasNwRb1gnwBJJJL4CULAppUxNqig7vMmcFeUH8bLlqYe4O7voInFmc+I1X6jfzU0fsu4GjII9u439mVCq8TrViQ8cYlUOW2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DvN7JTzn; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1756750739; c=relaxed/simple;
+	bh=7Kyem5o9tIBlzVjy/g3/1kJ1+KdaWx70IttLfM13BpY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=eSLB7L7X7GihRe40Z2pzSr+a3OSkgXQAT1E0xI2WxtrTec0HIa4on3O2g3TqDZGFIH9+xRBla93+wJZa9wXc5dF5J0OlKQC3hVrSctw6DQq8Vm0SLcHgInrmif7k+zzQV59DKJEM1pPXcgK0ZeJvoWvYZezHx6603O38G4gDHxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlBycC+S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DvN7JTzn"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3d0dd9c9229so2201909f8f.1
-        for <linux-modules@vger.kernel.org>; Mon, 01 Sep 2025 05:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1756729624; x=1757334424; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CvXFM2+EDhInaja9QZo9cQmXYbU073wpqmRBXkRFUBM=;
-        b=DvN7JTznmTgh9C5aWlllMdoPjvzuLsP2rqj0D1Rp6pMS1HNU+9dHfXvc3l7BLcnUQx
-         y8NnaUXXZlO8FQ9BUqCFPLJCGZ8RWM00pfuFH0WzyCW7oR1tBGVCTa0jOCupyiMxp/0Y
-         W0arLHgpl728aSFjv8Hqd3b7IOYygQ2zmdYzv4Htd2iodz99XlNZQeQmbrDGjMvFXc8u
-         FKcWwqwsbpH+ZjZacq/PU7sksS6QMv15u94T9D9EXqr60KEPW/yZf5B7toQk2ldCxSoP
-         pR37goby4lon67/Xo5BZzuHYJRpEzEEgsZNrpRGSOYuz20iDVNkknDg7zohLcCiKJLaF
-         ZGJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756729624; x=1757334424;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvXFM2+EDhInaja9QZo9cQmXYbU073wpqmRBXkRFUBM=;
-        b=qylnyp5HilVG2YwNfua0mM8y+J5cxnxl83z5Z2GMeLiyBpTcDHTE79MIoAsdRT1/Vg
-         yUIVoiZLxm+FqFtJdmNeHiRzdJSI7PMiFfz96rLl9eyQUKnGMyXwt7ApTqXh1KXu6Rxa
-         KV2qG9RL9C37Hlveld4IK22LngFlGI82MOWodYtkn4m/Hu1WAbRtjYFnE5oBIHdxalHE
-         jh/yHVZplGM6QICUiF6ewI3V6jcVT5jq7bIFn7SYHviltTzGejtxWOSJMZQuqo/6q7dL
-         roKQ4Z0O7oujlagKWhdCv/j7xcDd9W8fDrI2Lo2CxNeVmdn738aCwlX7h6DnNdsLRPkB
-         4pIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVN+yxVLwDJJCQYYcI+lxIOHmQRpEgpR/pFyHOWLbvVazS3d1J5O15G3WWIYr0+rRI878O1fO7NPIWXSdLd@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2VGDiUCcbf4uzcUy0ruDN4XQ7NgiCsBLAfQynXLS/OEN/6HOp
-	KHOQDvWwxShSfg3v2cLKk897Umof1ZF3GXLC1BbREqb2hLqa5V8tawugKRu8+dRY3EY=
-X-Gm-Gg: ASbGnctSPN8JtOhR759CncZoxvivu8Qe4Z10YuQPf7szunU4jkmIV0Sz6vY0Ak8kOam
-	W1cm9Zu4rep3NEOqqC0+a/Q29OC6uU3fUvTW1gX4+KtTYKUzq0yYmFZV7/N/Iecx7vKFtMOLdDk
-	kbpbRAjaNDeDUMMH9olLDD2ne5gZZz7zCSN/3WlbaT3CgftCMT0Kz9A0SiMibRgEsgMH7GfcyNr
-	erNtx1TZEnSxUUXSrtCf/FXwXXtQTCR08AX9eVpRTicFXUm1uyhv7dCf8/rSnSsqGEDCcuLBalL
-	AAWbdztGZyEaK2HmLtievSy1EnrwZwrQcb7lsIHx0Yr+TKCp+T6Y+UCC/s47PtEDOqd5hf8BtBP
-	cIbLnyVr3kFYC6HmKHMqcZuojUuXQ5XtIt8SpgJG7O/5QBV0w/O0iEw==
-X-Google-Smtp-Source: AGHT+IGMZj0MUqoNS8l03J940dxpE/Oa7+eZtp6hkgsi4bqmdFUhhinsYeDmT1bsO+4zfR2NPsVVzA==
-X-Received: by 2002:a05:6000:240d:b0:3d7:c86:800f with SMTP id ffacd0b85a97d-3d70c868524mr2579250f8f.60.1756729623615;
-        Mon, 01 Sep 2025 05:27:03 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d7330e4bc9sm3325617f8f.10.2025.09.01.05.27.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 05:27:03 -0700 (PDT)
-Message-ID: <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com>
-Date: Mon, 1 Sep 2025 14:27:02 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlBycC+S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0C1C4CEF0;
+	Mon,  1 Sep 2025 18:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756750739;
+	bh=7Kyem5o9tIBlzVjy/g3/1kJ1+KdaWx70IttLfM13BpY=;
+	h=Date:Reply-To:Subject:To:References:From:In-Reply-To:From;
+	b=HlBycC+So6+cM9GuGJM3utYXneTkdyZWFuGnA8tqMu0U2IuFSrw71pzswc4Q6X/JK
+	 +djgze8HrXcLgjjERAtBNNh8nXjhxaZcib1VNrkA1ojP2GyeSnhFwbOKluI11onhtK
+	 xI91YYLJcMRUdnm9cilUvZ+areYBEx3v/7WdVZpLnOM2ZgL1s6sCuXo9cdvWp743FG
+	 IJeuI4GynioLF+V5xAjrXbx5+wBLE99SPqtsbSzkijey7woERdA0KCbbWZy1pmgQql
+	 aTVD3X48jpNmyIMMqIWHtJF69yrqX1wDOEtl81Oo1K0BO5FKDz3mND1RQj1JBp+UKf
+	 zyhmNm8Ixe6gQ==
+Message-ID: <156fa755-6937-4df1-b995-99a2cc4bbb0a@kernel.org>
+Date: Mon, 1 Sep 2025 20:18:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -67,99 +35,27 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
-To: Siddharth Nayyar <sidnayyar@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH v3 1/4] module: signing: Use pr_err for signature
+ rejection
+To: Jinchao Wang <wangjinchao600@gmail.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org
-References: <20250829105418.3053274-1-sidnayyar@google.com>
+References: <20250829084927.156676-1-wangjinchao600@gmail.com>
+ <20250829084927.156676-2-wangjinchao600@gmail.com>
 Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250829105418.3053274-1-sidnayyar@google.com>
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <20250829084927.156676-2-wangjinchao600@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
-> Hi everyone,
-> 
-> This patch series proposes a new, scalable mechanism to represent
-> boolean flags for exported kernel symbols.
-> 
-> Problem Statement:
-> 
-> The core architectural issue with kernel symbol flags is our reliance on
-> splitting the main symbol table, ksymtab. To handle a single boolean
-> property, such as GPL-only, all exported symbols are split across two
-> separate tables: __ksymtab and __ksymtab_gpl.
-> 
-> This design forces the module loader to perform a separate search on
-> each of these tables for every symbol it needs, for vmlinux and for all
-> previously loaded modules.
-> 
-> This approach is fundamentally not scalable. If we were to introduce a
-> second flag, we would need four distinct symbol tables. For n boolean
-> flags, this model requires an exponential growth to 2^n tables,
-> dramatically increasing complexity.
-> 
-> Another consequence of this fragmentation is degraded performance. For
-> example, a binary search on the symbol table of vmlinux, that would take
-> only 14 comparison steps (assuming ~2^14 or 16K symbols) in a unified
-> table, can require up to 26 steps when spread across two tables
-> (assuming both tables have ~2^13 symbols). This performance penalty
-> worsens as more flags are added.
-> 
-> Proposed Solution:
-> 
-> This series introduces a __kflagstab section to store symbol flags in a
-> dedicated data structure, similar to how CRCs are handled in the
-> __kcrctab.
-> 
-> The flags for a given symbol in __kflagstab will be located at the same
-> index as the symbol's entry in __ksymtab and its CRC in __kcrctab. This
-> design decouples the flags from the symbol table itself, allowing us to
-> maintain a single, sorted __ksymtab. As a result, the symbol search
-> remains an efficient, single lookup, regardless of the number of flags
-> we add in the future.
+On 29/08/2025 10.49, Jinchao Wang wrote:
+> Make module signature rejection messages more visible by using pr_err
+> instead of pr_notice.
 
-Merging __ksymtab and __ksymtab_gpl into a single section looks ok to
-me, and similarly for __kcrctab and __kcrtab_gpl. The __ksymtab_gpl
-support originally comes from commit 3344ea3ad4 ("[PATCH] MODULE_LICENSE
-and EXPORT_SYMBOL_GPL support") [1], where it was named __gpl_ksymtab.
-The commit doesn't mention why the implementation opts for using
-a separate section, but I suspect it was designed this way to reduce
-memory/disk usage.
+Can you elaborate a bit more? Why is this needed?
 
-A question is whether the symbol flags should be stored in a new
-__kflagstab section, instead of adding a flag member to the existing
-__ksymtab. As far as I'm aware, no userspace tool (particularly kmod)
-uses the __ksymtab data, so we are free to update its format.
-
-Note that I believe that __kcrctab/__kcrtab_gpl is a separate section
-because the CRC data is available only if CONFIG_MODVERSIONS=y.
-
-Including the flags as part of __ksymtab would be obviously a simpler
-schema. On the other hand, an entry in __ksymtab has in the worst case
-a size of 24 bytes with an 8-byte alignment requirement. This means that
-adding a flag to it would require additional 8 bytes per symbol.
-
-> 
-> The motivation for this change comes from the Android kernel, which uses
-> an additional symbol flag to restrict the use of certain exported
-> symbols by unsigned modules, thereby enhancing kernel security. This
-> __kflagstab can be implemented as a bitmap to efficiently manage which
-> symbols are available for general use versus those restricted to signed
-> modules only.
-
-I think it would be useful to explain in more detail how this protected
-schema is used in practice and what problem it solves. Who is allowed to
-provide these limited unsigned modules and if the concern is kernel
-security, can't you enforce the use of only signed modules?
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git/commit/?id=3344ea3ad4b7c302c846a680dbaeedf96ed45c02
-
--- 
-Thanks,
-Petr
+IMO, I don't think making it more visible is enough rational to increase the
+level.
