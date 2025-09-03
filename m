@@ -1,122 +1,176 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8F86FC3;
-	Tue,  2 Sep 2025 02:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E22C2EBDE9
+	for <linux-modules@vger.kernel.org>; Wed,  3 Sep 2025 23:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756778806; cv=none; b=RMPfLy682g2Z6r8EO4IXe2aqofTNOyvf9VuVUoB5LiykDhPrMUe+IJ54jhv2IGTjz+XvNvSJw6FFvU4iQc8yoH20P+0ltoYVsKEMHeMlMQ4obWzJglLdvYkQtgMpRqqhWRqyjq1dnmZprua2ALavcoW5lh7W+3v1HaO111pxres=
+	t=1756942116; cv=none; b=KyGBEmTFfygDUTlErDh6vR96F0Bm5+c5/EACteJs6oVUT2HbG3/Pb1CTvZXZBmYYETmu3X2qRxpocKuMP9J6ld69o8A0xk+1TGin2STDwKD/mGoBGHNW3vRQIsCglapxXi1Z6NQZ6VjwNnYyAszhiLt+4hxAyjnOol2oeeKN3M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756778806; c=relaxed/simple;
-	bh=HKF7Uq1F70Kwpgymh7jE0C86slFJcf6p3imFzKXpX/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=kY+Oyq9h2ePyhPx+SrM2h4FlJeX18W9Wo6lffPmW0mPhxD/iGtE6SOCTLUtAL3+3LKRl2TGOXWG1d5Xki1lFGxzMxbQqb0yuQZJOORP79Viv8o2nAE5f4cm3nd2m93nOORYRwipRRGbKNGcNrbEZbjwEczugRbsGw/17LLv42do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R8xpWlnC; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1756942116; c=relaxed/simple;
+	bh=UqjqachRXn1HwRELgrBTL2T9lUKqgqiaiITgVWtzg+A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nXFCC5KnaIkrDtpCJde/e5rDMvuWXTDMmLP1gYqzHBp3Iul6eoU1mvn9PR89xGIqEqMerDWQHdB+ckqlxl4Wo4u2jsqqljEJ4mXYUpv75OmyQF4GO7JHBfuFXZsQC0CGWSC1mug/g5/McFw4vcoS1IOHqKzCgVcExrcvZh+It+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iuys6/KI; arc=none smtp.client-ip=209.85.219.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R8xpWlnC"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-24af8cd99ddso9109585ad.0;
-        Mon, 01 Sep 2025 19:06:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iuys6/KI"
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e96fc00ad79so495416276.0
+        for <linux-modules@vger.kernel.org>; Wed, 03 Sep 2025 16:28:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756778805; x=1757383605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jW9MYCTk53LCzNuCPTRNVQYG7lCrtmuE12XP1nv23mk=;
-        b=R8xpWlnCVG34spWukZ8xf2qKFxlEkZhawnf5T35ZPulM4t+iKfR6P6OuAzhBMG2srf
-         kmmHDTuC2tTA/pXdCphnvfjTjWsQT0Q4KIk7bvVax1e1tWs8iGmAUeh9dhGNaT8KbG6C
-         mckJCEkEC4zLlPlygokm5Qe0JhgiZpJiKm1CBKJeBfAg8ShXZuKuBsS3X/fpbwAxTASL
-         yPQcEwFzVBP2tp0eUTnb7ztL7OQgCrp9M560WyKVm1kbbSWQ1Yps5NG3RrfoErvlYMEq
-         WgrI9ou3BMd4EciwzC9qWODatLqAGVAGMzyLsZ9h7IPvVoan43y7ZEnnOtrQNzaYs1fd
-         ww+g==
+        d=google.com; s=20230601; t=1756942114; x=1757546914; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqjqachRXn1HwRELgrBTL2T9lUKqgqiaiITgVWtzg+A=;
+        b=iuys6/KIqUOEXkJw0+/P7iyJGL10Ie4+pzhYF7wqZ977sNzQDVcahMNMjhoL2YPn+E
+         8P7VxOBjHwdm3wVghLH08/1NZ5Oq/w1FiPa3B+qO2hYkjQi6o0qOYNzygiClPSc7fi4S
+         2XD6otmiWUPl+vXmAWqRM5YTM03CsGV+ZE9AqthuKUJdZ1WX5usSoMTtrOZ7pUs2dxPY
+         ncp/2/5XRPxFF1XrmwlPoJ3bFq8HbGtM/H0iFon7R5xEqp4w0FP8e+LhD8e+rwIlBvDr
+         suSA5l2UzjIDuD/ec4FS9ZDRCTo2fVFVWBYndHw+sxxiMqpkqn68/I6i4DNmibbiKH68
+         FtZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756778805; x=1757383605;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jW9MYCTk53LCzNuCPTRNVQYG7lCrtmuE12XP1nv23mk=;
-        b=Fw1G88nx5y05z3F5Bnw13ztdHeUSGcBL4E8+Zjwxq/xEpjp6QltrXv37HVbuif6Gei
-         NiYBgjmslsU7naaHr2MlfFmra09Vd8uiEPnE3yNK+NSwFU3qkREidUdaydbozALAC3L6
-         Km4CMfSVCHt5nOtYmZhZDxYZQSB/DZ2QMmBy3RpKlyFJagQdO2xK5CQHVQZhsOrkX69n
-         gVVKaufj1vL8FzCvGmFjsZyASeX16ikWvaMqOqIBP7puGe/et6DEjTlQFbGDAd0JxLL9
-         H55P1rte5tTzLddoEcASy7bYksvMD1Es8lsOXTYAVcP9Ouk1g7BayXEQvvKvncLzXnkI
-         oUYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU48+DWjO/nVXe6eRlxO1l9uwPaxCWauJGvv66OjQu8ORpp+5/kpdICKBb2v+eWAb+ozNKcvdC96MKiLko=@vger.kernel.org, AJvYcCVXqO7YTVr1ygsViIog0mfKOr2cTK9uypfSV8fyDSvEDK/GxXu0OUB3p11Oa+gERhWeJKaBlmHz1TXyKZU5SA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8adacM6ekaVSUQYBnNJZvI+u8VeRrpJ67zvpz/Dybdrllgh/n
-	rUMVSuoPJH3e8jXEyMFwlxiCBmaltfTCArJ094k2880MlUs+Wkxjw3VSBdjvg3Mvug36Yw==
-X-Gm-Gg: ASbGncuI8neCwkxINN+eTeORlAC2TFThWiB/G/26BTO+Bgof3QaSvp/oLtJ9YCWvigw
-	qQ32r5DJZPwoQxD5xv1QPQNwyw0RdtLV4niLmF3kEDznHgA7aZxUKFIeSnjNDW24sWIjYQYlytN
-	KWEqGafaWqQwfoGnzAyCLw3QRladjHFFryGdaklacI0+/7NcEYi30nVjtBHkPqx+9icJsf0uZr8
-	DA5okmEs3Z8G13MpVrBjsCUzy1hQCfXF5V0VtaES7DUSbbLM3fI7P+bXlz/rMvZTbqbFQmLAmve
-	jqi7bRZY07k1T2/+euClvvBRwt/twUKKj3LyuNenm1/NtKzxr+twF/ITlj+0uEwbrVRLOK8rWec
-	W8I8cECBLcFydP22tU4o+D8+um1qvMU2jMIe50EI02YNgMIw5lE6aCH50Ag==
-X-Google-Smtp-Source: AGHT+IFRHR1yrS3pX+3CXulKJValPNBkxHOddHYt0ZzaxzpUhMDiKFo8IyVJGkckl4oTxUGjK8k65A==
-X-Received: by 2002:a17:902:f542:b0:24b:1741:1a43 with SMTP id d9443c01a7336-24b17411e77mr2707075ad.58.1756778804599;
-        Mon, 01 Sep 2025 19:06:44 -0700 (PDT)
-Received: from [127.0.0.1] ([45.8.220.62])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24905da3c38sm116302875ad.91.2025.09.01.19.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 19:06:44 -0700 (PDT)
-Message-ID: <c853de6a-ab46-4228-953f-f509e0c84b74@gmail.com>
-Date: Tue, 2 Sep 2025 10:06:40 +0800
+        d=1e100.net; s=20230601; t=1756942114; x=1757546914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UqjqachRXn1HwRELgrBTL2T9lUKqgqiaiITgVWtzg+A=;
+        b=ZyqZRtW4CQ8+IM3VILKShGxsECBccll2JoDWgSzCDZNFbw4jFaAp+cdoLpbs/drtdw
+         oYRbvDHUukC4ygs7qxxTe+OvzhKHOEUg8e1UHTQuW0wSgwTboCqh7JcSnmQnwqpWO4Z5
+         x+bQNJkYjb21JUa1qfrNfjeXYriDFpq6mGBsc2pim7ejRL0uq4aoaf6kEdJmdEi8JUyl
+         n4mcUksQX67LG1y5gHL90cy5VYBNTyhlrQV5Xwob0RGWS2gIM+v3e2X4/iF+NLG/KN9H
+         m2hxLw0OQCqIKkEMAtTOwfR3ge0B+KrRcAeQ2zpNPEkqy2tLlQrRIJOJclHXaPxpqfGy
+         ZaSA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMU4WEE97OGwDlpsROj4UnUCM6kkBkkXpcVDiCjeV6KFFKZ8vLPSiyLtjTHW/QLn5r+u9JeaX+mnVMOBX1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1DOeytH7Nu4R6nB0cG2/oafVddK4F/mvbuzSMXD1WS6vdNqpL
+	9spRkE5dVCA8REyj/m3T5IJBJkBS7WycvQE015l/IIJtJ+JejE8B5Xe5lmBlfkX3rW0zvjpERI1
+	OfbvYCcVpmtYe6ZzsFBMXtfsIzNt6bvoKCAQNMpA6
+X-Gm-Gg: ASbGncta0mOmqaQQXnwwLo1s92Cg/eNxz51ujWnCgYnFevy/N2GLCUBfTcbSrlRK8R+
+	uqwbLAOemxlqTODfokUesL0DyUtYgkPfDMr2XAS/g6T0l4BAUgvZMX6STxals21lF9dM5D3ZpU1
+	rZSMKyaH8Lp1YypVl79J4OGBe6zNUjBs3HgT6ApsCbgl/jI38bQTeuCYW010aZvmXGaVkP8Xvwf
+	Yq/CmKzuFyW3aYwh1zoKhpxXjs=
+X-Google-Smtp-Source: AGHT+IGlPIP8oLtiC4wG5WrNKAc4UwbWQI9iei+N+57tKkTFJtqNCENNeZckB8ql+MwlRO5lsU8KOzVn8PEgh9nTxlA=
+X-Received: by 2002:a05:6902:284a:b0:e9b:b6aa:98dd with SMTP id
+ 3f1490d57ef6-e9bb6aaa0fcmr12868850276.5.1756942113989; Wed, 03 Sep 2025
+ 16:28:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] module: show why force load fails
-Content-Language: en-US
-To: Daniel Gomez <da.gomez@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250829084927.156676-1-wangjinchao600@gmail.com>
- <20250829084927.156676-3-wangjinchao600@gmail.com>
- <851c227e-5d1e-44bb-80ca-d9e230e8ccfe@kernel.org>
-From: Jinchao Wang <wangjinchao600@gmail.com>
-In-Reply-To: <851c227e-5d1e-44bb-80ca-d9e230e8ccfe@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250829105418.3053274-1-sidnayyar@google.com> <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com>
+In-Reply-To: <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com>
+From: Sid Nayyar <sidnayyar@google.com>
+Date: Thu, 4 Sep 2025 00:28:22 +0100
+X-Gm-Features: Ac12FXwP9jzMz1FEtiEYhrSL5bEOit-gvEx4axvwyPrGNk7vWuUT6_L_wldOkSQ
+Message-ID: <CA+OvW8ZY1D3ECy2vw_Nojm1Kc8NzJHCpqNJUF0n8z3MhLAQd8A@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Giuliano Procida <gprocida@google.com>, =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/2/25 02:29, Daniel Gomez wrote:
-> On 29/08/2025 10.49, Jinchao Wang wrote:
->> Include reason in error message when force loading is disabled.
->>
->> Signed-off-by: Jinchao Wang<wangjinchao600@gmail.com>
->> ---
->>   kernel/module/main.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/kernel/module/main.c b/kernel/module/main.c
->> index c66b26184936..e7484c6ce6e3 100644
->> --- a/kernel/module/main.c
->> +++ b/kernel/module/main.c
->> @@ -1083,6 +1083,7 @@ int try_to_force_load(struct module *mod, const char *reason)
->>   	add_taint_module(mod, TAINT_FORCED_MODULE, LOCKDEP_NOW_UNRELIABLE);
->>   	return 0;
->>   #else
->> +	pr_err("%s: %s, force load is not supported\n", mod->name, reason);
->>   	return -ENOEXEC;
->>   #endif
->>   }
-> I don't think is good to inform via kernel log buffer what the kernel supports
-> or what not. And definitely, not as an error.
-> 
+On Mon, Sep 1, 2025 at 1:27=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wro=
+te:
+> Merging __ksymtab and __ksymtab_gpl into a single section looks ok to
+> me, and similarly for __kcrctab and __kcrtab_gpl. The __ksymtab_gpl
+> support originally comes from commit 3344ea3ad4 ("[PATCH] MODULE_LICENSE
+> and EXPORT_SYMBOL_GPL support") [1], where it was named __gpl_ksymtab.
+> The commit doesn't mention why the implementation opts for using
+> a separate section, but I suspect it was designed this way to reduce
+> memory/disk usage.
+>
+> A question is whether the symbol flags should be stored in a new
+> __kflagstab section, instead of adding a flag member to the existing
+> __ksymtab. As far as I'm aware, no userspace tool (particularly kmod)
+> uses the __ksymtab data, so we are free to update its format.
+>
+> Note that I believe that __kcrctab/__kcrtab_gpl is a separate section
+> because the CRC data is available only if CONFIG_MODVERSIONS=3Dy.
+>
+> Including the flags as part of __ksymtab would be obviously a simpler
+> schema. On the other hand, an entry in __ksymtab has in the worst case
+> a size of 24 bytes with an 8-byte alignment requirement. This means that
+> adding a flag to it would require additional 8 bytes per symbol.
 
-Thank you for the feedback.
+Thanks for looking into the history of the _gpl split. We also noted
+that there were up to five separate arrays at one point.
 
-When debugging syzkaller, I noticed that insmod only reports a generic
-failure. To understand the exact reason, I needed to trace the kernel.
-This patch was meant to make it more convenient to see the precise
-cause directly.
+We explored three approaches to this problem: using the existing
+__ksymtab, packing flags as bit-vectors, and the proposed
+__kflagstab. We ruled out the bit-vector approach due to its
+complexity, which would only save a few bits per symbol. The
+__ksymtab approach, while the simplest, was too wasteful of space.
+The __kflagstab seems like a good compromise, offering a slight
+increase in complexity over the __ksymtab method but requiring only
+one extra byte per symbol.
 
-In my view, if the caller cannot perform the requested operation, that
-represents an error, and the kernel log buffer is the natural place to
-report the reason. This makes debugging and testing easier without
-requiring additional tracing.
+> >
+> > The motivation for this change comes from the Android kernel, which use=
+s
+> > an additional symbol flag to restrict the use of certain exported
+> > symbols by unsigned modules, thereby enhancing kernel security. This
+> > __kflagstab can be implemented as a bitmap to efficiently manage which
+> > symbols are available for general use versus those restricted to signed
+> > modules only.
+>
+> I think it would be useful to explain in more detail how this protected
+> schema is used in practice and what problem it solves. Who is allowed to
+> provide these limited unsigned modules and if the concern is kernel
+> security, can't you enforce the use of only signed modules?
 
--- 
-Best regards,
-Jinchao
+The Android Common Kernel source is compiled into what we call
+GKI (Generic Kernel Image), which consists of a kernel and a
+number of modules. We maintain a stable interface (based on CRCs and
+types) between the GKI components and vendor-specific modules
+(compiled by device manufacturers, e.g., for hardware-specific
+drivers) for the lifetime of a given GKI version.
+
+This interface is intentionally restricted to the minimal set of
+symbols required by the union of all vendor modules; our partners
+declare their requirements in symbol lists. Any additions to these
+lists are reviewed to ensure kernel internals are not overly exposed.
+For example, we restrict drivers from having the ability to open and
+read arbitrary files. This ABI boundary also allows us to evolve
+internal kernel types that are not exposed to vendor modules, for
+example, when a security fix requires a type to change.
+
+The mechanism we use for this is CONFIG_TRIM_UNUSED_KSYMS and
+CONFIG_UNUSED_KSYMS_WHITELIST. This results in a ksymtab
+containing two kinds of exported symbols: those explicitly required
+by vendors ("vendor-listed") and those only required by GKI modules
+("GKI use only").
+
+On top of this, we have implemented symbol import protection
+(covered in patches 9/10 and 10/10). This feature prevents vendor
+modules from using symbols that are not on the vendor-listed
+whitelist. It is built on top of CONFIG_MODULE_SIG. GKI modules are
+signed with a specific key, while vendor modules are unsigned and thus
+treated as untrusted. This distinction allows signed GKI modules to
+use any symbol in the ksymtab, while unsigned vendor modules can only
+access the declared subset. This provides a significant layer of
+defense and security against potentially exploitable vendor module
+code.
+
+Finally, we have implemented symbol export protection, which prevents
+a vendor module from impersonating a GKI module by exporting any of
+the same symbols. Note that this protection is currently specific to
+the Android kernel and is not included in this patch series.
+
+We have several years of experience with older implementations of
+these protection mechanisms. The code in this series is a
+considerably cleaner and simpler version compared to what has been
+shipping in Android kernels since Android 14 (6.1 kernel).
+
+I hope this clarifies the goals of the patch set. Let me know if you
+have further questions.
+
+--
+Thanks,
+Siddharth Nayyar
