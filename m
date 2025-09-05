@@ -1,137 +1,104 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5142D213237
-	for <linux-modules@vger.kernel.org>; Fri,  5 Sep 2025 09:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342FD31B826
+	for <linux-modules@vger.kernel.org>; Fri,  5 Sep 2025 15:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757062901; cv=none; b=hU5HIVEFBUMsTeUSErpspHEpCtVlNuY7OTwNr9pyyHMwudz1p+zXSo+vzbAgVfsyhclNgt0ESTc0Pd+QE9m1dSu1SvabLpxsZ3a1BsmavQy1r9AyuzpvQmjHgRLhTsS0vGMynnIaBKiFy0yFhBnyGZUt1HBbnDAGxNmqabobEpY=
+	t=1757084982; cv=none; b=jr3h1BBhx/StFtPutG/Y1AWbQSQEL3L+dqvL7UkIFS4Wbk0VvHFkNep3VNiuKJquv3xl1aoXI95xX4dG7jgV1XUD9fWkoPJ5xZKKTHHhow1LqOeS/chjluoX4irsSc7Zf/gKk/Qld34KUmoS2ArYECw6cAGcqpMPqwn4nkTQW8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757062901; c=relaxed/simple;
-	bh=qvqSjoO/mRLjIPV/1wtDFk60TiCvaNH/heT36hH/Qq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HdbV38s2GPZqIlnI/GwLtY95DhRnkRwhYHXFLTmBsXm3aXgrCgFdZ0BPv4LxAXkQHCn2q+PPB3cn7K6ZRW4eQLGuM43JKRjDVDuYtf2ZZs0beOCjm3mLVMyxROnCJY29d/s5NxUOAQt3ncqsAbcauo4cljAUQ5uquAbBK2YWZAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Qr+/XM3Y; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1757084982; c=relaxed/simple;
+	bh=dFdVomeaxD4LPhyoEmMyXlkg6qCcKVW87KQws4WwyuE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kkIpkGuXCzyIjE31c4bSDgWL0ZQoftY4VK1nbg4z5knDqxs5MQ8HFQ0B7CRjkTru/Ggo84LZRHqLMt5wlGmqso3ZFpW4F05l7PuNd2znFQaRQU85Q4TyNEuhteG6sD+/JksSglXRmdgkgHIn4tlc79pVBQ2ImZFujSjqajPZyis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I8/t02kD; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Qr+/XM3Y"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3dcce361897so1299343f8f.3
-        for <linux-modules@vger.kernel.org>; Fri, 05 Sep 2025 02:01:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I8/t02kD"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-24b2337d1bfso194975ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 05 Sep 2025 08:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757062898; x=1757667698; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1757084980; x=1757689780; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q5KHWEqaXSiQRHQD3PSK3TviVXz938qrA11SI1DLfq0=;
-        b=Qr+/XM3YIRot+XEKx6VXfPVY1M9qTnHPED3PapGgMMjexiJkYzp1xMptTZPAL00Bsy
-         1XkybDnqWauSnnnA0RMBM7rhsaJ/mqNHO47RfF4YUdYcOr/h+vyw4AMN8SUeW+Cws/hu
-         YsHorwa/ZOQwpewcc8Jk8Lqg4YAW3O1Av1MWNb9jolDRTGqNUo5ZKDGHv9DnTvqYEDam
-         AOKs0EWI0LZW6wNp2qrTFqGgCh2SFWQonkbxnQNIKd/JotNgFPQ11y31h1+69BquahRL
-         +nHQB3kCHGC4xUBTpuEWlF4Qk67yYOW0Eu5vCjfQ73oywrdwEe3Y4YbikFzve66Gg1wv
-         TmrA==
+        bh=dFdVomeaxD4LPhyoEmMyXlkg6qCcKVW87KQws4WwyuE=;
+        b=I8/t02kDYls1rrpwAmxAWi8JdyOA4wccts+YEjFZuyf0FJ/84NJzq1V5B+h3agBL9f
+         R5Xjpw9MNrNYzFmdYjQwQfoHm9F13dfHursuLcEOkazXJkOsDNdOutrTFpfsHAJaD7dg
+         N1C4cpKAVeuP079/xWoZuAOXagGIKuAk/V6sGZ1Qy98X1X3hpNMUoB6EDHc//YkS4U1S
+         yr4qx6RdNWouDWSTwtrUpU5E7/8S1aZ+2JLYUqLAt56BPbhyHOkaQhCFbZuQT7tx7eBn
+         QQ2vtqFUxwoD07rCA+a8/3oe/s+p6/bpep3L5M51vsQ0KAlZ9Y3/VaWlhiCI79YSCPZT
+         uLig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757062898; x=1757667698;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1757084980; x=1757689780;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q5KHWEqaXSiQRHQD3PSK3TviVXz938qrA11SI1DLfq0=;
-        b=cbbssWuRjjuVrFmdRJBcspmbcZXzcO1GFJHD6z2nhRg5b06txq2exOfN9mz6BA5bxV
-         C/fHtDUfa/JIetV5TCK1RmBeyPIQ32Vam0OZBXWd6zzbIZkXDMeiLRssR2MNMCTJDRUR
-         2sWnzG9WTNO1I1i555hDXgmYn8hKpCJusTPzmLwrG+ZQk53R/jU8an176gwWO1ROLs42
-         1/gg4jGjKXXXsmTJu0uNq84yD1GD32xPuOl5SKBR06aqzeB7gy0LMa5wFeDdW6M84hD0
-         /yrT+XPs4As4mBkNIelrv7Txw+/nfyODu4EVZERlEXMrWglQg0pizkv1mg/vRjAT/A7D
-         HHpw==
-X-Forwarded-Encrypted: i=1; AJvYcCUVAIUISscXC1tBzns5uNpLNaT+eGRnzRo9sikgqZXHWOw+momQpnJ5CBCn1V3FzmqfWUYr+i1o8ZxF3pqU@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzY3rHjxk4jRyjG8xKdUPnrTk5fxCl7Y3JK6wuoCDPWBPStB2C
-	KnEwWOAYA0phA6nKHGuXW3LATHW37LCqWReOTM6fhg7qq45SPBsvl4FXNyLrZ2jmdPI=
-X-Gm-Gg: ASbGncuwk1qmlF2pin86IAWBV/IEBRO5kR+CfNQNJg/mNlksAASOe3lcp6TFhOKLPaZ
-	7PgG1DGcFYX0eZxabumDe0OKa5wO9M6XIUz7rILaxsleBelBD/ZDzGnHeDAVRT+mkRtOycegdQf
-	1LC4n1Qb0p3nr8G32OCxWqAxDTG9+2XBJBlPFA3FikScSJeJcfElU1rHCq2CiW/+7UtLRu80sQ3
-	LYy1pKYugdXkAohLrI9y69c+jA0mpoWpeL2N34oZvHbgoUVufugOxtmrj2bucK0lKY17gqE+GBV
-	mAWraRMWUquNsS8LiAhsB6vhxIGipeOajA07AsGuA/v5Xl/blf1vw6zuxlC84PrDHXxgtT87NiX
-	J366baQ/bfL5a9tbeUdg8idwHo9lxP18feHPwt58CrZ+OKPdtsNg/hJIIlA==
-X-Google-Smtp-Source: AGHT+IEauwqdmqEn4hr445iqcOmm/sJaiG6o1U1wFAlO1tWFtAfZ1VjOWTJlAJ6GuL9SVs/bjIcxfA==
-X-Received: by 2002:a05:6000:22c8:b0:3e2:bbd1:e914 with SMTP id ffacd0b85a97d-3e2bbd1eb93mr2650150f8f.51.1757062897600;
-        Fri, 05 Sep 2025 02:01:37 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e411219ddfsm1317713f8f.57.2025.09.05.02.01.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Sep 2025 02:01:37 -0700 (PDT)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH 1/1] module: replace use of system_wq with system_percpu_wq
-Date: Fri,  5 Sep 2025 11:01:30 +0200
-Message-ID: <20250905090130.101724-2-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250905090130.101724-1-marco.crivellari@suse.com>
-References: <20250905090130.101724-1-marco.crivellari@suse.com>
+        bh=dFdVomeaxD4LPhyoEmMyXlkg6qCcKVW87KQws4WwyuE=;
+        b=QxYydNiRm8x7gS35hqFcFjKaGiwFGanHS5gUgaPin7cuZG5Ae5b+R6bx0f2CCJM3wg
+         gzvQ0ikH4rFeOprsRQ8j/qbhd5XhxYl9A64dwxEVVyOILoWt1JINvgwAmOjBWp1+7co4
+         NEZUyXkJApjv033vov224ahu34zVmVcRsE4DDkI21mJuvuZ5Xg1LPF5LBWlNq9qn7ZnA
+         +aa1kM3kDuoLNXqnWLoCp67e73gZr8sK3j1cnxuVbWuZqg5H5Ijm9njrQHIs2I2GyKmM
+         cmdtp5cY8JEF9xckstZ2gGUMUu9IJ/nArPd2os2Yl5VkzdCutOiLPPGaR20G556P2BSs
+         BJyw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9C1LWBLSWO1D4chg2/sSvvxhm6HPGsCkugAoavksL6i2yEgeBcxl+S2t13xxu2rBEJtvryJ7/DIcIZDMD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCOQ+PTsopYOREWoIyDvAQj/L1u6zMwIK00UZ0M3B/PaZ0fZIV
+	f9zswXy9csvqAfZ7WOdK7S3Y0kj19PkA+kkN/pjgHyjdNOlJ3Cp5VsUzHpUmi4vcDQdiGzVqbbA
+	fO6ODI/EJBOrMnhwsQfJYgVYbvc7q27CzLypSjLD4
+X-Gm-Gg: ASbGncuKMtEfyNZnljpREG3yuQRq5TrJXghkonV2oR0lbbSZ6Ys0NLKfx0O/4motEVL
+	Iei60AtsAXEXLpJFPQ1B9ZNRNmuYSc/lQ+qwnk7QRp4LtAaUs9qPUOoQxuXkQ3mgUEJaOeRfSO0
+	hBJva+C2VZKf2IaRVrt0S0nn1rmYjwLqj2SdrTNSYjVWh3M3WFpFA3ClUgSaGSs6W1k7LAAKLyY
+	i0/Q7sygr3CdwPTmAxVOzVphzBEsmPK
+X-Google-Smtp-Source: AGHT+IFigRlugHFu64XYH5E1HhI8NlSyNuAc3Xp90gTVTmK4u8CmaCMLRItGgVFLK1yt7YLP9pFW/NA0U37fFcFhCUQ=
+X-Received: by 2002:a17:903:2f85:b0:231:f6bc:5c84 with SMTP id
+ d9443c01a7336-24cf5c29233mr4503325ad.8.1757084979941; Fri, 05 Sep 2025
+ 08:09:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <a40e660e-5a45-420a-8d37-51324242ab9b@kzalloc.com>
+In-Reply-To: <a40e660e-5a45-420a-8d37-51324242ab9b@kzalloc.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 5 Sep 2025 08:09:02 -0700
+X-Gm-Features: Ac12FXwsBG___TZgBCnwrUiXvtQzs6bTFvY2gqQx0WiC1kXwGKAPta7iWLhYPhc
+Message-ID: <CABCJKufSRmYnbjcwvhuGgC=xkyPgJyi7FMrAdDm3N0fun1cLAg@mail.gmail.com>
+Subject: Re: [Question] Non-usage of PKEY_ID_PGP and PKEY_ID_X509 in module signing
+To: Yunseong Kim <ysk@kzalloc.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, 
+	"Sami Tolvanen <samitolvanen@google.com> David Howells" <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, linux-modules@vger.kernel.org, 
+	keyrings@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently if a user enqueue a work item using schedule_delayed_work() the
-used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
+Hi,
 
-This lack of consistentcy cannot be addressed without refactoring the API.
+On Tue, Aug 26, 2025 at 11:58=E2=80=AFAM Yunseong Kim <ysk@kzalloc.com> wro=
+te:
+>
+> Given that the module signature infrastructure seems hardcoded to use
+> PKCS#7, could anyone clarify if PKEY_ID_PGP and PKEY_ID_X509 are used
+> elsewhere in the kernel? Are they perhaps placeholders for future
+> implementations or remnants of past ones?
 
-system_wq is a per-CPU worqueue, yet nothing in its name tells about that
-CPU affinity constraint, which is very often not required by users. Make
-it clear by adding a system_percpu_wq.
+If you search LKML archives, you'll find some past efforts to add PGP
+signing support at least. The patches never ended up being merged
+though. See the discussion here, for example:
 
-queue_work() / queue_delayed_work() mod_delayed_work() will now use the
-new per-cpu wq: whether the user still stick on the old name a warn will
-be printed along a wq redirect to the new one.
+https://lore.kernel.org/lkml/20220111180318.591029-1-roberto.sassu@huawei.c=
+om/
 
-This patch add the new system_percpu_wq except for mm, fs and net
-subsystem, whom are handled in separated patches.
+> If they are indeed unused and there are no plans to support them, would
+> a patch to clean up these unused enum values be welcome? Or is there
+> another reason for keeping them?
 
-The old wq will be kept for a few release cylces.
+Perhaps the folks involved back then can chime in, but I'm fine with
+removing these. I'm not sure how likely it is, but if someone at some
+point makes a compelling case for supporting other key and signature
+types, I'm sure they can add back the constants too.
 
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
- kernel/module/dups.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index bd2149fbe117..e72fa393a2ec 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -113,7 +113,7 @@ static void kmod_dup_request_complete(struct work_struct *work)
- 	 * let this linger forever as this is just a boot optimization for
- 	 * possible abuses of vmalloc() incurred by finit_module() thrashing.
- 	 */
--	queue_delayed_work(system_wq, &kmod_req->delete_work, 60 * HZ);
-+	queue_delayed_work(system_percpu_wq, &kmod_req->delete_work, 60 * HZ);
- }
- 
- bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
-@@ -240,7 +240,7 @@ void kmod_dup_request_announce(char *module_name, int ret)
- 	 * There is no rush. But we also don't want to hold the
- 	 * caller up forever or introduce any boot delays.
- 	 */
--	queue_work(system_wq, &kmod_req->complete_work);
-+	queue_work(system_percpu_wq, &kmod_req->complete_work);
- 
- out:
- 	mutex_unlock(&kmod_dup_mutex);
--- 
-2.51.0
-
+Sami
