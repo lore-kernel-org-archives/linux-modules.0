@@ -1,61 +1,61 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30371A8F84;
-	Sat,  6 Sep 2025 12:27:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE53827FD40;
+	Sat,  6 Sep 2025 12:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757161665; cv=none; b=RxaylPeh6jBsbMxAysDja/FbcHA5B4xQOlvqR3213bhyFlMzCg/fdwUhIKQMnoM1/PHfbkCfG+z9qk10KcTxddGu0d3QQvpRZsUTfjHVPJ5CIyGMGJjObpS3YFDaX76ZcqlN9CZpupkT4G9S3ZTEs4TC1ezb3hTBJjEPoTFzJF0=
+	t=1757162672; cv=none; b=F/gELeIXxzKabfwb12ZTTpDesyNoJq1CG7jrmltF+xzeK0hE0FNWADLKw0ElG6nnUeRmTqqtTnXnid7XgD0oSa/gHFNBdQUykBPL3h1PfHjJcVRlZi8EhbKqrle9q0f/Fsfk+NS0lp3O80TNP2RW7Hxb6fC8UrJBodr80Zd8+6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757161665; c=relaxed/simple;
-	bh=PbFJYnlmCw87IIi8fkk0XAehdW/sVfzTc0fupsX4dxI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pOgn1eW9LLfc90of2ZQF1HyTKUfEeJrewjhVdBdmN/R18qlHkG+f+uoR8rdxgU1F19rBuM1kpCrasfZy3ikPfZqvH2dVg1TgMP6YjY6eW+MJJ0/B4GFTm/wrcA5ziE/dUrzI2Q9TT6dSUkMJ/9qsWstp+rYSnfFtJpjijEO339M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBUUUJBm; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1757162672; c=relaxed/simple;
+	bh=fs4zfTzKabi/47BkZEI5pNgZ2H9ES53lUsJnqM1n+7s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tQQ4yebm8gV3B3RY5j5PIR7s5x3SSb79JGotQvWKELOz6PGaxf7sBeYbB5zctRz2kCPKyAx0BOUMezKKCoKvFRISOYBEQvaPE2ebrehPqtL8E4kZoe43tyJWnONSBlcNhUmgtRGVM38ECio6AsqC1lnCopgvuXO3qOtP/5iaM88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCC8W3FV; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBUUUJBm"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3c68ac7e18aso1894240f8f.2;
-        Sat, 06 Sep 2025 05:27:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCC8W3FV"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45b4d89217aso18906145e9.2;
+        Sat, 06 Sep 2025 05:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757161661; x=1757766461; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757162668; x=1757767468; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FtIxLE7ZwWG4ZdWr9IpjFIHAP3cNcYJIs5BxYc7YsaU=;
-        b=eBUUUJBmJDoQ7XKVX6uO+pPz8r+ucprLx6hwxsUqC7XSQ80oNBXXQ1kWlNHR2hwkqZ
-         lSEQPE2W5TmGfxG1i9E3pDG0N2/tDjs9TxpISF+PRWD8MeH+AWWPagBu4gIALNJ69Bls
-         UsfjMrfzbDLR98DtdBYrsWMzaqOqDZ60d/59EXigJkjkuG5QXGJMpgKBCPggia9tq7uF
-         bfFRMEsgmCPjbCvaU+Lexk13SvFMCdTApKe/k/BYJ4SjKmOvKLXB7WHQG24mmlxcXP8O
-         EAYstj3xmuVTiFlQB2xu6vIBDLghMvDDObGLeXdHnf0RjsbI2++z1tpewtRTI94FrlGR
-         GcxQ==
+        bh=4FAE+oUnpunIhbfJWlgDTcPFbBZ5VFlx0tQtY8lTyAo=;
+        b=HCC8W3FVJ4Jxnk5uY04XmknIIsqA0EvbknPZvFyk+8nWux+Nx3gRExRb21jGizXVKf
+         tg4eo6xY4yqr+OjI7SGeUf0UBN69LXxogEAjo/Jz9kz8eoPnIgGTiJQhqs7MlvrpAb2S
+         lLbhGxF95xLxzkSBXlnZyVAFq0fg1TwYVHBcKodkF/fCVHkoFIVdYWVgasQh8pymGsjF
+         fxwyCY5Mg7xag9PLHIJvi6sWeh34OwlUFIKRpcNjxy/IpGbWFQMcyJ4ppBgbAubbnRMX
+         hTKUaqly/597+F6+skthcpiqhBquzCmr5cZCVtheRAQBegIMg2V0kayXe/1XueGF3ERT
+         DLOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757161661; x=1757766461;
+        d=1e100.net; s=20230601; t=1757162668; x=1757767468;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FtIxLE7ZwWG4ZdWr9IpjFIHAP3cNcYJIs5BxYc7YsaU=;
-        b=OmNKBhAwANXd1Xt80F96IL/tKsSn00qTTttsMRSCEhW4omhTUQ1fYnd6cZkvPwzadx
-         Y+62RdVBRuS8kfDateIIIi2jzG9+yC1apJkhXesSbRD9N0Kzc/sKL99AszvmCebZjVS8
-         zb4O+GYH7turC/Y9dXGHKjpOPYZeq2R3mF6P1suw+V/oL/Bhl6d+K4ZQhY3XXrjz98ti
-         dI8x4SJPMCD6XeCheZ0HJUSy/h8z3x4wSKqw2peCFGbK6mOcgDJW1EM/Sfy7XbR+CGDC
-         gngl/OA582cmV9CKm3TeFiqcfkKgO7sOhmI1D/gC3AsgruOoZ2mPLJ7R4oorPbpd9Q+M
-         tU1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWn4BVou9i/LXguK2CpJIMhzuXb8DrCXb2Wuy2RsqXR4h9aZ5ts5PPO5xbtN3EV8/HMfZZQ/L0Ww0oGLJw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyBvTc0m/8fhpZl2R8O+kRUVZ76JYJ1ff+SWrxBGLvC2YYG2nJ
-	TtDa4EkkTtwcxzjZU2vpGawd8KiBi9RhiOO+parNwzFYvdpaj/8xeldSJOJo4A==
-X-Gm-Gg: ASbGnct/AM7dgIsrvO8ZpiqptcD7qJg5BpbOrPyfDWHDD1nd3CGAR6dwaJ4f61I5542
-	8DlmCBo43zY+RJwRFoEzfZ7AtlgujMni8Km+TVrOj7Vbe31qajs5/alw8qq0FzJLUT5rV/B1Xui
-	jBlY2Cm3tZegPtpFREFcaUxcouHk79ijDaAvwiuRawVTQtgyqW963NPUjVcgL4hMd2q5AIVneYl
-	90vS0E0nQ1izVqsHwRdMPDqQQJYKQTeyorFd6cun30DWwZUsHaUvQH7hHMoA27pTe5IjnKOCBPm
-	jGV82sYIPCcK+aJblvYwfkwbLwnA5zQJtKU40kTgkK+YYJL0aI97OqyAKfR/fbKwUSqL2eWPsIL
-	vA+N3qLWxzl2PHwvFGucnqGhk+qwROWJF86+mBXQCLhmvFciT
-X-Google-Smtp-Source: AGHT+IGqdssGcgDuLRqlRIFo8v9Ppl3a5NLTvjvDEiRfylawgRWaBLuFz5WSgvAlwrbRLLkbURqNEg==
-X-Received: by 2002:a05:6000:40c9:b0:3e5:2082:8943 with SMTP id ffacd0b85a97d-3e64c1c2e40mr1211942f8f.46.1757161660803;
-        Sat, 06 Sep 2025 05:27:40 -0700 (PDT)
+        bh=4FAE+oUnpunIhbfJWlgDTcPFbBZ5VFlx0tQtY8lTyAo=;
+        b=SQKt2P+D8nbs9jXLX32+xK0Y+XQxFfyTu09BY0mWQqJzxA4my4/7JRq7tObB7jRrZt
+         HrqmbiSctLqR1KGCE+B6nW6B85L4lFX2OSNMtzRUxaW9Dk82RHNR+hkhYj3juzUvhRtj
+         shmf6jUdjx4mpby5kSINdgnTuNxy34thb8eL+jKVnGsXScbD6n3GQaro/NI6aPHkaru6
+         mQfTFtIXqhyESXcjvpGRDsky30RFIZzMEAKM7xhJqaXO8KTW14IocB9oVe21VYvLHNuV
+         LWLTlBTx9sKtiJKY8lS1AKv/fLrX+8KSOOc6LJzLV9MzYfeOpr2zzDi4vqYv47iJwNL8
+         jwow==
+X-Forwarded-Encrypted: i=1; AJvYcCUFCDi5AFAkdOHzu55evxBBdi8QA+iNZupwD5yhvvXOC0WfKtUiMNpxykUL64MNGCV3gKO8UO3MOT1+7cU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7Q1rvo7jpi6EeVBEmDKB7s0Z6L5m2ZgA3xJbXNOfzcfJxMSnU
+	r9nszYVSIw3lrFKShmYfe1WHAyVKWHj29dh0YBGfg8UxoyGui7g0tmsiwxLPSQ==
+X-Gm-Gg: ASbGnctMbgDRhKlxYcGPRzD8kmcKoWY1namg3PDUcJ8Ohe3mNVdSPvPE7YkWJluctCo
+	hTCZHj5O3BvAoDAeMD3utKOSbzIl+JyZYTbCbA0cre93ICdBqEY2swYbPqeI8xVoieeWojJQho8
+	9clBgI+ySZVIxzLa8DJh5U0yOuSinv2hLQs1dZTvtDeDyNnSq2lF2P6jrvgmoWouimPtzy585pu
+	YdJM4sqecJqe3rgH4Z3YxPigJtJ7UuIv/GXOivY3LIf4B7m8jqENQqX7wbnNtYaaeGU/FWvxv18
+	0XryLvhJZS1RKvL0v6Br+DohDtHvpbLPc+UyDZFUYs9hxqQK9UlFxEyWwQN7/C87Omb5I43ptFI
+	UwrJBTo8KoniMgORCBCuKmpEU27NlvGoKMBLOLQsJ3hFYqhpf
+X-Google-Smtp-Source: AGHT+IHX2gOEmEGkO0po9j35OCLFJL2NEC5LGoBqWcaxAkHyCerWEb8+d7E1T92L3LQqeDjFB6QcJw==
+X-Received: by 2002:a5d:64c5:0:b0:3e4:bd77:df12 with SMTP id ffacd0b85a97d-3e63736fc29mr1242164f8f.18.1757162667917;
+        Sat, 06 Sep 2025 05:44:27 -0700 (PDT)
 Received: from Al-Qamar ([2a00:f29:258:2ea4:8502:df64:bca:486e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3dedea839c1sm13134061f8f.63.2025.09.06.05.27.37
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf34493b8csm33995333f8f.59.2025.09.06.05.44.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Sep 2025 05:27:40 -0700 (PDT)
+        Sat, 06 Sep 2025 05:44:27 -0700 (PDT)
 From: Fidal Palamparambil <rootuserhere@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: mcgrof@kernel.org,
@@ -64,9 +64,9 @@ Cc: mcgrof@kernel.org,
 	samitolvanen@google.com,
 	linux-kernel@vger.kernel.org,
 	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: [PATCH] arm64/acpi: Fix multiple issues in ACPI boot support code
-Date: Sat,  6 Sep 2025 16:27:30 +0400
-Message-ID: <20250906122731.946-1-rootuserhere@gmail.com>
+Subject: [PATCH] cgroup: debug: Fix multiple issues in debug controller implementation
+Date: Sat,  6 Sep 2025 16:44:17 +0400
+Message-ID: <20250906124417.793-1-rootuserhere@gmail.com>
 X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -78,26 +78,110 @@ Content-Transfer-Encoding: 8bit
 
 From: Fidal palamparambil <rootuserhere@gmail.com>
 
-- Fixed memory leak in acpi_fadt_sanity_check() by ensuring acpi_put_table()
-  is called in all error paths
-- Corrected error handling in parse_acpi() by removing incorrect snprintf() usage
-- Added missing compiler_attributes.h include for fallthrough support
-- Verified proper NULL pointer checks in acpi_os_ioremap()
+This commit addresses several issues in the cgroup debug controller:
 
-These fixes address potential memory leaks, compilation warnings, and
-improper error handling in the ARM64 ACPI boot support code.
+1. Memory leak protection in current_css_set_cg_links_read():
+   - Initialize name_buf to NULL and use proper error handling with goto
+   - Ensure memory is freed in all code paths
+
+2. RCU locking correctness:
+   - Use lockdep_is_held() for proper lock dependency tracking in
+     rcu_dereference_protected() calls
+   - Ensure proper locking context is passed to RCU checks
+
+3. Buffer size safety:
+   - Remove off-by-one in snprintf() size calculation
+   - Use sizeof(buffer) instead of sizeof(buffer)-1
+
+4. Code robustness:
+   - Add proper initialization of variables
+   - Use consistent error handling patterns
+   - Fix potential integer underflow in extra reference calculation
+
+The debug controller is for internal debugging only, but these fixes
+ensure it doesn't introduce stability issues or memory leaks when
+used for debugging purposes.
 
 Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
 ---
- arch/arm64/kernel/acpi.c    |  17 +-
- arch/arm64/kernel/acpi.orig | 466 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 480 insertions(+), 3 deletions(-)
- create mode 100644 arch/arm64/kernel/acpi.orig
+ arch/arm64/kernel/acpi.c    |  15 +-
+ arch/arm64/kernel/acpi.orig |  17 +-
+ kernel/cgroup/debug.c       |  18 +-
+ kernel/cgroup/debug.c.orig  | 381 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 416 insertions(+), 15 deletions(-)
+ create mode 100644 kernel/cgroup/debug.c.orig
 
 diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index 4d529ff7ba51..218f39e5ae0f 100644
+index 218f39e5ae0f..f38db7e11f05 100644
 --- a/arch/arm64/kernel/acpi.c
 +++ b/arch/arm64/kernel/acpi.c
+@@ -73,7 +73,7 @@ static int __init parse_acpi(char *arg)
+ 	}
+ 	else
+ 	{
+-		pr_err("ACPI: Invalid option '%s'\n", arg);
++		pr_err("ACPI: unknown parameter '%s'\n", arg);
+ 		return -EINVAL;
+ 	}
+ 	return 0;
+@@ -84,6 +84,9 @@ static bool __init dt_is_stub(void)
+ {
+ 	int node;
+ 
++	if (!initial_boot_params)
++		return true;
++
+ 	fdt_for_each_subnode(node, initial_boot_params, 0) {
+ 		const char *name = fdt_get_name(initial_boot_params, node, NULL);
+ 		if (strcmp(name, "chosen") == 0)
+@@ -120,12 +123,16 @@ void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
+ 
+ bool __init acpi_psci_present(void)
+ {
++	if (!acpi_gbl_FADT.arm_boot_flags)
++		return false;
+ 	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_COMPLIANT;
+ }
+ 
+ /* Whether HVC must be used instead of SMC as the PSCI conduit */
+ bool acpi_psci_use_hvc(void)
+ {
++	if (!acpi_gbl_FADT.arm_boot_flags)
++		return false;
+ 	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_USE_HVC;
+ }
+ 
+@@ -265,7 +272,7 @@ void __init acpi_boot_table_init(void)
+ 		 */
+ 		ret = acpi_parse_spcr(earlycon_acpi_spcr_enable,
+ 			!param_acpi_nospcr);
+-		if (!ret || param_acpi_nospcr || !IS_ENABLED(CONFIG_ACPI_SPCR_TABLE))
++		if (ret || param_acpi_nospcr || !IS_ENABLED(CONFIG_ACPI_SPCR_TABLE))
+ 			pr_info("Use ACPI SPCR as default console: No\n");
+ 		else
+ 			pr_info("Use ACPI SPCR as default console: Yes\n");
+@@ -345,7 +352,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+ 		case EFI_BOOT_SERVICES_CODE:
+ 		case EFI_BOOT_SERVICES_DATA:
+ 		case EFI_CONVENTIONAL_MEMORY:
+-		case EFI_PERSISTENT_MEMORY:
++		case EFI_PERSISTent_MEMORY:
+ 			if (memblock_is_map_memory(phys) ||
+ 			    !memblock_is_region_memory(phys, size)) {
+ 				pr_warn(FW_BUG "requested region covers kernel memory @ %pa\n", &phys);
+@@ -459,7 +466,7 @@ void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+ int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
+ 		 int *pcpu)
+ {
+-	/* If an error code is passed in this stub can't fix it */
++	/* If caller already set a negative error code, propagate it. */
+ 	if (*pcpu < 0) {
+ 		pr_warn_once("Unable to map CPU to valid ID\n");
+ 		return *pcpu;
+diff --git a/arch/arm64/kernel/acpi.orig b/arch/arm64/kernel/acpi.orig
+index 4d529ff7ba51..218f39e5ae0f 100644
+--- a/arch/arm64/kernel/acpi.orig
++++ b/arch/arm64/kernel/acpi.orig
 @@ -14,6 +14,7 @@
  
  #include <linux/acpi.h>
@@ -142,478 +226,463 @@ index 4d529ff7ba51..218f39e5ae0f 100644
 -#endif /* CONFIG_ACPI_HOTPLUG_CPU */
 +#endif /* CONFIG_ACPI_HOTPLUG_CPU */
 \ No newline at end of file
-diff --git a/arch/arm64/kernel/acpi.orig b/arch/arm64/kernel/acpi.orig
-new file mode 100644
-index 000000000000..4d529ff7ba51
---- /dev/null
-+++ b/arch/arm64/kernel/acpi.orig
-@@ -0,0 +1,466 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  ARM64 Specific Low-Level ACPI Boot Support
-+ *
-+ *  Copyright (C) 2013-2014, Linaro Ltd.
-+ *	Author: Al Stone <al.stone@linaro.org>
-+ *	Author: Graeme Gregory <graeme.gregory@linaro.org>
-+ *	Author: Hanjun Guo <hanjun.guo@linaro.org>
-+ *	Author: Tomasz Nowicki <tomasz.nowicki@linaro.org>
-+ *	Author: Naresh Bhat <naresh.bhat@linaro.org>
-+ */
-+
-+#define pr_fmt(fmt) "ACPI: " fmt
-+
-+#include <linux/acpi.h>
-+#include <linux/arm-smccc.h>
-+#include <linux/cpumask.h>
-+#include <linux/efi.h>
-+#include <linux/efi-bgrt.h>
-+#include <linux/init.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/irq_work.h>
-+#include <linux/memblock.h>
-+#include <linux/of_fdt.h>
-+#include <linux/libfdt.h>
-+#include <linux/smp.h>
-+#include <linux/serial_core.h>
-+#include <linux/suspend.h>
-+#include <linux/pgtable.h>
-+
-+#include <acpi/ghes.h>
-+#include <acpi/processor.h>
-+#include <asm/cputype.h>
-+#include <asm/cpu_ops.h>
-+#include <asm/daifflags.h>
-+#include <asm/smp_plat.h>
-+
-+int acpi_noirq = 1;		/* skip ACPI IRQ initialization */
-+int acpi_disabled = 1;
-+EXPORT_SYMBOL(acpi_disabled);
-+
-+int acpi_pci_disabled = 1;	/* skip ACPI PCI scan and IRQ initialization */
-+EXPORT_SYMBOL(acpi_pci_disabled);
-+
-+static bool param_acpi_off __initdata;
-+static bool param_acpi_on __initdata;
-+static bool param_acpi_force __initdata;
-+static bool param_acpi_nospcr __initdata;
-+
-+static int __init parse_acpi(char *arg)
-+{
-+	if (!arg)
-+		return -EINVAL;
-+
-+	/* "acpi=off" disables both ACPI table parsing and interpreter */
-+	if (strcmp(arg, "off") == 0)
-+		param_acpi_off = true;
-+	else if (strcmp(arg, "on") == 0) /* prefer ACPI over DT */
-+		param_acpi_on = true;
-+	else if (strcmp(arg, "force") == 0) /* force ACPI to be enabled */
-+		param_acpi_force = true;
-+	else if (strcmp(arg, "nospcr") == 0) /* disable SPCR as default console */
-+		param_acpi_nospcr = true;
-+	else
-+		return -EINVAL;	/* Core will print when we return error */
-+
-+	return 0;
-+}
-+early_param("acpi", parse_acpi);
-+
-+static bool __init dt_is_stub(void)
-+{
-+	int node;
-+
-+	fdt_for_each_subnode(node, initial_boot_params, 0) {
-+		const char *name = fdt_get_name(initial_boot_params, node, NULL);
-+		if (strcmp(name, "chosen") == 0)
-+			continue;
-+		if (strcmp(name, "hypervisor") == 0 &&
-+		    of_flat_dt_is_compatible(node, "xen,xen"))
-+			continue;
-+
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+/*
-+ * __acpi_map_table() will be called before page_init(), so early_ioremap()
-+ * or early_memremap() should be called here to for ACPI table mapping.
-+ */
-+void __init __iomem *__acpi_map_table(unsigned long phys, unsigned long size)
-+{
-+	if (!size)
-+		return NULL;
-+
-+	return early_memremap(phys, size);
-+}
-+
-+void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
-+{
-+	if (!map || !size)
-+		return;
-+
-+	early_memunmap(map, size);
-+}
-+
-+bool __init acpi_psci_present(void)
-+{
-+	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_COMPLIANT;
-+}
-+
-+/* Whether HVC must be used instead of SMC as the PSCI conduit */
-+bool acpi_psci_use_hvc(void)
-+{
-+	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_USE_HVC;
-+}
-+
-+/*
-+ * acpi_fadt_sanity_check() - Check FADT presence and carry out sanity
-+ *			      checks on it
-+ *
-+ * Return 0 on success,  <0 on failure
-+ */
-+static int __init acpi_fadt_sanity_check(void)
-+{
-+	struct acpi_table_header *table;
-+	struct acpi_table_fadt *fadt;
-+	acpi_status status;
+diff --git a/kernel/cgroup/debug.c b/kernel/cgroup/debug.c
+index 80aa3f027ac3..47f26d7894cc 100644
+--- a/kernel/cgroup/debug.c
++++ b/kernel/cgroup/debug.c
+@@ -88,7 +88,8 @@ static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
+ {
+ 	struct cgrp_cset_link *link;
+ 	struct css_set *cset;
+-	char *name_buf;
++	char *name_buf = NULL;
 +	int ret = 0;
-+
-+	/*
-+	 * FADT is required on arm64; retrieve it to check its presence
-+	 * and carry out revision and ACPI HW reduced compliancy tests
-+	 */
-+	status = acpi_get_table(ACPI_SIG_FADT, 0, &table);
-+	if (ACPI_FAILURE(status)) {
-+		const char *msg = acpi_format_exception(status);
-+
-+		pr_err("Failed to get FADT table, %s\n", msg);
-+		return -ENODEV;
-+	}
-+
-+	fadt = (struct acpi_table_fadt *)table;
-+
-+	/*
-+	 * Revision in table header is the FADT Major revision, and there
-+	 * is a minor revision of FADT which was introduced by ACPI 5.1,
-+	 * we only deal with ACPI 5.1 or newer revision to get GIC and SMP
-+	 * boot protocol configuration data.
-+	 */
-+	if (table->revision < 5 ||
-+	   (table->revision == 5 && fadt->minor_revision < 1)) {
-+		pr_err(FW_BUG "Unsupported FADT revision %d.%d, should be 5.1+\n",
-+		       table->revision, fadt->minor_revision);
-+
-+		if (!fadt->arm_boot_flags) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		pr_err("FADT has ARM boot flags set, assuming 5.1\n");
-+	}
-+
-+	if (!(fadt->flags & ACPI_FADT_HW_REDUCED)) {
-+		pr_err("FADT not ACPI hardware reduced compliant\n");
-+		ret = -EINVAL;
-+	}
+ 
+ 	name_buf = kmalloc(NAME_MAX + 1, GFP_KERNEL);
+ 	if (!name_buf)
+@@ -106,8 +107,10 @@ static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
+ 	}
+ 	rcu_read_unlock();
+ 	spin_unlock_irq(&css_set_lock);
 +
 +out:
-+	/*
-+	 * acpi_get_table() creates FADT table mapping that
-+	 * should be released after parsing and before resuming boot
-+	 */
-+	acpi_put_table(table);
+ 	kfree(name_buf);
+-	return 0;
 +	return ret;
+ }
+ 
+ #define MAX_TASKS_SHOWN_PER_CSS 25
+@@ -130,7 +133,7 @@ static int cgroup_css_links_read(struct seq_file *seq, void *v)
+ 		 * and highlight difference between refcount and task_count.
+ 		 */
+ 		seq_printf(seq, "css_set %pK", cset);
+-		if (rcu_dereference_protected(cset->dom_cset, 1) != cset) {
++		if (rcu_dereference_protected(cset->dom_cset, lockdep_is_held(&css_set_lock)) != cset) {
+ 			threaded_csets++;
+ 			seq_printf(seq, "=>%pK", cset->dom_cset);
+ 		}
+@@ -146,7 +149,7 @@ static int cgroup_css_links_read(struct seq_file *seq, void *v)
+ 			}
+ 		} else {
+ 			seq_printf(seq, " %d", refcnt);
+-			if (refcnt - cset->nr_tasks > 0) {
++			if (refcnt > cset->nr_tasks) {
+ 				int extra = refcnt - cset->nr_tasks;
+ 
+ 				seq_printf(seq, " +%d", extra);
+@@ -214,7 +217,7 @@ static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
+ 		return -ENODEV;
+ 
+ 	for_each_subsys(ss, i) {
+-		css = rcu_dereference_check(cgrp->subsys[ss->id], true);
++		css = rcu_dereference_check(cgrp->subsys[ss->id], lockdep_is_held(&cgroup_mutex));
+ 		if (!css)
+ 			continue;
+ 
+@@ -222,8 +225,7 @@ static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
+ 
+ 		/* Show the parent CSS if applicable*/
+ 		if (css->parent)
+-			snprintf(pbuf, sizeof(pbuf) - 1, " P=%d",
+-				 css->parent->id);
++			snprintf(pbuf, sizeof(pbuf), " P=%d", css->parent->id);
+ 		seq_printf(seq, "%2d: %-4s\t- %p[%d] %d%s\n", ss->id, ss->name,
+ 			  css, css->id,
+ 			  atomic_read(&css->online_cnt), pbuf);
+@@ -378,4 +380,4 @@ void __init enable_debug_cgroup(void)
+ 	debug_cgrp_subsys.dfl_cftypes = debug_files;
+ 	debug_cgrp_subsys.implicit_on_dfl = true;
+ 	debug_cgrp_subsys.threaded = true;
+-}
++}
+\ No newline at end of file
+diff --git a/kernel/cgroup/debug.c.orig b/kernel/cgroup/debug.c.orig
+new file mode 100644
+index 000000000000..80aa3f027ac3
+--- /dev/null
++++ b/kernel/cgroup/debug.c.orig
+@@ -0,0 +1,381 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Debug controller
++ *
++ * WARNING: This controller is for cgroup core debugging only.
++ * Its interfaces are unstable and subject to changes at any time.
++ */
++#include <linux/ctype.h>
++#include <linux/mm.h>
++#include <linux/slab.h>
++
++#include "cgroup-internal.h"
++
++static struct cgroup_subsys_state *
++debug_css_alloc(struct cgroup_subsys_state *parent_css)
++{
++	struct cgroup_subsys_state *css = kzalloc(sizeof(*css), GFP_KERNEL);
++
++	if (!css)
++		return ERR_PTR(-ENOMEM);
++
++	return css;
++}
++
++static void debug_css_free(struct cgroup_subsys_state *css)
++{
++	kfree(css);
 +}
 +
 +/*
-+ * acpi_boot_table_init() called from setup_arch(), always.
-+ *	1. find RSDP and get its address, and then find XSDT
-+ *	2. extract all tables and checksums them all
-+ *	3. check ACPI FADT revision
-+ *	4. check ACPI FADT HW reduced flag
-+ *
-+ * We can parse ACPI boot-time tables such as MADT after
-+ * this function is called.
-+ *
-+ * On return ACPI is enabled if either:
-+ *
-+ * - ACPI tables are initialized and sanity checks passed
-+ * - acpi=force was passed in the command line and ACPI was not disabled
-+ *   explicitly through acpi=off command line parameter
-+ *
-+ * ACPI is disabled on function return otherwise
++ * debug_taskcount_read - return the number of tasks in a cgroup.
++ * @cgrp: the cgroup in question
 + */
-+void __init acpi_boot_table_init(void)
++static u64 debug_taskcount_read(struct cgroup_subsys_state *css,
++				struct cftype *cft)
 +{
-+	int ret;
++	return cgroup_task_count(css->cgroup);
++}
++
++static int current_css_set_read(struct seq_file *seq, void *v)
++{
++	struct kernfs_open_file *of = seq->private;
++	struct css_set *cset;
++	struct cgroup_subsys *ss;
++	struct cgroup_subsys_state *css;
++	int i, refcnt;
++
++	if (!cgroup_kn_lock_live(of->kn, false))
++		return -ENODEV;
++
++	spin_lock_irq(&css_set_lock);
++	rcu_read_lock();
++	cset = task_css_set(current);
++	refcnt = refcount_read(&cset->refcount);
++	seq_printf(seq, "css_set %pK %d", cset, refcnt);
++	if (refcnt > cset->nr_tasks)
++		seq_printf(seq, " +%d", refcnt - cset->nr_tasks);
++	seq_puts(seq, "\n");
 +
 +	/*
-+	 * Enable ACPI instead of device tree unless
-+	 * - ACPI has been disabled explicitly (acpi=off), or
-+	 * - the device tree is not empty (it has more than just a /chosen node,
-+	 *   and a /hypervisor node when running on Xen)
-+	 *   and ACPI has not been [force] enabled (acpi=on|force)
++	 * Print the css'es stored in the current css_set.
 +	 */
-+	if (param_acpi_off ||
-+	    (!param_acpi_on && !param_acpi_force && !dt_is_stub()))
-+		goto done;
-+
-+	/*
-+	 * ACPI is disabled at this point. Enable it in order to parse
-+	 * the ACPI tables and carry out sanity checks
-+	 */
-+	enable_acpi();
-+
-+	/*
-+	 * If ACPI tables are initialized and FADT sanity checks passed,
-+	 * leave ACPI enabled and carry on booting; otherwise disable ACPI
-+	 * on initialization error.
-+	 * If acpi=force was passed on the command line it forces ACPI
-+	 * to be enabled even if its initialization failed.
-+	 */
-+	if (acpi_table_init() || acpi_fadt_sanity_check()) {
-+		pr_err("Failed to init ACPI tables\n");
-+		if (!param_acpi_force)
-+			disable_acpi();
++	for_each_subsys(ss, i) {
++		css = cset->subsys[ss->id];
++		if (!css)
++			continue;
++		seq_printf(seq, "%2d: %-4s\t- %p[%d]\n", ss->id, ss->name,
++			  css, css->id);
 +	}
++	rcu_read_unlock();
++	spin_unlock_irq(&css_set_lock);
++	cgroup_kn_unlock(of->kn);
++	return 0;
++}
 +
-+done:
-+	if (acpi_disabled) {
-+		if (earlycon_acpi_spcr_enable)
-+			early_init_dt_scan_chosen_stdout();
-+	} else {
-+#ifdef CONFIG_HIBERNATION
-+		struct acpi_table_header *facs = NULL;
-+		acpi_get_table(ACPI_SIG_FACS, 1, &facs);
-+		if (facs) {
-+			swsusp_hardware_signature =
-+				((struct acpi_table_facs *)facs)->hardware_signature;
-+			acpi_put_table(facs);
-+		}
-+#endif
++static u64 current_css_set_refcount_read(struct cgroup_subsys_state *css,
++					 struct cftype *cft)
++{
++	u64 count;
++
++	rcu_read_lock();
++	count = refcount_read(&task_css_set(current)->refcount);
++	rcu_read_unlock();
++	return count;
++}
++
++static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
++{
++	struct cgrp_cset_link *link;
++	struct css_set *cset;
++	char *name_buf;
++
++	name_buf = kmalloc(NAME_MAX + 1, GFP_KERNEL);
++	if (!name_buf)
++		return -ENOMEM;
++
++	spin_lock_irq(&css_set_lock);
++	rcu_read_lock();
++	cset = task_css_set(current);
++	list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
++		struct cgroup *c = link->cgrp;
++
++		cgroup_name(c, name_buf, NAME_MAX + 1);
++		seq_printf(seq, "Root %d group %s\n",
++			   c->root->hierarchy_id, name_buf);
++	}
++	rcu_read_unlock();
++	spin_unlock_irq(&css_set_lock);
++	kfree(name_buf);
++	return 0;
++}
++
++#define MAX_TASKS_SHOWN_PER_CSS 25
++static int cgroup_css_links_read(struct seq_file *seq, void *v)
++{
++	struct cgroup_subsys_state *css = seq_css(seq);
++	struct cgrp_cset_link *link;
++	int dead_cnt = 0, extra_refs = 0, threaded_csets = 0;
++
++	spin_lock_irq(&css_set_lock);
++
++	list_for_each_entry(link, &css->cgroup->cset_links, cset_link) {
++		struct css_set *cset = link->cset;
++		struct task_struct *task;
++		int count = 0;
++		int refcnt = refcount_read(&cset->refcount);
 +
 +		/*
-+		 * For varying privacy and security reasons, sometimes need
-+		 * to completely silence the serial console output, and only
-+		 * enable it when needed.
-+		 * But there are many existing systems that depend on this
-+		 * behaviour, use acpi=nospcr to disable console in ACPI SPCR
-+		 * table as default serial console.
++		 * Print out the proc_cset and threaded_cset relationship
++		 * and highlight difference between refcount and task_count.
 +		 */
-+		ret = acpi_parse_spcr(earlycon_acpi_spcr_enable,
-+			!param_acpi_nospcr);
-+		if (!ret || param_acpi_nospcr || !IS_ENABLED(CONFIG_ACPI_SPCR_TABLE))
-+			pr_info("Use ACPI SPCR as default console: No\n");
-+		else
-+			pr_info("Use ACPI SPCR as default console: Yes\n");
++		seq_printf(seq, "css_set %pK", cset);
++		if (rcu_dereference_protected(cset->dom_cset, 1) != cset) {
++			threaded_csets++;
++			seq_printf(seq, "=>%pK", cset->dom_cset);
++		}
++		if (!list_empty(&cset->threaded_csets)) {
++			struct css_set *tcset;
++			int idx = 0;
 +
-+		if (IS_ENABLED(CONFIG_ACPI_BGRT))
-+			acpi_table_parse(ACPI_SIG_BGRT, acpi_parse_bgrt);
++			list_for_each_entry(tcset, &cset->threaded_csets,
++					    threaded_csets_node) {
++				seq_puts(seq, idx ? "," : "<=");
++				seq_printf(seq, "%pK", tcset);
++				idx++;
++			}
++		} else {
++			seq_printf(seq, " %d", refcnt);
++			if (refcnt - cset->nr_tasks > 0) {
++				int extra = refcnt - cset->nr_tasks;
++
++				seq_printf(seq, " +%d", extra);
++				/*
++				 * Take out the one additional reference in
++				 * init_css_set.
++				 */
++				if (cset == &init_css_set)
++					extra--;
++				extra_refs += extra;
++			}
++		}
++		seq_puts(seq, "\n");
++
++		list_for_each_entry(task, &cset->tasks, cg_list) {
++			if (count++ <= MAX_TASKS_SHOWN_PER_CSS)
++				seq_printf(seq, "  task %d\n",
++					   task_pid_vnr(task));
++		}
++
++		list_for_each_entry(task, &cset->mg_tasks, cg_list) {
++			if (count++ <= MAX_TASKS_SHOWN_PER_CSS)
++				seq_printf(seq, "  task %d\n",
++					   task_pid_vnr(task));
++		}
++		/* show # of overflowed tasks */
++		if (count > MAX_TASKS_SHOWN_PER_CSS)
++			seq_printf(seq, "  ... (%d)\n",
++				   count - MAX_TASKS_SHOWN_PER_CSS);
++
++		if (cset->dead) {
++			seq_puts(seq, "    [dead]\n");
++			dead_cnt++;
++		}
++
++		WARN_ON(count != cset->nr_tasks);
 +	}
++	spin_unlock_irq(&css_set_lock);
++
++	if (!dead_cnt && !extra_refs && !threaded_csets)
++		return 0;
++
++	seq_puts(seq, "\n");
++	if (threaded_csets)
++		seq_printf(seq, "threaded css_sets = %d\n", threaded_csets);
++	if (extra_refs)
++		seq_printf(seq, "extra references = %d\n", extra_refs);
++	if (dead_cnt)
++		seq_printf(seq, "dead css_sets = %d\n", dead_cnt);
++
++	return 0;
 +}
 +
-+static pgprot_t __acpi_get_writethrough_mem_attribute(void)
++static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
 +{
-+	/*
-+	 * Although UEFI specifies the use of Normal Write-through for
-+	 * EFI_MEMORY_WT, it is seldom used in practice and not implemented
-+	 * by most (all?) CPUs. Rather than allocate a MAIR just for this
-+	 * purpose, emit a warning and use Normal Non-cacheable instead.
-+	 */
-+	pr_warn_once("No MAIR allocation for EFI_MEMORY_WT; treating as Normal Non-cacheable\n");
-+	return __pgprot(PROT_NORMAL_NC);
-+}
++	struct kernfs_open_file *of = seq->private;
++	struct cgroup *cgrp;
++	struct cgroup_subsys *ss;
++	struct cgroup_subsys_state *css;
++	char pbuf[16];
++	int i;
 +
-+pgprot_t __acpi_get_mem_attribute(phys_addr_t addr)
-+{
-+	/*
-+	 * According to "Table 8 Map: EFI memory types to AArch64 memory
-+	 * types" of UEFI 2.5 section 2.3.6.1, each EFI memory type is
-+	 * mapped to a corresponding MAIR attribute encoding.
-+	 * The EFI memory attribute advises all possible capabilities
-+	 * of a memory region.
-+	 */
++	cgrp = cgroup_kn_lock_live(of->kn, false);
++	if (!cgrp)
++		return -ENODEV;
 +
-+	u64 attr;
-+
-+	attr = efi_mem_attributes(addr);
-+	if (attr & EFI_MEMORY_WB)
-+		return PAGE_KERNEL;
-+	if (attr & EFI_MEMORY_WC)
-+		return __pgprot(PROT_NORMAL_NC);
-+	if (attr & EFI_MEMORY_WT)
-+		return __acpi_get_writethrough_mem_attribute();
-+	return __pgprot(PROT_DEVICE_nGnRnE);
-+}
-+
-+void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
-+{
-+	efi_memory_desc_t *md, *region = NULL;
-+	pgprot_t prot;
-+
-+	if (WARN_ON_ONCE(!efi_enabled(EFI_MEMMAP)))
-+		return NULL;
-+
-+	for_each_efi_memory_desc(md) {
-+		u64 end = md->phys_addr + (md->num_pages << EFI_PAGE_SHIFT);
-+
-+		if (phys < md->phys_addr || phys >= end)
++	for_each_subsys(ss, i) {
++		css = rcu_dereference_check(cgrp->subsys[ss->id], true);
++		if (!css)
 +			continue;
 +
-+		if (phys + size > end) {
-+			pr_warn(FW_BUG "requested region covers multiple EFI memory regions\n");
-+			return NULL;
-+		}
-+		region = md;
-+		break;
++		pbuf[0] = '\0';
++
++		/* Show the parent CSS if applicable*/
++		if (css->parent)
++			snprintf(pbuf, sizeof(pbuf) - 1, " P=%d",
++				 css->parent->id);
++		seq_printf(seq, "%2d: %-4s\t- %p[%d] %d%s\n", ss->id, ss->name,
++			  css, css->id,
++			  atomic_read(&css->online_cnt), pbuf);
 +	}
 +
-+	/*
-+	 * It is fine for AML to remap regions that are not represented in the
-+	 * EFI memory map at all, as it only describes normal memory, and MMIO
-+	 * regions that require a virtual mapping to make them accessible to
-+	 * the EFI runtime services.
-+	 */
-+	prot = __pgprot(PROT_DEVICE_nGnRnE);
-+	if (region) {
-+		switch (region->type) {
-+		case EFI_LOADER_CODE:
-+		case EFI_LOADER_DATA:
-+		case EFI_BOOT_SERVICES_CODE:
-+		case EFI_BOOT_SERVICES_DATA:
-+		case EFI_CONVENTIONAL_MEMORY:
-+		case EFI_PERSISTENT_MEMORY:
-+			if (memblock_is_map_memory(phys) ||
-+			    !memblock_is_region_memory(phys, size)) {
-+				pr_warn(FW_BUG "requested region covers kernel memory @ %pa\n", &phys);
-+				return NULL;
-+			}
-+			/*
-+			 * Mapping kernel memory is permitted if the region in
-+			 * question is covered by a single memblock with the
-+			 * NOMAP attribute set: this enables the use of ACPI
-+			 * table overrides passed via initramfs, which are
-+			 * reserved in memory using arch_reserve_mem_area()
-+			 * below. As this particular use case only requires
-+			 * read access, fall through to the R/O mapping case.
-+			 */
-+			fallthrough;
-+
-+		case EFI_RUNTIME_SERVICES_CODE:
-+			/*
-+			 * This would be unusual, but not problematic per se,
-+			 * as long as we take care not to create a writable
-+			 * mapping for executable code.
-+			 */
-+			prot = PAGE_KERNEL_RO;
-+			break;
-+
-+		case EFI_ACPI_RECLAIM_MEMORY:
-+			/*
-+			 * ACPI reclaim memory is used to pass firmware tables
-+			 * and other data that is intended for consumption by
-+			 * the OS only, which may decide it wants to reclaim
-+			 * that memory and use it for something else. We never
-+			 * do that, but we usually add it to the linear map
-+			 * anyway, in which case we should use the existing
-+			 * mapping.
-+			 */
-+			if (memblock_is_map_memory(phys))
-+				return (void __iomem *)__phys_to_virt(phys);
-+			fallthrough;
-+
-+		default:
-+			if (region->attribute & EFI_MEMORY_WB)
-+				prot = PAGE_KERNEL;
-+			else if (region->attribute & EFI_MEMORY_WC)
-+				prot = __pgprot(PROT_NORMAL_NC);
-+			else if (region->attribute & EFI_MEMORY_WT)
-+				prot = __acpi_get_writethrough_mem_attribute();
-+		}
-+	}
-+	return ioremap_prot(phys, size, prot);
++	cgroup_kn_unlock(of->kn);
++	return 0;
 +}
++
++static void cgroup_masks_read_one(struct seq_file *seq, const char *name,
++				  u16 mask)
++{
++	struct cgroup_subsys *ss;
++	int ssid;
++	bool first = true;
++
++	seq_printf(seq, "%-17s: ", name);
++	for_each_subsys(ss, ssid) {
++		if (!(mask & (1 << ssid)))
++			continue;
++		if (!first)
++			seq_puts(seq, ", ");
++		seq_puts(seq, ss->name);
++		first = false;
++	}
++	seq_putc(seq, '\n');
++}
++
++static int cgroup_masks_read(struct seq_file *seq, void *v)
++{
++	struct kernfs_open_file *of = seq->private;
++	struct cgroup *cgrp;
++
++	cgrp = cgroup_kn_lock_live(of->kn, false);
++	if (!cgrp)
++		return -ENODEV;
++
++	cgroup_masks_read_one(seq, "subtree_control", cgrp->subtree_control);
++	cgroup_masks_read_one(seq, "subtree_ss_mask", cgrp->subtree_ss_mask);
++
++	cgroup_kn_unlock(of->kn);
++	return 0;
++}
++
++static u64 releasable_read(struct cgroup_subsys_state *css, struct cftype *cft)
++{
++	return (!cgroup_is_populated(css->cgroup) &&
++		!css_has_online_children(&css->cgroup->self));
++}
++
++static struct cftype debug_legacy_files[] =  {
++	{
++		.name = "taskcount",
++		.read_u64 = debug_taskcount_read,
++	},
++
++	{
++		.name = "current_css_set",
++		.seq_show = current_css_set_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "current_css_set_refcount",
++		.read_u64 = current_css_set_refcount_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "current_css_set_cg_links",
++		.seq_show = current_css_set_cg_links_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "cgroup_css_links",
++		.seq_show = cgroup_css_links_read,
++	},
++
++	{
++		.name = "cgroup_subsys_states",
++		.seq_show = cgroup_subsys_states_read,
++	},
++
++	{
++		.name = "cgroup_masks",
++		.seq_show = cgroup_masks_read,
++	},
++
++	{
++		.name = "releasable",
++		.read_u64 = releasable_read,
++	},
++
++	{ }	/* terminate */
++};
++
++static struct cftype debug_files[] =  {
++	{
++		.name = "taskcount",
++		.read_u64 = debug_taskcount_read,
++	},
++
++	{
++		.name = "current_css_set",
++		.seq_show = current_css_set_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "current_css_set_refcount",
++		.read_u64 = current_css_set_refcount_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "current_css_set_cg_links",
++		.seq_show = current_css_set_cg_links_read,
++		.flags = CFTYPE_ONLY_ON_ROOT,
++	},
++
++	{
++		.name = "css_links",
++		.seq_show = cgroup_css_links_read,
++	},
++
++	{
++		.name = "csses",
++		.seq_show = cgroup_subsys_states_read,
++	},
++
++	{
++		.name = "masks",
++		.seq_show = cgroup_masks_read,
++	},
++
++	{ }	/* terminate */
++};
++
++struct cgroup_subsys debug_cgrp_subsys = {
++	.css_alloc	= debug_css_alloc,
++	.css_free	= debug_css_free,
++	.legacy_cftypes	= debug_legacy_files,
++};
 +
 +/*
-+ * Claim Synchronous External Aborts as a firmware first notification.
-+ *
-+ * Used by KVM and the arch do_sea handler.
-+ * @regs may be NULL when called from process context.
++ * On v2, debug is an implicit controller enabled by "cgroup_debug" boot
++ * parameter.
 + */
-+int apei_claim_sea(struct pt_regs *regs)
++void __init enable_debug_cgroup(void)
 +{
-+	int err = -ENOENT;
-+	bool return_to_irqs_enabled;
-+	unsigned long current_flags;
-+
-+	if (!IS_ENABLED(CONFIG_ACPI_APEI_GHES))
-+		return err;
-+
-+	current_flags = local_daif_save_flags();
-+
-+	/* current_flags isn't useful here as daif doesn't tell us about pNMI */
-+	return_to_irqs_enabled = !irqs_disabled_flags(arch_local_save_flags());
-+
-+	if (regs)
-+		return_to_irqs_enabled = interrupts_enabled(regs);
-+
-+	/*
-+	 * SEA can interrupt SError, mask it and describe this as an NMI so
-+	 * that APEI defers the handling.
-+	 */
-+	local_daif_restore(DAIF_ERRCTX);
-+	nmi_enter();
-+	err = ghes_notify_sea();
-+	nmi_exit();
-+
-+	/*
-+	 * APEI NMI-like notifications are deferred to irq_work. Unless
-+	 * we interrupted irqs-masked code, we can do that now.
-+	 */
-+	if (!err) {
-+		if (return_to_irqs_enabled) {
-+			local_daif_restore(DAIF_PROCCTX_NOIRQ);
-+			__irq_enter();
-+			irq_work_run();
-+			__irq_exit();
-+		} else {
-+			pr_warn_ratelimited("APEI work queued but not completed");
-+			err = -EINPROGRESS;
-+		}
-+	}
-+
-+	local_daif_restore(current_flags);
-+
-+	return err;
++	debug_cgrp_subsys.dfl_cftypes = debug_files;
++	debug_cgrp_subsys.implicit_on_dfl = true;
++	debug_cgrp_subsys.threaded = true;
 +}
-+
-+void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
-+{
-+	memblock_mark_nomap(addr, size);
-+}
-+
-+#ifdef CONFIG_ACPI_HOTPLUG_CPU
-+int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
-+		 int *pcpu)
-+{
-+	/* If an error code is passed in this stub can't fix it */
-+	if (*pcpu < 0) {
-+		pr_warn_once("Unable to map CPU to valid ID\n");
-+		return *pcpu;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(acpi_map_cpu);
-+
-+int acpi_unmap_cpu(int cpu)
-+{
-+	return 0;
-+}
-+EXPORT_SYMBOL(acpi_unmap_cpu);
-+#endif /* CONFIG_ACPI_HOTPLUG_CPU */
 -- 
 2.50.1.windows.1
 
