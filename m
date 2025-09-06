@@ -1,61 +1,61 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE53827FD40;
-	Sat,  6 Sep 2025 12:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185FC8462;
+	Sat,  6 Sep 2025 13:16:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757162672; cv=none; b=F/gELeIXxzKabfwb12ZTTpDesyNoJq1CG7jrmltF+xzeK0hE0FNWADLKw0ElG6nnUeRmTqqtTnXnid7XgD0oSa/gHFNBdQUykBPL3h1PfHjJcVRlZi8EhbKqrle9q0f/Fsfk+NS0lp3O80TNP2RW7Hxb6fC8UrJBodr80Zd8+6E=
+	t=1757164594; cv=none; b=I4snofXiT7SlDAABu0DufQvXRgsZ3FJpbNRbueV98A1bTipcCObGAxPlqJRpeKEDwXoPKikWFCW/N5hS1hfQ5rHv53XD2z0VxSo7q4L3gC562t7cUgKTwWC2H8bXi0qNZK5uwW5OrX3nIgxz6f+nenBMzkIDp0Uwb0v8iCdstAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757162672; c=relaxed/simple;
-	bh=fs4zfTzKabi/47BkZEI5pNgZ2H9ES53lUsJnqM1n+7s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tQQ4yebm8gV3B3RY5j5PIR7s5x3SSb79JGotQvWKELOz6PGaxf7sBeYbB5zctRz2kCPKyAx0BOUMezKKCoKvFRISOYBEQvaPE2ebrehPqtL8E4kZoe43tyJWnONSBlcNhUmgtRGVM38ECio6AsqC1lnCopgvuXO3qOtP/5iaM88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HCC8W3FV; arc=none smtp.client-ip=209.85.128.44
+	s=arc-20240116; t=1757164594; c=relaxed/simple;
+	bh=l9nhhVdhm/8vc2KY9Pv8h9N4nKTO8OqtEIo3XHesPzI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XKUbBHGVMFdTHbL7xvO3SBf0UoxgZyeqECEfGw+XFM0PS1wvuDGl6Q/MQYMt37wqXLYb/vDMHM74wY4kvLUixvwmVrbGRl4sc5KnLnGSSJwIAPL96HUogAWfV8DpW0NbDOrXTCoj9vYolziTznIrlgNP6CTkIa6PcQMM2E33a18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVHPpPQO; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HCC8W3FV"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45b4d89217aso18906145e9.2;
-        Sat, 06 Sep 2025 05:44:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVHPpPQO"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45cb5492350so19238875e9.1;
+        Sat, 06 Sep 2025 06:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757162668; x=1757767468; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757164590; x=1757769390; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FAE+oUnpunIhbfJWlgDTcPFbBZ5VFlx0tQtY8lTyAo=;
-        b=HCC8W3FVJ4Jxnk5uY04XmknIIsqA0EvbknPZvFyk+8nWux+Nx3gRExRb21jGizXVKf
-         tg4eo6xY4yqr+OjI7SGeUf0UBN69LXxogEAjo/Jz9kz8eoPnIgGTiJQhqs7MlvrpAb2S
-         lLbhGxF95xLxzkSBXlnZyVAFq0fg1TwYVHBcKodkF/fCVHkoFIVdYWVgasQh8pymGsjF
-         fxwyCY5Mg7xag9PLHIJvi6sWeh34OwlUFIKRpcNjxy/IpGbWFQMcyJ4ppBgbAubbnRMX
-         hTKUaqly/597+F6+skthcpiqhBquzCmr5cZCVtheRAQBegIMg2V0kayXe/1XueGF3ERT
-         DLOQ==
+        bh=pHtbX+hoLFhisWXH/6uIM4RzEVWDALofbx9D6dgOqBU=;
+        b=UVHPpPQO+govu+fcasPdqmCWZ9+NEYu6a99hWgITSBh1vO66bf7ftV4QXGm+oaawra
+         zR8JM8HkNGQjE1hsC6mkTvhN/KxoZeqQ9oaCPTk+TkqUtoObVWUoGzTbM266U0fhgsfM
+         JTLiD/seFPOqobY9Xd7kDry6QbBzSnk2OrfQLl4tDb/Q5ZAyzmBrFsUz8PrwPgz4HV1A
+         YFu3lH9oAiBL5RoyrUG1N218AuZl4u7m80Wga4vMhn2JP3bjPag+ZHL+/nojHrDFqIt8
+         Ms6pglgeSJ3Zc4BE9qTDKvTqgyHp4xrMjvobQG4vbSBEqq84ALsNFh1/jo40uOrAwTJZ
+         c81w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757162668; x=1757767468;
+        d=1e100.net; s=20230601; t=1757164590; x=1757769390;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4FAE+oUnpunIhbfJWlgDTcPFbBZ5VFlx0tQtY8lTyAo=;
-        b=SQKt2P+D8nbs9jXLX32+xK0Y+XQxFfyTu09BY0mWQqJzxA4my4/7JRq7tObB7jRrZt
-         HrqmbiSctLqR1KGCE+B6nW6B85L4lFX2OSNMtzRUxaW9Dk82RHNR+hkhYj3juzUvhRtj
-         shmf6jUdjx4mpby5kSINdgnTuNxy34thb8eL+jKVnGsXScbD6n3GQaro/NI6aPHkaru6
-         mQfTFtIXqhyESXcjvpGRDsky30RFIZzMEAKM7xhJqaXO8KTW14IocB9oVe21VYvLHNuV
-         LWLTlBTx9sKtiJKY8lS1AKv/fLrX+8KSOOc6LJzLV9MzYfeOpr2zzDi4vqYv47iJwNL8
-         jwow==
-X-Forwarded-Encrypted: i=1; AJvYcCUFCDi5AFAkdOHzu55evxBBdi8QA+iNZupwD5yhvvXOC0WfKtUiMNpxykUL64MNGCV3gKO8UO3MOT1+7cU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7Q1rvo7jpi6EeVBEmDKB7s0Z6L5m2ZgA3xJbXNOfzcfJxMSnU
-	r9nszYVSIw3lrFKShmYfe1WHAyVKWHj29dh0YBGfg8UxoyGui7g0tmsiwxLPSQ==
-X-Gm-Gg: ASbGnctMbgDRhKlxYcGPRzD8kmcKoWY1namg3PDUcJ8Ohe3mNVdSPvPE7YkWJluctCo
-	hTCZHj5O3BvAoDAeMD3utKOSbzIl+JyZYTbCbA0cre93ICdBqEY2swYbPqeI8xVoieeWojJQho8
-	9clBgI+ySZVIxzLa8DJh5U0yOuSinv2hLQs1dZTvtDeDyNnSq2lF2P6jrvgmoWouimPtzy585pu
-	YdJM4sqecJqe3rgH4Z3YxPigJtJ7UuIv/GXOivY3LIf4B7m8jqENQqX7wbnNtYaaeGU/FWvxv18
-	0XryLvhJZS1RKvL0v6Br+DohDtHvpbLPc+UyDZFUYs9hxqQK9UlFxEyWwQN7/C87Omb5I43ptFI
-	UwrJBTo8KoniMgORCBCuKmpEU27NlvGoKMBLOLQsJ3hFYqhpf
-X-Google-Smtp-Source: AGHT+IHX2gOEmEGkO0po9j35OCLFJL2NEC5LGoBqWcaxAkHyCerWEb8+d7E1T92L3LQqeDjFB6QcJw==
-X-Received: by 2002:a5d:64c5:0:b0:3e4:bd77:df12 with SMTP id ffacd0b85a97d-3e63736fc29mr1242164f8f.18.1757162667917;
-        Sat, 06 Sep 2025 05:44:27 -0700 (PDT)
-Received: from Al-Qamar ([2a00:f29:258:2ea4:8502:df64:bca:486e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf34493b8csm33995333f8f.59.2025.09.06.05.44.24
+        bh=pHtbX+hoLFhisWXH/6uIM4RzEVWDALofbx9D6dgOqBU=;
+        b=pNlVv/SF6/M94+9BBhKh9gC8OXQoWzxWlK4axLocvZ8AWDuXkkUlqJAVROat+sLTCw
+         2pDXsyuVTAmah3u/T5B1Kz6rTeGwW2lvcK12/fb9s5ybPMmoYJmQb1LPxiENIplOFV4M
+         xsbvIe/G2eM9WCk95iGV41ApjrIISq2kANYPvC5Tjz77yx3WwHZ4aJu44yyI/86jLBEY
+         iWdv23lpQQ/+ysBc0qCzbNjVIwO9wzdz+LE4O0stBAmlTcpy78gZ9+1EcEj2t8Kfg3pN
+         L11hbo9M53ClWNSKYs9L8EtRBhnyJIZ+7nq25jVUdWfhvaCfWyV06d5EXhkiwQyhHv7F
+         PsWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPvJ98FfKiTIfowOss0GhiZ834JBaYzwg6KJh+aSNrQ0dDyXh1ISLbTueNSy2OlKDhZDiALUb/6olMhr0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWBDKTlV7hzG0EI3d07efPDePDxqT18+KsiACuW/C4N954Vv2N
+	UCb6+wgyCvqMZP5468kqZnHdSEt2QFGxaQXwdEnXaeGWdnMwbHxoPKw7tvdS2Hfc
+X-Gm-Gg: ASbGncupg2vASJuX1q0pzIxtVutSOgsvV4fyR5DhiosMh9qNojuHgraiN7BfFJ5/cXc
+	e/DxB+b2kxbQgWuJ4XnIkxN/oMG+8M0Fk/TtNV+NWoXPzabmIJ9FilebkyzHe+vXXInwwRD9RmR
+	ew5vAtDLJ6t9IZzNN2TR8KV4clH9dyS/VMGJ022OFh4Gp/gxcnzgp4xUUYplIPbrGTCC/vfvIFh
+	OWu6jxOLBdoRTm2NcTx7B7AeU+bdDKFMueh8Rmko7C860U4mWkSXjoE7y+w/SzSN7L2fgulHp5A
+	cnYZwO9jQW1nQA6NjSIx7LVKTcbEeRbKN/JG0RTk6VUCP7wCBTrC3Fyd7Px2/DcL+mL/8J0Z767
+	3ogUa0kW1wnZYeLLKeK+i4pEA8sNVWXj9eqge7E3p8jFGYxk=
+X-Google-Smtp-Source: AGHT+IHzz+rH/aLOFWZBzuo7qJGuEmT1EFIYfugsNbOri64viuMj6Of3U+JLlCxhnbKoEzArPRPENA==
+X-Received: by 2002:a05:600c:1c1b:b0:45d:d68c:2a43 with SMTP id 5b1f17b1804b1-45de1f2cc51mr4438825e9.33.1757164589821;
+        Sat, 06 Sep 2025 06:16:29 -0700 (PDT)
+Received: from Al-Qamar ([87.201.248.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b7e7fec07sm357514175e9.10.2025.09.06.06.16.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Sep 2025 05:44:27 -0700 (PDT)
+        Sat, 06 Sep 2025 06:16:29 -0700 (PDT)
 From: Fidal Palamparambil <rootuserhere@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: mcgrof@kernel.org,
@@ -64,9 +64,9 @@ Cc: mcgrof@kernel.org,
 	samitolvanen@google.com,
 	linux-kernel@vger.kernel.org,
 	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: [PATCH] cgroup: debug: Fix multiple issues in debug controller implementation
-Date: Sat,  6 Sep 2025 16:44:17 +0400
-Message-ID: <20250906124417.793-1-rootuserhere@gmail.com>
+Subject: [PATCH] kprobe_event_gen_test : Fix error handling and resource cleanup
+Date: Sat,  6 Sep 2025 17:15:59 +0400
+Message-ID: <20250906131559.200-1-rootuserhere@gmail.com>
 X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -78,611 +78,429 @@ Content-Transfer-Encoding: 8bit
 
 From: Fidal palamparambil <rootuserhere@gmail.com>
 
-This commit addresses several issues in the cgroup debug controller:
+This commit addresses several issues in the kprobe event generation test module:
 
-1. Memory leak protection in current_css_set_cg_links_read():
-   - Initialize name_buf to NULL and use proper error handling with goto
-   - Ensure memory is freed in all code paths
+1. Fixed NULL pointer management in error paths where trace_event_file pointers
+   were not properly set to NULL after errors, potentially causing double-free
+   or use-after-free issues.
 
-2. RCU locking correctness:
-   - Use lockdep_is_held() for proper lock dependency tracking in
-     rcu_dereference_protected() calls
-   - Ensure proper locking context is passed to RCU checks
+2. Added comprehensive cleanup for the kprobe event when kretprobe initialization
+   fails in kprobe_event_gen_test_init(). Previously, a failed kretprobe creation
+   would leave the kprobe event dangling.
 
-3. Buffer size safety:
-   - Remove off-by-one in snprintf() size calculation
-   - Use sizeof(buffer) instead of sizeof(buffer)-1
+3. Enhanced error handling consistency between kprobe and kretprobe test functions,
+   ensuring both follow the same pattern for resource cleanup.
 
-4. Code robustness:
-   - Add proper initialization of variables
-   - Use consistent error handling patterns
-   - Fix potential integer underflow in extra reference calculation
+4. Fixed the error handling flow in test_gen_kprobe_cmd() and test_gen_kretprobe_cmd()
+   to properly set trace_event_file pointers to NULL when errors occur after
+   event creation but before successful completion.
 
-The debug controller is for internal debugging only, but these fixes
-ensure it doesn't introduce stability issues or memory leaks when
-used for debugging purposes.
+The changes ensure proper resource management and prevent potential memory
+corruption or leaks during module initialization and cleanup.
 
 Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
 ---
- arch/arm64/kernel/acpi.c    |  15 +-
- arch/arm64/kernel/acpi.orig |  17 +-
- kernel/cgroup/debug.c       |  18 +-
- kernel/cgroup/debug.c.orig  | 381 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 416 insertions(+), 15 deletions(-)
- create mode 100644 kernel/cgroup/debug.c.orig
+ kernel/trace/kprobe_event_gen_test.c      |  33 ++-
+ kernel/trace/kprobe_event_gen_test.c.orig | 276 ++++++++++++++++++++++
+ 2 files changed, 301 insertions(+), 8 deletions(-)
+ create mode 100644 kernel/trace/kprobe_event_gen_test.c.orig
 
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index 218f39e5ae0f..f38db7e11f05 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -73,7 +73,7 @@ static int __init parse_acpi(char *arg)
+diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
+index 5a4b722b5045..c9ab1c9bbf52 100644
+--- a/kernel/trace/kprobe_event_gen_test.c
++++ b/kernel/trace/kprobe_event_gen_test.c
+@@ -129,6 +129,7 @@ static int __init test_gen_kprobe_cmd(void)
+ 					       "gen_kprobe_test");
+ 	if (IS_ERR(gen_kprobe_test)) {
+ 		ret = PTR_ERR(gen_kprobe_test);
++		gen_kprobe_test = NULL;
+ 		goto delete;
  	}
- 	else
- 	{
--		pr_err("ACPI: Invalid option '%s'\n", arg);
-+		pr_err("ACPI: unknown parameter '%s'\n", arg);
- 		return -EINVAL;
+ 
+@@ -137,14 +138,13 @@ static int __init test_gen_kprobe_cmd(void)
+ 					"kprobes", "gen_kprobe_test", true);
+ 	if (ret) {
+ 		trace_put_event_file(gen_kprobe_test);
++		gen_kprobe_test = NULL;
+ 		goto delete;
  	}
- 	return 0;
-@@ -84,6 +84,9 @@ static bool __init dt_is_stub(void)
- {
- 	int node;
- 
-+	if (!initial_boot_params)
-+		return true;
-+
- 	fdt_for_each_subnode(node, initial_boot_params, 0) {
- 		const char *name = fdt_get_name(initial_boot_params, node, NULL);
- 		if (strcmp(name, "chosen") == 0)
-@@ -120,12 +123,16 @@ void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
- 
- bool __init acpi_psci_present(void)
- {
-+	if (!acpi_gbl_FADT.arm_boot_flags)
-+		return false;
- 	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_COMPLIANT;
- }
- 
- /* Whether HVC must be used instead of SMC as the PSCI conduit */
- bool acpi_psci_use_hvc(void)
- {
-+	if (!acpi_gbl_FADT.arm_boot_flags)
-+		return false;
- 	return acpi_gbl_FADT.arm_boot_flags & ACPI_FADT_PSCI_USE_HVC;
- }
- 
-@@ -265,7 +272,7 @@ void __init acpi_boot_table_init(void)
- 		 */
- 		ret = acpi_parse_spcr(earlycon_acpi_spcr_enable,
- 			!param_acpi_nospcr);
--		if (!ret || param_acpi_nospcr || !IS_ENABLED(CONFIG_ACPI_SPCR_TABLE))
-+		if (ret || param_acpi_nospcr || !IS_ENABLED(CONFIG_ACPI_SPCR_TABLE))
- 			pr_info("Use ACPI SPCR as default console: No\n");
- 		else
- 			pr_info("Use ACPI SPCR as default console: Yes\n");
-@@ -345,7 +352,7 @@ void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
- 		case EFI_BOOT_SERVICES_CODE:
- 		case EFI_BOOT_SERVICES_DATA:
- 		case EFI_CONVENTIONAL_MEMORY:
--		case EFI_PERSISTENT_MEMORY:
-+		case EFI_PERSISTent_MEMORY:
- 			if (memblock_is_map_memory(phys) ||
- 			    !memblock_is_region_memory(phys, size)) {
- 				pr_warn(FW_BUG "requested region covers kernel memory @ %pa\n", &phys);
-@@ -459,7 +466,7 @@ void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
- int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 apci_id,
- 		 int *pcpu)
- {
--	/* If an error code is passed in this stub can't fix it */
-+	/* If caller already set a negative error code, propagate it. */
- 	if (*pcpu < 0) {
- 		pr_warn_once("Unable to map CPU to valid ID\n");
- 		return *pcpu;
-diff --git a/arch/arm64/kernel/acpi.orig b/arch/arm64/kernel/acpi.orig
-index 4d529ff7ba51..218f39e5ae0f 100644
---- a/arch/arm64/kernel/acpi.orig
-+++ b/arch/arm64/kernel/acpi.orig
-@@ -14,6 +14,7 @@
- 
- #include <linux/acpi.h>
- #include <linux/arm-smccc.h>
-+#include <linux/compiler_attributes.h>
- #include <linux/cpumask.h>
- #include <linux/efi.h>
- #include <linux/efi-bgrt.h>
-@@ -55,16 +56,26 @@ static int __init parse_acpi(char *arg)
- 
- 	/* "acpi=off" disables both ACPI table parsing and interpreter */
- 	if (strcmp(arg, "off") == 0)
-+	{
- 		param_acpi_off = true;
-+	}
- 	else if (strcmp(arg, "on") == 0) /* prefer ACPI over DT */
-+	{
- 		param_acpi_on = true;
-+	}
- 	else if (strcmp(arg, "force") == 0) /* force ACPI to be enabled */
-+	{
- 		param_acpi_force = true;
-+	}
- 	else if (strcmp(arg, "nospcr") == 0) /* disable SPCR as default console */
-+	{
- 		param_acpi_nospcr = true;
-+	}
- 	else
--		return -EINVAL;	/* Core will print when we return error */
--
-+	{
-+		pr_err("ACPI: Invalid option '%s'\n", arg);
-+		return -EINVAL;
-+	}
- 	return 0;
- }
- early_param("acpi", parse_acpi);
-@@ -463,4 +474,4 @@ int acpi_unmap_cpu(int cpu)
- 	return 0;
- }
- EXPORT_SYMBOL(acpi_unmap_cpu);
--#endif /* CONFIG_ACPI_HOTPLUG_CPU */
-+#endif /* CONFIG_ACPI_HOTPLUG_CPU */
-\ No newline at end of file
-diff --git a/kernel/cgroup/debug.c b/kernel/cgroup/debug.c
-index 80aa3f027ac3..47f26d7894cc 100644
---- a/kernel/cgroup/debug.c
-+++ b/kernel/cgroup/debug.c
-@@ -88,7 +88,8 @@ static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
- {
- 	struct cgrp_cset_link *link;
- 	struct css_set *cset;
--	char *name_buf;
-+	char *name_buf = NULL;
-+	int ret = 0;
- 
- 	name_buf = kmalloc(NAME_MAX + 1, GFP_KERNEL);
- 	if (!name_buf)
-@@ -106,8 +107,10 @@ static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
+  out:
+ 	kfree(buf);
+ 	return ret;
+  delete:
+-	if (trace_event_file_is_valid(gen_kprobe_test))
+-		gen_kprobe_test = NULL;
+ 	/* We got an error after creating the event, delete it */
+ 	kprobe_event_delete("gen_kprobe_test");
+ 	goto out;
+@@ -194,6 +194,7 @@ static int __init test_gen_kretprobe_cmd(void)
+ 						  "gen_kretprobe_test");
+ 	if (IS_ERR(gen_kretprobe_test)) {
+ 		ret = PTR_ERR(gen_kretprobe_test);
++		gen_kretprobe_test = NULL;
+ 		goto delete;
  	}
- 	rcu_read_unlock();
- 	spin_unlock_irq(&css_set_lock);
-+
-+out:
- 	kfree(name_buf);
--	return 0;
-+	return ret;
- }
  
- #define MAX_TASKS_SHOWN_PER_CSS 25
-@@ -130,7 +133,7 @@ static int cgroup_css_links_read(struct seq_file *seq, void *v)
- 		 * and highlight difference between refcount and task_count.
- 		 */
- 		seq_printf(seq, "css_set %pK", cset);
--		if (rcu_dereference_protected(cset->dom_cset, 1) != cset) {
-+		if (rcu_dereference_protected(cset->dom_cset, lockdep_is_held(&css_set_lock)) != cset) {
- 			threaded_csets++;
- 			seq_printf(seq, "=>%pK", cset->dom_cset);
+@@ -202,14 +203,13 @@ static int __init test_gen_kretprobe_cmd(void)
+ 					"kprobes", "gen_kretprobe_test", true);
+ 	if (ret) {
+ 		trace_put_event_file(gen_kretprobe_test);
++		gen_kretprobe_test = NULL;
+ 		goto delete;
+ 	}
+  out:
+ 	kfree(buf);
+ 	return ret;
+  delete:
+-	if (trace_event_file_is_valid(gen_kretprobe_test))
+-		gen_kretprobe_test = NULL;
+ 	/* We got an error after creating the event, delete it */
+ 	kprobe_event_delete("gen_kretprobe_test");
+ 	goto out;
+@@ -220,11 +220,21 @@ static int __init kprobe_event_gen_test_init(void)
+ 	int ret;
+ 
+ 	ret = test_gen_kprobe_cmd();
+-	if (ret)
++	if (ret) {
++		/* Clean up kprobe event if it was partially created */
++		if (trace_event_file_is_valid(gen_kprobe_test)) {
++			WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
++							  "kprobes",
++							  "gen_kprobe_test", false));
++			trace_put_event_file(gen_kprobe_test);
++		}
++		WARN_ON(kprobe_event_delete("gen_kprobe_test"));
+ 		return ret;
++	}
+ 
+ 	ret = test_gen_kretprobe_cmd();
+ 	if (ret) {
++		/* Clean up kretprobe event if it was partially created */
+ 		if (trace_event_file_is_valid(gen_kretprobe_test)) {
+ 			WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
+ 							  "kprobes",
+@@ -232,6 +242,15 @@ static int __init kprobe_event_gen_test_init(void)
+ 			trace_put_event_file(gen_kretprobe_test);
  		}
-@@ -146,7 +149,7 @@ static int cgroup_css_links_read(struct seq_file *seq, void *v)
- 			}
- 		} else {
- 			seq_printf(seq, " %d", refcnt);
--			if (refcnt - cset->nr_tasks > 0) {
-+			if (refcnt > cset->nr_tasks) {
- 				int extra = refcnt - cset->nr_tasks;
+ 		WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
++		
++		/* Also clean up the successfully created kprobe event */
++		if (trace_event_file_is_valid(gen_kprobe_test)) {
++			WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
++							  "kprobes",
++							  "gen_kprobe_test", false));
++			trace_put_event_file(gen_kprobe_test);
++		}
++		WARN_ON(kprobe_event_delete("gen_kprobe_test"));
+ 	}
  
- 				seq_printf(seq, " +%d", extra);
-@@ -214,7 +217,7 @@ static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
- 		return -ENODEV;
+ 	return ret;
+@@ -249,7 +268,6 @@ static void __exit kprobe_event_gen_test_exit(void)
+ 		trace_put_event_file(gen_kprobe_test);
+ 	}
  
- 	for_each_subsys(ss, i) {
--		css = rcu_dereference_check(cgrp->subsys[ss->id], true);
-+		css = rcu_dereference_check(cgrp->subsys[ss->id], lockdep_is_held(&cgroup_mutex));
- 		if (!css)
- 			continue;
+-
+ 	/* Now unregister and free the event */
+ 	WARN_ON(kprobe_event_delete("gen_kprobe_test"));
  
-@@ -222,8 +225,7 @@ static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
+@@ -263,7 +281,6 @@ static void __exit kprobe_event_gen_test_exit(void)
+ 		trace_put_event_file(gen_kretprobe_test);
+ 	}
  
- 		/* Show the parent CSS if applicable*/
- 		if (css->parent)
--			snprintf(pbuf, sizeof(pbuf) - 1, " P=%d",
--				 css->parent->id);
-+			snprintf(pbuf, sizeof(pbuf), " P=%d", css->parent->id);
- 		seq_printf(seq, "%2d: %-4s\t- %p[%d] %d%s\n", ss->id, ss->name,
- 			  css, css->id,
- 			  atomic_read(&css->online_cnt), pbuf);
-@@ -378,4 +380,4 @@ void __init enable_debug_cgroup(void)
- 	debug_cgrp_subsys.dfl_cftypes = debug_files;
- 	debug_cgrp_subsys.implicit_on_dfl = true;
- 	debug_cgrp_subsys.threaded = true;
--}
-+}
+-
+ 	/* Now unregister and free the event */
+ 	WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
+ }
+@@ -273,4 +290,4 @@ module_exit(kprobe_event_gen_test_exit)
+ 
+ MODULE_AUTHOR("Tom Zanussi");
+ MODULE_DESCRIPTION("kprobe event generation test");
+-MODULE_LICENSE("GPL v2");
++MODULE_LICENSE("GPL v2");
 \ No newline at end of file
-diff --git a/kernel/cgroup/debug.c.orig b/kernel/cgroup/debug.c.orig
+diff --git a/kernel/trace/kprobe_event_gen_test.c.orig b/kernel/trace/kprobe_event_gen_test.c.orig
 new file mode 100644
-index 000000000000..80aa3f027ac3
+index 000000000000..5a4b722b5045
 --- /dev/null
-+++ b/kernel/cgroup/debug.c.orig
-@@ -0,0 +1,381 @@
++++ b/kernel/trace/kprobe_event_gen_test.c.orig
+@@ -0,0 +1,276 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Debug controller
++ * Test module for in-kernel kprobe event creation and generation.
 + *
-+ * WARNING: This controller is for cgroup core debugging only.
-+ * Its interfaces are unstable and subject to changes at any time.
++ * Copyright (C) 2019 Tom Zanussi <zanussi@kernel.org>
 + */
-+#include <linux/ctype.h>
-+#include <linux/mm.h>
-+#include <linux/slab.h>
 +
-+#include "cgroup-internal.h"
++#include <linux/module.h>
++#include <linux/trace_events.h>
 +
-+static struct cgroup_subsys_state *
-+debug_css_alloc(struct cgroup_subsys_state *parent_css)
++/*
++ * This module is a simple test of basic functionality for in-kernel
++ * kprobe/kretprobe event creation.  The first test uses
++ * kprobe_event_gen_cmd_start(), kprobe_event_add_fields() and
++ * kprobe_event_gen_cmd_end() to create a kprobe event, which is then
++ * enabled in order to generate trace output.  The second creates a
++ * kretprobe event using kretprobe_event_gen_cmd_start() and
++ * kretprobe_event_gen_cmd_end(), and is also then enabled.
++ *
++ * To test, select CONFIG_KPROBE_EVENT_GEN_TEST and build the module.
++ * Then:
++ *
++ * # insmod kernel/trace/kprobe_event_gen_test.ko
++ * # cat /sys/kernel/tracing/trace
++ *
++ * You should see many instances of the "gen_kprobe_test" and
++ * "gen_kretprobe_test" events in the trace buffer.
++ *
++ * To remove the events, remove the module:
++ *
++ * # rmmod kprobe_event_gen_test
++ *
++ */
++
++static struct trace_event_file *gen_kprobe_test;
++static struct trace_event_file *gen_kretprobe_test;
++
++#define KPROBE_GEN_TEST_FUNC	"do_sys_open"
++
++/* X86 */
++#if defined(CONFIG_X86_64) || defined(CONFIG_X86_32)
++#define KPROBE_GEN_TEST_ARG0	"dfd=%ax"
++#define KPROBE_GEN_TEST_ARG1	"filename=%dx"
++#define KPROBE_GEN_TEST_ARG2	"flags=%cx"
++#define KPROBE_GEN_TEST_ARG3	"mode=+4($stack)"
++
++/* ARM64 */
++#elif defined(CONFIG_ARM64)
++#define KPROBE_GEN_TEST_ARG0	"dfd=%x0"
++#define KPROBE_GEN_TEST_ARG1	"filename=%x1"
++#define KPROBE_GEN_TEST_ARG2	"flags=%x2"
++#define KPROBE_GEN_TEST_ARG3	"mode=%x3"
++
++/* ARM */
++#elif defined(CONFIG_ARM)
++#define KPROBE_GEN_TEST_ARG0	"dfd=%r0"
++#define KPROBE_GEN_TEST_ARG1	"filename=%r1"
++#define KPROBE_GEN_TEST_ARG2	"flags=%r2"
++#define KPROBE_GEN_TEST_ARG3	"mode=%r3"
++
++/* RISCV */
++#elif defined(CONFIG_RISCV)
++#define KPROBE_GEN_TEST_ARG0	"dfd=%a0"
++#define KPROBE_GEN_TEST_ARG1	"filename=%a1"
++#define KPROBE_GEN_TEST_ARG2	"flags=%a2"
++#define KPROBE_GEN_TEST_ARG3	"mode=%a3"
++
++/* others */
++#else
++#define KPROBE_GEN_TEST_ARG0	NULL
++#define KPROBE_GEN_TEST_ARG1	NULL
++#define KPROBE_GEN_TEST_ARG2	NULL
++#define KPROBE_GEN_TEST_ARG3	NULL
++#endif
++
++static bool trace_event_file_is_valid(struct trace_event_file *input)
 +{
-+	struct cgroup_subsys_state *css = kzalloc(sizeof(*css), GFP_KERNEL);
-+
-+	if (!css)
-+		return ERR_PTR(-ENOMEM);
-+
-+	return css;
-+}
-+
-+static void debug_css_free(struct cgroup_subsys_state *css)
-+{
-+	kfree(css);
++	return input && !IS_ERR(input);
 +}
 +
 +/*
-+ * debug_taskcount_read - return the number of tasks in a cgroup.
-+ * @cgrp: the cgroup in question
++ * Test to make sure we can create a kprobe event, then add more
++ * fields.
 + */
-+static u64 debug_taskcount_read(struct cgroup_subsys_state *css,
-+				struct cftype *cft)
++static int __init test_gen_kprobe_cmd(void)
 +{
-+	return cgroup_task_count(css->cgroup);
-+}
++	struct dynevent_cmd cmd;
++	char *buf;
++	int ret;
 +
-+static int current_css_set_read(struct seq_file *seq, void *v)
-+{
-+	struct kernfs_open_file *of = seq->private;
-+	struct css_set *cset;
-+	struct cgroup_subsys *ss;
-+	struct cgroup_subsys_state *css;
-+	int i, refcnt;
-+
-+	if (!cgroup_kn_lock_live(of->kn, false))
-+		return -ENODEV;
-+
-+	spin_lock_irq(&css_set_lock);
-+	rcu_read_lock();
-+	cset = task_css_set(current);
-+	refcnt = refcount_read(&cset->refcount);
-+	seq_printf(seq, "css_set %pK %d", cset, refcnt);
-+	if (refcnt > cset->nr_tasks)
-+		seq_printf(seq, " +%d", refcnt - cset->nr_tasks);
-+	seq_puts(seq, "\n");
-+
-+	/*
-+	 * Print the css'es stored in the current css_set.
-+	 */
-+	for_each_subsys(ss, i) {
-+		css = cset->subsys[ss->id];
-+		if (!css)
-+			continue;
-+		seq_printf(seq, "%2d: %-4s\t- %p[%d]\n", ss->id, ss->name,
-+			  css, css->id);
-+	}
-+	rcu_read_unlock();
-+	spin_unlock_irq(&css_set_lock);
-+	cgroup_kn_unlock(of->kn);
-+	return 0;
-+}
-+
-+static u64 current_css_set_refcount_read(struct cgroup_subsys_state *css,
-+					 struct cftype *cft)
-+{
-+	u64 count;
-+
-+	rcu_read_lock();
-+	count = refcount_read(&task_css_set(current)->refcount);
-+	rcu_read_unlock();
-+	return count;
-+}
-+
-+static int current_css_set_cg_links_read(struct seq_file *seq, void *v)
-+{
-+	struct cgrp_cset_link *link;
-+	struct css_set *cset;
-+	char *name_buf;
-+
-+	name_buf = kmalloc(NAME_MAX + 1, GFP_KERNEL);
-+	if (!name_buf)
++	/* Create a buffer to hold the generated command */
++	buf = kzalloc(MAX_DYNEVENT_CMD_LEN, GFP_KERNEL);
++	if (!buf)
 +		return -ENOMEM;
 +
-+	spin_lock_irq(&css_set_lock);
-+	rcu_read_lock();
-+	cset = task_css_set(current);
-+	list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
-+		struct cgroup *c = link->cgrp;
++	/* Before generating the command, initialize the cmd object */
++	kprobe_event_cmd_init(&cmd, buf, MAX_DYNEVENT_CMD_LEN);
 +
-+		cgroup_name(c, name_buf, NAME_MAX + 1);
-+		seq_printf(seq, "Root %d group %s\n",
-+			   c->root->hierarchy_id, name_buf);
-+	}
-+	rcu_read_unlock();
-+	spin_unlock_irq(&css_set_lock);
-+	kfree(name_buf);
-+	return 0;
-+}
++	/*
++	 * Define the gen_kprobe_test event with the first 2 kprobe
++	 * fields.
++	 */
++	ret = kprobe_event_gen_cmd_start(&cmd, "gen_kprobe_test",
++					 KPROBE_GEN_TEST_FUNC,
++					 KPROBE_GEN_TEST_ARG0, KPROBE_GEN_TEST_ARG1);
++	if (ret)
++		goto out;
 +
-+#define MAX_TASKS_SHOWN_PER_CSS 25
-+static int cgroup_css_links_read(struct seq_file *seq, void *v)
-+{
-+	struct cgroup_subsys_state *css = seq_css(seq);
-+	struct cgrp_cset_link *link;
-+	int dead_cnt = 0, extra_refs = 0, threaded_csets = 0;
++	/* Use kprobe_event_add_fields to add the rest of the fields */
 +
-+	spin_lock_irq(&css_set_lock);
++	ret = kprobe_event_add_fields(&cmd, KPROBE_GEN_TEST_ARG2, KPROBE_GEN_TEST_ARG3);
++	if (ret)
++		goto out;
 +
-+	list_for_each_entry(link, &css->cgroup->cset_links, cset_link) {
-+		struct css_set *cset = link->cset;
-+		struct task_struct *task;
-+		int count = 0;
-+		int refcnt = refcount_read(&cset->refcount);
++	/*
++	 * This actually creates the event.
++	 */
++	ret = kprobe_event_gen_cmd_end(&cmd);
++	if (ret)
++		goto out;
 +
-+		/*
-+		 * Print out the proc_cset and threaded_cset relationship
-+		 * and highlight difference between refcount and task_count.
-+		 */
-+		seq_printf(seq, "css_set %pK", cset);
-+		if (rcu_dereference_protected(cset->dom_cset, 1) != cset) {
-+			threaded_csets++;
-+			seq_printf(seq, "=>%pK", cset->dom_cset);
-+		}
-+		if (!list_empty(&cset->threaded_csets)) {
-+			struct css_set *tcset;
-+			int idx = 0;
-+
-+			list_for_each_entry(tcset, &cset->threaded_csets,
-+					    threaded_csets_node) {
-+				seq_puts(seq, idx ? "," : "<=");
-+				seq_printf(seq, "%pK", tcset);
-+				idx++;
-+			}
-+		} else {
-+			seq_printf(seq, " %d", refcnt);
-+			if (refcnt - cset->nr_tasks > 0) {
-+				int extra = refcnt - cset->nr_tasks;
-+
-+				seq_printf(seq, " +%d", extra);
-+				/*
-+				 * Take out the one additional reference in
-+				 * init_css_set.
-+				 */
-+				if (cset == &init_css_set)
-+					extra--;
-+				extra_refs += extra;
-+			}
-+		}
-+		seq_puts(seq, "\n");
-+
-+		list_for_each_entry(task, &cset->tasks, cg_list) {
-+			if (count++ <= MAX_TASKS_SHOWN_PER_CSS)
-+				seq_printf(seq, "  task %d\n",
-+					   task_pid_vnr(task));
-+		}
-+
-+		list_for_each_entry(task, &cset->mg_tasks, cg_list) {
-+			if (count++ <= MAX_TASKS_SHOWN_PER_CSS)
-+				seq_printf(seq, "  task %d\n",
-+					   task_pid_vnr(task));
-+		}
-+		/* show # of overflowed tasks */
-+		if (count > MAX_TASKS_SHOWN_PER_CSS)
-+			seq_printf(seq, "  ... (%d)\n",
-+				   count - MAX_TASKS_SHOWN_PER_CSS);
-+
-+		if (cset->dead) {
-+			seq_puts(seq, "    [dead]\n");
-+			dead_cnt++;
-+		}
-+
-+		WARN_ON(count != cset->nr_tasks);
-+	}
-+	spin_unlock_irq(&css_set_lock);
-+
-+	if (!dead_cnt && !extra_refs && !threaded_csets)
-+		return 0;
-+
-+	seq_puts(seq, "\n");
-+	if (threaded_csets)
-+		seq_printf(seq, "threaded css_sets = %d\n", threaded_csets);
-+	if (extra_refs)
-+		seq_printf(seq, "extra references = %d\n", extra_refs);
-+	if (dead_cnt)
-+		seq_printf(seq, "dead css_sets = %d\n", dead_cnt);
-+
-+	return 0;
-+}
-+
-+static int cgroup_subsys_states_read(struct seq_file *seq, void *v)
-+{
-+	struct kernfs_open_file *of = seq->private;
-+	struct cgroup *cgrp;
-+	struct cgroup_subsys *ss;
-+	struct cgroup_subsys_state *css;
-+	char pbuf[16];
-+	int i;
-+
-+	cgrp = cgroup_kn_lock_live(of->kn, false);
-+	if (!cgrp)
-+		return -ENODEV;
-+
-+	for_each_subsys(ss, i) {
-+		css = rcu_dereference_check(cgrp->subsys[ss->id], true);
-+		if (!css)
-+			continue;
-+
-+		pbuf[0] = '\0';
-+
-+		/* Show the parent CSS if applicable*/
-+		if (css->parent)
-+			snprintf(pbuf, sizeof(pbuf) - 1, " P=%d",
-+				 css->parent->id);
-+		seq_printf(seq, "%2d: %-4s\t- %p[%d] %d%s\n", ss->id, ss->name,
-+			  css, css->id,
-+			  atomic_read(&css->online_cnt), pbuf);
++	/*
++	 * Now get the gen_kprobe_test event file.  We need to prevent
++	 * the instance and event from disappearing from underneath
++	 * us, which trace_get_event_file() does (though in this case
++	 * we're using the top-level instance which never goes away).
++	 */
++	gen_kprobe_test = trace_get_event_file(NULL, "kprobes",
++					       "gen_kprobe_test");
++	if (IS_ERR(gen_kprobe_test)) {
++		ret = PTR_ERR(gen_kprobe_test);
++		goto delete;
 +	}
 +
-+	cgroup_kn_unlock(of->kn);
-+	return 0;
-+}
-+
-+static void cgroup_masks_read_one(struct seq_file *seq, const char *name,
-+				  u16 mask)
-+{
-+	struct cgroup_subsys *ss;
-+	int ssid;
-+	bool first = true;
-+
-+	seq_printf(seq, "%-17s: ", name);
-+	for_each_subsys(ss, ssid) {
-+		if (!(mask & (1 << ssid)))
-+			continue;
-+		if (!first)
-+			seq_puts(seq, ", ");
-+		seq_puts(seq, ss->name);
-+		first = false;
++	/* Enable the event or you won't see anything */
++	ret = trace_array_set_clr_event(gen_kprobe_test->tr,
++					"kprobes", "gen_kprobe_test", true);
++	if (ret) {
++		trace_put_event_file(gen_kprobe_test);
++		goto delete;
 +	}
-+	seq_putc(seq, '\n');
++ out:
++	kfree(buf);
++	return ret;
++ delete:
++	if (trace_event_file_is_valid(gen_kprobe_test))
++		gen_kprobe_test = NULL;
++	/* We got an error after creating the event, delete it */
++	kprobe_event_delete("gen_kprobe_test");
++	goto out;
 +}
-+
-+static int cgroup_masks_read(struct seq_file *seq, void *v)
-+{
-+	struct kernfs_open_file *of = seq->private;
-+	struct cgroup *cgrp;
-+
-+	cgrp = cgroup_kn_lock_live(of->kn, false);
-+	if (!cgrp)
-+		return -ENODEV;
-+
-+	cgroup_masks_read_one(seq, "subtree_control", cgrp->subtree_control);
-+	cgroup_masks_read_one(seq, "subtree_ss_mask", cgrp->subtree_ss_mask);
-+
-+	cgroup_kn_unlock(of->kn);
-+	return 0;
-+}
-+
-+static u64 releasable_read(struct cgroup_subsys_state *css, struct cftype *cft)
-+{
-+	return (!cgroup_is_populated(css->cgroup) &&
-+		!css_has_online_children(&css->cgroup->self));
-+}
-+
-+static struct cftype debug_legacy_files[] =  {
-+	{
-+		.name = "taskcount",
-+		.read_u64 = debug_taskcount_read,
-+	},
-+
-+	{
-+		.name = "current_css_set",
-+		.seq_show = current_css_set_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "current_css_set_refcount",
-+		.read_u64 = current_css_set_refcount_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "current_css_set_cg_links",
-+		.seq_show = current_css_set_cg_links_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "cgroup_css_links",
-+		.seq_show = cgroup_css_links_read,
-+	},
-+
-+	{
-+		.name = "cgroup_subsys_states",
-+		.seq_show = cgroup_subsys_states_read,
-+	},
-+
-+	{
-+		.name = "cgroup_masks",
-+		.seq_show = cgroup_masks_read,
-+	},
-+
-+	{
-+		.name = "releasable",
-+		.read_u64 = releasable_read,
-+	},
-+
-+	{ }	/* terminate */
-+};
-+
-+static struct cftype debug_files[] =  {
-+	{
-+		.name = "taskcount",
-+		.read_u64 = debug_taskcount_read,
-+	},
-+
-+	{
-+		.name = "current_css_set",
-+		.seq_show = current_css_set_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "current_css_set_refcount",
-+		.read_u64 = current_css_set_refcount_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "current_css_set_cg_links",
-+		.seq_show = current_css_set_cg_links_read,
-+		.flags = CFTYPE_ONLY_ON_ROOT,
-+	},
-+
-+	{
-+		.name = "css_links",
-+		.seq_show = cgroup_css_links_read,
-+	},
-+
-+	{
-+		.name = "csses",
-+		.seq_show = cgroup_subsys_states_read,
-+	},
-+
-+	{
-+		.name = "masks",
-+		.seq_show = cgroup_masks_read,
-+	},
-+
-+	{ }	/* terminate */
-+};
-+
-+struct cgroup_subsys debug_cgrp_subsys = {
-+	.css_alloc	= debug_css_alloc,
-+	.css_free	= debug_css_free,
-+	.legacy_cftypes	= debug_legacy_files,
-+};
 +
 +/*
-+ * On v2, debug is an implicit controller enabled by "cgroup_debug" boot
-+ * parameter.
++ * Test to make sure we can create a kretprobe event.
 + */
-+void __init enable_debug_cgroup(void)
++static int __init test_gen_kretprobe_cmd(void)
 +{
-+	debug_cgrp_subsys.dfl_cftypes = debug_files;
-+	debug_cgrp_subsys.implicit_on_dfl = true;
-+	debug_cgrp_subsys.threaded = true;
++	struct dynevent_cmd cmd;
++	char *buf;
++	int ret;
++
++	/* Create a buffer to hold the generated command */
++	buf = kzalloc(MAX_DYNEVENT_CMD_LEN, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	/* Before generating the command, initialize the cmd object */
++	kprobe_event_cmd_init(&cmd, buf, MAX_DYNEVENT_CMD_LEN);
++
++	/*
++	 * Define the kretprobe event.
++	 */
++	ret = kretprobe_event_gen_cmd_start(&cmd, "gen_kretprobe_test",
++					    KPROBE_GEN_TEST_FUNC,
++					    "$retval");
++	if (ret)
++		goto out;
++
++	/*
++	 * This actually creates the event.
++	 */
++	ret = kretprobe_event_gen_cmd_end(&cmd);
++	if (ret)
++		goto out;
++
++	/*
++	 * Now get the gen_kretprobe_test event file.  We need to
++	 * prevent the instance and event from disappearing from
++	 * underneath us, which trace_get_event_file() does (though in
++	 * this case we're using the top-level instance which never
++	 * goes away).
++	 */
++	gen_kretprobe_test = trace_get_event_file(NULL, "kprobes",
++						  "gen_kretprobe_test");
++	if (IS_ERR(gen_kretprobe_test)) {
++		ret = PTR_ERR(gen_kretprobe_test);
++		goto delete;
++	}
++
++	/* Enable the event or you won't see anything */
++	ret = trace_array_set_clr_event(gen_kretprobe_test->tr,
++					"kprobes", "gen_kretprobe_test", true);
++	if (ret) {
++		trace_put_event_file(gen_kretprobe_test);
++		goto delete;
++	}
++ out:
++	kfree(buf);
++	return ret;
++ delete:
++	if (trace_event_file_is_valid(gen_kretprobe_test))
++		gen_kretprobe_test = NULL;
++	/* We got an error after creating the event, delete it */
++	kprobe_event_delete("gen_kretprobe_test");
++	goto out;
 +}
++
++static int __init kprobe_event_gen_test_init(void)
++{
++	int ret;
++
++	ret = test_gen_kprobe_cmd();
++	if (ret)
++		return ret;
++
++	ret = test_gen_kretprobe_cmd();
++	if (ret) {
++		if (trace_event_file_is_valid(gen_kretprobe_test)) {
++			WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
++							  "kprobes",
++							  "gen_kretprobe_test", false));
++			trace_put_event_file(gen_kretprobe_test);
++		}
++		WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
++	}
++
++	return ret;
++}
++
++static void __exit kprobe_event_gen_test_exit(void)
++{
++	if (trace_event_file_is_valid(gen_kprobe_test)) {
++		/* Disable the event or you can't remove it */
++		WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
++						  "kprobes",
++						  "gen_kprobe_test", false));
++
++		/* Now give the file and instance back */
++		trace_put_event_file(gen_kprobe_test);
++	}
++
++
++	/* Now unregister and free the event */
++	WARN_ON(kprobe_event_delete("gen_kprobe_test"));
++
++	if (trace_event_file_is_valid(gen_kretprobe_test)) {
++		/* Disable the event or you can't remove it */
++		WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
++						  "kprobes",
++						  "gen_kretprobe_test", false));
++
++		/* Now give the file and instance back */
++		trace_put_event_file(gen_kretprobe_test);
++	}
++
++
++	/* Now unregister and free the event */
++	WARN_ON(kprobe_event_delete("gen_kretprobe_test"));
++}
++
++module_init(kprobe_event_gen_test_init)
++module_exit(kprobe_event_gen_test_exit)
++
++MODULE_AUTHOR("Tom Zanussi");
++MODULE_DESCRIPTION("kprobe event generation test");
++MODULE_LICENSE("GPL v2");
 -- 
 2.50.1.windows.1
 
