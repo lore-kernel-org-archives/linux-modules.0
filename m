@@ -1,120 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F09B1DFF0;
-	Sun,  7 Sep 2025 07:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F306184524;
+	Sun,  7 Sep 2025 13:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757229450; cv=none; b=qGCE2vh3DhzMv+b5IZrOD3tHy8PnwM/o+atIyDBIWLzDCYrvISCb0kwrNtPEib8WQW5mZmqF54W1Ey/sWRMDP5M+3Y7liDgrbdRlotMU/4Yf5uQdS2hMV0ZiBmhLGGG1Ss8AZCr/NoYDS1jVDRVpMA+Nd5Lxo/JoX8N9aS4BXBQ=
+	t=1757253138; cv=none; b=NzgPw75UmhJw6oQ3r2z0yLncuc7dt6DZ8O96dc2W+2n4nK/QFVBpjA06yTjtQUEDWy9B1q+BfKk/nLe0Y/j/yOx9NuK+W+3o5pEnhUtrWuIcdjEEe1pS/djlLwd3rlbSYOGzlDSd0wHnRgNTV4Mcq2NfPHc3pDfb310G3ZH3d2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757229450; c=relaxed/simple;
-	bh=5QnvahDDoSfVPYd0OMon3YGK0VQvDxfku7S9GknZTYI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=un2NZ0rf0FM5Y58WwGkFTFHkt2BNJ96SM74zYYzt4lBUyg7ntBPSCjrfukZTxXTuyqr+pMHLd0TzkCzeEveeqvnhXYVjXqQRhiddS3ewOl9esJCRl39sFMzcuzQPtKduHPfcrhhCKpb+i2w5WkSjFtOqxRdpdmu8eUT+YrdJAIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eKfex2JT; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1757253138; c=relaxed/simple;
+	bh=x4kEclAJ0MfkCPXoMNQMW2TGVfix0VDvNa+xrJwZWv4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XzH2x/1dACSw6TfxwyEXsCPyhXmK8sKPLm5WjeulPDD6jlU/CcDlpyYCK16LPQYyHTVDPr4bn4kfmb/nICA8d81Jvlx/ehIuaqRG++7dwBOSnlTK+ffh0kUXq/f+CtXJhfew5m3Mkui5OaPG9zP1EmQg9tXfJKaqqR9yJ1Ozs2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FI+4XpCL; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eKfex2JT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757229448; x=1788765448;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5QnvahDDoSfVPYd0OMon3YGK0VQvDxfku7S9GknZTYI=;
-  b=eKfex2JTC8GzfgAqyzhw9/SiCUePw+if9DLphghEkjYQFDaO1d1LEYht
-   6O+byXWRAoJJzGH4QDJzkb0aSejZZw66brrN7eKHXks1WIovfV8HQwq5W
-   wEFhpG9ZYGYWbyZ+f8Fcv7+AZ4/dFd+czjuMAtVj3FYDLaWqXv6mRS+TD
-   NjYo1R0zZhr3t5IZEBEpPLncVJWadzklzFCO8/UkeEraFrH/2z8XCUWZe
-   C4b+9DbSNiuEGZXdjOaEeDsjgGTb5t1PpV/pySLWdk8yFxgPnr5v9aK4f
-   Nfgn1qQfnMuSEFH/aQ4q6kAyfTEj2kqvCv/FOmifkb41RNjOPWYQOQmT5
-   A==;
-X-CSE-ConnectionGUID: K4T6wwwjRPuQEipkXlm0sg==
-X-CSE-MsgGUID: CzNra6//Rs2xP8EB7swo1A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11545"; a="58728333"
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="58728333"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2025 00:17:28 -0700
-X-CSE-ConnectionGUID: RLrd80R8RdKAe6wmMf5B1g==
-X-CSE-MsgGUID: ziM7I9zISiKDJG6tht04Yg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,245,1751266800"; 
-   d="scan'208";a="176860507"
-Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 07 Sep 2025 00:17:26 -0700
-Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uv9eO-00026l-00;
-	Sun, 07 Sep 2025 07:17:24 +0000
-Date: Sun, 7 Sep 2025 15:17:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fidal Palamparambil <rootuserhere@gmail.com>,
-	linux-modules@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, mcgrof@kernel.org, petr.pavlu@suse.com,
-	da.gomez@kernel.org, samitolvanen@google.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FI+4XpCL"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3d1bf79d7acso2024775f8f.0;
+        Sun, 07 Sep 2025 06:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757253134; x=1757857934; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1AI/b6K0rk5sP/dbv2aFVDE/bjLTVHU2fHUDn3dbML0=;
+        b=FI+4XpCLtieBj37XMzD77UnjpiU2NodylUaIN68b6fog01QSjmMUYt3lj1fTdfDwhF
+         Metd1+d2AiKC1/sIENNEEmeSZmrq67r+92zue2TFelrP33+CsK5upyXN0DelfRjNqHBB
+         U/0A+JxhJFq0UKy4eyfRFnGfss/pqnDgtXRtjC9mI/4WKQX0zikxEST1OKvEo7pUOYsb
+         /S5v1G76MbSTpACkqJN/08IQYorwZU/MV3qTLv+/AchZsPra0jmxt2wUsFf9dxq8KSND
+         GDa7rbrn7EpupuXPj02LHmK5rPi893MzEJ7p5mUW+ItRZ9uR/GYebz2IU9ZXlBkvaxo/
+         A0AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757253134; x=1757857934;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1AI/b6K0rk5sP/dbv2aFVDE/bjLTVHU2fHUDn3dbML0=;
+        b=j0c8Aw9kmMbfm8sWkKVl1ZduUMvQ9fzvnARpywAXPXaHS8UH7yWG2SarIFmw73Qzo1
+         biUyTwu5xRGSYnbKe3cWQNuNFAVT5jfs3nG70XXje7R/yoTLE3KUf3Sy+CkxsRQPhY6K
+         iv+l7gD3ZsyXwcs+yPDkHXPQDNRaw0gnUl/JW7aAN7jBwoGpi9jk7FwGOdUT4ibpov5L
+         knpm0Mwui7HkqgJgqPzdjBb/JtnLWsFXsJ8cDaLXHDMbofu1BvLyu6LJVAZ8/ZdcFWad
+         /LxJ/ZzoNrD/MuVYmA5yPwd7Pad0IOiJNogOsPwbYch1o55mMqZFYCpc0+B/la51gQ77
+         Db1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWvTQXb2cVuIR+qByoiYQJ/nrzUnB68tkLvAW26+Y/oizmYE4OgfbCxqVnILm68g/1rfRu+2y8FziS08aI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK60cuRem0ICWqkEZyWBa01rUgzBIjcq9Pq9RJo6wM+LVaYkWA
+	elzczsqzBSSQR9C7lWyN4zhS0jVcubLr7dK3PzJJm+gCbsd7PRZ2BPrtoEd2fqndkPoNSA==
+X-Gm-Gg: ASbGncuUdYD5CgBwVkb0VLD9lk9/VyL5DLgSpV2AWivNRGaeNMVF+1YmdupgsPPIbyq
+	0BKtWHeVFEJCv7iy7DnceolU7KEUfJzlX5O/2RBKWrkxbIAUjOOjeyE0wOpIDXp/NrVvGEHFV7R
+	ZEM1hNzuMAQOkRUs3ZJyuKEKhgu8HT3Qr9EPjY6lE8TbP2qgeu3sSZYw+fZ87ykqvSRhs37wKcR
+	Jgzd9CtWIVbourFTbjdLR1SW8Bb8p2EiUUarzeWr7NEvLMSKs0LyrRB97fpqDHDyCKUo5DLBAj8
+	PTYLtL947hSMGaI6Xtt9K5tZkZaNnaK23EvUVh17TXDLj9BVJfKF0gEOyDqmSn/UtPBt1a13s1+
+	oYryFDQLBJqeuh8jJVDV0tOb8nXYwnw==
+X-Google-Smtp-Source: AGHT+IFCdRYV7VLuXijcUd76ZEpf/epWD9wR2plfNa6bc5qA4+Zo3kWfhCAKChyl6xpVDKs7UBfhgg==
+X-Received: by 2002:a05:6000:2489:b0:3d4:f7ae:bebb with SMTP id ffacd0b85a97d-3e643554e7fmr3685802f8f.26.1757253133925;
+        Sun, 07 Sep 2025 06:52:13 -0700 (PDT)
+Received: from Al-Qamar ([2a00:f29:1147:fe84:f87a:5ec2:b4ab:d537])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d1007c0dc8sm36569968f8f.53.2025.09.07.06.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Sep 2025 06:52:12 -0700 (PDT)
+From: Fidal Palamparambil <rootuserhere@gmail.com>
+To: linux-modules@vger.kernel.org
+Cc: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
 	linux-kernel@vger.kernel.org,
 	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: Re: [PATCH] tracing: Fix multiple issues in trace_printk module
- handling
-Message-ID: <202509071540.GTxwwstz-lkp@intel.com>
-References: <20250906134148.55-1-rootuserhere@gmail.com>
+Subject: [PATCH] tracing : Fix multiple issues in trace_printk module handling
+Date: Sun,  7 Sep 2025 17:52:01 +0400
+Message-ID: <20250907135201.760-1-rootuserhere@gmail.com>
+X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250906134148.55-1-rootuserhere@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Fidal,
+From: Fidal palamparambil <rootuserhere@gmail.com>
 
-kernel test robot noticed the following build warnings:
+This commit addresses several bugs and potential issues in the
+trace_printk module format handling code:
 
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on linus/master v6.17-rc4 next-20250905]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+1. Memory leak fix: In hold_module_trace_bprintk_format(), ensure
+   proper cleanup when format string allocation fails by setting
+   tb_fmt to NULL after freeing it to prevent memory leaks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Fidal-Palamparambil/tracing-Fix-multiple-issues-in-trace_printk-module-handling/20250906-214415
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20250906134148.55-1-rootuserhere%40gmail.com
-patch subject: [PATCH] tracing: Fix multiple issues in trace_printk module handling
-config: powerpc-randconfig-r131-20250907 (https://download.01.org/0day-ci/archive/20250907/202509071540.GTxwwstz-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 13.4.0
-reproduce: (https://download.01.org/0day-ci/archive/20250907/202509071540.GTxwwstz-lkp@intel.com/reproduce)
+2. NULL pointer dereference prevention: Added comprehensive NULL checks
+   in t_show() function before dereferencing format pointers to prevent
+   kernel crashes.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509071540.GTxwwstz-lkp@intel.com/
+3. Input validation: Added NULL check in trace_is_tracepoint_string()
+   to prevent potential NULL pointer dereference when called with
+   invalid input.
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/trace/trace_printk.c:388:16: sparse: sparse: incorrect type in assignment (different base types) @@     expected struct dentry *dentry @@     got int @@
-   kernel/trace/trace_printk.c:388:16: sparse:     expected struct dentry *dentry
-   kernel/trace/trace_printk.c:388:16: sparse:     got int
+4. Type safety: Fixed type casting in t_show() to use proper
+   unsigned long casting for pointer arithmetic, ensuring correct
+   pointer handling across different architectures.
 
-vim +388 kernel/trace/trace_printk.c
+5. Error handling: Fixed type mismatch in init_trace_printk_function_export()
+   by properly handling struct dentry pointer return from tracing_init_dentry()
+   and using IS_ERR_OR_NULL() for comprehensive error checking.
 
-   383	
-   384	static __init int init_trace_printk_function_export(void)
-   385	{
-   386		struct dentry *dentry;
-   387	
- > 388		dentry = tracing_init_dentry();
-   389		if (IS_ERR(dentry))
-   390			return 0;
-   391	
-   392		trace_create_file("printk_formats", TRACE_MODE_READ, NULL,
-   393					    NULL, &ftrace_formats_fops);
-   394	
-   395		return 0;
-   396	}
-   397	
+6. Code robustness: Added additional pointer validation throughout
+   the code to handle potential edge cases and improve overall stability.
 
+7. Memory safety: Ensured consistent handling of format pointers
+   when memory allocation failures occur, preventing use-after-free
+   and other memory corruption issues.
+
+These fixes improve the stability and reliability of the trace_printk
+infrastructure, particularly when dealing with module loading/unloading
+and format string management.
+
+Reported-by : kernel test robot <lkp@intel.com>
+Closes : https://lore.kernel.org/oe-kbuild-all/202509071540.GTxwwstz-lkp@intel.com/
+Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
+---
+ kernel/trace/trace_printk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/trace/trace_printk.c b/kernel/trace/trace_printk.c
+index cb962c6c02f8..665effbf50ae 100644
+--- a/kernel/trace/trace_printk.c
++++ b/kernel/trace/trace_printk.c
+@@ -386,7 +386,7 @@ static __init int init_trace_printk_function_export(void)
+ 	struct dentry *dentry;
+ 
+ 	dentry = tracing_init_dentry();
+-	if (IS_ERR(dentry))
++	if (IS_ERR_OR_NULL(dentry))
+ 		return 0;
+ 
+ 	trace_create_file("printk_formats", TRACE_MODE_READ, NULL,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.50.1.windows.1
+
