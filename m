@@ -1,129 +1,131 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04ED51EC006;
-	Sun,  7 Sep 2025 14:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 958F61922FD;
+	Sun,  7 Sep 2025 17:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757254087; cv=none; b=lvZLZzhJxNpryC94nzi37+lKHL0GJMyNhvtsFrAw36V0zL/cm32ydimGbH1nCioF04cCe+2iH9J6IwXA1jIvU+uT8EYRjDiF6IX8Ai1ScTzrCjSr1T9Au+1KrBuk4ktyfnsPvj8/jIfOfDwuEXryIHOTmGZ4B8sjv0r55tm5+Lg=
+	t=1757264486; cv=none; b=BXHgxuV5Ns6HpEMWmpKtJAPRZfgplrCD7lG6XoRG/9f82irzNvvTpU9nXWk523m3w8IjjNDQqpcFNvWOXRKCL4I1w6k/dNdF7Mr+Ki8RL9BFWvym7fgZl77nlZABs7Ru4d+1taGdrM7SSAQBTu0dhdd205yXFQT6bsXy8LqGzW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757254087; c=relaxed/simple;
-	bh=CewlAPVf5rwZipLs+79xKOiJolW0afmYbnDQyItpV3w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FRhrPYvAelcxYRBltGnIinaya7NcGwuDeoGbE3XMXR7WcSP8r24r8qIPvFNJv2o0uoumGpS/r6ARWNAPUvnfmQmt3e22qJXa/8e4+pJcqeLCtfZlT+X4K4VE9J86cWcxYcC83neuIql1yNcoeFEcg9HpAPw0nco0knVluJ9Og6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFWFXYx6; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1757264486; c=relaxed/simple;
+	bh=8Tm67jQQNXssHHVpk6mASydvBl2DcirB7AvwFZ5Cqd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QR4ZsTvWAIG45EnKdYhXEnYBwDPCnLqnoPu1AUkaESqd5aZKaP9Ut54v1xz5yDT8ejcITlPlhcKVcmfhmIb2hI/w2RaCCDK2giZ9oiv5ghl1NKVL/nwv/H+GKk54a+TYPMXSDZHVJ1DZ/gVDJtzY93o3rk5tA0UKV+4wJPVzBj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PN6SL+hH; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFWFXYx6"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3d1bf79d7acso2029127f8f.0;
-        Sun, 07 Sep 2025 07:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757254084; x=1757858884; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GxAmU9TqY2ttRrCopFYc9eGLYqcFkJIuRB66F7nXl3k=;
-        b=LFWFXYx6GcvtjMy5tVu9H6N1FxEaD89JcDSRdMfn7R0IjvHtH0H5Xa2ofjqwCvR/Pf
-         mxy+pRGzw7qSEIW2NvDA1a8gPDNgrcjUaidkJSG9ejjptpOHZXFpiStgW21t6zKUTDzW
-         fiSvx6RHHU+T0J5KAJ+NcDxht+jrpNqqAULDTBcHYSFrnfDmiwWH4opyenajMkrAYg0S
-         dQUOJVr8FO4WqDEJLqCoSWyWzZMz58Gkh9SYC/bmGVVG/AGLVmvTfFDs4mM8PTG7c+xU
-         Pzj41SS0F1cD8p33CbOlP/qucov3O3M9ZUBVLs9cnuzVDLF2rVSwBY5rd7vbdttdi66P
-         twrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757254084; x=1757858884;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GxAmU9TqY2ttRrCopFYc9eGLYqcFkJIuRB66F7nXl3k=;
-        b=ajYdZunbcAccvJC7fNSxuqRrRsfI3fSaMlox29QHrrzYUM2D94i4Pe6/YL1BCh9h7n
-         uBnmiMAZszMV8AhRYVJuL4+X8e3y1TVLSk7rlQTGM2Xy+AzlCMJHCLBCIz2baR1o2ecC
-         kHL1rutXBP5IvDLiWy2fspmJYMUXrlJECEQyru5vl/3umvmLr/gjRzve0/RVKJ0Z12Md
-         e93nUKJCcAAF7o8/leOREMLecJEca4crw3An2wQZWQXL4BAKegA3hJIj0vtza0TDZUkO
-         O0We+x2IY421FoGce4pX9VODWOJcBkqFcedX1cdCNx1rSHH0Rs62ieKko9ZzxQi0pVc6
-         /NEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXC/eWmdrPZXo5tNW/52bKB1Vd2k6976+s4j/hrVFPYDwiw/Sy3bpz/Uesq0ypitiiY+olIuekhlgwdz7U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzly+4NeJ9M3XnBUrzfKyZRT3jA4pXlSfjqEzW/B4dwKqpeePs1
-	HOLshTj/2iqZmbychXtpmUTyXYo6Bn2Gsqb6IMWEyBapHy1kbA15vaLMqm4n1ZKEwAt1Ug==
-X-Gm-Gg: ASbGnctNpUFjhsrf80eqjReKLAMPjMMq3RqRD2r1jbpHhfPPNeVCWIna/nznjbI3pGL
-	VVbjsATGODQalhkx4GwUI80/56GSMew1qpu6amfVlYgOavI+aMfmAj2T9LIaYTfpITBUpDLOKre
-	dWJ6TJF7HobqiN6Ui1DCHNuC6pOcVUtdP7X8JX/UCIkMwF1+3Lpy1wDy7nwupsVWigSca+Hxkox
-	z/2AXJCC9IeYTke4Wcveu3x3q0EB53c72DaDeZfSiJJhK9iK8ZKiaKfJ8qxCLNebJo6lso8Xx1d
-	8q+O3IDOuu9aCoPZGcsvy6J2qAP/u3W4RA/jlQ8vgqx3yotm5eIL7s1mwtOFsed99ddwvmU7js4
-	DcrBMs1VTlnm0Js3jbgANk2+x/LEqtg==
-X-Google-Smtp-Source: AGHT+IFaaftWLneymBKhflFTwylgH+pvzeB3ExO1AzrQbwqkvN0CF0Fml/68bb0R5PmjwKXvBaVPwg==
-X-Received: by 2002:a05:6000:24ca:b0:3e3:5b4:dc27 with SMTP id ffacd0b85a97d-3e64c3ad7e4mr3695450f8f.47.1757254083914;
-        Sun, 07 Sep 2025 07:08:03 -0700 (PDT)
-Received: from Al-Qamar ([2a00:f29:1147:fe84:f87a:5ec2:b4ab:d537])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e748aa8104sm663215f8f.40.2025.09.07.07.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 07:08:03 -0700 (PDT)
-From: Fidal Palamparambil <rootuserhere@gmail.com>
-To: linux-modules@vger.kernel.org
-Cc: mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PN6SL+hH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757264484; x=1788800484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8Tm67jQQNXssHHVpk6mASydvBl2DcirB7AvwFZ5Cqd0=;
+  b=PN6SL+hHbGKaAhE5JdpEYPNHnjrdUmpsAZR9LTkrYGwEpERyvE0Yd7ua
+   zdqoWThgraYGRKSB66+DYzl2X9tTRFBrUKdp20NK7miMbHvePPx6nD2PJ
+   0InZnPPNcVq1HE5MUwiYzxEri+kEFGFhQpZGFFx/C3RWs7ad8PRlLUy3V
+   1Ah9LjpjLKzfow3f2b+7pbtizmRoMB/Y2kgnkyicbK/GNvCt62OFoOlf/
+   3D2gLgm8hNl0rhmMilpR5uujC23oLuoNEv74AIofaUiPJBE+0gsVmVsAm
+   v9v7JErm76HKr/r0vm92Zcv04TsPddS8N7KlfmQbIXdPCib4euc8SrhHP
+   A==;
+X-CSE-ConnectionGUID: F1hhgKNqTpOOM00m5GAujA==
+X-CSE-MsgGUID: n5ZdNBI2Q+6qCzBAfSIqTg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63363928"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63363928"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2025 10:01:23 -0700
+X-CSE-ConnectionGUID: sUfy7hRQSG2UMFOQfacacQ==
+X-CSE-MsgGUID: JO3hPCyXSDaIWCW/22Ip7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,246,1751266800"; 
+   d="scan'208";a="172523448"
+Received: from lkp-server01.sh.intel.com (HELO 114d98da2b6c) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Sep 2025 10:01:20 -0700
+Received: from kbuild by 114d98da2b6c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uvIlS-0002P5-1H;
+	Sun, 07 Sep 2025 17:01:18 +0000
+Date: Mon, 8 Sep 2025 01:01:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fidal Palamparambil <rootuserhere@gmail.com>,
+	linux-modules@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, mcgrof@kernel.org, petr.pavlu@suse.com,
+	da.gomez@kernel.org, samitolvanen@google.com,
 	linux-kernel@vger.kernel.org,
 	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: [PATCH] Fixed the build warning in init_trace_printk_function_export():
-Date: Sun,  7 Sep 2025 18:07:55 +0400
-Message-ID: <20250907140755.529-1-rootuserhere@gmail.com>
-X-Mailer: git-send-email 2.50.1.windows.1
+Subject: Re: [PATCH] Fixed the build warning in
+ init_trace_printk_function_export():
+Message-ID: <202509080040.8gEyq9Ef-lkp@intel.com>
+References: <20250907140755.529-1-rootuserhere@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250907140755.529-1-rootuserhere@gmail.com>
 
-From: Fidal palamparambil <rootuserhere@gmail.com>
+Hi Fidal,
 
-Changed int ret to struct dentry *dentry
+kernel test robot noticed the following build warnings:
 
-Changed if (ret) to if (IS_ERR_OR_NULL(dentry))
+[auto build test WARNING on trace/for-next]
+[also build test WARNING on linus/master v6.17-rc4 next-20250905]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixed memory leak in hold_module_trace_bprintk_format():
+url:    https://github.com/intel-lab-lkp/linux/commits/Fidal-Palamparambil/Fixed-the-build-warning-in-init_trace_printk_function_export/20250907-221041
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20250907140755.529-1-rootuserhere%40gmail.com
+patch subject: [PATCH] Fixed the build warning in init_trace_printk_function_export():
+config: x86_64-buildonly-randconfig-001-20250907 (https://download.01.org/0day-ci/archive/20250908/202509080040.8gEyq9Ef-lkp@intel.com/config)
+compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250908/202509080040.8gEyq9Ef-lkp@intel.com/reproduce)
 
-Added proper cleanup when fmt allocation fails
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202509080040.8gEyq9Ef-lkp@intel.com/
 
-Set tb_fmt = NULL after freeing to prevent dangling pointers
+All warnings (new ones prefixed by >>):
 
-Fixed NULL pointer dereference in t_show():
+   kernel/trace/trace_printk.c: In function 'ftrace_formats_open':
+>> kernel/trace/trace_printk.c:369:25: warning: passing argument 1 of 'seq_open' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     369 |         return seq_open(file, &show_format_seq_ops);
+         |                         ^~~~
+   In file included from kernel/trace/trace_printk.c:8:
+   include/linux/seq_file.h:108:14: note: expected 'struct file *' but argument is of type 'const struct file *'
+     108 | int seq_open(struct file *, const struct seq_operations *);
+         |              ^~~~~~~~~~~~~
+   kernel/trace/trace_printk.c: At top level:
+   kernel/trace/trace_printk.c:373:17: error: initialization of 'int (*)(struct inode *, struct file *)' from incompatible pointer type 'int (*)(struct inode *, const struct file *)' [-Werror=incompatible-pointer-types]
+     373 |         .open = ftrace_formats_open,
+         |                 ^~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_printk.c:373:17: note: (near initialization for 'ftrace_formats_fops.open')
+   cc1: some warnings being treated as errors
 
-Added if (!fmt || !*fmt) check before dereferencing
 
-Simplified the string iteration loop
+vim +369 kernel/trace/trace_printk.c
 
-Added NULL check in trace_is_tracepoint_string():
+7975a2be16dd42 Steven Rostedt          2009-03-12  359  
+7975a2be16dd42 Steven Rostedt          2009-03-12  360  static int
+66670b02cb828c Fidal palamparambil     2025-09-07  361  ftrace_formats_open(struct inode *inode, const struct file *file)
+7975a2be16dd42 Steven Rostedt          2009-03-12  362  {
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  363) 	int ret;
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  364) 
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  365) 	ret = security_locked_down(LOCKDOWN_TRACEFS);
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  366) 	if (ret)
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  367) 		return ret;
+17911ff38aa58d Steven Rostedt (VMware  2019-10-11  368) 
+c8961ec6da22ea Li Zefan                2009-06-24 @369  	return seq_open(file, &show_format_seq_ops);
+7975a2be16dd42 Steven Rostedt          2009-03-12  370  }
+7975a2be16dd42 Steven Rostedt          2009-03-12  371  
 
-Added if (!str) check to prevent NULL pointer dereference
-
-Fixed type safety in t_show():
-
-Changed *(unsigned long *)fmt to (unsigned long)fmt for correct pointer casting
-
-Fixed function signature in ftrace_formats_open():
-
-Changed struct file *file to const struct file *file for consistency
-
-Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
----
- kernel/trace/trace_printk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/trace_printk.c b/kernel/trace/trace_printk.c
-index 665effbf50ae..060bd2c35a7d 100644
---- a/kernel/trace/trace_printk.c
-+++ b/kernel/trace/trace_printk.c
-@@ -363,7 +363,7 @@ static const struct seq_operations show_format_seq_ops = {
- };
- 
- static int
--ftrace_formats_open(struct inode *inode, struct file *file)
-+ftrace_formats_open(struct inode *inode, const struct file *file)
- {
- 	int ret;
- 
 -- 
-2.50.1.windows.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
