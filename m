@@ -1,61 +1,61 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F306184524;
-	Sun,  7 Sep 2025 13:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04ED51EC006;
+	Sun,  7 Sep 2025 14:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757253138; cv=none; b=NzgPw75UmhJw6oQ3r2z0yLncuc7dt6DZ8O96dc2W+2n4nK/QFVBpjA06yTjtQUEDWy9B1q+BfKk/nLe0Y/j/yOx9NuK+W+3o5pEnhUtrWuIcdjEEe1pS/djlLwd3rlbSYOGzlDSd0wHnRgNTV4Mcq2NfPHc3pDfb310G3ZH3d2w=
+	t=1757254087; cv=none; b=lvZLZzhJxNpryC94nzi37+lKHL0GJMyNhvtsFrAw36V0zL/cm32ydimGbH1nCioF04cCe+2iH9J6IwXA1jIvU+uT8EYRjDiF6IX8Ai1ScTzrCjSr1T9Au+1KrBuk4ktyfnsPvj8/jIfOfDwuEXryIHOTmGZ4B8sjv0r55tm5+Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757253138; c=relaxed/simple;
-	bh=x4kEclAJ0MfkCPXoMNQMW2TGVfix0VDvNa+xrJwZWv4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XzH2x/1dACSw6TfxwyEXsCPyhXmK8sKPLm5WjeulPDD6jlU/CcDlpyYCK16LPQYyHTVDPr4bn4kfmb/nICA8d81Jvlx/ehIuaqRG++7dwBOSnlTK+ffh0kUXq/f+CtXJhfew5m3Mkui5OaPG9zP1EmQg9tXfJKaqqR9yJ1Ozs2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FI+4XpCL; arc=none smtp.client-ip=209.85.221.46
+	s=arc-20240116; t=1757254087; c=relaxed/simple;
+	bh=CewlAPVf5rwZipLs+79xKOiJolW0afmYbnDQyItpV3w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FRhrPYvAelcxYRBltGnIinaya7NcGwuDeoGbE3XMXR7WcSP8r24r8qIPvFNJv2o0uoumGpS/r6ARWNAPUvnfmQmt3e22qJXa/8e4+pJcqeLCtfZlT+X4K4VE9J86cWcxYcC83neuIql1yNcoeFEcg9HpAPw0nco0knVluJ9Og6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFWFXYx6; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FI+4XpCL"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3d1bf79d7acso2024775f8f.0;
-        Sun, 07 Sep 2025 06:52:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFWFXYx6"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3d1bf79d7acso2029127f8f.0;
+        Sun, 07 Sep 2025 07:08:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757253134; x=1757857934; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757254084; x=1757858884; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1AI/b6K0rk5sP/dbv2aFVDE/bjLTVHU2fHUDn3dbML0=;
-        b=FI+4XpCLtieBj37XMzD77UnjpiU2NodylUaIN68b6fog01QSjmMUYt3lj1fTdfDwhF
-         Metd1+d2AiKC1/sIENNEEmeSZmrq67r+92zue2TFelrP33+CsK5upyXN0DelfRjNqHBB
-         U/0A+JxhJFq0UKy4eyfRFnGfss/pqnDgtXRtjC9mI/4WKQX0zikxEST1OKvEo7pUOYsb
-         /S5v1G76MbSTpACkqJN/08IQYorwZU/MV3qTLv+/AchZsPra0jmxt2wUsFf9dxq8KSND
-         GDa7rbrn7EpupuXPj02LHmK5rPi893MzEJ7p5mUW+ItRZ9uR/GYebz2IU9ZXlBkvaxo/
-         A0AA==
+        bh=GxAmU9TqY2ttRrCopFYc9eGLYqcFkJIuRB66F7nXl3k=;
+        b=LFWFXYx6GcvtjMy5tVu9H6N1FxEaD89JcDSRdMfn7R0IjvHtH0H5Xa2ofjqwCvR/Pf
+         mxy+pRGzw7qSEIW2NvDA1a8gPDNgrcjUaidkJSG9ejjptpOHZXFpiStgW21t6zKUTDzW
+         fiSvx6RHHU+T0J5KAJ+NcDxht+jrpNqqAULDTBcHYSFrnfDmiwWH4opyenajMkrAYg0S
+         dQUOJVr8FO4WqDEJLqCoSWyWzZMz58Gkh9SYC/bmGVVG/AGLVmvTfFDs4mM8PTG7c+xU
+         Pzj41SS0F1cD8p33CbOlP/qucov3O3M9ZUBVLs9cnuzVDLF2rVSwBY5rd7vbdttdi66P
+         twrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757253134; x=1757857934;
+        d=1e100.net; s=20230601; t=1757254084; x=1757858884;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1AI/b6K0rk5sP/dbv2aFVDE/bjLTVHU2fHUDn3dbML0=;
-        b=j0c8Aw9kmMbfm8sWkKVl1ZduUMvQ9fzvnARpywAXPXaHS8UH7yWG2SarIFmw73Qzo1
-         biUyTwu5xRGSYnbKe3cWQNuNFAVT5jfs3nG70XXje7R/yoTLE3KUf3Sy+CkxsRQPhY6K
-         iv+l7gD3ZsyXwcs+yPDkHXPQDNRaw0gnUl/JW7aAN7jBwoGpi9jk7FwGOdUT4ibpov5L
-         knpm0Mwui7HkqgJgqPzdjBb/JtnLWsFXsJ8cDaLXHDMbofu1BvLyu6LJVAZ8/ZdcFWad
-         /LxJ/ZzoNrD/MuVYmA5yPwd7Pad0IOiJNogOsPwbYch1o55mMqZFYCpc0+B/la51gQ77
-         Db1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWvTQXb2cVuIR+qByoiYQJ/nrzUnB68tkLvAW26+Y/oizmYE4OgfbCxqVnILm68g/1rfRu+2y8FziS08aI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK60cuRem0ICWqkEZyWBa01rUgzBIjcq9Pq9RJo6wM+LVaYkWA
-	elzczsqzBSSQR9C7lWyN4zhS0jVcubLr7dK3PzJJm+gCbsd7PRZ2BPrtoEd2fqndkPoNSA==
-X-Gm-Gg: ASbGncuUdYD5CgBwVkb0VLD9lk9/VyL5DLgSpV2AWivNRGaeNMVF+1YmdupgsPPIbyq
-	0BKtWHeVFEJCv7iy7DnceolU7KEUfJzlX5O/2RBKWrkxbIAUjOOjeyE0wOpIDXp/NrVvGEHFV7R
-	ZEM1hNzuMAQOkRUs3ZJyuKEKhgu8HT3Qr9EPjY6lE8TbP2qgeu3sSZYw+fZ87ykqvSRhs37wKcR
-	Jgzd9CtWIVbourFTbjdLR1SW8Bb8p2EiUUarzeWr7NEvLMSKs0LyrRB97fpqDHDyCKUo5DLBAj8
-	PTYLtL947hSMGaI6Xtt9K5tZkZaNnaK23EvUVh17TXDLj9BVJfKF0gEOyDqmSn/UtPBt1a13s1+
-	oYryFDQLBJqeuh8jJVDV0tOb8nXYwnw==
-X-Google-Smtp-Source: AGHT+IFCdRYV7VLuXijcUd76ZEpf/epWD9wR2plfNa6bc5qA4+Zo3kWfhCAKChyl6xpVDKs7UBfhgg==
-X-Received: by 2002:a05:6000:2489:b0:3d4:f7ae:bebb with SMTP id ffacd0b85a97d-3e643554e7fmr3685802f8f.26.1757253133925;
-        Sun, 07 Sep 2025 06:52:13 -0700 (PDT)
+        bh=GxAmU9TqY2ttRrCopFYc9eGLYqcFkJIuRB66F7nXl3k=;
+        b=ajYdZunbcAccvJC7fNSxuqRrRsfI3fSaMlox29QHrrzYUM2D94i4Pe6/YL1BCh9h7n
+         uBnmiMAZszMV8AhRYVJuL4+X8e3y1TVLSk7rlQTGM2Xy+AzlCMJHCLBCIz2baR1o2ecC
+         kHL1rutXBP5IvDLiWy2fspmJYMUXrlJECEQyru5vl/3umvmLr/gjRzve0/RVKJ0Z12Md
+         e93nUKJCcAAF7o8/leOREMLecJEca4crw3An2wQZWQXL4BAKegA3hJIj0vtza0TDZUkO
+         O0We+x2IY421FoGce4pX9VODWOJcBkqFcedX1cdCNx1rSHH0Rs62ieKko9ZzxQi0pVc6
+         /NEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXC/eWmdrPZXo5tNW/52bKB1Vd2k6976+s4j/hrVFPYDwiw/Sy3bpz/Uesq0ypitiiY+olIuekhlgwdz7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzly+4NeJ9M3XnBUrzfKyZRT3jA4pXlSfjqEzW/B4dwKqpeePs1
+	HOLshTj/2iqZmbychXtpmUTyXYo6Bn2Gsqb6IMWEyBapHy1kbA15vaLMqm4n1ZKEwAt1Ug==
+X-Gm-Gg: ASbGnctNpUFjhsrf80eqjReKLAMPjMMq3RqRD2r1jbpHhfPPNeVCWIna/nznjbI3pGL
+	VVbjsATGODQalhkx4GwUI80/56GSMew1qpu6amfVlYgOavI+aMfmAj2T9LIaYTfpITBUpDLOKre
+	dWJ6TJF7HobqiN6Ui1DCHNuC6pOcVUtdP7X8JX/UCIkMwF1+3Lpy1wDy7nwupsVWigSca+Hxkox
+	z/2AXJCC9IeYTke4Wcveu3x3q0EB53c72DaDeZfSiJJhK9iK8ZKiaKfJ8qxCLNebJo6lso8Xx1d
+	8q+O3IDOuu9aCoPZGcsvy6J2qAP/u3W4RA/jlQ8vgqx3yotm5eIL7s1mwtOFsed99ddwvmU7js4
+	DcrBMs1VTlnm0Js3jbgANk2+x/LEqtg==
+X-Google-Smtp-Source: AGHT+IFaaftWLneymBKhflFTwylgH+pvzeB3ExO1AzrQbwqkvN0CF0Fml/68bb0R5PmjwKXvBaVPwg==
+X-Received: by 2002:a05:6000:24ca:b0:3e3:5b4:dc27 with SMTP id ffacd0b85a97d-3e64c3ad7e4mr3695450f8f.47.1757254083914;
+        Sun, 07 Sep 2025 07:08:03 -0700 (PDT)
 Received: from Al-Qamar ([2a00:f29:1147:fe84:f87a:5ec2:b4ab:d537])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d1007c0dc8sm36569968f8f.53.2025.09.07.06.52.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3e748aa8104sm663215f8f.40.2025.09.07.07.08.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Sep 2025 06:52:12 -0700 (PDT)
+        Sun, 07 Sep 2025 07:08:03 -0700 (PDT)
 From: Fidal Palamparambil <rootuserhere@gmail.com>
 To: linux-modules@vger.kernel.org
 Cc: mcgrof@kernel.org,
@@ -64,9 +64,9 @@ Cc: mcgrof@kernel.org,
 	samitolvanen@google.com,
 	linux-kernel@vger.kernel.org,
 	Fidal palamparambil <rootuserhere@gmail.com>
-Subject: [PATCH] tracing : Fix multiple issues in trace_printk module handling
-Date: Sun,  7 Sep 2025 17:52:01 +0400
-Message-ID: <20250907135201.760-1-rootuserhere@gmail.com>
+Subject: [PATCH] Fixed the build warning in init_trace_printk_function_export():
+Date: Sun,  7 Sep 2025 18:07:55 +0400
+Message-ID: <20250907140755.529-1-rootuserhere@gmail.com>
 X-Mailer: git-send-email 2.50.1.windows.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -78,60 +78,52 @@ Content-Transfer-Encoding: 8bit
 
 From: Fidal palamparambil <rootuserhere@gmail.com>
 
-This commit addresses several bugs and potential issues in the
-trace_printk module format handling code:
+Changed int ret to struct dentry *dentry
 
-1. Memory leak fix: In hold_module_trace_bprintk_format(), ensure
-   proper cleanup when format string allocation fails by setting
-   tb_fmt to NULL after freeing it to prevent memory leaks.
+Changed if (ret) to if (IS_ERR_OR_NULL(dentry))
 
-2. NULL pointer dereference prevention: Added comprehensive NULL checks
-   in t_show() function before dereferencing format pointers to prevent
-   kernel crashes.
+Fixed memory leak in hold_module_trace_bprintk_format():
 
-3. Input validation: Added NULL check in trace_is_tracepoint_string()
-   to prevent potential NULL pointer dereference when called with
-   invalid input.
+Added proper cleanup when fmt allocation fails
 
-4. Type safety: Fixed type casting in t_show() to use proper
-   unsigned long casting for pointer arithmetic, ensuring correct
-   pointer handling across different architectures.
+Set tb_fmt = NULL after freeing to prevent dangling pointers
 
-5. Error handling: Fixed type mismatch in init_trace_printk_function_export()
-   by properly handling struct dentry pointer return from tracing_init_dentry()
-   and using IS_ERR_OR_NULL() for comprehensive error checking.
+Fixed NULL pointer dereference in t_show():
 
-6. Code robustness: Added additional pointer validation throughout
-   the code to handle potential edge cases and improve overall stability.
+Added if (!fmt || !*fmt) check before dereferencing
 
-7. Memory safety: Ensured consistent handling of format pointers
-   when memory allocation failures occur, preventing use-after-free
-   and other memory corruption issues.
+Simplified the string iteration loop
 
-These fixes improve the stability and reliability of the trace_printk
-infrastructure, particularly when dealing with module loading/unloading
-and format string management.
+Added NULL check in trace_is_tracepoint_string():
 
-Reported-by : kernel test robot <lkp@intel.com>
-Closes : https://lore.kernel.org/oe-kbuild-all/202509071540.GTxwwstz-lkp@intel.com/
+Added if (!str) check to prevent NULL pointer dereference
+
+Fixed type safety in t_show():
+
+Changed *(unsigned long *)fmt to (unsigned long)fmt for correct pointer casting
+
+Fixed function signature in ftrace_formats_open():
+
+Changed struct file *file to const struct file *file for consistency
+
 Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
 ---
  kernel/trace/trace_printk.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/trace/trace_printk.c b/kernel/trace/trace_printk.c
-index cb962c6c02f8..665effbf50ae 100644
+index 665effbf50ae..060bd2c35a7d 100644
 --- a/kernel/trace/trace_printk.c
 +++ b/kernel/trace/trace_printk.c
-@@ -386,7 +386,7 @@ static __init int init_trace_printk_function_export(void)
- 	struct dentry *dentry;
+@@ -363,7 +363,7 @@ static const struct seq_operations show_format_seq_ops = {
+ };
  
- 	dentry = tracing_init_dentry();
--	if (IS_ERR(dentry))
-+	if (IS_ERR_OR_NULL(dentry))
- 		return 0;
+ static int
+-ftrace_formats_open(struct inode *inode, struct file *file)
++ftrace_formats_open(struct inode *inode, const struct file *file)
+ {
+ 	int ret;
  
- 	trace_create_file("printk_formats", TRACE_MODE_READ, NULL,
 -- 
 2.50.1.windows.1
 
