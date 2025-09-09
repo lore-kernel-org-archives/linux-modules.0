@@ -1,65 +1,39 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFBE2F3631
-	for <linux-modules@vger.kernel.org>; Mon,  8 Sep 2025 10:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFD623A9AD;
+	Tue,  9 Sep 2025 09:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757326188; cv=none; b=ZBXUgfMYVJoQrMRFMuFvCC/jBRouWLroK71aPCWOMYoKQ1jev4CQeXoFW/KFxWwUDPJ2fynr4aTbegznZcKTFSoNBYcekaMkMvjpJFgVJDpOKMugoQiCIqXnk9hXQQCtT+ZwL4EPrI3jIU6yVupGcjBgUajrlhfBt5BH8cViml4=
+	t=1757411437; cv=none; b=HTWgQuh1PX6oNg4sO6PvTOrKR28gesA54Xp9pfTplxe5ULii+ebNAr/LutP65hxLe729OsGOXXQnyPFi+LV/zQDLmLGf7CkXN+kSwpwrOMlYg+0v0v2DrMl0LVgphs27/y8T6yXrVoDm6e4hWj8nvV18/DCBQ2KDQ62HRM3ImgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757326188; c=relaxed/simple;
-	bh=Qq6riTPm2rueQMQkOfKmSuNcy3bdh8dnvTR6Js2o/qA=;
+	s=arc-20240116; t=1757411437; c=relaxed/simple;
+	bh=uhxDWoptz2tBQK8hRc6j5prsq9hJfPj6Phx7JbtSAtk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MJeanOWrxBhSd82W8mN9iGbZZ3GSNUJ4fpsIdy1drwjue6HGL2ShMRd/BwndR0mtyxZfavvPMe3Us2zPijVh0kxPncC5V5hgmJifshHP3dn7T54j+GBcvelQnE+8/ue0jbiiki2O2Qml42e7jvU4tatcClOekaGB3c0ux4Ptvt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NzU48yL6; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NzU48yL6"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-45cb6428c46so35696235e9.1
-        for <linux-modules@vger.kernel.org>; Mon, 08 Sep 2025 03:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1757326184; x=1757930984; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=loBAPZn7jZfvkoicSll1Tf3khNjpahU6T+pGDlZXXHI=;
-        b=NzU48yL6TePxgIraBCR7Pr9w6vb97RL3u1UeqvaQpGJEHB2A86uo4GDEScE/BGTCIc
-         Jxa/ddmlKsKDMcUI77s+ix/NcNcmTgAq4uq+2z+wRNxlcjAt3uz9pg88vAyLxrhZQMLV
-         krzFjFxqDj0oOYT/SAxRRnz+DZ6jUL0oBLq9xk2J7QRHb3+td9FJtwisHuO7l3o7XP8H
-         BRX13b5Sf0cCESY29jPxmbVurRnnuJDI+G0/F4Ra+4zm+KsCqTgALdS92yByVpj5cuOl
-         sUqKfz0DWuIhJmg7tU59TX3UILCem23wkGE4zqDFWn4LuursSteTuPSRBJeOBlKcGize
-         EuYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757326184; x=1757930984;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loBAPZn7jZfvkoicSll1Tf3khNjpahU6T+pGDlZXXHI=;
-        b=tJhn8b7WLWy/3pSvykaIklrVHpgVRV6K33W+4aXoKf5KoPC24ECQufmJuUnLQYoTyk
-         2RHkFbEhnV26o2e0ee6Rt+DOUgL3eQGenm8CLf6OnWX0QLTnD4kSBUA3XwEuiG55URqU
-         Pf5dU6QI4xqWta6W8fJKd1MYDQsH+SHmKVnO1wqbbfAfUky7lX30+GMMNRsZO70aizlq
-         WREf5+RO01wbSmnVzX0LUy8KHAhR8j7owcb9OkkMoRRp11F19evWuFAlDlvfmsBuM9fD
-         2Qpm+5fQTux/qv6+GQv2kEcUM0lZ5wkyS3BtLbTn/nR0cPIaQtLKevM6jSzXKckoa1BR
-         y/eA==
-X-Forwarded-Encrypted: i=1; AJvYcCX3YeB1Qm7Sp9x9Cfncfenvw+OV+mzpTXdgj5ccVfiu/K8IO/OwvtPUWs2yNcf+35GoEoL/XCN4ZJP51kA5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx84857kAsSQwUbUCBrEov8nD6tzDjxwAjzbxbXnT0pWrGM8C+W
-	r7AM7tpdZq3T/0htyodu4fAcXrpJrESs7wjNj2ULBmttoyOa02MWKLeY84JftVM7AgM=
-X-Gm-Gg: ASbGncvvQ3z+uESFf2q0HJNGm/x8+vWugxVSXBbDmI7ktX9vSfvB2pZpIMCt20qnRqS
-	YxIYW2xrHRkiXTnRGX+s62RWzaxDImgqYA9fi9v7ysXfmWIwneZQ3No4K0TDVr5yIlwGEoA8qKF
-	dSOJLaoYlgFlvZZ/2TqOuWI1oz9ep6SEsY6in7XY9CJk+rp/7sO2qbU7S/wPxhgiP/7T7mClrza
-	hxkVbVYc4htbmNUiNilByk+1eYC3c1jAzY+CiNPStxN/dO4LOQndZTPV7DwkqCfqQGgN8V41+hC
-	WE5e4bbnTjfsdRCfjs64aQC4Hnq/Xn/lsB0Ln87s7j/kmaOHXi0uz4f35ogbBo5uOJ5rdsNJpQY
-	TuZHKut8IRaKkzV809OHgUAHRFxNcaP9aN6n6PxdX
-X-Google-Smtp-Source: AGHT+IGoeoqPrEGwW9DjGKyo/WaAC481m0yF50a09X3rLy0OSLpd7m3ef9LFrP+A/wO0TN/s421I1A==
-X-Received: by 2002:a05:600c:630e:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-45dddee5da3mr54003155e9.27.1757326184156;
-        Mon, 08 Sep 2025 03:09:44 -0700 (PDT)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dd0869b33sm193338125e9.9.2025.09.08.03.09.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 03:09:43 -0700 (PDT)
-Message-ID: <409ddefc-24f8-465c-8872-17dc585626a6@suse.com>
-Date: Mon, 8 Sep 2025 12:09:43 +0200
+	 In-Reply-To:Content-Type; b=fB6IjNvTA2o715hGvqCOrridAyULOrUA3XWBjrcIqqc4LTjtXYO/RS1jkNBa2ffdej/qn3qcOfnLKWCLb/zBTKSzs48iQYmwSXrKP2h6tMqURdX7NomI9EhOqX8MMXTZAkV9ucxcNImfYp4fqZi9Lw6WqsrgWOdY9d8FZVI3Rms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4cLdrr57Bjz9sRk;
+	Tue,  9 Sep 2025 11:32:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id C1oNj3b0ppI5; Tue,  9 Sep 2025 11:32:28 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4cLdrr357Yz9sRh;
+	Tue,  9 Sep 2025 11:32:28 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 44FAE8B766;
+	Tue,  9 Sep 2025 11:32:28 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 6TTgvUgJ3s7h; Tue,  9 Sep 2025 11:32:28 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id F1ACD8B764;
+	Tue,  9 Sep 2025 11:32:27 +0200 (CEST)
+Message-ID: <d46498e5-db21-4a79-93b4-3869be3660d2@csgroup.eu>
+Date: Tue, 9 Sep 2025 11:32:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -67,143 +41,346 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
-To: Sid Nayyar <sidnayyar@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Giuliano Procida <gprocida@google.com>,
- =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
-References: <20250829105418.3053274-1-sidnayyar@google.com>
- <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com>
- <CA+OvW8ZY1D3ECy2vw_Nojm1Kc8NzJHCpqNJUF0n8z3MhLAQd8A@mail.gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <CA+OvW8ZY1D3ECy2vw_Nojm1Kc8NzJHCpqNJUF0n8z3MhLAQd8A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] module : fix signature checker pointer arithmetic and
+ bounds check
+To: Fidal Palamparambil <rootuserhere@gmail.com>,
+ linux-modules@vger.kernel.org
+Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+ samitolvanen@google.com, linux-kernel@vger.kernel.org
+References: <20250905154550.130-1-rootuserhere@gmail.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20250905154550.130-1-rootuserhere@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/4/25 1:28 AM, Sid Nayyar wrote:
-> On Mon, Sep 1, 2025 at 1:27 PM Petr Pavlu <petr.pavlu@suse.com> wrote:
->> Merging __ksymtab and __ksymtab_gpl into a single section looks ok to
->> me, and similarly for __kcrctab and __kcrtab_gpl. The __ksymtab_gpl
->> support originally comes from commit 3344ea3ad4 ("[PATCH] MODULE_LICENSE
->> and EXPORT_SYMBOL_GPL support") [1], where it was named __gpl_ksymtab.
->> The commit doesn't mention why the implementation opts for using
->> a separate section, but I suspect it was designed this way to reduce
->> memory/disk usage.
->>
->> A question is whether the symbol flags should be stored in a new
->> __kflagstab section, instead of adding a flag member to the existing
->> __ksymtab. As far as I'm aware, no userspace tool (particularly kmod)
->> uses the __ksymtab data, so we are free to update its format.
->>
->> Note that I believe that __kcrctab/__kcrtab_gpl is a separate section
->> because the CRC data is available only if CONFIG_MODVERSIONS=y.
->>
->> Including the flags as part of __ksymtab would be obviously a simpler
->> schema. On the other hand, an entry in __ksymtab has in the worst case
->> a size of 24 bytes with an 8-byte alignment requirement. This means that
->> adding a flag to it would require additional 8 bytes per symbol.
-> 
-> Thanks for looking into the history of the _gpl split. We also noted
-> that there were up to five separate arrays at one point.
-> 
-> We explored three approaches to this problem: using the existing
-> __ksymtab, packing flags as bit-vectors, and the proposed
-> __kflagstab. We ruled out the bit-vector approach due to its
-> complexity, which would only save a few bits per symbol. The
-> __ksymtab approach, while the simplest, was too wasteful of space.
-> The __kflagstab seems like a good compromise, offering a slight
-> increase in complexity over the __ksymtab method but requiring only
-> one extra byte per symbol.
 
-This sounds reasonable to me. Do you have any numbers on hand that would
-show the impact of extending __ksymtab?
+
+Le 05/09/2025 à 17:45, Fidal Palamparambil a écrit :
+> From: Fidal palamparambil <rootuserhere@gmail.com>
+> 
+> This patch fixes :
+>   - invalid module_param type (bool_enable_only → bool)
+
+Can you explain what the problem is ? Why do you say bool_enable_only is 
+invalid ? Was generalised by commit d19f05d8a8fa ("kernel/params.c: 
+generalize bool_enable_only")
+
+>   - unsafe pointer arithmetic on void *
+
+Why is it unsafe in Linux Kernel ? See https://lkml.org/lkml/2022/2/24/978
+
+>   - missing bounds check for sig_len, preventing underflow/OOB
+
+This is checked by mod_check_sig(), why check it again ?
+
+>   - export set_module_sig_enforced for consistency
+
+Consistency with what ? Can you tell which module needs it ?
 
 > 
->>>
->>> The motivation for this change comes from the Android kernel, which uses
->>> an additional symbol flag to restrict the use of certain exported
->>> symbols by unsigned modules, thereby enhancing kernel security. This
->>> __kflagstab can be implemented as a bitmap to efficiently manage which
->>> symbols are available for general use versus those restricted to signed
->>> modules only.
->>
->> I think it would be useful to explain in more detail how this protected
->> schema is used in practice and what problem it solves. Who is allowed to
->> provide these limited unsigned modules and if the concern is kernel
->> security, can't you enforce the use of only signed modules?
-> 
-> The Android Common Kernel source is compiled into what we call
-> GKI (Generic Kernel Image), which consists of a kernel and a
-> number of modules. We maintain a stable interface (based on CRCs and
-> types) between the GKI components and vendor-specific modules
-> (compiled by device manufacturers, e.g., for hardware-specific
-> drivers) for the lifetime of a given GKI version.
-> 
-> This interface is intentionally restricted to the minimal set of
-> symbols required by the union of all vendor modules; our partners
-> declare their requirements in symbol lists. Any additions to these
-> lists are reviewed to ensure kernel internals are not overly exposed.
-> For example, we restrict drivers from having the ability to open and
-> read arbitrary files. This ABI boundary also allows us to evolve
-> internal kernel types that are not exposed to vendor modules, for
-> example, when a security fix requires a type to change.
-> 
-> The mechanism we use for this is CONFIG_TRIM_UNUSED_KSYMS and
-> CONFIG_UNUSED_KSYMS_WHITELIST. This results in a ksymtab
-> containing two kinds of exported symbols: those explicitly required
-> by vendors ("vendor-listed") and those only required by GKI modules
-> ("GKI use only").
-> 
-> On top of this, we have implemented symbol import protection
-> (covered in patches 9/10 and 10/10). This feature prevents vendor
-> modules from using symbols that are not on the vendor-listed
-> whitelist. It is built on top of CONFIG_MODULE_SIG. GKI modules are
-> signed with a specific key, while vendor modules are unsigned and thus
-> treated as untrusted. This distinction allows signed GKI modules to
-> use any symbol in the ksymtab, while unsigned vendor modules can only
-> access the declared subset. This provides a significant layer of
-> defense and security against potentially exploitable vendor module
-> code.
+> Signed-off-by : Fidal Palamparambil <rootuserhere@gmail.com>
+> Signed-off-by: Fidal palamparambil <rootuserhere@gmail.com>
 
-If I understand correctly, this is similar to the recently introduced
-EXPORT_SYMBOL_FOR_MODULES() macro, but with a coarser boundary.
+Why a double sob ?
 
-I think that if the goal is to control the kABI scope and limit the use
-of certain symbols only to GKI modules, then having the protection
-depend on whether the module is signed is somewhat odd. It doesn't give
-me much confidence if vendor modules are unsigned in the Android
-ecosystem. I would expect that you want to improve this in the long
-term.
+> ---
+>   kernel/module/signing.c    |  48 ++++++++------
+>   kernel/module/signing.orig | 125 +++++++++++++++++++++++++++++++++++++
 
-It would then make more sense to me if the protection was determined by
-whether the module is in-tree (the "intree" flag in modinfo) or,
-alternatively, if it is signed by a built-in trusted key. I feel this
-way the feature could be potentially useful for other distributions that
-care about the kABI scope and have ecosystems where vendor modules are
-properly signed with some key. However, I'm not sure if this would still
-work in your case.
+Why adding this .orig file into the kernel at all ?
+
+>   2 files changed, 155 insertions(+), 18 deletions(-)
+>   create mode 100644 kernel/module/signing.orig
+> 
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index a2ff4242e623..8dda6cd2fd73 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0-or-later
+> -/* Module signature checker
+> +/*
+> + * Module signature checker
+
+Don't mix cosmetic changes and real changes, you are making 
+bisectability more difficult.
+
+>    *
+>    * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+>    * Written by David Howells (dhowells@redhat.com)
+> @@ -20,11 +21,11 @@
+>   #define MODULE_PARAM_PREFIX "module."
+> 
+>   static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+> -module_param(sig_enforce, bool_enable_only, 0644);
+> +module_param(sig_enforce, bool, 0644);
+> 
+>   /*
+> - * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
+> - * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
+> + * Export sig_enforce kernel cmdline parameter to allow other subsystems to
+> + * rely on that instead of directly on CONFIG_MODULE_SIG_FORCE config.
+>    */
+>   bool is_module_sig_enforced(void)
+>   {
+> @@ -36,6 +37,7 @@ void set_module_sig_enforced(void)
+>   {
+>          sig_enforce = true;
+>   }
+> +EXPORT_SYMBOL(set_module_sig_enforced);
+> 
+>   /*
+>    * Verify the signature on a module.
+> @@ -45,44 +47,55 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+>          struct module_signature ms;
+>          size_t sig_len, modlen = info->len;
+>          int ret;
+> +       const unsigned char *data = mod;
+
+Pointless change.
 
 > 
-> Finally, we have implemented symbol export protection, which prevents
-> a vendor module from impersonating a GKI module by exporting any of
-> the same symbols. Note that this protection is currently specific to
-> the Android kernel and is not included in this patch series.
+>          pr_devel("==>%s(,%zu)\n", __func__, modlen);
 > 
-> We have several years of experience with older implementations of
-> these protection mechanisms. The code in this series is a
-> considerably cleaner and simpler version compared to what has been
-> shipping in Android kernels since Android 14 (6.1 kernel).
+>          if (modlen <= sizeof(ms))
+>                  return -EBADMSG;
+> 
+> -       memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
+> +       memcpy(&ms, data + (modlen - sizeof(ms)), sizeof(ms));
 
-I agree. I'm not aware of any other distribution that would immediately
-need this feature, so it is good if the implementation is kept
-reasonably straightforward and doesn't overly complicate the module
-loader code.
+Pointless change
 
--- 
-Thanks,
-Petr
+> 
+>          ret = mod_check_sig(&ms, modlen, "module");
+>          if (ret)
+>                  return ret;
+> 
+>          sig_len = be32_to_cpu(ms.sig_len);
+> +
+> +       /* Ensure sig_len is valid to prevent underflow/oob */
+> +       if (sig_len > modlen - sizeof(ms))
+> +               return -EBADMSG;
+
+Already verified by mod_check_sig()
+
+> +
+>          modlen -= sig_len + sizeof(ms);
+>          info->len = modlen;
+> 
+> -       return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
+> +       return verify_pkcs7_signature(data, modlen, data + modlen, sig_len,
+
+pointless change
+
+>                                        VERIFY_USE_SECONDARY_KEYRING,
+>                                        VERIFYING_MODULE_SIGNATURE,
+>                                        NULL, NULL);
+>   }
+> 
+> +/*
+> + * Check signature validity of a module during load.
+> + */
+>   int module_sig_check(struct load_info *info, int flags)
+>   {
+>          int err = -ENODATA;
+>          const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+>          const char *reason;
+> -       const void *mod = info->hdr;
+> +       const unsigned char *mod = info->hdr;
+
+info->hdr is not void*, how can this work without a cast ?
+
+>          bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+>                                         MODULE_INIT_IGNORE_VERMAGIC);
+> +
+
+Unrelated cosmetic change
+
+>          /*
+> -        * Do not allow mangled modules as a module with version information
+> -        * removed is no longer the module that was signed.
+> +        * Do not allow mangled modules: a module with version info removed
+> +        * is no longer the module that was signed.
+>           */
+>          if (!mangled_module &&
+>              info->len > markerlen &&
+> -           memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> -               /* We truncate the module to discard the signature */
+> +           memcmp(mod + info->len - markerlen,
+> +                  MODULE_SIG_STRING, markerlen) == 0) {
+> +               /* Truncate the module to discard the signature marker */
+
+Cosmetic and pointless change.
+
+>                  info->len -= markerlen;
+>                  err = mod_verify_sig(mod, info);
+>                  if (!err) {
+> @@ -92,9 +105,8 @@ int module_sig_check(struct load_info *info, int flags)
+>          }
+> 
+>          /*
+> -        * We don't permit modules to be loaded into the trusted kernels
+> -        * without a valid signature on them, but if we're not enforcing,
+> -        * certain errors are non-fatal.
+> +        * Enforced mode: only allow modules with a valid signature.
+> +        * Non-enforced mode: certain errors are downgraded to warnings.
+>           */
+>          switch (err) {
+>          case -ENODATA:
+> @@ -106,12 +118,12 @@ int module_sig_check(struct load_info *info, int flags)
+>          case -ENOKEY:
+>                  reason = "module with unavailable key";
+>                  break;
+> -
+
+Cosmetic
+
+>          default:
+>                  /*
+> -                * All other errors are fatal, including lack of memory,
+> -                * unparseable signatures, and signature check failures --
+> -                * even if signatures aren't required.
+> +                * All other errors are fatal, including:
+> +                * - OOM
+> +                * - unparseable signatures
+> +                * - invalid signature failures
+>                   */
+>                  return err;
+>          }
+> diff --git a/kernel/module/signing.orig b/kernel/module/signing.orig
+> new file mode 100644
+> index 000000000000..a2ff4242e623
+> --- /dev/null
+> +++ b/kernel/module/signing.orig
+> @@ -0,0 +1,125 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/* Module signature checker
+> + *
+> + * Copyright (C) 2012 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/errno.h>
+> +#include <linux/module.h>
+> +#include <linux/module_signature.h>
+> +#include <linux/string.h>
+> +#include <linux/verification.h>
+> +#include <linux/security.h>
+> +#include <crypto/public_key.h>
+> +#include <uapi/linux/module.h>
+> +#include "internal.h"
+> +
+> +#undef MODULE_PARAM_PREFIX
+> +#define MODULE_PARAM_PREFIX "module."
+> +
+> +static bool sig_enforce = IS_ENABLED(CONFIG_MODULE_SIG_FORCE);
+> +module_param(sig_enforce, bool_enable_only, 0644);
+> +
+> +/*
+> + * Export sig_enforce kernel cmdline parameter to allow other subsystems rely
+> + * on that instead of directly to CONFIG_MODULE_SIG_FORCE config.
+> + */
+> +bool is_module_sig_enforced(void)
+> +{
+> +       return sig_enforce;
+> +}
+> +EXPORT_SYMBOL(is_module_sig_enforced);
+> +
+> +void set_module_sig_enforced(void)
+> +{
+> +       sig_enforce = true;
+> +}
+> +
+> +/*
+> + * Verify the signature on a module.
+> + */
+> +int mod_verify_sig(const void *mod, struct load_info *info)
+> +{
+> +       struct module_signature ms;
+> +       size_t sig_len, modlen = info->len;
+> +       int ret;
+> +
+> +       pr_devel("==>%s(,%zu)\n", __func__, modlen);
+> +
+> +       if (modlen <= sizeof(ms))
+> +               return -EBADMSG;
+> +
+> +       memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
+> +
+> +       ret = mod_check_sig(&ms, modlen, "module");
+> +       if (ret)
+> +               return ret;
+> +
+> +       sig_len = be32_to_cpu(ms.sig_len);
+> +       modlen -= sig_len + sizeof(ms);
+> +       info->len = modlen;
+> +
+> +       return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
+> +                                     VERIFY_USE_SECONDARY_KEYRING,
+> +                                     VERIFYING_MODULE_SIGNATURE,
+> +                                     NULL, NULL);
+> +}
+> +
+> +int module_sig_check(struct load_info *info, int flags)
+> +{
+> +       int err = -ENODATA;
+> +       const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +       const char *reason;
+> +       const void *mod = info->hdr;
+> +       bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+> +                                      MODULE_INIT_IGNORE_VERMAGIC);
+> +       /*
+> +        * Do not allow mangled modules as a module with version information
+> +        * removed is no longer the module that was signed.
+> +        */
+> +       if (!mangled_module &&
+> +           info->len > markerlen &&
+> +           memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> +               /* We truncate the module to discard the signature */
+> +               info->len -= markerlen;
+> +               err = mod_verify_sig(mod, info);
+> +               if (!err) {
+> +                       info->sig_ok = true;
+> +                       return 0;
+> +               }
+> +       }
+> +
+> +       /*
+> +        * We don't permit modules to be loaded into the trusted kernels
+> +        * without a valid signature on them, but if we're not enforcing,
+> +        * certain errors are non-fatal.
+> +        */
+> +       switch (err) {
+> +       case -ENODATA:
+> +               reason = "unsigned module";
+> +               break;
+> +       case -ENOPKG:
+> +               reason = "module with unsupported crypto";
+> +               break;
+> +       case -ENOKEY:
+> +               reason = "module with unavailable key";
+> +               break;
+> +
+> +       default:
+> +               /*
+> +                * All other errors are fatal, including lack of memory,
+> +                * unparseable signatures, and signature check failures --
+> +                * even if signatures aren't required.
+> +                */
+> +               return err;
+> +       }
+> +
+> +       if (is_module_sig_enforced()) {
+> +               pr_notice("Loading of %s is rejected\n", reason);
+> +               return -EKEYREJECTED;
+> +       }
+> +
+> +       return security_locked_down(LOCKDOWN_MODULE_SIGNATURE);
+> +}
+> --
+> 2.50.1.windows.1
+> 
+> 
+
