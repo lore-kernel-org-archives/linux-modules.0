@@ -1,127 +1,110 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BEA25FA0A
-	for <linux-modules@vger.kernel.org>; Fri, 12 Sep 2025 23:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421021F2361;
+	Mon, 15 Sep 2025 06:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757718601; cv=none; b=bPrfzWs/EpnIDhEq+iKgGeFXFlKOn2j1NUc+ZNYPrR0oBSUDbg393f+51Ojds/+yMXH/eIwIx9nvstRVWr5C3pAgq8FP/FACDUCM5cVf0oah3couqPwNbrWgZSVvtQJygf/O9b7hA+sbO33/vHUZczeBRYGq3RI2gCTAw/8sRpY=
+	t=1757918000; cv=none; b=g/S+CPWQeVnx7mLIvTQIHVdAL4jz7KCDCHdDoDwbHElEvqLgl4NOrnuK8BC/saSE9xATVvxE7YAb4LVgfk9EVw79NU5LPm3zox5mMkRPx+3btILMMv2xl2SZBeb+BfBtDYqWZaNjI6md++MOwEE973Z39Wljih6x8vDsZ1Z49Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757718601; c=relaxed/simple;
-	bh=YEh//s+EtsJjGeLO13TxNSxxYq8mSsN2ket2o0T8fSo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZFNHfEcMAdzEb8SR0i9XzqTEwG/ZZRxwDMyfSZsQaPxBJusF4FeagvtxzjRse4PUgyMRhVZZkGjtXv5huGiGrOlfGOXYokXjlu21UuKihFVY3Prw71+nVIFQB0VQSFu58Iymjn4Dkblus1tGfJwpQReX7tOhivm8JXWy6lvNm5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=KQRUMNRz; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1757918000; c=relaxed/simple;
+	bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZReHTIuU1Q6CKMSDNpRDpwg1z8TXEqhlu+rzOxw6fF83rF2IiuiBFasJrkLrw1z3sF/xg+OAdj721l78cQ8Zn1xXHDpS9fpARtUO1gh1uY+gdo6Bh0YbTvCOf6SlrBMwvQvMYztsL+sUccTW5SB74N6Vp9TjYDBfUofUQ7QWI8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=iB0ibLlr; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KQRUMNRz"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-32dd4fa054bso1995451a91.1
-        for <linux-modules@vger.kernel.org>; Fri, 12 Sep 2025 16:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757718599; x=1758323399; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1aqQsfYpqczFMN6xd995B9cIuPxzc6IeMNO1DIuGzJc=;
-        b=KQRUMNRzLQIwOB9SGgCZ1b7r6/r4gdYltSkJpKKYpVE0gy/yOkd/lgR2sxXv0RsNZs
-         bb1tIWazv+Bj/yXnD8NLciEBJU/5oUttJVhftH88p4beIUfOkrE+fCxcM1ez6l63Qa0y
-         NgQA7SH+iE4cEOkAMfz/iB2jsQ9aTcB8BQbYI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757718599; x=1758323399;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1aqQsfYpqczFMN6xd995B9cIuPxzc6IeMNO1DIuGzJc=;
-        b=o4pS8w+tB5VDzHZZSPw2YrHTtOkR6PVGMmcJBlkjiTIbPyFGFwJ8D9JbosC4aXrDOQ
-         DPZQDacxd4q/FqATIiNoqPJplPO7ntkbWCUTtJsV1VAn9C1+xzw2/OllY6C3u5cMomAU
-         xb8fEMFTa1xQNHkTwrxiUYYqNoIBVENxDtQYxhMX84yeyGdxwzaxgaWwTywNoUzkthAM
-         Oi7x1J7D06bthw4cotd6xGB29+m3r0Q253Gwxf6sLTDh1aomFkAh0q5RihS9nZX5Qxnb
-         pp+Px3QJwqlPoA5+fwwZKSb7xjMniS7AbDzWP0B/NgDYeEY44OBJQI3t6OlWG/b37fIA
-         3LPg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7bZxiJy0CLcnwpg2LLAMWp5WeFm4yRGgy/uO92MKc4mdihBydyYJEyXk8kkIkVYNr8gv5sP6YcHpA6MGD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+QURB1v3leJZ0a8RjZMXCjAtjcFwIZDXBD6ikNhQ3jjzzr+pm
-	04yT85PZYr2KGJWn/M8VcAT9HawdATFcyaSx4t257yLDRkmMV4YleomaPmCnDECd9g==
-X-Gm-Gg: ASbGncvmv1AemUZY7JJWQmY6hqWhXoQ5415WiEv2OQcmKEymZ5hdH5Q4bp8TClNNXF2
-	B6vMyn7PfgiCA5N4+b/RAIoJ7VapdhK0s02mCd8aNLpnOtYAA2Z9+m6N40g/h5/ay/r4A5ED2Po
-	X557gE8nzFrnsXct3qNacNXJ/vAEJDIDsB1Ii9xi1m0pLlzl6SwifIquoKCihbeXbvh+wZP+b9b
-	1ZkaZr+HfWPM0cJVrUgUVUoFA9xAze5yYWc92tFHMk3Qoee+IQ+q0/aKj35bj4WIBI0qyBOYeY6
-	QHxPTL7upcVAN0e7t7ETcs19MrRZy6upCLNR7IMXBMksxIM+g78mOUadwbamtHEd+w8W7WeVQEX
-	DO/jvn3W3jUYLHsgjJJc5zw2NCnnLaW7ya/ukaO+m6336DihG/GnfLO6a65Y=
-X-Google-Smtp-Source: AGHT+IHahHShoB5Ii1WzvFIbd2LUrSYt+MXYAQPhHq31+WasztFuE5rlFSFzEb7dWV7UvuA2EIiQ1Q==
-X-Received: by 2002:a17:90b:4d0e:b0:327:53f0:6368 with SMTP id 98e67ed59e1d1-32de4b88595mr5567635a91.2.1757718599221;
-        Fri, 12 Sep 2025 16:09:59 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:e464:c3f:39d8:1bab])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b54a35b7e31sm5643608a12.11.2025.09.12.16.09.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Sep 2025 16:09:58 -0700 (PDT)
-From: Brian Norris <briannorris@chromium.org>
-To: Bjorn Helgaas <bhelgaas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>
-Cc: linux-pci@vger.kernel.org,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Richard Weinberger <richard@nod.at>,
-	Wei Liu <wei.liu@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	kunit-dev@googlegroups.com,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	linux-um@lists.infradead.org,
-	Brian Norris <briannorris@chromium.org>
-Subject: [PATCH 4/4] kunit: qemu_configs: Add PCI to arm, arm64
-Date: Fri, 12 Sep 2025 15:59:35 -0700
-Message-ID: <20250912230208.967129-5-briannorris@chromium.org>
-X-Mailer: git-send-email 2.51.0.384.g4c02a37b29-goog
-In-Reply-To: <20250912230208.967129-1-briannorris@chromium.org>
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="iB0ibLlr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=QlPxaZpQgAbJ15RgCwCxR2W4D+X5bJYrlbORaI22aqg=;
+	t=1757917999; x=1759127599; b=iB0ibLlrQzr7wy7mTR3wVlZtM1tW+Dvb9bTAcNPpdqEcP97
+	ZXgFeZx/7Tsv4GCH78ZhlKnAPYfcTqjposb3icB17MVqJBB5r4QmAN3/PZxlllz0XU8A7BCAbyo9S
+	T3MSYimLd6nSgK6SRwk9CiPcDGiSGjXgDdoVkWoz3NKozSnRrSEUeV6WoR2jaBY7PrdYCM4W4EpB5
+	7BLxS41xGD1a05iOgDy1NsyWyhJxgxjUCr8287iquvg/AU4gpFqEQcQkRdf1xpeb3XdwYQwhezXJg
+	nYRoyrHRQYmU5a4W2/fGkUvbrQCXnj51Z9MCt99P+SfUa6pIeUi5MicJcLyueNUw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uy2lx-00000005sPh-0Vis;
+	Mon, 15 Sep 2025 08:33:09 +0200
+Message-ID: <8e75d6cc3847899ba8d6a0cbd0ef3ac57eabf009.camel@sipsolutions.net>
+Subject: Re: [PATCH 1/4] PCI: Support FIXUP quirks in modules
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Brian Norris <briannorris@chromium.org>, Bjorn Helgaas
+ <bhelgaas@google.com>,  Luis Chamberlain	 <mcgrof@kernel.org>, Petr Pavlu
+ <petr.pavlu@suse.com>, Daniel Gomez	 <da.gomez@kernel.org>
+Cc: linux-pci@vger.kernel.org, David Gow <davidgow@google.com>, Rae Moar	
+ <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Sami Tolvanen	
+ <samitolvanen@google.com>, Richard Weinberger <richard@nod.at>, Wei Liu	
+ <wei.liu@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	kunit-dev@googlegroups.com, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ 	linux-um@lists.infradead.org
+Date: Mon, 15 Sep 2025 08:33:08 +0200
+In-Reply-To: <20250912230208.967129-2-briannorris@chromium.org> (sfid-20250913_010956_669404_FC913C9D)
 References: <20250912230208.967129-1-briannorris@chromium.org>
+	 <20250912230208.967129-2-briannorris@chromium.org>
+	 (sfid-20250913_010956_669404_FC913C9D)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
 
-To get some more test coverage on PCI tests.
+On Fri, 2025-09-12 at 15:59 -0700, Brian Norris wrote:
+> The PCI framework supports "quirks" for PCI devices via several
+> DECLARE_PCI_FIXUP_*() macros. These macros allow arch or driver code to
+> match device IDs to provide customizations or workarounds for broken
+> devices.
+>=20
+> This mechanism is generally used in code that can only be built into the
+> kernel, but there are a few occasions where this mechanism is used in
+> drivers that can be modules. For example, see commit 574f29036fce ("PCI:
+> iproc: Apply quirk_paxc_bridge() for module as well as built-in").
+>=20
+> The PCI fixup mechanism only works for built-in code, however, because
+> pci_fixup_device() only scans the ".pci_fixup_*" linker sections found
+> in the main kernel; it never touches modules.
+>=20
+> Extend the fixup approach to modules.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+This _feels_ a bit odd to me - what if you reload a module, should the
+fixup be done twice?=C2=A0Right now this was not possible in a module, whic=
+h
+is a bit of a gotcha, but at least that's only one for developers, not
+for users (unless someone messes up and puts it into modular code, as in
+the example you gave.)
 
- tools/testing/kunit/qemu_configs/arm.py   | 1 +
- tools/testing/kunit/qemu_configs/arm64.py | 1 +
- 2 files changed, 2 insertions(+)
+Although, come to think of it, you don't even apply the fixup when the
+module is loaded, so what I just wrote isn't really true. That almost
+seems like an oversight though, now the module has to be loaded before
+the PCI device is enumerated, which is unlikely to happen in practice?
+But then we get the next gotcha - the device is already enumerated, so
+the fixups cannot be applied at the various enumeration stages, and
+you're back to having to load the module before PCI enumeration, which
+could be tricky, or somehow forcing re-enumeration of a given device
+from userspace, but then you're firmly in "gotcha for the user"
+territory again ...
 
-diff --git a/tools/testing/kunit/qemu_configs/arm.py b/tools/testing/kunit/qemu_configs/arm.py
-index db2160200566..101d67e5157c 100644
---- a/tools/testing/kunit/qemu_configs/arm.py
-+++ b/tools/testing/kunit/qemu_configs/arm.py
-@@ -3,6 +3,7 @@ from ..qemu_config import QemuArchParams
- QEMU_ARCH = QemuArchParams(linux_arch='arm',
- 			   kconfig='''
- CONFIG_ARCH_VIRT=y
-+CONFIG_PCI=y
- CONFIG_SERIAL_AMBA_PL010=y
- CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
- CONFIG_SERIAL_AMBA_PL011=y
-diff --git a/tools/testing/kunit/qemu_configs/arm64.py b/tools/testing/kunit/qemu_configs/arm64.py
-index 5c44d3a87e6d..ba2b4e660ba7 100644
---- a/tools/testing/kunit/qemu_configs/arm64.py
-+++ b/tools/testing/kunit/qemu_configs/arm64.py
-@@ -2,6 +2,7 @@ from ..qemu_config import QemuArchParams
- 
- QEMU_ARCH = QemuArchParams(linux_arch='arm64',
- 			   kconfig='''
-+CONFIG_PCI=y
- CONFIG_SERIAL_AMBA_PL010=y
- CONFIG_SERIAL_AMBA_PL010_CONSOLE=y
- CONFIG_SERIAL_AMBA_PL011=y
--- 
-2.51.0.384.g4c02a37b29-goog
+I don't really have any skin in this game, but overall I'd probably
+argue it's better to occasionally have to fix things such as in the
+commit you point out but have a predictable system, than apply things
+from modules.
 
+Perhaps it'd be better to extend the section checking infrastructure to
+catch and error out on these sections in modules instead, so we catch it
+at build time, rather than finding things missing at runtime?
+
+And yeah, now I've totally ignored the kunit angle, but ... not sure how
+to combine the two requirements if they are, as I think, conflicting.
+
+johannes
