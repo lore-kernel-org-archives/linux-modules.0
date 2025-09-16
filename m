@@ -1,81 +1,46 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8D52F2E
-	for <linux-modules@vger.kernel.org>; Mon, 15 Sep 2025 20:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651B12DEA6F;
+	Tue, 16 Sep 2025 07:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757967915; cv=none; b=C1kL0QK2QXbJJaNuTFOHmdGzgj5J7zb8anISUyqsr6npNa+9Yzw2xTuLsnaxmhoa/W1UKRPv/cQ63FNpPIBu4h5176QRwzYN9r3E8jFwuNre3o2by7Yg2xteNoY4S0QvfCXmyDtu+z56jpKPuAi0vzHxELKFmaLHAcdPv2BGuvM=
+	t=1758006748; cv=none; b=u7WNEiPPq4+hP+YThu8iJ0hDfRKuQJEy1tR9zlBZdCalihZK7q2fFbk2yK0kY2JyvYvB8bcFeES9bzAajJYEk5PoxvJB6UwnM7o9GMcMPiqxgNcy0nojNDOlbx5Ov1S/0xi1RMJPVybEsR3X1e4JttREsdgix7MDbaPT8+Upr10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757967915; c=relaxed/simple;
-	bh=Oo9wGMZhnst9JKD4ApAAC3zg3Wq/VvmKzOk8qOj+8WA=;
+	s=arc-20240116; t=1758006748; c=relaxed/simple;
+	bh=oU7VvkqktkVNm/KzNrVro7cjiuBKEqIXf9EnmXfNqrg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aeEUZvPjMj3ga5WEjFJviqEIVOjW72EcK3fSr7YiPoOyd2DkbUwwwMHFoTTIhPWsy+elSsXoUQYVP0efVbhGvUkiVTW8qyjLtLcRJz39YGnBmiPUIjhNItwxKdr7PAtmwAXAwhxEPsn/qtm+7ht45q2ByuuqBQJofwE8WOhVrZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hZ2+sUIi; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=kQQ+Wqp9G6k9XU4icvK0yrgavZSurICZ1U/NbNpxLa8k167iUjwi4BDDZJNZ85qWIu+EmD2cHL7zpIek4rBlkHSaFMeXzTRFIT0RdIcGOdf1ir+jIkc5cxCfKIEI/g5tVs7uW9kBjyt4ylbHy8fh8/KqnjOasQI32TUII61I6+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psp5bO/F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hZ2+sUIi"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-266a0e83662so10080355ad.0
-        for <linux-modules@vger.kernel.org>; Mon, 15 Sep 2025 13:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1757967914; x=1758572714; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O72yw8vJtQy+8bHFkvEUobUMXSH/AYeLaHaVDBYLJyk=;
-        b=hZ2+sUIi9pf3OXUUBWGgpMI5lz3YNtMyjManCGjlhT68Jf3aWAX5gEb5flACSwLeL8
-         m2NKLGcinlGwgkrukw+lUQlIYAIY64+ywTzk6KEe4qXidGdBLOw4LqXS+4INsGIDyduM
-         P3TVtGcqXTsoY5Pk6PsMJsRqcGMDib280YHfw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757967914; x=1758572714;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O72yw8vJtQy+8bHFkvEUobUMXSH/AYeLaHaVDBYLJyk=;
-        b=WLKDUrO6kqpvvbA20v27I44vZuWbglmDU6Jpgipe8QwbuFJPJ9H6MBIDkP9GmaJgvz
-         //rmuNCReFawYmEB+pEHZqSoie/74iBdEUd407kQXUnOljr/7JLXL+eXgPe35l3Id9lf
-         WUExfU4HrvKei6W92OS/i+n4CZc8ygQxrq1plWyg5t7x9IaqhZFQVh/nixAIeLYpr7nr
-         TiZP/tXLuJgcUIiB5CjFV77ulrpQU0uAiNP7kOpsCFXa3edjmi+quQMhNpGJ7YWkadZd
-         V9gtFvA+M/ZWGRwcusQwUoxwBYWUJ5M1i8lEIu+fPBJB54klJn7FXC05QBXgrc7jYLiN
-         gjOA==
-X-Forwarded-Encrypted: i=1; AJvYcCV8lnXK4jAKKSjjLniXU0680M+ZIgo6AtlgDrU137rhMtMZ9towZKVLEkoGDb0NGgNg/mKmCJNBrtKA8usH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbju6EwQs/7Or4y/KFj4Qse24H2HQJ6kxJ4h55hoyxomOeE+B9
-	Jh5CN8do8xndsDCYcOr9OmjVBc7hREkzEnJCGh8rwfUedF8FvmQZ4Otl/YR24nd99A==
-X-Gm-Gg: ASbGncs1ONfX2KzOMsmouoIm6MqhkCB+/hrwIKY+OTZ8+o8BTFv49sZDdsZhxnVkufR
-	8VEWQ3/ZFZgTesxzgIzZD0eCqODDiySxJJMQAym4aOpPynyLF+nYWWAGvmmpTU7Ta51tOLKakzK
-	3dofqlIt4mbabiYfmaQpfeIDJzXxz0w3uM8qNMKFtWVGcxzRgufm01KIynocU9ZsLV6tHffzMoa
-	ZO3Z2hA0bRLzmzVUdotBihK/0Wmy0C5z7nyb9UHzWVP1OWhb1fs/srvWNAzPxo/guI9eNxv3LtB
-	vTf8Vccsawekt4/C9IvGRmW8KmwMoyrma19nC/qxtZaJgzDqcP3wUemhdVrEhhnEZ4tqU62BpzN
-	hTFoXinZF7r9fTDNVqEuLOGsWZWN+mplxuQIjwHCeA0RfIGSK+8jZwJ+LA269fFBwP4v+iZY=
-X-Google-Smtp-Source: AGHT+IH0BB3qybe2HQfIXVITegc2cfF0wfUP7hE62PhWgnHrlmUKZL5W+LGvMXTHhPZvp8uroV0xQA==
-X-Received: by 2002:a17:902:ebc2:b0:24b:25f:5f7f with SMTP id d9443c01a7336-25d2801094emr140529445ad.60.1757967913824;
-        Mon, 15 Sep 2025 13:25:13 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e14:7:fd49:49b1:16e7:2c97])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-25fc8285639sm86930085ad.134.2025.09.15.13.25.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Sep 2025 13:25:13 -0700 (PDT)
-Date: Mon, 15 Sep 2025 13:25:11 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psp5bO/F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B238DC4CEEB;
+	Tue, 16 Sep 2025 07:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758006747;
+	bh=oU7VvkqktkVNm/KzNrVro7cjiuBKEqIXf9EnmXfNqrg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=psp5bO/FZW/iyXU/LKpkMlICcpyAt3VX7ZKbABuO9tVK15McJy+5OJowkicZksuln
+	 yZFBMkmAkhKrtl2cS4yanL4usmxSc8kddAt7daP9GOlusbHJ8kj5YOQPpWGDcu4gBp
+	 XsnyHOw0ZtmQm55Jan1g4GUNvVHbNb+EqkTmAY5rqxtKQm3drNnGsBzCiutRQ7YAm8
+	 Sk/wQQmeLWb08x4FLcR3zz9E/hDGexpTCiPLD2gIyccS9ecgi6A/akq/KLblK4abj8
+	 AzBJgf6Q2TFrauF0/mt/GZDsJ+UCVVW4jslTuEhSRybzoSqgf7ZIt4OSf1OzUGMlr+
+	 7u0hKreUOi1FQ==
+Date: Tue, 16 Sep 2025 09:12:22 +0200
+From: Alexey Gladkov <legion@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>, linux-pci@vger.kernel.org,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	Johannes Berg <johannes@sipsolutions.net>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	Richard Weinberger <richard@nod.at>, Wei Liu <wei.liu@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	kunit-dev@googlegroups.com,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	linux-um@lists.infradead.org
-Subject: Re: [PATCH 2/4] PCI: Add KUnit tests for FIXUP quirks
-Message-ID: <aMh2J1K_YiWYaNxf@google.com>
-References: <20250912230208.967129-1-briannorris@chromium.org>
- <20250912230208.967129-3-briannorris@chromium.org>
- <aMfJCbld_TMHPTbD@google.com>
+	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v7 3/8] kbuild: keep .modinfo section in
+ vmlinux.unstripped
+Message-ID: <aMkN1m55vejTii_H@example.org>
+References: <cover.1755535876.git.legion@kernel.org>
+ <4d53c72293d88b663257a0d723ebf3473a08b374.1755535876.git.legion@kernel.org>
+ <aMeqgPVfJcjBLhl8@levanger>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -84,120 +49,108 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aMfJCbld_TMHPTbD@google.com>
+In-Reply-To: <aMeqgPVfJcjBLhl8@levanger>
 
-Hi,
+On Mon, Sep 15, 2025 at 07:56:16AM +0200, Nicolas Schier wrote:
+> On Mon, Aug 18, 2025 at 06:54:57PM +0200, Alexey Gladkov wrote:
+> > From: Masahiro Yamada <masahiroy@kernel.org>
+> > 
+> > Keep the .modinfo section during linking, but strip it from the final
+> > vmlinux.
+> > 
+> > Adjust scripts/mksysmap to exclude modinfo symbols from kallsyms.
+> > 
+> > This change will allow the next commit to extract the .modinfo section
+> > from the vmlinux.unstripped intermediate.
+> > 
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >  include/asm-generic/vmlinux.lds.h | 2 +-
+> >  scripts/Makefile.vmlinux          | 2 +-
+> >  scripts/mksysmap                  | 3 +++
+> >  3 files changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> > index ae2d2359b79e9..cfa63860dfd4c 100644
+> > --- a/include/asm-generic/vmlinux.lds.h
+> > +++ b/include/asm-generic/vmlinux.lds.h
+> > @@ -831,6 +831,7 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+> >  
+> >  /* Required sections not related to debugging. */
+> >  #define ELF_DETAILS							\
+> > +		.modinfo : { *(.modinfo) }				\
+> >  		.comment 0 : { *(.comment) }				\
+> >  		.symtab 0 : { *(.symtab) }				\
+> >  		.strtab 0 : { *(.strtab) }				\
+> > @@ -1044,7 +1045,6 @@ defined(CONFIG_AUTOFDO_CLANG) || defined(CONFIG_PROPELLER_CLANG)
+> >  	*(.discard.*)							\
+> >  	*(.export_symbol)						\
+> >  	*(.no_trim_symbol)						\
+> > -	*(.modinfo)							\
+> >  	/* ld.bfd warns about .gnu.version* even when not emitted */	\
+> >  	*(.gnu.version*)						\
+> >  
+> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+> > index 4f2d4c3fb7372..e2ceeb9e168d4 100644
+> > --- a/scripts/Makefile.vmlinux
+> > +++ b/scripts/Makefile.vmlinux
+> > @@ -86,7 +86,7 @@ endif
+> >  # vmlinux
+> >  # ---------------------------------------------------------------------------
+> >  
+> > -remove-section-y                                   :=
+> > +remove-section-y                                   := .modinfo
+> >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+> >  
+> >  quiet_cmd_strip_relocs = OBJCOPY $@
+> > diff --git a/scripts/mksysmap b/scripts/mksysmap
+> > index 3accbdb269ac7..a607a0059d119 100755
+> > --- a/scripts/mksysmap
+> > +++ b/scripts/mksysmap
+> > @@ -79,6 +79,9 @@
+> >  / _SDA_BASE_$/d
+> >  / _SDA2_BASE_$/d
+> >  
+> > +# MODULE_INFO()
+> > +/ __UNIQUE_ID_modinfo[0-9]*$/d
+> > +
+> >  # ---------------------------------------------------------------------------
+> >  # Ignored patterns
+> >  #  (symbols that contain the pattern are ignored)
+> > -- 
+> > 2.50.1
+> > 
+> 
+> Hi Alexey,
+> 
+> with this patch applied, I still get a warning from objcpy as Masahiro
+> and Stephen wrote [1,2]
+> 
+>   SORTTAB vmlinux.unstripped
+> + sorttable vmlinux.unstripped
+> + nm -S vmlinux.unstripped
+> + ./scripts/sorttable -s .tmp_vmlinux.nm-sort vmlinux.unstripped
+> + is_enabled CONFIG_KALLSYMS
+> + grep -q ^CONFIG_KALLSYMS=y include/config/auto.conf
+> + cmp -s System.map .tmp_vmlinux2.syms
+> + echo vmlinux.unstripped: ../scripts/link-vmlinux.sh
+> # OBJCOPY vmlinux
+>   objcopy --remove-section=.modinfo vmlinux.unstripped vmlinux
+> objcopy: vmlinux.unstripped: warning: empty loadable segment detected at vaddr=0xffff8000807a0000, is this intentional?
+> 
+> (arm64, allnoconfig)
+> 
+> Kind regards,
+> Nicolas
+> 
+> 
+> [1]: https://lore.kernel.org/linux-kbuild/CAK7LNAR-gD2H6Kk-rZjo0R3weTHCGTm0a=u2tRH1WWW6Sx6=RQ@mail.gmail.com/
+> [2]: https://lore.kernel.org/lkml/20250730164047.7c4a731a@canb.auug.org.au/
+> 
 
-On Mon, Sep 15, 2025 at 08:06:33AM +0000, Tzung-Bi Shih wrote:
-> On Fri, Sep 12, 2025 at 03:59:33PM -0700, Brian Norris wrote:
-> > +static int test_config_read(struct pci_bus *bus, unsigned int devfn, int where,
-> > +			    int size, u32 *val)
-> > +{
-> > +	if (PCI_SLOT(devfn) > 0)
-> > +		return PCIBIOS_DEVICE_NOT_FOUND;
-> > +
-> > +	if (where + size > TEST_CONF_SIZE)
-> > +		return PCIBIOS_BUFFER_TOO_SMALL;
-> > +
-> > +	if (size == 1)
-> > +		*val = test_readb(test_conf_space + where);
-> > +	else if (size == 2)
-> > +		*val = test_readw(test_conf_space + where);
-> > +	else if (size == 4)
-> > +		*val = test_readl(test_conf_space + where);
-> > +
-> > +	return PCIBIOS_SUCCESSFUL;
-> 
-> To handle cases where size might be a value other than {1, 2, 4}, would a
-> switch statement with a default case be more robust here?
+Hm. I missed that. I need to investigate how to fix this. Nothing comes
+to mind right now.
 
-I was patterning based on pci_generic_config_read() and friends, but I
-see that those use an 'else' for the last block, where I used an 'else
-if'.
+-- 
+Rgrds, legion
 
-I suppose I could switch to 'else'. I'm not sure 'switch/case' is much
-better.
-
-> > +static int test_config_write(struct pci_bus *bus, unsigned int devfn, int where,
-> > +			     int size, u32 val)
-> > +{
-> > +	if (PCI_SLOT(devfn) > 0)
-> > +		return PCIBIOS_DEVICE_NOT_FOUND;
-> > +
-> > +	if (where + size > TEST_CONF_SIZE)
-> > +		return PCIBIOS_BUFFER_TOO_SMALL;
-> > +
-> > +	if (size == 1)
-> > +		test_writeb(test_conf_space + where, val);
-> > +	else if (size == 2)
-> > +		test_writew(test_conf_space + where, val);
-> > +	else if (size == 4)
-> > +		test_writel(test_conf_space + where, val);
-> > +
-> > +	return PCIBIOS_SUCCESSFUL;
-> 
-> Same here.
-> 
-> > +static struct pci_dev *hook_device_early;
-> > +static struct pci_dev *hook_device_header;
-> > +static struct pci_dev *hook_device_final;
-> > +static struct pci_dev *hook_device_enable;
-> > +
-> > +static void pci_fixup_early_hook(struct pci_dev *pdev)
-> > +{
-> > +	hook_device_early = pdev;
-> > +}
-> > +DECLARE_PCI_FIXUP_EARLY(TEST_VENDOR_ID, TEST_DEVICE_ID, pci_fixup_early_hook);
-> > [...]
-> > +static int pci_fixup_test_init(struct kunit *test)
-> > +{
-> > +	hook_device_early = NULL;
-> > +	hook_device_header = NULL;
-> > +	hook_device_final = NULL;
-> > +	hook_device_enable = NULL;
-> > +
-> > +	return 0;
-> > +}
-> 
-> FWIW: if the probe is synchronous and the thread is the same task_struct,
-> the module level variables can be eliminated by using:
-> 
->     test->priv = kunit_kzalloc(...);
->     KUNIT_ASSERT_PTR_NE(...);
-> 
-> And in the hooks, kunit_get_current_test() returns the struct kunit *.
-
-Ah, good suggestion, will give that a shot.
-
-> > +static void pci_fixup_match_test(struct kunit *test)
-> > +{
-> > +	struct device *dev = kunit_device_register(test, DEVICE_NAME);
-> > +
-> > +	KUNIT_ASSERT_PTR_NE(test, NULL, dev);
-> > +
-> > +	test_conf_space = kunit_kzalloc(test, TEST_CONF_SIZE, GFP_KERNEL);
-> > +	KUNIT_ASSERT_PTR_NE(test, NULL, test_conf_space);
-> 
-> The common initialization code can be moved to pci_fixup_test_init().
-> 
-> > +	struct pci_host_bridge *bridge = devm_pci_alloc_host_bridge(dev, 0);
-> > +
-> > +	KUNIT_ASSERT_PTR_NE(test, NULL, bridge);
-> > +	bridge->ops = &test_ops;
-> 
-> The `bridge` allocation can be moved to .init() too.
-> 
-> > +	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_early);
-> > +	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_header);
-> > +	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_final);
-> > +	KUNIT_EXPECT_PTR_EQ(test, NULL, hook_device_enable);
-> 
-> Does it really need to check them?  They are just initialized by .init().
-
-Probably not. I wrote these before there were multiple test cases and an
-.init() function, and I didn't reconsider them afterward. And they'll be
-especially pointless once these move into a kzalloc'd private structure.
-
-Thanks for the suggestions.
-
-Brian
