@@ -1,400 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.manjaro.org (mail.manjaro.org [116.203.91.91])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDE131A818;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49232EBBB2;
+	Wed, 17 Sep 2025 13:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.91.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758113203; cv=none; b=B72EKGolLe46OtsHdFRnHRwzPMLN5gHEIDYHfZ1LsfP2Zp16ACGB5GbrZJgQixz5/dWpbMN7DUJ+KPR3rtNhGY359IDEbDEMnFFgPzxUsEc1/W3xGZ3CjAM1RFkUEBClR4E265mfwA1vcOjUM1lB18s63grDFMqkPOWxB/eg9JY=
+	t=1758115682; cv=none; b=onK+IeOcY7EjfuBxNhxpGK/FiA6a5N6Vsl5X9VJonz4y0cpsgLimbGWf9zRt24wLmgjug6UkjoHogIsohwYms8rEF0JJoRI85A1m+jrtwm5ZyV9FLShZkRanz04DXnqeMnO8ElIgTcfsjFg4dT4ECi1qX4MMde1ylhDdUjRlHWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758113203; c=relaxed/simple;
-	bh=QGfCj+hv3bpWcJg21PQm2lrKAx7uvxOezABFhsG8zWA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pLXYE1x/Gt4Juj1uhKfepZbihlILVRT9cM5tM28jT6PAVrJmPKeHopiwsvvscH/wO8LBvgIYGlN1p9PWGknSUztz9rr50cN/5S3V28EZifEnv81AxnEKRaT5TP3uwbBcmiFl4FUtNd1pjS2nwZrqN/u2fw/nB/K3c0WL9W9qu0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bEETsYs/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758115682; c=relaxed/simple;
+	bh=TiTzmMbR5nva4akgdNhgMpzqQgt4sNgYMEMrUKSoyiU=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=quOi9iv5XE+FC9YwJWxAgve3bsGGyVxmPeMc+YDESQipQz7MgkCsS0M4yEH7LGUd/CrxWp8xwSTr7NpZKxA58/eBhArelrzKDrNrCTEeu25HRR1BxFQY7BUTBbXRskhQqv438iDwybkwTE2k92XVjgwY2i3ZW1X526rW2sPBJkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org; spf=pass smtp.mailfrom=manjaro.org; dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b=Y4JWp/2/; arc=none smtp.client-ip=116.203.91.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manjaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manjaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bEETsYs/"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4B13C4CEFD;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758113202;
-	bh=QGfCj+hv3bpWcJg21PQm2lrKAx7uvxOezABFhsG8zWA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=bEETsYs/kY/4ngjlmDlI/IoVGPZELXlg2Pl2EF2gMm0uAnQ7CvSnnrK6JVwKe4WpX
-	 +N/6SM4ysONGXjrfP6X/DEz4N87vRSdaiD3OC8H3QZ+IH/OeF87PwPRSpEHdwc+6+Y
-	 kd2Fl5GigCjs8774vvmiTozX4p7HcFM/867DdSIyD+ERSA9kAhL9Bgc+BFgDJnGOJd
-	 /7uM22E5xSwE7pS317qmD0nKz584gtFE9OtVP+FB4syNo5LKmKcQmMHEWVWuecXy4F
-	 Ffzhn+ohu9OeghhxSbGYJDoVgvQzwcILjl1V27JYZTsdNUeEEwoqxwEw+L8X/nDk03
-	 bcEibLuNhB3PQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB129CAC59A;
-	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
-From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
-Date: Wed, 17 Sep 2025 20:46:42 +0800
-Subject: [PATCH v3 3/4] ALSA: usb-audio: add module param
- device_quirk_flags
+	dkim=pass (2048-bit key) header.d=manjaro.org header.i=@manjaro.org header.b="Y4JWp/2/"
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-sound-v3-3-92ebe9472a0a@uniontech.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+	t=1758115677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wERivNMnB7eyGntxtjltf/WH53+pKFmfMOZ0+81HSi4=;
+	b=Y4JWp/2/8qybWiWVyBBAr7DIDnnvKPO+mKw5TTfmz4gXivTD5MnRKB1N1oQBZCP4jlMWaR
+	jThSbsXYMd+q4x7KwzGOOGfUndQaHovo+K4AmzYZbdFKhPSGY7cJH6vHkgJxuTkrskqcQ8
+	gUIgM1DpeCalLw9BiGBoO8WExfhzJs3anjlnny1Dw0dzVmJ2WIe5Ne7IywOi49yAfnoR4i
+	1dL6ClzJbXfY7jJI53Aayl0P0X+lwbUZyZYuRGMg14wYBL4T1fcrQ813gwpYply7KjM4/W
+	MwpLWMZr+4iybDPZ6FsmJSXg/bunueDYUFRjVReIR3n7IYrBKXIF5vEbAAkJdg==
+Date: Wed, 17 Sep 2025 15:27:56 +0200
+From: Dragan Simic <dsimic@manjaro.org>
+To: cryolitia@uniontech.com
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, Petr
+ Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
+ Tolvanen <samitolvanen@google.com>, linux-sound@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit
+ <kexybiscuit@aosc.io>, Nie Cheng <niecheng1@uniontech.com>, Zhan Jun
+ <zhanjun@uniontech.com>, Feng Yuan <fengyuan@uniontech.com>, qaqland
+ <anguoli@uniontech.com>, kernel@uniontech.com, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] ALSA: doc: add docs about
+ device_device_quirk_flags in snd-usb-audio
+In-Reply-To: <20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
 References: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
-In-Reply-To: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
-To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>, 
- Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>, 
- Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>, 
- kernel@uniontech.com, linux-modules@vger.kernel.org, 
- Cryolitia PukNgae <cryolitia@uniontech.com>, Takashi Iwai <tiwai@suse.de>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758113201; l=9508;
- i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
- bh=/Z2DTz0F8Oc71Kb9EfIDDsfeAKHXwOPCabkVyFCDtuY=;
- b=VY0JsmOp90Ai7RzBnpH6c6n7l58BaGwbR7SCLHciQUzCyFH32yreslfuNCQg81sBkmlkoGMm/
- ytgr8o0KWIdBP2uIxAswHak9bxc1/hUiWeRm//zzOx4xcGMtddBubAe
-X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
- pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
-X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
- auth_id=474
-X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
-Reply-To: cryolitia@uniontech.com
+ <20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
+Message-ID: <0999abc5390bbfcb21e15bd140510540@manjaro.org>
+X-Sender: dsimic@manjaro.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=dsimic@manjaro.org smtp.mailfrom=dsimic@manjaro.org
 
-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Hello Cryolitia,
 
-For apply and unapply quirk flags more flexibly though param and sysfs
+On 2025-09-17 14:46, Cryolitia PukNgae via B4 Relay wrote:
+> From: Cryolitia PukNgae <cryolitia@uniontech.com>
+> 
+> Just briefly described about the new option.
+> 
+> Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
 
-Co-developed-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
----
- sound/usb/card.c     | 177 ++++++++++++++++++++++++++++++++++++++++++++++++---
- sound/usb/quirks.c   |  41 ++++++++++++
- sound/usb/quirks.h   |   2 +
- sound/usb/usbaudio.h |  14 ++++
- 4 files changed, 226 insertions(+), 8 deletions(-)
-
-diff --git a/sound/usb/card.c b/sound/usb/card.c
-index 0265206a8e8cf31133e8463c98fe0497d8ace89e..743aae910cfdf540c6677c6846061754f36a8c1b 100644
---- a/sound/usb/card.c
-+++ b/sound/usb/card.c
-@@ -73,8 +73,8 @@ static bool lowlatency = true;
- static char *quirk_alias[SNDRV_CARDS];
- static char *delayed_register[SNDRV_CARDS];
- static bool implicit_fb[SNDRV_CARDS];
--static unsigned int quirk_flags[SNDRV_CARDS];
- 
-+char *quirk_flags[SNDRV_CARDS];
- bool snd_usb_use_vmalloc = true;
- bool snd_usb_skip_validation;
- 
-@@ -103,13 +103,161 @@ module_param_array(delayed_register, charp, NULL, 0444);
- MODULE_PARM_DESC(delayed_register, "Quirk for delayed registration, given by id:iface, e.g. 0123abcd:4.");
- module_param_array(implicit_fb, bool, NULL, 0444);
- MODULE_PARM_DESC(implicit_fb, "Apply generic implicit feedback sync mode.");
--module_param_array(quirk_flags, uint, NULL, 0444);
--MODULE_PARM_DESC(quirk_flags, "Driver quirk bit flags.");
- module_param_named(use_vmalloc, snd_usb_use_vmalloc, bool, 0444);
- MODULE_PARM_DESC(use_vmalloc, "Use vmalloc for PCM intermediate buffers (default: yes).");
- module_param_named(skip_validation, snd_usb_skip_validation, bool, 0444);
- MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no).");
- 
-+DEFINE_MUTEX(device_quirk_mutex); /* protects quirk_flags && device_quirk_list */
-+LIST_HEAD(device_quirk_list);
-+
-+static void free_device_quirk_list(void)
-+{
-+	struct device_quirk_entry *pos, *tmp;
-+
-+	list_for_each_entry_safe(pos, tmp, &device_quirk_list, list) {
-+		list_del(&pos->list);
-+		kfree(pos);
-+	}
-+}
-+
-+static int device_quirks_param_set(const char *value,
-+				   const struct kernel_param *kp)
-+{
-+	u32 mask_flags, unmask_flags, bit;
-+	struct device_quirk_entry *data;
-+	char *val, *p, *field, *flag;
-+	bool is_unmask;
-+	u16 vid, pid;
-+	int err = 0;
-+	size_t i;
-+
-+	mutex_lock(&device_quirk_mutex);
-+
-+	memset(quirk_flags, 0, sizeof(quirk_flags));
-+
-+	err = param_array_set(value, kp);
-+	if (err)
-+		goto unlock;
-+
-+	free_device_quirk_list();
-+
-+	for (i = 0; i < ARRAY_SIZE(quirk_flags); i++) {
-+		if (!quirk_flags[i] || !*quirk_flags[i])
-+			break;
-+
-+		val = kstrdup(quirk_flags[i], GFP_KERNEL);
-+
-+		if (!val) {
-+			err = -ENOMEM;
-+			goto unlock;
-+		}
-+
-+		for (p = val; p && *p;) {
-+			/* Each entry consists of VID:PID:flags */
-+			field = strsep(&p, ":");
-+			if (!field)
-+				break;
-+
-+			if (strcmp(field, "*") == 0)
-+				vid = 0;
-+			else if (kstrtou16(field, 16, &vid))
-+				break;
-+
-+			field = strsep(&p, ":");
-+			if (!field)
-+				break;
-+
-+			if (strcmp(field, "*") == 0)
-+				pid = 0;
-+			else if (kstrtou16(field, 16, &pid))
-+				break;
-+
-+			field = strsep(&p, ";");
-+			if (!field || !*field)
-+				break;
-+
-+			/* Collect the flags */
-+			mask_flags = 0;
-+			unmask_flags = 0;
-+			while (field && *field) {
-+				flag = strsep(&field, "|");
-+
-+				if (!flag)
-+					break;
-+
-+				if (*flag == '!') {
-+					is_unmask = true;
-+					flag++;
-+				} else {
-+					is_unmask = false;
-+				}
-+
-+				if (!kstrtou32(flag, 16, &bit)) {
-+					if (is_unmask)
-+						unmask_flags |= bit;
-+					else
-+						mask_flags |= bit;
-+
-+					break;
-+				}
-+
-+				bit = snd_usb_quirk_flags_from_name(flag);
-+
-+				if (bit) {
-+					if (is_unmask)
-+						unmask_flags |= bit;
-+					else
-+						mask_flags |= bit;
-+				} else {
-+					pr_warn("snd_usb_audio: unknown flag %s while parsing param device_quirk_flags\n",
-+						field);
-+				}
-+			}
-+
-+			data = kzalloc(sizeof(*data), GFP_KERNEL);
-+
-+			if (!data) {
-+				kfree(val);
-+				err = -ENOMEM;
-+				goto unlock;
-+			}
-+
-+			data->vid = vid;
-+			data->pid = pid;
-+			data->mask_flags = mask_flags;
-+			data->unmask_flags = unmask_flags;
-+
-+			INIT_LIST_HEAD(&data->list);
-+			list_add(&data->list, &device_quirk_list);
-+		}
-+
-+		kfree(val);
-+	}
-+
-+unlock:
-+	mutex_unlock(&device_quirk_mutex);
-+	return err;
-+}
-+
-+static const struct kernel_param_ops quirk_flags_param_ops = {
-+	.set = device_quirks_param_set,
-+	.get = param_array_get,
-+	.free = param_array_free,
-+};
-+
-+static struct kparam_array quirk_flags_param_array = {
-+	.max = SNDRV_CARDS,
-+	.elemsize = sizeof(char *),
-+	.num = NULL,
-+	.ops = &param_ops_charp,
-+	.elem = &quirk_flags,
-+};
-+
-+device_param_cb(quirk_flags, &quirk_flags_param_ops, &quirk_flags_param_array,
-+		0644);
-+MODULE_PARM_DESC(quirk_flags, "Add/modify USB audio quirks");
-+
- /*
-  * we keep the snd_usb_audio_t instances by ourselves for merging
-  * the all interfaces on the same card as one sound device.
-@@ -750,10 +898,7 @@ static int snd_usb_audio_create(struct usb_interface *intf,
- 	INIT_LIST_HEAD(&chip->midi_v2_list);
- 	INIT_LIST_HEAD(&chip->mixer_list);
- 
--	if (quirk_flags[idx])
--		chip->quirk_flags = quirk_flags[idx];
--	else
--		snd_usb_init_quirk_flags(chip);
-+	snd_usb_init_dynamic_quirks(idx, chip);
- 
- 	card->private_free = snd_usb_audio_free;
- 
-@@ -1290,4 +1435,20 @@ static struct usb_driver usb_audio_driver = {
- 	.supports_autosuspend = 1,
- };
- 
--module_usb_driver(usb_audio_driver);
-+static int __init usb_audio_init(void)
-+{
-+	return usb_register_driver(&usb_audio_driver, THIS_MODULE,
-+				   KBUILD_MODNAME);
-+}
-+
-+static void __exit usb_audio_exit(void)
-+{
-+	mutex_lock(&device_quirk_mutex);
-+	free_device_quirk_list();
-+	mutex_unlock(&device_quirk_mutex);
-+
-+	usb_deregister(&usb_audio_driver);
-+}
-+
-+module_init(usb_audio_init);
-+module_exit(usb_audio_exit);
-diff --git a/sound/usb/quirks.c b/sound/usb/quirks.c
-index 94854f352b1702b491e1bf3c8b769f7088e03976..ee531ffa5ab13ac8b24c670e6529d3811f927b46 100644
---- a/sound/usb/quirks.c
-+++ b/sound/usb/quirks.c
-@@ -2537,3 +2537,44 @@ void snd_usb_init_quirk_flags(struct snd_usb_audio *chip)
- 		}
- 	}
- }
-+
-+void snd_usb_init_dynamic_quirks(int idx, struct snd_usb_audio *chip)
-+{
-+	u16 vid = USB_ID_VENDOR(chip->usb_id);
-+	u16 pid = USB_ID_PRODUCT(chip->usb_id);
-+	struct device_quirk_entry *pos;
-+
-+	mutex_lock(&device_quirk_mutex);
-+
-+	/* old style option found: the position-based integer value */
-+	if (quirk_flags[idx] &&
-+	    !kstrtou32(quirk_flags[idx], 0, &chip->quirk_flags)) {
-+		usb_audio_dbg(chip,
-+			      "Set quirk flags 0x%x from param based on position %d for device %04x:%04x\n",
-+			      chip->quirk_flags, idx,
-+			      USB_ID_VENDOR(chip->usb_id),
-+			      USB_ID_PRODUCT(chip->usb_id));
-+
-+		mutex_unlock(&device_quirk_mutex);
-+		return;
-+	}
-+
-+	/* take the default quirk from the quirk table */
-+	snd_usb_init_quirk_flags(chip);
-+
-+	/* add or correct quirk bits from options */
-+	list_for_each_entry(pos, &device_quirk_list, list) {
-+		if (pos->vid == 0 || (vid == pos->vid && pos->pid == 0) ||
-+		    (vid == pos->vid && pid == pos->pid)) {
-+			chip->quirk_flags |= pos->mask_flags;
-+			chip->quirk_flags &= ~pos->unmask_flags;
-+			usb_audio_dbg(chip,
-+				      "Set mask quirk flag 0x%x and unmask quirk flag 0x%x from param for device %04x:%04x\n",
-+				      pos->mask_flags, pos->unmask_flags,
-+				      USB_ID_VENDOR(chip->usb_id),
-+				      USB_ID_PRODUCT(chip->usb_id));
-+		}
-+	}
-+
-+	mutex_unlock(&device_quirk_mutex);
-+}
-diff --git a/sound/usb/quirks.h b/sound/usb/quirks.h
-index bd5baf2b193a1985f3a0e52bf4a77ca741364769..00c2852c4769d0790a9e2a31b92f3414767c9a98 100644
---- a/sound/usb/quirks.h
-+++ b/sound/usb/quirks.h
-@@ -53,4 +53,6 @@ void snd_usb_init_quirk_flags(struct snd_usb_audio *chip);
- const char *snd_usb_quirk_flag_find_name(unsigned long flag);
- u32 snd_usb_quirk_flags_from_name(char *name);
- 
-+void snd_usb_init_dynamic_quirks(int idx, struct snd_usb_audio *chip);
-+
- #endif /* __USBAUDIO_QUIRKS_H */
-diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
-index 0a22cb4a02344b2dcf4009c560a759f2da25ca67..3d09d4b7950d884a2076fa48f2180a5e7c87cb3a 100644
---- a/sound/usb/usbaudio.h
-+++ b/sound/usb/usbaudio.h
-@@ -7,6 +7,8 @@
-  *   Copyright (c) 2002 by Takashi Iwai <tiwai@suse.de>
-  */
- 
-+ #include <sound/core.h>
-+
- /* handling of USB vendor/product ID pairs as 32-bit numbers */
- #define USB_ID(vendor, product) (((unsigned int)(vendor) << 16) | (product))
- #define USB_ID_VENDOR(id) ((id) >> 16)
-@@ -162,9 +164,13 @@ DEFINE_CLASS(snd_usb_lock, struct __snd_usb_lock,
- 	     __snd_usb_unlock_shutdown(&(_T)), __snd_usb_lock_shutdown(chip),
- 	     struct snd_usb_audio *chip)
- 
-+extern char *quirk_flags[SNDRV_CARDS];
- extern bool snd_usb_use_vmalloc;
- extern bool snd_usb_skip_validation;
- 
-+extern struct mutex device_quirk_mutex;
-+extern struct list_head device_quirk_list;
-+
- /*
-  * Driver behavior quirk flags, stored in chip->quirk_flags
-  *
-@@ -254,4 +260,12 @@ extern bool snd_usb_skip_validation;
- #define QUIRK_FLAG_MIXER_CAPTURE_MIN_MUTE	(1U << 25)
- /* Please also edit snd_usb_audio_quirk_flag_names */
- 
-+struct device_quirk_entry {
-+	struct list_head list;
-+	u16 vid;
-+	u16 pid;
-+	u32 mask_flags;
-+	u32 unmask_flags;
-+};
-+
- #endif /* __USBAUDIO_H */
-
--- 
-2.51.0
-
-
+Isn't the patch subject a bit wrong, and should contain
+"device quirk_flags" instead of "device_device_quirk_flags"?
