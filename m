@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38282D949A;
-	Tue, 16 Sep 2025 13:35:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FADF1E492D;
+	Wed, 17 Sep 2025 01:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758029757; cv=none; b=jMTdbZYFbJGWW20K8gSp8GHWl98CPeGACCAI5BbPF9RjEIw2QnJKMFlhC5vMJzP5FMbCe/lEPqwzST+le0oTZpfsatdxi1SZFcxySntMrgKtgGp5SZ73Blz56RJrJIvLIlCOD7CFX2Y8CdG156dkA5bmjyD94qP9UFSBmQQY6O4=
+	t=1758071417; cv=none; b=IYe3l/zIbnfemJS7iEvhlYAAqysOEU3SZObS0+Q9Z2zFNM4bQeHk2Fjv5mBfq4jNFg1gyXAOlXU1gntwFtrAWWlBd4DhGN0Jycik/Ls59NFntOmFpPoTEKhqI2//kMqRD4Hkw6/2gUDqboXUygiZ26pmO3KxfUJfzaOG+IG0GZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758029757; c=relaxed/simple;
-	bh=rTIf/MtovWp08QtcwAXtxQE4sn7DYFAtPPui+rgyT68=;
+	s=arc-20240116; t=1758071417; c=relaxed/simple;
+	bh=LL76ArrrsiFpqVUCODSJD4MmtjtQi3bd2ibzdYJEqik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVssb+9UFeZRkncd8uG658ABa8YlOqidsucsPyxzG01Zy+1khxkB+CRBcerDAsBkN4+OCEB0rAk2DLGgoFP0sHv3kRCgVFjpuqTkC73ip5+atJVkY985z0xOAQrfbY4lDy6gs2LqHJ/NdNhoeucYU40kPD3ez3hQge6qpDZHZBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=opmALYIO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jw+EICrFHDYSTASIvTKUaWrdCE5bthA9dIbtazhPb08enJ0vD7hb3qljjDwAP0WTcJpzVzdjtlCdNvmIwffMO0T0U7988PwN2OwDNfal/GApP3f0ZCX7bEPOr23l7Ws4Tnn3VQwMhLWnWaFd2RiaNe8DRgkP2F83HDkiVlrYgJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsMqvpXZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="opmALYIO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303BAC4CEEB;
-	Tue, 16 Sep 2025 13:35:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsMqvpXZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53C4C4CEEB;
+	Wed, 17 Sep 2025 01:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758029756;
-	bh=rTIf/MtovWp08QtcwAXtxQE4sn7DYFAtPPui+rgyT68=;
+	s=k20201202; t=1758071415;
+	bh=LL76ArrrsiFpqVUCODSJD4MmtjtQi3bd2ibzdYJEqik=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=opmALYIOTGquTTpyU9Zv1RIgrv6kVHyx71VOlnhl4dDx77Ov0DpgS1ZbSi+65yawE
-	 b7DaPsIYnxg4h1HSkn09uv3txs9c3+kbk2Qh1w3K4lhwfrjIYazqQq3jaURjP4+azR
-	 h0EATQWG4Vxh+Wm8mWtdzXrYjso/0kGOk7gyhw4R2bqhh0mnYIiJut/yfACo8AFOAH
-	 Ry/BQH2RtiJXWraQ5o8Vku+JlsUnffWce9xOISmXT25ZWaVkiooiLffEkrqEunHLrR
-	 eWebWl+C5sfyV7CsjV91XoKDn4Kq3hypEBqfxyXvrmGZhJ8owdinMVzNtwQOgxqNXj
-	 Ie0yyA3nvNypg==
-Date: Tue, 16 Sep 2025 15:28:09 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Alexey Gladkov <legion@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
+	b=bsMqvpXZ0okOIV2OfZBtVU4WNIH9MdiXwaHnWRMK+qzsYAb4BpLMG6e71KRtyiC06
+	 M2XUTC4PqkF3xYnb0AExUaVHxlOR8bj2mgeGLSoYUKigcNrs+zn7lcnQCMYfXnj+2H
+	 cUiUa+jolbD/AREYQ/elrPyFansBzi4fv/DL5+0+Gz8dCcBbtsP1TIO3UxvYHv+rAP
+	 w+Ury2NY2zr5C/hfZIAvRHdgNMlmVI/UI0+biYBCa6Gu1v/CmKEWcLbBllvRB1XusO
+	 EzInOFqbtSuzYTAp4EvRRngKthT6gvGnriTvOEuenBgLTf/VBQeLi8q22ttQfriQtG
+	 9iNUkaAWccJaA==
+Date: Tue, 16 Sep 2025 18:10:10 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>
+Cc: Alexey Gladkov <legion@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
 	Masahiro Yamada <masahiroy@kernel.org>
 Subject: Re: [PATCH v7 3/8] kbuild: keep .modinfo section in
  vmlinux.unstripped
-Message-ID: <aMll6cHPhIY2yswz@levanger>
+Message-ID: <20250917011010.GA3106929@ax162>
 References: <cover.1755535876.git.legion@kernel.org>
  <4d53c72293d88b663257a0d723ebf3473a08b374.1755535876.git.legion@kernel.org>
  <aMeqgPVfJcjBLhl8@levanger>
@@ -46,6 +46,7 @@ References: <cover.1755535876.git.legion@kernel.org>
  <aMlKTPpNXrRW6v_7@example.org>
  <aMlbSEnwGOPM39Op@levanger>
  <aMlgMkB2nL31K2OB@example.org>
+ <aMll6cHPhIY2yswz@levanger>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -54,103 +55,24 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aMlgMkB2nL31K2OB@example.org>
+In-Reply-To: <aMll6cHPhIY2yswz@levanger>
 
-On Tue, Sep 16, 2025 at 03:03:46PM +0200, Alexey Gladkov wrote:
-> On Tue, Sep 16, 2025 at 02:42:48PM +0200, Nicolas Schier wrote:
-> > > > > > Hi Alexey,
-> > > > > > 
-> > > > > > with this patch applied, I still get a warning from objcpy as Masahiro
-> > > > > > and Stephen wrote [1,2]
-> > > > > > 
-> > > > > >   SORTTAB vmlinux.unstripped
-> > > > > > + sorttable vmlinux.unstripped
-> > > > > > + nm -S vmlinux.unstripped
-> > > > > > + ./scripts/sorttable -s .tmp_vmlinux.nm-sort vmlinux.unstripped
-> > > > > > + is_enabled CONFIG_KALLSYMS
-> > > > > > + grep -q ^CONFIG_KALLSYMS=y include/config/auto.conf
-> > > > > > + cmp -s System.map .tmp_vmlinux2.syms
-> > > > > > + echo vmlinux.unstripped: ../scripts/link-vmlinux.sh
-> > > > > > # OBJCOPY vmlinux
-> > > > > >   objcopy --remove-section=.modinfo vmlinux.unstripped vmlinux
-> > > > > > objcopy: vmlinux.unstripped: warning: empty loadable segment detected at vaddr=0xffff8000807a0000, is this intentional?
-> > > > > > 
-> > > > > > (arm64, allnoconfig)
-> > > > > > 
-> > > > > > Kind regards,
-> > > > > > Nicolas
-> > > > > > 
-> > > > > > 
-> > > > > > [1]: https://lore.kernel.org/linux-kbuild/CAK7LNAR-gD2H6Kk-rZjo0R3weTHCGTm0a=u2tRH1WWW6Sx6=RQ@mail.gmail.com/
-> > > > > > [2]: https://lore.kernel.org/lkml/20250730164047.7c4a731a@canb.auug.org.au/
-> > > > > > 
-> > > > > 
-> > > > > Hm. I missed that. I need to investigate how to fix this. Nothing comes
-> > > > > to mind right now.
-> > > > 
-> > > > Same here.  Only thing I could find until now is
-> > > > 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/diff/scripts/link-vmlinux.sh?id=90ceddcb495008ac8ba7a3dce297841efcd7d584
-> > > > 
-> > > > where '2>/dev/null' is appended exactly to prevent this very warning.
-> > > > But for me, it doesn't feel good doing that when stripping to vmlinux.
-> > > 
-> > > Yes, that's not a very good approach. It will hide other errors that will
-> > > definitely need to be seen. I think the commit you mentioned is actually
-> > > incorrect. I think there should be a different solution.
-> > > 
-> > > I think in the case of .modinfo, we can change the flag in the section
-> > > since we are going to delete it anyway.
-> > > 
-> > > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > > index dbbe3bf0cf23..9a118b31d0dc 100644
-> > > --- a/scripts/Makefile.vmlinux
-> > > +++ b/scripts/Makefile.vmlinux
-> > > @@ -87,7 +87,8 @@ remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> > >  remove-symbols := -w --strip-symbol='__mod_device_table__*'
-> > >  
-> > >  quiet_cmd_strip_relocs = OBJCOPY $@
-> > > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> > > +      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< && \
-> > > +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> > >                           $(remove-symbols) $< $@
-> > >  
-> > >  targets += vmlinux
-> > 
-> > Ah, great!  I thought we had to fiddle around with linker scripts et al.
-> > I needed to use an intermediate file:
-> > 
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index e2ceeb9e168d..516d51ca634b 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -90,6 +90,9 @@ remove-section-y                                   := .modinfo
-> >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> >  
-> >  quiet_cmd_strip_relocs = OBJCOPY $@
-> > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $< $@
-> > +      cmd_strip_relocs = set -e; \
-> > +                        trap 'rm $<.noload' EXIT HUP INT; \
-> > +                        $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $<.noload && \
-> > +                        $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $<.noload $@
-> >  
-> >  targets += vmlinux
+On Tue, Sep 16, 2025 at 03:28:09PM +0200, Nicolas Schier wrote:
+> yeah, it's actually because I dislike modifying vmlinux.unstripped in
+> the vmlinux rule.
 > 
-> according to man-page:
-> 
->   If you do not specify outfile, objcopy creates a temporary file and
->   destructively renames the result with the name of infile.
-> 
-> That is true even in freebsd:
-> 
-> https://man.freebsd.org/cgi/man.cgi?query=objcopy
-> 
-> Do you want to support any other objcopy implementations ?
+> But it may be that Nathan does not see it this way.
 
-yeah, it's actually because I dislike modifying vmlinux.unstripped in
-the vmlinux rule.
+Yeah, I would agree that it is good form to avoid modifying the inputs
+of a rule.
 
-But it may be that Nathan does not see it this way.
+This warning is pretty annoying since it is intentional but we do not
+have great tools to hide just this one instance it seems... This is
+probably worth a comment.
 
--- 
-Nicolas
+It would be nice if this section could be marked as NOLOAD from the
+beginning but that will mess with extracting .modinfo via objcopy from
+my brief testing.
+
+Cheers,
+Nathan
