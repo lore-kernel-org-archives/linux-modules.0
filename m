@@ -1,145 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36960238140;
-	Wed, 17 Sep 2025 12:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B0330CB29;
+	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758112692; cv=none; b=Poai1bf7LBkB8mXiDpZTc1Ygls7ITxqRuYC78vvU16fXLLTSslywt+9AZN9QDtPKtspxMn/0KIeWvzmrj9jT0zBQ+FXBJHTuUlg8Id36KAfNItSOhAoLDHuO/Dt1TlUBrUo4V+H6OJTbSNOCxBax8ciVHuoBmyCsiQ6gkEu0kuc=
+	t=1758113202; cv=none; b=fPtjU42OWuc4m1fuFjDPG9I3SEOKwvvne+I6VK2k2nsAfbe2y8eyS+LgrMsCUbVVksBYGmy/dddCKUpk5QcyQaZPDBAygEKNDXceRWfskZGnwlXeskwj+1T2zozufT89PYvtjm54ldtoITQP5jwHuoxJeTwgLrNWKyfJ6jWWPSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758112692; c=relaxed/simple;
-	bh=njQagFFNmXLDsU0106/ybuoQRu4ry9/hROx7T9egjxo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GogadFq9YaGk46JR+01vTSYFxrnCOSY6CdiC4+OBbDlYtb2FiAReRzY5p1FC4Oqo7wF9h76vKI5aYDEr/59jc//wUoNwqvfml1cCvUxlCOGFDOP6pPSEIgJqzs82oRGBDKL429jg2fcTg4vwWUdqMj610P5FBG1vTycuSmEq1J0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MF8oaL0u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1758113202; c=relaxed/simple;
+	bh=7MnLSLDqHSKYhr2jX7InTUROcDbNmLJmoidtzjDWx/Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=evJ7JL2y5UR0JF02doxXbk1G1o3uhVsFJYYQUjUzuh2A2Z1P9itp9SZkm97bebrnkkthHLHRqIUUb40NNsnurqDC/MJpgbZxC+rHLgnNaMOQqZjr+UfTJZqLkHO/2VEy/IHpcphJx2YJd4ZpTd1ZrlT9MwM8lIrUSZXNfxvFJkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F0ojVKrK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MF8oaL0u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0E4C4CEF7;
-	Wed, 17 Sep 2025 12:38:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F0ojVKrK"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9CAACC4CEF5;
+	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758112691;
-	bh=njQagFFNmXLDsU0106/ybuoQRu4ry9/hROx7T9egjxo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MF8oaL0uphBz+qhs3WC3BNMbMAOKI3ee9eEd/ZshuvwwEgPEjzDPSfnEC09lVhfQL
-	 FQK7c9HzvmaoTpE/8ZxQRRlcWSJ7cUEevMH7JJZGA6pHlawQOLK7aJrnBHVWYahnu/
-	 df2z1DtH/sfueiZ3KLcNWHqWZnKB5e17sRjwY4JnxGNIX578u4ApLMqaemI2qA1EL6
-	 HVzUoeYeaJewBmvnkL0yy1h7+1jjuUdWN4OiGnWTm/YwcEtFk0bkMDf5W4I43ReV1X
-	 +opOw/8u2BHWillMaGWO9FHKhyaA+KnQvwl6VG3DNWXVBPGnrvymDbCj+poyvWSJYv
-	 qm1jgNPdJnx4w==
-Date: Wed, 17 Sep 2025 14:38:06 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v7 3/8] kbuild: keep .modinfo section in
- vmlinux.unstripped
-Message-ID: <aMqrrjXZxYXN0zdY@example.org>
-References: <cover.1755535876.git.legion@kernel.org>
- <4d53c72293d88b663257a0d723ebf3473a08b374.1755535876.git.legion@kernel.org>
- <aMeqgPVfJcjBLhl8@levanger>
- <aMkN1m55vejTii_H@example.org>
- <aMkvtg55F1gJ5feM@levanger>
- <aMlKTPpNXrRW6v_7@example.org>
- <aMlbSEnwGOPM39Op@levanger>
- <aMqhuFQGAGtYFbRV@levanger>
+	s=k20201202; t=1758113202;
+	bh=7MnLSLDqHSKYhr2jX7InTUROcDbNmLJmoidtzjDWx/Y=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=F0ojVKrKOnPWcR+XtLMCbDgyUWV0lYqodR68zPcaIHNEVImKNX1Yi9ayxCky4GKmT
+	 blJXTppvwvKZfvD0iCDEyT4s50GeBbfyKuKu3+Up9xe7ek7Q23CPBbfn0vdOuBzxdE
+	 LoP0wpzPt6wxtIlmBY7DB1OLOPIgzaXvh5U6MGbzkA9Tr0PRxbRPbPa6hRPHrvMTBR
+	 1nIjLYbsQKcKsJtWX2nyQZ8kznKxBIFJK1gP/73eI2EBP5Ip7GybS473gQo6V+ImBD
+	 HBhvAid2LAbPZmyJRGn3YsgC7cM7Ls8FVsbdaYKhweSHmIlwL3ZkcWpyS7QcHhfJwC
+	 eWI+Vx9vXLwVQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A27ECAC599;
+	Wed, 17 Sep 2025 12:46:42 +0000 (UTC)
+From: Cryolitia PukNgae via B4 Relay <devnull+cryolitia.uniontech.com@kernel.org>
+Subject: [PATCH v3 0/4] ALSA: usb-audio: add module param
+ device_quirk_flags
+Date: Wed, 17 Sep 2025 20:46:39 +0800
+Message-Id: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMqhuFQGAGtYFbRV@levanger>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK+tymgC/22NzQ7CIBAGX8XsWQxs/cOT72E80GWxHAQDLdE0f
+ Xdpoxfjcb7szI6QOXnOcFqNkLj47GOo0KxXQJ0JNxbeVgaUuJNaSZHjEKwwWtFxTxpta6DePhI
+ 7/1w6l2vlzuc+pteSLWpevwX8FIoSUhBpclY7tFKdh1B/90zdhuId5krBvyZWUyo2jcWDdtv21
+ 5ym6Q1dSKVy2AAAAA==
+X-Change-ID: 20250910-sound-a91c86c92dba
+To: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>, 
+ Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>, 
+ Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>, 
+ kernel@uniontech.com, linux-modules@vger.kernel.org, 
+ Cryolitia PukNgae <cryolitia@uniontech.com>, Takashi Iwai <tiwai@suse.de>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1758113201; l=1478;
+ i=cryolitia@uniontech.com; s=20250730; h=from:subject:message-id;
+ bh=7MnLSLDqHSKYhr2jX7InTUROcDbNmLJmoidtzjDWx/Y=;
+ b=bUZz6m0RyNBnrBWVKttV3rveS6EnR5uIcNuAeRDLbzShnesdSz83xo4+h794BdwW3KEfFZ/zB
+ Nb9sfgD1EaeCCLsjV22bJrgO36xplueTaGSFIWQ3re/0Mv7pXtEhcMA
+X-Developer-Key: i=cryolitia@uniontech.com; a=ed25519;
+ pk=tZ+U+kQkT45GRGewbMSB4VPmvpD+KkHC/Wv3rMOn/PU=
+X-Endpoint-Received: by B4 Relay for cryolitia@uniontech.com/20250730 with
+ auth_id=474
+X-Original-From: Cryolitia PukNgae <cryolitia@uniontech.com>
+Reply-To: cryolitia@uniontech.com
 
-On Wed, Sep 17, 2025 at 01:55:36PM +0200, Nicolas Schier wrote:
-> On Tue, Sep 16, 2025 at 02:42:48PM +0200, Nicolas Schier wrote:
-> > On Tue, Sep 16, 2025 at 01:30:20PM +0200, Alexey Gladkov wrote:
-> ...
-> > > I think in the case of .modinfo, we can change the flag in the section
-> > > since we are going to delete it anyway.
-> > > 
-> > > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > > index dbbe3bf0cf23..9a118b31d0dc 100644
-> > > --- a/scripts/Makefile.vmlinux
-> > > +++ b/scripts/Makefile.vmlinux
-> > > @@ -87,7 +87,8 @@ remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> > >  remove-symbols := -w --strip-symbol='__mod_device_table__*'
-> > >  
-> > >  quiet_cmd_strip_relocs = OBJCOPY $@
-> > > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> > > +      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< && \
-> > > +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> > >                           $(remove-symbols) $< $@
-> > >  
-> > >  targets += vmlinux
-> > 
-> > Ah, great!  I thought we had to fiddle around with linker scripts et al.
-> > I needed to use an intermediate file:
-> > 
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index e2ceeb9e168d..516d51ca634b 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -90,6 +90,9 @@ remove-section-y                                   := .modinfo
-> >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> >  
-> >  quiet_cmd_strip_relocs = OBJCOPY $@
-> > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $< $@
-> > +      cmd_strip_relocs = set -e; \
-> > +                        trap 'rm $<.noload' EXIT HUP INT; \
-> > +                        $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $<.noload && \
-> > +                        $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $<.noload $@
-> >  
-> >  targets += vmlinux
-> 
-> I'd like to suggest another version closer to yours, as mine has several flaws:
-> 
-> diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> index dbbe3bf0cf23..9a118b31d0dc 100644
-> --- a/scripts/Makefile.vmlinux
-> +++ b/scripts/Makefile.vmlinux
-> @@ -87,7 +87,8 @@ remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
->  remove-symbols := -w --strip-symbol='__mod_device_table__*'
->  
->  quiet_cmd_strip_relocs = OBJCOPY $@
-> -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> +      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
-> +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
->                           $(remove-symbols) $@
->  
->  targets += vmlinux
-> 
-> 
-> 
-> Rationale (mainly for myself to not walk into that trap too often again):
-> 
->   * Use ';' instead of '&&' as 'cmd_' is evaluated in a 'set -e'
->     environment ('cmd') and thus '&&' may hide a possible error exit
->     code.
+As an implementation of what has been discussed previously[1].
 
-No, it can't hide exit code. The exit code will be correct even if
-‘set -e’ is not used.
+1. https://lore.kernel.org/all/87h5xm5g7f.wl-tiwai@suse.de/
 
-$ (exit 0) && (exit 2) && (exit 3); echo $?
-2
+Signed-off-by: Cryolitia PukNgae <cryolitia@uniontech.com>
+---
+Changes in v3:
+- Instead of a new param, improve the existed one.
+- Link to v2: https://lore.kernel.org/r/20250912-sound-v2-0-01ea3d279f4b@uniontech.com
 
-Actually ‘&&’ is protection against the absence of ‘set -e’.
+Changes in v2:
+- Cleaned up some internal rebase confusion, sorry for that
+- Link to v1: https://lore.kernel.org/r/20250912-sound-v1-0-cc9cfd9f2d01@uniontech.com
 
->   * Create 'vmlinux' already with the first objcopy and let the second
->     one modify it in order to not need a temporary file; iff one or the
->     other objcopy exists with an error exit code, the 'set -e + trap'
->     ('delete-on-interrupt') shell will remove a possibly existing
->     vmlinux file.
+---
+Cryolitia PukNgae (4):
+      ALSA: usb-audio: add two-way convert between name and bit for QUIRK_FLAG_*
+      param: export param_array related functions
+      ALSA: usb-audio: add module param device_quirk_flags
+      ALSA: doc: add docs about device_device_quirk_flags in snd-usb-audio
 
-That makes totally sense. This will avoid a temporary file. I will use it
-in the new version.
+ Documentation/sound/alsa-configuration.rst | 112 ++++++++++++------
+ include/linux/moduleparam.h                |   3 +
+ kernel/params.c                            |   9 +-
+ sound/usb/card.c                           | 177 +++++++++++++++++++++++++++--
+ sound/usb/quirks.c                         | 123 +++++++++++++++++++-
+ sound/usb/quirks.h                         |   5 +
+ sound/usb/usbaudio.h                       |  15 +++
+ 7 files changed, 394 insertions(+), 50 deletions(-)
+---
+base-commit: 4c421c40c8b30ab7aae1edc7f7e294fcd33fc186
+change-id: 20250910-sound-a91c86c92dba
 
+Best regards,
 -- 
-Rgrds, legion
+Cryolitia PukNgae <cryolitia@uniontech.com>
+
 
