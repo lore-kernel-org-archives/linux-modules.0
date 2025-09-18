@@ -1,78 +1,164 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7478D1C84C0;
-	Wed, 17 Sep 2025 17:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30EA1F4181;
+	Thu, 18 Sep 2025 04:09:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758131905; cv=none; b=ZXcUrpssm+B3r8SbE8yYQiP4dwnGBl3oYdLbwY12hCQF0C+rgW6RFxnQSkOAR8m9VYWBAmpjcsL1CXit7OST0g1cSiVr7TxgqGrM0ijMxxm2crcPjjQ0h1sY9+iijzKBwfE5e+YiLpwCusnfj4kpfNzsXBWj0MGnZobU3F3H5Po=
+	t=1758168552; cv=none; b=NUHywVy/+94y7L/NFn6FdNd6TvvirjD3rGxVbuInGnE13E7HciYy05gQNtLS4dtKL912udd32L6uIKbpJpZBD3HoULpWRTVwtaOLHKkNRK2P6+VMyZIaBhAKjsVc8tF3/qWjmQF04DsqoAUP21dvyLUhEapQKx3G9O0VGodnnmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758131905; c=relaxed/simple;
-	bh=6zMlqvkkJUxPR+2hCntCFeaA3Ngj3U6itSCfgav3eEY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ERx5V9Fwb0VL/W0jGpTMrwbmUs0k0tXKZEUXHM2SbxBQeWOibwqNELnp7pwT20wTsqdzFZNfd96KhZY4GYbOSr5iGaKIVk6BoqOpa9/fQNOP+Z/dg/dV0D7spO+PwxP1RM0lYo0gJeBdfkx8nDQKrKjPn+n9/T2c2e5Rc03NINA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ST1KfL37; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1758168552; c=relaxed/simple;
+	bh=DWbSGaeUDI+94RjG4nVLjU8+xda9a6RkuDCPS0NFvYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fStaQ5MjH98QJzcTNYf66ijrBM7cnrMLgRy7OFiqmHHAYk1nMCsFK/K7Jzqn+PSC760psJX6NzGxH9aFk+HpmXRPtqw8ia17rWJPRcgDdkCwgWjqo9Bz6+hNj6/WMA3lAa7Oo5DhOiRIsJXr4haHCwcTHWU4Yh977jmfOohnCFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeE1FzUU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ST1KfL37"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=4sg0pwVlDI3PlcEWg3BqiWrpfnSRU0MPr0hgbDjPw6w=; b=ST1KfL37z8LSxRSVV7aGFKe8Z9
-	u2ZfkpoxZX0BcWKZNcx6GOPpjZwYIB/ijc7R9rMKCezRU7vYQZSHesfNQuvqzzDRDnQoT/vsjpOtn
-	FhGLzQdSUzYoJ1H1dBn0Vl3blJwnwaX6a8aHl/ONmnuWqRv1WAR+aLAQvf6w2IPcMJpI07Bo+fsVY
-	UsG0cA7voaF7RMUFkdf/tY5BTr/10CY+zxBKKhgTSGtM/gHixBteOuTEofuJ05ckY7Sqfr36beljR
-	I8aGbN5mwE+13QVhKPlYZl1KP9R/V26NlEwdxPsvjFCrAsZU+9y0JWa8eqVFO4PhH1DRidVpjeKnG
-	4c5yfdXw==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uywQ6-0000000DlSR-48eJ;
-	Wed, 17 Sep 2025 17:58:19 +0000
-Message-ID: <9c459c3f-7a7b-42d6-8a4c-66ade94e1029@infradead.org>
-Date: Wed, 17 Sep 2025 10:58:17 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeE1FzUU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FC85C4CEE7;
+	Thu, 18 Sep 2025 04:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758168551;
+	bh=DWbSGaeUDI+94RjG4nVLjU8+xda9a6RkuDCPS0NFvYY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CeE1FzUUm9Gp0s0l9dMYuEkT1qY9+hNwzO0zKMfnauL5MIxSYxRxRkQsMcnDF4+eB
+	 4+byZ7+cqmfE8LibXGsNEr1hXDyDnki3WkCPWY2zvwp5AOX+K9+FFXuMQVpdI8ILVB
+	 Elo3pDQHPobx5Jgnda8HvFzD5x1EE/mVL5HQ4NXc7emlRYALVJalPxTOJpQCpkx7cA
+	 /POob3n1wYHJnxF4wqrNErMCrc6QngfIh9jh4F39f+Hbx3lo6gGxAT5x0hLBr1RbqF
+	 T35D94prSMKkEabxTk75EP2UUtxTxGcb5id5V0r3ROuzUPkfrbjbn2381nX15coArj
+	 4I358aDxRP9ww==
+Date: Thu, 18 Sep 2025 06:08:51 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Alexey Gladkov <legion@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v7 3/8] kbuild: keep .modinfo section in
+ vmlinux.unstripped
+Message-ID: <aMuF0zY_3gusK1nz@levanger>
+References: <cover.1755535876.git.legion@kernel.org>
+ <4d53c72293d88b663257a0d723ebf3473a08b374.1755535876.git.legion@kernel.org>
+ <aMeqgPVfJcjBLhl8@levanger>
+ <aMkN1m55vejTii_H@example.org>
+ <aMkvtg55F1gJ5feM@levanger>
+ <aMlKTPpNXrRW6v_7@example.org>
+ <aMlbSEnwGOPM39Op@levanger>
+ <aMqhuFQGAGtYFbRV@levanger>
+ <aMqrrjXZxYXN0zdY@example.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] ALSA: doc: add docs about
- device_device_quirk_flags in snd-usb-audio
-To: cryolitia@uniontech.com, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- Mingcong Bai <jeffbai@aosc.io>, Kexy Biscuit <kexybiscuit@aosc.io>,
- Nie Cheng <niecheng1@uniontech.com>, Zhan Jun <zhanjun@uniontech.com>,
- Feng Yuan <fengyuan@uniontech.com>, qaqland <anguoli@uniontech.com>,
- kernel@uniontech.com, linux-modules@vger.kernel.org
-References: <20250917-sound-v3-0-92ebe9472a0a@uniontech.com>
- <20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250917-sound-v3-4-92ebe9472a0a@uniontech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aMqrrjXZxYXN0zdY@example.org>
+
+On Wed, Sep 17, 2025 at 02:38:06PM +0200, Alexey Gladkov wrote:
+> On Wed, Sep 17, 2025 at 01:55:36PM +0200, Nicolas Schier wrote:
+> > On Tue, Sep 16, 2025 at 02:42:48PM +0200, Nicolas Schier wrote:
+> > > On Tue, Sep 16, 2025 at 01:30:20PM +0200, Alexey Gladkov wrote:
+> > ...
+> > > > I think in the case of .modinfo, we can change the flag in the section
+> > > > since we are going to delete it anyway.
+> > > > 
+> > > > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+> > > > index dbbe3bf0cf23..9a118b31d0dc 100644
+> > > > --- a/scripts/Makefile.vmlinux
+> > > > +++ b/scripts/Makefile.vmlinux
+> > > > @@ -87,7 +87,8 @@ remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+> > > >  remove-symbols := -w --strip-symbol='__mod_device_table__*'
+> > > >  
+> > > >  quiet_cmd_strip_relocs = OBJCOPY $@
+> > > > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
+> > > > +      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< && \
+> > > > +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
+> > > >                           $(remove-symbols) $< $@
+> > > >  
+> > > >  targets += vmlinux
+> > > 
+> > > Ah, great!  I thought we had to fiddle around with linker scripts et al.
+> > > I needed to use an intermediate file:
+> > > 
+> > > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+> > > index e2ceeb9e168d..516d51ca634b 100644
+> > > --- a/scripts/Makefile.vmlinux
+> > > +++ b/scripts/Makefile.vmlinux
+> > > @@ -90,6 +90,9 @@ remove-section-y                                   := .modinfo
+> > >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+> > >  
+> > >  quiet_cmd_strip_relocs = OBJCOPY $@
+> > > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $< $@
+> > > +      cmd_strip_relocs = set -e; \
+> > > +                        trap 'rm $<.noload' EXIT HUP INT; \
+> > > +                        $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $<.noload && \
+> > > +                        $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $<.noload $@
+> > >  
+> > >  targets += vmlinux
+> > 
+> > I'd like to suggest another version closer to yours, as mine has several flaws:
+> > 
+> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+> > index dbbe3bf0cf23..9a118b31d0dc 100644
+> > --- a/scripts/Makefile.vmlinux
+> > +++ b/scripts/Makefile.vmlinux
+> > @@ -87,7 +87,8 @@ remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+> >  remove-symbols := -w --strip-symbol='__mod_device_table__*'
+> >  
+> >  quiet_cmd_strip_relocs = OBJCOPY $@
+> > -      cmd_strip_relocs = $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
+> > +      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
+> > +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
+> >                           $(remove-symbols) $@
+> >  
+> >  targets += vmlinux
+> > 
+> > 
+> > 
+> > Rationale (mainly for myself to not walk into that trap too often again):
+> > 
+> >   * Use ';' instead of '&&' as 'cmd_' is evaluated in a 'set -e'
+> >     environment ('cmd') and thus '&&' may hide a possible error exit
+> >     code.
+> 
+> No, it can't hide exit code. The exit code will be correct even if
+> ‘set -e’ is not used.
+> 
+> $ (exit 0) && (exit 2) && (exit 3); echo $?
+> 2
+> 
+> Actually ‘&&’ is protection against the absence of ‘set -e’.
+
+That is correct for such a simple command sequence.
+
+Putting a compound 'command1 && command2' sequence in a cmd_* macro leads to a
+mixture of non-comound and compound statements:
+
+    ( set -e; (exit 0) && (exit 2) && (exit 3); printf 'bye\n' ); echo $?
+
+thus we have a case as described in [1, "-e"], so that the exit code 2
+gets lost due to the following successful 'printf'.
+
+[1]: https://pubs.opengroup.org/onlinepubs/9799919799/utilities/V3_chap02.html#tag_19_26
 
 
-
-On 9/17/25 5:46 AM, Cryolitia PukNgae via B4 Relay wrote:
-> @@ -2344,8 +2386,8 @@ report it to the upstream.
->  NB: ``quirk_alias`` option is provided only for testing / development.
->  If you want to have a proper support, contact to upstream for
->  adding the matching quirk in the driver code statically.
-> -Ditto for ``quirk_flags``.  If a device is known to require specific
-> -workarounds, please report to the upstream.
-> +Ditto for ``quirk_flags``.  If a device
-> +is known to require specific workarounds, please report to the upstream.
-
-What is the purpose of this change?
+> 
+> >   * Create 'vmlinux' already with the first objcopy and let the second
+> >     one modify it in order to not need a temporary file; iff one or the
+> >     other objcopy exists with an error exit code, the 'set -e + trap'
+> >     ('delete-on-interrupt') shell will remove a possibly existing
+> >     vmlinux file.
+> 
+> That makes totally sense. This will avoid a temporary file. I will use it
+> in the new version.
+> 
+> -- 
+> Rgrds, legion
+> 
 
 -- 
-~Randy
-
+Nicolas
