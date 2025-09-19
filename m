@@ -1,105 +1,245 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9586D2EA721
-	for <linux-modules@vger.kernel.org>; Fri, 19 Sep 2025 08:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EC719755B
+	for <linux-modules@vger.kernel.org>; Fri, 19 Sep 2025 12:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758269889; cv=none; b=YL5wvjh05r7s0JcUGG7LwniSh6YraXrtvwm6W1sjx6LbnnAjdwry5wSrBOBRGoCsEcrUVFLMevOnR4jufIIHBxZZ04tRYbuA43sAKqmFLFhucQYKUxOlwt0hrw2coEVw1z+wCol3e+lN205F+PEFs+1nWpX3/0MxJmUezcU8TA0=
+	t=1758285134; cv=none; b=cbzg/Nlxq5LckTzolx30K7xCtO/OHsNFnWCWZJcoFiC/M6WXFmo4s61VDsVlTZDeeyjJLslpKEKv1FxfYwoL0x7fszhUqA+rFuJZR/0Q+kZ617o6lZZ2/2LwoC9cTFFM9AMoUvuW5/nwbvTVMMz6k2YVnBAFZHf1Fk99lzo4Ggc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758269889; c=relaxed/simple;
-	bh=DyMqZzpbMkJgkEnGSTyBtxfZ+e/F+bKP3TSdsbcQBe0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=czbkcDpPX96thDfazwlUMhVdPK4ADj7n9iHtP36Cu6lcmwsRS7L39gddsJQNY0w0SQjjlXza44kzLQnPLzq5gXpzpbJu2rACDLV7UnsbvdGR0oanVByF5bFeKocVhaJshihZErbLZOoE/FvjHQSkdN0E8riIzUc4t8qq7yDL3F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cMibZPm2; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1758285134; c=relaxed/simple;
+	bh=rMjNbJA7qcOh5OJv8unaVyReVLTcdwUg64bV87PakBI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nff/uE6LvS4L3BRBc6wNnZBb7KXfAj1uQ00IANTT6dRI0DUKtR+ALrKj5MyjjfB/qoG/jfRKh03uvJPjQMLbpMADEZQbuHJim2vf1QY/1C/UXFLDxa5j+q2LgXQTrhaWZSI7zAJkb5HHqvojH125esZaJrjadatKnziZZis0I/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lsUsd2UU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dRt2gYJd; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lsUsd2UU; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dRt2gYJd; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cMibZPm2"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45f29e5e89bso20071045e9.2
-        for <linux-modules@vger.kernel.org>; Fri, 19 Sep 2025 01:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1758269886; x=1758874686; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5o43K7Y0uvDLyzASUv52fl9L82q3PGfkNuSA+w+tp4k=;
-        b=cMibZPm2CrHmhNmC3Rwd+2SdeLKp2fBzLJ1RSvd58XZ6JDdxbtd7Jl4ijVrFvRHROM
-         wfS0R5BDcJ5bFaAJLSVr+EPUkDSagLgiaxzolMicHN7dP9Z+9TyKCcmkXg9v6dEOLHZP
-         udD0+BSMZW7MFUQz1m/VsQjCn4hdlmHh7XOIbLraWXlUNWYZxq0VXb13S1TSjUJjCXyQ
-         ZvZfnpwiym2tlPY2JKUbYcfG52uKGk+cOUVnkwfFjhDc/g7CZnc0jQu361m3eXBfHi/H
-         +HTNZcjyBFivxCMNFnraon2nMzXueQrNeKS4Dv3wG22MRh282K3U+4Rsvt8dEe4qszDJ
-         CpsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758269886; x=1758874686;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5o43K7Y0uvDLyzASUv52fl9L82q3PGfkNuSA+w+tp4k=;
-        b=MDbQMoA6y539Prnu/tMnbexE3fNUb8eDZVX8sK1bwVy2FsGgykC1GKUO5Lo7pcxC4Y
-         pd/y/7iD259m64/Ak/5Kgtgbqyxc1wHPyp20461RviCTHkK+eO4ezr3kI/iq6dY0O1Ce
-         Oz8UXxgMzU0rodrEk5C36yKSgSElY/HXDVhpm6RD6Y3GvGyc9RcTt6J6bHsorLP1TEvp
-         OY36TTL8w+Fp7xqKVBW+3VIzYluOYBO7JukYa2YYWJmvEblnWvQArTNmF+os/kp8OVs2
-         9lk4y/cdGJDfqzWS4WKSGb1T3cuNwhdkdtmr3H0kUo2m0bUGZL+rxIaNsXxS3lgrRc1c
-         Rhrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVj43uUPJG8TThV1CwzoBQqVzpVbxS4bkg5/YHVm8Wew1ScVWRNE2JecOSqRjuUyApTyuuylDtb2T2bzC7r@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfYjF1h0O0YGOiyPl5Z8uFpRQMeSPZGYJeXdeeiv1obIwvSQRK
-	C0tPCeDcuz143CTWTyz/se7T6Te2rpw3JuSbFMJ+P3Z4gxaAqQp0Y0NJC58OKNRQQew=
-X-Gm-Gg: ASbGncsHrw4gzyUuMdlwg6aMDzZrqcuN8xO8KB1LWBJeJ/CvdjTlggi/L/LVr+Yn56V
-	um5tSOtw9VsC/qiFSq6tCGG55ESjdwQVLOFzkLciX8M054LVJWGn3wdkqEddUECoQQbmVe8ULDX
-	buHKz+nfXku6JhDlULuL3wWVW99G5Va4psNNXRnFKowsYIbEalqygP/zvlE3FtH7fkQCh/g9SlP
-	qzOoX+VpPS3fsi1iXOAorRVIGCmK0C5+LHvsHRLyh7NOQzekS+tQiFa5/4suUlt9uXYJHaSBPVF
-	f5wTSotLpDmeyGcKxd6ABGa/VjMXv5aOJCgDksSR6JNnlmQYAymOwP+0F3apdEQUCANlB1eBQju
-	qqRDsAmt6ZpXxK55H+8m6lOwfZd179+buI50YK6YU0dw=
-X-Google-Smtp-Source: AGHT+IG9IXvO0ORWH5ghDWSBVfrFKgK8sq0GS7GYB45OO3lu5+7LJG+GncUqXyvk6ZUL/55POHIftg==
-X-Received: by 2002:a05:600c:1c05:b0:459:e025:8c40 with SMTP id 5b1f17b1804b1-4684c13ec71mr17359215e9.10.1758269885811;
-        Fri, 19 Sep 2025 01:18:05 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-464f4f9f4e4sm85674225e9.13.2025.09.19.01.18.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Sep 2025 01:18:05 -0700 (PDT)
-Message-ID: <679c0f5a-bf19-45c6-b28f-b89fe9c44e66@suse.com>
-Date: Fri, 19 Sep 2025 10:18:04 +0200
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lsUsd2UU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dRt2gYJd";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lsUsd2UU";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dRt2gYJd"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 07F1221D67;
+	Fri, 19 Sep 2025 12:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758285131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H+ecT/d/iO9MHp5q4RbD25dFeGzBgJBi4NJtZOVh5yM=;
+	b=lsUsd2UUCCDUjvNnFXxh7NBYeBi9j6LKswtKMsv9hjSokiEL9vBrTGDV2dzvgBjqgYZw7a
+	hCyOv9Re9hOKoFjuQxkLklbkt6NmVViGvlYUcVM+YrJItIRVvBHK1UZUljgfN+isS/i9W4
+	WJ7fOQARqVPYer+tm/JBKcIfka9Jwpg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758285131;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H+ecT/d/iO9MHp5q4RbD25dFeGzBgJBi4NJtZOVh5yM=;
+	b=dRt2gYJdwCpG9JhWwasqlkSdH46dFEiATF5NEypIU94bl3KzFUBcHogR+w0gpD8UvkDXEN
+	k8xaqD9nVuhDyjAA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1758285131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H+ecT/d/iO9MHp5q4RbD25dFeGzBgJBi4NJtZOVh5yM=;
+	b=lsUsd2UUCCDUjvNnFXxh7NBYeBi9j6LKswtKMsv9hjSokiEL9vBrTGDV2dzvgBjqgYZw7a
+	hCyOv9Re9hOKoFjuQxkLklbkt6NmVViGvlYUcVM+YrJItIRVvBHK1UZUljgfN+isS/i9W4
+	WJ7fOQARqVPYer+tm/JBKcIfka9Jwpg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1758285131;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H+ecT/d/iO9MHp5q4RbD25dFeGzBgJBi4NJtZOVh5yM=;
+	b=dRt2gYJdwCpG9JhWwasqlkSdH46dFEiATF5NEypIU94bl3KzFUBcHogR+w0gpD8UvkDXEN
+	k8xaqD9nVuhDyjAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 7E09213A39;
+	Fri, 19 Sep 2025 12:32:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id lyc7HUpNzWhFfAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Fri, 19 Sep 2025 12:32:10 +0000
+Date: Fri, 19 Sep 2025 14:32:10 +0200
+Message-ID: <87tt0y8vxx.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: cryolitia@uniontech.com
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-sound@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Mingcong Bai <jeffbai@aosc.io>,
+	Kexy Biscuit <kexybiscuit@aosc.io>,
+	Nie Cheng <niecheng1@uniontech.com>,
+	Zhan Jun <zhanjun@uniontech.com>,
+	Feng Yuan <fengyuan@uniontech.com>,
+	qaqland <anguoli@uniontech.com>,
+	kernel@uniontech.com,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] ALSA: usb-audio: add two-way convert between name and bit for QUIRK_FLAG_*
+In-Reply-To: <20250918-sound-v4-1-82cf8123d61c@uniontech.com>
+References: <20250918-sound-v4-0-82cf8123d61c@uniontech.com>
+	<20250918-sound-v4-1-82cf8123d61c@uniontech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] module: replace use of system_wq with
- system_dfl_wq
-To: Marco Crivellari <marco.crivellari@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Frederic Weisbecker <frederic@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Michal Hocko <mhocko@suse.com>, Luis Chamberlain <mcgrof@kernel.org>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-References: <20250918085525.122429-1-marco.crivellari@suse.com>
- <20250918085525.122429-2-marco.crivellari@suse.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250918085525.122429-2-marco.crivellari@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.997];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -3.30
 
-On 9/18/25 10:55 AM, Marco Crivellari wrote:
-> Currently if a user enqueue a work item using schedule_delayed_work() the
-> used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-> WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-> schedule_work() that is using system_wq and queue_work(), that makes use
-> again of WORK_CPU_UNBOUND.
-> 
-> This lack of consistentcy cannot be addressed without refactoring the API.
-> 
-> This specific patch replace system_wq with system_dfl_wq, the new unbound
-> workqueue, because the users does not benefit from a per-cpu wq.
-> 
-> Suggested-by: Tejun Heo <tj@kernel.org>
-> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+On Thu, 18 Sep 2025 11:24:30 +0200,
+Cryolitia PukNgae via B4 Relay wrote:
+> --- a/sound/usb/quirks.c
+> +++ b/sound/usb/quirks.c
+> @@ -2446,6 +2446,62 @@ static const struct usb_audio_quirk_flags_table quirk_flags_table[] = {
+>  	{} /* terminator */
+>  };
+>  
+> +static const char *const snd_usb_audio_quirk_flag_names[] = {
+> +	"get_sample_rate",
+> +	"share_media_device",
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+I think it's worth to add a comment that this each entry corresponds
+to QUIRK_FLAG_XXX.  Or another idea would be to define enums like:
 
--- 
-Thanks,
-Petr
+enum {
+	QUIRK_TYPE_GET_SAMPLE_RATE,
+	QUIRK_TYPE_SHARE_MEDIA_DEVICE,
+	....
+};
+
+then redefine QUIRK_FLAG_* like:
+
+#define QUIRK_FLAG_GET_SAMPLE_RATE	BIT_U32(QUIRK_TYPE_GET_SAMPLE_RATE)
+#define QUIRK_FLAG_SHARE_MEDIA_DEVICE	BIT_U32(QUIRK_TYPE_SHARE_MEDIA_DEVICE)
+....
+ 
+or
+
+#define QUIRK_FLAG(x)	BIT_U32(QUIRK_TYPE_ ## x)
+
+and use like QUIRK_FLAG(GET_SAMPLE_RATE).
+
+With those changes, the above can be defined more safely like
+
+static const char *const snd_usb_audio_quirk_flag_names[] = {
+	[QUIRK_TYPE_GET_SAMPLE_RATE] = "get_sample_rate",
+	....
+
+or even more drastically by defining some macro for each entry like:
+
+#define QUIRK_STRING_ENTRY(x) \
+	[QUIRK_TYPE_ ## x] = __stringify(x)
+
+and put like:
+
+static const char *const snd_usb_audio_quirk_flag_names[] = {
+	QUIRK_STRING_ENTRY(GET_SAMPLE_RATE),
+	....
+};
+
+In this case, it'll become upper letters, so the parse would need to
+deal with the case-insensitive comparison, though.
+
+> +u32 snd_usb_quirk_flags_from_name(char *name)
+
+Use const char *.
+
+> +{
+> +	u32 flag = 0;
+> +	u32 i;
+
+The iterator can be simple int.
+
+> +	if (!name || !*name)
+> +		return 0;
+> +
+> +	for (i = 0; snd_usb_audio_quirk_flag_names[i]; i++) {
+> +		if (strcmp(name, snd_usb_audio_quirk_flag_names[i]) == 0) {
+> +			flag = (1U << i);
+
+Use BIT_U32(i)
+
+> +			break;
+
+We can return the value directly, so flag variable can be dropped.
+
+>  void snd_usb_init_quirk_flags(struct snd_usb_audio *chip)
+>  {
+>  	const struct usb_audio_quirk_flags_table *p;
+> @@ -2454,10 +2510,28 @@ void snd_usb_init_quirk_flags(struct snd_usb_audio *chip)
+>  		if (chip->usb_id == p->id ||
+>  		    (!USB_ID_PRODUCT(p->id) &&
+>  		     USB_ID_VENDOR(chip->usb_id) == USB_ID_VENDOR(p->id))) {
+> -			usb_audio_dbg(chip,
+> -				      "Set quirk_flags 0x%x for device %04x:%04x\n",
+> -				      p->flags, USB_ID_VENDOR(chip->usb_id),
+> -				      USB_ID_PRODUCT(chip->usb_id));
+> +			unsigned long flags = p->flags;
+> +			unsigned long bit;
+> +
+> +			for_each_set_bit(bit, &flags,
+> +					 BYTES_TO_BITS(sizeof(p->flags))) {
+> +				const char *name =
+> +					snd_usb_audio_quirk_flag_names[bit];
+> +
+> +				if (name)
+> +					usb_audio_dbg(chip,
+> +						      "Set quirk flag %s for device %04x:%04x\n",
+> +						      name,
+> +						      USB_ID_VENDOR(chip->usb_id),
+> +						      USB_ID_PRODUCT(chip->usb_id));
+> +				else
+> +					usb_audio_warn(chip,
+> +						       "Set unknown quirk flag 0x%lx for device %04x:%04x\n",
+> +						       bit,
+> +						       USB_ID_VENDOR(chip->usb_id),
+> +						       USB_ID_PRODUCT(chip->usb_id));
+> +			}
+
+This could be better factored out as a function.
+
+
+thanks,
+
+Takashi
