@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4647304BC5;
-	Wed, 24 Sep 2025 12:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79A2930AD14;
+	Wed, 24 Sep 2025 12:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717656; cv=none; b=ky1i3k8FmqalmXcm5xYqZyf1MjYsD0ZHiCwLlQq1thlhMIPL+m4D0aTq+q+2gINYDjXJU/N1SLQHoc1m6F6d/318vtVjTm+ty/JuKyFZ7jl4NGgflhtosMM4+rUiv57WrlMJxs8PjKkOZcjNl6Q8+sGDEx80vOg1UdDe86Nm8ks=
+	t=1758717659; cv=none; b=P0ZtCI1+/91KKzqAzwPScupMcC+Ik5uT3ytxx+7K8OBf68qgxBpnylItd+cMVxDBUuq2RpykP5872PDpUonvgX9ZGKs6RGo9GNY387k4NegwYP8x2QqjDdvqYbawMzcZYqaTb6NAEqwUW9WDa4QHP6pTjnwAWeBHkPrHZSB+D98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717656; c=relaxed/simple;
-	bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
+	s=arc-20240116; t=1758717659; c=relaxed/simple;
+	bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=W2Liuv7IkXmYn37zlsj3d7khDmdc0I2fmPBgWDDzinc/CAm5/vg6KyDEYosdeOBK0IwrchRgmdOhsUnds9QGZkDb3iHNnqQTygzccv/J8VA/tMePxTs19ZGvtoeeBfIZ0ZrCtByRnnGoJbaWwtOz3H21mwLTmpGX+K7tJ3c0Nyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNXfbk7X; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Mfch3YoFVZzU1dFLA15Dlb4wZSH7k1qtiiKmbLvztLsyfR7tneBknon1URNpi4Rny7h4g+JiTSh6+m6n9kkTmad829S1ps1f/KEp0SPJgfspjZs786g0q+5aEo9Jpbp93tUA//J7b3RiLG6M24xM1c1woREqSnhxkS0k43GJ+CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wc7KqvJw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNXfbk7X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176D4C4CEF7;
-	Wed, 24 Sep 2025 12:40:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wc7KqvJw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B1FC116B1;
+	Wed, 24 Sep 2025 12:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758717653;
-	bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
+	s=k20201202; t=1758717659;
+	bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=PNXfbk7XxgWHtthB5Go8gJcgX7hdHZQzqrvsrBvw/BkKNR1NTPj8cPhm+r23Ojz7g
-	 5PShhw5ZNKEP7wXdeUPeUR+jzjJ1qNhZUkGcT+gKgj7hBqQRiEIWFEoDKtgF8gJSQa
-	 sF8aebmYKrm9i+WiZOef+OSXHfLXy29bLQTn6YedS+lKW5JcKP6Z5YHdk561wJ6goD
-	 quZtLicnur0PaaOlQ9oV5KHXk/WXYp7dbkjYfhVc14qL4frjZR0UqbX9zNz5i5ycTk
-	 6ThWDu213xwDs4OfzN/kvus8k3EJAiQlOZJglgB6T2WuAIGJSVslCPjZ4ETaOm8mVe
-	 LAMsO6p5E6qzQ==
+	b=Wc7KqvJw3OV4yZ17T1MeouXrudZYg3zb2g1XG0HLPsWuCACupIp1gTe32Lbx/YG/l
+	 qayJM991xfQ3Wn1RcMNIZjYHiQ4Djhm0VkXLohTnOgdM6c0E90dUBpeeyK919YccEn
+	 lfr3oTlZsN3psTrPnWNRztB8RAVtV5N/lBzYytFRpBkuQCYlVIA8R9JQyJGcCaLZfB
+	 yGL1TfobWQvz3pv/3B5aEbxVCQEbcxPCl4UdHBCYfRSBl77hXHxDyH5DE9yZeBQt9D
+	 6/wmeSBKx0XVtIuOe7kI4IjxeXZLLBffQhWZPOuTmuYkKbzPOPov7s8Xg04wv1oWvP
+	 lXyXoEaSIsIrw==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 24 Sep 2025 14:39:27 +0200
-Subject: [PATCH v18 4/7] rust: module: use a reference in
- macros::module::module
+Date: Wed, 24 Sep 2025 14:39:29 +0200
+Subject: [PATCH v18 6/7] rust: samples: add a module parameter to the
+ rust_minimal sample
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250924-module-params-v3-v18-4-bf512c35d910@kernel.org>
+Message-Id: <20250924-module-params-v3-v18-6-bf512c35d910@kernel.org>
 References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
 In-Reply-To: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -58,70 +58,60 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1881; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBo0+ajvkInFRzIac1I/YET1HASfp2sVjEOtKmcs
- 4gQI0Q1KfuJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaNPmowAKCRDhuBo+eShj
- dy5VEACv/PPyPlCuSJhbz4c+w4awb+FCGt2u72DDNduf9av+v/r3Mk3gsMZ59jEzZbCPzSylKPY
- 5GJSMFn1DCfeKAv1W1hGF0yfX05mezZxCSpNSTnARjs1R3t5zcXevsz5J88KttI+TyZkL9j8Qw7
- gFT/7VQeKGvJji7bnEGqKdv8x6KEktp/DtBeU/pxncIWaGh9gPc/KN+K9ax3AkE93UxcUBCEKNN
- gkAvvxf1TWXtnCSADaaIYRsSfO9fMRhXiO4OSJ5qs9xQP7UEOPoE6VhOVfZxjVf011TdlkA3++1
- QKHpsE5yQXz2eIhvJ/N3uXP/gIYoQPoyNqYhuCVA4DmRRWU2jHF0Le1h+kxc4fuKS9fKxUs1QSE
- cOp7G9qyC3ivEF3+HHLB4ME0CJsrAYijdthm5guNyhRrJowM2FI5Xv6LTuMcoaqLAjbG8ijclsS
- u79wBUXOS2amCR6PL+pYpqWsn8l60dP9xUOI1fujWk9Ygnie5i2tSd8z19izoj5QheSWUWHsnVg
- omzd/0FUFR5Wm1LuXvACLo4DN8nWmduGD5knXaMXvfcnZKOWn0CRyu2q36DDCA8qFl0DG2oPhwp
- ogfa83V9r7LVmcA79jbFayJEKCoNEMye8C++vxE7fG3A5phxprEfFyZfvDPNasygpO4xrrRNcdB
- U+w94dMd38uaLqw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1268; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=4Rj9VzFcMjV2b2FKGGXgH+pSxDEnRIoZbc9nYVS6Nl0=;
+ b=kA0DAAgB4bgaPnkoY3cByyZiAGjT5qWieA70bPcE9KwDstNTPzEDSqzNcW/KKwEfNGGe5zFzV
+ okCMwQAAQgAHRYhBBLB+UdWv3wqFdbAEuG4Gj55KGN3BQJo0+alAAoJEOG4Gj55KGN3du8P/0Pz
+ 1Kg4YJN2UBkSyiK13tR68CAr4cpX+mwTzvmnuAGDUnngm/RrQ/54iq6RFCTbBh0PpW6YN0zpdA2
+ 31RzISgK9Z6DIwtJUzCI7MLFApHjtUXlDtRJuDKWjxTkdjYTpNDOfBfSJwxy1vmSoSZVf/vgzqa
+ qh5d8pkUcN999Qqb29QusALvf+hMpdSlPmTaOFtK0CEiDxGbfI4OzBRpxpf6c4OnUYj/ltpzpH6
+ sMHi1T1PrIH/M50+gpDEAWWsFbkmLg/ES3UrRB+Mjtio1eBwAa0lw4wYkps9D+1ykJQe70Effcg
+ KluCHFvRXsSsmGcltm0dbP52SpQQqiQRvUV2AJI3y7AMADVcYNqZ2cL5ZnBpbrsNtfa/EaIUsLM
+ uIOTmkI4BBvdEfUugmClc3I9gmD4vPE7X3vpPgfaFTlI6DsmYQ4BLYOf3LKz6FDZNz/0vvS2M5h
+ l7mmUPO/8uXD/+QLNb7avJDq8KZ4/M8tNvMmL8mTmXxUVpJ9tg1PCmyOrD//QxBJ9P5gLwGlMv3
+ cqp12y9kG80eNfYDabzhORc1ZCv6DzeRaZ1PkA/szPVRHsXO+T9BHZs9z90IVn0CqagstoLQcKN
+ golZ/To4KZwWowNGAsQRLqT+F3q5DmWkUV8dYD8Q5XlUipvKzfjRA+9u5lwQr+0XhlD8vbb1QBa
+ e/dR1
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-When we add parameter support to the module macro, we want to be able to
-pass a reference to `ModuleInfo` to a helper function. That is not possible
-when we move out of the local `modinfo`. So change the function to access
-the local via reference rather than value.
+Showcase the rust module parameter support by adding a module parameter to
+the `rust_minimal` sample.
 
 Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/macros/module.rs | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ samples/rust/rust_minimal.rs | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 5ee54a00c0b65..cbf3ac0a8f7ba 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -176,23 +176,23 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-     // Rust does not allow hyphens in identifiers, use underscore instead.
-     let ident = info.name.replace('-', "_");
-     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
--    if let Some(authors) = info.authors {
-+    if let Some(authors) = &info.authors {
-         for author in authors {
--            modinfo.emit("author", &author);
-+            modinfo.emit("author", author);
-         }
-     }
--    if let Some(description) = info.description {
--        modinfo.emit("description", &description);
-+    if let Some(description) = &info.description {
-+        modinfo.emit("description", description);
-     }
-     modinfo.emit("license", &info.license);
--    if let Some(aliases) = info.alias {
-+    if let Some(aliases) = &info.alias {
-         for alias in aliases {
--            modinfo.emit("alias", &alias);
-+            modinfo.emit("alias", alias);
-         }
-     }
--    if let Some(firmware) = info.firmware {
-+    if let Some(firmware) = &info.firmware {
-         for fw in firmware {
--            modinfo.emit("firmware", &fw);
-+            modinfo.emit("firmware", fw);
-         }
-     }
+diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
+index 1fc7a1be6b6d7..8eb9583571d72 100644
+--- a/samples/rust/rust_minimal.rs
++++ b/samples/rust/rust_minimal.rs
+@@ -10,6 +10,12 @@
+     authors: ["Rust for Linux Contributors"],
+     description: "Rust minimal sample",
+     license: "GPL",
++    params: {
++        test_parameter: i64 {
++            default: 1,
++            description: "This parameter has a default of 1",
++        },
++    },
+ }
  
+ struct RustMinimal {
+@@ -20,6 +26,10 @@ impl kernel::Module for RustMinimal {
+     fn init(_module: &'static ThisModule) -> Result<Self> {
+         pr_info!("Rust minimal sample (init)\n");
+         pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
++        pr_info!(
++            "test_parameter: {}\n",
++            *module_parameters::test_parameter.value()
++        );
+ 
+         let mut numbers = KVec::new();
+         numbers.push(72, GFP_KERNEL)?;
 
 -- 
 2.47.2
