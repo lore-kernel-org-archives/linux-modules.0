@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6692306B24;
-	Wed, 24 Sep 2025 12:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4647304BC5;
+	Wed, 24 Sep 2025 12:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717648; cv=none; b=JfPwPs2f+DXFgGJLIl/N6/7Ogcsvci6lnyMJphTO6f4Y7Sr0yI88Pf9kXKO2Hpgs9AmkxLG1WtK/RAc6trTZrGH8QaehJQQE/KvQMB0cU9Tu8axflaK/qUW32rejt169jdit2PH+wGegYUPdybc9vucm2Y11seudEZTt9VfYhps=
+	t=1758717656; cv=none; b=ky1i3k8FmqalmXcm5xYqZyf1MjYsD0ZHiCwLlQq1thlhMIPL+m4D0aTq+q+2gINYDjXJU/N1SLQHoc1m6F6d/318vtVjTm+ty/JuKyFZ7jl4NGgflhtosMM4+rUiv57WrlMJxs8PjKkOZcjNl6Q8+sGDEx80vOg1UdDe86Nm8ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717648; c=relaxed/simple;
-	bh=FC9GwCkiEibqEuCwLlQ1Q5VQbSyjrJul1CXFpg5by3k=;
+	s=arc-20240116; t=1758717656; c=relaxed/simple;
+	bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O7TTrp9Q8PyPzFfvBq16TjE+rCOHeOSiGAMoQjsMXEmuO7xbUurognkIwYO7tC5gg87oFDXtuzqHEtEZk9x/cGkKEO+C3wT6pgHjza4rTjmQA4kE18aj5bsxDvWF6MGF+PCVNLcSAw9yYd8WRvuh16OXZZKecXmppGPmTjvXLGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5HAFyIM; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=W2Liuv7IkXmYn37zlsj3d7khDmdc0I2fmPBgWDDzinc/CAm5/vg6KyDEYosdeOBK0IwrchRgmdOhsUnds9QGZkDb3iHNnqQTygzccv/J8VA/tMePxTs19ZGvtoeeBfIZ0ZrCtByRnnGoJbaWwtOz3H21mwLTmpGX+K7tJ3c0Nyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNXfbk7X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5HAFyIM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B15EC4CEF0;
-	Wed, 24 Sep 2025 12:40:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNXfbk7X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 176D4C4CEF7;
+	Wed, 24 Sep 2025 12:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758717647;
-	bh=FC9GwCkiEibqEuCwLlQ1Q5VQbSyjrJul1CXFpg5by3k=;
+	s=k20201202; t=1758717653;
+	bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=L5HAFyIMnrJKI0YA3DWNYV3z9TDtIQWvHydSg6yvATTb72C4OzW4OoNMs5xY7UMMB
-	 H5JHERRPXKi4wkzi4OmpnnFiYgGGVL/wq9xiAj5OD1zlHmhC8UsBclCKtfqUDen7yr
-	 AM1XbRK0g8LaHUzTESLrXsjl9po+VxrMIyxXMLzgSESJeCqMzqHJ+YzilG1o5waRZw
-	 2FEuF12Xd5k0BAaBGqn5KlPHSuanwtrYYdSHcZXFJeQKgrbwBNEdYxYJE0UwexPJb4
-	 QkJJWtZPFQgcFgujuAOOWdVEZzko72d9BoJK/dbUJuAwU7E7xpGnf5zPyqYeY9j3bJ
-	 5Y8stisbb35qQ==
+	b=PNXfbk7XxgWHtthB5Go8gJcgX7hdHZQzqrvsrBvw/BkKNR1NTPj8cPhm+r23Ojz7g
+	 5PShhw5ZNKEP7wXdeUPeUR+jzjJ1qNhZUkGcT+gKgj7hBqQRiEIWFEoDKtgF8gJSQa
+	 sF8aebmYKrm9i+WiZOef+OSXHfLXy29bLQTn6YedS+lKW5JcKP6Z5YHdk561wJ6goD
+	 quZtLicnur0PaaOlQ9oV5KHXk/WXYp7dbkjYfhVc14qL4frjZR0UqbX9zNz5i5ycTk
+	 6ThWDu213xwDs4OfzN/kvus8k3EJAiQlOZJglgB6T2WuAIGJSVslCPjZ4ETaOm8mVe
+	 LAMsO6p5E6qzQ==
 From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Wed, 24 Sep 2025 14:39:24 +0200
-Subject: [PATCH v18 1/7] rust: sync: add `SetOnce`
+Date: Wed, 24 Sep 2025 14:39:27 +0200
+Subject: [PATCH v18 4/7] rust: module: use a reference in
+ macros::module::module
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,7 +38,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250924-module-params-v3-v18-1-bf512c35d910@kernel.org>
+Message-Id: <20250924-module-params-v3-v18-4-bf512c35d910@kernel.org>
 References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
 In-Reply-To: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
@@ -57,186 +58,70 @@ Cc: Trevor Gross <tmgross@umich.edu>,
  Daniel Almeida <daniel.almeida@collabora.com>, 
  linux-modules@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5476; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=FC9GwCkiEibqEuCwLlQ1Q5VQbSyjrJul1CXFpg5by3k=;
- b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBo0+ag9/focWPE9Rg4DKUGQq73skp7akVHcvblT
- 3OdqR7vPICJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaNPmoAAKCRDhuBo+eShj
- dw9yD/wKMqUnk7VbroVYaods1snwU8Ypzm3zaennrSDK7pIpvEpahMwr3wh97oK0vbUhtmW5RAl
- nRvd1LMyF3QkR6QBuI/w/Lv/eVVGHbjQ3lz8OZ7vr4JJpUp5dvqdpwynk5IDNr5akTfsD3DjzBH
- jsvx5kmitro7Qxa0fLSYiWbFybmW24vwkirJAWEYl/6euVxmq3uIpJRL3HdtWu3WDFETzshSgid
- way1279njlazVdTE5SSKAiH7XaU/YC+P4brNbWoWeObMw+3krrJRIn5zV/vqH/COGKFWecsbPEb
- 2u9zuUt+kRc4MyBAIwQZOdQDyF6+qF4AElQxweMkq9nF0plhbsVgvhd1BdTudboLq4ZRKC6II5z
- YQvzxOJPNZvhR5QHjNvbEc0W7cFysxY1E3kNP+CJikP5/hYUkMDrd7NLDMLodyH2Ef0s5vyPpLZ
- QBvyRv5xAUbi7ixiHQCfyolGJQsedLgdNYD2nNUVApIm516lVuz0v6UgVIH+wsIOhkgiFztkz/C
- 8FtpJV/2e4ZxaF+UxSDNjSfx4k3xtTryyTGZOpLN6KaofjK9o1i6MyYyxjqi/TmypmUSw8S7Lv8
- o99+uJ/Az//suf+g9EJFJaj3jpFK0xDKWMh6KUSFGcgY2IGwYfAZqF2/CsKPlCP1kBHXH6eMqoq
- lUM8IG5WPYBUYeA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1881; i=a.hindborg@kernel.org;
+ h=from:subject:message-id; bh=Pb8ap8QGaO6wH5qrd6PDiOf6/mTWyw1xHoJQ58CimIo=;
+ b=owEBbQKS/ZANAwAIAeG4Gj55KGN3AcsmYgBo0+ajvkInFRzIac1I/YET1HASfp2sVjEOtKmcs
+ 4gQI0Q1KfuJAjMEAAEIAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCaNPmowAKCRDhuBo+eShj
+ dy5VEACv/PPyPlCuSJhbz4c+w4awb+FCGt2u72DDNduf9av+v/r3Mk3gsMZ59jEzZbCPzSylKPY
+ 5GJSMFn1DCfeKAv1W1hGF0yfX05mezZxCSpNSTnARjs1R3t5zcXevsz5J88KttI+TyZkL9j8Qw7
+ gFT/7VQeKGvJji7bnEGqKdv8x6KEktp/DtBeU/pxncIWaGh9gPc/KN+K9ax3AkE93UxcUBCEKNN
+ gkAvvxf1TWXtnCSADaaIYRsSfO9fMRhXiO4OSJ5qs9xQP7UEOPoE6VhOVfZxjVf011TdlkA3++1
+ QKHpsE5yQXz2eIhvJ/N3uXP/gIYoQPoyNqYhuCVA4DmRRWU2jHF0Le1h+kxc4fuKS9fKxUs1QSE
+ cOp7G9qyC3ivEF3+HHLB4ME0CJsrAYijdthm5guNyhRrJowM2FI5Xv6LTuMcoaqLAjbG8ijclsS
+ u79wBUXOS2amCR6PL+pYpqWsn8l60dP9xUOI1fujWk9Ygnie5i2tSd8z19izoj5QheSWUWHsnVg
+ omzd/0FUFR5Wm1LuXvACLo4DN8nWmduGD5knXaMXvfcnZKOWn0CRyu2q36DDCA8qFl0DG2oPhwp
+ ogfa83V9r7LVmcA79jbFayJEKCoNEMye8C++vxE7fG3A5phxprEfFyZfvDPNasygpO4xrrRNcdB
+ U+w94dMd38uaLqw==
 X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
  fpr=3108C10F46872E248D1FB221376EB100563EF7A7
 
-Introduce the `SetOnce` type, a container that can only be written once.
-The container uses an internal atomic to synchronize writes to the internal
-value.
+When we add parameter support to the module macro, we want to be able to
+pass a reference to `ModuleInfo` to a helper function. That is not possible
+when we move out of the local `modinfo`. So change the function to access
+the local via reference rather than value.
 
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 Reviewed-by: Benno Lossin <lossin@kernel.org>
 Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 ---
- rust/kernel/sync.rs          |   2 +
- rust/kernel/sync/set_once.rs | 125 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 127 insertions(+)
+ rust/macros/module.rs | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/rust/kernel/sync.rs b/rust/kernel/sync.rs
-index cf5b638a097d9..3f957ad3a9f0a 100644
---- a/rust/kernel/sync.rs
-+++ b/rust/kernel/sync.rs
-@@ -20,6 +20,7 @@
- pub mod poll;
- pub mod rcu;
- mod refcount;
-+mod set_once;
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 5ee54a00c0b65..cbf3ac0a8f7ba 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -176,23 +176,23 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+     // Rust does not allow hyphens in identifiers, use underscore instead.
+     let ident = info.name.replace('-', "_");
+     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
+-    if let Some(authors) = info.authors {
++    if let Some(authors) = &info.authors {
+         for author in authors {
+-            modinfo.emit("author", &author);
++            modinfo.emit("author", author);
+         }
+     }
+-    if let Some(description) = info.description {
+-        modinfo.emit("description", &description);
++    if let Some(description) = &info.description {
++        modinfo.emit("description", description);
+     }
+     modinfo.emit("license", &info.license);
+-    if let Some(aliases) = info.alias {
++    if let Some(aliases) = &info.alias {
+         for alias in aliases {
+-            modinfo.emit("alias", &alias);
++            modinfo.emit("alias", alias);
+         }
+     }
+-    if let Some(firmware) = info.firmware {
++    if let Some(firmware) = &info.firmware {
+         for fw in firmware {
+-            modinfo.emit("firmware", &fw);
++            modinfo.emit("firmware", fw);
+         }
+     }
  
- pub use arc::{Arc, ArcBorrow, UniqueArc};
- pub use completion::Completion;
-@@ -29,6 +30,7 @@
- pub use lock::spinlock::{new_spinlock, SpinLock, SpinLockGuard};
- pub use locked_by::LockedBy;
- pub use refcount::Refcount;
-+pub use set_once::SetOnce;
- 
- /// Represents a lockdep class. It's a wrapper around C's `lock_class_key`.
- #[repr(transparent)]
-diff --git a/rust/kernel/sync/set_once.rs b/rust/kernel/sync/set_once.rs
-new file mode 100644
-index 0000000000000..bdba601807d8b
---- /dev/null
-+++ b/rust/kernel/sync/set_once.rs
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+//! A container that can be initialized at most once.
-+
-+use super::atomic::{
-+    ordering::{Acquire, Relaxed, Release},
-+    Atomic,
-+};
-+use core::{cell::UnsafeCell, mem::MaybeUninit};
-+
-+/// A container that can be populated at most once. Thread safe.
-+///
-+/// Once the a [`SetOnce`] is populated, it remains populated by the same object for the
-+/// lifetime `Self`.
-+///
-+/// # Invariants
-+///
-+/// - `init` may only increase in value.
-+/// - `init` may only assume values in the range `0..=2`.
-+/// - `init == 0` if and only if `value` is uninitialized.
-+/// - `init == 1` if and only if there is exactly one thread with exclusive
-+///   access to `self.value`.
-+/// - `init == 2` if and only if `value` is initialized and valid for shared
-+///   access.
-+///
-+/// # Example
-+///
-+/// ```
-+/// # use kernel::sync::SetOnce;
-+/// let value = SetOnce::new();
-+/// assert_eq!(None, value.as_ref());
-+///
-+/// let status = value.populate(42u8);
-+/// assert_eq!(true, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+///
-+/// let status = value.populate(101u8);
-+/// assert_eq!(false, status);
-+/// assert_eq!(Some(&42u8), value.as_ref());
-+/// assert_eq!(Some(42u8), value.copy());
-+/// ```
-+pub struct SetOnce<T> {
-+    init: Atomic<u32>,
-+    value: UnsafeCell<MaybeUninit<T>>,
-+}
-+
-+impl<T> Default for SetOnce<T> {
-+    fn default() -> Self {
-+        Self::new()
-+    }
-+}
-+
-+impl<T> SetOnce<T> {
-+    /// Create a new [`SetOnce`].
-+    ///
-+    /// The returned instance will be empty.
-+    pub const fn new() -> Self {
-+        // INVARIANT: The container is empty and we initialize `init` to `0`.
-+        Self {
-+            value: UnsafeCell::new(MaybeUninit::uninit()),
-+            init: Atomic::new(0),
-+        }
-+    }
-+
-+    /// Get a reference to the contained object.
-+    ///
-+    /// Returns [`None`] if this [`SetOnce`] is empty.
-+    pub fn as_ref(&self) -> Option<&T> {
-+        if self.init.load(Acquire) == 2 {
-+            // SAFETY: By the type invariants of `Self`, `self.init == 2` means that `self.value`
-+            // is initialized and valid for shared access.
-+            Some(unsafe { &*self.value.get().cast() })
-+        } else {
-+            None
-+        }
-+    }
-+
-+    /// Populate the [`SetOnce`].
-+    ///
-+    /// Returns `true` if the [`SetOnce`] was successfully populated.
-+    pub fn populate(&self, value: T) -> bool {
-+        // INVARIANT: If the swap succeeds:
-+        //  - We increase `init`.
-+        //  - We write the valid value `1` to `init`.
-+        //  - Only one thread can succeed in this write, so we have exclusive access after the
-+        //    write.
-+        if let Ok(0) = self.init.cmpxchg(0, 1, Relaxed) {
-+            // SAFETY: By the type invariants of `Self`, the fact that we succeeded in writing `1`
-+            // to `self.init` means we obtained exclusive access to `self.value`.
-+            unsafe { core::ptr::write(self.value.get().cast(), value) };
-+            // INVARIANT:
-+            //  - We increase `init`.
-+            //  - We write the valid value `2` to `init`.
-+            //  - We release our exclusive access to `self.value` and it is now valid for shared
-+            //    access.
-+            self.init.store(2, Release);
-+            true
-+        } else {
-+            false
-+        }
-+    }
-+
-+    /// Get a copy of the contained object.
-+    ///
-+    /// Returns [`None`] if the [`SetOnce`] is empty.
-+    pub fn copy(&self) -> Option<T>
-+    where
-+        T: Copy,
-+    {
-+        self.as_ref().copied()
-+    }
-+}
-+
-+impl<T> Drop for SetOnce<T> {
-+    fn drop(&mut self) {
-+        if *self.init.get_mut() == 2 {
-+            let value = self.value.get_mut();
-+            // SAFETY: By the type invariants of `Self`, `self.init == 2` means that `self.value`
-+            // contains a valid value. We have exclusive access, as we hold a `mut` reference to
-+            // `self`.
-+            unsafe { value.assume_init_drop() };
-+        }
-+    }
-+}
 
 -- 
 2.47.2
