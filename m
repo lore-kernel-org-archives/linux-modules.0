@@ -1,105 +1,178 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D347220ED
-	for <linux-modules@vger.kernel.org>; Wed, 24 Sep 2025 22:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320C610E0
+	for <linux-modules@vger.kernel.org>; Fri, 26 Sep 2025 00:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758752227; cv=none; b=K13yIwe++p01+As1UYBn++82hYOB3wwmuJoh8DrDkg7tJy/6iLh2K4Ko3TCWXFn19nOdf18LKffZrOWuq3GLliuCAjRyjx/GGxAM9Yh0/TCXe/k15esMyyrqx1We1Ir5T6i5CKeeMf0/0VkMcljqBnz9O/sUBg7Sl8nBlGyGmpk=
+	t=1758845486; cv=none; b=XZaWfFvX4x0EaycbJYqhqxJqfz30obIRb4aj56yYuRLohyBRhi8tAoV8jCxB+jn0+M0T6qUCnb5A1n265XgsjbKJLvFo0Xz2hfCTmG57UyACqYSQOo45QbCnYu1oxIUbAOb+Mpz2PJkxXXs26tw3/mDK0kZrFRuAXtQHWft99xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758752227; c=relaxed/simple;
-	bh=BU+WCA+80wupmR3ABcOoM9JcjfSnFaN5GnaRcYFKGKI=;
+	s=arc-20240116; t=1758845486; c=relaxed/simple;
+	bh=Hzl/6sm0ijMbECDHUBEDiRfaMfrSYxO0jGDcnP2SoAw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F+Ef2gmn9yRCvkNSHCKlWh6w0m2kU8NeQfyzGqq1JTKdyWfP6jGeXAdHCk2NSJ0Nm1zqQGcHE463MNzozyGuY4nAHpTl7Rd8uqaCSHgMpLx1vj+9GSuyzGCKAUqh2szs0iyIuCQSnLVSLgIx6z3NOPBG2CR1LapJhdGHAxgrNvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dlj1xJo9; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=tIiHgXGgP+hPVoGutCjJCG/MydPeu3MfQ2PuHeC1TdpaMZWH1lSNOy70W7n3ybb8B3sBgDKEnN+BGASQw4KERXtweBnXBVcHPMDv/zdPzaZtMs4Glcfj9B3iNRj+qPBMS0HAhIHpqueENkpCc1QJDbZ5ztkVhw+94ygCVa2X0fk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bP3Jo4Vf; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dlj1xJo9"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-26f0c5455e2so2952185ad.3
-        for <linux-modules@vger.kernel.org>; Wed, 24 Sep 2025 15:17:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bP3Jo4Vf"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-72ce9790ab3so16195137b3.1
+        for <linux-modules@vger.kernel.org>; Thu, 25 Sep 2025 17:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758752225; x=1759357025; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BU+WCA+80wupmR3ABcOoM9JcjfSnFaN5GnaRcYFKGKI=;
-        b=dlj1xJo9wynkw217fSt+MNFgZyZXR3BPYiDGYYwdybK91yaKy/DZRomuMhFt8zNml3
-         F43Iy9UZcXPt5XgNxaZRc8uCEL5MSTFpC0yRXgAAUxylblXGRDVbon5PzuLuMZDu8ke9
-         JTHq3ZkAqvHEyCqhLTQHiQ1e8kSw+qQ3C1OVRi1bpBbQxmslnxju+HOzXB0SFz3zO5pN
-         oVB/sz3157ygjPfPI0RduGIWAnV22K45GUr3owTVK9GpmvsXJTVJnMwgQo27xrKUFyaN
-         T0sT8pEJvGSdDvu0Vgd7FzFWDLtCJw3yOteBrNBw8V+CxmZiPVDBYK62sVOj+ryhdRHF
-         kODg==
+        d=google.com; s=20230601; t=1758845484; x=1759450284; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AlSE1rUBrC9T1DFQ/5OfHtt+g6SfJ20nkl63DkWshCc=;
+        b=bP3Jo4Vf/EC1Gi82y7K8BAS7Va2DYYHZGFVkgCoJ2iG5B/ygeo6pTYAMxLVpi8dbie
+         9fqtxyt+z6qWchDwENOpsh10htzQbtlxnEQ50k+1PaHaTHI/uPxFgDky6hzv5CVkXdeb
+         CjdZB4Z7nWqTPJ3pGgNghbZwSo1HS2h92rBAbZis5hGzZSy/D3OY6tqF7/TZr6i02MTI
+         nUrO2vGRSwqr9iiI31dBqcsn3wiyCmRVGfs5CgaGTwoBj+7tPJAKEvDzoWXzHGKRuH+4
+         UriW0DguxNsi3Kahab4Gr/A7+IM0HywtQeHEBOrAZv7R70njk2pQHc8wqe7ltT8mqqd/
+         srGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758752225; x=1759357025;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BU+WCA+80wupmR3ABcOoM9JcjfSnFaN5GnaRcYFKGKI=;
-        b=GaPBvqxdfP338Pwb2lneSFBk9POu939fsTLy9KWWDDeP8lGEW6WEfZgyspr1/FdR2b
-         ViBGavA6vL628/qjgQRlYkDhTw3G/b3HLkNp+GKc2ntnrlyjo6Ch+cxeg5kRRk5J9h1x
-         RXn2802c6JtCLlCUZxLdovbq2+73VXDhIZyWlDbYuQpxntSB940xKJBaXJHoX79/rwkc
-         P6VCBVByM59cyRoYOdRCu5IQ4saEjcYEydPlp0M8BrVhGtNot+idihliOKKmY/EUM5RM
-         11n8KCXCHaXQZAnkwTQsJuuvixPDcq2HmkOkb9i+knVreBNhbX+ri3Ud23uTjwWZyoWY
-         vJ5w==
-X-Forwarded-Encrypted: i=1; AJvYcCXBV5sEvDlHNkSYeYwQfNVA4zkQgGnPMpdSm2MYgI4yLsnpWTYO0klafl3b13+1Mb0EqrkcT7zqF5GoKnWw@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFLa4oRp9pvCDo/GRofhSIEy2n6rb1Mx7uGtfr3IVNXdl8VOI/
-	ufwfPO5+AJp4U8hWN8TGa9eKexAYAMZ54VC58Q8g/IvKdc7Kita8RSMArXXu4Zw0YbbgSIB06qz
-	45wL1wG3TJf0Rm4enZcNn0B9Vr+gjRqc=
-X-Gm-Gg: ASbGncvhl9U1BnoVemoXcZjcsTLIruYshBYe9QpPpERAddx25XFWl2OHmd51alcN8cY
-	R/J2u3HcpmMIXDZgYy7LSfWDYmiYBcdlqD8CDrLbH4L9ELI7XJRYJcZbnW7TU8/9wqHlLfgrM1Z
-	g8OPlkfkyjPLmLQLyNoiaiWeZqJ4kq4gPeQES4dZEpLS3HWw69nPpa2fXuG3HE0puUMPTcFfwPj
-	AGF
-X-Google-Smtp-Source: AGHT+IGLga4Nd275V5VJ+me2n4+cweQRd5SaJpr3IPBvldnFR3TBBvkIVeIyqT7wP6rW+eYpEw7ocZ4oYldyXDIWVeY=
-X-Received: by 2002:a17:903:2442:b0:250:999f:31c6 with SMTP id
- d9443c01a7336-27ed4a3165amr11107805ad.32.1758752225112; Wed, 24 Sep 2025
- 15:17:05 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1758845484; x=1759450284;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AlSE1rUBrC9T1DFQ/5OfHtt+g6SfJ20nkl63DkWshCc=;
+        b=NES6M83vA30a9bzUy1rpMiWBlE5eydM2NERww9fMxkF6V4xMOgGmw6EFhFkxnhU72A
+         VrsPJKY84sYE2JyeW9hv3fbPgrdDwL5J+d/u55fgKPUzVD84Y8oerZ1QbPebG14Fco8N
+         trnZkV0HQjUeRWeuk0K1gGJViYcXD1zJSM3NXYldIyhFzLoYHCgx6r8mdPNHYex9ioRc
+         LWgcqFa8iNHMkGvbK9AidypVc6zyL0ItKIb6qK9YgPD07MciTINEO90T5HfqXrF26QWB
+         uyIKY0MlVEI0FxgQPRQnLD436liB5Ak2P4lLsT0j5Blj7yiONdyB2QXsLuD4Ij7cJVRw
+         fguQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWekbMNZu+/DUuXXp4HAnmzkiF9z5htj1kmydU1lrvdWKw0PqOYEKC2bdptmCgn2weKHFnmvP0TCJMNmgur@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkKIEv1M7ez1/xv1zE4BG+21s33cxRX/c7ag/1EKJLzQ4IZJ24
+	XJXsDM7wNARjrmJVsa5WzPlgm8khj/0PS7wFrGh77Y+YmrZYiKFpD5r4jkBIbUXWjUlDnCy6M7n
+	DT0T6hr32MUgs709XU29CtcI6J28XN6dbl9O90DVsxrjatga8KhQv3vPRx2w=
+X-Gm-Gg: ASbGnctofjM/hQ0MZuPqJtyaFSO7ZDXsjrFxLBw3OOFXJU7JAVWYcMgZt6lNwj47lkv
+	riZXpPpAPP6p92GHQrPwubnIBAmkimMbQpx1rstSkuj5q9roLzw2Dz5c+uAF91dHIfmcs3uGqpD
+	USm9rYhVF+n4i3f0Uk9Xvp6y5YdhvJO6fD2/JgeJtZEbtkBFp0fiKqf5UhiLoRrBTIZJ71egkcZ
+	g/7iOi4e0jpTEEfWRiaXQ9QsiQ=
+X-Google-Smtp-Source: AGHT+IFjkjg1CJK2kqFcJZmVZhckeV1dW5wAwLpyJnWVbu+PQmvkA/uVH/e/0tYM6tLXM/d7UXxi8O7HF6KX7EuWjD0=
+X-Received: by 2002:a05:690e:159a:10b0:636:d570:c4ed with SMTP id
+ 956f58d0204a3-636d570cab0mr1348537d50.10.1758845483874; Thu, 25 Sep 2025
+ 17:11:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250918201109.24620-2-julian.lagattuta@gmail.com> <000808f3-10cf-46ad-94f9-95a142c08b59@suse.com>
-In-Reply-To: <000808f3-10cf-46ad-94f9-95a142c08b59@suse.com>
-From: Julian LaGattuta <julian.lagattuta@gmail.com>
-Date: Wed, 24 Sep 2025 18:16:54 -0400
-X-Gm-Features: AS18NWDEw812FHiWYzAMJ81ep3O0jjDYxHiHcGHIsuEI15DM2GSEPmumxHFcyYs
-Message-ID: <CADuX1qJZ1V32d0U4hSOUOzte2KE-k-Hzop0zZd4=7Ap-kS3JzQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] module: enable force unloading of modules that have
- crashed during init
+References: <20250829105418.3053274-1-sidnayyar@google.com>
+ <4e215854-59df-489b-b92d-8d2fb2edf522@suse.com> <CA+OvW8ZY1D3ECy2vw_Nojm1Kc8NzJHCpqNJUF0n8z3MhLAQd8A@mail.gmail.com>
+ <409ddefc-24f8-465c-8872-17dc585626a6@suse.com> <CA+OvW8bhWK7prmyQMMJ_VYBeGMbn_mNiamHhUgYuCsnht+LFtA@mail.gmail.com>
+ <2bf54830-ea9c-4962-a7ef-653fbed8f8c0@suse.com>
+In-Reply-To: <2bf54830-ea9c-4962-a7ef-653fbed8f8c0@suse.com>
+From: Sid Nayyar <sidnayyar@google.com>
+Date: Fri, 26 Sep 2025 01:11:12 +0100
+X-Gm-Features: AS18NWAL2BOfXlIfw0PmfY9rpNA0-1bzCD1zhOmyRpqI4MrEa3fGtNm7DZbnVa0
+Message-ID: <CA+OvW8ZrbdqDGDkt8jXUX3Vg2aLSzVrP-a39Lqvxd1DYOOUg5g@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] scalable symbol flags with __kflagstab
 To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Cc: Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Giuliano Procida <gprocida@google.com>, =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Could you please explain the motivation for doing this in more detail?
+On Mon, Sep 22, 2025 at 12:41=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> w=
+rote:
+> This is useful information. However, I was specifically interested in
+> the impact of having the new flags field present as part of __ksymtab
+> (kernel_symbol), compared to keeping it in a separate section. Sorry for
+> not being clear.
 >
-> I think we shouldn't attempt to do anything clever with modules that
-> crashed during initialization. Such a module can already leave the
-> system in an unstable state and trying to recover can cause even more
-> problems. For instance, I don't see how it is safe to call the module's
-> exit function.
+> I ran a small test to get a better understanding of the different sizes.
+> I used v6.17-rc6 together with the openSUSE x86_64 config [1], which is
+> fairly large. The resulting vmlinux.bin (no debuginfo) had an on-disk
+> size of 58 MiB, and included 5937 + 6589 (GPL-only) exported symbols.
 >
-> --
-> Thanks,
-> Petr
+> The following table summarizes my measurements and calculations
+> regarding the sizes of all sections related to exported symbols:
+>
+>                       |  HAVE_ARCH_PREL32_RELOCATIONS  | !HAVE_ARCH_PREL3=
+2_RELOCATIONS
+>  Section              | Base [B] | Ext. [B] | Sep. [B] | Base [B] | Ext. =
+[B] | Sep. [B]
+> -------------------------------------------------------------------------=
+---------------
+>  __ksymtab            |    71244 |   200416 |   150312 |   142488 |   400=
+832 |   300624
+>  __ksymtab_gpl        |    79068 |       NA |       NA |   158136 |      =
+ NA |       NA
+>  __kcrctab            |    23748 |    50104 |    50104 |    23748 |    50=
+104 |    50104
+>  __kcrctab_gpl        |    26356 |       NA |       NA |    26356 |      =
+ NA |       NA
+>  __ksymtab_strings    |   253628 |   253628 |   253628 |   253628 |   253=
+628 |   253628
+>  __kflagstab          |       NA |       NA |    12526 |       NA |      =
+ NA |    12526
+> -------------------------------------------------------------------------=
+---------------
+>  Total                |   454044 |   504148 |   466570 |   604356 |   704=
+564 |   616882
+>  Increase to base [%] |       NA |     11.0 |      2.8 |       NA |     1=
+6.6 |      2.1
+>
+> The column "HAVE_ARCH_PREL32_RELOCATIONS -> Base" contains the numbers
+> that I measured. The rest of the values are calculated. The "Ext."
+> column represents the variant of extending __ksymtab, and the "Sep."
+> column represents the variant of having a separate __kflagstab. With
+> HAVE_ARCH_PREL32_RELOCATIONS, each kernel_symbol is 12 B in size and is
+> extended to 16 B. With !HAVE_ARCH_PREL32_RELOCATIONS, it is 24 B,
+> extended to 32 B. Note that this does not include the metadata needed to
+> relocate __ksymtab*, which is freed after the initial processing.
+>
+> The base export data in this case totals 0.43 MiB. About 50% is used for
+> storing the names of exported symbols.
+>
+> Adding __kflagstab as a separate section has a negligible impact, as
+> expected. When extending __ksymtab (kernel_symbol) instead, the worst
+> case with !HAVE_ARCH_PREL32_RELOCATIONS increases the export data size
+> by 16.6%.
+>
+> Based on the above, I think introducing __kflagstab makes senses, as the
+> added complexity is minimal, although I feel we could probably also get
+> away with extending kernel_symbol.
 
-Thank you for your response Petr. The motivation comes from when I
-wanted to replace a crashed module with one which does not crash
-without having to reboot. I looked around and saw some other people
-complain about it on stackoverflow.
+This investigation is very informative, thank you for sharing your
+findings. I am in agreement with your conclusions.
 
-I thought that if a module crashed during init, it would be in a no
-better position compared to if it were forcefully removed.
-Therefore, there is no reason why this shouldn't be an option as it
-couldn't make the problem worse.
+> This seems to answer why the in-tree flag is not sufficient for you.
+> However, I also suggested an alternative that the symbol protection
+> could be determined by whether the module is signed by a key from the
+> .builtin_trusted_keys keyring, as opposed to being signed by another key
+> reachable from the .secondary_trusted_keys keyring or being completely
+> unsigned.
+>
+> Distributions can require that external modules be signed and allow
+> additional keys to be added as Machine Owner Keys, which can be made
+> reachable from .secondary_trusted_keys. Nonetheless, such distributions
+> might be still interested in limiting the number of symbols that such
+> external modules can use.
+>
+> I think this option is worth considering, as it could potentially make
+> this symbol protection useful for other distributions as well.
 
-I agree that calling the exit function doesn't make sense and so I
-could change the behavior.
+This sounds like a great solution to enhance trust and security,
+apologies for missing this in the previous email. I will explore this
+approach, but I would like to do it in a separate series.
 
-That being said, I understand why someone would be wary of this type
-of change; this is just my thought process.
+> I'm personally ok with adding the kflagstab support. I think it
+> introduces minimal complexity and, as you point out, simplifies certain
+> aspects. Additionally, if we add it, I believe that adding the proposed
+> symbol protection is simple enough to be included as well, at least from
+> my perspective.
 
-Sincerely,
-Julian
+Since we are in agreement, I would like to seek code review for this
+series. The code is ready for review from my side, but if you prefer I
+can send out a non-RFC patch series for code review.
+
+--
+Thanks,
+Siddharth Nayyar
