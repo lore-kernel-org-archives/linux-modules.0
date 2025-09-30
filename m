@@ -1,149 +1,136 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazolkn19010001.outbound.protection.outlook.com [52.103.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C9C2F9D9E;
-	Tue, 30 Sep 2025 10:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.32.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759227942; cv=fail; b=mDzqGCD1AtfVvLeb4KQIh4SIQI41K8NHh5xBxavonNsz0iVcuVeh3k4wIRYZ3w6iWNf5ktcvFryHP1MpWo6Bk7llVuhJow5QaHPDZ6NijXRSNcGHJ+E6T6O5nJN0ou0FGKhrG4Uu1xmj+kyDgYvnHIdvcr4maS8SYL4i58+B9II=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759227942; c=relaxed/simple;
-	bh=bUjx40Z7MxkQZkpIvRy015QSsqMrj3HMDcrNpIbj3mE=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=M6e8ZX+sHB+fwX9IZgzrNes+Tymz5M+co3/HATh9P3A1s+BsSkKXwsuFLQSZudf3nuP5qIdiaBPEHNueIYLVWccGmP3c0DnJ9rCLvNaCiAU1aoyvSm/dagw7CSl8dcxsKUbaQE+WAFv7+2Pk9RUOw/ZddL4OTVRaMcwpZBr5cxU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=EtZFHogx; arc=fail smtp.client-ip=52.103.32.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B16E24E00F
+	for <linux-modules@vger.kernel.org>; Tue, 30 Sep 2025 13:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759238190; cv=none; b=tyJE9rJcW+VUD3nXaZEjlTU6mNIqhtXFQh+aqs1+yxGR61JVuF6VjVon0yhGTRL/C08mG2MysaAQdrfUZpMGAXf0B+2jD3kFnjiYLcup+Zy8h9o8KXCHzfGDhUGFRPRu1Sb5c1gNO0qOJhL3egMWYGSaM7xX3vU2xupaZQz2LXc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759238190; c=relaxed/simple;
+	bh=vACPcvX4LWehkNCn3avFNQCRel5Es4xLtJf1RFoWwxA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VLcivRcbFHeOM9DMoKUwRJ9YoZrz5us8AWjLazJYpAf/nWYGz+Nb1Y3sxcf+PpmtyX1etxBCziV8M5JkA31JCMtrM8OIpioxUrkYPR2rxlSdSHeatoYY2OgSHrvJfbbg410Dc1KVd0iecwaP01NoejqYP71CEecrcibvAkqJa38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KocRPIlw; arc=none smtp.client-ip=209.85.221.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="EtZFHogx"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nlc4sbpSRP3ujLxaPAFtpjX1505lnx1YvBqtfJ2Oj07HZWug2Q8gEL/PyxqVPi+6uyZ7TkuAIC460YPOSk5kk6D9hQ42Px8v0rdYAsrYJV6yRYLrauFaYsS7Yux+TDeynxCY4ySkxMnOhWbge0xu1hPPLgJSPPAxbk6FqfLnxO5KooenfjnwtAh4dsB3yjSQ4skfdGKvHWPxkYJabY8/9o4n483wxhyqghncr0IRpxYQOR3sNfMtN4eAdM7lznyJgPxNhARPlp+aPQW54OU0a8D/h3T9Oq5dx2tctf+HIGYjHT002Xp/9kIaRsD1yN0Zfddpg2EBfMmX7p+3Tjx+BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0h3hQ2odg3XRbz+/FzXSMC5FyzAwnh6UAVV29UT+8m4=;
- b=hWpqk4C7nhhzyds8iVl0Z3DyCxFuHjEDPCt2uz0TEOCeKEZNI9XcsmPunThhLx8VsIaF8/c97OrdEpIgLixBfVKkK8/22yUV4vV3FdOrwZEfYu1H9giu26gZBoHyh8DMG/Lwx8SOS2bD0VEDFjiQVjY2hg7FQesAyz8gVvWdpviEgSf+W7e8SNtS2VrT6jLbdj3SfZj22j+Qh4adXg/TK8hQCIKEVhdKiFvkH6G5HVAXBiPHRMXU7TmAr2sz3rNzmvCUsxzkHjP/KOkU0/YoNPPvi5IsSug7ITwJKfrGXlLrn0Sr+dBh8smzqj7GTpTj7pynIKJx64/0TwiP7aUG9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0h3hQ2odg3XRbz+/FzXSMC5FyzAwnh6UAVV29UT+8m4=;
- b=EtZFHogxsSmDaLt0Tzi0UnXCcq2TWD9tO1Zmzk84ZpBY4M7W5VEufTa7XEO8dvew/AgX8rAS51TJO1k/LwzgINIC1uoDpxMJ2lqMjBORhHXzCLmZvfxX/cwLcw5K1cq3dizGl0DficJaYdGj3I5HhA5P7MyZk3ORcKgbEJd6iTAJPuW9RS6iFpfqO5/UbyU0AgOdopV3AiotvntdmjXu+mrYMiiCMFoNgLxs7C2w4Xa+KGdIcdUxdFzcAyYToAwc2F2bnshkgu3H0hDTAmWmEG9Hrx8td2f/SJNfuf9aRflOaZBOuUvHO71fFKE2GxN1WoM5xOLGPmJ5CU8zkpEHIQ==
-Received: from VI1PR02MB3952.eurprd02.prod.outlook.com (2603:10a6:803:85::14)
- by DU0PR02MB9395.eurprd02.prod.outlook.com (2603:10a6:10:41a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.17; Tue, 30 Sep
- 2025 10:25:37 +0000
-Received: from VI1PR02MB3952.eurprd02.prod.outlook.com
- ([fe80::60e5:4de0:ff18:2fb1]) by VI1PR02MB3952.eurprd02.prod.outlook.com
- ([fe80::60e5:4de0:ff18:2fb1%3]) with mapi id 15.20.9160.013; Tue, 30 Sep 2025
- 10:25:37 +0000
-From: David Binderman <dcb314@hotmail.com>
-To: "mcgrof@kernel.org" <mcgrof@kernel.org>, "petr.pavlu@suse.com"
-	<petr.pavlu@suse.com>, "da.gomez@kernel.org" <da.gomez@kernel.org>,
-	"samitolvanen@google.com" <samitolvanen@google.com>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>
-Subject: linux-6.17/kernel/module/sysfs.c:275: Always true test in for loop ?
-Thread-Topic: linux-6.17/kernel/module/sysfs.c:275: Always true test in for
- loop ?
-Thread-Index: AQHcMfQsAnMo3slzvEG35zIVVtK0zg==
-Date: Tue, 30 Sep 2025 10:25:37 +0000
-Message-ID:
- <VI1PR02MB3952FA1785356790D290CE949C1AA@VI1PR02MB3952.eurprd02.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR02MB3952:EE_|DU0PR02MB9395:EE_
-x-ms-office365-filtering-correlation-id: 27e0a21c-7550-4bde-6df2-08de000bb2b8
-x-microsoft-antispam:
- BCL:0;ARA:14566002|19110799012|31061999003|461199028|15030799006|15080799012|8060799015|8062599012|39105399003|40105399003|51005399003|440099028|3412199025|102099032;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?tT8oeB+bQ0P1RneCa0ERZ+GVRZsXi6UHQIUL8I6JGZv4ER8SfUUXDc/9lx?=
- =?iso-8859-1?Q?XgMvE+c9/dLHpG/FuffWjHNbK9K+LFM+206bk76lD6aX1lazKEY4SJNa1I?=
- =?iso-8859-1?Q?p3HAw5M0XoXoPoX8RdeLFs2Jvtbjg6w2FPri6P14zD69PY3H/ei7q5eTiV?=
- =?iso-8859-1?Q?LEHy0lbTF7/CZUJzC7UoxKP5GBjnAiIv8m5AU85xDmWpekku2ZCzn6cfMZ?=
- =?iso-8859-1?Q?6P+uUeZe3HQpSibEPvM2VRS9Uy7aAMy2oKyJEaSI6+eBs0HyRbK0LvV9EP?=
- =?iso-8859-1?Q?9+svrs1F87lLv/PQ6aGE9m0sq1iq9/O55unFtNxdxLFriw/Ds/xCr5OxdU?=
- =?iso-8859-1?Q?PynbhTUO6ol2iVj2T8QKQOGbAa87JhrjIcI+AqiTDm3eosZwmukZFgch06?=
- =?iso-8859-1?Q?ZfCWdM1iKyLBQNzZxBdamXSbZ5FKnGbhqIxQq2D+XYGKI4bItbQXq+1vFC?=
- =?iso-8859-1?Q?9Kg4EbenkinwQO9FzmVARuDwtt+3P/2bmVlpSGSmcQMO3eQRxA7HIL8AHH?=
- =?iso-8859-1?Q?30YFHBU4T+Wl/x98WiERjEWC6L/wot18eu2MIsQJZX7w1euO/AIkalg9x/?=
- =?iso-8859-1?Q?9pVKPMWALROLPStN8xC/RdVOvRUcUMVjUgBjy0K5MzyZe9N53SShRWVqdr?=
- =?iso-8859-1?Q?wWhh0iWT/5641qy/sj5cKEHZIzn000QtilgDx383p006YseInTxMh24MCc?=
- =?iso-8859-1?Q?IJYxrljFsHQQzEqdLSPU4hiywkx8F4grhss/IeR3zZfxsuWWs1NGvE/ndp?=
- =?iso-8859-1?Q?vHviqFvxKQOrrDmF0KNzqPN1+D5q/2DBlFkohTIxkzUvJjVEAAIgky7IgF?=
- =?iso-8859-1?Q?FzIZjz5xgfPToSzZvcwN4AP1bBrNAv1FT8aUHk/Xcc58LK+wErU7niEO2q?=
- =?iso-8859-1?Q?5YDSkUffKE6nOViY6NhJ2Ot3dTvEfQmoIqQUwXfcIn/1xc53KBEn4Mv1ys?=
- =?iso-8859-1?Q?BF14+8BGKZMupYD/R+c0/9I3rURIre8Omgxknbekon3q8lkUPsKTqqVyv8?=
- =?iso-8859-1?Q?Rz/LmU2Yai1r6EsJiHTfuS0OsuE7nSHNOTCdw64XO76AI9Gv2YL7qu58az?=
- =?iso-8859-1?Q?89FKv26bTsg9FhxT33qvVIhkKHqFicrCPm71/vQWZ5wc3LFYDCb+Bn/UHU?=
- =?iso-8859-1?Q?LEhvN7ocj7RA4vNBwdHzKTB4AE7UnT79rSmqqINu20fF+ZbiJF7Kbe7wGL?=
- =?iso-8859-1?Q?AivGDIWX/BRtITKU6TfZRuQpZddmV2HhTMpvP0G5fsECHJQb/D6YWZvURd?=
- =?iso-8859-1?Q?+OCx//yv0IKOlLLz2vJqGt3m10uK9WhRgKCI50JSCbOjo61VbM+PZlp1sR?=
- =?iso-8859-1?Q?OUZN?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?yiBqo908UENH8p4aTYJc/RZhwO8rSQC4rFyJdSqf7smomia7Xuh8NNJ1vw?=
- =?iso-8859-1?Q?6ww6FiPkL8eFkwO5Y7YofR39FXlbUbs6p2+JrTZ9ZBFk+ZVAL0zTiFvR2C?=
- =?iso-8859-1?Q?nsUl2qdRLDbjlC8QOfLGyFkUwmI/9hR2ZFhFKvDgHQeGCLTNHXqoz5Lxtf?=
- =?iso-8859-1?Q?12De/g0uhw/iJ5kV3n7NBZrj5oMJBEE6vOv1l9mQ2ngWaYhVO0DoeF3xZa?=
- =?iso-8859-1?Q?RXIftjKfm2zJuU0wxAhXYXdqEgj/cX7aUXx8lTjnYwxhoRGOzYSwvM9cKL?=
- =?iso-8859-1?Q?/TK4H5CWaEqt9PFaiDVJqTJBfbHGn+e5iyMOjZpDIpDF+Jqmt05kkxjGdO?=
- =?iso-8859-1?Q?iZFU9F5j4XUYfyJHKP9FW2mZvb/JDM9fYF7aY7923iPpvXe32LtCfaYY+u?=
- =?iso-8859-1?Q?xNofC0cZ8cE1PUb7s11uwOAOqVe+8jMiEOin3aqy3aHS7omOtGWioOBzpW?=
- =?iso-8859-1?Q?4cwT4SLNCsgiySoWcXsSLQyOvnUmzqxOtyUkrHoZ+EhEO8BFH47qZ3ku8W?=
- =?iso-8859-1?Q?DJiE7Z9qIUqPZxh+Pej8RATKuZAuNMFtSvodGxbHvDCYNJx+cb/lIvTyDY?=
- =?iso-8859-1?Q?FGBTFdySMOVlp0yaCs/nrPMiDfvGmW+DDWO82KEoJzt+ifdOiA28vXuLmm?=
- =?iso-8859-1?Q?91x9QxKVOY5Ba8vN2YxntqFrvP2PbM51OVeVOpqcpyQUsLzEp3FsPRrEA8?=
- =?iso-8859-1?Q?THM1FizyE0kE+IGkuo7pVN5zligfW8gbqjBXRO8O1RTiodHdyFva9hibjx?=
- =?iso-8859-1?Q?TbU9DHMlZ07tgBwIAZgfcZZ3FRI8IcPDcAa0NQB9APR7RlbOSZn0T5fDVo?=
- =?iso-8859-1?Q?Iv0EcD3POxietAD1kvtQRidPs0+pa+Hcyyh+9ZMvHd2GrV40c+C1G/R2wG?=
- =?iso-8859-1?Q?zAP3GyOo5a8u3IM6zquf4zPYrX3djoOEbZWSzn4sTx1hYxWZC4meXYUcGf?=
- =?iso-8859-1?Q?hKcrBr4vkIos/RW+3TP97gl2mXNiYB9hMd/H3vpgm1AHSXSMITG8RHiLpR?=
- =?iso-8859-1?Q?uQ1z1fqBw2AZLa2oX8bIE9ffoz/ONVvWmAanRSRnr93AL7tBl2OO6GdZa+?=
- =?iso-8859-1?Q?61SxsedU2OtxrIGvuoDaKItYupipTihZj4VeY9OX4bfsh+7mWgmyEY4h7u?=
- =?iso-8859-1?Q?A2pq0o+5j/m0ju2qyJQIdO9vrcTCxPh9stH2ZqHnU0mhcgWh1Ri1HaJIy+?=
- =?iso-8859-1?Q?kPkgTlvrUxy6u2805LrpG1GMBrSlFUz0QblPMuCuERqvx1Bm++SLJOMedb?=
- =?iso-8859-1?Q?Suqh3lShlypcU68WKbgA=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KocRPIlw"
+Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-3ee1221ceaaso4836317f8f.3
+        for <linux-modules@vger.kernel.org>; Tue, 30 Sep 2025 06:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1759238186; x=1759842986; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gdligv9Yrmq7/rk+Qyvy0jU8vW9q2hQx81H/VG9HIsk=;
+        b=KocRPIlw32P6U3ZSi8FlWHtZjlLQYLWQZxha/GFDnrwhR7DQjO2ko/u9pNBUVFPdwr
+         hmA50rCe38YuqPbzMdXIAnYw1UKEDUZQ7BecZ+JM9qvrbOwIF5UyzEpoB61/eoyuAI/7
+         r5wOC2lFXYTuu7QXc3tg1O783qwOGTJfWqJD7c54mCla87VEIngn/1ISu12GjTmOzMiP
+         kLKfQ4H5/j1GOq1dRhVUfGyV7HkldA+cySr3oP/jCc3W5dgCLfYRufa2HpK86PUAmpoB
+         rVXOCaUc0UymInblrwjt4iNid/WlHyKGqIVTxUlsyas/+oYfP+k5bzpGTJHg29WR4z4X
+         mopA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759238186; x=1759842986;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdligv9Yrmq7/rk+Qyvy0jU8vW9q2hQx81H/VG9HIsk=;
+        b=uDGqCMLubIfpEkbGLrofy1T6LTVnJ1aFJy2CrGK3TkxiAZjFQC7F8R7oT4OVVRwSbV
+         QRRpMDtHlf3u5+IlzyGt1nRz4+/Kfc8LDf5hwE+g7orUrjm7zGfNk+w2+1FZyW3gh5f9
+         Iczf1MAQFsCERpZSr6FSIyH4dgAQLlu+KiLqTNiCJtKLC2m+mifDvc/cnDNy1GiMXG3Q
+         YJ9binyV5CcDpn+bVkkMSTX6UVqc1w8LQYZxziMRPpn8SPW9jp4fKgjywH73nH/nUd1Y
+         4mdH+vn7L437fe4pXN2LIt1bIG+2Ja35hsT7nqKK6+uzDIUTObijYyDnzItFA/XJGZqR
+         GKWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXfLuhC/H7wIoICz26XWo2JP8+2bz8fe2p/4Rea9U9thfrCBw3byEu5h7G/yVw6zlHAD4Ao5YiKLTPMsWTu@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4E6dNfn3IjhnOk1ctTuuDNa4ArHOGVja2+pFAmxsUadlD6+xf
+	jfDco39aMO+VUYinZWkQWmHwZ5ubDdXMUwh5xpcNA8nrRY88qTJJ44At2nKoPlVKDXw=
+X-Gm-Gg: ASbGncvsYuHQTU71H+eUwYsm3swegfS8i4AfuvTAx9vHZAgMj/T+HGf9IlAwIg4xpLO
+	pVX0fvgHT4aRPa8gBjnE3xd67JNVKMoCJvL8RytGnrgd2+Gjs95Sv3dwB1QMo2SOJNOsmGx8W+5
+	SO5jIULGIKCuiLilzBtTP6kYEhWZr2o24qAU8FfQmtygfQ+PiuDaeue+suMdtzUCSferOogUoZZ
+	jAxLJ1Nlm0WvbzsBrWIlqiChET7nroegd/5AUh/du8Aw+dnrn8IAd9KDHXzFKYvMGKODKMW6lGt
+	suZyM0fgzig0k/EU8U4SR9CsCOH3cIM2190EnF2KRV+wzVpnELfY8tmwR6XwCFZ95mYKdvOUYhF
+	8ZRTQrij+RN+J2YfyHEa8gd+6JzWcox4au9wUgSliFRZqtpyNGKD46THgLP1O//qA6G0=
+X-Google-Smtp-Source: AGHT+IF1ErbbbjhopZL6pCF+T2Bztzzvt3Govsbo7Ke9CGLKtmmw2H4ZbQVixK6pD842k6HiDc4iKg==
+X-Received: by 2002:a05:6000:2507:b0:3ee:1118:df81 with SMTP id ffacd0b85a97d-40e4623732amr18897288f8f.13.1759238186177;
+        Tue, 30 Sep 2025 06:16:26 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fb72fb2eesm23337471f8f.12.2025.09.30.06.16.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Sep 2025 06:16:25 -0700 (PDT)
+Message-ID: <3fc3f7e8-3297-4586-91ca-41f07c8a9418@suse.com>
+Date: Tue, 30 Sep 2025 15:16:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-5faa0.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR02MB3952.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27e0a21c-7550-4bde-6df2-08de000bb2b8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2025 10:25:37.5938
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB9395
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] module: enable force unloading of modules that have
+ crashed during init
+To: Julian LaGattuta <julian.lagattuta@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250918201109.24620-2-julian.lagattuta@gmail.com>
+ <000808f3-10cf-46ad-94f9-95a142c08b59@suse.com>
+ <CADuX1qJZ1V32d0U4hSOUOzte2KE-k-Hzop0zZd4=7Ap-kS3JzQ@mail.gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CADuX1qJZ1V32d0U4hSOUOzte2KE-k-Hzop0zZd4=7Ap-kS3JzQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello there,=0A=
-=0A=
-Static analyser cppcheck says:=0A=
-=0A=
-linux-6.17/kernel/module/sysfs.c:275:20: style: Pointer expression 'attr=3D=
-&mod->modinfo_attrs[i]' converted to bool is always true. [knownPointerToBo=
-ol]=0A=
-=0A=
-Source code is=0A=
-=0A=
-    for (i =3D 0; (attr =3D &mod->modinfo_attrs[i]); i++) {=0A=
-=0A=
-Suggest code rework.=0A=
-=0A=
-Regards=0A=
-=0A=
-David Binderman=0A=
+On 9/25/25 12:16 AM, Julian LaGattuta wrote:
+>> Could you please explain the motivation for doing this in more detail?
+>>
+>> I think we shouldn't attempt to do anything clever with modules that
+>> crashed during initialization. Such a module can already leave the
+>> system in an unstable state and trying to recover can cause even more
+>> problems. For instance, I don't see how it is safe to call the module's
+>> exit function.
+> 
+> Thank you for your response Petr. The motivation comes from when I
+> wanted to replace a crashed module with one which does not crash
+> without having to reboot. I looked around and saw some other people
+> complain about it on stackoverflow.
+
+Hm, I'm still not sure I understand the use case. If it is about being
+able to remove a crashed module when developing it, then I wouldn't
+expect rebooting the machine to be much of an issue. If it is on the
+other hand about removing it on a production machine, then I think
+attempting this can leave the machine in a worse state and not something
+we should encourage or support.
+
+> 
+> I thought that if a module crashed during init, it would be in a no
+> better position compared to if it were forcefully removed.
+> Therefore, there is no reason why this shouldn't be an option as it
+> couldn't make the problem worse.
+
+A module can be halfway through its initialization when it crashes. It
+may have already registered with various parts of the kernel and
+I believe that removing the module from under the kernel's control could
+result in even more problems.
+
+The current support for forcefully removing a module overrides the
+kernel's tracking of module references. This option was originally
+introduced by "[PATCH] Forced module unload" [1]. As far as I can see,
+it was related to the module loader rework at that time in "[PATCH]
+In-kernel Module Loader" [2]. This rework provided raceless
+loading/unloading and marked several MOD_INC_USE_COUNT/MOD_DEC_USE_COUNT
+interfaces as obsolete and unsafe. Since some modules still used the old
+racy interfaces, it seems the forced removal option was added to make it
+possible to remove such modules.
+
+However, this issue should have been fixed a long time ago, so I wonder
+if even the current CONFIG_MODULE_FORCE_UNLOAD support is useful.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=d0f8c9a4c2c9d93463d157248c73028670e80a97
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=4c877b08daf4b463c144cbd2748ed1659931a0dd
+
+-- 
+Thanks,
+Petr
