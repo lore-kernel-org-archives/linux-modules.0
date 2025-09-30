@@ -1,384 +1,149 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazolkn19010001.outbound.protection.outlook.com [52.103.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5722C2DF158
-	for <linux-modules@vger.kernel.org>; Mon, 29 Sep 2025 09:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759139266; cv=none; b=ufyg1jDFIRveX/q7UrI9GBOM0mCHnQCC1a22A9I5NAMnvPVX/zm3QKrjA43+PvJhnjAdIhoWtLaLGprPNfx8Cz0E4BFWfe8Zs+R69yFoE9oUCaCFMgtAPC/BEMJiSbP9iM6xOa+WXXijDVNc6sahfVryKqdxYyPTV5wai7KTu7Y=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759139266; c=relaxed/simple;
-	bh=ASXwhqcORvhNkY2l90P911X8c8KnWjYM2LqXASGJUjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b8dXa1Vy5X7pjYv+nLla3m/49/5huGiWhAWQLIFg+JyK5PIt37XU+/7Yti/pnGJdBmvLlksLTneEAFMyU8dTxj8jUaMmKx8gqS6t74oYuXL+j9ZGFEAjm+3eRib4TuZ3NUQyN8eoEXA/N/6VAvj9B0DfKp6n7kqoQ0OXzTvzHVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ahc4rbbO; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C9C2F9D9E;
+	Tue, 30 Sep 2025 10:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.32.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759227942; cv=fail; b=mDzqGCD1AtfVvLeb4KQIh4SIQI41K8NHh5xBxavonNsz0iVcuVeh3k4wIRYZ3w6iWNf5ktcvFryHP1MpWo6Bk7llVuhJow5QaHPDZ6NijXRSNcGHJ+E6T6O5nJN0ou0FGKhrG4Uu1xmj+kyDgYvnHIdvcr4maS8SYL4i58+B9II=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759227942; c=relaxed/simple;
+	bh=bUjx40Z7MxkQZkpIvRy015QSsqMrj3HMDcrNpIbj3mE=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=M6e8ZX+sHB+fwX9IZgzrNes+Tymz5M+co3/HATh9P3A1s+BsSkKXwsuFLQSZudf3nuP5qIdiaBPEHNueIYLVWccGmP3c0DnJ9rCLvNaCiAU1aoyvSm/dagw7CSl8dcxsKUbaQE+WAFv7+2Pk9RUOw/ZddL4OTVRaMcwpZBr5cxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=EtZFHogx; arc=fail smtp.client-ip=52.103.32.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ahc4rbbO"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-41174604d88so2229410f8f.2
-        for <linux-modules@vger.kernel.org>; Mon, 29 Sep 2025 02:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759139261; x=1759744061; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p1eJI1OUZqzGZIEOdjNU40XW3K4YBNlIBSlep784rzc=;
-        b=ahc4rbbOmLOCUOqSkuOI1ehNV0iz2TTTNA6dgEqGbxBhW4+vBB6Tw0Ofjv/oJLT5G0
-         gMpl2erMRJGd49E5/puVx38wau1gSmZ3W5XEMZ+IlhGE3keoM1Jo708/NKNsj27fWP4q
-         vq9+ujtQAjbawuuum0rsWYIe/5c7pJ/2rkbRbiz0aEah8fFJa/5YOeaP/oceTSLQFa0h
-         5H7UnmZJ6xNEkxrZQwwpnCdb6pF9VDOBEsZqPsgjOmtnnQZns7kOUeDvjWpn04fmjqOi
-         HsliU0914ppO20Hff+qfSzjoRhws+ZLh93O2SerhE+gNy3+WpdRfXzx3OI6jt2Xlq9g6
-         oVwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759139261; x=1759744061;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1eJI1OUZqzGZIEOdjNU40XW3K4YBNlIBSlep784rzc=;
-        b=dPffibt9AHfA7xdrOjRaBI6kG6WueIWEPN5mXCvWUsxNxf3QUEXkZBSwrIVH64T3xN
-         rXWXW2qg8bV+KPLqOP2ZgEOUd7v9RZT5jfM7cfaKAPJgkbPStNhYXZbo7q95nhbdiJSi
-         3l9p/T/cMwDQHLwDUp7c7B4U9wC8geVkB8hf22YAzuT+YnqVIvG/6A1/9QoWkq10RzrN
-         kXTeKe1SBUbQuZqfPtvvNcRYEnKKEfWEe4WaDkw0g2i7IQxUjFYa+llJTzFT6lF4Z4+N
-         Z1uJwwptnCXgtAn/eWatih7ANGcsR320Jjs5TW/7vN9vMw6KClbFLOejmU1F4qhlswGX
-         5GVg==
-X-Forwarded-Encrypted: i=1; AJvYcCWNdisCJkeDz4/P1YkAJWPJcbv3FkAJULNLDPvibQzZl9gm3yxIf3aXF5rW667lH8FsYSVCTLg8J83j+JhP@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1RT32+IxroP8RozXwEGRVAY8rRpa8gRLlmhqrtSlBLsK4ZpPj
-	+EhPQzvZ5tJrH5jUh1J2hAqQ0WLErMGCKURf0vatoBTJ1BCEikQIt7p61BGzkS9NraQ=
-X-Gm-Gg: ASbGncunEDp4wxvy1kJPqbIkecdhY6ALmDm+REKl/gfKao8J+W6Nqk8n820dQn75bgn
-	7Jit8CROMZBR6omUnzr50h4wLt95AUu+jx6fSIwnTVL5rdacwcIS30PPcuBX9mXJDjWV/JaWCQm
-	oAsmPVUvPoTVtONu57dMmbfh+6aKTzHQg8c3BXn+Niw34ZXyDUcf+Sxxxjqd+79AJf91ucizESZ
-	nYtWrqQxZiWHlmB81ywP9GVRxYq+AfV3fHWU09jEdrQYBROVWV9Tv9eO8ogOT8CIKUH0a0Ft3a1
-	BwGhdKDJ7aI303ZTA+rRK+M6+TWfrWWasCAxFvjeu4VlGVPq/3pzkvIRs814Zn7m42CeMVEplmB
-	Ybjw1Pdnsl/grOp4mcSSid78x7Eu1P38huhmA6eGneXE8jyWSM1d7tw==
-X-Google-Smtp-Source: AGHT+IGp7WQmlNJyGfoAWrgsGxFEL6Znj/8z2UZGtWFBZgR6B6emhNKiOUHLvrUGAeRm1cRG2rq/hQ==
-X-Received: by 2002:a05:6000:26c9:b0:3fc:e880:8bc with SMTP id ffacd0b85a97d-40e45a92576mr14528488f8f.16.1759139260579;
-        Mon, 29 Sep 2025 02:47:40 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-40fb7203b8asm17744328f8f.9.2025.09.29.02.47.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Sep 2025 02:47:40 -0700 (PDT)
-Message-ID: <b689b57d-07bd-4d11-98f0-9a99f0fa3c5d@suse.com>
-Date: Mon, 29 Sep 2025 11:47:39 +0200
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="EtZFHogx"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nlc4sbpSRP3ujLxaPAFtpjX1505lnx1YvBqtfJ2Oj07HZWug2Q8gEL/PyxqVPi+6uyZ7TkuAIC460YPOSk5kk6D9hQ42Px8v0rdYAsrYJV6yRYLrauFaYsS7Yux+TDeynxCY4ySkxMnOhWbge0xu1hPPLgJSPPAxbk6FqfLnxO5KooenfjnwtAh4dsB3yjSQ4skfdGKvHWPxkYJabY8/9o4n483wxhyqghncr0IRpxYQOR3sNfMtN4eAdM7lznyJgPxNhARPlp+aPQW54OU0a8D/h3T9Oq5dx2tctf+HIGYjHT002Xp/9kIaRsD1yN0Zfddpg2EBfMmX7p+3Tjx+BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0h3hQ2odg3XRbz+/FzXSMC5FyzAwnh6UAVV29UT+8m4=;
+ b=hWpqk4C7nhhzyds8iVl0Z3DyCxFuHjEDPCt2uz0TEOCeKEZNI9XcsmPunThhLx8VsIaF8/c97OrdEpIgLixBfVKkK8/22yUV4vV3FdOrwZEfYu1H9giu26gZBoHyh8DMG/Lwx8SOS2bD0VEDFjiQVjY2hg7FQesAyz8gVvWdpviEgSf+W7e8SNtS2VrT6jLbdj3SfZj22j+Qh4adXg/TK8hQCIKEVhdKiFvkH6G5HVAXBiPHRMXU7TmAr2sz3rNzmvCUsxzkHjP/KOkU0/YoNPPvi5IsSug7ITwJKfrGXlLrn0Sr+dBh8smzqj7GTpTj7pynIKJx64/0TwiP7aUG9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0h3hQ2odg3XRbz+/FzXSMC5FyzAwnh6UAVV29UT+8m4=;
+ b=EtZFHogxsSmDaLt0Tzi0UnXCcq2TWD9tO1Zmzk84ZpBY4M7W5VEufTa7XEO8dvew/AgX8rAS51TJO1k/LwzgINIC1uoDpxMJ2lqMjBORhHXzCLmZvfxX/cwLcw5K1cq3dizGl0DficJaYdGj3I5HhA5P7MyZk3ORcKgbEJd6iTAJPuW9RS6iFpfqO5/UbyU0AgOdopV3AiotvntdmjXu+mrYMiiCMFoNgLxs7C2w4Xa+KGdIcdUxdFzcAyYToAwc2F2bnshkgu3H0hDTAmWmEG9Hrx8td2f/SJNfuf9aRflOaZBOuUvHO71fFKE2GxN1WoM5xOLGPmJ5CU8zkpEHIQ==
+Received: from VI1PR02MB3952.eurprd02.prod.outlook.com (2603:10a6:803:85::14)
+ by DU0PR02MB9395.eurprd02.prod.outlook.com (2603:10a6:10:41a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.17; Tue, 30 Sep
+ 2025 10:25:37 +0000
+Received: from VI1PR02MB3952.eurprd02.prod.outlook.com
+ ([fe80::60e5:4de0:ff18:2fb1]) by VI1PR02MB3952.eurprd02.prod.outlook.com
+ ([fe80::60e5:4de0:ff18:2fb1%3]) with mapi id 15.20.9160.013; Tue, 30 Sep 2025
+ 10:25:37 +0000
+From: David Binderman <dcb314@hotmail.com>
+To: "mcgrof@kernel.org" <mcgrof@kernel.org>, "petr.pavlu@suse.com"
+	<petr.pavlu@suse.com>, "da.gomez@kernel.org" <da.gomez@kernel.org>,
+	"samitolvanen@google.com" <samitolvanen@google.com>,
+	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>, LKML
+	<linux-kernel@vger.kernel.org>
+Subject: linux-6.17/kernel/module/sysfs.c:275: Always true test in for loop ?
+Thread-Topic: linux-6.17/kernel/module/sysfs.c:275: Always true test in for
+ loop ?
+Thread-Index: AQHcMfQsAnMo3slzvEG35zIVVtK0zg==
+Date: Tue, 30 Sep 2025 10:25:37 +0000
+Message-ID:
+ <VI1PR02MB3952FA1785356790D290CE949C1AA@VI1PR02MB3952.eurprd02.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: VI1PR02MB3952:EE_|DU0PR02MB9395:EE_
+x-ms-office365-filtering-correlation-id: 27e0a21c-7550-4bde-6df2-08de000bb2b8
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|19110799012|31061999003|461199028|15030799006|15080799012|8060799015|8062599012|39105399003|40105399003|51005399003|440099028|3412199025|102099032;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?tT8oeB+bQ0P1RneCa0ERZ+GVRZsXi6UHQIUL8I6JGZv4ER8SfUUXDc/9lx?=
+ =?iso-8859-1?Q?XgMvE+c9/dLHpG/FuffWjHNbK9K+LFM+206bk76lD6aX1lazKEY4SJNa1I?=
+ =?iso-8859-1?Q?p3HAw5M0XoXoPoX8RdeLFs2Jvtbjg6w2FPri6P14zD69PY3H/ei7q5eTiV?=
+ =?iso-8859-1?Q?LEHy0lbTF7/CZUJzC7UoxKP5GBjnAiIv8m5AU85xDmWpekku2ZCzn6cfMZ?=
+ =?iso-8859-1?Q?6P+uUeZe3HQpSibEPvM2VRS9Uy7aAMy2oKyJEaSI6+eBs0HyRbK0LvV9EP?=
+ =?iso-8859-1?Q?9+svrs1F87lLv/PQ6aGE9m0sq1iq9/O55unFtNxdxLFriw/Ds/xCr5OxdU?=
+ =?iso-8859-1?Q?PynbhTUO6ol2iVj2T8QKQOGbAa87JhrjIcI+AqiTDm3eosZwmukZFgch06?=
+ =?iso-8859-1?Q?ZfCWdM1iKyLBQNzZxBdamXSbZ5FKnGbhqIxQq2D+XYGKI4bItbQXq+1vFC?=
+ =?iso-8859-1?Q?9Kg4EbenkinwQO9FzmVARuDwtt+3P/2bmVlpSGSmcQMO3eQRxA7HIL8AHH?=
+ =?iso-8859-1?Q?30YFHBU4T+Wl/x98WiERjEWC6L/wot18eu2MIsQJZX7w1euO/AIkalg9x/?=
+ =?iso-8859-1?Q?9pVKPMWALROLPStN8xC/RdVOvRUcUMVjUgBjy0K5MzyZe9N53SShRWVqdr?=
+ =?iso-8859-1?Q?wWhh0iWT/5641qy/sj5cKEHZIzn000QtilgDx383p006YseInTxMh24MCc?=
+ =?iso-8859-1?Q?IJYxrljFsHQQzEqdLSPU4hiywkx8F4grhss/IeR3zZfxsuWWs1NGvE/ndp?=
+ =?iso-8859-1?Q?vHviqFvxKQOrrDmF0KNzqPN1+D5q/2DBlFkohTIxkzUvJjVEAAIgky7IgF?=
+ =?iso-8859-1?Q?FzIZjz5xgfPToSzZvcwN4AP1bBrNAv1FT8aUHk/Xcc58LK+wErU7niEO2q?=
+ =?iso-8859-1?Q?5YDSkUffKE6nOViY6NhJ2Ot3dTvEfQmoIqQUwXfcIn/1xc53KBEn4Mv1ys?=
+ =?iso-8859-1?Q?BF14+8BGKZMupYD/R+c0/9I3rURIre8Omgxknbekon3q8lkUPsKTqqVyv8?=
+ =?iso-8859-1?Q?Rz/LmU2Yai1r6EsJiHTfuS0OsuE7nSHNOTCdw64XO76AI9Gv2YL7qu58az?=
+ =?iso-8859-1?Q?89FKv26bTsg9FhxT33qvVIhkKHqFicrCPm71/vQWZ5wc3LFYDCb+Bn/UHU?=
+ =?iso-8859-1?Q?LEhvN7ocj7RA4vNBwdHzKTB4AE7UnT79rSmqqINu20fF+ZbiJF7Kbe7wGL?=
+ =?iso-8859-1?Q?AivGDIWX/BRtITKU6TfZRuQpZddmV2HhTMpvP0G5fsECHJQb/D6YWZvURd?=
+ =?iso-8859-1?Q?+OCx//yv0IKOlLLz2vJqGt3m10uK9WhRgKCI50JSCbOjo61VbM+PZlp1sR?=
+ =?iso-8859-1?Q?OUZN?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?yiBqo908UENH8p4aTYJc/RZhwO8rSQC4rFyJdSqf7smomia7Xuh8NNJ1vw?=
+ =?iso-8859-1?Q?6ww6FiPkL8eFkwO5Y7YofR39FXlbUbs6p2+JrTZ9ZBFk+ZVAL0zTiFvR2C?=
+ =?iso-8859-1?Q?nsUl2qdRLDbjlC8QOfLGyFkUwmI/9hR2ZFhFKvDgHQeGCLTNHXqoz5Lxtf?=
+ =?iso-8859-1?Q?12De/g0uhw/iJ5kV3n7NBZrj5oMJBEE6vOv1l9mQ2ngWaYhVO0DoeF3xZa?=
+ =?iso-8859-1?Q?RXIftjKfm2zJuU0wxAhXYXdqEgj/cX7aUXx8lTjnYwxhoRGOzYSwvM9cKL?=
+ =?iso-8859-1?Q?/TK4H5CWaEqt9PFaiDVJqTJBfbHGn+e5iyMOjZpDIpDF+Jqmt05kkxjGdO?=
+ =?iso-8859-1?Q?iZFU9F5j4XUYfyJHKP9FW2mZvb/JDM9fYF7aY7923iPpvXe32LtCfaYY+u?=
+ =?iso-8859-1?Q?xNofC0cZ8cE1PUb7s11uwOAOqVe+8jMiEOin3aqy3aHS7omOtGWioOBzpW?=
+ =?iso-8859-1?Q?4cwT4SLNCsgiySoWcXsSLQyOvnUmzqxOtyUkrHoZ+EhEO8BFH47qZ3ku8W?=
+ =?iso-8859-1?Q?DJiE7Z9qIUqPZxh+Pej8RATKuZAuNMFtSvodGxbHvDCYNJx+cb/lIvTyDY?=
+ =?iso-8859-1?Q?FGBTFdySMOVlp0yaCs/nrPMiDfvGmW+DDWO82KEoJzt+ifdOiA28vXuLmm?=
+ =?iso-8859-1?Q?91x9QxKVOY5Ba8vN2YxntqFrvP2PbM51OVeVOpqcpyQUsLzEp3FsPRrEA8?=
+ =?iso-8859-1?Q?THM1FizyE0kE+IGkuo7pVN5zligfW8gbqjBXRO8O1RTiodHdyFva9hibjx?=
+ =?iso-8859-1?Q?TbU9DHMlZ07tgBwIAZgfcZZ3FRI8IcPDcAa0NQB9APR7RlbOSZn0T5fDVo?=
+ =?iso-8859-1?Q?Iv0EcD3POxietAD1kvtQRidPs0+pa+Hcyyh+9ZMvHd2GrV40c+C1G/R2wG?=
+ =?iso-8859-1?Q?zAP3GyOo5a8u3IM6zquf4zPYrX3djoOEbZWSzn4sTx1hYxWZC4meXYUcGf?=
+ =?iso-8859-1?Q?hKcrBr4vkIos/RW+3TP97gl2mXNiYB9hMd/H3vpgm1AHSXSMITG8RHiLpR?=
+ =?iso-8859-1?Q?uQ1z1fqBw2AZLa2oX8bIE9ffoz/ONVvWmAanRSRnr93AL7tBl2OO6GdZa+?=
+ =?iso-8859-1?Q?61SxsedU2OtxrIGvuoDaKItYupipTihZj4VeY9OX4bfsh+7mWgmyEY4h7u?=
+ =?iso-8859-1?Q?A2pq0o+5j/m0ju2qyJQIdO9vrcTCxPh9stH2ZqHnU0mhcgWh1Ri1HaJIy+?=
+ =?iso-8859-1?Q?kPkgTlvrUxy6u2805LrpG1GMBrSlFUz0QblPMuCuERqvx1Bm++SLJOMedb?=
+ =?iso-8859-1?Q?Suqh3lShlypcU68WKbgA=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 019/104] module: add load_module_mem() helper
-To: Vegard Nossum <vegard.nossum@oracle.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>, linux-crypto@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>, Eric Biggers <ebiggers@kernel.org>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Wang, Jay" <wanjay@amazon.com>, Nicolai Stange <nstange@suse.com>,
- Vladis Dronov <vdronov@redhat.com>, Stephan Mueller <smueller@chronox.de>,
- Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
-References: <20250904155216.460962-1-vegard.nossum@oracle.com>
- <20250904155216.460962-20-vegard.nossum@oracle.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250904155216.460962-20-vegard.nossum@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-5faa0.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR02MB3952.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27e0a21c-7550-4bde-6df2-08de000bb2b8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2025 10:25:37.5938
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB9395
 
-On 9/4/25 5:50 PM, Vegard Nossum wrote:
-> Add a new helper function, load_module_mem(), which can load a kernel
-> module from a byte array in memory.
-> 
-> Also add a new module loader flag, MODULE_INIT_MEM, signalling that a
-> module was loaded in this way.
-> 
-> When a module is loaded with load_module_mem(), we do a few things
-> differently:
-> 
-> - don't do signature verification
-> - ignore vermagic
-
-Why is checking the vermagic skipped?
-
-> - don't taint the kernel
-
-Why is tainting the kernel skipped?
-
-> - keep the initial reference to the module until the caller wants to
->   drop it
-> 
-> These changes are necessary for having a bundled (but separately
-> compiled) FIPS module.
-> 
-> We may want to let distros carry patches to disable tainting separately
-> so this information is not lost in case somebody builds a non-distro
-> kernel using a FIPS module compiled for an incompatible version.
-> 
-> Co-developed-by: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
-> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
-
-I realize this is posted as an RFC so I'm not sure if you're looking for
-more detailed comments on the implementation at this point. Nonetheless,
-some notes are provided below.
-
-> ---
->  include/linux/module.h      |  2 +
->  include/uapi/linux/module.h |  5 ++
->  kernel/module/main.c        | 99 ++++++++++++++++++++++++++-----------
->  3 files changed, 77 insertions(+), 29 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index 3319a5269d28..00d85602fb6a 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -586,6 +586,8 @@ struct module {
->  
->  #ifdef CONFIG_MODULES
->  
-> +extern int load_module_mem(const char *mem, size_t size);
-> +
-
-Nit: The extern keyword is unnecessary here. See
-Documentation/process/coding-style.rst, 6.1) Function prototypes.
-
->  /* Get/put a kernel symbol (calls must be symmetric) */
->  void *__symbol_get(const char *symbol);
->  void *__symbol_get_gpl(const char *symbol);
-> diff --git a/include/uapi/linux/module.h b/include/uapi/linux/module.h
-> index 03a33ffffcba..5dcd24018be7 100644
-> --- a/include/uapi/linux/module.h
-> +++ b/include/uapi/linux/module.h
-> @@ -7,4 +7,9 @@
->  #define MODULE_INIT_IGNORE_VERMAGIC	2
->  #define MODULE_INIT_COMPRESSED_FILE	4
->  
-> +#ifdef __KERNEL__
-> +/* Internal flags */
-> +#define MODULE_INIT_MEM			30
-> +#endif
-> +
-
-This looks to be incorrect, 30 is 0b11110. The value should be a flag
-with only one bit set.
-
-Additionally, I think referring to this special-type module as MEM is
-misleading as all modules are eventually loaded from the kernel memory.
-Perhaps call it MODULE_INIT_EMBEDDED_FILE, which also aligns with
-MODULE_INIT_COMPRESSED_FILE?
-
->  #endif /* _UAPI_LINUX_MODULE_H */
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index c66b26184936..12ce4bad29ca 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -2572,11 +2572,14 @@ static void module_augment_kernel_taints(struct module *mod, struct load_info *i
->  
->  static int check_modinfo(struct module *mod, struct load_info *info, int flags)
->  {
-> -	const char *modmagic = get_modinfo(info, "vermagic");
-> +	const char *modmagic = NULL;
->  	int err;
->  
-> -	if (flags & MODULE_INIT_IGNORE_VERMAGIC)
-> -		modmagic = NULL;
-> +	if (flags & MODULE_INIT_MEM)
-> +		return 0;
-> +
-> +	if (!(flags & MODULE_INIT_IGNORE_VERMAGIC))
-> +		modmagic = get_modinfo(info, "vermagic");
->  
->  	/* This is allowed: modprobe --force will invalidate it. */
->  	if (!modmagic) {
-> @@ -3007,7 +3010,7 @@ module_param(async_probe, bool, 0644);
->   * Keep it uninlined to provide a reliable breakpoint target, e.g. for the gdb
->   * helper command 'lx-symbols'.
->   */
-> -static noinline int do_init_module(struct module *mod)
-> +static noinline int do_init_module(struct module *mod, int flags)
->  {
->  	int ret = 0;
->  	struct mod_initfree *freeinit;
-> @@ -3071,7 +3074,8 @@ static noinline int do_init_module(struct module *mod)
->  			mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
->  	mutex_lock(&module_mutex);
->  	/* Drop initial reference. */
-> -	module_put(mod);
-> +	if (!(flags & MODULE_INIT_MEM))
-> +		module_put(mod);
->  	trim_init_extable(mod);
->  #ifdef CONFIG_KALLSYMS
->  	/* Switch to core kallsyms now init is done: kallsyms may be walking! */
-> @@ -3347,31 +3351,17 @@ static int early_mod_check(struct load_info *info, int flags)
->  /*
->   * Allocate and load the module: note that size of section 0 is always
->   * zero, and we rely on this for optional sections.
-> + *
-> + * NOTE: module signature verification must have been done already.
->   */
-> -static int load_module(struct load_info *info, const char __user *uargs,
-> -		       int flags)
-> +static int _load_module(struct load_info *info, const char __user *uargs,
-> +			int flags)
->  {
->  	struct module *mod;
->  	bool module_allocated = false;
->  	long err = 0;
->  	char *after_dashes;
->  
-> -	/*
-> -	 * Do the signature check (if any) first. All that
-> -	 * the signature check needs is info->len, it does
-> -	 * not need any of the section info. That can be
-> -	 * set up later. This will minimize the chances
-> -	 * of a corrupt module causing problems before
-> -	 * we even get to the signature check.
-> -	 *
-> -	 * The check will also adjust info->len by stripping
-> -	 * off the sig length at the end of the module, making
-> -	 * checks against info->len more correct.
-> -	 */
-> -	err = module_sig_check(info, flags);
-> -	if (err)
-> -		goto free_copy;
-> -
->  	/*
->  	 * Do basic sanity checks against the ELF header and
->  	 * sections. Cache useful sections and set the
-> @@ -3405,7 +3395,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	 * We are tainting your kernel if your module gets into
->  	 * the modules linked list somehow.
->  	 */
-> -	module_augment_kernel_taints(mod, info);
-> +	if (!(flags & MODULE_INIT_MEM))
-> +		module_augment_kernel_taints(mod, info);
->  
->  	/* To avoid stressing percpu allocator, do this once we're unique. */
->  	err = percpu_modalloc(mod, info);
-> @@ -3452,7 +3443,11 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	flush_module_icache(mod);
->  
->  	/* Now copy in args */
-> -	mod->args = strndup_user(uargs, ~0UL >> 1);
-> +	if ((flags & MODULE_INIT_MEM))
-> +		mod->args = kstrdup("", GFP_KERNEL);
-> +	else
-> +		mod->args = strndup_user(uargs, ~0UL >> 1);
-> +
->  	if (IS_ERR(mod->args)) {
->  		err = PTR_ERR(mod->args);
->  		goto free_arch_cleanup;
-> @@ -3500,13 +3495,10 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	if (codetag_load_module(mod))
->  		goto sysfs_cleanup;
->  
-> -	/* Get rid of temporary copy. */
-> -	free_copy(info, flags);
-> -
->  	/* Done! */
->  	trace_module_load(mod);
->  
-> -	return do_init_module(mod);
-> +	return do_init_module(mod, flags);
->  
->   sysfs_cleanup:
->  	mod_sysfs_teardown(mod);
-> @@ -3562,7 +3554,52 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  		audit_log_kern_module(info->name ? info->name : "?");
->  		mod_stat_bump_becoming(info, flags);
->  	}
-> +	return err;
-> +}
-> +
-> +/*
-> + * Load module from kernel memory without signature check.
-> + */
-> +int load_module_mem(const char *mem, size_t size)
-
-The description and name of this function are not ideal. All module
-loads via load_module() are from the kernel memory and skipping the
-signature check is not the only different property.
-
-I suggest calling the function load_embedded_module() and improving its
-description. Please preferably also use a kernel-doc to describe it as
-the function is external.
-
-> +{
-> +	int err;
-> +	struct load_info info = { };
-> +
-> +	info.sig_ok = true;
-> +	info.hdr = (Elf64_Ehdr *) mem;
-> +	info.len = size;
-> +
-> +	err = _load_module(&info, NULL, MODULE_INIT_MEM);
-> +	if (0)
-> +		free_copy(&info, 0);
-
-Remove the dead code.
-
-> +
-> +	return err;
-> +}
-> +
-> +static int load_module(struct load_info *info, const char __user *uargs,
-> +		       int flags)
-> +{
-> +	int err;
-> +
-> +	/*
-> +	 * Do the signature check (if any) first. All that
-> +	 * the signature check needs is info->len, it does
-> +	 * not need any of the section info. That can be
-> +	 * set up later. This will minimize the chances
-> +	 * of a corrupt module causing problems before
-> +	 * we even get to the signature check.
-> +	 *
-> +	 * The check will also adjust info->len by stripping
-> +	 * off the sig length at the end of the module, making
-> +	 * checks against info->len more correct.
-> +	 */
-> +	err = module_sig_check(info, flags);
-> +	if (!err)
-> +		err = _load_module(info, uargs, flags);
-> +
-> +	/* Get rid of temporary copy. */
->  	free_copy(info, flags);
-> +
->  	return err;
->  }
-
-In the current code, the load_module() function frees the temporary copy
-prior to calling the module's init function, which should generally
-result in less memory pressure. This behavior looks useful to me to
-preserve.
-
-You could keep the current load_module() as is but wrap its
-module_sig_check() call with 'if (!info->sig_ok)'. Similarly, the
-free_copy() call could be protected by
-'if (!(flags & MODULE_INIT_MEM))'.
-
->  
-> @@ -3728,6 +3765,10 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  
->  	pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
->  
-> +	/*
-> +	 * Deliberately omitting MODULE_INIT_MEM as it is for internal use
-> +	 * only.
-> +	 */
->  	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS
->  		      |MODULE_INIT_IGNORE_VERMAGIC
->  		      |MODULE_INIT_COMPRESSED_FILE))
-
-Nit: I suggest the following to improve the comment flow:
-
-	/*
-	 * Check flags validity. Deliberately omit MODULE_INIT_MEM as it is for
-	 * internal use only.
-	 */
-
--- 
-Thanks,
-Petr
+Hello there,=0A=
+=0A=
+Static analyser cppcheck says:=0A=
+=0A=
+linux-6.17/kernel/module/sysfs.c:275:20: style: Pointer expression 'attr=3D=
+&mod->modinfo_attrs[i]' converted to bool is always true. [knownPointerToBo=
+ol]=0A=
+=0A=
+Source code is=0A=
+=0A=
+    for (i =3D 0; (attr =3D &mod->modinfo_attrs[i]); i++) {=0A=
+=0A=
+Suggest code rework.=0A=
+=0A=
+Regards=0A=
+=0A=
+David Binderman=0A=
