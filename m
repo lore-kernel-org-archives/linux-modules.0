@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6AA83126C4;
-	Thu,  2 Oct 2025 08:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE88313550;
+	Thu,  2 Oct 2025 08:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759392857; cv=none; b=gipc70xUmmCH2U7MGBVcZtcQrtdZlv2CVxHdRsH7wXQZdOkgT61dg814AqmSUkPqRoU95kzFYbHGlXpyVkTCT2hhIzMvqDBKpflA2v4KiP0F1f2SOW2YExgO9ZpbmtkGGb6zmZ7uORy79G/2iXFn3HI4hWimf0vJ4+L/fV/EUAk=
+	t=1759392856; cv=none; b=r7sQrBMXmvCX//IyXNexpa/bAey87iRfq4JPeYRZqyueouFIAEczqcl9sCN6MiS5k2P22UyPR5U0FJnWuad1lvH2EXlmSyanSzNLSOOOZLFakJnDf6iH6j4PsxPIQ2aZ9j4Ovay7gPITw+czOTHMcnh2z9TDu2fuCazkTPSa6lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759392857; c=relaxed/simple;
-	bh=Maxqvp8M2/Mbhj5qDNZmaX54vuIa2E/KjRgY0LGmkyY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ebxvb2q40nYY6zZgawJQ9xP5KUNmG1tvLAdzZD8aSojXRkuCebS5s0E4bSgIT6Sg9HlnauGya4B1joSTUVfkGa3ZrUMFx0OHcnMjfw+ra0ZiUDCt4kx5mx6p+NvojmrWcA4c4AYTegAmiED0+t/sDv8m6gfeieWsyPeVdliTBCg=
+	s=arc-20240116; t=1759392856; c=relaxed/simple;
+	bh=IVs7UrTREahv4P4gaL8VNCv4Y1x1l3V8HrPMnx32xWM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=swBig1ZXSKmh8yS8vWNYC7NeZXXjWIOWt4DYgNi5aaLf383i+10qvXgmppvsMKiP6fC1fihZq7RUaJeYUEq36N10qEy152YcbTpXX24tcn49riXzuVYn7w4OnElIncIcsGr8AIuXvGBHjGnswaHrwGJr1jPBId2jXw3t/3qI0iI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-95-68de341581f1
+X-AuditID: a67dfc5b-c45ff70000001609-32-68de34199879
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -162,44 +162,43 @@ Cc: kernel_team@skhynix.com,
 	rcu@vger.kernel.org,
 	linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v17 42/47] dept: call dept_hardirqs_off() in local_irq_*() regardless of irq state
-Date: Thu,  2 Oct 2025 17:12:42 +0900
-Message-Id: <20251002081247.51255-43-byungchul@sk.com>
+Subject: [PATCH v17 47/47] mm: percpu: increase PERCPU_DYNAMIC_SIZE_SHIFT on DEPT and large PAGE_SIZE
+Date: Thu,  2 Oct 2025 17:12:47 +0900
+Message-Id: <20251002081247.51255-48-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251002081247.51255-1-byungchul@sk.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0xTZxjHed9z6Wmh7FDdPOqMpAma6IY31GeZm8vi5XxZYjKzeYta5cQ2
-	3FwLCE6TgqtDA7M2sUbKEKirXalaW2AodqkoKDbGVgxjysVOrBroGitCOihdwfjlyS+///95
-	Pj0MIfuLmseo8gsFdb4iV05LSEkopf7TD7MGlMvbWj+HnjIPCTVX7DT4LjciGHxbgWB8wkSA
-	7lqchJihUwSj0SciiLs7ERj9BgLsTWUY3jimaBi+FUEQtlQiqA6aRPCqYzOEBtsosAxNYRjy
-	/IwgZsyB8w0uGibuPyDgpSOhmjoHELit5TQ81zcT0D2UCiF/DYZ/HTTUlbspOGa+QoN/eBJD
-	n9GAodH5DQxagiR49Q0YjFfngOnsMZwYLzGcudSGIWqxicCizQDT/W4K/rFWi2AysALidQVw
-	OfSAgq6BHgoG7xyn4A/tUxE4/+5AMPoogMFeGSTA+SyRnqvto+GGu4uEitgogu7rNTRUOpop
-	GLDHKdCaxinwebwUPGz0kdBV/Tv5VTY/rvuF5G2uFszrHsZo3l5rR/zEfwbE6/QJujUSJvjf
-	vCM0f6+B469V94v4OmcR77Iu4c03XmG+PvKW4h8Pf8E7bSfoLZk7JOuyhVxVsaBe9uVeiTLu
-	aaIOln1QomuLkFoUSj6JxAzHZnHmC0bRe669GKammWYXc729UWKaZ7PpnKsqOOMJ1vsx1+P/
-	5CRimFnsPs4WUE5rks3gzJdCM3Upu4a7fecZfndyIdfo8Mx4ccJ3B7zkNMvY1Zwu/FOiI0l0
-	Loq5532niHcLc7mb1l5Sj6R1KMmGZKr84jyFKjcrU1maryrJ3F+Q50SJd7McndzZiiK+b9sR
-	yyB5itSX0a+UUYpiTWleO+IYQj5butfap5RJsxWlhwV1wR51Ua6gaUfzGVI+R7py7FC2jD2g
-	KBRyBOGgoH6fYkY8T4vmBr67voH5vkMZPv1DC/rxTdqmVdvd9bX3xrA3WvokLTl6xBaQrhX0
-	mrztG2Wfra+v+tqflRr3nygsutvsxynlI4t3Gla/2Pxrk2SR5KmcWLCyWByTuyq2JbUGx460
-	XK2ZSt/9UU7Va3e/+c9IWtJQ8rpU5Ce3Hj+0dNsILtmVkyYnNUrFiiWEWqP4H3kUzzhqAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSW0xTaRSF/c/5z4WOlTMdMp4oidqEkMwgagJmZ2qMzosnRo0ao4kvUvA4
-	rdxMiwwYTbg1EEaUNrZEqlghFqSACGjEWiSg9YIItSPgQGWqHbxArVGQIIVOwfiys/a3VnbW
-	w2ZJ2Q1qBavOyBI1Gco0OS3Bkl2KwrVRCS9V659bEmEgvxPD1GQJhgvXGmgoaTlPQX+TDcHo
-	VAmC6VkzCbr2EIY5g5OByZlhBkIOJwKTy0BCQ1s+AZ+b52kY7/6EwOj10VDxLh9DwHoaQeWY
-	mYF397eBf9ROQcjzhoDBLxMIrL55AnydxQjmTKlwqbqVhtnePhIqjP0ILns9JLxtDpttzpcI
-	HHUFNPxXfoMEt28Z/D0VoOGR8S8a/K4LBHxopsFS4KDgotmAoLDmGg2miy0Y2v+9zYBrPEjA
-	iMlAgK1lJ4xaxzD0lFcT4X7h1PXlYK4oJMLjLQHGRjsBM9Z6Bp7UjGCw5sWAuddNwau6SgaC
-	3g0QsmSC0/aGAc9ZI4Ymfx+1xYiEad0ZLNS33iQE3bM5WmioakDC7FcDEiavFJKCrjy8dk8E
-	SKGo9U/hSs8ELXydek4Lji8WLDyu5gV971qhvdLDCEUd/zC7fzso2XRYTFNni5p1m5MkqlBn
-	G3UsPzJHZ/+E85D/h1IUwfJcAl9VG6AWNM3F8kNDM+SCjuJW861lY4uc5Hqi+QFXXCli2Z+4
-	ZL7eq1rAmIvhaxr9i3Ept5G/9+A18e3kKt7W3LnII8Lc7e3BC1rGJfK6QBFRjiQWtKQeRakz
-	stOV6rTEeG2qKjdDnROfkpnegsLPZD0V1N9Ck+5tXYhjkXyp1BXjUckoZbY2N70L8Swpj5Im
-	1Y2oZNLDytwToibzkOZ4mqjtQitZLF8u3X5ATJJxfyizxFRRPCZqvrsEG7EiD+XK++ePDA25
-	dt8sS0k5nfJsP467e3lHxL41YvKDvuBt51XFj47pO9EF9u2xOabk8TNPi4cteved4sFh/b5V
-	8ZEKf+T10ljS1ntu696f4371lH2kqjpifFxAR++piHcpqj+4DO83js09VKjHT9b+3mTX9ye8
-	aHwaLe4J7tVlzcQelWOtSrnhF1KjVf4P8xIkJkgDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSbUhTYRTHfe597t3dcHRdoVeLiqUEUpmhcqyQ6IPc6ksRUVZQIy9t+Npm
+	vhTCTKUlmUMwccul5XuTdCapaJjmu9BCWitcZaROIcWXpalpW+WXw4//+fHnfDgMKcunAhhV
+	YoqgTlTEy2kJlvzwLt8fEPZZedDZR4NrUYdBZymh4ItLh2Bp1UiC+UUWAQsN6zQUjX2noXgq
+	C4NhwiiCDcckAb8fxkFxkRXBuL6ZhLI7HRQ8LLVgaP3aJoIvVRMYhvRPCDAWZ3uGk4AqbRB8
+	qzGIwFFQhMHysQeBrs2FocQ0SkN7xwCGkbZHNNxvaKZAa1yi4PmknYCh3n4MlR/eETD21U5B
+	/cwTGnrLfGG+4ieGvvxOAioXZ0iYNJQSMOhYEMFKtbt4cGWQgPnSdQoa5qppWF12F9f/tiGY
+	0S9Sxw7yS7kPMG82mRG/WJlN8jlNafyK6z3NtxocIr7McpNvqgnmn7ZPEXz5vIviLXX3aH7U
+	1k7z5doikjcNnOHnxj9hvrWwgzjtd1FyNFaIV6UK6pCoqxKl/Y2dSm4Wp7/UbYi06JsoD4kZ
+	jg3jHLW/qE1erh2nPUyzezm7/Rfp4W3sbq4pf+KvQ7JDOzjbu30e3soKXNt0i9thGMwGcabs
+	GE8sZSO42Z5a8l/lLu5ZQ+dfFrvzkbEh7GEZG87lzuYQeUjidp6KuZmxuf/3+HOva+xYj6Rl
+	yKsOyVSJqQkKVXzYAWVGoir9wLWkBAtyP0lV5tqlFjRvPduFWAbJvaXWIIdSRilSNRkJXYhj
+	SPk26dWaUaVMGqvIuCWok66ob8YLmi60ncFyP+mhn2mxMva6IkWIE4RkQb25JRhxgBbdsQXf
+	6I5cut9YVRFzvqS2c7Q/tzBVH3hKEhIWQcs1lrXjTSknjzwavtw4fbvl6Fp0jiTad/Ze7Fun
+	/zFzY7TN18eUvSpnHwfmkedM1i3lBVu9FpwRh63Dp3yyzJnkerW/6ULoQsURwvhitW6XM33n
+	q8Huc5EvTxga94QHRoXcjZJjjVIRGkyqNYo/BDYaliADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSXUyTdxTG/b/fbax500H6jo2pNcRoJorKcqbG6IXh1UTizbKoF9LoG1op
+	H7YCZZuGUhrJhA2bFIQqVogNX2qlwKimC4JUsRCsVSBKZZBSUMBmE2QI2LWa3Zz8zvM8OXku
+	DoNL28g4RpV1VtBkKdRySkyIU3cbtny585VyW5FzAwzqOwmYnysh4MrtZgpKWqpIeHKrCcHo
+	fAmChSULDkZnmIAVk5uGucWXNIRdbgQVXhMOza16DN7ZP1Iw3f0PAvNYgILK13oCQrZSBNVB
+	Cw2ve1JgdvQeCWH/JAZD72cQ2AIfMQh0XkCwUpEB12odFCz1D+BQaX6C4PqYH4cpe8Rsdb9C
+	4KovomCivA0HX2ANPJsPUdBrvkjBrPcKBm/tFFiLXCRctZgQGOpuU1BxtYUA5193afBOL2Mw
+	UmHCoKnlMIzaggR4ymuxSL9I6o4MLJUGLDKmMDDfvIfBoq2Rhr66EQJshQlg6feRMF5fTcPy
+	WBKErdngbpqkwf+7mYBbswPkPjPiF4y/EXyjox3jjU9XKL65phnxSx9MiJ+7YcB5Y3lk7Z4J
+	4XyxI5+/4Zmh+A/zzyne9d5K8I9rOf5S/xbeWe2n+eI/X9BHdh0T7zklqFV5gmbr3jSxcvjB
+	MJnTJtL9URKmC9E4/SsSMRy7k/u3YYKKMsVu5IaHF/Eox7DrOEdZkIwyznq+5ga930b5C1bg
+	7r7piGQYhmATuBrD0agsYb/jQj0N+OeTa7kme+cnFkV035iHiLKUTeaMoWKsHImtaFUjilFl
+	5WUqVOrkRG2GsiBLpUs8mZ3ZgiLPZDu3fKkDzflSuhDLIPlqiTfBr5SSijxtQWYX4hhcHiNJ
+	qx9RSiWnFAU/CZrsE5pctaDtQl8xhFwmOfSjkCZl0xVnhQxByBE0/7sYI4orRPe/CQbzN+oa
+	7HT7YYv4oUO3Y2j/NVtsaezlX2JdPQe7c55bRb1Jsvjk0qKB9b7l3X2bJzpO63MT/e369B9k
+	lqGA2r6neMOChq5xn1fVulKdcoXgkf68nZAdonSbvj9Z2l125u/BxLbc1Ibt8Qf0+HR6X1Vw
+	ZrTV/Ch/U//+3uNyQqtUJG3GNVrFfyOFB8lIAwAA
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -207,63 +206,41 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-For dept to function properly, dept_task()->hardirqs_enabled must be set
-correctly.  If it fails to set this value to false, for example, dept
-may mistakenly think irq is still enabled even when it's not.
+Yunseong reported a build failure due to the BUILD_BUG_ON() statement in
+alloc_kmem_cache_cpus().  In the following test:
 
-Do dept_hardirqs_off() regardless of irq state not to miss any
-unexpected cases by any chance e.g. changes of the state by asm code.
+  PERCPU_DYNAMIC_EARLY_SIZE < NR_KMALLOC_TYPES * KMALLOC_SHIFT_HIGH * sizeof(struct kmem_cache_cpu)
 
+The following factors increase the right side of the equation:
+
+  1. PAGE_SIZE > 4KiB increases KMALLOC_SHIFT_HIGH.
+  2. DEPT increases the size of the local_lock_t in kmem_cache_cpu.
+
+Increase PERCPU_DYNAMIC_SIZE_SHIFT to 11 on configs with PAGE_SIZE
+larger than 4KiB and DEPT enabled.
+
+Reported-by: Yunseong Kim <ysk@kzalloc.com>
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- include/linux/irqflags.h | 14 ++++++++++++++
- kernel/dependency/dept.c |  1 +
- 2 files changed, 15 insertions(+)
+ include/linux/percpu.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
-index d8b9cf093f83..586f5bad4da7 100644
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -214,6 +214,13 @@ extern void warn_bogus_irq_restore(void);
- 		raw_local_irq_disable();		\
- 		if (!was_disabled)			\
- 			trace_hardirqs_off();		\
-+		/*					\
-+		 * Just in case that C code has missed	\
-+		 * trace_hardirqs_off() at the first	\
-+		 * place e.g. disabling irq at asm code.\
-+		 */					\
-+		else					\
-+			dept_hardirqs_off();		\
- 	} while (0)
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 85bf8dd9f087..dd74321d4bbd 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -43,7 +43,11 @@
+ # define PERCPU_DYNAMIC_SIZE_SHIFT      12
+ #endif /* LOCKDEP and PAGE_SIZE > 4KiB */
+ #else
++#if defined(CONFIG_DEPT) && !defined(CONFIG_PAGE_SIZE_4KB)
++#define PERCPU_DYNAMIC_SIZE_SHIFT      11
++#else
+ #define PERCPU_DYNAMIC_SIZE_SHIFT      10
++#endif /* DEPT and PAGE_SIZE > 4KiB */
+ #endif
  
- #define local_irq_save(flags)				\
-@@ -221,6 +228,13 @@ extern void warn_bogus_irq_restore(void);
- 		raw_local_irq_save(flags);		\
- 		if (!raw_irqs_disabled_flags(flags))	\
- 			trace_hardirqs_off();		\
-+		/*					\
-+		 * Just in case that C code has missed	\
-+		 * trace_hardirqs_off() at the first	\
-+		 * place e.g. disabling irq at asm code.\
-+		 */					\
-+		else					\
-+			dept_hardirqs_off();		\
- 	} while (0)
- 
- #define local_irq_restore(flags)			\
-diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
-index 0f4464657288..a17b185d6a6a 100644
---- a/kernel/dependency/dept.c
-+++ b/kernel/dependency/dept.c
-@@ -2248,6 +2248,7 @@ void noinstr dept_hardirqs_off(void)
- 	 */
- 	dept_task()->hardirqs_enabled = false;
- }
-+EXPORT_SYMBOL_GPL(dept_hardirqs_off);
- 
- void noinstr dept_update_cxt(void)
- {
+ /*
 -- 
 2.17.1
 
