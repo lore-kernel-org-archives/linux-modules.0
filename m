@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB8482EAB89;
-	Thu,  2 Oct 2025 08:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09F5C2EA475;
+	Thu,  2 Oct 2025 08:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759392810; cv=none; b=mpWvZ0fEUN5KsWf8Fw56iEDHhLmzuUxjzOjJWeXqYJm5GyzemtJu69JOvUh5DUYlJZORyg8FiOlXPdnsLSqsBS8HkmLmtZYBtg8jDGynm+6tEkj4X54ZcF3epaycLQ9JEXkFPZl/lS1njeZAKeT0NdAqKhtU4k1yEFG/qICvoFA=
+	t=1759392813; cv=none; b=ZxrY7Z5NheMbTjteFYZdm2BulDv/lk2kRrP2199ct0b8mLKUNoJjWSpdOEfN0UZeloDBa9yd+r02Hp9xg3gtqudaeKQxJJ0Z73OAERrjyjBaoMBfAJ0SFcqxuer2b68E7Z+gp41AjDQcox8GFyrclqwGBK9MBdygn3MJEUQL+bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759392810; c=relaxed/simple;
-	bh=h//iPHlnVuvuWZaoIOCavmQljq7ds4KVfkx9Jf/hjms=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=SH/3Fo/sxpiB2bUc/l6F6l9PV6lEG/VuB7YBIKxnu/V6foiu6HVrJfDbMkJkMkr8n6l2nPecwQpaDQypmbMZpX+HxEPOn2kpqjTeMUfa4zCPPGSkYUOS//+zuD2Ut6pflo922lyrxjN5HaVW52CRjY060ZdcrbKMneYjpGWY/qw=
+	s=arc-20240116; t=1759392813; c=relaxed/simple;
+	bh=OrmCL7AMrlriaPZyremlA931PaCPQXdxGExlE/vjDx8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=t9DZ8jbQEpPm7rsMWRRnLn8097djGEukSS5MqWYh1X9BdxTIstrwWRyvjP19DPl8x4hBRzGMxcn7B2pAOeM9++pe8P2v5McieClsJ5Dqx/pVJTP6I31IGENE2nrkoW1lCr1sjnTjJ8WTuC+fmrBizy9S2on8hwpFCDccVvUMllQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c2dff70000001609-34-68de340dfdf5
+X-AuditID: a67dfc5b-c45ff70000001609-9c-68de340db706
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -162,44 +162,43 @@ Cc: kernel_team@skhynix.com,
 	rcu@vger.kernel.org,
 	linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: [PATCH v17 09/47] arm64, dept: add support CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64
-Date: Thu,  2 Oct 2025 17:12:09 +0900
-Message-Id: <20251002081247.51255-10-byungchul@sk.com>
+Subject: [PATCH v17 12/47] dept: record the latest one out of consecutive waits of the same class
+Date: Thu,  2 Oct 2025 17:12:12 +0900
+Message-Id: <20251002081247.51255-13-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251002081247.51255-1-byungchul@sk.com>
 References: <20251002081247.51255-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzXSbUxTZxQHcJ/72laqN9W46/tSQ4z4MjGdOSY6F2OyJ4vTReMHZ6I2cLUN
-	ULQowrJlVQEZbpE0KUYq0MJSm1Id3hKVag2ChWGjtKEKgxXsZJ0ESrMGMAjYtRi//fI//3M+
-	HQmp6KdXSLS6s4Jep85VMjJKFk2zbparBjVbXZ3roFy8TsPQZDmCtzNmEkpbEhTMGTtYmJge
-	YCHh6UBQFTCS4Gy+QMBoexyBKTzMwLWRCxTEbL8gqI6YWRjxfgWJ0L8E9E6NIbANvydguPUy
-	grmqHKirdzEw86ybhGsmPwJrOETCm6bksLljEIHHfpGBnuFFEJyMMdBlusJANHCDgPEmBiwX
-	PTRcavidgaoakYKWV24WAqOzBDSK38CQLUKBr7KeANOtBwRM2xws2AzpYH7WQ8Pf9moWZsOZ
-	ELpqouB2tJuGrsGXNIxGjAwMdZbRcM/wigXxTy+CiWCYgHL3JAXi62TF078RrGW/UfDQ00VB
-	+dwEgh73DQYGnQkaDOa3NPhbffSX2djhuktgZ60T4Zl3RoRLK5NqH4uR2DNlofDTeh63VIdY
-	XPKon8UW8Rx22TNww8MRAlvjkzQWHT8zWIwbWWydeUN+m/GdbGe2kKstFPSffXFCpil7fpM8
-	7VYUea+M0waUWFSBpBKeU/G+jjr6o/3eF/NmuPV8X980mfJS7lPe9WtkPic53yr+ZWBTyku4
-	I7ylt5tNmeLS+YmrMSJlObedf94eJD7cXMs3NrXO35Em856wj0pZwX3Ol8ZKkh1ZsmOW8i7D
-	ffbDwnL+sb2PqkRyC1rgQAqtrjBPrc1VbdEU67RFW7Ly80SU/Djbj7NH76O4/1Ab4iRImSb3
-	p4c0ClpdWFCc14Z4CalcKj9h/0ujkGeri78X9PnH9edyhYI2tFJCKT+Rb5s6n63gTqnPCjmC
-	cFrQf5wSEukKA1p217KjQnIoZ1/+vsTC1dFdG4N75+4Ew48GOjuNUd2GP8YHTgpZGxY7PKea
-	G2uLBw7SGeZ7x97/U6ssxWmXb++MZN766b+KJyU18sNbl1lVbmlDVV7hmu171nyte1rnP0mE
-	dnfdWe60vdvvrVEtYIpKxnqXHPjh6Jm4eSiwPwubbduUVIFGnZlB6gvU/wN4eVhLbQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0hTcRjG+5/rHK4OS+p0gWIg0U0rKl5MoojwkFT2oSwJ8pCHNryylWUQ
-	aLqU1mUNpuW0puISt8xcVkss0RzUMl2W3ZxzskxRG9SmmZe1FX15+b3P8/LwfHhFuPQRuVyk
-	yDotKLP4DBklJsQHdhRujNw6IN/kdMZDX0EbAQF/CQEV9y0UlDTdIqGnwYzAHShBMDVjwEFt
-	CxIwp7PT4J/+QkOw1Y6g1KnDwfKwAIOfjfMUjHX8QKD3eCkoGy0gwGe6gqB82EDDaGcCTLhb
-	SAi6vmHwYXIcgck7j4G3rRjBXGk63Km2UjDT1Y1Dmb4HQZXHhcNIY8h8aB9A0Fp3kYKv2mYc
-	er0L4V3AR8FLvYaCCWcFBt8bKTBebCWh0qBDUFhzn4LSyiYCbINPaXCOzWLQX6rDwNy0H9ym
-	YQIc2mos1C909WApGMoKsdAYwUB/rwWDaVM9Da9r+gkw5UeDoauXhKG6chpmPZshaMwGu/kb
-	Da7regIaJrrJXXrETamvEVy99RHGqd/OUZzltgVxM791iPPXFuKcWhtaO8Z9OFdkPcvVOsYp
-	7nfgPcW1ThoJ7lU1y93o2sjZyl00V/TsM50UlyKOTxMyFLmCMnZnqlh+6c1dPOep9Fyn5juZ
-	j4ILL6MIEctsZXs635Nhppg17MeP03iYo5jVrPXq8F8dZxwr2T7nhjAvZo6xxg/ddJgJJpr1
-	X/dhYZYw29k3He+wf5mrWHNj29+ciJDe63EQYZYy21i1rwjTIrERLahHUYqs3ExekbEtRpUu
-	z8tSnIs5mZ3ZhELfZLowe+MJ8vcmtCNGhGSREme0Sy4l+VxVXmY7YkW4LEqSWtcvl0rS+Lzz
-	gjL7hPJMhqBqRytEhGypZF+ykCplTvGnhXRByBGU/11MFLE8H1XHP/5xaTrtS0rC0bhjY4mj
-	OQNWR17S8b2Et2L9nqOJh7GzaGTDfGX9p1jvQa1Fk/LrfPMi0ZZAM286kmiLrJpNWuUZinuh
-	ObnJ9/xrjX+Snhp6bI6y7WlJXsv33TzkLR7/uWTlbvv2B37NMtu64gsRybGDn3piqlxu42CJ
-	29swIyNUcn7zOlyp4v8Aa9MXtkkDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe0hTcRTH++3+7mOzxW0Z3TQoBhJEWonJIUp6ENyoKIgiel/cpY18xDRz
+	haS1qQ0te6ilKbN0LYswTTJzaJaVWrJpmdAerMwKndKmEx9F0/Cfw4fP+Z7z15chFPlkGKNJ
+	ShW1SUKCkpJhmXd+ReSCGJd6bd6thTA2mothfKqUgNGJLzQU2a8T4K/5S0HxrywMI+Y8BF73
+	CxL6W3IQ/Ck6BcWFNgQVHicBT9+4EAzXUGC6aCWhqKwWg31wWgIT5moapj3roN3VS0JFdiWG
+	Jms7hp7GOxRklo6TYGvpJKH7oQ1D3Yf3BNwYHkAwGDATkPXyHgbL72ISBj5lS6BGX0KDrzKA
+	Idv/l4TsyicSqLJ4SXg1NiSBDqefhhvdJgomnQ0k+MqCEUPeBA2F07kU1LeN05DldyPQO9ZD
+	aZuL3ryWHzdcwbyh+w/FPyp/hHhDQXDo687yVZ1DFG8NmDDfcZfjn5c4ad5Ue4bXv/aS/L2m
+	XxK+tvoyxRu9HyW8o7eJ4oe7uui9YYdkG1VigiZN1K6JOyFTv3CX4dPfQ9Jdpmt0JnotNSIp
+	w7ExnPVbI5pj19UKcoYpdiXX1zdBzHAou4Kryx+Y9QTbuYzrta82IoZZxArcWK5uRmM2grO/
+	K5iNyNlYzjVQQvx/uZx7WNMyy9Kg7/F04hlWsOs5w4heYkSyYOa+lGvp/0H/P1jKvbT04QIk
+	N6F51UihSUpLFDQJMVFqXZImPSo+ObEWBUtizpg+3IB8tn2tiGWQcr7cFuFUK0ghLUWX2Io4
+	hlCGyk9YHGqFXCXozona5OPaMwliSisKZ7ByiTw6cFalYE8KqeIpUTwtaue2EkYalol2+BsD
+	9scOvHXP48tbjox+vZn+2Zizuzd29OjhxQcfvJuimiPTQ/eH16sPiEOb43w686erk8dGhMLo
+	t+6QjktxF27vHD6f4RwcGZs8Wt482fymvS1k6ro7pE8VrrEti3RsOJeTV3Wxy9PouevbtK1D
+	64vPiYh1sttZ67Py5l0qy08lTlEL61YR2hThHy0cNHggAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSfUhTexjH+51zds7ZvKvD0jy9QDWQICqLUh6ucrn3n/pxvUV/BEEQOezQ
+	hrrJpiuDQtN1pZfbXGyWy+syHKaWy2lky5DNzDJz02q9uC1rrTdtl64rfMum0T8Pn+f7/fLw
+	/eNhSVm7aBmrUhcKWrUiT05LKMmOjLL10i1B5caHrlR4UtpFQWy8goILLc00VLSeF4H3ahOC
+	UKwCwdcpKwmGjlkKZkw9DIxPvGBgtrMHgcVnIqG5rZSA/x3faPjo+YzAPBKmoep9KQVR+ykE
+	1RErA+/vbIOxkEsEs4G3BPi/jCKwh78REO76G8GMJRdq65w0TPUPkFBl9iK4OBIg4Z0jbrb1
+	BBF0Nhyj4Y2xnYSh8EJ4FIvScM98koYx3wUCPjlosB3rFEGN1YSg7FILDZaaVgo6Xt5kwPdx
+	moBhi4mAptbtELJHKOgz1hHxfvHUtWSwVpUR8fGOAPMVFwET9kYGHlwapsBekgLW/iERvGqo
+	ZmB6ZBPM2jTQ0/SWgcAZMwVXxwZEv5sR/mr4h8KNzusENgzO0Lj532aEpyZNCI/Xl5HYYIyv
+	ntEoicudB3F93yiNJ2OPadz5xUbh+3U8ruxfjzuqAwwuv/2c2fnrHknmfiFPpRe0qb9lS5Su
+	UA1V8CbhUNBWyZSgbvEJJGZ5bgsfPHNRNMc0t4Z/+nSCnONEbhXvPB2Z10mubwX/xLfuBGLZ
+	xZyCj1UUz8kUl8L7eo3zESmXzgcj1eSPkyv5JkfXPIvj+tBIHzXHMi6NN0TLCSOS2NCCRpSo
+	UuvzFaq8tA26XGWxWnVoQ44mvxXFn8l+ZLryBhof2uZGHIvkv0h9KQGlTKTQ64rz3YhnSXmi
+	NLthWCmT7lcUHxa0mn3aojxB50bLWUqeLP1zt5At4w4oCoVcQSgQtD9dghUvK0E54tys20kZ
+	gt5vntTcfE1vfOhOCK30FI56/EXbT9Wu3rV16Uvbdc+HrCODJ7uPe5M/ec8NhNPPPovqlnj9
+	WXs//MFeySyPZKoS4PIgdvylb6/3HsXdbSVJS6ZL7973E5b0ImeGGzarC5KqbqFFut7/JtNe
+	rFteq6k9KnPF7tyTUzqlYtNaUqtTfAeSC7G1SAMAAA==
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -207,82 +206,54 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-dept needs to notice every entrance from user to kernel mode to treat
-every kernel context independently when tracking wait-event dependencies.
-Roughly, system call and user oriented fault are the cases.
+The current code records all the waits for later use to track relation
+between waits and events within each context.  However, since the same
+class is handled the same way, it'd be okay to record only one on behalf
+of the others if they all have the same class.
 
-Make dept aware of the entrances of arm64 and add support
-CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
+Even though it's the ideal to search the whole history buffer for that,
+since it'd cost too high, alternatively, let's keep the latest one when
+the same class'ed waits consecutively appear.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- arch/arm64/Kconfig          | 1 +
- arch/arm64/kernel/syscall.c | 7 +++++++
- arch/arm64/mm/fault.c       | 7 +++++++
- 3 files changed, 15 insertions(+)
+ kernel/dependency/dept.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index e9bbfacc35a6..a8fab2c052dc 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -281,6 +281,7 @@ config ARM64
- 	select USER_STACKTRACE_SUPPORT
- 	select VDSO_GETRANDOM
- 	select VMAP_STACK
-+	select ARCH_HAS_DEPT_SUPPORT
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
+diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
+index 1b16a6095b3c..f4c08758f8db 100644
+--- a/kernel/dependency/dept.c
++++ b/kernel/dependency/dept.c
+@@ -1486,9 +1486,28 @@ static struct dept_wait_hist *new_hist(void)
+ 	return wh;
+ }
  
-diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-index c442fcec6b9e..bbd306335179 100644
---- a/arch/arm64/kernel/syscall.c
-+++ b/arch/arm64/kernel/syscall.c
-@@ -7,6 +7,7 @@
- #include <linux/ptrace.h>
- #include <linux/randomize_kstack.h>
- #include <linux/syscalls.h>
-+#include <linux/dept.h>
- 
- #include <asm/debug-monitors.h>
- #include <asm/exception.h>
-@@ -96,6 +97,12 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
- 	 * (Similarly for HVC and SMC elsewhere.)
- 	 */
- 
-+	/*
-+	 * This is a system call from user mode.  Make dept work with a
-+	 * new kernel mode context.
-+	 */
-+	dept_update_cxt();
++static struct dept_wait_hist *last_hist(void)
++{
++	int pos_n = hist_pos_next();
++	struct dept_wait_hist *wh_n = hist(pos_n);
 +
- 	if (flags & _TIF_MTE_ASYNC_FAULT) {
- 		/*
- 		 * Process the asynchronous tag check fault before the actual
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index d816ff44faff..96827b999d18 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -26,6 +26,7 @@
- #include <linux/pkeys.h>
- #include <linux/preempt.h>
- #include <linux/hugetlb.h>
-+#include <linux/dept.h>
- 
- #include <asm/acpi.h>
- #include <asm/bug.h>
-@@ -622,6 +623,12 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
- 	if (!(mm_flags & FAULT_FLAG_USER))
- 		goto lock_mmap;
- 
 +	/*
-+	 * This fault comes from user mode.  Make dept work with a new
-+	 * kernel mode context.
++	 * This is the first try.
 +	 */
-+	dept_update_cxt();
++	if (!pos_n && !wh_n->wait)
++		return NULL;
 +
- 	vma = lock_vma_under_rcu(mm, addr);
- 	if (!vma)
- 		goto lock_mmap;
++	return hist(pos_n + DEPT_MAX_WAIT_HIST - 1);
++}
++
+ static void add_hist(struct dept_wait *w, unsigned int wg, unsigned int ctxt_id)
+ {
+-	struct dept_wait_hist *wh = new_hist();
++	struct dept_wait_hist *wh;
++
++	wh = last_hist();
++
++	if (!wh || wh->wait->class != w->class || wh->ctxt_id != ctxt_id)
++		wh = new_hist();
+ 
+ 	if (likely(wh->wait))
+ 		put_wait(wh->wait);
 -- 
 2.17.1
 
