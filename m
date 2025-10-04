@@ -1,25 +1,36 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8396139E;
-	Fri,  3 Oct 2025 14:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7FA27FB21
+	for <linux-modules@vger.kernel.org>; Sat,  4 Oct 2025 16:40:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759502235; cv=none; b=D25l0+KTvICCJwZbCyV10c5Guqp9obZqZxtoAUTm32L3Fc6cPiY7wUspKmW8nRXHssjNpZVrs8+d86fPEo7KYY07ioRQa8UkJ6bnEoWG9tofdcUdWcHotaZ2WfDfxbcG4FA22Bbfo4eb9p7DcGdK0Yi5LBjjdd75CfNwjIFNXCs=
+	t=1759596009; cv=none; b=JdU00f3plNB6AOB7O+3KdJSsyytLc2OqYyYJC9SZd3sBHf74K8wM7cUEJLZg3omm4Z7qOpizRmLoZ7KKRsPtw9uDN9nl6sUtQryWxI6HBHVE2aKSRhFK9zVGe9nByoWWCeu9WATE7RTtycwTWw8+B4zdo4NwngN1/NRQVqFt1Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759502235; c=relaxed/simple;
-	bh=ify0TfiFKa3Hes8KZtJjaG2GeXYqffaYoF8Y5oCDXXg=;
+	s=arc-20240116; t=1759596009; c=relaxed/simple;
+	bh=RpD4KNUBmJSgm0bHWcZ0DvqxhqkKLHESkzxfIrCF35M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U6cE2diKRDWdmOgbZp5W0Q018xpyzLFAzYyIbMQ/ZEyxi2OrmtuIgrcpmDS1WC4dIZ0EcSNlZhka4rqrK/hq8gdn21NR1WGbNKUeXG6kAXxetZi8vqANffhmh6hqZZA5Of4sQnEwaQT26qoqUf1ika7R7wrW2QvHdd6TilZUPwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 09D741A9A;
-	Fri,  3 Oct 2025 07:37:04 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8693C3F5A1;
-	Fri,  3 Oct 2025 07:36:47 -0700 (PDT)
-Date: Fri, 3 Oct 2025 15:36:42 +0100
-From: Mark Rutland <mark.rutland@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BW4YVrhr55hpBSSlFiqOtRDlIClZflDMI4LceVcYHKzYMkG5nZjkPlAmDqTrBMym0GKsGPqOHzsE/yAWEqow6+lM6Q5GWOJKAuyUx9DOaDMmUch5p6cSWhTe6mHZ1DM6hSl5MMIFsO2EYT7sJZ0HTVqteqKWG1Z6pOxvjQvaNi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=PNedKPiX; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="PNedKPiX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=oYWX
+	AVcToZjL216N14wevIUTr5XEGs+BI72TKUQOPN8=; b=PNedKPiX4oCj4bpedhVz
+	E+/1zG4RS6etGvHx7daU2DUWMNccTF0z1BMx94C/uGTZ5muouJ1sCi+Rrrn+I0yb
+	QX0tCQTPUifcb+5NvLnilNYtzPuaMC9afpJzRPyfpW8YSMz2Kk2sAGveGofpt2/U
+	FgjEfDef1ztsgRt/i/fhnznfm7TM0Tf+A/tZDrAPd+4jSPssQfBLtqCfRE58HIfm
+	D8PcLW9fA6b0Ln4SDcQwSOwdrXhoroqBaJXPWi2lQd/dVTkvYzyJpOcaiTLwaahq
+	J+U+4x2W131yohhie5t+CaEw/7wpjC2Zja7YEDIcma8nk3Y5vfr5rBO/vRmlQllV
+	Rw==
+Received: (qmail 1087916 invoked from network); 4 Oct 2025 18:39:44 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Oct 2025 18:39:44 +0200
+X-UD-Smtp-Session: l3s3148p1@ZNCL3VdA3IqSRnW9
+Date: Sat, 4 Oct 2025 18:39:43 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 To: Byungchul Park <byungchul@sk.com>
 Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
@@ -61,7 +72,7 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
 	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
 	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, ada.coupriediaz@arm.com,
+	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
 	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
 	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
 	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
@@ -80,11 +91,11 @@ Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
 	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 09/47] arm64, dept: add support
- CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64
-Message-ID: <aN_fel4Rpqz6TPsD@J2N7QTR9R3>
+Subject: Re: [PATCH v17 35/47] i2c: rename wait_for_completion callback to
+ wait_for_completion_cb
+Message-ID: <aOFNz2mKXCXUImwO@shikoro>
 References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-10-byungchul@sk.com>
+ <20251002081247.51255-36-byungchul@sk.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -93,64 +104,24 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251002081247.51255-10-byungchul@sk.com>
+In-Reply-To: <20251002081247.51255-36-byungchul@sk.com>
 
-On Thu, Oct 02, 2025 at 05:12:09PM +0900, Byungchul Park wrote:
-> dept needs to notice every entrance from user to kernel mode to treat
-> every kernel context independently when tracking wait-event dependencies.
-> Roughly, system call and user oriented fault are the cases.
+On Thu, Oct 02, 2025 at 05:12:35PM +0900, Byungchul Park wrote:
+> Functionally no change.  This patch is a preparation for DEPT(DEPendency
+> Tracker) to track dependencies related to a scheduler API,
+> wait_for_completion().
 > 
-> Make dept aware of the entrances of arm64 and add support
-> CONFIG_ARCH_HAS_DEPT_SUPPORT to arm64.
+> Unfortunately, struct i2c_algo_pca_data has a callback member named
+> wait_for_completion, that is the same as the scheduler API, which makes
+> it hard to change the scheduler API to a macro form because of the
+> ambiguity.
+> 
+> Add a postfix _cb to the callback member to remove the ambiguity.
 > 
 > Signed-off-by: Byungchul Park <byungchul@sk.com>
-> ---
->  arch/arm64/Kconfig          | 1 +
->  arch/arm64/kernel/syscall.c | 7 +++++++
->  arch/arm64/mm/fault.c       | 7 +++++++
->  3 files changed, 15 insertions(+)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index e9bbfacc35a6..a8fab2c052dc 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -281,6 +281,7 @@ config ARM64
->  	select USER_STACKTRACE_SUPPORT
->  	select VDSO_GETRANDOM
->  	select VMAP_STACK
-> +	select ARCH_HAS_DEPT_SUPPORT
->  	help
->  	  ARM 64-bit (AArch64) Linux support.
->  
-> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> index c442fcec6b9e..bbd306335179 100644
-> --- a/arch/arm64/kernel/syscall.c
-> +++ b/arch/arm64/kernel/syscall.c
-> @@ -7,6 +7,7 @@
->  #include <linux/ptrace.h>
->  #include <linux/randomize_kstack.h>
->  #include <linux/syscalls.h>
-> +#include <linux/dept.h>
->  
->  #include <asm/debug-monitors.h>
->  #include <asm/exception.h>
-> @@ -96,6 +97,12 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
->  	 * (Similarly for HVC and SMC elsewhere.)
->  	 */
->  
-> +	/*
-> +	 * This is a system call from user mode.  Make dept work with a
-> +	 * new kernel mode context.
-> +	 */
-> +	dept_update_cxt();
 
-As Mark Brown pointed out in his replies, this patch is missing a whole
-bunch of cases and does not work correctly as-is.
+This patch seems reasonable in any case. I'll pick it, so you have one
+dependency less. Good luck with the series!
 
-As Dave Hansen pointed out on the x86 patch, you shouldn't do this
-piecemeal in architecture code, and should instead work with the
-existing context tracking, e.g. by adding logic to
-enter_from_user_mode() and exit_to_user_mode(), or by reusing some
-existing context tracking logic that's called there.
+Applied to for-next, thanks!
 
-Mark.
