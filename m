@@ -1,203 +1,296 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10E619F111
-	for <linux-modules@vger.kernel.org>; Mon,  6 Oct 2025 22:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688A21F3B9E
+	for <linux-modules@vger.kernel.org>; Tue,  7 Oct 2025 01:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759791497; cv=none; b=diK/BLrBItnYBtOf8xFM5IBmzaVFG5B/bo8jSm4EnOPtsF5TGu2P4KefEQTdEicydmcVg3YGGX+IzFDFg1ZTd8P//xxSo/FqvL9TlsZbvDfsqFLEM+Yf/58pgG481TRD/Plhzzs8heNJzYbBIe+ZbqRDThb15XrkekYOgdxGv+Q=
+	t=1759799838; cv=none; b=a8Q0EACPAn4kKE6ITlF96wYnqlQiUtD3/fOzqSJGLjTcgVfyVi5C9SyYTRaUAYWqvqzqJY2/E6xO5dnmnBnZwXaAYqEliyoky4LAo55BLEcHCGEalx9Y6SfmBKXTjXhKyRfhp/bAiMzJnXLCwsmntebYRPSjRuFspAR/S/mLljo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759791497; c=relaxed/simple;
-	bh=Lxcy5NL3Pu34Y9yZDrN3rk4ENVzLB2VJ2gFBFJRiZe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kssy0Ip+qqxTaiI24yb858ZLUK8MdqCeuVdZgPTBm4Y7eRrEURIqZDnDo9BvRwg8R5K3wn/0vwvznS9hq7M8CTQGhmTg0LXMMMPZ85i8fCItWW6EHyhDvVusH44pBMaRxLJWwcCcFN1w5ggWyRCUMVwu2m0CPaOJ1n+Ho0SlsRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=M4kP3F8h; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1759799838; c=relaxed/simple;
+	bh=ZoCuQIGKECVz2Og4x5nmupKDmXLNha8Nv8LewmenEmc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ra3dIhX6FANm/w2J+VfsP7dcthU/b6DX8wdaxUXa9AmfMNBhi7NVdimQ3zL6gh4VKdB+wVe+DeH4/HdC3zezIRkx5iA/vG73YikBnTVipjmoopvIj4DEHM7GfmIBwVayVuk0VZB21pXb4DWNL83824urGtsw5xIOH/S8jv07nMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e68+31uU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="M4kP3F8h"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-b555ab7fabaso5498382a12.0
-        for <linux-modules@vger.kernel.org>; Mon, 06 Oct 2025 15:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1759791495; x=1760396295; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/BzR3xcFJ27hJdoJBLSQ8cx3Y7ne92fXQ6+nL97RBI=;
-        b=M4kP3F8h1g2h/2LVC8k+gEdvyFalaLxxhi0boU2ms9csn7D1qhDuu9DZhemPuTizfP
-         LkiecPIxTfoI3hrpGqKq/4xfGOjtP/078WK/I8tW/0Idm0y75by/92PZg3m0dhXB8/sJ
-         yq4mBd5DO7cgp3BIdIRP3Wg7rdfxJg+brrp4Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759791495; x=1760396295;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/BzR3xcFJ27hJdoJBLSQ8cx3Y7ne92fXQ6+nL97RBI=;
-        b=i8E9yA4Ef5xWS5+EN5FomASc5vF36oqxPdebxBXa3FNWQVyJodYSt+m6GcMvWEJ4jB
-         DYSoyfHK3wCiMb7bLuuH5pDos4ohDOe8sy2WKgfd0lcNTWAa8aihV3rHPY6Z+JWgwMO+
-         jfcimUo4APrIi6PekuroNK2Wn97fK1Cif8cnlatPA8ajYLUv9NAfIZTcmQNOOt9VYJTV
-         nfooUmHCZOftFb95f1OE3PJh4k6g1V/AFPp+8DnnvtXEuTdmZ8gsa1FzkDVIvo+FdWYK
-         Qv3vAuZktCg+QoHKmvZpKhvKRyiw1YUOo570mRtoBCdKEBxIuY3SVmEngFWG+Tyd4FNd
-         E9Og==
-X-Forwarded-Encrypted: i=1; AJvYcCXA8rb7gq36ve+kG1a5GWqT7HL6Uwoz8MfVby3vdAaWE0BfyyUpdQeVycsAJjcZ/TNUFXA3NH3ayqTHy0LW@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjZb+OfQnqgzyT3y1Z4Ndwz/rFW9YRk6ztOE11sl+kQXsCwjkS
-	JYQpqWw96gNUUNaTgHCzszDsbrz4d9WB3AaXMRTx8CAZoboh262HCcwggaKZSjxp7A==
-X-Gm-Gg: ASbGnctAAp75rmbAzLLKz5H9i7w7xN6JtRpFDa5OB94imMdg0A2XJQsj28tAs6F91+v
-	nsBF0Kmsg9wcC080FaakxAtBOd9n1b3oZDMD7RwpnAtBtQWzg/JxIvZ4NyGc3Zztr/oS/qJLd7M
-	GAHcljsthnpRNgBaXZqe3tK/bL+rObx9JDv0al/Q2wkWitUY07oM1Sm2i6w6fZC+hI33NTKEd7g
-	GcSBsFqMhnkDhm4v3n4+NN72ARSnjGcp2W7WSGuQfFmJsGRoCTvyrDA0BFpiskqPL2nfSlSZECv
-	7SM0onuwT4myOl2FfKE9wz7DAHlQZ+Gdl5n6m31zWEeLXrhPpR66xGE1RuXVovU669pirLNhdYv
-	30L+BWQl70JD45AAubEDi1QzqXD3JtcPc/FsXm77qM1droNsZqhvW6V0wP9ltyadBkTaHcDNcGp
-	2os3OzqZ8F
-X-Google-Smtp-Source: AGHT+IGVZN5motWy2Ycd10vl3SQ+AaFTmr4hj0xbObvYJTiiiEPPzlHnJXWtgHFm0rxdlAP5PbSCnQ==
-X-Received: by 2002:a17:903:2ac3:b0:269:b2ff:5c0e with SMTP id d9443c01a7336-28e9a679f43mr160020265ad.46.1759791494873;
-        Mon, 06 Oct 2025 15:58:14 -0700 (PDT)
-Received: from localhost ([2a00:79e0:2e7c:8:299e:f3e3:eadb:de86])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-28e8d1d5e20sm143991805ad.97.2025.10.06.15.58.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Oct 2025 15:58:14 -0700 (PDT)
-Date: Mon, 6 Oct 2025 15:58:12 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>, linux-pci@vger.kernel.org,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e68+31uU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759799831;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EpRMfKm9o1/F18kIBfBg6L03Iz4uKtsAej9zDsxfaLk=;
+	b=e68+31uUFYFLJEb9QDPx/ktKo2UVkop7km6lgl/RfO/FNap8euOSzRGHs8jaXKYrEdxjGi
+	xzs68klBx2Vv9svQGUV43xiSdrx5qGjQ78rjr+TXV4Jk8/djbKo6ScOYt3rvD3UWGRCmLN
+	iLCI9YdnGTYE3Ih5D3h3+A55xKD7wrM=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-635-6M4nBPQVP42ztCl4msuiYw-1; Mon,
+ 06 Oct 2025 21:17:05 -0400
+X-MC-Unique: 6M4nBPQVP42ztCl4msuiYw-1
+X-Mimecast-MFC-AGG-ID: 6M4nBPQVP42ztCl4msuiYw_1759799823
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 04ED4180034F;
+	Tue,  7 Oct 2025 01:17:03 +0000 (UTC)
+Received: from cmirabil.lan (unknown [10.22.64.13])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EB5E41800452;
+	Tue,  7 Oct 2025 01:16:59 +0000 (UTC)
+From: Charles Mirabile <cmirabil@redhat.com>
+To: legion@kernel.org
+Cc: da.gomez@samsung.com,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-modules@vger.kernel.org,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Richard Weinberger <richard@nod.at>, Wei Liu <wei.liu@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	kunit-dev@googlegroups.com,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	linux-um@lists.infradead.org
-Subject: Re: [PATCH 1/4] PCI: Support FIXUP quirks in modules
-Message-ID: <aORJhL1yAPyV7YAW@google.com>
-References: <20250912230208.967129-1-briannorris@chromium.org>
- <20250912230208.967129-2-briannorris@chromium.org>
- <c84d6952-7977-47cd-8f09-6ea223217337@suse.com>
- <aNLb9g0AbBXZCJ4m@google.com>
- <2071b071-874c-4f85-8500-033c73dfaaab@suse.com>
+	masahiroy@kernel.org,
+	mcgrof@kernel.org,
+	nathan@kernel.org,
+	nicolas.schier@linux.dev,
+	petr.pavlu@suse.com,
+	samitolvanen@google.com,
+	sfr@canb.auug.org.au
+Subject: Re: [PATCH v8 7/8] modpost: Create modalias for builtin modules
+Date: Mon,  6 Oct 2025 21:16:37 -0400
+Message-ID: <20251007011637.2512413-1-cmirabil@redhat.com>
+In-Reply-To: <28d4da3b0e3fc8474142746bcf469e03752c3208.1758182101.git.legion@kernel.org>
+References: <28d4da3b0e3fc8474142746bcf469e03752c3208.1758182101.git.legion@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2071b071-874c-4f85-8500-033c73dfaaab@suse.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Hi Petr,
-
-On Wed, Sep 24, 2025 at 09:48:47AM +0200, Petr Pavlu wrote:
-> On 9/23/25 7:42 PM, Brian Norris wrote:
-> > Hi Petr,
-> > 
-> > On Tue, Sep 23, 2025 at 02:55:34PM +0200, Petr Pavlu wrote:
-> >> On 9/13/25 12:59 AM, Brian Norris wrote:
-> >>> @@ -259,6 +315,12 @@ void pci_fixup_device(enum pci_fixup_pass pass, struct pci_dev *dev)
-> >>>  		return;
-> >>>  	}
-> >>>  	pci_do_fixups(dev, start, end);
-> >>> +
-> >>> +	struct pci_fixup_arg arg = {
-> >>> +		.dev = dev,
-> >>> +		.pass = pass,
-> >>> +	};
-> >>> +	module_for_each_mod(pci_module_fixup, &arg);
-> >>
-> >> The function module_for_each_mod() walks not only modules that are LIVE,
-> >> but also those in the COMING and GOING states. This means that this code
-> >> can potentially execute a PCI fixup from a module before its init
-> >> function is invoked, and similarly, a fixup can be executed after the
-> >> exit function has already run. Is this intentional?
-> > 
-> > Thanks for the callout. I didn't really give this part much thought
-> > previously.
-> > 
-> > Per the comments, COMING means "Full formed, running module_init". I
-> > believe that is a good thing, actually; specifically for controller
-> > drivers, module_init() might be probing the controller and enumerating
-> > child PCI devices to which we should apply these FIXUPs. That is a key
-> > case to support.
-> > 
-> > GOING is not clearly defined in the header comments, but it seems like
-> > it's a relatively narrow window between determining there are no module
-> > refcounts (and transition to GOING) and starting to really tear it down
-> > (transitioning to UNFORMED before any significant teardown).
-> > module_exit() runs in the GOING phase.
-> > 
-> > I think it does not make sense to execute FIXUPs on a GOING module; I'll
-> > make that change.
+On Thu, Sep 18, 2025 at 10:05:51AM +0200, Alexey Gladkov wrote:
+> For some modules, modalias is generated using the modpost utility and
+> the section is added to the module file.
 > 
-> Note that when walking the modules list using module_for_each_mod(),
-> the delete_module() operation can concurrently transition a module to
-> MODULE_STATE_GOING. If you are thinking about simply having
-> pci_module_fixup() check that mod->state isn't MODULE_STATE_GOING,
-> I believe this won't quite work.
-
-Good point. I think this at least suggests that this should hook into
-some blocking point in the module-load sequence, such as the notifiers
-or even module_init() as you suggest below.
-
-> > Re-quoting one piece:
-> >> This means that this code
-> >> can potentially execute a PCI fixup from a module before its init
-> >> function is invoked,
-> > 
-> > IIUC, this part is not true? A module is put into COMING state before
-> > its init function is invoked.
+> When a module is added inside vmlinux, modpost does not generate
+> modalias for such modules and the information is lost.
 > 
-> When loading a module, the load_module() function calls
-> complete_formation(), which puts the module into the COMING state. At
-> this point, the new code in pci_fixup_device() can see the new module
-> and potentially attempt to invoke its PCI fixups. However, such a module
-> has still a bit of way to go before its init function is called from
-> do_init_module(). The module hasn't yet had its arguments parsed, is not
-> linked in sysfs, isn't fully registered with codetag support, and hasn't
-> invoked its constructors (needed for gcov/kasan support).
+> As a result kmod (which uses modules.builtin.modinfo in userspace)
+> cannot determine that modalias is handled by a builtin kernel module.
+> 
+> $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
+> pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
+> 
+> $ modinfo xhci_pci
+> name:           xhci_pci
+> filename:       (builtin)
+> license:        GPL
+> file:           drivers/usb/host/xhci-pci
+> description:    xHCI PCI Host Controller Driver
+> 
+> Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
+> modpost if the module is built separately.
+> 
+> To fix this it is necessary to generate the same modalias for vmlinux as
+> for the individual modules. Fortunately '.vmlinux.export.o' is already
+> generated from which '.modinfo' can be extracted in the same way as for
+> vmlinux.o.
 
-It seems unlikely that sysfs, codetag, or arguments should matter much.
-gcov and kasan might be nice to have though.
+Hi -
 
-> I don't know enough about PCI fixups and what is allowable in them, but
-> I suspect it would be better to ensure that no fixup can be invoked from
-> the module during this period.
+This patch broke RISC-V builds for me. During the final objcopy where the new
+symbols are supposed to be stripped, an error occurs producing lots of error
+messages similar to this one:
 
-I don't know of general rules, but they generally do pretty minimal work
-to adjust various fields in and around 'struct pci_dev', to account for
-broken IDs. Sometimes they need to read a few PCI registers. They may
-even tweak PM-related features. It varies based
-on what kind of "quriky" devices need to be handled, but it's usually
-pretty straightforward and well-contained -- not relying on any kind of
-global state, or even all that much specific to the module in question
-besides constant IDs.
+riscv64-linux-gnu-objcopy: not stripping symbol `__mod_device_table__...'
+because it is named in a relocation
 
-(You can peruse drivers/pci/quirks.c or the various other files that use
-DECLARE_PCI_FIXUP_*() macros, if you're curious.)
+It does not occur using defconfig, but I was able to bisect my way to this
+commit and then reduce my config delta w.r.t defconfig until I landed on:
 
-> If the above makes sense, I think using module_for_each_mod() might not
-> be the right approach. Alternative options include registering a module
-> notifier or having modules explicitly register their PCI fixups in their
-> init function.
+cat > .config <<'EOF'
+CONFIG_RELOCATABLE=y
+CONFIG_KASAN=y
+EOF
+ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make olddefconfig
+ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make -j $(nproc)
+...
+  LD      vmlinux.unstripped
+  NM      System.map
+  SORTTAB vmlinux.unstripped
+  CHKREL  vmlinux.unstripped
+  OBJCOPY vmlinux
+  OBJCOPY modules.builtin.modinfo
+  GEN     modules.builtin
+riscv64-linux-gnu-objcopy: not stripping symbol `<long symbol name>'
+because it is named in a relocation
+<repeats with different symbol names about a dozen times>
+make[3]: *** [scripts/Makefile.vmlinux:97: vmlinux] Error 1
+make[3]: *** Deleting file 'vmlinux'
+make[2]: *** [Makefile:1242: vmlinux] Error 2
+make[1]: *** [/tmp/linux/Makefile:369: __build_one_by_one] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
 
-I agree module_for_each_mod() is probably not the right choice, but I'm
-not sure what the right choice is.
+I confirmed that reverting this commit fixes the issue.
 
-register_module_notifier() + keying off MODULE_STATE_COMING before
-pulling in the '.pci_fixup*' list seems attractive, but it still comes
-before gcov/kasan.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Alexey Gladkov <legion@kernel.org>
+> Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  include/linux/module.h   |  4 ----
+>  scripts/Makefile.vmlinux |  4 +++-
+>  scripts/mksysmap         |  3 +++
+>  scripts/mod/file2alias.c | 19 ++++++++++++++++++-
+>  scripts/mod/modpost.c    | 15 +++++++++++++++
+>  scripts/mod/modpost.h    |  2 ++
+>  6 files changed, 41 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index e31ee29fac6b7..e135cc79aceea 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -256,14 +256,10 @@ struct module_kobject *lookup_or_create_module_kobject(const char *name);
+>  	__PASTE(type,			\
+>  	__PASTE(__, name)))))
+>  
+> -#ifdef MODULE
+>  /* Creates an alias so file2alias.c can find device table. */
+>  #define MODULE_DEVICE_TABLE(type, name)					\
+>  static typeof(name) __mod_device_table(type, name)			\
+>    __attribute__ ((used, alias(__stringify(name))))
+> -#else  /* !MODULE */
+> -#define MODULE_DEVICE_TABLE(type, name)
+> -#endif
+>  
+>  /* Version of form [<epoch>:]<version>[-<extra-version>].
+>   * Or for CVS/RCS ID version, everything but the number is stripped.
+> diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+> index ce79461714979..1e5e37aadcd05 100644
+> --- a/scripts/Makefile.vmlinux
+> +++ b/scripts/Makefile.vmlinux
+> @@ -89,11 +89,13 @@ endif
+>  remove-section-y                                   := .modinfo
+>  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+>  
+> +remove-symbols := -w --strip-symbol='__mod_device_table__*'
+> +
+>  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
+>  # it is necessary to remove the PT_LOAD flag from the segment.
+>  quiet_cmd_strip_relocs = OBJCOPY $@
+>        cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
+> -                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $@
+> +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
+>  
+>  targets += vmlinux
+>  vmlinux: vmlinux.unstripped FORCE
+> diff --git a/scripts/mksysmap b/scripts/mksysmap
+> index a607a0059d119..c4531eacde202 100755
+> --- a/scripts/mksysmap
+> +++ b/scripts/mksysmap
+> @@ -59,6 +59,9 @@
+>  # EXPORT_SYMBOL (namespace)
+>  / __kstrtabns_/d
+>  
+> +# MODULE_DEVICE_TABLE (symbol name)
+> +/ __mod_device_table__/d
+> +
+>  # ---------------------------------------------------------------------------
+>  # Ignored suffixes
+>  #  (do not forget '$' after each pattern)
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 1260bc2287fba..7da9735e7ab3e 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -1477,7 +1477,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  	void *symval;
+>  	char *zeros = NULL;
+>  	const char *type, *name, *modname;
+> -	size_t typelen;
+> +	size_t typelen, modnamelen;
+>  	static const char *prefix = "__mod_device_table__";
+>  
+>  	/* We're looking for a section relative symbol */
+> @@ -1500,6 +1500,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  	type = strstr(modname, "__");
+>  	if (!type)
+>  		return;
+> +	modnamelen = type - modname;
+>  	type += strlen("__");
+>  
+>  	name = strstr(type, "__");
+> @@ -1526,5 +1527,21 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
+>  		}
+>  	}
+>  
+> +	if (mod->is_vmlinux) {
+> +		struct module_alias *alias;
+> +
+> +		/*
+> +		 * If this is vmlinux, record the name of the builtin module.
+> +		 * Traverse the linked list in the reverse order, and set the
+> +		 * builtin_modname unless it has already been set in the
+> +		 * previous call.
+> +		 */
+> +		list_for_each_entry_reverse(alias, &mod->aliases, node) {
+> +			if (alias->builtin_modname)
+> +				break;
+> +			alias->builtin_modname = xstrndup(modname, modnamelen);
+> +		}
+> +	}
+> +
+>  	free(zeros);
+>  }
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 5ca7c268294eb..47c8aa2a69392 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2067,11 +2067,26 @@ static void write_if_changed(struct buffer *b, const char *fname)
+>  static void write_vmlinux_export_c_file(struct module *mod)
+>  {
+>  	struct buffer buf = { };
+> +	struct module_alias *alias, *next;
+>  
+>  	buf_printf(&buf,
+>  		   "#include <linux/export-internal.h>\n");
+>  
+>  	add_exported_symbols(&buf, mod);
+> +
+> +	buf_printf(&buf,
+> +		   "#include <linux/module.h>\n"
+> +		   "#undef __MODULE_INFO_PREFIX\n"
+> +		   "#define __MODULE_INFO_PREFIX\n");
+> +
+> +	list_for_each_entry_safe(alias, next, &mod->aliases, node) {
+> +		buf_printf(&buf, "MODULE_INFO(%s.alias, \"%s\");\n",
+> +			   alias->builtin_modname, alias->str);
+> +		list_del(&alias->node);
+> +		free(alias->builtin_modname);
+> +		free(alias);
+> +	}
+> +
+>  	write_if_changed(&buf, ".vmlinux.export.c");
+>  	free(buf.p);
+>  }
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 9133e4c3803f0..2aecb8f25c87e 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -99,10 +99,12 @@ buf_write(struct buffer *buf, const char *s, int len);
+>   * struct module_alias - auto-generated MODULE_ALIAS()
+>   *
+>   * @node: linked to module::aliases
+> + * @modname: name of the builtin module (only for vmlinux)
+>   * @str: a string for MODULE_ALIAS()
+>   */
+>  struct module_alias {
+>  	struct list_head node;
+> +	char *builtin_modname;
+>  	char str[];
+>  };
+>  
+> -- 
+> 2.51.0
+> 
 
-It seems like "first thing in module_init()" would be the right choice,
-but I don't know of a great way to do that. I could insert PCI-related
-calls directly into do_init_module() / delete_module(), but that doesn't
-seem very elegant. I could also mess with the module_{init,exit}()
-macros, but that seems a bit strange too.
-
-I'm open to suggestions. Or else maybe I'll just go with
-register_module_notifier(), and accept that there may some small
-downsides still.
-
-Thanks,
-Brian
