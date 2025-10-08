@@ -1,66 +1,65 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200712820DB
-	for <linux-modules@vger.kernel.org>; Wed,  8 Oct 2025 13:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116E52586C5
+	for <linux-modules@vger.kernel.org>; Wed,  8 Oct 2025 13:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759929551; cv=none; b=smEns+bFJmve3yfUozQPdJE0T5KH9RLQTwdQMc5gF5pGznd19oOLS/rduAv6bsM514qGgFtEDdhMfI50tzPr7qX4rAG7SlgrxGCHQOUEQyrSxn7VNvKBs3THirvF8AjS1iRRoBCtn43dguMD5NoCxmXwWNWNgajHGuDl3qpDvfU=
+	t=1759929765; cv=none; b=Gvpf7SVMd+KPNwv36Io1PUkbeEK6T6NFhBTyU/IIsC5olSxg35/Fdt5/A+76yq2bi9VrufJZPPWncwU39IHN2ucLNbl90vsr7JkSC8ixko2w3G4T+b46xgomTOot26pR1KAE8c2X95tqK9DKVUN537mubP8Hf67/pVtAsByZZPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759929551; c=relaxed/simple;
-	bh=MFp9KUdYt6xEG2KBVkL/DRBGqry+bbucB+9ElbhxNuc=;
+	s=arc-20240116; t=1759929765; c=relaxed/simple;
+	bh=eC0mq9CHz0uy1+c4DF7V23DakyvbvC8nry8GMoB26yo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EszkW+RhZJgnvui8znARPMljUHY3GqzHyyOEIMCFRd0xty8ZcFrp1CziB0u3UXsVP1KoE5w0KTQCLUUrTkxe24PTrXbYz0HHd8Mst1+wBiSZZ+RkV8/BuvIJ6dVpxec7THvocGvYbbWzB9EyzaqVzeOv9SjYoo4Oo4Q/MI2oTi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NPTt3lRa; arc=none smtp.client-ip=209.85.221.50
+	 In-Reply-To:Content-Type; b=JsXcAnncIJpDRtkL4ujTEv7y+fJxIbNKXlPeUaze0jGh2yWt6OrnbhlBzV8kcEf6fltuG2ut82XJUVNG7NBnAZgCARBakX36TcI4MuxE5QhL35oIsLbt3o768b2n7EgnkC709jh9FYJS64Kk55MDijZfUraomgv294hWuBrIk8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=graURhaN; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NPTt3lRa"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3ece0e4c5faso6040746f8f.1
-        for <linux-modules@vger.kernel.org>; Wed, 08 Oct 2025 06:19:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="graURhaN"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-46e61ebddd6so70173845e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 08 Oct 2025 06:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759929546; x=1760534346; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1759929761; x=1760534561; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jozU4MCtlsfVf9HK2ileSJtZZH6tHRFGD8OutqReHLk=;
-        b=NPTt3lRaVKHqE5xh2rBbCkXQByy+0thnAN0grg/XTTIi8YM9OzUKCEhjXpdlx2xM3l
-         eQqnmDPVeI+sw1ERUJ8OtD2G8MsDei1stRSCyFnZXtebkVKt/hvTVZKOSI0bK8XupgSu
-         q32aBcW4QbEYMu9mCv2GYYoSWLs/gvgx1uDmHfkeoeAUVNErGuadNoGuJyPqmBBhvyrw
-         r63Jt4XvukLbc8jDbfOhkra5WzYyhNTtctxuUuTxgMtA3Eo+cHCUzQOKqxPQL9bRx8pq
-         NFmP8tXBtekHA6YJwZQyTscFS8qsir5kb1j8UwfIfz5FtS2Wk6fem2s9AMqKWxrGvol9
-         usYA==
+        bh=4U2xsHoGJTH7iHhQZXfBw8CarpzUw6iPe1T3ECE3xUs=;
+        b=graURhaNgwJllCwU5YtDzDBBaSmXK3PBdOWI7RRmfvi2gysAJ5ppbQIQwgE00sYE8c
+         UXnsxRtZzi6U8L1XbwORYaRWwh7H1sBbmACIiD/7yDA+IquarGI22YxI4iWJnCwXDbmA
+         RTV4y9d3FHXdXz4aM/OhW2voQkJhtYYdBvIUsNBAbhjd6eFARG5+wvoLYh6rrIwYo8Zt
+         ptFxciSPzXJ3NvOBQDSUzLZbLTv14QEnIneM+nLuT+cM42gf5zk3TG7mXJO87WaizOJ3
+         pDeuIa+c55B1OZSeh/Un4DbgQfH9aixL4txAnRAA10LgrhBJ60jqDnWP9hofrb+EsA8P
+         dJBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759929546; x=1760534346;
+        d=1e100.net; s=20230601; t=1759929761; x=1760534561;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jozU4MCtlsfVf9HK2ileSJtZZH6tHRFGD8OutqReHLk=;
-        b=dG2egpEIHZ/4r28j5cqVbKk3U5lXE2jXK/IHJJd4heREjZoF/3dAaYT31v7pu7elUE
-         9r0Xe9TXEEzfKGNuxuXz5FHBodVlwj2QmOyXsT3cl3/eCMA8wt1LtpdafY/CAfTscFS5
-         pZUddHKKYIKwi2I7n8fsXPxlr3umL+kB5xkivVq1dHBf0s8TKHO3WlkERoEBV69p05O/
-         alpxAO5qCc7QZn6RPZebGyAvOzsmZUhLtYZy16TxRM1v2lXiNvmLAnvpEDUjnHrlAqIC
-         QxUdF9vnAe0cF5jWNQlnMJu/cBiE0CnogPXgWiqMAvj5wEEaCBbjgtmseb6LrSi2Vac/
-         h1iA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLUVfkHVnNgoXziODtH+pjjK6DehJjc6Y0rsEd08JpE+ofaR6S0r0izrjRdDWiCm6UPU1CuR2Z/+ocAWZl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxci8ImtccNDWeyeRHzk/+nw63qkXoDLv75kP54p+IDe4glGZPG
-	TAyJJndOpmdap4CTaYe+8gc2G8ntgPNk34ofsG4dNBZBHeXbOoS3HZ5n2EwF8E+Rslk=
-X-Gm-Gg: ASbGncuU1P2npOCEE4cQrF6vOwF7Arecp+qhzd6wZ2z1oI0GsBoJtNFWsqDAiGZ2KHB
-	W+dTqYLdECpcEreJCJcy8qRo0clGTiZtdLC+uJHltCc3fc8efDet5rT64OpHyZiicC+BE1DFkl7
-	n3z0+FNCLCRZ7ygNQC6lFBXfRgcY4n7HamsUeSLr6OmdN5oArv9wCX7sjFk0yQiUVaDLqA0/wjX
-	Rh+g4CDeFdxNp7Wd3tb7CfClgBetCQs4FnUbdHRY4l4QLiZkp/9PRC1nwegQFIlKX9s1wUYhY2a
-	UNOH8CPD8FQV9T9wxLCyS6GbO2RikjG5YOWx2Oxyvqi/JNPCIhr/XXMwtFYQjxkY+vcw4ywbpxs
-	y+UGghD1JrFbUfxwixPKKSuiwJEOhvXGn5hYVOSYrt4H8NftwrzAnkAiMgEQpPeHQLM77m4GY5h
-	k=
-X-Google-Smtp-Source: AGHT+IEaXUHfbuYM9nod7N9dOjKMSODtcO4+dyB2TLSlYEg1pQ+Lkd4II4POhjx99lRaAkInHDE4Dg==
-X-Received: by 2002:a05:6000:2dc9:b0:407:7a7:1cb6 with SMTP id ffacd0b85a97d-4266e8e637amr2098415f8f.55.1759929546358;
-        Wed, 08 Oct 2025 06:19:06 -0700 (PDT)
+        bh=4U2xsHoGJTH7iHhQZXfBw8CarpzUw6iPe1T3ECE3xUs=;
+        b=PSzE1DxnhYe1mpyXg7JkTb8pI8EPYxmNmg4+FqTkN5Fsy4BaEtbYdlcbCbEjQ1x7Jh
+         5P7wSP9G+wFNqDnqHH79NSd8NqfPgxEiqyi1bBLx/O+zRIy8PO1208iGt2mkJxPgS0Rw
+         RFzY2r162qIj6m8Be61OkhoDDAsBA8NxF4NcQpWyv16IFyyG0X2VhxWNbFSnWz4hQCRR
+         3+8xXS1XtMt9+r2OAHU3axrChV4CHdk5vwSbFRgO91XyF4EhAvvNnd2Z/wAHvnRfkPF1
+         LoXhPMKGwSso1Brn/ckUMCtZR0Dv2EEOLubyFpLibwR3ShUVo8ilaQb4pYF5+PXjzB+J
+         oZ5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUUJjI2Y303+c8Y1AEFQQyeHm690WZ4sDVI3+k5PAL0HTfGv3NG8AzCJ+Mz5JNfIufvtHs5FFgdLwM4tbCP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV7PZRZ3cwX8uDTPZrl8xqwwoI6TeJI1LQ90CHcFb64+v9B5tV
+	vmznDVP6FF/bOJ32pabZmd4CjhhmT3tToGosjNEUOQtsGA4KGo3HVGAav76I7CKH8V0=
+X-Gm-Gg: ASbGncu+t9/7XjkClGccsjwQ0rLkeKyoOv27EQDx8CXw75Z9G/5JJjUZ2yhqA/qGFJD
+	Qh5r1mg9Cs8QRjZTGAtKKdMRObywe8s/cV5c7Z8KnjmzZqN1+er4hcScxiRW+z5o74d8qBZf44p
+	+5rUuX40eiqAiJAkJ+ChPm3PNcpaMqynnHUYnUqnLINFB9IyhreM3kHtFpNqS8ZEHwhPP69vfdQ
+	XUYdJx2hM+c81ObB1QJaV2uHJaxXj+ID7EXKkTPGrpgtIiSz3LdmN9i8T73jhUbw4iuT35j9x0p
+	zqx5QMr8vv9WCQJrJge0RfKNV/mIXZEY4XFA4GKeRBUxprOuF5j0PW5pWINKWRE3cExmUX83Wqa
+	tqi7I6/wNMTG6Yu93/P9WVnlfFuvYqFNCbtYSpz/zupi0SpavINYzZiWMhr4w8xva
+X-Google-Smtp-Source: AGHT+IEYSq0TP4pQ8Uu0J6YEh6RVoGDJ8QoABxOaZSJ8G000FXcsdbuhJ1AnUVCmEjMI85B5DM4SOQ==
+X-Received: by 2002:a05:600c:6212:b0:46e:27f7:80ce with SMTP id 5b1f17b1804b1-46fa9af8f39mr24232495e9.23.1759929761358;
+        Wed, 08 Oct 2025 06:22:41 -0700 (PDT)
 Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4255d8e96e0sm29841221f8f.33.2025.10.08.06.19.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fa9c1726asm37099255e9.12.2025.10.08.06.22.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Oct 2025 06:19:06 -0700 (PDT)
-Message-ID: <fdec30b6-e3d0-4694-ba29-3bc99960346a@suse.com>
-Date: Wed, 8 Oct 2025 15:19:05 +0200
+        Wed, 08 Oct 2025 06:22:41 -0700 (PDT)
+Message-ID: <026b31a0-42d5-4f9a-8604-70f85cf203f2@suse.com>
+Date: Wed, 8 Oct 2025 15:22:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -68,8 +67,7 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/10] module loader: use kflagstab instead of *_gpl
- sections
+Subject: Re: [PATCH 06/10] module loader: remove references of *_gpl sections
 To: Siddharth Nayyar <sidnayyar@google.com>
 Cc: Nathan Chancellor <nathan@kernel.org>,
  Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
@@ -78,44 +76,40 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20250829105418.3053274-1-sidnayyar@google.com>
- <20250829105418.3053274-5-sidnayyar@google.com>
+ <20250829105418.3053274-7-sidnayyar@google.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20250829105418.3053274-5-sidnayyar@google.com>
+In-Reply-To: <20250829105418.3053274-7-sidnayyar@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/29/25 12:54 PM, Siddharth Nayyar wrote:
-> Read __kflagstab section for vmlinux and modules to determine whether
-> kernel symbols are GPL only.
+> The *_gpl section are not being used populated by modpost anymore. Hence
+> the module loader doesn't need to find and process these sections in
+> modules.
 > 
 > Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 > ---
 > [...]
-> @@ -2607,6 +2605,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
->  				     sizeof(*mod->gpl_syms),
->  				     &mod->num_gpl_syms);
->  	mod->gpl_crcs = section_addr(info, "__kcrctab_gpl");
-> +	mod->flagstab = section_addr(info, "__kflagstab");
+> @@ -2601,10 +2590,6 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+>  	mod->syms = section_objs(info, "__ksymtab",
+>  				 sizeof(*mod->syms), &mod->num_syms);
+>  	mod->crcs = section_addr(info, "__kcrctab");
+> -	mod->gpl_syms = section_objs(info, "__ksymtab_gpl",
+> -				     sizeof(*mod->gpl_syms),
+> -				     &mod->num_gpl_syms);
+> -	mod->gpl_crcs = section_addr(info, "__kcrctab_gpl");
+>  	mod->flagstab = section_addr(info, "__kflagstab");
 >  
->  #ifdef CONFIG_CONSTRUCTORS
->  	mod->ctors = section_objs(info, ".ctors",
 
-The module loader should always at least get through the signature and
-blacklist checks without crashing due to a corrupted ELF file. After
-that point, the module content is to be trusted, but we try to error out
-for most issues that would cause problems later on.
+I suggest adding a check that the loaded module doesn't contain
+a __ksymtab_gpl or __kcrctab_gpl section, similarly how the function
+later checks if the old __obsparm section isn't present. Something like:
 
-For __kflagstab, I believe it would be useful to check that the section
-is present to prevent the code from potentially crashing due to a NULL
-dereference deep in find_exported_symbol_in_section(). You can rename
-check_export_symbol_versions() to check_export_symbol_sections() and add
-the following:
-
-	if (mod->num_syms && !mod->flagstab) {
-		pr_err("%s: no flags for exported symbols\n", mod->name);
-		return -ENOEXEC;
-	}
+	if (section_addr(info, "__ksymtab_gpl"))
+		pr_warn("%s: ignoring obsolete section __ksymtab_gpl\n", mod->name);
+	if (section_addr(info, "__kcrctab_gpl"))
+		pr_warn("%s: ignoring obsolete section __kcrctab_gpl\n", mod->name);
 
 -- 
 Thanks,
