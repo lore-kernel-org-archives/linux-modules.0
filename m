@@ -1,296 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189E2192D68;
-	Tue,  7 Oct 2025 10:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B188F2BDC25;
+	Wed,  8 Oct 2025 03:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759832128; cv=none; b=iSOzE90cgmitK4HVlLl6rv0TTtTGs8EiqL2kyK2rqcX9I3d+9js7i9hdhGYuAouEeyxFxk2b4LItWodPZeO6f5EkyH2bw7HeSIQ0Ejk8MXd7wXaLLYtrTWioCxoruKxT+fmZbvQzRCc08k+qkra9uo9ySS8p4Cqqmm2burccqYg=
+	t=1759895978; cv=none; b=INDRoaLwgAjEq3AIIQ3LXrhjAwGYFEoTZXTAy1CA9nxkANN42iM5rOHGElbXLmjIec2lU4z66yi7QaNY6OHOOyrNUdR1JLgvJERBLMmkIN04geNjS+x9iXYBxhtfpxXF4xoj/aJ1qfGcIFbxZbIAHcGDSyT2niwHV3aXeRKOOMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759832128; c=relaxed/simple;
-	bh=9Yjtn8JfsbCjw77cR+hBU+JzC4/lFWaRHwDiPA/St4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DXz18qd8Z6NFd4gySsa3O5S5TbAfDW554kxiFXPNWsYKyRpgYS9eNL3MvO/cJ1sZOtlP/FLQ2T6eNNrdJBgETlC+3Gl00RoXGulBvUuTf3a0GpsOvPR8m81Czp/nwWFVgGBpBIr2UJWAx/Zzoi6SY907NEznQY/FjSnXvuvaX90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a+Yre29R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1759895978; c=relaxed/simple;
+	bh=vPUzB/kedHLN1UiYunAi6GZuZ1A/GiYXuoHbDCB5M4o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=aLVzpR5kS//ICMWTlkjhopdd93l05ggclsgW+FYFijugTYKoILgruEa7KsIoOAWl6qgNaFJ+5TeosKL0+XbYhab4fi7YAkmuO40YSwn6AGrOjLQd2/Zp+7FZqCdBVAkGO/Hl+KgPJsMpSn3oSbamSnq8K/1UYcxkbA9p2DXzCPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qerGsF5l; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a+Yre29R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A1EC4CEF9;
-	Tue,  7 Oct 2025 10:15:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qerGsF5l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53779C4CEF4;
+	Wed,  8 Oct 2025 03:59:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759832127;
-	bh=9Yjtn8JfsbCjw77cR+hBU+JzC4/lFWaRHwDiPA/St4c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a+Yre29RL7+d+0Vb6/1hn/zF2swItcSins9WHEY2lpw/XTOPPoUAwl6vf7fQKTkV4
-	 fEo1l5GZvv3nfthnsXmjONUSbJQLM/9ID2PwjSwznHlOCw1pR2tAWA4okHEsZPACUX
-	 q2Tfkj3G/YaAc/4VkWbtBwxUC5DGxaJtZUP3RWlv9RfRnjOmEWneYm9+R9ee6nq10F
-	 lEidSWK8Wkp46F0/5rNhASgtmd4clpjTAZLLHmhYdvQZqak0FjlPT4yZ9tqg79o7Qz
-	 aWa4faXywKGfvBXx2f1g5jiEMAUi73JbXK0cFSrfC7d2Kzc9NOenqfHO6WDpb8oXCe
-	 Y0txQBCa/t+4w==
-Date: Tue, 7 Oct 2025 12:15:21 +0200
-From: Alexey Gladkov <legion@kernel.org>
-To: Charles Mirabile <cmirabil@redhat.com>
-Cc: da.gomez@samsung.com, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org,
-	nicolas.schier@linux.dev, petr.pavlu@suse.com,
-	samitolvanen@google.com, sfr@canb.auug.org.au
-Subject: Re: [PATCH v8 7/8] modpost: Create modalias for builtin modules
-Message-ID: <aOToOeNGiaFVM0Ds@example.org>
-References: <28d4da3b0e3fc8474142746bcf469e03752c3208.1758182101.git.legion@kernel.org>
- <20251007011637.2512413-1-cmirabil@redhat.com>
+	s=k20201202; t=1759895978;
+	bh=vPUzB/kedHLN1UiYunAi6GZuZ1A/GiYXuoHbDCB5M4o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=qerGsF5lf8DmJqYFBYDmf4IlURtKS0YXbmifDG984jebZyIHSFw9vs/ZjCeuQXpmn
+	 tDpQNiDUa1CcKuxJ9+TIaM4wYOk2j9RRUm+0svoDvAd1WarK1IPKLNy/B+E7cmEW57
+	 85W8Noz7TknIYF+kYHZcbs8fJKLXlrtX6T6A9uQ5t7HEWaZdsv8Ze4Pbh0dmU6qJwU
+	 +4iTKQ+lGCshOlmLAe+Y5AG1xb3wqSYbkCvPx65adrmUtEObISLVS4iuiZQ/6BAo78
+	 bsp4m2nHdfbnwQTFB3YbXeFpGofJUvZeKrMcXZ78/DzMatDD+7ppwmjpIB6rAPQrlZ
+	 xs9cXWx8xymQQ==
+From: Kees Cook <kees@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 0/3] module: Add compile-time check for embedded NUL characters
+Date: Tue,  7 Oct 2025 20:59:32 -0700
+Message-Id: <20251008033844.work.801-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251007011637.2512413-1-cmirabil@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2403; i=kees@kernel.org; h=from:subject:message-id; bh=vPUzB/kedHLN1UiYunAi6GZuZ1A/GiYXuoHbDCB5M4o=; b=owGbwMvMwCVmps19z/KJym7G02pJDBlPHy7ljBR+Mv320ptmjW8KAibxM6zdHyC+8ax7DP/0C U8kZL9P7yhlYRDjYpAVU2QJsnOPc/F42x7uPlcRZg4rE8gQBi5OAZhI6kZGhjurND948cqdkf5W /y0hbqLU7t1NlpnZcyf/P7P0RU63cx7D/9APS9/Vt3r/SVTmLYnb7SWmnfXpnOmDCm7TiQGeZaG 53AA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 06, 2025 at 09:16:37PM -0400, Charles Mirabile wrote:
-> On Thu, Sep 18, 2025 at 10:05:51AM +0200, Alexey Gladkov wrote:
-> > For some modules, modalias is generated using the modpost utility and
-> > the section is added to the module file.
-> > 
-> > When a module is added inside vmlinux, modpost does not generate
-> > modalias for such modules and the information is lost.
-> > 
-> > As a result kmod (which uses modules.builtin.modinfo in userspace)
-> > cannot determine that modalias is handled by a builtin kernel module.
-> > 
-> > $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
-> > pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
-> > 
-> > $ modinfo xhci_pci
-> > name:           xhci_pci
-> > filename:       (builtin)
-> > license:        GPL
-> > file:           drivers/usb/host/xhci-pci
-> > description:    xHCI PCI Host Controller Driver
-> > 
-> > Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
-> > modpost if the module is built separately.
-> > 
-> > To fix this it is necessary to generate the same modalias for vmlinux as
-> > for the individual modules. Fortunately '.vmlinux.export.o' is already
-> > generated from which '.modinfo' can be extracted in the same way as for
-> > vmlinux.o.
-> 
-> Hi -
-> 
-> This patch broke RISC-V builds for me. During the final objcopy where the new
-> symbols are supposed to be stripped, an error occurs producing lots of error
-> messages similar to this one:
-> 
-> riscv64-linux-gnu-objcopy: not stripping symbol `__mod_device_table__...'
-> because it is named in a relocation
-> 
-> It does not occur using defconfig, but I was able to bisect my way to this
-> commit and then reduce my config delta w.r.t defconfig until I landed on:
-> 
-> cat > .config <<'EOF'
-> CONFIG_RELOCATABLE=y
-> CONFIG_KASAN=y
-> EOF
-> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make olddefconfig
-> ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make -j $(nproc)
-> ...
->   LD      vmlinux.unstripped
->   NM      System.map
->   SORTTAB vmlinux.unstripped
->   CHKREL  vmlinux.unstripped
->   OBJCOPY vmlinux
->   OBJCOPY modules.builtin.modinfo
->   GEN     modules.builtin
-> riscv64-linux-gnu-objcopy: not stripping symbol `<long symbol name>'
-> because it is named in a relocation
-> <repeats with different symbol names about a dozen times>
-> make[3]: *** [scripts/Makefile.vmlinux:97: vmlinux] Error 1
-> make[3]: *** Deleting file 'vmlinux'
-> make[2]: *** [Makefile:1242: vmlinux] Error 2
-> make[1]: *** [/tmp/linux/Makefile:369: __build_one_by_one] Error 2
-> make: *** [Makefile:248: __sub-make] Error 2
-> 
-> I confirmed that reverting this commit fixes the issue.
+Hi,
 
-Hm. Indeed. I haven't found a good solution yet, but you can use the
-following patch to unlock compilation. It won't solve the problem, it will
-only hide it.
+A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
+strings[1]. While this stands out pretty strongly when you look at the
+code, and we can't do anything about a binary module that just plain lies,
+we never actually implemented the trivial compile-time check needed to
+detect it.
 
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -84,7 +84,7 @@ endif
- remove-section-y                                   := .modinfo
- remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
+Add this check (and fix 2 instances of needless trailing semicolons that
+this change exposed).
 
--remove-symbols := -w --strip-symbol='__mod_device_table__*'
-+remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
+Note that these patches were produced as part of another LLM exercise.
+This time I wanted to try "what happens if I ask an LLM to go read
+a specific LWN article and write a patch based on a discussion?" It
+pretty effortlessly chose and implemented a suggested solution, tested
+the change, and fixed new build warnings in the process.
 
- # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
- # it is necessary to remove the PT_LOAD flag from the segment.
+Since this was a relatively short session, here's an overview of the
+prompts involved as I guided it through a clean change and tried to see
+how it would reason about static_assert vs _Static_assert. (It wanted
+to use what was most common, not what was the current style -- we may
+want to update the comment above the static_assert macro to suggest
+using _Static_assert directly these days...)
 
-> > 
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Signed-off-by: Alexey Gladkov <legion@kernel.org>
-> > Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  include/linux/module.h   |  4 ----
-> >  scripts/Makefile.vmlinux |  4 +++-
-> >  scripts/mksysmap         |  3 +++
-> >  scripts/mod/file2alias.c | 19 ++++++++++++++++++-
-> >  scripts/mod/modpost.c    | 15 +++++++++++++++
-> >  scripts/mod/modpost.h    |  2 ++
-> >  6 files changed, 41 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index e31ee29fac6b7..e135cc79aceea 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -256,14 +256,10 @@ struct module_kobject *lookup_or_create_module_kobject(const char *name);
-> >  	__PASTE(type,			\
-> >  	__PASTE(__, name)))))
-> >  
-> > -#ifdef MODULE
-> >  /* Creates an alias so file2alias.c can find device table. */
-> >  #define MODULE_DEVICE_TABLE(type, name)					\
-> >  static typeof(name) __mod_device_table(type, name)			\
-> >    __attribute__ ((used, alias(__stringify(name))))
-> > -#else  /* !MODULE */
-> > -#define MODULE_DEVICE_TABLE(type, name)
-> > -#endif
-> >  
-> >  /* Version of form [<epoch>:]<version>[-<extra-version>].
-> >   * Or for CVS/RCS ID version, everything but the number is stripped.
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index ce79461714979..1e5e37aadcd05 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -89,11 +89,13 @@ endif
-> >  remove-section-y                                   := .modinfo
-> >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> >  
-> > +remove-symbols := -w --strip-symbol='__mod_device_table__*'
-> > +
-> >  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
-> >  # it is necessary to remove the PT_LOAD flag from the segment.
-> >  quiet_cmd_strip_relocs = OBJCOPY $@
-> >        cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
-> > -                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $@
-> > +                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
-> >  
-> >  targets += vmlinux
-> >  vmlinux: vmlinux.unstripped FORCE
-> > diff --git a/scripts/mksysmap b/scripts/mksysmap
-> > index a607a0059d119..c4531eacde202 100755
-> > --- a/scripts/mksysmap
-> > +++ b/scripts/mksysmap
-> > @@ -59,6 +59,9 @@
-> >  # EXPORT_SYMBOL (namespace)
-> >  / __kstrtabns_/d
-> >  
-> > +# MODULE_DEVICE_TABLE (symbol name)
-> > +/ __mod_device_table__/d
-> > +
-> >  # ---------------------------------------------------------------------------
-> >  # Ignored suffixes
-> >  #  (do not forget '$' after each pattern)
-> > diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> > index 1260bc2287fba..7da9735e7ab3e 100644
-> > --- a/scripts/mod/file2alias.c
-> > +++ b/scripts/mod/file2alias.c
-> > @@ -1477,7 +1477,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
-> >  	void *symval;
-> >  	char *zeros = NULL;
-> >  	const char *type, *name, *modname;
-> > -	size_t typelen;
-> > +	size_t typelen, modnamelen;
-> >  	static const char *prefix = "__mod_device_table__";
-> >  
-> >  	/* We're looking for a section relative symbol */
-> > @@ -1500,6 +1500,7 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
-> >  	type = strstr(modname, "__");
-> >  	if (!type)
-> >  		return;
-> > +	modnamelen = type - modname;
-> >  	type += strlen("__");
-> >  
-> >  	name = strstr(type, "__");
-> > @@ -1526,5 +1527,21 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
-> >  		}
-> >  	}
-> >  
-> > +	if (mod->is_vmlinux) {
-> > +		struct module_alias *alias;
-> > +
-> > +		/*
-> > +		 * If this is vmlinux, record the name of the builtin module.
-> > +		 * Traverse the linked list in the reverse order, and set the
-> > +		 * builtin_modname unless it has already been set in the
-> > +		 * previous call.
-> > +		 */
-> > +		list_for_each_entry_reverse(alias, &mod->aliases, node) {
-> > +			if (alias->builtin_modname)
-> > +				break;
-> > +			alias->builtin_modname = xstrndup(modname, modnamelen);
-> > +		}
-> > +	}
-> > +
-> >  	free(zeros);
-> >  }
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 5ca7c268294eb..47c8aa2a69392 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -2067,11 +2067,26 @@ static void write_if_changed(struct buffer *b, const char *fname)
-> >  static void write_vmlinux_export_c_file(struct module *mod)
-> >  {
-> >  	struct buffer buf = { };
-> > +	struct module_alias *alias, *next;
-> >  
-> >  	buf_printf(&buf,
-> >  		   "#include <linux/export-internal.h>\n");
-> >  
-> >  	add_exported_symbols(&buf, mod);
-> > +
-> > +	buf_printf(&buf,
-> > +		   "#include <linux/module.h>\n"
-> > +		   "#undef __MODULE_INFO_PREFIX\n"
-> > +		   "#define __MODULE_INFO_PREFIX\n");
-> > +
-> > +	list_for_each_entry_safe(alias, next, &mod->aliases, node) {
-> > +		buf_printf(&buf, "MODULE_INFO(%s.alias, \"%s\");\n",
-> > +			   alias->builtin_modname, alias->str);
-> > +		list_del(&alias->node);
-> > +		free(alias->builtin_modname);
-> > +		free(alias);
-> > +	}
-> > +
-> >  	write_if_changed(&buf, ".vmlinux.export.c");
-> >  	free(buf.p);
-> >  }
-> > diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-> > index 9133e4c3803f0..2aecb8f25c87e 100644
-> > --- a/scripts/mod/modpost.h
-> > +++ b/scripts/mod/modpost.h
-> > @@ -99,10 +99,12 @@ buf_write(struct buffer *buf, const char *s, int len);
-> >   * struct module_alias - auto-generated MODULE_ALIAS()
-> >   *
-> >   * @node: linked to module::aliases
-> > + * @modname: name of the builtin module (only for vmlinux)
-> >   * @str: a string for MODULE_ALIAS()
-> >   */
-> >  struct module_alias {
-> >  	struct list_head node;
-> > +	char *builtin_modname;
-> >  	char str[];
-> >  };
-> >  
-> > -- 
-> > 2.51.0
-> > 
-> 
+  I want to fix a weakness in the module info strings. Read about it
+  here: https://lwn.net/Articles/82305/
+
+  Since it's only "info" that we need to check, can you reduce the checks
+  to just that instead of all the other stuff?
+
+  I think the change to the comment is redundent, and that should be
+  in a commit log instead. Let's just keep the change to the static assert.
+
+  Is "static_assert" the idiomatic way to use a static assert in this
+  code base? I've seen _Static_assert used sometimes.
+
+  What's the difference between the two?
+
+  Does Linux use C11 by default now?
+
+  Then let's not use the wrapper any more.
+
+  Do an "allmodconfig all -s" build to verify this works for all modules
+  in the kernel.
+
+
+Thanks!
+
+-Kees
+
+[1] https://lwn.net/Articles/82305/
+
+Kees Cook (3):
+  media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
+  media: radio: si470x: Fix DRIVER_AUTHOR macro definition
+  module: Add compile-time check for embedded NUL characters
+
+ include/linux/moduleparam.h                   |  3 +++
+ drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
+ drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
+ 3 files changed, 10 insertions(+), 7 deletions(-)
 
 -- 
-Rgrds, legion
+2.34.1
 
