@@ -1,144 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7546627381B;
-	Thu,  9 Oct 2025 20:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6892E1EB9F2;
+	Fri, 10 Oct 2025 03:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760042646; cv=none; b=rGkoMd/g/tTMwW9yLHRGsAjXeCf6p22kqyFjWjgXhmCALsm68/Ll1lUiQyq2nyJ0GgnLWF9tWMW6ZTGDqMuP3a8/D8OSGzk2kv1y43vc66odFFKo9uB2tXfcVd46E8yQVFuB9NmQYWEQN6HQAAkFSksOaxCRWsMnjxE88ilz270=
+	t=1760065571; cv=none; b=DIznOgVTJ6tS8olQ+akR/VGcOV5y777keT3OAagMjTggCmQFXVU8Jln0xbSHhpxCPq2CvczlS7ZxWpcLtCkvVMSWlQXxB5u3VONpreoJAeB8tKG+Cu0Sz/32A5EMxqaZ4pt2FB5gulAqZFEbhhUKsVSr/zEbQozNlFyQXc7TGhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760042646; c=relaxed/simple;
-	bh=q8tFl6oZrOiukZrjzXaSgvTq62o9cwQSbuh7QhRvhrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jlTtYyVvH4dX0bq3rBY6kx1B/ks1uLZsh2aRA8LdP5+ke23Cg56smOK0wWN8rA+av1SBtpEKgYhI/sFoml1wZ+AghYNzRqDgKoffEn5kKQuQSdluPymn+ZTQBy6YiPfSeO2T5OvZt0/iN9WOmrm8mam0Qt7AAaXHRdExJKx4zEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khiAb8cx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760065571; c=relaxed/simple;
+	bh=lVfiq1OSL8S/sRpiegclboUq/wYdhhM+UXtqjZveTCI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=rouJRWusr72ccmiyG1HVGP/kovo6VXCupUAvoAJ5jz5bPIbf9L7m66ukoziRS5qeFUPT2lQQPImomT9+/FYGGOw1EGMS/96Y7QSUfH+R5//TGfRBtDv76asZbtxGPmECPCVuj9aG43JqfPzWYhLOBLaNUwvSRTq5CwTn5svvx+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFfugLm5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khiAb8cx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB672C4CEE7;
-	Thu,  9 Oct 2025 20:44:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFfugLm5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5E85C4CEF5;
+	Fri, 10 Oct 2025 03:06:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760042646;
-	bh=q8tFl6oZrOiukZrjzXaSgvTq62o9cwQSbuh7QhRvhrY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=khiAb8cxLTnThu3Krtfc39RUO3L4LY3itWb88cR4z7tIboEJ03CiihinESdvU9iiF
-	 zr505XfLD2Vr3ltm0FYnJ1AmwgVFAhF6zWczQ7Iw6liq+85bX5reRIylG8wdTjecGJ
-	 uvV8JGEjg/lJjxs38Y2JWHmQzspgoatDrR6gWNZrehxtrHK42OxIJqxRnmsXXXp13Q
-	 bNnJlnu56epaimf6aDGcyBCQy3Fbtg7hbNp3qRZ/YD1x5ESiAcBnTyhaqqWmM/VXn3
-	 ftCrYPoZRzJ1JYCcZkVF7tefpRb40sP9nJnhYJl6rI6yrqCRqy6QBlZcgdOZbnFG84
-	 nubQIjHHqwpQA==
-Date: Thu, 9 Oct 2025 21:52:08 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Alexey Gladkov <legion@kernel.org>
-Cc: Charles Mirabile <cmirabil@redhat.com>, da.gomez@samsung.com,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, masahiroy@kernel.org,
-	mcgrof@kernel.org, nathan@kernel.org, petr.pavlu@suse.com,
-	samitolvanen@google.com, sfr@canb.auug.org.au
-Subject: Re: [PATCH v8 7/8] modpost: Create modalias for builtin modules
-Message-ID: <aOgSaNejdcBWKXx8@levanger>
-References: <28d4da3b0e3fc8474142746bcf469e03752c3208.1758182101.git.legion@kernel.org>
- <20251007011637.2512413-1-cmirabil@redhat.com>
- <aOToOeNGiaFVM0Ds@example.org>
+	s=k20201202; t=1760065570;
+	bh=lVfiq1OSL8S/sRpiegclboUq/wYdhhM+UXtqjZveTCI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XFfugLm5Njy/AiBfQr6jHPytsyF0w4NmutF3J1WVEhIWjUN1b5kXjyZyh0/sbT7Br
+	 EA5idOT9LpS7O46M8rKW73cBGsrzkOjJQ6VH/taa+Y16FJv1cKFaBDLhcmTQo2hx8o
+	 /uyAY/RGdLVpOJm7crL5yQpxajYs1dTZHS4R/UUXZ0DhCB74lF4CIo0+EvSCJ8/RoP
+	 pzNji/xA+ciySzqztWy4/aJGAHDD9mU/dLy9NPQie6S7Vc+ej2jZXo3OlA7oWfcva/
+	 gDR145I7hDaXZCxObkOMl1ygRjEs7t7iY88r4XdiODYtvuktTjtMnHcFAr0SKb5b5p
+	 mG/5tQV2zAjnA==
+From: Kees Cook <kees@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2 0/3] module: Add compile-time check for embedded NUL characters
+Date: Thu,  9 Oct 2025 20:06:06 -0700
+Message-Id: <20251010030348.it.784-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOToOeNGiaFVM0Ds@example.org>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2564; i=kees@kernel.org; h=from:subject:message-id; bh=lVfiq1OSL8S/sRpiegclboUq/wYdhhM+UXtqjZveTCI=; b=owGbwMvMwCVmps19z/KJym7G02pJDBkvKuSNWrd2eD8/WLz4tHTS7bquST47nMOKVeY8irznW rfnnFxxRykLgxgXg6yYIkuQnXuci8fb9nD3uYowc1iZQIYwcHEKwER2+zD8M73EsirbK8u8O25F 5OkF/x6Em3zwOMxrLXpZOdh6itAmXkaGKXoZP2Intqw+XP96noqUlNWBr1unx+dNOnVIp4/zbVc rMwA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 07, 2025 at 12:15:21PM +0200, Alexey Gladkov wrote:
-> On Mon, Oct 06, 2025 at 09:16:37PM -0400, Charles Mirabile wrote:
-> > On Thu, Sep 18, 2025 at 10:05:51AM +0200, Alexey Gladkov wrote:
-> > > For some modules, modalias is generated using the modpost utility and
-> > > the section is added to the module file.
-> > > 
-> > > When a module is added inside vmlinux, modpost does not generate
-> > > modalias for such modules and the information is lost.
-> > > 
-> > > As a result kmod (which uses modules.builtin.modinfo in userspace)
-> > > cannot determine that modalias is handled by a builtin kernel module.
-> > > 
-> > > $ cat /sys/devices/pci0000:00/0000:00:14.0/modalias
-> > > pci:v00008086d0000A36Dsv00001043sd00008694bc0Csc03i30
-> > > 
-> > > $ modinfo xhci_pci
-> > > name:           xhci_pci
-> > > filename:       (builtin)
-> > > license:        GPL
-> > > file:           drivers/usb/host/xhci-pci
-> > > description:    xHCI PCI Host Controller Driver
-> > > 
-> > > Missing modalias "pci:v*d*sv*sd*bc0Csc03i30*" which will be generated by
-> > > modpost if the module is built separately.
-> > > 
-> > > To fix this it is necessary to generate the same modalias for vmlinux as
-> > > for the individual modules. Fortunately '.vmlinux.export.o' is already
-> > > generated from which '.modinfo' can be extracted in the same way as for
-> > > vmlinux.o.
-> > 
-> > Hi -
-> > 
-> > This patch broke RISC-V builds for me. During the final objcopy where the new
-> > symbols are supposed to be stripped, an error occurs producing lots of error
-> > messages similar to this one:
-> > 
-> > riscv64-linux-gnu-objcopy: not stripping symbol `__mod_device_table__...'
-> > because it is named in a relocation
-> > 
-> > It does not occur using defconfig, but I was able to bisect my way to this
-> > commit and then reduce my config delta w.r.t defconfig until I landed on:
-> > 
-> > cat > .config <<'EOF'
-> > CONFIG_RELOCATABLE=y
-> > CONFIG_KASAN=y
-> > EOF
-> > ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make olddefconfig
-> > ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- make -j $(nproc)
-> > ...
-> >   LD      vmlinux.unstripped
-> >   NM      System.map
-> >   SORTTAB vmlinux.unstripped
-> >   CHKREL  vmlinux.unstripped
-> >   OBJCOPY vmlinux
-> >   OBJCOPY modules.builtin.modinfo
-> >   GEN     modules.builtin
-> > riscv64-linux-gnu-objcopy: not stripping symbol `<long symbol name>'
-> > because it is named in a relocation
-> > <repeats with different symbol names about a dozen times>
-> > make[3]: *** [scripts/Makefile.vmlinux:97: vmlinux] Error 1
-> > make[3]: *** Deleting file 'vmlinux'
-> > make[2]: *** [Makefile:1242: vmlinux] Error 2
-> > make[1]: *** [/tmp/linux/Makefile:369: __build_one_by_one] Error 2
-> > make: *** [Makefile:248: __sub-make] Error 2
-> > 
-> > I confirmed that reverting this commit fixes the issue.
+ v2:
+ - use static_assert instead of _Static_assert
+ - add Hans's Reviewed-by's
+ v1: https://lore.kernel.org/lkml/20251008033844.work.801-kees@kernel.org/
 
-Thanks for the report!
+Hi!
 
-> 
-> Hm. Indeed. I haven't found a good solution yet, but you can use the
-> following patch to unlock compilation. It won't solve the problem, it will
-> only hide it.
-> 
-> --- a/scripts/Makefile.vmlinux
-> +++ b/scripts/Makefile.vmlinux
-> @@ -84,7 +84,7 @@ endif
->  remove-section-y                                   := .modinfo
->  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> 
-> -remove-symbols := -w --strip-symbol='__mod_device_table__*'
-> +remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
-> 
->  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
->  # it is necessary to remove the PT_LOAD flag from the segment.
-> 
+A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
+strings[1]. While this stands out pretty strongly when you look at the
+code, and we can't do anything about a binary module that just plain lies,
+we never actually implemented the trivial compile-time check needed to
+detect it.
 
-Is it problematic to hide that?  Otherwise we'd have to revert the
-patch, right?
+Add this check (and fix 2 instances of needless trailing semicolons that
+this change exposed).
 
-Kind regards,
-Nicolas
+Note that these patches were produced as part of another LLM exercise.
+This time I wanted to try "what happens if I ask an LLM to go read
+a specific LWN article and write a patch based on a discussion?" It
+pretty effortlessly chose and implemented a suggested solution, tested
+the change, and fixed new build warnings in the process.
+
+Since this was a relatively short session, here's an overview of the
+prompts involved as I guided it through a clean change and tried to see
+how it would reason about static_assert vs _Static_assert. (It wanted
+to use what was most common, not what was the current style -- we may
+want to update the comment above the static_assert macro to suggest
+using _Static_assert directly these days...)
+
+  I want to fix a weakness in the module info strings. Read about it
+  here: https://lwn.net/Articles/82305/
+
+  Since it's only "info" that we need to check, can you reduce the checks
+  to just that instead of all the other stuff?
+
+  I think the change to the comment is redundent, and that should be
+  in a commit log instead. Let's just keep the change to the static assert.
+
+  Is "static_assert" the idiomatic way to use a static assert in this
+  code base? I've seen _Static_assert used sometimes.
+
+  What's the difference between the two?
+
+  Does Linux use C11 by default now?
+
+  Then let's not use the wrapper any more.
+
+  Do an "allmodconfig all -s" build to verify this works for all modules
+  in the kernel.
+
+
+Thanks!
+
+-Kees
+
+[1] https://lwn.net/Articles/82305/
+
+Kees Cook (3):
+  media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
+  media: radio: si470x: Fix DRIVER_AUTHOR macro definition
+  module: Add compile-time check for embedded NUL characters
+
+ include/linux/moduleparam.h                   |  3 +++
+ drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
+ drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
+ 3 files changed, 10 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
 
