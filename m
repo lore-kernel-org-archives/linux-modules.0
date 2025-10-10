@@ -1,114 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741D823958D;
-	Fri, 10 Oct 2025 03:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976381DF269
+	for <linux-modules@vger.kernel.org>; Fri, 10 Oct 2025 04:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760065571; cv=none; b=nZFi1w5c3WdUe25PIwfEhDPbUfR2+rzkMMWcjLRvtxe+rZQpc4oGTrNmxiLOfZbAVBMiSAyAKaGlKDpMzmeSnYZKfh43VTURy4cPu+id8h8c2avJkfH7rjz6hmOFqvUHkvoxHuO4/VYrIcMk4USXgSC6PqSwfMT4pl5bp/sn4oQ=
+	t=1760069959; cv=none; b=Kamg+VnUW7QDT66fG423rG3audSWbgAeJxDYCWXjEW75QoB8qkMu1pjZ0Dnc6+YQvu764C3k4Q0QIKVt3HCjHgjgc3zkbfVDc6UUPn6nOg9KNr4uYa1gARc+lGq3lb71MZMi4lj14bmR1/oJQGgDJdSScv7n60w4/S5K0O4BkHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760065571; c=relaxed/simple;
-	bh=buAk8wBnnxRKzIO9z4KvtvZ4fe13vVALntGgUa8V84U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mn8KCApY2x/N29l6XoshDLGppgztMNd7CQQF120M//zuqjJ9py0iWo61DUkc5KefkaFFa3yMzdwn6H2ZBvtqrMZbUh8gQcJA8+KuKn1tJTKLUZtzFACioeKoU3pQHYOU5p3ZNp1jyKTSpe9vPepyB4Xy+JUf6Q+FhDqJZLWqGng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TzhaMnwi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760069959; c=relaxed/simple;
+	bh=xwBn4qXrK+XNYpR0WLdPTYV+y8T+IAIrJ3YSUkkzQC0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DPbd8IYu3WFi3fbIAeaxaRKkKIk3+siMroRZhxDTiCFhToegPPYHFoCJ/eyJi9q4ROUn1S7KOwx2DkRvMPkkUibr+Z7v+wLZab1UV1xfVk1CbYMNuMhPk6O4Wv4M1+vxibQnCPQ7KiO50atpPKB1M+aOtU0gLHl/JOow2bjCcuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KNnBjr0q; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TzhaMnwi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8330C4CEF7;
-	Fri, 10 Oct 2025 03:06:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760065570;
-	bh=buAk8wBnnxRKzIO9z4KvtvZ4fe13vVALntGgUa8V84U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TzhaMnwi5aRCYhMaD90wY45c6oDbwSynC3DzmDcd2EhMbW+bwg+q+4X9fBSSGY1F2
-	 UCVKvmdzKVV7SEQFazNz4uOG+0TfFa5mYCvJFEC+eNsNuKunPAuuVxuLUbB5LfPC3C
-	 /e1qKqg/luyqhbw3P9iqPsWQwihFgWHW6kk08Ocu3nIlh+rRG4UqyW5pviUzTTpOfp
-	 n3Bp/NGJbd9NaqGKeN8Q7yt4ORDAokNot7/zqBCxszv8ZYxfp1gnXCjkbsEpyzDdN5
-	 nKN710g3qVhlsfkHZ+pBaJvc1xym5U6zxr27GPvg/zXDYqNQhBwVQt1fVzFLoXfP5m
-	 bPiTbNuPckfoQ==
-From: Kees Cook <kees@kernel.org>
-To: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Malcolm Priestley <tvboxspy@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	linux-media@vger.kernel.org,
-	Hans Verkuil <hverkuil@kernel.org>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v2 1/3] media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
-Date: Thu,  9 Oct 2025 20:06:07 -0700
-Message-Id: <20251010030610.3032147-1-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251010030348.it.784-kees@kernel.org>
-References: <20251010030348.it.784-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KNnBjr0q"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-46faa5b0372so10303045e9.1
+        for <linux-modules@vger.kernel.org>; Thu, 09 Oct 2025 21:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1760069956; x=1760674756; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WwOa80v1gASmUxbIlKVNpJ7pC74JVx0S1JpZYmF7fT4=;
+        b=KNnBjr0q5HdJcHl5KW1xWguYCm47g8hx1IkMR1zE4/dtFOxJneZHF+e/vQhNMA/v46
+         0O/yBa5nz3V8GKiXGcCvZ8BYDNjtexNaajr+6UOLWEL1QFQFy8JJYVp6CoXJ13goGpv8
+         xWxommaivpJU2vOGQSxjRMkySIIkQzb1gSiDJ/0ExzOIZSfn7bvaJ8mzsj+HXJCcw04E
+         AQZgRYU786KIw6YRGsAalBf9+5ED4JRfj+EA4myMJMu/DNoiUC5ExCYd02Ix9eA5CN3m
+         zvUb4hMHwWpnRRB5GMkEofL0mUVA+iT81dRClswUTeRPQPCOrS44AB7x+gsGvMVDmofT
+         9TUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760069956; x=1760674756;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WwOa80v1gASmUxbIlKVNpJ7pC74JVx0S1JpZYmF7fT4=;
+        b=kziWIe2DsLdHWj59VxYwwtOmW8czVONAF96haZ2tGxF3h5+CsV5rf2LnqwzyunTjzH
+         OwB6r8PcIWiNa1szceBUxeyVoJlZoifKL3dWJtwCdMd2n6bG/RJAjvmOoJhrEsjGkuQZ
+         2B6aLKiqQI764esqKUoVevTVEnp8+tQGexMRcslzay0QoPivUo4YioL0OnZIc84N9P4j
+         MSahkZ3PnPclYgss17Z1PEKS77V+Y7Zht/hCXbr0ybPlrFzh0mW8JYpU/75dk3FHfyKt
+         7COVrdCn10mNYdsamZu+gADhdZVYEp4vT20TYY7mL4Fy4o5xDmRgxxamF0AhWlNVIrep
+         oPOw==
+X-Forwarded-Encrypted: i=1; AJvYcCXu0xurtX5owjKIEG+uRplYsLjwrD9dJHyzaPokr4LTCYQb6aIX5UZyznC175j0OOcPeIf8oyROsdnOj8qW@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtHuCK8waMeTCj4XvDjZEjMhsP1oEbJ9T8bYKGxA6tRi/d2V8g
+	cf0cMBOM8vZOxUaQVqN/pvZ8j3HIi11SG6Mmjk9xdvszubohtrMgGtlphlVCUBO/XhA=
+X-Gm-Gg: ASbGncvKDAo1F7u7BGgb7FNEbxeOG/bN5R+3jZl0yj048ae9PUJ7iBKi/19SthSt1gU
+	vScYXb8C0jDDT+TaSZuuPGbzvoHylcj++QDlu3orhQRHlQGrCTDF+MDI2bXdtclS5tnSHJnnVOF
+	m/+MMmiQFplU9c600CCKB+e2nivTZHI5U5MR7+QkhSFxI48pBr2PknWQ3fSeLIt6g/Ix3Bsxpe4
+	bSq3zzr6SFDhuuNxEcOa19PgjJuWH49+d2hqs1BjcDwu8mnWNEjVY4mb0l1TbTAVXgQPdTruslh
+	ePJaa0UiZ/PsPtBBPQCK9CQyK70XMdbb7GPfK5YsTEVsWD32SZCk/NedU2BHUQ4y7zP+FlZRTzr
+	WhlWHYG42NE+dTS6II2pXyiqwmPS6oOjQmPi6zmsqkFnD5kipzzzcU+YiGr7oAA==
+X-Google-Smtp-Source: AGHT+IGJgO2IvwgPLgeBx8x9ysG+IFbcbA482p2h3xQBgGrT2la38bcOWIrduOHO8n5qJqWFiyffew==
+X-Received: by 2002:a05:600c:a43:b0:46f:b32e:5094 with SMTP id 5b1f17b1804b1-46fb32e50fcmr30537085e9.32.1760069955819;
+        Thu, 09 Oct 2025 21:19:15 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fb4982b30sm24491365e9.6.2025.10.09.21.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Oct 2025 21:19:15 -0700 (PDT)
+Message-ID: <565d9afb-cdd0-44c0-a070-9c603689f123@suse.com>
+Date: Fri, 10 Oct 2025 06:19:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2029; i=kees@kernel.org; h=from:subject; bh=buAk8wBnnxRKzIO9z4KvtvZ4fe13vVALntGgUa8V84U=; b=owGbwMvMwCVmps19z/KJym7G02pJDBkvKuSNRHNWmjXf/L5HymbpuzmXT1dvC5DbqfTMuo5B3 l4qc/eNjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgImsEWL4w3efx9RaQeHBDsEv U06efXncNIQ7eqJh6uZUuZKs7WuDgxj+5zHeU5Dzljx0Zff2vPyVxx9mh1aKiFvPPlf+Z8FFWb6 TrAA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] module: Add compile-time check for embedded NUL
+ characters
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+ Rusty Russell <rusty@rustcorp.com.au>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
+ Hans Verkuil <hverkuil+cisco@kernel.org>,
+ Malcolm Priestley <tvboxspy@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hans Verkuil <hverkuil@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20251010030348.it.784-kees@kernel.org>
+ <20251010030610.3032147-3-kees@kernel.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20251010030610.3032147-3-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The firmware filename macros incorrectly included semicolons in their
-string literal definitions. Right now, this wasn't causing any real
-problem, but coming changes to the MODULE_INFO() macro make this more
-sensitive. Specifically, when used with MODULE_FIRMWARE(), this
-created syntax errors during macro expansion:
+On 10/10/25 5:06 AM, Kees Cook wrote:
+> Long ago, the kernel module license checks were bypassed by embedding a
+> NUL character in the MODULE_LICENSE() string[1]. By using a string like
+> "GPL\0proprietary text", the kernel would only read "GPL" due to C string
+> termination at the NUL byte, allowing proprietary modules to avoid kernel
+> tainting and access GPL-only symbols.
+> 
+> The MODULE_INFO() macro stores these strings in the .modinfo ELF
+> section, and get_next_modinfo() uses strcmp()-family functions
+> which stop at the first NUL. This split the embedded string into two
+> separate .modinfo entries, with only the first part being processed by
+> license_is_gpl_compatible().
+> 
+> Add a compile-time check using static_assert that compares the full
+> string length (sizeof - 1) against __builtin_strlen(), which stops at
+> the first NUL. If they differ, compilation fails with a clear error
+> message.
+> 
+> While this check can still be circumvented by modifying the ELF binary
+> post-compilation, it prevents accidental embedded NULs and forces
+> intentional abuse to require deliberate binary manipulation rather than
+> simple source-level tricks.
+> 
+> Build tested with test modules containing both valid and invalid license
+> strings. The check correctly rejects:
+> 
+>     MODULE_LICENSE("GPL\0proprietary")
+> 
+> while accepting normal declarations:
+> 
+>     MODULE_LICENSE("GPL")
+> 
+> Link: https://lwn.net/Articles/82305/ [1]
+> Suggested-by: Rusty Russell <rusty@rustcorp.com.au>
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-    MODULE_FIRMWARE(LME2510_C_S7395);
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-expands to:
-
-    MODULE_INFO(firmware, "dvb-usb-lme2510c-s7395.fw";)
-                                                     ^
-                                          syntax error
-
-Remove the trailing semicolons from all six firmware filename macro
-definitions. Semicolons should only appear at the point of use, not in
-the macro definition.
-
-Reviewed-by: Hans Verkuil <hverkuil+cisco@kernel.org>
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Malcolm Priestley <tvboxspy@gmail.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: <linux-media@vger.kernel.org>
----
- drivers/media/usb/dvb-usb-v2/lmedm04.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/media/usb/dvb-usb-v2/lmedm04.c b/drivers/media/usb/dvb-usb-v2/lmedm04.c
-index 0c510035805b..05c18b6de5c6 100644
---- a/drivers/media/usb/dvb-usb-v2/lmedm04.c
-+++ b/drivers/media/usb/dvb-usb-v2/lmedm04.c
-@@ -70,12 +70,12 @@
- #include "ts2020.h"
- 
- 
--#define LME2510_C_S7395	"dvb-usb-lme2510c-s7395.fw";
--#define LME2510_C_LG	"dvb-usb-lme2510c-lg.fw";
--#define LME2510_C_S0194	"dvb-usb-lme2510c-s0194.fw";
--#define LME2510_C_RS2000 "dvb-usb-lme2510c-rs2000.fw";
--#define LME2510_LG	"dvb-usb-lme2510-lg.fw";
--#define LME2510_S0194	"dvb-usb-lme2510-s0194.fw";
-+#define LME2510_C_S7395	"dvb-usb-lme2510c-s7395.fw"
-+#define LME2510_C_LG	"dvb-usb-lme2510c-lg.fw"
-+#define LME2510_C_S0194	"dvb-usb-lme2510c-s0194.fw"
-+#define LME2510_C_RS2000 "dvb-usb-lme2510c-rs2000.fw"
-+#define LME2510_LG	"dvb-usb-lme2510-lg.fw"
-+#define LME2510_S0194	"dvb-usb-lme2510-s0194.fw"
- 
- /* debug */
- static int dvb_usb_lme2510_debug;
 -- 
-2.34.1
-
+Thanks,
+Petr
