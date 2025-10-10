@@ -1,106 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A0C1E5B88;
-	Fri, 10 Oct 2025 05:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DB9635;
+	Fri, 10 Oct 2025 07:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760074662; cv=none; b=Jgy5EAaR4WwAx0CmPgC/BhgsMelcFCAeWmSAqLKRVEgeQ3WogtQZwf0KeyWbP3PZfaecYskQY9i3hM8/RW05Q38TPTY66eNZGjXJSQ3/aaj5mrAayYlEIaM023WfB7ZZtp2oumHx56y3aPf4Je4HNoZN22XM5PA1QN+FYEqx1yk=
+	t=1760080212; cv=none; b=aV9OXAkZKLgShE9T1chc6xm/UBgqX5TspNB92rRzw4TvL8KnkgBhWsN0unXKI0nOY6mIhxsD/nbqHSljvLl1YyN/QkKMD7K4lfXTyc4Ya2M0yNfx942dWsXX5mmfC2mtUJxaJPymysrX3t3smnHCWciKAMgBrwpnOpgUnUwFvJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760074662; c=relaxed/simple;
-	bh=eSG/Q37AL9myTBhDnUGwpJwl96ThmygUixnMjqfFA7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CaS2zUxDtZJUHHUgdgHDwxGuO/VVh/Hdugj/r85xfDoYL9HS+U+TfOm7kBl9/8LdpwwfICtW6ViZXnBMX1rdGsADhRmljMpP6XBlopn9LB11mKHJiXOxsygc7HrVFIVYPUkU7pXaExXBkhePP0LyowAzp8WSnmNLZZF54/IDyrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mE/NCL8B; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760080212; c=relaxed/simple;
+	bh=mFIn2mObs5dKqhQdsiISRpULCebc5OTRrwRrnVShcDk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=D+htmomVawABnmVJVgE3pEGDwQoEMrNjNJAC0iTS75RyWxkIrVvif8Lm1TOuQgqa8tlyRHRO+o3Eu8u2CjT/PHzf80ScJNP68TGSaEqu6fxS4Z1z/CfVYlQCzRUqhIKrlBz5Ig7sR2RXjEI6TWfweLwezjz+KDhNW4Mk5SaHmVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KsS/Fw5y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mE/NCL8B"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37497C4CEF1;
-	Fri, 10 Oct 2025 05:37:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KsS/Fw5y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F17FC4CEF1;
+	Fri, 10 Oct 2025 07:10:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760074661;
-	bh=eSG/Q37AL9myTBhDnUGwpJwl96ThmygUixnMjqfFA7w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mE/NCL8BB4pxQmbWQWld9vmyEKkzDTVph4kFYLT8D6CxOIunbO3lsKyifa7pUV+7l
-	 C1OyCfMr1shXqOSaGvN1HIE3Xa+WQluhv3hWTL0BDu7MRrKoFRjvfxMP/evN1bKDm9
-	 L5OsI03zPx3hHjXSCGDG2cTPG3JO/uUPO6ED5dXjkRvbG3gdpwWu6g7M5CaHHyS9Ck
-	 qWTLqHRg97t1kBkuRYTwUEft6UBGWSHf5DEQpPmHO8Twr4HuYo/jJSFnGh5fEzSwsi
-	 RfTCFRXZhINgXySpPI1hlTOp49aHh1zHl6B0X7dSvvVMAXhxzPJbMNw5EN719EvWhn
-	 1QFsHhGMJ3Syw==
-Date: Thu, 9 Oct 2025 22:37:36 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Alexey Gladkov <legion@kernel.org>,
-	Charles Mirabile <cmirabil@redhat.com>, da.gomez@samsung.com,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, masahiroy@kernel.org,
-	mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com,
-	sfr@canb.auug.org.au
-Subject: Re: [PATCH v8 7/8] modpost: Create modalias for builtin modules
-Message-ID: <20251010053736.GA447238@ax162>
-References: <28d4da3b0e3fc8474142746bcf469e03752c3208.1758182101.git.legion@kernel.org>
- <20251007011637.2512413-1-cmirabil@redhat.com>
- <aOToOeNGiaFVM0Ds@example.org>
- <aOgSaNejdcBWKXx8@levanger>
+	s=k20201202; t=1760080210;
+	bh=mFIn2mObs5dKqhQdsiISRpULCebc5OTRrwRrnVShcDk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KsS/Fw5ye6Ox65qBuy/P6/foDTiAIKzEiu6zJeYo0FQ7M88DUFy9q6rjovsk4vsCA
+	 7yJhql4MoBmS5qVaZVj5PBdZ2mOi9RgeQ6AAl8T0PXj3XrM0orYCw9PU3OLaRuGuKe
+	 khYzYf9hMW16IikqH+mDUsyeqL47odxBGsh9vvMiJi999lkW706pZcHNhXuuCiopHy
+	 oK71lZ5aiMWuIKz3U7D/UIWXVhlMmHFplvbMyqlIBABccj0lCRFQtxNVD3DW4oicWt
+	 JnpNilQjLyJXsazpF9RG/WSnVwkedGPpvFrjv3zPhNEs+gwzwQXNFyxhgZlalnSC/h
+	 xhrcGKdtEEyVg==
+Date: Fri, 10 Oct 2025 08:10:00 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Hans Verkuil
+ <hverkuil+cisco@kernel.org>, Malcolm Priestley <tvboxspy@gmail.com>, Mauro
+ Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org, Hans
+ Verkuil <hverkuil@kernel.org>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
+ <u.kleine-koenig@pengutronix.de>, Rusty Russell <rusty@rustcorp.com.au>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
+ Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] media: dvb-usb-v2: lmedm04: Fix firmware macro
+ definitions
+Message-ID: <20251010081000.1104c7b1@sal.lan>
+In-Reply-To: <20251010030610.3032147-1-kees@kernel.org>
+References: <20251010030348.it.784-kees@kernel.org>
+	<20251010030610.3032147-1-kees@kernel.org>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOgSaNejdcBWKXx8@levanger>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 09, 2025 at 09:52:08PM +0200, Nicolas Schier wrote:
-> On Tue, Oct 07, 2025 at 12:15:21PM +0200, Alexey Gladkov wrote:
-> > Hm. Indeed. I haven't found a good solution yet, but you can use the
-> > following patch to unlock compilation. It won't solve the problem, it will
-> > only hide it.
-> > 
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> > @@ -84,7 +84,7 @@ endif
-> >  remove-section-y                                   := .modinfo
-> >  remove-section-$(CONFIG_ARCH_VMLINUX_NEEDS_RELOCS) += '.rel*'
-> > 
-> > -remove-symbols := -w --strip-symbol='__mod_device_table__*'
-> > +remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
-> > 
-> >  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
-> >  # it is necessary to remove the PT_LOAD flag from the segment.
-> > 
+Em Thu,  9 Oct 2025 20:06:07 -0700
+Kees Cook <kees@kernel.org> escreveu:
+
+> The firmware filename macros incorrectly included semicolons in their
+> string literal definitions. Right now, this wasn't causing any real
+> problem, but coming changes to the MODULE_INFO() macro make this more
+> sensitive. Specifically, when used with MODULE_FIRMWARE(), this
+> created syntax errors during macro expansion:
 > 
-> Is it problematic to hide that?  Otherwise we'd have to revert the
-> patch, right?
+>     MODULE_FIRMWARE(LME2510_C_S7395);
+> 
+> expands to:
+> 
+>     MODULE_INFO(firmware, "dvb-usb-lme2510c-s7395.fw";)
+>                                                      ^
+>                                           syntax error
+> 
+> Remove the trailing semicolons from all six firmware filename macro
+> definitions. Semicolons should only appear at the point of use, not in
+> the macro definition.
+> 
+> Reviewed-by: Hans Verkuil <hverkuil+cisco@kernel.org>
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-Yeah, I would much prefer to ending up with pointless
-__mod_device_table__ symbols in the final binary than erroring out
-during the build... Does this happen with other architectures? I have
-not seen any reports yet but I have not tested anything yet. Why is
-RISC-V special here?
+LGTM.
+Reviewed-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-It seems like the relocation comes from the .LASANLOC4 symbol in
-.data.rel.local?
 
-  $ llvm-objdump -Dr drivers/irqchip/irq-riscv-aplic-main.o
-  ...
-  Disassembly of section .data.rel.local:
-  ...
-  0000000000000130 <.LASANLOC4>:
-  ...
-       1c0: 0000          unimp
-          00000000000001c0:  R_RISCV_64   __mod_device_table__kmod_irq_riscv_aplic_main__acpi__aplic_acpi_match
-  ...
-
-I cannot find much information about this ASANLOC outside of its
-location within the GCC sources, do we even need it? I don't see a way
-to opt out of this section altogether or on a per-variable basis, I
-wonder if there is some way to strip it out...
-
-I plan to send the initial 6.18 Kbuild fixes pull request on Saturday.
-If we cannot figure out a real solution before then, maybe we can just
-switch to '--strip-unneeded-symbol' with a comment to upgrade that to
-'--strip-symbol' when possible?
-
-Cheers,
-Nathan
+> ---
+> Cc: Malcolm Priestley <tvboxspy@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: <linux-media@vger.kernel.org>
+> ---
+>  drivers/media/usb/dvb-usb-v2/lmedm04.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb-v2/lmedm04.c b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+> index 0c510035805b..05c18b6de5c6 100644
+> --- a/drivers/media/usb/dvb-usb-v2/lmedm04.c
+> +++ b/drivers/media/usb/dvb-usb-v2/lmedm04.c
+> @@ -70,12 +70,12 @@
+>  #include "ts2020.h"
+>  
+>  
+> -#define LME2510_C_S7395	"dvb-usb-lme2510c-s7395.fw";
+> -#define LME2510_C_LG	"dvb-usb-lme2510c-lg.fw";
+> -#define LME2510_C_S0194	"dvb-usb-lme2510c-s0194.fw";
+> -#define LME2510_C_RS2000 "dvb-usb-lme2510c-rs2000.fw";
+> -#define LME2510_LG	"dvb-usb-lme2510-lg.fw";
+> -#define LME2510_S0194	"dvb-usb-lme2510-s0194.fw";
+> +#define LME2510_C_S7395	"dvb-usb-lme2510c-s7395.fw"
+> +#define LME2510_C_LG	"dvb-usb-lme2510c-lg.fw"
+> +#define LME2510_C_S0194	"dvb-usb-lme2510c-s0194.fw"
+> +#define LME2510_C_RS2000 "dvb-usb-lme2510c-rs2000.fw"
+> +#define LME2510_LG	"dvb-usb-lme2510-lg.fw"
+> +#define LME2510_S0194	"dvb-usb-lme2510-s0194.fw"
+>  
+>  /* debug */
+>  static int dvb_usb_lme2510_debug;
