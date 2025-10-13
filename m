@@ -1,101 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D04F24A063;
-	Mon, 13 Oct 2025 16:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EA521ABD0;
+	Mon, 13 Oct 2025 19:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760372831; cv=none; b=sonRG5R+JbapTi8N6fD02O09LL+3/0DwRpHZmOKssOc4yeTi08rdRSXwq2wT9INn/tPGB3Dp+1fqB+7c9bQmrB7GAt0SObOdMAProXwBhmu26dOW2PyHZYL6JqcPzjkDtvlOOp2L/Z3DMwbtzeVqyibbiMISlUUx4wr5CyMWFiA=
+	t=1760382181; cv=none; b=d4oDICs+KifmAAB9JsrI+iilRuh9IML2Y+/KQKJK/9Qj+L8W0Q+izxbBH+9Fw3itfHEzCZPX+fsT3a+NiFsMDP1lkxBlCsVUIyY/CMPJKyroMz2AdGK+fNs6QkajOFbygLOkGBeaWbIlBdTmoHhpFFI4z5KGR2ftgTSOcUdH9fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760372831; c=relaxed/simple;
-	bh=5iLdmqPa99v7UTHnW6tvGbtWO3GHkHMbLz5IL+MzR64=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oWRnC+TeCqlMKYzQ67PSZRute/6b2mdHxmuXUD86kEVydoINfnOf5DQyUUem2e/Gr586/hf9OstEexxU+cFB0pqmEakX8iVcNv9qOlrP3kjcrMX6wLAuq4FB0OYkxLo+uXkbe8F5Bq6EwI4JH5IV79GSc1tqEbDBi3MgCdY2y/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aZjedRFd; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1760382181; c=relaxed/simple;
+	bh=j3JFInE4uEboS1h3cvrqQVXAUThb/4Aso5pJOsig16E=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gqNERU0iP3WQGnBZcdbB+6hyl2xaapOXWsF867xNPk1Eg/VULkTQJBjAZDqWdKZwPyNQbFTjnX6FU/33VZVgfS7NZXdd1PsrvUgxdLHJkpM15n66dzf5dkLAdvyLTjKNDQardbUXMvPr/88CK1SQHBJkHt6q0CUdktYCeX7ZWHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=M6nW1ISS; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aZjedRFd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760372830; x=1791908830;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5iLdmqPa99v7UTHnW6tvGbtWO3GHkHMbLz5IL+MzR64=;
-  b=aZjedRFdNFRinmlhz1nxlRV7wNWVGraPAL0CxHuDwu5UM1bAMnwOdvvh
-   c+G5O/pNtEKrqtQflJS/a0uvOmQFuaA/QGCA2JRWNEv2Zg8ltV9xX9+Jv
-   ta+FjkUj+J6BeYG6kQJg9UrUZUH9aLYbUJ2L01hVnbOfaId0l/Umg4AMc
-   zANkFhw7A4J3lpOijz/M5gensu4V/qSHsQ1F20k58A09F7kIIWCgNPkFS
-   xRq52e2Gn/VgtNgiM26fo4L/5LLSEQnTuSpNakhGgtZbBadeHoy7uu4pD
-   nh0Ggp0w5Lvopn39t43Yud/sk/+cCe3CztnKKkMbzOqwsgxzEREVX5eXQ
-   Q==;
-X-CSE-ConnectionGUID: jqHBjjQoQIWcy8g1fxk2dA==
-X-CSE-MsgGUID: jaCNamssQD2BZ2CpWrnBYw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11581"; a="62409333"
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="62409333"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 09:26:58 -0700
-X-CSE-ConnectionGUID: ZRj8VDwqSV2wAQPkPP5jCA==
-X-CSE-MsgGUID: acgVpgwRTgSKHED3BGtKhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,225,1754982000"; 
-   d="scan'208";a="205331722"
-Received: from lucas-s2600cw.jf.intel.com ([10.54.55.69])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2025 09:26:58 -0700
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH 1/2] module: Override -EEXISTS module return
-Date: Mon, 13 Oct 2025 09:26:23 -0700
-Message-ID: <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
-References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="M6nW1ISS"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net F027B40B1B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1760382173; bh=w7jJZlyqEMOvON5ktIvS7ruzua7nNGxvQi4Hhetil0w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=M6nW1ISSENMJuIjLjj4upP8TsPWclCX7mJIl+cD15NBijVdRh2nI8qcITy1S7PaKv
+	 Wtqty4w7naL/JIKoUvxCUA1jS6pDpIPxUfR1m/1prCpP4V0j7/96eLAFSG8jX6p3cf
+	 e4MSqkmbqbg7fmAOC6dPlAiZPWV4+7EMCdC6EL+uHnSfJPm0twSuIlOrWavhSY10vN
+	 dSrGWXmW1k4TCv41QfmF/x+cYREYAIVIIS0cAyLlVSz09iOTtCTN9hIEq8ZNo66knY
+	 ZN1BmAdO39cxG68x4UAqBPzVk4e/o/Qju3I00LHStNS1X4UOtEkJdr3gPB4Naf3qKh
+	 i/DNPIDvx31Tg==
+Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id F027B40B1B;
+	Mon, 13 Oct 2025 19:02:52 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Siddharth Nayyar <sidnayyar@google.com>, petr.pavlu@suse.com
+Cc: arnd@arndb.de, linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev,
+ samitolvanen@google.com, sidnayyar@google.com, maennich@google.com,
+ gprocida@google.com
+Subject: Re: [PATCH v2 00/10] scalable symbol flags with __kflagstab
+In-Reply-To: <20251013153918.2206045-1-sidnayyar@google.com>
+References: <20251013153918.2206045-1-sidnayyar@google.com>
+Date: Mon, 13 Oct 2025 13:02:52 -0600
+Message-ID: <87ikgieiar.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.15-dev-bd47d
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The -EEXIST errno is reserved by the module loading functionality. When
-userspace calls [f]init_module(), it expects a -EEXIST to mean that the
-module is already loaded in the kernel. If module_init() returns it,
-that is not true anymore.
+Siddharth Nayyar <sidnayyar@google.com> writes:
 
-Add a warning and override the return code to workaround modules
-currently returning the wrong code. It's expected that they eventually
-migrate to a better suited error.
+> This patch series implements a mechanism for scalable exported symbol
+> flags using a separate section called __kflagstab. The series introduces
+> __kflagstab support, removes *_gpl sections in favor of a GPL flag,
+> simplifies symbol resolution during module loading, and adds symbol
+> import protection.
 
-Closes: https://lore.kernel.org/all/aKLzsAX14ybEjHfJ@orbyte.nwl.cc/
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
----
- kernel/module/main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This caught my eye in passing ... some questions ...
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c66b261849362..74ff87b13c517 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3038,6 +3038,11 @@ static noinline int do_init_module(struct module *mod)
- 	if (mod->init != NULL)
- 		ret = do_one_initcall(mod->init);
- 	if (ret < 0) {
-+		if (ret == -EEXIST) {
-+			pr_warn("%s: init suspiciously returned -EEXIST: Overriding with -EBUSY\n",
-+				mod->name);
-+			ret = -EBUSY;
-+		}
- 		goto fail_free_freeinit;
- 	}
- 	if (ret > 0) {
+The import protection would appear to be the real point of this work?
+But it seems that you have kind of buried it; why not describe what you
+are trying to do here and how it will be used?
 
--- 
-2.51.0
+I ask "how it will be used" since you don't provide any way to actually
+mark exports with this new flag.  What is the intended usage here?
 
+If I understand things correctly, applying this series will immediately
+result in the inability to load any previously built modules, right?
+That will create a sort of flag day for anybody with out-of-tree modules
+that some may well see as a regression.  Is that really the intent?
+
+Thanks,
+
+jon
