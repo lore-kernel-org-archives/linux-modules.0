@@ -1,66 +1,65 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CFB332EA6
-	for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 11:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9BA332EAE
+	for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 12:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760701111; cv=none; b=USSO7TXyDmhGR/1dz3FUClVmdJpSyyTSBY31bjaxaOhALqRCaTpq5VvQrxWdvbfAqla5HnvNHpg66IMVjfjNL91bchJqmm3TwIHgKqsD/nr1tDltLHXBn/xyWUuUFN724KBm/sHTybk7O7yz4LNpSyrKW54khS97M7KPMFtcyAU=
+	t=1760702701; cv=none; b=VDWfY4JbrH3LgMn5ftuVxUksYM5cg9MmO7T7uquQxeFGfSVdBTIXcgcYOmgeZngRT5iOn1ZnTm60kItTiIAPlDIarqfHNoTS3zX3/1UdFIwoU0AH5CfYb85yZPlcPFCOE2R5bQedMSCHd2aFpBB88c1T4elRGzaSiKyufxY6lSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760701111; c=relaxed/simple;
-	bh=9msVu+SUBbsb9PBWG/xro47qnP6i3+BAjZkvCCDx/DM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VXX+wf0CBIA/QlQ7Ew8APJbx/XHqmJNktLnDD7+t30J4VeScxB9fkxjDJGa0Xt0qZyhFJdmH157t72I16vYQB5KwokhOfh5XbXPxSADt/VrBbaKtXTLQ5nhMfFNJPwYUzYtW4I7KXzA8SNXKjNwHfoyqOVss2eNpJZrNjdPl0GM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RJh6R/sE; arc=none smtp.client-ip=209.85.221.49
+	s=arc-20240116; t=1760702701; c=relaxed/simple;
+	bh=zxJeEPERBSwecyf1Dj4zrIfVzfgAX3Kmnnlh4mTeqXY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=VwPUhFF7A5FOxW6DHlsjPwMsxtg/RoDyykQ+QaAdxKsNoGVF27ykc9YBQ9kyrMPY1DU2KGOZQLACxyMYEOiYYQAUXp/xxHK94wN8fNgzvU73Y22HSHhZoyMIYwoCizMRy7VP+K6xn0x7UNI4OssHo85Xm8uIdrurUoW2axCP7gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A8WEISlI; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RJh6R/sE"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-426edfffc66so1237096f8f.1
-        for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 04:38:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A8WEISlI"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47103b6058fso13839605e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 05:04:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760701107; x=1761305907; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oSsGSmsIxqB5hm0PfffZYkH5rW/rAwPHgsZUjkbnJ5U=;
-        b=RJh6R/sE10jnJYI2cU1wwkRhFzykzZGWp9LPdHSEeeO96YDrImRezsdFp0mpwRSrhT
-         YTWf4kEhpI9aZMm3tM6qEuT62PTCfww9U0oLE1bpm7mX4tXFV2O/letJd1H1wfraACHu
-         VlOgURQfsjHEwZW/xvOdo/IPjgaW7+OA9X1ZnrXmoHWtO+eUYnZi1w2Vr3jbmsVKvn7B
-         INMZr+jl7DRRvYfzY9qtQJVcIBWBu2yb3YEbw+3elRRC9gxNo88HuefbEYi8mZBaCA6U
-         FzcWW6VQEGWW3s8q3Mmo866xxrUtL/shOgc/P7H7y8GH/9Dj6g6gT02h4F0qxPITEnkc
-         1gGQ==
+        d=suse.com; s=google; t=1760702698; x=1761307498; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PZTjBl4diZiotg4HGvoRg3VptpOxC83MZHMSgyQDmPQ=;
+        b=A8WEISlIbovZ6tG8QMcFTY4U2hkQ1301H8qJQMZbP2/xznDwFs390/usER8/CssPB1
+         u9dp/KKeii5YwSA+Kf4bk/kod1P1zIxDB43Ja8n6cSUiyI+fghy4uOculPVXqU/WO1Hm
+         /wtlzSua/wYGBj11q+RZmGESl7Bf3ilEZdY0tE5w0WI0JToOCIz9fITp7lFAKQ5hFoGG
+         jbd57O2Zqva0Dp4M1FxJN4ymLhCisGENxyF0rR2hzgCfge2YabgN8MaWHTUWe5tRcJ3k
+         ALddsU/O+hI7DW/VX62uC1Qm09P92KxPYh4WA5W4V4Z6bz9iGuMP1/1owRzWVN4QD7X6
+         CU3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760701107; x=1761305907;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1760702698; x=1761307498;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oSsGSmsIxqB5hm0PfffZYkH5rW/rAwPHgsZUjkbnJ5U=;
-        b=Ou7pPooEdkAzudCDfrBvq2R6hXeZFQSlbxzxgIT/L4WQ5LxQHAVurKuyIZqDvRePa5
-         UqmD18hyx56Vg+eWh5bus7JX0b6muoDHoP4PS6X7+g0xjD34dJxG2I6vXpBOPIm8pgK8
-         Nu+JzwAehgG9lqual3cFFCYTuhtOKvPjnEpr+XplrtE7b37pZRo++AhcY4oFIC+dN3Dk
-         5yW/nWdW8GrDS9Dajg6cLoOyL0BMyQ/i+P9yt2WLy8CeW+LT26QhHt+cKJ8wVvSMDWKV
-         Qd8iTJO41HCQnEbUXeZTTAetlWZNQWLZkZmhgweTGtbe+4woNM116o19YMiO7lkmYWph
-         BJVw==
-X-Forwarded-Encrypted: i=1; AJvYcCUUqbHEEX4gaDOY6oKhXsebK3KPtp/MDHfHcd9tnRFmbzIl8O5vxPHI3mBtJPlkE+6GPu9qg7YhfJnPrNSP@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqQ7OxtGrkxpYVvy2Ro/Ot4W0dOzyp0eWx1xYXEjDdX/fuCkwo
-	btWpm1eVPkXRgE9TXa/uIy16Gg5fynBCs9EZOewyYQAZaRSoTNNDSBUvY/aeVx+uf1E=
-X-Gm-Gg: ASbGncvMPArJuyqY8c+pEH+Lb0JjOhMFYaLZt3r2IoTVtxGTmCBrVw7djdo1RJd2cWb
-	gluiA8sggTseHDphVriTkenGtzu3X3rB/n/WrgFp4F5EFDX/rE/+SoMKinrM5d7+doiuZavCH5s
-	62fH/Kcxgfa1Z4a/Qk+57JbU89fVLa/L0upcHhQMcPvbeCRWQ4MQZNaTly8EWP7mNR5MvlU4GNf
-	2S17OW/1idMRJAZmemNO7u1+rpA3UZK9CazShKcNelt9vApkwU/e1CK9zbLKepZOjgaWBe/axEv
-	pypo3Gexrn9xJKlIcKzCyaEBL7Sbtl2PGFcEOzeQUPtAMj2ywobg8Td0L97kArpCKnWewtv+J6X
-	DwWO1WiSZXv6pKEHAb6aybJvsfsDSmvvuwFlCbYc63zH5GJILCf9XbaBwMP7wGMN6Nkq1nzso33
-	UPBnTcbmYP7Cn4S+pi5NN+
-X-Google-Smtp-Source: AGHT+IEvltr4XQUBvXbO5/DAcfM0KgT+zHuTMTdsx4BX5yj88NzF+xLsMdBh0+sxiVD7nd1L1YhGYw==
-X-Received: by 2002:a05:6000:2287:b0:425:7e33:b4a9 with SMTP id ffacd0b85a97d-42704a62705mr2909583f8f.0.1760701107569;
-        Fri, 17 Oct 2025 04:38:27 -0700 (PDT)
+        bh=PZTjBl4diZiotg4HGvoRg3VptpOxC83MZHMSgyQDmPQ=;
+        b=CObUN4Loj7B9Q6P8bUPgEUq+NnJ3OoD7iDSpSX6ygBmMYJIotjOS+TTIS2sGbgVnlT
+         FhfFD6DbJvHlVkyrXw95CkmzRe2g4R/la2UH/KJY4IwvH4ojniV1K6zzc4JGYw0Fpvqg
+         oTunYQMEdea/WPazKGVlnLrhptfgCf5pP68un0waqhCHjwjN0U7gDJDmMfeoTCagmI89
+         5ssht7LiexSo6FPyptuno1jk52UcNnC5rGXdiTRn1Q+SPht9qIxVpo+z4gkijJXItXdM
+         qhf5YSSeSdQtQ6rYA1+ynzLEvqWFn7mhKcrr+PbgnmhPsUlZyEmkvKm0jAeAIfUnI9BE
+         mggw==
+X-Gm-Message-State: AOJu0YyN/m5G1F6cKP6IH1RPljq9WycwFyV798BrhtG18jLBUTE3038N
+	P817dlsa6Z3eUIKP7lib9NRBj7AUgn/ZcdCyDI/70+ZwZKErAOiKaJGKV3ENb91tUkE=
+X-Gm-Gg: ASbGncuVHk+aX78jgKaZiZ7McGXlN1uhTLeV+WBBOitQvnQe6fYO+1BtXb2K+BL7zcP
+	tlLjOm7P+uEkGAYzrtfLfvRuiHzvOGvGjb9ZPWMqjUCjl3Lt3sgTtw2UFx99rjA8yptGI4Ndjib
+	Db7T6ya29zTM9MIcvie4s/L44H5qb5ZoyL26h4SBcJH42H/Mh7YIcqiy6tZfO+EDb5TFsyc9Fs/
+	FMWrnPSMXynCDyOzvgSoxZOsLcd/5F4+PmV8nrB+jkCPjB5CiLXKKTzGTmDV5XZI4IwZSDEjn6x
+	02tKONIgzlJ/3oE2Vp40Uz3MTmPLxVgIsJ5rZlXQnRMK3w5uZ3gPbSvRUY6X/BDVea0Wo51PuRF
+	lZU1Lz7hZWmz+EkHcNHOFYik5n/sUKHuqn8TKHbPShCpexSh4v1YYSeJevJTdIXFkKUbpUSMuOk
+	bFUxt4B8Rtxyqxh1TZuk7oxiK7Q9ApFZ8=
+X-Google-Smtp-Source: AGHT+IE1Fi7czH22W1V/P5wbD0Ci5V+g/0c5ggrDBbguznUJ3ayVv+bCUogPL7mV/v2uhjxPJ6rRbQ==
+X-Received: by 2002:a05:600c:8a16:10b0:46e:24a4:c247 with SMTP id 5b1f17b1804b1-471099254f6mr46174395e9.5.1760702698035;
+        Fri, 17 Oct 2025 05:04:58 -0700 (PDT)
 Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426f2f72e18sm19030555f8f.0.2025.10.17.04.38.26
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47121ed98e9sm4493705e9.3.2025.10.17.05.04.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Oct 2025 04:38:27 -0700 (PDT)
-Message-ID: <c58152f1-0fbe-4f50-bb61-e2f4c0584025@suse.com>
-Date: Fri, 17 Oct 2025 13:38:26 +0200
+        Fri, 17 Oct 2025 05:04:57 -0700 (PDT)
+Message-ID: <01ef4392-cfd4-4cf6-8af2-153b9e333d44@suse.com>
+Date: Fri, 17 Oct 2025 14:04:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -68,84 +67,59 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: ABI: sysfs-module: list all taint flags
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org
-References: <20251015221348.1125295-1-rdunlap@infradead.org>
+Subject: Re: [PATCH 1/2] module: Override -EEXISTS module return
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
+ <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
 Content-Language: en-US
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251015221348.1125295-1-rdunlap@infradead.org>
+In-Reply-To: <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/16/25 12:13 AM, Randy Dunlap wrote:
-> The list of module taint flags has not been updated lately as the
-> taint flags list grows. Instead of trying to keep multiple lists
-> updated, just refer to the list of kernel taint flags since they are
-> the same.
+On 10/13/25 6:26 PM, Lucas De Marchi wrote:
+> The -EEXIST errno is reserved by the module loading functionality. When
+> userspace calls [f]init_module(), it expects a -EEXIST to mean that the
+> module is already loaded in the kernel. If module_init() returns it,
+> that is not true anymore.
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> ---
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: Daniel Gomez <da.gomez@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: linux-modules@vger.kernel.org
-> ---
->  Documentation/ABI/testing/sysfs-module        |   10 ++--------
->  Documentation/admin-guide/tainted-kernels.rst |    2 ++
->  2 files changed, 4 insertions(+), 8 deletions(-)
+> Add a warning and override the return code to workaround modules
+> currently returning the wrong code. It's expected that they eventually
+> migrate to a better suited error.
 > 
-> --- linux-next-20251014.orig/Documentation/ABI/testing/sysfs-module
-> +++ linux-next-20251014/Documentation/ABI/testing/sysfs-module
-> @@ -52,14 +52,8 @@ What:		/sys/module/*/taint
->  Date:		Jan 2012
->  KernelVersion:	3.3
->  Contact:	Kay Sievers <kay.sievers@vrfy.org>
-> -Description:	Module taint flags:
-> -			==  =====================
-> -			P   proprietary module
-> -			O   out-of-tree module
-> -			F   force-loaded module
-> -			C   staging driver module
-> -			E   unsigned module
-> -			==  =====================
-> +Description:	Module taint flags: same as the kernel taint flags.
-> +		See: :ref:`taint_flags` in Documentation/admin-guide/tainted-kernels.rst
+> Closes: https://lore.kernel.org/all/aKLzsAX14ybEjHfJ@orbyte.nwl.cc/
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+> ---
+>  kernel/module/main.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c66b261849362..74ff87b13c517 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3038,6 +3038,11 @@ static noinline int do_init_module(struct module *mod)
+>  	if (mod->init != NULL)
+>  		ret = do_one_initcall(mod->init);
+>  	if (ret < 0) {
+> +		if (ret == -EEXIST) {
+> +			pr_warn("%s: init suspiciously returned -EEXIST: Overriding with -EBUSY\n",
+> +				mod->name);
+> +			ret = -EBUSY;
+> +		}
+>  		goto fail_free_freeinit;
+>  	}
+>  	if (ret > 0) {
+> 
 
-The module taint flags that can appear in /sys/module/*/taint are
-a subset of the kernel taint flags. By looking at the calls to
-add_taint_module(), they are as follows:
+I assume you intentionally omitted the "(reserved for loaded modules)"
+part from my previous suggestion [1] to keep the error message short.
 
-Present:
-TAINT_PROPRIETARY_MODULE
-TAINT_OOT_MODULE
-TAINT_FORCED_MODULE
-TAINT_CRAP
-TAINT_UNSIGNED_MODULE
+Looks ok to me then.
 
-Missing:
-TAINT_LIVEPATCH
-TAINT_TEST
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-+ potentially TEST_AUX.
-
-Since this text specifically documents what can appear in
-/sys/module/*/taint, I think we should still maintain a list of these
-flags for accuracy.
-
-Additionally, Documentation/admin-guide/tainted-kernels.rst provides
-taint descriptions for the kernel as a whole, which can be misleading
-for individual modules. For instance, for TAINT_LIVEPATCH, the document
-says "kernel has been live patched", but in the context of
-/sys/module/*/taint, it means "this is a livepatch module".
+[1] https://lore.kernel.org/linux-modules/ce7f293c-d9f9-4137-bcad-8cc492d34773@suse.com/
 
 -- 
 Thanks,
