@@ -1,267 +1,152 @@
-Received: from flow-b4-smtp.messagingengine.com (flow-b4-smtp.messagingengine.com [202.12.124.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370A027732;
-	Thu, 16 Oct 2025 07:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CFB332EA6
+	for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 11:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760601589; cv=none; b=slpZ+gfzyyLb2AUx5qVArKvEVvCa1U6SrU2u2i0L45nYs7wsIywHQyT8ft1C4JnJWd7uzSBdnpMc+wh+allQ6p7+bbBtsA663oPauGWy6nBrWB0+AdHFqsqapUHVeihlnt5I8lBLYF1OOFXLu9O8Ks5AW1o4GQ8tHac4/NdDNPQ=
+	t=1760701111; cv=none; b=USSO7TXyDmhGR/1dz3FUClVmdJpSyyTSBY31bjaxaOhALqRCaTpq5VvQrxWdvbfAqla5HnvNHpg66IMVjfjNL91bchJqmm3TwIHgKqsD/nr1tDltLHXBn/xyWUuUFN724KBm/sHTybk7O7yz4LNpSyrKW54khS97M7KPMFtcyAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760601589; c=relaxed/simple;
-	bh=GLELI6edHgJ4rLrCFdN0EgSviGgY+6eg489je3IK53g=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=h4bqVzh3AO1yK/wfZBraJTYpHIyteQ2I4rnPGdAbRfX4TtbxDdocpYoVrMiid91e15IF8Im4Ps2jTJ1s0G8h6hCxovG4idJLAhSiPaWKPjj3JyeTgmiOZyEzRRatnIFkM4XFrcvw7WGpgxnx3KkIMYmLYgroTaZxa7gW4rGzpys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Dnh00I6k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JYFqVQPa; arc=none smtp.client-ip=202.12.124.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1760701111; c=relaxed/simple;
+	bh=9msVu+SUBbsb9PBWG/xro47qnP6i3+BAjZkvCCDx/DM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VXX+wf0CBIA/QlQ7Ew8APJbx/XHqmJNktLnDD7+t30J4VeScxB9fkxjDJGa0Xt0qZyhFJdmH157t72I16vYQB5KwokhOfh5XbXPxSADt/VrBbaKtXTLQ5nhMfFNJPwYUzYtW4I7KXzA8SNXKjNwHfoyqOVss2eNpJZrNjdPl0GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RJh6R/sE; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Dnh00I6k";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JYFqVQPa"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 15FA6130062E;
-	Thu, 16 Oct 2025 03:59:45 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 16 Oct 2025 03:59:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1760601584;
-	 x=1760608784; bh=gsmN9Z3FJYObp60BofhTavDFXwdg3R8bCLb5lDfrp7M=; b=
-	Dnh00I6kWVC+90tFamluJ46nm3D90eaqL0not1NLL0Cr+oHq1AUstzTsjXEufvBI
-	NKe2r19Up1jt5g2erE0H9NZzSUsEwNbMW9FRXnxndtl3Lli4e2zbiP0AQv1EWoOD
-	olKL334NBGt24dzX/MGdzVyc7CvR8cP0CZikzEQeB5ajsFcZR3snfokqT0SNLjBO
-	KTPxZAhrqo6BPtJCpjGWLSnlXTYCQlH+qpbeHtMOz2u7RuDiBigtm6UIaOCo9AZ5
-	rsR+zdgIPqAkCD3+fH5VfVEIVTZx+XlTE+gfyauocMOCekgftjlVYi3Qc+/iOsIw
-	Qrtnbjr1vmobuL1Cb/1eDg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1760601584; x=
-	1760608784; bh=gsmN9Z3FJYObp60BofhTavDFXwdg3R8bCLb5lDfrp7M=; b=J
-	YFqVQPaF5TLM1U/Tn8/wz8rwBmZ3Rf1ciGLzKTV0RIzWA0trjMl+PvprizsQ3eQx
-	EmPoEloHqDhEqFeYQuqcuMa0UihOKKujcw6Kag1LPuJ6awioecbMKklIRPpGGAlm
-	Z/XOeWlGUtgS5sRTc+lPbYDU0CdkOqx8Mc1eRY6nuSDcNzys7BHhzsn2t1sDcNU4
-	s/KclAErUxhVtaxcUjiDz67VQvQAuHap+gGqt3m6rIeRFfw1L65ihkmbxdYKh8B/
-	A12xotHVXjZNTjw7HqOm5H6wDv6FzSAJc3okjrV5tnNyS7Sc1j8LjXcSGLveRDC/
-	PUWvipCNKFttJGawk5P+g==
-X-ME-Sender: <xms:7aXwaCh0KeFEB9Lz8Gt7Nxq4e_TdQu0NcmZkqq0Skmu5qnLvZHdcYQ>
-    <xme:7aXwaN04cb3r_2ZICkRKRvQcS_SYVxXNnyB4RdbSZQfatj2ru8zRQTnJH2uBIAxyl
-    BuhkOqSjhlQVJqi6DkrLV_Emt-lXcmIkxJKv5nYlLFDx3xU0UyzfQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvdehjeehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepgeelpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegurhhiqdguvghvvghlsehlihhsthhsrdhfrhgvvgguvghskhhtoh
-    hprdhorhhgpdhrtghpthhtoheplhhinhhugidqrghrmhdqkhgvrhhnvghlsehlihhsthhs
-    rdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhgrrhhoqdhmmhdqshhigh
-    eslhhishhtshdrlhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqrhhtqdgu
-    vghvvghlsehlihhsthhsrdhlihhnuhigrdguvghvpdhrtghpthhtoheptghorhgsvghtse
-    hlfihnrdhnvghtpdhrtghpthhtohepthihthhsohesmhhithdrvgguuhdprhgtphhtthho
-    pehjohgvlhgrghhnvghlfhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepiihihiesnh
-    hvihguihgrrdgtohhmpdhrtghpthhtohepuggrmhhivghnrdhlvghmohgrlhesohhpvghn
-    shhouhhrtggvrdifuggtrdgtohhm
-X-ME-Proxy: <xmx:7qXwaF73EL6Wx1oi645Jpe2lS5LjUOa0e0we3mKVQTSE3p0t5WtlcQ>
-    <xmx:7qXwaF_SZMGZDLyxSroOVGRtH_rQbTm8j5j-1WoqVCGKOxiqi37MRw>
-    <xmx:7qXwaKgQnzHzqlVSGnHM9v5A-eHyieFGElZzCzacMtdBaIymwbCU0g>
-    <xmx:7qXwaBlI2bpTfBZIpc_5FEL5K34_sy966F03LOitDOOWHQPhpIbuUQ>
-    <xmx:8KXwaBm8mD5l3EECvoNK0awzSPWIFuIwr0vxYRb-zAKqRTZQhRxc6xx7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C2CC7700063; Thu, 16 Oct 2025 03:59:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RJh6R/sE"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-426edfffc66so1237096f8f.1
+        for <linux-modules@vger.kernel.org>; Fri, 17 Oct 2025 04:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1760701107; x=1761305907; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oSsGSmsIxqB5hm0PfffZYkH5rW/rAwPHgsZUjkbnJ5U=;
+        b=RJh6R/sE10jnJYI2cU1wwkRhFzykzZGWp9LPdHSEeeO96YDrImRezsdFp0mpwRSrhT
+         YTWf4kEhpI9aZMm3tM6qEuT62PTCfww9U0oLE1bpm7mX4tXFV2O/letJd1H1wfraACHu
+         VlOgURQfsjHEwZW/xvOdo/IPjgaW7+OA9X1ZnrXmoHWtO+eUYnZi1w2Vr3jbmsVKvn7B
+         INMZr+jl7DRRvYfzY9qtQJVcIBWBu2yb3YEbw+3elRRC9gxNo88HuefbEYi8mZBaCA6U
+         FzcWW6VQEGWW3s8q3Mmo866xxrUtL/shOgc/P7H7y8GH/9Dj6g6gT02h4F0qxPITEnkc
+         1gGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760701107; x=1761305907;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oSsGSmsIxqB5hm0PfffZYkH5rW/rAwPHgsZUjkbnJ5U=;
+        b=Ou7pPooEdkAzudCDfrBvq2R6hXeZFQSlbxzxgIT/L4WQ5LxQHAVurKuyIZqDvRePa5
+         UqmD18hyx56Vg+eWh5bus7JX0b6muoDHoP4PS6X7+g0xjD34dJxG2I6vXpBOPIm8pgK8
+         Nu+JzwAehgG9lqual3cFFCYTuhtOKvPjnEpr+XplrtE7b37pZRo++AhcY4oFIC+dN3Dk
+         5yW/nWdW8GrDS9Dajg6cLoOyL0BMyQ/i+P9yt2WLy8CeW+LT26QhHt+cKJ8wVvSMDWKV
+         Qd8iTJO41HCQnEbUXeZTTAetlWZNQWLZkZmhgweTGtbe+4woNM116o19YMiO7lkmYWph
+         BJVw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUqbHEEX4gaDOY6oKhXsebK3KPtp/MDHfHcd9tnRFmbzIl8O5vxPHI3mBtJPlkE+6GPu9qg7YhfJnPrNSP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqQ7OxtGrkxpYVvy2Ro/Ot4W0dOzyp0eWx1xYXEjDdX/fuCkwo
+	btWpm1eVPkXRgE9TXa/uIy16Gg5fynBCs9EZOewyYQAZaRSoTNNDSBUvY/aeVx+uf1E=
+X-Gm-Gg: ASbGncvMPArJuyqY8c+pEH+Lb0JjOhMFYaLZt3r2IoTVtxGTmCBrVw7djdo1RJd2cWb
+	gluiA8sggTseHDphVriTkenGtzu3X3rB/n/WrgFp4F5EFDX/rE/+SoMKinrM5d7+doiuZavCH5s
+	62fH/Kcxgfa1Z4a/Qk+57JbU89fVLa/L0upcHhQMcPvbeCRWQ4MQZNaTly8EWP7mNR5MvlU4GNf
+	2S17OW/1idMRJAZmemNO7u1+rpA3UZK9CazShKcNelt9vApkwU/e1CK9zbLKepZOjgaWBe/axEv
+	pypo3Gexrn9xJKlIcKzCyaEBL7Sbtl2PGFcEOzeQUPtAMj2ywobg8Td0L97kArpCKnWewtv+J6X
+	DwWO1WiSZXv6pKEHAb6aybJvsfsDSmvvuwFlCbYc63zH5GJILCf9XbaBwMP7wGMN6Nkq1nzso33
+	UPBnTcbmYP7Cn4S+pi5NN+
+X-Google-Smtp-Source: AGHT+IEvltr4XQUBvXbO5/DAcfM0KgT+zHuTMTdsx4BX5yj88NzF+xLsMdBh0+sxiVD7nd1L1YhGYw==
+X-Received: by 2002:a05:6000:2287:b0:425:7e33:b4a9 with SMTP id ffacd0b85a97d-42704a62705mr2909583f8f.0.1760701107569;
+        Fri, 17 Oct 2025 04:38:27 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426f2f72e18sm19030555f8f.0.2025.10.17.04.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 04:38:27 -0700 (PDT)
+Message-ID: <c58152f1-0fbe-4f50-bb61-e2f4c0584025@suse.com>
+Date: Fri, 17 Oct 2025 13:38:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Aghr8S2aY07B
-Date: Thu, 16 Oct 2025 09:59:11 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Byungchul Park" <byungchul@sk.com>
-Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
- "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
- linux-ide@vger.kernel.org, "Andreas Dilger" <adilger.kernel@dilger.ca>,
- linux-ext4@vger.kernel.org, "Ingo Molnar" <mingo@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>, "Will Deacon" <will@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Joel Fernandes" <joel@joelfernandes.org>,
- "Sasha Levin" <sashal@kernel.org>,
- "Daniel Vetter" <daniel.vetter@ffwll.ch>, duyuyang@gmail.com,
- "Johannes Berg" <johannes.berg@intel.com>, "Tejun Heo" <tj@kernel.org>,
- "Theodore Ts'o" <tytso@mit.edu>, "Matthew Wilcox" <willy@infradead.org>,
- "Dave Chinner" <david@fromorbit.com>,
- "Amir Goldstein" <amir73il@gmail.com>, kernel-team@lge.com,
- linux-mm@kvack.org, "Andrew Morton" <akpm@linux-foundation.org>,
- "Michal Hocko" <mhocko@kernel.org>, "Minchan Kim" <minchan@kernel.org>,
- "Johannes Weiner" <hannes@cmpxchg.org>, vdavydov.dev@gmail.com,
- "SeongJae Park" <sj@kernel.org>, jglisse@redhat.com,
- "Dennis Zhou" <dennis@kernel.org>, "Christoph Lameter" <cl@linux.com>,
- "Pekka Enberg" <penberg@kernel.org>,
- "David Rientjes" <rientjes@google.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, ngupta@vflare.org,
- linux-block@vger.kernel.org, "Josef Bacik" <josef@toxicpanda.com>,
- linux-fsdevel@vger.kernel.org, "Jan Kara" <jack@suse.cz>,
- "Jeff Layton" <jlayton@kernel.org>,
- "Dan Williams" <dan.j.williams@intel.com>,
- "Christoph Hellwig" <hch@infradead.org>,
- "Darrick J. Wong" <djwong@kernel.org>, dri-devel@lists.freedesktop.org,
- rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
- hamohammed.sa@gmail.com, harry.yoo@oracle.com, chris.p.wilson@intel.com,
- "Gwan-gyeong Mun" <gwan-gyeong.mun@intel.com>,
- max.byungchul.park@gmail.com, "Boqun Feng" <boqun.feng@gmail.com>,
- "Waiman Long" <longman@redhat.com>, yunseong.kim@ericsson.com,
- ysk@kzalloc.com, "Yeoreum Yun" <yeoreum.yun@arm.com>,
- Netdev <netdev@vger.kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>, her0gyugyu@gmail.com,
- "Jonathan Corbet" <corbet@lwn.net>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
- "Sumit Semwal" <sumit.semwal@linaro.org>, gustavo@padovan.org,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- "Andi Shyti" <andi.shyti@kernel.org>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Mike Rapoport" <rppt@kernel.org>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>, da.gomez@kernel.org,
- "Sami Tolvanen" <samitolvanen@google.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- "Frederic Weisbecker" <frederic@kernel.org>, neeraj.upadhyay@kernel.org,
- joelagnelf@nvidia.com, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
- "Lai Jiangshan" <jiangshanlai@gmail.com>, qiang.zhang@linux.dev,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Chuck Lever" <chuck.lever@oracle.com>, neil@brown.name,
- okorniev@redhat.com, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, trondmy@kernel.org,
- "Anna Schumaker" <anna@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
- "Clark Williams" <clrkwllms@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, ada.coupriediaz@arm.com,
- kristina.martsenko@arm.com, "Kefeng Wang" <wangkefeng.wang@huawei.com>,
- "Mark Brown" <broonie@kernel.org>,
- "Kevin Brodsky" <kevin.brodsky@arm.com>,
- "David Woodhouse" <dwmw@amazon.co.uk>,
- "Shakeel Butt" <shakeel.butt@linux.dev>,
- "Alexei Starovoitov" <ast@kernel.org>, "Zi Yan" <ziy@nvidia.com>,
- "Yu Zhao" <yuzhao@google.com>,
- "Baolin Wang" <baolin.wang@linux.alibaba.com>, usamaarif642@gmail.com,
- joel.granados@kernel.org, "Wei Yang" <richard.weiyang@gmail.com>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- tim.c.chen@linux.intel.com, linux <linux@treblig.org>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- lillian@star-ark.net, "Huacai Chen" <chenhuacai@kernel.org>,
- francesco@valla.it, guoweikang.kernel@gmail.com, link@vivo.com,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Oleg Nesterov" <oleg@redhat.com>, "Mateusz Guzik" <mjguzik@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, wangfushuai@baidu.com,
- linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- linux-i2c@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-modules@vger.kernel.org, rcu <rcu@vger.kernel.org>,
- linux-nfs@vger.kernel.org, linux-rt-devel@lists.linux.dev
-Message-Id: <6241800d-9456-4d5f-b55d-611e33f2c446@app.fastmail.com>
-In-Reply-To: <20251016004640.GB2948@system.software.com>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-2-byungchul@sk.com>
- <2025100230-grafted-alias-22a2@gregkh>
- <63034035-03e4-4184-afce-7e1a897a90e9@efficios.com>
- <3bbe14af-ccdc-4c78-a7ca-d4ed39fa6b5d@app.fastmail.com>
- <20251016004640.GB2948@system.software.com>
-Subject: Re: [PATCH v17 01/47] llist: move llist_{head,node} definition to types.h
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] docs: ABI: sysfs-module: list all taint flags
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org
+References: <20251015221348.1125295-1-rdunlap@infradead.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20251015221348.1125295-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 16, 2025, at 02:46, Byungchul Park wrote:
-> On Fri, Oct 03, 2025 at 01:19:33AM +0200, Arnd Bergmann wrote:
->> On Thu, Oct 2, 2025, at 15:53, Mathieu Desnoyers wrote:
->> > On 2025-10-02 04:24, Greg KH wrote:
->> >> On Thu, Oct 02, 2025 at 05:12:01PM +0900, Byungchul Park wrote:
+On 10/16/25 12:13 AM, Randy Dunlap wrote:
+> The list of module taint flags has not been updated lately as the
+> taint flags list grows. Instead of trying to keep multiple lists
+> updated, just refer to the list of kernel taint flags since they are
+> the same.
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: Daniel Gomez <da.gomez@kernel.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: linux-modules@vger.kernel.org
+> ---
+>  Documentation/ABI/testing/sysfs-module        |   10 ++--------
+>  Documentation/admin-guide/tainted-kernels.rst |    2 ++
+>  2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> --- linux-next-20251014.orig/Documentation/ABI/testing/sysfs-module
+> +++ linux-next-20251014/Documentation/ABI/testing/sysfs-module
+> @@ -52,14 +52,8 @@ What:		/sys/module/*/taint
+>  Date:		Jan 2012
+>  KernelVersion:	3.3
+>  Contact:	Kay Sievers <kay.sievers@vrfy.org>
+> -Description:	Module taint flags:
+> -			==  =====================
+> -			P   proprietary module
+> -			O   out-of-tree module
+> -			F   force-loaded module
+> -			C   staging driver module
+> -			E   unsigned module
+> -			==  =====================
+> +Description:	Module taint flags: same as the kernel taint flags.
+> +		See: :ref:`taint_flags` in Documentation/admin-guide/tainted-kernels.rst
 
->> Maybe a shared linux/list_types.h would work, to specifically
->
-> I found a way to resolve my issue, but I thought it's good idea
-> regardless of my issue and took a quick look.  However, it seems like
-> there's an overwhelming amount of work since it might require to replace
-> all the existing include <linux/types.h> for use of list things with the
-> new one :-).
+The module taint flags that can appear in /sys/module/*/taint are
+a subset of the kernel taint flags. By looking at the calls to
+add_taint_module(), they are as follows:
 
-I don't think it's that bad, since almost every header ends up
-including linux/list.h indirectly at the moment.
+Present:
+TAINT_PROPRIETARY_MODULE
+TAINT_OOT_MODULE
+TAINT_FORCED_MODULE
+TAINT_CRAP
+TAINT_UNSIGNED_MODULE
 
-A little bit of scripting to find the headers that reference
-'struct list_head' but don't also include linux/list.h reveals
-this relatively short set that would need to include the new
-header:
+Missing:
+TAINT_LIVEPATCH
+TAINT_TEST
 
-> include/keys/asymmetric-parser.h
-> include/linux/dynamic_debug.h
-> include/linux/genalloc.h
-> include/linux/gpio/machine.h
-> include/linux/hiddev.h
-> include/linux/iio/iio-opaque.h
-> include/linux/iio/sysfs.h
-> include/linux/input/touch-overlay.h
-> include/linux/irq_poll.h
-> include/linux/iscsi_boot_sysfs.h
-> include/linux/kcore.h
-> include/linux/kcsan-checks.h
-> include/linux/kcsan.h
-> include/linux/lockdep_types.h
-> include/linux/logic_pio.h
-> include/linux/maple.h
-> include/linux/mfd/iqs62x.h
-> include/linux/mlx5/macsec.h
-> include/linux/mount.h
-> include/linux/mtd/map.h
-> include/linux/mtd/nand-qpic-common.h
-> include/linux/mtd/partitions.h
-> include/linux/mutex_types.h
-> include/linux/nfs_fs_i.h
-> include/linux/of_iommu.h
-> include/linux/parport_pc.h
-> include/linux/pinctrl/pinctrl.h
-> include/linux/plist_types.h
-> include/linux/pm_wakeup.h
-> include/linux/reboot-mode.h
-> include/linux/shm.h
-> include/linux/smpboot.h
-> include/linux/sunrpc/xprtmultipath.h
-> include/linux/usb/audio.h
-> include/linux/workqueue_types.h
-> include/linux/zpool.h
-> include/net/bluetooth/hci_sync.h
-> include/net/bluetooth/l2cap.h
-> include/net/bluetooth/rfcomm.h
-> include/net/dcbnl.h
-> include/sound/i2c.h
-> include/sound/soc-jack.h
-> include/target/iscsi/iscsi_transport.h
-> include/video/udlfb.h
++ potentially TEST_AUX.
 
-A lot of these don't have any #include statements at all,
-which indicates that they expect to only be included in
-places where the dependencies are already visible.
+Since this text specifically documents what can appear in
+/sys/module/*/taint, I think we should still maintain a list of these
+flags for accuracy.
 
-      Arnd
+Additionally, Documentation/admin-guide/tainted-kernels.rst provides
+taint descriptions for the kernel as a whole, which can be misleading
+for individual modules. For instance, for TAINT_LIVEPATCH, the document
+says "kernel has been live patched", but in the context of
+/sys/module/*/taint, it means "this is a livepatch module".
+
+-- 
+Thanks,
+Petr
