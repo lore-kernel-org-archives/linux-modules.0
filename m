@@ -1,83 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387982441A6;
-	Sat, 18 Oct 2025 20:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9375A153BE9;
+	Sat, 18 Oct 2025 22:27:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760819644; cv=none; b=VDnWhcR08EMoHsBHq1nZmsGQsVMJDO7DnARLtDYkJnI51Uoz+TrxqC04ajoF045YoSOySQGXSiZA5Bbgw39/0gm0doLlVURGjGzVbi05LupuHhrr6ZktaEUefO1io1GpU74xjSkBe0s3JsGMCrL9Ql+q/6mRs6/EbdG1stmQsGM=
+	t=1760826472; cv=none; b=tXNTpJ7HY/PaX7AWS/TD+UERgCh8YYdAUFAoEKWgP4gFyKM9ddQneLFb2j2pOAikX13TfxDDtxCLfr5Odrkg7nIXaoefT2zV2mnvLJL4NNCH1uSRJUtbjVKrVBmCOV9mX+OGtnBKZHYUaN5sTIFOWcLf9CyWPYotAa3quMPPsLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760819644; c=relaxed/simple;
-	bh=qDa8dNRA7HvXBHymxnFXRXDRH7wM3VWNwm2gtCpL+8c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K5HXJwHA0PhDguHOZcpFxkSFADjrvprpTjERSSPqmy/laTm6S0QcCVkXml192wodO/6R4QISXlD6r5Go31JRHxDSsZjbG7JQKDZ9pSH7dBkp96ljTXQjaAkvxpSm7fdyuNwOFGGHwp3LmsaK7tv2KaqWYxe/9+WzZZz500WoJfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvIn3uZP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1760826472; c=relaxed/simple;
+	bh=sv55VBMfMxRR0VQ7gXEeKljTKIrmjOAIjER8VzsG7IM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oAM4fYdZ+fRb1k6vfK2UH3G9yUjf2E0a9KLCfsdOu35Hi0r68qcL1MLzcIXJAVoLd8V4LS6In8kt8T4v3dK9i/ofl1oFqeXhzyZJO1wHa0GNELxrPyUyE/2coWRuKOn2K2VFeJNfLiZcGxqlmd21eZsLBv56Z1WQFc3E8VapVVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cg8IHfDZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvIn3uZP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DEDC4CEF8;
-	Sat, 18 Oct 2025 20:34:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cg8IHfDZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE64C4CEF8;
+	Sat, 18 Oct 2025 22:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760819643;
-	bh=qDa8dNRA7HvXBHymxnFXRXDRH7wM3VWNwm2gtCpL+8c=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mvIn3uZPhjBYp1aWcR4ekTpznp/TSUpcg9uKf4wiXcWgBCVT3Z7ETE2+qpX5GdgM2
-	 YSKhfr8ajjGXhcFv4Yqrlj9zbRMIqRdtb0KtSKXk9f4ToyUAqFeUSTeAof80z8tMhS
-	 1Uz5XYKW2dvShit2u3Jb65X6MhSsdwSD0V1Ua9tsG6+KL9vwI3gsY8et8mDoTIPL6d
-	 /Zrw7CFLnLxyNt56JqL+JO5Rt4VujtSPrDLkl7cyAv6LoTuurGxYa6J72MJ4tHei0C
-	 D1ZhNJbVIUaxP7ZnHRj9pDlDhSBMomC2UtChqw4IfWNJuuYLlbcujbK2VvtyemB4Pw
-	 gpuDgcVGDOLEw==
-Message-ID: <1431286d-e802-44ab-b40d-86bcfed42e3a@kernel.org>
-Date: Sat, 18 Oct 2025 22:33:59 +0200
+	s=k20201202; t=1760826472;
+	bh=sv55VBMfMxRR0VQ7gXEeKljTKIrmjOAIjER8VzsG7IM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cg8IHfDZT5NlqwmaxIxGP7+c61M1faD2yZBu22fqGNC3AfRZhJ210HO/uFVYQ06xn
+	 nIsXygxvdkgjFtYqglL64iW2PXYVqgc8sg3kXWgFg78Yf2UFhak9wotfBUUeaW2vKI
+	 qb6AQn8ukPWFvAyGOmYA9Nvx6+AtpSQbZ2FQ85TkAnwhKle6cP2oyzfqb3cJulCNdF
+	 4HaegnRQqZPdhacJ2CsnwnpQi130ojFXubVt2JuO8BXaECmDdwCMqDy1KcPz4M5/5/
+	 tbZPVBg1XYIwK5sf00/fAQhBKroU8pzAIVdhb2Xfe6txwEqCnICuvuC1xhsFGd6amM
+	 F1CnDwKfUFi4A==
+Date: Sat, 18 Oct 2025 15:27:50 -0700
+From: Luis Chamberlain <mcgrof@kernel.org>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer for module support
+Message-ID: <aPQUZvpnYPVdVJOv@bombadil.infradead.org>
+References: <20251018180210.347619-1-atomlin@atomlin.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer for module support
-To: Aaron Tomlin <atomlin@atomlin.com>, mcgrof@kernel.org,
- petr.pavlu@suse.com, samitolvanen@google.com
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251018180210.347619-1-atomlin@atomlin.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20251018180210.347619-1-atomlin@atomlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 18/10/2025 20.02, Aaron Tomlin wrote:
+On Sat, Oct 18, 2025 at 02:02:10PM -0400, Aaron Tomlin wrote:
 > Voluntering as a reviewer for Module support.
 > 
 > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 > Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 545a4776795e..c6c860ccdbef 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17392,6 +17392,7 @@ M:	Luis Chamberlain <mcgrof@kernel.org>
->  M:	Petr Pavlu <petr.pavlu@suse.com>
->  M:	Daniel Gomez <da.gomez@kernel.org>
->  R:	Sami Tolvanen <samitolvanen@google.com>
-> +R:	Aaron Tomlin <atomlin@atomlin.com>
->  L:	linux-modules@vger.kernel.org
->  L:	linux-kernel@vger.kernel.org
->  S:	Maintained
 
-Help is much appreciated.
+Even though we have 3 others working on helping with Rust, it turns out
+its not enough and so this help is greatly appreciated, thanks Aaron.
 
-FYI, I'm currently the one sending PRs to Linus, and I plan to send some of the
-reviewed fixes next week. In addition, by the end of rc3/rc4, we'll be ready to
-merge Andreas' patches with Rust module parameter support, leveraging kdevops
-CI integration.
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
-This patch, if/when acked-by the rest of the maintainers, can be merged in any
-of these 2 planned PRs.
-
-Acked-by: Daniel Gomez <da.gomez@samsung.com>
+ Luis
