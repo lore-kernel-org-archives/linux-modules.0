@@ -1,67 +1,66 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A66302CD9
-	for <linux-modules@vger.kernel.org>; Tue, 21 Oct 2025 08:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBBAD33893E
+	for <linux-modules@vger.kernel.org>; Tue, 21 Oct 2025 13:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761035708; cv=none; b=SX2tMX3sPB0qfPZE5nN7hdfVmY6V+WpwkbD9noQKm4qN+hWkzCHft/BgPPSI6F1OO/TOhsp8Jez/RUy28pqaS0B+Xg8E2LCdebnQkKgOKCxM0s0JNkDAeoOmzPMZWGACvmbdKCDkMqewMoPgsMZE8PWXxS1Ir3jauESE1cJ55/0=
+	t=1761054723; cv=none; b=XW6MbpEyvtSUFrjHK5rs9qm9A1P0tN8niNRymqunen6y5IEyX/0KDpL2JhWun36XDy6zNKPcwnRyDSsWdzMNTH/Q/8ItTmufc1KgX508ZnukIp5e98dM5HV2Bkw/wEsWn7xuvYB+NlPiRY7GDLFXvx6qFvrUV7XkK97dTaVGQ3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761035708; c=relaxed/simple;
-	bh=YaSBAbdAjpIG34xK5rBs7dOb6NfAJ+QEOT4p38B32Nc=;
+	s=arc-20240116; t=1761054723; c=relaxed/simple;
+	bh=cKFEf/mkujNMWCNn288lix+mx7uATbdtwPCr645LzQc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mvi0IBCJ8nolsyYjgjfsCJ+Nfv7W01VzZbxuZAe8usQhcqlsACwqrex442BrOLTAT2IfvQUTKAb5NzTWSUKg6S0pJmb8/7EouEP+kVIW/DY44kPWhMKzHAwcuCIKcPRltPstavFiFiC0MkK01yzgIytImMM46n+t7RulJ28sKT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Rk3c94xz; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:Content-Type; b=jt5OEs2uBEDXIGdoR9SThPPWwrbWCQDK9ZUwYHO62gsRDNcNC8o4q18hZnCax2NAS1JtQeno3LPVShz4pWs1b1bkppv+TIRl+29w8JSiztV+8NzIVsTkXJmdRE2JIDsv4z7/YWK5U3U5grZbOJwxWso8ibZ0ViOYSaevDPVfISc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=c3psRs9d; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Rk3c94xz"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4711f3c386eso25125745e9.0
-        for <linux-modules@vger.kernel.org>; Tue, 21 Oct 2025 01:35:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="c3psRs9d"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-46e6a689bd0so53393815e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 21 Oct 2025 06:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761035705; x=1761640505; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1761054718; x=1761659518; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+WElwxfDhwAQUTUU6M8FcHqJx7EeTmN3/ZrtK46jRLY=;
-        b=Rk3c94xzzE0PN+RoGuou8xmw60tdtJ74A+P801lG5T219t+6Uyrw4ql05seXnyG/sa
-         sqTeUwbErdOik9QKSGOIvpAj66MJbLhlBbKsK+hKn38sJewgPA/j5lUU28kPB0mis9NQ
-         TTCoO/pWRX/bthYXQvgjCN/Nkipa/Gp73jwOFHWHBbOsrdya0eTUCETlPh9Y1pfXfE4w
-         4TjV94xtu0DpaBT1sm0M9Fti4+tkUuTwTpDOpdXtQOWzh2p8SkuBaqnyoA2TdzF6vKV5
-         eDooE409MyRlLDfjxstpvor9y2+tEtghOUVW45qnVIroxuF8f/Cox/9PwaxxtrY0UvAI
-         bVmQ==
+        bh=2DyGAU+rMA/cRZrPzQupQaBzSC5vN1SBLAXdhns1VBg=;
+        b=c3psRs9dCxelf/aUOXvb+s91iQFgGtFocu21KJGzmx/OFjdFr+liPSKreuteIapmAu
+         RA/9LbcZ5iWEcGese/FGlR6IqlrpXRjvg6LzBb7MAUbLgyJ18pzuF5i29JMvRywT+Cov
+         uDW840jYvC17mez5rttoLLHpsvPxqeJAG1/yNveDdQ/8avt3u6wSyiF9cp+My1e1sRGj
+         F8vp+ujI4lRUk93yxKLGpDg3aXDRCAwMapKTmnhO+6s1toLzcIxR2yDt01hmZVA5T725
+         ayd2WCmdVXKrcafzt5LTtFc9A+aIMEPvxjdCyZfotvY6d9zDqcW1ebRNRlx8Wn1bqLb1
+         IsrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761035705; x=1761640505;
+        d=1e100.net; s=20230601; t=1761054718; x=1761659518;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+WElwxfDhwAQUTUU6M8FcHqJx7EeTmN3/ZrtK46jRLY=;
-        b=gH6kuE9y4irlvg35N+Y6AwqvMNREzBbdAzDlHtU73H6BICNGRPl7ePq50BWvbQpHKv
-         ZQJwqAHus6xh4oP1Nhu9/cMjicJl3COenNi/SOvyg5z8+8YjpyAon0Pi/Eb+FMoRX/hz
-         qR5OXoC1cbEDIvsZ2WvXNFWyGSm5xv+oFmhkutKX80hC8gWzSL6mrFbhYMv/3fJTEHTw
-         fTxHSRpHkEnJFvx5t1thX+8BXqf1MPlOpOO643x44uA8ZYUpQ2gSYhLnm6jaqyzoy+qT
-         kZqhK2c3peLXVxrGfSfDW9W+hmDB0KB04C2jt+uXp/amITzmlMYR7eB3uG62rYUlVLVC
-         jo+A==
-X-Forwarded-Encrypted: i=1; AJvYcCXA+CYYdaZZ1sDEZROeOVFzwB111E7k+W9cF8K/Vf62ELiypWgpawvkqud+52zSdCeIupyDVQBV2Q14E0aI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6/0k7iaTSt0RVxIHcC8C69YTOO7myLeZOtTjXL79N3AuVu0Pd
-	FqeCOnArM4yySr2e85MFNyDpByLCIBItU0oHhO6ysxuqIlOKhCzoTt8OGYfdXNjeVQhRZM+JaFU
-	nFyKG
-X-Gm-Gg: ASbGnctOET5N9ibqjwB9FjuVTEy4G7AJWbpe+qu4aYnDDyPDjmnSbICy6SnudC/hfg6
-	syG2lSL8BsMadt3K1AqWuowIKyyWSUcSbYPpZFb6JRoNYplzZ2u1nhvtoOUwrh46lt/HB3fPnJs
-	cFaIds9LE/97eYOrcsqV2yRCv0WJxuTQ2n8xTV4jYHkBYrteeLy0yzUDiyHPrqNI0/rbObigQiY
-	sYOkR9A5xsFhvCVPEOZyJSYdRDVmq98qrdRrUzeI+2GOrvpnu5qRP9vCWKJX9mu4ktmBZLmrvsY
-	Uu7Ff79Nd4iHk22r8vTc0ZOFGj4HZCTweGeo6HkTWDWjj3xEknQrJR3jd3D4jO/nxeODsWsQeaI
-	/Crj6cHqKLKGVEi+AlKVX8sMqH4OH/aT0G6HpyyTPqQFtOqmIH/Mk4fGM62u7ExPeXy6dfAZFx9
-	uR+uCZ4M6gB0+HfMSQ5Dl2wgME/HDkiPc=
-X-Google-Smtp-Source: AGHT+IHyHD3i9/mFT3HJ78GMd7f/qo1UWDeznE2MAfRacbhe0fu1pqUuTs5oe6SC2j+nOkpKxqDXfw==
-X-Received: by 2002:a05:600c:8284:b0:46f:b43a:aedf with SMTP id 5b1f17b1804b1-47117925da1mr94027305e9.38.1761035704645;
-        Tue, 21 Oct 2025 01:35:04 -0700 (PDT)
+        bh=2DyGAU+rMA/cRZrPzQupQaBzSC5vN1SBLAXdhns1VBg=;
+        b=CesFT6Kcdw21zk4IM77j/mz/+zo8JO64Ug+o2vOgXGIg/k6f+zEj2ZZR4SUi/nMzKg
+         fmVPFieevyjiU4aSD7JlzN1GtIOG1eEsP/hEIYlSN3rVE2CYPs3A44w5EOyIsmLJOGM6
+         GFQDS77GXitPIIwhoeU3sdmFPc6bwDZXqiCxC0gxxwl2Ieyjv3y+LjHKJx1ZvR/ohQAU
+         7ANl4SgYMAhufQ+euU2+vf8+1CE5zeuc3qSFeEwtAUULu08dp/ao9SKGmtGHz0sLvVzr
+         ilZXSy4m0TmxE0aG/HHMxj/SM3HKvHoQWLYRki6g2neJ1z9xxjZIj/6QPkn3APAKLCz3
+         pHCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWl5tJB1dmOemBZPKOjCgw2P68sVnmagLB4mKrsWI4L1hNSqp/9LgG78HYenPT8K7Mz8CRlCrr6zrzY3hLV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0CIlwQVa4Zqh2pVPJ0zAKz18CkG0R4IWP0DHpPn+KXsmGf1hk
+	HmDUUwXayRe78Nbar/H+8Wn9/ptq+KqYegwCqaKaKybAWdnm0TFW0rMG0696xnBcJug=
+X-Gm-Gg: ASbGncur2yG6syqKgEQiky5ccah+BxHcLqT0IFUxc2J8dUAChHFKA3k+oJ+AwIR119Z
+	tRzM73pAOLF2ck3BG+94HD87CfnHKO9LJ6UjAOVA6XBAglpEvrupCBCJ61QZ825VYUSnvEJDjLv
+	phRuWgfgebywVB7VoRcDpUHhFCNRqSIOIW58kiI7c+pzsA4fczwMwnPPWiYEadB+yQq84oJh5Hs
+	fp9qyJJkV3D9Rw3LXb9TNp42/gSHZSLqNubY715m2iHpveI+MUgWK2yn4baA2yzF+ly9u0GnpfM
+	9+wqk5zz0B8m1oi3xLnR4s86h5YqUevty3LsDPwvZOCG1efkODs365n4bSm6AL/4FF756pu0WAl
+	FwvvNpyYXQdHnridCOHqEByVHSsvUN/EuDLATDvQUdGcBoN2hfJqb5RcRdzXZBdXnB++bqwq50Q
+	bfsmyuD357dQuHtPty9jXPk9AKUgRs+MQ=
+X-Google-Smtp-Source: AGHT+IHWJuVwFzbFlMqm8ao/URm2+K5hiKjfkJF6MOKyAoW5c12azTqzQXI62G8B/tUeCFgJ75QR4A==
+X-Received: by 2002:a05:600c:45c9:b0:471:115e:87bd with SMTP id 5b1f17b1804b1-4711791c601mr124597535e9.26.1761054718131;
+        Tue, 21 Oct 2025 06:51:58 -0700 (PDT)
 Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f009a7dasm21065529f8f.25.2025.10.21.01.35.03
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4715257d90bsm198104915e9.2.2025.10.21.06.51.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Oct 2025 01:35:04 -0700 (PDT)
-Message-ID: <cac5ed5e-3320-4db0-99d8-ea5e97e56bfb@suse.com>
-Date: Tue, 21 Oct 2025 10:35:03 +0200
+        Tue, 21 Oct 2025 06:51:57 -0700 (PDT)
+Message-ID: <81080a24-e4a9-4287-8653-9d707e574d95@suse.com>
+Date: Tue, 21 Oct 2025 15:51:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -69,101 +68,163 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/10] scalable symbol flags with __kflagstab
-To: Siddharth Nayyar <sidnayyar@google.com>, corbet@lwn.net
-Cc: arnd@arndb.de, gprocida@google.com, linux-arch@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, maennich@google.com, mcgrof@kernel.org,
- nathan@kernel.org, nicolas.schier@linux.dev, samitolvanen@google.com
-References: <87ikgieiar.fsf@trenco.lwn.net>
- <20251020224317.723069-1-sidnayyar@google.com>
+Subject: Re: [PATCH v6 17/17] modsign: Enable ML-DSA module signing
+To: David Howells <dhowells@redhat.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, "Jason A . Donenfeld"
+ <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Stephan Mueller <smueller@chronox.de>, Lukas Wunner <lukas@wunner.de>,
+ Ignat Korchagin <ignat@cloudflare.com>, Luis Chamberlain
+ <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-crypto@vger.kernel.org,
+ keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251017144311.817771-1-dhowells@redhat.com>
+ <20251017144311.817771-18-dhowells@redhat.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251020224317.723069-1-sidnayyar@google.com>
+In-Reply-To: <20251017144311.817771-18-dhowells@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/21/25 12:43 AM, Siddharth Nayyar wrote:
-> On Mon, Oct 13, 2025 at 8:02PM Jonathan Corbet <corbet@lwn.net> wrote:
->> I ask "how it will be used" since you don't provide any way to actually
->> mark exports with this new flag. What is the intended usage here?
+On 10/17/25 4:43 PM, David Howells wrote:
+> Allow ML-DSA module signing to be enabled.
 > 
-> Patch 09/10 (last hunk) provides a mechanism to enable import protection
-> for all symbols exported by vmlinux. To summarise, modpost enables
-> import protection when CONFIG_UNUSED_KSYMS_WHITELIST is set. This
-> results in all symbols except for the ones mentioned in the whitelist to
-> be protected from being imported by out-of-tree modules. In other words,
-> out-of-tree modules can only use symbols mentioned in
-> CONFIG_UNUSED_KSYMS_WHITELIST, when the config option is set.
+> Note that openssl's CMS_*() function suite does not, as of openssl-3.5.1,
+> support the use of CMS_NOATTR with ML-DSA, so the prohibition against using
+> authenticatedAttributes with module signing has to be removed.  The selected
+> digest then applies only to the algorithm used to calculate the digest
+> stored in the messageDigest attribute.
 > 
-> I realise I should have documented this behaviour, both in the cover
-> letter as well as in kernel documentation. I will do so in the following
-> version of the patch series.
+> The ML-DSA algorithm uses its own internal choice of digest (SHAKE256)
+> without regard to what's specified in the CMS message.  This is, in theory,
+> configurable, but there's currently no hook in the crypto_sig API to do
+> that, though possibly it could be done by parameterising the name of the
+> algorithm, e.g. ("ml-dsa87(sha512)").
 > 
-> Please share any feedback on the mechnism to enable the mechanism. In my
-> opinion, CONFIG_UNUSED_KSYMS_WHITELIST has a complementary goal to
-> import protection and therefore I felt like using the option to enable
-> import protection. In case this seems to convoluted, I am okay with
-> introducing an explicit option to enable import protection.
-
-CONFIG_UNUSED_KSYMS_WHITELIST was originally added in commit
-1518c633df78 ("kbuild: allow symbol whitelisting with
-TRIM_UNUSED_KSYMS"), specifically for Android. Looking at configs of
-several distributions [1], it appears that it has only been used by
-Android so far. This means it is likely acceptable to protect the
-whitelist symbols in this manner.
-
-On the other hand, I think what is protected (all exported symbols or
-CONFIG_UNUSED_KSYMS_WHITELIST) and how it is protected
-(KSYM_FLAG_PROTECTED) are two different things, so it might be cleaner
-to keep them separate.
-
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Lukas Wunner <lukas@wunner.de>
+> cc: Ignat Korchagin <ignat@cloudflare.com>
+> cc: Stephan Mueller <smueller@chronox.de>
+> cc: Eric Biggers <ebiggers@kernel.org>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: keyrings@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
+> ---
+>  Documentation/admin-guide/module-signing.rst | 15 +++++------
+>  certs/Kconfig                                | 24 ++++++++++++++++++
+>  certs/Makefile                               |  3 +++
+>  crypto/asymmetric_keys/pkcs7_verify.c        |  4 ---
+>  kernel/module/Kconfig                        |  5 ++++
+>  scripts/sign-file.c                          | 26 ++++++++++++++------
+>  6 files changed, 58 insertions(+), 19 deletions(-)
 > 
->> If I understand things correctly, applying this series will immediately
->> result in the inability to load any previously built modules, right?
->> That will create a sort of flag day for anybody with out-of-tree modules
->> that some may well see as a regression. Is that really the intent?
-> 
-> Unfortunately this series will break all modules which export symbols
-> since older versions of such modules will not have the kflagstab
-> section.
+> diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/admin-guide/module-signing.rst
+> index a8667a777490..6daff80c277b 100644
+> --- a/Documentation/admin-guide/module-signing.rst
+> +++ b/Documentation/admin-guide/module-signing.rst
+> @@ -28,10 +28,11 @@ trusted userspace bits.
+>  
+>  This facility uses X.509 ITU-T standard certificates to encode the public keys
+>  involved.  The signatures are not themselves encoded in any industrial standard
+> -type.  The built-in facility currently only supports the RSA & NIST P-384 ECDSA
+> -public key signing standard (though it is pluggable and permits others to be
+> -used).  The possible hash algorithms that can be used are SHA-2 and SHA-3 of
+> -sizes 256, 384, and 512 (the algorithm is selected by data in the signature).
+> +type.  The built-in facility currently only supports the RSA, NIST P-384 ECDSA
+> +and NIST FIPS-204 ML-DSA (Dilithium) public key signing standards (though it is
+> +pluggable and permits others to be used).  For RSA and ECDSA, the possible hash
+> +algorithms that can be used are SHA-2 and SHA-3 of sizes 256, 384, and 512 (the
+> +algorithm is selected by data in the signature); ML-DSA uses SHAKE256.
 
-I would add that out-of-tree modules are typically leaves that don't
-export any symbols. This means it should still be possible to load such
-modules on an updated kernel.
+This update looks ok to me. However, I'll note some problems that
+I noticed in the original text, notably:
 
-A problem occurs when out-of-tree support is split into multiple
-modules, where one module exports data for another. Some drivers can be
-split in such a way. For example, a NIC driver might be divided into
-core, Ethernet and InfiniBand modules, where the core provides exports
-for the latter modules.
+The text doesn't match the implementation because kernel/module/Kconfig
+still allows selecting SHA-1 for module signing. What happened is that
+commit 16ab7cb5825f ("crypto: pkcs7 - remove sha1 support") initially
+removed CONFIG_MODULE_SIG_SHA1. Then, commit f2b88bab69c8
+("Documentation/module-signing.txt: bring up to date") removed it from
+the documentation. However, commit 203a6763ab69 ("Revert "crypto: pkcs7
+- remove sha1 support"") brought back CONFIG_MODULE_SIG_SHA1 without
+reverting the documentation update.
 
-In such a case, the kernel will ignore the __ksymtab_gpl section in the
-first module and issue a warning about it (patch #6). Eventually, when
-the second module is attempted to be inserted, the load operation will
-result in an error due to an unresolved import.
+Another problem is that for MODULE_SIG_KEY_TYPE_ECDSA, certs/Kconfig
+contains the line
+"depends on !(MODULE_SIG_SHA256 || MODULE_SIG_SHA3_256)",
+which intends to allow ECDSA only with MODULE_SIG_SHA384,
+MODULE_SIG_SHA512, MODULE_SIG_SHA3_384 and MODULE_SIG_SHA3_512. This
+restriction was added in commit d4f5bfe20da9 ("certs: Limit
+MODULE_SIG_KEY_TYPE_ECDSA to SHA384 or SHA512") and 446b1e0b7b39
+("module: enable automatic module signing with FIPS 202 SHA-3").
+However, the documentation suggests that ECDSA can still be used with
+SHA-2/3 of size 256.
 
-In practice, I believe this series should have limited impact. Stable
-trees and distributions that care about kABI stability should not
-backport it. In contrast, people who follow master releases typically
-don't use out-of-tree modules, or they know how to deal with updating
-them. In this case, only recompilation is needed, which is less
-impactful than when an API changes and the actual module code needs to
-be updated.
+I'll prepare fixes for these issues. For the first problem, I think we
+can drop CONFIG_MODULE_SIG_SHA1 instead of correcting the documentation.
 
-In the past, there were already breaking changes to the format of the
-exported data, notably in commit 7290d5809571 ("module: use relative
-references for __ksymtab entries") and 8651ec01daed ("module: add
-support for symbol namespaces."). As far as I'm aware, these changes
-didn't cause significant trouble, even though they actually resulted in
-silent breakages of old modules with exports.
+>  
+>  
+>  ==========================
+> @@ -146,9 +147,9 @@ into vmlinux) using parameters in the::
+>  
+>  file (which is also generated if it does not already exist).
+>  
+> -One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``) and ECDSA
+> -(``MODULE_SIG_KEY_TYPE_ECDSA``) to generate either RSA 4k or NIST
+> -P-384 keypair.
+> +One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``), ECDSA
+> +(``MODULE_SIG_KEY_TYPE_ECDSA``) and ML-DSA (``MODULE_SIG_KEY_TYPE_ML_DSA``) to
+> +generate an RSA 4k, a NIST P-384 keypair or an ML-DSA keypair.
+>  
+>  It is strongly recommended that you provide your own x509.genkey file.
+>  
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index 78307dc25559..a09db4b2c87c 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -39,6 +39,30 @@ config MODULE_SIG_KEY_TYPE_ECDSA
+>  	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
+>  	 when falling back to building Linux 5.14 and older kernels.
+>  
+> +config MODULE_SIG_KEY_TYPE_ML_DSA_44
+> +	bool "ML-DSA (Dilithium) 44"
+> +	select CRYPTO_ML_DSA
+> +	select LIB_SHA3
+> +	help
+> +	  Use an ML-DSA (Dilithium) 87 key (NIST FIPS 204) for module signing
+> +	  with a SHAKE256 'hash' of the message.
 
-> 
-> Out-of-tree modules which do not export symbols of their own will only
-> fail to load in case the CONFIG_UNUSED_KSYMS_WHITELIST is set and the
-> symbols which these modules consume are not present in the whitelist.
+Copy-and-paste error in the help message: 87 -> 44.
 
-[1] https://oracle.github.io/kconfigs/?config=UTS_RELEASE&config=UNUSED_KSYMS_WHITELIST
+> +
+> +config MODULE_SIG_KEY_TYPE_ML_DSA_65
+> +	bool "ML-DSA (Dilithium) 65"
+> +	select CRYPTO_ML_DSA
+> +	select LIB_SHA3
+> +	help
+> +	  Use an ML-DSA (Dilithium) 87 key (NIST FIPS 204) for module signing
+> +	  with a SHAKE256 'hash' of the message.
+
+Similarly here: 87 -> 65.
+
+> +
+> +config MODULE_SIG_KEY_TYPE_ML_DSA_87
+> +	bool "ML-DSA (Dilithium) 87"
+> +	select CRYPTO_ML_DSA
+> +	select LIB_SHA3
+> +	help
+> +	  Use an ML-DSA (Dilithium) 87 key (NIST FIPS 204) for module signing
+> +	  with a SHAKE256 'hash' of the message.
+> +
+
+Should all MODULE_SIG_KEY_TYPE_ML_DSA_* options depend on
+MODULE_SIG_SHAKE256 to match the updated
+Documentation/admin-guide/module-signing.rst?
+
+Similarly, do MODULE_SIG_KEY_TYPE_RSA and MODULE_SIG_KEY_TYPE_ECDSA
+require any "depends on" update with respect to the addition of
+MODULE_SIG_SHAKE256?
 
 -- 
 Thanks,
