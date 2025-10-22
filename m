@@ -1,89 +1,66 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75CA315777
-	for <linux-modules@vger.kernel.org>; Wed, 22 Oct 2025 10:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E681C8606;
+	Wed, 22 Oct 2025 19:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761128384; cv=none; b=AIuMseb3vmAYyTnRXs9m2iwwBnUTgXSSBPLy9Q5oG/Cyxb9qCFtl6lnHcuZsUJqD7mkRWC3sRbo7i4xOQYZMfMmyjJXx0RLau1+u593ztwt5CxWALkJjpE+6UKzI+89AQA6aUj2914x+gWOnFmxR4zipFNqDjW7hAYIXI6SSbmc=
+	t=1761161517; cv=none; b=D+JNRJLiBbHFtYgAyN7mIOX/sEVfDdp+jm/v7X/endRsavVly70gNQmKJ5ZCnO5PLQlw2v8k42Ms3Kb0BRUEngpK0tek+jxna9u40/dOl8JV1Vqj0oe6YGqsR4VU8L5ZohLRGpHJsozY6WG8RvPWYTq+assBM8krnp4q2Yoi7Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761128384; c=relaxed/simple;
-	bh=joBEyn5l111nZ9jGESSCAOmkS1tgkzPeMQXORmoeZRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=euj6TaK0wiIYsCBx0KzSHNqcM5gzNhX0MVlKu/+/D6oBwtPG7QYXqgyskC9KuBcvN+k5nbUXWFcha4vs4CDXSdrqXPpF800yaHBkJCwtPyAyp8VqOvDT1jk0P6fNGnCEO2zpNfNyfTjeFyGPY99ogxs2ElEyS6bFhZ6Iggw3Gaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DzCFpZJc; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1761161517; c=relaxed/simple;
+	bh=DMCBbT9Aq24u+PasVGHAJczYG7vG6quPlA3iyJvngc8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SccOTSVssQFuZiII28MQSuPsRSxW1+uqQKAJf+sYm8he48ql5HGiuIr7M+4WuvMuGayjkNwKeMlpgFy8Dbx5FW7/ZNvUL1p6itRc8pVeH0c+6bNkkz/qG2SYmfPnuEkRUFdfXhlsilCpxkSDBwwkAppb2m6ekVypT/8Blb0S87E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=wyKIboF8; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DzCFpZJc"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4712c6d9495so13371195e9.2
-        for <linux-modules@vger.kernel.org>; Wed, 22 Oct 2025 03:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1761128379; x=1761733179; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xXyDXixja6RmZT39Er05ZzpCC3vXUho6dl9B7iE9rfM=;
-        b=DzCFpZJcaEvh+evRO3GsyZ9vyb4yBLLh3ggw32alsNuqluiISUpz3UoIumLk8EKYWB
-         j1tKj9zYVv+b254EpxtPmDtClRMxMaStwRi2SJCwGwIgJRd7+ynAbhYuisRLRCkp6nHp
-         1/3VJaWJApP740/PKVxjX/I80Kw657fBVlQNXlN3t2aWnqOQ0aN++5fHDgP1jt3yCcYA
-         L1Jr4hLl6sqwLAArSavbfSTnWoxi/+pE+O1vouEu2PiOeCCbGRnXls7UNJ9CnttxvnnF
-         07N5sztahQPybwTnLOY7zpSeXqIdeZBKIJ6ZhmcHsPaQ7slVUGiIuqvGO7ISAeDTkZCU
-         lm/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761128379; x=1761733179;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xXyDXixja6RmZT39Er05ZzpCC3vXUho6dl9B7iE9rfM=;
-        b=oNOvtzuDOrWg1glRGYnEXGLku7w3ToyNIo/XT+DDG9HEhjM0tjUcoJ25tBUFrdgAvb
-         ZhipS8hkny5g6PYOZ+mJ1wHlanksEG7exFHwhtkk8+TvuruhQ+6ASMwfzeRKJ1hvg/ON
-         WZg5wyb4pG4uph6k5RA+9WsuZR5O8Zb381K+DNzVe3E51gPk0xomYRC7O11BAiutzIQ9
-         lShUKldMFi+2AMNBtrRi3nr+DO+8lGLEwRAgU5bToj8NKvNqxpD7NlbMrDde4GWHzBSZ
-         PHUKM69fTAnplAheTXt9FIfW7uVOLc/wVXh14AdwQMY/G7Aoi2pk4isX3/6F63nEKLji
-         M/VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVs8k9tgdvftAP67gI5JI0KzgKURDk/OAaNq0bcbLLea1bKMAG1ljTIHFHulXYiuh4PGq3CePGwTGZGROTV@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCsqwCmfe4KHMPIlaCRktVUQVFmwkN07h0dLjfWXR19Gmb3sme
-	ddZCBhHDjLxvOSIY2DIE6OQXATRPghL5PprnnOdPmncJarPt0AylTnFY2ED63a0BO40=
-X-Gm-Gg: ASbGnctXj5RzHIdADGhPXTnN5NvZUaTSUIhJuFN7UI0W2JHkoDO5afSy0/KgLsg4jTB
-	+ic+izCfS5ShNS579UL5VA2UeMNVXFSs7eyWMbVABl1y3S1SIg1xvT9HkIGmpfGoRpEQMMHid+d
-	RMt8zLXr5qBASpPwC1kR89uZwK+ZP3/prZ9PSSj4PbLOEwSspiLE0EEglXzuTVV0zYYDOwPIgLG
-	rwJLTtu6mPC04kDosZGbrTanWz8z7mqSAPAwMkS8JtiXoNY1t4DsGoxwpmlbZ52wLw5qsJPWp5d
-	j8Sz9rajD45+vN6yc5RIqNcSTOh9ywduzPWge7T20NiCZa25+yGvjgTJwOiYr/ZFKFSD0/u48Yk
-	9E8e/gpcK6pZ2OEcLr34akrCFYBlHC7ycwhYqRlaf3vf0O6R7WBJL0NV4xWLIEqkJOviKyzkCNC
-	nSY5nm9BDcmMJkWw==
-X-Google-Smtp-Source: AGHT+IEbwRIxqwOcW6k8/RNZuYBz6gOsWXSzyHrVYvpQPGm+n70PNasZXailVMdY6Pt7W5w8c1E2Ig==
-X-Received: by 2002:a05:600c:45ca:b0:46e:59dd:1b4d with SMTP id 5b1f17b1804b1-471178a4bb0mr148080655e9.16.1761128378963;
-        Wed, 22 Oct 2025 03:19:38 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c4369b3esm36179955e9.13.2025.10.22.03.19.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 03:19:38 -0700 (PDT)
-Date: Wed, 22 Oct 2025 12:19:36 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] taint/module: Remove unnecessary taint_flag.module field
-Message-ID: <aPivuD7CWwHBRcZI@pathway.suse.cz>
-References: <20251022082938.26670-1-petr.pavlu@suse.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="wyKIboF8"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=lrrq2Cj27BdBpTnOZHqUUMrh+hMufS7NHhrHWF4hvLk=; b=wyKIboF8s6GuGVkClVVD26u6Uo
+	xBtjebvWxH/I7IRBa7Pcwc4EzmipTJ/Rw/+8eaeANTbwPmwarOKUUAy/4hRswBgZXQ+Jp3cdzonGG
+	dC2zPS39EExW8AbUclFMrhsxbJjAgs/9IsgXA4R2TKsWaJ/JLjwyS79JtXQkyezfGxJ6ouMQFKjbI
+	hKhjL9Fr1vf5fF2MGrL/12zX+fkvs9Eoz4gWjeYDyi97X7VyhuhqdKhIPBlYfS0A5HjFTK5514S8n
+	mnoud0+4cfOXLNDL8pkgiQLTwvK+VQwXDEQQp/dNvsyDtNi984+wmOvPCMfZpxsmgzhWmrwY97T3Z
+	1FjFnZmQ==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vBeYq-000000048wp-0o0S;
+	Wed, 22 Oct 2025 19:31:52 +0000
+Message-ID: <caf949d7-09b4-4a36-bf38-43af13e8e308@infradead.org>
+Date: Wed, 22 Oct 2025 12:31:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] taint/module: Remove unnecessary taint_flag.module field
+To: Petr Pavlu <petr.pavlu@suse.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Petr Mladek <pmladek@suse.com>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251022082938.26670-1-petr.pavlu@suse.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
 In-Reply-To: <20251022082938.26670-1-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed 2025-10-22 10:28:04, Petr Pavlu wrote:
+
+
+On 10/22/25 1:28 AM, Petr Pavlu wrote:
 > The TAINT_RANDSTRUCT and TAINT_FWCTL flags are mistakenly set in the
 > taint_flags table as per-module flags. While this can be trivially
+
+Ah, I had just noticed these this morning.
+
 > corrected, the issue can be avoided altogether by removing the
 > taint_flag.module field.
 > 
@@ -96,9 +73,21 @@ On Wed 2025-10-22 10:28:04, Petr Pavlu wrote:
 > 
 > Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Makes sense. Nice trick!
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-Acked-by: Petr Mladek <pmladek@suse.com>
+> ---
+> The patch is based on linux-next (20251021) because I wanted to avoid
+> a conflict with "taint: add reminder about updating docs and scripts" [1],
+> which is currently queued in mm-nonmm-unstable.
+> 
+> [1] https://lore.kernel.org/all/20251015221626.1126156-1-rdunlap@infradead.org/
+> 
+> ---
+>  include/linux/panic.h |  1 -
+>  kernel/module/main.c  |  2 +-
+>  kernel/panic.c        | 46 ++++++++++++++++++++-----------------------
+>  3 files changed, 22 insertions(+), 27 deletions(-)
+> 
 
-Best Regards,
-Petr
+-- 
+~Randy
