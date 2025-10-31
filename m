@@ -1,156 +1,299 @@
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D1E302CCD
-	for <linux-modules@vger.kernel.org>; Sat, 25 Oct 2025 15:30:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C48329C6B
+	for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 07:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761406234; cv=none; b=n5h8d77O7VID0PhgxjNYioSnCeTqEyuVwEGjd24sgP3AFj7z5QEg6aBKPFWBIlsf6S63vSoYNa67oYbGUVKaPVNbmY1eg5D12GK6PtBQz7/ucx/LX+xiUsZrwKmTL4qQLHP8ER1V6B6YqesUBTsCPOlGU47I3x5DJlYOg6yzMPA=
+	t=1761896495; cv=none; b=bBO5S/mkjh74mAWjrseCDqdbSizP/V0UJrM7djDNI1yUTGrJN4YvezjNZz5CCO9e7LpD8QLAL5gafijWsWhUyWBfs3wy2Ic8ig89sC4vlDGhMXLPkrWr0dJ9Ntbi9WoU+xmdIn+Us7/cRDjjmhOv3LH9RaUb4yjlJw9lTH0Noiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761406234; c=relaxed/simple;
-	bh=tuqhXV1Da6wCZ0InK2dIqD7W5pd/2Xgd2oEnAJ9E7QA=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=kGWLyeAtOwKJ91UTgnCDo0qqNa+DBwQh7JaxMOU46XMzPjWYpgq0vHfzT8F2zpDCzUQ6o9cieWd2Xsosw4bh6giHWJkTg0UcV0Dpe7VvZZuTi5LaP5Nw3BU8vN3ua1NZKYEEwaNI1LYIPiH8T8UwohUQoNkdD7rk181e+bCHq9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-8870219dce3so305886239f.0
-        for <linux-modules@vger.kernel.org>; Sat, 25 Oct 2025 08:30:32 -0700 (PDT)
+	s=arc-20240116; t=1761896495; c=relaxed/simple;
+	bh=1DWKSJF8OEYqjcJrqFR6FrT+o8y4zSzWVVe3d/IbG9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZMWHWVStzSqyU/btlIqpMuWcJvP4+6ZxgotBdGPdk/uOElZaItWHX5Xd3HX6WJo/5SdRkzmt6HD2O3zqLhKvZyxlXdxazng4CT0N4nAdFNZ3g+Z8p7pg0GGJ3MBzmE2cWBScuSe6NUcXQldNPNhl7Qasdvoh3nVuzrdD5h+R2uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O+lRAaPr; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O+lRAaPr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761896492;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=x1U8+0OYOpaOguLvykcf3aLOzyj6wguuzkEUvWSZdG8=;
+	b=O+lRAaPrh/jG5S6qSqYbxC8Lf5TtYALWnlaSQU5iK5nrJx+wTgT4DDVxSQpvMpQ2MlR7+R
+	D4D9/sJaoFNKf7gvPgv5ordE8701aWtnN1pwPTXCiHlO4SFkwg7tRFAyW1SvmpRmPidYJs
+	kFmJ+zNmQ4gosOzcLUIOoyfi/oqKyLI=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-116-We2HAFTePhauYd1mNAZuiA-1; Fri, 31 Oct 2025 03:41:30 -0400
+X-MC-Unique: We2HAFTePhauYd1mNAZuiA-1
+X-Mimecast-MFC-AGG-ID: We2HAFTePhauYd1mNAZuiA_1761896490
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-294fca58e78so13440325ad.1
+        for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 00:41:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761406232; x=1762011032;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H4PtvkKZFEBjpaVtmYMgaiUP0rE5WRgcuVuHYkk41Is=;
-        b=sh8oSydM0nPMEYhj4y7NfTODWcWVsvv4vqyxsbTyUzjj0bNyx+NwpWjrWn26IHGSAC
-         +UeF0LvKIjJDHXChbsHag71JCz9MCW3z3F+qFhW/XzCM8lqOYTRp18pFr6O7U6+hS5Kc
-         QQzkRSKDhQyespp/U/d1NKqP+jR1gSaV3V+5L1SF6Izixv+4QYgsgn9eSXVKb0yR8xZ5
-         u26pYUhZehB/yCz58mxjloduvZI0RQ3Vf9QU3nDj2dKXdAL/iCi2C/9w4rSG5glVzMag
-         RzV7JOvKFLA5d+nxYnZtIfTfz8rJdXpwaeT55544PDZ6TcTKlYQFld9BrIOmcQSMQOPm
-         6ONQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXIPfSQbps681viyEM303MW4B+ejtA32l9w5N+o583TrPICvp4p0VaiWxrXYsdnmsQIXCABOd5AK+U0LfQP@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz990PmCZUDZLxfsK7s+/h4vG3kYTrZ+RevqizwQWFQSppjjKXg
-	ayLWsMTAlVkYcauxgWGOZ7j+Z/IdhdlhzGvQ+rZVHhSI1srsFSY0INOt+AF1k2Sry7mf4w6oBsB
-	rvkEDAoyGG8nbCIejroyZ09IZKlM+uiTMiDMdZcQF+fePzJcxv8ZISgmFrxM=
-X-Google-Smtp-Source: AGHT+IE/mS5AInx/Fn2GfpldYfqwHT1aTDzL70mL7vQ4auUZniXaqCBaITtE4KGxBTh882iPv4MheVT5dy2uy9HDIpuf7K+7ITIw
+        d=1e100.net; s=20230601; t=1761896489; x=1762501289;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x1U8+0OYOpaOguLvykcf3aLOzyj6wguuzkEUvWSZdG8=;
+        b=Q13XOJlQBKVVQxbDsj/E4s5nnQ6pbtj5bTb9ZCMDYWp7cSVBHuzoSOwiLlAQJE6i7/
+         MB62u3wfBCcHLY7KhLlI4DsbqPKvQVIG969y/JJuDlp9bBHKbG9/N4F5MEvl+BAqWOur
+         TXD+tUOURMz8/K/kyibYk5h3XwsJ2VUSionh/lEd2ABOJ9PIZX1l8JtRLVQsibSeboRA
+         k93QACTX3VXr6M0gYq6KNOank/1X66y6099vBM/ZKtu8s3FOGZWHizbDq8nFr/4BnLKo
+         pIeNPwX7YjFyDP7RPiAqhq9kJM0ge2GcFhv57hmiLcQW0u/lV16HahyqWj8F5T1CCeAm
+         R6kA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1rdUO+/4Cin98aDesaSneFQt4BaN+XxL9YdirKsTWH9RMci0qFPg+WmhL166uYaNTCVs7eqwqbjmHbLp4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWN2f5tMv0EyEN25UpjSbmoJeeW2fYv3wmYL/Hnp9fobL5roe/
+	6R6YEziTeyUjQ5XJSrxxjXYraAdRvtR9FRMLEKKTo26ANMLEPy8YWeW0JxoVMx+BkQ48i8iROyp
+	J8NsJ/6tU50NGX15VVjeSycQw2qZE55onfEluIa/mq2KsTU3QVSuNq95BavRSxLQYg2U=
+X-Gm-Gg: ASbGncu539JwIkpba9Cb+LMEL4czQKjTect2/IzQVGCeDoAkQuLTM30A9vuQE8kE5Xn
+	twrXp7XzQ8d4j5Mtq2rHX24v1jzpdIqQFwzwW5CROhJSITLujB+iEumptlfjcg+jtpp+4jEpja2
+	gRNS5ehhdKMxRTyvPpMOlHasSXM8unPxGnII+cJXwKWaVIfL8ChdYha8wxr09UYvt4lKPRX+wD2
+	RkfBQiLEc9bVAbn5CCugtNVac94fH0ASlTgDwsSX5eEb6mtCsVZKdTsriA/ZKhDh3RSw1DjQGSK
+	w4VUKRGgsENLohY9LsS3c5jzySEZlcnMzO60I40gfgXraE+n8H1ry76Z+tkZ8HizTw==
+X-Received: by 2002:a17:903:2c7:b0:26c:e270:6dad with SMTP id d9443c01a7336-2951a4fcb51mr32136195ad.60.1761896489184;
+        Fri, 31 Oct 2025 00:41:29 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFUvnpn03zGYM9wkLBYIw6ClAfviiBezzYgMRg1RS9G1UI4cgyI/q3aZ1UE8CEnS8k4YLVEmQ==
+X-Received: by 2002:a17:903:2c7:b0:26c:e270:6dad with SMTP id d9443c01a7336-2951a4fcb51mr32135925ad.60.1761896488704;
+        Fri, 31 Oct 2025 00:41:28 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-295268b43d7sm13094335ad.35.2025.10.31.00.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Oct 2025 00:41:28 -0700 (PDT)
+From: Coiby Xu <coxu@redhat.com>
+To: linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Mimi Zohar <zohar@linux.ibm.com>
+Cc: Karel Srot <ksrot@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-modules@vger.kernel.org (open list:MODULE SUPPORT)
+Subject: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file to access decompressed kernel module
+Date: Fri, 31 Oct 2025 15:40:15 +0800
+Message-ID: <20251031074016.1975356-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20250928030358.3873311-1-coxu@redhat.com>
+References: <20250928030358.3873311-1-coxu@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca4d:0:b0:430:b05a:ecc3 with SMTP id
- e9e14a558f8ab-430c525f52amr239057035ab.9.1761406232302; Sat, 25 Oct 2025
- 08:30:32 -0700 (PDT)
-Date: Sat, 25 Oct 2025 08:30:32 -0700
-In-Reply-To: <68087f2f.050a0220.dd94f.0177.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <68fced18.050a0220.1e563d.00cd.GAE@google.com>
-Subject: Re: [syzbot] [mm?] BUG: soft lockup in sys_bpf
-From: syzbot <syzbot+9431dc0c0741cff46a99@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, apopple@nvidia.com, byungchul@sk.com, 
-	da.gomez@samsung.com, david@redhat.com, gourry@gourry.net, 
-	joshua.hahnjy@gmail.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, matthew.brost@intel.com, mcgrof@kernel.org, 
-	netdev@vger.kernel.org, petr.pavlu@suse.com, rakie.kim@sk.com, 
-	samitolvanen@google.com, syzkaller-bugs@googlegroups.com, 
-	ying.huang@linux.alibaba.com, ziy@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot has found a reproducer for the following issue on:
+Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPRESS)
+is enabled, IMA has no way to verify the appended module signature as it
+can't decompress the module.
 
-HEAD commit:    566771afc7a8 Merge tag 'v6.18-rc2-smb-server-fixes' of git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15c8ee7c580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8345ce4ce316ca28
-dashboard link: https://syzkaller.appspot.com/bug?extid=9431dc0c0741cff46a99
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157013cd980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=130cc7e2580000
+Define a new LSM hook security_kernel_module_read_file which will be
+called after kernel module decompression is done so IMA can access the
+decompressed kernel module to verify the appended signature.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/52417ef1f782/disk-566771af.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/66730a263bf1/vmlinux-566771af.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1fe0762efb1f/bzImage-566771af.xz
+Since IMA can access both xattr and appended kernel module signature
+with the new LSM hook, it no longer uses the security_kernel_post_read_file
+LSM hook for kernel module loading.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9431dc0c0741cff46a99@syzkaller.appspotmail.com
+Before enabling in-kernel module decompression, a kernel module in
+initramfs can still be loaded with ima_policy=secure_boot. So adjust the
+kernel module rule in secure_boot policy to allow either an IMA
+signature OR an appended signature i.e. to use
+"appraise func=MODULE_CHECK appraise_type=imasig|modsig".
 
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P5823
-rcu: 	(detected by 1, t=10502 jiffies, g=8989, q=37467 ncpus=2)
-task:syz-executor333 state:R  running task     stack:24744 pid:5823  tgid:5823  ppid:5816   task_flags:0x400140 flags:0x00080001
-Call Trace:
- <IRQ>
- sched_show_task+0x49d/0x630 kernel/sched/core.c:7901
- rcu_print_detail_task_stall_rnp kernel/rcu/tree_stall.h:292 [inline]
- print_other_cpu_stall+0xf78/0x1340 kernel/rcu/tree_stall.h:681
- check_cpu_stall kernel/rcu/tree_stall.h:857 [inline]
- rcu_pending kernel/rcu/tree.c:3671 [inline]
- rcu_sched_clock_irq+0xa47/0x11b0 kernel/rcu/tree.c:2706
- update_process_times+0x235/0x2d0 kernel/time/timer.c:2473
- tick_sched_handle kernel/time/tick-sched.c:276 [inline]
- tick_nohz_handler+0x39a/0x520 kernel/time/tick-sched.c:297
- __run_hrtimer kernel/time/hrtimer.c:1777 [inline]
- __hrtimer_run_queues+0x506/0xd40 kernel/time/hrtimer.c:1841
- hrtimer_interrupt+0x45d/0xa90 kernel/time/hrtimer.c:1903
- local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1041 [inline]
- __sysvec_apic_timer_interrupt+0x10b/0x410 arch/x86/kernel/apic/apic.c:1058
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1052 [inline]
- sysvec_apic_timer_interrupt+0xa1/0xc0 arch/x86/kernel/apic/apic.c:1052
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0010:instrument_atomic_read include/linux/instrumented.h:68 [inline]
-RIP: 0010:_test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-RIP: 0010:get_page_from_freelist+0x459/0x2960 mm/page_alloc.c:3824
-Code: 8c 0d 00 48 8b 74 24 18 49 b8 00 00 00 00 00 fc ff df 48 8b 03 48 39 d8 0f 84 7e 07 00 00 48 8b 44 24 08 4c 8d a0 38 06 00 00 <4c> 89 e7 be 08 00 00 00 e8 ba 8e 0d 00 48 b9 00 00 00 00 00 fc ff
-RSP: 0018:ffffc90004c97158 EFLAGS: 00000206
-RAX: ffff88823fff8740 RBX: ffff88823fffc888 RCX: dffffc0000000000
-RDX: 0000000000000001 RSI: ffff88813fffdf70 RDI: ffff88813fffdf70
-RBP: 0000000000000000 R08: dffffc0000000000 R09: 1ffff11027fff7da
-R10: dffffc0000000000 R11: ffffed1027fff7db R12: ffff88823fff8d78
-R13: 0000000000000830 R14: ffffc90004c97448 R15: ffffc90004c9745c
- __alloc_pages_slowpath+0x33b/0xe50 mm/page_alloc.c:4714
- __alloc_frozen_pages_noprof+0x319/0x370 mm/page_alloc.c:5196
- alloc_pages_mpol+0xd1/0x380 mm/mempolicy.c:2416
- alloc_slab_page mm/slub.c:3055 [inline]
- allocate_slab+0x96/0x350 mm/slub.c:3228
- new_slab mm/slub.c:3282 [inline]
- ___slab_alloc+0xb12/0x13f0 mm/slub.c:4651
- __slab_alloc+0xc6/0x1f0 mm/slub.c:4770
- __slab_alloc_node mm/slub.c:4846 [inline]
- slab_alloc_node mm/slub.c:5268 [inline]
- kmem_cache_alloc_noprof+0xec/0x6b0 mm/slub.c:5287
- skb_clone+0x212/0x3a0 net/core/skbuff.c:2050
- ____bpf_clone_redirect net/core/filter.c:2465 [inline]
- bpf_clone_redirect+0xad/0x3d0 net/core/filter.c:2450
- bpf_prog_3e1cbbed0c4acd81+0x5f/0x68
- bpf_dispatcher_nop_func include/linux/bpf.h:1350 [inline]
- __bpf_prog_run include/linux/filter.h:721 [inline]
- bpf_prog_run include/linux/filter.h:728 [inline]
- bpf_test_run+0x313/0x7a0 net/bpf/test_run.c:423
- bpf_prog_test_run_skb+0xb4e/0x1550 net/bpf/test_run.c:1091
- bpf_prog_test_run+0x2cd/0x340 kernel/bpf/syscall.c:4688
- __sys_bpf+0x562/0x860 kernel/bpf/syscall.c:6167
- __do_sys_bpf kernel/bpf/syscall.c:6259 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6257 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6257
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f0d40505cb9
-Code: Unable to access opcode bytes at 0x7f0d40505c8f.
-RSP: 002b:00007fff9d9b3ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f0d40505cb9
-RDX: 0000000000000050 RSI: 00002000000000c0 RDI: 000000000000000a
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000006
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-
-
+Reported-by: Karel Srot <ksrot@redhat.com>
+Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Coiby Xu <coxu@redhat.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311-1-coxu@redhat.com/
+
+ include/linux/lsm_hook_defs.h       |  2 ++
+ include/linux/security.h            |  7 +++++++
+ kernel/module/main.c                | 10 +++++++++-
+ security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++++
+ security/integrity/ima/ima_policy.c |  2 +-
+ security/security.c                 | 17 +++++++++++++++++
+ 6 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+index 8c42b4bde09c..ced42eb8b618 100644
+--- a/include/linux/lsm_hook_defs.h
++++ b/include/linux/lsm_hook_defs.h
+@@ -232,6 +232,8 @@ LSM_HOOK(int, 0, kernel_read_file, struct file *file,
+ 	 enum kernel_read_file_id id, bool contents)
+ LSM_HOOK(int, 0, kernel_post_read_file, struct file *file, char *buf,
+ 	 loff_t size, enum kernel_read_file_id id)
++LSM_HOOK(int, 0, kernel_module_read_file, struct file *file, char *buf,
++	 loff_t size)
+ LSM_HOOK(int, 0, task_fix_setuid, struct cred *new, const struct cred *old,
+ 	 int flags)
+ LSM_HOOK(int, 0, task_fix_setgid, struct cred *new, const struct cred * old,
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 92ac3f27b973..e47951292c73 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -508,6 +508,7 @@ int security_kernel_read_file(struct file *file, enum kernel_read_file_id id,
+ 			      bool contents);
+ int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
+ 				   enum kernel_read_file_id id);
++int security_kernel_module_read_file(struct file *file, char *buf, loff_t size);
+ int security_task_fix_setuid(struct cred *new, const struct cred *old,
+ 			     int flags);
+ int security_task_fix_setgid(struct cred *new, const struct cred *old,
+@@ -1295,6 +1296,12 @@ static inline int security_kernel_post_read_file(struct file *file,
+ 	return 0;
+ }
+ 
++static inline int security_kernel_module_read_file(struct file *file,
++						   char *buf, loff_t size)
++{
++	return 0;
++}
++
+ static inline int security_task_fix_setuid(struct cred *new,
+ 					   const struct cred *old,
+ 					   int flags)
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index c66b26184936..40bc86fa7384 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3678,6 +3678,7 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
+ 	struct load_info info = { };
+ 	void *buf = NULL;
+ 	int len;
++	int err;
+ 
+ 	len = kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE);
+ 	if (len < 0) {
+@@ -3686,7 +3687,7 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
+ 	}
+ 
+ 	if (flags & MODULE_INIT_COMPRESSED_FILE) {
+-		int err = module_decompress(&info, buf, len);
++		err = module_decompress(&info, buf, len);
+ 		vfree(buf); /* compressed data is no longer needed */
+ 		if (err) {
+ 			mod_stat_inc(&failed_decompress);
+@@ -3698,6 +3699,13 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
+ 		info.len = len;
+ 	}
+ 
++	err = security_kernel_module_read_file(f, (char *)info.hdr, info.len);
++	if (err) {
++		mod_stat_inc(&failed_kreads);
++		free_copy(&info, flags);
++		return err;
++	}
++
+ 	return load_module(&info, uargs, flags);
+ }
+ 
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index cdd225f65a62..53d2e90176ea 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -635,6 +635,27 @@ static int ima_file_check(struct file *file, int mask)
+ 					   MAY_APPEND), FILE_CHECK);
+ }
+ 
++/**
++ * ima_read_kernel_module - collect/appraise/audit measurement
++ * @file: file pointer to the module.
++ * @buf: buffer containing module data (possibly decompressed).
++ * @size: size of the buffer.
++ *
++ * This IMA hook for kernel_module_read_file LSM hook is called after a kernel
++ * module has been read into memory and (if applicable) decompressed. It
++ * measures and/or appraises the module based on the IMA policy.
++ *
++ * Return: 0 on success, negative error code on failure.
++ */
++static int ima_read_kernel_module(struct file *file, char *buf, loff_t size)
++{
++	struct lsm_prop prop;
++
++	security_current_getlsmprop_subj(&prop);
++	return process_measurement(file, current_cred(), &prop, buf, size,
++				   MAY_READ, MODULE_CHECK);
++}
++
+ static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
+ 			    size_t buf_size)
+ {
+@@ -881,6 +902,10 @@ static int ima_post_read_file(struct file *file, char *buf, loff_t size,
+ 	enum ima_hooks func;
+ 	struct lsm_prop prop;
+ 
++	/* kernel module will be addressed in ima_read_kernel_module */
++	if (read_id == READING_MODULE)
++		return 0;
++
+ 	/* permit signed certs */
+ 	if (!file && read_id == READING_X509_CERTIFICATE)
+ 		return 0;
+@@ -1250,6 +1275,7 @@ static struct security_hook_list ima_hooks[] __ro_after_init = {
+ 	LSM_HOOK_INIT(kernel_load_data, ima_load_data),
+ 	LSM_HOOK_INIT(kernel_post_load_data, ima_post_load_data),
+ 	LSM_HOOK_INIT(kernel_read_file, ima_read_file),
++	LSM_HOOK_INIT(kernel_module_read_file, ima_read_kernel_module),
+ 	LSM_HOOK_INIT(kernel_post_read_file, ima_post_read_file),
+ 	LSM_HOOK_INIT(path_post_mknod, ima_post_path_mknod),
+ #ifdef CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS
+diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+index 128fab897930..2c9bdc618ac9 100644
+--- a/security/integrity/ima/ima_policy.c
++++ b/security/integrity/ima/ima_policy.c
+@@ -241,7 +241,7 @@ static struct ima_rule_entry build_appraise_rules[] __ro_after_init = {
+ 
+ static struct ima_rule_entry secure_boot_rules[] __ro_after_init = {
+ 	{.action = APPRAISE, .func = MODULE_CHECK,
+-	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
++	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED | IMA_MODSIG_ALLOWED | IMA_CHECK_BLACKLIST},
+ 	{.action = APPRAISE, .func = FIRMWARE_CHECK,
+ 	 .flags = IMA_FUNC | IMA_DIGSIG_REQUIRED},
+ 	{.action = APPRAISE, .func = KEXEC_KERNEL_CHECK,
+diff --git a/security/security.c b/security/security.c
+index 4d3c03a4524c..311ba63a8889 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -3442,6 +3442,23 @@ int security_kernel_post_read_file(struct file *file, char *buf, loff_t size,
+ }
+ EXPORT_SYMBOL_GPL(security_kernel_post_read_file);
+ 
++/**
++ * security_kernel_module_read_file() - Read a kernel module loaded by finit_module
++ * @file: file
++ * @buf: contents of decompressed kernel module
++ * @size: size of decompressed kernel module
++ *
++ * Read a kernel module loaded by the finit_module syscall. Unlike
++ * security_kernel_post_read_file, it has access to the decompressed kernel module.
++ *
++ * Return: Returns 0 if permission is granted.
++ */
++int security_kernel_module_read_file(struct file *file, char *buf, loff_t size)
++{
++	return call_int_hook(kernel_module_read_file, file, buf, size);
++}
++EXPORT_SYMBOL_GPL(security_kernel_module_read_file);
++
+ /**
+  * security_kernel_load_data() - Load data provided by userspace
+  * @id: data identifier
+
+base-commit: e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
+-- 
+2.51.0
+
