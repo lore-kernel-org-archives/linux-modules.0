@@ -1,155 +1,111 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F372532D0EE
-	for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 08:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A226D34B1B0
+	for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 12:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761898223; cv=none; b=m1duvSMBcF+fkQvM/2VNhyITDAWXePq9YV1dunOtEfBUVl2u/0LBt1nO9SDfFbLegn2HpTdWcInQwrYt7JWBFRJJ6XvKu/nQIT4GVQt7jkWuN5F7ltexgfiiYXqJEAmapAlMzyFsoWtNZjOcEI7lgRJBl4HUQyoLZDhA0ywn9e4=
+	t=1761915436; cv=none; b=CQL/y2Na/K8T0ohegmR9cZKk5C3EzJALk2631WDy0aUJKsVhjNYDz7ENWNyWYs6lOOiRTi7PvbNhpEx+at5oklsnPuB+bz6Th9gAyEc6uPfcosYb5HvmzRHFxqmhIXyq3i/dKCWiySnYxdp3Gnej4rtYtAsfT6hjvuP2hBDn9Ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761898223; c=relaxed/simple;
-	bh=VrcIxeKGvklYAAY8vcHJNydokVUp7bULcDMSaEYoXWs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UBJyzZOydoqOGjOlKLuA3IV7qsodluEIpKKeqt/vjao/cRaMuixFlUCUPgYcT5j2eAEO3WvihTPkMrqfkB+3zkPnc7fB+X5DfChvIPnrdd7MTSQpvxMrOWz78H4nOeKi7/4UbkEqfkxwOiXjycQ+dNRVvXkw9WD0JXG1zFYcI+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O6iLMVDR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1761915436; c=relaxed/simple;
+	bh=57XM95AelX9DUBLfU9THwVSSutS8OZT8Oj+HWgG7Ons=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D5V2GPRC7gvSiGw2zS7mpKUY15GonzpzrgHOUz2yLpoUSC/YSlcpIlQIal8qwE0rwjgjDI7/I+2ZkOZtt6nRl/5/bEVUycXsKNoEvU6oB2fVh7pB9txlmxifnE46NdFbEaCejgf5vdrT9JCE6h6azJnCIcS/UI4sF/jfAbqHC5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fx9INj2v; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O6iLMVDR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761898221;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=i82y6QYrW3cjMA5vRe+eeZV6V5DVvv4lrrKkBnMpwUY=;
-	b=O6iLMVDRh5NPKiM+a5C7oDviF1K8FJC0JQGJnrrGs3hTIYzJVJyoRmwUQo8cAUuNRYou6e
-	rFDj7c1MIEYoTwXEvKjc6apXzrwRjXi+uUge8kNzqvSSwz7tX9UFTwVm+LAbhJ3Ol0YAcr
-	VySm6wzgeTWk/0EtF5EV+/SalpK3NAc=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107-XAwE2xehMZatB-zdMZegpw-1; Fri, 31 Oct 2025 04:10:19 -0400
-X-MC-Unique: XAwE2xehMZatB-zdMZegpw-1
-X-Mimecast-MFC-AGG-ID: XAwE2xehMZatB-zdMZegpw_1761898218
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-34082c48b2bso1007306a91.1
-        for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 01:10:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fx9INj2v"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3409c8626easo59885a91.3
+        for <linux-modules@vger.kernel.org>; Fri, 31 Oct 2025 05:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761915434; x=1762520234; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=57XM95AelX9DUBLfU9THwVSSutS8OZT8Oj+HWgG7Ons=;
+        b=Fx9INj2v/zscGtylqr7LuT9oOrhVNAaptHEDLaTEIhjIXv+edlW88reBW9iWrRsvrl
+         el1j+Vtv8ANRYj7wUuqVGwf8LaMzKdY5ESO2mYiYa8UE9J/dBekJ1yvfdWou4FdYmu6m
+         F8T6+NZQY7atZn6LZ09MoFWF+E9O6XTsOArTbOlnBv23KAKKFpVWxiWcVsbBp7pp+27/
+         y3kMy6BgMLtP4VndSGTeVz/P+R9V7vOuTCUIp4nk7ApM69jJn6VgqY3iEXJ52XCvhaTd
+         iyPyFdWpDSx68PN1J0ucNN75jES6QvH8Skeo9nufrZ2SCsEqScR4gOoRHfzmitSkoqhF
+         H21A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761898218; x=1762503018;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i82y6QYrW3cjMA5vRe+eeZV6V5DVvv4lrrKkBnMpwUY=;
-        b=BDh3UYIQgDHJ76R63naHgevSyKX4zCBCbtQ4LaAEzeLKTA4D4TDKOM/Cjdaq2PG5oj
-         ieSDODBhnmCVeeYOszyXQz96lGCrTXR4YWjNuVAylYIzZxYSseYi3WcW12gLBhi/KU6g
-         mt5VgzUITXbIBHDy7C8DRxMQL8xcITib57f3ufHfYnbT+4IbPk3om2aMKWbZ3WdOYAbc
-         dld3dwUfMaZ6e8dmuWE163kaMdo4Wg7fF7G/n575EtwiS3+r38ehFxU9QB291mgbf2Nj
-         QAGBfdlWZtEb/znzyyYgOhYk8nXC9ofYnF+GZPOK9dgt0L48GVS73+35hkYc45ogOXMQ
-         P8yA==
-X-Gm-Message-State: AOJu0YzD9ZZnp2tOYmFm7wnmf0zkgR9tR6FM5KXNM6n/gs8kmTGc3Uj/
-	1eCNYDxFoJONcnQgjWGcF6qEwlcvxLSL5cGPgHAh9tVurxTpv+UMsFoSuTSJNMFE7YlhF/Dq4GZ
-	doAc3zUQIFdFbwLzofXJUS27TUlZNSxpXVIF1v1obNQsAlGapPkJbexUBrPeNacbu+3sWXagHMw
-	9JHLEXjW3x4zkM7J1cs63ajZ4ln8Ca9RwSVJAvWLbHydriV+WAP7Y=
-X-Gm-Gg: ASbGncsXax9RBGL8TplcUFZYa26O0/UjgNU5x60ISInqnEKVoRWRslQJDB026/uY0do
-	2V//CTT72droAaxIwWJ8L2PuScN3ErDQE2EauJhoGNT+j9telwzDZABBl3UJqpMWZVZqU2L1I+C
-	ahJJpWggQ/3uWFBsntUUSGQagud5DpUlL8ks521DjGZP9X5uvTwl5fJXl9orNj9jYJVxOpZ6TrN
-	WE6QtAc6YMWrt6bMqeftKQbcS2JR7NouJUF6n3BN1jHEAbHUAMO1vseOldfjUzyAIgZwSHckV9l
-	MxJvXWuKVGhkY8Qyc1vZLi9EPwkqHhhMp34+RW/wjWkJnNg3QWrsu8jZp9N2SE5Atw==
-X-Received: by 2002:a17:90b:2e50:b0:330:6f16:c4e0 with SMTP id 98e67ed59e1d1-34082fd8a51mr4113239a91.12.1761898217892;
-        Fri, 31 Oct 2025 01:10:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF4iFz4WR/OBJiATgxQJLE1K7D2jafbG20415vZcHWra3bLCe9VveUtUMdFVbyjY0dNnGmaJQ==
-X-Received: by 2002:a17:90b:2e50:b0:330:6f16:c4e0 with SMTP id 98e67ed59e1d1-34082fd8a51mr4113171a91.12.1761898217197;
-        Fri, 31 Oct 2025 01:10:17 -0700 (PDT)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-340999f9943sm814815a91.1.2025.10.31.01.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Oct 2025 01:10:16 -0700 (PDT)
-From: Coiby Xu <coxu@redhat.com>
-To: linux-modules@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org,
-	kernel test robot <lkp@intel.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org (open list:MODULE SUPPORT)
-Subject: [PATCH] module: Only declare set_module_sig_enforced when CONFIG_MODULE_SIG=y
-Date: Fri, 31 Oct 2025 16:09:48 +0800
-Message-ID: <20251031080949.2001716-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.51.0
+        d=1e100.net; s=20230601; t=1761915434; x=1762520234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=57XM95AelX9DUBLfU9THwVSSutS8OZT8Oj+HWgG7Ons=;
+        b=PIInznSTTpH4xUTqKQmmF/6AxV4eo8g9hpDHy6Bbu5WXcT9FWC3nSw9GPS+nnZJift
+         VSIgQoJfoguYVni7l88PWF3aZifhZGHEeWuCZWPMH9yyJ4xUD4Zrjo/Wjwz3t3jR71IJ
+         sf+yMFVZiMfTOJUus5nSUAAKm3sK2aABAFCHq0y3WFet1zTyTcsIwF5FeVj25Hzyqokj
+         rAe6uNEBRTCuPdQOmmZpGiMfyk7kPFbG8IEJf+P7BxdiYwO8xhiW1X44PRmjkxc+Rqvw
+         0aezr5Ozsw5jyHCOdIqfiwprfisQkittF8Mm4ddnEkVKoAlWutp5eXJUIIMpgz2PvxiJ
+         36Xw==
+X-Forwarded-Encrypted: i=1; AJvYcCWuvtEmKIzkLV8xau3j7/UnhJYl/mz4Ps51aRIns86cdTwZe+xeP+LZgQAW4cdphFnK461ajfQpoUFlM7g3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwxhBqpcOvgLJ0qEdUZec/yGgIGnEbZu7S0qz88k1QwXiojqvj
+	u+bAAYWYK0NeQua8cxNLGctpgwbK7cDqnIHK8xnmCiIIjmmcw1dLdHI9Nv9tiRT2hOuJAbIYnrD
+	Mwm+McMc5OmGEb7GAp0EwEbk4cX8jr44=
+X-Gm-Gg: ASbGncsFNbu3F2aiNRGbiQp4lg2QRGVY1M5ua3qbrBNXMiceqPi1pPAnRnrNzyNlPeU
+	yrvyzJUX0AAuuXPNlqsUZZVEg7RHVVxbSW6M4OacUnzOAJG7C0LIB4GJanRvUi7Vxf/5KkOHJQB
+	2UnKZNvri2HKugusSqmIpE/TKwimvBs9D7s25xUVE1UsyK7N07lgneEOu2yPWq5IHcwdxqbBS3K
+	DNYLQnqyjTBO4UevJ6+GNaRpZ6W/iZlj6B9sUDptQUahsCaJVOe6AnVvjm0yIHztjMYZPWwb5Ew
+	OFrSgaLV8PfZAyz7riHgEFRcX6VI/EylNKcbAvHLHDJ4EHn6sjRoOKkcsKTLJ0ytWkA3LoFMSfh
+	T7AoeUF7IdOtrQg==
+X-Google-Smtp-Source: AGHT+IFJM+PQMbTXmTGodnAosPHILr2GU6NSMb59LbmXplfAnvliIPhU9LCa4gpUD72tPa8WjMFa+1grBXZZatyQfa0=
+X-Received: by 2002:a17:902:e887:b0:272:2bf1:6a1f with SMTP id
+ d9443c01a7336-2951a3d2847mr26244955ad.4.1761915433746; Fri, 31 Oct 2025
+ 05:57:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251028-pwm_fixes-v1-0-25a532d31998@samsung.com>
+ <CGME20251028122316eucas1p2733987cd4c1eb8f83d6572d542e76d2a@eucas1p2.samsung.com>
+ <20251028-pwm_fixes-v1-1-25a532d31998@samsung.com> <h3sivr3uuzr5oodqe326svchbw3rzo4f4nw4chpeee2jwzjq3j@bdtecauehkn4>
+In-Reply-To: <h3sivr3uuzr5oodqe326svchbw3rzo4f4nw4chpeee2jwzjq3j@bdtecauehkn4>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 31 Oct 2025 13:57:00 +0100
+X-Gm-Features: AWmQ_blGoLkmXXueKnCk5kJ5O9pXLS5GlmxYneYVuP4K75NG97cEfvhzpNZh5XM
+Message-ID: <CANiq72nNxVJeMZdESrrB+LGmdRK+M5AGZbUw-x2aE-Qa-=HtJQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] rust: macros: Add support for 'imports_ns' to module!
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Michal Wilczynski <m.wilczynski@samsung.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Fu Wei <wefu@redhat.com>, Stephen Rothwell <sfr@canb.auug.org.au>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently, set_module_sig_enforced is declared as long as CONFIG_MODULES
-is enabled. This can lead to a linking error if
-set_module_sig_enforced is called with CONFIG_MODULE_SIG=n,
+On Fri, Oct 31, 2025 at 8:47=E2=80=AFAM Uwe Kleine-K=C3=B6nig <ukleinek@ker=
+nel.org> wrote:
+>
+> I already asked this in reply to the cover letter, but the question was
+> lost on the way (no offense!), so I'm asking again. As it only really
+> affects this patch, I'm doing that here:
+>
+> Can I have some blessing to take this patch via my pwm tree? Would you
+> prefer a tag to also merge it into your tree? Then I would apply it on
+> top of 6.18-rc1 and provide a tag for you to merge.
 
-    ld: security/integrity/ima/ima_appraise.o: in function `ima_appraise_measurement':
-    security/integrity/ima/ima_appraise.c:587:(.text+0xbbb): undefined reference to `set_module_sig_enforced'
+Sounds fine to me, but I am Cc'ing the modules maintainers since they
+were not, just in case:
 
-So only declare set_module_sig_enforced when CONFIG_MODULE_SIG is
-enabled.
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-Note this issue hasn't caused a real problem because all current callers
-of set_module_sig_enforced e.g. security/integrity/ima/ima_efi.c
-depend on CONFIG_MODULE_SIG=y.
+I think we don't need the tag/merge, unless someone else is looking to
+use this (is there such a user? I may have missed it).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202510030029.VRKgik99-lkp@intel.com/
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- include/linux/module.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Thanks!
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index e135cc79acee..fa251958b138 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -769,8 +769,6 @@ static inline bool is_livepatch_module(struct module *mod)
- #endif
- }
- 
--void set_module_sig_enforced(void);
--
- void module_for_each_mod(int(*func)(struct module *mod, void *data), void *data);
- 
- #else /* !CONFIG_MODULES... */
-@@ -865,10 +863,6 @@ static inline bool module_requested_async_probing(struct module *module)
- }
- 
- 
--static inline void set_module_sig_enforced(void)
--{
--}
--
- /* Dereference module function descriptor */
- static inline
- void *dereference_module_function_descriptor(struct module *mod, void *ptr)
-@@ -924,6 +918,8 @@ static inline bool retpoline_module_ok(bool has_retpoline)
- #ifdef CONFIG_MODULE_SIG
- bool is_module_sig_enforced(void);
- 
-+void set_module_sig_enforced(void);
-+
- static inline bool module_sig_ok(struct module *module)
- {
- 	return module->sig_ok;
-@@ -934,6 +930,10 @@ static inline bool is_module_sig_enforced(void)
- 	return false;
- }
- 
-+static inline void set_module_sig_enforced(void)
-+{
-+}
-+
- static inline bool module_sig_ok(struct module *module)
- {
- 	return true;
-
-base-commit: e53642b87a4f4b03a8d7e5f8507fc3cd0c595ea6
--- 
-2.51.0
-
+Cheers,
+Miguel
