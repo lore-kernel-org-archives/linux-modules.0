@@ -1,115 +1,134 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA38306B3D;
-	Fri, 31 Oct 2025 21:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503401A0BF3;
+	Sat,  1 Nov 2025 08:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761946380; cv=none; b=J5zwGNPmXncFGF/pRdDi7jF86w+hi8eNkR2fUpOT60oUVGnP8ncHDmpDRf0vbZig8EdflUBGXl1+rHZN1c1efBcCoWKWWaohSjjSlIdL0d1TAde/irBefNDvPCdUa7v18omwllNO/XZd3kDwZB4eaAvf4SOR0KIf/+CNJIvIOGI=
+	t=1761984423; cv=none; b=nSx7RJXIRJ15l9dhtZlXV5ysAmfnTk5wl8S3hNHCHycOctfVRxDFlg2een0JSdIMpzKK3051eaPmumkwImxtt0PGGtXWRiM0RViblgJMtYgIhaoE42abCVKkOaYKRM3YPylH1DF9kYQgDBB8x4kMfZT8mE13B+/u7uCCYJqc1r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761946380; c=relaxed/simple;
-	bh=Q4jsAPOYgiCp2KBXrG94dO+Z5cGNiyamdcVsqHPG6eM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gfmp+KxaAE6u9vCd8fyS2VyIvvXWjkgxfZCgVCD1T+IqnJk8JiEiV6pNN2pFGuTVhP38a/SBVAJS47EwO6iGr1rm5NVtytTEPaxVLPL81FOQawyr5yo9ijTkcjGuYaY0odz7Fye5ZQ7SFE7+z2hB6o8A6MOP5kU9tY3w3XToros=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=scPetG/8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1761984423; c=relaxed/simple;
+	bh=G/Jcr2WP/cPGUf9Bk+5VxA0ZTOL+7p5/wefrl26pvuU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PpF6nzoeGMsXNQlOzpD8j45WoKqsWacS9HeXbKyg31+U7QPxALNUXOjg4oRuPSNyIBDZdh9riRatpkYl9OqynuHprpc5u4+M5MD1SVzrF5DvII+ADLa6W5+TBO6aMOg48mmBq5NLOliq56NYbzTxp/nB9WUc//TLOQMw/CrDd/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgX6xL9F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="scPetG/8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE0BC4CEE7;
-	Fri, 31 Oct 2025 21:32:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgX6xL9F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3791FC4CEF1;
+	Sat,  1 Nov 2025 08:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761946379;
-	bh=Q4jsAPOYgiCp2KBXrG94dO+Z5cGNiyamdcVsqHPG6eM=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=scPetG/8GyxPOp5NeOGZMQrNgPWI6rBtLqVJwmQQNXxtmixSR3lctbzXBP3bSETJ8
-	 OnAwpatmqDVSwsZHVga36biummiWSTCJxbHFjyYwYG7pAY5n56+e3Pjn/pN3h8yYtI
-	 WvetyPgBQY5r4jDatzGOP2vVqyLwBDghoLO6HkUcEcyxL7LcVQppeGf/rRaghjt9h3
-	 yMqziMyZ+vWh+J4B5F7NaP/Qk1AOWN8nmdvBs7UqjgOusnmkNkziqzA0jsSudpR15p
-	 rSvl24o0f6k6NRcC5UexL876spmEuDWkRhQFNLqd1RKl3xWRhtTlnjCtuKNbx92PNH
-	 wjOO4lNYT4ufg==
-Message-ID: <0406562e-2066-4cf8-9902-b2b0616dd742@kernel.org>
-Date: Fri, 31 Oct 2025 22:32:54 +0100
+	s=k20201202; t=1761984422;
+	bh=G/Jcr2WP/cPGUf9Bk+5VxA0ZTOL+7p5/wefrl26pvuU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jgX6xL9FRABC9/zPye3aZ3S733GzdIqPWf2fgzW3yjKoE9aXXAERGZFbjTszexFf+
+	 70ZpoqX7K9DWoCgD5fvJajvx6Iewm9liRnLS2QIB35aP5lRunwDZms9dMC4RNbfwvr
+	 532Q1dkMl+/MOQskQCNaQyRPK5r10pPS2z3IJo74ulRB8s1ZPrZETsFG+HRkIJgIw2
+	 DGk80xJMhqRBEHs7tf8vchk22i2xHiv8aDYwdLodCL9zNjx/s2jPRGQCLv7JgSub12
+	 nkYSeR8OdaQ/ZCmlv/7Y8yFRScetZrds90yLTeYsJKRR5kaXOwcsEezeWEkFfETbN+
+	 ObwH9QzHipeCg==
+Date: Sat, 1 Nov 2025 09:06:59 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Daniel Gomez <da.gomez@kernel.org>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Michal Wilczynski <m.wilczynski@samsung.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH 1/4] rust: macros: Add support for 'imports_ns' to module!
+Message-ID: <ltzoyvyzmyf6ltdpolovjlsd44uuswkrbtlakzps376ohc23wn@mgqnvgv77tez>
+References: <20251028-pwm_fixes-v1-0-25a532d31998@samsung.com>
+ <CGME20251028122316eucas1p2733987cd4c1eb8f83d6572d542e76d2a@eucas1p2.samsung.com>
+ <20251028-pwm_fixes-v1-1-25a532d31998@samsung.com>
+ <h3sivr3uuzr5oodqe326svchbw3rzo4f4nw4chpeee2jwzjq3j@bdtecauehkn4>
+ <CANiq72nNxVJeMZdESrrB+LGmdRK+M5AGZbUw-x2aE-Qa-=HtJQ@mail.gmail.com>
+ <4654398f-324c-4465-88eb-8cadde6160dc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH v8 04/23] slab: add sheaf support for batching kfree_rcu()
- operations
-To: Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>,
- Harry Yoo <harry.yoo@oracle.com>, Uladzislau Rezki <urezki@gmail.com>,
- Sidhartha Kumar <sidhartha.kumar@oracle.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
- maple-tree@lists.infradead.org, linux-modules@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Lucas De Marchi <lucas.demarchi@intel.com>
-References: <20250910-slub-percpu-caches-v8-0-ca3099d8352c@suse.cz>
- <20250910-slub-percpu-caches-v8-4-ca3099d8352c@suse.cz>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20250910-slub-percpu-caches-v8-4-ca3099d8352c@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="usbfmskd44ovktpd"
+Content-Disposition: inline
+In-Reply-To: <4654398f-324c-4465-88eb-8cadde6160dc@kernel.org>
 
 
+--usbfmskd44ovktpd
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/4] rust: macros: Add support for 'imports_ns' to module!
+MIME-Version: 1.0
 
-On 10/09/2025 10.01, Vlastimil Babka wrote:
-> Extend the sheaf infrastructure for more efficient kfree_rcu() handling.
-> For caches with sheaves, on each cpu maintain a rcu_free sheaf in
-> addition to main and spare sheaves.
-> 
-> kfree_rcu() operations will try to put objects on this sheaf. Once full,
-> the sheaf is detached and submitted to call_rcu() with a handler that
-> will try to put it in the barn, or flush to slab pages using bulk free,
-> when the barn is full. Then a new empty sheaf must be obtained to put
-> more objects there.
-> 
-> It's possible that no free sheaves are available to use for a new
-> rcu_free sheaf, and the allocation in kfree_rcu() context can only use
-> GFP_NOWAIT and thus may fail. In that case, fall back to the existing
-> kfree_rcu() implementation.
-> 
-> Expected advantages:
-> - batching the kfree_rcu() operations, that could eventually replace the
->   existing batching
-> - sheaves can be reused for allocations via barn instead of being
->   flushed to slabs, which is more efficient
->   - this includes cases where only some cpus are allowed to process rcu
->     callbacks (Android)
-> 
-> Possible disadvantage:
-> - objects might be waiting for more than their grace period (it is
->   determined by the last object freed into the sheaf), increasing memory
->   usage - but the existing batching does that too.
-> 
-> Only implement this for CONFIG_KVFREE_RCU_BATCHED as the tiny
-> implementation favors smaller memory footprint over performance.
-> 
-> Also for now skip the usage of rcu sheaf for CONFIG_PREEMPT_RT as the
-> contexts where kfree_rcu() is called might not be compatible with taking
-> a barn spinlock or a GFP_NOWAIT allocation of a new sheaf taking a
-> spinlock - the current kfree_rcu() implementation avoids doing that.
-> 
-> Teach kvfree_rcu_barrier() to flush all rcu_free sheaves from all caches
-> that have them. This is not a cheap operation, but the barrier usage is
-> rare - currently kmem_cache_destroy() or on module unload.
-> 
-> Add CONFIG_SLUB_STATS counters free_rcu_sheaf and free_rcu_sheaf_fail to
-> count how many kfree_rcu() used the rcu_free sheaf successfully and how
-> many had to fall back to the existing implementation.
-> 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Hello Daniel, hello Miguel,
 
-Hi Vlastimil,
+On Fri, Oct 31, 2025 at 02:12:29PM +0100, Daniel Gomez wrote:
+> On 31/10/2025 13.57, Miguel Ojeda wrote:
+> > On Fri, Oct 31, 2025 at 8:47=E2=80=AFAM Uwe Kleine-K=C3=B6nig <ukleinek=
+@kernel.org> wrote:
+> > > Can I have some blessing to take this patch via my pwm tree? Would you
+> > > prefer a tag to also merge it into your tree? Then I would apply it on
+> > > top of 6.18-rc1 and provide a tag for you to merge.
+> >=20
+> > Sounds fine to me, but I am Cc'ing the modules maintainers since they
+> > were not, just in case:
 
-This patch increases kmod selftest (stress module loader) runtime by about
-~50-60%, from ~200s to ~300s total execution time. My tested kernel has
-CONFIG_KVFREE_RCU_BATCHED enabled. Any idea or suggestions on what might be
-causing this, or how to address it?
+Good idea, thanks for catching that.
+
+> > Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> > [...]
+>=20
+> Uwe, that's okay from modules side:
+>=20
+> Acked-by: Daniel Gomez <da.gomez@samsung.com>
+
+Thanks for your Acks, I applied patches #1-#3 to
+https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/for-=
+next
+(#4 was applied already).
+=20
+> FYI, I haven't merged Andreas's patches (rust: extend `module!` macro with
+> integer parameter support) yet, which add rust/macros/module.rs to our
+> MAINTAINERS file list. So, it's fine from modules side to go through your=
+ tree.
+> I was aiming to merge these patches along with some others for this week =
+but
+> I've found a regression in kmod testing introduced in the latest v6.18-rc=
+1,
+> which is taking me some extra time.
+
+If the issues you mentioned are sorted out and you apply patches that
+conflict with the changes I committed, please get in touch that we
+coordinate if/how to sort them out.
+
+Also if the need for a tag to share the commit arises, please coordinate
+and don't just merge the just now created commits, as I like to be able
+to rewrite my tree for late Acks etc. So I'd like to prepare and know
+when commits become set in stone.
+
+Best regards
+Uwe
+
+--usbfmskd44ovktpd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkFv6AACgkQj4D7WH0S
+/k6QQAf/ZAkDEyqE7MH4fqSdX0BKyDtZcv4Lt4GumeKupHHVRA5dkdUIGoamRHO1
+odjELXXO+7Em0roeVXdjnh3W6J2FjINqP8NYvXXN2bT3WjCL2CVWh1+X0kj6Odlr
+5lPowTPcu82u+fqUa758zMy55NYoeK4BEgrxSRPDamM9st2sivebaANBMKY1aSGw
+NgUFvhdmYcA8eWfEE5FfNhLfcfy/mjP/ogZ5p3/l7/5MqG7bmNsWin8r0u81k06m
+e081JkotlTeg9J2gAlnD61AZyn77/LP5764h5CiFYrFD18uK0ZHtfW3xqnT+jeKe
+/E9CAoE8NvNtI1FpAChL2Q7++uAr6g==
+=x5ke
+-----END PGP SIGNATURE-----
+
+--usbfmskd44ovktpd--
