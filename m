@@ -1,330 +1,215 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8FE1D5CFB;
-	Sun,  2 Nov 2025 09:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60841548C;
+	Sun,  2 Nov 2025 15:06:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762077396; cv=none; b=neDndaVXd2qbvjhwfkFhJq12NV7TeU8OHTO8+uKV/05tiLAE7s3tJ24Gb4eTkR93RB2genFLXt0m4vj3yKdpJee6vo0NEEpLigcCsVgK30g1pm6JhxqPBJkijtFFe/cmUrPyTu0+VN7+foqAwrckR0Z0gONVaXESP1SaLZTiLrw=
+	t=1762095986; cv=none; b=k63Pq5+X/lZowsnk4MVyGSrKxXqJF4xI+dlji8oNv8n3hwtbsh4kQHsybdhJE8Pgh5Aw770HeuECv50jfBZolr/05p1z3+S9lxpu7/pPS0LYFrUMyTdfpkfaWrHDSuw+fbHN6X67P3V/0gZbCKo0jyj2RdgmDBe3vXLYS7zpcy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762077396; c=relaxed/simple;
-	bh=tgoHUy8+dU5pLodr/+YdTz0qC9rjIrbBAsZbExT0RNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GnckBfQI6Y8UVFscZ2kv/hPByqXYsV2qhbR4dhX7q7msgst0PLXjgKVMm116qyOZIdIL8D1M8AiIROXElQpodgsrhMgUqNkFBBb0FB7ul2Vy+0xPoI6kL/t73V7GBZC6kiHZxja9Kvjyt2lRpaDiN0+2xCmMtPpdeaKaio3gZJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hrSH6BPo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762095986; c=relaxed/simple;
+	bh=Y/TfvwRtylgp9+GXHTm/CQJvnFREbnd09gzaiGHxmqc=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=H2mB3gb9AYy+caAfHtF/vqc0hyz1W0L9LW3UiB+YPfVnCisD40PVtQ8lhL2snM6AdcIDlSINomXb4bJu/5wbSU1p9rsq8srkXgWaXKSAlfHSN2MLPMF9WKB+/6TA5mR9/M/TfLuHV1UTzSNhJ8EKDAtJjteeuInpw6iJqRtNW5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=quuh0PYl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hrSH6BPo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8B48C4CEF7;
-	Sun,  2 Nov 2025 09:56:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762077395;
-	bh=tgoHUy8+dU5pLodr/+YdTz0qC9rjIrbBAsZbExT0RNQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hrSH6BPouyh++5y9DASNRzX9q7jiEkWxuufvkhXRpupzUVbTpRh7VvaqlSZ/U9s/l
-	 NxhGNGGgSwKHD/WsLIT7disUtJna3daSwaiEZz14yRpGXXMjlcS7NNi47J/6k4UiCy
-	 kmTu90Y0GVbv8n4cPsE7fEGgOzdhB/E1Fvd4bHif6dm50aWglpmQj5iItCOQn+4/7M
-	 QBAnt0jC97Ap951ppM3PozH9LzlL5AqGrBVS/mKk4QzohdjWpIkRsCTSlTNNT58z/C
-	 GG6SnG5nCEgP2wNFJG04/wVuE9IyjW5MG8lTovWeRwjTiITN0nznHRTl+UfuAXpY83
-	 H3SNguxq7R37g==
-Date: Sun, 2 Nov 2025 10:56:32 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
-	Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Michal Wilczynski <m.wilczynski@samsung.com>, Trevor Gross <tmgross@umich.edu>, 
-	Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, Greg KH <gregkh@linuxfoundation.org>, 
-	Fiona Behrens <me@kloenk.dev>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	linux-modules@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH v18 0/7] rust: extend `module!` macro with integer
- parameter support
-Message-ID: <er7h34im2rk627usnvbre3clqvsx3uzev7kboy33pd7oac747c@nvtl7y2mmdde>
-References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
- <49af6d76-bcb7-4343-8903-390040e2c49b@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="quuh0PYl"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A2EPjZE028667;
+	Sun, 2 Nov 2025 15:05:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=h2cIrY
+	DHldqHX54hilNkiCWkEgwobj3LhX7CjRgOYD0=; b=quuh0PYl9zREuvH8XUi8Dn
+	B+99B7xh1+sEEPZMLEusai9ahbcBdNZPBXr0aj3wRGWewi5xAYlOIKnjyMInEVur
+	aBQTdgU6gWXEWMVpfJ1P59/jImMi50NUfhslG5xVTRuCdfHRNDnOanyNjpr82HQZ
+	tTa3++szUC0cnriDBHY9Z4iRH2f5VsgZTFjLKZfxktU69cmqLYaNXlpczsoQkAjp
+	kVIjjFZq9xiI0i8aUqcAiGBjyTCKS3Kvqry3o194ZZY6pBWeoyDPqwD8FuT20hcg
+	ZaOGt2UvxS+wT1D5Mq4xfv6jiLByZFsvy1d95MLMDCmv2W/xhWybrl8LZ/WK7EMA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59vu3m6t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 02 Nov 2025 15:05:34 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A2F5XTJ032156;
+	Sun, 2 Nov 2025 15:05:33 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59vu3m6r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 02 Nov 2025 15:05:33 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A2DMGAu025557;
+	Sun, 2 Nov 2025 15:05:32 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4a5vhsa06a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 02 Nov 2025 15:05:32 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A2F5W8N29360534
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 2 Nov 2025 15:05:32 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4BAA458052;
+	Sun,  2 Nov 2025 15:05:32 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5B41D5805A;
+	Sun,  2 Nov 2025 15:05:31 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.190.185])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Sun,  2 Nov 2025 15:05:31 +0000 (GMT)
+Message-ID: <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] lsm,ima: new LSM hook
+ security_kernel_module_read_file to access decompressed kernel module
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>, Coiby Xu <coxu@redhat.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>,
+        "Serge E.
+ Hallyn" <serge@hallyn.com>,
+        Luis Chamberlain	 <mcgrof@kernel.org>,
+        Petr
+ Pavlu <petr.pavlu@suse.com>, Daniel Gomez	 <da.gomez@kernel.org>,
+        Sami
+ Tolvanen <samitolvanen@google.com>,
+        Roberto Sassu	
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        open list
+ <linux-kernel@vger.kernel.org>,
+        "open list:MODULE SUPPORT"
+ <linux-modules@vger.kernel.org>
+In-Reply-To: <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+	 <20251031074016.1975356-1-coxu@redhat.com>
+	 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 02 Nov 2025 10:05:31 -0500
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kgnqphnahpvonngh"
-Content-Disposition: inline
-In-Reply-To: <49af6d76-bcb7-4343-8903-390040e2c49b@kernel.org>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8Z-scviHlVf3LfftQtzRa1ejOqrrStl2
+X-Proofpoint-GUID: 1sVFZIHn9J8Fsgz4oTvi7QiHyty3gYwV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAyMSBTYWx0ZWRfX/vesfn6XpXpH
+ BT8hvqQ7DrQsMRqyL8s5nJklgVh9moDpraVbXYjBFu8QQDoIG5yKiN3CywwiOicE83H+7R6rRIJ
+ HV0iaWbEp7vW0jmFicb4UuGcanxIogdqb/5rLU1SdR3PMHI52P3zzJ118RXMGmA0jLMhDE6K7df
+ u/RpiyL8IMJLoWiinxRLYwudSJYkYJWy/OoqJL7yzfiLHHvxBgamgEQphLZnoKxPoUCNgBwBHxi
+ JO7aT3ZFLRlpDvyFZYfAwYDH10+BEQat680qptu2zfAZS/gZFJ0Ps/XxrMMn5kX20BeZkILyrv2
+ 030eSbBv7TKrNzG+HiDuTjiMdr9LbeUT1fg7+XsDgrlLM05B3FI/PNHgCV6/K7EgS19b6ck1AMu
+ sPdplNsJZPI1vbxe+3Um9MLhKku+Hw==
+X-Authority-Analysis: v=2.4 cv=U6qfzOru c=1 sm=1 tr=0 ts=6907733e cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8 a=CfLjOnkwlt8k9LrJmxEA:9
+ a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-02_02,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
+ definitions=main-2511010021
 
-
---kgnqphnahpvonngh
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v18 0/7] rust: extend `module!` macro with integer
- parameter support
-MIME-Version: 1.0
-
-Hello Daniel,
-
-[Adding Stephen and linux-next to Cc]
-
-On Sat, Nov 01, 2025 at 10:39:08PM +0100, Daniel Gomez wrote:
-> On 24/09/2025 14.39, Andreas Hindborg wrote:
-> > Extend the `module!` macro with support module parameters. Also add some
-> > string to integer parsing functions.
+On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
+> On Fri, Oct 31, 2025 at 3:41=E2=80=AFAM Coiby Xu <coxu@redhat.com> wrote:
 > >=20
-> > Based on the original module parameter support by Miguel [1],
-> > later extended and generalized by Adam for more types [2][3].
-> > Originally tracked at [4].
+> > Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPRES=
+S)
+> > is enabled, IMA has no way to verify the appended module signature as i=
+t
+> > can't decompress the module.
 > >=20
-> > Link: https://github.com/Rust-for-Linux/linux/pull/7 [1]
-> > Link: https://github.com/Rust-for-Linux/linux/pull/82 [2]
-> > Link: https://github.com/Rust-for-Linux/linux/pull/87 [3]
-> > Link: https://github.com/Rust-for-Linux/linux/issues/11 [4]
-> > Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+> > Define a new LSM hook security_kernel_module_read_file which will be
+> > called after kernel module decompression is done so IMA can access the
+> > decompressed kernel module to verify the appended signature.
+> >=20
+> > Since IMA can access both xattr and appended kernel module signature
+> > with the new LSM hook, it no longer uses the security_kernel_post_read_=
+file
+> > LSM hook for kernel module loading.
+> >=20
+> > Before enabling in-kernel module decompression, a kernel module in
+> > initramfs can still be loaded with ima_policy=3Dsecure_boot. So adjust =
+the
+> > kernel module rule in secure_boot policy to allow either an IMA
+> > signature OR an appended signature i.e. to use
+> > "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
+> >=20
+> > Reported-by: Karel Srot <ksrot@redhat.com>
+> > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> > ---
+> > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311-1-co=
+xu@redhat.com/
+> >=20
+> >  include/linux/lsm_hook_defs.h       |  2 ++
+> >  include/linux/security.h            |  7 +++++++
+> >  kernel/module/main.c                | 10 +++++++++-
+> >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++++
+> >  security/integrity/ima/ima_policy.c |  2 +-
+> >  security/security.c                 | 17 +++++++++++++++++
+> >  6 files changed, 62 insertions(+), 2 deletions(-)
 >=20
-> I tested this series with rust_minimal module. They LGTM,
->=20
-> Tested-by: Daniel Gomez <da.gomez@samsung.com>
->=20
-> The patches did not apply cleanly to v6.18-rc3, at least not when using b=
-4.
-> However, when applying them to the base commit and then rebasing onto v6.=
-18-rc3,
-> I didn't see any conflicts.
+> We don't really need a new LSM hook for this do we?  Can't we just
+> define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
+> another call to security_kernel_post_read_file() after the module is
+> unpacked?  Something like the snippet below ...
 
-I don't know how you use b4, but
-
-	git checkout v6.18-rc3
-	b4 am -3 49af6d76-bcb7-4343-8903-390040e2c49b@kernel.org
-	git am -3 ./v18_20250924_a_hindborg_rust_extend_module_macro_with_integer_=
-parameter_support.mbx
-
-works fine on my end. Using `-3` should have the same effect as applying
-the series on top of the original base and rebase it.
-
-	git fetch https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.gi=
-t rebase/20250924-module-params-v3-v18-0-bf512c35d910@kernel.org
-	git range-diff FETCH_HEAD...HEAD
-
-confirms that.
+Yes, this is similar to my suggestion based on defining multiple enumeratio=
+ns:
+READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MODULE.=
 =20
-> I've created a temporary branch with this rebase here:
+With this solution, IMA would need to make an exception in the post kernel
+module read for the READING_COMPRESSED_MODULE case, since the kernel module=
+ has
+not yet been decompressed.
+
+Coiby suggested further simplification by moving the call later.  At which =
+point
+either there is or isn't an appended signature for non-compressed and
+decompressed kernel modules.
+
+As long as you don't have a problem calling the security_kernel_post_read_f=
+ile()
+hook again, could we move the call later and pass READING_MODULE_UNCOMPRESS=
+ED?
+
 >=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/log/?h=
-=3Drebase/20250924-module-params-v3-v18-0-bf512c35d910@kernel.org
->=20
-> Can you take a look when you can? I'll merge this shortly after checking =
-with
-> Uwe, as there are some minor conflicts with his tree.
->=20
-> + Uwe
->=20
-> These are the conflicts I see when merging the patch series from Michal [=
-1]
-> (Introduce import_ns support for Rust). I believe these are trivial thing=
-s that
-> we will get notified from linux-next merging. But let me know what you th=
-ink as
-> you have requested in that thread.
->=20
-> [1] Link: https://lore.kernel.org/all/20251028-pwm_fixes-v1-0-25a532d3199=
-8@samsung.com/
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c66b26184936..f127000d2e0a 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file *f, c=
+onst ch
+> ar __user * uargs, int
+>                        mod_stat_add_long(len, &invalid_decompress_bytes);
+>                        return err;
+>                }
+> +
+> +               err =3D security_kernel_post_read_file(f,
+> +                                                    (char *)info.hdr, in=
+fo.len,
+> +                                                    READING_MODULE_DECOM=
+PRESS);
+> +               if (err) {
+> +                       mod_stat_inc(&failed_kreads);
+> +                       return err;
+> +               }
+>        } else {
+>                info.hdr =3D buf;
+>                info.len =3D len;
 
-Yeah, I expect that Stephen will highlight the conflicts, but I prefer
-to not be surprised by that and consider linux-next more a fallback
-security net that I don't want to use. I like it to be the other way
-round and tell Stephen about conflicts to expect :-)
+=3D=3D defer security_kernel_post_read_file() call to here =3D=3D
 
-> ...
-> Applying: rust: macros: Add support for 'imports_ns' to module!
-> Patch failed at 0008 rust: macros: Add support for 'imports_ns' to module!
-> error: patch failed: rust/macros/module.rs:98
-> error: rust/macros/module.rs: patch does not apply
-> hint: Use 'git am --show-current-patch=3Ddiff' to see the failed patch
-> hint: When you have resolved this problem, run "git am --continue".
-> hint: If you prefer to skip this patch, run "git am --skip" instead.
-> hint: To restore the original branch and stop patching, run "git am --abo=
-rt".
-> hint: Disable this message with "git config set advice.mergeConflict fals=
-e"
->=20
-> git am --show-current-patch=3Ddiff
-
-That command shows the patch to apply, but not the conflict, let alone
-your resolution.
-
-> ---
->  rust/macros/module.rs | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> ---
->  rust/macros/module.rs | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index 5ee54a00c0b65699596e660b2d4d60e64be2a50c..408cd115487514c8be79724d9=
-01c676435696376 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -98,6 +98,7 @@ struct ModuleInfo {
->      description: Option<String>,
->      alias: Option<Vec<String>>,
->      firmware: Option<Vec<String>>,
-> +    imports_ns: Option<Vec<String>>,
->  }
-
-So here the addition of `params` is missing.
-
-> [...]
-
-When I merge your branch mentioned above with my pwm/for-next and
-resolve the merge conflicts, the resolution looks as follows. The only
-non-trivial thing is that
-
-	if let Some(imports) =3D info.imports_ns {
-
-now needs a & for `info`.
-
-Best regards
-Uwe
-
-diff --cc rust/macros/module.rs
-index d62e9c1e2a89,408cd1154875..000000000000
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@@ -205,50 -98,7 +205,51 @@@ struct ModuleInfo=20
-      description: Option<String>,
-      alias: Option<Vec<String>>,
-      firmware: Option<Vec<String>>,
-+     imports_ns: Option<Vec<String>>,
- +    params: Option<Vec<Parameter>>,
- +}
- +
- +#[derive(Debug)]
- +struct Parameter {
- +    name: String,
- +    ptype: String,
- +    default: String,
- +    description: String,
- +}
- +
- +fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
- +    let params =3D expect_group(it);
- +    assert_eq!(params.delimiter(), Delimiter::Brace);
- +    let mut it =3D params.stream().into_iter();
- +    let mut parsed =3D Vec::new();
- +
- +    loop {
- +        let param_name =3D match it.next() {
- +            Some(TokenTree::Ident(ident)) =3D> ident.to_string(),
- +            Some(_) =3D> panic!("Expected Ident or end"),
- +            None =3D> break,
- +        };
- +
- +        assert_eq!(expect_punct(&mut it), ':');
- +        let param_type =3D expect_ident(&mut it);
- +        let group =3D expect_group(&mut it);
- +        assert_eq!(group.delimiter(), Delimiter::Brace);
- +        assert_eq!(expect_punct(&mut it), ',');
- +
- +        let mut param_it =3D group.stream().into_iter();
- +        let param_default =3D expect_param_default(&mut param_it);
- +        let param_description =3D expect_string_field(&mut param_it, "des=
-cription");
- +        expect_end(&mut param_it);
- +
- +        parsed.push(Parameter {
- +            name: param_name,
- +            ptype: param_type,
- +            default: param_default,
- +            description: param_description,
- +        })
- +    }
- +
- +    parsed
-  }
- =20
-  impl ModuleInfo {
-@@@ -263,7 -113,7 +264,8 @@@
-              "license",
-              "alias",
-              "firmware",
-+             "imports_ns",
- +            "params",
-          ];
-          const REQUIRED_KEYS: &[&str] =3D &["type", "name", "license"];
-          let mut seen_keys =3D Vec::new();
-@@@ -289,7 -139,7 +291,8 @@@
-                  "license" =3D> info.license =3D expect_string_ascii(it),
-                  "alias" =3D> info.alias =3D Some(expect_string_array(it)),
-                  "firmware" =3D> info.firmware =3D Some(expect_string_arra=
-y(it)),
-+                 "imports_ns" =3D> info.imports_ns =3D Some(expect_string_=
-array(it)),
- +                "params" =3D> info.params =3D Some(expect_params(it)),
-                  _ =3D> panic!("Unknown key \"{key}\". Valid keys are: {EX=
-PECTED_KEYS:?}."),
-              }
- =20
-@@@ -329,25 -179,30 +332,30 @@@ pub(crate) fn module(ts: TokenStream) -
-      // Rust does not allow hyphens in identifiers, use underscore instead.
-      let ident =3D info.name.replace('-', "_");
-      let mut modinfo =3D ModInfoBuilder::new(ident.as_ref());
- -    if let Some(authors) =3D info.authors {
- +    if let Some(authors) =3D &info.authors {
-          for author in authors {
- -            modinfo.emit("author", &author);
- +            modinfo.emit("author", author);
-          }
-      }
- -    if let Some(description) =3D info.description {
- -        modinfo.emit("description", &description);
- +    if let Some(description) =3D &info.description {
- +        modinfo.emit("description", description);
-      }
-      modinfo.emit("license", &info.license);
- -    if let Some(aliases) =3D info.alias {
- +    if let Some(aliases) =3D &info.alias {
-          for alias in aliases {
- -            modinfo.emit("alias", &alias);
- +            modinfo.emit("alias", alias);
-          }
-      }
- -    if let Some(firmware) =3D info.firmware {
- +    if let Some(firmware) =3D &info.firmware {
-          for fw in firmware {
- -            modinfo.emit("firmware", &fw);
- +            modinfo.emit("firmware", fw);
-          }
-      }
- -    if let Some(imports) =3D info.imports_ns {
-++    if let Some(imports) =3D &info.imports_ns {
-+         for ns in imports {
-+             modinfo.emit("import_ns", &ns);
-+         }
-+     }
- =20
-      // Built-in modules also export the `file` modinfo string.
-      let file =3D
-
---kgnqphnahpvonngh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkHKs4ACgkQj4D7WH0S
-/k6OgQgAlcauM7xGKbpjm5qIev+NmA2vRTzzTK4tqT2HQAgD4WBmMXX/Uu3xfBE8
-lgPxMkxCPbx7zwLtLEZQG4yT4gcizoXBuC8K0zc3Oft5Eqjd1q9f/FAWGGJbxwtR
-TunQpOyK8A3G1WX1gjS7y5PodMpSt1T743LhLZlemtQPNQKA3IsU1i1dKY0lTAeD
-ibjxpuf4Eog/4DCIQ2VTVEVRZd35U2bS6USYNn6hvkwWJHiJvv44zfYfwCpZn/sw
-YKCcS/2x/WQ2QfKtHHKhCiQAi2Z1yW0YOiqTKCJXTm1Q64TOLrLHBukF7A34S7U4
-yxZcp0HQUBS8AxdF4N2RMOScOJb4Tg==
-=fDE6
------END PGP SIGNATURE-----
-
---kgnqphnahpvonngh--
+Mimi
