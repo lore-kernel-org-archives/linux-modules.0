@@ -1,194 +1,196 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020081.outbound.protection.outlook.com [52.101.196.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2105E154BE2
-	for <linux-modules@vger.kernel.org>; Sun,  2 Nov 2025 15:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762098198; cv=none; b=oPSTrKx4iNQBtGxsz09/DtP1g+cVKp+wTuOGv3qpkTaCSNZnvF4CgGO3NMUIJ0UuT+mF1y2NXhaytb/ic3pjdiuDjE+gq5yLxHOddJ9j1exBv8viczqMb6HY5/wx0v4Qu/9B7mrolefx3hPYGLMqXouuwKq6aUS3DoS75qNwcPc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762098198; c=relaxed/simple;
-	bh=z+74uzTwOyQM+smLB/z8SPLxSH3L8uwlQ61epXaQDqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a8WbB4iDNsCVjay4248ZibVX5NV3+ARfeCNS2HtXG4CNzSG3LW3HNtxK0WYqam+oCZn2L2eFZwujXkUf50/+DcQ0wG4Gq1nJPyAYdDGMEbOKsrmJU+y+wH+EhYEKXyqNfLAg9f19y4z/Bxo+3DJQ6eZd4jNdY2og2vjhuRTQe4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=W5/mo3jc; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="W5/mo3jc"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-340c39ee02dso952341a91.1
-        for <linux-modules@vger.kernel.org>; Sun, 02 Nov 2025 07:43:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762098195; x=1762702995; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XR4hLMCuTJEX4w71czl1e00xwifRRggH9ZtmKhZRHec=;
-        b=W5/mo3jcV+LLYgNuvlgcKBT/U2DkWk0B4bUxXDKaDSbrVNkK5NKOwxwiWgiJ5CtCJr
-         PaiNZkYcZtOkrxMFS63oUHO+0qASyjqxoIo7QP7H+/SX0eSY2eO8kpfzPZlPrSR3oeb0
-         9Dl4L2Vne59kpwaC+XYSuIfhGdXQOucIrVB0wwX14HjcnyjNGfNykofC2rRumFBe3NDR
-         tC7+jl13DrjNpaBgfB7YJEoXjhQ/yxKSKzmhhU2riamNSikfuecsEKE8gl9Dj9MrUol2
-         VyAh9RZdPHCq5C737qxQ8LII1i48RK9Jx1BRp0fUyAdJj81w71rnCmIK1mx6KMqebtop
-         XySw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762098195; x=1762702995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XR4hLMCuTJEX4w71czl1e00xwifRRggH9ZtmKhZRHec=;
-        b=ZrRagV9EeTQV5V4ABFYkThFjoWcEuMHe0XVZ6f48l+jfgkkL6lVeWfqcHPL2u3Oq/F
-         XEBPqcyFkzBX/8wAxWf0kkYWsdMX4upzKX2BD51o98GsrOBqyTxy0bWJS7lKkfAM4LrN
-         Ruc6WwrYxpL+w82cApYGql+Tm5me/YHczpnDEPlqLepmbb/Op2eMciJSfbJG/QEHQf+3
-         Chi4o9UmbRgOyNEN5Vxoyrci0U1aA4tBVHLkx0IAi7gy0kEHODHbW7OH5O62W874UuLG
-         9SDIPDw+l7IVfL6EOzrZg2mRuIeTM3nm+mvh8nN9UgNWels9gwE7Z6TgvJElBD9OFR4X
-         cu5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUdbBwxqQImg7Y6lXGXfuLeBywcHs/cyRKxpUHHiFz7FNtMkD6326p3d9CDeqnmbEHnlQDTSXUvlaxZzeoh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOzZlnlBuIGKvfM1t2BWc72B2wCOToW42guoMtIDWAAMUY0d+i
-	SgEouHF1MzTHG9F03zQPbRIFyTUP7fIYNV0e/gvmePC2dInLp1+iIjCROr/lwA4Ht5KNFe9d0hf
-	QpluXGH4FxgNPf1zOvJ7xVP2yOe9YMM7bg7ooxsI+
-X-Gm-Gg: ASbGncsK1xYwwi3L13H4942IojhFKn8udfK9iCO0pjQmqDAG93P91/VFFIDfcq3cApd
-	PZXrkpN+MTmjDdQ6dk2dN6tMkKMqgkUzCdqBWzlbFkPkWrxbUajeYPUD5qYQM5IGVRv1UJU64kh
-	fWZNwlXH0Bxc2Evt7+WzZNYnGcw3ihjN+s0GMkSEtK9rNqrNR+6Ry9l3FBGe3fGWKCYzA02pi9+
-	C1Sd12GSUekaHWaYFVcEWy/RK2U16roKnTaOCgTaHTzfMUaTobepZwe0eUH
-X-Google-Smtp-Source: AGHT+IH+gdQyYqpCRFbM6fBI2tvP8h9njQCEvK/Ytm9+WC6sCBHRr/IlfFcCz6CZrkFk8ifrfaRZlu6u7GUboUGzPBM=
-X-Received: by 2002:a17:90b:5628:b0:32e:a54a:be4a with SMTP id
- 98e67ed59e1d1-34082fc6369mr10716770a91.2.1762098195358; Sun, 02 Nov 2025
- 07:43:15 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C313B2A0;
+	Sun,  2 Nov 2025 18:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.81
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762107804; cv=fail; b=qTvD7oHuQq27svlHOjsAMNUvMpIa2BEK1sBKUDvo6nZAc2zWOxJWqx/u/wG+Y7sfQ7ohTFqrAonE3P2RvehafMVUHIHmeFn10f5/PiU01NT0tqikcnpcA8MbfjKNH6QdoeRlH/xB3pdS/Qi3D9wILlG+LPnRQqyeIAFm+/ymlrw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762107804; c=relaxed/simple;
+	bh=SLshKaQ9XaJw2RE/D9RjtElUQU8VNrONsoM3p2mxKCA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=QHuTIRnwHQuPaxZiA/wsCwDK5n5NQ3RUF01gqOPGWjbWbVqZXD+2WUrszQJ18huy5RqF1O9rGKxtpFdFtMF8hbmeFzKuIHc0MvscChRqV9BDzrLxQvc6B0Qh1W2emKwBJS/OqYzVDLWH49+wUlH5dhE02n/yy8F5j5fTq0nvvRI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PAumqTuMinQvh7K+ImJFN+m6ijumqJuSfCwYespKRpyyVdq+vyXcvSrXw2dgE5RR/Nq0phxMs6YL6lqf8zolBe5Lrl7+LFAbCTkNc0+5DQ0P1LRy1dmkjxq+l8XqybYLEtdsMcPqXWEH1wWKvJ36k3BuUH/+K2WFt/4IxO88h9FwopS5KtR2HAeUDzV7u0CXK3F67vVB7ZcTm8lBrmcwBEET1FZ3E6Ly3VdUtzQDpiSOWVi8mvpR3cIzoboVtU96bMnBKRs6KMko19aGYwGxkTSEU0UveiRMRMj1cwiaYCK05viViL+8iMA7sTreiWVW6VZ8JyY92qnpCuatVVtEGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aVluQ+oBLxKEO67OrYfnFGiyyqhN+f3YqJdNbEHILZk=;
+ b=ZQ+0iIDWpVnOl8KKguaNrgDD7wQCGLbjyZyqF6oV+rTADzXzSrXBwwecnSIoVBVwUwfTjAkJc4ve7e/prZwwo3M2gKSX7076dqaXJWptqFWHHziVcWmbyxs+N/32aZM3q2EhuAHX/i1Q1OA2WEfaX6IIXrfWYn+3TcqsScJALUveV58eQLcp1gZVBoQiMuVWPmtUtXuR4pvgsRQQsneRPzYqegfNxsg2yNnSqMcQCGGKrbwt3JIIm6VbWbiFouABSvTySAwTB4HJU2NOHOdasa4Lvx3FKH2Y7/90mdAhBy4mR8dNDWjeDU/IbrlTpgQFrV24V7/Qom/Ptc1DIXnCDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
+ by CW1P123MB8286.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:25c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Sun, 2 Nov
+ 2025 18:23:18 +0000
+Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::de8e:2e4f:6c6:f3bf%5]) with mapi id 15.20.9275.013; Sun, 2 Nov 2025
+ 18:23:16 +0000
+Date: Sun, 2 Nov 2025 13:23:13 -0500
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Petr Pavlu <petr.pavlu@suse.com>
+Subject: Re: [PATCH 2/2] module: Simplify warning on positive returns from
+ module_init()
+Message-ID: <tgktmvprrmokcfdjww3xttwnvilqvue3tqpae2w556uggltr6q@e5u7e2w4ztbz>
+References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
+ <20251013-module-warn-ret-v1-2-ab65b41af01f@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251013-module-warn-ret-v1-2-ab65b41af01f@intel.com>
+X-ClientProxiedBy: BN0PR07CA0011.namprd07.prod.outlook.com
+ (2603:10b6:408:141::32) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:70::10)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250928030358.3873311-1-coxu@redhat.com> <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com> <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-In-Reply-To: <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 2 Nov 2025 10:43:04 -0500
-X-Gm-Features: AWmQ_bkhQmp1JdfxKhTFwi5MkVou1XmV320Ca5zT8aVFM_Vs-ciEtv2q9tc7P2M
-Message-ID: <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file
- to access decompressed kernel module
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|CW1P123MB8286:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c530535-3260-4d0a-a8ca-08de1a3ce460
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RWtuR2lvZWVOREFYblZDZnJNbE1sQnlkcExrOHpGZmhmOWdCWWw4SzZkaG9T?=
+ =?utf-8?B?dWVma3ByRWYrZDhWT01mblR1ZGxvUW5DY205MllEUFBVWnIvOUswVHU5bHFm?=
+ =?utf-8?B?M3pFWFJhNUJ4cGFBd1FZYW9oaWNwaDQ0VnFvUlVjcU5NWnFNR2RJM0pQeU9G?=
+ =?utf-8?B?Y01weHdFMzAyWS9NRWVBdTROOCsyL1FOUHFoOGF2S2xVRmI3VWYvRXNvS0Z4?=
+ =?utf-8?B?Zkp3Y1E1Wk96cVFPbkpCZE9hRG9jZDlMQmdDUS9MOWM3NDRxejJyVUVCU1Na?=
+ =?utf-8?B?OE1FUXdJY2lrVDhGQlJsT1BWTjFuMzRWR09Vdm4wSkVVWGRwYU5VUCt3MjFJ?=
+ =?utf-8?B?Ti8wS1lZd0FMVlpHMGo0WG1La2FRMGVwcGI4S2tGd1NGc1hkSVNjVm9qR3kx?=
+ =?utf-8?B?RCtCd2xMNlgzYS81TnVqT0xmTlRkZTZSV01DUU1RekUwdDZHZmNjMDM2VlB3?=
+ =?utf-8?B?amxtYjB1UmRINmNaSlJjRFVqK3FxT3E4SENPTE5yMmdwKzFRZ1A3WDQxNHVM?=
+ =?utf-8?B?SlhTTUkvMkxlcDQ1Y3B0RDlqcFZzM1dEcS9lSmpDd3FWbWFWTytJMUhDME1l?=
+ =?utf-8?B?WG5oYy9DcWxGRXlMUyt2RXRzYWlONWxuYXR0S1pXU1ZTbEltRWJYeEQ3RVQy?=
+ =?utf-8?B?ellRZ1dQa056SnBiZ0N2eWRvWjFtZnU2N2tWS0R1Z0tVT0tPc2QrV0xGTmMv?=
+ =?utf-8?B?dnFCZ3JtMjFzWm9hWE5YSGUyM3JSdmJDUU9VZVpDaDBIUDFBZVFlU1htVGxl?=
+ =?utf-8?B?L29XTmRWaHd4N2JoajE0cUJKUmRqMGNOWDdBb1did3Yva1FhYzlIemNGLzJm?=
+ =?utf-8?B?Q3VITHkzb0IycW9XSURVNitSSjVnQXVVUGV1MlhVSVRpd3RGMnVwM3Y1enV5?=
+ =?utf-8?B?Qmg0Nmc0SWFJZ2JUSnN6RGdPSXRUUkorUXYyNnhWUWN6SmRVT0I1WjJ5MjUy?=
+ =?utf-8?B?dHV6WnJ0WHRnTXpMQjdmRjNrQ3dFOFRLZHhvZVJvOExGVTdxR2VvZkNRQ2tp?=
+ =?utf-8?B?OE5zdjdRSHVKWjZUaVlHVEpHNTFXUTk2SUQzbnFwL0U0eEdyeGlnYmlodDRM?=
+ =?utf-8?B?Q3UvU3dxWFVHR1F6c1RYc3ZjaUp5SUF0VnQ3RDFHb3IvOHphbm1BSXBGUnFx?=
+ =?utf-8?B?aGp0cTRpRms2VzlQNFdoREFVTE5kb0tJSnlNNWJJWmNIcXJ1WVZuQXV1UWpG?=
+ =?utf-8?B?REdrSzJGU2g2N01hMGF1b1RLK0RqaGtjZWh4UG5xZjVtOFozY0ovZEJiVDc1?=
+ =?utf-8?B?TngrbnAzT1FEUGxMSTFENTVsaGFRQm9wYXFiNldOaWNkNGZBMXI0VEc0WE5B?=
+ =?utf-8?B?UkpyU25vMGtsVCtzZUhpTG1FazFLV0ZFbGxQSG5FQXRxMGRWemNKemhianA1?=
+ =?utf-8?B?VnlobWZRenJ6b0krUW56S1p6ZFBhS0MwM1R5dXUwN010RUJGZTExd1lEYW5U?=
+ =?utf-8?B?S0xNYU81YVFBWDJYb0xzZ2I2UlZVOCt4MnIvS05pWURpaUtBRm1PakJpd2p4?=
+ =?utf-8?B?WE95ZFdLeHRoZWNSWVF3c3pVS3dSUzBtSVEySndIY3FMUC9mbHEwbW5Hc2RF?=
+ =?utf-8?B?cmV4OGdTQWxkeE83c0c1Z0E3WU5FZFE5eHV0Vjk3NFFJNmpyMm1DRGg1UWF3?=
+ =?utf-8?B?d3dvNkNkRWJZMXdqR2JUdWo0dTBaWks4VnlSZTZubG9GeFo5N0VDdkVtREla?=
+ =?utf-8?B?NWUrOXFZMitvMHlJaWM0bEU0WFBKaVRaaHBCT28wejR0NTVscmdMa21JcXc1?=
+ =?utf-8?B?VEdwSFQrVktielRJMTEwYXVvSUtNL3FhVjdvS0g4SHR2Q01SYVhQRUhmM2J5?=
+ =?utf-8?B?cmZhTjhsS2JORGI3eHBBS0V2NURwZXVyVHBlZ05HZExsSjZZR0NWUXVLbGdU?=
+ =?utf-8?B?TGVZcmpnSWtqdWV3T0xVTHdWUCtPMFlqSDIxd1JCU3h4NXhMdHhFY21rUVZo?=
+ =?utf-8?Q?9dMvfXK0EIzh1tIV1WGhWzXRcIpaoIly?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?RGVvRTI3Yml6Q2NhL0lidDZPUHhJYWtRWml2UW9pQVJKanNwcWZXdWdsMW4z?=
+ =?utf-8?B?T2ZjOHB5MDdXYXVnd1dORnpnUFBrbnhLSm5nOVJkQldzOFRPMno4TkpSSWg2?=
+ =?utf-8?B?cUVVQzEySWEyeEpkN3BtMFRUdWYxc2JCdU1TeVVzaVRPK3kzVHBMWE9TWVlU?=
+ =?utf-8?B?bVJNclJaRXlCd2U5eHMrTWhYUWtGT2tuK283QnV5dkY3NWZaSE1FdDlSQTVC?=
+ =?utf-8?B?NDEwYnlzUXgrdEpXSlQzTnNtdWtWN0dueGRWQmZLZzJUVHVOMy9pd3Bla1BO?=
+ =?utf-8?B?c2lCSzU2VGFlSGxqaWthNm9leGhlV0gxa25OOEpsTitqZDkyRUtKQmwwTFNN?=
+ =?utf-8?B?WEEvREpWU2h6T1lTdHI3S2VlczJNbUZibWR0b250SUNFRThZbXA4TjlIY3dC?=
+ =?utf-8?B?QS9vN29ON3p6clpuWUU5MTc2cEJCcWxDVUFMMkc5dVFqUjVJcG9jUS9QSzhN?=
+ =?utf-8?B?R2RPaW14MkVZNnFLQ09xYWkrQzVMdjRwNy9uRlhXa3F0aXRSd2xjUzN3d2VZ?=
+ =?utf-8?B?NE5qNzZEQUZsWEVOOEFVSVB4SEJPVnpTeWhUOUwzQW95dllaZ1pIaWlKTkFn?=
+ =?utf-8?B?OVduWDFneGVxdXhiOTBqcmR2bk1YZC80UXFYQmd6aXBUTmIreG1SNEZnVE9X?=
+ =?utf-8?B?SnJOajVENm1PdTNvRlZYNm9tSDB4YWJiK0Jrd0R4T0ZGSFMzR0E2VWNBV3Ns?=
+ =?utf-8?B?TW43bHdnNTh4dTJnVVFCWWxjV3pkSXVXMFNqSzliak9qYTlVbkdhVFpwZTFJ?=
+ =?utf-8?B?b2FIMHIzckQvR0EveGgzaWFqVUFZZldjUXVwS1Q2OWRUK2VUUzdwbXFwdCta?=
+ =?utf-8?B?QkF3ZStHb091VnZRc3lEK1JZL2dYSWVqSjhrNXhyQjFuYkdyS2FVVUl1VEFa?=
+ =?utf-8?B?Q3BscitMdVJPZVZOWXFYMER2WDN2ZG11eW1tOURqTkFtakplRlJzSjV3cEhC?=
+ =?utf-8?B?ZlNIRzhRT1NaVmlXbnZLb0g0Z0RTWjludXpDc2JSQWN1Tjd6RmIxYU1vR285?=
+ =?utf-8?B?eVlBN3IxMlRuWjZyUERPa2FKZnZhUVhTRjJFWExlTEpDSjJSaEwvQnVyTDdu?=
+ =?utf-8?B?Q05FOTM1bTJONXJmdXl1SFcrc210MElaSjI1WDY1bzFxZkd5V1pOek83ajkw?=
+ =?utf-8?B?TU0yU055NktNWVJZZWVocVNmSEk0dzFnaTV3eGtQSmZxaFBVUDBGQ3F2a0l6?=
+ =?utf-8?B?a0pONmw3RWt0eFIzUGY5RlVFNVhPQm5PQVBBaCtnSVZlVTMzaWxJRFFxTUN4?=
+ =?utf-8?B?bGJCU0dJM3JtL2xDMm43TUNNck50elF6NlFHNzNObG5tZ0s0QXM2dFVTaW41?=
+ =?utf-8?B?VWtLMXEzUklQcWdPRHREN2Q3T2d1QU9yQWRoYjJ3eEFiQ2VKR1RGcVl4dXZH?=
+ =?utf-8?B?Q0cvM3pNRStpSCtIaWJtejU2Y0duZFFxTVoxeGVJNVkxbjlBLzBIY2dZNkNI?=
+ =?utf-8?B?ZllydGozbm0vcXRlY2RESVcxaVlobEFWeWhtYVZaSDFLaDFYMUEwQkJQV05M?=
+ =?utf-8?B?NU5xTUlETlp3ZTJlOWM5amtQbWhXVnJRU2ppVVdVMVBVTEtUREdGdlFNak5N?=
+ =?utf-8?B?QnEzcGRPSk1QZnZDRmtlbzdnMDF2M25JK1VwSGJKRkorTVFCVnZ5Tk9LK2Fq?=
+ =?utf-8?B?SElKSHNRSlRGd0xOMVEwV0cvOWQ2a1E1YjVCczYvcWRFTEJ6UUFpRlR4bktT?=
+ =?utf-8?B?Sy9SRzdCMXpFaXZQNUhqZTl3RFlTTVdLK0lMWFNoYisxdUUzcFpJK3FlNVRp?=
+ =?utf-8?B?K0FqclJFVmd5ZDlWSCtmbDJJM3Z1UkE4MnV5SzNhN0ZqR2dNNGo2UUt3OEg1?=
+ =?utf-8?B?b2lESEdxWlJFSGIyZ0JMbVUvbVh5THlHMHdCanhBSlBJZktoZzNsekhnbnJC?=
+ =?utf-8?B?VW1MRkZxNGExTlM4ZlJuR3Z3WGk2dlJUSkNzckdZYzVMd0FDcWE4NnFKN0t2?=
+ =?utf-8?B?Zk0yaDdXekdBOVAyZmU2VXU3Rkx4SzJPcHpsTUtTUmViUG1WWWFMZFVIUWZh?=
+ =?utf-8?B?T3IrclFVcWh3Q3podHpLN3F4SzlYSktpUitWb3N1eUtMYlIwMm9vRHM1NFJD?=
+ =?utf-8?B?Q3pHZWZ4TGJVTFdySEpMM2JmMFdvdzFaWHhWWjY5OHBvMEROZEs4Q3oxN3hl?=
+ =?utf-8?Q?OfIQfbHe4kFIZtMg0szuRmoMk?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c530535-3260-4d0a-a8ca-08de1a3ce460
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2025 18:23:16.7824
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xP+PvpP/j/c7ZD/+mAm49/GbVQx9ruG74c117c6rIqzq8fEOKmlwmb58MYagwTyTqWwJp5BRj9hfVnEOY7F9AQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P123MB8286
 
-On Sun, Nov 2, 2025 at 10:06=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
-> > On Fri, Oct 31, 2025 at 3:41=E2=80=AFAM Coiby Xu <coxu@redhat.com> wrot=
-e:
-> > >
-> > > Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPR=
-ESS)
-> > > is enabled, IMA has no way to verify the appended module signature as=
- it
-> > > can't decompress the module.
-> > >
-> > > Define a new LSM hook security_kernel_module_read_file which will be
-> > > called after kernel module decompression is done so IMA can access th=
-e
-> > > decompressed kernel module to verify the appended signature.
-> > >
-> > > Since IMA can access both xattr and appended kernel module signature
-> > > with the new LSM hook, it no longer uses the security_kernel_post_rea=
-d_file
-> > > LSM hook for kernel module loading.
-> > >
-> > > Before enabling in-kernel module decompression, a kernel module in
-> > > initramfs can still be loaded with ima_policy=3Dsecure_boot. So adjus=
-t the
-> > > kernel module rule in secure_boot policy to allow either an IMA
-> > > signature OR an appended signature i.e. to use
-> > > "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
-> > >
-> > > Reported-by: Karel Srot <ksrot@redhat.com>
-> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> > > ---
-> > > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311-1-=
-coxu@redhat.com/
-> > >
-> > >  include/linux/lsm_hook_defs.h       |  2 ++
-> > >  include/linux/security.h            |  7 +++++++
-> > >  kernel/module/main.c                | 10 +++++++++-
-> > >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++++
-> > >  security/integrity/ima/ima_policy.c |  2 +-
-> > >  security/security.c                 | 17 +++++++++++++++++
-> > >  6 files changed, 62 insertions(+), 2 deletions(-)
-> >
-> > We don't really need a new LSM hook for this do we?  Can't we just
-> > define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
-> > another call to security_kernel_post_read_file() after the module is
-> > unpacked?  Something like the snippet below ...
->
-> Yes, this is similar to my suggestion based on defining multiple enumerat=
-ions:
-> READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MODUL=
-E.
-> With this solution, IMA would need to make an exception in the post kerne=
-l
-> module read for the READING_COMPRESSED_MODULE case, since the kernel modu=
-le has
-> not yet been decompressed.
->
-> Coiby suggested further simplification by moving the call later.  At whic=
-h point
-> either there is or isn't an appended signature for non-compressed and
-> decompressed kernel modules.
->
-> As long as you don't have a problem calling the security_kernel_post_read=
-_file()
-> hook again, could we move the call later and pass READING_MODULE_UNCOMPRE=
-SSED?
+On Mon, Oct 13, 2025 at 09:26:24AM -0700, Lucas De Marchi wrote:
+> It should now be rare to trigger this warning - it doesn't need to be so
+> verbose. Make it follow the usual style in the module loading code.
+> 
+> For the same reason, drop the dump_stack().
+> 
+> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+> ---
+>  kernel/module/main.c | 10 +++-------
+>  1 file changed, 3 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 74ff87b13c517..31c54bf6df4b2 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3045,13 +3045,9 @@ static noinline int do_init_module(struct module *mod)
+>  		}
+>  		goto fail_free_freeinit;
+>  	}
+> -	if (ret > 0) {
+> -		pr_warn("%s: '%s'->init suspiciously returned %d, it should "
+> -			"follow 0/-E convention\n"
+> -			"%s: loading module anyway...\n",
+> -			__func__, mod->name, ret, __func__);
+> -		dump_stack();
+> -	}
+> +	if (ret > 0)
+> +		pr_warn("%s: init suspiciously returned %d, it should follow 0/-E convention\n",
+> +			mod->name, ret);
+>  
+>  	/* Now it's a first class citizen! */
+>  	mod->state = MODULE_STATE_LIVE;
+> 
+> -- 
+> 2.51.0
+> 
+> 
 
-It isn't clear from these comments if you are talking about moving
-only the second security_kernel_post_read_file() call that was
-proposed for init_module_from_file() to later in the function, leaving
-the call in kernel_read_file() intact, or something else?
+Fair enough. Looks good to me.
 
-I think we want to leave the hook calls in kernel_read_file() intact,
-in which case I'm not certain what advantage there is in moving the
-security_kernel_post_read_file() call to a location where it is called
-in init_module_from_file() regardless of if the module is compressed
-or not.  In the uncompressed case you are calling the hook twice for
-no real benefit?  It may be helpful to submit a patch with your
-proposal as a patch can be worth a thousand words ;)
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index c66b26184936..f127000d2e0a 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file *f,=
- const ch
-> > ar __user * uargs, int
-> >                        mod_stat_add_long(len, &invalid_decompress_bytes=
-);
-> >                        return err;
-> >                }
-> > +
-> > +               err =3D security_kernel_post_read_file(f,
-> > +                                                    (char *)info.hdr, =
-info.len,
-> > +                                                    READING_MODULE_DEC=
-OMPRESS);
-> > +               if (err) {
-> > +                       mod_stat_inc(&failed_kreads);
-> > +                       return err;
-> > +               }
-> >        } else {
-> >                info.hdr =3D buf;
-> >                info.len =3D len;
->
-> =3D=3D defer security_kernel_post_read_file() call to here =3D=3D
-
---=20
-paul-moore.com
+-- 
+Aaron Tomlin
