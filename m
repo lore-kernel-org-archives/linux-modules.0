@@ -1,192 +1,355 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020089.outbound.protection.outlook.com [52.101.196.89])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6D33B2A0;
-	Sun,  2 Nov 2025 18:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762107840; cv=fail; b=E+IR08EXEtbBVU09uZ2qEi3eGMEFIVyv6njAxE22e2BGmqe1XKUYENqCVQqOPz3q5A7SNUmeSyGy1HjGdPn3i8dUGgzZ3voM5DQljuz8diUNCeQ8OezycuEv8DU6BOC8AL9CjvAqg9oMsaDz6e+r4gCgpefzjuePF7ZeeKfsikg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762107840; c=relaxed/simple;
-	bh=qILR4hz+S+9ALWqC72yYZD2WNFewpNYFbDrst8XmNYY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YuHv47apX6RTP/5bWJ8qPYBxfQiSMcj0uPAYpxzqGgq9rN7HVWSqbaxCq4C/L8F6GcwjTsdrIyHgYt/owZpntEfyhD81RPc63CbuLBaYjhov+/Z8HMM/EwwWNWy5zMkfwYUw/RzcOGPLg/ZhvprqWXT40HzjHuJt7lBbSmGwnBY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.196.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xbcBkvTvHOA4EdgDHe9N5PGfBZ0JK9S5RG8IbE/eIsZ1meNHQSkWitNqAjsvhCO7teMTbylAsIuOnnEAhvL2ldre1IQbvsY3zBAkdnTu+BX7SJr6v3HyQ/AuYBvAzwYs3GQl+ocTvMYBlAQKccB4ytO4YrL1hrx80ZR7gXbCNiscmyO+kVEe1IypZSXFOATtEGAiNLKRU8Yv5QJBJWQGA0qkDg3NvQcCFGxG6Ih8BaKNyhLs9ymT8Y3YBAQd+zPS9cr00U5VSu9EaseH5IqI6fDi0/Gda1U5GbHHPxw7qEWnqjG8cU9IlVuBRku6aXhItb+fJKys+apJ+YT0Z7pCCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3krqG5WqXss9KDr9bUY6ulxVyEKdUCk/5Mgbj3a6IoA=;
- b=i0euAQ9w+oLK1QeedE9gxIbK6BPr/HFEV8v+kWso2qV4aRx3ejmlQIeKZkKZymHNa9yRkuzFVYPu/XviOPpA9H85Q2/p0Lgmdb108sBDsdPf/+UDw/I5hHQxSCXeFysDWdvs7R8QCnn9yzvCZIZU4nEG1Bz6YG/rUZu69YO6waWcYk3/DG5DayP9iEAXWzo4WrIeR2+J2dQcmi+92ZV+6NAAxiXfu9+5DU5Ivegn228JTxuBgU3+m9Z2jWxXBTeD2B+hUQ/URc4iEe+8pdn7QxCvsoSl8FL663tBJXF4hjLuqU+EGL2k4HwpSqk5hRbsZNK3ePh52n6hxfpPXXLMVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by CW1P123MB8286.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:25c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.16; Sun, 2 Nov
- 2025 18:23:56 +0000
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%5]) with mapi id 15.20.9275.013; Sun, 2 Nov 2025
- 18:23:56 +0000
-Date: Sun, 2 Nov 2025 13:23:53 -0500
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: Re: [PATCH 1/2] module: Override -EEXISTS module return
-Message-ID: <k4oueia5w5hjzusdcmhvimvpjcpjq4blhwc37y2w2luagdywaq@vrnknn6gbydo>
-References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
- <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
-X-ClientProxiedBy: BN9P222CA0015.NAMP222.PROD.OUTLOOK.COM
- (2603:10b6:408:10c::20) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:70::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6138F9EC;
+	Sun,  2 Nov 2025 21:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762118352; cv=none; b=UJZpgMcRvLeTj4yD+WJVcy16tA002OnY85o+tbBSFKbbJOoP1n9P2TBqjdIpUuWhfdf0uEj1Pm1uhTAvr1AN7pewMdSdQsXnbl9aZT0dRXYwXx3Ineem+cA5GZwk7ObDsgmINgOjzK5iOazUaIFsRzRO9S/jb3j05WGBNJf6W/s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762118352; c=relaxed/simple;
+	bh=34GY/EryjbHN5WFBiDBi5ct9qc1OmmQhzgRsTlTXYwM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=lHBO3vystXEZ+Vf89fr+oG5226K3IwShtYHkt7U1S46e3i65KPKzDkHeqs0/qnSyQs50ZWPxAZRQEvchroz9QyL74MVUyMIu+DOW4ZEyuj7hZj+F0bCim7aN6OwlCAr/fnDRtshv5tYao4eEaHrdqBM2l3muOxC2cBPMrr7+PLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NccM65dZ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NccM65dZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CD4C4CEF7;
+	Sun,  2 Nov 2025 21:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762118350;
+	bh=34GY/EryjbHN5WFBiDBi5ct9qc1OmmQhzgRsTlTXYwM=;
+	h=Date:From:Subject:Reply-To:To:Cc:References:In-Reply-To:From;
+	b=NccM65dZGg165dqrDeKOS5CWrDvwh1qIrgVMIYtXEXEZnEVqGZtEOqMuMrUWP/wCv
+	 HloZm/gSD6DJWVQtc/bcM1bcKh8cG4SsXI+5qPJcUA71w08r5EMU86UYCoMnX31j+E
+	 bHMWIcalk2XIDKsSMx8UgbyYVRLTtYPdZC/rpKgqAttoWF1Roy8h0yGCkvtSk8POct
+	 vacwRG/YQKRWOij0QW1NudOMumMonsEBWbbvjI4VjJnePDGSz2QIB+dp3j4Kh9dXUX
+	 uEuvCt8lRiDezYp+jMGh5rCohNr/B41G6JjMkcPtTr+1y2TnKbgew55ka2ewlLLHVz
+	 s4sIcgo3t5IWA==
+Message-ID: <e74f2c14-2642-4d5c-a076-adee8506d2c5@kernel.org>
+Date: Sun, 2 Nov 2025 22:19:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|CW1P123MB8286:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64cfbf56-d4a4-4ea8-48db-08de1a3cfc47
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aU4vMTNabDgrOGl0QTBISVp6Vk13am9Gem1YbHJrUmNHSUN0dFBneXgzbGR1?=
- =?utf-8?B?RGxaWVpHU0hTY1hyYzJVMG5aT2x2ei8xblZQanhPNzJsTzIrV1dwelBoRUVp?=
- =?utf-8?B?ZUxXOWVrbHhHWWNET1FTZTBzUGhxck01TS8zRUpjRmp6bW9sWFk2ZHp2ZjJV?=
- =?utf-8?B?MGFoRVoyOCtoT3l4WCs5YVU2eUFMa3BRK29RZzMzUzJNc0d5TDl0aXVjSXlY?=
- =?utf-8?B?cWN0WEdSMFNvZ1FXWFRHeVhxZnpiMlRiNUhQL2ErcTltR2MyZUpyY29XK0xQ?=
- =?utf-8?B?UWg0NkJjeTE1OEgwc05xelVBVDJEYVNCd2FZVWkxUFMvUXp1T0FibWppOTRJ?=
- =?utf-8?B?ZHBDRzBtRGNxZjNPQmZCeUNqTDhNOFM5dVU4SDdLRWhzckRJMFBWeU9IWmRx?=
- =?utf-8?B?L1FSc09NUDhqSENIOFBCdC82WjRSUVMvQkRhclFYVm9IY3FtZVoyKzgzWEZP?=
- =?utf-8?B?MW1hMDBreHdOSHhXS1NWR280UlJscXFub2xVM1Fvc0Z0WTM4SEc5SFVQbjNI?=
- =?utf-8?B?VUwwLzNDUXREVFBTaFBmcjFWeThHQloyYVVueWtzczZtMjlMQXRxNFNKTWJj?=
- =?utf-8?B?aFdSMlVOc2ZwdGZ6ZVBSaXMrSkpHU3FVdk5tdDdMVUtoTFJKdDFoeXVXbnJ3?=
- =?utf-8?B?amRrZ0F6Lzd0dy9uRTJwOS9IcmN4cmsxVW04VGprNm5DenhLWXBFanA0Sm53?=
- =?utf-8?B?L1pWY0Z4NWxuWmpKVFpBN3dGb2U2eVRkQjZjQVp6K0hpRjNzdDhZSnpGc2VC?=
- =?utf-8?B?UHVMWGtrcld4Z2pSSlFGQVl4Y3I0L3E3b29KUWpOMjNqWXk4Q1k2cjUyQVNV?=
- =?utf-8?B?eEVhQmJsU25pZXZRRUdOMDQ4QnVidEQ1ZlJXMFRoZ3RqTUIzMjdydmlFUHhv?=
- =?utf-8?B?S3FBWHJLdGl6RDlhT1FnN0tUT0ZGUCtQd0ZoNTd6UWNWWFUvQWdPbkJKK2Q3?=
- =?utf-8?B?YjNOWDdlNWNNb25nK3BPWUd5TWdmMmF0bUIvc0Y4a2g5TFVFckxaeFIyMFpx?=
- =?utf-8?B?QTlKZjVta2dZR3plbEJWZFExY3lxNmthZzVVUXJZYSs4M2xWWUZnTGVPT3hK?=
- =?utf-8?B?VUFNT3NaYVA1YWQ5NU95SFNsaElTV2ZLQmcxbkRDdnBoRXJVTHV5OFp1cGxB?=
- =?utf-8?B?YU8yZnA4UXBqUnUrcWtOOVM2bXNMWS84eHhFaERBeGNZL0hHT3owRFRpR2lC?=
- =?utf-8?B?TDd5cmZKRHVVUzVPRVZkNitMdVl4ZUVoUjQ4VW9uRThNNUExSHlpcE1uWkRu?=
- =?utf-8?B?c3VybUZ4TUM0cERqVGxZZTZyejZkODBLeGN3NFFuOWw3eXJuSmJPbmFDRFhu?=
- =?utf-8?B?ZVdPbllRNk1MRVRzNXo3Ykc1SGF4ZlB5UHhMZXVxSHRpRmhISWNVWVRqRktS?=
- =?utf-8?B?eDJRUmJsTXRCNVZJTExmMFM4RG51dDA3Z0RoT3BJL2dYd01mVk1MLzc5eTZt?=
- =?utf-8?B?UEdLSElLN21hNVd0Q3R2VW93b09lS1JrVEE4U2lpNmxOa0VpQjkvOTVTSndz?=
- =?utf-8?B?bmVyYUlWU29VZHA0Yk1WNzlqVkZyRmlMR1FENkYxNnVKcmN5K1dnYUNOaDVZ?=
- =?utf-8?B?SnpEZi9MMVhLTGFpWEFIc0s3cVBRMzNGS3cxRkZabTNIdzhEdkd1QWxZbzR2?=
- =?utf-8?B?NzZLcnB4RUtMdUpqTDlxOW83UWtxeGRsSG9LdE0ycWlzbkdpT0N0RWNGZGU1?=
- =?utf-8?B?aWhYWGJGelVaWkdOd0VwQ2xWMytVcytvclpXTDdrN3c4aGpkYzZBWXk3VTVj?=
- =?utf-8?B?ZUNLWUV4elNIM0lQUitiUmQ0b0tId2JYZDFFbUVqU2JPZEd6K2Y1YkNXMDN3?=
- =?utf-8?B?R0dpcHJxamVOR0o1SGZWblBTUVV3KzQzWHlyUTh4YnVZV2lmaVBpMFJLKzF1?=
- =?utf-8?B?OE5JL1kvZnExZXl6Vnc1ZDZITm5BNE1aaENKbGl6Sm9zQ1VmNTdWaWFubnZO?=
- =?utf-8?Q?2MC0dXI7/mnOA9YjTUjn85UveuTMZe0I?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z05zTlprYkdtRlR0NGE1VG45WnhuUjZPYlpHK0NwMHhZc1Bhc2owaUFQNHNX?=
- =?utf-8?B?RnlKMi9TYit0dkxmb1VSYlY2VXA1VlYrNDlIN0R2OW9oM29GajRwM2xXZVhH?=
- =?utf-8?B?Y21LcXFKOFkrQzdkWjdDdU5kRXlodFkzQXQyVUVUQ2JBT0pvUkZDckZRV2lB?=
- =?utf-8?B?cVVOWXhUb3Q1TWttbGhpcjdFYWpwOWpjdmdmKzBFOGJNK2drUEZ1N1RPZkty?=
- =?utf-8?B?RFR5Zko4clkrdHZzS01wRm1idDdLL1VJZ3BWSU1RNDdmZmxSc2cvWWMyMFZk?=
- =?utf-8?B?SGY4a01GblVKL2g4V0JXSW50ZitJdWU5S2NaMmFZRWNUS3pxT25nZFZXeksw?=
- =?utf-8?B?TFo1OHk2M2NNQlBlck1GUm1nc0dsRnhwUmhZdzVrTGN2TFEzY2tGOHJpWkxl?=
- =?utf-8?B?VVgzQ3FXVTFPb3ZNQXdYSFZoKytmOEc2QXZYWWQ3R2ttcjFNWGtKc0N6aVcx?=
- =?utf-8?B?QW5jN0ZIY0NpdzNJOFpzdXFtWm1idmJlS3FqUHFVUFcxYVN0ekN5OEZCMFNa?=
- =?utf-8?B?SDByWTFEWUs1UlZxaGQyQWR1NkxRM3dVUUU5TlVzb2t4Wkhudkd4WldTRFhW?=
- =?utf-8?B?MWlLSnhGZ1k3eEcvL0hKWFQ2N05mem5qWERZMFVlNzN2bE45UDJKREJ4V1dY?=
- =?utf-8?B?dWlvaFRlSWpkYk9RbGNveUJCRFNsT3A1aTRPdVZ4Vk10ckJlZmV3aGt0V2RK?=
- =?utf-8?B?cGFEME84aWZ5RVA4K2gwcjlXb1NWcUtoOUtxR3hQQnZ6V3pvNldaOER5ckpp?=
- =?utf-8?B?Umk2YVludDNPZGdjcWhCYStuWDRZUVJ5WWpubkRicVlTZUpXQ29adHZlSlZX?=
- =?utf-8?B?bG5Sd09PNkVBRzExVlhNUE5vT01zUVFxTEdDUDNIUTNZTlg2WVRZTzFJZzRC?=
- =?utf-8?B?c3ZhN0hPRUdkNWZWSjBtOWxuTGV5bC9rcjlWN0xlWWRqUkxScUN5dllCNFYr?=
- =?utf-8?B?YVduNk16VVVOK091aDNia3NHbXdSYnNBeUIrL0JSdFVUK3Q4cHc1RWI0YVJl?=
- =?utf-8?B?b0xWU0JnNDRXNXg5S3Y3MVZ2eVFMLzdoMzVEeWlxaXlnUm9OaGdkYTI3UnY1?=
- =?utf-8?B?VEdFb1RjelpsYTdncnRSUzg0c2RUNnEvNm1aZklLQW4zeHFBTUVkdmxRRGli?=
- =?utf-8?B?Rjd2aUVRZFZjdE1YUU9Tejh5WHFHODFKc3EyQ1ZQWmUxWXBHbTJzSURSaDN3?=
- =?utf-8?B?WkllWEROaHlBS0xQanROTFZTQWpYZVc3NVY2MEM3ZDZDSDZzQnMyN0ovbERI?=
- =?utf-8?B?MTJrR2ZQZFc0OU4rNUZMcERnNEJHZHVoZVZzOFgzbTRTdGxoc1IzbWZpaXFF?=
- =?utf-8?B?cWRZcE5UY0ZRZFhnT1RacWhZdW5hczR3TitKcG15SmhIMnBpQ1Z4VmIzWEYr?=
- =?utf-8?B?d3dMRmNEanBscVk0OVJWdFNNK0FtNG9wZ3Vka3k4b3BkaHZ2cW5vZ0g0UDAx?=
- =?utf-8?B?bmhXVHh6bGw3K0hKYk54YklBc0dvclFlcnpONFB0MUVsVFFUK3pZeW1aSjdh?=
- =?utf-8?B?eEFPVmw4UzNmQWtFR0FCWjNkU1R2SzY0ZUIzTXpQaEhmYmlJY0crOFJPK3FR?=
- =?utf-8?B?YmFwY0M1enRHZzlFdzI2bFo0YWp3dUdrbVR6R3dWeG5DaGJxcTMrSzlOU1dV?=
- =?utf-8?B?eDhtRXlyWUszdWtzZGQyTGNGOVhsLzdCZ3J2Y3p1ejJldVhuNk9paTZIN3Zm?=
- =?utf-8?B?Tm9oWjlXd2dDWXZtY1NEWGVYT0NPcHN3K0pjN0dlN05xdnJNVTBjUGNzRnk5?=
- =?utf-8?B?Zjh3ZDdFc3F2MmlySlNzcklUUE1hZU01cWVqemxrWm0zTUpXZHo5ZnFsSk4x?=
- =?utf-8?B?WXNuQWtpc3IyMG1XY2RIamoyNGpRc2NieGg5NU1xK2l2L1NLZS9IWjc5dDNk?=
- =?utf-8?B?aWhadHZZVkpSekgxS1pVMXNVOWhXQ3FOUWgzNjgzUEp4MVdPajk5dk45UGtO?=
- =?utf-8?B?QTdWMlI0QXNzVC9NTTlsQWdCQ3RONGplbWg5VVl3S0hVQTJCWHlXV0dyRm16?=
- =?utf-8?B?ZHdaVTJCaWJHT2FhalhCVmNRL3FheEplQ0pST3diMHZoaUFXOGhvTXRJQ0lN?=
- =?utf-8?B?QjZVdG4wYU9GRFAxb2R0WWNiRXFwQUxNc1VUK0xjVkFyTHNaUkxqRGkrZHVL?=
- =?utf-8?Q?d+GLwwenMnzoleSr/bLpCThUI?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64cfbf56-d4a4-4ea8-48db-08de1a3cfc47
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2025 18:23:56.7107
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K02IWPcJaqPCIEeItybD1AQieEddzclMbUw28v6yH30Jaft+Pra44SqjDODpNPo/nElh00tO39213viovXQbSA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P123MB8286
+User-Agent: Mozilla Thunderbird
+From: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH v18 0/7] rust: extend `module!` macro with integer
+ parameter support
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Miguel Ojeda
+ <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>,
+ Nicolas Schier <nicolas.schier@linux.dev>,
+ Michal Wilczynski <m.wilczynski@samsung.com>,
+ Trevor Gross <tmgross@umich.edu>, Adam Bratschi-Kaye <ark.email@gmail.com>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
+ <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>,
+ Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ linux-modules@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+ linux-next@vger.kernel.org
+References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
+ <49af6d76-bcb7-4343-8903-390040e2c49b@kernel.org>
+ <er7h34im2rk627usnvbre3clqvsx3uzev7kboy33pd7oac747c@nvtl7y2mmdde>
+Content-Language: en-US
+Organization: kernel.org
+In-Reply-To: <er7h34im2rk627usnvbre3clqvsx3uzev7kboy33pd7oac747c@nvtl7y2mmdde>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 13, 2025 at 09:26:23AM -0700, Lucas De Marchi wrote:
-> The -EEXIST errno is reserved by the module loading functionality. When
-> userspace calls [f]init_module(), it expects a -EEXIST to mean that the
-> module is already loaded in the kernel. If module_init() returns it,
-> that is not true anymore.
+On 02/11/2025 10.56, Uwe Kleine-KÃ¶nig wrote:
+> Hello Daniel,
 > 
-> Add a warning and override the return code to workaround modules
-> currently returning the wrong code. It's expected that they eventually
-> migrate to a better suited error.
+> [Adding Stephen and linux-next to Cc]
 > 
-> Closes: https://lore.kernel.org/all/aKLzsAX14ybEjHfJ@orbyte.nwl.cc/
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-> ---
->  kernel/module/main.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> On Sat, Nov 01, 2025 at 10:39:08PM +0100, Daniel Gomez wrote:
+>> On 24/09/2025 14.39, Andreas Hindborg wrote:
+>>> Extend the `module!` macro with support module parameters. Also add some
+>>> string to integer parsing functions.
+>>>
+>>> Based on the original module parameter support by Miguel [1],
+>>> later extended and generalized by Adam for more types [2][3].
+>>> Originally tracked at [4].
+>>>
+>>> Link: https://github.com/Rust-for-Linux/linux/pull/7 [1]
+>>> Link: https://github.com/Rust-for-Linux/linux/pull/82 [2]
+>>> Link: https://github.com/Rust-for-Linux/linux/pull/87 [3]
+>>> Link: https://github.com/Rust-for-Linux/linux/issues/11 [4]
+>>> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+>>
+>> I tested this series with rust_minimal module. They LGTM,
+>>
+>> Tested-by: Daniel Gomez <da.gomez@samsung.com>
+>>
+>> The patches did not apply cleanly to v6.18-rc3, at least not when using b4.
+>> However, when applying them to the base commit and then rebasing onto v6.18-rc3,
+>> I didn't see any conflicts.
 > 
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index c66b261849362..74ff87b13c517 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3038,6 +3038,11 @@ static noinline int do_init_module(struct module *mod)
->  	if (mod->init != NULL)
->  		ret = do_one_initcall(mod->init);
->  	if (ret < 0) {
-> +		if (ret == -EEXIST) {
-> +			pr_warn("%s: init suspiciously returned -EEXIST: Overriding with -EBUSY\n",
-> +				mod->name);
-> +			ret = -EBUSY;
-> +		}
->  		goto fail_free_freeinit;
->  	}
->  	if (ret > 0) {
+> I don't know how you use b4, but
 > 
-> -- 
-> 2.51.0
+> 	git checkout v6.18-rc3
+> 	b4 am -3 49af6d76-bcb7-4343-8903-390040e2c49b@kernel.org
+> 	git am -3 ./v18_20250924_a_hindborg_rust_extend_module_macro_with_integer_parameter_support.mbx
 > 
-> 
+> works fine on my end. Using `-3` should have the same effect as applying
+> the series on top of the original base and rebase it.
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Right, that's what I did but manually. I didn't know about that argument :).
 
--- 
-Aaron Tomlin
+> 
+> 	git fetch https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git rebase/20250924-module-params-v3-v18-0-bf512c35d910@kernel.org
+> 	git range-diff FETCH_HEAD...HEAD
+> 
+> confirms that.
+>  
+>> I've created a temporary branch with this rebase here:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/log/?h=rebase/20250924-module-params-v3-v18-0-bf512c35d910@kernel.org
+>>
+>> Can you take a look when you can? I'll merge this shortly after checking with
+>> Uwe, as there are some minor conflicts with his tree.
+>>
+>> + Uwe
+>>
+>> These are the conflicts I see when merging the patch series from Michal [1]
+>> (Introduce import_ns support for Rust). I believe these are trivial things that
+>> we will get notified from linux-next merging. But let me know what you think as
+>> you have requested in that thread.
+>>
+>> [1] Link: https://lore.kernel.org/all/20251028-pwm_fixes-v1-0-25a532d31998@samsung.com/
+> 
+> Yeah, I expect that Stephen will highlight the conflicts, but I prefer
+> to not be surprised by that and consider linux-next more a fallback
+> security net that I don't want to use. I like it to be the other way
+> round and tell Stephen about conflicts to expect :-)
+
+Please Stephen, check the proposed changes below. I plan to merge this series in
+modules' tree and it will conflict with Uwe's tree on rust/macros/module.rs file.
+
+> 
+>> ...
+>> Applying: rust: macros: Add support for 'imports_ns' to module!
+>> Patch failed at 0008 rust: macros: Add support for 'imports_ns' to module!
+>> error: patch failed: rust/macros/module.rs:98
+>> error: rust/macros/module.rs: patch does not apply
+>> hint: Use 'git am --show-current-patch=diff' to see the failed patch
+>> hint: When you have resolved this problem, run "git am --continue".
+>> hint: If you prefer to skip this patch, run "git am --skip" instead.
+>> hint: To restore the original branch and stop patching, run "git am --abort".
+>> hint: Disable this message with "git config set advice.mergeConflict false"
+>>
+>> git am --show-current-patch=diff
+> 
+> That command shows the patch to apply, but not the conflict, let alone
+> your resolution.
+> 
+>> ---
+>>  rust/macros/module.rs | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>> ---
+>>  rust/macros/module.rs | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+>> index 5ee54a00c0b65699596e660b2d4d60e64be2a50c..408cd115487514c8be79724d901c676435696376 100644
+>> --- a/rust/macros/module.rs
+>> +++ b/rust/macros/module.rs
+>> @@ -98,6 +98,7 @@ struct ModuleInfo {
+>>      description: Option<String>,
+>>      alias: Option<Vec<String>>,
+>>      firmware: Option<Vec<String>>,
+>> +    imports_ns: Option<Vec<String>>,
+>>  }
+> 
+> So here the addition of `params` is missing.
+> 
+>> [...]
+> 
+> When I merge your branch mentioned above with my pwm/for-next and
+> resolve the merge conflicts, the resolution looks as follows. The only
+> non-trivial thing is that
+> 
+> 	if let Some(imports) = info.imports_ns {
+> 
+> now needs a & for `info`.
+
+Correct.
+
+In case it's necessary, I've merged your changes into the modules's -next
+branch and attach the diff for you and Stephen. Not sure which order trees are
+taken/merged, though.
+
+> 
+> Best regards
+> Uwe
+> 
+> diff --cc rust/macros/module.rs
+> index d62e9c1e2a89,408cd1154875..000000000000
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@@ -205,50 -98,7 +205,51 @@@ struct ModuleInfo 
+>       description: Option<String>,
+>       alias: Option<Vec<String>>,
+>       firmware: Option<Vec<String>>,
+> +     imports_ns: Option<Vec<String>>,
+>  +    params: Option<Vec<Parameter>>,
+>  +}
+>  +
+>  +#[derive(Debug)]
+>  +struct Parameter {
+>  +    name: String,
+>  +    ptype: String,
+>  +    default: String,
+>  +    description: String,
+>  +}
+>  +
+>  +fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
+>  +    let params = expect_group(it);
+>  +    assert_eq!(params.delimiter(), Delimiter::Brace);
+>  +    let mut it = params.stream().into_iter();
+>  +    let mut parsed = Vec::new();
+>  +
+>  +    loop {
+>  +        let param_name = match it.next() {
+>  +            Some(TokenTree::Ident(ident)) => ident.to_string(),
+>  +            Some(_) => panic!("Expected Ident or end"),
+>  +            None => break,
+>  +        };
+>  +
+>  +        assert_eq!(expect_punct(&mut it), ':');
+>  +        let param_type = expect_ident(&mut it);
+>  +        let group = expect_group(&mut it);
+>  +        assert_eq!(group.delimiter(), Delimiter::Brace);
+>  +        assert_eq!(expect_punct(&mut it), ',');
+>  +
+>  +        let mut param_it = group.stream().into_iter();
+>  +        let param_default = expect_param_default(&mut param_it);
+>  +        let param_description = expect_string_field(&mut param_it, "description");
+>  +        expect_end(&mut param_it);
+>  +
+>  +        parsed.push(Parameter {
+>  +            name: param_name,
+>  +            ptype: param_type,
+>  +            default: param_default,
+>  +            description: param_description,
+>  +        })
+>  +    }
+>  +
+>  +    parsed
+>   }
+>   
+>   impl ModuleInfo {
+> @@@ -263,7 -113,7 +264,8 @@@
+>               "license",
+>               "alias",
+>               "firmware",
+> +             "imports_ns",
+>  +            "params",
+>           ];
+>           const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
+>           let mut seen_keys = Vec::new();
+> @@@ -289,7 -139,7 +291,8 @@@
+>                   "license" => info.license = expect_string_ascii(it),
+>                   "alias" => info.alias = Some(expect_string_array(it)),
+>                   "firmware" => info.firmware = Some(expect_string_array(it)),
+> +                 "imports_ns" => info.imports_ns = Some(expect_string_array(it)),
+>  +                "params" => info.params = Some(expect_params(it)),
+>                   _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
+>               }
+>   
+> @@@ -329,25 -179,30 +332,30 @@@ pub(crate) fn module(ts: TokenStream) -
+>       // Rust does not allow hyphens in identifiers, use underscore instead.
+>       let ident = info.name.replace('-', "_");
+>       let mut modinfo = ModInfoBuilder::new(ident.as_ref());
+>  -    if let Some(authors) = info.authors {
+>  +    if let Some(authors) = &info.authors {
+>           for author in authors {
+>  -            modinfo.emit("author", &author);
+>  +            modinfo.emit("author", author);
+>           }
+>       }
+>  -    if let Some(description) = info.description {
+>  -        modinfo.emit("description", &description);
+>  +    if let Some(description) = &info.description {
+>  +        modinfo.emit("description", description);
+>       }
+>       modinfo.emit("license", &info.license);
+>  -    if let Some(aliases) = info.alias {
+>  +    if let Some(aliases) = &info.alias {
+>           for alias in aliases {
+>  -            modinfo.emit("alias", &alias);
+>  +            modinfo.emit("alias", alias);
+>           }
+>       }
+>  -    if let Some(firmware) = info.firmware {
+>  +    if let Some(firmware) = &info.firmware {
+>           for fw in firmware {
+>  -            modinfo.emit("firmware", &fw);
+>  +            modinfo.emit("firmware", fw);
+>           }
+>       }
+>  -    if let Some(imports) = info.imports_ns {
+> ++    if let Some(imports) = &info.imports_ns {
+> +         for ns in imports {
+> +             modinfo.emit("import_ns", &ns);
+> +         }
+> +     }
+>   
+>       // Built-in modules also export the `file` modinfo string.
+>       let file =
+
+The resolution looks good to me.
+
+As I applied Michal's patch on top of Andreas changes, it looks like this on
+my side:
+
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index d62e9c1e2a89..5bf0a487de50 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -206,6 +206,7 @@ struct ModuleInfo {
+     alias: Option<Vec<String>>,
+     firmware: Option<Vec<String>>,
+     params: Option<Vec<Parameter>>,
++    imports_ns: Option<Vec<String>>,
+ }
+
+ #[derive(Debug)]
+@@ -264,6 +265,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+             "alias",
+             "firmware",
+             "params",
++            "imports_ns",
+         ];
+         const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
+         let mut seen_keys = Vec::new();
+@@ -290,6 +292,7 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+                 "alias" => info.alias = Some(expect_string_array(it)),
+                 "firmware" => info.firmware = Some(expect_string_array(it)),
+                 "params" => info.params = Some(expect_params(it)),
++                "imports_ns" => info.imports_ns = Some(expect_string_array(it)),
+                 _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
+             }
+
+@@ -348,6 +351,11 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+             modinfo.emit("firmware", fw);
+         }
+     }
++    if let Some(imports) = &info.imports_ns {
++        for ns in imports {
++            modinfo.emit("import_ns", &ns);
++        }
++    }
+
+     // Built-in modules also export the `file` modinfo string.
+     let file =
