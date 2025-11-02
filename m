@@ -1,95 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E516D1B7F4;
-	Sat,  1 Nov 2025 22:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DACD27E;
+	Sun,  2 Nov 2025 06:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762035056; cv=none; b=epnmiZg/Lhspm9qlvf0uNqVrXiDSW3auc43znFXFtxJxsTvKCMJqBwfiDjxpCt+F70j8PieqFdETSlLTNtXepHjHk/xmFxSVhaISSgrc0WLpNZQXFJNQu2KenoeMIPX/6NUb5kEJbtRKnkKDe7MMv/NCF0E8p3p4TN0X5Ujx82s=
+	t=1762063504; cv=none; b=jo68sy1Lx70bMUXYCagmVq6uYvYDbZNoaqV3YSUSwujeaWJ5qaaoMV08rl+8YaMilPJVIgFbTola65atXD+hbReP7kYPnaxQUdnfkRmpP8o4b31qvWLXeGBPvGhXWW55n8f4Wgq6MVMC6D3V8tevmMLo3yAe0JI59gjjDGUK9Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762035056; c=relaxed/simple;
-	bh=oluztI+MIemez6HwqODfyI/rPIrU07A52mxjJ/pFf8Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eErf/WHtSX3vd29uhuChyPGOxB0ip5fRxj0f5ECIKq0JgjYOXh1vglQealI22VKCSohVVaDiJJNA4e3Yw2liaGRwS/T5/bMGBSvmSHt6dLD2cCYCg1mnL/xuf0uiCv/wdJeGblkx85ivyUyBjg1OoAcV6hRSk2bUaPNzcIm0j80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uWtuQJ7l; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762063504; c=relaxed/simple;
+	bh=BPArzU6AOY4GRsJQX8Dd8FtZPCg3WUfDh1+BzfqSFUg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FkmWXOSr9MWsZO9Tb4r9PJsdN73q9Ebqvzowsq0nUvzpcdoIVaQ79F3IYOO1OG1XjgcMmlxKzj1zGGdGC1o5I6gcG/ItIL2VQT7WDBdznkdc8bHhRvNxDFuVcGVyLxrDICMJ4zjOwaXboXPru6WSu7/qVCTzX+KzQMtgH6ut+7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BiZPn62W; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uWtuQJ7l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C19C4CEF1;
-	Sat,  1 Nov 2025 22:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762035055;
-	bh=oluztI+MIemez6HwqODfyI/rPIrU07A52mxjJ/pFf8Q=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uWtuQJ7lC7ZOsCjZ+xKQd42045lUa3wn/Usaokuh/KYyWXEKy1Auo3yRdUOfNR5SC
-	 Bz5vDHORskHb1hgmOIG7Tr1+RNzMXrU+P1wdFdrIzksmgZbvpheivc+OuVUP5G+O76
-	 oXYJgRcuCnkaqaHeojeFI1gVe/yL43B0y7vaho86JKNU5IXzwTMfG2vc1+2Txc/Nic
-	 F7NftRx8uuoNWtcxI9RmIqKzC9xXtJTJ7p8RNG05S+32HQpDsJdAQWFK9puc8tEKVH
-	 5S2eBtGx19+KRtDMkFvFHtqNha0aXX0TM5yXDoRtAOMxgFRQO9O4QkCZbFXER6Wqkq
-	 HpLxPGszmhuwA==
-Message-ID: <3bf85718-8cea-4982-944d-b4c7a4faaf8f@kernel.org>
-Date: Sat, 1 Nov 2025 23:10:51 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BiZPn62W"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=fvjyzbQzdsv1hb697CTbc+u5e8GxrxFWkjAICgSBNfQ=; b=BiZPn62W3LqoSbwC3vJQ5Jyf68
+	LmHMSRp7rNoQgVAg5NnXR04V2peU7fYrc7EB3001ObH6o3LNcqsm6OUCjh7Lf2pthTkBjYPAaAKe9
+	frreq8lKz3zOdz7koT6ZMyEKatTQo/fi+rodolzB8zC2k4PmHz1twFsRmEkrAZvBwwrkhqVWGcOeq
+	l2jhC2VJAFRYxKGWl3dYVg+JvJA051xT0xf2jy0lCPhB8uD4fL8mrKCAT2rUZ0pZwMjtfB5RMQ8NN
+	At4sajFGz9MarHEyfOmvDE1LgRvhOxjOLQk5476M9hn++/OcV/FN97ug168XoHnMs7rmuK1xjm742
+	mQkCJzQg==;
+Received: from [50.53.43.113] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vFRD0-00000008KWE-49xc;
+	Sun, 02 Nov 2025 06:04:59 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	linux-doc@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-modules@vger.kernel.org
+Subject: [PATCH] docs: ABI: sysfs-module: update modules taint flags
+Date: Sat,  1 Nov 2025 23:04:57 -0700
+Message-ID: <20251102060458.517911-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH] module: Only declare set_module_sig_enforced when
- CONFIG_MODULE_SIG=y
-To: Coiby Xu <coxu@redhat.com>, linux-modules@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org, kernel test robot <lkp@intel.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>,
- "open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
-References: <20251031080949.2001716-1-coxu@redhat.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20251031080949.2001716-1-coxu@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 31/10/2025 09.09, Coiby Xu wrote:
-> Currently, set_module_sig_enforced is declared as long as CONFIG_MODULES
-> is enabled. This can lead to a linking error if
-> set_module_sig_enforced is called with CONFIG_MODULE_SIG=n,
-> 
->     ld: security/integrity/ima/ima_appraise.o: in function `ima_appraise_measurement':
->     security/integrity/ima/ima_appraise.c:587:(.text+0xbbb): undefined reference to `set_module_sig_enforced'
+Add missing taint flags for loadable modules, as pointed out by
+Petr Pavlu [1].
 
-It's a bit unclear whether you're referring to a current upstream issue (which I
-couldn't find as of -rc3), or if this is just a hypothetical scenario.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+[1] https://lore.kernel.org/all/c58152f1-0fbe-4f50-bb61-e2f4c0584025@suse.com/
+---
+Cc: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Daniel Gomez <da.gomez@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-modules@vger.kernel.org
+---
+ Documentation/ABI/testing/sysfs-module |    2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
-> So only declare set_module_sig_enforced when CONFIG_MODULE_SIG is
-> enabled.
-
-I only see cases where code has a safeguard like in
-security/integrity/ima/ima_efi.c:71
-
-		if (IS_ENABLED(CONFIG_MODULE_SIG))
-			set_module_sig_enforced();
-
-> 
-> Note this issue hasn't caused a real problem because all current callers
-> of set_module_sig_enforced e.g. security/integrity/ima/ima_efi.c
-> depend on CONFIG_MODULE_SIG=y.
-
-I think the correct term we should use here is runtime safeguard. The code does
-not actually depend on that config, nor is there any dep in Kconfig.
-
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202510030029.VRKgik99-lkp@intel.com/
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-
-
-Just minor nits regarding the commit message structure. This change should allow
-us to remove the safeguard from users of set_module_sig_enforced().
-
-
-Other than that, LGTM,
-
-Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+--- linux-next-20251031.orig/Documentation/ABI/testing/sysfs-module
++++ linux-next-20251031/Documentation/ABI/testing/sysfs-module
+@@ -59,6 +59,8 @@ Description:	Module taint flags:
+ 			F   force-loaded module
+ 			C   staging driver module
+ 			E   unsigned module
++			K   livepatch module
++			N   in-kernel test module
+ 			==  =====================
+ 
+ What:		/sys/module/grant_table/parameters/free_per_iteration
