@@ -1,126 +1,93 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B162EC09A;
-	Mon,  3 Nov 2025 11:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC6630CDA8;
+	Mon,  3 Nov 2025 14:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762169875; cv=none; b=SPYtmqAGDB60wzPts1dQ/uh864hLOK/AmnLpeUphxlNc8vsS5s3LP0WdYs6KtUBK63LvAnz1447RsfIHJmYW0xjxyY3W0wsPjN4nqKyx/UTieNqkZwISaj7JO3fpFn/uUJ6umAwRjXTkhYkcpLo1zjavgBflUF74EC4GpUAyswQ=
+	t=1762181247; cv=none; b=cKzy98fXJZd29Q+sOlwVgwwy2QS1P3S3piKod2bZd21GmRdpVGdRO/rkMHuueIRHZObbjKWyaEX7VC4a++TmSvZaUuhTYigUDhm82QkDIXb3Yo6/vvyBvBywodYf2O1YDcsfyPhBGxWSvWDynlu2CqqyTYcCH7EnJVzDuwlR9OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762169875; c=relaxed/simple;
-	bh=vrPKqaZjzgyI32CVu2lhvSvdm+nTkP6PkJwjnq4gOwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NxlxF5ueRsc7cM3rhAQbsVu2kidy0lf/rE31Ra2YytnsLDvsArgF+X+pdUJlJqBxj2ayR74uUi4PuCwq5WoEPlD4ZuBegT0FlXz+dYVHaDm2g5VZbpDLwwlkwzp8mSqoaybE7WrcztrZ/zj2vWwq9xnqa224Df0iEralNNqIRIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mlHLs6EO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Elx285e/; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1762181247; c=relaxed/simple;
+	bh=wEqUiWqzTn3qz8K/m/T7ZHGVJLtzuiTUO3H/8VHuy4M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nH8ayaivYncpoEsHfjL3PVmo4mL3YWVI2o2M0B25zuqT03WEGLtbEZGzYos/9itB83G/Cchuob43/CygXVozc5nBspY6JbU0RR4UiR4t7s0rqAjKSDlEeCLcWmAV77OGSm4vyJoeLghGPdfuOYXmDu1Gc6dkXlrTfMmBaBOGNzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLOofRBg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mlHLs6EO";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Elx285e/"
-Date: Mon, 3 Nov 2025 12:37:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762169871;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H+A2kkbWSNB6iE8g8vdOv3L2psTaC6itGdNeIXfXL90=;
-	b=mlHLs6EObUfkFh7qYD9lH1Ss1YVLuQiFxFdiH1Lv2+o4iTO2n3J8ya5TVcqbKG2YBHFfkk
-	aJX1shswrFnHZj3OAvXc6uC1i5A+Pilyzuy16k1OR8gTWD50l9vL7RXoguQeXof+T4mvV6
-	ntwpnDu1J2etMY32Se0UmfQNB6kt9FKcuv09QbxJHbF7s908dLUVIait5Q04VcE6mYBzCV
-	WhLr/V1j15FKEOnelg5G/QUYukxBJHdVyJUun8bUhjXditJmklh802wK4vug+Acoxm1NDT
-	m8SuDkQsXYvKEGN8UZLZEbOgVZhMQwkUQ+DFg/qigRVIrRrcRMSn606rxPgP+g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762169871;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H+A2kkbWSNB6iE8g8vdOv3L2psTaC6itGdNeIXfXL90=;
-	b=Elx285e/b/noOw36t17lLI3pQaCnNp6mR1yLsnhf/TZE2qRVJUVXjhtRpc+8wRz56p4zj1
-	iKlXIAeae1daY+Bw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: bp@alien8.de, da.gomez@samsung.com, dave.hansen@linux.intel.com,
-	hpa@zytor.com, jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, mcgrof@kernel.org, mingo@redhat.com,
-	paulmck@kernel.org, peterz@infradead.org, petr.pavlu@suse.com,
-	samitolvanen@google.com, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [PATCH v3 22/28] x86: Use RCU in all users of __module_address().
-Message-ID: <20251103113750.qam3KIkT@linutronix.de>
-References: <20250108090457.512198-23-bigeasy@linutronix.de>
- <20251103110835.1dca378c.michal.pecio@gmail.com>
- <20251103103434.D6m23Iud@linutronix.de>
- <20251103113907.4e647f33.michal.pecio@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLOofRBg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74552C4CEE7;
+	Mon,  3 Nov 2025 14:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762181247;
+	bh=wEqUiWqzTn3qz8K/m/T7ZHGVJLtzuiTUO3H/8VHuy4M=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gLOofRBgysxna9uxvfoCaDQSiaA4GPKntTz9Vyhb8eoWE9LSRiuSNsMcdOySc+HPm
+	 X5M7AyMh2VsUfuI+2K1EKsR3ouH04TMqLaZpsmdC7+MOzVDXycuKj2BevSsfwkBzZP
+	 C/qRSO+iBvxoMRgWcZZY6QtZlf81GlB/L9p9EKGZqeXmolio9oY/+ji70KQmZpdLCu
+	 0mk96GkjUGd5IVVrXp7bzMVxS2SUgQS24lrkVDBWrgbyg3KAPgJGpKy29rJGve5PQf
+	 ro9giLqf6UwJMEPrXETo5yZdLn6lmaCR4SU4CEekeawWeh1/ZmGmryvmZft/7Ab1oy
+	 Wpg5ZgLB5zhMA==
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
+ Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+ Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Trevor Gross <tmgross@umich.edu>, 
+ Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+ Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ linux-modules@vger.kernel.org
+In-Reply-To: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
+References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
+Subject: Re: [PATCH v18 0/7] rust: extend `module!` macro with integer
+ parameter support
+Message-Id: <176218124220.2602452.14511624048623385037.b4-ty@kernel.org>
+Date: Mon, 03 Nov 2025 15:47:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251103113907.4e647f33.michal.pecio@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-On 2025-11-03 11:39:07 [+0100], Michal Pecio wrote:
-> Sorry, I forgot to include the link. There is also a similar warning
-> regarding __this_cpu_read(). Pretty sure the kernel is SMP.
+
+On Wed, 24 Sep 2025 14:39:23 +0200, Andreas Hindborg wrote:
+> Extend the `module!` macro with support module parameters. Also add some
+> string to integer parsing functions.
 > 
-> https://bbs.archlinux.org/viewtopic.php?id=309960
+> Based on the original module parameter support by Miguel [1],
+> later extended and generalized by Adam for more types [2][3].
+> Originally tracked at [4].
+> 
+> [...]
 
-The stack trace is a bit odd. The compressed version is:
-| BUG: using smp_processor_id() in preemptible [00000000] code: Xorg/1183
-| caller is in_entry_stack+0x11/0x60
-| CPU: 3 UID: 1000 PID: 1183 Comm: Xorg Tainted: P           OE       6.16.12-hardened1-1-hardened #1 PREEMPT(full)  6edb90a7a07fab33bbee72d6d5ef53ba6eec3b9c
-| Tainted: [P]=PROPRIETARY_MODULE, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-| Hardware name: ASUS All Series/Z97-E, BIOS 0803 02/23/2016
-| Call Trace:
-|  <TASK>
-|  dump_stack_lvl+0x5d/0x80
-|  check_preemption_disabled+0xe5/0xf0
-|  in_entry_stack+0x11/0x60
-|  get_stack_info+0x2c/0x80
-|  stack_access_ok+0x51/0xa0
-|  unwind_next_frame+0x1cb/0x7b0
-|  arch_stack_walk+0xa6/0x110
-|  stack_trace_save+0x4d/0x70
-|  __kfence_alloc+0xb7/0x6f0
-|  __kmalloc_noprof+0x520/0x560
-|  os_alloc_mem+0x108/0x120 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv015295rm+0x34/0x50 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv015297rm+0x2b/0xd0 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv016352rm+0x1c/0x90 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv059298rm+0x65/0xb0 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv054041rm+0x20f/0x360 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv056165rm+0x54/0xd0 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv056096rm+0xa0/0x500 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv015919rm+0x424/0x680 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv054015rm+0x69/0xd0 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv014185rm+0x86/0xa0 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  _nv000652rm+0x5e/0x70 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  rm_kernel_rmapi_op+0x167/0x273 [nvidia 9746d397d5c5bffeb186e829669bb24c0846a4a7]
-|  nvkms_call_rm+0x4c/0x80 [nvidia_modeset 90775ea8a26c5e58b97ef4b3f46eb45efa040eb2]
-|  _nv003168kms+0x42/0x50 [nvidia_modeset 90775ea8a26c5e58b97ef4b3f46eb45efa040eb2]
-|  ? do_syscall_64+0x82/0x8d0
-|  ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
-|  </TASK>
+Applied, thanks!
 
-The last two entries start with a '?' which means it did not originate
-from the "stack unwind" but was laying around while passing through.
-I would expect the last two entries to be there without the '?' because
-userland (as in X here) enters the kernel via a proper syscall entry
-which should be part of the stack strace.
+[1/7] rust: sync: add `SetOnce`
+      commit: 821fe7bf16c57d690f4f92997f4e51abb93e0347
+[2/7] rust: str: add radix prefixed integer parsing functions
+      commit: 51d9ee90ea9060be240830eb28f5f117ad00318c
+[3/7] rust: introduce module_param module
+      commit: 0b08fc292842a13aa496413b48c1efb83573b8c6
+[4/7] rust: module: use a reference in macros::module::module
+      commit: 3809d7a89fe550bf4065c04adff6dac610daddad
+[5/7] rust: module: update the module macro with module parameter support
+      commit: 0b24f9740f26ac7ad91ac0f4de27717c14de91bd
+[6/7] rust: samples: add a module parameter to the rust_minimal sample
+      commit: e119c2fe8c78632188f6cdeae620951a7032855a
+[7/7] modules: add rust modules files to MAINTAINERS
+      commit: ee3b8134b2bae848e03e56c090ceca4ae76cee06
 
-Now, get_stack_info() where the warning originates: It starts with a
-check to see if the stack pointer belongs to the current task's stack
-frame which it does not. Then it checks if the task found is the
-currently running task. That it does. So in that case, we must be
-serving an exception (such as an IRQ) because the stack does not belong
-to the current task.  However preemption is not disabled which indicates
-that we do not do this.
-This in turn suggests that nvidia replaced the stack from while entering
-the syscall probably in _nv003168kms() or the binary blob which invokes
-the kernel function does not have a proper ORC entry which leads to a
-wrong turn in the process.
+Best regards,
+-- 
+Daniel Gomez <da.gomez@kernel.org>
 
-So the warning is well deserved.
-
-Sebastian
