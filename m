@@ -1,33 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854CBEEB3;
-	Mon,  3 Nov 2025 09:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D425C2E88AB
+	for <linux-modules@vger.kernel.org>; Mon,  3 Nov 2025 09:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762160731; cv=none; b=CbSb3O++Ws8K6z2+b2HQahCYkyTfjPvww0djLwsna3B+MiW8LIVAQaZ33KNkat30aZTFDoEF2D8gu0W60L8irRL8mQGmG6JjNjHNN+n4Z/+B0dxaD7HAnxKFz1ezTgQYk5iJKq9v2w8S+Zw/oK5tZgQquVYlT/OSc6v4RUwNuEY=
+	t=1762161555; cv=none; b=MD1NBqmZOSG7Fj3liX8z0p4hKPRPRSeSnFtEM1WB+94ZQwXyx796p7+yP/Prz/B2lCq1hoxyk1Vf3aM7HLxArWuonvMpI7GT9buHgctSk2W0kh8vczBfpOFLYELJO2EoCh07sQWMaAodtqTBthLxdYIQjrkBhKnShJVvUMtbr74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762160731; c=relaxed/simple;
-	bh=UUbEsOe4Q4pwT5mEOpKxll+kgknMkwcSq5AQt9/VDPA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KnLvB/uo2c/RvgxTOeGiVEokZq2r2km9PJ0/O5LWdt01ao3cGFovCsRnVu/H2zYHHIYIx5TPwCbIzgY0ToUd3cg7RP3nSXV3iJ7s6ZlSuooM1x2yvCElx7OTx1xwGFOkvq5A8PENcFJ7TOXh5JTVHJMw0nYqlJ9Db0QuaWaK644=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilxhQtZG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762161555; c=relaxed/simple;
+	bh=0Y9caYOqSW11yivpiI46fzV2GqLE4ZF0InC9uXM8/Uc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I4V1XYhIaIaIT6m4d46Rlac9lgyh7nqURnpQbJ4AesKqzJ7gmRvIsB6p+en3X5JHLvh/SnUl9x8pDvZh3ubuzaLBQ6J8Mo/VcMgTUM0bG7THQaH+3M1nfZpbq4weZIi+Qv0ZfIoeFvdfMG2FTQLfnsVvMqTBau1MsQs8BQ+AstM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A4XDX3no; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilxhQtZG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD7BC4CEE7;
-	Mon,  3 Nov 2025 09:05:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762160731;
-	bh=UUbEsOe4Q4pwT5mEOpKxll+kgknMkwcSq5AQt9/VDPA=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=ilxhQtZG2ZzCMz3K1Q7Asn/X9i0LQy6+ZkYWRA1Iv5jJXF8MqToYiHv5O9qTAO/1h
-	 PfHWmJlj2KA8IKwNvbXFuvIZXbJbbsQhDpeBCChU3M0h9x17VVYyweG/va0G+yPA3F
-	 xYa64zXIFeUmVEM+fo16wFH+Nf61X9TPNuywIBHXR0V5Ti0+cgranDoP5zgbl6FzUV
-	 3ZZCMCHtyZbO8k9giJvz7ASwR7jdX58EKpgsqDYsLBRHlJ0cC23pJU1rBcZrbwMER5
-	 Tww096h5svR+/UAVhc/fqEmtg7GIHTYKFSAXegQzrdvH8EBwbS5wOq6+onldiRCCZP
-	 MKWHGlG24hpFw==
-Message-ID: <14a57def-b2da-491b-ad97-19b784d0d594@kernel.org>
-Date: Mon, 3 Nov 2025 10:05:26 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A4XDX3no"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-470ffbf2150so28667045e9.1
+        for <linux-modules@vger.kernel.org>; Mon, 03 Nov 2025 01:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762161551; x=1762766351; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8ynz4s33e0TLs0d6hGvRQqkDSiZ1njMSQRICWUdMFEU=;
+        b=A4XDX3noApDwzL1MuaWiwkzukhdKkVkO3pb3TyJc0whbOiiYMgnE2/F4HG/IcE3JQK
+         kW4Pt3bSbpiLDgRaCJmRVcersuoR5hYRlam7pqJ9Tf7xij0Yk8E8M4FuwgjIC4O9aZxP
+         8WD2Q9H+HufJj14gT66qpDnmYuVGN9VYvf7KxA3/uy0N5jXM6oM+VJDDW+GvuQSjrDAO
+         CB4Ymfyt/5gJfhmOq7HH73uWpPUVRkaCAX/C4nM/pozv4peaUiQlumVs1UXsVDo2htm/
+         M5ZufSct6XdrodB6I0yX/J0SCLgYUYq0cx6LEaGPXMXfFKtrXafW7S/Zc76WmbqIK5qi
+         Geqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762161551; x=1762766351;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ynz4s33e0TLs0d6hGvRQqkDSiZ1njMSQRICWUdMFEU=;
+        b=g5oIYt+tpemO3+JSW+y3I6HLNDDl1TDi1yTGrmi3sKj47lPQiT/EnFoBG5X9o98N0A
+         znwwNPkBLRXP1Vws6b/agjB24A83J4Cj+zubfWqiCZzhnxyruoeWTtRfjIaiEGX5019N
+         qqG7+9N4b4nLxwfpLAQMUhF5hrm26HpX+gsY/c4XnNhoEhvNKCocTra8i5f5TvrX6mi/
+         clVz8WhvJIfMtM6PLh5BgYc6pawfl6rnKUoGoQlGi/Yf8w5rP6AE5f/Ia4APkk5hAFZu
+         wAaju1LAuhCNdx1H3/ciMN3lyWT22tKJwPE9d8W3GC5Vq0Bjwx01ktm4B1/hYIR3R4P6
+         13jA==
+X-Forwarded-Encrypted: i=1; AJvYcCWLVKzR89fAm0wYKMijtOi/VY9B+2dC35gtKSd3qJjaGXlMdjZxyVYERPovL1ytSZnRwZ5+TMVMuGZisPz1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz47XhIJcN8GsSET8p3BGjoD+S1vSGkaZADvmsWJy5ucvdJX9Pj
+	9FXLopFEs+Vr6I98dvBiThfw+uub8MjSQC8gPsGCjxZYbx0Ac+1dkesiw7QpEPzbpaY=
+X-Gm-Gg: ASbGncumjC1ARhooeXOUtjxaDVWXA+p0xQqZTfLRojMLuqUb0n0rxyaHrRjTESlE7uP
+	13Lzfo5aULVzvjtMPlY/qBhhXhcGgVsY98l+UyFq7GcPQlyVrNRN+BNpiBaclJgDG9N89I5+qTF
+	+D80jqVhIcs2ZjoLgZqoxfj2BmX4Oop9HV0W2AGawO0F60u/b3+SGr4bTj1yCqjCHsYmMp0Y0PA
+	Xo3MTsTAIMExA4uJwE/rpzpVkm+sn9qTjkwxIPbcGmIusUidn+uIfpvxekEcG7NUl1jULDyrqGh
+	opneQo+M3Q4ilXn9n3S2VOh33QJoQbAu1SGMbzlkOh77ngWpMJ9Zr2rhmVoFX6TZXYymEV5iSP4
+	Z079ES/YaF6KbMDx0thhgu8XXjwgD1seXbchVW8I7w/0XHsSysB6v1FPh04fdgL/IuV+9ZPwHR2
+	qD22HhCagqBXcbN6E982Qt8g==
+X-Google-Smtp-Source: AGHT+IEWfWVVzQFxN3DAZRcF5k08MxsMc9ZYeQ4H54jSP0UkuFE80X1DOa7SdsC7jiBDXkya412Xcg==
+X-Received: by 2002:a05:600c:64c3:b0:46e:2815:8568 with SMTP id 5b1f17b1804b1-477301041d1mr109894515e9.10.1762161551158;
+        Mon, 03 Nov 2025 01:19:11 -0800 (PST)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429d1061efasm7626939f8f.24.2025.11.03.01.19.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Nov 2025 01:19:10 -0800 (PST)
+Message-ID: <7301b0fa-5463-498f-82a0-f40bfee462ba@suse.com>
+Date: Mon, 3 Nov 2025 10:19:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -35,87 +68,61 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: Hans Verkuil <hverkuil+cisco@kernel.org>
-Subject: Re: [PATCH v2 3/3] module: Add compile-time check for embedded NUL
- characters
-To: Daniel Gomez <da.gomez@kernel.org>, Kees Cook <kees@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>
-Cc: Rusty Russell <rusty@rustcorp.com.au>, Petr Pavlu <petr.pavlu@suse.com>,
+Subject: Re: [PATCH] docs: ABI: sysfs-module: update modules taint flags
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
  Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- Malcolm Priestley <tvboxspy@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil@kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20251010030348.it.784-kees@kernel.org>
- <20251010030610.3032147-3-kees@kernel.org>
- <91866583-037f-4607-b148-4ddf38ffaf51@kernel.org>
- <1c3e9bc8-0d25-46b2-98a3-643157f78b21@kernel.org>
-Content-Language: en-US, nl
-In-Reply-To: <1c3e9bc8-0d25-46b2-98a3-643157f78b21@kernel.org>
+ linux-kernel@vger.kernel.org
+References: <20251102060458.517911-1-rdunlap@infradead.org>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20251102060458.517911-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 03/11/2025 09:58, Daniel Gomez wrote:
-> On 03/11/2025 09.54, Hans Verkuil wrote:
->> On 10/10/2025 05:06, Kees Cook wrote:
->>> Long ago, the kernel module license checks were bypassed by embedding a
->>> NUL character in the MODULE_LICENSE() string[1]. By using a string like
->>> "GPL\0proprietary text", the kernel would only read "GPL" due to C string
->>> termination at the NUL byte, allowing proprietary modules to avoid kernel
->>> tainting and access GPL-only symbols.
->>>
->>> The MODULE_INFO() macro stores these strings in the .modinfo ELF
->>> section, and get_next_modinfo() uses strcmp()-family functions
->>> which stop at the first NUL. This split the embedded string into two
->>> separate .modinfo entries, with only the first part being processed by
->>> license_is_gpl_compatible().
->>>
->>> Add a compile-time check using static_assert that compares the full
->>> string length (sizeof - 1) against __builtin_strlen(), which stops at
->>> the first NUL. If they differ, compilation fails with a clear error
->>> message.
->>>
->>> While this check can still be circumvented by modifying the ELF binary
->>> post-compilation, it prevents accidental embedded NULs and forces
->>> intentional abuse to require deliberate binary manipulation rather than
->>> simple source-level tricks.
->>>
->>> Build tested with test modules containing both valid and invalid license
->>> strings. The check correctly rejects:
->>>
->>>     MODULE_LICENSE("GPL\0proprietary")
->>>
->>> while accepting normal declarations:
->>>
->>>     MODULE_LICENSE("GPL")
->>
->> Who will take this series? I can take the first two media patches and
->> someone else can take this last patch, or I can take all, or someone
->> else can take all patches. The media patches already have my 'Reviewed-by'.
->>
->> Any preferences?
+On 11/2/25 7:04 AM, Randy Dunlap wrote:
+> Add missing taint flags for loadable modules, as pointed out by
+> Petr Pavlu [1].
 > 
-> I will take patch 3 in modules' tree.
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> [1] https://lore.kernel.org/all/c58152f1-0fbe-4f50-bb61-e2f4c0584025@suse.com/
+> ---
 
-OK, then I'll take patches 1 and 2 in the media tree.
+Looks ok to me. I would only move the "[1]" line before the
+"Signed-off-by" tag in the commit message and separate them by an empty
+line. Some tooling might rely on the tags being separately at the end.
+I guess this can be directly adjusted by a maintainer that picks up the
+patch and there is no need to resend it.
 
-Regards,
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
-	Hans
+-- 
+Thanks,
+Petr
 
+> Cc: Petr Pavlu <petr.pavlu@suse.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Daniel Gomez <da.gomez@kernel.org>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: linux-modules@vger.kernel.org
+> ---
+>  Documentation/ABI/testing/sysfs-module |    2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> 
->>
->> Regards,
->>
->> 	Hans
->>
->>>
->>> Link: https://lwn.net/Articles/82305/ [1]
->>> Suggested-by: Rusty Russell <rusty@rustcorp.com.au>
->>> Signed-off-by: Kees Cook <kees@kernel.org>
-> 
-> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+> --- linux-next-20251031.orig/Documentation/ABI/testing/sysfs-module
+> +++ linux-next-20251031/Documentation/ABI/testing/sysfs-module
+> @@ -59,6 +59,8 @@ Description:	Module taint flags:
+>  			F   force-loaded module
+>  			C   staging driver module
+>  			E   unsigned module
+> +			K   livepatch module
+> +			N   in-kernel test module
+>  			==  =====================
+>  
+>  What:		/sys/module/grant_table/parameters/free_per_iteration
 
