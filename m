@@ -1,93 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC6630CDA8;
-	Mon,  3 Nov 2025 14:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5F53176EE
+	for <linux-modules@vger.kernel.org>; Mon,  3 Nov 2025 16:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762181247; cv=none; b=cKzy98fXJZd29Q+sOlwVgwwy2QS1P3S3piKod2bZd21GmRdpVGdRO/rkMHuueIRHZObbjKWyaEX7VC4a++TmSvZaUuhTYigUDhm82QkDIXb3Yo6/vvyBvBywodYf2O1YDcsfyPhBGxWSvWDynlu2CqqyTYcCH7EnJVzDuwlR9OE=
+	t=1762186806; cv=none; b=U9Po+MunbvURu/BcsFRjLxePIzt2aS3SppauAzX/xzmU7cgRh8T4+oiQjiW3lAkktOQX2UJAkirEDRrAzb0cC3e3KaU84nIwEdbVtT2gisbYprGbX540wtZOxG19JWeYnv1PXQ6vQv825jWTytvJcc3X5bKdxLQ+4LaVZ7NMK4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762181247; c=relaxed/simple;
-	bh=wEqUiWqzTn3qz8K/m/T7ZHGVJLtzuiTUO3H/8VHuy4M=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=nH8ayaivYncpoEsHfjL3PVmo4mL3YWVI2o2M0B25zuqT03WEGLtbEZGzYos/9itB83G/Cchuob43/CygXVozc5nBspY6JbU0RR4UiR4t7s0rqAjKSDlEeCLcWmAV77OGSm4vyJoeLghGPdfuOYXmDu1Gc6dkXlrTfMmBaBOGNzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLOofRBg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762186806; c=relaxed/simple;
+	bh=h7R/k1MMSVPQfBxt0pvy0030CquRgbNXX1VOTDMoaIQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=rsCyf1ev+0QpqqaHhrft3YrtVXJc5GdlhZNk4IseEUp3vdSYBZvDMl2G1QuzD+hJSLb8AibCVrF6ZY8emXIri04WYOEyyDj9KiuVGwsd3d/cPTXXogTFNffsJ2d0yFkkdN+oTqAEtAP2XruJejZv+R31LgKt/1QMwvGnFiZKzeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rj09nGBa; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLOofRBg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74552C4CEE7;
-	Mon,  3 Nov 2025 14:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762181247;
-	bh=wEqUiWqzTn3qz8K/m/T7ZHGVJLtzuiTUO3H/8VHuy4M=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gLOofRBgysxna9uxvfoCaDQSiaA4GPKntTz9Vyhb8eoWE9LSRiuSNsMcdOySc+HPm
-	 X5M7AyMh2VsUfuI+2K1EKsR3ouH04TMqLaZpsmdC7+MOzVDXycuKj2BevSsfwkBzZP
-	 C/qRSO+iBvxoMRgWcZZY6QtZlf81GlB/L9p9EKGZqeXmolio9oY/+ji70KQmZpdLCu
-	 0mk96GkjUGd5IVVrXp7bzMVxS2SUgQS24lrkVDBWrgbyg3KAPgJGpKy29rJGve5PQf
-	 ro9giLqf6UwJMEPrXETo5yZdLn6lmaCR4SU4CEekeawWeh1/ZmGmryvmZft/7Ab1oy
-	 Wpg5ZgLB5zhMA==
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Alice Ryhl <aliceryhl@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Danilo Krummrich <dakr@kernel.org>, Benno Lossin <lossin@kernel.org>, 
- Benno Lossin <lossin@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
- Andreas Hindborg <a.hindborg@kernel.org>
-Cc: Trevor Gross <tmgross@umich.edu>, 
- Adam Bratschi-Kaye <ark.email@gmail.com>, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
- Greg KH <gregkh@linuxfoundation.org>, Fiona Behrens <me@kloenk.dev>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- linux-modules@vger.kernel.org
-In-Reply-To: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
-References: <20250924-module-params-v3-v18-0-bf512c35d910@kernel.org>
-Subject: Re: [PATCH v18 0/7] rust: extend `module!` macro with integer
- parameter support
-Message-Id: <176218124220.2602452.14511624048623385037.b4-ty@kernel.org>
-Date: Mon, 03 Nov 2025 15:47:22 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rj09nGBa"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477171bbf51so24650645e9.3
+        for <linux-modules@vger.kernel.org>; Mon, 03 Nov 2025 08:20:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762186802; x=1762791602; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=W8tTM2uCb0zl0k898LdIZTakN1ZygKd+3CMbo77PL78=;
+        b=rj09nGBaFeX9xJxGNhVti1JlVGg35iSsZj581DpbIM5CayFWU0a8FRWSK4VebK7qHu
+         Ux+y7H3SBxbIMMw9l7HyhN7Ptva2mSJhoC1VSqLuECr8c9NxHO9OT24T4rssf+DC3l4s
+         wG/3HPFQP1bi+Nm1IMlehvS1erGMmZ1i8AlRbxXVxR0SuoaVwJ9avqqZTTYVgNf4z8+c
+         X0kE/cWi2A52pNCxV6BG9vfj49Ss8qMjosifq2Sa8P6+wD4YW0jhh7Os4pN8CLUXbfjq
+         4Z10drFG4KKLrxMdHOK+CXi44cRaLGDIecz3PkEHdqJnO616SPjAVuVmtTFqYEOqhzOm
+         1axQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762186802; x=1762791602;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W8tTM2uCb0zl0k898LdIZTakN1ZygKd+3CMbo77PL78=;
+        b=MsFIXHojZ0SdzFIi9xg74UFlAkA0y/7UpeSLa8YeWWLWV9CUNsM7ZG7VTCTIXH3imy
+         UI5Iyk6uvc7rFF9x3ltGGze/PoVdpdselxUvflEhg9G5odCPQuTz6OUqOg9wu/uYBDdm
+         Pyor7kXb4IdXY8K+jBzd3XyZzBIEPQfXX1EGW+0QqSerGgEhSd1b1F82EGqZQDcBOZKS
+         /BbTH89hMDCYeJMCe0m+Y9KqonpGQEO5Aw869WsoQEeV4ISB4ftkfe4I4KInNfrG/PXw
+         0dGbcqqz67YFVAemD7csWZprrXRFbc1twd8bf+bXYtCisqXp0N/+N6PxZd9sAXnOxS3E
+         gH/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXgc6TcMS7eAnhCGP6wDgoD3StaOF44UCtcfBjrjIGOyXYqUekjU/4HAIfnHjLma4yiSEltWvld2512XXHN@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrQrY4+PUJxv0vbA4acwImkwnHrO6tV9DZA6ig/vmat8q8fXfq
+	M/fPxZKQVKzMvtF9eB/kbtT5QWSHJI/lp6k7KxskcsrCnlMR9GNALnuUFRrckx4WCRCfuexoHNL
+	CY979HXeV2sSzaq4RyA==
+X-Google-Smtp-Source: AGHT+IEbhSxEl23KciUSXJmUxlryd+9/wkj5PORgK0VgJEd3vZvStNFYMjkCuoAO6A/1vErUZgMsibakSlGcVNc=
+X-Received: from wmwn6.prod.google.com ([2002:a05:600d:4346:b0:477:3fdf:4c28])
+ (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:8b30:b0:46d:a04:50c6 with SMTP id 5b1f17b1804b1-477429d8ee4mr73769555e9.30.1762186802499;
+ Mon, 03 Nov 2025 08:20:02 -0800 (PST)
+Date: Mon,  3 Nov 2025 16:19:46 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
+Message-ID: <20251103161954.1351784-1-sidnayyar@google.com>
+Subject: [PATCH v3 0/8] scalable symbol flags with __kflagstab
+From: Siddharth Nayyar <sidnayyar@google.com>
+To: petr.pavlu@suse.com, corbet@lwn.net
+Cc: arnd@arndb.de, linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	mcgrof@kernel.org, nathan@kernel.org, nicolas.schier@linux.dev, 
+	samitolvanen@google.com, sidnayyar@google.com, maennich@google.com, 
+	gprocida@google.com
+Content-Type: text/plain; charset="UTF-8"
 
+This patch series implements a mechanism for scalable exported symbol
+flags using a separate section called __kflagstab. The series introduces
+__kflagstab support, removes *_gpl sections in favor of a GPL flag,
+simplifies symbol resolution during module loading.
 
-On Wed, 24 Sep 2025 14:39:23 +0200, Andreas Hindborg wrote:
-> Extend the `module!` macro with support module parameters. Also add some
-> string to integer parsing functions.
-> 
-> Based on the original module parameter support by Miguel [1],
-> later extended and generalized by Adam for more types [2][3].
-> Originally tracked at [4].
-> 
-> [...]
+This series previously added symbol import protection which aims to
+restrict the use of "protected symbol" exported by vmlinux, as a use
+case for which __kflagstab is being introduced. Such symbols are only
+allowed to be imported by signed modules when symbol protection is
+enabled. This functionality requires more thought and discussion [1],
+and therefore I will create a separate patch series for it. In the
+meantime, this series now only focuses on introduction of __kflagstab
+which right is an improvement to the module loader's code health [2].
 
-Applied, thanks!
+Thank you Petr Pavlu and Jonathan Corbet for their valuable feedback.
 
-[1/7] rust: sync: add `SetOnce`
-      commit: 821fe7bf16c57d690f4f92997f4e51abb93e0347
-[2/7] rust: str: add radix prefixed integer parsing functions
-      commit: 51d9ee90ea9060be240830eb28f5f117ad00318c
-[3/7] rust: introduce module_param module
-      commit: 0b08fc292842a13aa496413b48c1efb83573b8c6
-[4/7] rust: module: use a reference in macros::module::module
-      commit: 3809d7a89fe550bf4065c04adff6dac610daddad
-[5/7] rust: module: update the module macro with module parameter support
-      commit: 0b24f9740f26ac7ad91ac0f4de27717c14de91bd
-[6/7] rust: samples: add a module parameter to the rust_minimal sample
-      commit: e119c2fe8c78632188f6cdeae620951a7032855a
-[7/7] modules: add rust modules files to MAINTAINERS
-      commit: ee3b8134b2bae848e03e56c090ceca4ae76cee06
+---
+Changes from v2:
+- removed symbol import protection to spin off into its own series
 
-Best regards,
+v2:
+https://lore.kernel.org/20251013153918.2206045-1-sidnayyar@google.com/
+
+Changes from v1:
+- added a check to ensure __kflagstab is present
+- added warnings for the obsolete *_gpl sections
+- moved protected symbol check before ref_module() call
+- moved protected symbol check failure warning to issue detection point
+
+v1:
+https://lore.kernel.org/20250829105418.3053274-1-sidnayyar@google.com/
+
+[1] https://lore.kernel.org/cac5ed5e-3320-4db0-99d8-ea5e97e56bfb@suse.com/
+[2] https://lore.kernel.org/2bf54830-ea9c-4962-a7ef-653fbed8f8c0@suse.com/
+
+Siddharth Nayyar (8):
+  define kernel symbol flags
+  linker: add kflagstab section to vmlinux and modules
+  modpost: create entries for kflagstab
+  module loader: use kflagstab instead of *_gpl sections
+  modpost: put all exported symbols in ksymtab section
+  module loader: remove references of *_gpl sections
+  linker: remove *_gpl sections from vmlinux and modules
+  remove references to *_gpl sections in documentation
+
+ Documentation/kbuild/modules.rst  |  11 ++--
+ include/asm-generic/vmlinux.lds.h |  21 ++----
+ include/linux/export-internal.h   |  28 +++++---
+ include/linux/module.h            |   4 +-
+ include/linux/module_symbol.h     |   5 ++
+ kernel/module/internal.h          |   4 +-
+ kernel/module/main.c              | 102 ++++++++++++++----------------
+ scripts/mod/modpost.c             |  16 +++--
+ scripts/module.lds.S              |   3 +-
+ 9 files changed, 99 insertions(+), 95 deletions(-)
+
 -- 
-Daniel Gomez <da.gomez@kernel.org>
+2.51.1.930.gacf6e81ea2-goog
 
