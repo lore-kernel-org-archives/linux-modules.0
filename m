@@ -1,128 +1,176 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D425C2E88AB
-	for <linux-modules@vger.kernel.org>; Mon,  3 Nov 2025 09:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 600132FBE1F
+	for <linux-modules@vger.kernel.org>; Mon,  3 Nov 2025 10:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762161555; cv=none; b=MD1NBqmZOSG7Fj3liX8z0p4hKPRPRSeSnFtEM1WB+94ZQwXyx796p7+yP/Prz/B2lCq1hoxyk1Vf3aM7HLxArWuonvMpI7GT9buHgctSk2W0kh8vczBfpOFLYELJO2EoCh07sQWMaAodtqTBthLxdYIQjrkBhKnShJVvUMtbr74=
+	t=1762164529; cv=none; b=R5TMbiPPzPIwwTMMt1+DMXg6lW7K6zGUUHjjYcCYoSIMnU2KfZh5CrCCx3ZOlEaBzMv/MvbpRNGBz9Z90RhuUn+S+eZ9vsT2/QxhzjtflcuS+Hd7pfAx/QUb/qx1jaJnqgwa55RvZRna57fi4fi+JmwA/V/rbfsCwt/31rHa/d4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762161555; c=relaxed/simple;
-	bh=0Y9caYOqSW11yivpiI46fzV2GqLE4ZF0InC9uXM8/Uc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I4V1XYhIaIaIT6m4d46Rlac9lgyh7nqURnpQbJ4AesKqzJ7gmRvIsB6p+en3X5JHLvh/SnUl9x8pDvZh3ubuzaLBQ6J8Mo/VcMgTUM0bG7THQaH+3M1nfZpbq4weZIi+Qv0ZfIoeFvdfMG2FTQLfnsVvMqTBau1MsQs8BQ+AstM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A4XDX3no; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1762164529; c=relaxed/simple;
+	bh=YsTF68mjR39B/r/G6EPCUdpxSXCB8HJ4vZ+J81ZFViU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=qxGWT/GurrHuICV1zwtTDZIauIblt0qNJ3279IQAJrXAWg17dNh2YFUOeXy5G9YYcaLpbpQMuhzGJZrNPzXKA7e92TY/eN5OPR3oJh+M8zh8IWe6IdxsH25954/gRmubGaPhXXKmYs63cim4WiKivR2GvF4n8yGA4Tx2Ue+lnqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DMNO6Hbf; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A4XDX3no"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-470ffbf2150so28667045e9.1
-        for <linux-modules@vger.kernel.org>; Mon, 03 Nov 2025 01:19:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMNO6Hbf"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b4f323cf89bso928281566b.2
+        for <linux-modules@vger.kernel.org>; Mon, 03 Nov 2025 02:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762161551; x=1762766351; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ynz4s33e0TLs0d6hGvRQqkDSiZ1njMSQRICWUdMFEU=;
-        b=A4XDX3noApDwzL1MuaWiwkzukhdKkVkO3pb3TyJc0whbOiiYMgnE2/F4HG/IcE3JQK
-         kW4Pt3bSbpiLDgRaCJmRVcersuoR5hYRlam7pqJ9Tf7xij0Yk8E8M4FuwgjIC4O9aZxP
-         8WD2Q9H+HufJj14gT66qpDnmYuVGN9VYvf7KxA3/uy0N5jXM6oM+VJDDW+GvuQSjrDAO
-         CB4Ymfyt/5gJfhmOq7HH73uWpPUVRkaCAX/C4nM/pozv4peaUiQlumVs1UXsVDo2htm/
-         M5ZufSct6XdrodB6I0yX/J0SCLgYUYq0cx6LEaGPXMXfFKtrXafW7S/Zc76WmbqIK5qi
-         Geqg==
+        d=gmail.com; s=20230601; t=1762164526; x=1762769326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tLS6qgKRGlV1tkSNCOlSCrCisKumvAST+7mt3QUKFME=;
+        b=DMNO6HbfY7/ZVxGwmvwUUzErGvh8CWY+wb/crRNs3uS/5/PkUFPWJhyGKWEt1IgKv2
+         WbsPLhnvK8r/Kq6gNTAcTnmAExm6HgmdDaasRENjtlVfvbEPhVRJ+S5Kg+2ullVMdpSm
+         cSIZRXF0SbA+q8HzSaKcJgfZ2dtT6dQwRU5R0mj8/Plx9PeCp10G4BgUXS0C7CA8h7R5
+         6z6WFB21x+xXrSyRbJQXQbTUtrCBTptX9FvVX7d2DUCO3KydSkvRjYGD+WDXisVosTGB
+         8ITCH6tNmhaXOGLiJeIww35gaRvT6n7WsDYKZDt9YmB4vfPmU9aBTOg5A7BIy3C5B9I+
+         1dvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762161551; x=1762766351;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ynz4s33e0TLs0d6hGvRQqkDSiZ1njMSQRICWUdMFEU=;
-        b=g5oIYt+tpemO3+JSW+y3I6HLNDDl1TDi1yTGrmi3sKj47lPQiT/EnFoBG5X9o98N0A
-         znwwNPkBLRXP1Vws6b/agjB24A83J4Cj+zubfWqiCZzhnxyruoeWTtRfjIaiEGX5019N
-         qqG7+9N4b4nLxwfpLAQMUhF5hrm26HpX+gsY/c4XnNhoEhvNKCocTra8i5f5TvrX6mi/
-         clVz8WhvJIfMtM6PLh5BgYc6pawfl6rnKUoGoQlGi/Yf8w5rP6AE5f/Ia4APkk5hAFZu
-         wAaju1LAuhCNdx1H3/ciMN3lyWT22tKJwPE9d8W3GC5Vq0Bjwx01ktm4B1/hYIR3R4P6
-         13jA==
-X-Forwarded-Encrypted: i=1; AJvYcCWLVKzR89fAm0wYKMijtOi/VY9B+2dC35gtKSd3qJjaGXlMdjZxyVYERPovL1ytSZnRwZ5+TMVMuGZisPz1@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz47XhIJcN8GsSET8p3BGjoD+S1vSGkaZADvmsWJy5ucvdJX9Pj
-	9FXLopFEs+Vr6I98dvBiThfw+uub8MjSQC8gPsGCjxZYbx0Ac+1dkesiw7QpEPzbpaY=
-X-Gm-Gg: ASbGncumjC1ARhooeXOUtjxaDVWXA+p0xQqZTfLRojMLuqUb0n0rxyaHrRjTESlE7uP
-	13Lzfo5aULVzvjtMPlY/qBhhXhcGgVsY98l+UyFq7GcPQlyVrNRN+BNpiBaclJgDG9N89I5+qTF
-	+D80jqVhIcs2ZjoLgZqoxfj2BmX4Oop9HV0W2AGawO0F60u/b3+SGr4bTj1yCqjCHsYmMp0Y0PA
-	Xo3MTsTAIMExA4uJwE/rpzpVkm+sn9qTjkwxIPbcGmIusUidn+uIfpvxekEcG7NUl1jULDyrqGh
-	opneQo+M3Q4ilXn9n3S2VOh33QJoQbAu1SGMbzlkOh77ngWpMJ9Zr2rhmVoFX6TZXYymEV5iSP4
-	Z079ES/YaF6KbMDx0thhgu8XXjwgD1seXbchVW8I7w/0XHsSysB6v1FPh04fdgL/IuV+9ZPwHR2
-	qD22HhCagqBXcbN6E982Qt8g==
-X-Google-Smtp-Source: AGHT+IEWfWVVzQFxN3DAZRcF5k08MxsMc9ZYeQ4H54jSP0UkuFE80X1DOa7SdsC7jiBDXkya412Xcg==
-X-Received: by 2002:a05:600c:64c3:b0:46e:2815:8568 with SMTP id 5b1f17b1804b1-477301041d1mr109894515e9.10.1762161551158;
-        Mon, 03 Nov 2025 01:19:11 -0800 (PST)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429d1061efasm7626939f8f.24.2025.11.03.01.19.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Nov 2025 01:19:10 -0800 (PST)
-Message-ID: <7301b0fa-5463-498f-82a0-f40bfee462ba@suse.com>
-Date: Mon, 3 Nov 2025 10:19:10 +0100
+        d=1e100.net; s=20230601; t=1762164526; x=1762769326;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tLS6qgKRGlV1tkSNCOlSCrCisKumvAST+7mt3QUKFME=;
+        b=Nk8S+x0N2zVC4ruNxtrrCoXp2YiPM5jSmB9uDLZDr5/0qCNgVeJ+ypIiBip6/91g0/
+         YqZ6rPMwJK+ppgmu5xXkcSs0fhhrG+0BA42c7aO1jUGzRy8SsGln2ayUtfP6QWqBUxR4
+         N81jP0yYqZTVmMVFtnl8/Q7fBlC5dQdlkqST0iup+NoGhkLlwCfxX8xXwJAm7VgtV23W
+         GDQMIqzHu5KoF8kiENC5WOTjUGjGRIE1VX/uuNj1o0WlB9rSRRd+YNwL7u/Y3Rc8E994
+         RDFzC+7AUpok2dQZoYdh6XP4/pZMxDrcjvO3Qj5LBnNe2MDLMbFjkrO0XiuhTJzovCaN
+         /1cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUUqBQdB9LTn3Nqu5HGsPNU1Xz0DXz3qsZc1Ua9rgAlnn6/+SjJfG4r6mReGih/FD85Jbw/NkWxoX3doUQC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYVGx4UPT5GafiLTkwX74arrSiwva/qRX9Ug15g5qijdY3eD1/
+	TzL0kj7+eXWlJA/sMVfXFiy6Y9mTVLjR/idvSs3JuQXLkD4lmZQMZL+v
+X-Gm-Gg: ASbGncvDhvqQhx8RZ7rBDI0StaD07wkPU8bZcaPHqDhXr1LAOajol3QGifJhGgVXGY0
+	8jAQ6YgvFm58RWBcyTyOvwk8/wN6lbf33NgDukdowi7NMamiiiNIYEpZIYNV3R/H8pSVw1qg/1K
+	SOxdvYEt/LilhMnEt6EXndKetrWcwicrWUKlP/QOtjl32hM8iAXjXuPTOZ4ZBsftYBqWK0f6uDV
+	cHxO1G5RHDHFuLH248eQcN8OGpj3q0FfImtsm9w2AH8Jbj2FNNjFyMG+xzQqmVsNKtQqr0yJ9ar
+	9HvksSwovL8VhIEO0IuQswb7SA9H7WXrpY9d9V73d2F8mninCh5GQ2g6P9bAME1jIJGSBohtVfi
+	uvuBWFMEJIEvEvkofSspsIWJuAF7GZGfsukmq/Hr0SqOuEA5idzwrPjasSta8ziVJUx/1nN2MSt
+	o+E106A2Ush+Yi
+X-Google-Smtp-Source: AGHT+IEv5yXN9Rq+z/PHyS8obHrzjUW6HYGA45FU+WSNF/Zev/u9SGVmMPbE9+9XkPkG1FxuYOM0eQ==
+X-Received: by 2002:a17:907:3d4f:b0:b70:6d3a:a08b with SMTP id a640c23a62f3a-b70700ad4dfmr1388461366b.10.1762164525413;
+        Mon, 03 Nov 2025 02:08:45 -0800 (PST)
+Received: from foxbook (bgu110.neoplus.adsl.tpnet.pl. [83.28.84.110])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b718a2dd982sm74711866b.49.2025.11.03.02.08.43
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 03 Nov 2025 02:08:45 -0800 (PST)
+Date: Mon, 3 Nov 2025 11:08:35 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: bigeasy@linutronix.de
+Cc: bp@alien8.de, da.gomez@samsung.com, dave.hansen@linux.intel.com,
+ hpa@zytor.com, jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, mcgrof@kernel.org, mingo@redhat.com,
+ paulmck@kernel.org, peterz@infradead.org, petr.pavlu@suse.com,
+ samitolvanen@google.com, tglx@linutronix.de, x86@kernel.org
+Subject: Re: [PATCH v3 22/28] x86: Use RCU in all users of
+ __module_address().
+Message-ID: <20251103110835.1dca378c.michal.pecio@gmail.com>
+In-Reply-To: <20250108090457.512198-23-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: ABI: sysfs-module: update modules taint flags
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251102060458.517911-1-rdunlap@infradead.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251102060458.517911-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 11/2/25 7:04 AM, Randy Dunlap wrote:
-> Add missing taint flags for loadable modules, as pointed out by
-> Petr Pavlu [1].
+> x86: Use RCU in all users of __module_address().
+>
+> __module_address() can be invoked within a RCU section, there is no
+> requirement to have preemption disabled.
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> [1] https://lore.kernel.org/all/c58152f1-0fbe-4f50-bb61-e2f4c0584025@suse.com/
-> ---
-
-Looks ok to me. I would only move the "[1]" line before the
-"Signed-off-by" tag in the commit message and separate them by an empty
-line. Some tooling might rely on the tags being separately at the end.
-I guess this can be directly adjusted by a maintainer that picks up the
-patch and there is no need to resend it.
-
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-
--- 
-Thanks,
-Petr
-
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Daniel Gomez <da.gomez@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: linux-modules@vger.kernel.org
-> ---
->  Documentation/ABI/testing/sysfs-module |    2 ++
->  1 file changed, 2 insertions(+)
+> Replace the preempt_disable() section around __module_address() with
+> RCU.
 > 
-> --- linux-next-20251031.orig/Documentation/ABI/testing/sysfs-module
-> +++ linux-next-20251031/Documentation/ABI/testing/sysfs-module
-> @@ -59,6 +59,8 @@ Description:	Module taint flags:
->  			F   force-loaded module
->  			C   staging driver module
->  			E   unsigned module
-> +			K   livepatch module
-> +			N   in-kernel test module
->  			==  =====================
+> Cc: H. Peter Anvin <hpa@zytor.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: x86@kernel.org
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  arch/x86/kernel/callthunks.c | 3 +--
+>  arch/x86/kernel/unwind_orc.c | 4 +---
+>  2 files changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
+> index f17d166078823..276b5368ff6b0 100644
+> --- a/arch/x86/kernel/callthunks.c
+> +++ b/arch/x86/kernel/callthunks.c
+> @@ -98,11 +98,10 @@ static inline bool within_module_coretext(void *addr)
+>  #ifdef CONFIG_MODULES
+>  	struct module *mod;
 >  
->  What:		/sys/module/grant_table/parameters/free_per_iteration
+> -	preempt_disable();
+> +	guard(rcu)();
+>  	mod = __module_address((unsigned long)addr);
+>  	if (mod && within_module_core((unsigned long)addr, mod))
+>  		ret = true;
+> -	preempt_enable();
+>  #endif
+>  	return ret;
+>  }
+> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+> index d4705a348a804..977ee75e047c8 100644
+> --- a/arch/x86/kernel/unwind_orc.c
+> +++ b/arch/x86/kernel/unwind_orc.c
+> @@ -476,7 +476,7 @@ bool unwind_next_frame(struct unwind_state *state)
+>  		return false;
+>  
+>  	/* Don't let modules unload while we're reading their ORC data. */
+> -	preempt_disable();
+> +	guard(rcu)();
+>  
+>  	/* End-of-stack check for user tasks: */
+>  	if (state->regs && user_mode(state->regs))
+> @@ -669,14 +669,12 @@ bool unwind_next_frame(struct unwind_state *state)
+>  		goto err;
+>  	}
+>  
+> -	preempt_enable();
+>  	return true;
 
+Hi,
+
+There is a regression report on a distribution forum which involves
+an out of tree module on a patched kernel (yes, I know) calling
+stack_trace_save() in task context, which arrives here and apparently
+calls the various deref_stack_xxx() functions with preemption enabled,
+which in turn call stack_access_ok() leading to a BUG:
+
+Nov 02 21:44:30 ArchBasement kernel: BUG: using smp_processor_id() in preemptible [00000000] code: Xorg/1183
+Nov 02 21:44:30 ArchBasement kernel: caller is in_entry_stack+0x11/0x60
+Nov 02 21:44:30 ArchBasement kernel: CPU: 0 UID: 1000 PID: 1183 Comm: Xorg Tainted: P           OE       6.16.12-hardened1-1-hardened #1 PREEMPT(full)  6edb90a7a07fab33bbee72d6d5ef53ba6eec3b9c
+Nov 02 21:44:30 ArchBasement kernel: Tainted: [P]=PROPRIETARY_MODULE, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+Nov 02 21:44:30 ArchBasement kernel: Hardware name: ASUS All Series/Z97-E, BIOS 0803 02/23/2016
+Nov 02 21:44:30 ArchBasement kernel: Call Trace:
+Nov 02 21:44:30 ArchBasement kernel:  <TASK>
+Nov 02 21:44:30 ArchBasement kernel:  dump_stack_lvl+0x5d/0x80
+Nov 02 21:44:30 ArchBasement kernel:  check_preemption_disabled+0xe5/0xf0
+Nov 02 21:44:30 ArchBasement kernel:  in_entry_stack+0x11/0x60
+Nov 02 21:44:30 ArchBasement kernel:  get_stack_info+0x2c/0x80
+Nov 02 21:44:30 ArchBasement kernel:  stack_access_ok+0x51/0xa0
+Nov 02 21:44:30 ArchBasement kernel:  unwind_next_frame+0x1cb/0x7b0
+Nov 02 21:44:30 ArchBasement kernel:  ? _nv003168kms+0x42/0x50 [nvidia_modeset 90775ea8a26c5e58b97ef4b3f46eb45efa040eb2]
+Nov 02 21:44:30 ArchBasement kernel:  ? __pfx_stack_trace_consume_entry+0x10/0x10
+Nov 02 21:44:30 ArchBasement kernel:  arch_stack_walk+0xa6/0x110
+Nov 02 21:44:30 ArchBasement kernel:  ? _nv003168kms+0x42/0x50 [nvidia_modeset 90775ea8a26c5e58b97ef4b3f46eb45efa040eb2]
+Nov 02 21:44:30 ArchBasement kernel:  stack_trace_save+0x4d/0x70
+
+Is this nvidia doing something wrong, or a problem with this commit?
+
+The removed code suggests that preemption is allowed here, and as far
+as I see, this call trace is still possible on vanilla 6.18. Perhaps
+preempt_disable() needs to be restored around this code?
+
+Regards,
+Michal
