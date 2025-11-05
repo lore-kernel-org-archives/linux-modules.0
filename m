@@ -1,80 +1,33 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1AD305957
-	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 11:25:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721792F2619;
+	Wed,  5 Nov 2025 13:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762341922; cv=none; b=DdQgMw0NgQQJNnlqLyiYbWRIeDRoj6aMI4MDmfadfmUNUQsh8ZwTmZ416QG8mioceuKFIjShzOloIDxKHC1rIzncdXF1lerjXBQilY8YB0/n8Vbm7Tc7oSYWUHV42zYy/Ygci8m+kRO6DcMigpvM6PGBPNFmsPWswjW+jLURx/0=
+	t=1762347846; cv=none; b=a0DavKA7lTnfW7ynuoZxL/pmDE/F8Us4JKsD8QYZX+9KRr64lfnsm70vojRARvyGSI03oZe0144G/HkwdFaWLZxJpSp7tIErf94zEAYGQnIUyAuSnW6FA2l72XbiHf4DhP/1XWTdofPHDLR1irK6lg/Q1AHWkUOnqInO2N8rZd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762341922; c=relaxed/simple;
-	bh=WGjt1LZlkBB8w6gHVzXLXlbkP5HnD/BwtQ5i3ks0II4=;
+	s=arc-20240116; t=1762347846; c=relaxed/simple;
+	bh=yMMEvCFvy1D/FLf8ZdEsUZE9AALFl5pwluhKlPDJ97Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FUP/muv4urBvHnU6io1I2iHhI2ovsTkzjRUNcH4Vsxk1Ec9HGmDT2dgnXyTS99EZIhaAQY/OUoprKKmD0MvF4xOT0MimZ2qVUT7T+mojh9aJHdOUBChwFWhttt5Nj8G6C1Ird/4ArKXL3LjCBdUYZA3E2I+HhKGThhvKO4pceY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FU8oo6YB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yraSf4DV; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FU8oo6YB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yraSf4DV; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 In-Reply-To:Content-Type; b=cCoixstqBQiN6k6Sqo82okvKMlviNXlgURLHl/ClcOd9xOzYnJt4kvQyogBFkJy9rBc01TU8bXlzxhmSPDqGRiFajJYBJdn5kz8cr7Affhl48lECbWRMXxHpBAB2IPW3VKflnsqABslJhCVGMrPDbX5h4ecoaVauUcPo7fSRQz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6oGVhuU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FU8oo6YB";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yraSf4DV";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FU8oo6YB";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yraSf4DV"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id DEB5B211BA;
-	Wed,  5 Nov 2025 11:25:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762341918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
-	b=FU8oo6YBT7CVji0/a6quURnUbwznLcDOExmxbfxdXFtYnSS8PShRbYT4ARqEpaDtFIicwJ
-	JS0In1K9YI0YsGQrT1/ltls3nypEUSjkaN6YcRaxGDSX+0FikINZ1p91aY71KL9XKXicE0
-	VQRXBBX0kYkMkdiiCajXUc0IGqgmhK0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762341918;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
-	b=yraSf4DVWYl/W5BFC3s/lbeuDEv7YTuyVTIQMD/jIKmWChOFdkfVF/XaOrgLfmRjUbXjDT
-	55AGXH+HxCRUG3BQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762341918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
-	b=FU8oo6YBT7CVji0/a6quURnUbwznLcDOExmxbfxdXFtYnSS8PShRbYT4ARqEpaDtFIicwJ
-	JS0In1K9YI0YsGQrT1/ltls3nypEUSjkaN6YcRaxGDSX+0FikINZ1p91aY71KL9XKXicE0
-	VQRXBBX0kYkMkdiiCajXUc0IGqgmhK0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762341918;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
-	b=yraSf4DVWYl/W5BFC3s/lbeuDEv7YTuyVTIQMD/jIKmWChOFdkfVF/XaOrgLfmRjUbXjDT
-	55AGXH+HxCRUG3BQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B2ADC132DD;
-	Wed,  5 Nov 2025 11:25:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +ShFKx40C2ncEQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 05 Nov 2025 11:25:18 +0000
-Message-ID: <1bda09da-93be-4737-aef0-d47f8c5c9301@suse.cz>
-Date: Wed, 5 Nov 2025 12:25:18 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6oGVhuU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C604C4CEFB;
+	Wed,  5 Nov 2025 13:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762347843;
+	bh=yMMEvCFvy1D/FLf8ZdEsUZE9AALFl5pwluhKlPDJ97Y=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=C6oGVhuUB1w/3E69QFhrG+4ya4gA+b/fGIculz/ZcL48cooSrZrSlxjmTQ335ouUX
+	 +Q7oJNdJ+BlQa0pZ4455dhVmh1HGLXdDRyB1VuMUT/BtEARRAunHZNXLnjcPXDQDwA
+	 iKLV6qkBafUcRzevKYXFgB5LugK+XDfIZBrWZdZQupHwnaRTn3RALu3lKYI0bUgL3j
+	 M0eImLnm6h/lI6fqPChirCmU/VVxyOxH+OHiJDZbrmbYdvQhHTcT5YC5fpNvi9WYjI
+	 5bwZZJspHV14G/HcNHBoR7AONB5C1Ek1wBcwZr5QS771esAHjjaqBFaOeSYzSztzQv
+	 UYh3mSvPvq6kw==
+Message-ID: <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
+Date: Wed, 5 Nov 2025 14:03:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -82,177 +35,99 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 04/23] slab: add sheaf support for batching kfree_rcu()
- operations
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
+ characters
+To: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>
+Cc: Hans Verkuil <hverkuil+cisco@kernel.org>,
+ Malcolm Priestley <tvboxspy@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hans Verkuil <hverkuil@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Rusty Russell <rusty@rustcorp.com.au>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20251010030348.it.784-kees@kernel.org>
 Content-Language: en-US
-To: Harry Yoo <harry.yoo@oracle.com>, Daniel Gomez <da.gomez@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Uladzislau Rezki <urezki@gmail.com>,
- Sidhartha Kumar <sidhartha.kumar@oracle.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
- maple-tree@lists.infradead.org, linux-modules@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Lucas De Marchi <lucas.demarchi@intel.com>
-References: <20250910-slub-percpu-caches-v8-0-ca3099d8352c@suse.cz>
- <20250910-slub-percpu-caches-v8-4-ca3099d8352c@suse.cz>
- <0406562e-2066-4cf8-9902-b2b0616dd742@kernel.org> <aQge2rmgRvd1JKxc@harry>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <aQge2rmgRvd1JKxc@harry>
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <20251010030348.it.784-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,gentwo.org,google.com,linux.dev,gmail.com,kvack.org,vger.kernel.org,lists.infradead.org,kernel.org,suse.com,atomlin.com,intel.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
 
-On 11/3/25 04:17, Harry Yoo wrote:
-> On Fri, Oct 31, 2025 at 10:32:54PM +0100, Daniel Gomez wrote:
->> 
->> 
->> On 10/09/2025 10.01, Vlastimil Babka wrote:
->> > Extend the sheaf infrastructure for more efficient kfree_rcu() handling.
->> > For caches with sheaves, on each cpu maintain a rcu_free sheaf in
->> > addition to main and spare sheaves.
->> > 
->> > kfree_rcu() operations will try to put objects on this sheaf. Once full,
->> > the sheaf is detached and submitted to call_rcu() with a handler that
->> > will try to put it in the barn, or flush to slab pages using bulk free,
->> > when the barn is full. Then a new empty sheaf must be obtained to put
->> > more objects there.
->> > 
->> > It's possible that no free sheaves are available to use for a new
->> > rcu_free sheaf, and the allocation in kfree_rcu() context can only use
->> > GFP_NOWAIT and thus may fail. In that case, fall back to the existing
->> > kfree_rcu() implementation.
->> > 
->> > Expected advantages:
->> > - batching the kfree_rcu() operations, that could eventually replace the
->> >   existing batching
->> > - sheaves can be reused for allocations via barn instead of being
->> >   flushed to slabs, which is more efficient
->> >   - this includes cases where only some cpus are allowed to process rcu
->> >     callbacks (Android)
->> > 
->> > Possible disadvantage:
->> > - objects might be waiting for more than their grace period (it is
->> >   determined by the last object freed into the sheaf), increasing memory
->> >   usage - but the existing batching does that too.
->> > 
->> > Only implement this for CONFIG_KVFREE_RCU_BATCHED as the tiny
->> > implementation favors smaller memory footprint over performance.
->> > 
->> > Also for now skip the usage of rcu sheaf for CONFIG_PREEMPT_RT as the
->> > contexts where kfree_rcu() is called might not be compatible with taking
->> > a barn spinlock or a GFP_NOWAIT allocation of a new sheaf taking a
->> > spinlock - the current kfree_rcu() implementation avoids doing that.
->> > 
->> > Teach kvfree_rcu_barrier() to flush all rcu_free sheaves from all caches
->> > that have them. This is not a cheap operation, but the barrier usage is
->> > rare - currently kmem_cache_destroy() or on module unload.
->> > 
->> > Add CONFIG_SLUB_STATS counters free_rcu_sheaf and free_rcu_sheaf_fail to
->> > count how many kfree_rcu() used the rcu_free sheaf successfully and how
->> > many had to fall back to the existing implementation.
->> > 
->> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->> 
->> Hi Vlastimil,
->> 
->> This patch increases kmod selftest (stress module loader) runtime by about
->> ~50-60%, from ~200s to ~300s total execution time. My tested kernel has
->> CONFIG_KVFREE_RCU_BATCHED enabled. Any idea or suggestions on what might be
->> causing this, or how to address it?
+On 10/10/2025 05.06, Kees Cook wrote:
+>  v2:
+>  - use static_assert instead of _Static_assert
+>  - add Hans's Reviewed-by's
+>  v1: https://lore.kernel.org/lkml/20251008033844.work.801-kees@kernel.org/
 > 
-> This is likely due to increased kvfree_rcu_barrier() during module unload.
+> Hi!
+> 
+> A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
+> strings[1]. While this stands out pretty strongly when you look at the
+> code, and we can't do anything about a binary module that just plain lies,
+> we never actually implemented the trivial compile-time check needed to
+> detect it.
+> 
+> Add this check (and fix 2 instances of needless trailing semicolons that
+> this change exposed).
+> 
+> Note that these patches were produced as part of another LLM exercise.
+> This time I wanted to try "what happens if I ask an LLM to go read
+> a specific LWN article and write a patch based on a discussion?" It
+> pretty effortlessly chose and implemented a suggested solution, tested
+> the change, and fixed new build warnings in the process.
+> 
+> Since this was a relatively short session, here's an overview of the
+> prompts involved as I guided it through a clean change and tried to see
+> how it would reason about static_assert vs _Static_assert. (It wanted
+> to use what was most common, not what was the current style -- we may
+> want to update the comment above the static_assert macro to suggest
+> using _Static_assert directly these days...)
+> 
+>   I want to fix a weakness in the module info strings. Read about it
+>   here: https://lwn.net/Articles/82305/
+> 
+>   Since it's only "info" that we need to check, can you reduce the checks
+>   to just that instead of all the other stuff?
+> 
+>   I think the change to the comment is redundent, and that should be
+>   in a commit log instead. Let's just keep the change to the static assert.
+> 
+>   Is "static_assert" the idiomatic way to use a static assert in this
+>   code base? I've seen _Static_assert used sometimes.
+> 
+>   What's the difference between the two?
+> 
+>   Does Linux use C11 by default now?
+> 
+>   Then let's not use the wrapper any more.
+> 
+>   Do an "allmodconfig all -s" build to verify this works for all modules
+>   in the kernel.
+> 
+> 
+> Thanks!
+> 
+> -Kees
+> 
+> [1] https://lwn.net/Articles/82305/
+> 
+> Kees Cook (3):
+>   media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
+>   media: radio: si470x: Fix DRIVER_AUTHOR macro definition
+>   module: Add compile-time check for embedded NUL characters
+> 
+>  include/linux/moduleparam.h                   |  3 +++
+>  drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
+>  drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
+>  3 files changed, 10 insertions(+), 7 deletions(-)
+> 
 
-Hm so there are actually two possible sources of this. One is that the
-module creates some kmem_cache and calls kmem_cache_destroy() on it before
-unloading. That does kvfree_rcu_barrier() which iterates all caches via
-flush_all_rcu_sheaves(), but in this case it shouldn't need to - we could
-have a weaker form of kvfree_rcu_barrier() that only guarantees flushing of
-that single cache.
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
 
-The other source is codetag_unload_module(), and I'm afraid it's this one as
-it's hooked to evey module unload. Do you have CONFIG_CODE_TAGGING enabled?
-Disabling it should help in this case, if you don't need memory allocation
-profiling for that stress test. I think there's some space for improvement -
-when compiled in but memalloc profiling never enabled during the uptime,
-this could probably be skipped? Suren?
+I have also tested a build of v6.18-rc3 + patches using allmodconfig:
 
-> It currently iterates over all CPUs x slab caches (that enabled sheaves,
-> there should be only a few now) pair to make sure rcu sheaf is flushed
-> by the time kvfree_rcu_barrier() returns.
-
-Yeah, also it's done under slab_mutex. Is the stress test trying to unload
-multiple modules in parallel? That would make things worse, although I'd
-expect there's a lot serialization in this area already.
-
-Unfortunately it will get worse with sheaves extended to all caches. We
-could probably mark caches once they allocate their first rcu_free sheaf
-(should not add visible overhead) and keep skipping those that never did.
-> Just being curious, do you have any serious workload that depends on
-> the performance of module unload?
+Tested-by: Daniel Gomez <da.gomez@samsung.com>
 
