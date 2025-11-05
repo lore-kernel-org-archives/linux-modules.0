@@ -1,305 +1,362 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4EC3594B
-	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 00:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5AB21D3E2
+	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 02:48:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762301959; cv=none; b=tegI1lJWRZ37DgokGYj/EmWwWYbH4hKO/FnZCPZI9W1KUG0ITDQP/FGeJBtmyqreTxtwBVcB3lObV2JwZvrYbTXkLNIyHUiK60cqwuulcG9rZqMH6wRiG3ZYoRUtfnZxGEhw/7yBDBWWOhCVEZuSJDYc27ppyPnjSkhXIjcwud0=
+	t=1762310883; cv=none; b=FN9pU8keYzVEr84jMn71/pQTHA/hcnG6P2RBIuwI/uu628wO8a/7WnBjrLh3jLFTzWfU8dwPWobY7j5wkXZcUtBXjdJIWQ4tK1f2eA4xkxgjgCVZaATQcHyx02LirJLl6pOfUCkSn+vNgH78cvb+fRcNZHbT4OdeZ+2aJK1dNWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762301959; c=relaxed/simple;
-	bh=CXBidnbCR5ifmFwvHayw3FaO8i8qfw5gJZXUu4WTevA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J2DHWUa23kokWH+WYFZ8PH81YKJrJO7nZyjVwoZRmezJKFjrtSNneA1KIuhP4aeGGlqJDSgmC5qhPH02XFqLa9RKHWpXn5Kml+VM0EQOS1/1PfyFQIxK+Uh8PsQVfOO4SRr2Pz6E2RBdbZJfGLr8/nb0JF1xa/6sSBsD6HctCcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hsUv0eHi; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AJ/9CW9F; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1762310883; c=relaxed/simple;
+	bh=rXf5u+fnVQB8ijTEi6AvLLG2mpb9BXOpnmRrCXsI4IM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VWqUnjtk0LoaFBgj1WCWNqMa3NUVl1mTORBoyVm0SYBW9k149DUP4gwgW/IYYDUrBxJ69/Uw8D0mL0wOfAnR80NG7YrATJ2jcbC/D1JajlcPAxKh9uYkmjC3rEb0SF3F55mENs8EFMoRqFULmwQdBaBHHl0wkmM/NByaBeSINvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZaG3Cm7O; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hsUv0eHi";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AJ/9CW9F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762301955;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hF/Q0Jxg/bJ4rsgyrnW9VOMqT1HQ3E8+/Upt51gSeWM=;
-	b=hsUv0eHienNBvpyZV6fZSu9aKNhentlwCC0oGtGmbnkq/0KaeTnMKbtHoiAqDc61uqgq4j
-	oN2xD9CR0E62lbDFJAEYCLDGcH0CJP078xqnk/60vvvBOb1kvRcQxNY0759HLu2gEMzte/
-	60Y3nDhCYwZi/D+ROUrjEurg+GvvXfU=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-389-EVW_s14QM3KQ49sJHDhjhA-1; Tue, 04 Nov 2025 19:19:14 -0500
-X-MC-Unique: EVW_s14QM3KQ49sJHDhjhA-1
-X-Mimecast-MFC-AGG-ID: EVW_s14QM3KQ49sJHDhjhA_1762301954
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-ba4c6ac8406so447191a12.0
-        for <linux-modules@vger.kernel.org>; Tue, 04 Nov 2025 16:19:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZaG3Cm7O"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b55517e74e3so6224638a12.2
+        for <linux-modules@vger.kernel.org>; Tue, 04 Nov 2025 18:48:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762301954; x=1762906754; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hF/Q0Jxg/bJ4rsgyrnW9VOMqT1HQ3E8+/Upt51gSeWM=;
-        b=AJ/9CW9FkoFt4RY4R2TbCGSlM2RwkBuFhDSpjIvcnUE9OvBKX6BevnF+oiTTUHAG3U
-         24zTy/IkDZ1RM068Qp1CuxDnVt/YXW8/ng9EQ8cCGo7twktx+UPs5wj+iBGIQ4q65MS2
-         ccJIMfgHuC9y/SDktzd+er5WNb0IK4GP9gWg2MrmiKA6quDJnZ7mk5A8QBq/5syNvMkt
-         jG9QScLl5Yp9gaVyphyAB4MjzKyS4ehGkWbhShzXuSbw+UCpuj5MiDQYz89+/aVVUIGP
-         wXWYv7F4fasDZ1Jp3r1om9MsuBuBIBi/qcSkFj4HDl+EhvXZJ7xx9hvSRq/lmq65qZM1
-         k9xA==
+        d=paul-moore.com; s=google; t=1762310880; x=1762915680; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OPz8gud/XQUy5E/Kke8SRPmK6elIY9QqlM3PyIOa7cg=;
+        b=ZaG3Cm7OrmjG/OhloobS5j6vdVxLdh/BqI7vYnBpwloUHWwgXXLlHNm3tQGpfRnLHv
+         uAH57DuVh1Sn+IN+MbM7VNPtepOfv0SRChFbMELp4OHuXQUSpt9NdB+rT6jm752i5Zi/
+         hOG3lBO6F8BEz0xI1kSK5zpYeucdC4LSYbToKeErX/40epxRy0eNjk4dshiLmp1u4dNA
+         zjeExBGZre2EXqfIcBc91Od4GYqjdMloc/wUPtv3PrJpC7PvdbqvJTSJAMKfWOrK9cFp
+         vjpXi4Xy9OfulLClsSWbAcYn03P+5LFyd825GIikIQ/U93SFvazVLUiNw3ma4P759uwt
+         vI+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762301954; x=1762906754;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hF/Q0Jxg/bJ4rsgyrnW9VOMqT1HQ3E8+/Upt51gSeWM=;
-        b=v1IiIpPGqQeB/4yWsNoNJG/QeNHmpfDABWu4xFR87wtY40NKmpghs4drsUM+aoCCTe
-         eag7rnhPeJ/fodHFv3eg2UnWEmzQC9epCqKP0tOzCwPNxVvy/xNFL4/yBl/R/A8Cr41s
-         OdIDRlmcuPlB6zV7tGSFP5GB5RhQCiKsueyt0FIGNMEnuHhIG33Z17vpSJQ2xse9BdQ3
-         /0GFJWLGlIrZPpjXRGmJEYkq94sZt4QIdnc2YGOEs4Bu4R0LqPrrDwZXn+hR/X9PuHKZ
-         QMhVLfs3QsfYcOL0R3SyWXIqahVnsLQUP702fz0qR1ShHbHyTE1Cd435bWgmwmScnvh+
-         gyGA==
-X-Forwarded-Encrypted: i=1; AJvYcCWGLbQsllZE9sdLw543kBxIXUFfOIp2BpdkM8vMgEMWuSTmkhCGTvVYot1+vgwtoe9XZDYaxlndF6Nh/XNG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzpk6krmartFD/5SdF6My/aagf0DB3Sr1AL4DaoKXoqsOCpQIjW
-	vcoeDKoOmZyQ4JeV8dt6YQf3aBB7+xAO3FfjkqKQTN+ewC4ugAimu1ALrCCUuRNSEzgonkKmhFj
-	MCL89VNqDNhs1FImfzAlEJ80SY+CW4PpqOWNCLRp/Pz91kPZ6DuoU6k4E2oR/8W90LwU=
-X-Gm-Gg: ASbGncsRiNgCrv+t32t7GbctraalMGjR3Mlx5YTnIHPYoyxKG0Wb7yfwITrPpsWdbjH
-	+FcZiZ65BBIiJQ+ruagtZ+Y8Q+nMfJnYx5evWZd8B1Yv/qhifgk4BENE6OSK6viKVo63PuH9aRI
-	brdXhFiOBqtnhKLIX8AMtcZ59ozj8CPj6f8yVzr0WloEY2hFjhyE6tbRXh5RYMc1WpnuFx2H/fv
-	qBmguUOroFFFTj539Mnx6RSSNzdIHEVj2iwg5YNZAxhQaY6+T4xWH/gQDYB9/nBdeuKQPAwSnHI
-	HgdXSzKWVe7koUUHTX6sQuFBnRhCEdKzF/4cv+znhT2Mbf6l4XOdbDck4Ren6riICH3l6g==
-X-Received: by 2002:a17:903:2405:b0:290:c0d7:237e with SMTP id d9443c01a7336-2962adaf2cbmr20013915ad.39.1762301953492;
-        Tue, 04 Nov 2025 16:19:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGvLsNYSLufcGqpq910+wiTcGPaxLeUOI30KPT7POMh/wI/jxby0rWhm6jQT1thiVu8Y4E3iw==
-X-Received: by 2002:a17:903:2405:b0:290:c0d7:237e with SMTP id d9443c01a7336-2962adaf2cbmr20013465ad.39.1762301952858;
-        Tue, 04 Nov 2025 16:19:12 -0800 (PST)
-Received: from localhost ([2409:8924:a812:1670:4703:63e6:48fd:865d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601a69d91sm39637355ad.95.2025.11.04.16.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 16:19:12 -0800 (PST)
-Date: Wed, 5 Nov 2025 08:18:25 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-Message-ID: <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-References: <20250928030358.3873311-1-coxu@redhat.com>
- <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
- <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
- <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1762310880; x=1762915680;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OPz8gud/XQUy5E/Kke8SRPmK6elIY9QqlM3PyIOa7cg=;
+        b=X9lhUUslXUa+rC8PIba3q9NeKXZZOCYv0bPSyyYq+ypzEhe0lIubvESeLBigye+189
+         XL905wo2/cZ5iyfoibB/uZZNkXv5RZoHsmjj0N2vM3elLPuPRzsLRsKtgLiB8tRLB2hU
+         y83kNxe/jxRDwuCxvygq5XqzzMyzfRCTOqiC3KQTa8rQfZq3Fh9a0Hv8EdgBzXPBwcae
+         E0coUOulQrM5bburR0SIykWdIIvmfi6eWnmogZUG8lBU1KdhtmI0bsNqNb+YSh2Uu/nk
+         6RzibR5F3vF8ZWlAYh+/VC6VcqUboQ2n3IaVakudCnIkgPFxxmlYtjFZW84MkZ8mMRK1
+         HgFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPVjbvPwf+Kfbrtg8PeywZx55IA+ylZZpOhkpbZJLin8YDPaXWIhvZP+2aajHSo9D7Epe6DKYimk/K7t5B@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFwi3vGI280L81o4p13+49iJCuCSnJcZHZEu8cTk3wxEy2IQQR
+	PQCVA48HnatQ/ETXSYxxA9BuYMIHcXw9bqClZnlW7rHoqsS6r1gRJrJ7htMZahLKAzIat7qT0YL
+	sCrMibCpH97xf14tB7HiGaEX7qNttZh/y5hajQ4UX
+X-Gm-Gg: ASbGnctK34hGwzo8K+2dZpuGPGSPrPiRqOPRnX4+nPHnECxQTQSnjJIXpGIhmIQUOm8
+	DO3ZwfDKN6+jLlDCblAcSHVP/EHmRUQ1rucTIEXLcA1QKwRmbZb3wj5yO5Hj9gmBhME2OUJ497Q
+	s6XCRLacM0ickbEmPdelLBrpK+R6HksCNuCUMt6rfGXGv9c3kDQOGlbikaYtZRz0SddyxpCvbeR
+	ASolnUH6j3y29wRSHRHOONbFLkBBB8YrKeBqQ1+EkEdutA47i+1Ipj8xPh1mNWuSKK1EgM=
+X-Google-Smtp-Source: AGHT+IHnGx5CgEm/MoaWGt7F0FraTPi7R2fwUIX+qrXMRXnUPf+Tvb9LSvI/zqrUqWZwt/+nFfWSXcwZLQy2U8AshrU=
+X-Received: by 2002:a17:90b:28c3:b0:341:88ba:c6d3 with SMTP id
+ 98e67ed59e1d1-341a6ddf6ffmr1643542a91.23.1762310879615; Tue, 04 Nov 2025
+ 18:47:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
+References: <20250928030358.3873311-1-coxu@redhat.com> <20251031074016.1975356-1-coxu@redhat.com>
+ <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
+ <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
+ <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com> <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
+In-Reply-To: <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
+From: Paul Moore <paul@paul-moore.com>
+Date: Tue, 4 Nov 2025 21:47:48 -0500
+X-Gm-Features: AWmQ_blM1ev6BHzNyFPCCcGHeIapF6epj6-cnjfP4sh6gT-6Ml3ReEvCTyOT9dA
+Message-ID: <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
+Subject: Re: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file
+ to access decompressed kernel module
+To: Coiby Xu <coxu@redhat.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Nov 02, 2025 at 10:43:04AM -0500, Paul Moore wrote:
->On Sun, Nov 2, 2025 at 10:06 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
->> On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
->> > On Fri, Oct 31, 2025 at 3:41 AM Coiby Xu <coxu@redhat.com> wrote:
->> > >
->> > > Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPRESS)
->> > > is enabled, IMA has no way to verify the appended module signature as it
->> > > can't decompress the module.
->> > >
->> > > Define a new LSM hook security_kernel_module_read_file which will be
->> > > called after kernel module decompression is done so IMA can access the
->> > > decompressed kernel module to verify the appended signature.
->> > >
->> > > Since IMA can access both xattr and appended kernel module signature
->> > > with the new LSM hook, it no longer uses the security_kernel_post_read_file
->> > > LSM hook for kernel module loading.
->> > >
->> > > Before enabling in-kernel module decompression, a kernel module in
->> > > initramfs can still be loaded with ima_policy=secure_boot. So adjust the
->> > > kernel module rule in secure_boot policy to allow either an IMA
->> > > signature OR an appended signature i.e. to use
->> > > "appraise func=MODULE_CHECK appraise_type=imasig|modsig".
->> > >
->> > > Reported-by: Karel Srot <ksrot@redhat.com>
->> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
->> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
->> > > ---
->> > > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311-1-coxu@redhat.com/
->> > >
->> > >  include/linux/lsm_hook_defs.h       |  2 ++
->> > >  include/linux/security.h            |  7 +++++++
->> > >  kernel/module/main.c                | 10 +++++++++-
->> > >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++++
->> > >  security/integrity/ima/ima_policy.c |  2 +-
->> > >  security/security.c                 | 17 +++++++++++++++++
->> > >  6 files changed, 62 insertions(+), 2 deletions(-)
->> >
->> > We don't really need a new LSM hook for this do we?  Can't we just
->> > define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
->> > another call to security_kernel_post_read_file() after the module is
->> > unpacked?  Something like the snippet below ...
->>
->> Yes, this is similar to my suggestion based on defining multiple enumerations:
->> READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MODULE.
->> With this solution, IMA would need to make an exception in the post kernel
->> module read for the READING_COMPRESSED_MODULE case, since the kernel module has
->> not yet been decompressed.
->>
->> Coiby suggested further simplification by moving the call later.  At which point
->> either there is or isn't an appended signature for non-compressed and
->> decompressed kernel modules.
->>
->> As long as you don't have a problem calling the security_kernel_post_read_file()
->> hook again, could we move the call later and pass READING_MODULE_UNCOMPRESSED?
+On Tue, Nov 4, 2025 at 7:19=E2=80=AFPM Coiby Xu <coxu@redhat.com> wrote:
+> On Sun, Nov 02, 2025 at 10:43:04AM -0500, Paul Moore wrote:
+> >On Sun, Nov 2, 2025 at 10:06=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com>=
+ wrote:
+> >> On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
+> >> > On Fri, Oct 31, 2025 at 3:41=E2=80=AFAM Coiby Xu <coxu@redhat.com> w=
+rote:
+> >> > >
+> >> > > Currently, when in-kernel module decompression (CONFIG_MODULE_DECO=
+MPRESS)
+> >> > > is enabled, IMA has no way to verify the appended module signature=
+ as it
+> >> > > can't decompress the module.
+> >> > >
+> >> > > Define a new LSM hook security_kernel_module_read_file which will =
+be
+> >> > > called after kernel module decompression is done so IMA can access=
+ the
+> >> > > decompressed kernel module to verify the appended signature.
+> >> > >
+> >> > > Since IMA can access both xattr and appended kernel module signatu=
+re
+> >> > > with the new LSM hook, it no longer uses the security_kernel_post_=
+read_file
+> >> > > LSM hook for kernel module loading.
+> >> > >
+> >> > > Before enabling in-kernel module decompression, a kernel module in
+> >> > > initramfs can still be loaded with ima_policy=3Dsecure_boot. So ad=
+just the
+> >> > > kernel module rule in secure_boot policy to allow either an IMA
+> >> > > signature OR an appended signature i.e. to use
+> >> > > "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
+> >> > >
+> >> > > Reported-by: Karel Srot <ksrot@redhat.com>
+> >> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> >> > > ---
+> >> > > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311=
+-1-coxu@redhat.com/
+> >> > >
+> >> > >  include/linux/lsm_hook_defs.h       |  2 ++
+> >> > >  include/linux/security.h            |  7 +++++++
+> >> > >  kernel/module/main.c                | 10 +++++++++-
+> >> > >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++=
+++
+> >> > >  security/integrity/ima/ima_policy.c |  2 +-
+> >> > >  security/security.c                 | 17 +++++++++++++++++
+> >> > >  6 files changed, 62 insertions(+), 2 deletions(-)
+> >> >
+> >> > We don't really need a new LSM hook for this do we?  Can't we just
+> >> > define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
+> >> > another call to security_kernel_post_read_file() after the module is
+> >> > unpacked?  Something like the snippet below ...
+> >>
+> >> Yes, this is similar to my suggestion based on defining multiple enume=
+rations:
+> >> READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MO=
+DULE.
+> >> With this solution, IMA would need to make an exception in the post ke=
+rnel
+> >> module read for the READING_COMPRESSED_MODULE case, since the kernel m=
+odule has
+> >> not yet been decompressed.
+> >>
+> >> Coiby suggested further simplification by moving the call later.  At w=
+hich point
+> >> either there is or isn't an appended signature for non-compressed and
+> >> decompressed kernel modules.
+> >>
+> >> As long as you don't have a problem calling the security_kernel_post_r=
+ead_file()
+> >> hook again, could we move the call later and pass READING_MODULE_UNCOM=
+PRESSED?
+> >
+> >It isn't clear from these comments if you are talking about moving
+> >only the second security_kernel_post_read_file() call that was
+> >proposed for init_module_from_file() to later in the function, leaving
+> >the call in kernel_read_file() intact, or something else?
 >
->It isn't clear from these comments if you are talking about moving
->only the second security_kernel_post_read_file() call that was
->proposed for init_module_from_file() to later in the function, leaving
->the call in kernel_read_file() intact, or something else?
-
-Hi Paul and Mimi,
-
-Thanks for sharing your feedback! Yes, you are right, there is no need
-for a new LSM hook. Actually by not introducing a new LSM hook, we can
-have a much simpler solution!
-
+> Hi Paul and Mimi,
 >
->I think we want to leave the hook calls in kernel_read_file() intact,
->in which case I'm not certain what advantage there is in moving the
->security_kernel_post_read_file() call to a location where it is called
->in init_module_from_file() regardless of if the module is compressed
->or not.  In the uncompressed case you are calling the hook twice for
->no real benefit?  It may be helpful to submit a patch with your
->proposal as a patch can be worth a thousand words ;)
+> Thanks for sharing your feedback! Yes, you are right, there is no need
+> for a new LSM hook. Actually by not introducing a new LSM hook, we can
+> have a much simpler solution!
 >
+> >
+> >I think we want to leave the hook calls in kernel_read_file() intact,
+> >in which case I'm not certain what advantage there is in moving the
+> >security_kernel_post_read_file() call to a location where it is called
+> >in init_module_from_file() regardless of if the module is compressed
+> >or not.  In the uncompressed case you are calling the hook twice for
+> >no real benefit?  It may be helpful to submit a patch with your
+> >proposal as a patch can be worth a thousand words ;)
+> >
+> >
+> >> > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> >> > index c66b26184936..f127000d2e0a 100644
+> >> > --- a/kernel/module/main.c
+> >> > +++ b/kernel/module/main.c
+> >> > @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file =
+*f, const ch
+> >> > ar __user * uargs, int
+> >> >                        mod_stat_add_long(len, &invalid_decompress_by=
+tes);
+> >> >                        return err;
+> >> >                }
+> >> > +
+> >> > +               err =3D security_kernel_post_read_file(f,
+> >> > +                                                    (char *)info.hd=
+r, info.len,
+> >> > +                                                    READING_MODULE_=
+DECOMPRESS);
+> >> > +               if (err) {
+> >> > +                       mod_stat_inc(&failed_kreads);
+> >> > +                       return err;
+> >> > +               }
+> >> >        } else {
+> >> >                info.hdr =3D buf;
+> >> >                info.len =3D len;
+> >>
+> >> =3D=3D defer security_kernel_post_read_file() call to here =3D=3D
 >
->> > diff --git a/kernel/module/main.c b/kernel/module/main.c
->> > index c66b26184936..f127000d2e0a 100644
->> > --- a/kernel/module/main.c
->> > +++ b/kernel/module/main.c
->> > @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file *f, const ch
->> > ar __user * uargs, int
->> >                        mod_stat_add_long(len, &invalid_decompress_bytes);
->> >                        return err;
->> >                }
->> > +
->> > +               err = security_kernel_post_read_file(f,
->> > +                                                    (char *)info.hdr, info.len,
->> > +                                                    READING_MODULE_DECOMPRESS);
->> > +               if (err) {
->> > +                       mod_stat_inc(&failed_kreads);
->> > +                       return err;
->> > +               }
->> >        } else {
->> >                info.hdr = buf;
->> >                info.len = len;
->>
->> == defer security_kernel_post_read_file() call to here ==
+> By moving security_kernel_post_read_file, I think what Mimi means is to
+> move security_kernel_post_read_file in init_module_from_file() to later
+> in the function,
+>
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c66b261849362a..66725e53fef0c1 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3678,6 +3678,7 @@ static int init_module_from_file(struct file *f, co=
+nst char __user * uargs, int
+>         struct load_info info =3D { };
+>         void *buf =3D NULL;
+>         int len;
+> +       int err;
+>
+>         len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODUL=
+E);
+>         if (len < 0) {
+> @@ -3686,7 +3687,7 @@ static int init_module_from_file(struct file *f, co=
+nst char __user * uargs, int
+>         }
+>
+>         if (flags & MODULE_INIT_COMPRESSED_FILE) {
+> -               int err =3D module_decompress(&info, buf, len);
+> +               err =3D module_decompress(&info, buf, len);
+>                 vfree(buf); /* compressed data is no longer needed */
+>                 if (err) {
+>                         mod_stat_inc(&failed_decompress);
+> @@ -3698,6 +3699,14 @@ static int init_module_from_file(struct file *f, c=
+onst char __user * uargs, int
+>                 info.len =3D len;
+>         }
+>
+> +       err =3D security_kernel_post_read_file(f, (char *)info.hdr, info.=
+len,
+> +                                            READING_MODULE);
+> +       if (err) {
+> +               mod_stat_inc(&failed_kreads);
+> +               free_copy(&info, flags);
+> +               return err;
+> +       }
+> +
+>         return load_module(&info, uargs, flags);
+>   }
+>
+> If we only call security_kernel_post_read_file the 2nd time for a
+> decompressed kernel module, IMA won't be sure what to do when
+> security_kernel_post_read_file is called for the 1st time because it
+> can't distinguish between a compressed module with appended signature or
+> a uncompressed module without appended signature. If it permits 1st
+> calling security_kernel_post_read_file, a uncompressed module without
+> appended signature can be loaded. If it doesn't permit 1st calling
+> security_kernel_post_read_file, there is no change to call
+> security_kernel_post_read_file again for decompressed module.
+>
+> And you are right, there is no need to call
+> security_kernel_post_read_file twice. And from the perspective of IMA,
+> it simplifies reasoning if it is guaranteed that IMA will always access
+> uncompressed kernel module regardless regardless of its original
+> compression state.
+>
+> So I think a better solution is to stop calling
+> security_kernel_post_read_file in kernel_read_file for READING_MODULE.
+> This can also avoiding introducing an unnecessary
+> READING_MODULE_UNCOMPRESSED/READING_COMPRESSED_MODULE enumeration and
+> can make the solution even simpler,
+>
+> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
+> index de32c95d823dbd..7c78e84def6ec7 100644
+> --- a/fs/kernel_read_file.c
+> +++ b/fs/kernel_read_file.c
+> @@ -107,7 +107,12 @@ ssize_t kernel_read_file(struct file *file, loff_t o=
+ffset, void **buf,
+>                         goto out_free;
+>                 }
+>
+> -               ret =3D security_kernel_post_read_file(file, *buf, i_size=
+, id);
+> +               /*
+> +                * security_kernel_post_read_file will be called later af=
+ter
+> +                * a read kernel module is truly decompressed
+> +                */
+> +               if (id !=3D READING_MODULE)
+> +                       ret =3D security_kernel_post_read_file(file, *buf=
+, i_size, id);
+>         }
 
-By moving security_kernel_post_read_file, I think what Mimi means is to
-move security_kernel_post_read_file in init_module_from_file() to later
-in the function,
+Assuming I'm understanding the problem correctly, I think you're
+making this harder than it needs to be.  I believe something like this
+should solve the problem without having to add more conditionals
+around the hooks in kernel_read_file(), and limiting the multiple
+security_kernel_post_read_file() calls to just the compressed case ...
+and honestly in each of the _post_read_file() calls in the compressed
+case, the buffer contents have changed so it somewhat makes sense.
+
+Given the code below, IMA could simply ignore the
+READING_MODULE_COMPRESSED case (or whatever it is the IMA needs to do
+in that case) and focus on the READING_MODULE case as it does today.
+I expect the associated IMA patch would be both trivial and small.
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c66b261849362a..66725e53fef0c1 100644
+index c66b26184936..b435c498ec01 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -3678,6 +3678,7 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
-  	struct load_info info = { };
-  	void *buf = NULL;
-  	int len;
-+	int err;
-  
-  	len = kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE);
-  	if (len < 0) {
-@@ -3686,7 +3687,7 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
-  	}
-  
-  	if (flags & MODULE_INIT_COMPRESSED_FILE) {
--		int err = module_decompress(&info, buf, len);
-+		err = module_decompress(&info, buf, len);
-  		vfree(buf); /* compressed data is no longer needed */
-  		if (err) {
-  			mod_stat_inc(&failed_decompress);
-@@ -3698,6 +3699,14 @@ static int init_module_from_file(struct file *f, const char __user * uargs, int
-  		info.len = len;
-  	}
-  
-+	err = security_kernel_post_read_file(f, (char *)info.hdr, info.len,
-+					     READING_MODULE);
-+	if (err) {
-+		mod_stat_inc(&failed_kreads);
-+		free_copy(&info, flags);
-+		return err;
-+	}
+@@ -3675,17 +3675,19 @@ static int idempotent_wait_for_completion(struct id=
+empot
+ent *u)
+
+static int init_module_from_file(struct file *f, const char __user * uargs,=
+ int
+flags)
+{
++       bool compressed =3D !!(flags & MODULE_INIT_COMPRESSED_FILE);
+       struct load_info info =3D { };
+       void *buf =3D NULL;
+       int len;
+
+-       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE)=
+;
++       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL,
++                              compressed ? READING_MODULE_COMPRESSED : REA=
+DING_
+MODULE);
+       if (len < 0) {
+               mod_stat_inc(&failed_kreads);
+               return len;
+       }
+
+-       if (flags & MODULE_INIT_COMPRESSED_FILE) {
++       if (compressed) {
+               int err =3D module_decompress(&info, buf, len);
+               vfree(buf); /* compressed data is no longer needed */
+               if (err) {
+@@ -3693,6 +3695,14 @@ static int init_module_from_file(struct file *f, con=
+st ch
+ar __user * uargs, int
+                       mod_stat_add_long(len, &invalid_decompress_bytes);
+                       return err;
+               }
 +
-  	return load_module(&info, uargs, flags);
-  }
++               err =3D security_kernel_post_read_file(f,
++                                                    (char *)info.hdr, info=
+.len,
++                                                    READING_MODULE);
++               if (err) {
++                       mod_stat_inc(&failed_kreads);
++                       return err;
++               }
+       } else {
+               info.hdr =3D buf;
+               info.len =3D len;
 
-If we only call security_kernel_post_read_file the 2nd time for a
-decompressed kernel module, IMA won't be sure what to do when
-security_kernel_post_read_file is called for the 1st time because it
-can't distinguish between a compressed module with appended signature or
-a uncompressed module without appended signature. If it permits 1st
-calling security_kernel_post_read_file, a uncompressed module without
-appended signature can be loaded. If it doesn't permit 1st calling
-security_kernel_post_read_file, there is no change to call
-security_kernel_post_read_file again for decompressed module.
-
-And you are right, there is no need to call
-security_kernel_post_read_file twice. And from the perspective of IMA,
-it simplifies reasoning if it is guaranteed that IMA will always access
-uncompressed kernel module regardless regardless of its original
-compression state. 
-
-So I think a better solution is to stop calling
-security_kernel_post_read_file in kernel_read_file for READING_MODULE.
-This can also avoiding introducing an unnecessary
-READING_MODULE_UNCOMPRESSED/READING_COMPRESSED_MODULE enumeration and
-can make the solution even simpler,
-
-diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-index de32c95d823dbd..7c78e84def6ec7 100644
---- a/fs/kernel_read_file.c
-+++ b/fs/kernel_read_file.c
-@@ -107,7 +107,12 @@ ssize_t kernel_read_file(struct file *file, loff_t offset, void **buf,
-  			goto out_free;
-  		}
-  
--		ret = security_kernel_post_read_file(file, *buf, i_size, id);
-+		/*
-+		 * security_kernel_post_read_file will be called later after
-+		 * a read kernel module is truly decompressed
-+		 */
-+		if (id != READING_MODULE)
-+			ret = security_kernel_post_read_file(file, *buf, i_size, id);
-  	}
-
-Btw, I notice IMA is the only user of security_kernel_post_read_file so
-this change won't affect other LSMs. For a full patch, please visit
-https://github.com/coiby/linux/commit/558d85779ab5d794874749ecfae0e48b890bf3e0.patch
-
-If there are concerns that I'm unaware of and a new
-READING_MODULE_UNCOMPRESSED/READING_COMPRESSED_MODULE enumeration is
-necessary, here's another patch
-https://github.com/coiby/linux/commit/cdd40317b6070f48ec871c6a89428084f38ca083.patch
-
-
->
->-- 
->paul-moore.com
->
-
--- 
-Best regards,
-Coiby
-
+--=20
+paul-moore.com
