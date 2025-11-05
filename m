@@ -1,191 +1,237 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B006B2FB97B;
-	Wed,  5 Nov 2025 14:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAFC313E2A
+	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 14:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762351668; cv=none; b=BOpFtxZV24gSZyja5msECi3TctqcSudfveJrX8tl2YHaC45IoC3dld2XN/MQvIiCDd70sUNvgZbYaJSRz3QieZjBnADcR2YiIrkRke8vhFSXEwdGBKSfigmbHwPr626hF8+90J77UZGf/vu7gbTViIqM2x3zNo2nE/D1X0Du6T4=
+	t=1762352620; cv=none; b=jxL33NPDlesDOxH1qSv77txlVZL6qbLnrqjPu0LgUQNKZYi6s8XPCHozfVs/Yqu8YBO9zJdKBSRQ5RqSlE8N6fEnBIm7ctGaW7V6NaLTl+BWP52PLVw1R+zUmr17PthBIVLSDXy0iqroYg3riVI+LEAV1nPpvoqVS6aT9qUg6VE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762351668; c=relaxed/simple;
-	bh=tkdeOi7cY12aMcnr2J+SO43SXIWe+71wa+sOYjd1tME=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=jQQha9zvXDEkwa6Opd+8fyk42SBRKA/8NsEdAIJzx9Kpf8MlZ1pUH/X0nxcQ+YJZyNZljRoOOPytmweMVavRCqsSiyAPP48Qxdr7A+Z6H0oyg1AIfeApQdrByCq1WUE7uYPSKiLU8ryLH/mlWMTI04F8BAovmQeQtaohL3s6Syk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kpbSCE/U; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1762352620; c=relaxed/simple;
+	bh=0uWkxySb4X3qkV+td4fhoYDyaOL1Qzpqc5FJ1Y4C/Mk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pn3Sbvk2nKcBr7urvOQyzX0WGbTLF65TGHq0XaARhPC9PtKWPluXpzRISe3qXniY/ZNSdbhfZyga7Zb0B/5E57TPxssRXegVisilVGEvuU7/Ok9ki6Trb+PIIeF3VuhBJULAUQp8CFQGOJINqUuqQwMgIB5iS8SdWo8vw5K6KxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=aJ83/txM; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=aJ83/txM; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kpbSCE/U"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A550KcT001308;
-	Wed, 5 Nov 2025 14:07:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=tkdeOi
-	7cY12aMcnr2J+SO43SXIWe+71wa+sOYjd1tME=; b=kpbSCE/Uz032aVhAyocG6o
-	XPWHUtkwkmbMy8BRT1C09ac0T+e3B3EzS/u+RKqinc4I1hKlXWI0ROqjmo4q46/q
-	4+EGoojfaUXuKXBAPb5W+eHYKBpexexlv8ex/2u3zR8/RmhK+oQ51zp+taheZf4w
-	1RlzV84cQF/rvcnzs7W4sWbr88NJl1T7MQUyYblcQogYIl6drc8RW1QMhsTU54Ig
-	e6tTNuIbDqYKT3wP3oGTnZm9McBEyFWeGMQSoWyugt8IBIMRmcxWkHZrac8K92vy
-	e+zhyqIzH8vSZafpMCpkVMHc7gLg1XwmTxqqti/fbGfnR5uiOlIzwgah6NJyU17A
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a57mr9ed4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Nov 2025 14:07:16 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A5DhEOo029586;
-	Wed, 5 Nov 2025 14:07:16 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a57mr9ecu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Nov 2025 14:07:16 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5CZHQd018804;
-	Wed, 5 Nov 2025 14:07:15 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4a5whngcw4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Nov 2025 14:07:15 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A5E7EVj25428572
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 5 Nov 2025 14:07:14 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 606A15803F;
-	Wed,  5 Nov 2025 14:07:14 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D7CC858055;
-	Wed,  5 Nov 2025 14:07:12 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.10.126])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  5 Nov 2025 14:07:12 +0000 (GMT)
-Message-ID: <0c7e94a436a3742003e5e1155a48480d8307a9c7.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>, Coiby Xu <coxu@redhat.com>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>,
-        "Serge E.
- Hallyn" <serge@hallyn.com>,
-        Luis Chamberlain	 <mcgrof@kernel.org>,
-        Petr
- Pavlu <petr.pavlu@suse.com>, Daniel Gomez	 <da.gomez@kernel.org>,
-        Sami
- Tolvanen <samitolvanen@google.com>,
-        Roberto Sassu	
- <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        open list
- <linux-kernel@vger.kernel.org>,
-        "open list:MODULE SUPPORT"
- <linux-modules@vger.kernel.org>
-In-Reply-To: <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
-References: <20250928030358.3873311-1-coxu@redhat.com>
-	 <20251031074016.1975356-1-coxu@redhat.com>
-	 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
-	 <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-	 <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-	 <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-	 <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-Date: Wed, 05 Nov 2025 09:07:12 -0500
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="aJ83/txM";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="aJ83/txM"
+Received: from pathway.suse.cz (unknown [10.100.201.202])
+	by smtp-out2.suse.de (Postfix) with ESMTP id E4D691F6E6;
+	Wed,  5 Nov 2025 14:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1762352616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=igxPkPyQv/i/dh0I1jeBfwiP1p+UZo7J0NJEx4Op+Sk=;
+	b=aJ83/txMgw60fL64t8Rt9TgcHE13k6sNObgO3cwPscsenZHBO02u8O9+qmNHyRPNaVnEuB
+	AAGzuBbXFgj4obAL+EIw70JwqHmyGMFkvm5ycOzLR1Sg47oK+hr/rNvrYuEz4Ejk0ERyA8
+	HLopP/LFqaSKT/6Lbwwoer0iu6ng23k=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1762352616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=igxPkPyQv/i/dh0I1jeBfwiP1p+UZo7J0NJEx4Op+Sk=;
+	b=aJ83/txMgw60fL64t8Rt9TgcHE13k6sNObgO3cwPscsenZHBO02u8O9+qmNHyRPNaVnEuB
+	AAGzuBbXFgj4obAL+EIw70JwqHmyGMFkvm5ycOzLR1Sg47oK+hr/rNvrYuEz4Ejk0ERyA8
+	HLopP/LFqaSKT/6Lbwwoer0iu6ng23k=
+From: Petr Mladek <pmladek@suse.com>
+To: Petr Pavlu <petr.pavlu@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH 0/6] kallsyms: Prevent invalid access when showing module buildid
+Date: Wed,  5 Nov 2025 15:23:12 +0100
+Message-ID: <20251105142319.1139183-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: eGRNDIJmH03w3Ati_fcyHVM2BapRwb3X
-X-Authority-Analysis: v=2.4 cv=MKhtWcZl c=1 sm=1 tr=0 ts=690b5a14 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=ouyXqMZaNgMXvW1HyOUA:9 a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-ORIG-GUID: F6O3LgHbdETKh35Acolo2MDmhTEF-8n0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAwMSBTYWx0ZWRfXwgxkNudsW+/Z
- c4V8kB9fvoPo1uLUcZT4ADOgL33NRgN0fxLRhoY0hfX0CH4ihXzFVXSXAjNw11g4DTwdqTTuDTr
- bIa0jBJNeHo1Zb0TFPO7kvgu2N85xQGhYzybvwyXMe9N/mAXVnKt/wPAbkgUIodSwp+VwkdwmuX
- XH2WRZpwWKhTIxhlP72sQh/cbr2TgkppEou1P4Uk6v9+Hl+9q2QQjIp97lpGoIRSggWt82iZj+X
- 7hN1x54bLh30VNwtaaN2EKcmJnlmrGpAN8URzk4dzkFpCMdmG+MGX25MPiYdstte7ZTZ6zTJkwc
- 9rFT4d059QAfcfFGxuNPsUMuwM3bEjKWoAi7Z7l9Q43PUFRiz1Qf25DnHU9AH0++eJCTmi5q4I5
- ThbLz8FHREkyLZumasPEX5ruvMsfUg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-05_05,2025-11-03_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 adultscore=0 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511010001
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-1.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_CC(0.00)[iogearbox.net,gmail.com,kernel.org,arm.com,google.com,vger.kernel.org,suse.com];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Flag: NO
+X-Spam-Score: -1.30
+X-Spam-Level: 
 
-T24gVHVlLCAyMDI1LTExLTA0IGF0IDIxOjQ3IC0wNTAwLCBQYXVsIE1vb3JlIHdyb3RlOgo+IEFz
-c3VtaW5nIEknbSB1bmRlcnN0YW5kaW5nIHRoZSBwcm9ibGVtIGNvcnJlY3RseSwgSSB0aGluayB5
-b3UncmUKPiBtYWtpbmcgdGhpcyBoYXJkZXIgdGhhbiBpdCBuZWVkcyB0byBiZS7CoCBJIGJlbGll
-dmUgc29tZXRoaW5nIGxpa2UgdGhpcwo+IHNob3VsZCBzb2x2ZSB0aGUgcHJvYmxlbSB3aXRob3V0
-IGhhdmluZyB0byBhZGQgbW9yZSBjb25kaXRpb25hbHMKPiBhcm91bmQgdGhlIGhvb2tzIGluIGtl
-cm5lbF9yZWFkX2ZpbGUoKSwgYW5kIGxpbWl0aW5nIHRoZSBtdWx0aXBsZQo+IHNlY3VyaXR5X2tl
-cm5lbF9wb3N0X3JlYWRfZmlsZSgpIGNhbGxzIHRvIGp1c3QgdGhlIGNvbXByZXNzZWQgY2FzZSAu
-Li4KPiBhbmQgaG9uZXN0bHkgaW4gZWFjaCBvZiB0aGUgX3Bvc3RfcmVhZF9maWxlKCkgY2FsbHMg
-aW4gdGhlIGNvbXByZXNzZWQKPiBjYXNlLCB0aGUgYnVmZmVyIGNvbnRlbnRzIGhhdmUgY2hhbmdl
-ZCBzbyBpdCBzb21ld2hhdCBtYWtlcyBzZW5zZS4KCj4gR2l2ZW4gdGhlIGNvZGUgYmVsb3csIElN
-QSBjb3VsZCBzaW1wbHkgaWdub3JlIHRoZQo+IFJFQURJTkdfTU9EVUxFX0NPTVBSRVNTRUQgY2Fz
-ZSAob3Igd2hhdGV2ZXIgaXQgaXMgdGhlIElNQSBuZWVkcyB0byBkbwo+IGluIHRoYXQgY2FzZSkg
-YW5kIGZvY3VzIG9uIHRoZSBSRUFESU5HX01PRFVMRSBjYXNlIGFzIGl0IGRvZXMgdG9kYXkuCj4g
-SSBleHBlY3QgdGhlIGFzc29jaWF0ZWQgSU1BIHBhdGNoIHdvdWxkIGJlIGJvdGggdHJpdmlhbCBh
-bmQgc21hbGwuCj4gCj4gZGlmZiAtLWdpdCBhL2tlcm5lbC9tb2R1bGUvbWFpbi5jIGIva2VybmVs
-L21vZHVsZS9tYWluLmMKPiBpbmRleCBjNjZiMjYxODQ5MzYuLmI0MzVjNDk4ZWMwMSAxMDA2NDQK
-PiAtLS0gYS9rZXJuZWwvbW9kdWxlL21haW4uYwo+ICsrKyBiL2tlcm5lbC9tb2R1bGUvbWFpbi5j
-Cj4gQEAgLTM2NzUsMTcgKzM2NzUsMTkgQEAgc3RhdGljIGludCBpZGVtcG90ZW50X3dhaXRfZm9y
-X2NvbXBsZXRpb24oc3RydWN0IGlkZW1wb3QKPiBlbnQgKnUpCj4gCj4gc3RhdGljIGludCBpbml0
-X21vZHVsZV9mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmYsIGNvbnN0IGNoYXIgX191c2VyICogdWFy
-Z3MsIGludAo+IGZsYWdzKQo+IHsKPiArwqDCoMKgwqDCoMKgIGJvb2wgY29tcHJlc3NlZCA9ICEh
-KGZsYWdzICYgTU9EVUxFX0lOSVRfQ09NUFJFU1NFRF9GSUxFKTsKPiDCoMKgwqDCoMKgwqAgc3Ry
-dWN0IGxvYWRfaW5mbyBpbmZvID0geyB9Owo+IMKgwqDCoMKgwqDCoCB2b2lkICpidWYgPSBOVUxM
-Owo+IMKgwqDCoMKgwqDCoCBpbnQgbGVuOwo+IAo+IC3CoMKgwqDCoMKgwqAgbGVuID0ga2VybmVs
-X3JlYWRfZmlsZShmLCAwLCAmYnVmLCBJTlRfTUFYLCBOVUxMLCBSRUFESU5HX01PRFVMRSk7Cj4g
-K8KgwqDCoMKgwqDCoCBsZW4gPSBrZXJuZWxfcmVhZF9maWxlKGYsIDAsICZidWYsIElOVF9NQVgs
-IE5VTEwsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgY29tcHJlc3NlZCA/IFJFQURJTkdfTU9EVUxFX0NPTVBSRVNTRUQgOiBSRUFE
-SU5HXwo+IE1PRFVMRSk7Cj4gwqDCoMKgwqDCoMKgIGlmIChsZW4gPCAwKSB7Cj4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBtb2Rfc3RhdF9pbmMoJmZhaWxlZF9rcmVhZHMpOwo+IMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGxlbjsKPiDCoMKgwqDCoMKgwqAgfQo+IAo+
-IC3CoMKgwqDCoMKgwqAgaWYgKGZsYWdzICYgTU9EVUxFX0lOSVRfQ09NUFJFU1NFRF9GSUxFKSB7
-Cj4gK8KgwqDCoMKgwqDCoCBpZiAoY29tcHJlc3NlZCkgewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgaW50IGVyciA9IG1vZHVsZV9kZWNvbXByZXNzKCZpbmZvLCBidWYsIGxlbik7Cj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB2ZnJlZShidWYpOyAvKiBjb21wcmVzc2VkIGRh
-dGEgaXMgbm8gbG9uZ2VyIG5lZWRlZCAqLwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-aWYgKGVycikgewo+IEBAIC0zNjkzLDYgKzM2OTUsMTQgQEAgc3RhdGljIGludCBpbml0X21vZHVs
-ZV9mcm9tX2ZpbGUoc3RydWN0IGZpbGUgKmYsIGNvbnN0IGNoCj4gYXIgX191c2VyICogdWFyZ3Ms
-IGludAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG1vZF9z
-dGF0X2FkZF9sb25nKGxlbiwgJmludmFsaWRfZGVjb21wcmVzc19ieXRlcyk7Cj4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGVycjsKPiDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0KPiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgZXJyID0gc2VjdXJpdHlfa2VybmVsX3Bvc3RfcmVhZF9maWxlKGYsCj4gK8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAoY2hhciAqKWluZm8uaGRyLCBpbmZv
-LmxlbiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFJF
-QURJTkdfTU9EVUxFKTsKCldpdGhvdXQgY2hhbmdpbmcgdGhlIGVudW1lcmF0aW9uIGhlcmUsIElN
-QSB3b3VsZCBub3QgYmUgYWJsZSB0byBkaWZmZXJlbnRpYXRlCnRoZSBmaXJzdCBjYWxsIHRvIHNl
-Y3VyaXR5X2tlcm5lbF9wb3N0X3JlYWRfZmlsZSgpIGFuZCB0aGlzIG9uZS4gIFRoZSBmaXJzdCBj
-YWxsCndvdWxkIHJlc3VsdCBpbiB1bm5lY2Vzc2FyeSBlcnJvciBtZXNzYWdlcy4KCkFkZGluZyBh
-biBhZGRpdGlvbmFsIGNhbGwgdG8gc2VjdXJpdHlfa2VybmVsX3Bvc3RfcmVhZF9maWxlKCkgaGVy
-ZSwgd291bGQKcmVxdWlyZSBkZWZpbmluZyAyIGFkZGl0aW9uYWwgZW51bWVyYXRpb25zOiBSRUFE
-SU5HX01PRFVMRV9DT01QUkVTU0VELApSRUFESU5HX01PRFVMRV9ERUNPTVBSRVNTRUQuCgo+ICvC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChlcnIpIHsKPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgbW9kX3N0YXRfaW5jKCZmYWlsZWRfa3JlYWRz
-KTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJu
-IGVycjsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9Cj4gwqDCoMKgwqDCoMKgIH0g
-ZWxzZSB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpbmZvLmhkciA9IGJ1ZjsKPiDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGluZm8ubGVuID0gbGVuOwoKRGVmZXJyaW5nIHRo
-ZSBzZWN1cml0eV9rZXJuZWxfcG9zdF9yZWFkX2ZpbGUoKSBjYWxsIHRvIGhlcmUsIGVsaW1pbmF0
-ZXMgdGhlIG5lZWQKZm9yIGRlZmluaW5nIGFkZGl0aW9uYWwgZW51bWVyYXRpb25zLiAgKENvaWJ5
-J3MgZmlyc3QgbGluay4pCgpBZGRpbmcgYW4gYWRkaXRpb25hbCBjYWxsIHRvIHNlY3VyaXR5X2tl
-cm5lbF9wb3N0X3JlYWRfZmlsZSgpIGhlcmUsIHJlcXVpcmVzIDEKYWRkaXRpb25hbCBlbnVtZXJh
-dGlvbi4gIChDb2lieSdzIDJuZCBsaW5rLikKCk1pbWkKCgo=
+We have seen nested crashes in __sprint_symbol(), see below. They seems
+to be caused by invalid pointer to "buildid".
+
+I made an audit of __sprint_symbol() and found several situations
+when the buildid might be wrong:
+
+  + bpf_address_lookup() does not set @modbuildid
+
+  + ftrace_mod_address_lookup() does not set @modbuildid
+
+  + __sprint_symbol() does not take rcu_read_lock and
+    the related struct module might get removed before
+    mod->build_id is printed.
+
+This patchset solves these problems:
+
+  + 1st, 2nd patches are preparatory
+  + 3rd, 4th, 6th patches fix the above problems
+  + 5th patch cleans up a suspicious initialization code.
+
+This is the backtrace, we have seen. But it is not really important.
+The problems fixed by the patchset are obvious:
+
+  crash64> bt [62/2029]
+  PID: 136151 TASK: ffff9f6c981d4000 CPU: 367 COMMAND: "btrfs"
+  #0 [ffffbdb687635c28] machine_kexec at ffffffffb4c845b3
+  #1 [ffffbdb687635c80] __crash_kexec at ffffffffb4d86a6a
+  #2 [ffffbdb687635d08] hex_string at ffffffffb51b3b61
+  #3 [ffffbdb687635d40] crash_kexec at ffffffffb4d87964
+  #4 [ffffbdb687635d50] oops_end at ffffffffb4c41fc8
+  #5 [ffffbdb687635d70] do_trap at ffffffffb4c3e49a
+  #6 [ffffbdb687635db8] do_error_trap at ffffffffb4c3e6a4
+  #7 [ffffbdb687635df8] exc_stack_segment at ffffffffb5666b33
+  #8 [ffffbdb687635e20] asm_exc_stack_segment at ffffffffb5800cf9
+  #9 [ffffbdb687635ea8] hex_string at ffffffffb51b3b61
+  #10 [ffffbdb687635ef8] vsnprintf at ffffffffb51b7291
+  #11 [ffffbdb687635f50] sprintf at ffffffffb51b7541
+  #12 [ffffbdb687635fb8] __sprint_symbol at ffffffffb4d849d6
+  #13 [ffffbdb687636018] symbol_string at ffffffffb51b4588
+  #14 [ffffbdb687636168] vsnprintf at ffffffffb51b7291
+  #15 [ffffbdb6876361c0] vscnprintf at ffffffffb51b73b9
+  #16 [ffffbdb6876361d0] printk_sprint at ffffffffb4d2ae82
+  #17 [ffffbdb6876361f8] vprintk_store at ffffffffb4d2d06d
+  #18 [ffffbdb6876362c8] vprintk_emit at ffffffffb4d2d1bf
+  #19 [ffffbdb687636308] printk at ffffffffb565e5ce
+  #20 [ffffbdb687636370] show_trace_log_lvl at ffffffffb4c42374
+  #21 [ffffbdb687636478] __die_body at ffffffffb4c426ca
+  #22 [ffffbdb687636498] die at ffffffffb4c42778
+  #23 [ffffbdb6876364c0] do_trap at ffffffffb4c3e49a
+  #24 [ffffbdb687636508] do_error_trap at ffffffffb4c3e6a4
+  #25 [ffffbdb687636548] exc_stack_segment at ffffffffb5666b33
+  #26 [ffffbdb687636570] asm_exc_stack_segment at ffffffffb5800cf9
+  #27 [ffffbdb6876365f8] hex_string at ffffffffb51b3b61
+  #28 [ffffbdb687636648] vsnprintf at ffffffffb51b7291
+  #29 [ffffbdb6876366a0] sprintf at ffffffffb51b7541
+  #30 [ffffbdb687636708] __sprint_symbol at ffffffffb4d849d6
+  #31 [ffffbdb687636768] symbol_string at ffffffffb51b4588
+  #32 [ffffbdb6876368b8] vsnprintf at ffffffffb51b7291
+  #33 [ffffbdb687636910] vscnprintf at ffffffffb51b73b9
+  #34 [ffffbdb687636920] printk_sprint at ffffffffb4d2ae82
+  #35 [ffffbdb687636948] vprintk_store at ffffffffb4d2d06d
+  #36 [ffffbdb687636a18] vprintk_emit at ffffffffb4d2d1bf
+  #37 [ffffbdb687636a58] printk at ffffffffb565e5ce
+  #38 [ffffbdb687636ac0] show_trace_log_lvl at ffffffffb4c42374
+  #39 [ffffbdb687636bc8] __die_body at ffffffffb4c426ca
+  #40 [ffffbdb687636be8] die at ffffffffb4c42778
+  #41 [ffffbdb687636c10] do_trap at ffffffffb4c3e49a
+  #42 [ffffbdb687636c58] do_error_trap at ffffffffb4c3e6a4
+  #43 [ffffbdb687636c98] exc_stack_segment at ffffffffb5666b33
+  #44 [ffffbdb687636cc0] asm_exc_stack_segment at ffffffffb5800cf9
+  #45 [ffffbdb687636d48] hex_string at ffffffffb51b3b61
+  #46 [ffffbdb687636d98] vsnprintf at ffffffffb51b7291
+  #47 [ffffbdb687636df0] sprintf at ffffffffb51b7541
+  #48 [ffffbdb687636e58] __sprint_symbol at ffffffffb4d849d6
+  #49 [ffffbdb687636eb8] symbol_string at ffffffffb51b4588
+  #50 [ffffbdb687637008] vsnprintf at ffffffffb51b7291
+  #51 [ffffbdb687637060] vscnprintf at ffffffffb51b73b9
+  #52 [ffffbdb687637070] printk_sprint at ffffffffb4d2ae82
+  #53 [ffffbdb687637098] vprintk_store at ffffffffb4d2d06d
+  #54 [ffffbdb687637168] vprintk_emit at ffffffffb4d2d1bf
+  #55 [ffffbdb6876371a8] printk at ffffffffb565e5ce
+  #56 [ffffbdb687637210] show_trace_log_lvl at ffffffffb4c42374
+  #57 [ffffbdb687637318] __die_body at ffffffffb4c426ca
+  #58 [ffffbdb687637338] die at ffffffffb4c42778
+  #59 [ffffbdb687637360] do_trap at ffffffffb4c3e49a
+  #60 [ffffbdb6876373a8] do_error_trap at ffffffffb4c3e6a4
+  #61 [ffffbdb6876373e8] exc_stack_segment at ffffffffb5666b33
+  #62 [ffffbdb687637410] asm_exc_stack_segment at ffffffffb5800cf9
+  #63 [ffffbdb687637498] hex_string at ffffffffb51b3b61
+  #64 [ffffbdb6876374e8] vsnprintf at ffffffffb51b7291
+  #65 [ffffbdb687637540] sprintf at ffffffffb51b7541
+  #66 [ffffbdb6876375a8] __sprint_symbol at ffffffffb4d849d6
+  #67 [ffffbdb687637608] symbol_string at ffffffffb51b4588
+  #68 [ffffbdb687637758] vsnprintf at ffffffffb51b7291
+  #69 [ffffbdb6876377b0] vscnprintf at ffffffffb51b73b9
+  #70 [ffffbdb6876377c0] printk_sprint at ffffffffb4d2ae82
+  #71 [ffffbdb6876377e8] vprintk_store at ffffffffb4d2d06d
+  #72 [ffffbdb6876378b8] vprintk_emit at ffffffffb4d2d1bf
+  #73 [ffffbdb6876378f8] printk at ffffffffb565e5ce
+  #74 [ffffbdb687637960] show_trace_log_lvl at ffffffffb4c42374
+  #75 [ffffbdb687637a68] __warn at ffffffffb4cb0d4d
+  #76 [ffffbdb687637aa0] report_bug at ffffffffb51a73fb
+  #77 [ffffbdb687637ad8] handle_bug at ffffffffb5666817
+  #78 [ffffbdb687637ae8] exc_invalid_op at ffffffffb56669d3
+  #79 [ffffbdb687637b00] asm_exc_invalid_op at ffffffffb5800e0d
+  [exception RIP: btrfs_ioctl_send+0x26e]
+  RIP: ffffffffc06070ce RSP: ffffbdb687637bb8 RFLAGS: 00010282
+  RAX: ffff9f6e50160380 RBX: ffff9f8eda64f200 RCX: 0000000000000000
+  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+  RBP: 0000000000000000 R8: 000000000000000a R9: ffff9f6c9e1c5b20
+  R10: 0000000000000075 R11: 0000000000000004 R12: ffff9f6d43a24000
+  R13: 0000000000000001 R14: 0000000000000000 R15: ffff9a2d65644d30
+  ORIG_RAX: ffffffffffffffff CS: 0010 SS: 0018
+  #80 [ffffbdb687637c78] _btrfs_ioctl_send at ffffffffc05c31d4 [btrfs]
+  #81 [ffffbdb687637ce8] btrfs_ioctl at ffffffffc05c80c4 [btrfs]
+  #82 [ffffbdb687637df8] __x64_sys_ioctl at ffffffffb4f776df
+  #83 [ffffbdb687637e38] do_syscall_64 at ffffffffb56663f8
+  RIP: 00007fbd339164a7 RSP: 00007ffde6a19888 RFLAGS: 00000246
+  RAX: ffffffffffffffda RBX: 0000000000000fe2 RCX: 00007fbd339164a7
+  RDX: 00007ffde6a19980 RSI: 0000000040489426 RDI: 0000000000000022
+  RBP: 00007ffde6a1ab80 R8: 00007ffde6a19980 R9: 00007fbd33808700
+  R10: 00007fbd338089d0 R11: 0000000000000246 R12: 0000000000000022
+  R13: 0000000000000001 R14: 0000000000000001 R15: 00005585428002b0
+  ORIG_RAX: 0000000000000010 CS: 0033 SS: 002b
+
+Petr Mladek (6):
+  module: Add helper function for reading module_buildid()
+  kallsyms: Cleanup code for appending the module buildid
+  kallsyms/bpf: Set module buildid in bpf_address_lookup()
+  kallsyms/ftrace: Set module buildid in ftrace_mod_address_lookup()
+  kallsyms: Clean up @namebuf initialization in
+    kallsyms_lookup_buildid()
+  kallsyms: Prevent module removal when printing module name and buildid
+
+ include/linux/filter.h   | 15 +++++++---
+ include/linux/ftrace.h   |  6 ++--
+ include/linux/module.h   |  9 ++++++
+ kernel/kallsyms.c        | 60 ++++++++++++++++++++++++++++++----------
+ kernel/module/kallsyms.c |  9 ++----
+ kernel/trace/ftrace.c    |  5 +++-
+ 6 files changed, 76 insertions(+), 28 deletions(-)
+
+-- 
+2.51.1
 
