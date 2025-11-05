@@ -1,362 +1,258 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5AB21D3E2
-	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 02:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1AD305957
+	for <linux-modules@vger.kernel.org>; Wed,  5 Nov 2025 11:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762310883; cv=none; b=FN9pU8keYzVEr84jMn71/pQTHA/hcnG6P2RBIuwI/uu628wO8a/7WnBjrLh3jLFTzWfU8dwPWobY7j5wkXZcUtBXjdJIWQ4tK1f2eA4xkxgjgCVZaATQcHyx02LirJLl6pOfUCkSn+vNgH78cvb+fRcNZHbT4OdeZ+2aJK1dNWE=
+	t=1762341922; cv=none; b=DdQgMw0NgQQJNnlqLyiYbWRIeDRoj6aMI4MDmfadfmUNUQsh8ZwTmZ416QG8mioceuKFIjShzOloIDxKHC1rIzncdXF1lerjXBQilY8YB0/n8Vbm7Tc7oSYWUHV42zYy/Ygci8m+kRO6DcMigpvM6PGBPNFmsPWswjW+jLURx/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762310883; c=relaxed/simple;
-	bh=rXf5u+fnVQB8ijTEi6AvLLG2mpb9BXOpnmRrCXsI4IM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VWqUnjtk0LoaFBgj1WCWNqMa3NUVl1mTORBoyVm0SYBW9k149DUP4gwgW/IYYDUrBxJ69/Uw8D0mL0wOfAnR80NG7YrATJ2jcbC/D1JajlcPAxKh9uYkmjC3rEb0SF3F55mENs8EFMoRqFULmwQdBaBHHl0wkmM/NByaBeSINvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZaG3Cm7O; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1762341922; c=relaxed/simple;
+	bh=WGjt1LZlkBB8w6gHVzXLXlbkP5HnD/BwtQ5i3ks0II4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FUP/muv4urBvHnU6io1I2iHhI2ovsTkzjRUNcH4Vsxk1Ec9HGmDT2dgnXyTS99EZIhaAQY/OUoprKKmD0MvF4xOT0MimZ2qVUT7T+mojh9aJHdOUBChwFWhttt5Nj8G6C1Ird/4ArKXL3LjCBdUYZA3E2I+HhKGThhvKO4pceY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FU8oo6YB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yraSf4DV; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FU8oo6YB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yraSf4DV; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZaG3Cm7O"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b55517e74e3so6224638a12.2
-        for <linux-modules@vger.kernel.org>; Tue, 04 Nov 2025 18:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762310880; x=1762915680; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OPz8gud/XQUy5E/Kke8SRPmK6elIY9QqlM3PyIOa7cg=;
-        b=ZaG3Cm7OrmjG/OhloobS5j6vdVxLdh/BqI7vYnBpwloUHWwgXXLlHNm3tQGpfRnLHv
-         uAH57DuVh1Sn+IN+MbM7VNPtepOfv0SRChFbMELp4OHuXQUSpt9NdB+rT6jm752i5Zi/
-         hOG3lBO6F8BEz0xI1kSK5zpYeucdC4LSYbToKeErX/40epxRy0eNjk4dshiLmp1u4dNA
-         zjeExBGZre2EXqfIcBc91Od4GYqjdMloc/wUPtv3PrJpC7PvdbqvJTSJAMKfWOrK9cFp
-         vjpXi4Xy9OfulLClsSWbAcYn03P+5LFyd825GIikIQ/U93SFvazVLUiNw3ma4P759uwt
-         vI+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762310880; x=1762915680;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OPz8gud/XQUy5E/Kke8SRPmK6elIY9QqlM3PyIOa7cg=;
-        b=X9lhUUslXUa+rC8PIba3q9NeKXZZOCYv0bPSyyYq+ypzEhe0lIubvESeLBigye+189
-         XL905wo2/cZ5iyfoibB/uZZNkXv5RZoHsmjj0N2vM3elLPuPRzsLRsKtgLiB8tRLB2hU
-         y83kNxe/jxRDwuCxvygq5XqzzMyzfRCTOqiC3KQTa8rQfZq3Fh9a0Hv8EdgBzXPBwcae
-         E0coUOulQrM5bburR0SIykWdIIvmfi6eWnmogZUG8lBU1KdhtmI0bsNqNb+YSh2Uu/nk
-         6RzibR5F3vF8ZWlAYh+/VC6VcqUboQ2n3IaVakudCnIkgPFxxmlYtjFZW84MkZ8mMRK1
-         HgFA==
-X-Forwarded-Encrypted: i=1; AJvYcCXPVjbvPwf+Kfbrtg8PeywZx55IA+ylZZpOhkpbZJLin8YDPaXWIhvZP+2aajHSo9D7Epe6DKYimk/K7t5B@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFwi3vGI280L81o4p13+49iJCuCSnJcZHZEu8cTk3wxEy2IQQR
-	PQCVA48HnatQ/ETXSYxxA9BuYMIHcXw9bqClZnlW7rHoqsS6r1gRJrJ7htMZahLKAzIat7qT0YL
-	sCrMibCpH97xf14tB7HiGaEX7qNttZh/y5hajQ4UX
-X-Gm-Gg: ASbGnctK34hGwzo8K+2dZpuGPGSPrPiRqOPRnX4+nPHnECxQTQSnjJIXpGIhmIQUOm8
-	DO3ZwfDKN6+jLlDCblAcSHVP/EHmRUQ1rucTIEXLcA1QKwRmbZb3wj5yO5Hj9gmBhME2OUJ497Q
-	s6XCRLacM0ickbEmPdelLBrpK+R6HksCNuCUMt6rfGXGv9c3kDQOGlbikaYtZRz0SddyxpCvbeR
-	ASolnUH6j3y29wRSHRHOONbFLkBBB8YrKeBqQ1+EkEdutA47i+1Ipj8xPh1mNWuSKK1EgM=
-X-Google-Smtp-Source: AGHT+IHnGx5CgEm/MoaWGt7F0FraTPi7R2fwUIX+qrXMRXnUPf+Tvb9LSvI/zqrUqWZwt/+nFfWSXcwZLQy2U8AshrU=
-X-Received: by 2002:a17:90b:28c3:b0:341:88ba:c6d3 with SMTP id
- 98e67ed59e1d1-341a6ddf6ffmr1643542a91.23.1762310879615; Tue, 04 Nov 2025
- 18:47:59 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FU8oo6YB";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yraSf4DV";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FU8oo6YB";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yraSf4DV"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id DEB5B211BA;
+	Wed,  5 Nov 2025 11:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1762341918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
+	b=FU8oo6YBT7CVji0/a6quURnUbwznLcDOExmxbfxdXFtYnSS8PShRbYT4ARqEpaDtFIicwJ
+	JS0In1K9YI0YsGQrT1/ltls3nypEUSjkaN6YcRaxGDSX+0FikINZ1p91aY71KL9XKXicE0
+	VQRXBBX0kYkMkdiiCajXUc0IGqgmhK0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1762341918;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
+	b=yraSf4DVWYl/W5BFC3s/lbeuDEv7YTuyVTIQMD/jIKmWChOFdkfVF/XaOrgLfmRjUbXjDT
+	55AGXH+HxCRUG3BQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1762341918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
+	b=FU8oo6YBT7CVji0/a6quURnUbwznLcDOExmxbfxdXFtYnSS8PShRbYT4ARqEpaDtFIicwJ
+	JS0In1K9YI0YsGQrT1/ltls3nypEUSjkaN6YcRaxGDSX+0FikINZ1p91aY71KL9XKXicE0
+	VQRXBBX0kYkMkdiiCajXUc0IGqgmhK0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1762341918;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=PP/vg4TETuUesnxpasg6ytdJ1cNcbiaaG4KK1fcuiIY=;
+	b=yraSf4DVWYl/W5BFC3s/lbeuDEv7YTuyVTIQMD/jIKmWChOFdkfVF/XaOrgLfmRjUbXjDT
+	55AGXH+HxCRUG3BQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B2ADC132DD;
+	Wed,  5 Nov 2025 11:25:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +ShFKx40C2ncEQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 05 Nov 2025 11:25:18 +0000
+Message-ID: <1bda09da-93be-4737-aef0-d47f8c5c9301@suse.cz>
+Date: Wed, 5 Nov 2025 12:25:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250928030358.3873311-1-coxu@redhat.com> <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
- <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
- <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com> <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-In-Reply-To: <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 4 Nov 2025 21:47:48 -0500
-X-Gm-Features: AWmQ_blM1ev6BHzNyFPCCcGHeIapF6epj6-cnjfP4sh6gT-6Ml3ReEvCTyOT9dA
-Message-ID: <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file
- to access decompressed kernel module
-To: Coiby Xu <coxu@redhat.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 04/23] slab: add sheaf support for batching kfree_rcu()
+ operations
+Content-Language: en-US
+To: Harry Yoo <harry.yoo@oracle.com>, Daniel Gomez <da.gomez@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Uladzislau Rezki <urezki@gmail.com>,
+ Sidhartha Kumar <sidhartha.kumar@oracle.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ maple-tree@lists.infradead.org, linux-modules@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Lucas De Marchi <lucas.demarchi@intel.com>
+References: <20250910-slub-percpu-caches-v8-0-ca3099d8352c@suse.cz>
+ <20250910-slub-percpu-caches-v8-4-ca3099d8352c@suse.cz>
+ <0406562e-2066-4cf8-9902-b2b0616dd742@kernel.org> <aQge2rmgRvd1JKxc@harry>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <aQge2rmgRvd1JKxc@harry>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[oracle.com,gentwo.org,google.com,linux.dev,gmail.com,kvack.org,vger.kernel.org,lists.infradead.org,kernel.org,suse.com,atomlin.com,intel.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On Tue, Nov 4, 2025 at 7:19=E2=80=AFPM Coiby Xu <coxu@redhat.com> wrote:
-> On Sun, Nov 02, 2025 at 10:43:04AM -0500, Paul Moore wrote:
-> >On Sun, Nov 2, 2025 at 10:06=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com>=
- wrote:
-> >> On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
-> >> > On Fri, Oct 31, 2025 at 3:41=E2=80=AFAM Coiby Xu <coxu@redhat.com> w=
-rote:
-> >> > >
-> >> > > Currently, when in-kernel module decompression (CONFIG_MODULE_DECO=
-MPRESS)
-> >> > > is enabled, IMA has no way to verify the appended module signature=
- as it
-> >> > > can't decompress the module.
-> >> > >
-> >> > > Define a new LSM hook security_kernel_module_read_file which will =
-be
-> >> > > called after kernel module decompression is done so IMA can access=
- the
-> >> > > decompressed kernel module to verify the appended signature.
-> >> > >
-> >> > > Since IMA can access both xattr and appended kernel module signatu=
-re
-> >> > > with the new LSM hook, it no longer uses the security_kernel_post_=
-read_file
-> >> > > LSM hook for kernel module loading.
-> >> > >
-> >> > > Before enabling in-kernel module decompression, a kernel module in
-> >> > > initramfs can still be loaded with ima_policy=3Dsecure_boot. So ad=
-just the
-> >> > > kernel module rule in secure_boot policy to allow either an IMA
-> >> > > signature OR an appended signature i.e. to use
-> >> > > "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
-> >> > >
-> >> > > Reported-by: Karel Srot <ksrot@redhat.com>
-> >> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> >> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> >> > > ---
-> >> > > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311=
--1-coxu@redhat.com/
-> >> > >
-> >> > >  include/linux/lsm_hook_defs.h       |  2 ++
-> >> > >  include/linux/security.h            |  7 +++++++
-> >> > >  kernel/module/main.c                | 10 +++++++++-
-> >> > >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++=
-++
-> >> > >  security/integrity/ima/ima_policy.c |  2 +-
-> >> > >  security/security.c                 | 17 +++++++++++++++++
-> >> > >  6 files changed, 62 insertions(+), 2 deletions(-)
-> >> >
-> >> > We don't really need a new LSM hook for this do we?  Can't we just
-> >> > define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
-> >> > another call to security_kernel_post_read_file() after the module is
-> >> > unpacked?  Something like the snippet below ...
-> >>
-> >> Yes, this is similar to my suggestion based on defining multiple enume=
-rations:
-> >> READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MO=
-DULE.
-> >> With this solution, IMA would need to make an exception in the post ke=
-rnel
-> >> module read for the READING_COMPRESSED_MODULE case, since the kernel m=
-odule has
-> >> not yet been decompressed.
-> >>
-> >> Coiby suggested further simplification by moving the call later.  At w=
-hich point
-> >> either there is or isn't an appended signature for non-compressed and
-> >> decompressed kernel modules.
-> >>
-> >> As long as you don't have a problem calling the security_kernel_post_r=
-ead_file()
-> >> hook again, could we move the call later and pass READING_MODULE_UNCOM=
-PRESSED?
-> >
-> >It isn't clear from these comments if you are talking about moving
-> >only the second security_kernel_post_read_file() call that was
-> >proposed for init_module_from_file() to later in the function, leaving
-> >the call in kernel_read_file() intact, or something else?
->
-> Hi Paul and Mimi,
->
-> Thanks for sharing your feedback! Yes, you are right, there is no need
-> for a new LSM hook. Actually by not introducing a new LSM hook, we can
-> have a much simpler solution!
->
-> >
-> >I think we want to leave the hook calls in kernel_read_file() intact,
-> >in which case I'm not certain what advantage there is in moving the
-> >security_kernel_post_read_file() call to a location where it is called
-> >in init_module_from_file() regardless of if the module is compressed
-> >or not.  In the uncompressed case you are calling the hook twice for
-> >no real benefit?  It may be helpful to submit a patch with your
-> >proposal as a patch can be worth a thousand words ;)
-> >
-> >
-> >> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> >> > index c66b26184936..f127000d2e0a 100644
-> >> > --- a/kernel/module/main.c
-> >> > +++ b/kernel/module/main.c
-> >> > @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file =
-*f, const ch
-> >> > ar __user * uargs, int
-> >> >                        mod_stat_add_long(len, &invalid_decompress_by=
-tes);
-> >> >                        return err;
-> >> >                }
-> >> > +
-> >> > +               err =3D security_kernel_post_read_file(f,
-> >> > +                                                    (char *)info.hd=
-r, info.len,
-> >> > +                                                    READING_MODULE_=
-DECOMPRESS);
-> >> > +               if (err) {
-> >> > +                       mod_stat_inc(&failed_kreads);
-> >> > +                       return err;
-> >> > +               }
-> >> >        } else {
-> >> >                info.hdr =3D buf;
-> >> >                info.len =3D len;
-> >>
-> >> =3D=3D defer security_kernel_post_read_file() call to here =3D=3D
->
-> By moving security_kernel_post_read_file, I think what Mimi means is to
-> move security_kernel_post_read_file in init_module_from_file() to later
-> in the function,
->
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index c66b261849362a..66725e53fef0c1 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3678,6 +3678,7 @@ static int init_module_from_file(struct file *f, co=
-nst char __user * uargs, int
->         struct load_info info =3D { };
->         void *buf =3D NULL;
->         int len;
-> +       int err;
->
->         len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODUL=
-E);
->         if (len < 0) {
-> @@ -3686,7 +3687,7 @@ static int init_module_from_file(struct file *f, co=
-nst char __user * uargs, int
->         }
->
->         if (flags & MODULE_INIT_COMPRESSED_FILE) {
-> -               int err =3D module_decompress(&info, buf, len);
-> +               err =3D module_decompress(&info, buf, len);
->                 vfree(buf); /* compressed data is no longer needed */
->                 if (err) {
->                         mod_stat_inc(&failed_decompress);
-> @@ -3698,6 +3699,14 @@ static int init_module_from_file(struct file *f, c=
-onst char __user * uargs, int
->                 info.len =3D len;
->         }
->
-> +       err =3D security_kernel_post_read_file(f, (char *)info.hdr, info.=
-len,
-> +                                            READING_MODULE);
-> +       if (err) {
-> +               mod_stat_inc(&failed_kreads);
-> +               free_copy(&info, flags);
-> +               return err;
-> +       }
-> +
->         return load_module(&info, uargs, flags);
->   }
->
-> If we only call security_kernel_post_read_file the 2nd time for a
-> decompressed kernel module, IMA won't be sure what to do when
-> security_kernel_post_read_file is called for the 1st time because it
-> can't distinguish between a compressed module with appended signature or
-> a uncompressed module without appended signature. If it permits 1st
-> calling security_kernel_post_read_file, a uncompressed module without
-> appended signature can be loaded. If it doesn't permit 1st calling
-> security_kernel_post_read_file, there is no change to call
-> security_kernel_post_read_file again for decompressed module.
->
-> And you are right, there is no need to call
-> security_kernel_post_read_file twice. And from the perspective of IMA,
-> it simplifies reasoning if it is guaranteed that IMA will always access
-> uncompressed kernel module regardless regardless of its original
-> compression state.
->
-> So I think a better solution is to stop calling
-> security_kernel_post_read_file in kernel_read_file for READING_MODULE.
-> This can also avoiding introducing an unnecessary
-> READING_MODULE_UNCOMPRESSED/READING_COMPRESSED_MODULE enumeration and
-> can make the solution even simpler,
->
-> diff --git a/fs/kernel_read_file.c b/fs/kernel_read_file.c
-> index de32c95d823dbd..7c78e84def6ec7 100644
-> --- a/fs/kernel_read_file.c
-> +++ b/fs/kernel_read_file.c
-> @@ -107,7 +107,12 @@ ssize_t kernel_read_file(struct file *file, loff_t o=
-ffset, void **buf,
->                         goto out_free;
->                 }
->
-> -               ret =3D security_kernel_post_read_file(file, *buf, i_size=
-, id);
-> +               /*
-> +                * security_kernel_post_read_file will be called later af=
-ter
-> +                * a read kernel module is truly decompressed
-> +                */
-> +               if (id !=3D READING_MODULE)
-> +                       ret =3D security_kernel_post_read_file(file, *buf=
-, i_size, id);
->         }
+On 11/3/25 04:17, Harry Yoo wrote:
+> On Fri, Oct 31, 2025 at 10:32:54PM +0100, Daniel Gomez wrote:
+>> 
+>> 
+>> On 10/09/2025 10.01, Vlastimil Babka wrote:
+>> > Extend the sheaf infrastructure for more efficient kfree_rcu() handling.
+>> > For caches with sheaves, on each cpu maintain a rcu_free sheaf in
+>> > addition to main and spare sheaves.
+>> > 
+>> > kfree_rcu() operations will try to put objects on this sheaf. Once full,
+>> > the sheaf is detached and submitted to call_rcu() with a handler that
+>> > will try to put it in the barn, or flush to slab pages using bulk free,
+>> > when the barn is full. Then a new empty sheaf must be obtained to put
+>> > more objects there.
+>> > 
+>> > It's possible that no free sheaves are available to use for a new
+>> > rcu_free sheaf, and the allocation in kfree_rcu() context can only use
+>> > GFP_NOWAIT and thus may fail. In that case, fall back to the existing
+>> > kfree_rcu() implementation.
+>> > 
+>> > Expected advantages:
+>> > - batching the kfree_rcu() operations, that could eventually replace the
+>> >   existing batching
+>> > - sheaves can be reused for allocations via barn instead of being
+>> >   flushed to slabs, which is more efficient
+>> >   - this includes cases where only some cpus are allowed to process rcu
+>> >     callbacks (Android)
+>> > 
+>> > Possible disadvantage:
+>> > - objects might be waiting for more than their grace period (it is
+>> >   determined by the last object freed into the sheaf), increasing memory
+>> >   usage - but the existing batching does that too.
+>> > 
+>> > Only implement this for CONFIG_KVFREE_RCU_BATCHED as the tiny
+>> > implementation favors smaller memory footprint over performance.
+>> > 
+>> > Also for now skip the usage of rcu sheaf for CONFIG_PREEMPT_RT as the
+>> > contexts where kfree_rcu() is called might not be compatible with taking
+>> > a barn spinlock or a GFP_NOWAIT allocation of a new sheaf taking a
+>> > spinlock - the current kfree_rcu() implementation avoids doing that.
+>> > 
+>> > Teach kvfree_rcu_barrier() to flush all rcu_free sheaves from all caches
+>> > that have them. This is not a cheap operation, but the barrier usage is
+>> > rare - currently kmem_cache_destroy() or on module unload.
+>> > 
+>> > Add CONFIG_SLUB_STATS counters free_rcu_sheaf and free_rcu_sheaf_fail to
+>> > count how many kfree_rcu() used the rcu_free sheaf successfully and how
+>> > many had to fall back to the existing implementation.
+>> > 
+>> > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> 
+>> Hi Vlastimil,
+>> 
+>> This patch increases kmod selftest (stress module loader) runtime by about
+>> ~50-60%, from ~200s to ~300s total execution time. My tested kernel has
+>> CONFIG_KVFREE_RCU_BATCHED enabled. Any idea or suggestions on what might be
+>> causing this, or how to address it?
+> 
+> This is likely due to increased kvfree_rcu_barrier() during module unload.
 
-Assuming I'm understanding the problem correctly, I think you're
-making this harder than it needs to be.  I believe something like this
-should solve the problem without having to add more conditionals
-around the hooks in kernel_read_file(), and limiting the multiple
-security_kernel_post_read_file() calls to just the compressed case ...
-and honestly in each of the _post_read_file() calls in the compressed
-case, the buffer contents have changed so it somewhat makes sense.
+Hm so there are actually two possible sources of this. One is that the
+module creates some kmem_cache and calls kmem_cache_destroy() on it before
+unloading. That does kvfree_rcu_barrier() which iterates all caches via
+flush_all_rcu_sheaves(), but in this case it shouldn't need to - we could
+have a weaker form of kvfree_rcu_barrier() that only guarantees flushing of
+that single cache.
 
-Given the code below, IMA could simply ignore the
-READING_MODULE_COMPRESSED case (or whatever it is the IMA needs to do
-in that case) and focus on the READING_MODULE case as it does today.
-I expect the associated IMA patch would be both trivial and small.
+The other source is codetag_unload_module(), and I'm afraid it's this one as
+it's hooked to evey module unload. Do you have CONFIG_CODE_TAGGING enabled?
+Disabling it should help in this case, if you don't need memory allocation
+profiling for that stress test. I think there's some space for improvement -
+when compiled in but memalloc profiling never enabled during the uptime,
+this could probably be skipped? Suren?
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c66b26184936..b435c498ec01 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3675,17 +3675,19 @@ static int idempotent_wait_for_completion(struct id=
-empot
-ent *u)
+> It currently iterates over all CPUs x slab caches (that enabled sheaves,
+> there should be only a few now) pair to make sure rcu sheaf is flushed
+> by the time kvfree_rcu_barrier() returns.
 
-static int init_module_from_file(struct file *f, const char __user * uargs,=
- int
-flags)
-{
-+       bool compressed =3D !!(flags & MODULE_INIT_COMPRESSED_FILE);
-       struct load_info info =3D { };
-       void *buf =3D NULL;
-       int len;
+Yeah, also it's done under slab_mutex. Is the stress test trying to unload
+multiple modules in parallel? That would make things worse, although I'd
+expect there's a lot serialization in this area already.
 
--       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE)=
-;
-+       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL,
-+                              compressed ? READING_MODULE_COMPRESSED : REA=
-DING_
-MODULE);
-       if (len < 0) {
-               mod_stat_inc(&failed_kreads);
-               return len;
-       }
+Unfortunately it will get worse with sheaves extended to all caches. We
+could probably mark caches once they allocate their first rcu_free sheaf
+(should not add visible overhead) and keep skipping those that never did.
+> Just being curious, do you have any serious workload that depends on
+> the performance of module unload?
 
--       if (flags & MODULE_INIT_COMPRESSED_FILE) {
-+       if (compressed) {
-               int err =3D module_decompress(&info, buf, len);
-               vfree(buf); /* compressed data is no longer needed */
-               if (err) {
-@@ -3693,6 +3695,14 @@ static int init_module_from_file(struct file *f, con=
-st ch
-ar __user * uargs, int
-                       mod_stat_add_long(len, &invalid_decompress_bytes);
-                       return err;
-               }
-+
-+               err =3D security_kernel_post_read_file(f,
-+                                                    (char *)info.hdr, info=
-.len,
-+                                                    READING_MODULE);
-+               if (err) {
-+                       mod_stat_inc(&failed_kreads);
-+                       return err;
-+               }
-       } else {
-               info.hdr =3D buf;
-               info.len =3D len;
-
---=20
-paul-moore.com
