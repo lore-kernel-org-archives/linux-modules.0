@@ -1,101 +1,133 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D9433F8B7
-	for <linux-modules@vger.kernel.org>; Thu,  6 Nov 2025 16:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42BD2D5C8E
+	for <linux-modules@vger.kernel.org>; Thu,  6 Nov 2025 17:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762445264; cv=none; b=kkiyf4l8hnerddrjBF6Evt+8LGxi6vaa3i9C0fXKSW9+fMmbP34u4hD0n69vkPu4hUA5dSMmb4Pl8v4EtIJgfk1GgaLdUQIYk+Q4h9rYSa8bc/Ixw26tpgK9YLr9KUD0uTQ0FywBK9GgeUysPyYmdnAkYNgd0zl193gI554o49c=
+	t=1762450676; cv=none; b=Z4uun/ErTRXU45zEv6OTc9fp0/Ac5N37UU+LtKRI51k+Ta9dZN9j+SG2g5NXrE5xGdPqlscww/QU336gbJbbOxl7CHXRvQEaA5nR8Hg24cpsiKIXHK+BSFQ0gE1v2AXI2YjMoXxFPumz/v35FN6xHiojTrMjLqfS6nT2HPuFV2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762445264; c=relaxed/simple;
-	bh=Nzzlrmg2j3/3q8FevLWWH7MRQgKjJ5IbIXmjitSDalA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WtQZSWh5awkGHVD8EcXil2fd0K19YZ0WgmAQYfvrvozl6jnbdqeKu4q6Httd87Guc3/n0zeQ39S++GkRcAfwauAkn6owEdVxZepwbkcWOsUsLRCnmvWIr3hb+6dGzYQ2eKI3ixR6VHUJpTH9yOv6uTHSLU7W3k5YodCOhFboLtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XDI5yXsj; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1762450676; c=relaxed/simple;
+	bh=+nJx01PZoIhVVk4jUct5UQsityQ6G/mROL/5XbpZOO4=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=luOylEu8sr0sTS9aKK3SL2DFB4RB+pxAU3CLF/Wgibv3mjAc1iZ040/AkJ2uoe3sSS/lk3MqSywEsckBS0KlZApt6SSTnPbZcBHlgA2hfryZtwF8rZB7XchLR+xuENPaUgMmpPkbH7BVBhzVhXmqcGTcdZuawHQf7ZrMM/O9B1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WTcsfcL4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XDI5yXsj"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2959197b68eso198505ad.1
-        for <linux-modules@vger.kernel.org>; Thu, 06 Nov 2025 08:07:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762445262; x=1763050062; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nzzlrmg2j3/3q8FevLWWH7MRQgKjJ5IbIXmjitSDalA=;
-        b=XDI5yXsjuHRIBicHR9HeQMGoU/S5kjM7KMV74m609W0w/A8LAun0LIPRUtdhNIiCrr
-         fm5LHoj9uAHVrTSX5llcxtnsgq0EZY5oSfSEsgtWL9Pm/oILAgfhzvJNl+M3HU/V+UW5
-         8MBmTO955fThVjjoZikeDV6IPq5DLVOxyuV5v6tQIIIJpXK4uzHTTmSpr1ifi7dZx61/
-         l8k2Q9HrczAYndaSV30cG3ZbAsPwkwg933qL2Qpnls35nFKcbAZjc/adVqy2BeRZKX/u
-         ijdbsZoGhCJL4le3ATeOS7EZ/O/K0BFOBs0Bq1jr82acTWCx/uuIE1/5PAp5gG/z8Ajz
-         9Gug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762445262; x=1763050062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Nzzlrmg2j3/3q8FevLWWH7MRQgKjJ5IbIXmjitSDalA=;
-        b=sx7G35lNa4PWwWGh7AQiJjpyBp/zEembW2b8c8AsDg9/0KKLs+6xbkHpxaPS8tXQ8d
-         TpGBsSGrShhHCegLHbuYJbyb075qaBqhL3Rpiyseai45fio4vi2kFUtgzeyFir+AIwVw
-         CjNdCrz8wPVfFCe/IrDLbD4iphz8sFc/hWvfGL7kjSlkeWEdKYxC2qZDkaTUN3m1Tqmq
-         OByrwEGr+HZV8NvdD+P8DBP+rZVX9IagF/iSjbXhBRwXoMHyHU8gaJRiBkLk18pO6RAU
-         fVKwGFq8fadJjaI3ARGElYtlUx8OCN2yrZ1fwATJfANe7wfU58oTa2hVpNdUcY3g2AjA
-         grvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUExCj157xE7RshooubuFwK66L+rwb5L+EFzkn4HZYYSI8agww5Ssd+8iBVjCsIprzMUDtwzjkod/WSBrEQ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyg3Rsls3EPCeY1dr5I2GEhaeWzPoQVSn/xS786jMLbX6rEsUfd
-	legt+ztj1XQ2sLCBZ3Ogudj19cFi+/I3CY4FrPFNsYIldZFYwTJFeGDqaiQnSkBahn0f75M873T
-	kwWzxIDPhNX5Kk+U02pDUFzs1I5uNZ6zszsBg83HL8n1G0qaGHcmqsDo3VfM=
-X-Gm-Gg: ASbGncvlHwxT76I0z4zah4g8/3l6SiUkwvoCwXxjiD9AYXuE9yz4oXOkxE1xhPN46rB
-	nRzgJrSau3wr/5KTVzzybxJIsrkFWIjy3uCU3nHAtUNMZYL10k6hPMb1FYsN9mN1ZroJSj/961+
-	BhBGAMrUwSmDW69AvDMFy0km6xOl8J5QdVr+jRNuSBunq+4XX71LD5EjK6Sscm1CCtTjIOm+ik6
-	F2wcin4ljSNchA+gPgF3QpfPSnhQRynkRUn3wRh5sFBFQ8XZWvUIFQRUsKvBGOebz9q
-X-Google-Smtp-Source: AGHT+IGJrSQnF3wP8OZ9swEpkYM6kSGamHzGXGAVorA64fWZ3wYfYUNWQRnDULUAfLehZdmVqoWOJHEZGY0/oHgrTL8=
-X-Received: by 2002:a17:902:e885:b0:290:d4dd:b042 with SMTP id
- d9443c01a7336-29655c7b81fmr6092435ad.16.1762445262132; Thu, 06 Nov 2025
- 08:07:42 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WTcsfcL4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762450673;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NwD7CPpHKizbf1uy1rhnrkRajkdGEoQUg1lkgWgfy3U=;
+	b=WTcsfcL43qVBmAeY8Mv+gXQJtx02dH/Jl+tIG+HJvriysOrrVeh88y6fhhIAs37s2+krgB
+	mgwpzymZRXKuMF4MW9yBdtNBB7ilSKXGRCe0vVvQEHsXXQGnL2+sEx8sILS9rjU3VqRFwQ
+	7ENqvAdp+z/l14q7+5vmfZ/liH3aO4Y=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-672-HPwJs847Poa2f_AwZAVzBQ-1; Thu,
+ 06 Nov 2025 12:37:50 -0500
+X-MC-Unique: HPwJs847Poa2f_AwZAVzBQ-1
+X-Mimecast-MFC-AGG-ID: HPwJs847Poa2f_AwZAVzBQ_1762450668
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B596E1956096;
+	Thu,  6 Nov 2025 17:37:47 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.6])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7AAD2196B8F6;
+	Thu,  6 Nov 2025 17:37:43 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <81080a24-e4a9-4287-8653-9d707e574d95@suse.com>
+References: <81080a24-e4a9-4287-8653-9d707e574d95@suse.com> <20251017144311.817771-1-dhowells@redhat.com> <20251017144311.817771-18-dhowells@redhat.com>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: dhowells@redhat.com, Eric Biggers <ebiggers@kernel.org>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
+    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 17/17] modsign: Enable ML-DSA module signing
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <b8c1c73d-bf8b-4bf2-beb1-84ffdcd60547@163.com> <CANiq72kX4Yep3pNVq8Ge=txQbPnMO=zKsci5cPgz5LDS=D6NoQ@mail.gmail.com>
-In-Reply-To: <CANiq72kX4Yep3pNVq8Ge=txQbPnMO=zKsci5cPgz5LDS=D6NoQ@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 6 Nov 2025 08:07:05 -0800
-X-Gm-Features: AWmQ_bnwLdgdkHf9H1YieFCO4w6r6305meY5Ank0AAAGt5lDH9YzCvkKH09X7BQ
-Message-ID: <CABCJKud0G+Xh+Wbtg4SDGvk4Yh5nmt5YgHEPj-H0y8GO5R3Amw@mail.gmail.com>
-Subject: Re: Only rust/bindings.o build fail on rust-1.91.0
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Haiyue Wang <haiyuewa@163.com>, rust-for-linux@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-modules@vger.kernel.org, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <31210.1762450662.1@warthog.procyon.org.uk>
+Date: Thu, 06 Nov 2025 17:37:42 +0000
+Message-ID: <31211.1762450662@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Thu, Nov 6, 2025 at 5:57=E2=80=AFAM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> On Thu, Nov 6, 2025 at 2:08=E2=80=AFPM Haiyue Wang <haiyuewa@163.com> wro=
-te:
-> >
-> > Strange thing is that ONLY 'rust/bindings.o'failed. And if I add
-> > '$(obj)/bindings.o: private skip_gendwarfksyms =3D 1', rust build
-> > will be successful.
->
-> Thanks for the report!
->
-> Would you mind copy-pasting/attaching the your kernel config file
-> instead? i.e. the `.config` file (the `rustc` flags aren't the best to
-> reproduce the issue).
->
-> Cc'ing Sami as well.
+Petr Pavlu <petr.pavlu@suse.com> wrote:
 
-I can reproduce the issue. With rustc 1.90, rust/bindings.o has
-debugging information, but with 1.91, it no longer does:
+> This update looks ok to me. However, I'll note some problems that
+> I noticed in the original text, notably:
+> 
+> The text doesn't match the implementation because kernel/module/Kconfig
+> still allows selecting SHA-1 for module signing. What happened is that
+> commit 16ab7cb5825f ("crypto: pkcs7 - remove sha1 support") initially
+> removed CONFIG_MODULE_SIG_SHA1. Then, commit f2b88bab69c8
+> ("Documentation/module-signing.txt: bring up to date") removed it from
+> the documentation. However, commit 203a6763ab69 ("Revert "crypto: pkcs7
+> - remove sha1 support"") brought back CONFIG_MODULE_SIG_SHA1 without
+> reverting the documentation update.
+> 
+> Another problem is that for MODULE_SIG_KEY_TYPE_ECDSA, certs/Kconfig
+> contains the line
+> "depends on !(MODULE_SIG_SHA256 || MODULE_SIG_SHA3_256)",
+> which intends to allow ECDSA only with MODULE_SIG_SHA384,
+> MODULE_SIG_SHA512, MODULE_SIG_SHA3_384 and MODULE_SIG_SHA3_512. This
+> restriction was added in commit d4f5bfe20da9 ("certs: Limit
+> MODULE_SIG_KEY_TYPE_ECDSA to SHA384 or SHA512") and 446b1e0b7b39
+> ("module: enable automatic module signing with FIPS 202 SHA-3").
+> However, the documentation suggests that ECDSA can still be used with
+> SHA-2/3 of size 256.
+> 
+> I'll prepare fixes for these issues. For the first problem, I think we
+> can drop CONFIG_MODULE_SIG_SHA1 instead of correcting the documentation.
 
-$ dwarfdump rust/bindings.o
-No DWARF information present in rust/bindings.o
+Sounds good.
 
-Sami
+> > +	  Use an ML-DSA (Dilithium) 87 key (NIST FIPS 204) for module signing
+> > +	  with a SHAKE256 'hash' of the message.
+> 
+> Copy-and-paste error in the help message: 87 -> 44.
+> ...
+> Similarly here: 87 -> 65.
+
+Fixed.
+
+> Should all MODULE_SIG_KEY_TYPE_ML_DSA_* options depend on
+> MODULE_SIG_SHAKE256 to match the updated
+> Documentation/admin-guide/module-signing.rst?
+> 
+> Similarly, do MODULE_SIG_KEY_TYPE_RSA and MODULE_SIG_KEY_TYPE_ECDSA
+> require any "depends on" update with respect to the addition of
+> MODULE_SIG_SHAKE256?
+
+Um.  In theory ML-DSA can use hashes other than SHAKE256, but I'm not sure
+that OIDs exist yet to indicate that.  Also, I'm not sure how to implement the
+crypto API interface such that you can ask for, say, "ml-dsa87(sha512)" from
+crypto_sig.
+
+Anyway, for the moment, I'm going to post a v7 as I've made some substantial
+cleanups.
+
+David
+
