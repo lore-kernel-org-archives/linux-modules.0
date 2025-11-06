@@ -1,97 +1,75 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D57322537
-	for <linux-modules@vger.kernel.org>; Thu,  6 Nov 2025 17:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092A1252292;
+	Thu,  6 Nov 2025 19:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762451683; cv=none; b=EGRP7oiHnb/hp2W356+WIckGzCD1+eLp+ea1W7aAwigN54QjMuGMIvGSHYXcYva2OwCjT0jfpzaHQsnad/j9lf0QHK8jmh1D2Kc68ywUNbV4OFAx0NkjACNmFViu2XCsWexxmh7q0HaK60mRdNPgZY9/5C0nz1nMh2OMMaPQJe4=
+	t=1762456833; cv=none; b=lCm7P1vgODKCPJxbxQBB58l4MLETNJA5Yt+b4f5osIf/WDKTQfUJYyJ4COhVZCh2xdFQeH3IAPcVhmNLYtuahK5+1W5MpQYLoHukR0vqxteedNtj9XfdxRTCnyhaYsFxQB8iLo8KGy+y11rSlKmjyEHKjxOSNsoh/2PgtOO+lBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762451683; c=relaxed/simple;
-	bh=Ksw1O2ILTa6nbNkzQ8ESg5jM935Th6BDveZ1S58oGbw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ek0P7LWIQOWT8IPIM25pNQwgNxHVmgVrL64RxbIVQipF9+9gcpCUCe1gshRC2FyEo5kEFzzhrFGJpvxGoMlH2qxPfj/63JxAeMqk36Z9AzpSXtOnuMszx0uyRiX10pM5TS6J9j9avaBQNOhnHzAidf8jimK7qEggSu/xW8zoemY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UicaYoie; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762456833; c=relaxed/simple;
+	bh=meXPx+Ve4o9hI+5SdxRh+xUBm23b+aWsTT9FzIutTmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nzSHEpV04MjXqLrBzT0o1d7dh/WOfqeDH0nhRG30D2NcnMYud2TLHKrdTboXnzprjwaR87qaJ063Ro+3a2HCgG+VOUr/BoZAyFCP4NZGhg6JSwoXlpBSuJThrxHwb98A+6ADgKgcvz2Tno/F2D6DRNHVWd/ZRUAGY0eg70DaAl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PrDGUFA+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UicaYoie"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2950fab14beso538015ad.0
-        for <linux-modules@vger.kernel.org>; Thu, 06 Nov 2025 09:54:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762451682; x=1763056482; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Okn7qpZREP/wLijgmlrP2ZX+9ZeLo6Ylcde08Z9eoeg=;
-        b=UicaYoieNEAJldATNlWe0ilE0H5q6doUqvzQRLUzKckS8/tstHYz4ZtbolnwwnxLFZ
-         o6L8yrQN5rO4Q2sGf1NjnqfedRQmNqLSiSGto0ZHXDv1bWTgoRKn1IV/HO1SdSGMJehi
-         LdH4NZm/LHGR687OVH5Bo+WAgafDuVf7suWEoohtBdMZPy/qehl7ogLH5zAg9e6Ktn6L
-         sAxm1gw5yw/HlB3obsATOCC5/Fh9cCm/CPKIdpN4Bc/mVolsaTeRxANPNYM7FJmtbofO
-         r1kHPbCCxGSGd9zPj2HEU2i3h+a0cxHEsIc6RZNBYjKDvAWcA7Hf9U1OSiy3Ee8Ww9zd
-         Ng8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762451682; x=1763056482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Okn7qpZREP/wLijgmlrP2ZX+9ZeLo6Ylcde08Z9eoeg=;
-        b=aT/jZeRDi+jUNP9jc4sQlQwFlvcew7rR+5C9DjkjL40ekuajyDyXAhucftHzbDoVre
-         ny28XRAsSyxH/iyClrPk1taPWEpevxjNbOuqFWyIXH07F1cK00mgeTdMaqnrWPHbBYml
-         9VybUqU88G9SAl73ixUoGBm8kHrywg1f6toUhH01OupGZ9KKWsukOytiMd4Dln5vqVeV
-         7d5suEJSvbGN2lUyJNLe18WhaBtccM3gRTAQOA0ZSj7hkoasT6tyn3HLPtfAoZQeu3+7
-         XeVMxSEo3WwIk5UpnK/irFBL4sxgI2ezDqSGOHALo7uLqAxR83s9egPJy3GeM13jz4Zz
-         J7ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVvB3wlJBgdG+a0y6Yn4UCiVsPy9D5dVI04FNTicE0fsRHt3Do3jWm8ONbmd0wnUqEwdgP1AWPiDzUJakgX@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwXQ/IS8zqyitXklumAogFLO6jN6xNxsfMD1Hmt5gQe2AxRnZR
-	b+BAyXUwELLwfyHM+h8U23fVdRlFGfqZzpP+EPFw1VlanbY598mFCK6trb7kYmddBqxyE0hvE/l
-	DoOlUGVuj3YcgP/eUBcC8LT0XUIAqZ+C/DEuwg14=
-X-Gm-Gg: ASbGncsRTb+JlODoNKPRWUPG3YMqZzCwDdLkwWq9B9e5WAJnkHyVSHfb6LzZ39ZRLIe
-	WeZt3IF35RY6q0xsPIGvQ1BExJMv9A1B5JB1tEM1HTX3bzwgAYHZNacrXLIEETmBoPHg5TZTfcT
-	sEqVsQOGV33fZzdV9LRFAOiWLFRWatt/YpxciMZ22aFg+nsfppq2GnwmB9ENZcn4liT/6/suLZz
-	l2gDY06OSSwdv25LFdNH8iuKVgQ5x7JB26ZqomAjQmLKucgMlYknzyMJNPkDdhDycpyNMY6erA0
-	QhRCemgxJnLvFAzJiYNL9gnQW+dLp8yMl3OVDIieGL4ftLrSHH+ixkufC7/tVQfNlzy1nXW8isE
-	dqU8=
-X-Google-Smtp-Source: AGHT+IEQFZLchjDduH4qWmZhyYV0o5WLbi5+ttwHSqi4gQaN3BU7nanFdl/mHX5HfcqMUadxoGA3i7/M5nE2rROJQ8c=
-X-Received: by 2002:a17:903:1cd:b0:296:4e0c:8013 with SMTP id
- d9443c01a7336-297c045d1ecmr2192335ad.6.1762451681522; Thu, 06 Nov 2025
- 09:54:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PrDGUFA+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EBE7C116C6;
+	Thu,  6 Nov 2025 19:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762456832;
+	bh=meXPx+Ve4o9hI+5SdxRh+xUBm23b+aWsTT9FzIutTmg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PrDGUFA+YVH1Eyvc3ASnW7Wie28hxo+ReZAccLnn9UOeyUNutsF1ougrzS3nI0qod
+	 RqT9bmespxma70jexSVHf6ZiBX/3DTtqt9Aoztt21eqZrAaHvGikx45VgiSQw6qrE6
+	 am2kBD9oAl5YWz0Guxr/EEvDYywiKBPPvN6bm5SlXVW7nP7gRLcSFrQF5Atmf8c45f
+	 dTVHGRfumQKCUgYe3Mo0QLXjW9rJBN5aF8l9dmzaarA77piTXPYCnoYVL10ARWdSD/
+	 NhlVhgzA7dR7KacQCAHrHxwf49aD3Z+2aB31q2b7U4/pf7mYcJ/ZpYm/tgi82YTz4l
+	 VzjGqPC7qIgbg==
+Date: Thu, 6 Nov 2025 11:20:16 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] crypto: Add ML-DSA/Dilithium verify support
+Message-ID: <20251106192016.GA3318@quark>
+References: <20251106174456.31818-1-dhowells@redhat.com>
+ <20251106174456.31818-3-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <b8c1c73d-bf8b-4bf2-beb1-84ffdcd60547@163.com> <CANiq72kX4Yep3pNVq8Ge=txQbPnMO=zKsci5cPgz5LDS=D6NoQ@mail.gmail.com>
- <CABCJKud0G+Xh+Wbtg4SDGvk4Yh5nmt5YgHEPj-H0y8GO5R3Amw@mail.gmail.com>
-In-Reply-To: <CABCJKud0G+Xh+Wbtg4SDGvk4Yh5nmt5YgHEPj-H0y8GO5R3Amw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 6 Nov 2025 18:54:28 +0100
-X-Gm-Features: AWmQ_bnB7dF3A5p5iTsNbh6uHhgvWv73d0_f2Do54xO3WHnB4_rI1cr-bP8T2Fw
-Message-ID: <CANiq72mw66ADx7LoUuqY6h9KCU=uFzcNQXZ21kMP7jBjCyyaHQ@mail.gmail.com>
-Subject: Re: Only rust/bindings.o build fail on rust-1.91.0
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Haiyue Wang <haiyuewa@163.com>, rust-for-linux@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, linux-modules@vger.kernel.org, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251106174456.31818-3-dhowells@redhat.com>
 
-On Thu, Nov 6, 2025 at 5:07=E2=80=AFPM Sami Tolvanen <samitolvanen@google.c=
-om> wrote:
->
-> I can reproduce the issue. With rustc 1.90, rust/bindings.o has
-> debugging information, but with 1.91, it no longer does:
->
-> $ dwarfdump rust/bindings.o
-> No DWARF information present in rust/bindings.o
+On Thu, Nov 06, 2025 at 05:44:46PM +0000, David Howells wrote:
+> The interface to this code is through the crypto_sig API as the PKCS#7 code
+> wants to use that rather than calling it directly.  As such, I've placed it
+> in crypto/ rather than lib/crypto/.  Only the verification hooks are
+> implemented; the signing hooks return an error.
 
-Same, reproduced as well.
+As I mentioned before
+(https://lore.kernel.org/linux-crypto/20250613170456.GA1284@sol/), this
+code should go in lib/crypto/.  There seems to be a clean API in
+crypto/ml_dsa/dilithium.h already.  Just make that the library API.
 
-Bisecting nightlies, it seemed to happen between:
+If "crypto_sig" support is really needed too, then put that in
+crypto/ml-dsa.c, built on top of the library API.  It's not clear the
+crypto_sig support is very useful, though.  For one, you had to add
+ML-DSA specific logic to the calling code anyway (see "pkcs7: Allow the
+signing algo to calculate the digest itself").
 
-    rustc 1.91.0-nightly (12eb345e5 2025-09-07)
-    rustc 1.91.0-nightly (9c27f27ea 2025-09-08)
-
-Cheers,
-Miguel
+- Eric
