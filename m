@@ -1,86 +1,87 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9466329E6C
-	for <linux-modules@vger.kernel.org>; Thu,  6 Nov 2025 13:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6782A338937
+	for <linux-modules@vger.kernel.org>; Thu,  6 Nov 2025 13:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762435822; cv=none; b=uUliVPHlu9vDTNPEBhM2BLpEtkCrbYyvhFr5B6v2L+yXbHwBlfFzDWNrgs2XFG0Gj3421oIsdYPKAVEd5l7QkTPK+mPFQBqrX7ubKZjWx81BiXKMlsl8Gv0kWnZhD4pPlRH/dhCKR/GsXPsWs0gvKKJypz+CTghCpVR1kMXlmaA=
+	t=1762436419; cv=none; b=CycUVgi3SUQX4UMIVT97V2dZTEpju5UT0cmrgrXiWafoXUSR5eq1+RoYxh1eJ5yC+bMM3YPxLL1tVxgG8BKfl6edkGvpRPIvTKBXb5qOVQx26+zEx+xN/dhAiZD8f6Nrup6Ja2YBiJxF0g1JlDE+P6Pj4G97BZa7xdG0tbt2vEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762435822; c=relaxed/simple;
-	bh=CmB1MWecEBBp4OgxfqCuQiSEAV5QOXrCNuLXgiG46GI=;
+	s=arc-20240116; t=1762436419; c=relaxed/simple;
+	bh=uUlzz1SanQRYx/DFcY6UUxeg99XLdI7AB5xH58h796U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CRiUPMr0FalEYaKIUwW/eyglvlS+hI5W+GxWwS+ogogxp4/CRR0k8B7aJ+h0X9ysrWy1sfge0YmAXMIA/cyQJW6V9XfvgpBbJEfV29nysox3M4AFuuVORjuzyUD63nd2IAsKE4Nd3q7fi1SWoJAp7/SneN69fpFm1o2lWTUTLaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=htPtRi9e; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AMVRHxJD; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=GyV2ap0/ytSpjl8c9X9fAZukQiRnVo++D8bS6P7IUyEoSv3ok5nMZhKsQkxmSmbI7mQ0viKn28lFglPZ8kS87CwRBQstTRrHo9gmbEROPUoNlcsr3vdyeZxdzDGzqSRgrI68PhK/nd+7o1LwU1Nhh9OZo0UOmhe9Bo2g9hfdyxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FCdSZuin; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tUVQ5P4F; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="htPtRi9e";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AMVRHxJD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FCdSZuin";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tUVQ5P4F"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762435819;
+	s=mimecast20190719; t=1762436416;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=GKaQ6ZP+peJ5RMaPGONMdp62mSGMz4ih+kVgJblXjSY=;
-	b=htPtRi9eZuXuEfXzVNHt5vLXhMzGdBv+u8NMRqvyQXXYJdG/wesn1h+kgi558ymO9WB1V4
-	AeGR3ke9mluYAdK+1OYH09qauo0CkJ1pOgFH/XnPVxtMF5cmhOawMKyUsku9AyNDoCUoga
-	1/E8W2bgk+aZmM8QodtadVYXWMFeuv0=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=qkz72yTbvJHMytWdiLGhiha3HbVo2IXnZtXQ3EROj+0=;
+	b=FCdSZuinAnLW1iHv28D8qs1FbQ/hfhp0oW1hsi3ddViSo6E0R0rng+EM4O/Oc3rVuW7yNL
+	wjhiCJicKSS6HOo+Tu8iT2TxsHJhxgeDv84rgIGHE45YxQZQNShxZkRrDpncyf9Skk4C5V
+	RYhOFZs64QA2B1iiDaC2k808Xtr+BOA=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-256-dNOya_QyPTyGESzQahXI0w-1; Thu, 06 Nov 2025 08:30:15 -0500
-X-MC-Unique: dNOya_QyPTyGESzQahXI0w-1
-X-Mimecast-MFC-AGG-ID: dNOya_QyPTyGESzQahXI0w_1762435814
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-ba265ee0e34so846540a12.2
-        for <linux-modules@vger.kernel.org>; Thu, 06 Nov 2025 05:30:14 -0800 (PST)
+ us-mta-564-ks1X8yNwM0--_eOl3VZtBw-1; Thu, 06 Nov 2025 08:40:15 -0500
+X-MC-Unique: ks1X8yNwM0--_eOl3VZtBw-1
+X-Mimecast-MFC-AGG-ID: ks1X8yNwM0--_eOl3VZtBw_1762436413
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-295952a4dd6so30743705ad.1
+        for <linux-modules@vger.kernel.org>; Thu, 06 Nov 2025 05:40:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762435814; x=1763040614; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKaQ6ZP+peJ5RMaPGONMdp62mSGMz4ih+kVgJblXjSY=;
-        b=AMVRHxJDX8cEqQB2dBiym2BWC6LFYm3FnOpnbN227FGDdpXELBbUdqxXobgm/QYIh7
-         +anK++Up/31kNGUs34oBq8BmW50E+bnWRxduM2OZPRvEKxOOD20czuwSKeptOww1tmJO
-         VtZajIH7gxfzewHApW4900bCc12YAwxkOUAOmRAlPfCskf5RqzOO2IaDgHNMyriI5fZn
-         bA6yAe/vwBso8nkwg+l2gsrU5+lUCraECbnpk/Z9a+v/YuJSXk7nGRVUiMxmeTkKbWY1
-         e1e+kPDt2HB5DvJWoGUZs2iV5+/lg7+hU9zWArbRi40mf/K0g6KqONg5ceswyEPbcfHj
-         nPNQ==
+        d=redhat.com; s=google; t=1762436413; x=1763041213; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qkz72yTbvJHMytWdiLGhiha3HbVo2IXnZtXQ3EROj+0=;
+        b=tUVQ5P4Ff5WuxoLkV60mfrV/tMsAsGbkd0sCpEGj7EuP0nO99fSQthh04oiODOaNHO
+         hQvSaR962bxEHU6obdCPahESy8wz2pndtrh3yoHcL3DySfxx560GOoxF3BREJjfVpELR
+         Zj2PJNDWa5RmaLEPrSjGpAlbCY4E1GE/0CxUZ9Z74iY8rf9rXtmN0PMqGImyOJqZ7x/I
+         WEyBpOkYizn0DXc5uaXyMb/rAtJNxWbfF9qFGBBjNEj7p64ZEf4NKcaXujwLXCuozvAB
+         8KysqlDvrDz4LOdKkieycI46egnMO0BSXdVLmm4ccdW7vELwYCzylRfT3PNEfgr2q5tM
+         jUIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762435814; x=1763040614;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GKaQ6ZP+peJ5RMaPGONMdp62mSGMz4ih+kVgJblXjSY=;
-        b=QtUd0vA6RWW32+VRXONRv/RX/UNJ5gaLTuBTxew4DjwfmjIe0Jof1lNx5Ky6N28otK
-         OhYwz68Ug40xEc96iPTwMLCiXFiZGhM5Vf/E8/IAg679qB0/oiiGBl8ANP85nY6ylUpC
-         oZy8OpPZeb0aklDg+1U0F4Nn+M4BzY3NWrRYXZZKZ6iFX9mY/JdvE7WeVPcAYWT5QwaU
-         tonZC24YnZ0izQUMe4yBa4j9UfJhAKgJ++lK0UQKiJAzTrLBufV52sDwWw1pP2dmrmrE
-         rB/tEL0/YrHRAplIMRv2UVigLJVS7Ki3Q9orTbReBYHlWODCGrMa0PVjTFl059vGtHfX
-         2bsw==
-X-Forwarded-Encrypted: i=1; AJvYcCVebJQ7K6kM8RPfTv4i7hfHr7+v/4f6HRR1QH8MXHJxVSo9AmAqZNy+lezlionZDikT4O8o6LF2bsfZk7NV@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlpkoQR5bGeynFXpA/X+kmV/CTHDo//g6ktFuvdtFTO+j3lfWB
-	5pTD2sNqbN6L2qo+xxiwfSIa4SKo43mskeOwTBhKAu6vdaONjVAdWRWEnZ10GJHI6GG0nAg/1MQ
-	DZyn/mdCzAvrl7W8N3RMyiu/pb8E2b60dM7bobMlxiCdKvSALwBUx2mAHgqFectsg14gj/xPg9N
-	uMMsyU
-X-Gm-Gg: ASbGnctlPXHj+Fx9CGdrOK+sqMi6dZCg37KFlWqRuFoOR7EcHMPXBXWfeelxRGv29WF
-	YILUctJCa1injuIw3lcvQv/a+TXiQDVG1sZeVGSgxnXxuAS4UmmfWwcj8U5QS9VKWnN/O0zb6Pt
-	OOQJlGiLecCIyz48DjD7UPXMBzyM+Z063X5//pkkpBL3d414o8uu5oBu9Ve2R2Wn6LfCn3PooUa
-	JcoLg3emXX1r2rdjiFHF8P/tSkKMT7AhTGzhz3XfDi8BMJgbUbATGEreJ/DfiNe9uTlTuQ8+/Nk
-	u+mIaESfTA05hcFAm1/UWqGpoWQH9r4RDMs4ug1ey54EsecB62zaJ8LJXhySpYmNJg==
-X-Received: by 2002:a05:6a20:6a11:b0:342:1265:158f with SMTP id adf61e73a8af0-34f85f23889mr10202203637.51.1762435813484;
-        Thu, 06 Nov 2025 05:30:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF58+7mJo3sNtAxMb3Nqi6GJVi04D/CfZ0QveWCpOETxQnk4AuJy1ge7Ljn9GwytoZbabtjJg==
-X-Received: by 2002:a05:6a20:6a11:b0:342:1265:158f with SMTP id adf61e73a8af0-34f85f23889mr10202143637.51.1762435812912;
-        Thu, 06 Nov 2025 05:30:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762436413; x=1763041213;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qkz72yTbvJHMytWdiLGhiha3HbVo2IXnZtXQ3EROj+0=;
+        b=DhMz6gRw/A2AlI0rUq5hszUH+IyoUmZ4MtLLghxv50R3+H64NWtjeo4aHR3vJ1Fzqw
+         XsTrHkMrTEB5JngKmkjUIUytXMHQpv+W+t9X0y3Z9PqDYpjdhiEb1wBHf9sX4DNWnSIa
+         r/qTdRZxz64SLd7Gx61MXjHT9D8nQkPpuFv0lYwlR2N1f+zS9PSxApi8/08lqUQcvB9a
+         e3w64miiWnacZJj5SfFLCjsQyrzpvTeTYvf85MyQbDtJAWsDABWwwmwvFE2q6wiHQHSv
+         v9HM2WmxM+mBA3FM9jSZFbF4/6Gw1aR0i1Z0PleM4w/u6fui1VD3bXXO0D1DLYBLyqhu
+         sPsA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6i7EVYmVHNf+rlmv2TJVH7pUnff4u1nj8DadfoGNP73PuaIdCMnUSRJ7mIBtFDhGIuewRDxdTw202n4aA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvNLzuwqhepufapbRwh3Lz1AtkkQenjy+dBUPsb5VE8dLt+eQC
+	eihDXn39UAEzdP7GnYk56wlfnu6k4yqdEDKivmc+m8bebarLBSFDcOPXam4uWP7hebRHa0LsUOP
+	WrV4A3UwfLZtDl/MUB1fw8mC5Wuy3yMzCnw/GZ7+JyAPFnS1v0hhw9G4thy6ypq7KzaU=
+X-Gm-Gg: ASbGnctKElK+Qu702QeqhM/K0SRgi/mzBfiCxIPfjphJzIULmJjEnWLmS/kMx4JQtZH
+	O2qX/pBBpn1WrCiBYno3S9a1Dq8G6sozlueVFfDteIeJCcCL2jlOvf2zrvPjvoPHutYZ1hnjHEH
+	JxH+AxNXfx9G9WR8O24N/UdpmPRjX+nIhdhwwXqkXcBlnsXfQV36PwJuXgFQSOYAN8poY8tX0tB
+	X9NAtaH2DoBzM+p95NcRVs8i2XBh/1hK9UETLpus3IiDPC/SJViryn0eoh35SgNkwGkxDwz5kht
+	iQLQ7nMACkK+scV6qh2Q+p+eFMG+m8OZon8hxTK8xkC7UyWTCqw1ULy925q7jKS0tA==
+X-Received: by 2002:a05:6a21:998f:b0:33d:7c17:deb4 with SMTP id adf61e73a8af0-350de60ef4dmr4511323637.18.1762436412855;
+        Thu, 06 Nov 2025 05:40:12 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpqJ2Tqnwq4JekdzegbtzxvbqJx+H0dECy9gVADvuDqgqPrgvVh+iyG7BrVNpmORyKNnpgRQ==
+X-Received: by 2002:a05:6a21:998f:b0:33d:7c17:deb4 with SMTP id adf61e73a8af0-350de60ef4dmr4511262637.18.1762436412235;
+        Thu, 06 Nov 2025 05:40:12 -0800 (PST)
 Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba902207227sm2527090a12.33.2025.11.06.05.30.11
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7af7f7565bbsm2913270b3a.9.2025.11.06.05.40.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 05:30:12 -0800 (PST)
-Date: Thu, 6 Nov 2025 21:29:42 +0800
+        Thu, 06 Nov 2025 05:40:11 -0800 (PST)
+Date: Thu, 6 Nov 2025 21:35:08 +0800
 From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
+To: Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
 	"Serge E. Hallyn" <serge@hallyn.com>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
 	Sami Tolvanen <samitolvanen@google.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
@@ -88,64 +89,123 @@ Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org,
 	open list <linux-kernel@vger.kernel.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
 Subject: Re: [PATCH v2] lsm,ima: new LSM hook
  security_kernel_module_read_file to access decompressed kernel module
-Message-ID: <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
+Message-ID: <h4eloauedfln56moljqb724wsiqyhk4gsggexx3tsn4o4utjeu@ieczfooqcqsf>
 References: <20250928030358.3873311-1-coxu@redhat.com>
  <20251031074016.1975356-1-coxu@redhat.com>
  <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
  <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
  <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
  <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
- <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
+ <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
+ <0c7e94a436a3742003e5e1155a48480d8307a9c7.camel@linux.ibm.com>
+ <CAHC9VhS6xWvu5TjjS4MRGFEWxdAhg-Xsf6L+=K0k8U+fgiAtTQ@mail.gmail.com>
+ <8646ad03f2f14f45c0ade7c7d7cc148f56d964b1.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8646ad03f2f14f45c0ade7c7d7cc148f56d964b1.camel@linux.ibm.com>
 
-On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
->On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
-[...]
+On Wed, Nov 05, 2025 at 03:25:05PM -0500, Mimi Zohar wrote:
+>On Wed, 2025-11-05 at 10:42 -0500, Paul Moore wrote:
+>> On Wed, Nov 5, 2025 at 9:07 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>> > On Tue, 2025-11-04 at 21:47 -0500, Paul Moore wrote:
+>> > > Assuming I'm understanding the problem correctly, I think you're
+>> > > making this harder than it needs to be.  I believe something like this
+>> > > should solve the problem without having to add more conditionals
+>> > > around the hooks in kernel_read_file(), and limiting the multiple
+>> > > security_kernel_post_read_file() calls to just the compressed case ...
+>> > > and honestly in each of the _post_read_file() calls in the compressed
+>> > > case, the buffer contents have changed so it somewhat makes sense.
+>> >
+>> > > Given the code below, IMA could simply ignore the
+>> > > READING_MODULE_COMPRESSED case (or whatever it is the IMA needs to do
+>> > > in that case) and focus on the READING_MODULE case as it does today.
+>> > > I expect the associated IMA patch would be both trivial and small.
+>> > >
+>> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> > > index c66b26184936..b435c498ec01 100644
+>> > > --- a/kernel/module/main.c
+>> > > +++ b/kernel/module/main.c
+>> > > @@ -3675,17 +3675,19 @@ static int idempotent_wait_for_completion(struct idempot
+>> > > ent *u)
+>> > >
+>> > > static int init_module_from_file(struct file *f, const char __user * uargs, int
+>> > > flags)
+>> > > {
+>> > > +       bool compressed = !!(flags & MODULE_INIT_COMPRESSED_FILE);
+>> > >        struct load_info info = { };
+>> > >        void *buf = NULL;
+>> > >        int len;
+>> > >
+>> > > -       len = kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MODULE);
+>> > > +       len = kernel_read_file(f, 0, &buf, INT_MAX, NULL,
+>> > > +                              compressed ? READING_MODULE_COMPRESSED : READING_
+>> > > MODULE);
+>> > >        if (len < 0) {
+>> > >                mod_stat_inc(&failed_kreads);
+>> > >                return len;
+>> > >        }
+>> > >
+>> > > -       if (flags & MODULE_INIT_COMPRESSED_FILE) {
+>> > > +       if (compressed) {
+>> > >                int err = module_decompress(&info, buf, len);
+>> > >                vfree(buf); /* compressed data is no longer needed */
+>> > >                if (err) {
+>> > > @@ -3693,6 +3695,14 @@ static int init_module_from_file(struct file *f, const ch
+>> > > ar __user * uargs, int
+>> > >                        mod_stat_add_long(len, &invalid_decompress_bytes);
+>> > >                        return err;
+>> > >                }
+>> > > +
+>> > > +               err = security_kernel_post_read_file(f,
+>> > > +                                                    (char *)info.hdr, info.len,
+>> > > +                                                    READING_MODULE);
+>> >
+>> > Without changing the enumeration here, IMA would not be able to differentiate
+>> > the first call to security_kernel_post_read_file() and this one.  The first call
+>> > would result in unnecessary error messages.
+>>
+>> Given the patch snippet above, in the case where an uncompressed
+>> module is passed into init_module_from_file() there would be the
+>> following checks, in this order:
+>>
+>>  * kernel_read_file()
+>>  -> security_kernel_read_file(READING_MODULE)
+>>  -> security_kernel_post_read_file(READING_MODULE)
+>>  * init_module_from_file()
+>>  -> NONE
+>>
+>> ... this should be the same as the current behavior.
+>>
+>> In the case where a compressed module is passed into
+>> init_module_from_file() there would be the following checks, in this
+>> order:
+>>
+>>  * kernel_read_file()
+>>  -> security_kernel_read_file(READING_MODULE_COMPRESSED)
+>>  -> security_kernel_post_read_file(READING_MODULE_COMPRESSED)
+>>  * init_module_from_file()
+>>  -> security_kernel_post_read_file(READING_MODULE)
+>>
+>> ... the two differences being that the hook calls in
+>> kernel_read_file() use the READING_MODULE_COMPRESSED id, which seems
+>> appropriate as the data passed to the hook is the compressed
+>> representation, and the additional _post_read_file() hook call in
+>> init_module_from_file() using the READING_MODULE id, as the data
+>> passed to the hook is now uncompressed.  Not only should IMA be able
+>> to easily differentiate between the two _post_read_file() calls, but
+>> it should have access to both the compressed and uncompressed data.
 >
->Hi Coiby,
->
->Based on the conversation with Paul, there is no reason to remove the existing
->security_kernel_post_read_file() call.
->
->The changes are similar to the 2nd link, but a bit different.
->- Define a single enumeration named READING_MODULE_COMPRESSED.
->
->- In module/main.c add a new security_kernel_post_read_file() call immediately
->after decompressing the kernel module.  Like a previous version of this patch,
->call kernel_read_file() with either READING_MODULE or READING_MODULE_COMPRESSED
->based on MODULE_INIT_COMPRESSED_FILE.
->
->- In ima_post_read_file() defer verifying the signature when the enumeration is
->READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kernel_module.)
+>Thanks, Paul.  Yes, a single additional enumeration is enough.
 
-Hi Mimi,
+Yeah, thank Paul for elaborating on the solution!
 
-Thanks for summarizing your conversation with Paul! I can confirm Paul's
-approach works
-https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
-
-While testing the patch today, I realized there is another
-issue/challenge introduced by in-kernel module decompression. IMA
-appraisal is to verify the digest of compressed kernel module but
-currently the passed buffer is uncompressed module. When IMA uses
-uncompressed module data to calculate the digest, xattr signature
-verification will fail. If we always make IMA read the original kernel
-module data again to calculate the digest, does it look like a
-quick-and-dirty fix? If we can assume people won't load kernel module so
-often, the performance impact is negligible. Otherwise we may have to
-introduce a new LSM hook so IMA can access uncompressed and original
-module data one time.
-
->
->thanks,
 >
 >Mimi
 >
