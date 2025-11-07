@@ -1,207 +1,241 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021074.outbound.protection.outlook.com [52.101.95.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843861D61A3;
-	Fri,  7 Nov 2025 19:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762543724; cv=none; b=cP9NXhSxVWINtA9+m7ywctpwcHlbcPeBIXU9ZOp21i/0epD3PXl7tEdk3RA90ZsLSTEbNc6vq4+k/yZNILJ0WMPmxeAhjD9lmADMakobK6K2aY2da5Jpb8qcFMySTZdtFBhaDUkK80azaXD/9S+7gbNE0kQtjI4YcomXqcZN9J8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762543724; c=relaxed/simple;
-	bh=ya4XpoRY6qfeCfP5tVgi2q6BSc1XdmfS1j7EHD9hYco=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=NfwVc+1Ytq3SaQAwIiBF+Otx5ql/CmVk6KIVH5I+LxYJw5FSvb36fPTz7Ke3NBnYKFQoHxFIMYoUiFtgUZ8WHxVQ01n36RLNmNtN50T9nOHrh8G/4lQoHGa+b3/BR9+XETa1qoMfDWFpzsWN0j54SA8BQixPuhIeLcW32+unk8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AqmzvWXS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AqmzvWXS"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A7INt3L001089;
-	Fri, 7 Nov 2025 19:28:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=CT9azk
-	Ev/aPtf/U6S3mJQlo0hHAnCMMMWFmhZQVC0Bs=; b=AqmzvWXSjxnAtcW2KlqW/b
-	uk/KEJeVYJp9G/ESqYAWuKT7YDGTQiCWwhVMH587OgAZLs8Y2saqhIU7gOkocyIG
-	C5jNzu5j+6sT8NWF1RNrNPoSLjCIY1q8IljRzZnJIGU20ZkyUa2Up05xraZedHwF
-	QhQtqyIDCVhcTR+NxNnlk+ui/qqcsO+I5R5NWGc4W8QfAu5K36G7AqbggJ05JVKR
-	bEaaYUg+7TiCW4nE1XAf1wBcc3UPNExFdHTn+XHtLoNlHNwgwX4B8ayPShmNx427
-	h4/TX4eKUxLcFNh3hKwYh0smnQiDuCEELIs/wfmQHqvSrkUDxxCsmBSvO2IYdZfw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a9p0j886b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Nov 2025 19:28:17 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A7JSHtC001165;
-	Fri, 7 Nov 2025 19:28:17 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a9p0j8869-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Nov 2025 19:28:17 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A7J40k9012845;
-	Fri, 7 Nov 2025 19:28:16 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4a5y82c7t6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Nov 2025 19:28:16 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A7JSF6U61604208
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 7 Nov 2025 19:28:15 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7068E5805B;
-	Fri,  7 Nov 2025 19:28:15 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E701658065;
-	Fri,  7 Nov 2025 19:28:13 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.10.204])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  7 Nov 2025 19:28:13 +0000 (GMT)
-Message-ID: <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>,
-        James
- Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Luis
- Chamberlain	 <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez	 <da.gomez@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Roberto Sassu	 <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MODULE SUPPORT"
- <linux-modules@vger.kernel.org>
-In-Reply-To: <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
-References: <20250928030358.3873311-1-coxu@redhat.com>
-		 <20251031074016.1975356-1-coxu@redhat.com>
-		 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
-		 <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-		 <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-		 <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-		 <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
-		 <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
-	 <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Nov 2025 14:28:13 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE36721257A;
+	Fri,  7 Nov 2025 22:49:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762555766; cv=fail; b=dn8lR6fSRs34l/BmEaeTlTPwpiK8lzTmU2Cb/imzjUO4htJMkzMbHDGfAeDyqh1+5OEnPJoRURKufeKsDDZf52Kqv2RncMdFdQD1LSOsoKzg5PVUkTfRsyMoXWCBhSgR8mAD7IQIJ1ABcv3JfaA87maGmDzq05H2782SsaYEUJ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762555766; c=relaxed/simple;
+	bh=kiutZtLJHhiiDVstGuTDdr85rzjjZYGDD9QSh8jhJnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=tLY/5vjEjwyw+gVG3v3n25z9YhAaXajWSc1tbAk/00eAnAA6L4E1VRM8XXvokQdAmbTXsXKiYm+lhnewFKeVRseS1J/p4+ACVRgUHaPrhy6ZJHVCAqv8PCylR13yuSIanb9gIAVCkhA5UXgT5HpLDMdP6nFF+jf+n7M06FoQ5dw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.95.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=scYlIby7pXbvEIeDnyWGH10kEKPXnM/HrjM/HoLgl5bzl8PiQX83bdejGnotvP2dljE2KD+QzDYH6kNw/IqI2C2ExaY9HLNEGsMBWbt5BT2NRLPX63xn6wT8u8rZv3DKHJ7gsJMyiAjdWQMGUxghmM/pLPRMCTxuDRBx9XE2N96gCTdufHNVgzzYQZtTfZxehiDnWZXq4/9qFdKJK40wYIpW88ze+xkuN2Md4wveoVBp+7FaJOP4d/IW8iOY5j9bPTzH9yzErj9pQjJa5fFKAVUXRbMYA2rhsJH5IbAJf6Ki0BMuWpu1UJQBC51qW74w2LycpZs2uheBQORcpjKwug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wpZ31menD50kmAWcDJoJDgKGHdA1/212kU/791zVvFg=;
+ b=IhJJflIKW0Ezj4iwZa53YTuWlZnFMFbrKyu9EoRIUtXbZuaBV/8iqlG5ZC+D9deOTK2VAsIS34yy7fbfe4t49sW69BscK0vZ+r7NUxfhsZUbt3X7u8rhOMJS1G9Oqxj+RwUoxZb+6PE/UVOIqFX7FLr0uK93Uy8WHj5wb4tAmJ5QF9MhbSSmr0urW18pfJpJvJHDAq9Vo5qRSzQm/zqzkv3wJ4bFNCoelV2EApgV/0gW8tYsd/17+Bat+WjjaKv8ibpCcUhXr00tDxxN/Qnvw3xH/A40dz9CEbBMXPkJspHDfHbv4BoD70osKYZyTuV60Y/AQ49SO8yd6GoX8dCwPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
+ dkim=pass header.d=atomlin.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=atomlin.com;
+Received: from LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:be::10)
+ by LO0P123MB6688.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:2c9::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.13; Fri, 7 Nov
+ 2025 22:49:21 +0000
+Received: from LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::8242:da40:efa0:8375]) by LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::8242:da40:efa0:8375%4]) with mapi id 15.20.9298.012; Fri, 7 Nov 2025
+ 22:49:21 +0000
+Date: Fri, 7 Nov 2025 17:49:11 -0500
+From: Aaron Tomlin <atomlin@atomlin.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Kees Cook <kees@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] kallsyms/ftrace: Set module buildid in
+ ftrace_mod_address_lookup()
+Message-ID: <vb2dmubct3kvbtzz7zlcslxie422khm2ngmu4jfcpnfcoztuvy@6oi6urgqvc6y>
+References: <20251105142319.1139183-1-pmladek@suse.com>
+ <20251105142319.1139183-5-pmladek@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251105142319.1139183-5-pmladek@suse.com>
+X-ClientProxiedBy: BN9PR03CA0313.namprd03.prod.outlook.com
+ (2603:10b6:408:112::18) To LOYP123MB3534.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:117::14)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SWk1h8H8EKXKk4tVyYBO4d8kvL87jVtJ
-X-Authority-Analysis: v=2.4 cv=J9enLQnS c=1 sm=1 tr=0 ts=690e4851 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=IliqzFzewkCn4H2RUJwA:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA3MDE1MiBTYWx0ZWRfX0NYW7h31FCur
- tbaEeK1gYjegkO4EMTERjNLsUVF6EYsogD8Idldq+fisZZuCBg468Lsbnrhqv/ClCmAtp5h3eAn
- wdVq50RbY9L3dMbBpvpMO/WSvwYsVFVKiFjpojBW/ksi5wMOanNXybrK0oYJ6ewPfuFBhpWijMP
- Ts71tqGQxV0rZW/CnFTlyalFSFGgBxbbnEr0aptuo1ptY3rtfNbuP6OZO8P4tGr09WFhBL51F+P
- +fCxcgRqQZHVlrALdu6Lu+BZHqs5nJTQ+M/8Q6vt9KYuFiTLAvU6d8M28pU4XRqNpeEUarv75zF
- ABrleeQUzUXh30hL4jm6qdpWzu5/3/S1enU/RHhshrzHj6Zvjw5S1PH5lEd0je5V7wpTzdDUket
- ttkiQPJ6uCiX2qx4jhwJHc4vKfGKNQ==
-X-Proofpoint-GUID: Aw6UjcjfIaXneqyNXx7vGWc1oBiiQAa0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-07_05,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 malwarescore=0 phishscore=0 suspectscore=0
- bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511070152
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO3P123MB3531:EE_|LO0P123MB6688:EE_
+X-MS-Office365-Filtering-Correlation-Id: a59a6b91-fd86-484b-9ba2-08de1e4fe3a7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TCszaWpBdDBibTFJOFB2TXZJcGp3RlBoTzJDb0ZEOGdUckszL29YM3k1aHhO?=
+ =?utf-8?B?RFJMSGxWeElLNkgrcU9jYXYydFJodzJVaERTYWs4U3FwcERKWmZlTWVzSDBY?=
+ =?utf-8?B?TkZEQmpUcitSRVFVMEp6emk3UmNQTWxucVdsdzNaV3J6Zkc5NTh1SkxSZWdM?=
+ =?utf-8?B?ZGxNUmNmOE55QjExeDd4N2Z5elZLbG1Gd01YOUNlaTZIUlRpR2IvOUNNZjha?=
+ =?utf-8?B?TEtFTFo2a2dyNUZ1Y1lVRjVpbkNibmJmRWJuSkR5TDUwQzJpNVl0Vit2WlB0?=
+ =?utf-8?B?ZW5jbUJwWk1iZmw2ZEd0L1c4KzVxTzRxeHdWM21kblN5S3NFVXdMaDcyelZV?=
+ =?utf-8?B?TktqVDNiRWJYdzJSdXZDTnMycmdmWGgwZ1Qzb3g4UVFLcXpEL1BKNkxYa0V3?=
+ =?utf-8?B?c1FpOW40clBIMUJpaThpNVZrYXpDa3hqTXpNblhWT2lJR3VFZWxQNGdOM1JM?=
+ =?utf-8?B?aStsNmJJZWIvSDc3U0FsUjNna3NUKzhHUGIvQmlrOFJnUXZ1dFlGSFR2UmRu?=
+ =?utf-8?B?VksxT3VITmJQeVJBenJmbzBaazNIdGorUlZrZ200L1EwSWZDVEY0QXozUXk4?=
+ =?utf-8?B?YzZxT00xeStVVmErL3Q0TzUzZzRPU1NZd2FpMkUxb2M3ekhFdXlsMHFpd0dG?=
+ =?utf-8?B?dnFwa0ZVMmFhWVMzYk5wZTNDakNLZVJTeGVqTmtUbzhSWVI3UTlxLy9vWitG?=
+ =?utf-8?B?WHFRbk5lM3pUVE9ieDB1K3N5TmErOTNwT0xNaGJ1UHdoM1ljMTB1QTRaNUZq?=
+ =?utf-8?B?S21TTGlYdm1kMThJc0RTMGZIYUdZR3BvRm9wcDBxcDVQL2xjYmZUZzVxcVMv?=
+ =?utf-8?B?OGpEVWttL2cxWWVpcmYydU5XZTlyUlc4MU9UbEViYkVyd3BUazh5Mm9DbXBE?=
+ =?utf-8?B?b2ZweUtvRkpnNDErVmprSUlYZUxudUxxR3k0QXBzK0ZJUHcxWk9nNHR5Wkc4?=
+ =?utf-8?B?UXhFMFd1dXNrMGx3TGlMckszNERVcmtCNVN2aVpaTmhZY3FvKzhseDVaTHhK?=
+ =?utf-8?B?RndNU1NYc2Y3OGJqL0dPcWczU1FpeXVlSTE4SUFtaHYzWk1oZVExNGJ0Rll0?=
+ =?utf-8?B?NUZIVVBSblczYkRmL2dvUU1DdGQwZWl1Wmh0UmwrclFvMHEyVUFTYVp3b2RF?=
+ =?utf-8?B?K2pkZDQ0anZydjZuMWZjbldzWVltMDlwWDJyOFlyUTArRWJ0ZStqME80Wmtm?=
+ =?utf-8?B?Z1VVeWtzQjM1N2VVNmJJbXdZWjNXQ3cwNFhOK2hNZU5qNDhHdG5sRkdUYldw?=
+ =?utf-8?B?RjdYeTZkNng5NUFBbnZiaG1xRVJJUmdSQy9HOFp3cytTcERDM1p2NTNjQ0dP?=
+ =?utf-8?B?MVBkeUJkTWVxWUptaVNsdklmT05VcjBsMFBsbEt2RGI0SVFtbDZaRjZxS2Ru?=
+ =?utf-8?B?d0dTalBhVU8xSkdXQ0tuSEhvSjY3bElVMnpuTEphWm95RzN0TlVtVkdvaUp6?=
+ =?utf-8?B?MktFYUlnRUpBUGdtMlI1WUNFTXN1a0NjenQ1SEpWbzQxY3c3RXd5UmF3UHcy?=
+ =?utf-8?B?a1YxVW5WRit6YkFSbHV4Rzd1ZjdoSE1xSlFrUHh2VG5LMDM3cElOZ0l3T3N6?=
+ =?utf-8?B?Z0ZlcUxMcFNxU2FicUNKYmVsdis1RlNRUTFzQ0tLOEdaZU9jS2tyTkdrMG82?=
+ =?utf-8?B?M2VQRGptbGFDS0FJQ09nemxGejlTS3o1RkRWVWdyRTh6UlJlNXc3dzY2d3BE?=
+ =?utf-8?B?OTZhT1pkZ2NGbWNiTXRzUm0rdTZMZnNLOWtYM20xMk9FclhuTDBpNzc0Qytn?=
+ =?utf-8?B?MGJqenRQUG5XcHRlYVlRMng1MlRmQ3Z1cWdwaFlFSFN3K2IwZ3h5VTNaSTY1?=
+ =?utf-8?B?bGZDWHkwVWtrMld1TE1kL3dwNWZtYlZkRk1qcFZtNURBRTAxK0lkaHBYZEd1?=
+ =?utf-8?B?Unk2RFYvK3ZyN3phU0N5ZDFVZElEK2JxWkxzOXR0bCtmWk5tOFozUGRvakRS?=
+ =?utf-8?Q?Yv0TUh73nBEenF5uDGZ+/WdCBJs5bNMj?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(7053199007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eGxwKzZzMzZNaVl2eUI4SkI2R3Nyby9RNi81MDdjNGRqa0gxamxLKzFDWXhD?=
+ =?utf-8?B?TmZMMU52R3B6QUpsTUd5emg0RmpCU0tOeXJtWUwxek4wSkt0MTJsZ0tEd1g3?=
+ =?utf-8?B?QVJreVRTZ1M3NkV5L2l1YUdjTy9ydnhING16blRienQ4cThLeG1zYXlaYkRZ?=
+ =?utf-8?B?MzBSZGRzM0R5SnhUcGh2aTY0Ry9zZlMybkZ0L2IwZmYrcFZaemFTZkdmK0dZ?=
+ =?utf-8?B?ckhnL1hIeGRKYlBZSlJxcTJTRWxJRUJxMmYvaEhLVS9QdklRQ2N4WjhmTG5x?=
+ =?utf-8?B?SGJHK0hLZ1lNWmJkVTd1OSszby9JeFQ3TUdpUUVhUUV6ODhpeUxLOUw1Nkdk?=
+ =?utf-8?B?bytNOW1FOXptSFNNaHM2cXdIbE14dU5SM05oTEFJMzE1OTBROHFKM1paNHQ1?=
+ =?utf-8?B?Znl4T2FYZkwyQ1N0UUlzSFJWRzd4eVQxcTB5YWhBQ0kvTnNUVW1ud2xySVJP?=
+ =?utf-8?B?V0Y1U3V6OEdkemFJcEdaYmpYSUYyUzczVkloeEN1Q1dOR3Q1WWc5cVVDVnlh?=
+ =?utf-8?B?bEdkM25UV0JiUDFhVVNqdWtQVGFLb3hpWllBZDY5YlJFclZuV0hXdkRRV0R3?=
+ =?utf-8?B?c0ZYaEtJSExjNEtnb1p4TVdsWm9kd2lIaWIwOFoyVDZxK3dlS0ZBNWR0VEg4?=
+ =?utf-8?B?dGZmTWU3cFhsUFNXWXRCMGhsTnRzRmpRTmFCT0lVZlNpSy9YekNMZXl4YjdU?=
+ =?utf-8?B?QVBDZUdabHFYUmlYR0g3NURjWlo5clErLzFaQTYxZUdMV2RzYUxzc1NJSnNJ?=
+ =?utf-8?B?ZkxpbUVVd1M3SnYxMUh3MmpwQksrYVpOTkdBWjJkTC8wS2R1QWdjRzlVQlhl?=
+ =?utf-8?B?dy9uZDBobGUvUlpaS1ZoV0d5TE0ybGpYTnhnR3lVTFNvSjVHdjdrN1dNYUor?=
+ =?utf-8?B?Vm40cVo3TkFHcUlJRGlEbCtzVGkvRGxOTTZCcmpFaHVkRnUwUDJqZ2lUd29p?=
+ =?utf-8?B?L3g5R3hTeUVsSnB6VmZiL1A2cTJiczZUZXltMG9vRGl5b3MrVC9La3EvMUtF?=
+ =?utf-8?B?b1VXOFZOd1FHRGl2MlkyYUhhWnFJdHhmenZCVmhBa0hTSms0Z1k5TGtjR0Qz?=
+ =?utf-8?B?clNHYUtNVVo2NERpeFJDSEFhMkoreUExcHdTSi83c2RYYThyZE1TUlc2RlVu?=
+ =?utf-8?B?MHZQcHd2dWtKd215M2lwYUp4NFlsbnhha0UwY3YwMDJMVUVZanRtb0xJbmJJ?=
+ =?utf-8?B?L3ZlcFVRWHBIQ1FId0ZhREN2NitiWnZ3ZUpXWkNjYUgxakpSZGQzdmRtUXM1?=
+ =?utf-8?B?UVc2MWtRRjJWb2twRGRWVU9hMmNLTTB6ZlZyTTJhVEJBS3pkWXpQWjZtM21I?=
+ =?utf-8?B?bDU3eEkrQ2wwekVQWkgvQm1neHVLQVJjRUxzMFIrbWRhUml2RlhFTHFrMG9k?=
+ =?utf-8?B?V1FpczRta2pDUVM0SzZ5THNSNEpxT1M0RngwNlRPditIV2xGcWJUdy8yV1k0?=
+ =?utf-8?B?dElIblpMcWxSdlZQcm50Wm1jRTMxZW1BaDFmVXVrakVoMG82eHRhQklPclIx?=
+ =?utf-8?B?SGtsNjdjZW5iUWJJY1RiMTJmVnJQVWlZbmo2TjVFSG8zZzdwc0ptdE12eU4v?=
+ =?utf-8?B?N1N5U2dEeU5vZSttL0RodGlMT2dKZERybXIySTRIZGNTM3pHWDZ5SmxnN1Vq?=
+ =?utf-8?B?WTZ0R09PYTlFZDF2MlYyK2hTUktqWHZsMHZ1cGhxc1R0ZnU1U0REb3IxNWpJ?=
+ =?utf-8?B?Z0hKR3lkRTdveFJ2SkdQUU0xVVM1Zk91YytJK0x4NDRWanZkUHR6N2IwT2xD?=
+ =?utf-8?B?RmRhNStnWEthRGJJdG1icFJtV3EzMWtHclQwOURlY0ZWaFp0ZCtzNVNzMjdE?=
+ =?utf-8?B?blNRMjNMMnU4VWpNWTF3dzlKdGJ4WVk2SllYdHMwWWcyZ3J5R2tQb2JhUWR2?=
+ =?utf-8?B?aWJXMWkvUDJWb3h5SzA3SVB3WlE2bDJuY3V3cXg1YWN2Rzc5Tld0K3R3UDVT?=
+ =?utf-8?B?Rmt5dUdGMWZ1ZGo0UmVoeUlTUXBIbDM0alRrTnorZGc1bzJFUUxXNjFOdkhp?=
+ =?utf-8?B?Y0RSR0VuVjhoSU13S0lEbXZsQlF5MEo1WE9hV2FhL0x0ZFZhYWt6S1A0OWFs?=
+ =?utf-8?B?K3o5YW05RGVKT0ZVcDF3M29PeUNrMlFWTW10UXNMT0MyVUVrblEwRW9UMGFU?=
+ =?utf-8?Q?V8O/YgoFu3RnoUr4LNZtvg1cF?=
+X-OriginatorOrg: atomlin.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a59a6b91-fd86-484b-9ba2-08de1e4fe3a7
+X-MS-Exchange-CrossTenant-AuthSource: LOYP123MB3534.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 22:49:21.4328
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kyn/uurbRsAloNyzlbcVPaPkoH8dW8U0dCZ7LmFpubQlhhwHDkJEOK2D5mt4CPlmvmgVsFqaRxXCtTjz2n8Qsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB6688
 
-On Thu, 2025-11-06 at 17:15 -0500, Mimi Zohar wrote:
-> On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
-> > On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
-> > > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
-> > [...]
-> > >=20
-> > > Hi Coiby,
-> > >=20
-> > > Based on the conversation with Paul, there is no reason to remove the=
- existing
-> > > security_kernel_post_read_file() call.
-> > >=20
-> > > The changes are similar to the 2nd link, but a bit different.
-> > > - Define a single enumeration named READING_MODULE_COMPRESSED.
-> > >=20
-> > > - In module/main.c add a new security_kernel_post_read_file() call im=
-mediately
-> > > after decompressing the kernel module.  Like a previous version of th=
-is patch,
-> > > call kernel_read_file() with either READING_MODULE or READING_MODULE_=
-COMPRESSED
-> > > based on MODULE_INIT_COMPRESSED_FILE.
-> > >=20
-> > > - In ima_post_read_file() defer verifying the signature when the enum=
-eration is
-> > > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kern=
-el_module.)
-> >=20
-> > Hi Mimi,
-> >=20
-> > Thanks for summarizing your conversation with Paul! I can confirm Paul'=
-s
-> > approach works
-> > https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_=
-hook_paul
-> >=20
-> > While testing the patch today, I realized there is another
-> > issue/challenge introduced by in-kernel module decompression. IMA
-> > appraisal is to verify the digest of compressed kernel module but
-> > currently the passed buffer is uncompressed module. When IMA uses
-> > uncompressed module data to calculate the digest, xattr signature
-> > verification will fail. If we always make IMA read the original kernel
-> > module data again to calculate the digest, does it look like a
-> > quick-and-dirty fix? If we can assume people won't load kernel module s=
-o
-> > often, the performance impact is negligible. Otherwise we may have to
-> > introduce a new LSM hook so IMA can access uncompressed and original
-> > module data one time.
->=20
-> ima_collect_measurement() stores the file hash info in the iint and uses =
-that
-> information to verify the signature as stored in the security xattr.=20
-> Decompressing the kernel module shouldn't affect the xattr signature
-> verification.
+On Wed, Nov 05, 2025 at 03:23:16PM +0100, Petr Mladek wrote:
+> __sprint_symbol() might access an invalid pointer when
+> kallsyms_lookup_buildid() returns a symbol found by
+> ftrace_mod_address_lookup().
+> 
+> The ftrace lookup function must set both @modname and @modbuildid
+> the same way as module_address_lookup().
+> 
+> Fixes: 9294523e3768 ("module: add printk formats to add module build ID to stacktraces")
+> Signed-off-by: Petr Mladek <pmladek@suse.com>
+> ---
+>  include/linux/ftrace.h | 6 ++++--
+>  kernel/kallsyms.c      | 4 ++--
+>  kernel/trace/ftrace.c  | 5 ++++-
+>  3 files changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 7ded7df6e9b5..a003cf1b32d0 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -87,11 +87,13 @@ struct ftrace_hash;
+>  	defined(CONFIG_DYNAMIC_FTRACE)
+>  int
+>  ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+> -		   unsigned long *off, char **modname, char *sym);
+> +			  unsigned long *off, char **modname,
+> +			  const unsigned char **modbuildid, char *sym);
+>  #else
+>  static inline int
+>  ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+> -		   unsigned long *off, char **modname, char *sym)
+> +			  unsigned long *off, char **modname,
+> +			  const unsigned char **modbuildid, char *sym)
+>  {
+>  	return 0;
+>  }
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index efb12b077220..71868a76e9a1 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -378,8 +378,8 @@ static int kallsyms_lookup_buildid(unsigned long addr,
+>  					 modname, modbuildid, namebuf);
+>  
+>  	if (!ret)
+> -		ret = ftrace_mod_address_lookup(addr, symbolsize,
+> -						offset, modname, namebuf);
+> +		ret = ftrace_mod_address_lookup(addr, symbolsize, offset,
+> +						modname, modbuildid, namebuf);
+>  
+>  	return ret;
+>  }
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 42bd2ba68a82..11f5096fb60c 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -7678,7 +7678,8 @@ ftrace_func_address_lookup(struct ftrace_mod_map *mod_map,
+>  
+>  int
+>  ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+> -		   unsigned long *off, char **modname, char *sym)
+> +			  unsigned long *off, char **modname,
+> +			  const unsigned char **modbuildid, char *sym)
+>  {
+>  	struct ftrace_mod_map *mod_map;
+>  	int ret = 0;
+> @@ -7690,6 +7691,8 @@ ftrace_mod_address_lookup(unsigned long addr, unsigned long *size,
+>  		if (ret) {
+>  			if (modname)
+>  				*modname = mod_map->mod->name;
+> +			if (modbuildid)
+> +				*modbuildid = module_buildid(mod_map->mod);
+>  			break;
+>  		}
+>  	}
+> -- 
+> 2.51.1
+> 
+> 
 
-In the case when the compressed kernel module hasn't previously been measur=
-ed or
-appraised before loading the kernel module, we need to "collect" the file d=
-ata
-hash on READING_MODULE_COMPRESSED, but defer appraising/measuring it.
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
 
-An alternative to your suggestion of re-reading the original kernel module =
-data
-to calculate the digest or defining a new hook, would be to define "collect=
-" as
-a new "action" and pass the kernel_read_file_id enumeration to
-process_measurement().  IMA_COLLECTED already exists.  Only IMA_COLLECT wou=
-ld
-need to be defined.  The new collect "action" should be limited to
-func=3DMODULE_CHECK.
-
-The downside of this alternative is that it requires a new collect rule:
-collect func=3DMODULE_CHECK mask=3DMAY_READ uid=3D0
-appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig
-
---=20
-thanks,
-
-Mimi
+-- 
+Aaron Tomlin
