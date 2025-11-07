@@ -1,202 +1,310 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D4323EAAE;
-	Thu,  6 Nov 2025 22:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A51326E17A
+	for <linux-modules@vger.kernel.org>; Fri,  7 Nov 2025 10:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762467369; cv=none; b=Key3+CKfq2tFvKFOQvJZFvbiyoCPmMf3nRvYRulKMsGnRl52mLPSnwyRzaOO61qKqo3d0ylCWJ0EfO9XlwJLZEB+GPQGG3p5f2MBn6WZtiRUY0I+k6Vv0aVmMhZSZbnZamiQac1irP5/5PE5jB4fIhs+mGVv7dqGUQ1ZGF9FnTk=
+	t=1762509956; cv=none; b=aq6tkLwOgMZ/lAi5TyBnIhSOxj8hEpOl+clqrp9f9hpk5nz8uBKVi/P9wbourd0SKFp4a/1rMk+QJdwHMfbgCrnHO5v1kyCCX1+UqC0H+bPxhzpd8Q50h3HcC9rXP6nTv3C8cejWfQOiE7F02n3HawmmdB7vqav8kL9sk49sfT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762467369; c=relaxed/simple;
-	bh=ZIk+AfMZgAYMOTCCjanRLeMZrq0PnmwmS8zTdHALF7Q=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=TgkPCY4OrzsPnav3G9S9taHg82oIsJhrWQorTIO2tsRnlBZh81DRFN6quvMw5ike8hVf2ISczETFhxxouDpzoiTNPwx+jt5g+vJfG1kuz3U0gj/iMd8uGwV66GdQqB0yECazutkN8I7/V2D4deVNIFZsjUsjDu3YI/xdpcrK2/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZI9UJQ8x; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1762509956; c=relaxed/simple;
+	bh=h9z28y0YXaSoCRfDL4rjhIPmp6uSb1t7HivBNV4Rchg=;
+	h=From:In-Reply-To:References:Cc:Subject:MIME-Version:Content-Type:
+	 Date:Message-ID; b=ZYXMfT/1YZU/IS9nQnQgQVAa/WukBd3+Lho08uKS/IASqG1UPCxpm5auNqP9OrTo8dxVJd2xIoPnblROGIL83MZFCslFxtS5b5FZjDRuTHf5tMWh/lFm+q88en6XsIDJAlzdCksbMlIPvY510+yXrRZNDqtRg1nV+4mkNiITYKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iCEl2sHC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZI9UJQ8x"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6Gd0Go028252;
-	Thu, 6 Nov 2025 22:15:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=SiPPBV
-	1cKgzYnuAXoEe9S7za3I6Ag2LuDK3mBAh6v2c=; b=ZI9UJQ8xkEowH1xZwMTkeH
-	s4orfbGA1qB1DbcGbpIRSfARKmTd3LkeFN9wJFRo+HwCi+DNvN+YE4QY2zkXAeO7
-	kn2LZAUy2ZwCG3hdW/Z3ySTg09op+JqHEBWpoJ/5JnMSpK+6ybVNsw/U1c3NGu0Q
-	BEGvHXc5EdCxVdQgbzOPYIDOWOyOHZ8hoNiGJYBjr3z9y5+VKlAva7mqSwwlXZXB
-	2exp2zBFuH6j4CcQsCO2du/YNf8BPPk+lG7l9Dx4RkywLw7Xc7uUejfDPcmD6u01
-	PxPMNFri0NWuXuxhdfK7cybqODNZAs09L1qvWM64dhVw1GY1glbPYiTKfnuNGceQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59q99qur-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Nov 2025 22:15:38 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A6MFcAE022146;
-	Thu, 6 Nov 2025 22:15:38 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59q99qum-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Nov 2025 22:15:38 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6IdLFM009822;
-	Thu, 6 Nov 2025 22:15:36 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4a5x1kqpx3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Nov 2025 22:15:36 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A6MFZuu29164178
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 6 Nov 2025 22:15:36 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D275658053;
-	Thu,  6 Nov 2025 22:15:35 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4D6D158043;
-	Thu,  6 Nov 2025 22:15:34 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.50.42])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  6 Nov 2025 22:15:34 +0000 (GMT)
-Message-ID: <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>,
-        James
- Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Luis
- Chamberlain	 <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez	 <da.gomez@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Roberto Sassu	 <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MODULE SUPPORT"
- <linux-modules@vger.kernel.org>
-In-Reply-To: <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
-References: <20250928030358.3873311-1-coxu@redhat.com>
-	 <20251031074016.1975356-1-coxu@redhat.com>
-	 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
-	 <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-	 <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-	 <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-	 <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
-	 <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 06 Nov 2025 17:15:33 -0500
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iCEl2sHC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762509953;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d2iFp6mDvWDTtLkd9rZC+JAkBE2LytPdd3avlx4HUqs=;
+	b=iCEl2sHCodoGfjue7jRNodd+kYJqxRlhtKyV+6T7c2qhlZKc2SHf3bQWU97ItBzSyS4SG/
+	6mrbyCS8XNJkbdHLm/CkOQYvbULmSp/uMeS/kwlUHMShUFzbXf0KVAzWu/SRHIIjU/2lfX
+	/znF8+XzvkBO8nyMhunksKsKd5a0UQ8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-153-oQPbeBJIMvKWtug6NngSPQ-1; Fri,
+ 07 Nov 2025 05:05:48 -0500
+X-MC-Unique: oQPbeBJIMvKWtug6NngSPQ-1
+X-Mimecast-MFC-AGG-ID: oQPbeBJIMvKWtug6NngSPQ_1762509946
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 821D01956094;
+	Fri,  7 Nov 2025 10:05:45 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.6])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4E7A11945110;
+	Fri,  7 Nov 2025 10:05:40 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20251106174456.31818-1-dhowells@redhat.com>
+References: <20251106174456.31818-1-dhowells@redhat.com>
+Cc: dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: [PATCH v7 8/8] modsign: Enable ML-DSA module signing
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=StmdKfO0 c=1 sm=1 tr=0 ts=690d1e0a cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=hO0pNDKWLz_cAJWU_XQA:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-ORIG-GUID: 2TcC7SZcOWEAivhxNgOLpr4EkIUjPptU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAxOCBTYWx0ZWRfX7dnqnmt6YAZs
- 6vIe70aDIPD3i5Vz/yAe1lGDTPhsoeJFv4LKWysYZcaqB5AhZ0LpuOdbYqvShctUCJ1NU/miBxp
- V7tTIyHWxKxfH11I+HI5VpNCtFMOKcI+kAoc+gMOlbdf1sVDtgEsGsTOY9mGv1yX5FFbPNqH01A
- W6Z6l0FaXeBvhksyzAACTWu/Co2I5lwNY1AWvYG6IpNZGndY4j9VLLmCD8tkWek5cBtCdkwJpUP
- dhb7ET6FBhySgLKqVqFvduSKPXcVd5hNFfcByYDJza/5xkz4wMCvd8qMiIuZickBI49+sgdDRAQ
- 9XPglZ/3FXQgdX3tPDTapAykC0CWXUF5FEzRmbF4Ek3euo4KMdwVlwW/v9ceQWT6V7QyLoOnwT7
- 6KtuygcfsqsqGNBMG/JnJxDFYqpBkA==
-X-Proofpoint-GUID: 2sSP0p4LOwrW01N-WrnspT1BYGzsKbWK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-06_04,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511010018
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <61636.1762509938.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 07 Nov 2025 10:05:38 +0000
+Message-ID: <61637.1762509938@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
-> On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
-> > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
-> [...]
-> >=20
-> > Hi Coiby,
-> >=20
-> > Based on the conversation with Paul, there is no reason to remove the e=
-xisting
-> > security_kernel_post_read_file() call.
-> >=20
-> > The changes are similar to the 2nd link, but a bit different.
-> > - Define a single enumeration named READING_MODULE_COMPRESSED.
-> >=20
-> > - In module/main.c add a new security_kernel_post_read_file() call imme=
-diately
-> > after decompressing the kernel module.  Like a previous version of this=
- patch,
-> > call kernel_read_file() with either READING_MODULE or READING_MODULE_CO=
-MPRESSED
-> > based on MODULE_INIT_COMPRESSED_FILE.
-> >=20
-> > - In ima_post_read_file() defer verifying the signature when the enumer=
-ation is
-> > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kernel=
-_module.)
->=20
-> Hi Mimi,
->=20
-> Thanks for summarizing your conversation with Paul! I can confirm Paul's
-> approach works
-> https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_ho=
-ok_paul
->=20
-> While testing the patch today, I realized there is another
-> issue/challenge introduced by in-kernel module decompression. IMA
-> appraisal is to verify the digest of compressed kernel module but
-> currently the passed buffer is uncompressed module. When IMA uses
-> uncompressed module data to calculate the digest, xattr signature
-> verification will fail. If we always make IMA read the original kernel
-> module data again to calculate the digest, does it look like a
-> quick-and-dirty fix? If we can assume people won't load kernel module so
-> often, the performance impact is negligible. Otherwise we may have to
-> introduce a new LSM hook so IMA can access uncompressed and original
-> module data one time.
+    =
 
-ima_collect_measurement() stores the file hash info in the iint and uses th=
-at
-information to verify the signature as stored in the security xattr.=20
-Decompressing the kernel module shouldn't affect the xattr signature
-verification.
+Allow ML-DSA module signing to be enabled.
 
-The patch with a few minor changes looks good:
+Note that openssl's CMS_*() function suite does not, as of openssl-3.5.1,
+support the use of CMS_NOATTR with ML-DSA, so the prohibition against usin=
+g
+authenticatedAttributes with module signing has to be removed.  The select=
+ed
+digest then applies only to the algorithm used to calculate the digest
+stored in the messageDigest attribute.
 
-- READDING_MODULE_CHECK -> READING_MODULE_CHECK
-- Fix the enumeration name in ima_main.c
-- scripts/checkpatch.pl code/comment line length has been relaxed to 100 ch=
-ars,
-but the section "Breaking long lines and strings" in
-Documentation/process/coding-style.rst still recommends 80 characters.
+The ML-DSA algorithm uses its own internal choice of digest (SHAKE256)
+without regard to what's specified in the CMS message.  This is, in theory=
+,
+configurable, but there's currently no hook in the crypto_sig API to do
+that, though possibly it could be done by parameterising the name of the
+algorithm, e.g. ("ml-dsa87(sha512)").
 
-There are cases where it is necessary to go over the 80 char line limit for
-readability, but in general both Roberto and I prefer, as much as possible,=
- to
-limit the line length to 80 char.  To detect where/when the line limit is
-greater than 80 chars, use the scripts/checkpatch.pl "--max-line-length=3D8=
-0"
-option.
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Lukas Wunner <lukas@wunner.de>
+cc: Ignat Korchagin <ignat@cloudflare.com>
+cc: Stephan Mueller <smueller@chronox.de>
+cc: Eric Biggers <ebiggers@kernel.org>
+cc: Herbert Xu <herbert@gondor.apana.org.au>
+cc: keyrings@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+---
+ Documentation/admin-guide/module-signing.rst |   15 ++++++++-------
+ certs/Kconfig                                |   24 +++++++++++++++++++++=
++++
+ certs/Makefile                               |    3 +++
+ crypto/asymmetric_keys/pkcs7_verify.c        |    4 ----
+ kernel/module/Kconfig                        |    5 +++++
+ scripts/sign-file.c                          |   26 ++++++++++++++++++---=
+-----
+ 6 files changed, 58 insertions(+), 19 deletions(-)
 
-After fixing the patch, please post it to linux-integrity mailing list.
+diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/=
+admin-guide/module-signing.rst
+index a8667a777490..6daff80c277b 100644
+--- a/Documentation/admin-guide/module-signing.rst
++++ b/Documentation/admin-guide/module-signing.rst
+@@ -28,10 +28,11 @@ trusted userspace bits.
+ =
 
---=20
-thanks,
+ This facility uses X.509 ITU-T standard certificates to encode the public=
+ keys
+ involved.  The signatures are not themselves encoded in any industrial st=
+andard
+-type.  The built-in facility currently only supports the RSA & NIST P-384=
+ ECDSA
+-public key signing standard (though it is pluggable and permits others to=
+ be
+-used).  The possible hash algorithms that can be used are SHA-2 and SHA-3=
+ of
+-sizes 256, 384, and 512 (the algorithm is selected by data in the signatu=
+re).
++type.  The built-in facility currently only supports the RSA, NIST P-384 =
+ECDSA
++and NIST FIPS-204 ML-DSA (Dilithium) public key signing standards (though=
+ it is
++pluggable and permits others to be used).  For RSA and ECDSA, the possibl=
+e hash
++algorithms that can be used are SHA-2 and SHA-3 of sizes 256, 384, and 51=
+2 (the
++algorithm is selected by data in the signature); ML-DSA uses SHAKE256.
+ =
 
-Mimi
+ =
+
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+@@ -146,9 +147,9 @@ into vmlinux) using parameters in the::
+ =
+
+ file (which is also generated if it does not already exist).
+ =
+
+-One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``) and ECDSA
+-(``MODULE_SIG_KEY_TYPE_ECDSA``) to generate either RSA 4k or NIST
+-P-384 keypair.
++One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``), ECDSA
++(``MODULE_SIG_KEY_TYPE_ECDSA``) and ML-DSA (``MODULE_SIG_KEY_TYPE_ML_DSA`=
+`) to
++generate an RSA 4k, a NIST P-384 keypair or an ML-DSA keypair.
+ =
+
+ It is strongly recommended that you provide your own x509.genkey file.
+ =
+
+diff --git a/certs/Kconfig b/certs/Kconfig
+index 78307dc25559..f647b944f5da 100644
+--- a/certs/Kconfig
++++ b/certs/Kconfig
+@@ -39,6 +39,30 @@ config MODULE_SIG_KEY_TYPE_ECDSA
+ 	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
+ 	 when falling back to building Linux 5.14 and older kernels.
+ =
+
++config MODULE_SIG_KEY_TYPE_ML_DSA_44
++	bool "ML-DSA (Dilithium) 44"
++	select CRYPTO_ML_DSA
++	select LIB_SHA3
++	help
++	  Use an ML-DSA (Dilithium) 44 key (NIST FIPS 204) for module signing
++	  with a SHAKE256 'hash' of the message.
++
++config MODULE_SIG_KEY_TYPE_ML_DSA_65
++	bool "ML-DSA (Dilithium) 65"
++	select CRYPTO_ML_DSA
++	select LIB_SHA3
++	help
++	  Use an ML-DSA (Dilithium) 65 key (NIST FIPS 204) for module signing
++	  with a SHAKE256 'hash' of the message.
++
++config MODULE_SIG_KEY_TYPE_ML_DSA_87
++	bool "ML-DSA (Dilithium) 87"
++	select CRYPTO_ML_DSA
++	select LIB_SHA3
++	help
++	  Use an ML-DSA (Dilithium) 87 key (NIST FIPS 204) for module signing
++	  with a SHAKE256 'hash' of the message.
++
+ endchoice
+ =
+
+ config SYSTEM_TRUSTED_KEYRING
+diff --git a/certs/Makefile b/certs/Makefile
+index f6fa4d8d75e0..231379c91b86 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -43,6 +43,9 @@ targets +=3D x509_certificate_list
+ ifeq ($(CONFIG_MODULE_SIG_KEY),certs/signing_key.pem)
+ =
+
+ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) :=3D -newkey ec -pkeyopt ec_p=
+aramgen_curve:secp384r1
++keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ML_DSA_44) :=3D -newkey ml-dsa-44
++keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ML_DSA_65) :=3D -newkey ml-dsa-65
++keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ML_DSA_87) :=3D -newkey ml-dsa-87
+ =
+
+ quiet_cmd_gen_key =3D GENKEY  $@
+       cmd_gen_key =3D openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_=
+HASH) -days 36500 \
+diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_key=
+s/pkcs7_verify.c
+index 0f9f515b784d..f7ea1d41771d 100644
+--- a/crypto/asymmetric_keys/pkcs7_verify.c
++++ b/crypto/asymmetric_keys/pkcs7_verify.c
+@@ -424,10 +424,6 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
+ 			pr_warn("Invalid module sig (not pkcs7-data)\n");
+ 			return -EKEYREJECTED;
+ 		}
+-		if (pkcs7->have_authattrs) {
+-			pr_warn("Invalid module sig (has authattrs)\n");
+-			return -EKEYREJECTED;
+-		}
+ 		break;
+ 	case VERIFYING_FIRMWARE_SIGNATURE:
+ 		if (pkcs7->data_type !=3D OID_data) {
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 2a1beebf1d37..4b5d1601d537 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -327,6 +327,10 @@ config MODULE_SIG_SHA3_512
+ 	bool "SHA3-512"
+ 	select CRYPTO_SHA3
+ =
+
++config MODULE_SIG_SHAKE256
++	bool "SHAKE256"
++	select CRYPTO_SHA3
++
+ endchoice
+ =
+
+ config MODULE_SIG_HASH
+@@ -339,6 +343,7 @@ config MODULE_SIG_HASH
+ 	default "sha3-256" if MODULE_SIG_SHA3_256
+ 	default "sha3-384" if MODULE_SIG_SHA3_384
+ 	default "sha3-512" if MODULE_SIG_SHA3_512
++	default "shake256" if MODULE_SIG_SHAKE256
+ =
+
+ config MODULE_COMPRESS
+ 	bool "Module compression"
+diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+index 7070245edfc1..b726581075f9 100644
+--- a/scripts/sign-file.c
++++ b/scripts/sign-file.c
+@@ -315,18 +315,28 @@ int main(int argc, char **argv)
+ 		ERR(!digest_algo, "EVP_get_digestbyname");
+ =
+
+ #ifndef USE_PKCS7
++
++		unsigned int flags =3D
++			CMS_NOCERTS |
++			CMS_PARTIAL |
++			CMS_BINARY |
++			CMS_DETACHED |
++			CMS_STREAM  |
++			CMS_NOSMIMECAP |
++			CMS_NO_SIGNING_TIME |
++			use_keyid;
++		if (!EVP_PKEY_is_a(private_key, "ML-DSA-44") &&
++		    !EVP_PKEY_is_a(private_key, "ML-DSA-65") &&
++		    !EVP_PKEY_is_a(private_key, "ML-DSA-87"))
++			flags |=3D use_signed_attrs;
++
+ 		/* Load the signature message from the digest buffer. */
+-		cms =3D CMS_sign(NULL, NULL, NULL, NULL,
+-			       CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
+-			       CMS_DETACHED | CMS_STREAM);
++		cms =3D CMS_sign(NULL, NULL, NULL, NULL, flags);
+ 		ERR(!cms, "CMS_sign");
+ =
+
+-		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
+-				     CMS_NOCERTS | CMS_BINARY |
+-				     CMS_NOSMIMECAP | use_keyid |
+-				     use_signed_attrs),
++		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo, flags),
+ 		    "CMS_add1_signer");
+-		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) !=3D 1,
++		ERR(CMS_final(cms, bm, NULL, flags) !=3D 1,
+ 		    "CMS_final");
+ =
+
+ #else
+
