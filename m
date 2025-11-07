@@ -1,116 +1,201 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D35303C8F
-	for <linux-modules@vger.kernel.org>; Fri,  7 Nov 2025 10:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82AE2BEC42
+	for <linux-modules@vger.kernel.org>; Fri,  7 Nov 2025 13:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762511661; cv=none; b=GWISlEwyNeS1Jgs2YxXu1AGsbbhSmpogohNP/YgAqHil0YOiv6/qN06IqYlhUb8ETpoIJ67BYo6H6WmHguoHLCfmrijbPwu2eO2hbhiudsK/ffdFAXaENHkpFw79of1dBhobGinBPtYxOZyHyTdtYLKKg+arNSbL//dpGVkKb4E=
+	t=1762520927; cv=none; b=umKfZFilzkDx8Lsn+hr7lmIs+gEg/03iZHUXuNFOojancaT9DSQrspuyksItflUpw/Hvkgtq6naFBttTxzrjYYpfdGGhdeJCK242Nmplq7pfltRJi06q9Be0D0y3HIUd0GcPHwbK1b8zpyI7K8F+hH6UwmuCsz+gOMKD0QSgvJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762511661; c=relaxed/simple;
-	bh=cOCGVKmVEovJesU3WW8kK1oX09gBBIpX3J0LJkfvNN8=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=slkhFrDs1RsYgg7ZYL8VPfs4kAvC8pNZHTIZEBUOWUDfe2akPhshBQOZ+xObm6cokWSDfaYR0U1hyIympzpuhMmzjpPyq8qFubdgz6xgXRxopJUpI7Ck6Qr541ZkUndayDY5OZqVYL+qra/5f0yd42hmqQmbefsU3K1jKlNaPmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b2h8pSgL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1762520927; c=relaxed/simple;
+	bh=OWiEd8XbPv8RdYmPKuplSxpJVZGnRYjpmY5XLgep+8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJyS2CINVjYJ5AjBs8Fkl3v+XJotRUA1e3Nk2PpSwSNfhl01IavzE6yV4rVtTQuiAXtR/Pukrgs0Q11Pq+Xkd42dI+2lM2otYXsz+VlmTfXBAaqNS0VJRjIqiYqt3oDwX27MfOGuPoxZ8bOmvchrmsxQ7H/hnDu2QAyUvokOgiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BupN8VM9; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b2h8pSgL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762511658;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mRnffMyHiAhteHPeQJ+/psTcXTA9GHmSEDbZPxSCiXA=;
-	b=b2h8pSgLbJZUcAiQlD4pqOb12uqBpe9zoyH9EvyW9VaJGgC974SjPriVZwSCIJcQVfu5Zn
-	vSHqC/+homiJXyQYju1uyoRJvbOIsPZep8bmjV20mD3IdI14//y+gQjfQkp1FqvfaFq3Cw
-	jQDzK623Prtb+5nCWuez5FHW8ovS3dw=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-633-kFb5TB9lMOqKe88aYlyBOA-1; Fri,
- 07 Nov 2025 05:34:17 -0500
-X-MC-Unique: kFb5TB9lMOqKe88aYlyBOA-1
-X-Mimecast-MFC-AGG-ID: kFb5TB9lMOqKe88aYlyBOA_1762511655
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 24E7E1956063;
-	Fri,  7 Nov 2025 10:34:15 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.6])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9EC2B1945110;
-	Fri,  7 Nov 2025 10:34:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20251106192016.GA3318@quark>
-References: <20251106192016.GA3318@quark> <20251106174456.31818-1-dhowells@redhat.com> <20251106174456.31818-3-dhowells@redhat.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
-    Sami Tolvanen <samitolvanen@google.com>,
-    "Jason A .
- Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>,
-    Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org,
-    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/8] crypto: Add ML-DSA/Dilithium verify support
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BupN8VM9"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-64080ccf749so1243910a12.2
+        for <linux-modules@vger.kernel.org>; Fri, 07 Nov 2025 05:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762520923; x=1763125723; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=C1ywOlu3fOSK5EDS/96Lv9KyExdYs4hdjZJBrhwyZV0=;
+        b=BupN8VM9+coHpMkoRAxsJOTc5Rp4vj4FXlg+/oDipm87kfldmi9RZo4b2Ib1OXVSQb
+         E2avwPk3CHm88DmnhQAv6bB2WJFQqU6BDKEdzvMfoLwAuKNpCbsiiN3DCQPUN1NRVCjh
+         qa5SMJQh27m+8e1VL9EkmxPaPO3eoqVCvdfqGQAxswXjGAk2wGZTI1El88FuMAw+N1RX
+         y7CrHujXk5aTA1cbkBVPZvvHKXeXc5fWp8ezWBQXzi2LEC6MG2molG4R2me7EBjYz+qd
+         37ej3/IY4jqzfUZqZCfTDlIM71qH9EDqJPxhXEEobynZdXxUrlnI5xUq8r8T67mmoevH
+         os+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762520923; x=1763125723;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1ywOlu3fOSK5EDS/96Lv9KyExdYs4hdjZJBrhwyZV0=;
+        b=kVOp6TFM/Qd37rkT0GaSvtv1YuW/BlZKNsTKd1wPkrSS3EXFH/EXAZFogSm9hqCfn+
+         /sZ1IMglyvRr48/aV2aAIC75pYALvqF8Lo1GSnmB0uzxnlwxuYCaoF7EMfRM6AMPlxYx
+         ULI/BcxFReMatOhKYQVhQWmpNThrxybU8K0lEZ1VDhDkObci2/BvqaGMP6/g6OFwXzVj
+         zq6Vt1HtstVM5jV5XzeIxn0QCmZhSEGP7ec7/Kt9bi1l6qFcVXIVzQzJ/F2N0YBS67HF
+         +lsSeWomaqhOieI+jz+nc4sdXroly5TUkr9+pc/lszHwMqYWj7QNkxMREs0t0HP7bldA
+         nSKw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpyeCz0R6jlOWqS0E/erHHVTYebXBCMIaTSmkJRTKJiMBpYtPUeg+007fDbr/WSUtCYeOu0YkwMmNdNs/D@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3VYci85XsAE/1gJRGEdYYwzig4iPlnlEktB+1QPVOD58+RfTv
+	1Yr1GMbeCvCPTG0daym2KmzFPqCYXcc+aAMlgNySgBcf47+/0Y6/+x2DxrnfzFy73F4=
+X-Gm-Gg: ASbGncvojfefQOoGJPp2Wk9GNv0sG4d0OyIzR993aUFOdVo32RrEHb6C1SgLAe/xERy
+	ia8rQEF0ZQ4cqQR72qBh4uDkIIAl9VEF+eyW61spDNphIO7KdSBwfw7p/Z7OtwxmLZxVAUiIznv
+	fkXNLnQtNAtisrdFIV8d7lv7V4kK8I901YncUK2xPguQ17vWtfV69egu2dardPW7jiZUn0GLrHO
+	+GML7icj38Bg+Dor+PmphP5BsIs1Ka5zdHztleJJwLGMLEzgTdZ776muyY9RZghE1wiynCSE0Vs
+	jjA4mw3cKB+SOaupS+/TpgJj9iQjcGuwz5KRixLPkq3ZZ/nFlmNeNyxENWa6gz18mRqtxahnhSC
+	I0/X6guyeT5HAlp3X7oXhYndAZhI6cx4PmupObAd9KaeS60GbH+f1uWxjfDVI6Qbii1UYmRj/7W
+	wGpqbOtfd31qwkXA==
+X-Google-Smtp-Source: AGHT+IEouSTBDMcG/tchDfHpDvHcGOn021q8OTyah/7d7vm3vufHhiqKNCiTpyQWqwWHE044VaVj4Q==
+X-Received: by 2002:a05:6402:90a:b0:640:9b11:5d65 with SMTP id 4fb4d7f45d1cf-6413f061d7fmr2900743a12.24.1762520923128;
+        Fri, 07 Nov 2025 05:08:43 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f71394csm3968988a12.6.2025.11.07.05.08.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 05:08:42 -0800 (PST)
+Date: Fri, 7 Nov 2025 14:08:40 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/6] kallsyms/bpf: Set module buildid in
+ bpf_address_lookup()
+Message-ID: <aQ3vWIqG31BgE4YD@pathway.suse.cz>
+References: <20251105142319.1139183-1-pmladek@suse.com>
+ <20251105142319.1139183-4-pmladek@suse.com>
+ <CAADnVQ+kbQ4uwtKjD1DRCf702v0rEthy6hU4COAU9CyU53wTHg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <62629.1762511649.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 07 Nov 2025 10:34:09 +0000
-Message-ID: <62630.1762511649@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+kbQ4uwtKjD1DRCf702v0rEthy6hU4COAU9CyU53wTHg@mail.gmail.com>
 
-Eric Biggers <ebiggers@kernel.org> wrote:
+On Wed 2025-11-05 18:53:23, Alexei Starovoitov wrote:
+> On Wed, Nov 5, 2025 at 6:24 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > Make bpf_address_lookup() compatible with module_address_lookup()
+> > and clear the pointer to @modbuildid together with @modname.
+> >
+> > It is not strictly needed because __sprint_symbol() reads @modbuildid
+> > only when @modname is set. But better be on the safe side and make
+> > the API more safe.
+> >
+> > Fixes: 9294523e3768 ("module: add printk formats to add module build ID to stacktraces")
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> > ---
+> >  include/linux/filter.h | 15 +++++++++++----
+> >  kernel/kallsyms.c      |  4 ++--
+> >  2 files changed, 13 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/include/linux/filter.h b/include/linux/filter.h
+> > index f5c859b8131a..b7b95840250a 100644
+> > --- a/include/linux/filter.h
+> > +++ b/include/linux/filter.h
+> > @@ -1362,12 +1362,18 @@ struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
+> >
+> >  static inline int
+> >  bpf_address_lookup(unsigned long addr, unsigned long *size,
+> > -                  unsigned long *off, char **modname, char *sym)
+> > +                  unsigned long *off, char **modname,
+> > +                  const unsigned char **modbuildid, char *sym)
+> >  {
+> >         int ret = __bpf_address_lookup(addr, size, off, sym);
+> >
+> > -       if (ret && modname)
+> > -               *modname = NULL;
+> > +       if (ret) {
+> > +               if (modname)
+> > +                       *modname = NULL;
+> > +               if (modbuildid)
+> > +                       *modbuildid = NULL;
+> > +       }
+> > +
+> >         return ret;
+> >  }
+> >
+> > @@ -1433,7 +1439,8 @@ static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
+> >
+> >  static inline int
+> >  bpf_address_lookup(unsigned long addr, unsigned long *size,
+> > -                  unsigned long *off, char **modname, char *sym)
+> > +                  unsigned long *off, char **modname,
+> > +                  const unsigned char **modbuildid, char *sym)
+> >  {
+> >         return 0;
+> >  }
+> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> > index 9455e3bb07fc..efb12b077220 100644
+> > --- a/kernel/kallsyms.c
+> > +++ b/kernel/kallsyms.c
+> > @@ -374,8 +374,8 @@ static int kallsyms_lookup_buildid(unsigned long addr,
+> >         ret = module_address_lookup(addr, symbolsize, offset,
+> >                                     modname, modbuildid, namebuf);
+> >         if (!ret)
+> > -               ret = bpf_address_lookup(addr, symbolsize,
+> > -                                        offset, modname, namebuf);
+> > +               ret = bpf_address_lookup(addr, symbolsize, offset,
+> > +                                        modname, modbuildid, namebuf);
+> 
+> The initial bpf_address_lookup() 8 years ago was trying
+> to copy paste args and style of kallsyms_lookup().
+> It was odd back then. This change is doubling down on the wrong thing.
+> It's really odd to pass a pointer into bpf_address_lookup()
+> so it zero initializes it.
+> bpf ksyms are in the core kernel. They're never in modules.
+> Just call __bpf_address_lookup() here and remove the wrapper.
 
-> On Thu, Nov 06, 2025 at 05:44:46PM +0000, David Howells wrote:
-> > The interface to this code is through the crypto_sig API as the PKCS#7=
- code
-> > wants to use that rather than calling it directly.  As such, I've plac=
-ed it
-> > in crypto/ rather than lib/crypto/.  Only the verification hooks are
-> > implemented; the signing hooks return an error.
-> =
+I agree that it is ugly. It would make sense to initialize the
+pointers in kallsyms_lookup_buildid and call there
+__bpf_address_lookup() variant. Something like:
 
-> As I mentioned before
-> (https://lore.kernel.org/linux-crypto/20250613170456.GA1284@sol/), this
-> code should go in lib/crypto/.  There seems to be a clean API in
-> crypto/ml_dsa/dilithium.h already.  Just make that the library API.
+static int kallsyms_lookup_buildid(unsigned long addr,
+			unsigned long *symbolsize,
+			unsigned long *offset, char **modname,
+			const unsigned char **modbuildid, char *namebuf)
+{
+	int ret;
 
-Fine.  Is it ever likely to be used directly, I wonder?
+	if (modname)
+		*modname = NULL;
+	if (modbuildid)
+		*modbuildid = NULL;
+	namebuf[0] = 0;
+[...]
+	if (!ret)
+		ret = __bpf_address_lookup(addr, symbolsize, offset, namebuf);
 
-There is a downside of moving stuff to lib/crypto/: dynamically loadable
-algorithms now need two modules instead of one.  For initial module signin=
-g,
-granted, the algorithms for that must be built in.
+}
 
-> If "crypto_sig" support is really needed too, then put that in
-> crypto/ml-dsa.c, built on top of the library API.  It's not clear the
-> crypto_sig support is very useful, though.  For one, you had to add
-> ML-DSA specific logic to the calling code anyway (see "pkcs7: Allow the
-> signing algo to calculate the digest itself").
+As a result bpf_address_lookup() won't have any caller.
+And __bpf_address_lookup() would have two callers.
 
-The actual signature check still goes through the same code path as everyt=
-hing
-else, so crypto_sig will remain the API.  Otherwise I have to basically
-reimplement crypto_sig inside crypto/asymmetric_keys/, including the on-de=
-mand
-algorithm loading.
+It would make sense to remove bpf_address_lookup() and
+rename __bpf_address_lookup() to bpf_address_lookup().
 
-David
+How does that sound?
+Would you prefer to do this in one patch or in two steps, please?
 
+Best Regards,
+Petr
