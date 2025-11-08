@@ -1,94 +1,118 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA53A20FAB2
-	for <linux-modules@vger.kernel.org>; Sat,  8 Nov 2025 02:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597F729E0E5
+	for <linux-modules@vger.kernel.org>; Sat,  8 Nov 2025 02:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762569447; cv=none; b=iE0MQd+DeCoHGeQtlYTVzFBzG3pKSCqD/Eu8GlwIOCEGU7oKwF02/kNkkBU0K4oT2EVZLzRyjrLAeBENMMaegtcApq9esVqhIUVcAVJ056C/vgYVIaigqxprSeBZlDVsjDqh1GqMjNrC49VydfJPSnCQ26iNA4gUSjk2PSfTbQM=
+	t=1762569602; cv=none; b=CFXocipdGVnkShiH7I/LH7jE7pk/gBEQ7bWqHFtc7WSJLIVCbl9rLQgUfV+KBUAgAojy2tr8g0aogzpCvPbn4om6vvNielZGafDhVl5VtmUOe2k5uwWDb9SXMGlcyu/a2YHrHY1CZG8D/CkmKXc54nCYcKveV8TKRclzX2IE5xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762569447; c=relaxed/simple;
-	bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
+	s=arc-20240116; t=1762569602; c=relaxed/simple;
+	bh=m7LuMJmoMsw8OhL+zbye2ZVtZHlwh+NL6ZssgXY0Ijg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZafAlbImp7ggpCGHZeZHUdNnGBHzaKNMd+5MOM6MMg+TWwnY2cIR6+4BZGXPONFeOx1MOVshC3njm7G6n3/wOda1pdoBr26DfnQvFafpVVkJ9fx6KovOK/j/S0WYIlI9t7yHTz0goFqmvQ2dcTdd1BjAfIezSIuryItfo5+rblM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4Pz1O8f; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=F7kuu/f+Z6hdZl42BNQ+Ahiy5aBUlmHa359lIuFlbMTNGe3ozIYGb3pG4bOWHkW8ljSwVqIBPWKesIE5Fa/gMALOnfzTTeBFxDPUO7ntzyDwlY9Oe8S4RbmBHmExZ44NEZBuzHtSWxoPrIbz1z/1USzcvhhIOK3L5LMSeG3rZac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HqJ/2Oi2; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4Pz1O8f"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29498a10972so1211835ad.0
-        for <linux-modules@vger.kernel.org>; Fri, 07 Nov 2025 18:37:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HqJ/2Oi2"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-295c64cb951so89875ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 07 Nov 2025 18:40:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762569445; x=1763174245; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762569600; x=1763174400; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
-        b=D4Pz1O8fBgxVfdLn0kGOEPXb0Nmg76AgpJ/stxFpJ6/vKMwRMy+tyE6VHmRef8yl5a
-         J8sC7qAT32BKsKL2K+sbGtrDuSBnfDyI+7SfLKNmzGRO1uevSAXTYuv26lKUoFrw8U+Y
-         B2iSh3SbPRyQIzoTfh5Aufl4OIfIF+RhjQYQT4e6cxaOWLx++qhEZNySZlLeQCZLhZTr
-         JlJy7lOhCEQfh97v3Fv6CRy8JV/mXtkpggFW37TBz99luVoUGN6om9GQHH+RO930XbnQ
-         R1Qp/PmzrTRGrjz9+oDbKhBd0qSgwkzT7MHKilazuxuiRpEcpB6Nti0nr3KLk1Y+q/5D
-         o6vQ==
+        bh=ISo6u9Qc4EcSrRzi8tm5pg3DenyGQGDB6em3HujHsKQ=;
+        b=HqJ/2Oi2+EUUSDE8o79uHROYexzAQ5agtvvJkztq82qOJMAHY+E+DX+9genkeOqvA6
+         yxZEOaijZaUYf1X/po09h2wuan2v9mkI13mkSPS0HUQVqhS1/ZasELwO/0P6o+xHNYtp
+         WZLZL8THB41T52tT5YKZyhb13LI2sSNULVZurgXxK4diYTiHAARp0bBtBSO0dhCr761P
+         kSKksz52m5yErI9VuSd7WdSxih58Gvu3sp1Gij9BgWVNbv69ayjgaGV7JO3R4zPOpJTH
+         sOVWZOq6waoE8+teFt19Rj+t6R1R/bkpMRVMcxpKWQA4lp3SQ8+TPg/6QAviIFVoqcpT
+         o1+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762569445; x=1763174245;
+        d=1e100.net; s=20230601; t=1762569600; x=1763174400;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
-        b=SrI9ZkfRrxInO5xhr3dQOux8skK06SwHo/dsJsJeQMfrSJxHX1f/pDBqEHjoP6W0Pb
-         uwpVsug3GsDSOtR2snV9C5ZVVdP6QE28+fsq7af1rZgrNs/kQCKKgU/I/ngyrjJkBn5L
-         TSI61VT+6fAHqw1floPkL/SdKB+XXJ1sws2dfJCkaJZj1AXjr51hh1VzOxzJ9dl6/98/
-         Ggz6HMAhRFWxyYFR989xy0B9lvMzDPBIC5YA/CsheNR5lFgiQ+kKYaBDJIn9y0YvuKBL
-         Dq/YcFNlz6NGpF2gP43mSBjj6o/RXjd+ndYvHZ0HpBTmuOpBVVm0+blGBe9E3ep+0BcV
-         0F3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUQPUHj4wkySd+D//6qIPHxrcHSB5+n4z7UxQ42VTwoaDcBa3kAZYHLWHnTKllD9DSjZxx21rm4c7cmpF6S@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgmrDqZez2MUQmFizD2fMGbBMl9fvFNtzoTqOjnaSY3qSkM+NV
-	Qm7hTiqfSrbCznWEbtyp5UuKH3T1Q+ttuyBAZZsXAVjKr6J/PAG/KjdKkIqO+NiCAzGcQ9UQ3CR
-	3ly5k+Z7oFO+2u2Q9tGxxoN2hkNgaDAg=
-X-Gm-Gg: ASbGnctM6obbwwKsBIogA5CLgOYfNZxdRW3o96vsPokKIzrCstY9KeBo2JA5q5q0vL+
-	qsaW+LU6cegYnZCmwqMELz4nOfdRgorwuHUZj2Tel1eETH/HzHqGfthoqbvj2i2v7MA5rGHHCuE
-	5xT4+jKqHrsMrvQjaI/Dkzfx4zIVO+vGT7Q0oEWEJk4cl8UyLgDf4QfOL+BgFU4FoV1FSJYIIlR
-	etY8sVy7xp3OYvR0FdLx/6fjazi3eBh0d/IhKVDBSkxKq0qE2JD5+/h/zJOKkWRAjrYm+1XFgRu
-	afKAeNrmkk9UelW+7uc7epBJXwD2UpNuEQjHtf2JTiRJA6364zwrddIAUVM5treYbR65meQKRvg
-	L052YuZo5zYXooA==
-X-Google-Smtp-Source: AGHT+IEovvjVicfDdGQT2CYmrDOWKJSfWNjNZjATvixUw1CuI60OG2r2rmWY0cQTlJoWG3OL54m2HoMu3xt+gxb8f9U=
-X-Received: by 2002:a17:902:c409:b0:295:3262:c695 with SMTP id
- d9443c01a7336-297e5646bd4mr8325045ad.3.1762569445056; Fri, 07 Nov 2025
- 18:37:25 -0800 (PST)
+        bh=ISo6u9Qc4EcSrRzi8tm5pg3DenyGQGDB6em3HujHsKQ=;
+        b=umBUBgdSJxfQuNJzFM4vkBkr/SLkRI0yJ/o/thIL2SsUpiwDeiCvqcXZw0iyw8fFG5
+         fN3c8jB0kSkXux6jAUt/kUNUHz2nfCZTWl2RZChcqNVTimQvWnuwRkG5/gpAvr20kFGH
+         Tl6r8n3lTVNOOwCUMMHoigW++cNCsveHOBU6OSkWwiBNOPF8fi+rYQBfmiSV49AZkwn8
+         TRiy6JsGvNHscV0/Fh/TUBhSDnmDOW7glq5Fh793CPtzowyHYsESqEW5WdU59x0wAiSq
+         rf+SBSinZnxXxOBifmgxWY+qYOICwra14Hw9pwXpuveBUANkb7nxnCg2hOngJUzwmj5U
+         MnSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXcgs55CrBJtgIEbI3gsaX6n1v2KIXGJ1Grp43K3tBSN20OakF5lX5soeMlPDrRSMLO9hTDhQZUYG87SDzR@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4ijTmHGb0eJekVi9Uujl+EaS4/3E8DoK8h+X5c81YLKiEF/VR
+	8yXhvO9kqIHX9nYHYGgmigLXGtqfVBjQYIUiesQ1EumlcSeHF7edk5j3VOUw1CceuWdETVeUysz
+	YO2EaUe6imeHB86eV/JVaSAh5xbvLlFG8Y366aOPv
+X-Gm-Gg: ASbGncu7Z9PhyxSs+AbyUXgM691DUXr4+FGt4IXEamzeEvOUNOSC9AFv4KiRbVoxXPt
+	THj6bYrTwAFtZBYxwZ916QdwhhRATfAoyQ9HqBiWF5iTJDtm3BRpLI9HWbYfk3ughILk0GY7r2C
+	JxNU4UccekKdKKmAQ44tUb4x0sghT0y0ckynO9N61AaKntg+xoEp9Tx9PHTPc2fWHRVsXDCCAqb
+	gR7gc+gJsOpJz0g55ENHddihIDbE7Pmy7rzczWoI6vpLL1be+tqzTwYcA==
+X-Google-Smtp-Source: AGHT+IEcWbEeQy5nVbkbDh62AxtpCgxrZfusi9drFXZyCGpbyRRVAuf5K3IddyD+sWvIScB6XWD5N0JFil1/Ikeqm58=
+X-Received: by 2002:a17:902:d502:b0:26d:72f8:8cfa with SMTP id
+ d9443c01a7336-297e7df1d8dmr1129025ad.13.1762569600006; Fri, 07 Nov 2025
+ 18:40:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251108014246.689509-1-ojeda@kernel.org> <CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com>
-In-Reply-To: <CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 8 Nov 2025 03:37:12 +0100
-X-Gm-Features: AWmQ_bkkl97L4KdKe3MLMAG94NJvyqaB6LbDFgvfVIDBf_nqC8JcMtGIqLcDcT4
-Message-ID: <CANiq72kWWe_w-0088SiGvKFrh49P9wRcPxQvkSoU=SOpSrHbKQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: kbuild: skip gendwarfksyms in `bindings.o` for Rust
- >= 1.91.0
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, linux-modules@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev, stable@vger.kernel.org, 
-	Haiyue Wang <haiyuewa@163.com>, Miguel Ojeda <ojeda@kernel.org>
+References: <b8c1c73d-bf8b-4bf2-beb1-84ffdcd60547@163.com> <CANiq72kX4Yep3pNVq8Ge=txQbPnMO=zKsci5cPgz5LDS=D6NoQ@mail.gmail.com>
+ <CABCJKud0G+Xh+Wbtg4SDGvk4Yh5nmt5YgHEPj-H0y8GO5R3Amw@mail.gmail.com>
+ <CANiq72mw66ADx7LoUuqY6h9KCU=uFzcNQXZ21kMP7jBjCyyaHQ@mail.gmail.com> <CANiq72=OFO8fBpJ6xvGunYrx5hXfcjQJ=YDqFxtMPWDzfzwpKw@mail.gmail.com>
+In-Reply-To: <CANiq72=OFO8fBpJ6xvGunYrx5hXfcjQJ=YDqFxtMPWDzfzwpKw@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Fri, 7 Nov 2025 18:39:23 -0800
+X-Gm-Features: AWmQ_bmb64VymVFf8Gn-EuS7qsAtPzXyfc2oW8oZ6cRO_18rrTpp7PAlC0xQ6Tw
+Message-ID: <CABCJKue1xeY7CGHScG04PdHT6TOPgsOpZVKWwgzO65qwAcbEJg@mail.gmail.com>
+Subject: Re: Only rust/bindings.o build fail on rust-1.91.0
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Haiyue Wang <haiyuewa@163.com>, rust-for-linux@vger.kernel.org, 
+	Miguel Ojeda <ojeda@kernel.org>, linux-modules@vger.kernel.org, 
+	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 8, 2025 at 3:30=E2=80=AFAM Miguel Ojeda
+On Fri, Nov 7, 2025 at 5:42=E2=80=AFPM Miguel Ojeda
 <miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> With `#[no_mangle]` may be more reliable and it also gives an actual
-> exported symbol.
+> On Thu, Nov 6, 2025 at 6:54=E2=80=AFPM Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> >
+> > Bisecting nightlies, it seemed to happen between:
+> >
+> >     rustc 1.91.0-nightly (12eb345e5 2025-09-07)
+> >     rustc 1.91.0-nightly (9c27f27ea 2025-09-08)
+>
+> Ok, for reference, it was upstream's ab91a63d403b ("Ignore intrinsic
+> calls in cross-crate-inlining cost model"): the object file stops
+> containing DWARF debug information because the `Default`
+> implementations contained `write_bytes()` calls which are now ignored
+> in that cost model and so everything is essentially as if `#[inline]`.
+>
+> If one generates the bindings without the `Debug` impls, indeed the
+> file stops containing DWARF even in Rust 1.90.0.
+>
+> For the moment, we can just skip `gendwarfksyms` starting with Rust
+> 1.91.0 (sending a quick patch for that), but it may be a bit brittle
+> in that new versions could again re-introduce some symbols that get
+> exported from that one etc.
 
-Or `#[used]` to keep it mangled since we don't care.
+Technically speaking, bindings.o still exports ~1500 symbols even with
+newer rustc versions. If we don't actually expect modules to use these
+symbols, the correct solution is to not export them. Otherwise,
+modules that depend on these symbols will nevertheless fail to load
+with modversions.
 
-Cheers,
-Miguel
+> Sami, would it make sense to "auto-skip" in `gendwarfksyms` itself if
+> an object file does not have anything interesting and then remove that
+> from the `Makefile`?
+
+I'm not sure it makes sense to silently export unusable symbols. I
+feel like we should either ensure there's debugging information for
+these symbols, or just not export them.
+
+Sami
