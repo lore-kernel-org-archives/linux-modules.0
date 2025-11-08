@@ -1,73 +1,73 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD721E1DF0
-	for <linux-modules@vger.kernel.org>; Sat,  8 Nov 2025 02:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA53A20FAB2
+	for <linux-modules@vger.kernel.org>; Sat,  8 Nov 2025 02:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762569074; cv=none; b=AlwvoirROj0+j2gtPO5IUwC1DSCB1RSPUOD/44Fqjc3zyFyTwXiDyQjhLToKvjnga8Gfu8fgVBf7JgUfv+SborCmyIqLQ6Cc3C1UbhIuKSlnsWf9MgNT1/czYUp0gx5JAPT84WYU7nNxNfSDi+4Hfoj3XhA0Ryx6zkGbr0uwN0c=
+	t=1762569447; cv=none; b=iE0MQd+DeCoHGeQtlYTVzFBzG3pKSCqD/Eu8GlwIOCEGU7oKwF02/kNkkBU0K4oT2EVZLzRyjrLAeBENMMaegtcApq9esVqhIUVcAVJ056C/vgYVIaigqxprSeBZlDVsjDqh1GqMjNrC49VydfJPSnCQ26iNA4gUSjk2PSfTbQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762569074; c=relaxed/simple;
-	bh=hEsds1aJcMa/MFnGEl+oWU8IGfV52JAmFi/ogcjALRA=;
+	s=arc-20240116; t=1762569447; c=relaxed/simple;
+	bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fYKoTa7WbjT//MTTEAjqazWK2nfIRuBvWmeWw1dn5RXOZpoCsAVTH4MWF2qgibIzUzOfHqCuoUhygnKExZOVsbudzOZUsVBGeoGyDR08hIUv6KIwL0vS93ebDHllY89ytlmKf4JWTfzkGoV6lMQgOZq/wM1XuNgQN5I+eaUy9AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TZkXb17V; arc=none smtp.client-ip=209.85.216.44
+	 To:Cc:Content-Type; b=ZafAlbImp7ggpCGHZeZHUdNnGBHzaKNMd+5MOM6MMg+TWwnY2cIR6+4BZGXPONFeOx1MOVshC3njm7G6n3/wOda1pdoBr26DfnQvFafpVVkJ9fx6KovOK/j/S0WYIlI9t7yHTz0goFqmvQ2dcTdd1BjAfIezSIuryItfo5+rblM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4Pz1O8f; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZkXb17V"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-343641ceb62so124831a91.1
-        for <linux-modules@vger.kernel.org>; Fri, 07 Nov 2025 18:31:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4Pz1O8f"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29498a10972so1211835ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 07 Nov 2025 18:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762569071; x=1763173871; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762569445; x=1763174245; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4Ywt5KnXkAWuPtF4O67B6+CrKeKvSZlIbIOBaVjdLrc=;
-        b=TZkXb17VDXSi/hdNX1nnsUIBUikCDSDYabE2oBnc3ou2BnHl91qhrr8ryuMls+eW4+
-         iBXg+fLjOHRcvN1gpg3FLTPwA+TPMNItQ5PAdWwL6eO/+P80WsaqPG5lW0A/6WkRSK6i
-         G0uqVqIw0XwaQyN+EFtNoxWqKoEq2gH6qLe/3FqLdOVnIU2YOKl9HUQ4qvaE3EYaoNvg
-         BJUKoX6qqzMmXobdQdas2gzy6c/RVHzxcq5XErBAC1g3FACKOP14RVuGsm23EvyndIyz
-         d6LBl2nTzq/foUEHxJLTbB6OLk2HIPjAbMBL7I6bc9mns0h52vgFl8rCnvytZPYOcoji
-         X3+A==
+        bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
+        b=D4Pz1O8fBgxVfdLn0kGOEPXb0Nmg76AgpJ/stxFpJ6/vKMwRMy+tyE6VHmRef8yl5a
+         J8sC7qAT32BKsKL2K+sbGtrDuSBnfDyI+7SfLKNmzGRO1uevSAXTYuv26lKUoFrw8U+Y
+         B2iSh3SbPRyQIzoTfh5Aufl4OIfIF+RhjQYQT4e6cxaOWLx++qhEZNySZlLeQCZLhZTr
+         JlJy7lOhCEQfh97v3Fv6CRy8JV/mXtkpggFW37TBz99luVoUGN6om9GQHH+RO930XbnQ
+         R1Qp/PmzrTRGrjz9+oDbKhBd0qSgwkzT7MHKilazuxuiRpEcpB6Nti0nr3KLk1Y+q/5D
+         o6vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762569071; x=1763173871;
+        d=1e100.net; s=20230601; t=1762569445; x=1763174245;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4Ywt5KnXkAWuPtF4O67B6+CrKeKvSZlIbIOBaVjdLrc=;
-        b=CteEW6aQHD/TcIMNAkH41kXO4SIt+d3dnSzQ+ScBToh4tF74o1Jg+nVKwzKgGt+scd
-         EjuCy4bBxC7BzdnDFnNNtDr7cwRtUu1f7Y7Qp48sgEv4tehBZG08da5oq3xW6wOPag/t
-         12jzpLt9zPk+tCYqoIZLQYqITWX0s6mE9eOMTHSo4khNqgzejPJZLN83ceH1ZvMMhWV3
-         BjcL3/FB2e8E3b2zmrsXWnA9MOP2+MUHq4dUKygSPagQ5mZMauocIextPc/Bz68PEala
-         8/RL+Lhdp6lIeE2+AhK265UldCK7314ozA0eBmabRyKOHiZBcWAbPLi8d2NKAfq0MztL
-         cdig==
-X-Forwarded-Encrypted: i=1; AJvYcCXr7cKzequIx62AYgivJNatsp7RLTqFCSwHdA8gzfl0Yus+ITB48LoZ7rHg3MN12jeSCg4VODDjl0SQH6mS@vger.kernel.org
-X-Gm-Message-State: AOJu0YyexE5QmTiWFzHcN6NxPiRWk40Bl+G5TucmVRaG2h/PevOhxnBd
-	4CpmhXT7h6c19oezenQ+hZHukuyd5vJye4szLRuoJnIF9xTTax0SQfgXOvu0ngLNROYmcJ9Vh5U
-	ZYVq4QalwvI1hOKzWZ3RnNoHiWH7020QATRRdpUE=
-X-Gm-Gg: ASbGnculzsgrFVApjAt1qAGyQ9wnrSjzaEPEkPZ/+w9CyJMJwrT24+unMnZGwKNXCCh
-	MCTneJ1AOhW5loDmyNat6PFDgzini5meMLY/TpMj1w6fyqTwS7C1wBb8Iy5rhNFQoEetRBxUI1g
-	wQPVJIb3tSqsVbq0oCyuEYxyNwmNwUCMWvqk+W7L8F6hGGJmF0C8LsgyHMZuHbejQ84qVABXQoX
-	QqcAwEfwyOidKUWuQk3xhagh8yYcEStETmkVwjajC/g5nzrGGavSkBCnbDkyC6wMJW6ZheFRU0z
-	TH8SA2a10AF27Oqn/8UECzm49EIMD6a3z3vMqn0PMM8tNR2nqTf3jAf6sj1S4U8T/PwXis4DX0n
-	jotQ=
-X-Google-Smtp-Source: AGHT+IEPt/zum4mIPzur6pOWm9ugmaOB4ZnZwdF37jH/QJbMUq5i1HmGSC61s/z25m7jSEylTziMZI9njr8XmEb4iEk=
-X-Received: by 2002:a17:903:ace:b0:297:e67f:cd5 with SMTP id
- d9443c01a7336-297e67f0dc3mr6100935ad.7.1762569071389; Fri, 07 Nov 2025
- 18:31:11 -0800 (PST)
+        bh=pZs543aQJXGBiZv1p3fT4nEMYNcLibbhNgR3xp64diA=;
+        b=SrI9ZkfRrxInO5xhr3dQOux8skK06SwHo/dsJsJeQMfrSJxHX1f/pDBqEHjoP6W0Pb
+         uwpVsug3GsDSOtR2snV9C5ZVVdP6QE28+fsq7af1rZgrNs/kQCKKgU/I/ngyrjJkBn5L
+         TSI61VT+6fAHqw1floPkL/SdKB+XXJ1sws2dfJCkaJZj1AXjr51hh1VzOxzJ9dl6/98/
+         Ggz6HMAhRFWxyYFR989xy0B9lvMzDPBIC5YA/CsheNR5lFgiQ+kKYaBDJIn9y0YvuKBL
+         Dq/YcFNlz6NGpF2gP43mSBjj6o/RXjd+ndYvHZ0HpBTmuOpBVVm0+blGBe9E3ep+0BcV
+         0F3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUQPUHj4wkySd+D//6qIPHxrcHSB5+n4z7UxQ42VTwoaDcBa3kAZYHLWHnTKllD9DSjZxx21rm4c7cmpF6S@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgmrDqZez2MUQmFizD2fMGbBMl9fvFNtzoTqOjnaSY3qSkM+NV
+	Qm7hTiqfSrbCznWEbtyp5UuKH3T1Q+ttuyBAZZsXAVjKr6J/PAG/KjdKkIqO+NiCAzGcQ9UQ3CR
+	3ly5k+Z7oFO+2u2Q9tGxxoN2hkNgaDAg=
+X-Gm-Gg: ASbGnctM6obbwwKsBIogA5CLgOYfNZxdRW3o96vsPokKIzrCstY9KeBo2JA5q5q0vL+
+	qsaW+LU6cegYnZCmwqMELz4nOfdRgorwuHUZj2Tel1eETH/HzHqGfthoqbvj2i2v7MA5rGHHCuE
+	5xT4+jKqHrsMrvQjaI/Dkzfx4zIVO+vGT7Q0oEWEJk4cl8UyLgDf4QfOL+BgFU4FoV1FSJYIIlR
+	etY8sVy7xp3OYvR0FdLx/6fjazi3eBh0d/IhKVDBSkxKq0qE2JD5+/h/zJOKkWRAjrYm+1XFgRu
+	afKAeNrmkk9UelW+7uc7epBJXwD2UpNuEQjHtf2JTiRJA6364zwrddIAUVM5treYbR65meQKRvg
+	L052YuZo5zYXooA==
+X-Google-Smtp-Source: AGHT+IEovvjVicfDdGQT2CYmrDOWKJSfWNjNZjATvixUw1CuI60OG2r2rmWY0cQTlJoWG3OL54m2HoMu3xt+gxb8f9U=
+X-Received: by 2002:a17:902:c409:b0:295:3262:c695 with SMTP id
+ d9443c01a7336-297e5646bd4mr8325045ad.3.1762569445056; Fri, 07 Nov 2025
+ 18:37:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251108014246.689509-1-ojeda@kernel.org>
-In-Reply-To: <20251108014246.689509-1-ojeda@kernel.org>
+References: <20251108014246.689509-1-ojeda@kernel.org> <CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com>
+In-Reply-To: <CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 8 Nov 2025 03:30:57 +0100
-X-Gm-Features: AWmQ_bntWx41R6dVeerjev8Ne9qVeKQ30TdFKSebUZNEnjznMYZ4D9bO5nuNd7o
-Message-ID: <CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com>
+Date: Sat, 8 Nov 2025 03:37:12 +0100
+X-Gm-Features: AWmQ_bkkl97L4KdKe3MLMAG94NJvyqaB6LbDFgvfVIDBf_nqC8JcMtGIqLcDcT4
+Message-ID: <CANiq72kWWe_w-0088SiGvKFrh49P9wRcPxQvkSoU=SOpSrHbKQ@mail.gmail.com>
 Subject: Re: [PATCH] rust: kbuild: skip gendwarfksyms in `bindings.o` for Rust
  >= 1.91.0
 To: Sami Tolvanen <samitolvanen@google.com>
@@ -82,33 +82,13 @@ Cc: Alex Gaynor <alex.gaynor@gmail.com>, linux-modules@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 8, 2025 at 2:44=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
+On Sat, Nov 8, 2025 at 3:30=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> note that `CLIPPY=3D1` does not reproduce it
+> With `#[no_mangle]` may be more reliable and it also gives an actual
+> exported symbol.
 
-And obviously this means we have to special case this one too...
-
-    $(obj)/bindings.o: private skip_gendwarfksyms :=3D $(if $(call
-rustc-min-version,109100),$(if $(KBUILD_CLIPPY),,1))
-
-There may be other cases that disable the optimization or similar,
-plus we may have other small crates in the future that could also
-suffer from this, so it may be best to simply force to generate the
-DWARF with a dummy symbol from that crate for the time being as the
-fix:
-
-    #[expect(unused)]
-    static DUMMY_SYMBOL_FOR_DWARF_DEBUGINFO_GENERATION_FOR_GENDWARFKSYMS:
-() =3D ();
-
-With `#[no_mangle]` may be more reliable and it also gives an actual
-exported symbol.
-
-And then later do something in the `cmd` command itself or teaching
-`genkallksyms` to auto-skip in cases like this.
-
-What do you think?
+Or `#[used]` to keep it mangled since we don't care.
 
 Cheers,
 Miguel
