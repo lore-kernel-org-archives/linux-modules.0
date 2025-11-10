@@ -1,81 +1,96 @@
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FF91F130B
-	for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 14:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895BB24169A;
+	Mon, 10 Nov 2025 15:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762786642; cv=none; b=KaBOSrgMe6AGLeSpicaV4O5FQqqhXGhuVijMUnDEMUcFXlyQEecna9I7BrPxhNDXdtyuaFPgjegwYwzr2c4eD9aHtjFVsSYln5xsWWEilhYQtTrpTsrdElYleYAmUWNXi4d/77YXYgh3C6F1TzUK0dmW5NqdSon5d/LH0kirfS0=
+	t=1762787871; cv=none; b=LLc/+fRehmw/2av6WoC7Hh/kA73NiYavKzl5j34O3tjzK2/EgKLh5+SRXC79XjsmL6OAW9jfyNqL0InA4nVCWQ4pySV6IWP7/JBCnINOF48N9j08QJvXUCy9p7pDNsvNgv4fEI7vkJ2JhPAhL9Sa/pUBOBF9ACVhk2rkw6KPXeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762786642; c=relaxed/simple;
-	bh=XrYjurcXwMFuI1n6vQ4mS/+j3z0zFW9n2Q2HRAorD/k=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iOEYbUmr99y6zXODRxOq1oUWkv0wAI4e/LE6ZBIS1eVGSNDLyM8Ir3oE8Up7E/g32bfSKTGJG9CN3ZY8FLN2yciuvXyJyawkuOD4bgPHwkWAUHrsDobn1SxWYHBNVwkhUBwEfGeHj++2u3fHgJVOWUahR4Zmc/3eaOJNGncQyas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z2APgdQ6; arc=none smtp.client-ip=209.85.218.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1762787871; c=relaxed/simple;
+	bh=QP8oacYKLVsmnu+iuxXTiGIQwJLtP0opRzzvlntxhk0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f8mlWeMP6iy+WaP6w1krkYNjuvSMZFgNa7ZvvBH4zC4cyA8QRL/qgihKgrjB3hexs0/Hh5MSQULkhoVHocZTvuwzFawkfZbvMAcqTvXEbuZxs8gcAy3df3wkkj2Q28ZIUVrAOt8KyQUTVz03zpV048c3sROLIZn6gWM6RZe1Fj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PuXbbjVR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z2APgdQ6"
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b72a11466c2so339738766b.1
-        for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 06:57:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762786639; x=1763391439; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrYjurcXwMFuI1n6vQ4mS/+j3z0zFW9n2Q2HRAorD/k=;
-        b=z2APgdQ68ppohMezTmMnZUfXJwArZ+yKG2bGNYUSiLZUZi9tdGyAt8NDkBH3P/eXwE
-         LSceGSJUCNJHwSQlVLYkNWD+AQSmJoGCl5ksxV/2Fd64cm3YDojMcOirkQLf087pRVaQ
-         WfmdSbxqgGycjfK4OOlWtjVIpALEF5q9Po+mMSLqT/WGCy8xkhb9T41e50ssu3Ru8Uci
-         BgOv9WtcD8YYVx/F7KjtpacxOnm5g/bb9z3CPOzPlq3wBGa7iU+KXrO0j04GfZRSyNLI
-         6cXRItaSLfwQqE8FZOtSIm4b3cCxkEiiYvnWc3gCWj9BLkenWXT8/FVQqoHtmAzZTz+1
-         R2wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762786639; x=1763391439;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrYjurcXwMFuI1n6vQ4mS/+j3z0zFW9n2Q2HRAorD/k=;
-        b=Z4QSssSpH+mrfDoZiDQWMuqqSXkL/2XCqGcz+WNEfYPHWLnwkPEajzZp9uiMuou6G3
-         EGd1WK38ry6lNJuAWkH0o5dVNygR965fLd01qLdOhdz9L4y9m2VlQ43hdNb4VviRr9cy
-         VEhU4gAGxcu3fSazjDwCcwn0CSt/k8Zhh7gInbRE5lXd2yygIjq3mL6xugP+rQ37YJVd
-         66pkfNad074IHGc45ErmOh+CGF167pNOhC15hNsr4P4QV3178yEmIUgAGvwUwritiIX7
-         cbW0619tdlFglqiMJOmafXZ5oySoIGL1RDGWG8HRTQ5gLETGxVKlpiKOUNFQpN25RILB
-         g0Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCXGbgt793tv8CEWP//e/0BSgMziq7I32oKgEi2T6VlwSqsr4qtDyh7nrepSDe+55/yvjKSY1sbaXxiRJTuV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4aDL2/FrpWuYutQWz41AStp4Ez/ePilvggN+1Xzcr3ONo8jMA
-	0kHrrtwjXCCq1anBWKsMt0CRhQvUDkfhZNWXO1M2pZjHidc4cO2iPKDkwGtrsJaU6V6nYK+QWQJ
-	spGIMwJ+UyyC9tEbRQg==
-X-Google-Smtp-Source: AGHT+IGOnlG8lE2H2BKECccs5w83Ie0qMvDDSxYqNCeNyk/4OUCiSM9N6qmdcMFCMYYfeMybQOzcZG1uqwa4NcY=
-X-Received: from ejcvb9.prod.google.com ([2002:a17:907:d049:b0:b72:b433:246a])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:1c85:b0:b3b:4e6:46e6 with SMTP id a640c23a62f3a-b72e02ca1d9mr839517866b.1.1762786639240;
- Mon, 10 Nov 2025 06:57:19 -0800 (PST)
-Date: Mon, 10 Nov 2025 14:57:18 +0000
-In-Reply-To: <20251110131913.1789896-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PuXbbjVR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1462AC4CEF5;
+	Mon, 10 Nov 2025 15:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762787871;
+	bh=QP8oacYKLVsmnu+iuxXTiGIQwJLtP0opRzzvlntxhk0=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PuXbbjVR3EurWNeIKMGa5jzk5wJtPwmH5Rt8KPzT63A0TEFz6gzrGCS67Z/oFz5NP
+	 snuBRlQ+Uemqxszpn8irDW9nnN+IjeAc///D3GJUGengTep2kH/StpQ5koY+0T2ilL
+	 m4yCoYJvLkjn/ylYsNig48dcSUn6O3AVg8wVNU8+30RRO15uWX1+WRXC1FzohenLLE
+	 n5B0OM0Ax7B/U2iKIM/7VN+u3RW4o253z3wwEnujGhIUGcOMPxQyIehxRFwVIajfvJ
+	 urxAkTl1FAjnsFQWro0D4DGmxm8F7BZRqVfhrihoUzcYIhAPytfmgIDrwhWsCOtSTa
+	 pSzAgoMdJeXIw==
+Message-ID: <ea36d12b-15b9-4c1c-b81f-75834bc3269a@kernel.org>
+Date: Mon, 10 Nov 2025 16:17:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251110131913.1789896-1-ojeda@kernel.org>
-Message-ID: <aRH9Tjf0tszyQhKX@google.com>
-Subject: Re: [PATCH v2] gendwarfksyms: Skip files with no exports
-From: Alice Ryhl <aliceryhl@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev, stable@vger.kernel.org, 
-	Haiyue Wang <haiyuewa@163.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH 1/2] module: Override -EEXISTS module return
+To: Lucas De Marchi <lucas.demarchi@intel.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Petr Pavlu <petr.pavlu@suse.com>
+References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
+ <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 10, 2025 at 02:19:13PM +0100, Miguel Ojeda wrote:
-> Cc: stable@vger.kernel.org # Needed in 6.12.y and later (Rust is pinned in older LTSs).
+On 13/10/2025 18.26, Lucas De Marchi wrote:
+> The -EEXIST errno is reserved by the module loading functionality. When
+> userspace calls [f]init_module(), it expects a -EEXIST to mean that the
+> module is already loaded in the kernel. If module_init() returns it,
+> that is not true anymore.
+> 
+> Add a warning and override the return code to workaround modules
+> currently returning the wrong code. It's expected that they eventually
+> migrate to a better suited error.
 
-Is gendwarfksyms actually present in 6.12 upstream? I know we have it in
-Android's 6.12 branch, but I thought we backported for Android only.
+I've been following the thread (and apologies for the delay) and reviewing the
+patches, and I do not believe we should push this workaround. While this "fixes"
+the bug reported, it also hides the real problem and drivers will continue
+misusing EEXIST at module initialization.
 
-Alice
+From the bug report thread, I agree with Christophe's suggestion that
+nf_conntrack_helpers_register() should return EBUSY instead of EEXIST. This
+would fix the root cause for this particular module and will allow others to
+change their module behavior, if we also follow up with proper documentation
+about EEXIST.
+
+> 
+> Closes: https://lore.kernel.org/all/aKLzsAX14ybEjHfJ@orbyte.nwl.cc/
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+> ---
+>  kernel/module/main.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index c66b261849362..74ff87b13c517 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3038,6 +3038,11 @@ static noinline int do_init_module(struct module *mod)
+>  	if (mod->init != NULL)
+>  		ret = do_one_initcall(mod->init);
+>  	if (ret < 0) {
+> +		if (ret == -EEXIST) {
+> +			pr_warn("%s: init suspiciously returned -EEXIST: Overriding with -EBUSY\n",
+> +				mod->name);
+> +			ret = -EBUSY;
+> +		}
+>  		goto fail_free_freeinit;
+>  	}
+>  	if (ret > 0) {
+> 
