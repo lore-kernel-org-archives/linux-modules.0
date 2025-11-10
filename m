@@ -1,153 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6ED2F7AD5;
-	Mon, 10 Nov 2025 13:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74ECA22579E
+	for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 13:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762780763; cv=none; b=bSotvs+7p1N6W84NEe8AlDpZi36CrVoKKR4e2RKTaqomdzuMAs2FfHk7Sp19LVal7jpDpqvghZw0GWO3nk5o6vSkwiQgwNMaG66x7OzNWGDdPjbs88+sG25RTJK+ezNBpIqwkX+fzPHupKTdXjMGqYhc4hlpVe1X/tlAwmtrFRU=
+	t=1762781218; cv=none; b=AmoBUWILv4y0g34L6dlr2dJwHV2h2LHphK/OUTg/8vrGLjsnJeMdd7me68mYadNIjHYwAwUDz/Yvy9aIMuumEzbjhGzrwHJQz3k2a2Jnt4T9sybODu23yVt2PJSWN42zmy/e9FezE6hJq1MotPMU6sLmsyO4YRD4VzeOs3WxSlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762780763; c=relaxed/simple;
-	bh=VSiEIjLyYUKVvnPQ7kJVmq9DuKTsVrvaCBPI+TVnr3I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jppEh/l370pqgK5vc/6Sg33kCcbNeh9qqeGGnjTDH2CQEL2Cpke+jv+srKOE76ERejyFQ2rc8J62eV7xXdqfZSy+Skydhh9yIzoeq5lmRkheJDpQyrYYMGk9sxSpZZ0cmwOJ7qKMmoTv6yWjX7DTt2EIJpM0uxkKb3fMJENGDmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uzmGqwdC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762781218; c=relaxed/simple;
+	bh=7zBlKI19nm4l57l+GSpU34xDjL4DbJLxfBwZWCrg3No=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wu07nGpzMrPbrVpM0IrD14+vgG2OUfjlpoVu70OYtklo5/bOTDb6dKz9cagI2Ij6DELnnNxjmtKTiXcPoSuBN80jlzmDqkRyt2rNEmrqH4qhsqkEVFCVm8PTqDNTYJoUBEwMsLjKfTHctnVvT9bhniT/OA6mV6tnBXnisnLqGis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E5qqUFsl; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uzmGqwdC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90CA3C19425;
-	Mon, 10 Nov 2025 13:19:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762780761;
-	bh=VSiEIjLyYUKVvnPQ7kJVmq9DuKTsVrvaCBPI+TVnr3I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=uzmGqwdCfwkqc+jcuzhbZOI0uWbRrBQ1My5OehR1oF3gkvHxk0vnY91eBDD4xJE/u
-	 4rD2aVzaaR14Z+zw0892FiLUynditRfogNudq8VIc4pWw4phnNQFnzk4zDOe6nJjO9
-	 /3FACDjFRhVmdtnXXkPts1sgGbi4gSoPgfRsjBGyzdNwDqKuJr31Nsqw1G6P9F3oRm
-	 1SRj58ul0QpHoVdIY+o3k2m917FwfE1A6xIqzHRLznkiQVY7UOGeYJWkUHsQtLyqK1
-	 tKHPyqrJsIISIXlBQV7AtF7HHzmUI9ceYhXtvtC+7DINHS+jO085DyoYpxYr98Mm0s
-	 JINt6NRUhAxmQ==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Sami Tolvanen <samitolvanen@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>
-Cc: linux-modules@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev,
-	stable@vger.kernel.org,
-	Haiyue Wang <haiyuewa@163.com>
-Subject: [PATCH v2] gendwarfksyms: Skip files with no exports
-Date: Mon, 10 Nov 2025 14:19:13 +0100
-Message-ID: <20251110131913.1789896-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E5qqUFsl"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6419b7b4b80so1194958a12.2
+        for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 05:26:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1762781215; x=1763386015; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WhaZSZSH3JxixsGOb3+NSOpxTTK16V/bDeAhAAUpFzE=;
+        b=E5qqUFslVJXWPHhafsxsLihzT2Hp1H7ZL3bmTpHc1vF2FQcxh/aQ06ldMfj/Vuroos
+         6hElXI3/nIMU2tmAI7rb47W4ouuJ2zEDvb8xbb8ffZIju8HaIU51HE4S6tnw71CNQ3Bf
+         SgKBbPLG2cJ7UoeLIsWfFCk78xyOgWyvCGN2fFCZjODv9YM0tjvAzWt8o0pPmpRbmKjq
+         5gvS9Pg1mDvRrHYdnSJIGr093yv9UAsFVNVIGZbrH8Ga2I9QDAIM+z0ttJolmmxcgcpQ
+         aZjjcynCrC/094+Dg13xfDzZR5iiIEW/g6WMD43PJ1HEEajIHDCWJfXyimpxSn2TnjQ4
+         JyOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762781215; x=1763386015;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WhaZSZSH3JxixsGOb3+NSOpxTTK16V/bDeAhAAUpFzE=;
+        b=WZMO5Yown6ePevnKL6Vb/oFwsmW7bYVN+4diXU9w5aV0B+8YUXBbOSSPOHKXxUkI9b
+         DyAXElwbWZ+UPXtg6+4rqLZWY3DiscWfUdp0R3uAhMNYf/8xuagSFKgNu75UaL+rrCx+
+         +hs/bmy9Ma4GDT8R6ZuUJpeglj/KQzFIXc5LrRtgmWBs0jORbqtaXQH5LxKNCV0JNXvY
+         dJFlnZcJT+rWFopn7G8BAbkywu7cBZcKjPT7II2dRNPjRfpqCpOhbETQM1NS0YcotUis
+         v0/whCfZFDXVyQfSrVF41yDw02wM3hlCAP9sfX9XBfRgQYalhnOx3z7RNsd1Ey5CUCWe
+         rWLg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9qSbZKH9Osj0O2xvRtGeO37s1TZeyYRq24FTaNYkYvxROwV/Fn85V1LCWk/fWp2oBPfy9Mv/BaUo95XhH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4pDmr6qFSTI+qn4MfLxdfC1GPN0In2UvUkOyXifhrGOvQFnwL
+	NiKMZT4tFniuOQOfYEs20NvhooJTIeL17xZpQAnloVc8hT/tkoA2jVOPGKKdCC4g074=
+X-Gm-Gg: ASbGncumIeO59+oMMdPVnU66ypIXpDu6nkjXJhaoV8D59N3FE3Z0vnJJgHSGjkQQgD4
+	2xOr7cSgA07uCNyxDq4tOeuziwFhVoxRAcsMU76pfDHofPnGu3sAKKQF7GtEfdBgmuxMt+7Vmwo
+	zfButX1A8SPKyI++s8fetcdeVvu/UrulVBUzti+KZ6Ey/VDR6ptXyVKW4aQOa3IWRyo2oZk8LPK
+	KTiKWhSyWOHqn0G6nLEGg2tsLZlyR1oNkziJnHFUuRmCcKzGDywlfMKavQDWlGVf5Ke9Ie/7nTT
+	mpJnwXmOEOkgo/pJcvZgPOCWoBZyzTraz8PeUgc++zNNss7xwhX/Q5c3R2hwHnlQALgsS/hYqc+
+	Lxbji4PU37hJ+oM/lHUHt5vdXyoCElLp0rXSSBhNcPI6CojiRQbnsmH+WQtsOJ7eGt3BNKTnQbt
+	Ovt3Hqehgd6Rdfvw==
+X-Google-Smtp-Source: AGHT+IEFvin7sLruegH2ZxQ0SW44BHRX6xFr54ZAVGaHqC0y7M8M930cBHeCWlcadsxgJM1CQZ9cXw==
+X-Received: by 2002:a17:907:7b96:b0:b40:fba8:4491 with SMTP id a640c23a62f3a-b72e0310d6fmr928514366b.17.1762781214802;
+        Mon, 10 Nov 2025 05:26:54 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf97d43bsm1129492566b.45.2025.11.10.05.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 05:26:54 -0800 (PST)
+Date: Mon, 10 Nov 2025 14:26:52 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: Petr Pavlu <petr.pavlu@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] kallsyms: Prevent module removal when printing
+ module name and buildid
+Message-ID: <aRHoHMJYAhSoEh1e@pathway.suse.cz>
+References: <20251105142319.1139183-1-pmladek@suse.com>
+ <20251105142319.1139183-7-pmladek@suse.com>
+ <kubk2a4ydmja45dfnwxkkhpdbov27m6errnenc6eljbgdmidzl@is24eqefukit>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <kubk2a4ydmja45dfnwxkkhpdbov27m6errnenc6eljbgdmidzl@is24eqefukit>
 
-From: Sami Tolvanen <samitolvanen@google.com>
+On Fri 2025-11-07 19:36:35, Aaron Tomlin wrote:
+> On Wed, Nov 05, 2025 at 03:23:18PM +0100, Petr Mladek wrote:
+> > kallsyms_lookup_buildid() copies the symbol name into the given buffer
+> > so that it can be safely read anytime later. But it just copies pointers
+> > to mod->name and mod->build_id which might get reused after the related
+> > struct module gets removed.
+> > 
+> > The lifetime of struct module is synchronized using RCU. Take the rcu
+> > read lock for the entire __sprint_symbol().
+> > 
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> > ---
+> >  kernel/kallsyms.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> > index ff7017337535..1fda06b6638c 100644
+> > --- a/kernel/kallsyms.c
+> > +++ b/kernel/kallsyms.c
+> > @@ -468,6 +468,9 @@ static int __sprint_symbol(char *buffer, unsigned long address,
+> >  	unsigned long offset, size;
+> >  	int len;
+> >  
+> > +	/* Prevent module removal until modname and modbuildid are printed */
+> > +	guard(rcu)();
+> > +
+> >  	address += symbol_offset;
+> >  	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
+> >  				       buffer);
+> > -- 
+> > 2.51.1
+> > 
+> > 
+> 
+> Hi Petr,
+> 
+> If I am not mistaken, this is handled safely within the context of
+> module_address_lookup() since f01369239293e ("module: Use RCU in
+> find_kallsyms_symbol()."), no?
 
-Starting with Rust 1.91.0 (released 2025-10-30), in upstream commit
-ab91a63d403b ("Ignore intrinsic calls in cross-crate-inlining cost model")
-[1][2], `bindings.o` stops containing DWARF debug information because the
-`Default` implementations contained `write_bytes()` calls which are now
-ignored in that cost model (note that `CLIPPY=1` does not reproduce it).
+The above mention commit fixed an API which is looking only for
+the symbol name. It seems to be used, for example, in kprobe
+or ftrace code.
 
-This means `gendwarfksyms` complains:
+This patch is fixing another API which is used in vsprintf() for
+printing backtraces. It looks for more information: symbol name,
+module name, and buildid. It needs its own RCU read protection.
 
-      RUSTC L rust/bindings.o
-    error: gendwarfksyms: process_module: dwarf_get_units failed: no debugging information?
-
-There are several alternatives that would work here: conditionally
-skipping in the cases needed (but that is subtle and brittle), forcing
-DWARF generation with e.g. a dummy `static` (ugly and we may need to
-do it in several crates), skipping the call to the tool in the Kbuild
-command when there are no exports (fine) or teaching the tool to do so
-itself (simple and clean).
-
-Thus do the last one: don't attempt to process files if we have no symbol
-versions to calculate.
-
-  [ I used the commit log of my patch linked below since it explained the
-    root issue and expanded it a bit more to summarize the alternatives.
-
-      - Miguel ]
-
-Cc: stable@vger.kernel.org # Needed in 6.12.y and later (Rust is pinned in older LTSs).
-Reported-by: Haiyue Wang <haiyuewa@163.com>
-Closes: https://lore.kernel.org/rust-for-linux/b8c1c73d-bf8b-4bf2-beb1-84ffdcd60547@163.com/
-Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-Link: https://lore.kernel.org/rust-for-linux/CANiq72nKC5r24VHAp9oUPR1HVPqT+=0ab9N0w6GqTF-kJOeiSw@mail.gmail.com/
-Link: https://github.com/rust-lang/rust/commit/ab91a63d403b0105cacd72809cd292a72984ed99 [1]
-Link: https://github.com/rust-lang/rust/pull/145910 [2]
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- scripts/gendwarfksyms/gendwarfksyms.c | 3 ++-
- scripts/gendwarfksyms/gendwarfksyms.h | 2 +-
- scripts/gendwarfksyms/symbols.c       | 4 +++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/gendwarfksyms/gendwarfksyms.c b/scripts/gendwarfksyms/gendwarfksyms.c
-index 08ae61eb327e..f5203d1640ee 100644
---- a/scripts/gendwarfksyms/gendwarfksyms.c
-+++ b/scripts/gendwarfksyms/gendwarfksyms.c
-@@ -138,7 +138,8 @@ int main(int argc, char **argv)
- 		error("no input files?");
- 	}
-
--	symbol_read_exports(stdin);
-+	if (!symbol_read_exports(stdin))
-+		return 0;
-
- 	if (symtypes_file) {
- 		symfile = fopen(symtypes_file, "w");
-diff --git a/scripts/gendwarfksyms/gendwarfksyms.h b/scripts/gendwarfksyms/gendwarfksyms.h
-index d9c06d2cb1df..32cec8f7695a 100644
---- a/scripts/gendwarfksyms/gendwarfksyms.h
-+++ b/scripts/gendwarfksyms/gendwarfksyms.h
-@@ -123,7 +123,7 @@ struct symbol {
- typedef void (*symbol_callback_t)(struct symbol *, void *arg);
-
- bool is_symbol_ptr(const char *name);
--void symbol_read_exports(FILE *file);
-+int symbol_read_exports(FILE *file);
- void symbol_read_symtab(int fd);
- struct symbol *symbol_get(const char *name);
- void symbol_set_ptr(struct symbol *sym, Dwarf_Die *ptr);
-diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbols.c
-index 35ed594f0749..ecddcb5ffcdf 100644
---- a/scripts/gendwarfksyms/symbols.c
-+++ b/scripts/gendwarfksyms/symbols.c
-@@ -128,7 +128,7 @@ static bool is_exported(const char *name)
- 	return for_each(name, NULL, NULL) > 0;
- }
-
--void symbol_read_exports(FILE *file)
-+int symbol_read_exports(FILE *file)
- {
- 	struct symbol *sym;
- 	char *line = NULL;
-@@ -159,6 +159,8 @@ void symbol_read_exports(FILE *file)
-
- 	free(line);
- 	debug("%d exported symbols", nsym);
-+
-+	return nsym;
- }
-
- static void get_symbol(struct symbol *sym, void *arg)
-
-base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
---
-2.51.2
+Best Regards,
+Petr
