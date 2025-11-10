@@ -1,68 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C15266B67;
-	Mon, 10 Nov 2025 16:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062D130EF62
+	for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 16:49:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762790515; cv=none; b=j6M3F1buZHGj7IoGmgTfDbz2tZ5+H07AoG5nuGfi4hy+uG7zPPMOe0OanpySqr2uLB8O5EXGOaESdzwtbc2/F6Jc6KvY/YCIh78Dtbd6Sq0zKmLyHpXV/xiVphg8lwLc1wkh1KFaxwfavHomdcZTLwKrAJc3ZQSJ20Bv/BziRcs=
+	t=1762793345; cv=none; b=dHTDVLKJh2DwaZnR6SZ42DAtWtG4dI+LqQdQrE3F09ba/eOnLaj0+bJS53H5D3WtEbfhxSyYeC9V6M77yNKSRjk2R5S7qXprXYITN07EN11P0IJ97MGQmyRUYXBo8NZuiOz6INyxYhDanpEcTWMeKG2qTVhCVwdKHuRsnS15niw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762790515; c=relaxed/simple;
-	bh=H3NzdekXo1UQ4hcp/ZKn7Ol5GFdG7uTg3XxzFPfkbRo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bY04llu3kjth1N0bCu+2xxLu93+4nMNM8MB53WVB1f1TiMYBNVlqBDp+FUlotddQDBXLOe7Z3jNpGUPun3wIIwSILFJZ4UAN+B2kXYnFLX25GzZQqtrSirNK0E96FFxusJUjFxT4PC06Tnr+mQHXe9M/bSWqQw4veTInx+ZfV7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYkm0xuV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762793345; c=relaxed/simple;
+	bh=WCn2M9Pn98zQCwXGhIe94Mp208rWyyDEa7Ij/HDRHtE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=H4iGN9zjyaOwshXniDCm4B7BZTLoRCxRm/QBd/27doV6OZjsFaBgIV8bnXkKCBPcBPJmobOp8nAWidmbO0rnG2mRpIgNPeKQ+BrLLkRe1XOVsZLBpsnITtMMDpAFlCUL6fcr6ml0/ncYvYFZ0tartZb3ZNFzuQSfGzM9TZJ/cgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXCIop9C; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYkm0xuV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F3CC4AF09;
-	Mon, 10 Nov 2025 16:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762790515;
-	bh=H3NzdekXo1UQ4hcp/ZKn7Ol5GFdG7uTg3XxzFPfkbRo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cYkm0xuVNWAlGseBVO9lGJaJ02l/6r0SQAffp1TGc2D3yBWtDSGPzi8OeJIeCaRtM
-	 S+gJi9KlHnOyxQo4xHV2gX+5SklCzTu9vfJ9Mvs7uJZ8pJm3ak1gpSNyfR0iG/3Wxz
-	 bAG921OEMcsk4Xn4umAJZh5mXROIX295g6hl2RLJe0k8OFKptDUTEmylzt6lPDDw4p
-	 TldzfWLbUkXlctCY5eDxKv2UkKFPcouC2qx4ppuB9DwwFjx9BtZZlLyw7Z89Bwv9i6
-	 F5Fo74rsN2dOGhGzsRT986mo6T1Pis9aLwJRNIhmMYbRWLHA/gzlHZgBjfZIR/TeYG
-	 lC8l7f1moRETQ==
-From: Daniel Gomez <da.gomez@kernel.org>
-To: mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	Aaron Tomlin <atomlin@atomlin.com>
-Cc: Daniel Gomez <da.gomez@samsung.com>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer for module support
-Date: Mon, 10 Nov 2025 17:01:29 +0100
-Message-ID: <176279045446.4004696.4134618363007891892.b4-ty@samsung.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251018180210.347619-1-atomlin@atomlin.com>
-References: <20251018180210.347619-1-atomlin@atomlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXCIop9C"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-29806bd4776so2714495ad.0
+        for <linux-modules@vger.kernel.org>; Mon, 10 Nov 2025 08:49:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762793343; x=1763398143; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WCn2M9Pn98zQCwXGhIe94Mp208rWyyDEa7Ij/HDRHtE=;
+        b=LXCIop9C9154lwZg3Trtm3kb7fxgwtRrx/MWfU21BhkvGi1QP8dHv3OAgCWJtm01hK
+         sQzeTMCj9AAr+qxes3HBTPDDwt+FhNNRhgoZPAoUJF/KDNwqjy9azSHvI5ez49Oi5W/Q
+         cRe9LcY2DZJfksaFhejhBVfAJNu57XIA8qFIn7VzWA3LWJ3Ett3CijAsRTTpzEgEMi50
+         X7Ccwwxua/Wefi5U9121aYnrM9GinZ2kc4vZF6bOmH0rFAae6lb/iLvfK8iqdpkNIyYo
+         NBF/v2yqn7x6o2qKP0RxJ82yYoFHS3LM1V6sEPbNEzM4Gcdw8a/BO9otQvGHsEEtTdb/
+         svHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762793343; x=1763398143;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WCn2M9Pn98zQCwXGhIe94Mp208rWyyDEa7Ij/HDRHtE=;
+        b=JYitXnqnCN3KakNddQ2B0mGtG7Cau5jzZrtV+3y6/sUcXi7VWgvh1PfifC8Cx/2k4f
+         T4F6EGJSA44g1OUik2Xpq4Si84Yg7hfwxFupWAHFKwBJuodkRXEWgDNvDEkll5fTY3QN
+         +yl7JmsQ3x7/8idyd6f76rtA8XTr0xD6Xn0PBeRUV+/mSszV8c66XeIXFjxW3WO34qDz
+         TdB8DPEmsoWArGQyt0/6mxtLMmx9cWIxmLs/RQz4dmelDjnTmKmjt9MkmTrx7o0DjARO
+         E8vNGUBwoQGn46htqWmd7SlVUvIhvHd5o9HPCcpqu3hiIrLy0NPcYYsgVnWTNIU5+CaF
+         gDbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWhTVld65SomCccDTBCzuMl4G/BxBO+P+nwHQd7H5US7UelUYpERGWhAMDSpXwLkdJYgXa1o5ZFIUPLld5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiEbk4Skh8Bf+XBP5NfdSZn4K9d8SiLL4kDdhYaHXCkVmXukkb
+	qWLYH1K3FQchgbu8P/zUhH/pFBmYl3A2qwucOK+Nel/vbX+p4btUW0v3XlddmoqKbQwGnKoYT0H
+	Y4YtzhqMTUmv29AjZTTrEXY+B/FZumhY=
+X-Gm-Gg: ASbGncv409nOfgJIV0epw3gGDnPSdXki9kF30Z7Je/xx5X9YjF0Ko/ugOqqQvnwWjWZ
+	to02V0OA20J/SvZw3+/ziRDO55xJdC04S8PZLc3aCvx4DTNnST6ObTLL9blDbeF1FwIspHqEK5/
+	pna02fRLsNvbpOoBQPAsfqS+c5Ck1GOWj4sR15hiRNuCjzLxQbODld6J+FQV9yRei95MqABAs6C
+	gkHReGZAWN2vwz1jymLdvwtV1LJ551059EWKeGx4mtrZMdpOtOfJ5PBYLN9PCdSun+lay9EjsnG
+	O+bsxwtOEOHKBIOs8Rijga8OxkOux3N4o0ndVVmTgHbJcoiAq60A8bTa7yZW60Ss04xi8JoK0HK
+	xJ9imGbEU4GVCyQ==
+X-Google-Smtp-Source: AGHT+IH5I1+eyd6kWRNYzgBd7iVcE03A1u5jBf0zW8VtsXhcRPQLzp8sRacyFb9Hd3dmI6N+ld/TjvRphEHH4nekiBM=
+X-Received: by 2002:a17:902:d506:b0:290:ad79:c617 with SMTP id
+ d9443c01a7336-297e5611fd3mr70148695ad.1.1762793343249; Mon, 10 Nov 2025
+ 08:49:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20251110131913.1789896-1-ojeda@kernel.org> <aRH9Tjf0tszyQhKX@google.com>
+In-Reply-To: <aRH9Tjf0tszyQhKX@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 10 Nov 2025 17:48:51 +0100
+X-Gm-Features: AWmQ_bnW52r8h-0gmyLN7ivgaSD0gXN5MS8PTRXx5xySmJt3bBV43-xYwc4HHKc
+Message-ID: <CANiq72m4K+UZxodnKqdx3cowbYB+Mj_Z0gB63j=3jE+E-x+3UA@mail.gmail.com>
+Subject: Re: [PATCH v2] gendwarfksyms: Skip files with no exports
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, linux-modules@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev, stable@vger.kernel.org, 
+	Haiyue Wang <haiyuewa@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Daniel Gomez <da.gomez@samsung.com>
+On Mon, Nov 10, 2025 at 3:57=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> Is gendwarfksyms actually present in 6.12 upstream? I know we have it in
+> Android's 6.12 branch, but I thought we backported for Android only.
 
+No, you are right, this is just me being overeager. It should be:
 
-On Sat, 18 Oct 2025 14:02:10 -0400, Aaron Tomlin wrote:
-> Voluntering as a reviewer for Module support.
-> 
-> 
+Cc: stable@vger.kernel.org # Needed in 6.17.y.
 
-Applied, thanks!
+It would only be needed in 6.12.y if someone actually backports the
+feature (which does rarely happen, so I guess someone could have found
+it useful since there is no Fixes tag, but hopefully people would grep
+the log in that case...).
 
-[1/1] MAINTAINERS: Add myself as reviewer for module support
-      commit: 1ddac5cd7f278345b2e8298c930e4bffe0911a45
+Thanks!
 
-Best regards,
--- 
-Daniel Gomez <da.gomez@samsung.com>
+Cheers,
+Miguel
