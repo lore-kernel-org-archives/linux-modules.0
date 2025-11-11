@@ -1,85 +1,133 @@
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062EA377EBE;
-	Tue, 11 Nov 2025 16:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6613730D3
+	for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 17:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762880019; cv=none; b=sRnQgUhIdyv6LpUHKKD2Yo9h1TE1nQWDigtWb+L/NsPOe6eVDYoPm0KxioX2Is9M9wMkie92HPckkF2Wuc/Kzl6YLQX9TSPhVuPaOeqlrJrk3GzpgMJrbw+z0Dpj/wQCbkxihJbTO3AFfqXgDa154VqwBw3ChKeIo68hs8lSXls=
+	t=1762883574; cv=none; b=WJpDU0Um9gSpeRJ/moRu+xwwKbubV9R9iQw7m0pHOWjAcDfiJGJ0QgroyIYsVgwARsNTM+PnJi6XWKHiB9sKFvXy95bluNSDI3JvlxXX/yGelMxMAqKGC91/iJq/GiPwBG3mS1TPUznfgT7xf4amc/gSeMYy26s/5nD17Q0Nij8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762880019; c=relaxed/simple;
-	bh=XhJi0us/Z67NEUU934MQXpGjDJb7m3ZTCE9LamAPZEg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JLFVqvDIXUO4SG51OMSpE9ukA01xU5BInPedZpMjzkQiYjOWqAPvmzB3tXs9uyjYRxkW8p4UqrNDtRgZ6Xfq5J1xRsR1gKHtVX4neCSmL5ti69owLzAwOcWaKU7cpgEkXa+UKJpeg/YGxSZHXp9ZuzZVDRpONDsVowrXuVETs1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=fEktPkp0; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+	s=arc-20240116; t=1762883574; c=relaxed/simple;
+	bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rf8QKMbSL2gOAohj/Y9OfvzwK5CRJUvXY/WpLLN5zN+lq6FS9ax+pSzEqT0QSe/pMUSmuRGon4jLgfHGVowLzbWI8P2Tgpp4hhupCB3b7r2wCoI2Pes61QsI0WW9exH3kZoeZ1TqRD4d3XMatraJlPthzVKeQzEQeG3aIMPIPZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=j0uuJRWx; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="fEktPkp0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1762880015;
-	bh=XhJi0us/Z67NEUU934MQXpGjDJb7m3ZTCE9LamAPZEg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=fEktPkp0+4HyQdW7EOFEr5S19iaHQ9wZh7WuBpt6eIEhQgHXb6oSLWZbwQSSYnYje
-	 oHcDtYoYUuCt4Tkr7xz2Xl+xWenFe3m6XU9nSp7ZS+9dfZizw7wxoW3irc2ruGXe98
-	 sT7oYwInJ6o//K3YpuWt2qG9HaHm15YfpUEq1eTs=
-Received: from [10.144.238.181] (unknown [173.15.200.114])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 74C271C0202;
-	Tue, 11 Nov 2025 11:53:35 -0500 (EST)
-Message-ID: <922480ff44bda3b6ecfda1ae780c659644560f94.camel@HansenPartnership.com>
-Subject: Re: [PATCH 2/2] sign-file: Remove support for signing with PKCS#7
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Petr Pavlu <petr.pavlu@suse.com>, David Howells <dhowells@redhat.com>, 
- David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,  Sami Tolvanen
- <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
-Cc: keyrings@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Date: Tue, 11 Nov 2025 11:53:34 -0500
-In-Reply-To: <20251111154923.978181-3-petr.pavlu@suse.com>
-References: <20251111154923.978181-1-petr.pavlu@suse.com>
-	 <20251111154923.978181-3-petr.pavlu@suse.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="j0uuJRWx"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6408f9cb1dcso7628469a12.3
+        for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 09:52:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1762883571; x=1763488371; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
+        b=j0uuJRWx4TCgzGcs0iQ/SY+Rz3bHmVL8AO9iaZEmEfl2Hvk3Rq1JTDY0Avo9eNwBF9
+         g4jcgzz2Zn+9VuQKLxQChIuYSGAHg2DDU10EHVRSc9HmVefDP7xf1duGH/mXH/ktm/B6
+         5XK+iNWb7ZvuvPqVV1hlGaSXhp5zZjJyCm6uhxM9HLcul0bmu+qr7hUpjpt8bI3Nkx6h
+         PU/5p3MDB2/pt2aS6Ud1UqOm3jJKyIPNDVeSWfH4j/id7I85JcnMm5qASHLEUkY3bhn6
+         /xfn1gOFI/5IhBVMBp2HuV5VZkX/9Y4U6qcJACFw8kOrcLTqKTvhn68SVt7tB9yd4EGn
+         XIGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762883571; x=1763488371;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=46edM+lm/eIeFQfqmSHoHH2PCoG6egQvGXMvADmFIHY=;
+        b=l39Snv5rcL1U/GvpWUXu5Xe31Pe5YxzJIW41odTX79KWgaL2X/nyg7QUIZlpgMRgzm
+         Ca6ieUZ+PqmdoRDlFXJu9/Dk763YW980tPEflnpbwkJNZ5qx98hHr3dWRYRiitGPiwEt
+         ugaNGAhDB66G+KFnDFMXkkEz9uv+MBbM9I+nhlqfMvYcJfQKHUAJA/2f95eb6k6f5Ifs
+         1kaK/e5+SKXTwvJHkhz9yWpJt3jqXLC7MxxZHYmMcng3hcICBxrChvcm5jhRAxQASpkB
+         XuLBJ3RKsoV4QQa77/v92oMPMM7LcSHbKcS3+EKESgQR7x9wwk4dC1YLjkSyvH2ytVox
+         stbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzmh7j3vGaOl1sOuvO9xyPGPevj+CJ9JApplz3BXgITOiMBnqNfL21rfNRpGGoTmRtWjqPElQvNiBx4hXD@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpsEnL7xTXC1V2vcfqS1YGt8h10LLwq9lM9mYUHaOiqydTa0yx
+	r0zL3zWuLOXR83sWEC2Q3U7+azfN3H/SFmKzZ+geobW1o9pxLgwSdu5uhCiSY9bJ1+0=
+X-Gm-Gg: ASbGncs2v5G5oIxuVQ4eUH8UcqyDaLUSe3L2z2U8TKBDhqn4rEGHk8Zbl/ghr9fW6Vf
+	XGbF1+BkGzvmJ8mBuYDAar5fSYbLUqV984knZCHvdddMufUMcMgcl4hPVzq0BBfDSJszws5Qc5E
+	ka4y234orHvaMchzNLZ3kUZNhKYV4C27xLmfOLQE28BynGGtm0yPbFSN2ciosUuxduySIvnFFpp
+	Ho+TDckd+EWgbgQjPyZdpKiEq1poCWkLB3VXVveMHOq0TD6yXTzlbh5j0Oy9QuF1QPpA5EXyot5
+	qjDhb6FNvFc8NY7CGplBLGv+c5dyan9n070HpPBJYAHXnvYX0BcS0ItdBVCyrguq01rrS3dtyA6
+	MLoBB4gh3f6Nr/oxU6Wrucd53O3MwVlC2rvS8R4nMyp5hcUhTnFcCMK41q3M/2Sw8tC6heXlGaQ
+	JaApkk0dlRgsfm5llP+uqKdDste9/YbrmJVwshfbM4n2G/sz5PiGlsHFOy0e764Kkl
+X-Google-Smtp-Source: AGHT+IGZ24gPwNf9yPCfR7VYmGLvGJvKsnhVnsEWjyP34dYxdAWzeTApGxpBX2H8vl8E9dV82whA7w==
+X-Received: by 2002:a17:907:7fab:b0:b72:d56f:3468 with SMTP id a640c23a62f3a-b7331aac316mr1013366b.50.1762883570945;
+        Tue, 11 Nov 2025 09:52:50 -0800 (PST)
+Received: from localhost (p200300f65f2353049e8cfcf6469e7c35.dip0.t-ipconnect.de. [2003:f6:5f23:5304:9e8c:fcf6:469e:7c35])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b732c87ccfcsm76547366b.9.2025.11.11.09.52.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 09:52:50 -0800 (PST)
+Date: Tue, 11 Nov 2025 18:52:49 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Daniel Gomez <da.gomez@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Hans Verkuil <hverkuil+cisco@kernel.org>, 
+	Malcolm Priestley <tvboxspy@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Hans Verkuil <hverkuil@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
+ characters
+Message-ID: <dvdu27leqnwvxgz6rcgsdbovw2576dtcbmxuaznevjvijdxp6s@t64lg6bckgkd>
+References: <20251010030348.it.784-kees@kernel.org>
+ <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
+ <aRMhLEs9NpGexL7B@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mwbp63t7mxf4mfm7"
+Content-Disposition: inline
+In-Reply-To: <aRMhLEs9NpGexL7B@black.igk.intel.com>
 
-On Tue, 2025-11-11 at 16:48 +0100, Petr Pavlu wrote:
-> The PKCS#7 code in sign-file allows for signing only with SHA-1.
-> Since SHA-1 support for module signing has been removed, drop PKCS#7
-> support in favor of using only CMS.
 
-The change log is a bit alarmist.  CMS really *is* PKCS7 and most
-literature will refer to CMS as PKCS7.  What you're really deprecating
-is the use of the PKCS7_sign() API which can only produce SHA-1
-Signatures ... openssl is fully capable of producing any hash PKCS7
-signatures using a different PKCS7_... API set but the CMS_... API is
-newer.
+--mwbp63t7mxf4mfm7
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
+ characters
+MIME-Version: 1.0
 
-The point being the module signature type is still set to PKEY_ID_PKCS7
-so it doesn't square with the commit log saying "drop PKCS#7 support".
-What you really mean is only use the openssl CMS_... API for producing
-PKCS7 signatures.
+Helo Andy,
 
-Regards,
+On Tue, Nov 11, 2025 at 12:42:36PM +0100, Andy Shevchenko wrote:
+> Folks, are you aware that this change blown up the sparse?
+> Now there is a "bad constant expression" to each MODULE_*() macro line.
+>=20
+> Nice that Uwe is in the Cc list, so IIRC he is Debian maintainer for spar=
+se
+> and perhaps has an influence to it to some extent.
 
-James
+To be honest, in the nearer past I'm very passive on the sparse
+maintainer side and even stopped using it as it fails on guard locking.
 
+My impression is also that upstream isn't very active any more, but that
+might have been temporal and wrong as I stopped looking.
+
+If there is an outcome and a patch to cherry-pick into the Debian
+packaging, give me a ping.
+
+Uwe
+
+--mwbp63t7mxf4mfm7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkTd+4ACgkQj4D7WH0S
+/k6QXQf/WqP001zUT4Bxw/oC7trx3KqIhrnryL+Ih+OAu0LFHWKobNA3K556JcXQ
+YEoGffzJU/J7ODVixICet7Uv94oeQ/1Oqr/OSPXlUst2vEIgQrkAO5guB/DCoS6C
+c+aODonO57Ovlc834ylWPacex8K1XrSEC3bO3guctIxR+FLcfYyc6w8CI7pMRZ/0
+Kqaype/E9cFIvlGjyxnIZ28NKGuACVyiO6a4jrfnLtCiFsirGWww65tqhUg9hJx8
+sZ2RViIzMnMbl+Vqgoxm3JhpqsfgiA9k6069Ey0zw6JgBVH67N8IQs4v/AKqeBeB
+05CxLfZZIK/RlfUZfQ1d/EY78KJxOg==
+=qd7W
+-----END PGP SIGNATURE-----
+
+--mwbp63t7mxf4mfm7--
