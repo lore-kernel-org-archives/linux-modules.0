@@ -1,127 +1,85 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C80365A04
-	for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 16:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062EA377EBE;
+	Tue, 11 Nov 2025 16:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762878193; cv=none; b=pW+Udj1uCJuBMF2kiZIRv0HY2QLgqPbJqZUibgu2LAik6RyCUFhIoBTAYs/En2IVlLOA+QFB/rljPvTYtVfP9yTM5L0oDiPt5JxijJnPW3pirODYqxm8ErMQdN5YzfDCH+3SE+Azw2f5hQwqn2jFiOcn/x8iip12DMOQ9li3Kh4=
+	t=1762880019; cv=none; b=sRnQgUhIdyv6LpUHKKD2Yo9h1TE1nQWDigtWb+L/NsPOe6eVDYoPm0KxioX2Is9M9wMkie92HPckkF2Wuc/Kzl6YLQX9TSPhVuPaOeqlrJrk3GzpgMJrbw+z0Dpj/wQCbkxihJbTO3AFfqXgDa154VqwBw3ChKeIo68hs8lSXls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762878193; c=relaxed/simple;
-	bh=6K2M6sXqSfWuHEO5SZZB6vJuswyuFAvFpqwznwwaw6s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qt/dq+Fj9puut3WQzClqVPhWVY3o2f8RxGt/qCCDw90dg3sXI7G5Y4+nbu4pyeNZa9XOqQLxE+RIuklkGv1yCA0Gcqnl50uFV7UxLA3+EJDVydHc/eYR/L+P2WGTobfJgOQf+tgZkEZ0F0OSShDlSUCctVaBJXDcze1S514vjSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j9Zqu+Ab; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1762880019; c=relaxed/simple;
+	bh=XhJi0us/Z67NEUU934MQXpGjDJb7m3ZTCE9LamAPZEg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JLFVqvDIXUO4SG51OMSpE9ukA01xU5BInPedZpMjzkQiYjOWqAPvmzB3tXs9uyjYRxkW8p4UqrNDtRgZ6Xfq5J1xRsR1gKHtVX4neCSmL5ti69owLzAwOcWaKU7cpgEkXa+UKJpeg/YGxSZHXp9ZuzZVDRpONDsVowrXuVETs1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=fEktPkp0; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j9Zqu+Ab"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-295c64cb951so235085ad.0
-        for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 08:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762878191; x=1763482991; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZkUuhGxVx7htjf3miH8SdELPvuF/att6+BPRWArWBaA=;
-        b=j9Zqu+Abxe+ZBg4SeKM+8X36f3Og+vdq/13ynSR/ZhdVwzIbxM7l9Gd4jSdvSQ4YV5
-         CFW/e5YuTIvolzjrE2W8xkBaAz2Sj2r3BUTSkVMFhB8tu1fr1xiMEJ2nRAoqIwKQ33IN
-         YrVrL7Q/9FyjhmZuZHEoaFs6B1b3nvhkCPrCWT2RLMpTJueBpzLxcEPiSFmejLKXibxk
-         c6Np+H5KRyB7iKEMEkvRqLOA9vyqTuWj+gQpohpEqweQqjKD4ZfTunMLCbCUrG1z/5JL
-         7OuZ05XfqMfV/DSI6YeZpPyr4qWTWlfvJhJmD+1qNs+6Bh4Wp68VvMh37C7ZtOGJJyzu
-         IUjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762878191; x=1763482991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZkUuhGxVx7htjf3miH8SdELPvuF/att6+BPRWArWBaA=;
-        b=TuFfulAqd9doRNZmCxaClr4Cp0Bo6QZ9XjJeXeAzzKG7D6Mf/6RT2MHhdrfDCIT3W9
-         NzPZu7lGKDxF4QiOiliJbNPmuFHc6pJOXriw6eYV1UMru0v1DTbeoLbwbCyFVNmgZJID
-         UE9pnhBflAG78OAr7B8XiDEGJ7tefMi2Ex8DEOsnc5CGZugweM5Yx6BVr8XYw/Dg8E+T
-         rIno9ZMSsAMyYaKo+It0CmRWSoGLNIzvdAFe1myDaIN14rC3oJeQJAQ2dKqLyuBnloaO
-         fmaw43ZkhSLvuKUF/FoysngIJznRZ+AfKDiU3EwavBpVdcw9PF0/SE2CyKlUh/R6BihC
-         alLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbll6ACcXpA0WppeaR2VfiHZojoBz40SJkmyAGww8ndKuLAfVNW3c9Q2NJvexmbsEgwZpIsyVqwDo7ulJN@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP8PqVw6AROfePU0hvxtFoGOriI7a+k+B45dDi9wwqobdbBALg
-	k1TBbhXJyanvkHRscSsS29dtk8rPXk0mPFi2duIQGmS6OnPsnH3sn7xYMv7U6j5Du3IYANJZF9j
-	Kib9L+tOm2GsArYQSg5713F4GkPsnUIHXwid1qMn/
-X-Gm-Gg: ASbGncuSrrBAzBZPNGEqtV8JZ6QBEH+wDAQ11yNvpm4sa6RTQhNWMN9GFUiG0dzyDzR
-	K/tN+TtdFNF3XO9f+hctG0w/R3KLhvzRdsB4Vhz12Djch8yJflLR8/DpnCAANUBJqahG0izQ3X/
-	UyNPDk4iIaFpS7ui7g64SywwhuGWzIempbR3UzQRbUG01pl9WYk3l5OAn7LstSejJgVsaTEAy/w
-	xbIYu03D61jl8Br1vxHYllmFqBrdcBIW2EsUW/umB33LWW/golD8JTqsvpcEtiOyRJBbupc0q46
-	++g=
-X-Google-Smtp-Source: AGHT+IGjW9VeCdmnQlOPDbbOtgrUBcup+YzsUPtCtblVRIqj97xYrG1xVzenjeYmpZa+4PI1E9DpGWY0UTrKvAd+0z0=
-X-Received: by 2002:a17:902:b715:b0:294:e585:1f39 with SMTP id
- d9443c01a7336-29841595fc8mr4192095ad.14.1762878190750; Tue, 11 Nov 2025
- 08:23:10 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="fEktPkp0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1762880015;
+	bh=XhJi0us/Z67NEUU934MQXpGjDJb7m3ZTCE9LamAPZEg=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=fEktPkp0+4HyQdW7EOFEr5S19iaHQ9wZh7WuBpt6eIEhQgHXb6oSLWZbwQSSYnYje
+	 oHcDtYoYUuCt4Tkr7xz2Xl+xWenFe3m6XU9nSp7ZS+9dfZizw7wxoW3irc2ruGXe98
+	 sT7oYwInJ6o//K3YpuWt2qG9HaHm15YfpUEq1eTs=
+Received: from [10.144.238.181] (unknown [173.15.200.114])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 74C271C0202;
+	Tue, 11 Nov 2025 11:53:35 -0500 (EST)
+Message-ID: <922480ff44bda3b6ecfda1ae780c659644560f94.camel@HansenPartnership.com>
+Subject: Re: [PATCH 2/2] sign-file: Remove support for signing with PKCS#7
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Petr Pavlu <petr.pavlu@suse.com>, David Howells <dhowells@redhat.com>, 
+ David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,  Sami Tolvanen
+ <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>
+Cc: keyrings@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 11 Nov 2025 11:53:34 -0500
+In-Reply-To: <20251111154923.978181-3-petr.pavlu@suse.com>
+References: <20251111154923.978181-1-petr.pavlu@suse.com>
+	 <20251111154923.978181-3-petr.pavlu@suse.com>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251111154923.978181-1-petr.pavlu@suse.com>
-In-Reply-To: <20251111154923.978181-1-petr.pavlu@suse.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 11 Nov 2025 08:22:34 -0800
-X-Gm-Features: AWmQ_bkt--52MX6mbNFrxPL1Hwy8cf5iG1Co9zB8o3_9L6IQpFMw_TrpSWKzpZE
-Message-ID: <CABCJKucEqEnXtV0TCqxq8_vcZtdcgRCz85jqjbckYq1xuJc9Tw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] module: Remove SHA-1 support for module signing
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, keyrings@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Petr,
+On Tue, 2025-11-11 at 16:48 +0100, Petr Pavlu wrote:
+> The PKCS#7 code in sign-file allows for signing only with SHA-1.
+> Since SHA-1 support for module signing has been removed, drop PKCS#7
+> support in favor of using only CMS.
 
-On Tue, Nov 11, 2025 at 7:49=E2=80=AFAM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> SHA-1 is considered deprecated and insecure due to vulnerabilities that c=
-an
-> lead to hash collisions. Most distributions have already been using SHA-2
-> for module signing because of this. The default was also changed last yea=
-r
-> from SHA-1 to SHA-512 in f3b93547b91a ("module: sign with sha512 instead =
-of
-> sha1 by default"). This was not reported to cause any issues. Therefore, =
-it
-> now seems to be a good time to remove SHA-1 support for module signing.
->
-> Looking at the configs of several distributions [1], it seems only Androi=
-d
-> still uses SHA-1 for module signing.
->
-> @Sami, it this correct and is there a specific reason for using SHA-1?
+The change log is a bit alarmist.  CMS really *is* PKCS7 and most
+literature will refer to CMS as PKCS7.  What you're really deprecating
+is the use of the PKCS7_sign() API which can only produce SHA-1
+Signatures ... openssl is fully capable of producing any hash PKCS7
+signatures using a different PKCS7_... API set but the CMS_... API is
+newer.
 
-It looks like GKI just uses the defaults here. Overall, Android
-doesn't rely on module signing for security, it's only used to
-differentiate between module types. Dropping SHA-1 support sounds like
-a good idea to me.
+The point being the module signature type is still set to PKEY_ID_PKCS7
+so it doesn't square with the commit log saying "drop PKCS#7 support".
+What you really mean is only use the openssl CMS_... API for producing
+PKCS7 signatures.
 
-> Note: The second patch has a minor conflict with the sign-file update in =
-the
-> series "lib/crypto: Add ML-DSA signing" [2].
->
-> [1] https://oracle.github.io/kconfigs/?config=3DUTS_RELEASE&config=3DMODU=
-LE_SIG_SHA1&version=3Dbe8f5f6abf0b0979be20ee8d9afa2a49a13500b8
-> [2] https://lore.kernel.org/linux-crypto/61637.1762509938@warthog.procyon=
-.org.uk/
->
-> Petr Pavlu (2):
->   module: Remove SHA-1 support for module signing
->   sign-file: Remove support for signing with PKCS#7
->
->  kernel/module/Kconfig |  5 ----
->  scripts/sign-file.c   | 66 ++-----------------------------------------
->  2 files changed, 3 insertions(+), 68 deletions(-)
+Regards,
 
-For the series:
+James
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
