@@ -1,137 +1,164 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C152F3C39
-	for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 09:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942E313A3F7;
+	Tue, 11 Nov 2025 11:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762854665; cv=none; b=WGmAwHysy576q3dnEHl56BUwhS+lj+DHfPAQB1xQGpOB2eVEbMPHYmey+MFMvaNtntBXZdLfLiOrbzy59SGTXjXAuZNZ8F/0Gx0TvkgoLFRi8yo1ZriZpaG4KanRM26KPPmLvxA0pl/ewCM2Gjxm3vhsuyHpIwRhzvL70d69uy8=
+	t=1762861458; cv=none; b=IQti+Ivw10visDbXwU+hG6YsYOcYeM8u75EtGQybo0waWJix1XSDROFy5PsB9161j6Wxg1/kL4MGJAsniFRvEbLiI/rCjQ/WjrlPfqxeQehgxjJvhzbuVmORMYdfpLC8/p7BfqrQpLy2a4aNfQ0tvTyolDEIisBHeaakmUUNEAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762854665; c=relaxed/simple;
-	bh=PxMjrQfLGCNPCPfcG+3vDmiZS4Gy+k6Hbmk68mQZykg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cJ+DbIj+KaKTppvhLB/yVDF27tFxzAQr20XKINP5NMIJ8nDBmrVKobpaH9L0oFKY+lw1rO08Tz1B8qrhvXKOqQ7x5y8xU5iWE13DOkafjjANQb1S04aa+9f+5gJDDDPBqsVEpRwIUENX87vIqxMuJY/jRfRx9r37cFu20+3Fnzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VKJH3jyn; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1762861458; c=relaxed/simple;
+	bh=8hgo0SAlxDhqel27kLJFUy/dCtq9ThidmmkRD+8hvR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PzYIR22dkuFZ21ULDTUVA+DExB/OWtQpz457Exg64fVDgXxXn/RNYPqB3G97VYjdZN4nHb/0U+jT4nZkv5MYKwu6xlA6mXwchiett6xmglubRsEcbo8EXS9zlGr2nGnCcwjxX4rZD4XBmSad1QMIxG4F6dI6P6rwPe36mikxO4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZU72NPK; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VKJH3jyn"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42b3c965ca9so883881f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 11 Nov 2025 01:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1762854660; x=1763459460; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=COk/1h5aEbbVr2g94DPcBm4hMzvak0kI6Rv1sekEHQg=;
-        b=VKJH3jynHExwz7NhLWH/gUYB6qgW4gFUGbwK3k0BR24ucb1WXLS9SkkBdnuHVNJDBu
-         lSow5G1x+NQo540tS2Vq5NdwfkmtIPzQ61cAApRZM6Mooh944Jfgy91GuLrmHrCJ3gkW
-         aiJ7liS2Cuigntb1QsXiBt0CMZIARMhLPIaTSK+mtqmWlGfI5UnDPlDRNLqZQQ0bAi1I
-         pxMgBhLpuHUH3vlwFVbW6YF/RSv7aBqy2QwKuAFdMRAVvYe/3anu+LVxbA3eR2sGDjQA
-         ohj2tO8YdTJj98hX7JkoB+JVTnYTVTt/jEcfATdCA8bm4jo1mNsgIOBlkl3QItaXEmX+
-         sTeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762854660; x=1763459460;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=COk/1h5aEbbVr2g94DPcBm4hMzvak0kI6Rv1sekEHQg=;
-        b=kX4m2WV+R6oBUWZ+GdbUtIXCRqr7ximXcUtItuM1OrgnCLcl3BTEmpk+QytGeNyeIb
-         gkCmbT9Ib7afn26+QAyg8nNPP4bLNibf93oVqYdVtKd58x8AaBqOHrpN5QD9UGIMvoLS
-         GNacY7l/HNeaPqtszt6we/haxxn/hPAZagRxl4cNMva/nlXLNpf/LxqwKuvsg4coF8K5
-         q28EGRXssYaixFNUMR1pfB/ACPC6kSl982Xhn+UgjjeJDPawQWeorR3dEBcEPcHIU3/T
-         hUZjFgP449inTLNySd7wt2XAJ/K8g14KIz6rMq+UnRPdSIHpU3U5rKHIOkq8KWijQNU8
-         NPlg==
-X-Forwarded-Encrypted: i=1; AJvYcCWt0UOyCbHSGq6B4HTpL/pY8UTnhYJ87NoWWuPx+y5heO/moohMhY68Xi9Qxw+j2gtkv56FHChnok51Hvpz@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEyRAHSgdL/Ct+BrKs1zALk2YikhLQ2OgreUqCM+QAMYjsdinC
-	nH28OXz4I7Y1SF7oLufMPp2+1Ct8jqqrayqy9FvgBity8exnToySl3GPOdqhIHWBmyA=
-X-Gm-Gg: ASbGncv9vcPxd5xmihM+q40Qgw/1SUabBksKzMH1rUV5TVPd3D+JntgJHuB6CpeNjK0
-	PEsLvWlt6hSXazgV+TysIkUdPUBVQbvGnofib7R6Rj382lupXweED49S4UH3RuFtAQVCCcRxlR7
-	OhIIoxxglNVG2o9vgLnP3jF3iNzqvwr+wVZi5JrzX2pNe7swObzdhNTKav81gL0b8uzm07Q9r95
-	MAgVnP6+JT3OYJD2XaNgxz7Giu+dFFjqRZFeL7n//jzKZ1F5Tz9h2i+QUfFw8pR7wF+9Wfjmjnd
-	fjArQ470LD1hlqmMCh57LgvKBwratA8XGw6A0Vpj/wMrIaxUxxI+xFKfjZvjEU+K2b7omhQ0Emj
-	HmKTX3BrzjToV8zsEzeYuYai4Rc3ecWyJXGj3F0GVMgsUQRTwy73VI+zCp+h6F4BQpGhowKhkTu
-	7+tGMoK8oKxkIlMzyStsnetkOx
-X-Google-Smtp-Source: AGHT+IEGGihhO34PtW58vPvnGz96BDqop1knHZcnwdzlKCuwCgN24yrgoK5E5PupaYVgZy5LodYAqg==
-X-Received: by 2002:a5d:5d81:0:b0:429:c711:22d8 with SMTP id ffacd0b85a97d-42b2dc1eb5dmr10445085f8f.15.1762854659576;
-        Tue, 11 Nov 2025 01:50:59 -0800 (PST)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac675caecsm27136013f8f.30.2025.11.11.01.50.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 01:50:58 -0800 (PST)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH v3] module: replace use of system_wq with system_dfl_wq
-Date: Tue, 11 Nov 2025 10:50:49 +0100
-Message-ID: <20251111095049.67658-1-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.51.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZU72NPK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762861456; x=1794397456;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8hgo0SAlxDhqel27kLJFUy/dCtq9ThidmmkRD+8hvR4=;
+  b=LZU72NPKF9J647HtlyNU1v8zTRgdqKmgM2a6wLW5SaFKi4GPiB9P1Inx
+   rPT+yOnRdnnRTlgcENUxHg8l0oWOOeGKoxA1+lWbEL1jGfLSDFt49zKrl
+   8HfW8XVlRwXk23SqpHke/Kpjftlvd/FHd0B3GtG6+w6mfIosDYEbS0zHz
+   feoj1VKjJ7atr3JdfJp4iFitBzokh5jl/GLEFDTYp7TVUJUinTvAblOuz
+   j3yC4LLOAeXoscAZsKBeOX+gGIydb3r6C9/LNw8CqaCS1MsUQKm1a+3Rx
+   5m7aCt29eIxcIICAkrByojJaGA/RJBcKsAZK5z4RinClF6K8WriHOznQY
+   w==;
+X-CSE-ConnectionGUID: aYo+lPBbRbSh00FMgsZ4pw==
+X-CSE-MsgGUID: Di1vNDxHR3yAht1prPDCYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="64804535"
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="64804535"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2025 03:42:40 -0800
+X-CSE-ConnectionGUID: eSASJ1xXSnGDKl/SB9RQ5w==
+X-CSE-MsgGUID: yynfhYt5TZ2P13SXesI9FQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,296,1754982000"; 
+   d="scan'208";a="188261875"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa010.jf.intel.com with ESMTP; 11 Nov 2025 03:42:38 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 607B896; Tue, 11 Nov 2025 12:42:36 +0100 (CET)
+Date: Tue, 11 Nov 2025 12:42:36 +0100
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	Hans Verkuil <hverkuil+cisco@kernel.org>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Rusty Russell <rusty@rustcorp.com.au>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
+ characters
+Message-ID: <aRMhLEs9NpGexL7B@black.igk.intel.com>
+References: <20251010030348.it.784-kees@kernel.org>
+ <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Currently if a user enqueues a work item using schedule_delayed_work() the
-used wq is "system_wq" (per-cpu wq) while queue_delayed_work() use
-WORK_CPU_UNBOUND (used when a cpu is not specified). The same applies to
-schedule_work() that is using system_wq and queue_work(), that makes use
-again of WORK_CPU_UNBOUND.
+On Wed, Nov 05, 2025 at 02:03:59PM +0100, Daniel Gomez wrote:
+> On 10/10/2025 05.06, Kees Cook wrote:
+> >  v2:
+> >  - use static_assert instead of _Static_assert
+> >  - add Hans's Reviewed-by's
+> >  v1: https://lore.kernel.org/lkml/20251008033844.work.801-kees@kernel.org/
+> > 
+> > Hi!
+> > 
+> > A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
+> > strings[1]. While this stands out pretty strongly when you look at the
+> > code, and we can't do anything about a binary module that just plain lies,
+> > we never actually implemented the trivial compile-time check needed to
+> > detect it.
+> > 
+> > Add this check (and fix 2 instances of needless trailing semicolons that
+> > this change exposed).
+> > 
+> > Note that these patches were produced as part of another LLM exercise.
+> > This time I wanted to try "what happens if I ask an LLM to go read
+> > a specific LWN article and write a patch based on a discussion?" It
+> > pretty effortlessly chose and implemented a suggested solution, tested
+> > the change, and fixed new build warnings in the process.
+> > 
+> > Since this was a relatively short session, here's an overview of the
+> > prompts involved as I guided it through a clean change and tried to see
+> > how it would reason about static_assert vs _Static_assert. (It wanted
+> > to use what was most common, not what was the current style -- we may
+> > want to update the comment above the static_assert macro to suggest
+> > using _Static_assert directly these days...)
+> > 
+> >   I want to fix a weakness in the module info strings. Read about it
+> >   here: https://lwn.net/Articles/82305/
+> > 
+> >   Since it's only "info" that we need to check, can you reduce the checks
+> >   to just that instead of all the other stuff?
+> > 
+> >   I think the change to the comment is redundent, and that should be
+> >   in a commit log instead. Let's just keep the change to the static assert.
+> > 
+> >   Is "static_assert" the idiomatic way to use a static assert in this
+> >   code base? I've seen _Static_assert used sometimes.
+> > 
+> >   What's the difference between the two?
+> > 
+> >   Does Linux use C11 by default now?
+> > 
+> >   Then let's not use the wrapper any more.
+> > 
+> >   Do an "allmodconfig all -s" build to verify this works for all modules
+> >   in the kernel.
+> > 
+> > 
+> > Thanks!
+> > 
+> > -Kees
+> > 
+> > [1] https://lwn.net/Articles/82305/
+> > 
+> > Kees Cook (3):
+> >   media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
+> >   media: radio: si470x: Fix DRIVER_AUTHOR macro definition
+> >   module: Add compile-time check for embedded NUL characters
+> > 
+> >  include/linux/moduleparam.h                   |  3 +++
+> >  drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
+> >  drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
+> >  3 files changed, 10 insertions(+), 7 deletions(-)
+> > 
+> 
+> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+> 
+> I have also tested a build of v6.18-rc3 + patches using allmodconfig:
+> 
+> Tested-by: Daniel Gomez <da.gomez@samsung.com>
 
-This lack of consistency cannot be addressed without refactoring the API.
+Folks, are you aware that this change blown up the sparse?
+Now there is a "bad constant expression" to each MODULE_*() macro line.
 
-This continues the effort to refactor workqueue APIs, which began with
-the introduction of new workqueues and a new alloc_workqueue flag in:
+Nice that Uwe is in the Cc list, so IIRC he is Debian maintainer for sparse
+and perhaps has an influence to it to some extent.
 
-commit 128ea9f6ccfb ("workqueue: Add system_percpu_wq and system_dfl_wq")
-commit 930c2ea566af ("workqueue: Add new WQ_PERCPU flag")
-
-Switch to using system_dfl_wq, the new unbound workqueue, because the
-users do not benefit from a per-cpu workqueue.
-
-Suggested-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
----
-Changes in v3:
-- rebased on 6.18-rc5
-- commit log improved
-
-Changes in v2:
-- a per-cpu wq is not needed: replace system_wq with system_dfl_wq
----
- kernel/module/dups.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/module/dups.c b/kernel/module/dups.c
-index bd2149fbe117..0b633f2edda6 100644
---- a/kernel/module/dups.c
-+++ b/kernel/module/dups.c
-@@ -113,7 +113,7 @@ static void kmod_dup_request_complete(struct work_struct *work)
- 	 * let this linger forever as this is just a boot optimization for
- 	 * possible abuses of vmalloc() incurred by finit_module() thrashing.
- 	 */
--	queue_delayed_work(system_wq, &kmod_req->delete_work, 60 * HZ);
-+	queue_delayed_work(system_dfl_wq, &kmod_req->delete_work, 60 * HZ);
- }
- 
- bool kmod_dup_request_exists_wait(char *module_name, bool wait, int *dup_ret)
-@@ -240,7 +240,7 @@ void kmod_dup_request_announce(char *module_name, int ret)
- 	 * There is no rush. But we also don't want to hold the
- 	 * caller up forever or introduce any boot delays.
- 	 */
--	queue_work(system_wq, &kmod_req->complete_work);
-+	queue_work(system_dfl_wq, &kmod_req->complete_work);
- 
- out:
- 	mutex_unlock(&kmod_dup_mutex);
 -- 
-2.51.1
+With Best Regards,
+Andy Shevchenko
+
 
