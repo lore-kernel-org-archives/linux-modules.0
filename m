@@ -1,157 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9883AA1AB;
-	Tue, 11 Nov 2025 12:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6396B32825C;
+	Tue, 11 Nov 2025 13:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762864502; cv=none; b=CWoWcbufpy4l6zRYIO4E4xwRYIJrNv/CfQiaIbmCUOeZbQgYzXhdD+ZeZUZlmxl2Zt2FLhlJcSAEb5JMai7o8/uaCDYVCGYcpooiETahgBEPE89Q6jeXvN5A0Q5ekhWcSTOlW3j52EWbPX4hXesEKioLM4MH7O05pRNfXF4IR5Y=
+	t=1762866847; cv=none; b=PMgS7RIKFRhMM3szI8we3ZP60R7GFJEcSg0vSHj1FW43Dpyan1m4ET7n3kpIh4Q+kystp1C1atTi9nllGxFL2aRwLH3ulBYJUrCEThSV8wt+UGnkmHVi8bPxYZJQq4jBucZLP/eeLpxRjENth3QUYbj4vXv7EIHwbz4qzI7Ahoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762864502; c=relaxed/simple;
-	bh=P9kSJYPFha9VBnjvxXS0Y2nT53KXisQsU5JE1jGqHp0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R0/qGOFIxkkHWTpZscK9pwDSxdbSM5/iFHo07gwbdGDtCR0BCtMxMegWJAvEasr7onEEWJK3KjN4N+O8ZHnoS5OyGUv0vBWIyl5PgbjSGJR5JikxH/zZk41W+fxCtegqrRVV9TKQR2kpCYJWPuq1QGACqMsvzJJtkqrqB5EFnQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e955swYi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1762866847; c=relaxed/simple;
+	bh=lOPcvJvsBokQlbrkZq0019mQ3NXhOv5Cd9rNI69A+t8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F/KxpH2x3YSKjs17cYfBsK5/WOIgebkEMV7A50wwFXF/vrWqktYxqIROpMr62qaXArUJ+75PpEWcg8uekLuGdMTkhqrxHBjPSou7qlTNpEucmoEbKoHRQPh7l1hc8EMc0hsPGysw30fBEtnwDKUriJF5jVYI/BZKkcMQwJ6f/LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UeczfTSX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e955swYi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93172C19425;
-	Tue, 11 Nov 2025 12:34:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UeczfTSX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E11FC116B1;
+	Tue, 11 Nov 2025 13:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762864501;
-	bh=P9kSJYPFha9VBnjvxXS0Y2nT53KXisQsU5JE1jGqHp0=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=e955swYiMNNYCa7VwRQlSOyFTTfCDSmSdI6bJgsUoU2yhrRFa1DdQu4RLICy+kYem
-	 sjrHJxwqY1uaIzocJnJFb5g0XGYJ4O9VQHKAHILWdLsFXBhZqgtuVDdw4WRqGAHOKB
-	 KOP4i2enGCjielpqLssCrG3oDgBHvsmlqYXEEe2jl7Ie1ThdZrmCbaH+5dJekpgWaP
-	 KKWTRYegj4o6a+C6hZoP5pfbfdk4JQKTFeVdwO02CEFo0a9WiiuzTozni/Oqzas7+p
-	 mHGLn4/d2ArGJ6y19mT0BBdwY3lTqIUlxKKM2iT04fITVrZGeTJEJyDtui736jtK98
-	 ZCobIORO1MfTA==
-Message-ID: <ded3ba14-d2d8-40be-8c0c-d41c4307347c@kernel.org>
-Date: Tue, 11 Nov 2025 13:34:56 +0100
+	s=k20201202; t=1762866846;
+	bh=lOPcvJvsBokQlbrkZq0019mQ3NXhOv5Cd9rNI69A+t8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UeczfTSXMaWKnvtU2J+REgCmggMw0575oBUUaVAl8kCS6OANmvae9EAI5OTxgz+UK
+	 ipY24Y5KHd6uewJHOYC6uS4Y0KEMxCiYjJIcBNwOeZN+5K0ttQlzCyfgqeYivTb12t
+	 0Ukcy9oQ5iIgGzzY8tnuXpXa7UUdip7cwpeKEVjgKCqslQEwNiSZaNDZXztrS4DFYA
+	 pNkpio9hi796rpZpj65248e4/kyGiK4u3FNIT11Nt4crRh+hQik+loezEPtCcW/OOz
+	 YRyyNrZ7wd+mEq4SvQP5+tGBurJPngegleECdiSZsoFPaY/RkjzX9Z0fpYkU9Jmccu
+	 InOjZhRCap/2g==
+Date: Tue, 11 Nov 2025 14:14:04 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Kees Cook <kees@kernel.org>, Ricardo Ribalda <ribalda@chromium.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-media@vger.kernel.org, 
+	Patchwork Integration <patchwork@media-ci.org>, linux-modules@vger.kernel.org, linux-sparse@vger.kernel.org
+Subject: Re: [v2,0/3] module: Add compile-time check for embedded NUL
+ characters
+Message-ID: <ivqpin3idio22q3ccqvkvvz66yezcd7c7b2q3hgqzdp2xxhf26@w6wsmifvsev5>
+References: <20251010030348.it.784-kees@kernel.org>
+ <68ed624c.050a0220.3ba739.64ea@mx.google.com>
+ <D1CBCBE2-3A54-410A-B15C-F1C621F9F56B@kernel.org>
+ <CANiDSCu6xZAuSF5_M-4BMRc52hbSh_1QfDQqaeGR4iD5fdQjQg@mail.gmail.com>
+ <202510141344.E0ABCD2C7@keescook>
+ <CANiDSCsBAq3Yx4ybarUb_1NkQ-bvfXvWqb-DfqXatkiYJFZWiQ@mail.gmail.com>
+ <202510201127.D97BCF2@keescook>
+ <CANiDSCtbrM4Fg_p56EdV09ts_j8HnMCc1hGH31-BZvv03Z0DjQ@mail.gmail.com>
+ <202510201146.F12EA92@keescook>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH v2 0/3] module: Add compile-time check for embedded NUL
- characters
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Hans Verkuil <hverkuil+cisco@kernel.org>,
- Malcolm Priestley <tvboxspy@gmail.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil@kernel.org>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Rusty Russell <rusty@rustcorp.com.au>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, linux-kernel@vger.kernel.org,
- linux-media@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20251010030348.it.784-kees@kernel.org>
- <3dd1a00d-08f7-4801-a9f7-d6db61c0e0f3@kernel.org>
- <aRMhLEs9NpGexL7B@black.igk.intel.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <aRMhLEs9NpGexL7B@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202510201146.F12EA92@keescook>
 
-On 11/11/2025 12.42, Andy Shevchenko wrote:
-> On Wed, Nov 05, 2025 at 02:03:59PM +0100, Daniel Gomez wrote:
->> On 10/10/2025 05.06, Kees Cook wrote:
->>>  v2:
->>>  - use static_assert instead of _Static_assert
->>>  - add Hans's Reviewed-by's
->>>  v1: https://lore.kernel.org/lkml/20251008033844.work.801-kees@kernel.org/
->>>
->>> Hi!
->>>
->>> A long time ago we had an issue with embedded NUL bytes in MODULE_INFO
->>> strings[1]. While this stands out pretty strongly when you look at the
->>> code, and we can't do anything about a binary module that just plain lies,
->>> we never actually implemented the trivial compile-time check needed to
->>> detect it.
->>>
->>> Add this check (and fix 2 instances of needless trailing semicolons that
->>> this change exposed).
->>>
->>> Note that these patches were produced as part of another LLM exercise.
->>> This time I wanted to try "what happens if I ask an LLM to go read
->>> a specific LWN article and write a patch based on a discussion?" It
->>> pretty effortlessly chose and implemented a suggested solution, tested
->>> the change, and fixed new build warnings in the process.
->>>
->>> Since this was a relatively short session, here's an overview of the
->>> prompts involved as I guided it through a clean change and tried to see
->>> how it would reason about static_assert vs _Static_assert. (It wanted
->>> to use what was most common, not what was the current style -- we may
->>> want to update the comment above the static_assert macro to suggest
->>> using _Static_assert directly these days...)
->>>
->>>   I want to fix a weakness in the module info strings. Read about it
->>>   here: https://lwn.net/Articles/82305/
->>>
->>>   Since it's only "info" that we need to check, can you reduce the checks
->>>   to just that instead of all the other stuff?
->>>
->>>   I think the change to the comment is redundent, and that should be
->>>   in a commit log instead. Let's just keep the change to the static assert.
->>>
->>>   Is "static_assert" the idiomatic way to use a static assert in this
->>>   code base? I've seen _Static_assert used sometimes.
->>>
->>>   What's the difference between the two?
->>>
->>>   Does Linux use C11 by default now?
->>>
->>>   Then let's not use the wrapper any more.
->>>
->>>   Do an "allmodconfig all -s" build to verify this works for all modules
->>>   in the kernel.
->>>
->>>
->>> Thanks!
->>>
->>> -Kees
->>>
->>> [1] https://lwn.net/Articles/82305/
->>>
->>> Kees Cook (3):
->>>   media: dvb-usb-v2: lmedm04: Fix firmware macro definitions
->>>   media: radio: si470x: Fix DRIVER_AUTHOR macro definition
->>>   module: Add compile-time check for embedded NUL characters
->>>
->>>  include/linux/moduleparam.h                   |  3 +++
->>>  drivers/media/radio/si470x/radio-si470x-i2c.c |  2 +-
->>>  drivers/media/usb/dvb-usb-v2/lmedm04.c        | 12 ++++++------
->>>  3 files changed, 10 insertions(+), 7 deletions(-)
->>>
->>
->> Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
->>
->> I have also tested a build of v6.18-rc3 + patches using allmodconfig:
->>
->> Tested-by: Daniel Gomez <da.gomez@samsung.com>
+On Mon, Oct 20, 2025 at 11:51:05AM -0700, Kees Cook wrote:
+> On Mon, Oct 20, 2025 at 08:35:53PM +0200, Ricardo Ribalda wrote:
+> > Hi Kees
+> > 
+> > On Mon, 20 Oct 2025 at 20:29, Kees Cook <kees@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 15, 2025 at 09:33:40AM +0200, Ricardo Ribalda wrote:
+> > > > Hi Dan
+> > > >
+> > > > On Tue, 14 Oct 2025 at 22:45, Kees Cook <kees@kernel.org> wrote:
+> > > > >
+> > > > > On Tue, Oct 14, 2025 at 08:24:00AM +0200, Ricardo Ribalda wrote:
+> > > > > > Hi Kees
+> > > > > >
+> > > > > > Thanks for the report.
+> > > > > >
+> > > > > >
+> > > > > > On Tue, 14 Oct 2025 at 07:41, Kees Cook <kees@kernel.org> wrote:
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > > > > On October 13, 2025 1:34:20 PM PDT, Patchwork Integration <patchwork@media-ci.org> wrote:
+> > > > > > > >Dear Kees Cook:
+> > > > > > > >
+> > > > > > > >Thanks for your patches! Unfortunately the Media CI robot detected some
+> > > > > > > >issues:
+> > > > > > > >
+> > > > > > > ># Test static:test-smatch
+> > > > > > > >
+> > > > > > > >drivers/media/usb/usbtv/usbtv-core.c:157:1: error: bad constant expression
+> > > > > > >
+> > > > > > > Where can I find what this test actually does?
+> > > > > > >
+> > > > > > > >For more details, check the full report at:
+> > > > > > > >https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.htm .
+> > > > > > >
+> > > > > > > This webserver appears to be misconfigured to send compressed output without the right headers? I can't actually view this URL.
+> > > > > >
+> > > > > > I will follow-up with fdo maintainers to figure out what happened.
+> > > > > > there. On the meantime you can use these url that seems to work:
+> > > > > > https://linux-media.pages.freedesktop.org/-/users/patchwork/-/jobs/85913402/artifacts/report.txt
+> > > > > > https://gitlab.freedesktop.org/linux-media/users/patchwork/-/jobs/85913398
+> > > > > >
+> > > > > > Basically sparse/smatch do not seem to understand the constant.
+> > > > >
+> > > > > Yeah, I managed to find the actual scripts that are run for the
+> > > > > static-sparse/smatch tests. It looks like those tools aren't correctly
+> > > > > handling string literals for __builtin_strlen(), which is a constant for
+> > > > > constant arguments.
+> > > > >
+> > > > > So, that's a C parsing bug in those tools (GCC and Clang are fine).
+> > > >
+> > > > Could you take a look at this patch:
+> > > > https://patchwork.linuxtv.org/project/linux-media/patch/20251010030610.3032147-3-kees@kernel.org/
+> > > >
+> > > > Seems that sparse/smatch are not very happy about __builtin_strlen()
+> > > >
+> > > > Could you fix support for __builtin_strlen() in your tool?
+> > > >
+> > > > Once Kees lands his patch it will break all the CIs using
+> > > > sparse/smatch, including media-ci.
+> > > >
+> > > > Eg:
+> > > >
+> > > > drivers/media/pci/zoran/zr36060.c:33:1: error: bad constant expression
+> > > > drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
+> > > > drivers/media/usb/pvrusb2/pvrusb2-dvb.c:19:1: error: bad constant expression
+> > >
+> > > We've waited a decade to get the embedded-NUL check into the modinfo
+> > > macros, so I'm happy to wait until we can get the CI tooling updated.
+> > 
+> > For media-ci. It will probably be after 6.19rc1
+> > 
+> > Basically, when
+> > https://lore.kernel.org/linux-sparse/CACePvbVG2KrGQq4cNKV=wbO5h=jp3M0RO1SdfX8kV4OukjPG8A@mail.gmail.com/T/#t
+> > lands in media-committers.
 > 
-> Folks, are you aware that this change blown up the sparse?
-> Now there is a "bad constant expression" to each MODULE_*() macro line.
-
-Thanks for the heads up.
-
-I can see this thread:
-
-https://lore.kernel.org/all/D1CBCBE2-3A54-410A-B15C-F1C621F9F56B@kernel.org/#t
-
-And this:
-
-https://lore.kernel.org/linux-sparse/CACePvbVG2KrGQq4cNKV=wbO5h=jp3M0RO1SdfX8kV4OukjPG8A@mail.gmail.com/T/#t
-
+> That's external to Linux, though; it's a patch for sparse and smatch. How
+> often does the CI rebuild sparse and smatch?
 > 
-> Nice that Uwe is in the Cc list, so IIRC he is Debian maintainer for sparse
-> and perhaps has an influence to it to some extent.
+> > How did you plan to land this series? via which tree?
 > 
+> I assume it would go either via the modules tree or the hardening tree.
+> (Again, no rush.)
 
-Would it be better approach to postpone patch 3 from Kent until sparse is fixed?
+FYI, the patch is applied to modules-next, so I was planning to send it
+for v6.19-rc1.
