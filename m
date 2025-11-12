@@ -1,133 +1,99 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A0289E13
-	for <linux-modules@vger.kernel.org>; Wed, 12 Nov 2025 14:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34728341642
+	for <linux-modules@vger.kernel.org>; Wed, 12 Nov 2025 14:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762957312; cv=none; b=ea+STqNPhVA8EgXoN+I5+Qeo/rRrPJ/VgaBDF1OQsRrGSpRLkNfowZdfRq0OP2FgWOV2piFv5TNziFgh9pIrDsEoTZGgACtax/wBP61X/x+m2MN3X91ioSmdqEKC95LkSi0PHoOqZPnnXXee0BM9XL2EC0SYIYghnKJ9EV9hIbU=
+	t=1762959333; cv=none; b=dEM9/Q8tX/dLB04CH77Bp2MO43nBvgAlEyN4f002mIrFjA+VaXdfTls/O+G4+ScjB7vqa3a9QtwD0sX+xL4yGykxxJtHXn4A96N6CsMf5Tp1u1h+LN4CwkOYeyD2VDpvAE5+ADi2xAjZXywPCnya1lKIvNiCb64UPQ6r5iuqcVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762957312; c=relaxed/simple;
-	bh=DErfb1yw71TjXX1m2fEvBmVvRDvk5oiZa5z6kIuTRKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LDSwnzqEUBaoglsILG1bZh4rV6WLx+PlASGnLo3sMi7n6FUKsRqMCNwQYU0j7EYMg7Fe49MmbxKds8b/nGgVtCMzpoCEZYKXysoI0f96vWSww1YJhr6eimmk77VxGbyT1kDJO/SDGtcv603kaNnfB08xnKy2XYlDMu5IUYi1CwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Fwm4E1Ut; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ek/OUc1L; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1762959333; c=relaxed/simple;
+	bh=VvaOpU8/UH8cMCHv+j437vMmYuAqux2R0UTK+ai0Se4=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=Mgdhf1Bwv8CdHcdshOu4RFEvDlRHXF10G9D96GCeD+tku+8AcYDranK6P045j+bNFNNfueHOpsy2z+61xbhEdHW28dGnTYeY5eWW3B1HCzFnxtP2G4d+0vlwb61L8LreJL54MzGYvguR4dXdTXLt6jDC9q+V+vaQ09p5ygEuJ5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Wi0ImtrU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Fwm4E1Ut";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ek/OUc1L"
-Received: from pathway.suse.cz (unknown [10.100.208.146])
-	by smtp-out2.suse.de (Postfix) with ESMTP id E2A561F807;
-	Wed, 12 Nov 2025 14:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1762957308; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Wi0ImtrU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762959331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=97I/A52s9/abeslkIlgFB5lHhNmcwVQr9GlDloyKxh0=;
-	b=Fwm4E1Utf5nc5WoVAJu8cPbGqYJ663EAiMUr/dgD+haLJtJDSIcHPLVCstP0e3WjSOyVfL
-	39XTW3sBJh9rrJpBYxUGdJ/vEbrIGUF1xbftuqISTH9XzIGuFllUp4K1p6cRVP8z78xg9G
-	Lx9r2Hkyv/iU1gSYpAnO1AI1iHmlcxs=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1762957307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=97I/A52s9/abeslkIlgFB5lHhNmcwVQr9GlDloyKxh0=;
-	b=ek/OUc1L8yezFuEAGDJzTqJ+8mCV7yLr5PfXO+bwcp0xVnqW4RJjJ6UsOksg2or/65hKKb
-	GF94DTt31+xP9WOXSka14/oe6F8IQ9cgWvXrVP3QKtCUe6Ax86F4RO8qb3QVsNLhyD24xm
-	8u8FIpZ5z2VqK5lcE6vsJa0kgttZ0Go=
-From: Petr Mladek <pmladek@suse.com>
-To: Petr Pavlu <petr.pavlu@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <kees@kernel.org>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 7/7] kallsyms: Prevent module removal when printing module name and buildid
-Date: Wed, 12 Nov 2025 15:20:03 +0100
-Message-ID: <20251112142003.182062-8-pmladek@suse.com>
-X-Mailer: git-send-email 2.51.1
-In-Reply-To: <20251112142003.182062-1-pmladek@suse.com>
-References: <20251112142003.182062-1-pmladek@suse.com>
+	bh=XnEcES/eMdb8xcUNYxyYTP/uMJ28lCAKuvb73LvVDYA=;
+	b=Wi0ImtrUH3VQwMDch59MsyizGoveYU7r8Wpf0n419ahyGM0sPk73TBm05om6XfvJTBE5fj
+	x5VgtkzqZOQqBBxWKI2ykmyLY+AmkWeOwcWZSyUUOxUKvhfJaZcJuJ9B93HgfU4UoL9gFm
+	HvzhmgHr9gPfQ04TlCp8gWrqqxS3V3M=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-241-YfQTWq4hM2iYIckLzPN4Jw-1; Wed,
+ 12 Nov 2025 09:55:28 -0500
+X-MC-Unique: YfQTWq4hM2iYIckLzPN4Jw-1
+X-Mimecast-MFC-AGG-ID: YfQTWq4hM2iYIckLzPN4Jw_1762959324
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EA89119373F3;
+	Wed, 12 Nov 2025 14:55:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.87])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0EA1F30044E0;
+	Wed, 12 Nov 2025 14:55:18 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20251106192016.GA3318@quark>
+References: <20251106192016.GA3318@quark> <20251106174456.31818-1-dhowells@redhat.com> <20251106174456.31818-3-dhowells@redhat.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A .
+ Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/8] crypto: Add ML-DSA/Dilithium verify support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-5.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	FREEMAIL_CC(0.00)[atomlin.com,iogearbox.net,gmail.com,kernel.org,arm.com,google.com,vger.kernel.org,suse.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[atomlin.com:email,pathway.suse.cz:helo];
-	R_RATELIMIT(0.00)[to_ip_from(RLw9bydq1j5bti46rxed9sjz7y)];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
-X-Spam-Flag: NO
-X-Spam-Score: -5.30
-X-Spam-Level: 
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1232847.1762959317.1@warthog.procyon.org.uk>
+Date: Wed, 12 Nov 2025 14:55:17 +0000
+Message-ID: <1232848.1762959317@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-kallsyms_lookup_buildid() copies the symbol name into the given buffer
-so that it can be safely read anytime later. But it just copies pointers
-to mod->name and mod->build_id which might get reused after the related
-struct module gets removed.
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-The lifetime of struct module is synchronized using RCU. Take the rcu
-read lock for the entire __sprint_symbol().
+> As I mentioned before
+> (https://lore.kernel.org/linux-crypto/20250613170456.GA1284@sol/), this
+> code should go in lib/crypto/.  There seems to be a clean API in
+> crypto/ml_dsa/dilithium.h already.  Just make that the library API.
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- kernel/kallsyms.c | 3 +++
- 1 file changed, 3 insertions(+)
+It's not that simple, as it turns out.  Various of the API structures are
+dependent on the strength-specific #include magic stuff.
+dilithium_{44,65,87}.h (or parts thereof) are used in the generation of those
+structs.
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 5bc1646f8639..202d39f5493a 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -471,6 +471,9 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- 	unsigned long offset, size;
- 	int len;
- 
-+	/* Prevent module removal until modname and modbuildid are printed */
-+	guard(rcu)();
-+
- 	address += symbol_offset;
- 	len = kallsyms_lookup_buildid(address, &size, &offset, &modname, &buildid,
- 				       buffer);
--- 
-2.51.1
+Now, I can move all that stuff into one header file in include/crypto/, but
+it's exposing a lot of the internals.
+
+It also requires the caller to do some of the work in expanding the public key
+and signature into those API structs, so it's probably better to wrap the
+dilithium.h API to a simpler one with just init, update, fini and all-in-one
+functions and have the crypto_sig interface call those (the helper functions
+are pretty much the wrappers I need anyway).
+
+David
 
