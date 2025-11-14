@@ -1,198 +1,331 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25016289358
-	for <linux-modules@vger.kernel.org>; Thu, 13 Nov 2025 04:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D336627990C
+	for <linux-modules@vger.kernel.org>; Fri, 14 Nov 2025 13:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763007015; cv=none; b=HkvNbJO2QtK3r6jI6Qg2Yks7m2IPoMq9H0J4KOdEpvSZbndnzegNHRr4Lg7TnXxE6L9kJHEMWqYujs/GyagXUrQxd3T/qHTr1Mfl5kK/iMWjA+3yK8h0Ipl1lRTPiLsRVPCXz9so5uZd/U6OvH4JI+P4JD4mcUQbZDOcDPgNZVA=
+	t=1763125476; cv=none; b=j0x8lLLxws7fGYXrFb1txrOatgkED7i7JqHPh2cQbaF0FMt+AzpghFnKWQyXfF3f/45HKci6cS9dlfIX8bIOSilY6HAG3/xsxNO1kW5gSAKdwRurBienc/OWnHd6VAixU/6WlM5zLs0/hZiDev6/HY1lP2YgHs6qf9q3Seww5+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763007015; c=relaxed/simple;
-	bh=zdLHuuMTe46EsyhV/bM1eTvKdfpTyHz80agisPFVCuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H0x1lzEePxAoaVw+OXeHctVtuZMQVEcCBb3pp9Ms6hGA1jp8fLqhnMG/BFRQ3wHoE7bPJiT16Atw8octA3bMfymkgu9Au0XPhUCSQ8RK8FRKVoysygPHm4avHSKFbimLsXNcDXQ450dHH3S3sU3Bwwo1yrIuXE9E2C5Lv+y6bCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UK9cali3; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=gskfUTpw; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1763125476; c=relaxed/simple;
+	bh=mJMSS9RzJ9Gn+CgJBw19jj5u7pcKxSJxWoXqvuccwxU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mJ5ZOqE8Ub88x8+MEeNF/A+2c6BEUwMd/YIYQ8ollch+Xg9V80YrtpmeuN9sPcdsQIxnlH8jVOJUKYWIo0gex8pQXlk4F6UdAktpWsiz5H3nw7UNT+yNCU2bd1QzybwwaydAIRoGynl9sgDrJHNHdau0VWBgq6k/oI16bVR59S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fpxw8CKq; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UK9cali3";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="gskfUTpw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fpxw8CKq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763007013;
+	s=mimecast20190719; t=1763125473;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
-	b=UK9cali3rYxqnUnx1WKwHY5mIeLdeh/PwKomQoAkrg/iJDq9LKEKuIBH9DbR9y+pw8ANpQ
-	pzPQwGrJwMICfqAV97qfuJvOhTr+1PMbdQ3xjzD140IMUtyNA/SITEvjloXUrOdSFdgm8e
-	XZ1a7Bz4pD+v9AB2/IHK68PHlKqxT0o=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-252-8P1eRjOlO9mKon7n8GxpIw-1; Wed, 12 Nov 2025 23:10:11 -0500
-X-MC-Unique: 8P1eRjOlO9mKon7n8GxpIw-1
-X-Mimecast-MFC-AGG-ID: 8P1eRjOlO9mKon7n8GxpIw_1763007011
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-b99d6bd6cc9so377691a12.1
-        for <linux-modules@vger.kernel.org>; Wed, 12 Nov 2025 20:10:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763007010; x=1763611810; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
-        b=gskfUTpwvpr7GgL9lhSxHuBqkbWXrWdUM4GQDLuxst7w8koBW8OSryzYjTmf3D3VgX
-         tx1AYILH2dyQcKUlS5lTvFyVRrEepi67s87UDnssMK7WmLXwY4YCeEos9dCxdoJzovnE
-         UhiVYX1vur4TDFJrWTtMUOQVkEB+UaggyOJw1OYC9h/9pFpMsvxAq0/rquh2xx8mZTZQ
-         buTSs9i3ZYffqoRxZvzzOyfO2depQ+Fx9M5iQW32hJzb2xm/6KJ2IAWQCEg5XjHr//Ga
-         OuEM4YsZlh8w2ZVBqO7BbyopQ1LyTP7IBxSIILteRXsHsxWB+fRQlDVuycwcOF2v+NCK
-         PSiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763007010; x=1763611810;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
-        b=flpXlHjHJV2a9aoloOPVbGNkyAHVjLujKNretn+lNsentsJnkIpuq4m67nE18ucod5
-         5bAcd+IfReYV1rEmiprV+iCD51qO0v2Ws37D5ItCp6BcGICu2IUos9qLYYSgGrM2goU2
-         o44qKoIdzsxFQsuQnKjOqcPqINNeOFicM+Qa7DpGNBW0xlu+xNYv5LFwHwNgnnyv1Jnt
-         F1xNqMBzJ6Zi/3tIuIJVFE7caYbOJpPu8ofghlT3XrJY7pWpOTZeNNvzgLusNoCgzHGI
-         NRsV4x1j5w3kfwT//qK/ZrD9b3EHhy22Q7/3r9ErxYsnnMVoBQH7Hd8bQeHeBjgKKJ1H
-         NxQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXS97Y7vP9XXHOACt6BqnCNDg1Oa9ekzA6CXl1MNusyWG9MCidW9jdbVPHT+VJHCjUwh+Epex9lDsOBDUr0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOVSz/uhiqyON21eE3c0/c/k4o73olCTJfzkgb42cPEfkHLufE
-	SBsgUfryjMj5Zk/ZYUJA8tNYO/ezhz82c2y/RiVyHAICEGqlvYGCHLdzFSR0SvgQt+OPd26DJz/
-	m/9x0NBJOQs+Og/YYS+Rm5H6lGdZ5Aar3v5pnwiohDRl1mft1yt9jon/OtA2xZGUFXjk=
-X-Gm-Gg: ASbGncsmBF4ESsCpdAPPluRjrT7iD+9bWzu5GvdvTSbphMFslh9BAivjhfW2q+vUc4J
-	NRvJIgghkfyP8tuU5mGxUPS2t1rTqtiXcerPjhlDMn8fEiBSR2pn75JuTAYe4Yw7dWhxToNUKjj
-	sxeQF3JK0oNpnOFcgmsXQFUackF38UQlpZRfWvvjfEP5RCDTl6wi0aj7skQSiZPUvnZxptriTBz
-	V/+dEIZkWVjCF8VdLuaNkCqx18OkkKlaNJKgnEeC4gZr6hiIH0lpatdJBvwTpqc6bh8s4DH57/L
-	7iKZNJ3G5XQ8awfBmj2NlKaHK6L4wuAEkQGPHA3KMOIjYTN+xbJ9myPXn6RAzC0Nbw==
-X-Received: by 2002:a17:903:4b04:b0:298:529b:8956 with SMTP id d9443c01a7336-298529b8bd1mr54723705ad.56.1763007010486;
-        Wed, 12 Nov 2025 20:10:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFWDwN+5E+tsPmc61Ky6R88DQMezRVeNlZMFO+j6cmwW//kMzz/cF3f2/ywvf8oGJ38G1y9PQ==
-X-Received: by 2002:a17:903:4b04:b0:298:529b:8956 with SMTP id d9443c01a7336-298529b8bd1mr54723255ad.56.1763007009881;
-        Wed, 12 Nov 2025 20:10:09 -0800 (PST)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2346dasm8193665ad.7.2025.11.12.20.10.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 20:10:09 -0800 (PST)
-Date: Thu, 13 Nov 2025 12:06:02 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-Message-ID: <42qcfcxxlmwphctzvji76hy5tycfabiiv5u6zw6lgg2p3e2jwv@fp4g2y7ecf2y>
-References: <20250928030358.3873311-1-coxu@redhat.com>
- <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
- <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
- <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
- <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
- <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
- <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
- <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
- <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MUOvNt/admaEgWCOU636kbVRsDVuwzYnDCb9rsroxOM=;
+	b=Fpxw8CKq86DewPeFzolG/7SusJz3n9p812cZ+bzFfRYv3KD1t51lIdPAwVjLTJhmgwwuVt
+	1ROVgRdjEk1SGyW+3fjNuMdrP168aVBX1M7k7TyKAMZVWj6rnOmaN6oyWeIR4YnTROgNNN
+	3Gtb12V7DPTZxkSWPbQ8/ulgGVg2sEg=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-213-TjSMxLQ8McqLJqR77qX_-A-1; Fri,
+ 14 Nov 2025 08:04:29 -0500
+X-MC-Unique: TjSMxLQ8McqLJqR77qX_-A-1
+X-Mimecast-MFC-AGG-ID: TjSMxLQ8McqLJqR77qX_-A_1763125468
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6C08119560AF;
+	Fri, 14 Nov 2025 13:04:27 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.42.28.87])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BF9D918004A3;
+	Fri, 14 Nov 2025 13:04:22 +0000 (UTC)
+From: David Howells <dhowells@redhat.com>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David Howells <dhowells@redhat.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	linux-crypto@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/9] lib/crypto: Add ML-DSA signing
+Date: Fri, 14 Nov 2025 13:04:03 +0000
+Message-ID: <20251114130417.1756230-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Fri, Nov 07, 2025 at 02:28:13PM -0500, Mimi Zohar wrote:
->On Thu, 2025-11-06 at 17:15 -0500, Mimi Zohar wrote:
->> On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
->> > On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
->> > > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
->> > [...]
->> > >
->> > > Hi Coiby,
->> > >
->> > > Based on the conversation with Paul, there is no reason to remove the existing
->> > > security_kernel_post_read_file() call.
->> > >
->> > > The changes are similar to the 2nd link, but a bit different.
->> > > - Define a single enumeration named READING_MODULE_COMPRESSED.
->> > >
->> > > - In module/main.c add a new security_kernel_post_read_file() call immediately
->> > > after decompressing the kernel module.  Like a previous version of this patch,
->> > > call kernel_read_file() with either READING_MODULE or READING_MODULE_COMPRESSED
->> > > based on MODULE_INIT_COMPRESSED_FILE.
->> > >
->> > > - In ima_post_read_file() defer verifying the signature when the enumeration is
->> > > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kernel_module.)
->> >
->> > Hi Mimi,
->> >
->> > Thanks for summarizing your conversation with Paul! I can confirm Paul's
->> > approach works
->> > https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
->> >
->> > While testing the patch today, I realized there is another
->> > issue/challenge introduced by in-kernel module decompression. IMA
->> > appraisal is to verify the digest of compressed kernel module but
->> > currently the passed buffer is uncompressed module. When IMA uses
->> > uncompressed module data to calculate the digest, xattr signature
->> > verification will fail. If we always make IMA read the original kernel
->> > module data again to calculate the digest, does it look like a
->> > quick-and-dirty fix? If we can assume people won't load kernel module so
->> > often, the performance impact is negligible. Otherwise we may have to
->> > introduce a new LSM hook so IMA can access uncompressed and original
->> > module data one time.
->>
->> ima_collect_measurement() stores the file hash info in the iint and uses that
->> information to verify the signature as stored in the security xattr.
->> Decompressing the kernel module shouldn't affect the xattr signature
->> verification.
->
->In the case when the compressed kernel module hasn't previously been measured or
->appraised before loading the kernel module, we need to "collect" the file data
->hash on READING_MODULE_COMPRESSED, but defer appraising/measuring it.
->
->An alternative to your suggestion of re-reading the original kernel module data
->to calculate the digest or defining a new hook, would be to define "collect" as
->a new "action" and pass the kernel_read_file_id enumeration to
->process_measurement().  IMA_COLLECTED already exists.  Only IMA_COLLECT would
->need to be defined.  The new collect "action" should be limited to
->func=MODULE_CHECK.
->
->The downside of this alternative is that it requires a new collect rule:
->collect func=MODULE_CHECK mask=MAY_READ uid=0
->appraise func=MODULE_CHECK appraise_type=imasig|modsig
+Hi Herbert, Eric, et al.,
 
-Thank for suggesting an alternative! I've implemented the idea in
-https://github.com/coiby/linux/tree/in_kernel_decompression_ima_collect
+Building on the SHA-3 lib-crypto patches now in Eric's tree, here's a set of
+patches does the following:
 
-Note besides a new collect rule, another change is needed. Currently,
-process_measurement only accepts enum ima_hooks thus it can't tell if
-it's READING_MODULE_COMPRESSED so to only do collect action. So I
-create a fake MODULE_COMPRESSED_CHECK func.
+ (1) Add SHAKE-256 crypto_sig support, generating 32-byte fixed output.  The
+     XOF features aren't available through this.  SHAKE-128 crypto_sig support
+     isn't required for ML-DSA, so I haven't implemented that at this time.
 
-And for the idea of re-reading the original kernel module data, it has
-been implemented in 
-https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
+ (2) Add ML-DSA signature verification code, extracted from Stephan
+     Mueller's Leancrypto project.  The primary interface is intended to be
+     through crypto_sig.
 
-Both branches have applied your requested three changes including
-respecting the 80 char line limit. Additionally, I made a change to the
-IPE LSM because of the new READING_MODULE_COMPRESSED kernel_read_file_id
-enumerate.
+ (3) Add a simplified ML-DSA API for direct lib-crypto access.  Possibly
+     this should be conditional as the main access (from PKCS#7/X.509) is
+     going to be through crypto_sig.
 
-After comparing the two implementations, personally I prefer re-reading
-the original kernel module data because the change is smaller and it's
-more user-friendly. But if there are other reasons I don't know, I'll
-post the patches of the new collect action approach to the mailing list.
+ (4) Add a kunit test in three instalments (due to size) to add some
+     testing for the three different levels of ML-DSA (44, 65 and 87).
 
+ (5) Modify PKCS#7 support to allow kernel module signatures to carry
+     authenticatedAttributes as OpenSSL refuses to let them be opted out of
+     for ML-DSA (CMS_NOATTR).  This adds an extra digest calculation to the
+     process.
 
--- 
-Best regards,
-Coiby
+ (6) Modify PKCS#7 to pass the authenticatedAttributes directly to the
+     ML-DSA algorithm rather than passing over a digest as is done with RSA
+     as ML-DSA wants to do its own hashing and will add other stuff into
+     the hash.  We could use hashML-DSA or an external mu instead, but they
+     aren't standardised for CMS yet.
+
+ (7) Add support to the PKCS#7 and X.509 parsers for ML-DSA.
+
+ (8) Modify sign-file to handle OpenSSL not permitting CMS_NOATTR with
+     ML-DSA.
+
+ (9) Allow SHA-3 algorithms, including SHAKE256, to be used for the message
+     digest and add ML-DSA to the choice of algorithm with which to sign.
+
+With that, ML-DSA signing appears to work.
+
+This is based on Eric's libcrypto-next branch.
+
+The patches can also be found here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-pqc
+
+David
+
+Changes
+=======
+ver #8)
+ - Moved the ML-DSA code to lib/crypto/mldsa/.
+ - Renamed some bits from ml-dsa to mldsa.
+ - Created a simplified API and placed that in include/crypto/mldsa.h.
+ - Made the testing code use the simplified API.
+ - Fixed a warning about implicitly casting between uint16_t and __le16.
+
+ver #7)
+ - Rebased on Eric's tree as that now contains all the necessary SHA-3
+   infrastructure and drop the SHA-3 patches from here.
+ - Added a minimal patch to provide shake256 support for crypto_sig.
+ - Got rid of the memory allocation wrappers.
+ - Removed the ML-DSA keypair generation code and the signing code, leaving
+   only the signature verification code.
+ - Removed the secret key handling code.
+ - Removed the secret keys from the kunit tests and the signing testing.
+ - Removed some unused bits from the ML-DSA code.
+ - Downgraded the kdoc comments to ordinary comments, but keep the markup
+   for easier comparison to Leancrypto.
+
+ver #6)
+ - Added a patch to make the jitterentropy RNG use lib/sha3.
+ - Added back the crypto/sha3_generic changes.
+ - Added ML-DSA implementation (still needs more cleanup).
+ - Added kunit test for ML-DSA.
+ - Modified PKCS#7 to accommodate ML-DSA.
+ - Modified PKCS#7 and X.509 to allow ML-DSA to be specified and used.
+ - Modified sign-file to not use CMS_NOATTR with ML-DSA.
+ - Allowed SHA3 and SHAKE* algorithms for module signing default.
+ - Allowed ML-DSA-{44,65,87} to be selected as the module signing default.
+
+ver #5)
+ - Fix gen-hash-testvecs.py to correctly handle algo names that contain a
+   dash.
+ - Fix gen-hash-testvecs.py to not generate HMAC for SHA3-* or SHAKE* as
+   these don't currently have HMAC variants implemented.
+ - Fix algo names to be correct.
+ - Fix kunit module description as it now tests all SHA3 variants.
+
+ver #4)
+ - Fix a couple of arm64 build problems.
+ - Doc fixes:
+   - Fix the description of the algorithm to be closer to the NIST spec's
+     terminology.
+   - Don't talk of finialising the context for XOFs.
+   - Don't say "Return: None".
+   - Declare the "Context" to be "Any context" and make no mention of the
+     fact that it might use the FPU.
+   - Change "initialise" to "initialize".
+   - Don't warn that the context is relatively large for stack use.
+ - Use size_t for size parameters/variables.
+ - Make the module_exit unconditional.
+ - Dropped the crypto/ dir-affecting patches for the moment.
+
+ver #3)
+ - Renamed conflicting arm64 functions.
+ - Made a separate wrapper API for each algorithm in the family.
+ - Removed sha3_init(), sha3_reinit() and sha3_final().
+ - Removed sha3_ctx::digest_size.
+ - Renamed sha3_ctx::partial to sha3_ctx::absorb_offset.
+ - Refer to the output of SHAKE* as "output" not "digest".
+ - Moved the Iota transform into the one-round function.
+ - Made sha3_update() warn if called after sha3_squeeze().
+ - Simplified the module-load test to not do update after squeeze.
+ - Added Return: and Context: kdoc statements and expanded the kdoc
+   headers.
+ - Added an API description document.
+ - Overhauled the kunit tests.
+   - Only have one kunit test.
+   - Only call the general hash tester on one algo.
+   - Add separate simple cursory checks for the other algos.
+   - Add resqueezing tests.
+   - Add some NIST example tests.
+ - Changed crypto/sha3_generic to use this
+ - Added SHAKE128/256 to crypto/sha3_generic and crypto/testmgr
+ - Folded struct sha3_state into struct sha3_ctx.
+
+ver #2)
+  - Simplify the endianness handling.
+  - Rename sha3_final() to sha3_squeeze() and don't clear the context at the
+    end as it's permitted to continue calling sha3_final() to extract
+    continuations of the digest (needed by ML-DSA).
+  - Don't reapply the end marker to the hash state in continuation
+    sha3_squeeze() unless sha3_update() gets called again (needed by
+    ML-DSA).
+  - Give sha3_squeeze() the amount of digest to produce as a parameter
+    rather than using ctx->digest_size and don't return the amount digested.
+  - Reimplement sha3_final() as a wrapper around sha3_squeeze() that
+    extracts ctx->digest_size amount of digest and then zeroes out the
+    context.  The latter is necessary to avoid upsetting
+    hash-test-template.h.
+  - Provide a sha3_reinit() function to clear the state, but to leave the
+    parameters that indicate the hash properties unaffected, allowing for
+    reuse.
+  - Provide a sha3_set_digestsize() function to change the size of the
+    digest to be extracted by sha3_final().  sha3_squeeze() takes a
+    parameter for this instead.
+  - Don't pass the digest size as a parameter to shake128/256_init() but
+    rather default to 128/256 bits as per the function name.
+  - Provide a sha3_clear() function to zero out the context.
+
+David Howells (9):
+  crypto: Add support for shake256 through crypto_shash
+  crypto: Add ML-DSA/Dilithium verify support
+  mldsa: Add a simpler API
+  crypto: Add ML-DSA-44 pure rejection test vectors as a kunit test
+  crypto: Add ML-DSA-65 pure rejection test vectors as a kunit test
+  crypto: Add ML-DSA-87 pure rejection test vectors as a kunit test
+  pkcs7: Allow the signing algo to calculate the digest itself
+  pkcs7, x509: Add ML-DSA support
+  modsign: Enable ML-DSA module signing
+
+ Documentation/admin-guide/module-signing.rst  |   15 +-
+ Documentation/crypto/index.rst                |    1 +
+ Documentation/crypto/mldsa.rst                |  111 +
+ certs/Kconfig                                 |   24 +
+ certs/Makefile                                |    3 +
+ crypto/asymmetric_keys/pkcs7_parser.c         |   19 +-
+ crypto/asymmetric_keys/pkcs7_verify.c         |   52 +-
+ crypto/asymmetric_keys/public_key.c           |    7 +
+ crypto/asymmetric_keys/x509_cert_parser.c     |   24 +
+ crypto/sha3.c                                 |   42 +
+ include/crypto/mldsa.h                        |   34 +
+ include/crypto/public_key.h                   |    1 +
+ include/linux/oid_registry.h                  |    5 +
+ kernel/module/Kconfig                         |    5 +
+ lib/crypto/Kconfig                            |    1 +
+ lib/crypto/Makefile                           |    2 +
+ lib/crypto/mldsa/Kconfig                      |   28 +
+ lib/crypto/mldsa/Makefile                     |   15 +
+ lib/crypto/mldsa/crypto_mldsa.c               |  332 +
+ lib/crypto/mldsa/dilithium.h                  |  545 ++
+ lib/crypto/mldsa/dilithium_44.c               |   33 +
+ lib/crypto/mldsa/dilithium_44.h               |  282 +
+ lib/crypto/mldsa/dilithium_65.c               |   33 +
+ lib/crypto/mldsa/dilithium_65.h               |  282 +
+ lib/crypto/mldsa/dilithium_87.c               |   33 +
+ lib/crypto/mldsa/dilithium_87.h               |  282 +
+ lib/crypto/mldsa/dilithium_api.c              |  429 ++
+ lib/crypto/mldsa/dilithium_debug.h            |   49 +
+ lib/crypto/mldsa/dilithium_ntt.c              |   89 +
+ lib/crypto/mldsa/dilithium_ntt.h              |   35 +
+ lib/crypto/mldsa/dilithium_pack.h             |  119 +
+ lib/crypto/mldsa/dilithium_poly.c             |  377 +
+ lib/crypto/mldsa/dilithium_poly.h             |  181 +
+ lib/crypto/mldsa/dilithium_poly_c.h           |  141 +
+ lib/crypto/mldsa/dilithium_poly_common.h      |   35 +
+ lib/crypto/mldsa/dilithium_polyvec.h          |  343 +
+ lib/crypto/mldsa/dilithium_polyvec_c.h        |   81 +
+ lib/crypto/mldsa/dilithium_reduce.h           |   85 +
+ lib/crypto/mldsa/dilithium_rounding.c         |  128 +
+ lib/crypto/mldsa/dilithium_service_helpers.h  |   99 +
+ lib/crypto/mldsa/dilithium_signature_c.c      |  102 +
+ lib/crypto/mldsa/dilithium_signature_c.h      |   37 +
+ lib/crypto/mldsa/dilithium_signature_helper.c |   79 +
+ lib/crypto/mldsa/dilithium_signature_impl.h   |  370 +
+ lib/crypto/mldsa/dilithium_type.h             |  102 +
+ lib/crypto/mldsa/dilithium_zetas.c            |   67 +
+ lib/crypto/mldsa/mldsa_api.c                  |  186 +
+ .../mldsa/signature_domain_separation.c       |  203 +
+ .../mldsa/signature_domain_separation.h       |   30 +
+ lib/crypto/tests/Kconfig                      |   10 +
+ lib/crypto/tests/Makefile                     |    1 +
+ lib/crypto/tests/mldsa_kunit.c                |  103 +
+ .../tests/mldsa_pure_rejection_vectors_44.h   |  489 ++
+ .../tests/mldsa_pure_rejection_vectors_65.h   | 4741 ++++++++++++
+ .../tests/mldsa_pure_rejection_vectors_87.h   | 6456 +++++++++++++++++
+ scripts/sign-file.c                           |   26 +-
+ 56 files changed, 17368 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/crypto/mldsa.rst
+ create mode 100644 include/crypto/mldsa.h
+ create mode 100644 lib/crypto/mldsa/Kconfig
+ create mode 100644 lib/crypto/mldsa/Makefile
+ create mode 100644 lib/crypto/mldsa/crypto_mldsa.c
+ create mode 100644 lib/crypto/mldsa/dilithium.h
+ create mode 100644 lib/crypto/mldsa/dilithium_44.c
+ create mode 100644 lib/crypto/mldsa/dilithium_44.h
+ create mode 100644 lib/crypto/mldsa/dilithium_65.c
+ create mode 100644 lib/crypto/mldsa/dilithium_65.h
+ create mode 100644 lib/crypto/mldsa/dilithium_87.c
+ create mode 100644 lib/crypto/mldsa/dilithium_87.h
+ create mode 100644 lib/crypto/mldsa/dilithium_api.c
+ create mode 100644 lib/crypto/mldsa/dilithium_debug.h
+ create mode 100644 lib/crypto/mldsa/dilithium_ntt.c
+ create mode 100644 lib/crypto/mldsa/dilithium_ntt.h
+ create mode 100644 lib/crypto/mldsa/dilithium_pack.h
+ create mode 100644 lib/crypto/mldsa/dilithium_poly.c
+ create mode 100644 lib/crypto/mldsa/dilithium_poly.h
+ create mode 100644 lib/crypto/mldsa/dilithium_poly_c.h
+ create mode 100644 lib/crypto/mldsa/dilithium_poly_common.h
+ create mode 100644 lib/crypto/mldsa/dilithium_polyvec.h
+ create mode 100644 lib/crypto/mldsa/dilithium_polyvec_c.h
+ create mode 100644 lib/crypto/mldsa/dilithium_reduce.h
+ create mode 100644 lib/crypto/mldsa/dilithium_rounding.c
+ create mode 100644 lib/crypto/mldsa/dilithium_service_helpers.h
+ create mode 100644 lib/crypto/mldsa/dilithium_signature_c.c
+ create mode 100644 lib/crypto/mldsa/dilithium_signature_c.h
+ create mode 100644 lib/crypto/mldsa/dilithium_signature_helper.c
+ create mode 100644 lib/crypto/mldsa/dilithium_signature_impl.h
+ create mode 100644 lib/crypto/mldsa/dilithium_type.h
+ create mode 100644 lib/crypto/mldsa/dilithium_zetas.c
+ create mode 100644 lib/crypto/mldsa/mldsa_api.c
+ create mode 100644 lib/crypto/mldsa/signature_domain_separation.c
+ create mode 100644 lib/crypto/mldsa/signature_domain_separation.h
+ create mode 100644 lib/crypto/tests/mldsa_kunit.c
+ create mode 100644 lib/crypto/tests/mldsa_pure_rejection_vectors_44.h
+ create mode 100644 lib/crypto/tests/mldsa_pure_rejection_vectors_65.h
+ create mode 100644 lib/crypto/tests/mldsa_pure_rejection_vectors_87.h
 
