@@ -1,162 +1,113 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D068318149
-	for <linux-modules@vger.kernel.org>; Fri, 14 Nov 2025 13:42:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238EF221FB1;
+	Sun, 16 Nov 2025 20:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763127760; cv=none; b=W17sR5MxK6uiYyRBz0S8kCZbpC7aL9RAdSfRD6GuxEhnYbmUf++zg+TBFX896pJxK89HkrCNoifJbjmFz/gsrlzMYmCCbZ4VYRKqeyVs0B0HSp4bHaDaIt9oD6npSrU/yu8rqcjec6y08TzT5GlQGZQFmuGDv5OAVJOmZMMOMq0=
+	t=1763325772; cv=none; b=ho/lZAKHQXG7UHEo3F0FMnTJZBqIyz9z5YDCFXGFETdiopURhrARfx1sN99+SUyDz2sy2o2tHJCUPQLwt0Gic3nOmZobfwvmoJ/Qy/tGvoQE/G+IW+gV9KrxC39v0PqmL3Wes5YYUfFPDjMjcv2LuMqVg1srrlwP7Y4KfU0NvM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763127760; c=relaxed/simple;
-	bh=jjpP/weceEqeoclW7PG2fbBDDtT9Eeg02tIpOYsyq7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mVM4ojDtheHB0L4yMZdOGmaiJJmwuWrS1/UkLN7Lt6BTDQY4cwyoIL6zqa7vA5xQW9z2Dp7HRhmiZ+Wkf8pMgx8Mavoy9E3N1IfQpuiGiYMwtPjX6kLpmOrlClMOmViEQ0YlEIDH3hxod0tSUwGo+rYotnlJPmFFncxzgrDYvAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=FyxBsSkb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ElHgmLMR; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=FyxBsSkb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ElHgmLMR; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1763325772; c=relaxed/simple;
+	bh=L9mm6RZkEtZZw3YJtGPngE/RLxsaiBMNq7GLUKrCZoI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s2VgJgm/95An27APc6/kwf8QXuO48gKuVAf5j9AmpCnC50h5BqmmMiVLmosCzA1X8/BJS9RlYULRgUknYC3S9no3mqXgtx6aGGUTTSbK81aMMCUVZAwrxEiusOMnEU6+Rl7BTj7shTsy4GHV1TaF2Q3VbvOTEnQVsBJ4BmPE4Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mhfel4Me; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="FyxBsSkb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ElHgmLMR";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="FyxBsSkb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ElHgmLMR"
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5A96B2122E;
-	Fri, 14 Nov 2025 13:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1763127757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DxOGWffyVuW8pl3GZE/Xi5orlk84b/kPr+I63aZu/ow=;
-	b=FyxBsSkbcW67u6JaLU40pTCG0aOejuJyaQQl4q38A+O6GNs+bnFFlUaTo1nlDpwen49F+w
-	ZmjQc6izUZySypEoMfXdSS3bLjJ7aWz7rvRV34LRZkFGMjSGE/DpzItMniUnfB7mahQFd+
-	hNcroQHC8WkZOxsBGFzzP91ze87IW0o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1763127757;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DxOGWffyVuW8pl3GZE/Xi5orlk84b/kPr+I63aZu/ow=;
-	b=ElHgmLMRDUWKf9icQboWPpX06dJKUIyYnjoxOoK75AuYXjkHIGzTJZXYCLJMk60dxsnLI+
-	0mAS2Z6JvxPOU7Aw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1763127757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DxOGWffyVuW8pl3GZE/Xi5orlk84b/kPr+I63aZu/ow=;
-	b=FyxBsSkbcW67u6JaLU40pTCG0aOejuJyaQQl4q38A+O6GNs+bnFFlUaTo1nlDpwen49F+w
-	ZmjQc6izUZySypEoMfXdSS3bLjJ7aWz7rvRV34LRZkFGMjSGE/DpzItMniUnfB7mahQFd+
-	hNcroQHC8WkZOxsBGFzzP91ze87IW0o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1763127757;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DxOGWffyVuW8pl3GZE/Xi5orlk84b/kPr+I63aZu/ow=;
-	b=ElHgmLMRDUWKf9icQboWPpX06dJKUIyYnjoxOoK75AuYXjkHIGzTJZXYCLJMk60dxsnLI+
-	0mAS2Z6JvxPOU7Aw==
-Date: Fri, 14 Nov 2025 14:42:36 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Subject: gendwarksyms not 32bit-clean
-Message-ID: <aRcxzPxtJblVSh1y@kitsune.suse.cz>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mhfel4Me"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36CBC4CEF5;
+	Sun, 16 Nov 2025 20:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763325771;
+	bh=L9mm6RZkEtZZw3YJtGPngE/RLxsaiBMNq7GLUKrCZoI=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mhfel4MeVOfaZBDb0rVLekL+IY7/ASOIgEa6s982h5rvS9YqtFPxxAUaZAdNOowq3
+	 hqCtEtt05ek2XHA8nQkrkOQ83ec6yiZu3XVht5dB1j+Cf+nffKVfwe1uUkshK78dXG
+	 opn4U+4xCvouMHVHL/iOfQHNgF1gbBeiWfkfGxHsfdYw9eZP+yNTxN+WtfkuH3jazj
+	 PiNTLhGBiBVaJwUh1+Tue6ogQkUm4Pou6TW5KyiMH78JqNQZm48ylqIkEhA10Nb+Bg
+	 YEwi+Rgb/mnwiOpyBWuBRmP+cDZz21fJ4zdOvcOFvBsByWhqKUHEv1wHnmPffuPVKY
+	 pbA2k+oo4zShA==
+Message-ID: <81b10186-767c-4904-b048-d88a73ff15b3@kernel.org>
+Date: Sun, 16 Nov 2025 21:42:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.59 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MIXED_CHARSET(0.71)[subject];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kitsune.suse.cz:helo,kitsune.suse.cz:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -3.59
-X-Spam-Level: 
+User-Agent: Mozilla Thunderbird
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [PATCH 1/2] module: Override -EEXISTS module return
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Petr Pavlu <petr.pavlu@suse.com>
+References: <20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com>
+ <20251013-module-warn-ret-v1-1-ab65b41af01f@intel.com>
+ <ea36d12b-15b9-4c1c-b81f-75834bc3269a@kernel.org>
+ <geqat2upyxwvqjsp4ietmeypf4gmeoerg6akstbvelnxe3zpl4@dzqhyolsvtvc>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <geqat2upyxwvqjsp4ietmeypf4gmeoerg6akstbvelnxe3zpl4@dzqhyolsvtvc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Also cc lists
+On 10/11/2025 16.31, Lucas De Marchi wrote:
+> On Mon, Nov 10, 2025 at 04:17:47PM +0100, Daniel Gomez wrote:
+>> On 13/10/2025 18.26, Lucas De Marchi wrote:
+>>> The -EEXIST errno is reserved by the module loading functionality. When
+>>> userspace calls [f]init_module(), it expects a -EEXIST to mean that the
+>>> module is already loaded in the kernel. If module_init() returns it,
+>>> that is not true anymore.
+>>>
+>>> Add a warning and override the return code to workaround modules
+>>> currently returning the wrong code. It's expected that they eventually
+>>> migrate to a better suited error.
+>>
+>> I've been following the thread (and apologies for the delay) and reviewing the
+>> patches, and I do not believe we should push this workaround. While this "fixes"
+>> the bug reported, it also hides the real problem and drivers will continue
+>> misusing EEXIST at module initialization.
+>>
+>> From the bug report thread, I agree with Christophe's suggestion that
+>> nf_conntrack_helpers_register() should return EBUSY instead of EEXIST. This
+>> would fix the root cause for this particular module and will allow others to
+>> change their module behavior, if we also follow up with proper documentation
+>> about EEXIST.
+> 
+> the fix will always be for the modules to stop returning EEXIST, no
+> discussion on that. This is the messenger, not the fix. Someone starts
+> seeing this warning and rjeports the bug. Then the developers can fix
+> it. It's much easier than dealing with the outcome of a module returning
+> EEXIST.
 
-Hello,
+I see. Thanks for clarifying.
 
-I tried to build kernel with gendwarfksyms and it does not work on
-32bit:
+I'm thinking to merge this at the beginning of the next release cycle. So others
+can also have time to process the new warning when testing their modules. I hope
+that is okay with you.
 
-[   30s]   HOSTCC  scripts/gendwarfksyms/dwarf.o
-[   30s] ../scripts/gendwarfksyms/dwarf.c: In function ‘process_enumerator_type’:
-[   30s] ../scripts/gendwarfksyms/dwarf.c:764:64: error: passing argument 3 of ‘kabi_get_enumerator_value’ from incompatible pointer type [-Wincompatible-pointer-types]
-[   30s]   764 |                         state->expand.current_fqn, cache->fqn, &value);
-[   30s]       |                                                                ^~~~~~
-[   30s]       |                                                                |
-[   30s]       |                                                                Dwarf_Word * {aka long long unsigned int *}
-[   30s] In file included from ../scripts/gendwarfksyms/dwarf.c:10:
-[   30s] ../scripts/gendwarfksyms/gendwarfksyms.h:283:47: note: expected ‘long unsigned int *’ but argument is of type ‘Dwarf_Word *’ {aka ‘long long unsigned int *’}
-[   30s]   283 |                                unsigned long *value);
-[   30s]       |                                ~~~~~~~~~~~~~~~^~~~~
-[   30s] make[3]: *** [../scripts/Makefile.host:131: scripts/gendwarfksyms/dwarf.o] Error 1
-[   30s] make[3]: *** Waiting for unfinished jobs....
-[   30s]   HOSTCC  scripts/gendwarfksyms/cache.o
-[   30s]   HOSTCC  scripts/gendwarfksyms/gendwarfksyms.o
-[   30s]   HOSTCC  scripts/gendwarfksyms/kabi.o
-[   30s]   HOSTCC  scripts/selinux/mdp/mdp
-[   30s]   HOSTCC  scripts/gendwarfksyms/die.o
-[   30s]   HOSTCC  scripts/gendwarfksyms/symbols.o
-[   30s] In file included from ../scripts/gendwarfksyms/symbols.c:6:
-[   30s] ../scripts/gendwarfksyms/symbols.c: In function ‘elf_for_each_global’:
-[   30s] ../scripts/gendwarfksyms/gendwarfksyms.h:47:27: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 4 has type ‘Elf64_Xword’ {aka ‘long long unsigned int’} [-Wformat=]
-[   30s]    47 |                 __println("error: ", format, ##__VA_ARGS__); \
-[   30s]       |                           ^~~~~~~~~
-[   30s] ../scripts/gendwarfksyms/gendwarfksyms.h:35:25: note: in definition of macro ‘__println’
-[   30s]    35 |         fprintf(stderr, prefix __PREFIX "%s: " format "\n", __func__, \
-[   30s]       |                         ^~~~~~
-[   30s] ../scripts/gendwarfksyms/symbols.c:243:33: note: in expansion of macro ‘error’
-[   30s]   243 |                                 error("expected sh_entsize (%lu) to be %zu",
-[   30s]       |                                 ^~~~~
-[   30s] ../scripts/gendwarfksyms/symbols.c: In function ‘set_symbol_addr’:
-[   30s] ../scripts/gendwarfksyms/gendwarfksyms.h:41:35: warning: format ‘%lx’ expects argument of type ‘long unsigned int’, but argument 6 has type ‘Elf64_Addr’ {aka ‘long long unsigned int’} [-Wformat=]
-[   30s]    41 |                         __println("", format, ##__VA_ARGS__); \
-[   30s]       |                                   ^~
-[   30s] ../scripts/gendwarfksyms/gendwarfksyms.h:35:25: note: in definition of macro ‘__println’
-[   30s]    35 |         fprintf(stderr, prefix __PREFIX "%s: " format "\n", __func__, \
-[   30s]       |                         ^~~~~~
-[   30s] ../scripts/gendwarfksyms/symbols.c:293:17: note: in expansion of macro ‘debug’
-[   30s]   293 |                 debug("%s -> { %u, %lx }", sym->name, sym->addr.section,
-[   30s]       |                 ^~~~~
-[   30s]   HOSTCC  scripts/kallsyms
-[   30s]   HOSTCC  scripts/gendwarfksyms/types.o
-[   30s] make[2]: *** [../scripts/Makefile.build:556: scripts/gendwarfksyms] Error 2
-[   30s] make[2]: *** Waiting for unfinished jobs....
-[   30s]   HOSTCC  scripts/sign-file
-[   31s]   HOSTCC  scripts/sorttable
-[   31s]   HOSTCC  scripts/asn1_compiler
-[   31s] make[1]: *** [/home/abuild/rpmbuild/BUILD/kernel-default-6.18_rc5-build/kernel-default-6.18~rc5/linux-6.18-rc5/Makefile:1285: scripts] Error 2
-[   31s] make: *** [/home/abuild/rpmbuild/BUILD/kernel-default-6.18_rc5-build/kernel-default-6.18~rc5/linux-6.18-rc5/Makefile:248: __sub-make] Error 2
-[   31s] error: Bad exit status from /var/tmp/rpm-tmp.a006l0 (%prep)
+FYI, I will follow up this with docs and some drivers fixes I've found.
 
-Can you fix it, or make it depend on host being 64bit?
+> Also note that we already have a similar reasoning about adding
+> a warning for module return codes in this same function.
+> 
+> Even if we had the means to check possible return codes from all
+> module inits, we'd still have external modules.
+> 
+> See patch 2: after some time we can simplify the warning and maybe even
+> remove it.
 
-Thanks
+That was added almost two decades ago. I hope we don't need to wait that long!
+:)
 
-Michal
+commit e24e2e64c468c8060bb7173abecdf11d00ed5751
+Author: Alexey Dobriyan <adobriyan@gmail.com>
+Date:   Mon Mar 10 11:43:53 2008 -0700
+
+    modules: warn about suspicious return values from module's ->init() hook
+
+I don't see a way to completely remove any of these, especially with out of 
+tree modules... or to capture any possible future/new misses.
+
+> 
+> Lucas De Marchi
