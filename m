@@ -1,92 +1,152 @@
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4202550A4;
-	Mon, 17 Nov 2025 20:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40C4340A67
+	for <linux-modules@vger.kernel.org>; Mon, 17 Nov 2025 20:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763410747; cv=none; b=puMDa/xwKmS0PW2JKvQIQYDX2ieXyKEkE6n4hA7GG9y6kVwXVJoK7ZkJDhTfO1ka63uqY56BylAZ4mfix5GbbyoU9l2ut1MYKVbXxPwWWRY48LEP0AWI/6bqztxxUPTrpxiDR+7IXVtLBi5EuiNE8s9jaIEGrbU4g37USdr3bt4=
+	t=1763411894; cv=none; b=hPAZpWUqKAQ26WYMcrdb2H7+QFowRDvD8WSkW2/SE/ZdveHVPSS0TTyl/qgqxOq+blHzS+DFVe17iNeSZiOlOWfYqBW6BE0qTwp5N879zcHpo7RkZ5LcKVhlzHnAi32987/YhbLsv6ZxCTA6WyfMKtH31Pat3TyEGYSJlLyJ76k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763410747; c=relaxed/simple;
-	bh=8e4rS/mksWYyypl2AonyCncEJnTpbAc6PRCMhnlzgMg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Zes/kcgGVSrXLfUJIb/bzFD6qmeLlyS1tbcW3HZ5YTAIT9BmymQQgy76GT3fLAXifvf/+10K7yqApcO3R2F1Z1ws7jOeJi9jksfF7qn16lnUGFSPZuf9WszWSJgIS2AxfRvdbbVz0t+JVwQnzgsbwSbNQ//0UHwAPnV6Sgs9iKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=I3cPEQen; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+	s=arc-20240116; t=1763411894; c=relaxed/simple;
+	bh=lmm7xZu9vIWRC/0I8HIYl9OtdLf+eJUTiRP2chK2g1o=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FpjTT8iEVATYUSPycRfEamE094ekCWDhWhC3hHR+VyYzdE88epf1m2DL1MMJPl6z+OKLJsgJ6wDEFD1xhMYo9sGzJMPbBfQ5UuEh2WLyS3J8S58i6AefBlPi3T2JUw+9ltymU+A5JWvVohvRwrRO6ywxatZXK1iHYKj7CxUS1nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cNcOG/pk; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="I3cPEQen"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1763410743;
-	bh=8e4rS/mksWYyypl2AonyCncEJnTpbAc6PRCMhnlzgMg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=I3cPEQenjjiO9j/z5RSi1R6gqubD4lymCTjlrpe9IL4bmpMlvprRJV52fts3m6zgM
-	 LWm6dMeuADQ82mF7Q3q0rkIjNuTyd9qHVmhhTxiyZNH1M44/ni0L/2nK62n4HxOoh+
-	 gIOh3hspl4imArk+vSo6/DKk32rBSLMpdgv3Fxrg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id CD7941C0214;
-	Mon, 17 Nov 2025 15:19:02 -0500 (EST)
-Message-ID: <13213304ac049113655ab8fe1bae76cc84a3330e.camel@HansenPartnership.com>
-Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: David Howells <dhowells@redhat.com>, Eric Biggers <ebiggers@kernel.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez
- <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, "Jason A .
- Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan
- Mueller <smueller@chronox.de>,  Lukas Wunner <lukas@wunner.de>, Ignat
- Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org, 
- keyrings@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-Date: Mon, 17 Nov 2025 15:19:02 -0500
-In-Reply-To: <2165074.1763409175@warthog.procyon.org.uk>
-References: <20251117171003.GC1584@sol>
-	 <20251117145606.2155773-1-dhowells@redhat.com>
-	 <20251117145606.2155773-3-dhowells@redhat.com>
-	 <2165074.1763409175@warthog.procyon.org.uk>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cNcOG/pk"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b630753cc38so10283907a12.1
+        for <linux-modules@vger.kernel.org>; Mon, 17 Nov 2025 12:38:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763411892; x=1764016692; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KAVkLcKcCYKXTFq0TOIQZY7P6FpG3/4XPeGtMM9owIQ=;
+        b=cNcOG/pkFJwc91VpS/pcOPmaylzL9E3QvMln43PezYHVnf1TF+pzf5Tl/90zhpmbMk
+         7bhL5srR2Es+w05N8udjAj79I3zEXny0U3n0qQYA8672ymmGtOqcYmS/uz2wsQ/B8q36
+         GEpgdmdc95rTdHpg7+wWhHlfEzsABW5LUjJPHOQdGWi2nk2pw1FrNbSfST1Gao/ehBdM
+         XAdFnRtoJa7sbtJ3m6t5C5UY7R0LGJ3HG38Y3VhU5WyOz59F2qHeOaSqQLOtTyQ7U+mB
+         7SieHYlGaH3k4yKXiObLl90qVQQoWbYLNp7uoeM5Dis6pls8sR8b+MZJLtw7F5droV3X
+         6e0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763411892; x=1764016692;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KAVkLcKcCYKXTFq0TOIQZY7P6FpG3/4XPeGtMM9owIQ=;
+        b=OLzBTEHfsufzHDfVAWBuOrlgDvwViuh1WcogECiF2HQwoWyRpMPP8G662wIpjk1BAP
+         7NzqgqJRC81ZI8kd1m3yXi63R5NFq55o8NEo8sJkiX4Hl/iZy7+s2aIFsTHeOWvPoZv8
+         IA/MHpTvqBPEFbgD//3hGUIrLlkacYBePbTEQio+1G9UudqSIGFN1G8r4W7sx3p776zd
+         fCrpOREPENNhU70o2zL3WJ17bAqQiJ0dpSwlIclizCnc2C2V44hCRtWdOnOi5Xqu1BDh
+         h/ddoiLDHzXX+5A2IWc7CUyx+rcdS8DrWS/atI0SCPxV8Hj56m5iFr9k6k5RzChmT/cG
+         hnHQ==
+X-Gm-Message-State: AOJu0Yz/YiG/KjfjZLb0+8QhvK+PipFJZ62mVg1j+KesRrjhGE1Dgunr
+	8kluGwZDeNKW1wwTS+g3gk/RGM6iTl4Ky+pJte3+/Q7Y6GHFKUd+NOZEjgwSKH2nX6b/OEzAX3T
+	eYP7Q1DK8ms+Lif5kvAgWqi5bQiXFZpypTV3g7mjT8JDcELDfFR5cBWS/R9mQxxuHCrQuUARHtB
+	ORCvD/knTKWJVW37i+2sJcw7Z0x3lF0vvlfdrY1KWv7MaFmRR/NUQc1yWFN1gWvXnU2oPV9m4uE
+	F/hKg==
+X-Google-Smtp-Source: AGHT+IGAdp4z6HWG0Pq4FjrMPMePj7oMwnFog0nNl4LxcvRd6e0MMvcbsVGGvEMzO2xGW0wrKx1M6EyxpVGXTAaFO8I=
+X-Received: from dlbay38.prod.google.com ([2002:a05:7022:6626:b0:119:49ca:6ba8])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7022:5f18:b0:119:e56c:18b8 with SMTP id a92af1059eb24-11b41705b16mr4591063c88.32.1763411891886;
+ Mon, 17 Nov 2025 12:38:11 -0800 (PST)
+Date: Mon, 17 Nov 2025 20:38:07 +0000
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2544; i=samitolvanen@google.com;
+ h=from:subject; bh=IiTMCjudn09ARAqSHDWq99cozFbotruioqqqVlgFGlE=;
+ b=owGbwMvMwCUWxa662nLh8irG02pJDJnS7esmfXt+9Iibg5+rxNWfx6Zmt7r6J6Z4ls4SDnodt
+ tT//MuDHaUsDGJcDLJiiiwtX1dv3f3dKfXV5yIJmDmsTCBDGLg4BWAiJy0ZGb5z//vx9vBvv9oq
+ dkG/7eZNFx8E9LRdlzfVcL0pkcYhsY/hv9sf//Pq4qZzFs69lpNoLM6+mdk7p/vhp17dJzZPUr6 LMwEA
+X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
+Message-ID: <20251117203806.970840-2-samitolvanen@google.com>
+Subject: [PATCH] gendwarfksyms: Fix build on 32-bit hosts
+From: Sami Tolvanen <samitolvanen@google.com>
+To: linux-modules@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	"=?UTF-8?q?Michal=20Such=C3=A1nek?=" <msuchanek@suse.de>, Sami Tolvanen <samitolvanen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2025-11-17 at 19:52 +0000, David Howells wrote:
-> Eric Biggers <ebiggers@kernel.org> wrote:
->=20
-> > In comparison, BoringSSL has an entire implementation of ML-DSA,
-> > ...
->=20
-> ... which cannot be used in the kernel due to the licence.
+We have interchangeably used unsigned long for some of the types
+defined in elfutils, assuming they're always 64-bit. This obviously
+fails when building gendwarfksyms on 32-bit hosts. Fix the types.
 
-The licence problem is not insurmountable.  There are now real lawyers
-(not just me) prepared to stand up and say Apache-2 is GPL-2
-compatible:
+Reported-by: Michal Such=C3=A1nek <msuchanek@suse.de>
+Closes: https://lore.kernel.org/linux-modules/aRcxzPxtJblVSh1y@kitsune.suse=
+.cz/
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+---
+ scripts/gendwarfksyms/dwarf.c   | 4 +++-
+ scripts/gendwarfksyms/symbols.c | 5 +++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-https://digitalcommons.law.scu.edu/chtlj/vol40/iss3/2/
+diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
+index 3538a7d9cb07..e76d732f5f60 100644
+--- a/scripts/gendwarfksyms/dwarf.c
++++ b/scripts/gendwarfksyms/dwarf.c
+@@ -750,6 +750,7 @@ static void process_enumerator_type(struct state *state=
+, struct die *cache,
+ 				    Dwarf_Die *die)
+ {
+ 	bool overridden =3D false;
++	unsigned long override;
+ 	Dwarf_Word value;
+=20
+ 	if (stable) {
+@@ -761,7 +762,8 @@ static void process_enumerator_type(struct state *state=
+, struct die *cache,
+ 			return;
+=20
+ 		overridden =3D kabi_get_enumerator_value(
+-			state->expand.current_fqn, cache->fqn, &value);
++			state->expand.current_fqn, cache->fqn, &override);
++		value =3D override;
+ 	}
+=20
+ 	process_list_comma(state, cache);
+diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbol=
+s.c
+index ecddcb5ffcdf..42cd27c9cec4 100644
+--- a/scripts/gendwarfksyms/symbols.c
++++ b/scripts/gendwarfksyms/symbols.c
+@@ -3,6 +3,7 @@
+  * Copyright (C) 2024 Google LLC
+  */
+=20
++#include <inttypes.h>
+ #include "gendwarfksyms.h"
+=20
+ #define SYMBOL_HASH_BITS 12
+@@ -242,7 +243,7 @@ static void elf_for_each_global(int fd, elf_symbol_call=
+back_t func, void *arg)
+ 				error("elf_getdata failed: %s", elf_errmsg(-1));
+=20
+ 			if (shdr->sh_entsize !=3D sym_size)
+-				error("expected sh_entsize (%lu) to be %zu",
++				error("expected sh_entsize (%" PRIu64 ") to be %zu",
+ 				      shdr->sh_entsize, sym_size);
+=20
+ 			nsyms =3D shdr->sh_size / shdr->sh_entsize;
+@@ -292,7 +293,7 @@ static void set_symbol_addr(struct symbol *sym, void *a=
+rg)
+ 		hash_add(symbol_addrs, &sym->addr_hash,
+ 			 symbol_addr_hash(&sym->addr));
+=20
+-		debug("%s -> { %u, %lx }", sym->name, sym->addr.section,
++		debug("%s -> { %u, %" PRIx64 " }", sym->name, sym->addr.section,
+ 		      sym->addr.address);
+ 	} else if (sym->addr.section !=3D addr->section ||
+ 		   sym->addr.address !=3D addr->address) {
 
-But even if you don't accept that, Google keeps effective joint
-ownership of the code through their CLA and so could grant a dual
-licence to the kernel anyway without needing to refer to any
-contributors.
-
-Regards,
-
-James
+base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
+--=20
+2.52.0.rc1.455.g30608eb744-goog
 
