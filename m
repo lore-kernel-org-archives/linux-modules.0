@@ -1,187 +1,108 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AE2365A10
-	for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 16:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7432E36CE1E
+	for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 16:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763482715; cv=none; b=Nsl0mfrK2FZiRv3t3kAdEoYj4Xc5bo9mQsoFQBqE/kwrDpluimHFHp31k7HiAjByxW3PPi9/1Zrj7P39AvbidSaWjOUirkFhMbd38b6Z6Uq8VWyzLd5qzKVmDUFLSsQiDe/3FVBXVMfdm2+P8dg6rLFjCts3KEFY9EMOdZ4ELOQ=
+	t=1763482867; cv=none; b=hZ+PlucZWIaFrEouwSHFeDbNAr03lXZwDFKT/+eMtT3rZw3zGBnnPsLnufO76oPqkdWVK9KfyxRsZUwHgY1L3kshcLy4X+3ygQEAEgRzBLTfoCafWFaHfEs/r8w0yIGNDqgBRlRQj1+yCPpeOfpxTTAyGcpX+cWTwWw0+ISAJP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763482715; c=relaxed/simple;
-	bh=VCaiqV8vCrrsLqqf8b1+K9+FOBl2AhCdEyAraBkbibA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSksRms83jVpcD4ka4CfAncuz6CVM/AvNmtj5nWLN4qIhMOkUQ8RKZkBtnqHWlqzk9BIB2rPb2SnsWRiSLeg0JwbS3qOkfV+tCxBXixXimUS41UrgZ4TmGI9vhsD6eucwM2SK9p09E3b8JF5QXy76sqChRPkMd3qJK0PLxtVmU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KH16ukRP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=kNMpTgxY; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=E48M3eqb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=az9HKZt9; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1763482867; c=relaxed/simple;
+	bh=faOfBULiO6Qp0WVmE8McFWL4GEnAP8ye2ZQBGtxMog4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ppA6T/AxTec+IlXdxYqrKcNcge/FkuoKeUwzyQbrwNGpgdXDdzM0LiPPmX/u61OxPCGHZli54iInadLGcVgfAknuUTSj22Iy68hmsQgJ7d84LAWhDqNZaPbWWqQkwFPEuUgepONDAuAZf6pOAa82Gr/UIFn3o4IRZzc0jmOmGYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zqwcb0P4; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KH16ukRP";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="kNMpTgxY";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="E48M3eqb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="az9HKZt9"
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id CFDEE1FF90;
-	Tue, 18 Nov 2025 16:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1763482710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
-	b=KH16ukRPSLAQKNON4fDq3e0cySt60gkhrJbsAE6il46Zx5NkZMpWN5Xw+eaObV0QYabFpK
-	IggmZtIN+43xGo3qMknMT0h07lK9z8Epn8uzgf8rLJDJBglVRuRrefie/gk9fNaMw8m22T
-	lFwlJwc5bnNqEypSCnPNryxjrEK2NIw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1763482710;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
-	b=kNMpTgxYQiXHAV7fn6GiscHJXuEVD0Q53hVRUGFendzeHDv1Aplq4lBqUlmnPkw2DoLtBK
-	YtY8SfGE7Dwu+WCQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1763482709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
-	b=E48M3eqb0FNOKTFlsCmDQcpSYChHjCVm7CbKBRSw5zz+tGtTtbpD2sw7IYy2z4goIPX3dc
-	Yw0cJRwerzDhFA2PtrnZMB4Dwjr+PDTZk5DGO6D6ndJ4IaTSSIjZXmDEIK9uE1L4sPMZ+j
-	1UsJhui0wBelbtKDOGrae9tf7H0UMiU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1763482709;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
-	b=az9HKZt9LUWa3JKL3A5DFDDewT8jNcVyOVq52fgI6Fv8pt9P3IsYE9ROjUBSDP9YEmMQO9
-	h8j12jkzYUj5VXAA==
-Date: Tue, 18 Nov 2025 17:18:28 +0100
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gendwarfksyms: Fix build on 32-bit hosts
-Message-ID: <aRycVOe5ZXSJJFpn@kitsune.suse.cz>
-References: <20251117203806.970840-2-samitolvanen@google.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zqwcb0P4"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b8f70154354so534506a12.2
+        for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 08:21:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763482865; x=1764087665; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=faOfBULiO6Qp0WVmE8McFWL4GEnAP8ye2ZQBGtxMog4=;
+        b=Zqwcb0P48+Opg0PaoHzGH2nKmoyDyyWA0N0PNFgCZOOvSciSj3ry1FttgSdglPBrLu
+         OvABB3L07dtuewiVowNYjlByh7RpAr2ZENjqlwK8K5b6nbe2CsalMtbjLWt+qQn7I+qP
+         p0evDGvas187GEDn4kAZShlo1qDSOjoJlKWiO6ova8+TadWigOgVTkCPOG2rcotHtH7C
+         UfQpu+AHtSbVZCssdbrPNPaQuWsHvevEsxO8ss+k8JhTuBvI1QUt40iUmWvjvT+tgn0z
+         Xqc5Gz+Ouvx/1vYgVcKShvUxqGgLGR9JtSBlTwyrMAYot+lJRjK+TlDP6ZkKFIugUIWX
+         UhCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763482865; x=1764087665;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=faOfBULiO6Qp0WVmE8McFWL4GEnAP8ye2ZQBGtxMog4=;
+        b=QtPahPxbLAZMtTaSDv9SMU6iUzp0gQovG8EyTSCh+hlh+pMCu41xps+xxsKVcgm09g
+         oZKDX5Z8V/9DDdUI0tzzmhub/EiGCJ8XKz16PekG+o5ZZSZHa/eJUnW6CqA8S5nK35nI
+         ytnbh9BuOyz+ShZNdOw8/CpPL37Qd6PsUGu+ozrkbjOt218rY1ELWY2x+mHgQ6QzlMM7
+         betDiOxdwjKUfAc4ZoVxV7syGYmsmh2iAnjSPzzdnrGWnkqz0n1psZ3IN3dT3usDH8Ng
+         toxntx9lxJmk941pNafPwUHv9hQi12qn8zLf+lpt9QyfD/ScEYaxZyPLbk1vKiZuICSs
+         +lMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0XYzkgU2UTIdQ9mH9jdsO9+MEVzdG1Ch0QT0XEwG13a+CNMY2fevBUA6CLcdhcUu/X9UdoCw8l/Fbuh03@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFuNM9XHj8XQ4a75OrODZTqoaD9q9XoS4lQsQtr36Yy9RtS/pt
+	KGvMnNMu2MZ/ly14/zruZLmbK5VqeJq3PFq+STVZyRbJWKySRdsjgxzMJJ1C6qL6Y8wfUgUfyWI
+	aEeRoA+oG3Tcg2Xrai5Cw/aeLdSMEWm0=
+X-Gm-Gg: ASbGncsurOTkIlZ6CeyFozcdLRgmX1furtXzrMWwZhVaJ4x/qCjzmxiA+5ONVe27N9n
+	LZky1nMjI9+k9pbOJfent6Iyah9IcYg8g0Vpe2McPvzvkJCEmsD5+MJmMlaGLGGZ0Wd3FTz2SwS
+	KBgsKOSjk7A5GkjlBdmCfmIYvpsmZR+x3MvDGoBu52SAr2MG4+A81uJqFoIevRyyOpFzdZvE9rQ
+	0URMTJ1Aq15XUx7KJ1q1Fs1DVdCZ0b+LBkKZbw9kW4Rq8mLmDiPQbMHtxIOvZ3skb739S5Oq+uO
+	Qsvfd8br8Smx4FFDm9NXPwSnrRmac+fPvmu4QMMT4+I2oHH77xSR6FVv3U2j8uhIk2GCFacOWqP
+	/W0Eov0WuLwmyiA==
+X-Google-Smtp-Source: AGHT+IFVRdNsejBm6GKYlYca1Ngn1yJHjVdLnMU26Ia9C7PKBAIRtq1oGRAnFqiiyXtONzw3uw69CCzFP8m6+uCM7y0=
+X-Received: by 2002:a05:7022:ea46:10b0:11b:65e:f33 with SMTP id
+ a92af1059eb24-11c78ddf633mr1026663c88.1.1763482864497; Tue, 18 Nov 2025
+ 08:21:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251117203806.970840-2-samitolvanen@google.com>
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
+References: <20251110131913.1789896-1-ojeda@kernel.org> <20251118145741.1042013-1-gprocida@google.com>
+In-Reply-To: <20251118145741.1042013-1-gprocida@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 18 Nov 2025 17:20:50 +0100
+X-Gm-Features: AWmQ_bnVmxUteFT3dr5VfpkhZiAQKyOG1ub40EZh79PVRCrhks9ZqnFaWxh_hDc
+Message-ID: <CANiq72nsU1YH3ihkaTiVjF_YUZY2nSKbc7j3xLTcHDC-4-Y5iQ@mail.gmail.com>
+Subject: Re: [PATCH v2] gendwarfksyms: Skip files with no exports
+To: Giuliano Procida <gprocida@google.com>, Sami Tolvanen <samitolvanen@google.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev, stable@vger.kernel.org, 
+	Haiyue Wang <haiyuewa@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Nov 18, 2025 at 3:58=E2=80=AFPM Giuliano Procida <gprocida@google.c=
+om> wrote:
+>
+> This results in the -T foo option being ignored in the case there were
+> no symbols. I think it would be better, consistent with the
+> documentation and expectations, for the file to be produced empty.
+>
+> This means that just the for loop should be skipped, say by adding the
+> condition there with &&.
+>
+> If you disagree, then please update the documentation to match the new
+> behaviour.
 
-On Mon, Nov 17, 2025 at 08:38:07PM +0000, Sami Tolvanen wrote:
-> We have interchangeably used unsigned long for some of the types
-> defined in elfutils, assuming they're always 64-bit. This obviously
-> fails when building gendwarfksyms on 32-bit hosts. Fix the types.
-> 
-> Reported-by: Michal Suchánek <msuchanek@suse.de>
-> Closes: https://lore.kernel.org/linux-modules/aRcxzPxtJblVSh1y@kitsune.suse.cz/
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> ---
->  scripts/gendwarfksyms/dwarf.c   | 4 +++-
->  scripts/gendwarfksyms/symbols.c | 5 +++--
->  2 files changed, 6 insertions(+), 3 deletions(-)
+Sounds reasonable. If there were users relying on that, then it may be
+best to keep the behavior as it was. But up to the maintainers what
+would make the most sense here of course (moving Sami to the To:).
 
-with this patch gendwarfksyms builds on 32bit x86 and Arm.
+Since the commit is in mainline and it seems you already thought about
+the solution, I imagine a patch would be welcome.
 
-Tested-by: Michal Suchánek <msuchanek@suse.de>
+Thanks!
 
-Thanks
-
-Michal
-
-> 
-> diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
-> index 3538a7d9cb07..e76d732f5f60 100644
-> --- a/scripts/gendwarfksyms/dwarf.c
-> +++ b/scripts/gendwarfksyms/dwarf.c
-> @@ -750,6 +750,7 @@ static void process_enumerator_type(struct state *state, struct die *cache,
->  				    Dwarf_Die *die)
->  {
->  	bool overridden = false;
-> +	unsigned long override;
->  	Dwarf_Word value;
->  
->  	if (stable) {
-> @@ -761,7 +762,8 @@ static void process_enumerator_type(struct state *state, struct die *cache,
->  			return;
->  
->  		overridden = kabi_get_enumerator_value(
-> -			state->expand.current_fqn, cache->fqn, &value);
-> +			state->expand.current_fqn, cache->fqn, &override);
-> +		value = override;
->  	}
->  
->  	process_list_comma(state, cache);
-> diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbols.c
-> index ecddcb5ffcdf..42cd27c9cec4 100644
-> --- a/scripts/gendwarfksyms/symbols.c
-> +++ b/scripts/gendwarfksyms/symbols.c
-> @@ -3,6 +3,7 @@
->   * Copyright (C) 2024 Google LLC
->   */
->  
-> +#include <inttypes.h>
->  #include "gendwarfksyms.h"
->  
->  #define SYMBOL_HASH_BITS 12
-> @@ -242,7 +243,7 @@ static void elf_for_each_global(int fd, elf_symbol_callback_t func, void *arg)
->  				error("elf_getdata failed: %s", elf_errmsg(-1));
->  
->  			if (shdr->sh_entsize != sym_size)
-> -				error("expected sh_entsize (%lu) to be %zu",
-> +				error("expected sh_entsize (%" PRIu64 ") to be %zu",
->  				      shdr->sh_entsize, sym_size);
->  
->  			nsyms = shdr->sh_size / shdr->sh_entsize;
-> @@ -292,7 +293,7 @@ static void set_symbol_addr(struct symbol *sym, void *arg)
->  		hash_add(symbol_addrs, &sym->addr_hash,
->  			 symbol_addr_hash(&sym->addr));
->  
-> -		debug("%s -> { %u, %lx }", sym->name, sym->addr.section,
-> +		debug("%s -> { %u, %" PRIx64 " }", sym->name, sym->addr.section,
->  		      sym->addr.address);
->  	} else if (sym->addr.section != addr->section ||
->  		   sym->addr.address != addr->address) {
-> 
-> base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
-> -- 
-> 2.52.0.rc1.455.g30608eb744-goog
-> 
+Cheers,
+Miguel
