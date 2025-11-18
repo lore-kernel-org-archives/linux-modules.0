@@ -1,90 +1,92 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B077834B187
-	for <linux-modules@vger.kernel.org>; Mon, 17 Nov 2025 20:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7227630506B
+	for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 08:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763412018; cv=none; b=JMe1AGJZbYbI6D+NttNTtmktcNECriBwiUAnwLIg9PSh6yB6ao4ZOuGRyXymnVJtKfqTV2jdHQm5yki5y5XcCsC9KdRbkkFREQ/4jB8DCZITNOikvYoU2y0//nlXB7Jv2uDWEPeCskxq477cYjU2UQTW1A1mblarasSLp6dt1qI=
+	t=1763455170; cv=none; b=ekLAtqfs4wi+RvFRtD4zLmE8xagssex8gzQOxt9x/vDQNISAH7+buxGp/GPitMwDdbAX4xPjFVu8wzw1WTW2oQDDcLGmxbTcISB89A0PStUUqYoyvwJsQ9iYqJNERK4q6n9ryT/l6Pk8ZVBkFvPG3h4kJaY/mjQsMrdQw+vm9Tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763412018; c=relaxed/simple;
-	bh=1H0cLi2JOo6HkpMxCBZrFspi0FwuOmWdAXdzNOV92yA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fmxHrYC2QJUKuOL9BFk/4qVF+OnWKYdfhoYIrky5yJjquTQtnpGdeMQ4EUnxsea58O3LDSqNzREK5I5AHtD4yY4+QmrBy9GGlGlpUl5hJ3BvlVxM1SfGFW+EfzS5g3wS90uQDG4EfKREyDQJ1aWx1PU46Od9ckl7oZe//j0TMZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eQMv2rcH; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1763455170; c=relaxed/simple;
+	bh=EczDlkyDRFeAv68Aop81/CjtdTFYJJsFwEwAecerlBc=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=ph1FaBbxz0LhFJDJgNGQqts7tcpgHNuqARD48kcvRzcrm0X3V+QXwleh/Ie1DzP0d0TwhMF3OgO8WBt3u9Agc4fRbAVIPWy6RwktFqSWQpTnI+VpeTy92A6pvhGM9U8h8PF7RfEBTU1uAYQIkwZqU3Pf3CSOKj8N4tf1JHsmNmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jV1JeU38; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eQMv2rcH"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-295c64cb951so53885ad.0
-        for <linux-modules@vger.kernel.org>; Mon, 17 Nov 2025 12:40:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763412013; x=1764016813; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1H0cLi2JOo6HkpMxCBZrFspi0FwuOmWdAXdzNOV92yA=;
-        b=eQMv2rcH4r0WpDavc+kHqE2gJ8sDfN/n1piP94Ir8Z5tgssywVVP0igfpOrWoqawWg
-         6hWn+5Ueu/rmSstKI63ytb6E3vVdSVnUIpyjhFG25QT+Ed9gN1pA1gMmTHUMaBcNvETh
-         5RYd6lGbdqWFpjAzl7yuzj+ou/G7mLxMbqNTRfIc6iLwwiOcH0KO/sjLZq3M/LJJA1nk
-         UQSWh9Of93Hv09j+XToABgbOSj4uMkZa+/dxYlX0cS4clHhhGouI7mvkQTvyVBiue0zu
-         YtBXZUholdFVCCRyMZJrT1UOfzxVIuYTROiWtXsKsEdqPjLK/c4L7PY6jTcf8MWTaJXF
-         YXMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763412013; x=1764016813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1H0cLi2JOo6HkpMxCBZrFspi0FwuOmWdAXdzNOV92yA=;
-        b=HieR31mUK2GSLBRjrwd30QLoe1OxpieswLSUNRd+fd/v36aHoR3XPdalIfgjLkhoow
-         +natJu5U7cYZfdOO26w7AIs6H/c342Te/sAI8knX90R8IsuQY081X8WoD8S+WG5QHfhE
-         7HH8i75N8RPyicNRogrP78X33NcDgTyfHRqQG0GCwZGzD90hSHaTUnPPcg27yEjc1c4y
-         lrUwpS0Dvp2lu8fIsGCjZ3KYLt6UpM50KUcrhzOERdCqqs8+4BzYJzOGOGKF9SiBdHwA
-         omXb/aX6szw5d7E2AtDKyNq4ztAeVZug+o4I2pq1GcZ/J1q5JA+uuSpt4vMandvt8be1
-         vHfg==
-X-Gm-Message-State: AOJu0Yx/ZCDVNYf/WpubKFlJUfqqnANLPLTvPhJ0h9A9VLR66MZgHc+Q
-	ZPtVYPLHue9IqtWK0BqNvVFdZLw5GXKzhOmPv1NDgkwCeQpFaVMmgyZlfSvdRxiR6y4LqwKi91O
-	eqZOr+AvqZ6OUHU4J8QZWryCnKi3pG353D/J55QqE
-X-Gm-Gg: ASbGncu17BAUrRK9iQQvPpBIGTru7QwbpT7k1l5nzt1zxeey1jamcOtc3syLPPns+Rg
-	tZDB8j42L2oykZ8kl3JmKUq8aRoldttWTRK7zbpf0oQhstGVg2gakw3pmVbrvkf3F+NfdwmiN1A
-	0+tsha7Mt0Ahcq5ZFAYFxL7LJEchcVwYthqejTp3vGzi/lWOIbP9GA254eg6mdwY3/xUbOWsHrq
-	genBgePQ0LYMmmyaWA2RZ+Hi7pHUshofXoaS81AQxGJ1F0+MJA/Q4kAClAag6iEHNcT
-X-Google-Smtp-Source: AGHT+IGRvbW4d/tIwNtyHY0u+4ZKoC2/gi1CFz+eeP0CV681ftV7r/gK4h5K+JNL4Shy2rRd6rguma3V9C0i2eAjQHA=
-X-Received: by 2002:a05:7022:6182:b0:119:e56b:c1d5 with SMTP id
- a92af1059eb24-11c765a9e8emr21688c88.0.1763412013146; Mon, 17 Nov 2025
- 12:40:13 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jV1JeU38"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763455167;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7FL0nv8u6A7f3to0nc11pn91OMRRKpxQEVPN+kjD6Sw=;
+	b=jV1JeU388Qdz2KKWFJtGHNHMPPASf3SLZzf03fj20h2QSgGao395CZXIalvZxE5erRFshU
+	Nq2v45myzM3GdXBIy2nw34HDNSENdrv+mdOff2TsUCnf8i19qSEw3c2TUP0b3KXjVZ8w5X
+	jnxMoC7bo1ASeQLWDYUruack9Q2dMkQ=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-140-gwAfvOgXMwiscJTRXIZsHA-1; Tue,
+ 18 Nov 2025 03:39:24 -0500
+X-MC-Unique: gwAfvOgXMwiscJTRXIZsHA-1
+X-Mimecast-MFC-AGG-ID: gwAfvOgXMwiscJTRXIZsHA_1763455161
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0FAC418AB30C;
+	Tue, 18 Nov 2025 08:39:21 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.5])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 25879180047F;
+	Tue, 18 Nov 2025 08:39:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <13213304ac049113655ab8fe1bae76cc84a3330e.camel@HansenPartnership.com>
+References: <13213304ac049113655ab8fe1bae76cc84a3330e.camel@HansenPartnership.com> <20251117171003.GC1584@sol> <20251117145606.2155773-1-dhowells@redhat.com> <20251117145606.2155773-3-dhowells@redhat.com> <2165074.1763409175@warthog.procyon.org.uk>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: dhowells@redhat.com, Eric Biggers <ebiggers@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A .
+ Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aRcxzPxtJblVSh1y@kitsune.suse.cz>
-In-Reply-To: <aRcxzPxtJblVSh1y@kitsune.suse.cz>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 17 Nov 2025 12:39:36 -0800
-X-Gm-Features: AWmQ_blW76vh0PVkmggdMwvKwkljCLQHPM3W9uXuIORf5C0lZqXX4jqFUb23g2I
-Message-ID: <CABCJKufeEaZ1hsyHsr5=RxR=AcpMu6nnYypwvcmS-ZxjZNV77A@mail.gmail.com>
-Subject: Re: gendwarksyms not 32bit-clean
-To: =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
-Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2187236.1763455154.1@warthog.procyon.org.uk>
+Date: Tue, 18 Nov 2025 08:39:14 +0000
+Message-ID: <2187237.1763455154@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Hi Michal,
+James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
 
-On Fri, Nov 14, 2025 at 5:42=E2=80=AFAM Michal Such=C3=A1nek <msuchanek@sus=
-e.de> wrote:
-> I tried to build kernel with gendwarfksyms and it does not work on
-> 32bit:
-[...]
->
-> Can you fix it, or make it depend on host being 64bit?
+> But even if you don't accept that, Google keeps effective joint
+> ownership of the code through their CLA and so could grant a dual
+> licence to the kernel anyway without needing to refer to any
+> contributors.
 
-Thanks for the report. Can you test if this fixes the issue for you?
+Actually, the fact that BoringSSL's ML-DSA implementation uses C++ with heavy
+use of integer-parametered templating is more insurmountable for borrowing
+their code.  Yes, it does allow them to reduce their LoC to ~3000 and is much
+more readable, but I can't do that in C.  Now, if we want to work on
+persuading Linus to allow C++ into the kernel...
 
-https://lore.kernel.org/linux-modules/20251117203806.970840-2-samitolvanen@=
-google.com/
+David
 
-Sami
