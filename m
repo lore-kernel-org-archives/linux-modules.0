@@ -1,91 +1,187 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716543624DA
-	for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 14:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AE2365A10
+	for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 16:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763477898; cv=none; b=c8c0EjX4bP/u3p1rA0BH0D2BqzMfjj1ycAPa9+TVfvz/Ad2hzNwnoF+L/OT//TGwNVUg7OanZvoGlna7XrXmnO/1cUYBiVx4IVAJWeuDlAeLv1tUaTMtAb2F2QaAKeNVsB5Kh96BmVI381+LqrwB8x4jexTYYhjiTXbgW8t+zEI=
+	t=1763482715; cv=none; b=Nsl0mfrK2FZiRv3t3kAdEoYj4Xc5bo9mQsoFQBqE/kwrDpluimHFHp31k7HiAjByxW3PPi9/1Zrj7P39AvbidSaWjOUirkFhMbd38b6Z6Uq8VWyzLd5qzKVmDUFLSsQiDe/3FVBXVMfdm2+P8dg6rLFjCts3KEFY9EMOdZ4ELOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763477898; c=relaxed/simple;
-	bh=DPfztGpTpKeZwjuO3Y+4RpBkmoIsNivSOXSgBqsyN+0=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=LPAxwS4LNdTk7wPNYQ3yLGOBYaa4E3ad7DipMtbRMmLqvJ38cYR+3+AcbnUvomANq02+jb2tHDmk3JCso8nq+EJW2Fj14q5nHBJGHSOCXq+rqFg0NUdGSE70mRQEEzOMh3G+7lx+h6N1dJQ9p+FVj9lUX8cR3caNdA95eQo8AZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XQEC+Wz8; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--gprocida.bounces.google.com
+	s=arc-20240116; t=1763482715; c=relaxed/simple;
+	bh=VCaiqV8vCrrsLqqf8b1+K9+FOBl2AhCdEyAraBkbibA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kSksRms83jVpcD4ka4CfAncuz6CVM/AvNmtj5nWLN4qIhMOkUQ8RKZkBtnqHWlqzk9BIB2rPb2SnsWRiSLeg0JwbS3qOkfV+tCxBXixXimUS41UrgZ4TmGI9vhsD6eucwM2SK9p09E3b8JF5QXy76sqChRPkMd3qJK0PLxtVmU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KH16ukRP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=kNMpTgxY; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=E48M3eqb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=az9HKZt9; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XQEC+Wz8"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-47106720618so65640795e9.1
-        for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 06:58:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763477895; x=1764082695; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DPfztGpTpKeZwjuO3Y+4RpBkmoIsNivSOXSgBqsyN+0=;
-        b=XQEC+Wz8UIXoObeaMiJGlUUUvDcb4FseZK2UuMU8au9M843kYGS99h2eHb9yefkI+P
-         wEE6MVpKzjYgFqcMpCcfoiiyNYerIEo0Y1TRup9+CVafJC68DgHSprzpjf0NjRyXW8jB
-         r2GZdJU3mrSdmtg4JhcZ3QUNo3FvqoCxo3cr26bkKbMNos2SuJW67yIH6CfTXC5lv3fS
-         86LRppOz2ExLpinT25jF7jshe6nQD7d018Vy394BS7/xOt5h6WwoNEkltX/ROiCcEFAg
-         fo7BwCW370UituEtDTfejknVT9BzC4Jls4stUCZ2O3xfUzyo70A7rzcmtaCXAmSYLUru
-         wT0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763477895; x=1764082695;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPfztGpTpKeZwjuO3Y+4RpBkmoIsNivSOXSgBqsyN+0=;
-        b=OtnB5KaOX+SVrkP9EYmHariQmZFEInTewYKr5WngB/J79oDZKcG1lw6PGXYHnSQs6H
-         bbJjFRupR1cZpFPJvrPoWI4xBNAOMSaA0DWg0zimNJ5ra/9W8yld/g3b1y4YGkyVX2tS
-         wPIEboONz4aTodM1cCjiJuQ6tSlqqRVcupD6pHHM3a8DFowhFsJroJoDZ7VnTgFAn8TL
-         0/8ljMyDLGXp0YMfxYZcVmLRSwSnhx55kzVs2hvUzHrOFNZSFIX01ra8zoGEBpUJVdWU
-         AczrrMnRNKfp+cXWpmvGl3AHCHE9aFnkeQXSjy/0TZtcQTn5LsmtdwYFzmn7UywOzfpk
-         SV2w==
-X-Forwarded-Encrypted: i=1; AJvYcCVhx/lsXexjJJz8rpRdbbiiDsU/JSfXeTKOEBvy7A2TftttlJ7E7Ml6makR8YaJ/3yPI3TaY8pTq4+VGY5B@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/3j4Bzlhga9IkYFeviwnLmAVrTs8fnNiIiBVnZiRFCWJKsNjk
-	Fzp6bwhjzcGfl1KyFPu5fK7l0l8rfPkjlQIYD0cZH8QiQdmclWEIuWvcmMvWJKn9+TvN3VCtNeo
-	Qm4upfUNdTt16Xw==
-X-Google-Smtp-Source: AGHT+IF5IuKqsfo4fGvtEqK6+inM6Wme3e1NzVR1nM/R1oTA+LPa6JsLnhIYst5T5QUx9HKDMNad3Q0W0SjPeQ==
-X-Received: from wmpl35.prod.google.com ([2002:a05:600c:8a3:b0:475:d8de:fe5b])
- (user=gprocida job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:a07:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-4778fe55101mr148495515e9.4.1763477894678;
- Tue, 18 Nov 2025 06:58:14 -0800 (PST)
-Date: Tue, 18 Nov 2025 14:57:36 +0000
-In-Reply-To: <20251110131913.1789896-1-ojeda@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KH16ukRP";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="kNMpTgxY";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="E48M3eqb";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="az9HKZt9"
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CFDEE1FF90;
+	Tue, 18 Nov 2025 16:18:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1763482710; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
+	b=KH16ukRPSLAQKNON4fDq3e0cySt60gkhrJbsAE6il46Zx5NkZMpWN5Xw+eaObV0QYabFpK
+	IggmZtIN+43xGo3qMknMT0h07lK9z8Epn8uzgf8rLJDJBglVRuRrefie/gk9fNaMw8m22T
+	lFwlJwc5bnNqEypSCnPNryxjrEK2NIw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1763482710;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
+	b=kNMpTgxYQiXHAV7fn6GiscHJXuEVD0Q53hVRUGFendzeHDv1Aplq4lBqUlmnPkw2DoLtBK
+	YtY8SfGE7Dwu+WCQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1763482709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
+	b=E48M3eqb0FNOKTFlsCmDQcpSYChHjCVm7CbKBRSw5zz+tGtTtbpD2sw7IYy2z4goIPX3dc
+	Yw0cJRwerzDhFA2PtrnZMB4Dwjr+PDTZk5DGO6D6ndJ4IaTSSIjZXmDEIK9uE1L4sPMZ+j
+	1UsJhui0wBelbtKDOGrae9tf7H0UMiU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1763482709;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lV22ABgqhfmxJGlxKAwcYaFPokRsrb2FS9hJwycUbYk=;
+	b=az9HKZt9LUWa3JKL3A5DFDDewT8jNcVyOVq52fgI6Fv8pt9P3IsYE9ROjUBSDP9YEmMQO9
+	h8j12jkzYUj5VXAA==
+Date: Tue, 18 Nov 2025 17:18:28 +0100
+From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gendwarfksyms: Fix build on 32-bit hosts
+Message-ID: <aRycVOe5ZXSJJFpn@kitsune.suse.cz>
+References: <20251117203806.970840-2-samitolvanen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251118145741.1042013-1-gprocida@google.com>
-Subject: Re: [PATCH v2] gendwarfksyms: Skip files with no exports
-From: Giuliano Procida <gprocida@google.com>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev, stable@vger.kernel.org, 
-	Haiyue Wang <haiyuewa@163.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251117203806.970840-2-samitolvanen@google.com>
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-Hi.
+Hello,
 
-> Thus do the last one: don't attempt to process files if we have no symbol
-> versions to calculate.
+On Mon, Nov 17, 2025 at 08:38:07PM +0000, Sami Tolvanen wrote:
+> We have interchangeably used unsigned long for some of the types
+> defined in elfutils, assuming they're always 64-bit. This obviously
+> fails when building gendwarfksyms on 32-bit hosts. Fix the types.
+> 
+> Reported-by: Michal Suchánek <msuchanek@suse.de>
+> Closes: https://lore.kernel.org/linux-modules/aRcxzPxtJblVSh1y@kitsune.suse.cz/
+> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> ---
+>  scripts/gendwarfksyms/dwarf.c   | 4 +++-
+>  scripts/gendwarfksyms/symbols.c | 5 +++--
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 
-This results in the -T foo option being ignored in the case there were
-no symbols. I think it would be better, consistent with the
-documentation and expectations, for the file to be produced empty.
+with this patch gendwarfksyms builds on 32bit x86 and Arm.
 
-This means that just the for loop should be skipped, say by adding the
-condition there with &&.
+Tested-by: Michal Suchánek <msuchanek@suse.de>
 
-If you disagree, then please update the documentation to match the new
-behaviour.
+Thanks
 
-Regards,
-Giuliano.
+Michal
+
+> 
+> diff --git a/scripts/gendwarfksyms/dwarf.c b/scripts/gendwarfksyms/dwarf.c
+> index 3538a7d9cb07..e76d732f5f60 100644
+> --- a/scripts/gendwarfksyms/dwarf.c
+> +++ b/scripts/gendwarfksyms/dwarf.c
+> @@ -750,6 +750,7 @@ static void process_enumerator_type(struct state *state, struct die *cache,
+>  				    Dwarf_Die *die)
+>  {
+>  	bool overridden = false;
+> +	unsigned long override;
+>  	Dwarf_Word value;
+>  
+>  	if (stable) {
+> @@ -761,7 +762,8 @@ static void process_enumerator_type(struct state *state, struct die *cache,
+>  			return;
+>  
+>  		overridden = kabi_get_enumerator_value(
+> -			state->expand.current_fqn, cache->fqn, &value);
+> +			state->expand.current_fqn, cache->fqn, &override);
+> +		value = override;
+>  	}
+>  
+>  	process_list_comma(state, cache);
+> diff --git a/scripts/gendwarfksyms/symbols.c b/scripts/gendwarfksyms/symbols.c
+> index ecddcb5ffcdf..42cd27c9cec4 100644
+> --- a/scripts/gendwarfksyms/symbols.c
+> +++ b/scripts/gendwarfksyms/symbols.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2024 Google LLC
+>   */
+>  
+> +#include <inttypes.h>
+>  #include "gendwarfksyms.h"
+>  
+>  #define SYMBOL_HASH_BITS 12
+> @@ -242,7 +243,7 @@ static void elf_for_each_global(int fd, elf_symbol_callback_t func, void *arg)
+>  				error("elf_getdata failed: %s", elf_errmsg(-1));
+>  
+>  			if (shdr->sh_entsize != sym_size)
+> -				error("expected sh_entsize (%lu) to be %zu",
+> +				error("expected sh_entsize (%" PRIu64 ") to be %zu",
+>  				      shdr->sh_entsize, sym_size);
+>  
+>  			nsyms = shdr->sh_size / shdr->sh_entsize;
+> @@ -292,7 +293,7 @@ static void set_symbol_addr(struct symbol *sym, void *arg)
+>  		hash_add(symbol_addrs, &sym->addr_hash,
+>  			 symbol_addr_hash(&sym->addr));
+>  
+> -		debug("%s -> { %u, %lx }", sym->name, sym->addr.section,
+> +		debug("%s -> { %u, %" PRIx64 " }", sym->name, sym->addr.section,
+>  		      sym->addr.address);
+>  	} else if (sym->addr.section != addr->section ||
+>  		   sym->addr.address != addr->address) {
+> 
+> base-commit: 6a23ae0a96a600d1d12557add110e0bb6e32730c
+> -- 
+> 2.52.0.rc1.455.g30608eb744-goog
+> 
