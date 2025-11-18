@@ -1,255 +1,102 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4247A1E5714;
-	Tue, 18 Nov 2025 12:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCD2238C08;
+	Tue, 18 Nov 2025 12:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763468452; cv=none; b=KxQvoyFY6WF9UxUIKfDHPc9NrHSMSgTZVS7kkkP3eNJPMhLlOaV2l54GJKaxzWcXPD3WlOz6oZUSG8UqQsBFi6izXFg+fbpwfDvHCJlsI0RvrTuNC8LnH8iZX7+JF+MnBE61M/I9UCcVWtRmtc9+ZTZYtrnF1SAeRm3kRoCpdoo=
+	t=1763470787; cv=none; b=XyBYanVW9WjTOfImsqSNmrm8Nb8nUokNXciihoqb0rXwGWWNwvpVxA0dfjD97kW/8FOrek/H/6jkOErh9UkFlznJcFnfS4tQzPIG9d7MQ7B41I49Ao3dBH5h3pd2M2maxCNr9yRbswuABnPdAcQdvCJpc79khmWV++9gV5zDNcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763468452; c=relaxed/simple;
-	bh=GVRJlpDF8xrYLl1WhyXJ0U4K5iusSxsWmXPfW0IF8DE=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=PVzxmSgd9pwI5Rs57lo+LxPTKw+7dtK1i6a0RTNVVtYJja8qhFCyl5amWAM6p+nJR1cDbP8B1Q3Sh75tbhAq/6wL/k1JtODP+1bBuWfW7/PlLJMhsVOlHvzQwNxA+QZNY7l1rEAQn0FlzYa6yfM9MZ7r0qpf1qTo52x9FHMdCRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=NACC1nP2; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1763470787; c=relaxed/simple;
+	bh=Ncb/lmSZ8o8BxiSBOIglYd7auxVrKItyWqgvXcde6uE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uBr61exL4DsBS9U7VjvWJiPYmN0hFweOSRQREA1r9Uwe6IG/LV8ovfIsfpH7TzDBu3POs9a1tA7sJvKKjwHbURGf5b/1lbt/BEUWJL/KEhxzjMabPgXNGNDozCADYF0tMIwTBlEri9WWaPHCaWUv6NXSPVxcjTRZJ1BTWS1/pa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=i6jdZIEV; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="NACC1nP2"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AHLqGBh028653;
-	Tue, 18 Nov 2025 12:19:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=lyhY8E
-	ntmkR94BhtT2/pCjFipvKnQo7TILmccwMs99A=; b=NACC1nP2+Ol5T2M82baQnG
-	O90H/U1Rp7jUA6LJsgHhFZbAfpfDWQlT0qHpltpfvyUXClyUPrbkfrY68fsl/vID
-	PUeO80sSmr+gRSJShqNAceLpCaRvkOEm/hwaRnuYV0zShdAhGYr4nDD5n36qGw6y
-	cxEEbEx+r3csUe+bbliZUHVyYPyPdCsabcc2S3Sp/griILlmuKCKSh7Em3kpgPEr
-	LfIx2wj+ZLRiTCHhe/1j1rlCClx9TQMZe5NlbgMk57VD+8nMnPwsUS0ooIFiFCaS
-	XfI4ZhizmCBf6b8TMceHToK4VO3ZrJHhJtJ90sd4lThIKMU9zg6s98og5+DgT43w
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejmsje77-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 12:19:54 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AICJrlZ029594;
-	Tue, 18 Nov 2025 12:19:53 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejmsje73-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 12:19:53 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AIC6t9G022386;
-	Tue, 18 Nov 2025 12:19:52 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af4umtywa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 12:19:52 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AICJqNt19268182
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Nov 2025 12:19:52 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 36F9B58053;
-	Tue, 18 Nov 2025 12:19:52 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9C97558043;
-	Tue, 18 Nov 2025 12:19:50 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.13.83])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 18 Nov 2025 12:19:50 +0000 (GMT)
-Message-ID: <fca9a7b41a5e428fadfe2d7e3b004ada2763375c.camel@linux.ibm.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>,
-        James
- Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Luis
- Chamberlain	 <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez	 <da.gomez@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Roberto Sassu	 <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:MODULE SUPPORT"
- <linux-modules@vger.kernel.org>
-In-Reply-To: <42qcfcxxlmwphctzvji76hy5tycfabiiv5u6zw6lgg2p3e2jwv@fp4g2y7ecf2y>
-References: <20250928030358.3873311-1-coxu@redhat.com>
-	 <20251031074016.1975356-1-coxu@redhat.com>
-	 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
-	 <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-	 <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-	 <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
-	 <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
-	 <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
-	 <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
-	 <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
-	 <42qcfcxxlmwphctzvji76hy5tycfabiiv5u6zw6lgg2p3e2jwv@fp4g2y7ecf2y>
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="i6jdZIEV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1763470783;
+	bh=Ncb/lmSZ8o8BxiSBOIglYd7auxVrKItyWqgvXcde6uE=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=i6jdZIEVNwLYytXxL0xyszz9V/5J00crWUsPC1qD1xPY4uMLGG6PFVmMBDI1Qanz4
+	 lX8l8+zo6piIYnCdXIKjZuLVrDq0H5gCjQrZ3hxSmjUEKC9ju5ny/fuZ9cv93pKbjr
+	 FNvQWgk+tdXmaQcgSRiWdhZnGa2QMXI93iQBhnV0=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id E5FEC1C020F;
+	Tue, 18 Nov 2025 07:59:42 -0500 (EST)
+Message-ID: <29700dff2d59fa3a8a97604390280246a35df3bf.camel@HansenPartnership.com>
+Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: David Howells <dhowells@redhat.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, Herbert Xu
+ <herbert@gondor.apana.org.au>,  Luis Chamberlain <mcgrof@kernel.org>, Petr
+ Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
+ Tolvanen <samitolvanen@google.com>, "Jason A . Donenfeld"
+ <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller
+ <smueller@chronox.de>,  Lukas Wunner <lukas@wunner.de>, Ignat Korchagin
+ <ignat@cloudflare.com>, linux-crypto@vger.kernel.org, 
+ keyrings@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Date: Tue, 18 Nov 2025 07:59:42 -0500
+In-Reply-To: <2187237.1763455154@warthog.procyon.org.uk>
+References: 
+	<13213304ac049113655ab8fe1bae76cc84a3330e.camel@HansenPartnership.com>
+	 <20251117171003.GC1584@sol> <20251117145606.2155773-1-dhowells@redhat.com>
+	 <20251117145606.2155773-3-dhowells@redhat.com>
+	 <2165074.1763409175@warthog.procyon.org.uk>
+	 <2187237.1763455154@warthog.procyon.org.uk>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 18 Nov 2025 07:19:50 -0500
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tmx0S859D2PjT-GcS_PiFz6ExPxs8ajY
-X-Authority-Analysis: v=2.4 cv=Rv3I7SmK c=1 sm=1 tr=0 ts=691c646a cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=lMX6Wg8gRfqxLgtVRk4A:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: gAS9-5b4YybH3DfeKDBYJcVlI9B8-D4w
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX58kgaZkoYOHV
- vNfeRlo8tH98ik327mO9zkSPcXtkQE9G9dxlLFiA73mqddV5alGRttVQO6GUE5aOAlwdY/OWny9
- E8PLov8hz1t+/E7uo5ly7XKCIB3xbu8IlvcliHaT8UeB+tpcQlBDUG5OCBN+S766bgTx401T+O+
- brJVYM3ufPa/Aooa3qpAfO3O7+PAyvKvi7P7ix2br7wpb5FNRbsU28LnEocv0N6LyLJ40XpF3AI
- smUXMrYzr/RZVwmC+8CnUcPm+WGchMVrEqXETqaSx9QGutAP3PW2Nv6R/uq+fMwNL7PVz1Qhelh
- 9M9m8AAzPTILgWjGU4XV0HvTM3jGYAXZs4RUxFXGGcDu2QJFPMblHe4mzDZG940elrCQXD0OSs6
- OURZ/a2dWyaBRK/nrjtWLvEwoAEWpg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 clxscore=1015 phishscore=0 priorityscore=1501
- spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-On Thu, 2025-11-13 at 12:06 +0800, Coiby Xu wrote:
-> On Fri, Nov 07, 2025 at 02:28:13PM -0500, Mimi Zohar wrote:
-> > On Thu, 2025-11-06 at 17:15 -0500, Mimi Zohar wrote:
-> > > On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
-> > > > On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
-> > > > > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
-> > > > [...]
-> > > > >=20
-> > > > > Hi Coiby,
-> > > > >=20
-> > > > > Based on the conversation with Paul, there is no reason to remove=
- the existing
-> > > > > security_kernel_post_read_file() call.
-> > > > >=20
-> > > > > The changes are similar to the 2nd link, but a bit different.
-> > > > > - Define a single enumeration named READING_MODULE_COMPRESSED.
-> > > > >=20
-> > > > > - In module/main.c add a new security_kernel_post_read_file() cal=
-l immediately
-> > > > > after decompressing the kernel module.  Like a previous version o=
-f this patch,
-> > > > > call kernel_read_file() with either READING_MODULE or READING_MOD=
-ULE_COMPRESSED
-> > > > > based on MODULE_INIT_COMPRESSED_FILE.
-> > > > >=20
-> > > > > - In ima_post_read_file() defer verifying the signature when the =
-enumeration is
-> > > > > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_=
-kernel_module.)
-> > > >=20
-> > > > Hi Mimi,
-> > > >=20
-> > > > Thanks for summarizing your conversation with Paul! I can confirm P=
-aul's
-> > > > approach works
-> > > > https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_=
-lsm_hook_paul
-> > > >=20
-> > > > While testing the patch today, I realized there is another
-> > > > issue/challenge introduced by in-kernel module decompression. IMA
-> > > > appraisal is to verify the digest of compressed kernel module but
-> > > > currently the passed buffer is uncompressed module. When IMA uses
-> > > > uncompressed module data to calculate the digest, xattr signature
-> > > > verification will fail. If we always make IMA read the original ker=
-nel
-> > > > module data again to calculate the digest, does it look like a
-> > > > quick-and-dirty fix? If we can assume people won't load kernel modu=
-le so
-> > > > often, the performance impact is negligible. Otherwise we may have =
-to
-> > > > introduce a new LSM hook so IMA can access uncompressed and origina=
-l
-> > > > module data one time.
-> > >=20
-> > > ima_collect_measurement() stores the file hash info in the iint and u=
-ses that
-> > > information to verify the signature as stored in the security xattr.
-> > > Decompressing the kernel module shouldn't affect the xattr signature
-> > > verification.
-> >=20
-> > In the case when the compressed kernel module hasn't previously been me=
-asured or
-> > appraised before loading the kernel module, we need to "collect" the fi=
-le data
-> > hash on READING_MODULE_COMPRESSED, but defer appraising/measuring it.
-> >=20
-> > An alternative to your suggestion of re-reading the original kernel mod=
-ule data
-> > to calculate the digest or defining a new hook, would be to define "col=
-lect" as
-> > a new "action" and pass the kernel_read_file_id enumeration to
-> > process_measurement().  IMA_COLLECTED already exists.  Only IMA_COLLECT=
- would
-> > need to be defined.  The new collect "action" should be limited to
-> > func=3DMODULE_CHECK.
-> >=20
-> > The downside of this alternative is that it requires a new collect rule=
-:
-> > collect func=3DMODULE_CHECK mask=3DMAY_READ uid=3D0
-> > appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig
-
-As it turns out, the "collect" rule is unnecessary.  On
-READING_MODULE_COMPRESSED, process_measurement() should calculate the compr=
-essed
-file hash.  Extending the IMA measurement list and verifying the signature =
-can
-then be differed to READING_MODULE.
-
+On Tue, 2025-11-18 at 08:39 +0000, David Howells wrote:
+> James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
 >=20
-> Thank for suggesting an alternative! I've implemented the idea in
-> https://github.com/coiby/linux/tree/in_kernel_decompression_ima_collect
+> > But even if you don't accept that, Google keeps effective joint
+> > ownership of the code through their CLA and so could grant a dual
+> > licence to the kernel anyway without needing to refer to any
+> > contributors.
 >=20
-> Note besides a new collect rule, another change is needed. Currently,
-> process_measurement only accepts enum ima_hooks thus it can't tell if
-> it's READING_MODULE_COMPRESSED so to only do collect action. So I
-> create a fake MODULE_COMPRESSED_CHECK func.
+> Actually, the fact that BoringSSL's ML-DSA implementation uses C++
+> with heavy use of integer-parametered templating is more
+> insurmountable for borrowing their code.=C2=A0 Yes, it does allow them to
+> reduce their LoC to ~3000 and is much more readable, but I can't do
+> that in C.
 
-Correct, either extending process_measurement() with the read_idmap enum or
-defining the fake hook would work.
+I was only commenting on the legality of copying not the technical
+feasibility.=20
 
->=20
-> And for the idea of re-reading the original kernel module data, it has
-> been implemented in=20
-> https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_ho=
-ok_paul
->=20
-> Both branches have applied your requested three changes including
-> respecting the 80 char line limit. Additionally, I made a change to the
-> IPE LSM because of the new READING_MODULE_COMPRESSED kernel_read_file_id
-> enumerate.
->=20
-> After comparing the two implementations, personally I prefer re-reading
-> the original kernel module data because the change is smaller and it's
-> more user-friendly. But if there are other reasons I don't know, I'll
-> post the patches of the new collect action approach to the mailing list.
+> =C2=A0 Now, if we want to work on persuading Linus to allow C++ into the
+> kernel...
 
-The "re-reading" option fails some of the tests.  As the "collect" rule isn=
-'t
-needed, let's stick with the first option.
+Having worked on it, C++ is a bit of a messy language in that there are
+many more idioms for the same construct than in C, so I can see why C
+is preferred for cleaner coding.  On the other hand if the safety
+profiles work actually produces something useful (unlike safe C++ which
+just flamed out) I could see that being a reason to revisit.
 
---=20
+Regards,
 
-thanks,
+James
 
-Mimi
