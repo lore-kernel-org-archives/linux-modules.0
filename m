@@ -1,109 +1,93 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320FE364E97
-	for <linux-modules@vger.kernel.org>; Wed, 19 Nov 2025 19:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53302DC77E;
+	Wed, 19 Nov 2025 22:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763582163; cv=none; b=MzaDeozpxfrprcqdDe5Pk6cKE1uFmDn20vF237u2OJqEGBkoYPBp0gHoWUXYxD0q8e22/8QBsFEhmLtbNm3XJvhKU4WZRMT2hDYUDYO3rU2W8NaR7KrlPDpTqsz5KJjgYryJsz0AepVbHTMagRKpAPVDj8c6lkSPrSWfn2MEukc=
+	t=1763592885; cv=none; b=qXsPD1abUj3ZYrOquBU+9jJhRCX+0YYFnT2K25cFR3DIdF/BTzuHYLEB+oLR5xA/2T4dGcui8DrM9CQlqscaDma4TeLnUR0msuY5QfXtg1hN5ILecMUY3DeTTUEI0odUgnIo1+piHPfuszrJl+Qzj+kKaH/xt9/MC3FtTpcNGiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763582163; c=relaxed/simple;
-	bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BH5SC8zeVHi3xeMgemXf6JBlcEP+WmZFe8YZ9xdjvT10mbnsb/6GsxWoWEGliRtaAiiQ6bo/diVg97XP9EzW5eWGtkI31piMe6hwFLtSILSSZdU4BmQ90ZX4j0cob6APMVJlE0bYNnoGl3XxAshm+bXQiiXGfoOqhvFcAOJTLg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=b+5LHHKo; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1763592885; c=relaxed/simple;
+	bh=evRf10KLlkgghicnG+ujSW3Il6OzrjlVgGjTINYs7IE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B6dZGDJdHx7vmyaMoHIyUVQ55gY5Ib5AOqsuR8k7THYr2lgswj1Ui9rg+gwGX9r6u711CCAGZWCwROSWOJO2YHhNDXVsA8KEh1wnuAi13Wxdv0gLhVzHK6WlfkwmGcDR9wtw459iUm+gStIAWAv8wDeoufKNMIVLf114X4cCgYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JbVRDGgo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="b+5LHHKo"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-295548467c7so1401455ad.2
-        for <linux-modules@vger.kernel.org>; Wed, 19 Nov 2025 11:55:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1763582159; x=1764186959; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
-        b=b+5LHHKo2uZFLgJwzREuY9gs6Zw+2e6wzfSVyCM6Eis7Crav0/UquXBkt3eWPsDkr1
-         zumaiIjnYOrQCagOg1M2UzdnVGm3MhCL43iRsDPC336Q2WCxQBcvPSe5leC4gw2poj7s
-         KsOFzixapMh3zBZemmBMkB2vuw8fEux8tQwtslZ2bLQ3n2gaiOIK1Uu0J9TWwaRmPCA+
-         pt6Y0hN/mNSTc+o/bby86XwRBgkwB+PebYDHdrqrwjXs9A5Hinsb/r9fsAi6ZI/yH2hl
-         sdlkuhJF03Ne6XEcF+wR8x9Cg5D3Y3iaZenTQdNJuE9JeHIAuVTfHPQjXHX1SWWjwTId
-         norw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763582159; x=1764186959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DN/DzA6q+86ev6MGPfAT+dLF+J2Uxfsbiqindp3jA1o=;
-        b=mb1OfzMC3uVedlr+dXfJyW+ZP/U98cq1CL9YUuuBS9f2/GZAfPQrwY3Vg+EZusNq+D
-         wSqpAX+Gq2SxsD1RDtYvBBB2ZQZjGcm1nvYiqtbK/ad7LxMT6ZK5P/uVXaqRjvj8NsvH
-         jr3XLmjILC2OhRl9mg/1xjLE0djJMdrO2iMVH6F73H2ekEtx1FHCgGdNXGHNe1y2Zzbk
-         636VmkwUz4I7nZYQZv/2h6wZlhGFtoZMYDwJ/KmtKHE//7P7U5mdaNV5aaFoHIsOVe4h
-         UtdXIdp1lBH+VAkQ7pKOc6bn4Z1Z+sV76zW637+4WAzYKUEUYMiiQcAnNoBpZponhoGu
-         afOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSquhCVPGHev7g1LMxPIVLDR2U6Zp1mVpkyNhFYq0jnBp2HRk0NAX5F1Y089RyyHaCCoCqHLYM4Vu98ef7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzalsAKtQkIIsy07tGkPC5LqNF7ZuYPkEcHw1zXxs8saZIPY+uf
-	fbf4vmD64aIjbUmnUg4y6UtuPm6rGqOKPeS6WErxet3y1hhIrm/AXRD1UGAGgd/M5MAVzJErNjq
-	CDgzSlaBSfY8AcMZ9e+B6fr+l1g6FDodtha9DUaSU
-X-Gm-Gg: ASbGncsagh1Yso5alKV5nBuLVpbbKMFJEiVPGpzVofku+WekZz+qzwJqStoNQxOrnq6
-	eMdJlTUWLXCFlBALUY4n1Kwc8ZeyxWAoKmSbKaGvtX3/Kltok+xau9Y3gj8zNtcElfdonLstrpf
-	AKlfoZqfK6XjZF3+zgCPWLx7EiNxML7mna+N+htxbL5YIwB6fG3LI2fq/29Hkd00p6Mno8bhpSv
-	ifBZbWraIJxvmn4p5mOTDkfQUgGUeOek4RI69hwv4gH4gwIRTi6YJn2OHFjq3uvoiZvEK4=
-X-Google-Smtp-Source: AGHT+IFH9MSHfJWp6YXFB42UsuMhoLOkEWsFTDtMBAdcLCsEfu9ycctu3VPOXdyMN2njeOgrz0I5tCYbRs8o2VLROfk=
-X-Received: by 2002:a17:903:19cd:b0:295:a1a5:baf7 with SMTP id
- d9443c01a7336-29b5b0d7f17mr6451945ad.37.1763582159025; Wed, 19 Nov 2025
- 11:55:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JbVRDGgo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5E0C4CEF5;
+	Wed, 19 Nov 2025 22:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763592885;
+	bh=evRf10KLlkgghicnG+ujSW3Il6OzrjlVgGjTINYs7IE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JbVRDGgo6trdW+Oy1Pe9AfUgKOQLUOqf6UtEomcbq4I37ghBVV5tiBHk5cNEny42s
+	 AUQIc77HsaOlBaitldxEtQPlM/w8SPcZq8S0atHY3IpjCWyl+bxOACSkvqOjgSE8R6
+	 edOVOkVuqdiIWhx9f80y5j+jI6ZHv1+mJjtkud38pfq3m8f5IcuH/CRgeIjd/v/Ydy
+	 Zn+3JlRKAen7Y6GkL9oLIAQrFgjQkDCARGugcVo1OOh5D/eFQaEFyAPqfT9210FVWV
+	 PqDxyBCQYwLZ6NzHYf1NKKopkR0F40jkzr0c/Os8la32hbCuxkSvoJp5WulY4nHG94
+	 2iU46X2obOOxw==
+From: Kees Cook <kees@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	linux-modules@vger.kernel.org,
+	Daniel Gomez <da.gomez@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] module/decompress: Avoid open-coded kvrealloc()
+Date: Wed, 19 Nov 2025 14:54:43 -0800
+Message-Id: <20251119225439.work.741-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <20250429-module-hashes-v3-7-00e9258def9e@weissschuh.net> <20251119112055.W1l5FOxc@linutronix.de>
-In-Reply-To: <20251119112055.W1l5FOxc@linutronix.de>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 19 Nov 2025 14:55:47 -0500
-X-Gm-Features: AWmQ_bn1L21n_pWrZnJvXRwL1Z-01d6qlYWdrkllcBBpENXLHykDJ3f6oq3wlNk
-Message-ID: <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
-Subject: Re: [PATCH v3 7/9] module: Move lockdown check into generic module loader
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	=?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
-	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai=2DDrosi?= <mcaju95@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1251; i=kees@kernel.org; h=from:subject:message-id; bh=evRf10KLlkgghicnG+ujSW3Il6OzrjlVgGjTINYs7IE=; b=owGbwMvMwCVmps19z/KJym7G02pJDJlyXpumVnfvffVkMe8EWZOL5qocLB+83G1vq24RnDxBr GPNqks8HaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABPR/sDI0PLbNKx5x5s7fz5o LrzUziNuJvhuZqPC8qdJqV829x1MuMzIsDT24lzOqQ6dQd0W+lZ6M+Q0XgZ1zV/lvGZGnu3PBp2 PHAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 19, 2025 at 6:20=E2=80=AFAM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
-> On 2025-04-29 15:04:34 [+0200], Thomas Wei=C3=9Fschuh wrote:
-> > The lockdown check buried in module_sig_check() will not compose well
-> > with the introduction of hash-based module validation.
->
-> An explanation of why would be nice.
+Replace open-coded allocate/copy with kvrealloc().
 
-/me shrugs
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Daniel Gomez <da.gomez@samsung.com>
+Cc: <linux-modules@vger.kernel.org>
+---
+ kernel/module/decompress.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I thought the explanation was sufficient.
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index 474e68f0f063..36f52a232a12 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -17,16 +17,16 @@
+ static int module_extend_max_pages(struct load_info *info, unsigned int extent)
+ {
+ 	struct page **new_pages;
++	unsigned int new_max = info->max_pages + extent;
+ 
+-	new_pages = kvmalloc_array(info->max_pages + extent,
+-				   sizeof(info->pages), GFP_KERNEL);
++	new_pages = kvrealloc(info->pages,
++			      size_mul(new_max, sizeof(*info->pages)),
++			      GFP_KERNEL);
+ 	if (!new_pages)
+ 		return -ENOMEM;
+ 
+-	memcpy(new_pages, info->pages, info->max_pages * sizeof(info->pages));
+-	kvfree(info->pages);
+ 	info->pages = new_pages;
+-	info->max_pages += extent;
++	info->max_pages = new_max;
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
-> > Move it into module_integrity_check() which will work better.
-> >
-> > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-
---=20
-paul-moore.com
