@@ -1,217 +1,72 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C181EF09B
-	for <linux-modules@vger.kernel.org>; Wed, 19 Nov 2025 03:55:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBB71487F6;
+	Wed, 19 Nov 2025 04:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763524528; cv=none; b=LtliFMYsChYT/a7MAaX0auWO2dFw79LI0HaB3W8VY1r5uNb6GyPM+ly53SusBnL+bBhdH5ULY8KM4AamSsBlZXlSTchvaQP3wCjcxGI+RiXzp/V5mO+bBIaFVtt1VFpsMD37rMHpQdxNuJlOiD9Bc9f3do/AO1Cs76YgX7kYEbI=
+	t=1763524850; cv=none; b=cc+Jbg1MdFsBrYg5pXbvxjLrH1KGbDJ8N+6QS/VVfEdr3jWSb7xPccmXzzYnd8d0ghIz8S/PoTd8Z6zEkPJ2NoveGdraCpPn00C7PX121EgKMgmw85vosp1PF9i69Lq9WMSLpMuK9RnZpAIpCRQXUQoJ2uenxFLQcXtxLkgfgf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763524528; c=relaxed/simple;
-	bh=fexWQRxO1qDL1NeW3IczgGoSbv++XLaMMQy8gWodcVE=;
+	s=arc-20240116; t=1763524850; c=relaxed/simple;
+	bh=XJs/aGHI3VwP9T/GRAPPiAmowyjyGM+9eQqVOL9p4/g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FHmnahxaDiqeVtaLaaA2vB+RGuuMo5B93IK6mb66iAMio9bsD2l051+cySvjiPv3AFSduNw8R8xBsv/LkPY2kVaoAX7dN0fDUw+H8IKir7rmc21feZf0dVy52q7beitbUQONf1/96hlw1d93p8icvaxi+Pjb7LDPEF8ays4F8iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AUg1qrkj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y/2+LsKA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZH8Z1zt2kZIJ7msXrnCX90gcUMPTWRiJWGWfsef2qftbodvwlY8x+uTNkQdPASSiB4w3MBwipFeMmkp9K0fRs5P6VVXHuBKCVWoz01GL4Yn/p+N8M0dBHJzusuKc8xPTCkHGnL6/3ZrtJm/W+L2DoeHXMyxOwSx4wQWBwBMRqvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIX9mcMl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AUg1qrkj";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y/2+LsKA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763524525;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ooCsRVhcTHqfbP0l9J8al+EICyTsRGhauAL5pmZkQRo=;
-	b=AUg1qrkj+sMoHTJertH7D1hASiJesk5lJKEFzsyVbd2Ii+nsgROavD6xnu459upqs/axGm
-	dc7993lhf8UXoiCE6j1N+GzpePjm/ow/LjGs4rFp0qYUI1318rX7CY1TVYtigzXZpKwHs3
-	hzzp9Ds1uIxZ+qiFTleqy/FXV5aJMGE=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-413-UFyZMNMyNJ2IwC9gDwL-Ww-1; Tue, 18 Nov 2025 22:55:24 -0500
-X-MC-Unique: UFyZMNMyNJ2IwC9gDwL-Ww-1
-X-Mimecast-MFC-AGG-ID: UFyZMNMyNJ2IwC9gDwL-Ww_1763524523
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-3437b43eec4so11128911a91.3
-        for <linux-modules@vger.kernel.org>; Tue, 18 Nov 2025 19:55:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763524523; x=1764129323; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ooCsRVhcTHqfbP0l9J8al+EICyTsRGhauAL5pmZkQRo=;
-        b=Y/2+LsKAvRQKbFNcx2rYoLBHVPrZbzyavEfMiiuwoOsEuLl+Ch2DMBUpIIkDgDh4yY
-         PQu0jZLuRXIEmTZeG+1AHo24UrZZieNoBptLWKZD4T9O3Ve1TbAgFvFJyQ/YiLYhSI+N
-         3w96/8bfAuxc1Fisblk4JGWQnqSNBKGo1/qQrXwLCaIYnHBhtvwy3AAQS+mxT+GXSD4A
-         dR2DSWQOEeh2FvK2lUekgTz198kvaeRRbZ+0M9m/rdl5Y/GihH3bWpkpMRivb/EbsIbh
-         gRrjFtoHnMU+sGFTRDYRdiQOe4qXSCU8wPfz7Dpd/heuqiQ8BQwlHFnt7jGf0+tRddrJ
-         yJiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763524523; x=1764129323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ooCsRVhcTHqfbP0l9J8al+EICyTsRGhauAL5pmZkQRo=;
-        b=WTnYjj6KBdhMCuSu9bZQ5PZi08AkslT3fUVjOb7DzaDYIiUYAQQrk1FLYzWVoHc5qs
-         U3ltTih80d0VudV6QRBt+v+oKxlerbVCV5v7f+PD6QKwAkwaAroP4i9zq3sYrOaHAUJZ
-         ZpR7+YfpTOY7BJQZqPZdGpd++o5TbjjqhF4SUwleNp/A3kiRkawIfHjTUlXqYmknXCtq
-         Wffv1FSfsSc6BQlLCb63+JPk+7NEN/gGcXCA/nIj1NSZt2wzhaGw9+/mBJxU4A/5vqw4
-         vWpGz75Bwr/z6nhcAqDr5t/M0mfkWC6RdY13lOKcDTQ873eBXNAzw8o/+NmAffPzCRoP
-         OHsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5WsmAGZmVc2ilBDvBQaltOg3pLtKR52MVS35DPggm3XvLkQU5iCnwbXj5FeNdrQK1lzqobvbJPll4woeC@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/qaiMNhRx4hWbItVXNxe8V98pD2qizW7mQZcYKwMFxabtr389
-	7juwt10Cu9IuwQerhxwNRJ57RzBcDdAPYW3rq5fHQPzGdQrXTWVmxD3H9h6zp/XcPp008sWpsIB
-	8KJasYLf8Xh9hsi2xh+Z4LdwL4EYyGphmFJAl8v2U3oo4USz4Mzp3X9BL+NqF+oFl3MU=
-X-Gm-Gg: ASbGnct1KEwU6GWEvw4u/RvGrMvh3E34m47sMDl5Yi0oNCURZwC0A6fEtKgXNdJbNxH
-	Ljoy6jIXjO/SVeAMExHPa8ple3IURvT4iNAKZG5LVU+7CB1ZbijB4v1LiT4qiuV7KM5ufcYiY0z
-	3OBCmQbmZIR3hIIRQodqj4qs/dj7HEh5JA91WZ6i2nXPbXDohVrADkS0XE0w3NH5Z2XmQch8dVZ
-	RxlJsAEdScJaAhvs6bfahxA5OInD8Iy7Z4Qpd385i5WyLb+wl5wWr/Fv5yJkEvNCQ/Ym64BqIAo
-	HRmwXr48QapOCIKwOzP5sjD8tfL67jftTovmvcLlhW9mU8lgWw6YIbDKxJZOPGzYJOFe7McoJ1H
-	l
-X-Received: by 2002:a17:90b:2e0b:b0:343:747e:2cac with SMTP id 98e67ed59e1d1-343fa761482mr20567669a91.31.1763524523257;
-        Tue, 18 Nov 2025 19:55:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFssyPLkzi1egxM+wSUcJO1UnhvGQOb9QwQq0/MObXjomISK4Uyzbq1QhFXSSzRMUYO4Aev6Q==
-X-Received: by 2002:a17:90b:2e0b:b0:343:747e:2cac with SMTP id 98e67ed59e1d1-343fa761482mr20567648a91.31.1763524522734;
-        Tue, 18 Nov 2025 19:55:22 -0800 (PST)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc3760d9887sm16384031a12.28.2025.11.18.19.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 19:55:22 -0800 (PST)
-Date: Wed, 19 Nov 2025 11:52:15 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook
- security_kernel_module_read_file to access decompressed kernel module
-Message-ID: <7unk23jlwh3gy477ose6r5mvov5apxoflxmzhhpeanvrgg4ejb@h74hvym5r67s>
-References: <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
- <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
- <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
- <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
- <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
- <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
- <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
- <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
- <42qcfcxxlmwphctzvji76hy5tycfabiiv5u6zw6lgg2p3e2jwv@fp4g2y7ecf2y>
- <fca9a7b41a5e428fadfe2d7e3b004ada2763375c.camel@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIX9mcMl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7484C16AAE;
+	Wed, 19 Nov 2025 04:00:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763524850;
+	bh=XJs/aGHI3VwP9T/GRAPPiAmowyjyGM+9eQqVOL9p4/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QIX9mcMleXbcL82UI93ArPsVBOuUIEolWfVRb9xoLGr4fUPntcH7gJwABOKWHOpNb
+	 Irax2FJcjgcD7j7+1qbjIFJD5Hwsgq32O5Pz/32pHGGWFIVat/odpeOIVU5tr5e55q
+	 eJigfr98oz9avv+3gsOUqN0qfuQlceIhWYpF7+C6ch6ljXvxAxF7IC672FuhDhqBUV
+	 tUxfUCVrw+UXA6ItOTqSTchdIRp1cLxv6ZJziNXSJqMsn66GDiQ+d36+OlSjzeDbrh
+	 SiNxx0wQpKZt6V5gfLLxYq7+bFXThY2t+DrEqFjpN38kWfGGIErF+4a+mymNha+Fvp
+	 Oa1KC6xxeaU+g==
+Date: Tue, 18 Nov 2025 19:59:05 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: David Howells <dhowells@redhat.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
+Message-ID: <20251119035905.GA1743@sol>
+References: <20251117171003.GC1584@sol>
+ <20251117145606.2155773-1-dhowells@redhat.com>
+ <20251117145606.2155773-3-dhowells@redhat.com>
+ <2165074.1763409175@warthog.procyon.org.uk>
+ <20251117201233.GA3993@sol>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fca9a7b41a5e428fadfe2d7e3b004ada2763375c.camel@linux.ibm.com>
+In-Reply-To: <20251117201233.GA3993@sol>
 
-On Tue, Nov 18, 2025 at 07:19:50AM -0500, Mimi Zohar wrote:
->On Thu, 2025-11-13 at 12:06 +0800, Coiby Xu wrote:
->> On Fri, Nov 07, 2025 at 02:28:13PM -0500, Mimi Zohar wrote:
->> > On Thu, 2025-11-06 at 17:15 -0500, Mimi Zohar wrote:
->> > > On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
->> > > > On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
->> > > > > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
->> > > > [...]
->> > > > >
->> > > > > Hi Coiby,
->> > > > >
->> > > > > Based on the conversation with Paul, there is no reason to remove the existing
->> > > > > security_kernel_post_read_file() call.
->> > > > >
->> > > > > The changes are similar to the 2nd link, but a bit different.
->> > > > > - Define a single enumeration named READING_MODULE_COMPRESSED.
->> > > > >
->> > > > > - In module/main.c add a new security_kernel_post_read_file() call immediately
->> > > > > after decompressing the kernel module.  Like a previous version of this patch,
->> > > > > call kernel_read_file() with either READING_MODULE or READING_MODULE_COMPRESSED
->> > > > > based on MODULE_INIT_COMPRESSED_FILE.
->> > > > >
->> > > > > - In ima_post_read_file() defer verifying the signature when the enumeration is
->> > > > > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kernel_module.)
->> > > >
->> > > > Hi Mimi,
->> > > >
->> > > > Thanks for summarizing your conversation with Paul! I can confirm Paul's
->> > > > approach works
->> > > > https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
->> > > >
->> > > > While testing the patch today, I realized there is another
->> > > > issue/challenge introduced by in-kernel module decompression. IMA
->> > > > appraisal is to verify the digest of compressed kernel module but
->> > > > currently the passed buffer is uncompressed module. When IMA uses
->> > > > uncompressed module data to calculate the digest, xattr signature
->> > > > verification will fail. If we always make IMA read the original kernel
->> > > > module data again to calculate the digest, does it look like a
->> > > > quick-and-dirty fix? If we can assume people won't load kernel module so
->> > > > often, the performance impact is negligible. Otherwise we may have to
->> > > > introduce a new LSM hook so IMA can access uncompressed and original
->> > > > module data one time.
->> > >
->> > > ima_collect_measurement() stores the file hash info in the iint and uses that
->> > > information to verify the signature as stored in the security xattr.
->> > > Decompressing the kernel module shouldn't affect the xattr signature
->> > > verification.
->> >
->> > In the case when the compressed kernel module hasn't previously been measured or
->> > appraised before loading the kernel module, we need to "collect" the file data
->> > hash on READING_MODULE_COMPRESSED, but defer appraising/measuring it.
->> >
->> > An alternative to your suggestion of re-reading the original kernel module data
->> > to calculate the digest or defining a new hook, would be to define "collect" as
->> > a new "action" and pass the kernel_read_file_id enumeration to
->> > process_measurement().  IMA_COLLECTED already exists.  Only IMA_COLLECT would
->> > need to be defined.  The new collect "action" should be limited to
->> > func=MODULE_CHECK.
->> >
->> > The downside of this alternative is that it requires a new collect rule:
->> > collect func=MODULE_CHECK mask=MAY_READ uid=0
->> > appraise func=MODULE_CHECK appraise_type=imasig|modsig
->
->As it turns out, the "collect" rule is unnecessary.  On
->READING_MODULE_COMPRESSED, process_measurement() should calculate the compressed
->file hash.  Extending the IMA measurement list and verifying the signature can
->then be differed to READING_MODULE.
->
->>
->> Thank for suggesting an alternative! I've implemented the idea in
->> https://github.com/coiby/linux/tree/in_kernel_decompression_ima_collect
->>
->> Note besides a new collect rule, another change is needed. Currently,
->> process_measurement only accepts enum ima_hooks thus it can't tell if
->> it's READING_MODULE_COMPRESSED so to only do collect action. So I
->> create a fake MODULE_COMPRESSED_CHECK func.
->
->Correct, either extending process_measurement() with the read_idmap enum or
->defining the fake hook would work.
->
->>
->> And for the idea of re-reading the original kernel module data, it has
->> been implemented in
->> https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
->>
->> Both branches have applied your requested three changes including
->> respecting the 80 char line limit. Additionally, I made a change to the
->> IPE LSM because of the new READING_MODULE_COMPRESSED kernel_read_file_id
->> enumerate.
->>
->> After comparing the two implementations, personally I prefer re-reading
->> the original kernel module data because the change is smaller and it's
->> more user-friendly. But if there are other reasons I don't know, I'll
->> post the patches of the new collect action approach to the mailing list.
->
->The "re-reading" option fails some of the tests.  As the "collect" rule isn't
->needed, let's stick with the first option.
+On Mon, Nov 17, 2025 at 12:12:33PM -0800, Eric Biggers wrote:
+> My point is that a smaller, cleaner, and more maintainable
+> implementation of ML-DSA is possible,
 
-Thanks for evaluating the two options! Yeah, without the "collect" rule,
-the 1st option is much better as it doesn't have the issue of re-reading
-the module.
+I've written an implementation of ML-DSA verification in about 600
+lines.  It may grow slightly as I clean it up and test it, but we
+definitely don't need 4800 lines.  I'll send it out once it's ready.
 
--- 
-Best regards,
-Coiby
+By the way, your proposed KUnit test suite has no negative test cases :(
+We can do better than that.
 
+- Eric
