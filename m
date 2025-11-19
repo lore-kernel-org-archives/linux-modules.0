@@ -1,173 +1,153 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EFA26CE35;
-	Wed, 19 Nov 2025 14:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E759E33C195;
+	Wed, 19 Nov 2025 15:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763563064; cv=none; b=MEb1VyNN+3zwooImA2UHzlcJhIzXxLdj1zEJvmbdyCcagczvtr25p7BGevQdAI0Etl7Qk3iN9+2C87k3LovicKyKQKPir/R5ofSjztCwGC7zWPfu0nFReb3ux63YmB8iNgUbOcRB4bIbIyn3y3a8cgxqGjWT+XoyY78F79p81ZM=
+	t=1763566200; cv=none; b=juTSktJ0lBhbm3Iskwc7/hVg8zNf1KvJCqkQBL5EijcQj2/pV48+lVBMb/aMrl98lgnaJWhFil5SqM43uPQgm5PWNqAkq1tYiPU4eJlSmX8ijO+/qSVf3rrupEyPrFkMklM3CUysiBVVE5c2+wQXuR99oYTFPn67UhYZ6riwCDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763563064; c=relaxed/simple;
-	bh=XA0GeBzOpYEaSWCWCd+wnDlU6Fk5J/oBFNuaUBe2OAU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C8T4hiOCvJo/H+Wu+A6wh1wtVdlLYdueGrf7T2SeECN6RWlqai7gTb/h/ginYBLeNmcUDjI8TEPai2RRp7S+wOreqh+unTamMtNDWIOwjLtGZtTi35v4mQWSCOmAkkkS7LvxQhO2jeDYu2fkFUP1lF+557wPgV7EGnj1yDg+tVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nBP5qgac; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1763566200; c=relaxed/simple;
+	bh=9+bfJz/6I8aRoScteWrYNqbPnvWMzfdijiEhQ43E8TU=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=LvqCWCpiqb06PJqjQNVRuOUi/lv97AnswIyzj6yi76eFMlj3veN1zeO0GZpk6+eoW+N0+emqPw1G5RkBUCkhA11JO2uaWrppPcsoFnZtFVVXZRemHaUvY7LUCjwaF8mfeMqMzQI/WkAmkQgvyKri2roQDlc9GVSokCkpbndYOAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VXwgIrj2; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nBP5qgac"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jrEBjc2npjUKEbY4i9jofzcj/5yPuOiFOP9lZOX0tsI=; b=nBP5qgacID7pPb1N+57YvHaH6U
-	G7JzO5pEUGdhuUMMNn3k9NaEbTv68dj0hY9UW4pHZq6L+RoVGX93qIlWtLYoQytGKMPvLJ/D1KqKX
-	GV6hrdcPub9oX2YzpcjTtacFWku+OtVVTd6+pFYjSu6527+53NKY32Lj/L974tmHv3ScDp3gXp1L+
-	iFJ2wJM/Lmo71iZAxzafzKq22ZOt8sC31Kd10ep+n2MvqtEeikI1sljZ8uMGCqsNpyKZSf9jdYI8B
-	dZo+n/E+UO2Xtx516smblcWCers9IJLf4xYNhwJApoxEs2EHlQuoj0F7yrGXeee4kL13PJKFJYviX
-	pvBttZDA==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vLjJ8-0000000HDmA-0XUa;
-	Wed, 19 Nov 2025 14:37:18 +0000
-Date: Wed, 19 Nov 2025 14:37:17 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: Byungchul Park <byungchul@sk.com>
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
-	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
-	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
-	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
-	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
-	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
-	tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
-	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
-	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
-	hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
-	jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
-	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
-	ngupta@vflare.org, linux-block@vger.kernel.org,
-	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
-	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
-	djwong@kernel.org, dri-devel@lists.freedesktop.org,
-	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
-	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
-	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
-	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
-	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
-	yeoreum.yun@arm.com, netdev@vger.kernel.org,
-	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
-	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
-	sumit.semwal@linaro.org, gustavo@padovan.org,
-	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
-	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
-	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
-	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
-	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-	qiang.zhang@linux.dev, juri.lelli@redhat.com,
-	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
-	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
-	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
-	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
-	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
-	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
-	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
-	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
-	yuzhao@google.com, baolin.wang@linux.alibaba.com,
-	usamaarif642@gmail.com, joel.granados@kernel.org,
-	richard.weiyang@gmail.com, geert+renesas@glider.be,
-	tim.c.chen@linux.intel.com, linux@treblig.org,
-	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
-	chenhuacai@kernel.org, francesco@valla.it,
-	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
-	masahiroy@kernel.org, brauner@kernel.org,
-	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
-	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
- subclasses_evt for the usage
-Message-ID: <aR3WHf9QZ_dizNun@casper.infradead.org>
-References: <20251002081247.51255-1-byungchul@sk.com>
- <20251002081247.51255-45-byungchul@sk.com>
- <20251119105312.GA11582@system.software.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VXwgIrj2"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJ8SExl010859;
+	Wed, 19 Nov 2025 15:29:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=1aRhZa
+	7snvOM5oWKF8QoQlfa7Ar0YPQolGsuf2AHAsc=; b=VXwgIrj2v5Skg0G1txBtnx
+	gLrKZU1XrCXgiUDAU4pPv/REIQd+GOZTiSUnowhZAxA7rwXkxWA3IWHMMG4K6MPj
+	dolJmtcw0F56dwDtBEXGVs8qsfosKHfkLrn9lGgl5BPFqirUnPjzgrMTm+S+TWfa
+	ZS2apo5uaL6cg75mRHLmUU9mkollHtVfC75NkW0W9iqO10haFMkTUKNJkn2Nce+b
+	P41ITs1DIcT18SIwSN6QEY9FYtxuYsIwFdcUJzeDK/Xc2ClP7yAATgXozFQEv3Bk
+	AHIROz71zeTBS7RTpnbRf1VXas4zMpqlpYCXlcHfphHD/PUScXXrP5vfIT+qVC3g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk1h9x9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Nov 2025 15:29:18 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AJFTFdZ028527;
+	Wed, 19 Nov 2025 15:29:18 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk1h9x7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Nov 2025 15:29:18 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJEY4Ww010448;
+	Wed, 19 Nov 2025 15:29:17 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us9h9u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 19 Nov 2025 15:29:17 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AJFTG3223855624
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 19 Nov 2025 15:29:16 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CD2A558043;
+	Wed, 19 Nov 2025 15:29:16 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A935A58055;
+	Wed, 19 Nov 2025 15:29:15 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.42.2])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 19 Nov 2025 15:29:15 +0000 (GMT)
+Message-ID: <b4b89006e56e0d1c02e503ea3c2f2ec3a0856b04.camel@linux.ibm.com>
+Subject: Re: [PATCH v4] ima: Access decompressed kernel module to verify
+ appended signature
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc: Karel Srot <ksrot@redhat.com>, Paul Moore <paul@paul-moore.com>,
+        Luis
+ Chamberlain <mcgrof@kernel.org>,
+        Petr Pavlu <petr.pavlu@suse.com>, Daniel
+ Gomez <da.gomez@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin	
+ <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+        Fan
+ Wu <wufan@kernel.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        open list	
+ <linux-kernel@vger.kernel.org>,
+        "open list:MODULE SUPPORT"	
+ <linux-modules@vger.kernel.org>,
+        "open list:SECURITY SUBSYSTEM"	
+ <linux-security-module@vger.kernel.org>,
+        "open list:SELINUX SECURITY
+ MODULE"	 <selinux@vger.kernel.org>
+In-Reply-To: <20251119140326.787451-1-coxu@redhat.com>
+References: <20251031074016.1975356-1-coxu@redhat.com>
+	 <20251119140326.787451-1-coxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 19 Nov 2025 10:29:15 -0500
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251119105312.GA11582@system.software.com>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=691de24f cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=sWKEhP36mHoA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8 a=xVhDTqbCAAAA:8
+ a=TJo3RIopB0RH3hlNab8A:9 a=QEXdDO2ut3YA:10 a=GrmWmAYt4dzCMttCBZOh:22
+X-Proofpoint-GUID: 1Aacmr1lel3MWLuiEaRqdV5WAhY95P6C
+X-Proofpoint-ORIG-GUID: Tz2BsdnjY_28B6-MXgTzcSUCq8Xp729G
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfXxUozr5/BEu6D
+ 4uHt7aRLp8Nr9REH58s1B1cvJZVsinX18ju3wwKTsH8afes+ylqDPCqNauHUndTJx0TvOCD2riw
+ EXn4AY1in877S5dsXJKP7ApNL7FqhmFzm6gEVPJ6VgFQ8lfyihpLgZAfi1JipH0sKtKYkoxfO7E
+ +8pHXaA4dYB6yo9UuMiQeCDUWBmqHVp4zTertDYAfuM29BQBSxX8z36DhiJZNUFh5nYdFGiFduk
+ cEqcC8mj9PteL/I5up2CjYzb7s0zCIjc0diLqLxgjovhan9mhdoAsAulr1ay7AWcNFORhUB+qg2
+ XDf54QGV9AY3G/uhztJlSCMYv6y27tuNNGkIcutS4DLiQTUds2nzKK0pODoQKtkPqpmdNNOZ1b1
+ cb+yrg+dIOZXnknFoipTYEYhnqwsVw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-19_04,2025-11-18_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
-> On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
-> > False positive reports have been observed since dept works with the
-> > assumption that all the pages have the same dept class, but the class
-> > should be split since the problematic call paths are different depending
-> > on what the page is used for.
-> > 
-> > At least, ones in block device's address_space and ones in regular
-> > file's address_space have exclusively different usages.
-> > 
-> > Thus, define usage candidates like:
-> > 
-> >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
-> >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
-> >    DEPT_PAGE_DEFAULT       /* the others */
-> 
-> 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
->    starts to be associated with a page cache for fs data.
-> 
-> 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
->    starts to be associated with meta data of fs e.g. super block.
-> 
-> 3. Lastly, I'd like to reset the annotated value if any, that has been
->    set in the page, when the page ends the assoication with either page
->    cache or meta block of fs e.g. freeing the page.
-> 
-> Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
-> be totally appreciated. :-)
+On Wed, 2025-11-19 at 22:03 +0800, Coiby Xu wrote:
+> Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPRESS)
+> is enabled, IMA has no way to verify the appended module signature as it
+> can't decompress the module.
+>=20
+> Define a new kernel_read_file_id enumerate READING_MODULE_COMPRESSED so
+> IMA can calculate the compressed kernel module data hash on
+> READING_MODULE_COMPRESSED and defer appraising/measuring it until on
+> READING_MODULE when the module has been decompressed.
+>=20
+> Before enabling in-kernel module decompression, a kernel module in
+> initramfs can still be loaded with ima_policy=3Dsecure_boot. So adjust th=
+e
+> kernel module rule in secure_boot policy to allow either an IMA
+> signature OR an appended signature i.e. to use
+> "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
+>=20
+> Reported-by: Karel Srot <ksrot@redhat.com>
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Suggested-by: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 
-I don't think it makes sense to track lock state in the page (nor
-folio).  Partly bcause there's just so many of them, but also because
-the locking rules don't really apply to individual folios so much as
-they do to the mappings (or anon_vmas) that contain folios.
+Thanks, Coiby!  The patch is now queued in next-integrity.
 
-If you're looking to find deadlock scenarios, I think it makes more
-sense to track all folio locks in a given mapping as the same lock
-type rather than track each folio's lock status.
-
-For example, let's suppose we did something like this in the
-page fault path:
-
-Look up and lock a folio (we need folios locked to insert them into
-the page tables to avoid a race with truncate)
-Try to allocate a page table
-Go into reclaim, attempt to reclaim a folio from this mapping
-
-We ought to detect that as a potential deadlock, regardless of which
-folio in the mapping we attempt to reclaim.  So can we track folio
-locking at the mapping/anon_vma level instead?
-
----
-
-My current understanding of folio locking rules:
-
-If you hold a lock on folio A, you can take a lock on folio B if:
-
-1. A->mapping == B->mapping and A->index < B->index
-   (for example writeback; we take locks on all folios to be written
-    back in order)
-2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
-3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
-   inode_lock() held on both and A->index < B->index
-   (the remap_range code)
-
+--=20
+Mimi
