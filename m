@@ -1,251 +1,220 @@
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A3B135A53;
-	Thu, 20 Nov 2025 02:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.143.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763605793; cv=fail; b=CZOXb6MN9GKwZhIFjN0IMeSnGUsCBEa1V5W74PB429aBuBWQB1Y1cb58NetYzEou9NYzfoVmEyvCAGjvN6oOresHo4V+Kfn/R0ld8J5L4u6/xFt1Mlo+Fk8BvAvtyMD+PKUwYw0L5stTqrZ040ave0z2ejdL9u/4Y5V/zocH+Zc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763605793; c=relaxed/simple;
-	bh=JbOxmMBUr6qr+Dsu68aNBBPIZmcmPl2ZUaaW/Q9r+iE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=tDPsqTcqb+PBVXmZXVYlHDk8ZdOY9Rn1lj3C/aF/gpwLou3F944UY/Itt6p1YZQ+y/zb7ZMb9y41ggBqkjYnsZ12rQN1+P7+tzALEUIXpeQyvln52RuB109Cx3Y6YzoAuDVog4GbRBDsvttz08lK+oj4EJELs/Y+tc3NHsnGfX0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=OaxvIi98; arc=fail smtp.client-ip=148.163.143.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="OaxvIi98"
-Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJHb38O010882;
-	Thu, 20 Nov 2025 02:29:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=Pk
-	2Xk9SSx/fIQtY3S3ANEb53BQE4SIfszsiMqRjDkxE=; b=OaxvIi98Qememxv0iA
-	e6zmgrUjCgH1LC3Etpw6MIXCa7AlzBRIQtf2id4HHsb/B1JgiMJl29r8iOSCHvlf
-	4wPPVRfqA6mv5ThKU0Hd3dQzFdDDFbk1x/puw26Uv11KXFOXcWEUNteKqpLfc7V1
-	+DaBqHM5h+XBOUCR2qZ60J+fH3hH/i9aoSJQ1ra7AD1s+2fHrn9N6cS4cQKin9nM
-	naDCvundRu7JJF4FGSIfdJ5gmQj/+dH3Ciuzfd1r8zsCQpV4dnAiMwp8TFlPrJvn
-	5KVd+6LTcQx4CL2cuVh/Km37lC/mKBHWdGKvN8KreU6o+T9tJuJXyCBMxIsTTrX3
-	Ii6w==
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 4ahg21ensw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 20 Nov 2025 02:29:15 +0000 (GMT)
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 6747F800254;
-	Thu, 20 Nov 2025 02:29:13 +0000 (UTC)
-Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17; Wed, 19 Nov 2025 14:29:12 -1200
-Received: from P1WG14918.americas.hpqcorp.net (16.230.19.121) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.17 via Frontend Transport; Wed, 19 Nov 2025 14:29:12 -1200
-Received: from DM2PR04CU003.outbound.protection.outlook.com (192.58.206.35) by
- edge.it.hpe.com (16.230.19.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 20 Nov
- 2025 02:29:11 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fzdunvi1rdI5e2PCWsc4xcGdm9cSkEdMoGp24oNKdJ/dq4Hicuv44XBB9sLdZEdWpOAUmcZyVVe2HnjKEuT4k/sqFJ8l4X+OyGBvfSZDw/Py9FbET/0YSb3fD7kyXk6XqDcN4MzEzL1uU4r/94W7HGZGixgp4cjKNFLuc82RkrnIZDVumw6C9MkB5VOBgkrl2ZNfDCIbKBoeHvAW9LT8v2gZ3FmAZ4piCBdrDkz8K6okvmCTO6pXbZEdyRApRit/UCuaSYDH+2fGxG5hsevKeig5R6NDGu9jzmR5NQU3YRjh2pDwSYWnhHUuUnvkklCJmz2RjxFd4CMsahzTm7+wuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pk2Xk9SSx/fIQtY3S3ANEb53BQE4SIfszsiMqRjDkxE=;
- b=eZ9OXhN+amQFjo6uHlgpCKJxqGtZifiJOuJKvKUdSZTmmtp5nMwdlx/Y/4QWVnslDkixADsX0RdwRwkA5BwSj388aqzPXPA/PjYqNZhIPM4DjmMJEILBYefm6Qy0VH1jPKH1He3BRBsyE0dhvQxeeymayJDh7t6+Y6HZfHtzrKrjWHzCs073z0lwXR321LHOhdgNTtzSs/iz6y2lTdUDO6E6VKZHriuebSY4yZJOUCHswVO4D9vkGtlkGRlyPfVzaH3Zch/LU4/q71aiffE7qm+BAlz2FyN1kJe4Kj4nL4pakn7QLwEhBRkd28gLsVKDG+AV+d5dTXfkQBhvo4hClQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:54f::12)
- by LV9PR84MB4008.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:408:2f1::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Thu, 20 Nov
- 2025 02:29:10 +0000
-Received: from IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::766:753d:9ff8:1c8b]) by IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::766:753d:9ff8:1c8b%4]) with mapi id 15.20.9343.009; Thu, 20 Nov 2025
- 02:29:10 +0000
-From: "Elliott, Robert (Servers)" <elliott@hpe.com>
-To: Eric Biggers <ebiggers@kernel.org>,
-        "linux-crypto@vger.kernel.org"
-	<linux-crypto@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-CC: Herbert Xu <herbert@gondor.apana.org.au>,
-        Luis Chamberlain
-	<mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez
-	<da.gomez@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "Jason A .
- Donenfeld" <Jason@zx2c4.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Stephan
- Mueller" <smueller@chronox.de>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Ignat
- Korchagin" <ignat@cloudflare.com>,
-        "keyrings@vger.kernel.org"
-	<keyrings@vger.kernel.org>,
-        "linux-modules@vger.kernel.org"
-	<linux-modules@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 2/4] lib/crypto: tests: Add KUnit tests for ML-DSA
-Thread-Topic: [PATCH 2/4] lib/crypto: tests: Add KUnit tests for ML-DSA
-Thread-Index: AQHcWbZqxJ3MuJzK4UuM43fEwkWrTrT61EIQ
-Date: Thu, 20 Nov 2025 02:29:10 +0000
-Message-ID: <IA4PR84MB4011DD869EB624399BD9AD7FABD4A@IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM>
-References: <20251120003653.335863-1-ebiggers@kernel.org>
- <20251120003653.335863-3-ebiggers@kernel.org>
-In-Reply-To: <20251120003653.335863-3-ebiggers@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA4PR84MB4011:EE_|LV9PR84MB4008:EE_
-x-ms-office365-filtering-correlation-id: 019ac69b-d7d8-48d4-418c-08de27dc9658
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|7416014|366016|376014|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?SK3WLGbqH99TWGIQRmytVBsm4Wlg1OznqWZ4naPeGnk9zAnK/1pNmhft+Roj?=
- =?us-ascii?Q?qyRhZLykHxaqXu6qnFOTiC2Rn/Ox7Lj1d1DEp5sJn422MATiWeuGpAZxIUTy?=
- =?us-ascii?Q?B7m+B+E2R0JwRf74e5gQUQVj24Es4bQPFt/H0gdPPnK+Zf5zAFJaYtVy6k+q?=
- =?us-ascii?Q?0GBJWVzmzy/XuEJvW14IsoZrB1k15sfAAZtwOohOvSio/pkG9enV5hTifwBi?=
- =?us-ascii?Q?LWQuAph/L76JQRQ20UBnxghIMn+vz7o2BhSWOPg23286S2IJMpeH1oq/E5hB?=
- =?us-ascii?Q?F82xJiEwcYDZNFugoB8Xn4/1kISaTLXZWlwmyJb7zbTt02UwF9NjaqDSccz8?=
- =?us-ascii?Q?chXy0Vrkv7Ejx/MloSjq/lBRESB4t3G6NpMAF7FLZYNxqoTCTZNhze/9JbnH?=
- =?us-ascii?Q?RsEILLnSbXdEBtgX1PbD4LCg4dmVKbBcoNOcd01Jm6o42kz1rW3UFbCuR93/?=
- =?us-ascii?Q?2lafn0FLYivcXtCguDzUIDL1xEY0QfY8jSWchSGQ9KSJjt0+aZEY7K0eNuW+?=
- =?us-ascii?Q?VKCRBBS/TthonK3+kLxxa2LjPvBkzLc4hFpUz40X5KPL2xigIWK5gabH0+gD?=
- =?us-ascii?Q?9ZI5gbC4+2dNO5QpX6jWk23liki28gfZkyO2EO5WoPQ8S+LqaExn/6inWSUR?=
- =?us-ascii?Q?jH6I0+2vahVe1zQ5A5W/gx3dVh+D4e4pTCjpbaew/IYnQw0tt8VZf6HZurUe?=
- =?us-ascii?Q?iWtcH+bO29E1zGlbMoHZzN+9biMqp7QsEhbXj/k7dH9M7ACTLA/D/jl2xNL7?=
- =?us-ascii?Q?WE4y0I7xbTvGzGxbcJMndI+Dwoj3uALh7MEkeCdTI/CDCj3b2gqbts6PfRG0?=
- =?us-ascii?Q?XTfjURas1pyNLMUlzLX/i8JmCTb7CrVsrn9UWFinVdgBoUkWKCuqpPn12d0g?=
- =?us-ascii?Q?MKev1Zpjf6xd1ac5NZcpbHoNvcaYoY2dOQ6HakQFVsaI8+Mmu4YFjeIKK5tE?=
- =?us-ascii?Q?iPk8VTJdQkjxyv+zegvn8kyaw1W5YtH1gzw/jEgSuBdZ90RLHWlI/APQx60z?=
- =?us-ascii?Q?++PNlvVYD9TERYrTkO0rs0NsqFF4KGx5DGjoV/OacV1TxKn2Vv2easwer1cq?=
- =?us-ascii?Q?56BEaQqcrnHJ3nFygKqoStj6SbFvaBlJtwaY9ArPwW8k6clUbzG0yMl4DOLe?=
- =?us-ascii?Q?COvhaAUui2LvnPljCRNTmN8P++/c87MNVKCrKFUKoPpswSiadIGxYce5cNtg?=
- =?us-ascii?Q?KOat5gY4msevLj1vuK1kvZRSXZjFn7M1bXM0oDks5ONuqA0PslfeH52r7taQ?=
- =?us-ascii?Q?ELCDRwGjazHqDqesczvvwf5CegHGc+lf0iKg5z2t6G7TcAs3OiibNLXpVb0+?=
- =?us-ascii?Q?dsGr8NjI0PRHLcBx3K37SR0dHAuMv4Ob4qeO4fbN8pjR52LrQpM3n4gjz0F+?=
- =?us-ascii?Q?ubowA+PzKLJbcsFZjie9DFhXo3OvcvmrdcKDGQjSgobFd8R/VVV8lnT0EgUj?=
- =?us-ascii?Q?HgkNiold2FTOAPZZZnzo27p1etBn3pDt0Um+d0+tNIsBT7ltQVnPmO4QBJ53?=
- =?us-ascii?Q?sG5Q7sYQ7AQvXjErqdlqSFPWafJGV1r0eCgW?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(366016)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1P+/h2CyAqdAqGZzDnQ4zPo1CQh4gTTTfF5lThChSce9fGL8+7tKKXz1tM1O?=
- =?us-ascii?Q?Rtt8dXObAxJSJCNJZuJiZoH0AUKt959bY0IbG6uFcLuDxFQrSG//xYGTlGgJ?=
- =?us-ascii?Q?Y7FR7CWN+Zf72v20w7XBlpApmT9/uYeL5afj/2IHlGiR8pqCZ0yG8N3H37mx?=
- =?us-ascii?Q?h/YbEVoZG+Df4gl8mLqTjwmUqMV9n4z6GlSSL0crc4sX7g3pfRHWJEDTgwdN?=
- =?us-ascii?Q?mH7FHvKFIimLLUBV0L/K0gl7+QInm7e5E3Ml4X99+R6J4TN7YzdYhMHTqXhN?=
- =?us-ascii?Q?tv8Gt1/r96DVUeHuAZsqTPFlLcPUBVovTmKpcBgXzVJMDfjWS/rwnI8GMqDt?=
- =?us-ascii?Q?Xmf7vfzsX3kESZ02qN3gQMRBZtLLHopRB9QZV3mpOF5DrVKAebaE7BwVI0Oy?=
- =?us-ascii?Q?vXGHZIEBRTubQjNEYrwP/SNCxNiejprkhDjTzLps9cN6/mmTqaxca3c12yNg?=
- =?us-ascii?Q?cduGUaNjR0Dw2Z/zNHjON7LCAXCZaAeq4HXlFLCJpN8XnpVlTu1BctHhit/x?=
- =?us-ascii?Q?Vv5t1qFgQJjiVsoTZ2ybGsRsLAk8kjCHHpuVkutnjDBpUpLAvCgxuAAWa4OJ?=
- =?us-ascii?Q?4bxmZA5YeFs+2An9WDFftCkpLozdru2OsjQRClMHtyrsy55dk9lR2wO4hZ+S?=
- =?us-ascii?Q?aDqnOVm1rL166vszygYKShJlRIYiXQYBb40VUQUNqKDNDCrEWv/HpFv8zLSr?=
- =?us-ascii?Q?pHtuvNNA6skH30pexspErwbqGjTMk0kJTH78W0ANqetcnZqdPqKwK7awzFpf?=
- =?us-ascii?Q?I74m1d/J94Z/QfJ+gxxJVoph0xMFlSqHJZEF1ULw7Xkz3+NwDKTbAULsOT0Z?=
- =?us-ascii?Q?iNkeDpMO6+fimwc8TUQOSwBUOEFjxadwhGQiIUMulIKIouOv9P5ca7vI7J1N?=
- =?us-ascii?Q?upVLkybFnw6/NYCCmzKVchEpPiKxLNIcstXjXizOXOb4zEg63RwLpyHUkowP?=
- =?us-ascii?Q?X8DE/lSwnF7aOrA4EPAUuyzbmwuvbcqyJLFGhJirq6Pm5pp/ARYx7dZwsEA3?=
- =?us-ascii?Q?MHmccJrwYEhWvHxSuHQd90SMlPh4dMSZipaentEm6r1XV92/H4TJPlu9Bju4?=
- =?us-ascii?Q?hGVCu3XJYnM/nz+tL7onqk+ULCW8eKLeLFtK3K3bHjRkiGqRuTwe2oXv8S46?=
- =?us-ascii?Q?hezUYXA7gRYSHY1XoDNXEDWlwipxgVJcBVw+L7EJmTw9cgd9XNfChHjARG+H?=
- =?us-ascii?Q?fX/N/jdFjiD1xaTVVNCH5WoE5khlmYz8MCjJbp+2theye4Nl5zi1+Z+84PWn?=
- =?us-ascii?Q?4tmol0q0oqLdGEe6fKhdPYMaORceV6V6dBB7jTM1OhOBqGtqGrDckE7EBqap?=
- =?us-ascii?Q?qVpRrsaLXA7jowABUXPtUFvBBlW7xUn736FhYk5rRmZYW5kPB97vT6n57ts8?=
- =?us-ascii?Q?F88a+c/0VSzgactKv4uJMva3NYrk6MGsZkJfPKO/5Zcmcr1Br0J2jBS5m2DC?=
- =?us-ascii?Q?otKV4bQLeoy1Hg7fvzDlXBCinbsx+nAO4OE3/nBPuwEr8qUaiX5oLlTwFiWf?=
- =?us-ascii?Q?d2ztY1xjIFa4aIMs4tZtPCpLTVvCcJmERypy3cM4LCoXQcXnyfJeFr8FPVmD?=
- =?us-ascii?Q?WoVjrhvxDNMm+Lm0p+0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F0028725A;
+	Thu, 20 Nov 2025 02:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763606065; cv=none; b=jYwr2+6wEACyI9/NLUcaLmsUifXbBN5ExkpJTnAy7p3OElohJhoQMm26cI68bu9bFpRCp+a2qJE05cD3EkQfWAaLYrFnQX9nPOuUlYG1HN6FbPXiY5dljp4orqw4Wi8XTBEnAx1IteB5BDMd3SMc11Ctbzlrxbh6eybJtMISwvI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763606065; c=relaxed/simple;
+	bh=/EG5zoBd9EOTX77N44tGF7qVruGgiPwa1ndxkUQivj4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PgHiAhW590Z/lBWCgyPPXJGPgD4WHwVEQ9rqpjRujQgMNOSi3o1ixJLMv9o3Sjhn5kEJnb04Sr4jvxstHh0AtvAVvjQo1mZ7HoYLUUhqDYLZNOdP2M0iiWxT/7zFNcP+MCglsJoU5B4KlbeLJBVaxEnjTyWB8nFRgOARRSGmEkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-2b-691e7e2bd269
+Date: Thu, 20 Nov 2025 11:34:13 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, david@fromorbit.com, amir73il@gmail.com,
+	gregkh@linuxfoundation.org, kernel-team@lge.com, linux-mm@kvack.org,
+	akpm@linux-foundation.org, mhocko@kernel.org, minchan@kernel.org,
+	hannes@cmpxchg.org, vdavydov.dev@gmail.com, sj@kernel.org,
+	jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+	ngupta@vflare.org, linux-block@vger.kernel.org,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+	djwong@kernel.org, dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
+	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
+	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
+	yeoreum.yun@arm.com, netdev@vger.kernel.org,
+	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
+	catalin.marinas@arm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, luto@kernel.org,
+	sumit.semwal@linaro.org, gustavo@padovan.org,
+	christian.koenig@amd.com, andi.shyti@kernel.org, arnd@arndb.de,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+	rppt@kernel.org, surenb@google.com, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+	paulmck@kernel.org, frederic@kernel.org, neeraj.upadhyay@kernel.org,
+	joelagnelf@nvidia.com, josh@joshtriplett.org, urezki@gmail.com,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
+	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
+	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
+	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
+	masahiroy@kernel.org, brauner@kernel.org,
+	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
+	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v17 44/47] dept: introduce APIs to set page usage and use
+ subclasses_evt for the usage
+Message-ID: <20251120023413.GA27403@system.software.com>
+References: <20251002081247.51255-1-byungchul@sk.com>
+ <20251002081247.51255-45-byungchul@sk.com>
+ <20251119105312.GA11582@system.software.com>
+ <aR3WHf9QZ_dizNun@casper.infradead.org>
+ <20251120020909.GA78650@system.software.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 019ac69b-d7d8-48d4-418c-08de27dc9658
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2025 02:29:10.1304
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9i71tQjOFfhKl3IpCLRz/RwjACqUDnADRHtZgxDWzE+q+Rk0du6GiXgLQoK0pkhA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV9PR84MB4008
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 9zisRSx-FNhPxCPN0NZOW-vaA1_ZX8lr
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE5MDExOSBTYWx0ZWRfXyouJM/h6dzK8
- KSqcRww/aN22RTi9hQ2JWNTv6dyrA0nyEgJEvkm1ovFlFNHOzf9J4VHPsE2dEUc/7GZYyRTA2Go
- UuQFtY4v5P3rxLZBRNeiYwsQ68nM0x+2Ncnf4moHEN4K2gmAdfqvea7aOhTTRctSKCxFhaDReIi
- rDVoh0kceiYk+XDBm2ej3OHB29wBkhvzCu3ScCjlqq6VSQW/eh0xjuc+nUMMFz3jrlZSar+xvCf
- XASibs55pzSEbXFhn8fCeyu3VeU6EFpTifZSZZc+lLViPyKJx13yGkfRP5ZaytXgo+dqmp/AboU
- xEN/TJy2mRP2rwXMKhcYRMFGOvXeuN3emQorJppT9aygWP5ZJFngzzioXWDXnUEfcaXu1PPDZAq
- u/1jcqyfyxF0SWRah5GwSlF6jK4Xhw==
-X-Authority-Analysis: v=2.4 cv=JPY2csKb c=1 sm=1 tr=0 ts=691e7cfb cx=c_pps
- a=A+SOMQ4XYIH4HgQ50p3F5Q==:117 a=A+SOMQ4XYIH4HgQ50p3F5Q==:17
- a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
- a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8
- a=2OWJTqkPu8zccz12aJgA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: 9zisRSx-FNhPxCPN0NZOW-vaA1_ZX8lr
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-20_01,2025-11-18_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0 adultscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511190119
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251120020909.GA78650@system.software.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0yTZxTH8zzvhZeGJo/VzUeZxNQ1LjicGoxHsyxTE/N+MHGLH6Yz2fY6
+	XqWzraRFLt5SMi6FTGxQRKqBKjoNl4ItsI1VVrkUmBcKibUhEFBuVi5Gbm4B2VqN0W///M4/
+	v3M+HIFRdXMrBa0hWTYaJJ2aV7CKiagrcetOx2g33J/UwOyMhQWLs5gDn6MCQf+sBcF0zSIP
+	Y81TCAofD/FQFMxg4b++UQxDnhwEry4cgdKrrhAv9CF4WhNCE12XMXgrRiPAMdHJwdhIAQ/9
+	bdkc3O5ZB8UlvTy4b3eE1ryaQfBLTR0H5ksvOageDWDobKji4PqjLgwB6zCCbo89ZLJ/CHV/
+	ZSFoO+PBkPP0Tx6yr93C0GgZwNBS/RsGZ6Wfh+bZcQznuu08+AtKeajoYqFwwcLDpYx8BJaW
+	OQYyezfDPzWDHExaZ7gvN4gvs/JZsdxVj8XKkkokZrpSxT9sfRFiZmNPhGh3HhNdN2PFMncQ
+	i87yXF7s9bt58Yq5kBFLOr4Wy/LPceKL4R5WfN74kP9q6beKzxNknTZFNn72xQ+KRKfXh5Ou
+	rU6rH6xFZtRH81CkQEk8bX/QjN9m82AfykOCwBINLWnYEsY8WUsDgX+ZMF5GPqHjtZvykEJg
+	yNVoWvX3HS7cWUp0dK7FERHOSgI0+94CFy6pyDNE66y17JvBEtpRPPQ6MySWBhaDOCxlSDS9
+	sSiEcSTZSv2ugtfOD8ga6qlvw2EPJSOR1G8bQ2/uXEHv3AywVkRs72lt72lt77R2xJQjldaQ
+	ope0uvj1iekGbdr6H4/qnSj0ab+eWjjwO5ry7W1CREDqKOU+7yqtipNSTOn6JkQFRr1Mqdn+
+	kValTJDSj8vGo98bj+lkUxOKFlj1cuWmudQEFTksJctHZDlJNr6dYiFypRnFmN3zKfrvFpn9
+	P1ONtVXxJK7o+s6z57c2Je0INGgk++Hc5ScPMKbLW27tCaYWKBOmUz8Nbvu4bCTHcbBMjo+K
+	4TxM+oCr09F+l2TulpovVlWXnhq5kEzrY70d5iH98K6BE153Q5Rlx5nV/odFF0uHv2k9tPHQ
+	s/m4OB/OOfiTQc2aEqWNsYzRJP0PGukI72UDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0xTZxTPd7/7orPLtbLxKZtxNUSjwc1Ns7NHli1b4MbEjWQm6jYzm3kj
+	V0rBVhGWoMVaR5hzpVlLaFUYaEHAgm0lQwNBxDpUIo+JRKlYLSqTR6aAQ0pZ67LMf05+5/fK
+	+ePwWBVmFvGybpek12m0alZBKz7/wJS8cu9i+S13H4K+glYaJicKaThSX8dCoaeUgS53LYLB
+	yUIET2ecGMxNczTMWv0cTEzf4mCu2Y/A3m3FUOcroOBJQ4SFRxceI7AFQyyUDBfQMO46hMBx
+	38nB8MVUGB08x8Bc4AEFN6ZGELhCEQpCrT8gmLVnQFmFl4WZzmsYSmxdCH4NBjA8bIiKPv9t
+	BM3V+1kYspzB0Bt6Gf6YHGehw/YjC6PdRygYa2ChfH8zA0edVgSmynoW7Ec9NDTdOctB96Mw
+	BQN2KwW1nvUw6LpPwxVLBRW9L+o6nQDOEhMVHQ8psJ06R8G0q4aDq5UDNLiMSeDs7GXgbrWD
+	g3BwNcyVZ4G/9gEHgZ9tNLhHrzEf25D41HyYFmu8jZRo7pllxbpjdUiceWZF4sQJExbNluh6
+	YWQciwe8e8QTV0ZY8dnkdVZsniqnxcsVRCzuTBabHAFOPNByk0t7/yvFh9skrZwj6d/8aKsi
+	3ePvorKPL8ltvOdDRhQgRSiOJ8IaYrwXQEWI52khiRw7+26MZoVlpL9/GsfoeGE5GfG9XYQU
+	PBYqEsmpy+eZmGeBoCVT7W4uhpUCkINXw0zMpBL+ROSMxUf/K8wnHaWh5xgLK0h/ZJiKlWIh
+	kVRF+BgdJ7xH+rzW552vCEtJa+MlyoKUjhfSjhfSjv/T5QjXoHhZl5OpkbVrVxky0vN0cu6q
+	77IyPSj6k678cPFvaKI3tQ0JPFLPU27yvy6rGE2OIS+zDREeq+OVSZ+8JquU2zR530v6rG/1
+	u7WSoQ0l8rQ6Qbluo7RVJWzX7JIyJClb0v+nUnzcIiNKyZ6u+rL1SdpL2+mFZY9Nd/YuLZzB
+	r1r+2jJl8q9sGUv5Zd+AuequbvGenp4kb9rp4oadBz/bfD5i2ZGivl6p34eHNm7QlG1u/+bv
+	Hcaf3PX2ky1DN2/83rLzndS1h+xy8Ovx3QsWJuQOLEle193x6bxg/uHSLe1VYzg/f836NPfy
+	6i/eUNOGdM3qFVhv0PwDJjjDWY8DAAA=
+X-CFilter-Loop: Reflected
 
+On Thu, Nov 20, 2025 at 11:09:09AM +0900, Byungchul Park wrote:
+> On Wed, Nov 19, 2025 at 02:37:17PM +0000, Matthew Wilcox wrote:
+> > On Wed, Nov 19, 2025 at 07:53:12PM +0900, Byungchul Park wrote:
+> > > On Thu, Oct 02, 2025 at 05:12:44PM +0900, Byungchul Park wrote:
+> > > > False positive reports have been observed since dept works with the
+> > > > assumption that all the pages have the same dept class, but the class
+> > > > should be split since the problematic call paths are different depending
+> > > > on what the page is used for.
+> > > >
+> > > > At least, ones in block device's address_space and ones in regular
+> > > > file's address_space have exclusively different usages.
+> > > >
+> > > > Thus, define usage candidates like:
+> > > >
+> > > >    DEPT_PAGE_REGFILE_CACHE /* page in regular file's address_space */
+> > > >    DEPT_PAGE_BDEV_CACHE    /* page in block device's address_space */
+> > > >    DEPT_PAGE_DEFAULT       /* the others */
+> > >
+> > > 1. I'd like to annotate a page to DEPT_PAGE_REGFILE_CACHE when the page
+> > >    starts to be associated with a page cache for fs data.
+> > >
+> > > 2. And I'd like to annotate a page to DEPT_PAGE_BDEV_CACHE when the page
+> > >    starts to be associated with meta data of fs e.g. super block.
+> > >
+> > > 3. Lastly, I'd like to reset the annotated value if any, that has been
+> > >    set in the page, when the page ends the assoication with either page
+> > >    cache or meta block of fs e.g. freeing the page.
+> > >
+> > > Can anyone suggest good places in code for the annotation 1, 2, 3?  It'd
+> > > be totally appreciated. :-)
+> > 
+> > I don't think it makes sense to track lock state in the page (nor
+> > folio).  Partly bcause there's just so many of them, but also because
+> > the locking rules don't really apply to individual folios so much as
+> > they do to the mappings (or anon_vmas) that contain folios.
+> 
+> Thank you for the suggestion!
+> 
+> Since two folios associated to different mappings might appear in the
+> same callpath that usually be classified to a single class, I need to
+> think how to reflect the suggestion.
+> 
+> I guess you wanted to tell me a folio can only be associated to a single
+> mapping at once.  Right?  If so, sure, I should reflect it.
+> 
+> > If you're looking to find deadlock scenarios, I think it makes more
+> > sense to track all folio locks in a given mapping as the same lock
+> > type rather than track each folio's lock status.
+> > 
+> > For example, let's suppose we did something like this in the
+> > page fault path:
+> > 
+> > Look up and lock a folio (we need folios locked to insert them into
+> > the page tables to avoid a race with truncate)
+> > Try to allocate a page table
+> > Go into reclaim, attempt to reclaim a folio from this mapping
+> > 
+> > We ought to detect that as a potential deadlock, regardless of which
+> > folio in the mapping we attempt to reclaim.  So can we track folio
+> 
+> Did you mean 'regardless' for 'potential' detection, right?
+> 
+> > locking at the mapping/anon_vma level instead?
+> 
+> Piece of cake.  Even though it may increase the number of DEPT classes,
+> I hope it will be okay.  I just need to know the points in code where
+> folios start/end being associated to their specific mappings.
 
+Assuming that I understand what you meant correctly, I can use the
+@mapping value in struct page as a second key in DEPT.  Of course, it
+doesn't guarantee unique ids of the mappings for ever.  However, I think
+it can be a good and quite simple start.
 
-> -----Original Message-----
-> From: Eric Biggers <ebiggers@kernel.org>
-> Subject: [PATCH 2/4] lib/crypto: tests: Add KUnit tests for ML-DSA
-...
->=20
-> From: David Howells <dhowells@redhat.com>
->=20
-> Add a KUnit test suite for ML-DSA, including:
->=20
-> - The ML-DSA-44 "Pure rejection tests" from Stephan Mueller's Leancrypto
-> - An ML-DSA-44 benchmark
->=20
-> Later patches will add test cases for ML-DSA-65 and ML-DSA-87.
->=20
-> (This needs some work.  For one, there are no negative tests yet.)
->=20
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Co-developed-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
-...
+	Byungchul
 
-> +++ b/lib/crypto/tests/mldsa_pure_rejection_vectors_44.h
-> @@ -0,0 +1,489 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
-> +	{
-> +		.what =3D "pure rejection vector",
-> +		.algo =3D "ml-dsa44",
-
-Either no dashes or all dashes might be easier to handle:
-  mldsa44
-  mldsa-44
-  ml-dsa44
-  ml-dsa-44
-
-
+> 	Byungchul
+> 
+> > ---
+> > 
+> > My current understanding of folio locking rules:
+> > 
+> > If you hold a lock on folio A, you can take a lock on folio B if:
+> > 
+> > 1. A->mapping == B->mapping and A->index < B->index
+> >    (for example writeback; we take locks on all folios to be written
+> >     back in order)
+> > 2. !S_ISBLK(A->mapping->host) and S_ISBLK(B->mapping->host)
+> > 3. S_ISREG(A->mapping->host) and S_ISREG(B->mapping->host) with
+> >    inode_lock() held on both and A->index < B->index
+> >    (the remap_range code)
