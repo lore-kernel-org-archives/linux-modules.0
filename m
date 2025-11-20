@@ -1,126 +1,154 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2433C333727
-	for <linux-modules@vger.kernel.org>; Thu, 20 Nov 2025 12:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722D8311C19
+	for <linux-modules@vger.kernel.org>; Thu, 20 Nov 2025 13:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763641867; cv=none; b=FO1pQY82Vn3uHB3Lte6thlFH3+tN1ZOjcyswFYFQL2ZyI7OWb+y3DSdDw+zFS9g2wlLp07dI/goXjVx9PPYOm2Rux3+E5Q7PcvV56JXy3kOWA5nmYY2aLWRL63AuvKH/2h3h1DDWbSnq35zZQNTjyrAccbVFzkTUmlkDCC5ZTWM=
+	t=1763646932; cv=none; b=alhQJmbcE2eS21ViQyNDJt8aCuRlIRk9NJEcCCdR7w32LEiXMJWEgmkZ7EFepZQUKCZEyZptdbfrxxkPRUyCvBmDk+//rhH/qpWAyj+N6yP1YbeGqGetBQPlnTF1MChHcqtokTvQdovdgpbRjwZ8K5X7MnUTrHc+PEqEGUfSyNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763641867; c=relaxed/simple;
-	bh=7IwoWSZlfeD5okirxUpGyO7IwlQwYODhU3cln4El7rQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SFYdeI1eRtGuzKApq2UfHOfU+eVGtPOzpPZbobiCIzJbb/5ZicLiwBNXkvFVKovG3IB1ePLqxmIpH0IxMQbZLnYbJgoGfkHWWvyKT4H0cQLWOamTrU8Ul9ikSXixeF7VfyMBUsIGx6TqBHLAlx+OF7x/TaTT++/nhQ4XgQmLY3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fJJi+OBf; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1763646932; c=relaxed/simple;
+	bh=emfT4JXRXejRJxV18S/z18iLUjgMJbsFUVn1IaRCxg0=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=I8MVQjxp4suac/G5okud+2/MvgT7q8B+DdVP+BRNrX1tPMq1+uBFT4E6YcrYXymbWhAOPMW9yLumTc/rgKf97JgXBuMh2GnBCiZffwTee9EH2YYQvCuCSTwSg+Vbx33UKHJP3gtM30yG95Sg9fB9Oxs9SMx7y3ONXgdNpwBa6nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BEcH557J; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fJJi+OBf"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4775895d69cso3731095e9.0
-        for <linux-modules@vger.kernel.org>; Thu, 20 Nov 2025 04:31:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763641861; x=1764246661; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jS56hEMd80c4W90b7ePqVGHkDPIjZ5fhyUWu6DxnmCI=;
-        b=fJJi+OBfGFM9GCZnEFoF1MhBSfUq3xlsDysp1Lg3PzWBysuTGBcxIMCrgx+C3dcHVp
-         pT1H6w75IwBK5psjAJSj4lY3QubWMt7y1rgixg59qpVHOQFjlQKCUqyrrtt/ct6t7vLZ
-         Z7PgVJS6omX+ia+KR2yyYDXofwyKgKxdqqBbxAORyeaXhu8BvBlUAVplRxNXDxevhMm4
-         QoLAori+pk0MABy9Ye8mFNYs24dZlIyEnT3VfTkkBGMGQrD7fIWgpn/r87vE+iCwsBYL
-         mm7qzDXU8CWpZUZpDaRr5iEd1Dk0DjykQ4F+E4+v3AbPzISynQUkyulqd+D2O+H/0Wrl
-         IQSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763641861; x=1764246661;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jS56hEMd80c4W90b7ePqVGHkDPIjZ5fhyUWu6DxnmCI=;
-        b=ZqJv7/ImpPBrjbhXuHLcMJYLtCOmsUKDzxj+9+YLTLxsOiovYRbp+UPHh2zEda/7RS
-         npWFBV3M0GJ9l7sORUd8xnNIMEp2XJCJ62qkiYjhhoZ2C2gMwTkH2lUnOmxFEJ2TYyna
-         lbNyIVf+H04/s4dnYKOWDegRuTrgwT6XVfS4Z8VxNOlMcFNdGNFY0MPdnooF4Djq2js5
-         bEjdVdqB7mrL/kQdxajP5FCxXDwyGdgw6TtJHH47xllM5RjZTBJXK7A7Z5w3uaLd9zeR
-         O1FpjFNJ/wAsXczAWzduFv3TF3IyshQ67hNaxp9I1+JOGTD5blaiUdfFVL6Q0Vc6RRtL
-         e6Ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUAp1VVxGBq17TbbFKsK1OWfnQagbW0paFXj8Nh3xbzV7JA+upnMOGRcNVHdBHgUluftrGoqStbFVgmjHAw@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6bj/aceXiabD3QQ67y0PFSL+g7ZYA79JU+wClRheqVpJVvEtQ
-	2lsTSHdID+d6IWJ5q3dQzd2CcxxFaAj6dyIv1vzi6runCgWMoABhW+jhsUCoRFzyAeA=
-X-Gm-Gg: ASbGncuLRp1e45KRQcVZiQx9R9FJdbfOHKnfow1MvbbynlpOEaD7GtrDV4EINlt9adW
-	Yz8YSNh5yn8wxTaMxDuf9AyzR0CtipxR4l7RL/HK6rNscXNbiRyFrSJQI/KKIZWOx3/4eMczSl7
-	6Wu5rB+YTFQMgTD2Y2DsKIXj9+0ofFa6V29LGBlebgrtyok13XzBgHlLWlQUzGdkk1hf3Shx5Fe
-	huoWjGAzqL7tBQWbXT9WUiT1XnWvt6e+8QxfJV3om/rYBdjk6aqL8ka+a7lD5USk/v4WMqk+AYi
-	HhOcQ251CBm/Dj3YDFY7ZU1Dvs5V+2KZ14TWkLptjw/4vMtpWFT8sC2cIIFwzxMql8A3eC960F5
-	y93mi5qVu+LRvZ02Wf4Nw+ztXJ2UWdy8g0mlV3QsXllmUQw/DZie7sFN3g05EerfidvGdZZa5SK
-	l1e2M/W711w7/Sw+1nFYbCQz4E7aXsA2/CIIVVFTMo01o9JwGzqXwOrGT2E6y78F+YGRpovsYY0
-	sqGB09wmmu0F54L1YJ2Yh7PG7mPKC07B41uLs9f17Xz3gm1Nd3+hav0vxer6fYFw6a4
-X-Google-Smtp-Source: AGHT+IFwX0UGM0SSqywlXCPNUwgxiVVdpIXKUYy8u1ykfZN73v1I5KjuFyvBESlgJXXjTswqxF6tTw==
-X-Received: by 2002:a05:600c:1f86:b0:477:73e9:dc17 with SMTP id 5b1f17b1804b1-477b8c935d2mr35700965e9.35.1763641861394;
-        Thu, 20 Nov 2025 04:31:01 -0800 (PST)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82cc6b9sm46456965e9.3.2025.11.20.04.31.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 04:31:01 -0800 (PST)
-Message-ID: <d6632fc3-17e2-4d06-abbc-413bb6478db4@suse.com>
-Date: Thu, 20 Nov 2025 13:31:00 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BEcH557J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763646929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1C8+LrjU0KzWq9emHiCsxm0TlrKfuklcXtM1rteIByw=;
+	b=BEcH557JumcM2W68CFvI4xTLntEMyXiHyJnffQH7cLFFBi8CRdUXhfi7W1DYETvXvU+BBa
+	KriI28lJjEz+643pkHQ7jExoAJWwTBIprZvXMv43fod8i0In/OnywsqvgW9QyqNcH3WSN6
+	0gopm1TYB7jqKOtw6iFdPNsyhsXlZMI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-56-QkHHSkW8Ouy8-NP7xFcggQ-1; Thu,
+ 20 Nov 2025 08:55:26 -0500
+X-MC-Unique: QkHHSkW8Ouy8-NP7xFcggQ-1
+X-Mimecast-MFC-AGG-ID: QkHHSkW8Ouy8-NP7xFcggQ_1763646924
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 573871800358;
+	Thu, 20 Nov 2025 13:55:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.5])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 109A41955F2C;
+	Thu, 20 Nov 2025 13:55:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20251120003653.335863-2-ebiggers@kernel.org>
+References: <20251120003653.335863-2-ebiggers@kernel.org> <20251120003653.335863-1-ebiggers@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: dhowells@redhat.com, linux-crypto@vger.kernel.org,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, keyrings@vger.kernel.org,
+    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] lib/crypto: Add ML-DSA verification support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module/decompress: Avoid open-coded kvrealloc()
-To: Kees Cook <kees@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, linux-modules@vger.kernel.org,
- Daniel Gomez <da.gomez@kernel.org>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20251119225439.work.741-kees@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251119225439.work.741-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2624663.1763646918.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 20 Nov 2025 13:55:18 +0000
+Message-ID: <2624664.1763646918@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 11/19/25 11:54 PM, Kees Cook wrote:
-> Replace open-coded allocate/copy with kvrealloc().
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Daniel Gomez <da.gomez@samsung.com>
-> Cc: <linux-modules@vger.kernel.org>
-> ---
->  kernel/module/decompress.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> index 474e68f0f063..36f52a232a12 100644
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -17,16 +17,16 @@
->  static int module_extend_max_pages(struct load_info *info, unsigned int extent)
->  {
->  	struct page **new_pages;
-> +	unsigned int new_max = info->max_pages + extent;
->  
-> -	new_pages = kvmalloc_array(info->max_pages + extent,
-> -				   sizeof(info->pages), GFP_KERNEL);
-> +	new_pages = kvrealloc(info->pages,
-> +			      size_mul(new_max, sizeof(*info->pages)),
-> +			      GFP_KERNEL);
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-Nit: Using the array_size() alias of size_mul() might be clearer in this
-context.
+> +	/* Compute d =3D (c mod 2^32) * (q^-1 mod 2^32). */
+> +	s32 d =3D (s32)c * QINV_MOD_R;
 
-It looks ok to me in any case.
+Hmmm...  is "(s32)c" actually "(c mod 2^32)"?  Should that be:
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+	u32 d =3D (u32)c * QINV_MOD_R;
 
--- 
-Thanks,
-Petr
+This is followed up by casting 'd' to "s64".  I don't think that should
+sign-extend it, but...
+
+> +	for (int m =3D 0, len =3D 128; len >=3D 1; len /=3D 2) {
+
+Can you put "int m =3D 0" outside of the for-statement?  I know putting it
+inside saves a line or two, but 'm' is not the loop counter - which it see=
+ms
+like it should be by virtue of being listed first.
+
+> +	for (int m =3D 256, len =3D 1; len < 256; len *=3D 2) {
+
+Ditto.
+
+> +static const u8 *decode_t1_elem(struct mldsa_ring_elem *out,
+> +				const u8 *t1_encoded)
+
+I think this is (more or less) pkDecode()?  Can you put something like:
+
+  * Decode the vector 't1' from the public key.
+  * Reference: FIPS 204 Algorithm 23, sigDecode.
+
+in the comment before it?
+
+> +/*
+> + * Use @seed to generate a ring element @c with coefficients in {-1, 0,=
+ 1},
+> + * exactly @tau of them nonzero.  Reference: FIPS 204 Algorithm 29, Sam=
+pleInBall
+> + */
+> +static void sample_in_ball(struct mldsa_ring_elem *c, const u8 *seed,
+> +			   size_t seed_len, int tau, struct shake_ctx *shake)
+
+Should "seed" actually be labelled "rho"?  I know a seed is what it is, bu=
+t
+the algo description has a different label - and the caller passes it ctil=
+de,
+not rho:-/.
+
+> +	u8 (*h)[N]; /* The signer's hint vector, length k */
+> +	h =3D (u8 (*)[N])&ws->z[l];
+
+C is weird sometimes.
+
+> +		/* Reduce to [0, q), then tmp =3D w'_1 =3D UseHint(h, w'_Approx) */
+
+Bracket mismatch.  "[0, q]"
+
+> +		/* w1Encode(w'_1) */
+> +		w1_pos =3D 0;
+> ...
+
+Given you put the decode functions into helpers, don't you want to do that
+with this?
+
+> +	if (memcmp(ws->ctildeprime, ctilde, params->ctilde_len) !=3D 0)
+> +		return -EBADMSG;
+
+Actually, this should return -EKEYREJECTED, not -EBADMSG.
+
+I guess you don't need to use crypto_memneq() as timing doesn't matter.
+
+The maths look okay, I think.  You can add:
+
+	Reviewed-by: David Howells <dhowells@redhat.com>
+
+David
+
