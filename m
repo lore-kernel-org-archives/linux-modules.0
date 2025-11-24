@@ -1,105 +1,321 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFEA14F125;
-	Sun, 23 Nov 2025 17:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6032F6165
+	for <linux-modules@vger.kernel.org>; Mon, 24 Nov 2025 09:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763917860; cv=none; b=K++/V/Ye4GGVMMVI7ch5SinaBQhunRrEKTwRMDur3QU1zyTRoLcqB3Emh9i2fEyBiGG7lfa8vfhEOl2Wr/vFks8NoQvdI+ykzmKf8W52C92HqLXJzSFP0cuJEvQjnjGysONQAlfgUyFSqJFNdH02yxRMuyLgOVcoUb24qn+tSc8=
+	t=1763975595; cv=none; b=Otl+2kWTSSJHqyxZ415FHJWwozPqsrZnTa3/efvwUmP93N8LbPi9HbfUxTS7oJxtbtc4JNIOyXxeBuBEbfUe4GRiHoD1Qr4b6nj4cXJDTXCrJ27JIdwHfOASZ8y2H+9612cpsKRjV+w/VoPI08ff0/V3xkRLoDidhYLI8ln+RJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763917860; c=relaxed/simple;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyQw9rNx7Y83G9VuO8fNSOybgs1V6SSB1o2n2QAXsv+7Gc9tPvHD3YGy4/+kpJuhNrnrktc+uwsEljtsO+lRz3JfK2QMFP2CuWG67pZEaqa3Qpf9Qn0uhGhIeKtxybS0F4zI4I8mwZbjD9ip+dd6tC2uCcTOb79B/1Iixf9wJU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wo8WQpA6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H8a+b7E4; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1763975595; c=relaxed/simple;
+	bh=mMnVLuCXftagdG0NTHkbuuBvgharmyAiq+/MBIApwPE=;
+	h=From:In-Reply-To:References:Cc:Subject:MIME-Version:Content-Type:
+	 Date:Message-ID; b=ErXF+l7Ue/F16n8tQwf+phmJfjUNXem8Li7oGM6CAkTEhugUMWCn0wTQLgVVdFqs3XHvJ7PbTZtxaYjUUfIQ31dCtuEt4Zt0mOvDiXmzGjYxqMf+HWTrvRLdqg+vUE6qC5ki8VZUH1swYfIvwFOMpKNvl4oU0/lIlD7ox2PjsBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JpaXeMGD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wo8WQpA6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H8a+b7E4"
-Date: Sun, 23 Nov 2025 18:10:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763917856;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JpaXeMGD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763975593;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
-	b=wo8WQpA6NfO5oq1yU5MNIxMljtmOFymvIKwf+z4UpWIwlmWK66C9CioLMyGAOPzFA0j76x
-	feTDuA2whfyAklcQwWO/kFWvgwWMGymo+2py2F9m0snFPcsiGb2px0IjJZXqcGHrvur9VH
-	JltI0wdrt+vgV2fQLaCE9TaaYnJ1sEPv3Xcrqp0ibg+AnJOIAG+nn4YMVG874FGgvxpo2n
-	MJMTZztLqBmS37z8mUn6XD5/rXrSl5JNZ15qQTziNCOzq622/JthL+xDeTbEIH+I9kWOCg
-	JKL5L5uhHGwBitxvsz2++MsIcD4j/XrNx79t/M05VLbd8rdWlYJFtlifZn2GHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763917856;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
-	b=H8a+b7E4pwlDvJgRrStalE/DblBpY6KGjVhb8qJAv2yo/f7vbjkwGdH54cVGXBkqaDHNNk
-	EznfI2lT8cZDOYBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3 7/9] module: Move lockdown check into generic module
- loader
-Message-ID: <20251123171054.wnPvVQrF@linutronix.de>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <20250429-module-hashes-v3-7-00e9258def9e@weissschuh.net>
- <20251119112055.W1l5FOxc@linutronix.de>
- <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
+	bh=Grgderz4QxceWjw2z3CGqb7mO57qe11aGdbiTyRAyNQ=;
+	b=JpaXeMGDTA4BlRW11fBSbdVPDeExuQrz5cX+JUfHjTJygZRgz3H68sJ8+uAQ/TZwGpNK/P
+	l1F9hmPWFKYI62wRLCV7fF5ZwdsN8h0tLI2NHL1zTFInCPgxIcdcWuHDcr8igMMKrNPO0V
+	vEW3eL6GgxqMtBH8oPQ6V7WLHAUymOg=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-460-aRXj-SCIMEeL_QC0KHZA-A-1; Mon,
+ 24 Nov 2025 04:13:05 -0500
+X-MC-Unique: aRXj-SCIMEeL_QC0KHZA-A-1
+X-Mimecast-MFC-AGG-ID: aRXj-SCIMEeL_QC0KHZA-A_1763975583
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 21403180048E;
+	Mon, 24 Nov 2025 09:13:03 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.14])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EF4A41800576;
+	Mon, 24 Nov 2025 09:12:58 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20251120104439.2620205-6-dhowells@redhat.com>
+References: <20251120104439.2620205-6-dhowells@redhat.com> <20251120104439.2620205-1-dhowells@redhat.com>
+Cc: dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 5/8] crypto: Add ML-DSA crypto_sig support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3374840.1763975577.1@warthog.procyon.org.uk>
+Date: Mon, 24 Nov 2025 09:12:57 +0000
+Message-ID: <3374841.1763975577@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 2025-11-19 14:55:47 [-0500], Paul Moore wrote:
-> On Wed, Nov 19, 2025 at 6:20=E2=80=AFAM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
-> > On 2025-04-29 15:04:34 [+0200], Thomas Wei=C3=9Fschuh wrote:
-> > > The lockdown check buried in module_sig_check() will not compose well
-> > > with the introduction of hash-based module validation.
-> >
-> > An explanation of why would be nice.
->=20
-> /me shrugs
->=20
-> I thought the explanation was sufficient.
+Meh.  I forgot to git add crypto/mldsa.c.
 
-Okay. So if it is just me and everyone is well aware then okay.
+David
+---
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index bf8b8a60a0c0..45e376af02dc 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -344,6 +344,16 @@ config CRYPTO_ECRDSA
+ 	  One of the Russian cryptographic standard algorithms (called GOST
+ 	  algorithms). Only signature verification is implemented.
+ 
++config CRYPTO_MLDSA
++	tristate "ML-DSA (Module-Lattice-Based Digital Signature Algorithm)"
++	select CRYPTO_SIG
++	select CRYPTO_LIB_MLDSA
++	select CRYPTO_LIB_SHA3
++	help
++	  ML-DSA (Module-Lattice-Based Digital Signature Algorithm) (FIPS-204).
++
++	  Only signature verification is implemented.
++
+ endmenu
+ 
+ menu "Block ciphers"
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 093c56a45d3f..b181f8a54099 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -60,6 +60,8 @@ ecdsa_generic-y += ecdsa-p1363.o
+ ecdsa_generic-y += ecdsasignature.asn1.o
+ obj-$(CONFIG_CRYPTO_ECDSA) += ecdsa_generic.o
+ 
++obj-$(CONFIG_CRYPTO_MLDSA) += mldsa.o
++
+ crypto_acompress-y := acompress.o
+ crypto_acompress-y += scompress.o
+ obj-$(CONFIG_CRYPTO_ACOMP2) += crypto_acompress.o
+diff --git a/crypto/mldsa.c b/crypto/mldsa.c
+new file mode 100644
+index 000000000000..2146c774b5ca
+--- /dev/null
++++ b/crypto/mldsa.c
+@@ -0,0 +1,201 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * crypto_sig wrapper around ML-DSA library.
++ */
++#include <linux/init.h>
++#include <linux/module.h>
++#include <crypto/internal/sig.h>
++#include <crypto/mldsa.h>
++
++struct crypto_mldsa_ctx {
++	u8 pk[MAX(MAX(MLDSA44_PUBLIC_KEY_SIZE,
++		      MLDSA65_PUBLIC_KEY_SIZE),
++		  MLDSA87_PUBLIC_KEY_SIZE)];
++	unsigned int pk_len;
++	enum mldsa_alg strength;
++	u8 key_set;
++};
++
++static int crypto_mldsa_sign(struct crypto_sig *tfm,
++			     const void *msg, unsigned int msg_len,
++			     void *sig, unsigned int sig_len)
++{
++	return -EOPNOTSUPP;
++}
++
++static int crypto_mldsa_verify(struct crypto_sig *tfm,
++			       const void *sig, unsigned int sig_len,
++			       const void *msg, unsigned int msg_len)
++{
++	const struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	if (unlikely(!ctx->key_set))
++		return -EINVAL;
++
++	return mldsa_verify(ctx->strength, sig, sig_len, msg, msg_len,
++			    ctx->pk, ctx->pk_len);
++}
++
++static unsigned int crypto_mldsa_key_size(struct crypto_sig *tfm)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	switch (ctx->strength) {
++	case MLDSA44:
++		return MLDSA44_PUBLIC_KEY_SIZE;
++	case MLDSA65:
++		return MLDSA65_PUBLIC_KEY_SIZE;
++	case MLDSA87:
++		return MLDSA87_PUBLIC_KEY_SIZE;
++	default:
++		WARN_ON_ONCE(1);
++		return 0;
++	}
++}
++
++static int crypto_mldsa_set_pub_key(struct crypto_sig *tfm,
++				    const void *key, unsigned int keylen)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++	unsigned int expected_len = crypto_mldsa_key_size(tfm);
++
++	if (keylen != expected_len)
++		return -EINVAL;
++
++	ctx->pk_len = keylen;
++	memcpy(ctx->pk, key, keylen);
++	ctx->key_set = true;
++	return 0;
++}
++
++static int crypto_mldsa_set_priv_key(struct crypto_sig *tfm,
++				     const void *key, unsigned int keylen)
++{
++	return -EOPNOTSUPP;
++}
++
++static unsigned int crypto_mldsa_max_size(struct crypto_sig *tfm)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	switch (ctx->strength) {
++	case MLDSA44:
++		return MLDSA44_SIGNATURE_SIZE;
++	case MLDSA65:
++		return MLDSA65_SIGNATURE_SIZE;
++	case MLDSA87:
++		return MLDSA87_SIGNATURE_SIZE;
++	default:
++		WARN_ON_ONCE(1);
++		return 0;
++	}
++}
++
++static int crypto_mldsa44_alg_init(struct crypto_sig *tfm)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	ctx->strength = MLDSA44;
++	ctx->key_set = false;
++	return 0;
++}
++
++static int crypto_mldsa65_alg_init(struct crypto_sig *tfm)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	ctx->strength = MLDSA65;
++	ctx->key_set = false;
++	return 0;
++}
++
++static int crypto_mldsa87_alg_init(struct crypto_sig *tfm)
++{
++	struct crypto_mldsa_ctx *ctx = crypto_sig_ctx(tfm);
++
++	ctx->strength = MLDSA87;
++	ctx->key_set = false;
++	return 0;
++}
++
++static void crypto_mldsa_alg_exit(struct crypto_sig *tfm)
++{
++}
++
++static struct sig_alg crypto_mldsa_algs[] = {
++	{
++		.sign			= crypto_mldsa_sign,
++		.verify			= crypto_mldsa_verify,
++		.set_pub_key		= crypto_mldsa_set_pub_key,
++		.set_priv_key		= crypto_mldsa_set_priv_key,
++		.key_size		= crypto_mldsa_key_size,
++		.max_size		= crypto_mldsa_max_size,
++		.init			= crypto_mldsa44_alg_init,
++		.exit			= crypto_mldsa_alg_exit,
++		.base.cra_name		= "mldsa44",
++		.base.cra_driver_name	= "mldsa44-lib",
++		.base.cra_ctxsize	= sizeof(struct crypto_mldsa_ctx),
++		.base.cra_module	= THIS_MODULE,
++		.base.cra_priority	= 5000,
++	}, {
++		.sign			= crypto_mldsa_sign,
++		.verify			= crypto_mldsa_verify,
++		.set_pub_key		= crypto_mldsa_set_pub_key,
++		.set_priv_key		= crypto_mldsa_set_priv_key,
++		.key_size		= crypto_mldsa_key_size,
++		.max_size		= crypto_mldsa_max_size,
++		.init			= crypto_mldsa65_alg_init,
++		.exit			= crypto_mldsa_alg_exit,
++		.base.cra_name		= "mldsa65",
++		.base.cra_driver_name	= "mldsa65-lib",
++		.base.cra_ctxsize	= sizeof(struct crypto_mldsa_ctx),
++		.base.cra_module	= THIS_MODULE,
++		.base.cra_priority	= 5000,
++	}, {
++		.sign			= crypto_mldsa_sign,
++		.verify			= crypto_mldsa_verify,
++		.set_pub_key		= crypto_mldsa_set_pub_key,
++		.set_priv_key		= crypto_mldsa_set_priv_key,
++		.key_size		= crypto_mldsa_key_size,
++		.max_size		= crypto_mldsa_max_size,
++		.init			= crypto_mldsa87_alg_init,
++		.exit			= crypto_mldsa_alg_exit,
++		.base.cra_name		= "mldsa87",
++		.base.cra_driver_name	= "mldsa87-lib",
++		.base.cra_ctxsize	= sizeof(struct crypto_mldsa_ctx),
++		.base.cra_module	= THIS_MODULE,
++		.base.cra_priority	= 5000,
++	},
++};
++
++static int __init mldsa_init(void)
++{
++	int ret, i;
++
++	for (i = 0; i < ARRAY_SIZE(crypto_mldsa_algs); i++) {
++		ret = crypto_register_sig(&crypto_mldsa_algs[i]);
++		if (ret < 0)
++			goto error;
++	}
++	return 0;
++
++error:
++	pr_err("Failed to register (%d)\n", ret);
++	for (i--; i >= 0; i--)
++		crypto_unregister_sig(&crypto_mldsa_algs[i]);
++	return ret;
++}
++module_init(mldsa_init);
++
++static void mldsa_exit(void)
++{
++	for (int i = 0; i < ARRAY_SIZE(crypto_mldsa_algs); i++)
++		crypto_unregister_sig(&crypto_mldsa_algs[i]);
++}
++module_exit(mldsa_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Crypto API support for ML-DSA signature verification");
++MODULE_ALIAS_CRYPTO("mldsa44");
++MODULE_ALIAS_CRYPTO("mldsa65");
++MODULE_ALIAS_CRYPTO("mldsa87");
 
-Sebastian
