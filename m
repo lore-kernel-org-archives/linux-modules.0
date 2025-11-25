@@ -1,103 +1,173 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD37331A67
-	for <linux-modules@vger.kernel.org>; Tue, 25 Nov 2025 20:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974A33B96F;
+	Tue, 25 Nov 2025 20:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764101432; cv=none; b=aeQvmpNdWBaYrXwGorPy1GfFGCDrla4+F9fWeW80BGIfcEBR0+6hguFfWZWthgQOZXizYZ1cOJEoL9L4vMju03SMpeFTVPpQ26/PQNzpaYo4jlMsTzyfvz5h0kCu61Ek4cRPMH9P/lXdYsaWWBhHzp/yfjNiKlzeAD59rpOYTWs=
+	t=1764102262; cv=none; b=r2PaLlcD+u09tEoer+VZ0vJ1xEv8eDJ/WneNoH0mswR9D207jrvYWJMUa6z7ATHVaulvv84e3nCZ5QNz8mD5vORHmBZZgpFnOYxzQuBEKuxM0USQQUg6I37iITOJ9C7+gP+I/lI+van8xr+LrC/967zVPEa4cvU5v3xl10I4CQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764101432; c=relaxed/simple;
-	bh=IpmkyWu37izB9U/urDTB4FMeYG+K+Cuv8K/u3LCvyYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jOUizJhGP38Igon/i+gdTUVog45/a3dk8I6kTMy/26qPwv+/uZOed6eiRwFK2F05oC8DHg5roHJuRkt10eA9gYXsHYH8Z1gTjpt4r8wkTsRvRrsV61kMMUffwiiFa7YPYK3e7IbRKgqFbpEslxvhrsu9WFXXCEAoV9EwCTYTVOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r6XKd7Ua; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1764102262; c=relaxed/simple;
+	bh=IF3zxg6vSqG7eDpZdkTklgqMEg9K+BK9bCEP6T58x+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AajCogpB3KEOZvBBvahEWaUYcW7rE4NjCuc7uBL2BJiukJcGs3dn8z5gye8w8AtpxAbBSUrQJTgvZJ31egbWz8rbfO6g+tFYd2NU9vUhDNXSojbwlfG4NJK/JJ5Ip8X8dfjVcGcUj6rNaQzRJlhKszczwvpGtd4SrLVmz09vssk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxNvE3xR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r6XKd7Ua"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2980343d9d1so34235ad.1
-        for <linux-modules@vger.kernel.org>; Tue, 25 Nov 2025 12:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764101430; x=1764706230; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i+5vyqCrtY9XbVqcemX0lY7g/P4KxTFS1RrZs7bK+uY=;
-        b=r6XKd7UaPy81HY4T8ChhRs0XIESXHy5xdnFVIvOlQa+zHomKc4QuXz6n6ueLegroZX
-         62qJfSGXx3xbr6b0j4OXv4Vg/U+zu7ZVo+mjg2FfVU7nph2uj+SU2rv1/uQcMotMhb3D
-         prENkAq0UzXLc6LPl2CJMj4+rlSmxdQkNGJx31U0iDjA+RbARG87K0CpkduKiG2spMPW
-         0GSYg1V/IVS4p+AWbFBOfbVlBbCoCJnEHnMC2YovNlnI9Wnxf7e/UFjPM9MlSi/PFvgj
-         13nEdXKJKd9PqKCbT2ZpGJb+DlOgxMtqGexiYpC4Z36HOSf+yNmM0JGbiltiJbQcG4NW
-         gj7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764101430; x=1764706230;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=i+5vyqCrtY9XbVqcemX0lY7g/P4KxTFS1RrZs7bK+uY=;
-        b=r34s7ER9I9L9w+ABPWOwm9ZI6GT7At0Ro3vq6arV5laDCBMSM2xvCvEzZ/sdW7T4vK
-         yibq7YkcDLYQy9FxGYJMU2AxmnuudVVRACiD+Lr7G7jFw5Fe93GOmvDDjMTFB2Off9cF
-         gPn6PcWEGaiHS22CynPWJ7ZIOGV8s/iQWrY/0eUHqB8pB+L8I9wbBRVKkXUDovdmaUIM
-         DHmFTJaIPUC8A034n0aoMRJIyn5xn+Os5b7oOt1l250ifr/41c6HTQH+1BO10wekTISz
-         qdQ9S3oDbfaerPAbX0GQXFVR/HJK12pxavM6GLxK4CR3w/+qdA1OPzAVFOd429DQRU21
-         sQiw==
-X-Gm-Message-State: AOJu0YxI7E5SSZoTqBFuyIUd4kzGAWbtWtE2HmOFhzLc4TzmzWTbl+MC
-	f5jWH+BeZLHGjBM0qe3klO5s29uYQKyIfb8/SBVmutaxq/CItXhqwWyIM3jTsgq+kiH9DkG2PbV
-	G6VQji7tn90QBcBxoryKatYkFtCgtQhUtUJWlA1fxzphf3M5m36JKZfUs
-X-Gm-Gg: ASbGncuxJyDioEII2NKrMC8HVu0V7edB6Xk72yuZ/PHRd7xiInMz/4JhezkOWjUgA9i
-	0n/pr6xz7ahFLXr1+DMmefLbys7x6sj18QVOqNoADpaMc5bJChCIPOS+8x3HQJqH80/+BgE+QT7
-	QxbrSNeMKAZibYVo0cVM+LbfA/JY98NntLoH0M/beAVa1FEalUDrPnObMZZJFFTlP1pd+7t9M/z
-	GS3AR+34VnpHcbh08MXtg9DRqIvwtkAwS3x5oYWDGp/Ql6fXoO7FBZE8bfrRjLK8y8C
-X-Google-Smtp-Source: AGHT+IGna2ErKhNthbpSypt53IuMt3hgqHZlvYfXCyfz0EDoxhdTVpdJkiV9BuKUCjqG7mkLQMunNXHx2Y/iuXgA2LM=
-X-Received: by 2002:a05:7022:a91:b0:11a:4752:4322 with SMTP id
- a92af1059eb24-11dc327e1femr21774c88.3.1764101429398; Tue, 25 Nov 2025
- 12:10:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxNvE3xR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41346C4CEF1;
+	Tue, 25 Nov 2025 20:24:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764102261;
+	bh=IF3zxg6vSqG7eDpZdkTklgqMEg9K+BK9bCEP6T58x+w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dxNvE3xRvlOrasOVf9QYAZHjK1SBFVBxQMQKJEYCxcwq5Jl8DbEhuBwBA1fJPwxdk
+	 LSHJBdWPFm7V17BZ3FSo+mwlVg36hj40z/aQOZEP07QQlZ2kYySN6kKNF1yg9GQHbp
+	 dYkJZ/sL57g4Utj+6uS7HYhqLG03+rrFsKBgMgY9SeXSvfMQWbBcFaRrJY8spGM4q6
+	 0WiDbevs+Mk+1sCcJcceo827p6esezqmJTHHGMT3vitH3BBAj/e+HTw+dZIwDgkna7
+	 djejdJ3WgBgrKPmYvSZ5smEOXvCPjb0rh7raRSOrYV4eYpzUDIuqLMRCbHUlYv4RMZ
+	 dkrYWA0rDa9mQ==
+Date: Tue, 25 Nov 2025 20:24:19 +0000
+From: Eric Biggers <ebiggers@kernel.org>
+To: Ignat Korchagin <ignat@cloudflare.com>
+Cc: David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>, linux-crypto@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
+Message-ID: <20251125202419.GB3061247@google.com>
+References: <20251117145606.2155773-1-dhowells@redhat.com>
+ <20251117145606.2155773-3-dhowells@redhat.com>
+ <20251117171003.GC1584@sol>
+ <CALrw=nG6X5Opjb1H4VVzCNpJ4QtmHUK3nQ1XQ5GKMvnE9NnZsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117203806.970840-2-samitolvanen@google.com> <aRycVOe5ZXSJJFpn@kitsune.suse.cz>
-In-Reply-To: <aRycVOe5ZXSJJFpn@kitsune.suse.cz>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Tue, 25 Nov 2025 12:09:52 -0800
-X-Gm-Features: AWmQ_blW6iMHGI7aTPQJK8iAONzA-fBA8_Io8bUpLEK98GyzR8N3QeVQrdLSgl8
-Message-ID: <CABCJKucc0bxLJ=b9rkiwWts6uA=ReLFr32K1OP9WH51D-hO4+A@mail.gmail.com>
-Subject: Re: [PATCH] gendwarfksyms: Fix build on 32-bit hosts
-To: =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>, 
-	Daniel Gomez <da.gomez@kernel.org>
-Cc: linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALrw=nG6X5Opjb1H4VVzCNpJ4QtmHUK3nQ1XQ5GKMvnE9NnZsQ@mail.gmail.com>
 
-On Tue, Nov 18, 2025 at 8:18=E2=80=AFAM Michal Such=C3=A1nek <msuchanek@sus=
-e.de> wrote:
->
-> Hello,
->
-> On Mon, Nov 17, 2025 at 08:38:07PM +0000, Sami Tolvanen wrote:
-> > We have interchangeably used unsigned long for some of the types
-> > defined in elfutils, assuming they're always 64-bit. This obviously
-> > fails when building gendwarfksyms on 32-bit hosts. Fix the types.
+On Tue, Nov 25, 2025 at 10:10:18AM +0000, Ignat Korchagin wrote:
+> Hi all,
+> 
+> On Mon, Nov 17, 2025 at 5:11 PM Eric Biggers <ebiggers@kernel.org> wrote:
 > >
-> > Reported-by: Michal Such=C3=A1nek <msuchanek@suse.de>
-> > Closes: https://lore.kernel.org/linux-modules/aRcxzPxtJblVSh1y@kitsune.=
-suse.cz/
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  scripts/gendwarfksyms/dwarf.c   | 4 +++-
-> >  scripts/gendwarfksyms/symbols.c | 5 +++--
-> >  2 files changed, 6 insertions(+), 3 deletions(-)
->
-> with this patch gendwarfksyms builds on 32bit x86 and Arm.
->
-> Tested-by: Michal Such=C3=A1nek <msuchanek@suse.de>
+> > On Mon, Nov 17, 2025 at 02:55:51PM +0000, David Howells wrote:
+> > >  lib/crypto/Kconfig                            |   1 +
+> > >  lib/crypto/Makefile                           |   2 +
+> > >  lib/crypto/mldsa/Kconfig                      |  29 ++
+> > >  lib/crypto/mldsa/Makefile                     |  20 +
+> > >  lib/crypto/mldsa/crypto_mldsa_44.c            | 166 ++++++++
+> > >  lib/crypto/mldsa/crypto_mldsa_65.c            | 166 ++++++++
+> > >  lib/crypto/mldsa/crypto_mldsa_87.c            | 166 ++++++++
+> > >  lib/crypto/mldsa/dilithium.h                  | 304 ++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_44.c               |  33 ++
+> > >  lib/crypto/mldsa/dilithium_44.h               | 291 ++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_65.c               |  33 ++
+> > >  lib/crypto/mldsa/dilithium_65.h               | 291 ++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_87.c               |  33 ++
+> > >  lib/crypto/mldsa/dilithium_87.h               | 291 ++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_common.c           | 117 ++++++
+> > >  lib/crypto/mldsa/dilithium_debug.h            |  49 +++
+> > >  lib/crypto/mldsa/dilithium_ntt.c              |  89 +++++
+> > >  lib/crypto/mldsa/dilithium_ntt.h              |  35 ++
+> > >  lib/crypto/mldsa/dilithium_pack.h             | 119 ++++++
+> > >  lib/crypto/mldsa/dilithium_poly.c             | 377 ++++++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_poly.h             | 181 +++++++++
+> > >  lib/crypto/mldsa/dilithium_poly_c.h           | 141 +++++++
+> > >  lib/crypto/mldsa/dilithium_poly_common.h      |  35 ++
+> > >  lib/crypto/mldsa/dilithium_polyvec.h          | 343 ++++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_polyvec_c.h        |  81 ++++
+> > >  lib/crypto/mldsa/dilithium_reduce.h           |  85 ++++
+> > >  lib/crypto/mldsa/dilithium_rounding.c         | 128 ++++++
+> > >  lib/crypto/mldsa/dilithium_service_helpers.h  |  99 +++++
+> > >  lib/crypto/mldsa/dilithium_signature_c.c      | 279 +++++++++++++
+> > >  lib/crypto/mldsa/dilithium_signature_c.h      |  37 ++
+> > >  lib/crypto/mldsa/dilithium_signature_impl.h   | 370 +++++++++++++++++
+> > >  lib/crypto/mldsa/dilithium_type.h             | 108 +++++
+> > >  lib/crypto/mldsa/dilithium_zetas.c            |  68 ++++
+> > >  .../mldsa/signature_domain_separation.c       | 204 ++++++++++
+> > >  .../mldsa/signature_domain_separation.h       |  30 ++
+> > >  35 files changed, 4801 insertions(+)
+> >
+> > Over the past week I've been starting to review this massive addition.
+> >
+> > I don't think this is on the right track.  This implementation is really
+> > messy, with lots of unused functionality and unnecessary abstractions,
+> > and code that doesn't follow kernel conventions.
+> >
+> > In comparison, BoringSSL has an entire implementation of ML-DSA,
+> > *including key generation and signing*, in a bit over 3000 lines in one
+> > file.  But about half of that code is specific to key generation or
+> > signing, which the kernel doesn't need, so in principle
+> > verification-only shouldn't be much more than a thousand.  I find it to
+> > be much easier to understand than leancrypto as well.
+> >
+> > Historically we've had a lot of problems with people integrating code
+> > from external sources into the kernel, like mpi, with properly "owning"
+> > it because they feel like it's not their code and someone else is
+> > responsible.  I feel like that's going to be a big problem here.
+> >
+> > I think we can do better here and put together a smaller implementation
+> > for the kernel that we'll actually be able to maintain.
+> 
+> I was thinking about this lately for some time - even put forward a
+> small discussion proposal for upcoming Plumbers (which wasn't accepted
+> unfortunately). Should we consider somehow safely "outsourcing" at
+> least some (asymmetric - potentially slow anyway) crypto
+> implementations to userspace? Something similar to
+> request_module/request_firmware/request_key usermode helpers or an
+> io_uring interface or a crypto socket? This way we can bring any
+> well-maintained crypto library (and even multiple ones) to the kernel:
+>   * it can have any software license
+>   * can be written in any programming language
+>   * can use architecture vector instructions more easily
+>   * can have any certifications out of the box (looking at you - FIPS)
+>   * distros would have the ability to plug their own
+>   * maybe it can even do private key crypto (which I personally would
+> really like more support of and it would be acceptable to Herbert)
+> 
+> Given the past experience of RSA and mpi - it is not that difficult to
+> port something to the kernel, but quite hard to maintain it over time
+> in a secure manner. With a userspace approach the kernel can
+> piggy-back on proven vendors like any other piece of open source
+> software out there.
+> 
+> I understand that there probably still be a need for some in-kernel
+> crypto, so the proposal here is not to fully replace things, but
+> rather complement the current offerings with an interface, which could
+> enable faster adoption of newer (and more secure versions of existing)
+> crypto algorithms.
 
-Great, thanks for testing!  Daniel, do you want to take this fix
-through the modules tree?
+The performance cost of that would be very high, so it would only have
+any chance at possibly being reasonable for some of the asymmetric
+algorithms.  It would also introduce reliability issues.
 
-Sami
+I'll also note that the main reason that people seem to want private key
+operations in the kernel is for the keyctl() UAPIs for userspace, which
+is already a bad idea.  So I guess we end up with userspace calling into
+the kernel, which calls back into userspace to use some userspace crypto
+library which the original userspace program refused to use in the first
+place for some reason?  It makes no sense to me, sorry.
+
+There is the opportunity to share more code with userspace projects at
+the source code level.  Just it doesn't always work out due to different
+languages, licences, requirements, conventions, and implementation
+qualities.  For ML-DSA verification I didn't see a good alternative to
+just writing it myself.  But in other cases a different conclusion could
+be reached.  The kernel uses a lot of the assembly files from
+CRYPTOGAMS, for example, and some of the Curve25519 code (including
+formally verified code) is imported from other sources.
+
+- Eric
