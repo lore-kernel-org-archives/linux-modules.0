@@ -1,85 +1,102 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4365314D0C;
-	Wed, 26 Nov 2025 19:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F2A16DEB0;
+	Wed, 26 Nov 2025 20:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764187199; cv=none; b=Re4mLQGfTA50zLJFjHkRaO+pLghNRi8ton/ivj7w8HE7kGqVCSOgy7YZTOSuMKidzLUct91aI0xOGNt7ws704OpCPy2DoT2YQ/qHZldCDVnfNeLxPwj+JMv2kETdl/JFZBBZADjmg7pQep4bSiEGNR3Pywrc4a/ZD36gxAyCwZk=
+	t=1764189330; cv=none; b=n9mCM1dD5+TNV+FoRQFfQGgeZzIlYcPY45LLVVkcKjfQ+G3Y56EXzmxFYE71qtbWLMm0ItVCVrkBnIA7VPrIsErnZ0JVYYkjxl2mnmBYHwkCW3DH18IteOqTtcc77EZHQUR0jKrvA/MQCIlvFA43okneDhzLInRz2cZVQ3QGP3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764187199; c=relaxed/simple;
-	bh=JVkhGAnFuqOLyOevdPN+qYtg3KUlxPhUsvfr3ZMySPI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JD+NSlNexUHEq2/7sbMfWtAXMJafyjWfIJAfrWZjHEoYjW20cETT4D3SRA7ueRZtCQtK3MaHt3uwnr19bQ8isc7alGKkrBEUq9Txq22suZ3wwLZihLpNEVydieb81IMGAvZmx3hsIWxcF/ZnPsukS8DhM/uz4FAdK1NAzCaHYm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U65324fX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764189330; c=relaxed/simple;
+	bh=XJXE66Wg9ac+X/iLhsiFW1rK34eqy0iauMDUWn+fmr8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JfOfKmIe86qeBel9X9yPRrOVAB0ATCf75yYI9hi0H+eZQPNudypC5qCDFg7QasA4FadKWEd5P0lTRD+v8SBOZWabbHqrfQ3o0h8oTnfLXjlTgNrrPgdmuQqTrdET6lb6eQ9pEz3O3pPzG0GMkpk+xcGSF6Ouq3mHJBotIurgkPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8mUqEse; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U65324fX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB18FC4CEF7;
-	Wed, 26 Nov 2025 19:59:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8mUqEse"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5362C113D0;
+	Wed, 26 Nov 2025 20:35:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764187199;
-	bh=JVkhGAnFuqOLyOevdPN+qYtg3KUlxPhUsvfr3ZMySPI=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U65324fXGG4SAU0RxSSsnYMz4mPZOgiBdK+xN20jRu2PlWwEJehwLkEH0mQe199GS
-	 08EAZl3rjCxO2tl0b6nzDmvKa3ROgFF2bf5HN7bY6056yhIl4w9gixd5L3RQDmqzQe
-	 vlHgWv2f9UIxsGvvxqHcm5VgS1jmgILEHmCoP1ugNbSFSXJREDZZNSuoVueejtfYA/
-	 +w6NbiodaPC/iDD9t6JlbFA1byZxznuiEnljp/BYDOmrbVljxa6HHfM5xAx4Xcg74T
-	 8+2pLy9tRO2Cgaf+7TPNUFVkjDeuz7nOsIV+QT6UmA8Yg67pHSgskYPwEg+CNmIGpX
-	 YV+SfZyZ8wPTA==
-Message-ID: <9d9ca6f0-b4cc-4fef-9ca2-9cb754330581@kernel.org>
-Date: Wed, 26 Nov 2025 20:59:55 +0100
+	s=k20201202; t=1764189329;
+	bh=XJXE66Wg9ac+X/iLhsiFW1rK34eqy0iauMDUWn+fmr8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=b8mUqEse8DnSdJrOMofRe119XsNSgQIUnpxUvNUAOTUFo6y934EIL5ZRqpaMdvn8/
+	 dfcMdLewSY+8JQcFKMDpURiI4V2vSYM4rr4kYcyeO3bCOA/ki//hp94jauZ0kuY8uE
+	 i7ugGJENvuIdrMnTFAiLK5HpFzykIcdIVQAipJKKEpJQ/nhJ+JSRYDjmSCgQNOA4sI
+	 9fHiZxZPzfW742asHo2qKcT+yRa7QILKQIVy777Ec5K1ibXS0T0iphaecP9IrjURsp
+	 x9UVujD7c3FOGSDRtHBoSEW0w5KHGHl/ZtzVq06E25Wwkj31PpAWsiILfmdtWd5Odu
+	 zvGLNlgFHH0Hw==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org,
+	David Howells <dhowells@redhat.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] lib/crypto: ML-DSA verification support
+Date: Wed, 26 Nov 2025 12:35:15 -0800
+Message-ID: <20251126203517.167040-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH] gendwarfksyms: Fix build on 32-bit hosts
-To: Sami Tolvanen <samitolvanen@google.com>,
- =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
-Cc: linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251117203806.970840-2-samitolvanen@google.com>
- <aRycVOe5ZXSJJFpn@kitsune.suse.cz>
- <CABCJKucc0bxLJ=b9rkiwWts6uA=ReLFr32K1OP9WH51D-hO4+A@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <CABCJKucc0bxLJ=b9rkiwWts6uA=ReLFr32K1OP9WH51D-hO4+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+This series is targeting libcrypto-next.  It can also be retrieved from:
+
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git mldsa-v2
+
+This series adds support for verifying ML-DSA signatures to lib/crypto/.
+Patch 1 is the ML-DSA implementation itself.  See that for full details.
+Patch 2 adds the KUnit test suite.
+
+The initial use case for this will be kernel module signature
+verification.  For more details, see David Howells' patchset
+https://lore.kernel.org/linux-crypto/20251120104439.2620205-1-dhowells@redhat.com/
+
+Changed in v2:
+- Reworked the KUnit test suite
+- Improved commit messages and comments
+- Added missing MODULE_DESCRIPTION() and MODULE_LICENSE()
+- Made the return values of mldsa_verify() differentiate between an
+  input being malformed and the "real" signature check failing
+- Refactored w1 encoding into a helper function
+- Used kfree() instead of kfree_sensitive()
+- Avoided unusal C syntax by accessing the hint vector via 'u8 *'
+- Reworked use_hint() to be better optimized and documented
+
+Eric Biggers (2):
+  lib/crypto: Add ML-DSA verification support
+  lib/crypto: tests: Add KUnit tests for ML-DSA verification
+
+ include/crypto/mldsa.h            |   53 +
+ lib/crypto/Kconfig                |    7 +
+ lib/crypto/Makefile               |    5 +
+ lib/crypto/mldsa.c                |  651 ++++++++++
+ lib/crypto/tests/Kconfig          |    9 +
+ lib/crypto/tests/Makefile         |    1 +
+ lib/crypto/tests/mldsa-testvecs.h | 1877 +++++++++++++++++++++++++++++
+ lib/crypto/tests/mldsa_kunit.c    |  381 ++++++
+ 8 files changed, 2984 insertions(+)
+ create mode 100644 include/crypto/mldsa.h
+ create mode 100644 lib/crypto/mldsa.c
+ create mode 100644 lib/crypto/tests/mldsa-testvecs.h
+ create mode 100644 lib/crypto/tests/mldsa_kunit.c
 
 
-On 25/11/2025 21.09, Sami Tolvanen wrote:
-> On Tue, Nov 18, 2025 at 8:18 AM Michal Suchánek <msuchanek@suse.de> wrote:
->>
->> Hello,
->>
->> On Mon, Nov 17, 2025 at 08:38:07PM +0000, Sami Tolvanen wrote:
->>> We have interchangeably used unsigned long for some of the types
->>> defined in elfutils, assuming they're always 64-bit. This obviously
->>> fails when building gendwarfksyms on 32-bit hosts. Fix the types.
->>>
->>> Reported-by: Michal Suchánek <msuchanek@suse.de>
->>> Closes: https://lore.kernel.org/linux-modules/aRcxzPxtJblVSh1y@kitsune.suse.cz/
->>> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
->>> ---
->>>  scripts/gendwarfksyms/dwarf.c   | 4 +++-
->>>  scripts/gendwarfksyms/symbols.c | 5 +++--
->>>  2 files changed, 6 insertions(+), 3 deletions(-)
->>
->> with this patch gendwarfksyms builds on 32bit x86 and Arm.
->>
->> Tested-by: Michal Suchánek <msuchanek@suse.de>
-> 
-> Great, thanks for testing!  Daniel, do you want to take this fix
-> through the modules tree?
-> 
-> Sami
+base-commit: c0127f3ad65e8b21752f7b4d7dbe7e4ab5b5c62d
+-- 
+2.52.0
 
-Absolutely! Since we are at the end of the rc cycle, I'll merge this after
-sending the current queued patches.
