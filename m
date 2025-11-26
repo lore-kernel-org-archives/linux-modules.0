@@ -1,250 +1,309 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110B42629D
-	for <linux-modules@vger.kernel.org>; Tue, 25 Nov 2025 20:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA2D280024;
+	Wed, 26 Nov 2025 13:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764103929; cv=none; b=nlhiix1WPLQQuPKloCQ+Qzxb9s89W54zhoBtOc68jwij9RzdvHmpIWfKHNx2pxJu71Sgz0XvvjtPS5Qenapyz8im3tvDXgp4FF/Z30OKEQcfPSXkXTnhRedeC+F3U5K+cYsxHQXBJ1+43Tmg7gR/ZiXgu0f4dbpSSiboeox8WoI=
+	t=1764164502; cv=none; b=Sli0ID2+tyAJFaYISoWazWQWlB5wQUg7r1Hyfa+XACyWt8BgUQn71eqVG6JDSwSKaYH9FiDKDmimKWHPEq9cXDI5DIZJVkTXSAnwjMoLllKzAQq3/GCDIo7v7pKczbwE21KbeZCEPxkc4uISJlk8dkR0PX9VUp4BbKEkUH4bL3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764103929; c=relaxed/simple;
-	bh=kiAUqFv308tsTC9XMP6J7L5wzi54M7ISRKjnfqA+O/0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mHbjlHWGWm1zg6G4uxQ3xDa1OG5srAtcS0aBvn28XpFOkaDtvGwqM1yHvXqWDVKj1Cf1QQC/rQaBXO7CW7WaTcdqpycYubMMBmekvrEkcvNGY0/8mWFaj79fYOtF+gQA6qMqroVhE732YR1GIzf4saPQGoU+JApdOOCwcdV84Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=fuOlVC0P; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1764164502; c=relaxed/simple;
+	bh=2028ThgkXy0dTdUmOIYKJXcHuEjAOpSXf9oPdrnhF4o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DCzocjoXj6lCYuDfTU/JKn2kU5DJTUAi+ohnxhA3CULkQ7GXgrK597X0YmeM7TJOGbV3RnHZm8LNJmYZYu91c7WIgA41h2v5yms3mGPL9nt279Bq7GYlfTVUFm7G7A5gvMdm4pG9lUeJFsnR6I1zE0FGDfsJLxbKTQr9kb95WgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g18HKZiS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fuOlVC0P"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5959105629bso5770019e87.2
-        for <linux-modules@vger.kernel.org>; Tue, 25 Nov 2025 12:52:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1764103925; x=1764708725; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6Veq6qGtZQdentDyLb41XD/n7T4wPrMoW41woL5oNso=;
-        b=fuOlVC0PTT4djp/G3+RKbu/Pwl3hjypCeBhgr2cvzDrK63QLsrJZ/a7Loi+eaIY3zj
-         QmTG3TZ3XEsCjZQC++aIh9LSm0IqtRauRqMgTyUNR/kmxmlwR3UuEqD2k/EW/1eaOD4D
-         SDIv9z1modfzYazPDZrtafEfdBghhi4YmVvJrBDLN3Qw7aXLvzdPHmp/XNIokC8AZQHw
-         puwDOaDKJTlXPDqWDVJ0W8Aucn9NGXqlT2sGvZo8/XOp9LvfwgTDF6ji6i+HGEZyuxvX
-         141o8/tvxaCTqjjrAdqRxYWUUoMWTvg1iGzfwaIFuHdPgbwRFtEHLH7Ck2jw2oX2CXjJ
-         peZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764103925; x=1764708725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6Veq6qGtZQdentDyLb41XD/n7T4wPrMoW41woL5oNso=;
-        b=LGbHLqjEJHcWni0rQcyL5wPOOlYoZlq/f9UboPFZKrYZQSZ+f9zCI1yOf7EGcMPtey
-         zI9uDpGyQPwZrmnfgr0X5NKTWGjgXB+qhoZh3PGo8jqt2icvC0/WlAf0vw3lRVhV4JFm
-         pYvKoA5KC8649/Xh3X+iSw1ux3uMUGawPzMMyYplBsDAztT4o3d0Slf9s+VqOroiaxPh
-         50TrnGeuy5I+xU3MbeorB799ChWO62yydRQA9oHXo1WxfdF02zHZqi/uOT8Bw0k/J6a+
-         bnwmmKZsVSdhGGUA8LqJeUS5aS2BIFiG4XmBkKDK6CP2fvGYNmL9uxtb2CNIO70qC0D6
-         VA7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUWUlyMnsaNH9HLEGQmX7Fc0xF0VVLC+3OU26jPUG1tP5nQrLS+JpHqOCCmh1SIVk8VdMElnas72qMZERR1@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzNWc+VOYUIbPqw4Us3K4YA8dKYoax4fLPXRxMvUz7R0oXz2YR
-	bt7GRK7ikU8yws+omgPumHG6q3nUba1loWGubsU8IIZ0EZhn566okCSPN4K3tN5O0dErQgI9WJY
-	6LKlWZUUj8KDGE/widZqPWqW3HDLAO7Cx8HUOW0CoxA==
-X-Gm-Gg: ASbGncv/3y51jgEpm/YuOB+BSBT4QStyoHc2kW9IV+ZLwLwp/ORHnndsX2ttnR7sWM/
-	aXG4+lh5GWvEqA+8x37b1yibMTEtOCMQDNwIiGleJKh4VTMgU/n6FMKnLO60EG3apbRAh8r5GZ1
-	YcPSDPJQHMUc3ocIMkaUnIBSpOVZIBDpKGDPgz7btXyz3JTYu3isdclzhm8r8UwpAn+vk4XfO4R
-	JtU35lPv3mNuHAAIhwmzdkd4wrf/lGbNu+FZwZehwOPrHhqJLqdgFZD4aojotluocXy4cqwRT4E
-	ugcDp/yktNOdKQ==
-X-Google-Smtp-Source: AGHT+IHB1XT1j6ogJ8J0r/Cp4YyDwKoWMJH5bcQnr9ufM6rkWLD8KmRTppkmR+1Kgn6cYgO/dmIaCDDZnMsdIWvOsXE=
-X-Received: by 2002:a05:6512:308a:b0:592:f818:9bde with SMTP id
- 2adb3069b0e04-596b50598aamr1850177e87.1.1764103925047; Tue, 25 Nov 2025
- 12:52:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g18HKZiS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952D8C113D0;
+	Wed, 26 Nov 2025 13:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764164502;
+	bh=2028ThgkXy0dTdUmOIYKJXcHuEjAOpSXf9oPdrnhF4o=;
+	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=g18HKZiSTM5+9hGF0NPES0cGtRkt/0XzZSS1lmKYeEifRzV6FwWMarHMGYZBD50IE
+	 p8YSHjRqIKMQUgAmhHB6oqtFSXrq0avFWtvnVPUpOCvS6egcaXXh3Stiax0CfkHfuy
+	 /FoBBr3jtb5uYO4Cn+P/M3QdNwE/f/xe4eKeSML7x3R5lhExkzTCAMFjWMz18e/M0t
+	 tnn5S03CPg3JPtJ3xewvaxXck7EX0neUEoHSwe+v0b3YyYk8SilmSAOl+hSRTM9iRN
+	 nndlbA8iUhlyp3sdkEmG/xIwrV3GdYOcvyXykp2dzFUtuFu3FYxhQshj797EXX/56K
+	 p52hJ2KBEampw==
+Message-ID: <84b74435-5aad-4c15-aea5-db87b4a6bf11@kernel.org>
+Date: Wed, 26 Nov 2025 14:41:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117145606.2155773-1-dhowells@redhat.com> <20251117145606.2155773-3-dhowells@redhat.com>
- <20251117171003.GC1584@sol> <CALrw=nG6X5Opjb1H4VVzCNpJ4QtmHUK3nQ1XQ5GKMvnE9NnZsQ@mail.gmail.com>
- <20251125202419.GB3061247@google.com>
-In-Reply-To: <20251125202419.GB3061247@google.com>
-From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Tue, 25 Nov 2025 20:51:51 +0000
-X-Gm-Features: AWmQ_bnvxBAK5ZG3x1nUtVEXK9eSB6SwFv-HxkEqdz_PCr-Ol9dbfVbV3x0xwpc
-Message-ID: <CALrw=nFYE8yP6ZjVmDCv36g4zHBtJZet1m55Rkv3firv=-QB3w@mail.gmail.com>
-Subject: Re: [PATCH v9 2/9] crypto: Add ML-DSA/Dilithium verify support
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	"Jason A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller <smueller@chronox.de>, 
-	Lukas Wunner <lukas@wunner.de>, linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: Daniel Gomez <da.gomez@kernel.org>
+Subject: Re: [linux-next:master 4806/10599] error[E0560]: struct
+ `bindings::kernel_param_ops` has no field named `get`
+To: kernel test robot <lkp@intel.com>,
+ Andreas Hindborg <a.hindborg@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Benno Lossin <lossin@kernel.org>, linux-modules@vger.kernel.org
+References: <202511210858.uwVivgvn-lkp@intel.com>
+Content-Language: en-US
+From: Daniel Gomez <da.gomez@kernel.org>
+Organization: kernel.org
+In-Reply-To: <202511210858.uwVivgvn-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 25, 2025 at 8:24=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
-wrote:
->
-> On Tue, Nov 25, 2025 at 10:10:18AM +0000, Ignat Korchagin wrote:
-> > Hi all,
-> >
-> > On Mon, Nov 17, 2025 at 5:11=E2=80=AFPM Eric Biggers <ebiggers@kernel.o=
-rg> wrote:
-> > >
-> > > On Mon, Nov 17, 2025 at 02:55:51PM +0000, David Howells wrote:
-> > > >  lib/crypto/Kconfig                            |   1 +
-> > > >  lib/crypto/Makefile                           |   2 +
-> > > >  lib/crypto/mldsa/Kconfig                      |  29 ++
-> > > >  lib/crypto/mldsa/Makefile                     |  20 +
-> > > >  lib/crypto/mldsa/crypto_mldsa_44.c            | 166 ++++++++
-> > > >  lib/crypto/mldsa/crypto_mldsa_65.c            | 166 ++++++++
-> > > >  lib/crypto/mldsa/crypto_mldsa_87.c            | 166 ++++++++
-> > > >  lib/crypto/mldsa/dilithium.h                  | 304 ++++++++++++++
-> > > >  lib/crypto/mldsa/dilithium_44.c               |  33 ++
-> > > >  lib/crypto/mldsa/dilithium_44.h               | 291 ++++++++++++++
-> > > >  lib/crypto/mldsa/dilithium_65.c               |  33 ++
-> > > >  lib/crypto/mldsa/dilithium_65.h               | 291 ++++++++++++++
-> > > >  lib/crypto/mldsa/dilithium_87.c               |  33 ++
-> > > >  lib/crypto/mldsa/dilithium_87.h               | 291 ++++++++++++++
-> > > >  lib/crypto/mldsa/dilithium_common.c           | 117 ++++++
-> > > >  lib/crypto/mldsa/dilithium_debug.h            |  49 +++
-> > > >  lib/crypto/mldsa/dilithium_ntt.c              |  89 +++++
-> > > >  lib/crypto/mldsa/dilithium_ntt.h              |  35 ++
-> > > >  lib/crypto/mldsa/dilithium_pack.h             | 119 ++++++
-> > > >  lib/crypto/mldsa/dilithium_poly.c             | 377 ++++++++++++++=
-++++
-> > > >  lib/crypto/mldsa/dilithium_poly.h             | 181 +++++++++
-> > > >  lib/crypto/mldsa/dilithium_poly_c.h           | 141 +++++++
-> > > >  lib/crypto/mldsa/dilithium_poly_common.h      |  35 ++
-> > > >  lib/crypto/mldsa/dilithium_polyvec.h          | 343 ++++++++++++++=
-++
-> > > >  lib/crypto/mldsa/dilithium_polyvec_c.h        |  81 ++++
-> > > >  lib/crypto/mldsa/dilithium_reduce.h           |  85 ++++
-> > > >  lib/crypto/mldsa/dilithium_rounding.c         | 128 ++++++
-> > > >  lib/crypto/mldsa/dilithium_service_helpers.h  |  99 +++++
-> > > >  lib/crypto/mldsa/dilithium_signature_c.c      | 279 +++++++++++++
-> > > >  lib/crypto/mldsa/dilithium_signature_c.h      |  37 ++
-> > > >  lib/crypto/mldsa/dilithium_signature_impl.h   | 370 ++++++++++++++=
-+++
-> > > >  lib/crypto/mldsa/dilithium_type.h             | 108 +++++
-> > > >  lib/crypto/mldsa/dilithium_zetas.c            |  68 ++++
-> > > >  .../mldsa/signature_domain_separation.c       | 204 ++++++++++
-> > > >  .../mldsa/signature_domain_separation.h       |  30 ++
-> > > >  35 files changed, 4801 insertions(+)
-> > >
-> > > Over the past week I've been starting to review this massive addition=
-.
-> > >
-> > > I don't think this is on the right track.  This implementation is rea=
-lly
-> > > messy, with lots of unused functionality and unnecessary abstractions=
-,
-> > > and code that doesn't follow kernel conventions.
-> > >
-> > > In comparison, BoringSSL has an entire implementation of ML-DSA,
-> > > *including key generation and signing*, in a bit over 3000 lines in o=
-ne
-> > > file.  But about half of that code is specific to key generation or
-> > > signing, which the kernel doesn't need, so in principle
-> > > verification-only shouldn't be much more than a thousand.  I find it =
-to
-> > > be much easier to understand than leancrypto as well.
-> > >
-> > > Historically we've had a lot of problems with people integrating code
-> > > from external sources into the kernel, like mpi, with properly "ownin=
-g"
-> > > it because they feel like it's not their code and someone else is
-> > > responsible.  I feel like that's going to be a big problem here.
-> > >
-> > > I think we can do better here and put together a smaller implementati=
-on
-> > > for the kernel that we'll actually be able to maintain.
-> >
-> > I was thinking about this lately for some time - even put forward a
-> > small discussion proposal for upcoming Plumbers (which wasn't accepted
-> > unfortunately). Should we consider somehow safely "outsourcing" at
-> > least some (asymmetric - potentially slow anyway) crypto
-> > implementations to userspace? Something similar to
-> > request_module/request_firmware/request_key usermode helpers or an
-> > io_uring interface or a crypto socket? This way we can bring any
-> > well-maintained crypto library (and even multiple ones) to the kernel:
-> >   * it can have any software license
-> >   * can be written in any programming language
-> >   * can use architecture vector instructions more easily
-> >   * can have any certifications out of the box (looking at you - FIPS)
-> >   * distros would have the ability to plug their own
-> >   * maybe it can even do private key crypto (which I personally would
-> > really like more support of and it would be acceptable to Herbert)
-> >
-> > Given the past experience of RSA and mpi - it is not that difficult to
-> > port something to the kernel, but quite hard to maintain it over time
-> > in a secure manner. With a userspace approach the kernel can
-> > piggy-back on proven vendors like any other piece of open source
-> > software out there.
-> >
-> > I understand that there probably still be a need for some in-kernel
-> > crypto, so the proposal here is not to fully replace things, but
-> > rather complement the current offerings with an interface, which could
-> > enable faster adoption of newer (and more secure versions of existing)
-> > crypto algorithms.
->
-> The performance cost of that would be very high, so it would only have
-> any chance at possibly being reasonable for some of the asymmetric
-> algorithms.  It would also introduce reliability issues.
 
-Yes, definitely. For the userspace approach I would think only
-asymmetric algorithms. For "reliability issues" I don't know if it is
-a problem of the kernel itself, or the user/admin of the system. The
-kernel supports network-based and userspace-based filesystems and
-userspace-based block devices even and users successfully use them as
-root filesystems. Surely a small crypto agent running locally would
-not be worse than this.
 
-> I'll also note that the main reason that people seem to want private key
-> operations in the kernel is for the keyctl() UAPIs for userspace, which
-> is already a bad idea.  So I guess we end up with userspace calling into
+On 21/11/2025 01.24, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+> commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4806/10599] rust: introduce module_param module
+> config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/config)
+> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/reproduce)
 
-Can you elaborate on this? (I want to understand for myself). I think
-keyctl UAPIs for private keys are a great idea and allows building
-good (and relatively simple) secure architectures. So I want to enable
-more of this, not less.
+We can't reproduce this.
 
-> the kernel, which calls back into userspace to use some userspace crypto
-> library which the original userspace program refused to use in the first
-> place for some reason?  It makes no sense to me, sorry.
+If anyone cares, please let us know how to reproduce it. 
 
-It does make sense for userspace programs (apart from potential keyctl
-users which don't want to have private keys in their address space),
-but what about in-kernel services? How is this fundamentally different
-from request_module, for example? If the kernel needs a module, it
-tells userspace and there is a userspace helper, which provides it. It
-is an "external service" to the kernel. So crypto can be another
-service. After all, microkernels have been doing this forever.
+Tested on Debian testing x86_64 host.
 
-> There is the opportunity to share more code with userspace projects at
-> the source code level.  Just it doesn't always work out due to different
-> languages, licences, requirements, conventions, and implementation
-> qualities.  For ML-DSA verification I didn't see a good alternative to
-> just writing it myself.  But in other cases a different conclusion could
-> be reached.  The kernel uses a lot of the assembly files from
+rustc --version
+rustc 1.91.1 (ed61e7d7e 2025-11-07
 
-What about sharing code at the binary level? At Cloudflare we have an
-internal kernel crypto driver, which just imports its implementation
-directly from compiled BoringSSL into the kernel space. So in the end
-it is fully in-kernel and fast, but the advantage is that the code
-itself comes from BoringSSL (and we regularly update it). There are
-rough edges of course (like using vector instructions, different stack
-alignment etc), but it kinda works and I think with some investment we
-can make such an approach upstream. We even considered open sourcing
-it, but not sure about licensing as we effectively have a bespoke
-"module loader" for BoringSSL, which is Apache (I hope James is right
-that Apache may be considered GPL-2 compatible in the future).
+/home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c234874d1db4f93154-20250918-184558-x86_64/bin/clang-22 --version
+ClangBuiltLinux clang version 22.0.0git (https://github.com/llvm/llvm-project.git e19fa930ca838715028c00c234874d1db4f93154)
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c234874d1db4f93154-20250918-184558-x86_64/bin
 
-While I think such an approach is much more technically challenging,
-it provides "best of both worlds" by having fast in-kernel crypto
-directly from established libraries.
+  561  wget https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/config
+  563  git clone https://github.com/intel/lkp-tests.git ~/lkp-tests
+  565  mkdir -p build_dir && cp config build_dir/.config
 
-> CRYPTOGAMS, for example, and some of the Curve25519 code (including
-> formally verified code) is imported from other sources.
->
-> - Eric
+  571  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um olddefconfig
+  572  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um prepare
+  573  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um -j$(nproc)
 
-Ignat
+I'm just getting these warnings:
+
+...
+In file included from ../arch/um/include/asm/io.h:24:
+../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+ 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+      |                                                   ~~~~~~~~~~ ^
+In file included from ../drivers/gpu/drm/nouveau/nvc0_fence.c:24:
+In file included from ../drivers/gpu/drm/nouveau/nouveau_drv.h:42:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/client.h:5:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/object.h:4:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+In file included from ../include/linux/pci.h:38:
+In file included from ../include/linux/interrupt.h:11:
+In file included from ../include/linux/hardirq.h:11:
+In file included from ../arch/um/include/asm/hardirq.h:5:
+In file included from ../include/asm-generic/hardirq.h:17:
+In file included from ../include/linux/irq.h:20:
+In file included from ../include/linux/io.h:12:
+In file included from ../arch/um/include/asm/io.h:24:
+../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+ 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+      |                                                   ~~~~~~~~~~ ^
+1 warning generated.
+1 warning generated.
+1 warning generated.
+1 warning generated.
+In file included from ../drivers/gpu/drm/nouveau/gv100_fence.c:5:
+In file included from ../drivers/gpu/drm/nouveau/nouveau_drv.h:42:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/client.h:5:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/object.h:4:
+In file included from ../drivers/gpu/drm/nouveau/include/nvif/os.h:8:
+In file included from ../include/linux/pci.h:38:
+In file included from ../include/linux/interrupt.h:11:
+In file included from ../include/linux/hardirq.h:11:
+In file included from ../arch/um/include/asm/hardirq.h:5:
+In file included from ../include/asm-generic/hardirq.h:17:
+In file included from ../include/linux/irq.h:20:
+In file included from ../include/linux/io.h:12:
+In file included from ../arch/um/include/asm/io.h:24:
+../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+ 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+      |                                                   ~~~~~~~~~~ ^
+1 warning generated.
+1 warning generated.
+1 warning generated.
+1 warning generated.
+1 warning generated.
+1 warning generated.
+1 warning generated.
+  AR      drivers/gpu/drm/nouveau/built-in.a
+  AR      drivers/gpu/drm/built-in.a
+  AR      drivers/gpu/built-in.a
+  AR      drivers/built-in.a
+  AR      built-in.a
+  AR      vmlinux.a
+  LD      vmlinux.o
+  MODPOST vmlinux.symvers
+  CC      .vmlinux.export.o
+  UPD     include/generated/utsversion.h
+  CC      init/version-timestamp.o
+  KSYMS   .tmp_vmlinux0.kallsyms.S
+  AS      .tmp_vmlinux0.kallsyms.o
+  LD      .tmp_vmlinux1
+/usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+  NM      .tmp_vmlinux1.syms
+  KSYMS   .tmp_vmlinux1.kallsyms.S
+  AS      .tmp_vmlinux1.kallsyms.o
+  LD      .tmp_vmlinux2
+/usr/bin/ld: warning: .tmp_vmlinux2 has a LOAD segment with RWX permissions
+  NM      .tmp_vmlinux2.syms
+  KSYMS   .tmp_vmlinux2.kallsyms.S
+  AS      .tmp_vmlinux2.kallsyms.o
+  LD      vmlinux.unstripped
+/usr/bin/ld: warning: vmlinux.unstripped has a LOAD segment with RWX permissions
+  NM      System.map
+  OBJCOPY vmlinux
+  OBJCOPY modules.builtin.modinfo
+  GEN     modules.builtin
+  LINK linux
+make[1]: Leaving directory '/home/dagomez/ws/c131/kernel/vcs/modules/build_dir'
+
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511210858.uwVivgvn-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
+>    --> rust/kernel/module_param.rs:166:13
+>    |
+>    166 |             get: None,
+>    |             ^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    177 | make_param_ops!(PARAM_OPS_U32, u32);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
+>    --> rust/kernel/module_param.rs:167:13
+>    |
+>    167 |             free: None,
+>    |             ^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    177 | make_param_ops!(PARAM_OPS_U32, u32);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
+>    --> rust/kernel/module_param.rs:164:13
+>    |
+>    164 |             flags: 0,
+>    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    178 | make_param_ops!(PARAM_OPS_I64, i64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `set`
+>    --> rust/kernel/module_param.rs:165:13
+>    |
+>    165 |             set: Some(set_param::<$ty>),
+>    |             ^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    178 | make_param_ops!(PARAM_OPS_I64, i64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
+>    --> rust/kernel/module_param.rs:166:13
+>    |
+>    166 |             get: None,
+>    |             ^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    178 | make_param_ops!(PARAM_OPS_I64, i64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
+>    --> rust/kernel/module_param.rs:167:13
+>    |
+>    167 |             free: None,
+>    |             ^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    178 | make_param_ops!(PARAM_OPS_I64, i64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
+>    --> rust/kernel/module_param.rs:164:13
+>    |
+>    164 |             flags: 0,
+>    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    179 | make_param_ops!(PARAM_OPS_U64, u64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `set`
+>    --> rust/kernel/module_param.rs:165:13
+>    |
+>    165 |             set: Some(set_param::<$ty>),
+>    |             ^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    179 | make_param_ops!(PARAM_OPS_U64, u64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
+>    --> rust/kernel/module_param.rs:166:13
+>    |
+>    166 |             get: None,
+>    |             ^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    179 | make_param_ops!(PARAM_OPS_U64, u64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
+>    --> rust/kernel/module_param.rs:167:13
+>    |
+>    167 |             free: None,
+>    |             ^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    179 | make_param_ops!(PARAM_OPS_U64, u64);
+>    | ----------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> --
+>>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
+>    --> rust/kernel/module_param.rs:164:13
+>    |
+>    164 |             flags: 0,
+>    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
+>    ...
+>    180 | make_param_ops!(PARAM_OPS_ISIZE, isize);
+>    | --------------------------------------- in this macro invocation
+>    |
+>    = note: all struct fields are already assigned
+>    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
+> ..
+> 
