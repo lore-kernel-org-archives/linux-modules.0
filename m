@@ -1,309 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA2D280024;
-	Wed, 26 Nov 2025 13:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80522980C2
+	for <linux-modules@vger.kernel.org>; Wed, 26 Nov 2025 13:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764164502; cv=none; b=Sli0ID2+tyAJFaYISoWazWQWlB5wQUg7r1Hyfa+XACyWt8BgUQn71eqVG6JDSwSKaYH9FiDKDmimKWHPEq9cXDI5DIZJVkTXSAnwjMoLllKzAQq3/GCDIo7v7pKczbwE21KbeZCEPxkc4uISJlk8dkR0PX9VUp4BbKEkUH4bL3w=
+	t=1764165059; cv=none; b=FaMZU5Ss/yP3dmldYNQomtYBZkk6uQzwgNtNqsyQ7/KPBLRqYBskUzJe8UvqTRozlV004nhIsZJ6QI5pjbAPmmNUSLh9y4+FefygSduX5ltL5GHn6IEunajGi0CQpEESQ+29hr25QJAZcboEe1pY/OdlTPFQMNz7PpBzUZ7zTUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764164502; c=relaxed/simple;
-	bh=2028ThgkXy0dTdUmOIYKJXcHuEjAOpSXf9oPdrnhF4o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DCzocjoXj6lCYuDfTU/JKn2kU5DJTUAi+ohnxhA3CULkQ7GXgrK597X0YmeM7TJOGbV3RnHZm8LNJmYZYu91c7WIgA41h2v5yms3mGPL9nt279Bq7GYlfTVUFm7G7A5gvMdm4pG9lUeJFsnR6I1zE0FGDfsJLxbKTQr9kb95WgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g18HKZiS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764165059; c=relaxed/simple;
+	bh=hVlN1t05NF8J9hwZYP7yS3Hy93FFi7SiwUuqHtqtjZQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HacckAD6+c3dycmFjwP7kz4YA3Y6ovttdiaQMiui8oN7I6t4+d9/b9t6632MkcqWD3VKSndSskAIpgA/UESHgLcMO4nHvCUW4IXLCcSQs4BrJRMTFc25NmmfiYuBqPXFRFuIFgDAYD/h/+rw9fCEUW2FAtFdjCQDVqXctt5uxFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7Js+X7E; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g18HKZiS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 952D8C113D0;
-	Wed, 26 Nov 2025 13:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764164502;
-	bh=2028ThgkXy0dTdUmOIYKJXcHuEjAOpSXf9oPdrnhF4o=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=g18HKZiSTM5+9hGF0NPES0cGtRkt/0XzZSS1lmKYeEifRzV6FwWMarHMGYZBD50IE
-	 p8YSHjRqIKMQUgAmhHB6oqtFSXrq0avFWtvnVPUpOCvS6egcaXXh3Stiax0CfkHfuy
-	 /FoBBr3jtb5uYO4Cn+P/M3QdNwE/f/xe4eKeSML7x3R5lhExkzTCAMFjWMz18e/M0t
-	 tnn5S03CPg3JPtJ3xewvaxXck7EX0neUEoHSwe+v0b3YyYk8SilmSAOl+hSRTM9iRN
-	 nndlbA8iUhlyp3sdkEmG/xIwrV3GdYOcvyXykp2dzFUtuFu3FYxhQshj797EXX/56K
-	 p52hJ2KBEampw==
-Message-ID: <84b74435-5aad-4c15-aea5-db87b4a6bf11@kernel.org>
-Date: Wed, 26 Nov 2025 14:41:36 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7Js+X7E"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bdd38966c74so81647a12.1
+        for <linux-modules@vger.kernel.org>; Wed, 26 Nov 2025 05:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764165057; x=1764769857; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MubSNeMbmYM/HeKESQYTWsGeLQj4IZdr09nxlU7W7oE=;
+        b=j7Js+X7ErECCEVCRHjIjKPkzMn6JHvMVeh4ajcPqdigB5UGGOrI1cSoDPW+4ehRI2P
+         9+tAgl4TkqM0j474ntoeTjPt2uAYl/HLQEXfcRuZk/nvcRBdIedCFGFaM4ud28K5lGQV
+         mJuESR/YoweA7RhyFYf1NMFPj//3bO/0C/qru88cF2/Q1iF/5kpGQdBPiBFnoyUTyTxi
+         n/GZ9to8VutQi1I2EYK/71SbdvYvJ0RWtgVUQBPWfifiCb7s3t2/uRt+UxA9WNwIUOHQ
+         xNvlnGgUOQHJNC5KeU8qEsNiIhzmwf0fk5C1nHYVzfECWLylem0OstbgzCRDVOxe1XJ7
+         e2vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764165057; x=1764769857;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MubSNeMbmYM/HeKESQYTWsGeLQj4IZdr09nxlU7W7oE=;
+        b=n71xEgOSxtwAm4FQm246Aom1Zxj7TSSYpZOZsgtXRveR2byxeh4K6EnL7Icita2y8H
+         jAInwHpn9AgKfcO/oTUwzcN5aM5D0SaxQ4VZSjrWI6/ztDi3U3GS68cg/cwExnUKz9sp
+         ewtuk04K4FFdKQVIJUExOkothGFTH7OiSJtlxDfyEP3ps4rWBgCh33H0hzht6GiGyxpm
+         ESwiPQe94MJuL4O0Y4MR+/48lWi+URmc8+UShyXN/NCq4A2QnQd0dBsVHE/yCK4n+aAS
+         Pdak+cbqQanLXWToHe08eXlP1VXWAUSRix863mWcnp0eWUI19Rmbt0ruj87mgiYqYRzc
+         t6Sw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMhmoQTTTaldqicWWCE9G1FXFBXRBTItJKxKagh4AwaoYL529sJws2mc/TTqt3RiV8IUy7+Nt2sty8SCF5@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaL/GzWJJhQRrPMWK/ua9XGOoUdDRcbkxt+YEUig1O4iF4LKln
+	wXnIX5tJ1WJ19Ltisn7oxzJgrMjwZfyO4Ek8mB8Oz14davpgvmc2lsf0M8NpQO24n/AubqsOZLI
+	2Y1KWdHIE4rZDewdcdEf56d/kAqewYGg=
+X-Gm-Gg: ASbGncufcOewgInENMwAaFA8K5PgDvzgLKHK71CPER+m03Nf0GTQI5LF/+6oFPtponJ
+	XXGE/kpcnx+OlSLITADghGG+A62/XQtnQPr0RvFcPZJ3XfzeNNn2sy3NHQfZ47AZRC3q4uslYSI
+	aUIkqqp9PXH4myhFvrzyf7Hnk1maQOS3YBG7gcv7gnrx0aIvdTe62j8HIJY4xOFzAmzf8rhWVVI
+	EnU4lL5l3u/N21/1War731WLk9vNafUXwS7jl6DWCnv2sS6PMO6jnpU6xziFjezDV68fmk7wWsl
+	sIcRiYwJlz02lJEEauryNMd9fjd/pLZXsXYDtcaN0Zl6xGURBxffoZHofjEjTeh0FKhJbQ4VYeK
+	bqn7cYwQaQGntiQ==
+X-Google-Smtp-Source: AGHT+IHyjyBhvKxSJvpXE0N3bS4+qnIUQ/hrP8nt2xNCh1iG/p92wXmacntCXSyEtcLWpcePqvDURhRBURjbbMcC7kM=
+X-Received: by 2002:a05:7300:7b01:b0:2a4:3593:2c08 with SMTP id
+ 5a478bee46e88-2a7249fec39mr7725470eec.1.1764165056986; Wed, 26 Nov 2025
+ 05:50:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
+References: <202511210858.uwVivgvn-lkp@intel.com> <84b74435-5aad-4c15-aea5-db87b4a6bf11@kernel.org>
+In-Reply-To: <84b74435-5aad-4c15-aea5-db87b4a6bf11@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 26 Nov 2025 14:50:44 +0100
+X-Gm-Features: AWmQ_bktxfIw2Y2gRIytid6imUptHKKwkrT99X3ar_u-JsKJ1SBOQUCIAfvL4CA
+Message-ID: <CANiq72mCd7FVO0Btsvct5Dy67TkBJd=QJgnPvLMn9d43Vy0YnA@mail.gmail.com>
 Subject: Re: [linux-next:master 4806/10599] error[E0560]: struct
  `bindings::kernel_param_ops` has no field named `get`
-To: kernel test robot <lkp@intel.com>,
- Andreas Hindborg <a.hindborg@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Benno Lossin <lossin@kernel.org>, linux-modules@vger.kernel.org
-References: <202511210858.uwVivgvn-lkp@intel.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <202511210858.uwVivgvn-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, Andreas Hindborg <a.hindborg@kernel.org>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, Benno Lossin <lossin@kernel.org>, 
+	linux-modules@vger.kernel.org, Richard Weinberger <richard@nod.at>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	linux-um <linux-um@lists.infradead.org>, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Nov 26, 2025 at 2:41=E2=80=AFPM Daniel Gomez <da.gomez@kernel.org> =
+wrote:
+>
+> On 21/11/2025 01.24, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git master
+> > head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
+> > commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4806/10599] rust: int=
+roduce module_param module
+> > config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/arc=
+hive/20251121/202511210858.uwVivgvn-lkp@intel.com/config)
+> > compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project=
+ 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
+> > rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20251121/202511210858.uwVivgvn-lkp@intel.com/reproduce)
+>
+> We can't reproduce this.
+>
+> If anyone cares, please let us know how to reproduce it.
+>
+> Tested on Debian testing x86_64 host.
+>
+> rustc --version
+> rustc 1.91.1 (ed61e7d7e 2025-11-07
+>
+> /home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c234874d1db4f93154-2=
+0250918-184558-x86_64/bin/clang-22 --version
+> ClangBuiltLinux clang version 22.0.0git (https://github.com/llvm/llvm-pro=
+ject.git e19fa930ca838715028c00c234874d1db4f93154)
+> Target: x86_64-unknown-linux-gnu
+> Thread model: posix
+> InstalledDir: /home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c23487=
+4d1db4f93154-20250918-184558-x86_64/bin
+>
+>   561  wget https://download.01.org/0day-ci/archive/20251121/202511210858=
+.uwVivgvn-lkp@intel.com/config
+>   563  git clone https://github.com/intel/lkp-tests.git ~/lkp-tests
+>   565  mkdir -p build_dir && cp config build_dir/.config
+>
+>   571  COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang-22 ~/lkp-tests=
+/kbuild/make.cross W=3D1 O=3Dbuild_dir ARCH=3Dum olddefconfig
+>   572  COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang-22 ~/lkp-tests=
+/kbuild/make.cross W=3D1 O=3Dbuild_dir ARCH=3Dum prepare
+>   573  COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang-22 ~/lkp-tests=
+/kbuild/make.cross W=3D1 O=3Dbuild_dir ARCH=3Dum -j$(nproc)
+>
+> I'm just getting these warnings:
+>
+> ...
 
+Cc'ing UML so that they are in the loop.
 
-On 21/11/2025 01.24, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   88cbd8ac379cf5ce68b7efcfd4d1484a6871ee0b
-> commit: 0b08fc292842a13aa496413b48c1efb83573b8c6 [4806/10599] rust: introduce module_param module
-> config: um-randconfig-001-20251121 (https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9e9fe08b16ea2c4d9867fb4974edf2a3776d6ece)
-> rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/reproduce)
-
-We can't reproduce this.
-
-If anyone cares, please let us know how to reproduce it. 
-
-Tested on Debian testing x86_64 host.
-
-rustc --version
-rustc 1.91.1 (ed61e7d7e 2025-11-07
-
-/home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c234874d1db4f93154-20250918-184558-x86_64/bin/clang-22 --version
-ClangBuiltLinux clang version 22.0.0git (https://github.com/llvm/llvm-project.git e19fa930ca838715028c00c234874d1db4f93154)
-Target: x86_64-unknown-linux-gnu
-Thread model: posix
-InstalledDir: /home/dagomez/0day/llvm-22.0.0-e19fa930ca838715028c00c234874d1db4f93154-20250918-184558-x86_64/bin
-
-  561  wget https://download.01.org/0day-ci/archive/20251121/202511210858.uwVivgvn-lkp@intel.com/config
-  563  git clone https://github.com/intel/lkp-tests.git ~/lkp-tests
-  565  mkdir -p build_dir && cp config build_dir/.config
-
-  571  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um olddefconfig
-  572  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um prepare
-  573  COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang-22 ~/lkp-tests/kbuild/make.cross W=1 O=build_dir ARCH=um -j$(nproc)
-
-I'm just getting these warnings:
-
-...
-In file included from ../arch/um/include/asm/io.h:24:
-../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
- 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-      |                                                   ~~~~~~~~~~ ^
-In file included from ../drivers/gpu/drm/nouveau/nvc0_fence.c:24:
-In file included from ../drivers/gpu/drm/nouveau/nouveau_drv.h:42:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/client.h:5:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/object.h:4:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-In file included from ../include/linux/pci.h:38:
-In file included from ../include/linux/interrupt.h:11:
-In file included from ../include/linux/hardirq.h:11:
-In file included from ../arch/um/include/asm/hardirq.h:5:
-In file included from ../include/asm-generic/hardirq.h:17:
-In file included from ../include/linux/irq.h:20:
-In file included from ../include/linux/io.h:12:
-In file included from ../arch/um/include/asm/io.h:24:
-../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
- 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-      |                                                   ~~~~~~~~~~ ^
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-In file included from ../drivers/gpu/drm/nouveau/gv100_fence.c:5:
-In file included from ../drivers/gpu/drm/nouveau/nouveau_drv.h:42:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/client.h:5:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/object.h:4:
-In file included from ../drivers/gpu/drm/nouveau/include/nvif/os.h:8:
-In file included from ../include/linux/pci.h:38:
-In file included from ../include/linux/interrupt.h:11:
-In file included from ../include/linux/hardirq.h:11:
-In file included from ../arch/um/include/asm/hardirq.h:5:
-In file included from ../include/asm-generic/hardirq.h:17:
-In file included from ../include/linux/irq.h:20:
-In file included from ../include/linux/io.h:12:
-In file included from ../arch/um/include/asm/io.h:24:
-../include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
- 1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-      |                                                   ~~~~~~~~~~ ^
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-1 warning generated.
-  AR      drivers/gpu/drm/nouveau/built-in.a
-  AR      drivers/gpu/drm/built-in.a
-  AR      drivers/gpu/built-in.a
-  AR      drivers/built-in.a
-  AR      built-in.a
-  AR      vmlinux.a
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-  CC      .vmlinux.export.o
-  UPD     include/generated/utsversion.h
-  CC      init/version-timestamp.o
-  KSYMS   .tmp_vmlinux0.kallsyms.S
-  AS      .tmp_vmlinux0.kallsyms.o
-  LD      .tmp_vmlinux1
-/usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
-  NM      .tmp_vmlinux1.syms
-  KSYMS   .tmp_vmlinux1.kallsyms.S
-  AS      .tmp_vmlinux1.kallsyms.o
-  LD      .tmp_vmlinux2
-/usr/bin/ld: warning: .tmp_vmlinux2 has a LOAD segment with RWX permissions
-  NM      .tmp_vmlinux2.syms
-  KSYMS   .tmp_vmlinux2.kallsyms.S
-  AS      .tmp_vmlinux2.kallsyms.o
-  LD      vmlinux.unstripped
-/usr/bin/ld: warning: vmlinux.unstripped has a LOAD segment with RWX permissions
-  NM      System.map
-  OBJCOPY vmlinux
-  OBJCOPY modules.builtin.modinfo
-  GEN     modules.builtin
-  LINK linux
-make[1]: Leaving directory '/home/dagomez/ws/c131/kernel/vcs/modules/build_dir'
-
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511210858.uwVivgvn-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
->    --> rust/kernel/module_param.rs:166:13
->    |
->    166 |             get: None,
->    |             ^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    177 | make_param_ops!(PARAM_OPS_U32, u32);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
->    --> rust/kernel/module_param.rs:167:13
->    |
->    167 |             free: None,
->    |             ^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    177 | make_param_ops!(PARAM_OPS_U32, u32);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
->    --> rust/kernel/module_param.rs:164:13
->    |
->    164 |             flags: 0,
->    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    178 | make_param_ops!(PARAM_OPS_I64, i64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `set`
->    --> rust/kernel/module_param.rs:165:13
->    |
->    165 |             set: Some(set_param::<$ty>),
->    |             ^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    178 | make_param_ops!(PARAM_OPS_I64, i64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
->    --> rust/kernel/module_param.rs:166:13
->    |
->    166 |             get: None,
->    |             ^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    178 | make_param_ops!(PARAM_OPS_I64, i64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
->    --> rust/kernel/module_param.rs:167:13
->    |
->    167 |             free: None,
->    |             ^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    178 | make_param_ops!(PARAM_OPS_I64, i64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
->    --> rust/kernel/module_param.rs:164:13
->    |
->    164 |             flags: 0,
->    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    179 | make_param_ops!(PARAM_OPS_U64, u64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `set`
->    --> rust/kernel/module_param.rs:165:13
->    |
->    165 |             set: Some(set_param::<$ty>),
->    |             ^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    179 | make_param_ops!(PARAM_OPS_U64, u64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `get`
->    --> rust/kernel/module_param.rs:166:13
->    |
->    166 |             get: None,
->    |             ^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    179 | make_param_ops!(PARAM_OPS_U64, u64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `free`
->    --> rust/kernel/module_param.rs:167:13
->    |
->    167 |             free: None,
->    |             ^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    179 | make_param_ops!(PARAM_OPS_U64, u64);
->    | ----------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> --
->>> error[E0560]: struct `bindings::kernel_param_ops` has no field named `flags`
->    --> rust/kernel/module_param.rs:164:13
->    |
->    164 |             flags: 0,
->    |             ^^^^^ `bindings::kernel_param_ops` does not have this field
->    ...
->    180 | make_param_ops!(PARAM_OPS_ISIZE, isize);
->    | --------------------------------------- in this macro invocation
->    |
->    = note: all struct fields are already assigned
->    = note: this error originates in the macro `make_param_ops` (in Nightly builds, run with -Z macro-backtrace for more info)
-> ..
-> 
+Cheers,
+Miguel
