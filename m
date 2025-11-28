@@ -1,115 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A464132AAA5;
-	Fri, 28 Nov 2025 12:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DC623EA86
+	for <linux-modules@vger.kernel.org>; Fri, 28 Nov 2025 13:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764333558; cv=none; b=NqI/0Yq7NPYdvjb1MAq2Y7rP8qK8jS+MpWJexhHnLaRvs6yLhT+GKr4LY0jr2Px3pnjc6tIrLI9MbHfsZQpGdZasnoRZC5rTi6NLka7VC5O/UMOEdbP8RMPpJ76TVk04ut5E2WVlOOVjNUZXnwmHJt2AA9IdHd3Vlv8tsE3g0Go=
+	t=1764338378; cv=none; b=SBKil+Ch4X8E/oTkxHX8ajwGAqgUtPLaawWkkec4io8Q8+EgXWqenaRVyLoae936FqgvRssOSBumo0vwfvgwvf5tGyR2UYmutwxkHa0dn1pJrRDQQ35jVS8bRWwaFVboOg/44ePSkKPFZWM8AgicfjQL6pR4NUi+AEqcS06qzPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764333558; c=relaxed/simple;
-	bh=g+SkIfajbV0hqvLZ2wup7Z47s5dD85cBMdZ7+aTYs9E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CLrOmakd9PZCPAgWgy0h2dvlTXwx8ZWfomdITvypb7XpKBujXZKxf2X7VOH3Q9Yj+7RkXPgDidZqjp2lstId0X4NkB+ACaVK2/p7JESfJFDtP8MA6BxhszNHZA6R9/iQ1/DFUY6X7smOnj0A7iQVae/qp3dMDUQEX3mQrU4VPw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pZ9LaEnw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764338378; c=relaxed/simple;
+	bh=y7MGR3TiuYXzQGOBsWXv2gEUuADCNMhyD/vJITxbwpI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PzYZjRDFAs781o2ZKV6EMZBndEE3Ubik8ZGrerJJPo2JRECMY+u65gsgIP5475XW3URtTIH39oltYwd53ScjdG6lwmhyOtWJXtJKVcSHUQ5zuJ4XM0x9WF/HsmRLUPEpGJOH44a2DC4yWSnHwPOt4I0OO7kgaQUOqe1wIRU1tRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=J71V3TZo; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=J71V3TZo; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pZ9LaEnw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E500C4CEF1;
-	Fri, 28 Nov 2025 12:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764333556;
-	bh=g+SkIfajbV0hqvLZ2wup7Z47s5dD85cBMdZ7+aTYs9E=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pZ9LaEnwtoMzE2wP2JePzB0UIbDFe/z9WwsqJMrJ6cu8/bpETlbYrY84oneD3Rkik
-	 eQQX0YSVwarX9f71FzDcafq2O+YLCxYZB6Wo1LRQZ9kkbJx25PobIAKjp3XyCr+4EQ
-	 uOyDZo9HbPpk8BUZm2PlqLrPbneIgJr0SFU4xMvNKThQDt9V9IsR2fLb9sqNFP4k8p
-	 Oyxdf3sZUU9P5Hw4UT3x0zX7fvyobkyNDnN+e+tX1I/rTHSs4xaXXu/na9egoDsvhv
-	 E2puVi41ZsqqSRvNPDLTV/OnRNmuoq1+j9Hfdr63UB+JEVNZDlCJU04xKKeF1UZj1O
-	 KbWaa4cLAs83Q==
-Message-ID: <1f19b775-d670-40ef-9147-2dcdce62b56e@kernel.org>
-Date: Fri, 28 Nov 2025 13:38:34 +0100
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="J71V3TZo";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="J71V3TZo"
+Received: from pathway.suse.cz (unknown [IPv6:2a07:de40:b2bf:1b::12bd])
+	by smtp-out2.suse.de (Postfix) with ESMTP id 1C22B5BDC1;
+	Fri, 28 Nov 2025 13:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1764338367; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=HOcG+jrPa6OGfVHEEKDIojvHtUAzk3DbcK43E7DAYo8=;
+	b=J71V3TZoTu1Zisce46aIKy0DFNQhNFxLK+SsbhJDT3wgAVQ6HLA7J5UVhzS5dLBNDYKd5Q
+	+SKtwRpUYX1QuuQZtM/aOamHwbKkn1yjtaZ5TJBDoIvHEfZiQApr13WJnYyhwGHGtAHTw1
+	P+ibyDAKNK0SujnrYeRO1LqU0MQatjs=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=J71V3TZo
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1764338367; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=HOcG+jrPa6OGfVHEEKDIojvHtUAzk3DbcK43E7DAYo8=;
+	b=J71V3TZoTu1Zisce46aIKy0DFNQhNFxLK+SsbhJDT3wgAVQ6HLA7J5UVhzS5dLBNDYKd5Q
+	+SKtwRpUYX1QuuQZtM/aOamHwbKkn1yjtaZ5TJBDoIvHEfZiQApr13WJnYyhwGHGtAHTw1
+	P+ibyDAKNK0SujnrYeRO1LqU0MQatjs=
+From: Petr Mladek <pmladek@suse.com>
+To: Petr Pavlu <petr.pavlu@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH v3 0/7] kallsyms: Prevent invalid access when showing module buildid
+Date: Fri, 28 Nov 2025 14:59:13 +0100
+Message-ID: <20251128135920.217303-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH V1] mm/slab: introduce kvfree_rcu_barrier_on_cache() for
- cache destruction
-To: Harry Yoo <harry.yoo@oracle.com>, surenb@google.com
-Cc: Liam.Howlett@oracle.com, atomlin@atomlin.com, bpf@vger.kernel.org,
- cl@gentwo.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, lucas.demarchi@intel.com,
- maple-tree@lists.infradead.org, mcgrof@kernel.org, petr.pavlu@suse.com,
- rcu@vger.kernel.org, rientjes@google.com, roman.gushchin@linux.dev,
- samitolvanen@google.com, sidhartha.kumar@oracle.com, urezki@gmail.com,
- vbabka@suse.cz, jonathanh@nvidia.com
-References: <CAJuCfpFTMQD6oyR_Q1ds7XL4Km7h2mmzSv4z7f5fFnQ14=+g_A@mail.gmail.com>
- <20251128113740.90129-1-harry.yoo@oracle.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <20251128113740.90129-1-harry.yoo@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [15.13 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	BAYES_HAM(-3.00)[99.99%];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_CONTAINS_FROM(1.00)[];
+	HFILTER_HELO_IP_A(1.00)[pathway.suse.cz];
+	R_MISSING_CHARSET(0.50)[];
+	HFILTER_HELO_NORES_A_OR_MX(0.30)[pathway.suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	MIME_GOOD(-0.10)[text/plain];
+	NEURAL_HAM_SHORT(-0.06)[-0.285];
+	MX_GOOD(-0.01)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	DIRECT_TO_MX(0.00)[git-send-email 2.52.0];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	TAGGED_RCPT(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[atomlin.com,iogearbox.net,gmail.com,kernel.org,arm.com,google.com,vger.kernel.org,suse.com];
+	DKIM_TRACE(0.00)[suse.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:mid,suse.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b2bf:1b::12bd:from];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spamd-Bar: +++++++++++++++
+X-Rspamd-Queue-Id: 1C22B5BDC1
+X-Spam-Flag: YES
+X-Spam-Score: 15.13
+X-Spam-Level: ***************
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: add header
+X-Spam: Yes
+
+This patchset is cleaning up kallsyms code related to module buildid.
+It is fixing an invalid access when printing backtraces, see [v1] for
+more details:
+
+  + 1st..4th patches are preparatory.
+
+  + 5th and 6th patches are fixing bpf and ftrace related APIs.
+
+  + 7th patch prevents a potential race.
 
 
+Changes against [v2]:
 
-On 28/11/2025 12.37, Harry Yoo wrote:
-> Currently, kvfree_rcu_barrier() flushes RCU sheaves across all slab
-> caches when a cache is destroyed. This is unnecessary when destroying
-> a slab cache; only the RCU sheaves belonging to the cache being destroyed
-> need to be flushed.
-> 
-> As suggested by Vlastimil Babka, introduce a weaker form of
-> kvfree_rcu_barrier() that operates on a specific slab cache and call it
-> on cache destruction.
-> 
-> The performance benefit is evaluated on a 12 core 24 threads AMD Ryzen
-> 5900X machine (1 socket), by loading slub_kunit module.
-> 
-> Before:
->   Total calls: 19
->   Average latency (us): 8529
->   Total time (us): 162069
-> 
-> After:
->   Total calls: 19
->   Average latency (us): 3804
->   Total time (us): 72287
-> 
-> Link: https://lore.kernel.org/linux-mm/0406562e-2066-4cf8-9902-b2b0616dd742@kernel.org
-> Link: https://lore.kernel.org/linux-mm/e988eff6-1287-425e-a06c-805af5bbf262@nvidia.com
-> Link: https://lore.kernel.org/linux-mm/1bda09da-93be-4737-aef0-d47f8c5c9301@suse.cz
-> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
-> ---
+  + Fixed typos in commit message [Alexei]
 
-Thanks Harry for the patch,
+  + Added Acks [Alexei]
 
-A quick test on a different machine from the one I originally used to report
-this shows a decrease from 214s to 100s.
 
-LGTM,
+Changes against [v1]:
 
-Tested-by: Daniel Gomez <da.gomez@samsung.com>
+  + Added existing Reviewed-by tags.
 
-> 
-> Not sure if the regression is worse on the reporters' machines due to
-> higher core count (or because some cores were busy doing other things,
-> dunno).
+  + Shuffled patches to update the kallsyms_lookup_buildid() initialization
+    code 1st.
 
-FWIW, CI modules run on an 8 core VM. Depending on the host CPU, this made the
-absolute number different but equivalent performance degradation.
+  + Initialized also *modname and *modbuildid in kallsyms_lookup_buildid().
 
-> 
-> Hopefully this will reduce the time to complete tests,
-> and Suren could add his patch on top of this ;)
-> 
->  include/linux/slab.h |  5 ++++
->  mm/slab.h            |  1 +
->  mm/slab_common.c     | 52 +++++++++++++++++++++++++++++------------
->  mm/slub.c            | 55 ++++++++++++++++++++++++--------------------
->  4 files changed, 73 insertions(+), 40 deletions(-)
+  + Renamed __bpf_address_lookup() to bpf_address_lookup() and used it
+    in kallsyms_lookup_buildid(). Did this instead of passing @modbuildid
+    parameter just to clear it.
+
+
+[v1] https://lore.kernel.org/r/20251105142319.1139183-1-pmladek@suse.com
+[v2] https://lore.kernel.org/r/20251112142003.182062-1-pmladek@suse.com
+
+
+Petr Mladek (7):
+  kallsyms: Clean up @namebuf initialization in
+    kallsyms_lookup_buildid()
+  kallsyms: Clean up modname and modbuildid initialization in
+    kallsyms_lookup_buildid()
+  module: Add helper function for reading module_buildid()
+  kallsyms: Cleanup code for appending the module buildid
+  kallsyms/bpf: Rename __bpf_address_lookup() to bpf_address_lookup()
+  kallsyms/ftrace: Set module buildid in ftrace_mod_address_lookup()
+  kallsyms: Prevent module removal when printing module name and buildid
+
+ arch/arm64/net/bpf_jit_comp.c   |  2 +-
+ arch/powerpc/net/bpf_jit_comp.c |  2 +-
+ include/linux/filter.h          | 26 ++----------
+ include/linux/ftrace.h          |  6 ++-
+ include/linux/module.h          |  9 ++++
+ kernel/bpf/core.c               |  4 +-
+ kernel/kallsyms.c               | 73 ++++++++++++++++++++++++---------
+ kernel/module/kallsyms.c        |  9 +---
+ kernel/trace/ftrace.c           |  5 ++-
+ 9 files changed, 81 insertions(+), 55 deletions(-)
+
+-- 
+2.52.0
+
