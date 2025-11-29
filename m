@@ -1,60 +1,62 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F55F1EA7DB
-	for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 19:53:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D882E7F30
+	for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 19:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764445988; cv=none; b=Y0FrPVRIh0TsMXbcGBQ42/fPEeNG4OEc5yEF7nD5o8vmFfOOMCxpHPG0Jv4irUPBBPZu65mgljj5aEh0fDfXlI48QKznzMqbd+UCVVbE4sQsyzRbYyHu16VzruybixPcE/t/T/nLd8tnUm9YSbppw/BAM9we4LL8mrCLAENn8wE=
+	t=1764445989; cv=none; b=fs87A62Sw5E1hFzHNQ+QAm5GaouRvyaPaJzCUH0ZVF4R/8BFY9P8o0tOJ+iJ8AtxeJ9ZXp7VVhEyT1CunJJJ5casYPUnqM2H4q6ezoHz3ESYzD6nFDnIagK9KR45AfAj+Urw4ya6ItG5GqTtZAb0iT3gk3he0+O6VH66yiOeVRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764445988; c=relaxed/simple;
-	bh=UYASUc3+cc9N6xfCjk2IMzWPz7jySHVohyawDKdKyww=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uYGAC0BFkcMSvFWT+FKoe0jEyv6OtrBBtm2R8i0aMvXoj+FqgR12SqLK8ntZ2n9jog5vJeqkU9gP1ZMoU3W0ihdU1KlXI+HJnvuATCP8xOiJpkVdwQa7BLfWzoFdfw3ktNfGVBuMsunhU7P966mndWjl/CNdjP+vtpZ/10GEhn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ill1EMR6; arc=none smtp.client-ip=74.125.224.54
+	s=arc-20240116; t=1764445989; c=relaxed/simple;
+	bh=U6wVjDQqWIkEPY9m3/jjaLkHW2qb9EnJS9XX+Cslv54=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WMhJOUN6JLgTNhgf6AvxWtmLkjAgPaLYbpbPltUAHYeYxcok7zCZabj7ABZgQBq47f4hC32gve5iE5wnoKnOvxgh8SvxErbsWHwa7BMdefnZ9jtT3LmgnJ6grhq0yZUkpB5H7RVfGCmtlVz8axPQO5GDzYeoURFjdG9ohbXrfuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hoxjn+d5; arc=none smtp.client-ip=74.125.224.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ill1EMR6"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-6420c0cf4abso2707232d50.1
-        for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 11:53:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hoxjn+d5"
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-640f88b8613so2045687d50.2
+        for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 11:53:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764445985; x=1765050785; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bq5yUqUCzfdjLEn9031/L9EMDQ3XGvUTCWlQPofKw7E=;
-        b=Ill1EMR6yKc61BY1eVYp3ogR7LmwTIfJH8DSoepqB4ATUWILikHzeZGCLIfTl7jah9
-         fmFjk8v6NNPOTvXZ8ywrW/RClnqlcBLVpvkiwGki/r9uYDIKbk1RVWX7agdS1USedzPE
-         YKxECNPIpg/8HSMypEKrjZ+I7UJ8Tw/FBVRLa1Y0mkclRpW65sghE+MY+18Gz+MafOoi
-         Yemg2c0Rxic2nkArfhEEGwZhadAZ4eTtW2dI8+IBqz0ammUbvROi7zwzhErL9KsE1AW9
-         aMHGXTFmLj54nwY68Cun43fHGvHtag5ehAdBxlaNE/mBVbMyl3ZYvIym7ginzRjrhRzY
-         jP5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764445985; x=1765050785;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1764445986; x=1765050786; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bq5yUqUCzfdjLEn9031/L9EMDQ3XGvUTCWlQPofKw7E=;
-        b=nr6cf6OZBL9AuCgLD2JvFx2p1RGnLM883J011uuRJ+IgRUtcm3MVk7zSuqvP/rH7ak
-         ksBXD41VdsA50leVlVzbqDJNFrK5SImcAnNPVaGuzQiSsUKrdswyRCY2esb3OyrZn/Yq
-         Grtz1IP8ccBHRs6WFP2pycomwq+82fVZBDLQi8OJayYaED+vAU0cAx0Jt/vIvF4GCx3b
-         uT6HyfXTKEen2G8/fucKSwAGJCxWq928N1VJiNgtcsceb2slbbZfOjwKMKnywDr3LNC5
-         E6YMAE7y2u74DnqDyo+I0+sHkmcqqBaqV2AyHxZDdqTT/p1U5zrSaRFv2XSqZzwfyuh4
-         +pUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDdHWpYXUCnqCPxuieC8XbHHtSlMT47YTrZ4vVGW6DokX01FP5VqSv6A+OnyinBCy43OiNLg9SCTECgFIg@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTSKTGtfs1Te7Yh4RNyAAou2EAN9eseA2eeUZffPj/F8H80Lcl
-	0xCE1yY6ps4fWASgSQEQzGdNKCviLwHoH+whgzjgXqyV10/yIqKlPDfI
-X-Gm-Gg: ASbGnctQ7WWdz9d2JEFRu0uTzT8Pw0vJKjVCoXbB6LRkMpOjADwQKSoTOngqSesLbiS
-	cFXo6SFk8F/Z/aYYI7x7cPjyuxJ1RN/yc1tBu6Ho9KDCYDguCTjp3gUtZF9av+BQl2b2zNZ25VW
-	xhcJzOFzaXG3Xjm+ql8vS42f/2dVa3+3xtuMxMAXWXAWMtqVa+98EapuAn1y7hnbn1zMuWIUiyR
-	eh0oVRw1obZIEwNKyrlyIu3T4sVRylaAQ+Mzwg3YysIrLfjUDfFEbsCrT7vEbX0P54rSC0fpJxS
-	zu5v1/SNiMoGC+cBnrWlHxCh1uL3+cNzwGD7x+E2mpwfFh8v/Cgy+CLUxGeUDztbchusvLXs5IY
-	PMGAp/AxPWesqpXkE3sua8GY5kWyQVVCMY1eUttX8b89BD67w/5WLgXR9zLEy3zOwSoI3MKVacv
-	R5JM3ZPAg=
-X-Google-Smtp-Source: AGHT+IEfj6PVUeeY07J7TJfo/pC02NnxeqqVhA9KwWv0e199pnEc7YIXLK9r3fHsMgALzxDeBf1gGQ==
-X-Received: by 2002:a05:690e:1510:b0:63f:a8db:47b4 with SMTP id 956f58d0204a3-64302a8f75fmr24324286d50.3.1764445985371;
-        Sat, 29 Nov 2025 11:53:05 -0800 (PST)
+        bh=gMtAFmfUFSqT7Mio9YvaV3lvjHpX+ONaRINwsv8b7ko=;
+        b=Hoxjn+d5lQ+osEJtdy81Bdv7RMu4hA2RK5i5Y+W3oyzginhMEjFS6/pCG7jd3KNj6i
+         NgPB2Y2agsqDx6g0jkRMSm3jdxWYLUM0UIsOmOGoHCZLoF6aKQ3PnRsKdLokW50Nfy3n
+         gk51VQKg7Ybo/izPTilrxXieWKJGb5pixFcz+1SwqrkynepDpkqqqj68UJuK1nYonZvr
+         PHqtXNUr1mkPYvPQQHgG+FdfYkuR4zSfnKhk33uBTXSJb6YIqJvU9Fg5R9dhJSRzDYuc
+         HNILPUUBmI9Fhg/AjvwUlsFs+O2SHuQ9IHQ9vxPPHqNe4zFlwX96+Kco8FWP8QImFxkM
+         M0UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764445986; x=1765050786;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gMtAFmfUFSqT7Mio9YvaV3lvjHpX+ONaRINwsv8b7ko=;
+        b=vyZpH7MMZEG6ZGpJ4eAOpeBfQhC1yM9Qoy9A29CJPreK4s1BjvYFNzswLQV52Pn2tL
+         f3lDlP06HppH1/6b277plxy50/a2eoKZmTxb67fJ9jKCled2oRe3rW04PY1PrshuT6XW
+         ygcPMDqOMC1HQ68ywwsNJ4bJypl9yH6k2YidfO9t1GA5JsExqVSWR6wfUPaNuipb67H9
+         jACprRv47eNDSrOQZY/skL0N3yXAIlGgFLRxZOawMOO+WIYE0Xj94RtU1D7qSwQ61DXy
+         9Lq/WUh+z30gWyt2VoBy5c3PENFCqKrHSd8z4D6m28Qh1qGfUG4Fy/Ih9WKXPZhmskCq
+         81eA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2rUtGEMF49uMtcuitHOKALuBpu39F2q35VWLN1Uzx7U9jAzpAvaCOwqstoXN9/NR1NK7JdG2XV6hVJKZP@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZDhZHUod50/9yjSr+tQff3IXFomkiGXEG9LzcRZKtuavr+ZTS
+	yg/bseiKZegfEYyOsTUPdmRXqT5HPfL0zMziLD/bbp9wl45uvvrhOuui
+X-Gm-Gg: ASbGncsdqbgHva+GEyepBfvoEdqU2i+yk9YqgW2E+g5NIQ3EurqcT0NOwaCwUqWBU01
+	mrd16jzhQ8f+MYggWSqqBYGLj8yJjSZuCr0SFitfCIy5OsttqLCZgTbCLORPV/w3VzOb81Y1o4B
+	0oC8iNMYI3DJHK9R+wv5Xz1SAOkU9j0/y47lSKYIYeULPfg1fvo8bVS9W1T4YxhviI1EkmRO22F
+	eSEpbRbdmQPti6B6HTMUZWrC/Jcu73o95g6wbf+19WMQVe7Bdu6Dai7WSSy4nzIRntvWUAbJ+TN
+	CqnGOtAwBsjiFZNM0k8IqVOk1k5asgVUNWpIm8rQrLwlCqFD7e7jJMil+NHKGmrPsBLopcBo5rh
+	rpeIWqv/hQijwdhTWCL8Vu+WSmuEzKvWLvhoyPux4oDWhGMb8gFLh215RJZoTrMtEbZ4icjpLVI
+	H6Sq/EQ9I=
+X-Google-Smtp-Source: AGHT+IFe8Y0GMh+6LMlCZSdBuNKhw5C68QDt9RitlP5LR9LIFpydTgLo1EIGXwaP+uPjQ4SltW6e2g==
+X-Received: by 2002:a53:c052:0:20b0:63f:b922:ed79 with SMTP id 956f58d0204a3-64302a3a8d1mr19964013d50.14.1764445986251;
+        Sat, 29 Nov 2025 11:53:06 -0800 (PST)
 Received: from localhost ([2601:346:0:79bd:353a:b6ab:d4ee:67b9])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad1044f9esm28751737b3.56.2025.11.29.11.53.04
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6433c073e07sm2844621d50.6.2025.11.29.11.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sat, 29 Nov 2025 11:53:05 -0800 (PST)
 From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
@@ -80,10 +82,12 @@ To: Steven Rostedt <rostedt@goodmis.org>,
 	linux-modules@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
 Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Subject: [PATCH 0/3] Unload linux/kernel.h
-Date: Sat, 29 Nov 2025 14:52:59 -0500
-Message-ID: <20251129195304.204082-1-yury.norov@gmail.com>
+Subject: [PATCH 1/3] kernel.h: drop STACK_MAGIC macro
+Date: Sat, 29 Nov 2025 14:53:00 -0500
+Message-ID: <20251129195304.204082-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251129195304.204082-1-yury.norov@gmail.com>
+References: <20251129195304.204082-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -92,22 +96,41 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-kernel.h hosts declarations that can be placed better.
+The macro is only used by i915. Move it to a local header and drop from
+the kernel.h.
 
-Yury Norov (NVIDIA) (3):
-  kernel.h: drop STACK_MAGIC macro
-  kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
-  tracing: move tracing declarations from kernel.h to a dedicated header
+Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
+---
+ drivers/gpu/drm/i915/i915_utils.h | 2 ++
+ include/linux/kernel.h            | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- MAINTAINERS                       |   1 +
- drivers/gpu/drm/i915/i915_utils.h |   2 +
- include/linux/kernel.h            | 209 +-----------------------------
- include/linux/moduleparam.h       |   2 +-
- include/linux/sysfs.h             |  13 ++
- include/linux/tracing.h           | 203 +++++++++++++++++++++++++++++
- 6 files changed, 221 insertions(+), 209 deletions(-)
- create mode 100644 include/linux/tracing.h
-
+diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
+index a0c892e4c40d..6c197e968305 100644
+--- a/drivers/gpu/drm/i915/i915_utils.h
++++ b/drivers/gpu/drm/i915/i915_utils.h
+@@ -32,6 +32,8 @@
+ #include <linux/workqueue.h>
+ #include <linux/sched/clock.h>
+ 
++#define STACK_MAGIC	0xdeadbeef
++
+ #ifdef CONFIG_X86
+ #include <asm/hypervisor.h>
+ #endif
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 5b46924fdff5..61d63c57bc2d 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -40,8 +40,6 @@
+ 
+ #include <uapi/linux/kernel.h>
+ 
+-#define STACK_MAGIC	0xdeadbeef
+-
+ struct completion;
+ struct user;
+ 
 -- 
 2.43.0
 
