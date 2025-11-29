@@ -1,548 +1,219 @@
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F33B3101AA
-	for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 19:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764445991; cv=none; b=cXfNGC9sZ4bdHO0ON3PbrKtanlo6P2gPR++N++3Vk7VOshnXby84GBPrIGRtdAtXrLyvXIuDv4ZVanFv8tZn91Fl3GwoQ/6ucqI062IMIvesHtAgXh3p1uaqE1W0eZFdg2wQFlnBYsYfoY3HqYA/80pNxHoxLhzvF1M0UHa928s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764445991; c=relaxed/simple;
-	bh=aXRfTaRGpbjnvq4qNF4ICgoIeZ9X37XGGJ9DOHdRdJM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RKWsczYRybCzourf300bkAvtYLGl8Liv6I/dXItaq3CShM7gE2O9uc2t3LX6RHHyYAqMnHUVVaQtqoRFRhaGyilNG2bxsJv03zS/6X675sFat693Fnmc8InV9N3hLG2HTRDKFlw/JG06jlpDLszzuiySnRmaRHMEj0674v8Bt4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E6DPDfQs; arc=none smtp.client-ip=74.125.224.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB3F13957E;
+	Sat, 29 Nov 2025 20:00:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=18.197.217.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764446441; cv=fail; b=LLYRC4AXPR4e2yoI2j/GY2pqTby2MNt8YLnYX5k63RWdGwGEEC//heNv4433Jy+EM4lCmpnm/vysLA4jw/Jn7pxeN5pEvsmc7XzQdtqFdNNa9YF75evYYPwFZp7Ev52IIixoXTXLr/gErFAGcrIC7+cQYp+i72S2GMV0VXaeefI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764446441; c=relaxed/simple;
+	bh=mbG0ntM95AWZiKi5PifosMP6AF8gWub3F1LMYe61FhI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=kD1VOcGlwbKZ5nqzpNxgp8vRh8v0QDgMcemDzJYGAyeGoz31adtzkAUN1SgCh48VF1KhzPh6OnETOQknYC03eEp6Ha8eDSrSRGEDgw7wLCbB027uUL3WU5MDamtoiZbzb86lq5gCZgz6oeruWWk9LzNo3mLjSyqWnT2qedq18XU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=caJKh6VL; arc=fail smtp.client-ip=18.197.217.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E6DPDfQs"
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64107188baeso2529785d50.3
-        for <linux-modules@vger.kernel.org>; Sat, 29 Nov 2025 11:53:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="caJKh6VL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764445988; x=1765050788; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KPhKot9RrW+4OVEYlhiH2dUrdgdiYCdMeVF+/QnKJpk=;
-        b=E6DPDfQsPNWAb6D2lI9b0X6TBBj2eFaYhEsBoAJ40/UINhdMcPLUq4g4N0f086rtN5
-         9GlrXiFbdvLCtL7O/xaiquIZMHXm2gpJJL2t06lgzxXsWnoenc89EiIs1Mq1Rhju7WPX
-         UEm91Fh1otLKkVV7FzxQMKF7dO2gZ8hoQioBoQsf46X2pNU5Vi4YYrAggQHVqvm1X8h3
-         Dlq4PD/yM6DZ4giHiBfVrxRfwoBCKTs4BXw9Pc/3G6G5yxHeZsCrW/13l954ptXOkX6W
-         OdT+3pW/v9a5GTvV7dh18kWP6PMDBFXFP1tgRfWY016k8blbuOrnFegkAImp00kq4w7p
-         EunQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764445988; x=1765050788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KPhKot9RrW+4OVEYlhiH2dUrdgdiYCdMeVF+/QnKJpk=;
-        b=UTn/QMVlDpYzQudElsr7zrWe8W2as0IJ9/SfSRrqP5RuA8xR3s+p0FGXoO4oZS1sMj
-         6iESKrmTNHpl5AehHDCz4GjH/Ljj0GTP0U6DAF4FOHAx6iWxYawd1WEJ7Et/wu+0vkAa
-         2XDONCHRbUJWR/+K4ooFRYs18dbAUQnSQ8Gssc4SGV8IJKyB03Z22rscpr8dg5t3Pgxk
-         QYYgUPgOKYFybhyCIoiJGggCWhJmswdwaXAp0s6mndXJjWGIbGj5YRJj6aALrpkeIcid
-         4Jfat/ffmgSjmeZTC2Wa8+2qSWpM+TC7IWVj21YjP5XE/i7pq7nxz0FZ99ivDLjHEz78
-         rmTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWsUCI0btFC4QrlbuUuilsQFSxJt6FUoWMhGxDNqb4xjDbQGCG97B+bg0AYLLfEvdPEJAgblfvsKCIA5t7I@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFaAOG7LbZn8+P7Wx+pg2f5U+OUWdYW9+i+Kn+ZPkEUN2oxfWi
-	hY37O6Dk9mTxnZCq0Q/UgWN1fYzo8QbSBTrUUpDFdCrb8VwagB5DHSJg
-X-Gm-Gg: ASbGncvZbdCjxVDGV/esdZYbwhdEOk32G+gzxV6JagYcklqxMj1ZokqvxbkpIiTggfH
-	rle8bpAdpU7aCXtMxYraCCZYYVkRwRqMG4eTnUejeZ2TVYjsPcr3mPWYFSd37eZ8/Wd7uggupyz
-	A2Ofkbx8FkGsW0/s7ihpuW/dPWD0p1osVFjLM4Zk3FrLu8VrUAz4iVo3BpQ7TAs/w7kTsOsORWV
-	vQ3sgSGKclz3Sav9NpCiSqPW3Q53hT4kTKMtXzM1BljVi8inI82xaum+Yxwl0Yyc+kgZFUr3Fct
-	D2wY6QcGjVwf710zwfV8+LL6E1DKJwxBRHuoaHzNUTYoOC44FthJD1JeueXaTi3lutuDV9SWdrD
-	vP5yYt0H3cERzEqB51XGInJMoiwVuofuYFkRX9Iy6P1neNUFIz5DCK643AgBtkSfwz/kgHrEYS+
-	hK1nWbysg=
-X-Google-Smtp-Source: AGHT+IFRuLzNF/pr0yH2EAr8HpHXwB/WeGCGG0/WvzHFo3LTXr61qS6+iXCYXDnEXYF/tuCt9oopew==
-X-Received: by 2002:a05:690e:144a:b0:63e:233a:3ee6 with SMTP id 956f58d0204a3-64302b0fc69mr23750126d50.38.1764445988022;
-        Sat, 29 Nov 2025 11:53:08 -0800 (PST)
-Received: from localhost ([2601:346:0:79bd:353a:b6ab:d4ee:67b9])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad101115asm28750137b3.29.2025.11.29.11.53.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Nov 2025 11:53:07 -0800 (PST)
-From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Subject: [PATCH 3/3] tracing: move tracing declarations from kernel.h to a dedicated header
-Date: Sat, 29 Nov 2025 14:53:02 -0500
-Message-ID: <20251129195304.204082-4-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251129195304.204082-1-yury.norov@gmail.com>
-References: <20251129195304.204082-1-yury.norov@gmail.com>
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazoncorp2; t=1764446440; x=1795982440;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=mbG0ntM95AWZiKi5PifosMP6AF8gWub3F1LMYe61FhI=;
+  b=caJKh6VL1QIGYv2dRvXkC2z4uBmb0g6Jn2n9mNhnhNvGbmNR9vme09WI
+   yGX8qjSrFLR9gvlI9nzo55tlWOS/9iV4+XgaCR+rLBWvvFgmZmzy+tNSa
+   Z2R39l/GNFqvIxVzkjuZAtZZuots7ZJn0L2KObxDQ3QPDBmzVMi6Ew9TQ
+   +S+y44dc2SqISkuAnX9G47gU+sIRRXVSJyEnljmSApexofIsmkFc2jo98
+   sXm5V4fqLguiWB+VkHhQjquT2nPprN7g4i9jj3lUnDYAFfWHty9qeW9/0
+   95WxbG1+GFa1WRxa35itA61tzST0jF7DkZ6cTbiO+yydz1OlJFChWCpYE
+   Q==;
+X-CSE-ConnectionGUID: wH6Tee2UQomzrcPbIykbrw==
+X-CSE-MsgGUID: +5x6yTmtSY64d9TYAjqT3A==
+X-IronPort-AV: E=Sophos;i="6.20,237,1758585600"; 
+   d="scan'208";a="5990945"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2025 20:00:21 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:8425]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.7.127:2525] with esmtp (Farcaster)
+ id 6ea26fbd-6c37-4f3b-88a3-1cba2a3e010a; Sat, 29 Nov 2025 20:00:21 +0000 (UTC)
+X-Farcaster-Flow-ID: 6ea26fbd-6c37-4f3b-88a3-1cba2a3e010a
+Received: from EX19EXOEUB001.ant.amazon.com (10.252.51.80) by
+ EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Sat, 29 Nov 2025 20:00:20 +0000
+Received: from LO0P265CU003.outbound.protection.outlook.com (10.252.51.94) by
+ EX19EXOEUB001.ant.amazon.com (10.252.51.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29
+ via Frontend Transport; Sat, 29 Nov 2025 20:00:20 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QVFu9mO/gp07c0OWYgzRBsYzWL6JfNC9/Nd6RRCcOo6OEu38sCc34DzNKT/Wnp1X7AMZuhGL8eyi8edwdw4TObfH3zq8FcMmq+MX6SGmge/EF5Axmm/teT2Hr+CcazBHENPOz1Z+/pqQQyb+fhrGJEUHl3NiU/7p8kbkMjhrZYCGQ2QvoEHuQf1uxKvbrndAKyoJi85WcFX9+ZQSeJaUa9voHtfDO0GpCZjJAUqSMXUkqN2zivG9n6hS1Avvf6KX/GuptG76BQ7N79gfCOpipxCMHt+mIEUbD9DQ30F5eADzdMcfJ/rWJHm4K4IzM+bFuwk1ct/gQNPQln1ePQpF7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mbG0ntM95AWZiKi5PifosMP6AF8gWub3F1LMYe61FhI=;
+ b=Wdsa5W9MfdVFJ1Cy/QRKR+CofFiFusVPqvVjsUGQ2B1AOaUS9lrb26vu+0xQEr5y5PmzmSXd0iSvHvp3jsRsznX+O27nimRFsUSnURSm1AgHLIm+dNoh6CGWQZt4kFgWPA1MBDLVdLxsF01G7cjRZQqYTXWb+TyWD+CFVnaZgCU1x0ii0EOpDinllVoFJJMSsssSvipDGv2x/kDdRzvoxT8MWOLQCFMBjOThDlepVvWCYJ5x9E5MzPqEZi/sEe39Qpibb0KZUe56PjbOFjUFdEiDeEiL/oYcLX2viCaXRuLxgOOknGTiLZofEJRR3eA0iyYpHU8w/ee4H+NY6RtLwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amazon.co.uk; dmarc=pass action=none header.from=amazon.co.uk;
+ dkim=pass header.d=amazon.co.uk; arc=none
+Received: from LO4P123MB5121.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:1f4::8)
+ by LO6P123MB7287.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:33c::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Sat, 29 Nov
+ 2025 20:00:17 +0000
+Received: from LO4P123MB5121.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::bbde:f164:4dc2:7b98]) by LO4P123MB5121.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::bbde:f164:4dc2:7b98%6]) with mapi id 15.20.9366.012; Sat, 29 Nov 2025
+ 20:00:17 +0000
+From: "Becker, Hanno" <beckphan@amazon.co.uk>
+To: Eric Biggers <ebiggers@kernel.org>
+CC: "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>, "David
+ Howells" <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+	"Luis Chamberlain" <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	"Daniel Gomez" <da.gomez@kernel.org>, Sami Tolvanen
+	<samitolvanen@google.com>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Ard
+ Biesheuvel <ardb@kernel.org>, "Stephan Mueller" <smueller@chronox.de>, Lukas
+ Wunner <lukas@wunner.de>, "Ignat Korchagin" <ignat@cloudflare.com>,
+	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"matthias@kannwischer.eu" <matthias@kannwischer.eu>
+Subject: Re: [PATCH 1/4] lib/crypto: Add ML-DSA verification support
+Thread-Topic: [PATCH 1/4] lib/crypto: Add ML-DSA verification support
+Thread-Index: AQHcYWpl4vlpzYy0KE2uJTRFS1fqTQ==
+Date: Sat, 29 Nov 2025 20:00:17 +0000
+Message-ID: <A7135B59-BAB5-451E-AD71-971F828054F0@amazon.co.uk>
+References: <20251120003653.335863-1-ebiggers@kernel.org>
+ <20251120003653.335863-2-ebiggers@kernel.org>
+In-Reply-To: <20251120003653.335863-2-ebiggers@kernel.org>
+Reply-To: "20251120003653.335863-2-ebiggers@kernel.org"
+	<20251120003653.335863-2-ebiggers@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amazon.co.uk;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LO4P123MB5121:EE_|LO6P123MB7287:EE_
+x-ms-office365-filtering-correlation-id: 75f3540e-4b68-42eb-a69d-08de2f81eb1a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|7416014|10070799003|1800799024|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?929r9vNDMbRgStWg0+PTXMMrqbgu927qGvLX9IJjX4+8+7D0KRPxPNfy37i7?=
+ =?us-ascii?Q?W30XttbPxX6n8hqT0vWfefLTBPwpq4q5GgUrAAyso4aiUysEm2p8hE/hIJI1?=
+ =?us-ascii?Q?7HOX6VXgijB8p8/SKeIV1Ggu1rAuUr1ZUQuXL0ZaSOlKd2ZaSSt+F5RPGjEB?=
+ =?us-ascii?Q?rGyAZqfU2kYCsRItzD4rQGynHEFqLK2LSYOcdRHJZ3P3lDAF+4+e04HNg3iV?=
+ =?us-ascii?Q?pcZwz7JhzgRGkqGYDtiOZaXldMbIDK6tj3vykQQyQlyHDcBL0LIm36aB/0Ij?=
+ =?us-ascii?Q?mkV6zoNRZ4fLEIjpGanq4uWjJWr8AZQW6EPuP3DzmVh3DmXBNDBkQUGpoliK?=
+ =?us-ascii?Q?qbgEUHEL4VwKp/THmRuMpfVneOgiaugkCKKu1F/rM7zooAjvsZB1wCuY2mVc?=
+ =?us-ascii?Q?sgAnh3SF0IrD1IkVjY2TjAPj8X/b/AgJzU3+ylbb0PUi/g1ief3hp17QEgCa?=
+ =?us-ascii?Q?v67UaZrKuRaKCj5Fusz8Gphh1ZmKllQ+/bMGiuVcztEmKX071es28YMqliRK?=
+ =?us-ascii?Q?NpoPVJhdaWPJxUhgvz+pBdeuLikPgofkgcTffsJRiuutY2kaFMnkjGTO1q5S?=
+ =?us-ascii?Q?KuxGpetB7lYRDJ9QRlnxr+nkydaazHHyxdfj+B1ZaA3rwBIP6StShLQH5wD5?=
+ =?us-ascii?Q?MM/G9fSpw8OQPvG9mnLVWkyfyC2BXWEbfFxAcNmIWqplEebuB8QEzygjLQ6Z?=
+ =?us-ascii?Q?rv9inV/IHPrxGyBEOkNS425XkbPQ0ytOjO3sbm1ljfr0YeNUQ3C6BrUT38ff?=
+ =?us-ascii?Q?u+u6U6uRoZcVYL6qV76v/CabaZ8FWmIIAHvAoYsnLONjoK4wALdwN4mWkMJ8?=
+ =?us-ascii?Q?C7/YMVwkouCgW/TWP8aDCOljzWfaYU74JieRNr9JGI7hmL09zLgGQHc8YpSF?=
+ =?us-ascii?Q?SEFwS5mhO7jMt+UyfKyT+7dXgnTSfjQFbLnSzCPe8WvECx+W3VIteMYt9Y0s?=
+ =?us-ascii?Q?szJZ9rT0U2x51z3oySNuz7mj/VYnivnxiQmilHLUe+wwLNFCW24dvJcgB4TK?=
+ =?us-ascii?Q?i870B838DYMIq9WGNZNn3RY/e/QV6kK3dxp1zMHpfv3zGzNazY4DikMUf2vg?=
+ =?us-ascii?Q?g6fdxR7SWuWBXRM8ZGR5ufI6lvgp/8ktr9+Liq9mrpRT8xH84h0P5j+xlppZ?=
+ =?us-ascii?Q?TTSdNcQyBms3RinLYvcjW3v+wPWJ58h3aWbYC039aZ10UB4OvMnc8dIzSLb0?=
+ =?us-ascii?Q?kwKpcBrE7cqgI+6dPXk9xXRbiTEWVyvUMms+4hYfgwZqC/hFCW9vKLZB4S6W?=
+ =?us-ascii?Q?52vvBm3p1TCRxMennjDDGyVX+zK8isj/7eHK796HqRZajX47tdC1yBazOnQV?=
+ =?us-ascii?Q?xU6He/fhCAP3jTqmvVQdqAyHL5pVIJ7L1EPBIqBdo2D/otd8m6kfAqWbbUJm?=
+ =?us-ascii?Q?CzrreOnD4rA0iCHQlowtIZjRJLxbkDqd/mCjU2HGUL9LvFokOJBAcW103faL?=
+ =?us-ascii?Q?NhoiK4HAHvIx1iwmK/CfS5uyYo4tTcztwwtA7EH6I2O5wW6XJWmlrJ/FkaQ9?=
+ =?us-ascii?Q?a7ffAYdknrmrkXexQudzLQY4T6rduTQNhLBy60DXloXvBfJK6+nMXzPU3A?=
+ =?us-ascii?Q?=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO4P123MB5121.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(10070799003)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jAttTBzcJBIhUvecWxLklZ/oiinVZ4nyLX3B1Ff9JSnKzMX/NhQtqWhs8IzL?=
+ =?us-ascii?Q?+Zli3pStSIKw+MctAdwX4gjslFZ+2OPLPHL9ggZKZugrWvD8TbfHRG5Zsu1G?=
+ =?us-ascii?Q?m0HrRDLQH6sXLem0LMTRGAUkdP53mIcI5PBes6ASairF3BxJEVwKWNLTx9Sz?=
+ =?us-ascii?Q?32DfN2T3JZe29RnJVhnuX2BK40lhHxW+CVawdhdLVw7AsHDGPF3XKplYFCGh?=
+ =?us-ascii?Q?HXqu58LpZ0VY/c1Fv7byF0i8mXSf/qfcNW/VIjSFE/ugNHU4RTZvHxAbsYpu?=
+ =?us-ascii?Q?+7qbXLtK79TXZVa7NLmBhws7Gxw2VoV3idPB57HA+P1g5oKg1tmQDnWsAgHC?=
+ =?us-ascii?Q?IK/BhhlXvwiEkTF3BPqSSFoNYdmZwHyLv6JUFG/aIuzReZny26z3nTqQcyKf?=
+ =?us-ascii?Q?WXbQIBtNepAcJO4bDQcjzr4gjj+IWZ5XK6QaRNhNt4BmrJAEbXnQYpJ/dvV+?=
+ =?us-ascii?Q?husuAGKA6Pf0BKSSIR51iZPBPDhGzKQLODsTjHzc9xY7urD+tWlTaLsZjcfl?=
+ =?us-ascii?Q?N2xOOMLxP8s1hkvR1a3Kkkp53uVMKDSsY0Wjm64Loda+rbrEohs/EUQg3V+A?=
+ =?us-ascii?Q?DAXTblVg6VUPCzZQD8a4EVFePGzypmT+zi5U5UdfAJFMhZdN/gW1iVwzmgY7?=
+ =?us-ascii?Q?acikDhJVQTHcYrd3eT7d9TFD2JQmni4XcfqHTGRq1V+vy0sodWqW27UwEV5g?=
+ =?us-ascii?Q?ZyJknjDOM8Ao5QhPGPfN9gfKUXwrEy+DmZJI0BLRn9Kw9Y0r1Mev1ao6iH0N?=
+ =?us-ascii?Q?doKT0RVOHCspAq8dsk0k9KBHNlUYDL8EWkvYIiOedP+FCQjOpLSWjISGA8gs?=
+ =?us-ascii?Q?8KtTMDQHTEU0RnQnDnl8Dn2Rhhiv3rPnnzId1WyQpJ0ktm6bSzpn6nNPaEq7?=
+ =?us-ascii?Q?OIoR48Kl/B9PGsUB38HNc+zpofGGKEph2OXs5ZsAmHdbP8Awk0l/ak0/nxQE?=
+ =?us-ascii?Q?WMlmxKhrx0XSYOF1VkjEvsWZepciYCxMCfSq+HbjAx9VjAs+5sjTKpgAlMHW?=
+ =?us-ascii?Q?6yuQxCvj2ttGZ7lMDRNIGgX9pnow2YkDiS9g3Yb/NzVThPQx6LU2BOt5+lB/?=
+ =?us-ascii?Q?jWpNeuAwhhJSzRLWZ1oFw2gmoeezkksO0+ihA5a+6pH/vtKWlHTh0VRfc6kI?=
+ =?us-ascii?Q?QSdDAHVuyGAQkAbxiCnO7UrhbY7wWWYKs1TGKyzuYT22nl6dxFUClA6wQCX7?=
+ =?us-ascii?Q?9a4yiE2v+nY6SabbB3GyEzt2Zqbg5i/bP9ol3JQQ9kgxEZvTOdFGceL9d56V?=
+ =?us-ascii?Q?ZM70GVamYDgPA9wIVPvponARePa6VQsLTsY8zkQ1b2tfhO5w2khIT7W2YIwP?=
+ =?us-ascii?Q?Sbi3FVJbSK7OaF/pkflgyFgPGudiI0K7l2d8gR8DO4+hmof0jl9JbQxp0+oX?=
+ =?us-ascii?Q?Mr/qXJMQCLef0EaYH+MrvZEh5kJZVXVPIY4QodMze5/vhmr9MKfnGVAoigfW?=
+ =?us-ascii?Q?VW0O/Rh1Q/ac/SBHOYW3bV7Hplo2bL6pCKz4kS1mJWu05Xui2rdjjekwUz3q?=
+ =?us-ascii?Q?v4OazmdOO9vEDYCgOF39H+3LfkAA6UCBMkfNQLmWmhoelc/kXlA+gV+KklyA?=
+ =?us-ascii?Q?uJeCWQ/+fj9zRFppwXhtpsUk6zwT4BmOZzz/IHt8jxm++rSuTAXpnpc9V042?=
+ =?us-ascii?Q?c3uIS3pDCpfqU/jaCaNF/CYPuYgCxet0I6IXOOuaWseyAc2L/l7ikgbvWyLk?=
+ =?us-ascii?Q?fpSnMw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <68E8E40B78616D4BA292F438C81CAE61@GBRP123.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: LO4P123MB5121.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75f3540e-4b68-42eb-a69d-08de2f81eb1a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2025 20:00:17.4500
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6oeFl/EwpKEoomLzgtyA8+KdHPm1wPGsfGJFQ8pNZTOyZ+sJ0Rr6+7dyA3j7rdubmuDepirLzL+FG1RilXw/Uw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P123MB7287
+X-OriginatorOrg: amazon.co.uk
 
-Tracing is a half of the kernel.h in terms of LOCs, although it's a
-self-consistent part. Move it to a separate header.
+It looks like this may be close, but for the record:
 
-This is a pure move, except for removing a few 'extern's.
+The LF has a dedicated project for ML-DSA: https://github.com/pq-code-packa=
+ge/mldsa-native (part of the Post-Quantum Cryptography Alliance). It's deri=
+ved from the reference implementation and adds automatically verified memor=
+y-safety + type-safety (=3D bounds-tracking) and a uniform backend interfac=
+e for assembly optimizations; see the README for more details. It's license=
+d under Apache-2.0 OR MIT OR ISC.
 
-Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
----
- MAINTAINERS             |   1 +
- include/linux/kernel.h  | 195 +-------------------------------------
- include/linux/tracing.h | 203 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 205 insertions(+), 194 deletions(-)
- create mode 100644 include/linux/tracing.h
+If you are sure that the kernel will never need sign/keygen support, or sup=
+port for optimized assembly, the current ad-hoc patch may be fine. Otherwis=
+e, the challenges are likely just delayed, e.g. how to safely re-use parts =
+of the current code for the timing-sensitive signing, or in contexts with o=
+ther bounds assumptions, or how to integrate assembly optimizations. It may=
+ not seem so, but this is difficult to get right and where maintainability =
+gets challenging.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index be6a4217caa5..706bbb5da263 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -26071,6 +26071,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git
- F:	Documentation/trace/*
- F:	fs/tracefs/
- F:	include/linux/trace*.h
-+F:	include/linux/tracing.h
- F:	include/trace/
- F:	kernel/trace/
- F:	kernel/tracepoint.c
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 5b879bfea948..265c0d31f369 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -27,6 +27,7 @@
- #include <linux/math.h>
- #include <linux/minmax.h>
- #include <linux/typecheck.h>
-+#include <linux/tracing.h>
- #include <linux/panic.h>
- #include <linux/printk.h>
- #include <linux/build_bug.h>
-@@ -190,200 +191,6 @@ enum system_states {
- };
- extern enum system_states system_state;
- 
--/*
-- * General tracing related utility functions - trace_printk(),
-- * tracing_on/tracing_off and tracing_start()/tracing_stop
-- *
-- * Use tracing_on/tracing_off when you want to quickly turn on or off
-- * tracing. It simply enables or disables the recording of the trace events.
-- * This also corresponds to the user space /sys/kernel/tracing/tracing_on
-- * file, which gives a means for the kernel and userspace to interact.
-- * Place a tracing_off() in the kernel where you want tracing to end.
-- * From user space, examine the trace, and then echo 1 > tracing_on
-- * to continue tracing.
-- *
-- * tracing_stop/tracing_start has slightly more overhead. It is used
-- * by things like suspend to ram where disabling the recording of the
-- * trace is not enough, but tracing must actually stop because things
-- * like calling smp_processor_id() may crash the system.
-- *
-- * Most likely, you want to use tracing_on/tracing_off.
-- */
--
--enum ftrace_dump_mode {
--	DUMP_NONE,
--	DUMP_ALL,
--	DUMP_ORIG,
--	DUMP_PARAM,
--};
--
--#ifdef CONFIG_TRACING
--void tracing_on(void);
--void tracing_off(void);
--int tracing_is_on(void);
--void tracing_snapshot(void);
--void tracing_snapshot_alloc(void);
--
--extern void tracing_start(void);
--extern void tracing_stop(void);
--
--static inline __printf(1, 2)
--void ____trace_printk_check_format(const char *fmt, ...)
--{
--}
--#define __trace_printk_check_format(fmt, args...)			\
--do {									\
--	if (0)								\
--		____trace_printk_check_format(fmt, ##args);		\
--} while (0)
--
--/**
-- * trace_printk - printf formatting in the ftrace buffer
-- * @fmt: the printf format for printing
-- *
-- * Note: __trace_printk is an internal function for trace_printk() and
-- *       the @ip is passed in via the trace_printk() macro.
-- *
-- * This function allows a kernel developer to debug fast path sections
-- * that printk is not appropriate for. By scattering in various
-- * printk like tracing in the code, a developer can quickly see
-- * where problems are occurring.
-- *
-- * This is intended as a debugging tool for the developer only.
-- * Please refrain from leaving trace_printks scattered around in
-- * your code. (Extra memory is used for special buffers that are
-- * allocated when trace_printk() is used.)
-- *
-- * A little optimization trick is done here. If there's only one
-- * argument, there's no need to scan the string for printf formats.
-- * The trace_puts() will suffice. But how can we take advantage of
-- * using trace_puts() when trace_printk() has only one argument?
-- * By stringifying the args and checking the size we can tell
-- * whether or not there are args. __stringify((__VA_ARGS__)) will
-- * turn into "()\0" with a size of 3 when there are no args, anything
-- * else will be bigger. All we need to do is define a string to this,
-- * and then take its size and compare to 3. If it's bigger, use
-- * do_trace_printk() otherwise, optimize it to trace_puts(). Then just
-- * let gcc optimize the rest.
-- */
--
--#define trace_printk(fmt, ...)				\
--do {							\
--	char _______STR[] = __stringify((__VA_ARGS__));	\
--	if (sizeof(_______STR) > 3)			\
--		do_trace_printk(fmt, ##__VA_ARGS__);	\
--	else						\
--		trace_puts(fmt);			\
--} while (0)
--
--#define do_trace_printk(fmt, args...)					\
--do {									\
--	static const char *trace_printk_fmt __used			\
--		__section("__trace_printk_fmt") =			\
--		__builtin_constant_p(fmt) ? fmt : NULL;			\
--									\
--	__trace_printk_check_format(fmt, ##args);			\
--									\
--	if (__builtin_constant_p(fmt))					\
--		__trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);	\
--	else								\
--		__trace_printk(_THIS_IP_, fmt, ##args);			\
--} while (0)
--
--extern __printf(2, 3)
--int __trace_bprintk(unsigned long ip, const char *fmt, ...);
--
--extern __printf(2, 3)
--int __trace_printk(unsigned long ip, const char *fmt, ...);
--
--/**
-- * trace_puts - write a string into the ftrace buffer
-- * @str: the string to record
-- *
-- * Note: __trace_bputs is an internal function for trace_puts and
-- *       the @ip is passed in via the trace_puts macro.
-- *
-- * This is similar to trace_printk() but is made for those really fast
-- * paths that a developer wants the least amount of "Heisenbug" effects,
-- * where the processing of the print format is still too much.
-- *
-- * This function allows a kernel developer to debug fast path sections
-- * that printk is not appropriate for. By scattering in various
-- * printk like tracing in the code, a developer can quickly see
-- * where problems are occurring.
-- *
-- * This is intended as a debugging tool for the developer only.
-- * Please refrain from leaving trace_puts scattered around in
-- * your code. (Extra memory is used for special buffers that are
-- * allocated when trace_puts() is used.)
-- *
-- * Returns: 0 if nothing was written, positive # if string was.
-- *  (1 when __trace_bputs is used, strlen(str) when __trace_puts is used)
-- */
--
--#define trace_puts(str) ({						\
--	static const char *trace_printk_fmt __used			\
--		__section("__trace_printk_fmt") =			\
--		__builtin_constant_p(str) ? str : NULL;			\
--									\
--	if (__builtin_constant_p(str))					\
--		__trace_bputs(_THIS_IP_, trace_printk_fmt);		\
--	else								\
--		__trace_puts(_THIS_IP_, str, strlen(str));		\
--})
--extern int __trace_bputs(unsigned long ip, const char *str);
--extern int __trace_puts(unsigned long ip, const char *str, int size);
--
--extern void trace_dump_stack(int skip);
--
--/*
-- * The double __builtin_constant_p is because gcc will give us an error
-- * if we try to allocate the static variable to fmt if it is not a
-- * constant. Even with the outer if statement.
-- */
--#define ftrace_vprintk(fmt, vargs)					\
--do {									\
--	if (__builtin_constant_p(fmt)) {				\
--		static const char *trace_printk_fmt __used		\
--		  __section("__trace_printk_fmt") =			\
--			__builtin_constant_p(fmt) ? fmt : NULL;		\
--									\
--		__ftrace_vbprintk(_THIS_IP_, trace_printk_fmt, vargs);	\
--	} else								\
--		__ftrace_vprintk(_THIS_IP_, fmt, vargs);		\
--} while (0)
--
--extern __printf(2, 0) int
--__ftrace_vbprintk(unsigned long ip, const char *fmt, va_list ap);
--
--extern __printf(2, 0) int
--__ftrace_vprintk(unsigned long ip, const char *fmt, va_list ap);
--
--extern void ftrace_dump(enum ftrace_dump_mode oops_dump_mode);
--#else
--static inline void tracing_start(void) { }
--static inline void tracing_stop(void) { }
--static inline void trace_dump_stack(int skip) { }
--
--static inline void tracing_on(void) { }
--static inline void tracing_off(void) { }
--static inline int tracing_is_on(void) { return 0; }
--static inline void tracing_snapshot(void) { }
--static inline void tracing_snapshot_alloc(void) { }
--
--static inline __printf(1, 2)
--int trace_printk(const char *fmt, ...)
--{
--	return 0;
--}
--static __printf(1, 0) inline int
--ftrace_vprintk(const char *fmt, va_list ap)
--{
--	return 0;
--}
--static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
--#endif /* CONFIG_TRACING */
--
- /* Rebuild everything on CONFIG_DYNAMIC_FTRACE */
- #ifdef CONFIG_DYNAMIC_FTRACE
- # define REBUILD_DUE_TO_DYNAMIC_FTRACE
-diff --git a/include/linux/tracing.h b/include/linux/tracing.h
-new file mode 100644
-index 000000000000..1989e6328c59
---- /dev/null
-+++ b/include/linux/tracing.h
-@@ -0,0 +1,203 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_TRACING_H
-+#define _LINUX_TRACING_H
-+
-+#include <linux/compiler_attributes.h>
-+#include <linux/instruction_pointer.h>
-+#include <linux/stringify.h>
-+
-+/*
-+ * General tracing related utility functions - trace_printk(),
-+ * tracing_on/tracing_off and tracing_start()/tracing_stop
-+ *
-+ * Use tracing_on/tracing_off when you want to quickly turn on or off
-+ * tracing. It simply enables or disables the recording of the trace events.
-+ * This also corresponds to the user space /sys/kernel/tracing/tracing_on
-+ * file, which gives a means for the kernel and userspace to interact.
-+ * Place a tracing_off() in the kernel where you want tracing to end.
-+ * From user space, examine the trace, and then echo 1 > tracing_on
-+ * to continue tracing.
-+ *
-+ * tracing_stop/tracing_start has slightly more overhead. It is used
-+ * by things like suspend to ram where disabling the recording of the
-+ * trace is not enough, but tracing must actually stop because things
-+ * like calling smp_processor_id() may crash the system.
-+ *
-+ * Most likely, you want to use tracing_on/tracing_off.
-+ */
-+
-+enum ftrace_dump_mode {
-+	DUMP_NONE,
-+	DUMP_ALL,
-+	DUMP_ORIG,
-+	DUMP_PARAM,
-+};
-+
-+#ifdef CONFIG_TRACING
-+void tracing_on(void);
-+void tracing_off(void);
-+int tracing_is_on(void);
-+void tracing_snapshot(void);
-+void tracing_snapshot_alloc(void);
-+
-+void tracing_start(void);
-+void tracing_stop(void);
-+
-+static inline __printf(1, 2)
-+void ____trace_printk_check_format(const char *fmt, ...)
-+{
-+}
-+#define __trace_printk_check_format(fmt, args...)			\
-+do {									\
-+	if (0)								\
-+		____trace_printk_check_format(fmt, ##args);		\
-+} while (0)
-+
-+/**
-+ * trace_printk - printf formatting in the ftrace buffer
-+ * @fmt: the printf format for printing
-+ *
-+ * Note: __trace_printk is an internal function for trace_printk() and
-+ *       the @ip is passed in via the trace_printk() macro.
-+ *
-+ * This function allows a kernel developer to debug fast path sections
-+ * that printk is not appropriate for. By scattering in various
-+ * printk like tracing in the code, a developer can quickly see
-+ * where problems are occurring.
-+ *
-+ * This is intended as a debugging tool for the developer only.
-+ * Please refrain from leaving trace_printks scattered around in
-+ * your code. (Extra memory is used for special buffers that are
-+ * allocated when trace_printk() is used.)
-+ *
-+ * A little optimization trick is done here. If there's only one
-+ * argument, there's no need to scan the string for printf formats.
-+ * The trace_puts() will suffice. But how can we take advantage of
-+ * using trace_puts() when trace_printk() has only one argument?
-+ * By stringifying the args and checking the size we can tell
-+ * whether or not there are args. __stringify((__VA_ARGS__)) will
-+ * turn into "()\0" with a size of 3 when there are no args, anything
-+ * else will be bigger. All we need to do is define a string to this,
-+ * and then take its size and compare to 3. If it's bigger, use
-+ * do_trace_printk() otherwise, optimize it to trace_puts(). Then just
-+ * let gcc optimize the rest.
-+ */
-+
-+#define trace_printk(fmt, ...)				\
-+do {							\
-+	char _______STR[] = __stringify((__VA_ARGS__));	\
-+	if (sizeof(_______STR) > 3)			\
-+		do_trace_printk(fmt, ##__VA_ARGS__);	\
-+	else						\
-+		trace_puts(fmt);			\
-+} while (0)
-+
-+#define do_trace_printk(fmt, args...)					\
-+do {									\
-+	static const char *trace_printk_fmt __used			\
-+		__section("__trace_printk_fmt") =			\
-+		__builtin_constant_p(fmt) ? fmt : NULL;			\
-+									\
-+	__trace_printk_check_format(fmt, ##args);			\
-+									\
-+	if (__builtin_constant_p(fmt))					\
-+		__trace_bprintk(_THIS_IP_, trace_printk_fmt, ##args);	\
-+	else								\
-+		__trace_printk(_THIS_IP_, fmt, ##args);			\
-+} while (0)
-+
-+__printf(2, 3)
-+int __trace_bprintk(unsigned long ip, const char *fmt, ...);
-+
-+__printf(2, 3)
-+int __trace_printk(unsigned long ip, const char *fmt, ...);
-+
-+/**
-+ * trace_puts - write a string into the ftrace buffer
-+ * @str: the string to record
-+ *
-+ * Note: __trace_bputs is an internal function for trace_puts and
-+ *       the @ip is passed in via the trace_puts macro.
-+ *
-+ * This is similar to trace_printk() but is made for those really fast
-+ * paths that a developer wants the least amount of "Heisenbug" effects,
-+ * where the processing of the print format is still too much.
-+ *
-+ * This function allows a kernel developer to debug fast path sections
-+ * that printk is not appropriate for. By scattering in various
-+ * printk like tracing in the code, a developer can quickly see
-+ * where problems are occurring.
-+ *
-+ * This is intended as a debugging tool for the developer only.
-+ * Please refrain from leaving trace_puts scattered around in
-+ * your code. (Extra memory is used for special buffers that are
-+ * allocated when trace_puts() is used.)
-+ *
-+ * Returns: 0 if nothing was written, positive # if string was.
-+ *  (1 when __trace_bputs is used, strlen(str) when __trace_puts is used)
-+ */
-+
-+#define trace_puts(str) ({						\
-+	static const char *trace_printk_fmt __used			\
-+		__section("__trace_printk_fmt") =			\
-+		__builtin_constant_p(str) ? str : NULL;			\
-+									\
-+	if (__builtin_constant_p(str))					\
-+		__trace_bputs(_THIS_IP_, trace_printk_fmt);		\
-+	else								\
-+		__trace_puts(_THIS_IP_, str, strlen(str));		\
-+})
-+int __trace_bputs(unsigned long ip, const char *str);
-+int __trace_puts(unsigned long ip, const char *str, int size);
-+
-+void trace_dump_stack(int skip);
-+
-+/*
-+ * The double __builtin_constant_p is because gcc will give us an error
-+ * if we try to allocate the static variable to fmt if it is not a
-+ * constant. Even with the outer if statement.
-+ */
-+#define ftrace_vprintk(fmt, vargs)					\
-+do {									\
-+	if (__builtin_constant_p(fmt)) {				\
-+		static const char *trace_printk_fmt __used		\
-+		  __section("__trace_printk_fmt") =			\
-+			__builtin_constant_p(fmt) ? fmt : NULL;		\
-+									\
-+		__ftrace_vbprintk(_THIS_IP_, trace_printk_fmt, vargs);	\
-+	} else								\
-+		__ftrace_vprintk(_THIS_IP_, fmt, vargs);		\
-+} while (0)
-+
-+__printf(2, 0) int
-+__ftrace_vbprintk(unsigned long ip, const char *fmt, va_list ap);
-+
-+__printf(2, 0) int
-+__ftrace_vprintk(unsigned long ip, const char *fmt, va_list ap);
-+
-+void ftrace_dump(enum ftrace_dump_mode oops_dump_mode);
-+#else
-+static inline void tracing_start(void) { }
-+static inline void tracing_stop(void) { }
-+static inline void trace_dump_stack(int skip) { }
-+
-+static inline void tracing_on(void) { }
-+static inline void tracing_off(void) { }
-+static inline int tracing_is_on(void) { return 0; }
-+static inline void tracing_snapshot(void) { }
-+static inline void tracing_snapshot_alloc(void) { }
-+
-+static inline __printf(1, 2)
-+int trace_printk(const char *fmt, ...)
-+{
-+	return 0;
-+}
-+static __printf(1, 0) inline int
-+ftrace_vprintk(const char *fmt, va_list ap)
-+{
-+	return 0;
-+}
-+static inline void ftrace_dump(enum ftrace_dump_mode oops_dump_mode) { }
-+#endif /* CONFIG_TRACING */
-+
-+#endif
--- 
-2.43.0
+Verification here is a vehicle for maintainability: If you change any arith=
+metic code -- say you decide to do less modular reduction for performance -=
+- you currently need very careful review that the bounds still check out in=
+ the worst case. In mldsa-native, this is re-checked automatically.
 
+mldsa-native is production-ready and in the process of being integrated int=
+o Amazon's AWS-LC crypto library; the sibling-project mlkem-native https://=
+github.com/pq-code-package/mlkem-native already has been. mldsa-native is n=
+ot yet a drop-in for the kernel, however. At the least, memory usage needs =
+to be brought down and allocation be made flexible. We're working on it, an=
+d if the kernel community was interested in it, it'd give impetus to accele=
+rate the work.
+
+This is just so you're aware. If mldsa-native is of interest, let us know -=
+- it would be great to collaborate across the LF instead of duplicating eff=
+orts.
+
+Thanks,
+Hanno & Matthias (maintainers of mldsa-native)=
