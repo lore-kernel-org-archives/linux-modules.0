@@ -1,111 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D417617B50A;
-	Sun, 30 Nov 2025 01:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840591F4262;
+	Sun, 30 Nov 2025 06:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764464727; cv=none; b=HLfexbUciY4wpvk24PzXiE/yNsfW45AI4sUHCMIjzMSEThJwDitfnG/XC3jlj3U2McQgHEpXVfvHy1LhlCQhewgUmr+OAzWGFTpAWdh/MHBn3afdi6kPXTfpr8JG3VujVmQ+3uciE4+T9JKPbNgKUrpbITEUQbMoI0NS3gmZevI=
+	t=1764483581; cv=none; b=Dszhvg+cSJZf/0jiC2Jv18lAwCduYE2OjC0JAGd1jx0omAwEmAIdGR/kmzxpBwX5k25z1mwgQ6pNjfm17q/5v9E47pYotzXrUSq8AwlbMJ7dgpVr+9xvpVd5cwScemYEA0bH1mcUVaCaKNOFT9cEpXD8iES+jeJx3NDWLKczXSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764464727; c=relaxed/simple;
-	bh=h62Qpy3wIzPNqaVVz62kx+Vm/YLqPAAAXuI2QaLGGEA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qZpw/CU6JeEVye/srDTbFiI2ssFisRRDoA1zkZY28Qp/WNtFnvTinsVUgaq1fwEDLHuuCaY6DwsY4day5z/3Sb/saSJYz32qzf+X7kwrwuYe+MNoZYj7i7MAwA8Cnl/Yjzyyd1/pN5kGtJ0BhU9FkqgFF2x0EY+ySUiBe10wXJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=F5tMY9xy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764483581; c=relaxed/simple;
+	bh=UdqnPIijC3meOjZBaPEmRHigWIk9kritbc8jd7mfue8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sto7w0jM/xVUGLZKVuaON2rNjmwoT2Uho2pDJV3h1rl3WXdIs8fpJ4jfrEef/dlD3b5vfcmONe/dIWSC97Zdca0I2yy3QEG5YkIpxjSWcokpBNVeAtuo5NIAZ81yPSa+1O4bkEy0qhwXgikfsg0VT9h1ihM6Zv/ySNKigNx2NTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=1O+ufe3I; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="F5tMY9xy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B22C4CEF7;
-	Sun, 30 Nov 2025 01:05:24 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="F5tMY9xy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1764464722;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=At7TTlBq+ZlIDUjv0+t7TLluXTYzsmDdD2LzPAn7QLI=;
-	b=F5tMY9xylsT7GA1JTKuJpo5H5xvVA+gTL+hy8+hP8P8ChalCe3+UWj6MEDPMR/YC6c3bDb
-	c5kDz1hrgLUb2nv2v3WrvHtZxKTpKKL6zCsyMAxvyiF4DwtvtHobduzOvImE/p8umNr9yn
-	vN4gXTf1fays4EoolzDbkqwQP9Cndb8=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id cda9e9f9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sun, 30 Nov 2025 01:05:21 +0000 (UTC)
-Date: Sun, 30 Nov 2025 02:05:20 +0100
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: "Becker, Hanno" <beckphan@amazon.co.uk>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>,
-	Lukas Wunner <lukas@wunner.de>,
-	Ignat Korchagin <ignat@cloudflare.com>,
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"matthias@kannwischer.eu" <matthias@kannwischer.eu>
-Subject: Re: [PATCH 1/4] lib/crypto: Add ML-DSA verification support
-Message-ID: <aSuYUDdlZvZrXuUo@zx2c4.com>
-References: <20251120003653.335863-1-ebiggers@kernel.org>
- <20251120003653.335863-2-ebiggers@kernel.org>
- <A7135B59-BAB5-451E-AD71-971F828054F0@amazon.co.uk>
- <20251130001911.GA12664@sol>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="1O+ufe3I"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=rt2H3+YsV1Ah/Ev8lx7nrZ/yC+yGTNlGyhpvY/Czsfc=; b=1O+ufe3IOodReZZFEuh/XWgceb
+	lPyYSG94S/HbBkwa0ugXvuXTGFRNx62ihA4+4zF66T1SH3PtF38wEx79Qcb07iEM8VLJKUwZ2ESdW
+	H1VQ0KUJkgmiqv0RGf0GIi4majQmZCE/Rivw2IlQDzuVnY75lsFlgwXeWhqpej3nUOvxnaFfoQGi0
+	EqfoGhX/mctk9lM7RulWQ9FJFlM9wo3CqqGyNN9P1hPjiNR8W4RuNrJ7/q1f/BUdAWMpLO9KAXh5+
+	sjCwzMBAhznoebLFF6BWLxYgvZCmvFXTdZ5Y/b1USDwWngoDT7I9PYA4w34QtLlQx8ZYUmEtNoLr+
+	BoQXh9ag==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vPamP-000000025XT-3zu4;
+	Sun, 30 Nov 2025 06:19:30 +0000
+Message-ID: <e0d34a20-7547-4788-8449-95fcd5588434@infradead.org>
+Date: Sat, 29 Nov 2025 22:19:29 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251130001911.GA12664@sol>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Ingo Molnar <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
+ <tursulin@ursulin.net>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20251129195304.204082-1-yury.norov@gmail.com>
+ <20251129195304.204082-3-yury.norov@gmail.com>
+ <aStWkK6exUj9YEC1@smile.fi.intel.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <aStWkK6exUj9YEC1@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Hanno,
 
-Just to add to what Eric said...
 
-On Sat, Nov 29, 2025 at 04:19:11PM -0800, Eric Biggers wrote:
-> I think you may be underestimating how much the requirements of the
-> kernel differ from userspace.  Consider the following:
+On 11/29/25 12:24 PM, Andy Shevchenko wrote:
+> On Sat, Nov 29, 2025 at 02:53:01PM -0500, Yury Norov (NVIDIA) wrote:
+>> The macro is related to sysfs, but is defined in kernel.h. Move it to
+>> the proper header, and unload the generic kernel.h.
+> 
+> Tough guy :-)
+> I hope it builds well in your case.
+> 
+> FWIW,
+> https://lore.kernel.org/lkml/20220603172101.49950-1-andriy.shevchenko@linux.intel.com/
+> https://lore.kernel.org/lkml/20240212115500.2078463-1-max.kellermann@ionos.com/
+> https://lore.kernel.org/lkml/20240215093646.3265823-1-max.kellermann@ionos.com/
+> 
+> Assuming it builds in allmodconfig, allyesconfig on x86_32/64 and arm/64
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-I've added a bit of formally verified code to the kernel, and also
-ported some userspace crypto. In these cases, I wound up working with
-the authors of the code to make it more suitable to the requirements of
-kernel space -- even down to the formatting level. For example, the
-HACL* project needed some changes to KReMLin to make the variety of code
-fit into what the kernel expected. Andy Polyakov's code needed some
-internal functions exposed so that the kernel could do cpu capability
-based dispatch. And so on and so forth. There's always _something_.
+I don't build allyesconfigs any more (final? linking takes too long).
+It builds successfully for arm64 allmodconfig, arm allmodconfig,
+i386 allmodconfig, and x86_64 allmodconfig.
 
-I'd love to have a formally verified ML-DSA implementation (if we're to
-have ML-DSA in the kernel anyhow, but it looks like that's happening).
-But I almost guarantee that it's going to be some work to do. If those
-are efforts you'd consider undertaking seriously, I'd be happy to assist
-or help guide the considerations.
+And the source files that use VERIFY_OCTAL_PERMISSIONS() all build successfully
+(which means that they possibly include <linux/sysfs.h> indirectly, i.e.,
+by luck). There aren't many of them, so I checked:
 
-There's also another approach, which would be to formally verify Eric's
-code, perhaps even using the same techniques as your own project, via
-CBMC and such. In this case, the name of the game is usually to port the
-kernel code to userspace. That generally winds up being a matter of
-shimming out some headers and adding a few typedefs. There's a decent
-amount of kernel test code or kernel tool code that does this, and lots
-of shim headers already in the kernel that can be borrowed for this. But
-usually, at least for crypto code, you can figure it out pretty quickly
-by just trying to compile it and plugging the missing headers and types
-as they come up.
+arch/arc/kernel/perf_event.c:	arc_pmu->attr[j].attr.attr.mode = VERIFY_OCTAL_PERMISSIONS(0444);
+INDIRECT
+drivers/edac/thunderx_edac.c:	.mode = VERIFY_OCTAL_PERMISSIONS(_mode),		    \
+INDIRECT
+drivers/media/platform/amphion/vpu_dbg.c:		    VERIFY_OCTAL_PERMISSIONS(0644),
+INDIRECT
+drivers/soc/aspeed/aspeed-uart-routing.c:	 .mode = VERIFY_OCTAL_PERMISSIONS(0644) },	\
+INDIRECT
+fs/xfs/xfs_error.c:		 .mode = VERIFY_OCTAL_PERMISSIONS(S_IWUSR | S_IRUGO) },	\
+INDIRECT
+include/linux/moduleparam.h:	    VERIFY_OCTAL_PERMISSIONS(perm), level, flags, { arg } }
+INDIRECT
 
-The model checking might be more work with this latter approach, since
-it's not already done like it is for the former, but the porting work is
-probably much less arduous.
+so all of them got lucky. :)
 
-Anyway, the bigger picture is that I'm very enthusiastic about getting
-formally verified crypto in the kernel, so these types of efforts are
-really very appreciated and welcomed. But it just takes a bit more work
-than usual.
-
-Jason
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+-- 
+~Randy
