@@ -1,64 +1,64 @@
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857FE17A2FC
-	for <linux-modules@vger.kernel.org>; Sun, 30 Nov 2025 17:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B65F285C99
+	for <linux-modules@vger.kernel.org>; Sun, 30 Nov 2025 18:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764525370; cv=none; b=eOYqxaC9YVj96VfRoiTHoQIDTfLuQvqjMfzbkRCvLz3IIllMt1NxRDvHv2tOekG7xKWdVPXxf5dDvbLrzxtXqOmJfazMsCWI7eKiM9vhpmhGPcHr8VpkrQ8zAiPK7UXEsItjRh3KzR675S4cfnfx/3UJo/zhVVDSiSNxjzM5WtA=
+	t=1764526583; cv=none; b=gzR489TyFXMgu8plweiPfEeuSimdkG8UKiX1xzv6BWafGPfYbm/9JXsOuXsomB2WJPrKmvBC5S90GsXr9pxxaxRZqqmZE93oe1FaqxU9xp9qh4MRp2OtorwKQHmvgEgyKpyT1xsIkHq7skMqVr9I4/c6wFDpDu7PX3VQILmlO9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764525370; c=relaxed/simple;
-	bh=27WbreY2RKmBEG/BW9KQXhwy/0tZWPSyiK6pn9laG6g=;
+	s=arc-20240116; t=1764526583; c=relaxed/simple;
+	bh=xMe2StGzK5NX+kq6kKhx0Deffi5L07sCSW856vZYwzg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HZx46LJ2ShnVk2kdr6buAylMRXX7qar28wSZ0jesCDO+jSVW+fTwMgcE6Sj/jUCAL3KonsAAT+MsNHWLvM/pMEXI3e7xyRZRVgTuI6jO2/UvWMoL6oPvFt85ElZ4r/xQ7YVrpEORHv7fleZo5rQKTmrCZmOgeK+z5LulWgHUMiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqNts4w2; arc=none smtp.client-ip=74.125.224.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5Q5MeeAGGjwmkp/aluTU190Tno5o11wiluDTf2Vsa5yFhj7GWQcdjEH8VJluHbS7dxe1kSbwezVRei19ckYXqL4uabfUNRfdoUjlNdb8urX9WMqExwfUEjA+pziBnKV7OovMWHVMR/xU9VQFxgZAt+SMJYREQdE5FqydlcNaWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eAt4cI59; arc=none smtp.client-ip=74.125.224.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqNts4w2"
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-640d0895d7cso4284571d50.1
-        for <linux-modules@vger.kernel.org>; Sun, 30 Nov 2025 09:56:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eAt4cI59"
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-640d43060d2so2467824d50.2
+        for <linux-modules@vger.kernel.org>; Sun, 30 Nov 2025 10:16:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764525366; x=1765130166; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764526580; x=1765131380; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUD/yBt9NZ9+A9XDWEgi0gEwekBnc6bPrryNuMfZMEw=;
-        b=jqNts4w2unHzV47JmXIbCJ7rKQzQZ0wAWkLT1kyHY4rCVObgD9iR6kW31XWKz0rrBI
-         mTzZAwVKaU3RE11n8WTkbgW4vPRVINIGeQUGqYhD9UQ9DhhO84aDdzpN5P6FYxXFbP6+
-         hOk9WmwzGz0zQ2Ac4sf4tqaREcyp8ei6ydBM44CyI4T0ZGHC5p1nRkZE2xF4oDN9YH50
-         duDK7rp4o+MWeB7H4X1demIvhShJaXGYPPiAglTXOxQmV61FdxFN445VYmAzTM7OpH+n
-         b2/Sgl8EyfB0yQNQz9zZpKxF3A426ZHr8r90P7ZFcCUTUQas1RtJ4ocuGr6+onM3agHo
-         t2kg==
+        bh=bPTHL8VwtfKfk45TFU08paMyal7EO1gfKoy+e7omzHs=;
+        b=eAt4cI59JxPsGjtJ11O+7GH/oETePW6BnD31pPwEe+xo4Ko+0S079pSUzzoJBtfdzl
+         bkRcWar8e1ngKub1JmKn8XVrwPU9L2AyUljdDOFnVYuDuqvsJwlRGdLLGUhs6FMf1TU1
+         X520Iww3vfK0Q5CpmAsbwR1G5SDoHlpK3TWUksPKx3dVKsU5SEW+yEKrhE87yvd8uorA
+         fYT8Xyv1NYoyDYGzFApp8UX+OaLsn8GwiFIf4C0xQfMhQOUP9OhToVffECMlLUj62TNO
+         HMfWONadLlZC8QfZ5/Uf9Ayra6tU+ufYTCQgQVK+s8JUnjDLok2J42BwnebyXmDMip+O
+         GETQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764525366; x=1765130166;
+        d=1e100.net; s=20230601; t=1764526580; x=1765131380;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wUD/yBt9NZ9+A9XDWEgi0gEwekBnc6bPrryNuMfZMEw=;
-        b=qetvlStf/cbvG6FyKCqNjKzvJBybDBNnjON55wPCCups7IpkLFKTQenoTrvRh/om9o
-         ySlhrOMJ6J79pvUNCXrj4vyF6jChzpTmHfIwbwr+6x9YIWM/QoIydQg1kV4aOAr7NelG
-         cEE26EIDqblh+57MZNzWj/UzplkDAZnyOsUy6kisFxDekxw9ivUTJla/hzbSvR2W15lI
-         t1P03el1wU9kP2uyaiow0S9Ogcv5f6YGBOAfUapfyTQc/gstkBBesN+7qD6TF4EG6Kza
-         6OXTY6gUi7n0cWP8s85VG1TfslC35gE+NN7d9Tlr7FeDeVvwBPSDSOBGX02r6nSfeyyh
-         vC7w==
-X-Forwarded-Encrypted: i=1; AJvYcCX8nzpnPoSOq5ccAkteW1+r3ZHQOZdW6mjJnJyXle4KnyngY9LgpSWoG12gCEBA+AFzpAGg31sGwpJzdHgE@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHj3wSOBCMpAC2Jq1q1rbA+dqyNl1KoYi/NG15LDrQbRkVRj57
-	oSsVIMOMA244Xr/KkDyHrf+Os67r9XDzn1JRe8LiAq3docXQZexK/jK8
-X-Gm-Gg: ASbGnctxG3zKe6XdNVPGO8kKuHtOKjHBC8AiNrZSSADXlj1SHsgd8i92gFlBMquQjLf
-	5JP6y6XXeTrKKsSzvgdhk4H5brE6ltqgWaRXx30G+4CqrkfxotJovAK2cNDBCj6Rb+lgJmraQ93
-	iJf4jQk5N28mMlp/UZFyP182J+N4FE2ntm4uE7orxmakr+1WK38RwWL0s10/ihTD/1jrEYEI2Ly
-	WB3sCOlMgQkMUh/0+hVTMFsypwEJmsMx6Yl1ZNRvRrD2N7AOzvTUpmGdGBaqxJhBe9bypULdtki
-	0/VuVzjUjlmK4k7GzaXfGIpYT3sUiB9BwqtBZEf5ZTHNKRbAeAlqL/0rdxju53HX8TGEzjQDY+B
-	ZN/2JFTMtzhxyxXQAtCRBdUu5NstXFzKfmzlzNJeQ9AD/lHYKnON1TRxTtN2azyhZr/e32ZMtKu
-	FwCKMh/No=
-X-Google-Smtp-Source: AGHT+IFazktIfCN3qlxWEck8ZBpdX6Q85L5F/mb8r4CtsaC7PGh9ijpwS9MHVlr3YNeQOBcTLxwxaw==
-X-Received: by 2002:a05:690e:1483:b0:640:d1cc:2be7 with SMTP id 956f58d0204a3-642f8e41c16mr30276137d50.30.1764525366495;
-        Sun, 30 Nov 2025 09:56:06 -0800 (PST)
+        bh=bPTHL8VwtfKfk45TFU08paMyal7EO1gfKoy+e7omzHs=;
+        b=FMZgLwC28fhCZvLfb6Xv18ACRSFEKepxYLShqksz+WGguM+ZIU3iOTiXBoVgzo/iLA
+         ZEuRUVv32pgHiWAPa0xdyNnrUCUKC2CalZ+WJtSi5OUvgcGszNy2fUQC8iMLl6Hh0Jf/
+         uAPIzu8HINfu7rcQrakTQNUdlqSucwXqSNc3qewiMfPMUsHOgG5+nL6gdcuPBWne2lTc
+         7EVA3vLlElhN0cP2fMhf1wqXaPB+mTF26AzZErKYJosaXc9Lecy6W1UhO048uRaUKFDp
+         PQIPxiGa4MHsq3H9W8RyfPkeV6KjR9KhteJJPBoXIolEcYk8/7RLdglVRz+JebrgUPiA
+         gHbg==
+X-Forwarded-Encrypted: i=1; AJvYcCX9al/CSBGneFozfT3UAoGulYwt1pcp0tfLC9EMPb6IW3PxDa/HlbSp9MitinrQQMOCfKZ5JFAIQYM2KCmY@vger.kernel.org
+X-Gm-Message-State: AOJu0YyypDMuE80UQ/JdiABOc2kAQ+PdbrILio9ivhrly+Wu9f2Ye4qu
+	oslRkV2FtEyKmwjSmaxZ9Na3D7ey8qQY1OG6AnuGNYbqVVaejrzfgP4V
+X-Gm-Gg: ASbGncv01hVp0jQG1b7HRf6Vba6zonUiC8R6UDeIRwtX71yBf/UEuKMdrFjmyWrCIOw
+	fo1gDQ/8WhyZQMbG5oi2AtbC3cXEwOpFSAOHK+IYjA4ygQ9N3TyZKp5X26wcTLcNnie+IucQ4X7
+	eZSB1Stta2KKkaNwgmtRa+DipyNUk3Aln5ImSK8nPcr8mlmopDL/zGxF0d17hUQFgiMJ+m0F+FE
+	RDLAWwmSc+fGRu5Kd3vISNJ0QgVx4UgHBnxblTk6HW+CdONKpWSSN78lUn7kgA4d4C1rUFFeZww
+	fxtuzqYHF6ACabsypISfIq38bDymjfPoIUhwthsOTzCWA+rBT0nJze/lfcC+6fJmJbKb9m2rZ8u
+	YM8l8SH3xg9UgJhD02OhIvnxpXxvH5EQZoHNxit8iyhKA4XUpnJkXAYaFlaTenIgbSQJ8spH8Dm
+	xlHtK1zldganOlGHQbaA==
+X-Google-Smtp-Source: AGHT+IEQcHwA7T6ktmCXafon70hVlddeX9BaPXERtnLHGkMmTox+ufRP6CsVlNJn8W2ToaNF/lgtHw==
+X-Received: by 2002:a53:acc9:0:10b0:63f:beb2:9519 with SMTP id 956f58d0204a3-64302a2fb59mr21422815d50.5.1764526580498;
+        Sun, 30 Nov 2025 10:16:20 -0800 (PST)
 Received: from localhost ([2601:346:0:79bd:b42b:4ad9:10af:cabc])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6433c4692a2sm3805357d50.17.2025.11.30.09.56.06
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d603f5sm39289087b3.19.2025.11.30.10.16.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 09:56:06 -0800 (PST)
-Date: Sun, 30 Nov 2025 12:56:05 -0500
+        Sun, 30 Nov 2025 10:16:20 -0800 (PST)
+Date: Sun, 30 Nov 2025 13:16:19 -0500
 From: Yury Norov <yury.norov@gmail.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>,
@@ -79,13 +79,12 @@ Cc: Steven Rostedt <rostedt@goodmis.org>,
 	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
 	dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
-Message-ID: <aSyFNSqWv_A7JNpI@yury>
+Subject: Re: [PATCH 3/3] tracing: move tracing declarations from kernel.h to
+ a dedicated header
+Message-ID: <aSyJ83v7EEAPHXeU@yury>
 References: <20251129195304.204082-1-yury.norov@gmail.com>
- <20251129195304.204082-3-yury.norov@gmail.com>
- <aStWkK6exUj9YEC1@smile.fi.intel.com>
- <aStYs-LDKbJe6zvW@smile.fi.intel.com>
- <aStZKktOEWliXWT1@smile.fi.intel.com>
+ <20251129195304.204082-4-yury.norov@gmail.com>
+ <aStX3242e3mo5H05@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -94,62 +93,46 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aStZKktOEWliXWT1@smile.fi.intel.com>
+In-Reply-To: <aStX3242e3mo5H05@smile.fi.intel.com>
 
-On Sat, Nov 29, 2025 at 10:35:54PM +0200, Andy Shevchenko wrote:
-> On Sat, Nov 29, 2025 at 10:34:02PM +0200, Andy Shevchenko wrote:
-> > On Sat, Nov 29, 2025 at 10:24:55PM +0200, Andy Shevchenko wrote:
-> > > On Sat, Nov 29, 2025 at 02:53:01PM -0500, Yury Norov (NVIDIA) wrote:
-> > > > The macro is related to sysfs, but is defined in kernel.h. Move it to
-> > > > the proper header, and unload the generic kernel.h.
-> > > 
-> > > Tough guy :-)
-> > > I hope it builds well in your case.
-> > > 
-> > > FWIW,
-> > > https://lore.kernel.org/lkml/20220603172101.49950-1-andriy.shevchenko@linux.intel.com/
-> > > https://lore.kernel.org/lkml/20240212115500.2078463-1-max.kellermann@ionos.com/
-> > > https://lore.kernel.org/lkml/20240215093646.3265823-1-max.kellermann@ionos.com/
-> > > 
-> > > Assuming it builds in allmodconfig, allyesconfig on x86_32/64 and arm/64
-> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Sat, Nov 29, 2025 at 10:30:23PM +0200, Andy Shevchenko wrote:
+> On Sat, Nov 29, 2025 at 02:53:02PM -0500, Yury Norov (NVIDIA) wrote:
+> > Tracing is a half of the kernel.h in terms of LOCs, although it's a
+> > self-consistent part. Move it to a separate header.
 > > 
-> > Actually, one thing should be fixed, i.e.
-> > Documentation/filesystems/sysfs.rst:123:Note as stated in include/linux/kernel.h "OTHER_WRITABLE? ...
+> > This is a pure move, except for removing a few 'extern's.
 > 
-> And just in case, look into
-> https://lore.kernel.org/r/20251126214709.2322314-1-andriy.shevchenko@linux.intel.com
+> Yeah, I also have something similar (but half-baked) locally, the Q I wanted to
+> ask is why a separate header? We have already some of tracing headers. Doesn't
+> suit well?
 
-Sure. Please find attached.
+Just as said in the commit message - this part is more or less
+self-consistent and debugging-oriented. If someone needs to just
+throw trace_printk() in their driver, they will not have to pull
+all the heavy tracing machinery.
 
-From 8b08bfd1d4b885bffb67c548d17d98760ca06e76 Mon Sep 17 00:00:00 2001
-From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Date: Sun, 30 Nov 2025 12:50:11 -0500
-Subject: [PATCH] sysfs: Align update documentation
+> ...
+> 
+> > --- a/include/linux/kernel.h
+> > +++ b/include/linux/kernel.h
+> > @@ -27,6 +27,7 @@
+> >  #include <linux/math.h>
+> >  #include <linux/minmax.h>
+> >  #include <linux/typecheck.h>
+> 
+> > +#include <linux/tracing.h>
+> 
+> There is better place for t*.h, i.e. after static_call_types.h.
 
-This series moves VERIFY_OCTAL_PERMISSIONS() from linux/kernel.h to
-linux/sysfs.h. Update documentation accordingly
-
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
----
- Documentation/filesystems/sysfs.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/filesystems/sysfs.rst b/Documentation/filesystems/sysfs.rst
-index 2703c04af7d0..ffcef4d6bc8d 100644
---- a/Documentation/filesystems/sysfs.rst
-+++ b/Documentation/filesystems/sysfs.rst
-@@ -120,7 +120,7 @@ is equivalent to doing::
- 	    .store = store_foo,
-     };
+They are poorly sorted for seemingly no good reason. I found the first
+t*.h and just put this header next to it. Don't think that placing it
+next to static_call_types.h is any better or worse.
  
--Note as stated in include/linux/kernel.h "OTHER_WRITABLE?  Generally
-+Note as stated in include/linux/sysfs.h "OTHER_WRITABLE?  Generally
- considered a bad idea." so trying to set a sysfs file writable for
- everyone will fail reverting to RO mode for "Others".
- 
--- 
-2.43.0
+> Btw, have you tried to sort alphabetically the bulk in the kernel.h after
+> your series. Does it still build? (Just wondering about state of affairs
+> with the possible cyclic dependencies.)
 
+I didn't try. Sorting #include's is not the purpose of the series.
 
+Thanks,
+Yury
