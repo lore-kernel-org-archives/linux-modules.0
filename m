@@ -1,58 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08E913A3ED;
-	Sun, 30 Nov 2025 19:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0F33C17;
+	Sun, 30 Nov 2025 19:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764529674; cv=none; b=D07G4o2qr3aUX1wpgPmKMETaAjy3jIF+Z0pgww+wr5ahAYecXTdWTfwX3ZSNfHTXI+5+XID92aFPsE2P/VTvCefxmaKQrhmewJqblBWUzw7Qvtg93dWwWxkZvhkZ+PaCwHdAUBVy4F+RGD3Rsu1OC2VNNCN5JP5qE97Jr7lOJ24=
+	t=1764531352; cv=none; b=ifMxPhizFkshgaOLuculilokm485FStHv1adDrEIjXR1DzWGbL+UeCeJgRPMshCLnrXqw+Kzd5JSXM5m4vvcvrIsc3TquZUhXJF0mUgRufr9jpZtd8tYqsHiM4RQYZsB2qT3MOxOBz4MZG60QP5pOZeALCci4hv4PXuFmLb8tGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764529674; c=relaxed/simple;
-	bh=LyS8TZOVxr4rQNbi7Nu//tsFFGALTqeYPgQi1HdllXc=;
+	s=arc-20240116; t=1764531352; c=relaxed/simple;
+	bh=v/MI6kLlmGwE12FmWCb72yhLGZ2pXfiaLSMVHtPu4Qs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EJ4vpttMClkVfGBYZvbdAQ7MJDPe59cyH1DDQ9V5BaM93d20JAZEi3pHKzaa3Dv7picy+dwHRJ1g7baXk9HgLmBxyQF5D1f6MaDdXqVyQwehhFL87YQQ/qTfurnUTmdGrmeDzmPbK7LCiqZPMy3U0wqDlDiyYpL5S2UaHhGeXS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mu3gT8+5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ss4wkswHcNdsvW6/oNexr13PUffs2a8NG6Uyl6CebMIdXYdEqDC01aDtBdTIOdv7vL5hvkCCvvmFqLzDlIr7vS4mLrd5dFnDPJLkiLF3dk9U9XrZGhQctQi6u68Arug8I3tSQCtQ5Bf1iWZUDE24GkDg+SPfAXngRqAFaft3EAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I3NNJMy2; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mu3gT8+5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CC40C4CEF8;
-	Sun, 30 Nov 2025 19:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764529672;
-	bh=LyS8TZOVxr4rQNbi7Nu//tsFFGALTqeYPgQi1HdllXc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mu3gT8+5+SDi6FjE/H1gPtOCd8cxyTAEO79V0X8CT9vzGKWi021+V/mOYnf+nw3QP
-	 ka6mIVjnAY7ZyP70tvBkk00LNLymkK5iRzrmsZuD8T1GIJ1GuYNT9FRCkfXyG9K4YJ
-	 x4+zc1uPS2CF9bx1a5iZR7mj3Jbis0YJvqxS217rWBLrwVWwkiGNqnFBz6YZjg0UMX
-	 tpypL0Ydl/nglOZeSiqvIUcBvphrcgLYQYLNIoqfpBF1aDVWSGQ0RXdB3k4M2fUfks
-	 LGQy1LIQsltE708qponAn84WMw7wcacKHSz0V0qE25xpGUR3x4y60XF/geHDLRXh4F
-	 9TdjduUaks+Dw==
-Date: Sun, 30 Nov 2025 11:06:01 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: "Becker, Hanno" <beckphan@amazon.co.uk>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I3NNJMy2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764531350; x=1796067350;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v/MI6kLlmGwE12FmWCb72yhLGZ2pXfiaLSMVHtPu4Qs=;
+  b=I3NNJMy2LF9FNyn/FlRnflFEw74fP7nUkS3L8s779mtHNMmJn2sbZ/aD
+   evt+ntWJmC2JN/Z6UzrHgA6PQuPNKLfy8f4rBR2MrnjIXGb+DD4YER3l4
+   8B6QJH1G+/aM0MNrU82Ds1piWIHS7sRYnsePsFPNiojopdS5B8DonllCj
+   b6MDgvuVQjrTqH8JI7pt/rY8uy3j7qvJMecRxAQN3g2ajbKMGSXlZfhTO
+   uOHq41gXJBm0ytCxXEQlhSCVvkysIjaxo78jEMqdxdQFPh+1eZhh6A0gD
+   ugVInzgiaDis8jPetbUKMx++RlWf6Ssy9hwzLfhQB1p/9WFarrPIvIE3/
+   g==;
+X-CSE-ConnectionGUID: JPe5/aDrTC6A+4y4Nc+VGg==
+X-CSE-MsgGUID: 8S6wHMWlSXCgut/nUVdLfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11629"; a="66364219"
+X-IronPort-AV: E=Sophos;i="6.20,239,1758610800"; 
+   d="scan'208";a="66364219"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2025 11:35:48 -0800
+X-CSE-ConnectionGUID: ZbEoJsGDT2KT5QF14rLIGQ==
+X-CSE-MsgGUID: NF4JUzJjR/mDO5fMXIcBZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,239,1758610800"; 
+   d="scan'208";a="193778551"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.125])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2025 11:35:43 -0800
+Date: Sun, 30 Nov 2025 21:35:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>,
-	Lukas Wunner <lukas@wunner.de>,
-	Ignat Korchagin <ignat@cloudflare.com>,
-	"keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"matthias@kannwischer.eu" <matthias@kannwischer.eu>
-Subject: Re: [PATCH 1/4] lib/crypto: Add ML-DSA verification support
-Message-ID: <20251130190601.GC1395@sol>
-References: <20251120003653.335863-1-ebiggers@kernel.org>
- <20251120003653.335863-2-ebiggers@kernel.org>
- <A7135B59-BAB5-451E-AD71-971F828054F0@amazon.co.uk>
- <20251130001911.GA12664@sol>
- <aSuYUDdlZvZrXuUo@zx2c4.com>
- <1CB2640E-B918-4C90-933D-61D5B1954E6C@amazon.co.uk>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
+Message-ID: <aSycjR2Iq4iCOa7k@smile.fi.intel.com>
+References: <20251129195304.204082-1-yury.norov@gmail.com>
+ <20251129195304.204082-3-yury.norov@gmail.com>
+ <aStWkK6exUj9YEC1@smile.fi.intel.com>
+ <aStYs-LDKbJe6zvW@smile.fi.intel.com>
+ <aStZKktOEWliXWT1@smile.fi.intel.com>
+ <aSyFNSqWv_A7JNpI@yury>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -61,61 +80,43 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1CB2640E-B918-4C90-933D-61D5B1954E6C@amazon.co.uk>
+In-Reply-To: <aSyFNSqWv_A7JNpI@yury>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Sun, Nov 30, 2025 at 07:15:22AM +0000, Becker, Hanno wrote:
-> > - Vector registers (e.g. AVX) can be used in the kernel only in some
-> >  contexts, and only when they are explicitly saved and restored.  So
-> >  we have to do our own integration of any code that uses them anyway.
-> >  There is also more overhead to each vector-optimized function than
-> >  there is in userspace, so very fine-grained optimization (e.g. as is
-> >  used in the Dilithium reference code) doesn't work too well.
+On Sun, Nov 30, 2025 at 12:56:05PM -0500, Yury Norov wrote:
+> On Sat, Nov 29, 2025 at 10:35:54PM +0200, Andy Shevchenko wrote:
+> > On Sat, Nov 29, 2025 at 10:34:02PM +0200, Andy Shevchenko wrote:
+> > > On Sat, Nov 29, 2025 at 10:24:55PM +0200, Andy Shevchenko wrote:
+> > > > On Sat, Nov 29, 2025 at 02:53:01PM -0500, Yury Norov (NVIDIA) wrote:
+> > > > > The macro is related to sysfs, but is defined in kernel.h. Move it to
+> > > > > the proper header, and unload the generic kernel.h.
+> > > > 
+> > > > Tough guy :-)
+> > > > I hope it builds well in your case.
+> > > > 
+> > > > FWIW,
+> > > > https://lore.kernel.org/lkml/20220603172101.49950-1-andriy.shevchenko@linux.intel.com/
+> > > > https://lore.kernel.org/lkml/20240212115500.2078463-1-max.kellermann@ionos.com/
+> > > > https://lore.kernel.org/lkml/20240215093646.3265823-1-max.kellermann@ionos.com/
+> > > > 
+> > > > Assuming it builds in allmodconfig, allyesconfig on x86_32/64 and arm/64
+> > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > 
+> > > Actually, one thing should be fixed, i.e.
+> > > Documentation/filesystems/sysfs.rst:123:Note as stated in include/linux/kernel.h "OTHER_WRITABLE? ...
+> > 
+> > And just in case, look into
+> > https://lore.kernel.org/r/20251126214709.2322314-1-andriy.shevchenko@linux.intel.com
 > 
-> That's very useful, can you say more? Would one want some sort of
-> configurable preamble/postamble in the top-level API which takes care of
-> the necessary save/restore logic?
-> 
-> What is the per-function overhead?
+> Sure. Please find attached.
 
-It varies by architecture, but usually it looks something like:
+Just fold this into your patch.
 
-    if (irq_fpu_usable()) {
-            kernel_fpu_begin();
-            avx_function();
-            kernel_fpu_end();
-    } else {
-            generic_function();
-    }
+Thanks!
 
-The overhead varies significantly by CPU, kernel config options, and
-whether it's the first use since the current task last entered the
-kernel.  But it can be up to a few hundred cycles.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-> > Note that the kernel already has optimized Keccak code.  That already
-> > covers the most performance-critical part of ML-DSA.
-> 
-> No, this would need _batched_ Keccak. An ML-DSA implementation using
-> only 1x-Keccak will never have competitive performance. See
-> https://github.com/pq-code-package/mldsa-native/pull/754 for the
-> performance loss from using unbatched Keccak only, on a variety of
-> platforms; it's >2x for some.
-> 
-> In turn, if you want to integrate batched Keccak -- but perhaps only on
-> some platforms? -- you need to rewrite your entire code to make use of
-> it. That's not a simple change, and part of what I mean when I say that
-> the challenges are just deferred. Note that the official reference and
-> AVX2 implementations duck this problem by duplicating the code and
-> adjusting it, rather than looking for a common structure that could host
-> both 'plain' and batched Keccak. I assume the amount of code duplication
-> this brings would be unacceptable.
 
-At least in my code, only the matrix expansion code would need to change
-to take advantage of interleaved Keccak.  The fact that other
-implementations apparently are having trouble with this actually
-suggests to me that perhaps they're not good implementations to use.
-
-Anyway, no one has said they want this particular optimization in the
-kernel anyway.  And hopefully the future is native Keccak support
-anyway; s390 already has it, and (at least) RISC-V is working on it.
-
-- Eric
