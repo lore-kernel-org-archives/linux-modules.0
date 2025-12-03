@@ -1,123 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F841F4181;
-	Wed,  3 Dec 2025 07:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878422DCBFA
+	for <linux-modules@vger.kernel.org>; Wed,  3 Dec 2025 09:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764747672; cv=none; b=q8i23p7OUvbImF+j+DnT129b69GS6NeGxyZtUqtDOLMFHteuaPycOD4PHm/XKTl/v4IY6vSTjDOwh73hImiShvqqn5OOv0WDo93jeE27NevKI2FRXUL+Q1uK05RMQ/rvc4UgenWT/f3cZw8NE29T/+oaNHw/pr4VgZYdsIcHRgI=
+	t=1764752514; cv=none; b=LfeVeHd29rDz6DNS4Ubt/kuQwEjB5A8QYe3Ia2iKlnWdzpMyzL4wGdCl+oVWp1yB3hW0TsCEWrKXAlsSgcRWg7Uo1rAZkLzhiXlt0m1P/D0GbSzEoYy+Tpd32WwKF8pCMjxvUJJZK61Q6oU6mbfVMNfM6HcoD4CAfiqUyH5vAcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764747672; c=relaxed/simple;
-	bh=MUotNHdZvHfpLJp7wYS966EzQOmH3nsQfIzCutAez2E=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=qWBs2gjJXwdwHMIpjU/VNle806PRVXTqWgIXCnNSIMSOfk5mHK9J2XQDa7vnu/IyWHCefLBL8i97OMwRqKne7OIMybr5J6y06MhL/xj8mw+ASmNYdlnYGUrI0WPfYNWL8MvcajCxM1wwHpo4Uary4gUCwgvvrJkjlGsI9HBb+FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cF9q30JS; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1764752514; c=relaxed/simple;
+	bh=vIwUJ0goI0C1yxxERv1G3eCwXSERxKrEpSTSJJVAXIU=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=Zt6YKWnNuLHGM1F9kCFRFqx9kfsKBlZV3i+4GkzWOYNaBHxe3pno5Lm6Xh+FTXu9LKKyPZy6TlJJOPY7UNwkgE+pW6nV93UR6qUFt5bLqsYPQ/iNibmB06YexBFTjck2v0sTGvJXCPEH8fA+21gPLUdK3V9vYgRKFBGTdb47uzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CqjAwRB8; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cF9q30JS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764747670; x=1796283670;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=MUotNHdZvHfpLJp7wYS966EzQOmH3nsQfIzCutAez2E=;
-  b=cF9q30JS4Rb1UotS27UlInrKtA9oYVLjLPbolDXRg09yrndWEln5LQ8r
-   Vg85gpjNJ+2NDzsXiYmnt5vVyaR4Msh+UwKwvQa6ha5gv0sMgCUGAcEAy
-   ikqCGiqom5O1OJamA/+pm/we6fbMeBRh0I0unxTDUhEQzvsx7sDg2SZG2
-   gpUZVXlYluZ3DZLNIxo4+ZLaeX/7XUAZBzfX4dWps81hVl/m5RidyXnC8
-   9/9pOQFRsEUCdMdfL+YwXneYdOiTu6AlXNzIi03ey5KTSII5xlKfGiz/b
-   qDn9ZRc4slKsnhdxopkT70ccz9BTJagK9SgJbSR9OF7rxvQcDUrtq+ebG
-   Q==;
-X-CSE-ConnectionGUID: lgdvQJtsTI+h/v9j9aaqcQ==
-X-CSE-MsgGUID: 7/xlFUElSDyRL21Tg4a+Aw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66692588"
-X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
-   d="scan'208";a="66692588"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 23:41:08 -0800
-X-CSE-ConnectionGUID: HHV6KETJT6+EV5w0j5UZpA==
-X-CSE-MsgGUID: w/IK4FJjTC+v44lCVSxgpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
-   d="scan'208";a="231945676"
-Received: from ettammin-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.246.211])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 23:41:01 -0800
-From: Jani Nikula <jani.nikula@linux.intel.com>
-To: Yury Norov <yury.norov@gmail.com>, Andi Shyti <andi.shyti@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Randy Dunlap
- <rdunlap@infradead.org>, Ingo Molnar <mingo@kernel.org>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] kernel.h: drop STACK_MAGIC macro
-In-Reply-To: <aS9XpaiGXn2upVKB@yury>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20251129195304.204082-1-yury.norov@gmail.com>
- <20251129195304.204082-2-yury.norov@gmail.com>
- <d854dadd78a43f589399e967def37a0eda3655c2@intel.com>
- <3m64k5fagw7hp2duo43t5fldyn6argdjripx3nn6onxbr6xu6w@iwiepyn5krf6>
- <aS9XpaiGXn2upVKB@yury>
-Date: Wed, 03 Dec 2025 09:40:58 +0200
-Message-ID: <e049b13451395843971de33b2fbd9058eb351850@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CqjAwRB8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764752511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lv4nzr1Qaoy5VKC0VGHotmxyvcmCxUkHsPe1OGF9+6I=;
+	b=CqjAwRB8nuoiDwSEbi8mOyMBUdwHQdy/qAGDoyB1OAFx2Cpcsdiq514z7la8XN210OwbcQ
+	35Drv2P523voq0Y+4x8gWr3LcAU6TndxV1QHwPNygpG8RZZNnj0hMTVVNXzw1yTasJ/mmJ
+	0Y/GxnBJrF/WABeSFOca5vNiOFwwdfA=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-120-7GVZsr8WPAqCrCQfbqBWyg-1; Wed,
+ 03 Dec 2025 04:01:23 -0500
+X-MC-Unique: 7GVZsr8WPAqCrCQfbqBWyg-1
+X-Mimecast-MFC-AGG-ID: 7GVZsr8WPAqCrCQfbqBWyg_1764752480
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C2A418001E8;
+	Wed,  3 Dec 2025 09:01:20 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.14])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4B618180057E;
+	Wed,  3 Dec 2025 09:01:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20251203072844.484893-3-ebiggers@kernel.org>
+References: <20251203072844.484893-3-ebiggers@kernel.org> <20251203072844.484893-1-ebiggers@kernel.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: dhowells@redhat.com, linux-crypto@vger.kernel.org,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>, keyrings@vger.kernel.org,
+    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] lib/crypto: tests: Add KUnit tests for ML-DSA verification
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1682767.1764752475.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 03 Dec 2025 09:01:15 +0000
+Message-ID: <1682768.1764752475@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Tue, 02 Dec 2025, Yury Norov <yury.norov@gmail.com> wrote:
-> On Tue, Dec 02, 2025 at 09:58:19PM +0100, Andi Shyti wrote:
->> Hi Jani,
->> 
->> On Mon, Dec 01, 2025 at 09:46:47AM +0200, Jani Nikula wrote:
->> > On Sat, 29 Nov 2025, "Yury Norov (NVIDIA)" <yury.norov@gmail.com> wrote:
->> > > The macro is only used by i915. Move it to a local header and drop from
->> > > the kernel.h.
->> > >
->> > > Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
->> > > ---
->> > >  drivers/gpu/drm/i915/i915_utils.h | 2 ++
->> > >  include/linux/kernel.h            | 2 --
->> > >  2 files changed, 2 insertions(+), 2 deletions(-)
->> > >
->> > > diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
->> > > index a0c892e4c40d..6c197e968305 100644
->> > > --- a/drivers/gpu/drm/i915/i915_utils.h
->> > > +++ b/drivers/gpu/drm/i915/i915_utils.h
->> > 
->> > i915_utils.h is on a diet itself. STACK_MAGIC is only used in selftests,
->> > please put this in i915_selftest.h.
->> > 
->> > I guess also need to include that from gt/selftest_ring_submission.c,
->> > the only one that uses STACK_MAGIC but doesn't include i915_selftest.h.
->> 
->> Doing this cleanups is a bit out of the scope of this patch.
->> Given that the patch itself has quite a good consensus, let move
->> it forward and I can take care of the i915 cleanup once it gets
->> merged.
->
-> I'm already testing it in my tree:
->
-> https://github.com/norov/linux/tree/sm1
->
-> If everything is fine, I'll submit v2 with this change, otherwise will
-> schedule it for future improvements.
+I'm seeing:
 
-I had a look,
+	ERROR: modpost: module mldsa_kunit uses symbol mldsa_use_hint from namesp=
+ace EXPORTED_FOR_KUNIT_TESTING, but does not import it.
 
-Acked-by: Jani Nikula <jani.nikula@intel.com>
+I have this in my .config:
 
+	CONFIG_CRYPTO_LIB_MLDSA=3Dm
+	CONFIG_CRYPTO_LIB_MLDSA_KUNIT_TEST=3Dm
 
+The problem appears to be here:
 
--- 
-Jani Nikula, Intel
+	#if IS_ENABLED(CONFIG_CRYPTO_LIB_MLDSA_KUNIT_TEST)
+	/* Allow the __always_inline function use_hint() to be unit-tested. */
+	s32 mldsa_use_hint(u8 h, s32 r, s32 gamma2)
+	{
+		return use_hint(h, r, gamma2);
+	}
+	EXPORT_SYMBOL_IF_KUNIT(mldsa_use_hint);
+	#endif
+
+It works if EXPORT_SYMBOL_IF_KUNIT() is changed to EXPORT_SYMBOL_GPL().
+
+David
+
