@@ -1,85 +1,250 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056CB2FFDFC
-	for <linux-modules@vger.kernel.org>; Wed,  3 Dec 2025 14:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8463435BDB9
+	for <linux-modules@vger.kernel.org>; Wed,  3 Dec 2025 16:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764772843; cv=none; b=KX1VlSwf2mB4M11lBBceuH1hh1QUSACL9OTybuQgsv7jwKGf/ZJVYQnojkoC+tTzcV+YXiuV6QCZQFTFl/gfib9h1dqqIZfJgerwOPeH4hlfz9CVfrfMKr4PAUWcvoIe8y+Y4eq6m+To31ZocGLkUS0fjpQBEw1w9GwsjxWPtGY=
+	t=1764779015; cv=none; b=DzoL5nBX49DLdziJYL6awI3VFlDck13jW0LxGcKuI/7g8MODgDxeJzNFPE2zx1+VkgX0icxRlGhEjzwIahhx5tdW/EJtQNZ09qlDVht2RwOEa0WcXXgyO6jYBXDkkFLjwVZ4JoFDsVOH4yaN96zm53MwVKf3dXca138Ia9MCyQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764772843; c=relaxed/simple;
-	bh=sni84eXEYd+de2L/vVmmutjA/aIPRSlalbCS50kC3+w=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=I7PQe2MvB6j0MzkyQnHj/7OwWaj22V2V6vz+NJZSdDDVZRMC0XpfEXlEGWZNDK+sc5JIUk+0CvqeweBlmJE1rQETd8D9ve8w4DHMNuKRqCQV1UQW0WDGZEQzrFTVwEAYwju3gR6zbLA3g/mE/jGovxhOBc6crcQScuMZZE7mYuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X+t1y9ut; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1764779015; c=relaxed/simple;
+	bh=pFGWtKByXQ3u7eMAhDSlWJy1f35qFFoQOyuWawl0PUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fEei1B6Chb11A2QIwtzqJpCLk1k6mcTxivl3RcGDAufBuoQGTLNlfU7P/x5Ck5EnTJJ3TRdTdMspgcnQCvZSR8tJpyKt49FU5u1OhAkyvU0J4MSSuYuxyKYneSXEnH/I+dUqtwZjSegod4ODT02d1N1OehKITK6BlEFjBtsycpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dktGQeVm; arc=none smtp.client-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X+t1y9ut"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764772841;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sni84eXEYd+de2L/vVmmutjA/aIPRSlalbCS50kC3+w=;
-	b=X+t1y9utHvtDSx/goosEFmaMHWqKUGI2BfY3hyokFiqKYVmEmbREO95GyvsFQ+oYNxpapX
-	V5d3e6alzKjCSudw0wHYkTiRcspgCTGRmNjD8dR4pw040Tb36EYbOrZ8oSNuk0vdlmcu69
-	UvZozoP3tNTZSxlIwqVUGKTni6sMTh0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-549-t8h2yfuzPCq4fDB4xJVCDw-1; Wed,
- 03 Dec 2025 09:40:37 -0500
-X-MC-Unique: t8h2yfuzPCq4fDB4xJVCDw-1
-X-Mimecast-MFC-AGG-ID: t8h2yfuzPCq4fDB4xJVCDw_1764772835
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 300BF1800358;
-	Wed,  3 Dec 2025 14:40:35 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.14])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B001530001A2;
-	Wed,  3 Dec 2025 14:40:30 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <94cb715bd8782b93e10a285c6dc6ec58@linux.ibm.com>
-References: <94cb715bd8782b93e10a285c6dc6ec58@linux.ibm.com> <20251203072844.484893-1-ebiggers@kernel.org>
-To: freude@linux.ibm.com
-Cc: dhowells@redhat.com, Eric Biggers <ebiggers@kernel.org>,
-    linux-crypto@vger.kernel.org,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
-    Sami Tolvanen <samitolvanen@google.com>,
-    "Jason A . Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>,
-    Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>, keyrings@vger.kernel.org,
-    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] lib/crypto: ML-DSA verification support
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dktGQeVm"
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-6433f99eb15so5505274d50.3
+        for <linux-modules@vger.kernel.org>; Wed, 03 Dec 2025 08:23:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764779011; x=1765383811; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNK//JpS9hirQN90oXpJD1gUxWiQ6E+9iQMheM4lBcw=;
+        b=dktGQeVmOgyEON9ioVWral7IIoQdr9grSWAzFBOqImj2AzC5tTsfrL0D5sMd2gyDFu
+         yT2plDQmBD600lwrVnhuDuTcbWJ3T/LdeeScV82CaXXNVAHzbBH5ivjOqbxYBO2OJ/11
+         cE8/b171WDPHSmjPXBeGSQH4yBeInPJF/edbq2GxB9ot+uBOG3YEGsuGuxB/FYzc/PmE
+         TVA6YLAEWKTbFZapBZjO+gXR+wTzvbyxCXFWIWi1nAfQyB9j9K1Vb2MjdURpdcM36TC0
+         XpOyPTzUPkHI3CNMnmVKim1Zi14sSAtOapZFD8+/r17SOl8ai1ykPNzH/0CORnMLAB4t
+         7wqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764779011; x=1765383811;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNK//JpS9hirQN90oXpJD1gUxWiQ6E+9iQMheM4lBcw=;
+        b=GV57WFf+njmUE9dHqWbw+xUK8GgBlIObtNrO8DFaEDKK7EtSH0W95M6a5vNQ/kM4rH
+         z+hCSL7q6BI3VhVG7jTEaFw9+SJQV512lWk9oO10354oRPnRZxwio33f8Bs65X9y+WF4
+         7qHtCNmScZIdyRk/8KpOa9/jNamSE0L1MPWZs9TovThTScig2jnQmC7zb0pRvZYkLJhp
+         zY2ua246RwGgRY4HPbyyjYrlktDRvtyVMTmZBUoTpx0GTDGkQ2KS7nWXV8wfMtAv6Cnu
+         qEVqmXVX+g3zA9iovl16vHHA5dkv2SInpNSo8MrgTWHIgeObGZXI8+r4yugkLO8BsViZ
+         9r7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXU+F2FdUgCopsWfxRpXk0bbDQBLCPW/gAi62ylxAkIAbyV1T7hoymbMorjVlZL3+k9yCyzEH7EuNecOQ/P@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/qmzRwqYvhFLfzES2YHGSxahnsIV4mKcYTPdeHUU/9+Hl1lRL
+	KfuOwCtgi6WfDIlBWqCr73NR7qcMV4onUTaQl6fpHwMF/U1qzidHf/1R
+X-Gm-Gg: ASbGncuSVRUyXUgLAO9cVGovG4UBGG5902YmHMZGcLqMRpOE8NYa/V8AiW2IGJFkJ66
+	G+Trj1o0y8ULP8Tr5SLfZTPdnc7FWRAyyE4WubkVY+cWqXLv/qZKMwNE6VGGk/RuxEqwzyl8TNZ
+	VzBDpm609AJo/Y2mb3lp2Otc6solBwWHyVClMT7o1HU1Ja3kibhb/tA4+X3NYGDJb9+0WNa0dQF
+	y7l1E1VI2+GpL6flFOPesWFJK8OLbYTpGDjqe/m1ibjoohsnxk5JpK3u3Wg35wE6Ul7/TKK4Lnr
+	CehZL5Ho58VElYFDtYa5bbpnQxqfootZdpLEvLWNysUQbniFtubki310KBjc98ZU0C61MmUSIFO
+	suq6QRWFqgFkfl0HxaXOsT3JfD+AkOFzpHP8AJl9eEbBh/I0SCcQuZ7WjH2ZTmww8D+b33TcCty
+	3nCghdeWg=
+X-Google-Smtp-Source: AGHT+IFbqbKS7r+NlCXK/8J98hJM3a/US0gzPftZwuaa3JUY2EfeVswum0kC2L5AoZFpIWqi7rzeVg==
+X-Received: by 2002:a05:690e:e8d:b0:63f:af64:ae5a with SMTP id 956f58d0204a3-6443704b94amr2258748d50.58.1764779011007;
+        Wed, 03 Dec 2025 08:23:31 -0800 (PST)
+Received: from localhost ([2601:346:0:79bd:3422:8bf9:97bc:b085])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d3f600sm75866767b3.9.2025.12.03.08.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 08:23:30 -0800 (PST)
+From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	David Laight <david.laight@runbox.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-modules@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
+Subject: [PATCH v2 0/4] Unload linux/kernel.h
+Date: Wed,  3 Dec 2025 11:23:21 -0500
+Message-ID: <20251203162329.280182-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1937479.1764772829.1@warthog.procyon.org.uk>
-Date: Wed, 03 Dec 2025 14:40:29 +0000
-Message-ID: <1937480.1764772829@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
 
-Harald Freudenberger <freude@linux.ibm.com> wrote:
+kernel.h hosts declarations that can be placed better.
 
-> ERROR: modpost: module mldsa_kunit uses symbol mldsa_use_hint from namespace
-> EXPORTED_FOR_KUNIT_TESTING, but does not import it.
+Testing (0-Day):
+alpha                               defconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20251202    gcc-8.5.0
+arc                   randconfig-002-20251202    gcc-12.5.0
+arm                                 defconfig    clang-22
+arm                   randconfig-001-20251202    clang-17
+arm                   randconfig-002-20251202    clang-22
+arm                   randconfig-003-20251202    clang-22
+arm                   randconfig-004-20251202    gcc-14.3.0
+arm                       spear13xx_defconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20251202    clang-22
+arm64                 randconfig-002-20251202    clang-22
+arm64                 randconfig-003-20251202    clang-16
+arm64                 randconfig-004-20251202    clang-22
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20251202    gcc-13.4.0
+csky                  randconfig-002-20251202    gcc-15.1.0
+hexagon                             defconfig    clang-22
+hexagon               randconfig-001-20251202    clang-22
+hexagon               randconfig-002-20251202    clang-22
+i386                             allmodconfig    gcc-14
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251202    clang-20
+i386        buildonly-randconfig-002-20251202    gcc-14
+i386        buildonly-randconfig-003-20251202    clang-20
+i386        buildonly-randconfig-004-20251202    clang-20
+i386        buildonly-randconfig-005-20251202    clang-20
+i386        buildonly-randconfig-006-20251202    gcc-14
+i386                                defconfig    clang-20
+i386                  randconfig-001-20251202    clang-20
+i386                  randconfig-002-20251202    gcc-14
+i386                  randconfig-003-20251202    gcc-14
+i386                  randconfig-004-20251202    clang-20
+i386                  randconfig-005-20251202    gcc-14
+i386                  randconfig-006-20251202    clang-20
+i386                  randconfig-007-20251202    clang-20
+i386                  randconfig-011-20251202    clang-20
+i386                  randconfig-012-20251202    clang-20
+i386                  randconfig-013-20251202    gcc-14
+i386                  randconfig-014-20251202    gcc-14
+i386                  randconfig-015-20251202    gcc-14
+i386                  randconfig-016-20251202    clang-20
+i386                  randconfig-017-20251202    clang-20
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251202    gcc-15.1.0
+loongarch             randconfig-002-20251202    clang-22
+m68k                                defconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+nios2                         10m50_defconfig    gcc-11.5.0
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251202    gcc-8.5.0
+nios2                 randconfig-002-20251202    gcc-8.5.0
+openrisc                         allmodconfig    gcc-15.1.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                generic-32bit_defconfig    gcc-15.1.0
+parisc                randconfig-001-20251202    gcc-9.5.0
+parisc                randconfig-002-20251202    gcc-15.1.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc               randconfig-001-20251202    clang-22
+powerpc               randconfig-002-20251202    gcc-10.5.0
+powerpc64             randconfig-001-20251202    clang-22
+powerpc64             randconfig-002-20251202    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                               defconfig    clang-22
+riscv                    nommu_k210_defconfig    clang-22
+riscv                 randconfig-001-20251202    gcc-9.5.0
+riscv                 randconfig-002-20251202    clang-22
+s390                              allnoconfig    clang-22
+s390                                defconfig    clang-22
+s390                  randconfig-001-20251202    clang-17
+s390                  randconfig-002-20251202    gcc-13.4.0
+sh                                allnoconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20251202    gcc-15.1.0
+sh                    randconfig-002-20251202    gcc-12.5.0
+sh                          rsk7269_defconfig    gcc-15.1.0
+sh                     sh7710voipgw_defconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251202    gcc-8.5.0
+sparc                 randconfig-002-20251202    gcc-8.5.0
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20251202    gcc-8.5.0
+sparc64               randconfig-002-20251202    gcc-10.5.0
+um                                allnoconfig    clang-22
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251202    clang-17
+um                    randconfig-002-20251202    gcc-14
+um                           x86_64_defconfig    clang-22
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251202    gcc-14
+x86_64      buildonly-randconfig-002-20251202    gcc-14
+x86_64      buildonly-randconfig-003-20251202    clang-20
+x86_64      buildonly-randconfig-004-20251202    gcc-13
+x86_64      buildonly-randconfig-005-20251202    gcc-14
+x86_64      buildonly-randconfig-006-20251202    gcc-13
+x86_64                              defconfig    gcc-14
+x86_64                randconfig-011-20251202    clang-20
+x86_64                randconfig-012-20251202    gcc-13
+x86_64                randconfig-013-20251202    gcc-14
+x86_64                randconfig-014-20251202    clang-20
+x86_64                randconfig-015-20251202    clang-20
+x86_64                randconfig-016-20251202    clang-20
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251202    gcc-11.5.0
+xtensa                randconfig-002-20251202    gcc-11.5.0
 
-Change EXPORT_SYMBOL_FOR_KUNIT() in patch 1 to EXPORT_SYMBOL_GPL().
+v1: https://lore.kernel.org/all/20251129195304.204082-1-yury.norov@gmail.com/
+v2: 
+ - more historical context for STACK_MAGIC removal (Christophe);
+ - place STACK_MAGIC in i915_selftest.h (Jan);
+ - new patch #2: moduleparam: include required headers explicitly (Petr);
+ - align Documentation/filesystems/sysfs.rst (Andy);
+ - more motivation for linux/tracing.h (Andy, Steven);
 
-David
+Yury Norov (NVIDIA) (4):
+  kernel.h: drop STACK_MAGIC macro
+  moduleparam: include required headers explicitly
+  kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
+  tracing: move tracing declarations from kernel.h to a dedicated header
+
+ Documentation/filesystems/sysfs.rst           |   2 +-
+ MAINTAINERS                                   |   1 +
+ .../drm/i915/gt/selftest_ring_submission.c    |   1 +
+ drivers/gpu/drm/i915/i915_selftest.h          |   2 +
+ include/linux/kernel.h                        | 209 +-----------------
+ include/linux/moduleparam.h                   |   7 +-
+ include/linux/sysfs.h                         |  13 ++
+ include/linux/tracing.h                       | 203 +++++++++++++++++
+ 8 files changed, 228 insertions(+), 210 deletions(-)
+ create mode 100644 include/linux/tracing.h
+
+-- 
+2.43.0
 
