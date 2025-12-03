@@ -1,62 +1,64 @@
-Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8463435BDB9
-	for <linux-modules@vger.kernel.org>; Wed,  3 Dec 2025 16:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A818E35BDC5
+	for <linux-modules@vger.kernel.org>; Wed,  3 Dec 2025 16:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764779015; cv=none; b=DzoL5nBX49DLdziJYL6awI3VFlDck13jW0LxGcKuI/7g8MODgDxeJzNFPE2zx1+VkgX0icxRlGhEjzwIahhx5tdW/EJtQNZ09qlDVht2RwOEa0WcXXgyO6jYBXDkkFLjwVZ4JoFDsVOH4yaN96zm53MwVKf3dXca138Ia9MCyQA=
+	t=1764779016; cv=none; b=EWJ7KsEtvwz4lMRemfH2aW/yZaDyew9/3MacWNs+JgRcbi04ULJ0SK0C9GiKzNct4VApds6Em1IZQZsZrO+N8TCtbdkCen7lnoUrTkF369mNPyvRAkWy+5ob0znXmezg19q4w+9s5sfu4ahvllgisEA0TaAc/gkFiioX9zkWGJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764779015; c=relaxed/simple;
-	bh=pFGWtKByXQ3u7eMAhDSlWJy1f35qFFoQOyuWawl0PUQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fEei1B6Chb11A2QIwtzqJpCLk1k6mcTxivl3RcGDAufBuoQGTLNlfU7P/x5Ck5EnTJJ3TRdTdMspgcnQCvZSR8tJpyKt49FU5u1OhAkyvU0J4MSSuYuxyKYneSXEnH/I+dUqtwZjSegod4ODT02d1N1OehKITK6BlEFjBtsycpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dktGQeVm; arc=none smtp.client-ip=74.125.224.49
+	s=arc-20240116; t=1764779016; c=relaxed/simple;
+	bh=XIwl+QOA198wftZNvu9IO4FLzrxnhpjs1uVff2B+sOY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=o8lGqUC6nPZnMdGWD5lPm7SxuvCgJv0z/6mcJ4qdgg+opyZksYkwQe6nSCUIFHFQHQvmjQdNKwW6cG73HVuePSa9H77FD8VDdjbvSzWqG/R44/TvnqdyG95k4SThlNOMl6ZlRzhgSGbH3dVSf1vz7ymVUwPUZRPRm9kobasnBCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HfOAE2NJ; arc=none smtp.client-ip=209.85.128.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dktGQeVm"
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-6433f99eb15so5505274d50.3
-        for <linux-modules@vger.kernel.org>; Wed, 03 Dec 2025 08:23:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HfOAE2NJ"
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78a835353e4so77926787b3.2
+        for <linux-modules@vger.kernel.org>; Wed, 03 Dec 2025 08:23:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764779011; x=1765383811; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNK//JpS9hirQN90oXpJD1gUxWiQ6E+9iQMheM4lBcw=;
-        b=dktGQeVmOgyEON9ioVWral7IIoQdr9grSWAzFBOqImj2AzC5tTsfrL0D5sMd2gyDFu
-         yT2plDQmBD600lwrVnhuDuTcbWJ3T/LdeeScV82CaXXNVAHzbBH5ivjOqbxYBO2OJ/11
-         cE8/b171WDPHSmjPXBeGSQH4yBeInPJF/edbq2GxB9ot+uBOG3YEGsuGuxB/FYzc/PmE
-         TVA6YLAEWKTbFZapBZjO+gXR+wTzvbyxCXFWIWi1nAfQyB9j9K1Vb2MjdURpdcM36TC0
-         XpOyPTzUPkHI3CNMnmVKim1Zi14sSAtOapZFD8+/r17SOl8ai1ykPNzH/0CORnMLAB4t
-         7wqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764779011; x=1765383811;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1764779012; x=1765383812; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mNK//JpS9hirQN90oXpJD1gUxWiQ6E+9iQMheM4lBcw=;
-        b=GV57WFf+njmUE9dHqWbw+xUK8GgBlIObtNrO8DFaEDKK7EtSH0W95M6a5vNQ/kM4rH
-         z+hCSL7q6BI3VhVG7jTEaFw9+SJQV512lWk9oO10354oRPnRZxwio33f8Bs65X9y+WF4
-         7qHtCNmScZIdyRk/8KpOa9/jNamSE0L1MPWZs9TovThTScig2jnQmC7zb0pRvZYkLJhp
-         zY2ua246RwGgRY4HPbyyjYrlktDRvtyVMTmZBUoTpx0GTDGkQ2KS7nWXV8wfMtAv6Cnu
-         qEVqmXVX+g3zA9iovl16vHHA5dkv2SInpNSo8MrgTWHIgeObGZXI8+r4yugkLO8BsViZ
-         9r7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXU+F2FdUgCopsWfxRpXk0bbDQBLCPW/gAi62ylxAkIAbyV1T7hoymbMorjVlZL3+k9yCyzEH7EuNecOQ/P@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/qmzRwqYvhFLfzES2YHGSxahnsIV4mKcYTPdeHUU/9+Hl1lRL
-	KfuOwCtgi6WfDIlBWqCr73NR7qcMV4onUTaQl6fpHwMF/U1qzidHf/1R
-X-Gm-Gg: ASbGncuSVRUyXUgLAO9cVGovG4UBGG5902YmHMZGcLqMRpOE8NYa/V8AiW2IGJFkJ66
-	G+Trj1o0y8ULP8Tr5SLfZTPdnc7FWRAyyE4WubkVY+cWqXLv/qZKMwNE6VGGk/RuxEqwzyl8TNZ
-	VzBDpm609AJo/Y2mb3lp2Otc6solBwWHyVClMT7o1HU1Ja3kibhb/tA4+X3NYGDJb9+0WNa0dQF
-	y7l1E1VI2+GpL6flFOPesWFJK8OLbYTpGDjqe/m1ibjoohsnxk5JpK3u3Wg35wE6Ul7/TKK4Lnr
-	CehZL5Ho58VElYFDtYa5bbpnQxqfootZdpLEvLWNysUQbniFtubki310KBjc98ZU0C61MmUSIFO
-	suq6QRWFqgFkfl0HxaXOsT3JfD+AkOFzpHP8AJl9eEbBh/I0SCcQuZ7WjH2ZTmww8D+b33TcCty
-	3nCghdeWg=
-X-Google-Smtp-Source: AGHT+IFbqbKS7r+NlCXK/8J98hJM3a/US0gzPftZwuaa3JUY2EfeVswum0kC2L5AoZFpIWqi7rzeVg==
-X-Received: by 2002:a05:690e:e8d:b0:63f:af64:ae5a with SMTP id 956f58d0204a3-6443704b94amr2258748d50.58.1764779011007;
+        bh=UuNgNlcfjsZ+Qe/j+fC/RN/pSpI7MUBa9s9mWM6ZH0E=;
+        b=HfOAE2NJepvcF3KQas+gk2xFSOkwKNFBrwETBnYtUiGrCsYEJsETi35VT2KAP1OFHk
+         xxgEOn8Vk2oLwtI3LjvxaywokyuxnzLC7WwHqcxJoU6niSdQQ2gunR1kw4mR5k5QQ959
+         O+Wt3vvSKs9eDHBUwZt0lW3wBAS56rM5XZsK6k1aQSvKLBjMsLAC9a4xCVDl8bc+Bpa0
+         xYcKwcQqSEXto+j7V2H1oiyM+SZjlO4TU/YFYSzOjPjS7EnudARg1rnzYArjRI3AVMTF
+         f7zErhCqiyALiyVe7RHdZq59JTqCDLpLLHBjG69J+pu/qsMBbt/IDWaUXiVE7rLnBlx5
+         F1zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764779012; x=1765383812;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UuNgNlcfjsZ+Qe/j+fC/RN/pSpI7MUBa9s9mWM6ZH0E=;
+        b=wkN7fBKaQEcgHovDbMSUjr5BlIAkhjgcvlUb9+KYcheYxX9MLZQjtXYGUkAA2B1xZA
+         6A8CxSPVCju4GFeDQOJfdnMKVxOFewZmNioAFslriN77PdH8stGxcdHSzT5MNHeWtC1Y
+         XFttVtBJxRLMkYbs0M5Qi6PypuD4Qx2Gb4T/JtlLZRKrfGwBVevkOLLFtkL6G7FbJVXV
+         ImPVaqMBb4b3aL9KLjqBC8gZQqZmsoA1Q7M2AH2wbwFSezHq7InrOrXx9s6LZflfaY15
+         4I7WSVCQIMk8Z+1h2nO6q7+JHeKWJWfSfeCGchxLvAgfoVw0gDV1Mer71spJQ3//96lc
+         orwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVlDCLMmTSgJdcTFT/F87Ja/a2sbTZRyE0sur4v2dUyYHFaEF974dNeYNzM9llnWfqlelk3ffXPblnFWDa2@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9CXDvIJmXzhBs7TUqHcUaFQZR/OWezC/FFAAKLSTWCCV4hA1a
+	Bk3+gRSX8rN1aqOKxB0DWEXo7lVKLRoCUEb1Dpp876IDVkHlj664pmC/
+X-Gm-Gg: ASbGncsJxxIRiIkMtZiQjnIu904dmUWXIEnNQBxFRcQutpI8rrHWPIZMGeKg+61GhL7
+	wRE9vig68Lkr90CxwQUFJCeItQhlRZBW+WWIiKPYdXdmqgTl1LhDq3/qpUsTqthiFJvoydCQV1w
+	SsH84kjS70A/JZ5pXJIN5cI1zqA4DLc5XesoKYNoa5FvOoHp902C/cOYUvB2F6TwucHk7elI4s9
+	uujeRMSHGYa1ZJmxxxe6plxzAq5tTvZe91pB75ypP/CcjedODyhQaDsGGXyyBwzdZpEw75DChZ3
+	Vp49zPR2TSdHl0W3m7ZR4NfF4d9uwKAovr8mCuKfG6JBePhwNYeRfg6CGUmIviIMwLMlik53DHl
+	2HpbuuQEaqolwGdLoPLfpufLpQ04LdCSCIqR6qmgqr944r4PKoQp2PzwsN7UrNs63s3Mp81fG3S
+	DZUsUniLo=
+X-Google-Smtp-Source: AGHT+IGgPWDFUFvsoh4Eu3h95/Sh/XNQIQM+FfTSI/plOCqZ3lQCrUg2djPKk5L/jEKtossHKw/vRg==
+X-Received: by 2002:a05:690c:23c4:b0:77f:9dae:34f0 with SMTP id 00721157ae682-78c0c2627a5mr21697617b3.46.1764779011881;
         Wed, 03 Dec 2025 08:23:31 -0800 (PST)
 Received: from localhost ([2601:346:0:79bd:3422:8bf9:97bc:b085])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d3f600sm75866767b3.9.2025.12.03.08.23.30
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d5fe1bsm74921787b3.15.2025.12.03.08.23.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Dec 2025 08:23:30 -0800 (PST)
+        Wed, 03 Dec 2025 08:23:31 -0800 (PST)
 From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
@@ -82,169 +84,76 @@ To: Steven Rostedt <rostedt@goodmis.org>,
 	dri-devel@lists.freedesktop.org,
 	linux-modules@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Subject: [PATCH v2 0/4] Unload linux/kernel.h
-Date: Wed,  3 Dec 2025 11:23:21 -0500
-Message-ID: <20251203162329.280182-1-yury.norov@gmail.com>
+Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>
+Subject: [PATCH v2 1/4] kernel.h: drop STACK_MAGIC macro
+Date: Wed,  3 Dec 2025 11:23:22 -0500
+Message-ID: <20251203162329.280182-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20251203162329.280182-1-yury.norov@gmail.com>
+References: <20251203162329.280182-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-kernel.h hosts declarations that can be placed better.
+The macro was introduced in 1994, v1.0.4, for stacks protection. Since
+that, people found better ways to protect stacks, and now the macro is
+only used by i915 selftests. Move it to a local header and drop from
+the kernel.h.
 
-Testing (0-Day):
-alpha                               defconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20251202    gcc-8.5.0
-arc                   randconfig-002-20251202    gcc-12.5.0
-arm                                 defconfig    clang-22
-arm                   randconfig-001-20251202    clang-17
-arm                   randconfig-002-20251202    clang-22
-arm                   randconfig-003-20251202    clang-22
-arm                   randconfig-004-20251202    gcc-14.3.0
-arm                       spear13xx_defconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20251202    clang-22
-arm64                 randconfig-002-20251202    clang-22
-arm64                 randconfig-003-20251202    clang-16
-arm64                 randconfig-004-20251202    clang-22
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20251202    gcc-13.4.0
-csky                  randconfig-002-20251202    gcc-15.1.0
-hexagon                             defconfig    clang-22
-hexagon               randconfig-001-20251202    clang-22
-hexagon               randconfig-002-20251202    clang-22
-i386                             allmodconfig    gcc-14
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20251202    clang-20
-i386        buildonly-randconfig-002-20251202    gcc-14
-i386        buildonly-randconfig-003-20251202    clang-20
-i386        buildonly-randconfig-004-20251202    clang-20
-i386        buildonly-randconfig-005-20251202    clang-20
-i386        buildonly-randconfig-006-20251202    gcc-14
-i386                                defconfig    clang-20
-i386                  randconfig-001-20251202    clang-20
-i386                  randconfig-002-20251202    gcc-14
-i386                  randconfig-003-20251202    gcc-14
-i386                  randconfig-004-20251202    clang-20
-i386                  randconfig-005-20251202    gcc-14
-i386                  randconfig-006-20251202    clang-20
-i386                  randconfig-007-20251202    clang-20
-i386                  randconfig-011-20251202    clang-20
-i386                  randconfig-012-20251202    clang-20
-i386                  randconfig-013-20251202    gcc-14
-i386                  randconfig-014-20251202    gcc-14
-i386                  randconfig-015-20251202    gcc-14
-i386                  randconfig-016-20251202    clang-20
-i386                  randconfig-017-20251202    clang-20
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251202    gcc-15.1.0
-loongarch             randconfig-002-20251202    clang-22
-m68k                                defconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-nios2                         10m50_defconfig    gcc-11.5.0
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251202    gcc-8.5.0
-nios2                 randconfig-002-20251202    gcc-8.5.0
-openrisc                         allmodconfig    gcc-15.1.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                generic-32bit_defconfig    gcc-15.1.0
-parisc                randconfig-001-20251202    gcc-9.5.0
-parisc                randconfig-002-20251202    gcc-15.1.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc               randconfig-001-20251202    clang-22
-powerpc               randconfig-002-20251202    gcc-10.5.0
-powerpc64             randconfig-001-20251202    clang-22
-powerpc64             randconfig-002-20251202    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                               defconfig    clang-22
-riscv                    nommu_k210_defconfig    clang-22
-riscv                 randconfig-001-20251202    gcc-9.5.0
-riscv                 randconfig-002-20251202    clang-22
-s390                              allnoconfig    clang-22
-s390                                defconfig    clang-22
-s390                  randconfig-001-20251202    clang-17
-s390                  randconfig-002-20251202    gcc-13.4.0
-sh                                allnoconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20251202    gcc-15.1.0
-sh                    randconfig-002-20251202    gcc-12.5.0
-sh                          rsk7269_defconfig    gcc-15.1.0
-sh                     sh7710voipgw_defconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251202    gcc-8.5.0
-sparc                 randconfig-002-20251202    gcc-8.5.0
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251202    gcc-8.5.0
-sparc64               randconfig-002-20251202    gcc-10.5.0
-um                                allnoconfig    clang-22
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251202    clang-17
-um                    randconfig-002-20251202    gcc-14
-um                           x86_64_defconfig    clang-22
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251202    gcc-14
-x86_64      buildonly-randconfig-002-20251202    gcc-14
-x86_64      buildonly-randconfig-003-20251202    clang-20
-x86_64      buildonly-randconfig-004-20251202    gcc-13
-x86_64      buildonly-randconfig-005-20251202    gcc-14
-x86_64      buildonly-randconfig-006-20251202    gcc-13
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-011-20251202    clang-20
-x86_64                randconfig-012-20251202    gcc-13
-x86_64                randconfig-013-20251202    gcc-14
-x86_64                randconfig-014-20251202    clang-20
-x86_64                randconfig-015-20251202    clang-20
-x86_64                randconfig-016-20251202    clang-20
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251202    gcc-11.5.0
-xtensa                randconfig-002-20251202    gcc-11.5.0
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
+---
+ drivers/gpu/drm/i915/gt/selftest_ring_submission.c | 1 +
+ drivers/gpu/drm/i915/i915_selftest.h               | 2 ++
+ include/linux/kernel.h                             | 2 --
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-v1: https://lore.kernel.org/all/20251129195304.204082-1-yury.norov@gmail.com/
-v2: 
- - more historical context for STACK_MAGIC removal (Christophe);
- - place STACK_MAGIC in i915_selftest.h (Jan);
- - new patch #2: moduleparam: include required headers explicitly (Petr);
- - align Documentation/filesystems/sysfs.rst (Andy);
- - more motivation for linux/tracing.h (Andy, Steven);
-
-Yury Norov (NVIDIA) (4):
-  kernel.h: drop STACK_MAGIC macro
-  moduleparam: include required headers explicitly
-  kernel.h: move VERIFY_OCTAL_PERMISSIONS() to sysfs.h
-  tracing: move tracing declarations from kernel.h to a dedicated header
-
- Documentation/filesystems/sysfs.rst           |   2 +-
- MAINTAINERS                                   |   1 +
- .../drm/i915/gt/selftest_ring_submission.c    |   1 +
- drivers/gpu/drm/i915/i915_selftest.h          |   2 +
- include/linux/kernel.h                        | 209 +-----------------
- include/linux/moduleparam.h                   |   7 +-
- include/linux/sysfs.h                         |  13 ++
- include/linux/tracing.h                       | 203 +++++++++++++++++
- 8 files changed, 228 insertions(+), 210 deletions(-)
- create mode 100644 include/linux/tracing.h
-
+diff --git a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
+index 87ceb0f374b6..600333ae6c8c 100644
+--- a/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
++++ b/drivers/gpu/drm/i915/gt/selftest_ring_submission.c
+@@ -3,6 +3,7 @@
+  * Copyright © 2020 Intel Corporation
+  */
+ 
++#include "i915_selftest.h"
+ #include "intel_engine_pm.h"
+ #include "selftests/igt_flush_test.h"
+ 
+diff --git a/drivers/gpu/drm/i915/i915_selftest.h b/drivers/gpu/drm/i915/i915_selftest.h
+index bdf3e22c0a34..72922028f4ba 100644
+--- a/drivers/gpu/drm/i915/i915_selftest.h
++++ b/drivers/gpu/drm/i915/i915_selftest.h
+@@ -26,6 +26,8 @@
+ 
+ #include <linux/types.h>
+ 
++#define STACK_MAGIC	0xdeadbeef
++
+ struct pci_dev;
+ struct drm_i915_private;
+ 
+diff --git a/include/linux/kernel.h b/include/linux/kernel.h
+index 5b46924fdff5..61d63c57bc2d 100644
+--- a/include/linux/kernel.h
++++ b/include/linux/kernel.h
+@@ -40,8 +40,6 @@
+ 
+ #include <uapi/linux/kernel.h>
+ 
+-#define STACK_MAGIC	0xdeadbeef
+-
+ struct completion;
+ struct user;
+ 
 -- 
 2.43.0
 
