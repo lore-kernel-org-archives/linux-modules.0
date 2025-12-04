@@ -1,120 +1,389 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6131D6AA;
-	Thu,  4 Dec 2025 11:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3754428D8D9
+	for <linux-modules@vger.kernel.org>; Thu,  4 Dec 2025 22:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764849129; cv=none; b=ITH+4upMfm1a6yY0TEpEcfwP0T1Uz9nNz2PEaam6Zp9SkEovnrkGZSiavHpq+8TwMzuBy0uMWGlqCrwfdVh6ZPuo8cZA2FM0UzmgCABPQPgwn+ngpTyM8hIuoz0YWp0+CDAEB21cRABndpcPMbfoZB5vBC/sQDW7Xec15lZGVhw=
+	t=1764885923; cv=none; b=QuHC0ZNofUYs0IBY/nRt8O/hCFkXN80MO8VGdWoM0qyUtxlKbDbUjfkpBBi8y0jWIvmgvYlrRH5xzLx019hF3nfUmN6qM/jAs93jsHa2GFzknEtQcSUSW8nhxnVEZuWpg9nDVJ/GdrGT2jvIVx+Z+/InveAOf2nRCDZgiA1O0z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764849129; c=relaxed/simple;
-	bh=4+ago9RcB1V/RAZJY3SUXojT88ytoljJuAHL0Qj8ORc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=V1Gqer8C3qwmY8X+n7KmRDTN+rww/adGt/Mid1ZfXcHfx9Cl+kHMqwRRL1AxY72u67MQNusluWcYi+dzggAcRcJJ6EGzQ+jxaB1axeQkd4ur9Hshychreqcv83W8IIA3VssQRoIKYsNXK6HVJE+gZxrZOYG3+mnxdIzQ0EpvSIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgC/cfgS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764885923; c=relaxed/simple;
+	bh=O/p9f+fGjb5JRyj7xXiW6sdlvwqkCxGcca77LTKi/t0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LPGyhGVly5P6ScGuLm7fqlGIJbcbU/brfHbFHHiHM6P9DPoVWAAXDeeuwN4qeGRgxBCE9Y6GKaMSoN9Sdhp6rMgykSst6C49FQx2GHTGUe23GglsSCZSJeoBn6fkIi2OGF6T7MoLg1ChgiDNnO6a2Up4UQR7dNv0kKPDKUKDYOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sTIJSdVe; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgC/cfgS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D43C4CEFB;
-	Thu,  4 Dec 2025 11:52:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764849128;
-	bh=4+ago9RcB1V/RAZJY3SUXojT88ytoljJuAHL0Qj8ORc=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=jgC/cfgSbsMZfYmT4aesgCYglo33a2FgHrwI4QPLfupPyevEVB9sQKAXQ6YhUsu7e
-	 ULZO6htBx2JY4aaGeXEQ4R27JGpAEPztvOs6uBH6/Pyn6UirRBd6yey3aMWtqGPH5e
-	 R8vxUGSeFJD6tQZfyUicOztS5L7Mwlf9rUpp4Q0RP2SfBzgaMk0knm21ZuySRylT69
-	 KvsKbsnyVgqWdh0BulRbe2KQiQGW8Dw6V2aNIAFaLWB4nzTnLqf5GZO9CWofI54NdA
-	 BO2xj0vbySXEpXo85v+CZdhdNmst9r7ZM+hLTycNB/qhQz5SIAuKKtHBTCAKoimfQe
-	 i9wouv1BJkKBg==
-Message-ID: <7dc0f103-ab0b-40db-b246-a1af40afe4d3@kernel.org>
-Date: Thu, 4 Dec 2025 12:52:04 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sTIJSdVe"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4edb8d6e98aso164991cf.0
+        for <linux-modules@vger.kernel.org>; Thu, 04 Dec 2025 14:05:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764885919; x=1765490719; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BlMojaibJswZ58Md6lSPxnF32xXnO1Wd7Xx7hEEyCgs=;
+        b=sTIJSdVeuZIfKnNYVehnINy05oNNxDggxDHygpiYzlSBfE3b/rzchZxz7JAL1gt5ZQ
+         JX/qfMU1BGda2JOuZrywxAreZHR91hKHO1bizFd2C4l9HpauOzghFkfhv4gTgy6OCxHD
+         KXzPp4Cu2TjADeeWutYXEokaDAJUiDwf+RT/iQa3jVEPzvEcgjhowEBKi6pKUKhtLkWa
+         XCgTGGId+IYUCzKNvhlHokVVw9bleQU/J8zpHYkTTjD0s4dgyIcaHDslmgz08xyvy4YU
+         M6i3hXZyiiIBlrhC9EjRQOEPurbZyp88X85A7qPLKDoTYZA2T2QwnC/5KNY02Ionq+Us
+         wBVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764885919; x=1765490719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BlMojaibJswZ58Md6lSPxnF32xXnO1Wd7Xx7hEEyCgs=;
+        b=geb61ni8Lrde34DrDyN2+n4GXq8TsG0Z3csx4cM3Y8klwkTkn3b0cYMn9XmT5NpDom
+         EXCj5hAENoIeyyAsG1wuPMYmK/3Xtb6MzpvPaEc4EeFmVKfR7ckxHnWDRe7kS4U6UcAt
+         /RAF7PFDORR6y/JCim7Yaqtz37PPT2LyjNIXfV07/aPk/3Djq9WOmTkXXGdp8Li7C2Jj
+         ey3t4WID+mk73igNCT3KBCSguYvLP5kGoqFE+CPIX6Ztw5dKF2xpumLTaQAo8TQ7BqRQ
+         /X3/exhTvKLT1T9zTYqc1lO+gL1/L4AfBCjVqnXQ/2ZVicXUjCuxZJCfRAmzm14ZOvPz
+         xkiA==
+X-Forwarded-Encrypted: i=1; AJvYcCXAHlMCoDeUezU6ldbfw27IiNpgDKzGugJ5B7QWhKQ5s/Jfj4zWgZBf5Vr/qoZvVLM1DLa1pYU0ayeBfLRZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkXqZiu4vZyTsUZZXh69/m4r+phCP7gT7vINDy55A8mFUkvZsM
+	YQLq3od5AkVFhVyvIFIVYHljpPZLgoUbcsjYRJYftEea33gk+fPCSXnqKbcgE4Is9jAaI74Uyzp
+	DJ1TucPkoevhnKlBefIj+aTjHeOYVsY4AZW9M4k8H
+X-Gm-Gg: ASbGncvPMAZT52O8tXApcc5mgp2FpfgtEHDE63+WhKIV3/uAXKqdwFMf9glGqb7l8mZ
+	nuIsJSwXMrCCAA96dwC2KKFD1oc3U9OtPqOXjp6BCJOdTZH9j/xsDVXFKkqRdXJxzB21ElUUFas
+	yOEBZ863sMILZe6IYFfj4ztBqEiFg8UoDzwIIKCspOPjBsxRQ5SrNAugytGTnYPOCp73t0JBI6g
+	SPI2AoSrw3xmJ73gVMyb4WPFYUVH3DzYEXmJQiZlvDZJGuADWB6f8s03C/uG88owg6GxzvcUaNI
+	5CCI/JC8I7uWEShBJAp+F9oP/A==
+X-Google-Smtp-Source: AGHT+IFPNi1Qq6VnpviOUxpKZr81dFMcXNcb6T+4p6OQ/SGAOQNaW0ByA8FKshNAIkMbBHJmIRv/I4XWmKWNYD2+UjQ=
+X-Received: by 2002:a05:622a:11c7:b0:4b7:9c77:6ba5 with SMTP id
+ d75a77b69052e-4f0328c27f7mr986761cf.15.1764885918541; Thu, 04 Dec 2025
+ 14:05:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Modules changes for v6.19-rc1
-From: Daniel Gomez <da.gomez@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Mauro Carvalho Chehab <mchehab@kernel.org>,
- Hans Verkuil <hverkuil@kernel.org>, Andreas Hindborg
- <a.hindborg@kernel.org>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <u.kleine-koenig@pengutronix.de>, Aaron Tomlin <atomlin@atomlin.com>,
- Kees Cook <kees@kernel.org>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251203234840.3720-1-da.gomez@kernel.org>
-Content-Language: en-US
-Organization: kernel.org
-In-Reply-To: <20251203234840.3720-1-da.gomez@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251202101626.783736-1-harry.yoo@oracle.com>
+In-Reply-To: <20251202101626.783736-1-harry.yoo@oracle.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 4 Dec 2025 14:05:07 -0800
+X-Gm-Features: AQt7F2p0K1ADlvbRPKyMu031QLfpqGn6xZ7XRfN7KMrquLJSUSvofoLyz0mVl2M
+Message-ID: <CAJuCfpE+g65Dm8-r=psDJQf_O1rfBG62DOzx4mE1mb+ottUKmQ@mail.gmail.com>
+Subject: Re: [PATCH V2] mm/slab: introduce kvfree_rcu_barrier_on_cache() for
+ cache destruction
+To: Harry Yoo <harry.yoo@oracle.com>
+Cc: vbabka@suse.cz, Liam.Howlett@oracle.com, cl@gentwo.org, 
+	rientjes@google.com, roman.gushchin@linux.dev, urezki@gmail.com, 
+	sidhartha.kumar@oracle.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	rcu@vger.kernel.org, maple-tree@lists.infradead.org, 
+	linux-modules@vger.kernel.org, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, atomlin@atomlin.com, lucas.demarchi@intel.com, 
+	akpm@linux-foundation.org, jonathanh@nvidia.com, stable@vger.kernel.org, 
+	Daniel Gomez <da.gomez@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Dec 2, 2025 at 2:16=E2=80=AFAM Harry Yoo <harry.yoo@oracle.com> wro=
+te:
+>
+> Currently, kvfree_rcu_barrier() flushes RCU sheaves across all slab
+> caches when a cache is destroyed. This is unnecessary; only the RCU
+> sheaves belonging to the cache being destroyed need to be flushed.
+>
+> As suggested by Vlastimil Babka, introduce a weaker form of
+> kvfree_rcu_barrier() that operates on a specific slab cache.
+>
+> Factor out flush_rcu_sheaves_on_cache() from flush_all_rcu_sheaves() and
+> call it from flush_all_rcu_sheaves() and kvfree_rcu_barrier_on_cache().
+>
+> Call kvfree_rcu_barrier_on_cache() instead of kvfree_rcu_barrier() on
+> cache destruction.
+>
+> The performance benefit is evaluated on a 12 core 24 threads AMD Ryzen
+> 5900X machine (1 socket), by loading slub_kunit module.
+>
+> Before:
+>   Total calls: 19
+>   Average latency (us): 18127
+>   Total time (us): 344414
+>
+> After:
+>   Total calls: 19
+>   Average latency (us): 10066
+>   Total time (us): 191264
+>
+> Two performance regression have been reported:
+>   - stress module loader test's runtime increases by 50-60% (Daniel)
+>   - internal graphics test's runtime on Tegra23 increases by 35% (Jon)
+>
+> They are fixed by this change.
+>
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Fixes: ec66e0d59952 ("slab: add sheaf support for batching kfree_rcu() op=
+erations")
+> Cc: <stable@vger.kernel.org>
+> Link: https://lore.kernel.org/linux-mm/1bda09da-93be-4737-aef0-d47f8c5c93=
+01@suse.cz
+> Reported-and-tested-by: Daniel Gomez <da.gomez@samsung.com>
+> Closes: https://lore.kernel.org/linux-mm/0406562e-2066-4cf8-9902-b2b0616d=
+d742@kernel.org
+> Reported-and-tested-by: Jon Hunter <jonathanh@nvidia.com>
+> Closes: https://lore.kernel.org/linux-mm/e988eff6-1287-425e-a06c-805af5bb=
+f262@nvidia.com
+> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
+> ---
+>
+> No code change, added proper tags and updated changelog.
+>
+>  include/linux/slab.h |  5 ++++
+>  mm/slab.h            |  1 +
+>  mm/slab_common.c     | 52 +++++++++++++++++++++++++++++------------
+>  mm/slub.c            | 55 ++++++++++++++++++++++++--------------------
+>  4 files changed, 73 insertions(+), 40 deletions(-)
+>
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index cf443f064a66..937c93d44e8c 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -1149,6 +1149,10 @@ static inline void kvfree_rcu_barrier(void)
+>  {
+>         rcu_barrier();
+>  }
+> +static inline void kvfree_rcu_barrier_on_cache(struct kmem_cache *s)
+> +{
+> +       rcu_barrier();
+> +}
+>
+>  static inline void kfree_rcu_scheduler_running(void) { }
+>  #else
+> @@ -1156,6 +1160,7 @@ void kvfree_rcu_barrier(void);
+>
+>  void kfree_rcu_scheduler_running(void);
+>  #endif
+> +void kvfree_rcu_barrier_on_cache(struct kmem_cache *s);
 
+Should the above line be before the #endif? I was expecting something like =
+this:
 
-On 04/12/2025 00.48, Daniel Gomez wrote:
-> The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa:
-> 
->   Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
-> 
-> are available in the Git repository at:
-> 
->   ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/modules/linux.git/ tags/modules-6.19-rc1
+#ifndef CONFIG_KVFREE_RCU_BATCHED
+...
+static inline void kvfree_rcu_barrier_on_cache(struct kmem_cache *s)
+{
+    rcu_barrier();
+}
+#else
+...
+void kvfree_rcu_barrier_on_cache(struct kmem_cache *s);
+#endif
 
-I know the preference is to use git:// but my git config resolved to the above
-link. Here what I intended to do:
+but when I apply this patch on mm-new I get this:
 
-git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-6.19-rc1
+#ifndef CONFIG_KVFREE_RCU_BATCHED
+...
+static inline void kvfree_rcu_barrier_on_cache(struct kmem_cache *s)
+{
+    rcu_barrier();
+}
+#else
+...
+#endif
+void kvfree_rcu_barrier_on_cache(struct kmem_cache *s);
 
-> The changes have been in linux-next for 4 weeks. Recent 0day reports for UM [3]
-> and arm64 [4] builds were not reproducible and traced to a buggy bindgen version
-> combined with unreleased clang-22 in 0day. The Rust team has reported this to
-> 0day.
+Other than that LGTM
 
-FYI, this has been confirmed by 0day:
-
-https://lore.kernel.org/all/aTEi3KUUkPVGS3ix@xsang-OptiPlex-9020/
-
-> @@@ -329,25 -179,30 +332,30 @@@ pub(crate) fn module(ts: TokenStream) -
->       // Rust does not allow hyphens in identifiers, use underscore instead.
->       let ident = info.name.replace('-', "_");
->       let mut modinfo = ModInfoBuilder::new(ident.as_ref());
->  -    if let Some(authors) = info.authors {
->  +    if let Some(authors) = &info.authors {
->           for author in authors {
->  -            modinfo.emit("author", &author);
->  +            modinfo.emit("author", author);
->           }
->       }
->  -    if let Some(description) = info.description {
->  -        modinfo.emit("description", &description);
->  +    if let Some(description) = &info.description {
->  +        modinfo.emit("description", description);
->       }
->       modinfo.emit("license", &info.license);
->  -    if let Some(aliases) = info.alias {
->  +    if let Some(aliases) = &info.alias {
->           for alias in aliases {
->  -            modinfo.emit("alias", &alias);
->  +            modinfo.emit("alias", alias);
->           }
->       }
->  -    if let Some(firmware) = info.firmware {
->  +    if let Some(firmware) = &info.firmware {
->           for fw in firmware {
->  -            modinfo.emit("firmware", &fw);
->  +            modinfo.emit("firmware", fw);
->           }
->       }
->  -    if let Some(imports) = info.imports_ns {
-> ++    if let Some(imports) = &info.imports_ns {
-> +         for ns in imports {
->  -            modinfo.emit("import_ns", &ns);
-> ++            modinfo.emit("import_ns", ns);
-> +         }
-> +     }
-
-This last part is the only non-trivial for this conflict.
+>
+>  /**
+>   * kmalloc_size_roundup - Report allocation bucket size for the given si=
+ze
+> diff --git a/mm/slab.h b/mm/slab.h
+> index f730e012553c..e767aa7e91b0 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -422,6 +422,7 @@ static inline bool is_kmalloc_normal(struct kmem_cach=
+e *s)
+>
+>  bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj);
+>  void flush_all_rcu_sheaves(void);
+> +void flush_rcu_sheaves_on_cache(struct kmem_cache *s);
+>
+>  #define SLAB_CORE_FLAGS (SLAB_HWCACHE_ALIGN | SLAB_CACHE_DMA | \
+>                          SLAB_CACHE_DMA32 | SLAB_PANIC | \
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 84dfff4f7b1f..dd8a49d6f9cc 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -492,7 +492,7 @@ void kmem_cache_destroy(struct kmem_cache *s)
+>                 return;
+>
+>         /* in-flight kfree_rcu()'s may include objects from our cache */
+> -       kvfree_rcu_barrier();
+> +       kvfree_rcu_barrier_on_cache(s);
+>
+>         if (IS_ENABLED(CONFIG_SLUB_RCU_DEBUG) &&
+>             (s->flags & SLAB_TYPESAFE_BY_RCU)) {
+> @@ -2038,25 +2038,13 @@ void kvfree_call_rcu(struct rcu_head *head, void =
+*ptr)
+>  }
+>  EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+>
+> -/**
+> - * kvfree_rcu_barrier - Wait until all in-flight kvfree_rcu() complete.
+> - *
+> - * Note that a single argument of kvfree_rcu() call has a slow path that
+> - * triggers synchronize_rcu() following by freeing a pointer. It is done
+> - * before the return from the function. Therefore for any single-argumen=
+t
+> - * call that will result in a kfree() to a cache that is to be destroyed
+> - * during module exit, it is developer's responsibility to ensure that a=
+ll
+> - * such calls have returned before the call to kmem_cache_destroy().
+> - */
+> -void kvfree_rcu_barrier(void)
+> +static inline void __kvfree_rcu_barrier(void)
+>  {
+>         struct kfree_rcu_cpu_work *krwp;
+>         struct kfree_rcu_cpu *krcp;
+>         bool queued;
+>         int i, cpu;
+>
+> -       flush_all_rcu_sheaves();
+> -
+>         /*
+>          * Firstly we detach objects and queue them over an RCU-batch
+>          * for all CPUs. Finally queued works are flushed for each CPU.
+> @@ -2118,8 +2106,43 @@ void kvfree_rcu_barrier(void)
+>                 }
+>         }
+>  }
+> +
+> +/**
+> + * kvfree_rcu_barrier - Wait until all in-flight kvfree_rcu() complete.
+> + *
+> + * Note that a single argument of kvfree_rcu() call has a slow path that
+> + * triggers synchronize_rcu() following by freeing a pointer. It is done
+> + * before the return from the function. Therefore for any single-argumen=
+t
+> + * call that will result in a kfree() to a cache that is to be destroyed
+> + * during module exit, it is developer's responsibility to ensure that a=
+ll
+> + * such calls have returned before the call to kmem_cache_destroy().
+> + */
+> +void kvfree_rcu_barrier(void)
+> +{
+> +       flush_all_rcu_sheaves();
+> +       __kvfree_rcu_barrier();
+> +}
+>  EXPORT_SYMBOL_GPL(kvfree_rcu_barrier);
+>
+> +/**
+> + * kvfree_rcu_barrier_on_cache - Wait for in-flight kvfree_rcu() calls o=
+n a
+> + *                               specific slab cache.
+> + * @s: slab cache to wait for
+> + *
+> + * See the description of kvfree_rcu_barrier() for details.
+> + */
+> +void kvfree_rcu_barrier_on_cache(struct kmem_cache *s)
+> +{
+> +       if (s->cpu_sheaves)
+> +               flush_rcu_sheaves_on_cache(s);
+> +       /*
+> +        * TODO: Introduce a version of __kvfree_rcu_barrier() that works
+> +        * on a specific slab cache.
+> +        */
+> +       __kvfree_rcu_barrier();
+> +}
+> +EXPORT_SYMBOL_GPL(kvfree_rcu_barrier_on_cache);
+> +
+>  static unsigned long
+>  kfree_rcu_shrink_count(struct shrinker *shrink, struct shrink_control *s=
+c)
+>  {
+> @@ -2215,4 +2238,3 @@ void __init kvfree_rcu_init(void)
+>  }
+>
+>  #endif /* CONFIG_KVFREE_RCU_BATCHED */
+> -
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 785e25a14999..7cec2220712b 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -4118,42 +4118,47 @@ static void flush_rcu_sheaf(struct work_struct *w=
+)
+>
+>
+>  /* needed for kvfree_rcu_barrier() */
+> -void flush_all_rcu_sheaves(void)
+> +void flush_rcu_sheaves_on_cache(struct kmem_cache *s)
+>  {
+>         struct slub_flush_work *sfw;
+> -       struct kmem_cache *s;
+>         unsigned int cpu;
+>
+> -       cpus_read_lock();
+> -       mutex_lock(&slab_mutex);
+> +       mutex_lock(&flush_lock);
+>
+> -       list_for_each_entry(s, &slab_caches, list) {
+> -               if (!s->cpu_sheaves)
+> -                       continue;
+> +       for_each_online_cpu(cpu) {
+> +               sfw =3D &per_cpu(slub_flush, cpu);
+>
+> -               mutex_lock(&flush_lock);
+> +               /*
+> +                * we don't check if rcu_free sheaf exists - racing
+> +                * __kfree_rcu_sheaf() might have just removed it.
+> +                * by executing flush_rcu_sheaf() on the cpu we make
+> +                * sure the __kfree_rcu_sheaf() finished its call_rcu()
+> +                */
+>
+> -               for_each_online_cpu(cpu) {
+> -                       sfw =3D &per_cpu(slub_flush, cpu);
+> +               INIT_WORK(&sfw->work, flush_rcu_sheaf);
+> +               sfw->s =3D s;
+> +               queue_work_on(cpu, flushwq, &sfw->work);
+> +       }
+>
+> -                       /*
+> -                        * we don't check if rcu_free sheaf exists - raci=
+ng
+> -                        * __kfree_rcu_sheaf() might have just removed it=
+.
+> -                        * by executing flush_rcu_sheaf() on the cpu we m=
+ake
+> -                        * sure the __kfree_rcu_sheaf() finished its call=
+_rcu()
+> -                        */
+> +       for_each_online_cpu(cpu) {
+> +               sfw =3D &per_cpu(slub_flush, cpu);
+> +               flush_work(&sfw->work);
+> +       }
+>
+> -                       INIT_WORK(&sfw->work, flush_rcu_sheaf);
+> -                       sfw->s =3D s;
+> -                       queue_work_on(cpu, flushwq, &sfw->work);
+> -               }
+> +       mutex_unlock(&flush_lock);
+> +}
+>
+> -               for_each_online_cpu(cpu) {
+> -                       sfw =3D &per_cpu(slub_flush, cpu);
+> -                       flush_work(&sfw->work);
+> -               }
+> +void flush_all_rcu_sheaves(void)
+> +{
+> +       struct kmem_cache *s;
+> +
+> +       cpus_read_lock();
+> +       mutex_lock(&slab_mutex);
+>
+> -               mutex_unlock(&flush_lock);
+> +       list_for_each_entry(s, &slab_caches, list) {
+> +               if (!s->cpu_sheaves)
+> +                       continue;
+> +               flush_rcu_sheaves_on_cache(s);
+>         }
+>
+>         mutex_unlock(&slab_mutex);
+> --
+> 2.43.0
+>
