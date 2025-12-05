@@ -1,17 +1,17 @@
 Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849E12DC346;
-	Fri,  5 Dec 2025 07:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78FEA2FDC29;
+	Fri,  5 Dec 2025 07:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764919168; cv=none; b=AZZgLz1n7hEeI0JhNsONqfHQidjIeWWH+iNtNSQfKKlNLVnqMCB/hPR9sqiLjf5mem0hrZyYGtRfalCfucDkOmiQ2jAY6RQjJZgGO+BMNB8OzNNEq202U8N9GjpgdhTtIsDBVKqDl2FrTEYRsBZn8ou6TM+kJFjajgQ4x2uVGf0=
+	t=1764919169; cv=none; b=TtGusZKd8R2Icc1U0edrhtxyIKP7dOKMXRg8muIbbCxOJrqGAHcEU174a1BghOgP4wrYzfWtb8dgrYaKVegiK3dft63s9SpNdfjvBXbYggXVcUyk33L9M1n/N1wSOK9+uILPcAqGPH6aUvYzuFnQTItKpJxWMxbmkfUFAjzNbE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764919168; c=relaxed/simple;
-	bh=ZBufOsf5101zZeF1bYop0Nqu5Rg0RXtJg4uE7RC7rbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=g3YoFA6MV24uc5w/pz0tKn74xCSZNyFDJChjYMQMRo5mPybgdPDepdCI2LzzstYENtyWZ5j6OirBSv5k8m0WInq/7huRk7bk8IdyR+n+i5vfma28VW1KiCrEFxefurXVqdEiugGQDZkEYk5FAFr382rXynHxQnpczvKox9vWwQ0=
+	s=arc-20240116; t=1764919169; c=relaxed/simple;
+	bh=OrmCL7AMrlriaPZyremlA931PaCPQXdxGExlE/vjDx8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=r44rPMnojBwh/04wc6UfiBLOgqHpQS9Xxc5pFZha31B1d66pwZeE+AQSojJ8sCnr677L9fKFxe5NaM/IEga/4Fh0w2mEjAwtMxzYBAM3xOt0F/Jjmqw6MfAN46mj4x8g5SUTbXlVYfUuh2E2j8T6szyiehKCtF5qxzxZKKzpVYk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
-X-AuditID: a67dfc5b-c45ff70000001609-c7-6932876c4939
+X-AuditID: a67dfc5b-c2dff70000001609-07-6932876c74aa
 From: Byungchul Park <byungchul@sk.com>
 To: linux-kernel@vger.kernel.org
 Cc: kernel_team@skhynix.com,
@@ -178,44 +178,45 @@ Cc: kernel_team@skhynix.com,
 	aliceryhl@google.com,
 	tmgross@umich.edu,
 	rust-for-linux@vger.kernel.org
-Subject: [PATCH v18 07/42] dept: distinguish each work from another
-Date: Fri,  5 Dec 2025 16:18:20 +0900
-Message-Id: <20251205071855.72743-8-byungchul@sk.com>
+Subject: [PATCH v18 09/42] dept: record the latest one out of consecutive waits of the same class
+Date: Fri,  5 Dec 2025 16:18:22 +0900
+Message-Id: <20251205071855.72743-10-byungchul@sk.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20251205071855.72743-1-byungchul@sk.com>
 References: <20251205071855.72743-1-byungchul@sk.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSe2xLcRTH/e793UdL5SrhmseWJkJkHls8jng//rgJEkJIiEzpZY2upLPN
-	hOhstSqaKe1Cx162zDa2dWPGxozMZlu0JjqMbsgQK8msa7apqeKfk+85328+5/xxWFLupsJY
-	tfawqNMqNQpaiqXeMblzNOnR6vm5ZYvAaDgBnZ6PFLxMqcfg6zdiyCorpSFgr2bA6LhEQZP7
-	JAaPz4jAP2wnwVAzgiFgaWTAmoLA5rKQ0OF8QEJpVQoBP8p/0eD13KPAPdCLIGA7ANl5lTQM
-	tz0jIdPqRJDb/ZaEqsZ3COqKTtLQ/nEsNFvP0PCtnAZX61cEV+wWBD2v6whIzS+joabrLgOd
-	NgsBJY6N4CnswdCSkUdA5hcabBWTwJ6ZSgTLZwKsN+4RMFhYzEBrfieGQv0MsLe1U/CzOwoa
-	Sz4xcNP7jILmdy8p8Dw5RUG1vouB/hfdBDg+BGe1dc0YjIF+BO13s2g4W36LAr3dT4GzvoWC
-	5yXO4OLGJgwFbhexSiX4DWYsGJ4HaKH0aikShocsSOgvSCUFQ0awfdT7nRTSKpOEuoEcLDzN
-	44Vrp4cI4XzbHKHm8ltGSLv/mhFyHAlC2mMvtSl6h3SZStSoE0XdvBW7pbG+FzfxoW/MkTdZ
-	VYQe1dImJGF5bgHvelVP/tfdnc6QprmZfEfHYEhP4CL4ynM9lAlJWZJrD+fTB81Bg2XHc2v5
-	/IvH/mQwN4OvsJhCTBm3kP91/jb1lxnOl5T/5Uu4RbzVPRTS8mAm2+QPMXkuW8Kbqgf/HTGZ
-	f1jUgTOQLAeNKkZytTYxTqnWLJgbm6xVH5m792CcAwXfrfD4z513UJ9zSwPiWKQYI6tPilLL
-	KWVifHJcA+JZUjFB1quZr5bLVMrko6LuYIwuQSPGN6ApLFZMkkUPJKnk3H7lYfGAKB4Sdf9d
-	gpWE6ZFms9w/K7Ulzb19lmbs4kvrvX377NqJq8IrHavXRe6oXvfG40zYs/nV9IpIl+NsVw+s
-	n9a2ZGlVeETMOPP7bXxx9PX0Jouqb7Rpg+/yhQ+uqTvDaDwsmfhg+YnV5oUMGXH668Pc6+at
-	K3eN23vnfU4YxUT5lo1krFkzUmOrveWRjrQqcHysMmo2qYtX/gb20yM/agMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWSa0xScRjG+58bRxbtjNw65YcaW7ObZK3L27RW64Onmt2+tLVWUZ7iBGqD
-	Mm25UiJNuwATWGJqlsyUyrxUlhRRua5LstJSQzeyHJZdRFNCI1tf3v3ePc/77Pnw0rj0JjmN
-	FlIO8JoUhVpGiQnx+jhdjCpnoRCb8y4ecvVHocPrI+FtlouAwEAuAUXXHBSEbDdFkFtzjoTH
-	rdkENF+tQuAN5CIYCtpw0DeMERAyNYlgYLhdBOYsBGPOJgQWjwmHtuZ7ODjqsjD4WT1Kgf/B
-	DwTmbh8F1t4sAvrtpxAU9thE0PsoAb5475Aw1vkJg9bBPgR23ygGPlcOgpBFBSVlteFzyzcK
-	gi9e4mA1NyO40N2Jw4/eLgR1TR8QOCuyKfhoqMehxTcJXgf6KXhizqfgi6cIg6/VFJRmO0nw
-	PPcjOG8zIeh578RAd/EaBZbzNQQ0dN0Wgcf/G4MOiwmDqppE8Np7CHhmKMPCdcOu61PAZtVh
-	4fEZA/OVOxgM2ytFK8sRN6Q/Q3CVtTcwTv8qRHGOYgfigiMmxA2U63BObwivD/r6ce547SGu
-	/FkfxY0E3lCcc7CU4J6WsdylkyMYZ3wRwzUUdoo2rtoqjk/i1UIar5m/YqdYGXh9ldj/VZTe
-	XlSHHUONVB6KoFlmEdvd0Yz/ZYqJZtvahsc5kpnB1p7uIfOQmMaZlulszvCZsEDTk5nV7MWC
-	I389BDOTvW7KG8+RMIvZUeMN8l/mdLaq2jWeE8EsYc2tI+MsDXtK8oZIAxKXogmVKFJISUtW
-	COrFcq1KmZEipMt3pybXoPA72TN/G2+hgZYEN2JoJJsocR1aIEhJRZo2I9mNWBqXRUr61LGC
-	VJKkyDjMa1J3aA6qea0bRdGEbIpk7RZ+p5TZqzjAq3h+P6/5r2J0xLRjyNnIxRUsu+yV8+59
-	e+pNUa+mPh1sjMfy7xuYuIeCTvn+yaeZhd3r+Eym+LEzf/vWmHfe5U6rfxfObzZF9UrnCR5X
-	e9Imd7DeeCnxbvBXxtQKB9yLTj2R4NlSui95YWj+XP2igiMuZcXZ9K6lD8eMG2YP4d/nrYmV
-	F6mstsxZ22SEVqlYMAfXaBV/AArVmUJKAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSXUxTdxjG+Z/vFjrPKotHvYA0IxoZHzJ07wUazZZ5YrIM9cKoF/NETqCh
+	gCvIh4KWSEvtlCgEmlm3toBFik4tcygoQ4RtbG5p+RAG2mJkFSxfQVsCWhRqdvPkl+d5n+fq
+	ZXD5ELmOUWbniepsQaWgpIR0KsIal1WepEx0lq0CvfYUBE0tNOgd35Pg/KkJwfxrEw7aO28J
+	eLUwQkN1KYIaVyUOU542EgYDkwhsY0sYBGsywVzbTIGvZpYCY7UTgfXpExzmJkYR9PtnKJhy
+	XcJg+gYFroc+BE2Or8Bj8xJgnKCg5uYaMBnHMXhY95gAmyYG3lpyoMf9iASft5ICz+86Elo0
+	ozQ4ni17d+/1ENDXeokCjWmehL9++4OAnouNBAQq1sO16VoKbP4ZGno7LBiU3q8jwDugw6DR
+	3IDg1q9aBLqXSySUj7dR8LfpHxIeV7wgQFd/E4P+f9sQtOtHMajqtVCw2NCNQHt2gYYmFwH6
+	rgAOt7rnaSh96UFwLfgIganbTe/Ywdubf8F4bW+Q4q/+eBXx2vPL8mByBucX/QMUfy9gIfj6
+	M4sYf+fiE5ovax+meYvjGF/WNUXydXcnMN465yf5Yd823mE/Q6VGH5SmpIkqZb6oTth+WJrR
+	5vmBOPpfeKHbcoHWoC6JATEMxyZzrcMfGZAkhHVjfnyFKXYDNzS0EOJINpprPuclDUjK4Gxf
+	FFe+UBEKVrMC1/d8nFphgo3hnNZZeoVl7Fauw/iGfD8axTXd6AjdS5b96sHFEMvZLZzZMB8a
+	5ViThGv9eRZ/X1jL3b8yRJxHMgsKsyO5Mjs/S1CqkuMzirKVhfFHcrIcaPnfbCVvDt1Gc859
+	nYhlkCJC1lGwWSknhfzcoqxOxDG4IlI2qUpUymVpQtFxUZ3zjfqYSsztROsZQrFGlhQoSJOz
+	6UKemCmKR0X1/ynGSNZpUEZmXovqZAIbNbFz69OqiGcnNkYeMWem/rkppf3T8E9i+9jr2jFz
+	lD1WJR0dvCyMfBkscFvcO4v368PW1pKG1s/iYi/sts7xX3/A7jWH37ZHL6kUe4pd0boPT632
+	JqYPeDb6xr/7wndg18cP4j4/oTCmByZflVR/G9aQWtZQP6I/3awgcjOEzZtwda7wDonAyddr
+	AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAAzWSWUwTcRDG/e/ZVqtrJWHFB7XRmBA8MB5jPIK+sGi8HoiJL7KRjayUI62C
+	mKgcNiAqQk1bpaAIUhCKYIsHkMYGFW8FqtIgUDEFJaAoUgjlsmB8mfxmvm++zMNIcMUjMkgi
+	xp8Q1PG8SknJCNm+rRmrVZnrxXVtZcsgS3sOOtweEj6lOQjwDmcRUFBtoWDS9JCGLOt1El60
+	pRPQfLcSgdubhWB03ISDtm6agEldEw3DY59p0KchmLY3ITC06HBwNT/GwVKbhsGfmikK+p8M
+	IdB3eygw9qURMGi+hCC/10RD37Nw+OFuIGG68xsGbSMDCMyeKQw8jkwEk4ZYuFls868bflEw
+	/vY9DkZ9M4Jb3Z04DPV9QVDb1IXAXp5OQU/ufRycnvnwwTtIwUv9RQp+tBRg8LOGgqJ0Owkt
+	b/oRFJp0CHrb7RhklFRTYCi0ElD3pZ6Glv4JDDoMOgwqrXvBbe4l4HVuMeY/1++6FwgmYwbm
+	L98x0Fc1YDBmrqDDShE3qs0huArbA4zTtk5SnOWGBXHjPh3ihkszcE6b62+fDAzi3HlbMlf6
+	eoDifN6PFGcfKSK4V8Usd/uCD+Py3q7m6vI76QM7D8u2RQsqMUlQr90RJYtpcBcSiT1zT3UV
+	5dGp6Kk0G0klLLOBLfF48RmmmFWsyzU2ywHMMtZ2uZfMRjIJzjiXspljObPCIoZnnd++UzNM
+	MCvZ5lu/6BmWM5tYh3GC/Be6lK2sccz6pf65vs03ywpmI3sze5TMRbIiNKcCBYjxSXG8qNq4
+	RhMbkxIvnlpzNCHOivz/ZD4zkfcIDTvDGxEjQcp5ckdyqKgg+SRNSlwjYiW4MkA+oFonKuTR
+	fMppQZ1wRH1SJWga0RIJoQyU7z4kRCmYY/wJIVYQEgX1fxWTSINS0ZboEGNVZoHrxfHlwtk9
+	tWf2WqwJW3bB4nDzAsXBz+NL7jzX5mzYOTIYRosPtuObo1pbxa/dPeW7nCH7I9QKmeZaEKkP
+	iJxfGBpxxZVfZtNPVya9T429WlP/2xCpaFcvxLj6uAP8045reSsi3kljfoeKo+0LDmvKki8G
+	uxLDfPuUhCaGDw3G1Rr+L3xIHd1LAwAA
 X-CFilter-Loop: Reflected
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -223,38 +224,54 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 
-Workqueue already provides concurrency control.  By that, any wait in a
-work doesn't prevents events in other works with the control enabled.
-Thus, each work would better be considered a different context.
+The current code records all the waits for later use to track relation
+between waits and events within each context.  However, since the same
+class is handled the same way, it'd be okay to record only one on behalf
+of the others if they all have the same class.
 
-So let dept assign a different context id to each work.
+Even though it's the ideal to search the whole history buffer for that,
+since it'd cost too high, alternatively, let's keep the latest one when
+the same class'ed waits consecutively appear.
 
 Signed-off-by: Byungchul Park <byungchul@sk.com>
 ---
- kernel/workqueue.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/dependency/dept.c | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 253311af47c6..ab7425adc826 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -55,6 +55,7 @@
- #include <linux/kvm_para.h>
- #include <linux/delay.h>
- #include <linux/irq_work.h>
-+#include <linux/dept.h>
+diff --git a/kernel/dependency/dept.c b/kernel/dependency/dept.c
+index 1b16a6095b3c..f4c08758f8db 100644
+--- a/kernel/dependency/dept.c
++++ b/kernel/dependency/dept.c
+@@ -1486,9 +1486,28 @@ static struct dept_wait_hist *new_hist(void)
+ 	return wh;
+ }
  
- #include "workqueue_internal.h"
- 
-@@ -3174,6 +3175,8 @@ __acquires(&pool->lock)
- 
- 	lockdep_copy_map(&lockdep_map, &work->lockdep_map);
- #endif
-+	dept_update_cxt();
++static struct dept_wait_hist *last_hist(void)
++{
++	int pos_n = hist_pos_next();
++	struct dept_wait_hist *wh_n = hist(pos_n);
 +
- 	/* ensure we're on the correct CPU */
- 	WARN_ON_ONCE(!(pool->flags & POOL_DISASSOCIATED) &&
- 		     raw_smp_processor_id() != pool->cpu);
++	/*
++	 * This is the first try.
++	 */
++	if (!pos_n && !wh_n->wait)
++		return NULL;
++
++	return hist(pos_n + DEPT_MAX_WAIT_HIST - 1);
++}
++
+ static void add_hist(struct dept_wait *w, unsigned int wg, unsigned int ctxt_id)
+ {
+-	struct dept_wait_hist *wh = new_hist();
++	struct dept_wait_hist *wh;
++
++	wh = last_hist();
++
++	if (!wh || wh->wait->class != w->class || wh->ctxt_id != ctxt_id)
++		wh = new_hist();
+ 
+ 	if (likely(wh->wait))
+ 		put_wait(wh->wait);
 -- 
 2.17.1
 
