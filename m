@@ -1,101 +1,54 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAFDF9D9;
-	Sun, 14 Dec 2025 20:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA7522A7F9;
+	Sun, 14 Dec 2025 20:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765743964; cv=none; b=om0xaqqqrNyMGi0DWx1FwIgMP+EZ5PHes9J/mQYorV8ncnLTFBrh/K8qnDakyN6oXLHsn5x58xjWYUFD2rVr9gUFNmjj2DjGhptMQTbO8diBAC5Jjom7/YtVX+95gIOVZXMr7qTYcMPuUxGbKpSHGQ1BS8Nul2cbJFndKeKqbjU=
+	t=1765744010; cv=none; b=S4DXOVE1/3MgR3crVsw3zRV+/e/vBrJaKSOPGs6cneC+7UcHyLN6yCPubPiFY5VH1va5HuMIxVmsYIIBsmWLyCuXwhdTqUdVUIWzYZZDnR6KWa5kmLNmVPjDcPfpSPBLpq9hbIi0/YRTfWJb4+nAe1JZXmkRql/8sURo7HcmArU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765743964; c=relaxed/simple;
-	bh=bWHnczMX4V5FFiTIRvdFJn7prFk6Q9CLUjOr8uJdIBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IiYNN6oQ5pw4nuafdjgZgoaoroSWOXO/GjoMS1R2JpX7htHTQEinP3s7mTDRVszHzu06/iKjwc1vOT3hxjS1oAeRQoxiqgBdf772soL1XuY+qN2PC8u28Rv7kXxz9Y0PuqlD37aMwuxkVXWWKJ+eMJUp+mm6PzRiABXCRDcSoM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QLXTib8U; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1765744010; c=relaxed/simple;
+	bh=lYcCLuBB8dIUxHv5VC6vJ+TAUOAZB72szKWsh0PC/YU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eCKT0TWPmqsEt+HmWSgiAg8VzjkMCZLA4zg7GAFKNCchxC3Xr3ptrwQMnU2pcS3/vRDv7Q6cMAMO3r6aT8sNq4lxf2TWvOE0cZvQTesEVQPpcvP2Ty+2J470/9OvLVg43eVkkhRJwmc2PpKrOAKBe5XRGX5pdnYJ2jnQ/P9U2So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dPYTJy0G; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QLXTib8U"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dPYTJy0G"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=K19pLdafFW741s/Kto9uQWN4sauI7vl0PzvVNTSPNBw=; b=QLXTib8UKvywdy1gVkmiHfz15f
-	Jloj6lwo0SzBoDXUaqb3nBrdUJs9i418uqLVQqx6yodJTJFInlphMUkO6jwduzkptHrVD+m6PgrUX
-	ZehsQbgN+jXuSMEMbx+TtfKlLC3qyaDPJkFNnetXPBthjB39FgkNiOuyyIBnoIjxT41bJKoyGa+V3
-	oabCeZ53aNVsUYTkvlB1WWxlDBQiR702tgKkZCRjgfxMDUC0whM5Zsc3zux5B7wcJlBuxxDlj24T4
-	Y9kHtHepCiBL35FUMuIR4Aj7Gz+jQp6bKQ0MEkkouQbUByUpGsVUwcjmsvIPQjpkhr+qSyYuyXR9g
-	zDB++4lg==;
-Received: from [50.53.43.113] (helo=bombadil.infradead.org)
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=lYcCLuBB8dIUxHv5VC6vJ+TAUOAZB72szKWsh0PC/YU=; b=dPYTJy0GP/MVKkqXsJWbl9/Onr
+	5DK9o+26tE79g8ht8s4JZNRId9LwjvojhiLWCFGL9F084/k3fDDilNArG4zVAIIiUBzoO5vwLBJiA
+	WDPxOs+Wwy0JcGxEZMQd4BlEYXh54iclDGWb3alqNJCbrUGRj2vBqEnoIhUKeWz95UB79x91vlyjd
+	NjhBGGmfHzkRW2oAjglZ3ow0juLE64F9qbU3CRkWTQrGTiNSr54kypXO5mA2AZbSovL2zZI2UOjdQ
+	dFd4ERK5F8EeCLnlJjh89lPLyKUIYZQ5JWc+8QNcwQ/ywSQ9MVZGdpzZ5nSZNIbve84RCcEAsEfo+
+	3fX+5JBQ==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
 	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vUsfL-00000002iWz-0LXq;
-	Sun, 14 Dec 2025 20:26:03 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] modules: moduleparam.h: add kernel-doc comments
-Date: Sun, 14 Dec 2025 12:26:00 -0800
-Message-ID: <20251214202600.2212699-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.52.0
+	id 1vUsg3-00000002iYj-2eFX;
+	Sun, 14 Dec 2025 20:26:48 +0000
+Message-ID: <ff6ace69-0b63-4da8-8a1b-7f0ab9247ed8@infradead.org>
+Date: Sun, 14 Dec 2025 12:26:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] modules: moduleparam.h: add kernel-doc comments
+To: linux-kernel@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, linux-modules@vger.kernel.org
+References: <20251214202600.2212699-1-rdunlap@infradead.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20251214202600.2212699-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add missing kernel-doc comments to prevent kernel-doc warnings:
+Sorry. Accidental resend. Please disregard it.
 
-Warning: include/linux/moduleparam.h:364 function parameter 'arg' not
- described in '__core_param_cb'
-Warning: include/linux/moduleparam.h:395 No description found for return
- value of 'parameq'
-Warning: include/linux/moduleparam.h:405 No description found for return
- value of 'parameqn'
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Daniel Gomez <da.gomez@kernel.org>
-Cc: linux-modules@vger.kernel.org
----
- include/linux/moduleparam.h |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
---- linux-next-20251203.orig/include/linux/moduleparam.h
-+++ linux-next-20251203/include/linux/moduleparam.h
-@@ -355,8 +355,8 @@ static inline void kernel_param_unlock(s
- /**
-  * __core_param_cb - similar like core_param, with a set/get ops instead of type.
-  * @name: the name of the cmdline and sysfs parameter (often the same as var)
-- * @var: the variable
-  * @ops: the set & get operations for this parameter.
-+ * @arg: the variable
-  * @perm: visibility in sysfs
-  *
-  * Ideally this should be called 'core_param_cb', but the name has been
-@@ -390,7 +390,7 @@ static inline void kernel_param_unlock(s
-  * @name1: parameter name 1
-  * @name2: parameter name 2
-  *
-- * Returns true if the two parameter names are equal.
-+ * Returns: true if the two parameter names are equal.
-  * Dashes (-) are considered equal to underscores (_).
-  */
- extern bool parameq(const char *name1, const char *name2);
-@@ -402,6 +402,10 @@ extern bool parameq(const char *name1, c
-  * @n: the length to compare
-  *
-  * Similar to parameq(), except it compares @n characters.
-+ *
-+ * Returns: true if the first @n characters of the two parameter names
-+ * are equal.
-+ * Dashes (-) are considered equal to underscores (_).
-  */
- extern bool parameqn(const char *name1, const char *name2, size_t n);
- 
