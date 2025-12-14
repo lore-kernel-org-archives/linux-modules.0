@@ -1,34 +1,34 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8697C270575;
-	Sun, 14 Dec 2025 20:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAFDF9D9;
+	Sun, 14 Dec 2025 20:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765743841; cv=none; b=UqrKN5rjrHuxHxPTOeWHWxweM7yKvUp4karVSgOcXISYrGxnPPRMzShbq4mQkjYLfnh7Q54nP7lYLlwLp0Rr071ZVfAFjG0Vj8W9ZKSYlntBy7o8Wx2pPr/bbYBvgQqSK2+c0sXWBj8u+EO7n3Ph2QOL7XGhGpEmJooOBanFWsA=
+	t=1765743964; cv=none; b=om0xaqqqrNyMGi0DWx1FwIgMP+EZ5PHes9J/mQYorV8ncnLTFBrh/K8qnDakyN6oXLHsn5x58xjWYUFD2rVr9gUFNmjj2DjGhptMQTbO8diBAC5Jjom7/YtVX+95gIOVZXMr7qTYcMPuUxGbKpSHGQ1BS8Nul2cbJFndKeKqbjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765743841; c=relaxed/simple;
+	s=arc-20240116; t=1765743964; c=relaxed/simple;
 	bh=bWHnczMX4V5FFiTIRvdFJn7prFk6Q9CLUjOr8uJdIBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lEoTDmNTGz4JQhSUn348XZHzeD3Xj+RB5WTEOAkXE7hkGlqXI5V4BasIWVHDefs++kEDkoVll/fXeIsI3+psWyuTnq5DvDL12FQMyimnjCB/EkVudf2LOq7vtzrLRPnjAxJ9YPBUBEn0ft8wTXqFEPDv9PSOlolMO6OZyOnK4VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dPVnpTXa; arc=none smtp.client-ip=198.137.202.133
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IiYNN6oQ5pw4nuafdjgZgoaoroSWOXO/GjoMS1R2JpX7htHTQEinP3s7mTDRVszHzu06/iKjwc1vOT3hxjS1oAeRQoxiqgBdf772soL1XuY+qN2PC8u28Rv7kXxz9Y0PuqlD37aMwuxkVXWWKJ+eMJUp+mm6PzRiABXCRDcSoM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QLXTib8U; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dPVnpTXa"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QLXTib8U"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
 	Content-ID:Content-Description:In-Reply-To:References;
-	bh=K19pLdafFW741s/Kto9uQWN4sauI7vl0PzvVNTSPNBw=; b=dPVnpTXax76i4ByP/zBXlNkDJ2
-	wmEN9+bF5zJLWvz1Ky1t9Uqyqte02+qSpIrAOX1mvNDCJz1tYQlCjyiJe4+qouhmYTXXx3utDTj6F
-	aatlHgVvXRZlu6PBQEaUS2wfO6MT3TfvgNg6VPtGvurrLlPyuhFmJdwdrqrPygoWL5SVShsTx0hXL
-	iCyjkgL56akPkmZ/b2Ki/RhAZgIcA6m8Ye+873ZT2prDepa4VFEncwSd8ozWxkFwbcwYPagzCoq2j
-	IEtmU2QG5wn8zC7mfKScG3Zl7Q7N/b0dms3LmakOVFIFt9CJ+EY8zYCPEyzPl+mBDAoEpjM8dZc0G
-	gJwRq41A==;
+	bh=K19pLdafFW741s/Kto9uQWN4sauI7vl0PzvVNTSPNBw=; b=QLXTib8UKvywdy1gVkmiHfz15f
+	Jloj6lwo0SzBoDXUaqb3nBrdUJs9i418uqLVQqx6yodJTJFInlphMUkO6jwduzkptHrVD+m6PgrUX
+	ZehsQbgN+jXuSMEMbx+TtfKlLC3qyaDPJkFNnetXPBthjB39FgkNiOuyyIBnoIjxT41bJKoyGa+V3
+	oabCeZ53aNVsUYTkvlB1WWxlDBQiR702tgKkZCRjgfxMDUC0whM5Zsc3zux5B7wcJlBuxxDlj24T4
+	Y9kHtHepCiBL35FUMuIR4Aj7Gz+jQp6bKQ0MEkkouQbUByUpGsVUwcjmsvIPQjpkhr+qSyYuyXR9g
+	zDB++4lg==;
 Received: from [50.53.43.113] (helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vUsdM-00000002iTI-0YGt;
-	Sun, 14 Dec 2025 20:24:00 +0000
+	id 1vUsfL-00000002iWz-0LXq;
+	Sun, 14 Dec 2025 20:26:03 +0000
 From: Randy Dunlap <rdunlap@infradead.org>
 To: linux-kernel@vger.kernel.org
 Cc: Randy Dunlap <rdunlap@infradead.org>,
@@ -37,8 +37,8 @@ Cc: Randy Dunlap <rdunlap@infradead.org>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	linux-modules@vger.kernel.org
 Subject: [PATCH] modules: moduleparam.h: add kernel-doc comments
-Date: Sun, 14 Dec 2025 12:23:57 -0800
-Message-ID: <20251214202357.2208303-1-rdunlap@infradead.org>
+Date: Sun, 14 Dec 2025 12:26:00 -0800
+Message-ID: <20251214202600.2212699-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
