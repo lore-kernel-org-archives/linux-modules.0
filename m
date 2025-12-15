@@ -1,222 +1,505 @@
-Received: from mail-ot1-f80.google.com (mail-ot1-f80.google.com [209.85.210.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0601F2BEFED
-	for <linux-modules@vger.kernel.org>; Mon, 15 Dec 2025 04:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.80
+Received: from invmail4.hynix.com (exvmail4.skhynix.com [166.125.252.92])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07FA2561AA;
+	Mon, 15 Dec 2025 04:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.125.252.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765771422; cv=none; b=t1uddxzD6NSHXInUWi53Oq3r+dy2ybdt2jGXx5mZAsqESMgqaHhQ9H7zb+HUT2rzlHt3vh1rKsmrs7vN4xBEOSm2UjH1f0QNBBPTbxbOOitf4pMgV7sYeoJG2hrco26YjfKLTGlsoNrzEsztbJpyXZOy1QrlFoRuNFhd8aQ05lM=
+	t=1765773477; cv=none; b=ZDZMcinVL5mY5jJUvVqWh4XcOuFHVS1BVg/rNE98R6sWinEA4xLWarvQreraMzSSXO4tze4u63ryIy1Gz4mHNGXuUztX4udde95pmjc5+929nVHDEoKU4wLcOctRK05kSPkI+UGH1kPqFnydj4WKXMO3Ih7lJxAvoP0XtR4UaE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765771422; c=relaxed/simple;
-	bh=O1kozeLnBjIGKC16cgsIfWpAUbDDgL4ol3McIh1witk=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=dFISBIpCbhwvI2w6vD+KbG9VIo7F/gGtZDB/2K3WIdlTXyYt54MfIT7a+Kvzk8MN1Dh86emq90zTUZprI0w3zEvUZ06IsdVa9gJfn/xZTFxqG9YA5V7VDS5E3zOdryF7LhQmZzrxkUzdxf77coVKkgDDZ3m6N/oBT+0y5YYl9IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-ot1-f80.google.com with SMTP id 46e09a7af769-7c79200d1a4so5949814a34.0
-        for <linux-modules@vger.kernel.org>; Sun, 14 Dec 2025 20:03:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765771420; x=1766376220;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PkSbrs5dWbzcr85ayz/EvCdoLhYVeQHZyr/kJEzxiIg=;
-        b=CwwQddMaCYApcOSdLEycmUoHQ/ddsfcSE2ge0hUGVFlOWEmsaE6i24JO3AsU6xXLuK
-         OPZ8q/tPDeZFYYX6fuJ+rlutsgwxzqup+8arGEv7RKs64W5rz3Hntbdo7sLo3qyKiUTJ
-         piqYcdjxEWd32TMJTjfO5YtkotR5lIfCs4Ee3Z7Ztda9tWFnCHfkxDxzYUnWmrx29sGX
-         lQPSYs32EVJ3o1424ROyLrTx2uu2Kv5HcsSwqjoEHj5Amo0EI6vLcdULz1hzx1iaB715
-         Fn+ZKreQyLmhEWOG7MdDkOfAyJI7VgJWPkWAmbHsuCXwSvKR6qGRiN/y1RHAw5Us8wtP
-         CtIw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMm7qb/bACSBxNbHq2xhp+SsOPR9gkAQwrGWCBmRnMhqx4pbsGIBUijGl/59Y1cVRI67jKQ/NI1Iw/Pmer@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7NNHIJ0913Y2rf6jS4iDPI9wYu0gTxnJUI0ssWUI4v5zmTOQZ
-	SSCbQBBNPrHPe7uy4BDHOZG7FT6Pn9nbaa1mbCjSf0sCpmsh13C8q1x9yNK6OX66qm//pRNUgfX
-	TvVK8BozHq2pyDi1fxKSGPCB+u4Z7+bf7oKUvYC2Kcu9DhMfF1aVDBLDkU6w=
-X-Google-Smtp-Source: AGHT+IHf8Xguwy4O0kGe7gTqrDJnNRejRcDPnJvKMFBjNIC27FEAlfxiyFzVnDd7cyBzlqmWv7KLj3NID6dhKk6KveQl4mLmDr26
+	s=arc-20240116; t=1765773477; c=relaxed/simple;
+	bh=qqxWqnXhe90QLloQ4PLY9BFWtNYjD+6g4eILkpOK6Us=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b34CdMjAJ8EUR1YcjnkTIChVA/VngzdMR2syXOxSWdQPfdnMMZKfSO+L3ttFU0AKlpzLbZ6ab5rVal4AXDwpUCqABieCO4LEkKJW89jZ3edawAaSh58UqJoUqXdgAML+7YmtldAEp3x2IP2Ty9fvYUkaf4oe2kQlMqKQ7zQq9W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com; spf=pass smtp.mailfrom=sk.com; arc=none smtp.client-ip=166.125.252.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sk.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sk.com
+X-AuditID: a67dfc5b-c2dff70000001609-7d-693f8d13c060
+Date: Mon, 15 Dec 2025 13:22:37 +0900
+From: Byungchul Park <byungchul@sk.com>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
+	torvalds@linux-foundation.org, damien.lemoal@opensource.wdc.com,
+	linux-ide@vger.kernel.org, adilger.kernel@dilger.ca,
+	linux-ext4@vger.kernel.org, mingo@redhat.com, peterz@infradead.org,
+	will@kernel.org, tglx@linutronix.de, rostedt@goodmis.org,
+	joel@joelfernandes.org, sashal@kernel.org, daniel.vetter@ffwll.ch,
+	duyuyang@gmail.com, johannes.berg@intel.com, tj@kernel.org,
+	tytso@mit.edu, willy@infradead.org, david@fromorbit.com,
+	amir73il@gmail.com, gregkh@linuxfoundation.org, kernel-team@lge.com,
+	linux-mm@kvack.org, akpm@linux-foundation.org, mhocko@kernel.org,
+	minchan@kernel.org, hannes@cmpxchg.org, vdavydov.dev@gmail.com,
+	sj@kernel.org, jglisse@redhat.com, dennis@kernel.org, cl@linux.com,
+	penberg@kernel.org, rientjes@google.com, vbabka@suse.cz,
+	ngupta@vflare.org, linux-block@vger.kernel.org,
+	josef@toxicpanda.com, linux-fsdevel@vger.kernel.org, jack@suse.cz,
+	jlayton@kernel.org, dan.j.williams@intel.com, hch@infradead.org,
+	djwong@kernel.org, dri-devel@lists.freedesktop.org,
+	rodrigosiqueiramelo@gmail.com, melissa.srw@gmail.com,
+	hamohammed.sa@gmail.com, harry.yoo@oracle.com,
+	chris.p.wilson@intel.com, gwan-gyeong.mun@intel.com,
+	max.byungchul.park@gmail.com, boqun.feng@gmail.com,
+	longman@redhat.com, yunseong.kim@ericsson.com, ysk@kzalloc.com,
+	yeoreum.yun@arm.com, netdev@vger.kernel.org,
+	matthew.brost@intel.com, her0gyugyu@gmail.com, corbet@lwn.net,
+	catalin.marinas@arm.com, bp@alien8.de, x86@kernel.org,
+	hpa@zytor.com, luto@kernel.org, sumit.semwal@linaro.org,
+	gustavo@padovan.org, christian.koenig@amd.com,
+	andi.shyti@kernel.org, arnd@arndb.de, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, rppt@kernel.org, surenb@google.com,
+	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+	samitolvanen@google.com, paulmck@kernel.org, frederic@kernel.org,
+	neeraj.upadhyay@kernel.org, joelagnelf@nvidia.com,
+	josh@joshtriplett.org, urezki@gmail.com,
+	mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+	qiang.zhang@linux.dev, juri.lelli@redhat.com,
+	vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+	bsegall@google.com, mgorman@suse.de, vschneid@redhat.com,
+	chuck.lever@oracle.com, neil@brown.name, okorniev@redhat.com,
+	Dai.Ngo@oracle.com, tom@talpey.com, trondmy@kernel.org,
+	anna@kernel.org, kees@kernel.org, bigeasy@linutronix.de,
+	clrkwllms@kernel.org, mark.rutland@arm.com, ada.coupriediaz@arm.com,
+	kristina.martsenko@arm.com, wangkefeng.wang@huawei.com,
+	broonie@kernel.org, kevin.brodsky@arm.com, dwmw@amazon.co.uk,
+	shakeel.butt@linux.dev, ast@kernel.org, ziy@nvidia.com,
+	yuzhao@google.com, baolin.wang@linux.alibaba.com,
+	usamaarif642@gmail.com, joel.granados@kernel.org,
+	richard.weiyang@gmail.com, geert+renesas@glider.be,
+	tim.c.chen@linux.intel.com, linux@treblig.org,
+	alexander.shishkin@linux.intel.com, lillian@star-ark.net,
+	chenhuacai@kernel.org, francesco@valla.it,
+	guoweikang.kernel@gmail.com, link@vivo.com, jpoimboe@kernel.org,
+	masahiroy@kernel.org, brauner@kernel.org,
+	thomas.weissschuh@linutronix.de, oleg@redhat.com, mjguzik@gmail.com,
+	andrii@kernel.org, wangfushuai@baidu.com, linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org, linux-i2c@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	rcu@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev, 2407018371@qq.com, dakr@kernel.org,
+	miguel.ojeda.sandonis@gmail.com, neilb@ownmail.net,
+	wsa+renesas@sang-engineering.com, dave.hansen@intel.com,
+	geert@linux-m68k.org, ojeda@kernel.org, alex.gaynor@gmail.com,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v18 25/42] dept: add documents for dept
+Message-ID: <20251215042237.GA49936@system.software.com>
+References: <20251205071855.72743-1-byungchul@sk.com>
+ <20251205071855.72743-26-byungchul@sk.com>
+ <aTN38kJjBftxnjm9@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a4a:b5c6:0:b0:659:9a49:8e35 with SMTP id
- 006d021491bc7-65b37fcbf4bmr5262417eaf.39.1765771419804; Sun, 14 Dec 2025
- 20:03:39 -0800 (PST)
-Date: Sun, 14 Dec 2025 20:03:39 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <693f889b.a70a0220.104cf0.0335.GAE@google.com>
-Subject: [syzbot] [mm?] INFO: rcu detected stall in finish_dput
-From: syzbot <syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com>
-To: atomlin@atomlin.com, da.gomez@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, mcgrof@kernel.org, 
-	petr.pavlu@suse.com, samitolvanen@google.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTN38kJjBftxnjm9@archie.me>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUxTdxTG97/v1Ha5FBz/SbIs3cgm821Ek5OgsA/Ldr9t0ywhmmXrxp00
+	vJmiCCQmlYl2BDJ6M2C21RWUWqGKUgV0NkF0xQ4bCiI2sbSKFUawMWNULLWwVmLml5NfnnOe
+	J8+Hw5HKU8w6TlO2X9SWqUtUjIySheXtG9Ma8zVbLk+9D/5giAZzt52BuKmPhVv3ainwnu9C
+	EIzoESzGTCTUXVmhIC65WFhxuhDM3ZhH8NTagGD2z88hHPyDBmtomYDQwDEE8ZZi+L3dwUDM
+	M0JCa7MXwSVXAIHTVsvAndCbMB55ykB41EyApdZJw+jtOQQnTBKClhM9FIzOvSDA3yIRELRO
+	UzDc1E5Ay8UMMLX+RCTG3wRErZ0sWHVZMGUzJgpZysHVNcOCOzBBw9y0xECf7gELC+MPCbA3
+	TJOgvxqhoO3oaQqOn/QzcM3ppkAfX0Dg6p8ioOHCZRoC9hUadKZFGsa6vBR0z/gIcBvPUnDf
+	8wsLI1fP0dBxb5SAhw98NDg8t0nwGhrpTwqFTkcvIdSNxRnBftKOhNiShIS6pgR1DD9hhKXI
+	XUb4qx0Lp39eIgSDZ6NwxTjJCpaeA8KRm2FacNiyhVPXZgmhbT5Cf7l+t2x7oViiqRS1m/O+
+	kxU1xZ/Q+37bWdXqNlM6ZM2tRykc5rdicyyKXnH9rRidZIrPwv/M1rFJZvgPsM8XJZOczn+I
+	3Y7nCV3GkXzzOzju6nppTuNzscVnIJKs4AGf0Z9DySMlfxjhoRs2anWRit3HQy+Z5LOxb3k2
+	YeASnInPLHNJOYVfjyf1q+dr+ffwQO8QkczB/FQKDtd72dWmb+PrNh/VhHjja7HG12KN/8da
+	ENmJlJqyylK1pmTrpqLqMk3Vph/KS3tQ4nWth17s6Ufz3l2DiOeQSq7wXsrTKGl1ZUV16SDC
+	HKlKV+h9CUlRqK6uEbXl32oPlIgVgyiTo1QZipxnBwuV/F71frFYFPeJ2ldbgktZp0NrMw5u
+	u9s9vwF//+PEYmPW+fyz6QbP+J2gnWxeiP4r31yQ/Wzg05FtqUhnLmjNcU5u71/zxQW3vLeo
+	uPvdmcdy41vN0qCkfJTac8xUMxC4mVmztyNKq3celnQFO9ZczPv6jZyPJr/xK/RtVTXWXYfY
+	3MDY8K+SP+2rkcr8z4b6JgwqqqJI/XE2qa1Q/wdSUvmTtgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0xTZxzG877n0kO15qxiPMHFJV2M4qLOqMlfcczb9OgicUqyxX0YjR6l
+	4SJpBcXNS8HG6txSGttKCw6ZVMdNKQp22IggRawo9UYjYtVUZgXEC1W5tOxUs8wvb37v8zy/
+	5P3wMoR8jIpjVJnbBXWmMl1BS0lpUkL+LPlvX6u+fPIsAfS6vXDfH6DgrraRhNCgnoSi05U0
+	hG31EtA7Cim40plHQkd1BQJ/SI/g7YiNAJ1zjISw0S2BwaEuCZi0CMZcbgRmr5EAX8dFAirP
+	ajG8PhOhobf5FQLTowANlqCWhAH7YQTWHpsEgi2roN/fQMFY9z8YOt/0IbAHIhgCjQcQhM1p
+	8EdpraibX9Aw0n6DAIupA8HxR90EvAo+RHDW/QCB61QeDU8M5wi4FZgAt0MDNLSZfqWh31uE
+	4fkZGkryXBR4r/UiKLYZEfTcc2HI//M0DeZiBwnOh39LwNs7iuG+2YihwrEW/PYeEjyGUiw+
+	V1zVTAabJR+Lx1MMpqoGDEP2csmSMsS/1f1O8uW1dZjX3QzTfOWxSsSPDBsRP1iWT/A6g3ht
+	7hsg+P21O/gyTx/ND4fu0LzrTQnJXy3l+BMHhzFf0D6Ld1q7JeuWbpQu3iykq3IE9ZzEFGmq
+	IdxHZR1dv9PSVkTuQ/aEQyiG4dj53KErI1SUSXYa9zKok0SZZqdzPt8QEeVYdgbXVvtOzKUM
+	wZqmcmF3BYoWE9kErsRXgKMsY4E7qa9C0ZGc1SKutfkU+aH4hGsrDLxngp3J+SJBUWBEnsKd
+	jDDROIaN57r1H+aT2M+5xrpWbEAy60e29SPb+r9dgohyFKvKzMlQqtIXzNakpeZmqnbO3rQt
+	w4HEb2nfPVpwHg3eWtWEWAYpxst8DYkqOaXM0eRmNCGOIRSxMr1PjGSblbm7BPW2n9TZ6YKm
+	CU1hSMVk2ZrvhRQ5u1W5XUgThCxB/V+LmZi4fYia6pm0wuP/7PhWk/sH97fP93y6fLTKefhC
+	/LrCc47vVlYvDNZ512/ItQh/eZ6uRslHq49Mr7+OS3f/3B65nDg8cW/9pWXZG7eoQj/Gxyz5
+	oji5a03nwqSO+VkTmmrolMfSAnrl4q+SF81bPffIpdhN4dvxC/offzMw7pcW37QVfE2cS+lU
+	kJpU5dyZhFqj/Bcf4v0VkgMAAA==
+X-CFilter-Loop: Reflected
 
-Hello,
+On Sat, Dec 06, 2025 at 07:25:22AM +0700, Bagas Sanjaya wrote:
+> On Fri, Dec 05, 2025 at 04:18:38PM +0900, Byungchul Park wrote:
+> > Add documents describing the concept and APIs of dept.
+> > 
+> > Signed-off-by: Byungchul Park <byungchul@sk.com>
+> > ---
+> >  Documentation/dev-tools/dept.rst     | 778 +++++++++++++++++++++++++++
+> >  Documentation/dev-tools/dept_api.rst | 125 +++++
+> 
+> You forget to add toctree entries:
 
-syzbot found the following issue on:
+I'm sorry for late reply.
 
-HEAD commit:    8f0b4cce4481 Linux 6.19-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=119d511a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a94030c847137a18
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1b2c58262854b97eb1f
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d38d92580000
+Thanks a lot!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2b5022055115/disk-8f0b4cce.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/17c3669e328d/vmlinux-8f0b4cce.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/7e72b5dbef4f/bzImage-8f0b4cce.xz
+> ---- >8 ----
+> diff --git a/Documentation/dev-tools/index.rst b/Documentation/dev-tools/index.rst
+> index 4b8425e348abd1..02c858f5ed1fa2 100644
+> --- a/Documentation/dev-tools/index.rst
+> +++ b/Documentation/dev-tools/index.rst
+> @@ -22,6 +22,8 @@ Documentation/process/debugging/index.rst
+>     clang-format
+>     coccinelle
+>     sparse
+> +   dept
+> +   dept_api
+>     kcov
+>     gcov
+>     kasan
+> 
+> > +Lockdep detects a deadlock by checking lock acquisition order.  For
+> > +example, a graph to track acquisition order built by lockdep might look
+> > +like:
+> > +
+> > +.. literal::
+> > +
+> > +   A -> B -
+> > +           \
+> > +            -> E
+> > +           /
+> > +   C -> D -
+> > +
+> > +   where 'A -> B' means that acquisition A is prior to acquisition B
+> > +   with A still held.
+> 
+> Use code-block directive for literal code blocks:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com
+I will.
 
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P6163/1:b..l
-rcu: 	(detected by 1, t=10502 jiffies, g=13717, q=383 ncpus=2)
-task:syz.2.19        state:R  running task     stack:26480 pid:6163  tgid:6163  ppid:5961   task_flags:0x40004c flags:0x00080001
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5256 [inline]
- __schedule+0x14bc/0x5000 kernel/sched/core.c:6863
- preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7190
- irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0010:lock_release+0x2bb/0x3b0 kernel/locking/lockdep.c:5893
-Code: 00 00 75 52 f7 c3 00 02 00 00 74 01 fb 65 48 8b 05 da 07 e0 10 48 3b 44 24 28 75 75 48 83 c4 30 5b 41 5c 41 5d 41 5e 41 5f 5d <e9> ab 98 71 ff cc 90 0f 0b 90 e9 70 fd ff ff 90 0f 0b 90 48 c7 c7
-RSP: 0018:ffffc90003b8efd8 EFLAGS: 00000282
-RAX: 670f1dcbf9e62d00 RBX: ffffffff81ac174d RCX: 670f1dcbf9e62d00
-RDX: 0000000000000000 RSI: ffffffff8d978ed0 RDI: ffffffff8bc08360
-RBP: 0000000000000000 R08: ffffffff81ac174d R09: ffffffff8df419e0
-R10: dffffc0000000000 R11: ffffffff81ada000 R12: ffff888029131e80
-R13: 1ffff92000771e38 R14: 00007f810118f749 R15: 1ffff92000771e16
- rcu_lock_release include/linux/rcupdate.h:341 [inline]
- rcu_read_unlock include/linux/rcupdate.h:897 [inline]
- class_rcu_destructor include/linux/rcupdate.h:1195 [inline]
- is_module_text_address+0x18b/0x1e0 kernel/module/main.c:3858
- kernel_text_address+0x94/0xe0 kernel/extable.c:119
- __kernel_text_address+0xd/0x40 kernel/extable.c:79
- unwind_get_return_address+0x4d/0x90 arch/x86/kernel/unwind_orc.c:369
- arch_stack_walk+0xfc/0x150 arch/x86/kernel/stacktrace.c:26
- stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
- save_stack+0xf5/0x1f0 mm/page_owner.c:165
- __reset_page_owner+0x71/0x1f0 mm/page_owner.c:320
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1395 [inline]
- free_unref_folios+0xdb3/0x14f0 mm/page_alloc.c:3000
- folios_put_refs+0x584/0x670 mm/swap.c:1002
- folio_batch_release include/linux/pagevec.h:101 [inline]
- shmem_undo_range+0x49e/0x1490 mm/shmem.c:1137
- shmem_truncate_range mm/shmem.c:1249 [inline]
- shmem_evict_inode+0x26e/0xa70 mm/shmem.c:1379
- evict+0x5f4/0xae0 fs/inode.c:837
- __dentry_kill+0x209/0x660 fs/dcache.c:670
- finish_dput+0xc9/0x480 fs/dcache.c:879
- __fput+0x68e/0xa70 fs/file_table.c:476
- task_work_run+0x1d4/0x260 kernel/task_work.c:233
- exit_task_work include/linux/task_work.h:40 [inline]
- do_exit+0x6c5/0x2310 kernel/exit.c:971
- do_group_exit+0x21c/0x2d0 kernel/exit.c:1112
- __do_sys_exit_group kernel/exit.c:1123 [inline]
- __se_sys_exit_group kernel/exit.c:1121 [inline]
- __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1121
- x64_sys_call+0x2210/0x2210 arch/x86/include/generated/asm/syscalls_64.h:232
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f810118f749
-RSP: 002b:00007ffdda280538 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f810118f749
-RDX: 0000000000000064 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 0000000000000003 R08: 0000000bda28062f R09: 00007f81013b4280
-R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f81013b4280 R14: 0000000000000003 R15: 00007ffdda2805f0
- </TASK>
-rcu: rcu_preempt kthread starved for 10546 jiffies! g13717 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:R  running task     stack:27128 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5256 [inline]
- __schedule+0x14bc/0x5000 kernel/sched/core.c:6863
- __schedule_loop kernel/sched/core.c:6945 [inline]
- schedule+0x165/0x360 kernel/sched/core.c:6960
- schedule_timeout+0x12b/0x270 kernel/time/sleep_timeout.c:99
- rcu_gp_fqs_loop+0x301/0x1540 kernel/rcu/tree.c:2083
- rcu_gp_kthread+0x99/0x390 kernel/rcu/tree.c:2285
- kthread+0x711/0x8a0 kernel/kthread.c:463
- ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
-rcu: Stack dump where RCU GP kthread last ran:
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 6168 Comm: syz.0.25 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:rdtsc_ordered arch/x86/include/asm/tsc.h:57 [inline]
-RIP: 0010:read_tsc+0xc/0x20 arch/x86/kernel/tsc.c:1135
-Code: e9 e8 fe ff ff e8 e4 c7 f2 09 0f 1f 40 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa e8 e7 c7 58 00 0f 01 f9 <66> 90 48 c1 e2 20 48 09 d0 e9 e1 57 a7 ff cc 0f 1f 44 00 00 90 90
-RSP: 0000:ffffc90003077ac0 EFLAGS: 00000093
-RAX: 0000000063ea710f RBX: ffffffff8dd73ac0 RCX: 0000000000000000
-RDX: 000000000000008f RSI: 0000000000000000 RDI: ffffffff8dd73ac0
-RBP: 000000000000b122 R08: ffffffff81af6795 R09: ffffffff998e3508
-R10: 0000000000000003 R11: ffffffff8168e910 R12: 000000399661b39b
-R13: dffffc0000000000 R14: 00000039b4a1e637 R15: dffffc0000000000
-FS:  00007fd54d67f6c0(0000) GS:ffff888125e35000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00002000000001c0 CR3: 0000000033588000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- tk_clock_read kernel/time/timekeeping.c:295 [inline]
- timekeeping_get_ns kernel/time/timekeeping.c:404 [inline]
- ktime_get+0x97/0x200 kernel/time/timekeeping.c:826
- clockevents_program_event+0xe8/0x350 kernel/time/clockevents.c:326
- hrtimer_start_range_ns+0xd8a/0x1080 kernel/time/hrtimer.c:1323
- __posixtimer_deliver_signal kernel/time/posix-timers.c:321 [inline]
- posixtimer_deliver_signal+0x1cf/0x410 kernel/time/posix-timers.c:347
- dequeue_signal+0x24a/0x370 kernel/signal.c:660
- get_signal+0x55e/0x1340 kernel/signal.c:2914
- arch_do_signal_or_restart+0x9a/0x7a0 arch/x86/kernel/signal.c:337
- __exit_to_user_mode_loop kernel/entry/common.c:41 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:75 [inline]
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
- irqentry_exit_to_user_mode_prepare include/linux/irq-entry-common.h:270 [inline]
- irqentry_exit_to_user_mode include/linux/irq-entry-common.h:339 [inline]
- irqentry_exit+0x177/0x660 kernel/entry/common.c:196
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0033:0x7fd54c78f747
-Code: ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 <0f> 05 48 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89
-RSP: 002b:00007fd54d67f0e8 EFLAGS: 00000246
-RAX: 00000000000000ca RBX: 00007fd54c9e5fa8 RCX: 00007fd54c78f749
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fd54c9e5fa8
-RBP: 00007fd54c9e5fa0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fd54c9e6038 R14: 00007ffeebd71e40 R15: 00007ffeebd71f28
- </TASK>
+> ---- >8 ----
+> diff --git a/Documentation/dev-tools/dept.rst b/Documentation/dev-tools/dept.rst
+> index 333166464543d7..8394c4ea81bc2a 100644
+> --- a/Documentation/dev-tools/dept.rst
+> +++ b/Documentation/dev-tools/dept.rst
+> @@ -10,7 +10,7 @@ Lockdep detects a deadlock by checking lock acquisition order.  For
+>  example, a graph to track acquisition order built by lockdep might look
+>  like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     A -> B -
+>             \
+> @@ -25,7 +25,7 @@ Lockdep keeps adding each new acquisition order into the graph at
+>  runtime.  For example, 'E -> C' will be added when the two locks have
+>  been acquired in the order, E and then C.  The graph will look like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>         A -> B -
+>                 \
+> @@ -41,7 +41,7 @@ been acquired in the order, E and then C.  The graph will look like:
+>  
+>  This graph contains a subgraph that demonstrates a loop like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>                  -> E -
+>                 /      \
+> @@ -76,7 +76,7 @@ e.g. irq context, normal process context, wq worker context, or so on.
+>  
+>  Can lockdep detect the following deadlock?
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -91,7 +91,7 @@ Can lockdep detect the following deadlock?
+>  
+>  No.  What about the following?
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X		   context Y
+>  
+> @@ -116,7 +116,7 @@ What leads a deadlock
+>  A deadlock occurs when one or multi contexts are waiting for events that
+>  will never happen.  For example:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -148,7 +148,7 @@ In terms of dependency:
+>  
+>  Dependency graph reflecting this example will look like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>      -> C -> A -> B -
+>     /                \
+> @@ -171,7 +171,7 @@ Introduce DEPT
+>  DEPT(DEPendency Tracker) tracks wait and event instead of lock
+>  acquisition order so as to recognize the following situation:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -186,7 +186,7 @@ acquisition order so as to recognize the following situation:
+>  and builds up a dependency graph at runtime that is similar to lockdep.
+>  The graph might look like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>      -> C -> A -> B -
+>     /                \
+> @@ -199,7 +199,7 @@ DEPT keeps adding each new dependency into the graph at runtime.  For
+>  example, 'B -> D' will be added when event D occurrence is a
+>  prerequisite to reaching event B like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context W
+>  
+> @@ -211,7 +211,7 @@ prerequisite to reaching event B like:
+>  
+>  After the addition, the graph will look like:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>                       -> D
+>                      /
+> @@ -236,7 +236,7 @@ How DEPT works
+>  Let's take a look how DEPT works with the 1st example in the section
+>  'Limitation of lockdep'.
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -256,7 +256,7 @@ event.
+>  
+>  Adding comments to describe DEPT's view in detail:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -293,7 +293,7 @@ Adding comments to describe DEPT's view in detail:
+>  
+>  Let's build up dependency graph with this example.  Firstly, context X:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X
+>  
+> @@ -304,7 +304,7 @@ Let's build up dependency graph with this example.  Firstly, context X:
+>  
+>  There are no events to create dependency.  Next, context Y:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context Y
+>  
+> @@ -332,7 +332,7 @@ event A cannot be triggered if wait B cannot be awakened by event B.
+>  Therefore, we can say event A depends on event B, say, 'A -> B'.  The
+>  graph will look like after adding the dependency:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     A -> B
+>  
+> @@ -340,7 +340,7 @@ graph will look like after adding the dependency:
+>  
+>  Lastly, context Z:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context Z
+>  
+> @@ -362,7 +362,7 @@ triggered if wait A cannot be awakened by event A.  Therefore, we can
+>  say event B depends on event A, say, 'B -> A'.  The graph will look like
+>  after adding the dependency:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>      -> A -> B -
+>     /           \
+> @@ -386,7 +386,7 @@ Interpret DEPT report
+>  
+>  The following is the same example in the section 'How DEPT works'.
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -425,7 +425,7 @@ We can simplify this by labeling each waiting point with [W], each
+>  point where its event's context starts with [S] and each event with [E].
+>  This example will look like after the labeling:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context X	   context Y	   context Z
+>  
+> @@ -443,7 +443,7 @@ DEPT uses the symbols [W], [S] and [E] in its report as described above.
+>  The following is an example reported by DEPT for a real problem in
+>  practice.
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     Link: https://lore.kernel.org/lkml/6383cde5-cf4b-facf-6e07-1378a485657d@I-love.SAKURA.ne.jp/#t
+>     Link: https://lore.kernel.org/lkml/1674268856-31807-1-git-send-email-byungchul.park@lge.com/
+> @@ -646,7 +646,7 @@ practice.
+>  
+>  Let's take a look at the summary that is the most important part.
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     ---------------------------------------------------
+>     summary
+> @@ -669,7 +669,7 @@ Let's take a look at the summary that is the most important part.
+>  
+>  The summary shows the following scenario:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context A	   context B	   context ?(unknown)
+>  
+> @@ -684,7 +684,7 @@ The summary shows the following scenario:
+>  
+>  Adding comments to describe DEPT's view in detail:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context A	   context B	   context ?(unknown)
+>  
+> @@ -711,7 +711,7 @@ Adding comments to describe DEPT's view in detail:
+>  
+>  Let's build up dependency graph with this report. Firstly, context A:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context A
+>  
+> @@ -735,7 +735,7 @@ unlock(&ni->ni_lock:0) depends on folio_unlock(&f1), say,
+>  
+>  The graph will look like after adding the dependency:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     unlock(&ni->ni_lock:0) -> folio_unlock(&f1)
+>  
+> @@ -743,7 +743,7 @@ The graph will look like after adding the dependency:
+>  
+>  Secondly, context B:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>     context B
+>  
+> @@ -762,7 +762,7 @@ folio_unlock(&f1) depends on unlock(&ni->ni_lock:0), say,
+>  
+>  The graph will look like after adding the dependency:
+>  
+> -.. literal::
+> +.. code-block::
+>  
+>      -> unlock(&ni->ni_lock:0) -> folio_unlock(&f1) -
+>     /                                                \
+> 
+> > +Limitation of lockdep
+> > +---------------------
+> > +
+> > +Lockdep deals with a deadlock by typical lock e.g. spinlock and mutex,
+> > +that are supposed to be released within the acquisition context.
+> > +However, when it comes to a deadlock by folio lock that is not supposed
+> > +to be released within the acquisition context or other general
+> > +synchronization mechanisms, lockdep doesn't work.
+> > +
+> > +NOTE:  In this document, 'context' refers to any type of unique context
+> > +e.g. irq context, normal process context, wq worker context, or so on.
+> > +
+> > +Can lockdep detect the following deadlock?
+> > +
+> > +.. literal::
+> > +
+> > +   context X	   context Y	   context Z
+> > +
+> > +		   mutex_lock A
+> > +   folio_lock B
+> > +		   folio_lock B <- DEADLOCK
+> > +				   mutex_lock A <- DEADLOCK
+> > +				   folio_unlock B
+> > +		   folio_unlock B
+> > +		   mutex_unlock A
+> > +				   mutex_unlock A
+> > +
+> > +No.  What about the following?
+> > +
+> > +.. literal::
+> > +
+> > +   context X		   context Y
+> > +
+> > +			   mutex_lock A
+> > +   mutex_lock A <- DEADLOCK
+> > +			   wait_for_complete B <- DEADLOCK
+> > +   complete B
+> > +			   mutex_unlock A
+> > +   mutex_unlock A
+> > +
+> > +No.
+> 
+> One unanswered question from my v17 review [1]: You explain in "How DEPT works"
+> section how DEPT detects deadlock in the first example (the former with three
+> contexts). Can you do the same on the second example (the latter with two
+> contexts)?
+
+Did you mean to update the document with it?  I misunderstood what you
+meant but sure I will update it as [1].
+
+[1] https://lore.kernel.org/linux-doc/20251013012855.GB52546@system.software.com/
+
+Thanks.
+
+	Byungchul
+
+> Thanks.
+> 
+> [1]: https://lore.kernel.org/linux-doc/aN84jKyrE1BumpLj@archie.me/
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
