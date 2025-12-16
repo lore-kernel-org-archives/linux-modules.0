@@ -1,99 +1,165 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D62313E2D
-	for <linux-modules@vger.kernel.org>; Tue, 16 Dec 2025 08:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D0B364E96
+	for <linux-modules@vger.kernel.org>; Tue, 16 Dec 2025 14:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765875471; cv=none; b=dRmNqvDfFxQtLk6pQ1SIAT1EdB1QAugGZdprmFluam+ND/YwvD0vWOmVOtblZvKrMIlAQCKAQI6JfMP+1T/KY9OKCMw4d0raWdO916jLX1fMa+zuEcNHmWpWVr/3RL20urmZGefguD0Te58nkXnryjQFQiiVNzCyYfusWvMbtJw=
+	t=1765893628; cv=none; b=cIxQ5uUbxospNTFewCf+3tSfXD5wEGiC5zZLpHGOAfAmXvqXShR/utaKkswE2J4y9wZ65iT4jqSurksJOvb0sN3F6kaA22Yq0IVdv1p81poUWVJarTHuX7mWfKsfXnChAvQfPbHEBNZiBhFkCM/AwjcLWcJfYNXsvY1W0Bihnk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765875471; c=relaxed/simple;
-	bh=X+XYBQa3q8jynRoCNw7ZJKTmmADQNeO3n8pFxlrVVxE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N/dhoYU8MxYqgAZulONMi2KrawdyB01E0CegMPJSVnw5WyGQabJiZ49thmm9wEU9fhXo4eUt3br1buaNUojijOtmQhcrLhqs+moN0fdFuTKlBsh8DM3SUahWw19r96N6fvXm0p7I3XsKVKknYxcQh/G+HOYw/a+MDDK7RHkY9Ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=O50eXj3V; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1765893628; c=relaxed/simple;
+	bh=oo331MyVoc+k3UZL6I7kuvuEyuD++kbF4dU3KtoNNTQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cjj4Af+Z2nwKL53se/KIVJ8dPZCtDUX0JDKIWxZdK0BMMDqIJtouvYcG/TTAA1nHu/+C2lBwaBf3tLBNuTzNfyUc3bBFnOChEObKoMKfXiLgsgJC4I2c5AVOGctbmzO3+j+zZgRwlPT6XMm/daPRGCJOrguRyyLMMQH6TORFoGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b8Y6ScLo; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="O50eXj3V"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-477b91680f8so42615325e9.0
-        for <linux-modules@vger.kernel.org>; Tue, 16 Dec 2025 00:57:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b8Y6ScLo"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fb5810d39so2163022f8f.2
+        for <linux-modules@vger.kernel.org>; Tue, 16 Dec 2025 06:00:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1765875467; x=1766480267; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7aHjZdlpuTA/+VCFeB3kYuF7dkzrIWScBxYjLRTmNGs=;
-        b=O50eXj3VxnrzavlxbuEiZOPzJI39Sm2ICTwxWQayLlVige7+I1sLg1WDywK7UZHb1D
-         rlswk6ZIX3GYk5nrpki2lyRviNBE4dlVUvQuUYFyI2gzsAB4aq9VD9H7IzXFlVLjy1Vz
-         oXmm1lGgC/LgAR25Fdmq2cGe/3Ib+oY4CQPGPSmIrvEk2dezoRSC8qkUGLhB+PT/mMi2
-         sNhaouGIt6kSJ3rWWz9RJrqyDnWOHY88hGpYBQvy3iEQbqenWr8pHn25ONoa+1En0J+n
-         6loRskcClrQkxvpRvhDGZ7hSTugnwND0gkOpaif1GgnCWh2xZxU4lWElILe1gqI7KStB
-         j+dg==
+        d=suse.com; s=google; t=1765893625; x=1766498425; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KL96hyDg6qSdwafAtR/5W1zXZLQQAbfSahId8IWk8M0=;
+        b=b8Y6ScLoX5CWuU5ef57/9McoGZWMx0ykOvsSKm4b7UvYiKdmD3CwN0uKerpIY9XF9/
+         JQZH8ImxB4fww4Ho1kNeL0EVA4UBf9ACX6lvLBBtG8soFak/seqA5KwDYYbKmVEWRuZG
+         o0fCJoS2x38q4b6miFoIJ7feIPURndgsaLkASOt1t0F4eb8KNs1chPWrZufgxv0hqinY
+         bvlX2fJH6t764FCoHe7bD97P6O9okEz5MKjzBmnf4wwH0L0EqLKjShA+9yIGOkfqan8i
+         ys57tB7dh1aSRWjOGzSeBl55LSE1Os4fwnexqjrcY7rPE8nYYV5ZUPwFlwYLfMgmC6oB
+         SaxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765875467; x=1766480267;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7aHjZdlpuTA/+VCFeB3kYuF7dkzrIWScBxYjLRTmNGs=;
-        b=ALnZsWuHyKvqUxGjxeRZt/8wQRwl3Au6Ebxq0r2/s0kb9Gz7HHsgdgiVHJaF1m3Dey
-         R/O4WySgKyBiCQuiRv6DAOhhDsg+SqN8f/BvgwzBaa2gMtn0RiFYYTZcNKxvt9FeK1a7
-         t+YFYVmQ1OwsQEwl83keeBjG+/n2PeFfof7ngdBLi1n7JBC8M5EUmbboyTjkC/kLtkW3
-         rTPBzU+trai9G81uJWeiOJYhmyBiiirgOx3u+QzuS3d/mk71+ssrPncgknGPDbUeHZTZ
-         tjOo/0wndtj58P1qordRznstjb7WMvBQ7GZL8CSnNrM7FUkbZ+Ah/AahGXBmAsrUR0F2
-         0W7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXrhILrapaU61FXQfm/Myn0CeubAFDwxlmMBPQViXmrlQNMT7TRgA3hSIHux7qJep2GqyatltbOqaRCGxiZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVoXY/q51PyYMRWEufiKxSWxAvO2tzlNbY4ZcLkAyLsqSMpHN1
-	MiCu5KSs5aVmPnt5/Zt/WOzUlVHANvUSk6k9v50ajgLrrn+gEIDJubgujnQvJVRHKFI=
-X-Gm-Gg: AY/fxX6g/ReJiAOhI/Is2OLvD0f8kPEPw5AmO5b+BsxPWetQzhr72CwbNZIHIsr9RDR
-	c1CSdPhfurJe03cTEme+rxYf0Gmjz2et9j8j4ZJfySYDKO4Y1rsKbdlyuAgRQw+nP2CG7sshsIb
-	TOz/Z79IddYqB7vMzQRrY697n+22B3SqTxRHBpwvThLqiArwfc2YjZlA61oZh/h+m1NKou860Ml
-	t9L9rKHDgL9T++nyMPyZkRWF1uXnS1Q8E+TuXc64qlwK8rlkaaXjEaPpkpSuUcSwlkMfsRGimL8
-	qVk9WQ1p6+uibEQV855m3iJpLR/wmT1Hhtkp2dnwrL+eZgENgqlzO+N/W0xfoVQKmFUdVL8PB4M
-	6wgzDpArdqv0BTQ4zZ7tFBFYoko3NRnj1FQZNcVS+o+iBmjLfdFobi8xeSQUQLXZlWobkuDw6Tv
-	d0f4e+RFeTznY/KRbbf2mitgMiTXrpivTQ
-X-Google-Smtp-Source: AGHT+IG5jFcwmF7uFSS85paOtFSZF/44GwLBDnZ1eFIgf1fMXDKgGhHNsxDk2WI8viRGoT2D70AGbA==
-X-Received: by 2002:a05:600c:450f:b0:477:b642:9dbf with SMTP id 5b1f17b1804b1-47a8f910f90mr124720995e9.32.1765875466988;
-        Tue, 16 Dec 2025 00:57:46 -0800 (PST)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a8f6e58c1sm226892755e9.12.2025.12.16.00.57.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Dec 2025 00:57:46 -0800 (PST)
-Message-ID: <be8b5b62-f8ac-4221-b537-b9d458d329ac@suse.com>
-Date: Tue, 16 Dec 2025 09:57:46 +0100
+        d=1e100.net; s=20230601; t=1765893625; x=1766498425;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KL96hyDg6qSdwafAtR/5W1zXZLQQAbfSahId8IWk8M0=;
+        b=ox3N3Dp088DoqQIPZFe3kujaJXGu8K9VxWLRUaoWkBx+oIMgk2RYMhM7pAs98fTG4n
+         +gGCShFU4jJDOoCH8bn6xmZkoE79goNCslKXsVEtShiZmqUlX8FmuTYugDI2Y5DV7gqL
+         W7rjl2R/TAjtszii526gEJChUkH9MJUCZ3h9oNLwOxEjgDXbr5yhuZAvwcSFx8vdSeVi
+         uN8LYyRPeoYd3Avztl8NSKcknmmUyo7VOh4hU9eCDHcI3rMP+oUzMkzqPiiKHhalgfqE
+         wapn3d13lLBCB3N9hWUKuC8oE/em9Mkyn5W9e1twixTJcnjyos/ZJ8caWBo5/MxQMqVn
+         Je7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVABRF80RLuOKIMcK+z16ETokaLkiqe0IxFhXkB9sMDhMq/B0Yj1m/WtzGYn6vvP/DoQH4WLsYEzpCzX/Fm@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNUNrffJRdPVtrJdTDwNBPTVgniECSrXtLe53Gr7t5uvAoswuG
+	vwvWxBhjQXG8vHHOww18BpuvDwM/esxOzxH2SIobs/FlNgw9yvnvtX1vJ5U8zWV6w60=
+X-Gm-Gg: AY/fxX6dSynDjRirMBMX17dQpSyy9kQSTwqTnLbAnTBvWl3kgux4AD3VO38PNAXkfQ3
+	ucc7FMuFG2q2/sYKSmioSqi135PXdJa1YPuQEk5hO3RJR4r1W4fjwRdrrThCbqYhmMSsWyfVV9z
+	NFuOEq47UCdvMFhGh2sGlByYE5WUl0DAnlIHF1K/z+1v561WqNcw4Se2d4yHtlCWlGY0TaWw4JB
+	Z066s4HzhVS+OU6lW18FeEQDqoT/ovQ6jK2Q9y4327hyXoy5RKRVAuSU4gpwNCUOtVG3CEXSFtv
+	NqohBK+ajsRfCXFmkVONBp//xmM4ogPk3aoq/3aNUzvME/5vQyqref3OcYJoDTZSxmdGVNRNfRj
+	ueiz5uNk0u71X5uS0ZELC9xy6j/tVPZt5vL7mJ6BqUtadZ/3qTVUGRLY8JVQVL+y8ZEjkniCWqV
+	pSHpGTQzxNn4QGkg==
+X-Google-Smtp-Source: AGHT+IEvNNp/GFZ2IQ7L7fWWzVzKQJ39p1H+1gouoPgfCo05L1mXn72S5xo0BtukHnsmhWUV5hIWfw==
+X-Received: by 2002:a05:6000:2585:b0:431:8bf:f07c with SMTP id ffacd0b85a97d-43108bff231mr1464493f8f.9.1765893625280;
+        Tue, 16 Dec 2025 06:00:25 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43009dfe5b3sm24065754f8f.39.2025.12.16.06.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 06:00:24 -0800 (PST)
+Date: Tue, 16 Dec 2025 15:00:22 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Petr Pavlu <petr.pavlu@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <kees@kernel.org>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] kallsyms: Prevent invalid access when showing
+ module buildid
+Message-ID: <aUFl9n3b8DWnYGyJ@pathway.suse.cz>
+References: <20251128135920.217303-1-pmladek@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: Update module subsystem maintainers and
- repository
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251215215545.1332626-2-samitolvanen@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251215215545.1332626-2-samitolvanen@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251128135920.217303-1-pmladek@suse.com>
 
-On 12/15/25 10:55 PM, Sami Tolvanen wrote:
-> Add myself as a maintainer for module support as I'll be handling pull
-> requests for the next six months according to the previously announced
-> rotation [1][2].  Also, update the git repository link to point to the
-> modules tree, which is already used by linux-next.
-> 
-> Link: https://lore.kernel.org/linux-modules/Z3gDAnPlA3SZEbgl@bombadil.infradead.org [1]
-> Link: https://lore.kernel.org/linux-modules/20251203234840.3720-1-da.gomez@kernel.org/ [2]
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Hi,
 
-Acked-by: Petr Pavlu <petr.pavlu@suse.com>
+I wonder who could take this patchset.
 
--- 
-Cheers,
+IMHO, the failed test report is bogus. The system went out of memory.
+Anyway, the info provided by the mail is not enough for debugging.
+
+IMHO. this patchset is ready for linux-next. Unfortunately, kallsyms
+do not have any dedicated maintainer. I though about Kees (hardening)
+or Andrew (core stuff). Or I could take it via printk tree.
+
+Best Regards,
 Petr
+
+On Fri 2025-11-28 14:59:13, Petr Mladek wrote:
+> This patchset is cleaning up kallsyms code related to module buildid.
+> It is fixing an invalid access when printing backtraces, see [v1] for
+> more details:
+> 
+>   + 1st..4th patches are preparatory.
+> 
+>   + 5th and 6th patches are fixing bpf and ftrace related APIs.
+> 
+>   + 7th patch prevents a potential race.
+> 
+> 
+> Changes against [v2]:
+> 
+>   + Fixed typos in commit message [Alexei]
+> 
+>   + Added Acks [Alexei]
+> 
+> 
+> Changes against [v1]:
+> 
+>   + Added existing Reviewed-by tags.
+> 
+>   + Shuffled patches to update the kallsyms_lookup_buildid() initialization
+>     code 1st.
+> 
+>   + Initialized also *modname and *modbuildid in kallsyms_lookup_buildid().
+> 
+>   + Renamed __bpf_address_lookup() to bpf_address_lookup() and used it
+>     in kallsyms_lookup_buildid(). Did this instead of passing @modbuildid
+>     parameter just to clear it.
+> 
+> 
+> [v1] https://lore.kernel.org/r/20251105142319.1139183-1-pmladek@suse.com
+> [v2] https://lore.kernel.org/r/20251112142003.182062-1-pmladek@suse.com
+> 
+> 
+> Petr Mladek (7):
+>   kallsyms: Clean up @namebuf initialization in
+>     kallsyms_lookup_buildid()
+>   kallsyms: Clean up modname and modbuildid initialization in
+>     kallsyms_lookup_buildid()
+>   module: Add helper function for reading module_buildid()
+>   kallsyms: Cleanup code for appending the module buildid
+>   kallsyms/bpf: Rename __bpf_address_lookup() to bpf_address_lookup()
+>   kallsyms/ftrace: Set module buildid in ftrace_mod_address_lookup()
+>   kallsyms: Prevent module removal when printing module name and buildid
+> 
+>  arch/arm64/net/bpf_jit_comp.c   |  2 +-
+>  arch/powerpc/net/bpf_jit_comp.c |  2 +-
+>  include/linux/filter.h          | 26 ++----------
+>  include/linux/ftrace.h          |  6 ++-
+>  include/linux/module.h          |  9 ++++
+>  kernel/bpf/core.c               |  4 +-
+>  kernel/kallsyms.c               | 73 ++++++++++++++++++++++++---------
+>  kernel/module/kallsyms.c        |  9 +---
+>  kernel/trace/ftrace.c           |  5 ++-
+>  9 files changed, 81 insertions(+), 55 deletions(-)
+> 
+> -- 
+> 2.52.0
