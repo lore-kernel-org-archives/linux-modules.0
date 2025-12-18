@@ -1,102 +1,80 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1771337BA1;
-	Thu, 18 Dec 2025 21:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5E723A1E66;
+	Thu, 18 Dec 2025 21:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766091613; cv=none; b=GgKcbBVUVfIJvetaujyTs1NhYXuxFNDMnNOjd+c+U5kk/619qxjKV+jGvbRicQOBE+UJa+xpwPczojE/G75vegpIxOpEmcIjZfU006Tr96cRtRXbiNk/59zRbI8jdzyqCbhAMW52zKZBzjbGkg1TIlaTrtr17R3lzsSGAFS92xQ=
+	t=1766093059; cv=none; b=fxt/u4UPObAjt08jS1gAX0kBCTt5FBEzzdCQVpv60fAzxE6s7eNNgSTCUT5uEr1G9HLuhZCQdilT8LB6Ed5Lv7VjGxDR9+Z1fiw/0e6Y6uV7dXnjNBRH2xd8LlcCXpTE4+IPoFYo8QhWehJHPMtkHsIDKSVOSKRGhHvel7VZb7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766091613; c=relaxed/simple;
-	bh=T0HudyPQiXlEcaSonXnq9yf2eOFygMh6mpUvZEIaQq8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TkUv6aLSS2AaBSzcph+kHOBNcdL1w24lxfnMDEYyI3IOYAnJaBccMFIKOpuML3FV0SVy9Jp+7cfMulMFZ2pc9nU33Cv4Wknuln273nfazztqcneYms53YjHN722hfKg7ydpEZ71r4qRs29FuGwyLYv41mB0h00nWHWTHBq//G+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHJc8vrh; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHJc8vrh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89681C4CEFB;
-	Thu, 18 Dec 2025 21:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766091613;
-	bh=T0HudyPQiXlEcaSonXnq9yf2eOFygMh6mpUvZEIaQq8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=lHJc8vrhIoLAQtagdpMI10ecYbintFf8od6yiCak2iGx/eenO13Jhzwt12oYhfuUD
-	 7pRi73KTbM7O87a0FYZ9KkoCr8ZaKbHyclVoSN36bDJ4IulzavdUiYctxaaCYQvC38
-	 iguG9xUBawTeKSwfr9ZPpnIbtm239TlABUV2xE75rky3R4hX56nbNQt3nv1wT9mG4r
-	 JREEUDsxSIEDBqhT0rvUBJVD1/eXhl6f2jUyKfI+CzAYWXXzLAHBJCsf7kG4sNGD3s
-	 hOoc2rnylS8/LMN6QCOdqL3i4MUsY37qmT9yuC9rullkN6zPCAsTpqFVAQhQLHxRfy
-	 zUWMoprBhWZdg==
-From: Daniel Gomez <da.gomez@kernel.org>
-Date: Thu, 18 Dec 2025 21:59:45 +0100
-Subject: [PATCH 2/2] docs: hacking: clarify reserved -EEXIST in
- module_init()
+	s=arc-20240116; t=1766093059; c=relaxed/simple;
+	bh=iFfYbgmtRjgpgrAzFYyyp2p9g0mErMix04hrGKLaXIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aCXvPwL/ExqOxe3tVfYkheXQKPtNv+xVHyulViQXsyEQlohHHElwe3gVPzXctvJbWHz/W3ZVGmi0HuGceeyAEUmJu5ZpbQ+YmDmB6yD43t9FLfyR1/yjUOHJtjww523wGeQGwG2ZmQXIHU+Kh3oubUlmTl7zphIF+iji6D28dSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 6F808B82A6;
+	Thu, 18 Dec 2025 21:24:08 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 744942F;
+	Thu, 18 Dec 2025 21:24:03 +0000 (UTC)
+Date: Thu, 18 Dec 2025 16:25:42 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Christophe Leroy <chleroy@kernel.org>,
+ Ingo Molnar <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, David Laight
+ <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko
+ Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v3 4/4] tracing: move tracing declarations from kernel.h
+ to a dedicated header
+Message-ID: <20251218162542.476009db@gandalf.local.home>
+In-Reply-To: <aURlK1gpCrfLEKN9@yury>
+References: <20251205175237.242022-1-yury.norov@gmail.com>
+	<20251205175237.242022-5-yury.norov@gmail.com>
+	<20251216161316.45b3f19ff0ad482018137189@linux-foundation.org>
+	<55ceb7bf-0fe9-4edc-81c2-d51366847eec@infradead.org>
+	<aUN8Hm377C5A0ILX@yury>
+	<20251218123349.35339242@gandalf.local.home>
+	<20251218124326.22334325@gandalf.local.home>
+	<aURlK1gpCrfLEKN9@yury>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251218-dev-module-init-eexists-modules-docs-v1-2-361569aa782a@samsung.com>
-References: <20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com>
-In-Reply-To: <20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
- Lucas De Marchi <demarchi@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1223; i=da.gomez@samsung.com;
- h=from:subject:message-id; bh=3/juWpuVSytzeR+Q94yJU1Q00H8YiC2jNnM7Cj+uyis=;
- b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRGtVjfIFrM2mvSEzkoG55N8iP84wo1gZ192UO
- GqVoRhx2xeJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaURrVQAKCRBAnqPEHxlR
- +3HHD/92depapZq7iMsUsJXJdVEMKLcumRhNP+Nx/HM7u3b7B6t4zsBFoHqmPflmqwHtJpl1IcO
- 7Fr9Q9JPGAV22731bBEo9m+GNH1wUyeSfjzAWddb7Cu+wwyosDL25NvuwPOdw4diVcYgQEPNrYM
- IDYoHJeqs0NSmMWmKSH3E5eytsnRFcjwDhvOQykxKqIMxJpAKetNEFuhjzCBEkaowpJUr5gzj8l
- L8TdROj4fgSTavRYw9bHMeBanjMQVxMZKlF1FWR7cK277hbNfWJAm30jzixpBHQ9mz9p4gADaPH
- wzn5Z4NmCwbNNspCchdE4qe8A9SaYdBXemdUEjDxJE9zKsO4KhqURfl7GpjN8X12vGDbnYuvtHK
- TefIgbYv0tCxh+GQu7QtKr+iHqPfmLKj5aXplshNXy0UidxJ/IKaOsHy9W4y3ynGPAFmf8dKbc+
- o8xWqEqaFKGfgDvKEMK5xAK2DG3nZnqPv0FcAD/wRkq3F9AGBOk/So77zEzwPfVh9zKYwEtJn4t
- Qb0GBlT5cLgXOQ3XxLmFyiQ2rk19g3ccCbvyPFcZL56mVCVTLAzJC9Qup87TTnLT6jSEIOda9B2
- dKwa3kaLjCQtB1rvoJqQ9GOtooQR1rApq2c+JuEZbaYPfRdmEA/z5x3z08CR3ye5/KMKr9x+Otf
- rpypRdw3Ux2jZYw==
-X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
- fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
+X-Stat-Signature: 5wwf9gob3j94aeuxi6eiyod9cjcjs5gu
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 744942F
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+qadkGPvrEw+WnOGTOA3qaSmf6dajjukE=
+X-HE-Tag: 1766093043-108761
+X-HE-Meta: U2FsdGVkX1+Xw1uaVtgMkJj+Zet6YRpVC3/38BOj1xfE3N4PX1Nmv+XXFMI+J9u5wvpIClJspVH2v7b5HlXNj6KKyu7uhp3y/HAasEZW4kqrOU9FGz+pAWr8HgF5KcgmC3MBhGDdKWsc3fyDLxMGmOfriowcq+34XtUOEv8llhRHmwVbhdbrQjpO/+46rFPCqQFi8t0J4es7oXaHOUbOGwh6YD32UqbgzlYruriqS8H9Ws7zxaqY4jtWs7W4IPS7HZ3cCZejPOnZenb2jdtZw8F60/CUvXfDPCS10GVN+aRrjUIGfaCDvm+k/kqhwZesKGkj5Av9d/XRlSO/ab8whwEI9JxBZWFe
 
-From: Daniel Gomez <da.gomez@samsung.com>
+On Thu, 18 Dec 2025 15:33:47 -0500
+Yury Norov <yury.norov@gmail.com> wrote:
 
-The error code -EEXIST is reserved by the kernel module loader to
-indicate that a module with the same name is already loaded. Add
-a warning note to clarify what these means for module authors and
-maintainers to ensure the module_init() path return error do not
-conflict with the reserved one.
+> > I don't actually remember why I had __trace_puts() pass in the size. I
+> > could change it to:  
+> 
+> This is the best approach. I'll schedule it for v4. Would you like me to
+> take it as-is, or you'd send a patch?
+>  
 
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
----
- Documentation/kernel-hacking/hacking.rst | 7 +++++++
- 1 file changed, 7 insertions(+)
+Let me send an official patch.
 
-diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
-index 0042776a9e17..2c929ab93143 100644
---- a/Documentation/kernel-hacking/hacking.rst
-+++ b/Documentation/kernel-hacking/hacking.rst
-@@ -459,6 +459,13 @@ to fail (unfortunately, this has no effect if the module is compiled
- into the kernel). This function is called in user context with
- interrupts enabled, so it can sleep.
- 
-+.. warning::
-+
-+    The error code ``-EEXIST`` is reserved by the module loader to
-+    indicate a module is already loaded. kmod interprets this as success,
-+    so ``module_init()`` must never return ``-EEXIST``. Use ``-EBUSY`` or
-+    ``-EALREADY`` instead.
-+
- :c:func:`module_exit()`
- -----------------------
- 
-
--- 
-2.52.0
-
+-- Steve
