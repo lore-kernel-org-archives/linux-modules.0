@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC542D73A7;
-	Thu, 18 Dec 2025 21:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9938533A9D2;
+	Thu, 18 Dec 2025 21:00:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766091610; cv=none; b=bXib4gsjM1Rda78bbN+zjtJ0Y/l+kOV4jlEOu+/dqH9xuQvD5oWPS+37BQyMmphdgY4KzqEfWnvNAZd8TAbuhLh5aN6SoVpJ1tIltZ0Zi8m1BsH/WHlIOyP4xWF9CcdaDlmww8LEDMFlO90a6ZIdZmuGFkmh4qYt4U0RdxMZChk=
+	t=1766091611; cv=none; b=l0/PIQRGciYpAaqNDFsQPTXYdap4LgS3QOKzX5PDmBekgEIFN/mgwAKgS7Y4/JlUVoUZVsQgOwDen7AraEG7jzE/Ao7VrKM8zqTuVriUumdKvYHftY/64lFzFWHBsoRbB+UmOE+1kXTSd5g+suyKQBWa0H5RNdOO3e2ivPBIXvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766091610; c=relaxed/simple;
-	bh=ocVyW7CGSJZnuRqGhBS2hiaA0KAEoYpXnxRGkIt+GEs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UFYvfNc/G4RjWjpCH5gMGVac2rMXVtGm4xJU8KTi2JfvagK/onk+LVCoL6uiiiUh2rVYJ3uLs/yUk6LqI1mrsF1I1bRY9OI8sXL77vzaWc8Hbc8OBd9qLNmzpCwi5mkUrjQQMtlfg23TBZHf1xw13fOglEYPniWhGyskgNmFQcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EtcP7kCe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766091611; c=relaxed/simple;
+	bh=b0KBXZU1l1tjWXLTckjL6wIhQJEHgxGVlrwheNqDpyo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JdLNOYhSTLyAeZmgz2UPROm6X5gT2zCYp5IMd7UR9qsdWucomwgHfO2QAgyG7hG4ZXfVcelqCPQbroC6rRsJ+ZbeylhMu1L/YTinCtipRweWT91X/RyHdEqcC5FxQ9g4P0D857xuPeRQHmOvzw3jELi4vk/rThRDfse0kQ8xBZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XAdhssyi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EtcP7kCe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6493C4CEFB;
-	Thu, 18 Dec 2025 21:00:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XAdhssyi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29603C116D0;
+	Thu, 18 Dec 2025 21:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766091608;
-	bh=ocVyW7CGSJZnuRqGhBS2hiaA0KAEoYpXnxRGkIt+GEs=;
-	h=From:Subject:Date:To:Cc:From;
-	b=EtcP7kCegT4Px2JQrRa2PLTqCF3BmKjDxvBVGNp7QVyhw4EFSWG1FT2ixpun9NOP0
-	 KOmurcJzjwj/aH5DllRyraorW+oF8Y0wSPJOzwS6Zcf50NDXlmgv+IE3AnZYO2n8P0
-	 qNYAJrxZL0I+lNOaHX0klfR23sUSS84UHFKHgpg9RAhZTf5nnLPE5Dwr0X8rjsad1u
-	 5pamQUgU4wkpKma3B2QkXUukQc1unRQnzLfnerEwt9RuEw1SGbXL9iA19wqG+bCiuc
-	 TKjvH5P27zQ/QWL7MQ3u85O2EBdqqULWYoQ1ggtWkRFBFTJb9Kc53Os5zATOqyWUng
-	 4RiaU6wc7oetQ==
+	s=k20201202; t=1766091611;
+	bh=b0KBXZU1l1tjWXLTckjL6wIhQJEHgxGVlrwheNqDpyo=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=XAdhssyi6bZ01Qk01YeSQ8zw4oYaNvzysiHnZTMNdkO8RpeTNTGxFWlCPdKye8nnF
+	 5zLm5AM8q30D4gEb/6MSSVhl9Ku5P25GAwddCyTJKuzC1TUAyvG4ssGUVOAT8+Vm9u
+	 EQSaAZEM1CdRx1zQxpc2pzQyVoVfEIyc/f30vcZkn9IYrD60jD7q4b4uYvT1myIUY0
+	 qPD6wJTq/z0HszHZ+cg7lZlfE3hVf6f+5ke1KYbPDNkKYWjpyFzMDxcASnKifDdZ0h
+	 syd53/ful/1ZYJyCNUmJB16DUHfVVcQCqcnc6zXA9j2IwxsdENECoLektU4hN5VoDJ
+	 s5bfGBIXA4m9g==
 From: Daniel Gomez <da.gomez@kernel.org>
-Subject: [PATCH 0/2] module: add -EEXIST module_init() reservation docs
-Date: Thu, 18 Dec 2025 21:59:43 +0100
-Message-Id: <20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com>
+Date: Thu, 18 Dec 2025 21:59:44 +0100
+Subject: [PATCH 1/2] module: add -EEXIST documentation
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,11 +37,9 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD9rRGkC/02O22rDMBBEf8XscxdWkmXL/pWSB11WraC2W0lxD
- CH/HpEL9PHMwMy5QuGcuMDcXSHznkra1gbiowP/bdcvxhQagySphRQGA++4bOH805o1VWQ+Uqn
- llRUMmy8ogh+9G+00OAdt6jdzTMfj5vP05Mx/5/ZWnyE4Wxj9tiypzh3rSHaYjFM9h3EgksFrH
- 6My1NtBeENSKTta+G85dw9HEurtd7F5xcwV9RTJaDkZ0nreBZxutzt7oOyN+QAAAA==
-X-Change-ID: 20251218-dev-module-init-eexists-modules-docs-1dc7cb7a96bb
+Message-Id: <20251218-dev-module-init-eexists-modules-docs-v1-1-361569aa782a@samsung.com>
+References: <20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com>
+In-Reply-To: <20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com>
 To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
  Aaron Tomlin <atomlin@atomlin.com>, Jonathan Corbet <corbet@lwn.net>, 
@@ -49,53 +47,56 @@ To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-doc@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1337; i=da.gomez@samsung.com;
- h=from:subject:message-id; bh=ocVyW7CGSJZnuRqGhBS2hiaA0KAEoYpXnxRGkIt+GEs=;
- b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRGtSi2cujVCcKzKljcgpoR5IeiU7HBbjRjtMq
- XGKA5ybsjOJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaURrUgAKCRBAnqPEHxlR
- +2dhD/9sE/lhlbTTBuaXXDG9+Smy+AGq0fGM/gavw/WzTBxymsy4LpOjj840bglSa8DuZ83R+Nr
- Sw2AK5lExPCrEVUYBdIvGKyGMQvZM2wBAa+A06PjQ1x/zTNb+gizXZ/ARs8LVH7FzhRkq2DaUno
- RSVCiy6mWUkVi2clK7MnbDnCFr7HPByKz4qpFKGylMMXLFnNotgNmimMw2OAxXQfwa0rv68eHt1
- TtReXJ0ILDFpRMZjLDG83PmLn7fy2mySKH/ipKNqz7skzk2YPz16NMENQPyeH7uleAua5jfpTUo
- h0i70bKzt6gR13o6nI/ItT4EaaUBtVwxOrnlMYBcdfcX5fFM+3kwjMlspYVKENQkLCv/klkcV7d
- ZjlZADz2Vrn5CVHiR+R6VHxkK3WiMhwEqnQM0hvo6XypjvlposQrB3N2QImT+kUS4daTDBcO4nl
- 6Lba7Ah1lggUTciqX9sgdwJNzQGnlLt6LC78cwiOq+t2aNXNCvy9yqg9FTPewWMieHY8R+/BnE4
- dItCBkDteBOo5oWms0WgJR0D2tIl0/OSK110IgDW9WweRL93IzP84A9XGCU8MfM6ATY4zDnM29U
- 2grvIiD1+m9y8NTR0+odcQaESsR5gYYAIOUXNWCbzXYTbDY97Ac2LcnSVIFhtDCwkW8KJZBYk8k
- B9bdr90eZvtxdWA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1202; i=da.gomez@samsung.com;
+ h=from:subject:message-id; bh=hP58waUaaD3eZ5jAC5SvBWbgesYb/Es043tMEuXEBZk=;
+ b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRGtTfq3ytmmB6MomNA4lbtFq4UGIkg7WuBYKg
+ 89EKDK9YleJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaURrUwAKCRBAnqPEHxlR
+ +2OQD/9s2rIn76bZZ/s0qxfC/HmOf724NEBHN79Ut9PlZPKQU3iWMuYGbrHGMF3o1jhQWZo9zNF
+ yVGpTL0DBF8j0lrY/2vXi3JD08yWuVVotAQ1HPfasphVsbebf+c6utKjL6jonkGNLImPGlQlqE1
+ m5f1zYs0xgANZMtVRz60I6QevcxAoFqIYkLgIDi3hVKspLd/3vam2RVj2+B5z32kvtz8W/UjPFZ
+ b7is3raBp7KjppdwI539SVuBXQK9uwB3PI4N8IHu5p0gz3Wbdnmp6+D1mZRXLPLtrn/toJXAEYD
+ 9fP5NS38JUB6HOE2Cn6GHqh7yPEo66YwMtfrAQ7NPlan+HJQXCfbFLToKblJrW7yQagsqfBCnn6
+ TH19N36Akmnxne1mNMDcku5gFhpNm4U6TgKx2uR1ssvFOJzKHVSwSwxxDHKWe4L5gjBJ3KQZSnr
+ wWnrgyUiDtF7u43EIn6XBGfCE3ahptj33SZvUYcMmS4i7xv0u1s2PYgJUYU3Wlf9EG1P1rjWXcz
+ Epy1LQpH4MApkU8eSAiJhaukXbUkgJLCSlMHfQ2PsHLfEAAb8Sdje+p+Z0rsqXlFwoSk6mRzeUj
+ RjZRiaeAauZ6B/h97w2fqCnjEWhI/xWbJbk43L7hAbC2pad2LvBl0MzAnynK3nkmj/5EJsAkRie
+ obMvPGBMikILG2w==
 X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
  fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
 
-This series documents the -EEXIST error code reservation in the module
-loader, building on Lucas's patches [1] that add the runtime safety net.
+From: Daniel Gomez <da.gomez@samsung.com>
 
-When module_init() returns -EEXIST, kmod interprets this as "module
-already loaded" and reports success, hiding real init failures. Lucas's
-patches warn and override this to -EBUSY. These patches document this
-convention to prevent future cases.
-
-This was originally reported in this thread [2].
-
-Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [1]
-Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/#t [2]
+The error code -EEXIST is reserved by the kernel module loader to
+indicate that a module with the same name is already loaded. Add a
+comment to clarify what this means for module authors and maintainers
+to ensure the module_init() path return error do not conflict with the
+reserved one.
 
 Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
-Daniel Gomez (2):
-      module: add -EEXIST documentation
-      docs: hacking: clarify reserved -EEXIST in module_init()
+ kernel/module/main.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- Documentation/kernel-hacking/hacking.rst | 7 +++++++
- kernel/module/main.c                     | 8 ++++++++
- 2 files changed, 15 insertions(+)
----
-base-commit: e5f0a698b34ed76002dc5cff3804a61c80233a7a
-change-id: 20251218-dev-module-init-eexists-modules-docs-1dc7cb7a96bb
-prerequisite-change-id: 20251013-module-warn-ret-59f085298055:v1
-prerequisite-patch-id: c3e4f5b5d01c2b48b4c94e51a60469cb74691853
-prerequisite-patch-id: 2d5a726a75f3b9d9c256b8478fb6115a92f04354
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index a8394d81174f..655a780981d3 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3038,6 +3038,14 @@ static noinline int do_init_module(struct module *mod)
+ 	if (mod->init != NULL)
+ 		ret = do_one_initcall(mod->init);
+ 	if (ret < 0) {
++		/*
++		 * -EEXIST is reserved by the module loader to mean "already loaded". kmod
++		 * interprets this as success, hiding real module failures. Override with
++		 * -EBUSY and warn.
++		 *
++		 * Module authors: use -EBUSY or -EALREADY instead of -EEXIST.
++		 * See Documentation/kernel-hacking/hacking.rst
++		 */
+ 		if (ret == -EEXIST) {
+ 			pr_warn("%s: init suspiciously returned -EEXIST: Overriding with -EBUSY\n",
+ 				mod->name);
 
-Best regards,
---  
-Daniel Gomez <da.gomez@samsung.com>
+-- 
+2.52.0
 
