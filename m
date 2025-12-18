@@ -1,98 +1,74 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2CA8302779;
-	Thu, 18 Dec 2025 18:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263282D7387;
+	Thu, 18 Dec 2025 19:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766082864; cv=none; b=cK24fHyToTl189LeRgKzMSS7g3Tb3VQmIKvSmdGWs7D63UXIwYQzsWOh1rV6Zj/9rczAkijH26hsQFa9qqQQ6ZSJb8XFa2+qXtUpLq4pv5mf8uw4ea/eBLuce0bvTyq1gbx7EuAMdKKnNFQ1ko5+NLMNSRArKQWtOltzzYvDUgE=
+	t=1766084897; cv=none; b=V/uDh4soK1R59kpy8KVoJRuW6+lQb3v7Oou5/w+bLar+BC4rmJFKQDFWBeajOkF8iO2hnaNC727uCFvdF/QlEv3MnMf1xI4kAjnO+FhzIG6fAXguZ9D8c8F3oTtJtKu4fSWt5rmPQfRTGAxJ1F2rp55OUOSanVeIN3hgq0wQvYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766082864; c=relaxed/simple;
-	bh=/Ryvh2QITxLueebuXUP2iRknRfEv8mtrfjRHXUboMjc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NAGCToDxkc+i/NlL8cgCW5c0lW06drIhXeaCtLQeDczZ6eDFqxj1Rie5sNyHbmVd2XdLDFgC/DQEK5+AD06OJXc2r5EZNg3DKQYrv48XXRVK/gAXNACEJYsZ63NKiO1m+mq6BDLSXYHDIaqDOO9KgiquQtA3XC6LUqy4504jfvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=g5GxlN8e; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1766084897; c=relaxed/simple;
+	bh=Z9a4e2kqMkKgECN326Qvq7UbuTUqk+wZb7MlxJlWTR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XFCwg2FtC3qLYEAgNwe9f/WBxdnAnYbQLkhqNgwfKfFb8VAzTVQJF6isUifEGSfJG2DDs8HDTMtUc1fEsebReS8O8oxT7jXTn7hb4mMDnfk2Wf34pc3KN6CnzxS0r1o7soPQks8pmKKq9kDccN5pe8r0R5AARai8kfBcJTj0nFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TVt7IRjs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="g5GxlN8e"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=cuje8ig6a28Lg0VJ0Y9qzlYqiEsZ8+FPv/4gTINIB+o=; b=g5GxlN8eJfNAUjHAytyOM1aZwu
-	mYAc3Yy/X+EmNtAYTw7Enr9PtgaXJp+gahI8HuQJ0pVmjVhU0rzhAOMueICtKXRWn3kjzBVr9ahTD
-	JxmfG4YC6y8LeKqfPJ6QXVv6T5/tZk1KL2d8PaQDFBrd9xQs/sjJn/6X3KdKqKhE/HQeGe1CnkfZz
-	hBke2rgLKTDQZ9Ej5mHJ/n3DEUFkqZc+A9eY/3D3oDkv4xhCKdoeEvSPCKR55GWOedqdsbTZ5wb1+
-	tZY6FeeiNWXvj5h6xndSGGjsHXwbSc9rMa5i65EsolHrRlTsnMjPtb9Ls/x6WMkYtVClIDbcQ++Aw
-	q27KAyBg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vWIpG-00000008zgO-2UYL;
-	Thu, 18 Dec 2025 18:34:10 +0000
-Message-ID: <95f0c65b-15ff-45db-9845-579f7adf4c86@infradead.org>
-Date: Thu, 18 Dec 2025 10:34:07 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TVt7IRjs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5813BC4CEFB;
+	Thu, 18 Dec 2025 19:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766084896;
+	bh=Z9a4e2kqMkKgECN326Qvq7UbuTUqk+wZb7MlxJlWTR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TVt7IRjs2ghTWN3c/22Tqxzt7YfvoutHaPj12OH2pkrYO0vk7kdjC1PcIN3tbB8jx
+	 saNOCAOq1OkKPa6P3kT1vqi+EGUX3VOKj25mztYDS+7+S1g+mNPD2p9EbKXfxdEyPE
+	 pPCT7Y6SXCKA9irZLQ8j2wjwLOHurx3Lw79KgxSXDrb57WfAlxu8vZVKfJ1fpwsaug
+	 5mBinKohEUuxMrO9B0eBjiE0nH3RWbdJwMTNs1OgL6O6Ct6Hk+dEo+Fq7pgIiELPWj
+	 LSakdMvRzAC40tGgo3jrVCZik7E+2oN9buaWBIY2PUAy4SxRJEEyddTXD/mo/Gps8s
+	 BEW4+wBo38ikg==
+Date: Thu, 18 Dec 2025 11:08:07 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>, keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] lib/crypto: ML-DSA verification support
+Message-ID: <20251218190807.GC21380@sol>
+References: <20251214181712.29132-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] tracing: move tracing declarations from kernel.h
- to a dedicated header
-To: Steven Rostedt <rostedt@goodmis.org>, Yury Norov <yury.norov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Christophe Leroy <chleroy@kernel.org>, Ingo Molnar <mingo@kernel.org>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- David Laight <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Kees Cook <kees@kernel.org>
-References: <20251205175237.242022-1-yury.norov@gmail.com>
- <20251205175237.242022-5-yury.norov@gmail.com>
- <20251216161316.45b3f19ff0ad482018137189@linux-foundation.org>
- <55ceb7bf-0fe9-4edc-81c2-d51366847eec@infradead.org> <aUN8Hm377C5A0ILX@yury>
- <20251218123349.35339242@gandalf.local.home>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251218123349.35339242@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251214181712.29132-1-ebiggers@kernel.org>
 
-
-
-On 12/18/25 9:33 AM, Steven Rostedt wrote:
-> On Wed, 17 Dec 2025 22:59:33 -0500
-> Yury Norov <yury.norov@gmail.com> wrote:
+On Sun, Dec 14, 2025 at 10:17:10AM -0800, Eric Biggers wrote:
+> This series can also be retrieved from:
 > 
->> I deem to drop trace_printk.h from kernel.h - it is more aligned with
->> the idea of unloading the header. The original motivation to keep
->> trace_printk.h in kernel.h was just because a similar printk.h is living
->> there. But after all, this is a purely debugging header, so no need for
->> almost every C file to bear debugging stuff.
+>     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git mldsa-v4
 > 
-> It is a big deal for debugging stuff. A lot of developers debug their code
-> with trace_printk(), and do the "shotgun approach", where they cut and
-> paste trace_printk()s all over their code in several files. Having to now add:
+> This series adds support for verifying ML-DSA signatures to lib/crypto/.
+> Patch 1 is the ML-DSA implementation itself.  See that for full details.
+> Patch 2 adds the KUnit test suite.
 > 
->   #include <linux/trace_printk.h>
+> The initial use case for this will be kernel module signature
+> verification.  For more details, see David Howells' patchset
+> https://lore.kernel.org/linux-crypto/20251120104439.2620205-1-dhowells@redhat.com/
 > 
-> whenever a trace_printk() is added is going to be a big PITA and slow down
-> all debugging efforts.
+> Note: I'm planning to apply this to libcrypto-next for 6.20.
 
-Eh? Maybe a PITA, but surely not a big one.
-Slow down "all debugging efforts?"
-Please cut down on the hyperbole.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=libcrypto-next
 
--- 
-~Randy
-
+- Eric
