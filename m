@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BB0320CA8;
-	Fri, 19 Dec 2025 13:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB1433DED3;
+	Fri, 19 Dec 2025 14:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766151589; cv=none; b=H58YsCxygitMdJxO3GJ4O0SmalZM1CcizemjU/nmVw2KRKm5G7xFtw1CyShWMdl6EENVhCql3Z2taxIOciFcZfQK+zYXPZJOoalEmuPdxY5B7MX8imYLakhYg/vmerPmiCzOY0dW2Gr7SIDepuoIGZWvZqWNhVLO2K6plhoCUms=
+	t=1766156398; cv=none; b=CK7g1jp+TWM0PRV2tZJvKvRDhJCOQrkqvBD4zXmJqqABQuMZAn16B2vwAk/W0Jmhl1RqejzlHdeeePT8xWK/aDgMfAB9XjybZ7B8JJRoymQtRX5QjOQNSiRybQvtfRaNnHUdunkmcVrgcTdfh5GynfInSl6yjxkZsh9dGqZ097w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766151589; c=relaxed/simple;
-	bh=B7gy/6fcyRRQm9I3gjotnDVopYfBrxz7/tSUiK+f0lE=;
+	s=arc-20240116; t=1766156398; c=relaxed/simple;
+	bh=7L/q4HPuFy1vCm2MmLUJST8v/l7o4IYp77xRl8XO9N4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SEmNZEBjgxxqCAhF+eQtFhVoGV0sL64d6rHPDyMAOyEPFS3DFADEgc8CRt1j4LPfiLUEHIj8mc/HC6CrU6BcGZZcyLiOevj9f3UpPHbv1yqEkfzkuXfpsw51ZLITBHE7tb9XImdUQBHUw//S24pZVagIY7R8TrmRbwoHJLdXvcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=umgsFRhI; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=rd9fg2B7KuHnmlTQ1yvJeTj88yizBdrK7OnHOf1sVTOcolQvMydHRx/5Hy2KpB6dslkuUPYh6ZJsGoPagxyp4jjLZRCg71h+Qk3xZ3yvTPeImB137sT5Yl13EQ0t/zzf8s0lOE0CPqaBcIAt7X++HJHYjgLpTuGj3M3Jk2TtAII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=As/oYeNx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="umgsFRhI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BFCC116C6;
-	Fri, 19 Dec 2025 13:39:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="As/oYeNx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08884C4CEF1;
+	Fri, 19 Dec 2025 14:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766151588;
-	bh=B7gy/6fcyRRQm9I3gjotnDVopYfBrxz7/tSUiK+f0lE=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=umgsFRhI/tLq/rGjvhZY5yLoaa2+cNDKAXbkW3WzgyHCXYgck6ifXVN5uPuIJzrkh
-	 4jR745ZgRXCOhaX0KQPU3DcLIWgAyXfHH99ge2mjBhdzluWGNL6raJ46Htrnijns6h
-	 v+08m1gkz6mzrbNz9cfpBt4/5/XGEZUuWvnBRwF/uOS46QBI40bWJYKubEDnuwq8nk
-	 h7A/N8h6LdwdqnSD1K6pZPH1NmihIl1gQMoJ/i+qBPaI3sB313iAQmhI6ZU5ONfhwR
-	 0xjhUJkOGazBQyjM1l6YNPSqKtSlvtRfOXhbSiQ4126+w7FSnWOddtb6DCTHDITaGx
-	 gPIlsmJ6Uh60Q==
-Message-ID: <fdb9f97d-7813-48a0-9fdf-ddc039d853eb@kernel.org>
-Date: Fri, 19 Dec 2025 14:39:40 +0100
+	s=k20201202; t=1766156396;
+	bh=7L/q4HPuFy1vCm2MmLUJST8v/l7o4IYp77xRl8XO9N4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=As/oYeNxM4abW+3WVENKEEewYHXwfd4Jel7Df6FpFo45nRTlozbZSFIujcnEqMw5M
+	 Q7MEhHLM1FYJpcmfke7YN1SETscuUbR2VvMjmfOAt3gKCbwybpX+SFWFXkTNhpwpqo
+	 iHa3tFsHhiU3kqOO0OwWWMyIYwbST8yDDW9EvhA4dZn7qQOvfHMvdyx8Im0dYlvQRA
+	 GJ0A3BWC0gHhj3KK3TbMVsJhBG9kt2hk/gDXpmegR9r4o1DgwW894hinlFKRZHtPtU
+	 VeVz2TnQdhwdtp/bwwQvMr8Ckqv5KniUEdqB8aKMwf8NaBAFzrW+3edcsWryr44Yej
+	 MhKKjtXqHXgeQ==
+Message-ID: <bf5b9a62-a120-421e-908d-1404c42e0b60@kernel.org>
+Date: Fri, 19 Dec 2025 15:59:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -35,67 +35,94 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH] netfilter: replace -EEXIST with -EBUSY
-To: Florian Westphal <fw@strlen.de>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
- Jozsef Kadlecsik <kadlec@netfilter.org>, Phil Sutter <phil@nwl.cc>,
- Nikolay Aleksandrov <razor@blackwall.org>, Ido Schimmel <idosch@nvidia.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+Subject: Re: [PATCH v2 3/3] module: Add compile-time check for embedded NUL
+ characters
+Content-Language: en-GB, fr-BE
+To: Dan Carpenter <dan.carpenter@linaro.org>,
+ Daniel Gomez <da.gomez@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>,
  Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Lucas De Marchi <demarchi@kernel.org>,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- bridge@lists.linux.dev, netdev@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- Daniel Gomez <da.gomez@samsung.com>
-References: <20251219-dev-module-init-eexists-netfilter-v1-1-efd3f62412dc@samsung.com>
- <aUUDRGqMQ_Ss3bDJ@strlen.de>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <aUUDRGqMQ_Ss3bDJ@strlen.de>
+ linux-modules@vger.kernel.org, Hans Verkuil <hverkuil+cisco@kernel.org>,
+ Malcolm Priestley <tvboxspy@gmail.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Hans Verkuil <hverkuil@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-hardening@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Chris Li <sparse@chrisli.org>, linux-sparse@vger.kernel.org
+References: <20251010030348.it.784-kees@kernel.org>
+ <20251010030610.3032147-3-kees@kernel.org>
+ <47a2f0c7-c25f-4734-840b-fdefc2f3c4a9@kernel.org>
+ <aUVIlvOSvobrdrKV@stanley.mountain>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <aUVIlvOSvobrdrKV@stanley.mountain>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 19/12/2025 08.48, Florian Westphal wrote:
-> Daniel Gomez <da.gomez@kernel.org> wrote:
->> From: Daniel Gomez <da.gomez@samsung.com>
->>
->> The -EEXIST error code is reserved by the module loading infrastructure
->> to indicate that a module is already loaded. When a module's init
->> function returns -EEXIST, userspace tools like kmod interpret this as
->> "module already loaded" and treat the operation as successful, returning
->> 0 to the user even though the module initialization actually failed.
->>
->> This follows the precedent set by commit 54416fd76770 ("netfilter:
->> conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
->> issue in nf_conntrack_helper_register().
->>
->> Affected modules:
->>   * ebtable_broute ebtable_filter ebtable_nat arptable_filter
->>   * ip6table_filter ip6table_mangle ip6table_nat ip6table_raw
->>   * ip6table_security iptable_filter iptable_mangle iptable_nat
->>   * iptable_raw iptable_security
+Hi Dan, Daniel
+
+On 19/12/2025 13:44, Dan Carpenter wrote:
+> On Fri, Dec 19, 2025 at 01:29:21PM +0100, Matthieu Baerts wrote:
+>> net/mptcp/crypto_test.c:72:1: error: bad integer constant expression
+>> net/mptcp/crypto_test.c:72:1: error: static assertion failed: "MODULE_INFO(license, ...) contains embedded NUL byte"
+>> net/mptcp/crypto_test.c:73:1: error: bad integer constant expression
+>> net/mptcp/crypto_test.c:73:1: error: static assertion failed: "MODULE_INFO(description, ...) contains embedded NUL byte"
 > 
-> But this is very different from what 54416fd76770 fixes.
+> There was a fix for that posted.  Let me ping them to see if anyone is
+> planning to send an actual patch.
 > 
-> Before 54416fd76770. userspace can make a configuration entry that
-> prevents and unrelated module from getting loaded but at the same time
-> it doesn't provide any error to userspace.
-> 
-> All these -EEXIST should not be possible unless the module is
-> already loaded.
+> https://lore.kernel.org/all/20251211175101.GA3405942@google.com/
 
-I see.
+Thank you both for your reply! I didn't think about looking at the v1.
 
-> I'll apply this patch but its not related to 54416fd76770 afaics.
+I confirm that Sami's patch silences the errors on my side. Thanks!
 
-Thanks.
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
-Then, what about removing that paragraph that mentions the commit and add
-something like:
-
-Replace -EEXIST with -EBUSY to ensure correct error reporting in the module
-initialization path.
