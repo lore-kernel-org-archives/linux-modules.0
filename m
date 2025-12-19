@@ -1,129 +1,174 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A620B2BDC2C
-	for <linux-modules@vger.kernel.org>; Thu, 18 Dec 2025 23:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34BC22B5A3;
+	Fri, 19 Dec 2025 05:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766101074; cv=none; b=m4F5N/gqx2VWxFF58OGBH+C9DWfzemEw+XruZsGk6lHw7P6lcR2Vzn4vEyZyHOa5NLOcXkBDMexGcIN5zUkuocJ6pov0Du0amVR55Ki1YdfxxtJZdqlmAfl50BEumjUuGf8OnMU2ax3+zdVGFraidLU92Tg6j1hYBLvGYubOWJM=
+	t=1766121224; cv=none; b=WBtqXsowQMt0gGWTiag2UolGCoVIN2josAy1dgsyxXlrLnv+hi4k2KU4qZTATnrbwljUKpiRxRcTVeuCfKTw2dqi8o3Ed1cMbDBxX1kIs1Q71VWzCwRMlzEgYi748x1Cchdq97PPwthZX4I2ZiClZmDcpS7cKptp1fb7TYXs8gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766101074; c=relaxed/simple;
-	bh=3xlG6FYPR48UFVUeYAAdpz6olWhBuChTlR4EX2RSTmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nzwVdYyRLcRRceRGHxwmtQrHRqD9G9qCGBVUgjKNjRmgG0/nfcwrq+PCk8BwWRY46k68AwJVtjuet+6vpOHv8UMUMaJjMafiqYn+nSHPfPtf86YZxu5Wvc3o9YxbwKYyTL8XoJ0HGCoIHC44byejy/ysHC37oPK5D38niTn+iCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B56SoBTW; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766121224; c=relaxed/simple;
+	bh=gsvvD4fusz8UOMAocP96M5y9o3JhQPWaOjsWz3Kq8bE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hqG8V3Syb0HeLgZWMY894xQ9zxU9Agx5RZZ8JfyW130aWvvp8DTM+2DUgoY9rB8MBFZTCY+e376wsq9U/YBmv+rwXHjRcZQGRdqdHzgXkPPUsXqK2uScRie44Un5tmtirz06c6w4VPNQAbnq7fQScxl7V0uLE5TZzSlr1RC0GNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjq/AAtp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B56SoBTW"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7aab061e7cbso1743566b3a.1
-        for <linux-modules@vger.kernel.org>; Thu, 18 Dec 2025 15:37:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766101072; x=1766705872; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QZalkBGMZvwmDVV1ya5Lu+/scueeEmPRx1djh9JCuvk=;
-        b=B56SoBTWisVDDnhjDS2Wz9+kAkmZvXVLELbFwjKLqDFwtJlrNtTfFHXXXpLY5yexC/
-         WTajhNjaR3kIex1591/sOjRAGAktKrOtb13WUhREB+9NbHkO1Mkc35ogQzabegDgMfcG
-         lSmLqMV3yoPksXpdF+cbFY+phVZX8UU3EqZCStZZbMUcFE+I6z2NPzQBasHerucAF6Gp
-         7hC8vLh0QIGZohXnJd93bbmM/Cp0Wm+nGrJFNol3BmJjsMLNxK9Pnj0KaRtMmnBMasKz
-         Sntin7+Qv5UItxvlv1vOr/A+6KFcEoIYYvveY6GonnKFjL2TuA+mcPpMFiagavnrssgQ
-         ecaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766101072; x=1766705872;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QZalkBGMZvwmDVV1ya5Lu+/scueeEmPRx1djh9JCuvk=;
-        b=hBWc26HFkIjglrOJkn+gIEifSE1dra0i22L4y3zvKFiM9iXhiOPTlZyMuH6BF60PFS
-         ioJLYCe2eTTN8YGmFIB8U2uPsOy5zG5G3LLAAGc21RuGX1PEp2++L1Y76RxCKEyeSpw+
-         vGEsyi4gySfqP4qVltabkyn6hmoA6t6vQ5AXxgXmhF9PdMKH8dvwNQcMBhEAwQ16NKpu
-         wSd+E5HYwD3NqxsMT+0/aKSxAboeH+zSETg2dazOBr4eiS6Xkn4T3lGsmdGBTbNbWMlA
-         bzPyBqxBZN4lSatzsyH3eFUKOpPi8r/OsJ6jTiuwXc1YFA52frSe+M6GCT3SDNnVBqoR
-         fZJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVpdrJ1Yy5JJBxrV0weUgCtt3udzR/es1q9GYnmoBGRmLW3126WlYeyN94kG6yakom3/9JF2FAc3qTGzAZ0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaGa4G/LwC5+a9fpmi8W9ecnIk0vd5EqpdvMaxm1oBYdL5ymc6
-	sUSUQHRITq4E6Fdei+c1Fv1fwD7UhUgSv8l0T1kls1Rgho6Skp97+uVHKsmFjA==
-X-Gm-Gg: AY/fxX67VMTUPT0Ewd98TaHjVoaAwGaqaqPr8ICxWeM8nR/u41T+FEN+ywv3JHDJq6K
-	wFrcoHBSWKckplUozcMJY1BWl+k285/RW0VnV4ndmrfmNET05qvnRzr9S/uBX9VCwJEaItkqT/u
-	e0xk5Fnpalu56Fgg8UeBv3J1NV20kThWGrGJOwYvYdQemIHPaNM7oNy4gcYqMaF2AVoDrCBFHYZ
-	hhVlMUpW1JU+lkElqjh42vRCYpePDuSs+uqEAT+2Sik6bg3SvTfcVIt7WzKnpQlvoT3OR93pC+4
-	/bH2ErpCqPfRfi7bQ++CoctqoLpgwOV65PUG+VRlHDjkVHnBfVzevhliAenN36rG8VRmXf75mcw
-	O/hNGUvqukBF+ntFgZ3rOw7tXe7WuWxOpVGXmdKf95L6osEQhyjiTKYzXsolu5YBmVCL4N2kPfF
-	UCHSNK3Q==
-X-Google-Smtp-Source: AGHT+IF21Ecc6Jc0533/8GWL1yiDmEnXNfeJkD3kNuw+xcQOMYUm7A56eghLjVuqVAs0d9Em+kHEaQ==
-X-Received: by 2002:a05:690c:7012:b0:78d:6d62:f93f with SMTP id 00721157ae682-78fb3ed3062mr7661257b3.8.1766094799618;
-        Thu, 18 Dec 2025 13:53:19 -0800 (PST)
-Received: from localhost ([2601:346:0:79bd:c44b:debe:992d:e6a])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78fb44f01e5sm2294447b3.35.2025.12.18.13.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Dec 2025 13:53:19 -0800 (PST)
-Date: Thu, 18 Dec 2025 16:53:18 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	David Laight <david.laight@runbox.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v3 4/4] tracing: move tracing declarations from kernel.h
- to a dedicated header
-Message-ID: <aUR3zqq4-qMV_bFh@yury>
-References: <20251205175237.242022-1-yury.norov@gmail.com>
- <20251205175237.242022-5-yury.norov@gmail.com>
- <20251216161316.45b3f19ff0ad482018137189@linux-foundation.org>
- <55ceb7bf-0fe9-4edc-81c2-d51366847eec@infradead.org>
- <aUN8Hm377C5A0ILX@yury>
- <20251218123349.35339242@gandalf.local.home>
- <20251218124326.22334325@gandalf.local.home>
- <aURlK1gpCrfLEKN9@yury>
- <20251218162542.476009db@gandalf.local.home>
- <20251218164103.3c535de3@gandalf.local.home>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjq/AAtp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53052C116D0;
+	Fri, 19 Dec 2025 05:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766121224;
+	bh=gsvvD4fusz8UOMAocP96M5y9o3JhQPWaOjsWz3Kq8bE=;
+	h=From:Date:Subject:To:Cc:From;
+	b=rjq/AAtpu2++A/EjejYLIgRcB0d9a7LoMcuTj2d6IJPcXtn58LE8ikZMO8i00goP5
+	 1f/7WYa5XcPrSf1Uzd94Dwei2Czb4Hp91v2QOGGRh1O+LL6we+3DrQFv6e28MYx3ux
+	 dGlycK2G5FWFSnFfhv+ghEpvmQucXV89FGcwunjO0Uhzka6tCor8NROjsg1zsRCaxf
+	 x2zNGMJaw3THo9P2DTOi1ODskmZ3j3ZVVmIdJah9LJ9W9qzr9yXkqEqn0SGvkczL97
+	 M51Ey8LZVP1f+HoNSr98z17EuUqdgTBolCAAG2atHzVwqoRmY/+kYJngT/iGhdBX7z
+	 q7H733E3kMxww==
+From: Daniel Gomez <da.gomez@kernel.org>
+Date: Fri, 19 Dec 2025 06:13:20 +0100
+Subject: [PATCH] netfilter: replace -EEXIST with -EBUSY
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251218164103.3c535de3@gandalf.local.home>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251219-dev-module-init-eexists-netfilter-v1-1-efd3f62412dc@samsung.com>
+X-B4-Tracking: v=1; b=H4sIAO/eRGkC/x2NwQqDMBAFf0X23IUmNVL6K9JDNS+6YKNkowjiv
+ xs8DgMzBymSQOlTHZSwicocC5hHRf34iwNYfGGyT+uMNW/22Pg/+3UqJkpmYBfNyhE5yJSR2DW
+ hDt3LWd93VDpLQpD9frTf87wA+wCYS3MAAAA=
+X-Change-ID: 20251218-dev-module-init-eexists-netfilter-56f4fb352dcb
+To: Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+ Phil Sutter <phil@nwl.cc>, Nikolay Aleksandrov <razor@blackwall.org>, 
+ Ido Schimmel <idosch@nvidia.com>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Lucas De Marchi <demarchi@kernel.org>, 
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ bridge@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Daniel Gomez <da.gomez@samsung.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3967; i=da.gomez@samsung.com;
+ h=from:subject:message-id; bh=aLysHjbqpI8FaFJ4wtkcZbXvdugD32ypDbpUfYtRcaE=;
+ b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRN77Y8OOuXAROsrdnRmMDgZy4zuf/ygiHytLh
+ 91q+5GbhcmJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUTe+wAKCRBAnqPEHxlR
+ +5xrD/9P2SgKSwKvpQRtM9kmAOh93wT4s4ZSnBztJZMV4mzJV40AOfTIDpHGgeDVem09lfB2ZMA
+ YE1L912aK1qiUk9YDCjtn98C5xqtOXvZtHwRwl5dkStnYOqlpC+mA+bXUz+kEKsE/hKWmO7x2I1
+ 7OADPTymgeGRDJIpLhkNx0OrLdbAAN8dbYs/eCpPkT0+YResXIsfbkYiINLmWeBdmbmxqwWbxzc
+ usIaNiSl4OzDI7VPg8sHrsJz4sbMEOAz+VNoM6Wgq/3qnnKMRGdrg5X/iRWthcD6U8tggNdzNhg
+ dQhusUZv2pQ1kw37mXwVJ6j3f/jpFeIS4CwKbF9S3nKd3+tle9CwfRfmAdCe5vhhjveAj3Yqhna
+ milZZT5mIaBD6BTFNFr5Hb5nqpIrOivQocOmu2WlhFu1jFfCEMnQgv0t1/lgghzKM07Xos7nn60
+ nPTTCNbgujniIVURYeEWDAn+mpu6pC8Is1R9EGMYajeZC26dGPqF0WcHJJtHdI30Jlnn3W3ab0n
+ IprltDMy+1pga2kvqNg2U5/fGcNxlMn66D61RtQSoaBntfRaINhBt9LZINHDBGZEeC2M2zf2aTF
+ IssZlq7yQb8wp5YFAkDTVpdKgCZeuIP7+xhywNLiWTo12iQez4so/XZurSTJNva36Vvc7UVpsIK
+ 7UCpVRoBp8QWoHQ==
+X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
+ fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
 
-On Thu, Dec 18, 2025 at 04:41:03PM -0500, Steven Rostedt wrote:
-> On Thu, 18 Dec 2025 16:25:42 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Thu, 18 Dec 2025 15:33:47 -0500
-> > Yury Norov <yury.norov@gmail.com> wrote:
-> > 
-> > > > I don't actually remember why I had __trace_puts() pass in the size. I
-> > > > could change it to:    
-> > > 
-> > > This is the best approach. I'll schedule it for v4. Would you like me to
-> > > take it as-is, or you'd send a patch?
-> > >    
-> > 
-> > Let me send an official patch.
-> > 
-> 
-> You can find it here (I Cc'd you too). Feel free to add it to your patch set.
-> 
->   https://lore.kernel.org/all/20251218163739.5605f9ea@gandalf.local.home/
+From: Daniel Gomez <da.gomez@samsung.com>
 
-Thanks, will do.
+The -EEXIST error code is reserved by the module loading infrastructure
+to indicate that a module is already loaded. When a module's init
+function returns -EEXIST, userspace tools like kmod interpret this as
+"module already loaded" and treat the operation as successful, returning
+0 to the user even though the module initialization actually failed.
+
+This follows the precedent set by commit 54416fd76770 ("netfilter:
+conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
+issue in nf_conntrack_helper_register().
+
+Affected modules:
+  * ebtable_broute ebtable_filter ebtable_nat arptable_filter
+  * ip6table_filter ip6table_mangle ip6table_nat ip6table_raw
+  * ip6table_security iptable_filter iptable_mangle iptable_nat
+  * iptable_raw iptable_security
+
+Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+---
+The error code -EEXIST is reserved by the kernel module loader to
+indicate that a module with the same name is already loaded. When a
+module's init function returns -EEXIST, kmod interprets this as "module
+already loaded" and reports success instead of failure [1].
+
+The kernel module loader will include a safety net that provides -EEXIST
+to -EBUSY with a warning [2], and a documentation patch has been sent to
+prevent future occurrences [3].
+
+These affected code paths were identified using a static analysis tool
+[4] that traces -EEXIST returns to module_init(). The tool was developed
+with AI assistance and all findings were manually validated.
+
+Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
+Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [2]
+Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
+Link: https://gitlab.com/-/snippets/4913469 [4]
+---
+ net/bridge/netfilter/ebtables.c | 2 +-
+ net/netfilter/nf_log.c          | 4 ++--
+ net/netfilter/x_tables.c        | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/net/bridge/netfilter/ebtables.c b/net/bridge/netfilter/ebtables.c
+index 5697e3949a36..a04fc1757528 100644
+--- a/net/bridge/netfilter/ebtables.c
++++ b/net/bridge/netfilter/ebtables.c
+@@ -1299,7 +1299,7 @@ int ebt_register_template(const struct ebt_table *t, int (*table_init)(struct ne
+ 	list_for_each_entry(tmpl, &template_tables, list) {
+ 		if (WARN_ON_ONCE(strcmp(t->name, tmpl->name) == 0)) {
+ 			mutex_unlock(&ebt_mutex);
+-			return -EEXIST;
++			return -EBUSY;
+ 		}
+ 	}
+ 
+diff --git a/net/netfilter/nf_log.c b/net/netfilter/nf_log.c
+index 74cef8bf554c..62cf6a30875e 100644
+--- a/net/netfilter/nf_log.c
++++ b/net/netfilter/nf_log.c
+@@ -89,7 +89,7 @@ int nf_log_register(u_int8_t pf, struct nf_logger *logger)
+ 	if (pf == NFPROTO_UNSPEC) {
+ 		for (i = NFPROTO_UNSPEC; i < NFPROTO_NUMPROTO; i++) {
+ 			if (rcu_access_pointer(loggers[i][logger->type])) {
+-				ret = -EEXIST;
++				ret = -EBUSY;
+ 				goto unlock;
+ 			}
+ 		}
+@@ -97,7 +97,7 @@ int nf_log_register(u_int8_t pf, struct nf_logger *logger)
+ 			rcu_assign_pointer(loggers[i][logger->type], logger);
+ 	} else {
+ 		if (rcu_access_pointer(loggers[pf][logger->type])) {
+-			ret = -EEXIST;
++			ret = -EBUSY;
+ 			goto unlock;
+ 		}
+ 		rcu_assign_pointer(loggers[pf][logger->type], logger);
+diff --git a/net/netfilter/x_tables.c b/net/netfilter/x_tables.c
+index 90b7630421c4..48105ea3df15 100644
+--- a/net/netfilter/x_tables.c
++++ b/net/netfilter/x_tables.c
+@@ -1764,7 +1764,7 @@ EXPORT_SYMBOL_GPL(xt_hook_ops_alloc);
+ int xt_register_template(const struct xt_table *table,
+ 			 int (*table_init)(struct net *net))
+ {
+-	int ret = -EEXIST, af = table->af;
++	int ret = -EBUSY, af = table->af;
+ 	struct xt_template *t;
+ 
+ 	mutex_lock(&xt[af].mutex);
+
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251218-dev-module-init-eexists-netfilter-56f4fb352dcb
+
+Best regards,
+--  
+Daniel Gomez <da.gomez@samsung.com>
+
