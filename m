@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6179A347DD;
-	Sat, 20 Dec 2025 03:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DA91D90DF;
+	Sat, 20 Dec 2025 03:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766202503; cv=none; b=NVm3UoJkItQUtjwxFe1Ew5whntbIw7lAC+qd26S3eNckKgj4TXAanF4DdSBmuFkLlFvnt0s4H3hCXtycHC+T2BJAonj0AVg8mnw6Y82G6LF540nXOd/EBkQHwRw5mcWv6VjzP2bR/3mnW0XvJGZUwHW+9wQQipnZBgYpirm9edc=
+	t=1766202590; cv=none; b=Q0asKfyk5eJ8JrC1QfOC1BgvNO0BV2Stwt2OzGlDjYi+oEDKBLsQObwKaVRP/RJMKbWqVpZBl7DCGeTOxabgEIeqF6D9T5znSqoqA+yYb5hpB1pMDY8iCbOxV5zjQ2Q/0PczzW7ijFLSykT84wvTt/qDRxlPS3fvhq+EO0kQbSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766202503; c=relaxed/simple;
-	bh=n0UjH6rxp4IB+pxWkaxiUb1+qekNAzowkS8FcdDjBcc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ew1Pxov3mnQ4s6sqDK8XqTJh7Z73G4Yf7+RaTUNt7cPf0hcXnsQRAAzfiZoBVF6y3WIZoecGuRvRysHuB68LwD0nPfQE3AIRDtbrl36Bob4AQYbvyUgj2Bh2PIoE4CLEvoHqT75aAlWh+O+8EnWKJgIDCcr2wcYQ/Mk6LdN4F/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r/5L02zY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766202590; c=relaxed/simple;
+	bh=QWh9rxCDoyp2juQL2Q1ZXFFSFiSU37YjjmSjsZmDVc4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sz/uCP2i9Roh7lLMF14aIr9l4h6I/T59DjTZxy+rD+wf7W0yJetX/UV3V/rWVgd4SbP4iXW3orXI4TvlW1ji4FAEKzeexixEugrVmjTyWGT3V2tykFRPfXMkI/9v1HhW+pat9R4/yzvzpT3AZ8ZzERQyw/dk5Hi5b2qVKoI8nLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFs1me0N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r/5L02zY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7620AC4CEF5;
-	Sat, 20 Dec 2025 03:48:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFs1me0N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40163C4CEF5;
+	Sat, 20 Dec 2025 03:49:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766202502;
-	bh=n0UjH6rxp4IB+pxWkaxiUb1+qekNAzowkS8FcdDjBcc=;
+	s=k20201202; t=1766202589;
+	bh=QWh9rxCDoyp2juQL2Q1ZXFFSFiSU37YjjmSjsZmDVc4=;
 	h=From:Date:Subject:To:Cc:From;
-	b=r/5L02zYRWhq/D/qH7z7fVzKyD0mIE1AMVEG9j83a2ituyweGtiKh4rDEwpClWmBX
-	 fxF1sjTBGH2LwKbwdFsQT1+sQNb80GKOE4ddXODTaM9rVYaH7qgp0nhcAoc47Tra3f
-	 9qMiClSWVV56YmxAV8gNVOCO/9Ve7AJfRjfeJjSA96GxZ4E6BTL7ivvhNh7ZSjQCwZ
-	 SNOM423e4eH8Y1SfVYmizzgSMfKGqvpa4v4JZzcO8UU7IlhfjZFIsPrBdOkOmwjFTD
-	 ZvU64cIhG1amdftbgy1yMxkkw/VONoZP2UADcDo3WTbRrv0u9IN6iYfcLsbFvaP1PE
-	 zoypOG0xUh6VA==
+	b=nFs1me0NHvzgDwN0vE8GxjlcUSL21L5JGQteBCscNwpKpAIDAMKXnmXn00a8OkPoR
+	 lLWudfZKFm7IRQTWeYT+7SDgTk9YIgntpZfdcZ0AhYQ8lI/gS/d5J9ENBqmVskPNJU
+	 loHutJ/GNoMp8FFiENs97+NWWxP5UDo+hRgD7sDNTQl97P4AdqZfCiXsVK8pYRviWW
+	 0O7yw/FXDW4uVF7ImgIn1Sv5ivI0MOJSfUh0+T23GLAe2IQs6VVu60jsyy3RokqDyA
+	 lmH1WkywZ6f3Bw/hX//SxVQGzEHbtAfSwFMcoKfWZZQzuCRIv1wVTOV1BwQtjUV7rk
+	 5612b2g9BNXiA==
 From: Daniel Gomez <da.gomez@kernel.org>
-Date: Sat, 20 Dec 2025 04:48:09 +0100
-Subject: [PATCH] bpf: crypto: replace -EEXIST with -EBUSY
+Date: Sat, 20 Dec 2025 04:49:37 +0100
+Subject: [PATCH] dm: replace -EEXIST with -EBUSY
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -36,40 +36,34 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com>
-X-B4-Tracking: v=1; b=H4sIAHgcRmkC/x3M0QpAMBSA4VfRuXbKhhavIhdjB6cY7YyUvLvl8
- uuv/wGhwCTQZg8Eulh49wkqz2BcrJ8J2SWDLnSttGrQ0YXb7s41Fc8RiW6WKDgcEzqrrS1rY6r
- SQDocgSa+/3vXv+8HSGtNv20AAAA=
-X-Change-ID: 20251219-dev-module-init-eexists-bpf-da2aa3577437
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>
+Message-Id: <20251220-dev-module-init-eexists-dm-devel-v1-1-90ed00444ea0@samsung.com>
+X-B4-Tracking: v=1; b=H4sIANAcRmkC/x2NwQrCMBAFf6Xs2QWzkqD+ingQ90UX2lSybSmU/
+ rvR4zAws5GjGpyu3UYVi7mNpUE4dPR8P8oLbNqY5CgxSDizYuFh1LlvptjEwGo+OevwU+hZNMW
+ UL1lOKVLLfCqyrf/F7b7vX13hMfhyAAAA
+X-Change-ID: 20251218-dev-module-init-eexists-dm-devel-2d656f9f2365
+To: Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+ Mikulas Patocka <mpatocka@redhat.com>, 
+ Benjamin Marzinski <bmarzins@redhat.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
  Aaron Tomlin <atomlin@atomlin.com>, Lucas De Marchi <demarchi@kernel.org>, 
- bpf@vger.kernel.org, linux-modules@vger.kernel.org, 
+ dm-devel@lists.linux.dev, linux-modules@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2483; i=da.gomez@samsung.com;
- h=from:subject:message-id; bh=4s4dcK1i6cCHvuwA2GQnp8g1ai+DeFSrtU/4w51RHIk=;
- b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRhyA9aBNfYYJVkENORThiOc50zRlcUVflTF4r
- 2pfWfH2qeSJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYcgAAKCRBAnqPEHxlR
- +63BD/wIRh5TK+3OXjC5jdb+1rzikUD0jwdH68zqcdPL4S1NaSWobHWXdz5Pnj07JpCD5Z/fOe+
- yk4lExAH8bu33XowtZg6TMRGlgR0vQYWNP0vEWMg3Au7JzTJ+ylAkDQ3Vhwz1uxFL9LkyVkh0k2
- pxF9QlqA4aY8CnAzusRm2/FwS8Ytfnxi0HMnO2croFBfsdVx+XjR79J7JVxRoBHtwbl5QSUpS6Y
- 1fCaVub8sPn1QZPBwVbwdIJFatGlj8mQNXkASyR2CQGv6acjpX5E5ylEXhYDae4CcNf379pLHYn
- m7fQIdObvmbjXfKiqOVprHFDNgj9iddsL+yIc/My+OOCe6s36dAcNkxcMUf+c/gKcb8teq+uiFu
- WYJ9WzSayNe6wqtZKhQrWbQyF6WoCtXtNoTUCN8TR5vwGlXNLoUyM8puiioQOL+7zWqivehHUoS
- Ca8lzp9aIqsUB1OiiOqyZOxQS2oFewKfikkCnrtpdzGBnLE7HHk2yaTJU57Lq78A25P7Y8Dc5nN
- xERE5nO+rkyKDCUU78lORno5lGobcoHiXCST2W3vZHDDrA+SUxchAoUkmAtC33TVUSUGTyd1vZL
- uTMy1mnUTWMcci6QF7W2cy2VFa0dnugaZSzEeoRa+V8DvhY1xtGEOEmvJVVbgGvHvc8AZBdMDq6
- 23HMZWGcg7HllVg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3952; i=da.gomez@samsung.com;
+ h=from:subject:message-id; bh=MG8e+vxiY9C9ehStOyYYHRRXlZKUpSGUgXejP7etWME=;
+ b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRhzZeZlSIe1p2xlI3eFIWTKBGw6SEvI3Bn1vw
+ rmtxaeFxnyJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYc2QAKCRBAnqPEHxlR
+ +346EACVULz1BLBsWaPWpD4Z/3jTvDiinEDK8Ekgi5Cc/7TBCp8VVusYMRUyHqOXKNfbe/8J5+B
+ Qe35rFvildNH6bhrbvmDm3pwJpFEfCORu2zFZg/AyUfhyD0uO0C/9+7yfjqYNJ47uOU34uN+GyK
+ rLRCfBGMMFTN/rWQm8mrhVTp26zNCuWTr7X/u8+gvyir/4Crid7c78bMbq0Vaz8+3Arxyjpt2Pn
+ Bcn19Y16B+31RXuGTryDg0qJ/jhb0eWMjOrTrnonytFK9Bg8vAM9+GeBnCuVZBONxReeiR1tnRP
+ Zcs4iYfSU3Wl3Q+Qs7/sqdIYpyU+mXXAhUq+GkNMabrO3sulfzZPx06nM4IZ14/w4W2AKoenUrf
+ fctDw/VOBGjQZa1GlCorRjvL3pbd5PUWwAiUldzJvWYyjZPCZbCyuhFS9K6zwKXBHUHuoaxARyz
+ 2rJ7VjNu2CKkL/pRC/zMa6StbxLVvZ4OwGzDm5A7SUJ7Zs7/WuDfq8UOZ/HfZNU4ekpNXJU02zs
+ 7dHz7OfHKTFTNH3NL1BYnYnDYaHcxo4DG1G71j2Eea2Wjix3hBep4mkAW3S881n9IMq15GXRaG3
+ mIMIXCES5MxDY7SJNuy6mnnQUtrQKRPfnBlHlRj5SuamMaQTt8ey2ZwOWoDLjGEjh3lRzW4ywLS
+ HenzJUJsDYyJgnw==
 X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
  fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
 
@@ -85,9 +79,10 @@ This follows the precedent set by commit 54416fd76770 ("netfilter:
 conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
 issue in nf_conntrack_helper_register().
 
-This affects bpf_crypto_skcipher module. While the configuration
-required to build it as a module is unlikely in practice, it is
-technically possible, so fix it for correctness.
+Affected modules:
+  * dm_cache dm_clone dm_integrity dm_mirror dm_multipath dm_pcache
+  * dm_vdo dm-ps-round-robin dm_historical_service_time dm_io_affinity
+  * dm_queue_length dm_service_time dm_snapshot
 
 Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
@@ -109,26 +104,68 @@ Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@int
 Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
 Link: https://gitlab.com/-/snippets/4913469 [4]
 ---
- kernel/bpf/crypto.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/dm-exception-store.c | 2 +-
+ drivers/md/dm-log.c             | 2 +-
+ drivers/md/dm-path-selector.c   | 2 +-
+ drivers/md/dm-target.c          | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 83c4d9943084..1ab79a6dec84 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -60,7 +60,7 @@ struct bpf_crypto_ctx {
- int bpf_crypto_register_type(const struct bpf_crypto_type *type)
- {
- 	struct bpf_crypto_type_list *node;
--	int err = -EEXIST;
-+	int err = -EBUSY;
+diff --git a/drivers/md/dm-exception-store.c b/drivers/md/dm-exception-store.c
+index c3799757bf4a..88f119a0a2ae 100644
+--- a/drivers/md/dm-exception-store.c
++++ b/drivers/md/dm-exception-store.c
+@@ -116,7 +116,7 @@ int dm_exception_store_type_register(struct dm_exception_store_type *type)
+ 	if (!__find_exception_store_type(type->name))
+ 		list_add(&type->list, &_exception_store_types);
+ 	else
+-		r = -EEXIST;
++		r = -EBUSY;
+ 	spin_unlock(&_lock);
  
- 	down_write(&bpf_crypto_types_sem);
- 	list_for_each_entry(node, &bpf_crypto_types, list) {
+ 	return r;
+diff --git a/drivers/md/dm-log.c b/drivers/md/dm-log.c
+index 9d85d045f9d9..bced5a783ee3 100644
+--- a/drivers/md/dm-log.c
++++ b/drivers/md/dm-log.c
+@@ -121,7 +121,7 @@ int dm_dirty_log_type_register(struct dm_dirty_log_type *type)
+ 	if (!__find_dirty_log_type(type->name))
+ 		list_add(&type->list, &_log_types);
+ 	else
+-		r = -EEXIST;
++		r = -EBUSY;
+ 	spin_unlock(&_lock);
+ 
+ 	return r;
+diff --git a/drivers/md/dm-path-selector.c b/drivers/md/dm-path-selector.c
+index d0b883fabfeb..2b0ac200f1c0 100644
+--- a/drivers/md/dm-path-selector.c
++++ b/drivers/md/dm-path-selector.c
+@@ -107,7 +107,7 @@ int dm_register_path_selector(struct path_selector_type *pst)
+ 
+ 	if (__find_path_selector_type(pst->name)) {
+ 		kfree(psi);
+-		r = -EEXIST;
++		r = -EBUSY;
+ 	} else
+ 		list_add(&psi->list, &_path_selectors);
+ 
+diff --git a/drivers/md/dm-target.c b/drivers/md/dm-target.c
+index 8fede41adec0..1fd41289de36 100644
+--- a/drivers/md/dm-target.c
++++ b/drivers/md/dm-target.c
+@@ -88,7 +88,7 @@ int dm_register_target(struct target_type *tt)
+ 	if (__find_target_type(tt->name)) {
+ 		DMERR("%s: '%s' target already registered",
+ 		      __func__, tt->name);
+-		rv = -EEXIST;
++		rv = -EBUSY;
+ 	} else {
+ 		list_add(&tt->list, &_targets);
+ 	}
 
 ---
 base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251219-dev-module-init-eexists-bpf-da2aa3577437
+change-id: 20251218-dev-module-init-eexists-dm-devel-2d656f9f2365
 
 Best regards,
 --  
