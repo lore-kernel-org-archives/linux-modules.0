@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DA91D90DF;
-	Sat, 20 Dec 2025 03:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AE71D90DF;
+	Sat, 20 Dec 2025 03:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766202590; cv=none; b=Q0asKfyk5eJ8JrC1QfOC1BgvNO0BV2Stwt2OzGlDjYi+oEDKBLsQObwKaVRP/RJMKbWqVpZBl7DCGeTOxabgEIeqF6D9T5znSqoqA+yYb5hpB1pMDY8iCbOxV5zjQ2Q/0PczzW7ijFLSykT84wvTt/qDRxlPS3fvhq+EO0kQbSw=
+	t=1766202644; cv=none; b=p5l1zYnCZ1QY6sFJd6eZlDrfQhE80ilf93j9rsNj2ZwcwBcz55VUCJNuLPzZXyKKgvsYQpdmlDLpeCHBSf3n2KWGUU5MDC5K3bzMKlzPK1UFXA/TQsHi8hyLhqMp93AyyU0pHywksCVnmPVN3omu7orEjk0+r3yy36sMGTsIr1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766202590; c=relaxed/simple;
-	bh=QWh9rxCDoyp2juQL2Q1ZXFFSFiSU37YjjmSjsZmDVc4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sz/uCP2i9Roh7lLMF14aIr9l4h6I/T59DjTZxy+rD+wf7W0yJetX/UV3V/rWVgd4SbP4iXW3orXI4TvlW1ji4FAEKzeexixEugrVmjTyWGT3V2tykFRPfXMkI/9v1HhW+pat9R4/yzvzpT3AZ8ZzERQyw/dk5Hi5b2qVKoI8nLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFs1me0N; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766202644; c=relaxed/simple;
+	bh=MrMds3utW8eAWwtDygjBW2IqUKEl4oFRSbnzbCmLv7o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tT+MTwmkER0Ek2Bzi0uaPE96voC3zNtkcaDEuo4W0aGsXnCFD/w4wjfMAKGUtvO3U0Uoa7J+a75M3U3JXTl8J67Vtz9g2gPtu8kx+UWRJoG1iYU3C0GyUN1CDKhu+6F6s6Ym+S/RlX2h9ZgPO0cfHJ4pu8y1w5nG80xekxSzqTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6T1wVxO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFs1me0N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40163C4CEF5;
-	Sat, 20 Dec 2025 03:49:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6T1wVxO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8542DC4CEF5;
+	Sat, 20 Dec 2025 03:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766202589;
-	bh=QWh9rxCDoyp2juQL2Q1ZXFFSFiSU37YjjmSjsZmDVc4=;
+	s=k20201202; t=1766202644;
+	bh=MrMds3utW8eAWwtDygjBW2IqUKEl4oFRSbnzbCmLv7o=;
 	h=From:Date:Subject:To:Cc:From;
-	b=nFs1me0NHvzgDwN0vE8GxjlcUSL21L5JGQteBCscNwpKpAIDAMKXnmXn00a8OkPoR
-	 lLWudfZKFm7IRQTWeYT+7SDgTk9YIgntpZfdcZ0AhYQ8lI/gS/d5J9ENBqmVskPNJU
-	 loHutJ/GNoMp8FFiENs97+NWWxP5UDo+hRgD7sDNTQl97P4AdqZfCiXsVK8pYRviWW
-	 0O7yw/FXDW4uVF7ImgIn1Sv5ivI0MOJSfUh0+T23GLAe2IQs6VVu60jsyy3RokqDyA
-	 lmH1WkywZ6f3Bw/hX//SxVQGzEHbtAfSwFMcoKfWZZQzuCRIv1wVTOV1BwQtjUV7rk
-	 5612b2g9BNXiA==
+	b=f6T1wVxO5/BnJq19l7xlgAyL3t9t8ZSt2+XcG4Xt0o9yqBk+n+LBR873K82UEMCXl
+	 lkfR8Zpz8/N1i7IIYwt+Tc+8IzUYETOiO0bV66IP5ZMX8J1AhEVldltoAUOJNr+WRk
+	 zHO5xpGEf3QFGsu4ITn05+cn7tnbD/IOVa4/MpNr4XzfM5dSPa22Db5vTSL6xxx/o/
+	 B8MJhXIqZu3ahd6sLKfGsiGn4/GLfq724WN96Ec5lxwcoi5yUgONt0F960cnfvapTd
+	 N5TmTWnUVbbA5RmTlWz1l2cPkFJl1liEFAR3sl+TETJsIj4in68nOozTvxBhEbL+By
+	 2OqfopSQTgzqw==
 From: Daniel Gomez <da.gomez@kernel.org>
-Date: Sat, 20 Dec 2025 04:49:37 +0100
-Subject: [PATCH] dm: replace -EEXIST with -EBUSY
+Date: Sat, 20 Dec 2025 04:50:31 +0100
+Subject: [PATCH] KEYS: replace -EEXIST with -EBUSY
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -36,34 +36,38 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251220-dev-module-init-eexists-dm-devel-v1-1-90ed00444ea0@samsung.com>
-X-B4-Tracking: v=1; b=H4sIANAcRmkC/x2NwQrCMBAFf6Xs2QWzkqD+ingQ90UX2lSybSmU/
- rvR4zAws5GjGpyu3UYVi7mNpUE4dPR8P8oLbNqY5CgxSDizYuFh1LlvptjEwGo+OevwU+hZNMW
- UL1lOKVLLfCqyrf/F7b7vX13hMfhyAAAA
-X-Change-ID: 20251218-dev-module-init-eexists-dm-devel-2d656f9f2365
-To: Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
- Mikulas Patocka <mpatocka@redhat.com>, 
- Benjamin Marzinski <bmarzins@redhat.com>
+Message-Id: <20251220-dev-module-init-eexists-keyring-v1-1-a2f23248c300@samsung.com>
+X-B4-Tracking: v=1; b=H4sIAAYdRmkC/x2NwQqDMBAFf0X27EISlIq/UnpQ89RFG0tWRRH/3
+ dDjMDBzkSIKlOrsoohdVJaQwOYZdWMTBrD4xOSMK62zFXvs/F38NicTZGXgEF2VJ5xRwsBla0z
+ lX+jbwlCq/CJ6Of6H9+e+HxemqPNxAAAA
+X-Change-ID: 20251218-dev-module-init-eexists-keyring-5b008d7efb40
+To: David Howells <dhowells@redhat.com>, Lukas Wunner <lukas@wunner.de>, 
+ Ignat Korchagin <ignat@cloudflare.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Jarkko Sakkinen <jarkko@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
  Aaron Tomlin <atomlin@atomlin.com>, Lucas De Marchi <demarchi@kernel.org>, 
- dm-devel@lists.linux.dev, linux-modules@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
+ keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3952; i=da.gomez@samsung.com;
- h=from:subject:message-id; bh=MG8e+vxiY9C9ehStOyYYHRRXlZKUpSGUgXejP7etWME=;
- b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRhzZeZlSIe1p2xlI3eFIWTKBGw6SEvI3Bn1vw
- rmtxaeFxnyJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYc2QAKCRBAnqPEHxlR
- +346EACVULz1BLBsWaPWpD4Z/3jTvDiinEDK8Ekgi5Cc/7TBCp8VVusYMRUyHqOXKNfbe/8J5+B
- Qe35rFvildNH6bhrbvmDm3pwJpFEfCORu2zFZg/AyUfhyD0uO0C/9+7yfjqYNJ47uOU34uN+GyK
- rLRCfBGMMFTN/rWQm8mrhVTp26zNCuWTr7X/u8+gvyir/4Crid7c78bMbq0Vaz8+3Arxyjpt2Pn
- Bcn19Y16B+31RXuGTryDg0qJ/jhb0eWMjOrTrnonytFK9Bg8vAM9+GeBnCuVZBONxReeiR1tnRP
- Zcs4iYfSU3Wl3Q+Qs7/sqdIYpyU+mXXAhUq+GkNMabrO3sulfzZPx06nM4IZ14/w4W2AKoenUrf
- fctDw/VOBGjQZa1GlCorRjvL3pbd5PUWwAiUldzJvWYyjZPCZbCyuhFS9K6zwKXBHUHuoaxARyz
- 2rJ7VjNu2CKkL/pRC/zMa6StbxLVvZ4OwGzDm5A7SUJ7Zs7/WuDfq8UOZ/HfZNU4ekpNXJU02zs
- 7dHz7OfHKTFTNH3NL1BYnYnDYaHcxo4DG1G71j2Eea2Wjix3hBep4mkAW3S881n9IMq15GXRaG3
- mIMIXCES5MxDY7SJNuy6mnnQUtrQKRPfnBlHlRj5SuamMaQTt8ey2ZwOWoDLjGEjh3lRzW4ywLS
- HenzJUJsDYyJgnw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3333; i=da.gomez@samsung.com;
+ h=from:subject:message-id; bh=q4cI0aBVoXHVJKhjzx9eP5SA50zhMHGoxrB7LDqV3kk=;
+ b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRh0PGnY21kDDwXOVauY8RTS22ihvwD0eaIfmf
+ LMLk8+ZhcKJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYdDwAKCRBAnqPEHxlR
+ +wa0D/4xxAMBT8H1iUmQHNZewuG0zfcL0uHrZ4rgUTrfKRV7AuL9BlOhEGfLmU88ORKPQBzDn2o
+ rzMJF6+V0/1lJ3Q3+qCabABUADW50OaouR8mNzXsg+tpxOXg8IC1rJe+u4awcuQOsaoO43b1slK
+ mZm3lsR7gb6mZWc8DjEu9yrzqZB82df1N6AdVZ+3mnj/ar9R9lymNNILHpp/W5RFy2DDkcD26Rv
+ coGeKkdvHsFDyZpf46Y2K+YXHbu07FL6gX/7Ho9GYVCF4BdFy8GJjiihUZ7zQXcqAt3H1Cl60Y/
+ lGnEtQZnFeixpWRlYO4vUMnwV43AErB49Nm1AB6EhM3ZVsMhcBKz680y/VqxHE8UnJxQFP5qI4M
+ yYgzqy/v8W+sN1FD7kW1AEDSxmKVnJR3ZyP4JrH8kOo5Vlvg2edb/3yBdOyD8rY8tGxNHq9rrT1
+ wyRNdFBtcjH/CoGsmYFq9AYs+vEqyHP2CJYHupXnE4q2TIUG0RFATLLzKIREXRQ0DhLKXwXRROf
+ At+x3LxriA0mN4fFA8pAMlz0v/5kHM5PNZrCXYDbgxqdSEwN6mmCs2N5EhSA9AgFgSthpUF4tPc
+ 7LcAcaasdDpqoszbNavgk10dTc9R5kcTtRUNv+3OBmzJMWRAHTXmHx5de6F1JrgZO6LpiMjzDG5
+ AXv0xrgDZdSlx7w==
 X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
  fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
 
@@ -80,9 +84,8 @@ conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
 issue in nf_conntrack_helper_register().
 
 Affected modules:
-  * dm_cache dm_clone dm_integrity dm_mirror dm_multipath dm_pcache
-  * dm_vdo dm-ps-round-robin dm_historical_service_time dm_io_affinity
-  * dm_queue_length dm_service_time dm_snapshot
+  * pkcs8_key_parser x509_key_parser asymmetric_keys dns_resolver
+  * nvme_keyring pkcs7_test_key rxrpc turris_signing_key
 
 Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
@@ -104,68 +107,49 @@ Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@int
 Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
 Link: https://gitlab.com/-/snippets/4913469 [4]
 ---
- drivers/md/dm-exception-store.c | 2 +-
- drivers/md/dm-log.c             | 2 +-
- drivers/md/dm-path-selector.c   | 2 +-
- drivers/md/dm-target.c          | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ crypto/asymmetric_keys/asymmetric_type.c | 2 +-
+ security/keys/key.c                      | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/md/dm-exception-store.c b/drivers/md/dm-exception-store.c
-index c3799757bf4a..88f119a0a2ae 100644
---- a/drivers/md/dm-exception-store.c
-+++ b/drivers/md/dm-exception-store.c
-@@ -116,7 +116,7 @@ int dm_exception_store_type_register(struct dm_exception_store_type *type)
- 	if (!__find_exception_store_type(type->name))
- 		list_add(&type->list, &_exception_store_types);
- 	else
--		r = -EEXIST;
-+		r = -EBUSY;
- 	spin_unlock(&_lock);
- 
- 	return r;
-diff --git a/drivers/md/dm-log.c b/drivers/md/dm-log.c
-index 9d85d045f9d9..bced5a783ee3 100644
---- a/drivers/md/dm-log.c
-+++ b/drivers/md/dm-log.c
-@@ -121,7 +121,7 @@ int dm_dirty_log_type_register(struct dm_dirty_log_type *type)
- 	if (!__find_dirty_log_type(type->name))
- 		list_add(&type->list, &_log_types);
- 	else
--		r = -EEXIST;
-+		r = -EBUSY;
- 	spin_unlock(&_lock);
- 
- 	return r;
-diff --git a/drivers/md/dm-path-selector.c b/drivers/md/dm-path-selector.c
-index d0b883fabfeb..2b0ac200f1c0 100644
---- a/drivers/md/dm-path-selector.c
-+++ b/drivers/md/dm-path-selector.c
-@@ -107,7 +107,7 @@ int dm_register_path_selector(struct path_selector_type *pst)
- 
- 	if (__find_path_selector_type(pst->name)) {
- 		kfree(psi);
--		r = -EEXIST;
-+		r = -EBUSY;
- 	} else
- 		list_add(&psi->list, &_path_selectors);
- 
-diff --git a/drivers/md/dm-target.c b/drivers/md/dm-target.c
-index 8fede41adec0..1fd41289de36 100644
---- a/drivers/md/dm-target.c
-+++ b/drivers/md/dm-target.c
-@@ -88,7 +88,7 @@ int dm_register_target(struct target_type *tt)
- 	if (__find_target_type(tt->name)) {
- 		DMERR("%s: '%s' target already registered",
- 		      __func__, tt->name);
--		rv = -EEXIST;
-+		rv = -EBUSY;
- 	} else {
- 		list_add(&tt->list, &_targets);
+diff --git a/crypto/asymmetric_keys/asymmetric_type.c b/crypto/asymmetric_keys/asymmetric_type.c
+index 348966ea2175..2c6f3a725102 100644
+--- a/crypto/asymmetric_keys/asymmetric_type.c
++++ b/crypto/asymmetric_keys/asymmetric_type.c
+@@ -634,7 +634,7 @@ int register_asymmetric_key_parser(struct asymmetric_key_parser *parser)
+ 		if (strcmp(cursor->name, parser->name) == 0) {
+ 			pr_err("Asymmetric key parser '%s' already registered\n",
+ 			       parser->name);
+-			ret = -EEXIST;
++			ret = -EBUSY;
+ 			goto out;
+ 		}
  	}
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 3bbdde778631..ed597660f72e 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -1219,7 +1219,7 @@ EXPORT_SYMBOL(generic_key_instantiate);
+  *
+  * Register a new key type.
+  *
+- * Returns 0 on success or -EEXIST if a type of this name already exists.
++ * Returns 0 on success or -EBUSY if a type of this name already exists.
+  */
+ int register_key_type(struct key_type *ktype)
+ {
+@@ -1228,7 +1228,7 @@ int register_key_type(struct key_type *ktype)
+ 
+ 	memset(&ktype->lock_class, 0, sizeof(ktype->lock_class));
+ 
+-	ret = -EEXIST;
++	ret = -EBUSY;
+ 	down_write(&key_types_sem);
+ 
+ 	/* disallow key types with the same name */
 
 ---
 base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251218-dev-module-init-eexists-dm-devel-2d656f9f2365
+change-id: 20251218-dev-module-init-eexists-keyring-5b008d7efb40
 
 Best regards,
 --  
