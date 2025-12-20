@@ -1,100 +1,60 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F7E9191F98
-	for <linux-modules@vger.kernel.org>; Sat, 20 Dec 2025 18:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2727280A21;
+	Sat, 20 Dec 2025 19:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766256942; cv=none; b=t7pMHcQw8sU9Y6WD/71+3w9s0tYP4HNIfBSEVShpA89byJkcbL5WQIF1d9oYLHb9lk4zU0BZ8BO9xgWBrXCufp220lPI9gGHjBXOSXPFcA9eE3agc3ruT+ItTHy8ehRRlnrFWDoNFSFFoPnN6Q6KcL6jAS4wMdPCemyXVRAiDb0=
+	t=1766258223; cv=none; b=OE3nETH9zv7cZ1fuCT35z2vyI/kKpreGqCfu/EXX3+PKi8zBFV5yY15jXpCBxRFgM+KuRRM73U5DPIgoP3rQsTeMp1g6MO52Xs54QJwG4CstZCgd3PE27fLANqFAW0P8g/TmkYz8yOscb4QNBhlcpMTbuRpCvVqtB48+GI9WX7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766256942; c=relaxed/simple;
-	bh=PL4wqyWGvUC3rLlHWxZTYECbhtGlmM5d2Mpowq3sOYc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NDgYUT8SiVTOD5nW1m8MynO+zz09AUdDEkWbwBxMxnxkgcgQZs+xvnnz2Ljx1hnYWBcQc6xjHZHXlPRtgCMCguv6HgsYfts+gzaj+E1ZHHWD+7wlMe07lk9XN45BzhfpTma0yvW7Wyv0xfDMWS13PJD3PqkMMllI1ZOEoN4RsyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UC4f3Ss4; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UC4f3Ss4"
-Message-ID: <47165c76-d856-4c5d-bf2d-6d5a7fe08d43@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766256937;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZE0O0LWGwCoQunsy4CgAz5O5+3MKWy0nxMHrqSp7VR4=;
-	b=UC4f3Ss4UMw1MG2eD2iCJA7iqiIxlga2tVxSO0CJ5lhARi9+SC2wJQ7LMRFBoHmxgfSMMc
-	l1Ffa2hOWU3aNzAvjjSQ9LWhIBnS23q3ZhQ3f+b2Voc/Af8LFch1NAw58H8tRTM5V1n029
-	uPHkAAMuHzXD5HCiEvUiZpASzEP7gEk=
-Date: Sat, 20 Dec 2025 18:55:32 +0000
+	s=arc-20240116; t=1766258223; c=relaxed/simple;
+	bh=wNcAmYBMJRoxLEEkuFIyrUQOB9kkOUqZdUxsj7Aizkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YnAV8OF7GqvvjKq5cpJJKFCGVmjZEzddPmjAagZb7cz0wT7noebOD3kLQs1aFYqv6ywVllak3tpBXZuO92v2VKPWdtwbtPqvR2ISKXonXBiijbClCJ26MXKNSu+w5CvWlrazbkrHHHeYdNagIVHL5bVn4lbSIyjCC7Nuf8flGdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
+Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
+	id C89D560351; Sat, 20 Dec 2025 20:16:51 +0100 (CET)
+Date: Sat, 20 Dec 2025 20:16:45 +0100
+From: Florian Westphal <fw@strlen.de>
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>, Phil Sutter <phil@nwl.cc>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Lucas De Marchi <demarchi@kernel.org>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Gomez <da.gomez@samsung.com>
+Subject: Re: [PATCH] netfilter: replace -EEXIST with -EBUSY
+Message-ID: <aUb2HS6kTR-z7gp2@strlen.de>
+References: <20251219-dev-module-init-eexists-netfilter-v1-1-efd3f62412dc@samsung.com>
+ <aUUDRGqMQ_Ss3bDJ@strlen.de>
+ <fdb9f97d-7813-48a0-9fdf-ddc039d853eb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] bpf: crypto: replace -EEXIST with -EBUSY
-To: Daniel Gomez <da.gomez@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Lucas De Marchi <demarchi@kernel.org>, bpf@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- Daniel Gomez <da.gomez@samsung.com>
-References: <20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fdb9f97d-7813-48a0-9fdf-ddc039d853eb@kernel.org>
 
-On 20/12/2025 03:48, Daniel Gomez wrote:
-> From: Daniel Gomez <da.gomez@samsung.com>
+Daniel Gomez <da.gomez@kernel.org> wrote:
+> something like:
 > 
-> The -EEXIST error code is reserved by the module loading infrastructure
-> to indicate that a module is already loaded. When a module's init
-> function returns -EEXIST, userspace tools like kmod interpret this as
-> "module already loaded" and treat the operation as successful, returning
-> 0 to the user even though the module initialization actually failed.
-> 
-> This follows the precedent set by commit 54416fd76770 ("netfilter:
-> conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
-> issue in nf_conntrack_helper_register().
-> 
-> This affects bpf_crypto_skcipher module. While the configuration
-> required to build it as a module is unlikely in practice, it is
-> technically possible, so fix it for correctness.
-> 
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
-> The error code -EEXIST is reserved by the kernel module loader to
-> indicate that a module with the same name is already loaded. When a
-> module's init function returns -EEXIST, kmod interprets this as "module
-> already loaded" and reports success instead of failure [1].
-> 
-> The kernel module loader will include a safety net that provides -EEXIST
-> to -EBUSY with a warning [2], and a documentation patch has been sent to
-> prevent future occurrences [3].
-> 
-> These affected code paths were identified using a static analysis tool
-> [4] that traces -EEXIST returns to module_init(). The tool was developed
-> with AI assistance and all findings were manually validated.
-> 
-> Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
-> Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [2]
-> Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
-> Link: https://gitlab.com/-/snippets/4913469 [4]
+> Replace -EEXIST with -EBUSY to ensure correct error reporting in the module
+> initialization path.
 
-Even though I'm not quite sure that we should care once the core
-module loader can adjust the error, the change looks ok to me:
-
-Acked-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+Makes sense, I will mangle it locally when I apply this.  Thanks!
