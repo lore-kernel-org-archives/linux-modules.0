@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B92D3A1E8A;
-	Sat, 20 Dec 2025 03:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6179A347DD;
+	Sat, 20 Dec 2025 03:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766202347; cv=none; b=M7AO07KE24D1AZhdv8VsCE0zhU6vtkautxd85f2nG6huwVzIR1XimJlRuEujdKeFj/PXML9HOQWYqknqJzsqUY4tLSwK6Jg+paGgBynQo3RxORNE2lFfohQ7PNBTwiLvdO/yXHl6JhwmikS9xGyA26bORHVUXQa/KpSfiG/pvLs=
+	t=1766202503; cv=none; b=NVm3UoJkItQUtjwxFe1Ew5whntbIw7lAC+qd26S3eNckKgj4TXAanF4DdSBmuFkLlFvnt0s4H3hCXtycHC+T2BJAonj0AVg8mnw6Y82G6LF540nXOd/EBkQHwRw5mcWv6VjzP2bR/3mnW0XvJGZUwHW+9wQQipnZBgYpirm9edc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766202347; c=relaxed/simple;
-	bh=ljS74JXhPZ1LeDdwxkTAIFvssMwAF5gNuyDs6g2Lvkg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MzQftxZxbG5htjh2AhLmkxPl6CR3gsw5/5q1GOyGlm9ywdiJbReEvz9a4+ywFUUsGbZeVAdikynSgAKQ6OkpsbpUGgZcS2q/VAYIw6KKWNlxWIsuPzkRdHri9X0gXe3ckIsyR/IvFN+HAreB9kWi7G18VoMAVHQNHG7DOWIl7os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGvGo+PD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766202503; c=relaxed/simple;
+	bh=n0UjH6rxp4IB+pxWkaxiUb1+qekNAzowkS8FcdDjBcc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ew1Pxov3mnQ4s6sqDK8XqTJh7Z73G4Yf7+RaTUNt7cPf0hcXnsQRAAzfiZoBVF6y3WIZoecGuRvRysHuB68LwD0nPfQE3AIRDtbrl36Bob4AQYbvyUgj2Bh2PIoE4CLEvoHqT75aAlWh+O+8EnWKJgIDCcr2wcYQ/Mk6LdN4F/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r/5L02zY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGvGo+PD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 185FAC4CEF5;
-	Sat, 20 Dec 2025 03:45:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r/5L02zY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7620AC4CEF5;
+	Sat, 20 Dec 2025 03:48:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766202345;
-	bh=ljS74JXhPZ1LeDdwxkTAIFvssMwAF5gNuyDs6g2Lvkg=;
+	s=k20201202; t=1766202502;
+	bh=n0UjH6rxp4IB+pxWkaxiUb1+qekNAzowkS8FcdDjBcc=;
 	h=From:Date:Subject:To:Cc:From;
-	b=FGvGo+PD/nNfCOaX8txlV3nLiWO1kQMANyyOZarWkPgzRN1ZzoisIvtHP9im0H0XN
-	 WtM+ZGQiI9o1/OTImi8KpD3I6Qnlnh7rnlxrvZufcFIzsArBLs25KS2Q6Ntld+Fp1J
-	 7M/nt2ZI47QHkQp2FAonYjhlgqJShWFYG4jIAPNlx2V9Ao8RvfVtL5dqlwlud0ELiL
-	 8m7v8YnvCH0aI7vW9rnsd8H9I6zBLle2piEl14Wnkh8q/XcNEgDPLMbYRoaUkBfBdF
-	 APvnoC+uSsLlmw4pl9G4gAzjTiBQ1H+MC/4lRjYfINbjlOjeSu/B8vwUA1FN4bcQZL
-	 CAjLYy8bev6dQ==
+	b=r/5L02zYRWhq/D/qH7z7fVzKyD0mIE1AMVEG9j83a2ituyweGtiKh4rDEwpClWmBX
+	 fxF1sjTBGH2LwKbwdFsQT1+sQNb80GKOE4ddXODTaM9rVYaH7qgp0nhcAoc47Tra3f
+	 9qMiClSWVV56YmxAV8gNVOCO/9Ve7AJfRjfeJjSA96GxZ4E6BTL7ivvhNh7ZSjQCwZ
+	 SNOM423e4eH8Y1SfVYmizzgSMfKGqvpa4v4JZzcO8UU7IlhfjZFIsPrBdOkOmwjFTD
+	 ZvU64cIhG1amdftbgy1yMxkkw/VONoZP2UADcDo3WTbRrv0u9IN6iYfcLsbFvaP1PE
+	 zoypOG0xUh6VA==
 From: Daniel Gomez <da.gomez@kernel.org>
-Date: Sat, 20 Dec 2025 04:45:34 +0100
-Subject: [PATCH] driver core: attribute_container: change return type to
- void
+Date: Sat, 20 Dec 2025 04:48:09 +0100
+Subject: [PATCH] bpf: crypto: replace -EEXIST with -EBUSY
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -37,165 +36,99 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251220-dev-attribute-container-linux-scsi-v1-1-d58fcd03bf21@samsung.com>
-X-B4-Tracking: v=1; b=H4sIAN0bRmkC/x3NQQqDMBBG4avIrDtgUgLSq5QuYvxtB8pYZqII4
- t0NXX6b9w5ymMDp0R1k2MRl0YZw66h8sr7BMjVT7GMKMQw8YeNcq8m4VnBZtGZRGH9F1529uDD
- mMKTc3xPGTC30M8yy/yfP13letsSkTnQAAAA=
-X-Change-ID: 20251218-dev-attribute-container-linux-scsi-ef185a035eba
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>
+Message-Id: <20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com>
+X-B4-Tracking: v=1; b=H4sIAHgcRmkC/x3M0QpAMBSA4VfRuXbKhhavIhdjB6cY7YyUvLvl8
+ uuv/wGhwCTQZg8Eulh49wkqz2BcrJ8J2SWDLnSttGrQ0YXb7s41Fc8RiW6WKDgcEzqrrS1rY6r
+ SQDocgSa+/3vXv+8HSGtNv20AAAA=
+X-Change-ID: 20251219-dev-module-init-eexists-bpf-da2aa3577437
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>
 Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
  Aaron Tomlin <atomlin@atomlin.com>, Lucas De Marchi <demarchi@kernel.org>, 
- linux-scsi@vger.kernel.org, linux-modules@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-modules@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5359; i=da.gomez@samsung.com;
- h=from:subject:message-id; bh=C9R4j2gXxzAQ0FMyEnLzcTXh2qpavqW/CQxI9RtuaTA=;
- b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRhvl/TipJts2/zduU3dlzQGOSL7wBvzxHK1Bo
- QtvAGVCBuCJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYb5QAKCRBAnqPEHxlR
- +/fnEACQijbOWjMz4xwTfKB5VFrS+jiCrreEcqLKJOEUcR7NyyDtTWLABQyl/Xab2/0jJRsfvQN
- MsEfjsLdtVU9t5p5u3qfyAPC62OjYZezDbFnfBj3zTcVT1SuWR3B448V76s6E/Rx5aoClyHL2gd
- odzOXp1io4dRnbNtrLWQgV4kUpkIirk9KCQ5gtS8NEnlompR52FJCv31pB7jiU1myeLW7k8bNJz
- HQrPPceOvhhMVJssyx4kB/s1YvUitNHkstSDwAYW9n1aAjlgrOctksAqCVAFGuPcf1gkW+DOzDZ
- i9mHTmtY/aqlQQkqfmQrhLJJPCdQRuQ68SbUR1wdqsizpalCsaZoPePkpQ91s3fAKr7U0GYE+1z
- RWp/9TPiDFfskDq1wLJBBXyVcIIDawc5w18GeWetjzDzjVLc7RSUX3y56cxmpmbEvmujgBRGawo
- buHKIMf/pkRI6pCSOqoHrrvM9jxOwO7Pv7vCiG4ee3QcenNhAhS2h3i4CHL4ZgZxUrmiPl1uCes
- OND+/F1JRqaPSe5y7ru02gmgiqZMOmD5+rGbUvWd+Jq89R9vy0iwxXVeVGljg1vDvSjyjoVbqdB
- 5zR5/WCkw7aprnQcscQrRoOgNpcdBT3UZHVvSBPfcdz6NyZSZfEshZPKxrub1GQmtAczob2IwWp
- Aoj+YA/DGuFx2Bg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2483; i=da.gomez@samsung.com;
+ h=from:subject:message-id; bh=4s4dcK1i6cCHvuwA2GQnp8g1ai+DeFSrtU/4w51RHIk=;
+ b=owEBbQKS/ZANAwAIAUCeo8QfGVH7AcsmYgBpRhyA9aBNfYYJVkENORThiOc50zRlcUVflTF4r
+ 2pfWfH2qeSJAjMEAAEIAB0WIQTvdRrhHw9z4bnGPFNAnqPEHxlR+wUCaUYcgAAKCRBAnqPEHxlR
+ +63BD/wIRh5TK+3OXjC5jdb+1rzikUD0jwdH68zqcdPL4S1NaSWobHWXdz5Pnj07JpCD5Z/fOe+
+ yk4lExAH8bu33XowtZg6TMRGlgR0vQYWNP0vEWMg3Au7JzTJ+ylAkDQ3Vhwz1uxFL9LkyVkh0k2
+ pxF9QlqA4aY8CnAzusRm2/FwS8Ytfnxi0HMnO2croFBfsdVx+XjR79J7JVxRoBHtwbl5QSUpS6Y
+ 1fCaVub8sPn1QZPBwVbwdIJFatGlj8mQNXkASyR2CQGv6acjpX5E5ylEXhYDae4CcNf379pLHYn
+ m7fQIdObvmbjXfKiqOVprHFDNgj9iddsL+yIc/My+OOCe6s36dAcNkxcMUf+c/gKcb8teq+uiFu
+ WYJ9WzSayNe6wqtZKhQrWbQyF6WoCtXtNoTUCN8TR5vwGlXNLoUyM8puiioQOL+7zWqivehHUoS
+ Ca8lzp9aIqsUB1OiiOqyZOxQS2oFewKfikkCnrtpdzGBnLE7HHk2yaTJU57Lq78A25P7Y8Dc5nN
+ xERE5nO+rkyKDCUU78lORno5lGobcoHiXCST2W3vZHDDrA+SUxchAoUkmAtC33TVUSUGTyd1vZL
+ uTMy1mnUTWMcci6QF7W2cy2VFa0dnugaZSzEeoRa+V8DvhY1xtGEOEmvJVVbgGvHvc8AZBdMDq6
+ 23HMZWGcg7HllVg==
 X-Developer-Key: i=da.gomez@samsung.com; a=openpgp;
  fpr=B2A7A9CFDD03B540FF58B27185F56EA4E9E8138F
 
 From: Daniel Gomez <da.gomez@samsung.com>
 
-attribute_container_register() has always returned 0 since its
-introduction in commit 06ff5a987e ("Add attribute container to generic
-device model") in the historical Linux tree [1]. Convert the return type
-to void and update all callers.
+The -EEXIST error code is reserved by the module loading infrastructure
+to indicate that a module is already loaded. When a module's init
+function returns -EEXIST, userspace tools like kmod interpret this as
+"module already loaded" and treat the operation as successful, returning
+0 to the user even though the module initialization actually failed.
 
-This removes dead code where callers checked for errors that could never
-occur.
+This follows the precedent set by commit 54416fd76770 ("netfilter:
+conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
+issue in nf_conntrack_helper_register().
 
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git [1]
+This affects bpf_crypto_skcipher module. While the configuration
+required to build it as a module is unlikely in practice, it is
+technically possible, so fix it for correctness.
 
 Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
-Cleanup. Found while reviewing module_init() return values for the
--EEXIST issue [1] on the scsi spi transport module.
+The error code -EEXIST is reserved by the kernel module loader to
+indicate that a module with the same name is already loaded. When a
+module's init function returns -EEXIST, kmod interprets this as "module
+already loaded" and reports success instead of failure [1].
 
-Link: https://lore.kernel.org/linux-modules/20251220-dev-module-init-eexists-linux-scsi-v1-0-5379db749d54@samsung.com/T/#t [1]
+The kernel module loader will include a safety net that provides -EEXIST
+to -EBUSY with a warning [2], and a documentation patch has been sent to
+prevent future occurrences [3].
+
+These affected code paths were identified using a static analysis tool
+[4] that traces -EEXIST returns to module_init(). The tool was developed
+with AI assistance and all findings were manually validated.
+
+Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
+Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [2]
+Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
+Link: https://gitlab.com/-/snippets/4913469 [4]
 ---
- drivers/base/attribute_container.c  | 4 +---
- drivers/base/transport_class.c      | 8 ++------
- drivers/scsi/scsi_transport_spi.c   | 2 +-
- include/linux/attribute_container.h | 2 +-
- include/linux/transport_class.h     | 6 +++---
- 5 files changed, 8 insertions(+), 14 deletions(-)
+ kernel/bpf/crypto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/attribute_container.c b/drivers/base/attribute_container.c
-index b6f941a6ab69..72adbacc6554 100644
---- a/drivers/base/attribute_container.c
-+++ b/drivers/base/attribute_container.c
-@@ -69,7 +69,7 @@ static DEFINE_MUTEX(attribute_container_mutex);
-  * @cont: The container to register.  This must be allocated by the
-  *        callee and should also be zeroed by it.
-  */
--int
-+void
- attribute_container_register(struct attribute_container *cont)
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 83c4d9943084..1ab79a6dec84 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -60,7 +60,7 @@ struct bpf_crypto_ctx {
+ int bpf_crypto_register_type(const struct bpf_crypto_type *type)
  {
- 	INIT_LIST_HEAD(&cont->node);
-@@ -79,8 +79,6 @@ attribute_container_register(struct attribute_container *cont)
- 	mutex_lock(&attribute_container_mutex);
- 	list_add_tail(&cont->node, &attribute_container_list);
- 	mutex_unlock(&attribute_container_mutex);
--
--	return 0;
- }
- EXPORT_SYMBOL_GPL(attribute_container_register);
+ 	struct bpf_crypto_type_list *node;
+-	int err = -EEXIST;
++	int err = -EBUSY;
  
-diff --git a/drivers/base/transport_class.c b/drivers/base/transport_class.c
-index 09ee2a1e35bb..4b1e8820e764 100644
---- a/drivers/base/transport_class.c
-+++ b/drivers/base/transport_class.c
-@@ -88,17 +88,13 @@ static int anon_transport_dummy_function(struct transport_container *tc,
-  * events.  Use prezero and then use DECLARE_ANON_TRANSPORT_CLASS() to
-  * initialise the anon transport class storage.
-  */
--int anon_transport_class_register(struct anon_transport_class *atc)
-+void anon_transport_class_register(struct anon_transport_class *atc)
- {
--	int error;
- 	atc->container.class = &atc->tclass.class;
- 	attribute_container_set_no_classdevs(&atc->container);
--	error = attribute_container_register(&atc->container);
--	if (error)
--		return error;
-+	attribute_container_register(&atc->container);
- 	atc->tclass.setup = anon_transport_dummy_function;
- 	atc->tclass.remove = anon_transport_dummy_function;
--	return 0;
- }
- EXPORT_SYMBOL_GPL(anon_transport_class_register);
- 
-diff --git a/drivers/scsi/scsi_transport_spi.c b/drivers/scsi/scsi_transport_spi.c
-index fe47850a8258..17a4a0918fc4 100644
---- a/drivers/scsi/scsi_transport_spi.c
-+++ b/drivers/scsi/scsi_transport_spi.c
-@@ -1622,7 +1622,7 @@ static __init int spi_transport_init(void)
- 	error = transport_class_register(&spi_transport_class);
- 	if (error)
- 		return error;
--	error = anon_transport_class_register(&spi_device_class);
-+	anon_transport_class_register(&spi_device_class);
- 	return transport_class_register(&spi_host_class);
- }
- 
-diff --git a/include/linux/attribute_container.h b/include/linux/attribute_container.h
-index b3643de9931d..fa6520e192be 100644
---- a/include/linux/attribute_container.h
-+++ b/include/linux/attribute_container.h
-@@ -36,7 +36,7 @@ attribute_container_set_no_classdevs(struct attribute_container *atc)
- 	atc->flags |= ATTRIBUTE_CONTAINER_NO_CLASSDEVS;
- }
- 
--int attribute_container_register(struct attribute_container *cont);
-+void attribute_container_register(struct attribute_container *cont);
- int __must_check attribute_container_unregister(struct attribute_container *cont);
- void attribute_container_create_device(struct device *dev,
- 				       int (*fn)(struct attribute_container *,
-diff --git a/include/linux/transport_class.h b/include/linux/transport_class.h
-index 2efc271a96fa..9c2e03104461 100644
---- a/include/linux/transport_class.h
-+++ b/include/linux/transport_class.h
-@@ -87,9 +87,9 @@ transport_unregister_device(struct device *dev)
- 	transport_destroy_device(dev);
- }
- 
--static inline int transport_container_register(struct transport_container *tc)
-+static inline void transport_container_register(struct transport_container *tc)
- {
--	return attribute_container_register(&tc->ac);
-+	attribute_container_register(&tc->ac);
- }
- 
- static inline void transport_container_unregister(struct transport_container *tc)
-@@ -99,7 +99,7 @@ static inline void transport_container_unregister(struct transport_container *tc
- }
- 
- int transport_class_register(struct transport_class *);
--int anon_transport_class_register(struct anon_transport_class *);
-+void anon_transport_class_register(struct anon_transport_class *);
- void transport_class_unregister(struct transport_class *);
- void anon_transport_class_unregister(struct anon_transport_class *);
- 
+ 	down_write(&bpf_crypto_types_sem);
+ 	list_for_each_entry(node, &bpf_crypto_types, list) {
 
 ---
 base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251218-dev-attribute-container-linux-scsi-ef185a035eba
+change-id: 20251219-dev-module-init-eexists-bpf-da2aa3577437
 
 Best regards,
 --  
