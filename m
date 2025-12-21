@@ -1,87 +1,147 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713C02F999F
-	for <linux-modules@vger.kernel.org>; Sun, 21 Dec 2025 12:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE04878F4F;
+	Sun, 21 Dec 2025 21:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766321572; cv=none; b=BxuWgFIAHeW8E2taE3V20fDYnW9yyhpq2XtGnoCXNKalQqlFrWEXTR1wafWOWP8QczwQ4vHidencaaCYEOii/9xR/Bks3rrl/Y+wKRC4oCDobxfu3e7kP2st+DRqHn7lIXOwEblS+2A/TmoyYl4SXM/3n/ngePp7YZX/a7PUDcM=
+	t=1766354397; cv=none; b=Va0ne/ZPb8taS28k+rSTN+6fVhQsoMTVoA59lnEruEKcc5oOkcve+ffLyXm6nuNYqWmFT1tjxD7Xok85VZLF41xodCbA2f5ziRTR0YwN3uG07y7JXATfiogk+z+tcuDcIccMN+CY83gyRdw20tnteeeh2Bdcu7iElW/1fpJzbnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766321572; c=relaxed/simple;
-	bh=zVC29AsLXf0qaODbTFd8HB8zOYEu+UQOKW51j3CD2vI=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=GZaB0HykjOrKWhl3Xj0v+UnxMsdtApoc6lIPNsJS23++iw9nx85WRsvn+qLSoJu5Jgt4xOAIC9fE2h0VQRM/H4ARxqnkjBGiqtNAqMWPbb3Pa+jFdUvZn8CAxKUtl64oYya39AtVNcOVTsF1EPI4z/Ufjqh0B7rlHD6tFCvOtGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GOGySFoG; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766354397; c=relaxed/simple;
+	bh=0sbZ9LeRhYVW4/ryrWO1r2rUfhj1QmqtW/qTXTUBcoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufmsMHNP3sE5x6i1dv/OUpiHauIxTUyv1kgWcBE5TrDJWE9YievCQB7+YoL7TIiuM745jndldjdoa9UmIJj0c6890b2YZLqIxCbm/i1kPYX0Xwqn/4LiBpOUcK2Y+bqbpDWTCc4xKEUxex27gPOGYU8y4kBXf0M911DIVYJDIjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EZi+ABd2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GOGySFoG"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-37bac34346dso23278531fa.2
-        for <linux-modules@vger.kernel.org>; Sun, 21 Dec 2025 04:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766321567; x=1766926367; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ewssAqo1bPMzymAusjyvh6QxSKjWGYqx7PGPNjLSgIU=;
-        b=GOGySFoGkponMKzPW/WOa1yMT2Fl1UIbaHwqkZQGUn5rlWKcMEArVSPqhQfym8bB4T
-         0SnvbDCJrNf2qaEE+ToG6wWYxkJDtgn24yTNzTTP4LFoJj4dLxUF+GiJnn1XV1ttsRBi
-         x2ErD9Tsoq14neI+zuwSLlsJpxSNS7TVQD22KLsXFnTndpkdPoyp1hGYmfhOVGx95j14
-         QjudEJhl5/0wyPwPzXsmxCH/0y3QeeoZR540qXVdAWJqx8VUHNOblcDWnEvC8WiC8E5R
-         a4vbm1JgVNK4g2ceWQH2+DRz21yKnIkD2u/oUIVLQ33luMuz14R404rT+AX8Fq9zRARR
-         VjPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766321567; x=1766926367;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewssAqo1bPMzymAusjyvh6QxSKjWGYqx7PGPNjLSgIU=;
-        b=rENM8Pkg6JTA4Ib0SpC63AzdGBryez/URyEdK3hLp8o3TFCj+DpD0fw3XpXOhBYSfB
-         zfp/5s1Zee2XSBOBOFV07yji2oxe4aNNgxPvXrdypr4F+zGgha+h5Io59I7GXV5KPFPy
-         M+W56Nk3dc5o/+6oN/jRxIciHe1LzwM1PZuBi2wn8hPyYCcNDLdMKg47EKp/CrknL4EL
-         WAdJP1i4WNkVZoE3/xAsCHJ07BKHpnwSac/IzbmMDCdQ2v1SDB+sDhiruE0+tUHiE9Kp
-         5PmU5gQtqm4MJIP8GmD2B8sEjdr13TKV7+vhWhF4wLFwPd5ks6iRUHsTdxlFpvOwzBH1
-         eTMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWct+aAlgDrMxJQ48DBdNgUDhxHBDOtyDZFoYI82WfwlP3sOlG9a+gKAD72f94B5AI/kSVSVdNprKbLm0g@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx93e4640Z+5whYV5B6BAVYbniayFt0ivusMqyUcMv2IdD6Q7dv
-	RW9mVzuAcmTbvw+ONwwAI/MX7HUmW7eTXNxy/tTk2UNILupGwXebB2k4XLo0a/BsUNU/1LcGQLD
-	4wF0QQzeQdNwIStbqcAf1u6ROJ1lrnmk=
-X-Gm-Gg: AY/fxX56jlL2w7/wGLVrXYxn7RjBKInnsNXu923iBi01YpklKEGRB3pp47sczdOipxt
-	6QgkZFN3Ud6YxwMh5397zmIenv0LDsEomFZE07i6HUucL0eXRWhdrNRq1LH6eDLN3RRXqfZk3/a
-	BNuvMeUiFv4Xsw8PfPqBj5M+Etxf6za5TrEqVNv0XHTdzXxD4DWOFt/e3FyV6xpc5yYZFTAW65h
-	3n3ACat4iJ4zc9nYjNx/XMGr45aelCnBL6qznB81KHUhSqyj1MwUF8elnh+/f/kUrEA9QrR4P6q
-	vx41
-X-Google-Smtp-Source: AGHT+IEz1iLVManChamvexcJptkdsdYqDuiRiS/tcdKp/m9sHolvLmbS9HUwX1CEsPLoNcn+Ljet7ExEEBEoysZZAFE=
-X-Received: by 2002:a05:651c:2123:b0:37f:a216:e443 with SMTP id
- 38308e7fff4ca-38121566b5amr25348901fa.2.1766321566850; Sun, 21 Dec 2025
- 04:52:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EZi+ABd2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766354396; x=1797890396;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0sbZ9LeRhYVW4/ryrWO1r2rUfhj1QmqtW/qTXTUBcoc=;
+  b=EZi+ABd2x8wh5koH+qnhDwLHkhgqTlD2p36Og2DQwywwfvoHM1tLjlF0
+   7Fqlx259SxQPT7GSZyK1z62NGl7Vcn62ZKNG90hJ5vqbiHetGvJXuv8dj
+   zc7aUk0FFfsd6t4uAId5dkncyoN8/5CTUFrECKQ82w0s43kfmattyhgOd
+   HgW+AZIuTtO7cJaNS4C4DtPr+WnFDP3k03jXsdoc3qZlXggpDveoFBISv
+   Kvl+BSHsz8wZIZvbESAlGFk7qwdMXLl5PkhlPfyLIvupWay9HFCY/wSeQ
+   G8cuo9wn2tmKpiB37vFzXemqkz8K6ssLUw/T3n+VBva6kfolS0rdE7nb1
+   Q==;
+X-CSE-ConnectionGUID: 8/Lv3R78RTeTKJsjPpfYfQ==
+X-CSE-MsgGUID: dnZVaqEtQLCVbdlXJyf5Og==
+X-IronPort-AV: E=McAfee;i="6800,10657,11649"; a="68373581"
+X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
+   d="scan'208";a="68373581"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 13:59:55 -0800
+X-CSE-ConnectionGUID: LL/9NGAcR4e3Q0cCacWsYg==
+X-CSE-MsgGUID: JIDseJxjRca54yy4cvoZjw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,166,1763452800"; 
+   d="scan'208";a="204439442"
+Received: from abityuts-desk.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.245.245.161])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2025 13:59:51 -0800
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 046A6120927;
+	Sun, 21 Dec 2025 23:59:52 +0200 (EET)
+Date: Sun, 21 Dec 2025 23:59:51 +0200
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6 krs, Bertel Jungin Aukio 5, 02600 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Daniel Scally <djrscally@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Lucas De Marchi <demarchi@kernel.org>, linux-acpi@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Daniel Gomez <da.gomez@samsung.com>
+Subject: Re: [PATCH] software node: replace -EEXIST with -EBUSY
+Message-ID: <aUht13bTn-lEnNM-@kekkonen.localdomain>
+References: <20251220-dev-module-init-eexists-linux-acpi-v1-1-af59b1a0e217@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
-Date: Sun, 21 Dec 2025 21:52:35 +0900
-X-Gm-Features: AQt7F2rTEdNQMItr2qx6Dugn0XBR5xsWw3SdLVnNTdJsQP7G9u1_vH5-H2BmySU
-Message-ID: <CANqewP0+N0i8Ld+fGKQZbLg5yJhVkLTyvZKz_ZL0aV+noArsiQ@mail.gmail.com>
-Subject: /proc/modules address+size bounds are inconsistent
-To: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org
-Cc: song@kernel.org, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251220-dev-module-init-eexists-linux-acpi-v1-1-af59b1a0e217@samsung.com>
 
-Hi,
+Hi Daniel,
 
-I noticed that /proc/modules reports inconsistent address and size
-values for modules. In m_show():
+Thanks for the patch.
 
-     size = module_total_size(mod);              // .text + .rodata +
-.data + ...
-     value = mod->mem[MOD_TEXT].base;            // only text base
+On Sat, Dec 20, 2025 at 04:55:00AM +0100, Daniel Gomez wrote:
+> From: Daniel Gomez <da.gomez@samsung.com>
+> 
+> The -EEXIST error code is reserved by the module loading infrastructure
+> to indicate that a module is already loaded. When a module's init
+> function returns -EEXIST, userspace tools like kmod interpret this as
+> "module already loaded" and treat the operation as successful, returning
+> 0 to the user even though the module initialization actually failed.
+> 
+> This follows the precedent set by commit 54416fd76770 ("netfilter:
+> conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
+> issue in nf_conntrack_helper_register().
+> 
+> Affected modules:
+>   * meraki_mx100 pcengines_apuv2
+> 
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+> The error code -EEXIST is reserved by the kernel module loader to
+> indicate that a module with the same name is already loaded. When a
+> module's init function returns -EEXIST, kmod interprets this as "module
+> already loaded" and reports success instead of failure [1].
+> 
+> The kernel module loader will include a safety net that provides -EEXIST
+> to -EBUSY with a warning [2], and a documentation patch has been sent to
+> prevent future occurrences [3].
+> 
+> These affected code paths were identified using a static analysis tool
+> [4] that traces -EEXIST returns to module_init(). The tool was developed
+> with AI assistance and all findings were manually validated.
 
-Looking at kallsyms, .data symbols can come before .text symbols, so
-[addr, addr+size) is useless as a bound and can be overlapping.
+This might not be the only case where -EEXIST may be returned by loading a
+module. The patch is fine IMO but I'd just change -EEXIST to -EBUSY in e.g.
+do_init_module() to avoid this being an actual bug elsewhere.
 
-I have a userspace frontend for perf [1] and the code currently
-expects non-overlapping regions. I can add a workaround to truncate
-any overlapping regions from /proc/modules. But is it possible to
-"fix" the kernel-side semantics here?
+I wonder what others think.
 
-[1]: https://github.com/mstange/samply/pull/736
+> 
+> Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
+> Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [2]
+> Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
+> Link: https://gitlab.com/-/snippets/4913469 [4]
+> ---
+>  drivers/base/swnode.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+> index 16a8301c25d6..083593d99a18 100644
+> --- a/drivers/base/swnode.c
+> +++ b/drivers/base/swnode.c
+> @@ -919,7 +919,7 @@ int software_node_register(const struct software_node *node)
+>  	struct swnode *parent = software_node_to_swnode(node->parent);
+>  
+>  	if (software_node_to_swnode(node))
+> -		return -EEXIST;
+> +		return -EBUSY;
+>  
+>  	if (node->parent && !parent)
+>  		return -EINVAL;
+> 
+
+-- 
+Regards,
+
+Sakari Ailus
