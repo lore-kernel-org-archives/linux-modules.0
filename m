@@ -1,77 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDB0245019;
-	Sun, 21 Dec 2025 10:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713C02F999F
+	for <linux-modules@vger.kernel.org>; Sun, 21 Dec 2025 12:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766311209; cv=none; b=NfYUPI1xTeCXFbY/3fJR71lSITmpY5sZBYOzE347J7msZnsBOJFfa91dFflGO72p4iPs6EHKfGmLA7GAbSRoBiRKqDkHF7RxfQWFjirqBfPL475A6of8U/E8aMfCR160zlruXgzI6v9jQoyuK8kRd1Zk3QBY8tG6DGE/Zaam1fA=
+	t=1766321572; cv=none; b=BxuWgFIAHeW8E2taE3V20fDYnW9yyhpq2XtGnoCXNKalQqlFrWEXTR1wafWOWP8QczwQ4vHidencaaCYEOii/9xR/Bks3rrl/Y+wKRC4oCDobxfu3e7kP2st+DRqHn7lIXOwEblS+2A/TmoyYl4SXM/3n/ngePp7YZX/a7PUDcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766311209; c=relaxed/simple;
-	bh=3gkq5R8z5oqeJXoC7e2rNhnROWWBbksf0tpbhMKwobo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OLOsNofo+SkxkJvD14to3Yp4Otx0S/cW/9MrNTyi7AZUH+vw5fVv405FBww55KHGknSfk/xbBr4utXcs2ez//TxU182A53QwzALURDZ65n/4yBVBqVMbzxsCTky2tM/9vvK6g6Str9jL3JuAw0NdJNHTNnHtYi2L2cRcs7omKcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Exv+EqVx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1766321572; c=relaxed/simple;
+	bh=zVC29AsLXf0qaODbTFd8HB8zOYEu+UQOKW51j3CD2vI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=GZaB0HykjOrKWhl3Xj0v+UnxMsdtApoc6lIPNsJS23++iw9nx85WRsvn+qLSoJu5Jgt4xOAIC9fE2h0VQRM/H4ARxqnkjBGiqtNAqMWPbb3Pa+jFdUvZn8CAxKUtl64oYya39AtVNcOVTsF1EPI4z/Ufjqh0B7rlHD6tFCvOtGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GOGySFoG; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Exv+EqVx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73EB2C4CEFB;
-	Sun, 21 Dec 2025 10:00:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766311206;
-	bh=3gkq5R8z5oqeJXoC7e2rNhnROWWBbksf0tpbhMKwobo=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Exv+EqVx2rDGF2EWxiky66c9on/9JhxghL4N0zd+x6cbJWyN9ay3Y0IULgc4IMP53
-	 1tCG/3Dfu3jCX2neh91Y3KmHGREr3/fft/G9/w6ZTtVROeANOma9JUr4EIZappKZN1
-	 eQiuJKXywE8b4X+UM8/cWlKI/MFsmbbRDiHEy569Br7rNvuWlZrndJKOJEecmQ6OlG
-	 MVoNyLZuGpTKhTK2SQsYcQTdb3E2jjmN3mj8pqJzdgK+0xU439tDfPRvOES5jqzXcT
-	 M+rYXst/IwxNNSR1n2oceQyqYdoxGwVlGvEoVqTKoC1D2E1CNXgHCE8aI+kp3oP5ZE
-	 RQIhEt2OJ3kwg==
-Message-ID: <9817dbc0-0bb6-4e31-8413-c54b12ce952b@kernel.org>
-Date: Sun, 21 Dec 2025 11:00:00 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GOGySFoG"
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-37bac34346dso23278531fa.2
+        for <linux-modules@vger.kernel.org>; Sun, 21 Dec 2025 04:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766321567; x=1766926367; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ewssAqo1bPMzymAusjyvh6QxSKjWGYqx7PGPNjLSgIU=;
+        b=GOGySFoGkponMKzPW/WOa1yMT2Fl1UIbaHwqkZQGUn5rlWKcMEArVSPqhQfym8bB4T
+         0SnvbDCJrNf2qaEE+ToG6wWYxkJDtgn24yTNzTTP4LFoJj4dLxUF+GiJnn1XV1ttsRBi
+         x2ErD9Tsoq14neI+zuwSLlsJpxSNS7TVQD22KLsXFnTndpkdPoyp1hGYmfhOVGx95j14
+         QjudEJhl5/0wyPwPzXsmxCH/0y3QeeoZR540qXVdAWJqx8VUHNOblcDWnEvC8WiC8E5R
+         a4vbm1JgVNK4g2ceWQH2+DRz21yKnIkD2u/oUIVLQ33luMuz14R404rT+AX8Fq9zRARR
+         VjPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766321567; x=1766926367;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ewssAqo1bPMzymAusjyvh6QxSKjWGYqx7PGPNjLSgIU=;
+        b=rENM8Pkg6JTA4Ib0SpC63AzdGBryez/URyEdK3hLp8o3TFCj+DpD0fw3XpXOhBYSfB
+         zfp/5s1Zee2XSBOBOFV07yji2oxe4aNNgxPvXrdypr4F+zGgha+h5Io59I7GXV5KPFPy
+         M+W56Nk3dc5o/+6oN/jRxIciHe1LzwM1PZuBi2wn8hPyYCcNDLdMKg47EKp/CrknL4EL
+         WAdJP1i4WNkVZoE3/xAsCHJ07BKHpnwSac/IzbmMDCdQ2v1SDB+sDhiruE0+tUHiE9Kp
+         5PmU5gQtqm4MJIP8GmD2B8sEjdr13TKV7+vhWhF4wLFwPd5ks6iRUHsTdxlFpvOwzBH1
+         eTMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWct+aAlgDrMxJQ48DBdNgUDhxHBDOtyDZFoYI82WfwlP3sOlG9a+gKAD72f94B5AI/kSVSVdNprKbLm0g@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx93e4640Z+5whYV5B6BAVYbniayFt0ivusMqyUcMv2IdD6Q7dv
+	RW9mVzuAcmTbvw+ONwwAI/MX7HUmW7eTXNxy/tTk2UNILupGwXebB2k4XLo0a/BsUNU/1LcGQLD
+	4wF0QQzeQdNwIStbqcAf1u6ROJ1lrnmk=
+X-Gm-Gg: AY/fxX56jlL2w7/wGLVrXYxn7RjBKInnsNXu923iBi01YpklKEGRB3pp47sczdOipxt
+	6QgkZFN3Ud6YxwMh5397zmIenv0LDsEomFZE07i6HUucL0eXRWhdrNRq1LH6eDLN3RRXqfZk3/a
+	BNuvMeUiFv4Xsw8PfPqBj5M+Etxf6za5TrEqVNv0XHTdzXxD4DWOFt/e3FyV6xpc5yYZFTAW65h
+	3n3ACat4iJ4zc9nYjNx/XMGr45aelCnBL6qznB81KHUhSqyj1MwUF8elnh+/f/kUrEA9QrR4P6q
+	vx41
+X-Google-Smtp-Source: AGHT+IEz1iLVManChamvexcJptkdsdYqDuiRiS/tcdKp/m9sHolvLmbS9HUwX1CEsPLoNcn+Ljet7ExEEBEoysZZAFE=
+X-Received: by 2002:a05:651c:2123:b0:37f:a216:e443 with SMTP id
+ 38308e7fff4ca-38121566b5amr25348901fa.2.1766321566850; Sun, 21 Dec 2025
+ 04:52:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: [PATCH 0/2] scsi: target+fcoe: replace -EEXIST with -EBUSY in
- module_init() paths
-To: James Bottomley <James.Bottomley@HansenPartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Hannes Reinecke <hare@suse.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Lucas De Marchi <demarchi@kernel.org>, linux-scsi@vger.kernel.org,
- target-devel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, Daniel Gomez <da.gomez@samsung.com>
-References: <20251220-dev-module-init-eexists-linux-scsi-v1-0-5379db749d54@samsung.com>
- <b1e372cacf08a758e06ce7504c6cfaf7778bc6f3.camel@HansenPartnership.com>
- <799f5069-36a1-4be7-8ee3-acb3a6cd44a2@kernel.org>
- <6be5a2cfdeb6af71f6bd676e71418393d78e93e0.camel@HansenPartnership.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <6be5a2cfdeb6af71f6bd676e71418393d78e93e0.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Date: Sun, 21 Dec 2025 21:52:35 +0900
+X-Gm-Features: AQt7F2rTEdNQMItr2qx6Dugn0XBR5xsWw3SdLVnNTdJsQP7G9u1_vH5-H2BmySU
+Message-ID: <CANqewP0+N0i8Ld+fGKQZbLg5yJhVkLTyvZKz_ZL0aV+noArsiQ@mail.gmail.com>
+Subject: /proc/modules address+size bounds are inconsistent
+To: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org
+Cc: song@kernel.org, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 21/12/2025 05.02, James Bottomley wrote:
-> On Sun, 2025-12-21 at 04:30 +0100, Daniel Gomez wrote:
->> On 20/12/2025 05.27, James Bottomley wrote:
->>> On Sat, 2025-12-20 at 04:37 +0100, Daniel Gomez wrote:
-> None of that answers the why question:  Given that EEXIST is used all
-> over the kernel, for what appear to be fairly legitimate cases, why
-> would we suddenly want it to become only for modules?  I get that we
-> can, as you propose patches above, but why should we bother?  It seems
-> to be a useful error code outside the module use case, so why the need
-> to restrict it to being only for modules?
+Hi,
 
-Because both the module loader and module_init() return through the same
-(f)init_module() syscall path, we need to ensure consistency in what we report
-back to userspace. The init_module(2) man page documents EEXIST as "a module
-with this name is already loaded." When module_init() returns EEXIST for
-a different reason, userspace tools following the documented behavior will
-misinterpret it. We can't use the same error code for different meanings and
-expect the caller to differentiate.
+I noticed that /proc/modules reports inconsistent address and size
+values for modules. In m_show():
+
+     size = module_total_size(mod);              // .text + .rodata +
+.data + ...
+     value = mod->mem[MOD_TEXT].base;            // only text base
+
+Looking at kallsyms, .data symbols can come before .text symbols, so
+[addr, addr+size) is useless as a bound and can be overlapping.
+
+I have a userspace frontend for perf [1] and the code currently
+expects non-overlapping regions. I can add a workaround to truncate
+any overlapping regions from /proc/modules. But is it possible to
+"fix" the kernel-side semantics here?
+
+[1]: https://github.com/mstange/samply/pull/736
