@@ -1,96 +1,93 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840DF2C21C4
-	for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 20:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A607326922
+	for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 20:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766435101; cv=none; b=czEl2dJb05wyy41bPcCQ2mMQ1vbCdxU2P4k2DeB0X/Wm24pM+9LwsuvHEZ/Cz5e1iiNL0n4HPp4sDrl78B8UZnrG2t2ZsFT9D3Vl7cTikdZiNHsROqX9Om1PhOY1QVkoOJ3Muw5XV4jD3tNS/SClhc4T5NG7GjYquEpr+DUDLGE=
+	t=1766435102; cv=none; b=CYB8zsJbbjDU4xWjPCdF/BqLab6YKEJLDHLjR05GYWKWscyXBNgUi1Ww2Ct0dUjTuaHvWNytqBKjAdYHgg+u5xyA2+UtK0l8J2lXoPDlVy+FTi8X674+7pUdsgsECaF/CunCGNEsgMh/BG3ev4A2GHFBKTEKH91MgDLRCVGGzYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766435101; c=relaxed/simple;
-	bh=goZsKDviOicgqCgIbb3f4eed4rNpDg8XLM1zahV4cHU=;
+	s=arc-20240116; t=1766435102; c=relaxed/simple;
+	bh=v5L5gXDnVlWWfiv/G0jR9HkitiFkU9QX4orelWuzcWQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fIQjDbNOGnSvIgaIzaAGRw3k8eAAP/k6p0FnOyXTqZRfJtM3zWL3K97sDlS2qkLkMmnG7F0BZiEYvh4ejaE2pWGuZGSNN9m/vtHegsGWabVJMGkb48AxKYa4R2YNqmW8yqrvnwg/ExmPGv9HEDD/t21r70bzh/YhcY9Rd61AnBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ltgP8WmQ; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=j1v0B6l8wf+LQrEFpMczCpn4EtTF21QqFoYcvNw3+xBYqPubhwNB07OLaCQY2Swp9Km+fRwQTBAt/aU8sJ7TZdW95v3onjgvDgjYjZ83Mucijhy6Blomxba682P+iRhHoc358e8zAxil9D38OyNhYwioFcvLDBumFAWRs8L/L84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HHW1SH2S; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ltgP8WmQ"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34c904a1168so9315063a91.1
-        for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 12:24:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HHW1SH2S"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-34c21341f56so13075971a91.2
+        for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 12:25:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766435099; x=1767039899; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1766435100; x=1767039900; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mz9ND7dbzjMcTMqsYF60nWhpj6LKAszoMm8f2guS36A=;
-        b=ltgP8WmQyFg7BRATyz2SI6BeZn8DNoLknHsvjqYwuT/TrlUskp1UxGYAQOWiTDUPG2
-         xE+VEIKRyWIttqHgkYT/QqvcxyVmFqfFXZY8P5+/Q1YtzMpEbBymqwsdevFIVuK20d4H
-         po2irNQX7idmRk5HgqD5MPqcyfJHBU3IqM/ryVk+r5Gk9avAVyhWRbBRcvhNF0AsRz/w
-         N089CZaOpeLdQtdljgrDLAiAiAon6TfP/ogITUDi+sOomjD+OaXkDckbJSJi3CabBT45
-         WODxuNlUSm2iTmhrCapjJHPjlxeo9M3mwHc+SfJwqhR1Dk6q0r48WrS0fyCRhYu2bgeD
-         U1kg==
+        bh=HuWaprUrnlOgZKm0tgBiLASfxj+4f7HgxNxIOgXEExA=;
+        b=HHW1SH2SEeeAi4aiVTQSRdh315LKzmuxXJHvtq3SrKuHxz2RHzVqXaKBJVG6ikPN9D
+         ZjyVZMiMHBpKrqNfOCZZZdwiChRCNvCkjZAFCi3SpxUe94oAFs92aXojfsSpruEhs9nL
+         2IOScocFkRhBWqcA9WWlBxaa75Fm8iCS+E1B9aYMb1/TR90FanLHzvcZ5oa6X1LFRkZS
+         21bRvGfbaNolcRbjnFzvBMmK8TTNGeVs1T5PRzU+u5hIE/tdKcb7OIW13CcyniXS68YU
+         GNS0Q136hUcfqqcyuosHmOz4BTpy0S/ACv7Q5tJpVQmGjoj25DyMaODscpUZo+EluaAd
+         EzHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766435099; x=1767039899;
+        d=1e100.net; s=20230601; t=1766435100; x=1767039900;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mz9ND7dbzjMcTMqsYF60nWhpj6LKAszoMm8f2guS36A=;
-        b=EcEYoBUxaPIf8H23WMRA/eEi4mtaBkprRF9+sS0Xb1P6y13z9qNyMCbzOqls61+9Yj
-         Yr3nQMbdvBSVSkaHHUR6QcCQZmD/QP4u2iGddYXfn3UEbbnYQxPTQRZPx1Lp3yfN7ZT+
-         MTcvjqVX49TjY27LS4U7ub2iOzwdyIOoFOX6KDqwLaR+vEzetgDGPu2Vc6g2pCA+ALKP
-         BTaJ/UMhsQyIpVifntFC6Ap/jP9dSll9i9m2dHtwrDVR9xjhmzfw8YpbpbV8v0J8Mavx
-         Y9BMWCRDnBzL+DXRQd1k4JNi8319xToFUVqTu7Gd6npQW/MUzjjhMhhQcpEoGKMOVvaZ
-         USQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVlKlSLk52SCu8wJp3s5IBQtKFJCS9N3FVcZHN3zUI5qD4XLcsM+pajiJlfGUoqHqWtpDOyyuJpJET8R7V@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7jUjL7fDQ3ehl3J2ZOB8Jw66mgo5nLu7pVzUhtZZipu+Cow/v
-	10/HRKhcT8mIzIhn4MaQfDcYd1zXR3xI0xKLLYgAm3CdTVJza6mSFYaP5F7PxI2niVoxs6uLJ6E
-	cCM6hLiECUYDDYlmwRNzURK1ilvu9zA==
-X-Google-Smtp-Source: AGHT+IFPl3USfOoE99npQMzjvmceXBxzORxqId4TnbV5ICbecLrp1nb9g4AjvoeAvwTlcw3TrHIEFv+0bTAqBH5ZbFI=
-X-Received: from dlbph16.prod.google.com ([2002:a05:7022:3710:b0:11f:45c3:e5f6])
+        bh=HuWaprUrnlOgZKm0tgBiLASfxj+4f7HgxNxIOgXEExA=;
+        b=kOXfpyF7uXlqR9abrK+7s+vvDjPWhVFkEGurI6FEyjRDTyE3yODg6TpN5EO9kneoXS
+         mtiQyG5lA38p+TQ0vSLdX1N0uVQzPM+C4QJ6O2suTlzYN4ggG1Te3xyg2qpFV/auAEC+
+         TuNLgpL2HFJKh/6BaTeMym0HJgMOdLIgfHAerVtvOGo/9JsxfWQeNf9CkbMOjb0curCn
+         pSElNvpgyDUoyNv0Ft04yJY0kJtVjz1HrA/2o8gQO5WktRM4C6+eECjyYK+6Ybg9oJFo
+         QyT//oPRQI9o75nv62UMQJgt0haO5POf9yqoOCmvtgoOIkt2r88+R7WklZP+cErPCQBT
+         8TmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVF/lM4lx1wzVUvlqpgNfoxWijn6Ol8nZaK97OAUltApC96uY0ZAXksPMHbeqksbOv1G4zfNj8v+JOqq4bF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH79rHBM5mKNkzEJt6Ano1C5ZAsf0p7F35ypaBNheJYWr3351f
+	hHdbvSjT/aB+G5QCReNU9Wvb757q6ZxcbqR9rmR2CFqMSozWQSrgkSL73NYG9/MDZzZLfL5riZg
+	g3DU1uPIeeNv3MI7tgfH1c5cNbvgKnA==
+X-Google-Smtp-Source: AGHT+IHpZldovjvPuErGikdSozVsC9feOQjMc7jisWWFzLGU223FEkoZUn9LlOInMQ9+NWqzMmv7xIAzFYE7E4H45lw=
+X-Received: from dlyy26.prod.google.com ([2002:a05:7022:69a:b0:11d:ccc4:4c98])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:3a0d:b0:119:e569:f25f with SMTP id a92af1059eb24-121721ad018mr12670763c88.8.1766435098832;
- Mon, 22 Dec 2025 12:24:58 -0800 (PST)
-Date: Mon, 22 Dec 2025 20:24:17 +0000
-In-Reply-To: <20251111154923.978181-1-petr.pavlu@suse.com>
+ 2002:a05:7022:7e87:b0:11b:c1ab:bdd4 with SMTP id a92af1059eb24-121722f9176mr12101825c88.38.1766435100351;
+ Mon, 22 Dec 2025 12:25:00 -0800 (PST)
+Date: Mon, 22 Dec 2025 20:24:18 +0000
+In-Reply-To: <20250819121423.460156-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20251111154923.978181-1-petr.pavlu@suse.com>
+References: <20250819121423.460156-1-petr.pavlu@suse.com>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=825; i=samitolvanen@google.com;
- h=from:subject:message-id; bh=goZsKDviOicgqCgIbb3f4eed4rNpDg8XLM1zahV4cHU=;
- b=owGbwMvMwCUWxa662nLh8irG02pJDJmeK77w/JXexxIyZeMUFsO+iM/zJnlnb4x9dH+twNtH7
- Cznj83+1FHKwiDGxSArpsjS8nX11t3fnVJffS6SgJnDygQyhIGLUwAmMrWX4X/Y83OfSiUmfbu5
- vPFYXe/SUqWZz7aoTrJvT9s35dgx3Tf7GBlanzBcnfDsg3Hrc47NATU8q9zv2rALiC//WPrc0GW l1RMeAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=625; i=samitolvanen@google.com;
+ h=from:subject:message-id; bh=v5L5gXDnVlWWfiv/G0jR9HkitiFkU9QX4orelWuzcWQ=;
+ b=owGbwMvMwCUWxa662nLh8irG02pJDJmeK74abCpR/x+hYLn6jcaOpWs5THOs5kRwPv09hX+a5
+ kxz+61XOkpZGMS4GGTFFFlavq7euvu7U+qrz0USMHNYmUCGMHBxCsBElmQwMhzZcGEu29RKm7iz
+ 01iMYwV/KEhMZtUv/7BNKO5UdGfp12sM/8y2RfjWi/XFsS8K31T7QfD7A/GpJqYKzQsfvrJ0um3 jzQkA
 X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
-Message-ID: <176643400578.1902051.9409046385163707144.b4-ty@google.com>
-Subject: Re: [PATCH 0/2] module: Remove SHA-1 support for module signing
+Message-ID: <176643400570.1902051.11528101077941161890.b4-ty@google.com>
+Subject: Re: [PATCH] module: Remove unused __INIT*_OR_MODULE macros
 From: Sami Tolvanen <samitolvanen@google.com>
-To: David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, keyrings@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Tue, 11 Nov 2025 16:48:30 +0100, Petr Pavlu wrote:
-> SHA-1 is considered deprecated and insecure due to vulnerabilities that can
-> lead to hash collisions. Most distributions have already been using SHA-2
-> for module signing because of this. The default was also changed last year
-> from SHA-1 to SHA-512 in f3b93547b91a ("module: sign with sha512 instead of
-> sha1 by default"). This was not reported to cause any issues. Therefore, it
-> now seems to be a good time to remove SHA-1 support for module signing.
+On Tue, 19 Aug 2025 14:13:37 +0200, Petr Pavlu wrote:
+> Remove the __INIT_OR_MODULE, __INITDATA_OR_MODULE and
+> __INITRODATA_OR_MODULE macros. These were introduced in commit 8b5a10fc6fd0
+> ("x86: properly annotate alternatives.c"). Only __INITRODATA_OR_MODULE was
+> ever used, in arch/x86/kernel/alternative.c. In 2011, commit dc326fca2b64
+> ("x86, cpu: Clean up and unify the NOP selection infrastructure") removed
+> this usage.
 > 
 > [...]
 
 Applied to modules-next, thanks!
 
-[1/2] module: Remove SHA-1 support for module signing
-      commit: 148519a06304af4e6fbb82f20e1a4480e2c1b126
-[2/2] sign-file: Use only the OpenSSL CMS API for signing
-      commit: d7afd65b4acc775df872af30948dd7c196587169
+[1/1] module: Remove unused __INIT*_OR_MODULE macros
+      commit: f13bff1b6d55de341f37a24781df5a1253377db3
 
 Best regards,
 
