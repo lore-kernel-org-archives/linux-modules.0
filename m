@@ -1,99 +1,89 @@
 Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008A3304BBF
-	for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 20:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6248830ACEB
+	for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 20:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766435096; cv=none; b=WFEspIrci6Gx80N3AiHpfFf5xa5NCNyPjDCApgPjBly5izJ9HQUpqpqFydmCdNlyJSAKmrsaJjpXbPUu2p8i2qXJ7FlvETzJ6RCMdOOgpnKbC5H7zqZRP4h6Vi/ZNoyioNVDesffsRNB4lQ8Ho6gT8mPTnowyFkR/9YgDNxj2cI=
+	t=1766435097; cv=none; b=rrpy9JdgCGeupTErNN1QwS1dhking1LszBkBgF58hyUbOf2dMJ3ALOKtGz3eacVZ335C+P7jwNz14FSLy4ZvgfLhP/jx4djz4RAXN9bBopGiponL50eQZG6YAwwgjF5O6tsdFqDo7tlNSpr71YKzY9WbXo6kosNO7lZLeFTalL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766435096; c=relaxed/simple;
-	bh=9rd+GpwzLc1w9cmaB5ydQoPGRQPj7ozHx/DAQZ4dYr4=;
+	s=arc-20240116; t=1766435097; c=relaxed/simple;
+	bh=n4uTk6JujUshZIHOvlYzInxYcuTU4c5NJcNylTC9QPM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iHUdyltEiG1Csiy9C9yvUfy0CvcA0sXvdFmq+3Emlyt6a+6iMBi0hCHdgTvE/wlB0Js7elMT94X9pVZQgLatwcvM1I70Oo9cfE3LNbOnYQoG20sw53I6owGEuwvxcNPnPRyOt5kjCfrwi6uq97dU7+31INjxOMvhPEaOe/CfTlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4X8kuzj0; arc=none smtp.client-ip=209.85.216.73
+	 To:Cc:Content-Type; b=WWa7MwMb0mDG4j+uFvFlQJ/xaL4bTV0Isgv5BmGHEAv8MRKapx049CLmuK/7Cz5jdJz1/FNQxJmhsxlxrScViVRysAPkXWQ7FZQn8SdVW83/liUCXEi+yTr0euOtHEc6p641eYYbdEqnMHEURlmS0dJ2942NYf9XeyOYDmCzRP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A5+IgbhD; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4X8kuzj0"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34c64cd48a8so9828102a91.0
-        for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 12:24:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A5+IgbhD"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-34cc88eca7eso7947423a91.2
+        for <linux-modules@vger.kernel.org>; Mon, 22 Dec 2025 12:24:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766435094; x=1767039894; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1766435096; x=1767039896; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdi1SM/nAbM7Pof3bvt+6WkayM59q8Xfd87dshQVa90=;
-        b=4X8kuzj041k1HMS43Xu9ssbk+iDK1SdzF4u7anEgJdXmY20zHpclegwMrhFnkAOTI2
-         tTDNeL7ucsK2LTiKlC9WAGr11pNJlNhS8ex4SbQW6ygXDHeSKoMbfFtG4D494va2E1gF
-         HWOxOwv04bQwuY407MPgs6SsZDFJY0+hrMN1Gxb92qIbgVUn0bk63mHUFvvSQFSK8QP/
-         br4debh6MoAezq2VvJiivQqkRfsW7Hl1ej06A2iebY1bErH5I6iA8lJmlbVq6R2LmK87
-         zMXyBytlS+RFV/5vxmgCDONpaRl+cxtuHz3ntGyA5I8XI/PRjz7wIAyr535Km/P/m7YR
-         0Lqg==
+        bh=QJyrOGxlu0ScfVIWQXAbbLBtlLqeU/M6daVE2o6S+8M=;
+        b=A5+IgbhDFW1GBrOYCd9yoeP6LVpa6uEkMQavd8EA+mlgm4e0HqlSMqap4Ks8f/TFm9
+         m09wn6mc4y/vor+HQ8Yi6b5KTJdmsyu4jyLdn+xRvOM6smlXJIZnskBbjQPsSd8j11Uh
+         2zYEqImfX8ctuw+GpIZ9efiaB7OFFlYNljuQ6hD76KNdN5TvYnFTCmd+xDibr5xN+1Lz
+         kC9yvkb1BrKjajskcyxLyV9rkwecNyDX+InsIh0vYdZce7G/pQIh22ykI5xL6rSa/2T1
+         uSERd8axDwRSNrqkouO3EW9tsAlJ8yrJTH0tgksCGyv6eErNKJSa/J3NQ4CiFC9gaX4P
+         egkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766435094; x=1767039894;
+        d=1e100.net; s=20230601; t=1766435096; x=1767039896;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdi1SM/nAbM7Pof3bvt+6WkayM59q8Xfd87dshQVa90=;
-        b=E98E0dkKaQg+lHN0+fHlPABSFiSqpuUA6s9zAf4/grfLFucB+HSKST6ZVaxxQTEPbR
-         lgIg2LyrsNpTlEbYM86GtWBZVnM5kedU/QC7Py/kT3KqhxGxTrf9y8S+JsIrbwsTw5Ee
-         G1e6G4CRTn75fH7DBlQ1LQ9P/BuSLYsEZQ2vJFEI0g51QkWRI+EoozfDdSVikmBsXF5d
-         +KnN9yA333IJor4yi0XOGjeP6eydTr9i5fKB/N6yY0t3ozbmJjwwK9DZbtFZig21SVtG
-         WDJdAAvtwP+6vZBJhFdS85EyHFHkztAhp2Tkh8tog0qWh3IO6odMxMrxIhrm5dcEL+NL
-         Y7AA==
-X-Gm-Message-State: AOJu0YyijKabiQKBd6SpT7Sic37F/BB596a8QStBYt+RbSyS/jjM7iKt
-	BkQC29UKQXuJI7IqRnqtu3etjvHCnHohWB/nY16pBkC7aIhAHL2/tYDn1oiF93yrxq2zYoINP3A
-	cgFW1pxA5vA5N5I6SngE3bpCBnFyf0h8klIRJUc+B7x6OqqpdDisxB0H4+xFtN71eGcuZTQ4nyw
-	hm/RDqyYJgqtaz/ft1Zsv/gh4En4YRM+BQnRKUKFgPASgLJvCOFCZs6a6ppd5iSIhY+VcH9tU34
-	Zn9Vg==
-X-Google-Smtp-Source: AGHT+IGoq1CIOLiUHphOY1xkNyX6Xae168VYvdK7hs6guIsiY2W6mU5hTHiY95SH08FqYdtKbrgKNNqEH3qSoLSsGto=
-X-Received: from dlbvv19.prod.google.com ([2002:a05:7022:5f13:b0:11d:cf4c:62ab])
+        bh=QJyrOGxlu0ScfVIWQXAbbLBtlLqeU/M6daVE2o6S+8M=;
+        b=lHK3eEAT8pmLdT3qs+maxzirtbItyn6d6jIairUDFK3eudyZrVWf/52WEeo3Xj4rCc
+         aWmPD2Dcf8SoiVMJ5DpZoJhaZdXJ4uSo/NKa5cTefTH7mvKCmOedKNkIoDK0eAQiZCMT
+         IABl4ivjMEmpxuOa68Gu1ygHqzrzef9OBQN0gL7rMz19jUO4l9NMxGox+Ww5mTshXZ0B
+         Dr98gasO12joMA6psYcwIoM1xVjpX56mShcTeDtjS+f2bUOVKiR+KbzVz5bU3S98kz19
+         gh3+iPRxrW4iF07snG3y+p1AQFx3Md0lSbZcCJAFs3/4inywP8ht0C/ZNE8GBlxVRfX1
+         buFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXavpg3/JlCldMTRR3sFb3cYINuYGvqawoljmCyhQJ90S1VGfDxNM4ihlF6fVv4wmElm3UgBAPOEd21jILS@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpEpJi5f/ISAB4Yoh+HQyYXr5R5+0uxaRsF4yQco106hdir/9V
+	mmEe5wL7At6VEVJczDx7J785GVHcdsR6hKNNTEMGslj4daSaDhv8dSutw09j3sZd7KYbjfdPvkd
+	LQgCzXq/9VWyrzAv+ugvndLLFiUvwdg==
+X-Google-Smtp-Source: AGHT+IHuYKdQ5x164yb7PryotVkYr394zzpivyA8SkPxp1eaMzgRUNIdpkWI9Pa38anpX/MBv/MMg98T9PztL+Gp/ug=
+X-Received: from dlc23.prod.google.com ([2002:a05:7022:397:b0:120:5f59:867])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:e13:b0:11b:88a7:e1b0 with SMTP id a92af1059eb24-121722eb801mr13420034c88.26.1766435094054;
- Mon, 22 Dec 2025 12:24:54 -0800 (PST)
-Date: Mon, 22 Dec 2025 20:24:14 +0000
-In-Reply-To: <20251201030606.2295399-1-coxu@redhat.com>
+ 2002:a05:701b:2714:b0:11a:962:99c2 with SMTP id a92af1059eb24-121723091efmr8988677c88.38.1766435095697;
+ Mon, 22 Dec 2025 12:24:55 -0800 (PST)
+Date: Mon, 22 Dec 2025 20:24:15 +0000
+In-Reply-To: <20251119225439.work.741-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20251031080949.2001716-1-coxu@redhat.com> <20251201030606.2295399-1-coxu@redhat.com>
+References: <20251119225439.work.741-kees@kernel.org>
 X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=801; i=samitolvanen@google.com;
- h=from:subject:message-id; bh=9rd+GpwzLc1w9cmaB5ydQoPGRQPj7ozHx/DAQZ4dYr4=;
- b=owGbwMvMwCUWxa662nLh8irG02pJDJmeKz7/TUuY2STVcmh/95Lap9O1J30SM4x+M9PIOXOvN
- uPvE46HO0pZGMS4GGTFFFlavq7euvu7U+qrz0USMHNYmUCGMHBxCsBE7r5nZDgZNNfy3uX0nI7p
- fpdMRcSz7gfnlsRtPckr+/iCelakWALDX9mzntH7zLbJLSlYp8DFIeYRxzA9LKm0t59hYnvZ25d /+AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=291; i=samitolvanen@google.com;
+ h=from:subject:message-id; bh=n4uTk6JujUshZIHOvlYzInxYcuTU4c5NJcNylTC9QPM=;
+ b=owGbwMvMwCUWxa662nLh8irG02pJDJmeKz5PZdF4l+zJ15V2zFL8buuP17Nyf2yfoLvd6d/ao
+ kcfJVsrOkpZGMS4GGTFFFlavq7euvu7U+qrz0USMHNYmUCGMHBxCsBE6tkZGTatk/qcHSPI/miV
+ KcOeG/ltBfcX6Jb+U/xlI7xNYceZn2wM/7T/Hi9ccc5n9vRDHw30FDLV7qTNyJn0/bEwW2GOUXb yahYA
 X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
-Message-ID: <176643400584.1902051.10979216909918913544.b4-ty@google.com>
-Subject: Re: [PATCH v2] module: Only declare set_module_sig_enforced when CONFIG_MODULE_SIG=y
+Message-ID: <176643400582.1902051.3878925092193822803.b4-ty@google.com>
+Subject: Re: [PATCH] module/decompress: Avoid open-coded kvrealloc()
 From: Sami Tolvanen <samitolvanen@google.com>
-To: linux-modules@vger.kernel.org, Coiby Xu <coxu@redhat.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, linux-integrity@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, Aaron Tomlin <atomlin@atomlin.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, linux-kernel@vger.kernel.org
+To: Petr Pavlu <petr.pavlu@suse.com>, Kees Cook <kees@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Daniel Gomez <da.gomez@samsung.com>, linux-modules@vger.kernel.org, 
+	Daniel Gomez <da.gomez@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Mon, 01 Dec 2025 11:06:05 +0800, Coiby Xu wrote:
-> Currently if set_module_sig_enforced is called with CONFIG_MODULE_SIG=n
-> e.g. [1], it can lead to a linking error,
+On Wed, 19 Nov 2025 14:54:43 -0800, Kees Cook wrote:
+> Replace open-coded allocate/copy with kvrealloc().
 > 
->     ld: security/integrity/ima/ima_appraise.o: in function `ima_appraise_measurement':
->     security/integrity/ima/ima_appraise.c:587:(.text+0xbbb): undefined reference to `set_module_sig_enforced'
 > 
-> This happens because the actual implementation of
-> set_module_sig_enforced comes from CONFIG_MODULE_SIG but both the
-> function declaration and the empty stub definition are tied to
-> CONFIG_MODULES.
-> 
-> [...]
 
 Applied to modules-next, thanks!
 
-[1/1] module: Only declare set_module_sig_enforced when CONFIG_MODULE_SIG=y
-      commit: 1ae719a43b0336678172b3eb55c5187816f9a130
+[1/1] module/decompress: Avoid open-coded kvrealloc()
+      commit: 68e85558587e6bbb5c3ea3c8b4c71ab852e4b53e
 
 Best regards,
 
