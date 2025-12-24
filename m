@@ -1,135 +1,272 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A2F345749
-	for <linux-modules@vger.kernel.org>; Tue, 23 Dec 2025 19:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0492248A5
+	for <linux-modules@vger.kernel.org>; Wed, 24 Dec 2025 00:58:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766517852; cv=none; b=goRNKL8jANLsYcZwh4IXBvm9/LSmwg/gIsmJoN6mE38Wq5buugYgZFjJ0YR98TA9iLK4PHfraSWpSL6vOlkPxpZFSFMbZMLFgR6RVSLxRvysYwrGzOLRWdCAl/m0J8FMT+hFlS4QR7ofMEQ5xwZu2kRkdOMMWqjZQRohQqpyIrA=
+	t=1766537923; cv=none; b=asCcIg03+OpHwDk2Rv+NfRKXlhh7nV6K6/koCxshjirkEzBa4nS5bmbZSwc+K0FE4iwHgOXV1FSHo+m7RQLCy/aVUW0J5xnlfnlR2rXtGqUKETWPymT3XK0DHkR59Sq4JCpwz95Aap4wciQjUi8GiMwaMKvMzPsSKWHoHbMXC6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766517852; c=relaxed/simple;
-	bh=WU0c+Ej+ibCsAFMveNpQ3mdIdSrtdeoPA94mykdrdO8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iKYEPj8KsBclkLkOUCFJdYT3/X7GjnW5JWKM0k4ih5XCD4t67S2WCDPg3HRliq4t2D+6nXutmuQ24v0FRFomAK/xcB8F6Yjo4TxxYpnHRasVXNFO3ccSYhECVYurl9BdMk5uUsq+iNMiESbErLAUIS0YG4wstl8KAs4XMUTCQiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dMHhWAoH; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766537923; c=relaxed/simple;
+	bh=m1xppCf6Sfjg2XT4d7KPEMA5nR8Nbi0GlUaoLXnssIg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ISLBSFYdT0apX2jmiMDiZ5go+9BtEKy0aGEwySL3Axx1NvV0uT+DJlRAISbfSLkS+w/YfDL+ULv91aOr5ak91ZeYxhgCaKxOMohq2EIMDGb1qRL33dVWdtnmXJcD6L7pRFg5GrDHbVC+WnYqlb87QIcqMt68zdvuloHfaLTzG/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UGGiabCB; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dMHhWAoH"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4779aa4f928so52087935e9.1
-        for <linux-modules@vger.kernel.org>; Tue, 23 Dec 2025 11:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766517849; x=1767122649; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WU0c+Ej+ibCsAFMveNpQ3mdIdSrtdeoPA94mykdrdO8=;
-        b=dMHhWAoHEY8bLj6yKeFcAj4oWEcBhr84c9A8UsaxRDoAvt7gIx6PEpM9CcGD6Xw7V+
-         nSuyEivDT9ro8v4KncN4H7t+fnNEF2KIazbF+XnQ50BO/gzXm1bP1kRQXYt4Lbg39Dk8
-         ziISx2RCJdFhgwwwiG3ToK3g1Gk+aE8ph4y3pWTZabLqbwqkh1W7xmNjVIq6/Jn3IAXE
-         a6rFkvt2x0B1+YYsgn3KEOSB5MAILSVWx5J9QGIuPmG3EOHwojKBTRixlbaBoAf/Hg6O
-         Ll/OoMlaIlfkIdEu0PzoxZ8z1Qwxbvn11mGbIpDsu56h15TuGi/OMGa4anxWikxoa2OE
-         kLVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766517849; x=1767122649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WU0c+Ej+ibCsAFMveNpQ3mdIdSrtdeoPA94mykdrdO8=;
-        b=wDU7UXl4dZuiPd4mttxG/Fy3RXDEsRQ5HwnyjJtcEvT7wIYYxZ4pCQD+W61yBx479+
-         9CZFi43BEiiau588FG0wlR4tMnJolQYKSnRyQwyAQzydsI0aIcVqz/QVWnCH5KtyNxVU
-         oiMxyAbokyJ5VB2yw1/FCRPFd71ktNR5qGjg2fade3yjj5qjyX9yN5BWbLeHWTVzwetw
-         EEPusDk7l6yLjU6fk54MszaCh4Rs2ArnWXfTLXv0QwdnwhjllEhiT/JeD6yRE3s2niBk
-         y+6bO664Nw/+aoOzD9Rrkj+PnpE3yCrViQzC7eqpsXcQ/D3AUUsTP8SN2/wRy/jpxLOw
-         a85A==
-X-Forwarded-Encrypted: i=1; AJvYcCUVz44tOXEElbkqT1EzqFguX+I6wBvmU9p8i/OS6mtvQ2tfadICmbg0ACHE2S/Dh1odVwlUjhtMcieK1AT9@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGw80I6pu5AYodur54WZytRrDMenZBEUCgkYhtKdmQWD9AcQTv
-	0RZNfgkxrc31X7s7Pr5uw+rufYSodCegMdwLWAj9R/H/D5URb0i+MZDpFlR4e9FkjghzcjgIKDe
-	9H+5DieaL7yEMikG7dDW70SAf3bp1Pcc=
-X-Gm-Gg: AY/fxX56He0L11nnFcQjXxguBzyMgZyZabT99UjnEUd/HCLOj2gLtjKOIeveIlSWfP2
-	djoSpy6T1wlOqWLuM3XDgxUHoJjHhpoBQ2dzC4mXpq/pl/vIScs8FCo6EDGHVihkgpVBL+4u6bM
-	u+duRC8iPiGk9Bp9bzXaFPu4nPwLMjpiwDqBAUnJ/k7RUuURAUGs55eNqeBGQDisJQCmz0+i0fL
-	bhTqGOGJLSASG2jKWhDsAppYeiu8mVzRs7HhiLA4wznj5VSB9o29ijBhinDCWqh4wz0izdH
-X-Google-Smtp-Source: AGHT+IEA8N0l7f37xu5fuodrmydJdjU8BPqUpk7joEMKf2v+HTz+VBQEMv8K8hO4h1IbRN6r+aIM0AZTsebwkuXeaXM=
-X-Received: by 2002:a05:600c:1c9d:b0:477:9cc3:7971 with SMTP id
- 5b1f17b1804b1-47d1957f7cfmr167023245e9.20.1766517848747; Tue, 23 Dec 2025
- 11:24:08 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UGGiabCB"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766537908;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VkIGme4fltU4a5vFCl+hn5EcbJPsBzmDE23i5d/2G74=;
+	b=UGGiabCBL0BZgjY80GTOZz3okOnr/o4friaEfuSri5WBjyIU7sZ+DQjWZxrygDU21mLh4C
+	dETivcrH9qhcwyNmOstqaj5JmeiD/RYevPYYw9kFdRbN371knQZK5wb1ArJ4Lv3AHPRP0s
+	DN+vkYwe0gt/Z06QbPcZaEw2CUCTfrg=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is out of bounds
+Date: Tue, 23 Dec 2025 16:57:52 -0800
+Message-ID: <20251224005752.201911-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com>
- <47165c76-d856-4c5d-bf2d-6d5a7fe08d43@linux.dev>
-In-Reply-To: <47165c76-d856-4c5d-bf2d-6d5a7fe08d43@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 23 Dec 2025 09:23:57 -1000
-X-Gm-Features: AQt7F2paAUP67eAz86aT4EZ2zxYpVE22u8U7q7vZXo758q6RP0KM0jYtAiwhChs
-Message-ID: <CAADnVQJAmb8NFWFCgpBUO9wT3NTzTJAd2gH1cs3rpLxAK1WNrQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: crypto: replace -EEXIST with -EBUSY
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-Cc: Daniel Gomez <da.gomez@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Lucas De Marchi <demarchi@kernel.org>, bpf <bpf@vger.kernel.org>, linux-modules@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Gomez <da.gomez@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Dec 20, 2025 at 8:55=E2=80=AFAM Vadim Fedorenko
-<vadim.fedorenko@linux.dev> wrote:
->
-> On 20/12/2025 03:48, Daniel Gomez wrote:
-> > From: Daniel Gomez <da.gomez@samsung.com>
-> >
-> > The -EEXIST error code is reserved by the module loading infrastructure
-> > to indicate that a module is already loaded. When a module's init
-> > function returns -EEXIST, userspace tools like kmod interpret this as
-> > "module already loaded" and treat the operation as successful, returnin=
-g
-> > 0 to the user even though the module initialization actually failed.
-> >
-> > This follows the precedent set by commit 54416fd76770 ("netfilter:
-> > conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
-> > issue in nf_conntrack_helper_register().
-> >
-> > This affects bpf_crypto_skcipher module. While the configuration
-> > required to build it as a module is unlikely in practice, it is
-> > technically possible, so fix it for correctness.
-> >
-> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > ---
-> > The error code -EEXIST is reserved by the kernel module loader to
-> > indicate that a module with the same name is already loaded. When a
-> > module's init function returns -EEXIST, kmod interprets this as "module
-> > already loaded" and reports success instead of failure [1].
-> >
-> > The kernel module loader will include a safety net that provides -EEXIS=
-T
-> > to -EBUSY with a warning [2], and a documentation patch has been sent t=
-o
-> > prevent future occurrences [3].
-> >
-> > These affected code paths were identified using a static analysis tool
-> > [4] that traces -EEXIST returns to module_init(). The tool was develope=
-d
-> > with AI assistance and all findings were manually validated.
-> >
-> > Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
-> > Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41=
-af01f@intel.com/ [2]
-> > Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modu=
-les-docs-v1-0-361569aa782a@samsung.com/ [3]
-> > Link: https://gitlab.com/-/snippets/4913469 [4]
->
-> Even though I'm not quite sure that we should care once the core
-> module loader can adjust the error, the change looks ok to me:
->
-> Acked-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+I've been chasing down the following flaky splat, introduced by recent
+changes in BTF generation [1]:
 
-Applied to bpf-next.
+  ------------[ cut here ]------------
+  BUG: unable to handle page fault for address: ffa000000233d828
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 100000067 P4D 100253067 PUD 100258067 PMD 0
+  Oops: Oops: 0000 [#1] SMP NOPTI
+  CPU: 1 UID: 0 PID: 390 Comm: test_progs Tainted: G        W  OE       6.19.0-rc1-gf785a31395d9 #331 PREEMPT(full)
+  Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-4.el9 04/01/2014
+  RIP: 0010:simplify_symbols+0x2b2/0x480
+     9.737179] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+  RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+  RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+  RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+  RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+  R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+  R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+  FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+  PKRU: 55555554
+  Call Trace:
+   <TASK>
+   ? __kmalloc_node_track_caller_noprof+0x37f/0x740
+   ? __pfx_setup_modinfo_srcversion+0x10/0x10
+   ? srso_alias_return_thunk+0x5/0xfbef5
+   ? kstrdup+0x4a/0x70
+   ? srso_alias_return_thunk+0x5/0xfbef5
+   ? setup_modinfo_srcversion+0x1a/0x30
+   ? srso_alias_return_thunk+0x5/0xfbef5
+   ? setup_modinfo+0x12b/0x1e0
+   load_module+0x133a/0x1610
+   __x64_sys_finit_module+0x31b/0x450
+   ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+   do_syscall_64+0x80/0x2d0
+   ? srso_alias_return_thunk+0x5/0xfbef5
+   ? exc_page_fault+0x95/0xc0
+   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+  RIP: 0033:0x7f1c63a2582d
+     9.794028] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff 8 8b 0d bb 15 0f 00 f7 d8 64 89 01 48
+  RSP: 002b:00007ffe513df128 EFLAGS: 00000206 ORIG_RAX: 0000000000000139
+  RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1c63a2582d
+  RDX: 0000000000000000 RSI: 0000000000ee83f9 RDI: 0000000000000016
+  RBP: 00007ffe513df150 R08: 0000000000000000 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000000206 R12: 00007ffe513e3588
+  R13: 000000000088fad0 R14: 00000000014bddb0 R15: 00007f1c63ba7000
+   </TASK>
+  Modules linked in: bpf_testmod(OE)
+  CR2: ffa000000233d828
+  ---[ end trace 0000000000000000 ]---
+  RIP: 0010:simplify_symbols+0x2b2/0x480
+     9.821595] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+  RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+  RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+  RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+  RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+  R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+  R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+  FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+  PKRU: 55555554
+  Kernel panic - not syncing: Fatal exception
+  Kernel Offset: disabled
+
+This hasn't happened on BPF CI so far, for example, however I was able
+to reproduce it on a particular x64 machine using a kernel built with
+LLVM 20.
+
+The crash happens on attempt to load one of the BPF selftest modules
+(tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.ko) which
+is used by kfunc_module_order test.
+
+The reason for the crash is that simplify_symbols() doesn't check for
+bounds of the ELF section index:
+
+       for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+		const char *name = info->strtab + sym[i].st_name;
+
+		switch (sym[i].st_shndx) {
+		case SHN_COMMON:
+
+		[...]
+
+		default:
+			/* Divert to percpu allocation if a percpu var. */
+			if (sym[i].st_shndx == info->index.pcpu)
+				secbase = (unsigned long)mod_percpu(mod);
+			else
+  /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+			sym[i].st_value += secbase;
+			break;
+		}
+	}
+
+And in the case I was able to reproduce, the value 0xffff
+(SHN_HIRESERVE aka SHN_XINDEX [2]) fell through here.
+
+Now this code fragment is between 15 and 20 years old, so obviously
+it's not expected for a kmodule symbol to have such st_shndx
+value. Even so, the kernel probably should fail loading the module
+instead of crashing, which is what this patch attempts to fix.
+
+Investigating further, I discovered that the module binary became
+corrupted by `${OBJCOPY} --update-section` operation updating .BTF_ids
+section data in scripts/gen-btf.sh. This explains how the bug has
+surfaced after gen-btf.sh was introduced:
+
+  $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+  llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (2), but unable to locate the extended symbol index table
+  llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (3), but unable to locate the extended symbol index table
+  llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (4), but unable to locate the extended symbol index table
+       3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+  llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (16), but unable to locate the extended symbol index table
+       4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__func__bpf_test_modorder_retx__44417
+
+vs expected
+
+  $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+       3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT     6 __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+       4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT     6 __BTF_ID__func__bpf_test_modorder_retx__44417
+
+But why? Updating section data without changing it's size is not
+supposed to affect sections indices, right?
+
+With a bit more testing I confirmed that this is a LLVM-specific
+issue (doesn't reproduce with GCC kbuild), and it's not stable,
+because in link-vmlinux.h we also do:
+
+    ${OBJCOPY} --update-section .BTF_ids=${btfids_vmlinux} ${VMLINUX}
+
+However:
+
+  $ llvm-readelf -s --wide ~/workspace/prog-aux/linux/vmlinux | grep 0xffff
+  # no output, which is good
+
+So the suspect is the implementation of llvm-objcopy. As it turns out
+there is a relevant known bug that explains the flakiness and isn't
+fixed yet [3].
+
+[1] https://lore.kernel.org/bpf/20251219181825.1289460-3-ihor.solodrai@linux.dev/
+[2] https://man7.org/linux/man-pages/man5/elf.5.html
+[3] https://github.com/llvm/llvm-project/issues/168060#issuecomment-3533552952
+
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+---
+
+RFC
+
+While this llvm-objcopy bug is not fixed, we can not trust it in the
+kernel build pipeline. In the short-term we have to come up with a
+workaround for .BTF_ids section update and replace the calls to
+${OBJCOPY} --update-section with something else.
+
+One potential workaround is to force the use of the objcopy (from
+binutils) instead of llvm-objcopy when updating .BTF_ids section.
+
+Alternatively, we could just dd the .BTF_ids data computed by
+resolve_btfids at the right offset in the target ELF file.
+
+Surprisingly I couldn't find a good way to read a section offset and
+size from the ELF with a specified format in a command line. Both
+readelf and {llvm-}objdump give a human readable output, and it
+appears we can't rely on the column order, for example.
+
+We could still try parsing readelf output with awk/grep, covering
+output variants that appear in the kernel build.
+
+We can also do:
+
+   llvm-readobj --elf-output-style=JSON --sections "$elf" | \
+        jq -r --arg name .BTF_ids '
+            .[0].Sections[] |
+            select(.Section.Name.Name == $name) |
+            "\(.Section.Offset) \(.Section.Size)"'
+
+...but idk man, doesn't feel right.
+
+Most reliable way to determine the size and offset of .BTF_ids section
+is probably reading them by a C program with libelf, such as
+resolve_btfids. Which is quite ironic, given the recent
+changes. Setting the irony aside, we could add smth like:
+         resolve_btfids --section-info=.BTF_ids $elf
+
+Reverting the gen-btf.sh patch is also a possible workaround, but I'd
+really like to avoid it, given that BPF features/optimizations in
+development depend on it.
+
+I'd appreciate comments and suggestions on this issue. Thank you!
+---
+ kernel/module/main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 710ee30b3bea..5bf456fad63e 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+ 			break;
+ 
+ 		default:
++			if (sym[i].st_shndx >= info->hdr->e_shnum) {
++				pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
++				       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
++				ret = -ENOEXEC;
++				break;
++			}
++
+ 			/* Divert to percpu allocation if a percpu var. */
+ 			if (sym[i].st_shndx == info->index.pcpu)
+ 				secbase = (unsigned long)mod_percpu(mod);
+-- 
+2.52.0
+
