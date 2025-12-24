@@ -1,250 +1,316 @@
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B482E28C009
-	for <linux-modules@vger.kernel.org>; Wed, 24 Dec 2025 04:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA8942D193C
+	for <linux-modules@vger.kernel.org>; Wed, 24 Dec 2025 05:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766550732; cv=none; b=cHULC0KuqmGM+E9oDK9ZqAynxuFz7Z1L/Hpnh4omG838K89sRM5QRLlK+xXLB7GlAZK5hS7KRfzqDAjTwwiOoXa6QBfFzi0ahuw3B0035LuAeReh/bpwWm2kl2yjWXzfD/LDQy4uOPS1xXP138N6vLgsZ/LO1Y85r+8AYWKu8Qw=
+	t=1766554593; cv=none; b=lRLUWxuNIpB42vV87TIYD5yjOsj+rmSfK2URO76dFlj9cTVnrCxBZroZEGX3ol3b37yFIdfYMrOMMIqp0xwTSsG4fp4JR6MWMgBuT85njyWsXSvRD5ZSwYjzir7CMG8wQaXOawEiC2wWrnlqJm4W6MKLoMGHzeB5DFP9O3aYIKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766550732; c=relaxed/simple;
-	bh=5hCqqnMuX901tu2ICqgwO+v8/gncXU+eR+poRyeGdhE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=ojjLRnGgvbO/yQZMCrzrfGY5uNb5iVQkygdafDpqrzLqVzAnaRFUvANDaF4E1TlP14DRpqWT0xd6Vr9s1gxIR+tNQKg2Aem6+fnQz3DKHQQ4ULrEnl6UF0im98JnjvjBtLvYg+WgKC3d/DHTXBsc52WXLWG5iZSraZgoqCOjLAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=KcFQuvpr; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1766554593; c=relaxed/simple;
+	bh=f0pKkChIzjZS/7gb5J9jwf0OGZYqz2n74a56KVmIRAg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GJYuZ7C5u/djiVvLx2ypsbwGtNCxb4JBqyYsfiN9OhHH48G/9RN/wBri1GhLZ/hJZ440XmKeDD9oKu9tWr6r6zj7l/U8x8suoYvYwdIhJN6+hLaud93tmpttGh6MqVIv7JBSFjMiEW1Xe2IOoTmVAX9QZrB1fmwGwa8pb2rhc04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n8UWXI59; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="KcFQuvpr"
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20251224043159epoutp02bc3eca4b5c9f73d22a36cea35c2e1fbd~EDIUX-2yH1167011670epoutp02b
-	for <linux-modules@vger.kernel.org>; Wed, 24 Dec 2025 04:31:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20251224043159epoutp02bc3eca4b5c9f73d22a36cea35c2e1fbd~EDIUX-2yH1167011670epoutp02b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1766550719;
-	bh=YXO066pxNrwE8u/0uOTahD5Dqr7uT2f/RtFKzM9d2wM=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=KcFQuvprpBZcEJTUP1iwq7jKeCjP1BBbfZf8qdeub3bas04Un6yMxqALKcSvaVFMZ
-	 NpYlC23WzPFs+EdJyQl7KI35W8bmlK7rFSVWIt1K6W15AKe1aiGigQ2DZKrg4N9O1j
-	 ZrWiEvNW8dkkQ2Z/i2HQdqwBaRFZfP+vb1Ovw83k=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
-	20251224043159epcas2p2bec422ba6a2026ec0596fcfdba517134~EDIUIrhio0447704477epcas2p25;
-	Wed, 24 Dec 2025 04:31:59 +0000 (GMT)
-Received: from epcas2p1.samsung.com (unknown [182.195.38.210]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4dbf9B6kllz6B9m5; Wed, 24 Dec
-	2025 04:31:58 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
-	20251224043158epcas2p217889374e0ea4b1722371ca143741d85~EDITQtNh33231632316epcas2p2c;
-	Wed, 24 Dec 2025 04:31:58 +0000 (GMT)
-Received: from KORCO166536.samsungds.net (unknown [12.80.211.123]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20251224043158epsmtip1adab85e65ea1c837451facb7a8f6c346~EDITNzRPo0800208002epsmtip12;
-	Wed, 24 Dec 2025 04:31:58 +0000 (GMT)
-From: Yunjin Kim <yunzhen.kim@samsung.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>
-Cc: Yunjin Kim <yunzhen.kim@samsung.com>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] ANDROID: gki: kallsyms: add
- kallsyms_lookup_address_and_size.
-Date: Wed, 24 Dec 2025 13:31:57 +0900
-Message-Id: <20251224043157.59289-1-yunzhen.kim@samsung.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n8UWXI59"
+Message-ID: <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766554588;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zbiVkbEbpfeVAU/ecvNvfKdtMSPu86Ui3ddOqdISv80=;
+	b=n8UWXI59cir+cCXqz7wSVwRBH131j4Z4xlhB37kLYzE5O86uvzq72iA8daaHlF1xPVuFFX
+	HNwhNabhFBuzff+ioUiDcV1EGEVpbHoKHkGAh+gWdb0zVJYzIl8gCwXv9HgbokNuH4FQHt
+	vfEZqJTPLVKmmW4/4pjyx2D01DDSYtI=
+Date: Tue, 23 Dec 2025 21:36:22 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20251224043158epcas2p217889374e0ea4b1722371ca143741d85
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20251224043158epcas2p217889374e0ea4b1722371ca143741d85
-References: <CGME20251224043158epcas2p217889374e0ea4b1722371ca143741d85@epcas2p2.samsung.com>
+Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
+ out of bounds
+Content-Language: en-GB
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-This methods are used by AKKstub-ARM Kernel Kstub.
 
-We need to implement an automatic kernel-method mock that streamlines the
-mocking process during kernel-method testing and enables fully automated
-operations. This mechanism must traverse the binary instructions of the
-target function in memory, locate the appropriate instruction, and replace
-it. To perform the traversal, it must know the function’s entry address and
-the size of its instruction range.
 
-Bug:
-Change-Id: I5a318f762d4412e70b0c8dcf2dfed326312bdc65
-Signed-off-by: Yunjin Kim <yunzhen.kim@samsung.com>
----
- include/linux/kallsyms.h |  2 ++
- include/linux/module.h   |  2 ++
- kernel/kallsyms.c        | 38 ++++++++++++++++++++++++++
- kernel/module/kallsyms.c | 58 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 100 insertions(+)
+On 12/23/25 4:57 PM, Ihor Solodrai wrote:
+> I've been chasing down the following flaky splat, introduced by recent
+> changes in BTF generation [1]:
+>
+>    ------------[ cut here ]------------
+>    BUG: unable to handle page fault for address: ffa000000233d828
+>    #PF: supervisor read access in kernel mode
+>    #PF: error_code(0x0000) - not-present page
+>    PGD 100000067 P4D 100253067 PUD 100258067 PMD 0
+>    Oops: Oops: 0000 [#1] SMP NOPTI
+>    CPU: 1 UID: 0 PID: 390 Comm: test_progs Tainted: G        W  OE       6.19.0-rc1-gf785a31395d9 #331 PREEMPT(full)
+>    Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-4.el9 04/01/2014
+>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>       9.737179] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>    PKRU: 55555554
+>    Call Trace:
+>     <TASK>
+>     ? __kmalloc_node_track_caller_noprof+0x37f/0x740
+>     ? __pfx_setup_modinfo_srcversion+0x10/0x10
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? kstrdup+0x4a/0x70
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? setup_modinfo_srcversion+0x1a/0x30
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? setup_modinfo+0x12b/0x1e0
+>     load_module+0x133a/0x1610
+>     __x64_sys_finit_module+0x31b/0x450
+>     ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>     do_syscall_64+0x80/0x2d0
+>     ? srso_alias_return_thunk+0x5/0xfbef5
+>     ? exc_page_fault+0x95/0xc0
+>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>    RIP: 0033:0x7f1c63a2582d
+>       9.794028] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff 8 8b 0d bb 15 0f 00 f7 d8 64 89 01 48
+>    RSP: 002b:00007ffe513df128 EFLAGS: 00000206 ORIG_RAX: 0000000000000139
+>    RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1c63a2582d
+>    RDX: 0000000000000000 RSI: 0000000000ee83f9 RDI: 0000000000000016
+>    RBP: 00007ffe513df150 R08: 0000000000000000 R09: 0000000000000000
+>    R10: 0000000000000000 R11: 0000000000000206 R12: 00007ffe513e3588
+>    R13: 000000000088fad0 R14: 00000000014bddb0 R15: 00007f1c63ba7000
+>     </TASK>
+>    Modules linked in: bpf_testmod(OE)
+>    CR2: ffa000000233d828
+>    ---[ end trace 0000000000000000 ]---
+>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>       9.821595] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>    PKRU: 55555554
+>    Kernel panic - not syncing: Fatal exception
+>    Kernel Offset: disabled
+>
+> This hasn't happened on BPF CI so far, for example, however I was able
+> to reproduce it on a particular x64 machine using a kernel built with
+> LLVM 20.
+>
+> The crash happens on attempt to load one of the BPF selftest modules
+> (tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.ko) which
+> is used by kfunc_module_order test.
+>
+> The reason for the crash is that simplify_symbols() doesn't check for
+> bounds of the ELF section index:
+>
+>         for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+> 		const char *name = info->strtab + sym[i].st_name;
+>
+> 		switch (sym[i].st_shndx) {
+> 		case SHN_COMMON:
+>
+> 		[...]
+>
+> 		default:
+> 			/* Divert to percpu allocation if a percpu var. */
+> 			if (sym[i].st_shndx == info->index.pcpu)
+> 				secbase = (unsigned long)mod_percpu(mod);
+> 			else
+>    /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+> 			sym[i].st_value += secbase;
+> 			break;
+> 		}
+> 	}
+>
+> And in the case I was able to reproduce, the value 0xffff
+> (SHN_HIRESERVE aka SHN_XINDEX [2]) fell through here.
+>
+> Now this code fragment is between 15 and 20 years old, so obviously
+> it's not expected for a kmodule symbol to have such st_shndx
+> value. Even so, the kernel probably should fail loading the module
+> instead of crashing, which is what this patch attempts to fix.
+>
+> Investigating further, I discovered that the module binary became
+> corrupted by `${OBJCOPY} --update-section` operation updating .BTF_ids
+> section data in scripts/gen-btf.sh. This explains how the bug has
+> surfaced after gen-btf.sh was introduced:
+>
+>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (2), but unable to locate the extended symbol index table
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (3), but unable to locate the extended symbol index table
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (4), but unable to locate the extended symbol index table
+>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended symbol index (16), but unable to locate the extended symbol index table
+>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT   RSV[0xffff] __BTF_ID__func__bpf_test_modorder_retx__44417
+>
+> vs expected
+>
+>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT     6 __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT     6 __BTF_ID__func__bpf_test_modorder_retx__44417
+>
+> But why? Updating section data without changing it's size is not
+> supposed to affect sections indices, right?
+>
+> With a bit more testing I confirmed that this is a LLVM-specific
+> issue (doesn't reproduce with GCC kbuild), and it's not stable,
+> because in link-vmlinux.h we also do:
+>
+>      ${OBJCOPY} --update-section .BTF_ids=${btfids_vmlinux} ${VMLINUX}
+>
+> However:
+>
+>    $ llvm-readelf -s --wide ~/workspace/prog-aux/linux/vmlinux | grep 0xffff
+>    # no output, which is good
+>
+> So the suspect is the implementation of llvm-objcopy. As it turns out
+> there is a relevant known bug that explains the flakiness and isn't
+> fixed yet [3].
+>
+> [1] https://lore.kernel.org/bpf/20251219181825.1289460-3-ihor.solodrai@linux.dev/
+> [2] https://man7.org/linux/man-pages/man5/elf.5.html
+> [3] https://github.com/llvm/llvm-project/issues/168060#issuecomment-3533552952
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>
+> ---
+>
+> RFC
+>
+> While this llvm-objcopy bug is not fixed, we can not trust it in the
+> kernel build pipeline. In the short-term we have to come up with a
+> workaround for .BTF_ids section update and replace the calls to
+> ${OBJCOPY} --update-section with something else.
+>
+> One potential workaround is to force the use of the objcopy (from
+> binutils) instead of llvm-objcopy when updating .BTF_ids section.
+>
+> Alternatively, we could just dd the .BTF_ids data computed by
+> resolve_btfids at the right offset in the target ELF file.
+>
+> Surprisingly I couldn't find a good way to read a section offset and
+> size from the ELF with a specified format in a command line. Both
+> readelf and {llvm-}objdump give a human readable output, and it
+> appears we can't rely on the column order, for example.
+>
+> We could still try parsing readelf output with awk/grep, covering
+> output variants that appear in the kernel build.
+>
+> We can also do:
+>
+>     llvm-readobj --elf-output-style=JSON --sections "$elf" | \
+>          jq -r --arg name .BTF_ids '
+>              .[0].Sections[] |
+>              select(.Section.Name.Name == $name) |
+>              "\(.Section.Offset) \(.Section.Size)"'
+>
+> ...but idk man, doesn't feel right.
+>
+> Most reliable way to determine the size and offset of .BTF_ids section
+> is probably reading them by a C program with libelf, such as
+> resolve_btfids. Which is quite ironic, given the recent
+> changes. Setting the irony aside, we could add smth like:
+>           resolve_btfids --section-info=.BTF_ids $elf
+>
+> Reverting the gen-btf.sh patch is also a possible workaround, but I'd
+> really like to avoid it, given that BPF features/optimizations in
+> development depend on it.
+>
+> I'd appreciate comments and suggestions on this issue. Thank you!
+> ---
+>   kernel/module/main.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 710ee30b3bea..5bf456fad63e 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+>   			break;
+>   
+>   		default:
+> +			if (sym[i].st_shndx >= info->hdr->e_shnum) {
+> +				pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
+> +				       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
+> +				ret = -ENOEXEC;
+> +				break;
+> +			}
+> +
+>   			/* Divert to percpu allocation if a percpu var. */
+>   			if (sym[i].st_shndx == info->index.pcpu)
+>   				secbase = (unsigned long)mod_percpu(mod);
 
-diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-index 1c6a6c1704d8..ec59f25259f2 100644
---- a/include/linux/kallsyms.h
-+++ b/include/linux/kallsyms.h
-@@ -78,6 +78,8 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
- /* Lookup the address for a symbol. Returns 0 if not found. */
- unsigned long kallsyms_lookup_name(const char *name);
+I tried both llvm21 and llvm22 (where llvm21 is used in bpf ci).
 
-+unsigned long kallsyms_lookup_address_and_size(const char *name, unsigned long *address, unsigned long * size);
-+
- extern int kallsyms_lookup_size_offset(unsigned long addr,
-				  unsigned long *symbolsize,
-				  unsigned long *offset);
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 5beb39d56197..47fb46bd1b92 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -976,6 +976,8 @@ int module_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- /* Look for this name: can be of form module:name. */
- unsigned long module_kallsyms_lookup_name(const char *name);
+Without KASAN, I can reproduce the failure for llvm19/llvm21/llvm22.
+I did not test llvm20 and I assume it may fail too.
 
-+unsigned long module_kallsyms_lookup_address_and_size(const char *name, unsigned long *address, unsigned long *size);
-+
- unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name);
+The following llvm patch
+    https://github.com/llvm/llvm-project/pull/170462
+can fix the issue. Currently it is still in review stage. The actual diff is
 
- #else	/* CONFIG_MODULES && CONFIG_KALLSYMS */
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index a9a0ca605d4a..5533816794da 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -160,6 +160,22 @@ unsigned long kallsyms_sym_address(int idx)
-	return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
- }
+diff --git a/llvm/lib/ObjCopy/ELF/ELFObject.cpp b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+index e5de17e093df..cc1527d996e2 100644
+--- a/llvm/lib/ObjCopy/ELF/ELFObject.cpp
++++ b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+@@ -2168,7 +2168,11 @@ Error Object::updateSectionData(SecPtr &Sec, ArrayRef<uint8_t> Data) {
+                               Data.size(), Sec->Name.c_str(), Sec->Size);
+  
+    if (!Sec->ParentSegment) {
+-    Sec = std::make_unique<OwnedDataSection>(*Sec, Data);
++    SectionBase *Replaced = Sec.get();
++    SectionBase *Modified = &addSection<OwnedDataSection>(*Sec, Data);
++    DenseMap<SectionBase *, SectionBase *> Replacements{{Replaced, Modified}};
++    if (auto err = replaceSections(Replacements))
++      return err;
+    } else {
+      // The segment writer will be in charge of updating these contents.
+      Sec->Size = Data.size();
 
-+unsigned long kallsyms_sym_address_and_size(int idx, unsigned long *size)
-+{
-+	/* values are unsigned offsets if --absolute-percpu is not in effect */
-+	*size = kallsyms_offsets[idx+1] - kallsyms_offsets[idx];
-+
-+	if (!IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU))
-+		return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
-+
-+	/* ...otherwise, positive offsets are absolute values */
-+	if (kallsyms_offsets[idx] >= 0)
-+		return kallsyms_offsets[idx];
-+
-+	/* ...and negative offsets are relative to kallsyms_relative_base - 1 */
-+	return kallsyms_relative_base - 1 - kallsyms_offsets[idx];
-+}
-+
- static unsigned int get_symbol_seq(int index)
- {
-	unsigned int i, seq = 0;
-@@ -242,6 +258,27 @@ unsigned long kallsyms_lookup_name(const char *name)
+I applied the above patch to latest llvm21 and llvm22 and
+the crash is gone and the selftests can run properly.
 
-	return module_kallsyms_lookup_name(name);
- }
-+EXPORT_SYMBOL(kallsyms_lookup_name);
-+
-+unsigned long kallsyms_lookup_address_and_size(const char *name, unsigned long *address, unsigned long * size)
-+{
-+	int ret;
-+	unsigned int i;
-+
-+	/* Skip the search for empty string. */
-+	if (!*name)
-+		return 0;
-+
-+	ret = kallsyms_lookup_names(name, &i, NULL);
-+	if (!ret){
-+		*address = kallsyms_sym_address_and_size(get_symbol_seq(i), size);
-+		return *address;
-+	}
-+
-+	//return module_kallsyms_lookup_name(name);
-+	return module_kallsyms_lookup_address_and_size(name, address, size);
-+}
-+EXPORT_SYMBOL(kallsyms_lookup_address_and_size);
+With KASAN, everything is okay for llvm21 and llvm22.
 
- /*
-  * Iterate over all symbols in vmlinux.  For symbols from modules use
-@@ -430,6 +467,7 @@ int lookup_symbol_name(unsigned long addr, char *symname)
-	/* See if it's in a module. */
-	return lookup_module_symbol_name(addr, symname);
- }
-+EXPORT_SYMBOL(lookup_symbol_name);
+Not sure whether the llvm patch
+    https://github.com/llvm/llvm-project/pull/170462
+can make into llvm21 or not as looks like llvm21 intends to
+freeze for now. See
+    https://github.com/llvm/llvm-project/pull/168314#issuecomment-3645797175
+the llvm22 will branch into rc mode in January.
 
- /* Look up a kernel symbol and return it in a text buffer. */
- static int __sprint_symbol(char *buffer, unsigned long address,
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index bf65e0c3c86f..e8552f5e64c8 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -462,6 +462,64 @@ unsigned long module_kallsyms_lookup_name(const char *name)
-	return ret;
- }
+I will try to see whether we can have a reasonable workaround
+for llvm21 llvm-objcopy (for without KASAN).
 
-+static unsigned long __find_kallsyms_symbol_address_and_size_value(struct module *mod, const char *name, unsigned long *address, unsigned long* size)
-+{
-+	unsigned int i;
-+	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
-+	unsigned long ret = 0;
-+
-+	for (i = 0; i < kallsyms->num_symtab; i++) {
-+		const Elf_Sym *sym = &kallsyms->symtab[i];
-+
-+		if (strcmp(name, kallsyms_symbol_name(kallsyms, i)) == 0 &&
-+		    sym->st_shndx != SHN_UNDEF){
-+			ret = kallsyms_symbol_value(sym);
-+			*address = ret;
-+			*size = sym->st_size;
-+			return ret;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static unsigned long __module_kallsyms_lookup_address_and_size(const char *name, unsigned long *address, unsigned long *size)
-+{
-+	struct module *mod;
-+	char *colon;
-+
-+	colon = strnchr(name, MODULE_NAME_LEN, ':');
-+	if (colon) {
-+		mod = find_module_all(name, colon - name, false);
-+		if (mod)
-+			return __find_kallsyms_symbol_address_and_size_value(mod, colon + 1, address, size);
-+		return 0;
-+	}
-+
-+	list_for_each_entry_rcu(mod, &modules, list) {
-+		unsigned long ret;
-+
-+		if (mod->state == MODULE_STATE_UNFORMED)
-+			continue;
-+		ret = __find_kallsyms_symbol_address_and_size_value(mod, name, address, size);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+/* Look for this name: can be of form module:name. */
-+unsigned long module_kallsyms_lookup_address_and_size(const char *name, unsigned long *address, unsigned long *size)
-+{
-+	unsigned long ret;
-+
-+	/* Don't lock: we're in enough trouble already. */
-+	preempt_disable();
-+	ret = __module_kallsyms_lookup_address_and_size(name, address, size);
-+	preempt_enable();
-+	return ret;
-+}
-+
-+
- unsigned long find_kallsyms_symbol_value(struct module *mod, const char *name)
- {
-	unsigned long ret;
---
-2.34.1
