@@ -1,184 +1,365 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EBD3A1E6D
-	for <linux-modules@vger.kernel.org>; Thu, 25 Dec 2025 19:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046531DE8AD
+	for <linux-modules@vger.kernel.org>; Fri, 26 Dec 2025 05:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766689701; cv=none; b=IqmHwmfrcLu5FcLu0Fim6Nmik0Tc5XcBlVcF9rZsqH6jYyAYqqYiNcr/IpGtR8213aqwokdVc0g9/LhxQvvZafR4MRUSgqySKJLq56QoSr7De0uHNW+mz4l/KZRuwgVjM/6R3Rsa7abq1kHdBoK2McYGnrQ0kAS9hu096DChabE=
+	t=1766725527; cv=none; b=SJ45j6Fz8mooy+KI23jJCEWJjj6dM00ZUSn/lEAx1XqiwEpFf/dH/40Q4WfrGBsOlqWaOc0dHG+mjDWoos5j+ZGBho5V5jISsPffn+f8Zb20yfu3Wg+DAjuWlXjW2cRfBitQJOeLzIjaPnjXgphuBI/tdY/pkeVT8nXvRnIWA8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766689701; c=relaxed/simple;
-	bh=Sp3BBI7rqWS/x5u5n95rHXBvTYUWZEdDT2uy0cYwMU4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H6n/jTQm1QJwvVjqtE4uRQoL3BnRTfQSDAoPAIffqyjqg/4pTdkG+bimbDEQoimj9lcwstYVvRnrZPDWYXCkkNSNNdGTSmRjjDHsaFMzEDQTovlihk1Pf3TEYFXyx+YnziH5VhPrQqz9KibwL3o4eCBxlrljNeRZu+P1fGOMLR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hDOLKro4; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1766725527; c=relaxed/simple;
+	bh=rvX4wb24tQe5E738k/EQiUFGx5vQZyRkO1TZ+FOUlDU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=pWDwWYScO6sGJ137PzfsfHxc/rCq78DzAzL6gw7mkHUCrybe+3Bs+mdu7+dZu2FayDgRIAXk3wAYqrjDjaV1jLE75C1IreHU0fDnTSxDuFKpAUMdhAmbiSlDXL0FK0WjrjfIU3NwEu34rirQdBj6akuYrb9mWr72N7s71M3I2zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PgVqaH3c; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hDOLKro4"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4edb6e678ddso99176761cf.2
-        for <linux-modules@vger.kernel.org>; Thu, 25 Dec 2025 11:08:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766689698; x=1767294498; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hauBx7stO8fgVv7cwKU+lRmpmOfl414DpJwGxBenCpM=;
-        b=hDOLKro4qi0veM+aEdrwmznbpyYpMVq6KlFZkCu9yO5p7joAi50/7rWInim6uLZhe/
-         eLcltJV7SPHNa83lfWyFPdmKJ5IeMcH0dnmycQhvkx6lS6zlYrCHiXdeU8j4cm8raVOS
-         7qToj8uf3WykxMjy6PkP0cOVbp9iC0AOAGRkbRuYEjQFsQPLWC9I10WPRJ8b8Y7sA7Gh
-         TFj+Z1Ke9DnJqq18y2PHeTL+kxhsi4BbbelKy/ezVM2hmlQexrp/YBpmgeConeUWhid6
-         /jFiAw/EKf7uVZjAf0TZio5DE4wDQLIUJ4sVPd15lALgSyy1cdWp9crb0jaIZRG7GXNF
-         dblw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766689698; x=1767294498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hauBx7stO8fgVv7cwKU+lRmpmOfl414DpJwGxBenCpM=;
-        b=uJbVGGUzwMsVgTX9wMYRIto/HAUStHKC27SfhyHkW77lrMbXEdMy2sSwC1b18x/Cvn
-         2RMQamRg+gFjH4+1Ksr7KnuH6pLtwbDGoT+A+7RMcuWqbDXgtS8HpcXGDvsaA9euhuuX
-         25S88EDCgilrDdyjHz18Q23p8TZE7hYjMbS+CemT9cz0lTUeOaWvlfDTrzqsCIgwSIR5
-         Mw/WT7/gLcWGpsNfIBnrtKn6mGaKFLw/+DIVc0/yGkpdH8nbbJuwKzxcJpuKsRqHLVQ9
-         DIYou4sNK+FR7oiqaKcNXdX/qVuCVCXValLCD8diy7mghCioPXjJ9JBp08bt44x/fYN0
-         W25Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWpWjlRTaXHNZGl7M8g3SYvodgUs/oTz4+qcMAOMMQyBi3xqLWhuQVtdFEE9+wRbSVyqNxohabH1yij9DK/@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys32gy14TjHIRZ481Sq3gApPCDd1VR2iEz0mmOQv5GaFTn5jKG
-	lUVRY6M1J7b+Z3uAfCImEw0M7baAsPPS/MUiSWq2tqk3BqdHkHTka6UfXkp3kg==
-X-Gm-Gg: AY/fxX4LeXlm81b9RWh2QPbnh/LpXqNoSqqUxAGHgQLtgsem8sZd0U5DkqFj0SqCzcV
-	G/UotB0i04HjIG1Su/ezaxuFqJaiFOoy8dmg2oAHh/wroKhFB6YXfrEVKCpZzyOyLpzy5qkmurG
-	bliuiia3uHTTZWcyw0odcYlaxqb19ciBtj45iBeczssTvOTyL4FRVsvwabMruhUdrWjUS4TjuvB
-	e+MY0JikYvKtZHbLAnfhUBRcT/W+m3ftbTkaFglHYxXlcjl+bfP1BVVYBN9QCyebhHdjk5/d4V2
-	oqgUAmJgYjZfZ1EAm0O04e7KSlWnyx4M71OSdL+GBJvQQPzu0X4478K28U/I9MOUylfjAI2khLe
-	RHM6145NWKoBm/YC0Oba6J+qdOGCnxVxh2ox7Hrgnug3BIsLMg4hiXT3IrUKFmPEHjWwbAnr3zj
-	DI2NngrhA=
-X-Google-Smtp-Source: AGHT+IFOC5KnXE7Y/86OXEfn0VfROKTdlo6cIy7sSNHG4HuRQ93qgtI5LmuQjuxLc/KbIiLosqGOQg==
-X-Received: by 2002:a53:8592:0:b0:63f:ad6d:cbd5 with SMTP id 956f58d0204a3-6466a900e02mr12636421d50.60.1766682577930;
-        Thu, 25 Dec 2025 09:09:37 -0800 (PST)
-Received: from localhost ([2601:346:0:79bd:5a70:118b:3656:4527])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a8bd6ffsm9803141d50.9.2025.12.25.09.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Dec 2025 09:09:37 -0800 (PST)
-From: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	David Laight <david.laight@runbox.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-modules@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Subject: [PATCH v4 5/7] tracing: Remove size parameter in __trace_puts()
-Date: Thu, 25 Dec 2025 12:09:27 -0500
-Message-ID: <20251225170930.1151781-6-yury.norov@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251225170930.1151781-1-yury.norov@gmail.com>
-References: <20251225170930.1151781-1-yury.norov@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PgVqaH3c"
+Message-ID: <c5d991d2-a7ef-4f14-b0c5-374371275057@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766725513;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=co8Qm+GaRT4l/KPEP3k1Lz+3G2xdaA0MMbibVGv2CnU=;
+	b=PgVqaH3cY5vszofv7TAcOzEUxccFset+5ku3QSikJRv6wJrQ68tntyItyz7qXf2Gx3l3c5
+	3qjWA/xStpRlkgQy1RvkwWpqEempHWvORp97nobGr4wNW2RPS29gbdxunmMwcEYNnPQBsX
+	eEHlC1NcdYBk6V/coYveyYSZUYRi8wA=
+Date: Thu, 25 Dec 2025 21:04:59 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
+ out of bounds
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+ <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+In-Reply-To: <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Steven Rostedt <rostedt@goodmis.org>
 
-The __trace_puts() function takes a string pointer and the size of the
-string itself. All users currently simply pass in the strlen() of the
-string it is also passing in. There's no reason to pass in the size.
-Instead have the __trace_puts() function do the strlen() within the
-function itself.
 
-This fixes a header recursion issue where using strlen() in the macro
-calling __trace_puts() requires adding #include <linux/string.h> in order
-to use strlen(). Removing the use of strlen() from the header fixes the
-recursion issue.
+On 12/23/25 9:36 PM, Yonghong Song wrote:
+>
+>
+> On 12/23/25 4:57 PM, Ihor Solodrai wrote:
+>> I've been chasing down the following flaky splat, introduced by recent
+>> changes in BTF generation [1]:
+>>
+>>    ------------[ cut here ]------------
+>>    BUG: unable to handle page fault for address: ffa000000233d828
+>>    #PF: supervisor read access in kernel mode
+>>    #PF: error_code(0x0000) - not-present page
+>>    PGD 100000067 P4D 100253067 PUD 100258067 PMD 0
+>>    Oops: Oops: 0000 [#1] SMP NOPTI
+>>    CPU: 1 UID: 0 PID: 390 Comm: test_progs Tainted: G        W 
+>> OE       6.19.0-rc1-gf785a31395d9 #331 PREEMPT(full)
+>>    Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+>>    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
+>> 1.16.3-4.el9 04/01/2014
+>>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>>       9.737179] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 
+>> fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 
+>> c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) 
+>> knlGS:0000000000000000
+>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>>    PKRU: 55555554
+>>    Call Trace:
+>>     <TASK>
+>>     ? __kmalloc_node_track_caller_noprof+0x37f/0x740
+>>     ? __pfx_setup_modinfo_srcversion+0x10/0x10
+>>     ? srso_alias_return_thunk+0x5/0xfbef5
+>>     ? kstrdup+0x4a/0x70
+>>     ? srso_alias_return_thunk+0x5/0xfbef5
+>>     ? setup_modinfo_srcversion+0x1a/0x30
+>>     ? srso_alias_return_thunk+0x5/0xfbef5
+>>     ? setup_modinfo+0x12b/0x1e0
+>>     load_module+0x133a/0x1610
+>>     __x64_sys_finit_module+0x31b/0x450
+>>     ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>     do_syscall_64+0x80/0x2d0
+>>     ? srso_alias_return_thunk+0x5/0xfbef5
+>>     ? exc_page_fault+0x95/0xc0
+>>     entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>    RIP: 0033:0x7f1c63a2582d
+>>       9.794028] Code: 5b 41 5c c3 66 0f 1f 84 00 00 00 00 00 f3 0f 1e 
+>> fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 
+>> 08 0f 05 <48> 3d 01 f0 ff 8 8b 0d bb 15 0f 00 f7 d8 64 89 01 48
+>>    RSP: 002b:00007ffe513df128 EFLAGS: 00000206 ORIG_RAX: 
+>> 0000000000000139
+>>    RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1c63a2582d
+>>    RDX: 0000000000000000 RSI: 0000000000ee83f9 RDI: 0000000000000016
+>>    RBP: 00007ffe513df150 R08: 0000000000000000 R09: 0000000000000000
+>>    R10: 0000000000000000 R11: 0000000000000206 R12: 00007ffe513e3588
+>>    R13: 000000000088fad0 R14: 00000000014bddb0 R15: 00007f1c63ba7000
+>>     </TASK>
+>>    Modules linked in: bpf_testmod(OE)
+>>    CR2: ffa000000233d828
+>>    ---[ end trace 0000000000000000 ]---
+>>    RIP: 0010:simplify_symbols+0x2b2/0x480
+>>       9.821595] Code: 85 f6 4d 89 f7 b8 01 00 00 00 4c 0f 44 f8 49 83 
+>> fd f0 4d 0f 44 fe 75 5b 4d 85 ff 0f 85 76 ff ff ff eb 50 49 8b 4e 20 
+>> c1 e0 06 <48> 8b 44 01 10 9 cf fd ff ff 49 89 c5 eb 36 49 c7 c5
+>>    RSP: 0018:ffa00000017afc40 EFLAGS: 00010216
+>>    RAX: 00000000003fffc0 RBX: 0000000000000002 RCX: ffa0000001f3d858
+>>    RDX: ffffffffc0218038 RSI: ffffffffc0218008 RDI: aaaaaaaaaaaaaaab
+>>    RBP: ffa00000017afd18 R08: 0000000000000072 R09: 0000000000000069
+>>    R10: ffffffff8160d6ca R11: 0000000000000000 R12: ffa0000001f3d577
+>>    R13: ffffffffc0214058 R14: ffa00000017afdc0 R15: ffa0000001f3e518
+>>    FS:  00007f1c638654c0(0000) GS:ff1100089b7bc000(0000) 
+>> knlGS:0000000000000000
+>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>    CR2: ffa000000233d828 CR3: 000000010ba1f001 CR4: 0000000000771ef0
+>>    PKRU: 55555554
+>>    Kernel panic - not syncing: Fatal exception
+>>    Kernel Offset: disabled
+>>
+>> This hasn't happened on BPF CI so far, for example, however I was able
+>> to reproduce it on a particular x64 machine using a kernel built with
+>> LLVM 20.
+>>
+>> The crash happens on attempt to load one of the BPF selftest modules
+>> (tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.ko) which
+>> is used by kfunc_module_order test.
+>>
+>> The reason for the crash is that simplify_symbols() doesn't check for
+>> bounds of the ELF section index:
+>>
+>>         for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+>>         const char *name = info->strtab + sym[i].st_name;
+>>
+>>         switch (sym[i].st_shndx) {
+>>         case SHN_COMMON:
+>>
+>>         [...]
+>>
+>>         default:
+>>             /* Divert to percpu allocation if a percpu var. */
+>>             if (sym[i].st_shndx == info->index.pcpu)
+>>                 secbase = (unsigned long)mod_percpu(mod);
+>>             else
+>>    /** HERE --> **/        secbase = 
+>> info->sechdrs[sym[i].st_shndx].sh_addr;
+>>             sym[i].st_value += secbase;
+>>             break;
+>>         }
+>>     }
+>>
+>> And in the case I was able to reproduce, the value 0xffff
+>> (SHN_HIRESERVE aka SHN_XINDEX [2]) fell through here.
+>>
+>> Now this code fragment is between 15 and 20 years old, so obviously
+>> it's not expected for a kmodule symbol to have such st_shndx
+>> value. Even so, the kernel probably should fail loading the module
+>> instead of crashing, which is what this patch attempts to fix.
+>>
+>> Investigating further, I discovered that the module binary became
+>> corrupted by `${OBJCOPY} --update-section` operation updating .BTF_ids
+>> section data in scripts/gen-btf.sh. This explains how the bug has
+>> surfaced after gen-btf.sh was introduced:
+>>
+>>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended 
+>> symbol index (2), but unable to locate the extended symbol index table
+>>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended 
+>> symbol index (3), but unable to locate the extended symbol index table
+>>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended 
+>> symbol index (4), but unable to locate the extended symbol index table
+>>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT RSV[0xffff] 
+>> __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>>    llvm-readelf: warning: 'bpf_test_modorder_x.ko': found an extended 
+>> symbol index (16), but unable to locate the extended symbol index table
+>>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT RSV[0xffff] 
+>> __BTF_ID__func__bpf_test_modorder_retx__44417
+>>
+>> vs expected
+>>
+>>    $ llvm-readelf -s --wide bpf_test_modorder_x.ko | grep 'BTF_ID'
+>>         3: 0000000000000000    16 NOTYPE  LOCAL  DEFAULT     6 
+>> __BTF_ID__set8__bpf_test_modorder_kfunc_x_ids
+>>         4: 0000000000000008     4 OBJECT  LOCAL  DEFAULT     6 
+>> __BTF_ID__func__bpf_test_modorder_retx__44417
+>>
+>> But why? Updating section data without changing it's size is not
+>> supposed to affect sections indices, right?
+>>
+>> With a bit more testing I confirmed that this is a LLVM-specific
+>> issue (doesn't reproduce with GCC kbuild), and it's not stable,
+>> because in link-vmlinux.h we also do:
+>>
+>>      ${OBJCOPY} --update-section .BTF_ids=${btfids_vmlinux} ${VMLINUX}
+>>
+>> However:
+>>
+>>    $ llvm-readelf -s --wide ~/workspace/prog-aux/linux/vmlinux | grep 
+>> 0xffff
+>>    # no output, which is good
+>>
+>> So the suspect is the implementation of llvm-objcopy. As it turns out
+>> there is a relevant known bug that explains the flakiness and isn't
+>> fixed yet [3].
+>>
+>> [1] 
+>> https://lore.kernel.org/bpf/20251219181825.1289460-3-ihor.solodrai@linux.dev/
+>> [2] https://man7.org/linux/man-pages/man5/elf.5.html
+>> [3] 
+>> https://github.com/llvm/llvm-project/issues/168060#issuecomment-3533552952
+>>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>>
+>> ---
+>>
+>> RFC
+>>
+>> While this llvm-objcopy bug is not fixed, we can not trust it in the
+>> kernel build pipeline. In the short-term we have to come up with a
+>> workaround for .BTF_ids section update and replace the calls to
+>> ${OBJCOPY} --update-section with something else.
+>>
+>> One potential workaround is to force the use of the objcopy (from
+>> binutils) instead of llvm-objcopy when updating .BTF_ids section.
+>>
+>> Alternatively, we could just dd the .BTF_ids data computed by
+>> resolve_btfids at the right offset in the target ELF file.
+>>
+>> Surprisingly I couldn't find a good way to read a section offset and
+>> size from the ELF with a specified format in a command line. Both
+>> readelf and {llvm-}objdump give a human readable output, and it
+>> appears we can't rely on the column order, for example.
+>>
+>> We could still try parsing readelf output with awk/grep, covering
+>> output variants that appear in the kernel build.
+>>
+>> We can also do:
+>>
+>>     llvm-readobj --elf-output-style=JSON --sections "$elf" | \
+>>          jq -r --arg name .BTF_ids '
+>>              .[0].Sections[] |
+>>              select(.Section.Name.Name == $name) |
+>>              "\(.Section.Offset) \(.Section.Size)"'
+>>
+>> ...but idk man, doesn't feel right.
+>>
+>> Most reliable way to determine the size and offset of .BTF_ids section
+>> is probably reading them by a C program with libelf, such as
+>> resolve_btfids. Which is quite ironic, given the recent
+>> changes. Setting the irony aside, we could add smth like:
+>>           resolve_btfids --section-info=.BTF_ids $elf
+>>
+>> Reverting the gen-btf.sh patch is also a possible workaround, but I'd
+>> really like to avoid it, given that BPF features/optimizations in
+>> development depend on it.
+>>
+>> I'd appreciate comments and suggestions on this issue. Thank you!
+>> ---
+>>   kernel/module/main.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index 710ee30b3bea..5bf456fad63e 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module 
+>> *mod, const struct load_info *info)
+>>               break;
+>>             default:
+>> +            if (sym[i].st_shndx >= info->hdr->e_shnum) {
+>> +                pr_err("%s: Symbol %s has an invalid section index 
+>> %u (max %u)\n",
+>> +                       mod->name, name, sym[i].st_shndx, 
+>> info->hdr->e_shnum - 1);
+>> +                ret = -ENOEXEC;
+>> +                break;
+>> +            }
+>> +
+>>               /* Divert to percpu allocation if a percpu var. */
+>>               if (sym[i].st_shndx == info->index.pcpu)
+>>                   secbase = (unsigned long)mod_percpu(mod);
+>
+> I tried both llvm21 and llvm22 (where llvm21 is used in bpf ci).
+>
+> Without KASAN, I can reproduce the failure for llvm19/llvm21/llvm22.
+> I did not test llvm20 and I assume it may fail too.
+>
+> The following llvm patch
+>    https://github.com/llvm/llvm-project/pull/170462
+> can fix the issue. Currently it is still in review stage. The actual 
+> diff is
+>
+> diff --git a/llvm/lib/ObjCopy/ELF/ELFObject.cpp 
+> b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> index e5de17e093df..cc1527d996e2 100644
+> --- a/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> +++ b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> @@ -2168,7 +2168,11 @@ Error Object::updateSectionData(SecPtr &Sec, 
+> ArrayRef<uint8_t> Data) {
+>                               Data.size(), Sec->Name.c_str(), Sec->Size);
+>
+>    if (!Sec->ParentSegment) {
+> -    Sec = std::make_unique<OwnedDataSection>(*Sec, Data);
+> +    SectionBase *Replaced = Sec.get();
+> +    SectionBase *Modified = &addSection<OwnedDataSection>(*Sec, Data);
+> +    DenseMap<SectionBase *, SectionBase *> Replacements{{Replaced, 
+> Modified}};
+> +    if (auto err = replaceSections(Replacements))
+> +      return err;
+>    } else {
+>      // The segment writer will be in charge of updating these contents.
+>      Sec->Size = Data.size();
+>
+> I applied the above patch to latest llvm21 and llvm22 and
+> the crash is gone and the selftests can run properly.
+>
+> With KASAN, everything is okay for llvm21 and llvm22.
+>
+> Not sure whether the llvm patch
+>    https://github.com/llvm/llvm-project/pull/170462
+> can make into llvm21 or not as looks like llvm21 intends to
+> freeze for now. See
+> https://github.com/llvm/llvm-project/pull/168314#issuecomment-3645797175
+> the llvm22 will branch into rc mode in January.
+>
+> I will try to see whether we can have a reasonable workaround
+> for llvm21 llvm-objcopy (for without KASAN).
+>
+I commented the llvm patch https://github.com/llvm/llvm-project/pull/170462
+and hopefully the fix can land soon.
 
-Link: https://lore.kernel.org/all/aUN8Hm377C5A0ILX@yury/
+I didn't find a good solution. Currently if there are kfunc's in the module,
+.BTF_ids section will be created. Previously, resolve_btfids will resolve
+.BTF_ids such that the count and btf id will be resolved by resolve_btfids
+itself.
 
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
----
- include/linux/kernel.h | 4 ++--
- kernel/trace/trace.c   | 7 +++----
- kernel/trace/trace.h   | 2 +-
- 3 files changed, 6 insertions(+), 7 deletions(-)
+The current approach, resolve_btfids will not populate the *correct* contents
+to .BTF_ids section. Rather it created another file and try to do
+update-section. This should work. But it may not work due to the llvm bug.
 
-diff --git a/include/linux/kernel.h b/include/linux/kernel.h
-index 5b879bfea948..4ee48fb10dec 100644
---- a/include/linux/kernel.h
-+++ b/include/linux/kernel.h
-@@ -329,10 +329,10 @@ int __trace_printk(unsigned long ip, const char *fmt, ...);
- 	if (__builtin_constant_p(str))					\
- 		__trace_bputs(_THIS_IP_, trace_printk_fmt);		\
- 	else								\
--		__trace_puts(_THIS_IP_, str, strlen(str));		\
-+		__trace_puts(_THIS_IP_, str);				\
- })
- extern int __trace_bputs(unsigned long ip, const char *str);
--extern int __trace_puts(unsigned long ip, const char *str, int size);
-+extern int __trace_puts(unsigned long ip, const char *str);
- 
- extern void trace_dump_stack(int skip);
- 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 6f2148df14d9..57f24e2cd19c 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1178,11 +1178,10 @@ EXPORT_SYMBOL_GPL(__trace_array_puts);
-  * __trace_puts - write a constant string into the trace buffer.
-  * @ip:	   The address of the caller
-  * @str:   The constant string to write
-- * @size:  The size of the string.
-  */
--int __trace_puts(unsigned long ip, const char *str, int size)
-+int __trace_puts(unsigned long ip, const char *str)
- {
--	return __trace_array_puts(printk_trace, ip, str, size);
-+	return __trace_array_puts(printk_trace, ip, str, strlen(str));
- }
- EXPORT_SYMBOL_GPL(__trace_puts);
- 
-@@ -1201,7 +1200,7 @@ int __trace_bputs(unsigned long ip, const char *str)
- 	int size = sizeof(struct bputs_entry);
- 
- 	if (!printk_binsafe(tr))
--		return __trace_puts(ip, str, strlen(str));
-+		return __trace_puts(ip, str);
- 
- 	if (!(tr->trace_flags & TRACE_ITER(PRINTK)))
- 		return 0;
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index b6d42fe06115..de4e6713b84e 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -2116,7 +2116,7 @@ extern void tracing_log_err(struct trace_array *tr,
-  * about performance). The internal_trace_puts() is for such
-  * a purpose.
-  */
--#define internal_trace_puts(str) __trace_puts(_THIS_IP_, str, strlen(str))
-+#define internal_trace_puts(str) __trace_puts(_THIS_IP_, str)
- 
- #undef FTRACE_ENTRY
- #define FTRACE_ENTRY(call, struct_name, id, tstruct, print)	\
--- 
-2.43.0
+One possible workaround is in resolve_btfids, the .BTF_ids section is populated
+correct contents and remove update-section for .BTF_ids.
+
 
