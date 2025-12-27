@@ -1,93 +1,125 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462C121CFF6;
-	Fri, 26 Dec 2025 16:59:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC64A2A1AA;
+	Sat, 27 Dec 2025 14:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766768345; cv=none; b=H1+YyoNGXuuOgoLYaj+r9GFlr5tjs9ytTQcX9dETQ9nrr7uwFSGhhd1MoZHi9r8Xl097L5wAQaDD300777xebjrCTp4xlR7l3G52DacDrHQTjXpidj9s4oo+kWaqfoAUoQAouRVZmokxFcHXhK8AG9bsf1DPUVtF2p/IK3SIvq0=
+	t=1766846757; cv=none; b=KAljvcknWr8h9rSk40GmWPB8zQKCeVy50WztzbKuQOqwDwRhfjyMJIS2ctPm/WySXjJ/FjQaTrZPQS2qFFNnuWPl/SLoWlCs+kbVHJLnv/gKtSMtjFBbZ0aGNyP6mYt9bAkhkdEXVvGNsROdRHsu1nAtEd/OqrhTsVqbhn+8E5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766768345; c=relaxed/simple;
-	bh=gLN4Gz2aAYKNY3Bdz06vnxUWFpcJtbJu5lGft+KBjl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jgjyR0+UYZ4Mx7fAm6uTUbU+iyRzSHomW5OMsNBgwV//nbsikYs2JAOetfYSNzl5toaUzPZ/39LPzRr2c/tAKVqaOTi6P7e62krAXaG7hfhO8t1w+zkRyWCkEKXOZ259Hj8dHsrpnkPON3bU65RijGyyA8vR57KTL0K8Bmkur9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 74CAE1A19DA;
-	Fri, 26 Dec 2025 16:58:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id A02F02002E;
-	Fri, 26 Dec 2025 16:58:49 +0000 (UTC)
-Date: Fri, 26 Dec 2025 11:58:48 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Christophe Leroy
- <chleroy@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Ingo Molnar
- <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, Joonas
- Lahtinen <joonas.lahtinen@linux.intel.com>, David Laight
- <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>, Andi Shyti
- <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko
- Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
+	s=arc-20240116; t=1766846757; c=relaxed/simple;
+	bh=ozcx0gKLWqYdPO0l3hd3hB0x6/DN+2pZQgLoQ7CvLVY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GBaMShIme2LMG+UltuGOL+YbwW+0n04q4VpYOvivZy3uV007nSGIp+z5UZuFFI0jDwzpdyj6ckufnYr9WQUuW+4AFx9oA0dd8xRw+DSh3DKWMjVvyfcdxA660NOaRU1KjoJ1OU9c2bPKAIESYHS0Ct7EPbnkhCMwEl7ClF942ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GNvysmwo; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GNvysmwo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766846756; x=1798382756;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ozcx0gKLWqYdPO0l3hd3hB0x6/DN+2pZQgLoQ7CvLVY=;
+  b=GNvysmwol2TFa9w2h0oJWdrW4nUVkeb/njTHAVNbMQgTdUJIBrw67U1z
+   nws1mNG2zKffFGg+jqZXhGm+g8GSHUQ/+3EqqQK+VqILLQWqvF0YSWiax
+   0Oq/ZL2u+7E0Ug4tbnYuMszY6Y7eYjapp3XdWuy2D8zN0JEdf3E03FqHc
+   bUmQLzWmqqOX6OpK25WiffSO/Xf/Dptmq85Y8SFKqYPpww344u0v+uyFW
+   sa70KcPCBoDcTSKdHM0piCqDjgBUNb49nfxBIabEWxt/xB9fcI2kL8FyH
+   ZkLZScZglcZElpjuRlMGrUcwIh7yGkp7fY4YdAc8I2/1TNqywza3U1yxF
+   A==;
+X-CSE-ConnectionGUID: x8D9uxZRSwKnOtIyLR1Fkg==
+X-CSE-MsgGUID: QQWG3acHTYO5QgqL25KzCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="71128649"
+X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
+   d="scan'208";a="71128649"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:45:55 -0800
+X-CSE-ConnectionGUID: FC2sVHjDQVaxTJuz2GjCZQ==
+X-CSE-MsgGUID: Og0tXdcbQZWsd846IPkl+w==
+X-ExtLoop1: 1
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.211])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 06:45:50 -0800
+Date: Sat, 27 Dec 2025 16:45:47 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	David Laight <david.laight@runbox.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
-Message-ID: <20251226115848.298465d4@gandalf.local.home>
-In-Reply-To: <20251225170930.1151781-8-yury.norov@gmail.com>
+Message-ID: <aU_xG7pK9iauff65@smile.fi.intel.com>
 References: <20251225170930.1151781-1-yury.norov@gmail.com>
-	<20251225170930.1151781-8-yury.norov@gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20251225170930.1151781-8-yury.norov@gmail.com>
+ <20251226115848.298465d4@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 1modb5ifbg36aazd9rg3ywmjnp363f5p
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: A02F02002E
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+HIOJSfUq/gQIek48dCUCnGJxtEBCdWvc=
-X-HE-Tag: 1766768329-521154
-X-HE-Meta: U2FsdGVkX18Cf37frWp8MFvsF0UI9IwFqnSbl8721qXqPIf4ArnA2YrIfdgmqBx3r7DSA469zIpz357H6hEN3m/TzQ+b1X/DStv9yN6DoRvdMhluN06cr5VuVuFDot2eDmItWnDv+QTzjDzY59V/qBuuG7B55TFrbmUECyS1WNRTCmh0XPj1u98C1ze9hFj4zNAQP1UnxHs9rqb+fAKDVhj85QgS1oyHZoNWgFTDi+mnF8yNyIuTTulIy8dl1ELTK8i4rfznnxcE6dsHhuWDXRXiM9Rbwqy8GFgvqd8AlTVKvSBADSuHLYavtYA0lJk6Qz40gnNT3D5oN70CTRnQqbHZW8uDj0lq3Zu/OJZQtY5iFgKLdkeqZLInK2+/XU1YKYEbyyg8DN1DbXnlnYC7SQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251226115848.298465d4@gandalf.local.home>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, 25 Dec 2025 12:09:29 -0500
-"Yury Norov (NVIDIA)" <yury.norov@gmail.com> wrote:
-
-> The trace_printk.h header is debugging-only by nature, but now it's
-> included by almost every compilation unit via kernel.h.
+On Fri, Dec 26, 2025 at 11:58:48AM -0500, Steven Rostedt wrote:
+> On Thu, 25 Dec 2025 12:09:29 -0500
+> "Yury Norov (NVIDIA)" <yury.norov@gmail.com> wrote:
 > 
-> Removing trace_printk.h saves 1.5-2% of compilation time on my
-> Ubuntu-derived x86_64/localyesconfig.
+> > The trace_printk.h header is debugging-only by nature, but now it's
+> > included by almost every compilation unit via kernel.h.
+> > 
+> > Removing trace_printk.h saves 1.5-2% of compilation time on my
+> > Ubuntu-derived x86_64/localyesconfig.
+> > 
+> > There's ~30 files in the codebase, requiring trace_printk.h for
+> > non-debugging reasons: mostly to disable tracing on panic or under
+> > similar conditions. Include the header for those explicitly.
+> > 
+> > This implicitly decouples linux/kernel.h and linux/instruction_pointer.h
+> > as well, because it has been isolated to trace_printk.h early in the
+> > series.
+> > 
+> > Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
 > 
-> There's ~30 files in the codebase, requiring trace_printk.h for
-> non-debugging reasons: mostly to disable tracing on panic or under
-> similar conditions. Include the header for those explicitly.
+> I'm still against this patch. It means every time someone adds
+> trace_printk() they need to add the header for it.
 > 
-> This implicitly decouples linux/kernel.h and linux/instruction_pointer.h
-> as well, because it has been isolated to trace_printk.h early in the
-> series.
+> trace_printk() should be as available to the kernel as printk() is. If
+> there's a place that one can add printk() without adding a header, then
+> they should be able to add trace_printk() to that same location without
+> adding any header. If that's not the case, then I'm adding an official
 > 
-> Signed-off-by: Yury Norov (NVIDIA) <yury.norov@gmail.com>
+>  Nacked-by: Steven Rostedt <rostedt@goodmis.org>
+> 
+> I'm fine for trying other ways to speed up the compilation, but removing
+> full access to trace_printk() isn't one of them.
 
-I'm still against this patch. It means every time someone adds
-trace_printk() they need to add the header for it.
+I interpreted this as if the header inclusion should be moved from kernel.h
+to printk.h as a compromise that satisfies all (?) stakeholders. Is it possible
+approach?
 
-trace_printk() should be as available to the kernel as printk() is. If
-there's a place that one can add printk() without adding a header, then
-they should be able to add trace_printk() to that same location without
-adding any header. If that's not the case, then I'm adding an official
+-- 
+With Best Regards,
+Andy Shevchenko
 
- Nacked-by: Steven Rostedt <rostedt@goodmis.org>
 
-I'm fine for trying other ways to speed up the compilation, but removing
-full access to trace_printk() isn't one of them.
-
--- Steve
