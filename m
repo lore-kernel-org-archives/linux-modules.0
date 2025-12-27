@@ -1,104 +1,77 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E0A2405FD;
-	Sat, 27 Dec 2025 15:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2280B2192E4;
+	Sat, 27 Dec 2025 15:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766848995; cv=none; b=ZAeF3o77hsN6cW2lWWzRuRXXTXi5kJHXDomCZYdYv/Fo9u7xFBpVkfqeGtlFm6Mye+xBLfTlN95Roq2NaKvAnkfZjz/T1L75+8RY9+3SJA0kEQv/lHBPzU3YJHCuv64Meu6E5bUUqpJPY8o1PwFBHpPQjINc/QGzRqOdBpytHUs=
+	t=1766851041; cv=none; b=Xqf7XRdmnvOJ+k0w4Oq0YYJPM7aniwbGDtieFPnPUuXLlq27vrEP109AUfFOa7zLUJ99bBJP/mBv+j9BW5756OIczjz5RxQBUm91Txd5xZw5csTo3ZCDkKmI4O0UI6NsLt/bLitfV2lVW6nt+0ANtwKfvXm/cPUkz/TGZOqjtfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766848995; c=relaxed/simple;
-	bh=aJCJjb0+vGt4+ke4RYGQuIVdravL691g4gCMLHSWxVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B/83sQ5XJzC+KVumCF3gPaBU9HwoBAwEDT61T94Tsc+Tbn4+/3RwNi7nM4IQ4uqoJLDpjAkhNZg6bFELjUZ/ToiKMKIb5yiQUkY1l8JoSu91a+ON45ztNgnNkSE0CV0MOBtduCgVkp225gcurE0Tj6rir/vowo6pIm5ABTISXlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E0Aw/Txt; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E0Aw/Txt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766848993; x=1798384993;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aJCJjb0+vGt4+ke4RYGQuIVdravL691g4gCMLHSWxVU=;
-  b=E0Aw/TxtfyaMGJkc8tO2SNhCraBaoHre7jBxn3sH9OdS9SOYkwJyZ9v8
-   fUrY4O8F9gHUil+M0yQ7b/k2MURVTwR0OTzRIqzpPGYD7dT+mx4xl+1bo
-   MC1hwPGFMBvg9kxecOvGPVk0WvvQU811RfeaMZpmCDwDXmsuPTGspLHRf
-   PpwFDoFnjYP0DguPhjK+s4jmgsAqre8l7amJFiKZn3b7cm3vOuf0sO3j4
-   o5EDUrZaZT9vHPPFudXE4ZXMuQoE7YBJrJ5RKk+ufk0kSuQzG07zy4NTU
-   hm2kZELGeNnVF0pgCpAvlGUBzI2fWVL26WRa9Glp0MWjvEp74b6NECizZ
-   w==;
-X-CSE-ConnectionGUID: ORbve7AXTC2d0u5t50UfPg==
-X-CSE-MsgGUID: /psJm/G9R0uC/CZV64M3Jg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="86126524"
-X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="86126524"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 07:23:12 -0800
-X-CSE-ConnectionGUID: 11YvjeQCR7iH9CwO17WT/A==
-X-CSE-MsgGUID: zw8bgYMMSQynvdDaJYGddQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
-   d="scan'208";a="205481126"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.211])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 07:23:08 -0800
-Date: Sat, 27 Dec 2025 17:23:06 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Daniel Scally <djrscally@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Lucas De Marchi <demarchi@kernel.org>, linux-acpi@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Gomez <da.gomez@samsung.com>
-Subject: Re: [PATCH] software node: replace -EEXIST with -EBUSY
-Message-ID: <aU_52lcfC8NzmFp5@smile.fi.intel.com>
-References: <20251220-dev-module-init-eexists-linux-acpi-v1-1-af59b1a0e217@samsung.com>
+	s=arc-20240116; t=1766851041; c=relaxed/simple;
+	bh=0eTr0dox93jaYzcBNfvnikWqIefOS1Az8/PDvZAw/n8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C/1sduFXKaa/vT7DJ51vc9HO8YqMcmEFl8/HpPNUqlj3n4N7Tmm81JG2SiDOuYKPtasBRzCGfz7rwdG8wHHStP2PQFobQzGc8RbwqQjTYujI6L2fx71uMPrYjKEe7Q0HHUXkoqH17cl2qObs5ORaWp8QQi6g7LSzsjKi3b1bbow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay02.hostedemail.com (Postfix) with ESMTP id 4CE1D13D079;
+	Sat, 27 Dec 2025 15:57:16 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 0FD8820028;
+	Sat, 27 Dec 2025 15:57:10 +0000 (UTC)
+Date: Sat, 27 Dec 2025 10:57:01 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Christophe Leroy
+ <chleroy@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, Ingo Molnar
+ <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>, Joonas
+ Lahtinen <joonas.lahtinen@linux.intel.com>, David Laight
+ <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>, Andi Shyti
+ <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko
+ Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
+Message-ID: <20251227105701.5cbeb47e@robin>
+In-Reply-To: <aU_xG7pK9iauff65@smile.fi.intel.com>
+References: <20251225170930.1151781-1-yury.norov@gmail.com>
+	<20251225170930.1151781-8-yury.norov@gmail.com>
+	<20251226115848.298465d4@gandalf.local.home>
+	<aU_xG7pK9iauff65@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251220-dev-module-init-eexists-linux-acpi-v1-1-af59b1a0e217@samsung.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 4bi56z6prjoxpu5k77kdk7niwsunwdbw
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 0FD8820028
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+BV7GvsBH3P8RqkX5NIpmjPk/ZJZbh6cc=
+X-HE-Tag: 1766851030-923509
+X-HE-Meta: U2FsdGVkX19nNp9zKnXj3G8Z7Pf9W6fMJYGbsN003UTQvQm4hf6cBcmJNUvxVZ41ch4Z2eLmAMch67kPfmcme6XcLa2Mv8IEzDX5INq30iCx2g1VpdzfxyezF7cNWadHiSrle/Ec2CmZA11MJfXtfW3nDT256CsdmmoEEgzwQQ0DSW9ajErxpqSgSVfdTPJgyS4Y4NFG06SUGRoMvHI4RQFPt449Q79rbxo8tttv+jPMfdETOa4wmCbP+b8RBotJSzZgiZEWmJG9IxLiVIha+0GFi56mvy7D1fFUFx+iEIj6AKI9Ufg7NdgyUG0W0HW/ozB3/cuaj5tG2CZFymW4FwwpPA3qk8lPxsVDHUNSGkeoaK6JomqPPg==
 
-On Sat, Dec 20, 2025 at 04:55:00AM +0100, Daniel Gomez wrote:
-> From: Daniel Gomez <da.gomez@samsung.com>
+On Sat, 27 Dec 2025 16:45:47 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> > I'm fine for trying other ways to speed up the compilation, but removing
+> > full access to trace_printk() isn't one of them.  
 > 
-> The -EEXIST error code is reserved by the module loading infrastructure
-> to indicate that a module is already loaded. When a module's init
-> function returns -EEXIST, userspace tools like kmod interpret this as
-> "module already loaded" and treat the operation as successful, returning
-> 0 to the user even though the module initialization actually failed.
-> 
-> This follows the precedent set by commit 54416fd76770 ("netfilter:
-> conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
-> issue in nf_conntrack_helper_register().
-> 
-> Affected modules:
->   * meraki_mx100 pcengines_apuv2
+> I interpreted this as if the header inclusion should be moved from kernel.h
+> to printk.h as a compromise that satisfies all (?) stakeholders. Is it possible
+> approach?
 
-As I read the description the problem is in the kmod/do_module_init(). If you
-need a clear way to distinguish that, use some unique error code in the kernel
-module loader. I fully agree with Greg that this is a slippery slope which
-leads to -EEXIST to be forbidden in the drivers which is no go.
+I'm fine with putting the include of trace_printk.h into printk.h. If
+you remove printk.h from kernel.h I would expect a lot more people to
+complain about it. Including Linus himself.
 
-NAK.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+-- Steve
