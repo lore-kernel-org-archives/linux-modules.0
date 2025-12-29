@@ -1,119 +1,186 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A3423D2B2;
-	Mon, 29 Dec 2025 17:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB1A285419
+	for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 20:40:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767028818; cv=none; b=rTAKhX5imbwKx2g5aCLNHgeVkRz44paj97QITFxA4L8o/ffhlOeF+piEI2DKxjgXM46pf6GAubOOcLIaspPu2onvIeean0Zg+JRJiuSnZjcN/02zSHUcNYCfgJEdPhL3Sq7cV+v69bSu59BQ4yO4XsRfZgZn6w9od2XHl2IcoMA=
+	t=1767040824; cv=none; b=FlkYdq76E2OwdpbYFCE1WytZYQ7OaOF2M9vkxOxGmVPFyBpZ55vdRa56AsuWfBdg+IPDSO4RBJ88ZNw986B1mrq6PlGiYIn7MUiIWNB9/co1v5PFxO0BSyg1DASfiixh0qwyC8DqNOa8G5r0nj4uKrV9I3gq8SjaQwAHFvMxm9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767028818; c=relaxed/simple;
-	bh=/qrNbEbjFc9NdLyVqOrV5H0AlMj7b/V+ptpRGyqcQXo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8r599UzGVxxlGcD8y+FLrHnnhwbOoojHDQf0PO4lZiG7GXqVrEoTRQq2gRK85nk/PXcSEhDJaG+b/TA5SS0WRQBwYQtSQhTdtRUqe4/XL2+bD/ZXFO/lcFN8aQT2Mp4+MXQUJ0LkS0rmamzmo41cmxYmD065XP7Yry/m+E895M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Hf4UYv3k; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1767040824; c=relaxed/simple;
+	bh=hYamOfS6TIAEu7pt2Unyg+Y5yMCwtDePRFhMJ+PirXc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OgqKk5P0wt+drYh+XA3rM1R9mtLItbIlt+q/pfyl1YOk5mZGEguPZehPpFs7iSSqDai2To32aZSnV7NjexrLnW3SQ3ukVGcPv8Qc0YjoW7dhhwXi7SPwHuGZLffHBbIYJLcab6B/m40/pUY1NwCXml32h4Kik9DJymd+tAfQ4PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PpooQzLL; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Hf4UYv3k"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 700B340E0140;
-	Mon, 29 Dec 2025 17:20:10 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id NsfawIvqeB37; Mon, 29 Dec 2025 17:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1767028804; bh=wTpw5X0jkCJFQekDC0i+aMLcse9YU/tWDQEWS+Bf48U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hf4UYv3kaB9sD0JRw/+OnQnNZPNr0uULUayFeYqM6gONEArXNfIURfcUhq+wqrkNB
-	 Cyg3F949oCK8dfkffw7lU1zHOPJrrbAjF7wbCXFMPWCNy4PEiPkuxmemet+DVHYogt
-	 ysL11maghgY7Azr6xPmbcWFevaYbS2Z0LEr/W5F2z1AhEXpcsX7YMbdB4DJwMJZ1St
-	 4pVgKbzQEpKztKQe9VLK6gjlwN6sDdcNRkKK3xzcsbPLzeIfOuG0i9jPXvXKsAxj5V
-	 uM+vR1tjHJDez0UX+BirkhBGSNSorJ7daHwkuXISG54akH89jXnQtPzgUHhV0B4JHd
-	 2LY7okjh45FhlRMkTGEgtZyQkoHmzghx85T9y00fK3ibD2QBigv1qKaTUuaXTOTo97
-	 4c/Di4EeuXJFvyb11Edx73UJGvhtDSEK9HDxbiIYKcdvJiVZg4aYQZyHv3l1wArWaa
-	 iz4djPPD7kQDepu3DyZlOxAnKdGEmTBu2fQm9weJaYyEoY4GUAHT4eyrZO36De7HY9
-	 6CZbw6bGU4OVbVlij9OffabH/t4GvAR23YcqOu9aJz/Muo0bOsluwjEzrybdMdQwgb
-	 oqFTY/y2O9iIUS7HZIkvYn/8bhUiYJ9lJoZpMO9C5wLf9m2GdRqFaWPR+lPXYs2tra
-	 fhaUTxP4EvmSf8Yqamq2M/ME=
-Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 1812840E00DA;
-	Mon, 29 Dec 2025 17:19:39 +0000 (UTC)
-Date: Mon, 29 Dec 2025 18:19:29 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	David Laight <david.laight@runbox.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
-Message-ID: <20251229171929.GAaVK4IX5Wxq3rRf0Z@fat_crate.local>
-References: <20251225170930.1151781-1-yury.norov@gmail.com>
- <20251225170930.1151781-8-yury.norov@gmail.com>
- <20251226115848.298465d4@gandalf.local.home>
- <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
- <20251229111748.3ba66311@gandalf.local.home>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PpooQzLL"
+Message-ID: <af906e9e-8f94-41f5-9100-1a3b4526e220@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767040821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9iSbqGt05qGCDVCyvYvl6leLwTAA8O7BjOn63M9MuBM=;
+	b=PpooQzLLqFDI4KR7FlDd1BnjJOEKlyV4qFsWSGHiZXiozWIqhJkBgRhjpR3Mh2O4toPcF8
+	4n1FPykGk7r/XlNHThX4W8xbgdt+AtYaP6OA7FtmIs9h4c7xFa/Ajs6Ng9+ixkZtrPvWmP
+	bdTi6TLxIXa5Zt/IDdBQx5jPU/PpLwQ=
+Date: Mon, 29 Dec 2025 12:40:10 -0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251229111748.3ba66311@gandalf.local.home>
+Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
+ out of bounds
+To: Yonghong Song <yonghong.song@linux.dev>,
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
+ <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Dec 29, 2025 at 11:17:48AM -0500, Steven Rostedt wrote:
-> But sure, if you want to save the few minutes that is added to "make
-> allyesconfig"
+On 12/23/25 9:36 PM, Yonghong Song wrote:
+> 
+> 
+> On 12/23/25 4:57 PM, Ihor Solodrai wrote:
+>> [...]
+>>
+>> While this llvm-objcopy bug is not fixed, we can not trust it in the
+>> kernel build pipeline. In the short-term we have to come up with a
+>> workaround for .BTF_ids section update and replace the calls to
+>> ${OBJCOPY} --update-section with something else.
+>>
+>> One potential workaround is to force the use of the objcopy (from
+>> binutils) instead of llvm-objcopy when updating .BTF_ids section.
 
-Nah, it is
+I think the simplest workaround is this one: use objcopy from binutils
+instead of llvm-objcopy when doing --update-section.
 
-"Removing trace_printk.h saves 1.5-2% of compilation time on my
-Ubuntu-derived x86_64/localyesconfig"
+There are just 3 places where that happens, so the OBJCOPY
+substitution is going to be localized.
 
-which is:
+Also binutils is a documented requirement for compiling the kernel,
+whether with clang or not [1].
 
-  localyesconfig  - Update current config converting local mods to core
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/changes.rst?h=v6.18#n29
 
-and which makes me wonder - who does that?
+>>
+>> Alternatively, we could just dd the .BTF_ids data computed by
+>> resolve_btfids at the right offset in the target ELF file.
+>>
+>> Surprisingly I couldn't find a good way to read a section offset and
+>> size from the ELF with a specified format in a command line. Both
+>> readelf and {llvm-}objdump give a human readable output, and it
+>> appears we can't rely on the column order, for example.
+>>
+>> We could still try parsing readelf output with awk/grep, covering
+>> output variants that appear in the kernel build.
+>>
+>> We can also do:
+>>
+>>     llvm-readobj --elf-output-style=JSON --sections "$elf" | \
+>>          jq -r --arg name .BTF_ids '
+>>              .[0].Sections[] |
+>>              select(.Section.Name.Name == $name) |
+>>              "\(.Section.Offset) \(.Section.Size)"'
+>>
+>> ...but idk man, doesn't feel right.
+>>
+>> Most reliable way to determine the size and offset of .BTF_ids section
+>> is probably reading them by a C program with libelf, such as
+>> resolve_btfids. Which is quite ironic, given the recent
+>> changes. Setting the irony aside, we could add smth like:
+>>           resolve_btfids --section-info=.BTF_ids $elf
+>>
+>> Reverting the gen-btf.sh patch is also a possible workaround, but I'd
+>> really like to avoid it, given that BPF features/optimizations in
+>> development depend on it.
+>>
+>> I'd appreciate comments and suggestions on this issue. Thank you!
+>> ---
+>>   kernel/module/main.c | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index 710ee30b3bea..5bf456fad63e 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+>>               break;
+>>             default:
+>> +            if (sym[i].st_shndx >= info->hdr->e_shnum) {
+>> +                pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
+>> +                       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
+>> +                ret = -ENOEXEC;
+>> +                break;
+>> +            }
+>> +
+>>               /* Divert to percpu allocation if a percpu var. */
+>>               if (sym[i].st_shndx == info->index.pcpu)
+>>                   secbase = (unsigned long)mod_percpu(mod);
+> 
+> I tried both llvm21 and llvm22 (where llvm21 is used in bpf ci).
+> 
+> Without KASAN, I can reproduce the failure for llvm19/llvm21/llvm22.
+> I did not test llvm20 and I assume it may fail too.
+> 
+> The following llvm patch
+>    https://github.com/llvm/llvm-project/pull/170462
+> can fix the issue. Currently it is still in review stage. The actual diff is
+> 
+> diff --git a/llvm/lib/ObjCopy/ELF/ELFObject.cpp b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> index e5de17e093df..cc1527d996e2 100644
+> --- a/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> +++ b/llvm/lib/ObjCopy/ELF/ELFObject.cpp
+> @@ -2168,7 +2168,11 @@ Error Object::updateSectionData(SecPtr &Sec, ArrayRef<uint8_t> Data) {
+>                               Data.size(), Sec->Name.c_str(), Sec->Size);
+>  
+>    if (!Sec->ParentSegment) {
+> -    Sec = std::make_unique<OwnedDataSection>(*Sec, Data);
+> +    SectionBase *Replaced = Sec.get();
+> +    SectionBase *Modified = &addSection<OwnedDataSection>(*Sec, Data);
+> +    DenseMap<SectionBase *, SectionBase *> Replacements{{Replaced, Modified}};
+> +    if (auto err = replaceSections(Replacements))
+> +      return err;
+>    } else {
+>      // The segment writer will be in charge of updating these contents.
+>      Sec->Size = Data.size();
+> 
+> I applied the above patch to latest llvm21 and llvm22 and
+> the crash is gone and the selftests can run properly.
 
-What are we actually optimizing here?
+Hi Yonghong, thank you for confirming the issue.
 
-And 1-2% at that.
+Patching llvm-objcopy would be great, it should be done. But we are
+still going to be stuck with making sure older LLVMs can build the kernel.
+So even if they backport the fix to v21, it won't help us much, unfortunately.
 
-I don't see how this outweighs the goodness of using trace_printk()
-everywhere.
+> 
+> With KASAN, everything is okay for llvm21 and llvm22.
+> 
+> Not sure whether the llvm patch
+>    https://github.com/llvm/llvm-project/pull/170462
+> can make into llvm21 or not as looks like llvm21 intends to
+> freeze for now. See
+>    https://github.com/llvm/llvm-project/pull/168314#issuecomment-3645797175
+> the llvm22 will branch into rc mode in January.
+> 
+> I will try to see whether we can have a reasonable workaround
+> for llvm21 llvm-objcopy (for without KASAN).
+> 
 
-So that's a NO on that patch from me too.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
