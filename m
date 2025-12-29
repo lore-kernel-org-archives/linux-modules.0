@@ -1,260 +1,156 @@
-Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44929347C6
-	for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 04:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5B330F923
+	for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 13:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766981425; cv=none; b=ohXpach7XMjjFL3NXglw8YuA+AxXJhSMq1xYUuCduZ6Ih5q6C2EqFDqlO20eT1kAzRkgSbqBO+vmgE3hqgPSrOhrZgvZyM3wTrQ+LNYwEJoCTjs8Uvc5OfLLMpz4fvZms8gPdjm5j+0LiuVvjkKkO3I58Wu7EgGz43J5msWrK8Q=
+	t=1767016683; cv=none; b=bxNbBvlyBtEPxpoptRR2MeYHBD1y9uISnia9XdU86wPZ0g1AW91r5Mz6pLRRmmSF9fxbIqnoJeQzLaaFdqYY9vNDvBGsNZojwuVgYx5yq1UViek9zTWrBgKRtm2gLi+kYt0SlozJqJ8FgHKVXrP5rqmijuHH8edqy/NrBrfN6Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766981425; c=relaxed/simple;
-	bh=pJ/QZ2CCXsuokSK/lNKjU3bybR5CN32Z2r/8AEBuDNE=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=NShZqwdWyxWB5ycZhBEPltCa8lN2loK7tg+zHVNuJAGztV1Z/JU/X+yPRwx6yjJ8ekIKeZPxKIaV1buMnPdDrie9JKlIop2/P5hxqLywNxHh60Brv8SRKHkOXMXvb/MUGAzgICjutNqLEeZRKEwY7uRh7PS2GNZg2VaZHuxZ/I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-6574d3d44f9so15308837eaf.3
-        for <linux-modules@vger.kernel.org>; Sun, 28 Dec 2025 20:10:23 -0800 (PST)
+	s=arc-20240116; t=1767016683; c=relaxed/simple;
+	bh=j0ql+LLrN7jQTJFQ7N3G8EHrgQ1tyYV4vua6CPmTAPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KSnD4zPAJgKhYWV+hmjc2PY7t/y+rY3MZDO2payBjcniDSA6QvHy2457gi9ZLk4Q7fAENM2cqVGdanjZoqKjrS+6moQ6Vg8kkoKdwr0DXymQYs+8kLSzvn0DzAynzXesboDbYGxaiRufo0ECVclHi7Zfd7/SWnGhfJ+zdQEXijo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TO94Wtm9; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TO94Wtm9"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-477aa218f20so54382315e9.0
+        for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 05:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1767016680; x=1767621480; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/woNRG27/M9OqSwR5nyZqJ4xx+CHB7YoyhXgMBzHdQQ=;
+        b=TO94Wtm9jQ60DLWymSc9fAvWps8dNADHTfPptNHbSvsAZVRpzhhdybiE0epjJFbuNQ
+         7of6cyXnSzfscoiciJFWF8mAMOsH8OTFbs5kiSTb5/P7vVjsBGKrlrwK9fV9DrWaNWsv
+         3ZRbhNmwuypquWqW3s1YpyYdRT6q+T5bSJlv5dLbMUt87bkobnTdKj1fN1w+jWiD01O2
+         15j0QHq2Q5kvuZ/G50cs4H+ffvNJVJFfgMey/HZmYypIqUrjVD3BB2bdC7VigAkQU1Y9
+         TfXXnYJNZyece6ZRfB4SXusVk11+KNpNim+WvehSaYglIuWiDFo0CpYMrj85mY78u4Pj
+         E48w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766981422; x=1767586222;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mEpLPY44HLAax3LCr6aY4119TcZRpT06LgxjSSRPQLs=;
-        b=aukGICDENbK6E5LmxzbQ708mrH7kvZHkEMOV2cHfoW1RcTLSSYuighEdtD5j2uya/Q
-         GCXx8Mv+djG84a9NQMODfo8b4BMjXawEnyJgYvzr1wJxUcY3EWcAOS146FysUbkB27U5
-         cn/X8CfH7nSbCnex0eVySp+OprTrzfXC9D3cerRaFuKpfa/UnGjMzpz3jLQXxanlnETO
-         p2h+VfQl5nWC47H2JVhRaS/C4+D3y3mVLmZFHNNP8ZURXNxwxrTVEvy1X5DW3p4h0g14
-         T47j4m48eShsEcLDLiz0rIbgs8oj6eGLO4is7Ko5XAy8XC5E+D6KAMwGnLrkjMGUel0x
-         Dgzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUz59US14Q0DgMJTbu+dx9kFE3fVDmkXzdG9py9KwFG7whd2L+VRLH2DrMDGxltZrw7ClkXjL+V8tDKFtdx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4f+p3xU+GctN8pq/uRqB1en7YBySouIkIpGPnotgN5BsLdJ0/
-	DHfPYS9MIK6tKyByWrJpJgdgdZ6hM/SmVbWb1ncIfyb7p2JazyUqrph3H1AIflbjab9j2DPvJhF
-	kU861s810eNIPbXBM33x8QJJ+K0z4Rrj/XgqBaMZWLI5llczA2ShPQ5MmJXA=
-X-Google-Smtp-Source: AGHT+IGVuh3zWwQq7VhlQOoV8Aat5t4WVZNF4Nbbtns/oYoCWRfCZ6TLVj/D64+v5dQIbFapOmX2BxeXoAzlQpK24C5sLg8HfW6h
+        d=1e100.net; s=20230601; t=1767016680; x=1767621480;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/woNRG27/M9OqSwR5nyZqJ4xx+CHB7YoyhXgMBzHdQQ=;
+        b=kBl+/4bnl5dnoZuq6QPRnYNUKXO5DRMW02mCA/LiK0RSRIeLr/KhC1QUALZqEqHDuv
+         q9MO7UaZdv4Yw4H2WnrrEQ2fbmMXHXS4+4BGoFqQqqvvS2YW/QsA1qpyfXDzS2+fAzfu
+         ga+TSJqOKFwz5zaXwe7Zjsd37epYmDbBrOYJgPy4UIxlwjQAqvIwKUTqdgfgnkWu5WEJ
+         Ep9slGj6R9NW8xotRPOTfafXbj0bS5hZ9JP9fY1a4TduPFEn3TYM/Q9IGP2jTXiYMAUc
+         WmiHOYuNCa0CvWmgi5V5dO5kKBI0WaTOupPZVEmaGk05T0yt6DIy5kI3rihGOcaTID5n
+         n5vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWEf7s+3T03xc2yl1FBYlHG/ZRlJo3JpmiQTqAYZaDpklIQPPEMFMq5PNulVnI9sCp1pvM0aMYem5cv3m3T@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTHX25CODL44XoWfMGC7FAwg9Vt7aHqar8PRmXE4X0od+ddsIB
+	3/ANlabHb3pG93VJDZOejq3s6KbVK8kLLJm9z7Q0cPLpUZiFAsfP70WXNMthFw2FhmQ=
+X-Gm-Gg: AY/fxX607KpwjDI8Bn6BKRcDKRD27uBBs5ngNRkCIDOp+IHDx7XHS9BhVf0ksOQzSmI
+	AoonCkPs0cQt20y8MEfYK3ZTO/83XjAaFO7Wj5vcA2NrMJ0DgHTJyW61AP8ThdNz++AXZZlUL5Q
+	9tuz1bDeqgbCmrIqNEnpB+96egtrac0bqUMgN33TJ2v0T4O+uvQZ0pAIH+sawmAUS0sTSFFSBN6
+	wis3j/hAIIPNJz+vF4bpVCqi9NE8qgZitcJqBdjOnHTU8jTx5hp0psyGxNLJpxDqWjyWr5iug5n
+	KL7oGhgs8AaSV20z/VYmR1S9GLVyYcSRvgRWN5bZbxv3tg49fYbs0M4T5oHG9WpD8w5qgrP6rm0
+	cdvrjwOjogGLyM1qS2oh8RE9ec/S+vEfi5ylumReum/F2CZH4cFsU46hK6qmr6y9e4US5VKQ/Fg
+	psg4v1XY37vxhBHO+SOIAOW7iUnTeNTSdX5+cqL6xEBlqz7GLegVE0PbXVBYbiJQFgVZyx72wjt
+	XmhMqNwxMJqX4WzgfQ9y6JDm8a/4swwDxCveqosPgDrXXg/PgjGetT1nA==
+X-Google-Smtp-Source: AGHT+IGE+aL517vflAEyDwa8ypSMQBSclRIeWpinNU4iYkWIpdq9jBGULPEiQ+tTI6H7zOP/V1wJNw==
+X-Received: by 2002:a05:600c:c494:b0:479:35e7:a0e3 with SMTP id 5b1f17b1804b1-47d19582aacmr353941545e9.30.1767016679859;
+        Mon, 29 Dec 2025 05:57:59 -0800 (PST)
+Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eab2a94sm63125099f8f.43.2025.12.29.05.57.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Dec 2025 05:57:59 -0800 (PST)
+Message-ID: <04363c51-8887-4a9b-b2f8-a55edeb6f727@suse.com>
+Date: Mon, 29 Dec 2025 14:57:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:22a6:b0:659:9a49:901e with SMTP id
- 006d021491bc7-65d0eaedcf0mr13755041eaf.75.1766981422258; Sun, 28 Dec 2025
- 20:10:22 -0800 (PST)
-Date: Sun, 28 Dec 2025 20:10:22 -0800
-In-Reply-To: <693f889b.a70a0220.104cf0.0335.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6951ff2e.a70a0220.c527.0018.GAE@google.com>
-Subject: Re: [syzbot] [mm?] INFO: rcu detected stall in finish_dput
-From: syzbot <syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com>
-To: atomlin@atomlin.com, da.gomez@kernel.org, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, mcgrof@kernel.org, petr.pavlu@suse.com, 
-	samitolvanen@google.com, syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: /proc/modules address+size bounds are inconsistent
+To: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Cc: mcgrof@kernel.org, da.gomez@kernel.org,
+ Sami Tolvanen <samitolvanen@google.com>, song@kernel.org,
+ linux-modules@vger.kernel.org
+References: <CANqewP0+N0i8Ld+fGKQZbLg5yJhVkLTyvZKz_ZL0aV+noArsiQ@mail.gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <CANqewP0+N0i8Ld+fGKQZbLg5yJhVkLTyvZKz_ZL0aV+noArsiQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-syzbot has found a reproducer for the following issue on:
+On 12/21/25 1:52 PM, Tatsuyuki Ishi wrote:
+> Hi,
+> 
+> I noticed that /proc/modules reports inconsistent address and size
+> values for modules. In m_show():
+> 
+>      size = module_total_size(mod);              // .text + .rodata +
+> .data + ...
+>      value = mod->mem[MOD_TEXT].base;            // only text base
+> 
+> Looking at kallsyms, .data symbols can come before .text symbols, so
+> [addr, addr+size) is useless as a bound and can be overlapping.
+> 
+> I have a userspace frontend for perf [1] and the code currently
+> expects non-overlapping regions. I can add a workaround to truncate
+> any overlapping regions from /proc/modules. But is it possible to
+> "fix" the kernel-side semantics here?
+> 
+> [1]: https://github.com/mstange/samply/pull/736
 
-HEAD commit:    cc3aa43b44bd Add linux-next specific files for 20251219
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16918422580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=da1bc82c6189c463
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1b2c58262854b97eb1f
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16937c9a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11918422580000
+The initial code to show the module start address in /proc/modules was
+added in 2003 by "[PATCH] Module state and address in /proc/modules."
+[1].
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/30bf539e6f28/disk-cc3aa43b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0e2f8b08e342/vmlinux-cc3aa43b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ec7ee6ece11f/bzImage-cc3aa43b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/b44ad9245927/mount_16.gz
-  fsck result: OK (log: https://syzkaller.appspot.com/x/fsck.log?x=139de49a580000)
+I'm not entirely sure if the intention at that time was for the address
+and (already present) size read from /proc/modules to provide a range
+where the module is loaded. In particular, if a module had a separate
+init region and was still in the process of being loaded, the size would
+also include a non-zero value of mod->init_size, which means this could
+result in overlapping ranges.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com
+Nonetheless, I assume that providing a range was indeed the intention,
+as I don't see how having just the address of a module would be
+particularly useful.
 
-rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P5981/1:b..l P8410/1:b..l P5988/1:b..l
-rcu: 	(detected by 1, t=10503 jiffies, g=18665, q=488 ncpus=2)
-task:syz-executor    state:R  running task     stack:19496 pid:5988  tgid:5988  ppid:5980   task_flags:0x400140 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5258 [inline]
- __schedule+0x150e/0x5070 kernel/sched/core.c:6866
- preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
- irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0010:lock_acquire+0x16c/0x340 kernel/locking/lockdep.c:5872
-Code: 00 00 00 00 9c 8f 44 24 30 f7 44 24 30 00 02 00 00 0f 85 cd 00 00 00 f7 44 24 08 00 02 00 00 74 01 fb 65 48 8b 05 44 41 01 11 <48> 3b 44 24 58 0f 85 e5 00 00 00 48 83 c4 60 5b 41 5c 41 5d 41 5e
-RSP: 0018:ffffc900041cf538 EFLAGS: 00000206
-RAX: 32a75ba562c33400 RBX: 0000000000000000 RCX: 32a75ba562c33400
-RDX: 000000005a44979c RSI: ffffffff8db7ed49 RDI: ffffffff8be07960
-RBP: ffffffff81742f85 R08: ffffffff81742f85 R09: ffffffff8e13f2e0
-R10: ffffc900041cf6f8 R11: ffffffff81ad9d50 R12: 0000000000000002
-R13: ffffffff8e13f2e0 R14: 0000000000000000 R15: 0000000000000246
- rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
- rcu_read_lock include/linux/rcupdate.h:867 [inline]
- class_rcu_constructor include/linux/rcupdate.h:1195 [inline]
- unwind_next_frame+0xc2/0x23d0 arch/x86/kernel/unwind_orc.c:495
- arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
- stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
- kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
- kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
- __call_rcu_common kernel/rcu/tree.c:3119 [inline]
- call_rcu+0x157/0x9c0 kernel/rcu/tree.c:3239
- __destroy_inode+0x2da/0x670 fs/inode.c:371
- destroy_inode fs/inode.c:394 [inline]
- evict+0x87d/0xae0 fs/inode.c:861
- __dentry_kill+0x209/0x660 fs/dcache.c:670
- finish_dput+0xc9/0x480 fs/dcache.c:879
- __fput+0x68e/0xa70 fs/file_table.c:476
- fput_close_sync+0x113/0x220 fs/file_table.c:573
- __do_sys_close fs/open.c:1534 [inline]
- __se_sys_close fs/open.c:1519 [inline]
- __x64_sys_close+0x7f/0x110 fs/open.c:1519
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f53c018e3aa
-RSP: 002b:00007fff1566c5c0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f53c018e3aa
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fff1566c61c R08: 00007fff1566bf1c R09: 00007fff1566c327
-R10: 00007fff1566bfa0 R11: 0000000000000293 R12: 000000000000003d
-R13: 0000000000000059 R14: 00000000000789ec R15: 00007fff1566c670
- </TASK>
-task:btrfs-cleaner   state:R  running task     stack:28144 pid:8410  tgid:8410  ppid:2      task_flags:0x208040 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5258 [inline]
- __schedule+0x150e/0x5070 kernel/sched/core.c:6866
- preempt_schedule_notrace+0xd1/0x110 kernel/sched/core.c:7143
- preempt_schedule_notrace_thunk+0x16/0x30 arch/x86/entry/thunk.S:13
- rcu_is_watching+0x7f/0xb0 kernel/rcu/tree.c:752
- trace_lock_release include/trace/events/lock.h:69 [inline]
- lock_release+0x4b/0x3b0 kernel/locking/lockdep.c:5879
- rcu_lock_release include/linux/rcupdate.h:341 [inline]
- rcu_read_unlock include/linux/rcupdate.h:897 [inline]
- class_rcu_destructor include/linux/rcupdate.h:1195 [inline]
- unwind_next_frame+0x1ab1/0x23d0 arch/x86/kernel/unwind_orc.c:695
- arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
- stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
- kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
- kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
- __call_rcu_common kernel/rcu/tree.c:3119 [inline]
- call_rcu+0x157/0x9c0 kernel/rcu/tree.c:3239
- kernfs_put+0x18e/0x470 fs/kernfs/dir.c:591
- kernfs_remove_by_name_ns+0xb7/0x130 fs/kernfs/dir.c:1721
- kernfs_remove_by_name include/linux/kernfs.h:633 [inline]
- create_files fs/sysfs/group.c:66 [inline]
- internal_create_group+0x57b/0x1170 fs/sysfs/group.c:189
- btrfs_sysfs_feature_update+0x9b/0x1d0 fs/btrfs/sysfs.c:2689
- cleaner_kthread+0x302/0x400 fs/btrfs/disk-io.c:1482
- kthread+0x711/0x8a0 kernel/kthread.c:463
- ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
-task:syz-executor    state:R  running task     stack:19496 pid:5981  tgid:5981  ppid:5978   task_flags:0x400140 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5258 [inline]
- __schedule+0x150e/0x5070 kernel/sched/core.c:6866
- preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
- irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
-RIP: 0010:lock_release+0x2a6/0x3b0 kernel/locking/lockdep.c:5893
-Code: 4d 48 c7 44 24 20 00 00 00 00 9c 8f 44 24 20 f7 44 24 20 00 02 00 00 75 52 f7 c3 00 02 00 00 74 01 fb 65 48 8b 05 2a 0f 01 11 <48> 3b 44 24 28 75 75 48 83 c4 30 5b 41 5c 41 5d 41 5e 41 5f 5d e9
-RSP: 0018:ffffc900041ff430 EFLAGS: 00000206
-RAX: 56b6579f03543c00 RBX: 0000000000000202 RCX: 56b6579f03543c00
-RDX: 0000000000000001 RSI: ffffffff8db7ed49 RDI: ffffffff8be07960
-RBP: ffff88801cb58b58 R08: ffffc900041ff808 R09: 0000000000000000
-R10: ffffc900041ff5b8 R11: fffff5200083feb9 R12: 0000000000000001
-R13: 0000000000000001 R14: ffffffff8e13f2e0 R15: ffff88801cb58000
- rcu_lock_release include/linux/rcupdate.h:341 [inline]
- rcu_read_unlock include/linux/rcupdate.h:897 [inline]
- class_rcu_destructor include/linux/rcupdate.h:1195 [inline]
- unwind_next_frame+0x1ab1/0x23d0 arch/x86/kernel/unwind_orc.c:695
- arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
- stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
- save_stack+0xf5/0x1f0 mm/page_owner.c:165
- __reset_page_owner+0x71/0x1f0 mm/page_owner.c:320
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1406 [inline]
- __free_frozen_pages+0xbc8/0xd30 mm/page_alloc.c:2943
- vfree+0x25a/0x400 mm/vmalloc.c:3504
- copy_entries_to_user net/ipv4/netfilter/ip_tables.c:866 [inline]
- get_entries net/ipv4/netfilter/ip_tables.c:1022 [inline]
- do_ipt_get_ctl+0xebc/0x1180 net/ipv4/netfilter/ip_tables.c:1668
- nf_getsockopt+0x26e/0x290 net/netfilter/nf_sockopt.c:116
- ip_getsockopt+0x1c4/0x220 net/ipv4/ip_sockglue.c:1777
- do_sock_getsockopt+0x2b4/0x3d0 net/socket.c:2398
- __sys_getsockopt net/socket.c:2427 [inline]
- __do_sys_getsockopt net/socket.c:2434 [inline]
- __se_sys_getsockopt net/socket.c:2431 [inline]
- __x64_sys_getsockopt+0x1a5/0x250 net/socket.c:2431
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fb026b9148a
-RSP: 002b:00007fff93b01148 EFLAGS: 00000212 ORIG_RAX: 0000000000000037
-RAX: ffffffffffffffda RBX: 00007fff93b011d0 RCX: 00007fb026b9148a
-RDX: 0000000000000041 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 0000000000000003 R08: 00007fff93b0116c R09: 00007fff93b01587
-R10: 00007fff93b011d0 R11: 0000000000000212 R12: 00007fb026db8be0
-R13: 00007fff93b0116c R14: 0000000000000000 R15: 00007fb026dba020
- </TASK>
-rcu: rcu_preempt kthread starved for 10620 jiffies! g18665 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-rcu: RCU grace-period kthread stack dump:
-task:rcu_preempt     state:R  running task     stack:27728 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5258 [inline]
- __schedule+0x150e/0x5070 kernel/sched/core.c:6866
- __schedule_loop kernel/sched/core.c:6948 [inline]
- schedule+0x165/0x360 kernel/sched/core.c:6963
- schedule_timeout+0x12b/0x270 kernel/time/sleep_timeout.c:99
- rcu_gp_fqs_loop+0x301/0x1540 kernel/rcu/tree.c:2083
- rcu_gp_kthread+0x99/0x390 kernel/rcu/tree.c:2285
- kthread+0x711/0x8a0 kernel/kthread.c:463
- ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
- </TASK>
-rcu: Stack dump where RCU GP kthread last ran:
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:pv_native_safe_halt+0x13/0x20 arch/x86/kernel/paravirt.c:82
-Code: cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 33 9e 2a 00 f3 0f 1e fa fb f4 <e9> 48 ee 02 00 cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90
-RSP: 0000:ffffffff8de07d80 EFLAGS: 000002c6
-RAX: 741d0ec708556100 RBX: ffffffff819786ba RCX: 741d0ec708556100
-RDX: 0000000000000001 RSI: ffffffff8d997e54 RDI: ffffffff8be07960
-RBP: ffffffff8de07ea8 R08: ffff8880b86336db R09: 1ffff110170c66db
-R10: dffffc0000000000 R11: ffffed10170c66dc R12: ffffffff8fa22f70
-R13: 1ffffffff1bd29b8 R14: 0000000000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff888125c25000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 00000000755b0000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
- default_idle+0x13/0x20 arch/x86/kernel/process.c:767
- default_idle_call+0x73/0xb0 kernel/sched/idle.c:122
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x1ea/0x520 kernel/sched/idle.c:332
- cpu_startup_entry+0x44/0x60 kernel/sched/idle.c:430
- rest_init+0x2de/0x300 init/main.c:758
- start_kernel+0x3ac/0x400 init/main.c:1208
- x86_64_start_reservations+0x24/0x30 arch/x86/kernel/head64.c:310
- x86_64_start_kernel+0x143/0x1c0 arch/x86/kernel/head64.c:291
- common_startup_64+0x13e/0x147
- </TASK>
+The patch mentions that the module address was added for use by OProfile
+and ksymoops. The OProfile code reads /proc/modules in the function
+_record_module_info() [2] and appears to expect that the address and
+size form a valid range. The old ksymoops code [3] reads the file in the
+function read_lsmod() but doesn't seem to handle the added address.
 
+More importantly, I notice that perf has the function modules__parse()
+[4], which reads the /proc/modules data and is called in several places.
+For instance, the machine__create_module() callback [5] then expects
+that the address and size form a valid range.
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+The original behavior was first broken in 2022 by commit 01dc0386efb7
+("module: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC"), which
+introduced a third optional module region. A year later, commit
+ac3b43283923 ("module: replace module_layout with module_memory")
+further split the module into up to seven separate regions.
+
+The separation of module regions was done for good reasons and should
+not be reverted.
+
+Instead, a simple and consistent approach could be for /proc/modules to
+report only the size of MOD_TEXT, or to show it in an additional column.
+I suspect this should be sufficient for debugging tools. However, this
+requires careful checking to ensure that nothing else breaks. If more
+accurate or complete information is necessary, the kernel could export
+data about all module regions under something like
+/sys/module/<modname>/segments/<segname>.
+
+[1] https://lore.kernel.org/all/20030114025452.563462C374@lists.samba.org/
+[2] https://sourceforge.net/p/oprofile/oprofile/ci/master/tree/libperf_events/operf_utils.cpp#l1327
+[3] https://www.kernel.org/pub/linux/utils/kernel/ksymoops/v2.4/ksymoops-2.4.11.tar.gz
+[4] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/util/symbol.c?h=v6.19-rc3#n668
+[5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/util/machine.c?h=v6.19-rc3#n1467
+
+-- 
+Cheers,
+Petr
