@@ -1,99 +1,222 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from YQZPR01CU011.outbound.protection.outlook.com (mail-canadaeastazon11020094.outbound.protection.outlook.com [52.101.191.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC481E1C02;
-	Mon, 29 Dec 2025 21:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767043784; cv=none; b=WHIGSoL5lvDcB15ptwsVnIE6OpadmxLbDZHzHSZzx9uMSjm05LsiuThELQbHZLoljAvkxjputPolwVHTphYFlmAEZl0m0fBG9oOJJG25lAKhabuwAmD4Zj7J9IKKgTR7PupmC8d1UnQM3moAs1nyEhWRC1Tc/cYkjBmfps5xQ2I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767043784; c=relaxed/simple;
-	bh=mdzCKbdkjkLWAsXYOk3IU5/RIWJOMHNvZN23/seJpxE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E8u82K9kgVC/IBZO8SHkHW0yPnuFhaScWiB/tTtoPogntHoqPj1pZis0ABhOzrquPZrx9GmcKy/tJFShTxqx+fJVZsMmb/0WKgl+sC2dM+a4ZRhlj203lkIEq9W3bjkNTeoVEYsSEBfVgwjauALBAGWrHJtR69v1+6jGwevu104=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwpy8BxB; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7752926ED3A;
+	Mon, 29 Dec 2025 22:25:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.191.94
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767047117; cv=fail; b=sOuXvcrch6ggNp72QGR8p+28IDgLjXqx349GTFk97F8EhKCmhM+PI9X7f1EKDQlniyHwqMVlgsMImsOkvcOiUQcdrTs5YpMjuEdPr1WT4iWEXPgKJIlHgoWdGHUFQ0+deKNrA0x74E5tgPGTyHf+eGgSg9/de+Iu+c6RJoDGGaY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767047117; c=relaxed/simple;
+	bh=EY5YOQgY91mo62ldSFxZDFgQtondD+OHq1KKFBWlCsk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ExphCiGaRUprksL9+THK4MA1bBNCHEY+H8+72xm2CQsAgbCEw+mMonAdu+278V3/I9/ZfA+ZkTt657mqk36GXHDP0oZnvuup8JsnTthV9zF0PsKHD2gC+Yz2gRJmkWoIcnfe/cP6Iivi6V9XgZa5nnBr5NFy9CIPgdFr69NvLok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=sbV3LBaW; arc=fail smtp.client-ip=52.101.191.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwpy8BxB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 551ADC4CEF7;
-	Mon, 29 Dec 2025 21:29:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767043784;
-	bh=mdzCKbdkjkLWAsXYOk3IU5/RIWJOMHNvZN23/seJpxE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mwpy8BxBsYaMAFRSH+yepMk2DNRlPqIQmpb4qmlcN4FeCRWDoex5RJ48WypSWoH5H
-	 WhFCe/JuqBJZqi/CcW029UZI8ytMDDth8tVcp7HQie21o/+M+V4lpqOPY2RMhCEte3
-	 O44PO8lHki2fY9mKtqytGTabhTL4cgJGOpLLjz6JjLa+AkRxspv3TRFuJayXF3cGwP
-	 6YmeLdhZltLlnQ/gUqY0fVUrv7m9mXGJ4HEEWidU26Ko8Yks8S67K5fKEYLgXlvI2z
-	 6t+nOPVoh4sc834ZyJCce8lGavqhOtosTX8IMRA/Y8w+FGHXdxhp3Fd5qIKaFjZm3m
-	 /FzZ1fbsfPc3g==
-Date: Mon, 29 Dec 2025 14:29:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx
- is out of bounds
-Message-ID: <20251229212938.GA2701672@ax162>
-References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
- <9edd1395-8651-446b-b056-9428076cd830@linux.dev>
- <af906e9e-8f94-41f5-9100-1a3b4526e220@linux.dev>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="sbV3LBaW"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a/zuVgK2QxxGVwOKvLEFDJm81+NAAmOrxrfizm7cinPYnpiLARqhjFHSxV8Dgxtm0TBsyQ0GJoONggwMz6fQ2XpN3Ua4q+Wi+F0Uz1AEqAumO9RIF/Oe7MJRwcKPmm24COh4M+jEhraS0IuVEoUwLVymCkrZavIuBF9A+EV7FveYDc2OAKRjB3PiO58IxdE82wt9DQnZHkoy1zf2tGJfRLoYjJ58164l7EZwwWAnEBLQvt5SB9RdxXGzATo+I6zqjxHbZusYAeJYwY61QViOEu69DUj87frzdLehssMHm285UnJTwZaAIAe6zzYZbuSsaUE+JKqE57wRzMGcqDwD+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NdfzNniktmm84vSXAoAbLkf7UZlF2yvswvw/7jKLYkE=;
+ b=DsjIJmO4IVvc8oUiPoDiSRco4Vfd/SiiykEnFNmSWphdkLgwgDwZjCIH/dp2ue0HgNnj+4y36cUutJ6tdydDv11am/7M7PCUyBTTdmX9rWBCpwUBYfBrD709Kve3iV2iWHgwjYb2obOiLQQng6A7f48FuHSZ/LYe1hXZOJ8UiyHe/UyfByXBRfmXMr8yARcisPlTKk2Rh9JDBDzUUPWu115SUrB1Ncu5E5jgqvgr8G5Wet8wihGcr4hZNz516UeetyP7+liwt0i97lvca6tlg/13J21LNH3a+Nv6V0W76MMVHU3qEBU6UcyawGTkdEOFvL26flcbGISeXzequAO41A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NdfzNniktmm84vSXAoAbLkf7UZlF2yvswvw/7jKLYkE=;
+ b=sbV3LBaWquBKzKXKbQjS7OZK6G0hh1PggMs3L0LMSfBenI2FEeAnTqfzJtFL5pYgK1Y9nT72gtpMXuXGEcKtgQHmA8b7z3Fm7lD8pXkP2kSOSk7VPTtUUDC0ORE+/Ncysoo7PQWLhBMjCL3b9H0WzFtiOjBptQhqv43lPz/UQNi6RKff0J53LLnNTsjmTLCdXztFYFtb8wAIqWLwfFvW2ipt2nOJlEE5fMY5tbf2rBLF4SgRKjEx3VvrGoIcCRYI9GJjlehQv5LcUqDTquk1iNYoqDET9G7EzwMm3qYuPSUPU4uFvsVVAxgGUdXDQP5RGmPdAOvxXsxyFK7Zipjm3w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB10750.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:fa::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9456.14; Mon, 29 Dec
+ 2025 22:25:12 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9456.013; Mon, 29 Dec 2025
+ 22:25:12 +0000
+Message-ID: <9833cb61-1ec5-4cc1-ad9d-3e07f3deff80@efficios.com>
+Date: Mon, 29 Dec 2025 17:25:08 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
+To: Steven Rostedt <rostedt@goodmis.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Christophe Leroy <chleroy@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ David Laight <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20251225170930.1151781-1-yury.norov@gmail.com>
+ <20251225170930.1151781-8-yury.norov@gmail.com>
+ <20251226115848.298465d4@gandalf.local.home>
+ <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
+ <20251229111748.3ba66311@gandalf.local.home>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <20251229111748.3ba66311@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0051.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:2::23) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af906e9e-8f94-41f5-9100-1a3b4526e220@linux.dev>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB10750:EE_
+X-MS-Office365-Filtering-Correlation-Id: a21f8d98-8aef-43c0-e3fe-08de472921b1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?b2prTHlFZkNLWGg4OWhyc2swK3dNU2N2QU91NjBPMUc0dWx0UnFFaU52MmJy?=
+ =?utf-8?B?TzY2WkRERmd5SFlxRU5pZHlHbGVOcmwvSmVxMStMbXVCQ08vemlSR0xKM3M2?=
+ =?utf-8?B?MmNaOVFNQ2c1cmEvSjhDRXlFOU96NHdzVlFhMEFiT01ydGUrSk5hN051REdr?=
+ =?utf-8?B?NitNSDRzTnpCVWtRajEzYVNPS0FNUHdMUG01elRJWUFTQnFWZVZpbUxycmUx?=
+ =?utf-8?B?VzNvMWtEeUlUZkFaN3ZJTGZNeExRRnhYQ3FFSzFhbm5yYzFTUVJ1ZkVIM2NN?=
+ =?utf-8?B?NWRVcnc1S0Q5ZERuNnJycHNITjR3SzRFdFVvL0JpN3RBT0NqL3JIMnRyYWpY?=
+ =?utf-8?B?TVpUemxYQmxsZnJtaXA4WEY4QzluRkRuS2t4SFlqTzdLMjV2UU1xbUNteVRL?=
+ =?utf-8?B?NnhTMGxLK016RmV5eGhXYXpRTGRERHI5RXBYVm5rU0JhcDIvcU9DZEs5L1VC?=
+ =?utf-8?B?MlI3WnpvbTZYZmU2NjNUNVhTcEJ1UUxNQWExMTYwNXczdjRoY3IwUFlCWGk5?=
+ =?utf-8?B?OTBxbWs4eDRFcWpESWtYTkdlYnYrcjlaY3Zic01WR0VvMUg2OUpXMGcyZEYv?=
+ =?utf-8?B?dW5McWMyd3RPQTg2TUZMdXJDVWJxOGwzVjRIclAvNk0za1NJRGFZcmRxT01C?=
+ =?utf-8?B?UXIxYUduSTY3ZFdraU5JSlh3b1J0UHVuUjdjWDladnNpTUN3ZVZNTVR5NTdJ?=
+ =?utf-8?B?T1RmSGN1anJsNVpRaFp3ckZXWE92Z280TVVneWFYMU5hMjZtbHd3R0Y3cERt?=
+ =?utf-8?B?U25oWFJQd09DV0JPa1pDWGlyNVVINlUveFhRQzA4ZzVCa041NkNFTnRoY25C?=
+ =?utf-8?B?Z29UMTAxbGtqYU1HMklwZWpTak05WFdBbmVQZ3Q0elBlcU1zQ1ZlV3c1eVp4?=
+ =?utf-8?B?TThrOVV2YjRWbkVqUHhNTE4wQkpPeGs2RCtaVmpVdEwvOFNPNGVmeGVWdkEw?=
+ =?utf-8?B?WDM3OWpTSDBzRFJSVDZJOEhuK0lTVkZMR1pPRFo3dFB6L2srRVNoUHVVTzli?=
+ =?utf-8?B?REZINzIvcW42ZDIrdFhhYWh6MHN6SzNNU2lsTFRXUDQ3VnpwUHViTHN4OVdr?=
+ =?utf-8?B?SFdWYXVKSHRGMGx2Q01vV2RjRm56SHJjc3A1MldMb0FDS2JZODJIcG1uenRu?=
+ =?utf-8?B?QjMvWWRIMi8zak5NSmxrb0RacmFvWHVMdVMzYW9aczBJVHlzYnZOVlpZZk9z?=
+ =?utf-8?B?c0Z5MW9yalh0YlhJQW84M1JpeHMxNldqS3JUZEE5YXVJWDhNcVpNWGN3Q0FE?=
+ =?utf-8?B?R3NlVzd4N29NcFYvWHE0MG0rUEQyV0tlOGI1aGljUDQvSXovL2RxRFZ0TDEy?=
+ =?utf-8?B?VnZkSkIwUitVeUZkOE90cjA5bld6UGJ3QmxUWUxOK3hNRVVaQWIxWm43TFc5?=
+ =?utf-8?B?TGZCUkwwQUZMbXRDK3VaUndTSmQxeWFCaDZzZTBaWThwUndoV0VYRFhiZGE3?=
+ =?utf-8?B?dGw2djU5eDltRzdwSGdOd0tUWlZNaUtMNmxmazB5cm5UUmROUC9OZGhtNEJZ?=
+ =?utf-8?B?TnpiSXR3VEZZMUVleFFvZ3JXeU9vdXZGU1I2UWJrZGwyOWVZYnFPaU5hSEpC?=
+ =?utf-8?B?ZlVXOFk4UGpBVkpOWXIvalE2NzRyM0dKdFFDeExKMHNXOVdMUG9RbklLVUhZ?=
+ =?utf-8?B?eEsxeUNxdTNrRkRFWDBEV2gyNHlaWDR6d2RzOUlQZXVIWHk1cEVTS0hQWjJw?=
+ =?utf-8?B?NW5NZVMyS0VnSGNWdkYrcy9vSno5NU5jRFNLY3QxYVlvTE9TOHJhUDFWYXI5?=
+ =?utf-8?B?ZjJNeUJleG14QmdYTEFEOHdXcHpoRG9tdG1HaHAvcVNFalUyZHgxUWU5eHV3?=
+ =?utf-8?B?NkhOU01QYzV3WHhiSndMRE9LRTZGMEN6NHpJeDRtZWtORlN4bHFFaEhUS1ZP?=
+ =?utf-8?B?N0pEbXFHR29TMmxnbGd0U0FTQmVZd3VMM3Q1RDRKdGZ1V2c9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?OEJmeDhPNENpa21RSExJcWlSb3FDdlJOckR2ZXlDRU1XOU5EZFBtVFR0TFZD?=
+ =?utf-8?B?eWp1dkRBUDdDMkNJMUk0aFdyQm1sTU01Rlh0cnhGNUVvK0ZXVkV0R0xqSTds?=
+ =?utf-8?B?Si9EeWlHeDdCTkpDalAyL3I3VFAvcDFVQlFLdlF6YnhXZVUzbXNvWFdSZmdn?=
+ =?utf-8?B?K1FaeWVveVZHWnlPUk03OXU1R2Z3cGNoVXVYWEhvU05YMUxBSW9kaUlWVW9X?=
+ =?utf-8?B?RE90ZVM5ZkFHTENoUXVmM3lJVS9pNGFoZDhVWnl2Z0RPQmpFOXdSNThCYVZU?=
+ =?utf-8?B?RTRoSmZRN1Rodlo4NVJDQWhPdUhMN3Y2VklNL3cxUm1HaU5LNzR1Sm8weWpJ?=
+ =?utf-8?B?b3BlN3Ria1U1TysxMkRqZ1lFaFIwc1VwNUUwRFlJTkNSdmFLeXVnRVNETWRF?=
+ =?utf-8?B?b1lhOGdQTTdBWWVQb0gycmt5TldHOWxiMUR1NnRza2hFRG81Ym5yMVNkOXRL?=
+ =?utf-8?B?c1o1ZDd1SUxsV2hSZ2NRbDhPM3ZVK0lZZTVtUVFFbFp4UVhPbWdWL1lMSGx2?=
+ =?utf-8?B?Rmx0Szh0TWtVNjgrM2VJTmhvZXFyampFaE02VDJwODd2R0F2RU5Ub2IxMEpT?=
+ =?utf-8?B?SDl4aVNLSXdsWGhWbUJJVDkxU2Q3b2w4YWZBVTA2djdwS2RXYmZsOHUrbG5t?=
+ =?utf-8?B?T0VxbzcyamFJRHh0RVpoUlNpYkdETWczMDB0VzFEWHpWbGRLMndrMVFhOXl5?=
+ =?utf-8?B?YUZDbzB3V0QxTDc4bFMydnZRbndMYWJQSXdLOXk5cHNERnJTRmVoZVlnUS9E?=
+ =?utf-8?B?RDNsOWdnOElJdXJpNFg0c2NLSjNqdk1oMlluZjFjS3RFU21nWVMySlAwSE1u?=
+ =?utf-8?B?M05pRlpkM3hVNjY3ZzVGMjhEdzdNTE92NFo1NE1ybHd5OWFXckM5MG9vTkVH?=
+ =?utf-8?B?QzdhU090cGFSVzc4RGh5YWFQQTZmcGF6WFdicjVwWldXckJTL1ViVHpjakdQ?=
+ =?utf-8?B?aVpjL004Y1FLWGJaaWR0dVpVZU5JMzAydm9Cc2M1ZU9xUkJDMkR1L20vZGtE?=
+ =?utf-8?B?TmxaMU56enZKdit3WTR6TEIxL1YzQTFOUUtaekluM0xJNlYvQkwyMGZ1cG0v?=
+ =?utf-8?B?QTZhSlpTWXFGZ01JZlVBVEl4aWlJeG1xU25yVkxXeWFyTENXNm90Q3FDSXpq?=
+ =?utf-8?B?dGRBZGtUZzB1OHM0dEp5TlFHRnpQakdDNWI5NytPQmsxS1dtbmY0ay9YeW5u?=
+ =?utf-8?B?em1WeEhxWWozRGVpLzNLeFNpQytid2ZNeHRTZU12MVFNUVNhZFZMVGNsTE00?=
+ =?utf-8?B?b2pxT0liNEV6YnBMa1BNdXdsWEpPK0Y1OFNzbldSakRVMFN2U3RsQ2kxcFlQ?=
+ =?utf-8?B?TndTNjVPQ2F5NjJYWGhQeXJsRkhpYjIzZmw5dERhQVhKRkJVQWh3NlJWOVVE?=
+ =?utf-8?B?T2l5UGVHc1FVY2VidmI0Q2s4dkJET0IvS3hIWW5qMU8rQi9rSXJqSjlZZnRk?=
+ =?utf-8?B?NmM4U1RlbXBwSnVpN1piTVV5VnZTQ1phMS9IaTVCbXhpSTVhakNuWE5SeUd1?=
+ =?utf-8?B?cndrYVgzbEhJenRVS2FOM3I1TVJvSHFPWm5mZno2TWUxeFczajdmVGN4ejNq?=
+ =?utf-8?B?aTBabWVsUllFOXpJQS9DMGZmMWFlbW1MZlNUdTNGTWhBeEF2dnpNQVRuZkRx?=
+ =?utf-8?B?MzcrbmMxVnNZNVdrZ0NUMWQreGtxejBhV1FLWDdhcUNuQ3BOL3FMY0dmUGNW?=
+ =?utf-8?B?WGQzcnlsKzFLRXltU1hVZTlUWGJPYVRVd0hMYmtMcm92U0gzWG04V3JTd0JO?=
+ =?utf-8?B?WWFiaUlXaFVBV1R5L0Jmd2x0TVg0amUyTXJURUpzaEFrU3RacWVueGxHL1No?=
+ =?utf-8?B?UnFLQ2dHZEp0Vm5LbmlrTUN4ZmxhdGxkenA4T0lpYXZlWWY5K284enhSeTBo?=
+ =?utf-8?B?SWp2ajFpcmV2d3dxbmF1ZUpGNzRKWHByc0gvUTk4WGZrcEdBa2Jnc0YzcWc1?=
+ =?utf-8?B?VmYyckFObTlLaFhHbDIrNndpcyt5b3RKRnloZWk1aCtaRjhFdG9NU3JUTEo4?=
+ =?utf-8?B?RU1xSUIwUEVCUFBOS1JZRGJWdlA0VlNuRHJpWGQrV1VsOVdZV2FMS1M4c3U3?=
+ =?utf-8?B?Z3JKOC80cEphdDZsdEdYOXJDNTlpdmJoMUxRMDUxOGgzOWp1ZDNrZmgyYzQ5?=
+ =?utf-8?B?Q052QXI2ajZxWndtNU5Fa2RCRW56SnFnTENlbE1vczVVOXh0TTBoRUM2b2l6?=
+ =?utf-8?B?YVRvTk8ySVhFaWo0cTJJQmZ0amRrVFBvZUdUZllYWllqcjN5aXpwaWtwSUUx?=
+ =?utf-8?B?cXlGSWxwSHk0eVRwa3l2aFhkdFNiK0xzUkt2SEU3TzZvUzQxYWN2eDltTGFZ?=
+ =?utf-8?B?ZTlVSWpWcVdkT1RNVStjOGhmK1FYZitjZE9iYTk3c0hyUW0wODM2a1I2d0lR?=
+ =?utf-8?Q?prXIs2Nuu7cNjw+k=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a21f8d98-8aef-43c0-e3fe-08de472921b1
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Dec 2025 22:25:11.8952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HOidrK1PWjkSOjp14R3tx/6AQ1BfeJRX3yg4dFxxA06rhIdzodXiTITYRazZGHI3e7QnsZmYowpZTOFYATJL58GxdQ4Xgb0JOoBDiMUC/AA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB10750
 
-Hi Ihor,
-
-On Mon, Dec 29, 2025 at 12:40:10PM -0800, Ihor Solodrai wrote:
-> I think the simplest workaround is this one: use objcopy from binutils
-> instead of llvm-objcopy when doing --update-section.
+On 2025-12-29 11:17, Steven Rostedt wrote:
+> On Sun, 28 Dec 2025 13:31:50 -0800
+> Andrew Morton <akpm@linux-foundation.org> wrote:
 > 
-> There are just 3 places where that happens, so the OBJCOPY
-> substitution is going to be localized.
-> 
-> Also binutils is a documented requirement for compiling the kernel,
-> whether with clang or not [1].
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/changes.rst?h=v6.18#n29
+>>> trace_printk() should be as available to the kernel as printk() is.
+>>
+>> um, why?  trace_printk is used 1% as often as is printk.  Seems
+>> reasonable to include a header file to access such a rarely-used(!) and
+>> specialized thing?
+[...]
+> Yes, it's not in your kernel, but it is in several other people's kernels
+> as they develop it. And adding a requirement that they need to include a
+> header file for every place they add it (and then have to remember to
+> remove that header file when they are done debugging) is going to waste
+> more precious time that kernel developers don't have much of.
 
-This would necessitate always specifying a CROSS_COMPILE variable when
-cross compiling with LLVM=1, which I would really like to avoid. The
-LLVM variants have generally been drop in substitutes for several
-versions now so some groups such as Android may not even have GNU
-binutils installed in their build environment (see a recent build
-fix [1]).
+I agree with Steven. trace_printk() needs to stay convenient to use for
+kernel developers. Part of this convenience comes from not having to
+include additional header files by hand. It has been around for
+16 years and documented as such in kernel documentation [1],
+LWN articles [2], and conference presentation material. Changing
+this would lead to confusion for people trying to use the feature.
 
-I would much prefer detecting llvm-objcopy in Kconfig (such as by
-creating CONFIG_OBJCOPY_IS_LLVM using the existing check for
-llvm-objcopy in X86_X32_ABI in arch/x86/Kconfig) and requiring a working
-copy (>= 22.0.0 presuming the fix is soon merged) or an explicit opt
-into GNU objcopy via OBJCOPY=...objcopy for CONFIG_DEBUG_INFO_BTF to be
-selectable.
+I personally use trace_printk() to sprinkle temporary debug-style
+trace events in frequently executed kernel code I need to follow
+carefully.
 
-> Patching llvm-objcopy would be great, it should be done. But we are
-> still going to be stuck with making sure older LLVMs can build the kernel.
-> So even if they backport the fix to v21, it won't help us much, unfortunately.
+One possible compromise would be to move it to its own header file,
+and introduce a CONFIG_TRACE_PRINTK Kconfig option (default Y) that
+would surround an include from linux/kernel.h with a preprocessor
+conditional. But please make sure the default stays as it is today:
+include the trace printk header by default.
 
-21.1.8 was the last planned 21.x release [2] so I think it is unlikely
-that a 21.1.9 would be released for this but we won't know until it is
-merged into main. Much agreed on handling the old versions.
+Thanks,
 
-[1]: https://lore.kernel.org/20251218175824.3122690-1-cmllamas@google.com/
-[2]: https://discourse.llvm.org/t/llvm-21-1-8-released/89144
+Mathieu
 
-Cheers,
-Nathan
+[1] Debugging the kernel using Ftrace - part 1 https://lwn.net/Articles/365835/
+[2] Documentation/trace/ftrace.txt
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
