@@ -1,128 +1,260 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-oo1-f80.google.com (mail-oo1-f80.google.com [209.85.161.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 759A9EEB3
-	for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 02:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44929347C6
+	for <linux-modules@vger.kernel.org>; Mon, 29 Dec 2025 04:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766976369; cv=none; b=b3lNNjxlRRG4pyt48sAuq+ISPbg/aYu0JaM2XbIvea8DZsQncSa49NB5Md0qtqLEnQeW6VPbbyCW5ESoXjOAAQCReqrvVUG1aSbLMEEd56nII/iSuKEA3FEsSHRk6IQ0QOvlJo1OgHzNZYoD/OW8zorEsONnwqSjLeeWOaTIi1A=
+	t=1766981425; cv=none; b=ohXpach7XMjjFL3NXglw8YuA+AxXJhSMq1xYUuCduZ6Ih5q6C2EqFDqlO20eT1kAzRkgSbqBO+vmgE3hqgPSrOhrZgvZyM3wTrQ+LNYwEJoCTjs8Uvc5OfLLMpz4fvZms8gPdjm5j+0LiuVvjkKkO3I58Wu7EgGz43J5msWrK8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766976369; c=relaxed/simple;
-	bh=JMdXEp8ZZfYGi58KsjbVQIHRcDrf3D/zHBQgB8IXIXk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XqEeO4q6pZrTdO7ORJ6iDA/Hg5IsuhYK675PTH7Ytji620IF5FsLevsGW3xKKGE32WzbfBT1phcc9p+j6un/JuMqu+UoiXDDFgCvm0YlIxtImeHkpl3L4SBSiclnKfuyOqQWNdDd8zHV3GHvVr10uO4TrpKymm7YjMInMduHGyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YPkRZ7bX; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPkRZ7bX"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a0bb2f093aso87064505ad.3
-        for <linux-modules@vger.kernel.org>; Sun, 28 Dec 2025 18:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766976367; x=1767581167; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvsZccGmypaQdk3tHNL83bEg1blkjlqraDO3AgV6BlE=;
-        b=YPkRZ7bXsEeDUskeQ6bF7NxCuiaKd8xGqfl7wzEsE7gSb2UCU8EG0ttNZGhLYPvCt5
-         LdAMnFg272SSNWSCnsIx+K+rl/Tt0+LCbpo4nfidTsi/RpRfLZdbXsIWJkiajIRk50N0
-         7teW/e+ECuooXZKHHLk8ANYjR69Cy/+nMrFWtNArMN6EWybJx8gUlqYbA2hQV+8tDdK1
-         S5DTC8V815vSBsrJ0VQeCAjx1XZXSVrVnozSL7y/2eayswq6fLboEUpHqgofvMdA5oJo
-         /wYAXKDWCxnbX17wejY6Ge8il4rA9pRAxp+q5OLZiEfe2OL7HOwtc8A5NPFj+Ac8G/le
-         +TwQ==
+	s=arc-20240116; t=1766981425; c=relaxed/simple;
+	bh=pJ/QZ2CCXsuokSK/lNKjU3bybR5CN32Z2r/8AEBuDNE=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=NShZqwdWyxWB5ycZhBEPltCa8lN2loK7tg+zHVNuJAGztV1Z/JU/X+yPRwx6yjJ8ekIKeZPxKIaV1buMnPdDrie9JKlIop2/P5hxqLywNxHh60Brv8SRKHkOXMXvb/MUGAzgICjutNqLEeZRKEwY7uRh7PS2GNZg2VaZHuxZ/I4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f80.google.com with SMTP id 006d021491bc7-6574d3d44f9so15308837eaf.3
+        for <linux-modules@vger.kernel.org>; Sun, 28 Dec 2025 20:10:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766976367; x=1767581167;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hvsZccGmypaQdk3tHNL83bEg1blkjlqraDO3AgV6BlE=;
-        b=F1HXUrZIwz1/t5yPYeTAfCdMo/YevUTPqD/dmSPwHG6t8fviaM+aQu9FxICEpFRp2+
-         N4FtgbGILvCaQM+j4ed3G2L3vHhz2yWus1/IGR2VhS03eSxDre/Zpva4BEMXj6MV9/zr
-         UrD+LcaELXt7hpoiQY7vpET1z5cL2MP+vxkzCb4MDSK5GJxIl6x+x22V89QhGkSSJy+8
-         uZ4B8G45UKZw1Pn7p9Cue3K6xaa4MNJBhQLDoxYshcRuHDBPmWdZYY4AxjDPeX9eO+K6
-         oiAM4XJBbeEuS+VQ47ezobsMD8bE0839n9dVjaZdlwxV9RM5Q59/P1QLA78e+lBwLuAT
-         160Q==
-X-Gm-Message-State: AOJu0YwAh1HPV1mYNCFZYsl85eH2SUW2aYYd9Z1mmdlffByORBZerQ1L
-	0eWKgtH43OHhSZqjARlYGqGPC47NKM4NGyaGcj6zdpAnPvkunCDi2m72
-X-Gm-Gg: AY/fxX4ScZ3Z/1o0dXpBWdaEaPK+WV8l6sSAIKQfUW3Vz2krF9c+9qZ3MWmR05fKzt4
-	/BXB9EoUWYR20I9GgodaMBRYiWqmfvEJq/gZSr4/4qMSE1tXMZDJIxFa2CQClVQcoPDmvS3Gy4U
-	MDhBEwUQNA7A8VEa5CcNKsQQAci4M55s6VoHab71HcYQ/nxlRmigGe8BBxgjjEsRCw4RghW5yDD
-	xcs6IBfDm4iwGn/06TaDT0zP1O2XnTFRH+4SgXps+/doYOHKdRF73qw941Abo1PCb2z9uyL/M3+
-	yEGtVOld2qkf0dNRJJRX8BOnGiKBWU/rSpO3ce7gTdGF/GIvv53dmEBwUJmoG+k/eRnOWrnsA35
-	e9vva0MIFTXkiIYEYc41PJLg4LdvzCOV9/jXi+sy74u+rK2Vzpr/ek9I4Y4wn2n7zDlouQunBxL
-	KbFSS9iPerN1oCXGKROuzzs2+y2hmoVKJzepj7eQ1EAeD9
-X-Google-Smtp-Source: AGHT+IEZzWuW7nYClb3WUIhupeoVpz3DcKELJiPvuQZ7eMljWgZc0EcZ59jpTYUi4GlKIFiDKo3E4g==
-X-Received: by 2002:a17:903:2342:b0:2a0:d5b0:dd80 with SMTP id d9443c01a7336-2a2f2a3ae13mr265783725ad.54.1766976366721;
-        Sun, 28 Dec 2025 18:46:06 -0800 (PST)
-Received: from localhost.localdomain ([2409:891f:1b62:23f0:1ee:bb12:84d9:847d])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c66473sm235580885ad.13.2025.12.28.18.46.03
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 28 Dec 2025 18:46:06 -0800 (PST)
-From: Yafang Shao <laoar.shao@gmail.com>
-To: mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	atomlin@atomlin.com
-Cc: linux-modules@vger.kernel.org,
-	Yafang Shao <laoar.shao@gmail.com>
-Subject: [PATCH] module: show module version directly in print_modules()
-Date: Mon, 29 Dec 2025 10:45:56 +0800
-Message-ID: <20251229024556.25946-1-laoar.shao@gmail.com>
-X-Mailer: git-send-email 2.50.1
+        d=1e100.net; s=20230601; t=1766981422; x=1767586222;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mEpLPY44HLAax3LCr6aY4119TcZRpT06LgxjSSRPQLs=;
+        b=aukGICDENbK6E5LmxzbQ708mrH7kvZHkEMOV2cHfoW1RcTLSSYuighEdtD5j2uya/Q
+         GCXx8Mv+djG84a9NQMODfo8b4BMjXawEnyJgYvzr1wJxUcY3EWcAOS146FysUbkB27U5
+         cn/X8CfH7nSbCnex0eVySp+OprTrzfXC9D3cerRaFuKpfa/UnGjMzpz3jLQXxanlnETO
+         p2h+VfQl5nWC47H2JVhRaS/C4+D3y3mVLmZFHNNP8ZURXNxwxrTVEvy1X5DW3p4h0g14
+         T47j4m48eShsEcLDLiz0rIbgs8oj6eGLO4is7Ko5XAy8XC5E+D6KAMwGnLrkjMGUel0x
+         Dgzg==
+X-Forwarded-Encrypted: i=1; AJvYcCUz59US14Q0DgMJTbu+dx9kFE3fVDmkXzdG9py9KwFG7whd2L+VRLH2DrMDGxltZrw7ClkXjL+V8tDKFtdx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4f+p3xU+GctN8pq/uRqB1en7YBySouIkIpGPnotgN5BsLdJ0/
+	DHfPYS9MIK6tKyByWrJpJgdgdZ6hM/SmVbWb1ncIfyb7p2JazyUqrph3H1AIflbjab9j2DPvJhF
+	kU861s810eNIPbXBM33x8QJJ+K0z4Rrj/XgqBaMZWLI5llczA2ShPQ5MmJXA=
+X-Google-Smtp-Source: AGHT+IGVuh3zWwQq7VhlQOoV8Aat5t4WVZNF4Nbbtns/oYoCWRfCZ6TLVj/D64+v5dQIbFapOmX2BxeXoAzlQpK24C5sLg8HfW6h
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:22a6:b0:659:9a49:901e with SMTP id
+ 006d021491bc7-65d0eaedcf0mr13755041eaf.75.1766981422258; Sun, 28 Dec 2025
+ 20:10:22 -0800 (PST)
+Date: Sun, 28 Dec 2025 20:10:22 -0800
+In-Reply-To: <693f889b.a70a0220.104cf0.0335.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6951ff2e.a70a0220.c527.0018.GAE@google.com>
+Subject: Re: [syzbot] [mm?] INFO: rcu detected stall in finish_dput
+From: syzbot <syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com>
+To: atomlin@atomlin.com, da.gomez@kernel.org, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, mcgrof@kernel.org, petr.pavlu@suse.com, 
+	samitolvanen@google.com, syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-We maintain a vmcore analysis script on each server that automatically
-parses /var/crash/XXXX/vmcore-dmesg.txt to categorize vmcores. This helps
-us save considerable effort by avoiding analysis of known bugs.
+syzbot has found a reproducer for the following issue on:
 
-For vmcores triggered by a driver bug, the system calls print_modules() to
-list the loaded modules. However, print_modules() does not output module
-version information. Across a large fleet of servers, there are often many
-different module versions running simultaneously, and we need to know which
-driver version caused a given vmcore.
+HEAD commit:    cc3aa43b44bd Add linux-next specific files for 20251219
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16918422580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=da1bc82c6189c463
+dashboard link: https://syzkaller.appspot.com/bug?extid=d1b2c58262854b97eb1f
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16937c9a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11918422580000
 
-Currently, the only reliable way to obtain the module version associated
-with a vmcore is to analyze the /var/crash/XXXX/vmcore file itself—an
-operation that is resource-intensive. Therefore, we propose printing the
-driver version directly in the log, which is far more efficient.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/30bf539e6f28/disk-cc3aa43b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0e2f8b08e342/vmlinux-cc3aa43b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/ec7ee6ece11f/bzImage-cc3aa43b.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/b44ad9245927/mount_16.gz
+  fsck result: OK (log: https://syzkaller.appspot.com/x/fsck.log?x=139de49a580000)
 
-- Before this patch
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d1b2c58262854b97eb1f@syzkaller.appspotmail.com
 
-  Modules linked in: xfs nvidia-535.274.02(PO) nvme_core-1.0 mlx_compat(O)
-  Unloaded tainted modules: nvidia_peermem(PO):1
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P5981/1:b..l P8410/1:b..l P5988/1:b..l
+rcu: 	(detected by 1, t=10503 jiffies, g=18665, q=488 ncpus=2)
+task:syz-executor    state:R  running task     stack:19496 pid:5988  tgid:5988  ppid:5980   task_flags:0x400140 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
+ irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:lock_acquire+0x16c/0x340 kernel/locking/lockdep.c:5872
+Code: 00 00 00 00 9c 8f 44 24 30 f7 44 24 30 00 02 00 00 0f 85 cd 00 00 00 f7 44 24 08 00 02 00 00 74 01 fb 65 48 8b 05 44 41 01 11 <48> 3b 44 24 58 0f 85 e5 00 00 00 48 83 c4 60 5b 41 5c 41 5d 41 5e
+RSP: 0018:ffffc900041cf538 EFLAGS: 00000206
+RAX: 32a75ba562c33400 RBX: 0000000000000000 RCX: 32a75ba562c33400
+RDX: 000000005a44979c RSI: ffffffff8db7ed49 RDI: ffffffff8be07960
+RBP: ffffffff81742f85 R08: ffffffff81742f85 R09: ffffffff8e13f2e0
+R10: ffffc900041cf6f8 R11: ffffffff81ad9d50 R12: 0000000000000002
+R13: ffffffff8e13f2e0 R14: 0000000000000000 R15: 0000000000000246
+ rcu_lock_acquire include/linux/rcupdate.h:331 [inline]
+ rcu_read_lock include/linux/rcupdate.h:867 [inline]
+ class_rcu_constructor include/linux/rcupdate.h:1195 [inline]
+ unwind_next_frame+0xc2/0x23d0 arch/x86/kernel/unwind_orc.c:495
+ arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
+ kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
+ kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
+ __call_rcu_common kernel/rcu/tree.c:3119 [inline]
+ call_rcu+0x157/0x9c0 kernel/rcu/tree.c:3239
+ __destroy_inode+0x2da/0x670 fs/inode.c:371
+ destroy_inode fs/inode.c:394 [inline]
+ evict+0x87d/0xae0 fs/inode.c:861
+ __dentry_kill+0x209/0x660 fs/dcache.c:670
+ finish_dput+0xc9/0x480 fs/dcache.c:879
+ __fput+0x68e/0xa70 fs/file_table.c:476
+ fput_close_sync+0x113/0x220 fs/file_table.c:573
+ __do_sys_close fs/open.c:1534 [inline]
+ __se_sys_close fs/open.c:1519 [inline]
+ __x64_sys_close+0x7f/0x110 fs/open.c:1519
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f53c018e3aa
+RSP: 002b:00007fff1566c5c0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f53c018e3aa
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007fff1566c61c R08: 00007fff1566bf1c R09: 00007fff1566c327
+R10: 00007fff1566bfa0 R11: 0000000000000293 R12: 000000000000003d
+R13: 0000000000000059 R14: 00000000000789ec R15: 00007fff1566c670
+ </TASK>
+task:btrfs-cleaner   state:R  running task     stack:28144 pid:8410  tgid:8410  ppid:2      task_flags:0x208040 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ preempt_schedule_notrace+0xd1/0x110 kernel/sched/core.c:7143
+ preempt_schedule_notrace_thunk+0x16/0x30 arch/x86/entry/thunk.S:13
+ rcu_is_watching+0x7f/0xb0 kernel/rcu/tree.c:752
+ trace_lock_release include/trace/events/lock.h:69 [inline]
+ lock_release+0x4b/0x3b0 kernel/locking/lockdep.c:5879
+ rcu_lock_release include/linux/rcupdate.h:341 [inline]
+ rcu_read_unlock include/linux/rcupdate.h:897 [inline]
+ class_rcu_destructor include/linux/rcupdate.h:1195 [inline]
+ unwind_next_frame+0x1ab1/0x23d0 arch/x86/kernel/unwind_orc.c:695
+ arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
+ kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
+ kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
+ __call_rcu_common kernel/rcu/tree.c:3119 [inline]
+ call_rcu+0x157/0x9c0 kernel/rcu/tree.c:3239
+ kernfs_put+0x18e/0x470 fs/kernfs/dir.c:591
+ kernfs_remove_by_name_ns+0xb7/0x130 fs/kernfs/dir.c:1721
+ kernfs_remove_by_name include/linux/kernfs.h:633 [inline]
+ create_files fs/sysfs/group.c:66 [inline]
+ internal_create_group+0x57b/0x1170 fs/sysfs/group.c:189
+ btrfs_sysfs_feature_update+0x9b/0x1d0 fs/btrfs/sysfs.c:2689
+ cleaner_kthread+0x302/0x400 fs/btrfs/disk-io.c:1482
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+task:syz-executor    state:R  running task     stack:19496 pid:5981  tgid:5981  ppid:5978   task_flags:0x400140 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ preempt_schedule_irq+0xb5/0x150 kernel/sched/core.c:7193
+ irqentry_exit+0x5d8/0x660 kernel/entry/common.c:216
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:lock_release+0x2a6/0x3b0 kernel/locking/lockdep.c:5893
+Code: 4d 48 c7 44 24 20 00 00 00 00 9c 8f 44 24 20 f7 44 24 20 00 02 00 00 75 52 f7 c3 00 02 00 00 74 01 fb 65 48 8b 05 2a 0f 01 11 <48> 3b 44 24 28 75 75 48 83 c4 30 5b 41 5c 41 5d 41 5e 41 5f 5d e9
+RSP: 0018:ffffc900041ff430 EFLAGS: 00000206
+RAX: 56b6579f03543c00 RBX: 0000000000000202 RCX: 56b6579f03543c00
+RDX: 0000000000000001 RSI: ffffffff8db7ed49 RDI: ffffffff8be07960
+RBP: ffff88801cb58b58 R08: ffffc900041ff808 R09: 0000000000000000
+R10: ffffc900041ff5b8 R11: fffff5200083feb9 R12: 0000000000000001
+R13: 0000000000000001 R14: ffffffff8e13f2e0 R15: ffff88801cb58000
+ rcu_lock_release include/linux/rcupdate.h:341 [inline]
+ rcu_read_unlock include/linux/rcupdate.h:897 [inline]
+ class_rcu_destructor include/linux/rcupdate.h:1195 [inline]
+ unwind_next_frame+0x1ab1/0x23d0 arch/x86/kernel/unwind_orc.c:695
+ arch_stack_walk+0x11c/0x150 arch/x86/kernel/stacktrace.c:25
+ stack_trace_save+0x9c/0xe0 kernel/stacktrace.c:122
+ save_stack+0xf5/0x1f0 mm/page_owner.c:165
+ __reset_page_owner+0x71/0x1f0 mm/page_owner.c:320
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1406 [inline]
+ __free_frozen_pages+0xbc8/0xd30 mm/page_alloc.c:2943
+ vfree+0x25a/0x400 mm/vmalloc.c:3504
+ copy_entries_to_user net/ipv4/netfilter/ip_tables.c:866 [inline]
+ get_entries net/ipv4/netfilter/ip_tables.c:1022 [inline]
+ do_ipt_get_ctl+0xebc/0x1180 net/ipv4/netfilter/ip_tables.c:1668
+ nf_getsockopt+0x26e/0x290 net/netfilter/nf_sockopt.c:116
+ ip_getsockopt+0x1c4/0x220 net/ipv4/ip_sockglue.c:1777
+ do_sock_getsockopt+0x2b4/0x3d0 net/socket.c:2398
+ __sys_getsockopt net/socket.c:2427 [inline]
+ __do_sys_getsockopt net/socket.c:2434 [inline]
+ __se_sys_getsockopt net/socket.c:2431 [inline]
+ __x64_sys_getsockopt+0x1a5/0x250 net/socket.c:2431
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xfa/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fb026b9148a
+RSP: 002b:00007fff93b01148 EFLAGS: 00000212 ORIG_RAX: 0000000000000037
+RAX: ffffffffffffffda RBX: 00007fff93b011d0 RCX: 00007fb026b9148a
+RDX: 0000000000000041 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 0000000000000003 R08: 00007fff93b0116c R09: 00007fff93b01587
+R10: 00007fff93b011d0 R11: 0000000000000212 R12: 00007fb026db8be0
+R13: 00007fff93b0116c R14: 0000000000000000 R15: 00007fb026dba020
+ </TASK>
+rcu: rcu_preempt kthread starved for 10620 jiffies! g18665 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R  running task     stack:27728 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5258 [inline]
+ __schedule+0x150e/0x5070 kernel/sched/core.c:6866
+ __schedule_loop kernel/sched/core.c:6948 [inline]
+ schedule+0x165/0x360 kernel/sched/core.c:6963
+ schedule_timeout+0x12b/0x270 kernel/time/sleep_timeout.c:99
+ rcu_gp_fqs_loop+0x301/0x1540 kernel/rcu/tree.c:2083
+ rcu_gp_kthread+0x99/0x390 kernel/rcu/tree.c:2285
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+RIP: 0010:pv_native_safe_halt+0x13/0x20 arch/x86/kernel/paravirt.c:82
+Code: cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 33 9e 2a 00 f3 0f 1e fa fb f4 <e9> 48 ee 02 00 cc cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90
+RSP: 0000:ffffffff8de07d80 EFLAGS: 000002c6
+RAX: 741d0ec708556100 RBX: ffffffff819786ba RCX: 741d0ec708556100
+RDX: 0000000000000001 RSI: ffffffff8d997e54 RDI: ffffffff8be07960
+RBP: ffffffff8de07ea8 R08: ffff8880b86336db R09: 1ffff110170c66db
+R10: dffffc0000000000 R11: ffffed10170c66dc R12: ffffffff8fa22f70
+R13: 1ffffffff1bd29b8 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff888125c25000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 00000000755b0000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
+ default_idle+0x13/0x20 arch/x86/kernel/process.c:767
+ default_idle_call+0x73/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x1ea/0x520 kernel/sched/idle.c:332
+ cpu_startup_entry+0x44/0x60 kernel/sched/idle.c:430
+ rest_init+0x2de/0x300 init/main.c:758
+ start_kernel+0x3ac/0x400 init/main.c:1208
+ x86_64_start_reservations+0x24/0x30 arch/x86/kernel/head64.c:310
+ x86_64_start_kernel+0x143/0x1c0 arch/x86/kernel/head64.c:291
+ common_startup_64+0x13e/0x147
+ </TASK>
 
-- After this patch
 
-  Modules linked in: xfs nvidia(PO) nvme_core mlx_compat(O)
-  Unloaded tainted modules: nvidia_peermem(PO):1
-
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 ---
- kernel/module/main.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 710ee30b3bea..1ad9afec8730 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3901,7 +3901,10 @@ void print_modules(void)
- 	list_for_each_entry_rcu(mod, &modules, list) {
- 		if (mod->state == MODULE_STATE_UNFORMED)
- 			continue;
--		pr_cont(" %s%s", mod->name, module_flags(mod, buf, true));
-+		pr_cont(" %s", mod->name);
-+		if (mod->version)
-+			pr_cont("-%s", mod->version);
-+		pr_cont("%s", module_flags(mod, buf, true));
- 	}
- 
- 	print_unloaded_tainted_modules();
--- 
-2.43.5
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
