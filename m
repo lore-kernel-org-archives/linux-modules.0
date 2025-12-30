@@ -1,180 +1,121 @@
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D3F259C84;
-	Tue, 30 Dec 2025 16:46:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5576126C38C
+	for <linux-modules@vger.kernel.org>; Tue, 30 Dec 2025 18:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767113176; cv=none; b=WdA5OuaPwdyU2aYtoq9+grGHM7qyQ8X8waeF7EjYSvYt7sK/RnW5AMVgubh1HrLWXdJrZ+/3G4lFj5Yu4KiFlRtX9xN6ec2E5CwQcAsxBRHiiaah6Ev1fi4z/7dgoEbp78p5O9hrEG3WUQcgyCJNZAl7Jv4YEz59lNMQC1SswnA=
+	t=1767119571; cv=none; b=cA1Ccyc/QSfyxKWzXwyKPSodGXxN+d2Snc0jpC/Ndafnx2Ys5d0v7AfBzeX2a3tbkI1l6UPxLyWP9dr/wilRQWDcgWTrKSNQngbRKGyy5Z+uNKzIp78AL0LPaGQuuSUI+qPZc/4pN/LjjBfAgUHaNaQzqVpijwA/3SN9BB5eLSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767113176; c=relaxed/simple;
-	bh=R4SxyFI83waj6Lu9i7GQ4O/KwnSnmH1EUTPwS0QAwhc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BiuxYcH7+vvN4ICAuzCYRLA3hVhSiIXHUXhYF5ru+4Q2CLsXeqLp0quCytgVSq5dnyhM9j7hGY//6UhlvEOOyxiD9pKdwHxk37VRjT6rfS/I5VFLeznbqaUMhwhVRhcKlY4iA8wJ6CkU2bkol/kjgMeEGFX8pDp8wp8DHM3vyss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay01.hostedemail.com (Postfix) with ESMTP id 3A4561AC02;
-	Tue, 30 Dec 2025 16:46:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id 3C3872000E;
-	Tue, 30 Dec 2025 16:46:00 +0000 (UTC)
-Date: Tue, 30 Dec 2025 11:46:08 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Andrew Morton
- <akpm@linux-foundation.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Christophe Leroy <chleroy@kernel.org>, Randy Dunlap
- <rdunlap@infradead.org>, Ingo Molnar <mingo@kernel.org>, Jani Nikula
- <jani.nikula@linux.intel.com>, Joonas Lahtinen
- <joonas.lahtinen@linux.intel.com>, David Laight <david.laight@runbox.com>,
- Petr Pavlu <petr.pavlu@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Tvrtko Ursulin
- <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
-Message-ID: <20251230114608.4d016ad3@gandalf.local.home>
-In-Reply-To: <aVP7XVtYwb4YV9gy@yury>
-References: <20251225170930.1151781-1-yury.norov@gmail.com>
-	<20251225170930.1151781-8-yury.norov@gmail.com>
-	<20251226115848.298465d4@gandalf.local.home>
-	<20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
-	<20251229111748.3ba66311@gandalf.local.home>
-	<9833cb61-1ec5-4cc1-ad9d-3e07f3deff80@efficios.com>
-	<aVOTbArAxmbT5LY9@smile.fi.intel.com>
-	<71767aa7-0247-4bcc-8746-3338905197b3@efficios.com>
-	<aVP7XVtYwb4YV9gy@yury>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767119571; c=relaxed/simple;
+	bh=7tOkvUuh/6GiISbyLheGU4///m4131Mud4EO3Yo/+h8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EAtVoq39RF9gxGpfp/QCMA8RRX0rbgdmf+FiR/v8LJ1Ha9KHVrpi/I4K/2txKumPE2g/u5HoSxFLnWdWOXJNYb7sm56CX+clP9D52JHzQ0Y7t4ZD75DWAa7XdAIa6A6Qw1JYcKAE047pgLEUttR/u6WsTkH8WSxeOZLKWRHbVw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ljkaMa7g; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ljkaMa7g"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767119557;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DCQNXUyI4+4dxZcbehNgpALRC5lYnrYiYesNBz6jLuo=;
+	b=ljkaMa7g+vz0DJtiPRobYhg5W1nIKDxVIbF6J/hF5dmMLV3OmjVt9m5W1Dm9ZXkL/4H8lI
+	0SDYaYqx+RHkkflqjEdd3wDL7hoLnSiptCQvIkZWHG+pRyEcOtr0LhKnxE0Zu4Xq1dKt2c
+	3GOoS7NI44N7E8aVFuSaOB+Zvy9fghs=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] module: Fix kernel panic when a symbol st_shndx is out of bounds
+Date: Tue, 30 Dec 2025 10:32:08 -0800
+Message-ID: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 4i9hewjpr3gbis1q6d3ttnkhanok4op7
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 3C3872000E
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18O6dPuVd6GpggnxnHsJ7vt65oCGcSBmjI=
-X-HE-Tag: 1767113160-914064
-X-HE-Meta: U2FsdGVkX18pw+VknCW4DxjOFTSyQBTc345WFVz/6FnLY9YrBVc+F9/yrODI8xntUzXr6QDAUTdwfVKc2ji52wMkx+htI+Dz48K8SQi/wWRO2PFdggctocbIDZ5uEWPoDkRnaAh25vBcp2AJUUygYwNwh/JrMwAbIPXdqK9Tcrzvo7CnkiLt7z4jGH0nkAFlAvkuq4vJv4757f0HurjAvcOTdxeG8PfzZHXSAP7l2112HEI/BbnRhX84nNssrD2zF9mPTP/WWzuKXZzPJFvm6bYURwv1iQUdmJ4Btt6EYP/lD/A5Gh+qz40ZHZK6TEeWi+OOS6gMWcRgJnjXFYTpHVKKNdF2FB0XpS+54YY1zUvhwOh/RzvjoRCBjkhlhsp+
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 30 Dec 2025 11:18:37 -0500
-Yury Norov <yury.norov@gmail.com> wrote:
+The module loader doesn't check for bounds of the ELF section index in
+simplify_symbols():
 
-> On Tue, Dec 30, 2025 at 09:21:00AM -0500, Mathieu Desnoyers wrote:
-> > On 2025-12-30 03:55, Andy Shevchenko wrote:  
-> > > On Mon, Dec 29, 2025 at 05:25:08PM -0500, Mathieu Desnoyers wrote:
-> > > 
-> > > ...
-> > >   
-> > > > One possible compromise would be to move it to its own header file,
-> > > > and introduce a CONFIG_TRACE_PRINTK Kconfig option (default Y) that
-> > > > would surround an include from linux/kernel.h with a preprocessor
-> > > > conditional.  
-> 
-> We already have CONFIG_TRACING, and everything in the new
-> trace_printk.h is conditional on it. We can protect the header in
-> kernel.h with the same config.
+       for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+		const char *name = info->strtab + sym[i].st_name;
 
-Tracing is used in production all the time. So I think we can have a new
-config just for trace_printk(). I was actually thinking of adding a
-CONFIG_HIDE_TRACE_PRINTK, with the description of:
+		switch (sym[i].st_shndx) {
+		case SHN_COMMON:
 
-  trace_printk() is an extremely powerful utility to debug and develop
-  kernel code. It is defined in kernel.h so that it can be easily accessed
-  during development or having to debug existing code.
+		[...]
 
-  But trace_printk() is not to be included in the final result, and having
-  it in kernel.h during normal builds where the builder has no plans of
-  debugging the kernel causes wasted cycles and time in compiling the kernel.
+		default:
+			/* Divert to percpu allocation if a percpu var. */
+			if (sym[i].st_shndx == info->index.pcpu)
+				secbase = (unsigned long)mod_percpu(mod);
+			else
+  /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+			sym[i].st_value += secbase;
+			break;
+		}
+	}
 
-  By saying yes here, the include of trace_printk() macros will be hidden
-  from kernel.h and help speed up the compile.
+A symbol with an out-of-bounds st_shndx value, for example 0xffff
+(known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
 
-  If you do not plan on debugging this kernel, say Y
+  BUG: unable to handle page fault for address: ...
+  RIP: 0010:simplify_symbols+0x2b2/0x480
+  ...
+  Kernel panic - not syncing: Fatal exception
 
-And then have in kernel.h:
+This can happen when module ELF is legitimately using SHN_XINDEX or
+when it is corrupted.
 
-#ifndef CONFIG_HIDE_TRACE_PRINTK
-# include <linux/trace_printk.h>
-#endif
+Add a bounds check in simplify_symbols() to validate that st_shndx is
+within the valid range before using it.
 
-This also means it gets set for allyesconfig builds, which I doubt anyone
-wants to debug anyway.
+This issue was discovered due to a bug in llvm-objcopy, see relevant
+discussion for details [1].
 
-> 
-> > > > But please make sure the default stays as it is today:
-> > > > include the trace printk header by default.  
-> > > 
-> > > "by default" where exactly?  
-> 
-> Seemingly nowhere.
-> 
-> > > The problem is that kernel.h is a total mess and
-> > > it's included in a lot of mysterious ways (indirectly),  
-> 
-> Yes!
-> 
-> > > and in C you _must_
-> > > include a header anyway for a custom API, just define *which* one.  
-> >
-> > This patch series moves the guts of trace_printk into its own header
-> > file, which reduces clutter. So that's already progress. :)
-> >   
-> > > 
-> > > Based on the Steven's first replies I see a compromise in having it inside
-> > > printk.h. If you want to debug something with printf() (in general) the same
-> > > header should provide all species. Do you agree?  
->  
-> It may sound logical, but I don't like this idea. Printk() is used
-> for debugging by everyone, but its main goal is to communicate to
-> userspace and between different parts of the kernel. Notice how all
-> debugging and development API in linux/pritnk.h is protected with the
-> corresponding ifdefery. 
-> 
-> Contrary to that, trace_printk() is a purely debugging feature. There's
-> no use for it after the debugging is done. (Or I missed something?)
+[1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
 
-I actually agree with you here. I don't think adding trace_printk.h into
-printk.h is appropriate. I only said that anywhere you can add a printk()
-for debugging, you should also be able to add trace_printk(). I believe
-kernel.h is the appropriate place for both.
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ kernel/module/main.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> 
-> Everyone admits that kernel.h is a mess. Particularly, it's a mess of
-> development and production features. So, moving trace_printk() from an
-> already messy kernel.h to a less messy printk.h - to me it looks like
-> spreading the mess.
-> 
-> > I don't have a strong opinion about including trace_printk.h from either
-> > kernel.h or printk.h. As long as it's still included by a default kernel
-> > config the same way it has been documented/used since 2009.  
-> 
-> Can you please point to the documentation and quote the exact piece
-> stating that? Git history points to the commit 40ada30f9621f from Ingo
-> that decouples tracers from DEBUG_KERNEL, and the following 422d3c7a577
-> from Kosaki that force-enables the new TRACING_SUPPORT regardless of
-> the DEBUG_KERNEL state.
-> 
-> To me, decoupling tracing from DEBUG_KERNEL looks accidental rather than
-> intentional. So maybe simply restore that dependency?
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 710ee30b3bea..5bf456fad63e 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+ 			break;
+ 
+ 		default:
++			if (sym[i].st_shndx >= info->hdr->e_shnum) {
++				pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
++				       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
++				ret = -ENOEXEC;
++				break;
++			}
++
+ 			/* Divert to percpu allocation if a percpu var. */
+ 			if (sym[i].st_shndx == info->index.pcpu)
+ 				secbase = (unsigned long)mod_percpu(mod);
+-- 
+2.52.0
 
-Absolutely not. Tracing is used to debug production kernels, and things
-like live kernel patching also depend on it, not to mention BPF.
-
-> 
-> Currently, even with tinyconfig, DEBUG_KERNEL is enabled (via EXPERT).
-> And even if EXPERT and DEBUG_KERNEL are off, tracers are still enabled.
-> This doesn't look right...
-
-Looks fine to me.
-
--- Steve
