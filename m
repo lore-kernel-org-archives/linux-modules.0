@@ -1,190 +1,215 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021092.outbound.protection.outlook.com [40.107.192.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1DE1DDC2B
-	for <linux-modules@vger.kernel.org>; Tue, 30 Dec 2025 14:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767103968; cv=none; b=XdGZJg5C9VPda5MidK0UatzSQjO6Gav18QIqc9pJL6ODNSblGpegv1fKyPnaeKkbPVDoYTeM8yCc7hJFICDZrHsFfH60qhRsAxOT8YO+1TnyHGnxbRDIRvTv5/E4gJ8QLWRFKvJLubtTo95CYFUKs5JOoHkH6Kru9IcHjbUF7TQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767103968; c=relaxed/simple;
-	bh=8fHyW/Ti4zAza9adcbyQaRbJEdxoFUhmiWRIaEAI3TE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eA4WbaA1Gzpt+BvPtvfhoml3sQcNUBFI+ttd2tguiv9WtB7E+LzG+Utbt4clgeRcPcuxu/fFp8aTiRm6GlY96GwYmgnI4kYu+4qA12FQak+Ed1zvFnPWbaUvKRsXxxX7k6dxWkm0QnU05bTBf/2L7ovpVV/1tc+bRNpNs2kn5KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gh9AdfgY; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB68A15E97;
+	Tue, 30 Dec 2025 14:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767104471; cv=fail; b=L094c12JV5/OpxV9Fn9sZdD6Y86hHk+wrTV71CzQHgFI/7xP/IBrV02UdSKxG0KE0WB1JImHapIzyTfZpMp9rqeUqCm7LNfsAFX2jcbKIOM+HttjLUT3CZGV2EB/2ecdjN2k60Mr0qTSp/T7YtdZVQhrP452uBmgxZLmAxve+wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767104471; c=relaxed/simple;
+	bh=QLzMJ3XjRawcJgfY+qu8EBxmlNae8OD0C0EGP8Sx5MQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=K5uiqGhCv7tRJqydWs/b8F/LpgLCjFD/EEOfbHIdgqt/O1vSiHZOEY6MYaM4dOKciJQGOBup3xUWIaba8Lc8Zf3hZ3hi85uFub0S+H0tyRnfUTlQR3/aVCdYHd7of+ep1x46ZvAfEE4712VTrdh/0jsOWM4fursijdG3/YA5NNI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=dBYbn3FU; arc=fail smtp.client-ip=40.107.192.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gh9AdfgY"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-78f89501423so113666207b3.1
-        for <linux-modules@vger.kernel.org>; Tue, 30 Dec 2025 06:12:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767103966; x=1767708766; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vw0rUmD4sTrIxkgrINNUcSHVW2jZ3z1T7XxFrwVbvsk=;
-        b=gh9AdfgY2JrjWvPrsIaUfOrDd7CL6bZ0TShoOnW1W/ZVldmF9vT9u87bOvErDMgEhQ
-         6FcnrSsIGSHcD0vNQP6lYOav5G+euPyu63d9XDdBI64yq80gbLL/oZfXzS6AmWjPmqq2
-         N2Y3QLUooi/sXB5OfZj3U0aBAiX+kF0xt7w2ZB6P/8F38Pwouk3KIRaROLtwt5IBwV0C
-         PAnGiRMoi8slbTnYjk5UYJm1/joTHEM+e9CvFxmk21A63fwb1T4woikTVdDNsaIe87zs
-         i/+lVkyFQg/As43Lpj6R6Tay0/iqXDdkgN0u52sGZtZESA14ZJqwNYDWmN0OReos5xph
-         XRsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767103966; x=1767708766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=vw0rUmD4sTrIxkgrINNUcSHVW2jZ3z1T7XxFrwVbvsk=;
-        b=psbwXkec50ucvZWgGSBZT4aOz7BQKrVBZbAhUu5XWCYZ/gDXyo5qef3nhBaoaJ2ziR
-         eQjPGbjD3LRO1XPTOQs9N4XjvVwJrIf5Oo4PQvytYO8gcxmzTQ+iYXuiM7mjCmbG1AbO
-         LlU8yH+V5G9Ghc0tBnc2gs76027kkXxboxiiMFE6uTgo2H6Fv5dbrs/O6k9XL6wZU2bW
-         bXb33KBfDoad+Vxz2gaA7j117zn8w6PVDImxDVG/oUQWb+N/AroZpWzZ5HHnorDI1MrH
-         qia8EtJzA4zmib2YrlzkQYKo98VvqmlOK6rBKLv7uxbhbErdqXYSO9b9BzfmFn7YeU14
-         LNLw==
-X-Forwarded-Encrypted: i=1; AJvYcCVZLlG9PWSD1PUEOuSVMZsrizhl1W71YJCLFD4Sefrw+CmwJVuGlN6q1U2bQJHRPO0DLuwJO8lJYg1sGa+o@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3n3Wqj6PDnZenD5cJ5asxxH9cMMA3eIBIqzu0qOSSj5bf1rDP
-	/P4cJsUZrGITIxSWoDyDsGhYmZ5QvJVe0jHyndV36Yy6w7Bwgk9IdjrDub1o3Gw4gkU6rE3IWZO
-	8e2L9qZQ3acq0ae0MwW8LJDvbRFbO2TlRgZGl
-X-Gm-Gg: AY/fxX7ccW78E4e2djhK88Nttj+5MUylZyOZGJibd0mo8TdlcXD6wpKMUyph3S15ERT
-	seSR7QPyQGDh4F5cH41GN/nCXNvOLrMEUJ5QFdF4218KGnuxb3G52XMBLa3vVVxqykRtcle+Ivu
-	+5kxb/N31aOR0mAhZxuhtrDPfUQPfeqTlyaQwTF3CWCJY8XtrswMOgeVs65ct67m4tRP04G2RJM
-	EPhEECBg/tzkb1EuXadS+fEj8or7OiNXLk1U9lf1sipCxHZqBcLkn+YW/jP003E/PVrmyEsUeq7
-	rBZHIPE=
-X-Google-Smtp-Source: AGHT+IEoYfeCP1ZZv1nKo1yA/OrpocPbZSb2Qv1jWTQ4AjnbVG3FJHd7cwvHfHGtX4PySl/7ZMjLcE1VxFCFbkVx3W0=
-X-Received: by 2002:a05:690e:12ce:b0:646:8ae1:f92a with SMTP id
- 956f58d0204a3-6468ae1fa90mr18428047d50.47.1767103966095; Tue, 30 Dec 2025
- 06:12:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="dBYbn3FU"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=h7MFn/wt9+b0IubkS3+hnAMbNzvHIJs6gj11CkXlZdkwAYqrvas76IXiNOTyuZXa9JYZKyR4CUIveFgZYI+ln63reEeRpVghgJfIpvyJ6+LApuYLqkJ9RsVpivOyFnNpFXTJPSHH9gkDIe6VkHriwS9ktUNWmzirWYI0+k8XxC9V0pSSd7XeNzvfpXxgMHxpTSi+40Ex2cwi8EPje3QT8c67OyG2apT+svx+ATO5QvU/2VaSeOax+gDhmXRkDpUdjK5jaZKSzbob+4u2djj2w/c8tc0K5nHxUJ8vzHhhM663ddnqJM8z6Nps9xU8JkCxR/2XJaazH2M79PwGeb3aCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xmfOm970tR0LMfVhppECJYwa31qtTvA7VdHsreylcy0=;
+ b=b4FEQOdTnsgtfp9nfCzIyJjb4Txv0Dw+q6gvaBSfqLpLcI1gGeMO+GOSQYwtU7jnZAg5c4zDhxsLUqlVVGE0VSQH/JeHRB2NIvZU2PFq4qPnOpIMnq5o7SiHdTiz7juuSPmw7U1fM1MaefOVWZoLNp7NbTkQPUfo/5nAYCrw1CreT2hgoxwFxsZLR4ZOkDR2wm/okAyMzC4etrFCmb+E4MxRSqozJy4vhTMJpTcwSFmEUv7Mb4fNaVSH7kAheQntyW8RXVfhUQZiuvbO5NIulgRpraMc5B0nmoQlpPcpFcgmvT+Xtc357PFzeOAQDIsdwRzO4gzsb2aQhs/qr1uBuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xmfOm970tR0LMfVhppECJYwa31qtTvA7VdHsreylcy0=;
+ b=dBYbn3FUM8OpJ3zUhI4YcRuiN2Mvp+duZAFXmB8IfYS6pTZtbLRmXAKybWQWb5TID7mmkLKSKGBybTKWQXBhLWsCq6U6a3vpcDHLHJJkyZaa4XWAULe4s2alH1/hwiMeuHD3WB3dSkU48KZAoqgz8E1vDGewuxWJInhmleh2VEVPzBdxgJC0E1ydpmZ2Z4p/VxCz78RC/73TNX5azPl5615aDoRXuCRg6Ge4nD+cy5nOdpq6lPSD76l2TPOYHQf72j9oERBBTitkIXZcjEtbS0lCR+QQgAMezaMND1P8GsjZ7q9EkAzfloXama8jX+zzWDSFxoI3Ptp2qr8Fv5pFEg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
+ by YT3PR01MB10796.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:95::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Tue, 30 Dec
+ 2025 14:21:04 +0000
+Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6004:a862:d45d:90c1%5]) with mapi id 15.20.9456.013; Tue, 30 Dec 2025
+ 14:21:04 +0000
+Message-ID: <71767aa7-0247-4bcc-8746-3338905197b3@efficios.com>
+Date: Tue, 30 Dec 2025 09:21:00 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+ Masami Hiramatsu <mhiramat@kernel.org>, Christophe Leroy
+ <chleroy@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Ingo Molnar <mingo@kernel.org>, Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ David Laight <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-modules@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20251225170930.1151781-1-yury.norov@gmail.com>
+ <20251225170930.1151781-8-yury.norov@gmail.com>
+ <20251226115848.298465d4@gandalf.local.home>
+ <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
+ <20251229111748.3ba66311@gandalf.local.home>
+ <9833cb61-1ec5-4cc1-ad9d-3e07f3deff80@efficios.com>
+ <aVOTbArAxmbT5LY9@smile.fi.intel.com>
+Content-Language: en-US
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <aVOTbArAxmbT5LY9@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0345.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6b::19) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251229024556.25946-1-laoar.shao@gmail.com> <971b1fd7-5702-4cf7-ba84-aedde0296449@suse.com>
-In-Reply-To: <971b1fd7-5702-4cf7-ba84-aedde0296449@suse.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 30 Dec 2025 22:12:09 +0800
-X-Gm-Features: AQt7F2qHtwGiy125cBPBzxihO5k0woWzVUT8wm7gFLPARBxX1UgvgSDw8HM-Q4Q
-Message-ID: <CALOAHbBF_Q02amBXKh_iGPepp_-CbF91a-HAXa3pSnO4qBnX4Q@mail.gmail.com>
-Subject: Re: [PATCH] module: show module version directly in print_modules()
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT3PR01MB10796:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d66e775-d2bc-46b7-a473-08de47aeaa4c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?a003RE0yYk1ra0FKRXZ0ZzRjT3B2U2toTkhYMXFVZlhQeXpHVURIekpmMmhl?=
+ =?utf-8?B?Z2tTYUk0VGh4MnhlQVZBZFA1Mnc2WVVFZzJ3cTUwTGtXMXpPR3RIMlV3V1My?=
+ =?utf-8?B?UzVIRTgwTkNoYS8zV0VzMmJBWkZxSVBYTTdsLzJaSnZ3T2tpL0Jhbk95T09j?=
+ =?utf-8?B?YVpZbVMxdEQ4enViVWNkcm5zcEJLVVlucXpMSUlzNkNDU24vNGF0QVpTZnJQ?=
+ =?utf-8?B?cmtYTEp3ajZHYis1bzFteEt2ZFpDQVNCMXc3Y3VuUHN2ek5DZnlyeXl5RlJG?=
+ =?utf-8?B?cEVSYmJPL01tdTNFTzNydGVmbjJNODl4MTBUYW9KZHVmOTNqZUdUZCtuclMx?=
+ =?utf-8?B?RnZXaE5oc050Wk5uNmtkWER6V0huSWdXMW5KR3J4V05BR0lZZ1FwWVUyNnFw?=
+ =?utf-8?B?M1loWHVhZ3Eza3N5Vi9BclY4VFc0WFZUZE5iK2lIQ3JJTlhRUnBsNGpGSG1t?=
+ =?utf-8?B?bzVvTGtkcFh6ai9URlRoL1BlcFhCNEMrUFlMdVRHSitsRldJQzhZT1BoRmtV?=
+ =?utf-8?B?RHpTM2VzU0pHbFJVcm1qNmJXUVorT3duZ1djczd5dkZ2cktGaWhyYjBpeTFk?=
+ =?utf-8?B?TExNUEV3MUpUZnNuMlJTZnRxUzNzdWdzUnExVmd3MVdPSzBZMHVCTUxnVXRC?=
+ =?utf-8?B?NHFTOW5YQTlVclVOdVZacGlxVk9SbWZYSEVkN1YvQXZLWVNsazdjSTE5RnpT?=
+ =?utf-8?B?QUdmY0c2SDRCUXlpUEFLOHRuaFlKcVlXV2hPelpuZFdLYndMRUYzbnZVZERF?=
+ =?utf-8?B?YWptUVp1WjRCREtBVld1YktJNDlMZWl6WTRCbFBwUlFYWXJNWnRJdTFVQzVO?=
+ =?utf-8?B?N2NXeFk4VTZIb3VQSUhCTXY4a3JVcFpibHpiWEFpUEp3dklSRmFHV0wrZVFK?=
+ =?utf-8?B?YytsdGRKTHhkWmp3MWFMOHFtWWlLcFpwSlV4OHRod0tsNWk2Q0lqOTJzaU9N?=
+ =?utf-8?B?S25SSHkvTldNcXpDMzJ0TE9ZUmdVN1kvd1VzblBKMjdYRnZlRGpyVWdldGNM?=
+ =?utf-8?B?aXk5M3FrVGRVd1hBL1RqQWtlbkFhbmwrZnd4L0d5YXc0TGd6NXdnTnVTWitK?=
+ =?utf-8?B?N1ZoU2NXbk12NVp5ekpwMDhBN2hPU3dWRk9OblNzYUM3a0NHU0JWNDAwempT?=
+ =?utf-8?B?R0VBc0gyOFlRblkzOEpVSDcza1JxTVRLOWxCclpvVUpWVW40REhNUXF0WHhp?=
+ =?utf-8?B?Z09GVWp3TnpWem4yTU9VOE1TbkZaTXF5TDlyV1R0dmhHbzRtOFowbkVIMEg5?=
+ =?utf-8?B?SVpiRVRVYmZjZldmUm84ayt3WGhOcVBUMEtVVXhVQ2pTaEZKMUNLUlQ4NURi?=
+ =?utf-8?B?SUZuVnZQOVlHUzFCL1JBRE1SL0VqTURaQkZibXNFNkl6MnQ3SEovSi9UL1Qx?=
+ =?utf-8?B?ZW1qYUFza253ZjdTRGl1ZnNTU1FUeVE3ZHQvdUxxdk5GSWdxeFNyY3JiMVVC?=
+ =?utf-8?B?MjQ5VG1MZFMyM0J6QzVlS0o0WE9reVlDV3F5V2szYnNCUEVNckR4NDhMaFFt?=
+ =?utf-8?B?TVpqbjg1alpyYmJjRnFzanRYcmora09UbXZ2YjNyQlZUT21NWUE2aUZETTRG?=
+ =?utf-8?B?SjNKVXRoY3YwSnA2Z3VtYzl0Wm02c1N4QU9OTzU5ZDJoeWFKdEt0a1MxUUtW?=
+ =?utf-8?B?dHhmTWxXa2JmcDlLeUNKVm1WL0pMdHh2YUF6b3dMRkdoc29Ra1JzTEltcHYx?=
+ =?utf-8?B?aEViSlVSbmlQU1BydjBVYlk0TkN6VGhpcEpTcFVqUEthYnpJTjlmK3RBSWUw?=
+ =?utf-8?B?NktyRXdqZ1V1KzdKVnp2eFp1T0YyK0ZZVEtIdXJVTW5yTndHVEVKaFBRekxy?=
+ =?utf-8?B?ZGliaTNSUURFak9GeVdsWVJ6YVhhRk1XYmtxaE9sWkliU0IwTTJDbHNEZENN?=
+ =?utf-8?B?Wk5lUVhzbW1iVzVpYVl0VnBaOTZKNjNIS2ZodnJLbGVSZWc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?d2hvZUxrem9kdm50NVUySFRPVXZyenE2eXRwZnFJSVpqOEhYbzZyNGd0NVZw?=
+ =?utf-8?B?dVhONEZEc29MVWhvVmVVQXlPdk9FQ0JIZUdvdkZIRExUaG01N3U1Rno1M1VL?=
+ =?utf-8?B?cGxsd1MwUFhJdFhpQ3IxUVdETkVvb3diaHVSWnRNSDNDQWVzcjlDbllXRmxE?=
+ =?utf-8?B?VTBzbzZ6bWJBQS80YkdhcW9RNlZHbm1vWVh4dHZ6NmJaNlhndCtyVUJLblp0?=
+ =?utf-8?B?R0gvbWZnYVdjTngxeUt6VVBJWC9BdCtnaExNd1lEdEdZQnZNR241Tm1jd0F1?=
+ =?utf-8?B?QUVFbDRSK2pKM0hycVc1a2lWajZxNDkvTUJ5eHBQbnMxcGhvdTR4NzZ0Yk13?=
+ =?utf-8?B?dHhram9LRWNzTUlFK0xZOUFUMi9VVTFOdUMrOUcrd21RZGx0MWt4MGQ5RWdw?=
+ =?utf-8?B?SFNYcVF6UkJDQ1ZOK3FiU3ppUEY3V1hzMWlBcW5Rb1ZpRDBPZ2ttMGY3WENk?=
+ =?utf-8?B?Mnlucnp3OTNlTU9zNmJLZ1ZKK0E4TjlCMHdKR1JldmpEMXpPWTR6b3l1QkNX?=
+ =?utf-8?B?UnQ2SGJpTzVzLzI3eWM1TUYwZHI2OHhiRGw1d09vdE9TQ2RhcjVkUFBzWkdK?=
+ =?utf-8?B?YlQrZlVtbmUvSmlxY3VhY2hycVhpZTVQRk82dkM0Z0srQ3NzVk00Q2xUQnlq?=
+ =?utf-8?B?RjhEdEEyZWpMNDU5dnI2R2JKVzBlOW5wb3JiMkUxRHdpbzdSc2tjUXF2MHQ0?=
+ =?utf-8?B?M3RYVUtaaENSOHpXYzNDR2xxMU9zVGthZFc0VDdLaTVyaU9BbHZ2RkU3RjR3?=
+ =?utf-8?B?RG5mWVRtdDdqWUp0QWQ5N3JPRjFNZWxvRGpVVDB5OGwydXlRNExDODdsVWFu?=
+ =?utf-8?B?d3hsVm9sTGRsR01xZjM3ZVdkWUhqUUhNNkFBYlVhbUI1ZExNU1JpYUhERzJY?=
+ =?utf-8?B?NGtFUXRXUmp1dDFrMFpHaDRoWi9UelBMQ1R1RElPZDlCTkN4WXM3cHFFTGQ4?=
+ =?utf-8?B?V2VzdE5rT3V5R3NqU2xoQ09ycmRuLy9VY25JOFhyNjRwMGhjbUpyNWhUWU1J?=
+ =?utf-8?B?emR4WDkzN09RVHNxYXd0cG94Q0YrcXNYSkhqODFmK0ZwTHljZmdsR0Exa1Mv?=
+ =?utf-8?B?UGJhYVFvdUNMdkZiU3dPbG1oemVZNW9tQWtTQjMyd3p3OWdCd3ZTTThLUnVk?=
+ =?utf-8?B?cTBhenZhMlY1NXk4Vk5Pb3JOV1UwSjZ6OTBXS05vR2pETHRDNDZrbk5wVHBV?=
+ =?utf-8?B?V29ZM1pkblVONk5QTEM2MDIxWXRLY1Ivb0QrMTZybmd0Q2dlNFYwb3BYSnFF?=
+ =?utf-8?B?eEVkMG1LUk9QZEl6Q05ISWN5bmxhV1Y0TFY5WDg1RU0xOVp4YWZGMnlzYVhY?=
+ =?utf-8?B?VTRlaWd0T0JPK1dHQWJ1cjdINHFhdGFwREFNaG1nRXlmVTZ6SnRaM3RNdFFV?=
+ =?utf-8?B?Vko0bysvMTBxNjhhanhDcTBabkpSblJ3UnZxamovSmFGYkE3TmU5SkkwbnFI?=
+ =?utf-8?B?RXk0V20rZG9qOGZiRnNhTTJwNDIybWpKVlljY2EwMkY1NFl3OUhzQUxnajQw?=
+ =?utf-8?B?Uk1rRjdZOFdTZUJ5OU4rQnlxWHdOY3RyRG12aVJBQmlqS0hYeEEzTUNvbitE?=
+ =?utf-8?B?aE52dkQxU2NOZWdHdW51K3ZnbTZBTEk0Y3pTK2NIWjhmK2ZjZ1VwdGQ3aml4?=
+ =?utf-8?B?SS9ZVnNOQTV0S1JSNmtJaDc2SzdaTGhzaE0zb0dtRThaSXVyb1BEbWIwMEln?=
+ =?utf-8?B?eDZzaW9HZ1RxTHh0cEloTkx6N1B3ejN3eVFyR0EraEtjZ2RXUmFHMnVsSVc0?=
+ =?utf-8?B?aWNrM0JZd1l5UDY1OVFTYS9VbDNpYk41cFdKUlcrNnhyVmJmbmxaSjVUQmtX?=
+ =?utf-8?B?Vzg4UTNXWHZyWFlRbzcrNzQycUIzblJ5N21ncmNyc3d6SS9FZWk0NDhZVS9h?=
+ =?utf-8?B?eVZ1eTc1ZDJTQmlDMWJrVy9SdXF5TWFoRC8zQXlEZTdmeEQvS3RSSVBvODl5?=
+ =?utf-8?B?bzc3Nm5xMmZzWVZKVVdrQXRCUHM5eHB5dUwzdEtMalovL1UwWXBycytJZGZB?=
+ =?utf-8?B?M3ZTdm5odEt4ZDFnWitUYW5OMUJqTEozVk5tNUNGOVEvVU9jSi83ZXl6M25T?=
+ =?utf-8?B?UXBuWGtyUHh0VWtZV1FCMFZBbnRwam11WlVYNlU2UFB2ejhOalVCWUJIOGUw?=
+ =?utf-8?B?SnIzc21ZZFA5YzlidUN3eUVuRUpKZGVPcDFBTjZWN1RJK1ZHVURqUmNRYTdX?=
+ =?utf-8?B?SzMzSk5ianFFZERJQzRhYnREa2xnWDcwQi9BNnFjaXpCZElYM3czVnNUU1ZN?=
+ =?utf-8?B?MDZTTDhmT0FTYmQwQlNLVlR2eTloejdvYjhRaWhOQzIzRGRhbzM2b3V5TWVJ?=
+ =?utf-8?B?bkJHMkxXbHpPSzE0akRFdzEyUXpQYmY0RklDRFFubzBYRUhvQ2VVYzB6M1RT?=
+ =?utf-8?Q?G1HflB6xF7D/RPzA=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d66e775-d2bc-46b7-a473-08de47aeaa4c
+X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Dec 2025 14:21:04.1974
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tJCCHMKchYxyXY2sxleL8Lpf8nRlze7XuANf1WfsibXtaT/a9uWrNJvXAoUhd8ucx13la9EGZISrZKd11VMOIEoEo2Np32tJkrC4uEnrDRE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT3PR01MB10796
 
-On Tue, Dec 30, 2025 at 8:41=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wr=
-ote:
->
-> On 12/29/25 3:45 AM, Yafang Shao wrote:
-> > We maintain a vmcore analysis script on each server that automatically
-> > parses /var/crash/XXXX/vmcore-dmesg.txt to categorize vmcores. This hel=
-ps
-> > us save considerable effort by avoiding analysis of known bugs.
-> >
-> > For vmcores triggered by a driver bug, the system calls print_modules()=
- to
-> > list the loaded modules. However, print_modules() does not output modul=
-e
-> > version information. Across a large fleet of servers, there are often m=
-any
-> > different module versions running simultaneously, and we need to know w=
-hich
-> > driver version caused a given vmcore.
-> >
-> > Currently, the only reliable way to obtain the module version associate=
-d
-> > with a vmcore is to analyze the /var/crash/XXXX/vmcore file itself=E2=
-=80=94an
-> > operation that is resource-intensive. Therefore, we propose printing th=
-e
-> > driver version directly in the log, which is far more efficient.
-> >
-> > - Before this patch
-> >
-> >   Modules linked in: xfs nvidia-535.274.02(PO) nvme_core-1.0 mlx_compat=
-(O)
-> >   Unloaded tainted modules: nvidia_peermem(PO):1
-> >
-> > - After this patch
-> >
-> >   Modules linked in: xfs nvidia(PO) nvme_core mlx_compat(O)
-> >   Unloaded tainted modules: nvidia_peermem(PO):1
-> I feel that module versions are not particularly useful for in-tree
-> modules nowadays. They rarely change and therefore provide little
-> information about what code is actually running.
->
-> This is supported by their limited use in the kernel. In v6.19-rc3,
-> I see the following:
->
-> $ git grep '^MODULE_LICENSE(.*);$' | wc -l
-> 12481
-> $ git grep '^MODULE_VERSION(.*);$' | wc -l
-> 605
->
-> Moreover, in the event of a crash, the log should contain the kernel
-> version and usually also the vmlinux build ID, which should provide
-> enough information to identify in-tree modules.
->
-> However, based on the example in your patch description, it seems to me
-> that your main interest is likely in identifying external modules. If
-> that is correct, I see why it might be helpful to quickly identify their
-> versions.
+On 2025-12-30 03:55, Andy Shevchenko wrote:
+> On Mon, Dec 29, 2025 at 05:25:08PM -0500, Mathieu Desnoyers wrote:
+> 
+> ...
+> 
+>> One possible compromise would be to move it to its own header file,
+>> and introduce a CONFIG_TRACE_PRINTK Kconfig option (default Y) that
+>> would surround an include from linux/kernel.h with a preprocessor
+>> conditional. But please make sure the default stays as it is today:
+>> include the trace printk header by default.
+> 
+> "by default" where exactly? The problem is that kernel.h is a total mess and
+> it's included in a lot of mysterious ways (indirectly), and in C you _must_
+> include a header anyway for a custom API, just define *which* one.
 
-That's correct.
-The motivation behind this change is that the external NVIDIA driver
-[0] frequently causes kernel panics across our server fleet.
-While we continuously upgrade to newer NVIDIA driver versions,
-upgrading the entire fleet is time=E2=80=91consuming.
-Therefore, we need to identify which driver version is responsible for
-each panic.
+This patch series moves the guts of trace_printk into its own header
+file, which reduces clutter. So that's already progress. :)
 
-[0] https://github.com/NVIDIA/open-gpu-kernel-modules/tags
+> 
+> Based on the Steven's first replies I see a compromise in having it inside
+> printk.h. If you want to debug something with printf() (in general) the same
+> header should provide all species. Do you agree?
 
-> This assumes that developers of external modules actually
-> update MODULE_VERSION() in their releases, but I don't know if this is
-> generally true.
+I don't have a strong opinion about including trace_printk.h from either
+kernel.h or printk.h. As long as it's still included by a default kernel
+config the same way it has been documented/used since 2009.
 
-The external modules we currently use include the NVIDIA GPU driver,
-the mlx5 network driver, and related drivers such as gdrcopy.
-All of them carry module versions, such as:
+Thanks,
 
-  gdrdrv-2.5(PO)
-  nvidia-535.274.02(PO)
-  nvidia_uvm-535.274.02(PO)
-  nvidia_drm-535.274.02(PO)
-  mlx5_core-5.8-2.0.3(O)
-  nvidia_modeset-535.274.02(PO)
+Mathieu
 
->
-> As mentioned, most in-tree modules do not specify an explicit version,
-> so in terms of bloating the information about loaded modules, the patch
-> should have minimal impact in practice. Alternatively, the version
-> information could be printed only for external modules.
-
-Good suggestion.
-I believe it=E2=80=99s sufficient to print only for external modules.
-
-Does the following change look good to you?
-
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3901,7 +3901,10 @@ void print_modules(void)
-        list_for_each_entry_rcu(mod, &modules, list) {
-                if (mod->state =3D=3D MODULE_STATE_UNFORMED)
-                        continue;
--               pr_cont(" %s%s", mod->name, module_flags(mod, buf, true));
-+               pr_cont(" %s", mod->name);
-+               if (mod->version && test_bit(TAINT_OOT_MUDLE, &mod->taints)=
-)
-+                       pr_cont("-%s", mod->version);
-+               pr_cont("%s", module_flags(mod, buf, true));
-        }
-
-        print_unloaded_tainted_modules();
-
-
---=20
-Regards
-Yafang
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
