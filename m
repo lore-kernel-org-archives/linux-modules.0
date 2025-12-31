@@ -1,209 +1,152 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA82717AE11
-	for <linux-modules@vger.kernel.org>; Tue, 30 Dec 2025 18:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C5523278D
+	for <linux-modules@vger.kernel.org>; Wed, 31 Dec 2025 09:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767120865; cv=none; b=I5ZI4yrYiZ0Zfd2FHxHspITBfXtN5U26F7r/Oycd/LKrY88J1wQJgR4Gd70CKr2J1yM/qbJCnMDjtuUQqgrH6OuoQXGT5UGMiCH09ESob8LwqsidjeBeQto2TRgCfc8Eg9Oj1le7j7PMEyq5c8Vh7tHVvfjP5hiUl+Z/AsxHO4M=
+	t=1767174022; cv=none; b=RJiie0uUYdvEw3LbR2TTss4m2Eao4ajdnD96ZDL9NlNbFSiNcmTZds/hskzt1RkJtS50IE9vZr1hJJGuPNRFcADnfLPb74vCEAmDerZ/yUk9l4d7Z5FAuMNEvpmtTS65bic4hfXNTgJbugNZGL/vo2yaDY+LsIvhp5OQZE3UjLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767120865; c=relaxed/simple;
-	bh=bwBQoDsrR5ZTPISamJQ6/ETGzsI8HpMF3yru58EHxIo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c0WNtZdZXRpE5BbT0BWGqx+jEDdrwIypLiTVnrwhcfIFSiD59sGtoMGcp3s5pCBOkMO5RbPMU/YO/PZo6hIe3Z0AFW12I6py2cLmLgTxz8W5O1co2OhBVNEmmfadcTo+ISwqJ2HCnadlS9UTgAh07rI9JZc170vptm7AMcrVJJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGdIpuo/; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1767174022; c=relaxed/simple;
+	bh=gmm6NWGxypJYJf5vLWVdbtxQiU/ceK4+aFds9BBJ8wc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XmZXSt3HpB64UMGFKJcdb8RWlebirHFm1JBEkYW6recnKzXurMNalv8tld6cJohwBgmTvI/3SClVFvOrS6SLX2OIUOUaUdygTyhA7tnxld2Gcx/JSuJJPVUyKlpdHvEVsAMEt3iarNK+esUYcrMzgGnSWJPbDg2n9gjOwQVT5xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O9gQzr4b; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGdIpuo/"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so78129165e9.1
-        for <linux-modules@vger.kernel.org>; Tue, 30 Dec 2025 10:54:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O9gQzr4b"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7aa9be9f03aso8837528b3a.2
+        for <linux-modules@vger.kernel.org>; Wed, 31 Dec 2025 01:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767120862; x=1767725662; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FfTnoTlVXZzJ6ncSJiOcRGLtsetmUBc6i4wR9Q+Yo4U=;
-        b=eGdIpuo/USoAOJ1xn/Il39Ncun9aEIA4I7PbO/UrNCqv0fP/W0SHk5WN1gDCEcrcad
-         xWKzSnRZg58zsApi7Tii22Ny7W4W8h3j4aPhkVQVIeDYZXm6toqz4HVsixY6kHuXU/3b
-         Dg9N/TxPJCgPRg+D2JH7NusMU+i3eF4XDXm90P1gMYyBlxKWLa/0GpfVYvobFlgp8QaK
-         5KwQtfMdwK8BYLAkeqtcf8G+OJTU+0h6HxfTVW2QfW2ASUV7QqEoDjWot1L8gx17JRp/
-         b1tjN4PgZUDroalp+V5p74JRcODcGnR/50QwJpMI4Ot9b11dcp6m7TBQQKguI/sOd/BH
-         rGXQ==
+        d=gmail.com; s=20230601; t=1767174021; x=1767778821; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPqbE9JXbwYMIAurx7IZrU/QF8HBNMOU/70cT7hhYXU=;
+        b=O9gQzr4bo60imVcPpRDZWLXeB7m6/dxwKNMcRYhwY02XduIfQ/tirY0haR/syqCVRX
+         NqZQgxluOqU0h2dbJXRkTeJjj7spqoBR4cXfbZjwsBr2EgQ1Po1hBIEb3A3mWA4qIlEF
+         xvTXjMgiKsQ13fSQqv5YFoykIpfeA4fLQxAshowObfZSnBGDbbLfTp1fR+0QkHMFRplv
+         DWWyFm1W21kalpHch83kMcO7tjDkVKriWL8ALGJtxHmgEmbb+LyFqCRuOj9vzvui94as
+         eaM4Jpp4Q2M5Dmq7XXfvc0Ot+MsT5jKv1EafEgzMm8uCKtHh4ssweoNc35PhHkc2pCsL
+         sx4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767120862; x=1767725662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FfTnoTlVXZzJ6ncSJiOcRGLtsetmUBc6i4wR9Q+Yo4U=;
-        b=uBevnHt3XRkjChhPgnbqgH7UvIrNwWNm8n5d+q61NXAdd1MPhJznOz0QLsEg62R0Ir
-         iKSRPKWca8xb3ILdaV9NBeGZP7C0AUIF/E5tvjHlSSs8AdMFtBPPchF74H0BVY7E/nnr
-         /5M2DOT7qhzZ+qCyTW3A0nCjlo3fiW4hpnU/dqBBjtOku+y8y9eZinDQ2o4BjY/j/pM2
-         ZADhuiq9+NJktyE9MxNF1u16tyMi7Iw9yHDubuTDml1tW4wY9LjJlDHCCI9FkFnP3Y49
-         AWSDxYVHjyhgKd85Z76kQN9TZ8Ea79Xdi3BwYGsgvedVCw/FSY9AezGTomxJPH72t1R2
-         cR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCX3QB8DUo2FlSz216sXRX15rPDccPzp6Uk0h7lmZOFEzA5NTww6ykZkeo2cAymuRnoIxVV3YjaUTxz2QIZq@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ7E8wSvSDmVLMVy4osBkizavSxLj9d+1Uw1XjM3ZLsyj9gTCf
-	Q7xJEIU4HKx0TOEEDmsxuggzycxDtbyu0a9TUsHVF5kku3ztJueg3TfuL9+cJkjvod2eAiUYb7j
-	SmroFh0q8tuLK9Tx9yDwSCep7fFOV0Fg=
-X-Gm-Gg: AY/fxX6LKr2NSyq+MCGQKTYVj11Z32T677PFJcQZ7qSnCL/1PGxtS96lx3ChU7MygEj
-	6rF3VhCYQN13gh2ikmMx+cG4iHBI1v06K99HE3cZcgjh2/4x4cyI9Y7drm5D8CAtABdj1HXezIp
-	haFfNn9g5nMd9mdTJdbAPkCbikO4LRt1FDc4rRFj/YQmOyEV8x87ZjDZp8idkC+vUMRT5zEYWSp
-	LwFMcz96cgKMtTT1QEj6gsuHOevveZpRGsBsBLG3Zo8zZ8IdU21dNlEtKBtqIHFJT6t2HjWR1na
-	TYiwSy4KWbr1Llf5GyGxx/Oupeln9pK1ffWatoQ=
-X-Google-Smtp-Source: AGHT+IFWuMCPYACqR9rny76OQbZst+hV5SZZZq6+g06y2WDpnTFZheIshlPIQ8dticF4izLeGSJo7mIk5Zort2KSJmo=
-X-Received: by 2002:adf:b605:0:b0:432:7d2a:2be4 with SMTP id
- ffacd0b85a97d-4327d2a2d3dmr18936149f8f.60.1767120862080; Tue, 30 Dec 2025
- 10:54:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767174021; x=1767778821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aPqbE9JXbwYMIAurx7IZrU/QF8HBNMOU/70cT7hhYXU=;
+        b=XZzIVCy6rXzljwc6TRhc/FgL5KtJLYmWgFK9c22Tj1ueoXSTy2bKLcbhPfX7BM9H96
+         tW2X9aPsUaRMXG5Fx/kT0czfW1JmZ7CuuUl1tP68zZ1T0kTa9GsWXSF+SX9VGXqtipAg
+         FkjyXXDyQ2HyKZUjdVe4Hx1f8rVFKtx9O/cmdLFJvm26hGusKzSG1iithSx6GZeocwDD
+         uBim01odXOg6CvisxnkWNsbxXe1lMaRvdckOyby8L5Pz7/ADezuNf8oS9+JD48MF9QdB
+         TjDJmU/GJaIyGuu+3ktfvGT7qAcIrxfKz5pu2ino5hhLdOGT686sTF6FzlIKjeI5boep
+         gG3g==
+X-Gm-Message-State: AOJu0YwB8EnR/WbR+iI8IyZM1DlW/YT1Nu1hRTwQY1tTq7bPiFPiUuzi
+	ShX19pGXWO+n9dxSAWl2iEWk1tCDTvJGWqIkk8UR9KQKJr9z/t2gW6Tb
+X-Gm-Gg: AY/fxX7zgIy8RO+RDeo5HjZp1gLmdXwlP0qTSgeevst+uHBJYqr5iYwqGP70WX28llT
+	khneOI/jWfQQPzqUgTmvFHsmiGhyTYhNi9cVlPxfdtnBOzZfiYANAIkg4kbyboZQpIPSkqvGkG1
+	k/egSsHAoN3zCzaf149Jf9aiIhNxNYTF31jqto5AqhZIUjNp8BCXU+/QPOHEGomq8oT6hloTes4
+	LtrsfUtpo/dxMhZr2/b7cIAI7/AXkzYxRfLHgNZ9APXydzTvhjcT3ORKd1EmJoO2BIgJMQlUu4h
+	hUmMZIBXMX9k7qSTW8LiAhXhdoPemkN6GD4ZDtj02gjDQZUEpfJOYrqzGoyKEFqiKWfOtbbiFtk
+	MZ3nSUY+TukHwrUb/FIqJAXhjGRHG9/m08o/orUTz38JpJ/TKMtm5X2Zxvg4d617lWoEWtHp91G
+	rNmzk9SOUO9BWQ6gIRJqVot7st7Xj2H0RZ3AycpQyfQf5YqtA/
+X-Google-Smtp-Source: AGHT+IH1OgfOCQ++6YoGWLe3z7I4z73peUSuXlX2JSaaii/Q28mvy0SB7AG2/Db+JIbPrwNaS2ycdw==
+X-Received: by 2002:a05:6a21:7002:b0:384:d0be:9f8e with SMTP id adf61e73a8af0-384d0be9fffmr4352398637.79.1767174020572;
+        Wed, 31 Dec 2025 01:40:20 -0800 (PST)
+Received: from localhost.localdomain ([2409:891f:1c62:72:289d:e95e:4395:a7d0])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e76d1be4bsm30270486a12.0.2025.12.31.01.40.15
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 31 Dec 2025 01:40:19 -0800 (PST)
+From: Yafang Shao <laoar.shao@gmail.com>
+To: mcgrof@kernel.org,
+	petr.pavlu@suse.com,
+	da.gomez@kernel.org,
+	samitolvanen@google.com,
+	atomlin@atomlin.com
+Cc: linux-modules@vger.kernel.org,
+	Yafang Shao <laoar.shao@gmail.com>
+Subject: [PATCH v2] module: print version for external modules in print_modules()
+Date: Wed, 31 Dec 2025 17:40:04 +0800
+Message-ID: <20251231094004.37851-1-laoar.shao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251224005752.201911-1-ihor.solodrai@linux.dev>
- <9edd1395-8651-446b-b056-9428076cd830@linux.dev> <af906e9e-8f94-41f5-9100-1a3b4526e220@linux.dev>
- <20251229212938.GA2701672@ax162> <6b87701b-98fb-4089-a201-a7b402e338f9@linux.dev>
- <CAADnVQ+X-a92LEgcd-HjTJUcw2zR_jtUmD9U-Z6OtNnvpVwfiw@mail.gmail.com> <6f845383-563e-49a7-941c-03e9db6158cc@linux.dev>
-In-Reply-To: <6f845383-563e-49a7-941c-03e9db6158cc@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 30 Dec 2025 10:54:10 -0800
-X-Gm-Features: AQt7F2qfm0IOYJ36x71n6KBCccrNrZZfYjIji8zwMhgtT2E3g8iPqSCrCXot0LM
-Message-ID: <CAADnVQLr3HqooTM6Ok768BHeCTp+LQegtdcS3La3dknGbCJ5Vw@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] module: Fix kernel panic when a symbol st_shndx is
- out of bounds
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Nathan Chancellor <nathan@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-modules@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 30, 2025 at 10:45=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
->
-> On 12/29/25 4:50 PM, Alexei Starovoitov wrote:
-> > On Mon, Dec 29, 2025 at 4:39=E2=80=AFPM Ihor Solodrai <ihor.solodrai@li=
-nux.dev> wrote:
-> >>
-> >> On 12/29/25 1:29 PM, Nathan Chancellor wrote:
-> >>> Hi Ihor,
-> >>>
-> >>> On Mon, Dec 29, 2025 at 12:40:10PM -0800, Ihor Solodrai wrote:
-> >>>> I think the simplest workaround is this one: use objcopy from binuti=
-ls
-> >>>> instead of llvm-objcopy when doing --update-section.
-> >>>>
-> >>>> There are just 3 places where that happens, so the OBJCOPY
-> >>>> substitution is going to be localized.
-> >>>>
-> >>>> Also binutils is a documented requirement for compiling the kernel,
-> >>>> whether with clang or not [1].
-> >>>>
-> >>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.g=
-it/tree/Documentation/process/changes.rst?h=3Dv6.18#n29
-> >>>
-> >>> This would necessitate always specifying a CROSS_COMPILE variable whe=
-n
-> >>> cross compiling with LLVM=3D1, which I would really like to avoid. Th=
-e
-> >>> LLVM variants have generally been drop in substitutes for several
-> >>> versions now so some groups such as Android may not even have GNU
-> >>> binutils installed in their build environment (see a recent build
-> >>> fix [1]).
-> >>>
-> >>> I would much prefer detecting llvm-objcopy in Kconfig (such as by
-> >>> creating CONFIG_OBJCOPY_IS_LLVM using the existing check for
-> >>> llvm-objcopy in X86_X32_ABI in arch/x86/Kconfig) and requiring a work=
-ing
-> >>> copy (>=3D 22.0.0 presuming the fix is soon merged) or an explicit op=
-t
-> >>> into GNU objcopy via OBJCOPY=3D...objcopy for CONFIG_DEBUG_INFO_BTF t=
-o be
-> >>> selectable.
-> >>
-> >> I like the idea of opt into GNU objcopy, however I think we should
-> >> avoid requiring kbuilds that want CONFIG_DEBUG_INFO_BTF to change any
-> >> configuration (such as adding an explicit OBJCOPY=3D in a build comman=
-d).
-> >>
-> >> I drafted a patch (pasted below), introducing BTF_OBJCOPY which
-> >> defaults to GNU objcopy. This implements the workaround, and should be
-> >> easy to update with a LLVM version check later after the bug is fixed.
-> >>
-> >> This bit:
-> >>
-> >> @@ -391,6 +391,7 @@ config DEBUG_INFO_BTF
-> >>         depends on PAHOLE_VERSION >=3D 122
-> >>         # pahole uses elfutils, which does not have support for Hexago=
-n relocations
-> >>         depends on !HEXAGON
-> >> +       depends on $(success,command -v $(BTF_OBJCOPY))
-> >>
-> >> Will turn off DEBUG_INFO_BTF if relevant GNU objcopy happens to not be
-> >> installed.
-> >>
-> >> However I am not sure this is the right way to fail here. Because if
-> >> the kernel really does need BTF (which is effectively all kernels
-> >> using BPF), then we are breaking them anyways just downstream of the
-> >> build.
-> >>
-> >> An "objcopy: command not found" might make some pipelines red, but it
-> >> is very clear how to address.
-> >>
-> >> Thoughts?
-> >>
-> >>
-> >> From 7c3b9cce97cc76d0365d8948b1ca36c61faddde3 Mon Sep 17 00:00:00 2001
-> >> From: Ihor Solodrai <ihor.solodrai@linux.dev>
-> >> Date: Mon, 29 Dec 2025 15:49:51 -0800
-> >> Subject: [PATCH] BTF_OBJCOPY
-> >>
-> >> ---
-> >>  Makefile                             |  6 +++++-
-> >>  lib/Kconfig.debug                    |  1 +
-> >>  scripts/gen-btf.sh                   | 10 +++++-----
-> >>  scripts/link-vmlinux.sh              |  2 +-
-> >>  tools/testing/selftests/bpf/Makefile |  4 ++--
-> >>  5 files changed, 14 insertions(+), 9 deletions(-)
-> >
-> > All the makefile hackery looks like overkill and wrong direction.
-> >
-> > What's wrong with kernel/module/main.c change?
-> >
-> > Module loading already does a bunch of sanity checks for ELF
-> > in elf_validity_cache_copy().
-> >
-> > + if (sym[i].st_shndx >=3D info->hdr->e_shnum)
-> > is just one more.
-> >
-> > Maybe it can be moved to elf_validity*() somewhere,
-> > but that's a minor detail.
-> >
-> > iiuc llvm-objcopy affects only bpf testmod, so not a general
-> > issue that needs top level makefile changes.
->
-> By the way, we don't have to put BTF_OBJCOPY variable in the top level
-> Makefile.  It can be defined in Makefile.btf, which is included only
-> with CONFIG_DEBUG_INFO_BTF=3Dy
->
-> We have to define BTF_OBJCOPY in the top-level makefile *if* we want
-> CONFIG_DEBUG_INFO_BTF to depend on it, and get disabled if BTF_OBJCOPY
-> is not set/available.
->
-> I was trying to address Nathan's concern, that some kernel build
-> environments might not have GNU binutils installed, and kconfig should
-> detect that.  IMO putting BTF_OBJCOPY in Makefile.btf is more
-> appropriate, assuming the BTF_OBJCOPY variable is at all an acceptable
-> workaround for the llvm-objcopy bug.
+We maintain a vmcore analysis script on each server that automatically
+parses /var/crash/XXXX/vmcore-dmesg.txt to categorize vmcores. This helps
+us save considerable effort by avoiding analysis of known bugs.
 
-I feel that fallback to binutils objcopy is going to have its own
-issues. It could have issues with cross compiling too.
-Asking developers to setup cross compile with llvm toolchain and binutils
-at the same time is imo too much.
-If we cannot rely on objcopy then resolve_btfids should do the whole thing.
+For vmcores triggered by a driver bug, the system calls print_modules() to
+list the loaded modules. However, print_modules() does not output module
+version information. Across a large fleet of servers, there are often many
+different module versions running simultaneously, and we need to know which
+driver version caused a given vmcore.
+
+Currently, the only reliable way to obtain the module version associated
+with a vmcore is to analyze the /var/crash/XXXX/vmcore file itself—an
+operation that is resource-intensive. Therefore, we propose printing the
+driver version directly in the log, which is far more efficient.
+
+The motivation behind this change is that the external NVIDIA driver
+[0] frequently causes kernel panics across our server fleet.
+While we continuously upgrade to newer NVIDIA driver versions,
+upgrading the entire fleet is time-consuming. Therefore, we need to
+identify which driver version is responsible for each panic.
+
+In-tree modules are tied to the specific kernel version already, so
+printing their versions is redundant. However, for external drivers (like
+proprietary networking or GPU stacks), the version is the single most
+critical piece of metadata for triage. Therefore, to avoid bloating the
+information about loaded modules, we only print the version for external
+modules.
+
+- Before this patch
+
+  Modules linked in: mlx5_core(O) nvidia(PO) nvme_core
+
+- After this patch
+
+  Modules linked in: mlx5_core-5.8-2.0.3(O) nvidia-535.274.02(PO) nvme_core
+                              ^^^^^^^^^^          ^^^^^^^^^^^
+
+  Note: nvme_core is a in-tree module[1], so its version isn't printed.
+
+Link: https://github.com/NVIDIA/open-gpu-kernel-modules/tags [0]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/core.c?h=v6.19-rc3#n5448 [1]
+Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+---
+ kernel/module/main.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+---
+v1->v2: 
+- print it for external module only (Petr, Aaron)
+- add comment for it (Aaron)
+
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 710ee30b3bea..16263ce23e92 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -3901,7 +3901,11 @@ void print_modules(void)
+ 	list_for_each_entry_rcu(mod, &modules, list) {
+ 		if (mod->state == MODULE_STATE_UNFORMED)
+ 			continue;
+-		pr_cont(" %s%s", mod->name, module_flags(mod, buf, true));
++		pr_cont(" %s", mod->name);
++		/* Only append version for out-of-tree modules */
++		if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->taints))
++			pr_cont("-%s", mod->version);
++		pr_cont("%s", module_flags(mod, buf, true));
+ 	}
+ 
+ 	print_unloaded_tainted_modules();
+-- 
+2.43.5
+
