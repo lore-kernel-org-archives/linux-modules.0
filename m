@@ -1,69 +1,68 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374D2242D7D
-	for <linux-modules@vger.kernel.org>; Thu,  1 Jan 2026 05:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590C82512C8
+	for <linux-modules@vger.kernel.org>; Thu,  1 Jan 2026 05:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767244910; cv=none; b=bNMozKjvxRnaDFq5gi0Uue+C78JVWyQe0svo5VJWj1LCZRRFP5Gx/X7K26g6V4iJ3yJQ2cYZNn2N5TihAsZboykyckOHPwOIITIdY91jTX9f4Q0Dj3oSuog1E8qUt3icj6hIUk9hHpyqF1PmOhdoAI98/UfwILdv1zRTPiyx0EI=
+	t=1767244916; cv=none; b=eCL1OA1HOOaaRB1C2NBgxlaZ+p7eLK6Ms7sXwpJCoDxnLV6bXTohSt9yQfDR/fN0sUYLnx++w2+0RZBqimjiA/bB1PF+Q6omYXFH+RWLz9uj79aJzmAFxXt/ZFN2+hSniMFmDr7FQljcbqz4ndB2CLKHl0RlmaK3TBqXIpcd1FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767244910; c=relaxed/simple;
-	bh=nhvDkK7TuHB4MoV4yw6dY467Y+N4XGakk6DbHpWFzd0=;
+	s=arc-20240116; t=1767244916; c=relaxed/simple;
+	bh=7rhNZKoiKt69rXYOx/nPj8NyhjOaV5my4mHPW2W+MJo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fQBnmgk3CaPo8ZKTOychHdHQScpl34rVqKl7mMnQMWkDtGMyW+uUaWXDpx9J9xze9nPdqmW75EnW5Vc7Xt7DHRD5eeOt2VotWBoTZczuuZNbIuNpNH3vhF3Ece6zvjTV7vIe1U2In0lN7tLeE0QGLg+M9fVpMXQEtSFpqqhzDQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ju6NoZ4E; arc=none smtp.client-ip=209.85.167.53
+	 In-Reply-To:To:Cc; b=X8V+cj0cjeKOUoNSBu3f9A+KMM+F3pxcIulOEThIr67U9YhflbwDbkBB02SXRwkj/x50j7ejw5dTn8E8o++hw61PedZBn3/rCABSEfrZhhMEwurJWJE+mmemN7aFLCjTD5GyqyvJNgLdALOR7apWLG+69EbNljXACYzYXPt/Fog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lr2pmb9f; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ju6NoZ4E"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5958931c9c7so12853545e87.2
-        for <linux-modules@vger.kernel.org>; Wed, 31 Dec 2025 21:21:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lr2pmb9f"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-37b8aa5adf9so72507091fa.1
+        for <linux-modules@vger.kernel.org>; Wed, 31 Dec 2025 21:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767244906; x=1767849706; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767244911; x=1767849711; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m/ANztT2H+RPjRwH4Tsn7VpWSZebBDPsBIwtoPyunNo=;
-        b=Ju6NoZ4EdUJ+YcU0nQtl91qWUEYRJuGnIbFyD3FiTNgEkRoOyXqroW4QNht0iT1aTI
-         g0d/UDJPPHEjG0wXPV2QlVtx6UT63rTdMdj0sfDKHRXZ0vSeoNRVx3vT/1Qa8Vuivht1
-         bC9VDDwNFuOT9wdwhaRh9fp2+kGr3O7OehBa/mNDhrEoagdnICeAIb/vjoQuGyt6qFAJ
-         lgJ//1q7IohtPGMD+a+yANVugBoT0MPVUiwatSPy7UC4cten2Xk8OC9gMoOhu1IA8+Z4
-         TDD/t3pqMiA1XkhSvguINfHYVeB7aEkVGWtDuzozRyiEk2LmpD87gD17MqZKfOEmZCK7
-         VYIg==
+        bh=ZnWuhRewCBtlepNlYLvDYAkJsMsIyPpraMiTNGgUITs=;
+        b=lr2pmb9fBA3ugs/QR3Y2DjR/7jhhFex3Bml0m8fWx3JIlEE/Naj4CCVxWlbFOY5qSf
+         4xsINTZRn4KBLoC6EWlnV/FJdu+6fNEbdvkPPpwPMYWa+LKygDQK2iWWV9FVWg+RQgtx
+         2bWp5goviPCxIL9+m2T6KC4zxzmvi6kIQGreyl3kD2kDWjHEjZr1+TBU6rjBaCmU4Zrk
+         oFkxvaaooR7/DOjrZmPFHWEmow+5xJLqXjQT9NHsMWdAX34K8fiMfI2AO6n6yoWLVNsD
+         DVMi360hK39YLVb8Oo88j+nlXyvZh3yeOlQtuUsmBFfd7ubmHBvukKn/QdrbVxT7VunQ
+         5fdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767244906; x=1767849706;
+        d=1e100.net; s=20230601; t=1767244911; x=1767849711;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=m/ANztT2H+RPjRwH4Tsn7VpWSZebBDPsBIwtoPyunNo=;
-        b=PloOAu1TKSY63dKnMRrltTRjMI1ZoMNLymfKGNAre4VxVTyPW93++Mc+QSF2KjWAPv
-         5W372Oe/Zq6g3VxS8P6qOOHyzsrRhBGMr8Weesji0xJUy5Pgnum3BQ9VQ81IzablZWgb
-         Wiu00QY7ZAJ7/yyKYqXTfbhjQR8GyqG2O+nsBfNZ3Zwx5VrRQil/DfnysyZnSkSdEOC+
-         2Xz2GY5mGT+7dAeo11jfHHW+khnPaPPEwokXcgGW70SrmStUs3RYHcW0RKFeNPSYJ6PN
-         QEwyTSbhObnDqI867XGLVCtNiygAPlDizlwAQ6zwpxSZEqqGKmlUoo0XvYxgmSJ1r1gs
-         KUFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUX7AWk4Ytmo1P2YWh3s9RqQkp3QRua+kTq0WGAxAwPt+bB0lENzTe4BTNWUyeRcDwOEQwcJQRhjbxOCEql@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3gdfmZP+t6oqiaSICVerW0AL/F69H/u6FxidqFPm5aQ5iY2SH
-	nRWi8wtQfdc9yYFEj/PZoV7djA2xDBcLsBpmtMa20o0JTzZBjTleLkKB
-X-Gm-Gg: AY/fxX6o11l6Gdd4ljJsJH2CnSy+rY3Htd+ic3pNKkUiOynA6aZNhJEMl7nA2BhuGQm
-	DG1yf0BPicJU3x3j6Hur4ZpjGb+isOY5ybkm8NDg2FzIhcw8JKA94JVWuWtpKdrD6LY/en+FoH9
-	E5a61kt4obZBbsNa/oAsDEIUrkPRsaPmY/4z7yihX5mlDW3y/FATd6ImN6zYBXBIJioPc9HdWEV
-	bJkgazOwo48BwpJ30EukYIQ+Z9PsIHA/HpZCSapJAuqLBGqHIjVEixxCUFIniEc+moxSeUSNke9
-	UB4yngLReSqtaHUZHiaXfS3WDHGrBpo7x6U5KTuyhnO/PY8N3wyaXI5RTLatPAnbgvnx6yGPHKc
-	P0COXnV/xY71VHv9q9ScbqzPEqkC14QUErjdqLLSx6hx7dsyEfSJIrpxFpxwBwk0szdrla9jDps
-	gXewlGrxbHV7ja4VEitptyd58gtjqcpIsJqusuGOhECiFPt9szuIVm2jcDH+YGzZaqMiTyJlB6V
-	XIjBA==
-X-Google-Smtp-Source: AGHT+IEY8zKF0VLVmG6TtPAYOSCfHkImpLYAYGmmru2k+1hlQ5fmMzzDNTll7nlIB5lVGkBEHsJVnA==
-X-Received: by 2002:a05:6512:131c:b0:593:ffa:6988 with SMTP id 2adb3069b0e04-59a17d9707fmr13645549e87.21.1767244905984;
-        Wed, 31 Dec 2025 21:21:45 -0800 (PST)
+        bh=ZnWuhRewCBtlepNlYLvDYAkJsMsIyPpraMiTNGgUITs=;
+        b=Bi1/47rkEhf381SNwr26n2lB2s36X4UkIUeuIHc3jWVKbbf336v76D08pL7ga7OIKE
+         sOvO1uz/7JAbJ+aHpWe9fBRQ4hcgkg7In371gnTufC7Qm/iw0pgH+tSgX7O5fjLEHcIT
+         PNqP1lUspL89c2Z7hVQXDPUfLiwwDjmzl0dKxEIfAoC3Haf0tOMeYgA8Ljusdyk8VZg0
+         6YnTeSjxd8aEsKmt/gln1nWYhoK4jRJSA1ZI3JAwflJo9UbK6UElYAVU5vkXEE53J72L
+         m5G1qTUDhaZHXvNMdVR7S8Tx9zDzqlt7w9rfcRc2en99Ydg6pXTSAmVPxGlbWGzoXelh
+         v9zg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiInTdbxLLsbEzcv+SR82Lxj0TWORcA8UDe5fY4xW36ecfu9wP5VpqPghTf3Ltp0/7PKif24PqVChImt/4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzerrVusPjrh5cjiLTt8Dyi7gj6oBiNkQ6lGsNkafqhWHoQ2r/i
+	R3nUsWb11MiCEXi0AgGT/3JM9uYFwg3vdaAxAe2rY5NgqTE1jV1bX5oD
+X-Gm-Gg: AY/fxX4G4q60Me1Tt8c+DjR+MQRgiYYEqi3f9zLM0N89u9I+GL3HlQtO/uf1SLxfb1q
+	jTRP6V4Jb3kHZ2f8NnIfYXjLYXdWZDMzx6d1jBEbg8wDbiKg61drffIBwX4MOIUmOCwzn7Tmtad
+	xtS1SVPVYIVGdw5o0Xx5UreZAn7DMUhcQIaYqYyjiLbAh8dmB6+Qz+/mYvMKp4jOvMozD9RmlB9
+	XY9rja7Xs7iY1H4UPCaoFMkoYNDgELr0x4M7U4jQn1MER56juDrkFFY91qLlE9eV1IYpsk1OYQX
+	O2CLOasLChE3IHWf3CvWgAyuYij7CtXpd7ZU5JTmAu/PYSLETbtW6VHgxjGudaz3Z65cFuMtUZJ
+	ecawbqAXX+OLYr52FPYJxCddw1E+k9yYSNNUYxubwyZmkOkJ/7Oh6zfJNsc+UTwtTIhDKwKIJSw
+	MRLtCXxo+Kq9sLwRDJKKltn9IYhqpXk1TCym5XZiZEHexnuXZe1rqtLgc4xQpMpu1KoHAroxV/l
+	2gO5XPTPu7OFyg2
+X-Google-Smtp-Source: AGHT+IGWnxKTzBFDRvVhBJLkPNrg5zCvovKVt3Iq5ajcHW0NwDfpLyHHuTaAQOvw6Ai3P24W4z2g9Q==
+X-Received: by 2002:a05:651c:1443:b0:382:4d6b:993b with SMTP id 38308e7fff4ca-3824d6b9c18mr83313231fa.35.1767244910574;
+        Wed, 31 Dec 2025 21:21:50 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (84-253-216-54.bb.dnainternet.fi. [84.253.216.54])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382861ef4ccsm37064921fa.23.2025.12.31.21.21.40
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382861ef4ccsm37064921fa.23.2025.12.31.21.21.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 21:21:43 -0800 (PST)
+        Wed, 31 Dec 2025 21:21:48 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Thu, 01 Jan 2026 07:20:48 +0200
-Subject: [PATCH RFC 4/6] rust: WIP: use ThisModule trait to fix some
- missing owners
+Date: Thu, 01 Jan 2026 07:20:49 +0200
+Subject: [PATCH RFC 5/6] rust: debugfs: WIP: Use owner for file_operations
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260101-this_module_fix-v1-4-46ae3e5605a0@gmail.com>
+Message-Id: <20260101-this_module_fix-v1-5-46ae3e5605a0@gmail.com>
 References: <20260101-this_module_fix-v1-0-46ae3e5605a0@gmail.com>
 In-Reply-To: <20260101-this_module_fix-v1-0-46ae3e5605a0@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -89,231 +88,425 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Jens Axboe <axboe@kernel.dk>, Kari Argillander <kari.argillander@gmail.com>, 
  Andreas Hindborg <a.hindborg@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767244881; l=9015;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767244881; l=16426;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=nhvDkK7TuHB4MoV4yw6dY467Y+N4XGakk6DbHpWFzd0=;
- b=LQy58ByfuHjMPZSnA9a2ozCKWq2Y3Fs4/M6Cjv7nmjYk01qfXvfcVsmWkq4egQIxeok8J69Op
- Z2gArtuoOyuBaqKqaIIhTViELLVZ9f5EjAfc727JvOm0cfPtMH4Kwtm
+ bh=7rhNZKoiKt69rXYOx/nPj8NyhjOaV5my4mHPW2W+MJo=;
+ b=/FHxPndxLye7RpOlj19HW54w3416yImg7K+iPDUzBUCprQvFxJNDtczJD3uQwfT7CmWNxIUe6
+ 6iglF8d4oCDCqSX4wSpusPl5a2PMwxaVFMFe5smUbzFzPC75Rg8FCPo
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-Some places do not define owner and we have null pointer dereference
-bugs which we can fix with this. I have tested miscdevice that it
-actually works.
 ---
- drivers/android/binder/rust_binder_main.rs |  2 +-
- drivers/block/rnull/rnull.rs               |  1 +
- drivers/gpu/drm/nova/driver.rs             |  1 +
- drivers/gpu/drm/tyr/driver.rs              |  1 +
- lib/find_bit_benchmark_rust.rs             |  2 +-
- rust/kernel/block/mq/gen_disk.rs           | 31 ++++--------------------------
- rust/kernel/block/mq/operations.rs         | 12 ++++++++++++
- rust/kernel/drm/device.rs                  |  2 +-
- rust/kernel/drm/driver.rs                  |  3 +++
- rust/kernel/miscdevice.rs                  |  4 ++++
- samples/rust/rust_misc_device.rs           |  1 +
- 11 files changed, 30 insertions(+), 30 deletions(-)
+ rust/kernel/debugfs.rs          | 79 ++++++++++++++++++++++-------------------
+ rust/kernel/debugfs/file_ops.rs | 50 +++++++++++++++++++-------
+ samples/rust/rust_debugfs.rs    |  6 ++--
+ 3 files changed, 83 insertions(+), 52 deletions(-)
 
-diff --git a/drivers/android/binder/rust_binder_main.rs b/drivers/android/binder/rust_binder_main.rs
-index 169fe552e32a..7877503c639e 100644
---- a/drivers/android/binder/rust_binder_main.rs
-+++ b/drivers/android/binder/rust_binder_main.rs
-@@ -311,7 +311,7 @@ unsafe impl<T> Sync for AssertSync<T> {}
-     let zeroed_ops = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
+diff --git a/rust/kernel/debugfs.rs b/rust/kernel/debugfs.rs
+index facad81e8290..03e22b1cfa2b 100644
+--- a/rust/kernel/debugfs.rs
++++ b/rust/kernel/debugfs.rs
+@@ -6,7 +6,8 @@
+ //! C header: [`include/linux/debugfs.h`](srctree/include/linux/debugfs.h)
  
-     let ops = kernel::bindings::file_operations {
--        owner: THIS_MODULE.as_ptr(),
-+        owner: <THIS_MODULE as ThisModule>::OWNER.as_ptr(),
-         poll: Some(rust_binder_poll),
-         unlocked_ioctl: Some(rust_binder_ioctl),
-         compat_ioctl: Some(bindings::compat_ptr_ioctl),
-diff --git a/drivers/block/rnull/rnull.rs b/drivers/block/rnull/rnull.rs
-index c9dff74489c1..3360a0f50fc6 100644
---- a/drivers/block/rnull/rnull.rs
-+++ b/drivers/block/rnull/rnull.rs
-@@ -75,6 +75,7 @@ struct QueueData {
- #[vtable]
- impl Operations for NullBlkDevice {
-     type QueueData = KBox<QueueData>;
-+    type ThisModule = THIS_MODULE;
+ // When DebugFS is disabled, many parameters are dead. Linting for this isn't helpful.
+-#![cfg_attr(not(CONFIG_DEBUG_FS), allow(unused_variables))]
++// #![cfg_attr(not(CONFIG_DEBUG_FS), allow(unused_variables))]
++#![allow(unused_variables)]
  
-     #[inline(always)]
-     fn queue_rq(queue_data: &QueueData, rq: ARef<mq::Request<Self>>, _is_last: bool) -> Result {
-diff --git a/drivers/gpu/drm/nova/driver.rs b/drivers/gpu/drm/nova/driver.rs
-index 2246d8e104e0..a49c9848ce2e 100644
---- a/drivers/gpu/drm/nova/driver.rs
-+++ b/drivers/gpu/drm/nova/driver.rs
-@@ -57,6 +57,7 @@ fn probe(adev: &auxiliary::Device<Core>, _info: &Self::IdInfo) -> impl PinInit<S
+ use crate::fmt;
+ use crate::prelude::*;
+@@ -46,27 +47,31 @@
+ // able to refer to us. In this case, we need to silently fail. All future child directories/files
+ // will silently fail as well.
+ #[derive(Clone)]
+-pub struct Dir(#[cfg(CONFIG_DEBUG_FS)] Option<Arc<Entry<'static>>>);
++pub struct Dir<M: ThisModule>(
++    #[cfg(CONFIG_DEBUG_FS)] Option<Arc<Entry<'static>>>,
++    PhantomData<M>,
++);
  
- #[vtable]
- impl drm::Driver for NovaDriver {
-+    type ThisModule = crate::THIS_MODULE;
-     type Data = NovaData;
-     type File = File;
-     type Object = gem::Object<NovaObject>;
-diff --git a/drivers/gpu/drm/tyr/driver.rs b/drivers/gpu/drm/tyr/driver.rs
-index 264c2362237a..a84825dbd008 100644
---- a/drivers/gpu/drm/tyr/driver.rs
-+++ b/drivers/gpu/drm/tyr/driver.rs
-@@ -180,6 +180,7 @@ fn drop(self: Pin<&mut Self>) {
- 
- #[vtable]
- impl drm::Driver for TyrDriver {
-+    type ThisModule = crate::THIS_MODULE;
-     type Data = TyrData;
-     type File = File;
-     type Object = drm::gem::Object<TyrObject>;
-diff --git a/lib/find_bit_benchmark_rust.rs b/lib/find_bit_benchmark_rust.rs
-index 6bdc51de2f30..420a1855b08a 100644
---- a/lib/find_bit_benchmark_rust.rs
-+++ b/lib/find_bit_benchmark_rust.rs
-@@ -88,7 +88,7 @@ fn find_bit_test() {
- }
- 
- impl kernel::Module for Benchmark {
--    fn init(_module: &'static ThisModule) -> Result<Self> {
-+    fn init<M: ThisModule>() -> Result<Self> {
-         find_bit_test();
-         // Return error so test module can be inserted again without rmmod.
-         Err(code::EINVAL)
-diff --git a/rust/kernel/block/mq/gen_disk.rs b/rust/kernel/block/mq/gen_disk.rs
-index 1ce815c8cdab..f5839829d0b7 100644
---- a/rust/kernel/block/mq/gen_disk.rs
-+++ b/rust/kernel/block/mq/gen_disk.rs
-@@ -7,7 +7,7 @@
- 
- use crate::{
-     bindings,
--    block::mq::{Operations, TagSet},
-+    block::mq::{operations::OperationsVTable, Operations, TagSet},
-     error::{self, from_err_ptr, Result},
-     fmt::{self, Write},
-     prelude::*,
-@@ -126,32 +126,9 @@ pub fn build<T: Operations>(
+-impl Dir {
++impl<M: ThisModule> Dir<M> {
+     /// Create a new directory in DebugFS. If `parent` is [`None`], it will be created at the root.
+-    fn create(name: &CStr, parent: Option<&Dir>) -> Self {
++    fn create(name: &CStr, parent: Option<&Self>) -> Self {
+         #[cfg(CONFIG_DEBUG_FS)]
+         {
+             let parent_entry = match parent {
+                 // If the parent couldn't be allocated, just early-return
+-                Some(Dir(None)) => return Self(None),
+-                Some(Dir(Some(entry))) => Some(entry.clone()),
++                Some(Self(None, _)) => return Self(None, PhantomData),
++                Some(Self(Some(entry), _)) => Some(entry.clone()),
+                 None => None,
+             };
+             Self(
+                 // If Arc creation fails, the `Entry` will be dropped, so the directory will be
+                 // cleaned up.
+                 Arc::new(Entry::dynamic_dir(name, parent_entry), GFP_KERNEL).ok(),
++                PhantomData,
              )
-         })?;
- 
--        const TABLE: bindings::block_device_operations = bindings::block_device_operations {
--            submit_bio: None,
--            open: None,
--            release: None,
--            ioctl: None,
--            compat_ioctl: None,
--            check_events: None,
--            unlock_native_capacity: None,
--            getgeo: None,
--            set_read_only: None,
--            swap_slot_free_notify: None,
--            report_zones: None,
--            devnode: None,
--            alternative_gpt_sector: None,
--            get_unique_id: None,
--            // TODO: Set to THIS_MODULE. Waiting for const_refs_to_static feature to
--            // be merged (unstable in rustc 1.78 which is staged for linux 6.10)
--            // <https://github.com/rust-lang/rust/issues/119618>
--            owner: core::ptr::null_mut(),
--            pr_ops: core::ptr::null_mut(),
--            free_disk: None,
--            poll_bio: None,
--        };
--
--        // SAFETY: `gendisk` is a valid pointer as we initialized it above
--        unsafe { (*gendisk).fops = &TABLE };
-+        unsafe {
-+            (*gendisk).fops = OperationsVTable::<T>::build_block_device_operations();
-+        }
- 
-         let mut writer = NullTerminatedFormatter::new(
-             // SAFETY: `gendisk` points to a valid and initialized instance. We
-diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
-index 8ad46129a52c..3e0e8baa7d07 100644
---- a/rust/kernel/block/mq/operations.rs
-+++ b/rust/kernel/block/mq/operations.rs
-@@ -31,6 +31,8 @@ pub trait Operations: Sized {
-     /// Data associated with the `struct request_queue` that is allocated for
-     /// the `GenDisk` associated with this `Operations` implementation.
-     type QueueData: ForeignOwnable;
-+    /// TODO Doc
-+    type ThisModule: ThisModule;
- 
-     /// Called by the kernel to queue a request with the driver. If `is_last` is
-     /// `false`, the driver is allowed to defer committing the request.
-@@ -283,4 +285,14 @@ impl<T: Operations> OperationsVTable<T> {
-     pub(crate) const fn build() -> &'static bindings::blk_mq_ops {
-         &Self::VTABLE
+         }
+         #[cfg(not(CONFIG_DEBUG_FS))]
+-        Self()
++        Self(PhantomData)
      }
-+
-+    const BLOCK_OPS: bindings::block_device_operations = bindings::block_device_operations {
-+        owner: T::ThisModule::OWNER.as_ptr(),
-+        ..pin_init::zeroed()
-+    };
-+
-+    pub(crate) const fn build_block_device_operations() -> &'static bindings::block_device_operations
-+    {
-+        &Self::BLOCK_OPS
-+    }
+ 
+     /// Creates a DebugFS file which will own the data produced by the initializer provided in
+@@ -107,7 +112,7 @@ fn create_file<'a, T, E: 'a>(
+     /// let debugfs = Dir::new(c_str!("parent"));
+     /// ```
+     pub fn new(name: &CStr) -> Self {
+-        Dir::create(name, None)
++        Self::create(name, None)
+     }
+ 
+     /// Creates a subdirectory within this directory.
+@@ -121,7 +126,7 @@ pub fn new(name: &CStr) -> Self {
+     /// let child = parent.subdir(c_str!("child"));
+     /// ```
+     pub fn subdir(&self, name: &CStr) -> Self {
+-        Dir::create(name, Some(self))
++        Self::create(name, Some(self))
+     }
+ 
+     /// Creates a read-only file in this directory.
+@@ -149,7 +154,7 @@ pub fn read_only_file<'a, T, E: 'a>(
+     where
+         T: Writer + Send + Sync + 'static,
+     {
+-        let file_ops = &<T as ReadFile<_>>::FILE_OPS;
++        let file_ops = &<T as ReadFile<M, _>>::FILE_OPS;
+         self.create_file(name, data, file_ops)
+     }
+ 
+@@ -176,7 +181,7 @@ pub fn read_binary_file<'a, T, E: 'a>(
+     where
+         T: BinaryWriter + Send + Sync + 'static,
+     {
+-        self.create_file(name, data, &T::FILE_OPS)
++        self.create_file(name, data, &<T as BinaryReadFile<M, _>>::FILE_OPS)
+     }
+ 
+     /// Creates a read-only file in this directory, with contents from a callback.
+@@ -215,7 +220,7 @@ pub fn read_callback_file<'a, T, E: 'a, F>(
+         T: Send + Sync + 'static,
+         F: Fn(&T, &mut fmt::Formatter<'_>) -> fmt::Result + Send + Sync,
+     {
+-        let file_ops = <FormatAdapter<T, F>>::FILE_OPS.adapt();
++        let file_ops = <FormatAdapter<T, F> as ReadFile<M, FormatAdapter<T, F>>>::FILE_OPS.adapt();
+         self.create_file(name, data, file_ops)
+     }
+ 
+@@ -231,7 +236,7 @@ pub fn read_write_file<'a, T, E: 'a>(
+     where
+         T: Writer + Reader + Send + Sync + 'static,
+     {
+-        let file_ops = &<T as ReadWriteFile<_>>::FILE_OPS;
++        let file_ops = &<T as ReadWriteFile<M, _>>::FILE_OPS;
+         self.create_file(name, data, file_ops)
+     }
+ 
+@@ -247,7 +252,7 @@ pub fn read_write_binary_file<'a, T, E: 'a>(
+     where
+         T: BinaryWriter + BinaryReader + Send + Sync + 'static,
+     {
+-        let file_ops = &<T as BinaryReadWriteFile<_>>::FILE_OPS;
++        let file_ops = &<T as BinaryReadWriteFile<M, _>>::FILE_OPS;
+         self.create_file(name, data, file_ops)
+     }
+ 
+@@ -270,7 +275,7 @@ pub fn read_write_callback_file<'a, T, E: 'a, F, W>(
+         W: Fn(&T, &mut UserSliceReader) -> Result + Send + Sync,
+     {
+         let file_ops =
+-            <WritableAdapter<FormatAdapter<T, F>, W> as file_ops::ReadWriteFile<_>>::FILE_OPS
++            <WritableAdapter<FormatAdapter<T, F>, W> as file_ops::ReadWriteFile<M, _>>::FILE_OPS
+                 .adapt()
+                 .adapt();
+         self.create_file(name, data, file_ops)
+@@ -290,7 +295,7 @@ pub fn write_only_file<'a, T, E: 'a>(
+     where
+         T: Reader + Send + Sync + 'static,
+     {
+-        self.create_file(name, data, &T::FILE_OPS)
++        self.create_file(name, data, &<T as WriteFile<M, _>>::FILE_OPS)
+     }
+ 
+     /// Creates a write-only binary file in this directory.
+@@ -307,7 +312,7 @@ pub fn write_binary_file<'a, T, E: 'a>(
+     where
+         T: BinaryReader + Send + Sync + 'static,
+     {
+-        self.create_file(name, data, &T::FILE_OPS)
++        self.create_file(name, data, &<T as BinaryWriteFile<M, _>>::FILE_OPS)
+     }
+ 
+     /// Creates a write-only file in this directory, with write logic from a callback.
+@@ -324,7 +329,7 @@ pub fn write_callback_file<'a, T, E: 'a, W>(
+         T: Send + Sync + 'static,
+         W: Fn(&T, &mut UserSliceReader) -> Result + Send + Sync,
+     {
+-        let file_ops = <WritableAdapter<NoWriter<T>, W> as WriteFile<_>>::FILE_OPS
++        let file_ops = <WritableAdapter<NoWriter<T>, W> as WriteFile<M, _>>::FILE_OPS
+             .adapt()
+             .adapt();
+         self.create_file(name, data, file_ops)
+@@ -527,7 +532,7 @@ fn create_file<T: Sync>(&self, name: &CStr, data: &'data T, vtable: &'static Fil
+     /// file is removed when the [`Scope`] that this directory belongs
+     /// to is dropped.
+     pub fn read_only_file<T: Writer + Send + Sync + 'static>(&self, name: &CStr, data: &'data T) {
+-        self.create_file(name, data, &T::FILE_OPS)
++        // self.create_file(name, data, &<T as ReadFile<M, T>>::FILE_OPS)
+     }
+ 
+     /// Creates a read-only binary file in this directory.
+@@ -541,7 +546,7 @@ pub fn read_binary_file<T: BinaryWriter + Send + Sync + 'static>(
+         name: &CStr,
+         data: &'data T,
+     ) {
+-        self.create_file(name, data, &T::FILE_OPS)
++        // self.create_file(name, data, &<T as ReadFile<M, T>>::FILE_OPS)
+     }
+ 
+     /// Creates a read-only file in this directory, with contents from a callback.
+@@ -560,8 +565,8 @@ pub fn read_callback_file<T, F>(&self, name: &CStr, data: &'data T, _f: &'static
+         T: Send + Sync + 'static,
+         F: Fn(&T, &mut fmt::Formatter<'_>) -> fmt::Result + Send + Sync,
+     {
+-        let vtable = <FormatAdapter<T, F> as ReadFile<_>>::FILE_OPS.adapt();
+-        self.create_file(name, data, vtable)
++        // let vtable = <FormatAdapter<T, F> as ReadFile<M, _>>::FILE_OPS.adapt();
++        // self.create_file(name, data, vtable)
+     }
+ 
+     /// Creates a read-write file in this directory.
+@@ -577,8 +582,8 @@ pub fn read_write_file<T: Writer + Reader + Send + Sync + 'static>(
+         name: &CStr,
+         data: &'data T,
+     ) {
+-        let vtable = &<T as ReadWriteFile<_>>::FILE_OPS;
+-        self.create_file(name, data, vtable)
++        // let vtable = &<T as ReadWriteFile<_>>::FILE_OPS;
++        // self.create_file(name, data, vtable)
+     }
+ 
+     /// Creates a read-write binary file in this directory.
+@@ -593,8 +598,8 @@ pub fn read_write_binary_file<T: BinaryWriter + BinaryReader + Send + Sync + 'st
+         name: &CStr,
+         data: &'data T,
+     ) {
+-        let vtable = &<T as BinaryReadWriteFile<_>>::FILE_OPS;
+-        self.create_file(name, data, vtable)
++        // let vtable = &<T as BinaryReadWriteFile<_>>::FILE_OPS;
++        // self.create_file(name, data, vtable)
+     }
+ 
+     /// Creates a read-write file in this directory, with logic from callbacks.
+@@ -618,10 +623,10 @@ pub fn read_write_callback_file<T, F, W>(
+         F: Fn(&T, &mut fmt::Formatter<'_>) -> fmt::Result + Send + Sync,
+         W: Fn(&T, &mut UserSliceReader) -> Result + Send + Sync,
+     {
+-        let vtable = <WritableAdapter<FormatAdapter<T, F>, W> as ReadWriteFile<_>>::FILE_OPS
+-            .adapt()
+-            .adapt();
+-        self.create_file(name, data, vtable)
++        // let vtable = <WritableAdapter<FormatAdapter<T, F>, W> as ReadWriteFile<_>>::FILE_OPS
++        //     .adapt()
++        //     .adapt();
++        // self.create_file(name, data, vtable)
+     }
+ 
+     /// Creates a write-only file in this directory.
+@@ -632,8 +637,8 @@ pub fn read_write_callback_file<T, F, W>(
+     /// file is removed when the [`Scope`] that this directory belongs
+     /// to is dropped.
+     pub fn write_only_file<T: Reader + Send + Sync + 'static>(&self, name: &CStr, data: &'data T) {
+-        let vtable = &<T as WriteFile<_>>::FILE_OPS;
+-        self.create_file(name, data, vtable)
++        // let vtable = &<T as WriteFile<_>>::FILE_OPS;
++        // self.create_file(name, data, vtable)
+     }
+ 
+     /// Creates a write-only binary file in this directory.
+@@ -647,7 +652,7 @@ pub fn write_binary_file<T: BinaryReader + Send + Sync + 'static>(
+         name: &CStr,
+         data: &'data T,
+     ) {
+-        self.create_file(name, data, &T::FILE_OPS)
++        // self.create_file(name, data, &<T as ReadFile<M, T>>::FILE_OPS)
+     }
+ 
+     /// Creates a write-only file in this directory, with write logic from a callback.
+@@ -665,10 +670,10 @@ pub fn write_only_callback_file<T, W>(&self, name: &CStr, data: &'data T, _w: &'
+         T: Send + Sync + 'static,
+         W: Fn(&T, &mut UserSliceReader) -> Result + Send + Sync,
+     {
+-        let vtable = &<WritableAdapter<NoWriter<T>, W> as WriteFile<_>>::FILE_OPS
+-            .adapt()
+-            .adapt();
+-        self.create_file(name, data, vtable)
++        // let vtable = &<WritableAdapter<NoWriter<T>, W> as WriteFile<_>>::FILE_OPS
++        //     .adapt()
++        //     .adapt();
++        // self.create_file(name, data, vtable)
+     }
+ 
+     fn empty() -> Self {
+diff --git a/rust/kernel/debugfs/file_ops.rs b/rust/kernel/debugfs/file_ops.rs
+index 8a0442d6dd7a..0e5059c044af 100644
+--- a/rust/kernel/debugfs/file_ops.rs
++++ b/rust/kernel/debugfs/file_ops.rs
+@@ -115,13 +115,14 @@ fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
  }
-diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
-index 3ce8f62a0056..a740c87933d0 100644
---- a/rust/kernel/drm/device.rs
-+++ b/rust/kernel/drm/device.rs
-@@ -92,7 +92,7 @@ impl<T: drm::Driver> Device<T> {
-         fops: &Self::GEM_FOPS,
-     };
  
--    const GEM_FOPS: bindings::file_operations = drm::gem::create_fops();
-+    const GEM_FOPS: bindings::file_operations = drm::gem::create_fops::<T::ThisModule>();
+ // Work around lack of generic const items.
+-pub(crate) trait ReadFile<T> {
++pub(crate) trait ReadFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
  
-     /// Create a new `drm::Device` for a `drm::Driver`.
-     pub fn new(dev: &device::Device, data: impl PinInit<T::Data, Error>) -> Result<ARef<Self>> {
-diff --git a/rust/kernel/drm/driver.rs b/rust/kernel/drm/driver.rs
-index f30ee4c6245c..ae8f7d3b9156 100644
---- a/rust/kernel/drm/driver.rs
-+++ b/rust/kernel/drm/driver.rs
-@@ -99,6 +99,9 @@ pub trait AllocImpl: super::private::Sealed + drm::gem::IntoGEMObject {
- /// drm_driver` to be registered in the DRM subsystem.
- #[vtable]
- pub trait Driver {
-+    /// TODO Doc
-+    type ThisModule: ThisModule;
-+
-     /// Context data associated with the DRM driver
-     type Data: Sync + Send;
+-impl<T: Writer + Sync> ReadFile<T> for T {
++impl<M: ThisModule, T: Writer + Sync> ReadFile<M, T> for T {
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             read: Some(bindings::seq_read),
+             llseek: Some(bindings::seq_lseek),
+             release: Some(bindings::single_release),
+@@ -167,13 +168,18 @@ fn read<T: Reader + Sync>(data: &T, buf: *const c_char, count: usize) -> isize {
+ }
  
-diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
-index d698cddcb4a5..08346c52d574 100644
---- a/rust/kernel/miscdevice.rs
-+++ b/rust/kernel/miscdevice.rs
-@@ -116,6 +116,9 @@ pub trait MiscDevice: Sized {
-     /// What kind of pointer should `Self` be wrapped in.
-     type Ptr: ForeignOwnable + Send + Sync;
+ // A trait to get the file operations for a type.
+-pub(crate) trait ReadWriteFile<T> {
++pub(crate) trait ReadWriteFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
  
-+    /// TODO Docs
-+    type ThisModule: ThisModule;
-+
-     /// Called when the misc device is opened.
-     ///
-     /// The returned pointer will be stored as the private data for the file.
-@@ -389,6 +392,7 @@ impl<T: MiscDevice> MiscdeviceVTable<T> {
+-impl<T: Writer + Reader + Sync> ReadWriteFile<T> for T {
++impl<M, T> ReadWriteFile<M, T> for T
++where
++    M: ThisModule,
++    T: Writer + Reader + Sync,
++{
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             open: Some(writer_open::<T>),
+             read: Some(bindings::seq_read),
+             write: Some(write::<T>),
+@@ -225,13 +231,18 @@ impl<T: Writer + Reader + Sync> ReadWriteFile<T> for T {
+     read(data, buf, count)
+ }
+ 
+-pub(crate) trait WriteFile<T> {
++pub(crate) trait WriteFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
+ 
+-impl<T: Reader + Sync> WriteFile<T> for T {
++impl<M, T> WriteFile<M, T> for T
++where
++    M: ThisModule,
++    T: Reader + Sync,
++{
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             open: Some(write_only_open),
+             write: Some(write_only_write::<T>),
+             llseek: Some(bindings::noop_llseek),
+@@ -278,13 +289,18 @@ extern "C" fn blob_read<T: BinaryWriter>(
+ }
+ 
+ /// Representation of [`FileOps`] for read only binary files.
+-pub(crate) trait BinaryReadFile<T> {
++pub(crate) trait BinaryReadFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
+ 
+-impl<T: BinaryWriter + Sync> BinaryReadFile<T> for T {
++impl<M, T> BinaryReadFile<M, T> for T
++where
++    M: ThisModule,
++    T: BinaryWriter + Sync,
++{
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             read: Some(blob_read::<T>),
+             llseek: Some(bindings::default_llseek),
+             open: Some(bindings::simple_open),
+@@ -333,13 +349,18 @@ extern "C" fn blob_write<T: BinaryReader>(
+ }
+ 
+ /// Representation of [`FileOps`] for write only binary files.
+-pub(crate) trait BinaryWriteFile<T> {
++pub(crate) trait BinaryWriteFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
+ 
+-impl<T: BinaryReader + Sync> BinaryWriteFile<T> for T {
++impl<M, T> BinaryWriteFile<M, T> for T
++where
++    M: ThisModule,
++    T: BinaryReader + Sync,
++{
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             write: Some(blob_write::<T>),
+             llseek: Some(bindings::default_llseek),
+             open: Some(bindings::simple_open),
+@@ -358,13 +379,18 @@ impl<T: BinaryReader + Sync> BinaryWriteFile<T> for T {
+ }
+ 
+ /// Representation of [`FileOps`] for read/write binary files.
+-pub(crate) trait BinaryReadWriteFile<T> {
++pub(crate) trait BinaryReadWriteFile<M, T> {
+     const FILE_OPS: FileOps<T>;
+ }
+ 
+-impl<T: BinaryWriter + BinaryReader + Sync> BinaryReadWriteFile<T> for T {
++impl<M, T> BinaryReadWriteFile<M, T> for T
++where
++    M: ThisModule,
++    T: BinaryWriter + BinaryReader + Sync,
++{
+     const FILE_OPS: FileOps<T> = {
+         let operations = bindings::file_operations {
++            owner: M::OWNER.as_ptr(),
+             read: Some(blob_read::<T>),
+             write: Some(blob_write::<T>),
+             llseek: Some(bindings::default_llseek),
+diff --git a/samples/rust/rust_debugfs.rs b/samples/rust/rust_debugfs.rs
+index 025e8f9d12de..85c3f93159fd 100644
+--- a/samples/rust/rust_debugfs.rs
++++ b/samples/rust/rust_debugfs.rs
+@@ -54,7 +54,7 @@ struct RustDebugFs {
+     pdev: ARef<platform::Device>,
+     // As we only hold these for drop effect (to remove the directory/files) we have a leading
+     // underscore to indicate to the compiler that we don't expect to use this field directly.
+-    _debugfs: Dir,
++    _debugfs: Dir<THIS_MODULE>,
+     #[pin]
+     _compatible: File<CString>,
+     #[pin]
+@@ -124,11 +124,11 @@ fn probe(
+ }
+ 
+ impl RustDebugFs {
+-    fn build_counter(dir: &Dir) -> impl PinInit<File<Atomic<usize>>> + '_ {
++    fn build_counter<M: ThisModule>(dir: &Dir<M>) -> impl PinInit<File<Atomic<usize>>> + '_ {
+         dir.read_write_file(c_str!("counter"), Atomic::<usize>::new(0))
      }
  
-     const VTABLE: bindings::file_operations = bindings::file_operations {
-+        owner: T::ThisModule::OWNER.as_ptr(),
-         open: Some(Self::open),
-         release: Some(Self::release),
-         mmap: if T::HAS_MMAP { Some(Self::mmap) } else { None },
-diff --git a/samples/rust/rust_misc_device.rs b/samples/rust/rust_misc_device.rs
-index 3f1acb6818a5..78d239b26dcc 100644
---- a/samples/rust/rust_misc_device.rs
-+++ b/samples/rust/rust_misc_device.rs
-@@ -157,6 +157,7 @@ struct RustMiscDevice {
- #[vtable]
- impl MiscDevice for RustMiscDevice {
-     type Ptr = Pin<KBox<Self>>;
-+    type ThisModule = THIS_MODULE;
+-    fn build_inner(dir: &Dir) -> impl PinInit<File<Mutex<Inner>>> + '_ {
++    fn build_inner<M: ThisModule>(dir: &Dir<M>) -> impl PinInit<File<Mutex<Inner>>> + '_ {
+         dir.read_write_file(c_str!("pair"), new_mutex!(Inner { x: 3, y: 10 }))
+     }
  
-     fn open(_file: &File, misc: &MiscDeviceRegistration<Self>) -> Result<Pin<KBox<Self>>> {
-         let dev = ARef::from(misc.device());
 
 -- 
 2.43.0
