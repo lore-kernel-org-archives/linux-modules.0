@@ -1,393 +1,211 @@
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010040.outbound.protection.outlook.com [52.101.46.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD542512C8
-	for <linux-modules@vger.kernel.org>; Thu,  1 Jan 2026 05:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767244920; cv=none; b=MCLfnqjeObL8wFt3yaLitDX4cVilg1trRThq3Hvwi5W/8YcpMc1Xsbkxa+xRFmear53/0w9nywsdaXvy6AyMsawFwEWylOV18F8tDc9QTOxZ5cH25zNs/Ti1kZpOU5AEDaJXgCh26U6r6KH3YUMEiCv3f/wk4FxjB8ak8E6FeQ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767244920; c=relaxed/simple;
-	bh=KJQ4jpYSGm/3nhZ2nBbnbAiByofjpfGBkERW9T5CzMA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oynhBpqpbeJPQNkK1XaZTEHfJGJuzEpvhM9V7A4F5sbr2UDvjtbQtRjnfW92hty46RlzQ4wnhPl3/nYdFYFmLq7qb/uHNS1nhMszuYT8i3EOig9m5fC1qbTCPVf+uaiaMIyTXkpJcwrqZafhOM9KtpD4CNV/t5CSbJ2BeGqRJO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8SfiUOG; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F18E2749C7;
+	Sat,  3 Jan 2026 00:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767401467; cv=fail; b=KYDbzk9YAT2DrLNE0kfzdA9/FInuFp9+77lQWIoOHETxlZCz7gLLMwYjRyFxc1NDzfKqcOnHBDw2TcUYjPbsID96T4j46TcQCpTuzqwP2jmHsrIkwx5zgkskUrtSjGfqGc417bgwMLvbYI37m6KUwKXzLTMXumGZD1BPH8TZDyQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767401467; c=relaxed/simple;
+	bh=zfc5eBk/KcwZ9rzCCyBLNsD+XxvrTUP/hrTM6bqgI0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=XwXTvezzFByfmZaAGJN7raAbiWKW0iOvA8uFx5yZXNWyX7Zsiz8sm5wzQ1ligqj5EOdjzMFheFp8QOXMqJqHIABD9K8TFIrLuYwoEcx53StA8qpGUp7q3nSyz1ob8RWsRnAty+IdbMTSGdN8dwVafWjeQUCiPxdX4cYIrL94XjE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=r7N9WLNi; arc=fail smtp.client-ip=52.101.46.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8SfiUOG"
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-37b983fbd45so85711401fa.3
-        for <linux-modules@vger.kernel.org>; Wed, 31 Dec 2025 21:21:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767244915; x=1767849715; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MCtaSXGPRcSbvYyqIPMnOeQLbklJUshA1S2PP0SMOWU=;
-        b=W8SfiUOGab+mVjvrfzk/33yX079OgglDKXsquQVI4bjSwr+NAIphOQ0dPWEtcKwQKV
-         r9dTZCKw6pGWEFFXMx94XhpTfWhzQxpRm6XioKypGjKEwBN8iLy5T47VmVhUnJhJkQtO
-         NcKB4R2tZ8xKqChT2UM4L73ojVXqVowPSooi3o38YYfX6iLdZJmouPQtzNyDJKK+z7/U
-         0iEkcoq3an+DuQJsqdR35jpX/vF+D3kf3lzaBFqm3J1z0hmF/3tjv0fu75O/ZnHIeB86
-         /nLMvgzM1NjXKUdz3deG9NXgRCVNitauHN0OLSDh5z/r9fP98m+A7+SKpbOnd4gNsOW0
-         mAtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767244915; x=1767849715;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MCtaSXGPRcSbvYyqIPMnOeQLbklJUshA1S2PP0SMOWU=;
-        b=eDbOlcpk7GTgZJVH8SmME8QajCVg+uddg6etJY/oQ0gbbC5ifSS9OJw5QoUaiZ6OSa
-         v0noB9nKOv2BK8RwX4We7lkqb7y8tWVlEuRxvqD4JTRVX5MJ6xQb51hiL8KPOOiI0EY+
-         ds3NJu3OJq9Q2wd2nuuzcM2Br/dXRY3/Z+3xXGSfKd+Bt2wM6YOMn9tDZiU0abRAzEGv
-         nI5rsUcYZ4vX9qMUWDLAVIlhIs/GL7qruGL1cpmLOpTxfQnYUYsCDnz3tiRVdoYTWsn/
-         AwRJUhhCZmEsAUqzuqdj67DDhbvAT4kKId2T1V95PtYPgdpLsPg0lSFxz4dCx25J79YC
-         fPmg==
-X-Forwarded-Encrypted: i=1; AJvYcCW5N2RMFRDzddRtwBVnU+2KFePQVWOH8G/1PEM6P5QId87nhUginXeYNrMs34OEQ+zbwJCA+LnL9u4kua5t@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzd+gX6V2dFx3NPmlKumAjE/lB8n4K+YCSYWzfr88IWTPAM/hi8
-	BIDyQAblAekO7Wb8XnJJVut/smysxu4E3HyEmUej90MQ02OO3MErRl9J
-X-Gm-Gg: AY/fxX6UfiPVN6YTb32wHaXyaq+nMO4vKRkNnJDvwOe0+JJIlG2twbdTSX7eJabh7cT
-	55rYQ7M+P9UCKCg2qh5rCxyfXRLgp9vOtDpu/dGVbl2hFIYkR0oiiWwKdOy1EKpsb+uqj/PBWSp
-	/lkAuSOLzRPP7k/6ic91lm3B0Cj3LFqPmzgKPdcf2Y05NFyWyaX9vgR5wbp99QuxB+jYn+drfvU
-	1ESA5x3PeWzN28huIVDUgCMhXJMarGFDRGKvhuyaDvhulY5LsaDOwv9BEWQDu9zLZ3n97rE90pC
-	wUffbyaGMTaSE/GYCRpGYLOe4tY78cva9ExQ6jm9P5OIUHEWnihPGcv9NTB43Qg4bG3Pf2OKEbh
-	CzkU8dTRriOqe/L+EpdphuDDNTi+lmXXZdy60Nvp3tUuzTxqBsp4EdopqzlMa0ojRHxGiSFqveb
-	eCfMrCUV8tdB8qM4O+/O8wBR9khfXkAYNwbOuodU/8CLhPQZsU+fdQBQzgm36gtXpRrBZnlTM+B
-	yWlPw==
-X-Google-Smtp-Source: AGHT+IE44rsnY6ipPrk3/J7X1yUoLY5WMocdogdmnIRKh23tOr7xkmlRQ6aQFRsTEn6UW4FJGOVNiA==
-X-Received: by 2002:a2e:a993:0:b0:382:b559:8336 with SMTP id 38308e7fff4ca-382b55983b4mr984331fa.22.1767244915067;
-        Wed, 31 Dec 2025 21:21:55 -0800 (PST)
-Received: from LT-5CG5341NQ4.nordic.imtech.com (84-253-216-54.bb.dnainternet.fi. [84.253.216.54])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382861ef4ccsm37064921fa.23.2025.12.31.21.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 21:21:53 -0800 (PST)
-From: Kari Argillander <kari.argillander@gmail.com>
-Date: Thu, 01 Jan 2026 07:20:50 +0200
-Subject: [PATCH RFC 6/6] rust: WIP: Replace ModuleMetadata with THIS_MODULE
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="r7N9WLNi"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Y9PFPLTw4SWtKGTsyB0ZWrMoaEt+gmKM5gj65bqiO1+347hmSuWNzuAqOTwfUswncjsk5XFRnmrGqlLvn6bcXpY3ZMiWjBcTFEfpkRAXBNTxXFouxi01CYRGxnSVI4IoHtHOKJgajBvjA1FCNMCH8Pt5Ha3tH5VIgR4hQILL8WDNVFHhNXxlqRdnryJkO2AT0f/U1ZQBQfBsVBvURJF9u6s54l5+9nzlgKRKQz7TqoRABnB0T5zJ3Z7KVaX8ZIBypU0K3GAlEiRSR72t+4RlPmv+XUrqr7opEtS4A5CUEZgFD2hsnBkFkd6sKs5F09CGtBpkebe92MA5bKNUyr6TZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Yxq+MHMFw4APyzja8hu1mgjpWQ/mABLK0XY8rQMDz1k=;
+ b=EfTBv5AfC2CcAElopIcSbOculDp4e9DgaKO5JsJIU0QWuUUDVn3GkWVRBHNDTP1NZiPXXPGaZj5G2hcmIloV55wSHLjmOqjdL+qGFRdgT9A5m+J3LWCA5UNzHeEkjL+sAyU//fdF7mN48AFAI4oze8+giG0RZq+D6rSR7I9h3TRkQZ2o4YjHYY+MVRsWhOKy+ESBTkwcwGYfLanMAdPDLAjPeF2tSteLEcs/fo0hwznqN0kj43gHA3Kiu/x3MQPQr0tZ7iwXF0T76FphyCza6tgbE0O1K4nKfWUc+PiYK7hd7lQMMnXBj93BP6Oj5i9sGcpnF1RfC8vfQx0AuuCciw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yxq+MHMFw4APyzja8hu1mgjpWQ/mABLK0XY8rQMDz1k=;
+ b=r7N9WLNiko9kuKu+2WIP1upIGVyXlGA/it0Lr70IAnbJ0NeO1xmbs1+l0rehwlTAjBQ3SM7o4VOKxsMHTBjxFGs9MpXLBSheGdhh6f0A0D/WAEY+ubPkeoMYMkJEA9fqHyMosfpJMuHiRv67HbwbgRp7ZjkKOXHN2TtA2pDFdItiUkqMsBvmILIzA+Jgr/D0vYsDOHAvRd/xSeqNtm1gTYyQRLdeHSZFHRLjxdAiwQJUxIHRzK9f+Qkx/Xhzy14KE0yjjrUcBYARbxNyxEboV4j5ZKA+rYq6Yqo68UaJXGh6aSzcJ2rjL3c0aUXxGQfrveDUkVdBdGpLrUD6suad6w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
+ by CY5PR12MB6454.namprd12.prod.outlook.com (2603:10b6:930:36::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Sat, 3 Jan
+ 2026 00:51:01 +0000
+Received: from SN7PR12MB8059.namprd12.prod.outlook.com
+ ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
+ ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9478.004; Sat, 3 Jan 2026
+ 00:51:01 +0000
+Date: Fri, 2 Jan 2026 19:50:59 -0500
+From: Joel Fernandes <joelagnelf@nvidia.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Yury Norov (NVIDIA)" <yury.norov@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	David Laight <david.laight@runbox.com>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
+Message-ID: <20260103005059.GA11015@joelbox2>
+References: <20251225170930.1151781-1-yury.norov@gmail.com>
+ <20251225170930.1151781-8-yury.norov@gmail.com>
+ <20251226115848.298465d4@gandalf.local.home>
+ <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
+ <20251229111748.3ba66311@gandalf.local.home>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251229111748.3ba66311@gandalf.local.home>
+X-ClientProxiedBy: MN2PR02CA0008.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::21) To SN7PR12MB8059.namprd12.prod.outlook.com
+ (2603:10b6:806:32b::7)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260101-this_module_fix-v1-6-46ae3e5605a0@gmail.com>
-References: <20260101-this_module_fix-v1-0-46ae3e5605a0@gmail.com>
-In-Reply-To: <20260101-this_module_fix-v1-0-46ae3e5605a0@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Jens Axboe <axboe@kernel.dk>, Kari Argillander <kari.argillander@gmail.com>, 
- Andreas Hindborg <a.hindborg@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767244881; l=13418;
- i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=KJQ4jpYSGm/3nhZ2nBbnbAiByofjpfGBkERW9T5CzMA=;
- b=gFUZ/58AraibpqH01HqbZhQb+XNzgNCXh3sNTjmMWxdx2lrddwUWZPbsMGPtHuo9cNjvK7Gnk
- 08Orxt2elZ7CXFWUsZAPrZSWyFOPO4sQv3P7Qixgg1aPs6qOQRb92/+
-X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
- pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|CY5PR12MB6454:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a45e441-3da7-4504-06d8-08de4a622a87
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dsDv/L5uxfnBOoB0EqkVKcPZFK8R/R0QEfCJAqs5rhPTbzD0Kux6kK8Yyqgc?=
+ =?us-ascii?Q?UZh5nnQceV3jq/xNN/wAmvjlfC9IA+fu5eak2EPL8aJvnjvQiuFFqQkTlW8x?=
+ =?us-ascii?Q?fDSUiieckM91nBTwQGVTEUXsxSTBEZvnPYnhp6ir1VtTP+mode0MM/lyDbl8?=
+ =?us-ascii?Q?YsHQ/zPTX1ovpfKnwBMTDLS47nDZMo9hnyjZUYyPTGPoynCA8P8MNhiLymgR?=
+ =?us-ascii?Q?3blUEf3ZLGUpJEbIFDj0H9TaDMd5uoMeeVlUPBvj9YA8x6TJBcD6Ic5MT1kv?=
+ =?us-ascii?Q?gst9Zp70PPBJ3MKshJqzlkYiEOhc02ojrrSUbD0b4IxI2vjSEnbLw1Ke0/4i?=
+ =?us-ascii?Q?yQOVgYOBWmcCIP7WgSUyHXwTPz7OvKasglvvMAzAmgicSMtPnWZohejN2MOo?=
+ =?us-ascii?Q?NL3m5ufOQju2pXkjsBrfb6i6L1DhnDyyI4bkGU9nw2JHA3qYGdvAvuAP7OCf?=
+ =?us-ascii?Q?eod0WX/CaMeEBUU5kexx1LB6Cmb9nLqgUdvvPep/WXuPbYjdfBYnycnb/yCY?=
+ =?us-ascii?Q?BwQvIdEZGlNKZ+Zp3A2SlbtpI21Ad0NSt4kkMJFOhpzgMSyMQoXLeatKyFUU?=
+ =?us-ascii?Q?3r/Vhc2B7n+F3fuRYo6D5OPTBGNAtphHhhrOY2ipOjlqfyzOXtMD8amEDv75?=
+ =?us-ascii?Q?XEa/ESJ3Z+4QDZEjKmEanLtAyGCBMtGcDbtC4WscH8OolDOQW2MYB7gEWeL2?=
+ =?us-ascii?Q?H9sWGb2dswHYh2U8ggMemO6CiHKGdqXV8W+DuqD9AFVmB8zVAyDwvTPF1hpa?=
+ =?us-ascii?Q?3t9SXHk8AeFQiFtg/fubpxpDsTSDCfc17PyqXQUBOu5gj/Xo8hqbzdvhyJzV?=
+ =?us-ascii?Q?hREmS50zr5DA6ZXWj0xvmC1jpikl39mGiY6R3l0RxCmkQehgNm/F99V+tW0v?=
+ =?us-ascii?Q?PzJeBn9h6HwWXp/vIIXHTxCSMNpvO5LcEnQkaCyHb8oRnNzJ2Xv6NxV7E972?=
+ =?us-ascii?Q?fws61uj1m+gxob8WQvS7nlhMXDg5zlAhgyLQe2je2sM4p5EckAELiDx4EGtv?=
+ =?us-ascii?Q?oTHihNmYwNmVi2XAL4yxJ8hfmFamQ3za+AaH/M30ZozwbZGwTfuWweBaV5ZL?=
+ =?us-ascii?Q?nhH1EXwWpkq4mI2pQxf4zu3PPqcmwbm5GEPQGzma7G4Se9s/OiidoweJC9qR?=
+ =?us-ascii?Q?lpGMFxayvnBWvE3hp8rSc20LgyR7F6JvIBmLP9ghhjJ5Iot3CCXIYMmbf8qj?=
+ =?us-ascii?Q?CdZ/mx+1Zb0AhOVwUzYigj+K/19Mkw7zgbgyb5I+JvArRXHkF8Wx9b9P6uAY?=
+ =?us-ascii?Q?4iV40FbmSjFzffzHM00he1lMT9ozysToJl172EsFF1TrI6qlhcq+GTewzQWM?=
+ =?us-ascii?Q?bnSJkOge35CokBEP0KIonM5ATOvv4+F4s9otmorfj+18ngSudtS6O7moGN2I?=
+ =?us-ascii?Q?S9BiX2wJzv72besYtCi8VBlCrzh9WOtJDflU8giZPCQaXzzb2iM+bYp9MvNs?=
+ =?us-ascii?Q?GkbnN/m+pkdcoDzraM79oQsDPzdtp3zO?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?26qmSiQsIeLMJtd1Wjxg5ifOY7cK38Vg/WqZJi7k58vmHF/WJkcrqc9WYXIi?=
+ =?us-ascii?Q?0f8M/Xzu83qZpLze/SVZLDu0T57zU3XYswVMPUhDiYz6AGhTEQ+8Vl9hvpeM?=
+ =?us-ascii?Q?D5/omRUG1Lr0nGiULtOfD260PVztJw5UNFzs5KqGhzX4ngTApfOh0Oy2C1DJ?=
+ =?us-ascii?Q?HLqVCWlrH1p5hGqtFkMl22vN9q0EMnLtEnwAIryOH8UaaemCNsE7wKhRGY5h?=
+ =?us-ascii?Q?z/0agOgkvL99L7a9R/T+DbfbO1Iv/zfL4EdT71+3up+w2TTK+Z+fdcclqJua?=
+ =?us-ascii?Q?M2oSg7RmsRQU5f1wHE7mdO/RoDtDtIciLLKmnp9tyWCccdxrgVuzRYzrC/T8?=
+ =?us-ascii?Q?YbfXyxKtMOJqfWQRxs7vpvVxnw6BMi+N9EDsPkXpczivpnIEaeY7WpY9wr6C?=
+ =?us-ascii?Q?8ii/Cn0dQcJb2kUQDcW8t3WSmuGX9GCMkJSKA3UyYgQF02lea1nQZzT0jAQd?=
+ =?us-ascii?Q?tJox9n8WZMAtVjwAybTtp86i4Dswbrhu4kGuY2uexOV1Pfbz8iIa0IW1yd8K?=
+ =?us-ascii?Q?wxxg093/fT7r/cc/9PLrGwVJZpAn4w+4iqZ3gGaEllGNstMzfKgrAFjpD13M?=
+ =?us-ascii?Q?VvzWEmV5DCtAfDqG1SkeTGy7vi+jGqKRLEZQOtDfRsT29WeFTJ43SLCgeMZy?=
+ =?us-ascii?Q?nBuXTsnumK+8e1kUjKc6qKOLJ/mmhT5b4ewmZT1J3z4vFGUFjSFGKvRFdnPo?=
+ =?us-ascii?Q?jRoRMPRKbRt5qpbHYSS6Q2YWHNpFoYYNK18NUTr0OIotKD69rDiHjnUZ/8iQ?=
+ =?us-ascii?Q?rvSpZE1V9fk0qIuiDfcysuey/dGZR0SoyIPvTvaatZKWtlFK1Eb+jsP9vVgV?=
+ =?us-ascii?Q?Fwwk8qp/vVC89lElgM5jpK3Yc6GnmT0II+PLGnmov+RMTHOaYFmgwDBGi7bn?=
+ =?us-ascii?Q?qVfjv+rXEGP2iY66C1hT40HiQbHmFkPW02bbb0uSzTkM/GQb2tixhu2EX0YQ?=
+ =?us-ascii?Q?G7WMt1p7EqhrWh302IdcSQJErswMkNYlX4Kx/JaM3ppsPv/4r0t5rdH8+J5p?=
+ =?us-ascii?Q?WV4lhjjk222M8lNjVWPZJapxH44/9vqInd97eVEri64d6XDXl4XfUR7r7iRn?=
+ =?us-ascii?Q?8a3pY29ot867Pyr1TAFTZwlJDkOhoZMruRpTYfzSl2hQjYqdNkB5fp6EZnx2?=
+ =?us-ascii?Q?LfMU4l+ZlP8SV25ROUENdV4AWL+4/kvY4RjJP0BbnMeaQPlr5tFJgVy76zG6?=
+ =?us-ascii?Q?bgOGx5R7Kb7Z0DuO+itg/MC9RXqclCQB1yNRUQAASPC+gJIIqbfrY9M83xQD?=
+ =?us-ascii?Q?DB0JgTHN2DZTJrOfKv/0oJL5NM++pMp+GcE5uHDD4Rr84cxM4TyG0JlxoH/2?=
+ =?us-ascii?Q?n2t2X95nkvLqyS9gx3coZhlKdBWsDjrxpqSjA1JE1H4XHN+6ntz9IZKlZhB2?=
+ =?us-ascii?Q?BtxFuWeEcXknHJnsvfCJyGKa/6H4QbWWbfloOSuJ26UBAfNWvP9sJlQEQ/Vw?=
+ =?us-ascii?Q?5s8FQTPdk8s9rBtKSql3NSWGyBbqNlbZLMbAbFbm/cN6ggjVjuYCWC7KnrhI?=
+ =?us-ascii?Q?7qJvxy7/4gYtCv+r1GnEuPFFSrUhLgo9qGsHFG7tPpE/A+oNk+7G5MLCUkOq?=
+ =?us-ascii?Q?dczrfAn88NFeQ9uiIs5k6oKf0UtUmoCM7JBf6uuBz32OVtL6D/Cdl0tLcneo?=
+ =?us-ascii?Q?tFKKVQwwFWEaCb00IYD045le7YnfBp2VDkj8UbZ0RdFsodQHMDSx7sEMUFSw?=
+ =?us-ascii?Q?lg/yBiVFsI9WAUC+smS8CwnrXcfE7R6jg13oal2VZhjdZvV06IFMC6y3jvFI?=
+ =?us-ascii?Q?FzG/avirqw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a45e441-3da7-4504-06d8-08de4a622a87
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2026 00:51:01.4654
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aqCi8ZRoQtGGPvDN+haozGZ93C/q3Z9tR+ywx93BM0lMlbFPLFHGIEhn/YcFQux/iX8D5J0pJgaXPlHs+axmDA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6454
 
-ModuleMetadata seems redudant after we have prober THIS_MODULE.
----
- drivers/gpu/nova-core/nova_core.rs    |  2 +-
- rust/kernel/auxiliary.rs              | 10 +++++++---
- rust/kernel/driver.rs                 | 10 ++++------
- rust/kernel/firmware.rs               |  2 +-
- rust/kernel/i2c.rs                    |  4 ++--
- rust/kernel/lib.rs                    |  8 ++------
- rust/kernel/pci.rs                    |  6 +++---
- rust/kernel/platform.rs               |  4 ++--
- rust/kernel/usb.rs                    |  6 +++---
- rust/macros/module.rs                 | 13 +++++++------
- samples/rust/rust_driver_auxiliary.rs |  6 +++---
- 11 files changed, 35 insertions(+), 36 deletions(-)
+On Mon, Dec 29, 2025 at 11:17:48AM -0500, Steven Rostedt wrote:
+> On Sun, 28 Dec 2025 13:31:50 -0800
+> Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+> > > trace_printk() should be as available to the kernel as printk() is.  
+> > 
+> > um, why?  trace_printk is used 1% as often as is printk.  Seems
+> > reasonable to include a header file to access such a rarely-used(!) and
+> > specialized thing?
+> 
+> It will waste a lot of kernel developers time. Go to conferences and talk
+> with developers. trace_printk() is now one of the most common ways to debug
+> your code. Having to add "#include <linux/trace_printk.h>" in every file
+> that you use trace_printk() (and after your build fails because you forgot
+> to include that file **WILL** slow down kernel debugging for hundreds of
+> developers! It *is* used more than printk() for debugging today. Because
+> it's fast and can be used in any context (NMI, interrupt handlers, etc).
+> 
+> But sure, if you want to save the few minutes that is added to "make
+> allyesconfig" by sacrificing minutes of kernel developer's time. Go ahead
+> and make this change.
+> 
+> I don't know how much you debug and develop today, but lots of people I
+> talk to at conferences thank me for trace_printk() because it makes
+> debugging their code so much easier.
+> 
+> The "shotgun" approach is very common. That is, you add:
+> 
+> 	trace_printk("%s:%d\n", __func__, __LINE__);
+> 
+> all over your code to find out where things are going wrong. With the
+> persistent ring buffer, you can even extract that information after a
+> crash and reboot.
 
-diff --git a/drivers/gpu/nova-core/nova_core.rs b/drivers/gpu/nova-core/nova_core.rs
-index b98a1c03f13d..fbfbcc9446c0 100644
---- a/drivers/gpu/nova-core/nova_core.rs
-+++ b/drivers/gpu/nova-core/nova_core.rs
-@@ -19,7 +19,7 @@
- mod util;
- mod vbios;
- 
--pub(crate) const MODULE_NAME: &kernel::str::CStr = <LocalModule as kernel::ModuleMetadata>::NAME;
-+pub(crate) const MODULE_NAME: &kernel::str::CStr = THIS_MODULE::name();
- 
- kernel::module_pci_driver! {
-     type: driver::NovaCore,
-diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
-index 323074322505..bd064b677c05 100644
---- a/rust/kernel/auxiliary.rs
-+++ b/rust/kernel/auxiliary.rs
-@@ -27,10 +27,10 @@
- unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-     type RegType = bindings::auxiliary_driver;
- 
--    unsafe fn register<M: ThisModule>(adrv: &Opaque<Self::RegType>, name: &'static CStr) -> Result {
-+    unsafe fn register<M: ThisModule>(adrv: &Opaque<Self::RegType>) -> Result {
-         // SAFETY: It's safe to set the fields of `struct auxiliary_driver` on initialization.
-         unsafe {
--            (*adrv.get()).name = name.as_char_ptr();
-+            (*adrv.get()).name = M::NAME.as_char_ptr();
-             (*adrv.get()).probe = Some(Self::probe_callback);
-             (*adrv.get()).remove = Some(Self::remove_callback);
-             (*adrv.get()).id_table = T::ID_TABLE.as_ptr();
-@@ -38,7 +38,11 @@ unsafe fn register<M: ThisModule>(adrv: &Opaque<Self::RegType>, name: &'static C
- 
-         // SAFETY: `adrv` is guaranteed to be a valid `RegType`.
-         to_result(unsafe {
--            bindings::__auxiliary_driver_register(adrv.get(), M::OWNER.as_ptr(), name.as_char_ptr())
-+            bindings::__auxiliary_driver_register(
-+                adrv.get(),
-+                M::OWNER.as_ptr(),
-+                M::NAME.as_char_ptr(),
-+            )
-         })
-     }
- 
-diff --git a/rust/kernel/driver.rs b/rust/kernel/driver.rs
-index 7c4ad24bb48a..5bb029075a57 100644
---- a/rust/kernel/driver.rs
-+++ b/rust/kernel/driver.rs
-@@ -118,7 +118,7 @@ pub unsafe trait RegistrationOps {
-     ///
-     /// On success, `reg` must remain pinned and valid until the matching call to
-     /// [`RegistrationOps::unregister`].
--    unsafe fn register<M: ThisModule>(reg: &Opaque<Self::RegType>, name: &'static CStr) -> Result;
-+    unsafe fn register<M: ThisModule>(reg: &Opaque<Self::RegType>) -> Result;
- 
-     /// Unregisters a driver previously registered with [`RegistrationOps::register`].
-     ///
-@@ -151,7 +151,7 @@ unsafe impl<T: RegistrationOps> Send for Registration<T> {}
- 
- impl<T: RegistrationOps> Registration<T> {
-     /// Creates a new instance of the registration object.
--    pub fn new<M: ThisModule>(name: &'static CStr) -> impl PinInit<Self, Error> {
-+    pub fn new<M: ThisModule>() -> impl PinInit<Self, Error> {
-         try_pin_init!(Self {
-             reg <- Opaque::try_ffi_init(|ptr: *mut T::RegType| {
-                 // SAFETY: `try_ffi_init` guarantees that `ptr` is valid for write.
-@@ -162,7 +162,7 @@ pub fn new<M: ThisModule>(name: &'static CStr) -> impl PinInit<Self, Error> {
-                 let drv = unsafe { &*(ptr as *const Opaque<T::RegType>) };
- 
-                 // SAFETY: `drv` is guaranteed to be pinned until `T::unregister`.
--                unsafe { T::register::<M>(drv, name) }
-+                unsafe { T::register::<M>(drv) }
-             }),
-         })
-     }
-@@ -195,9 +195,7 @@ struct DriverModule {
-         impl $crate::InPlaceModule for DriverModule {
-             fn init<M: ::kernel::ThisModule>() -> impl ::pin_init::PinInit<Self, $crate::error::Error> {
-                 $crate::try_pin_init!(Self {
--                    _driver <- $crate::driver::Registration::new::<M>(
--                        <Self as $crate::ModuleMetadata>::NAME,
--                    ),
-+                    _driver <- $crate::driver::Registration::new::<M>(),
-                 })
-             }
-         }
-diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-index 71168d8004e2..254b5c6b64af 100644
---- a/rust/kernel/firmware.rs
-+++ b/rust/kernel/firmware.rs
-@@ -206,7 +206,7 @@ macro_rules! module_firmware {
-             const __MODULE_FIRMWARE_PREFIX: &'static $crate::str::CStr = if cfg!(MODULE) {
-                 c""
-             } else {
--                <LocalModule as $crate::ModuleMetadata>::NAME
-+                THIS_MODULE::name()
-             };
- 
-             #[link_section = ".modinfo"]
-diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
-index bc154506b16f..31db4d45bab1 100644
---- a/rust/kernel/i2c.rs
-+++ b/rust/kernel/i2c.rs
-@@ -97,7 +97,7 @@ macro_rules! i2c_device_table {
- unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-     type RegType = bindings::i2c_driver;
- 
--    unsafe fn register<M: ThisModule>(idrv: &Opaque<Self::RegType>, name: &'static CStr) -> Result {
-+    unsafe fn register<M: ThisModule>(idrv: &Opaque<Self::RegType>) -> Result {
-         build_assert!(
-             T::ACPI_ID_TABLE.is_some() || T::OF_ID_TABLE.is_some() || T::I2C_ID_TABLE.is_some(),
-             "At least one of ACPI/OF/Legacy tables must be present when registering an i2c driver"
-@@ -120,7 +120,7 @@ unsafe fn register<M: ThisModule>(idrv: &Opaque<Self::RegType>, name: &'static C
- 
-         // SAFETY: It's safe to set the fields of `struct i2c_client` on initialization.
-         unsafe {
--            (*idrv.get()).driver.name = name.as_char_ptr();
-+            (*idrv.get()).driver.name = M::NAME.as_char_ptr();
-             (*idrv.get()).probe = Some(Self::probe_callback);
-             (*idrv.get()).remove = Some(Self::remove_callback);
-             (*idrv.get()).shutdown = Some(Self::shutdown_callback);
-diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index 6d4563662a02..3bae80a949d2 100644
---- a/rust/kernel/lib.rs
-+++ b/rust/kernel/lib.rs
-@@ -199,12 +199,6 @@ fn init<M: ThisModule>() -> impl pin_init::PinInit<Self, error::Error> {
-     }
- }
- 
--/// Metadata attached to a [`Module`] or [`InPlaceModule`].
--pub trait ModuleMetadata {
--    /// The name of the module as specified in the `module!` macro.
--    const NAME: &'static crate::str::CStr;
--}
--
- pub mod this_module {
-     //! TODO
-     //!
-@@ -224,6 +218,8 @@ pub mod this_module {
-     pub trait ThisModule {
-         /// TODO Doc
-         const OWNER: ModuleWrapper;
-+        /// TODO Doc
-+        const NAME: &'static kernel::str::CStr;
-     }
- 
-     /// See [`this_module`]
-diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
-index 792560ca8020..b043d7a388d0 100644
---- a/rust/kernel/pci.rs
-+++ b/rust/kernel/pci.rs
-@@ -54,10 +54,10 @@
- unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-     type RegType = bindings::pci_driver;
- 
--    unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>, name: &'static CStr) -> Result {
-+    unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>) -> Result {
-         // SAFETY: It's safe to set the fields of `struct pci_driver` on initialization.
-         unsafe {
--            (*pdrv.get()).name = name.as_char_ptr();
-+            (*pdrv.get()).name = M::NAME.as_char_ptr();
-             (*pdrv.get()).probe = Some(Self::probe_callback);
-             (*pdrv.get()).remove = Some(Self::remove_callback);
-             (*pdrv.get()).id_table = T::ID_TABLE.as_ptr();
-@@ -65,7 +65,7 @@ unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>, name: &'static C
- 
-         // SAFETY: `pdrv` is guaranteed to be a valid `RegType`.
-         to_result(unsafe {
--            bindings::__pci_register_driver(pdrv.get(), M::OWNER.as_ptr(), name.as_char_ptr())
-+            bindings::__pci_register_driver(pdrv.get(), M::OWNER.as_ptr(), M::NAME.as_char_ptr())
-         })
-     }
- 
-diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
-index 67d46231600e..27f196a140e5 100644
---- a/rust/kernel/platform.rs
-+++ b/rust/kernel/platform.rs
-@@ -30,7 +30,7 @@
- unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-     type RegType = bindings::platform_driver;
- 
--    unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>, name: &'static CStr) -> Result {
-+    unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>) -> Result {
-         let of_table = match T::OF_ID_TABLE {
-             Some(table) => table.as_ptr(),
-             None => core::ptr::null(),
-@@ -43,7 +43,7 @@ unsafe fn register<M: ThisModule>(pdrv: &Opaque<Self::RegType>, name: &'static C
- 
-         // SAFETY: It's safe to set the fields of `struct platform_driver` on initialization.
-         unsafe {
--            (*pdrv.get()).driver.name = name.as_char_ptr();
-+            (*pdrv.get()).driver.name = M::NAME.as_char_ptr();
-             (*pdrv.get()).probe = Some(Self::probe_callback);
-             (*pdrv.get()).remove = Some(Self::remove_callback);
-             (*pdrv.get()).driver.of_match_table = of_table;
-diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
-index c6ee98d12875..43259307986f 100644
---- a/rust/kernel/usb.rs
-+++ b/rust/kernel/usb.rs
-@@ -31,10 +31,10 @@
- unsafe impl<T: Driver + 'static> driver::RegistrationOps for Adapter<T> {
-     type RegType = bindings::usb_driver;
- 
--    unsafe fn register<M: ThisModule>(udrv: &Opaque<Self::RegType>, name: &'static CStr) -> Result {
-+    unsafe fn register<M: ThisModule>(udrv: &Opaque<Self::RegType>) -> Result {
-         // SAFETY: It's safe to set the fields of `struct usb_driver` on initialization.
-         unsafe {
--            (*udrv.get()).name = name.as_char_ptr();
-+            (*udrv.get()).name = M::NAME.as_char_ptr();
-             (*udrv.get()).probe = Some(Self::probe_callback);
-             (*udrv.get()).disconnect = Some(Self::disconnect_callback);
-             (*udrv.get()).id_table = T::ID_TABLE.as_ptr();
-@@ -42,7 +42,7 @@ unsafe fn register<M: ThisModule>(udrv: &Opaque<Self::RegType>, name: &'static C
- 
-         // SAFETY: `udrv` is guaranteed to be a valid `RegType`.
-         to_result(unsafe {
--            bindings::usb_register_driver(udrv.get(), M::OWNER.as_ptr(), name.as_char_ptr())
-+            bindings::usb_register_driver(udrv.get(), M::OWNER.as_ptr(), M::NAME.as_char_ptr())
-         })
-     }
- 
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 6b8753d122cc..6a1ce6435e8f 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -375,6 +375,13 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-             #[allow(non_camel_case_types)]
-             pub struct THIS_MODULE;
- 
-+            impl THIS_MODULE {{
-+                /// Returns the name of this module.
-+                pub const fn name() -> &'static ::kernel::str::CStr {{
-+                    c\"{name}\"
-+                }}
-+            }}
-+
-             impl ::kernel::prelude::ThisModule for THIS_MODULE {{
-                 #[cfg(not(MODULE))] 
-                 const OWNER: ::kernel::this_module::ModuleWrapper = unsafe {{
-@@ -392,13 +399,7 @@ impl ::kernel::prelude::ThisModule for THIS_MODULE {{
-                     
-                     ::kernel::this_module::ModuleWrapper::from_ptr(__this_module.get())
-                 }};
--            }}
--
--            /// The `LocalModule` type is the type of the module created by `module!`,
--            /// `module_pci_driver!`, `module_platform_driver!`, etc.
--            type LocalModule = {type_};
- 
--            impl ::kernel::ModuleMetadata for {type_} {{
-                 const NAME: &'static ::kernel::str::CStr = c\"{name}\";
-             }}
- 
-diff --git a/samples/rust/rust_driver_auxiliary.rs b/samples/rust/rust_driver_auxiliary.rs
-index e996dca19454..2f77b0873e81 100644
---- a/samples/rust/rust_driver_auxiliary.rs
-+++ b/samples/rust/rust_driver_auxiliary.rs
-@@ -18,7 +18,7 @@
- use core::any::TypeId;
- use pin_init::PinInit;
- 
--const MODULE_NAME: &CStr = <LocalModule as kernel::ModuleMetadata>::NAME;
-+const MODULE_NAME: &CStr = THIS_MODULE::name();
- const AUXILIARY_NAME: &CStr = c_str!("auxiliary");
- 
- struct AuxiliaryDriver;
-@@ -113,8 +113,8 @@ struct SampleModule {
- impl InPlaceModule for SampleModule {
-     fn init<M: ThisModule>() -> impl PinInit<Self, Error> {
-         try_pin_init!(Self {
--            _pci_driver <- driver::Registration::new::<M>(MODULE_NAME),
--            _aux_driver <- driver::Registration::new::<M>(MODULE_NAME),
-+            _pci_driver <- driver::Registration::new::<M>(),
-+            _aux_driver <- driver::Registration::new::<M>(),
-         })
-     }
- }
+I use trace_printk() all the time for kernel, particularly RCU development.
+One of the key usecases I have is dumping traces on panic (with panic on warn
+and stop tracing on warn enabled). This is extremely useful since I can add
+custom tracing and dump traces when rare conditions occur. I fixed several
+bugs with this technique.
 
--- 
-2.43.0
+I also recommend keeping it convenient to use.
+
+thanks,
+
+ - Joel
 
