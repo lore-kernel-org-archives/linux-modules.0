@@ -1,188 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A6B32C921
-	for <linux-modules@vger.kernel.org>; Mon,  5 Jan 2026 15:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C123064A9
+	for <linux-modules@vger.kernel.org>; Mon,  5 Jan 2026 16:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767626575; cv=none; b=bJVEyEEE8URTbruBGOkXsFuXRBgjSdYm2d6HlSUM72RASeShzkG+JuuFROWmSS20zC8YJNvx8eI1TlDeyroW5/zo3Mgv+Tgb4/HeWekRhkIB9tN91w6B3hLMeZw0wjbBbZ4aPSzOsgh9fohZXRkAEtsaafyH9HXWMZ55DJyLVbc=
+	t=1767630975; cv=none; b=A3SES15f9mDR80YLEvD8ro/saqLr0CfsmzWCLqbqnKEyvFo2bi/guxhOkZSHpqE8/NAeOye6o5GSgdIZrM9xe5/d42kE4JpEt19G/hV+hbTtdjnNeglpPTyx8+tbmqJ4VRRYcNIZShAMvtPK/DGglmmlSgxkWpDvc0lgzFbafhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767626575; c=relaxed/simple;
-	bh=dbX9nHJ5REzRp8QaFOHK2ee2n38HwBnQPeTWNbT3JoQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fi+ev+nUEJWJ6CwbNr/OAK/xk34/ZLTK3LTmgdMFJbQcb1BhgAZ7Lot19Q2EpbHg6sgMUkJke553sZCJ/P5Iy7L85TH1tNjmFrqgMe/ACKubPdqbp0u12O0zFK92KcLv2lCqkNf8TFAdbpGIhkv+WirFXP93xUenax82KNo9cho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FRTUBoYD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1767630975; c=relaxed/simple;
+	bh=Cne43cGOBFzbsHriSJTKpbMxofM1/GdzL1+MVAry/W4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQclM/nwbqHm4SKLN8SY4dIg389AaOVAADG3sfoDW0S34oI3ZA/k6OI/UZFDV8Upi3UEcvnUNf0CRvm2ekkjpG/QBttnuyPzjiCaVK36YEi8uk/N53Lu5HQihmG/QZt1daEcImxzXqI5B5WDEDOfEVFzRbCVCRq68IluarzDLCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipjMY4/1; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FRTUBoYD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767626572;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e9kgzsLwkkfNxmetAJNcral3H3dTIGoaCL0v9z96wpg=;
-	b=FRTUBoYDANSJk7cxvxE2o/ZUVMh/mXk082VC6iV/oqc17YiGKVGi9miM9+erloOTBw8c0v
-	G9qMjExAcfqofg3WZvSUlIekhYtpDg0PpmS1s6dAsn0RW+C/Z4AZTK4AYRTgfujSukP3RN
-	ODm4l5xS+zVn7quMZoKC3aelJahMlog=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-26-KQWT_SDsNDmINssT8d_tdA-1; Mon,
- 05 Jan 2026 10:22:50 -0500
-X-MC-Unique: KQWT_SDsNDmINssT8d_tdA-1
-X-Mimecast-MFC-AGG-ID: KQWT_SDsNDmINssT8d_tdA_1767626568
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 90468195609D;
-	Mon,  5 Jan 2026 15:22:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk.com (unknown [10.42.28.4])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE50419560AB;
-	Mon,  5 Jan 2026 15:22:44 +0000 (UTC)
-From: David Howells <dhowells@redhat.com>
-To: Lukas Wunner <lukas@wunner.de>,
-	Ignat Korchagin <ignat@cloudflare.com>
-Cc: David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipjMY4/1"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7900ab67562so1695897b3.0
+        for <linux-modules@vger.kernel.org>; Mon, 05 Jan 2026 08:36:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767630972; x=1768235772; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmLroKiaaSIEDmiG3hNy96115cezpvbgC/O0Qw/mmcE=;
+        b=ipjMY4/19KtfqRv0jJBNwzk99KWVbeD7mlC1CKhkX3LMa43NLmIOAXegcSUIWxhef2
+         qNn/wV1C7mfUiqs67gUTOdQNDvqAZL74N0iz6/a6+T4G/qysNy/dRQsRPJfKDjEf06eN
+         a1vi6sT5yHAN77fOeERlGW5gtUCiGQJkbPHcv5vvQJFGmNYY89aApFSJrSyau9tjw2QG
+         5h5+Qq7Et/LX8XjN001SGTjFBB9Wu7OXl0GKpzV8fPDIPYdis5IUrNGL0jfm3oPb1Oz0
+         CwiB5Gs6+oL9V6btK4L6YkmF1hvOuyojPJmOLqwrfLrOEoQe2v99FhFsOFUiqazQ+Cpp
+         YnFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767630972; x=1768235772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pmLroKiaaSIEDmiG3hNy96115cezpvbgC/O0Qw/mmcE=;
+        b=Nkt8rMRUA7uL+DMw78r8tUERt8Jd7hnCCYU4s0c4fKXMedPPdWPXK7JcH4Pez4n3tI
+         iikNm05jzZ+rluJLt/KzHL+MBeBAkHYiddRIaQ3dtstzir/n5Jkq8tEVjicUIjGhIvWZ
+         XpsHB28VD9InBMOY08tjkC3Sw2FK+SmtQo735lx/VHfFSAMrr36KSCLs/F90ksYP4ODx
+         aILCcpLMi24wz3H1VcxhhWkQYo9DUczYC83UJPn8PY38gBz9ZKaoBpVpAMIKjeZUhC0N
+         3eXnrVl0s2zWAGzR+ut45dwf9gZWV2CT71yzLr6rf79mW4hPy6cNt+QWEBdt+7IqA51U
+         8sCg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYR3hjlAxM9chY3MfZROBdl23PnjTVI68LolEpN1K7s/u8392kGOirIW5pfjShakyUTrZ4xU09LzqnrHwC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZXp6/YI34GpfvJ0zF22RcG7Jc231YbQxyZ+vHOYP+8/vYQEMO
+	p29SraCwxPV3pkYYxBZfRCtmtQNYlOyM7WufA0tezFlwDkW6e9stq2QN
+X-Gm-Gg: AY/fxX6nI2FMDx2UJzWSdrdR2zFBig8DmIp2/1jYladhVKMjKj+8fngv7i6hSAjwi4f
+	rzfC3kTP5EhUv87Aqqikc1AbXYUN+0huJLlbkH2KCcmM0fL1vMTNYIiK+Dxir9zb9Y3I1SGKTbz
+	FBDCqoLjCU+WNXlKlPqAQUOdmSa9NfmxGRmotWbpZhupxqLKZE0Vxw7dTpGKoo3z0jRxwiDBVDq
+	l8tY4kyp7epSLQKsA7aY5FeTVwVJu7T0YI6RElUonGT36EDFXYPwaYBDFAvbPjbdgivrlyQC4BF
+	JbCibMrZEhdjhceup9zDrtbLpWRT5nxfVGSavtgBCkoDICTsn9TSIcnoVUQhNesZu2b2A2/Wnt1
+	G7CWQOyn5nLI74yxvHzixSExpj6QVW3W9WxXspquq/YChuMp5qwkD0ZyWzJVXGTw310SjUl/e/c
+	pfTviLSGI=
+X-Google-Smtp-Source: AGHT+IHZnvqij0p2dsVEyUAqfbDQF6JM3zbwBqi4iRccM72+GqOmYwfEQER+7XbmOSanBy2kuKO6sw==
+X-Received: by 2002:a05:690c:45ca:b0:78f:aa6d:48cd with SMTP id 00721157ae682-790a88f50b1mr1761297b3.0.1767630972421;
+        Mon, 05 Jan 2026 08:36:12 -0800 (PST)
+Received: from localhost ([2601:346:0:79bd:830c:9f83:df41:3e7d])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790a87dce60sm648267b3.13.2026.01.05.08.36.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 08:36:12 -0800 (PST)
+Date: Mon, 5 Jan 2026 11:36:11 -0500
+From: Yury Norov <yury.norov@gmail.com>
+To: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	David Laight <david.laight@runbox.com>,
 	Petr Pavlu <petr.pavlu@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
 	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>,
-	linux-crypto@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v11 8/8] modsign: Enable RSASSA-PSS module signing
-Date: Mon,  5 Jan 2026 15:21:33 +0000
-Message-ID: <20260105152145.1801972-9-dhowells@redhat.com>
-In-Reply-To: <20260105152145.1801972-1-dhowells@redhat.com>
-References: <20260105152145.1801972-1-dhowells@redhat.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, linux-kernel@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
+Message-ID: <aVvoe5fQN3EUtEAJ@yury>
+References: <20251225170930.1151781-1-yury.norov@gmail.com>
+ <20251225170930.1151781-8-yury.norov@gmail.com>
+ <20251226115848.298465d4@gandalf.local.home>
+ <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
+ <20251229111748.3ba66311@gandalf.local.home>
+ <20260103005059.GA11015@joelbox2>
+ <aVkSVk2L6VH9MYGz@smile.fi.intel.com>
+ <aVkmQ4EGIQgAddZQ@yury>
+ <254c1096c3b892923dd12b07a8b80291b88c0e9b@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <254c1096c3b892923dd12b07a8b80291b88c0e9b@intel.com>
 
-Add support for RSASSA-PSS signatures (RFC8017) for use with module signing
-and other public key cryptography done by the kernel.
+On Mon, Jan 05, 2026 at 11:29:51AM +0200, Jani Nikula wrote:
+> On Sat, 03 Jan 2026, Yury Norov <yury.norov@gmail.com> wrote:
+> > On Sat, Jan 03, 2026 at 02:57:58PM +0200, Andy Shevchenko wrote:
+> >> On Fri, Jan 02, 2026 at 07:50:59PM -0500, Joel Fernandes wrote:
+> >> > On Mon, Dec 29, 2025 at 11:17:48AM -0500, Steven Rostedt wrote:
+> >> 
+> >> ...
+> >> 
+> >> > I use trace_printk() all the time for kernel, particularly RCU development.
+> >> > One of the key usecases I have is dumping traces on panic (with panic on warn
+> >> > and stop tracing on warn enabled). This is extremely useful since I can add
+> >> > custom tracing and dump traces when rare conditions occur. I fixed several
+> >> > bugs with this technique.
+> >> > 
+> >> > I also recommend keeping it convenient to use.
+> >> 
+> >> Okay, you know C, please share your opinion what header is the best to hold the
+> >> trace_printk.h to be included.
+> >
+> > What if we include it on Makefile level, similarly to how W=1 works?
+> >
+> >         make D=1 // trace_printk() is available
+> >         make D=0 // trace_printk() is not available
+> >         make     // trace_printk() is not available
+> >
+> > Where D stands for debugging.
+> >
+> > D=1 may be a default setting if you prefer, but the most important is
+> > that every compilation unit will have an access to debugging without
+> > polluting core headers.
+> 
+> You do realize this means recompiling everything when adding D=1 for
+> debugging?
 
-Note that only signature verification is supported by the kernel.
+Yes sir I do.
 
-Note further that this alters some of the same code as the MLDSA support,
-so that needs to be applied first to avoid conflicts.
+It would be as simple (or hard) as building another arch:
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Lukas Wunner <lukas@wunner.de>
-cc: Ignat Korchagin <ignat@cloudflare.com>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
-cc: keyrings@vger.kernel.org
-cc: linux-crypto@vger.kernel.org
----
- certs/Kconfig       |  6 ++++++
- certs/Makefile      |  1 +
- scripts/sign-file.c | 39 +++++++++++++++++++++++++++++++++++++--
- 3 files changed, 44 insertions(+), 2 deletions(-)
+        make O=../build/linux-arm64
+        make O=../build/linux-x86_64
+        make D=1 W=1 O=../build/linux-x86_64-dev
 
-diff --git a/certs/Kconfig b/certs/Kconfig
-index 94b086684d07..beb8991ad761 100644
---- a/certs/Kconfig
-+++ b/certs/Kconfig
-@@ -27,6 +27,12 @@ config MODULE_SIG_KEY_TYPE_RSA
- 	help
- 	 Use an RSA key for module signing.
- 
-+config MODULE_SIG_KEY_TYPE_RSASSA_PSS
-+	bool "RSASSA-PSS"
-+	select CRYPTO_RSA
-+	help
-+	 Use an RSASSA-PSS key for module signing.
-+
- config MODULE_SIG_KEY_TYPE_ECDSA
- 	bool "ECDSA"
- 	select CRYPTO_ECDSA
-diff --git a/certs/Makefile b/certs/Makefile
-index 3ee1960f9f4a..3b5a3a303f4c 100644
---- a/certs/Makefile
-+++ b/certs/Makefile
-@@ -42,6 +42,7 @@ targets += x509_certificate_list
- # boolean option and we unfortunately can't make it depend on !RANDCONFIG.
- ifeq ($(CONFIG_MODULE_SIG_KEY),certs/signing_key.pem)
- 
-+keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_RSASSA_PSS) := -newkey rsassa-pss
- keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
- keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_MLDSA_44) := -newkey ml-dsa-44
- keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_MLDSA_65) := -newkey ml-dsa-65
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index b726581075f9..ca605095194e 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -233,6 +233,7 @@ int main(int argc, char **argv)
- 	EVP_PKEY *private_key;
- #ifndef USE_PKCS7
- 	CMS_ContentInfo *cms = NULL;
-+	CMS_SignerInfo *signer;
- 	unsigned int use_keyid = 0;
- #else
- 	PKCS7 *pkcs7 = NULL;
-@@ -329,13 +330,47 @@ int main(int argc, char **argv)
- 		    !EVP_PKEY_is_a(private_key, "ML-DSA-65") &&
- 		    !EVP_PKEY_is_a(private_key, "ML-DSA-87"))
- 			flags |= use_signed_attrs;
-+		if (EVP_PKEY_is_a(private_key, "RSASSA-PSS"))
-+			flags |= CMS_KEY_PARAM;
-+	if (EVP_PKEY_is_a(private_key, "RSASSA-PSS")) {
-+			EVP_PKEY_CTX *pkctx;
-+			char mdname[1024] = {};
-+
-+			pkctx = EVP_PKEY_CTX_new(private_key, NULL);
-+
-+			ERR(!EVP_PKEY_sign_init(pkctx), "EVP_PKEY_sign_init");
-+			ERR(!EVP_PKEY_CTX_set_rsa_padding(pkctx, RSA_PKCS1_PSS_PADDING),
-+			    "EVP_PKEY_CTX_set_rsa_padding");
-+			ERR(!EVP_PKEY_CTX_set_rsa_mgf1_md_name(pkctx, hash_algo, NULL),
-+			    "EVP_PKEY_CTX_set_rsa_mgf1_md_name");
-+
-+			ERR(!EVP_PKEY_CTX_get_rsa_mgf1_md_name(pkctx, mdname, sizeof(mdname)),
-+			    "EVP_PKEY_CTX_get_rsa_mgf1_md_name");
-+			printf("RSASSA-PSS %s\n", mdname);
-+		}
- 
- 		/* Load the signature message from the digest buffer. */
- 		cms = CMS_sign(NULL, NULL, NULL, NULL, flags);
- 		ERR(!cms, "CMS_sign");
- 
--		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo, flags),
--		    "CMS_add1_signer");
-+		signer = CMS_add1_signer(cms, x509, private_key, digest_algo, flags);
-+		ERR(!signer, "CMS_add1_signer");
-+
-+		if (EVP_PKEY_is_a(private_key, "RSASSA-PSS")) {
-+			EVP_PKEY_CTX *pkctx;
-+			char mdname[1024] = {};
-+
-+			pkctx = CMS_SignerInfo_get0_pkey_ctx(signer);
-+			ERR(!EVP_PKEY_CTX_set_rsa_padding(pkctx, RSA_PKCS1_PSS_PADDING),
-+			    "EVP_PKEY_CTX_set_rsa_padding");
-+			ERR(!EVP_PKEY_CTX_set_rsa_mgf1_md_name(pkctx, hash_algo, NULL),
-+			    "EVP_PKEY_CTX_set_rsa_mgf1_md_name");
-+
-+			ERR(!EVP_PKEY_CTX_get_rsa_mgf1_md_name(pkctx, mdname, sizeof(mdname)),
-+			    "EVP_PKEY_CTX_get_rsa_mgf1_md_name");
-+			printf("RSASSA-PSS %s\n", mdname);
-+		}
-+
- 		ERR(CMS_final(cms, bm, NULL, flags) != 1,
- 		    "CMS_final");
- 
+If you're both developer and CI engineer in your company, you're likely
+already doing something like that. If you're CI-only, there're no
+changes for you. If you're a developer - yeah, you'd have to learn a
+new flag.
 
+The real problem of course is the status inflation. The fact that
+defconfig enables CONFIG_EXPERT and CONFIG_DEBUG_KERNEL implies that
+every random person who is able to do:
+
+        git clone && make && sudo make install
+
+now assumed an expert kernel user and active developer. It is not
+correct, and it leads to bloating kernel with dev-only features.
+
+What we discuss here is a new marker for those real experts and
+developers, I think. (In an hope that it will inflate not very fast.)
+
+Thanks,
+Yury
