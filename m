@@ -1,219 +1,243 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013007.outbound.protection.outlook.com [40.93.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436A12874FA;
-	Mon,  5 Jan 2026 20:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767644149; cv=fail; b=Qy80U5ACzZZtS98/0maTqBc12spPE0NtZBpGm+i5YYBopN6smi7X/GEpygmldYJ7RejbtVMGD0nAXveeQZFVsK0MxKENZddOIOWD31ulNgdN3yUPim6s3vsdMyMxfP5uxG+kpr4uJqpwIChWRKOQqomjm1uumUj7LKMzXmiet7M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767644149; c=relaxed/simple;
-	bh=mAnu5gt5lTGhvBysLmCMY6jQkrs8c9Y6IvavFfdIOoE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=VI1oPwjE2wseht+YlJbMihzn6TQGI2o61K42JIltXH27tDzZO4xl3tYdIa26OA5mLvMn0EzHbkDAuxuiDkEMGkQVwtnOjTwKCrkvcaLllcBOEDMTwYI6SQKjX3iehx7MZQS2iVatUylWfJgigxJgDfLsS3pfJdUuzzyGKITfg84=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=K2x9p+Cr; arc=fail smtp.client-ip=40.93.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A4C3246E8
+	for <linux-modules@vger.kernel.org>; Mon,  5 Jan 2026 20:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767644402; cv=none; b=eMcJj5w+tM1Kh4dKn2a5hpgIvhrB55N0sQXwPvZc/+w/wRNs1b1yPrkSXdh1h9ehXcNQIBsBJE0L2lWNFTjfevJoL2f8fm38jBoXbRgwvoqDTqdFtqghNzg4aqlGKSV/dmI4EdQnd3e2dqWnADJZo64s94EabOFsdDoc6l3Zo6g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767644402; c=relaxed/simple;
+	bh=erV/7hImZhxHV6hFL0eAvsX15yKory6E1e03cKjfxr4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZOytZb//y0hvvo8nAOmbDtVAuHdOb2Sq4JyhGyDwE+z10dZzzzsaavAnfn+o5ZvLA2pomPM2pF/lac/Udp4wL8rGjPXuApHbF7vo6MhCNr5r8lQe3Ulnr2CE/Q0UHu7CkZlcZ6pTi9JibFERk4M088th2LpHJnNrfCaDYSUqq04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=dDa7OOf9; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="K2x9p+Cr"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Es/6ncmR3iiIZUmKVI5Og4txLiMUeCxQZ8IyQkOWGfxSXRqJs0yp/DIOyKEBr+R95COwBE8Acv1XRP09ZJJZABvQ7YnYobe9UCXt07Q4Ec8LCB8xGXj3mPgpKwopP/0nx1id9aqSHHtyejpm2l8poBbKgNtWV5nUPAPrcxrwTIeWgH8QVDju6OyDsvg0pwx54dTi456AVgIXvUwLva7X+V0rppO1remGDoPsohXaMyDJruP7iNweVZyRptOYhdZ42WrGgiboDL5fMPiUm3Pr01kx2ILgXNeMj1Reh3fam4pa0OU1qy5dPRnqbE4/OWBlbtkg+N08iGm5fGQSZ0CHWQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YmK7pN+zGC1r2bU48EJQ7Sebjyo3fVmi92hBmPQrweA=;
- b=VfNPoX2AjgXMJEUipUhzCldf9GIgsSBUCG74djQxEIna5VoNh94lqcqT1wv8QeLINkjC5aZW4OmCdGhcFbOfNweqqItyRdt7/2bD0qUEq5aikufR8jDac5DQvV2gXvwiZUByvr3e4w2r+STv5sqeFwUlGRASnFROd7RmoNrPMnVVqwepPsjJGqoCi4LrjqAsqHz9OvksLml0v71K6ob0kXNpIT3StZy89Li21m7Dj5xVcUowTwUP3spjstH+dVXR4DXGk+SgYGVaOwzSzWCmhhkFNXDE2uSISSKWQ9PrUBu9f21S5gfdrx0ZK+2yfexQccLeFXbGPRFpBXSnzzZHrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YmK7pN+zGC1r2bU48EJQ7Sebjyo3fVmi92hBmPQrweA=;
- b=K2x9p+CrGBFXhbyqLyBRppfonUJ46K4eVh8EX8n9QGGpqmE6JtsU7fAt88DqJvrMZhGKVbynsxAcDeA5itxZrhBq/uD65ECgqwd9WevvDLFIaa5yFZl59TTuxNkh6ACuYQSqOU5Jq6kV071BdYRyeB0xrbWJIuwUFooARBo46/25R1t3ErtCUJZZNq3M1I8d+vBRp2XzXbBh6+5OYfKdc90Fh7d6YlOS0ywlM019tjxbLXva4rz+8aaFJoMPchu86/xbMa6VcqZaGObbM7N0i22nLFKrXOUr/Uy0GTMCl/4lCowJYRBnyXRo80UIgceQNut6bRrDf+Hdem9z7w/PAQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
- by PH7PR12MB7332.namprd12.prod.outlook.com (2603:10b6:510:20f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Mon, 5 Jan
- 2026 20:15:45 +0000
-Received: from SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
- ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9478.004; Mon, 5 Jan 2026
- 20:15:45 +0000
-Message-ID: <be346d2a-29b1-4cb9-b335-bd5193cf4cbe@nvidia.com>
-Date: Mon, 5 Jan 2026 15:15:42 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/7] kernel.h: drop trace_printk.h
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Andrew Morton <akpm@linux-foundation.org>, Yury Norov
- <yury.norov@gmail.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Randy Dunlap <rdunlap@infradead.org>, Ingo Molnar <mingo@kernel.org>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- David Laight <david.laight@runbox.com>, Petr Pavlu <petr.pavlu@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>, Vivi Rodrigo <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tursulin@ursulin.net>, Daniel Gomez <da.gomez@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
- "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
- "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
- "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>
-References: <20251225170930.1151781-1-yury.norov@gmail.com>
- <20251225170930.1151781-8-yury.norov@gmail.com>
- <20251226115848.298465d4@gandalf.local.home>
- <20251228133150.1d5731d04bc1b685b0fe81c1@linux-foundation.org>
- <20251229111748.3ba66311@gandalf.local.home>
- <20260103005059.GA11015@joelbox2> <aVkSVk2L6VH9MYGz@smile.fi.intel.com>
- <937926D0-00DC-499B-9FD8-D921C903882D@nvidia.com>
- <aVmyZ0iXzTkNU86y@smile.fi.intel.com>
- <20260105113902.6bdfcfa8@gandalf.local.home>
- <d642ef4c-145c-4b16-818d-153c8f2e3485@nvidia.com>
- <63a00906-a5c6-43de-82ce-328c8eaa7d3f@kernel.org>
- <e171f94d-060b-448c-aab5-bafc01fea7fe@nvidia.com>
- <20260105150453.127927c9@gandalf.local.home>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <20260105150453.127927c9@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0153.namprd03.prod.outlook.com
- (2603:10b6:208:32f::19) To SN7PR12MB8059.namprd12.prod.outlook.com
- (2603:10b6:806:32b::7)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dDa7OOf9"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3825ae23d95so2705171fa.0
+        for <linux-modules@vger.kernel.org>; Mon, 05 Jan 2026 12:20:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1767644399; x=1768249199; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8imYTE9fZ+fkXdg0Oayh+IU33w1fYi/u+y+9etIX+Q8=;
+        b=dDa7OOf986Bn8AQ8Or14ROEMS5p95LkV+7LwkZF+jQ/QHpOEE4eP6YemnWrWCYB5yx
+         /SbAoykMPAcOIQ7lMMvIIH62ajtbSAICa6oiihq2sjJ/coeK9vGMvMGrJW4R7SkeUJkT
+         r3wVfcfQdOB5eQuQh0kf4Qc/T8EL+My2t0YT01vGGesau2ejM0TBw0gcs0SKH4tv2oE3
+         9p4haVCgWnPkoNErSpRTKvfC8wzSbK6+pUEkRJxI0VCKXaEmgbkxlbW/UcAEMPFUluQ3
+         1/eXKQckDoSD6wlEbXikmXeCAsJIe2OEnZZ2RbFw2fZdr1ibmlIbmHH2y6CcKG0PXSTb
+         fv3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767644399; x=1768249199;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8imYTE9fZ+fkXdg0Oayh+IU33w1fYi/u+y+9etIX+Q8=;
+        b=uK0o5ndiYJ4Q2KopvbhTAs+5WU4gYcaLxhQqUot4+V7KMuwnnglpVDVC3b448CnlFx
+         akRP9hS2G+iea29sxI6XWv+LQhMDz/0AsHajeeNP6rfK70rD/mDo9galp7w6Z54fDaKT
+         oHTMMCojYx+Qx98kIz0Be92SqoH5Qyx/t8z8L6FCR04ZuPh/CirqUrESh9bIM2+DJGZG
+         xrniU0kSwu4fnOVe6mHaprCYN9gB9bZj9NTnReOwf2I61V3+3xvBnT1GLxufLRa4vsSN
+         F3KMbjnuvey7eykIzfHlhBbXi/NrQlA19P6WwBCOVcpADTrGdHJrxTL6by+GP5kNWq7L
+         hlaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ/YejKx2iJfyN2EMwMjW2ZNMl/vuniO78Yp/2/W/XYrF/kdjQVwwuKnm84NzpYnUrIE2z82/UDKxXeKPM@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRtIX5ntMGCEmzi+HOj7lMdS971E1sArb2VqsfD+ZtjeVfNwI/
+	t5Bmn8so8dX6L6g51n3yv61IXwe/3buXL7cmX6c5iLfaUIaNVrS3sGssvUBNjPCpJU11PEsnNGB
+	fAFdNCGa47No7HnbFKJghHCP87MQEYttNssPxumYKFPzVdcnGjQtKKTDscw==
+X-Gm-Gg: AY/fxX5+eQEG5yvyKAtFi4kVSAwcYgNB0sHiCP/DYRvvNkqjeKrAU6WElylKOX7Yr0C
+	6hi6qJHCvsWuvz8AxiLDlYG3K47JNgA+PH8DX/zVN0UnYvjmoTVreUeDzyyUbV7b+n9nLKO7lNU
+	UKAK7knf45X173P+a6VnOikZXKCK9ndMfioj3na/dnLWV0lI6nvQzwc9Rvkub37y+53hRJi4ygw
+	X+SIe2nBClDDqt7h1IK7YS+szRZWAUjXV7ixD86wufV+tQ67Qzy5jGOPgkLtRDJ5C0w1pBzW8G3
+	hUYFOP4qFYQ/b+0=
+X-Google-Smtp-Source: AGHT+IEnKyZPZAXVWl4XySHhAyeX1jQxNch1dZ7PUiMgSlQINGs89/Rye9DThfBkGuzHjxQfRHCo0ZVS2sSmWkjX4do=
+X-Received: by 2002:a05:6512:b98:b0:598:eef2:d30d with SMTP id
+ 2adb3069b0e04-59b6525facbmr312799e87.44.1767644398750; Mon, 05 Jan 2026
+ 12:19:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|PH7PR12MB7332:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87fb00b0-dfe6-40bc-6eef-08de4c973525
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dmE2cDNJdEJRenpTVHc3L1Rlb1N4em1XNTYzVDNhMTNLL3Nlcy9TSkN1T3Vk?=
- =?utf-8?B?ckRtRzc2Vy9qbnBpTU5IRGhNUEVZYU8rdEVWUFAyc252QzhKbjV5MG5KT28y?=
- =?utf-8?B?cGFuYzN0WVVteUpGWGE3Q0V0OURiQmRCNjNycVlFQlNLcnMzVkJHYmFMeGxw?=
- =?utf-8?B?SDZlelRub1JOakViWTI4S2s2d2J4OThZVDk1SFBGa2NxT3FwWmFEQW01OHEv?=
- =?utf-8?B?cjF3ZERpU3E3M3VvSTFJclhaR3hDNEc3djFNclpDZmFzRUlJWWRKY0Y0VHRH?=
- =?utf-8?B?Uk1BUGJwVjZlUGNXVCtKNGhVWEFrc3lZamVYSnhoMUNrY2Z4SzJwcTVpU3ZO?=
- =?utf-8?B?dWRaNlR0R1lPdTQ3UWpaOVJ3TndlSDdMZzBYQytYLzVlK2hxREFoUytnTFp2?=
- =?utf-8?B?U0EwTGpsd0VKRHJVWVNMdllUemR1TGR0T0VXM1Ivcmh1b3lKbW5HYW9lTXFh?=
- =?utf-8?B?TjRlS09HaVdXTDhNSTRob2xzMVM1OGVEZWt4OTdQQ2YrV05WTmF0azFEZkx5?=
- =?utf-8?B?SHRTcWlVTGxuZ1lYcDQxSHA1dFRrK2NVMmszSy92STd5YWNTSTc0eEZDeGIr?=
- =?utf-8?B?M0x1ZFg4MHhFT1dQNmhmaEkyMk8zRmFrNXZpdXFaRDFreHNtaWVvdC9oK3Jm?=
- =?utf-8?B?VWllSVhGcGV1amcyVGZpdzNReU5HT05PUXlzMEdwb2ZKYllOWEo1ZWJRZ01R?=
- =?utf-8?B?U0psaUR6M0E0aDdRcVNMMFpWUTFNUW9tUlpQVTVSSUpFaWR4Z2Q5NmEwODFY?=
- =?utf-8?B?aVFmQ1RUaUY2Y0pKWHRTRGpSUkNQWXFYRXVkKzEreWJFR1UwZEorYW92aitN?=
- =?utf-8?B?R21TcDU2YTNhOUdmOWpMRGhPUXQ2NGpBd3o5U0taZDRxMjhpUlAzeTQ4eW1Y?=
- =?utf-8?B?cUJyTTlqQ3hTNWJOQndmWm9xLzhTQzdBSGxhSDIzcWdhKzNnQXk5RlF6RzVU?=
- =?utf-8?B?N0hHQTVsVThDbkJrY3pZTnd3blZReDNzcG5ZKzlVN0JJTmtIQk1nWVYrZzZQ?=
- =?utf-8?B?VVdzM2ZESC84ZHoyMGFxMGVkRTh3OVVjelU3L0YzMEVGZEhsdldBVzc0ekxn?=
- =?utf-8?B?emp1T1Z1dmFybzJtY3h4Y3kwWnlZVWhRaVAzbG1DdUJYUm1NdmNSMDkyTWZa?=
- =?utf-8?B?VjBPelc5RDlEeTBKelNwTXZiTzdXTHRCNVRzeUVvbEtJMlU3eW9qUUh1V0Vq?=
- =?utf-8?B?ZmpheHNGZnZaT2Z5TDk5Z1gvc1U5c0dMZDVLR3lGR01DMDBTS2pMQmZGSCtk?=
- =?utf-8?B?Z2dLY0JHTEZZQ3lqUGZmOFU3aXpRZXRNdmhka2srNnJaUkcrNlNQdXlxSnRQ?=
- =?utf-8?B?RDkzQ3B2TGVSWWx3dnRETHhwVmlZem1DellTRndGa09ad05sRmtEQVlVenJU?=
- =?utf-8?B?NWRNa0xRYjdCaVYwczJZRUdZbkkxWnM3YWFreDE4dTRSTDZmenNYSXpXbm90?=
- =?utf-8?B?MjJmME9tbkgwWnJsS3RiYnhrSXZWVmdhV1AveUlpSmZXb29nRDZIRklHOUdZ?=
- =?utf-8?B?cXpXelRHUktNVGc1QmdtNlNLMVlGQWxWNlNIMVowTHl5TTV1ZnNUd0ppRlE0?=
- =?utf-8?B?Ujg0Z1NXKzdONUQ1a0h0bERtbHV6KzY5MWwreFpNMXpxRW1aNFI5TFdZbWpB?=
- =?utf-8?B?TGpjTDJhWlp4NnlZczZlL21VRWZaSlNXYnZMZitGUjJqUG1yZ1lvMTdscmVX?=
- =?utf-8?B?UzMrWGxqcmVCSERZZ09Ud0NTejkwOU16dHg4eEZ4RHJpalh2TmdIR1lZeUJB?=
- =?utf-8?B?bk14MXZoMWN2U1ozN3dlV0FaTzFjTVZuUHZaMURqVTZVS2dnamcwSDBDN2pJ?=
- =?utf-8?B?SmdEUTUzL3BHQ1h2WDdFbUhRaHIwMEU2Rm91QnZhd1Avbzc5dnlTNjZZclV1?=
- =?utf-8?B?SFRkdStHK3RCVDVseThra1U3OEJFZ0RFd1l1MzdlMWw2TS84Qm5QVyszZkpD?=
- =?utf-8?Q?1d2AaGdmKWYe5xKBnx2iYLNapNrjnn/X?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U2krZ2RxaHVZSldDRGlMT0xvYWFQSTNGN201WXdHWHVOalcySUJoN3E2MUp2?=
- =?utf-8?B?V25VRGJoOXdMWFc4RDFQei84TDJZQ0IxVXE5eFhhQkhMU05zU01jdmsrWFlH?=
- =?utf-8?B?VnZPVnpkcWNaSWYrWGxuelUxY3lpaFZxOFlRYjlNR3EzcnBxZ3NmWk5YVzFn?=
- =?utf-8?B?cmVFVlUzSEs0Vk5RRllIL0lxUHduUlVVekRERVBEaGRWT2NBQXFmRHo5ZWIz?=
- =?utf-8?B?R3VsQlcyblVpenljbEhHOWRyQmszV3I0NkdCNDE2dHo4SWxzMlNad2tLaDlM?=
- =?utf-8?B?SEkzOVZ3Q1ZvcXNQa2VWZjBVa0p0YlFaUUUrK2VGcE1HNkZLTVlGeUZEVGRT?=
- =?utf-8?B?MExLQjJ1WEIvS09IR2xKdVNENXA5aUUwWHpNZE5NZTBlclFaU05xRWt6RnM2?=
- =?utf-8?B?K2JuWklWQUo0VVpETXMwRjQrSmFReHZoaE9HTm5SaFZlMnlaYXpXWjNERkRM?=
- =?utf-8?B?UnFYeXRzZWppU3BYS2dESXVLVEk3dlp0Q0R0di9LVFd0RVh2aGFrL2FHMmJE?=
- =?utf-8?B?aEw4SlhDS09uTW50Uk12cFRLMkZ6YThyMmN4TkRtc0hFTFBpbW1NRXhxOU93?=
- =?utf-8?B?RGVielZuTERVVzhCOWFMd3pOWkQxK2Y2WjhEbkJxWGtpTkUya2NYLzhYQnQx?=
- =?utf-8?B?RWpEM1FGbmozdDR1QURXWGJvY1U0YnRBaS91NlJjUFBaYzdlU1phYysyNnNW?=
- =?utf-8?B?MFVRSDkyVkJTa3hucEVtZ1dURWFTNFIwdGZpQ0FVeGtwZWFzODFleFAzK3Jp?=
- =?utf-8?B?Tm1CWWhOUVRaSkUxaXR4bUNOeDZsNnd5QVdUbTVDbHJxb2NGL255RFdKemNU?=
- =?utf-8?B?R3hzOXdMcWFMUk9ZdEUxV0c4KzMyQU9uQVJYRTdwTlQwV2Zndy82WFpVWUJU?=
- =?utf-8?B?U3A2ZkxsMGVWWW9meDA2V3FVZjJlMjdrbW9LcUFpa3BmU2pnZmlQVThGamZO?=
- =?utf-8?B?RloyYy8yNEVBdzUwR2dqcm40OHM2SmFrVm5rSTIxWXJUN211NmVrNHExYzM0?=
- =?utf-8?B?U2VKdEVOdlJjL245MGtGSFVZZ2N0Y0dMSTYvU283cmt0NVhQTnlNandDNVlk?=
- =?utf-8?B?REdsTk1LM1BTQVNHV0tnVlB2Mm9qVnI1UmxVS1JPa0tHbjgwM0JhWFNJUzRD?=
- =?utf-8?B?WGQ1UmREdFpSL3VHaWRQdU5tZTZtUXNYM0xBWEZuRkFWcXJYUmlpVU5BQ2pD?=
- =?utf-8?B?dVAxbHFUMUV0ODF6eDFjVktjdVZZSWMzR0ord0FHa01paXIwcEs5cmU5eldO?=
- =?utf-8?B?ZE1PaFJwUndUZjE2SkQrMWVic0huNDhCc1VKckR5ckhGaTFBREJvVlJIOU5o?=
- =?utf-8?B?MEZyV3dYVzRQZVp0MEsyMmJkLzUweFhtWjlyOGpSR1BnUEd4cVBRaTJzYWFo?=
- =?utf-8?B?eWViOTBuYmRjVFRRNnVacXNzbVBuVVFHMmQ5cFNLZERFeW82dnViOEFidEV4?=
- =?utf-8?B?WEtYNDcySGlFOW1xVHpMSm1HV0RxaUpkWjVmaGtncGl0YTBkWENpbWtOWm1V?=
- =?utf-8?B?bzhhVnY0amJYWEtoTzhRTmsvTWZqQU44NDJHSGVEMVQwUjNvcUJuYURGVkNX?=
- =?utf-8?B?YW50Y1VCQ2ovZ3A2NHhyU0NIZUY5T2NsMWVWK2w3UnVaaHJOK216WEFLMjZZ?=
- =?utf-8?B?Y0Rrdm5wQ3FOdVVQbTcyaE9xNHVHbmt4aEdYdWNqWURhVThHeEYxSGJ2a2xB?=
- =?utf-8?B?OVRaNGhqbFUrRnVCV0xtSkgzZStKN3puZ1lqK25LREdKVzRFTGNJdVU4bzVC?=
- =?utf-8?B?alVwSkxaOGVoNDBOL2NpNGQ2ZDRacWxqam4ydzNBNGtjL2djbGg0UjN5WEFV?=
- =?utf-8?B?aGZsQjBERGhtck4wZXJFQklvQk5xem5JN1YyZ1ZWOFEwRWdhUFRleWNzcnNq?=
- =?utf-8?B?QWkyM1cyU3ZNaUJlQzgwTUZuYk9WZEpqL1UvaTVKNmVnRUcwNUdpbVZvdmNa?=
- =?utf-8?B?QUJMTHRSTTZQMnZPMzFzRUIwalhaMndyWkxOc3ZXSGcrWHFKRWFqTlN1SnFT?=
- =?utf-8?B?SnptMzcwQmZLaU0rY3g0SFp4cDN4d0ZIcm8yOHkwdWt5VFBCL3FicGkvWTJ4?=
- =?utf-8?B?NHZiT3BwcDZ1U1gzcHFCbTI4TmRFZkg4SjBuVTA0WW43a2l5cG1CSHdDRlZC?=
- =?utf-8?B?S0laeWJPVXF5cE1td0FTR1d0SEJFV0pDWVR2Ujh0bEp3eWpYQ2NuUnR2cjAz?=
- =?utf-8?B?SGxUcGVPNnRhMlVBS00xeHN3ZjFHVUt4MmNGTzE3WjhXWXBISjFRbHVVNU9D?=
- =?utf-8?B?Z2dXRE9UNDR5R1pNT05iWlMrVXo4RGlqcUhTdWJQbDRoRnB4b1Nrc0YyaHpl?=
- =?utf-8?B?c29HU0pxNmNlVlJ1VEJTYkVtYnJkQXBaWkd0clVUaXdOcDREN1plQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87fb00b0-dfe6-40bc-6eef-08de4c973525
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2026 20:15:44.9955
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cmW7XgjTVoDFB8ZO8Up7k4Ul7v+m96Sb4KwF+w+4mo2dPJeMddc0RbpxEou/bfW5lSV8tZOwkUd/Qp66UNWQ2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7332
+References: <20260105152145.1801972-1-dhowells@redhat.com> <20260105152145.1801972-3-dhowells@redhat.com>
+In-Reply-To: <20260105152145.1801972-3-dhowells@redhat.com>
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Mon, 5 Jan 2026 20:19:47 +0000
+X-Gm-Features: AQt7F2rv67S9698z3Pcf5z3TICLvtuIGkvngE4YX9ydSrQdbUONZrUF6YhFvpQQ
+Message-ID: <CALrw=nFj9OEsREJ8Kxox3U6N8y=e00ZawxEkCPOb5-6_k=7+nQ@mail.gmail.com>
+Subject: Re: [PATCH v11 2/8] pkcs7: Allow the signing algo to calculate the
+ digest itself
+To: David Howells <dhowells@redhat.com>
+Cc: Lukas Wunner <lukas@wunner.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Eric Biggers <ebiggers@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	"Jason A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller <smueller@chronox.de>, 
+	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi David,
 
+On Mon, Jan 5, 2026 at 3:22=E2=80=AFPM David Howells <dhowells@redhat.com> =
+wrote:
+>
+> The ML-DSA public key algorithm really wants to calculate the message
+> digest itself, rather than having the digest precalculated and fed to it
+> separately as RSA does[*].  The kernel's PKCS#7 parser, however, is
+> designed around the latter approach.
+>
+>   [*] ML-DSA does allow for an "external mu", but CMS doesn't yet have th=
+at
+>   standardised.
+>
+> Fix this by noting in the public_key_signature struct when the signing
+> algorithm is going to want this and then, rather than doing the digest of
+> the authenticatedAttributes ourselves and overwriting the sig->digest wit=
+h
+> that, replace sig->digest with a copy of the contents of the
+> authenticatedAttributes section and adjust the digest length to match.
+>
+> This will then be fed to the public key algorithm as normal which can do
+> what it wants with the data.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Lukas Wunner <lukas@wunner.de>
+> cc: Ignat Korchagin <ignat@cloudflare.com>
+> cc: Stephan Mueller <smueller@chronox.de>
+> cc: Eric Biggers <ebiggers@kernel.org>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: keyrings@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
+> ---
+>  crypto/asymmetric_keys/pkcs7_parser.c |  4 +--
+>  crypto/asymmetric_keys/pkcs7_verify.c | 48 ++++++++++++++++++---------
+>  include/crypto/public_key.h           |  1 +
+>  3 files changed, 36 insertions(+), 17 deletions(-)
+>
+> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
+ys/pkcs7_parser.c
+> index 423d13c47545..3cdbab3b9f50 100644
+> --- a/crypto/asymmetric_keys/pkcs7_parser.c
+> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
+> @@ -599,8 +599,8 @@ int pkcs7_sig_note_set_of_authattrs(void *context, si=
+ze_t hdrlen,
+>         }
+>
+>         /* We need to switch the 'CONT 0' to a 'SET OF' when we digest */
+> -       sinfo->authattrs =3D value - (hdrlen - 1);
+> -       sinfo->authattrs_len =3D vlen + (hdrlen - 1);
+> +       sinfo->authattrs =3D value - hdrlen;
+> +       sinfo->authattrs_len =3D vlen + hdrlen;
+>         return 0;
+>  }
+>
+> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_ke=
+ys/pkcs7_verify.c
+> index 6d6475e3a9bf..0f9f515b784d 100644
+> --- a/crypto/asymmetric_keys/pkcs7_verify.c
+> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
+> @@ -70,8 +70,6 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
+>          * digest we just calculated.
+>          */
+>         if (sinfo->authattrs) {
+> -               u8 tag;
+> -
+>                 if (!sinfo->msgdigest) {
+>                         pr_warn("Sig %u: No messageDigest\n", sinfo->inde=
+x);
+>                         ret =3D -EKEYREJECTED;
+> @@ -97,20 +95,40 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
+>                  * as the contents of the digest instead.  Note that we n=
+eed to
+>                  * convert the attributes from a CONT.0 into a SET before=
+ we
+>                  * hash it.
+> +                *
+> +                * However, for certain algorithms, such as ML-DSA, the d=
+igest
+> +                * is integrated into the signing algorithm.  In such a c=
+ase,
+> +                * we copy the authattrs, modifying the tag type, and set=
+ that
+> +                * as the digest.
+>                  */
+> -               memset(sig->digest, 0, sig->digest_size);
+> -
+> -               ret =3D crypto_shash_init(desc);
+> -               if (ret < 0)
+> -                       goto error;
+> -               tag =3D ASN1_CONS_BIT | ASN1_SET;
+> -               ret =3D crypto_shash_update(desc, &tag, 1);
+> -               if (ret < 0)
+> -                       goto error;
+> -               ret =3D crypto_shash_finup(desc, sinfo->authattrs,
+> -                                        sinfo->authattrs_len, sig->diges=
+t);
+> -               if (ret < 0)
+> -                       goto error;
+> +               if (sig->algo_does_hash) {
+> +                       kfree(sig->digest);
+> +
+> +                       ret =3D -ENOMEM;
+> +                       sig->digest =3D kmalloc(umax(sinfo->authattrs_len=
+, sig->digest_size),
+> +                                             GFP_KERNEL);
 
-On 1/5/2026 3:04 PM, Steven Rostedt wrote:
-> On Mon, 5 Jan 2026 14:33:35 -0500
-> Joel Fernandes <joelagnelf@nvidia.com> wrote:
-> 
->>>>> I'm thinking that my proposed config option is the best solution now. For
->>>>> those that do not care about debugging the kernel, you enable the
->>>>> "HIDE_TRACE_PRINTK" config so that your builds will be "quicker". But for
->>>>> everyone else, it will not slow down their workflow when they need to debug
->>>>> code.  
->>>>
->>>> 100% agree. We do have people running custom configs for faster builds, so this
->>>> hide thing could be enabled there assuming those don't care about debug.
->>>>
->>>> In other words, "If it aint broke, don't fix it".  
->>>
->>> But if I understand correctly, it would save 2% build time. That means 12
->>> secondes on a 10 minutes build. Is it really worth it ?
->>>   
->> 99% of my kernel builds are usually 90 seconds. I throw a lot of cores at it and
->> with ccache. I care more about trace_printk not being available than saving 2%.
->> But YMMV. I am sure there are people who care a lot about build time, but for me
->> it has not (yet) been a problem.
-> 
-> I can see Linus enabling this. I don't think he uses trace_printk() to
-> debug the kernel, so improving his build times may be useful.
+Can we refactor this so we allocate the right size from the start.
+Alternatively, should we just unconditionally use this approach
+"overallocating" some times?
 
-Sounds good to me. Making it an option sounds okay to me. Thanks.
+> +                       if (!sig->digest)
+> +                               goto error_no_desc;
+> +
+> +                       sig->digest_size =3D sinfo->authattrs_len;
+> +                       memcpy(sig->digest, sinfo->authattrs, sinfo->auth=
+attrs_len);
+> +                       ((u8 *)sig->digest)[0] =3D ASN1_CONS_BIT | ASN1_S=
+ET;
+> +                       ret =3D 0;
+> +               } else {
+> +                       u8 tag =3D ASN1_CONS_BIT | ASN1_SET;
+> +
+> +                       ret =3D crypto_shash_init(desc);
+> +                       if (ret < 0)
+> +                               goto error;
+> +                       ret =3D crypto_shash_update(desc, &tag, 1);
+> +                       if (ret < 0)
+> +                               goto error;
+> +                       ret =3D crypto_shash_finup(desc, sinfo->authattrs=
+ + 1,
+> +                                                sinfo->authattrs_len - 1=
+,
+> +                                                sig->digest);
+> +                       if (ret < 0)
+> +                               goto error;
+> +               }
+>                 pr_devel("AADigest =3D [%*ph]\n", 8, sig->digest);
+>         }
+>
+> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
+> index 81098e00c08f..e4ec8003a3a4 100644
+> --- a/include/crypto/public_key.h
+> +++ b/include/crypto/public_key.h
+> @@ -46,6 +46,7 @@ struct public_key_signature {
+>         u8 *digest;
+>         u32 s_size;             /* Number of bytes in signature */
+>         u32 digest_size;        /* Number of bytes in digest */
+> +       bool algo_does_hash;    /* Public key algo does its own hashing *=
+/
 
+It seems this controls if we hash authenticated attributes, not the
+data itself. Maybe reflect this in the name? Something like
+do_authattrs_hash or authattrs_algo_passthrough?
+
+>         const char *pkey_algo;
+>         const char *hash_algo;
+>         const char *encoding;
+>
+
+Ignat
