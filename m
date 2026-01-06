@@ -1,68 +1,68 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC2C33A707
-	for <linux-modules@vger.kernel.org>; Tue,  6 Jan 2026 16:13:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5436E3376A2
+	for <linux-modules@vger.kernel.org>; Tue,  6 Jan 2026 16:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767716011; cv=none; b=VzQoe6RfqS//0my2RSd4u94M7H3nLJiC+AiAqXdkwZGcaYC7zr4c9SB8/thuOY1XPjEfIeeA1WmySWm3bqwzxNWTxB6jI78tkB9LAsf5GcgTCBMBmPeA/WciM77E6aOdn9vSIiXFLXlU4UlA4N5FDKL3ncapN30jHjFsfZxLQdg=
+	t=1767716013; cv=none; b=WdBR5ERuGTszxsMIFS7SWF/j4IO2umMGE1Yx632ekx2L7kjpHzUW4CrSuyo1v+wREjeFtZe23eozmgyU9Z4tTvGP+sQAXGudLlTeQw+ZpZ0/4ZsxV0KxNOesi8ixoyyduq306LZJFfmYYvaDxsuWKM08eaNmE6mcigJCRUn3T5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767716011; c=relaxed/simple;
-	bh=31K3z/TeTL27blPoZfDSHOqEMPWwg63C71FzL1KNDBY=;
+	s=arc-20240116; t=1767716013; c=relaxed/simple;
+	bh=DmmtaDAQNblc8YsS6wVHtlUqz9NIYJ5OZn7ml6apuUc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=htXQSg876POiTGIO1ov6u1acP2nPMAcDHS2MOe9RnwxJVK7zccwHCEkMiYJAeTPo1xYJpYhqUBW8WnzUzw9SnDWQ0+y75ykDhIKIdEldwRVM63PbnOawJVkRGYaEPdTK72C7JxHn74yiNrevw2DLt082/dcEY3WoLUEhDIn2jKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=js9H5iCD; arc=none smtp.client-ip=209.85.167.44
+	 In-Reply-To:To:Cc; b=ILpQFkfK7k+NGc7nIE00OisHv0R3HN4kzcr28JHZfRbT1UJoYn7EARM+yirxfJGZYvQYyOG1oTFHhQ99iAAm80LyJssHhFCrSQcRNEKlNhqQAo9Sc/B3zyzJHfwxAbnsy9QGyv9r9X8DIlZQ8IiDlkml9dH4NM7mtp8ofvePUkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=USf8ptYU; arc=none smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="js9H5iCD"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b6c89d302so288400e87.1
-        for <linux-modules@vger.kernel.org>; Tue, 06 Jan 2026 08:13:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="USf8ptYU"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-382fe06aa94so22401fa.0
+        for <linux-modules@vger.kernel.org>; Tue, 06 Jan 2026 08:13:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767716007; x=1768320807; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767716009; x=1768320809; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Rzq6sT7GcMk+zrj1ACCJmSl03CZtKzXScBbEctCNtgE=;
-        b=js9H5iCDT1xuYoBwfMQoX8HBM4fQF7ARMJuPtWMXdN/SRJqmJ8Am75E2rITcGr4lev
-         UQvHdP7wDWL1e9hb/I05KwrWlQyoWRxVFEyQN24shW2lOTNJgavuFdAi+b9jxd7KoHwI
-         drlhKUUVeWtBLXnvuJnuWGIFbMCCvYmzYhVIROeyAhClVX8diUQdEZC6iIqU06gvNCwA
-         V/5xHrhFbEig4JJK9SZLTo3bv8Tqr5rHjSoTZKKDfPNAhx7AJs0qdRwGLOm4/JuQaSQi
-         Fu+CQN/+YayRAjQKJxIW9RjPVf1bXvmUr0S7IrJJKqIfaE6mpbg0uUy3OTtCbvPp9Fub
-         16sg==
+        bh=yD1KNN5/TWj3t1cQe+Jpa13onMvM2XzOEo1ubv8aag4=;
+        b=USf8ptYUDxHpzCm9+DVHO4RWuMzUZTZawfX40J9OI6HOS90AATEmtGxwaSy3YcnXbM
+         5hHFZU+I57W8wLiA9LrkBhL3R2ENebO0tyv4ncFJ22QgNMDN4kCNM1iwb5bAPaWgmcHk
+         qclIkVvBi9wlUE027PBeaEvKzP5yjQhjP3wdgZ/pcJXIaJP+66emkYmLHPoIyRocp16H
+         VK1s/MC31CYC50vULt1/yjivjBWDNeGATarBS8VTMcW9vL640XNngSKzmyn5KImxjiRV
+         EC6szmQXC3scWBye4f2Vt4/T3a83jq6Kg3Weg3lDmx19hu5OkKFPiyvVe7/7+6+Ru8Kc
+         rWRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767716007; x=1768320807;
+        d=1e100.net; s=20230601; t=1767716009; x=1768320809;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Rzq6sT7GcMk+zrj1ACCJmSl03CZtKzXScBbEctCNtgE=;
-        b=o8lwGS5mmEFi9dIDE1scNWAENtM5CDe5VJm4UMp2iAF9GIg5L9x37mvFEjkgD+egFi
-         xAJUBFp5a/zd9duUBx+iT56pXrBZmt20qnxe8iI57qMko9GAA5ZfiZqlpGWQO8jSJgkd
-         66Q2tY7HpzxSLRG/zJ1VbEhJnjHLEGUazXj+D3O6YF1uSGXlhZ5KVXFmdhmzbeGUX1LD
-         idmDws5v/hyMqCdnNcYEjSePR2B82VeiHwZGvbn4OaWqmGB3tuX/OTvX5VMQCznXdAhT
-         yVfCXRA2ylSqm2ce/ww1eAS8ZvvoKq957eJ3PlyXS5UlrrIE1xm3m8OqQfV0GoKq8lGs
-         B95Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXwNXyOS8m1prl67cR7Pt0Nf38YegRWTCsFIuYw2zir7/HgWWXNNi/R/KdDpOYnWARDZMfWKvYVbhdvg/KD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxkwt7t0utByHPX/B1wS6+e8SkrRRz9c6PGiaslIbYhD1PwnqNJ
-	ftK386Qh3RTPpDs1NRnrqKPrE0kDFwCMXv6do9A/t3w8uqHTL7gpSgb5
-X-Gm-Gg: AY/fxX4ZYGoyQ33POo9WgpBWTR/it0bUDdsU6Q/a/SXaWMPJ44wopsKUAnj0GupaCfW
-	PeLJQkX6B160v84YhxlXhjZGi1+DwmCThYw1qjdonjBUrmxjPzxpu/7YDO1aQGul126Zht1Sviu
-	g83aBQ4CbcDX0htOkmXRibDoEUIDBI7oF07PhckIeB0vuoUAwwcF9eNCq5vfFNgJu1J5/l9mVOv
-	Oq0VVnx1o5BkR1kncdoWEIJ7EFION+XLfvIKF6sOv11PImHZoYfsf3CJDRas4bLcLxmATlPh9e0
-	iWMWZ29Q9yVg5XzHSne5kG/R16/QuwX4ZS6Ljhwkyj/cAh1CXCzzcmPGn0g3glVF+Qbv0x7rSxq
-	0cZMJTs1RSWH/WZ5D52bROAAzb23cBV9J+VmV1HFG2lr+AY04u2NZ7Ad5jwnb1Y5GC+tsmIb2GB
-	TrnwyVbywleAalXixKyM9qbpzedTozFSiij9+MmA3gfyj17E5cEswwQTpzWo8BDMwFWK/H0HHgE
-	cPDcw==
-X-Google-Smtp-Source: AGHT+IEP/ySDqe0fUbCPgt5iLWx19W1TWyDR8oFVojZghcOpc//7QvyUeu7CEG1drmNLRunieI+/Uw==
-X-Received: by 2002:a05:6512:10c5:b0:594:2f1a:6ff0 with SMTP id 2adb3069b0e04-59b6520ebe3mr1228667e87.9.1767716006851;
-        Tue, 06 Jan 2026 08:13:26 -0800 (PST)
+        bh=yD1KNN5/TWj3t1cQe+Jpa13onMvM2XzOEo1ubv8aag4=;
+        b=rsuQkHc3EIa8G1VRQPHWdYJ+WVZEQUBz8Ze+8UzT8BhJki3V1uTjQxLWs0ZSskK/HV
+         vObPNQnoURpguR923rSf3uhxWLMvaxpwpe+zRmi59vTmN42+e/Nh3SQd6/EIpEgFFZCl
+         3ERNzR7kmfdilAHs9/J8juAvoSOWKsb/bNffDVdT98xscUDJFBoxBRsKYKyx9vf9zztC
+         G8F3eaQ3hvGZmNDBmegBuPEVlVD5jki0gQGmc15rnTgWs0EQL8PFRBwAZHLbMmUfHzCn
+         70vYkr4BLHQXZDD6Ja7/zLKipS2whXdlZhi5CKxmqGoi8Nlq99dSSPwQot2zRLDkxLh0
+         l85w==
+X-Forwarded-Encrypted: i=1; AJvYcCVtNmKpaTrmPRjOei0jJAiJJfcIEyrMH/KkUJdOUuCPymi9WUNzMuW8eqRITmKptGOGA0I0ep8JvSEveueK@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSYdyrxNvags+nHfVs9YzgpYBxtiPpYaDpFjtp6mRwrquFh+Dr
+	5VVeo6DdMjJy2Hu7N3RGny+oNYFSpL6r9urfp3Hwixb+NBgL1QHZ/myj
+X-Gm-Gg: AY/fxX5iV9+mwVTGg0+v+z58YNs7C/1kDK++P5qHy5jfO7wJ3JlG2JsItOMszXd6TJJ
+	nIIE+aCkhik19BiJihY652P4/0zFayu/mOFAfdpTYr1knj8/Wm9D/BkN4adKTRfppj6sL/OZBB2
+	4WEuLNuRqMvD4nShj/gfisv3TDGixQ/ouTtrofdQcs7qO4BJ6mwJI42cNQbGJ4eL+tyL2BcBoIG
+	5HEKeqYub3+9VUDNrNcGkKz0iyEPdnyvyzanPz14iftgApMfbEI6yDfvp3i6zVVPpjNrEmodpPX
+	24iMFHZMVCH9y84ljSYuyUQD6r6Zoi78QSBcRw6eGCmBQqmlpr8zQPde1G5OraUFRwuFQyxzGVO
+	9VY+s6fXXRdrK9skN39MUGMVHROMAR40Nu8B05bfgaVZEOm0E/wPZvyj5DhYj8JC+UDdOLEuo2E
+	Nbmfcq71oGF0i4dAtXSxPHnCyYvx0US51QaN47oS8NMgvCEDhRQJ8EWXqKUIZj8mudGuYCL/ERA
+	5rQug==
+X-Google-Smtp-Source: AGHT+IGJWfLGBy47BJ7PbhNF+N9zhPP31NLcPDf0py/c4ZK/NKQFnYsEpUrBObyH1jqbw52Z4Ikz8A==
+X-Received: by 2002:a2e:a988:0:b0:381:ca5:e893 with SMTP id 38308e7fff4ca-382eaace214mr11548671fa.29.1767716009250;
+        Tue, 06 Jan 2026 08:13:29 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (37-33-180-149.bb.dnainternet.fi. [37.33.180.149])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb91dfbdsm5256091fa.44.2026.01.06.08.13.24
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb91dfbdsm5256091fa.44.2026.01.06.08.13.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 08:13:26 -0800 (PST)
+        Tue, 06 Jan 2026 08:13:28 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Tue, 06 Jan 2026 18:11:48 +0200
-Subject: [PATCH RFC v2 10/11] rust: remove kernel::ModuleMetadata
+Date: Tue, 06 Jan 2026 18:11:49 +0200
+Subject: [PATCH RFC v2 11/11] rust: remove old version of ThisModule
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260106-this_module_fix-v2-10-842ac026f00b@gmail.com>
+Message-Id: <20260106-this_module_fix-v2-11-842ac026f00b@gmail.com>
 References: <20260106-this_module_fix-v2-0-842ac026f00b@gmail.com>
 In-Reply-To: <20260106-this_module_fix-v2-0-842ac026f00b@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -87,101 +87,105 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
  Kari Argillander <kari.argillander@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767715983; l=3446;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767715983; l=3442;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=31K3z/TeTL27blPoZfDSHOqEMPWwg63C71FzL1KNDBY=;
- b=aYpSyfVvVzRtx2jZBA0uzYh2qT6PaE4SsBkyhK757T6LX63SFZ5UAGbmaYOT6qU//VGxRLdbb
- ZCWh1rldZrwA3wKCYGu9+ZCmt5Du50a7ox3x1R5Wt+7hiG44za8CUbs
+ bh=DmmtaDAQNblc8YsS6wVHtlUqz9NIYJ5OZn7ml6apuUc=;
+ b=uYBIMLvMg9r/ZOwGJHxD6HePpybjrDmSrwNbtIJYvgRSrcfWVRaic3h5c24eIiIqJmaUBSlPW
+ 8XKbEuvtZb8A9rti2Mh6Q5HGTetYgo061eGl7iK6Gpzab9/0YztStRN
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-We have all information available also in THIS_MODULE. Use that instead.
-This way we do not need to do ugly casts from driver struct.
+There are now users anymore which use old ThisModule. Also new
+ThisModule did have couple quirks which where there only to probide
+fucntionality what old ThisModule provided. Those also are not needed
+anymore.
 
+Closes: https://github.com/Rust-for-Linux/linux/issues/212
+Closes: https://github.com/Rust-for-Linux/linux/issues/1176
 Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- drivers/gpu/nova-core/nova_core.rs    | 2 +-
- rust/kernel/firmware.rs               | 2 +-
- rust/kernel/lib.rs                    | 6 ------
- rust/macros/module.rs                 | 8 --------
- samples/rust/rust_driver_auxiliary.rs | 2 +-
- 5 files changed, 3 insertions(+), 17 deletions(-)
+ rust/kernel/lib.rs     | 47 -----------------------------------------------
+ rust/kernel/prelude.rs |  2 +-
+ 2 files changed, 1 insertion(+), 48 deletions(-)
 
-diff --git a/drivers/gpu/nova-core/nova_core.rs b/drivers/gpu/nova-core/nova_core.rs
-index b98a1c03f13d..fbfbcc9446c0 100644
---- a/drivers/gpu/nova-core/nova_core.rs
-+++ b/drivers/gpu/nova-core/nova_core.rs
-@@ -19,7 +19,7 @@
- mod util;
- mod vbios;
- 
--pub(crate) const MODULE_NAME: &kernel::str::CStr = <LocalModule as kernel::ModuleMetadata>::NAME;
-+pub(crate) const MODULE_NAME: &kernel::str::CStr = THIS_MODULE::name();
- 
- kernel::module_pci_driver! {
-     type: driver::NovaCore,
-diff --git a/rust/kernel/firmware.rs b/rust/kernel/firmware.rs
-index 11372a8f7be4..42bae71f6af1 100644
---- a/rust/kernel/firmware.rs
-+++ b/rust/kernel/firmware.rs
-@@ -206,7 +206,7 @@ macro_rules! module_firmware {
-             const __MODULE_FIRMWARE_PREFIX: &'static $crate::str::CStr = if cfg!(MODULE) {
-                 c""
-             } else {
--                <LocalModule as $crate::ModuleMetadata>::NAME
-+                crate::THIS_MODULE::name()
-             };
- 
-             #[link_section = ".modinfo"]
 diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-index e7bc52a6ad42..dec1d05ebe7b 100644
+index dec1d05ebe7b..e709f85ec4b5 100644
 --- a/rust/kernel/lib.rs
 +++ b/rust/kernel/lib.rs
-@@ -201,12 +201,6 @@ fn init() -> impl pin_init::PinInit<Self, error::Error> {
+@@ -201,32 +201,6 @@ fn init() -> impl pin_init::PinInit<Self, error::Error> {
      }
  }
  
--/// Metadata attached to a [`Module`] or [`InPlaceModule`].
--pub trait ModuleMetadata {
--    /// The name of the module as specified in the `module!` macro.
--    const NAME: &'static crate::str::CStr;
+-/// Equivalent to `THIS_MODULE` in the C API.
+-///
+-/// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
+-pub struct ThisModule(*mut bindings::module);
+-
+-// SAFETY: `THIS_MODULE` may be used from all threads within a module.
+-unsafe impl Sync for ThisModule {}
+-
+-impl ThisModule {
+-    /// Creates a [`ThisModule`] given the `THIS_MODULE` pointer.
+-    ///
+-    /// # Safety
+-    ///
+-    /// The pointer must be equal to the right `THIS_MODULE`.
+-    pub const unsafe fn from_ptr(ptr: *mut bindings::module) -> ThisModule {
+-        ThisModule(ptr)
+-    }
+-
+-    /// Access the raw pointer for this module.
+-    ///
+-    /// It is up to the user to use it correctly.
+-    pub const fn as_ptr(&self) -> *mut bindings::module {
+-        self.0
+-    }
 -}
 -
- /// Equivalent to `THIS_MODULE` in the C API.
- ///
- /// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 7473a377a3bd..97635aed1598 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -374,14 +374,6 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
-             ::kernel::create_this_module!(\"{name}\");
- 
- 
--            /// The `LocalModule` type is the type of the module created by `module!`,
--            /// `module_pci_driver!`, `module_platform_driver!`, etc.
--            type LocalModule = {type_};
+ pub mod this_module {
+     //! Access to the module identity and ownership information.
+     //!
+@@ -360,27 +334,6 @@ impl THIS_MODULE {
+                 pub const fn name() -> &'static ::kernel::str::CStr {
+                     $crate::c_str!($name)
+                 }
 -
--            impl ::kernel::ModuleMetadata for {type_} {{
--                const NAME: &'static ::kernel::str::CStr = c\"{name}\";
--            }}
+-                // TODO: Temporary to provide functionality old `THIS_MODULE` provided.
+-                // SAFETY: `__this_module` is constructed by the kernel at load time and
+-                // will not be freed until the module is unloaded.
+-                const ThisModule: ::kernel::ThisModule = unsafe {{
+-                    ::kernel::ThisModule::from_ptr(
+-                        <Self as ::kernel::this_module::ThisModule>::OWNER.as_ptr()
+-                    )
+-                }};
+-    
+-                /// Gets a pointer to the underlying `struct module`.
+-                // TODO: Temporary to provide functionality old `THIS_MODULE` provided.
+-                pub const fn as_ptr(&self) -> *mut ::kernel::bindings::module {{
+-                    Self::ThisModule.as_ptr()
+-                }}
 -
-             // Double nested modules, since then nobody can access the public items inside.
-             mod __module_init {{
-                 mod __module_init {{
-diff --git a/samples/rust/rust_driver_auxiliary.rs b/samples/rust/rust_driver_auxiliary.rs
-index 7b729687811d..528866b953aa 100644
---- a/samples/rust/rust_driver_auxiliary.rs
-+++ b/samples/rust/rust_driver_auxiliary.rs
-@@ -18,7 +18,7 @@
- use core::any::TypeId;
- use pin_init::PinInit;
+-                /// Gets a reference to the underlying `ThisModule`.
+-                /// TODO: Temporary to provide functionality old `THIS_MODULE` provided.
+-                pub const fn as_ref(&self) -> &'static ::kernel::ThisModule {{
+-                    &Self::ThisModule
+-                }}
+             }
+         };
+     }
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index 2877e3f7b6d3..66974ec20ef4 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -43,7 +43,7 @@
  
--const MODULE_NAME: &CStr = <LocalModule as kernel::ModuleMetadata>::NAME;
-+const MODULE_NAME: &CStr = THIS_MODULE::name();
- const AUXILIARY_NAME: &CStr = c"auxiliary";
+ pub use super::error::{code::*, Error, Result};
  
- struct AuxiliaryDriver;
+-pub use super::{str::CStrExt as _, ThisModule};
++pub use super::str::CStrExt as _;
+ 
+ pub use super::init::InPlaceInit;
+ 
 
 -- 
 2.43.0
