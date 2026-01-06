@@ -1,90 +1,163 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E0D2FD7D3
-	for <linux-modules@vger.kernel.org>; Tue,  6 Jan 2026 09:37:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858A23126C3;
+	Tue,  6 Jan 2026 14:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767692269; cv=none; b=b5E2bPiiP1ccYVHYYhwMdVG8No+N0/7WjvIdhNw3aGa/V1ox7TYSxRYCAyI+tbIEPpu5V1gOSVJAq3+HzbM0UIuPrdS9AQMYhIf+v9rqvI4BtteiDZLu2oxFrHDhpJpu6zwvl9q4IX0oBk8tkSmuoV2JhEf8AOMoKwSmySg0IkM=
+	t=1767709492; cv=none; b=d0oL/c5hqlGbNuNVmpu8bVOBzev+Ek/Hmbw2Ju6d9+g5bRrrwrm2d9umlcto//0ky5FFZM2rV6OAsFmEuEs+Z72ITZvYcQHqJlsJk+eLISEpHbla84NuT8SwVMaQmS150hQ05qsHiG9ONjt4AZJT6NDOmgsdqMs4qOmBI3RAHmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767692269; c=relaxed/simple;
-	bh=N7uAYbVpKybj/kxqV2hwnieEyXuUnlhLWKSb0QwFbn0=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=bkeayBfG7uac6JCvIkHTb4e5hLvYGQmli40LCZpyCrMvLnKyDEc0hbHuIb0OmW8LXNjQbIglFF7FkvU+BmbZUUo1LOBE9bVb9KJvFnXTmb5n0YL7dQkpwpIVqjacVifK/nXMyf1aqF0VbZkL7PXjTpL15FQ0UELF0fhBMSOiTaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i1w/RVoV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1767709492; c=relaxed/simple;
+	bh=Zncy1KkWYJnXMWV5PjCrHYfekTgxbBilVilf73f0cvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJDtOYdSG932vawyhQBNtb2A95gW7vh4X3tFul86ewimmokyY97jVdzNat57mvfFxYo/pZoywm0wGubM1MB6FKfo/F5dJCltB6aeHSr+amiIhJe9H9F81dhFBD5N2r6psk9aiIWhPihzmPjV9gtrD3Rbn5uyToWKcmo10QFmGX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FU5BRCWN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i1w/RVoV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767692265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MDANCi/532bShCCLptsPqiZizaA/KMJpZpqXSVA2mvA=;
-	b=i1w/RVoV8qg8Gz2YjPBG8exhwiMbm36LIAd8UAwKcsqUcAm0ux5FCvZBybzfxtsT1orqSn
-	E4/XsB5egcmsdhiRGz4b3RQaH0RvFrRaUJjQPZ1oMnTdigBGyHui1K+rHyUoBwxoKx+4wc
-	jdQamlhqb2VWiIJAgbRe3It/RW6kJtg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-443-HuW2W3u6OaKQKMA4jjUmVw-1; Tue,
- 06 Jan 2026 04:37:41 -0500
-X-MC-Unique: HuW2W3u6OaKQKMA4jjUmVw-1
-X-Mimecast-MFC-AGG-ID: HuW2W3u6OaKQKMA4jjUmVw_1767692258
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 372001800343;
-	Tue,  6 Jan 2026 09:37:38 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0649F18004D8;
-	Tue,  6 Jan 2026 09:37:33 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20260106080251.GD2630@sol>
-References: <20260106080251.GD2630@sol> <20260105152145.1801972-1-dhowells@redhat.com> <20260105152145.1801972-4-dhowells@redhat.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>,
-    Jarkko Sakkinen <jarkko@kernel.org>,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
-    Sami Tolvanen <samitolvanen@google.com>,
-    "Jason A . Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/8] pkcs7, x509: Add ML-DSA support
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FU5BRCWN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8AD4C116C6;
+	Tue,  6 Jan 2026 14:24:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767709492;
+	bh=Zncy1KkWYJnXMWV5PjCrHYfekTgxbBilVilf73f0cvU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FU5BRCWNSh+DnnO0iFU4Xx2OHYXg13Ydr6BdbHBuwmT5kOUsaqnKUwBty7wOu4oWS
+	 u55Gc5oNWPpHPoIDAGig1lbyUGxxKyzb8JskixcQ3cPvfzdJmxOgafx/LaLtJoyg3y
+	 TMOAIwTnHvMnIDklxg2wosJJfh/dF9ycotY02BFHUVASPK/s5U3bP3Q/4OIRkrEkGW
+	 UUz7mUAsW7yd0cM7ZmtnZboETCvvqwf6czZs2aO6mc2yxlKOVE5wF7EckhJScfyi28
+	 JozdqgWVwufOenAM5uuWLyHxgQFqUt25s8litSp+nPw7YxKzEr5FVdKF0J5K4gOXqu
+	 zcE8+EUao5YXw==
+Date: Tue, 6 Jan 2026 08:24:50 -0600
+From: Lucas De Marchi <demarchi@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Daniel Gomez <da.gomez@kernel.org>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, linux-acpi@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Daniel Gomez <da.gomez@samsung.com>
+Subject: Re: [PATCH] software node: replace -EEXIST with -EBUSY
+Message-ID: <4zatcu4izel7yijmkinxy6wq6owktwsyxkazb5ufc4vua54ojx@3vq4dgtydgia>
+References: <20251220-dev-module-init-eexists-linux-acpi-v1-1-af59b1a0e217@samsung.com>
+ <2025122203-purely-huntsman-7987@gregkh>
+ <7ff92075-df6a-45d8-9014-647ae45797ff@kernel.org>
+ <2025122212-fiction-setback-ede5@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1837725.1767692252.1@warthog.procyon.org.uk>
-Date: Tue, 06 Jan 2026 09:37:32 +0000
-Message-ID: <1837726.1767692252@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <2025122212-fiction-setback-ede5@gregkh>
 
-Eric Biggers <ebiggers@kernel.org> wrote:
+On Mon, Dec 22, 2025 at 12:56:38PM +0100, Greg Kroah-Hartman wrote:
+>On Mon, Dec 22, 2025 at 09:48:54AM +0100, Daniel Gomez wrote:
+>> On 22/12/2025 09.19, Greg Kroah-Hartman wrote:
+>> > On Sat, Dec 20, 2025 at 04:55:00AM +0100, Daniel Gomez wrote:
+>> >> From: Daniel Gomez <da.gomez@samsung.com>
+>> >>
+>> >> The -EEXIST error code is reserved by the module loading infrastructure
+>> >> to indicate that a module is already loaded. When a module's init
+>> >> function returns -EEXIST, userspace tools like kmod interpret this as
+>> >> "module already loaded" and treat the operation as successful, returning
+>> >> 0 to the user even though the module initialization actually failed.
+>> >>
+>> >> This follows the precedent set by commit 54416fd76770 ("netfilter:
+>> >> conntrack: helper: Replace -EEXIST by -EBUSY") which fixed the same
+>> >> issue in nf_conntrack_helper_register().
+>> >>
+>> >> Affected modules:
+>> >>   * meraki_mx100 pcengines_apuv2
+>> >>
+>> >> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+>> >> ---
+>> >> The error code -EEXIST is reserved by the kernel module loader to
+>> >> indicate that a module with the same name is already loaded. When a
+>> >> module's init function returns -EEXIST, kmod interprets this as "module
+>> >> already loaded" and reports success instead of failure [1].
+>> >>
+>> >> The kernel module loader will include a safety net that provides -EEXIST
+>> >> to -EBUSY with a warning [2], and a documentation patch has been sent to
+>> >> prevent future occurrences [3].
+>> >>
+>> >> These affected code paths were identified using a static analysis tool
+>> >> [4] that traces -EEXIST returns to module_init(). The tool was developed
+>> >> with AI assistance and all findings were manually validated.
+>> >>
+>> >> Link: https://lore.kernel.org/all/aKEVQhJpRdiZSliu@orbyte.nwl.cc/ [1]
+>> >> Link: https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/ [2]
+>> >> Link: https://lore.kernel.org/all/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/ [3]
+>> >> Link: https://gitlab.com/-/snippets/4913469 [4]
+>> >> ---
+>> >>  drivers/base/swnode.c | 2 +-
+>> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> >>
+>> >> diff --git a/drivers/base/swnode.c b/drivers/base/swnode.c
+>> >> index 16a8301c25d6..083593d99a18 100644
+>> >> --- a/drivers/base/swnode.c
+>> >> +++ b/drivers/base/swnode.c
+>> >> @@ -919,7 +919,7 @@ int software_node_register(const struct software_node *node)
+>> >>  	struct swnode *parent = software_node_to_swnode(node->parent);
+>> >>
+>> >>  	if (software_node_to_swnode(node))
+>> >> -		return -EEXIST;
+>> >> +		return -EBUSY;
+>> >
+>> > While I understand the want for the module loader to be returning
+>> > -EBUSY, that doesn't really make sense down here in this layer of the
+>> > kernel.
+>> >
+>> > So why doesn't the module loader turn -EEXIST return values into -EBUSY
+>> > if it wishes to pass that value on to userspace?  Otherwise you are
+>>
+>> Indeed, we are planning to do that as well with "[PATCH 0/2] module: Tweak
+>> return and warning":
+>>
+>> https://lore.kernel.org/all/20251013-module-warn-ret-v1-0-ab65b41af01f@intel.com/#t
+>>
+>> However, we don't consider that as the right fix.
+>>
+>> > going to be constantly playing "whack-a-mole" here and have really
+>> > set things up so that NO api can ever return EEXIST as an error value in
+>> > the future.
+>>
+>> 100%.
+>>
+>> For that reason, on top of the series from Lucas, we are documenting this to
+>> make it clear:
+>>
+>> https://lore.kernel.org/linux-modules/20251218-dev-module-init-eexists-modules-docs-v1-0-361569aa782a@samsung.com/T/#m2ed6fbffb3f78b9bff53840f6492a198c389cb50
+>
+>Wait, no, that's not what I mean at all :)
+>
+>> And sending patches where we see modules need fixing. I have already sent 6 out
+>> of 20-ish series (that include a total of 40+ fixes):
+>>
+>> https://lore.kernel.org/all/20251220-dev-module-init-eexists-linux-scsi-v1-0-5379db749d54@samsung.com
+>> https://lore.kernel.org/all/20251219-dev-module-init-eexists-netfilter-v1-1-efd3f62412dc@samsung.com
+>> https://lore.kernel.org/all/20251220-dev-module-init-eexists-bpf-v1-1-7f186663dbe7@samsung.com
+>> https://lore.kernel.org/all/20251220-dev-module-init-eexists-keyring-v1-1-a2f23248c300@samsung.com
+>> https://lore.kernel.org/all/20251220-dev-module-init-eexists-dm-devel-v1-1-90ed00444ea0@samsung.com
+>
+>Please no, let us keep using -EEXIST in the kernel source, and if your
+>usage is going to map this to userspace somehow, do the translation
+>there, in the module code, as your original patch above said.
+>
+>Otherwise, again, this is never going to work, let the subsystems use
+>this error code how ever they feel they need to.
 
-> This "PKCS#7" (really CMS -- the kernel misleadingly uses the old name)
+Ok. When I added the warning I was more following what the other error
+handling was doing for positive values. Happy to change that to simply
+map the error code before returning from do_init_module().
 
-I implemented PKCS#7 first and then added CMS on top of that.
+Daniel, do you want me to resend that with the warning removed?
 
-> That needs to either be implemented correctly, or not at all.  (If only
-> (2) is actually needed, then "not at all" probably would be preferable.)
+Lucas De Marchi
 
-At the time of writing, openssl didn't fully support CMS with ML-DSA, and that
-limited things.
-
-David
-
+>
+>thanks,
+>
+>greg k-h
