@@ -1,69 +1,68 @@
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11669337BBC
-	for <linux-modules@vger.kernel.org>; Tue,  6 Jan 2026 16:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E598F338598
+	for <linux-modules@vger.kernel.org>; Tue,  6 Jan 2026 16:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767716005; cv=none; b=fbabAHqKi+kZjKiU2Go8QxA1XUfm3Nw/fu31avVMJ2MrO14nUBeG9VoMq65ZrqmB9GA8I/V1GjvUxRQg7/aUDl7jZ2LVZHM6eQ1H/vYexHKgRaPsruRraruKR7mlprPh4WnkFJASCyaX2SP4B27QX2zZLGvyckXL9EzLvjoNmtI=
+	t=1767716006; cv=none; b=nF4tZjDKQFwLYwqHxfJLGgxXmjsJ6CJqlrYSGodxJAKhtUJbx6FJR1PS7b7FR+lwyl74bw7Dfpupsxgm4lPVHj/3hYOEo5ljj0FcABqaFZB8CpJHFIcamW8twdCYKMeP0dpfnu1QOoCQ3T6/2rxSqdoF81Ics6ZaynH9rrfPesA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767716005; c=relaxed/simple;
-	bh=cmxaklbkQRdcmvAPv3nZU1XmyGWj+C91dTrjBACqY00=;
+	s=arc-20240116; t=1767716006; c=relaxed/simple;
+	bh=HXsmrNNEr+H1R93npODROo6Md8lvxfZavxKoxrx9XrE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E5eLNGuTM10gCZZwyqLzYeZCw3sF3eeXbxBiTjePmJtWntFxaTqC/Ux1+DFYMCDcsgGQ3JpZd8uuzMIjZVsQfhOKH/9hPcr59Q/Cb5jqj6jjbw3NOVlBnxKQ/HJPC0nRCIS4MOTnAtdFGdvV3kRXCW1hUoDSS8RR34vFBGVncNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L3Hya9hy; arc=none smtp.client-ip=209.85.208.182
+	 In-Reply-To:To:Cc; b=UnuekmiXx4JG52Qf29h3/xpqXiPxsuu48yeY/SlzkAsBHQdENQXNis+BSy3gc1KrHn9C/yI7A19jOOyDMdxBgysUa3H88hPmjoEwAEbvEC/s/4GZ9OYXfhuBVtYp9JxUFPyMbeDqitr/1Zeyudt7R2dxtYy6a8CixwFWXhTiV/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOMfVa29; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L3Hya9hy"
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37b99da107cso10352561fa.1
-        for <linux-modules@vger.kernel.org>; Tue, 06 Jan 2026 08:13:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOMfVa29"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-37d056f5703so9472411fa.0
+        for <linux-modules@vger.kernel.org>; Tue, 06 Jan 2026 08:13:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767716001; x=1768320801; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767716003; x=1768320803; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=h5aCMn3FrqRU+TQVZ+VUcKX0ZHYXGPf5P30sbMEeP8s=;
-        b=L3Hya9hy2X7Jd7Bx0vmN88cIUXra8moux1VmKDWbu5I4c1EeAxwiMKfN1vfF77ygQR
-         hR6zlVo2NjnON5Aj/YJWuBi5vWao/A3eHbsoYLVQf8dCySlqrZMzLn9aZhg1+1PNRzqN
-         U88i1fHimyQrmWwoRsTWSCwbMN+C1gmtSDg7TDjKN4r3e9nVfjwNxsZlhjr92Mp6vu4M
-         KPZiZXnJYK/z6q3eo//4uw/peqC3cA+V+deoAWwGwKf7YQg4BGYmA733+aPBCUIqKBeZ
-         TFA1g2PSkFS4yYRKZcpUlxtk57iPordlIHBDklvGKx66E+JYxQ1EHkQ9fzktKg+u9VQM
-         zp3g==
+        bh=jA4SPNhuMX5XCZ5OBbakMPi2P9GAq2DqeqD/xi+6gT8=;
+        b=mOMfVa295tY7LkIeYZsnWS1Rdske3pgJY8ADTuX0xsp6a0wfNtA/RgpbASh6gwkbie
+         LtoGdyKnfi7sN9JFObruv9dlj0yc4NqvSaxn1nqg0KZxrg5ivQ38cc6WQuNz4rB17T9J
+         TfSfxiaKcs3MW2trseyAhouSny0xDvoH4jQNvJbijvt3WFWcIN5ipxa1Jn0AXAmM4zEx
+         odgUwfes6qD9m88Edduo7I4HSxWKDqovjndroELwdcgdnuqpK/nRxBlu8p8Ny2Bcctv9
+         P45MdXltu/tAr5HhUtyE27wAKpjC/zI2UtqJxwLkbGOOwFE9RjHDSCr334ohfDyJuYdG
+         YmyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767716001; x=1768320801;
+        d=1e100.net; s=20230601; t=1767716003; x=1768320803;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=h5aCMn3FrqRU+TQVZ+VUcKX0ZHYXGPf5P30sbMEeP8s=;
-        b=KKMKL9uFuw0J3get8skomBkfqxnC7PlHHjqi2Mxnp/W709A+x6vGUB0/e/bBEAIYX7
-         vdhJx3PBdKLkB+1Ey+PdArDGOCY+TiDYT+phfE65+q9HXxqeOHozi0Z9DIHS/elMbnog
-         hVfaex6Ydizx5tUg91wrG9dyovTu/v83Fmp8l/LyZJLwwntJ2Z7l87zBkKG2IZSsFlC4
-         r7EIJ+S7ubgiIFvpph3vxMtMTBsjRj+kaXKWN5Fynr4Js/Ra5N6bgeroUZBuhcbd0/4A
-         XOjkXTnoBjfLYQ8PbR1kFLn+wXGySe3gc7GwyZ87FweaYex+fSwTMX4yb+vcDbTEM3yf
-         o8Kw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWRzyZbIsGFgLJ6uxevtm6Se79J76MaWEkOgLhINB8dtEnklSILg4P7I48+wiQ4yNSwQQhcXqu4eP25bwd@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvjFOyBs6u9TtZV0BLHMBFzmCU0eMt3WIh70loQv2sWPlRZaUl
-	l2M+dPo5TFJgm1sY3KZQgWiLie2lIXJ70Ew9JDVoPJ/UFqh6A46PWjop
-X-Gm-Gg: AY/fxX6XEuRyYVd+EnB/3O24YX7SgLZueDEuanR9S5fEVBLJApTEHduPus8uNuY5cZv
-	ppXm52n72IV6LlsDMQKOUcy+Qvqp0qSlvf6SjooBSc7s2NaOWUnFVpDq9ET4358T96nPOJlSk1e
-	Zi7NWwfFgIoRPwAh8PZWxLPS1ZVYnOnwv7gOxC4hlXGDaFS9bqAAUqcuJYvgJEyy5fKuqpnXBH8
-	ArILNWC76lcSZpnla1T2XLMsFgpGEt8ylFe7lF7ocvq1PAob90kJYGvNUTnh6ItXS+XcyF7OyU2
-	DhKmjm6HisiIXvfzn0LXBL1VJ4fnJGvrC+41LswGS2Fd2aw3F59puxayrU2v7uAjGC8fTDiRojo
-	Bz9lXlD1qNkpxyrHWOb4BO0062rzF5M+xDPXyMLg13c261muKEJuPrwXAC1tnBKlcMiarDAVo8Z
-	vTGMVzWn//4FEWtv75OeiPry6s7/nrEYGvteMuJZSftxFW+Q2pl4rmNGXxS6IPvhll2hvC108Yd
-	LTHqA==
-X-Google-Smtp-Source: AGHT+IEtAEGIdsEnrjEv9hp9aYk8dlDx9Z9M7RXZ2NsQs+GlYYPz2YQjUEUNJFTWzDj+8iPFr+ObPg==
-X-Received: by 2002:a2e:a98d:0:b0:37f:cc09:3197 with SMTP id 38308e7fff4ca-382eaabb987mr9562311fa.23.1767716000748;
-        Tue, 06 Jan 2026 08:13:20 -0800 (PST)
+        bh=jA4SPNhuMX5XCZ5OBbakMPi2P9GAq2DqeqD/xi+6gT8=;
+        b=TIfWRbxiWrKK3priPiZ8kn5IpA2/Tj0hOYl6sXnbzvVP2Q+BSUqWRBZgj7YxRWZXYq
+         GF9m1MODwWUKAMaHA7O+6Ue+vZm755UtbOrgUrjUi0MrdM2rkWNOHe4v897+Iz0bWxyK
+         McbDx3uiGvabhxzcMu1gmnplbvD37+Ic0xbU/HWqJPkGGDJepePuzIRPksLI0TiQMfi+
+         S7HMd04o+HZv423Kr+6yH4gW5RScgdLgWsUc3wDC6MKeaRvsj7BOEvoUypizIr9z3eS1
+         vlrOuJqst21zIzkN8rZEFq71C5w4viCQ7LvvWy0PqIB9x0SfnVwzGMPp1qn/Kvmr2QXC
+         i4HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVOhcfwyAoqnJQdVKTBeyKUAFwSxUHGBIp7AP2u3ClJBOH+URvPleYSpMQsVphLRVcXowkpRtsbvi8tvYp/@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeV7IQ+21IX1CK0E93U5vEfcWaIUTv3jUaSZPcN5HXE6zU+Y7M
+	WgASZnjTDYKXkBUItzOAR3vKRngXwSziWH5QVWjxesi+pJ7ukAGl2f9R
+X-Gm-Gg: AY/fxX62n2pRks8bUDQChHhHuwfHGrX3Q7kmaQ3E/KM7RirFn0Z5D9tvl16JeXOy1bF
+	yJLx/TBN2e4cM1dcfvVZJ1p7qyAF44HkivqfFZP7HdzeZp46BMsKKItwxdasNd7VgkAb9eRE92c
+	VM3JieDCZ3W0wmgMGzYLmalLNtVG17GY1X5NntqNXf8HgVJSauP+a1cBnfM0La8n7IAzM9WUw/7
+	Tl8EePHM+k7wWAM59EFOtVSEF7xI9hBoqB1txRmnB65UXHxlKJTGestpzrZZ6dl4vEaA6PTaWiz
+	pFquaU+CSYdb7Hl5RTRa/+hHfnbsh6XID4kpG5TMsVIjNOn8i9kgkd5P7FlCOaVGXmZMonlHDgP
+	XRntBltBlR9Qa4NnTWpOxXxdd+slV93YJBQC/Wk9HchNM/JwiEYCzpeiM+xTogvHS1iohcZj8Cd
+	8LPpgN4kQ/tX3OnT/1CDkCYJAbmzLvrvFUt6KaFlheWXUfFS7Kw+GFV4bHVxKJorPerMIwX5hPP
+	iGZog==
+X-Google-Smtp-Source: AGHT+IEDfjAP/q6tl8l2j/q30jjjWobjSIo8yqpbOiByLc5uyBuPPT+WRrg2weBXCsixvQrl0a6H9Q==
+X-Received: by 2002:a2e:a58f:0:b0:37a:4714:ff39 with SMTP id 38308e7fff4ca-382eaaa2f8bmr10163611fa.23.1767716002686;
+        Tue, 06 Jan 2026 08:13:22 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (37-33-180-149.bb.dnainternet.fi. [37.33.180.149])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb91dfbdsm5256091fa.44.2026.01.06.08.13.19
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb91dfbdsm5256091fa.44.2026.01.06.08.13.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 08:13:20 -0800 (PST)
+        Tue, 06 Jan 2026 08:13:22 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Tue, 06 Jan 2026 18:11:45 +0200
-Subject: [PATCH RFC v2 07/11] rust: phy: make Registration::register() use
- new ThisModule
+Date: Tue, 06 Jan 2026 18:11:46 +0200
+Subject: [PATCH RFC v2 08/11] rust: binder: use new THIS_MODULE
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260106-this_module_fix-v2-7-842ac026f00b@gmail.com>
+Message-Id: <20260106-this_module_fix-v2-8-842ac026f00b@gmail.com>
 References: <20260106-this_module_fix-v2-0-842ac026f00b@gmail.com>
 In-Reply-To: <20260106-this_module_fix-v2-0-842ac026f00b@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -88,94 +87,44 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
  Kari Argillander <kari.argillander@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767715983; l=3371;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767715983; l=1238;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=cmxaklbkQRdcmvAPv3nZU1XmyGWj+C91dTrjBACqY00=;
- b=klGzWdOZ5EgPSjks2EtqIzlsEOOg95lAi5QZmehg+4hxXdUW6mLP37/BYLKSPS3LauFIz4LDk
- dWJXi9qxenlAQp+keh9h30GqcEXUmEVc0MNNhASsQEK7vOIDyJbD+pz
+ bh=HXsmrNNEr+H1R93npODROo6Md8lvxfZavxKoxrx9XrE=;
+ b=5lBBJ8pNkqE/cUVzYPL+ifrN07scK3BAy/Q4cFAaJhkvnZyARbkT2dcTAmw41Pf0yprOIFojh
+ u81hnoO3A+YArUkD6BUvZYrXJkWXcEAIj6EBEDw7QQDufIRI4FH8z/+
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-Switch `Registration::register()` to take the owning module via the
-`ThisModule` abstraction instead of an explicit module parameter.
-
-The function is now generic over `TM: ThisModule`, allowing the module
-owner to be resolved at compile time through `TM::OWNER`. This unifies
-the way `THIS_MODULE` is passed to Rust abstractions and avoids
-threading module pointers manually through the API.
-
-This also removes redundant parameters and prevents accidental
-mismatches between the registered drivers and their owning module.
+We have new THIS_MODULE. ThisModule is now crate. This is ugly for
+reason that drivers should not use as_ptr() directly. Currently binder
+still needs it so ugly cast is totally ok.
 
 Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- rust/kernel/net/phy.rs | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ drivers/android/binder/rust_binder_main.rs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
-index bf6272d87a7b..b6c99bf7e97b 100644
---- a/rust/kernel/net/phy.rs
-+++ b/rust/kernel/net/phy.rs
-@@ -6,8 +6,17 @@
- //!
- //! C headers: [`include/linux/phy.h`](srctree/include/linux/phy.h).
- 
--use crate::{device_id::RawDeviceId, error::*, prelude::*, types::Opaque};
--use core::{marker::PhantomData, ptr::addr_of_mut};
-+use crate::{
-+    device_id::RawDeviceId,
-+    error::*,
-+    prelude::*,
+diff --git a/drivers/android/binder/rust_binder_main.rs b/drivers/android/binder/rust_binder_main.rs
+index d84c3c360be0..fc921c0e1116 100644
+--- a/drivers/android/binder/rust_binder_main.rs
++++ b/drivers/android/binder/rust_binder_main.rs
+@@ -21,6 +21,7 @@
+     sync::poll::PollTable,
+     sync::Arc,
+     task::Pid,
 +    this_module::ThisModule,
-+    types::Opaque, //
-+};
-+use core::{
-+    marker::PhantomData,
-+    ptr::addr_of_mut, //
-+};
+     transmute::AsBytes,
+     types::ForeignOwnable,
+     uaccess::UserSliceWriter,
+@@ -319,7 +320,7 @@ unsafe impl<T> Sync for AssertSync<T> {}
+     let zeroed_ops = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
  
- pub mod reg;
- 
-@@ -648,10 +657,7 @@ unsafe impl Send for Registration {}
- 
- impl Registration {
-     /// Registers a PHY driver.
--    pub fn register(
--        module: &'static crate::ThisModule,
--        drivers: Pin<&'static mut [DriverVTable]>,
--    ) -> Result<Self> {
-+    pub fn register<TM: ThisModule>(drivers: Pin<&'static mut [DriverVTable]>) -> Result<Self> {
-         if drivers.is_empty() {
-             return Err(code::EINVAL);
-         }
-@@ -659,7 +665,11 @@ pub fn register(
-         // the `drivers` slice are initialized properly. `drivers` will not be moved.
-         // So it's just an FFI call.
-         to_result(unsafe {
--            bindings::phy_drivers_register(drivers[0].0.get(), drivers.len().try_into()?, module.0)
-+            bindings::phy_drivers_register(
-+                drivers[0].0.get(),
-+                drivers.len().try_into()?,
-+                TM::OWNER.as_ptr(),
-+            )
-         })?;
-         // INVARIANT: The `drivers` slice is successfully registered to the kernel via `phy_drivers_register`.
-         Ok(Registration { drivers })
-@@ -891,12 +901,11 @@ struct Module {
-                 [$($crate::net::phy::create_phy_driver::<$driver>()),+];
- 
-             impl $crate::Module for Module {
--                fn init(module: &'static $crate::ThisModule) -> Result<Self> {
-+                fn init(_module: &'static $crate::ThisModule) -> Result<Self> {
-                     // SAFETY: The anonymous constant guarantees that nobody else can access
-                     // the `DRIVERS` static. The array is used only in the C side.
-                     let drivers = unsafe { &mut DRIVERS };
--                    let mut reg = $crate::net::phy::Registration::register(
--                        module,
-+                    let mut reg = $crate::net::phy::Registration::register::<crate::THIS_MODULE>(
-                         ::core::pin::Pin::static_mut(drivers),
-                     )?;
-                     Ok(Module { _reg: reg })
+     let ops = kernel::bindings::file_operations {
+-        owner: THIS_MODULE.as_ptr(),
++        owner: <THIS_MODULE as ThisModule>::OWNER.as_ptr(),
+         poll: Some(rust_binder_poll),
+         unlocked_ioctl: Some(rust_binder_ioctl),
+         #[cfg(CONFIG_COMPAT)]
 
 -- 
 2.43.0
