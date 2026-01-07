@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6F339B488;
-	Wed,  7 Jan 2026 16:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3FF39E6CB;
+	Wed,  7 Jan 2026 16:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767803420; cv=none; b=BP9AodwF1GeIx5l17qYpTUatMBBzqmoFRmTTBvoxpB5imXwUVbj+PqId9yC02gSzbcjb+34DIZ3uYAYnMfCo2rad13NTFjKzOSxyrOgGXJtcB4PKBjoTkQwd+LRTI2LOv6F1LTJy6Ifq2PYSBdb10PqHJMLcpZZzpIjgbW3PkBI=
+	t=1767803436; cv=none; b=XOs2DE8WCiPpIATDVhSdfoQoDvyQUd48xqEW0cN1Qe4s7229lifsqBfMn8VIzOItqalA2EcvbCYN7i/Bis9UnhkywXi285JNzW6plYF48nAdEq4Jo2ga44b/XfF0jhk2vWyDxcI/B9lEWfmwHkMsCLWlXEld/GzVu7z9/ENWCIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767803420; c=relaxed/simple;
-	bh=g1xdWybaHzatWpQm2xyOQnEhqq5D9ySHbjOF55t+a0s=;
+	s=arc-20240116; t=1767803436; c=relaxed/simple;
+	bh=2GgeZpROWDwJAL2len3LNV0WkuOENfp2YwSPqNibeeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RB4V1bdTZJDaYUfrn4TgQj4aWNZewc5KKry6RiBuonrDKMIvRDNhEh7IDwxp80cnNmEoB36Jbl+yKllDDA7JGO2OBkeeG7rxT1/PZ1GqAF3G4kaWfCdbpbEPwNnlkXUZ+CNjIUGQxqyPvNV1nAOatpxBTmqt+fN6pLjXzcz5/i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTYoc3MR; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=soPcKDBjUVYlVmvz6Y6hP9fGaFXPp1ODsc1nIJZnnoJa7D5CzZEZfNVhk//qXdjg6lMlCAjeyHHG1eryr3T22seDSpSnBoTcSnuGpNhJvtGOrSihv++ehOQkxigheVt1XynQCTi6/9AV1BE3hfbdunzSGCpAyZYWXiZBWfWu2Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k53Z1ABd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTYoc3MR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE7AC4CEF1;
-	Wed,  7 Jan 2026 16:30:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k53Z1ABd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D9DC4CEF7;
+	Wed,  7 Jan 2026 16:30:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767803418;
-	bh=g1xdWybaHzatWpQm2xyOQnEhqq5D9ySHbjOF55t+a0s=;
+	s=k20201202; t=1767803435;
+	bh=2GgeZpROWDwJAL2len3LNV0WkuOENfp2YwSPqNibeeA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=XTYoc3MRPEQZ9P6CYqxDhwUWgklKacTmua9Dem1TT72+kp0jsaZ1Odf9YNYrChTH9
-	 vvFrnH1rnQ5lm/okjWjYtYHMCOkq5dvnE1nHeZVuQX26hKmhltzLg2xN8Xnx/qneEw
-	 Bc6lay3HRJYcTkfE5jOcRchG6E/Hf2mRnIWnLNcZl7idaoCUm3pOPJhZZQZoDTS3bi
-	 MGu98b4gTNNbF5nGlKQ1aZLrV4VGW16nautruOdkQmOQxg37bYCuzq5fBHmL0MAbCw
-	 2uo79v3Wwnc+ZfhJ27lfdH/YT1sTAI7C9F8nFIu6DCZrJ/1d5T4Kkf05TQtnR2gKcJ
-	 a8+NvVZqrh2Sw==
+	b=k53Z1ABdx14wcmrHzOUGjNoXUwYjkYpk+6pVkihKU65GmxMovCwkBjsWiKYXc2vvZ
+	 ovhGReiu/YQjuOkdD3H/hWQxnxRJ/fj/30VtXHXoF8Bh8x27n1VAMZqbkPcfzdTLSR
+	 69PxRWtaRJxNJVMNkQ+0FZfPf6teTF1xBwbbF7S7WcndyNoWqbq5udC6RkLJxBpbHz
+	 qBTKWYJtFjvpTxxSxnmPNdml+I0aWqqAf/YNe/X7dP2rTddtzxzydHewGRCFcPCQTW
+	 NPgOu+ZrPVjGtHUNml41LezcW6cdObhjjXSSdtjMuwMumR26yFRM3FjqYSFyS3hoAf
+	 HTMVC+WemfyDg==
 From: Gary Guo <gary@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Boqun Feng <boqun.feng@gmail.com>,
@@ -36,27 +36,20 @@ To: Miguel Ojeda <ojeda@kernel.org>,
 	Alice Ryhl <aliceryhl@google.com>,
 	Trevor Gross <tmgross@umich.edu>,
 	Danilo Krummrich <dakr@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <raemoar63@gmail.com>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Aaron Tomlin <atomlin@atomlin.com>,
 	Tamir Duberstein <tamird@gmail.com>,
-	Igor Korotin <igor.korotin.linux@gmail.com>,
-	=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
 Cc: rust-for-linux@vger.kernel.org,
-	Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>,
+	Patrick Miller <paddymills@proton.me>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
 	linux-modules@vger.kernel.org
-Subject: [PATCH v2 02/11] rust: macros: use `quote!` from vendored crate
-Date: Wed,  7 Jan 2026 16:15:41 +0000
-Message-ID: <20260107161729.3855851-3-gary@kernel.org>
+Subject: [PATCH v2 04/11] rust: macros: use `syn` to parse `module!` macro
+Date: Wed,  7 Jan 2026 16:15:43 +0000
+Message-ID: <20260107161729.3855851-5-gary@kernel.org>
 X-Mailer: git-send-email 2.51.2
 In-Reply-To: <20260107161729.3855851-1-gary@kernel.org>
 References: <20260107161729.3855851-1-gary@kernel.org>
@@ -67,459 +60,693 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Gary Guo <gary@garyguo.net>
 
-With `quote` crate now vendored in the kernel, we can remove our custom
-`quote!` macro implementation and just rely on that crate instead.
+With `syn` being available in the kernel, use it to parse the complex
+custom `module!` macro to replace existing helpers. Only parsing is
+changed in this commit, the code generation is untouched.
 
-The `quote` crate uses types from the `proc-macro2` library so we also
-update to use that, and perform conversion in the top-level lib.rs.
+This has the benefit of better error message when the macro is used
+incorrectly, as it can point to a concrete span on what's going wrong.
 
-Clippy complains about unnecessary `.to_string()` as `proc-macro2`
-provides additional `PartialEq` impl, so they are removed.
+For example, if a field is specified twice, previously it reads:
 
-Reviewed-by: Tamir Duberstein <tamird@gmail.com>
-Reviewed-by: Benno Lossin <lossin@kernel.org>
+    error: proc macro panicked
+      --> samples/rust/rust_minimal.rs:7:1
+       |
+    7  | / module! {
+    8  | |     type: RustMinimal,
+    9  | |     name: "rust_minimal",
+    10 | |     author: "Rust for Linux Contributors",
+    11 | |     description: "Rust minimal sample",
+    12 | |     license: "GPL",
+    13 | |     license: "GPL",
+    14 | | }
+       | |_^
+       |
+       = help: message: Duplicated key "license". Keys can only be specified once.
+
+now it reads:
+
+    error: duplicated key "license". Keys can only be specified once.
+      --> samples/rust/rust_minimal.rs:13:5
+       |
+    13 |     license: "GPL",
+       |     ^^^^^^^
+
 Signed-off-by: Gary Guo <gary@garyguo.net>
 ---
- rust/macros/concat_idents.rs |   2 +-
- rust/macros/export.rs        |   4 +-
- rust/macros/fmt.rs           |   4 +-
- rust/macros/helpers.rs       |   4 +-
- rust/macros/kunit.rs         |   5 +-
- rust/macros/lib.rs           |  21 ++--
- rust/macros/module.rs        |   6 +-
- rust/macros/paste.rs         |   2 +-
- rust/macros/quote.rs         | 182 -----------------------------------
- rust/macros/vtable.rs        |   7 +-
- 10 files changed, 32 insertions(+), 205 deletions(-)
- delete mode 100644 rust/macros/quote.rs
+ rust/macros/helpers.rs | 109 ++++--------
+ rust/macros/lib.rs     |   6 +-
+ rust/macros/module.rs  | 389 +++++++++++++++++++++++++----------------
+ 3 files changed, 277 insertions(+), 227 deletions(-)
 
-diff --git a/rust/macros/concat_idents.rs b/rust/macros/concat_idents.rs
-index 7e4b450f3a507..12cb231c3d715 100644
---- a/rust/macros/concat_idents.rs
-+++ b/rust/macros/concat_idents.rs
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--use proc_macro::{token_stream, Ident, TokenStream, TokenTree};
-+use proc_macro2::{token_stream, Ident, TokenStream, TokenTree};
- 
- use crate::helpers::expect_punct;
- 
-diff --git a/rust/macros/export.rs b/rust/macros/export.rs
-index a08f6337d5c8d..92d9b30971929 100644
---- a/rust/macros/export.rs
-+++ b/rust/macros/export.rs
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+use proc_macro2::TokenStream;
-+use quote::quote;
-+
- use crate::helpers::function_name;
--use proc_macro::TokenStream;
- 
- /// Please see [`crate::export`] for documentation.
- pub(crate) fn export(_attr: TokenStream, ts: TokenStream) -> TokenStream {
-diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
-index 2f4b9f6e22110..19f709262552b 100644
---- a/rust/macros/fmt.rs
-+++ b/rust/macros/fmt.rs
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--use proc_macro::{Ident, TokenStream, TokenTree};
- use std::collections::BTreeSet;
- 
-+use proc_macro2::{Ident, TokenStream, TokenTree};
-+use quote::quote_spanned;
-+
- /// Please see [`crate::fmt`] for documentation.
- pub(crate) fn fmt(input: TokenStream) -> TokenStream {
-     let mut input = input.into_iter();
 diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
-index 365d7eb499c08..13fafaba12261 100644
+index 13fafaba12261..fa66ef6eb0f3d 100644
 --- a/rust/macros/helpers.rs
 +++ b/rust/macros/helpers.rs
-@@ -1,6 +1,6 @@
+@@ -1,53 +1,21 @@
  // SPDX-License-Identifier: GPL-2.0
  
--use proc_macro::{token_stream, Group, Ident, TokenStream, TokenTree};
-+use proc_macro2::{token_stream, Group, Ident, TokenStream, TokenTree};
+-use proc_macro2::{token_stream, Group, Ident, TokenStream, TokenTree};
+-
+-pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
+-    if let Some(TokenTree::Ident(ident)) = it.next() {
+-        Some(ident.to_string())
+-    } else {
+-        None
+-    }
+-}
+-
+-pub(crate) fn try_sign(it: &mut token_stream::IntoIter) -> Option<char> {
+-    let peek = it.clone().next();
+-    match peek {
+-        Some(TokenTree::Punct(punct)) if punct.as_char() == '-' => {
+-            let _ = it.next();
+-            Some(punct.as_char())
+-        }
+-        _ => None,
+-    }
+-}
+-
+-pub(crate) fn try_literal(it: &mut token_stream::IntoIter) -> Option<String> {
+-    if let Some(TokenTree::Literal(literal)) = it.next() {
+-        Some(literal.to_string())
+-    } else {
+-        None
+-    }
+-}
+-
+-pub(crate) fn try_string(it: &mut token_stream::IntoIter) -> Option<String> {
+-    try_literal(it).and_then(|string| {
+-        if string.starts_with('\"') && string.ends_with('\"') {
+-            let content = &string[1..string.len() - 1];
+-            if content.contains('\\') {
+-                panic!("Escape sequences in string literals not yet handled");
+-            }
+-            Some(content.to_string())
+-        } else if string.starts_with("r\"") {
+-            panic!("Raw string literals are not yet handled");
+-        } else {
+-            None
+-        }
+-    })
+-}
+-
+-pub(crate) fn expect_ident(it: &mut token_stream::IntoIter) -> String {
+-    try_ident(it).expect("Expected Ident")
+-}
++use proc_macro2::{
++    token_stream,
++    Ident,
++    TokenStream,
++    TokenTree, //
++};
++use quote::ToTokens;
++use syn::{
++    parse::{
++        Parse,
++        ParseStream, //
++    },
++    Error,
++    LitStr,
++    Result, //
++};
  
- pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
-     if let Some(TokenTree::Ident(ident)) = it.next() {
-@@ -86,7 +86,7 @@ pub(crate) fn function_name(input: TokenStream) -> Option<Ident> {
-     let mut input = input.into_iter();
-     while let Some(token) = input.next() {
-         match token {
--            TokenTree::Ident(i) if i.to_string() == "fn" => {
-+            TokenTree::Ident(i) if i == "fn" => {
-                 if let Some(TokenTree::Ident(i)) = input.next() {
-                     return Some(i);
-                 }
-diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-index b395bb0536959..5cd6aa5eef07d 100644
---- a/rust/macros/kunit.rs
-+++ b/rust/macros/kunit.rs
-@@ -4,10 +4,11 @@
- //!
- //! Copyright (c) 2023 José Expósito <jose.exposito89@gmail.com>
+ pub(crate) fn expect_punct(it: &mut token_stream::IntoIter) -> char {
+     if let TokenTree::Punct(punct) = it.next().expect("Reached end of token stream for Punct") {
+@@ -57,27 +25,28 @@ pub(crate) fn expect_punct(it: &mut token_stream::IntoIter) -> char {
+     }
+ }
  
--use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
- use std::collections::HashMap;
- use std::fmt::Write;
+-pub(crate) fn expect_string(it: &mut token_stream::IntoIter) -> String {
+-    try_string(it).expect("Expected string")
+-}
++/// A string literal that is required to have ASCII value only.
++pub(crate) struct AsciiLitStr(LitStr);
  
-+use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
-+
- pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-     let attr = attr.to_string();
+-pub(crate) fn expect_string_ascii(it: &mut token_stream::IntoIter) -> String {
+-    let string = try_string(it).expect("Expected string");
+-    assert!(string.is_ascii(), "Expected ASCII string");
+-    string
++impl Parse for AsciiLitStr {
++    fn parse(input: ParseStream<'_>) -> Result<Self> {
++        let s: LitStr = input.parse()?;
++        if !s.value().is_ascii() {
++            return Err(Error::new_spanned(s, "expected ASCII-only string literal"));
++        }
++        Ok(Self(s))
++    }
+ }
  
-@@ -59,7 +60,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-                 }
-                 _ => (),
-             },
--            TokenTree::Ident(i) if i.to_string() == "fn" && attributes.contains_key("test") => {
-+            TokenTree::Ident(i) if i == "fn" && attributes.contains_key("test") => {
-                 if let Some(TokenTree::Ident(test_name)) = body_it.next() {
-                     tests.push((test_name, attributes.remove("cfg").unwrap_or_default()))
-                 }
+-pub(crate) fn expect_group(it: &mut token_stream::IntoIter) -> Group {
+-    if let TokenTree::Group(group) = it.next().expect("Reached end of token stream for Group") {
+-        group
+-    } else {
+-        panic!("Expected Group");
++impl ToTokens for AsciiLitStr {
++    fn to_tokens(&self, ts: &mut TokenStream) {
++        self.0.to_tokens(ts);
+     }
+ }
+ 
+-pub(crate) fn expect_end(it: &mut token_stream::IntoIter) {
+-    if it.next().is_some() {
+-        panic!("Expected end");
++impl AsciiLitStr {
++    pub(crate) fn value(&self) -> String {
++        self.0.value()
+     }
+ }
+ 
+@@ -114,17 +83,3 @@ pub(crate) fn file() -> String {
+         proc_macro::Span::call_site().file()
+     }
+ }
+-
+-/// Parse a token stream of the form `expected_name: "value",` and return the
+-/// string in the position of "value".
+-///
+-/// # Panics
+-///
+-/// - On parse error.
+-pub(crate) fn expect_string_field(it: &mut token_stream::IntoIter, expected_name: &str) -> String {
+-    assert_eq!(expect_ident(it), expected_name);
+-    assert_eq!(expect_punct(it), ':');
+-    let string = expect_string(it);
+-    assert_eq!(expect_punct(it), ',');
+-    string
+-}
 diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index b38002151871a..945982c21f703 100644
+index 9955c04dbaae3..c5347127a3a51 100644
 --- a/rust/macros/lib.rs
 +++ b/rust/macros/lib.rs
-@@ -11,8 +11,6 @@
- // to avoid depending on the full `proc_macro_span` on Rust >= 1.88.0.
- #![cfg_attr(not(CONFIG_RUSTC_HAS_SPAN_FILE), feature(proc_macro_span))]
- 
--#[macro_use]
--mod quote;
- mod concat_idents;
- mod export;
- mod fmt;
-@@ -132,7 +130,7 @@
+@@ -131,8 +131,10 @@
+ ///   - `firmware`: array of ASCII string literals of the firmware files of
  ///     the kernel module.
  #[proc_macro]
- pub fn module(ts: TokenStream) -> TokenStream {
--    module::module(ts)
-+    module::module(ts.into()).into()
- }
- 
- /// Declares or implements a vtable trait.
-@@ -207,7 +205,7 @@ pub fn module(ts: TokenStream) -> TokenStream {
- /// [`kernel::error::VTABLE_DEFAULT_ERROR`]: ../kernel/error/constant.VTABLE_DEFAULT_ERROR.html
- #[proc_macro_attribute]
- pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
--    vtable::vtable(attr, ts)
-+    vtable::vtable(attr.into(), ts.into()).into()
- }
- 
- /// Export a function so that C code can call it via a header file.
-@@ -230,7 +228,7 @@ pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
- /// automatically exported with `EXPORT_SYMBOL_GPL`.
- #[proc_macro_attribute]
- pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
--    export::export(attr, ts)
-+    export::export(attr.into(), ts.into()).into()
- }
- 
- /// Like [`core::format_args!`], but automatically wraps arguments in [`kernel::fmt::Adapter`].
-@@ -248,7 +246,7 @@ pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
- /// [`pr_info!`]: ../kernel/macro.pr_info.html
- #[proc_macro]
- pub fn fmt(input: TokenStream) -> TokenStream {
--    fmt::fmt(input)
-+    fmt::fmt(input.into()).into()
- }
- 
- /// Concatenate two identifiers.
-@@ -306,7 +304,7 @@ pub fn fmt(input: TokenStream) -> TokenStream {
- /// ```
- #[proc_macro]
- pub fn concat_idents(ts: TokenStream) -> TokenStream {
--    concat_idents::concat_idents(ts)
-+    concat_idents::concat_idents(ts.into()).into()
- }
- 
- /// Paste identifiers together.
-@@ -444,9 +442,12 @@ pub fn concat_idents(ts: TokenStream) -> TokenStream {
- /// [`paste`]: https://docs.rs/paste/
- #[proc_macro]
- pub fn paste(input: TokenStream) -> TokenStream {
--    let mut tokens = input.into_iter().collect();
-+    let mut tokens = proc_macro2::TokenStream::from(input).into_iter().collect();
-     paste::expand(&mut tokens);
--    tokens.into_iter().collect()
-+    tokens
-+        .into_iter()
-+        .collect::<proc_macro2::TokenStream>()
+-pub fn module(ts: TokenStream) -> TokenStream {
+-    module::module(ts.into()).into()
++pub fn module(input: TokenStream) -> TokenStream {
++    module::module(parse_macro_input!(input))
++        .unwrap_or_else(|e| e.into_compile_error())
 +        .into()
  }
  
- /// Registers a KUnit test suite and its test cases using a user-space like syntax.
-@@ -473,5 +474,5 @@ pub fn paste(input: TokenStream) -> TokenStream {
- /// ```
- #[proc_macro_attribute]
- pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
--    kunit::kunit_tests(attr, ts)
-+    kunit::kunit_tests(attr.into(), ts.into()).into()
- }
+ /// Declares or implements a vtable trait.
 diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index 80cb9b16f5aaf..b855a2b586e18 100644
+index b855a2b586e18..6ad7b411ccde4 100644
 --- a/rust/macros/module.rs
 +++ b/rust/macros/module.rs
-@@ -1,9 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
+@@ -2,28 +2,30 @@
  
--use crate::helpers::*;
--use proc_macro::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
  use std::fmt::Write;
  
-+use proc_macro2::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
-+
-+use crate::helpers::*;
-+
- fn expect_string_array(it: &mut token_stream::IntoIter) -> Vec<String> {
-     let group = expect_group(it);
-     assert_eq!(group.delimiter(), Delimiter::Bracket);
-diff --git a/rust/macros/paste.rs b/rust/macros/paste.rs
-index cce712d19855b..2181e312a7d32 100644
---- a/rust/macros/paste.rs
-+++ b/rust/macros/paste.rs
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
+-use proc_macro2::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
++use proc_macro2::{
++    Literal,
++    TokenStream, //
++};
++use quote::ToTokens;
++use syn::{
++    braced,
++    bracketed,
++    ext::IdentExt,
++    parse::{
++        Parse,
++        ParseStream, //
++    },
++    punctuated::Punctuated,
++    Error,
++    Expr,
++    Ident,
++    LitStr,
++    Result,
++    Token, //
++};
  
--use proc_macro::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
-+use proc_macro2::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
+ use crate::helpers::*;
  
- fn concat_helper(tokens: &[TokenTree]) -> Vec<(String, Span)> {
-     let mut tokens = tokens.iter();
-diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
-deleted file mode 100644
-index ddfc21577539c..0000000000000
---- a/rust/macros/quote.rs
-+++ /dev/null
-@@ -1,182 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0 OR MIT
+-fn expect_string_array(it: &mut token_stream::IntoIter) -> Vec<String> {
+-    let group = expect_group(it);
+-    assert_eq!(group.delimiter(), Delimiter::Bracket);
+-    let mut values = Vec::new();
+-    let mut it = group.stream().into_iter();
 -
--use proc_macro::{TokenStream, TokenTree};
--
--pub(crate) trait ToTokens {
--    fn to_tokens(&self, tokens: &mut TokenStream);
--}
--
--impl<T: ToTokens> ToTokens for Option<T> {
--    fn to_tokens(&self, tokens: &mut TokenStream) {
--        if let Some(v) = self {
--            v.to_tokens(tokens);
+-    while let Some(val) = try_string(&mut it) {
+-        assert!(val.is_ascii(), "Expected ASCII string");
+-        values.push(val);
+-        match it.next() {
+-            Some(TokenTree::Punct(punct)) => assert_eq!(punct.as_char(), ','),
+-            None => break,
+-            _ => panic!("Expected ',' or end of array"),
 -        }
 -    }
+-    values
 -}
 -
--impl ToTokens for proc_macro::Group {
--    fn to_tokens(&self, tokens: &mut TokenStream) {
--        tokens.extend([TokenTree::from(self.clone())]);
--    }
--}
--
--impl ToTokens for proc_macro::Ident {
--    fn to_tokens(&self, tokens: &mut TokenStream) {
--        tokens.extend([TokenTree::from(self.clone())]);
--    }
--}
--
--impl ToTokens for TokenTree {
--    fn to_tokens(&self, tokens: &mut TokenStream) {
--        tokens.extend([self.clone()]);
--    }
--}
--
--impl ToTokens for TokenStream {
--    fn to_tokens(&self, tokens: &mut TokenStream) {
--        tokens.extend(self.clone());
--    }
--}
--
--/// Converts tokens into [`proc_macro::TokenStream`] and performs variable interpolations with
--/// the given span.
--///
--/// This is a similar to the
--/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_spanned.html) macro from the
--/// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
--macro_rules! quote_spanned {
--    ($span:expr => $($tt:tt)*) => {{
--        let mut tokens = ::proc_macro::TokenStream::new();
--        {
--            #[allow(unused_variables)]
--            let span = $span;
--            quote_spanned!(@proc tokens span $($tt)*);
--        }
--        tokens
--    }};
--    (@proc $v:ident $span:ident) => {};
--    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) => {
--        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) => {
--        for token in $id {
--            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
--        }
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) => {
--        #[allow(unused_mut)]
--        let mut tokens = ::proc_macro::TokenStream::new();
--        quote_spanned!(@proc tokens $span $($inner)*);
--        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
--            ::proc_macro::Delimiter::Parenthesis,
--            tokens,
--        ))]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) => {
--        let mut tokens = ::proc_macro::TokenStream::new();
--        quote_spanned!(@proc tokens $span $($inner)*);
--        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
--            ::proc_macro::Delimiter::Bracket,
--            tokens,
--        ))]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) => {
--        let mut tokens = ::proc_macro::TokenStream::new();
--        quote_spanned!(@proc tokens $span $($inner)*);
--        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
--            ::proc_macro::Delimiter::Brace,
--            tokens,
--        ))]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident :: $($tt:tt)*) => {
--        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::Alone].map(|spacing| {
--            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':', spacing))
--        }));
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident : $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident , $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident @ $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident ! $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident ; $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident + $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident = $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident # $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident & $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Punct(
--            ::proc_macro::Punct::new('&', ::proc_macro::Spacing::Alone),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident _ $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Ident(
--            ::proc_macro::Ident::new("_", $span),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
--        $v.extend([::proc_macro::TokenTree::Ident(
--            ::proc_macro::Ident::new(stringify!($id), $span),
--        )]);
--        quote_spanned!(@proc $v $span $($tt)*);
--    };
--}
--
--/// Converts tokens into [`proc_macro::TokenStream`] and performs variable interpolations with
--/// mixed site span ([`Span::mixed_site()`]).
--///
--/// This is a similar to the [`quote!`](https://docs.rs/quote/latest/quote/macro.quote.html) macro
--/// from the `quote` crate but provides only just enough functionality needed by the current
--/// `macros` crate.
--///
--/// [`Span::mixed_site()`]: https://doc.rust-lang.org/proc_macro/struct.Span.html#method.mixed_site
--macro_rules! quote {
--    ($($tt:tt)*) => {
--        quote_spanned!(::proc_macro::Span::mixed_site() => $($tt)*)
--    }
--}
-diff --git a/rust/macros/vtable.rs b/rust/macros/vtable.rs
-index ee06044fcd4f3..a67d1cc81a2d3 100644
---- a/rust/macros/vtable.rs
-+++ b/rust/macros/vtable.rs
-@@ -1,9 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
+ struct ModInfoBuilder<'a> {
+     module: &'a str,
+     counter: usize,
+@@ -113,12 +115,16 @@ fn emit_params(&mut self, info: &ModuleInfo) {
+         };
  
--use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
- use std::collections::HashSet;
- use std::fmt::Write;
- 
-+use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
+         for param in params {
+-            let ops = param_ops_path(&param.ptype);
++            let param_name = param.name.to_string();
++            let param_type = param.ptype.to_string();
++            let param_default = param.default.to_token_stream().to_string();
 +
- pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
-     let mut tokens: Vec<_> = ts.into_iter().collect();
++            let ops = param_ops_path(&param_type);
  
-@@ -31,7 +32,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
-     let mut consts = HashSet::new();
-     while let Some(token) = body_it.next() {
-         match token {
--            TokenTree::Ident(ident) if ident.to_string() == "fn" => {
-+            TokenTree::Ident(ident) if ident == "fn" => {
-                 let fn_name = match body_it.next() {
-                     Some(TokenTree::Ident(ident)) => ident.to_string(),
-                     // Possibly we've encountered a fn pointer type instead.
-@@ -39,7 +40,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
-                 };
-                 functions.push(fn_name);
+             // Note: The spelling of these fields is dictated by the user space
+             // tool `modinfo`.
+-            self.emit_param("parmtype", &param.name, &param.ptype);
+-            self.emit_param("parm", &param.name, &param.description);
++            self.emit_param("parmtype", &param_name, &param_type);
++            self.emit_param("parm", &param_name, &param.description.value());
+ 
+             write!(
+                 self.param_buffer,
+@@ -160,10 +166,7 @@ fn emit_params(&mut self, info: &ModuleInfo) {
+                         );
+                 }};
+                 ",
+-                module_name = info.name,
+-                param_type = param.ptype,
+-                param_default = param.default,
+-                param_name = param.name,
++                module_name = info.name.value(),
+                 ops = ops,
+             )
+             .unwrap();
+@@ -187,127 +190,82 @@ fn param_ops_path(param_type: &str) -> &'static str {
+     }
+ }
+ 
+-fn expect_param_default(param_it: &mut token_stream::IntoIter) -> String {
+-    assert_eq!(expect_ident(param_it), "default");
+-    assert_eq!(expect_punct(param_it), ':');
+-    let sign = try_sign(param_it);
+-    let default = try_literal(param_it).expect("Expected default param value");
+-    assert_eq!(expect_punct(param_it), ',');
+-    let mut value = sign.map(String::from).unwrap_or_default();
+-    value.push_str(&default);
+-    value
+-}
+-
+-#[derive(Debug, Default)]
+-struct ModuleInfo {
+-    type_: String,
+-    license: String,
+-    name: String,
+-    authors: Option<Vec<String>>,
+-    description: Option<String>,
+-    alias: Option<Vec<String>>,
+-    firmware: Option<Vec<String>>,
+-    imports_ns: Option<Vec<String>>,
+-    params: Option<Vec<Parameter>>,
+-}
+-
+-#[derive(Debug)]
+-struct Parameter {
+-    name: String,
+-    ptype: String,
+-    default: String,
+-    description: String,
+-}
+-
+-fn expect_params(it: &mut token_stream::IntoIter) -> Vec<Parameter> {
+-    let params = expect_group(it);
+-    assert_eq!(params.delimiter(), Delimiter::Brace);
+-    let mut it = params.stream().into_iter();
+-    let mut parsed = Vec::new();
+-
+-    loop {
+-        let param_name = match it.next() {
+-            Some(TokenTree::Ident(ident)) => ident.to_string(),
+-            Some(_) => panic!("Expected Ident or end"),
+-            None => break,
+-        };
+-
+-        assert_eq!(expect_punct(&mut it), ':');
+-        let param_type = expect_ident(&mut it);
+-        let group = expect_group(&mut it);
+-        assert_eq!(group.delimiter(), Delimiter::Brace);
+-        assert_eq!(expect_punct(&mut it), ',');
+-
+-        let mut param_it = group.stream().into_iter();
+-        let param_default = expect_param_default(&mut param_it);
+-        let param_description = expect_string_field(&mut param_it, "description");
+-        expect_end(&mut param_it);
+-
+-        parsed.push(Parameter {
+-            name: param_name,
+-            ptype: param_type,
+-            default: param_default,
+-            description: param_description,
+-        })
+-    }
+-
+-    parsed
+-}
+-
+-impl ModuleInfo {
+-    fn parse(it: &mut token_stream::IntoIter) -> Self {
+-        let mut info = ModuleInfo::default();
+-
+-        const EXPECTED_KEYS: &[&str] = &[
+-            "type",
+-            "name",
+-            "authors",
+-            "description",
+-            "license",
+-            "alias",
+-            "firmware",
+-            "imports_ns",
+-            "params",
+-        ];
+-        const REQUIRED_KEYS: &[&str] = &["type", "name", "license"];
++/// Parse fields that are required to use a specific order.
++///
++/// As fields must follow a specific order, we *could* just parse fields one by one by peeking.
++/// However the error message generated when implementing that way is not very friendly.
++///
++/// So instead we parse fields in an arbitrary order, but only enforce the ordering after parsing,
++/// and if the wrong order is used, the proper order is communicated to the user with error message.
++///
++/// Usage looks like this:
++/// ```ignore
++/// parse_ordered_fields! {
++///     from input;
++///
++///     // This will extract "foo: <field>" into a variable named "foo".
++///     // The variable will have type `Option<_>`.
++///     foo => <expression that parses the field>,
++///
++///     // If you need the variable name to be different than the key name.
++///     // This extracts "baz: <field>" into a variable named "bar".
++///     // You might want this if "baz" is a keyword.
++///     baz as bar => <expression that parse the field>,
++///
++///     // You can mark a key as required, and the variable will no longer be `Option`.
++///     // foobar will be of type `Expr` instead of `Option<Expr>`.
++///     foobar [required] => input.parse::<Expr>()?,
++/// }
++/// ```
++macro_rules! parse_ordered_fields {
++    (@gen
++        [$input:expr]
++        [$([$name:ident; $key:ident; $parser:expr])*]
++        [$([$req_name:ident; $req_key:ident])*]
++    ) => {
++        $(let mut $name = None;)*
++
++        const EXPECTED_KEYS: &[&str] = &[$(stringify!($key),)*];
++        const REQUIRED_KEYS: &[&str] = &[$(stringify!($req_key),)*];
++
++        let span = $input.span();
+         let mut seen_keys = Vec::new();
+ 
+         loop {
+-            let key = match it.next() {
+-                Some(TokenTree::Ident(ident)) => ident.to_string(),
+-                Some(_) => panic!("Expected Ident or end"),
+-                None => break,
+-            };
++            if $input.is_empty() {
++                break;
++            }
++
++            let key = $input.call(Ident::parse_any)?;
+ 
+             if seen_keys.contains(&key) {
+-                panic!("Duplicated key \"{key}\". Keys can only be specified once.");
++                Err(Error::new_spanned(
++                    &key,
++                    format!(r#"duplicated key "{key}". Keys can only be specified once."#),
++                ))?
              }
--            TokenTree::Ident(ident) if ident.to_string() == "const" => {
-+            TokenTree::Ident(ident) if ident == "const" => {
-                 let const_name = match body_it.next() {
-                     Some(TokenTree::Ident(ident)) => ident.to_string(),
-                     // Possibly we've encountered an inline const block instead.
+ 
+-            assert_eq!(expect_punct(it), ':');
+-
+-            match key.as_str() {
+-                "type" => info.type_ = expect_ident(it),
+-                "name" => info.name = expect_string_ascii(it),
+-                "authors" => info.authors = Some(expect_string_array(it)),
+-                "description" => info.description = Some(expect_string(it)),
+-                "license" => info.license = expect_string_ascii(it),
+-                "alias" => info.alias = Some(expect_string_array(it)),
+-                "firmware" => info.firmware = Some(expect_string_array(it)),
+-                "imports_ns" => info.imports_ns = Some(expect_string_array(it)),
+-                "params" => info.params = Some(expect_params(it)),
+-                _ => panic!("Unknown key \"{key}\". Valid keys are: {EXPECTED_KEYS:?}."),
++            $input.parse::<Token![:]>()?;
++
++            match &*key.to_string() {
++                $(
++                    stringify!($key) => $name = Some($parser),
++                )*
++                _ => {
++                    Err(Error::new_spanned(
++                        &key,
++                        format!(r#"unknown key "{key}". Valid keys are: {EXPECTED_KEYS:?}."#),
++                    ))?
++                }
+             }
+ 
+-            assert_eq!(expect_punct(it), ',');
+-
++            $input.parse::<Token![,]>()?;
+             seen_keys.push(key);
+         }
+ 
+-        expect_end(it);
+-
+         for key in REQUIRED_KEYS {
+             if !seen_keys.iter().any(|e| e == key) {
+-                panic!("Missing required key \"{key}\".");
++                Err(Error::new(span, format!(r#"missing required key "{key}""#)))?
+             }
+         }
+ 
+@@ -319,43 +277,178 @@ fn parse(it: &mut token_stream::IntoIter) -> Self {
+         }
+ 
+         if seen_keys != ordered_keys {
+-            panic!("Keys are not ordered as expected. Order them like: {ordered_keys:?}.");
++            Err(Error::new(
++                span,
++                format!(r#"keys are not ordered as expected. Order them like: {ordered_keys:?}."#),
++            ))?
++        }
++
++        $(let $req_name = $req_name.expect("required field");)*
++    };
++
++    // Handle required fields.
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $key:ident as $name:ident [required] => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)* [$name; $key]] $($rest)*
++        )
++    };
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $name:ident [required] => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)* [$name; $name]] $($rest)*
++        )
++    };
++
++    // Handle optional fields.
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $key:ident as $name:ident => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $key; $parser]] [$($req)*] $($rest)*
++        )
++    };
++    (@gen
++        [$input:expr] [$($tok:tt)*] [$($req:tt)*]
++        $name:ident => $parser:expr,
++        $($rest:tt)*
++    ) => {
++        parse_ordered_fields!(
++            @gen [$input] [$($tok)* [$name; $name; $parser]] [$($req)*] $($rest)*
++        )
++    };
++
++    (from $input:expr; $($tok:tt)*) => {
++        parse_ordered_fields!(@gen [$input] [] [] $($tok)*)
++    }
++}
++
++struct Parameter {
++    name: Ident,
++    ptype: Ident,
++    default: Expr,
++    description: LitStr,
++}
++
++impl Parse for Parameter {
++    fn parse(input: ParseStream<'_>) -> Result<Self> {
++        let name = input.parse()?;
++        input.parse::<Token![:]>()?;
++        let ptype = input.parse()?;
++
++        let fields;
++        braced!(fields in input);
++
++        parse_ordered_fields! {
++            from fields;
++            default [required] => fields.parse()?,
++            description [required] => fields.parse()?,
+         }
+ 
+-        info
++        Ok(Self {
++            name,
++            ptype,
++            default,
++            description,
++        })
+     }
+ }
+ 
+-pub(crate) fn module(ts: TokenStream) -> TokenStream {
+-    let mut it = ts.into_iter();
++pub(crate) struct ModuleInfo {
++    type_: Ident,
++    license: AsciiLitStr,
++    name: AsciiLitStr,
++    authors: Option<Punctuated<AsciiLitStr, Token![,]>>,
++    description: Option<LitStr>,
++    alias: Option<Punctuated<AsciiLitStr, Token![,]>>,
++    firmware: Option<Punctuated<AsciiLitStr, Token![,]>>,
++    imports_ns: Option<Punctuated<AsciiLitStr, Token![,]>>,
++    params: Option<Punctuated<Parameter, Token![,]>>,
++}
+ 
+-    let info = ModuleInfo::parse(&mut it);
++impl Parse for ModuleInfo {
++    fn parse(input: ParseStream<'_>) -> Result<Self> {
++        parse_ordered_fields!(
++            from input;
++            type as type_ [required] => input.parse()?,
++            name [required] => input.parse()?,
++            authors => {
++                let list;
++                bracketed!(list in input);
++                Punctuated::parse_terminated(&list)?
++            },
++            description => input.parse()?,
++            license [required] => input.parse()?,
++            alias => {
++                let list;
++                bracketed!(list in input);
++                Punctuated::parse_terminated(&list)?
++            },
++            firmware => {
++                let list;
++                bracketed!(list in input);
++                Punctuated::parse_terminated(&list)?
++            },
++            imports_ns => {
++                let list;
++                bracketed!(list in input);
++                Punctuated::parse_terminated(&list)?
++            },
++            params => {
++                let list;
++                braced!(list in input);
++                Punctuated::parse_terminated(&list)?
++            },
++        );
++
++        Ok(ModuleInfo {
++            type_,
++            license,
++            name,
++            authors,
++            description,
++            alias,
++            firmware,
++            imports_ns,
++            params,
++        })
++    }
++}
+ 
++pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+     // Rust does not allow hyphens in identifiers, use underscore instead.
+-    let ident = info.name.replace('-', "_");
++    let ident = info.name.value().replace('-', "_");
+     let mut modinfo = ModInfoBuilder::new(ident.as_ref());
+     if let Some(authors) = &info.authors {
+         for author in authors {
+-            modinfo.emit("author", author);
++            modinfo.emit("author", &author.value());
+         }
+     }
+     if let Some(description) = &info.description {
+-        modinfo.emit("description", description);
++        modinfo.emit("description", &description.value());
+     }
+-    modinfo.emit("license", &info.license);
++    modinfo.emit("license", &info.license.value());
+     if let Some(aliases) = &info.alias {
+         for alias in aliases {
+-            modinfo.emit("alias", alias);
++            modinfo.emit("alias", &alias.value());
+         }
+     }
+     if let Some(firmware) = &info.firmware {
+         for fw in firmware {
+-            modinfo.emit("firmware", fw);
++            modinfo.emit("firmware", &fw.value());
+         }
+     }
+     if let Some(imports) = &info.imports_ns {
+         for ns in imports {
+-            modinfo.emit("import_ns", ns);
++            modinfo.emit("import_ns", &ns.value());
+         }
+     }
+ 
+@@ -366,7 +459,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+ 
+     modinfo.emit_params(&info);
+ 
+-    format!(
++    Ok(format!(
+         "
+             /// The module name.
+             ///
+@@ -536,12 +629,12 @@ mod module_parameters {{
+             }}
+         ",
+         type_ = info.type_,
+-        name = info.name,
++        name = info.name.value(),
+         ident = ident,
+         modinfo = modinfo.buffer,
+         params = modinfo.param_buffer,
+         initcall_section = ".initcall6.init"
+     )
+     .parse()
+-    .expect("Error parsing formatted string into token stream.")
++    .expect("Error parsing formatted string into token stream."))
+ }
 -- 
 2.51.2
 
