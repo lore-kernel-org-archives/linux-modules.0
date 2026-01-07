@@ -1,233 +1,1125 @@
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021137.outbound.protection.outlook.com [52.101.100.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54AC3803C3;
-	Wed,  7 Jan 2026 16:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.137
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767803495; cv=fail; b=HtqPzWv6M8mGb40Pk4qoTPZNqV3+6Leov3+/f3WgV3YyWbD0t4rKTEqJ77uLBL4PX/qx+VgGeHFPtzTP6suvyypvlzFsWFRl39E5vrlufUEFpwVvwFa2LkqQGfxyu91a3HvATwher/ZW9CBDPXivYx+OXs/wd4FRBxY8i8dke/k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767803495; c=relaxed/simple;
-	bh=swCcSb9KEJ/FcHCdtzONEEi3b7ayxeK+SIPEZCMvWN8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=N9DAUGnIN3pnOTyxdMH6MyyceCLlpogX3trbX0lhOHqVvkIQ3aBN135IXry3S+aIDzTioMPEOh8/VN3ihqoI0p9MO6yYOUdq5ejDXZ40+6PLjTbj8MWdK4a9dK1ydHQ9/rZTwFxdd3Ft6ulXwQvDrdqEffgZh/QgskvbOttEw90=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.100.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qMCwv+lDNTK9uNFzozpkUin+5L5wNuPCncV9FxdPYt4V9is2zyAgyAB/D3S2Q3qYHomb00eAtIAxjya3w340HNYMd/5UFrKZCF422hWMH66X4uweWbDUHUke69YfukqClFa5dhhwIrggmvhHwmDWooCJVxyF0EBp3KtffP7Mij2xS6e9WP6VKNR5JUNgltdFsnb1kIwtkNcyXEzqFNNT25cKaX9eebzX+VtzZEpZwfex+e0wyY4BzJ1sfo+B1B2j+gn0kfmlNkOfuBychK+mg4YaDU78E0yRcf3J8bOdsAhJNgdCJuZV/9fVKCfgNsAPuvJRn8lv8N30IRVmZmiksQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xcwsw7kLKhD7t4XZI+QX+YLVBsdPRV4kv9t/I5yZmYA=;
- b=ifhVSgBJLW04iMzWhuNjOu4Rc+cs9AKtMHnR1Xv4J+0l0pjl73/l+xC6fQx3FA0prrTZ5njQA9IWvcq/u0Kh8u0TZW+ivFA+MudxFbmBpK0fk/I2RtQ2N30ZLMfHPUkLU/V6IW2xnQYaqsUgYdqwPe6HlTqUOd/J9gElplCgPsBeSoSvEkM9AZ8zfQy4NttwVmVrvvT6L/b97/gNuasLissA3/XJgwKTb0xSpTy36IrIOxnOP96fRfD4pGNDIJwvkiA7gwIk38ZQdnQ5dd+Lr1UigNtoOFFYKrPHY13e9dT59d3STSrtZob12L9l4uYJ7dddpHAUtqq0sXmWHfR8Nw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
- dkim=pass header.d=atomlin.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=atomlin.com;
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by CW1P123MB7803.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:249::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Wed, 7 Jan
- 2026 16:31:10 +0000
-Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%5]) with mapi id 15.20.9499.002; Wed, 7 Jan 2026
- 16:31:10 +0000
-Date: Wed, 7 Jan 2026 11:31:05 -0500
-From: Aaron Tomlin <atomlin@atomlin.com>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, Song Liu <song@kernel.org>, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] module: Remove duplicate freeing of lockdep classes
-Message-ID: <vjjlkysj4co5lf2vs2tczxznxugfhtr5ept7sxat6pwjzetvmx@nzcen26ei5nn>
-References: <20260107122329.1324707-1-petr.pavlu@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rwaihcjj5jb2lcrg"
-Content-Disposition: inline
-In-Reply-To: <20260107122329.1324707-1-petr.pavlu@suse.com>
-X-ClientProxiedBy: PH7PR13CA0020.namprd13.prod.outlook.com
- (2603:10b6:510:174::27) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:400:70::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9809E362147
+	for <linux-modules@vger.kernel.org>; Wed,  7 Jan 2026 16:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767803831; cv=none; b=G+M7Y1zD4+iV6E/LIuD/fobkUaMWzPQQ6N4cKd2j3jzeS9mpJLrQf6CA0WwogH9C5swJXjIPjHMEFOP3RnCD9F9MZ8aZRpeyCkCE1JIHdM9/lA/xdT2pAXTsywLbrChshpD3OVd9Ec4GgsPK4GxNlGIv7LLsIVT0TWiBbZeiauE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767803831; c=relaxed/simple;
+	bh=yE1+zIvfN7zHoNAoQcXPJaZTTBAiBc1w5uAGQJpMZWc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=I53Iisf+avkE8hYOi1Ev4owvbo4bUujatKPbVdNXjQkT3iEEwPUqhaiu+qfHiQIS6NwVcIpL87DyK7KNdZVkHR6RrHg9QD0+PY763ala4PKsc0i91pbtHQ5Fh/3mNgzglBqPfGrf6dK+5C5wAgK1JqW37FODKFhutHeGcRZ2X80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=E291fH8R; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="E291fH8R"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59583505988so1526876e87.1
+        for <linux-modules@vger.kernel.org>; Wed, 07 Jan 2026 08:37:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1767803818; x=1768408618; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P1w+kaVVotLEBFxJ9sBpmoM9MCqL0pUTbWYoMVzOEC8=;
+        b=E291fH8RpK2bnLZvQH9f6qNwycbPYqs8jHi9azSvNfWe6qxYizEV27nN3a0GpwvH8H
+         D3Akt0Fe39piUKlwDy/w7Jl5T9qYcWv9AbdBjEVhBK4GWesNOwLQpfcOar3Era3Z9k1l
+         s8M3gomCXl+Yiwwze52cQGFFb7jlHUptM3Pv3j/0mHk6RjR1d19jSbx7wyxWOpTfL5Rj
+         rweCkzUXKkVoa6ytsiOrBogdo+sxokQT2ZmH7deAo+BQ7ocY9j7x1Z+P9RZ32OupJjx4
+         GLl4BiVFq0Hc2Mvom4sE9rYlcq3IPmVbNWreKzQatq3KeRRSxyEgQn29xYw19gCcPlEr
+         O2hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767803818; x=1768408618;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=P1w+kaVVotLEBFxJ9sBpmoM9MCqL0pUTbWYoMVzOEC8=;
+        b=PdkRJ85OUXB/Zy0VCI+alKat1J+S58vTd0qNSTnxpLu7a7PwC4NtWiwbnGn+m6Sbb0
+         tJMR07aJRgYVllfRg5Qm7TwHWDZFUZysepBBGZNfT+BLy08BoTId6jlZOGpawANcj0lh
+         k74CEvxpRVElP5jongpJIvkvrL1LSzB2Be8xjYx93KtAHyARzPwsc86fjnAkrCmlf6EA
+         Zh12IoPRWX09wMPpsCCHXpzzQolQEhEH5vQxl+dG+89pFt2OjqgLtp+CPLvDMz9VGJz3
+         CDf/jwNY/tz/MDKVamhK08frMrVkk8ux5dEffToAUGFyGc6VEcvZ/YLiZssdlrLdxVSC
+         ie/A==
+X-Forwarded-Encrypted: i=1; AJvYcCUMyvdcRbgc7YsiVb0tUF5vUiuJ/b4qbAQCVYdgGvIgBdrbPlD1tsTMTaigr60A9kzDdex4L43O4rV3dwCy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQjsUgIjXP/i+5Kt/LCMLW2+Okpmm7W1+G/2t8h8bonkoWNktj
+	0pxHc3MxF15yFNIJcNBp35GZtCbktj2YFY6a5go2NQF2R+nxbHlTaN7EM64LVXe04GBZKlggmHR
+	YhJIBXLNSXRqK9qfXkcgUBNDJlaLAgYi1lr9jZHkJqw==
+X-Gm-Gg: AY/fxX565cf7aXAeX8xMK0LImkV0a8EpbABPOmLLudMkPhgB0xYE3ZDso+aIL8e42I0
+	ZtaXFLAvVXNaXFOr96BKo0BtisiRrEIQ1RUU/6gW+mMXXarxRUjKHMQzRizULUpTppPKqSlUCtM
+	KiwzDQ+DwtLzCtTGWi9OWiBJRKD/6f66i+PhTQM374o02Hw6hgcHEF0msBtjnktfs9Vu7kXtFv6
+	JJkjW1P3G91SYRl0FBpQniGkM06z9TmTbD6OGGiLKngwODh7srnSifWCjKMfYNDUNLNK/ArbTDd
+	5Q5OcrZD5zvqsA==
+X-Google-Smtp-Source: AGHT+IGWx5imEdBGLN5gs/J4NnRKvJVyXIecNGMZ/ZXVTHL6+q9FISuGw5DyfVBE9xXmhu1duK8dD0PVsKEyIq/JdEY=
+X-Received: by 2002:a05:6512:1105:b0:59a:1326:43c6 with SMTP id
+ 2adb3069b0e04-59b65894e3emr2429791e87.22.1767803817821; Wed, 07 Jan 2026
+ 08:36:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|CW1P123MB7803:EE_
-X-MS-Office365-Filtering-Correlation-Id: c5d1fd16-b1ea-4f5e-6bd5-08de4e0a2a55
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?KzVIaGZJanRXc3BNTzZqRE96TTRLMmJnbmVLWXR5bDdrZGQrYVhDRnlsa2FC?=
- =?utf-8?B?VzdMMUxLRmZaeHZLZ3pheDA5MU56MWwrV1RPa2t5cU1PdEJWbHZWQjBYaFVU?=
- =?utf-8?B?Vlg5Zm8vM1FQSUdIOXV1YjNUUkI1eFVrRUwycFpYN1U2WjgzMzg0dlJ1RzVX?=
- =?utf-8?B?QjViM2lMeFVsK3VXOXpIYjVKUkJHblZMS2pNU3FER3Ywd2NRR2lBZHJYRmpl?=
- =?utf-8?B?VHRIcWVpQ3RCY2I5aEptUWMwa3ppRWpmOWZ5UXNWQ3pSS2ZWWExsYWNTL3BC?=
- =?utf-8?B?Snkwd25FdTFKc1hUSFBOVTlpL3Y1VTNRaDY3cHhHcWpCdWZkV2xXclM5c2hi?=
- =?utf-8?B?RW5MMzRnemdjUXdmQjdXZGcyTENiR0dwYWpsMEEwcFFMTXRHS3A2dTNRWU9L?=
- =?utf-8?B?MTgrSnd4UEhnaTloM1VER0N4bkJVeWc2VEFUK051ZjZkTDI3disrbzZ2Tk13?=
- =?utf-8?B?QmVSRURoQUl5c281Snd3TzAzNHVJdXZOR2JOeTRhR3pMM1p5UVlvamNNNXdr?=
- =?utf-8?B?bFpreGVaa3E4SXFGVzI0K0I1TWF4amFwMVd2dFkwZi9TVnpzbDdweDBFRDFE?=
- =?utf-8?B?TG1tSTFnVDA3YTdGUVhkVko3QUNCWjVvdmZmN2J3dHp4REROaU83ZmNGUmtD?=
- =?utf-8?B?STY1ZGJ1Z0F4STdZRzNTL053ZXNQTGd5QTRDV2tEeXhxbm91em9pNUN4bE9H?=
- =?utf-8?B?Y3FGOWIwaHVyRGcyYm04RkZWVDJ1OHlaM08zRWNoUm8wS3dhRXFuRm13SzNw?=
- =?utf-8?B?SkpyTW1FRXY3Y3RLL3paa2ZGeEduQWUzYzdtU0w5RWl1dkFabCtEMEVKVUlu?=
- =?utf-8?B?bUZvc1lUUjl4c3libCtFU2JUSHUzQ1BCWjdqWks4ZSt6TVRSU29QdkFlWUVy?=
- =?utf-8?B?N2VGUURMcW9jdlN6aTVxVDlsSlFNL3lBZXUrUnQyazA5eWhnemJjQW00MmZv?=
- =?utf-8?B?NVo2VTgra0cwNXEydVE0ZU5zaUlURkVtejVBOEg1bzRYMm1BeWx2Mi9qVmhz?=
- =?utf-8?B?aC9ydHJaNGdiRTJZaUtQY0VKRW1nYUN2UEZoc0E5aGh0cSt5aW1DOEZiV2M0?=
- =?utf-8?B?bEhGdkhTSmloRkY1Q3FTemxGbEVQQmJmd1ZGUk1GM3VOaVFHbTJZVVE0WnVw?=
- =?utf-8?B?ck5ZOEpxeDR2TmNJWnNKempmQ1Y4NmFMWHJtV29FQ0tNMDhWR0xlUzBlYlov?=
- =?utf-8?B?TC84WnFCWUZYN3dzVzB6WENvSTkrUHdQQ3poQ2VyUWR1SCtkbEFEVTh5em93?=
- =?utf-8?B?WHRSWHIrcFU1eDhwUXdxaGpJbTM2Z0hBU1AzUDV0RU1vMTV3b1VwR2dkZlA5?=
- =?utf-8?B?QWFlVURnZWxUMnBPSG85b0Q5WEl0RFByY1pmWjBrWEh1OEhLcUp5UjZoM0w0?=
- =?utf-8?B?YkF2enFCdENhMmxtb0RlbHdtVHYxVWJ6UmwzNm4xR2lDWVdtQjhTMUU3RVgw?=
- =?utf-8?B?Sm83bTJxdXBBTEdVRWFUeWNZczRPNzljNE5VS2ZMa2dGb0pQb3lJMUV3S3Zv?=
- =?utf-8?B?REsrV2NGREhvSTNPdythRVFkV2c0dWpIbDI0OXJpM3luZVlDZmJuc3QrVmRq?=
- =?utf-8?B?Mm1pY29xaXg1MEVwaGpaVkxBR01JY0pFNFc1TnkzY1pBZXI1c1VSYWJrYXFX?=
- =?utf-8?B?SGJGQy9QVUJaM0tLdU0yK08wb1lZYXphWjhBVW1TTFI0czUvWUhVcXo1ME9D?=
- =?utf-8?B?UHpXYWV0N2VvMkJNb2V6eENNcnhWQzhyWU9nU2tnU1NRNzd1WEZONFUreDNa?=
- =?utf-8?B?YmtLUWpNaGg1VWxFRHhtR2JvVWtRSWQrbHByQVRVL1d4ZjRwYkdTKzdKbWRL?=
- =?utf-8?B?d3VxY1BraUNPUEVzNTdyQkZ3SjRLYXBtS282MkM2QzdmeC9LdHZmbjBnUE51?=
- =?utf-8?B?bTAzM3dUbS9mdkhqZnVJaFpvOE1xVmp6UFZSYk00dmNCWENBc2M1aEwzbGNP?=
- =?utf-8?Q?RYMvAOpFZFkvBBIzKXpob5wKUY/TTCmh?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cmcyM2ZTNUtrTEl3a2FCazF0WndnQWNFQmJuMFg3U1FPWm82ZFlTM1hkQ2Yx?=
- =?utf-8?B?ZzRndnVpUG50VCsyYWFBc2VvSjYvc2FiTmRuNS9FeGVDWWdDTmd6aWVyOFVO?=
- =?utf-8?B?S0tiMlJOVDc1SVFRUEdWVjlWSnJ0UkZ1YXJzc3ErTHhxRWdRTmgrb3lNd3RJ?=
- =?utf-8?B?QW9WUFNGREVtelhmSDRJcGxqcmxSbzB0aEFPSnJDZ093SWgrNUVweEk3Tit0?=
- =?utf-8?B?bHN4Vjl4dzhwckxRV3hoK3VJZjBRM1QxTEFpaG5EN0lITUVEU0pNdW9zSWgx?=
- =?utf-8?B?UkRBekxwcWd5YXo0OThWRlJaYTdCVWh2anVnZE5oWEVTaGdDYm1adWFWVi9z?=
- =?utf-8?B?eGVPbzN3bkEwUGlBdkdITDJZYnJaSllFYzQwSTZtdWZZaVl3ZmovOGN1SGZa?=
- =?utf-8?B?VStaUnJsb2tyVVVScU1Mc3JrVEFLamxEZmJJTUdtVlZJWDdHMjdZSHBYcFZU?=
- =?utf-8?B?R2RCckdlUllBVTJRUkt6WGZ0Nm5wYTB5ei9MY1hGNHBoVXZDZGY0WHdTOXBQ?=
- =?utf-8?B?MXQrRHNpODAwZHhMMmpVUzE3aDBxTzkycGVOWG55VGY4UnRYbjVkbUh1WE9X?=
- =?utf-8?B?N1kvaS8xUXZtdHNZK3JwZ3JnY2RpdDhleDdMdUU5cS9WUkJnWXJFdzFTbjZO?=
- =?utf-8?B?b3BlT21veDRpZVVDYzJRQy9RckMxazRQejJ0Ui9pL3FmRW14cFBXZTMrMHMw?=
- =?utf-8?B?QlBNNlZSZlFJb1BHVk1ZRm1YN1QxVkZETWFDVDgxTERwSGppcjFKbGk0V3RF?=
- =?utf-8?B?QWhDcmdWbnNvb0JrcTdGcXQ5RzZyaVl2S0wrcER4eENUc0ZqczRnK3V5NFll?=
- =?utf-8?B?ZU9ZQkl4ZFNaRUJLcWR5UUtxNGs0dDZPcW1ibW9oaGFWYUF0SjY0TEJBVHRs?=
- =?utf-8?B?S3lra096dHdWRWRPU3B5WEFneE0xOEZudTRURTd0WGM4ZjFDalIwQjROSjAz?=
- =?utf-8?B?c2Q3Y1g0N3hEMFhVdUdBUi95SUlkdmx4ZllPOVorS05RbEVDMmx4bU5vKzh6?=
- =?utf-8?B?NWo1Q2s1UGVueW9xT0lRTlBlbmVjaGYxQVE0dkVaYWZCZVE2ZU85UWwwTktV?=
- =?utf-8?B?TFdpdFl0SkxiL1FHaWZjRmhab1NFc3hDQ3lITExvWEtCVmZpeFkrWElpb204?=
- =?utf-8?B?VGt1RG1DaGsvMFdpak1oOVFFa3VPa1hoUWJyT0hwQ0NCYWpHTDUxbzVXWFpE?=
- =?utf-8?B?ZFhlVzNFVTFuRmFURzBQbWpUMDQyUDVnclFtc0FseGl6UTJIWTdiNWlXMGp6?=
- =?utf-8?B?V2ttd1JPcHlER2tqTVVsdFZRczA3OHRxUDJSZURPYWIxSDEwdHV0YkhKYWpT?=
- =?utf-8?B?dUFDWm5EeXdQc0dKenRHKzM2YUE3RzVvSE5JSEJ5OFVrdWNRcVRpdDd3VzF3?=
- =?utf-8?B?aEsrOWhkcHVVTm4zVUgrVFIwZnBiOUtlQUl1TVkrNW80Yzh4aXFPbit2SUNl?=
- =?utf-8?B?cFJabzJYeU5ZMjlYb1Mxb1RLRGZJN0RBcENMUDB4MW1XeUdMSW05QVdZRkxD?=
- =?utf-8?B?NTlqSUsxUXdRZ1ErQ3YweHY0T1pjdTVCYkhMRTlGaVRTeGhDaTV6TjBPQ2Zp?=
- =?utf-8?B?emhCcnJPdzh5YVh0NTB6SVVIYTJXdzJPa21UVVdxTVFIOTBEWnJhMzNKU3VT?=
- =?utf-8?B?Y1VQVHh1eEEvNjA5YjFJbUtxVUFlRTRUZURkZjVHWEtDWHI0SHdPL2o1NGpN?=
- =?utf-8?B?THI1U1RhYTFVazBxMFR3UWJPTCt5enA5SjJSSzE3d3NoQkdMSGJVNktwZ2Qx?=
- =?utf-8?B?NUV1N0Q5QkxIOUR1aFhMM1pTMldmcGE2WlRPbGtnc0JpK0ZnZ2Q4TUQ5NEo3?=
- =?utf-8?B?aWp5QW9BTkpzTHg3cmUxSHQwaXVXV2ZqYnNJVWI3Y0tzc1FJbzMxU0xBT1hm?=
- =?utf-8?B?RWQ2YkNjL1Fac2VMdlhDOC9yUlZQci9RMmtmcytmTk1uM0VsMTNBaU54UXNC?=
- =?utf-8?B?Y1g1L0xYOUNxMzRBZ1NrNmE1TmZCRGIzSEpubzlKUHh3ME1abTVXendteHZ0?=
- =?utf-8?B?OU91V1UzTC9yQ0FSRUlPRzgwbTlreXFvN29sbVNoTGtKRERvck5tQUYxSk9s?=
- =?utf-8?B?ZjNWdlRBUWVsOUVYSFJyMENhd1QxVHc1RmlMYmp1d0tUUHpnR0NRVXhnSXYr?=
- =?utf-8?B?blI0SVhOMzQwZElTK3FZZ2RubzRPUGJLM3VVVUd6Tit2ZFA1TU5GemwyWHVv?=
- =?utf-8?B?VHo1dG1FL3YvMGJ1N25JSG1WVC9aOFhVRnJBU080UDRnK01XWWY3Mnk0UFJa?=
- =?utf-8?B?Y2s4YWg4Vnh4S1RpcTFGd2g1YkVnZGdDWkVNcVE2RTU4cWxibEFtallMVUNB?=
- =?utf-8?B?dzJJV3pHWTNuVXhycnF0MUpkK01oeTUrNnFvYVhvUUU5WEFoeFZRQT09?=
-X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5d1fd16-b1ea-4f5e-6bd5-08de4e0a2a55
-X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 16:31:10.2667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 93RmN4Ac3TfmffHoB5HxMzOK+LUANNKDLQPpksxsBkqSoeO9uvglzsvT+uskruezSnLPrrWHOZN51hJLqVMYQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P123MB7803
-
---rwaihcjj5jb2lcrg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20260105152145.1801972-1-dhowells@redhat.com> <20260105152145.1801972-8-dhowells@redhat.com>
+In-Reply-To: <20260105152145.1801972-8-dhowells@redhat.com>
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Wed, 7 Jan 2026 16:36:46 +0000
+X-Gm-Features: AQt7F2r4CpylCwB-dv4Ha4W0abX82HiLR-34n8t00sBQWnM2lp-k44NmqQsT-Ag
+Message-ID: <CALrw=nHMm0Br9iaMyCQwbujb-vus3nsA-__1Nw=UG-an=B_jtg@mail.gmail.com>
+Subject: Re: [PATCH v11 7/8] pkcs7, x509: Add RSASSA-PSS support
+To: David Howells <dhowells@redhat.com>
+Cc: Lukas Wunner <lukas@wunner.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Eric Biggers <ebiggers@kernel.org>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	"Jason A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller <smueller@chronox.de>, 
+	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] module: Remove duplicate freeing of lockdep classes
-MIME-Version: 1.0
 
-On Wed, Jan 07, 2026 at 01:22:57PM +0100, Petr Pavlu wrote:
-> In the error path of load_module(), under the free_module label, the
-> code calls lockdep_free_key_range() to release lock classes associated
-> with the MOD_DATA, MOD_RODATA and MOD_RO_AFTER_INIT module regions, and
-> subsequently invokes module_deallocate().
->=20
-> Since commit ac3b43283923 ("module: replace module_layout with
-> module_memory"), the module_deallocate() function calls free_mod_mem(),
-> which releases the lock classes as well and considers all module
-> regions.
->=20
-> Attempting to free these classes twice is unnecessary. Remove the
-> redundant code in load_module().
->=20
-> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Hi David,
+
+On Mon, Jan 5, 2026 at 3:23=E2=80=AFPM David Howells <dhowells@redhat.com> =
+wrote:
+>
+> Add support for RSASSA-PSS keys and signatures to the PKCS#7 and X.509
+> implementations.  This requires adding support for algorithm parameters f=
+or
+> keys and signatures as RSASSA-PSS needs metadata.  The ASN.1 encoded data
+> is converted into a printable key=3Dvalue list string and passed to the
+> verification code.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Lukas Wunner <lukas@wunner.de>
+> cc: Ignat Korchagin <ignat@cloudflare.com>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: keyrings@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
 > ---
->  kernel/module/main.c | 6 ------
->  1 file changed, 6 deletions(-)
->=20
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 710ee30b3bea..bcd259505c8b 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3544,12 +3544,6 @@ static int load_module(struct load_info *info, con=
-st char __user *uargs,
->  	mutex_unlock(&module_mutex);
->   free_module:
->  	mod_stat_bump_invalid(info, flags);
-> -	/* Free lock-classes; relies on the preceding sync_rcu() */
-> -	for_class_mod_mem_type(type, core_data) {
-> -		lockdep_free_key_range(mod->mem[type].base,
-> -				       mod->mem[type].size);
-> -	}
+>  crypto/asymmetric_keys/Makefile           |  12 +-
+>  crypto/asymmetric_keys/mgf1_params.asn1   |  12 ++
+>  crypto/asymmetric_keys/pkcs7.asn1         |   2 +-
+>  crypto/asymmetric_keys/pkcs7_parser.c     | 113 ++++++-----
+>  crypto/asymmetric_keys/public_key.c       |  10 +
+>  crypto/asymmetric_keys/rsassa_params.asn1 |  25 +++
+>  crypto/asymmetric_keys/rsassa_parser.c    | 233 ++++++++++++++++++++++
+>  crypto/asymmetric_keys/rsassa_parser.h    |  25 +++
+>  crypto/asymmetric_keys/x509.asn1          |   2 +-
+>  crypto/asymmetric_keys/x509_cert_parser.c |  96 +++++----
+>  crypto/asymmetric_keys/x509_parser.h      |  33 ++-
+>  crypto/asymmetric_keys/x509_public_key.c  |  28 ++-
+>  include/linux/oid_registry.h              |   2 +
+>  13 files changed, 490 insertions(+), 103 deletions(-)
+>  create mode 100644 crypto/asymmetric_keys/mgf1_params.asn1
+>  create mode 100644 crypto/asymmetric_keys/rsassa_params.asn1
+>  create mode 100644 crypto/asymmetric_keys/rsassa_parser.c
+>  create mode 100644 crypto/asymmetric_keys/rsassa_parser.h
+>
+> diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Mak=
+efile
+> index bc65d3b98dcb..c5aed382ee8a 100644
+> --- a/crypto/asymmetric_keys/Makefile
+> +++ b/crypto/asymmetric_keys/Makefile
+> @@ -21,7 +21,11 @@ x509_key_parser-y :=3D \
+>         x509_akid.asn1.o \
+>         x509_cert_parser.o \
+>         x509_loader.o \
+> -       x509_public_key.o
+> +       x509_public_key.o \
+> +       rsassa_params.asn1.o \
+> +       rsassa_parser.o \
+> +       mgf1_params.asn1.o
+> +
+>  obj-$(CONFIG_FIPS_SIGNATURE_SELFTEST) +=3D x509_selftest.o
+>  x509_selftest-y +=3D selftest.o
+>  x509_selftest-$(CONFIG_FIPS_SIGNATURE_SELFTEST_RSA) +=3D selftest_rsa.o
+> @@ -31,8 +35,14 @@ $(obj)/x509_cert_parser.o: \
+>         $(obj)/x509.asn1.h \
+>         $(obj)/x509_akid.asn1.h
+>
+> +$(obj)/rsassa_parser.o: \
+> +       $(obj)/rsassa_params.asn1.h \
+> +       $(obj)/mgf1_params.asn1.h
+> +
+>  $(obj)/x509.asn1.o: $(obj)/x509.asn1.c $(obj)/x509.asn1.h
+>  $(obj)/x509_akid.asn1.o: $(obj)/x509_akid.asn1.c $(obj)/x509_akid.asn1.h
+> +$(obj)/rsassa_params.asn1.o: $(obj)/rsassa_params.asn1.c $(obj)/rsassa_p=
+arams.asn1.h
+> +$(obj)/mgf1_params.asn1.o: $(obj)/mgf1_params.asn1.c $(obj)/mgf1_params.=
+asn1.h
+>
+>  #
+>  # PKCS#8 private key handling
+> diff --git a/crypto/asymmetric_keys/mgf1_params.asn1 b/crypto/asymmetric_=
+keys/mgf1_params.asn1
+> new file mode 100644
+> index 000000000000..c3bc4643e72c
+> --- /dev/null
+> +++ b/crypto/asymmetric_keys/mgf1_params.asn1
+> @@ -0,0 +1,12 @@
+> +-- SPDX-License-Identifier: BSD-3-Clause
+> +--
+> +-- Copyright (C) 2009 IETF Trust and the persons identified as authors
+> +-- of the code
+> +--
+> +--
+> +-- https://datatracker.ietf.org/doc/html/rfc4055 Section 6.
+> +
+> +AlgorithmIdentifier ::=3D SEQUENCE {
+> +       algorithm       OBJECT IDENTIFIER ({ mgf1_note_OID }),
+> +       parameters      ANY OPTIONAL
+> +}
+> diff --git a/crypto/asymmetric_keys/pkcs7.asn1 b/crypto/asymmetric_keys/p=
+kcs7.asn1
+> index 28e1f4a41c14..03c2248f23bc 100644
+> --- a/crypto/asymmetric_keys/pkcs7.asn1
+> +++ b/crypto/asymmetric_keys/pkcs7.asn1
+> @@ -124,7 +124,7 @@ UnauthenticatedAttribute ::=3D SEQUENCE {
+>
+>  DigestEncryptionAlgorithmIdentifier ::=3D SEQUENCE {
+>         algorithm               OBJECT IDENTIFIER ({ pkcs7_note_OID }),
+> -       parameters              ANY OPTIONAL
+> +       parameters              ANY OPTIONAL ({ pkcs7_sig_note_algo_param=
+s })
+>  }
+>
+>  EncryptedDigest ::=3D OCTET STRING ({ pkcs7_sig_note_signature })
+> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
+ys/pkcs7_parser.c
+> index 90c36fe1b5ed..81996b60c1f1 100644
+> --- a/crypto/asymmetric_keys/pkcs7_parser.c
+> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/oid_registry.h>
+>  #include <crypto/public_key.h>
+>  #include "pkcs7_parser.h"
+> +#include "rsassa_parser.h"
+>  #include "pkcs7.asn1.h"
+>
+>  MODULE_DESCRIPTION("PKCS#7 parser");
+> @@ -30,6 +31,8 @@ struct pkcs7_parse_context {
+>         enum OID        last_oid;               /* Last OID encountered *=
+/
+>         unsigned        x509_index;
+>         unsigned        sinfo_index;
+> +       unsigned        algo_params_size;
+> +       const void      *algo_params;
+>         const void      *raw_serial;
+>         unsigned        raw_serial_size;
+>         unsigned        raw_issuer_size;
+> @@ -225,45 +228,29 @@ int pkcs7_sig_note_digest_algo(void *context, size_=
+t hdrlen,
+>                                const void *value, size_t vlen)
+>  {
+>         struct pkcs7_parse_context *ctx =3D context;
+> +       const char *algo;
+>
+> -       switch (ctx->last_oid) {
+> -       case OID_sha1:
+> -               ctx->sinfo->sig->hash_algo =3D "sha1";
+> -               break;
+> -       case OID_sha256:
+> -               ctx->sinfo->sig->hash_algo =3D "sha256";
+> -               break;
+> -       case OID_sha384:
+> -               ctx->sinfo->sig->hash_algo =3D "sha384";
+> -               break;
+> -       case OID_sha512:
+> -               ctx->sinfo->sig->hash_algo =3D "sha512";
+> -               break;
+> -       case OID_sha224:
+> -               ctx->sinfo->sig->hash_algo =3D "sha224";
+> -               break;
+> -       case OID_sm3:
+> -               ctx->sinfo->sig->hash_algo =3D "sm3";
+> -               break;
+> -       case OID_gost2012Digest256:
+> -               ctx->sinfo->sig->hash_algo =3D "streebog256";
+> -               break;
+> -       case OID_gost2012Digest512:
+> -               ctx->sinfo->sig->hash_algo =3D "streebog512";
+> -               break;
+> -       case OID_sha3_256:
+> -               ctx->sinfo->sig->hash_algo =3D "sha3-256";
+> -               break;
+> -       case OID_sha3_384:
+> -               ctx->sinfo->sig->hash_algo =3D "sha3-384";
+> -               break;
+> -       case OID_sha3_512:
+> -               ctx->sinfo->sig->hash_algo =3D "sha3-512";
+> -               break;
+> -       default:
+> -               printk("Unsupported digest algo: %u\n", ctx->last_oid);
+> +       algo =3D oid_to_hash(ctx->last_oid);
+> +       if (!algo) {
+> +               pr_notice("Unsupported digest algo: %u\n", ctx->last_oid)=
+;
+>                 return -ENOPKG;
+>         }
+> +
+> +       ctx->sinfo->sig->hash_algo =3D algo;
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Note the parameters for the signature.
+> + */
+> +int pkcs7_sig_note_algo_params(void *context, size_t hdrlen,
+> +                              unsigned char tag,
+> +                              const void *value, size_t vlen)
+> +{
+> +       struct pkcs7_parse_context *ctx =3D context;
+> +
+> +       ctx->algo_params =3D value - hdrlen;
+> +       ctx->algo_params_size =3D vlen + hdrlen;
+>         return 0;
+>  }
+>
+> @@ -275,12 +262,16 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t =
+hdrlen,
+>                              const void *value, size_t vlen)
+>  {
+>         struct pkcs7_parse_context *ctx =3D context;
+> +       struct public_key_signature *sig =3D ctx->sinfo->sig;
+> +       int err;
+>
+>         switch (ctx->last_oid) {
+>         case OID_rsaEncryption:
+> -               ctx->sinfo->sig->pkey_algo =3D "rsa";
+> -               ctx->sinfo->sig->encoding =3D "pkcs1";
+> +               sig->pkey_algo =3D "rsa";
+> +               sig->encoding =3D "pkcs1";
+>                 break;
+> +       case OID_id_rsassa_pss:
+> +               goto rsassa_pss;
+
+I really don't like this. Is it possible to factor this out to a
+separate function and just call here? Should the factored function
+even be part of the implementation somehow?
+
+>         case OID_id_ecdsa_with_sha1:
+>         case OID_id_ecdsa_with_sha224:
+>         case OID_id_ecdsa_with_sha256:
+> @@ -289,34 +280,52 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t =
+hdrlen,
+>         case OID_id_ecdsa_with_sha3_256:
+>         case OID_id_ecdsa_with_sha3_384:
+>         case OID_id_ecdsa_with_sha3_512:
+> -               ctx->sinfo->sig->pkey_algo =3D "ecdsa";
+> -               ctx->sinfo->sig->encoding =3D "x962";
+> +               sig->pkey_algo =3D "ecdsa";
+> +               sig->encoding =3D "x962";
+>                 break;
+>         case OID_gost2012PKey256:
+>         case OID_gost2012PKey512:
+> -               ctx->sinfo->sig->pkey_algo =3D "ecrdsa";
+> -               ctx->sinfo->sig->encoding =3D "raw";
+> +               sig->pkey_algo =3D "ecrdsa";
+> +               sig->encoding =3D "raw";
+>                 break;
+>         case OID_id_ml_dsa_44:
+> -               ctx->sinfo->sig->pkey_algo =3D "mldsa44";
+> -               ctx->sinfo->sig->encoding =3D "raw";
+> -               ctx->sinfo->sig->algo_does_hash =3D true;
+> +               sig->pkey_algo =3D "mldsa44";
+> +               sig->encoding =3D "raw";
+> +               sig->algo_does_hash =3D true;
+>                 break;
+>         case OID_id_ml_dsa_65:
+> -               ctx->sinfo->sig->pkey_algo =3D "mldsa65";
+> -               ctx->sinfo->sig->encoding =3D "raw";
+> -               ctx->sinfo->sig->algo_does_hash =3D true;
+> +               sig->pkey_algo =3D "mldsa65";
+> +               sig->encoding =3D "raw";
+> +               sig->algo_does_hash =3D true;
+>                 break;
+>         case OID_id_ml_dsa_87:
+> -               ctx->sinfo->sig->pkey_algo =3D "mldsa87";
+> -               ctx->sinfo->sig->encoding =3D "raw";
+> -               ctx->sinfo->sig->algo_does_hash =3D true;
+> +               sig->pkey_algo =3D "mldsa87";
+> +               sig->encoding =3D "raw";
+> +               sig->algo_does_hash =3D true;
+>                 break;
+>         default:
+> -               printk("Unsupported pkey algo: %u\n", ctx->last_oid);
+> +               pr_notice("Unsupported pkey algo: %u\n", ctx->last_oid);
+>                 return -ENOPKG;
+>         }
+> +
+> +out:
+> +       ctx->algo_params =3D NULL;
+> +       ctx->algo_params_size =3D 0;
+>         return 0;
+> +
+> +rsassa_pss:
+> +       if (!ctx->algo_params || !ctx->algo_params_size) {
+> +               pr_debug("RSASSA-PSS sig algo without parameters\n");
+> +               return -EBADMSG;
+> +       }
+> +
+> +       err =3D rsassa_parse_sig_params(sig, ctx->algo_params, ctx->algo_=
+params_size);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       sig->pkey_algo =3D "rsa";
+> +       sig->encoding =3D "emsa-pss";
+> +       goto out;
+>  }
+>
+>  /*
+> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys=
+/public_key.c
+> index 61dc4f626620..13a5616becaa 100644
+> --- a/crypto/asymmetric_keys/public_key.c
+> +++ b/crypto/asymmetric_keys/public_key.c
+> @@ -100,6 +100,16 @@ software_key_determine_akcipher(const struct public_=
+key *pkey,
+>                         }
+>                         return n >=3D CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
+>                 }
+> +               if (strcmp(encoding, "emsa-pss") =3D=3D 0) {
+> +                       if (op !=3D kernel_pkey_sign &&
+> +                           op !=3D kernel_pkey_verify)
+> +                               return -EINVAL;
+> +                       *sig =3D true;
+> +                       if (!hash_algo)
+> +                               hash_algo =3D "none";
+> +                       n =3D snprintf(alg_name, CRYPTO_MAX_ALG_NAME, "rs=
+assa-pss");
+> +                       return n >=3D CRYPTO_MAX_ALG_NAME ? -EINVAL : 0;
+> +               }
+>                 if (strcmp(encoding, "raw") !=3D 0)
+>                         return -EINVAL;
+>                 /*
+> diff --git a/crypto/asymmetric_keys/rsassa_params.asn1 b/crypto/asymmetri=
+c_keys/rsassa_params.asn1
+> new file mode 100644
+> index 000000000000..95a4e5f0dcd5
+> --- /dev/null
+> +++ b/crypto/asymmetric_keys/rsassa_params.asn1
+> @@ -0,0 +1,25 @@
+> +-- SPDX-License-Identifier: BSD-3-Clause
+> +--
+> +-- Copyright (C) 2009 IETF Trust and the persons identified as authors
+> +-- of the code
+> +--
+> +--
+> +-- https://datatracker.ietf.org/doc/html/rfc4055 Section 6.
+> +
+> +RSASSA-PSS-params ::=3D SEQUENCE {
+> +       hashAlgorithm      [0] HashAlgorithm,
+> +       maskGenAlgorithm   [1] MaskGenAlgorithm,
+> +       saltLength         [2] INTEGER ({ rsassa_note_salt_length }),
+> +       trailerField       [3] TrailerField OPTIONAL
+> +}
+> +
+> +TrailerField ::=3D INTEGER ({ rsassa_note_trailer })
+> +-- { trailerFieldBC(1) }
+> +
+> +HashAlgorithm ::=3D AlgorithmIdentifier ({ rsassa_note_hash_algo })
+> +MaskGenAlgorithm ::=3D AlgorithmIdentifier ({ rsassa_note_maskgen_algo }=
+)
+> +
+> +AlgorithmIdentifier ::=3D SEQUENCE {
+> +       algorithm       OBJECT IDENTIFIER ({ rsassa_note_OID }),
+> +       parameters      ANY OPTIONAL ({ rsassa_note_params })
+> +}
+> diff --git a/crypto/asymmetric_keys/rsassa_parser.c b/crypto/asymmetric_k=
+eys/rsassa_parser.c
+> new file mode 100644
+> index 000000000000..8c598517f785
+> --- /dev/null
+> +++ b/crypto/asymmetric_keys/rsassa_parser.c
+> @@ -0,0 +1,233 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/* RSASSA-PSS ASN.1 parameter parser
+> + *
+> + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#define pr_fmt(fmt) "RSAPSS: "fmt
+> +#include <linux/kernel.h>
+> +#include <linux/slab.h>
+> +#include <linux/err.h>
+> +#include <linux/asn1.h>
+> +#include <crypto/hash.h>
+> +#include <crypto/hash_info.h>
+> +#include <crypto/public_key.h>
+> +#include "x509_parser.h"
+> +#include "rsassa_parser.h"
+> +#include "rsassa_params.asn1.h"
+> +#include "mgf1_params.asn1.h"
+> +
+> +struct rsassa_parse_context {
+> +       struct rsassa_parameters *rsassa;       /* The parsed parameters =
+*/
+> +       unsigned long   data;                   /* Start of data */
+> +       const void      *params;                /* Algo parameters */
+> +       unsigned int    params_len;             /* Length of algo paramet=
+ers */
+> +       enum OID        last_oid;               /* Last OID encountered *=
+/
+> +       enum OID        mgf1_last_oid;          /* Last OID encountered i=
+n MGF1 */
+> +};
+> +
+> +/*
+> + * Parse an RSASSA parameter block.
+> + */
+> +struct rsassa_parameters *rsassa_params_parse(const void *data, size_t d=
+atalen)
+> +{
+> +       struct rsassa_parse_context ctx =3D {};
+> +       struct rsassa_parameters *rsassa __free(kfree);
+
+Declare when initialised
+
+> +       long ret;
+> +
+> +       rsassa =3D kzalloc(sizeof(*rsassa), GFP_KERNEL);
+> +       if (!rsassa)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       ctx.rsassa =3D rsassa;
+> +       ctx.data =3D (unsigned long)data;
+> +
+> +       /* Attempt to decode the parameters */
+> +       ret =3D asn1_ber_decoder(&rsassa_params_decoder, &ctx, data, data=
+len);
+> +       if (ret < 0) {
+> +               pr_debug("RSASSA parse failed %ld\n", ret);
+> +               return ERR_PTR(ret);
+> +       }
+> +
+> +       return no_free_ptr(rsassa);
+> +}
+> +
+> +/*
+> + * Note an OID when we find one for later processing when we know how
+> + * to interpret it.
+> + */
+> +int rsassa_note_OID(void *context, size_t hdrlen, unsigned char tag,
+> +                   const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +
+> +       ctx->last_oid =3D look_up_OID(value, vlen);
+> +       if (ctx->last_oid =3D=3D OID__NR) {
+> +               char buffer[56];
+> +               sprint_oid(value, vlen, buffer, sizeof(buffer));
+> +               pr_debug("Unknown OID: %s\n", buffer);
+> +       }
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Parse trailerField.  We only accept trailerFieldBC.
+> +*/
+> +int rsassa_note_trailer(void *context, size_t hdrlen, unsigned char tag,
+> +                       const void *value, size_t vlen)
+> +{
+> +       if (vlen !=3D 1 || *(u8 *)value !=3D 0x01) {
+> +               pr_debug("Unknown trailerField\n");
+> +               return -EINVAL;
+> +       }
+> +       return 0;
+> +}
+> +
+> +int rsassa_note_hash_algo(void *context, size_t hdrlen, unsigned char ta=
+g,
+> +                         const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +
+> +       ctx->rsassa->hash_algo =3D ctx->last_oid;
+> +       pr_debug("HASH-ALGO %u %u\n", ctx->rsassa->hash_algo, ctx->params=
+_len);
+> +       ctx->params =3D NULL;
+> +       return 0;
+> +}
+> +
+> +int rsassa_note_maskgen_algo(void *context, size_t hdrlen, unsigned char=
+ tag,
+> +                            const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +       int ret;
+> +
+> +       ctx->rsassa->maskgen_algo =3D ctx->last_oid;
+> +       pr_debug("MGF-ALGO %u %u\n", ctx->rsassa->maskgen_algo, ctx->para=
+ms_len);
+> +
+> +       switch (ctx->rsassa->maskgen_algo) {
+> +       case OID_id_mgf1:
+> +               if (!vlen) {
+> +                       pr_debug("MGF1 missing parameters\n");
+> +                       return -EBADMSG;
+> +               }
+> +
+> +               ret =3D asn1_ber_decoder(&mgf1_params_decoder, ctx,
+> +                                      ctx->params, ctx->params_len);
+> +               if (ret < 0) {
+> +                       pr_debug("MGF1 parse failed %d\n", ret);
+> +                       return ret;
+> +               }
+> +               ctx->rsassa->maskgen_hash =3D ctx->mgf1_last_oid;
+> +               break;
+> +
+> +       default:
+> +               pr_debug("Unsupported MaskGenAlgorithm %d\n", ret);
+> +               return -ENOPKG;
+> +       }
+> +
+> +       ctx->params =3D NULL;
+> +       return 0;
+> +}
+> +
+> +int rsassa_note_salt_length(void *context, size_t hdrlen, unsigned char =
+tag,
+> +                           const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +       u32 salt_len =3D 0;
+> +
+> +       if (!vlen) {
+> +               pr_debug("Salt len bad integer\n");
+> +               return -EBADMSG;
+> +       }
+> +       if (vlen > 4) {
+> +               pr_debug("Salt len too long %zu\n", vlen);
+> +               return -EBADMSG;
+> +       }
+> +       if (((u8 *)value)[0] & 0x80) {
+> +               pr_debug("Salt len negative\n");
+> +               return -EBADMSG;
+> +       }
+> +
+> +       for (size_t i =3D 0; i < vlen; i++) {
+> +               salt_len <<=3D 8;
+> +               salt_len |=3D ((u8 *)value)[i];
+> +       }
+> +
+> +       ctx->rsassa->salt_len =3D salt_len;
+> +       pr_debug("Salt-Len %u\n", salt_len);
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Extract arbitrary parameters.
+> + */
+> +int rsassa_note_params(void *context, size_t hdrlen, unsigned char tag,
+> +                      const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +
+> +       ctx->params     =3D value - hdrlen;
+> +       ctx->params_len =3D vlen + hdrlen;
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Note an OID when we find one for later processing when we know how to
+> + * interpret it.
+> + */
+> +int mgf1_note_OID(void *context, size_t hdrlen, unsigned char tag,
+> +                 const void *value, size_t vlen)
+> +{
+> +       struct rsassa_parse_context *ctx =3D context;
+> +
+> +       ctx->mgf1_last_oid =3D look_up_OID(value, vlen);
+> +       if (ctx->mgf1_last_oid =3D=3D OID__NR) {
+> +               char buffer[56];
+> +               sprint_oid(value, vlen, buffer, sizeof(buffer));
+> +               pr_debug("Unknown MGF1 OID: %s\n", buffer);
+> +       }
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Parse the signature parameter block and generate a suitable info stri=
+ng from
+> + * it.
+> + */
+> +int rsassa_parse_sig_params(struct public_key_signature *sig,
+> +                           const u8 *sig_params, unsigned int sig_params=
+_size)
+> +{
+> +       struct rsassa_parameters *rsassa __free(rsassa_params_free) =3D N=
+ULL;
+
+Declare when initialised or just flip the two declarations
+
+> +       const char *mf, *mh;
+> +
+> +       rsassa =3D rsassa_params_parse(sig_params, sig_params_size);
+> +       if (IS_ERR(rsassa))
+> +               return PTR_ERR(rsassa);
+> +
+> +       sig->hash_algo =3D oid_to_hash(rsassa->hash_algo);
+> +       if (!sig->hash_algo) {
+> +               pr_notice("Unsupported hash: %u\n", rsassa->hash_algo);
+> +               return -ENOPKG;
+> +       }
+> +
+> +       switch (rsassa->maskgen_algo) {
+> +       case OID_id_mgf1:
+> +               mf =3D "mgf1";
+> +               break;
+> +       default:
+> +               pr_notice("Unsupported maskgen algo: %u\n", rsassa->maskg=
+en_algo);
+> +               return -ENOPKG;
+> +       }
+> +
+> +       mh =3D oid_to_hash(rsassa->maskgen_hash);
+> +       if (!mh) {
+> +               pr_notice("Unsupported MGF1 hash: %u\n", rsassa->maskgen_=
+hash);
+> +               return -ENOPKG;
+> +       }
+> +
+> +       sig->info =3D kasprintf(GFP_KERNEL, "sighash=3D%s pss_mask=3D%s,%=
+s pss_salt=3D%u",
+> +                             sig->hash_algo, mf, mh, rsassa->salt_len);
+> +       if (!sig->info)
+> +               return -ENOMEM;
+> +       pr_debug("Info string: %s\n", sig->info);
+> +       return 0;
+> +}
+> diff --git a/crypto/asymmetric_keys/rsassa_parser.h b/crypto/asymmetric_k=
+eys/rsassa_parser.h
+> new file mode 100644
+> index 000000000000..b80401a3de8f
+> --- /dev/null
+> +++ b/crypto/asymmetric_keys/rsassa_parser.h
+> @@ -0,0 +1,25 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/* RSASSA-PSS parameter parsing context
+> + *
+> + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
+> + * Written by David Howells (dhowells@redhat.com)
+> + */
+> +
+> +#include <linux/oid_registry.h>
+> +
+> +struct rsassa_parameters {
+> +       enum OID        hash_algo;              /* Hash algorithm identif=
+ier */
+> +       enum OID        maskgen_algo;           /* Mask gen algorithm ide=
+ntifier */
+> +       enum OID        maskgen_hash;           /* Mask gen hash algorith=
+m identifier */
+> +       u32             salt_len;
+> +};
+> +
+> +struct rsassa_parameters *rsassa_params_parse(const void *data, size_t d=
+atalen);
+> +int rsassa_parse_sig_params(struct public_key_signature *sig,
+> +                           const u8 *sig_params, unsigned int sig_params=
+_size);
+> +
+> +static inline void rsassa_params_free(struct rsassa_parameters *params)
+> +{
+> +       kfree(params);
+> +}
+> +DEFINE_FREE(rsassa_params_free,  struct rsassa_parameters*, rsassa_param=
+s_free(_T))
+> diff --git a/crypto/asymmetric_keys/x509.asn1 b/crypto/asymmetric_keys/x5=
+09.asn1
+> index feb9573cacce..453b72eba1fe 100644
+> --- a/crypto/asymmetric_keys/x509.asn1
+> +++ b/crypto/asymmetric_keys/x509.asn1
+> @@ -29,7 +29,7 @@ CertificateSerialNumber ::=3D INTEGER
+>
+>  AlgorithmIdentifier ::=3D SEQUENCE {
+>         algorithm               OBJECT IDENTIFIER ({ x509_note_OID }),
+> -       parameters              ANY OPTIONAL ({ x509_note_params })
+> +       parameters              ANY OPTIONAL ({ x509_note_algo_id_params =
+})
+>  }
+>
+>  Name ::=3D SEQUENCE OF RelativeDistinguishedName
+> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetri=
+c_keys/x509_cert_parser.c
+> index 5ab5b4e5f1b4..6c431bf181f2 100644
+> --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> @@ -15,28 +15,7 @@
+>  #include "x509_parser.h"
+>  #include "x509.asn1.h"
+>  #include "x509_akid.asn1.h"
 > -
->  	module_memory_restore_rox(mod);
->  	module_deallocate(mod, info);
->   free_copy:
->=20
-> base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
-> --=20
-> 2.52.0
->=20
+> -struct x509_parse_context {
+> -       struct x509_certificate *cert;          /* Certificate being cons=
+tructed */
+> -       unsigned long   data;                   /* Start of data */
+> -       const void      *key;                   /* Key data */
+> -       size_t          key_size;               /* Size of key data */
+> -       const void      *params;                /* Key parameters */
+> -       size_t          params_size;            /* Size of key parameters=
+ */
+> -       enum OID        key_algo;               /* Algorithm used by the =
+cert's key */
+> -       enum OID        last_oid;               /* Last OID encountered *=
+/
+> -       enum OID        sig_algo;               /* Algorithm used to sign=
+ the cert */
+> -       u8              o_size;                 /* Size of organizationNa=
+me (O) */
+> -       u8              cn_size;                /* Size of commonName (CN=
+) */
+> -       u8              email_size;             /* Size of emailAddress *=
+/
+> -       u16             o_offset;               /* Offset of organization=
+Name (O) */
+> -       u16             cn_offset;              /* Offset of commonName (=
+CN) */
+> -       u16             email_offset;           /* Offset of emailAddress=
+ */
+> -       unsigned        raw_akid_size;
+> -       const void      *raw_akid;              /* Raw authorityKeyId in =
+ASN.1 */
+> -       const void      *akid_raw_issuer;       /* Raw directoryName in a=
+uthorityKeyId */
+> -       unsigned        akid_raw_issuer_size;
+> -};
+> +#include "rsassa_parser.h"
+>
+>  /*
+>   * Free an X.509 certificate
+> @@ -104,15 +83,15 @@ struct x509_certificate *x509_cert_parse(const void =
+*data, size_t datalen)
+>
+>         cert->pub->keylen =3D ctx->key_size;
+>
+> -       cert->pub->params =3D kmemdup(ctx->params, ctx->params_size, GFP_=
+KERNEL);
+> +       cert->pub->params =3D kmemdup(ctx->key_params, ctx->key_params_si=
+ze, GFP_KERNEL);
+>         if (!cert->pub->params)
+>                 return ERR_PTR(-ENOMEM);
+>
+> -       cert->pub->paramlen =3D ctx->params_size;
+> +       cert->pub->paramlen =3D ctx->key_params_size;
+>         cert->pub->algo =3D ctx->key_algo;
+>
+>         /* Grab the signature bits */
+> -       ret =3D x509_get_sig_params(cert);
+> +       ret =3D x509_get_sig_params(cert, ctx);
+>         if (ret < 0)
+>                 return ERR_PTR(ret);
+>
+> @@ -146,7 +125,7 @@ int x509_note_OID(void *context, size_t hdrlen,
+>
+>         ctx->last_oid =3D look_up_OID(value, vlen);
+>         if (ctx->last_oid =3D=3D OID__NR) {
+> -               char buffer[50];
+> +               char buffer[56];
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+I've seen this elsewhere in the crypto code (namely in ECC) but is it
+generally a good idea to declare long buffers on the stack?
 
---=20
-Aaron Tomlin
+>                 sprint_oid(value, vlen, buffer, sizeof(buffer));
+>                 pr_debug("Unknown OID: [%lu] %s\n",
+>                          (unsigned long)value - ctx->data, buffer);
+> @@ -179,6 +158,7 @@ int x509_note_sig_algo(void *context, size_t hdrlen, =
+unsigned char tag,
+>                        const void *value, size_t vlen)
+>  {
+>         struct x509_parse_context *ctx =3D context;
+> +       int err;
+>
+>         pr_debug("PubKey Algo: %u\n", ctx->last_oid);
+>
+> @@ -210,6 +190,9 @@ int x509_note_sig_algo(void *context, size_t hdrlen, =
+unsigned char tag,
+>                 ctx->cert->sig->hash_algo =3D "sha1";
+>                 goto ecdsa;
+>
+> +       case OID_id_rsassa_pss:
+> +               goto rsassa_pss;
+> +
+>         case OID_id_rsassa_pkcs1_v1_5_with_sha3_256:
+>                 ctx->cert->sig->hash_algo =3D "sha3-256";
+>                 goto rsa_pkcs1;
+> @@ -268,6 +251,24 @@ int x509_note_sig_algo(void *context, size_t hdrlen,=
+ unsigned char tag,
+>                 goto ml_dsa;
+>         }
+>
+> +rsassa_pss:
+> +       if (!ctx->algo_params || !ctx->algo_params_size) {
+> +               pr_debug("RSASSA-PSS sig algo without parameters\n");
+> +               return -EBADMSG;
+> +       }
+> +
+> +       err =3D rsassa_parse_sig_params(ctx->cert->sig,
+> +                                     ctx->algo_params, ctx->algo_params_=
+size);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       ctx->cert->sig->pkey_algo =3D "rsa";
+> +       ctx->cert->sig->encoding =3D "emsa-pss";
+> +       ctx->sig_algo =3D ctx->last_oid;
+> +       ctx->algo_params =3D NULL;
+> +       ctx->algo_params_size =3D 0;
+> +       return 0;
+> +
+>  rsa_pkcs1:
+>         ctx->cert->sig->pkey_algo =3D "rsa";
+>         ctx->cert->sig->encoding =3D "pkcs1";
+> @@ -324,8 +325,8 @@ int x509_note_signature(void *context, size_t hdrlen,
+>                 vlen--;
+>         }
+>
+> -       ctx->cert->raw_sig =3D value;
+> -       ctx->cert->raw_sig_size =3D vlen;
+> +       ctx->sig =3D value;
+> +       ctx->sig_size =3D vlen;
+>         return 0;
+>  }
+>
+> @@ -479,23 +480,16 @@ int x509_note_subject(void *context, size_t hdrlen,
+>  }
+>
+>  /*
+> - * Extract the parameters for the public key
+> + * Extract the parameters for an AlgorithmIdentifier.
+>   */
+> -int x509_note_params(void *context, size_t hdrlen,
+> -                    unsigned char tag,
+> -                    const void *value, size_t vlen)
+> +int x509_note_algo_id_params(void *context, size_t hdrlen,
+> +                            unsigned char tag,
+> +                            const void *value, size_t vlen)
+>  {
+>         struct x509_parse_context *ctx =3D context;
+>
+> -       /*
+> -        * AlgorithmIdentifier is used three times in the x509, we should=
+ skip
+> -        * first and ignore third, using second one which is after subjec=
+t and
+> -        * before subjectPublicKey.
+> -        */
+> -       if (!ctx->cert->raw_subject || ctx->key)
+> -               return 0;
+> -       ctx->params =3D value - hdrlen;
+> -       ctx->params_size =3D vlen + hdrlen;
+> +       ctx->algo_params =3D value - hdrlen;
+> +       ctx->algo_params_size =3D vlen + hdrlen;
+>         return 0;
+>  }
+>
+> @@ -514,12 +508,28 @@ int x509_extract_key_data(void *context, size_t hdr=
+len,
+>         case OID_rsaEncryption:
+>                 ctx->cert->pub->pkey_algo =3D "rsa";
+>                 break;
+> +       case OID_id_rsassa_pss:
+> +               /* Parameters are optional for the key itself. */
+> +               if (ctx->algo_params_size) {
+> +                       struct rsassa_parameters *params __free(rsassa_pa=
+rams_free) =3D NULL;
+> +                       ctx->key_params =3D ctx->algo_params;
+> +                       ctx->key_params_size =3D ctx->algo_params_size;
+> +                       ctx->algo_params =3D NULL;
+> +                       ctx->algo_params_size =3D 0;
+> +
+> +                       params =3D rsassa_params_parse(ctx->key_params, c=
+tx->key_params_size);
+> +                       if (IS_ERR(params))
+> +                               return PTR_ERR(params);
+> +                       break;
+> +               }
+> +               ctx->cert->pub->pkey_algo =3D "rsa";
+> +               break;
+>         case OID_gost2012PKey256:
+>         case OID_gost2012PKey512:
+>                 ctx->cert->pub->pkey_algo =3D "ecrdsa";
+>                 break;
+>         case OID_id_ecPublicKey:
+> -               if (parse_OID(ctx->params, ctx->params_size, &oid) !=3D 0=
+)
+> +               if (parse_OID(ctx->algo_params, ctx->algo_params_size, &o=
+id) !=3D 0)
+>                         return -EBADMSG;
+>
+>                 switch (oid) {
+> @@ -557,6 +567,8 @@ int x509_extract_key_data(void *context, size_t hdrle=
+n,
+>                 return -EBADMSG;
+>         ctx->key =3D value + 1;
+>         ctx->key_size =3D vlen - 1;
+> +       ctx->algo_params =3D NULL;
+> +       ctx->algo_params_size =3D 0;
+>         return 0;
+>  }
+>
+> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_key=
+s/x509_parser.h
+> index 0688c222806b..be2e1f6cb9f5 100644
+> --- a/crypto/asymmetric_keys/x509_parser.h
+> +++ b/crypto/asymmetric_keys/x509_parser.h
+> @@ -23,8 +23,6 @@ struct x509_certificate {
+>         time64_t        valid_to;
+>         const void      *tbs;                   /* Signed data */
+>         unsigned        tbs_size;               /* Size of signed data */
+> -       unsigned        raw_sig_size;           /* Size of signature */
+> -       const void      *raw_sig;               /* Signature data */
+>         const void      *raw_serial;            /* Raw serial number in A=
+SN.1 */
+>         unsigned        raw_serial_size;
+>         unsigned        raw_issuer_size;
+> @@ -41,6 +39,34 @@ struct x509_certificate {
+>         bool            blacklisted;
+>  };
+>
+> +struct x509_parse_context {
+> +       struct x509_certificate *cert;          /* Certificate being cons=
+tructed */
+> +       unsigned long   data;                   /* Start of data */
+> +       const void      *key;                   /* Key data */
+> +       size_t          key_size;               /* Size of key data */
+> +       const void      *algo_params;           /* AlgorithmIdentifier: p=
+arameters */
+> +       size_t          algo_params_size;       /* AlgorithmIdentifier: p=
+arameters size */
+> +       const void      *key_params;            /* Key parameters */
+> +       size_t          key_params_size;        /* Size of key parameters=
+ */
+> +       const void      *sig_params;            /* Signature parameters *=
+/
+> +       unsigned int    sig_params_size;        /* Size of sig parameters=
+ */
+> +       unsigned int    sig_size;               /* Size of signature */
+> +       const void      *sig;                   /* Signature data */
+> +       enum OID        key_algo;               /* Algorithm used by the =
+cert's key */
+> +       enum OID        last_oid;               /* Last OID encountered *=
+/
+> +       enum OID        sig_algo;               /* Algorithm used to sign=
+ the cert */
+> +       u8              o_size;                 /* Size of organizationNa=
+me (O) */
+> +       u8              cn_size;                /* Size of commonName (CN=
+) */
+> +       u8              email_size;             /* Size of emailAddress *=
+/
+> +       u16             o_offset;               /* Offset of organization=
+Name (O) */
+> +       u16             cn_offset;              /* Offset of commonName (=
+CN) */
+> +       u16             email_offset;           /* Offset of emailAddress=
+ */
+> +       unsigned        raw_akid_size;
+> +       const void      *raw_akid;              /* Raw authorityKeyId in =
+ASN.1 */
+> +       const void      *akid_raw_issuer;       /* Raw directoryName in a=
+uthorityKeyId */
+> +       unsigned        akid_raw_issuer_size;
+> +};
+> +
+>  /*
+>   * x509_cert_parser.c
+>   */
+> @@ -55,5 +81,6 @@ extern int x509_decode_time(time64_t *_t,  size_t hdrle=
+n,
+>  /*
+>   * x509_public_key.c
+>   */
+> -extern int x509_get_sig_params(struct x509_certificate *cert);
+> +extern const char *oid_to_hash(enum OID oid);
+> +extern int x509_get_sig_params(struct x509_certificate *cert, struct x50=
+9_parse_context *parse);
+>  extern int x509_check_for_self_signed(struct x509_certificate *cert);
+> diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric=
+_keys/x509_public_key.c
+> index 12e3341e806b..b2f8542accc4 100644
+> --- a/crypto/asymmetric_keys/x509_public_key.c
+> +++ b/crypto/asymmetric_keys/x509_public_key.c
+> @@ -17,11 +17,32 @@
+>  #include "asymmetric_keys.h"
+>  #include "x509_parser.h"
+>
+> +/*
+> + * Translate OIDs to hash algorithm names.
+> + */
+> +const char *oid_to_hash(enum OID oid)
+> +{
+> +       switch (oid) {
+> +       case OID_sha1:                  return "sha1";
+> +       case OID_sha256:                return "sha256";
+> +       case OID_sha384:                return "sha384";
+> +       case OID_sha512:                return "sha512";
+> +       case OID_sha224:                return "sha224";
+> +       case OID_sm3:                   return "sm3";
+> +       case OID_gost2012Digest256:     return "streebog256";
+> +       case OID_gost2012Digest512:     return "streebog512";
+> +       case OID_sha3_256:              return "sha3-256";
+> +       case OID_sha3_384:              return "sha3-384";
+> +       case OID_sha3_512:              return "sha3-512";
+> +       default:                        return NULL;
+> +       }
+> +}
+> +
+>  /*
+>   * Set up the signature parameters in an X.509 certificate.  This involv=
+es
+>   * digesting the signed data and extracting the signature.
+>   */
+> -int x509_get_sig_params(struct x509_certificate *cert)
+> +int x509_get_sig_params(struct x509_certificate *cert, struct x509_parse=
+_context *parse)
+>  {
+>         struct public_key_signature *sig =3D cert->sig;
+>         struct crypto_shash *tfm;
+> @@ -31,11 +52,11 @@ int x509_get_sig_params(struct x509_certificate *cert=
+)
+>
+>         pr_devel("=3D=3D>%s()\n", __func__);
+>
+> -       sig->s =3D kmemdup(cert->raw_sig, cert->raw_sig_size, GFP_KERNEL)=
+;
+> +       sig->s =3D kmemdup(parse->sig, parse->sig_size, GFP_KERNEL);
+>         if (!sig->s)
+>                 return -ENOMEM;
+>
+> -       sig->s_size =3D cert->raw_sig_size;
+> +       sig->s_size =3D parse->sig_size;
+>
+>         /* Allocate the hashing algorithm we're going to need and find ou=
+t how
+>          * big the hash operational data will be.
+> @@ -43,6 +64,7 @@ int x509_get_sig_params(struct x509_certificate *cert)
+>         tfm =3D crypto_alloc_shash(sig->hash_algo, 0, 0);
+>         if (IS_ERR(tfm)) {
+>                 if (PTR_ERR(tfm) =3D=3D -ENOENT) {
+> +                       pr_debug("Unsupported hash %s\n", sig->hash_algo)=
+;
+>                         cert->unsupported_sig =3D true;
+>                         return 0;
+>                 }
+> diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
+> index 30821a6a4f72..d546ea7999b9 100644
+> --- a/include/linux/oid_registry.h
+> +++ b/include/linux/oid_registry.h
+> @@ -31,6 +31,8 @@ enum OID {
+>         /* PKCS#1 {iso(1) member-body(2) us(840) rsadsi(113549) pkcs(1) p=
+kcs-1(1)} */
+>         OID_rsaEncryption,              /* 1.2.840.113549.1.1.1 */
+>         OID_sha1WithRSAEncryption,      /* 1.2.840.113549.1.1.5 */
+> +       OID_id_mgf1,                    /* 1.2.840.113549.1.1.8 */
+> +       OID_id_rsassa_pss,              /* 1.2.840.113549.1.1.10 */
+>         OID_sha256WithRSAEncryption,    /* 1.2.840.113549.1.1.11 */
+>         OID_sha384WithRSAEncryption,    /* 1.2.840.113549.1.1.12 */
+>         OID_sha512WithRSAEncryption,    /* 1.2.840.113549.1.1.13 */
+>
 
---rwaihcjj5jb2lcrg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEeQaE6/qKljiNHm6b4t6WWBnMd9YFAmleikkACgkQ4t6WWBnM
-d9bR9g/+K6bXKbOeZDIHezz7K/AYsJYxScVdl+NiBjZuohZJQtDybDrRlzifT8v4
-4UWjjilQMpgUSfwVwCbWYTVLtePUIdaaNwAJO6ItYyY3PQFCYDw/2DhwCrn5zCWd
-p8DOULFp7HpF791hTF2skpsmJw5yFe9HgF1jO7qr4+dNcP4BptXOF9JlZcWJDecX
-JRhup8SyMAKTTgU7+L9rAMjcbvFk25N84RIbYZ8tzsEZGTkq31U/EGv3qG4WoIeh
-aPyZ4JLZawwNAok0reXxWA0prTkNgnLU9HSU6/whDNTXuVatGuRHgxduXuN3yshQ
-jf9EMgiEhQ0MjlWkj1ITG6lZ9LzeT6XJxkNjnapA3iZ52n7aqOkbNhWbhQYB8d4s
-v3HDRFg1Ngcslmc63vtg4uYcXvUoVkRvb6Sf04rEyQSmXAssBPHYAfT4OvcjclBG
-AQc4aYj8vux+dmuaOBQSKODR7X66YEjt7LhQ9XQwI5eSgrsOZ2JMf1ZzgJzw4F+b
-HRn1NppWotzm2nW0NYTmOtHUtvdFJcH4LnWzpNOwxDytpKThBuclv3x0Muc4EWyD
-S4WoqI6mqfD1gV/s986eqEK1GDGmK6zdV1Hzx6Ul0nefLLAdKkbrtrwyyjxRQiWc
-zgpSwQXgKR3JABO/Ot22xAsx2k3LDccCeE2FQEoIRZiR58lZx74=
-=zD25
------END PGP SIGNATURE-----
-
---rwaihcjj5jb2lcrg--
+Ignat
