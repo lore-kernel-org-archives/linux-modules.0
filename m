@@ -1,125 +1,111 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F70329E5A
-	for <linux-modules@vger.kernel.org>; Wed,  7 Jan 2026 12:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B86D432ED32
+	for <linux-modules@vger.kernel.org>; Wed,  7 Jan 2026 13:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767788655; cv=none; b=SHvYNR9gITc5jEsD+DzspqqoC2i3PKcKpa31vzibvpDdCGoThYL52Z/87mszfW0KxjVqK5H+VVoaAegCy1qvAe/KZRL/MyryE8xkbT1qgW+5HNaEzGeQJTNIwjTtCOCzIkXk4NNccQq9n+gclatq9Iykmj0TrpMQKaHRmYKxhSo=
+	t=1767794019; cv=none; b=gX7anEZFJhW8HhSZJHOhbF+1ay75vA7aBy8O7ZHFFHBPWp4VFBOcjPMWLXBR1QGw3Qsluc03ZMBldD3EPxO3o+zZ07Yx4t9zhJ8AHOmjTh7EP0+LHMZX5gRFrUh1Z8FAaKjbz2R8jZzkWYRP/LsBN1K6S9wMVQV2zdLhSQ23Er0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767788655; c=relaxed/simple;
-	bh=s5gtHosk0WX7KEYnl6eaZ3wvb1CKwcyuhMiXSkV3WeM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tnkV0PLGqLnP/cOM4TH7sjeXIqrkxLDxbHwrgYbDgST2th9soqBl6NaoFslL/BNY4T+9CMiIgYk1clSCpxEKCq5l7kHZBlbi5TCgGRTul676mzGST1FbEiXuNA7stsU8zRUvckE6QiL0iU0o13LhGwQwL1xQuJmKWcEk7TCRSxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=abRL/f6Z; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1767794019; c=relaxed/simple;
+	bh=Saoed4Dc0jee0b/UVY9YgHw7inzzEj3jNE7uJVi9Qqc=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=BcZcE82T3blqOJPN55DV2+/JL2D4Xscg0j78hZxR1ovwzTfX2ZFxbk4qqsOq6pkNQkaLHQ9s6pSKNMOoZwLAv/sMFPPn4T3T5eypg9g/Cwmzyhzolx8F8mhPWoIcCRwXdgv/VGOjQS3SBmqj7GnIWe7bGH/rF5Ab73SslXTf44k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z/HZXvtI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="abRL/f6Z"
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso19223355e9.3
-        for <linux-modules@vger.kernel.org>; Wed, 07 Jan 2026 04:24:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1767788652; x=1768393452; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NpSWjoueUhBb14aD8RrMxMLp3NlnjMNn1484M381QDk=;
-        b=abRL/f6ZJX0rSJPNch0HoRvOywwQ2ocFzTrUW6L6x+ioXwNn8kDWZ1iB4Fkte8oWHw
-         6utIOK8wfS/XO2QnfLyzTZGIggGUv53+wNOGI3lSf9unaEoVr0iHNbC7u4NQYg5TUWKn
-         E7aQxRZ6FPotRh7gNAYbu7XSGtIVTPsW6dhcEcRiw7h17fcYQ68aZsoI0SsMwHg+l8Kb
-         CagT75+eD9kRg6vogb3gA7Uhqz3A7VIWe/Y7IMybdCHR/japxjpcCWbsql/0bn1yzYvf
-         9p48Yg459Mkxdb5J+sNMlH5QTw2yI6Gv1gB5/MWa5j2RzkkQeX8ueOSUE05Gbo+Zsvz1
-         9pXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767788652; x=1768393452;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NpSWjoueUhBb14aD8RrMxMLp3NlnjMNn1484M381QDk=;
-        b=chtibhpguHfYFXDgFlDBilzeBImfqgIw7Y31OD7vLkWQfSXvPDiLqDuIqqE9zn3P3n
-         XYe0FhpeMe0hCZSkstSRjeYcRAuYYYW+yrBfbiA3SfMvKYYRgrLXlqUdGHqq9Y+MgBnr
-         lC2baFkXq0b8iyQTYNEJYdmVgMVcCsHvWG3Nw5EDqZCGdNGBqATAiEmDQg1fYWgZu1Hn
-         emFJDE9o4X+qcaZ93QanpxeX03m95X7GHHcBG+z1dLwjC9/+e9vYDds6+L4w3h31dcD6
-         IWQ5MVQxdgn2qkeHcn+BuvbqgGytM/L06hQbTFKdnvbEguGxQRcaaavUXtrA6tsPmkX7
-         54Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyujGD1FLvtuDhFVWlC07zKOVJK1sEy1OYO51xu39ZjDiHRGo5F3A500+ZdNAR1ghfF8OKOZd76tFavCMo@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy46EG7O37UCSwgBxHm1MG+yTOLv0StaRn0XbYkRRS8fYWMOpiu
-	Fn10GISqT1mxfQySCgXNJaZdmNRlI106mL3GlDwg3fquD2XiD7+S3HHYfPZKqqrQja8=
-X-Gm-Gg: AY/fxX44hhouQGKqbGo1eZzZUnxnhJHH2tHSkWDnEB+d/Yt+4oGH1HMTRSGaUzL1OYu
-	neh1QNTS8x6PnqoBd2f65RfWcAXol8yElzanuc1UHwwk2fHdGfWLiAves1+6ip+ww3djJgxwXdJ
-	cBnWMZDvHluXKjN+jyGjbboSyNm2oT1fUpFkIqKjL+wOoxg0D8DObvfEXqq82LcL/y9WSTTJPBy
-	ijSDXl1n77OZVdMiD2PKgS2gJpfFD92DKvewQ5I7PiaDn/GG/RH4j2tbbY4kEq6OPJeNJc7YzqX
-	2sYaEtaOL5TQQIdQg26SI0yBXvBVP5XLkJiLCuYhA2MqsZ7LGBfamf030R+GSneDq92lt/65ZCv
-	rAxUzsQN4mtioocDcPtgS8jlnIxT0qdpDxrt014mBlS9ARBs7gG9IfJiRt+MPpYs7Iz76nUZe/X
-	0EAPrq0T3HG2b1anwOHjEFR5+FCuZ8nMg=
-X-Google-Smtp-Source: AGHT+IGgIvSdtiQVbxb9crIhzsFQqS8uYB8K9J1AwrgyVMxPpdtVjQLuJ/AgUZQb7Qyd1ju2bU2yFg==
-X-Received: by 2002:a05:600c:1392:b0:46e:37fe:f0e6 with SMTP id 5b1f17b1804b1-47d84b3b724mr27671415e9.30.1767788651833;
-        Wed, 07 Jan 2026 04:24:11 -0800 (PST)
-Received: from zovi.suse.cz (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f41eb3bsm97977945e9.7.2026.01.07.04.24.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 04:24:11 -0800 (PST)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Waiman Long <longman@redhat.com>,
-	Song Liu <song@kernel.org>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] module: Remove duplicate freeing of lockdep classes
-Date: Wed,  7 Jan 2026 13:22:57 +0100
-Message-ID: <20260107122329.1324707-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z/HZXvtI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767794016;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vrzn+Ssn7p217lIFP+Z2b99FMmHrz8aKK4bxB98oF7g=;
+	b=Z/HZXvtI2Cy0ajw22KE1ZAvWsxTgQVU+6mNUOafpOTo/IHzyij5hl1jb5SCX2ApGY+fX6a
+	XXz+4KSCLmJ4TViI2wW2LbaZn92ssjidSbJnFOJzRWMaKVSb2VFaybK7ztynt5zCNw/ARe
+	qtyz3cezNfbYbZEpWalj6FnsUnVp04k=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-275-8Lk2NEKkMymD6xf9Lhi8pA-1; Wed,
+ 07 Jan 2026 08:53:32 -0500
+X-MC-Unique: 8Lk2NEKkMymD6xf9Lhi8pA-1
+X-Mimecast-MFC-AGG-ID: 8Lk2NEKkMymD6xf9Lhi8pA_1767794010
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 89EEB18002C2;
+	Wed,  7 Jan 2026 13:53:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 43EF818004D8;
+	Wed,  7 Jan 2026 13:53:25 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <CALrw=nFj9OEsREJ8Kxox3U6N8y=e00ZawxEkCPOb5-6_k=7+nQ@mail.gmail.com>
+References: <CALrw=nFj9OEsREJ8Kxox3U6N8y=e00ZawxEkCPOb5-6_k=7+nQ@mail.gmail.com> <20260105152145.1801972-1-dhowells@redhat.com> <20260105152145.1801972-3-dhowells@redhat.com>
+To: Ignat Korchagin <ignat@cloudflare.com>
+Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
+    Jarkko Sakkinen <jarkko@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 2/8] pkcs7: Allow the signing algo to calculate the digest itself
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2366239.1767794004.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 07 Jan 2026 13:53:24 +0000
+Message-ID: <2366240.1767794004@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-In the error path of load_module(), under the free_module label, the
-code calls lockdep_free_key_range() to release lock classes associated
-with the MOD_DATA, MOD_RODATA and MOD_RO_AFTER_INIT module regions, and
-subsequently invokes module_deallocate().
+Ignat Korchagin <ignat@cloudflare.com> wrote:
 
-Since commit ac3b43283923 ("module: replace module_layout with
-module_memory"), the module_deallocate() function calls free_mod_mem(),
-which releases the lock classes as well and considers all module
-regions.
+> > +                       ret =3D -ENOMEM;
+> > +                       sig->digest =3D kmalloc(umax(sinfo->authattrs_=
+len, sig->digest_size),
+> > +                                             GFP_KERNEL);
+> =
 
-Attempting to free these classes twice is unnecessary. Remove the
-redundant code in load_module().
+> Can we refactor this so we allocate the right size from the start.
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- kernel/module/main.c | 6 ------
- 1 file changed, 6 deletions(-)
+The problem is that we don't know the right size until we've tried parsing=
+ it.
 
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 710ee30b3bea..bcd259505c8b 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -3544,12 +3544,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	mutex_unlock(&module_mutex);
-  free_module:
- 	mod_stat_bump_invalid(info, flags);
--	/* Free lock-classes; relies on the preceding sync_rcu() */
--	for_class_mod_mem_type(type, core_data) {
--		lockdep_free_key_range(mod->mem[type].base,
--				       mod->mem[type].size);
--	}
--
- 	module_memory_restore_rox(mod);
- 	module_deallocate(mod, info);
-  free_copy:
+> Alternatively, should we just unconditionally use this approach
+> "overallocating" some times?
 
-base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
--- 
-2.52.0
+In some ways, what I'd rather do is push the hash calculation down into th=
+e
+crypto/ layer for all public key algos.
+
+Also, we probably don't actually need to copy the authattrs, just retain a
+pointer into the source buffer and the length since we don't intend to kee=
+p
+the digest around beyond the verification procedure.  So I might be able t=
+o
+get away with just a flag saying I don't need to free it.
+
+However, there's an intermediate hash if there are authattrs, so I will ne=
+ed
+to store that somewhere - though that could be allocated on demand.
+
+David
 
