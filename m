@@ -1,131 +1,117 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D53267B02;
-	Thu,  8 Jan 2026 04:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413DE345CBF;
+	Thu,  8 Jan 2026 08:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767847677; cv=none; b=PsFe/IIC9g1gBY02dyF4eVXu/JoUHDzdlFDSBfQEAoXw8FNauTWVe6JRdPqxVqNtoaMNE44iv5uWEXAxJ+ngtjseiocKGotAEPMOhKpy2/nn/BzOfz4cpSDjcgmTUt0z+nfPeTq/6S4HCqwyPYzB4tzLkLK4CNQpXDhOLhB+ewM=
+	t=1767862198; cv=none; b=HFhYSh9FU/v0WYB5a+2sVmFE7pKBBc+Hz+yK7lplYKhsjwgwK9P+5YVHIi92Cq2e7BGjSffdh/4+7mPXGTAcTcR3ihHy1UPPg34RHZS9c5uMWVlo0FbssYF1Sqp8NKcj/vyb63JX7xeLU3SkY6P33euVQUS/OF945E+4DRKxvos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767847677; c=relaxed/simple;
-	bh=2jZm+azm/zsvNCujFw2oLr2iuAT6NNn4ixcf+icxfys=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q4FFHSxjii4gHY7Be7SZTMARyDzaKSukJL8TgiQmCyjRmxHeKJnjXg2Sl1HmPoVUGYId2uCRBbWHLcSfGtHK6BZoxf5lEO6D5Z/FUClqnlRN9ZhgN1iKLR/CAc3xOsY6N19UBd5EaAjIDwOcCydTLHYF563maE2hg+g0OYejP1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com; spf=none smtp.mailfrom=opensource.nslick.com; dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b=fZSAD1DG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=V+3PgdGA; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=opensource.nslick.com
+	s=arc-20240116; t=1767862198; c=relaxed/simple;
+	bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tKWiT7aaC7ajXQTm2UlDo1+vuoZkeg8QD0qCTAU+q4J+8kBBCDSnR1cBJae/TQWMlRpjR8HQNHTT+Y3F3kv+xLleGDjNEI/2eDIOYdpIPVmNPll6BCryBv6SwK0gC53cCWClOkf1scdf5rUDlhGOwBI9NqdzsflZGKHkodZ8GQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kvo4+A9E; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b="fZSAD1DG";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="V+3PgdGA"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 3045B1400044;
-	Wed,  7 Jan 2026 23:47:55 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Wed, 07 Jan 2026 23:47:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nslick.com; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1767847675; x=
-	1767934075; bh=pOGD/XYAtiEgZSmm3oioBf0YdBeQVCdG6rkQiT5fg80=; b=f
-	ZSAD1DGLpR8G3WGEedlOjpAbOwIdQfrpj0CrBMFeSZJO/I5BhY+UU9/HDciyQAor
-	PTjRZsqMbtaWDTq+n3ghD3BJbTeh2Z9PfvHZPQveasBB5OY896uZdrzHabEtQqVE
-	ol0RXb87QqEHJxgUOdaLAxVEVDwwwQ6GPBnFCneKuSGTxmKE7fJ5MgQUwls9ahwg
-	qbTguQ5Xe0wOk7atiVqaRseG1g/h9O5b9WUNYSrHY0VPuVIDTX1cGD3SvVUUi20X
-	oF23xo7/Vnl9RJIv0st8OZ8o51iemvmiwTyIHDTUeBHuYrXjlkE9U4qr3phPU6jb
-	MWHgL9NvgfCgyR8KNlxHQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1767847675; x=1767934075; bh=p
-	OGD/XYAtiEgZSmm3oioBf0YdBeQVCdG6rkQiT5fg80=; b=V+3PgdGAascE1H1vf
-	nYTFUI3Qhv9nQqnMNYMMsa1N3eLvHJr3Ddm/mUswJHy9kV6ubiAfi6otUwqLrTN8
-	LB9jHtJs+Bjp+nOhgvcIN33e/Fv5NhIctEPJl5Pe4qotgaVZQXKb/XKDTjmKFpgs
-	bHY4tfZsi1z5l1IQGr5aG3FtYvKvltI5tRk5X8HGCM06BfLFUnjRcTq3mat13J/Q
-	LbJ8/+LYhNTT7LaVGxPk0SFbfFfVYr8tTfM+/63ls9Xe1SiTgesXHVqV/X+tHDSs
-	8KXaDs3H6R5ik2EzJypR423y01H9QgW9pYMbt+nxH9SNEG91WIAbpmugiQF7ycEc
-	iNaQQ==
-X-ME-Sender: <xms:-zZfaTJqqfJNkq1F3NvphV01JzlNe-Z50-83rvoTXj2TaTOgVjLA9w>
-    <xme:-zZfaSk17MhuJefc4HHHZfmLF0IoRufGT4ei4g_-8rlu7Xv7JcIFTG3FQFJX670uA
-    cyMQPtxQZEVfLk3UssKsKGS6n3ugQdxibgvfidAujjIDvRBT-9YNQ>
-X-ME-Received: <xmr:-zZfaaaeEqSja-oR_a5P1QsAIkctLa87SOi0Vpge2VcbBlfKmcM5XcJbxegWn-nSS7RBHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdehtdefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheppfhitghhohhl
-    rghsucfuihgvlhhitghkihcuoehlihhnuhigsehophgvnhhsohhurhgtvgdrnhhslhhitg
-    hkrdgtohhmqeenucggtffrrghtthgvrhhnpeetudevkeeuvefghfetleehkeegudeigfel
-    gffhtedvkeevgfekueelfeevfeelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehlihhnuhigsehophgvnhhsohhurhgtvgdrnhhslhhitghk
-    rdgtohhmpdhnsggprhgtphhtthhopedvgedpmhhouggvpehsmhhtphhouhhtpdhrtghpth
-    htohepmhgtghhrohhfsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtrhdrphgr
-    vhhluhesshhushgvrdgtohhmpdhrtghpthhtohepuggrrdhgohhmvgiisehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehsrghmihhtohhlvhgrnhgvnhesghhoohhglhgvrdgtohhm
-    pdhrtghpthhtoheprghtohhmlhhinhesrghtohhmlhhinhdrtghomhdprhgtphhtthhope
-    hmrggvnhhnihgthhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehi
-    nhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpd
-    hrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrgh
-X-ME-Proxy: <xmx:-zZfaZjfICS5NMPlpwOCKVbMDQG_ckWCmloWheJQJCAwAe4DEuuupQ>
-    <xmx:-zZfaQwQTAPAkxEC6oLRgYk8PbbOpYfeIGSNkfriKTDYlkA1fBLEJA>
-    <xmx:-zZfaV84OoRSnLCqP0rIakhKVz1EVnKTNDKN5f4bLTTz8olXKdjNMA>
-    <xmx:-zZfaVwLAvKYf9BK5p7w8G8HYGvOMxDvoP3iJpZk9AqdPI_5f0FZ_Q>
-    <xmx:-zZfaeYECRuDSlBOuafuRw92U2k7RJTCmAvn5KYQEddRrpJzTV2ddhrr>
-Feedback-ID: i78f146c6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jan 2026 23:47:53 -0500 (EST)
-From: Nicholas Sielicki <linux@opensource.nslick.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kvo4+A9E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767862192; x=1799398192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
+  b=kvo4+A9EGzPc6PoOfEuCcIVni2UF8A9alZSsKz9AUIqGJpArG+orCPs4
+   XjZ+LJwTo/PuwzelQJZxc3ConlhLsdad+IVEAf7cVoGU1D0qES5XlG5Pp
+   y5CZtswWTvvSI0su9pOdbnITyRRh8N5fz9yb0WCEM5FGs7GbMVOyC1D+I
+   FgBlJub73kdmAnKQvn1mlWyAv0AEOu6LbTGz8qtXwMItWIkR7+mUpw0YX
+   Xh7+9YWROd4Zofl0cmDG/LwgRoynaFVd4UPefHE+gvXChucwxvnrj876B
+   9ABvbsKYh8DTdTK3SvmtPNUN60izWtieTdCtSE54JUIOqZaa/tEWuuRbT
+   g==;
+X-CSE-ConnectionGUID: lTXgdfn8ThCFZPV0vHzb1A==
+X-CSE-MsgGUID: 46B3koi9QhatX/fhy9/pSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94703795"
+X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
+   d="scan'208";a="94703795"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:49:44 -0800
+X-CSE-ConnectionGUID: 6esznvGJRZmfIhuOnwI7nw==
+X-CSE-MsgGUID: ehJ8enqqToaAnlafOQd48Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
+   d="scan'208";a="203208075"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa008.jf.intel.com with ESMTP; 08 Jan 2026 00:49:40 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 072FB98; Thu, 08 Jan 2026 09:49:39 +0100 (CET)
+Date: Thu, 8 Jan 2026 09:49:39 +0100
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: "Luck, Tony" <tony.luck@intel.com>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Chris Li <sparse@chrisli.org>, Eric Biggers <ebiggers@kernel.org>,
+	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	Rusty Russell <rusty@rustcorp.com.au>,
 	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Matthias Maennich <maennich@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Nicholas Sielicki <linux@opensource.nslick.com>
-Subject: [PATCH 2/2] docs: symbol-namespaces: mention sysfs attribute
-Date: Wed,  7 Jan 2026 22:47:10 -0600
-Message-ID: <20260108044710.33036-2-linux@opensource.nslick.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260108044710.33036-1-linux@opensource.nslick.com>
-References: <20260108044710.33036-1-linux@opensource.nslick.com>
+	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+	Malcolm Priestley <tvboxspy@gmail.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 3/3] module: Add compile-time check for embedded NUL
+ characters
+Message-ID: <aV9vo7_turBr84bs@black.igk.intel.com>
+References: <SJ1PR11MB6083C6D97484ED4E4710268EFCA3A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <aThSGiKwJRYOB6kx@agluck-desk3>
+ <aThqcq0iGge1pQCr@agluck-desk3>
+ <20251210010020.GA2522829@google.com>
+ <aTn0WdVv-S_EpQmS@agluck-desk3>
+ <aTqAxfiVCR2ch4I5@stanley.mountain>
+ <CABCJKufWw4VQA_k6Deuf5Bn6401cbYv_St8VV_0-LAau6F0nTw@mail.gmail.com>
+ <083ebd92-4b3f-47f8-bf0f-395a604b5f05@kernel.org>
+ <aUVI9smf2t7PvDF6@stanley.mountain>
+ <aUV7kyjxlijuy5sC@agluck-desk3>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aUV7kyjxlijuy5sC@agluck-desk3>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Reference the new /sys/module/*/import_ns sysfs attribute in docs as an
-alternative to modinfo for inspecting imported namespaces of loaded
-modules.
+On Fri, Dec 19, 2025 at 08:21:39AM -0800, Luck, Tony wrote:
+> On Fri, Dec 19, 2025 at 03:45:42PM +0300, Dan Carpenter wrote:
+> > On Fri, Dec 12, 2025 at 02:30:48AM +0900, Daniel Gomez wrote:
+> > > Maybe the flag fix just needs to be applied to the evaluation? Other op
+> > > structs do the same. But Dan's patch did not implement evaluate. E.g.:
+> > > 
+> > > static struct symbol_op constant_p_op = {
+> > > 	.evaluate = evaluate_to_int_const_expr,
+> > > 	.expand = expand_constant_p
+> > > };
+> > 
+> > I was waiting for you to send this as a patch.  I can do it if you
+> > need me to.
+> 
+> Al Viro thought this was wrong. His alternative patch is here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/viro/sparse.git/commit/?id=2634e39bf02697a18fece057208150362c985992
 
-Signed-off-by: Nicholas Sielicki <linux@opensource.nslick.com>
----
- Documentation/core-api/symbol-namespaces.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+Sparse still is PITA as of today, can we get some fix (Al's or alternative)
+ASAP to be applied and sparse tagged as 0.6.5 so the distros will pack the
+new version, please?
 
-diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
-index 034898e81ba2..2304d5bffcce 100644
---- a/Documentation/core-api/symbol-namespaces.rst
-+++ b/Documentation/core-api/symbol-namespaces.rst
-@@ -114,6 +114,11 @@ inspected with modinfo::
- 	import_ns:      USB_STORAGE
- 	[...]
- 
-+For modules that are currently loaded, imported namespaces are also available
-+via sysfs::
-+
-+	$ cat /sys/module/ums_karma/import_ns
-+	USB_STORAGE
- 
- It is advisable to add the MODULE_IMPORT_NS() statement close to other module
- metadata definitions like MODULE_AUTHOR() or MODULE_LICENSE().
 -- 
-2.52.0
+With Best Regards,
+Andy Shevchenko
+
 
