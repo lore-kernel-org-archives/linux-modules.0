@@ -1,117 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 413DE345CBF;
-	Thu,  8 Jan 2026 08:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AC73A962F
+	for <linux-modules@vger.kernel.org>; Thu,  8 Jan 2026 11:29:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767862198; cv=none; b=HFhYSh9FU/v0WYB5a+2sVmFE7pKBBc+Hz+yK7lplYKhsjwgwK9P+5YVHIi92Cq2e7BGjSffdh/4+7mPXGTAcTcR3ihHy1UPPg34RHZS9c5uMWVlo0FbssYF1Sqp8NKcj/vyb63JX7xeLU3SkY6P33euVQUS/OF945E+4DRKxvos=
+	t=1767871784; cv=none; b=JR8EZwPSQu9quIkmXTkuOwlQcIkDxQz6x6IytFTkJujQWcwFr7zkI86eIWZoL6IE7wV0eqMhtzbWg2qWNN+34yXuNHSNDRmBMxeSyeFfK9LhYL/0j5fhDK7juMxNz0Dy8KSBiTfL3NnoU2x9/9qS1oXif/qbMB7hEEvtZjXEkA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767862198; c=relaxed/simple;
-	bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tKWiT7aaC7ajXQTm2UlDo1+vuoZkeg8QD0qCTAU+q4J+8kBBCDSnR1cBJae/TQWMlRpjR8HQNHTT+Y3F3kv+xLleGDjNEI/2eDIOYdpIPVmNPll6BCryBv6SwK0gC53cCWClOkf1scdf5rUDlhGOwBI9NqdzsflZGKHkodZ8GQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kvo4+A9E; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1767871784; c=relaxed/simple;
+	bh=DgkWQnj485Cdlj0s6OaAmvJGF615eW9UFZIJZgLGdOs=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=qSTSCjBgYFSIiKFqGm6mINuecoi3y7Xx+elLOSodh+vHZbZGsIBxMjzOWubrIiER4I3ou6viW9+r7szdWY+oW1ggoGuKyNjsH3qzIn5hjgxk/gN+CrvbWddaC1OBsesu/LPjNpWN3Dn6syu5Cht8lFZLbr8aBFXhinSUnYN3750=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BBEx5aOs; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kvo4+A9E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767862192; x=1799398192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CcP4M2fIfl+Zsp6RV9ovc01tuBG8/9NSa6NmSQfTg1k=;
-  b=kvo4+A9EGzPc6PoOfEuCcIVni2UF8A9alZSsKz9AUIqGJpArG+orCPs4
-   XjZ+LJwTo/PuwzelQJZxc3ConlhLsdad+IVEAf7cVoGU1D0qES5XlG5Pp
-   y5CZtswWTvvSI0su9pOdbnITyRRh8N5fz9yb0WCEM5FGs7GbMVOyC1D+I
-   FgBlJub73kdmAnKQvn1mlWyAv0AEOu6LbTGz8qtXwMItWIkR7+mUpw0YX
-   Xh7+9YWROd4Zofl0cmDG/LwgRoynaFVd4UPefHE+gvXChucwxvnrj876B
-   9ABvbsKYh8DTdTK3SvmtPNUN60izWtieTdCtSE54JUIOqZaa/tEWuuRbT
-   g==;
-X-CSE-ConnectionGUID: lTXgdfn8ThCFZPV0vHzb1A==
-X-CSE-MsgGUID: 46B3koi9QhatX/fhy9/pSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="94703795"
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="94703795"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 00:49:44 -0800
-X-CSE-ConnectionGUID: 6esznvGJRZmfIhuOnwI7nw==
-X-CSE-MsgGUID: ehJ8enqqToaAnlafOQd48Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,210,1763452800"; 
-   d="scan'208";a="203208075"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa008.jf.intel.com with ESMTP; 08 Jan 2026 00:49:40 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 072FB98; Thu, 08 Jan 2026 09:49:39 +0100 (CET)
-Date: Thu, 8 Jan 2026 09:49:39 +0100
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Chris Li <sparse@chrisli.org>, Eric Biggers <ebiggers@kernel.org>,
-	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
-	Rusty Russell <rusty@rustcorp.com.au>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-	Malcolm Priestley <tvboxspy@gmail.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 3/3] module: Add compile-time check for embedded NUL
- characters
-Message-ID: <aV9vo7_turBr84bs@black.igk.intel.com>
-References: <SJ1PR11MB6083C6D97484ED4E4710268EFCA3A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <aThSGiKwJRYOB6kx@agluck-desk3>
- <aThqcq0iGge1pQCr@agluck-desk3>
- <20251210010020.GA2522829@google.com>
- <aTn0WdVv-S_EpQmS@agluck-desk3>
- <aTqAxfiVCR2ch4I5@stanley.mountain>
- <CABCJKufWw4VQA_k6Deuf5Bn6401cbYv_St8VV_0-LAau6F0nTw@mail.gmail.com>
- <083ebd92-4b3f-47f8-bf0f-395a604b5f05@kernel.org>
- <aUVI9smf2t7PvDF6@stanley.mountain>
- <aUV7kyjxlijuy5sC@agluck-desk3>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BBEx5aOs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767871780;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BY4QFtk8w05Z2iDasTM1yxyFxo3qpga8FzQxbaR04dE=;
+	b=BBEx5aOsEzMySe7JK7O4vnSBEVuxKw+/ouix9pmaNzmIxb4hXDPSGgeR/klfziV6hd7HgQ
+	Ins+vKNfol0XjVu9uSb9AUb7H0j8vzITh7ePD+/2dLLB2Zfg24ss146kQFOjP0ZvsT2cAq
+	ZM/Q2fvhQyEOnGhTDTIG0y+0t7bL/gI=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-322-0DGUIbRDOL2xf5vLaO_vQg-1; Thu,
+ 08 Jan 2026 06:29:39 -0500
+X-MC-Unique: 0DGUIbRDOL2xf5vLaO_vQg-1
+X-Mimecast-MFC-AGG-ID: 0DGUIbRDOL2xf5vLaO_vQg_1767871777
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8FF5318005B6;
+	Thu,  8 Jan 2026 11:29:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7598430002D1;
+	Thu,  8 Jan 2026 11:29:31 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <CALrw=nHhs61yqkLkK9F4UGU_ujnniMzrkbhjRDc+Aa69XTFTvg@mail.gmail.com>
+References: <CALrw=nHhs61yqkLkK9F4UGU_ujnniMzrkbhjRDc+Aa69XTFTvg@mail.gmail.com> <20260105152145.1801972-1-dhowells@redhat.com> <20260105152145.1801972-7-dhowells@redhat.com>
+To: Ignat Korchagin <ignat@cloudflare.com>
+Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
+    Jarkko Sakkinen <jarkko@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org,
+    Tadeusz Struk <tadeusz.struk@intel.com>,
+    "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v11 6/8] crypto: Add RSASSA-PSS support
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aUV7kyjxlijuy5sC@agluck-desk3>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2708429.1767871770.1@warthog.procyon.org.uk>
+Date: Thu, 08 Jan 2026 11:29:30 +0000
+Message-ID: <2708430.1767871770@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Fri, Dec 19, 2025 at 08:21:39AM -0800, Luck, Tony wrote:
-> On Fri, Dec 19, 2025 at 03:45:42PM +0300, Dan Carpenter wrote:
-> > On Fri, Dec 12, 2025 at 02:30:48AM +0900, Daniel Gomez wrote:
-> > > Maybe the flag fix just needs to be applied to the evaluation? Other op
-> > > structs do the same. But Dan's patch did not implement evaluate. E.g.:
-> > > 
-> > > static struct symbol_op constant_p_op = {
-> > > 	.evaluate = evaluate_to_int_const_expr,
-> > > 	.expand = expand_constant_p
-> > > };
-> > 
-> > I was waiting for you to send this as a patch.  I can do it if you
-> > need me to.
+Ignat Korchagin <ignat@cloudflare.com> wrote:
+
+> A lot of pointers and arithmetic here. Wouldn't it be easier to do
+> something like in [1]?
+
+Fair point.
+
+> > +DEFINE_FREE(crypto_free_shash, struct crypto_shash*,
+> > +           if (!IS_ERR_OR_NULL(_T)) { crypto_free_shash(_T); });
 > 
-> Al Viro thought this was wrong. His alternative patch is here:
+> Is this useful enough to go into some commonly used header for shash?
+
+Maybe - I guess there's no actual cost to doing so as it generates an inline
+function.
+
+> > +       struct crypto_shash *hash_tfm __free(crypto_free_shash) = NULL;
+> > +       struct shash_desc *Hash __free(kfree) = NULL;
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/viro/sparse.git/commit/?id=2634e39bf02697a18fece057208150362c985992
+> So even though x509/pkcs7 code now has a counterexample (partially due
+> to my fault) seems the consensus [2] is to declare and initialise the
+> variable with the __free attribute at the same time meaning it is OK
+> to declare the variables later and not follow the "declaration at the
+> top" rule.
 
-Sparse still is PITA as of today, can we get some fix (Al's or alternative)
-ASAP to be applied and sparse tagged as 0.6.5 so the distros will pack the
-new version, please?
+Ok, I'll move the decls.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+David
 
