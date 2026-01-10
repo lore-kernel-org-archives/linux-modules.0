@@ -1,68 +1,68 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A42347BC4
-	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02276347FE2
+	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768057757; cv=none; b=FVV7yrrXeSdZoisrfSNK15+Ug8ZxVAxs9vJAgLtvFH8LH6lhLtksJo67PdJMfcjMOkUZys3+mfRLj9Bz3gHFkA6VtQV3z4VoOsEx9NV0Yxgau22n1TZkmlx588bsIBF1Gh2lojVEAJNXRa6LvbA5hpxqbknJ1Yss1VQp2sP3z4o=
+	t=1768057759; cv=none; b=XozSxgE4618QQ79OTCKBdRMi/XiOg0AOafFXWMAML49rz8r65qM0HtsiE77knSB0XrGsoJ/n0wyHhBlAlgyukSsczGptldJyb6K5fES9qsXMtSlfpINmi3iY3recnK5qLUVPMB8JQ063zTdh07Un1V6ppZ0cN+rPidGFEHQZ9L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768057757; c=relaxed/simple;
-	bh=891dg5NeMMgINCtxfUx5z2GhTLzUtO+bREujFmK9Vxo=;
+	s=arc-20240116; t=1768057759; c=relaxed/simple;
+	bh=PsulVulBYOKVhtxVFsqQzoL1KhSmhEASbJ2jTpxpE5M=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WtboTbnVQXVaeYmuHB9QrnOWDzHcLdwVGblDzTnSubGOlYHZrVcYP2dJNu4yY5wyo+Fs0T6MWx3dApJTziwPae0p3PtgVdBv/7NfCDE/nvr4QCgJULnypMytDRUwogtn+2Ti2bDvKNopN+CjT/+vrcTG83+NZdWYPDH1mILNWO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ns6wyTsC; arc=none smtp.client-ip=209.85.167.53
+	 In-Reply-To:To:Cc; b=jC66458bzfuqnG9cp0SmgD3ZKDDjTiPAIUGzSIEGsrb64l9nVVxkdJ9/+pM69gGMBvEf2RT724tl4mzki5vgp2qYnyJZavfX5/ETtd6DmLjbeERAc/wG2PoE3Lx1vkKCOTsx/dXXuYRVzpEFKNpAcMT25mRgvstAyC9wPV7tnwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNB/2O5V; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ns6wyTsC"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59b79f700a1so2331003e87.0
-        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNB/2O5V"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59b834e3d64so1533010e87.2
+        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768057754; x=1768662554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768057756; x=1768662556; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SI0sZ7uVNTRnuO/8Ld3c5O3KKGDZMWG55LzxmtwZszI=;
-        b=Ns6wyTsCKAFNVbWzJ1CxIRn0XdsOkvf17b5zSed5MgBzEiMnkcrXMA6BDndyqA6AEK
-         rIdJdkVRWlrr+uTu1cSGgeKkHGLCIj7qEjch6uhDNx6c7TE/M2JwqEBUWVMEk6HNelyf
-         +De+i8BprT9w7faeWuqv2MVPlgr10CskI3Ysb0jJSiBPA129fdDgpKRhKWysOc1NJ9YR
-         s6nFrN96bXeWIMmZyUy7b+Zlj3wcKZ/ERZMHNkhnPRSWCeAV5Jyybq8xyRl13tL7g1aV
-         dXzr/+W48k3r8QETM+e2v6OV5WgfXG0BC9v8GUfVIbgCDtGQ5xa9+/B6I0/6ofX9duB4
-         HloQ==
+        bh=6p/TE1++7w8lcKdQTf98fxRYGObQ9N/7Fpqo/Gx8pUA=;
+        b=fNB/2O5VPaQcMjJhRn9ooDDxdhrbWQ2tJueaNuRkADCw0wUBB32pLXyEQqVjC2OmBy
+         gzD7nMLV3fR+6bNWtPDHocO07nop4UPL1OcOuAaI5F/Pt9ELjrqIOiLkk13KG9OpkQgM
+         ffkCuCnpwLItPzPMwJVkjhEKhDcKRmrd5CZ2E0cIxcdJzhV9pAAsN7p7Ub/VIOmCYAVz
+         Z9975GGB87swDXv4A3Jf/7Iw7ouO8zz/8Hk8NtTQuyqtIpW9Fct4VQOm1eaDklBLD4Ti
+         mnlLWzJF3mj8yBFfximGdQjt/s/MD2wWnHiHO4GIUyE4krgcIkp/MLSUqRR5lL9AfNkk
+         GQ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768057754; x=1768662554;
+        d=1e100.net; s=20230601; t=1768057756; x=1768662556;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=SI0sZ7uVNTRnuO/8Ld3c5O3KKGDZMWG55LzxmtwZszI=;
-        b=HvvAjOYxOq+FOnm8CNYdGTo5S/3RlM//mBG3Q0awqT/9RAxJD2ztDFavzsOFIoWT4p
-         6w1suiG8NPpn9yt+cNIGz2WyfaOuxqJfXUmVMm9rusAtRvhMWP4z5lJ0tkOoMSFYwCFB
-         Ki9lAAFZVUUWEErglD7d8MrXcrvXK/pf3swaFnxPnFxUcLkDZmf/yESRklaV6DASL9cH
-         wSQyGbzH9lqT7JVtnBuzBcOcvO6OjViV/cC59FU/mOjrlxPZMqJ+wMCyJcYU3toMXY49
-         KhwrfXB+73EL+o9fzLtJs6gYO48msz/QwkL141L1pit+ibhuccAz5Z+pd7BupQpT2ufj
-         0DIA==
-X-Forwarded-Encrypted: i=1; AJvYcCW97dx9MwcFOAUVwj6i+rYzWkRXkapy/Hyoi2fJlBL1DW96+4BpcQZRPrDujV0havd5xwOTNLU59OJoMwHx@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcOZ4XTtG4JpM0MRDSmdFE4fk1iWc8JJV7DLsl42IXTmnV/rgM
-	kO89X/EoJPicRb7iJmqsMISEkIoxa/GKnIovAv1S7ZCRTqev40A7hxjg
-X-Gm-Gg: AY/fxX59iSHxuKEda9qQ9E+xMpcuZeQf2iMDMlzZzotvD1AMn1dCqbYzvat4QU1t852
-	ACUYv3dPglgF9mSwcxBGHBhBd43o99beLoAUKE1ckLtu/2gO9AcFIYal+wJMM6Rdy5neGHcoBvy
-	AiuvgPLzDSSk5zmyWh+iCkzVx9AzmhiCDPcazKK0sO0epyT/u15TJ1fIp8jYCaVUaN7s6gZXy07
-	9FXJPngy/VxLOoIEGdo9NjQWxDiEiBp2pXG2VwDyx/6b6Ft383gOSfw+E6RF6VJBrNK1ox7/0r0
-	mDaRyb+u966n52VcIYSk5fZ0ONoXNicQ+BHFsF/30+Deb4Wp7LWYe0p49lDHV9aZur7W2YXJ30p
-	SYcCMzszy/fCZ6V7AxGMgCGLRNSuC59LX9S9yY60dh1Id4zA7vjAFmzHYrPsrNaJseMRhuj970X
-	6J6mtJ9TZ6hpe7+Vw8i5x7j2/N2B22z8G76vryeSVkDYtJQRpvRSnRzNXGF44rslx43+/kuvqc
-X-Google-Smtp-Source: AGHT+IF15/eRGuTu7+wp+QYULK4KR7oRPF4/q3DNB7vZeYJShFYAC050bMH9rb7Ur2PCPfBPy+O9hw==
-X-Received: by 2002:a05:6512:33cb:b0:59b:73b9:1f49 with SMTP id 2adb3069b0e04-59b73b921e7mr3815567e87.26.1768057753607;
-        Sat, 10 Jan 2026 07:09:13 -0800 (PST)
+        bh=6p/TE1++7w8lcKdQTf98fxRYGObQ9N/7Fpqo/Gx8pUA=;
+        b=cBKITXAhWKT3VKIyA1G7jZ+WPT9TWnyfL12zbN93i7SiaR1nx06HwvSEaQYy3SRdF/
+         puTwP1X0WWqF8WpC465ualXNcZ28Aqiw9vWiBPCvQW0Kp6fmRZt6+t6ZloWeioqnR4KB
+         1Ff74X72w604KBymOhyMMy/aaNIwNevWzDIljFx3w1fC0m0a780wMq61GTDx0EOYpumd
+         gh8CeI7jlnFYwBJCwgTfhRT2l6asgpIAssjael2Wik7KRh1VEVilTCZopJTGT7JMvcl9
+         U27KeeaxQnXmEb9GQYwc6HTZytV10AxybWr5qeI7DYrhifWO2y+2jDqzeX6TYGTrQfRf
+         XyDg==
+X-Forwarded-Encrypted: i=1; AJvYcCW1WqFQDkIyws5Dvt5NDUOt1HCNx/1iKhYzU0YgIn6pUhR5cI0YpC0D4Zhz0PVSKLeMosPXAAbycZt1MHpt@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjdoQbqcqEqFzCy/ayODHAPlyzD3FqfQwWpQUshkXnV7SJr3VM
+	YY1/Sm1YsTEu9WAsNYzv5lquQDmwtD7nE4zh9bQY17z2V2JkoJugihKZ
+X-Gm-Gg: AY/fxX597U4zStn1a+9aMrdM594hif8BW2ZnSdUmbIeoj2WDnsjlibfH3ZnYieMb8eP
+	5pG7wXWVN41d8Ac4RxKOfDQutIauR5/ZxfhAIDQuMISSw7rdUlfDeKheJI5a1M4twbu1EmmWtHI
+	qCyyjLlUkHgWi4xqgk7c1CUm2wPz8PIv7+/SGZR1Ro3+DH+khUQ/5NAYv1a1fMRTUtQOPCMTWdt
+	NP2sTgiSFc2W1DTniuasmkolJyqL+Psdqad+nONam1OFdC5tT4pfElT25pR2Zf8iGe7XvRk4el0
+	C8DEu3J7zJi5nzCAUOSOn+AECfRRRhdT4BYj8M27sFEPkWQVAEh+D5ayoDZYOXV3fE7tTaHdu0Q
+	itOitSdJJBha2G9oGtggT46MXV1QMFnFMNmv09qaYtyNGo1Wk+2jXw1CRJGxxcHtV5bUMMbzMvM
+	zcsE52bAYQrC4feZXgHVU249nSSBmbLRvKnJ31jCC/nElQihDV2paLfOtbNNzwe3n0fjNFz7Zf
+X-Google-Smtp-Source: AGHT+IGlt9Yv8sDeB4e3Q5NwnV4p5lgaXKn9ea9qedHkfBs0ps8vJj79GZDi9RawkBZhq22ruSs+oA==
+X-Received: by 2002:ac2:4e0c:0:b0:59b:7b86:44d2 with SMTP id 2adb3069b0e04-59b7b864515mr2191519e87.18.1768057755950;
+        Sat, 10 Jan 2026 07:09:15 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (37-33-148-7.bb.dnainternet.fi. [37.33.148.7])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.11
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jan 2026 07:09:13 -0800 (PST)
+        Sat, 10 Jan 2026 07:09:15 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Sat, 10 Jan 2026 17:08:01 +0200
-Subject: [PATCH RFC v3 03/15] rust: miscdevice: fix use after free because
- missing .owner
+Date: Sat, 10 Jan 2026 17:08:02 +0200
+Subject: [PATCH RFC v3 04/15] rust: block: fix missing owner field in
+ block_device_operations
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260110-this_module_fix-v3-3-97a3d9c14e8b@gmail.com>
+Message-Id: <20260110-this_module_fix-v3-4-97a3d9c14e8b@gmail.com>
 References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -85,79 +85,162 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, 
  Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Kari Argillander <kari.argillander@gmail.com>, 
- Youseok Yang <ileixe@gmail.com>
+ Kari Argillander <kari.argillander@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=2370;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=5351;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=891dg5NeMMgINCtxfUx5z2GhTLzUtO+bREujFmK9Vxo=;
- b=YGFU2Mudpv6wmls6LVSS+C3zLULqJaxqGgs9hMIwnNZn79Pd9ugTIDLVe52c0ThqhL7w/+wS0
- cBq/kCyOWf4B6laeNZScBjMawlstvNU/8l4e7/MRGSL/nd1oFpEZQDf
+ bh=PsulVulBYOKVhtxVFsqQzoL1KhSmhEASbJ2jTpxpE5M=;
+ b=185gZsCt1xGiCyXyEzSPP0pAcZ1ipKyoiLBT3qAgSvAHQ5mewac9KEA/SJgWHYzP0ShVf4l15
+ sTw9hTUbbf/Bpj28SG+0E0IafHVZBRm1xGY6ElfQmn7afXlsCIbrPqv
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-Currently if miscdevice driver is compiled as module it can cause use
-after free when unloading. To reproduce problem with Rust sample driver
-we can do:
+Kernel has now enabled "const_refs_to_static" feature. We can fix TODO
+item now. Fix this by defining owner in vtable so we can read it from
+there.  As this table needs to be const we need to define it in
+operations so we do not need pass THIS_MODULE alongside with
+GenDiskBuilder::build().
 
-    tail -f /dev/rust-misc-device
-    # And same time as device is open
-    sudo rmmod rust_misc_device_module
+This will probably fix some use after free.
 
-This will crash system. Fix is to have .owner field filled with module
-information. We pass this owner information through vtable.
-
-Reported-by: Youseok Yang <ileixe@gmail.com>
-Closes: https://github.com/Rust-for-Linux/linux/issues/1182
-Fixes: f893691e7426 ("rust: miscdevice: add base miscdevice abstraction")
+Fixes: 3253aba3408a ("rust: block: introduce `kernel::block::mq` module")
 Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- rust/kernel/miscdevice.rs        | 5 +++++
- samples/rust/rust_misc_device.rs | 1 +
- 2 files changed, 6 insertions(+)
+ drivers/block/rnull/rnull.rs       |  1 +
+ rust/kernel/block/mq.rs            |  1 +
+ rust/kernel/block/mq/gen_disk.rs   | 30 ++++--------------------------
+ rust/kernel/block/mq/operations.rs | 30 ++++++++++++++++++++++++++++++
+ 4 files changed, 36 insertions(+), 26 deletions(-)
 
-diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
-index ba64c8a858f0..d4b0c35c4b60 100644
---- a/rust/kernel/miscdevice.rs
-+++ b/rust/kernel/miscdevice.rs
-@@ -18,6 +18,7 @@
-     mm::virt::VmaNew,
-     prelude::*,
-     seq_file::SeqFile,
-+    this_module::ThisModule,
-     types::{ForeignOwnable, Opaque},
- };
- use core::{marker::PhantomData, pin::Pin};
-@@ -112,6 +113,9 @@ fn drop(self: Pin<&mut Self>) {
- /// Trait implemented by the private data of an open misc device.
+diff --git a/drivers/block/rnull/rnull.rs b/drivers/block/rnull/rnull.rs
+index a9d5e575a2c4..862369ab9b5c 100644
+--- a/drivers/block/rnull/rnull.rs
++++ b/drivers/block/rnull/rnull.rs
+@@ -74,6 +74,7 @@ struct QueueData {
+ 
  #[vtable]
- pub trait MiscDevice: Sized {
+ impl Operations for NullBlkDevice {
++    type ThisModule = THIS_MODULE;
+     type QueueData = KBox<QueueData>;
+ 
+     #[inline(always)]
+diff --git a/rust/kernel/block/mq.rs b/rust/kernel/block/mq.rs
+index 1fd0d54dd549..0c8e9e316952 100644
+--- a/rust/kernel/block/mq.rs
++++ b/rust/kernel/block/mq.rs
+@@ -68,6 +68,7 @@
+ //!
+ //! #[vtable]
+ //! impl Operations for MyBlkDevice {
++//!     type ThisModule = THIS_MODULE;
+ //!     type QueueData = ();
+ //!
+ //!     fn queue_rq(_queue_data: (), rq: ARef<Request<Self>>, _is_last: bool) -> Result {
+diff --git a/rust/kernel/block/mq/gen_disk.rs b/rust/kernel/block/mq/gen_disk.rs
+index 1ce815c8cdab..4d5d378577ec 100644
+--- a/rust/kernel/block/mq/gen_disk.rs
++++ b/rust/kernel/block/mq/gen_disk.rs
+@@ -7,7 +7,7 @@
+ 
+ use crate::{
+     bindings,
+-    block::mq::{Operations, TagSet},
++    block::mq::{operations::OperationsVTable, Operations, TagSet},
+     error::{self, from_err_ptr, Result},
+     fmt::{self, Write},
+     prelude::*,
+@@ -126,32 +126,10 @@ pub fn build<T: Operations>(
+             )
+         })?;
+ 
+-        const TABLE: bindings::block_device_operations = bindings::block_device_operations {
+-            submit_bio: None,
+-            open: None,
+-            release: None,
+-            ioctl: None,
+-            compat_ioctl: None,
+-            check_events: None,
+-            unlock_native_capacity: None,
+-            getgeo: None,
+-            set_read_only: None,
+-            swap_slot_free_notify: None,
+-            report_zones: None,
+-            devnode: None,
+-            alternative_gpt_sector: None,
+-            get_unique_id: None,
+-            // TODO: Set to THIS_MODULE. Waiting for const_refs_to_static feature to
+-            // be merged (unstable in rustc 1.78 which is staged for linux 6.10)
+-            // <https://github.com/rust-lang/rust/issues/119618>
+-            owner: core::ptr::null_mut(),
+-            pr_ops: core::ptr::null_mut(),
+-            free_disk: None,
+-            poll_bio: None,
+-        };
+-
+         // SAFETY: `gendisk` is a valid pointer as we initialized it above
+-        unsafe { (*gendisk).fops = &TABLE };
++        unsafe {
++            (*gendisk).fops = OperationsVTable::<T>::build_block_device_operations();
++        }
+ 
+         let mut writer = NullTerminatedFormatter::new(
+             // SAFETY: `gendisk` points to a valid and initialized instance. We
+diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
+index 8ad46129a52c..0f8f616590fb 100644
+--- a/rust/kernel/block/mq/operations.rs
++++ b/rust/kernel/block/mq/operations.rs
+@@ -10,6 +10,7 @@
+     error::{from_result, Result},
+     prelude::*,
+     sync::{aref::ARef, Refcount},
++    this_module::ThisModule,
+     types::ForeignOwnable,
+ };
+ use core::marker::PhantomData;
+@@ -28,6 +29,9 @@
+ /// [module level documentation]: kernel::block::mq
+ #[macros::vtable]
+ pub trait Operations: Sized {
 +    /// Module ownership for this device, provided via `THIS_MODULE`.
 +    type ThisModule: ThisModule;
 +
-     /// What kind of pointer should `Self` be wrapped in.
-     type Ptr: ForeignOwnable + Send + Sync;
+     /// Data associated with the `struct request_queue` that is allocated for
+     /// the `GenDisk` associated with this `Operations` implementation.
+     type QueueData: ForeignOwnable;
+@@ -280,7 +284,33 @@ impl<T: Operations> OperationsVTable<T> {
+         show_rq: None,
+     };
  
-@@ -388,6 +392,7 @@ impl<T: MiscDevice> MiscdeviceVTable<T> {
-     }
- 
-     const VTABLE: bindings::file_operations = bindings::file_operations {
++    const BLOCK_OPS: bindings::block_device_operations = bindings::block_device_operations {
++        submit_bio: None,
++        open: None,
++        release: None,
++        ioctl: None,
++        compat_ioctl: None,
++        check_events: None,
++        unlock_native_capacity: None,
++        getgeo: None,
++        set_read_only: None,
++        swap_slot_free_notify: None,
++        report_zones: None,
++        devnode: None,
++        alternative_gpt_sector: None,
++        get_unique_id: None,
 +        owner: T::ThisModule::OWNER.as_ptr(),
-         open: Some(Self::open),
-         release: Some(Self::release),
-         mmap: if T::HAS_MMAP { Some(Self::mmap) } else { None },
-diff --git a/samples/rust/rust_misc_device.rs b/samples/rust/rust_misc_device.rs
-index 49dd5814e1ab..464e3026e6e3 100644
---- a/samples/rust/rust_misc_device.rs
-+++ b/samples/rust/rust_misc_device.rs
-@@ -155,6 +155,7 @@ struct RustMiscDevice {
- 
- #[vtable]
- impl MiscDevice for RustMiscDevice {
-+    type ThisModule = THIS_MODULE;
-     type Ptr = Pin<KBox<Self>>;
- 
-     fn open(_file: &File, misc: &MiscDeviceRegistration<Self>) -> Result<Pin<KBox<Self>>> {
++        pr_ops: core::ptr::null_mut(),
++        free_disk: None,
++        poll_bio: None,
++    };
++
+     pub(crate) const fn build() -> &'static bindings::blk_mq_ops {
+         &Self::VTABLE
+     }
++
++    pub(crate) const fn build_block_device_operations() -> &'static bindings::block_device_operations
++    {
++        &Self::BLOCK_OPS
++    }
+ }
 
 -- 
 2.43.0
