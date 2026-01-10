@@ -1,67 +1,67 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE23346E63
-	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37B13491D0
+	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768057769; cv=none; b=M0gG4o6imJig0RipUGdbkyN1/y7xmXBMyLdHgP5KcLVAfG6ZIhubH+vnwUsG0J2xgw34nUWbSnYDwwUdzxSS4CmjGlAbhStYbbcFTicKFH0CDrLxtfk20wQjuGN6MH/2o7LqB6A/q4XH6/R5JiPxnrnykIS/V0xtYEmnDWlWqXY=
+	t=1768057771; cv=none; b=sNZcqOlDZoBPfnkX6s7jGz7JBgHo22fPiP+RXuS3TA6EQ6sMdiHkWjDlsMSVZSgJxtm4gaFDomvslxWjUksssx7t0mH/H1OqOJe0Nt2BnOKtA0GL1wc6MlRN1sDsBF7WRCfMAxEgypUyd8a4jon+8D/s/RxNBt712S2TW+VGbhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768057769; c=relaxed/simple;
-	bh=HXsmrNNEr+H1R93npODROo6Md8lvxfZavxKoxrx9XrE=;
+	s=arc-20240116; t=1768057771; c=relaxed/simple;
+	bh=1FB+uT1pALfUGFef4CiqxjN0XjuunSUgAxAx5cQ/hwo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O/3O5k6YToi0lP2BpNDScZClgAdmF9XWGD3YKRDm3yiv/pPN9bfQR0yUtJ6L6cUK3/0PilQewwmZ3UApQAeb6eEmakYguYMemBWPqJvEyComkWIyLr5u8dvIwXSa3zc4JECZJ1ZMKFQCu/Ib4Co7FlBMCY/F2Fj7vfcWUCXZGRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LtrT728O; arc=none smtp.client-ip=209.85.167.45
+	 In-Reply-To:To:Cc; b=SySiChZBWP2smP4wfQWtZ5rLOel40iUt8szVBXCM2UOWaOjuSuJ3TGrfnYq2rv3D9+k1ILwT3lpofC1tCHvIjwY/ifQtYUmwx717ttI/O5EFmxXKxl+AbGjmlTHsfocmbjbhf2VkIXtRWOVUF7wdm+0n/eqRO99BG2g8r9KwOkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CKMMlPNv; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LtrT728O"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59b685d2b79so5005582e87.3
-        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CKMMlPNv"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59b72a1e2f0so4690571e87.0
+        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768057766; x=1768662566; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768057762; x=1768662562; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jA4SPNhuMX5XCZ5OBbakMPi2P9GAq2DqeqD/xi+6gT8=;
-        b=LtrT728O3amQSkF69AUmkAC7v5yMmQ1cauMk5K8evmhDhZBiizof39/SelMtMizRde
-         sn4JS5sENOCa3XDLCe5bwrpe7aX/r6cRKm8Qe7K/ZaPfuajn6AcKa44VE+UvHNHcdjIo
-         1PDLMasQtZa7hMUD1sHrphJHnSuvBVohEzeb03piE6Wp5JcrdZ5KgwYAFYTpspvyI5wR
-         /oq9yNUKVUxCgxQwfy7QVv409/9bmX2xDJhMvKXJ0vNsUnHXp6p6IMN1IQBsaF7Hm/yo
-         g5n3bQF0xCjHkdQ4TtBSejYFFF3anz27BK5YxqDE5EgBRvVq2LaDYDzIr+s7El9QzAcL
-         Deig==
+        bh=Vqf7LCg+sg6Hx5J5qs/p3xtmlckbxwDqMrE5j+qRjSY=;
+        b=CKMMlPNvXpMm1GvHDNAatxWV55AUHOZ/PGrn124XPDPrWuSgUdhRqbmUHGlZ82BJht
+         nDTSTcpsiNo844EQgZ3vRE3LIbgC2L/2tCwAtw57a3RBAnCAc2tBunEZLSzTXwO5hQkt
+         Z6vfxBO1KrdwOGWMk6hMWGHp8ITA2UxQYbDFMEIXcT7HorZ26Y+U1wUNBI6rCV+MhRN7
+         6Qm5OtL+PKlAL5O0Rg5NGEdDiGmuEuq1/VCWt+EHHMOm/h44SEkzvDM36OYNJFCPt0e8
+         6umbr6gRTqplzwwdwSbSJP1AGItO/gbdTOcIr0y3MJztwvAHEDHcJhdPsODc4nqFxxog
+         6WVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768057766; x=1768662566;
+        d=1e100.net; s=20230601; t=1768057762; x=1768662562;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=jA4SPNhuMX5XCZ5OBbakMPi2P9GAq2DqeqD/xi+6gT8=;
-        b=hui1AdrCh1R8Kbficqlj1DZolYcRnhQpNy1bdlIzA1rdsHO8lsrtMVpyoGXaaDVlIX
-         RDlbqelxP36m4FiNSHeonhjUOzaTsmQN3TNJYHL70sVWMBHi52IPe0y1CTGz6qRNONPm
-         P6fbf+trL2xM6/8OrwrZ27g9zbRJk+MZJdrqGNDqUZtlVBOuYVgOLDcC7h5pKBFKjIV/
-         9ewm6mLJXegvEnJJmdGTTusYWFmS138KCajJqxmv01/NVjytuH+/GXJyOb2Sywuachhh
-         oRSreXQ/pqlh+zZ3FBEqGT9ZB6wcWwcxXC6JTMz5yjuT8d7gxRkqOEmzT4T9MpjEvQBO
-         oGJw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9NH7tmkWS2R91Y/awF0PJDZ+RoeXTAMg/0YAJL8BcUjKR54mWu89QWbyRfvcXF5RXGTS4hA20X53mqA/v@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMKg7CdcCx+uFUu+ATmLzVd00Rt6ZE0lU3nyNZFaT1O0JGiCsw
-	+9yYQ48D5PP+0XyL8+vHOrmp+u4DGewbpqlYqpHaVvb4wV43WkDk9RTR
-X-Gm-Gg: AY/fxX4QV2ch1Oi4s392Jdgo888bXkmsBKeha9fyfLl4MjIfsI8OCAOujaCiOYgPV14
-	SUTZutsiFfOHD/13pRpLWUYR4AivBJ0HOrglQP8WxpyyAsLUQcIQObyOH/BTPQrCQpCckAxq6vl
-	/TVikyJmNZfrGkq+Y1rHN2vOA8u/ISFTeAKTAF0puF7x8ok7P92x6f4vtLzbAFg+bEjdFGmmQvK
-	MuBPh6QbbwujNXItmGeCpvFG72aL2O4kycsFR+E0+h8lqGw5E8I8hYdntEaI+WdJac26bTC35jM
-	mCS8wgKJsB+moyENOkHA135DRt0YWItD5v7VUw8tilotCUW8OGZ8EPliQGdH5kYRuSlSkB+8FQJ
-	2m8u6RwhpWIErTZ1VyRm5exdckBilLKemMJZTZdpNKh+heayv8C7YLSbZq8bonr2jbW33g+vrlp
-	peWE9+tUuVo++Z0gtAC+T56xwgOBMBqZpXoRGjlu2xlHG47TLQLu0c5k+eGMiv40RPO6W3l60n
-X-Google-Smtp-Source: AGHT+IF5pkNobwqDdpJnVvMJj9HNo5dFu/TJZ8O4ycgXj/UHfAc8hmVO6+l9QbYPw5ZRrk2F06noMQ==
-X-Received: by 2002:a05:6512:3d04:b0:59b:7fe7:eed1 with SMTP id 2adb3069b0e04-59b7fe7ef14mr1809283e87.28.1768057765447;
-        Sat, 10 Jan 2026 07:09:25 -0800 (PST)
+        bh=Vqf7LCg+sg6Hx5J5qs/p3xtmlckbxwDqMrE5j+qRjSY=;
+        b=QNKXnrVABJg9HM6ClIKxdq2U7fvZahHvIeTlMOST3CpkKCWOD0QX+vUvDqhszPVvCF
+         lB7duZsKIe6GVQwWhIRXUM9Q3uyAssY2t0Ymn0umtCuI9LiDiUE2e+Q7d+tiPd9UOlMp
+         HqxifVY2l8I1bJinZL7NtLZCk+5PNA04/Uz8CNai2c3/CEjywLEz/mg0UwwJi3bIVUEB
+         c03kSiJAykB7A1mzHZXVMgFxcEqgDFvnXaD9RBaDXZmmWufTBZ4m/U8XBTJk8bMzVTj/
+         TItf8J80EMJHSYyP7J0wNe+z7BsMEZSYJsmoj3oso/uEBiVf/Gh/JJFElkGa9OiNJzrF
+         9DcA==
+X-Forwarded-Encrypted: i=1; AJvYcCVJuqiNHdEg/iGsv8dQ+qMkvWttuecTo4G8geZhq1PkBnJ57OqUssI2NzfZkguLnPpytgxcVTaLh23qTDJ5@vger.kernel.org
+X-Gm-Message-State: AOJu0YylGkRvAFx5f0QahW+kkE9BFhrmEjbGrYTpzXoRcoeg4BBbkfoV
+	zxVRkPsZzno/oDKBDEVhC1uP+H0l7jbRPulPb0EvEIXGqEfc87bn+8ebH94IGlwk
+X-Gm-Gg: AY/fxX5eKhizwgQCTGXK0KzwBpkpZ5sS6FnpRkOjHKwFckmLqE++VE1339LN6rrYijA
+	y6WXGXFBxman9IfcYZs8s7mMyMIndwY2ujW3KFCivJft+PR0ezYdUooA7YvtoPbKZtfLKMqhqFr
+	NTsnybH0F7X1d1S7KKYGqjU0S4y+ZWrZ1hYjNrcYgOnbXITIFD7ln6oOuL5pICe1M9pxjOLKeYA
+	cX2ekYGiZ8laceb4E5R/8gldlvBmjweISGCnEeiLJJoiPos3LVAM80nuJBRRzLwIFXNLMcmb+3y
+	E1O5ch8hJbfXGgOm2CtyFDxHv1Zt+BKIk3rMsa7yp1bEZQ3DhpcdyDQWoOwzb9W9J6FHE8povXN
+	Tj0csist5uougYSel+EzuyE1nI/otqYaeT3EkELlwlAnh2aF8LLXgAAmT5klV9JladsP3FlGnXz
+	q2GRSRzdsRNkGT1bKxFWgowVLDYjPNw9EHJvTb87WX5Zw0a9ANWHfaYxbzx43rou07toe5ZUIS
+X-Google-Smtp-Source: AGHT+IHEE1TGipeoD2/6eyBBIsojGiNqm7JwcbPiYjVFBwHDR5nwSai8es4nGi6I/fgjxe+bGdX/zQ==
+X-Received: by 2002:a05:6512:b01:b0:59b:8483:8d97 with SMTP id 2adb3069b0e04-59b84838e5amr1204577e87.13.1768057761899;
+        Sat, 10 Jan 2026 07:09:21 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (37-33-148-7.bb.dnainternet.fi. [37.33.148.7])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.22
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jan 2026 07:09:24 -0800 (PST)
+        Sat, 10 Jan 2026 07:09:21 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Sat, 10 Jan 2026 17:08:05 +0200
-Subject: [PATCH RFC v3 07/15] rust: binder: use new THIS_MODULE
+Date: Sat, 10 Jan 2026 17:08:04 +0200
+Subject: [PATCH RFC v3 06/15] rust: configfs: use new THIS_MODULE
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260110-this_module_fix-v3-7-97a3d9c14e8b@gmail.com>
+Message-Id: <20260110-this_module_fix-v3-6-97a3d9c14e8b@gmail.com>
 References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -86,44 +86,138 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
  Kari Argillander <kari.argillander@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=1238;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=5277;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=HXsmrNNEr+H1R93npODROo6Md8lvxfZavxKoxrx9XrE=;
- b=R0q/X1ltJqeYVBP9SobLKfHgM075ElagNogpcGU3GkRvQ1n9qSEzsNfW83i0UdVRRa/JUGwAU
- bxs1cBNamQBD2YNOSaU1QhJ7S2BuCHBpPzzaT5E05h1XEXN8E9VD7v+
+ bh=1FB+uT1pALfUGFef4CiqxjN0XjuunSUgAxAx5cQ/hwo=;
+ b=KTu6JmsvpKxaB1JzW8EXhr264WUGMX9sqMRbv98Urte4QvFUB+KimYWM6CyVbNCSLfejIngg3
+ 769ilDyNnBwDbNGyi+QKw7almLRAojJtFeFDvsqYuTex4HO29lmm4rN
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-We have new THIS_MODULE. ThisModule is now crate. This is ugly for
-reason that drivers should not use as_ptr() directly. Currently binder
-still needs it so ugly cast is totally ok.
+We have new THIS_MODULE and ThisModule is now trait. Pass THIS_MODULE as
+generic type parameter which is current convention.
 
 Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- drivers/android/binder/rust_binder_main.rs | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/block/rnull/configfs.rs |  2 +-
+ rust/kernel/configfs.rs         | 46 +++++++++++++++++++++--------------------
+ 2 files changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/android/binder/rust_binder_main.rs b/drivers/android/binder/rust_binder_main.rs
-index d84c3c360be0..fc921c0e1116 100644
---- a/drivers/android/binder/rust_binder_main.rs
-+++ b/drivers/android/binder/rust_binder_main.rs
-@@ -21,6 +21,7 @@
-     sync::poll::PollTable,
-     sync::Arc,
-     task::Pid,
-+    this_module::ThisModule,
-     transmute::AsBytes,
-     types::ForeignOwnable,
-     uaccess::UserSliceWriter,
-@@ -319,7 +320,7 @@ unsafe impl<T> Sync for AssertSync<T> {}
-     let zeroed_ops = unsafe { core::mem::MaybeUninit::zeroed().assume_init() };
+diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/configfs.rs
+index 2f5a7da03af5..7223ee7c3032 100644
+--- a/drivers/block/rnull/configfs.rs
++++ b/drivers/block/rnull/configfs.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
  
-     let ops = kernel::bindings::file_operations {
--        owner: THIS_MODULE.as_ptr(),
-+        owner: <THIS_MODULE as ThisModule>::OWNER.as_ptr(),
-         poll: Some(rust_binder_poll),
-         unlocked_ioctl: Some(rust_binder_ioctl),
-         #[cfg(CONFIG_COMPAT)]
+-use super::{NullBlkDevice, THIS_MODULE};
++use super::NullBlkDevice;
+ use kernel::{
+     block::mq::gen_disk::{GenDisk, GenDiskBuilder},
+     c_str,
+diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
+index fe80439ab21f..908cb98d404f 100644
+--- a/rust/kernel/configfs.rs
++++ b/rust/kernel/configfs.rs
+@@ -110,16 +110,21 @@
+ //! [C documentation]: srctree/Documentation/filesystems/configfs.rst
+ //! [`rust_configfs.rs`]: srctree/samples/rust/rust_configfs.rs
+ 
+-use crate::alloc::flags;
+-use crate::container_of;
+-use crate::page::PAGE_SIZE;
+-use crate::prelude::*;
+-use crate::str::CString;
+-use crate::sync::Arc;
+-use crate::sync::ArcBorrow;
+-use crate::types::Opaque;
+-use core::cell::UnsafeCell;
+-use core::marker::PhantomData;
++use crate::{
++    alloc::flags,
++    container_of,
++    page::PAGE_SIZE,
++    prelude::*,
++    str::CString,
++    sync::Arc,
++    sync::ArcBorrow,
++    this_module::ThisModule,
++    types::Opaque, //
++};
++use core::{
++    cell::UnsafeCell,
++    marker::PhantomData, //
++};
+ 
+ /// A configfs subsystem.
+ ///
+@@ -744,8 +749,7 @@ macro_rules! impl_item_type {
+     ($tpe:ty) => {
+         impl<Data> ItemType<$tpe, Data> {
+             #[doc(hidden)]
+-            pub const fn new_with_child_ctor<const N: usize, Child>(
+-                owner: &'static ThisModule,
++            pub const fn new_with_child_ctor<const N: usize, Child, TM: ThisModule>(
+                 attributes: &'static AttributeList<N, Data>,
+             ) -> Self
+             where
+@@ -754,7 +758,7 @@ pub const fn new_with_child_ctor<const N: usize, Child>(
+             {
+                 Self {
+                     item_type: Opaque::new(bindings::config_item_type {
+-                        ct_owner: owner.as_ptr(),
++                        ct_owner: TM::OWNER.as_ptr(),
+                         ct_group_ops: GroupOperationsVTable::<Data, Child>::vtable_ptr().cast_mut(),
+                         ct_item_ops: ItemOperationsVTable::<$tpe, Data>::vtable_ptr().cast_mut(),
+                         ct_attrs: core::ptr::from_ref(attributes).cast_mut().cast(),
+@@ -765,13 +769,12 @@ pub const fn new_with_child_ctor<const N: usize, Child>(
+             }
+ 
+             #[doc(hidden)]
+-            pub const fn new<const N: usize>(
+-                owner: &'static ThisModule,
++            pub const fn new<const N: usize, TM: ThisModule>(
+                 attributes: &'static AttributeList<N, Data>,
+             ) -> Self {
+                 Self {
+                     item_type: Opaque::new(bindings::config_item_type {
+-                        ct_owner: owner.as_ptr(),
++                        ct_owner: TM::OWNER.as_ptr(),
+                         ct_group_ops: core::ptr::null_mut(),
+                         ct_item_ops: ItemOperationsVTable::<$tpe, Data>::vtable_ptr().cast_mut(),
+                         ct_attrs: core::ptr::from_ref(attributes).cast_mut().cast(),
+@@ -875,8 +878,7 @@ fn as_ptr(&self) -> *const bindings::config_item_type {
+ ///         = kernel::configfs::ItemType::<
+ ///                 configfs::Subsystem<Configuration>,
+ ///                 Configuration
+-///                 >::new_with_child_ctor::<N,Child>(
+-///             THIS_MODULE.as_ref(),
++///                 >::new_with_child_ctor::<N, Child, crate::THIS_MODULE>(
+ ///             &CONFIGURATION_ATTRS
+ ///         );
+ ///
+@@ -1019,8 +1021,8 @@ macro_rules! configfs_attrs {
+                     const [<$no_child:upper>]: bool = true;
+ 
+                     static [< $data:upper _TPE >] : $crate::configfs::ItemType<$container, $data>  =
+-                        $crate::configfs::ItemType::<$container, $data>::new::<N>(
+-                            THIS_MODULE.as_ref(), &[<$ data:upper _ATTRS >]
++                        $crate::configfs::ItemType::<$container, $data>::new::<N, crate::THIS_MODULE>(
++                            &[<$ data:upper _ATTRS >]
+                         );
+                 )?
+ 
+@@ -1028,8 +1030,8 @@ macro_rules! configfs_attrs {
+                     static [< $data:upper _TPE >]:
+                         $crate::configfs::ItemType<$container, $data>  =
+                             $crate::configfs::ItemType::<$container, $data>::
+-                            new_with_child_ctor::<N, $child>(
+-                                THIS_MODULE.as_ref(), &[<$ data:upper _ATTRS >]
++                            new_with_child_ctor::<N, $child, crate::THIS_MODULE>(
++                                &[<$ data:upper _ATTRS >]
+                             );
+                 )?
+ 
 
 -- 
 2.43.0
