@@ -1,68 +1,68 @@
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02276347FE2
-	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470C5346FBE
+	for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 15:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768057759; cv=none; b=XozSxgE4618QQ79OTCKBdRMi/XiOg0AOafFXWMAML49rz8r65qM0HtsiE77knSB0XrGsoJ/n0wyHhBlAlgyukSsczGptldJyb6K5fES9qsXMtSlfpINmi3iY3recnK5qLUVPMB8JQ063zTdh07Un1V6ppZ0cN+rPidGFEHQZ9L8=
+	t=1768057761; cv=none; b=kyArsCbQEtddWl0pA3kahazeseZ6lb30qJ4o09kv6BCSD0/at5ZeXg7ROUEb1MFstDs3MkLFmo8ksB8mrlcDYGVnxrl5NRQDLWaB9KIGM+XmSdHNLwBreCpI2tNhZiaD4MWPeu7f8JUMAHfgaSwilPF8KkuqdhQI0jVSBOwZf9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768057759; c=relaxed/simple;
-	bh=PsulVulBYOKVhtxVFsqQzoL1KhSmhEASbJ2jTpxpE5M=;
+	s=arc-20240116; t=1768057761; c=relaxed/simple;
+	bh=pObMsqQ3xkzVkZ3cfdHVrZzRa8fls1Dett+yl59GTWk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jC66458bzfuqnG9cp0SmgD3ZKDDjTiPAIUGzSIEGsrb64l9nVVxkdJ9/+pM69gGMBvEf2RT724tl4mzki5vgp2qYnyJZavfX5/ETtd6DmLjbeERAc/wG2PoE3Lx1vkKCOTsx/dXXuYRVzpEFKNpAcMT25mRgvstAyC9wPV7tnwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fNB/2O5V; arc=none smtp.client-ip=209.85.167.52
+	 In-Reply-To:To:Cc; b=i7XN7oIoW1BX3BGqc16x4r7bDY0Y8ZHzIAWqBkR+F2l3+myVtlMJTRvDqrwzY/EsyF2/acL5VwGrzDfjlriOjTlBR0XTPp8zAYyAGHPuqxEWpsjJrtxNpFfsgvjINGOPuuzcNB9koAv224OV80bNLCeDmfCBxJ9WM2EIu8eDmCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNkkbRo6; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fNB/2O5V"
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59b834e3d64so1533010e87.2
-        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNkkbRo6"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59b7bb3b913so2876928e87.1
+        for <linux-modules@vger.kernel.org>; Sat, 10 Jan 2026 07:09:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768057756; x=1768662556; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768057758; x=1768662558; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6p/TE1++7w8lcKdQTf98fxRYGObQ9N/7Fpqo/Gx8pUA=;
-        b=fNB/2O5VPaQcMjJhRn9ooDDxdhrbWQ2tJueaNuRkADCw0wUBB32pLXyEQqVjC2OmBy
-         gzD7nMLV3fR+6bNWtPDHocO07nop4UPL1OcOuAaI5F/Pt9ELjrqIOiLkk13KG9OpkQgM
-         ffkCuCnpwLItPzPMwJVkjhEKhDcKRmrd5CZ2E0cIxcdJzhV9pAAsN7p7Ub/VIOmCYAVz
-         Z9975GGB87swDXv4A3Jf/7Iw7ouO8zz/8Hk8NtTQuyqtIpW9Fct4VQOm1eaDklBLD4Ti
-         mnlLWzJF3mj8yBFfximGdQjt/s/MD2wWnHiHO4GIUyE4krgcIkp/MLSUqRR5lL9AfNkk
-         GQ7w==
+        bh=POe8fbaXk5saKFPceg6wmKUDp4vPexwP90O+JTHpGXU=;
+        b=NNkkbRo6aZbyc06RlLk1lH6ZXqkmowM+l54L2ZcMX1EWCqGBDSx/t1ut8jyp4lLRYe
+         ZzCPCSWbF/6nHNtqketNdBc2Rs4p7n2NxODS9mhEDRzCdo1MGhtrdqPwD8DbgL6uNHEp
+         +JzoXSp0L3AE/dwcjuAhG1QNca7EFz+yoKTogTRFxzd/Z0EO6xaKOdwtlWqLfGlbCMpW
+         UUCObZsH7+dk9tGaTqseR95BAjGbUHC91fGzO9zB+oZDtqWirktvirSpXpWfjTmF2INb
+         9xrWxT/xIyI+hdRoz5Bj4Ty9XT5xytQNk0sMK2V87pfWGaAh6ZSnaZLe9NdgOtsBNEUc
+         YHuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768057756; x=1768662556;
+        d=1e100.net; s=20230601; t=1768057758; x=1768662558;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=6p/TE1++7w8lcKdQTf98fxRYGObQ9N/7Fpqo/Gx8pUA=;
-        b=cBKITXAhWKT3VKIyA1G7jZ+WPT9TWnyfL12zbN93i7SiaR1nx06HwvSEaQYy3SRdF/
-         puTwP1X0WWqF8WpC465ualXNcZ28Aqiw9vWiBPCvQW0Kp6fmRZt6+t6ZloWeioqnR4KB
-         1Ff74X72w604KBymOhyMMy/aaNIwNevWzDIljFx3w1fC0m0a780wMq61GTDx0EOYpumd
-         gh8CeI7jlnFYwBJCwgTfhRT2l6asgpIAssjael2Wik7KRh1VEVilTCZopJTGT7JMvcl9
-         U27KeeaxQnXmEb9GQYwc6HTZytV10AxybWr5qeI7DYrhifWO2y+2jDqzeX6TYGTrQfRf
-         XyDg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1WqFQDkIyws5Dvt5NDUOt1HCNx/1iKhYzU0YgIn6pUhR5cI0YpC0D4Zhz0PVSKLeMosPXAAbycZt1MHpt@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjdoQbqcqEqFzCy/ayODHAPlyzD3FqfQwWpQUshkXnV7SJr3VM
-	YY1/Sm1YsTEu9WAsNYzv5lquQDmwtD7nE4zh9bQY17z2V2JkoJugihKZ
-X-Gm-Gg: AY/fxX597U4zStn1a+9aMrdM594hif8BW2ZnSdUmbIeoj2WDnsjlibfH3ZnYieMb8eP
-	5pG7wXWVN41d8Ac4RxKOfDQutIauR5/ZxfhAIDQuMISSw7rdUlfDeKheJI5a1M4twbu1EmmWtHI
-	qCyyjLlUkHgWi4xqgk7c1CUm2wPz8PIv7+/SGZR1Ro3+DH+khUQ/5NAYv1a1fMRTUtQOPCMTWdt
-	NP2sTgiSFc2W1DTniuasmkolJyqL+Psdqad+nONam1OFdC5tT4pfElT25pR2Zf8iGe7XvRk4el0
-	C8DEu3J7zJi5nzCAUOSOn+AECfRRRhdT4BYj8M27sFEPkWQVAEh+D5ayoDZYOXV3fE7tTaHdu0Q
-	itOitSdJJBha2G9oGtggT46MXV1QMFnFMNmv09qaYtyNGo1Wk+2jXw1CRJGxxcHtV5bUMMbzMvM
-	zcsE52bAYQrC4feZXgHVU249nSSBmbLRvKnJ31jCC/nElQihDV2paLfOtbNNzwe3n0fjNFz7Zf
-X-Google-Smtp-Source: AGHT+IGlt9Yv8sDeB4e3Q5NwnV4p5lgaXKn9ea9qedHkfBs0ps8vJj79GZDi9RawkBZhq22ruSs+oA==
-X-Received: by 2002:ac2:4e0c:0:b0:59b:7b86:44d2 with SMTP id 2adb3069b0e04-59b7b864515mr2191519e87.18.1768057755950;
-        Sat, 10 Jan 2026 07:09:15 -0800 (PST)
+        bh=POe8fbaXk5saKFPceg6wmKUDp4vPexwP90O+JTHpGXU=;
+        b=qTAsWCureYhxmKg5liYz2GIf68d4DtQzwT9EBwE/bd0z+tAR7ajnv1uCcKr0VNZrJN
+         B1Frrsy81Hk32lMDdu/I1HQEj95TngjLpxWdnZiEbJBXDpJ+rILmrNIu8/H0X6qae3qY
+         tFXn+pExh2kX2r8g/eOu0/f8xAXFUAaUw+G0n8v/LRXtFekNH3FBOsH3m6gTZVTiTB4h
+         gNcJ7vjO/EsqtNIJgF0chDHrY/YTShwcYb5794pCRsiOL+khZbwbST9Y0LkHuv8fRh9N
+         iQhuwddwTX6CBOdAm05+TopPlt0PO5n56etxeqSJNnHjZ7bLXjSgBskMvecK9uFhtXdr
+         4r6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUTr/Ul6eDnl+gf0BbJozvH2ReoeSKHMTVE2w+r5926iz0+skA+JjrbSZM22K64ULkQtW4Y1501nFRdMm04@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzho6dqs0/IkhBo8YAefvCfriXXD2fonbiobCDYr3+J96oMYhQf
+	pOevAl7FDlRLPR6rGuISLAwFttPMay0/tLMoX58IK6bdKcOcnGu3paie
+X-Gm-Gg: AY/fxX7SPg1/NFP6TE7005a5hNyYW9ItsEKsFJ0m+eS5yVOGJpgeFObO1hxsw755mEf
+	OYabOR8+nYqQHNeR579MNULtt6mOc6og+T8+X9qQYy2ZbdqQGFSjT/Dy0T3Egz2L3RmJEKkAbQm
+	QRlGLyJkrleAGv0SJT74GlKgU2Fd7ZZ3fLFsCE2N3KEw0liJeO73tfNdZjKr8nVYMY+4UQEa+Kj
+	p7cvy4J+tVmsDKLjyY3PmBGzvOyzNbToQHK5qZygdecDUC5dZCbOOuxiecncYkWK1fsqoL8TSoh
+	ah5DRiQBxpWImkTe683E5gZpja3Qq7CZxKsNQ67TjK/hk7Gb/ssxQ0E918dKV9/h1g/QXamBY3L
+	/LMWshWVQi9l5VKDdS/fo0d+7//xhEY2GZlSlvMamkdBywvw304RUDLi4C0ppY8CYUl1Ni1rXwH
+	I5MouEVSSaOX3opiBUt5jJC57kAsg0iselcaKLx1oNb3vHsqUmuu6t/AEYk0073vM0SrVNn7SV
+X-Google-Smtp-Source: AGHT+IFNLBJQ01WunUBd430d8tTEifFvMoI0XyeN6DoOTINO7+ijuLgcerNFWqW0B99vr+losLUPpw==
+X-Received: by 2002:a05:6512:2117:b0:59b:7319:1178 with SMTP id 2adb3069b0e04-59b7319121bmr2477799e87.18.1768057758332;
+        Sat, 10 Jan 2026 07:09:18 -0800 (PST)
 Received: from LT-5CG5341NQ4.nordic.imtech.com (37-33-148-7.bb.dnainternet.fi. [37.33.148.7])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.13
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b75543a64sm2137059e87.49.2026.01.10.07.09.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jan 2026 07:09:15 -0800 (PST)
+        Sat, 10 Jan 2026 07:09:17 -0800 (PST)
 From: Kari Argillander <kari.argillander@gmail.com>
-Date: Sat, 10 Jan 2026 17:08:02 +0200
-Subject: [PATCH RFC v3 04/15] rust: block: fix missing owner field in
- block_device_operations
+Date: Sat, 10 Jan 2026 17:08:03 +0200
+Subject: [PATCH RFC v3 05/15] rust: drm: fix missing owner in
+ file_operations
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260110-this_module_fix-v3-4-97a3d9c14e8b@gmail.com>
+Message-Id: <20260110-this_module_fix-v3-5-97a3d9c14e8b@gmail.com>
 References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
@@ -87,160 +87,130 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
  Kari Argillander <kari.argillander@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=5351;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768057742; l=4166;
  i=kari.argillander@gmail.com; s=20251219; h=from:subject:message-id;
- bh=PsulVulBYOKVhtxVFsqQzoL1KhSmhEASbJ2jTpxpE5M=;
- b=185gZsCt1xGiCyXyEzSPP0pAcZ1ipKyoiLBT3qAgSvAHQ5mewac9KEA/SJgWHYzP0ShVf4l15
- sTw9hTUbbf/Bpj28SG+0E0IafHVZBRm1xGY6ElfQmn7afXlsCIbrPqv
+ bh=pObMsqQ3xkzVkZ3cfdHVrZzRa8fls1Dett+yl59GTWk=;
+ b=7zLe5lryXy/9T6T96fAXZ7YJeKt8qHxw069TB58wLHh6FQK1Lc+lOPi4kQLZ71zfyr/Y1nIP9
+ SPGhEma2/P/CfpNojS+bq8ykYv3iAGUyS47NiSESO5YlCZu6vHqAVfF
 X-Developer-Key: i=kari.argillander@gmail.com; a=ed25519;
  pk=RwSxyhTpE3z4sywdDbIkC3q33ZQLNyhYWxT44iTY6r4=
 
-Kernel has now enabled "const_refs_to_static" feature. We can fix TODO
-item now. Fix this by defining owner in vtable so we can read it from
-there.  As this table needs to be const we need to define it in
-operations so we do not need pass THIS_MODULE alongside with
-GenDiskBuilder::build().
+Fix missing .owner field in file_operations. This has been previosly
+left out because Rust feature `const_refs_to_static` has not been
+enabled. Now that it is we can make define owner even in const context.
 
-This will probably fix some use after free.
+This should probably fix use-after-free problems in situations where
+file is opened and module driver is unloaded during that.
 
-Fixes: 3253aba3408a ("rust: block: introduce `kernel::block::mq` module")
 Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
- drivers/block/rnull/rnull.rs       |  1 +
- rust/kernel/block/mq.rs            |  1 +
- rust/kernel/block/mq/gen_disk.rs   | 30 ++++--------------------------
- rust/kernel/block/mq/operations.rs | 30 ++++++++++++++++++++++++++++++
- 4 files changed, 36 insertions(+), 26 deletions(-)
+ drivers/gpu/drm/nova/driver.rs | 2 ++
+ drivers/gpu/drm/tyr/driver.rs  | 2 ++
+ rust/kernel/drm/device.rs      | 2 +-
+ rust/kernel/drm/driver.rs      | 4 ++++
+ rust/kernel/drm/gem/mod.rs     | 5 +++--
+ 5 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/block/rnull/rnull.rs b/drivers/block/rnull/rnull.rs
-index a9d5e575a2c4..862369ab9b5c 100644
---- a/drivers/block/rnull/rnull.rs
-+++ b/drivers/block/rnull/rnull.rs
-@@ -74,6 +74,7 @@ struct QueueData {
+diff --git a/drivers/gpu/drm/nova/driver.rs b/drivers/gpu/drm/nova/driver.rs
+index b1af0a099551..7ce505802716 100644
+--- a/drivers/gpu/drm/nova/driver.rs
++++ b/drivers/gpu/drm/nova/driver.rs
+@@ -14,6 +14,7 @@
+ 
+ use crate::file::File;
+ use crate::gem::NovaObject;
++use crate::THIS_MODULE;
+ 
+ pub(crate) struct NovaDriver {
+     #[expect(unused)]
+@@ -65,6 +66,7 @@ fn probe(adev: &auxiliary::Device<Core>, _info: &Self::IdInfo) -> impl PinInit<S
  
  #[vtable]
- impl Operations for NullBlkDevice {
+ impl drm::Driver for NovaDriver {
 +    type ThisModule = THIS_MODULE;
-     type QueueData = KBox<QueueData>;
+     type Data = NovaData;
+     type File = File;
+     type Object = gem::Object<NovaObject>;
+diff --git a/drivers/gpu/drm/tyr/driver.rs b/drivers/gpu/drm/tyr/driver.rs
+index f0da58932702..11932d3f03ff 100644
+--- a/drivers/gpu/drm/tyr/driver.rs
++++ b/drivers/gpu/drm/tyr/driver.rs
+@@ -25,6 +25,7 @@
+ use crate::gpu;
+ use crate::gpu::GpuInfo;
+ use crate::regs;
++use crate::THIS_MODULE;
  
-     #[inline(always)]
-diff --git a/rust/kernel/block/mq.rs b/rust/kernel/block/mq.rs
-index 1fd0d54dd549..0c8e9e316952 100644
---- a/rust/kernel/block/mq.rs
-+++ b/rust/kernel/block/mq.rs
-@@ -68,6 +68,7 @@
- //!
- //! #[vtable]
- //! impl Operations for MyBlkDevice {
-+//!     type ThisModule = THIS_MODULE;
- //!     type QueueData = ();
- //!
- //!     fn queue_rq(_queue_data: (), rq: ARef<Request<Self>>, _is_last: bool) -> Result {
-diff --git a/rust/kernel/block/mq/gen_disk.rs b/rust/kernel/block/mq/gen_disk.rs
-index 1ce815c8cdab..4d5d378577ec 100644
---- a/rust/kernel/block/mq/gen_disk.rs
-+++ b/rust/kernel/block/mq/gen_disk.rs
-@@ -7,7 +7,7 @@
+ pub(crate) type IoMem = kernel::io::mem::IoMem<SZ_2M>;
  
- use crate::{
-     bindings,
--    block::mq::{Operations, TagSet},
-+    block::mq::{operations::OperationsVTable, Operations, TagSet},
-     error::{self, from_err_ptr, Result},
-     fmt::{self, Write},
+@@ -179,6 +180,7 @@ fn drop(self: Pin<&mut Self>) {
+ 
+ #[vtable]
+ impl drm::Driver for TyrDriver {
++    type ThisModule = THIS_MODULE;
+     type Data = TyrData;
+     type File = File;
+     type Object = drm::gem::Object<TyrObject>;
+diff --git a/rust/kernel/drm/device.rs b/rust/kernel/drm/device.rs
+index 3ce8f62a0056..a740c87933d0 100644
+--- a/rust/kernel/drm/device.rs
++++ b/rust/kernel/drm/device.rs
+@@ -92,7 +92,7 @@ impl<T: drm::Driver> Device<T> {
+         fops: &Self::GEM_FOPS,
+     };
+ 
+-    const GEM_FOPS: bindings::file_operations = drm::gem::create_fops();
++    const GEM_FOPS: bindings::file_operations = drm::gem::create_fops::<T::ThisModule>();
+ 
+     /// Create a new `drm::Device` for a `drm::Driver`.
+     pub fn new(dev: &device::Device, data: impl PinInit<T::Data, Error>) -> Result<ARef<Self>> {
+diff --git a/rust/kernel/drm/driver.rs b/rust/kernel/drm/driver.rs
+index f30ee4c6245c..a157db2ea02b 100644
+--- a/rust/kernel/drm/driver.rs
++++ b/rust/kernel/drm/driver.rs
+@@ -9,6 +9,7 @@
+     error::{to_result, Result},
      prelude::*,
-@@ -126,32 +126,10 @@ pub fn build<T: Operations>(
-             )
-         })?;
- 
--        const TABLE: bindings::block_device_operations = bindings::block_device_operations {
--            submit_bio: None,
--            open: None,
--            release: None,
--            ioctl: None,
--            compat_ioctl: None,
--            check_events: None,
--            unlock_native_capacity: None,
--            getgeo: None,
--            set_read_only: None,
--            swap_slot_free_notify: None,
--            report_zones: None,
--            devnode: None,
--            alternative_gpt_sector: None,
--            get_unique_id: None,
--            // TODO: Set to THIS_MODULE. Waiting for const_refs_to_static feature to
--            // be merged (unstable in rustc 1.78 which is staged for linux 6.10)
--            // <https://github.com/rust-lang/rust/issues/119618>
--            owner: core::ptr::null_mut(),
--            pr_ops: core::ptr::null_mut(),
--            free_disk: None,
--            poll_bio: None,
--        };
--
-         // SAFETY: `gendisk` is a valid pointer as we initialized it above
--        unsafe { (*gendisk).fops = &TABLE };
-+        unsafe {
-+            (*gendisk).fops = OperationsVTable::<T>::build_block_device_operations();
-+        }
- 
-         let mut writer = NullTerminatedFormatter::new(
-             // SAFETY: `gendisk` points to a valid and initialized instance. We
-diff --git a/rust/kernel/block/mq/operations.rs b/rust/kernel/block/mq/operations.rs
-index 8ad46129a52c..0f8f616590fb 100644
---- a/rust/kernel/block/mq/operations.rs
-+++ b/rust/kernel/block/mq/operations.rs
-@@ -10,6 +10,7 @@
-     error::{from_result, Result},
-     prelude::*,
-     sync::{aref::ARef, Refcount},
+     sync::aref::ARef,
 +    this_module::ThisModule,
-     types::ForeignOwnable,
  };
- use core::marker::PhantomData;
-@@ -28,6 +29,9 @@
- /// [module level documentation]: kernel::block::mq
- #[macros::vtable]
- pub trait Operations: Sized {
+ use macros::vtable;
+ 
+@@ -99,6 +100,9 @@ pub trait AllocImpl: super::private::Sealed + drm::gem::IntoGEMObject {
+ /// drm_driver` to be registered in the DRM subsystem.
+ #[vtable]
+ pub trait Driver {
 +    /// Module ownership for this device, provided via `THIS_MODULE`.
 +    type ThisModule: ThisModule;
 +
-     /// Data associated with the `struct request_queue` that is allocated for
-     /// the `GenDisk` associated with this `Operations` implementation.
-     type QueueData: ForeignOwnable;
-@@ -280,7 +284,33 @@ impl<T: Operations> OperationsVTable<T> {
-         show_rq: None,
-     };
+     /// Context data associated with the DRM driver
+     type Data: Sync + Send;
  
-+    const BLOCK_OPS: bindings::block_device_operations = bindings::block_device_operations {
-+        submit_bio: None,
-+        open: None,
-+        release: None,
-+        ioctl: None,
-+        compat_ioctl: None,
-+        check_events: None,
-+        unlock_native_capacity: None,
-+        getgeo: None,
-+        set_read_only: None,
-+        swap_slot_free_notify: None,
-+        report_zones: None,
-+        devnode: None,
-+        alternative_gpt_sector: None,
-+        get_unique_id: None,
-+        owner: T::ThisModule::OWNER.as_ptr(),
-+        pr_ops: core::ptr::null_mut(),
-+        free_disk: None,
-+        poll_bio: None,
-+    };
-+
-     pub(crate) const fn build() -> &'static bindings::blk_mq_ops {
-         &Self::VTABLE
-     }
-+
-+    pub(crate) const fn build_block_device_operations() -> &'static bindings::block_device_operations
-+    {
-+        &Self::BLOCK_OPS
-+    }
+diff --git a/rust/kernel/drm/gem/mod.rs b/rust/kernel/drm/gem/mod.rs
+index d49a9ba02635..705afea65ff6 100644
+--- a/rust/kernel/drm/gem/mod.rs
++++ b/rust/kernel/drm/gem/mod.rs
+@@ -11,6 +11,7 @@
+     error::{to_result, Result},
+     prelude::*,
+     sync::aref::{ARef, AlwaysRefCounted},
++    this_module::ThisModule,
+     types::Opaque,
+ };
+ use core::{ops::Deref, ptr::NonNull};
+@@ -292,10 +293,10 @@ impl<T: DriverObject> AllocImpl for Object<T> {
+     };
  }
+ 
+-pub(super) const fn create_fops() -> bindings::file_operations {
++pub(super) const fn create_fops<TM: ThisModule>() -> bindings::file_operations {
+     let mut fops: bindings::file_operations = pin_init::zeroed();
+ 
+-    fops.owner = core::ptr::null_mut();
++    fops.owner = TM::OWNER.as_ptr();
+     fops.open = Some(bindings::drm_open);
+     fops.release = Some(bindings::drm_release);
+     fops.unlocked_ioctl = Some(bindings::drm_ioctl);
 
 -- 
 2.43.0
