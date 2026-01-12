@@ -1,137 +1,103 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC24422DFA4
-	for <linux-modules@vger.kernel.org>; Mon, 12 Jan 2026 14:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC02236997D;
+	Mon, 12 Jan 2026 16:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768228629; cv=none; b=GtWAkwIaS69L8fz4Ag9uuDeAU3cnEsCMYrOaj+tX4QjGWEwyTD3L1wvD/Y2t+YYyEYhg4uo8pit6N+FFv/Ouv5napTYZAgk/Rc7lhPqdcEvbVNePTjqkizFB5NF/IFgNn2hqnkMe2bAyNIrTgH777p3md/hwHaIqSKhT/+1g/jA=
+	t=1768236225; cv=none; b=pO5Zv7c6NdwSynTcFmfQHtIoQRI7eb6zrmhWlzAnjfcOrqP64IcB5cmyHfOYwyhXAbLYE3v/VCWkcr5l0Iij4shwiPa15fhrsj4dRCz3BJep991KCsFarNLWcJqRmVlmF8nyapSeeaPDc7JRqXWScy8Q9EwJXwERxWO18HYCXr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768228629; c=relaxed/simple;
-	bh=iyqqznUqDL99OwJCEkrsF2iVykllrm4FsNPCyAuRMwE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DF1VDTtqBUN3e70yJBBtPRgiJAHrtOY2IJDqeK7VYpT2d8qQ0MQg2rp2+V35rEFVZqF3RdTnpOaxIVR+sck8k3Q9OqWWRgDAaeYi6a0TnUmhS4s+86XBBZ5SKvh+bnfSWSyi09yIuxLtjqykJDz7oCC4WC3QHZhqeEVKFcBQzPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HxKCXCEn; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1768236225; c=relaxed/simple;
+	bh=4m5vZMhkyIAFZEFDERjphvH88aWpo+HBmZvfEgUz+Bg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ll7tENTH/sZISgUoPYlFQaTNxDgTAgy8soge9AoABO95tAFgSxofC9nfUvMi1xgAZeRUX8kDJCyrI66H3JoBb7tw3d9D9ocl8kg3bLEWwnz3sR8wfR+7aD4uXw/EUF0GthOWQYCDNd5q0cnCTtwbSapWIdFTsDTewkJVVLubgEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZVsLw+ds; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxKCXCEn"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4779cb0a33fso69759415e9.0
-        for <linux-modules@vger.kernel.org>; Mon, 12 Jan 2026 06:37:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768228626; x=1768833426; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gusj9aT7RaX3C9uGASncaxKiTRdOev9W3ScVaZSC4iY=;
-        b=HxKCXCEnI49Qz4IQaghPBJuui1rlMR6Novwc99GHqU+DzA2GaaTSHU0BmrzVdrjoR0
-         eaJfAzUC0RPWV3NJ3dAm7K4H5ny9qutM5lWev7HR6nAwHlWZ222AgweMPQO1Pk4ZQ2/c
-         927hsXyAyGVY5f9lK0+0f5jSUCbYNy+Q+zvBu1EG//K7ZGUb0WZAj8LIpQJEuaYR0xGr
-         S/ADOD4neNCly69JA/OBFTtTVbHlCYWBXvPAD40FLZRPusoLLzlNVgM4hYtl7lA3HcSf
-         Ew0d2xha43Q3Zw25P0OfIN5XwuIZDFWAF751T2FBGekiJw+zOfXVAX2cnH7DpNk0CKmM
-         9XXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768228626; x=1768833426;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gusj9aT7RaX3C9uGASncaxKiTRdOev9W3ScVaZSC4iY=;
-        b=LM0UVpnO1PSaeP0iN/lakgUfD0rLPGsurW26ot3pKs04xuvcUu0UrVgarQCm1BHj0k
-         ATf4MQBNKEd7KkTZaQejb0xV9ux0dtA84sBrTuf3G9YMr2UUta4fCVvQycYo5jRjPGA+
-         F37OHaWUKe4We+3RGz1SG4ZGWE5GA64MI+erjfBaaRWnM3kJMq8kMFXNZHivUzTb6KRk
-         NwAFRp7h5NoG08Hs2va5KpkMoOtZIdyF+AXfYGaFobDe7AZTLETOtJ/6amlbDJ4YDCKm
-         yu4RslJEk5bTZPczQxJ3HIdL4PLE2Ee0knv3htfyoYdPqRGwpGIJFGk9Bz1RQY6+LxvL
-         ShVw==
-X-Forwarded-Encrypted: i=1; AJvYcCU6slTZyF/iTYfjPyl0+DP1TSoX+towo+ufG22RP/LLZEYVBAlCC/Z0cnef5SDoLbGGFrimubEQ0dFVizXE@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSCCOgykoT+XL5vPfEUqpw+khu+R6siHBBL71Tf1O6kirx+GAB
-	pZHtUxuqqC3sWtFblIO2LKBszKpqUZtyrj6p5KIh0kh6cAf743KAn4IuUNcM+jM81Yo=
-X-Gm-Gg: AY/fxX56MKZdjj7in3ifkHrHYGBg2+ucl8pcjo4MV8X/JsBccIzhjUIuSWDOPw2U+2W
-	gF4aMYjExnC3bY65jAg6RYLbxghnpoH+chYX/kWur0v0OBKMtwQCah8eAm3A9Hx8Ndj6vJn/ZU/
-	iSFXGWv4OopQzDEXQwjSxAbORezXetmcxvnB5TdR5UO0PfVUCT2/9e6NvukU3okPbMeEoheFZvz
-	oGuCCdz2ZL7bXvJU9za3Zhx8RKJVceAUf/cKWQC+6D90vUORQ2bf8WJYAGR33/mYiUngsrtHuIK
-	6AUPglcHxrHdPevHyGhYS1k3845Rdivt0P+sYwWmZRhsAxIVpWts5WZQB4amF8BM+aT0tq9s9Ih
-	0IeUShT4OQdPtJrF9Ke3zp53umMBwEV7OADpsEiGRgGDRXqVHM+z5s6FWhGTSoj3x269T7MSo3y
-	qzLxVzsaiI15z7avx2OqGx8WPcvNn5gA==
-X-Google-Smtp-Source: AGHT+IFmm1oEKKdZV8ZlNXFTTJqlKJkxSdN4HcGz/P7O+LQJVZm9Zz54Me3GJnG5+SbV8c+kl57MWg==
-X-Received: by 2002:a5d:5f94:0:b0:432:5bac:3915 with SMTP id ffacd0b85a97d-432c37c87e4mr21260896f8f.39.1768228625843;
-        Mon, 12 Jan 2026 06:37:05 -0800 (PST)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff0b2sm38877725f8f.42.2026.01.12.06.37.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 06:37:05 -0800 (PST)
-Message-ID: <d683a5c5-51ad-4b8e-bf8e-6a0526f7c9c1@suse.com>
-Date: Mon, 12 Jan 2026 15:37:04 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZVsLw+ds"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=QQtqe6cr7CLTj5lsiVf7e2mma3ytQYAggQ5dp6tr2Sw=; b=ZVsLw+dsAPbv7Y0fC2nElmp0PH
+	9RFwX9pWg8ddg0L6Dv34MDRcyygK67LnTdBVEfldPM9kOa7EwNF/VZNtDGlFzsbblnCT2Gfp0nSVy
+	sSR2DDsp2F6FxPiAXTLKpvlypU9N+YDmBCtm7OHj057fQUseeAz57jjD0h00QZk+xr2ZoVPaRaQMP
+	+MqQZLQzfyIURv+QSLHgs1c0+DfhSESyQXsfhYdC75MnjpSCh0pI27p0qt3ysWVO8lSpxTJ6qNa52
+	Cx41BB7dp12y3cElrsKu/Wfse70o+4M+g+/y4AhH0cYeLUT+crYIy1du7OIW9IygtA6TBZ8nQII/t
+	KlJ7PKdQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vfL0w-00000003Urd-3p7J;
+	Mon, 12 Jan 2026 16:43:34 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 8C6CF302D3E; Mon, 12 Jan 2026 17:43:33 +0100 (CET)
+Date: Mon, 12 Jan 2026 17:43:33 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	Waiman Long <longman@redhat.com>, Song Liu <song@kernel.org>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] module: Remove duplicate freeing of lockdep classes
+Message-ID: <20260112164333.GR830755@noisy.programming.kicks-ass.net>
+References: <20260107122329.1324707-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] module: Fix kernel panic when a symbol st_shndx is out of
- bounds
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, bpf@vger.kernel.org,
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
-References: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260107122329.1324707-1-petr.pavlu@suse.com>
 
-On 12/30/25 7:32 PM, Ihor Solodrai wrote:
-> The module loader doesn't check for bounds of the ELF section index in
-> simplify_symbols():
+On Wed, Jan 07, 2026 at 01:22:57PM +0100, Petr Pavlu wrote:
+> In the error path of load_module(), under the free_module label, the
+> code calls lockdep_free_key_range() to release lock classes associated
+> with the MOD_DATA, MOD_RODATA and MOD_RO_AFTER_INIT module regions, and
+> subsequently invokes module_deallocate().
 > 
->        for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
-> 		const char *name = info->strtab + sym[i].st_name;
+> Since commit ac3b43283923 ("module: replace module_layout with
+> module_memory"), the module_deallocate() function calls free_mod_mem(),
+> which releases the lock classes as well and considers all module
+> regions.
 > 
-> 		switch (sym[i].st_shndx) {
-> 		case SHN_COMMON:
+> Attempting to free these classes twice is unnecessary. Remove the
+> redundant code in load_module().
 > 
-> 		[...]
-> 
-> 		default:
-> 			/* Divert to percpu allocation if a percpu var. */
-> 			if (sym[i].st_shndx == info->index.pcpu)
-> 				secbase = (unsigned long)mod_percpu(mod);
-> 			else
->   /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
-> 			sym[i].st_value += secbase;
-> 			break;
-> 		}
-> 	}
-> 
-> A symbol with an out-of-bounds st_shndx value, for example 0xffff
-> (known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
-> 
->   BUG: unable to handle page fault for address: ...
->   RIP: 0010:simplify_symbols+0x2b2/0x480
->   ...
->   Kernel panic - not syncing: Fatal exception
-> 
-> This can happen when module ELF is legitimately using SHN_XINDEX or
-> when it is corrupted.
-> 
-> Add a bounds check in simplify_symbols() to validate that st_shndx is
-> within the valid range before using it.
-> 
-> This issue was discovered due to a bug in llvm-objcopy, see relevant
-> discussion for details [1].
-> 
-> [1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
-> 
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+Indeed,
 
--- 
-Thanks,
-Petr
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+> ---
+>  kernel/module/main.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index 710ee30b3bea..bcd259505c8b 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3544,12 +3544,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  	mutex_unlock(&module_mutex);
+>   free_module:
+>  	mod_stat_bump_invalid(info, flags);
+> -	/* Free lock-classes; relies on the preceding sync_rcu() */
+> -	for_class_mod_mem_type(type, core_data) {
+> -		lockdep_free_key_range(mod->mem[type].base,
+> -				       mod->mem[type].size);
+> -	}
+> -
+>  	module_memory_restore_rox(mod);
+>  	module_deallocate(mod, info);
+>   free_copy:
+> 
+> base-commit: 3609fa95fb0f2c1b099e69e56634edb8fc03f87c
+> -- 
+> 2.52.0
+> 
