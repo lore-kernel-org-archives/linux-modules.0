@@ -1,132 +1,129 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF84D214A8B
-	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 14:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768400795; cv=none; b=UoG6nd8A+h+ECUKYYBTIsmfar9BME693+dJyfWjLoj3yy79Ecd+h2wlD84wsthaDdx6hKKO2f7nF7uq7osriEUwEsHc424nUrsvJK4dNCV/hbNDpxx9P55o5zpeUbgYJS5PuqJJmaJNQZvxT9yevmZZyeNbBROf8oe4cWMwgO9I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768400795; c=relaxed/simple;
-	bh=XFBlPJKIbDQKyHpiOrhsJf3rxfDuDaoLs2vYJ1ERVw4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ya12ODfkch4pfKcFo1k7C7IyHQk91xKJoqU+2IyM8RuG41JNGuN9FXoXWtQEqIYG14chQkTFbPGjnHBgXerpkOrwJ1Ce0GUJA7pyxMC/ecxub6S8S5XDSUD+L4pwJNhsgTr5BwMeG30rSO7trS9Z5Z+UOMtYBDk19jk3SLgMBBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=afbxg1dm; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109B723504B
+	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 14:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768401460; cv=pass; b=OrJpBedKsPk/iJ0Q5W/UL66sQRUtiMHANDXjBNtxzNrgje3rDb/DPCThVAJv2SjMKDfk0QGp2ylyGn2/8/OkHQBIT+eJvQk4DpmNcL3SV20c5Q6ndZyAn6DAdI2p6nYm/TM3t8FLkN5y3hR7G9RUU4ng/6ZvKInjo6i03Emcn6Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768401460; c=relaxed/simple;
+	bh=+gZtxbzNt43l59bSct2Wxe+p7Zbg0+RNqLubrnVLiPY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kIAGHUYMV7SVdlSs/J4W69ddeFeupUWzoKRYmLpBNjLHyvvLuh+gFb+8lP7a6otysxdNKpcdPjmqYojiJfTOpQtO/AtkFC7c7nCoh8z/a47vjY9cDwUbGQKkFPiuuCdjbyrIfS3/Cpry0LyDgUUQc9iPBrAX1uJCdLb/Irt13sg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PSTCbmXI; arc=pass smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="afbxg1dm"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee301a06aso8937105e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 06:26:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSTCbmXI"
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b07583340dso560206eec.3
+        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 06:37:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768401457; cv=none;
+        d=google.com; s=arc-20240605;
+        b=CLYgSTS37H0HX81YIoUsE5rgYKv0ZueelVa3691k5ZN8wYGOPJMvGLhg84MkQ6VSDc
+         oFWNe/5do2wAkIr5M0hZnT9phBICb17jx7IbbIkF9TKJMUCNachScz33vzc+8lSqKdo8
+         7WbN9t0qE+N6UiPaEfbjCX6ICCDuIT5Gytzj4LKCIivAWH2/Jib2bWBnoNIhMCRWmEVX
+         0DVoHfPqq/0OyVOkXE6IHduU01lfnPa7oz/1WpDtuz00kf3rM/uhdveFN3S4Je54KdSW
+         acjej7kbp0bKD7uRYnJguBKNe/VZbX5HmsbnPu6rAhGyIujYO9+sZyo7RSwP+DLiIarO
+         bACg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
+        fh=yVwl0hLYD4LZhAE39m6elzGjbzKoh0xz7Y64tLWq1jA=;
+        b=BUZwBNuMsLHjq2PzBsCKfHGJ6z5Cjj1moE3qL8me388UblZ5HLPiaFum9P1yEbCiYi
+         GRpEdcAqxpUms/X1BLPIpd2KK/jRKOK2rjf3uqFdQn8Wh2HAyAm/37B4EKJdHCD+tsh9
+         T36wMZaA/4W2e65au2B/60/PUyZND09BNagGGAYjb7suofaeGsZ1qp43GFYHp7EjD7C1
+         04iJwmQ4J02JSdUG1jwA6NLwLWz0mODZ9ASV2QktlW3oj7f5kjCKmjCBCkJ+weq54lOj
+         e2LZKxCvg8GVYVaKqCkuBmkh1DBP1t/AmCN1N9CI0+XxsROyBBxKoPhzO0QyogpfC5sL
+         Epow==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768400792; x=1769005592; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WFkWLAgT08Oj55bURIFv2XEwqSDQ0hHOA4DCqjRSAOw=;
-        b=afbxg1dmJvKH2Vuw/yxkEv6TWkGnGqkBWLLmZk4BTBEA2ll9SpG8tHMQjFgSFTvU0V
-         2TBBsygkdCjinQEJC3zo4M8jc6We+jr8/m14c9KGowq0nFY83Uf00cpZ+oSe+7D3ikkE
-         y929RsmvjbEX0439NuB7fk5bjBoCCFqZhf0nyJFuzQ7jO24EGmRT5VQqADijQIxQBi9J
-         KqLBUxxmy8skXPTfn9BUanZq2E2/6g9PTYwcWFb/QdXsGd58SBaO8Xsdtc9DwGbShP7y
-         uLL43ToK2uO2IHUT1oqBTNmaz4aieRRRintrfD8/FnnZau9K8nV+HDc3N8vwsK5Hzi+5
-         qyCg==
+        d=gmail.com; s=20230601; t=1768401457; x=1769006257; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
+        b=PSTCbmXIS9PDEip9hvDMjoJTiKDD5GXsYE6yA2I48WNjS3HL9OK7qcw+xbBlu2UY1c
+         12OTISbTJlkKpi8fjOa2rj9P4myBU6pfTzCGmDq36+AAyHt5diagpOk5tudBLip/6E62
+         AxCHG06frpN/v7DgDuzXtVodn8Qwzzrka9gCpyx/i4KlRfVoLIFkISLGknUnzc45GQWv
+         dcf91a37Or7Mt5kXg8bz6Poaj3CrYQABlixOEMjT+oZV2iWiSNWsNnZTVt/MpAVbVIM0
+         lzgLhEq6NfVMpIu5DljlX3jh2/oyH6JhGfRg3R9vaxhPaWRg0qeCGckAjqZLjbmO07vf
+         ZdoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768400792; x=1769005592;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WFkWLAgT08Oj55bURIFv2XEwqSDQ0hHOA4DCqjRSAOw=;
-        b=NULssecRXiXmmltAkTWjppoWj4sk3yalzU4LR8Q6xmLGWQBkTdVOjcr+H1XosFAEs7
-         lCFQKPu5tqA22Ck90LwJrX+0uxBD+rjQU9wJFtanctayy3NvnmVbh73fYQ16+457BPxe
-         HBcGc5iP2EbsZ+AQYF7/1No8zs6Ex46tfjk5qWl+Zy+sP5QZhc9bK06yEZ/M2xAFTVb7
-         JcP/71nDpHsWGNeJpkw7dvialeOjQKK2ufdufQ31mt2n80iW9QX/pOIOOTivyi3ysrA/
-         l/KplkuWt2Cdoz/bI9ceVw3hRZoePC2Mlu9A+mBeaHMDH3FJETiBbDPVjruOEN15IxM4
-         opsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUov7kFLaSrELntE3JR/n54+d2LMBVYce7EfURVIapI1lYLXnQbkMF3t5G/o943QSfmUZq0dI9YQV8BTe2y@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/Nq5rm6TthhVLZV6V5TFXrT4FH6lWLNQankop4n8pKYpPrRwv
-	WetmYhuVnRNUjgCFhHOG0YTUFnuxxFLetU+dVOqgjs7mYRbr6zvS/aOONSjNA7lcLbM=
-X-Gm-Gg: AY/fxX6SzKzwgqwKMT0TvKXjfDpPQ9KyCGl/8a/Fo75WLDA0uIekCMfaNnlH8ftNz+1
-	h56w7Rjt1WRRkkCIqn6H/AUmDN5iZyF8s7I4SXgMLQQC87DZaGad8PZBAeFNCvbsIlSUhvpNGl+
-	cMHV5Zt5xZl/fCR0OraVQ6tK1E2NYopOQlD1pNr3B3K1YQTAculR9DpbHOzELvkLk7n/4MrE5oF
-	k3yle/JA3N69ylAt7TaoVoNo1ejnspdlcecdRwsdUyHVLMCQqaqn+cuSDvazakQcQa6Hzi3J8OV
-	+EWIaG2ugwtgXnN6rgj3gd6Nhh2wMQUY/7emU2dkpnByzxT+DeDvxjUif30ZtloT/y9MLxmUgI2
-	tVlq8a3G8bMybulog7fj+t07enNLpeHXwe9k8msrA5sY1Uj7anzkJ7foUMRP+vT+pakTbxQ58+1
-	mtj00y8pcb+D1/MJFTr3XCi9y2FdHzGg==
-X-Received: by 2002:a05:600d:a:b0:47e:e5c5:f3a3 with SMTP id 5b1f17b1804b1-47ee5c5f57fmr18904075e9.24.1768400792369;
-        Wed, 14 Jan 2026 06:26:32 -0800 (PST)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee0baf482sm22736995e9.2.2026.01.14.06.26.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 06:26:31 -0800 (PST)
-Message-ID: <29c6fb60-0b5e-4822-bd49-80ce3d9eb6d9@suse.com>
-Date: Wed, 14 Jan 2026 15:26:30 +0100
+        d=1e100.net; s=20230601; t=1768401457; x=1769006257;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
+        b=YvB/1VUCqo56MVLkcAojZOmOPega0rdS4Z+guJqFPqvvf6XNy97eyldRmHgCKWPiUF
+         tRQagJ4fIhSCrLram4KKOP+XZvvIm5cT9b/oB00HbIqex+hgOnO4QKJxwN/KuI+lcjoR
+         JUrQmGnedyWhpT+bTDkreqtyxUd0Xa3aX69OWcPhvfc94M+w8WWdKsly5AK+LznOLhE2
+         +TI1fzTHLIjPTX13kjAsWax2Wrj0erNoPT1Mww1/sSg7+wh5oFLFxj9PYC7YViywefQ2
+         lT5hkf1y+jS3GEuWvnaAshtf05oHxJr76N4WCdAeVlhH5POvO+fe81XBddJmgzslVyKh
+         OC2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWnXvI2CdLCpXk52QCby2nA06nSB/ztjFvhVPz1StxTJ25phnn8v0raZEWv5EhXlplWHsvuHmEkRg3MFjyl@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9cOokSnpyMkM8pQif6xRoecLFSpYxtAesgkguZ+JEEclWoHz+
+	j1CaeJp8iLF1WjbBIjtfiHOgHaKA6oXjk3boedWjkOb4sQC6CeV/+WVdkwpjDcG87JvlNShwKJN
+	roBPAJ03XfytTWxMGTNa9i6WLx7ByHP4=
+X-Gm-Gg: AY/fxX7BjjIxRX2kf50J4OFmlqQqQKy8Ubc02XwteQahxu4FCCkn8T7frmJd3IG3JSj
+	xqWxcsASj1HwcnNyYLqaQO2Gdz6vHrhEhpCLAAN7MA3QoiQ9pRyDQI4EjG1838zKA4LQ6EUAkIe
+	F3RAeuq/xnGs1l1cGe6MINRamxFOcB8pSsM2rhiCeQxeYkzWn/1BeGs/HVxtXKeVRx5/45129PY
+	bwxn/iKbNLLxpcAx4V2pvAEoeaVbqCyD3/qmXf1tybn41cvrXuzPHgt0YBHM92NKNxzh9d1ItgU
+	rx1KBcOiWCM1uiCUewPvexS/rc4FWiJH2SThn6rjeDStsLyi3aQK/XWh4W0rlRMOANoi2xCDrzr
+	quvkZMk1eS71EpeH78PEPvts=
+X-Received: by 2002:a05:7300:d505:b0:2ae:5b23:1601 with SMTP id
+ 5a478bee46e88-2b48662c38emr1719555eec.0.1768401457031; Wed, 14 Jan 2026
+ 06:37:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v3 02/15] rust: add new ThisModule trait and
- THIS_MODULE impl
-To: Kari Argillander <kari.argillander@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Alexandre Courbot <acourbot@nvidia.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>
 References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
- <20260110-this_module_fix-v3-2-97a3d9c14e8b@gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260110-this_module_fix-v3-2-97a3d9c14e8b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Wed, 14 Jan 2026 15:37:24 +0100
+X-Gm-Features: AZwV_QhGm6AQT1y-6rFZieo-Sg-jU4esKv1Zq0TRBf1aujTPmnHrtNeDeXDpT-o
+Message-ID: <CANiq72m7S5aK22yzeGykGH2zhvL_UrTE2jxf2-6Fx_8oWR=nPQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 00/15] rust: Reimplement ThisModule to fix
+ ownership problems
+To: Kari Argillander <kari.argillander@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Youseok Yang <ileixe@gmail.com>, Yuheng Su <gipsyh.icu@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/10/26 4:08 PM, Kari Argillander wrote:
-> To make clear separation between module crates and kernel crate we
-> introduce ThisModule trait which is meant to be used by kernel space.
-> THIS_MODULE is meant to be used by modules. So kernel create will be
-> unable to even accidentally use THIS_MODULE.
-> 
-> As ThisModule is trait we can pass that around in const context. This is
-> needed so that we can read ownership information in const context when
-> we create example file_operations structs for modules.
-> 
-> New ThisModule will also eventually replace kernel::ModuleMetadata trait
-> and for this reason it also have NAME field.
-> 
-> To make transition smooth use mod this_module so we can have two
-> ThisModule same time. Also some functionality is added to THIS_MODULE
-> temporarily so that we do not have to change everything at once.
-> 
-> Also docs examples will need THIS_MODULE so also define that in docs.
-> 
-> Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
+On Sat, Jan 10, 2026 at 4:09=E2=80=AFPM Kari Argillander
+<kari.argillander@gmail.com> wrote:
+>
+> So currently we have problem that we are not always filling .owner field
+> example for file_operations. I think we can enable const_refs_to_static
+> already as that is in 1.78 and is stable in 1.83. So that fits perfecly
+> for us.  This also seems to be quite request feature but I did not found
+> that no one has ever suggested that we just enable this.
 
-Is this pattern common in other Rust code in the kernel? The situation
-on the C side is that THIS_MODULE is a variable of the module struct. On
-the Rust side, it is currently quite similar, with THIS_MODULE being a
-variable of the ThisModule struct/wrapper. The patch shifts this and
-makes THIS_MODULE a type that implements the ThisModule trait.
+For context, we have been tracking that feature (as well as
+`const_mut_refs`) precisely for `THIS_MODULE`:
 
-Naively, it seems somewhat confusing to me, coming mostly from the C
-side and expecting THIS_MODULE to be a variable.
+    https://github.com/Rust-for-Linux/linux/issues/2
 
-I'd like to understand this better. Would enabling const_refs_to_static
-alone be sufficient, or is it necessary to make THIS_MODULE a type for
-this to work? Should we be concerned that this new model could confuse
-people, or do you think it actually simplifies things? Does making the
-functions generic on ThisModule impact code size in any significant way,
-or could it in the future?
+There is also a test that Ralf added upstream back then:
 
--- 
-Thanks,
-Petr
+    https://github.com/rust-lang/rust/blob/main/tests/ui/consts/const-ref-t=
+o-static-linux-vtable.rs
+
+(Not sure what you mean by "quite request" though)
+
+Cheers,
+Miguel
