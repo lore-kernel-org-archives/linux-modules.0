@@ -1,233 +1,132 @@
 Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72880399004
-	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 12:31:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF84D214A8B
+	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 14:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768393916; cv=none; b=Neuu8eG6mxlWbvDr7/+dCPTTfY2aVgHh3gMre+8+CJj30/V/0A/QZAlhV3dXCvR9vG3tciXg5U2EqTvYB5tWUrK8eGI7uPwD1YVvgONOj5EGif1meq37QN0Mf2/2LZ+MJRC9uhZuj8m9SF7mRwLnMhe3vS5PRC01GWTBIaSZ0tQ=
+	t=1768400795; cv=none; b=UoG6nd8A+h+ECUKYYBTIsmfar9BME693+dJyfWjLoj3yy79Ecd+h2wlD84wsthaDdx6hKKO2f7nF7uq7osriEUwEsHc424nUrsvJK4dNCV/hbNDpxx9P55o5zpeUbgYJS5PuqJJmaJNQZvxT9yevmZZyeNbBROf8oe4cWMwgO9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768393916; c=relaxed/simple;
-	bh=ZgJ1dEU6+ZGVdXM6hw4wKI+le2B582/kbyjLsCiprmo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cnd0GKbpQsaICCX6v/DXZVD7c411KQp5cGODG6K7QutVOXjpc1DyYyJY+5o0SykUybZpEIy+rXZJLnk1RlWG+/TjFiRE8D9/lZ2NVrWu0s52FgrSB+6mN/w9pIs2DFGszdhfPUh+/gABgHLQZCdJn9cW0lo3+qGpKAl6XhW6xpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EdL1qTm9; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1768400795; c=relaxed/simple;
+	bh=XFBlPJKIbDQKyHpiOrhsJf3rxfDuDaoLs2vYJ1ERVw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ya12ODfkch4pfKcFo1k7C7IyHQk91xKJoqU+2IyM8RuG41JNGuN9FXoXWtQEqIYG14chQkTFbPGjnHBgXerpkOrwJ1Ce0GUJA7pyxMC/ecxub6S8S5XDSUD+L4pwJNhsgTr5BwMeG30rSO7trS9Z5Z+UOMtYBDk19jk3SLgMBBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=afbxg1dm; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EdL1qTm9"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee937ecf2so855045e9.0
-        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 04:31:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="afbxg1dm"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee301a06aso8937105e9.0
+        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 06:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768393909; x=1768998709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RR3YoD6WCTWgJohAhViTjBihhVdnHUrj5lJnB7qGoyI=;
-        b=EdL1qTm9TFRSj5q3AdElTFnRhEhUbcnj2iYgVIl12twupqEltlfymYPnts2A3UeQgh
-         lgvH2ElIJ4V9QslRuXYo8wrA00mkSUQf9NybDijPUhZTMHzuYPYGAQv5wLCYoxM1KiWJ
-         og7f0fBVfu/saNOX6oC6xwWxCxDtMG8asOs+ChpYwFUf3XW5nf/HDC0eb1SkCXDMBUm7
-         LFN7dBV9pjzSEEJULoWWuLLOPYmBVImjST1tzDOzctQBlg1ZJ8tnQrI8loKhh7Z1n61z
-         eZ7RnHIhfAVdV9xz1NxHqQH5SdyF1cZSoiucN0xXP4YYe2ZVWfrfJ2mm9vlig0mjPj0m
-         LAxA==
+        d=suse.com; s=google; t=1768400792; x=1769005592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WFkWLAgT08Oj55bURIFv2XEwqSDQ0hHOA4DCqjRSAOw=;
+        b=afbxg1dmJvKH2Vuw/yxkEv6TWkGnGqkBWLLmZk4BTBEA2ll9SpG8tHMQjFgSFTvU0V
+         2TBBsygkdCjinQEJC3zo4M8jc6We+jr8/m14c9KGowq0nFY83Uf00cpZ+oSe+7D3ikkE
+         y929RsmvjbEX0439NuB7fk5bjBoCCFqZhf0nyJFuzQ7jO24EGmRT5VQqADijQIxQBi9J
+         KqLBUxxmy8skXPTfn9BUanZq2E2/6g9PTYwcWFb/QdXsGd58SBaO8Xsdtc9DwGbShP7y
+         uLL43ToK2uO2IHUT1oqBTNmaz4aieRRRintrfD8/FnnZau9K8nV+HDc3N8vwsK5Hzi+5
+         qyCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768393909; x=1768998709;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RR3YoD6WCTWgJohAhViTjBihhVdnHUrj5lJnB7qGoyI=;
-        b=g5lyZ98vFzORRino72ATRClEqS0QnHKOV83h+w3+jvOlv1OeR791OBEdmBLDXn8qhd
-         +TPMmFeb0pb6ijshLnPMZc0wBZeCiq3sNYk1uobcUaeG5oPrahpIrn3RgbL3wh/5uRog
-         9BuZxU7HEchpI0BatVsk3IknSCCnGrPjj7HdGgPSzF53KoQiZm4iHB7D49xCSNgE32xl
-         v9T4fSgVqG+txC+r1D9AaAKNWCqSWKmW3PHfgGCpEIbGtdfmZmAzzXHkGb6cQbEgWTJO
-         blOkYZ6aN4tDItHwZHkvoZG9JdKLVK54vplRI8LMsRaZ6Yj2THO3HJJ8DuBNnWwW6S7h
-         F2qw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6vC16qZzUZxU/OLHiyZvmAIrnoX1iewojAGYdJ8rfrfDNiueYYSQTqqziZTKmkoQts7t4aBhUwQme5eLO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3S/F8Ttbhkes7piDoQFnUMoi+p4eYoG7oQtZUvEuQtDRkNpXz
-	fqi6W1r76fIUW9b5wz+okC2Lebfgl7JH2ddiGcXIAzMaIfSzpm+DQQ0p51OsJxMk/Io=
-X-Gm-Gg: AY/fxX59mPIK5IthLyNV2QToljV7LJf4JIsIeeKDzBvQMjySJR8Ffl+BEYcya5YGTlg
-	gNzdGtAXhl9ScmWP8mjFTrzuhVqWYsV4LGQfjQQZr32acv6NM126ZyGHF8bP6CkIeTAM6htNMdy
-	Utka4DWUfxzolQLSpTAZb4PAFF9txxbAUstWqQ/xfNA0qVbiy+nyzKieSK+96Oz9GySAcILjBi2
-	DEgGFwiem8D0+OmtyUyjOkqylzbJT6CTaYZSGF3dOpF6AwApZZYUyN0m7eAxlc8SlXLnlCcfViK
-	vxS5CUUwczgbs6bycUsp1XNejdv9CLlMUTeqSd6WfQNyzTHUFDNdGc/WD4oj8K8dCaY4apztEMH
-	L3HAVn0lVFcsF9Xm+4YWgi5vhUF2Py67rw1CkKLg6tq4MiiSyWZ39N7fKBTLOhTcKWGaS8S1MLW
-	MMFRxzXJ1DtKdH/lHjtRt8lsqaYVhNSeQ=
-X-Received: by 2002:a05:600c:a44:b0:47b:deb9:163d with SMTP id 5b1f17b1804b1-47ee377d1damr26618985e9.7.1768393909141;
-        Wed, 14 Jan 2026 04:31:49 -0800 (PST)
-Received: from zovi.suse.cz (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee243sm50097772f8f.31.2026.01.14.04.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 04:31:48 -0800 (PST)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	live-patching@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] livepatch: Fix having __klp_objects relics in non-livepatch modules
-Date: Wed, 14 Jan 2026 13:29:53 +0100
-Message-ID: <20260114123056.2045816-2-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260114123056.2045816-1-petr.pavlu@suse.com>
-References: <20260114123056.2045816-1-petr.pavlu@suse.com>
+        d=1e100.net; s=20230601; t=1768400792; x=1769005592;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WFkWLAgT08Oj55bURIFv2XEwqSDQ0hHOA4DCqjRSAOw=;
+        b=NULssecRXiXmmltAkTWjppoWj4sk3yalzU4LR8Q6xmLGWQBkTdVOjcr+H1XosFAEs7
+         lCFQKPu5tqA22Ck90LwJrX+0uxBD+rjQU9wJFtanctayy3NvnmVbh73fYQ16+457BPxe
+         HBcGc5iP2EbsZ+AQYF7/1No8zs6Ex46tfjk5qWl+Zy+sP5QZhc9bK06yEZ/M2xAFTVb7
+         JcP/71nDpHsWGNeJpkw7dvialeOjQKK2ufdufQ31mt2n80iW9QX/pOIOOTivyi3ysrA/
+         l/KplkuWt2Cdoz/bI9ceVw3hRZoePC2Mlu9A+mBeaHMDH3FJETiBbDPVjruOEN15IxM4
+         opsw==
+X-Forwarded-Encrypted: i=1; AJvYcCUov7kFLaSrELntE3JR/n54+d2LMBVYce7EfURVIapI1lYLXnQbkMF3t5G/o943QSfmUZq0dI9YQV8BTe2y@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/Nq5rm6TthhVLZV6V5TFXrT4FH6lWLNQankop4n8pKYpPrRwv
+	WetmYhuVnRNUjgCFhHOG0YTUFnuxxFLetU+dVOqgjs7mYRbr6zvS/aOONSjNA7lcLbM=
+X-Gm-Gg: AY/fxX6SzKzwgqwKMT0TvKXjfDpPQ9KyCGl/8a/Fo75WLDA0uIekCMfaNnlH8ftNz+1
+	h56w7Rjt1WRRkkCIqn6H/AUmDN5iZyF8s7I4SXgMLQQC87DZaGad8PZBAeFNCvbsIlSUhvpNGl+
+	cMHV5Zt5xZl/fCR0OraVQ6tK1E2NYopOQlD1pNr3B3K1YQTAculR9DpbHOzELvkLk7n/4MrE5oF
+	k3yle/JA3N69ylAt7TaoVoNo1ejnspdlcecdRwsdUyHVLMCQqaqn+cuSDvazakQcQa6Hzi3J8OV
+	+EWIaG2ugwtgXnN6rgj3gd6Nhh2wMQUY/7emU2dkpnByzxT+DeDvxjUif30ZtloT/y9MLxmUgI2
+	tVlq8a3G8bMybulog7fj+t07enNLpeHXwe9k8msrA5sY1Uj7anzkJ7foUMRP+vT+pakTbxQ58+1
+	mtj00y8pcb+D1/MJFTr3XCi9y2FdHzGg==
+X-Received: by 2002:a05:600d:a:b0:47e:e5c5:f3a3 with SMTP id 5b1f17b1804b1-47ee5c5f57fmr18904075e9.24.1768400792369;
+        Wed, 14 Jan 2026 06:26:32 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee0baf482sm22736995e9.2.2026.01.14.06.26.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jan 2026 06:26:31 -0800 (PST)
+Message-ID: <29c6fb60-0b5e-4822-bd49-80ce3d9eb6d9@suse.com>
+Date: Wed, 14 Jan 2026 15:26:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 02/15] rust: add new ThisModule trait and
+ THIS_MODULE impl
+To: Kari Argillander <kari.argillander@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Alexandre Courbot <acourbot@nvidia.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>
+References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
+ <20260110-this_module_fix-v3-2-97a3d9c14e8b@gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260110-this_module_fix-v3-2-97a3d9c14e8b@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The linker script scripts/module.lds.S specifies that all input
-__klp_objects sections should be consolidated into an output section of
-the same name, and start/stop symbols should be created to enable
-scripts/livepatch/init.c to locate this data.
+On 1/10/26 4:08 PM, Kari Argillander wrote:
+> To make clear separation between module crates and kernel crate we
+> introduce ThisModule trait which is meant to be used by kernel space.
+> THIS_MODULE is meant to be used by modules. So kernel create will be
+> unable to even accidentally use THIS_MODULE.
+> 
+> As ThisModule is trait we can pass that around in const context. This is
+> needed so that we can read ownership information in const context when
+> we create example file_operations structs for modules.
+> 
+> New ThisModule will also eventually replace kernel::ModuleMetadata trait
+> and for this reason it also have NAME field.
+> 
+> To make transition smooth use mod this_module so we can have two
+> ThisModule same time. Also some functionality is added to THIS_MODULE
+> temporarily so that we do not have to change everything at once.
+> 
+> Also docs examples will need THIS_MODULE so also define that in docs.
+> 
+> Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 
-This start/stop pattern is not ideal for modules because the symbols are
-created even if no __klp_objects input sections are present.
-Consequently, a dummy __klp_objects section also appears in the
-resulting module. This unnecessarily pollutes non-livepatch modules.
+Is this pattern common in other Rust code in the kernel? The situation
+on the C side is that THIS_MODULE is a variable of the module struct. On
+the Rust side, it is currently quite similar, with THIS_MODULE being a
+variable of the ThisModule struct/wrapper. The patch shifts this and
+makes THIS_MODULE a type that implements the ThisModule trait.
 
-Instead, since modules are relocatable files, the usual method for
-locating consolidated data in a module is to read its section table.
-This approach avoids the aforementioned problem.
+Naively, it seems somewhat confusing to me, coming mostly from the C
+side and expecting THIS_MODULE to be a variable.
 
-The klp_modinfo already stores a copy of the entire section table with
-the final addresses. Introduce a helper function that
-scripts/livepatch/init.c can call to obtain the location of the
-__klp_objects section from this data.
+I'd like to understand this better. Would enabling const_refs_to_static
+alone be sufficient, or is it necessary to make THIS_MODULE a type for
+this to work? Should we be concerned that this new model could confuse
+people, or do you think it actually simplifies things? Does making the
+functions generic on ThisModule impact code size in any significant way,
+or could it in the future?
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- include/linux/livepatch.h |  3 +++
- kernel/livepatch/core.c   | 20 ++++++++++++++++++++
- scripts/livepatch/init.c  | 17 ++++++-----------
- scripts/module.lds.S      |  7 +------
- 4 files changed, 30 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index 772919e8096a..ca90adbe89ed 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -175,6 +175,9 @@ int klp_enable_patch(struct klp_patch *);
- int klp_module_coming(struct module *mod);
- void klp_module_going(struct module *mod);
- 
-+struct klp_object_ext *klp_build_locate_init_objects(const struct module *mod,
-+						     unsigned int *nr_objs);
-+
- void klp_copy_process(struct task_struct *child);
- void klp_update_patch_state(struct task_struct *task);
- 
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 9917756dae46..4e0ac47b3623 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -1356,6 +1356,26 @@ void klp_module_going(struct module *mod)
- 	mutex_unlock(&klp_mutex);
- }
- 
-+struct klp_object_ext *klp_build_locate_init_objects(const struct module *mod,
-+						     unsigned int *nr_objs)
-+{
-+	struct klp_modinfo *info = mod->klp_info;
-+
-+	for (int i = 1; i < info->hdr.e_shnum; i++) {
-+		Elf_Shdr *shdr = &info->sechdrs[i];
-+
-+		if (strcmp(info->secstrings + shdr->sh_name, "__klp_objects"))
-+			continue;
-+
-+		*nr_objs = shdr->sh_size / sizeof(struct klp_object_ext);
-+		return (struct klp_object_ext *)shdr->sh_addr;
-+	}
-+
-+	*nr_objs = 0;
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(klp_build_locate_init_objects);
-+
- static int __init klp_init(void)
- {
- 	klp_root_kobj = kobject_create_and_add("livepatch", kernel_kobj);
-diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-index 2274d8f5a482..23e037d6de19 100644
---- a/scripts/livepatch/init.c
-+++ b/scripts/livepatch/init.c
-@@ -9,19 +9,16 @@
- #include <linux/slab.h>
- #include <linux/livepatch.h>
- 
--extern struct klp_object_ext __start_klp_objects[];
--extern struct klp_object_ext __stop_klp_objects[];
--
- static struct klp_patch *patch;
- 
- static int __init livepatch_mod_init(void)
- {
-+	struct klp_object_ext *obj_exts;
- 	struct klp_object *objs;
- 	unsigned int nr_objs;
- 	int ret;
- 
--	nr_objs = __stop_klp_objects - __start_klp_objects;
--
-+	obj_exts = klp_build_locate_init_objects(THIS_MODULE, &nr_objs);
- 	if (!nr_objs) {
- 		pr_err("nothing to patch!\n");
- 		ret = -EINVAL;
-@@ -41,7 +38,7 @@ static int __init livepatch_mod_init(void)
- 	}
- 
- 	for (int i = 0; i < nr_objs; i++) {
--		struct klp_object_ext *obj_ext = __start_klp_objects + i;
-+		struct klp_object_ext *obj_ext = obj_exts + i;
- 		struct klp_func_ext *funcs_ext = obj_ext->funcs;
- 		unsigned int nr_funcs = obj_ext->nr_funcs;
- 		struct klp_func *funcs = objs[i].funcs;
-@@ -90,12 +87,10 @@ static int __init livepatch_mod_init(void)
- 
- static void __exit livepatch_mod_exit(void)
- {
--	unsigned int nr_objs;
--
--	nr_objs = __stop_klp_objects - __start_klp_objects;
-+	struct klp_object *obj;
- 
--	for (int i = 0; i < nr_objs; i++)
--		kfree(patch->objs[i].funcs);
-+	klp_for_each_object_static(patch, obj)
-+		kfree(obj->funcs);
- 
- 	kfree(patch->objs);
- 	kfree(patch);
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 3037d5e5527c..383d19beffb4 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -35,12 +35,7 @@ SECTIONS {
- 	__patchable_function_entries : { *(__patchable_function_entries) }
- 
- 	__klp_funcs		0: ALIGN(8) { KEEP(*(__klp_funcs)) }
--
--	__klp_objects		0: ALIGN(8) {
--		__start_klp_objects = .;
--		KEEP(*(__klp_objects))
--		__stop_klp_objects = .;
--	}
-+	__klp_objects		0: ALIGN(8) { KEEP(*(__klp_objects)) }
- 
- #ifdef CONFIG_ARCH_USES_CFI_TRAPS
- 	__kcfi_traps		: { KEEP(*(.kcfi_traps)) }
 -- 
-2.52.0
-
+Thanks,
+Petr
