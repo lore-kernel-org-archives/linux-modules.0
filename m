@@ -1,103 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF40399000;
-	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E613C399019
+	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 12:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768391300; cv=none; b=r88PR4dvidbfRQAORNSI+Os93ZeGQNKtnmv/WFh/r3o5DBA/0Ju18f/W46Ixy5vdy+4izYcpSEaHAZvrrozyaNhnZNysGWWdfWjDOqqeKBBUbfJwVMpHCOqBIB9hUJszVg7n7F0yp5wAvsVi4fFwyKnbty3Z0O3K6aKkIEE+7fw=
+	t=1768393915; cv=none; b=VdSD13Xdo1c43G97SuzCA/TKcblUz01p669dPyCd2bX8vnwUrYViA/upWFJeq7ZlIaqL7yW75jbIWaZuXQ9ifFYY0V1l7g5vY+ch4ngCseOcNpYZ86kGzq1a65k0D9nBx82s53CVoXB/wf7HIwMSpEpWk8xJFPPa+rrM739oa7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768391300; c=relaxed/simple;
-	bh=42b1jPMRaZQMJsFTcdIPsgOH+T5OPHq2ZKwWlPwIz44=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Kn4APzosVu3WC9ev/HCUwMogM7PkDvpfRsTBaM2TPpy7ES0NWOGnjMJY0v+YieFFl8NaK/DTiK5xUt+xukoajl5iCm6H+pfy03batffzJVsX8LNx7F/Ptp9GwxaodjtnvVmJdQuLB8CbUHT4tpZxH8XoYMTJOEvp2wRQClgRX+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O7o7XXLD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768393915; c=relaxed/simple;
+	bh=4cEsjI6qmluXc03y+Xik1t3t8Tu9eac4951kHHMMRrs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l/yTn8QmwP9QM00bUf+GNubAmWqmsWlpU8DMXp15JKB93oh6qTL8kV6h9HJsGUJVT6jj5d4SwwUwZ+pj82ZORSVh68XshpxEZ3enfIygqXkb1UCHkaXPcRJpbtakpbXyfbcGq45NAc0oEdd7deCdb1K31lxsmZc5oc5ylvB6bfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VuU3Vwqq; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O7o7XXLD"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 27719C2BC86;
-	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768391300;
-	bh=42b1jPMRaZQMJsFTcdIPsgOH+T5OPHq2ZKwWlPwIz44=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=O7o7XXLDaiYzs93VgV3RZzXPKw8S7HWiYG6LYTRdiab5rsryYJGtGvu83pUD27HqH
-	 UGnQhxQBYLa8hINWTHg/40l7SwgvqXoHeNtJFEXEEqkvoG1GN0izO1162Eop4KJ/Yg
-	 S93sQzZAUdfzelmDxpNQLBk1C4B7ZlbrFNzp+gmkliFS88xQLP5dlsZEyeLPCvh1+1
-	 ylBJf2IygroDEGJhLbuns/wvqVzmKe9HKam8aA+AnvmI5q6E4eM/9j/kNaUsvOIt/l
-	 3e/35M7LrkhESr8you8sU0ilwWOB5YLMqOZk4cCGmDLk9ceRo+2Mwtg6zqKEEZnYUy
-	 Av2Mxhw3Wn0bQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10505D29FEA;
-	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
-From: Jihan LIN via B4 Relay <devnull+linjh22s.gmail.com@kernel.org>
-Subject: [PATCH v2 0/2] gendwarfksyms: Document build dependencies
-Date: Wed, 14 Jan 2026 19:47:43 +0800
-Message-Id: <20260114-documents_gendwarfksyms-v2-0-297c98bd62c6@gmail.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VuU3Vwqq"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fbc305914so6094524f8f.0
+        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 04:31:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1768393908; x=1768998708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MDpgMwk1BHGoscfxwj/PsMCXAuQ0lRGKa6CrVf+sfjA=;
+        b=VuU3VwqqVwarBAP0ycg2bJeosFiePVcbzgGObILJMDGoKkegIUBKEmQrVB7e8jw3ZJ
+         cKgP8xyI4evX84RK/CGS+9vzEsAkziFJf6bgOoQa+V5PNeLCQyiUB4Ty6L4XblbUmf95
+         LtSQcJ48FIa9hPd8FHV4uk9t0OZyaHtbhdykq7Fjud6n6OVuPSPJWjjm+zXjrZzInviq
+         dJEL1xqnt0IHGQQ1BkHj/jZqSbP2WkszLC3W4QlMWRJHjwiuItEySpFNXzC5A4985Ui4
+         hs2EAJses/tsXl1QpRjk6OBPOl+x3i0H69AilTcK67mmfH1M/jBB8PXHBqNPPQDsz6/8
+         YbwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768393908; x=1768998708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MDpgMwk1BHGoscfxwj/PsMCXAuQ0lRGKa6CrVf+sfjA=;
+        b=qYG2oOqTrcO0PQJjulpJU52uxw41oYmk0IkfWKBlvfT4Lwuw2u7oSCq75+S45NIDys
+         Vjj50NIab3qkQ41+A9ZgeIU08ZqXKWGw+z5aeEKUdCYRjbE13NZgGYa6MYlvpAqCZNYO
+         V6D2bV3PRpyjcFqbBGCV1yeUMDmvOYOOhXKFRmHu+MhAyxCipyjxGgRu1kdXgSKsjO2G
+         U8/Zs+Z3xBod2U2zTC7qDiHtWkhT1d9c/mu8MvP7+1oHvw365PkBNjTcPFuCSBCg4WSE
+         BywEgdOvKCMK4cXM9ed2f5VW1ZxFvorer5ie1SKpAiJSYwPDfhOrUzguU+g/LCFx4+XW
+         /bAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXa1UC6kVF5cgeuLVLBf7ghePQBHXu4hBwQWVvvgYo9fUoNc4cQT7CQXNiI1l5qtHxMrInZdec5a5Nqmo1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/om1QiZYDHmmyzrpUhlURX24zd0+GgJIOWuzGGj5idTg9HR7m
+	GvKR4aghgPJ+62XxrohAuyqIzx/8/PUC2p442y+EV9J5Eix+vaAkP9QlKMHkIs/Egqs=
+X-Gm-Gg: AY/fxX5hXVBOGfj0VN/StdsBZC+oRczd8kxOOvkQ86Too5p7eqfgsQcwcbxsEcEDN0s
+	4mFuKKJwTvpZCGqgLcCT3lojeK9Ge+s+WL5/MlnOO4jwZEe8Vao16X5VaYfMc8uxt4PilLT0tAa
+	qr/Jdn0RbYFRQZdTzAEU/kSR7qNeydlr/kFHNAArJUjjYbT6CsEF4Q/ktM+rqcel3VGQSc1rFfj
+	h/pdwnxINR2Zno3JyIVsvzeBsKGXtzYDjkL1B2HIJTKkemIDHkKCkAa2YVfWukc+oWmblcWFi2a
+	OOhe+SXTsUJGEt5pDae0Y7k6MCFVRVlpjGyj2JZZ1hq+2mnaBFfxcFarFy1fQCJeptfFv8Eg1zb
+	dUY7OYyUZHII5UX2OcsX++3v+sUn901LdorrOCF4qQ25Ud8K4QtKLnH4B69APo8psK3Ci4NHI4/
+	diwoq5Lz+bIT0gsD/ATFGZXk/zf/sKPRc=
+X-Received: by 2002:a05:6000:2887:b0:430:f7ae:af3e with SMTP id ffacd0b85a97d-4342c54ac52mr2565147f8f.32.1768393907979;
+        Wed, 14 Jan 2026 04:31:47 -0800 (PST)
+Received: from zovi.suse.cz (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee243sm50097772f8f.31.2026.01.14.04.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 04:31:47 -0800 (PST)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Improve handling of the __klp_{objects,funcs} sections in modules
+Date: Wed, 14 Jan 2026 13:29:52 +0100
+Message-ID: <20260114123056.2045816-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAF+CZ2kC/3WNQQ7CIBQFr9L8tRhAa6kr72Eag/BpiQIGarVpu
- LvYxKXLmeTNWyBhtJjgWC0QcbLJBl+AbypQg/Q9EqsLA6f8QBmtiQ7q6dCP6dKj1y8ZzS3NLpH
- WCIF72UjNDZT1I6Kx77V87goPNo0hzuvRxL721xR/mxMjjNT8ykyrdkI19NQ7ae9bFRx0OecPF
- /L5zr4AAAA=
-X-Change-ID: 20260105-documents_gendwarfksyms-9f88e4a7ad2f
-To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun.feng@gmail.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jihan LIN <linjh22s@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768391298; l=1284;
- i=linjh22s@gmail.com; s=linjh22s_machine; h=from:subject:message-id;
- bh=42b1jPMRaZQMJsFTcdIPsgOH+T5OPHq2ZKwWlPwIz44=;
- b=OhZJJST3EqaB8evuw8uBs1/Mh0MwTtGN1AdtBslfMv4u2s/DuVo6soixm5q9t7N9lQDdQmtf9
- gnU8lXrczWABzmmL5EWYh3qHGm4lX5ghB3gimUgRYyMRPQM8nDZqA7C
-X-Developer-Key: i=linjh22s@gmail.com; a=ed25519;
- pk=MnRQAVFy1t4tiGb8ce7ohJwrN2YFXd+dA7XmzR6GmUc=
-X-Endpoint-Received: by B4 Relay for linjh22s@gmail.com/linjh22s_machine
- with auth_id=592
-X-Original-From: Jihan LIN <linjh22s@gmail.com>
-Reply-To: linjh22s@gmail.com
+Content-Transfer-Encoding: 8bit
 
-Hi,
+Petr Pavlu (2):
+  livepatch: Fix having __klp_objects relics in non-livepatch modules
+  livepatch: Free klp_{object,func}_ext data after initialization
 
-I found there is no documentation for build dependencies in gendwarfksyms
-while digging into Rust drivers. Though Yuli added libdw-dev to the build
-dependencies for packaging [1], it seems that there is no documentation
-about it.
+ include/linux/livepatch.h           |  3 +++
+ kernel/livepatch/core.c             | 21 +++++++++++++++++++++
+ scripts/livepatch/init.c            | 17 ++++++-----------
+ scripts/module.lds.S                |  9 ++-------
+ tools/objtool/check.c               |  2 +-
+ tools/objtool/include/objtool/klp.h | 10 +++++-----
+ tools/objtool/klp-diff.c            |  2 +-
+ 7 files changed, 39 insertions(+), 25 deletions(-)
 
-This series documents the build dependencies of gendwarfksyms, adds a few
-examples for installing these dependencies on some distributions and
-introduces indentation style cleanup as suggested.
 
-[1]: https://lore.kernel.org/all/79C925DCE2E963FF+20250422104927.144252-1-wangyuli@uniontech.com/
-
-Signed-off-by: Jihan LIN <linjh22s@gmail.com>
----
-Changes in v2:
-- Fix style for section 'Dependencies'.
-- Introduce a new patch to clean up indentation in gendwarfksyms.rst.
-- Link to v1: https://lore.kernel.org/r/20260108-documents_gendwarfksyms-v1-1-52b1f9c38c70@gmail.com
-
----
-Jihan LIN (2):
-      Documentation/kbuild: Document gendwarfksyms build dependencies
-      Documentation/kbuild: gendwarfksyms: Style cleanup
-
- Documentation/kbuild/gendwarfksyms.rst | 123 +++++++++++++++++++--------------
- 1 file changed, 73 insertions(+), 50 deletions(-)
----
-base-commit: b71e635feefc852405b14620a7fc58c4c80c0f73
-change-id: 20260105-documents_gendwarfksyms-9f88e4a7ad2f
-
-Best regards,
+base-commit: f0b9d8eb98dfee8d00419aa07543bdc2c1a44fb1
 -- 
-Jihan LIN <linjh22s@gmail.com>
-
+2.52.0
 
