@@ -1,154 +1,123 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42709284686;
-	Tue, 13 Jan 2026 14:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CDBC397AC6;
+	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768316201; cv=none; b=o0wgjhKmbdX/h3jJdxLDMvVofaOuMK5KwvkFqNTYatnZhEON0CIjItTyiB4lD3Bk9kKOd8vh+IUbOnHmA+bBjQD5vA+JDoGwzdJ/XwSjBVx5iLM74NQdzOky6PfRwnfseMLcYM14SeCi1U2L4XEg/mE6DeysuL87U7MoHGOn4Ew=
+	t=1768391300; cv=none; b=LjLnxZM0GGSHQCo4QbluQp+hi8oiS7FvFKd/V4nIWRiTO7+UjE9SodDNLPsv/G/rZuKGEwgXZKJtR27BjzAqMjP+zwoh64raul+JDMjpqESUaf9uRZveeO1tTJ5EHdh420NeTlncf8WHGdLrb8HwtUzWhfhYhLoSJ496Cij7N+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768316201; c=relaxed/simple;
-	bh=NAqsrBRRVQ9IjNII30nTZcG+axDLjmdYDnjuoF9bBio=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HV6KWreyR79nz9hSHBqcqHWaQbSfQWstauNtshrJCeATQeFxgDWFsRTR7WbRw5h67t7Q5CJ3yfLkQXGbHQCUnghie4yR31tS3dXYfvRPQl/iLOnxj1AVfkqBlbialY/ys9scasObMUhnq0rTFf8Tt7MA/o2EiLmeSe/FsXFh1JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sSx4mOU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EElHHGGH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1768391300; c=relaxed/simple;
+	bh=0O1tF7Rx6B7NMUTJaBjAs7O/JZvQflj27dnVV/aS0Ds=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WrTj44nFKGkF2DVjIR8vHXSngGyOxT8XAi+9WghXVNqainfIDPtsVsaupAtt8FZyPrUv/lcnGt9iG8ZiEH2l3RQc0L19+DxtO4bwpgea09fMUXEW+FtaCu1ZRICmUouCuyRXaaGxcoNflf+4Fone3f+TUkwX1wYmQsFkH3uYJnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=StJIpipQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sSx4mOU4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EElHHGGH"
-Date: Tue, 13 Jan 2026 15:56:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768316198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
-	b=sSx4mOU4qkDYzkkx/o4BEtWyl3KyxW3euTuarzApOzTpXlaTS++4XY/zozFEdwI+2D4gqc
-	X/2YYXHPhJ39OiUekNo9mxCgbd3mRKVP6iJ5LixKaumKVEOue7aHTdj2/SSw9AIA7xysiw
-	khwRiBeHIgbbxPJE6nsPK4snz9MXXmwk6QsCaNwglaoU9+6Hv1fw7AOuDtH/SrsWBwtrSs
-	Zpm5UWEXMa1w74IQw5HzaMgnRUPa2rwJxDOUlrasiueQFGxKTnhVEfsy49uPFRY/wFDjFK
-	OtlrNM9syil5J8J1N2p2o6zWC7xe4RZ5ft3jv1L7pqgXQLYRRkdUm/6V+g4TPg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768316198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
-	b=EElHHGGH26sj8RjZyTS7MzBbQHDhVABCJGxSUKy3ePFAS2cW41IbJqoE/+HSbaCGe4llt6
-	VlRf7PDMccGp4EBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <20260113145635.YfSTBhVs@linutronix.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="StJIpipQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 36B75C16AAE;
+	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768391300;
+	bh=0O1tF7Rx6B7NMUTJaBjAs7O/JZvQflj27dnVV/aS0Ds=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=StJIpipQoDNgFUATVI+O9zBIFfboxc2ZsHkzyQdYITw+7bfo8yn+ssCTYeQIclF6T
+	 v2ckFIjqiXYbhzSueGZ+HnVSeAHCw7QKMKtk/lOcVHHbzOG/qZznFUKrm3vYQ5higf
+	 Dya2uLYg7VQRu4O+kCjpjno7l0wmfbLrHPAH/r4BhkmvzIDF6duCIpBj178GfakSV+
+	 sLWDKdsZZlmwxC1kRpVui/+V43tlsf82WSz7Fq5CUiltxAFx3Ezl/cJ+idGar7Xuz6
+	 Ma1ZxlpaHAbJKPX+QYI0GsB2+JKaq1HXV2Ay4ON4F0FU0EXXmdOInrNRO2eZhjlFjG
+	 VdhSj860IXWiQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 246DFD29FF7;
+	Wed, 14 Jan 2026 11:48:20 +0000 (UTC)
+From: Jihan LIN via B4 Relay <devnull+linjh22s.gmail.com@kernel.org>
+Date: Wed, 14 Jan 2026 19:47:44 +0800
+Subject: [PATCH v2 1/2] Documentation/kbuild: Document gendwarfksyms build
+ dependencies
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260114-documents_gendwarfksyms-v2-1-297c98bd62c6@gmail.com>
+References: <20260114-documents_gendwarfksyms-v2-0-297c98bd62c6@gmail.com>
+In-Reply-To: <20260114-documents_gendwarfksyms-v2-0-297c98bd62c6@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, Sami Tolvanen <samitolvanen@google.com>, 
+ Masahiro Yamada <masahiroy@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Jihan LIN <linjh22s@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768391298; l=1690;
+ i=linjh22s@gmail.com; s=linjh22s_machine; h=from:subject:message-id;
+ bh=zaWdvli633/VK3S2KUL14PgYlfdPOQbClm+Z3p3BhUE=;
+ b=kMzqRJLPJqr33VLRjq0RPNsdmz0bA0nnzM52+b1Yznalz4e6Xi+T+3tx9pdylN9m4W96yQ43T
+ LXR12zdX+BGC5BlQJHChFfDCzW/e24NiHXQ2OmYFX8auZna93/Zztkr
+X-Developer-Key: i=linjh22s@gmail.com; a=ed25519;
+ pk=MnRQAVFy1t4tiGb8ce7ohJwrN2YFXd+dA7XmzR6GmUc=
+X-Endpoint-Received: by B4 Relay for linjh22s@gmail.com/linjh22s_machine
+ with auth_id=592
+X-Original-From: Jihan LIN <linjh22s@gmail.com>
+Reply-To: linjh22s@gmail.com
 
-On 2026-01-13 13:28:59 [+0100], Thomas Wei=C3=9Fschuh wrote:
-> --- /dev/null
-> +++ b/scripts/modules-merkle-tree.c
-> @@ -0,0 +1,467 @@
-=E2=80=A6
-> +static void build_proof(struct mtree *mt, unsigned int n, int fd)
-> +{
-> +	unsigned char cur[EVP_MAX_MD_SIZE];
-> +	unsigned char tmp[EVP_MAX_MD_SIZE];
+From: Jihan LIN <linjh22s@gmail.com>
 
-This and a few other instances below could be optimized to avoid
-hashing. I probably forgot to let you know.
--> https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/mtree-hashed-mod=
-s.git/commit/?id=3D10b565c123c731da37befe862de13678b7c54877
+Although dependencies for gendwarfksyms were recently added to the
+packaging rules [1-2], the corresponding documentation was missing.
 
-> +	struct file_entry *fe, *fe_sib;
-> +
-> +	fe =3D &fh_list[n];
-> +
-> +	if ((n & 1) =3D=3D 0) {
-> +		/* No pair, hash with itself */
-> +		if (n + 1 =3D=3D num_files)
-> +			fe_sib =3D fe;
-> +		else
-> +			fe_sib =3D &fh_list[n + 1];
-> +	} else {
-> +		fe_sib =3D &fh_list[n - 1];
-> +	}
-> +	/* First comes the node position into the file */
-> +	write_be_int(fd, n);
-> +
-> +	if ((n & 1) =3D=3D 0)
-> +		hash_entry(fe->hash, fe_sib->hash, cur);
-> +	else
-> +		hash_entry(fe_sib->hash, fe->hash, cur);
-> +
-> +	/* Next is the sibling hash, followed by hashes in the tree */
-> +	write_hash(fd, fe_sib->hash);
-> +
-> +	for (unsigned int i =3D 0; i < mt->levels - 1; i++) {
-> +		n >>=3D 1;
-> +		if ((n & 1) =3D=3D 0) {
-> +			void *h;
-> +
-> +			/* No pair, hash with itself */
-> +			if (n + 1 =3D=3D mt->entries[i])
-> +				h =3D cur;
-> +			else
-> +				h =3D mt->l[i][n + 1].hash;
-> +
-> +			hash_entry(cur, h, tmp);
-> +			write_hash(fd, h);
-> +		} else {
-> +			hash_entry(mt->l[i][n - 1].hash, cur, tmp);
-> +			write_hash(fd, mt->l[i][n - 1].hash);
-> +		}
-> +		memcpy(cur, tmp, hash_size);
-> +	}
-> +
-> +	 /* After all that, the end hash should match the root hash */
-> +	if (memcmp(cur, mt->l[mt->levels - 1][0].hash, hash_size))
-> +		errx(1, "hash mismatch");
-> +}
+Document the required build dependencies for gendwarfksyms, and
+include a few examples for installing these dependencies on some
+distributions.
 
-Sebastian
+[1] commit 657f96cb7c06 ("kbuild: deb-pkg: Add libdw-dev:native to
+Build-Depends-Arch")
+[2] commit 5bd6bdd0f76e ("kbuild: rpm-pkg: Add (elfutils-devel or
+libdw-devel) to BuildRequires")
+Signed-off-by: Jihan LIN <linjh22s@gmail.com>
+---
+ Documentation/kbuild/gendwarfksyms.rst | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/Documentation/kbuild/gendwarfksyms.rst b/Documentation/kbuild/gendwarfksyms.rst
+index ed366250a54eac3a72c2f529da94a9e803704ae4..0e153d13b052da6edcf65950739730c123cd49db 100644
+--- a/Documentation/kbuild/gendwarfksyms.rst
++++ b/Documentation/kbuild/gendwarfksyms.rst
+@@ -14,6 +14,29 @@ selected, **gendwarfksyms** is used instead to calculate symbol versions
+ from the DWARF debugging information, which contains the necessary
+ details about the final module ABI.
+ 
++Dependencies
++------------
++
++libelf, libdw and zlib are dependencies of gendwarfksyms.
++
++Here are a few examples for installing these dependencies:
++
++* Arch Linux and derivatives::
++
++	sudo pacman --needed -S zlib libelf
++
++* Debian, Ubuntu, and derivatives::
++
++	sudo apt install libelf-dev libdw-dev zlib1g-dev
++
++* Fedora and derivatives::
++
++	sudo dnf install elfutils-libelf-devel elfutils-devel zlib-devel
++
++* openSUSE and derivatives::
++
++	sudo zypper install libelf-devel libdw-devel zlib-devel
++
+ Usage
+ -----
+ 
+
+-- 
+2.51.0
+
+
