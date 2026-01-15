@@ -1,129 +1,331 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109B723504B
-	for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 14:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768401460; cv=pass; b=OrJpBedKsPk/iJ0Q5W/UL66sQRUtiMHANDXjBNtxzNrgje3rDb/DPCThVAJv2SjMKDfk0QGp2ylyGn2/8/OkHQBIT+eJvQk4DpmNcL3SV20c5Q6ndZyAn6DAdI2p6nYm/TM3t8FLkN5y3hR7G9RUU4ng/6ZvKInjo6i03Emcn6Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768401460; c=relaxed/simple;
-	bh=+gZtxbzNt43l59bSct2Wxe+p7Zbg0+RNqLubrnVLiPY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kIAGHUYMV7SVdlSs/J4W69ddeFeupUWzoKRYmLpBNjLHyvvLuh+gFb+8lP7a6otysxdNKpcdPjmqYojiJfTOpQtO/AtkFC7c7nCoh8z/a47vjY9cDwUbGQKkFPiuuCdjbyrIfS3/Cpry0LyDgUUQc9iPBrAX1uJCdLb/Irt13sg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PSTCbmXI; arc=pass smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF6A31BC8D
+	for <linux-modules@vger.kernel.org>; Thu, 15 Jan 2026 21:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768513878; cv=none; b=WMEMbesY/A46tDvyQKa4OVXD/QqsNznhJ2m3yG0As14Ipz7eIOUkRAMO68KtlyHd8x2Rrg/d3f66H22zpc40Xhmx0pGx5pX2tb5iqcPbyszr7ozQxq6/Jj6qa4rgzM7pbaizgweZk6G0Dtneh/I/pJCgr1JeNn7rtBfXNZ0kRzQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768513878; c=relaxed/simple;
+	bh=+Zq/iPBlsGMEwtOE1mp3hKqXwslvhehBu11zNYksgOw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u/0zrD1/vE050a6RE/R8M633ahTyIkv8VbOU1whwalQ6XzzDMBleCLRWIb9ihbZ+lybmhib7ZAWxBoY9G7F/DRYqm4FmIlHTFkWWX+n6CNQUQyhxztwmQFn5FNV+bR48Ada0fptzsfRyZKQQMb22yoFIDgFahBif4gMD6JUz5s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QYYw5wFJ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSTCbmXI"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2b07583340dso560206eec.3
-        for <linux-modules@vger.kernel.org>; Wed, 14 Jan 2026 06:37:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768401457; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CLYgSTS37H0HX81YIoUsE5rgYKv0ZueelVa3691k5ZN8wYGOPJMvGLhg84MkQ6VSDc
-         oFWNe/5do2wAkIr5M0hZnT9phBICb17jx7IbbIkF9TKJMUCNachScz33vzc+8lSqKdo8
-         7WbN9t0qE+N6UiPaEfbjCX6ICCDuIT5Gytzj4LKCIivAWH2/Jib2bWBnoNIhMCRWmEVX
-         0DVoHfPqq/0OyVOkXE6IHduU01lfnPa7oz/1WpDtuz00kf3rM/uhdveFN3S4Je54KdSW
-         acjej7kbp0bKD7uRYnJguBKNe/VZbX5HmsbnPu6rAhGyIujYO9+sZyo7RSwP+DLiIarO
-         bACg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
-        fh=yVwl0hLYD4LZhAE39m6elzGjbzKoh0xz7Y64tLWq1jA=;
-        b=BUZwBNuMsLHjq2PzBsCKfHGJ6z5Cjj1moE3qL8me388UblZ5HLPiaFum9P1yEbCiYi
-         GRpEdcAqxpUms/X1BLPIpd2KK/jRKOK2rjf3uqFdQn8Wh2HAyAm/37B4EKJdHCD+tsh9
-         T36wMZaA/4W2e65au2B/60/PUyZND09BNagGGAYjb7suofaeGsZ1qp43GFYHp7EjD7C1
-         04iJwmQ4J02JSdUG1jwA6NLwLWz0mODZ9ASV2QktlW3oj7f5kjCKmjCBCkJ+weq54lOj
-         e2LZKxCvg8GVYVaKqCkuBmkh1DBP1t/AmCN1N9CI0+XxsROyBBxKoPhzO0QyogpfC5sL
-         Epow==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768401457; x=1769006257; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
-        b=PSTCbmXIS9PDEip9hvDMjoJTiKDD5GXsYE6yA2I48WNjS3HL9OK7qcw+xbBlu2UY1c
-         12OTISbTJlkKpi8fjOa2rj9P4myBU6pfTzCGmDq36+AAyHt5diagpOk5tudBLip/6E62
-         AxCHG06frpN/v7DgDuzXtVodn8Qwzzrka9gCpyx/i4KlRfVoLIFkISLGknUnzc45GQWv
-         dcf91a37Or7Mt5kXg8bz6Poaj3CrYQABlixOEMjT+oZV2iWiSNWsNnZTVt/MpAVbVIM0
-         lzgLhEq6NfVMpIu5DljlX3jh2/oyH6JhGfRg3R9vaxhPaWRg0qeCGckAjqZLjbmO07vf
-         ZdoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768401457; x=1769006257;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7vz6gsheW2ZkxS8OzJeR0mXOpyBUWqb5nPTzr3eRxHA=;
-        b=YvB/1VUCqo56MVLkcAojZOmOPega0rdS4Z+guJqFPqvvf6XNy97eyldRmHgCKWPiUF
-         tRQagJ4fIhSCrLram4KKOP+XZvvIm5cT9b/oB00HbIqex+hgOnO4QKJxwN/KuI+lcjoR
-         JUrQmGnedyWhpT+bTDkreqtyxUd0Xa3aX69OWcPhvfc94M+w8WWdKsly5AK+LznOLhE2
-         +TI1fzTHLIjPTX13kjAsWax2Wrj0erNoPT1Mww1/sSg7+wh5oFLFxj9PYC7YViywefQ2
-         lT5hkf1y+jS3GEuWvnaAshtf05oHxJr76N4WCdAeVlhH5POvO+fe81XBddJmgzslVyKh
-         OC2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWnXvI2CdLCpXk52QCby2nA06nSB/ztjFvhVPz1StxTJ25phnn8v0raZEWv5EhXlplWHsvuHmEkRg3MFjyl@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9cOokSnpyMkM8pQif6xRoecLFSpYxtAesgkguZ+JEEclWoHz+
-	j1CaeJp8iLF1WjbBIjtfiHOgHaKA6oXjk3boedWjkOb4sQC6CeV/+WVdkwpjDcG87JvlNShwKJN
-	roBPAJ03XfytTWxMGTNa9i6WLx7ByHP4=
-X-Gm-Gg: AY/fxX7BjjIxRX2kf50J4OFmlqQqQKy8Ubc02XwteQahxu4FCCkn8T7frmJd3IG3JSj
-	xqWxcsASj1HwcnNyYLqaQO2Gdz6vHrhEhpCLAAN7MA3QoiQ9pRyDQI4EjG1838zKA4LQ6EUAkIe
-	F3RAeuq/xnGs1l1cGe6MINRamxFOcB8pSsM2rhiCeQxeYkzWn/1BeGs/HVxtXKeVRx5/45129PY
-	bwxn/iKbNLLxpcAx4V2pvAEoeaVbqCyD3/qmXf1tybn41cvrXuzPHgt0YBHM92NKNxzh9d1ItgU
-	rx1KBcOiWCM1uiCUewPvexS/rc4FWiJH2SThn6rjeDStsLyi3aQK/XWh4W0rlRMOANoi2xCDrzr
-	quvkZMk1eS71EpeH78PEPvts=
-X-Received: by 2002:a05:7300:d505:b0:2ae:5b23:1601 with SMTP id
- 5a478bee46e88-2b48662c38emr1719555eec.0.1768401457031; Wed, 14 Jan 2026
- 06:37:37 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QYYw5wFJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768513875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QxHfcULehqk/CUbBuxnoshnu3LDgK1UORk3ATWR0rlA=;
+	b=QYYw5wFJ6CM9yGRSxMHwwwpl7TxFCrb+1u8Q0X74vLhA6dYN40f77vldvo4KuSVncF64x/
+	QZhA+rVUvdWz2bF6s2JQ6PSrEGM4jIyN1KoRtUv9D9+KNbFuOKeU+r5r4dlLp6dcwKjaKL
+	mP5/hxSUqFmviM7j268rI6zlNdDZeeQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-473-6TbhKVmZM42f0MDQo-pinw-1; Thu,
+ 15 Jan 2026 16:51:12 -0500
+X-MC-Unique: 6TbhKVmZM42f0MDQo-pinw-1
+X-Mimecast-MFC-AGG-ID: 6TbhKVmZM42f0MDQo-pinw_1768513870
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CCD81954B21;
+	Thu, 15 Jan 2026 21:51:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk.com (unknown [10.42.28.4])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1087B3001DB9;
+	Thu, 15 Jan 2026 21:51:04 +0000 (UTC)
+From: David Howells <dhowells@redhat.com>
+To: Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>
+Cc: David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	linux-crypto@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v12 00/10] x509, pkcs7, crypto: Add ML-DSA and RSASSA-PSS signing
+Date: Thu, 15 Jan 2026 21:50:42 +0000
+Message-ID: <20260115215100.312611-1-dhowells@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
-In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 14 Jan 2026 15:37:24 +0100
-X-Gm-Features: AZwV_QhGm6AQT1y-6rFZieo-Sg-jU4esKv1Zq0TRBf1aujTPmnHrtNeDeXDpT-o
-Message-ID: <CANiq72m7S5aK22yzeGykGH2zhvL_UrTE2jxf2-6Fx_8oWR=nPQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 00/15] rust: Reimplement ThisModule to fix
- ownership problems
-To: Kari Argillander <kari.argillander@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Youseok Yang <ileixe@gmail.com>, Yuheng Su <gipsyh.icu@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Sat, Jan 10, 2026 at 4:09=E2=80=AFPM Kari Argillander
-<kari.argillander@gmail.com> wrote:
->
-> So currently we have problem that we are not always filling .owner field
-> example for file_operations. I think we can enable const_refs_to_static
-> already as that is in 1.78 and is stable in 1.83. So that fits perfecly
-> for us.  This also seems to be quite request feature but I did not found
-> that no one has ever suggested that we just enable this.
+Hi Lukas, Ignat,
 
-For context, we have been tracking that feature (as well as
-`const_mut_refs`) precisely for `THIS_MODULE`:
+[Note this is based on Eric Bigger's libcrypto-next branch].
 
-    https://github.com/Rust-for-Linux/linux/issues/2
+These patches add ML-DSA module signing and RSASSA-PSS module signing.  The
+first half of the set adds ML-DSA signing:
 
-There is also a test that Ralf added upstream back then:
+ (1) Add a crypto_sig interface for ML-DSA, verification only.
 
-    https://github.com/rust-lang/rust/blob/main/tests/ui/consts/const-ref-t=
-o-static-linux-vtable.rs
+ (2) Modify PKCS#7 support to allow kernel module signatures to carry
+     authenticatedAttributes as OpenSSL refuses to let them be opted out of
+     for ML-DSA (CMS_NOATTR).  This adds an extra digest calculation to the
+     process.
 
-(Not sure what you mean by "quite request" though)
+     Modify PKCS#7 to pass the authenticatedAttributes directly to the
+     ML-DSA algorithm rather than passing over a digest as is done with RSA
+     as ML-DSA wants to do its own hashing and will add other stuff into
+     the hash.  We could use hashML-DSA or an external mu instead, but they
+     aren't standardised for CMS yet.
 
-Cheers,
-Miguel
+ (3) Add support to the PKCS#7 and X.509 parsers for ML-DSA.
+
+ (4) Modify sign-file to handle OpenSSL not permitting CMS_NOATTR with
+     ML-DSA and add ML-DSA to the choice of algorithm with which to sign
+     modules.  Note that this might need some more 'select' lines in the
+     Kconfig to select the lib stuff as well.
+
+This is based on Eric's libcrypto-next branch which has the core
+implementation of ML-DSA.
+
+The second half of the set adds RSASSA-PSS signing:
+
+ (5) Add an info string parameter to the internal signature verification
+     routines where that does not already exist.  This is necessary to pass
+     extra parameters and is already supported in the KEYCTL_PKEY_VERIFY
+     keyctl.
+
+     Both X.509 and PKCS#7 provide for these parameters to be supplied, but
+     it is tricky to pass the parameters in a blob with the signature or
+     key data as there are checks on these sizes that are then violated;
+     further, the way the parameters are laid out in the ASN.1 doesn't lend
+     itself easily to simply extracting out a larger blob.
+
+ (6) Add RSASSA-PSS support to the RSA driver in crypto/.  This parses the
+     info string to get the verification parameters.
+
+ (7) Add support to the PKCS#7 and X.509 parsers for RSASSA-PSS.
+
+ (8) Modify sign-file to pass the extra parameters necessary to be able
+     generate RSASSA-PSS.  For the moment, only select MGF1 with the same
+     hash algorithm as for the data for the mask function.  Add RSASSA-PSS
+     to the choice of algorithm with which to sign modules.
+
+Note that I do still need to add some FIPS tests for both ML-DSA and
+RSASSA-PSS in the form of X.509 certs, data and detached PKCS#7 signatures.
+I'm not sure if I can use FIPS-standard tests for that.
+
+The patches can also be found here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=keys-pqc
+
+David
+
+Changes
+=======
+ver #12)
+ - Rebased on Eric's libcrypto-next branch.
+ - Delete references to Dilithium (ML-DSA derived from this).
+ - Made sign-file supply CMS_NOATTR for ML-DSA if openssl >= v4.
+ - Made it possible to do ML-DSA over the data without signedAttrs.
+ - Made RSASSA-PSS info parser use strsep() and match_token().
+ - Cleaned the RSASSA-PSS param parsing.
+ - Added limitation on what hashes can be used with what algos.
+ - Moved __free()-marked variables to the point of setting.
+
+ver #11)
+ - Rebased on Eric's libcrypto-next branch.
+ - Added RSASSA-PSS support patches.
+
+ver #10)
+ - Replaced the Leancrypto ML-DSA implementation with Eric's.
+ - Fixed Eric's implementation to have MODULE_* info.
+ - Added a patch to drive Eric's ML-DSA implementation from crypto_sig.
+ - Removed SHAKE256 from the list of available module hash algorithms.
+ - Changed a some more ML_DSA to MLDSA in config symbols.
+
+ver #9)
+ - ML-DSA changes:
+   - Separate output into four modules (1 common, 3 strength-specific).
+     - Solves Kconfig issue with needing to select at least one strength.
+   - Separate the strength-specific crypto-lib APIs.
+     - This is now generated by preprocessor-templating.
+   - Remove the multiplexor code.
+   - Multiplex the crypto-lib APIs by C type.
+ - Fix the PKCS#7/X.509 code to have the correct algo names.
+
+ver #8)
+ - Moved the ML-DSA code to lib/crypto/mldsa/.
+ - Renamed some bits from ml-dsa to mldsa.
+ - Created a simplified API and placed that in include/crypto/mldsa.h.
+ - Made the testing code use the simplified API.
+ - Fixed a warning about implicitly casting between uint16_t and __le16.
+
+ver #7)
+ - Rebased on Eric's tree as that now contains all the necessary SHA-3
+   infrastructure and drop the SHA-3 patches from here.
+ - Added a minimal patch to provide shake256 support for crypto_sig.
+ - Got rid of the memory allocation wrappers.
+ - Removed the ML-DSA keypair generation code and the signing code, leaving
+   only the signature verification code.
+ - Removed the secret key handling code.
+ - Removed the secret keys from the kunit tests and the signing testing.
+ - Removed some unused bits from the ML-DSA code.
+ - Downgraded the kdoc comments to ordinary comments, but keep the markup
+   for easier comparison to Leancrypto.
+
+ver #6)
+ - Added a patch to make the jitterentropy RNG use lib/sha3.
+ - Added back the crypto/sha3_generic changes.
+ - Added ML-DSA implementation (still needs more cleanup).
+ - Added kunit test for ML-DSA.
+ - Modified PKCS#7 to accommodate ML-DSA.
+ - Modified PKCS#7 and X.509 to allow ML-DSA to be specified and used.
+ - Modified sign-file to not use CMS_NOATTR with ML-DSA.
+ - Allowed SHA3 and SHAKE* algorithms for module signing default.
+ - Allowed ML-DSA-{44,65,87} to be selected as the module signing default.
+
+ver #5)
+ - Fix gen-hash-testvecs.py to correctly handle algo names that contain a
+   dash.
+ - Fix gen-hash-testvecs.py to not generate HMAC for SHA3-* or SHAKE* as
+   these don't currently have HMAC variants implemented.
+ - Fix algo names to be correct.
+ - Fix kunit module description as it now tests all SHA3 variants.
+
+ver #4)
+ - Fix a couple of arm64 build problems.
+ - Doc fixes:
+   - Fix the description of the algorithm to be closer to the NIST spec's
+     terminology.
+   - Don't talk of finialising the context for XOFs.
+   - Don't say "Return: None".
+   - Declare the "Context" to be "Any context" and make no mention of the
+     fact that it might use the FPU.
+   - Change "initialise" to "initialize".
+   - Don't warn that the context is relatively large for stack use.
+ - Use size_t for size parameters/variables.
+ - Make the module_exit unconditional.
+ - Dropped the crypto/ dir-affecting patches for the moment.
+
+ver #3)
+ - Renamed conflicting arm64 functions.
+ - Made a separate wrapper API for each algorithm in the family.
+ - Removed sha3_init(), sha3_reinit() and sha3_final().
+ - Removed sha3_ctx::digest_size.
+ - Renamed sha3_ctx::partial to sha3_ctx::absorb_offset.
+ - Refer to the output of SHAKE* as "output" not "digest".
+ - Moved the Iota transform into the one-round function.
+ - Made sha3_update() warn if called after sha3_squeeze().
+ - Simplified the module-load test to not do update after squeeze.
+ - Added Return: and Context: kdoc statements and expanded the kdoc
+   headers.
+ - Added an API description document.
+ - Overhauled the kunit tests.
+   - Only have one kunit test.
+   - Only call the general hash tester on one algo.
+   - Add separate simple cursory checks for the other algos.
+   - Add resqueezing tests.
+   - Add some NIST example tests.
+ - Changed crypto/sha3_generic to use this
+ - Added SHAKE128/256 to crypto/sha3_generic and crypto/testmgr
+ - Folded struct sha3_state into struct sha3_ctx.
+
+ver #2)
+  - Simplify the endianness handling.
+  - Rename sha3_final() to sha3_squeeze() and don't clear the context at the
+    end as it's permitted to continue calling sha3_final() to extract
+    continuations of the digest (needed by ML-DSA).
+  - Don't reapply the end marker to the hash state in continuation
+    sha3_squeeze() unless sha3_update() gets called again (needed by
+    ML-DSA).
+  - Give sha3_squeeze() the amount of digest to produce as a parameter
+    rather than using ctx->digest_size and don't return the amount digested.
+  - Reimplement sha3_final() as a wrapper around sha3_squeeze() that
+    extracts ctx->digest_size amount of digest and then zeroes out the
+    context.  The latter is necessary to avoid upsetting
+    hash-test-template.h.
+  - Provide a sha3_reinit() function to clear the state, but to leave the
+    parameters that indicate the hash properties unaffected, allowing for
+    reuse.
+  - Provide a sha3_set_digestsize() function to change the size of the
+    digest to be extracted by sha3_final().  sha3_squeeze() takes a
+    parameter for this instead.
+  - Don't pass the digest size as a parameter to shake128/256_init() but
+    rather default to 128/256 bits as per the function name.
+  - Provide a sha3_clear() function to zero out the context.
+
+David Howells (10):
+  crypto: Add ML-DSA crypto_sig support
+  pkcs7: Allow the signing algo to calculate the digest itself
+  pkcs7: Allow direct signing of data with ML-DSA
+  pkcs7, x509: Add ML-DSA support
+  modsign: Enable ML-DSA module signing
+  crypto: Add supplementary info param to asymmetric key signature
+    verification
+  crypto: Add RSASSA-PSS support
+  pkcs7, x509: Add RSASSA-PSS support
+  modsign: Enable RSASSA-PSS module signing
+  x509, pkcs7: Limit crypto combinations that may be used for module
+    signing
+
+ Documentation/admin-guide/module-signing.rst |  17 +-
+ certs/Kconfig                                |  27 ++
+ certs/Makefile                               |   4 +
+ crypto/Kconfig                               |  10 +
+ crypto/Makefile                              |   3 +
+ crypto/asymmetric_keys/Makefile              |  12 +-
+ crypto/asymmetric_keys/asymmetric_type.c     |   1 +
+ crypto/asymmetric_keys/mgf1_params.asn1      |  12 +
+ crypto/asymmetric_keys/mscode_parser.c       |   2 +-
+ crypto/asymmetric_keys/pkcs7.asn1            |   2 +-
+ crypto/asymmetric_keys/pkcs7_parser.c        | 115 +++---
+ crypto/asymmetric_keys/pkcs7_verify.c        |  70 +++-
+ crypto/asymmetric_keys/public_key.c          |  70 +++-
+ crypto/asymmetric_keys/rsassa_params.asn1    |  25 ++
+ crypto/asymmetric_keys/rsassa_parser.c       | 240 ++++++++++++
+ crypto/asymmetric_keys/rsassa_parser.h       |  25 ++
+ crypto/asymmetric_keys/signature.c           |   4 +-
+ crypto/asymmetric_keys/verify_pefile.c       |   3 +-
+ crypto/asymmetric_keys/verify_pefile.h       |   1 +
+ crypto/asymmetric_keys/x509.asn1             |   2 +-
+ crypto/asymmetric_keys/x509_cert_parser.c    | 124 +++---
+ crypto/asymmetric_keys/x509_parser.h         |  45 ++-
+ crypto/asymmetric_keys/x509_public_key.c     |  37 +-
+ crypto/ecdsa-p1363.c                         |   5 +-
+ crypto/ecdsa-x962.c                          |   5 +-
+ crypto/ecdsa.c                               |   3 +-
+ crypto/ecrdsa.c                              |   3 +-
+ crypto/mldsa.c                               | 202 ++++++++++
+ crypto/rsa.c                                 |   8 +
+ crypto/rsassa-pkcs1.c                        |   3 +-
+ crypto/rsassa-pss.c                          | 384 +++++++++++++++++++
+ crypto/sig.c                                 |   3 +-
+ crypto/testmgr.c                             |   2 +-
+ crypto/testmgr.h                             |   1 +
+ include/crypto/hash.h                        |   3 +
+ include/crypto/internal/rsa.h                |   2 +
+ include/crypto/public_key.h                  |   3 +
+ include/crypto/sig.h                         |   9 +-
+ include/linux/oid_registry.h                 |   7 +
+ scripts/sign-file.c                          |  71 +++-
+ 40 files changed, 1397 insertions(+), 168 deletions(-)
+ create mode 100644 crypto/asymmetric_keys/mgf1_params.asn1
+ create mode 100644 crypto/asymmetric_keys/rsassa_params.asn1
+ create mode 100644 crypto/asymmetric_keys/rsassa_parser.c
+ create mode 100644 crypto/asymmetric_keys/rsassa_parser.h
+ create mode 100644 crypto/mldsa.c
+ create mode 100644 crypto/rsassa-pss.c
+
