@@ -1,94 +1,93 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0285343C04D
-	for <linux-modules@vger.kernel.org>; Tue, 20 Jan 2026 14:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862343D3015
+	for <linux-modules@vger.kernel.org>; Tue, 20 Jan 2026 14:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768917977; cv=pass; b=KRLXAFB7wk3D5QBO4MMIKQMnJJiAH/1NfX4uyk9wjttD5vWPNuzEmxguWaXKNXypvKDM25cmFFtEIYH38J5V2r37oNu0/MjKhG0XSeNh0Mlh8aTlMoMfBaJPdAyPlmZ25bn2CWtsziCwBGDVhcHBv7RgpkSkvx9/Sk2SwwbzWGU=
+	t=1768919203; cv=pass; b=GwTJqbuVr+uzC1FqKsVlKciMY8igFOek9G2PiVDZZ2yJwSm+tPzaftaorqKRPon6wdoKlkhZaX3WSwcQ3JC8VCV60hfI5ZqATaw72Ec45oxvC9k6TSQ9KtYmAP1Y2l4uVv3dgHMHq5T9413bMYC4ltKQKOKEfHwH3kgoxV65NiA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768917977; c=relaxed/simple;
-	bh=YK2c/N6z+9ArDdm+zc44ynJ17RZ2p78JcQ4HLMIlkFI=;
+	s=arc-20240116; t=1768919203; c=relaxed/simple;
+	bh=QCUDSMlskNb3W9hlYknvFO06WK3AaORHPIrE66uCBys=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tnNkyVVHPdq/tkQzC73km4AzeR8hR96FXGlqCx7ZYAhztllx5A303bIqG1nTk1MT2+pqbSXvpxqr7H5LbMsvl3HS+z5zXQ4mWk4mnggE/p3y20sagK1YtdLH9QKdKwTKRRjelwIsQgsbvHEGF+/Ihp4fSp0YfFaB708oYIX7ttM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=PYoULEK4; arc=pass smtp.client-ip=209.85.208.179
+	 To:Cc:Content-Type; b=NqEavUmnGCaF+j3+068v1PeLjmYD+3TTmkO3wSFXFXCnRGkSvknszV60pCl/KjutIuOURduxmtP+chxccQs/TcbzO9XREuapIDZyufFxb7rTn68ukgtjI8TddGfsIdMBSxzSdGJoBWjmFHUOpCul9GM41gIvfycmIUJqDNlK9zg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=VdI0hQmy; arc=pass smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="PYoULEK4"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-382fea4a160so51708451fa.2
-        for <linux-modules@vger.kernel.org>; Tue, 20 Jan 2026 06:06:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768917974; cv=none;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VdI0hQmy"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59b855a46d2so4822155e87.2
+        for <linux-modules@vger.kernel.org>; Tue, 20 Jan 2026 06:26:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768919199; cv=none;
         d=google.com; s=arc-20240605;
-        b=jTi4zSA4juWAUDyeF/hFCzyFTrtHWjUR/uNxstRBONREWuy06hns12Ng2lHgLAaEsJ
-         WSlvUSDsk0JsPOZtrktMu/6k+mPeQcIxrmMeu32NkWrBsPKVv6SU7ySSma+wPLGhe/FV
-         HQsATdtBERzUyZdwHVPB0J06+dDJd3BqVuSVC0Yoi6+/ZcFHXpOMSYbt+3D8ELd23YAE
-         +JIIerJMkbGFvHnPnJmjiqsm8dGgJQAuBLkYpN2oaSreDP5jHoa4MQJjBQKlCjgALzJH
-         OeOZc8x4GDupKI3RNzQvkiWRHKLSmGX2dizj/KAtjekMl0IxXWFUev/dlMUBIxTW+bS/
-         C5EQ==
+        b=Bqvqvxf2De7GSOY3mlKPPGwlV7cpGO1/hxf7621hBlD25FCcLpTCMJSSo97w2gFOg+
+         Nh1yc3gDdhyI2zTicbbwnSFxv01lYZY2zDSkuErNfL8CUfH3QaF8TVP7UtTYLvwDmmro
+         Ozqca2lmHJ/jYcOKTGBDfA1tKqdqnQPmfTnfhLWHqhSKiPyiQglpteRbfawBSHzrlNyP
+         2mBUx988lHU17TUea6ylJ2VMbzBF6Lc02V4rDmy/y/95VUevwkFHTYKo37J+QJnQKFw8
+         K/apVB/gVOclZGgvYqQnALJI/0mq6RKzzBQq5zUX+ymnDmeF7bwnu+K58kaD6kRPDjZp
+         iCrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=coebzWgpCcGie0B0iLVoXdMDPnL95oM6P6x36fKk/EY=;
-        fh=JqKNRctxW4L8aQoqOPF0THK7UjVUb4Uu0fcXL4FA+Es=;
-        b=jM8CCcgZMWYkzQOTB/UhDShIK6U39vGFIZCVH4IsMBE8MjsWQ/8VVFfJI9rTwZ/FyY
-         fWFAuBfFMR9pQnGHELSS0lposmBTs4muuYH9FXmKezqrpCou/uPiI2NynUOuP6sLpKSP
-         QJfR6nr04OIXpLuVAni3TZCk+GAiCRtApdCvrSIo9Yobp4b+CFS/Agz9ISXsNGcPn+fc
-         B0RZDzB1o8D9G2USasfR9FVh4nLey//Y/a90v/ND6ixpBbuJcPyB+5XIm+FYkG6extB3
-         ltSh1S3ljitDNcTz3lmHt/ce1p4g4l/ndBUSYO41oX4FjmswM5fKLRO+mMhysfIxVjnM
-         yI/A==;
+        bh=j+y0XNEyJZqJ0cJubEJQ2uLanbXj9PPXMmxI3R28pZA=;
+        fh=U1OsU5+808DOvFBkgPAtbM9/KY6FqMZTZWZCFuXn+XY=;
+        b=MzbI+ylRF9OKcMdfAXKAS/CLrXL3vyRXOt2a/4NzduxUzH0hSPD/hrq7h1mF7yEQNK
+         RkradA4ipMGNzlyg+QYbKBaMRvNcXIdE7U16mpBqSf4iJk52PeYMxY9vkbDH8FqTGB42
+         rKdZuIMDfiutWl1G/eeQ1Oc/mroXqmt3bVJeh9awAbJaA9VPgxqaM7VpVNNQGgU7xTBy
+         4jBIeRwPtJxt+j8mhS2UWfjt01US8tr81iyufVp8J94LDdPQQEY9Hg8z8kIJKTnnEcII
+         z30uThK6KZtqnrLOUAqO4yqLb+iKl5zAd2swcjjePk5YFooFbRcFA1XWbZ5btKc02xhD
+         H1/A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1768917974; x=1769522774; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1768919199; x=1769523999; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=coebzWgpCcGie0B0iLVoXdMDPnL95oM6P6x36fKk/EY=;
-        b=PYoULEK4cqitfrBlIQZhi3kBTcJ+4N1ROiEDanbo1dg1WfyOIkx6t5rW2nuJUV9UjM
-         dy7Iz80h/Q8OrjKMs0wAC29Ed/+tYt8l3KFLwSUhWbYdWR0/UPdJDh5vOHAD6PGVLt4Z
-         wFGwr7plHN1/0MWWvVGoF0P2Ycb+Pnj3JVRNtgfTZmsS+6j+xW+lF3nM+7GcDY18knjA
-         mbl6pYs3dt+9c6N0OPuAZ1ScUp2RKzD0RUDmz2GyoKmSnMA8jvzrM5aRMvjWWTHO5dox
-         2CHvvcz/jF/yOMCKU/9q35LF1xXj8m7iQUC4MiFwXTnoKXwk2Dx5StR/NS0HDUD4sll/
-         VslA==
+        bh=j+y0XNEyJZqJ0cJubEJQ2uLanbXj9PPXMmxI3R28pZA=;
+        b=VdI0hQmytenS+jbFR8JWN8bQGr1oP/VMIXkr1zY36MqdnYmyKK8SXQ9DFxQ8rk8eJh
+         JpO71mVj7wECk8qKxajEDh5u8ZW+vFTWiMZTti+5eoIs8FKaTr8RZl0t9G9d1i/KPrbq
+         vVNbuDGgPhsnmmdWwOvf06hlx8as25/1+Xwc7HGnOpXOEjaLxFRWIbMItpVyDJlFMciG
+         cCP3dl8Q+gp2R0sI77ISUX6MhR08xraJvYcFCPBkBXkfnwSY+vnm5rwgp+nopr3ZQrxD
+         3k2dxIygFGwsVI9xn7IjnpyuSrtg7wn5ARRRXUej55KPwKr2uAyfAhG+fepzERlyTwGQ
+         uYZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768917974; x=1769522774;
+        d=1e100.net; s=20230601; t=1768919199; x=1769523999;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=coebzWgpCcGie0B0iLVoXdMDPnL95oM6P6x36fKk/EY=;
-        b=SXrwpAaa8fsh6OLPDOQjDkLL/W7IJsBpYmw9HbU5fpARTSj8Saq5A6MN/bHxtU8Cgj
-         a+VPA8VkeJ1LJ6V32edxlwaAuU87+sL60YytnY9mn7TNata88uSH1QnGQyeTBqrkCsFJ
-         6PF8sf634upgxXJ34G5m01FUspPOpf4uzAh22y0uW2zVAzFbEra+1yk4Hp/pnaHyLp7z
-         4I4IMk9Ni2gWWSifeACFBESyOcFmwYPxr9g4/Fc8jPfY43fTBIWwktEFOq0M6LozHygs
-         wkA3JW3Qyf1q/PtKyG28BvaO1cIjuI81Y1vZUMV/Fq9kH60JPwZ35Dv39L47DCIuc9on
-         mJZA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9ciUUaESUoZFEdCviiYaF54NzlptiJTkLRUKUirVyFl2e8o7KSBH9BeqGYup1vRQqZ/lc6yP8lCzF9bTg@vger.kernel.org
-X-Gm-Message-State: AOJu0YwClTqed09w4ISDfAmuc4W8I8Y//+E+PwmfdkWVIMxVuHtMoplq
-	UwQztOtIz39hWMEB1T/hVsyRX0bbwq1pxLnn1f+o1hiuFdAO7LCg51n/LguPwuqFsHwbQgRCqdl
-	BmJKp21Fs3HOsExuRDnAiVSVfDzAmhM5IJqK/231ucw==
-X-Gm-Gg: AZuq6aL+3Gt6LOVYtWJ/bdANzqdl9rca+tOIGfPZBZAcoLxisQW+J4sKY1iUfhMe7gi
-	Uk7MdMCcqxZkDDB0Ffuzwxyy+OLJVEeYLuRNp2g0f/SCGAT4j6lsrVQtDpsbgk3NgSOw3HhibRZ
-	tenXSKpe6gBkOiqAKqcDCgeTsWbCKxPbgydocQ7ouNvthqz43sjlOhT9mtO2mrYjpXr+YwfGaF1
-	c4StM69VKMxw3dckV1PQo83AaoxkpsEDYjKR/DJIvfHk/IcigvSgNHQ607AixGDBDUioXJbArBC
-	f2dRYC0XYWw=
-X-Received: by 2002:a05:651c:31cd:b0:383:20cd:530d with SMTP id
- 38308e7fff4ca-38384147aa6mr58209661fa.7.1768917973945; Tue, 20 Jan 2026
- 06:06:13 -0800 (PST)
+        bh=j+y0XNEyJZqJ0cJubEJQ2uLanbXj9PPXMmxI3R28pZA=;
+        b=XXvrMlqruhrApUorqlMMKweYcsJ7xXLOt1Uyxlv9qAK6ZY+7e1LJxMngwmkNX+phkQ
+         IcGtoHlT1RDJ5/0OgTwbSEsfNLp+aeLuv5HagYiy8r2yOnbNlft2N8dsLuGY+xnyf8se
+         /R8kiLowp0v+QjVCJyftXvDe6CbRyaw69OxHykCZSJYIk4CJEqzDEgghW5noEpmSy4E1
+         9JT4nrTRLBmL9nMVaXCho3jXDPC7wY0ISzFqZ54ssLi4I0E405jRVjdXIx3hjSJ8Q0DA
+         bb4NNF4Jzw/6De/CarUY4i/6QXKWq45NfmYB4kCuJPRYqX67jNZZG9T+iDkjyw+uYhna
+         Ke0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXTWd7UrVoPHy6hSs2EHX8ML0LLNPlEKQjyV2QZmqZoE/Dg7Tg8iM/+TX3ddS4bgGKeN1QFOCWH8+/nYdLf@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkPWXjlqLVp3/5G6n1Jk04TnTGsME2vhitLlv7JAUF7CeFFJRY
+	NIDM/OjbH+1SVskLNMzCwVmz8ggJoidHXdVddKEIHvJYHWbznMfuRTs9zTmcoYI78TrlycyjQwT
+	qg8W54tVx6+pUFM5pu+lPnh1ZFpysraFnhw0PlK4LIQ==
+X-Gm-Gg: AZuq6aJdgxiRTcTr4IsBG+Euvwx3mCl6cty+ca8i4pRaOzQv3tP1BbNmTkusrVl+Ht4
+	G9UDqIWIlaIoeWX5s8PGW4XQVKuplnuAO6HU+SR+QpNg4nkTAOL2Jylf1l1ex4rIMhSY/dwIhq6
+	wCD3vTswHbWI8SxZNsWkIBXEAcK0L7zmGO4Q4KcqkucyAmNG++7DCEru+Jp3yqUg+T5RkkAIbnv
+	q1IdrkRoamlyJYjD4PEEaj5Pl//48iIfvPZ7FfCUcZt7a8FBkJ984N+Vn1xHgZIPRA025rPnn3k
+	xV8cHH/4tZs=
+X-Received: by 2002:a05:6512:3e18:b0:59b:4213:7587 with SMTP id
+ 2adb3069b0e04-59baffbf254mr4497256e87.27.1768919198478; Tue, 20 Jan 2026
+ 06:26:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115215100.312611-1-dhowells@redhat.com> <20260115215100.312611-3-dhowells@redhat.com>
-In-Reply-To: <20260115215100.312611-3-dhowells@redhat.com>
+References: <20260115215100.312611-1-dhowells@redhat.com> <20260115215100.312611-8-dhowells@redhat.com>
+In-Reply-To: <20260115215100.312611-8-dhowells@redhat.com>
 From: Ignat Korchagin <ignat@cloudflare.com>
-Date: Tue, 20 Jan 2026 14:06:02 +0000
-X-Gm-Features: AZwV_Qig-WseM1AqWnFAmAYc7N-AnkJS9PkeaesylQLn3vd-pGi7_2LyqZ5fUb8
-Message-ID: <CALrw=nH8zOXiyiCGkx1A533ijM=pyVebbhYCFpUyvP0bnjrXzA@mail.gmail.com>
-Subject: Re: [PATCH v12 02/10] pkcs7: Allow the signing algo to calculate the
- digest itself
+Date: Tue, 20 Jan 2026 14:26:26 +0000
+X-Gm-Features: AZwV_QipPdJflh9cHYaRR7wlshA2f9qAKN5Q6O0QXOsc-HZaHvJ9O1uUzfNJuw0
+Message-ID: <CALrw=nFwF7pUG81hBaPd4=GfXGUmBFW1Krc1XVo9qDqCptDMzQ@mail.gmail.com>
+Subject: Re: [PATCH v12 07/10] crypto: Add RSASSA-PSS support
 To: David Howells <dhowells@redhat.com>
 Cc: Lukas Wunner <lukas@wunner.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
 	Herbert Xu <herbert@gondor.apana.org.au>, Eric Biggers <ebiggers@kernel.org>, 
@@ -96,169 +95,532 @@ Cc: Lukas Wunner <lukas@wunner.de>, Jarkko Sakkinen <jarkko@kernel.org>,
 	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
 	"Jason A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller <smueller@chronox.de>, 
 	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Tadeusz Struk <tadeusz.struk@intel.com>, "David S. Miller" <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-
-Hi David,
 
 On Thu, Jan 15, 2026 at 9:51=E2=80=AFPM David Howells <dhowells@redhat.com>=
  wrote:
 >
-> The ML-DSA public key algorithm really wants to calculate the message
-> digest itself, rather than having the digest precalculated and fed to it
-> separately as RSA does[*].  The kernel's PKCS#7 parser, however, is
-> designed around the latter approach.
+> Add support for RSASSA-PSS [RFC8017 sec 8.1] signature verification suppo=
+rt
+> to the RSA driver in crypto/.  Note that signing support is not provided.
 >
->   [*] ML-DSA does allow for an "external mu", but CMS doesn't yet have th=
-at
->   standardised.
+> The verification function requires an info string formatted as a
+> space-separated list of key=3Dvalue pairs.  The following parameters need=
+ to
+> be provided:
 >
-> Fix this by noting in the public_key_signature struct when the signing
-> algorithm is going to want this and then, rather than doing the digest of
-> the authenticatedAttributes ourselves and overwriting the sig->digest wit=
-h
-> that, replace sig->digest with a copy of the contents of the
-> authenticatedAttributes section and adjust the digest length to match.
+>  (1) sighash=3D<algo>
 >
-> This will then be fed to the public key algorithm as normal which can do
-> what it wants with the data.
+>      The hash algorithm to be used to digest the data.
+>
+>  (2) pss_mask=3D<type>,...
+>
+>      The mask generation function (MGF) and its parameters.
+>
+>  (3) pss_salt=3D<len>
+>
+>      The length of the salt used.
+>
+> The only MGF currently supported is "mgf1".  This takes an additional
+> parameter indicating the mask-generating hash (which need not be the same
+> as the data hash).  E.g.:
+>
+>      "sighash=3Dsha256 pss_mask=3Dmgf1,sha256 pss_salt=3D32"
 >
 > Signed-off-by: David Howells <dhowells@redhat.com>
+
+Reviewed-by: Ignat Korchagin <ignat@cloudflare.com>
+
+> cc: Tadeusz Struk <tadeusz.struk@intel.com>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: David S. Miller <davem@davemloft.net>
 > cc: Lukas Wunner <lukas@wunner.de>
 > cc: Ignat Korchagin <ignat@cloudflare.com>
-> cc: Stephan Mueller <smueller@chronox.de>
-> cc: Eric Biggers <ebiggers@kernel.org>
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
 > cc: keyrings@vger.kernel.org
 > cc: linux-crypto@vger.kernel.org
 > ---
->  crypto/asymmetric_keys/pkcs7_parser.c |  4 +--
->  crypto/asymmetric_keys/pkcs7_verify.c | 48 ++++++++++++++++++---------
->  include/crypto/public_key.h           |  1 +
->  3 files changed, 36 insertions(+), 17 deletions(-)
+>  crypto/Makefile               |   1 +
+>  crypto/rsa.c                  |   8 +
+>  crypto/rsassa-pss.c           | 384 ++++++++++++++++++++++++++++++++++
+>  include/crypto/hash.h         |   3 +
+>  include/crypto/internal/rsa.h |   2 +
+>  5 files changed, 398 insertions(+)
+>  create mode 100644 crypto/rsassa-pss.c
 >
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_ke=
-ys/pkcs7_parser.c
-> index 423d13c47545..3cdbab3b9f50 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.c
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
-> @@ -599,8 +599,8 @@ int pkcs7_sig_note_set_of_authattrs(void *context, si=
-ze_t hdrlen,
->         }
+> diff --git a/crypto/Makefile b/crypto/Makefile
+> index 267d5403045b..5c91440d1751 100644
+> --- a/crypto/Makefile
+> +++ b/crypto/Makefile
+> @@ -50,6 +50,7 @@ rsa_generic-y +=3D rsa.o
+>  rsa_generic-y +=3D rsa_helper.o
+>  rsa_generic-y +=3D rsa-pkcs1pad.o
+>  rsa_generic-y +=3D rsassa-pkcs1.o
+> +rsa_generic-y +=3D rsassa-pss.o
+>  obj-$(CONFIG_CRYPTO_RSA) +=3D rsa_generic.o
 >
->         /* We need to switch the 'CONT 0' to a 'SET OF' when we digest */
-> -       sinfo->authattrs =3D value - (hdrlen - 1);
-> -       sinfo->authattrs_len =3D vlen + (hdrlen - 1);
-> +       sinfo->authattrs =3D value - hdrlen;
-> +       sinfo->authattrs_len =3D vlen + hdrlen;
+>  $(obj)/ecdsasignature.asn1.o: $(obj)/ecdsasignature.asn1.c $(obj)/ecdsas=
+ignature.asn1.h
+> diff --git a/crypto/rsa.c b/crypto/rsa.c
+> index 6c7734083c98..189a09d54c16 100644
+> --- a/crypto/rsa.c
+> +++ b/crypto/rsa.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/mpi.h>
+>  #include <crypto/internal/rsa.h>
+>  #include <crypto/internal/akcipher.h>
+> +#include <crypto/internal/sig.h>
+>  #include <crypto/akcipher.h>
+>  #include <crypto/algapi.h>
+>
+> @@ -414,8 +415,14 @@ static int __init rsa_init(void)
+>         if (err)
+>                 goto err_unregister_rsa_pkcs1pad;
+>
+> +       err =3D crypto_register_sig(&rsassa_pss_alg);
+> +       if (err)
+> +               goto err_rsassa_pss;
+> +
 >         return 0;
+>
+> +err_rsassa_pss:
+> +       crypto_unregister_template(&rsassa_pkcs1_tmpl);
+>  err_unregister_rsa_pkcs1pad:
+>         crypto_unregister_template(&rsa_pkcs1pad_tmpl);
+>  err_unregister_rsa:
+> @@ -425,6 +432,7 @@ static int __init rsa_init(void)
+>
+>  static void __exit rsa_exit(void)
+>  {
+> +       crypto_unregister_sig(&rsassa_pss_alg);
+>         crypto_unregister_template(&rsassa_pkcs1_tmpl);
+>         crypto_unregister_template(&rsa_pkcs1pad_tmpl);
+>         crypto_unregister_akcipher(&rsa);
+> diff --git a/crypto/rsassa-pss.c b/crypto/rsassa-pss.c
+> new file mode 100644
+> index 000000000000..c12ffa3813df
+> --- /dev/null
+> +++ b/crypto/rsassa-pss.c
+> @@ -0,0 +1,384 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * RSA Signature Scheme combined with EMSA-PSS encoding (RFC 8017 sec 8.=
+2)
+> + *
+> + * https://www.rfc-editor.org/rfc/rfc8017#section-8.1
+> + *
+> + * Copyright (c) 2025 Red Hat
+> + */
+> +
+> +#define pr_fmt(fmt) "RSAPSS: "fmt
+> +#include <linux/ctype.h>
+> +#include <linux/module.h>
+> +#include <linux/oid_registry.h>
+> +#include <linux/parser.h>
+> +#include <linux/scatterlist.h>
+> +#include <crypto/akcipher.h>
+> +#include <crypto/algapi.h>
+> +#include <crypto/hash.h>
+> +#include <crypto/sig.h>
+> +#include <crypto/internal/akcipher.h>
+> +#include <crypto/internal/rsa.h>
+> +#include <crypto/internal/sig.h>
+> +
+> +struct rsassa_pss_ctx {
+> +       struct crypto_akcipher *rsa;
+> +       unsigned int    key_size;
+> +       unsigned int    salt_len;
+> +       char            *pss_hash;
+> +       char            *mgf1_hash;
+> +};
+> +
+> +enum {
+> +       rsassa_pss_verify_hash_algo,
+> +       rsassa_pss_verify_pss_mask,
+> +       rsassa_pss_verify_pss_salt,
+> +};
+> +
+> +static const match_table_t rsassa_pss_verify_params =3D {
+> +       { rsassa_pss_verify_hash_algo,  "sighash=3D%s" },
+> +       { rsassa_pss_verify_pss_mask,   "pss_mask=3D%s" },
+> +       { rsassa_pss_verify_pss_salt,   "pss_salt=3D%u" },
+> +       {}
+> +};
+> +
+> +/*
+> + * Parse the signature parameters out of the info string.
+> + */
+> +static int rsassa_pss_vinfo_parse(struct rsassa_pss_ctx *ctx,
+> +                                 char *info)
+> +{
+> +       substring_t args[MAX_OPT_ARGS];
+> +       char *p;
+> +
+> +       ctx->pss_hash =3D NULL;
+> +       ctx->mgf1_hash =3D NULL;
+> +       ctx->salt_len =3D 0;
+> +
+> +       while ((p =3D strsep(&info, " \t"))) {
+> +               if (*p =3D=3D '\0' || *p =3D=3D ' ' || *p =3D=3D '\t')
+> +                       continue;
+> +
+> +               switch (match_token(p, rsassa_pss_verify_params, args)) {
+> +               case rsassa_pss_verify_hash_algo:
+> +                       *args[0].to =3D 0;
+> +                       ctx->pss_hash =3D args[0].from;
+> +                       break;
+> +               case rsassa_pss_verify_pss_mask:
+> +                       if (memcmp(args[0].from, "mgf1", 4) !=3D 0)
+> +                               return -ENOPKG;
+> +                       if (args[0].from[4] !=3D ',')
+> +                               return -EINVAL;
+> +                       args[0].from +=3D 5;
+> +                       if (args[0].from >=3D args[0].to)
+> +                               return -EINVAL;
+> +                       *args[0].to =3D 0;
+> +                       ctx->mgf1_hash =3D args[0].from;
+> +                       break;
+> +               case rsassa_pss_verify_pss_salt:
+> +                       if (match_uint(&args[0], &ctx->salt_len) < 0)
+> +                               return -EINVAL;
+> +                       break;
+> +               default:
+> +                       pr_debug("Unknown info param\n");
+> +                       return -EINVAL; /* Ignoring it might be better. *=
+/
+> +               }
+> +       }
+> +
+> +       if (!ctx->pss_hash ||
+> +           !ctx->mgf1_hash ||
+> +           !ctx->salt_len)
+> +               return -EINVAL;
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Perform mask =3D MGF1(mgfSeed, masklen) - RFC8017 appendix B.2.1.
+> + */
+> +static int MGF1(struct rsassa_pss_ctx *ctx,
+> +               const u8 *mgfSeed, unsigned int mgfSeed_len,
+> +               u8 *mask, unsigned int maskLen)
+> +{
+> +       unsigned int counter, count_to, hLen, T_len;
+> +       __be32 *C;
+> +       int err;
+> +       u8 *T, *t, *to_hash;
+> +
+> +       struct crypto_shash *hash_tfm __free(crypto_free_shash) =3D
+> +               crypto_alloc_shash(ctx->mgf1_hash, 0, 0);
+> +       if (IS_ERR(hash_tfm))
+> +               return PTR_ERR(hash_tfm);
+> +
+> +       hLen =3D crypto_shash_digestsize(hash_tfm);
+> +       count_to =3D DIV_ROUND_UP(maskLen, hLen);
+> +       T_len =3D hLen * count_to;
+> +
+> +       struct shash_desc *Hash __free(kfree) =3D
+> +               kmalloc(roundup(sizeof(struct shash_desc) +
+> +                               crypto_shash_descsize(hash_tfm), 64) +
+> +                       roundup(T_len, 64) + /* T */
+> +                       roundup(mgfSeed_len + 4, 64), /* mgfSeed||C */
+> +                       GFP_KERNEL);
+> +       if (!Hash)
+> +               return -ENOMEM;
+> +
+> +       Hash->tfm =3D hash_tfm;
+> +
+> +       /* 2: Let T be the empty octet string. */
+> +       T =3D (void *)Hash +
+> +               roundup(sizeof(struct shash_desc) +
+> +                       crypto_shash_descsize(hash_tfm), 64);
+> +
+> +       /* 3: Generate the mask. */
+> +       to_hash =3D T + roundup(T_len, 64);
+> +       memcpy(to_hash, mgfSeed, mgfSeed_len);
+> +       C =3D (__be32 *)(to_hash + mgfSeed_len);
+> +
+> +       t =3D T;
+> +       for (counter =3D 0; counter < count_to; counter++) {
+> +               /* 3A: C =3D I2OSP(counter, 4). */
+> +               put_unaligned_be32(counter, C);
+> +
+> +               /* 3B: T =3D T || Hash(mgfSeed || C). */
+> +               err =3D crypto_shash_digest(Hash, to_hash, mgfSeed_len + =
+4, t);
+> +               if (err < 0)
+> +                       return err;
+> +
+> +               t +=3D hLen;
+> +       }
+> +
+> +       /* 4: Output T to mask */
+> +       memcpy(mask, T, maskLen);
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Perform EMSA-PSS-VERIFY(M, EM, emBits) - RFC8017 sec 9.1.2.
+> + */
+> +static int emsa_pss_verify(struct rsassa_pss_ctx *ctx,
+> +                          const u8 *M, unsigned int M_len,
+> +                          const u8 *EM, unsigned int emLen)
+> +{
+> +       unsigned int emBits, hLen, sLen, DB_len;
+> +       const u8 *maskedDB, *H;
+> +       u8 *mHash, *dbMask, *DB, *salt, *Mprime, *Hprime;
+> +       int err, i;
+> +
+> +       emBits =3D 8 - fls(EM[0]);
+> +       emBits =3D emLen * 8 - emBits;
+> +
+> +       struct crypto_shash *hash_tfm __free(crypto_free_shash) =3D
+> +               crypto_alloc_shash(ctx->pss_hash, 0, 0);
+> +       if (IS_ERR(hash_tfm))
+> +               return PTR_ERR(hash_tfm);
+> +
+> +       hLen =3D crypto_shash_digestsize(hash_tfm);
+> +       sLen =3D ctx->salt_len;
+> +
+> +       if (sLen > 65536 ||
+> +           emBits < 8 * (hLen + sLen) + 9)
+> +               return -EBADMSG;
+> +
+> +       DB_len =3D emLen - hLen - 1;
+> +
+> +       struct shash_desc *Hash __free(kfree) =3D
+> +               kmalloc(roundup(sizeof(struct shash_desc) +
+> +                               crypto_shash_descsize(hash_tfm), 64) +
+> +                       roundup(hLen, 64) + /* mHash */
+> +                       roundup(DB_len, 64) + /* DB and dbMask */
+> +                       roundup(8 + hLen + sLen, 64) + /* M' */
+> +                       roundup(hLen, 64), /* H' */
+> +                       GFP_KERNEL);
+> +       if (!Hash)
+> +               return -ENOMEM;
+> +
+> +       Hash->tfm =3D hash_tfm;
+> +
+> +       mHash =3D (void *)Hash +
+> +               roundup(sizeof(struct shash_desc) +
+> +                       crypto_shash_descsize(hash_tfm), 64);
+> +       DB =3D dbMask =3D mHash + roundup(hLen, 64);
+> +       Mprime =3D dbMask + roundup(DB_len, 64);
+> +       Hprime =3D Mprime + roundup(8 + hLen + sLen, 64);
+> +
+> +       /* 1. Check len M against hash input limitation. */
+> +       /* The standard says ~2EiB for SHA1, so I think we can ignore thi=
+s. */
+> +
+> +       /* 2. mHash =3D Hash(M).
+> +        * In theory, we would do:
+> +        *      err =3D crypto_shash_digest(Hash, M, M_len, mHash);
+> +        * but the caller is assumed to already have done that for us.
+> +        */
+> +       if (M_len !=3D hLen)
+> +               return -EINVAL;
+> +       memcpy(mHash, M, hLen);
+> +
+> +       /* 3. Check emLen against hLen + sLen + 2. */
+> +       if (emLen < hLen + sLen + 2)
+> +               return -EBADMSG;
+> +
+> +       /* 4. Validate EM. */
+> +       if (EM[emLen - 1] !=3D 0xbc)
+> +               return -EKEYREJECTED;
+> +
+> +       /* 5. Pick maskedDB and H. */
+> +       maskedDB =3D EM;
+> +       H =3D EM + DB_len;
+> +
+> +       /* 6. Check leftmost 8emLen-emBits bits of maskedDB are 0. */
+> +       /* Can only find emBits by counting the zeros on the Left. */
+> +
+> +       /* 7. Let dbMask =3D MGF(H, emLen - hLen - 1). */
+> +       err =3D MGF1(ctx, H, hLen, dbMask, DB_len);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       /* 8. Let DB =3D maskedDB XOR dbMask. */
+> +       for (i =3D 0; i < DB_len; i++)
+> +               DB[i] =3D maskedDB[i] ^ dbMask[i];
+> +
+> +       /* 9. Set leftmost bits in DB to zero. */
+> +       int z =3D 8 * emLen - emBits;
+> +
+> +       if (z > 0) {
+> +               if (z >=3D 8) {
+> +                       DB[0] =3D 0;
+> +               } else {
+> +                       z =3D 8 - z;
+> +                       DB[0] &=3D (1 << z) - 1;
+> +               }
+> +       }
+> +
+> +       /* 10. Check the left part of DB is {0,0,...,1}. */
+> +       for (i =3D 0; i < emLen - hLen - sLen - 2; i++)
+> +               if (DB[i] !=3D 0)
+> +                       return -EKEYREJECTED;
+> +       if (DB[i] !=3D 0x01)
+> +               return -EKEYREJECTED;
+> +
+> +       /* 11. Let salt be the last sLen octets of DB. */
+> +       salt =3D DB + DB_len - sLen;
+> +
+> +       /* 12. Let M' be 00 00 00 00 00 00 00 00 || mHash || salt. */
+> +       memset(Mprime, 0, 8);
+> +       memcpy(Mprime + 8, mHash, hLen);
+> +       memcpy(Mprime + 8 + hLen, salt, sLen);
+> +
+> +       /* 13. Let H' =3D Hash(M'). */
+> +       err =3D crypto_shash_digest(Hash, Mprime, 8 + hLen + sLen, Hprime=
+);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       /* 14. Check H =3D H'. */
+> +       if (memcmp(H, Hprime, hLen) !=3D 0)
+> +               return -EKEYREJECTED;
+> +       return 0;
+> +}
+> +
+> +/*
+> + * Perform RSASSA-PSS-VERIFY((n,e),M,S) - RFC8017 sec 8.1.2.
+> + */
+> +static int rsassa_pss_verify(struct crypto_sig *tfm,
+> +                            const void *src, unsigned int slen,
+> +                            const void *digest, unsigned int dlen,
+> +                            const char *info)
+> +{
+> +       struct rsassa_pss_ctx *ctx =3D crypto_sig_ctx(tfm);
+> +       struct crypto_wait cwait;
+> +       struct scatterlist sg;
+> +       unsigned int rsa_reqsize =3D crypto_akcipher_reqsize(ctx->rsa);
+> +       u8 *EM;
+> +       int err;
+> +
+> +       if (!info)
+> +               return -EINVAL;
+> +
+> +       char *str __free(kfree) =3D kstrdup(info, GFP_KERNEL);
+> +       if (!str)
+> +               return -ENOMEM;
+> +
+> +       err =3D rsassa_pss_vinfo_parse(ctx, str);
+> +       if (err < 0)
+> +               return err;
+> +
+> +       /* RFC8017 sec 8.1.2 step 1 - length checking */
+> +       if (!ctx->key_size || slen !=3D ctx->key_size)
+> +               return -EINVAL;
+> +
+> +       /* RFC8017 sec 8.1.2 step 2 - RSA verification */
+> +       struct akcipher_request *rsa_req __free(kfree) =3D
+> +               kmalloc(sizeof(*rsa_req) + rsa_reqsize + ctx->key_size,
+> +                       GFP_KERNEL);
+> +       if (!rsa_req)
+> +               return -ENOMEM;
+> +
+> +       EM =3D (u8 *)(rsa_req + 1) + rsa_reqsize;
+> +       memcpy(EM, src, slen);
+> +
+> +       crypto_init_wait(&cwait);
+> +       sg_init_one(&sg, EM, slen);
+> +       akcipher_request_set_tfm(rsa_req, ctx->rsa);
+> +       akcipher_request_set_crypt(rsa_req, &sg, &sg, slen, slen);
+> +       akcipher_request_set_callback(rsa_req, CRYPTO_TFM_REQ_MAY_SLEEP,
+> +                                     crypto_req_done, &cwait);
+> +
+> +       err =3D crypto_akcipher_encrypt(rsa_req);
+> +       err =3D crypto_wait_req(err, &cwait);
+> +       if (err)
+> +               return err;
+> +
+> +       /* RFC 8017 sec 8.1.2 step 3 - EMSA-PSS(M, EM, modbits-1) */
+> +       return emsa_pss_verify(ctx, digest, dlen, EM, slen);
+> +}
+> +
+> +static unsigned int rsassa_pss_key_size(struct crypto_sig *tfm)
+> +{
+> +       struct rsassa_pss_ctx *ctx =3D crypto_sig_ctx(tfm);
+> +
+> +       return ctx->key_size * BITS_PER_BYTE;
+> +}
+> +
+> +static int rsassa_pss_set_pub_key(struct crypto_sig *tfm,
+> +                                   const void *key, unsigned int keylen)
+> +{
+> +       struct rsassa_pss_ctx *ctx =3D crypto_sig_ctx(tfm);
+> +
+> +       return rsa_set_key(ctx->rsa, &ctx->key_size, RSA_PUB, key, keylen=
+);
+> +}
+> +
+> +static int rsassa_pss_init_tfm(struct crypto_sig *tfm)
+> +{
+> +       struct crypto_akcipher *rsa;
+> +       struct rsassa_pss_ctx *ctx =3D crypto_sig_ctx(tfm);
+> +
+> +       rsa =3D crypto_alloc_akcipher("rsa", 0, 0);
+> +       if (IS_ERR(rsa))
+> +               return PTR_ERR(rsa);
+> +
+> +       ctx->rsa =3D rsa;
+> +       return 0;
+> +}
+> +
+> +static void rsassa_pss_exit_tfm(struct crypto_sig *tfm)
+> +{
+> +       struct rsassa_pss_ctx *ctx =3D crypto_sig_ctx(tfm);
+> +
+> +       crypto_free_akcipher(ctx->rsa);
+> +}
+> +
+> +struct sig_alg rsassa_pss_alg =3D {
+> +       .verify         =3D rsassa_pss_verify,
+> +       .set_pub_key    =3D rsassa_pss_set_pub_key,
+> +       .key_size       =3D rsassa_pss_key_size,
+> +       .init           =3D rsassa_pss_init_tfm,
+> +       .exit           =3D rsassa_pss_exit_tfm,
+> +       .base =3D {
+> +               .cra_name        =3D "rsassa-pss",
+> +               .cra_driver_name =3D "rsassa-pss-generic",
+> +               .cra_priority    =3D 100,
+> +               .cra_module      =3D THIS_MODULE,
+> +               .cra_ctxsize     =3D sizeof(struct rsassa_pss_ctx),
+> +       },
+> +};
+> +
+> +MODULE_ALIAS_CRYPTO("rsassa-pss");
+> diff --git a/include/crypto/hash.h b/include/crypto/hash.h
+> index 586700332c73..49b1ea5cf78d 100644
+> --- a/include/crypto/hash.h
+> +++ b/include/crypto/hash.h
+> @@ -779,6 +779,9 @@ static inline void crypto_free_shash(struct crypto_sh=
+ash *tfm)
+>         crypto_destroy_tfm(tfm, crypto_shash_tfm(tfm));
 >  }
 >
-> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_ke=
-ys/pkcs7_verify.c
-> index 6d6475e3a9bf..0f9f515b784d 100644
-> --- a/crypto/asymmetric_keys/pkcs7_verify.c
-> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
-> @@ -70,8 +70,6 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->          * digest we just calculated.
->          */
->         if (sinfo->authattrs) {
-> -               u8 tag;
-> -
->                 if (!sinfo->msgdigest) {
->                         pr_warn("Sig %u: No messageDigest\n", sinfo->inde=
-x);
->                         ret =3D -EKEYREJECTED;
-> @@ -97,20 +95,40 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->                  * as the contents of the digest instead.  Note that we n=
-eed to
->                  * convert the attributes from a CONT.0 into a SET before=
- we
->                  * hash it.
-> +                *
-> +                * However, for certain algorithms, such as ML-DSA, the d=
-igest
-> +                * is integrated into the signing algorithm.  In such a c=
-ase,
-> +                * we copy the authattrs, modifying the tag type, and set=
- that
-> +                * as the digest.
->                  */
-> -               memset(sig->digest, 0, sig->digest_size);
-> -
-> -               ret =3D crypto_shash_init(desc);
-> -               if (ret < 0)
-> -                       goto error;
-> -               tag =3D ASN1_CONS_BIT | ASN1_SET;
-> -               ret =3D crypto_shash_update(desc, &tag, 1);
-> -               if (ret < 0)
-> -                       goto error;
-> -               ret =3D crypto_shash_finup(desc, sinfo->authattrs,
-> -                                        sinfo->authattrs_len, sig->diges=
-t);
-> -               if (ret < 0)
-> -                       goto error;
-> +               if (sig->algo_does_hash) {
-> +                       kfree(sig->digest);
+> +DEFINE_FREE(crypto_free_shash, struct crypto_shash*,
+> +           if (!IS_ERR_OR_NULL(_T)) { crypto_free_shash(_T); });
 > +
-> +                       ret =3D -ENOMEM;
-> +                       sig->digest =3D kmalloc(umax(sinfo->authattrs_len=
-, sig->digest_size),
-> +                                             GFP_KERNEL);
-
-I'm still bothered by this "reallocation". You mentioned we need to do
-some parsing for attributes, but it seems by the time this function is
-called we have all the data to do something like
-kmalloc(sig->algo_does_hash ? umax(sinfo->authattrs_len,
-sig->digest_size) : sig->digest_size, GFP_KERNEL) during the initial
-allocation. Or am I missing something?
-
-> +                       if (!sig->digest)
-> +                               goto error_no_desc;
-> +
-> +                       sig->digest_size =3D sinfo->authattrs_len;
-> +                       memcpy(sig->digest, sinfo->authattrs, sinfo->auth=
-attrs_len);
-> +                       ((u8 *)sig->digest)[0] =3D ASN1_CONS_BIT | ASN1_S=
-ET;
-> +                       ret =3D 0;
-> +               } else {
-> +                       u8 tag =3D ASN1_CONS_BIT | ASN1_SET;
-> +
-> +                       ret =3D crypto_shash_init(desc);
-> +                       if (ret < 0)
-> +                               goto error;
-> +                       ret =3D crypto_shash_update(desc, &tag, 1);
-> +                       if (ret < 0)
-> +                               goto error;
-> +                       ret =3D crypto_shash_finup(desc, sinfo->authattrs=
- + 1,
-> +                                                sinfo->authattrs_len - 1=
-,
-> +                                                sig->digest);
-> +                       if (ret < 0)
-> +                               goto error;
-> +               }
->                 pr_devel("AADigest =3D [%*ph]\n", 8, sig->digest);
->         }
+>  static inline const char *crypto_shash_alg_name(struct crypto_shash *tfm=
+)
+>  {
+>         return crypto_tfm_alg_name(crypto_shash_tfm(tfm));
+> diff --git a/include/crypto/internal/rsa.h b/include/crypto/internal/rsa.=
+h
+> index 071a1951b992..d7f38a273949 100644
+> --- a/include/crypto/internal/rsa.h
+> +++ b/include/crypto/internal/rsa.h
+> @@ -83,4 +83,6 @@ static inline int rsa_set_key(struct crypto_akcipher *c=
+hild,
 >
-> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
-> index 81098e00c08f..e4ec8003a3a4 100644
-> --- a/include/crypto/public_key.h
-> +++ b/include/crypto/public_key.h
-> @@ -46,6 +46,7 @@ struct public_key_signature {
->         u8 *digest;
->         u32 s_size;             /* Number of bytes in signature */
->         u32 digest_size;        /* Number of bytes in digest */
-> +       bool algo_does_hash;    /* Public key algo does its own hashing *=
-/
-
-nit: still do not like this name, but have no better alternatives so far
-
->         const char *pkey_algo;
->         const char *hash_algo;
->         const char *encoding;
+>  extern struct crypto_template rsa_pkcs1pad_tmpl;
+>  extern struct crypto_template rsassa_pkcs1_tmpl;
+> +extern struct sig_alg rsassa_pss_alg;
+> +
+>  #endif
 >
-
-Ignat
