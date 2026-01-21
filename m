@@ -1,187 +1,116 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20243D3D04
-	for <linux-modules@vger.kernel.org>; Wed, 21 Jan 2026 08:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFD9481244
+	for <linux-modules@vger.kernel.org>; Wed, 21 Jan 2026 12:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768984163; cv=none; b=CeWKmh9dfMXTzRq76NjPRYsCoV94m+l3lNsRaFJknwoRd36jB3kek3vdPk2IrCwlQirGhxNlhPyR4EoGrtOg8zL5H/ZwbGCgvoqYoql605PTx6iu3XK2RYeY1sTDNIvJcYerS7hBx3GeEdrGa2yBGzj3W7HlM1oTjZRU/1FdqH4=
+	t=1768998709; cv=none; b=DNH0q4FdTE+b8ifqK26lauJcSKckyMjJHXQw93bxc0pHXYbSKYO2h/RPbkZ0dFXxaew8lP0FPwuOWKKSHkrrewEkuiYfh3s3FE5vlSzMJYvL94t4aqFISr7EeF37a2YEeVS9xinplYfP5m1q99TKQyHCWIHx8WHucKxMILMTt4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768984163; c=relaxed/simple;
-	bh=tf2r0DbF4We3sVnIZiZOAFzXpYYSfLGiXXDWTAoLYpI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D7OIj+hoQh4Fg1Q2s2qepswDUtJvSmPIbehHBCrPsxFeADiG1k8IUEAvjD/PmJYK1bwgSTm/52HcZjlzGUrp9nXNYMrKNDY72zSECyEBD9QMhvjK/dpfcHrhgrtD2cEOws67xkbq+9C3Hi56Ab+8zVJuVqey1HmP/oZw+GghnBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ny8Qiv1y; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1768998709; c=relaxed/simple;
+	bh=XPAd4rGA3H2l/h9MxskZuWBwGfSZPyWPjoE+4jZFahw=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=t6ThqlhI5+/fd8l79WByA26ySIKAPkvFc/RuT48w5V+oXY7DLMzPB5JkLEli8aN3Zpb8kwTE41NkXrMkkfwy1R7blbcmjonKIElDbcf6GET2PbSm/4Gj8NHTRuyvVtZeOnZjVFQ1zm74EI62MUKUqy6+1FTvG0jTx42q9eRC3Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SVgnBlZf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ny8Qiv1y"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4801d1daf53so46247715e9.2
-        for <linux-modules@vger.kernel.org>; Wed, 21 Jan 2026 00:29:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768984159; x=1769588959; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7vxOZHcSBD1fpQdkK38syRA+6nyfkbQXy3R8wbjNKlg=;
-        b=Ny8Qiv1ydkinzp/mRVJAD8Q3d0d1kXAI6CLUeB+zGmWZ8tFO5hMe0XNvijab+4cIb8
-         MbhuEoEY059NqrhH/bIAauh8YY/bcGSu1ywqy1Dq2dyRqYqO6s5NGEE5KDKKbS9g/vwc
-         hMGVL/DX4U8SQJqnHpwTYL+BmTqjw0Jd7ZIjMya4tXaJiy0xqEzfBgvBcIY3j/BhhLut
-         W3wT2gTRFaetQ6LiAgFaHWZcv2dfB++XK9SVOZAOqU+MF3mAOULuwbaxFzy3I3HcUeDP
-         uq7EizhB+n6e/yHIZQrNOETn2t1QsDo1FCbOghkPU9hASSe7kjIQ39rWQhGU1/HbbXOE
-         ZXDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768984159; x=1769588959;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7vxOZHcSBD1fpQdkK38syRA+6nyfkbQXy3R8wbjNKlg=;
-        b=ZNhOwhrgNG1AM+lK3mReFadI+MeBMiFb5R+46ueSuvGUlUnB7FegfloQ3qomeamy14
-         G1aHYRMyLwgDCjBQTgTqkEW2laqLheAlZUTkBUa/m1sdJwIWl9di6NeE5E2Rn8XsEeUl
-         J+CWnDjXTYXXxR3uQdqiw8YXzNkCMBR6KvtTQdTHqetCy9MR5nqFimN8cnf9+L786J/Z
-         oXxKgiDO0ef9FoFMfYWjDVpbmONPpMI+Z3Josmt+YVapR5n8NzTFthMzp083vwlnxTwr
-         mQyZfhJZmmu67uXHNY1PuAq2Y4If+Qk6tIXsSaeJbyXdxpxzISvkPjfTbK4xGDmmaPxw
-         xfAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVA+awyuopZuU2iNaoWReqmz9RHLxl620tS4s3Hefr2lIJCp0LDkVYHAXDkKaVVKBJI4p80NcrS9PZZsTLM@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPs3OSHn9SjgucgBKYSbNbs08OwhkS4WNcam5966swhAKk5f0L
-	YXp6axPxZNZdAHJqg0+xLX6PnHTtAuokwnc5DbGmTmM5jkqBHWFuBv/S6mDK4HLKmU4=
-X-Gm-Gg: AZuq6aLXn5/9PfoCiQ9UVi0v8rAb1V215OewaSx/Skkg5zzC+BkA/wVkdyb+ZoBbLGE
-	Ja5af/9HXJGvzw3MpO/PybY9+D5yelGue4rjpjCSpPO99u60tocS1Yg7fcZTGnaSbIgNxFc9D6A
-	+zKm7FyV6PywSTIJd2qICaAnSgdbWAYULDllXsdcq2vdz39G2F6AB/fGam23Lzq4iYla7NcCwcW
-	7g943iO4VBUPrkD7IoEddhHKXTx6tIa/iVZ4AQvx+VdzGPF8GHQv9XPKGrbwN6Pcgd2dINlE8Bm
-	tAFXj98Wv08NsX5FIF0sb4cNCa/TJQD4WkA2sxrKLwe8Cr9+4dRuZoZhIVGEtn52gBNyRPQiQEz
-	12H3dJ+KLZQ6irT65y8nt9hFy7rg6KW0o/Jkvc5mVhME+4/zz+s5MYphkapRSP0JTeUq4S1c59o
-	qFUuPqJ8/RgDE2oTS04EctRIIFh+nJH10=
-X-Received: by 2002:a05:600c:6990:b0:47e:c562:a41f with SMTP id 5b1f17b1804b1-4801e334361mr221506345e9.18.1768984158802;
-        Wed, 21 Jan 2026 00:29:18 -0800 (PST)
-Received: from zovi.suse.cz (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f4b2755absm441635355e9.15.2026.01.21.00.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 00:29:18 -0800 (PST)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	live-patching@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] livepatch: Free klp_{object,func}_ext data after initialization
-Date: Wed, 21 Jan 2026 09:28:17 +0100
-Message-ID: <20260121082842.3050453-3-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260121082842.3050453-1-petr.pavlu@suse.com>
-References: <20260121082842.3050453-1-petr.pavlu@suse.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SVgnBlZf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768998706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=B1W93OR2XYiIiHVHo6/GIKwgMtIzbURml8eyAEBcndk=;
+	b=SVgnBlZf0AY6IV+MfHt1trhrmGUgalQ3VlLbU9rkhDqVDuC+qA8370CLqhZFpsdufoSAgN
+	nludMaDdMMeFoewvwLtkDSqyZt3EmQuAQRZ5rJR3ZBxuiHmvT/M+alc/oXa0ZrnR84Cwzc
+	UBx5QrWXDrp4FwZny6PbGdgTVMU4oSQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-542-KrkrYFufPO6i1HmtP0ektA-1; Wed,
+ 21 Jan 2026 07:31:43 -0500
+X-MC-Unique: KrkrYFufPO6i1HmtP0ektA-1
+X-Mimecast-MFC-AGG-ID: KrkrYFufPO6i1HmtP0ektA_1768998701
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DF7E1954B0B;
+	Wed, 21 Jan 2026 12:31:40 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.2])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3A73F180049F;
+	Wed, 21 Jan 2026 12:31:36 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <aW_BAchcx2_TXASz@kernel.org>
+References: <aW_BAchcx2_TXASz@kernel.org> <20260120145103.1176337-1-dhowells@redhat.com> <20260120145103.1176337-3-dhowells@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 02/12] pkcs7: Allow the signing algo to calculate the digest itself
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1501915.1768998695.1@warthog.procyon.org.uk>
+Date: Wed, 21 Jan 2026 12:31:35 +0000
+Message-ID: <1501916.1768998695@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The klp_object_ext and klp_func_ext data, which are stored in the
-__klp_objects and __klp_funcs sections, respectively, are not needed
-after they are used to create the actual klp_object and klp_func
-instances. This operation is implemented by the init function in
-scripts/livepatch/init.c.
+Jarkko Sakkinen <jarkko@kernel.org> wrote:
 
-Prefix the two sections with ".init" so they are freed after the module
-is initializated.
+> I'd use the wording you used already in commit message, which
+> factors more descriptive than what you have here. E.g., name
+> it "external_digest".
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- scripts/livepatch/init.c            |  2 +-
- scripts/module.lds.S                |  4 ++--
- tools/objtool/check.c               |  2 +-
- tools/objtool/include/objtool/klp.h | 10 +++++-----
- tools/objtool/klp-diff.c            |  2 +-
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ML-DSA uses "external" to mean that the caller does the
+digestion/hashing/XOF-ing/whatever Eric wants to call it, but the caller also
+has to put other stuff into the digest/hash/XOF/thing that then gets passed to
+ML-DSA if it does this.
 
-diff --git a/scripts/livepatch/init.c b/scripts/livepatch/init.c
-index a02252e1de03..3e658db5dfe8 100644
---- a/scripts/livepatch/init.c
-+++ b/scripts/livepatch/init.c
-@@ -18,7 +18,7 @@ static int __init livepatch_mod_init(void)
- 	unsigned int nr_objs;
- 	int ret;
- 
--	obj_exts = klp_locate_section_objs(THIS_MODULE, "__klp_objects",
-+	obj_exts = klp_locate_section_objs(THIS_MODULE, ".init.klp_objects",
- 					   sizeof(*obj_exts), &nr_objs);
- 	if (!nr_objs) {
- 		pr_err("nothing to patch!\n");
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 383d19beffb4..054ef99e8288 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -34,8 +34,8 @@ SECTIONS {
- 
- 	__patchable_function_entries : { *(__patchable_function_entries) }
- 
--	__klp_funcs		0: ALIGN(8) { KEEP(*(__klp_funcs)) }
--	__klp_objects		0: ALIGN(8) { KEEP(*(__klp_objects)) }
-+	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
-+	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
- 
- #ifdef CONFIG_ARCH_USES_CFI_TRAPS
- 	__kcfi_traps		: { KEEP(*(.kcfi_traps)) }
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 3f7999317f4d..933868ee3beb 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4761,7 +4761,7 @@ static int validate_ibt(struct objtool_file *file)
- 		    !strcmp(sec->name, "__bug_table")			||
- 		    !strcmp(sec->name, "__ex_table")			||
- 		    !strcmp(sec->name, "__jump_table")			||
--		    !strcmp(sec->name, "__klp_funcs")			||
-+		    !strcmp(sec->name, ".init.klp_funcs")		||
- 		    !strcmp(sec->name, "__mcount_loc")			||
- 		    !strcmp(sec->name, ".llvm.call-graph-profile")	||
- 		    !strcmp(sec->name, ".llvm_bb_addr_map")		||
-diff --git a/tools/objtool/include/objtool/klp.h b/tools/objtool/include/objtool/klp.h
-index ad830a7ce55b..e32e5e8bc631 100644
---- a/tools/objtool/include/objtool/klp.h
-+++ b/tools/objtool/include/objtool/klp.h
-@@ -6,12 +6,12 @@
- #define SHN_LIVEPATCH		0xff20
- 
- /*
-- * __klp_objects and __klp_funcs are created by klp diff and used by the patch
-- * module init code to build the klp_patch, klp_object and klp_func structs
-- * needed by the livepatch API.
-+ * .init.klp_objects and .init.klp_funcs are created by klp diff and used by the
-+ * patch module init code to build the klp_patch, klp_object and klp_func
-+ * structs needed by the livepatch API.
-  */
--#define KLP_OBJECTS_SEC	"__klp_objects"
--#define KLP_FUNCS_SEC	"__klp_funcs"
-+#define KLP_OBJECTS_SEC	".init.klp_objects"
-+#define KLP_FUNCS_SEC	".init.klp_funcs"
- 
- /*
-  * __klp_relocs is an intermediate section which are created by klp diff and
-diff --git a/tools/objtool/klp-diff.c b/tools/objtool/klp-diff.c
-index 4d1f9e9977eb..fd64d5e3c3b6 100644
---- a/tools/objtool/klp-diff.c
-+++ b/tools/objtool/klp-diff.c
-@@ -1439,7 +1439,7 @@ static int clone_special_sections(struct elfs *e)
- }
- 
- /*
-- * Create __klp_objects and __klp_funcs sections which are intermediate
-+ * Create .init.klp_objects and .init.klp_funcs sections which are intermediate
-  * sections provided as input to the patch module's init code for building the
-  * klp_patch, klp_object and klp_func structs for the livepatch API.
-  */
--- 
-2.52.0
+For added confusion, the NIST FIPS tests seem to consider what this patch does
+as 'external' but an "external mu" as 'internal':
+
+	"tgId": 1,
+	"testType": "AFT",
+	"parameterSet": "ML-DSA-44",
+	"signatureInterface": "external",
+	"preHash": "pure",
+
+vs:
+
+	"tgId": 7,
+	"testType": "AFT",
+	"parameterSet": "ML-DSA-44",
+	"signatureInterface": "internal",
+	"externalMu": true,
+
+I haven't come up with a better name that particularly describes this.  Maybe
+use "no_prehash" or "algo_takes_hash" or "algo_takes_data"?
+
+Maybe better than using a true/false value, use an enum?
+
+	enum public_key_hash {
+		ALGO_SIGNS_HASH, /* RSA, ECDSA, ... */
+		ALGO_SIGNS_DATA, /* MLDSA, ... */
+	};
+
+David
 
