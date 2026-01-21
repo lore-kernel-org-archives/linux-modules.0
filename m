@@ -1,122 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E250127B4F7;
-	Wed, 21 Jan 2026 02:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768961656; cv=none; b=ks7eg3jJy79+EyOMmM7vojnEuXpy64tPUW1zG98JNs4cR2/+YMU3ne1VIQtlUfrwerL3gUNnbl2GmuHLqDbNJ5uNB+UecO49V1RyspUuee8nPYUsNfVOsulEtQl0A1lazpCprj3Yr64oNa8fFsTffYqWFupJDdXOHmpJlUYMcZc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768961656; c=relaxed/simple;
-	bh=BG9pkfBir7XLyspne+cVryo9UhHMwaspQ+CurD6p3FU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SB7SLF6dK34mzoLy2m7XUohqNrDWH5sf2skln+/U0WKxU6Fu0G5FyhzqvbGybN1RpVvSquIzzJ4YaT9jdNuJyQACiNaTNvPqIJQpY0YnCmAwpMlBU362q5M5KkGkfM7HAZq1Bpv96ht0QuSdE5p59ZvHTsKL+NlEmQZu+zQb//s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EvaCi02j; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D370C359701
+	for <linux-modules@vger.kernel.org>; Wed, 21 Jan 2026 08:12:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768983126; cv=pass; b=THaF0Uqrk0RfC/LGDf4dcdCYqO9WukPRd+tZwWJHgorcOROIj6QjCFS9/HnqoDRaGgDebkoATv4x0uQvnJGSp/fMdHhIdmzjGfdNUC/aB8BXgEowRKkstM5BoZZ6gdog0pJ79vK2QBex4siT/QmUGUJymo+rgLKRVJXgKKRk21Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768983126; c=relaxed/simple;
+	bh=NcPcHijqCx7t3zPi3d2W+9QUjcbq1aI+GVwFFFeFbq4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dpExtbEDMocdfckdts4UtNdv15IPNkkJNWcTrrKa7B7RW5IMqBqVwXDv6s+BHngWebHJBGoEw/7j/msQAGn+KjGe6SCZZCa33FBxrOwow1Y/pCJYnnn9rQz1QzWZZWSjNZ2tD41kQckLSeX4mKceBtNKgMRbiUg2fYfuXWb0PPI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ZdVhO9OQ; arc=pass smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EvaCi02j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1443C16AAE;
-	Wed, 21 Jan 2026 02:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768961655;
-	bh=BG9pkfBir7XLyspne+cVryo9UhHMwaspQ+CurD6p3FU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EvaCi02jvSfBnscmszmkY55oB161aLkf/C22HgL3eo/DNjXp0/zofrFZqvJDd43V6
-	 pYHbAUY0dqogzyBrASpPMNyVhaO+CbCFC3KDypx/zF4XRF2MtC0S0tQLTux14rREby
-	 fvifk2bX+kwc7WuZ9mtQQipM4W+DYrJAuoh9vPu37qbFMZUoCYv6GUhn9wyGMEwj0E
-	 9ViYiH57Lb9eJl6Cpx5xm9vQReGpQhad37drvG7B8vum5Gn5NLgQSAqcWoykVI5xP/
-	 CofAwUQQ5OtYYl3borIK/4fTtxTHvvlXs3UHHNwiHGOSdx7v7hbl+uiEQwtY48kLBj
-	 JG067t3fMS4tA==
-Date: Wed, 21 Jan 2026 02:14:13 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Lukas Wunner <lukas@wunner.de>, Ignat Korchagin <ignat@cloudflare.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tadeusz Struk <tadeusz.struk@intel.com>,
-	"David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v13 07/12] crypto: Add RSASSA-PSS support
-Message-ID: <20260121021413.GA998999@google.com>
-References: <20260120145103.1176337-1-dhowells@redhat.com>
- <20260120145103.1176337-8-dhowells@redhat.com>
- <20260120224108.GC6191@quark>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ZdVhO9OQ"
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59b76844f89so6102758e87.1
+        for <linux-modules@vger.kernel.org>; Wed, 21 Jan 2026 00:12:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768983123; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TeNbi3BRNISyAQ3vA0Fn5lFWCkYS6mbL86cqiMvA2tJiWj22lNZQWQCq4zJ7RsMb3u
+         dEL0gZU1PLdnhT+KFqJQhsPmrJYMoP4MjZCMZaqTIw2cS/ZPG6IFmtioKA3sx9wy3Zji
+         pLzuJR5uAyofPIZbZJHFg4lcHUapNAZ84/GLksbWWIHWCmHDRACpubdFtCSyj1t9AxML
+         SgDXK+aTPvOi5YMyGJp0S65mlZSYv9HhoLY9WF2GyeLucrttN529Gc9TVDCeyoTA7Jh6
+         DDeOFjGUBEluR435fMxro1soptc338mrENZDU8s5PVBq/db8ziTFJpEEkW9WVM2JHjK4
+         ODYg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7fXCBugNbG8UpDEmEOBmP8ra4Bif5NvnVW2PAsTZKdM=;
+        fh=FW/mR3lPXFS4crxqEY7w24qCsi7FHYtL9r6EaOzoRe0=;
+        b=OwR37kn/3jjKRt0jrwCKXZe3jBAkEO7VrVfCrxuhJKIQr5esE+ChnMZCLyINaB7bSt
+         klqC56ZmFaeM7KYq8uBtG3nHyk4K29EvnVPpCM8nqFJ0zL7vimpBkyrnO0CkXHvgzsgz
+         gDLMHY2sWzvQ5n//pS7yyNFs9GTyAqudNBH8toKPTf1EYL4OGlhurOF/+YH8XhT+vNaK
+         U3+eHvI33go7d+wtDuO+1heNQcYlzs7yMoFB7fAb19LtnHWywh7ljZoDCW5z1hCkgI25
+         wyWgpXgwxhvHeV1b2kkbtsilYb1/hpOXHVrk/kAhDPadONCz62Zda7MnmgUmcHobFaBX
+         5Exg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1768983123; x=1769587923; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7fXCBugNbG8UpDEmEOBmP8ra4Bif5NvnVW2PAsTZKdM=;
+        b=ZdVhO9OQUc0wiKmBFlmD8k8TUGqsMUSipCPOvNPYADDKeiTc6sa99VIgDi2FHKkZ/U
+         Awkh2QH5dLTlkwim2U0tmBzoezXZIt391oDRSB8q2+eF46TUcVLaE5lyHBezcI0rGyGX
+         3gRH2QPt/ybJ8oj79BkHF/V87RMdLtTZx/m3mQPAaxSwc3316N9I+ufcZQa/FAOHBKrx
+         KkDqoxXHMtVYME+lgECQbFbuNoTnZztld4VI8sgtKWgUzM01s/I6jl0t28uH8S7NCGDj
+         cKdh0oboHRLvXVG6ac6s4kUaodyOt0hTQG5dVDS3n4mumRZ3/0/OgbiW1TKMj8abHGzo
+         z98Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768983123; x=1769587923;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7fXCBugNbG8UpDEmEOBmP8ra4Bif5NvnVW2PAsTZKdM=;
+        b=a0e8xHYwCTepO3Qy1omy/QCuWr3PshLv+0MONlCuh+vLUPcl7ja9VQ+ha7KaIAGe3N
+         nSHvD7xVwQC4bFnIkL3s3HMJxzgKwg9CceglZaoQw3s9fkUXimt/IN/hVZBnDBRWnnLK
+         qQFqpcy2kDU3HzBvz86vMel1Z7FxdgJDr2sa0t5swdjlFX31z/5mgpFB0gPLdNu4CvK8
+         /ogxl4bBFoxNRHvcdfbk6CcsxC35+VHWXPZmQhZn0hZCG9h+bprAFW3gSuJ8TRvV3z2o
+         nBrxD4H1YISM8c/R8JDfSomWiejzznJS1Q9G85+HQHRdeQrkHp/HDDH5HPa/gYEiV4KZ
+         NVoA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnEsiMTrFLbyRzQL5B0WuAoMm4zQcS5SxfuapgXu84dlVA28lWif+xC/Dg+cpPHg/fNTUgzE8p18aphhpK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8IlT/BKHn3euyVjP61KSVOfj6uezAE+MT8WU0YN67gLxrde7X
+	cmrGLg5t8HDdMwVV6EpKQttgSL5ploPAMbHAAEnjBplih4arNjbxzJD+CifJh+VpsmXCneK9oLu
+	14RHl1CCWRF/d7XC4K2/T8fXOIisCCdrT/cxP3BQySWi/wfMWBgPea19BIA==
+X-Gm-Gg: AZuq6aIJjaILxkDdm0zWK0F0augwrR1yxbHpCVWSPlb+IynWoOLDGt7nmagCXU4RbjV
+	5aTfe54WVspTgnZfDIDBjbXCKsOGrCV+JWSGT2+DelrcC4JeXGmdIEg9xxd2Cz1M916XSTDV6DN
+	1LfmbOK/eBGTlZ2RmpkKuYj1i7kk0OrYTWx738N5AYsfiSMouTsw7WqHvI0y5ZuQyqPZ6Z9aXfC
+	W5WElIslxjxTAZOEGNcZpW8RwJN2hgjDACNQiFM6TvT8JK4eQNoXbbbrUY+aOpW+FmmNbOraPDB
+	LMVZtjzZFP4EFIgXcUR/IdALXlIW
+X-Received: by 2002:a05:6512:138f:b0:59a:183c:4863 with SMTP id
+ 2adb3069b0e04-59baeeb1d8cmr5444078e87.8.1768983122854; Wed, 21 Jan 2026
+ 00:12:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260120224108.GC6191@quark>
+References: <20260120224108.GC6191@quark> <20260120145103.1176337-1-dhowells@redhat.com>
+ <20260120145103.1176337-8-dhowells@redhat.com> <1416722.1768950957@warthog.procyon.org.uk>
+ <20260120233617.GA10653@quark>
+In-Reply-To: <20260120233617.GA10653@quark>
+From: Ignat Korchagin <ignat@cloudflare.com>
+Date: Wed, 21 Jan 2026 08:11:51 +0000
+X-Gm-Features: AZwV_QiRbs3OO4qM3uwaFGGNt_nfptg6k5-iiQUJvwUGMqgS-PCFW0-TncfBeF8
+Message-ID: <CALrw=nGHEf3zT0yb2ybpH58ah4dT4_H11TseDL7Fs-w7RBY6hQ@mail.gmail.com>
+Subject: Re: [PATCH v13 07/12] crypto: Add RSASSA-PSS support
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: David Howells <dhowells@redhat.com>, Lukas Wunner <lukas@wunner.de>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	"Jason A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan Mueller <smueller@chronox.de>, 
+	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Tadeusz Struk <tadeusz.struk@intel.com>, "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 20, 2026 at 02:41:11PM -0800, Eric Biggers wrote:
-> On Tue, Jan 20, 2026 at 02:50:53PM +0000, David Howells wrote:
-> > Add support for RSASSA-PSS [RFC8017 sec 8.1] signature verification support
-> > to the RSA driver in crypto/.
-> 
-> This additional feature significantly increases the scope of your
-> patchset, especially considering that the kernel previously didn't
-> implement RSASSA-PSS at all.  This patchset also doesn't include any
-> explanation for why this additional feature is needed.  It might make
-> sense to add this feature, but it needs to be properly explained, and it
-> would be preferable for it to be its own patchset.
-> 
-> > The verification function requires an info string formatted as a
-> > space-separated list of key=value pairs.  The following parameters need to
-> > be provided:
-> > 
-> >  (1) sighash=<algo>
-> > 
-> >      The hash algorithm to be used to digest the data.
-> > 
-> >  (2) pss_mask=<type>,...
-> > 
-> >      The mask generation function (MGF) and its parameters.
-> > 
-> >  (3) pss_salt=<len>
-> > 
-> >      The length of the salt used.
-> > 
-> > The only MGF currently supported is "mgf1".  This takes an additional
-> > parameter indicating the mask-generating hash (which need not be the same
-> > as the data hash).  E.g.:
-> > 
-> >      "sighash=sha256 pss_mask=mgf1,sha256 pss_salt=32"
-> 
-> One of the issues with RSASSA-PSS is the excessive flexibility in the
-> parameters, which often end up being attacker controlled.  Therefore
-> many implementations of RSASSA-PSS restrict the allowed parameters to
-> something reasonable, e.g. restricting the allowed hash algorithms,
-> requiring the two hash algorithms to be the same, and requiring the salt
-> size to match the digest size.  We should do likewise if possible.
+On Tue, Jan 20, 2026 at 11:36=E2=80=AFPM Eric Biggers <ebiggers@kernel.org>=
+ wrote:
+>
+> On Tue, Jan 20, 2026 at 11:15:57PM +0000, David Howells wrote:
+> > Eric Biggers <ebiggers@kernel.org> wrote:
+> >
+> > > As I mentioned in another reply, error-prone string parsing isn't a
+> > > great choice.  C has native support for function parameters.
+> >
+> > But is constrained that it has to work with KEYCTL_PKEY_VERIFY's info
+> > parameter.
+>
+> The cover letter of this patchset summarizes it as "These patches add
+> ML-DSA module signing and RSASSA-PSS module signing."  Adding
+> KEYCTL_PKEY_VERIFY support for these algorithms would be a significant
+> new UAPI feature that would need its own justification and its own
+> documentation and test updates.
+>
+> However, it was established pretty clearly in past discussions that
+> KEYCTL_PKEY_* are a mistake and basically exist only for backwards
+> compatibility with iwd.
 
-Looking into this a bit more, I'm increasingly skeptical that RSASSA-PSS
-would be a worthwhile addition, especially when integrated into CMS and
-X.509.  It seems that while in theory it's an improvement over PKCS#1
-v1.5 padding, the specifications were messed up and it has way too many
-unnecessary and error-prone parameters.  Here are some references that
-describe some of the issues in RSASSA-PSS:
+I disagree that it was "established". It is some folks opinion here,
+but I find it quite useful and hope it would be actually extended by
+good algorithm support.
 
-    * https://boringssl-review.googlesource.com/c/boringssl/+/81656
-    * https://www.metzdowd.com/pipermail/cryptography/2019-November/035449.html
-
-It seems it might not be very widely used either.
-
-I think the fact that this patchset implements RSASSA-PSS verification
-incorrectly (by not verifying that the leading bit is zero) further
-validates these concerns.
-
-With RSA also being two generations behind the current generation of
-signature algorithms (RSA => elliptic curves => lattices), I'm wondering
-what the motivation for this feature is.
-
-- Eric
+> So I don't understand why you're advocating for adding new features to
+> them.
+>
+> - Eric
