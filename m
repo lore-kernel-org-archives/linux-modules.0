@@ -1,269 +1,137 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D283DA2C4
-	for <linux-modules@vger.kernel.org>; Thu, 22 Jan 2026 23:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E32D34DCD2
+	for <linux-modules@vger.kernel.org>; Fri, 23 Jan 2026 09:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769125598; cv=none; b=OLX5xJ3U86b3tDd5j+meJ2ejh75cDJDFH5kTVXzfufVMcfYHJxAwYA7CaNuy7w+iIcTFsdawsgw1FYTvL8nJemjXk3gm/BXGBqPW4shn16UiINZAY6cilj07OghRYZrSg58L5Oe6guDCBJF+Zbd9QhUXn11XvW0GRIG8lNk/PvA=
+	t=1769160991; cv=none; b=TOlrDYZayGitFwJCXVqvzLlOgqPsgphAKzoYzz8/TjioKUALhNYud+DSjrgSp0pZ06F4m1a3R6bC9gTI+yMFV9wrdhBv4OXcJ6dzwGIJRkmCT3uwsbgKabLcU+8XugKvI3NxIGvGtNfCw2I958jQRHnnpHpM50S/dZAo3vJEaNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769125598; c=relaxed/simple;
-	bh=WBt42ZoL9H4sqfzW7XxkBn82+w80swTPZfEc5VkkJcI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j56jbI7ebrY7EfK/BPhl4sKs5uyrYZfWtnBXdKafZNWrZ5QTk1HpwpAUZwpZ0UKN+nmK9dxjNVyC3ZqL3m9KNcgeHm0Z9Q13YrXfWE7dUY70hYZf9GpCUf4dOG+1B0IgT4pBXucOjmYGB0Ost9tJpEdm5IvGalb4nIAfO+5cIwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AeSonPpt; arc=none smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769160991; c=relaxed/simple;
+	bh=UHCtzZUwNmJVex/PidjG1QhsgZr3sHuco2k9/TFidh4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gNSQ7a9aQYLy4ejyAs6TLRl+UsfgsBM+QNCwF/8yFHt8n0V7xAaX+VuLYMEsj47oXqxxXKwcGvZkeUi0GREY7M+UvKJsanO/bUuYhQlp7y9J/aQ4qJI1fxIMjBkiuixWpqfhBUZdLXjk+CVvW89B/LVxWeUmcimdFJbii0/tTGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=d7Tzg02M; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AeSonPpt"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6610c5b014cso810590eaf.0
-        for <linux-modules@vger.kernel.org>; Thu, 22 Jan 2026 15:46:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="d7Tzg02M"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4801c731d0aso15295755e9.1
+        for <linux-modules@vger.kernel.org>; Fri, 23 Jan 2026 01:36:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769125590; x=1769730390; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPh2B3A23jzmDxsvkquxO9OUhxXjWjo9YoRmPG2ooSA=;
-        b=AeSonPptT+nJ0pI4GZ6kg4kKGAlQEoiXAsrbYIGEq2+8KQRVEe0bbvqvvRUrp9JU99
-         syfTCG0gEc0sf3CcfW3Hg02TOVzTh9ptorAxE9qwkdjXLVRcienS6g3Eq2Oing/94kpQ
-         /8vMs8RwIpYcmS4Cm1UljW39KP6vSKk3gmyNZwFCzsvkzJVu8Yuj8OyiWaX47hLVE6D9
-         nZCxTZtwwa3/G7v00ydfLhoycW+4BaYVzKtDhC8Hm0Ht5Ab2xtzeYlxfJWwHcvvxmGuQ
-         EWE1v1jne2TfvA20bGPoy291wY6EURuukRptJJYCQ4BQLlg76N/6297iEgsw/T5Xd9Az
-         tovQ==
+        d=suse.com; s=google; t=1769160981; x=1769765781; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ml193Cxw+2y2CyhUl9eY/flN/zutVC5TnFaQhjrJlN4=;
+        b=d7Tzg02M22dfWu8JPYQY/z9qZRSZdRQaQ2Duc6QTYQ/IumvpC4DyB7alcAanyqOXCx
+         9OLd8E33DmgQyREZ3zDxq7O9oxNSJ6S4FfudiZ4zWh71h97dV8mYA+LWBf7quEnx8O1U
+         ORikHgVJ4LEjLuvAZNfcwcKbNvQi0uZs8v0oBLCaNLo+r7hpxiov2MbuO3ABwszn84Im
+         KvFIbLMF1Z2dSKocCzeT1iBCRvLlYK7iAtEP2n3rpBuAvaTmKArLs+LY7qIFAf+L9zE1
+         qoFRd123269oyJO0KqtAOb/Xlkbny+XuyiyhZSHQx6aF7/8JJOwr2iCYZrTSOq7ZqDdo
+         +QcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769125590; x=1769730390;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dPh2B3A23jzmDxsvkquxO9OUhxXjWjo9YoRmPG2ooSA=;
-        b=saaawCcS1GISoLUf0gL2xLEsH8AGTxr6JJodh040sgFUgEAE7+EHzdln+TMhLe0E56
-         rCPC9MDg6tzv5XMdwxlSc54xnnunGTweWfZSDijpyQ0SWW7Vwdsu/GQQKTWCyK40hNUU
-         zNoI2w/CBdLJn972tGWqIaMm41lKaHumpe/FW1rt8W51tO06JEphZrHnNXJKKZdilLUI
-         sJKld/L0asXyLZ7RVnw3J/yLJjx2K8bfEwyVO/T2Psr2Ox8aqJD3rnqlQGCVFTnkPbZk
-         AydBM8Q0EtpjAk3CQXxFU67QReZSDacqiP1/U9qrWKH2zqiNyDC7xmiDcQXWWcfPXmEQ
-         V6LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6BQirWVRQA8dHpITULqRV4gz8/o9Gmp4i5T2DWvq8ql0DofAMh9/+NHwHaSrKUTIBLiqI7+7RHkqTdeyT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/pI2thO17N/1A/YIsm9D9dTcpTau8H2eFK6w09sd+nvmRvMYp
-	xmkRBf0ayy14HtXcXB2qfwRfUV0aXJX9d4g78eZrGYzxZeODJVvI3Ubm/ZRNVpeKh9M=
-X-Gm-Gg: AZuq6aLoZL3qYnQ7uVgJpYAHLvxm5Pw6Pw8kmkdYTynAN21c1Aeoqv+6poB2uxTtIDD
-	XsFS54CFRzAemsz/wwpLtJlvnbR3ItcS2cpso6/DXNzR7v+CWpWFzk7gIovVMDc6c/aZS4LJV4P
-	2HyHADo+tz9meF44el+6q0rosEdoPfBgvCRBo5ARQiFBHrkobt8tTpazwD3dy3uhxGpjHo8Gqt3
-	FiNBOzhVa1nZ5+Bm+mjBFMrLuFDxHl5v95nbry5LZANkgZbx/S8uTV1AeupJKIs9WN12JcT+MIF
-	rjzGGtUsK37gByCLmqIqMjqUUjG2Lv5QtDDr666IxWNFu5eqac2i7DXDYF7ZD90qB6fYV1QhsH0
-	U3va8BiS6V41o1JKyBFIFU/lXj5l52KpPVKB+b0YmjXskbB0kTENOEzWqh+Y+hFKvmMEx/1IDWZ
-	/wNrbk0K1afJ6fXnMAZY8aSnavmHOz9eyDVI8l
-X-Received: by 2002:a05:6820:208:b0:65f:71ec:4ec8 with SMTP id 006d021491bc7-662cab51cd7mr684170eaf.47.1769125590501;
-        Thu, 22 Jan 2026 15:46:30 -0800 (PST)
-Received: from frodo (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-662cb4e5b2fsm349655eaf.1.2026.01.22.15.46.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 15:46:29 -0800 (PST)
-From: Jim Cromie <jim.cromie@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Jim Cromie <jim.cromie@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	linux-modules@vger.kernel.org
-Subject: [RFC PATCH 1/1] module: speed modprobe by adding name_crc to struct module
-Date: Thu, 22 Jan 2026 16:46:21 -0700
-Message-ID: <20260122234621.3403276-1-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.52.0
+        d=1e100.net; s=20230601; t=1769160981; x=1769765781;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ml193Cxw+2y2CyhUl9eY/flN/zutVC5TnFaQhjrJlN4=;
+        b=ejI0qIrCOhRR63MpdpXF7a9jKg34lX8GLVuNsSWE4BqZS90UPOOD4TL9cL4bIANsNJ
+         ZM9NCofvtxX7BPg5g3dltGnFFX7aeMBbcv7i+cIA8qQfqlDHgHxxt3JvYAuUfDiotGvW
+         kCqkj3lpfp2V/9vaCai4yO8O87jkLAAxxfn8jSi2R6uqNdrDEmIuluq6zyEpOZPBgLIV
+         tyiVDtJxTRZyKVlu0HQTct1RDEtd8oQ0wrCwYn7rmPZrMCqJekc5SpyxyFViyw5zw1S0
+         e5zYunWEXlsMOkd3BKSdn94/56xUiZAhqOsGwX1jLmX09njKkcNiW6VJz6l0+PpWXs/d
+         4gVw==
+X-Forwarded-Encrypted: i=1; AJvYcCWaP1XszxRbY7nSorkIT4qHn8v1JxnO+ubwtReQadVrthAiHunRkWcDgPm3g9fnFNLNIBjOBVHqauNtzxZB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxDxDZfSR7JkQMSGd6XPzRxc4AqCVGPj0vAq6/+XUYy/isNblc
+	Ivi+1r624hs7MgE1qbdWQ2XKbQkPJt5hBLJMVG9AxOhviK10Pz488CycFdcGkuK1DZo=
+X-Gm-Gg: AZuq6aJoGjYrcdXVr92DzrhfwV3HHRAuGoIG3/CgQDdfvR67728yDPJ2VIdE828MhxR
+	WzHiT4R5VSDN+dGVI4rKyZjoQWe9RBBvHd5otbjhjh7/QSWrGuy54uCir8OyXf0mxkE1a/l6HHf
+	6zLTDuV7yx9P3Xz4MHuUf2EWeNM5CPKV3K08RPxbYj1aOsV2KncPASpLYj9nuXU1fXO+a/7f0MP
+	ag8lvO8HfR0iP6FkO9xpXarkOpi1nYTYlOgbeqJ+hS5QhK1erAYDBt/1vaVMqRJWnqj1FdryAJ5
+	nsX2qQmrYhqAkWQU+Q0DtNKV5UW5DfIlbQHUTPyBdAaroPIyNsGfU7Fvtoj8erwBuYghAl7lCw1
+	POhG9ipggJkEg1PiUQyoAoag5cwA2XVQr2X+XO7aeEdV4Y1B2pgV7BguwmMA5DecCG+ihx2AniI
+	+U9hI7lMso13ZuhwNugh11ymsHR80CNZF0yrKgs2q/
+X-Received: by 2002:a05:600c:6095:b0:480:4d39:84b3 with SMTP id 5b1f17b1804b1-480511e4ec0mr12497115e9.6.1769160981070;
+        Fri, 23 Jan 2026 01:36:21 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1f7b4d8sm5009841f8f.38.2026.01.23.01.36.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 23 Jan 2026 01:36:20 -0800 (PST)
+Message-ID: <198d1ca0-031f-459c-89bd-6d438a84fcb9@suse.com>
+Date: Fri, 23 Jan 2026 10:36:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/1] module: speed modprobe by adding name_crc to
+ struct module
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260122234621.3403276-1-jim.cromie@gmail.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260122234621.3403276-1-jim.cromie@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-"modprobe foo" currently does strcmp on the name, this can be improved.
+On 1/23/26 12:46 AM, Jim Cromie wrote:
+> "modprobe foo" currently does strcmp on the name, this can be improved.
+> 
+> So this commit:
+> 
+> 1. adds name_crc to struct module
+> 2. modpost.c computes the value and
+> 3. outputs it for "modinfo foo" to see/use.
+> 
+> 4. adds hotpath to find_module_all()
+>    this uses name_crc to do quick "name-check"
+>    falls back to strcmp only to guard against collisions.
+> 
+> This should significantly reduce modprobe workload, and shorten module
+> load-time.
+> 
+> Since it alters struct module, its binary incompatible. This means:
+> 
+> 1. RFC for its wide "blast radius".
+> 2. suitable for major version bump *only*
+> 
+> 3. it opens door for further struct module reorg, to:
+>    a. segregate fields by "temperature"
+>    b. pack out paholes.
+>    c. improve cache locality (by reordering coldest on bottom)
+>       name should be cold now.
+>       bikeshedding is appropriate here.
+> 
+> NB: this isn't a substitute for CONFIG_MODULE_SIG.
+> It reimplements crc_le(), doesn't reuse kernel's version.
+> 
+> CC: Luis Chamberlain <mcgrof@kernel.org>
+> CC: Petr Pavlu <petr.pavlu@suse.com>
+> CC: Daniel Gomez <da.gomez@kernel.org>
+> CC: Sami Tolvanen <samitolvanen@google.com>
+> CC: Aaron Tomlin <atomlin@atomlin.com>
+> CC: linux-modules@vger.kernel.org
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> 
+>  '#' will be ignored, and an empty message aborts the commit.
 
-So this commit:
+This patch looks as if it were generated by AI. If so, please avoid
+sending such changes. Otherwise, the commit description should explain
+the affected workload. This should be backed up by actual measurements,
+showing how the change improves the situation.
 
-1. adds name_crc to struct module
-2. modpost.c computes the value and
-3. outputs it for "modinfo foo" to see/use.
+Implementation-wise, I don't think this is the right approach. If
+searching by a module name is a hot operation, a hash table can be added
+to speed it up.
 
-4. adds hotpath to find_module_all()
-   this uses name_crc to do quick "name-check"
-   falls back to strcmp only to guard against collisions.
-
-This should significantly reduce modprobe workload, and shorten module
-load-time.
-
-Since it alters struct module, its binary incompatible. This means:
-
-1. RFC for its wide "blast radius".
-2. suitable for major version bump *only*
-
-3. it opens door for further struct module reorg, to:
-   a. segregate fields by "temperature"
-   b. pack out paholes.
-   c. improve cache locality (by reordering coldest on bottom)
-      name should be cold now.
-      bikeshedding is appropriate here.
-
-NB: this isn't a substitute for CONFIG_MODULE_SIG.
-It reimplements crc_le(), doesn't reuse kernel's version.
-
-CC: Luis Chamberlain <mcgrof@kernel.org>
-CC: Petr Pavlu <petr.pavlu@suse.com>
-CC: Daniel Gomez <da.gomez@kernel.org>
-CC: Sami Tolvanen <samitolvanen@google.com>
-CC: Aaron Tomlin <atomlin@atomlin.com>
-CC: linux-modules@vger.kernel.org
-
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-
- '#' will be ignored, and an empty message aborts the commit.
----
- include/linux/module.h | 15 ++++++++-------
- kernel/module/main.c   |  8 ++++++--
- scripts/mod/modpost.c  | 18 ++++++++++++++++++
- scripts/mod/modpost.h  |  6 +++++-
- 4 files changed, 37 insertions(+), 10 deletions(-)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index d80c3ea57472..4ea6c5ae3374 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -402,10 +402,18 @@ struct klp_modinfo {
- 
- struct module {
- 	enum module_state state;
-+	u32 name_hash;
- 
- 	/* Member of list of modules */
- 	struct list_head list;
- 
-+	/* Sysfs stuff. */
-+	struct module_kobject mkobj;
-+	struct module_attribute *modinfo_attrs;
-+	const char *version;
-+	const char *srcversion;
-+	struct kobject *holders_dir;
-+
- 	/* Unique handle for this module */
- 	char name[MODULE_NAME_LEN];
- 
-@@ -414,13 +422,6 @@ struct module {
- 	unsigned char build_id[BUILD_ID_SIZE_MAX];
- #endif
- 
--	/* Sysfs stuff. */
--	struct module_kobject mkobj;
--	struct module_attribute *modinfo_attrs;
--	const char *version;
--	const char *srcversion;
--	struct kobject *holders_dir;
--
- 	/* Exported symbols */
- 	const struct kernel_symbol *syms;
- 	const u32 *crcs;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index d855f43a2be3..685218b2c5ef 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -39,6 +39,7 @@
- #include <linux/mutex.h>
- #include <linux/rculist.h>
- #include <linux/uaccess.h>
-+#include <linux/crc32.h>
- #include <asm/cacheflush.h>
- #include <linux/set_memory.h>
- #include <asm/mmu_context.h>
-@@ -431,13 +432,16 @@ struct module *find_module_all(const char *name, size_t len,
- 			       bool even_unformed)
- {
- 	struct module *mod;
-+	u32 incoming_name_hash = crc32_le(0, name, len);
- 
- 	list_for_each_entry_rcu(mod, &modules, list,
- 				lockdep_is_held(&module_mutex)) {
- 		if (!even_unformed && mod->state == MODULE_STATE_UNFORMED)
- 			continue;
--		if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
--			return mod;
-+		if (mod->name_hash == incoming_name_hash) {
-+			if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
-+				return mod;
-+		}
- 	}
- 	return NULL;
- }
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 755b842f1f9b..ae90e0bf9330 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -21,6 +21,22 @@
- #include <stdbool.h>
- #include <errno.h>
- 
-+/* Local CRC32 implementation for modpost.c */
-+#define CRCPOLY_LE 0xEDB88320
-+
-+typedef uint32_t u32;
-+
-+static u32 crc32_le(u32 crc,  char  *p, size_t len)
-+{
-+	int i;
-+	while (len--) {
-+		crc ^= *p++;
-+		for (i = 0; i < 8; i++)
-+			crc = (crc >> 1) ^ ((crc & 1) ? CRCPOLY_LE : 0);
-+	}
-+	return crc;
-+}
-+
- #include <hash.h>
- #include <hashtable.h>
- #include <list.h>
-@@ -1581,6 +1597,7 @@ static void read_symbols(const char *modname)
- 
- 	/* strip trailing .o */
- 	mod = new_module(modname, strlen(modname) - strlen(".o"));
-+	mod->name_hash = crc32_le(0, mod->name, strlen(mod->name));
- 
- 	/* save .no_trim_symbol section for later use */
- 	if (info.no_trim_symbol_len) {
-@@ -1834,6 +1851,7 @@ static void add_header(struct buffer *b, struct module *mod)
- 	buf_printf(b, "#include <linux/compiler.h>\n");
- 	buf_printf(b, "\n");
- 	buf_printf(b, "MODULE_INFO(name, KBUILD_MODNAME);\n");
-+	buf_printf(b, "MODULE_INFO(name_crc, \"0x%08x\");\n", mod->name_hash);
- 	buf_printf(b, "\n");
- 	buf_printf(b, "__visible struct module __this_module\n");
- 	buf_printf(b, "__section(\".gnu.linkonce.this_module\") = {\n");
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 2aecb8f25c87..3fc3cfd0a039 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -11,11 +11,14 @@
- #include <fcntl.h>
- #include <unistd.h>
- #include <elf.h>
-+#include <stdint.h>
- #include "../../include/linux/module_symbol.h"
- 
- #include <list_types.h>
- #include "elfconfig.h"
- 
-+typedef uint32_t u32;
-+
- /* On BSD-alike OSes elf.h defines these according to host's word size */
- #undef ELF_ST_BIND
- #undef ELF_ST_TYPE
-@@ -126,7 +129,8 @@ struct module {
- 	bool seen;
- 	bool has_init;
- 	bool has_cleanup;
--	char	     srcversion[25];
-+		char         srcversion[25];
-+		u32          name_hash;
- 	// Missing namespace dependencies
- 	struct list_head missing_namespaces;
- 	// Actual imported namespaces
 -- 
-2.52.0
-
+Cheers,
+Petr
