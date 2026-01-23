@@ -1,97 +1,73 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E75272E7C
-	for <linux-modules@vger.kernel.org>; Fri, 23 Jan 2026 17:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9AC86329;
+	Fri, 23 Jan 2026 17:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769190207; cv=none; b=XNt0opCuFPLGu4cT1/oS8dA/BRUgvIid7h+P8VmknD0Ne2M8BJLx3gQCt6jkbluL1dDrRU9jrLcB5l9T/agoWxs84L0wEp8kfg2o0BF9P15DxM8WVKbMZqENx++hGE7rF1EU6+CxVaczFe5wRuxen2Mbk4YYJRGbv3LHyBb0gow=
+	t=1769190604; cv=none; b=TB7VRs3TL3U3o2k4kh8/jw+PiZs3e0cVj0nuLr7MWsuYNYab6bnet/h19dgFsBPcQGzCM6mwA5u/+gCdV1AGO36sN+Sv8+1xKiifscgtLR4NY1nMmiKNa0NxhMe7JYHkHokGvmwUj9raxsOUCQ9R3LJrfOavVoq7iSKfx4D/5rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769190207; c=relaxed/simple;
-	bh=kT+Pn3gyhaoNqIWv1mtrMDHTRArFu/zsHuhePGBpLPs=;
-	h=From:To:cc:Subject:MIME-Version:Content-Type:Date:Message-ID; b=ESireCCe/65dSdNQhFm0Q0COSV/IfZMUrcZYikC8w7728Axkg7PEh5SCveipBrgOh0gCLf0WibCI2iIRfuwlU83+xMMGcVx9gueMKO6nPwdGvjkOFZT6KYtPczKfpFwll/a+rzNxWTr/tOAzVZUcLih1txKaYaRmskHvEzCIh3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IqXt9e3b; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769190604; c=relaxed/simple;
+	bh=QR+gFgj7mXHGYDTqe/WjnMp/eyjf+BLKshDboxU3pRA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L/h8HHmN/UwOGVA0LBRHvl4tSrdFnkczqbXkY27KFj4Wjz8C4S/UeK5g3Qm/a6YsPsnTFpbEabfhhB1Xy0hoUGr1bS7p0aojAEE+3eAFobsqRTT7emlbRIu+TTjiwQYNADk1Ki2FBIcU3egJbJzlSnw7W5XjPmVl2pz0M8SAxrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ir37Fktn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IqXt9e3b"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769190205;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=HXWgAtc6UurHJ7v7o10vNJH+C+IF5KjA0KAPDFaMV1I=;
-	b=IqXt9e3bYOrWLDPyG5svIfEA8RZimM4+wjOo32hYxO0EhBh68m4cS+CB+tedkoMQeCFEfY
-	FDRv21EVZfnxj0+2V2NkT9ueP68PsU6FEycgOE/CKRMb3G2K3sPGAm1XKFbtzoxJQcgJ4U
-	97mHkYxodRapmR7nKpKGIsgLj46aii0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-66-wrds9M3_M2qiXpued7TKRg-1; Fri,
- 23 Jan 2026 12:43:23 -0500
-X-MC-Unique: wrds9M3_M2qiXpued7TKRg-1
-X-Mimecast-MFC-AGG-ID: wrds9M3_M2qiXpued7TKRg_1769190202
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9D1E41800378;
-	Fri, 23 Jan 2026 17:43:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.2])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 95809180099B;
-	Fri, 23 Jan 2026 17:43:18 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-cc: dhowells@redhat.com, Simo Sorce <simo@redhat.com>,
-    Roberto Sassu <roberto.sassu@huawei.com>,
-    Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-    Eric Snowberg <eric.snowberg@oracle.com>,
-    Eric Biggers <ebiggers@kernel.org>, linux-integrity@vger.kernel.org,
-    linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
-    linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: IMA and PQC
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ir37Fktn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 147E9C19421;
+	Fri, 23 Jan 2026 17:50:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769190604;
+	bh=QR+gFgj7mXHGYDTqe/WjnMp/eyjf+BLKshDboxU3pRA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ir37FktnhxF/m7o/FYai63DbeO0lUeHvCrWuMbeXDvrFrtO4Nfma4YCuJVE5qG4Bi
+	 fWxzhxHuC35/YmxttjA+JJfgMYE4srBNyeNkmFPi5jK4IDQA+hlKUzfVuhltAuN82/
+	 kI6SkT6CF69JDRzpxBtCos+DozGeO0p9bgdlky3j6slcSU9br2hQHoy5RXPkAgFEu4
+	 9ABAeoFiCCTw9hLZEO+RXc6BnskJEbL0M231bTWrOtC+N2eIN2Y9NpI1BLxRDS72Aj
+	 mhW6HX6IyCTyqRqvYNVqX51EqQuSTThSKP4mlJ5aTTr1QX9LasqbTbFm/1+CYNd7kI
+	 p/GwORaQ6XjAQ==
+Date: Fri, 23 Jan 2026 09:50:02 -0800
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+	Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Peter Zijlstra <peterz@infradead.org>, live-patching@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] Improve handling of the __klp_{objects,funcs}
+ sections in modules
+Message-ID: <uiodnd33mmm5xkd2czcfatqjen2wehfyfrwjoj3ysvhha2medv@cnft7tc7qo7n>
+References: <20260123102825.3521961-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1783974.1769190197.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 23 Jan 2026 17:43:17 +0000
-Message-ID: <1783975.1769190197@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260123102825.3521961-1-petr.pavlu@suse.com>
 
-Hi Mimi,
+On Fri, Jan 23, 2026 at 11:26:55AM +0100, Petr Pavlu wrote:
+> Changes since v2 [1]:
+> - Generalize the helper function that locates __klp_objects in a module
+>   to allow it to find any data in other sections as well.
+> 
+> Changes since v1 [2]:
+> - Generalize the helper function that locates __klp_objects in a module
+>   to allow it to find objects in other sections as well.
+> 
+> [1] https://lore.kernel.org/linux-modules/20260121082842.3050453-1-petr.pavlu@suse.com/
+> [2] https://lore.kernel.org/linux-modules/20260114123056.2045816-1-petr.pavlu@suse.com/
+> 
+> Petr Pavlu (2):
+>   livepatch: Fix having __klp_objects relics in non-livepatch modules
+>   livepatch: Free klp_{object,func}_ext data after initialization
 
-I've posted patches which I hope will accepted to implement ML-DSA module
-signing:
+Thanks!
 
-	https://lore.kernel.org/linux-crypto/1753972.1769166821@warthog.procyon.o=
-rg.uk/T/#t
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-but for the moment, it will give an error to pkcs7_get_digest() if there's=
- no
-digest available (which there won't be with ML-DSA).  This means that ther=
-e
-isn't a hash for IMA to get at for TPM measurement.
-
-Now, I probably have to make a SHA256 hash anyway for UEFI blacklisting
-purposes, so that could be used.  Alternatively, we can require the use of
-authenticatedAttributes/signedAttrs and give you the hash of that - but th=
-en
-you're a bit at the mercy of whatever hashes were used.
-
-Further, we need to think how we're going to do PQC support in IMA -
-particularly as the signatures are so much bigger and verification slower.
-
-Would ML-DSA-44 be acceptable?  Should we grab some internal state out of
-ML-DSA to use in lieu of a hash?
-
-David
-
+-- 
+Josh
