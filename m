@@ -1,101 +1,268 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81EF353EE3
-	for <linux-modules@vger.kernel.org>; Fri, 23 Jan 2026 11:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDACD35B64A;
+	Fri, 23 Jan 2026 11:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769168246; cv=none; b=WaKp8HYHcELekjDfG3kOEpf5k+i0Psp9g7OTpgcNANRGcfJWfVhVJDu8ZK2billqhqPNf/hWeqXUR6xHpYBT2TXWS1zs2Sl9rTPVyaMXaztFinWFSH/iBWqZ112ORYSn09Aw1bsbbwl6qNbMg/UxNez24mb3JTRazH5PLX7X9tQ=
+	t=1769168350; cv=none; b=dE9mTlPAlHH2w2Lb5dVNvQep8LCZpXlKMKesUgtDQY4zLaZ0hwi5Yw4wJQt1zh5MWitqBRV4AlHx4MmSAY4C4m2CuXT8WxaFlKIfxb/WoFiCasSporkN7fxVHZXtoqJ0RN1mHFBep+1PBXrHYH99S+iv22qpcpuAjLGdpe96UZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769168246; c=relaxed/simple;
-	bh=+HSNHG9QzRgXKJEoItQv1Nc43cR0XweN2kAYE+SyNMU=;
-	h=In-Reply-To:References:To:Cc:Subject:From:MIME-Version:
-	 Content-Type:Date:Message-ID; b=qH+Rzg2imMBmQB6r4L5jODrv/1QYbhZ3U6XVXqO7rM3MQW38Q+b8jTM3kfHDCET1DDr6H2VfuPv4BobfsI2RIQ4VazzNRsKNckfZpNyUAT1k80wmOZZaEFpiiYxSpQXscU19e35yT2fyTrECJCmLbL7FV/pqYVN4xkINQYLZitw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ekNsQOv2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769168350; c=relaxed/simple;
+	bh=S8JqAJ26GnU0nV6ZUiIbzkEBN50OMkiLOLi8r5Hb5+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OACFzxHCmip96lct2x/ABmAUfhqShvwYgiaEA2jI2zlnarNFK96OoKijp4KdPRofxUNgUMuBvtjlaqE8JTnTCUHntIchgx3T/qGy0gqWpWg7p/O3byN456iWLtOINnYvHAvyAARL24wPbl8GBPjhHhnCiopVYNqnN06qQ1FJX0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7ukc/nt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ekNsQOv2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769168241;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NPTtO5YScyJb25eYSPVGgKr6h7EkN57q5AA+yKfP2kU=;
-	b=ekNsQOv25CCNyJ76XVd03iWBf8vA/Sacp13vEdhTxOvL0YXox+Bjvm5Iy1znprBhwC6eQr
-	eJTj4zEvs/gEDZkOVbNHIe/1ndODzWSRzrPAH24OYzuMxzAIZ6cQlzxKj7Yb4kVi5yMmtl
-	dpTWJH3ywS3FEk3N1lnMW9Sm+H8smmA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-45-heqkEfZrOZuLmeJR6fihMQ-1; Fri,
- 23 Jan 2026 06:37:17 -0500
-X-MC-Unique: heqkEfZrOZuLmeJR6fihMQ-1
-X-Mimecast-MFC-AGG-ID: heqkEfZrOZuLmeJR6fihMQ_1769168235
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AB0941944EBB;
-	Fri, 23 Jan 2026 11:37:14 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.2])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3C60F1958DC1;
-	Fri, 23 Jan 2026 11:37:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-In-Reply-To: <20260120211232.GB2657@quark>
-References: <20260120211232.GB2657@quark> <20260120145103.1176337-1-dhowells@redhat.com> <20260120145103.1176337-3-dhowells@redhat.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>,
-    Jarkko Sakkinen <jarkko@kernel.org>,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
-    Sami Tolvanen <samitolvanen@google.com>,
-    "Jason A . Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 02/12] pkcs7: Allow the signing algo to calculate the digest itself
-From: David Howells <dhowells@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7ukc/nt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14C5AC4CEF1;
+	Fri, 23 Jan 2026 11:39:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769168350;
+	bh=S8JqAJ26GnU0nV6ZUiIbzkEBN50OMkiLOLi8r5Hb5+8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m7ukc/nt4NbJdRyjo9xi9EvdGxwDx8AXlzezi58qq6e/xpYydIY8ey1VgKOoLEP+G
+	 WOPnl47Xf61pnqKO64xVgg99VicauITo2AjY3lF+Xtb6356M/WbxDEDuJ+W6tEYCcc
+	 0mmkw9WimARqjtLT/u/QdcC4DU16AV580SvtuGR8e8wcQkL8tLA7WxW/XN9StcSxNk
+	 yoORdUFxFb4UZO65F/fX/IR3x7b4qeaugsTSHl3p8LDXGYKitgN/W7UejitTr/eZwb
+	 8P5sas5fBbrGh1NVZ5qA8Hv3aFL18ozOoIpJf8Mg1FzcMWY+M1gnMrbuahU8U0Jk4I
+	 PYgGBROqBBMrw==
+Message-ID: <6277616a-e66d-4ed1-b5d2-270f95d6eacc@kernel.org>
+Date: Fri, 23 Jan 2026 12:39:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1754463.1769168229.1@warthog.procyon.org.uk>
-Date: Fri, 23 Jan 2026 11:37:09 +0000
-Message-ID: <1754464.1769168229@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/1] module: speed modprobe by adding name_crc to
+ struct module
+To: Jim Cromie <jim.cromie@gmail.com>, linux-kernel@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org
+References: <20260122234621.3403276-1-jim.cromie@gmail.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260122234621.3403276-1-jim.cromie@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Eric Biggers <ebiggers@kernel.org> wrote:
 
-> As I mentioned on v11, it's misleading to start using the term digest
-> for something that isn't a digest.
 
-I can call it 'm' if you like.  I don't want to call it 'message' as that is
-overused here.
+Le 23/01/2026 à 00:46, Jim Cromie a écrit :
+> [Vous ne recevez pas souvent de courriers de jim.cromie@gmail.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
+> 
+> "modprobe foo" currently does strcmp on the name, this can be improved.
+> 
+> So this commit:
+> 
+> 1. adds name_crc to struct module
+> 2. modpost.c computes the value and
+> 3. outputs it for "modinfo foo" to see/use.
+> 
+> 4. adds hotpath to find_module_all()
+>     this uses name_crc to do quick "name-check"
+>     falls back to strcmp only to guard against collisions.
+> 
+> This should significantly reduce modprobe workload, and shorten module
+> load-time.
 
-> Naturally, this confusing introduction of non-digest digests seems to
-> have already caused a bug: IMA calls pkcs7_get_digest() to calculate the
-> digest of the module.  But now that's no longer necessarily a digest.
-> It could be the entire signed attributes.
+Any numbers of how significant is the reduction ?
 
-The next patch deals with that, but I can move the error check forward...
+> 
+> Since it alters struct module, its binary incompatible. This means:
+> 
+> 1. RFC for its wide "blast radius".
+> 2. suitable for major version bump *only*
+> 
+> 3. it opens door for further struct module reorg, to:
+>     a. segregate fields by "temperature"
+>     b. pack out paholes.
+>     c. improve cache locality (by reordering coldest on bottom)
+>        name should be cold now.
+>        bikeshedding is appropriate here.
+> 
+> NB: this isn't a substitute for CONFIG_MODULE_SIG.
+> It reimplements crc_le(), doesn't reuse kernel's version.
 
-> I'll also note that this commit doesn't fully implement "Allow the
-> signing algo to calculate the digest itself" as claimed, since only the
-> signed attributes case is handled.  It looks like the next patch is
-> intended to handle the other case.  But it's not made clear at all that
-> it's a two-part thing; this patch implies that it's complete.
+Why not use the kernel's version ?
 
-... or just squash the two patches together.
+> 
+> CC: Luis Chamberlain <mcgrof@kernel.org>
+> CC: Petr Pavlu <petr.pavlu@suse.com>
+> CC: Daniel Gomez <da.gomez@kernel.org>
+> CC: Sami Tolvanen <samitolvanen@google.com>
+> CC: Aaron Tomlin <atomlin@atomlin.com>
+> CC: linux-modules@vger.kernel.org
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> 
+>   '#' will be ignored, and an empty message aborts the commit.
+> ---
+>   include/linux/module.h | 15 ++++++++-------
+>   kernel/module/main.c   |  8 ++++++--
+>   scripts/mod/modpost.c  | 18 ++++++++++++++++++
+>   scripts/mod/modpost.h  |  6 +++++-
+>   4 files changed, 37 insertions(+), 10 deletions(-)
+> 
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index d80c3ea57472..4ea6c5ae3374 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -402,10 +402,18 @@ struct klp_modinfo {
+> 
+>   struct module {
+>          enum module_state state;
+> +       u32 name_hash;
 
-David
+In the subject you say "name_crc"
+
+> 
+>          /* Member of list of modules */
+>          struct list_head list;
+> 
+> +       /* Sysfs stuff. */
+> +       struct module_kobject mkobj;
+> +       struct module_attribute *modinfo_attrs;
+> +       const char *version;
+> +       const char *srcversion;
+> +       struct kobject *holders_dir;
+> +
+
+Shouldn't this move be another patch ?
+
+>          /* Unique handle for this module */
+>          char name[MODULE_NAME_LEN];
+> 
+> @@ -414,13 +422,6 @@ struct module {
+>          unsigned char build_id[BUILD_ID_SIZE_MAX];
+>   #endif
+> 
+> -       /* Sysfs stuff. */
+> -       struct module_kobject mkobj;
+> -       struct module_attribute *modinfo_attrs;
+> -       const char *version;
+> -       const char *srcversion;
+> -       struct kobject *holders_dir;
+> -
+>          /* Exported symbols */
+>          const struct kernel_symbol *syms;
+>          const u32 *crcs;
+> diff --git a/kernel/module/main.c b/kernel/module/main.c
+> index d855f43a2be3..685218b2c5ef 100644
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -39,6 +39,7 @@
+>   #include <linux/mutex.h>
+>   #include <linux/rculist.h>
+>   #include <linux/uaccess.h>
+> +#include <linux/crc32.h>
+>   #include <asm/cacheflush.h>
+>   #include <linux/set_memory.h>
+>   #include <asm/mmu_context.h>
+> @@ -431,13 +432,16 @@ struct module *find_module_all(const char *name, size_t len,
+>                                 bool even_unformed)
+>   {
+>          struct module *mod;
+> +       u32 incoming_name_hash = crc32_le(0, name, len);
+> 
+>          list_for_each_entry_rcu(mod, &modules, list,
+>                                  lockdep_is_held(&module_mutex)) {
+>                  if (!even_unformed && mod->state == MODULE_STATE_UNFORMED)
+>                          continue;
+> -               if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
+> -                       return mod;
+> +               if (mod->name_hash == incoming_name_hash) {
+> +                       if (strlen(mod->name) == len && !memcmp(mod->name, name, len))
+> +                               return mod;
+> +               }
+
+Why not just adding the following instead of modifing existing test:
+
+	if (mod->name_hash != incoming_name_hash)
+		continue;
+
+>          }
+>          return NULL;
+>   }
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 755b842f1f9b..ae90e0bf9330 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -21,6 +21,22 @@
+>   #include <stdbool.h>
+>   #include <errno.h>
+> 
+> +/* Local CRC32 implementation for modpost.c */
+> +#define CRCPOLY_LE 0xEDB88320
+> +
+> +typedef uint32_t u32;
+> +
+> +static u32 crc32_le(u32 crc,  char  *p, size_t len)
+> +{
+> +       int i;
+> +       while (len--) {
+> +               crc ^= *p++;
+> +               for (i = 0; i < 8; i++)
+> +                       crc = (crc >> 1) ^ ((crc & 1) ? CRCPOLY_LE : 0);
+> +       }
+> +       return crc;
+> +}
+> +
+
+Why do you re-implement crc32_le() ?
+
+>   #include <hash.h>
+>   #include <hashtable.h>
+>   #include <list.h>
+> @@ -1581,6 +1597,7 @@ static void read_symbols(const char *modname)
+> 
+>          /* strip trailing .o */
+>          mod = new_module(modname, strlen(modname) - strlen(".o"));
+> +       mod->name_hash = crc32_le(0, mod->name, strlen(mod->name));
+> 
+>          /* save .no_trim_symbol section for later use */
+>          if (info.no_trim_symbol_len) {
+> @@ -1834,6 +1851,7 @@ static void add_header(struct buffer *b, struct module *mod)
+>          buf_printf(b, "#include <linux/compiler.h>\n");
+>          buf_printf(b, "\n");
+>          buf_printf(b, "MODULE_INFO(name, KBUILD_MODNAME);\n");
+> +       buf_printf(b, "MODULE_INFO(name_crc, \"0x%08x\");\n", mod->name_hash);
+>          buf_printf(b, "\n");
+>          buf_printf(b, "__visible struct module __this_module\n");
+>          buf_printf(b, "__section(\".gnu.linkonce.this_module\") = {\n");
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 2aecb8f25c87..3fc3cfd0a039 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -11,11 +11,14 @@
+>   #include <fcntl.h>
+>   #include <unistd.h>
+>   #include <elf.h>
+> +#include <stdint.h>
+>   #include "../../include/linux/module_symbol.h"
+> 
+>   #include <list_types.h>
+>   #include "elfconfig.h"
+> 
+> +typedef uint32_t u32;
+> +
+>   /* On BSD-alike OSes elf.h defines these according to host's word size */
+>   #undef ELF_ST_BIND
+>   #undef ELF_ST_TYPE
+> @@ -126,7 +129,8 @@ struct module {
+>          bool seen;
+>          bool has_init;
+>          bool has_cleanup;
+> -       char         srcversion[25];
+> +               char         srcversion[25];
+> +               u32          name_hash;
+>          // Missing namespace dependencies
+>          struct list_head missing_namespaces;
+>          // Actual imported namespaces
+> --
+> 2.52.0
+> 
+> 
 
