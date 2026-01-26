@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154AE23A58F
-	for <linux-modules@vger.kernel.org>; Mon, 26 Jan 2026 14:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E86F8245020
+	for <linux-modules@vger.kernel.org>; Mon, 26 Jan 2026 14:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769437825; cv=none; b=LXMaEo5pkmzuwL1PHFECisV0RgcThd+NSEK98IyjnNvanAZkuA4IzgeymFQd0XjwSUacuTAolYJk47d/UWHfXkNY1uYJRbg76MqcboHeStPZg1vKRRx0AYl9CRIEbKhivCvoyboAg8//5w3LmKRDGrcLsyIwst7yWfHImeD4wRs=
+	t=1769437836; cv=none; b=H3FFI6i8BT5b1NoPlZcNly8C+3DgoHhOuaPSl5QIWAmAOQjFzwaBzIzkJHud5ORlzQMJBoOOuvmePjQAeJCQ/1aAQOkuoo8rEUyiRllu5iWQy9lvAaKpIM2wL69jnHhSe85+nI3pp3NOdD+c2SxOGLuWe12Ek+AgimTj41zo5tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769437825; c=relaxed/simple;
-	bh=l/fa67HBV5uX6Gdt7JrduYhxUxeS2/+/0g+TUOR714A=;
+	s=arc-20240116; t=1769437836; c=relaxed/simple;
+	bh=YmYddHPvZEgOqKJmE8MugDptUWnHZHtuSGeVaqPbG3g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SbZthQemrWXMaGQYhbO/zfaWufQu8Oaz9o+ohcKiPIRN5SBNdXo1qY4ypi0j2QGxUnUM69uBqV9HZ3dAR2OwIjrQuXQyALC49YV36Hj01ce96RGmdUkAyhl2/VYCUexE+mvvORjgH+Ds0hOTxVsKaR2a/+8b2mNwdf5vCdwQvnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oht62j4v; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=N3KYHraP+lekF0v53YRI1N6mmbg6Xm56ERXsn3bnDPrRK+2z8I3Qm/wMZhOGULBuFKsUBNvJnhASbQUuKjqXNq5R9PbMpmeNFSrIKQk6sOCSAAPIKSDTbnrrBXLdstRIK0Pb7qG5rggfGR3kjmw/Eqk5S0WdoNiivm84SA+VVJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KDa/glg1; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oht62j4v"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KDa/glg1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769437823;
+	s=mimecast20190719; t=1769437834;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RIPQr5EvD0RaYtFXC8NPZPZWU9cXfzbV/hp3jKESUjo=;
-	b=Oht62j4vIdZ7LyhcSsQi0fl5vrsk9TuqVRiOi2RkJAPIZXMDXSej9Kfo8QRTGhljVJZL3K
-	oPlZkoMHAhHBwhowhdC/0PdGI8i6BLf9EFsQzNEJ5hQkvxeT9K9anBE2Mv0Kwk70GPDBXh
-	1Ey5tAABD4tV0XMOY2hP89yyDeGGyao=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=RUvLtsQUIbuT8aNyKAbRO6AgrSzDL4SrRGZc9+zngls=;
+	b=KDa/glg1nl7nAeCnl88S5bRRvaZVDFdz6fNNDQLF5SidmkdAKtJZKSjHEa9l0B6pHw3iO5
+	+A3nt54OVwpmot8PuT7LqjwqrguTwvRhvhBhHHOpPqdiYhpcMELbhQemYw+bGGMX8QJHDb
+	v0kFhVzJEQQuvfagJqrfkDldEIcM3ko=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-EhNtqsVGOFmx7X9IOM9gKg-1; Mon,
- 26 Jan 2026 09:30:18 -0500
-X-MC-Unique: EhNtqsVGOFmx7X9IOM9gKg-1
-X-Mimecast-MFC-AGG-ID: EhNtqsVGOFmx7X9IOM9gKg_1769437815
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-604-MXrR1Hh7NU2KjnMXnBYR3g-1; Mon,
+ 26 Jan 2026 09:30:31 -0500
+X-MC-Unique: MXrR1Hh7NU2KjnMXnBYR3g-1
+X-Mimecast-MFC-AGG-ID: MXrR1Hh7NU2KjnMXnBYR3g_1769437828
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 88C0218005BF;
-	Mon, 26 Jan 2026 14:30:15 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BE9EE18002E9;
+	Mon, 26 Jan 2026 14:30:28 +0000 (UTC)
 Received: from warthog.procyon.org.uk.com (unknown [10.44.33.164])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CAC1819560B2;
-	Mon, 26 Jan 2026 14:30:10 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0DD9F30001A7;
+	Mon, 26 Jan 2026 14:30:23 +0000 (UTC)
 From: David Howells <dhowells@redhat.com>
 To: Lukas Wunner <lukas@wunner.de>,
 	Ignat Korchagin <ignat@cloudflare.com>
@@ -60,9 +60,9 @@ Cc: David Howells <dhowells@redhat.com>,
 	keyrings@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v15 5/7] pkcs7, x509: Add ML-DSA support
-Date: Mon, 26 Jan 2026 14:29:26 +0000
-Message-ID: <20260126142931.1940586-6-dhowells@redhat.com>
+Subject: [PATCH v15 7/7] pkcs7: Allow authenticatedAttributes for ML-DSA
+Date: Mon, 26 Jan 2026 14:29:28 +0000
+Message-ID: <20260126142931.1940586-8-dhowells@redhat.com>
 In-Reply-To: <20260126142931.1940586-1-dhowells@redhat.com>
 References: <20260126142931.1940586-1-dhowells@redhat.com>
 Precedence: bulk
@@ -72,169 +72,105 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Add support for ML-DSA keys and signatures to the CMS/PKCS#7 and X.509
-implementations.  ML-DSA-44, -65 and -87 are all supported.  For X.509
-certificates, the TBSCertificate is required to be signed directly; for CMS,
-direct signing of the data is preferred, though use of SHA512 (and only that)
-as an intermediate hash of the content is permitted with signedAttrs.
+Allow the rejection of authenticatedAttributes in PKCS#7 (signedAttrs in
+CMS) to be waived in the kernel config for ML-DSA when used for module
+signing.  This reflects the issue that openssl < 4.0 cannot do this and
+openssl-4 has not yet been released.
+
+This does not permit RSA, ECDSA or ECRDSA to be so waived (behaviour
+unchanged).
 
 Signed-off-by: David Howells <dhowells@redhat.com>
 cc: Lukas Wunner <lukas@wunner.de>
 cc: Ignat Korchagin <ignat@cloudflare.com>
+cc: Jarkko Sakkinen <jarkko@kernel.org>
 cc: Stephan Mueller <smueller@chronox.de>
 cc: Eric Biggers <ebiggers@kernel.org>
 cc: Herbert Xu <herbert@gondor.apana.org.au>
 cc: keyrings@vger.kernel.org
 cc: linux-crypto@vger.kernel.org
 ---
- crypto/asymmetric_keys/pkcs7_parser.c     | 24 +++++++++++++++++++-
- crypto/asymmetric_keys/public_key.c       | 10 +++++++++
- crypto/asymmetric_keys/x509_cert_parser.c | 27 ++++++++++++++++++++++-
- include/linux/oid_registry.h              |  5 +++++
- 4 files changed, 64 insertions(+), 2 deletions(-)
+ crypto/asymmetric_keys/Kconfig        | 11 +++++++++++
+ crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
+ crypto/asymmetric_keys/pkcs7_parser.h |  3 +++
+ crypto/asymmetric_keys/pkcs7_verify.c |  6 ++++++
+ 4 files changed, 28 insertions(+)
 
+diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
+index e1345b8f39f1..1dae2232fe9a 100644
+--- a/crypto/asymmetric_keys/Kconfig
++++ b/crypto/asymmetric_keys/Kconfig
+@@ -53,6 +53,17 @@ config PKCS7_MESSAGE_PARSER
+ 	  This option provides support for parsing PKCS#7 format messages for
+ 	  signature data and provides the ability to verify the signature.
+ 
++config PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
++	bool "Waive rejection of authenticatedAttributes for ML-DSA"
++	depends on PKCS7_MESSAGE_PARSER
++	depends on CRYPTO_MLDSA
++	help
++	  Due to use of CMS_NOATTR with ML-DSA not being supported in
++	  OpenSSL < 4.0 (and thus any released version), enabling this
++	  allows authenticatedAttributes to be used with ML-DSA for
++	  module signing.  Use of authenticatedAttributes in this
++	  context is normally rejected.
++
+ config PKCS7_TEST_KEY
+ 	tristate "PKCS#7 testing key type"
+ 	depends on SYSTEM_DATA_VERIFICATION
 diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-index 3cdbab3b9f50..594a8f1d9dfb 100644
+index 594a8f1d9dfb..db1c90ca6fc1 100644
 --- a/crypto/asymmetric_keys/pkcs7_parser.c
 +++ b/crypto/asymmetric_keys/pkcs7_parser.c
-@@ -95,11 +95,18 @@ static int pkcs7_check_authattrs(struct pkcs7_message *msg)
+@@ -92,9 +92,17 @@ static int pkcs7_check_authattrs(struct pkcs7_message *msg)
+ 	if (!sinfo)
+ 		goto inconsistent;
+ 
++#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
++	msg->authattrs_rej_waivable = true;
++#endif
++
  	if (sinfo->authattrs) {
  		want = true;
  		msg->have_authattrs = true;
-+	} else if (sinfo->sig->algo_takes_data) {
-+		sinfo->sig->hash_algo = "none";
++#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
++		if (strncmp(sinfo->sig->pkey_algo, "mldsa", 5) != 0)
++			msg->authattrs_rej_waivable = false;
++#endif
+ 	} else if (sinfo->sig->algo_takes_data) {
+ 		sinfo->sig->hash_algo = "none";
  	}
+diff --git a/crypto/asymmetric_keys/pkcs7_parser.h b/crypto/asymmetric_keys/pkcs7_parser.h
+index e17f7ce4fb43..6ef9f335bb17 100644
+--- a/crypto/asymmetric_keys/pkcs7_parser.h
++++ b/crypto/asymmetric_keys/pkcs7_parser.h
+@@ -55,6 +55,9 @@ struct pkcs7_message {
+ 	struct pkcs7_signed_info *signed_infos;
+ 	u8		version;	/* Version of cert (1 -> PKCS#7 or CMS; 3 -> CMS) */
+ 	bool		have_authattrs;	/* T if have authattrs */
++#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
++	bool		authattrs_rej_waivable; /* T if authatts rejection can be waived */
++#endif
  
--	for (sinfo = sinfo->next; sinfo; sinfo = sinfo->next)
-+	for (sinfo = sinfo->next; sinfo; sinfo = sinfo->next) {
- 		if (!!sinfo->authattrs != want)
- 			goto inconsistent;
-+
-+		if (!sinfo->authattrs &&
-+		    sinfo->sig->algo_takes_data)
-+			sinfo->sig->hash_algo = "none";
-+	}
- 	return 0;
- 
- inconsistent:
-@@ -297,6 +304,21 @@ int pkcs7_sig_note_pkey_algo(void *context, size_t hdrlen,
- 		ctx->sinfo->sig->pkey_algo = "ecrdsa";
- 		ctx->sinfo->sig->encoding = "raw";
- 		break;
-+	case OID_id_ml_dsa_44:
-+		ctx->sinfo->sig->pkey_algo = "mldsa44";
-+		ctx->sinfo->sig->encoding = "raw";
-+		ctx->sinfo->sig->algo_takes_data = true;
-+		break;
-+	case OID_id_ml_dsa_65:
-+		ctx->sinfo->sig->pkey_algo = "mldsa65";
-+		ctx->sinfo->sig->encoding = "raw";
-+		ctx->sinfo->sig->algo_takes_data = true;
-+		break;
-+	case OID_id_ml_dsa_87:
-+		ctx->sinfo->sig->pkey_algo = "mldsa87";
-+		ctx->sinfo->sig->encoding = "raw";
-+		ctx->sinfo->sig->algo_takes_data = true;
-+		break;
- 	default:
- 		printk("Unsupported pkey algo: %u\n", ctx->last_oid);
- 		return -ENOPKG;
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index a46356e0c08b..09a0b83d5d77 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -142,6 +142,16 @@ software_key_determine_akcipher(const struct public_key *pkey,
- 		if (strcmp(hash_algo, "streebog256") != 0 &&
- 		    strcmp(hash_algo, "streebog512") != 0)
- 			return -EINVAL;
-+	} else if (strcmp(pkey->pkey_algo, "mldsa44") == 0 ||
-+		   strcmp(pkey->pkey_algo, "mldsa65") == 0 ||
-+		   strcmp(pkey->pkey_algo, "mldsa87") == 0) {
-+		if (strcmp(encoding, "raw") != 0)
-+			return -EINVAL;
-+		if (!hash_algo)
-+			return -EINVAL;
-+		if (strcmp(hash_algo, "none") != 0 &&
-+		    strcmp(hash_algo, "sha512") != 0)
-+			return -EINVAL;
- 	} else {
- 		/* Unknown public key algorithm */
- 		return -ENOPKG;
-diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
-index b37cae914987..2fe094f5caf3 100644
---- a/crypto/asymmetric_keys/x509_cert_parser.c
-+++ b/crypto/asymmetric_keys/x509_cert_parser.c
-@@ -257,6 +257,15 @@ int x509_note_sig_algo(void *context, size_t hdrlen, unsigned char tag,
- 	case OID_gost2012Signature512:
- 		ctx->cert->sig->hash_algo = "streebog512";
- 		goto ecrdsa;
-+	case OID_id_ml_dsa_44:
-+		ctx->cert->sig->pkey_algo = "mldsa44";
-+		goto ml_dsa;
-+	case OID_id_ml_dsa_65:
-+		ctx->cert->sig->pkey_algo = "mldsa65";
-+		goto ml_dsa;
-+	case OID_id_ml_dsa_87:
-+		ctx->cert->sig->pkey_algo = "mldsa87";
-+		goto ml_dsa;
- 	}
- 
- rsa_pkcs1:
-@@ -274,6 +283,12 @@ int x509_note_sig_algo(void *context, size_t hdrlen, unsigned char tag,
- 	ctx->cert->sig->encoding = "x962";
- 	ctx->sig_algo = ctx->last_oid;
- 	return 0;
-+ml_dsa:
-+	ctx->cert->sig->algo_takes_data = true;
-+	ctx->cert->sig->hash_algo = "none";
-+	ctx->cert->sig->encoding = "raw";
-+	ctx->sig_algo = ctx->last_oid;
-+	return 0;
- }
- 
- /*
-@@ -300,7 +315,8 @@ int x509_note_signature(void *context, size_t hdrlen,
- 
- 	if (strcmp(ctx->cert->sig->pkey_algo, "rsa") == 0 ||
- 	    strcmp(ctx->cert->sig->pkey_algo, "ecrdsa") == 0 ||
--	    strcmp(ctx->cert->sig->pkey_algo, "ecdsa") == 0) {
-+	    strcmp(ctx->cert->sig->pkey_algo, "ecdsa") == 0 ||
-+	    strncmp(ctx->cert->sig->pkey_algo, "mldsa", 5) == 0) {
- 		/* Discard the BIT STRING metadata */
- 		if (vlen < 1 || *(const u8 *)value != 0)
- 			return -EBADMSG;
-@@ -524,6 +540,15 @@ int x509_extract_key_data(void *context, size_t hdrlen,
- 			return -ENOPKG;
+ 	/* Content Data (or NULL) */
+ 	enum OID	data_type;	/* Type of Data */
+diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
+index 06abb9838f95..519eecfe6778 100644
+--- a/crypto/asymmetric_keys/pkcs7_verify.c
++++ b/crypto/asymmetric_keys/pkcs7_verify.c
+@@ -425,6 +425,12 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
+ 			return -EKEYREJECTED;
  		}
- 		break;
-+	case OID_id_ml_dsa_44:
-+		ctx->cert->pub->pkey_algo = "mldsa44";
-+		break;
-+	case OID_id_ml_dsa_65:
-+		ctx->cert->pub->pkey_algo = "mldsa65";
-+		break;
-+	case OID_id_ml_dsa_87:
-+		ctx->cert->pub->pkey_algo = "mldsa87";
-+		break;
- 	default:
- 		return -ENOPKG;
- 	}
-diff --git a/include/linux/oid_registry.h b/include/linux/oid_registry.h
-index 6de479ebbe5d..ebce402854de 100644
---- a/include/linux/oid_registry.h
-+++ b/include/linux/oid_registry.h
-@@ -145,6 +145,11 @@ enum OID {
- 	OID_id_rsassa_pkcs1_v1_5_with_sha3_384, /* 2.16.840.1.101.3.4.3.15 */
- 	OID_id_rsassa_pkcs1_v1_5_with_sha3_512, /* 2.16.840.1.101.3.4.3.16 */
- 
-+	/* NIST FIPS-204 ML-DSA */
-+	OID_id_ml_dsa_44,			/* 2.16.840.1.101.3.4.3.17 */
-+	OID_id_ml_dsa_65,			/* 2.16.840.1.101.3.4.3.18 */
-+	OID_id_ml_dsa_87,			/* 2.16.840.1.101.3.4.3.19 */
-+
- 	OID__NR
- };
- 
+ 		if (pkcs7->have_authattrs) {
++#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
++			if (pkcs7->authattrs_rej_waivable) {
++				pr_warn("Waived invalid module sig (has authattrs)\n");
++				break;
++			}
++#endif
+ 			pr_warn("Invalid module sig (has authattrs)\n");
+ 			return -EKEYREJECTED;
+ 		}
 
