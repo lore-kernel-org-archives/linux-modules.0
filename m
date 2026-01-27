@@ -1,318 +1,349 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020112.outbound.protection.outlook.com [52.101.196.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7929135CB73;
-	Tue, 27 Jan 2026 14:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769525611; cv=fail; b=hbEPDnwLypfAye56Ru4kZm5JXE/mjraTLxlQ7AefjdF0OJlbSoi11x65VqBoEaRYPPHUDcrixDSuo+goTGPjUbOAEez/J280emrXILGcVNu9vMSLBRkcj5CQLuiSCL4vabw0RUXWGp00UQUZLI5IoR8/IPAMkxikJj+Im5JGW1o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769525611; c=relaxed/simple;
-	bh=q01YsGd6EfXdjdmEewOF389aUjVnydXmkf8z7SIQsQo=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
-	 In-Reply-To:MIME-Version; b=YY1iniD17XVHHreVSBAVFM0Nft6mDkkeNP4WyjmMsqJ4BnpPtS0AuA+rXzxreaHW5vkTzIUE2yhWE8y9A3+nfY6YyRLR7g8W1k6eKteey2yWCYHKGiZ6quFzBp/aW63giiKEvGx4v7GmPOOO2fwqxWjeDyB12w3F757rb92Aw+I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=QTigyPtU; arc=fail smtp.client-ip=52.101.196.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2D036654F
+	for <linux-modules@vger.kernel.org>; Tue, 27 Jan 2026 15:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769527223; cv=none; b=KDRiBt5RQdHBZsvjjEBJAXXcoyW4dTRAamZvU1K60Z569f98PEm9BDLVvos3dUbL1CGSxvw3p+edSZLEXAiOCpaLEyqKWC+JBE+GdlogSud90HcPLJnwX4QTi9u5bt01lr4vZIL6gNVCF3sDhDXyqolQTlfR/fgps/S0z8u7/tE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769527223; c=relaxed/simple;
+	bh=ablOwMKQd22Q+KZBq9y4BMZVnNaLiD0FFqi08v9XFCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PJELlHwPi29plor0963F4bNm9q8cFu6hmBm8i5ZgldRsHhUgPSM1jXkArkrSziRvu75G5UtGsgJwQapuNzUUsr0NtBve5EwqBCclivWSP/apF0pRjf9ZJuN3azrahwgu27UOTg1pCW1f7o1MITrxgj6TPjBigVxgFfWn5Ydrp3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PS49/Xt+; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="QTigyPtU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Fj3Qx06L/ncA5PlFgGXwR2BBsiupGcqCGnNBU3cnNAtlIpokFgo3thtDUx8a3hoHdPx3GiGJ0m/4N4A0X9B/spqG1QsR3kyohuxrZAutkYzjr/pVMu/qLoUNiP/KPYTZA1+lvEOzfTNo95A7evL0OLCMiYu2wYFY4CjLduKMN4hpTnIeo2+PYBkoZVvpWhELfsXOjHmaiXOIPLAsJjOqXh8UQQft38/g2jlhsstdECGN4fvNHmc/sYMjaIUdR+mAL41m/sQrilG7bgu+eNBuM0mpXXAzSr6IZriPv+KwchbR6sQBCGk/XNbJgzFPQvZn4X4MyDEBtRRfotoWndlcjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7eDfCJhD0UJZC5pfMVV8FuDp0EqOWcSHnFKxHnRchLE=;
- b=K3k2uj1yB+/SPnHp0Pv/RD96mAmEQiodQbyBPq+IESqo9sEe91orYoYegElXDCKZ5eJPScGbHjLJEARISdH0Dzlg5D41k2TzWgrpjTYPrz45RDdI2VJHaBxEiIarbfS9lEhmuRExtQw5eOSE7yiPX/Iumrcpeb5quZn1ApgcV8AuvGm7lNRUvIA/WSyIQKlKth6rYAHilO09ZjlCCBTHq5wPWBOZeFNfIYRPnwdXNVRyrh8dsgS7kG32CkTivLoPmD18pgnxra055uhJ2NBkpwWH24zpweWdkUWbzFXEJ2SP0wj0tO11wSvYCbVNEs3bt4y4u4l/KdDkHd8axfRgGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7eDfCJhD0UJZC5pfMVV8FuDp0EqOWcSHnFKxHnRchLE=;
- b=QTigyPtUn3PLkgKl1ts8YCf+SEFIVP3P6o3g7AXFJXlYnhMBv6iWDBF516vHGI8uKw2M0eNNDW/qiGble2pWNz8Os8jH9s7BJhC6OCX8BS8WZ3zZLy5cL/lYCqPsvxP/VwWHWztFu1fAsfghmVnLo28wWjEyuTK2NhQj2mN4924=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:27c::13)
- by CWXP265MB1974.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:82::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.16; Tue, 27 Jan
- 2026 14:53:25 +0000
-Received: from CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
- ([fe80::6c9e:93c8:10db:e995]) by CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
- ([fe80::6c9e:93c8:10db:e995%6]) with mapi id 15.20.9542.010; Tue, 27 Jan 2026
- 14:53:25 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Jan 2026 14:53:24 +0000
-Message-Id: <DFZGH4IMZEE8.2NG4D64BPM9N0@garyguo.net>
-To: "Kari Argillander" <kari.argillander@gmail.com>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-modules@vger.kernel.org>, "Luis Chamberlain" <mcgrof@kernel.org>,
- "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>,
- "Sami Tolvanen" <samitolvanen@google.com>, "Aaron Tomlin"
- <atomlin@atomlin.com>, "Youseok Yang" <ileixe@gmail.com>, "Yuheng Su"
- <gipsyh.icu@gmail.com>
-Subject: Re: [PATCH RFC v3 00/15] rust: Reimplement ThisModule to fix
- ownership problems
-From: "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.21.0
-References: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
-In-Reply-To: <20260110-this_module_fix-v3-0-97a3d9c14e8b@gmail.com>
-X-ClientProxiedBy: LO4P265CA0310.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:391::18) To CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:400:27c::13)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PS49/Xt+"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47ee0291921so50079035e9.3
+        for <linux-modules@vger.kernel.org>; Tue, 27 Jan 2026 07:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1769527219; x=1770132019; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TpVju2z52ieKZ9g+UW8bQZ3qR3Ja1fAXqmPTBm/6Msg=;
+        b=PS49/Xt+XBkvPmyiu7HuoN/+FQbWne3GuGTRt8FAgjemU+g0VSDoY5YDNkCt6aPhh8
+         +YUL+8WHWYyYN+Bfzf6Pb0YJ/eJTEXSMMLpfDcGqiMJjA5X18sig1ycBF1++bPuhOW0j
+         +06gCjnCrxJDM2e5OOUp/H47tgjuQ4ybDtjc7grIkF0qtmGWnhXBmUc88b/8E4BowpFq
+         sDFKtZ0UGspdRgOnkYrDNKpiBX6UZA9bVhZgKyXsU9wLNmWgEr7+FzeQJYFFU4gqwTr5
+         QbDKPSeDpC4WeQHTkReLy7m2xU4YFUCmweL0PWjLUqMn3CMaftJBwZwhsAGRenzh51WC
+         biVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769527219; x=1770132019;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TpVju2z52ieKZ9g+UW8bQZ3qR3Ja1fAXqmPTBm/6Msg=;
+        b=clo0Sdp1XRQ8OztEjssZCVFrDYuPKqQahY0ML3Hb12i1uw1CAkujk65bVXz1vHwYM/
+         m9GPWsAYvtq4ngTQ75tpXUTpnPRhamQbl7jMtL5yLqs4emdAU+Ohk3BIn8NJgHSg17kx
+         4zJl10JXa+5fRcGAyC88nwg7XCN4e0EHTV3NE4DgXM3BtIxyvGgV+iRbtHzqlrcLvj73
+         HGTTFZTg57zX6/CKuWHJCCGipBonYN0EgPQwUFk2zequqjNvJKku7oeYweQjaMpVUgNe
+         cqv6YNituLsYcYNEAy5K6iwU3ZuuSKw/dxkF6zIJDaUl2E0JcdadE8QtLzkGxsjU8T2X
+         Qsjg==
+X-Forwarded-Encrypted: i=1; AJvYcCWeLwEOIR15EqegI89/T20urY9UleSunC1Gqc9Jsy506BVuq7vqIKFne7olfQc0vmVY3JWwC9R+R6j2kN3V@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCmfyDJwkVZvPqgXfHJ/KBBPyxk2XEK9sOTR3UtGxiAot80x58
+	F3LdXP01x+NJ2TD4qY7wyPRLC/wU/58b9pmaNuMMmlATrXsOTmzJIsLU9pt/wFl9RTM=
+X-Gm-Gg: AZuq6aLGeQhvOEWWQJDGcaxJrIMbZhR9oZR7T044KYjRLxb4zZbMcQc71iAlS5+xjxK
+	MnLxHlnhAI3JQf+t9ATWpL5XKQruy+9QTHlEtXgkP/EYlxIT7FtJ/1NPPo+nktxV89YIloYou6Q
+	MT+d9gdlUiid6Gik8rfOK13cCViDg1hiY/1aNw7UYBhh1HARFL03dw+JE5iXXpSw4wRDltVUMAY
+	QIpExAchQ8xTPf+jDFPwfY6VIuvN/LTOVPId6F2LSzlRf+hm54OCmGAtWjgU7vSrNY54bmJLfy3
+	6tn7PMKQNkbU2m5dy64/JH55sll7j4tf0ds/WuyJ7YsowEjq78ULaca72xW75zknHHbdJfv6QXz
+	tWbFG57OXm2KzR2afUgNVyNIK0VR3X9s8vxhbYSFES7zyL2HtGaPycjc0tUs9+Ok6j3+OQm9sei
+	XVnxAts90CzDvAhsSrHlhw2wQ6NGECLTz+VPYGQHCW
+X-Received: by 2002:a05:600c:5553:b0:480:1c53:2085 with SMTP id 5b1f17b1804b1-4806a313f35mr20307595e9.19.1769527219144;
+        Tue, 27 Jan 2026 07:20:19 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c034dfsm67200105e9.10.2026.01.27.07.20.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 07:20:18 -0800 (PST)
+Message-ID: <52cbbccf-d5b6-4a33-b16a-4a09fe5e64d3@suse.com>
+Date: Tue, 27 Jan 2026 16:20:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CW1P265MB8877:EE_|CWXP265MB1974:EE_
-X-MS-Office365-Filtering-Correlation-Id: 96c6b106-e56a-4871-bd04-08de5db3d306
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?U2pCakUwUnlSNm9SMGVSYS9KcWY0K2NpYVZoRFZmWlZvSFI3NUt0MGpLdy9M?=
- =?utf-8?B?NHNXeEloRUFuR1JyS3o4U08vWnpId3oxNTJ6OW5PRHhWNXBVSjRaM1pQZFRl?=
- =?utf-8?B?cjZxUHltTmxnYmpmdkpIZlB0aCs3TTJnR080ZWs3Tkh4QzdGQ3ZBUVZnMlZk?=
- =?utf-8?B?N0tyWUdlSzM0SENqc1FVejR5QUNBcXVmaWdUUUgvVVVsMldqY1VreTN5THpH?=
- =?utf-8?B?RGxpWXd1cHpCdlZjZXZHN0hLTmFUVjE4a3BWWitPWXBzMVV3SFBpbXBQVENE?=
- =?utf-8?B?ZTVVV1hRSGZCcXJ4K0JoMHQ2Rk92K2Zpb0FEWVJTRHU3ZzhzODVDajUrUlpj?=
- =?utf-8?B?bGJCYVhjd1RzVHdnNEJaL0FLNFVrRkJWYURPUGsxZEZSZkpEejlPZmtyME81?=
- =?utf-8?B?cDdOL252QTV0TEt4d2ZLQkV3ZlI1bTJUNHpHT1BMQnlqQnE1bWlENGZ4SXBO?=
- =?utf-8?B?dFd2TUNpdnFxaVBEUkdTaXJIYTZHZ1hBUWxLWUhSV09nZkowdmJrYm5uWXRM?=
- =?utf-8?B?ajFReWZRZEQxdFRoQ0t0azhMbnFTODQ3NC9TbldhK0dtRC9zNzZTL2FpZjJ0?=
- =?utf-8?B?TS9XM0tvaG1QQjB3N3ZwTGxMUU5MZytDVEptT1FBUUlWSk5NbDBWOURVZ1JS?=
- =?utf-8?B?c1VzZ0sxODE4RytIT2ZnMVZGV0tTSVg2WTZ0Y3FLRzdURnlDaDJxZWhaWWtm?=
- =?utf-8?B?Q3NvcGhHOU9oY3F1U0dhZCt6dE1IVWE5TjZHSTlsYy9kUVJEb0p5VGlqMHdP?=
- =?utf-8?B?dmUxSmFlRENNT1k3bW9QNVExQk92T3k3WiswMTNza0JkVVNrRHJYVkl3a1Nz?=
- =?utf-8?B?eTBCTU43UGZXVDVLTFlLbHEwb1ZKVWhFd3FSdUlSYXlITjd3OUhqMkNvWWw3?=
- =?utf-8?B?NU9RS2R3ZWkveVFNR2FYRFNucTJWRmZNbWVmMVlIdVFlT0Q3ajlnVjRFc1Jw?=
- =?utf-8?B?S2lTOEZZUnZyN2s4d3Y2ako4bC9kQUVickw3Zlo1V2JRTnd5VzZCMnNXaUV6?=
- =?utf-8?B?TmN5eVAyeVd5Y3lrSXlZSWlDLzNpb2k4WVppUHFURXFXYUNBK2p4bmp5TnBR?=
- =?utf-8?B?NW5uVFFhYUkrSm1ZTXN4bkRWYzV0MUs0cVhEYytDUm5SdURSbXhsK3VGZVhq?=
- =?utf-8?B?Nmc1SWI1VFQ5WEJLQ3RGSFlKZDZYa2pnL0dlY2EzOGRxM2d2WnBvV2daUTFS?=
- =?utf-8?B?MmZ4a1FJd1dKK3dEWmdwKzkvblkxampZUThMNnRSd0tHdnFTT2tuNmNLdENF?=
- =?utf-8?B?YXQ1Y1BOMDB0TjRSNlpTRXl0T1pmKzUzSFJrb052MHdXS3NWRmFObUY4eklM?=
- =?utf-8?B?R056VVRYOFFpZTY1a0EzZTN2WlVwTlByaC9pVHFudEVaRDMrVWhTOXFUeEVq?=
- =?utf-8?B?OTIxM28wcnBQYVBzNGhtYXc3bWZUTjFvRXByblUyZzlSbUdOWjIxTFhHMEM5?=
- =?utf-8?B?TkxIVG1xSlB6TW9aZ0JyS1huVm5aNjU5R2w1TFlBUnNYWVFZVkpqa0hwR0Rs?=
- =?utf-8?B?OVdkbDVNQ1VwM1N1MlczWDA2NXQ2VnpXNk9MTEdZMGFrVEZHeVM0N2pRRnV6?=
- =?utf-8?B?UGtNQVVJNDVmc25BS2dhZFV2OHVYQXorR1BmakhvSlF5VUNaT08yQlJFWXF6?=
- =?utf-8?B?blIyYWhYbnJtUDVsc2dCWUN1QnBhclBqMlhWbHB1eDYrWStEaWFtNGhBWFQy?=
- =?utf-8?B?ejJwdGZ5dVFZS2lYcWZKc1RXa0UwOG1Pajh2VDhqRTRWbkVkQzlHWWJ5N0Qr?=
- =?utf-8?B?Mk5WWklFaXZjd1loV1kyL01mbVJudU9PbFlLVEYwU0FmNlFqL0lwU29RTURX?=
- =?utf-8?B?NWJic2h6VHJuUEUrVDlhT1ZWYnFaMWdGU3VoL2FuUXFicXRKQnhYWHNwRE0y?=
- =?utf-8?B?MnBZNnFOYzc4enAxZlFaeGtiVTRhd29KTkNZWEhMM3lIcXQzdVVQNmdIMkps?=
- =?utf-8?B?MUlzL2U2VnhYZHNOZDluYllCek1JMEMxY1hSem80b25GUUkybnpNTXZkM1A5?=
- =?utf-8?B?bUhYcFo1Q0I1MGVicm1ncVdNZkpOMkVkdDFFOUR6bzFlbnNiUnQwNld2bW5T?=
- =?utf-8?B?aklYeW9uNlRxcklWa0pmVjVacXVzeCtPbEVpK2Z1ODI1NEk5bDYwZ1pETEV6?=
- =?utf-8?B?SXI1di9sVEdwZEFGZ0paeTBaaS9KblVOQlo3dHVjTVFhVmNVcUt4Tjc2MFdJ?=
- =?utf-8?Q?0wXlo9ugoDEihWUv0TWCTjU=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K2ZXeGtJNGZoSjlUUDluc2ErdGZHUzZYU2JyWmJ1V01Lc3BKeDRUajk2ZEpn?=
- =?utf-8?B?bWVuOHUvMTkxQWlHMlJSeUFyaThJblhGWTdTRmNqNXUyNjNPbERLYXE1Qkpl?=
- =?utf-8?B?cjRuNEVKdWNSeHVFcThIVG9uREw0Z1l0d1VUL3V0ejUwRXEwZ3JOaWFqZUY2?=
- =?utf-8?B?NDF3bGFqMDJaWmJhTmtEYUMzaVFHWit6LzB5dTBoeUVJdzZCSEdzR2hvbHhT?=
- =?utf-8?B?YkxSWExoMmVXM1MxdWFFV0hjOWRIVXI5TlRCM0tVSEN1Y1FROG53bHF1TEIr?=
- =?utf-8?B?QkhvK3E0RmtBN1V2ZW5VcjRBa2FhblUvdVE2NjNSYk9HTE9wNGxpaUZYSk5B?=
- =?utf-8?B?enJEeXZmd2RJZDZGRGdJK1FqWC8xMXZNVURsdmVQVUhmTWJRenY0SUF5VEI4?=
- =?utf-8?B?cVE5R0hoRlM2UUNWUXVWWFBLUFlWV1RpbExNbWhpTnlqQnhDMjhJUE1lenNN?=
- =?utf-8?B?cHoxb254a3QwaEc1aWU2UDNPVnZDY1Q0aUxCNkJKeFNiY3Q3VnVNMkphMng3?=
- =?utf-8?B?R2tRa2FKMlhGdWkyU0hKRkJ2STZialg0Y01vZWhUYThraEdHU3orS3BGNlVo?=
- =?utf-8?B?aHdhb0RrT01aNjloeTlqemRIeUtYZG11YUQ5dE10eDBNZllwK0tHd1A4ZDBt?=
- =?utf-8?B?eUk5U0dNRWRCVVVwOUROSklGRDFVcEM2ZGprS0hVU0xmOHdtdm9IZWp1a1Vx?=
- =?utf-8?B?WVo2OExmajVBbEVsd25qRDhDcnA0OTRrRnZTMHduM3lBRFg1SVlLS3NPMWtl?=
- =?utf-8?B?QVBBaWNBbWpoOVFRVUNKSyt3Z2tqNkhYdVpaSFdON3ZMVHJISkhEUHJ1Zkh0?=
- =?utf-8?B?emtTUi9XWDRuN0svMXI0cEJXYlh1enRmYUo0M0xqWkpkbEV4YllsZTlIcFFD?=
- =?utf-8?B?eFc0UXZ1TzBORzVJS20rQmtGVmxuOVp6N3c4cE80dXZOUmo3citXZDE2OHBQ?=
- =?utf-8?B?dnBqVHdpYW5Xdmw5NXZCcHhucmk4Tk13QlRnc3BhcWVXQWw4b0lYaTN3Sjlv?=
- =?utf-8?B?L0tzU0R4cStOeC9pZCtWRk5XT2Qwa21BdDJXVnZNMHlqYXQ5cS9YSTBSNjhw?=
- =?utf-8?B?ZlAwcEVaWG1Ud0x1NTRBZ2NsY24ySkcwZXBrekJFNlJidzloQVRscDJaTFRW?=
- =?utf-8?B?NjZ5MG9iYm5JMCtrczdQKzBaSWwxeS8vdkltYlBIc05meUkvZ0Q1SGU1YzNj?=
- =?utf-8?B?dXo1SW05elNDMm5weEE5UWMzRE9IWG5ZcGFmUThtMUQwL0ozZWlaRmR4Qzh0?=
- =?utf-8?B?S2l1UWk5UEEyV3ZtVFFYeVpTMXEzM2F6bVhaRitLTE5Bb2VmQkhZdlMwUjlB?=
- =?utf-8?B?eGVvTnRtUVpySGFnRVRob2NTL0piWnZUNjJNTllxWWFGK3lOajROK3dvWHJZ?=
- =?utf-8?B?b3Z5UTl3NWU4RGtRUElZTjFQU3JxVWViNWYxS1ZSZE1xRElBYm53dkRuZ1Zj?=
- =?utf-8?B?WFBJRDg1VEVwZmNkeUZ1WGhuR2xrRU9oVXdBTHczajVOUWFKWGNXTW91RUta?=
- =?utf-8?B?dGRkQU5MOFVEWnA3cElmNVJxMjRBRHRCM2tKNzVxTlFZNjdVY3I0b3JOZTFQ?=
- =?utf-8?B?M01zeUVQcndDMWM4Wis0WHdhRU1rTW1razYrSE1jT3ExSGdsa2xoQWVFWkRY?=
- =?utf-8?B?Q0FqeU5hU1hLeWFFc2xtZGxqbS84bkRIUVhGZXF4WjZnci9GL1FmcWFQVWtO?=
- =?utf-8?B?dTdFWi9RNW5JaFVzdnE0OGpPWVhIT2ZYL2VYVGY0Y2l4enI4UFdoTXlwa0VK?=
- =?utf-8?B?M1RERjQyUmVoMW5KUmtJZVJmQzYzcmpuRXVGQU52TnFRTGlGaXBPRndTU1Bz?=
- =?utf-8?B?MExQN3M3LzJBY3pWSjNGTEh1MW1uZHpUSmlpL1RoVzJGOTBBdXArVDNoZzNl?=
- =?utf-8?B?MDZiSTRQQkd1dkt2aWVRTFdOUlZiZzZhMzJFbytRVVJaZzM4NTc1U25XQlZp?=
- =?utf-8?B?dFFKSWZzbUxwcDlXVEVoVWQ3ZzgxNGtJQVpvQkw2NndZWGJGL3B2dk1ScE1v?=
- =?utf-8?B?OGNTdjNnQU5TRVlJczBQQXN1OXVlMmNEeFk3UUtadnVEMk1DZGJDVDROOEFX?=
- =?utf-8?B?cnFobG1RMFovcGVHL3ZYZHM4Tk00bTB6R0dWa3ZLeHJWSE04WEREVkhjL2k0?=
- =?utf-8?B?WDIzaUZJQUk2OXI1UElRYzZFWWRiaGo0K3RZMWx2ak1sUm0yeS91L0J5S0dr?=
- =?utf-8?B?Yy93V1BFL2x3bWx4b3dPYjB6MkxIc3hkZ2xLTTBNK2Q5MlFsa211dnlIZkE4?=
- =?utf-8?B?UGtVdjdjU1NJQXdPWks1SEJYSWV3aXRMNXNmMVl2SUJmVjdWT1lYUitQSURN?=
- =?utf-8?B?UUxjMGZIWTFwbC80TVcyOWZHNzRsK0tBcklaRDh5MkJoZ045UlpFUT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96c6b106-e56a-4871-bd04-08de5db3d306
-X-MS-Exchange-CrossTenant-AuthSource: CW1P265MB8877.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 14:53:25.5369
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7SCBzmjDnfx719PJs3UKdKOugl/T09xhrtNwJtyH3pK7+AhaAJADa7yGNWDxaN/TDYbmJDn46SOlwmHtEDlBdw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB1974
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 08/17] module: Deduplicate signature extraction
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
+ <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
+ kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
+ =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-8-0b932db9b56b@weissschuh.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260113-module-hashes-v4-8-0b932db9b56b@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat Jan 10, 2026 at 3:07 PM GMT, Kari Argillander wrote:
-> Still RFC. Not all people for each subsystems are not included yet as
-> this touch quite lot of things. I would like to get feed back is this
-> resonable seperation and how we will land this. I have tried my best so
-> that it can be applied in multiple staged if needed. I have not receive
-> any feedback on this series and that is little bit worrying.
->
-> Introduce new ThisModule trait and THIS_MODULE impl.
->
-> So currently we have problem that we are not always filling .owner field
-> example for file_operations. I think we can enable const_refs_to_static
-> already as that is in 1.78 and is stable in 1.83. So that fits perfecly
-> for us.  This also seems to be quite request feature but I did not found
-> that no one has ever suggested that we just enable this.
->
-> So basic idea is that we will have ThisModule trait which is used kernel
-> side. Module side we will always use THIS_MODULE. That is completly
-> private for modules and kernel crate cannot use it. Currently we have
-> THIS_MODULE, LocalModule and
-
-Why is trait needed? Couldn't this just be a `const THIS_MODULE` required f=
-or
-vtable?
-
-Best,
-Gary
-
->
->   module: &' static ThisModule
->
-> on init functions. As we anyway need THIS_MODULE just use that for all
-> of these things.
->
-> Patches 1-2 introduce THIS_MODULE and ThisModule trait.
-> Patches 3-12 can be applied any order after 1-2.
-> Patch 13 depends on patches 11-12.
-> Patches 14-15 are clean up patches and depends 1-13.
->
->     Argillander
->
-> To: Miguel Ojeda <ojeda@kernel.org>
-> To: Boqun Feng <boqun.feng@gmail.com>
-> To: Gary Guo <gary@garyguo.net>
-> To: Bj=C3=B6rn Roy Baron <bjorn3_gh@protonmail.com>
-> To: Benno Lossin <lossin@kernel.org>
-> To: Andreas Hindborg <a.hindborg@kernel.org>
-> To: Alice Ryhl <aliceryhl@google.com>
-> To: Trevor Gross <tmgross@umich.edu>
-> To: Danilo Krummrich <dakr@kernel.org>
->
-> To: Alexandre Courbot <acourbot@nvidia.com>
->
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
-> Cc: Daniel Gomez <da.gomez@kernel.org>
-> Cc: Sami Tolvanen <samitolvanen@google.com>
-> Cc: Aaron Tomlin <atomlin@atomlin.com>
->
-> Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
+On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
+> The logic to extract the signature bits from a module file are
+> duplicated between the module core and IMA modsig appraisal.
+> 
+> Unify the implementation.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > ---
-> Changes in v3:
-> - Edit cover.
-> - Seperate module name changes to seperate patches.
-> - Rebase top of next 20260109
-> - Seperate configfs changes to own commit.
-> - Fix one place still used M over TM for ThisModule.
-> - Link to v2: https://lore.kernel.org/r/20260106-this_module_fix-v2-0-842=
-ac026f00b@gmail.com
->
-> Changes in v2:
-> - Patches are now sepereted properly.
-> - Removed debugfs changes as that is not so clear to me.
-> - Remove module parameter and just used THIS_MODULE everywhere.
-> - Made macro to make THIS_MODULE.
-> - Doc tests also have THIS_MODULE.
-> - Link to v1: https://lore.kernel.org/r/20260101-this_module_fix-v1-0-46a=
-e3e5605a0@gmail.com
->
-> ---
-> Kari Argillander (15):
->       rust: enable const_refs_to_static feature
->       rust: add new ThisModule trait and THIS_MODULE impl
->       rust: miscdevice: fix use after free because missing .owner
->       rust: block: fix missing owner field in block_device_operations
->       rust: drm: fix missing owner in file_operations
->       rust: configfs: use new THIS_MODULE
->       rust: binder: use new THIS_MODULE
->       rust: firmware: use THIS_MODULE over LocalModule for name
->       gpu: nova-core: use THIS_MODULE over LocalModule for name
->       samples: rust: auxiliary: use THIS_MODULE over LocalModule for name
->       rust: driver: make RegistrationOps::register() to use new ThisModul=
-e
->       rust: phy: make Registration::register() use new ThisModule
->       rust: remove module argument from InPlaceModule::init()
->       rust: remove kernel::ModuleMetadata
->       rust: remove old version of ThisModule
->
->  drivers/android/binder/rust_binder_main.rs |   5 +-
->  drivers/block/rnull/configfs.rs            |   2 +-
->  drivers/block/rnull/rnull.rs               |   3 +-
->  drivers/gpu/drm/nova/driver.rs             |   2 +
->  drivers/gpu/drm/tyr/driver.rs              |   2 +
->  drivers/gpu/nova-core/nova_core.rs         |   2 +-
->  lib/find_bit_benchmark_rust.rs             |   3 +-
->  rust/kernel/auxiliary.rs                   |  16 +--
->  rust/kernel/block/mq.rs                    |   1 +
->  rust/kernel/block/mq/gen_disk.rs           |  30 +-----
->  rust/kernel/block/mq/operations.rs         |  30 ++++++
->  rust/kernel/configfs.rs                    |  49 ++++-----
->  rust/kernel/driver.rs                      |  31 +++---
->  rust/kernel/drm/device.rs                  |   2 +-
->  rust/kernel/drm/driver.rs                  |   4 +
->  rust/kernel/drm/gem/mod.rs                 |   5 +-
->  rust/kernel/firmware.rs                    |   4 +-
->  rust/kernel/i2c.rs                         |  11 +-
->  rust/kernel/lib.rs                         | 161 +++++++++++++++++++++++=
-+-----
->  rust/kernel/miscdevice.rs                  |   5 +
->  rust/kernel/net/phy.rs                     |  29 ++++--
->  rust/kernel/pci.rs                         |  15 +--
->  rust/kernel/platform.rs                    |  12 +--
->  rust/kernel/prelude.rs                     |   2 +-
->  rust/kernel/sync/lock/global.rs            |   4 +-
->  rust/kernel/usb.rs                         |  13 +--
->  rust/macros/lib.rs                         |   4 +-
->  rust/macros/module.rs                      |  24 +----
->  samples/rust/rust_configfs.rs              |   2 +-
->  samples/rust/rust_debugfs_scoped.rs        |   2 +-
->  samples/rust/rust_driver_auxiliary.rs      |   8 +-
->  samples/rust/rust_driver_faux.rs           |   2 +-
->  samples/rust/rust_minimal.rs               |   2 +-
->  samples/rust/rust_misc_device.rs           |   3 +-
->  samples/rust/rust_print_main.rs            |   2 +-
->  scripts/rustdoc_test_gen.rs                |   2 +
->  36 files changed, 298 insertions(+), 196 deletions(-)
-> ---
-> base-commit: f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
-> change-id: 20251230-this_module_fix-a390bff24897
->
-> Best regards,
+>  include/linux/module_signature.h    |  4 +--
+>  kernel/module/signing.c             | 52 +++++++------------------------------
+>  kernel/module_signature.c           | 41 +++++++++++++++++++++++++++--
+>  security/integrity/ima/ima_modsig.c | 24 ++++-------------
+>  4 files changed, 56 insertions(+), 65 deletions(-)
+> 
+> diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
+> index 7eb4b00381ac..186a55effa30 100644
+> --- a/include/linux/module_signature.h
+> +++ b/include/linux/module_signature.h
+> @@ -40,7 +40,7 @@ struct module_signature {
+>  	__be32	sig_len;	/* Length of signature data */
+>  };
+>  
+> -int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> -		  const char *name);
+> +int mod_split_sig(const void *buf, size_t *buf_len, bool mangled,
+> +		  size_t *sig_len, const u8 **sig, const char *name);
+>  
+>  #endif /* _LINUX_MODULE_SIGNATURE_H */
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index fe3f51ac6199..6d64c0d18d0a 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -37,54 +37,22 @@ void set_module_sig_enforced(void)
+>  	sig_enforce = true;
+>  }
+>  
+> -/*
+> - * Verify the signature on a module.
+> - */
+> -static int mod_verify_sig(const void *mod, struct load_info *info)
+> -{
+> -	struct module_signature ms;
+> -	size_t sig_len, modlen = info->len;
+> -	int ret;
+> -
+> -	pr_devel("==>%s(,%zu)\n", __func__, modlen);
+> -
+> -	if (modlen <= sizeof(ms))
+> -		return -EBADMSG;
+> -
+> -	memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
+> -
+> -	ret = mod_check_sig(&ms, modlen, "module");
+> -	if (ret)
+> -		return ret;
+> -
+> -	sig_len = be32_to_cpu(ms.sig_len);
+> -	modlen -= sig_len + sizeof(ms);
+> -	info->len = modlen;
+> -
+> -	return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
+> -				      VERIFY_USE_SECONDARY_KEYRING,
+> -				      VERIFYING_MODULE_SIGNATURE,
+> -				      NULL, NULL);
+> -}
+> -
+>  int module_sig_check(struct load_info *info, int flags)
+>  {
+> -	int err = -ENODATA;
+> -	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +	int err;
+>  	const char *reason;
+>  	const void *mod = info->hdr;
+> +	size_t sig_len;
+> +	const u8 *sig;
+>  	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+>  				       MODULE_INIT_IGNORE_VERMAGIC);
+> -	/*
+> -	 * Do not allow mangled modules as a module with version information
+> -	 * removed is no longer the module that was signed.
+> -	 */
+> -	if (!mangled_module &&
+> -	    info->len > markerlen &&
+> -	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> -		/* We truncate the module to discard the signature */
+> -		info->len -= markerlen;
+> -		err = mod_verify_sig(mod, info);
+> +
+> +	err = mod_split_sig(info->hdr, &info->len, mangled_module, &sig_len, &sig, "module");
+> +	if (!err) {
+> +		err = verify_pkcs7_signature(mod, info->len, sig, sig_len,
+> +					     VERIFY_USE_SECONDARY_KEYRING,
+> +					     VERIFYING_MODULE_SIGNATURE,
+> +					     NULL, NULL);
+>  		if (!err) {
+>  			info->sig_ok = true;
+>  			return 0;
 
+The patch looks to modify the behavior when mangled_module is true.
+
+Previously, module_sig_check() didn't attempt to extract the signature
+in such a case and treated the module as unsigned. The err remained set
+to -ENODATA and the function subsequently consulted module_sig_check()
+and security_locked_down() to determine an appropriate result.
+
+Newly, module_sig_check() calls mod_split_sig(), which skips the
+extraction of the marker ("~Module signature appended~\n") from the end
+of the module and instead attempts to read it as an actual
+module_signature. The value is then passed to mod_check_sig() which
+should return -EBADMSG. The error is propagated to module_sig_check()
+and treated as fatal, without consulting module_sig_check() and
+security_locked_down().
+
+I think the mangled_module flag should not be passed to mod_split_sig()
+and it should be handled solely by module_sig_check().
+
+> diff --git a/kernel/module_signature.c b/kernel/module_signature.c
+> index 00132d12487c..b2384a73524c 100644
+> --- a/kernel/module_signature.c
+> +++ b/kernel/module_signature.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/errno.h>
+>  #include <linux/printk.h>
+> +#include <linux/string.h>
+>  #include <linux/module_signature.h>
+>  #include <asm/byteorder.h>
+>  
+> @@ -18,8 +19,8 @@
+>   * @file_len:	Size of the file to which @ms is appended.
+>   * @name:	What is being checked. Used for error messages.
+>   */
+> -int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> -		  const char *name)
+> +static int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> +			 const char *name)
+>  {
+>  	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
+>  		return -EBADMSG;
+> @@ -44,3 +45,39 @@ int mod_check_sig(const struct module_signature *ms, size_t file_len,
+>  
+>  	return 0;
+>  }
+> +
+> +int mod_split_sig(const void *buf, size_t *buf_len, bool mangled,
+> +		  size_t *sig_len, const u8 **sig, const char *name)
+> +{
+> +	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +	struct module_signature ms;
+> +	size_t modlen = *buf_len;
+> +	int ret;
+> +
+> +	/*
+> +	 * Do not allow mangled modules as a module with version information
+> +	 * removed is no longer the module that was signed.
+> +	 */
+> +	if (!mangled &&
+> +	    *buf_len > markerlen &&
+> +	    memcmp(buf + modlen - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> +		/* We truncate the module to discard the signature */
+> +		modlen -= markerlen;
+> +	}
+> +
+> +	if (modlen <= sizeof(ms))
+> +		return -EBADMSG;
+> +
+> +	memcpy(&ms, buf + (modlen - sizeof(ms)), sizeof(ms));
+> +
+> +	ret = mod_check_sig(&ms, modlen, name);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*sig_len = be32_to_cpu(ms.sig_len);
+> +	modlen -= *sig_len + sizeof(ms);
+> +	*buf_len = modlen;
+> +	*sig = buf + modlen;
+> +
+> +	return 0;
+> +}
+> diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+> index 3265d744d5ce..a57342d39b07 100644
+> --- a/security/integrity/ima/ima_modsig.c
+> +++ b/security/integrity/ima/ima_modsig.c
+> @@ -40,44 +40,30 @@ struct modsig {
+>  int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+>  		    struct modsig **modsig)
+>  {
+> -	const size_t marker_len = strlen(MODULE_SIG_STRING);
+> -	const struct module_signature *sig;
+> +	size_t buf_len_sz = buf_len;
+>  	struct modsig *hdr;
+>  	size_t sig_len;
+> -	const void *p;
+> +	const u8 *sig;
+>  	int rc;
+>  
+> -	if (buf_len <= marker_len + sizeof(*sig))
+> -		return -ENOENT;
+> -
+> -	p = buf + buf_len - marker_len;
+> -	if (memcmp(p, MODULE_SIG_STRING, marker_len))
+> -		return -ENOENT;
+> -
+> -	buf_len -= marker_len;
+> -	sig = (const struct module_signature *)(p - sizeof(*sig));
+> -
+> -	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
+> +	rc = mod_split_sig(buf, &buf_len_sz, true, &sig_len, &sig, func_tokens[func]);
+
+Passing mangled=true to mod_split_sig() seems incorrect here. It causes
+that the function doesn't properly extract the signature marker at the
+end of the module, no?
+
+>  	if (rc)
+>  		return rc;
+>  
+> -	sig_len = be32_to_cpu(sig->sig_len);
+> -	buf_len -= sig_len + sizeof(*sig);
+> -
+>  	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
+>  	hdr = kzalloc(struct_size(hdr, raw_pkcs7, sig_len), GFP_KERNEL);
+>  	if (!hdr)
+>  		return -ENOMEM;
+>  
+>  	hdr->raw_pkcs7_len = sig_len;
+> -	hdr->pkcs7_msg = pkcs7_parse_message(buf + buf_len, sig_len);
+> +	hdr->pkcs7_msg = pkcs7_parse_message(sig, sig_len);
+>  	if (IS_ERR(hdr->pkcs7_msg)) {
+>  		rc = PTR_ERR(hdr->pkcs7_msg);
+>  		kfree(hdr);
+>  		return rc;
+>  	}
+>  
+> -	memcpy(hdr->raw_pkcs7, buf + buf_len, sig_len);
+> +	memcpy(hdr->raw_pkcs7, sig, sig_len);
+>  
+>  	/* We don't know the hash algorithm yet. */
+>  	hdr->hash_algo = HASH_ALGO__LAST;
+> 
+
+-- 
+Thanks,
+Petr
