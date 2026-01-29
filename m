@@ -1,284 +1,622 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A722335554;
-	Wed, 28 Jan 2026 23:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D4737B409
+	for <linux-modules@vger.kernel.org>; Thu, 29 Jan 2026 07:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769642148; cv=none; b=mOi0WG+glvpEmcBvI/cQpbNh/ZHNth/1kcajZ2u2zG2ho7qQQIg72EiHbNe7YgWz/KMNJIIp7jLJVUnE4fH92t3QTSe9pEkiF9ZCs4GugMZMeoJnDpNVyVb6uGJdH/M1aOta3p/TT5IByEbqJ99rYR/n5XD8QerVV+wlsvBXr8c=
+	t=1769671851; cv=none; b=MjL2Y4t0Q3F1CSif1asZtaRke1GtvHfBxHjFHv1/ZwbAX0Csxrx1+giyATR4NqSUT+DnsWJwwapcz7qYWRTUt9fTSuFmKAUCDmwbRWtMVxO38D7+EfBY5Xezk9VPWx0O2pZkCNSVzGnqXf3He8N1ZCPnw/b81BeSBqcDBfvqctk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769642148; c=relaxed/simple;
-	bh=/g5GQCRx9VQ1qpx5c23mUIMjE6qDTKlKhm2i5tJzEEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+fpcsTswn21XnBeuGsZUFpp8w+hUFyMJhOfneoFrHa/GP6EkOLgcXPCGOtNJ+gszasKJvpjP2Qxh02h/I/EkbnO0X845O3ZFalozsVb5uGcJDwqGC6IwHZYSEUiggaX0OBQfxOZ9aYJuLoXyLG95nq2V+yXq2Y542/sKLOmbkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6goQrMS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769671851; c=relaxed/simple;
+	bh=6SWYVg0WRAJ+zlVeZZ2h9Li0bHwPKpzu2Hv3HbAmGuY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AyY31/3lbqzKgwVqEiCcrOONnvTqnNFET0uTQfSlviB9553aLhZR/WKlqtdLGXtZwv4E8Nm+SMh5B37v4cKMz07VDTdiVQfHxAa7ZFyxWx59uidi6ug5ZV3GQRVaRZ7wijZCp5kSp2mUbk9sXCnNREFzPeG3D4ph4mnsH/VUxVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fFhABYdW; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6goQrMS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FC4C4CEF1;
-	Wed, 28 Jan 2026 23:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769642147;
-	bh=/g5GQCRx9VQ1qpx5c23mUIMjE6qDTKlKhm2i5tJzEEI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U6goQrMSmWlTGBjF1g8gIXvwlczh4NG7n3FI0tec8IkWwjfTkqzDXSIsV20Q3lfhO
-	 7fypmBfJbkor5lM7uCar6mNAQMxuOpx/fNM1HLtjyffrReJN/amEDJQ8pn7SOuRJLe
-	 vE3SXwlZaBJaulwAlJ+2Mx2C+ooO5fheJ6XaJsW7UO6+frWJnQ3ICfO/hP3UTCXa+m
-	 18gwCBmRvd4Bz8wP+rv8kFrgb+PzleKUqjHAzIgZ4CkG3GlCMjebdV5gfml8IwCKhl
-	 xKKMT3QX0DjE/X457KCcw/+1aI+cdYYfzjoOV9rFZHo6Yk0OERKCUmPWntC/eeJYPj
-	 ySuqBNfrcCcAQ==
-Date: Thu, 29 Jan 2026 01:15:42 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Lukas Wunner <lukas@wunner.de>, Ignat Korchagin <ignat@cloudflare.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Eric Biggers <ebiggers@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fFhABYdW"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-45c7a71ba20so300325b6e.2
+        for <linux-modules@vger.kernel.org>; Wed, 28 Jan 2026 23:30:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769671847; x=1770276647; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EgSaZ35o/97kxB+I2u5PTbtHLtN0Mymp74NK/iIs2Mo=;
+        b=fFhABYdWxzqw29OAojQyT/Agf11CyAC7UZq5T5zZW/1/kXvlddfvXK24uR+brEq7Wt
+         F6tDWSU28tQxiJIcDDuJO19SweHRN9to/6DUZ/8jNbd0cVrECu02wO7FmaYQVZcyE+jJ
+         KcMsjAf5bXXVh42xAEW7V3kFrSUxPDzTSVNfW6IV8OxkWG7Pkdc+nXCcMp2Oqczj1Q+d
+         nvbpUwF1FYBAeX41i/6AEtU/mL3Y4RAA9EcuZoQiC+y0dVYJEvosTWSnqGid3mPrivFn
+         XsoHK3F8njO1gcmXxMjvZzLXfOQs248ObAfCJDNn2myEECBsS4iEqxAJE8KsnFbE6zKd
+         xa7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769671847; x=1770276647;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=EgSaZ35o/97kxB+I2u5PTbtHLtN0Mymp74NK/iIs2Mo=;
+        b=igaLe/SOaRRRVroAog4RuOLgs9La8Fe5OtbkRm0PbbFwE/JKhfNSJq2pqMV5A6gEn2
+         ZoquS7DC28c3cR0gFRt0k/6HaYV+r+L6JVUScJ/BC9o2uzU+zWqUdnxavUVlFAGUJ6ec
+         IFSH0yBAaEdej6k0P1uyRDvytrw7a1TsMsQ6W+UiUEs8EXpqvm+EYR1ixmkgqwDbC8QE
+         jxkcs1xLo0Ku9zq+WXXxMXs/jdKz29OonGiqXxFr6Y9IE8HLctFHGWttwPBHZYVvYPcR
+         6jxlUB9rO6urTOlIrsqm/7gLlgtl4GDQ812rAtuS2xE2XK7HW1OlfFZY7hGF0D2a0o/j
+         Au8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWCJ+nDz9bCPOUogkx3aBbI1W7X7bg+wo0uUF/o91X+wJlU91JDjEZjIuCkigKV/cGjTy1OErAGQjM0RFCz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/rclqQq97D1aD4qjFzrRM7PgdkbJPllgS9qUyqiKkWafXhcVS
+	Tn92Eg/ux/Uj/ueRUWppWLPj4wFJvGCSWvfwsNM8k4A5/Qs5ULqalPSg
+X-Gm-Gg: AZuq6aLkvK3LBPb+CLJtZdULju89FHlYihWLXFAJWybzsHSq/oS6eU8cjAy5g8cd6oM
+	KfJiC8AXvMT6e2aQ26xQPBYP0Mv5Jv3depzCyO4TwFlUvguEr8BdTL92x+jaU/ffXLduqAJACr7
+	b60vQPm0p7TgvvZntAdth1PRxFqLfM0uQTS0eP1zPkjuM2EPIaaOAal08efhPsnBNrOaEU3vZVZ
+	cn3BOiUc+RqledSSC6c4cQv29T0rYmsB1WALXZ9jpM0nOUeNLOl+OgHe94aLWz8n3LuWcwVpZNd
+	fTOlVIRyHvttVA0SZv3shB526iXnSJ/+H6zAiI0/q69HlYFSDJ4qE2xkDK8eJOCvbMcjMsOFj+A
+	+UyiSQGCtG+tGA/QvfmXkYRu78lUdOQUAOc1L2X9mXuf/6OG8CzM0PEJ+zN8wnj4BEihWoxHR1t
+	ikbgIT2wVdynEnO8XIwQVtQhFcbBd9EKc8yzOmi1SM
+X-Received: by 2002:a05:6808:a5ce:20b0:45f:8be:d983 with SMTP id 5614622812f47-45f08bf1043mr2424576b6e.12.1769671847429;
+        Wed, 28 Jan 2026 23:30:47 -0800 (PST)
+Received: from godzilla (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-45f08d8333dsm2724473b6e.4.2026.01.28.23.30.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 23:30:46 -0800 (PST)
+From: Jim Cromie <jim.cromie@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: Jim Cromie <jim.cromie@gmail.com>,
+	Jason Baron <jbaron@akamai.com>,
+	=?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>,
+	Louis Chauvet <louis.chauvet@bootlin.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Dave Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	dri-devel@lists.freedesktop.org,
+	Petr Mladek <pmladek@suse.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-doc@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 3/7] pkcs7, x509: Rename ->digest to ->m
-Message-ID: <aXqYnh92VWroe8AJ@kernel.org>
-References: <20260126142931.1940586-1-dhowells@redhat.com>
- <20260126142931.1940586-4-dhowells@redhat.com>
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org
+Subject: [PATCH v9 16/32] dyndbg,module: make proper substructs in _ddebug_info
+Date: Thu, 29 Jan 2026 00:29:02 -0700
+Message-ID: <20260129072932.2190803-17-jim.cromie@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260129072932.2190803-1-jim.cromie@gmail.com>
+References: <20260129072932.2190803-1-jim.cromie@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126142931.1940586-4-dhowells@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 26, 2026 at 02:29:24PM +0000, David Howells wrote:
-> Rename ->digest and ->digest_len to ->m and ->m_size to represent the input
-> to the signature verification algorithm, reflecting that ->digest may no
-> longer actually *be* a digest.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Lukas Wunner <lukas@wunner.de>
-> cc: Ignat Korchagin <ignat@cloudflare.com>
-> cc: Jarkko Sakkinen <jarkko@kernel.org>
-> cc: Stephan Mueller <smueller@chronox.de>
-> cc: Eric Biggers <ebiggers@kernel.org>
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
-> cc: keyrings@vger.kernel.org
-> cc: linux-crypto@vger.kernel.org
-> ---
->  crypto/asymmetric_keys/asymmetric_type.c |  4 ++--
->  crypto/asymmetric_keys/pkcs7_verify.c    | 28 ++++++++++++------------
->  crypto/asymmetric_keys/public_key.c      |  3 +--
->  crypto/asymmetric_keys/signature.c       |  2 +-
->  crypto/asymmetric_keys/x509_public_key.c | 10 ++++-----
->  include/crypto/public_key.h              |  4 ++--
->  security/integrity/digsig_asymmetric.c   |  4 ++--
->  7 files changed, 26 insertions(+), 29 deletions(-)
-> 
-> diff --git a/crypto/asymmetric_keys/asymmetric_type.c b/crypto/asymmetric_keys/asymmetric_type.c
-> index 348966ea2175..2326743310b1 100644
-> --- a/crypto/asymmetric_keys/asymmetric_type.c
-> +++ b/crypto/asymmetric_keys/asymmetric_type.c
-> @@ -593,10 +593,10 @@ static int asymmetric_key_verify_signature(struct kernel_pkey_params *params,
->  {
->  	struct public_key_signature sig = {
->  		.s_size		= params->in2_len,
-> -		.digest_size	= params->in_len,
-> +		.m_size		= params->in_len,
->  		.encoding	= params->encoding,
->  		.hash_algo	= params->hash_algo,
-> -		.digest		= (void *)in,
-> +		.m		= (void *)in,
->  		.s		= (void *)in2,
->  	};
->  
-> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
-> index 6d6475e3a9bf..aa085ec6fb1c 100644
-> --- a/crypto/asymmetric_keys/pkcs7_verify.c
-> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
-> @@ -31,7 +31,7 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  	kenter(",%u,%s", sinfo->index, sinfo->sig->hash_algo);
->  
->  	/* The digest was calculated already. */
-> -	if (sig->digest)
-> +	if (sig->m)
->  		return 0;
->  
->  	if (!sinfo->sig->hash_algo)
-> @@ -45,11 +45,11 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  		return (PTR_ERR(tfm) == -ENOENT) ? -ENOPKG : PTR_ERR(tfm);
->  
->  	desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
-> -	sig->digest_size = crypto_shash_digestsize(tfm);
-> +	sig->m_size = crypto_shash_digestsize(tfm);
->  
->  	ret = -ENOMEM;
-> -	sig->digest = kmalloc(sig->digest_size, GFP_KERNEL);
-> -	if (!sig->digest)
-> +	sig->m = kmalloc(sig->m_size, GFP_KERNEL);
-> +	if (!sig->m)
->  		goto error_no_desc;
->  
->  	desc = kzalloc(desc_size, GFP_KERNEL);
-> @@ -59,11 +59,10 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  	desc->tfm   = tfm;
->  
->  	/* Digest the message [RFC2315 9.3] */
-> -	ret = crypto_shash_digest(desc, pkcs7->data, pkcs7->data_len,
-> -				  sig->digest);
-> +	ret = crypto_shash_digest(desc, pkcs7->data, pkcs7->data_len, sig->m);
->  	if (ret < 0)
->  		goto error;
-> -	pr_devel("MsgDigest = [%*ph]\n", 8, sig->digest);
-> +	pr_devel("MsgDigest = [%*ph]\n", 8, sig->m);
->  
->  	/* However, if there are authenticated attributes, there must be a
->  	 * message digest attribute amongst them which corresponds to the
-> @@ -78,14 +77,14 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  			goto error;
->  		}
->  
-> -		if (sinfo->msgdigest_len != sig->digest_size) {
-> +		if (sinfo->msgdigest_len != sig->m_size) {
->  			pr_warn("Sig %u: Invalid digest size (%u)\n",
->  				sinfo->index, sinfo->msgdigest_len);
->  			ret = -EBADMSG;
->  			goto error;
->  		}
->  
-> -		if (memcmp(sig->digest, sinfo->msgdigest,
-> +		if (memcmp(sig->m, sinfo->msgdigest,
->  			   sinfo->msgdigest_len) != 0) {
->  			pr_warn("Sig %u: Message digest doesn't match\n",
->  				sinfo->index);
-> @@ -98,7 +97,8 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  		 * convert the attributes from a CONT.0 into a SET before we
->  		 * hash it.
->  		 */
-> -		memset(sig->digest, 0, sig->digest_size);
-> +		memset(sig->m, 0, sig->m_size);
-> +
->  
->  		ret = crypto_shash_init(desc);
->  		if (ret < 0)
-> @@ -108,10 +108,10 @@ static int pkcs7_digest(struct pkcs7_message *pkcs7,
->  		if (ret < 0)
->  			goto error;
->  		ret = crypto_shash_finup(desc, sinfo->authattrs,
-> -					 sinfo->authattrs_len, sig->digest);
-> +					 sinfo->authattrs_len, sig->m);
->  		if (ret < 0)
->  			goto error;
-> -		pr_devel("AADigest = [%*ph]\n", 8, sig->digest);
-> +		pr_devel("AADigest = [%*ph]\n", 8, sig->m);
->  	}
->  
->  error:
-> @@ -138,8 +138,8 @@ int pkcs7_get_digest(struct pkcs7_message *pkcs7, const u8 **buf, u32 *len,
->  	if (ret)
->  		return ret;
->  
-> -	*buf = sinfo->sig->digest;
-> -	*len = sinfo->sig->digest_size;
-> +	*buf = sinfo->sig->m;
-> +	*len = sinfo->sig->m_size;
->  
->  	i = match_string(hash_algo_name, HASH_ALGO__LAST,
->  			 sinfo->sig->hash_algo);
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index e5b177c8e842..a46356e0c08b 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -425,8 +425,7 @@ int public_key_verify_signature(const struct public_key *pkey,
->  	if (ret)
->  		goto error_free_key;
->  
-> -	ret = crypto_sig_verify(tfm, sig->s, sig->s_size,
-> -				sig->digest, sig->digest_size);
-> +	ret = crypto_sig_verify(tfm, sig->s, sig->s_size, sig->m, sig->m_size);
->  
->  error_free_key:
->  	kfree_sensitive(key);
-> diff --git a/crypto/asymmetric_keys/signature.c b/crypto/asymmetric_keys/signature.c
-> index 041d04b5c953..f4ec126121b3 100644
-> --- a/crypto/asymmetric_keys/signature.c
-> +++ b/crypto/asymmetric_keys/signature.c
-> @@ -28,7 +28,7 @@ void public_key_signature_free(struct public_key_signature *sig)
->  		for (i = 0; i < ARRAY_SIZE(sig->auth_ids); i++)
->  			kfree(sig->auth_ids[i]);
->  		kfree(sig->s);
-> -		kfree(sig->digest);
-> +		kfree(sig->m);
->  		kfree(sig);
->  	}
->  }
-> diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
-> index 79cc7b7a0630..3854f7ae4ed0 100644
-> --- a/crypto/asymmetric_keys/x509_public_key.c
-> +++ b/crypto/asymmetric_keys/x509_public_key.c
-> @@ -63,11 +63,11 @@ int x509_get_sig_params(struct x509_certificate *cert)
->  	}
->  
->  	desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
-> -	sig->digest_size = crypto_shash_digestsize(tfm);
-> +	sig->m_size = crypto_shash_digestsize(tfm);
->  
->  	ret = -ENOMEM;
-> -	sig->digest = kmalloc(sig->digest_size, GFP_KERNEL);
-> -	if (!sig->digest)
-> +	sig->m = kmalloc(sig->m_size, GFP_KERNEL);
-> +	if (!sig->m)
->  		goto error;
->  
->  	desc = kzalloc(desc_size, GFP_KERNEL);
-> @@ -76,9 +76,7 @@ int x509_get_sig_params(struct x509_certificate *cert)
->  
->  	desc->tfm = tfm;
->  
-> -	ret = crypto_shash_digest(desc, cert->tbs, cert->tbs_size,
-> -				  sig->digest);
-> -
-> +	ret = crypto_shash_digest(desc, cert->tbs, cert->tbs_size, sig->m);
->  	if (ret < 0)
->  		goto error_2;
->  
-> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
-> index 81098e00c08f..bd38ba4d217d 100644
-> --- a/include/crypto/public_key.h
-> +++ b/include/crypto/public_key.h
-> @@ -43,9 +43,9 @@ extern void public_key_free(struct public_key *key);
->  struct public_key_signature {
->  	struct asymmetric_key_id *auth_ids[3];
->  	u8 *s;			/* Signature */
-> -	u8 *digest;
-> +	u8 *m;			/* Message data to pass to verifier */
->  	u32 s_size;		/* Number of bytes in signature */
-> -	u32 digest_size;	/* Number of bytes in digest */
-> +	u32 m_size;		/* Number of bytes in ->m */
->  	const char *pkey_algo;
->  	const char *hash_algo;
->  	const char *encoding;
-> diff --git a/security/integrity/digsig_asymmetric.c b/security/integrity/digsig_asymmetric.c
-> index 457c0a396caf..87be85f477d1 100644
-> --- a/security/integrity/digsig_asymmetric.c
-> +++ b/security/integrity/digsig_asymmetric.c
-> @@ -121,8 +121,8 @@ int asymmetric_verify(struct key *keyring, const char *sig,
->  		goto out;
->  	}
->  
-> -	pks.digest = (u8 *)data;
-> -	pks.digest_size = datalen;
-> +	pks.m = (u8 *)data;
-> +	pks.m_size = datalen;
->  	pks.s = hdr->sig;
->  	pks.s_size = siglen;
->  	ret = verify_signature(key, &pks);
-> 
+recompose struct _ddebug_info, inserting proper sub-structs.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+The struct _ddebug_info has 2 pairs of _vec, num##_vec fields, for
+descs and classes respectively.  for_subvec() makes walking these
+vectors less cumbersome, now lets move those field pairs into their
+own "vec" structs: _ddebug_descs & _ddebug_class_maps, and re-compose
+struct _ddebug_info to contain them cleanly.  This also lets us rid
+for_subvec() of its num##_vec paste-up.
 
-BR, Jarkko
+Also recompose struct ddebug_table to contain a _ddebug_info.  This
+reinforces its use as a cursor into relevant data for a builtin
+module, and access to the full _ddebug state for modules.
+
+NOTES:
+
+Invariant: These vectors ref a contiguous subrange of __section memory
+in builtin/DATA or in loadable modules via mod->dyndbg_info; with
+guaranteed life-time for us.
+
+Fixup names: Normalize all struct names to "struct _ddebug_*"
+eliminating the minor/stupid variations created in classmaps-v1.
+Also normalize the __section names to "__dyndbg_*".
+
+struct module contains a _ddebug_info field and module/main.c sets it
+up, so that gets adjusted rather obviously.
+
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ include/asm-generic/vmlinux.lds.h |   4 +-
+ include/linux/dynamic_debug.h     |  42 ++++++----
+ kernel/module/main.c              |  12 +--
+ lib/dynamic_debug.c               | 127 +++++++++++++++---------------
+ lib/test_dynamic_debug.c          |   2 +-
+ 5 files changed, 100 insertions(+), 87 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 4b4d2773aa22..8e06adf48223 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -385,8 +385,8 @@
+ 	*(__tracepoints)						\
+ 	/* implement dynamic printk debug */				\
+ 	. = ALIGN(8);							\
+-	BOUNDED_SECTION_BY(__dyndbg, ___dyndbg)				\
+-	BOUNDED_SECTION_BY(__dyndbg_classes, ___dyndbg_classes)		\
++	BOUNDED_SECTION_BY(__dyndbg_descriptors, ___dyndbg_descs)	\
++	BOUNDED_SECTION_BY(__dyndbg_class_maps, ___dyndbg_class_maps)	\
+ 	CODETAG_SECTIONS()						\
+ 	LIKELY_PROFILE()		       				\
+ 	BRANCH_PROFILE()						\
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 9fd36339db52..b84518b70a6e 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -83,30 +83,42 @@ enum class_map_type {
+ 	 */
+ };
+ 
+-struct ddebug_class_map {
+-	struct module *mod;
+-	const char *mod_name;	/* needed for builtins */
++struct _ddebug_class_map {
++	struct module *mod;	/* NULL for builtins */
++	const char *mod_name;
+ 	const char **class_names;
+ 	const int length;
+ 	const int base;		/* index of 1st .class_id, allows split/shared space */
+ 	enum class_map_type map_type;
+ };
+ 
+-/* encapsulate linker provided built-in (or module) dyndbg data */
++/*
++ * @_ddebug_info: gathers module/builtin dyndbg_* __sections together.
++ * For builtins, it is used as a cursor, with the inner structs
++ * marking sub-vectors of the builtin __sections in DATA.
++ */
++struct _ddebug_descs {
++	struct _ddebug *start;
++	int len;
++};
++
++struct _ddebug_class_maps {
++	struct _ddebug_class_map *start;
++	int len;
++};
++
+ struct _ddebug_info {
+-	struct _ddebug *descs;
+-	struct ddebug_class_map *classes;
+-	unsigned int num_descs;
+-	unsigned int num_classes;
++	struct _ddebug_descs descs;
++	struct _ddebug_class_maps maps;
+ };
+ 
+-struct ddebug_class_param {
++struct _ddebug_class_param {
+ 	union {
+ 		unsigned long *bits;
+ 		unsigned long *lvl;
+ 	};
+ 	char flags[8];
+-	const struct ddebug_class_map *map;
++	const struct _ddebug_class_map *map;
+ };
+ 
+ /*
+@@ -125,8 +137,8 @@ struct ddebug_class_param {
+  */
+ #define DECLARE_DYNDBG_CLASSMAP(_var, _maptype, _base, ...)		\
+ 	static const char *_var##_classnames[] = { __VA_ARGS__ };	\
+-	static struct ddebug_class_map __aligned(8) __used		\
+-		__section("__dyndbg_classes") _var = {			\
++	static struct _ddebug_class_map __aligned(8) __used		\
++		__section("__dyndbg_class_maps") _var = {		\
+ 		.mod = THIS_MODULE,					\
+ 		.mod_name = KBUILD_MODNAME,				\
+ 		.base = _base,						\
+@@ -166,7 +178,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+ 
+ #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
+ 	static struct _ddebug  __aligned(8)			\
+-	__section("__dyndbg") name = {				\
++	__section("__dyndbg_descriptors") name = {		\
+ 		.modname = KBUILD_MODNAME,			\
+ 		.function = __func__,				\
+ 		.filename = __FILE__,				\
+@@ -253,7 +265,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+  * macro.
+  */
+ #define _dynamic_func_call_cls(cls, fmt, func, ...)			\
+-	__dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
++	__dynamic_func_call_cls(__UNIQUE_ID(_ddebug), cls, fmt, func, ##__VA_ARGS__)
+ #define _dynamic_func_call(fmt, func, ...)				\
+ 	_dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+ 
+@@ -263,7 +275,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
+  * with precisely the macro's varargs.
+  */
+ #define _dynamic_func_call_cls_no_desc(cls, fmt, func, ...)		\
+-	__dynamic_func_call_cls_no_desc(__UNIQUE_ID(ddebug), cls, fmt,	\
++	__dynamic_func_call_cls_no_desc(__UNIQUE_ID(_ddebug), cls, fmt,	\
+ 					func, ##__VA_ARGS__)
+ #define _dynamic_func_call_no_desc(fmt, func, ...)			\
+ 	_dynamic_func_call_cls_no_desc(_DPRINTK_CLASS_DFLT, fmt,	\
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 710ee30b3bea..de5f3c143160 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -2710,12 +2710,12 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
+ 
+ #ifdef CONFIG_DYNAMIC_DEBUG_CORE
+-	mod->dyndbg_info.descs = section_objs(info, "__dyndbg",
+-					      sizeof(*mod->dyndbg_info.descs),
+-					      &mod->dyndbg_info.num_descs);
+-	mod->dyndbg_info.classes = section_objs(info, "__dyndbg_classes",
+-						sizeof(*mod->dyndbg_info.classes),
+-						&mod->dyndbg_info.num_classes);
++	mod->dyndbg_info.descs.start = section_objs(info, "__dyndbg_descriptors",
++						    sizeof(*mod->dyndbg_info.descs.start),
++						    &mod->dyndbg_info.descs.len);
++	mod->dyndbg_info.maps.start = section_objs(info, "__dyndbg_class_maps",
++						   sizeof(*mod->dyndbg_info.maps.start),
++						   &mod->dyndbg_info.maps.len);
+ #endif
+ 
+ 	return 0;
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index aed197f879f5..be3a430cc332 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -39,17 +39,15 @@
+ 
+ #include <rdma/ib_verbs.h>
+ 
+-extern struct _ddebug __start___dyndbg[];
+-extern struct _ddebug __stop___dyndbg[];
+-extern struct ddebug_class_map __start___dyndbg_classes[];
+-extern struct ddebug_class_map __stop___dyndbg_classes[];
++extern struct _ddebug __start___dyndbg_descs[];
++extern struct _ddebug __stop___dyndbg_descs[];
++extern struct _ddebug_class_map __start___dyndbg_class_maps[];
++extern struct _ddebug_class_map __stop___dyndbg_class_maps[];
+ 
+ struct ddebug_table {
+ 	struct list_head link;
+ 	const char *mod_name;
+-	struct _ddebug *ddebugs;
+-	struct ddebug_class_map *classes;
+-	unsigned int num_ddebugs, num_classes;
++	struct _ddebug_info info;
+ };
+ 
+ struct ddebug_query {
+@@ -136,20 +134,21 @@ do {								\
+  * @_i:  caller provided counter.
+  * @_sp: cursor into _vec, to examine each item.
+  * @_box: ptr to a struct containing @_vec member
+- * @_vec: name of a member in @_box
++ * @_vec: name of a a vector member in @_box
+  */
++
+ #define __ASSERT_IS_LVALUE(x) ((void)sizeof((void)0, &(x)))
+-#define __ASSERT_HAS_VEC_MEMBER(_box, _vec) ({	\
+-	(void)sizeof((_box)->_vec);		\
+-	(void)sizeof((_box)->num_##_vec);	\
++#define __ASSERT_HAS_VEC_MEMBER(_box, _vec) ({		\
++	(void)sizeof((_box)->_vec.start);		\
++	(void)sizeof((_box)->_vec.len);			\
+ })
+ #define for_subvec(_i, _sp, _box, _vec)			\
+ 	__ASSERT_IS_LVALUE(_i);				\
+ 	__ASSERT_IS_LVALUE(_sp);			\
+ 	__ASSERT_HAS_VEC_MEMBER(_box, _vec);		\
+-	for ((_i) = 0, (_sp) = (_box)->_vec;		\
+-	     (_i) < (_box)->num_##_vec;			\
+-	     (_i)++, (_sp)++)
++	for ((_i) = 0, (_sp) = (_box)->_vec.start;	\
++	     (_i) < (_box)->_vec.len;			\
++	     (_i)++, (_sp)++)		/* { block } */
+ 
+ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
+ {
+@@ -171,14 +170,14 @@ static void vpr_info_dq(const struct ddebug_query *query, const char *msg)
+ 		  query->first_lineno, query->last_lineno, query->class_string);
+ }
+ 
+-static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
++static struct _ddebug_class_map *ddebug_find_valid_class(struct ddebug_table const *dt,
+ 							const char *class_string,
+ 							int *class_id)
+ {
+-	struct ddebug_class_map *map;
++	struct _ddebug_class_map *map;
+ 	int i, idx;
+ 
+-	for_subvec(i, map, dt, classes) {
++	for_subvec(i, map, &dt->info, maps) {
+ 		idx = match_string(map->class_names, map->length, class_string);
+ 		if (idx >= 0) {
+ 			*class_id = idx + map->base;
+@@ -249,7 +248,7 @@ static int ddebug_change(const struct ddebug_query *query,
+ 	unsigned int newflags;
+ 	unsigned int nfound = 0;
+ 	struct flagsbuf fbuf, nbuf;
+-	struct ddebug_class_map *map = NULL;
++	struct _ddebug_class_map *map = NULL;
+ 	int valid_class;
+ 
+ 	/* search for matching ddebugs */
+@@ -270,8 +269,8 @@ static int ddebug_change(const struct ddebug_query *query,
+ 			valid_class = _DPRINTK_CLASS_DFLT;
+ 		}
+ 
+-		for (i = 0; i < dt->num_ddebugs; i++) {
+-			struct _ddebug *dp = &dt->ddebugs[i];
++		for (i = 0; i < dt->info.descs.len; i++) {
++			struct _ddebug *dp = &dt->info.descs.start[i];
+ 
+ 			if (!ddebug_match_desc(query, dp, valid_class))
+ 				continue;
+@@ -629,14 +628,14 @@ static int ddebug_exec_queries(char *query, const char *modname)
+ }
+ 
+ /* apply a new class-param setting */
+-static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
++static int ddebug_apply_class_bitmap(const struct _ddebug_class_param *dcp,
+ 				     const unsigned long *new_bits,
+ 				     const unsigned long old_bits,
+ 				     const char *query_modname)
+ {
+ #define QUERY_SIZE 128
+ 	char query[QUERY_SIZE];
+-	const struct ddebug_class_map *map = dcp->map;
++	const struct _ddebug_class_map *map = dcp->map;
+ 	int matches = 0;
+ 	int bi, ct;
+ 
+@@ -672,8 +671,8 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
+ /* accept comma-separated-list of [+-] classnames */
+ static int param_set_dyndbg_classnames(const char *instr, const struct kernel_param *kp)
+ {
+-	const struct ddebug_class_param *dcp = kp->arg;
+-	const struct ddebug_class_map *map = dcp->map;
++	const struct _ddebug_class_param *dcp = kp->arg;
++	const struct _ddebug_class_map *map = dcp->map;
+ 	unsigned long curr_bits, old_bits;
+ 	char *cl_str, *p, *tmp;
+ 	int cls_id, totct = 0;
+@@ -743,8 +742,8 @@ static int param_set_dyndbg_module_classes(const char *instr,
+ 					   const struct kernel_param *kp,
+ 					   const char *mod_name)
+ {
+-	const struct ddebug_class_param *dcp = kp->arg;
+-	const struct ddebug_class_map *map = dcp->map;
++	const struct _ddebug_class_param *dcp = kp->arg;
++	const struct _ddebug_class_map *map = dcp->map;
+ 	unsigned long inrep, new_bits, old_bits;
+ 	int rc, totct = 0;
+ 
+@@ -831,8 +830,8 @@ EXPORT_SYMBOL(param_set_dyndbg_classes);
+  */
+ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
+ {
+-	const struct ddebug_class_param *dcp = kp->arg;
+-	const struct ddebug_class_map *map = dcp->map;
++	const struct _ddebug_class_param *dcp = kp->arg;
++	const struct _ddebug_class_map *map = dcp->map;
+ 
+ 	switch (map->map_type) {
+ 
+@@ -1083,8 +1082,8 @@ static struct _ddebug *ddebug_iter_first(struct ddebug_iter *iter)
+ 	}
+ 	iter->table = list_entry(ddebug_tables.next,
+ 				 struct ddebug_table, link);
+-	iter->idx = iter->table->num_ddebugs;
+-	return &iter->table->ddebugs[--iter->idx];
++	iter->idx = iter->table->info.descs.len;
++	return &iter->table->info.descs.start[--iter->idx];
+ }
+ 
+ /*
+@@ -1105,10 +1104,10 @@ static struct _ddebug *ddebug_iter_next(struct ddebug_iter *iter)
+ 		}
+ 		iter->table = list_entry(iter->table->link.next,
+ 					 struct ddebug_table, link);
+-		iter->idx = iter->table->num_ddebugs;
++		iter->idx = iter->table->info.descs.len;
+ 		--iter->idx;
+ 	}
+-	return &iter->table->ddebugs[iter->idx];
++	return &iter->table->info.descs.start[iter->idx];
+ }
+ 
+ /*
+@@ -1152,16 +1151,19 @@ static void *ddebug_proc_next(struct seq_file *m, void *p, loff_t *pos)
+ 	return dp;
+ }
+ 
+-#define class_in_range(class_id, map)					\
+-	(class_id >= map->base && class_id < map->base + map->length)
++static bool ddebug_class_in_range(const int class_id, const struct _ddebug_class_map *map)
++{
++	return (class_id >= map->base &&
++		class_id < map->base + map->length);
++}
+ 
+-static const char *ddebug_class_name(struct ddebug_iter *iter, struct _ddebug *dp)
++static const char *ddebug_class_name(struct ddebug_table *dt, struct _ddebug *dp)
+ {
+-	struct ddebug_class_map *map = iter->table->classes;
+-	int i, nc = iter->table->num_classes;
++	struct _ddebug_class_map *map;
++	int i;
+ 
+-	for (i = 0; i < nc; i++, map++)
+-		if (class_in_range(dp->class_id, map))
++	for_subvec(i, map, &dt->info, maps)
++		if (ddebug_class_in_range(dp->class_id, map))
+ 			return map->class_names[dp->class_id - map->base];
+ 
+ 	return NULL;
+@@ -1194,7 +1196,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 	seq_putc(m, '"');
+ 
+ 	if (dp->class_id != _DPRINTK_CLASS_DFLT) {
+-		class = ddebug_class_name(iter, dp);
++		class = ddebug_class_name(iter->table, dp);
+ 		if (class)
+ 			seq_printf(m, " class:%s", class);
+ 		else
+@@ -1246,7 +1248,7 @@ static const struct proc_ops proc_fops = {
+ 
+ static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug_info *di)
+ {
+-	struct ddebug_class_map *cm;
++	struct _ddebug_class_map *cm;
+ 	int i, nc = 0;
+ 
+ 	/*
+@@ -1254,18 +1256,18 @@ static void ddebug_attach_module_classes(struct ddebug_table *dt, struct _ddebug
+ 	 * the builtin/modular classmap vector/section.  Save the start
+ 	 * and length of the subrange at its edges.
+ 	 */
+-	for_subvec(i, cm, di, classes) {
++	for_subvec(i, cm, di, maps) {
+ 		if (!strcmp(cm->mod_name, dt->mod_name)) {
+ 			if (!nc) {
+ 				v2pr_info("start subrange, class[%d]: module:%s base:%d len:%d ty:%d\n",
+ 					  i, cm->mod_name, cm->base, cm->length, cm->map_type);
+-				dt->classes = cm;
++				dt->info.maps.start = cm;
+ 			}
+ 			nc++;
+ 		}
+ 	}
+ 	if (nc) {
+-		dt->num_classes = nc;
++		dt->info.maps.len = nc;
+ 		vpr_info("module:%s attached %d classes\n", dt->mod_name, nc);
+ 	}
+ }
+@@ -1278,10 +1280,10 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
+ {
+ 	struct ddebug_table *dt;
+ 
+-	if (!di->num_descs)
++	if (!di->descs.len)
+ 		return 0;
+ 
+-	v3pr_info("add-module: %s %d sites\n", modname, di->num_descs);
++	v3pr_info("add-module: %s %d sites\n", modname, di->descs.len);
+ 
+ 	dt = kzalloc(sizeof(*dt), GFP_KERNEL);
+ 	if (dt == NULL) {
+@@ -1295,19 +1297,18 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
+ 	 * this struct ddebug_table.
+ 	 */
+ 	dt->mod_name = modname;
+-	dt->ddebugs = di->descs;
+-	dt->num_ddebugs = di->num_descs;
++	dt->info = *di;
+ 
+ 	INIT_LIST_HEAD(&dt->link);
+ 
+-	if (di->classes && di->num_classes)
++	if (di->maps.len)
+ 		ddebug_attach_module_classes(dt, di);
+ 
+ 	mutex_lock(&ddebug_lock);
+ 	list_add_tail(&dt->link, &ddebug_tables);
+ 	mutex_unlock(&ddebug_lock);
+ 
+-	vpr_info("%3u debug prints in module %s\n", di->num_descs, modname);
++	vpr_info("%3u debug prints in module %s\n", di->descs.len, modname);
+ 	return 0;
+ }
+ 
+@@ -1454,10 +1455,10 @@ static int __init dynamic_debug_init(void)
+ 	char *cmdline;
+ 
+ 	struct _ddebug_info di = {
+-		.descs = __start___dyndbg,
+-		.classes = __start___dyndbg_classes,
+-		.num_descs = __stop___dyndbg - __start___dyndbg,
+-		.num_classes = __stop___dyndbg_classes - __start___dyndbg_classes,
++		.descs.start = __start___dyndbg_descs,
++		.maps.start  = __start___dyndbg_class_maps,
++		.descs.len = __stop___dyndbg_descs - __start___dyndbg_descs,
++		.maps.len  = __stop___dyndbg_class_maps - __start___dyndbg_class_maps,
+ 	};
+ 
+ #ifdef CONFIG_MODULES
+@@ -1468,7 +1469,7 @@ static int __init dynamic_debug_init(void)
+ 	}
+ #endif /* CONFIG_MODULES */
+ 
+-	if (&__start___dyndbg == &__stop___dyndbg) {
++	if (&__start___dyndbg_descs == &__stop___dyndbg_descs) {
+ 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
+ 			pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
+ 			return 1;
+@@ -1478,16 +1479,16 @@ static int __init dynamic_debug_init(void)
+ 		return 0;
+ 	}
+ 
+-	iter = iter_mod_start = __start___dyndbg;
++	iter = iter_mod_start = __start___dyndbg_descs;
+ 	modname = iter->modname;
+ 	i = mod_sites = mod_ct = 0;
+ 
+-	for (; iter < __stop___dyndbg; iter++, i++, mod_sites++) {
++	for (; iter < __stop___dyndbg_descs; iter++, i++, mod_sites++) {
+ 
+ 		if (strcmp(modname, iter->modname)) {
+ 			mod_ct++;
+-			di.num_descs = mod_sites;
+-			di.descs = iter_mod_start;
++			di.descs.len = mod_sites;
++			di.descs.start = iter_mod_start;
+ 			ret = ddebug_add_module(&di, modname);
+ 			if (ret)
+ 				goto out_err;
+@@ -1497,8 +1498,8 @@ static int __init dynamic_debug_init(void)
+ 			iter_mod_start = iter;
+ 		}
+ 	}
+-	di.num_descs = mod_sites;
+-	di.descs = iter_mod_start;
++	di.descs.len = mod_sites;
++	di.descs.start = iter_mod_start;
+ 	ret = ddebug_add_module(&di, modname);
+ 	if (ret)
+ 		goto out_err;
+@@ -1508,8 +1509,8 @@ static int __init dynamic_debug_init(void)
+ 		 i, mod_ct, (int)((mod_ct * sizeof(struct ddebug_table)) >> 10),
+ 		 (int)((i * sizeof(struct _ddebug)) >> 10));
+ 
+-	if (di.num_classes)
+-		v2pr_info("  %d builtin ddebug class-maps\n", di.num_classes);
++	if (di.maps.len)
++		v2pr_info("  %d builtin ddebug class-maps\n", di.maps.len);
+ 
+ 	/* now that ddebug tables are loaded, process all boot args
+ 	 * again to find and activate queries given in dyndbg params.
+diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
+index 396144cf351b..8434f70b51bb 100644
+--- a/lib/test_dynamic_debug.c
++++ b/lib/test_dynamic_debug.c
+@@ -41,7 +41,7 @@ module_param_cb(do_prints, &param_ops_do_prints, NULL, 0600);
+  */
+ #define DD_SYS_WRAP(_model, _flags)					\
+ 	static unsigned long bits_##_model;				\
+-	static struct ddebug_class_param _flags##_model = {		\
++	static struct _ddebug_class_param _flags##_model = {		\
+ 		.bits = &bits_##_model,					\
+ 		.flags = #_flags,					\
+ 		.map = &map_##_model,					\
+-- 
+2.52.0
+
