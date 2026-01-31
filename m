@@ -1,166 +1,388 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazolkn19010003.outbound.protection.outlook.com [52.103.20.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EA1329C6D
-	for <linux-modules@vger.kernel.org>; Sat, 31 Jan 2026 07:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769844999; cv=none; b=nCASp7OlI3Qw5BZJkTu8harFohEQdtDN/HUVLKFS0pfuNF0E6HDmgVOuCfy2MBRbJdhsciFYzn636cyTb1thVaIBPYJc3lzrPjqwScEOctforZDJszgcB/RvO55zNJNafDX8wP5i/cBQyf66yWlycnFX2dyUdZHos+ba8a2ewEA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769844999; c=relaxed/simple;
-	bh=nY7lzQOVExn4AJ6nTUtW8NcMqjv6w/dyQWietm+R40w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z5kj68If0S7myroPmhqUI8/y0tMjU9GgwPYgzFIhUylJIYV9Nvkm1NiQFEgYapVpD3152HOrMCc8/FJ4asMO+npjgH6XwJvYskc6qda5W9C+fPfmydkCW3fspRAOmM3/AZUKAvMQ4iUzpKHt/1mWx2tH1uVXPxxUW/qZpwZkPjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxUD/sd8; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E046219E8;
+	Sat, 31 Jan 2026 16:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.20.3
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769875218; cv=fail; b=a8UmOBXylFGoQQf1cSyjqr6mE+Clc/Hh+eNF0DnFl9Mt8Pyg8zLeYL8mF510Cyo866NlKc2LMrGRszgGEC49L5nMwaljYkxlZ4etr93o/1lkEFmPAF3EUO8mzUovC1wxdXT4TvDABEuM5TMdJgk29r/fMCCOOC1YoNJ2ouPukqI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769875218; c=relaxed/simple;
+	bh=ybnyXL0VSRYys0nw3LtUMe7e/+A2/MaRXkDslH1X9Ng=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YBWNmua4lV8WLCMB5Mk4jqTHIrhHasVKV5amLTWUpucWREHy02IgC/G6lcgIEYwqzDRdZ370V4sKHkq0V+BdcAbtzqcD1jFOh1NU9ogPREvWY9Hmly0mUFq9/BU2/HGN8YN125SrIxxchunsg1LtenL7/EEaHvOoh8C/R1xMbC0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=gUSQHWWA; arc=fail smtp.client-ip=52.103.20.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxUD/sd8"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4806b43beb6so21010675e9.3
-        for <linux-modules@vger.kernel.org>; Fri, 30 Jan 2026 23:36:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769844996; x=1770449796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
-        b=fxUD/sd8b3wQtQ+1lw6r6s407RaqfpNZfgGyYQigk6ugXox9dM52OaDnYiwwSqTzEl
-         jEGEvibHs+f7Nqnaq7YuFS/JiIXWagxLk3hEhwz0ojyd/vHsiFtDQtX2FIKM4/RVsAzz
-         F9HuybNgpagi9qIePKl/lGazzR8F4CR0P39bGKtsdeiqz1Z8AFU/nO9vMJgWj6OH/Cj9
-         OyXk8Ln5zM7eieL5kmwj4GykrH3XxYSC/fe1Sh3xnK5tSExP682QdF4rTbYwfBxi6EqC
-         7Wy1jeugDsSMWF22gL3pZV85LiwP9vGES3tElukotgVzSbOCKcBDDnCy2Glk5svSwHEE
-         SZXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769844996; x=1770449796;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
-        b=e5/iSG7ah38WsxtN8BFU1MeEBYWysG8pahT9XArNBnNw9k3R2yADXh9dcobT2rbpq7
-         E9o1V8pmw5Fwt0/bmnKTBSulfhw5Zbjrp9S80d1K46go3WKoERgfYJAw5shcfSX7KJQc
-         4ar0U+lWIpW9JAnxoDA6A/1eL7zxLnK84BX04+Gg515CmuZihi2FUJ7m0WpyvYg1G/Vn
-         TiOFjMgylN9+MuKNyr+3BdiZC9MoofcU51XumdPqVwNEBSgS34EXz59/YgzA3p7qUEND
-         MwZcrlnkZ/EpVVYRDmqHa+QQ0IMlHIioVP/yqGofREXZmSvYyxodFWjLu72taAnvha+4
-         oivQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWe3z5cyZVcbS6UDicSU99GkhC4td5DOEEoXRYHxyouLXrGImqhrPVCb1ucKond5tXObPj0YyJjTbA4TfF5@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMiJF8mHQFe3t/n6OTbu6UBO7X42cy9AmSwI9FY3erOibYIja+
-	FThZCEYZ02JSO4CbDgGq6NaOXvqa4Y6gWu9daQME43UsT2oHai5Wicaz
-X-Gm-Gg: AZuq6aIPicCIZVPXW/qoC8x/h8kyphXef7EuLca1dq2uWMvPilEJucE7Q1SEyU2ifaW
-	y0uZHhRZJtj/AFT8IzMqVTAHe1+rvc0K8PBKcKP5CWIb9opzotD9Z+QrA9Z5PXPh7f/k+nR+LZU
-	5Ax4ymROekcwW5esbDv6wJWGNtLWD77/6GmkUtusYpndjsnperg7nDPY83TZrA8O/byyoDjkWJy
-	7z6aJ8b75PJYBvUAJ6tXrYYpCSxtupWpbhK0ndt3UAf1iKDKxjxm4bYh0hrPXIInbJa1BPW65HL
-	foikHEKb6jHyK5hrJcPQHiq7r74JXu6Q/DBb45UsXDVSQPBEN+669y4dz23oZEPrHcbvX1ABGGr
-	UKz5S4Fj2C4VY05HaaZeD3pRbb60Klaq3LgAH5MTmQHYXkr2MByTALAS1oss4+45h10WERE8idz
-	p+
-X-Received: by 2002:a05:600c:1e89:b0:47a:9560:5944 with SMTP id 5b1f17b1804b1-482db4ac0f4mr57301605e9.34.1769844995600;
-        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
-Received: from legion.lan ([2a02:a58:9200:ea00::700])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cd8fadfsm248952145e9.0.2026.01.30.23.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
-From: =?UTF-8?q?Mihai-Drosi=20C=C3=A2ju?= <mcaju95@gmail.com>
-To: linux@weissschuh.net
-Cc: arnd@arndb.de,
-	arnout@bzzt.net,
-	atomlin@atomlin.com,
-	bigeasy@linutronix.de,
-	chleroy@kernel.org,
-	christian@heusel.eu,
-	corbet@lwn.net,
-	coxu@redhat.com,
-	da.gomez@kernel.org,
-	da.gomez@samsung.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	f.gruenbichler@proxmox.com,
-	jmorris@namei.org,
-	kpcyrd@archlinux.org,
-	linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	lkp@intel.com,
-	maddy@linux.ibm.com,
-	mattia@mapreri.org,
-	mcaju95@gmail.com,
-	mcgrof@kernel.org,
-	mpe@ellerman.id.au,
-	nathan@kernel.org,
-	naveen@kernel.org,
-	nicolas.bouchinet@oss.cyber.gouv.fr,
-	nicolas.schier@linux.dev,
-	npiggin@gmail.com,
-	nsc@kernel.org,
-	paul@paul-moore.com,
-	petr.pavlu@suse.com,
-	roberto.sassu@huawei.com,
-	samitolvanen@google.com,
-	serge@hallyn.com,
-	xiujianfeng@huawei.com,
-	zohar@linux.ibm.com
-Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
-Date: Sat, 31 Jan 2026 09:36:36 +0200
-Message-ID: <20260131073636.65494-1-mcaju95@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="gUSQHWWA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=l/eLMKnZuq6gUqLXyQ3YW31T/0uXbyRbZrOehYGZFsYrqNY4Ksev92HWG6bm91EeMsPdPhTfR2lZbK1YXJcw9FA5ffBzdtlwfcwuh8GSeXieT5QdPwgJy8NocIFZiSNP6nxpeNwObIsQhk/r7Vvb5YpocpfWcVfFSWPxQUwv8umNjybHAO0iBG9loCKuRalfHZD38PAdXA9k59HOSEQ1eNUuHZo/ISk/FlBhm5Wbj567C0oBIeaqmH32SMyrpZmgh8H4m6rq66xUaIHjuwNA1zCiP7Y5WvmDKyZ4a4TBPf3VhhmjoXmnB3+jmOMpgFubW9mDkdrYJZ7reLagXkaF6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xPIjGbz/YfEvYQ4WSjm/YLx9Hn6jfLzJVgxwePzmeUw=;
+ b=yBzrusrcoMooPvN3fYTKdkLok4xhaQ+IOaiCAuDNPPTxCaduc141PUJIDn5AsYUi6q2K1sMNLSxOgLXs3Bb3c7PvqWTZKosvkYCY5vEC9Da/7fyb8nwqrAq27/8f+2mpcWrsjDnBI5vjFJOr35n0dPU3e/0oQ3brAvkW9B7Kah5rKHH20Ct3IAkkd4Cs6UvgSxN3JnV7tJXam2Jp7eYbw3j8bNnLZR5GmEa/PJQuKsEzqIgf9TjxPuqBPzrQ38Qcppl9ADNoJN/3/cVYXRln3k6v3YeNLoPDM3fv5+vA4ymitu9cNbbqxLZNEcKv4zVVRVQNrylBuB37QYRkdVi0iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xPIjGbz/YfEvYQ4WSjm/YLx9Hn6jfLzJVgxwePzmeUw=;
+ b=gUSQHWWAmQUiMDDXLiGaqQWXyatLMq/tWjIfYZEI1Y7j4MronZA6Qlz8EL884qtjXuJQbx6/0QSbDyHjjyUGz/Mna9vMFGyNAQAY7jCYJFZyTp3hdnTm/WCv1gt6I8IoiVltBiWlgfHYnpcb8/v8ZDhAaOopoHR5URc/1H+4RZAug+cNs08oT2xqmwRxF+XrHw0KE3bxRTC1NrjpVNX0ceOrNB1LsK6fQ/f3RJx/Z+LPYBjQfjNgWxItgBi40NUvDQAV4mopc9XCKvCOxDutXriqmdvxVjt8b7r93fMR1+uChgObUs8oEsFcWpGnGqb142FfVVS3kghmCr7FGvIQaQ==
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com (2603:10b6:805:33::23)
+ by SA1PR02MB9831.namprd02.prod.outlook.com (2603:10b6:806:376::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.8; Sat, 31 Jan
+ 2026 16:00:14 +0000
+Received: from SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::900:1ccf:2b1e:52b6]) by SN6PR02MB4157.namprd02.prod.outlook.com
+ ([fe80::900:1ccf:2b1e:52b6%6]) with mapi id 15.20.9564.014; Sat, 31 Jan 2026
+ 16:00:13 +0000
+From: Michael Kelley <mhklinux@outlook.com>
+To: David Howells <dhowells@redhat.com>, Lukas Wunner <lukas@wunner.de>, Ignat
+ Korchagin <ignat@cloudflare.com>
+CC: Jarkko Sakkinen <jarkko@kernel.org>, Herbert Xu
+	<herbert@gondor.apana.org.au>, Eric Biggers <ebiggers@kernel.org>, Luis
+ Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Daniel
+ Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, "Jason
+ A . Donenfeld" <Jason@zx2c4.com>, Ard Biesheuvel <ardb@kernel.org>, Stephan
+ Mueller <smueller@chronox.de>, "linux-crypto@vger.kernel.org"
+	<linux-crypto@vger.kernel.org>, "keyrings@vger.kernel.org"
+	<keyrings@vger.kernel.org>, "linux-modules@vger.kernel.org"
+	<linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v15 6/7] modsign: Enable ML-DSA module signing
+Thread-Topic: [PATCH v15 6/7] modsign: Enable ML-DSA module signing
+Thread-Index: AQHcjtC3xUDRE8Ho5kej8+vCQMw4IrVsc8pg
+Date: Sat, 31 Jan 2026 16:00:13 +0000
+Message-ID:
+ <SN6PR02MB415708C0A6E2EB1B5C7BBFB0D49CA@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <20260126142931.1940586-1-dhowells@redhat.com>
+ <20260126142931.1940586-7-dhowells@redhat.com>
+In-Reply-To: <20260126142931.1940586-7-dhowells@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR02MB4157:EE_|SA1PR02MB9831:EE_
+x-ms-office365-filtering-correlation-id: 92177fcc-b657-423c-c022-08de60e1d1dd
+x-ms-exchange-slblob-mailprops:
+ YfhX3sd/0TXC3SDMOKasxb1Truxn0Xe/oumTv5Y4oWH+ckW6aHTm+j58isAPEIQ6qr+mYGZNc1XRWgDlDL3NCVCc5chbdVk4C+pVzii8vswYQzOpSSV8EYiBteMvaU5ocB0FMHetYzBh9gTMHnH1Ddc88x6xOlASDA4OArj9JhqmnAjVwP0iORpWaK6CzNIdV8vvcPkhahXh3y6qOyRcIf/KJQy9yD3JMBzqnERKyKBM5hwBScVsCErGLBbIQBSiWtCiciP+LraAQGWMejgVXJqQHrWWYrS2MLRjpYzZn4dILWfwgJ0dCOy48cuChdkVOSHQGJN4KqhVrtCDMMXWnL16F/VTDVcDJv4ouTbkIX33q+ulNEz9kxG4WNW1cKiPcWDwG9ElqXc7WE7a26eFhFlNP5WsxhHXITSXXZxuNuQ8IkWNzEhPzVSKE31nrxbwwBN6bEm5qGERsmy3jcGqWcI58trbfUB4E0VRvRtANGcEBDMq5eabIXYqBKIYjCzbZefS9SZTunhduubYc6p9GqsREFezOSuKmGTXaGJp12kTOt/eIrijo8+WN+URR6exGpDMhDnk7DtlBeWjWr8dbkVKQnnTLZxTTl9jalZhglgpsm8g+liX96z5q8u5TkBBLzmpYn5jFMkJ+DT6KDLvmW5N1zAJCBoLkZFm2GdoVCpjhQiVH2Oj7qHR4bCiZ4ISznX9mT8PQUKGUzflVMifLQOW+jafPtfVqIh2TeBgcQjPMlzNI3uOOy+Gg/iZFrXCLU/tvt0d/rcMuc0MmuDozbE+M2VpypJQwMhxl/4QU0g=
+x-microsoft-antispam:
+ BCL:0;ARA:14566002|13091999003|39105399006|8062599012|8060799015|15080799012|31061999003|461199028|19110799012|41105399003|40105399003|3412199025|440099028|10035399007|102099032|19111999003;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?dmI88FgMvZN5UVOT08StMmpnBMf3d25VOH6Wh0INp4tHfXGHs3p+GBfi/FJW?=
+ =?us-ascii?Q?f62xh6Ds/IaW//oaPUN3zd9DLxkEsHMcrGpf7ydoWGmvPvZ/EwG4++zkgXKO?=
+ =?us-ascii?Q?MFrCs5IrsaWf8wF0B6wreYxEa7bh0qXW3numIb8dznUwHXZwezp6lZGRKw7V?=
+ =?us-ascii?Q?2P/aWlfVVPMlT138CoUcvQrnVAmvUXlW+gln1yTbSF4lDBRvmhETuLmhC3HX?=
+ =?us-ascii?Q?OEP2rKwMIuqSh9M68HMFZsTXvVtR4qohoioFqcvpnU2SR1f0WhJVPZPzKpHg?=
+ =?us-ascii?Q?NAenpV9nIOEl1XItciQ8BxZlldwubZn0eJq8r8AFv08323d9JBd2gETz7W/2?=
+ =?us-ascii?Q?ZT/4YYe1lR5ZOJhwHtjMBuhebgyKXlpsbBESnFwUnyStQhYOVUF2ViS30Hgd?=
+ =?us-ascii?Q?7buRtHaSRP5bgy9Wy5zQEqRP12e5MgIk2eioqlDSy/MsoQUMaP0Wd7Qo8ics?=
+ =?us-ascii?Q?21lY2AMu6IMMDe0+lQPJH/z5R+Cye6+rKsX6lKzBGlmKu9vqDAZI/1tiHXEg?=
+ =?us-ascii?Q?yNahCanOR+FGXtjghqLzR6DFIJaV+9iyg8w6qG3Rn99LgB0yfiY3Cqy6OtbI?=
+ =?us-ascii?Q?cfRYIbCUYNL34CP0AYN2nKA+SRnrPirUxW+KnpqMryVnYfK7T95QXncS4H5+?=
+ =?us-ascii?Q?WFRAqUrYBqhnCG3/gpt/mXoiYJYmS5fSB5TsFOC6z6JhaAe+RJ5sIR+vNCyQ?=
+ =?us-ascii?Q?WHCczS0qtDkLA6q6lOYCqX78oldOW+2JwdJDaAgCwmNaY+s0admKZACupy9K?=
+ =?us-ascii?Q?ryTkd0RqEKEVzlNPHO1SeAQslkOxqcP1MPyCbXuvBkRJjr+RpIvomAyi4dg7?=
+ =?us-ascii?Q?U3I49sxtB5/dCPhbXFDVYcAlJqqng7Vc05Q4f7EI8t06De3TNB1kfmWGqz2Z?=
+ =?us-ascii?Q?pQNDP+J+v5PJGYRrJaTd/QbqfWgh8jcejfupeSNCzbEPx238eeS5fG0KJIVf?=
+ =?us-ascii?Q?iJCmBGk2Ed7Tr+9g4Q2rifgEoDrIFXrkyr5hV7zEbt9OFADxg1MAzI7SBpKY?=
+ =?us-ascii?Q?iKyz+7b3sSFwTnyGFU+OqL2NLuknt1AFp4xpcA5RvBUV1B+fxuWGE8JeOe9Q?=
+ =?us-ascii?Q?nNpnJFHMO8ipXSpSzEj5mj3ltqsBs3DrEczlw0/zzhRQtwRGxWJwnaHH4T2+?=
+ =?us-ascii?Q?mRk1H71CCvrc7JULyvFaECBDIZFPsylWQErAvVuO9Pos3eKSs+hIx4KRqoVz?=
+ =?us-ascii?Q?LlKt7owRW6fN8IJycy/Yq0OuMOjx5ksIPBKfbu1dfdETlFbO62p4OPkbYvtS?=
+ =?us-ascii?Q?JNA/QgF/t5yrGIhGyIZ98yQZ6f+K+c2yZA7JUktvLWixJ3iwsAv4DJFKQMYs?=
+ =?us-ascii?Q?woY=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?6hG93AT6OtzEi058fiu1lhe86w7qtWEVblkTqC+/vK6I+nR8BgIeEFLo/L/C?=
+ =?us-ascii?Q?GISUFQo5XBs5De7ui6JBQX7Da0LKcBsPGDcGjVsDJZt6Q6FjNYKImgpDwWm7?=
+ =?us-ascii?Q?p6k0LfVRop/Hb2hY2JlerCrHkKFqRcwrvgKFfc+8SOPm/LL1UCnpnG6cebyt?=
+ =?us-ascii?Q?7dNJCwO9du7emHes9Vjf9AIfDBbdmwqgcmfTWHcwxI3DSQ7oT3UPsQ77FMuD?=
+ =?us-ascii?Q?osuhYYEJAE/gYM40IOW9B1qGU/podycMF/1ZwxmlVDzLFkrdYN154OS+gCco?=
+ =?us-ascii?Q?QyOygjrrU6aEnC7UaoKkf++cUH+LPZeSwnzqMUQaGVRvKikJ8iR7NoBlv6tX?=
+ =?us-ascii?Q?GjSY+8Z/9kDfw59UwSAdpAmbbddM0PovsRvtebZ/JMftkyc+Vg5Gl3T++mw/?=
+ =?us-ascii?Q?aqsns/CkgDvLMZ+G5p9ZoEgnpI+xw1sFFHTiK6vc8HnnJLfKdUTU1CbkBJg0?=
+ =?us-ascii?Q?RFV6b+CBJ/YUid3tWDAqbHp3FC07n7gRXrOGv+F2KrsoZ8lFbCstwOq3BfB6?=
+ =?us-ascii?Q?OreJwIcFWI126YrBMQ0PxjPfn2KMNmfvmtiX0/dJ5NVAtH43CiRrGRqShGkZ?=
+ =?us-ascii?Q?2AzzxPNg4578rPZHu5NE28JTcy7cQ3mwoApQzszvy+ukscadbVssJ1U2/4Tt?=
+ =?us-ascii?Q?ZbsdxNZIwt0GOjJQwoi6mn27iOrvdKr85qSA7NFUI3PmwcfV6aDwZgeMVGCV?=
+ =?us-ascii?Q?3s+UrDI0zgQI5a5Lla0Xds6SV+tF9WLYgzb2xDgKZiLgvOtFeHID7iHQ9Fg/?=
+ =?us-ascii?Q?l8iklTNxplWWoPKJEDzsEIHGYriMRB/lYmefit+53kkna4Ph99aNGDPHCf/h?=
+ =?us-ascii?Q?PG3S8fHHKamzelVs7BaoPvXB2oTGHd8e9fIanhtsgKWmaiOnZdJlYAP+p0cm?=
+ =?us-ascii?Q?p+jJmjS/KltiTgh3ts1WaFRTmy7rTNEbLsjp6/+Ice45etNaiT2BrG2T+v9W?=
+ =?us-ascii?Q?f+VbPb/m5EzVnI6Uu6lXkI6F2fJv4gwuLiBXfJmBuXr0WCMA8OLgDIQm7mIH?=
+ =?us-ascii?Q?PYKkKYTAZV/RywxPSMnPgHoXhAaulSFBXAXXdHyapPZtFhMWMhfmGBgRupwp?=
+ =?us-ascii?Q?uMhMUiPV+lManZ4OFF5fZpeIfQH9RAXY6Z3WajtUulWmW/rSsmsfCUb6CJxk?=
+ =?us-ascii?Q?aXHJbO/rQmqlGtqlYMfpBzy2p3e1V8txwRvtG12Txq+Fpt97NB6i5R+ex9Jn?=
+ =?us-ascii?Q?0B8J7qRvpWb7mU3vXuMk/RfomhLMu19XaCoytGadCoWwEWsNK4A1Q1QGHUha?=
+ =?us-ascii?Q?jsLIfAAqOyjVDljL1D6Tms9T/PIaMR+7Yi1etvj4XEJF4AcGPaHAaK8GNrRf?=
+ =?us-ascii?Q?X9mfgZ73kkoxPOkqS8OazED7P51N1pjZRO26ScIZJTk3IsaaqeoTgOP6O0Zy?=
+ =?us-ascii?Q?zAUvrZc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4157.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92177fcc-b657-423c-c022-08de60e1d1dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2026 16:00:13.7413
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR02MB9831
 
-> The current signature-based module integrity checking has some drawbacks
-in combination with reproducible builds. Either the module signing key
-is generated at build time, which makes the build unreproducible, or a
-static signing key is used, which precludes rebuilds by third parties
-and makes the whole build and packaging process much more complicated.
+From: David Howells <dhowells@redhat.com> Sent: Monday, January 26, 2026 6:=
+29 AM
+>=20
+> Allow ML-DSA module signing to be enabled.
+>=20
+> Note that OpenSSL's CMS_*() function suite does not, as of OpenSSL-3.6,
+> support the use of CMS_NOATTR with ML-DSA, so the prohibition against usi=
+ng
+> signedAttrs with module signing has to be removed.  The selected digest
+> then applies only to the algorithm used to calculate the digest stored in
+> the messageDigest attribute.  The OpenSSL development branch has patches
+> applied that fix this[1], but it appears that that will only be available
+> in OpenSSL-4.
+>=20
+> [1] https://github.com/openssl/openssl/pull/28923
+>=20
+> sign-file won't set CMS_NOATTR if openssl is earlier than v4, resulting i=
+n
+> the use of signed attributes.
+>=20
+> The ML-DSA algorithm takes the raw data to be signed without regard to wh=
+at
+> digest algorithm is specified in the CMS message.  The CMS specified dige=
+st
+> algorithm is ignored unless signedAttrs are used; in such a case, only
+> SHA512 is permitted.
+>=20
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> cc: Eric Biggers <ebiggers@kernel.org>
+> cc: Lukas Wunner <lukas@wunner.de>
+> cc: Ignat Korchagin <ignat@cloudflare.com>
+> cc: Stephan Mueller <smueller@chronox.de>
+> cc: Herbert Xu <herbert@gondor.apana.org.au>
+> cc: keyrings@vger.kernel.org
+> cc: linux-crypto@vger.kernel.org
 
-I think there is a middle ground where the module signing key is generated
-using a key derivation function that has as an input a deterministic value
-on the build host, such as /etc/machine-id . The problem with this approach
-is that only hosts knowing the value will be able to reproduce the build.
+I'm building linux-next20260130, which has this patch, and get the followin=
+g errors:
 
-Maybe this is a solution to NixOS secret management? Introduce minimal
-impurity as a cryptographic seed and derive the rest of the secrets using
-something like Argon2(seed, key_uuid).
+  HOSTCC  scripts/sign-file
+scripts/sign-file.c: In function 'main':
+scripts/sign-file.c:282:25: error: 'CMS_NO_SIGNING_TIME' undeclared (first =
+use in this function)
+  282 |                         CMS_NO_SIGNING_TIME |
+      |                         ^~~~~~~~~~~~~~~~~~~
+scripts/sign-file.c:282:25: note: each undeclared identifier is reported on=
+ly once for each function it appears in
+scripts/sign-file.c:285:22: warning: implicit declaration of function 'EVP_=
+PKEY_is_a'; did you mean 'EVP_PKEY_sign'? [-Wimplicit-function-declaration]
+  285 |                 if ((EVP_PKEY_is_a(private_key, "ML-DSA-44") ||
+      |                      ^~~~~~~~~~~~~
+      |                      EVP_PKEY_sign
+scripts/sign-file.c:288:21: error: 'OPENSSL_VERSION_MAJOR' undeclared (firs=
+t use in this function); did you mean 'OPENSSL_VERSION_NUMBER'?
+  288 |                     OPENSSL_VERSION_MAJOR < 4) {
+      |                     ^~~~~~~~~~~~~~~~~~~~~
+      |                     OPENSSL_VERSION_NUMBER
 
-There might be another approach to code integrity rather than step-by-step
-reproducibility. One may exploit the very cryptographic primitives that make
-reproducibility hard to ensure that reproducibility is most  likely valid.
+The problem is that I'm running on Ubuntu 20.04, with this openssl:
 
-For example, the module signing issue, the build host publishes four artifacts:
-* The source-code
-* The compiled and signed binary
-* The build environment
-* Its public key
+# openssl version
+OpenSSL 1.1.1f  31 Mar 2020=20
 
-Now, we don't need to sign with the private key to know that building the source
-code using the specific build environment and signing the result with the private
-key will result in the claimed binary. We can just compile and verify with the
-public key.
+The symbols CMS_NO_SIGNING_TIME, EVP_PKEY_is_a() and OPENSSL_VERSION_MAJOR
+don't exist in the include/openssl/* files for that old version.
 
-So a traditional workflow would be:
-compiled_module + module_signature == module
+Yes, I'm running on an old distro version which has been out-of-support for=
+ 9 months
+now. But I suspect this patch is not intending to raise the kernel build re=
+quirements
+to be openssl 3.0 or later -- at least there's no mention of that larger im=
+pact in the
+commit message.
 
-In this case we build the module, sign it with whatever key, distribute the
-builds and the private key to whoever wants to reproduce the build. Or we build
-locally and the key stays with the end-user.
+Thoughts? Can this patch be enhanced to handle openssl 1.1.1 appropriately?
 
-While the cryptographic approach would be:
-verify(compiled_code, module.signature) is True
+Michael
 
-In this case we distribute the builds, source code and the public key. While
-everyone can ensure that the compiled code is the result of the build
-environment and source code. The signature is verified using cryptographic
-means.
+> ---
+>  Documentation/admin-guide/module-signing.rst | 16 +++++----
+>  certs/Kconfig                                | 30 +++++++++++++++++
+>  certs/Makefile                               |  3 ++
+>  scripts/sign-file.c                          | 34 +++++++++++++++-----
+>  4 files changed, 68 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation=
+/admin-
+> guide/module-signing.rst
+> index a8667a777490..7f2f127dc76f 100644
+> --- a/Documentation/admin-guide/module-signing.rst
+> +++ b/Documentation/admin-guide/module-signing.rst
+> @@ -28,10 +28,12 @@ trusted userspace bits.
+>=20
+>  This facility uses X.509 ITU-T standard certificates to encode the publi=
+c keys
+>  involved.  The signatures are not themselves encoded in any industrial s=
+tandard
+> -type.  The built-in facility currently only supports the RSA & NIST P-38=
+4 ECDSA
+> -public key signing standard (though it is pluggable and permits others t=
+o be
+> -used).  The possible hash algorithms that can be used are SHA-2 and SHA-=
+3 of
+> -sizes 256, 384, and 512 (the algorithm is selected by data in the signat=
+ure).
+> +type.  The built-in facility currently only supports the RSA, NIST P-384=
+ ECDSA
+> +and NIST FIPS-204 ML-DSA public key signing standards (though it is plug=
+gable
+> +and permits others to be used).  For RSA and ECDSA, the possible hash
+> +algorithms that can be used are SHA-2 and SHA-3 of sizes 256, 384, and 5=
+12 (the
+> +algorithm is selected by data in the signature); ML-DSA does its own has=
+hing,
+> +but is allowed to be used with a SHA512 hash for signed attributes.
+>=20
+>=20
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> @@ -146,9 +148,9 @@ into vmlinux) using parameters in the::
+>=20
+>  file (which is also generated if it does not already exist).
+>=20
+> -One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``) and ECDSA
+> -(``MODULE_SIG_KEY_TYPE_ECDSA``) to generate either RSA 4k or NIST
+> -P-384 keypair.
+> +One can select between RSA (``MODULE_SIG_KEY_TYPE_RSA``), ECDSA
+> +(``MODULE_SIG_KEY_TYPE_ECDSA``) and ML-DSA
+> (``MODULE_SIG_KEY_TYPE_MLDSA_*``) to
+> +generate an RSA 4k, a NIST P-384 keypair or an ML-DSA 44, 65 or 87 keypa=
+ir.
+>=20
+>  It is strongly recommended that you provide your own x509.genkey file.
+>=20
+> diff --git a/certs/Kconfig b/certs/Kconfig
+> index 78307dc25559..2b088ef58373 100644
+> --- a/certs/Kconfig
+> +++ b/certs/Kconfig
+> @@ -39,6 +39,36 @@ config MODULE_SIG_KEY_TYPE_ECDSA
+>  	 Note: Remove all ECDSA signing keys, e.g. certs/signing_key.pem,
+>  	 when falling back to building Linux 5.14 and older kernels.
+>=20
+> +config MODULE_SIG_KEY_TYPE_MLDSA_44
+> +	bool "ML-DSA-44"
+> +	select CRYPTO_MLDSA
+> +	help
+> +	  Use an ML-DSA-44 key (NIST FIPS 204) for module signing.  ML-DSA
+> +	  support requires OpenSSL-3.5 minimum; preferably OpenSSL-4+.  With
+> +	  the latter, the entire module body will be signed; with the former,
+> +	  signedAttrs will be used as it lacks support for CMS_NOATTR with
+> +	  ML-DSA.
+> +
+> +config MODULE_SIG_KEY_TYPE_MLDSA_65
+> +	bool "ML-DSA-65"
+> +	select CRYPTO_MLDSA
+> +	help
+> +	  Use an ML-DSA-65 key (NIST FIPS 204) for module signing.  ML-DSA
+> +	  support requires OpenSSL-3.5 minimum; preferably OpenSSL-4+.  With
+> +	  the latter, the entire module body will be signed; with the former,
+> +	  signedAttrs will be used as it lacks support for CMS_NOATTR with
+> +	  ML-DSA.
+> +
+> +config MODULE_SIG_KEY_TYPE_MLDSA_87
+> +	bool "ML-DSA-87"
+> +	select CRYPTO_MLDSA
+> +	help
+> +	  Use an ML-DSA-87 key (NIST FIPS 204) for module signing.  ML-DSA
+> +	  support requires OpenSSL-3.5 minimum; preferably OpenSSL-4+.  With
+> +	  the latter, the entire module body will be signed; with the former,
+> +	  signedAttrs will be used as it lacks support for CMS_NOATTR with
+> +	  ML-DSA.
+> +
+>  endchoice
+>=20
+>  config SYSTEM_TRUSTED_KEYRING
+> diff --git a/certs/Makefile b/certs/Makefile
+> index f6fa4d8d75e0..3ee1960f9f4a 100644
+> --- a/certs/Makefile
+> +++ b/certs/Makefile
+> @@ -43,6 +43,9 @@ targets +=3D x509_certificate_list
+>  ifeq ($(CONFIG_MODULE_SIG_KEY),certs/signing_key.pem)
+>=20
+>  keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) :=3D -newkey ec -pkeyopt
+> ec_paramgen_curve:secp384r1
+> +keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_MLDSA_44) :=3D -newkey ml-dsa-44
+> +keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_MLDSA_65) :=3D -newkey ml-dsa-65
+> +keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_MLDSA_87) :=3D -newkey ml-dsa-87
+>=20
+>  quiet_cmd_gen_key =3D GENKEY  $@
+>        cmd_gen_key =3D openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG=
+_HASH) -
+> days 36500 \
+> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+> index 7070245edfc1..547b97097230 100644
+> --- a/scripts/sign-file.c
+> +++ b/scripts/sign-file.c
+> @@ -315,18 +315,36 @@ int main(int argc, char **argv)
+>  		ERR(!digest_algo, "EVP_get_digestbyname");
+>=20
+>  #ifndef USE_PKCS7
+> +
+> +		unsigned int flags =3D
+> +			CMS_NOCERTS |
+> +			CMS_PARTIAL |
+> +			CMS_BINARY |
+> +			CMS_DETACHED |
+> +			CMS_STREAM  |
+> +			CMS_NOSMIMECAP |
+> +			CMS_NO_SIGNING_TIME |
+> +			use_keyid;
+> +
+> +		if ((EVP_PKEY_is_a(private_key, "ML-DSA-44") ||
+> +		     EVP_PKEY_is_a(private_key, "ML-DSA-65") ||
+> +		     EVP_PKEY_is_a(private_key, "ML-DSA-87")) &&
+> +		    OPENSSL_VERSION_MAJOR < 4) {
+> +			 /* ML-DSA + CMS_NOATTR is not supported in openssl-3.5
+> +			  * and before.
+> +			  */
+> +			use_signed_attrs =3D 0;
+> +		}
+> +
+> +		flags |=3D use_signed_attrs;
+> +
+>  		/* Load the signature message from the digest buffer. */
+> -		cms =3D CMS_sign(NULL, NULL, NULL, NULL,
+> -			       CMS_NOCERTS | CMS_PARTIAL | CMS_BINARY |
+> -			       CMS_DETACHED | CMS_STREAM);
+> +		cms =3D CMS_sign(NULL, NULL, NULL, NULL, flags);
+>  		ERR(!cms, "CMS_sign");
+>=20
+> -		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
+> -				     CMS_NOCERTS | CMS_BINARY |
+> -				     CMS_NOSMIMECAP | use_keyid |
+> -				     use_signed_attrs),
+> +		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo, flags),
+>  		    "CMS_add1_signer");
+> -		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) !=3D 1,
+> +		ERR(CMS_final(cms, bm, NULL, flags) !=3D 1,
+>  		    "CMS_final");
+>=20
+>  #else
+>=20
 
-As long as no one cracks RSA or an algorithm of our choosing/has an absurd
-amount of luck, the cryptographic approach would be just as good as the traditional
-approach at ensuring that a program has stopped with a certain output.
