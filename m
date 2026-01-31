@@ -1,72 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCAF3126A0;
-	Fri, 30 Jan 2026 21:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86EA1329C6D
+	for <linux-modules@vger.kernel.org>; Sat, 31 Jan 2026 07:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769808466; cv=none; b=a5SXrvvmDLJst3sespmJZ/9THQWlTgCWJ4jJzt+tOmFQLwr665ORDPuDiMvJVLLKV0ytFSJPtKPHfWxwHNzvo1XMOAIki6BKO3Q0RiCCfNHnkcuibgPNrwa9kVzffAcaDPSPHTgwUvedplkAQ9BDhasSOLYPdY0/qykjKOs03Ps=
+	t=1769844999; cv=none; b=nCASp7OlI3Qw5BZJkTu8harFohEQdtDN/HUVLKFS0pfuNF0E6HDmgVOuCfy2MBRbJdhsciFYzn636cyTb1thVaIBPYJc3lzrPjqwScEOctforZDJszgcB/RvO55zNJNafDX8wP5i/cBQyf66yWlycnFX2dyUdZHos+ba8a2ewEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769808466; c=relaxed/simple;
-	bh=FvIO7SYCBl3tVvwkNQX+8vvn5bQFmm/SLM97HfqpY44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dLRIemtFV+fz2i12DbfhBdsp+FhXrpUq432dNQcfiukRN7YEqn3xoFp7th36i7Ufmjk3P3wkUZwiQD+7Cr7MalCcgcfTKf8EB+vpfSpNHdptYodqHxjlfEvoNVBlOQ/bXylpWnOSr6kxfJ37JnC+B/Vtayda2XWJyiCpvDruPzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQ0lv0C5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769844999; c=relaxed/simple;
+	bh=nY7lzQOVExn4AJ6nTUtW8NcMqjv6w/dyQWietm+R40w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Z5kj68If0S7myroPmhqUI8/y0tMjU9GgwPYgzFIhUylJIYV9Nvkm1NiQFEgYapVpD3152HOrMCc8/FJ4asMO+npjgH6XwJvYskc6qda5W9C+fPfmydkCW3fspRAOmM3/AZUKAvMQ4iUzpKHt/1mWx2tH1uVXPxxUW/qZpwZkPjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxUD/sd8; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQ0lv0C5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBD5C4CEF7;
-	Fri, 30 Jan 2026 21:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769808466;
-	bh=FvIO7SYCBl3tVvwkNQX+8vvn5bQFmm/SLM97HfqpY44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GQ0lv0C5XECKpcaBoLx02ghfVe4hvSXFUZcywEGIzWyUV9KCcMifA2hJ7zVKCdAVU
-	 JeiKpQJEuO88I7C+9TxDZzhq9AidcEhaymufyoMpYBI0QYsxG/D5+PC7AzwRKUBMgv
-	 dAMlo2pWhfmffohQZeD10neAFAYaeSSQ24xJxcWSOqHF8wxoqcutolP/zs1apBzsou
-	 SoIqUUOLXW2Is2EjgH6CCmug5G08iKcrgeBnU5JaoQb7nOjaw6l+egN8a0xM/KAYDK
-	 yd9fQe3AcId4V49kGRAJon/TixhhwFYlDC9JRWloIQS57ztW6Mhi4zkBOJHC2pg/GD
-	 Fk/28FZU0TfcA==
-Date: Fri, 30 Jan 2026 13:27:43 -0800
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
-	Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Peter Zijlstra <peterz@infradead.org>, live-patching@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Improve handling of the __klp_{objects,funcs}
- sections in modules
-Message-ID: <svcwbksz247y5fboeemlvdi5ef62lh5ibtxuz2ofsievsxlyjp@v35zf7qwltlp>
-References: <20260123102825.3521961-1-petr.pavlu@suse.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxUD/sd8"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4806b43beb6so21010675e9.3
+        for <linux-modules@vger.kernel.org>; Fri, 30 Jan 2026 23:36:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769844996; x=1770449796; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
+        b=fxUD/sd8b3wQtQ+1lw6r6s407RaqfpNZfgGyYQigk6ugXox9dM52OaDnYiwwSqTzEl
+         jEGEvibHs+f7Nqnaq7YuFS/JiIXWagxLk3hEhwz0ojyd/vHsiFtDQtX2FIKM4/RVsAzz
+         F9HuybNgpagi9qIePKl/lGazzR8F4CR0P39bGKtsdeiqz1Z8AFU/nO9vMJgWj6OH/Cj9
+         OyXk8Ln5zM7eieL5kmwj4GykrH3XxYSC/fe1Sh3xnK5tSExP682QdF4rTbYwfBxi6EqC
+         7Wy1jeugDsSMWF22gL3pZV85LiwP9vGES3tElukotgVzSbOCKcBDDnCy2Glk5svSwHEE
+         SZXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769844996; x=1770449796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
+        b=e5/iSG7ah38WsxtN8BFU1MeEBYWysG8pahT9XArNBnNw9k3R2yADXh9dcobT2rbpq7
+         E9o1V8pmw5Fwt0/bmnKTBSulfhw5Zbjrp9S80d1K46go3WKoERgfYJAw5shcfSX7KJQc
+         4ar0U+lWIpW9JAnxoDA6A/1eL7zxLnK84BX04+Gg515CmuZihi2FUJ7m0WpyvYg1G/Vn
+         TiOFjMgylN9+MuKNyr+3BdiZC9MoofcU51XumdPqVwNEBSgS34EXz59/YgzA3p7qUEND
+         MwZcrlnkZ/EpVVYRDmqHa+QQ0IMlHIioVP/yqGofREXZmSvYyxodFWjLu72taAnvha+4
+         oivQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWe3z5cyZVcbS6UDicSU99GkhC4td5DOEEoXRYHxyouLXrGImqhrPVCb1ucKond5tXObPj0YyJjTbA4TfF5@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMiJF8mHQFe3t/n6OTbu6UBO7X42cy9AmSwI9FY3erOibYIja+
+	FThZCEYZ02JSO4CbDgGq6NaOXvqa4Y6gWu9daQME43UsT2oHai5Wicaz
+X-Gm-Gg: AZuq6aIPicCIZVPXW/qoC8x/h8kyphXef7EuLca1dq2uWMvPilEJucE7Q1SEyU2ifaW
+	y0uZHhRZJtj/AFT8IzMqVTAHe1+rvc0K8PBKcKP5CWIb9opzotD9Z+QrA9Z5PXPh7f/k+nR+LZU
+	5Ax4ymROekcwW5esbDv6wJWGNtLWD77/6GmkUtusYpndjsnperg7nDPY83TZrA8O/byyoDjkWJy
+	7z6aJ8b75PJYBvUAJ6tXrYYpCSxtupWpbhK0ndt3UAf1iKDKxjxm4bYh0hrPXIInbJa1BPW65HL
+	foikHEKb6jHyK5hrJcPQHiq7r74JXu6Q/DBb45UsXDVSQPBEN+669y4dz23oZEPrHcbvX1ABGGr
+	UKz5S4Fj2C4VY05HaaZeD3pRbb60Klaq3LgAH5MTmQHYXkr2MByTALAS1oss4+45h10WERE8idz
+	p+
+X-Received: by 2002:a05:600c:1e89:b0:47a:9560:5944 with SMTP id 5b1f17b1804b1-482db4ac0f4mr57301605e9.34.1769844995600;
+        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
+Received: from legion.lan ([2a02:a58:9200:ea00::700])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cd8fadfsm248952145e9.0.2026.01.30.23.36.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
+From: =?UTF-8?q?Mihai-Drosi=20C=C3=A2ju?= <mcaju95@gmail.com>
+To: linux@weissschuh.net
+Cc: arnd@arndb.de,
+	arnout@bzzt.net,
+	atomlin@atomlin.com,
+	bigeasy@linutronix.de,
+	chleroy@kernel.org,
+	christian@heusel.eu,
+	corbet@lwn.net,
+	coxu@redhat.com,
+	da.gomez@kernel.org,
+	da.gomez@samsung.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	f.gruenbichler@proxmox.com,
+	jmorris@namei.org,
+	kpcyrd@archlinux.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	lkp@intel.com,
+	maddy@linux.ibm.com,
+	mattia@mapreri.org,
+	mcaju95@gmail.com,
+	mcgrof@kernel.org,
+	mpe@ellerman.id.au,
+	nathan@kernel.org,
+	naveen@kernel.org,
+	nicolas.bouchinet@oss.cyber.gouv.fr,
+	nicolas.schier@linux.dev,
+	npiggin@gmail.com,
+	nsc@kernel.org,
+	paul@paul-moore.com,
+	petr.pavlu@suse.com,
+	roberto.sassu@huawei.com,
+	samitolvanen@google.com,
+	serge@hallyn.com,
+	xiujianfeng@huawei.com,
+	zohar@linux.ibm.com
+Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
+Date: Sat, 31 Jan 2026 09:36:36 +0200
+Message-ID: <20260131073636.65494-1-mcaju95@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260123102825.3521961-1-petr.pavlu@suse.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 23, 2026 at 11:26:55AM +0100, Petr Pavlu wrote:
-> Changes since v2 [1]:
-> - Generalize the helper function that locates __klp_objects in a module
->   to allow it to find any data in other sections as well.
-> 
-> Changes since v1 [2]:
-> - Generalize the helper function that locates __klp_objects in a module
->   to allow it to find objects in other sections as well.
-> 
-> [1] https://lore.kernel.org/linux-modules/20260121082842.3050453-1-petr.pavlu@suse.com/
-> [2] https://lore.kernel.org/linux-modules/20260114123056.2045816-1-petr.pavlu@suse.com/
-> 
-> Petr Pavlu (2):
->   livepatch: Fix having __klp_objects relics in non-livepatch modules
->   livepatch: Free klp_{object,func}_ext data after initialization
+> The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds. Either the module signing key
+is generated at build time, which makes the build unreproducible, or a
+static signing key is used, which precludes rebuilds by third parties
+and makes the whole build and packaging process much more complicated.
 
-If there are no objections, I will go ahead and queue these patches up
-in -tip.
+I think there is a middle ground where the module signing key is generated
+using a key derivation function that has as an input a deterministic value
+on the build host, such as /etc/machine-id . The problem with this approach
+is that only hosts knowing the value will be able to reproduce the build.
 
--- 
-Josh
+Maybe this is a solution to NixOS secret management? Introduce minimal
+impurity as a cryptographic seed and derive the rest of the secrets using
+something like Argon2(seed, key_uuid).
+
+There might be another approach to code integrity rather than step-by-step
+reproducibility. One may exploit the very cryptographic primitives that make
+reproducibility hard to ensure that reproducibility is most  likely valid.
+
+For example, the module signing issue, the build host publishes four artifacts:
+* The source-code
+* The compiled and signed binary
+* The build environment
+* Its public key
+
+Now, we don't need to sign with the private key to know that building the source
+code using the specific build environment and signing the result with the private
+key will result in the claimed binary. We can just compile and verify with the
+public key.
+
+So a traditional workflow would be:
+compiled_module + module_signature == module
+
+In this case we build the module, sign it with whatever key, distribute the
+builds and the private key to whoever wants to reproduce the build. Or we build
+locally and the key stays with the end-user.
+
+While the cryptographic approach would be:
+verify(compiled_code, module.signature) is True
+
+In this case we distribute the builds, source code and the public key. While
+everyone can ensure that the compiled code is the result of the build
+environment and source code. The signature is verified using cryptographic
+means.
+
+As long as no one cracks RSA or an algorithm of our choosing/has an absurd
+amount of luck, the cryptographic approach would be just as good as the traditional
+approach at ensuring that a program has stopped with a certain output.
