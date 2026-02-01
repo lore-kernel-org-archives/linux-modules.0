@@ -1,108 +1,110 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC511261B8F;
-	Sun,  1 Feb 2026 16:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50943274671
+	for <linux-modules@vger.kernel.org>; Sun,  1 Feb 2026 16:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769962944; cv=none; b=WtrGi4yPv3bQaqLAL0d6U4yNWI+8xuiOgc/FeFhUABp/qVLVj5cxi31JtmhRwcxsy7j342RRCnLnin0UdnKTNAZUdXm5tpye82XTK+DbfCdHG5v8mMvu3PM4mtckwPxfIQlpk8eBjJV7aEGgg3SAfBri0TExBc/3kG8ngbTAzvo=
+	t=1769964300; cv=none; b=ZrmbYdWLZ5wMRntlulWoKk70yIiLtIw0sBH+ppWLhraFxbg7XqBQH3lY0NV6yCK0fagd9jqG7NT7R+viTh4QRiF2wHehaVevzku+MhoMkEy1Ha0PYQbJjjM94JbGmaHPqylLA0GiPy27hxigWyG/qamfJA/lqQUTa6n/8BBKhsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769962944; c=relaxed/simple;
-	bh=xlStmTRMhWVPt3fGtyXwEEDK5QLc9ZLigiHpsUvTOrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLHvyBQsrAQffTN7zZEXGg+NczdAqElK85oRg10p691IeqYUVqETZWC6gKQPCV0difis/p77bupvKeiE5n4V9jn4RARDzx3QFR6K4EIxgyqID9R6GHf/PBgzsUmN7gCYfgBEwCFe1189hNJk8jE0V98u12+Td13MKoYIzUv6JjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=bEfjssX6; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1769964300; c=relaxed/simple;
+	bh=giD2F5UNmFMG6o6l+i3XLP9MRphNPKugSUu8GN9qHPs=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=sX5OMmrX8jKIvEGDqsgXjoL1eBGb7gehIOwv3rztixCeLme56rMsEeC6/+Q5FFY4R7bDaa8+I9jTpbhg7Mu96qvV1OK0J+74hpC8nufh3rhbMMw8TWW/X8jRawyD3DPvc/DNMCg/Ojl3emT+nUAkc+5GtjsbmPnBv8pd5LfdJoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cEHUQJiM; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="bEfjssX6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1769962934;
-	bh=xlStmTRMhWVPt3fGtyXwEEDK5QLc9ZLigiHpsUvTOrc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bEfjssX6nVvGGJYCjRv1Hgum2HvUXJPGA7CgYPlDg4pNFEnfuqh6BJNVd4xzoEnb/
-	 ZMmAJGEOHpCghTNwc5ybR5xqiScFWUgOJvwITdq0n0q7Kv6pPqNjU99FoLxmpQ1ILY
-	 /UCNvFIurX5sZ1rKb2ccqszu5PRz2lLOVB+DzJaQ=
-Date: Sun, 1 Feb 2026 17:22:12 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Mihai-Drosi =?utf-8?B?Q8OianU=?= <mcaju95@gmail.com>
-Cc: arnd@arndb.de, arnout@bzzt.net, atomlin@atomlin.com, 
-	bigeasy@linutronix.de, chleroy@kernel.org, christian@heusel.eu, corbet@lwn.net, 
-	coxu@redhat.com, da.gomez@kernel.org, da.gomez@samsung.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, f.gruenbichler@proxmox.com, 
-	jmorris@namei.org, kpcyrd@archlinux.org, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, lkp@intel.com, 
-	maddy@linux.ibm.com, mattia@mapreri.org, mcgrof@kernel.org, mpe@ellerman.id.au, 
-	nathan@kernel.org, naveen@kernel.org, nicolas.bouchinet@oss.cyber.gouv.fr, 
-	nicolas.schier@linux.dev, npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com, 
-	petr.pavlu@suse.com, roberto.sassu@huawei.com, samitolvanen@google.com, 
-	serge@hallyn.com, xiujianfeng@huawei.com, zohar@linux.ibm.com
-Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
-Message-ID: <1ff0f085-fe89-48b4-bae3-559777a56a0d@t-8ch.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260131073636.65494-1-mcaju95@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cEHUQJiM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769964298;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gbjcDMK0rcsgbZ0bOwqzZviKflLW8sOigcLXjjdEPsU=;
+	b=cEHUQJiMYBS1FAsKK2IyW6ZZBYZyVJg97hQtFjWe+GG2n3ik1MQ6UtysiBzolPSj4jjT5q
+	yX0w8IkB+Kq4VwzE6mcEpqrgpZ9r2HfpzGBso2I0mjnZpMVFBqCCbZfyJkQ3prceHH0RmK
+	xI1/XG2M2T6Ulx06x9JMs2E7n5RLcLg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-120-zX-rT8bBOY-cMQsxbWZZig-1; Sun,
+ 01 Feb 2026 11:44:52 -0500
+X-MC-Unique: zX-rT8bBOY-cMQsxbWZZig-1
+X-Mimecast-MFC-AGG-ID: zX-rT8bBOY-cMQsxbWZZig_1769964290
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4F2321956094;
+	Sun,  1 Feb 2026 16:44:49 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D556E30001A7;
+	Sun,  1 Feb 2026 16:44:43 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <SN6PR02MB415708C0A6E2EB1B5C7BBFB0D49CA@SN6PR02MB4157.namprd02.prod.outlook.com>
+References: <SN6PR02MB415708C0A6E2EB1B5C7BBFB0D49CA@SN6PR02MB4157.namprd02.prod.outlook.com> <20260126142931.1940586-1-dhowells@redhat.com> <20260126142931.1940586-7-dhowells@redhat.com>
+To: Michael Kelley <mhklinux@outlook.com>,
+    Sami Tolvanen <samitolvanen@google.com>
+Cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>,
+    Jarkko Sakkinen <jarkko@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    "Jason
+ A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>,
+    "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+    "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+    "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+    "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v15 6/7] modsign: Enable ML-DSA module signing
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260131073636.65494-1-mcaju95@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2315763.1769964282.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 01 Feb 2026 16:44:42 +0000
+Message-ID: <2315764.1769964282@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Hi Mihai-Drosi,
+Michael Kelley <mhklinux@outlook.com> wrote:
 
-thanks for taking an interest into these patches!
+> I'm building linux-next20260130, which has this patch, and get the follo=
+wing errors:
+> =
 
-On 2026-01-31 09:36:36+0200, Mihai-Drosi Câju wrote:
-> > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds. Either the module signing key
-> > is generated at build time, which makes the build unreproducible, or a
-> > static signing key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more complicated.
-> 
-> I think there is a middle ground where the module signing key is generated
-> using a key derivation function that has as an input a deterministic value
-> on the build host, such as /etc/machine-id . The problem with this approach
-> is that only hosts knowing the value will be able to reproduce the build.
+>   HOSTCC  scripts/sign-file
+> scripts/sign-file.c: In function 'main':
+> scripts/sign-file.c:282:25: error: 'CMS_NO_SIGNING_TIME' undeclared (fir=
+st use in this function)
+> ...
+> The problem is that I'm running on Ubuntu 20.04, with this openssl:
+> =
 
-The goal is to make the distro kernel packages rebuildable by the
-general public. Any involvement of secret values will break this goal.
-
-> Maybe this is a solution to NixOS secret management? Introduce minimal
-> impurity as a cryptographic seed and derive the rest of the secrets using
-> something like Argon2(seed, key_uuid).
-
-I am not familiar with NixOS and its secret management.
-This patchset serves a wider audience.
-
-> There might be another approach to code integrity rather than step-by-step
-> reproducibility. One may exploit the very cryptographic primitives that make
-> reproducibility hard to ensure that reproducibility is most  likely valid.
-> 
-> For example, the module signing issue, the build host publishes four artifacts:
-> * The source-code
-> * The compiled and signed binary
-> * The build environment
-> * Its public key
-> 
-> Now, we don't need to sign with the private key to know that building the source
-> code using the specific build environment and signing the result with the private
-> key will result in the claimed binary. We can just compile and verify with the
-> public key.
-
-This could work if the goal is only to verify the reproducibility of a
-single, signed-en-bloc artifact. But we also need to handle vmlinux which
-contains the corresponding public key. It would need different handling.
-We can add some special logic to strip that public key before
-comparision. But then vmlinux might be compressed or wrapped in some
-other format. Another whole collection of special logic.
-
-(...)
+> # openssl version
+> OpenSSL 1.1.1f  31 Mar 2020 =
 
 
-Thomas
+The problem probably isn't this patch, it's almost certainly due to:
+
+  d7afd65b4acc7 ("sign-file: Use only the OpenSSL CMS API for signing")
+
+in the modules tree.  It removes support for PKCS#7 signature generation.
+
+Were you using PKCS#7 with SHA1?
+
+David
+
