@@ -1,102 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2593EBF3D;
-	Sun,  1 Feb 2026 20:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E872C08CB
+	for <linux-modules@vger.kernel.org>; Mon,  2 Feb 2026 09:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769976741; cv=none; b=K8/eBNqSfORujjE1J59hBqZDDVtTS1TSevbQ9k6BFkRlbC8GniuGuKRkWgyvqZ7nTaU63bNpZQM5WlP5TMraC+PBlo7JtubuSikcz5leRpOhynsBqiEerZE7FLCwyrhr4b5e5R++hKnYl0DggthH2tMbGUj55JtU53hHVWt6fRI=
+	t=1770024111; cv=none; b=O21c9viQTjoyvj7ceSQ+4K1NLi3LAOvtm7lve6G+OzUzBiXUbvaiYfOEUMkEn8Rx3j767LROMRYE0hImh4oM6zFx2JDAN71gqDWnpa2rWmGkChietg7d7MLnfar0ORBmSD04cSZHTlNqDnm5ag17q+GKkWrCU8tpqmy+eg7i1Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769976741; c=relaxed/simple;
-	bh=P4abRiJNT2o7A1KauWPFd1QUCJK6AwkuNkuWQv1rej0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zx9Tlg40LZ+a8kzTJwkNKuyvvLGrUcq2d2mwYQtonwCTNW8kdTnLvO32gNdO9r0WjyHm+zo/+LBZ5SGOpWfzQ82GaRtYg4DYg3bC45oDvOw32tjGf1Ue/y3pg6Ca/M8mhCobWF+5YiqX4Y/C/l/xqhcomTz2Kn4Y7/Edp42ADFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fIdRv4hA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770024111; c=relaxed/simple;
+	bh=bwnBNgHbFIW/GKpzdSfu0j1YrOO311FSebJ7+HObXGE=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=af67lw1fszpAbj+ATwq5UQA3xOzOProSZtuLTTu6VpMa5hM1+7ZcoEdWxT3qi1plHMoMY4M1fWf9n65HpwqF60KE+YgxBCm/NsAbOhHtC3Vc4XXDXTWedBKAO2PtKB+yhHkkr687+6j1+SDmN/m580YO7QzBORQNpSw9uKGQo7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JclSRvyg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fIdRv4hA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C67C4CEF7;
-	Sun,  1 Feb 2026 20:12:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769976741;
-	bh=P4abRiJNT2o7A1KauWPFd1QUCJK6AwkuNkuWQv1rej0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fIdRv4hA/DqSiqBclAtFK4XfUk/ksYnebA0yhghX5vLyndIRXaysGZ5MMbgL4vwkI
-	 8QvBVSpULQqoJhdyvj1t+Bug4HEuYNCYZpbs71huOoJbBE+HauLZ7LOEuhZ05cJQV/
-	 94Y42B9l4Ik8l7KwDFKgbh0MP9IX/WqJ6i2FNecab++SmyJy3Bh3nn+Acqzrq+Njoe
-	 CsZ/nV1JY55rWf1JPQfvoOd6i0Xj135qyfTL+vl7JOttvuSTevqqFRtknPLvL8LLVJ
-	 cQaAEOaE5VWFnmDFi97q9n93wpKJXVcB/h7Fay/vhGI+7dszWX9t1U+EoJG9mhwgBV
-	 dAMVUoFltx0rw==
-Date: Sun, 1 Feb 2026 12:12:18 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: =?us-ascii?B?PT9VVEYtOD9xP01paGFpLURyb3NpPTIwQz1DMz1BMmp1Pz0=?= <mcaju95@gmail.com>,
-	linux@weissschuh.net, arnd@arndb.de, arnout@bzzt.net,
-	atomlin@atomlin.com, bigeasy@linutronix.de, chleroy@kernel.org,
-	christian@heusel.eu, corbet@lwn.net, coxu@redhat.com,
-	da.gomez@kernel.org, da.gomez@samsung.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-	f.gruenbichler@proxmox.com, jmorris@namei.org, kpcyrd@archlinux.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, lkp@intel.com, maddy@linux.ibm.com,
-	mattia@mapreri.org, mcgrof@kernel.org, mpe@ellerman.id.au,
-	nathan@kernel.org, naveen@kernel.org,
-	nicolas.bouchinet@oss.cyber.gouv.fr, nicolas.schier@linux.dev,
-	npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com,
-	petr.pavlu@suse.com, roberto.sassu@huawei.com,
-	samitolvanen@google.com, serge@hallyn.com, xiujianfeng@huawei.com,
-	zohar@linux.ibm.com
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JclSRvyg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770024109;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5lbDw7o/RaxnPFlRJ1INa0R+IZJyXDgWQKuA97onDkQ=;
+	b=JclSRvygeWEw5b74C3R1wQwVcZm0FD0rq44itbAsTbripE8sDMTMiCMeXUZLy+JbHq1Ki2
+	cDxAYP8e6kLoEwao5I9YK3wo6Rb2pne17J1BVpwjLRoQgTKchE26Bc4/JGAFTrvHlyk6OR
+	t/RhrFDDjeKlMvKo+hZUnK3xfuzBMc4=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-vRYKonroPPacvPvXG9Mi7g-1; Mon,
+ 02 Feb 2026 04:21:43 -0500
+X-MC-Unique: vRYKonroPPacvPvXG9Mi7g-1
+X-Mimecast-MFC-AGG-ID: vRYKonroPPacvPvXG9Mi7g_1770024097
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 468A818002CE;
+	Mon,  2 Feb 2026 09:21:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 77AA43001DB7;
+	Mon,  2 Feb 2026 09:21:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20260201201218.GA15755@quark>
+References: <20260201201218.GA15755@quark> <20260131073636.65494-1-mcaju95@gmail.com> <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net> <2316630.1769965788@warthog.procyon.org.uk>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: dhowells@redhat.com,
+    =?us-ascii?B?PT9VVEYtOD9xP01paGFpLURyb3NpPTIwQz1DMz1BMmp1Pz0=?= <mcaju95@gmail.com>,
+    linux@weissschuh.net, arnd@arndb.de, arnout@bzzt.net,
+    atomlin@atomlin.com, bigeasy@linutronix.de, chleroy@kernel.org,
+    christian@heusel.eu, corbet@lwn.net, coxu@redhat.com,
+    da.gomez@kernel.org, da.gomez@samsung.com, dmitry.kasatkin@gmail.com,
+    eric.snowberg@oracle.com, f.gruenbichler@proxmox.com,
+    jmorris@namei.org, kpcyrd@archlinux.org, linux-arch@vger.kernel.org,
+    linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org,
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+    linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org,
+    linuxppc-dev@lists.ozlabs.org, lkp@intel.com, maddy@linux.ibm.com,
+    mattia@mapreri.org, mcgrof@kernel.org, mpe@ellerman.id.au,
+    nathan@kernel.org, naveen@kernel.org,
+    nicolas.bouchinet@oss.cyber.gouv.fr, nicolas.schier@linux.dev,
+    npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com,
+    petr.pavlu@suse.com, roberto.sassu@huawei.com,
+    samitolvanen@google.com, serge@hallyn.com, xiujianfeng@huawei.com,
+    zohar@linux.ibm.com
 Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
-Message-ID: <20260201201218.GA15755@quark>
-References: <20260131073636.65494-1-mcaju95@gmail.com>
- <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <2316630.1769965788@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2316630.1769965788@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2339368.1770024079.1@warthog.procyon.org.uk>
+Date: Mon, 02 Feb 2026 09:21:19 +0000
+Message-ID: <2339369.1770024079@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Sun, Feb 01, 2026 at 05:09:48PM +0000, David Howells wrote:
-> Mihai-Drosi Câju <mcaju95@gmail.com> wrote:
-> 
-> > > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds. Either the module signing key
-> > is generated at build time, which makes the build unreproducible, or a
-> > static signing key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more complicated.
-> 
-> There is another issue too: If you have a static private key that you use to
-> sign modules (and probably other things), someone will likely give you a GPL
-> request to get it.
-> 
-> One advantage of using a transient key every build and deleting it after is
-> that no one has the key.
-> 
-> One other thing to remember: security is *meant* to get in the way.  That's
-> the whole point of it.
-> 
-> However, IANAL.
-> 
-> David
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-It sounds like hash-based module authentication is just better, then.
-If the full set of authentic modules is known at kernel build time, then
-signatures are unnecessary to verify their authenticity: a list of
-hashes built into the kernel image is perfectly sufficient.
+> With that being the case, why is there still effort being put into
+> adding more features to module signing?  I would think efforts should be
+> focused on hash-based module authentication, i.e. this patchset.
 
-(This patchset actually gets a little fancy and makes it a Merkle tree
-root.  But it could be simplified to just a list of hashes.)
+Because it's not just signing of modules and it's not just modules built with
+the kernel.  Also a hash table just of module hashes built into the core
+kernel image will increase the size of the kernel by around a third of a meg
+(on Fedora 43 and assuming SHA512) with uncompressible data.
 
-With that being the case, why is there still effort being put into
-adding more features to module signing?  I would think efforts should be
-focused on hash-based module authentication, i.e. this patchset.
+David
 
-- Eric
