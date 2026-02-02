@@ -1,155 +1,110 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D571363C57
-	for <linux-modules@vger.kernel.org>; Mon,  2 Feb 2026 11:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89B5366047
+	for <linux-modules@vger.kernel.org>; Mon,  2 Feb 2026 12:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770032921; cv=none; b=jilJPL/hQREGzZYKrHfMb+cqn2NEXoZGUolS5Yi1XaLTVZ724ZIw/koaSqGswMXhT+LvyrwJhiqdOC+hR4bKPGL03hXvUd3+drAiTRmS1s+pX5FfAkTl5+1yLTm8SuMOz2G/zHfNhZ7BTMMNWW7X8dvEvy7Zcd8ccO4TQAMrPz4=
+	t=1770035111; cv=none; b=UcqCCbp+QSj2Y2429Ll7Q/hvaQdATI3C9Mni8yppQOgvHaVOzJ38Tavf7GyvgMMr18qcUJJ+TQfjwIwDNnkUAeE1J0P4pqFJo4xL7lWHHpOL19yrN/t1FwLw/LBVLrNz3nRf9hiEK1YQN7b1ZzUzNEwBHr1h/nJPveAEv1m6pGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770032921; c=relaxed/simple;
-	bh=y0M27HId7NanN+KU4bmQbyiW7t9DmGAMrikFMXLb2jE=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=Uh1/c8NxTuG7NvTreegnhQ/GD75q6U1g1gvJoM5cs4gO7UFJJfMavklHQVigOvNtm3ctzBpo9UCjb8LkANY8lEmP7aakQ8PQ0pb3sP/ZOlZBuePYsT2mBsGoUetW38NuqyJc66lDvFfoViW4/ELeRWLeOXWMD6S++MtxA+6fU4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JMfHvUL7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770035111; c=relaxed/simple;
+	bh=P9HHPCfdzr3+7KcIG4nqWi/NFF0xphh1hN2q0+DqS+k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l1XcqCMs7DGQ3RyafZb7272I06ovT3YLfSlef4lkfq6RRRFcYGQzy3LfHjLEnfHkBRIEZSilj4TWaD/8RONKSnUkB/GpLA92Xf4DxA94uVmGUZJsTZPdCfvCz9h1K6ZsfaAJ2xU2IAUy9wqSZCUHz2gZtgodAUMU8id05qmAzdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=cXUrTXQj; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JMfHvUL7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770032919;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=48ZJbU9M0XqFSl5lmSxIUBwR/U0Gi0NzVcwFc4/F/LI=;
-	b=JMfHvUL7nf97vH01MFkpKu7knjgdWAUgASxs51UrWMbkqKhKyuFgCMphOKnQqg3ZNuhSrf
-	+1GGYFi+gQ5QbQ+IWtolkQKoBdIP8iOErzXqnoXCUojwNg1cGZsspT1CSLPb2bKJaOz1yk
-	YuJpf0Qwp1ibF8uZkFm0g4BSYotQZY8=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-104-w39nM4vVP1ChqFApyokLrQ-1; Mon,
- 02 Feb 2026 06:48:36 -0500
-X-MC-Unique: w39nM4vVP1ChqFApyokLrQ-1
-X-Mimecast-MFC-AGG-ID: w39nM4vVP1ChqFApyokLrQ_1770032914
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 08FED19560B7;
-	Mon,  2 Feb 2026 11:48:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 932151800109;
-	Mon,  2 Feb 2026 11:48:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <SN6PR02MB4157EE01F25375784EB7C507D49DA@SN6PR02MB4157.namprd02.prod.outlook.com>
-References: <SN6PR02MB4157EE01F25375784EB7C507D49DA@SN6PR02MB4157.namprd02.prod.outlook.com> <SN6PR02MB415708C0A6E2EB1B5C7BBFB0D49CA@SN6PR02MB4157.namprd02.prod.outlook.com> <20260126142931.1940586-1-dhowells@redhat.com> <20260126142931.1940586-7-dhowells@redhat.com> <2315764.1769964282@warthog.procyon.org.uk>
-To: Michael Kelley <mhklinux@outlook.com>
-Cc: dhowells@redhat.com, Sami Tolvanen <samitolvanen@google.com>,
-    Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>,
-    Jarkko Sakkinen <jarkko@kernel.org>,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    Eric Biggers <ebiggers@kernel.org>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
-    "Jason A . Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>,
-    "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-    "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-    "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-    "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v15 6/7] modsign: Enable ML-DSA module signing
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="cXUrTXQj"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-432da746749so2509187f8f.0
+        for <linux-modules@vger.kernel.org>; Mon, 02 Feb 2026 04:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1770035108; x=1770639908; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=35SCFxgP97C5MCjGFWH+I8SFYnEJmlfx+QRFsAL723s=;
+        b=cXUrTXQj+EywFnrxpcm5ZMZ0Dpj1SrEdRNgq/FIbG8qJiGdhE3xBVOK1TyNKVC5yHM
+         /YU4Rp6jcWu4EgREG9LUsb70K6+NleBSiFi5Y532AJZYt94kyWiCH7duiPY7ADITTgMA
+         IW9PEEB54V/S0ubsl6TsLW/4VVNbEudOpBUOff9sJreEaYHxQhAxNFQIqtECkfn+IaYe
+         1qZOIec7ST2haJWciKJjBvrg+Nm+Gn755hjsc4yMIh5F92SMFKWOt1mcWDEGu6VjHu8F
+         6C2+EPxqtgIQ0mv3KvCrVgsoRjQ1QpvjgCpIDNk4uUvfQ3XBkeEqQMpXvOU1I3nfzYkN
+         /now==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770035108; x=1770639908;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=35SCFxgP97C5MCjGFWH+I8SFYnEJmlfx+QRFsAL723s=;
+        b=QWikcXLwMQhgerndRGcNNc7Qjoj7D5vWl+97kNauU8IBFotRJTciOn9JILdDfu1cda
+         qsueDS8TWUVe9ZpmW/Uhl4eUJm1DBHJTEne/x4tR9uFijKM4l1FaU6MAF946PEpZwCPg
+         2pfb6GmeSPV39yR9+C0TSajfTj5HAvcDdRLuvGpQnNfOUdyJfOsbsbJGniaISR5GlOEl
+         wD1vO4dNO83ozGIFKeawQk63ppWKY+lYGB/gOetrr78WR9rDh56t5i17NBUiaG3oqakl
+         JSF7Ad0OJdmdvFxBvehoWn7hxV5cRYxu8lu4b5IE7zz6vOO3NCkfKsMIfeVRW2VpnuQV
+         xx9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUiubjCMGVnj9z/WSnQIOq83vIu8ub6X3GWrTZIpwkdrElpR8JRRGSiefw1ykBJcTgrQ0hKAZ9LYikp1/aP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWsD9z9xS4vxTfeHmZjg1jIxY8udBb5MMx52fl6HpgIm6P+0p7
+	dlzzutwmJa53sK/qpwe8WEzb9pqWYBf2B/dTDRbIZF7PUkVWgIduNiyxEFyAkohOCOw=
+X-Gm-Gg: AZuq6aKqqcILuwQ7nCx8TdMFTbtxvluEHxT0ctdi25ewlH5zEK5hqxcQRVb1Bm39geI
+	s5+xIT2PZ/60n7e7IR2gN9ltLj6hAXSTyciyDWaQub7s6Wv6kCxtTbw+Q262GzyfzRmqDOtdN7j
+	mRUTaAOp6xnMkEyFKAzIn07meWpAmgTTnbJTGvrLrNBUipX6Oydnmer9PB0y+gpItdsaHgvOko8
+	U2mvjuSJ/4+jzb5cEhlL/1INqj+m24wvDsU954CN1cAg3TNAc3ZRuiPe7G2+ccK/zOfFzNEfHVg
+	7yNC744dIlP0utxwL8okUA/pOFOuVfxTdXVJTukK1jie6dGNFz0M9r7H9S6lhbjqFcerLx+P5p1
+	apRIgK21ZJggBKS8V3B/QZ3150o2gQ1wLXFDmrEEHcmlX7Xo1L6d46JJ8Q3JhjrNb8Kw/d8GTUU
+	xZCdGDZGBy7Ofve3hAKdMRrCB2cms7LA==
+X-Received: by 2002:a05:6000:2881:b0:435:94c1:3713 with SMTP id ffacd0b85a97d-435f3aaff90mr15459978f8f.37.1770035108092;
+        Mon, 02 Feb 2026 04:25:08 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e1322eefsm44791754f8f.30.2026.02.02.04.25.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 04:25:07 -0800 (PST)
+Message-ID: <640c124e-0f03-4869-80fe-20c8be7aa525@suse.com>
+Date: Mon, 2 Feb 2026 13:25:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2416272.1770032906.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 02 Feb 2026 11:48:26 +0000
-Message-ID: <2416273.1770032906@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] sign-file, pkcs7: Honour the hash parameter to sign-file
+To: David Howells <dhowells@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251111154923.978181-3-petr.pavlu@suse.com>
+ <20251111154923.978181-1-petr.pavlu@suse.com>
+ <2403737.1770031462@warthog.procyon.org.uk>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <2403737.1770031462@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Michael Kelley <mhklinux@outlook.com> wrote:
+On 2/2/26 12:24 PM, David Howells wrote:
+> Here's an alternative patch that will allow PKCS#7 with the hash specified on
+> the command line, removing the SHA1 restriction.
+> 
+> David
+> ---
+> sign-file, pkcs7: Honour the hash parameter to sign-file
+> 
+> Currently, the sign-file program rejects anything other than "sha1" as the
+> hash parameter if it is going to produce a PKCS#7 message-based signature
+> rather than a CMS message-based signature (though it then ignores this
+> argument and uses whatever is selected as the default which might not be
+> SHA1 and may actually reflect whatever is used to sign the X.509
+> certificate).
+> 
+> Fix sign-file to actually use the specified hash when producing a PKCS#7
+> message rather than just accepting the default.
 
-> Pardon my ignorance of the signing details, but I don't see an indicatio=
-n
-> of having selected PKCS#7 with SHA1 in my .config. What am I looking for=
-?
+Is it worth keeping this sign-file code that uses the OpenSSL PKCS7 API
+instead of having only one variant that uses the newer CMS API?
 
-Actually, if you have openssl >=3D 1.0.0 then it sign-file will be built t=
-o use
-CMS rather than PKCS#7, and will use the configured hash algo, so you can
-ignore this.
-
-> The symbols CMS_NO_SIGNING_TIME,
-
-I can probably just not add that.
-
-> EVP_PKEY_is_a()
-
-I guess I can probably make this contingent on >=3D 3.0.0.
-
-> and OPENSSL_VERSION_MAJOR don't exist in the include/openssl/* files for
-> that old version.
-
-I should probably use OPENSSL_VERSION_NUMBER instead - though we already u=
-se
-it for selecting #includes (I guess #if doesn't complain).
-
-Do the attached changes work for you?
-
-David
----
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index 547b97097230..78276b15ab23 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -27,7 +27,7 @@
- #include <openssl/evp.h>
- #include <openssl/pem.h>
- #include <openssl/err.h>
--#if OPENSSL_VERSION_MAJOR >=3D 3
-+#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
- # define USE_PKCS11_PROVIDER
- # include <openssl/provider.h>
- # include <openssl/store.h>
-@@ -323,18 +323,21 @@ int main(int argc, char **argv)
- 			CMS_DETACHED |
- 			CMS_STREAM  |
- 			CMS_NOSMIMECAP |
-+#ifdef CMS_NO_SIGNING_TIME
- 			CMS_NO_SIGNING_TIME |
-+#endif
- 			use_keyid;
- =
-
--		if ((EVP_PKEY_is_a(private_key, "ML-DSA-44") ||
--		     EVP_PKEY_is_a(private_key, "ML-DSA-65") ||
--		     EVP_PKEY_is_a(private_key, "ML-DSA-87")) &&
--		    OPENSSL_VERSION_MAJOR < 4) {
-+#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L && OPENSSL_VERSION_NUMBER < 0=
-x40000000L
-+		if (EVP_PKEY_is_a(private_key, "ML-DSA-44") ||
-+		    EVP_PKEY_is_a(private_key, "ML-DSA-65") ||
-+		    EVP_PKEY_is_a(private_key, "ML-DSA-87")) {
- 			 /* ML-DSA + CMS_NOATTR is not supported in openssl-3.5
- 			  * and before.
- 			  */
- 			use_signed_attrs =3D 0;
- 		}
-+#endif
- =
-
- 		flags |=3D use_signed_attrs;
- =
-
+-- 
+Thanks,
+Petr
