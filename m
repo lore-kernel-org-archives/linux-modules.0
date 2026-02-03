@@ -1,120 +1,206 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A46486341;
-	Tue,  3 Feb 2026 12:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC9039E18E
+	for <linux-modules@vger.kernel.org>; Tue,  3 Feb 2026 13:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770123546; cv=none; b=uJGerNazbpAgp+r2V+JQDbZannVE+p6OWHlgbC44IfXmPVJT/UlMzBDn4r/aUtdbpuAt5eUYgSSzeF8bs99VlG+6YYSM/jkBCN+6K30kpXaDQ40Ys7qVCC873YpTX/GwjYqced9+E3NnXBqUxB4UAeTm5A1/G6pJRbWiK/pd1rU=
+	t=1770125732; cv=none; b=iRnhu5xqkVHP0LonQp9W1LknboLTwbRUt1DchnlXOy0DuZo4XWaMQUKRV/FC6iprj9fPw01/G25peO7Q+nLI2Ug4BX1/g+/ZrrVFSDTfmmaU8KoiovsgpXtgAiwklz+ToH6sOF6rc4aqEHe+I66q0QgeRzeNVw/HUnA4hYDSTP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770123546; c=relaxed/simple;
-	bh=6LS/kA+onmwNe8A7Ynby1iar5OwBoPJ8XKnL5twRNZI=;
+	s=arc-20240116; t=1770125732; c=relaxed/simple;
+	bh=io/EYxv7ttfZ5c/LLL9VvcayFvS43ID701JLwnZ6lKY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=esTfFlucMrd0IjtGBK7ug8gaN3Hw3+WrTzD4g2WeObrVnMsSLbB5qIr4UYIQ5EhZ9YSZRhIgENFW42t4DaaEfwHZwQJlsthujWt5OlwH/DQXVlz7WHiC4kOq6VECxN8gv9aSNRUxs6DsPQfwbh5orkSr5P/F/czfgQ8sg3LBQYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SPdtsnUd; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=YxQThzPPExIR1R0+Y/H5VB1ArYCUC8n4wtYr3pM7BwcTHB/BgHf4hP6w8t+9+e3lCVapU3CayLxWi9cms5lfg2ssvf2AI1GOdAOdz1oIkYNpdgMOPYq7MauTL16SmgG18EDRxnwgGB3hqbJMlpZ/wJCAEWRFZ2uIhaRKNu8Tmog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fz5BJZa0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lpWbaqrA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SPdtsnUd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1770123542;
-	bh=6LS/kA+onmwNe8A7Ynby1iar5OwBoPJ8XKnL5twRNZI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SPdtsnUdSSGeLAvpGs66Yc7fwhPORRh9r7ctAvysXw3f//3u70CJ0gLtNJWuXJQC9
-	 7MAnhu/JI34H1H6OHyalZvy4k5hxQXNQ1m/yLoFxdGWEao2ummshchk8d8wnhmjVOu
-	 e+aM1OBp2myV2ypeuFFm6aPHmRqcdO/MCSevgV0o=
-Date: Tue, 3 Feb 2026 13:59:02 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <633ddd60-edbf-4072-932e-2d67d2173edd@t-8ch.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fz5BJZa0";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lpWbaqrA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770125729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4BpfLzNQISMcvb3bYUowH+LAX7zmYdRcPREXRs4s810=;
+	b=Fz5BJZa02fKd2R/ktjSlFmcWRsZLsBkIJAmPlB9h5UftgkgMXcaN1SX1gCbINntsbcSnYt
+	dBKcB5n1QUPogBIKAXYW6OP0bm24cKQdVxyPxEuJ2OJMMD82pOgbk5DEOhsXGUZpCc2s+Z
+	rQ+ZWR18YseUttMcGQ2B1r1KccwPa1E=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-213-T-wo3EbsOZiCCyUoytyrrw-1; Tue, 03 Feb 2026 08:35:28 -0500
+X-MC-Unique: T-wo3EbsOZiCCyUoytyrrw-1
+X-Mimecast-MFC-AGG-ID: T-wo3EbsOZiCCyUoytyrrw_1770125727
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2a0bae9acd4so41112365ad.3
+        for <linux-modules@vger.kernel.org>; Tue, 03 Feb 2026 05:35:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770125727; x=1770730527; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4BpfLzNQISMcvb3bYUowH+LAX7zmYdRcPREXRs4s810=;
+        b=lpWbaqrAqaJRaYbc1ybv2Ucqx11nF82dGvFMj7aQe26XVyKS63ImwXTt4yQV1OJOFd
+         zbbXFnkA5Vqj0qWehdKuJmpfE4USQVqU8ZV04xjSn7cFiZCpXyCQ0zYz2OfruEB8qJzY
+         g87DlfrReDJG30Ebwdxxuk4Xi86yk3nd8BbfvSyXwqtrYfnzO0Q8caI2UhhBMck45Kns
+         2B/Q4bHmS6YjEq+wM/veOSeEGnAMgQjGtRkl92YVR1cJ4N3REhoWxfifgpA5YK8uA8Ae
+         hxgeLtRgOd413PM6jOKRx16nuhuAYPkYkJ7ct3sQ/+FpECiROxL4UkLUiuMrk6WijCjN
+         z/FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770125727; x=1770730527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BpfLzNQISMcvb3bYUowH+LAX7zmYdRcPREXRs4s810=;
+        b=p1W9auiiXaxaCvLQUTq+b+9Mj6rh5pagWDWw36sjNPrxAsvn1zuHzI1iTAoiLjcdo/
+         oWqFez4xrsoZpveIdtJhcgbA8jiRn1ZTDipsO4cWJ0juooRmm113raGhO0mkhb2bSXYD
+         Cra5LuyMgzk18mrp/Oy7CF3tPIyb7C6e/WjQ3zEXxl2w9FdErlYMMznYHAjsaK8RkqJc
+         zlxTAdbRO8jbacYi5MWKjP6h9Z4cZ4hOtJANQcAMjJXqYY2bqSoP3I+ToqMEI4eWtFdq
+         DVgApTIpsQ9kzYWBbTBlD695C3yfC1dU2UM4m43nXSccHAQ6IyIJLJrDmf2/d4NPM1ev
+         W0+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWwOFWrKc77E+Tc7xpXUfQ/NibrgNnTDfa0ZKOsESSGZngXxPGFX8Y/B8C0tXkprotkLhzWYhwkDtgFwuxS@vger.kernel.org
+X-Gm-Message-State: AOJu0YykBOAz3E1gSjhh+muFnGH5fLld2F++pBv3Is2DbQ3W2fTdhQ7l
+	QVHTloPGIMGqUBbisSKhr0IYOzW7hzBkBkK4nWBeeSztxouf75lJ7ajhDjVYyeKSP686uuHvZGY
+	buGFdoeKT6M2KAuUoiAmk+KeSd71/DEdaxRwKQPz2xfZrgGsZgrzqfLvfowFoLkv3+Jc=
+X-Gm-Gg: AZuq6aKhvD9ThT2db7o0jPvoBNApC3AVVdtTJE3TFg6Pv5QqiJwoao+xvr0+hIxfKe4
+	xH9iV+dpZEloFkScJGgbi6PQasxX/LX85u1hIEQt5BjFa7kAV8yO9qMKpGo675bBT+q+Iai45w/
+	S4+/UqpPnR5q4RsmsR1Aah34OcwbxSj+8R9nVqZWSwL4W33iclSGFdj9iY//HJWc3pUSITYJAxj
+	SBWZQasz/1hEY8HVNfm0v2rBWZH6iTiA6TsmChQ76sFy/YufPOHKerqs+eku4kguk7muhZyRDYL
+	NpIfsC3dsmyTZoXXvZAbMBHMGqtUkcuhp/qTVur+6hCk8xSs2Y2sGDvBgzpAXYitXxk4k1Ye4Ey
+	f
+X-Received: by 2002:a17:902:e891:b0:2a0:d662:7285 with SMTP id d9443c01a7336-2a8d8945522mr156161805ad.0.1770125727249;
+        Tue, 03 Feb 2026 05:35:27 -0800 (PST)
+X-Received: by 2002:a17:902:e891:b0:2a0:d662:7285 with SMTP id d9443c01a7336-2a8d8945522mr156161175ad.0.1770125726520;
+        Tue, 03 Feb 2026 05:35:26 -0800 (PST)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b4c3df6sm177027765ad.49.2026.02.03.05.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 05:35:25 -0800 (PST)
+Date: Tue, 3 Feb 2026 21:32:44 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Johannes =?utf-8?B?V2llc2LDtmNr?= <johannes.wiesboeck@aisec.fraunhofer.de>
+Cc: dhowells@redhat.com, dmitry.kasatkin@gmail.com, ebiggers@kernel.org, 
+	eric.snowberg@oracle.com, keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	roberto.sassu@huawei.com, simo@redhat.com, zohar@linux.ibm.com, 
+	michael.weiss@aisec.fraunhofer.de
+Subject: Re: IMA and PQC
+Message-ID: <aYHznG6vbptVOjHQ@Rk>
+References: <aXrKaTem9nnWNuGV@Rk>
+ <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
+In-Reply-To: <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
 
-On 2026-02-03 13:19:20+0100, Petr Pavlu wrote:
-> On 1/13/26 1:28 PM, Thomas WeiÃŸschuh wrote:
-> > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds. Either the module signing key
-> > is generated at build time, which makes the build unreproducible, or a
-> > static signing key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more complicated.
-> > 
-> > The goal is to reach bit-for-bit reproducibility. Excluding certain
-> > parts of the build output from the reproducibility analysis would be
-> > error-prone and force each downstream consumer to introduce new tooling.
-> > 
-> > Introduce a new mechanism to ensure only well-known modules are loaded
-> > by embedding a merkle tree root of all modules built as part of the full
-> > kernel build into vmlinux.
-> > 
-> > Non-builtin modules can be validated as before through signatures.
-> > 
-> > Normally the .ko module files depend on a fully built vmlinux to be
-> > available for modpost validation and BTF generation. With
-> > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
-> > to build a merkle tree. This introduces a dependency cycle which is
-> > impossible to satisfy. Work around this by building the modules during
-> > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
-> > but before the final module hashes are
-> > 
-> > The PKCS7 format which is used for regular module signatures can not
-> > represent Merkle proofs, so a new kind of module signature is
-> > introduced. As this signature type is only ever used for builtin
-> > modules, no compatibility issues can arise.
-> 
-> Nit: The description uses the term "builtin modules" in a misleading
-> way. Typically, "builtin modules" refers to modules that are linked
-> directly into vmlinux. However, this text uses the term to refer to
-> loadable modules that are built together with the main kernel image,
-> which is something different.
+On Fri, Jan 30, 2026 at 09:31:26PM +0100, Johannes Wiesböck wrote:
+>Hi all,
 
-Agreed. I'll go through everything again, to consistently use "in-tree".
+Hi Johannes,
 
-(...)
+>
+>we conducted an evaluation regarding PQC use in IMA last year (see [1] for all
+>details) where we also considered the interplay of different PQC signatures and
+>file systems (ext4, btrfs, XFS, f2fs).
 
-> > +
-> > +	while (fgets(line, PATH_MAX, in)) {
-> > +		struct file_entry *entry;
-> > +
-> > +		fh_list = xreallocarray(fh_list, num_files + 1, sizeof(*fh_list));
-> 
-> It might be useful to not reallocate this array for each file, although
-> I don't immediately see that it contributes any significant time to the
-> runtime.
+Thanks for sharing this comprehensive study! There are many nuances in
+this research paper!
 
-The libc implementation should optimize this internally to not actually
-grow one elemet at a time. I'd like to keep this as-is.
+>
+>Coiby Xu <coxu@redhat.com> wrote:
+>
+>>According to my experiments done so far, for verification speed,
+>>ML-DSA-65 is consistently faster than ECDSA P-384 which is used by
+>>current CentOS/RHEL to sign files in a package.
+>
+>Regarding performance, similar to Coiby, we found that all variants of ML-DSA
+>consistently outperformed ECDSA P-256.
 
-(...)
+Glad to know ML-DSA is also faster than ECDSA P-256!
 
-Ack to everything else.
+>
+>>The size of a single ML-DSA-65 signature indeed increases dramatically
+>>compared with ECDSA P-384 (3309 bytes vs ~100 bytes). But I'm not sure
+>>it can be a big problem when considering the storage capacity. Take
+>>latest fresh CentOS Stream 10 x86_64 KVM guest as example, without any
+>>file system optimization, extra ~189MB disk space is needed if all files
+>>in /usr signed using by ML-DSA-65 where the disk size is 50G. But I
+>>don't have enough experience to tell how users will perceive it and I'll
+>>try to collect more feedback.
+>>
+>>For the details of my experiments, you can check
+>>https://gist.github.com/coiby/41cf3a4d59cd64fb19d35b9ac42e4cd7
+>>And here's the tldr; version,
+>>- Verification Speed: ML-DSA-65 is consistently ~10-12% faster
+>>   at verification than ECDSA P-384 when verifying all files in /usr;
+>>   ML-DSA-65 is 2.5x or 3x faster by "openssl speed"
+>>
+>>- Signing Speed: ML-DSA-65 appears ~25-30% slower when signing
+>>   all files in /usr; ML-DSA-65 is 4x or 4.8x slower by "openssl speed"
+>>
+>>- Storage overhead: For ML-DSA-65, /usr will increase by 189MB and
+>>   430MB when there are 27346 and 58341 files respectively. But total
+>>   size of pure IMA signatures are estimated (files x (3309+20) bytes) to
+>>   be ~87MB and ~185MB respectively.
+>
+>Two relevant aspects we discovered regard the signature size. TL;DR:
+>
+>1. Most file systems need to be tuned to support the larger extended attributes
+>(signatures) if their size goes above a certain threshold (e.g. enable EA_INODE
+>in ext4). This influences not only disk usage but overall compatibility between
+>file systems and PQC signatures. A file system that would not provide the
+>functionality to store larger extended attributes would be incompatible with
+>large signatures.
+>
+>2. For most smaller signatures (like ML-DSA-44/65), we believe that the overhead
+>of signatures is actually compensated by fragmentation within the file systems.
+>For example, ext4 will allocate a full file system block for extended attributes.
+>As long as the signature size is below this block size, we did not observe less
+>free space on the file system despite the larger signatures.
+
+I think this explains why I didn't see any disk overhead when using ECDSA P-384:)
+
+>
+>Overall, we concluded that ML-DSA-65 provides the best combination of disk
+>overhead, performance and security level. Performace was good and for all
+>algorithms with larger signatures than ML-DSA-65, file systems would need to be
+>tuned.
+
+Thanks for summarizing your findings regarding the signature size and
+also sharing your evaluation!
+
+>
+>>According to
+>>https://www.ietf.org/archive/id/draft-salter-lamps-cms-ml-dsa-00.html
+>>ML-DSA-44 is intended to meet NIST's level 2 security category. Will
+>>NIST level 2 meet users' security requirements?
+>
+>Regarding security levels:
+>For security levels, we referred to NIST IR 8547 ipd [2].
+>ECDSA P-256 has a classical security strength of 128bits (P-384: 192bits).
+>According to [2] Table 3, these levels are met by the different ML-DSA variants.
+>So, if you are migrating from ECDSA P-384, you need to use at least ML-DSA-65 to
+>meet the same security strength.
+
+This is helpful info! And thanks for sharing the perspective of
+migration!
+
+>
+>Best regards,
+>Johannes
+>
+>[1] https://www.wsbck.net/publications/pqc-ima.pdf
+>[2] https://nvlpubs.nist.gov/nistpubs/ir/2024/NIST.IR.8547.ipd.pdf
+>
+
+-- 
+Best regards,
+Coiby
+
