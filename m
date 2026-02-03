@@ -1,162 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8BD918E025;
-	Tue,  3 Feb 2026 00:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E005D2DC336;
+	Tue,  3 Feb 2026 08:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770078931; cv=none; b=WiUT5DN2PBsMpW2URwGg5u75v/AuGEXfTJRPQO/kigyRevPsS1r6xl/6YAFYqdUjwHu5L4c7E9SOkzDwEpyB6Uw4DjXkrZci9x3jPoE+lPaRWtz/NzZEwncta3ZU3qMfmpvTgpBKCNYnr6h/A+272eAuVIXeHqUqCnhg2yDubkg=
+	t=1770106706; cv=none; b=jHAHIksqopkiMv85p3kk9b2KPEQZYYguxcjfFACEMEEjjLaa0a8mFzHhCcEYd6xN3ansut/2qETzQug7mH3xFb2x+8SSrAQ96Qh0kchURp8ycHfu3fckwnOUnn8k6PmYXFCvhBfOLVsoLwK/vm5Zzep+kJVbQ5lhbSylE3xjszE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770078931; c=relaxed/simple;
-	bh=ovtezGkmnjYK1dJq7gxbfnsXpTZi+R1BHE8vyy9L2bs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4LZ9ER4AIyH7afW9qch8sK7OyNKzn5SAV/6AnwTiJPV1qYCA9YUWlU15izNVR+q+U6AhbMcK9eRxhHKzGZYPZVW/GA5wUqPUrNpWn3xq4ST5YmHgi/4l2QYqqejZvUv2GP9Qrg6S2DKAlHb+0s/IP4ZtIMFOVT6oDHOgdKjJpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pXVywSx5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770106706; c=relaxed/simple;
+	bh=5rqqjsLuw5JA2sTQ/3twqQMctI8v/ml7Q4w1kuVcdd4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qaZ9fDW77OPbPj2B6V2rwkOyraI8MyK3EB7LqXBfk0OzoUHKpHFP32CJw+lT33dfcw8dFl9kr0I4F1IAO3ky5dSrmFuGGXw7jJtyvCPxuXMLntFFnqx2dxW43RcEH+3kWjNZ5MdDVpxbyYNFnqbZexPJrp0TIZGaM9oliewnAcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=n/vfRxg6; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pXVywSx5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CDD4C116C6;
-	Tue,  3 Feb 2026 00:35:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770078931;
-	bh=ovtezGkmnjYK1dJq7gxbfnsXpTZi+R1BHE8vyy9L2bs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pXVywSx5/T+VdYINhKgFGG2rIPRbmAmvlrrctUivGuVVM9RlH+tSIuAEjB8rhpqxE
-	 cPKQ6aJmvxR+8iUH+cnWpmDRzw/jREp1ZiwNMt3Rg53PihT3/vHtb8c8z0cf2cUnYW
-	 V1hT8TCFoEy67+cthScL3fhaIFD2cPxPfh5PVt9DckzgIm7YSi0KgaW5nE1vsj9IKm
-	 hAhp2bqkIxTn3xnUqiDF/F4FXXHuySApeau6+ANsvsgjrL3cH73RHE+VnbE2JoZSIo
-	 u6crnRwVuGsEa9cAVeIpLlhiwpXn3XK67rhuVnoZhcrQ7txY/b2hmptNjSBWzGWfEN
-	 S/65u6pNESVFQ==
-Date: Tue, 3 Feb 2026 02:35:26 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Lukas Wunner <lukas@wunner.de>, Ignat Korchagin <ignat@cloudflare.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16 7/7] pkcs7: Allow authenticatedAttributes for ML-DSA
-Message-ID: <aYFCzv9MKNnROg2Y@kernel.org>
-References: <20260202170216.2467036-1-dhowells@redhat.com>
- <20260202170216.2467036-8-dhowells@redhat.com>
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="n/vfRxg6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1770106696;
+	bh=5rqqjsLuw5JA2sTQ/3twqQMctI8v/ml7Q4w1kuVcdd4=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=n/vfRxg6Mx5/kpRzWSjV+TvC+W8NSHQJEUS/jKVzgxv6MW9uqbaBEj7SdXD6bINIY
+	 a2cT8EgsdnGD4uvVSlmp3OchX1UaNyCxsecs9F0V0WeT0cCPuturmPv7d6VYPZCPZj
+	 84hzM8xKoedT9KUlynJg5BXImWAwfOvukxNdWCFY=
+Received: from [10.10.7.5] (unknown [51.52.16.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 83D871C02EC;
+	Tue, 03 Feb 2026 03:18:11 -0500 (EST)
+Message-ID: <8b12f1d28d3859467c3b5f6bc352038ce7627e54.camel@HansenPartnership.com>
+Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: David Howells <dhowells@redhat.com>, Mihai-Drosi =?ISO-8859-1?Q?C=E2ju?=
+	 <mcaju95@gmail.com>
+Cc: linux@weissschuh.net, arnd@arndb.de, arnout@bzzt.net,
+ atomlin@atomlin.com,  bigeasy@linutronix.de, chleroy@kernel.org,
+ christian@heusel.eu, corbet@lwn.net,  coxu@redhat.com, da.gomez@kernel.org,
+ da.gomez@samsung.com,  dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ f.gruenbichler@proxmox.com,  jmorris@namei.org, kpcyrd@archlinux.org,
+ linux-arch@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-integrity@vger.kernel.org,  linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,
+ lkp@intel.com, maddy@linux.ibm.com,  mattia@mapreri.org, mcgrof@kernel.org,
+ mpe@ellerman.id.au, nathan@kernel.org,  naveen@kernel.org,
+ nicolas.bouchinet@oss.cyber.gouv.fr, nicolas.schier@linux.dev, 
+ npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com,
+ petr.pavlu@suse.com,  roberto.sassu@huawei.com, samitolvanen@google.com,
+ serge@hallyn.com,  xiujianfeng@huawei.com, zohar@linux.ibm.com
+Date: Tue, 03 Feb 2026 08:18:09 +0000
+In-Reply-To: <2316630.1769965788@warthog.procyon.org.uk>
+References: <20260131073636.65494-1-mcaju95@gmail.com>
+	 <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+	 <2316630.1769965788@warthog.procyon.org.uk>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260202170216.2467036-8-dhowells@redhat.com>
 
-On Mon, Feb 02, 2026 at 05:02:12PM +0000, David Howells wrote:
-> Allow the rejection of authenticatedAttributes in PKCS#7 (signedAttrs in
-> CMS) to be waived in the kernel config for ML-DSA when used for module
-> signing.  This reflects the issue that openssl < 4.0 cannot do this and
-> openssl-4 has not yet been released.
-> 
-> This does not permit RSA, ECDSA or ECRDSA to be so waived (behaviour
-> unchanged).
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Lukas Wunner <lukas@wunner.de>
-> cc: Ignat Korchagin <ignat@cloudflare.com>
-> cc: Jarkko Sakkinen <jarkko@kernel.org>
-> cc: Stephan Mueller <smueller@chronox.de>
-> cc: Eric Biggers <ebiggers@kernel.org>
-> cc: Herbert Xu <herbert@gondor.apana.org.au>
-> cc: keyrings@vger.kernel.org
-> cc: linux-crypto@vger.kernel.org
-> ---
->  crypto/asymmetric_keys/Kconfig        | 11 +++++++++++
->  crypto/asymmetric_keys/pkcs7_parser.c |  8 ++++++++
->  crypto/asymmetric_keys/pkcs7_parser.h |  3 +++
->  crypto/asymmetric_keys/pkcs7_verify.c |  6 ++++++
->  4 files changed, 28 insertions(+)
-> 
-> diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-> index e1345b8f39f1..1dae2232fe9a 100644
-> --- a/crypto/asymmetric_keys/Kconfig
-> +++ b/crypto/asymmetric_keys/Kconfig
-> @@ -53,6 +53,17 @@ config PKCS7_MESSAGE_PARSER
->  	  This option provides support for parsing PKCS#7 format messages for
->  	  signature data and provides the ability to verify the signature.
->  
-> +config PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
-> +	bool "Waive rejection of authenticatedAttributes for ML-DSA"
-> +	depends on PKCS7_MESSAGE_PARSER
-> +	depends on CRYPTO_MLDSA
-> +	help
-> +	  Due to use of CMS_NOATTR with ML-DSA not being supported in
-> +	  OpenSSL < 4.0 (and thus any released version), enabling this
-> +	  allows authenticatedAttributes to be used with ML-DSA for
-> +	  module signing.  Use of authenticatedAttributes in this
-> +	  context is normally rejected.
-> +
->  config PKCS7_TEST_KEY
->  	tristate "PKCS#7 testing key type"
->  	depends on SYSTEM_DATA_VERIFICATION
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.c b/crypto/asymmetric_keys/pkcs7_parser.c
-> index 594a8f1d9dfb..db1c90ca6fc1 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.c
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.c
-> @@ -92,9 +92,17 @@ static int pkcs7_check_authattrs(struct pkcs7_message *msg)
->  	if (!sinfo)
->  		goto inconsistent;
->  
-> +#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
-> +	msg->authattrs_rej_waivable = true;
-> +#endif
-> +
->  	if (sinfo->authattrs) {
->  		want = true;
->  		msg->have_authattrs = true;
-> +#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
-> +		if (strncmp(sinfo->sig->pkey_algo, "mldsa", 5) != 0)
-> +			msg->authattrs_rej_waivable = false;
-> +#endif
->  	} else if (sinfo->sig->algo_takes_data) {
->  		sinfo->sig->hash_algo = "none";
->  	}
-> diff --git a/crypto/asymmetric_keys/pkcs7_parser.h b/crypto/asymmetric_keys/pkcs7_parser.h
-> index e17f7ce4fb43..6ef9f335bb17 100644
-> --- a/crypto/asymmetric_keys/pkcs7_parser.h
-> +++ b/crypto/asymmetric_keys/pkcs7_parser.h
-> @@ -55,6 +55,9 @@ struct pkcs7_message {
->  	struct pkcs7_signed_info *signed_infos;
->  	u8		version;	/* Version of cert (1 -> PKCS#7 or CMS; 3 -> CMS) */
->  	bool		have_authattrs;	/* T if have authattrs */
-> +#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
-> +	bool		authattrs_rej_waivable; /* T if authatts rejection can be waived */
-> +#endif
->  
->  	/* Content Data (or NULL) */
->  	enum OID	data_type;	/* Type of Data */
-> diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_keys/pkcs7_verify.c
-> index 06abb9838f95..519eecfe6778 100644
-> --- a/crypto/asymmetric_keys/pkcs7_verify.c
-> +++ b/crypto/asymmetric_keys/pkcs7_verify.c
-> @@ -425,6 +425,12 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
->  			return -EKEYREJECTED;
->  		}
->  		if (pkcs7->have_authattrs) {
-> +#ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
-> +			if (pkcs7->authattrs_rej_waivable) {
-> +				pr_warn("Waived invalid module sig (has authattrs)\n");
-> +				break;
-> +			}
-> +#endif
->  			pr_warn("Invalid module sig (has authattrs)\n");
->  			return -EKEYREJECTED;
->  		}
-> 
+On Sun, 2026-02-01 at 17:09 +0000, David Howells wrote:
+> Mihai-Drosi C=C3=A2ju <mcaju95@gmail.com> wrote:
+>=20
+> > > The current signature-based module integrity checking has some
+> > > drawbacks
+> > in combination with reproducible builds. Either the module signing
+> > key is generated at build time, which makes the build
+> > unreproducible, or a static signing key is used, which precludes
+> > rebuilds by third parties and makes the whole build and packaging
+> > process much more complicated.
+>=20
+> There is another issue too: If you have a static private key that you
+> use to sign modules (and probably other things), someone will likely
+> give you a GPL request to get it.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+The SFC just lost that exact point in the Vizio trial, so I think
+you're wrong on this under US law at least.  There's no general ability
+under GPLv2 to demand long lived signing keys.
 
-BR, Jarkko
+Regards,
+
+James
+
