@@ -1,120 +1,256 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22EA39E6DF
-	for <linux-modules@vger.kernel.org>; Tue,  3 Feb 2026 13:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CA713957E
+	for <linux-modules@vger.kernel.org>; Thu,  5 Feb 2026 14:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770126332; cv=none; b=Y72DyGxXmYAgSAYGcTPBAQb1CHevnaZ6f8p3ya30bqM6571kLssVa6BGCiW8odmlvdvr1/Jhj+1gMe94qvQltTh0Wv4M5pi8pgA1meR1GTpViFPteUKkwsTTfqBknwzx9pbznRo0NHbLS04cmQwNo0YtOHF8/ayR+qkI9IOiugU=
+	t=1770302266; cv=none; b=UxsmHMi52soCXRh177P/VPesGJcuNK0dZdoCwgve2QHgF5RkSxkTEA8Gpg4TgmlJeXd7byEqlq+9uCLOMTUgqW1Gt3Celn6MqRP69NU3/Qx3YzyU9NvpoO770HEzS7y83AMiJsGni0mBAuiEM/qxyJkSvbbqSEvDMkA1WRTd78I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770126332; c=relaxed/simple;
-	bh=lvsYp3H1+gWA5AeRRPJ0wwKeu6rWLpQuDQcZLr3Mi9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lUyEawRF933iQX0SZZyQ9/7koONO0dje0m9N5KPof6l4PNZ8mJ3qh+WWD1ev/FAwCBCuLL2g655M0ctbu3fJ6huGGzAlwaozGvjkyiK4TVbYfD9ExZgNgUNs4S0Da/ixsJRuCLFmxs8jJheCO5963GfDeGhh0d2WQXnSt7IVSu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=inAvxD4I; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rqu5iPlQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770302266; c=relaxed/simple;
+	bh=3+I3YXJAeMJegb9I1hw4ztW66HinQyv4pQxBA83lAQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WvNlLw7Jf56Nt+pAMcNjSfqueDOPjTC0ihVbus7CpUjLcq69hJuwb6yk9dDdO4lofbK4YoNhZgQOvWxRke/X4Flwf7ZRmGSNRHmvzdv+gqOKDceP+jCeYg4VGatZwUrhdUZKABH3J7FM+jlcwNtVZZ0NA73lINxB5fVWwz3jlBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NYJrqpiY; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="inAvxD4I";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rqu5iPlQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770126328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xr4CwAN4WPxPbrE6dktzcw7EThzmA9unHQ46Jjzl26E=;
-	b=inAvxD4II958xy7wvAEb8srkRplbvEHHSqnZATYyn62UP+7zxwYkENwT5PkgeZyDQSgh/W
-	dR9nPXLXj/EW81HqiNhkynYzc3tMUtFMDPM25Tj36XZqjHaR3S/OSmVCntqDxyBjnM3fLl
-	95uYAc/aMC9fT0l8cmDDVhBKu1P/fwc=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-Xv-PRjDcN1ScziUxBIjd2g-1; Tue, 03 Feb 2026 08:45:27 -0500
-X-MC-Unique: Xv-PRjDcN1ScziUxBIjd2g-1
-X-Mimecast-MFC-AGG-ID: Xv-PRjDcN1ScziUxBIjd2g_1770126326
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-81f2481ab87so5334809b3a.0
-        for <linux-modules@vger.kernel.org>; Tue, 03 Feb 2026 05:45:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NYJrqpiY"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-43590777e22so652675f8f.3
+        for <linux-modules@vger.kernel.org>; Thu, 05 Feb 2026 06:37:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770126326; x=1770731126; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xr4CwAN4WPxPbrE6dktzcw7EThzmA9unHQ46Jjzl26E=;
-        b=rqu5iPlQNeZgfwkBgBcPl4OqyrxTj0B4Xh7XrAAttNb6f+0RzlZAtDqqCSK+tQ7hcI
-         5EITxg0JLEkhOf+NmgHWfL+wmT019Pjh+A6wtS0d/J35asq2Y932SovoY9gUguv3C338
-         eglppUcTPR/0QWwvAtYFfJTXvVmFpIm6pXYdMLs6fsu1Ig8vU7Md9LHgtkecnXS31thx
-         6a2bC3jlxG1fojxOazrh1vC7POzNIBjj9//GDFdbQH8TjIFwk9F670yKevh4wEi8XLF6
-         rogfyDELwhiqJYm3Fedy7CUcL1GeZXGQMKe/h6RK7KatQMwjwWecvvgYicVoOy9SwgF4
-         UEfA==
+        d=suse.com; s=google; t=1770302264; x=1770907064; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=D1qdUtqe3EFZ3Mf4wkI+qAPVS2QnmUM27Jj1lTw5Vko=;
+        b=NYJrqpiYTJpJwBLGDkMMaHEzkM3t4Cc88bnFX5Ty/yfbDAPshd5HJ5rIeJaEYsyU++
+         z1isjn/JKfxToucf4bze3g07YYwYMpLsh91lwChjgiNMsF+8RtwctgrlsZIWq//oiOjX
+         s9yo/DfLqfVmcf+lM68gsWcg2vcbLB0O5CxCF+oFE1YibxlINVrRZQyNpHQronxWZPqC
+         O5XFFRUN6b1MGmTTbpIk0Ts08kvwbh4gdelgsTM48t8Oxj8CJW99WjHXW93CkvsiNyoC
+         c+tIQvvUDbS7fjBlwWrDw55RTtgSFiBvropJxj76paIdEwUfwCoMG15SrxueEhWEB8NU
+         CR1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770126326; x=1770731126;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xr4CwAN4WPxPbrE6dktzcw7EThzmA9unHQ46Jjzl26E=;
-        b=t4pMT0BELH1EOgKcuXVJHwn5Q0HliXk3PQlkUBTPq3EGEjVgkoGQL6Ni5pwymkmZED
-         Y8hfydNWJp1t95wfkT10sqWlrd0C/spqgU4ZY5yUebCemW3kR9rJreeSScTCyJAvPLPQ
-         x2rXOr9mdE6Ln+es1BAI5QEtdAumAaFcrf1vH2Yd0aelwjXcBb42alGqjUvTGZIIoKn1
-         w55zMwxlEvMnn+9O4aC8q8YW9FWH1uZ390mI/cbxrV4L06N3ErS5J6o4qofG3pN5a6q7
-         JKIj3oPkcfikeQ+rrSLin5bWUt8QbXkZ+zjiWXpebuLHvVfkt7jd73/1her4BCQVBiND
-         ZqGw==
-X-Forwarded-Encrypted: i=1; AJvYcCW8YOzIQcDuq/8CbJT3QpPpkjgAeld0zW0FylfdoPT5xf1dGA+zC2l0/ykgB8QCQPvmAlmV6mZ5gVJ6lj/E@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCazM+Q9ROUbRCnylY1s/yQraEBuBHw1cvsjiOCE4FjMtN7HeS
-	Ffx1dN0roNDZ8MJ+tFOPglKfLTYvHa4++SuoHdOo6yiRwvxPYe+a+tBmCdd9OnkdCmmyYM+lanh
-	jVYOFlKsBPWSp+qIgQ2js0VeRCXlXShDQtWFEM6hh1DmJ8C4a7aaB9FCKrFIVJtCUKQU=
-X-Gm-Gg: AZuq6aLfI7xT1PMM0C0T4wUYM70/Vw96ZXl53xdboUCaUBy9i18vip4GhqIFb5fONml
-	7dqPnvYsu+Pg9t9vdieLJvElBxFKjzRpQtUD7uLZcaz9Tz+TZQybIz4i4aUQSJ4smmeCfSI0plv
-	r0mp80QbgsSARogRv9GiBVA7vaPxmwKbczisCfDX4jVgVYvTYW1yfL91N2/ZgCnBr/niNiDrgTL
-	cCWLH23m/OveSl7czpQxAwd0ugyo4k/LNZX0yY5dcu5hVbMjKe6SstF5D3VM090Xl4kjJ9Y36AR
-	qd1mdXyzvrq6y3w2I93Jj+n8D/0AM6efiR73HoEZOxQrG9I1eWmDAO3z0Pzz8C3CpQ8vILHibio
-	s
-X-Received: by 2002:a05:6a00:9a8:b0:823:b5e:d0 with SMTP id d2e1a72fcca58-823aa7107a0mr14629541b3a.39.1770126325871;
-        Tue, 03 Feb 2026 05:45:25 -0800 (PST)
-X-Received: by 2002:a05:6a00:9a8:b0:823:b5e:d0 with SMTP id d2e1a72fcca58-823aa7107a0mr14629501b3a.39.1770126325332;
-        Tue, 03 Feb 2026 05:45:25 -0800 (PST)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379bfc72asm24284818b3a.42.2026.02.03.05.45.23
+        d=1e100.net; s=20230601; t=1770302264; x=1770907064;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1qdUtqe3EFZ3Mf4wkI+qAPVS2QnmUM27Jj1lTw5Vko=;
+        b=DIFKpTjJt4y8P3cty/ZabQY+rtuTYg3rqUN53PzXBKvlTTf1HVdF21eGVs69hiCCl3
+         knGKtOFzS3SSBsoIqocjeE17vvtiXS8A71o79tpz5hhew2ApkgAwAbD7r5V5IMX6sIP2
+         NCj7yuoDQIS/dSD7SjQBDNNasXeYyIk+D0sDVst2tpCztLR3HGNhoS2fQlPidOI1If6C
+         cXScUm1K0u0OMr+gM8sD+baHdQ7fLtQwCEEqE95ULq6JCpQJbE9VKXoi44E/lVAbiFVU
+         Z3nmGgv5/3UJzS/NuAR1HoN2aTxNllE9OjoDZ/57YQUFzogDr3HIG/tm/G7uzQruIDgO
+         WZNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVFYRPqXnz0fdxqOdRU1qfs/KlB6SlncgDCEriGk/ATeJFbQAw33I2Gj0GLCjty47gupgJRg9q9lCHiaN2l@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjI8B6ZBo+qxJQTM8lp1RtDc7FH5rqoDCcCB12VVYtpB24Vb42
+	ndl9jgKBv/nqQiYvwziNlQF6jrhYUDe/PF0wr5dUXGCs6+fZI3Y9n2QnpbwftskwWmc=
+X-Gm-Gg: AZuq6aIACSHoZS5XSn81CcyghSrFJJ+bH0aXBF4xgeErUsrhCx1wRzp+VO1Yam1CStS
+	7aIIhFMiyKEYo1pi3p4f7PLT5zz/sBHX+iGpHkBFVpiEqO2IC/84qE3MQWk2/CElbrkJysPvJtL
+	oOU7Ay9+xluQKri4cYmt38QEhXd+3WYqPuEgUp2eHEyU07H85tNz1wEFKW+QRb7wQlUM0dnJ/yG
+	JasSfIOEgEU6m+D+A3/o8Iin+XNa0GFd30o7521b1S4Sgy/lQr/by24Thxh5PQeh9/thsl6bURn
+	grxom9lZQoF9NVO1fxKtPC7BBHs5oS9ycjjE3LUY/hQGsa7sC/L4Pj8wqIVRsi1jYvpeeYXLCUW
+	Dz3vildyDkjGY8PeJtuAYG9AsoNYOHBPIYzFclw0lDzKvjlIBfh9lu4nDVe1GEma1kSJtwy2q2h
+	z/uOTr2JuPSOIpe2bczee9rJNLHNd522o=
+X-Received: by 2002:adf:fc86:0:b0:436:19f9:9012 with SMTP id ffacd0b85a97d-43619f99049mr5823961f8f.9.1770302263969;
+        Thu, 05 Feb 2026 06:37:43 -0800 (PST)
+Received: from zovi.suse.cz (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e25cefsm15486175f8f.9.2026.02.05.06.37.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 05:45:24 -0800 (PST)
-Date: Tue, 3 Feb 2026 21:43:03 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: David Howells <dhowells@redhat.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Simo Sorce <simo@redhat.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Eric Biggers <ebiggers@kernel.org>, 
-	linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: IMA and PQC
-Message-ID: <aYH5AlnUIv9MPRiY@Rk>
-References: <aXrKaTem9nnWNuGV@Rk>
- <1783975.1769190197@warthog.procyon.org.uk>
- <2265997.1769782221@warthog.procyon.org.uk>
+        Thu, 05 Feb 2026 06:37:43 -0800 (PST)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] module: Fix the modversions and signing submenus
+Date: Thu,  5 Feb 2026 15:37:08 +0100
+Message-ID: <20260205143720.423026-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <2265997.1769782221@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 30, 2026 at 02:10:21PM +0000, David Howells wrote:
->Coiby Xu <coxu@redhat.com> wrote:
->
->> Take latest fresh CentOS Stream 10 x86_64 KVM guest as example, without any
->> file system optimization, extra ~189MB disk space is needed if all files in
->> /usr signed using by ML-DSA-65 where the disk size is 50G.
->
->Is that storing raw signatures rather than PKCS#7 wrapped signatures?
+The module Kconfig file contains a set of options related to "Module
+versioning support" (depends on MODVERSIONS) and "Module signature
+verification" (depends on MODULE_SIG). The Kconfig tool automatically
+creates submenus when an entry for a symbol is followed by consecutive
+items that all depend on the symbol. However, this functionality doesn't
+work for the mentioned module options. The MODVERSIONS options are
+interleaved with ASM_MODVERSIONS, which has no 'depends on MODVERSIONS' but
+instead uses 'default HAVE_ASM_MODVERSIONS && MODVERSIONS'. Similarly, the
+MODULE_SIG options are interleaved by a comment warning not to forget
+signing modules with scripts/sign-file, which uses the condition 'depends
+on MODULE_SIG_FORCE && !MODULE_SIG_ALL'.
 
-Yes, it's storing raw signatures + per ~20 bytes overhead including the
-4-byte key ID.
+The result is that the options are confusingly shown when using
+a menuconfig tool, as follows:
 
->
->David
->
+ [*]   Module versioning support
+         Module versioning implementation (genksyms (from source code))  --->
+ [ ]   Extended Module Versioning Support
+ [*]   Basic Module Versioning Support
+ [*]   Source checksum for all modules
+ [*]   Module signature verification
+ [ ]     Require modules to be validly signed
+ [ ]     Automatically sign all modules
+       Hash algorithm to sign modules (SHA-256)  --->
 
+Fix the issue by using if/endif to group related options together in
+kernel/module/Kconfig, similarly to how the MODULE_DEBUG options are
+already grouped. Note that the signing-related options depend on
+'MODULE_SIG || IMA_APPRAISE_MODSIG', with the exception of
+MODULE_SIG_FORCE, which is valid only for MODULE_SIG and is therefore kept
+separately. For consistency, do the same for the MODULE_COMPRESS entries.
+The options are then properly placed into submenus, as follows:
+
+ [*]   Module versioning support
+         Module versioning implementation (genksyms (from source code))  --->
+ [ ]     Extended Module Versioning Support
+ [*]     Basic Module Versioning Support
+ [*]   Source checksum for all modules
+ [*]   Module signature verification
+ [ ]     Require modules to be validly signed
+ [ ]     Automatically sign all modules
+         Hash algorithm to sign modules (SHA-256)  --->
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ kernel/module/Kconfig | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
+index 2a1beebf1d37..537985387ff3 100644
+--- a/kernel/module/Kconfig
++++ b/kernel/module/Kconfig
+@@ -169,9 +169,10 @@ config MODVERSIONS
+ 	  make them incompatible with the kernel you are running.  If
+ 	  unsure, say N.
+ 
++if MODVERSIONS
++
+ choice
+ 	prompt "Module versioning implementation"
+-	depends on MODVERSIONS
+ 	help
+ 	  Select the tool used to calculate symbol versions for modules.
+ 
+@@ -206,7 +207,7 @@ endchoice
+ 
+ config ASM_MODVERSIONS
+ 	bool
+-	default HAVE_ASM_MODVERSIONS && MODVERSIONS
++	default HAVE_ASM_MODVERSIONS
+ 	help
+ 	  This enables module versioning for exported symbols also from
+ 	  assembly. This can be enabled only when the target architecture
+@@ -214,7 +215,6 @@ config ASM_MODVERSIONS
+ 
+ config EXTENDED_MODVERSIONS
+ 	bool "Extended Module Versioning Support"
+-	depends on MODVERSIONS
+ 	help
+ 	  This enables extended MODVERSIONs support, allowing long symbol
+ 	  names to be versioned.
+@@ -224,7 +224,6 @@ config EXTENDED_MODVERSIONS
+ 
+ config BASIC_MODVERSIONS
+ 	bool "Basic Module Versioning Support"
+-	depends on MODVERSIONS
+ 	default y
+ 	help
+ 	  This enables basic MODVERSIONS support, allowing older tools or
+@@ -237,6 +236,8 @@ config BASIC_MODVERSIONS
+ 	  This is enabled by default when MODVERSIONS are enabled.
+ 	  If unsure, say Y.
+ 
++endif # MODVERSIONS
++
+ config MODULE_SRCVERSION_ALL
+ 	bool "Source checksum for all modules"
+ 	help
+@@ -277,10 +278,11 @@ config MODULE_SIG_FORCE
+ 	  Reject unsigned modules or signed modules for which we don't have a
+ 	  key.  Without this, such modules will simply taint the kernel.
+ 
++if MODULE_SIG || IMA_APPRAISE_MODSIG
++
+ config MODULE_SIG_ALL
+ 	bool "Automatically sign all modules"
+ 	default y
+-	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	help
+ 	  Sign all modules during make modules_install. Without this option,
+ 	  modules must be signed manually, using the scripts/sign-file tool.
+@@ -290,7 +292,6 @@ comment "Do not forget to sign required modules with scripts/sign-file"
+ 
+ choice
+ 	prompt "Hash algorithm to sign modules"
+-	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	default MODULE_SIG_SHA512
+ 	help
+ 	  This determines which sort of hashing algorithm will be used during
+@@ -331,7 +332,6 @@ endchoice
+ 
+ config MODULE_SIG_HASH
+ 	string
+-	depends on MODULE_SIG || IMA_APPRAISE_MODSIG
+ 	default "sha1" if MODULE_SIG_SHA1
+ 	default "sha256" if MODULE_SIG_SHA256
+ 	default "sha384" if MODULE_SIG_SHA384
+@@ -340,6 +340,8 @@ config MODULE_SIG_HASH
+ 	default "sha3-384" if MODULE_SIG_SHA3_384
+ 	default "sha3-512" if MODULE_SIG_SHA3_512
+ 
++endif # MODULE_SIG || IMA_APPRAISE_MODSIG
++
+ config MODULE_COMPRESS
+ 	bool "Module compression"
+ 	help
+@@ -355,9 +357,10 @@ config MODULE_COMPRESS
+ 
+ 	  If unsure, say N.
+ 
++if MODULE_COMPRESS
++
+ choice
+ 	prompt "Module compression type"
+-	depends on MODULE_COMPRESS
+ 	help
+ 	  Choose the supported algorithm for module compression.
+ 
+@@ -384,7 +387,6 @@ endchoice
+ config MODULE_COMPRESS_ALL
+ 	bool "Automatically compress all modules"
+ 	default y
+-	depends on MODULE_COMPRESS
+ 	help
+ 	  Compress all modules during 'make modules_install'.
+ 
+@@ -394,7 +396,6 @@ config MODULE_COMPRESS_ALL
+ 
+ config MODULE_DECOMPRESS
+ 	bool "Support in-kernel module decompression"
+-	depends on MODULE_COMPRESS
+ 	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+ 	select XZ_DEC if MODULE_COMPRESS_XZ
+ 	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
+@@ -405,6 +406,8 @@ config MODULE_DECOMPRESS
+ 
+ 	  If unsure, say N.
+ 
++endif # MODULE_COMPRESS
++
+ config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+ 	bool "Allow loading of modules with missing namespace imports"
+ 	help
+
+base-commit: 6bd9ed02871f22beb0e50690b0c3caf457104f7c
 -- 
-Best regards,
-Coiby
+2.52.0
 
