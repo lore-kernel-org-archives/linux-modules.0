@@ -1,110 +1,108 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA2421888
-	for <linux-modules@vger.kernel.org>; Thu,  5 Feb 2026 15:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546D2348860
+	for <linux-modules@vger.kernel.org>; Fri,  6 Feb 2026 08:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770306446; cv=none; b=kM376FqM5voucVo67LhhGS6SAeeK6Sh1DAJT3YFqiR52yqRugbEGVPmkWkDE2TtihPy6qvxHZYsVY2cRQJe4TyC1+ht0wVj0Ps1LGtb3iy+ITCKQlZ70Q8jO5qyCmn1yn3mOk/WcHdIk+cloHDw+TmIrOvHu4KP0KHPjoHToSig=
+	t=1770365960; cv=none; b=LBj73LVBWZi8EE6SLTTprEgfAeNcRYqcFEs17qkQBeu94D/GZ+4WNNuOMdJ1N7OBeFHL5zkH61bzAzUOW5DekrHUrxYO2qo6ATAll+9QdfDTslOtjIFpBkRKq9S/cQrEfP9y/YSVPHIm1h5AG9j9CciRA2DYp/jA35q8QotWdcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770306446; c=relaxed/simple;
-	bh=vCCaliERwSlZzc+XuIrS0lhzH4nb9gNqe9iZEp/4ro4=;
+	s=arc-20240116; t=1770365960; c=relaxed/simple;
+	bh=bCriBhlazS/0HXIrSjYBexp6X65YIc7sYJB9i7mUNXQ=;
 	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=LEGyKsaIPvSMns8OSPryLptBqxaioSlwssUTAOjgf8a7YroQCq3c+tT9F9VzF5LMMYA2jCwIn8o7mcMJAktgSAES0eaLZvcXI5lkRyHJY0HxWq5Ux19kLHTp65lIHUefZkVVl+ND0480Du2U7XXI608eereOo10CtZ5KvW/PuYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LQoy2fNU; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Date:Message-ID; b=PbhESvpv/WEs7XjHrO1raOfGzfvNHlKhu1eiEv6brY75p51tVKJFLejchiwnFJmWTtwznow1cxSZX0cl8ogj6PMV5eXrXd4c/B4nxRAqAoyJp9ahPI/u4jKQahV4+lX7tZzNzN49hHw2kZ+K5flNVl3lbiJL/pNBo50dlGJDiUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z2EMrjfP; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LQoy2fNU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z2EMrjfP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770306445;
+	s=mimecast20190719; t=1770365959;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9AalDAqCSrPHzl6PRLengujOgGlQKMz7q2XgNk6zAZU=;
-	b=LQoy2fNUlKZIv/WHjmeJjTDjTiUhMoyzkDZNWXyqWKoKF0YuSHTSmGSUmyKgTTF4VLkLPV
-	H4AzdHhea6SO9HOgacdL5PKTf5esOEC3+BDWAkTDizKkNQVYloAtXtWR8P+dsAjA5+iheu
-	5FxukbgMoLbZNoR0itmxABNWEBXvfMo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=bCriBhlazS/0HXIrSjYBexp6X65YIc7sYJB9i7mUNXQ=;
+	b=Z2EMrjfPot0ak00tiDkn1mmvOvpcgDFbVDQpk3j6mtgxbGRyHFlsh+7E0UgKpJkQkm9/0C
+	8TpaeAmk+Imbn4JOqAguaGa14AJbhSJnSddkSMLUTzScG1ZZduHm3x+Df3kw/Xmv6wmTQx
+	drhbZUpsUlaXgmrJ2VDhl1GhoH6KbFc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-639-I5yeje16OEuihBXewHv6rw-1; Thu,
- 05 Feb 2026 10:47:20 -0500
-X-MC-Unique: I5yeje16OEuihBXewHv6rw-1
-X-Mimecast-MFC-AGG-ID: I5yeje16OEuihBXewHv6rw_1770306434
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-516--zY-X-rwO-qBHh21bdBLDA-1; Fri,
+ 06 Feb 2026 03:19:15 -0500
+X-MC-Unique: -zY-X-rwO-qBHh21bdBLDA-1
+X-Mimecast-MFC-AGG-ID: -zY-X-rwO-qBHh21bdBLDA_1770365951
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 125D81955F20;
-	Thu,  5 Feb 2026 15:47:14 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ABCD01956095;
+	Fri,  6 Feb 2026 08:19:08 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4C90A192C7C3;
-	Thu,  5 Feb 2026 15:47:07 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C245A3000707;
+	Fri,  6 Feb 2026 08:18:54 +0000 (UTC)
 Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
 	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
 	Kingdom.
 	Registered in England and Wales under Company Registration No. 3798903
 From: David Howells <dhowells@redhat.com>
-In-Reply-To: <20260202170216.2467036-1-dhowells@redhat.com>
-References: <20260202170216.2467036-1-dhowells@redhat.com>
-To: Lukas Wunner <lukas@wunner.de>,
-    Ignat Korchagin <ignat@cloudflare.com>
-Cc: dhowells@redhat.com, Jarkko Sakkinen <jarkko@kernel.org>,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    Eric Biggers <ebiggers@kernel.org>,
-    Luis Chamberlain <mcgrof@kernel.org>,
-    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+In-Reply-To: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
+References: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net> <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+To: =?us-ascii?Q?=3D=3Futf-8=3Fq=3FThomas=5FWei=3DC3=3D9Fschuh=3F=3D?= <linux@weissschuh.net>
+Cc: dhowells@redhat.com, Nathan Chancellor <nathan@kernel.org>,
+    Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>,
     Sami Tolvanen <samitolvanen@google.com>,
-    "Jason A . Donenfeld" <Jason@zx2c4.com>,
-    Ard Biesheuvel <ardb@kernel.org>,
-    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
-    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
-    linux-kernel@vger.kernel.org
-Subject: [PATCH v16 8/7] pkcs7: Change a pr_warn() to pr_warn_once()
+    Daniel Gomez <da.gomez@samsung.com>,
+    Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+    "Serge E.
+ Hallyn" <serge@hallyn.com>,
+    Jonathan Corbet <corbet@lwn.net>,
+    Madhavan Srinivasan <maddy@linux.ibm.com>,
+    Michael Ellerman <mpe@ellerman.id.au>,
+    Nicholas Piggin <npiggin@gmail.com>,
+    Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+    Roberto Sassu <roberto.sassu@huawei.com>,
+    Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+    Eric Snowberg <eric.snowberg@oracle.com>,
+    Nicolas Schier <nicolas.schier@linux.dev>,
+    Daniel Gomez <da.gomez@kernel.org>,
+    Aaron Tomlin <atomlin@atomlin.com>,
+    "Christophe
+ Leroy (CS GROUP)" <chleroy@kernel.org>,
+    Nicolas Schier <nsc@kernel.org>,
+    Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+    Xiu Jianfeng <xiujianfeng@huawei.com>,
+    Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+    Arnout Engelen <arnout@bzzt.net>,
+    Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+    Christian Heusel <christian@heusel.eu>,
+    =?utf-8?Q?C=C3=A2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+    linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+    linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 05/17] module: Switch load_info::len to size_t
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2892235.1770306426.1@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 05 Feb 2026 15:47:06 +0000
-Message-ID: <2892236.1770306426@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Date: Fri, 06 Feb 2026 08:18:53 +0000
+Message-ID: <2919071.1770365933@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Only display the "PKCS7: Waived invalid module sig (has authattrs)" once.
+Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
 
-Suggested-by: Lenny Szubowicz <lszubowi@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Tested-by: Lenny Szubowicz <lszubowi@redhat.com>
-cc: Lukas Wunner <lukas@wunner.de>
-cc: Ignat Korchagin <ignat@cloudflare.com>
-cc: Jarkko Sakkinen <jarkko@kernel.org>
-cc: Stephan Mueller <smueller@chronox.de>
-cc: Eric Biggers <ebiggers@kernel.org>
-cc: Herbert Xu <herbert@gondor.apana.org.au>
-cc: keyrings@vger.kernel.org
-cc: linux-crypto@vger.kernel.org
----
- crypto/asymmetric_keys/pkcs7_verify.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> As both 'size_t' and 'unsigned int' are always the same size, this
+> should be risk-free.
 
-diff --git a/crypto/asymmetric_keys/pkcs7_verify.c b/crypto/asymmetric_key=
-s/pkcs7_verify.c
-index 519eecfe6778..474e2c1ae21b 100644
---- a/crypto/asymmetric_keys/pkcs7_verify.c
-+++ b/crypto/asymmetric_keys/pkcs7_verify.c
-@@ -427,7 +427,7 @@ int pkcs7_verify(struct pkcs7_message *pkcs7,
- 		if (pkcs7->have_authattrs) {
- #ifdef CONFIG_PKCS7_WAIVE_AUTHATTRS_REJECTION_FOR_MLDSA
- 			if (pkcs7->authattrs_rej_waivable) {
--				pr_warn("Waived invalid module sig (has authattrs)\n");
-+				pr_warn_once("Waived invalid module sig (has authattrs)\n");
- 				break;
- 			}
- #endif
+Did you mean 'unsigned long'?
+
+David
 
