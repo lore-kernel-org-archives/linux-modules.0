@@ -1,84 +1,159 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD88359716;
-	Fri,  6 Feb 2026 09:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7882367CF
+	for <linux-modules@vger.kernel.org>; Fri,  6 Feb 2026 13:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770369485; cv=none; b=ZbfPtNabXW0FcuVLoXAHTIjsVD4GmhgoTcAAgU9dhvzBrI7JO9U8I8+riBoQ1Bu2NgRJCsqNSfE3moRE0M/vRuJkbcasdIe9pFlMXx3TOZLIDZqIIGk5tNTvmNBbpfam7QqmbgXF9Osqoo54vRY8UC5MfGOj2uJz+KuvzZWedZI=
+	t=1770384822; cv=none; b=XAQnALAvwqoOGZbM4AcAUCX6dt3b8DyyDxFML39xK1xxdjdOd/rjVRPtze06K/Lx6a326rfJKB9NPU939pe8W5aYI6wy8vU8ClafQFW4vn7k3Lmjj7hzxLF6od3f2Q/xmGxthbdRKVL5ZvWm6vgurob4JSma5TnsB3lY63I4LL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770369485; c=relaxed/simple;
-	bh=3lh+T18IbYxtb3gtqLTD6cEKkxOYPIXP9FgcFXhcwNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDkWAQxycB2vcqKjZGGLsSXJihGxSXn+CCdsA49BETk6I95JWB/cTVB9xGj0AZA4ksd3O+Wq3t0dLf/aDwpxkA0Bp5T6rVmdvqLRZewb0A01pHk1sMCVOOif4wYs79RcXQY6rjRa7lNMHvyifuiF+0Cc1G3OZLE5xDlvT2JfMoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=P8I512GQ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1770384822; c=relaxed/simple;
+	bh=HcehPSlopdgQojZ7EQaumhfR5EFZxPZlRXdbXMpqorU=;
+	h=From:To:cc:Subject:MIME-Version:Content-Type:Date:Message-ID; b=Cp42dO9LJEQtOhnFOh9Gt1eiadMcvh+1+G6iVVyjb2EJSSsHanSgr+6+DZJFxOs052KnnWwz7566UsjYrT56dwTYHC4MMWQsTWrS3vx3tkPVOG42j7llRpwmrDZHDngxWQLDbHZ6xqsCJMQ61Ufr+IAp6+uXkNA888KaQrQOQzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MGsqa6rf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="P8I512GQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1770369482;
-	bh=3lh+T18IbYxtb3gtqLTD6cEKkxOYPIXP9FgcFXhcwNo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P8I512GQdTuSnyyG/lrd0tY92NCxg6hbOdKWE5uC9rEk0Af5xUuBzfxkYiQYnDT74
-	 tZLXGVTtusLO1jNFYwYOYKJdJtCfChhFdJR7MQR+p9C9W/0oAljzpiG/Pc1bKJ4KRG
-	 +L7bhP0R6enz+BHXvbGpLSUPi81SWL48atg2FHZc=
-Date: Fri, 6 Feb 2026 10:18:02 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Nicolas Schier <nsc@kernel.org>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 05/17] module: Switch load_info::len to size_t
-Message-ID: <08d258a3-1710-4d2f-815d-3d16a3dc928b@t-8ch.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
- <ffdafd21-fe7a-44a2-86ec-0e0c2ad4238c@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MGsqa6rf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770384821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZIZOCzqYxJiIRhnu2OUABj+ULNYXYuEc+snEBZA8w1U=;
+	b=MGsqa6rf5bbTQkqg04A9ca+Ym7KH6rFW3z8a05sgoTsas4yGWn+mYCWn/yMSSOzza9qceJ
+	5BF7h9YyfKnaUcOaqVd4yb0IYNtu6jVjz0j2GvqsXQz05LtI/rL1fhAdmFrydhzMPdf9+M
+	kgtC2RF3lnAHYJC93MfqBVEJNGmowpU=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-621-gTW-smkLMLGhd854M3Plfw-1; Fri,
+ 06 Feb 2026 08:33:36 -0500
+X-MC-Unique: gTW-smkLMLGhd854M3Plfw-1
+X-Mimecast-MFC-AGG-ID: gTW-smkLMLGhd854M3Plfw_1770384814
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 968F41800639;
+	Fri,  6 Feb 2026 13:33:33 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AE448180057F;
+	Fri,  6 Feb 2026 13:33:27 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+cc: dhowells@redhat.com, Lukas Wunner <lukas@wunner.de>,
+    Ignat Korchagin <ignat@cloudflare.com>,
+    Jarkko Sakkinen <jarkko@kernel.org>,
+    Herbert Xu <herbert@gondor.apana.org.au>,
+    Eric Biggers <ebiggers@kernel.org>,
+    Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    "Jason A . Donenfeld" <Jason@zx2c4.com>,
+    Ard Biesheuvel <ardb@kernel.org>,
+    Stephan Mueller <smueller@chronox.de>, linux-crypto@vger.kernel.org,
+    keyrings@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-kernel@vger.kernel.org
+Subject: [GIT PULL] x509, pkcs7: Add support for ML-DSA signatures
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ffdafd21-fe7a-44a2-86ec-0e0c2ad4238c@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2977831.1770384806.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 06 Feb 2026 13:33:26 +0000
+Message-ID: <2977832.1770384806@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 2026-02-06 10:09:12+0100, Christophe Leroy (CS GROUP) wrote:
-> 
-> 
-> Le 13/01/2026 à 13:28, Thomas Weißschuh a écrit :
-> > Switching the types will make some later changes cleaner.
-> > size_t is also the semantically correct type for this field.
-> > 
-> > As both 'size_t' and 'unsigned int' are always the same size, this
-> > should be risk-free.
+Hi Linus,
 
-> Are you sure ?
+Could you pull this patchset in the upcoming merge window please?  It adds
+support for ML-DSA signatures in X.509 certificates and PKCS#7/CMS
+messages, thereby allowing this algorithm to be used for signing modules,
+kexec'able binaries, wifi regulatory data, etc..
 
-As mentioned before by David [0], this should have been 'unsigned long'
-instead of 'unsigned int'. Which is also what the diff shows.
+This requires OpenSSL-3.5 at a minimum and preferably OpenSSL-4 (so that i=
+t
+can avoid the use of CMS signedAttrs - but that version is not cut yet).
+certs/Kconfig does a check to hide the signing options if OpenSSL does not
+list the algorithm as being available.
 
-> Some architectures have size_t as 'unsigned int', some have 'unsigned long',
-> some have 'unsigned long long'
+Note that this is dependent on Eric Bigger's libcrypto (for the core ML-DS=
+A
+implementation) and would need to be pulled after that.
 
-(...)
+Note also that this has a conflict with the modules tree which has a patch
+to unconditionally use the OpenSSL CMS_* API to generate signatures in
+scripts/sign-file.c and to remove fallback use of the PKCS7_* API.  I've
+added an illustrative merge at the top of my keys-pqc branch for reference
+purposes.
 
-[0] https://lore.kernel.org/lkml/2919071.1770365933@warthog.procyon.org.uk/
+The patches were last posted here:
+
+	https://lore.kernel.org/r/20260202170216.2467036-1-dhowells@redhat.com/
+
+Thanks,
+David
+---
+The following changes since commit 959a634ebcda02e0add101024a5793323d66cda=
+5:
+
+  lib/crypto: mldsa: Add FIPS cryptographic algorithm self-test (2026-01-1=
+2 11:07:50 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags=
+/keys-next-20260206
+
+for you to fetch changes up to 965e9a2cf23b066d8bdeb690dff9cd7089c5f667:
+
+  pkcs7: Change a pr_warn() to pr_warn_once() (2026-02-05 15:44:00 +0000)
+
+----------------------------------------------------------------
+keys: Support for ML-DSA module signing
+
+----------------------------------------------------------------
+David Howells (8):
+      crypto: Add ML-DSA crypto_sig support
+      x509: Separately calculate sha256 for blacklist
+      pkcs7, x509: Rename ->digest to ->m
+      pkcs7: Allow the signing algo to do whatever digestion it wants itse=
+lf
+      pkcs7, x509: Add ML-DSA support
+      modsign: Enable ML-DSA module signing
+      pkcs7: Allow authenticatedAttributes for ML-DSA
+      pkcs7: Change a pr_warn() to pr_warn_once()
+
+ Documentation/admin-guide/module-signing.rst |  16 ++-
+ certs/Kconfig                                |  40 ++++++
+ certs/Makefile                               |   3 +
+ crypto/Kconfig                               |   9 ++
+ crypto/Makefile                              |   2 +
+ crypto/asymmetric_keys/Kconfig               |  11 ++
+ crypto/asymmetric_keys/asymmetric_type.c     |   4 +-
+ crypto/asymmetric_keys/pkcs7_parser.c        |  36 ++++-
+ crypto/asymmetric_keys/pkcs7_parser.h        |   3 +
+ crypto/asymmetric_keys/pkcs7_verify.c        |  78 +++++++----
+ crypto/asymmetric_keys/public_key.c          |  13 +-
+ crypto/asymmetric_keys/signature.c           |   3 +-
+ crypto/asymmetric_keys/x509_cert_parser.c    |  27 +++-
+ crypto/asymmetric_keys/x509_parser.h         |   2 +
+ crypto/asymmetric_keys/x509_public_key.c     |  42 ++++--
+ crypto/mldsa.c                               | 201 ++++++++++++++++++++++=
++++++
+ include/crypto/public_key.h                  |   6 +-
+ include/linux/oid_registry.h                 |   5 +
+ scripts/sign-file.c                          |  39 ++++--
+ security/integrity/digsig_asymmetric.c       |   4 +-
+ 20 files changed, 473 insertions(+), 71 deletions(-)
+ create mode 100644 crypto/mldsa.c
+
