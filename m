@@ -1,126 +1,168 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835828287E
-	for <linux-modules@vger.kernel.org>; Fri, 13 Feb 2026 17:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771004735; cv=pass; b=abMCaigSoXrch7XsqFHkSX4S1UzfLTy4Y71N84T5N0Src7aXViG0ENCyOdNWKt1Ce8YYnx3VjctL5bYzDVii4u7rnl9LAZvS28Rm78Xl4sVdF6u+WIIRdHucL+Y1Wyg1nNO2lOmHwwvv2Oxqf9dF4I4EbdpW7a/j0WyAinf8RXM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771004735; c=relaxed/simple;
-	bh=ayFrK7Uyy/TSNgQmuVFUc3Igof5CZZ1gX6lTzzVj8Mk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WeXon1z/Wg6azLC6ynFCoh9BLkz1ay2CIUvwWGFKBtdWutBHsE9DBqAGHKXSSRKWmAKJFaIwfOGnZYXnjFtFVqtDZ/rbxU3I2ze6Y7EbviRu7GofBc0q0TXtxctDIYDYhtlsa/gbLnmPQbfKPC9HDg61m1RAKlkz32MCbKMVpLY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jwznsusH; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B192242D9D;
+	Fri, 13 Feb 2026 20:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771014382; cv=none; b=REN1Geuil+s+cj0h33RO0VMHvbihc3vcCHcyDZnY5PZMo1eEqqSa0QMxYrlICqQyCTIkaez+m/Qe8ROZPFdHzm7s643Mz835t2lT5B3fvHm3J+Z1rh6UGFwF9esplb6FNPodzrKrzvYT0CPivSj/YXprJxpYm1iNBbUIw6/We90=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771014382; c=relaxed/simple;
+	bh=zUGbf2JusS0zvsi2fS+3b4Wc746QajE1SGO73wz1UFQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=QkRgWSgK7oO9gjrlXyQhh/DWP1zxZY0WcT/oe5kuXpQ58lxAt5oQT/uqnOS4sL3OSOdtaIzusine6lxXgd9/YfXSjW4JH78VWBQ9RJSgVyl8yFTneuEizfoDqdF7tSTGokpfaz1svKT4HkmpTH3Xp1eGzk/9g4hyrtwWdSGeeWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com; spf=none smtp.mailfrom=opensource.nslick.com; dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b=Vv2yUIyu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aV48Ur9F; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=opensource.nslick.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jwznsusH"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-65a3a1740e7so262a12.0
-        for <linux-modules@vger.kernel.org>; Fri, 13 Feb 2026 09:45:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771004733; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aRBhljmH/6B8XhMoScsx+LhdKts0W6X4KViEX2mQGnxtpIGbh7CBVuEmemSglJ111Y
-         wvFnnDf3c4QPStHKIYGx2alXFYzbpnjkaN2u6vpVmjxmVasgd9iCgWxxoVrCGXJauOVG
-         QOjhflk4p61gSwYFERy2+cRATHkpJFoNuQAu2mRyg3St61rz8liG302BBzInYoG+s5aG
-         IEY4q8j/bVCeuLjvKxVy+nZv3hgxZhD9uO5zjiaLvD1mMJxU3ifhlHgacF6VWw1qE3Fh
-         C1M/1J6z9+qvIDjTPxY3dbGy5qqasmikH0B6Qj6h52g/b3sRPusHntqdIpYTKjV9LiJV
-         kEhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ayFrK7Uyy/TSNgQmuVFUc3Igof5CZZ1gX6lTzzVj8Mk=;
-        fh=ygAXh0cXs+Kf+yxR9/vXs2hTjW3pPww3nDlJnIw+jIE=;
-        b=GTM/btDan9uvFKyW8vr6Ljydkzb3CunaRDdOaC6+YXSsjmIDClllBMWTYVNbcV3m57
-         X+i7+Bwnpmkk+g3xBudL18I//imksBVzZdXKFkCjxlH/BSvtDhONayaa6r+bwcEaLnYI
-         koCtKKYn5onblspBMrzOhFON8F9RsNXBsL8xQPJrd4GPWHpBIoGHjnVSmlg8K4g+pjlf
-         k0treRdYyvCW4Jl0ImPdPQ4sJ2kcSZzydIMlwtFCANCJFPLZipEq8988qPLvYz+SwXcY
-         SKypM8Qj7bfdlimEFUUda7+IfpJmSSmYN7YDirBw6eHyUT5GjbRC/yKlTmBcq/3CrgvA
-         FrKA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771004733; x=1771609533; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayFrK7Uyy/TSNgQmuVFUc3Igof5CZZ1gX6lTzzVj8Mk=;
-        b=jwznsusHcAbfkezvgBKotCsRXvHJpYKHz/5qGmb9xmChAJpK0z/1pHuOswcLyqtFse
-         YMgLAr6t6730LOa5eSpZ+2Q6XYREdggpDeddSluqwmKHoBY/eHOlxvOgxC7j66agCscL
-         4FTgJDJggv1gRE4CxTSfEcPecUJ2aHN3nq9vTizOJc37LxLOY6DhGxfUkncPtIxHpPsE
-         CGONYr6zajhKNHazIvSy2KlBavd9Y9GDrb9Dik37C+Zpy7aYiXjUseHGlY6Gbk39Sk6D
-         Jo6Z9JQPuC4GeyHR5DkB75/32q+sb4UGXX2GSowQoFSefd4Avi+KCFauQPuYVXtKLhtL
-         enAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771004733; x=1771609533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ayFrK7Uyy/TSNgQmuVFUc3Igof5CZZ1gX6lTzzVj8Mk=;
-        b=v5KkY74GP+5D/TXi9LyvPfhZfF920Do+Yg1gOuXtKNt99fT1KBW3Kmh/nrjqwbAKm5
-         N3gwhOUBRIa+jeTozEKV7HZ5ivA2Yy/XbPNEfM61zXXSZjHcwMPiS7IID0KGQrNNRT36
-         csVRpe/XK4ZHSOHW++JUJF7RpLSZafqUCJ2L9xtDrnKy5IanmcAwwya1rVPvsFcqXtGj
-         jDYl68n7Ni+p1xn4dqSZmK8pXIE525jWb0CTuDED2P5xFiaH8eVzQ1P5+sxwqfRqxnyJ
-         36u679pgH+C0Yar/oCna3Kvh/Od18MYtVw2l9tN7d75YrVNmHRnEPyg1KEmnilgR1P/e
-         y+xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBgs31Lgtxtz8QKqQHR4NPP1Pl7apmbV5Z77TqNmyZj9YLmXqWzaxhoDrB84fNAk5C6XTIzP6VwoHICe16@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywy3/3wd8E7IguFqo160PCeWmOiprL3l4moS9r6pWW3FNQFyvLZ
-	AN3JLuwM19n2QOYAQgu4zSOgSd07FYvqL+dACfxFG7LJ3Sh6D7IkC0hq/GVpcraaxAL1ckOPpOd
-	69L4WU7NFx0hshaCK4zb+b33aqTITgKH2ctTfeoLv
-X-Gm-Gg: AZuq6aLu0eCimOs88t/IKZ8e1jAEAtwrkg4KMHkMd/EGlyXylLtivzumiNfV9Ibzk0G
-	T0BEWn5BIY1aoHYThCKJY44J8IJgKEUar2CO6d1eMY3DZYcLdLf86Sdo3pnchfBfP38aLQezNft
-	YnDBjz/UsPYgB+5BSe+6KDKVPEiCIuWsGvSF+kep5y9R4+rAvd8e7i/xz9A4j6I7v24C/CShSay
-	LDqLc3NarZ1rxFouBIpt1IImdWTlqjbvwk1hocOeVWSSkgkXAFLi502x96P0UssDfzuiH9l4iZY
-	YgGx
-X-Received: by 2002:aa7:d0cb:0:b0:65a:3032:5f99 with SMTP id
- 4fb4d7f45d1cf-65bb07bf853mr33729a12.14.1771004732430; Fri, 13 Feb 2026
- 09:45:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b="Vv2yUIyu";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aV48Ur9F"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.stl.internal (Postfix) with ESMTP id 6EDAC1D00094;
+	Fri, 13 Feb 2026 15:26:19 -0500 (EST)
+Received: from phl-imap-10 ([10.202.2.85])
+  by phl-compute-06.internal (MEProxy); Fri, 13 Feb 2026 15:26:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nslick.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1771014379;
+	 x=1771100779; bh=zUGbf2JusS0zvsi2fS+3b4Wc746QajE1SGO73wz1UFQ=; b=
+	Vv2yUIyuaXcrgGhDQKZ7iBtfgOj/CWU/5m+LIv3yS+33JrEncfs/ErLzhun3EhaT
+	KYAVGObdNutd9vG56U+UnZxGxoqZfGee+/L6h3Iww2dvjgP5II7giD9tDFE5Dz+o
+	2LP/mrw41uZTuZzwrLXT9z+HnZyt3FTHQv0IOj/6nlSKk+VU3wzBQn3jSEist2vy
+	1xXP0jhSP4yHCCPJmnMgLoe8z5wP+bKZy9mkAPcsSHhdtxGXzJcRYlTVFFn+t8rl
+	qdKQ4uImz1+z7CrUmPXdF0VUy3iyDpGiy1lkt5e660qn9Ywu61EAS2ZDcp25GmTS
+	knmeaLwOTdY83VEa41ocQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1771014379; x=
+	1771100779; bh=zUGbf2JusS0zvsi2fS+3b4Wc746QajE1SGO73wz1UFQ=; b=a
+	V48Ur9FWdOenMMCIMy1ylLJrLRKyvnFhYO3SlHGDagZEAHZo0BXIJW/vUmG3vinK
+	Eb2YUASgxdytxn4W5AYRBeObDIbCzwL1TzOJjFX9axMfsVjjJsxEunIyCvNc33/z
+	mhRPUG5fF+ARReOuMg0fzPGKJXDdj2IWbb7pjHAleT79Nw0LINGAQBUiaOAfk/HU
+	DY0ChARpudUszzl1YejObXJ/5AdSXWmzWLchkqiMZsdXoZRPbD6G1ZxZIfqI/v46
+	Yr2qjjsuMMVROvJdpZcIC+qb/qGEJsqMTTpz0y7RpkGO37krwDieYw4tAJnfm3OE
+	VsxQWpL4UKSriTlWHp1BQ==
+X-ME-Sender: <xms:6oiPabuysqSYU1_3inuyXoew2d9N2SZRIOXmRkanzEUTdAllOi7M8g>
+    <xme:6oiPaXTvnHa_TgNJkBxeZPLY-8AhJSllKGYG21r_Pi-8jwS_fNM9PtFz6W2ArNePG
+    UCLJulEznJr8Jv-U1_4H9Vl7cTE2FM-mDrp1XSc6JtCx3tIPwpiFvs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvtdelvdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedfpfhitghh
+    ohhlrghsucfuihgvlhhitghkihdfuceolhhinhhugiesohhpvghnshhouhhrtggvrdhnsh
+    hlihgtkhdrtghomheqnecuggftrfgrthhtvghrnhepgfejtdefhedvheetiedtieektdev
+    hedtfedvgfeuveevudevtefhfffhgfejhfejnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheplhhinhhugiesohhpvghnshhouhhrtggvrdhnshhl
+    ihgtkhdrtghomhdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopegrthhomhhlihhnsegrthhomhhlihhnrdgtohhmpdhrtghpthhtohepmhgr
+    vghnnhhitghhsehgohhoghhlvgdrtghomhdprhgtphhtthhopehsrghmihhtohhlvhgrnh
+    gvnhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggv
+    rggurdhorhhgpdhrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrgh
+    dprhgtphhtthhopegurgdrghhomhgviieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    mhgtghhrohhfsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnh
+    drnhgvthdprhgtphhtthhopehpvghtrhdrphgrvhhluhesshhushgvrdgtohhm
+X-ME-Proxy: <xmx:6oiPafT-w9cBdUk9Rlzs95hyiUbf4qdOd02KCSJAKQ2kQrwypuAAMw>
+    <xmx:6oiPacqYV40Wu3vpO8Srwj9sUpJHpzZFrKdpSkLrpwTKtbZ01EypHQ>
+    <xmx:6oiPaR2llLeOVVSXWwDQpCDlCDwh7HQmRjdBlVW8wHsKIfRAyC_jMQ>
+    <xmx:6oiPaT7Gj9Bbv4LDdn6KLstm7PIrfAEBDdIpu2Sd018LQfY1oDEoQQ>
+    <xmx:64iPabrvYBzM5KzAkAD1IG9akyjCacIts7vi3WCHSOjmla2X8tBnnRSq>
+Feedback-ID: i78f146c6:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 3A1EB2160081; Fri, 13 Feb 2026 15:26:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-ThreadId: AHZd_PBxTk1F
+Date: Fri, 13 Feb 2026 14:25:42 -0600
+From: "Nicholas Sielicki" <linux@opensource.nslick.com>
+To: "Sami Tolvanen" <samitolvanen@google.com>
+Cc: "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez" <da.gomez@kernel.org>,
+ "Aaron Tomlin" <atomlin@atomlin.com>,
+ "Matthias Maennich" <maennich@google.com>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Jonathan Corbet" <corbet@lwn.net>,
+ "Randy Dunlap" <rdunlap@infradead.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <5e1e7615-8ebc-49de-a918-6d96dbbea6b0@app.fastmail.com>
+In-Reply-To: 
+ <CABCJKudKtrVCUcKRFCHfAyCCA43=gni0iB4mdL5b+176Ky2UPA@mail.gmail.com>
 References: <20260108044710.33036-1-linux@opensource.nslick.com>
-In-Reply-To: <20260108044710.33036-1-linux@opensource.nslick.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 13 Feb 2026 09:44:56 -0800
-X-Gm-Features: AZwV_QhmtBeCGmaI1RJu4D-yf_6VgXyRAHldLsr2GyEAgPsejOdx8L4v1NNyTxM
-Message-ID: <CABCJKudKtrVCUcKRFCHfAyCCA43=gni0iB4mdL5b+176Ky2UPA@mail.gmail.com>
+ <CABCJKudKtrVCUcKRFCHfAyCCA43=gni0iB4mdL5b+176Ky2UPA@mail.gmail.com>
 Subject: Re: [PATCH 1/2] module: expose imported namespaces via sysfs
-To: linux@opensource.nslick.com
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Matthias Maennich <maennich@google.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, linux-modules@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Nicholas,
+On Fri, Feb 13, 2026, at 11:44, Sami Tolvanen wrote:
+> The patches look reasonable to me, but I do wonder if examining
+> imported namespaces is the best way to distinguish between module
+> variants. Is looking at /sys/module/*/taint not sufficient for your
+> use case?
 
-On Wed, Jan 7, 2026 at 8:47=E2=80=AFPM Nicholas Sielicki
-<linux@opensource.nslick.com> wrote:
->
-> Currently, the only way for userspace to determine which symbol
-> namespaces a module imports is to locate the .ko file on disk (which may
-> not match the loaded module), then either parsing the binary manually
-> and handling any potential compression, or shelling-out to modinfo.
->
-> This is painful in cases where userspace wants to distinguish between
-> module variants that share the same name but import different
-> namespaces. For example, the nvidia-uvm module exists in both open and
-> closed source variants; the open source version imports the DMA_BUF
-> namespace while the closed source version does not, and networking
-> middleware may want to initialize itself differently depending on that.
->
-> Add /sys/module/*/import_ns to expose imported namespaces for loaded
-> modules. The file contains one namespace per line and only exists for
-> modules that import at least one namespace.
+You're right that the example in the commit message is bad; it's true that the
+taint bit is strictly mutually exclusive with dmabuf support, at least for the
+way that this evolved in the nvidia open module. This is a patch I had in the
+back of my head for a while, and the details had become murkier since.
 
-The patches look reasonable to me, but I do wonder if examining
-imported namespaces is the best way to distinguish between module
-variants. Is looking at /sys/module/*/taint not sufficient for your
-use case?
+The actual problem I wanted to solve with this was not with dmabuf being
+conditionally available on the exporter side (where the taint bit, albeit
+imprecise, would have worked), but with determining whether the ioctl was
+present on the import side, which was only true from 5.12 onward for uverbs
+(commit bfe0cc6).
 
-Sami
+So on eg: a system with untainted nvidia-open on 5.10, it was viable to export
+dmabufs from device memory, but ibv_reg_dmabuf_mr would fail at runtime because
+the ioctl didn't exist yet. The workaround for my specific piece of middleware
+was just to call uname and check for 5.12+ before advertising dmabuf support
+back to the caller, but this left me feeling gross.
+
+In reality, this patch doesn't solve that problem, because any system running a
+new enough kernel to have this patch will already have support on both
+import/export sides. But it's what made me wish this functionality existed.
+
+Why I still hope you'll take this patch:
+
+1. cheaply exposing module namespace imports under sysfs can be useful beyond
+this specific situation. The kernel is already tracking this and validating it
+for other reasons, so it's easy to also just expose it.
+
+2. taint may not always be mutually exclusive with a module namespace import,
+eg: in the case of uverbs above.
+
+3. currently, the only way to determine whether a module speaks dmabuf at
+runtime is to hardcode module-specific priors around the kernel version and/or
+the taint bit, or to link proprietary vendor libraries and check for things
+like CU_DEVICE_ATTRIBUTE_DMA_BUF_SUPPORTED. Exposing this under sysfs provides
+a cheaper way for networking middleware (that doesn't usually allocate device
+memory itself and largely wishes to just blindly plumb dmabufs fds from callers
+into some importer in a vendor agnostic way) to determine what modules are
+in-play during initialization:
+
+> user@host$ grep DMA_BUF /sys/module/*/import_ns
+> /sys/module/amdgpu/import_ns:DMA_BUF
+> /sys/module/ib_uverbs/import_ns:DMA_BUF
+
+Critically, it can do this check without needing to link any vendor libraries.
+
+As an example, libfabric currently contains an enum for heterogeneous memory
+types, spanning ZE/ROCM/CUDA/SYNAPSEAI/NEURON... but libfabric doesn't need to
+allocate device memory itself (it is provided by the caller, hopefully as a
+dmabuf), and regardless of what module exported it, all roads will eventually
+lead back to a generic dmabuf fd import ioctl for the NIC.
+
+Despite that, to prevent memory registration errors at runtime before they
+happen, it needs to probe support for these memory types at initialization
+time. Today, that essentially means needing to link a new proprietary vendor
+library to query dmabuf export support using a vendor-specific API. But without
+any existing mechanism in the kernel to query known dmabuf importers or
+exporters, even a suboptimal one, this is what is done in practice.
+
+Best,
+Nicholas
