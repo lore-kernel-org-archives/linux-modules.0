@@ -1,135 +1,100 @@
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CC934B1A1
-	for <linux-modules@vger.kernel.org>; Thu, 19 Feb 2026 17:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D400734B1A1
+	for <linux-modules@vger.kernel.org>; Thu, 19 Feb 2026 17:06:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771520682; cv=pass; b=IfxjXJ2HU8oOLNX1j9oreFn028DhW72aKavAZM2mF0fP2t5XuoRjGh84CxqS0+Gq+q2+2jtHQRSTaSPO3jDhqbMNYLF7XiRXgXLtFZ7heSANWwhg2P1n8CqAVDnrk5nVJIjZVujKI/CcDlGZtIhP8LzyepLzjEQL02Q7UzRhYVg=
+	t=1771520796; cv=pass; b=P8aO+iY7ngJ7hBo4HQYt9XorjKH8LXWTtV5kKff1P5oijmKrB+tnMH/9Fkyzs+MOPfJrf2aMaH0BANF1i8MwO3azIVe/liSl2Gu6EZA97spTx55qMaqfx0o9cgAMNibZ6MQXkBGOsq6Xd2yRGRGvbBO4nQVjTgD4GPV3BcWL3A4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771520682; c=relaxed/simple;
-	bh=b6U1hG3nrOVFz0ecG5N+39M6HPtyrPXlR9zj9WH7HqQ=;
+	s=arc-20240116; t=1771520796; c=relaxed/simple;
+	bh=PDL3ADfTUjQJ9baIpgOVXBhOINqlaJdo+eD/uky5pRg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qV8IPsn49znt39o0CUGGtbE9T++E+8bzTig4M8EWikjNrwxGm217ROUfhQmSn9dxwmbZ+ILEoRZa4De4cDIbLasCDaLH8h3XPq7q6GDbzINsdIljgdALy9hSBoKIwA1pAy9EDRSMOfYTy7OXu2zCNXDlFSDlwAJqgun0p6THPsY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chrisli.org; spf=pass smtp.mailfrom=chrisli.org; arc=pass smtp.client-ip=74.125.224.44
+	 To:Cc:Content-Type; b=Rs+8SpEu8SBDsL9u4G0PaW3vkodCdoMxTBMz4q/KGLtFWG7X3nh68MTY6SA2qmDb++Lht7tAkWr9MgWhGhlYUFsnikkCUo5ewsgRlY7Q4eizYOhpnxfFSkiE8utXM5JWI97KFOHoxqTsvPQlJOlEKknGZhjH7Y0i5Z8iIrzUyBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chrisli.org; spf=pass smtp.mailfrom=chrisli.org; arc=pass smtp.client-ip=74.125.224.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chrisli.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chrisli.org
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-64aefa98fe6so1164746d50.1
-        for <linux-modules@vger.kernel.org>; Thu, 19 Feb 2026 09:04:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771520680; cv=none;
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-64937edbc9eso1122543d50.2
+        for <linux-modules@vger.kernel.org>; Thu, 19 Feb 2026 09:06:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771520795; cv=none;
         d=google.com; s=arc-20240605;
-        b=Ka4LTsbEbN1yTZQnPdUl9ObWVWghVALUTPI3/OZUP+/vNMmZhAxGySyy8xaW1f4odA
-         kGvQ/ac2oNevNmhmIyNYtAiHxAah8e1QRhAPY+NvIuPniheKBvdnmV+OYKACLqqSn9Ji
-         i3FZ8Avy3HOM6Q1ms47J3Gslk70FA6iDtswGJPVjH/N/N09mXOkBfrtTanhfxrsUmSma
-         xVvujXs2JVqHJHNRm/3C6VkNjmyx+7liRaHQzExaw52rMzVf/VAoRdF3/KYK9qnOitaz
-         khSva/Cb0WIMdZv54O4kN2lR1RtRr+Fm6xIlV9aFEbZykrsA2AfS2waswkRve1y4Yo+1
-         VTug==
+        b=biUjdPH2/Yv/vg6JqZ/DmXAq5MbD5X25pmk3oeGpXEtvM77ixNHXwXwV8ZauAvaZSI
+         fVEVgpRj0fY74v2pvCR4MtCuF1kGiN2YJruvddNRsEIIB5BgeLLdksfzebRkG9yuOAyD
+         k6yLpzT2sloEu/zn+tJw6pULW2tR3WX6KKJWJH3Et8BnLROS6jimwgf1VP8hk78Ia5AF
+         W4ePHVsU1xKuPph76YdrPnpryBfYLVMO+R0IQqcyPNy19il3MTyBXPDhPhSMXRzciDLk
+         gHIU/Rmb6lCRUL7ve+9AY8a0lp1xsRS4CO0uqIngR3Yd3tYucxd3lp+ZJQNrNsAaIk3N
+         zbHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version;
-        bh=GCfnfADMenCdj35GVzlSj1RLfLETxBVqx3iNQnVeu6I=;
-        fh=M8UN6B0GNSa2hZkiQUDNlhVQCVecb/1qPCcPd+kCGgw=;
-        b=S7BukNns8tmRISjVDe12YYlQFLIBebpEG8RjnJe7cft6bhdmlzlN5GML8gN2IHbnM8
-         UxzcmeFlgx8Wb4l59Y/swuSVY2oSVQ+aWSBlS6bTpCtTj3/ivLiIC022AgLTAOlQbSxO
-         L5G1nNbD9Hd8qvF2tANVC/9/delWAO/STre7sVrox6L326K0pRY29MRdCH5OhYdeMcMJ
-         P/wD31vK8H/Q9IOWb2GdvDRgc/xZbsYOTFG11pQrOb7pSOl9D9rEdwd0ZX2qzAZkX3vC
-         GgJpkPXHpHKGH7/M6QwKOt3DvKjsMfk5yv/IhK8A0k/gnvbpknnt4DfIiSQC+StWmmxp
-         zWQg==;
+        bh=PDL3ADfTUjQJ9baIpgOVXBhOINqlaJdo+eD/uky5pRg=;
+        fh=O70+q1tXWzBqm7n4GKIABBl341FzoGO8waNWfNI0LWw=;
+        b=MbsskZ9yPApXPtCeo2Dq280lVsJrS/nH9C4qpiv5wx92VR6MjhScurCYJxL5793/Oq
+         5UZG5Rze/8ML766+WyZSzjV43eKHnNfInOlReTSqrOO9TAvpGGamBhtz88Axhaz02SdM
+         7vJYLt+mVnJfUeF6bQD6RKPKXYjEXL1oOOVfFTCw9D4RSiAIJPcja0YvV5oBa81cPpRB
+         z7XYwlQlwUS8f9PbrAbLIHkn2fID6CMNWNwosUZfBjnAC5+PQh+RC7uXyGQk9ncQ4+kB
+         6itSUiJZQQebw7n2mRy7bUL7TWCRFx8ztMjsq2JLwZ1OCbMvn0KS9VysJSaptcO0kvzh
+         lcWA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771520680; x=1772125480;
+        d=1e100.net; s=20230601; t=1771520795; x=1772125595;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GCfnfADMenCdj35GVzlSj1RLfLETxBVqx3iNQnVeu6I=;
-        b=tXj7XfEcF8cd/HjqUlr4+WWNGezu4OK1imu/5XECOZfK9/D8ShTJySTuqjCSE+eZYj
-         1/45hjhAfSV3ASQ1ZGwqrcWCiJtDAJUxoWfEan+Z6uGON1c51RtTyfUnszV/rA4pAUhY
-         iN/Rlm1RmBiQFjNfV/qz609A5G1GNrpvPNF27sXJ74YrGfTvArUW3axs+uxAHSaLJPir
-         HHOf+WkjZXsU17n+xZRZ+Jtn8NUJs7UdERS7+RgYKROrPkSkk2F7cU1CZ0dUaqpA+GdT
-         4oJGgKAkwupqANH64CvWRaoHTEix7xDf3KDpfGAfVkykJQYRg+7EczJuMvi03NXcYjPM
-         yolg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/hicprP65kpsdYrz2Oam8rHZQwrO3wI6kB98E+QV6bqC8QIyTRLT17t7GPxiQuAdK3iKqo6yw9SRm2UPK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJbjWt9X1EI8VfitdsJgvbxnpcckZNW/Je07FEqUAGChVqCSus
-	utNrn809IrRkivHzQOVp5UmEhPVdI7J8vf68umV+uPVf/Zz0OSocQBS4alqm8Ci5f7oV6qTofud
-	U5ZE9EbxXwIflCR9EVmoHo2hL3Y85ArkXzXubpHsMtQ==
-X-Gm-Gg: AZuq6aJsxh2F9TfJb8AlXQEPUN9aM2npDq1ORl9NWKnzr68kdxqSaECN04O9GL+xVTQ
-	ft+/BEk979qEGUI/6VVJtwKwZ42Xf1VBFqccqGsx8mz9Rb9q4lm2+zKHxlCF+ga1CYKkXWWE6lb
-	d5qPa1kuYZlEzK3s9/IlmMD07z2Of03p21PEJFbuqnM8rqMpkeaiMslzSBMozidXS0RAzH1YHiD
-	3bpx+xgo0Msk164e19S7TwImBaF5Whcm7UXp+kprI1atpwbnmFWpUskHp/P0ll1jQWd9zeVhMUw
-	1hLyefXudv6LcycGYUKYjWBa6O2r/khv5XPcHKVslTIbJiA9
-X-Received: by 2002:a05:690e:1c1c:b0:649:c375:974c with SMTP id
- 956f58d0204a3-64c55587d75mr4376174d50.28.1771520680340; Thu, 19 Feb 2026
- 09:04:40 -0800 (PST)
+        bh=PDL3ADfTUjQJ9baIpgOVXBhOINqlaJdo+eD/uky5pRg=;
+        b=lHq787NqULRvx3xJTznaWKHqNJ1G/LJvEs2T/4HbT0cv78o9Kuh6K3BmfnYB99tR57
+         IVP300lKlvOrcE2xH4Yofy/4dNkf38J+SY4DCCA2+tFDWCT3alK2vrGZKSHD/OoXrSvz
+         s8AQzmmKdCU18EtNDrt4pwwz7++vaHO72B3X7I5oSpp8oQToXCoFOZ/9hIIFGWBpSuTr
+         q30XHDRP2yNAa3G7wtWzluG8kY/l36sfZ5BDNdOIC2k84mvcEesFHL0UjkKGHw8V006G
+         +a+zVoZsq+wCMLpCMSz49SffQLUaMzv2H5U9mglq8h86h3WJ0gbXWedvfsmQNkvUTvAV
+         YP1A==
+X-Forwarded-Encrypted: i=1; AJvYcCWuxNJS6HfJfBvcvJqn8t61fGqJ+1T9epBeHg9X6LIuBnagQvvxjh3KmVQg09iLF2Wm4nF1vxAXttXc9lxM@vger.kernel.org
+X-Gm-Message-State: AOJu0YyALQ1GAkXDFpzg7cWSsJfMekMjOiQ9s6yUT3qNXEMjbWBf0JY8
+	4vCUnoO6sjArHg+mpKtugnYj0sPjNpZ9d9IyRM4Uw+JxHNahYqlIynBLShjUWNLDY5l0Ao0hP7l
+	z+m3mANDmDqp9nZwo/2TPjUpXYSjiSDLW2/FNkIvmkA==
+X-Gm-Gg: AZuq6aLSLuPGH5xnJIBo5KJFawiDF/dloYMJHhnDjkKmyGuQ3xjpr3igqbfP/OosBZI
+	3jNTUXi/lHeTxN3Gxvy2NC5Yh9cv24KjNLsovROeqCtavp/ENypQJQyKLyo4FLqzyteSJJ1cR3c
+	vW1uYeZNKiarnn4X1z8B/LMKjRX7RPWwM7EKhf7aSQm8MfKjJf1oVNtVKr3f8JfqCNglxgkDwDp
+	bpdJT8MbgWF5A4Xgx4pajZwrZLRAe62/IL1Byml2RpTRnB0VOkn+qeOUpham32gY8K3iRlx2gG+
+	6F4yUgL1Nhj9GKZmadJeBWF7wq20+qMNyIcnFg==
+X-Received: by 2002:a53:ac93:0:b0:64a:e3d7:58ac with SMTP id
+ 956f58d0204a3-64c21a442e4mr13833516d50.9.1771520794582; Thu, 19 Feb 2026
+ 09:06:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d3dd8fc8-ab46-4cf1-87a9-0324685ba2e0@kernel.org>
- <SJ1PR11MB6083C6D97484ED4E4710268EFCA3A@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <aThSGiKwJRYOB6kx@agluck-desk3> <aThqcq0iGge1pQCr@agluck-desk3>
- <20251210010020.GA2522829@google.com> <aTn0WdVv-S_EpQmS@agluck-desk3>
- <aTqAxfiVCR2ch4I5@stanley.mountain> <CABCJKufWw4VQA_k6Deuf5Bn6401cbYv_St8VV_0-LAau6F0nTw@mail.gmail.com>
- <083ebd92-4b3f-47f8-bf0f-395a604b5f05@kernel.org> <aUVI9smf2t7PvDF6@stanley.mountain>
- <aUV7kyjxlijuy5sC@agluck-desk3>
-In-Reply-To: <aUV7kyjxlijuy5sC@agluck-desk3>
+References: <20260219-fix-builtin-strlen-v1-1-3ec3efc0cda7@samsung.com>
+ <CABCJKuf8jh_yxQcR1=uMeuWOueXyoM5=L-QpTuBenRi_MZK_Gg@mail.gmail.com> <aZdAxZR-c8PY_uEL@macos>
+In-Reply-To: <aZdAxZR-c8PY_uEL@macos>
 From: Chris Li <sparse@chrisli.org>
-Date: Thu, 19 Feb 2026 09:04:29 -0800
-X-Gm-Features: AZwV_QgEIU-5ticNLcegsMRlOq6nRWIo8xAridFdMNrLj6Suwr-SXxpNMC8DPy0
-Message-ID: <CACePvbVCwr2hc+gqUBWz++GKsk6+c97sBrVRFJ015jyeLkDbcw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] module: Add compile-time check for embedded NUL characters
-To: "Luck, Tony" <tony.luck@intel.com>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Eric Biggers <ebiggers@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Rusty Russell <rusty@rustcorp.com.au>, 
-	Petr Pavlu <petr.pavlu@suse.com>, 
-	"linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>, Malcolm Priestley <tvboxspy@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Hans Verkuil <hverkuil@kernel.org>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>, 
-	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Date: Thu, 19 Feb 2026 09:06:23 -0800
+X-Gm-Features: AZwV_QjdOnMgiLE4kypKeprfnuFYZTeLS_e2Pq8-K0baZPp_KSQ2fANM0QCJBe8
+Message-ID: <CACePvbU9Dh-caC59+L7wicZF+3sMjc4NC0HEkp9cVa7qqdydow@mail.gmail.com>
+Subject: Re: [PATCH] builtin: mark __builtin_strlen() as integer constant expression
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Sami Tolvanen <samitolvanen@google.com>, 
+	linux-sparse@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>, 
+	Andy Shevchenko <andriy.shevchenko@intel.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Eric Biggers <ebiggers@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	"Luck, Tony" <tony.luck@intel.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Tony,
-
-Sorry for the late reply.
-
-On Fri, Dec 19, 2025 at 8:21=E2=80=AFAM Luck, Tony <tony.luck@intel.com> wr=
-ote:
+On Thu, Feb 19, 2026 at 9:00=E2=80=AFAM Daniel Gomez <da.gomez@kernel.org> =
+wrote:
 >
-> On Fri, Dec 19, 2025 at 03:45:42PM +0300, Dan Carpenter wrote:
-> > On Fri, Dec 12, 2025 at 02:30:48AM +0900, Daniel Gomez wrote:
-> > > Maybe the flag fix just needs to be applied to the evaluation? Other =
-op
-> > > structs do the same. But Dan's patch did not implement evaluate. E.g.=
-:
-> > >
-> > > static struct symbol_op constant_p_op =3D {
-> > >     .evaluate =3D evaluate_to_int_const_expr,
-> > >     .expand =3D expand_constant_p
-> > > };
-> > >
-> >
-> > I was waiting for you to send this as a patch.  I can do it if you
-> > need me to.
+> Chris, Al,
 >
-> Dan,
->
-> Al Viro thought this was wrong. His alternative patch is here:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/viro/sparse.git/commit/?i=
-d=3D2634e39bf02697a18fece057208150362c985992
+> Can you please take a look? If Al patch is the correct approach, any
+> chance you can send it and fix this?
 
-Hi Al, should I pull from your git repo
-https://git.kernel.org/pub/scm/linux/kernel/git/viro/sparse.git/
-instead? I saw there is more than one commit. I assume it is ready to
-pull. Please let me know if I shouldn't.
-
-Thanks
+I am asking in another thread should I pull Al's git repo instead.
+There are a few good commits there.
 
 Chris
