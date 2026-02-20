@@ -1,109 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE7330DEB8;
-	Fri, 20 Feb 2026 08:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895F12C11CD;
+	Fri, 20 Feb 2026 15:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771576268; cv=none; b=mftRUYtiWdr9JsDvDf6XQhb/jiilM53PAMZQrMznLiuC7aBMQUhf9iN+oX23jPEulkP3AnJgAm3NIyQ6LVit4WYgMUotWuuNQ2Buq7rXZsYczucFcrcqzwij7iZ/XSO0nj8bRwhZZw4pwrrYNCeiXZMzODSnU5+OWefBQPJIwos=
+	t=1771602913; cv=none; b=qPb8eF0FVTd64zjLM1hWiRfGUTv5y5ME6IQGezWgxdLtECqljV/LxJcyLugxr6Se+A8nIoXKytOvdiT/cguJZJXOPNCGs488+XYfSzfgZFGCOGHk8vEnIBArfGBtJsEk+t7Qt1gd4nKV3vUeBYTbTHfNUSVQzG7fuKiBoh0Y7/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771576268; c=relaxed/simple;
-	bh=5OxdbjN6P6byrb9BD3oHX2fy3Q6b9HNNwDCo773CwxI=;
+	s=arc-20240116; t=1771602913; c=relaxed/simple;
+	bh=sf7HrBnxjfkYlmWPVKhmzFIrsPNVYpWlY71R+iCD/MI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzuA4sTVQSw7qPtki/4e2zZG6MFNmr5HpurQ5FrMUdmZHTuZSeQfeAIG8vic2GVV1RdZRMMzT8SXX3AsCIrtnL511VVovDrNDu4pYKF4CMTqu56dooqrgFO3hYr6rz6rRcdbGa9EURb17IbIygVGjbbH5xoF/LujtOStWkAj0gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7t9Efk+; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=U0XLavjl9C2s3d22VIcK2Kn0peW+Gz3PEZltv2kDuSTx4bhUUricqLvAUOxjSEfVlb8l0smrTL8L/SzpmdOxpTZJhGqpqDbU85E0u7rIIzQLAYN3BbSnNrnvmxks1aeX7IpV2F3KdVbYLlar2yvyuwodD7mVGrCwq2EUlasx4bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lMtq6coy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7t9Efk+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771576266; x=1803112266;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=5OxdbjN6P6byrb9BD3oHX2fy3Q6b9HNNwDCo773CwxI=;
-  b=J7t9Efk+dzKYDiyJL4Z464pXl42pT1hPyqt1IMzMgHb+YPkao8KKilsr
-   zENpxfppiHpSThHVPeHFKbikD2kPWPWR5SZFTa1ty/2sJCfAJD43DtAOq
-   dw51EJlazsr9ziH+RtQwseYQYbnnwa0sKl7xn5IOZEmGsHPn8fYiA8kJq
-   4OPiri+OD6vHajhWpYeU9RcUbKMflXX2tlZmDvjB54OYH0957jnIYl9Rc
-   CUl10OOgUZ7pKy6TB3U9haXbp7eP4an8P9H/J8/tGzXBd/UCd4GZ+MpNd
-   vxZUU+k4klquhN21Ho82cmAUhR27gxf92xPqAmwMu31CTgw1lEJ1HVrnn
-   w==;
-X-CSE-ConnectionGUID: P+IlD2sBQziAKYfH/ukA1g==
-X-CSE-MsgGUID: cz+VbwMwTQKIdHJWqXmIkg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="72730607"
-X-IronPort-AV: E=Sophos;i="6.21,301,1763452800"; 
-   d="scan'208";a="72730607"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 00:31:05 -0800
-X-CSE-ConnectionGUID: iquXS/LDQAO7lebzXsRNoQ==
-X-CSE-MsgGUID: 03rqr4P4QH2dWRLdFNEYdA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,301,1763452800"; 
-   d="scan'208";a="219300287"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.25])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 00:31:01 -0800
-Date: Fri, 20 Feb 2026 10:30:59 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Chris Li <sparse@chrisli.org>
-Cc: Daniel Gomez <da.gomez@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-sparse@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, "Luck, Tony" <tony.luck@intel.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: Re: [PATCH] builtin: mark __builtin_strlen() as integer constant
- expression
-Message-ID: <aZgbw40qk2zIRpbE@smile.fi.intel.com>
-References: <20260219-fix-builtin-strlen-v1-1-3ec3efc0cda7@samsung.com>
- <CABCJKuf8jh_yxQcR1=uMeuWOueXyoM5=L-QpTuBenRi_MZK_Gg@mail.gmail.com>
- <aZdAxZR-c8PY_uEL@macos>
- <CACePvbU9Dh-caC59+L7wicZF+3sMjc4NC0HEkp9cVa7qqdydow@mail.gmail.com>
- <aZdighmTJN-JaijL@smile.fi.intel.com>
- <CACePvbWpC7o-Du=pr4Cfn-pM_XcOM1v+6cHb5mqaaEvzsvMX=Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lMtq6coy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93BE1C116C6;
+	Fri, 20 Feb 2026 15:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771602913;
+	bh=sf7HrBnxjfkYlmWPVKhmzFIrsPNVYpWlY71R+iCD/MI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lMtq6coyU1w+HcU39x8+iNHW5trrgdhfnUnvfElRttjllgaD7tgsS+IM4p1JhmqcL
+	 GwNxz/k1osfXaVXVZ6e4eCL6IrISdlXtvEEr37OWUVexBxmScr7BoQLFqRRLkwgGG4
+	 q32MXNpcESd7QudTXS6cqvLDDsF+UzE8Ytaz7eBzzWI6SgBRpWmc+3ZnFoayKziEn9
+	 C2Pn8hStvf9lQg6NhnIGIZNf9F9FWSMkjAfa0pIftjDbXusi6cUkDwhRjNohAhRb5J
+	 v7wfirYRNnQPyh33JdiccLT5QxV3bX7XizmouCK8dFLL6bEvZ1GogN0TRjvh/6uHAR
+	 q0L1OdWM/dOaw==
+Date: Fri, 20 Feb 2026 16:55:10 +0100
+From: Daniel Gomez <da.gomez@kernel.org>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] module: Fix kernel panic when a symbol st_shndx is out
+ of bounds
+Message-ID: <aZhyyIVW95SzGzjJ@macos>
+References: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACePvbWpC7o-Du=pr4Cfn-pM_XcOM1v+6cHb5mqaaEvzsvMX=Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20251230183208.1317279-1-ihor.solodrai@linux.dev>
 
-On Fri, Feb 20, 2026 at 12:06:15AM -0800, Chris Li wrote:
-> On Thu, Feb 19, 2026 at 11:20 AM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> >
-> > On Thu, Feb 19, 2026 at 09:06:23AM -0800, Chris Li wrote:
-> > > On Thu, Feb 19, 2026 at 9:00 AM Daniel Gomez <da.gomez@kernel.org> wrote:
-> > > >
-> > > > Can you please take a look? If Al patch is the correct approach, any
-> > > > chance you can send it and fix this?
-> > >
-> > > I am asking in another thread should I pull Al's git repo instead.
-> > > There are a few good commits there.
-> >
-> > Please, pull Al's work, My colleagues and I use his version of sparse for a few
-> > weeks without noticing any downsides.
+On 2025-12-30 10:32, Ihor Solodrai wrote:
+> The module loader doesn't check for bounds of the ELF section index in
+> simplify_symbols():
 > 
-> Thanks for the heads up. I just pulled Al's sparse repo.
+>        for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
+> 		const char *name = info->strtab + sym[i].st_name;
+> 
+> 		switch (sym[i].st_shndx) {
+> 		case SHN_COMMON:
+> 
+> 		[...]
+> 
+> 		default:
+> 			/* Divert to percpu allocation if a percpu var. */
+> 			if (sym[i].st_shndx == info->index.pcpu)
+> 				secbase = (unsigned long)mod_percpu(mod);
+> 			else
+>   /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
+> 			sym[i].st_value += secbase;
+> 			break;
+> 		}
+> 	}
+> 
+> A symbol with an out-of-bounds st_shndx value, for example 0xffff
+> (known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
+> 
+>   BUG: unable to handle page fault for address: ...
+>   RIP: 0010:simplify_symbols+0x2b2/0x480
+>   ...
+>   Kernel panic - not syncing: Fatal exception
+> 
+> This can happen when module ELF is legitimately using SHN_XINDEX or
+> when it is corrupted.
+> 
+> Add a bounds check in simplify_symbols() to validate that st_shndx is
+> within the valid range before using it.
+> 
+> This issue was discovered due to a bug in llvm-objcopy, see relevant
+> discussion for details [1].
+> 
+> [1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Can you also issue a new tag (say 0.6.5) so the distros can really be pushed to
-update the quite outdated sparse in their repos?
-
-> Sorry for the delay.
-
-Thanks!
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
+ 
