@@ -1,219 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2466915C158;
-	Tue, 24 Feb 2026 16:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3292798F8
+	for <linux-modules@vger.kernel.org>; Tue, 24 Feb 2026 18:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771949829; cv=none; b=S6qMwrriie1roBXeAN6pfx93S3G3cfxaarWgWwbBzIGv8Be1YOkrY+dxcPJLFsTSUwu8XL/a8v2fQAb1y0LJX7F9l5DQdLqgZZo+rbXYPT3+zr4WT/Q7HREA7zwF5kkRd5kPTggDd5T6pJVmVVEQGQNezDZtmQCZ/s7JMWYbmeM=
+	t=1771958045; cv=none; b=nRVsVoLIhO726smdRRZaaXz+HKbmjclPa9EJqzi5EkAuaN+VCXYaFMsaXHNDVrrogmBPuK4trDbH//BF/2v/rRJU1ZREEUUqXu+dF8iViowkrNZJvJyRLRnK9YUEYHDtX6TCpB282wFBLc0vu0USWN+QnTlF+5u7u5CQmQHBuM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771949829; c=relaxed/simple;
-	bh=SXv8kNok4zxMnc5pPBCN8E77XIiooRBkXlI+BOUS8Dc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p07QnTuF645xLHf2PmQ5IVhPmAv5mAsEqXWd5g48U2457vAqOASgk6w9PF7uzLT6JSp/YrKxt9Ab0KErPXgqUs0EtrQhLMg1/pNVHsefvIpVpMeLSpx3IB2eTx0ImjkMhiLZnrptPC5lF+jm5RfbtNoROh/7Fxd6WKmh6k6iS+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dE5DsgJe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771958045; c=relaxed/simple;
+	bh=9ypUVcrUQGxqa/UHcKTwm3h0u3TclCFr7LqBI8UanN0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=acok3421dSgvOVaCL7FQLfq6Vds+7oa5/oc0PfqZKsoFqCIq5q2k+7Y/bzVKhVK1K5vj7FeUc+6u0rsLiM6yKrhDKfB0K7venjj9dCsQg/n0wrevHHvVyAcBjAkxyiT4hCH+gj48J4m+29JDGB67Oo2ex+nBK2QlHgQGesgbgKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lxqvNbLn; arc=none smtp.client-ip=74.125.82.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dE5DsgJe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2CAC116D0;
-	Tue, 24 Feb 2026 16:17:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771949828;
-	bh=SXv8kNok4zxMnc5pPBCN8E77XIiooRBkXlI+BOUS8Dc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dE5DsgJe4eWwAhLUkc52afWpncNFQHm3ITfjxXTQs8pZ3HAdZoxX3E9+yw84PuWfc
-	 8hv0jBSBocClUd7acb2nBgtY0uf3R+6IJ9CaSBzL6ITcI6T+FBM4oFlesEeJM8ib+K
-	 5uZ/5NDfic7g+vqbPRCzSUckWiK+3QDVPDhtTPlOjE84675xU/g2iZz6oR/8YvKW4l
-	 4AL1i725kN9lXS1UU2SngsrbrekRgSdTqNC7/UOua/J6J9V+z4azuGI6LX2qWBuTwE
-	 SZwRe4f0R4aadCnfUfk4peBnSm5w+WJWSP6gTO15tqNeDIuiLzQBAAPazq1vUyzKiJ
-	 dizgCboB6pIOA==
-Date: Tue, 24 Feb 2026 17:14:52 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <aZ3OfJJSJgfOb0rJ@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
- <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
- <aZyfcDCWOBJJztQ2@levanger>
- <06054e9a-2b7a-4063-98b8-7d6c539e543f@t-8ch.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lxqvNbLn"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bdbe1bd565so238731eec.1
+        for <linux-modules@vger.kernel.org>; Tue, 24 Feb 2026 10:34:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771958043; x=1772562843; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vCl16yQd5JCdKMlnrWwaTzTiouydIWnKj+/Pu7L48ec=;
+        b=lxqvNbLnIWoe2gfskGb2EU4zZ8DZ0FU+WvEUslbSVtB0XAkp8erMJCJ1oZEIkIUA9s
+         iBZ7pmbqbP8rMOFdcSWERPxavUC8QM5Mi5oIn/dcXWEGd7onD5kkaN49P+O6glY3wmer
+         SegCk9XHK6GkqpxLnSDzW7U5GbARCZXk4X63CmZgJHJ5jpvTa0WCIMQBZ8j7qs5lAgga
+         0SQikk/A/MeawEOat5wdC2C0syEgf6E4cMu5D9w3JZUKsajK1uBIrJRCuwFMVnN/dzX4
+         lgmcPqmHHkSHrfYgtOgvUwv4WNW62UL4WRjWUJ5v96YFBj+GcFYKwVcsDyN5pRSuBQi5
+         pEjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771958043; x=1772562843;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vCl16yQd5JCdKMlnrWwaTzTiouydIWnKj+/Pu7L48ec=;
+        b=DIdf1IEJkf/RKiSKPb8sv5o5xDcbtCapUKpeaUJQ3F5OfJNjAqzx5rqZyWuTk+RQKC
+         tfsgCjCCMAH7CDJfjXq5IcWmgZLT+n/pKOQ8yJrawi2sMNgfmWzF9B/R6IpIFxRtcbdG
+         amlLSUVBNmz4gX4+HGGbrlXZ1Sw82zh5TA0bHQKWqPkQRoFjWPJa+VYeVpqJx4pOkHN1
+         NEjGVvE0LD8pv7QTPu3ZcMbZht6W4rBVUDTp9ruE5ufUgRyC0KWcg+mfj7HaerlpdleL
+         KWigOZbsoN1FKlwbXL7DpauMKVQtANaACSV/aGTuW9wjAultfkVtdR5kcIGZTqhMG1RG
+         lcdw==
+X-Forwarded-Encrypted: i=1; AJvYcCVO+OyD/H+6W6VS4IQHzOto//0yqDdCKpsfy8G4LkFT6njo16k1vbvakWqvMadgUMFX1o1ump32NZsaAbTI@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgBJBmc31An4aGhl5tHUVMbkhWKgOYN+KoxRi9Ec0qasu38oRq
+	VQSwwQq5yDsNJPgAjZaU5aTdbBlkIZeE5n/dF4iAWPYox51XRosI+VbuKk1krQk5he/spx9KgJv
+	a+jrmg3eynfKpE2yx0es0F6rvXxjtow==
+X-Received: from dycue10.prod.google.com ([2002:a05:7300:8a:b0:2ba:7069:6875])
+ (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:693c:3002:b0:2ba:7b63:3f4f with SMTP id 5a478bee46e88-2bd7b9f1ddemr4985896eec.15.1771958043333;
+ Tue, 24 Feb 2026 10:34:03 -0800 (PST)
+Date: Tue, 24 Feb 2026 18:34:02 +0000
+In-Reply-To: <20260205143720.423026-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <06054e9a-2b7a-4063-98b8-7d6c539e543f@t-8ch.de>
+Mime-Version: 1.0
+References: <20260205143720.423026-1-petr.pavlu@suse.com>
+X-Mailer: b4 0.14.3
+Message-ID: <177195804200.1905199.16388859152409551132.b4-ty@google.com>
+Subject: Re: [PATCH] module: Fix the modversions and signing submenus
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Feb 23, 2026 at 10:43:30PM +0100, Thomas Weiﬂschuh wrote:
-> On 2026-02-23 19:41:52+0100, Nicolas Schier wrote:
-> > On Mon, Feb 23, 2026 at 08:53:29AM +0100, Thomas Weiﬂschuh wrote:
-> > > On 2026-02-21 22:38:29+0100, Nicolas Schier wrote:
-> > > > On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weiﬂschuh wrote:
-[...]
-> > > > [...]
-> > > > > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..a6ec0e21213b
-> > > > > --- /dev/null
-> > > > > +++ b/scripts/modules-merkle-tree.c
-> > > > > @@ -0,0 +1,467 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > > > > +/*
-> > > > > + * Compute hashes for modules files and build a merkle tree.
-> > > > > + *
-> > > > > + * Copyright (C) 2025 Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-> > > > > + * Copyright (C) 2025 Thomas Weiﬂschuh <linux@weissschuh.net>
-> > > > > + *
-> > > > > + */
-> > > > > +#define _GNU_SOURCE 1
-> > > > > +#include <arpa/inet.h>
-> > > > > +#include <err.h>
-> > > > > +#include <unistd.h>
-> > > > > +#include <fcntl.h>
-> > > > > +#include <stdarg.h>
-> > > > > +#include <stdio.h>
-> > > > > +#include <string.h>
-> > > > > +#include <stdbool.h>
-> > > > > +#include <stdlib.h>
-> > > > > +
-> > > > > +#include <sys/stat.h>
-> > > > > +#include <sys/mman.h>
-> > > > > +
-> > > > > +#include <openssl/evp.h>
-> > > > > +#include <openssl/err.h>
-> > > > > +
-> > > > > +#include "ssl-common.h"
-> > > > > +
-> > > > > +static int hash_size;
-> > > > > +static EVP_MD_CTX *ctx;
-> > > > > +
-> > > > > +struct module_signature {
-> > > > > +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
-> > > > > +	uint8_t		hash;		/* Digest algorithm [0] */
-> > > > > +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
-> > > > > +	uint8_t		signer_len;	/* Length of signer's name [0] */
-> > > > > +	uint8_t		key_id_len;	/* Length of key identifier [0] */
-> > > > > +	uint8_t		__pad[3];
-> > > > > +	uint32_t	sig_len;	/* Length of signature data */
-> > > > > +};
-> > > > > +
-> > > > > +#define PKEY_ID_MERKLE 3
-> > > > > +
-> > > > > +static const char magic_number[] = "~Module signature appended~\n";
-> > > > 
-> > > > This here will be the forth definition of struct module_signature,
-> > > > increasing the risk of unwanted diversion.  I second Petr's suggestion
-> > > > to reuse a _common_ definition instead.
-> > > 
-> > > Ack.
-> > > 
-> > > > (Here, even include/linux/module_signature.h could be included itself.)
-> > > 
-> > > I'd like to avoid including internal headers from other components.
-> > > We could move it to an UAPI header. Various other subsystems use those
-> > > for not-really-UAPI but still ABI definitions.
-> > 
-> > Yeah, ack.
+On Thu, 05 Feb 2026 15:37:08 +0100, Petr Pavlu wrote:
+> The module Kconfig file contains a set of options related to "Module
+> versioning support" (depends on MODVERSIONS) and "Module signature
+> verification" (depends on MODULE_SIG). The Kconfig tool automatically
+> creates submenus when an entry for a symbol is followed by consecutive
+> items that all depend on the symbol. However, this functionality doesn't
+> work for the mentioned module options. The MODVERSIONS options are
+> interleaved with ASM_MODVERSIONS, which has no 'depends on MODVERSIONS' but
+> instead uses 'default HAVE_ASM_MODVERSIONS && MODVERSIONS'. Similarly, the
+> MODULE_SIG options are interleaved by a comment warning not to forget
+> signing modules with scripts/sign-file, which uses the condition 'depends
+> on MODULE_SIG_FORCE && !MODULE_SIG_ALL'.
 > 
-> What exactly is the 'ack' for?
-> * Avoiding to include internal headers?
-> * Moving the definition to UAPI headers?
+> [...]
 
-ah, sorry.  I think reduction of duplicated definitions is good; moving
-these definitions to UAPI headers sounds like a valid compromise to me.
+Applied to modules-next, thanks!
+
+[1/1] module: Fix the modversions and signing submenus
+      commit: 8d597ba6ec18dae2eec143d4e1c9d81441ca0dda
+
+Best regards,
+
+	Sami
 
 
-> (...)
-> 
-> > > > Can you verify if I get the mechanics roughly correct?
-> > > > 
-> > > >   * Modules are merkle tree leaves.  Modules are built and logically
-> > > >     paired by the order from modules.order; a single left-over module is
-> > > >     paired with itself.
-> > > > 
-> > > >   * Hashes of paired modules are hashed again (branch node hash);
-> > > >     hashes of pairs of branch nodes' hashes are hashed again;
-> > > >     repeat until we reach the single merkle tree root hash
-> > > > 
-> > > >   * The final merkle tree root hash (and the count of tree levels) is
-> > > >     included in vmlinux
-> > > 
-> > > The merkle tree code was written by Sebastian so he will have the best
-> > > knowledge about it. But this is also my understanding.
-> > 
-> > I'd like to see some (rough) description in Documentation or in a commit
-> > message at least, otherwise future me will have to ask that again.
-> 
-> Ack in general. I'd prefer to document it in a source code comment,
-> though. That feels like the best fit to me.
-
-Great, thanks.
-
--- 
-Nicolas
