@@ -1,119 +1,219 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E3E372B32;
-	Tue, 24 Feb 2026 10:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2466915C158;
+	Tue, 24 Feb 2026 16:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771928777; cv=none; b=kOFZ5WQAwmygWD4ta/qq+Etem0YHxoR5GNwaZSPlgZKSdZOnfc72tJ5GBwR22Z7tRTzaO4JnqcntsAbF2+QKOVS60LjKjbdEFK9OEGnwnRfvUW+vVUFMVdQ7WSjZDE6opfQtLOt9lrsZoxd68F+l+eJPxygx0XIV+uBnCumw8Rw=
+	t=1771949829; cv=none; b=S6qMwrriie1roBXeAN6pfx93S3G3cfxaarWgWwbBzIGv8Be1YOkrY+dxcPJLFsTSUwu8XL/a8v2fQAb1y0LJX7F9l5DQdLqgZZo+rbXYPT3+zr4WT/Q7HREA7zwF5kkRd5kPTggDd5T6pJVmVVEQGQNezDZtmQCZ/s7JMWYbmeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771928777; c=relaxed/simple;
-	bh=T92VV6JKUnoLm55vgNtMzd98POaalEsEjInJfMjJ+XA=;
+	s=arc-20240116; t=1771949829; c=relaxed/simple;
+	bh=SXv8kNok4zxMnc5pPBCN8E77XIiooRBkXlI+BOUS8Dc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n8CgfzYQl00SOyLvU0OD0GbbRWDqCsyE6BcG/dnDBFPfs/zr9TWZrr9TuZcCCryt7bU1+tvWgRzEEc4VSCW/lFV60eH/VM2vB8o6a4NcyFpLmuqGs55aIkzX01YJ7nvwqMU2IBlf9dIFGtJK0TU429N0gSoTdUVASal4urxGaF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IdlO/VjY; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=p07QnTuF645xLHf2PmQ5IVhPmAv5mAsEqXWd5g48U2457vAqOASgk6w9PF7uzLT6JSp/YrKxt9Ab0KErPXgqUs0EtrQhLMg1/pNVHsefvIpVpMeLSpx3IB2eTx0ImjkMhiLZnrptPC5lF+jm5RfbtNoROh/7Fxd6WKmh6k6iS+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dE5DsgJe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IdlO/VjY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771928776; x=1803464776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=T92VV6JKUnoLm55vgNtMzd98POaalEsEjInJfMjJ+XA=;
-  b=IdlO/VjYeh+Nvwtm2jZ7LEoy6420svLvRSG2I3t75hUs6R4lhg1roT7B
-   YUvmMAaXr9jlATlb6l3xyZ0l0NBCSFD5UZ4RkwcaoKtf0Oyo7lTabhLAS
-   GiFnr+ZE0Una3KNq/67VTrFWhEAeAV6iRG1eQ+JQ7AzoQwbVM6e1YRNbw
-   19BnZsqZk4h+Sx86UBz3B0EVEANBVoivUu8EpG98Tf+8X+nr3NeRJkkpN
-   4bdIGXzGQAVAkKvUts3XSfruXHlHP9pX8TIASfHpoiE0tn1xAPrMSN5YA
-   vBkgTZVrdIporRUeqsYsaQ155LVJdMheTS2S/poPBj0ypImmcPgOxVtFP
-   w==;
-X-CSE-ConnectionGUID: uCySn2bFRrSkAqJYQA33Cg==
-X-CSE-MsgGUID: aJ+19+xnTtiteCGlWv/g9g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11710"; a="72849855"
-X-IronPort-AV: E=Sophos;i="6.21,308,1763452800"; 
-   d="scan'208";a="72849855"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 02:26:15 -0800
-X-CSE-ConnectionGUID: zUfw9g+4RWW0du3ELCnGLg==
-X-CSE-MsgGUID: qFpfuHuhRxCGm5V7efXgPg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,308,1763452800"; 
-   d="scan'208";a="215716696"
-Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.146])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 02:26:11 -0800
-Date: Tue, 24 Feb 2026 12:26:07 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Chris Li <sparse@chrisli.org>
-Cc: Daniel Gomez <da.gomez@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-sparse@vger.kernel.org, Aaron Tomlin <atomlin@atomlin.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org, "Luck, Tony" <tony.luck@intel.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dE5DsgJe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D2CAC116D0;
+	Tue, 24 Feb 2026 16:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771949828;
+	bh=SXv8kNok4zxMnc5pPBCN8E77XIiooRBkXlI+BOUS8Dc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dE5DsgJe4eWwAhLUkc52afWpncNFQHm3ITfjxXTQs8pZ3HAdZoxX3E9+yw84PuWfc
+	 8hv0jBSBocClUd7acb2nBgtY0uf3R+6IJ9CaSBzL6ITcI6T+FBM4oFlesEeJM8ib+K
+	 5uZ/5NDfic7g+vqbPRCzSUckWiK+3QDVPDhtTPlOjE84675xU/g2iZz6oR/8YvKW4l
+	 4AL1i725kN9lXS1UU2SngsrbrekRgSdTqNC7/UOua/J6J9V+z4azuGI6LX2qWBuTwE
+	 SZwRe4f0R4aadCnfUfk4peBnSm5w+WJWSP6gTO15tqNeDIuiLzQBAAPazq1vUyzKiJ
+	 dizgCboB6pIOA==
+Date: Tue, 24 Feb 2026 17:14:52 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: Re: [PATCH] builtin: mark __builtin_strlen() as integer constant
- expression
-Message-ID: <aZ18v6V97ROtJPkq@smile.fi.intel.com>
-References: <20260219-fix-builtin-strlen-v1-1-3ec3efc0cda7@samsung.com>
- <CABCJKuf8jh_yxQcR1=uMeuWOueXyoM5=L-QpTuBenRi_MZK_Gg@mail.gmail.com>
- <aZdAxZR-c8PY_uEL@macos>
- <CACePvbU9Dh-caC59+L7wicZF+3sMjc4NC0HEkp9cVa7qqdydow@mail.gmail.com>
- <aZdighmTJN-JaijL@smile.fi.intel.com>
- <CACePvbWpC7o-Du=pr4Cfn-pM_XcOM1v+6cHb5mqaaEvzsvMX=Q@mail.gmail.com>
- <aZgbw40qk2zIRpbE@smile.fi.intel.com>
- <CACePvbU5ByoP2jZZSHYWCncNNXOQXArvyWpVcinTRag8k3-GiA@mail.gmail.com>
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <aZ3OfJJSJgfOb0rJ@levanger>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
+ <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
+ <aZyfcDCWOBJJztQ2@levanger>
+ <06054e9a-2b7a-4063-98b8-7d6c539e543f@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACePvbU5ByoP2jZZSHYWCncNNXOQXArvyWpVcinTRag8k3-GiA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <06054e9a-2b7a-4063-98b8-7d6c539e543f@t-8ch.de>
 
-On Fri, Feb 20, 2026 at 11:34:29AM -0800, Chris Li wrote:
-> On Fri, Feb 20, 2026 at 12:31â€¯AM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Fri, Feb 20, 2026 at 12:06:15AM -0800, Chris Li wrote:
-> > > On Thu, Feb 19, 2026 at 11:20â€¯AM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Thu, Feb 19, 2026 at 09:06:23AM -0800, Chris Li wrote:
-> > > > > On Thu, Feb 19, 2026 at 9:00â€¯AM Daniel Gomez <da.gomez@kernel.org> wrote:
-> > > > > >
-> > > > > > Can you please take a look? If Al patch is the correct approach, any
-> > > > > > chance you can send it and fix this?
-> > > > >
-> > > > > I am asking in another thread should I pull Al's git repo instead.
-> > > > > There are a few good commits there.
-> > > >
-> > > > Please, pull Al's work, My colleagues and I use his version of sparse for a few
-> > > > weeks without noticing any downsides.
-> > >
-> > > Thanks for the heads up. I just pulled Al's sparse repo.
-> >
-> > Can you also issue a new tag (say 0.6.5) so the distros can really be pushed to
-> > update the quite outdated sparse in their repos?
+On Mon, Feb 23, 2026 at 10:43:30PM +0100, Thomas Weißschuh wrote:
+> On 2026-02-23 19:41:52+0100, Nicolas Schier wrote:
+> > On Mon, Feb 23, 2026 at 08:53:29AM +0100, Thomas Weißschuh wrote:
+> > > On 2026-02-21 22:38:29+0100, Nicolas Schier wrote:
+> > > > On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weißschuh wrote:
+[...]
+> > > > [...]
+> > > > > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..a6ec0e21213b
+> > > > > --- /dev/null
+> > > > > +++ b/scripts/modules-merkle-tree.c
+> > > > > @@ -0,0 +1,467 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > > +/*
+> > > > > + * Compute hashes for modules files and build a merkle tree.
+> > > > > + *
+> > > > > + * Copyright (C) 2025 Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+> > > > > + * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
+> > > > > + *
+> > > > > + */
+> > > > > +#define _GNU_SOURCE 1
+> > > > > +#include <arpa/inet.h>
+> > > > > +#include <err.h>
+> > > > > +#include <unistd.h>
+> > > > > +#include <fcntl.h>
+> > > > > +#include <stdarg.h>
+> > > > > +#include <stdio.h>
+> > > > > +#include <string.h>
+> > > > > +#include <stdbool.h>
+> > > > > +#include <stdlib.h>
+> > > > > +
+> > > > > +#include <sys/stat.h>
+> > > > > +#include <sys/mman.h>
+> > > > > +
+> > > > > +#include <openssl/evp.h>
+> > > > > +#include <openssl/err.h>
+> > > > > +
+> > > > > +#include "ssl-common.h"
+> > > > > +
+> > > > > +static int hash_size;
+> > > > > +static EVP_MD_CTX *ctx;
+> > > > > +
+> > > > > +struct module_signature {
+> > > > > +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
+> > > > > +	uint8_t		hash;		/* Digest algorithm [0] */
+> > > > > +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+> > > > > +	uint8_t		signer_len;	/* Length of signer's name [0] */
+> > > > > +	uint8_t		key_id_len;	/* Length of key identifier [0] */
+> > > > > +	uint8_t		__pad[3];
+> > > > > +	uint32_t	sig_len;	/* Length of signature data */
+> > > > > +};
+> > > > > +
+> > > > > +#define PKEY_ID_MERKLE 3
+> > > > > +
+> > > > > +static const char magic_number[] = "~Module signature appended~\n";
+> > > > 
+> > > > This here will be the forth definition of struct module_signature,
+> > > > increasing the risk of unwanted diversion.  I second Petr's suggestion
+> > > > to reuse a _common_ definition instead.
+> > > 
+> > > Ack.
+> > > 
+> > > > (Here, even include/linux/module_signature.h could be included itself.)
+> > > 
+> > > I'd like to avoid including internal headers from other components.
+> > > We could move it to an UAPI header. Various other subsystems use those
+> > > for not-really-UAPI but still ABI definitions.
+> > 
+> > Yeah, ack.
 > 
-> Sure. I can give it a spin this weekend and keep you posted. There is
-> one risk on my signing key, it might be expired and I need to sort
-> that out.
-> 
-> Meanwhile, please give the current sparse repo some good tests.
+> What exactly is the 'ack' for?
+> * Avoiding to include internal headers?
+> * Moving the definition to UAPI headers?
 
-It seems that your tip is the same as Al's, and if it's the case
-we are testing (actually using) this for a few weeks without problems.
-Thanks!
+ah, sorry.  I think reduction of duplicated definitions is good; moving
+these definitions to UAPI headers sounds like a valid compromise to me.
+
+
+> (...)
+> 
+> > > > Can you verify if I get the mechanics roughly correct?
+> > > > 
+> > > >   * Modules are merkle tree leaves.  Modules are built and logically
+> > > >     paired by the order from modules.order; a single left-over module is
+> > > >     paired with itself.
+> > > > 
+> > > >   * Hashes of paired modules are hashed again (branch node hash);
+> > > >     hashes of pairs of branch nodes' hashes are hashed again;
+> > > >     repeat until we reach the single merkle tree root hash
+> > > > 
+> > > >   * The final merkle tree root hash (and the count of tree levels) is
+> > > >     included in vmlinux
+> > > 
+> > > The merkle tree code was written by Sebastian so he will have the best
+> > > knowledge about it. But this is also my understanding.
+> > 
+> > I'd like to see some (rough) description in Documentation or in a commit
+> > message at least, otherwise future me will have to ask that again.
+> 
+> Ack in general. I'd prefer to document it in a source code comment,
+> though. That feels like the best fit to me.
+
+Great, thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Nicolas
