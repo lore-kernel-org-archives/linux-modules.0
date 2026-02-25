@@ -1,145 +1,94 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5E43AE703;
-	Wed, 25 Feb 2026 14:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874DC3921D1;
+	Wed, 25 Feb 2026 17:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.218.115.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772029573; cv=none; b=kS8WZddesmNT2yI2VuyVxp+Y+qWy/5Oyqvd7BfDk6rW/y4Ok1gakVfIQ+zFb/nIqx7khEAPVQWY2DVuTIK0/59q8aaOXHT8YhLrVSaymQ47MPfT3mWuF+p181OrJ5aeDtHM5Qaf3KqeB4NoUfbH83brXWu4AYuGcrraTwgTsNSw=
+	t=1772040964; cv=none; b=QpwVwK6sOLjgDIjvnQIP9XZxJe2+ZcF/yhzDvkmEIMPIU6LqfTNOF2wscgWzbamIA7qgeOTAR3FkzMgVfMjPJkjDPp5aENFSe4F94KV4IOuX9fZ2DbmzoZfoPEoUFOPJRN8q/p8JVarWrQwaek5fdoclvjxyZe/b9GNX5DW3I0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772029573; c=relaxed/simple;
-	bh=POFnvDRMDntoaKYYUzHLozgduV3d4+IdNOY4m5PKl4U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mpuBSqRNjCqpvw75mx+27DC39Ho/31gJmtWZZAVdwpY2kZIq0vOOjXHSokGxIxm5UJYBEjrsWOpXNtRvZct+CK1fOflRNcXNDbmef4P/JcRmgS749V7IuaswcUIe8ZEBWw+mvD7qaFwbtVwnb5be01dv5Gs7kR43d3ln6oDyJrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jsNiwTj1; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1772040964; c=relaxed/simple;
+	bh=YRY5VNh5WJAQAaMILsab9VN7315yMrX1I852eDbxTtU=;
+	h=Subject:From:To:CC:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E9/TdFH7dqXiUKqSrFi+9rSa8Iyq1u8smQ6XHciIiesQRwuO8MrjfYWjJyG/BaR4sXvwfh1OSAscqOGz3jOIyX7fqOIkzM9F2HqULTXfesT0IAwqLFrH/7cChazvBdoL+nLA9V/EzYGl/q3VIi8uLcvxa4KW3Ra12RS/0opVjEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=hayY423g; arc=none smtp.client-ip=34.218.115.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jsNiwTj1"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61PCEjjX2347293;
-	Wed, 25 Feb 2026 14:25:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=SHMqjR
-	5JS4nc3Prvtwcb2C6pncruxyqQAeH0T5Ewzhc=; b=jsNiwTj1A5DYsXEXoJqQA+
-	0TkBYk8v4ot1xoL3Bwy4ILnhsF88j1eSNeasaj7/PbWXz+Rnl6C1t9ZSwEdBywWg
-	JgOfwI3RJ/oWs/RKCGbZG5tr5Bf/tt6aJQKBcE9NeK+xfn3mLq0Hc+3HvgxHzNmV
-	Q39bihEexZoJBf1/yTVB5GSmjtQZcBkKNVInTo13tLucZ8oOruJw88LmIm1E8UJN
-	+cvUJUgOzhguOCNKvqXjvZH4Jatk79gbeiCNrg+cbWIEY1YZzyMHkgK1rx7qHkf/
-	qBQAq005yfS4e3yda9rUZvRmEpUNOI1KoduOTuHOULaoSH7fLhdWQBKV1/3IFq7w
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ch858p0s0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 14:25:46 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61PDp8Si027794;
-	Wed, 25 Feb 2026 14:25:45 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1wcej-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 14:25:45 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61PEPiLj30999090
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 14:25:44 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9AA9958059;
-	Wed, 25 Feb 2026 14:25:44 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B9F0558063;
-	Wed, 25 Feb 2026 14:25:43 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 25 Feb 2026 14:25:43 +0000 (GMT)
-Message-ID: <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
-Date: Wed, 25 Feb 2026 09:25:43 -0500
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="hayY423g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1772040963; x=1803576963;
+  h=from:to:cc:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding:subject;
+  bh=YRY5VNh5WJAQAaMILsab9VN7315yMrX1I852eDbxTtU=;
+  b=hayY423gYfNpQdEb1njjsKucjYdX2eYQFzzawghxCT5tyolnzskmY8oN
+   ByZBzQ3Rwzzm/d5KIcioFPr4BAfbMEH2e5DhcAMn9OD3i2MkiRMl2Gn+F
+   ZbzxFKdxy5YhFFDVUU0+NBa7EqAUGDL3ZgnQdZyXNZKIsywI0VaIyFt9i
+   pCx/5a7sYyp/wpnVxENonNLA7x+L3KJnJ0zSaBNO/Wi19vmA9VHzSdEkO
+   WPCXlz2zOvVoYynbBLva4Omef6GZcemU6Lz0gjirxA5KLqHIkKw/yJ8Cc
+   Gd7E0GPeXQh6lrKxsn+So7Oo/eA+LI/OiCDNdk+t83WopYxZeL+UhSdWm
+   w==;
+X-CSE-ConnectionGUID: 8uhsIv4TQIe9EcUHkouJpQ==
+X-CSE-MsgGUID: ba3PhwdMSXS3IlmTrBGnTQ==
+X-IronPort-AV: E=Sophos;i="6.21,310,1763424000"; 
+   d="scan'208";a="13593227"
+Subject: RE: [PATCH 17/17] Add standalone crypto kernel module technical documentation
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 17:36:03 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:1793]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.86:2525] with esmtp (Farcaster)
+ id 93693ec8-671a-42a3-87bc-f5a3c251f9ed; Wed, 25 Feb 2026 17:36:02 +0000 (UTC)
+X-Farcaster-Flow-ID: 93693ec8-671a-42a3-87bc-f5a3c251f9ed
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 25 Feb 2026 17:36:00 +0000
+Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 25 Feb 2026 17:35:59 +0000
+From: Jay Wang <wanjay@amazon.com>
+To: <ebiggers@kernel.org>
+CC: <bp@alien8.de>, <catalin.marinas@arm.com>, <davem@davemloft.net>,
+	<herbert@gondor.apana.org.au>, <ilya.okomin@oracle.com>,
+	<jay.wang.upstream@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-crypto@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<linux-modules@vger.kernel.org>, <mcgrof@kernel.org>, <mingo@redhat.com>,
+	<nathan@kernel.org>, <nsc@kernel.org>, <nstange@suse.de>,
+	<petr.pavlu@suse.com>, <tglx@kernel.org>, <vegard.nossum@oracle.com>,
+	<wanjay@amazon.com>, <will@kernel.org>, <x86@kernel.org>
+Date: Wed, 25 Feb 2026 17:35:45 +0000
+Message-ID: <20260225173551.8704-1-wanjay@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260225015517.GA162634@quark>
+References: <20260225015517.GA162634@quark>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: IMA and PQC
-To: Coiby Xu <coxu@redhat.com>,
-        =?UTF-8?Q?Johannes_Wiesb=C3=B6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>
-Cc: dhowells@redhat.com, dmitry.kasatkin@gmail.com, ebiggers@kernel.org,
-        eric.snowberg@oracle.com, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-        roberto.sassu@huawei.com, simo@redhat.com, zohar@linux.ibm.com,
-        michael.weiss@aisec.fraunhofer.de
-References: <aXrKaTem9nnWNuGV@Rk>
- <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
- <aYHznG6vbptVOjHQ@Rk>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <aYHznG6vbptVOjHQ@Rk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDEzNSBTYWx0ZWRfX3qP5/QR4NiU0
- GOqGnNq7OdR6+Ew1H+Du8EZdvcu3XXvpqnjEgNAZOC5+zqjVH1bB6TOMKI753jx9CE4m7sbsGMJ
- JCiR9f2di7zqlSf1n1bNe0JyN6R0y7SQM4fu6Jz/q3fBMhxh5MqMVIPeMXLF5tNc+INOrewy31B
- IcvAZ8sK+vkSS8VYWhMBuLb4VpEQhWQ+TEiu/9GKn5JjBincwgzgDCk3a1ir09xfmGqTL/Q6OIo
- 3YFKUEckgUnAFInxMCm/8Xt/+23R0ZmVXrut7aldZnp4u3tlNRJR0kyz54WSNCQhnE2XTJ3uDUt
- ei0IzhDuYrxEjdLXe2gpIsv64EGlWXZNuAtdfvJlPF9ks2bY1zhu/eTqDSq6eAhxhVK+iS6KCDW
- PSR+3/7xvNNs5cNDRCCtBX0XxBllt0uXCLoCQSHmHEbj34VVi8qCuxWcZfDsyx6vGnSHty2wsTo
- FwLd8a+eDi/0WjgiUjA==
-X-Proofpoint-GUID: NgaRPDtkcA5qlnwKN1z91muvBPFRyMN8
-X-Authority-Analysis: v=2.4 cv=S4HUAYsP c=1 sm=1 tr=0 ts=699f066a cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=20KFwNOVAAAA:8
- a=8AN272uGgGVaRbb4kAAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: a5T0_K3QU7mjD237BGpEkprt9BYz8mkj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-25_01,2026-02-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1011 impostorscore=0 malwarescore=0 bulkscore=0
- phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602250135
+X-ClientProxiedBy: EX19D032UWA003.ant.amazon.com (10.13.139.37) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
+Thanks to everyone who has taken the time to review and comment.
 
+Based on the discussion so far, it seems the core question is whether this feature is appropriate for upstream at all, or whether it should remain entirely downstream.
 
-On 2/3/26 8:32 AM, Coiby Xu wrote:
-> On Fri, Jan 30, 2026 at 09:31:26PM +0100, Johannes Wiesböck wrote:
->> Hi all,
-> 
-> Hi Johannes,
-> 
->>
->> we conducted an evaluation regarding PQC use in IMA last year (see [1] 
->> for all
->> details) where we also considered the interplay of different PQC 
->> signatures and
->> file systems (ext4, btrfs, XFS, f2fs).
-> 
-> Thanks for sharing this comprehensive study! There are many nuances in
-> this research paper!
-> 
->>
->> Coiby Xu <coxu@redhat.com> wrote:
->>
->>> According to my experiments done so far, for verification speed,
->>> ML-DSA-65 is consistently faster than ECDSA P-384 which is used by
->>> current CentOS/RHEL to sign files in a package.
->>
->> Regarding performance, similar to Coiby, we found that all variants of 
->> ML-DSA
->> consistently outperformed ECDSA P-256.
-> 
-> Glad to know ML-DSA is also faster than ECDSA P-256!
+We’ve discussed this with a few folks, and to help clarify the discussion, let me outline what is actually required to use this approach and what the community would gain from upstreaming it:
 
-To avoid duplicate work: Is either one of you planning on writing 
-patches for IMA to use ML-DSA and convert the current ML-DSA to also 
-support HashML? I had done the work on this before and could dig out the 
-patches again...
+1. Maintaining a crypto snapshot (for example, a source code snapshot used for streamlined FIPS re-validation processes such as NSRL).
+2. Maintaining the loadable crypto build infrastructure itself (i.e., this patch set).
 
-    Stefan
+For (1), since this requires maintaining a specific snapshot, we acknowledge that this is inherently a downstream responsibility. We are not expecting upstream to provide or guarantee a stable in-kernel API (to clarify, a stable ABI is not strictly required here, since the crypto module can be rebuilt against newer kernels and still benefit from FIPS through the shorter NSRL re-validation process of roughly 3 months, compared to the full 12–18 month certification cycle). The upstream crypto subsystem should continue evolving independently.
 
+For (2), since this feature mainly serves as infrastructure and is of interest to multiple distributions, upstreaming it could help reduce the effort each distribution would otherwise spend maintaining similar infrastructure patches independently.
+
+We’d love to hear more thoughts on this. If the general consensus is that the downsides outweigh the benefits of merging this into mainline, we are happy to maintain it in a separate repository tracking the latest mainline and stable releases in order to keep the work publicly available.
+
+Thanks again for taking the time to read and discuss this.
+
+Jay
