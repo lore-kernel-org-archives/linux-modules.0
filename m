@@ -1,84 +1,145 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB24284880;
-	Wed, 25 Feb 2026 14:09:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5E43AE703;
+	Wed, 25 Feb 2026 14:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772028543; cv=none; b=CgiVf9vhDzI7HvKhkVpAuCADxJBqG2eG45XauZun5HjqhoYZzmsCO0WuP+SlNGOVRdboLj3h3FsdQxhLQLOJwvFiffiirHyGkHD8GH/EaSrbi+XqnttuzMHQXbE5bCpXY1cVytO0hZrCKfZzW5tbMQJ6ub+/MKjN7/Eu5fP+z/g=
+	t=1772029573; cv=none; b=kS8WZddesmNT2yI2VuyVxp+Y+qWy/5Oyqvd7BfDk6rW/y4Ok1gakVfIQ+zFb/nIqx7khEAPVQWY2DVuTIK0/59q8aaOXHT8YhLrVSaymQ47MPfT3mWuF+p181OrJ5aeDtHM5Qaf3KqeB4NoUfbH83brXWu4AYuGcrraTwgTsNSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772028543; c=relaxed/simple;
-	bh=najeskeSGaMowgnuBVZaa8lrbJEgO/ZS8Nq1D58P5LE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DadvxCggtdxjzAjqZmXaRfhUrm+ZbDHOyMnp0dIH/Ey0HUnQ0siQhvaSC/zSLy43vgpSIlFbPi60DZD0BurVr3SMP2Qs/EVKD2pFCWLJQBd/qLgON5jyDmtbqln4LnwmJPnWwJTd6jbJWEfJmCSAb+4Au5wLnAKqEatuKE1p6iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HiRxEFd7; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1772029573; c=relaxed/simple;
+	bh=POFnvDRMDntoaKYYUzHLozgduV3d4+IdNOY4m5PKl4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mpuBSqRNjCqpvw75mx+27DC39Ho/31gJmtWZZAVdwpY2kZIq0vOOjXHSokGxIxm5UJYBEjrsWOpXNtRvZct+CK1fOflRNcXNDbmef4P/JcRmgS749V7IuaswcUIe8ZEBWw+mvD7qaFwbtVwnb5be01dv5Gs7kR43d3ln6oDyJrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jsNiwTj1; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HiRxEFd7"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=XWRvKSrVzQxumCJr/FJXMqnLK+ok9RFugzOcVZ5aYRY=; b=HiRxEFd7f+eEHFsntm7SMlUNB1
-	c4AbjTQ3piGQdRYpSHk5q14C/THBE2f4pSP7LePeXBUybbnnTzy6Dby15D3pa0iM5POQ59cNB5cRH
-	fyidvvGLYHpfM+mkOkn8LhcIZHaEC2oIzXwGkV5aFX6h3Y7jD6Q60R8HQh1sSif6y3VSnhUlS3exW
-	LOJdm6i77zrXeiqWO2j2tQ+YDyYd/aNW3LdG0Y1IJ+UTpUbft7YWYoMAWbVhBBZ1AHHr294qm7me3
-	SqEh2KyPQJkdERVVceI7J7H85do0NBqCWH+BnIEGQloCUCVB9yJCOTPkHmVF3b28lZZkdYD1/gbtY
-	0xPcmI+Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vvFZO-00000004AMD-2PsX;
-	Wed, 25 Feb 2026 14:08:54 +0000
-Date: Wed, 25 Feb 2026 06:08:54 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Jay Wang <wanjay@amazon.com>, Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-crypto@vger.kernel.org,
-	Jay Wang <jay.wang.upstream@gmail.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Nicolai Stange <nstange@suse.de>,
-	Ilia Okomin <ilya.okomin@oracle.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH 17/17] Add standalone crypto kernel module technical
- documentation
-Message-ID: <aZ8Cdq2doSHlPG9-@infradead.org>
-References: <20260212024228.6267-1-wanjay@amazon.com>
- <20260212024228.6267-18-wanjay@amazon.com>
- <20260225015517.GA162634@quark>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jsNiwTj1"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61PCEjjX2347293;
+	Wed, 25 Feb 2026 14:25:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=SHMqjR
+	5JS4nc3Prvtwcb2C6pncruxyqQAeH0T5Ewzhc=; b=jsNiwTj1A5DYsXEXoJqQA+
+	0TkBYk8v4ot1xoL3Bwy4ILnhsF88j1eSNeasaj7/PbWXz+Rnl6C1t9ZSwEdBywWg
+	JgOfwI3RJ/oWs/RKCGbZG5tr5Bf/tt6aJQKBcE9NeK+xfn3mLq0Hc+3HvgxHzNmV
+	Q39bihEexZoJBf1/yTVB5GSmjtQZcBkKNVInTo13tLucZ8oOruJw88LmIm1E8UJN
+	+cvUJUgOzhguOCNKvqXjvZH4Jatk79gbeiCNrg+cbWIEY1YZzyMHkgK1rx7qHkf/
+	qBQAq005yfS4e3yda9rUZvRmEpUNOI1KoduOTuHOULaoSH7fLhdWQBKV1/3IFq7w
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ch858p0s0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 14:25:46 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61PDp8Si027794;
+	Wed, 25 Feb 2026 14:25:45 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1wcej-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 14:25:45 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61PEPiLj30999090
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 25 Feb 2026 14:25:44 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9AA9958059;
+	Wed, 25 Feb 2026 14:25:44 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B9F0558063;
+	Wed, 25 Feb 2026 14:25:43 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 25 Feb 2026 14:25:43 +0000 (GMT)
+Message-ID: <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
+Date: Wed, 25 Feb 2026 09:25:43 -0500
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225015517.GA162634@quark>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: IMA and PQC
+To: Coiby Xu <coxu@redhat.com>,
+        =?UTF-8?Q?Johannes_Wiesb=C3=B6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>
+Cc: dhowells@redhat.com, dmitry.kasatkin@gmail.com, ebiggers@kernel.org,
+        eric.snowberg@oracle.com, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        roberto.sassu@huawei.com, simo@redhat.com, zohar@linux.ibm.com,
+        michael.weiss@aisec.fraunhofer.de
+References: <aXrKaTem9nnWNuGV@Rk>
+ <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
+ <aYHznG6vbptVOjHQ@Rk>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <aYHznG6vbptVOjHQ@Rk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDEzNSBTYWx0ZWRfX3qP5/QR4NiU0
+ GOqGnNq7OdR6+Ew1H+Du8EZdvcu3XXvpqnjEgNAZOC5+zqjVH1bB6TOMKI753jx9CE4m7sbsGMJ
+ JCiR9f2di7zqlSf1n1bNe0JyN6R0y7SQM4fu6Jz/q3fBMhxh5MqMVIPeMXLF5tNc+INOrewy31B
+ IcvAZ8sK+vkSS8VYWhMBuLb4VpEQhWQ+TEiu/9GKn5JjBincwgzgDCk3a1ir09xfmGqTL/Q6OIo
+ 3YFKUEckgUnAFInxMCm/8Xt/+23R0ZmVXrut7aldZnp4u3tlNRJR0kyz54WSNCQhnE2XTJ3uDUt
+ ei0IzhDuYrxEjdLXe2gpIsv64EGlWXZNuAtdfvJlPF9ks2bY1zhu/eTqDSq6eAhxhVK+iS6KCDW
+ PSR+3/7xvNNs5cNDRCCtBX0XxBllt0uXCLoCQSHmHEbj34VVi8qCuxWcZfDsyx6vGnSHty2wsTo
+ FwLd8a+eDi/0WjgiUjA==
+X-Proofpoint-GUID: NgaRPDtkcA5qlnwKN1z91muvBPFRyMN8
+X-Authority-Analysis: v=2.4 cv=S4HUAYsP c=1 sm=1 tr=0 ts=699f066a cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=20KFwNOVAAAA:8
+ a=8AN272uGgGVaRbb4kAAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: a5T0_K3QU7mjD237BGpEkprt9BYz8mkj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-25_01,2026-02-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1011 impostorscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602250135
 
-On Tue, Feb 24, 2026 at 05:55:17PM -0800, Eric Biggers wrote:
-> Let's be clear: this is possible only when the kernel has a stable ABI
-> to the crypto module, which realistically isn't something that is going
-> to be supported upstream.  The Linux kernel is well-known for not
-> maintaining a stable in-kernel ABI, for good reasons.
-> 
-> So, the only case where this feature would have a benefit over the
-> kernel's existing approach to FIPS 140 is in downstream kernels that
-> maintain a stable in-kernel ABI.  There would be no benefit to direct
-> users of the mainline kernel or even the stable release series.
-> 
-> For this to be considered for upstream there would need to be some level
-> of consensus in the community to support this feature despite this.
 
-That's a very nice way to say this goes against all the established
-principles for kernel development.
+
+On 2/3/26 8:32 AM, Coiby Xu wrote:
+> On Fri, Jan 30, 2026 at 09:31:26PM +0100, Johannes Wiesböck wrote:
+>> Hi all,
+> 
+> Hi Johannes,
+> 
+>>
+>> we conducted an evaluation regarding PQC use in IMA last year (see [1] 
+>> for all
+>> details) where we also considered the interplay of different PQC 
+>> signatures and
+>> file systems (ext4, btrfs, XFS, f2fs).
+> 
+> Thanks for sharing this comprehensive study! There are many nuances in
+> this research paper!
+> 
+>>
+>> Coiby Xu <coxu@redhat.com> wrote:
+>>
+>>> According to my experiments done so far, for verification speed,
+>>> ML-DSA-65 is consistently faster than ECDSA P-384 which is used by
+>>> current CentOS/RHEL to sign files in a package.
+>>
+>> Regarding performance, similar to Coiby, we found that all variants of 
+>> ML-DSA
+>> consistently outperformed ECDSA P-256.
+> 
+> Glad to know ML-DSA is also faster than ECDSA P-256!
+
+To avoid duplicate work: Is either one of you planning on writing 
+patches for IMA to use ML-DSA and convert the current ML-DSA to also 
+support HashML? I had done the work on this before and could dig out the 
+patches again...
+
+    Stefan
 
