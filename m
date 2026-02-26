@@ -1,191 +1,186 @@
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB94242D67;
-	Thu, 26 Feb 2026 00:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772065651; cv=none; b=mSxJZ2K6yGBp2O+H+7Yv65tpqqz2rC7o074PzWrkwSOu3nAmA1/5qxvrXZAqVJ/+G2v9pN5Liiqqf3YT7NNU2g2iu0yV5S+fQPCcyNNvGwLCpwStAGvDFjFEeOgc46DxECsJGJTcXugLCwau5fz3oplS1aMFjxSwk4j8sp5R2CQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772065651; c=relaxed/simple;
-	bh=jq32sMb9gwp0msh5L6M41YEmWuZy0C+oRSy9ysqc6iM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I2AuJx7GgN4poNK3PRfd1IVAY/h1FeW939ZGANJPV+IyzKE/rsY+A8IyIiqtFVzC+0P0nH4ficQFp2UCxThV7HEM87q/7j43CJFnW2mq/MVrxei23C4d281aPxI2cjFx/vmMKPrSXz9Wj74jM2CIXoD88Tg8gcfh7FiW+6XkTLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id BCCC813A6B3;
-	Thu, 26 Feb 2026 00:27:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 8569E35;
-	Thu, 26 Feb 2026 00:27:25 +0000 (UTC)
-Date: Wed, 25 Feb 2026 19:27:24 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: chensong_2000@189.cn
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
- samitolvanen@google.com, atomlin@atomlin.com, mhiramat@kernel.org,
- mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] kernel/trace/ftrace: introduce ftrace module notifier
-Message-ID: <20260225192724.48ed165e@fedora>
-In-Reply-To: <20260225054639.21637-1-chensong_2000@189.cn>
-References: <20260225054639.21637-1-chensong_2000@189.cn>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53696374733
+	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 02:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772072373; cv=pass; b=NSC1J5TWdUtu6nlKlgA7RM5lATor6IXQ9nvTPJ5u5zgtXx3GGFrs7n7yyDSDvdHKn2N27oNowiXBYqOQfuGBzHmYPbkpRm9iiDYDDKvj8wHS6/WKYzF2lIB6LjFav/x+vvssu+J9EXN3/nnFKkhO33y/hVi3nGsbQNSrbWig5CI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772072373; c=relaxed/simple;
+	bh=cLzlljzK9C4sAI2eoDoXahDWNnpEZfyXpBbhwKLwyMg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JGJ8jTgZ+GkLffWkYpbSkHWBBxe+AQRdUbm6Q4mfA+W7nC3byoNhA8d6GfcV0ZJJObNKxNsMrFVWY5YI8uu6bjhmpUmCJM270Q8q/n13ndngeKOZo2Bpf6ztOc+x6YFrvtq/m5Lh0jxM1aKZ5VAYIF14DGrakF2UkyV7yuvgM2M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EQoCVkuk; arc=pass smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EQoCVkuk"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-79863ab8478so3213107b3.3
+        for <linux-modules@vger.kernel.org>; Wed, 25 Feb 2026 18:19:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772072371; cv=none;
+        d=google.com; s=arc-20240605;
+        b=f2hFB9LEcBRiKGUfryx3ffG/pBCR6H3eot+PL3VW1REw7SMZaPWzfcHeegcGCmtkEx
+         nUxNPAIpGtyvSURWSQdFEVp/XP+WhDbYRhao+HF7/MZeV/8TREIiG0qogns0E31F0vp6
+         7rC1k0yPc6xS2a/fuA0txTe03MbYbOOkOFtKkookSMyYDuTui9sa/NzkiCOQ2v/3h2ly
+         ikkTTFXcufPvysYxaYLeH+ZZaM0xiLG/cqBqm4116xTG/s5/ie+Nkm2qH3YS39wDqVCs
+         dWTzBWK7YXO6DeGVAMtOIAhnvtQkjoessgIIRiMQfxsQjBpdsbtkmVAbr8n0/P6zjrWU
+         EgQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VqhHQA+pQ+p8DHC8y7YMlY+2BCSnJTgBmJxNuF6a+pU=;
+        fh=sFWtu6c+50c5t94aLQkKx4o5OgrkUN9VJPgruKYhNoM=;
+        b=lXLAnuYRYtMS1Kznvq+JMPfCxeNAbEXS1bt6LeCZUDybEBkjot6OT+Dip2WmPxwUV6
+         OVGbWpjq3NaLR4iQoSHFwtv57HSRd7NHsLEozLrgalvgpfaQoKjgyLquc/1iRfQjLSV2
+         pX6iKoVfqyIaRzC/R6Lv77rh/kGszoL1EI5qCZHIwchEDHn03JyyiVFxg8C7ntj2BJjN
+         jhKrI0WVXJcpqYfMEJJvCd7XHiMLsYuUGm662RvA0TNtDS3BtoOACwGQRpVL4kFq48uj
+         SwyKSmy1oCKLFKGihCFeOliNpHSaartL5dYVRc1pFBJSUlK5gG6G97cmuEOMDh982Q/5
+         gy3w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772072371; x=1772677171; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VqhHQA+pQ+p8DHC8y7YMlY+2BCSnJTgBmJxNuF6a+pU=;
+        b=EQoCVkukmKdWCnVX1sykR0SvRH5zTy8WNONGKoWGrDQ7EM1dy68xVb6AFS3Oy40U4O
+         ZnSXp9ZOlc6bozZyU/NpJVdjvIEJ4LjDhv9PrXJixWdUgDZpDfHCItcghJA+1PighNQh
+         vL8CFKmHba5fzxMhK2B8SCZtkGkQhZamcYLjXTgaRyYy4YHF+r5TO1ssspeaLhXhmlN7
+         TlOjX2QMwDj6tFW0JoclnV3xvrXZmm6XXMADjdzqK46UiQmjQlnyy+cqWT6lE585o1lL
+         pxcHfRZ8OqsKvsPS5qT4QvzUcABifR62HP3igmFMmMFN/1dmgu3NxIKDGwjsqTF0GCm2
+         Sq5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772072371; x=1772677171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VqhHQA+pQ+p8DHC8y7YMlY+2BCSnJTgBmJxNuF6a+pU=;
+        b=SF+6OYaoaTx19dMHRAuistaBudj957oVygOMaP1BR+FOEVn6Ux/9aDVMJbad8xW+/v
+         DWvNA/hzi2nGTOl8+/zx/4zBMfTVZwUDg7NDJsXJmZGTSY+3YtY8+Q43EBui19qwVY4Y
+         U5Yw5M2ezQ95U64S3Agrke29t6y8TTrQPu/w9cHFZF9j5RZVdl/zc0ZMck/883HG7ZvC
+         80Ssxw4F1NeAy+jFXkYAoKPNrUi5bu/gvJrI/+AmiIub94wnifsyyJ3grknsg3LfSprj
+         RkLrHS3uXG6696eE5Z3u5vpT63qMco/BVTKColrLTiJYchMrpn46wEuzg/K6xHA/78J/
+         vOYw==
+X-Gm-Message-State: AOJu0Yz8O4jPwjMGEKnjjrNSBa9ox45LM7xboIC01l5YF41HeLxTaEql
+	CiBAvopSHyhW3yZZfrzRaK0dVjoNJc24PxW7EQaQWYBbnvnfC08kLSfb4sQ0fTnJB7mBXwa/3QO
+	d0FNHX9I1bPl3gH7VFrSvJDTneWesAqY=
+X-Gm-Gg: ATEYQzxUFcIIiaZH+QOdduxXBGSq6mzt+Bl7npMNkez/BfyuYWen/uwSZyIU86PlWH3
+	5cpz2Mxd2C6yopRW2G+u3eVZs6ok6rEUnFPt4evx27LZfu373aHSHCT1gJV+RJfB3cLlad4S3OT
+	d5HFMFoAWxc76yg1H14B57Nc4Gim9uhSFB6BX1reG78LrOHlh3uEiqOsCZ58gE6Oybsgv2KMQQg
+	RDop0eDIlwU5DOAY6Dxy44CxsvZceqJuJQxPfVEed+mijhWerKVEmzQqpUosa7m5vxz4/I+kawM
+	+Pyn4e6x
+X-Received: by 2002:a05:690c:dd5:b0:798:77ee:cc2c with SMTP id
+ 00721157ae682-79877eed54fmr3824107b3.62.1772072371270; Wed, 25 Feb 2026
+ 18:19:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 8569E35
-X-Stat-Signature: r5wbtka4cbzdk3wt1z3cxyoed7cu86p7
-X-Rspamd-Server: rspamout05
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19SQoDZvBQPRI5Yp0dko/ETRkl/Hb3WaR8=
-X-HE-Tag: 1772065645-907232
-X-HE-Meta: U2FsdGVkX1+/gR4zQu3s5eDkMePACjR5re5clkhLIP46c062LMfk+mcX2QGDMAkO70Wd65te/oTYlMWDN3h0b1aV0Fvv4YAnmyggAcTXw0GI4HK+gwdAL2cAQQvuqWqwdmU0Y/uwlEw5LvUxImuuEXnytnDjxwXDyPl/RJJZtbeJooVYpPzNPVEI5KO0/IxAdxhmgyaR0pfehBoEct+E1Aky6Tgim8NxI0hJ82Ugq1AEKrhmUgRSumfgUk8ObtfCg+KBpwcJa2jBtQ4Dfl0t3jsiLUVLHxS+obMuj3WPpf6/l48XqZtMI3IdeQSqpqOB
+References: <20251231094004.37851-1-laoar.shao@gmail.com>
+In-Reply-To: <20251231094004.37851-1-laoar.shao@gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Thu, 26 Feb 2026 10:18:55 +0800
+X-Gm-Features: AaiRm51ugG1-_872846VhxRvBbcSsVplqxg_NI9kHq42XNDMKLKZb12gYlWiCnQ
+Message-ID: <CALOAHbA5fkK8XSqo62=k1hVX+krx58eUWMLNwMdwncAp+Xn4=w@mail.gmail.com>
+Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
+To: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
+	samitolvanen@google.com, atomlin@atomlin.com
+Cc: linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 25 Feb 2026 13:46:39 +0800
-chensong_2000@189.cn wrote:
-
-> From: Song Chen <chensong_2000@189.cn>
-> 
-> Like kprobe, fprobe and btf, this patch attempts to introduce
-> a notifier_block for ftrace to decouple its initialization from
-> load_module.
-> 
-> Below is the table of ftrace fucntions calls in different
-> module state:
-> 
-> 	MODULE_STATE_UNFORMED	ftrace_module_init
-> 	MODULE_STATE_COMING	ftrace_module_enable
-> 	MODULE_STATE_LIVE	ftrace_free_mem
-> 	MODULE_STATE_GOING	ftrace_release_mod
-> 
-> Unlike others, ftrace module notifier must take care of state
-> MODULE_STATE_UNFORMED to ensure calling ftrace_module_init
-> before complete_formation which changes module's text property.
-> 
-> That pretty much remains same logic with its original design,
-> the only thing that changes is blocking_notifier_call_chain
-> (MODULE_STATE_GOING) has to be moved from coming_cleanup to
-> ddebug_cleanup in function load_module to ensure
-> ftrace_release_mod is invoked in case complete_formation fails.
-> 
-> Signed-off-by: Song Chen <chensong_2000@189.cn>
+On Wed, Dec 31, 2025 at 5:40=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
+>
+> We maintain a vmcore analysis script on each server that automatically
+> parses /var/crash/XXXX/vmcore-dmesg.txt to categorize vmcores. This helps
+> us save considerable effort by avoiding analysis of known bugs.
+>
+> For vmcores triggered by a driver bug, the system calls print_modules() t=
+o
+> list the loaded modules. However, print_modules() does not output module
+> version information. Across a large fleet of servers, there are often man=
+y
+> different module versions running simultaneously, and we need to know whi=
+ch
+> driver version caused a given vmcore.
+>
+> Currently, the only reliable way to obtain the module version associated
+> with a vmcore is to analyze the /var/crash/XXXX/vmcore file itself=E2=80=
+=94an
+> operation that is resource-intensive. Therefore, we propose printing the
+> driver version directly in the log, which is far more efficient.
+>
+> The motivation behind this change is that the external NVIDIA driver
+> [0] frequently causes kernel panics across our server fleet.
+> While we continuously upgrade to newer NVIDIA driver versions,
+> upgrading the entire fleet is time-consuming. Therefore, we need to
+> identify which driver version is responsible for each panic.
+>
+> In-tree modules are tied to the specific kernel version already, so
+> printing their versions is redundant. However, for external drivers (like
+> proprietary networking or GPU stacks), the version is the single most
+> critical piece of metadata for triage. Therefore, to avoid bloating the
+> information about loaded modules, we only print the version for external
+> modules.
+>
+> - Before this patch
+>
+>   Modules linked in: mlx5_core(O) nvidia(PO) nvme_core
+>
+> - After this patch
+>
+>   Modules linked in: mlx5_core-5.8-2.0.3(O) nvidia-535.274.02(PO) nvme_co=
+re
+>                               ^^^^^^^^^^          ^^^^^^^^^^^
+>
+>   Note: nvme_core is a in-tree module[1], so its version isn't printed.
+>
+> Link: https://github.com/NVIDIA/open-gpu-kernel-modules/tags [0]
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/drivers/nvme/host/core.c?h=3Dv6.19-rc3#n5448 [1]
+> Suggested-by: Petr Pavlu <petr.pavlu@suse.com>
+> Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 > ---
->  kernel/module/main.c  | 14 ++++----------
->  kernel/trace/ftrace.c | 37 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 41 insertions(+), 10 deletions(-)
-> 
+>  kernel/module/main.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> ---
+> v1->v2:
+> - print it for external module only (Petr, Aaron)
+> - add comment for it (Aaron)
+>
 > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index 710ee30b3bea..5dc0a980e9bd 100644
+> index 710ee30b3bea..16263ce23e92 100644
 > --- a/kernel/module/main.c
 > +++ b/kernel/module/main.c
-> @@ -45,7 +45,6 @@
->  #include <linux/license.h>
->  #include <asm/sections.h>
->  #include <linux/tracepoint.h>
-> -#include <linux/ftrace.h>
->  #include <linux/livepatch.h>
->  #include <linux/async.h>
->  #include <linux/percpu.h>
-> @@ -836,7 +835,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *, name_user,
->  	blocking_notifier_call_chain(&module_notify_list,
->  				     MODULE_STATE_GOING, mod);
->  	klp_module_going(mod);
-> -	ftrace_release_mod(mod);
+> @@ -3901,7 +3901,11 @@ void print_modules(void)
+>         list_for_each_entry_rcu(mod, &modules, list) {
+>                 if (mod->state =3D=3D MODULE_STATE_UNFORMED)
+>                         continue;
+> -               pr_cont(" %s%s", mod->name, module_flags(mod, buf, true))=
+;
+> +               pr_cont(" %s", mod->name);
+> +               /* Only append version for out-of-tree modules */
+> +               if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->tain=
+ts))
+> +                       pr_cont("-%s", mod->version);
+> +               pr_cont("%s", module_flags(mod, buf, true));
+>         }
+>
+>         print_unloaded_tainted_modules();
+> --
+> 2.43.5
+>
 
-Is the above safe? klp uses ftrace. That means klp_module_going() may
-need to be called before ftrace_release_mod(). That said, I wonder if
-klp_module_going() could be moved into ftrace_release_mod()?
+Just checking in on this patch. It looks like it hasn't been merged
+yet. Is it good to go, or does it need something else?
 
->  
->  	async_synchronize_full();
->  
-> @@ -3067,8 +3065,6 @@ static noinline int do_init_module(struct module *mod)
->  	if (!mod->async_probe_requested)
->  		async_synchronize_full();
->  
-> -	ftrace_free_mem(mod, mod->mem[MOD_INIT_TEXT].base,
-> -			mod->mem[MOD_INIT_TEXT].base + mod->mem[MOD_INIT_TEXT].size);
-
-Have you tested the case for why this is called? It has to be called
-before the module frees the kallsyms. It's for tracing the module's
-init functions.
-
-  cd /sys/kernel/tracing
-  echo :mod:<module> > set_ftrace_filter
-  echo function > current_tracer
-  modprobe <module>
-  cat trace
-
-You should see the init functions of the module loaded. If
-ftrace_free_mem() is called after the module frees the kallsyms of the
-module init functions, you'll just get garbage for the init function
-names.
-
-
-
->  	mutex_lock(&module_mutex);
->  	/* Drop initial reference. */
->  	module_put(mod);
-> @@ -3131,7 +3127,6 @@ static noinline int do_init_module(struct module *mod)
->  	blocking_notifier_call_chain(&module_notify_list,
->  				     MODULE_STATE_GOING, mod);
->  	klp_module_going(mod);
-> -	ftrace_release_mod(mod);
->  	free_module(mod);
->  	wake_up_all(&module_wq);
->  
-> @@ -3278,7 +3273,6 @@ static int prepare_coming_module(struct module *mod)
->  {
->  	int err;
->  
-> -	ftrace_module_enable(mod);
->  	err = klp_module_coming(mod);
-
-Same issue with ftrace and klp here.
-
->  	if (err)
->  		return err;
-> @@ -3461,7 +3455,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	init_build_id(mod, info);
->  
->  	/* Ftrace init must be called in the MODULE_STATE_UNFORMED state */
-> -	ftrace_module_init(mod);
-> +	blocking_notifier_call_chain(&module_notify_list,
-> +				MODULE_STATE_UNFORMED, mod);
->  
->  	/* Finally it's fully formed, ready to start executing. */
->  	err = complete_formation(mod, info);
-> @@ -3513,8 +3508,6 @@ static int load_module(struct load_info *info, const char __user *uargs,
->   coming_cleanup:
->  	mod->state = MODULE_STATE_GOING;
->  	destroy_params(mod->kp, mod->num_kp);
-> -	blocking_notifier_call_chain(&module_notify_list,
-> -				     MODULE_STATE_GOING, mod);
->  	klp_module_going(mod);
-
-Now klp_module_going() may need to be called *after* the
-MODULE_STATE_GOING callbacks and *before* ftrace_release_mod(). But
-again, if that's moved into ftrace_release_mod() it may be fine.
-
->   bug_cleanup:
->  	mod->state = MODULE_STATE_GOING;
-> @@ -3524,7 +3517,8 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	mutex_unlock(&module_mutex);
->  
->   ddebug_cleanup:
-> -	ftrace_release_mod(mod);
-> +	blocking_notifier_call_chain(&module_notify_list,
-> +				     MODULE_STATE_GOING, mod);
->  	synchronize_rcu();
->  	kfree(mod->args);
->   free_arch_cleanup:
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-
--- Steve
+--=20
+Regards
+Yafang
