@@ -1,95 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF14D3A783E;
-	Thu, 26 Feb 2026 18:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772130820; cv=none; b=hRV46n1Po2Kkl86ndAaEdSdvue1du2eEMaOn+dUl8O2nyrmi1mgZbgUme5u4UHgXeoyfAywa/DtOw7Q3ttRRw8TCuBRSJv3DZ3lPGVd9EMRFLhoypg4LbD8ws1IuDXvKvzA+7QzFSXA3SWKECuSPF4rZ/bnPo8xjuuCXaV04dMM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772130820; c=relaxed/simple;
-	bh=U/Z/ceAeahWvC5StdVOl3pvQlYfwBIFDv5N/bOtobZc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2pMJfcnYQC9rpp2ZqG3Xc5EwzTl8dce8ksDJwiy9ePZuRXz3uWyeXZCzuSCb0kOTUlhieXWh9Jdk0pu4kiuPNahdxQ4Ncl8tOwadghaTJFOExV2e/DSw09vXJaxRX9y9xn2eJgH9GKPvJptXr9ESwNcyXivx1PUZrajKijiHJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FTAQLlRx; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83062E7621
+	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 18:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772131183; cv=pass; b=ZvkaAygO2N5Ab9IX9eLPoiTKFxFWDeiBOTw5iaZBd60aXf6UTrht3xlvDPuwFXNHE7K74snEplcquqdwTnvHeywR790cuNfAR/7NtzEa7P67fSR8bTvdp5QR3PZZ2XALtygUYOJgFPT429E6DoxBFnBRAVZjCZQMmZMvc1UJjvc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772131183; c=relaxed/simple;
+	bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BqfYytGzvp8BeZumhGFoHG7/5eYwQYfNyVfD5RX8ylytFycZ+Pil1uRq/ETCPNXBSELALFKuHrahAhmQQXX89MZ341t7BQXW/ItqWCANS4+Rq1Keu4xwJLRIr1hc7PnLm6Bds8CPxYYxWGolwe4L2kgk/n9ZSVCc5N0f1bcu8qw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vzvgwdcl; arc=pass smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FTAQLlRx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF94AC19423;
-	Thu, 26 Feb 2026 18:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772130820;
-	bh=U/Z/ceAeahWvC5StdVOl3pvQlYfwBIFDv5N/bOtobZc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FTAQLlRxPUjjgPbzWiRTzE2gQd92DDGXxIkXnAyRFzc1l43gafZ00xivzEexR4TCi
-	 YNPdDJO96XhcA2oiS2qhiR258bmNMPE2Cv+EGOb4esvJ3tYl2INV8t9S+IjjJj2pKK
-	 6uVClLDkjGMGRUNzdTKJuBTcbOVeqs2mfXo6yemyuUCEaououaMsYthJHvU/2m32pk
-	 tr55IbvLZMmExU8QcyToUVqn19iVOfSj0KxlK2c1BulINQopqaZxKymx3TzJPRDQKb
-	 5H7qgynGr+plJit0uMRLAdRw5uXP5smUYokuUfxHT0KAIrV3Wj1+mjB1v4/257CYOI
-	 24SqxqBnoD0SQ==
-Date: Thu, 26 Feb 2026 10:32:48 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Stefan Berger <stefanb@linux.ibm.com>
-Cc: Simo Sorce <simo@redhat.com>, Coiby Xu <coxu@redhat.com>,
-	Johannes =?iso-8859-1?Q?Wiesb=F6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>,
-	dhowells@redhat.com, dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com, keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	roberto.sassu@huawei.com, zohar@linux.ibm.com,
-	michael.weiss@aisec.fraunhofer.de
-Subject: Re: IMA and PQC
-Message-ID: <20260226183248.GE2251@sol>
-References: <aXrKaTem9nnWNuGV@Rk>
- <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
- <aYHznG6vbptVOjHQ@Rk>
- <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
- <20260226001049.GA3135@quark>
- <cba10ac6-3557-4fc1-9b86-55361d14156d@linux.ibm.com>
- <dc09be79-5efe-4756-a295-5b0428985525@linux.ibm.com>
- <da190dbbc692b9da8464bbbfffdde7bab26b3f1c.camel@redhat.com>
- <20260226165819.GA2251@sol>
- <969c74f3-81ed-442c-87dd-381274a642a7@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vzvgwdcl"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-65f3a35ff13so1100a12.0
+        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 10:39:41 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772131180; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ePmGuNt/xBAQSn3jkIEnE+1wr1tRFjguF6q6Ozq8CYlnGbl92rBoUFoLHeeyW3E1sS
+         8elszQ22Tz4TpoIUXltH4ajje1C1sPDeqMUUqGgj+sU6xBDxC0AbdTXyp/XVDv+EKrkp
+         fZlBFQl2lSVywEiwxSjiPts1jU4kmfebmY0+ReRScbmRncJDjh2FK3O0EORiqy5cBcrj
+         0B4m44ff8zx/KxPiEwbMWfKi+n0kf1PX1HDLac4f6ASbvgE43Z1yX1jnETsHFprXe5fj
+         /aj64JlWsKBKL3DpNJCgidlmYRBFkkNB2MY1c3uwXsIe7MD0lNVCxCZAr2B9aisgllCw
+         RL7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
+        fh=S6Vjs4aazgyOh0/i5xLHvO4GgtZ2mmzXdyiwA1AYs3c=;
+        b=Yv2YHfSeR62VBqt112VlrUmDciOE1sCEzfLXh31nIbobH9lyyM6rTwZXiClOFVnf5w
+         dd1Ms2LoACmvNoS95yJtKb6T7PhgmDIthz/3CnsUWVSmGxcYji0e8diAcBj3l3auP8yp
+         I0WHmRAzbiT/7YZPnSqVlPJBcJi350sJNGJU2x9+RwBDcWCHJ/Bmggau8vm/eJ6w2mXH
+         rWQWEJsY2ebPsKdb03xqUSZ9cx1GuMvHMEa9tsbpac1/c7lHHvc1vtFPFsKJIA5z6lNg
+         MBwZszVwdV9z6gBKckxnJdWC+1LI67K4cbdUxaePohb1z5si65P7RQvvXAt5/ScwpMyQ
+         vS0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772131180; x=1772735980; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
+        b=vzvgwdclLp8knYjRgNv2NF7vbcqefmSDoQn3teMXmNoXCKgG7Q+Oiz04oAnwv7/Fmq
+         R/lNDJ28z8m2FFTw7rEGJsBjzwQINJochZjI2IsNzA/hcJ+tcv+0+LPONfFz+pUJQuQT
+         qxrvtRu1Y+XjGHwf4GVDeh5wboupZk1jtU9aCIJU/TzBve4iHRG46w3YSdWdkCkRMGSj
+         4QbnqSS1v2d0S5TznhQGsf41TcjFZiAbS0Xt6/JJdtyShwFQLt3Y0GoGcid0/ZsA7MbF
+         jFHHzKddE8nNUSdqHv8ZNkiIgpgeHo+YcCHG/N6HKzDwdla48sXe5SK4mG+hLB7azpmG
+         xAZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772131180; x=1772735980;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
+        b=n4y2yAVmnlN+0d1LbppqYELSuHAtJLxUvXx4XKON8EnicjsqgXm6hINYdPCT34ZNrz
+         +qR/TxQnCGwdapMjqZNQTuHEsZTRjxIw0e+A2lydwaIEH3XgGeRfZjNmyFh7mJRA4n3Q
+         +/XAw38WQWdaUbJoSg2mBxHjKW32Ffg4jsX2o82rU6XPLGhkthC8NTy4usxdcaEzuV+w
+         i9s/BvWUQqLz6i66UQof4+7/U7LkgC+TZUIoLGGq7ETyM0uIuBcpPr29Q/skeU3C+Fs5
+         0nRoRDnmhZdRPYLVB0XrhgNFoJFXv2AB/ZvSh9lbEE0EF4UUbWatEQ6zwHyGcx8OBou5
+         UdtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWrXyoe6+M6I6PWxE2LWncJ+z6acjtV2rM6pcAw1zM2c3mft8+YwxgXjSjiE0Xv/0GOjuRwwVBFKHgmy6H@vger.kernel.org
+X-Gm-Message-State: AOJu0YyY4lolZc2jlxDX7ZIA0end0T/v7OcmgW6Nj1kncFJu+P+j0EZU
+	Itlad9WLmbOHHd3NqIG3VLGdr5CuIG2mCdP9S7wFyOjljVJeu169Amxk3FuzUG1NkOYtJhZ63mI
+	+3TqiPrqjzBn8XOCkuMvOE+n2gWT9e9oo4FiaYMOv
+X-Gm-Gg: ATEYQzxaGGyUTN4aFo2+YDSbLu4+Yl2umkE5ukNv531TiEa5z2iNLDBz2oLTjpm7uIv
+	s3lneD3+QfVd3+lw+kPNGnWn7bRiKh4zevQ63tUYq8AFtbmHvhLsMcpoQVjLoZ7xjDi+GJAWjoT
+	6bygnNDpsMyf4a8X+rni6n87BfcRZuZ8Bi1UtMnO1d3mdx54jXomkrbDWvmEqoKqqLmuPSFovMs
+	z+DHA6YFBnVlNSseoYjG2GaCWxm+1JuHEds+HCCLjl0yQl4h395eWCf3zqdXaC3C51JTAP0uMsv
+	RPXU
+X-Received: by 2002:aa7:d292:0:b0:65f:ddaf:d1c5 with SMTP id
+ 4fb4d7f45d1cf-65fddbf1827mr3660a12.12.1772131179631; Thu, 26 Feb 2026
+ 10:39:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <969c74f3-81ed-442c-87dd-381274a642a7@linux.ibm.com>
+References: <20251231094004.37851-1-laoar.shao@gmail.com> <CALOAHbA5fkK8XSqo62=k1hVX+krx58eUWMLNwMdwncAp+Xn4=w@mail.gmail.com>
+In-Reply-To: <CALOAHbA5fkK8XSqo62=k1hVX+krx58eUWMLNwMdwncAp+Xn4=w@mail.gmail.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 26 Feb 2026 10:39:03 -0800
+X-Gm-Features: AaiRm525IjvAgP2m8U1ztRPIt1NFKWi9elaaOHMPnFuFw6PDgAFCBbR_5SlT25o
+Message-ID: <CABCJKuetWVkjqMPR371cEs9hhSd-kzBFNz1UyQk=t2C1Yc=ETQ@mail.gmail.com>
+Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
+	atomlin@atomlin.com, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 26, 2026 at 12:22:32PM -0500, Stefan Berger wrote:
-> > I see that IMA indeed never upgraded full file hashes to use
-> > 'struct ima_file_id'.  Building a new feature that relies on this seems
-> > like a bad idea though, given that it's a security bug that makes the> IMA
-> protocol cryptographically ambiguous.  I.e., it means that in IMA,
-> > when the contents of some file are signed, that signature is sometimes
-> > also valid for some other file contents which the signer didn't intend.
-> 
-> You mean IMA should not sign the digest in the ima_file_id structure but
-> hash the ima_file_id structure in which this file digest is written into
-> (that we currently sign) and sign/verify this digest? And we would do this
-> to avoid two different files (with presumably different content) from having
-> the same hashes leading to the same signature? Which hashes (besides the
-> non-recommended ones) are so weak now that you must not merely sign a file's
-> hash?
-> 
-> The problem with this is that older kernels (without patching) won't be able
-> to handle newer signatures.
+On Wed, Feb 25, 2026 at 6:19=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
+wrote:
+> Just checking in on this patch. It looks like it hasn't been merged
+> yet. Is it good to go, or does it need something else?
 
-IMA needs to sign the entire ima_file_id structure, which is indeed what
-IMA already does when it uses that structure.  (Well, actually it signs
-a hash of the struct, but that's best thought of an implementation
-detail of legacy signature algorithms that can only sign hashes.  For a
-modern algorithm the whole struct should be passed instead.)  Just IMA
-uses that structure only for fsverity hashes, which is a bug that makes
-the IMA protocol ambiguous.  It needs to use ima_file_id consistently,
-otherwise a signed message sometimes corresponds to multiple unique file
-contents even without a break in the cryptographic hash function.
+The patch looks reasonable to me. I have it in my queue for v7.1.
 
-Sure, when that bug is fixed, old kernels won't support the new
-signatures for files that use a full-file hash.  But the same applies to
-starting to use a new signature algorithm, such as ML-DSA.
-
-- Eric
+Sami
