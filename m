@@ -1,64 +1,64 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73D3335099
-	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 23:47:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2196E332EA4
+	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 23:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772149664; cv=none; b=HLvcN928dpLwAkVbtDWMGKcM4C2T0GImqrjNJ2E0Y1aZ02kQtgfSl044Kq8KciMxokMnxIdiTaHpkrmpudHH3W212ANCuMFaYQuDOQ0rBnpdM/AmNWtI4i+n8QT5ZYQoxYw81ifch5Q+j1tBwPjJwTMux2QsmcG6DAcI3oOhOZ4=
+	t=1772149665; cv=none; b=lRanP0pPfjzefhHf/ELIwGzSZPGGWlLSJoriK0mnKLYMAEe1DLnylJUTRkF2nDB1PP/adM8b/MWK5HQFmVgJoqNjGxR87+L4M9eA7MU54F1G7UgjgWZf62+2tzkqB8zy6iMeg1Fqd3KXny039zQbFVLqOCSM0TRNyAavHd0TIZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772149664; c=relaxed/simple;
-	bh=diXsuT8eJT5nS1aZMe0HRgaFMpWk5Il6lizUmS70zew=;
+	s=arc-20240116; t=1772149665; c=relaxed/simple;
+	bh=RHn2hmvCm9HqGAs0R0Q7MI+s5iIBHQPJjHJ3TmmUVZg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zf+IdU185myjtnDgFcrTZF1oV8SJC5jQVaJnl0LQrmgNxH3NU1D5fjsKIviVWX3plkl48mwcobkhwvxvqGcJezcbu7714kYxP23mdcOdQC/xvloBbl5mbUZ5gkuFxZzmvCpRqvYr4lCBT/CeBABje5aDJsaIY2jwEHvlPPN1c4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MbVjp91i; arc=none smtp.client-ip=74.125.82.172
+	 MIME-Version; b=ufSTCwrB+GWo83lk+oYQPjG1jnvM5/qoCczF4HBV9CdbA/+fGw0TJkxAcSHlMaM+3o1RtXkRfFmkh+0Cx872cxcP0UWEQVOe5XNUnkp9KdTvybyRkRLnK8/lFOUgNSRdRo0VtzvisRqZStNSr7c0nSOk7yB2PeZFrMgi59M9Ui0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T5xbapxx; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MbVjp91i"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2bdbd13ca01so2713120eec.0
-        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 15:47:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T5xbapxx"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1271195d2a7so2598262c88.0
+        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 15:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772149662; x=1772754462; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772149663; x=1772754463; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q5i5WdejKaPItbRozzcqSDHdFPHSAvpyQt6V3+kxZMw=;
-        b=MbVjp91i58IBWrvZ0bLFpMYkO/UcDLmdXT9lKTCa6RotSYujw4CdXcboon5KWNvbqj
-         vxpSvORZD42q0gbcK8La/s7Mjis8KKRSNQiPJnB84hAY0Gt4e7109nwryPmP/Ul5PMkZ
-         r+H0YR8AM3G1JKA+CcJXUBa3+pbzIn212FiKjAXy5FrHccnQEmEMq8r7xF4bZRf5RFT6
-         4BiXRcysP1p3gA8jveORAOpc17K66x8ESQqTzYji1FhNVlMF/jkPtI7f2WKbNjqMfJE4
-         luB2qrmvBzSAWL7iMvaYKTAmH3cfEMfYtH7vFOH9xpMAzS3DeFiB3q6JcYvGXIypVxFh
-         sv+g==
+        bh=sNVcpj/MlR6xmLdrStuL7mU5hg7ztc2Pvj8nGgrDXrY=;
+        b=T5xbapxxHxmnGx3MweLRwo6oFS9rU/w4h0p6yhze7NFBa1KKwaQJfOQGu8XmUTdJsQ
+         iKU2J8UvnfKTm97ky0id3EbMHfoCQIyMo+u9k4QzZi+jOgZQ10279SpFIjpWFYJEa/vz
+         HoTD4ixtcRN78AS7HaSVhP7UAY4PJlUhCkc1m9Ry+aHHDCD4GxRLcOp166SK565PYYyE
+         wR+ux/xxGSsRZX1+JiwGGCMbXPaTXmTAE2dkTgQkTL3mZAjlGmJ1LaOMfdyz8plNTvnr
+         Bsv63Vcfn6RoIE9UhvPcRXfnwOAGH6tWNkvvBJbK7Xf0k/Hl7qQfCReYougKQZoBWzWm
+         aJrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772149662; x=1772754462;
+        d=1e100.net; s=20230601; t=1772149663; x=1772754463;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Q5i5WdejKaPItbRozzcqSDHdFPHSAvpyQt6V3+kxZMw=;
-        b=UYOaJEd+bFOAgqdE1gkMO/CjzYi7dfuBQTEBB1YkFzvZSya9oHmpVpBL4LYizPPbqP
-         9XqAhm8CeaTbfEdayEFb31JBhqXBbhMCvAphA7+6O0yPYtik07lzxhVqM2GYCyWnsiTs
-         u78sjrzyRrOT1NESUD30cPPsOvO3zEw4EH9/YP0k+tkrkcI6QoRmfmNjJbSaZM2eVeN5
-         VjYPX4ws/45LM3LDVekDFU5C2VcuCjiYrL86SpUdMaEv2Ekv1pip9hPkNsOokQFbrtmc
-         xeiGO5rairj21Gt6EuckwNa8ULonRS8kwU0ietgnelw7Y3bbGspuMSBjHXkOS0O/gkut
-         dnbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHqJwTG3z8Vb7lr4giwv+tZrlSQN3UBKETJ+DWlSTPrqZb+r49ic5nUc8pHx8ax4JEzQ721UIjH5FFS6u0@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZatmVoeWn0ibZ5xcuQ5SVJ2yT/iatZaKG9h23eBRK3joB7lp3
-	wCOef2jZONVCP1z7sLAlwzKzN31lmgdvWe5nOW6kMyay5nWVxgkgC8Wg
-X-Gm-Gg: ATEYQzyIfAHoWZdE0U8udashVDYlRgH+L4JSk4kXs3ErGTGx2Yr4WvA8UxRYfGIarQX
-	eMlA6fzH04U4VbgRmQz/nWVV5SiFgjxru6L6SAX8t1rVMLWu5HbE/e18KL24lZP38IF2FBNwPJL
-	G/YqDSAfMOanVfXkE9fOKH8R7N6frvpBslql49gImMvvwjlBOFhMxH1bLLxrdj1q7JmAwY3g6Cx
-	W03/oyhHYg0jpjwvDsolGO1FEprA9y04+aU9segaovFStK3lUeK9wjUUhPronXsqrOjMpJd7CWa
-	JVsHt2zX27G2mA3T2C4S5/BAx2XcM2mpXr6adRdXxL0QfDeYGcFLOhAQsF+MD7X8lMm9tzmYMh7
-	rpS4+nvyMqvD+B5Jcn6AlVM78dK6w6cGMgoiZ01/bQx6vCcSCLd0oO6QEu4FiYdco7+HxN8phLh
-	K2RBP9+uSDIPJ+KQqCYfFS4mKxmqk4QN58CZa0iECPhX/6ZfSy5hEAQXJAi6p7Yyp9Zl2yYAKkv
+        bh=sNVcpj/MlR6xmLdrStuL7mU5hg7ztc2Pvj8nGgrDXrY=;
+        b=TqmDDt49mtYtijgzmfpPYMnqnxtwItI62nZUoFpVH6iO+IBpTtZn5qnJc+q9aSuAoA
+         /ED+Ihj4uH/vGc2pQ1xJ/e+B1xR5R1EMXAw4viVz37fx8/LLkEhKhvD7cSwOPgpoBd4C
+         9uIW1L9XZxvyWBWnnQLAJqtc2WnGWUXExEWJx/NPhXNNFzEYP9IbgMuX6cdFW/z8yzxV
+         URsoiG7GOcmi6kisHz1pSCo/P0HmqwE1Nr+VX9vBbxfWy3DFFCalXZ3E63VaRIEf2zoi
+         CixmNJiXrUpvfkTUSU+HPMIgaj0wB7Eof2v75VHnBo7V64iDG2d2GosPsCUmOGtz08YA
+         9GtA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMmaOR79I28DSpAeCYUdzNZDyiJWIC71bJLme7/8lQ/7znCcXpb4wksgod8hyAQeVAn9+FIWzVSjd2y7aj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQJ2TSQhw1OJ/iRREvQzWk6Gp7qd0UR5MimttIeiXknBa9H779
+	TcfmK7aLpXrQcggsNkqGp+w/NUzpaS8bk6bkEgJXmndPCQpFzlj8pcji
+X-Gm-Gg: ATEYQzzVr73lXPluPLvo0/HLHrCXn7f/Qt0r/g3BDX9b6zGYI4KTwaSVfeiSz3y+/Wh
+	lH/XX8Li1/g6ErMh1du65Ke6XBoXwQz3pOnkNBBj2VomgJcqgLCR1ME2gS9f6Z953njgoDh7et9
+	w9VP/ZDr9S38bdj/TCX0K3hCDBt6gQFi22+Hndyi18cuFk2exj22nomjwJ7ShZV7Whax5roGxay
+	RKNmXaRU0n4spo2cuRVCDCxYUZqpSxPVfxBYX+qEuuwLXXBbOzCVxlHrPcDG11ihSK+ik0/BZiW
+	5T0PBdS20R2UwQgEw3TZ8TALNWhPFoTelAGH8YsKVvgkHjQ44T+R5X20+T3MaymTOf1siQE5yB+
+	A/HQeNam13kgz0LQ92MDhnOd6Mx0s5G2v5svkPL6oEIqyWWtdamfJOmVyASggtTKQqK61UPKQwb
+	Rnkep6OYu+nw1tEYZ+FVTDlgn3GZM7RHyWZR/bDXBfRWHupfLeuozAUQFHE9sGCJYU/jhZYUnGl
 	g==
-X-Received: by 2002:a05:693c:2c97:b0:2b8:64ad:ad4d with SMTP id 5a478bee46e88-2bde1d32ceemr413421eec.26.1772149661991;
-        Thu, 26 Feb 2026 15:47:41 -0800 (PST)
+X-Received: by 2002:a05:7022:6986:b0:124:a4cf:ce90 with SMTP id a92af1059eb24-1278fc288e8mr352535c88.1.1772149663234;
+        Thu, 26 Feb 2026 15:47:43 -0800 (PST)
 Received: from localhost (99-122-55-39.lightspeed.sntcca.sbcglobal.net. [99.122.55.39])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f23c0csm2819777eec.22.2026.02.26.15.47.41
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a5312dsm3296029c88.16.2026.02.26.15.47.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 15:47:41 -0800 (PST)
+        Thu, 26 Feb 2026 15:47:42 -0800 (PST)
 From: Matthew Wood <thepacketgeek@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -80,9 +80,9 @@ Cc: Aaron Tomlin <atomlin@atomlin.com>,
 	linux-modules@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 4/8] rust: module_param: add ObsKernelParam type
-Date: Thu, 26 Feb 2026 15:47:30 -0800
-Message-ID: <20260226234736.428341-5-thepacketgeek@gmail.com>
+Subject: [PATCH 5/8] rust: module_param: add from_setup_arg() to ModuleParam trait
+Date: Thu, 26 Feb 2026 15:47:31 -0800
+Message-ID: <20260226234736.428341-6-thepacketgeek@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260226234736.428341-1-thepacketgeek@gmail.com>
 References: <20260226234736.428341-1-thepacketgeek@gmail.com>
@@ -94,52 +94,81 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add ObsKernelParam, a #[repr(C)] struct that mirrors the C
-obs_kernel_param structure used by the __setup / early_param
-infrastructure to register boot-time command-line handlers.
+Extend the ModuleParam trait with from_setup_arg(), which constructs
+a parameter value from a raw C string pointer received via a __setup
+callback during early boot.
 
-The struct contains:
-  - str_: pointer to the null-terminated setup string
-  - setup_func: the callback invoked when the kernel parses the
-    matching command-line token
-  - early: flag distinguishing early_param (1) from __setup (0)
+The default implementation converts the pointer to a CStr and
+delegates to try_from_param_arg(), which handles the parse-from-string
+path used by integer types.
 
-Mark it Sync because instances are written at compile time and only
-read during single-threaded early boot initialization.
+StringParam overrides this method to store the raw pointer directly
+without parsing, since the pointer originates from static_command_line
+and remains valid for the kernel's lifetime.
 
-This type will be used by the module! macro to emit __setup entries
-in the .init.setup ELF section in subsequent patches.
+Also add ModuleParamAccess::set_value() to allow the __setup callback
+generated by the module! macro to populate the SetOnce container with
+first-write-wins semantics.
 
 Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
 ---
- rust/kernel/module_param.rs | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ rust/kernel/module_param.rs | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-index 67ff6f2ea9c2..54379a2bba51 100644
+index 54379a2bba51..5e14dbe03865 100644
 --- a/rust/kernel/module_param.rs
 +++ b/rust/kernel/module_param.rs
-@@ -26,6 +26,20 @@ pub const fn new(val: bindings::kernel_param) -> Self {
- // from Rust module.
- unsafe impl Sync for KernelParam {}
- 
-+/// Placed in the `.init.setup` ELF section by the `module!` macro.
-+#[repr(C)]
-+pub struct ObsKernelParam {
-+    /// Pointer to the null-terminated setup string (e.g., `"netconsole=\0"`).
-+    pub str_: *const c_char,
-+    /// The setup callback function.
-+    pub setup_func: Option<unsafe extern "C" fn(*mut c_char) -> c_int>,
-+    /// Whether this is an early parameter (0 for `__setup`, 1 for `early_param`).
-+    pub early: c_int,
-+}
-+
-+// SAFETY: Only written at compile time, read during single-threaded boot init.
-+unsafe impl Sync for ObsKernelParam {}
-+
- /// Types that can be used for module parameters.
- // NOTE: This trait is `Copy` because drop could produce unsoundness during teardown.
+@@ -45,6 +45,21 @@ unsafe impl Sync for ObsKernelParam {}
  pub trait ModuleParam: Sized + Copy {
+     /// Parse a parameter argument into the parameter value.
+     fn try_from_param_arg(arg: &BStr) -> Result<Self>;
++
++    /// Create a parameter value from a raw `__setup` callback argument.
++    ///
++    /// Default implementation: parse the null-terminated C string via
++    /// [`ModuleParam::try_from_param_arg`]. `StringParam` overrides this to store the pointer
++    /// directly.
++    ///
++    /// # Safety
++    ///
++    /// `val` must point to a valid null-terminated string.
++    unsafe fn from_setup_arg(val: *const c_char) -> Result<Self> {
++        // SAFETY: Caller guarantees `val` points to a valid null-terminated string.
++        let cstr = unsafe { CStr::from_char_ptr(val) };
++        Self::try_from_param_arg(cstr.as_ref())
++    }
+ }
+ 
+ /// Set the module parameter from a string.
+@@ -226,6 +241,12 @@ fn try_from_param_arg(_arg: &BStr) -> Result<Self> {
+         // when using PARAM_OPS_STRING.
+         Err(EINVAL)
+     }
++
++    unsafe fn from_setup_arg(val: *const c_char) -> Result<Self> {
++        // SAFETY: Caller guarantees `val` points to a valid null-terminated string.
++        // The pointer comes from `static_command_line` which is valid for the kernel's lifetime.
++        Ok(unsafe { StringParam::from_ptr(val) })
++    }
+ }
+ 
+ /// A wrapper for kernel parameters.
+@@ -266,6 +287,14 @@ pub fn value(&self) -> &T {
+     pub const fn as_void_ptr(&self) -> *mut c_void {
+         core::ptr::from_ref(self).cast_mut().cast()
+     }
++
++    /// Set the parameter value directly.
++    ///
++    /// Returns `true` if successfully set, `false` if already populated
++    /// (first-write-wins semantics via [`SetOnce`]).
++    pub fn set_value(&self, val: T) -> bool {
++        self.value.populate(val)
++    }
+ }
+ 
+ #[doc(hidden)]
 -- 
 2.52.0
 
