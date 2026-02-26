@@ -1,64 +1,64 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745C433BBB8
-	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 23:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A5733CE91
+	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 23:47:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772149668; cv=none; b=YPOq7etEKjET3SL2i/yxWiKV2wh9G8cL4PCvejJqsw3RfPeNHVHKeTP2ZUd5QdB+VXHKfmixWHff9h819/+RR/Hn6kfzaUQ2GBb8O4RDQ7HbLA5Uti6YUCdRZKcPdC0WQ1aEBSHlg3xYclv2yhqq2GqYUk9/bk0pvECG0CHC+bY=
+	t=1772149672; cv=none; b=OGWpCatbuMY5+m56uWfSTObvk1xtwg7RCPeahuMPcwOxcAadCt2/v49dqJ5oZmH0W5yf83Qdn8aORulb1MI7KnUiXCjwe7PN92/2eZ+rx0IiPKbF0TU2fmwEe6Ycv9zZTUb88xwdIdCSk/0cu2HAgym7JAtq3+0mShOqCMubjro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772149668; c=relaxed/simple;
-	bh=BAjK7gWmE8NiqPCEPZ+0Bww+M+TFsGuQf188GGuI7Ds=;
+	s=arc-20240116; t=1772149672; c=relaxed/simple;
+	bh=eHSd6gZAgAs99aURB/P61YrQaeqSUqKmTJDHpVJAJgk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h71VCYZPXA2G9pxnvm+n5vRd+98uH909l3Teg6/IbOw6FPaH+KPoj2UgHzDOf7x+9K1U9L868HyUxSjRUsSNVhhlsisAf74DO+a6d5oUIc1f0OUQYo5khDoxucFxf+Z13O46OVs0nUZTuFBiQBQGyONp/RBXFf3xnEl6LVXon1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxuvrRSh; arc=none smtp.client-ip=74.125.82.181
+	 MIME-Version; b=spmgjRHD1nxZHD9T9BWtRC1LKOth+YU6wy45Ce+X2CwsnfogrTbCwkoxNBc5l6QLCV5ADEViWEY0qwtfOmAZvpNIRWfjPpj3zHjBD56eI5gHxidZN4Mi5/Zp8XtlWS+xHnxi2AQO8m9AUP1xrtk8UYMjLuneA+VO1PTfNv0Ssb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d1Yj8Xhi; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxuvrRSh"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2bdcfbd0779so1699928eec.0
-        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 15:47:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d1Yj8Xhi"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ba9c484e5eso1473969eec.1
+        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 15:47:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772149666; x=1772754466; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772149667; x=1772754467; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gpoHH7pwXOlyNuoaXWey7x0lvhL7U9SeoRRb6VtCgvw=;
-        b=fxuvrRShfPuZ7Rr+Hm8Bxm9iS2163sSdeJ/UcrXVi28FZy4u+Mwvj7uMERRHMReCdP
-         jHh9+thhpxFomJ7FPNjnqkUVdfHwvVX04ifguXiVwQYguS4tLazoflfbLte+7lpzz8z6
-         6N6GM+J2+hxnkiEcSPCMnHUAMuVYun2F+GeMXr7Q3tMQNIxg2g7du95c8BZKvXVhp4II
-         Oh8RSH3sreziq/gHLwIKjdlgPMmiJ36OhNuIEBJOl/s8cXM59eFEjav8cjlhYVHyFm1P
-         ApvAEtKc1Pyds5gr41DsybndVaDWFyNRj0YqBM12nhfr6z8Pk1NpWCUAJwpsV5cPu6Y1
-         zr9A==
+        bh=a9Hb2iavLuCFwRbZcUJdleryz74/Q+xg8WkVXrxCwXo=;
+        b=d1Yj8XhiNEDcSEBMYSPG0iltvoIdKiu6FndiVhVCztvqTMN/sLm5yehkw+AbZaL2RT
+         6gDYQEEdSPjmh7kU9quk2KhOVHvYP4al2ENNvlFxF31NrA9uDeoN/krSBa4Xicaaj3SY
+         FkVkZb1SEh3y7CGEnIH46f+tFbHfFxe8ZfUlmcwXT4oXlMSKtMtcU4i4Ml/HH7dT98nj
+         n20IupGAK7iFGvKdoe79DnElTMpMo3XEDLNxVLlzfCcESZZu1Wm7a58TJxr9q7tapJjy
+         rftfIX6+3GsEq2WEU//+z1iVOZqXpSt7pUvQnYSoVbiNOJgItjQfB+lopPxJJSedmu7k
+         OBIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772149666; x=1772754466;
+        d=1e100.net; s=20230601; t=1772149667; x=1772754467;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gpoHH7pwXOlyNuoaXWey7x0lvhL7U9SeoRRb6VtCgvw=;
-        b=BjCwnmX9waDkkK1yLddC0UDGFKT9qKFcqfpHTzPw5/uilC1fVakmiLQIVwtTYqv79J
-         TNruJRWPY2oHHeztMOqq4YaXqNZFG0G1gk/wcj1yu2PYczDbO01qyTCtHpy7DP9WWiWn
-         EqUuVszLw+cYH6ylsB83JTOls6OD1YZ6wEAaR+IA3wopYT55eMzfDCg33TkCEPytPKVw
-         a3vidxjETiy7H9S6rUApLwFh/w1Us+8cvFJLzZ0/5G8feQK0VgR+ihm7/r07t50aUKrj
-         fkRzj2Av+l9znrcQLZOi60uqN3gX5IRnqGIUw1nKnFYnmmfma1d+vU6X95oXAXvxEGYb
-         AToA==
-X-Forwarded-Encrypted: i=1; AJvYcCUY2I4z20Y7mKn+wrMeQvGVkq/b0/OfX+koZ45Qp7e9oihvsZQ28FmobEQwY8qmbyffQADldTy+Q7Po2CPq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6PfGfEcvLJ1wdrJr9qCoqq6UON/rDVfDwNWAZcTmp2WhppaUM
-	IDLD9raeZB0/G83v1upG9Kk94R/dBgK5fts9cPbVJU6AtnlCGBNn4Vyb
-X-Gm-Gg: ATEYQzyp7CsKnxd4VImYblxxIuAli89DLX2bqWfyE94p1NaqzDCyeX3Zs7eX+AgheCK
-	Cjb7gaA8+CKRK7PTwsqw895Qg7H+Q6v51R7EB9GAnqlh1RtGIylqNE0IS/dLv+o5wUSiEq9FwN5
-	v5hmTj5qcrT1OF2gGckkrxPRziKYYRowomK1eDxgypC8e5szl3sCjLH/5beRDIgqWSz8AIEQudB
-	7INzGmuz4gOq39Ke4W9MWJAXaqKLupjZ+obZFUjp6pXh07kNwK+UiqtCiGtUyia43SScZ0C0JIx
-	z0hXR7cwtfrnOYn5evOvL7CbRDbLSO1Eh+K3AYKt2zm49C5L1CbNN5tuL/cKRBrudVXKe0FLXZC
-	oGNZa9Bs6NjJmy4On632SbV9YyrW6pZOa+Yb0t2kwuKBuWdJz2zpJolSeViW+tCug61XjMpUP1+
-	AwVLkp5mN9nyK8vDUTd6PF8KYrZcfqv5zclklUBzO9ditDZK5IVmMia6S0fhRFgWyraHjHf4vO0
-	w==
-X-Received: by 2002:a05:7300:640c:b0:2b7:95d5:3a32 with SMTP id 5a478bee46e88-2bde1b4dd2cmr411625eec.1.1772149665577;
-        Thu, 26 Feb 2026 15:47:45 -0800 (PST)
+        bh=a9Hb2iavLuCFwRbZcUJdleryz74/Q+xg8WkVXrxCwXo=;
+        b=V36Om1RKzXS+1c8oagdLN22ptOVjSavkXIF79JHsF8eQWpnCiQijK4vrEEnAGUpNPQ
+         Rq736Bly79nx12DGKTpuiO9ueAkIGiFM+w8tq6+g1yM/VyZNidtSGAyGqQANT+XhkbHB
+         ObMEjeHtY48aU1iPNwiPiaVd00TbNd6P1rnIL3A0786zX/xNmb7nZheTHxZ9NfGF7bH5
+         NrmLVQ+v0M1R7kvx8+67sI7v2uNAKmciodMRoOlwnLbyWO6PuwvtW29YiFOwQdKiltm8
+         VjqVqLSJvsEIV8SsDJaBZFokBkeabXit9rUWpHF4yDszJCyPVV0rV9RZ8nU1kABHDzqp
+         wdNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGSLVmfmzMPDc91xNHK/F1q1jkQt5qCJvmZLknhiLHkXuF+PETdZ8WY4H4jdtu9CrB4k8XopnGx9ejzOoc@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl9/RKr5CilzMuJNrD79XsiAOOGCmwna0D1tC4+Pv+2NIGNJ6e
+	JkvK2qdtodq964sY86D0H9DJJv1RgHifI9wc8hpzXpxhQ/RmOwRUPCmy
+X-Gm-Gg: ATEYQzw2KuD3UGCokjd3ywCQasacGlNnGLLQTxnHc5NmBRS+BmBuHWuQhFwD0Xk+OTj
+	kfUGAwYYyhFShtTnONMkQNDLLCh/naMDWYCmn0mfdHaoAGbRPBPJ3H4H1A1R04/+uGRTJpAg7Zl
+	Suv3sV4HaW0cxbuMnIC9zLpbyOA1E2O4WBe+sbpwz4r6NUT5uaNcj3ns7aGsqIgfzhVLdXTlkSd
+	zl1kHXe3FRiftKg5kFn3xX/3Z9l7iDrz7XdqDX4O7pDJm/Vt9Jeu+U1lYp/tGzZEGzUN7M4MN6i
+	MTbZYzuHJq7rZEw1MErD09I6+fr+pB5WAfU0bk4d6fQp3CS8gC3VOnPF6eE2+ZRqdo5se32Iyo6
+	HAYwojvNQGQJsgktRlDNEF+LTszRMSi4jsZvOk47xyKY8Mc1n3MaVUBsSDul+eTsLZG2A+lLZ8+
+	SloUmJMqbfn4Ijz4cTDgTxS58TcbZLsQ5mbsFooAJC+0KCa4ljs+xeFDBksrQP68yyrrSFot2Ko
+	Q==
+X-Received: by 2002:a05:7300:fb89:b0:2ba:72c3:53c0 with SMTP id 5a478bee46e88-2bde16c8443mr353009eec.0.1772149666732;
+        Thu, 26 Feb 2026 15:47:46 -0800 (PST)
 Received: from localhost (99-122-55-39.lightspeed.sntcca.sbcglobal.net. [99.122.55.39])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1bcdd95sm2776586eec.6.2026.02.26.15.47.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1bce276sm2849248eec.3.2026.02.26.15.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 15:47:45 -0800 (PST)
+        Thu, 26 Feb 2026 15:47:46 -0800 (PST)
 From: Matthew Wood <thepacketgeek@gmail.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
@@ -80,9 +80,9 @@ Cc: Aaron Tomlin <atomlin@atomlin.com>,
 	linux-modules@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] samples: rust_minimal: demonstrate early_param usage
-Date: Thu, 26 Feb 2026 15:47:33 -0800
-Message-ID: <20260226234736.428341-8-thepacketgeek@gmail.com>
+Subject: [PATCH 8/8] rust: macros: add configurable initcall levels to module! macro
+Date: Thu, 26 Feb 2026 15:47:34 -0800
+Message-ID: <20260226234736.428341-9-thepacketgeek@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260226234736.428341-1-thepacketgeek@gmail.com>
 References: <20260226234736.428341-1-thepacketgeek@gmail.com>
@@ -94,33 +94,150 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add an early_param annotation to the test_str parameter in the
-rust_minimal sample module, registering it as "testing_early_str="
-on the kernel command line.
+Currently all Rust modules using the module! macro are placed at
+initcall level 6 (device_initcall).  Some modules need to initialize
+earlier in the boot sequence to provide services that other subsystems
+depend on.
 
-When the module is built-in, this allows the parameter to be set
-directly on the boot command line without dotted module notation:
+Add an InitCallLevel enum representing all eight standard initcall
+levels (pure through late) and map each to its corresponding
+.initcallN.init ELF section.
 
-    testing_early_str=world
+Expose this as an optional `initcall` field in the module! macro.
+When omitted, the default remains level 6 (device) so existing
+modules are unaffected.  Example usage:
+
+    module! {
+        ...
+        initcall: subsys,
+    }
+
+This only affects built-in modules; loadable modules always enter
+through init_module() regardless of the declared level.
 
 Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
 ---
- samples/rust/rust_minimal.rs | 2 ++
- 1 file changed, 2 insertions(+)
+ rust/macros/lib.rs    |  4 ++++
+ rust/macros/module.rs | 56 ++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 59 insertions(+), 1 deletion(-)
 
-diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
-index 59955e95e31a..9fc0c0a864d3 100644
---- a/samples/rust/rust_minimal.rs
-+++ b/samples/rust/rust_minimal.rs
-@@ -35,6 +35,8 @@
-         test_str: string {
-             default: "hello",
-             description: "This parameter has a default of hello",
-+            // This will allow the arg to be used in kernel cmdline without dotted notation
-+            early_param: "testing_early_str=",
-         }
-     },
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 83dcc89a425a..cfde59e81cdd 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -135,6 +135,10 @@
+ ///   - `alias`: array of ASCII string literals of the alias names of the kernel module.
+ ///   - `firmware`: array of ASCII string literals of the firmware files of
+ ///     the kernel module.
++///   - `initcall`: initcall level for built-in modules. Valid values are:
++///     `pure` (0), `core` (1), `postcore` (2), `arch` (3), `subsys` (4),
++///     `fs` (5), `device` (6, the default), and `late` (7).
++///     This only affects built-in modules; loadable modules always use `init_module()`.
+ #[proc_macro]
+ pub fn module(input: TokenStream) -> TokenStream {
+     module::module(parse_macro_input!(input))
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 4d2e144fa6de..1e210fee4506 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -436,6 +436,53 @@ macro_rules! parse_ordered_fields {
+     }
  }
+ 
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++enum InitCallLevel {
++    Pure,
++    Core,
++    PostCore,
++    Arch,
++    Subsys,
++    Fs,
++    Device,
++    Late,
++}
++
++impl InitCallLevel {
++    fn section(&self) -> &'static str {
++        match self {
++            Self::Pure => ".initcall0.init",
++            Self::Core => ".initcall1.init",
++            Self::PostCore => ".initcall2.init",
++            Self::Arch => ".initcall3.init",
++            Self::Subsys => ".initcall4.init",
++            Self::Fs => ".initcall5.init",
++            Self::Device => ".initcall6.init",
++            Self::Late => ".initcall7.init",
++        }
++    }
++}
++
++impl Parse for InitCallLevel {
++    fn parse(input: ParseStream<'_>) -> Result<Self> {
++        let ident: Ident = input.call(Ident::parse_any)?;
++        match ident.to_string().as_str() {
++            "pure" => Ok(Self::Pure),
++            "core" => Ok(Self::Core),
++            "postcore" => Ok(Self::PostCore),
++            "arch" => Ok(Self::Arch),
++            "subsys" => Ok(Self::Subsys),
++            "fs" => Ok(Self::Fs),
++            "device" => Ok(Self::Device),
++            "late" => Ok(Self::Late),
++            _ => Err(Error::new_spanned(
++                ident,
++                "invalid initcall level. Valid values are: pure, core, postcore, arch, subsys, fs, device, late",
++            )),
++        }
++    }
++}
++
+ struct Parameter {
+     name: Ident,
+     ptype: Type,
+@@ -480,6 +527,7 @@ pub(crate) struct ModuleInfo {
+     firmware: Option<Punctuated<AsciiLitStr, Token![,]>>,
+     imports_ns: Option<Punctuated<AsciiLitStr, Token![,]>>,
+     params: Option<Punctuated<Parameter, Token![,]>>,
++    initcall: Option<InitCallLevel>,
+ }
+ 
+ impl Parse for ModuleInfo {
+@@ -515,6 +563,7 @@ fn parse(input: ParseStream<'_>) -> Result<Self> {
+                 braced!(list in input);
+                 Punctuated::parse_terminated(&list)?
+             },
++            initcall => input.parse()?,
+         );
+ 
+         Ok(ModuleInfo {
+@@ -527,6 +576,7 @@ fn parse(input: ParseStream<'_>) -> Result<Self> {
+             firmware,
+             imports_ns,
+             params,
++            initcall,
+         })
+     }
+ }
+@@ -542,6 +592,7 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+         firmware,
+         imports_ns,
+         params: _,
++        initcall,
+     } = &info;
+ 
+     // Rust does not allow hyphens in identifiers, use underscore instead.
+@@ -587,7 +638,10 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+     let ident_init = format_ident!("__{ident}_init");
+     let ident_exit = format_ident!("__{ident}_exit");
+     let ident_initcall = format_ident!("__{ident}_initcall");
+-    let initcall_section = ".initcall6.init";
++    let initcall_section = initcall
++        .as_ref()
++        .unwrap_or(&InitCallLevel::Device)
++        .section();
+ 
+     let global_asm = format!(
+         r#".section "{initcall_section}", "a"
 -- 
 2.52.0
 
