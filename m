@@ -1,212 +1,165 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6939C31B122
-	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 10:52:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D014261B9B;
+	Thu, 26 Feb 2026 12:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772103122; cv=none; b=hpot++XMkUatseNa7FR2IzNyAa53nW4muo/xkK3ERtFaoIhubeyuaYsg12oB2xeIDsfdhEO5e5M64u2A55jawFu9uRpYy6kGAFLWllF4QB54i3KC8rUap4smvmUqsw8OgVRxVZSAi7tB0UUBNkPgJFYk860HJ+mhrFfAzSrEDBg=
+	t=1772109741; cv=none; b=pkb+k1LmVZt/OXBMicxz5o1Z85OQYFfW33OBwkqttfbloTokvnCkQMff+qQeHtTamP4X5GYrSNrsI8wc2MlkocIuTuCORVTqrzgXQcIV5Sm9AaQqBfxN5S5oob+wtavJ+rh96RMCO4zuCRnjlkMrb3H6OUvlA4JHy9GcOAvMMgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772103122; c=relaxed/simple;
-	bh=OW9jBrw6UlKYAR5G6puvzpuBw0/LmaOaAW/CKdNUqyM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=NB/LKOne0el9IFNrNcrdm3HwPIPaoFM7zjUYxSClk0HVq1D4jUR1LuRZ4GUfcnApp/gdEeJJk1CidAfH0h+OsdXOpSLkAneSLKlJAVCZ4lFrw6bQjVu0F5gGDeiGwLt+kdvai6+SqDv0NSBk3vUtG9cGXdKaPq7sGL4ZJIZRPRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BtdOjjra; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=DhqTz4uK; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BtdOjjra; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=DhqTz4uK; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1772109741; c=relaxed/simple;
+	bh=IcNay0btSOXeeAE+kAiTYTA7H/ekXPFYc0x4SXrQGwg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WMwYcgHO1xuFXOWTlGS2vkkqS22USBGxdBr0PAI5UJ3qAL9c3HIql2tAWMjZHxHsVEDt61xZa5QUs8ly8zuiKx+Hpl1ljVK+HO687vBezjiOyRpPzzZiuqKNIR/akx62K2974caUTHONzHK1Z82XtOFbYba6TZvT6+Je9XG5x4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=L+X9J8rA; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BtdOjjra";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="DhqTz4uK";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BtdOjjra";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="DhqTz4uK"
-Received: from pobox.suse.cz (unknown [10.128.32.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 520E34D303;
-	Thu, 26 Feb 2026 10:51:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1772103113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YRTmkOMlRvhhgDm3Bj6NzrogGPyP1ivHOK1BORzlqgc=;
-	b=BtdOjjraadHHE2MfRdYKt5HG/0XCy/7gvF0LZcjL4kHaN1Tt6bKh5irc2RaORfHXboV16u
-	xxF+qxKEu5oImnDOksHvYI/FvCVXbWojJkbbl/+NFI7851GtL67QDYfXf4X+iD2F5ImvKN
-	lXqgSuewnL7e/dwI2hIZ7kzS5VBQMVs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1772103113;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YRTmkOMlRvhhgDm3Bj6NzrogGPyP1ivHOK1BORzlqgc=;
-	b=DhqTz4uKCAEP3eSHIhOvETTC7rBzH3h8/8JSfz88aECcECfsBsMqfHhsQHtcAfU6K3HJBg
-	TKQb5nOTwm9ZGRDw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1772103113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YRTmkOMlRvhhgDm3Bj6NzrogGPyP1ivHOK1BORzlqgc=;
-	b=BtdOjjraadHHE2MfRdYKt5HG/0XCy/7gvF0LZcjL4kHaN1Tt6bKh5irc2RaORfHXboV16u
-	xxF+qxKEu5oImnDOksHvYI/FvCVXbWojJkbbl/+NFI7851GtL67QDYfXf4X+iD2F5ImvKN
-	lXqgSuewnL7e/dwI2hIZ7kzS5VBQMVs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1772103113;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YRTmkOMlRvhhgDm3Bj6NzrogGPyP1ivHOK1BORzlqgc=;
-	b=DhqTz4uKCAEP3eSHIhOvETTC7rBzH3h8/8JSfz88aECcECfsBsMqfHhsQHtcAfU6K3HJBg
-	TKQb5nOTwm9ZGRDw==
-Date: Thu, 26 Feb 2026 11:51:53 +0100 (CET)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Song Chen <chensong_2000@189.cn>
-cc: Steven Rostedt <rostedt@goodmis.org>, mcgrof@kernel.org, 
-    petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com, 
-    atomlin@atomlin.com, mhiramat@kernel.org, mark.rutland@arm.com, 
-    mathieu.desnoyers@efficios.com, linux-modules@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    live-patching@vger.kernel.org
-Subject: Re: [PATCH] kernel/trace/ftrace: introduce ftrace module notifier
-In-Reply-To: <e18ed5f4-3917-46e7-bca9-78063e6e4457@189.cn>
-Message-ID: <alpine.LSU.2.21.2602261147150.5739@pobox.suse.cz>
-References: <20260225054639.21637-1-chensong_2000@189.cn> <20260225192724.48ed165e@fedora> <e18ed5f4-3917-46e7-bca9-78063e6e4457@189.cn>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="L+X9J8rA"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61Q493Wp2713427;
+	Thu, 26 Feb 2026 12:42:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=41aTUf
+	zGa4ZfEXMXDAU3CDN2adSNbMjM07L4F0tJvg8=; b=L+X9J8rA88lWvXn+ijgWP0
+	/XJeOUauzAKwg1J2eYqk6k1RJd4HpqZGoTGUK/FgRsWTJuLXQFejCcBC/iZByF6t
+	1s0pS/ocO776SmFWhWcr1Hk6KYuKclljgsCld9PM1/gWsUs3/3AHSNU0WA8eKluV
+	ZKJpB02NCFQTR/ldbpCpdH81ojTQaA4gaAAOCP7PZgm0yppZrs8hFsV2oYOkeTwd
+	SsZmDvw+av7toQQ8ksBbnYyx7dDYo3ZWQVEerUUNkPgp0Fd0f5xYpZh/yu2Bm57M
+	9IHT3QQpXTQVQi5i3WdDvIFnPb8spAsZi74yf5jX1YS7eSEozneVXOi7QvyzkLdA
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf34cdhh8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 12:42:03 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61QB9Qpl003386;
+	Thu, 26 Feb 2026 12:42:02 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfs8k34qa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 12:42:02 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61QCg21W21234390
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 26 Feb 2026 12:42:02 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1FF2958054;
+	Thu, 26 Feb 2026 12:42:02 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CA7B25803F;
+	Thu, 26 Feb 2026 12:42:00 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 26 Feb 2026 12:42:00 +0000 (GMT)
+Message-ID: <cba10ac6-3557-4fc1-9b86-55361d14156d@linux.ibm.com>
+Date: Thu, 26 Feb 2026 07:42:00 -0500
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="-2146828000-1599428458-1772103001=:5739"
-Content-ID: <alpine.LSU.2.21.2602261150450.5739@pobox.suse.cz>
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	CTYPE_MIXED_BOGUS(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	MIME_TRACE(0.00)[0:+,1:+];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[189.cn];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[189.cn]
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: IMA and PQC
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Coiby Xu <coxu@redhat.com>,
+        =?UTF-8?Q?Johannes_Wiesb=C3=B6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>,
+        dhowells@redhat.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        roberto.sassu@huawei.com, simo@redhat.com, zohar@linux.ibm.com,
+        michael.weiss@aisec.fraunhofer.de
+References: <aXrKaTem9nnWNuGV@Rk>
+ <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
+ <aYHznG6vbptVOjHQ@Rk> <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
+ <20260226001049.GA3135@quark>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20260226001049.GA3135@quark>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI2MDExNCBTYWx0ZWRfX25OFoWMW75Pw
+ wDfGunJuHnlJ0zriWVZDtbkuIN0N0kXBXvP0kZKWvjdQ1LI22alQTCw8s5iGalNYxd128SadDob
+ eRRNxrDVzr88sXxMj81bIksnSWknNrXl4Bqmao30StuKaPuMC9Inp33iGk9iaLa1JDSDUuivsXK
+ rtW+wbu7/jLsF4pYFPCcm2Z/iGia+6Cq7KiMWC+kgSfqHK509mhqEcrDE8015Ux6wlHpjzZdPI5
+ qJi3JTC0DLlZffODO7JZmfyZdWPhKglI36ZMKd/5jisBoTNcV/djDQloGDwyvyrAGuV3zcvMSUQ
+ HUCewC8+bp1pHZ69rtSSK5JDLKR5qACyxlyBf5A26KNJi7iBUkJIf0O0PcWJzyJMUyJ7oxgNHpD
+ UEt7WkiCtcblRZ1b7AIJNzoDaun4wYD3EH22asFYCAtfFbTW42l/aQcI5/BCQwJn/zM8127dhhq
+ buWLq8lsYyJGvePJtzQ==
+X-Proofpoint-ORIG-GUID: dLyHBasPuk35xkQkVwjL6WfHqoq8z0qU
+X-Authority-Analysis: v=2.4 cv=F9lat6hN c=1 sm=1 tr=0 ts=69a03f9c cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=NEAV23lmAAAA:8
+ a=or4u6VGYAAAA:8 a=LpeavwYcytEc06GjzjIA:9 a=QEXdDO2ut3YA:10
+ a=f52p4T1hNPgkgD0SKpRM:22
+X-Proofpoint-GUID: -d0xVr0Tbl_weNYPZuUqlD4u7ZGPQL9_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-25_04,2026-02-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602260114
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
----2146828000-1599428458-1772103001=:5739
-Content-Type: text/plain; CHARSET=ISO-2022-JP
-Content-ID: <alpine.LSU.2.21.2602261150451.5739@pobox.suse.cz>
 
-Hi,
-
-+ Cc: live-patching@vger.kernel.org
-
-On Thu, 26 Feb 2026, Song Chen wrote:
-
-> Hi,
+On 2/25/26 7:10 PM, Eric Biggers wrote:
+> On Wed, Feb 25, 2026 at 09:25:43AM -0500, Stefan Berger wrote:
+>> To avoid duplicate work: Is either one of you planning on writing patches
+>> for IMA to use ML-DSA and convert the current ML-DSA to also support HashML?
+>> I had done the work on this before and could dig out the patches again...
 > 
-> 在 2026/2/26 08:27, Steven Rostedt 写道:
-> > On Wed, 25 Feb 2026 13:46:39 +0800
-> > chensong_2000@189.cn wrote:
-> > 
-> >> From: Song Chen <chensong_2000@189.cn>
-> >>
-> >> Like kprobe, fprobe and btf, this patch attempts to introduce
-> >> a notifier_block for ftrace to decouple its initialization from
-> >> load_module.
-> >>
-> >> Below is the table of ftrace fucntions calls in different
-> >> module state:
-> >>
-> >>  MODULE_STATE_UNFORMED	ftrace_module_init
-> >>  MODULE_STATE_COMING	ftrace_module_enable
-> >>  MODULE_STATE_LIVE	ftrace_free_mem
-> >>  MODULE_STATE_GOING	ftrace_release_mod
-> >>
-> >> Unlike others, ftrace module notifier must take care of state
-> >> MODULE_STATE_UNFORMED to ensure calling ftrace_module_init
-> >> before complete_formation which changes module's text property.
-> >>
-> >> That pretty much remains same logic with its original design,
-> >> the only thing that changes is blocking_notifier_call_chain
-> >> (MODULE_STATE_GOING) has to be moved from coming_cleanup to
-> >> ddebug_cleanup in function load_module to ensure
-> >> ftrace_release_mod is invoked in case complete_formation fails.
-> >>
-> >> Signed-off-by: Song Chen <chensong_2000@189.cn>
-> >> ---
-> >>   kernel/module/main.c  | 14 ++++----------
-> >>   kernel/trace/ftrace.c | 37 +++++++++++++++++++++++++++++++++++++
-> >>   2 files changed, 41 insertions(+), 10 deletions(-)
-> >>
-> >> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> >> index 710ee30b3bea..5dc0a980e9bd 100644
-> >> --- a/kernel/module/main.c
-> >> +++ b/kernel/module/main.c
-> >> @@ -45,7 +45,6 @@
-> >>   #include <linux/license.h>
-> >>   #include <asm/sections.h>
-> >>   #include <linux/tracepoint.h>
-> >> -#include <linux/ftrace.h>
-> >>   #include <linux/livepatch.h>
-> >>   #include <linux/async.h>
-> >>   #include <linux/percpu.h>
-> >> @@ -836,7 +835,6 @@ SYSCALL_DEFINE2(delete_module, const char __user *,
-> >> name_user,
-> >>    blocking_notifier_call_chain(&module_notify_list,
-> >>    			     MODULE_STATE_GOING, mod);
-> >>   	klp_module_going(mod);
-> >> -	ftrace_release_mod(mod);
-> > 
-> > Is the above safe? klp uses ftrace. That means klp_module_going() may
-> > need to be called before ftrace_release_mod(). That said, I wonder if
-> > klp_module_going() could be moved into ftrace_release_mod()?
-> > 
-> >>   
-> 
-> I didn't test with klp, so i'm not sure if it's safe. But i consider klp is
-> the other part which should be decoupled after ftrace and klp should introduce
-> its own notifier.
-> 
-> If klp_module_going must be running before ftrace_release_mod, i can try to
-> use priority in notifier_block to ensure their order.
-> 
-> Let me see if there is any way to use notifier and remain below calling
-> sequence:
-> 
-> ftrace_module_enable
-> klp_module_coming
-> blocking_notifier_call_chain_robust(MODULE_STATE_COMING)
-> 
-> blocking_notifier_call_chain(MODULE_STATE_GOING)
-> klp_module_going
-> ftrace_release_mod
+> IMA already had to add its own digest prefixing support, since it was
+> needed to disambiguate between full-file digests and fsverity digests.
+> See 'struct ima_file_id'.  Thus the message signed is at most 66 bytes.
 
-Both klp and ftrace used module notifiers in the past. We abandoned that 
-and opted for direct calls due to issues with ordering at the time. I do 
-not have the list of problems at hand but I remember it was very fragile.
+The hash there is still only a hash over a file and that hash is signed, 
+isn't it?
 
-See commits 7dcd182bec27 ("ftrace/module: remove ftrace module 
-notifier"), 7e545d6eca20 ("livepatch/module: remove livepatch module 
-notifier") and their surroundings.
+> 
+> With that being the case, HashML-DSA isn't necessary.  It's not even
+> possible to use here, since there are no OIDs assigned for the fsverity
+> digests, so it cannot replace the ima_file_id.
 
-So unless there is a reason for the change (which should be then carefully 
-reviewed and properly tested), I would prefer to keep it as is. What is 
-the motivation? I am failing to find it in the commit log.
+For non-fsverify IMA signatures it is 'possible' to use HashML-DSA and 
+it's 'working' (recycled old patches yesterday):
 
-Regards,
-Miroslav
----2146828000-1599428458-1772103001=:5739--
+Linux: https://github.com/stefanberger/linux/commits/dhmlsa%2Bima.202602025/
+
+ima-evm-utils: 
+https://github.com/linux-integrity/ima-evm-utils/pull/19/commits
+
+> 
+> I'll also note that HashML-DSA is controversial (e.g. see
+> https://keymaterial.net/2024/11/05/hashml-dsa-considered-harmful/),
+
+The problem with this is that NIST would have to react to these 
+controversies as we race to support PQC. If something is wrong with the 
+standard then it would be best for NIST to withdraw/modify HashML-DSA 
+asap. Otherwise it's the best to follow the standard IMO because if you 
+don't you get criticism otherwise.
+
+> since it was added to the ML-DSA specification at a late stage without
+> sufficient review, and what it does can be achieved in better ways.
+
+In case of doubt I would use the standard, though. It's probably not a 
+good idea for everyone to implement their own (bad) solution.
+
+> Which is exactly what we are seeing here, since again, IMA needs to do
+> the digest calculation and prefixing itself anyway.
+
+Use the standard...
+
+    Stefan
+
+> 
+> - Eric
+
