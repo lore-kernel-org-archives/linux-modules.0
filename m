@@ -1,94 +1,156 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31CB3290B1;
-	Thu, 26 Feb 2026 17:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9330E3246EB;
+	Thu, 26 Feb 2026 18:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772126998; cv=none; b=eipaFQDwBeRFaGqPwYDJgHFwFmlUkh7xDzkIJcXwrbnW4YpLJpz/cM0wMSnqNgJlmEi7E/MyG0YWQMp6XeJu0gwClZSOOylX3hJy2boKGcBkl0l9ngX5sfMwkH+y4OISHNf82lge9ia00Bksqbypzu+y7VJX8T9iw4jWue0rVKM=
+	t=1772129190; cv=none; b=G1yCn5Tqr6saYK2TpdNt6IFgEUB6xHc83JVYR5ZvgiHFHf/0LcIFITR8f1Q5msyelGWqssEuIxWSC3kQ2KktdyE8++6ZVJcM3Yglw786hD665RDgV8a2pkUNhP66+xWfw6qGcGxyJZ+eCK3nSTOyzfauUh27gCL7lWcD0lAVInI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772126998; c=relaxed/simple;
-	bh=Myr1MgJF1JTxxCD/DbwmKCiYXCoYXn29daRv+/9+xJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y3Rey2rFeDS5w/KuXjOkkKm2+U9M5xqhJ8GpmtJGxf+sbOc3Vene4ACvniWiLNqx+u2ZV3HY+XT4Zj1dWA4Gchct2qeTCmQoWA1/9b30dOnA8UBHdNBF+KKZYX3Ie1KnrxLbpQUyB1GcHNWCFIhomIEo2DG5/k3Jumhbrnibg+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id C38CF1602DB;
-	Thu, 26 Feb 2026 17:29:54 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id F129E2F;
-	Thu, 26 Feb 2026 17:29:51 +0000 (UTC)
-Date: Thu, 26 Feb 2026 12:30:14 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Miroslav Benes <mbenes@suse.cz>
-Cc: Song Chen <chensong_2000@189.cn>, mcgrof@kernel.org,
- petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
- atomlin@atomlin.com, mhiramat@kernel.org, mark.rutland@arm.com,
- mathieu.desnoyers@efficios.com, linux-modules@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org
-Subject: Re: [PATCH] kernel/trace/ftrace: introduce ftrace module notifier
-Message-ID: <20260226123014.2197d9b7@gandalf.local.home>
-In-Reply-To: <alpine.LSU.2.21.2602261147150.5739@pobox.suse.cz>
-References: <20260225054639.21637-1-chensong_2000@189.cn>
-	<20260225192724.48ed165e@fedora>
-	<e18ed5f4-3917-46e7-bca9-78063e6e4457@189.cn>
-	<alpine.LSU.2.21.2602261147150.5739@pobox.suse.cz>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1772129190; c=relaxed/simple;
+	bh=/VC1zI8gyRjIqgWzQZ2wTqewHEcl/+S3+ikq7qvbGPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cct0I/8ZYf9tig5ZDRa7U9AsGsxJHOkO228lxM4s/SucFPoZNXeOxebx2JP96xKzeC+D8kfiwhW1CEvN6/jpVj7oaqa4MboRWSo4gFBdgLpk1GFuhEwdR+LtqKtK6b9CLC1IxpCkhaNJGk9c/68I2oeuH/QOJnTRJ/3v54+Mp1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V0al8PCb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V0al8PCb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA86AC116C6;
+	Thu, 26 Feb 2026 18:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772129190;
+	bh=/VC1zI8gyRjIqgWzQZ2wTqewHEcl/+S3+ikq7qvbGPo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V0al8PCbDfksz3c923c59Vass7yvTlhiEYg97IgF2KYsKXPwfxU5UNWMaUFeQAT+v
+	 44X3HQzzXrj5g/ejCYL0MWU78TauqjzkWBeSFzhSiXb+kS7USaQFlqQfuK0WHyTuMw
+	 Wrx19GwVDQwXDDDkWiKkepPXSIvWVq6NQPuGIqGoXM0Qjc7x5VdCDPXICImYweDNcl
+	 rkhdWZPyVoCGKjhEPPJT5M2F1qLriZsXCCmO9xgZhLh3v5x0AmdrphO1l56ESK/yio
+	 m9KnyVplDWLW//fag0HYjADJPoo7G4H5naqXyIMhL6wEAHMikl8vBOcMz0acUZF6PW
+	 xQJEKn/HQL9MA==
+Date: Thu, 26 Feb 2026 10:05:38 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>
+Cc: linux-crypto@vger.kernel.org, David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Stephan Mueller <smueller@chronox.de>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>, keyrings@vger.kernel.org,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	KUnit Development <kunit-dev@googlegroups.com>
+Subject: Re: [PATCH v4 2/2] lib/crypto: tests: Add KUnit tests for ML-DSA
+ verification
+Message-ID: <20260226180538.GC2251@sol>
+References: <20251214181712.29132-1-ebiggers@kernel.org>
+ <20251214181712.29132-3-ebiggers@kernel.org>
+ <CAMuHMdULzMdxuTVfg8_4jdgzbzjfx-PHkcgbGSthcUx_sHRNMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 15hnzta5zitj3wgczi3cy1ygrsn5xmj4
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: F129E2F
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19+mxDP6FUS+yLtEo/J2xwBrefbLo6Tx5o=
-X-HE-Tag: 1772126991-370274
-X-HE-Meta: U2FsdGVkX1/8psOWJJHNRsApMdxdvPCxHHuKBX9HA8oaqHugRrFmAwGb4BvpfGwTA76WY5y1IVZ/le9ItCwt9n7jwy2Rkb6uzLDhmmoYo7PnEU+9DDLk+DHRXDuY5Lulbt3AF2/HxqYHaorQbEfHxSOyh+cv9ZIPj4mdZt2ibzKSD/r97PxsDwIbwEvI9cF9Lz8xnbeQwRhuQtnmz0uJ++h6p5i/y0jWEEUWgkteWXOB2himfptjTsBHyoB/K1hvm2ci4jWkXlSPRO3msm8mTsoJyp47jM2GugI07X6U/vVH8p9NIxSsv2AfO9PDnoPC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdULzMdxuTVfg8_4jdgzbzjfx-PHkcgbGSthcUx_sHRNMg@mail.gmail.com>
 
-On Thu, 26 Feb 2026 11:51:53 +0100 (CET)
-Miroslav Benes <mbenes@suse.cz> wrote:
-
-> > Let me see if there is any way to use notifier and remain below calling
-> > sequence:
-> > 
-> > ftrace_module_enable
-> > klp_module_coming
-> > blocking_notifier_call_chain_robust(MODULE_STATE_COMING)
-> > 
-> > blocking_notifier_call_chain(MODULE_STATE_GOING)
-> > klp_module_going
-> > ftrace_release_mod  
+On Thu, Feb 26, 2026 at 02:09:47PM +0100, Geert Uytterhoeven wrote:
+> On Sun, 14 Dec 2025 at 19:18, Eric Biggers <ebiggers@kernel.org> wrote:
+> > Add a KUnit test suite for ML-DSA verification, including the following
+> > for each ML-DSA parameter set (ML-DSA-44, ML-DSA-65, and ML-DSA-87):
+> >
+> > - Positive test (valid signature), using vector imported from leancrypto
+> > - Various negative tests:
+> >     - Wrong length for signature, message, or public key
+> >     - Out-of-range coefficients in z vector
+> >     - Invalid encoded hint vector
+> >     - Any bit flipped in signature, message, or public key
+> > - Unit test for the internal function use_hint()
+> > - A benchmark
+> >
+> > ML-DSA inputs and outputs are very large.  To keep the size of the tests
+> > down, use just one valid test vector per parameter set, and generate the
+> > negative tests at runtime by mutating the valid test vector.
+> >
+> > I also considered importing the test vectors from Wycheproof.  I've
+> > tested that mldsa_verify() indeed passes all of Wycheproof's ML-DSA test
+> > vectors that use an empty context string.  However, importing these
+> > permanently would add over 6 MB of source.  That's too much to be a
+> > reasonable addition to the Linux kernel tree for one algorithm.  It also
+> > wouldn't actually provide much better test coverage than this commit.
+> > Another potential issue is that Wycheproof uses the Apache license.
+> >
+> > Similarly, this also differs from the earlier proposal to import a long
+> > list of test vectors from leancrypto.  I retained only one valid
+> > signature for each algorithm, and I also added (runtime-generated)
+> > negative tests which were missing.  I think this is a better tradeoff.
+> >
+> > Reviewed-by: David Howells <dhowells@redhat.com>
+> > Tested-by: David Howells <dhowells@redhat.com>
+> > Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 > 
-> Both klp and ftrace used module notifiers in the past. We abandoned that 
-> and opted for direct calls due to issues with ordering at the time. I do 
-> not have the list of problems at hand but I remember it was very fragile.
+> Thanks for your patch, which is now commit ed894faccb8de55c
+> ("lib/crypto: tests: Add KUnit tests for ML-DSA verification")
+> in v7.0-rc1.
 > 
-> See commits 7dcd182bec27 ("ftrace/module: remove ftrace module 
-> notifier"), 7e545d6eca20 ("livepatch/module: remove livepatch module 
-> notifier") and their surroundings.
+> > --- a/lib/crypto/tests/Kconfig
+> > +++ b/lib/crypto/tests/Kconfig
+> > @@ -36,10 +36,19 @@ config CRYPTO_LIB_MD5_KUNIT_TEST
+> >         select CRYPTO_LIB_MD5
+> >         help
+> >           KUnit tests for the MD5 cryptographic hash function and its
+> >           corresponding HMAC.
+> >
+> > +config CRYPTO_LIB_MLDSA_KUNIT_TEST
+> > +       tristate "KUnit tests for ML-DSA" if !KUNIT_ALL_TESTS
+> > +       depends on KUNIT
+> > +       default KUNIT_ALL_TESTS || CRYPTO_SELFTESTS
+> > +       select CRYPTO_LIB_BENCHMARK_VISIBLE
+> > +       select CRYPTO_LIB_MLDSA
 > 
-> So unless there is a reason for the change (which should be then carefully 
-> reviewed and properly tested), I would prefer to keep it as is. What is 
-> the motivation? I am failing to find it in the commit log.
+> These two selects mean that enabling KUNIT_ALL_TESTS also enables
+> extra functionality, which may not be desirable in a production system.
+> Fortunately CRYPTO_LIB_MLDSA is tristate, so in the modular case
+> the extra functionality is a module, too, and not part of the running system
+> by default.  Unfortunately CRYPTO_LIB_MLDSA is invisible, so this cannot
+> just be changed from "select" to "depends on". But as CRYPTO_MLDSA
+> also selects it, perhaps the test can be made dependent on CRYPTO_MLDSA?
 
-Honestly, I do think just decoupling ftrace and live kernel patching from
-modules is rationale enough, as it makes the code a bit cleaner. But to do
-so, we really need to make sure there is absolutely no regressions.
+"depends on CRYPTO_MLDSA" doesn't make sense, since the test is for the
+code in CRYPTO_LIB_MLDSA, not CRYPTO_MLDSA.  CRYPTO_MLDSA just happens
+to be one of the users of CRYPTO_LIB_MLDSA.  In this case the names
+happen to be similar, but consider e.g. CRYPTO_LIB_AESGCM which is
+selected by AMD_MEM_ENCRYPT.  If we added a test for CRYPTO_LIB_AESGCM,
+it clearly shouldn't use "depends on AMD_MEM_ENCRYPT".
 
-Thus, to allow such a change, I would ask those that are proposing it, show
-a full work flow of how ftrace, live kernel patching, and modules work with
-each other and why those functions are currently injected in the module code.
+So, "depends on CRYPTO_LIB_MLDSA" would be the correct way to switch it
+from a selection to a dependency.
 
-As Miroslav stated, we tried to do it via notifiers in the past and it
-failed. I don't want to find out why they failed by just adding them back
-to notifiers again. Instead, the reasons must be fully understood and
-updates made to make sure they will not fail in the future.
+It's just a bit annoying to do this for hidden symbols, given that it
+makes it so that anyone who wants to unconditionally enable the test,
+like what I do to test all the crypto library code, has to find and
+enable some other random kconfig symbol that enables the code.
 
--- Steve
+Also, the series that originally added CRYPTO_LIB_MLDSA and its test
+(https://lore.kernel.org/linux-crypto/20251214181712.29132-1-ebiggers@kernel.org/)
+didn't add any user of CRYPTO_LIB_MLDSA besides the test, as the real
+user came a bit later.  So if I had used "depends on CRYPTO_LIB_MLDSA",
+my series wouldn't have received any build bot coverage, and I'd have
+needed to temporarily carry local patches to build and test the code.
+
+But if this is really the convention for KUnit, as it seems to be, I
+will follow it and work around it for my own testing.  So I'll plan to
+change the crypto library and CRC tests to use "depends on".
+
+But any thoughts from the KUnit maintainers would also be appreciated.
+Is it indeed intended that the tests for library modules depend on those
+modules rather than selecting them, despite their symbols being hidden?
+
+- Eric
