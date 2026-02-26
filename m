@@ -1,94 +1,76 @@
-Received: from pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com [34.218.115.239])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874DC3921D1;
-	Wed, 25 Feb 2026 17:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.218.115.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E8B4A21;
+	Thu, 26 Feb 2026 00:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772040964; cv=none; b=QpwVwK6sOLjgDIjvnQIP9XZxJe2+ZcF/yhzDvkmEIMPIU6LqfTNOF2wscgWzbamIA7qgeOTAR3FkzMgVfMjPJkjDPp5aENFSe4F94KV4IOuX9fZ2DbmzoZfoPEoUFOPJRN8q/p8JVarWrQwaek5fdoclvjxyZe/b9GNX5DW3I0E=
+	t=1772064657; cv=none; b=pGHUkmz28HxTC9nxTZxPnKkBF2ZnqyfhKMqa+AC8/x0hy58ms6qjzg/Abh4JMWS360/VJ9CwqFtIzqshYZbvaAFm/t9knm7gxEGTAa53okMHg3t2ZCSIUJfrmT8qsrFZB0p5axzvW2xBJtiUNudl+LE2NcK1UrhZbPPSIhZ67iU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772040964; c=relaxed/simple;
-	bh=YRY5VNh5WJAQAaMILsab9VN7315yMrX1I852eDbxTtU=;
-	h=Subject:From:To:CC:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E9/TdFH7dqXiUKqSrFi+9rSa8Iyq1u8smQ6XHciIiesQRwuO8MrjfYWjJyG/BaR4sXvwfh1OSAscqOGz3jOIyX7fqOIkzM9F2HqULTXfesT0IAwqLFrH/7cChazvBdoL+nLA9V/EzYGl/q3VIi8uLcvxa4KW3Ra12RS/0opVjEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=hayY423g; arc=none smtp.client-ip=34.218.115.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1772064657; c=relaxed/simple;
+	bh=Hp8XdMbt8T9/DD+xxTRZWrJVGxrduonc71/LyubvrO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E0zfE2LmxBV5imrvXdVA6p/ka9uLXL3nPGwLMBucKqyPNMFW0tAekriYXUFUnxNxVVXkDx6s4aR0JgOjlV2neSQdF/HjLvDeWysAn+P6itfZ5SQVd32atVhfAjS5O06pYQYjLp3VlLXTkMq6Nu37RQptqYLOvtmG2RR9VTqfqZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dCynDOyU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="hayY423g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1772040963; x=1803576963;
-  h=from:to:cc:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding:subject;
-  bh=YRY5VNh5WJAQAaMILsab9VN7315yMrX1I852eDbxTtU=;
-  b=hayY423gYfNpQdEb1njjsKucjYdX2eYQFzzawghxCT5tyolnzskmY8oN
-   ByZBzQ3Rwzzm/d5KIcioFPr4BAfbMEH2e5DhcAMn9OD3i2MkiRMl2Gn+F
-   ZbzxFKdxy5YhFFDVUU0+NBa7EqAUGDL3ZgnQdZyXNZKIsywI0VaIyFt9i
-   pCx/5a7sYyp/wpnVxENonNLA7x+L3KJnJ0zSaBNO/Wi19vmA9VHzSdEkO
-   WPCXlz2zOvVoYynbBLva4Omef6GZcemU6Lz0gjirxA5KLqHIkKw/yJ8Cc
-   Gd7E0GPeXQh6lrKxsn+So7Oo/eA+LI/OiCDNdk+t83WopYxZeL+UhSdWm
-   w==;
-X-CSE-ConnectionGUID: 8uhsIv4TQIe9EcUHkouJpQ==
-X-CSE-MsgGUID: ba3PhwdMSXS3IlmTrBGnTQ==
-X-IronPort-AV: E=Sophos;i="6.21,310,1763424000"; 
-   d="scan'208";a="13593227"
-Subject: RE: [PATCH 17/17] Add standalone crypto kernel module technical documentation
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-013.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 17:36:03 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:1793]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.24.86:2525] with esmtp (Farcaster)
- id 93693ec8-671a-42a3-87bc-f5a3c251f9ed; Wed, 25 Feb 2026 17:36:02 +0000 (UTC)
-X-Farcaster-Flow-ID: 93693ec8-671a-42a3-87bc-f5a3c251f9ed
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 25 Feb 2026 17:36:00 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 25 Feb 2026 17:35:59 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <ebiggers@kernel.org>
-CC: <bp@alien8.de>, <catalin.marinas@arm.com>, <davem@davemloft.net>,
-	<herbert@gondor.apana.org.au>, <ilya.okomin@oracle.com>,
-	<jay.wang.upstream@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-crypto@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<linux-modules@vger.kernel.org>, <mcgrof@kernel.org>, <mingo@redhat.com>,
-	<nathan@kernel.org>, <nsc@kernel.org>, <nstange@suse.de>,
-	<petr.pavlu@suse.com>, <tglx@kernel.org>, <vegard.nossum@oracle.com>,
-	<wanjay@amazon.com>, <will@kernel.org>, <x86@kernel.org>
-Date: Wed, 25 Feb 2026 17:35:45 +0000
-Message-ID: <20260225173551.8704-1-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260225015517.GA162634@quark>
-References: <20260225015517.GA162634@quark>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dCynDOyU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C3CC116D0;
+	Thu, 26 Feb 2026 00:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772064657;
+	bh=Hp8XdMbt8T9/DD+xxTRZWrJVGxrduonc71/LyubvrO8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dCynDOyUSyIUc8xszf6VlE+bVWzCsTD2J7PC4kD9e3AKvgz7NPklqOKnY/XfWO5kK
+	 dV7oS8lkcSmWuHqyrW9e89NvTRFuLDG5IOnYJU3rXZBh7ysVFvTFfD85fdxSgN3Ixq
+	 fL1DuMTF07JQnF/uVR7ym/mWiOPxhyi25jx05O9ubXIZyH7BmpKWG+eLDNm/1gFgEf
+	 zT6hPr8/6ZRDJsXA6532ifUsXmQMXVbygqC1pHGHGlphKUpgJGX+BuelkZ2twyOWzo
+	 TgMvdslJ9YH9++4JjN3tkrN4cIzcBrsbZJPkYT6Z841FOr3Tm6pfvQi2b8kVAbNiao
+	 /b4NKlbQB7QuQ==
+Date: Wed, 25 Feb 2026 16:10:49 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Stefan Berger <stefanb@linux.ibm.com>
+Cc: Coiby Xu <coxu@redhat.com>,
+	Johannes =?iso-8859-1?Q?Wiesb=F6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>,
+	dhowells@redhat.com, dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com, keyrings@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	roberto.sassu@huawei.com, simo@redhat.com, zohar@linux.ibm.com,
+	michael.weiss@aisec.fraunhofer.de
+Subject: Re: IMA and PQC
+Message-ID: <20260226001049.GA3135@quark>
+References: <aXrKaTem9nnWNuGV@Rk>
+ <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
+ <aYHznG6vbptVOjHQ@Rk>
+ <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D032UWA003.ant.amazon.com (10.13.139.37) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
 
-Thanks to everyone who has taken the time to review and comment.
+On Wed, Feb 25, 2026 at 09:25:43AM -0500, Stefan Berger wrote:
+> To avoid duplicate work: Is either one of you planning on writing patches
+> for IMA to use ML-DSA and convert the current ML-DSA to also support HashML?
+> I had done the work on this before and could dig out the patches again...
 
-Based on the discussion so far, it seems the core question is whether this feature is appropriate for upstream at all, or whether it should remain entirely downstream.
+IMA already had to add its own digest prefixing support, since it was
+needed to disambiguate between full-file digests and fsverity digests.
+See 'struct ima_file_id'.  Thus the message signed is at most 66 bytes.
 
-We’ve discussed this with a few folks, and to help clarify the discussion, let me outline what is actually required to use this approach and what the community would gain from upstreaming it:
+With that being the case, HashML-DSA isn't necessary.  It's not even
+possible to use here, since there are no OIDs assigned for the fsverity
+digests, so it cannot replace the ima_file_id.
 
-1. Maintaining a crypto snapshot (for example, a source code snapshot used for streamlined FIPS re-validation processes such as NSRL).
-2. Maintaining the loadable crypto build infrastructure itself (i.e., this patch set).
+I'll also note that HashML-DSA is controversial (e.g. see
+https://keymaterial.net/2024/11/05/hashml-dsa-considered-harmful/),
+since it was added to the ML-DSA specification at a late stage without
+sufficient review, and what it does can be achieved in better ways.
+Which is exactly what we are seeing here, since again, IMA needs to do
+the digest calculation and prefixing itself anyway.
 
-For (1), since this requires maintaining a specific snapshot, we acknowledge that this is inherently a downstream responsibility. We are not expecting upstream to provide or guarantee a stable in-kernel API (to clarify, a stable ABI is not strictly required here, since the crypto module can be rebuilt against newer kernels and still benefit from FIPS through the shorter NSRL re-validation process of roughly 3 months, compared to the full 12–18 month certification cycle). The upstream crypto subsystem should continue evolving independently.
-
-For (2), since this feature mainly serves as infrastructure and is of interest to multiple distributions, upstreaming it could help reduce the effort each distribution would otherwise spend maintaining similar infrastructure patches independently.
-
-We’d love to hear more thoughts on this. If the general consensus is that the downsides outweigh the benefits of merging this into mainline, we are happy to maintain it in a separate repository tracking the latest mainline and stable releases in order to keep the work publicly available.
-
-Thanks again for taking the time to read and discuss this.
-
-Jay
+- Eric
