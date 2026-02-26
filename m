@@ -1,104 +1,285 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83062E7621
-	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 18:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772131183; cv=pass; b=ZvkaAygO2N5Ab9IX9eLPoiTKFxFWDeiBOTw5iaZBd60aXf6UTrht3xlvDPuwFXNHE7K74snEplcquqdwTnvHeywR790cuNfAR/7NtzEa7P67fSR8bTvdp5QR3PZZ2XALtygUYOJgFPT429E6DoxBFnBRAVZjCZQMmZMvc1UJjvc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772131183; c=relaxed/simple;
-	bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BqfYytGzvp8BeZumhGFoHG7/5eYwQYfNyVfD5RX8ylytFycZ+Pil1uRq/ETCPNXBSELALFKuHrahAhmQQXX89MZ341t7BQXW/ItqWCANS4+Rq1Keu4xwJLRIr1hc7PnLm6Bds8CPxYYxWGolwe4L2kgk/n9ZSVCc5N0f1bcu8qw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vzvgwdcl; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA373D905B
+	for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 18:42:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772131349; cv=none; b=JIEuegB5yeSaPhDd8o6KMDc38DRfwUoCN7TC6IsXpsxBUaf+Cd0EkE9d+BVHpunmqbG3MxF8q+osRhxzf+zfsAHZlyxy4PT0j/WySpu+D8gXdmRsdhHvX4DjmBBMGtfcWNy+34RYuHvxuWn/yMl60GMlHzKjiGOfGD/roIW078s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772131349; c=relaxed/simple;
+	bh=fp53dHPMtS9Vv7Y49DE4SFhmmymxuGQm7sX0WDJndqY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jXLUVsjR+n/IAkhC+D/jf0PBftbfC99+0WKrFd8Q1C9+sVLL+nf5oTKiFLu7lnizayhLhk4Fz94ih0pevB20JXUc2WzGv40t3FaIMDKRO2aZdIfyWmJ0yLh+5E/yt6hGGfN43rG8nanJpCQgCS/wL2axFdwVamINMHduYDGkOyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cxHJivZ9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pqSOhJi/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vzvgwdcl"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-65f3a35ff13so1100a12.0
-        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 10:39:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772131180; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ePmGuNt/xBAQSn3jkIEnE+1wr1tRFjguF6q6Ozq8CYlnGbl92rBoUFoLHeeyW3E1sS
-         8elszQ22Tz4TpoIUXltH4ajje1C1sPDeqMUUqGgj+sU6xBDxC0AbdTXyp/XVDv+EKrkp
-         fZlBFQl2lSVywEiwxSjiPts1jU4kmfebmY0+ReRScbmRncJDjh2FK3O0EORiqy5cBcrj
-         0B4m44ff8zx/KxPiEwbMWfKi+n0kf1PX1HDLac4f6ASbvgE43Z1yX1jnETsHFprXe5fj
-         /aj64JlWsKBKL3DpNJCgidlmYRBFkkNB2MY1c3uwXsIe7MD0lNVCxCZAr2B9aisgllCw
-         RL7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
-        fh=S6Vjs4aazgyOh0/i5xLHvO4GgtZ2mmzXdyiwA1AYs3c=;
-        b=Yv2YHfSeR62VBqt112VlrUmDciOE1sCEzfLXh31nIbobH9lyyM6rTwZXiClOFVnf5w
-         dd1Ms2LoACmvNoS95yJtKb6T7PhgmDIthz/3CnsUWVSmGxcYji0e8diAcBj3l3auP8yp
-         I0WHmRAzbiT/7YZPnSqVlPJBcJi350sJNGJU2x9+RwBDcWCHJ/Bmggau8vm/eJ6w2mXH
-         rWQWEJsY2ebPsKdb03xqUSZ9cx1GuMvHMEa9tsbpac1/c7lHHvc1vtFPFsKJIA5z6lNg
-         MBwZszVwdV9z6gBKckxnJdWC+1LI67K4cbdUxaePohb1z5si65P7RQvvXAt5/ScwpMyQ
-         vS0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cxHJivZ9";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pqSOhJi/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772131347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TmNWMkp+rxDVZAXirUGvlit21mg3IlMEfr5LPpAaf2s=;
+	b=cxHJivZ99l9+qBSBdS11p0KiGdN7h7mEzOKCjcDO24OAeKTSrxzWvC7zDi+YOLausJLEZ7
+	sUIbynfTBte7VmmhVrSXvxccOv8T/QQBNpe9MpDiuJUFNMNGaBw9Sp3Xe4sNl/Q4/IfH/U
+	opxTTOnwW70Sf4Wz+BpJsmsIvU6eGAo=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-179-3xsEMhxJNICSQ5lsREf0RQ-1; Thu, 26 Feb 2026 13:42:19 -0500
+X-MC-Unique: 3xsEMhxJNICSQ5lsREf0RQ-1
+X-Mimecast-MFC-AGG-ID: 3xsEMhxJNICSQ5lsREf0RQ_1772131339
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-89718626897so118954236d6.1
+        for <linux-modules@vger.kernel.org>; Thu, 26 Feb 2026 10:42:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772131180; x=1772735980; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
-        b=vzvgwdclLp8knYjRgNv2NF7vbcqefmSDoQn3teMXmNoXCKgG7Q+Oiz04oAnwv7/Fmq
-         R/lNDJ28z8m2FFTw7rEGJsBjzwQINJochZjI2IsNzA/hcJ+tcv+0+LPONfFz+pUJQuQT
-         qxrvtRu1Y+XjGHwf4GVDeh5wboupZk1jtU9aCIJU/TzBve4iHRG46w3YSdWdkCkRMGSj
-         4QbnqSS1v2d0S5TznhQGsf41TcjFZiAbS0Xt6/JJdtyShwFQLt3Y0GoGcid0/ZsA7MbF
-         jFHHzKddE8nNUSdqHv8ZNkiIgpgeHo+YcCHG/N6HKzDwdla48sXe5SK4mG+hLB7azpmG
-         xAZQ==
+        d=redhat.com; s=google; t=1772131339; x=1772736139; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TmNWMkp+rxDVZAXirUGvlit21mg3IlMEfr5LPpAaf2s=;
+        b=pqSOhJi/h8VixRQ7mgUeK8Rq66BaMT8uFNnpo+0cHMW/dM/Xj+8s8hwHMiwJSRctyb
+         YFVcsVr+JglTbgTCLaKB1G6x9RSyGMf15WBhDzlEPrgDjU1rdT36Y0MJzMOTyUbgD2ua
+         CRS+rMjHCsjAJL/EF4eZg/Lhpb5FdN0Fn/PwzJ+Rq6k3cP9I9lkyP47DLG7031USARTw
+         RbNVFWRmGBK/ZZcDWg0KZXWjl9nGAKsjDOLaADy2cUbAljAUvCXaDrvb69d1sD2Oi/Cd
+         eJXHH4jlCATWhRyuqN6ga6r8K3sVbw4idO3K8HH48z0J9UOC5cQ3n4OpEW9jpZrvMYfP
+         hLsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772131180; x=1772735980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+3cHqP/CtaLXwL2fWRFC8YJBiL/GRMMotjHF+n9QyHM=;
-        b=n4y2yAVmnlN+0d1LbppqYELSuHAtJLxUvXx4XKON8EnicjsqgXm6hINYdPCT34ZNrz
-         +qR/TxQnCGwdapMjqZNQTuHEsZTRjxIw0e+A2lydwaIEH3XgGeRfZjNmyFh7mJRA4n3Q
-         +/XAw38WQWdaUbJoSg2mBxHjKW32Ffg4jsX2o82rU6XPLGhkthC8NTy4usxdcaEzuV+w
-         i9s/BvWUQqLz6i66UQof4+7/U7LkgC+TZUIoLGGq7ETyM0uIuBcpPr29Q/skeU3C+Fs5
-         0nRoRDnmhZdRPYLVB0XrhgNFoJFXv2AB/ZvSh9lbEE0EF4UUbWatEQ6zwHyGcx8OBou5
-         UdtA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWrXyoe6+M6I6PWxE2LWncJ+z6acjtV2rM6pcAw1zM2c3mft8+YwxgXjSjiE0Xv/0GOjuRwwVBFKHgmy6H@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY4lolZc2jlxDX7ZIA0end0T/v7OcmgW6Nj1kncFJu+P+j0EZU
-	Itlad9WLmbOHHd3NqIG3VLGdr5CuIG2mCdP9S7wFyOjljVJeu169Amxk3FuzUG1NkOYtJhZ63mI
-	+3TqiPrqjzBn8XOCkuMvOE+n2gWT9e9oo4FiaYMOv
-X-Gm-Gg: ATEYQzxaGGyUTN4aFo2+YDSbLu4+Yl2umkE5ukNv531TiEa5z2iNLDBz2oLTjpm7uIv
-	s3lneD3+QfVd3+lw+kPNGnWn7bRiKh4zevQ63tUYq8AFtbmHvhLsMcpoQVjLoZ7xjDi+GJAWjoT
-	6bygnNDpsMyf4a8X+rni6n87BfcRZuZ8Bi1UtMnO1d3mdx54jXomkrbDWvmEqoKqqLmuPSFovMs
-	z+DHA6YFBnVlNSseoYjG2GaCWxm+1JuHEds+HCCLjl0yQl4h395eWCf3zqdXaC3C51JTAP0uMsv
-	RPXU
-X-Received: by 2002:aa7:d292:0:b0:65f:ddaf:d1c5 with SMTP id
- 4fb4d7f45d1cf-65fddbf1827mr3660a12.12.1772131179631; Thu, 26 Feb 2026
- 10:39:39 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772131339; x=1772736139;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TmNWMkp+rxDVZAXirUGvlit21mg3IlMEfr5LPpAaf2s=;
+        b=CpplA7I8ClMy/+BqBfjnIClXKpie+vdlNjeEpWcQ29ALJ95snX0h54zx+1Q4UODG1C
+         YqCv14TWwRIHVdJrxZCYoyLfLvlgdjuDNNgUpaWwlDGKZspDsdKnaZoJv6B75A+hiF7L
+         r22Zqt4m8sxGi8YnuGlr1lGvwYUzaLS1ahD2S6gIFlQJAR9cTJubPAOm70Cz50czE3S6
+         55AWhVfQFsZakMGIzvPMJmsP1/IsUQJXi5f0smTzp49ifSYlJ55/NOPGOBx7xWPoqO+B
+         4pKW6cywIfSK5WN4f2cM4zdY8q6+70AuqkRquCNpV+lOciHo9lcbwyiXqSwQBHKF8Rlp
+         3NpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUiDPTT5uwk/zMYwtSjztFa5WYLRNJVK1Yl+/9hZNB5qHtx0WSCFZgTfJaKomuXfhWCUx7fqaiuJoN7QIw5@vger.kernel.org
+X-Gm-Message-State: AOJu0YybKIRxyHVuXc18Hz98sHVsfzwCZyxM57UqC0JhjvrYB4iYphH3
+	Di+q6ieCTs8DzHNoot1l2krWAJaTnJHiYBKtCFl/UGa1q1DLP2ArLiRoz7YmicsA9WxmmuW8iCk
+	zGRr1lQooMEF2ZVl6f5lvReRM+UvN1pDCoE4iTzx5lyub4VPkvbKowVP5QahLzEbo4XE=
+X-Gm-Gg: ATEYQzxpvousddVOxz3OnGlIpZUC8Hswz4pJ08Sh4blAWgV5DK672+6y5aSJnCbDhfP
+	TE+A/v+/eR2Xa0BW2U9D+CpfONIy9HKWS16O7tJDe18uertFet/isrs4RnCyiCXOt2caUuZyUin
+	yIanXd6Te4kf3gkAj4jgmJ3Yi0lXU3gpLECbR1fwvxKLcfQL10FMg/6jUZ3KEIfIDKvdmzhbKAU
+	/Y2cOLOhLMkt/rz62G9xpxVsVZPg/5OcL6Gzn1/B8HbVzh3kiNNgfuU6ZHb2VPLKN9nyv0/Mk1y
+	vVGtB7RbM3Y5oGo3RlnuUa2aB27bT7fhm/VypW4sXgJK+VEa25COndqKZarfcu0AXHQkBGAsWcq
+	6o/446MZZXlI5NeJR
+X-Received: by 2002:a05:6214:c46:b0:894:6202:4dc with SMTP id 6a1803df08f44-899d1ddb553mr1667976d6.21.1772131339254;
+        Thu, 26 Feb 2026 10:42:19 -0800 (PST)
+X-Received: by 2002:a05:6214:c46:b0:894:6202:4dc with SMTP id 6a1803df08f44-899d1ddb553mr1667456d6.21.1772131338716;
+        Thu, 26 Feb 2026 10:42:18 -0800 (PST)
+Received: from m8.users.ipa.redhat.com ([2603:7000:9400:fe80::7a7])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899c7376847sm24184676d6.28.2026.02.26.10.42.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 10:42:18 -0800 (PST)
+Message-ID: <2230669ce43024a2b7b27ca98b7539133d320730.camel@redhat.com>
+Subject: Re: IMA and PQC
+From: Simo Sorce <simo@redhat.com>
+To: Stefan Berger <stefanb@linux.ibm.com>, Eric Biggers <ebiggers@kernel.org>
+Cc: Coiby Xu <coxu@redhat.com>, Johannes =?ISO-8859-1?Q?Wiesb=F6ck?=	
+ <johannes.wiesboeck@aisec.fraunhofer.de>, dhowells@redhat.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ keyrings@vger.kernel.org, 	linux-crypto@vger.kernel.org,
+ linux-integrity@vger.kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-modules@vger.kernel.org, 	roberto.sassu@huawei.com,
+ zohar@linux.ibm.com, michael.weiss@aisec.fraunhofer.de
+Date: Thu, 26 Feb 2026 13:42:16 -0500
+In-Reply-To: <969c74f3-81ed-442c-87dd-381274a642a7@linux.ibm.com>
+References: <aXrKaTem9nnWNuGV@Rk>
+	 <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
+	 <aYHznG6vbptVOjHQ@Rk> <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
+	 <20260226001049.GA3135@quark>
+	 <cba10ac6-3557-4fc1-9b86-55361d14156d@linux.ibm.com>
+	 <dc09be79-5efe-4756-a295-5b0428985525@linux.ibm.com>
+	 <da190dbbc692b9da8464bbbfffdde7bab26b3f1c.camel@redhat.com>
+	 <20260226165819.GA2251@sol>
+	 <969c74f3-81ed-442c-87dd-381274a642a7@linux.ibm.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231094004.37851-1-laoar.shao@gmail.com> <CALOAHbA5fkK8XSqo62=k1hVX+krx58eUWMLNwMdwncAp+Xn4=w@mail.gmail.com>
-In-Reply-To: <CALOAHbA5fkK8XSqo62=k1hVX+krx58eUWMLNwMdwncAp+Xn4=w@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Thu, 26 Feb 2026 10:39:03 -0800
-X-Gm-Features: AaiRm525IjvAgP2m8U1ztRPIt1NFKWi9elaaOHMPnFuFw6PDgAFCBbR_5SlT25o
-Message-ID: <CABCJKuetWVkjqMPR371cEs9hhSd-kzBFNz1UyQk=t2C1Yc=ETQ@mail.gmail.com>
-Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 25, 2026 at 6:19=E2=80=AFPM Yafang Shao <laoar.shao@gmail.com> =
-wrote:
-> Just checking in on this patch. It looks like it hasn't been merged
-> yet. Is it good to go, or does it need something else?
+On Thu, 2026-02-26 at 12:22 -0500, Stefan Berger wrote:
+>=20
+> On 2/26/26 11:58 AM, Eric Biggers wrote:
+> > On Thu, Feb 26, 2026 at 10:27:43AM -0500, Simo Sorce wrote:
+> > > On Thu, 2026-02-26 at 09:16 -0500, Stefan Berger wrote:
+> > > > On 2/26/26 7:42 AM, Stefan Berger wrote:
+> > > > > On 2/25/26 7:10 PM, Eric Biggers wrote:
+> > > > > > On Wed, Feb 25, 2026 at 09:25:43AM -0500, Stefan Berger wrote:
+> > > > > > > To avoid duplicate work: Is either one of you planning on wri=
+ting
+> > > > > > > patches
+> > > > > > > for IMA to use ML-DSA and convert the current ML-DSA to also =
+support
+> > > > > > > HashML?
+> > > > > > > I had done the work on this before and could dig out the patc=
+hes
+> > > > > > > again...
+> > > > > >=20
+> > > > > > IMA already had to add its own digest prefixing support, since =
+it was
+> > > > > > needed to disambiguate between full-file digests and fsverity d=
+igests.
+> > > > > > See 'struct ima_file_id'.=C2=A0 Thus the message signed is at m=
+ost 66 bytes.
+> > > > >=20
+> > > > > The hash there is still only a hash over a file and that hash is =
+signed,
+> > > > > isn't it?
+> > > > >=20
+> > > > > >=20
+> > > > > > With that being the case, HashML-DSA isn't necessary.=C2=A0 It'=
+s not even
+> > > > > > possible to use here, since there are no OIDs assigned for the =
+fsverity
+> > > > > > digests, so it cannot replace the ima_file_id.
+> > > > >=20
+> > > > > For non-fsverify IMA signatures it is 'possible' to use HashML-DS=
+A and
+> > > > > it's 'working' (recycled old patches yesterday):
+> > > > >=20
+> > > > > Linux: https://github.com/stefanberger/linux/commits/
+> > > > > dhmlsa%2Bima.202602025/
+> > > > >=20
+> > > > > ima-evm-utils: https://github.com/linux-integrity/ima-evm-utils/p=
+ull/19/
+> > > > > commits
+> > > > >=20
+> > > > > >=20
+> > > > > > I'll also note that HashML-DSA is controversial (e.g. see
+> > > > > > https://keymaterial.net/2024/11/05/hashml-dsa-considered-harmfu=
+l/),
+> > > > >=20
+> > > > > The problem with this is that NIST would have to react to these
+> > > > > controversies as we race to support PQC. If something is wrong wi=
+th the
+> > > > > standard then it would be best for NIST to withdraw/modify HashML=
+-DSA
+> > > > > asap. Otherwise it's the best to follow the standard IMO because =
+if you
+> > > > > don't you get criticism otherwise.
+> > > >=20
+> > > > What I am not clear about from FIPS-204 is whether availability of
+> > > > HashML-DSA is a "must-use" or  a "may-use". What speaks against it =
+for
+> > > > our use case is performance. The lookup of a hash's ID (last digit =
+of
+> > > > OID) and the creation of the 11 byte encoding to prepend before eve=
+ry
+> > > > digest for every signature takes cycles.
+> > >=20
+> > > It is a recommendation, but there are plenty of protocols (TLS,
+> > > OpenPGP, etc...) where the decision has been made to use "pure" ML-DS=
+A
+> > > only, even if what you are signing is not the full data, but somethin=
+g
+> > > containing a hash.
+> > >=20
+> > > Ideally you do not sign *just* a hash, but some structured data, like=
+ a
+> > > context label that identifies the hash and some other related metadat=
+a
+> > > for example. In order to make forgeries much harder should the hashin=
+g
+> > > algorithm used to hash the data weaken over time. But it is not
+> > > strictly necessary (NIST mentioned in some forum, sorry I do not have
+> > > the message handy for quoting, that a structured packet is perfectly
+> > > fine for use with pure ML-DSA, because it does enough to address the
+> > > same issues that a separate internal context does with HashML-DSA).
+> > >=20
+> > > If pure-ML-DSA works better for IMA, just use pure ML-DSA.
+> > >=20
+> > > > Maybe it should explicitly state in FIPS-204 something along the li=
+nes
+> > > > of "with a given hash either ML-DSA or HashML-DSA can be used (for =
+as
+> > > > long as you use it in the same way from then on)." At least this wa=
+y
+> > > > nobody can point out that HashML-DSA should have been used when you=
+ didn't.
+> > >=20
+> > > NIST will not change the standard documents any time soon, but for FI=
+PS
+> > > certification there are Implementation Guidelines.
+> > >=20
+> > > In any case a FIPS module cannot distinguish between data that happen=
+s
+> > > to be 32 bytes long and a hash of larger data, so the point is kind o=
+f
+> > > moot. From the FIPS perspective HashML-DSA is just an available
+> > > algorithm that protocol implementations can use, or not.
+> > >=20
+> > > There are additional guidelines on what this may be useful for, but s=
+o
+> > > far NIST has not objected to the use of pure ML-DSA even where
+> > > theoretically HashML-DSA could be used.
+> >=20
+> > I see that IMA indeed never upgraded full file hashes to use
+> > 'struct ima_file_id'.  Building a new feature that relies on this seems
+>  > like a bad idea though, given that it's a security bug that makes=20
+> the> IMA protocol cryptographically ambiguous.  I.e., it means that in IM=
+A,
+> > when the contents of some file are signed, that signature is sometimes
+> > also valid for some other file contents which the signer didn't intend.
+>=20
+> You mean IMA should not sign the digest in the ima_file_id structure but=
+=20
+> hash the ima_file_id structure in which this file digest is written into=
+=20
+> (that we currently sign) and sign/verify this digest?
 
-The patch looks reasonable to me. I have it in my queue for v7.1.
+You should not (need to) hash it, just format it and the use ML-DSA to
+sign it.
 
-Sami
+> And we would do=20
+> this to avoid two different files (with presumably different content)=20
+> from having the same hashes leading to the same signature? Which hashes=
+=20
+> (besides the non-recommended ones) are so weak now that you must not=20
+> merely sign a file's hash?
+>=20
+> The problem with this is that older kernels (without patching) won't be=
+=20
+> able to handle newer signatures.
+
+Ad a kernel option to use the new format? Old kernels won't be able to
+deal with ML-DSA IMA either.
+
+> >=20
+> > Just fix that bug first, which has to be done anyway.  Then just use
+> > pure ML-DSA to sign and verify the 'struct ima_file_id'.
+>  > > As Simo mentioned, FIPS 204 doesn't require HashML-DSA when signing =
+a
+> > hash.  It's there as an *option* to solve a perceived problem, which is
+> > actually solvable in better ways.
+> >=20
+> > NIST doesn't plan to update FIPS 204 until 2029, and most likely the
+> > updates will just be errata in the text (such as the ones I reported to
+> > them), not changes or withdrawals in the algorithms themselves.  But
+> > it's irrelevant: just because HashML-DSA is an option doesn't mean it
+> > has to be used.  Pure ML-DSA supports arbitrary data, which includes
+>=20
+> And I was sure whether it was merely an 'option'. Who would use it then=
+=20
+> if it takes more cycles to hash the prepended 11 byte oid in HashML-DSA?
+
+Nobody is using HashML-DSA at the moment.
+
+--=20
+Simo Sorce
+Distinguished Engineer
+RHEL Crypto Team
+Red Hat, Inc
+
