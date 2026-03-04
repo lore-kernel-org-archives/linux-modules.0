@@ -1,70 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E5C34E74E
-	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 16:12:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75EF63DA5D9
+	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 19:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772640767; cv=none; b=UKx6HLnlFny6h/sR5B5usM4JeVHY8HtQlAI24m8+Rwf6VZt8m+ltdbcSwJ2UeGvQ6cNynOLMRE7RWxzuYRhC05npE4DjRVLma3JL8MTRWuMzXZ6eLUs5uhaIIFBcleAcDTDUNhU+qMVNFnw1sMTc8/6Ng6oCLDbMTo8ekqw/fwk=
+	t=1772652805; cv=none; b=XmK0zIkDD9WcLOi9V2ufCYVwQ0/deSHLeqH6uMDK9OMCgbdc8qqeXh0IiKJNfbkCzVJoQ+Iz5Ve5SDA0uOt8NaFYBmO7IxY0T6N9lu/ZXCxGLMLGBnVsFkwaTX7fC6IMvWpoas/lZ/mNOc0KjzKE0C2pbbHIgj7ArIRDhGelgyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772640767; c=relaxed/simple;
-	bh=m+qwbB71rrlGhNdXzKE/AQ50HEHKr9xwlau/dwXUUzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjqvXG3jlHHBolSgq3mjliJ62FrjZHIeaXws8pdT8B3i7vl5yey6mZEX9CW2AZQ9a9ZVGHKQXYPbvJDZAolL9iJFdOc4MSqXZqnUa7UBuBVDmOyPHXg0NwdAPDOqcBD/pfdP+IZdP98EuiEbY97LzaIegu9Z+1mfOhViR04tjIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MmX9vs4Z; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772652805; c=relaxed/simple;
+	bh=xt5LSQtF8djT3pyh6r+qKCISkQKP4j4fbWDR874CSjc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lKiIZqoySvDO3/c30xWOIVjw5gD0VynO7R4gB2PfCg3JHAbBSGACsgg0Neri2GivGkv737X13JFIQ1tNPvmtyqWRkXYL7P4XLIosJzeX0CVpwuy0ty+qL1iDz1hVkqBbNZFwgg+sYI7DGO2QUFGNAo2UvAFgV3+tKL93Cudmly0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gEWztoWX; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MmX9vs4Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772640764;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GOOCbZ9poJVCD4GALeTPjjenC3XBTD2PBklGLSe4XRQ=;
-	b=MmX9vs4Z8TJfXC2HuB0s0zHWxa3N8CJsO0ZSULzyIC4lf9dWOPejtEWbcpvG20zHyklPTV
-	jRTMuYin3ijKLPsizo68iri5IsJINhKstC+PAQA7PKUkVPRdT7AoRuDZajHQ8XBaxq+2hS
-	nLnJhPPVJIavJEN1x/Acj7wrBli5DoI=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-636-W_XQERGnNeSaGneBfH7G1Q-1; Wed,
- 04 Mar 2026 11:12:39 -0500
-X-MC-Unique: W_XQERGnNeSaGneBfH7G1Q-1
-X-Mimecast-MFC-AGG-ID: W_XQERGnNeSaGneBfH7G1Q_1772640757
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C69619560B0;
-	Wed,  4 Mar 2026 16:12:37 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.5])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 40E5C19560AB;
-	Wed,  4 Mar 2026 16:12:35 +0000 (UTC)
-Date: Wed, 4 Mar 2026 11:12:32 -0500
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>, Petr Mladek <pmladek@suse.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [PATCH] module.lds: force 0 sh_addr for .text, .data, .bss, and
- .rodata sections
-Message-ID: <aahZ8K6BmtVKRbg2@redhat.com>
-References: <20260304160611.143862-1-joe.lawrence@redhat.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gEWztoWX"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-483a233819aso71473095e9.3
+        for <linux-modules@vger.kernel.org>; Wed, 04 Mar 2026 11:33:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772652801; x=1773257601; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TwcPWqbwdgcIHoSyNaDrWJ+mjlZF6CriUiUT+57GEbo=;
+        b=gEWztoWXqCLaoGxFCo19El/NexvLKLoqTwu08ruwIf+so4Gtl17kvBney8WCpi5AEy
+         EUed9onVozK6I/ruQcOYcKVkhyy2447NVTbmfFeAlXaHSB1LovWDbuh67Dd9Psq1eNZS
+         SJelWsAbEHHJkEJjMhHZJ4HAgPWNwZlHsos9YE8GRBPyKkWNHBB5ldyX6fDDsIzg1grT
+         lXymfGw+r2pOGAy8XmRfctFdV/eWgnUfd12G91ROgoXgsIbWVCIZoIJhk3MIkSNf1sRs
+         KYTablQH3xW4NV6T8PNNG/IJFqdMzLOYAvtJltyIzN1KDpoPXvosGSCOTYmOIwBhEQ3Q
+         4W2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772652801; x=1773257601;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TwcPWqbwdgcIHoSyNaDrWJ+mjlZF6CriUiUT+57GEbo=;
+        b=XBjNcSNL5ifpxc2zlEuNc1RVPlp9wZA5utOFwda8DJfDV3dKOB78HAED3iP4QELvsl
+         gM/ZwvC4o/2n22scm4B7jgcHPQUIrQnuW9IO/9rnff0P6veM86oSk8kr8kYTzdGpBrwh
+         QxD+dDRK/BZacJyRuYQnx7CdRau1NBkdne/3y7zJpmkb6ORKnzchmyhHEbUrNpOi1XmA
+         1mnjLUTYyt+M3hxfFwwrt0g56C2tC5vOkBWQxurRuXYDLhxAwkHKwQHK1C8IqcQLkfQL
+         pjhB5KnQFdizjx28Jh1vet8JgbqWJJCRZBBOYCHfq/YxC5XV+oduPfJLi5eVe46kZhrj
+         Ogyw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCyzUJ3Ho3mbpPHzjvVlwbictxd0jCKYXUv/q2Bg++gdUuE+4lPhjBOrWYGlzMbCQNpDX/dzlbZlIwS2n+@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEvDwCjhQb8FBuhlxAjaAPbINELsigGMXMN0bb9EtTMIrlkbid
+	DMzKFEfHlE4U4ifGXvzjt0Vnid7x6/iZkOKJRYregzRHVKUu4smDKgJd+FYIE0kawGA=
+X-Gm-Gg: ATEYQzwdmqa2c5tfapyXnWtLBF48ziMP/Rit4+BrNNRanO3VCvvCH8SXK14LOkobZhy
+	A7WahvHnI4cvw0E6+OikStorY/MP1rFn6ugk2s65BzCajcGKKPxiTlKv3cHyGNgiEYBtyS1PWG5
+	nXhWKL/5UH317WlJ5ETyreY6vXV5GSE96i3yV3eAPwNTM/jRuuQsnqPE3FuQhGviBGVInBnKkK4
+	yycJM7NiGVgGRBNSwDC3niIIBHSJ0CVrw/iznzxMDOs255D14hMAYcUcjEBhiYNzjq2+3iDysGa
+	HVhbws/BTXQ+Js0WprzwZT2mtskqstbLAG1zCiooDAmsHVqo28ZCzjT8YjwCEXgeCCuisN8TQau
+	iZxkTgKu7G0Ht1hnmt/qB6JjTHS03bmdUA5yl30hMjobozTweaxUG0Axt7vHfmkWSpJz2CE7WeR
+	O/sx7tvtdOYM+8UXm0o1e1alfAsdXTBeV65f5ajM/Wx5RChBdzptwWkwaOIFJRw7uA1zdQTmLKw
+	rYYkBlLTyaEjaAtw/QAwFsv4Z7OiCWwH/6S+ljvTv7JRNV7u7kE/JyLcNykM4hJApMupQ==
+X-Received: by 2002:a05:600c:c8a:b0:477:79c7:8994 with SMTP id 5b1f17b1804b1-4851989f6e3mr51545915e9.30.1772652800743;
+        Wed, 04 Mar 2026 11:33:20 -0800 (PST)
+Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851a8a9542sm40206455e9.1.2026.03.04.11.33.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Mar 2026 11:33:20 -0800 (PST)
+Message-ID: <505a3a22-caeb-4351-a97c-2995275dff27@suse.com>
+Date: Wed, 4 Mar 2026 20:33:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module.lds: force 0 sh_addr for .text, .data, .bss, and
+ .rodata sections
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Petr Mladek <pmladek@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260304160611.143862-1-joe.lawrence@redhat.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
 In-Reply-To: <20260304160611.143862-1-joe.lawrence@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 04, 2026 at 11:06:11AM -0500, Joe Lawrence wrote:
+On 3/4/26 5:06 PM, Joe Lawrence wrote:
 > Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
 > related macros") added .text and made .data, .bss, and .rodata sections
 > unconditional in the module linker script, but without an explicit
@@ -79,6 +98,11 @@ On Wed, Mar 04, 2026 at 11:06:11AM -0500, Joe Lawrence wrote:
 > Add the 0 address specifier to .text, .bss, .data, and .rodata, and also
 > to __patchable_function_entries and __kcfi_traps which had the same
 > issue.
+
+I had this issue with non-zero sh_addr values on my list of small things
+to clean up for some time. I didn't realize it could cause an actual
+problem. :/
+
 > 
 > Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
 > Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
@@ -128,17 +152,10 @@ On Wed, Mar 04, 2026 at 11:06:11AM -0500, Joe Lawrence wrote:
 >  		*(.rodata .rodata.[0-9a-zA-Z_]*)
 >  		*(.rodata..L*)
 >  	}
-> -- 
-> 2.53.0
-> 
 
-Linker files are not my usual gig, but I offer up this patch as a
-strawman to raise awareness to those who might know better :D
+This looks ok but the same should be done for sections created via
+MOD_SEPARATE_CODETAG_SECTIONS, namely .codetag.alloc_tags.
 
-This was very lightly tested: readelf reports 0 sh_addrs after the
-change for the affected sections and stap was happier parsing this.
-
+-- 
 Thanks,
---
-Joe
-
+Petr
