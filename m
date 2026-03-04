@@ -1,157 +1,131 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F559381AF8
-	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 08:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7168E199FBA
+	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 16:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772611987; cv=none; b=lW305d2+nJCHbdomeZOP2kW/G3h6+VKml2UtU6Kw5dihBJxGZm3QPLlw1EYxevv27BysP17AoB4dZsT92bigmTebZh4KiEU8kCdsn2OkOBneQHwaKn+jdcPQ45B+Vhu5rXxxKEK+rktv8wjSv1mjt29Af+XyBXiSdFEvF9tHC2c=
+	t=1772640383; cv=none; b=QsPwiZgwde0HplokxWFQtLpbbQEmow1nZ892kduaft425NEWgCikPMK3mSs4Afh/J9PzJDfCvP2ujuEATrhCSdsemZdlp/3VYqev1haslcRjhiSnbHgHdVT9OCfSF0MAD5KQHA8OeN6AxcQxNAcbMuIeTX1dlJ2l8UpJoBFL/lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772611987; c=relaxed/simple;
-	bh=crWmgNqlnMBQ03nDgNxxQUvIWj21atNNvKm8ubqqak0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aS2l/Nuv1hmfSx45RLeMeuNDfE7BysPw0FQUi9BB4LeQhO086/KEQ2t3IIzbx6MH+o6+m0C4Sm6RUiv+d2dWU7x5J+bsvFcQgEXrkMSsrFbLHJtFxZvfaE3NdqOD2hWOe42AI9DJDDhCqPWrJU7wc9KyBIrpXcckwRt/E/VAVk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RNHuSUO8; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772640383; c=relaxed/simple;
+	bh=ScAej3X816b1xqy7EmTt/a3vXOs0JllbxOWpxbyi8c0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=I6nU2fGrji7WB+AuhpSpE5LESVdnPa4PtZz+f5b4WDiFu6PchPjJ9MqBxuph5TY1gJUoFSf3OgCbvSYApmyKJ9ehs8kZHiQPnbtcOtpgYL9EXoLAhIla2F3VmsUrikhKGnu5B58+mx4wZuSrIxryLsZM4w3px4YxFHTijaARSQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ajckvXDP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RNHuSUO8"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b9b190easo1901782f8f.2
-        for <linux-modules@vger.kernel.org>; Wed, 04 Mar 2026 00:13:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772611983; x=1773216783; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkljEEI7m7cvv1eaHcluPEw1Mfpi3L3tnqN5jye2x18=;
-        b=RNHuSUO8Nix+PnIrKdsux+HzYnBwJJzG/fUSeLzNICww/skyl1gwIGV1OfoxYlJ63Q
-         f5uk1WA3nsukO8gRf7+eU9/xeasxp3bA6GLdDzzkboFCLGqO+uThKdfgXHf0xjkZOZKk
-         vIJQ6/3pYuLReI992EkGhKchXpg8RZjJlj5cUZ+wE6qoWxeAQouVPcHlSowxAJ25Mp1a
-         aCcpd/Cv6uEZuG6SY4zjGOPPsflDR8B04kTi1cBEBrLfzA1TH3DbtpP4lOYP4G2LfNfK
-         ifv8W+LzNoadTtzFxiiXtr7pkIoUim+PqZA2NgyqnJbv/A3VWeetLAGxJV2BaeZ3GQm/
-         zteQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772611983; x=1773216783;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lkljEEI7m7cvv1eaHcluPEw1Mfpi3L3tnqN5jye2x18=;
-        b=apyMfWE0lte7SNtDgSdexGMVsMGJg5ZlBu2iqbxDKljskwVHBFfEleaReqPH3Xau/l
-         kj39/gJsFyRPJpVegbL4tIM3vN+TIJrjKDDVvaJP+bluOAYPqxeS4XUdNw6xbX9aVzcW
-         HTYbtaR9wMnsunri+NrvaIVoBMbn7j0DhyCFd6Ba1XSYIIh8tJq5op5lZ2ZqRu86lmGf
-         1WdTcsi3niIbCkKIVFU/3uNjLLlTM4tqklbWMH00CaOf7Hhqj/HxwKpvmyIeU2GEVWJ0
-         ojgxLWEfoH4A+a8hlvCgU14oyC+7wkFu1V4nbbGY/KGoU6rQ3fAS2GX/neDBZBzFZitZ
-         Uy/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWZTAWAPppUpHl5Ya9u0RGe1y8283g+cAIBFCOjhnA5c2smctNFzl5QabfCdEX+xFuuHbLnypbcHtx/0DDh@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVuVfhQNAgbq+13FuyY0n5zefDYm0JKB4HpmntVPcH1X/3tetJ
-	ThRw8qhbzAlJln7BHpbN1Xho0kk8xYo4hMnyA/ThmZU8RmSyExKUAO4saqHJtXldQXU=
-X-Gm-Gg: ATEYQzyUpfsuseJcY3RyWCkTYXCkyiGmU27gf7MciRogxAYTM8Ge5dXLvONSrL0kDOs
-	j+4bik7niNFEX7/eklHynMqq5J1hmyx8Kydw6KjFINej0xa5BbQXR8FPJzu2/QhJd/KWsNi+1i4
-	/qEneK2YpuS43AIFhrApnLSwzIV60uwgEho9SeenAodKD09iYYTwWiIVOotQ0VuzPjzr9I5/BHg
-	nSgtLAD+UDsofgp5y1nCMfdJez2Jx8hzokIm6daHpRmstLYXCHw5x/FzsaGzbhLPY6WOriv9f5Z
-	0MBKcAsAZEH/JzKYGnuIrxK7uH3ZkXX1ebiGEBps4Cun5KhBvPPdGMBu10ZywyhTsTEbYfh8ren
-	WwCXczqbHd68SrxSvuqVaL2KXcR3c9aKiP25dyRjkwu5TF17qF3BLuvHxyNj2YXTHf1f7lmDafH
-	yoq6WELxKAIclu2RbZpReMRl6beYpnt7mOv3LZtsaNcvdzYmrnZATdWd/2LNTvkMakB7F1RXBj0
-	5SDWpEFQcdNj8lbs+Lmx5TR3DTcY8fd4ZlwDj/5OLQ6vRYwJT7b1EL7DzW4KbuLxzMETw==
-X-Received: by 2002:a5d:5d0b:0:b0:439:a9a5:d3e9 with SMTP id ffacd0b85a97d-439c7fd3cfbmr2326625f8f.30.1772611983540;
-        Wed, 04 Mar 2026 00:13:03 -0800 (PST)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b0549600sm26602877f8f.35.2026.03.04.00.13.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 00:13:03 -0800 (PST)
-Message-ID: <f88cefdd-3366-4be1-a1a1-3b48d500138c@suse.com>
-Date: Wed, 4 Mar 2026 09:13:02 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ajckvXDP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772640381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hxSpT0yifDXBnPJ/fGGcnzbJyaYNyHp2I1DkrsHdocY=;
+	b=ajckvXDPntIMYEejZRIY5kOYx8lIzetIRKJ71i1sjHVnB2tIK5rmKtVCiGuN6NSNRj4X77
+	Uw/2oW+3PpvSCMP6kfvTx+GxJKIihWHckHexD6el+kAAAfrg6iEhLzHlTvwOvPorJWHiMF
+	7T2a7MUVEg/fi79NeQABxdajYukbUTo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-55-YcttVVH0P_mxfzOlhgBJcw-1; Wed,
+ 04 Mar 2026 11:06:18 -0500
+X-MC-Unique: YcttVVH0P_mxfzOlhgBJcw-1
+X-Mimecast-MFC-AGG-ID: YcttVVH0P_mxfzOlhgBJcw_1772640376
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7631218002D7;
+	Wed,  4 Mar 2026 16:06:16 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.5])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 63BC519560B7;
+	Wed,  4 Mar 2026 16:06:14 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH] module.lds: force 0 sh_addr for .text, .data, .bss, and .rodata sections
+Date: Wed,  4 Mar 2026 11:06:11 -0500
+Message-ID: <20260304160611.143862-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/8] rust: module_param: wire StringParam into the module!
- macro
-To: Matthew Wood <thepacketgeek@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Tamir Duberstein <tamird@kernel.org>, David Gow <davidgow@google.com>,
- =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
- linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260226234736.428341-1-thepacketgeek@gmail.com>
- <20260226234736.428341-3-thepacketgeek@gmail.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260226234736.428341-3-thepacketgeek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 2/27/26 12:47 AM, Matthew Wood wrote:
-> Add support for `string` as a parameter type in the module! macro.
-> 
-> On the runtime side, add:
->   - set_string_param(): an extern "C" callback matching the
->     kernel_param_ops::set signature that stores the raw C string
->     pointer directly into the SetOnce<StringParam> container, avoiding
->     an unnecessary copy-and-parse round-trip.
->   - PARAM_OPS_STRING: a static kernel_param_ops that uses
->     set_string_param as its setter.
->   - ModuleParam impl for StringParam with try_from_param_arg()
->     returning -EINVAL, since string parameters are populated
->     exclusively through the kernel's set callback.
-> 
-> On the macro side:
->   - Change the Parameter::ptype field from Ident to syn::Type to
->     support path-qualified types.
+Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
+related macros") added .text and made .data, .bss, and .rodata sections
+unconditional in the module linker script, but without an explicit
+address like the other sections in the same file.
 
-Why is it necessary to change the type of Parameter::ptype? My
-understanding is that this token can currently be "i8", "u8", ...,
-"isize", "usize". Additionally, the value "string" should now be
-accepted. When should one use a path-qualified type in this context?
+When linking modules with ld.bfd -r, sections defined without an address
+inherit the location counter, resulting in non-zero sh_addr values in
+the .ko.  Relocatable objects are expected to have sh_addr=0 for these
+sections and these non-zero addresses confuse elfutils and have been
+reported to cause segmentation faults in SystemTap [1].
 
->   - Recognize the `string` shorthand and resolve it to the fully
->     qualified ::kernel::module_param::StringParam type during code
->     generation.
->   - Wrap string default values with StringParam::from_c_str(c_str!(...))
->     to produce a compile-time CStr-backed default.
->   - Route `string` to PARAM_OPS_STRING in param_ops_path().
-> 
-> Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
-> ---
->  rust/kernel/module_param.rs | 48 +++++++++++++++++++++++++++++++++++++
->  rust/macros/module.rs       | 42 +++++++++++++++++++++++++-------
->  2 files changed, 81 insertions(+), 9 deletions(-)
-> 
-> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-> index 80fe8643c0ab..67ff6f2ea9c2 100644
-> --- a/rust/kernel/module_param.rs
-> +++ b/rust/kernel/module_param.rs
-> @@ -86,6 +86,36 @@ pub trait ModuleParam: Sized + Copy {
->      })
->  }
->  
-> +/// Set a string module parameter from a string.
-> +///
-> +/// Similar to [`set_param`] but for [`StringParam`].
-> +///
-> +/// # Safety
-> +///
-> +/// Same requirements as [`set_param`].
-> +unsafe extern "C" fn set_string_param(
-> +    val: *const c_char,
-> +    param: *const bindings::kernel_param,
-> +) -> c_int {
+Add the 0 address specifier to .text, .bss, .data, and .rodata, and also
+to __patchable_function_entries and __kcfi_traps which had the same
+issue.
 
-The safety comment is somewhat inaccurate because set_param() says that
-the input value needs to be valid only for the duration of the call,
-whereas set_string_param() and StringParam require it to be valid for
-the module's lifetime.
+Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
+Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ scripts/module.lds.S | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 054ef99e8288..e1cab3cee3f7 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -32,30 +32,30 @@ SECTIONS {
+ 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+ 	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
+ 
+-	__patchable_function_entries : { *(__patchable_function_entries) }
++	__patchable_function_entries 0 : { *(__patchable_function_entries) }
+ 
+ 	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
+ 	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
+ 
+ #ifdef CONFIG_ARCH_USES_CFI_TRAPS
+-	__kcfi_traps		: { KEEP(*(.kcfi_traps)) }
++	__kcfi_traps		0 : { KEEP(*(.kcfi_traps)) }
+ #endif
+ 
+-	.text : {
++	.text			0 : {
+ 		*(.text .text.[0-9a-zA-Z_]*)
+ 	}
+ 
+-	.bss : {
++	.bss			0 : {
+ 		*(.bss .bss.[0-9a-zA-Z_]*)
+ 		*(.bss..L*)
+ 	}
+ 
+-	.data : {
++	.data			0 : {
+ 		*(.data .data.[0-9a-zA-Z_]*)
+ 		*(.data..L*)
+ 	}
+ 
+-	.rodata : {
++	.rodata			0 : {
+ 		*(.rodata .rodata.[0-9a-zA-Z_]*)
+ 		*(.rodata..L*)
+ 	}
 -- 
-Thanks,
-Petr
+2.53.0
+
