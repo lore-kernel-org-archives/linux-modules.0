@@ -1,68 +1,67 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E07388379
-	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 07:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F559381AF8
+	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 08:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772610754; cv=none; b=PUopz2o6PKFtZTlUh7KtjKnOOkcd2eG7mOONkqi/4Z8OveWCmnUHXX9aSLWecXr4n+edR/KQU9ktDJdIx/A32oQIh16bzxsiHsC2+MNM6bWRnEBtjhXyMR+Wu7cPQK5JzdMV7YMMvea82Cz7OtYlAjR5sQr0whN67eDczmvnTbE=
+	t=1772611987; cv=none; b=lW305d2+nJCHbdomeZOP2kW/G3h6+VKml2UtU6Kw5dihBJxGZm3QPLlw1EYxevv27BysP17AoB4dZsT92bigmTebZh4KiEU8kCdsn2OkOBneQHwaKn+jdcPQ45B+Vhu5rXxxKEK+rktv8wjSv1mjt29Af+XyBXiSdFEvF9tHC2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772610754; c=relaxed/simple;
-	bh=EcLDMvBjjbTD/cKF5y1BkO7ob6e6OBIu3jcREkFicZE=;
+	s=arc-20240116; t=1772611987; c=relaxed/simple;
+	bh=crWmgNqlnMBQ03nDgNxxQUvIWj21atNNvKm8ubqqak0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a+cXLbap6rZc8eKYPHwlzeekGPx66dlpZ709VAV86Q9yOGfjwZaZVhbtQqE3IA6+a0+gGVGF16BxT6N2AdYDaeSlkCh73RONyk+Cp3RqOvt5VAvKgn1PGmQC5/+s8Kmy2w6aGaWq6999wybryWfkbCq8fL5JkM0kJaasQPcN4Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FNnTPrmD; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:Content-Type; b=aS2l/Nuv1hmfSx45RLeMeuNDfE7BysPw0FQUi9BB4LeQhO086/KEQ2t3IIzbx6MH+o6+m0C4Sm6RUiv+d2dWU7x5J+bsvFcQgEXrkMSsrFbLHJtFxZvfaE3NdqOD2hWOe42AI9DJDDhCqPWrJU7wc9KyBIrpXcckwRt/E/VAVk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RNHuSUO8; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FNnTPrmD"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439af7d77f0so3147998f8f.0
-        for <linux-modules@vger.kernel.org>; Tue, 03 Mar 2026 23:52:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RNHuSUO8"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-439b9b190easo1901782f8f.2
+        for <linux-modules@vger.kernel.org>; Wed, 04 Mar 2026 00:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772610748; x=1773215548; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1772611983; x=1773216783; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=iaji8MiSwOMoEhpHJ9TfGIIdRoqWhERpR7BNI+IYVW8=;
-        b=FNnTPrmDvPeJsl7KgOkZBHjigGbAfeWKOyNkXPj/ux+4SYrQn4MTPSHMrouYmSgqIa
-         YuFUNmIKbBGjpl8HC4GdNNkeY3ChhyRlnRpH4V0ri52oDep3hlSTOoliQedMT0Q80eJ/
-         u74NOjzU2/l3poPflXJgxfZbtt5Jd1H9iW1nzjA/GbFpj7Don+kWtej1SpQqfk5AYi09
-         Eb9dLae/TK4h5q3fJZKI1g95C/udZxLAoLe0Upb2/LygfKo5T5+smDUdi37tfQZDsldY
-         1va/Z7NSVaRop+Elt1Nxco58Kr4VF80cTnrvUk2M/x5YabCEcP0q7FV2F+ubPjbxO5dH
-         6ovw==
+        bh=lkljEEI7m7cvv1eaHcluPEw1Mfpi3L3tnqN5jye2x18=;
+        b=RNHuSUO8Nix+PnIrKdsux+HzYnBwJJzG/fUSeLzNICww/skyl1gwIGV1OfoxYlJ63Q
+         f5uk1WA3nsukO8gRf7+eU9/xeasxp3bA6GLdDzzkboFCLGqO+uThKdfgXHf0xjkZOZKk
+         vIJQ6/3pYuLReI992EkGhKchXpg8RZjJlj5cUZ+wE6qoWxeAQouVPcHlSowxAJ25Mp1a
+         aCcpd/Cv6uEZuG6SY4zjGOPPsflDR8B04kTi1cBEBrLfzA1TH3DbtpP4lOYP4G2LfNfK
+         ifv8W+LzNoadTtzFxiiXtr7pkIoUim+PqZA2NgyqnJbv/A3VWeetLAGxJV2BaeZ3GQm/
+         zteQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772610748; x=1773215548;
+        d=1e100.net; s=20230601; t=1772611983; x=1773216783;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iaji8MiSwOMoEhpHJ9TfGIIdRoqWhERpR7BNI+IYVW8=;
-        b=Jn8FDcyXoutNTJDUx/27z2M7scYAZ81vzqZp11GC0daZ4kGKIIFO30duX4m2uU7e2E
-         jV+ty2ARDwzbfM5tFCS3HzylIMObRFIEBAjHOeCbVZk1nbKiX6tiMFVIylM63VIuupia
-         /+124LvpjmRRAzmEO/CAF/dCZj0O3811AFUYNoRj4ZNmIIVFfk+8Ks3jzJz9asBLeurf
-         vW/5lbVpuhKFqDIbMoyU2dG6pjzUPs7d2g+/Xc3M3ZeyYtWSLgrVO12Y5wBeWaeSItMo
-         mrtW/SSW1O6SvBqB9avgIZpx0Xj9GW/utAcX5RuTzLQy86ChqD63tj/T632pYTGvVUOt
-         AB2g==
-X-Forwarded-Encrypted: i=1; AJvYcCWue868DHvbjX0oun/WxlJ6GzxUAcGLFgM/7azwtofKCjg7Hw7NJchI1rORDFelK0tF0pVAqZqiWYCa5XBk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXPEWXIzCG4SaxYNTjyskka/WSQ43ToTUqi3HV88pVrde9B3Gd
-	Z+/sFzpYkAufwsMAqxLkpxTxXVfpn8LuYfoVy8VSIM4oMfMIEXHcSqx7uChY3757Jg0=
-X-Gm-Gg: ATEYQzwf6kSRK60LJnjGvxfGv972KVQRc5k+GpwDPQISqI2cqu/YLKurhVVfdt/DrBb
-	1fQgvryYNzmG+j15LoD+WjBjtnab0OXAdZm+PwTpM+QBaPq7EUXTp3aZ+niGJMusnzAYAywa7tk
-	IOGlvW0qWLnvQior/fEptnG0xjl1lBb/ZECVYuPaE2rUluPVL4lN+jJYvzdBj+dcPaOA2bTNjl9
-	+KZ8toux7/hQ2oVrztCC2RHjA58EuSIdplHylnzRGOkZCqXt9w6gPieyJr6k/1Czc6rhzqPK/dT
-	+/xs88bdCTtIN8kY98nfE3Eep9ug0iE1XB9OWaChY0N9L/MPFH//Hn/YQhUkp4SaoskFMEMGHKV
-	AXRv5BJktneMsjg++lAur2rijhQ0eh4wSa7hykuOt27iyLGNPBI0SRoJLMyf0sK88Seiqom7McP
-	E/EcFr40iE3YX/XjQeHUNIYWM8LxpAgE4IADxLg3JzLu23GtB63p16Ih+OP4jRojTpkw9KOt1H1
-	EpEcQdhoyfJLt6Zj4DdIsf+ToQK7gs4tHyCpiTOKNeXrpKOohHrlx5j8WJZPy5R8gjWT2ZAGqiB
-	at8U
-X-Received: by 2002:a05:6000:4301:b0:439:b886:20d3 with SMTP id ffacd0b85a97d-439c7f7e5b7mr2101563f8f.15.1772610748337;
-        Tue, 03 Mar 2026 23:52:28 -0800 (PST)
+        bh=lkljEEI7m7cvv1eaHcluPEw1Mfpi3L3tnqN5jye2x18=;
+        b=apyMfWE0lte7SNtDgSdexGMVsMGJg5ZlBu2iqbxDKljskwVHBFfEleaReqPH3Xau/l
+         kj39/gJsFyRPJpVegbL4tIM3vN+TIJrjKDDVvaJP+bluOAYPqxeS4XUdNw6xbX9aVzcW
+         HTYbtaR9wMnsunri+NrvaIVoBMbn7j0DhyCFd6Ba1XSYIIh8tJq5op5lZ2ZqRu86lmGf
+         1WdTcsi3niIbCkKIVFU/3uNjLLlTM4tqklbWMH00CaOf7Hhqj/HxwKpvmyIeU2GEVWJ0
+         ojgxLWEfoH4A+a8hlvCgU14oyC+7wkFu1V4nbbGY/KGoU6rQ3fAS2GX/neDBZBzFZitZ
+         Uy/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWZTAWAPppUpHl5Ya9u0RGe1y8283g+cAIBFCOjhnA5c2smctNFzl5QabfCdEX+xFuuHbLnypbcHtx/0DDh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVuVfhQNAgbq+13FuyY0n5zefDYm0JKB4HpmntVPcH1X/3tetJ
+	ThRw8qhbzAlJln7BHpbN1Xho0kk8xYo4hMnyA/ThmZU8RmSyExKUAO4saqHJtXldQXU=
+X-Gm-Gg: ATEYQzyUpfsuseJcY3RyWCkTYXCkyiGmU27gf7MciRogxAYTM8Ge5dXLvONSrL0kDOs
+	j+4bik7niNFEX7/eklHynMqq5J1hmyx8Kydw6KjFINej0xa5BbQXR8FPJzu2/QhJd/KWsNi+1i4
+	/qEneK2YpuS43AIFhrApnLSwzIV60uwgEho9SeenAodKD09iYYTwWiIVOotQ0VuzPjzr9I5/BHg
+	nSgtLAD+UDsofgp5y1nCMfdJez2Jx8hzokIm6daHpRmstLYXCHw5x/FzsaGzbhLPY6WOriv9f5Z
+	0MBKcAsAZEH/JzKYGnuIrxK7uH3ZkXX1ebiGEBps4Cun5KhBvPPdGMBu10ZywyhTsTEbYfh8ren
+	WwCXczqbHd68SrxSvuqVaL2KXcR3c9aKiP25dyRjkwu5TF17qF3BLuvHxyNj2YXTHf1f7lmDafH
+	yoq6WELxKAIclu2RbZpReMRl6beYpnt7mOv3LZtsaNcvdzYmrnZATdWd/2LNTvkMakB7F1RXBj0
+	5SDWpEFQcdNj8lbs+Lmx5TR3DTcY8fd4ZlwDj/5OLQ6vRYwJT7b1EL7DzW4KbuLxzMETw==
+X-Received: by 2002:a5d:5d0b:0:b0:439:a9a5:d3e9 with SMTP id ffacd0b85a97d-439c7fd3cfbmr2326625f8f.30.1772611983540;
+        Wed, 04 Mar 2026 00:13:03 -0800 (PST)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c60f764sm42229774f8f.3.2026.03.03.23.52.26
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439b0549600sm26602877f8f.35.2026.03.04.00.13.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Mar 2026 23:52:27 -0800 (PST)
-Message-ID: <97a56169-b71c-4ad0-8992-c6e2d381ff02@suse.com>
-Date: Wed, 4 Mar 2026 08:52:26 +0100
+        Wed, 04 Mar 2026 00:13:03 -0800 (PST)
+Message-ID: <f88cefdd-3366-4be1-a1a1-3b48d500138c@suse.com>
+Date: Wed, 4 Mar 2026 09:13:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,60 +69,88 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] modules: Move 'struct module_signature' to UAPI
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: David Howells <dhowells@redhat.com>, David Woodhouse
- <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>,
+Subject: Re: [PATCH 2/8] rust: module_param: wire StringParam into the module!
+ macro
+To: Matthew Wood <thepacketgeek@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
  Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de>
+ Aaron Tomlin <atomlin@atomlin.com>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Tamir Duberstein <tamird@kernel.org>, David Gow <davidgow@google.com>,
+ =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+ linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260226234736.428341-1-thepacketgeek@gmail.com>
+ <20260226234736.428341-3-thepacketgeek@gmail.com>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de>
+In-Reply-To: <20260226234736.428341-3-thepacketgeek@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 3/2/26 1:42 PM, Thomas Weißschuh wrote:
-> This structure definition is used outside the kernel proper.
-> For example in kmod and the kernel build environment.
+On 2/27/26 12:47 AM, Matthew Wood wrote:
+> Add support for `string` as a parameter type in the module! macro.
 > 
-> To allow reuse, move it to a new UAPI header.
+> On the runtime side, add:
+>   - set_string_param(): an extern "C" callback matching the
+>     kernel_param_ops::set signature that stores the raw C string
+>     pointer directly into the SetOnce<StringParam> container, avoiding
+>     an unnecessary copy-and-parse round-trip.
+>   - PARAM_OPS_STRING: a static kernel_param_ops that uses
+>     set_string_param as its setter.
+>   - ModuleParam impl for StringParam with try_from_param_arg()
+>     returning -EINVAL, since string parameters are populated
+>     exclusively through the kernel's set callback.
 > 
-> While it is not a true UAPI, it is a common practice to have
-> non-UAPI interface definitions in the kernel's UAPI headers.
-> 
-> This came up as part of my CONFIG_MODULE_HASHES series [0].
-> But it is useful on its own and so we get it out of the way.
-> 
-> [0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> On the macro side:
+>   - Change the Parameter::ptype field from Ident to syn::Type to
+>     support path-qualified types.
 
-This looks reasonable from my side and reduces code duplication. With
-the removal of MODULE_SIGNATURE_TYPE_MERKLE in patch 6, as reported by
-the AI, the changes seem ok to me. Feel free to add:
+Why is it necessary to change the type of Parameter::ptype? My
+understanding is that this token can currently be "i8", "u8", ...,
+"isize", "usize". Additionally, the value "string" should now be
+accepted. When should one use a path-qualified type in this context?
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+>   - Recognize the `string` shorthand and resolve it to the fully
+>     qualified ::kernel::module_param::StringParam type during code
+>     generation.
+>   - Wrap string default values with StringParam::from_c_str(c_str!(...))
+>     to produce a compile-time CStr-backed default.
+>   - Route `string` to PARAM_OPS_STRING in param_ops_path().
+> 
+> Signed-off-by: Matthew Wood <thepacketgeek@gmail.com>
+> ---
+>  rust/kernel/module_param.rs | 48 +++++++++++++++++++++++++++++++++++++
+>  rust/macros/module.rs       | 42 +++++++++++++++++++++++++-------
+>  2 files changed, 81 insertions(+), 9 deletions(-)
+> 
+> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
+> index 80fe8643c0ab..67ff6f2ea9c2 100644
+> --- a/rust/kernel/module_param.rs
+> +++ b/rust/kernel/module_param.rs
+> @@ -86,6 +86,36 @@ pub trait ModuleParam: Sized + Copy {
+>      })
+>  }
+>  
+> +/// Set a string module parameter from a string.
+> +///
+> +/// Similar to [`set_param`] but for [`StringParam`].
+> +///
+> +/// # Safety
+> +///
+> +/// Same requirements as [`set_param`].
+> +unsafe extern "C" fn set_string_param(
+> +    val: *const c_char,
+> +    param: *const bindings::kernel_param,
+> +) -> c_int {
+
+The safety comment is somewhat inaccurate because set_param() says that
+the input value needs to be valid only for the duration of the call,
+whereas set_string_param() and StringParam require it to be valid for
+the module's lifetime.
 
 -- 
 Thanks,
