@@ -1,149 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2655333688A
-	for <linux-modules@vger.kernel.org>; Thu,  5 Mar 2026 01:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE771A23A4;
+	Thu,  5 Mar 2026 02:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772675569; cv=none; b=kJqayIx6X5kX+PwVAAs6qF46h9PjANGH5IL89ZNvdXObC7r76q/ivMk90O/eR/W7XPHFgiROmEjdwcntXOXS4VEnhZSxbr9lcEZyzsIfJAij8NHZVUuEGIrOjpLaFtotZrqWP0nbC2iEXV+CFkjfRvV43djjOHPheAbTEGhu8Kw=
+	t=1772677139; cv=none; b=lVAfPmk6XghPbHLCn89LHJUWgzHKkCKUAJzmmDoRRMrZ5kReTd5HI2710Q+me/AuJqlDXgavsN1UsrSsXsTozjpjj9igbDRGFnuDGxV/UKHIEWWQf1nEsgIuPqOvCuSr4yzCe9pdAziIEGXqaXzIxmHP24aVAO+UVcH6HYznWPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772675569; c=relaxed/simple;
-	bh=5+sPssbX4DjNgiCHhK+7R9HB8TbI96p5oZyAfzKul4Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=U1kcBzhkvIyOUyJBUPtVSfycgUkDYMW+G8Tyz6bMDW2UHsLavb1wzb7iY4dKckeav+Q0970ZmBNKYBtIbCXoJfHnnUGf8vHnm5TWWTCLR3QL8Nukh/uGisutEaQk8xdTe2k6bJ1LlJaZuz+ifyQtHwdNZgDUBje6qv06EgjEFEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dgSvd/bx; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772677139; c=relaxed/simple;
+	bh=Ls/7mcA2DK1yUNDKwWVDb+Xk7O6ZAGJS7ZHtXQtS4sk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o1ljOGZAXFZ2NMdl4XaBoXcTYlCsj3uomhRQwB+TATS5EAYmNFLB0Iu54+vWrr5HCfYihXFSd3O85MXokPj+JYamyZwFmVyGFUP9DG7timw1t3ZKQCIR0FTxhCpIs9A68PoAM5DBVzI7xEZV/TlHBZn6x6FMM6Pe9rNkAWdS6Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pawCvHiZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dgSvd/bx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772675566;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8aprwNHpfwhGWqO3GQWsFAasnh0wuwj6x6k2vz+M2hM=;
-	b=dgSvd/bx1PCAJIhWvPO7GTFQbbOBDjYDVjHOeMAkEMk9KYnjbN7PYcsq1EoC3UshWiEiXt
-	5iYDwI0tO2l6WFAtB2axfg0oc8HBDmmZFH23WJK59WueD8wNdD/wLsq9MFDMkMI+Hcrens
-	HAdXY1qB2KpDGb23x8ZdxzQC4qliCLw=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-516-RknQHbo4PceER0PBFO4fVQ-1; Wed,
- 04 Mar 2026 20:52:44 -0500
-X-MC-Unique: RknQHbo4PceER0PBFO4fVQ-1
-X-Mimecast-MFC-AGG-ID: RknQHbo4PceER0PBFO4fVQ_1772675563
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F1240180049D;
-	Thu,  5 Mar 2026 01:52:42 +0000 (UTC)
-Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.5])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0178C180035F;
-	Thu,  5 Mar 2026 01:52:40 +0000 (UTC)
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pawCvHiZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6EAC4CEF7;
+	Thu,  5 Mar 2026 02:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772677138;
+	bh=Ls/7mcA2DK1yUNDKwWVDb+Xk7O6ZAGJS7ZHtXQtS4sk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pawCvHiZSp7TytfXL17wDR0K9R0m/k1ZLv5M80Yj6FEjwhe66HcUrZniCaGC8bysk
+	 2MrZySXtcpKszetZbzw6Cli/lg1vdfeueZuBn3ABqQjfzlmMLQxOjPQaO0LH4YJ1WD
+	 Haw14DWcqB+POm5YJLoIveLxljpRGnFTSoM8C7m3lIvfiwh38t8J3pcCXP7rYez8Dn
+	 8iJRLmNzJXXK5bBPw3TAK/O554ERaOPj/8RioVipVJTzHgGuEkqdEdiufjvnybbplc
+	 aXUh3zhMwepJ8hj0ckPvlNfFQHaQt3ti/caRF4/yFvnftgP+Gss5XMIfri38yProH6
+	 XPpGtFnHD7Qhw==
+Date: Wed, 4 Mar 2026 21:18:57 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Helge Deller <deller@gmx.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
+	Greg KH <gregkh@linuxfoundation.org>,
 	Petr Mladek <pmladek@suse.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
-Date: Wed,  4 Mar 2026 20:52:37 -0500
-Message-ID: <20260305015237.299727-1-joe.lawrence@redhat.com>
+	Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH 1/3] kallsyms: embed source file:line info in kernel
+ stack traces
+Message-ID: <aajoETEtX9r2XzT7@laps>
+References: <20260303182103.3523438-1-sashal@kernel.org>
+ <20260303182103.3523438-2-sashal@kernel.org>
+ <258d7167-2e82-4402-9545-108c501ae69e@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <258d7167-2e82-4402-9545-108c501ae69e@gmx.de>
 
-Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
-related macros") added .text and made .data, .bss, and .rodata sections
-unconditional in the module linker script, but without an explicit
-address like the other sections in the same file.
+On Wed, Mar 04, 2026 at 09:17:37PM +0100, Helge Deller wrote:
+>On 3/3/26 19:21, Sasha Levin wrote:
+>>Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
+>>lookup table in the kernel image so stack traces directly print source
+>>file and line number information:
+>>
+>>   root@localhost:~# echo c > /proc/sysrq-trigger
+>>   [   11.201987] sysrq: Trigger a crash
+>>   [   11.202831] Kernel panic - not syncing: sysrq triggered crash
+>>   [   11.206218] Call Trace:
+>>   [   11.206501]  <TASK>
+>>   [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
+>>   [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
+>>   [   11.208565]  ? __lock_acquire+0x465/0x2240 (kernel/locking/lockdep.c:4674)
+>>   [   11.209324]  panic+0xc9/0xd0 (kernel/panic.c:787)
+>>   [   11.211873]  ? find_held_lock+0x2b/0x80 (kernel/locking/lockdep.c:5350)
+>>   [   11.212597]  ? lock_release+0xd3/0x300 (kernel/locking/lockdep.c:5535)
+>>   [   11.213312]  sysrq_handle_crash+0x1a/0x20 (drivers/tty/sysrq.c:154)
+>>   [   11.214005]  __handle_sysrq.cold+0x66/0x256 (drivers/tty/sysrq.c:611)
+>>   [   11.214712]  write_sysrq_trigger+0x65/0x80 (drivers/tty/sysrq.c:1221)
+>>   [   11.215424]  proc_reg_write+0x1bd/0x3c0 (fs/proc/inode.c:330)
+>>   [   11.216061]  vfs_write+0x1c6/0xff0 (fs/read_write.c:686)
+>>   [   11.218848]  ksys_write+0xfa/0x200 (fs/read_write.c:740)
+>>   [   11.222394]  do_syscall_64+0xf3/0x690 (arch/x86/entry/syscall_64.c:63)
+>>   [   11.223942]  entry_SYSCALL_64_after_hwframe+0x77/0x7f (arch/x86/entry/entry_64.S:121)
+>
+>As mentioned in the other series, I really like this patch series.
+>
+>I tested this series again on the parisc architecture, and the relative
+>directories are now stripped with this version of your patch.
+>IIRC, the previous patch did show the subdirectory names.
+>[  132.840382] Backtrace:
+>[  132.840382]  [<104254d8>] show_stack+0x50/0x64 (traps.c:212)
+>[  132.840382]  [<1041c0c8>] dump_stack_lvl+0x6c/0xa0 (dump_stack.c:122)
+>[  132.840382]  [<1041c118>] dump_stack+0x1c/0x2c (dump_stack.c:130)
+>[  132.840382]  [<10402218>] vpanic+0x154/0x344 (panic.c:550)
+>[  132.840382]  [<10402438>] panic+0x30/0x34 (panic.c:787)
+>[  132.840382]  [<10bebea8>] sysrq_handle_crash+0x30/0x34 (rcupdate.h:110)
+>[  132.840382]  [<10bec720>] __handle_sysrq+0xc0/0x1e4 (preempt.h:14)
 
-When linking modules with ld.bfd -r, sections defined without an address
-inherit the location counter, resulting in non-zero sh_addr values in
-the .ko.  Relocatable objects are expected to have sh_addr=0 for these
-sections and these non-zero addresses confuse elfutils and have been
-reported to cause segmentation faults in SystemTap [1].
+Ugh... Can you confirm that you've build this kernel with O=?
 
-Add the 0 address specifier to all sections in module.lds, including the
-.codetag.* sections via MOD_SEPARATE_CODETAG_SECTIONS macro.
+The RFC had a dirty dirty hack around how we turn these absolute paths into
+relative ones, but I tried to re-do it so no one would yell at me :)
 
-Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
-Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
- include/asm-generic/codetag.lds.h |  2 +-
- scripts/module.lds.S              | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-v2:
-- Update the MOD_SEPARATE_CODETAG_SECTION for .codetag.* as well [Petr]
-
-v1: https://lore.kernel.org/lkml/20260304160611.143862-1-joe.lawrence@redhat.com
-
-diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
-index a14f4bdafdda..4948e5d4e9d9 100644
---- a/include/asm-generic/codetag.lds.h
-+++ b/include/asm-generic/codetag.lds.h
-@@ -18,7 +18,7 @@
- 	IF_MEM_ALLOC_PROFILING(SECTION_WITH_BOUNDARIES(alloc_tags))
- 
- #define MOD_SEPARATE_CODETAG_SECTION(_name)	\
--	.codetag.##_name : {			\
-+	.codetag.##_name 0 : {			\
- 		SECTION_WITH_BOUNDARIES(_name)	\
- 	}
- 
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index 054ef99e8288..e1cab3cee3f7 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -32,30 +32,30 @@ SECTIONS {
- 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
- 	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
- 
--	__patchable_function_entries : { *(__patchable_function_entries) }
-+	__patchable_function_entries 0 : { *(__patchable_function_entries) }
- 
- 	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
- 	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
- 
- #ifdef CONFIG_ARCH_USES_CFI_TRAPS
--	__kcfi_traps		: { KEEP(*(.kcfi_traps)) }
-+	__kcfi_traps		0 : { KEEP(*(.kcfi_traps)) }
- #endif
- 
--	.text : {
-+	.text			0 : {
- 		*(.text .text.[0-9a-zA-Z_]*)
- 	}
- 
--	.bss : {
-+	.bss			0 : {
- 		*(.bss .bss.[0-9a-zA-Z_]*)
- 		*(.bss..L*)
- 	}
- 
--	.data : {
-+	.data			0 : {
- 		*(.data .data.[0-9a-zA-Z_]*)
- 		*(.data..L*)
- 	}
- 
--	.rodata : {
-+	.rodata			0 : {
- 		*(.rodata .rodata.[0-9a-zA-Z_]*)
- 		*(.rodata..L*)
- 	}
 -- 
-2.53.0
-
+Thanks,
+Sasha
