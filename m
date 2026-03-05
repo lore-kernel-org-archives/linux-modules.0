@@ -1,115 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE771A23A4;
-	Thu,  5 Mar 2026 02:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097346B5;
+	Thu,  5 Mar 2026 02:30:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772677139; cv=none; b=lVAfPmk6XghPbHLCn89LHJUWgzHKkCKUAJzmmDoRRMrZ5kReTd5HI2710Q+me/AuJqlDXgavsN1UsrSsXsTozjpjj9igbDRGFnuDGxV/UKHIEWWQf1nEsgIuPqOvCuSr4yzCe9pdAziIEGXqaXzIxmHP24aVAO+UVcH6HYznWPw=
+	t=1772677810; cv=none; b=J7F2j/2B6573EPsHWSyF8CZKvLM510qjFZdvvecxJTsvSxxGSD4lRJcfv5w4M4mGR7gvrrw/h6VMyxWR7mpojP0rcsgpyMdrhpWbNXOdFyKxGadsTCzc8WnvIFlf0MFEZUiym1ydiJMlSGBXaG7iOliqbC0cpqKiqlyfwQiCK6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772677139; c=relaxed/simple;
-	bh=Ls/7mcA2DK1yUNDKwWVDb+Xk7O6ZAGJS7ZHtXQtS4sk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o1ljOGZAXFZ2NMdl4XaBoXcTYlCsj3uomhRQwB+TATS5EAYmNFLB0Iu54+vWrr5HCfYihXFSd3O85MXokPj+JYamyZwFmVyGFUP9DG7timw1t3ZKQCIR0FTxhCpIs9A68PoAM5DBVzI7xEZV/TlHBZn6x6FMM6Pe9rNkAWdS6Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pawCvHiZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772677810; c=relaxed/simple;
+	bh=6BFjRMJSYzbk6K4pnRx0ihq6YrVqC/HST8KBEcdxeQ4=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=eInFs3m1Yvy6WNM+7DSgk8edmWSOqinlCnkWpcf9BUxiadBd/6Vve5cqlR1GQUW+9QWRq+RBcZop6XdnA2+mRcO8jSH9CHMQ3WQA6jgEiEpM75B66NA6QCwEktx4l/kZWwgJQNyJ+N9YQp081P/0PATtOo2y+hS/aluP+j/I4YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRS9HqdD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pawCvHiZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6EAC4CEF7;
-	Thu,  5 Mar 2026 02:18:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRS9HqdD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4B3C4CEF7;
+	Thu,  5 Mar 2026 02:30:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772677138;
-	bh=Ls/7mcA2DK1yUNDKwWVDb+Xk7O6ZAGJS7ZHtXQtS4sk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pawCvHiZSp7TytfXL17wDR0K9R0m/k1ZLv5M80Yj6FEjwhe66HcUrZniCaGC8bysk
-	 2MrZySXtcpKszetZbzw6Cli/lg1vdfeueZuBn3ABqQjfzlmMLQxOjPQaO0LH4YJ1WD
-	 Haw14DWcqB+POm5YJLoIveLxljpRGnFTSoM8C7m3lIvfiwh38t8J3pcCXP7rYez8Dn
-	 8iJRLmNzJXXK5bBPw3TAK/O554ERaOPj/8RioVipVJTzHgGuEkqdEdiufjvnybbplc
-	 aXUh3zhMwepJ8hj0ckPvlNfFQHaQt3ti/caRF4/yFvnftgP+Gss5XMIfri38yProH6
-	 XPpGtFnHD7Qhw==
-Date: Wed, 4 Mar 2026 21:18:57 -0500
-From: Sasha Levin <sashal@kernel.org>
-To: Helge Deller <deller@gmx.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Richard Weinberger <richard@nod.at>,
-	Juergen Gross <jgross@suse.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Vlastimil Babka <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/3] kallsyms: embed source file:line info in kernel
- stack traces
-Message-ID: <aajoETEtX9r2XzT7@laps>
-References: <20260303182103.3523438-1-sashal@kernel.org>
- <20260303182103.3523438-2-sashal@kernel.org>
- <258d7167-2e82-4402-9545-108c501ae69e@gmx.de>
+	s=k20201202; t=1772677809;
+	bh=6BFjRMJSYzbk6K4pnRx0ihq6YrVqC/HST8KBEcdxeQ4=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=eRS9HqdDEL12cVjpvwMN3U5h+UYke/5E1HwPg1DkKigxAReOGtqoju/CFjLLvHloR
+	 aetcu30vpqGSLTDhcDCedWH/weMpsDZkoelG4bGOtnRN7Df8sNj3EQcgGeCI+xkYQr
+	 +0dyHTucfnTAgNzG/nl7/yoG8N0N+WPdkMKM4UzBBM3lB40VW0zUNu9tb0aXFyarfF
+	 /ManjMNJmNZaHpTNfCc9HeeX3o1crIflndODeKRmG4lZ659Piy/HJXKzDpZHAbkOOP
+	 9cLL5YxVjrxgJbJa0uveE/4uSI9yFmFIuhtG1Dl2Yt6Tw8OTTpiH2A9JtrZdwCd5TK
+	 Kc9P15KaP8jxA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D0DF3808200;
+	Thu,  5 Mar 2026 02:30:11 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules fixes for v7.0-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20260304232900.149281-2-samitolvanen@google.com>
+References: <20260304232900.149281-2-samitolvanen@google.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20260304232900.149281-2-samitolvanen@google.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.0-rc3.fixes
+X-PR-Tracked-Commit-Id: f9d69d5e7bde2295eb7488a56f094ac8f5383b92
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c107785c7e8dbabd1c18301a1c362544b5786282
+Message-Id: <177267781004.2484572.2623664404094300464.pr-tracker-bot@kernel.org>
+Date: Thu, 05 Mar 2026 02:30:10 +0000
+To: Sami Tolvanen <samitolvanen@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Daniel Gomez <da.gomez@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <258d7167-2e82-4402-9545-108c501ae69e@gmx.de>
 
-On Wed, Mar 04, 2026 at 09:17:37PM +0100, Helge Deller wrote:
->On 3/3/26 19:21, Sasha Levin wrote:
->>Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
->>lookup table in the kernel image so stack traces directly print source
->>file and line number information:
->>
->>   root@localhost:~# echo c > /proc/sysrq-trigger
->>   [   11.201987] sysrq: Trigger a crash
->>   [   11.202831] Kernel panic - not syncing: sysrq triggered crash
->>   [   11.206218] Call Trace:
->>   [   11.206501]  <TASK>
->>   [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
->>   [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
->>   [   11.208565]  ? __lock_acquire+0x465/0x2240 (kernel/locking/lockdep.c:4674)
->>   [   11.209324]  panic+0xc9/0xd0 (kernel/panic.c:787)
->>   [   11.211873]  ? find_held_lock+0x2b/0x80 (kernel/locking/lockdep.c:5350)
->>   [   11.212597]  ? lock_release+0xd3/0x300 (kernel/locking/lockdep.c:5535)
->>   [   11.213312]  sysrq_handle_crash+0x1a/0x20 (drivers/tty/sysrq.c:154)
->>   [   11.214005]  __handle_sysrq.cold+0x66/0x256 (drivers/tty/sysrq.c:611)
->>   [   11.214712]  write_sysrq_trigger+0x65/0x80 (drivers/tty/sysrq.c:1221)
->>   [   11.215424]  proc_reg_write+0x1bd/0x3c0 (fs/proc/inode.c:330)
->>   [   11.216061]  vfs_write+0x1c6/0xff0 (fs/read_write.c:686)
->>   [   11.218848]  ksys_write+0xfa/0x200 (fs/read_write.c:740)
->>   [   11.222394]  do_syscall_64+0xf3/0x690 (arch/x86/entry/syscall_64.c:63)
->>   [   11.223942]  entry_SYSCALL_64_after_hwframe+0x77/0x7f (arch/x86/entry/entry_64.S:121)
->
->As mentioned in the other series, I really like this patch series.
->
->I tested this series again on the parisc architecture, and the relative
->directories are now stripped with this version of your patch.
->IIRC, the previous patch did show the subdirectory names.
->[  132.840382] Backtrace:
->[  132.840382]  [<104254d8>] show_stack+0x50/0x64 (traps.c:212)
->[  132.840382]  [<1041c0c8>] dump_stack_lvl+0x6c/0xa0 (dump_stack.c:122)
->[  132.840382]  [<1041c118>] dump_stack+0x1c/0x2c (dump_stack.c:130)
->[  132.840382]  [<10402218>] vpanic+0x154/0x344 (panic.c:550)
->[  132.840382]  [<10402438>] panic+0x30/0x34 (panic.c:787)
->[  132.840382]  [<10bebea8>] sysrq_handle_crash+0x30/0x34 (rcupdate.h:110)
->[  132.840382]  [<10bec720>] __handle_sysrq+0xc0/0x1e4 (preempt.h:14)
+The pull request you sent on Wed,  4 Mar 2026 23:28:58 +0000:
 
-Ugh... Can you confirm that you've build this kernel with O=?
+> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.0-rc3.fixes
 
-The RFC had a dirty dirty hack around how we turn these absolute paths into
-relative ones, but I tried to re-do it so no one would yell at me :)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c107785c7e8dbabd1c18301a1c362544b5786282
+
+Thank you!
 
 -- 
-Thanks,
-Sasha
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
