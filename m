@@ -1,63 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1097346B5;
-	Thu,  5 Mar 2026 02:30:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511B23101B2;
+	Thu,  5 Mar 2026 07:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772677810; cv=none; b=J7F2j/2B6573EPsHWSyF8CZKvLM510qjFZdvvecxJTsvSxxGSD4lRJcfv5w4M4mGR7gvrrw/h6VMyxWR7mpojP0rcsgpyMdrhpWbNXOdFyKxGadsTCzc8WnvIFlf0MFEZUiym1ydiJMlSGBXaG7iOliqbC0cpqKiqlyfwQiCK6M=
+	t=1772694717; cv=none; b=AzRUoufifUZPE+Tfw/U40Ib8UDlpuU0jwMpb0cm0gCz/1oZb283gZl+FNGtizV0KfZxT2YVn14Ox2S/4mVneLJyyqsNxMbtToMfuQvcQe2qdRu26hoQbibwVPEZdU5CTc5scmB/o6vgu2eb7lDjCeqdF0QSnwm+7iLRI0XkNor8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772677810; c=relaxed/simple;
-	bh=6BFjRMJSYzbk6K4pnRx0ihq6YrVqC/HST8KBEcdxeQ4=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=eInFs3m1Yvy6WNM+7DSgk8edmWSOqinlCnkWpcf9BUxiadBd/6Vve5cqlR1GQUW+9QWRq+RBcZop6XdnA2+mRcO8jSH9CHMQ3WQA6jgEiEpM75B66NA6QCwEktx4l/kZWwgJQNyJ+N9YQp081P/0PATtOo2y+hS/aluP+j/I4YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRS9HqdD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772694717; c=relaxed/simple;
+	bh=CdxA/lDoNCeJgiVSZNMfVTLoyKfuC5y8bX2gqNZcV84=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rgHkRBTGu6KADXwb7yS/gzFultGsQDv12uiMkVyPYnoilqg+60OKFXt0UdkNfxVm9gjg44wocEtJnOwicYzqlzacRRvFpftbD3t5tRCVEaEtihdZsTlKooFcNeq1UbCwCedx4gGGHxUQTdQfLXFh/t2UhrxkYUhKHgc/jQdeXcs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=n0fkJZFN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5Rkjhwne; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRS9HqdD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF4B3C4CEF7;
-	Thu,  5 Mar 2026 02:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772677809;
-	bh=6BFjRMJSYzbk6K4pnRx0ihq6YrVqC/HST8KBEcdxeQ4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=eRS9HqdDEL12cVjpvwMN3U5h+UYke/5E1HwPg1DkKigxAReOGtqoju/CFjLLvHloR
-	 aetcu30vpqGSLTDhcDCedWH/weMpsDZkoelG4bGOtnRN7Df8sNj3EQcgGeCI+xkYQr
-	 +0dyHTucfnTAgNzG/nl7/yoG8N0N+WPdkMKM4UzBBM3lB40VW0zUNu9tb0aXFyarfF
-	 /ManjMNJmNZaHpTNfCc9HeeX3o1crIflndODeKRmG4lZ659Piy/HJXKzDpZHAbkOOP
-	 9cLL5YxVjrxgJbJa0uveE/4uSI9yFmFIuhtG1Dl2Yt6Tw8OTTpiH2A9JtrZdwCd5TK
-	 Kc9P15KaP8jxA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D0DF3808200;
-	Thu,  5 Mar 2026 02:30:11 +0000 (UTC)
-Subject: Re: [GIT PULL] Modules fixes for v7.0-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20260304232900.149281-2-samitolvanen@google.com>
-References: <20260304232900.149281-2-samitolvanen@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20260304232900.149281-2-samitolvanen@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.0-rc3.fixes
-X-PR-Tracked-Commit-Id: f9d69d5e7bde2295eb7488a56f094ac8f5383b92
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c107785c7e8dbabd1c18301a1c362544b5786282
-Message-Id: <177267781004.2484572.2623664404094300464.pr-tracker-bot@kernel.org>
-Date: Thu, 05 Mar 2026 02:30:10 +0000
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, Daniel Gomez <da.gomez@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="n0fkJZFN";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5Rkjhwne"
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772694714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o9Rv/g2sSOXoBx4YOHT+TvErcM7jjAJLr2hFIDRxUAc=;
+	b=n0fkJZFNW9Pzw4/56jcf0S5vOQJDa4Ty4URhhRjrX8F5sYZpH6cZ5BpEEmcePdxaE/u7Ae
+	+mJNbwc6AKN5nC4tkXCeMmpjMPeAuwRRTp/yTQTd7OOWRugAt3TZllguLzalIIlp67Bm5O
+	tC8tF94VTEdCOX6qESaJyXQzGhZ2P6P3rZ4qYm8V5k3sfx5qy2KbmOJ6Gy6mXEuakK4dD+
+	lVqWir9+OtHBQFPoB0vdx6u00GK/BNuM/0fR5eyK0RPZFGmnvQn7gXFXpDh44vy2OcqjXf
+	7zhSfRI/3FMngkovpr/Tx92cxp8dqerymRABoDMkc+2PMiqlvkOlYVTtjcnC0g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772694714;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=o9Rv/g2sSOXoBx4YOHT+TvErcM7jjAJLr2hFIDRxUAc=;
+	b=5RkjhwnejcuSRS2fW76R3LD3peZJAHQGav+2GwR+SMZX3QiQtepiZ0c5iQ4unK5hFIvrHV
+	gFBh1TRGSQY2f/CQ==
+Subject: [PATCH v2 0/8] module: Move 'struct module_signature' to UAPI
+Date: Thu, 05 Mar 2026 08:11:50 +0100
+Message-Id: <20260305-module-signature-uapi-v2-0-dc4d81129dee@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNQQ6CMBBFr0Jm7ZhpDSiuvIdhUewAk2BLWkowh
+ LtbuYDL95L//gaRg3CEe7FB4EWieJdBnwp4Dcb1jGIzgyZd0YU0vr1NI2OU3pk5BcZkJsFKdeZ
+ GrWLdtpC3U+BO1qP7bDIPEmcfPsfNon72X3FRSKjpauuyZLJV/RjFpTl4J+vZMjT7vn8B5pSBk
+ r4AAAA=
+X-Change-ID: 20260302-module-signature-uapi-61fa80b1e2bb
+To: David Howells <dhowells@redhat.com>, 
+ David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772694712; l=2332;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=CdxA/lDoNCeJgiVSZNMfVTLoyKfuC5y8bX2gqNZcV84=;
+ b=9FyUClW24ZP0BNLsGOQjp6Vf1xA2ehbLzgQTtF4tcedOtFKzNXBx/elbEs7tPtDMI9KUk6nJ1
+ zhyau38au1oAgqN/zKFdzdfil5CGff4Dh8k5PxwgrozQcMJX8JFuSop
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The pull request you sent on Wed,  4 Mar 2026 23:28:58 +0000:
+This structure definition is used outside the kernel proper.
+For example in kmod and the kernel build environment.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.0-rc3.fixes
+To allow reuse, move it to a new UAPI header.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c107785c7e8dbabd1c18301a1c362544b5786282
+While it is not a true UAPI, it is a common practice to have
+non-UAPI interface definitions in the kernel's UAPI headers.
 
-Thank you!
+This came up as part of my CONFIG_MODULE_HASHES series [0].
+But it is useful on its own and so we get it out of the way.
 
+[0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Drop spurious definition of MODULE_SIGNATURE_TYPE_MERKLE.
+- s/modules/module/ in two patch subjects.
+- Pick up review tags.
+- Link to v1: https://lore.kernel.org/r/20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de
+
+---
+Thomas Weißschuh (8):
+      extract-cert: drop unused definition of PKEY_ID_PKCS7
+      module: Drop unused signature types
+      module: Give 'enum pkey_id_type' a more specific name
+      module: Give MODULE_SIG_STRING a more descriptive name
+      module: Move 'struct module_signature' to UAPI
+      tools uapi headers: add linux/module_signature.h
+      sign-file: use 'struct module_signature' from the UAPI headers
+      selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from the UAPI headers
+
+ arch/s390/kernel/machine_kexec_file.c              |  6 ++--
+ certs/extract-cert.c                               |  2 --
+ include/linux/module_signature.h                   | 30 +---------------
+ include/uapi/linux/module_signature.h              | 41 ++++++++++++++++++++++
+ kernel/module/signing.c                            |  4 +--
+ kernel/module_signature.c                          |  2 +-
+ scripts/Makefile                                   |  1 +
+ scripts/sign-file.c                                | 19 +++-------
+ security/integrity/ima/ima_modsig.c                |  6 ++--
+ tools/include/uapi/linux/module_signature.h        | 41 ++++++++++++++++++++++
+ .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 ++-------------
+ 11 files changed, 100 insertions(+), 80 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260302-module-signature-uapi-61fa80b1e2bb
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
