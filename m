@@ -1,112 +1,149 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E0036C581
-	for <linux-modules@vger.kernel.org>; Wed,  4 Mar 2026 23:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2655333688A
+	for <linux-modules@vger.kernel.org>; Thu,  5 Mar 2026 01:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772666947; cv=none; b=n31/OYNknDB6wySOVH1UbqTckPOPl45bBqwRRfJrrbbM3MRwaIPAZXuSyN3/HVarWKmD3VooFVbGsyDj9iyDFJg/9D0BvaVdCXeGwHrmhKYveWxrmeN+rcJDMJivZpeEB4dQOz9jmOOOxjEemvy8OQppL2MuQNGAEScS/Q7yz6U=
+	t=1772675569; cv=none; b=kJqayIx6X5kX+PwVAAs6qF46h9PjANGH5IL89ZNvdXObC7r76q/ivMk90O/eR/W7XPHFgiROmEjdwcntXOXS4VEnhZSxbr9lcEZyzsIfJAij8NHZVUuEGIrOjpLaFtotZrqWP0nbC2iEXV+CFkjfRvV43djjOHPheAbTEGhu8Kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772666947; c=relaxed/simple;
-	bh=0gHapI30/+/be7JhTBpIoOsGZ0qVwShIt9lUzEuDuck=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mkBY4k3COw6y/QzH7do5yB/2T4ox7JSxUd29KY8JyXZ3YiOTtgfAOBypT+JnoGN7FV36+ejdjpRzQb8kL12rr9Rb9yJ6aBec+ap1npqfIyghVgtMy7IeJUv1StpVV4yauEmxa3wy0Y3Fih1T4GrmbNll7PUxhFT3t3JakVjLt1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FasJElsW; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1772675569; c=relaxed/simple;
+	bh=5+sPssbX4DjNgiCHhK+7R9HB8TbI96p5oZyAfzKul4Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=U1kcBzhkvIyOUyJBUPtVSfycgUkDYMW+G8Tyz6bMDW2UHsLavb1wzb7iY4dKckeav+Q0970ZmBNKYBtIbCXoJfHnnUGf8vHnm5TWWTCLR3QL8Nukh/uGisutEaQk8xdTe2k6bJ1LlJaZuz+ifyQtHwdNZgDUBje6qv06EgjEFEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dgSvd/bx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FasJElsW"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2be21146933so3997569eec.1
-        for <linux-modules@vger.kernel.org>; Wed, 04 Mar 2026 15:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772666945; x=1773271745; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=n7h8W+ClGkt164cnjJsLpftPjj5hWQFNeBKB5yKZwAI=;
-        b=FasJElsWjKxfyaS+U5nYucyUQszqd+JfLqYrGtz89zd4zK5dL1OKyyt8BtdnpRpeq/
-         eQzEVRakZ6T14ZxxdRFPN9snMpYwNAceFPmAkGE/upuny69M9tlcZJvV+umHmo4vEylX
-         DcSavHJfX3CNf2LkxHs8keozIaiMQLQf21PvKPnqlMHxg28uXDSd5LPuQMaiTloLsttz
-         fHAmay8rPQfOtpRNO3Iyo8RpC5QgRThvqLVFViATQN6DVtNfO4GJllcUZUNNt32OY6vl
-         CI57SNKhkivG+4HVw2DXqjzZ1gkaEssjApBV9mO3kyydyT56ksspWh4BOtAlZoxAuD3I
-         /6Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772666945; x=1773271745;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n7h8W+ClGkt164cnjJsLpftPjj5hWQFNeBKB5yKZwAI=;
-        b=EJtzArMIhqhDi8EWIxvlvuQF1NtZ/rGYN7WdLVzp8bbvhFYnL9gyh9FBIUjaCSbWLI
-         ck7/m0V6DTHohub5S07YnFAAUwylCaawfpxfkUSMpgbXfoJ5Db3SPYsTp5HmdByDkbHD
-         UIPBQQJNKRf/U1KekqbfhILvkS8+QUXwEroXz/djpLFPtm1Tx07ZDO4UFmiaX/BPuS4i
-         U2f+cwcdfB8owYxvev5/7g63kdJD9IIltkXwwXsSEVoWK9zXbwlJa3BB/6gWsAgbEenF
-         ZGDDWktKeEHdixq1o9Amk2jE3SzGIvEc8DFICwg0bzSv3/mPg0bxUHz3yRwEc667uGVg
-         8BNw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbjPs/nj3h64Ivaq/SD/CrzMZE9oB/jM8hl2DMX9M7OCHOTaTYFAxRL7MTJQNrF6YlrxQh1s4OLtnC1Pav@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhoasV3qkXfRn4LqY2CzaMdDtn1sL38dn2EGvfroYSqmfcVkcN
-	B3rxF5XWLG9hSFntevYGzGgb/1+JSdpVSKsxW2cGLkFEboZnP0v2P4+DBOtBNGShDgcv804tWl8
-	RgeDMtGCGv5FUhcwuTaoo4dVGfxxA5A==
-X-Received: from dya11.prod.google.com ([2002:a05:693c:620b:b0:2be:1421:f19])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:6c1f:b0:2b7:95d5:3a32 with SMTP id 5a478bee46e88-2be30fcfe10mr1445559eec.1.1772666944786;
- Wed, 04 Mar 2026 15:29:04 -0800 (PST)
-Date: Wed,  4 Mar 2026 23:28:58 +0000
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dgSvd/bx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1772675566;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8aprwNHpfwhGWqO3GQWsFAasnh0wuwj6x6k2vz+M2hM=;
+	b=dgSvd/bx1PCAJIhWvPO7GTFQbbOBDjYDVjHOeMAkEMk9KYnjbN7PYcsq1EoC3UshWiEiXt
+	5iYDwI0tO2l6WFAtB2axfg0oc8HBDmmZFH23WJK59WueD8wNdD/wLsq9MFDMkMI+Hcrens
+	HAdXY1qB2KpDGb23x8ZdxzQC4qliCLw=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-516-RknQHbo4PceER0PBFO4fVQ-1; Wed,
+ 04 Mar 2026 20:52:44 -0500
+X-MC-Unique: RknQHbo4PceER0PBFO4fVQ-1
+X-Mimecast-MFC-AGG-ID: RknQHbo4PceER0PBFO4fVQ_1772675563
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F1240180049D;
+	Thu,  5 Mar 2026 01:52:42 +0000 (UTC)
+Received: from jolawren-thinkpadp1gen7.ibmlowe.csb (unknown [10.22.80.5])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0178C180035F;
+	Thu,  5 Mar 2026 01:52:40 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
+Date: Wed,  4 Mar 2026 20:52:37 -0500
+Message-ID: <20260305015237.299727-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=samitolvanen@google.com; a=openpgp; fpr=35CCFB63B283D6D3AEB783944CB5F6848BBC56EE
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1580; i=samitolvanen@google.com;
- h=from:subject; bh=0gHapI30/+/be7JhTBpIoOsGZ0qVwShIt9lUzEuDuck=;
- b=owGbwMvMwCUWxa662nLh8irG02pJDJkrDthkPV9555Fx9QUp6Zo+hi/xeyTKmTK3ftK/lnLc5
- XPJuTN9HaUsDGJcDLJiiiwtX1dv3f3dKfXV5yIJmDmsTCBDGLg4BWAi2iEMf/gX/jn18/xx58qE
- JzUPtq5tNd1Y2yp86ERW3+O/Gznjl+kxMtzyeSxyvnBW1oa/QnWrHjUtWiii8aTTg+mSo7mSq4t sDxcA
-X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260304232900.149281-2-samitolvanen@google.com>
-Subject: [GIT PULL] Modules fixes for v7.0-rc3
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The following changes since commit 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f:
+Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
+related macros") added .text and made .data, .bss, and .rodata sections
+unconditional in the module linker script, but without an explicit
+address like the other sections in the same file.
 
-  Linux 7.0-rc1 (2026-02-22 13:18:59 -0800)
+When linking modules with ld.bfd -r, sections defined without an address
+inherit the location counter, resulting in non-zero sh_addr values in
+the .ko.  Relocatable objects are expected to have sh_addr=0 for these
+sections and these non-zero addresses confuse elfutils and have been
+reported to cause segmentation faults in SystemTap [1].
 
-are available in the Git repository at:
+Add the 0 address specifier to all sections in module.lds, including the
+.codetag.* sections via MOD_SEPARATE_CODETAG_SECTIONS macro.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux.git tags/modules-7.0-rc3.fixes
+Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
+Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ include/asm-generic/codetag.lds.h |  2 +-
+ scripts/module.lds.S              | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-for you to fetch changes up to f9d69d5e7bde2295eb7488a56f094ac8f5383b92:
+v2:
+- Update the MOD_SEPARATE_CODETAG_SECTION for .codetag.* as well [Petr]
 
-  module: Fix kernel panic when a symbol st_shndx is out of bounds (2026-02-23 19:37:28 +0000)
+v1: https://lore.kernel.org/lkml/20260304160611.143862-1-joe.lawrence@redhat.com
 
-----------------------------------------------------------------
-Modules fixes for v7.0-rc3
+diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
+index a14f4bdafdda..4948e5d4e9d9 100644
+--- a/include/asm-generic/codetag.lds.h
++++ b/include/asm-generic/codetag.lds.h
+@@ -18,7 +18,7 @@
+ 	IF_MEM_ALLOC_PROFILING(SECTION_WITH_BOUNDARIES(alloc_tags))
+ 
+ #define MOD_SEPARATE_CODETAG_SECTION(_name)	\
+-	.codetag.##_name : {			\
++	.codetag.##_name 0 : {			\
+ 		SECTION_WITH_BOUNDARIES(_name)	\
+ 	}
+ 
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 054ef99e8288..e1cab3cee3f7 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -32,30 +32,30 @@ SECTIONS {
+ 	__jump_table		0 : ALIGN(8) { KEEP(*(__jump_table)) }
+ 	__ex_table		0 : ALIGN(4) { KEEP(*(__ex_table)) }
+ 
+-	__patchable_function_entries : { *(__patchable_function_entries) }
++	__patchable_function_entries 0 : { *(__patchable_function_entries) }
+ 
+ 	.init.klp_funcs		0 : ALIGN(8) { KEEP(*(.init.klp_funcs)) }
+ 	.init.klp_objects	0 : ALIGN(8) { KEEP(*(.init.klp_objects)) }
+ 
+ #ifdef CONFIG_ARCH_USES_CFI_TRAPS
+-	__kcfi_traps		: { KEEP(*(.kcfi_traps)) }
++	__kcfi_traps		0 : { KEEP(*(.kcfi_traps)) }
+ #endif
+ 
+-	.text : {
++	.text			0 : {
+ 		*(.text .text.[0-9a-zA-Z_]*)
+ 	}
+ 
+-	.bss : {
++	.bss			0 : {
+ 		*(.bss .bss.[0-9a-zA-Z_]*)
+ 		*(.bss..L*)
+ 	}
+ 
+-	.data : {
++	.data			0 : {
+ 		*(.data .data.[0-9a-zA-Z_]*)
+ 		*(.data..L*)
+ 	}
+ 
+-	.rodata : {
++	.rodata			0 : {
+ 		*(.rodata .rodata.[0-9a-zA-Z_]*)
+ 		*(.rodata..L*)
+ 	}
+-- 
+2.53.0
 
-- Fix a potential kernel panic in the module loader by adding a bounds
-  check for the ELF section index. This prevents crashes if attempting
-  to load a module that uses SHN_XINDEX or is corrupted.
-
-- Fix the Kconfig menu layout for module versioning, signing, and
-  compression options so they correctly appear as submenus in menuconfig.
-
-- Remove a redundant lockdep_free_key_range() call in the load_module()
-  error path. This is already handled by module_deallocate() calling
-  free_mod_mem() since the module_memory rework.
-
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-
-----------------------------------------------------------------
-Ihor Solodrai (1):
-      module: Fix kernel panic when a symbol st_shndx is out of bounds
-
-Petr Pavlu (2):
-      module: Remove duplicate freeing of lockdep classes
-      module: Fix the modversions and signing submenus
-
- kernel/module/Kconfig | 23 +++++++++++++----------
- kernel/module/main.c  | 13 +++++++------
- 2 files changed, 20 insertions(+), 16 deletions(-)
