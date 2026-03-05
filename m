@@ -1,76 +1,72 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A7333F5A0
-	for <linux-modules@vger.kernel.org>; Thu,  5 Mar 2026 22:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420511459FA
+	for <linux-modules@vger.kernel.org>; Thu,  5 Mar 2026 23:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772749974; cv=none; b=VqRioByxH7cJJIxgpQn8L9aHIlnmPSM5qtiOzzoYBigZDvX+S9LcvSiZIQkdIiB7b3INHn+Y2/RfJRTww7iqizrcNjJzYnqqUU1jLNzCJy4yXVNiVZHB7N7ZSUAkgKUVMJD6dmDhNwlp3/bQi8WloFCHdCrcIr3kcz8x6FWiDzM=
+	t=1772754232; cv=none; b=ltHohfEqjBl3X52y5ZNYQZbCCtEXfoJgmkSdn7ucAyJh+4QX9l9QyNBZlLg/CWIPcopH/e0yg8ibzSV5/0P2oG8rr90PQY4CSnbTskIEMC0sns5S1yr6swBHlvZy3aF5VJVtfTEAv9xaFUU4EeKormMXDQwz1KYsC4F1c4tIzzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772749974; c=relaxed/simple;
-	bh=MglYxuye+f6mi7DlYbR0pjhnIPwFYCOCLfH+Kswlkm0=;
+	s=arc-20240116; t=1772754232; c=relaxed/simple;
+	bh=Cm5jOGAbLPgkIIetWvZPW/wffySPwqETtTkxCyCtD2M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rokbDKUjrPquUioqCkV30fhAR2nqrLra66+aqg3aK6/qdOvz6Zy5UoLsmh7L2CbuvGgWHZ8m/ZTe/bkGGYJNM6I3LrG/Dhrge8EjXQ13ZkRWPG1VoVL7WrH/weBwi28faqDjWNpe8mqc0xKThsMYlozSN4Gbziw2s1EOBhPAZzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qolQ047o; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=R6F+wtnvEt+E/3njHyXYrt4YEfYCU/oatBWP1idDyEqtJbSJWAYxDzBbuPNcOu3Cv56c0D77KQbnSjGJJakR34r+hjoLWmpVSmF2IRArtynROmY1a8SYSjYKgt3hXrM8KJXab3ksjnJdPY5e8fHUvXrxl+hNCJoyTfd5pNvV3Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BreIVhzb; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qolQ047o"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ae49120e97so27305ad.0
-        for <linux-modules@vger.kernel.org>; Thu, 05 Mar 2026 14:32:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BreIVhzb"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ae3f822163so30805ad.0
+        for <linux-modules@vger.kernel.org>; Thu, 05 Mar 2026 15:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772749971; x=1773354771; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772754231; x=1773359031; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n7dtkvH98TyYtXXMGFbwc3ykk2Hwk5qV14QGB+DUa00=;
-        b=qolQ047oER3xWZChKug56AJRSYSyFzFCX9BFa3Jc/OQmd9lFCdjrzsrZcn+gaTaam1
-         rDKQVFxhRPwRRCZRi0iCbg0MhTqyIN21cd6CPLbN8uduyoDTQxZ9Henb/xPOo9vwMuh6
-         AWYqeC9JfTZr/JVag3X6rx+kaTkklteJyC2x3MTiac0qOKvQzmeyO4CdQTwrPQgEm38n
-         JQn06Ndn41CfFJ/BBX7CNN+Us7om7I7IWLH8CPYSVriVokMNklIDUB6IXB13/1xgfyRo
-         G4EyUsDohH0iZWF1WZ5U5OZ3LZPh6WgShM5r3MBAyvV5bOsV5hT/Ec55QPrV8hVYwbof
-         +lGg==
+        bh=b3hRJWJtgL46YRm7sWrwCb//3MFQJHKTxijQfZVoH+0=;
+        b=BreIVhzb8kMd67nJeSBDcqd16rVYlrOBCRU6iCpPo+xE3echh0HKY8412HVrCYD2Sg
+         2p5UMTkIUBJtCXIlL0+hosqZX6X3U9W1N5b+D3JBCATsZMPe4UDi7Tbh1VOJYvlE3fWS
+         rnoO5l0Yx24424QGM/2lsI4fjBC3SkPqLRCntByiy2ZtflakdppZJTe6XVB8nYCGJ7fk
+         ys2HflZYdEMQ7U65hm30gKezzq2IBUZWoOqsRFcZN96nqKlpxw968W+FPZN5l9oOInl/
+         dwHjQN+wnVegWGjWu4bnifX/51Jv6pM3YOo2hQ1pbOBEGBtOAtAJQoBqB6UEgk/crSVI
+         x/rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772749971; x=1773354771;
+        d=1e100.net; s=20230601; t=1772754231; x=1773359031;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n7dtkvH98TyYtXXMGFbwc3ykk2Hwk5qV14QGB+DUa00=;
-        b=Ciu7/kHnIg2COrDVfSI5pxLhYPTExf7u0TKpO3kWguXzLqqfOYl+iDnQUbuD5WCT8s
-         s7pogUMCcBWQX7bLp3+Q2qRYBjHRmM1ZZbCyD61VsHK+z7GCIPTJfy6PlvZeNUWyZX6K
-         ZLFmG2a8mZiwH6PE5ekV9c5H3pXkhA/h7pFMLt/7M/0YKdG/Fd4T1H7daKF8Eo1uTDlY
-         Grp3cvE5Xk2dXxy9uQf5JZuHLJoyqNMtK7Y4OhNVb+0jpXPBV5XsrUnhyXC8WvNY1yBS
-         TOXIx0KrCm2i16JDJDZsr5/T7NsGFWE7gF1J8I/+tE2lXvIr79otP2DUarIsrLUuvwH+
-         atog==
-X-Forwarded-Encrypted: i=1; AJvYcCUd6teufsfb4SbSmnskgMooHtwA4mivzy99ND/18OblKsk8dF6wIRaVVGYsIWfeaq55vP5uFR91fTAN7Oc8@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZz31SofJgzk6dcxlRqV/VL//2KEn5xt6CCPX5qUEY9eKVDiuP
-	Dp+4u2ZUYDI/Ughvwq4w+fBOlCbCmhZB9Wk57QcIFFOOwI20anqj/cP/8FCGJKe8Jw==
-X-Gm-Gg: ATEYQzwVAZACAMvD+NWomTYR3KPRjDXhao0hTTQ07iF7CM4vpIMOO1CCQrN0SFXt+3g
-	Q3EJxhCqiz86QRJr5IxnAb9ZJ/5AqoQ8NrEsGf793f+4VRiv1NyRfnObG0iRCPplsjTe2pvXK2s
-	x4yvfl82jJMVKjkCKX8B2Rdj2Zuc9tXDuSkoIaYb+ETqso1NQY0p1kriAily3cvR4xPjrZNbaPV
-	U/YdZQBDq6P1n6C3lWriXm4p/sCs5twIOnLAQ4X0JqHrqzIK0P8Y6NX0ty7E1zsBosBKiCiHoXI
-	kDCY80EZm3X/Dc6FLuNpMEXz7Fjej6vbjyvtM4UF0fo/6P5jm0ejO4/PrsI15AGc3A5UeHxrH7K
-	MnRka0/X63lUr150+xebtmTFerm+i+MXJURj718ksDXX8Gl9teMS9o/cZ5Nv3bJVN0sPw61Us3C
-	A3+9E2jzQDkgs41wkaMrz2s2YxzCwdwcm0u1Y9n/FBppcPC5TgDlR1h1PeuSx/7I8yDZs=
-X-Received: by 2002:a17:903:f90:b0:2ae:6432:8f77 with SMTP id d9443c01a7336-2ae81e8c6ffmr394105ad.17.1772749970601;
-        Thu, 05 Mar 2026 14:32:50 -0800 (PST)
+        bh=b3hRJWJtgL46YRm7sWrwCb//3MFQJHKTxijQfZVoH+0=;
+        b=mA8tw5F/e2siUDTdY1ghPOVdMvRVDVus3i+WVAejH8WWYgied8cCUSjJynFvup0LNG
+         dwd2rrkSU9eJT4NkdMwcVH+tdy5nUqXvDR1GdtKrQabpW5Vmyf52v5/iS8ttCkAv6FyK
+         AbhHAeqiHWV8Cv3LBhCR3smTCzTSaQlukluZlF3Mn2SoU5Dbq3D7LdHvCdmMDWxp3QtI
+         I/qUAxORDQO7v3s5mVhHXccsff19FbQOiqwxzR7JQmeLDrLE+ksE2LiG+d7uxq0U+c3p
+         9cBUC7COFUkD96t2Fg/sCGP81FgE+uMKRF+P8DF74u2vOM5HuGpVcEjszhUnjCuFchtw
+         o4PA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSJGS+kt5lXTUuVljkv30czS/GHU7nCTofYj3u/qY7qLE9rXDPEjh+uhH1cERjyznebtAMXt6wuDCdG3kl@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlYm/gnnr7dabZU54r3CHGX4K+W/EM+RcjQV6E+WgpElFoTbiA
+	DVsfPQfebGH7kciIoOAw1b3tzlYMhqPRSFu3CZQKqMWnCq/+Rq2LyPzNG9UFm50Miw==
+X-Gm-Gg: ATEYQzzBNKpXSEklSrxrYqml/XI+rX77sNBUDVYWKoCSNPr3uFaSrJ7doEWog2pfc+1
+	zdzL/aNWUqskav4cl9ofqUEeo1k/TXPkGzA2FzHKQIH7689FLP/9JfnBYHObJsH8K40i3ayjHXP
+	NDxlzpeuadP7DcV+Apz206NrSu6q9WpnAchMiXjngbpHzlgGzzW0LiA25mteL13eFazXNHIKGg0
+	O3+AeEmAazK/e2/le6uw19PwM7w/XbT1Fl81m+P1/iOS7NPwmCXPRuzQ5s40TDDcZIsiePbtrBc
+	ZVHxQJ6EV/E95Vbcve1jasosXMWrkmqHbCQfS74s5nYxMGm1Agyf7/y6XVLcd0nBZOTCxq1sbgD
+	ezSdDl4y9UaPV3ctpMSgSLTyIcB3fnn81PobVW9ZQYlY9iBIFmFA0TKiaRki6CMDAUCQUqhST5D
+	wsgkQtzVlO3SgjvOxjXsLe0abc/kImw6r0G+JIxg4Wlc4cz/8dysloHqa+CASJxRyUyajh+TlWa
+	zwvsA==
+X-Received: by 2002:a17:902:e845:b0:2aa:d604:62f3 with SMTP id d9443c01a7336-2ae810ebc73mr1327235ad.10.1772754230161;
+        Thu, 05 Mar 2026 15:43:50 -0800 (PST)
 Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-829751f3867sm5267441b3a.55.2026.03.05.14.32.49
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82739d4dc6dsm22769012b3a.6.2026.03.05.15.43.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2026 14:32:49 -0800 (PST)
-Date: Thu, 5 Mar 2026 22:32:45 +0000
+        Thu, 05 Mar 2026 15:43:49 -0800 (PST)
+Date: Thu, 5 Mar 2026 23:43:44 +0000
 From: Sami Tolvanen <samitolvanen@google.com>
-To: Nicholas Sielicki <linux@opensource.nslick.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Matthias Maennich <maennich@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] module: expose imported namespaces via sysfs
-Message-ID: <20260305223245.GA732271@google.com>
-References: <20260108044710.33036-1-linux@opensource.nslick.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+	atomlin@atomlin.com, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2] module: print version for external modules in
+ print_modules()
+Message-ID: <20260305234344.GA788042@google.com>
+References: <20251231094004.37851-1-laoar.shao@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -79,116 +75,42 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260108044710.33036-1-linux@opensource.nslick.com>
+In-Reply-To: <20251231094004.37851-1-laoar.shao@gmail.com>
 
-On Wed, Jan 07, 2026 at 10:47:09PM -0600, Nicholas Sielicki wrote:
->  
-> +static ssize_t show_modinfo_import_ns(const struct module_attribute *mattr,
-> +				      struct module_kobject *mk, char *buffer)
-> +{
-> +	return sysfs_emit(buffer, "%s\n", mk->mod->imported_namespaces);
-> +}
-> +
-> +static int modinfo_import_ns_exists(struct module *mod)
-> +{
-> +	return mod->imported_namespaces != NULL;
-> +}
-> +
-> +static const struct module_attribute modinfo_import_ns = {
-> +	.attr = { .name = "import_ns", .mode = 0444 },
-> +	.show = show_modinfo_import_ns,
-> +	.test = modinfo_import_ns_exists,
-> +};
-> +
+On Wed, Dec 31, 2025 at 05:40:04PM +0800, Yafang Shao wrote:
+> --- a/kernel/module/main.c
+> +++ b/kernel/module/main.c
+> @@ -3901,7 +3901,11 @@ void print_modules(void)
+>  	list_for_each_entry_rcu(mod, &modules, list) {
+>  		if (mod->state == MODULE_STATE_UNFORMED)
+>  			continue;
+> -		pr_cont(" %s%s", mod->name, module_flags(mod, buf, true));
+> +		pr_cont(" %s", mod->name);
+> +		/* Only append version for out-of-tree modules */
+> +		if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->taints))
+> +			pr_cont("-%s", mod->version);
+> +		pr_cont("%s", module_flags(mod, buf, true));
 
-Don't we need a .setup function that initializes mod->imported_namespaces
-to NULL? Currently, if setup_modinfo returns an error, the pointer remains
-initialized to whatever value we read from .gnu.linkonce.this_module, and
-we'll pass that arbitrary pointer to kfree.
+On second thought, is using mod->version here safe? We release the
+memory for mod->version in:
 
-This isn't normally a problem since modpost zero-initializes the field, but
-we don't want to rely on userspace to initialize our pointers.
+  free_module
+    -> mod_sysfs_teardown
+    -> module_remove_modinfo_attrs
+    -> attr->free = free_modinfo_version
 
-Also, define .free to release the buffer instead of adding a direct call
-to free_modinfo.
+And this happens before the module is removed from the
+list. Couldn't there be a race condition where we read a non-NULL
+mod->version here, but the buffer is being concurrently released
+by another core that's unloading the module, resulting in a
+use-after-free in the pr_cont call?
 
->  static struct {
->  	char name[MODULE_NAME_LEN];
->  	char taints[MODULE_FLAGS_BUF_SIZE];
-> @@ -1058,6 +1075,7 @@ const struct module_attribute *const modinfo_attrs[] = {
->  	&module_uevent,
->  	&modinfo_version,
->  	&modinfo_srcversion,
-> +	&modinfo_import_ns,
->  	&modinfo_initstate,
->  	&modinfo_coresize,
->  #ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-> @@ -1753,11 +1771,48 @@ static void module_license_taint_check(struct module *mod, const char *license)
->  	}
->  }
->  
-> +static int copy_modinfo_import_ns(struct module *mod, struct load_info *info)
-> +{
-> +	char *ns;
-> +	size_t len, total_len = 0;
-> +	char *buf, *p;
-> +
-> +	for_each_modinfo_entry(ns, info, "import_ns")
-> +		total_len += strlen(ns) + 1;
-> +
-> +	if (!total_len) {
-> +		mod->imported_namespaces = NULL;
-> +		return 0;
-> +	}
-> +
-> +	buf = kmalloc(total_len, GFP_KERNEL);
-> +	if (!buf)
-> +		return -ENOMEM;
+In order to do this safely, we should presumably drop the attr->free
+call from module_remove_modinfo_attrs and release the attributes
+only after the synchronize_rcu call in free_module (there's already
+free_modinfo we can use), so mod->version is valid for the entire
+time the module is on the list.
 
-For example, if kmalloc fails, mod->imported_namespaces isn't initialized.
-
-> +
-> +	p = buf;
-> +	for_each_modinfo_entry(ns, info, "import_ns") {
-> +		len = strlen(ns);
-> +		memcpy(p, ns, len);
-> +		p += len;
-> +		*p++ = '\n';
-> +	}
-> +	/* Replace trailing newline with null terminator. */
-> +	*(p - 1) = '\0';
-> +
-> +	mod->imported_namespaces = buf;
-> +	return 0;
-> +}
-> +
-> +static void free_modinfo_import_ns(struct module *mod)
-> +{
-> +	kfree(mod->imported_namespaces);
-
-mod->imported_namespaces = NULL;
-
-> +}
-> +
->  static int setup_modinfo(struct module *mod, struct load_info *info)
->  {
->  	const struct module_attribute *attr;
->  	char *imported_namespace;
-> -	int i;
-> +	int i, err;
->  
->  	for (i = 0; (attr = modinfo_attrs[i]); i++) {
->  		if (attr->setup)
-> @@ -1776,6 +1831,10 @@ static int setup_modinfo(struct module *mod, struct load_info *info)
->  		}
->  	}
-
-Also setup_modinfo can fail before copy_modinfo_import_ns is even
-called.
-
-> +	err = copy_modinfo_import_ns(mod, info);
-> +	if (err)
-> +		return err;
-> +
+Thoughts?
 
 Sami
