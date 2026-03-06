@@ -1,195 +1,218 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4E392C37
-	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 12:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F098292B44;
+	Fri,  6 Mar 2026 14:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772801836; cv=none; b=c/r22RsLerV3k9WobY08S+rpP8+b9ePu91skq1FHJU7X9sESbfhg8ZJDN7zDOTtEbVTnP15zXHeNihmvDnIycqK1UIIlBhzotf0D2yYpE0dsvE8mqxYGzBcb3N4zUjQOSl2UjjoAG919Xj2KYNZ6nMDxroaRLqYo+GTqWev2nbo=
+	t=1772806113; cv=none; b=gEafP0H8Mldsb1Np0YUWbzfcEzbvyvJne8yvZO/oiAFIWxaIa4AH9nHSOomg9WIqtTuWgfiWwDHDKCPCJeL/ao5pcNTSJhYkB1La/JlINdteHCPLmZvSNcmbwp87BEYRYw/xsXSgX4SQitv+76tYtjrgeurq0VscGYETmV3vSPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772801836; c=relaxed/simple;
-	bh=OV5otnRgS/S+0kH9qEdyT/f7wV5xTxdVSISYKq4ifD0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sZVCd4AmN2Ka6VrdiUOk47Hv0UsCH9ZgvICqPp84IPeNUXxur4tZrFZG/8jxvvqA/gExnKX8dh/bSYJu3aG4J2HehV6q4O4Nq9LmEu4M4pu9RO2/oUUqncJxUyX9L0Dsl5yAAE/kI0NKheN5xxnTGBZiMfaRrDMBqjQHpSaRhYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VIp3AoLm; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1772806113; c=relaxed/simple;
+	bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:
+	 In-Reply-To:References:To:Cc; b=uPFn0wY3tYxlnHlkoMR8rFoydLYmJe6HMlNGoS0dU2EgPYGJzpMORFuYMdra92wLyBtcnunevc6oOQkWpwsctb21la73LJ8Lf3Bj2ho09CcCbnHNx4WNAQhJ1TTFwkLP+XTvZLVDCzO9Xf2XcXh/my4ya7IodPKBxsLdZWFEXHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Il8W8Q5C; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VIp3AoLm"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-483bd7354efso120412815e9.2
-        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 04:57:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1772801831; x=1773406631; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=umr5xt4p3qMVQx4ufWCasqFVTfl1J7n+hKybDwFVeVA=;
-        b=VIp3AoLmLtwrvzBWBiosFqWEw3+yNbzDL4GXyKc635ZZDs1omjVfyZTOkPEpiTrfEH
-         tFDZqoVXSowP/yx1BPBrYEeUl/At0S3gmDACKgOdxz22M6Nszcosv9i8Zf53wxrI4fY8
-         PymwH//SAriJTBP7WYNNKUdVphOgBiLmH8twEWa0zWczVjCEahoGnEdEu1ckA3RNuFnA
-         pVHUuyF+VOH3psRWGA+Ezom+edGN6oHvn/uSx1JyrxwaWkrwtt7xFLA+E8zQK8Mp3FGF
-         0uIjFD5pWPsaj4RA7RJKI4fVEpyNPzipWz1p9TCYtB/ZkackqN5UW97iPSOUrRgU7ESw
-         q5oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772801831; x=1773406631;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=umr5xt4p3qMVQx4ufWCasqFVTfl1J7n+hKybDwFVeVA=;
-        b=VlYiObln0jD52Fr4rpbOB+hJWzNyenwpKM4hRqhcIuwTidzv5wv7q1g1enQ2EXAYY4
-         cSMj/j7sDp8Yw4G/Bn8Yz0gT70cEbG7kLy7W3yZfa3Ns2SYBU9ZaNXeiXR9RBtHIDvBS
-         8F+xiGC2yIfP8gV5UnR8IlBdauQdAchDg9DuZvvMtj/nJBpFfCDO4sSxCD/l6hDaQZlY
-         CwU6Z2fhItwQ+AMO5izVWxWWk1rPo2FeCHx5cH1LQko7J7UqoIiVn+rRHOBfufsHQhr/
-         49pOlHHlGAf3kMLvBbM1RxMp+9p93hZvc0eEu8nxUr1MMuoch4uBTPHDI2ZESThfk36k
-         Akjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXAzTBts2pk7n97qojnIVQhdwmCkwDQWKN0vgL2cXBvsZJ9qmwg/mTWVMEt5L2n61+sNgzMDgyDWhwfN5fA@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxtor/Cmm+qUwrWvrRtw83Aeyb1vb4KhI648QIYIcYPouDPhFd2
-	KttfTt1428++wFH9boGRu7iXXT5lDUhvonorubMcZLGvi6wAb2gMoP2OSzhFIJPTOr4=
-X-Gm-Gg: ATEYQzzhaE4s1VK8kuVS2L6xaa8Ez6Qs9hg9wDXnZI/xT8041SYiVBeNAwNb0I0eGxV
-	08Gw9dgoHElrumI5zbOucE8VtDJHxBqyH0QrRcQqfN+WLjTpYTtfmUUL4R3DJluhOV8R5sMRgvb
-	e+2kQUxz3YxWxhbpup/Mz307T5Xfo8l3p5BTgyB2cGDUwwHz+tXxK8SL/DplMXU2IDkWgTkcGcO
-	PK1iaM5ayjZCv36VzDl8lWqUlnJIrvDicveO5WDnlbJp9hWniXn0sF4QkjAopZn1RbJrL5nmG28
-	dKCUtcNgBhBgXEUM4j1IjrqzB7UmWrVrmHjL85DNYK0qbOqwdi6P49HBtXq6gmTlxgxij3fxm2O
-	VJDpYAuSMrHH4ftt1hfeRYB4VKW3VwKdspaRxK+Do02SC0AuSNzHwOipFoE2MLPtsi5S167+p/9
-	JDj1IXiJZfak48JQYmfLJEGH95wAXkRahWkwZEZP3L
-X-Received: by 2002:a05:600c:8b8b:b0:47e:e20e:bbb2 with SMTP id 5b1f17b1804b1-4852691884fmr35674595e9.7.1772801831558;
-        Fri, 06 Mar 2026 04:57:11 -0800 (PST)
-Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4851fb4257csm181381215e9.15.2026.03.06.04.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 04:57:11 -0800 (PST)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] module: Fix freeing of charp module parameters when CONFIG_SYSFS=n
-Date: Fri,  6 Mar 2026 12:10:52 +0100
-Message-ID: <20260306125457.1377402-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Il8W8Q5C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38C8C2BC86;
+	Fri,  6 Mar 2026 14:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772806113;
+	bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+	h=From:Date:Subject:In-Reply-To:References:To:Cc:From;
+	b=Il8W8Q5CS7L7P0bqo7Us0iIYS+WhXJUOEb6CER6p4507+nweqA6pmTUkrTmWKCZYn
+	 OcMUvncMKjCPahYcsW24aDEqyWlWu3DzoJtoi5MRomgR/HzTR6VX3O/tBeVLMrwKrY
+	 j9b+uiS/Kwojk05jNdKZtMdJbv6/1KhgO+h4IQunQvYBLez6uqQUX5IEL07z+iNiir
+	 1jgUYbWkiYKuJHWUfPbP0AWg0LSS5lQyVXjyZbtEbdk5J9JFKqVQWbXsG5WKIEMiFq
+	 SzBVSkbHuDK9UsrqBOaU3Le1NLR/mdH5shVNxcd6RGbDQ4Lpby7lVEjcBR7F7+AIzM
+	 d7momE3le035w==
+From: Christian Brauner <brauner@kernel.org>
+Date: Fri, 06 Mar 2026 15:07:31 +0100
+Subject: [PATCH] kthread: remove kthread_exit()
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKLfqmkC/yWMQQ7CIBBFr2JYi4FpC+hVjAsYphar1AxVmzS9u
+ 60u389/bxaFOFERp90smN6ppCGvoPc7gZ3PV5IprixAgVGVMvIzcC974kx3SVMaJZBr45EAwWu
+ xak+mNk2/5Pny5/IKN8Jx62yP4AvJwD5jt00PX0biA2plrWvQkovBh6hRu0ppr7Ey0NR1aKwz4
+ EAsyxdp09x5tgAAAA==
+X-Change-ID: 20260306-work-kernel-exit-2e8fd9e2c2a1
+In-Reply-To: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+To: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+ Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
+ Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, 
+ Anna Schumaker <anna@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Christian Loehle <christian.loehle@arm.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.15-dev-1404c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4745; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=4MdGIbdndDFCXfwOf0TVp8VdxUpp+s5KJh5cTZCa4y4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWSuun9zi3BDvPhGva7N9jzc0WLt//ImTHJ6mbiAa1Jii
+ onw4sTFHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABM5xczIsFX3ReLthQdXXuNI
+ CpVK9/mw6GnZgm27IpN0cq2Sudb43Gb475566W5uru1bmY1O95xfbrj57apDYsOxuz2sZkqRSr3
+ C3AA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-When setting a charp module parameter, the param_set_charp() function
-allocates memory to store a copy of the input value. Later, when the module
-is potentially unloaded, the destroy_params() function is called to free
-this allocated memory.
+In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
+we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
+We left kthread_exit() around as an alias to do_exit(). Remove it
+completely.
 
-However, destroy_params() is available only when CONFIG_SYSFS=y, otherwise
-only a dummy variant is present. In the unlikely case that the kernel is
-configured with CONFIG_MODULES=y and CONFIG_SYSFS=n, this results in
-a memory leak of charp values when a module is unloaded.
-
-Fix this issue by making destroy_params() always available when
-CONFIG_MODULES=y. Rename the function to module_destroy_params() to clarify
-that it is intended for use by the module loader.
-
-Fixes: e180a6b7759a ("param: fix charp parameters set via sysfs")
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+Reported-by: Christian Loehle <christian.loehle@arm.com>
+Link: https://lore.kernel.org/1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com
+Signed-off-by: Christian Brauner <brauner@kernel.org>
 ---
- include/linux/moduleparam.h | 12 ++++--------
- kernel/module/main.c        |  4 ++--
- kernel/params.c             | 27 ++++++++++++++++++---------
- 3 files changed, 24 insertions(+), 19 deletions(-)
+ include/linux/kthread.h    | 1 -
+ include/linux/module.h     | 2 +-
+ include/linux/sunrpc/svc.h | 2 +-
+ kernel/bpf/verifier.c      | 1 -
+ kernel/kthread.c           | 8 ++++----
+ kernel/module/main.c       | 2 +-
+ lib/kunit/try-catch.c      | 2 +-
+ 7 files changed, 8 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
-index 7d22d4c4ea2e..6283665ec614 100644
---- a/include/linux/moduleparam.h
-+++ b/include/linux/moduleparam.h
-@@ -426,14 +426,10 @@ extern char *parse_args(const char *name,
- 		      void *arg, parse_unknown_fn unknown);
+diff --git a/include/linux/kthread.h b/include/linux/kthread.h
+index a01a474719a7..37982eca94f1 100644
+--- a/include/linux/kthread.h
++++ b/include/linux/kthread.h
+@@ -116,7 +116,6 @@ void *kthread_probe_data(struct task_struct *k);
+ int kthread_park(struct task_struct *k);
+ void kthread_unpark(struct task_struct *k);
+ void kthread_parkme(void);
+-#define kthread_exit(result) do_exit(result)
+ void kthread_complete_and_exit(struct completion *, long) __noreturn;
+ int kthreads_update_housekeeping(void);
+ void kthread_do_exit(struct kthread *, long);
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 14f391b186c6..79ac4a700b39 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -855,7 +855,7 @@ static inline int unregister_module_notifier(struct notifier_block *nb)
+ 	return 0;
+ }
  
- /* Called by module remove. */
--#ifdef CONFIG_SYSFS
--extern void destroy_params(const struct kernel_param *params, unsigned num);
--#else
--static inline void destroy_params(const struct kernel_param *params,
--				  unsigned num)
--{
--}
--#endif /* !CONFIG_SYSFS */
-+#ifdef CONFIG_MODULES
-+extern void module_destroy_params(const struct kernel_param *params,
-+				  unsigned num);
-+#endif
+-#define module_put_and_kthread_exit(code) kthread_exit(code)
++#define module_put_and_kthread_exit(code) do_exit(code)
  
- /* All the helper functions */
- /* The macros to do compile-time type checking stolen from Jakub
+ static inline void print_modules(void)
+ {
+diff --git a/include/linux/sunrpc/svc.h b/include/linux/sunrpc/svc.h
+index 4dc14c7a711b..c86fc8a87eae 100644
+--- a/include/linux/sunrpc/svc.h
++++ b/include/linux/sunrpc/svc.h
+@@ -338,7 +338,7 @@ static inline void svc_thread_init_status(struct svc_rqst *rqstp, int err)
+ {
+ 	store_release_wake_up(&rqstp->rq_err, err);
+ 	if (err)
+-		kthread_exit(1);
++		do_exit(1);
+ }
+ 
+ struct svc_deferred_req {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 401d6c4960ec..8db79e593156 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -25261,7 +25261,6 @@ BTF_ID(func, __x64_sys_exit_group)
+ BTF_ID(func, do_exit)
+ BTF_ID(func, do_group_exit)
+ BTF_ID(func, kthread_complete_and_exit)
+-BTF_ID(func, kthread_exit)
+ BTF_ID(func, make_task_dead)
+ BTF_SET_END(noreturn_deny)
+ 
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 791210daf8b4..1447c14c8540 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -323,7 +323,7 @@ void __noreturn kthread_complete_and_exit(struct completion *comp, long code)
+ 	if (comp)
+ 		complete(comp);
+ 
+-	kthread_exit(code);
++	do_exit(code);
+ }
+ EXPORT_SYMBOL(kthread_complete_and_exit);
+ 
+@@ -395,7 +395,7 @@ static int kthread(void *_create)
+ 	if (!done) {
+ 		kfree(create->full_name);
+ 		kfree(create);
+-		kthread_exit(-EINTR);
++		do_exit(-EINTR);
+ 	}
+ 
+ 	self->full_name = create->full_name;
+@@ -435,7 +435,7 @@ static int kthread(void *_create)
+ 		__kthread_parkme(self);
+ 		ret = threadfn(data);
+ 	}
+-	kthread_exit(ret);
++	do_exit(ret);
+ }
+ 
+ /* called from kernel_clone() to get node information for about to be created task */
+@@ -738,7 +738,7 @@ EXPORT_SYMBOL_GPL(kthread_park);
+  * instead of calling wake_up_process(): the thread will exit without
+  * calling threadfn().
+  *
+- * If threadfn() may call kthread_exit() itself, the caller must ensure
++ * If threadfn() may call do_exit() itself, the caller must ensure
+  * task_struct can't go away.
+  *
+  * Returns the result of threadfn(), or %-EINTR if wake_up_process()
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c3ce106c70af..ef2e2130972f 100644
+index c3ce106c70af..340b4dc5c692 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -1408,7 +1408,7 @@ static void free_module(struct module *mod)
- 	module_unload_free(mod);
- 
- 	/* Free any allocated parameters. */
--	destroy_params(mod->kp, mod->num_kp);
-+	module_destroy_params(mod->kp, mod->num_kp);
- 
- 	if (is_livepatch_module(mod))
- 		free_module_elf(mod);
-@@ -3519,7 +3519,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
- 	mod_sysfs_teardown(mod);
-  coming_cleanup:
- 	mod->state = MODULE_STATE_GOING;
--	destroy_params(mod->kp, mod->num_kp);
-+	module_destroy_params(mod->kp, mod->num_kp);
- 	blocking_notifier_call_chain(&module_notify_list,
- 				     MODULE_STATE_GOING, mod);
- 	klp_module_going(mod);
-diff --git a/kernel/params.c b/kernel/params.c
-index 7188a12dbe86..1a436c9d6140 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -745,15 +745,6 @@ void module_param_sysfs_remove(struct module *mod)
- }
- #endif
- 
--void destroy_params(const struct kernel_param *params, unsigned num)
--{
--	unsigned int i;
--
--	for (i = 0; i < num; i++)
--		if (params[i].ops->free)
--			params[i].ops->free(params[i].arg);
--}
--
- struct module_kobject * __init_or_module
- lookup_or_create_module_kobject(const char *name)
+@@ -228,7 +228,7 @@ static int mod_strncmp(const char *str_a, const char *str_b, size_t n)
+ void __noreturn __module_put_and_kthread_exit(struct module *mod, long code)
  {
-@@ -985,3 +976,21 @@ static int __init param_sysfs_builtin_init(void)
- late_initcall(param_sysfs_builtin_init);
+ 	module_put(mod);
+-	kthread_exit(code);
++	do_exit(code);
+ }
+ EXPORT_SYMBOL(__module_put_and_kthread_exit);
  
- #endif /* CONFIG_SYSFS */
-+
-+#ifdef CONFIG_MODULES
-+
-+/*
-+ * module_destroy_params - free all parameters for one module
-+ * @params: module parameters (array)
-+ * @num: number of module parameters
-+ */
-+void module_destroy_params(const struct kernel_param *params, unsigned num)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < num; i++)
-+		if (params[i].ops->free)
-+			params[i].ops->free(params[i].arg);
-+}
-+
-+#endif /* CONFIG_MODULES */
+diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
+index d84a879f0a78..99d9603a2cfd 100644
+--- a/lib/kunit/try-catch.c
++++ b/lib/kunit/try-catch.c
+@@ -18,7 +18,7 @@
+ void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
+ {
+ 	try_catch->try_result = -EFAULT;
+-	kthread_exit(0);
++	do_exit(0);
+ }
+ EXPORT_SYMBOL_GPL(kunit_try_catch_throw);
+ 
 
+---
 base-commit: c107785c7e8dbabd1c18301a1c362544b5786282
--- 
-2.53.0
+change-id: 20260306-work-kernel-exit-2e8fd9e2c2a1
 
