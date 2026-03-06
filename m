@@ -1,137 +1,133 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13BB3A6417
-	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 18:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D761D36EA89
+	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 19:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772821668; cv=none; b=a5ETNIG9zGuJt+kikZUxuCfNe5Q6NhosYnRjON0ZrlcER0PGf8KyeI62yIvHkvXVfskuzNddzGYGI5obRPjlQZ03MC/IiP9UeEegMLm4UgEGEnS7IaKQHk0u23GGr0pO2GebVYap6ZtzlA39Aj2f1rUD056BOAvPRGw39cdDrMY=
+	t=1772825287; cv=none; b=FF+iwcg8VBg7YQB/3IfC6KpZK6SQWoK0sHTXNTYscPM94Oe1ZhR0LbvoF8XocLI+o7gqkdIxYItBbAYNk1U9Ym0rw13ht6XMXzUfjJI3JMDy8ebgjB6FvjzMlma26786m3BfhkUHKmGpk/1hn0sgvKB0tfaa6wH40f9ZfkacCl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772821668; c=relaxed/simple;
-	bh=C0FpvF+Eai8YIFcFjlslWeL22N9NQEVFyXAeA99g07Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bhomRTrAlKqDkHsvt5CZr/tdL2uJvXjG86uf5SatuqyTPrsIbnCwLevE/oPF3gs5h0Q/8MF0QhPFiEIhn38MlFYY30BqgO1Ai0H1P5UyyPGai09E00eNnokhOrgAtRK2VErJVYey4auu+9EvGhrI8rXLoOIGe6ff7txXckW0bXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Hm451rp2; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1772825287; c=relaxed/simple;
+	bh=1wSzry9qXgOGT6an8EaEVFIb7De7cskzidp6Q/iEeZ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=APfpAUwowbWXGla58NhlLOFtrm3TPg6SuQw6kw7S8lxVEMzykH9T5/phKXZYm18QvUbLxQx4MKT9+ETUdXpzVWOu0M5mBGYyTCYqrKgwvtSLQV17ZtU2Mt/tWBck7oB1ng6Rv3rsy35gjLRtAQP3vRAagsF+j0Xe2Sq5UUroPN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RrSPeJQn; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Hm451rp2"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b93695f7cdcso1279635466b.3
-        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 10:27:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RrSPeJQn"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ae49120e97so10295ad.0
+        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 11:28:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1772821665; x=1773426465; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5lHZOXkujkn3ph72tYgDlAYNUE4LM5JcTk02pGHeUU=;
-        b=Hm451rp2KoSPRlW/5i8AaWMT+ewKEBBkOsgut/bUfjwbknD+ma1WvCJzy/Kaur2vfV
-         eVMrkKWEyoQEF2DtD4QChx+vXb/WYGhMClfGz4E29lNQomSDQdfUJuXNbUbNjDOdqa9s
-         GjhOhnyyj1pRP7zlrAYgDmzMI0VnhlAmWUCtU=
+        d=google.com; s=20230601; t=1772825286; x=1773430086; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PvXYP23IhuFH1eZo6K/xzmMOw61rGrmSbBCOFimt1yM=;
+        b=RrSPeJQnLdLtKC0ennxeJvxxlxVOcRVe2l/C8vOk2RHhFqhvRnGb01aNx6vA2Vpz2L
+         xOyfFl/WVz2E14hgaOoutMZQY/he1ZBVTjPLZ3z43NzUTazwZ+iqky+T4kfo6aUyqFIN
+         dgafzgrhlP3CI0L8A5CiGgTqAAmR/7wt3H5a7iQskbBfIIP19A1A4yZxzNIcufVKl6jk
+         jGmAVEISb76IhMdDrH/mVz8eksJmJmRwhmnLKlyGXMRA2KA493eAFMAo/Sfpfsu4/T16
+         fyJNU6G2ladry1Zof/+tmT7VMBO2uvBV4QW7RPrxy8s6/fYQwOSH4wThf2OGS0v1k12p
+         vFmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772821665; x=1773426465;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w5lHZOXkujkn3ph72tYgDlAYNUE4LM5JcTk02pGHeUU=;
-        b=bbU+NDqLCsfXcWWwjm399il78PFEjNqzv3DnxXyiyC/1GrXdjKt62JNS3yyYf3uXuP
-         B9HzM3XrBCgaTVl6U7JWco9drOFcOSWt9S5Mnat++EKiRf2ZfR/fDgJ0MCeC1ws64+F8
-         KTbr7Ar/Z/SKAcz5yjlCkQqwwP/OsJuY499SSuc7pnLy9Mpoc7JFNwtTWXUlQNokaMaJ
-         9dB+76aJw7rGckseMMj+XgVqKded32mc6vvxUidmkBABmW0dZdHw5tWoBlwkMoJ9E/xF
-         rucSaG443nd+MLDsAmqifj2EJ0MvbNugkbHRl18sa5ZRqjzaVgLYUB6PqeS+1o/83COk
-         d9aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW/tehRnYbxvi71CMyc1nWm0xhUJHXh0yZ0FSpiOVw9kZ8Pf6wmM4LuNS6+s4Z2RHS+FqpAaox1h7YCsQ6w@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp1g96wiglZUAMuXwoUBy4Z2qY4sL8GRBjm3z4MFszDQcjUuR3
-	yhv1FsfATLpI8CiSEFFeAdjKMhGeSzHeAzBLQHy2/qYf/nnHeka9/TSvdk3MFF8IShMk/iB4/23
-	TC7UG88c=
-X-Gm-Gg: ATEYQzwAYJ4+xGp49sVRB0pP2JszUG8bVSjgUUeKNv0Jj8tsU8bDZZYDFxB8vAkBv5j
-	2FRuGTHX4WRux69WT+mLfki5vZTSgZMK5/61n2iHg2v5R/HTDPzf9oNjn08FExjpI1530f++ij0
-	DxHZV3HKCG442hiIgI2w3GKHC4yrqebSjNBLair9WFxX+G2PS9iIhRZF/bDTb/w84t3gsrI1YYK
-	RT4M3PUoQZ4HEmkifZ8dT1ql/QTbH2PBiauchM8RWn7jl1BAk5IEaT5BgOi+fkO6ibT8vxkn8ZH
-	W/tTXRhZ2/Sk9zj7H9AjfUMpTnHmj4YJWAMhxs5JenjAMTWeDxUwJqB64Taksk6BzlrLa6hrdnI
-	+P7WusNfBUvvqR9BWNqFYBGlfMYxaBFCtZHrj+xMBInZCHP8J0GTlZN21Cc2rsY005//AiJwOWm
-	JCOnMBxStlY0GdedzFA8JvfYBBrverW/+swtjwM+slUJblYIZWK0p/oZs1TLbz3TGXwkVjWabg
-X-Received: by 2002:a17:907:7f86:b0:b8a:f7fb:4f4d with SMTP id a640c23a62f3a-b942dce9ab4mr174557366b.16.1772821665072;
-        Fri, 06 Mar 2026 10:27:45 -0800 (PST)
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942f15d532sm79414466b.54.2026.03.06.10.27.43
-        for <linux-modules@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Mar 2026 10:27:44 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b942424d231so175615166b.0
-        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 10:27:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCURIe8yi5zEFNUQB0U521MFbit1gO6x7S8z/K1i2acC7ech7+8J7fXO6p7xroyLWCZIh2m37KZFFJH1HINl@vger.kernel.org
-X-Received: by 2002:a17:907:72d3:b0:b90:8016:cfe4 with SMTP id
- a640c23a62f3a-b942dbae36emr189809666b.10.1772821663491; Fri, 06 Mar 2026
- 10:27:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772825286; x=1773430086;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PvXYP23IhuFH1eZo6K/xzmMOw61rGrmSbBCOFimt1yM=;
+        b=HaUbT7I6eqrkgLjqgelh+xjOhc3y5r2EWf41gEhv+MZtmvjoagL6Vm+o9tJK2mQGAQ
+         6rRQHZg5DFoBd69Xx84DJa3Q4Def858uWvINndMN062+GpHbSyyidgUbKkR6xUawewWt
+         I1iOHunb+sw7yCNJRfJegBIOdLeAZ+qQXf6+8M8bX0NqD5bcwf45JyTl5t2/LSRTfcFK
+         7pA0NaXVadrAKMVodbzEqUzq1lJzlx9nV+LYtmuStmlLTpSFFvjrFNyOp09sBQRQabT/
+         cQiNRpAgSvREmJbAiqtsDuixi8wOucmDJd4JVUtnohl8KnNPIRw+kOLGBSfbpSycQJDO
+         x7tw==
+X-Forwarded-Encrypted: i=1; AJvYcCVB3qn7asolAKxoz9s85gxvharSqqikpz5B3ed4Yofpw5XPX0iESu23fTKNWWzDOeznQ+yqAGgy7hTWzNE3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2RgUY5kFjOK3/68NYNZaGT3IwybZQtYnoC2UgO2hU/scIg1ZR
+	cWw/n8Z+lMwhSgaYSgyfbDJ4gOVA3iLY6IFMWaivY123uYjW7ZpFTJkr8WnEw9Kl/g==
+X-Gm-Gg: ATEYQzy+9PcB1lQC5h7p4gTE+kANieQitlNUqlrmgQGM3EECiMkDzLZzBtnn8K90/Bx
+	eIbm9p8c0/foP3grN5H9FqtFMIdZ9orWL86HwoLjEEcrGz0gzlV8a++6vsYrWIoh0wawgkX7JhK
+	lQXW7CeH0M0zRCi3HaUpQHkQPQ7u0xhn6U7mzwCXtjU2nyyrGMeqa1KCJvSDQNXXUmbPdPBtGFM
+	bnM4cqlNElRzz6T/wZj8/N7FsAvYsoO7056bmzJ57YAz8pY3UZn2Nmo8fXGH6H1ECcJfo4Ld7sk
+	QSFW0KtDLdzMLTbU7OuSkaO5JG6+HADKLODlxNVUVmY0lgOfHGVMsAXI51IHi8av+iGA3ul5pak
+	0AmhJKUf4k6uEWMBWP8qHtZWe8YtPbxcUWpNBPMexfFcPXgtiShtv9aUKNHK08nohvsDrcQscIu
+	TpjJ+XI1RcbjlXsX/4Gs2lCMNFPnCZIP9g6MzEvcLEWJeawPXunCjFjlNmBUFEp+ZIGIc=
+X-Received: by 2002:a17:902:d487:b0:2a7:4151:2c74 with SMTP id d9443c01a7336-2ae8ad895d7mr224085ad.16.1772825285389;
+        Fri, 06 Mar 2026 11:28:05 -0800 (PST)
+Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c739e0cb598sm2259382a12.13.2026.03.06.11.28.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 11:28:04 -0800 (PST)
+Date: Fri, 6 Mar 2026 19:27:59 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Matthew Wood <thepacketgeek@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Tamir Duberstein <tamird@kernel.org>,
+	David Gow <davidgow@google.com>,
+	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] rust: module_param: wire StringParam into the
+ module! macro
+Message-ID: <20260306192759.GA1369418@google.com>
+References: <20260226234736.428341-1-thepacketgeek@gmail.com>
+ <20260226234736.428341-3-thepacketgeek@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
-In-Reply-To: <aaroReSCj1qXUeQb@infradead.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 6 Mar 2026 10:27:26 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
-X-Gm-Features: AaiRm50t8TjmDHmMBt5Sh-GyOL4xotHpUKagWUMEUHoG2sdTM--QAxb3FwfabmE
-Message-ID: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>, 
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260226234736.428341-3-thepacketgeek@gmail.com>
 
-On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
->
-> More a comment on the previous patch, but I think exporting do_exit
-> which can work on any task is a really bad idea.
+On Thu, Feb 26, 2026 at 03:47:28PM -0800, Matthew Wood wrote:
+> +/// Set a string module parameter from a string.
+> +///
+> +/// Similar to [`set_param`] but for [`StringParam`].
+> +///
+> +/// # Safety
+> +///
+> +/// Same requirements as [`set_param`].
+> +unsafe extern "C" fn set_string_param(
+> +    val: *const c_char,
+> +    param: *const bindings::kernel_param,
+> +) -> c_int {
+> +    if val.is_null() {
+> +        crate::pr_warn!("Null pointer passed to `module_param::set_string_param`");
+> +        return EINVAL.to_errno();
+> +    }
+> +
+> +    crate::error::from_result(|| {
+> +        // SAFETY: val points to a valid C string from the kernel.
+> +        let cstr_param = unsafe { StringParam::from_ptr(val) };
+> +
+> +        // SAFETY: By function safety requirements, param.arg points to our SetOnce<StringParam>.
+> +        let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<StringParam>>()) };
 
-What is the advantage of a module only being able to do
-kthread_exit(), and not able to do a regular do_exit()?
+I do realize this matches set_param, and there's a good chance I
+missed something when reading the macros, but doesn't arg actually
+point to ModuleParamAccess<T> here? Since the struct is not repr(C),
+isn't the compiler technically speaking allowed to reorder the
+fields, which means SetOnce<T> might not actually be at offset 0?
 
-I think the only real advantage of having a "kthread_exit()" is that
-it's a nicer name.
+> +
+> +        container
+> +            .populate(cstr_param)
+> +            .then_some(0)
+> +            .ok_or(kernel::error::code::EEXIST)
 
-Because if that's the main issue, then I agree that "do_exit()" is
-really not a great name, and it matches a very traditional "this is an
-internal function" naming convention, and not typically a "this is
-what random modules should use".
+Does this mean the behavior for Rust modules differs from C modules if
+the user specifies multiple instances of the same parameter? I believe
+we just use the last value of the parameter instead of failing in C.
 
-So kthread_exit() is a much better name, but it basically *has* to act
-exactly like do_exit(), and adding a limitation to only work on
-kthreads doesn't actually seem like an improvement.
-
-Why make a function that is intentionally limited with no real
-technical upside? It's not like there's any real reason why a module
-couldn't call exit - we may not have exported it before, but we do
-have code that looks like it *could* be a module that calls do_exit()
-today.
-
-For example, I'm looking at kernel/vhost_task.c, and the only users
-are things that *are* modules, and it's not hugely obvious that
-there's a big advantage to saying "that task handling has to be
-built-in for those modules".
-
-So my reaction is that "no, do_exit() is not a great name, but there's
-no real technical upside to havign a separate kthread_exit()"
-function.
-
-If it's just about naming, maybe we could just unify it all and call
-it "task_exit()" or something?
-
-           Linus
+Sami
