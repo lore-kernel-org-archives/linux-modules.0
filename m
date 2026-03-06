@@ -1,147 +1,163 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94CC37D12D
-	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 08:54:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772787252; cv=pass; b=abUrNyy8vbITIOeUdbWgt6I4fYxAt7fVZlgDZxf9rjr0Apv+tkYru/KihdOcMiKhVnkmhi1bLeNbaettR2YqmHW5fIiwWxJ398xL6IFIe5VN4ABdQWOoa2pokhJpKgX4KlSl++8bBG0Q9hJN1UrP7pcgK5JfVlmxZwPSH510PZ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772787252; c=relaxed/simple;
-	bh=rdGRpEUaht6MYf6o9RXZIZscTi3HqoGwM8V5j3py2CI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oaB7ttCgP0of0WZwr4EPmNPict/niajU08ZFo06xY6buPGPw2VXNoK+PZQf/d7Lj2H73N+si46LezqEt7nWbaMnJ4U28PfZKCIpx0ZRHk2QlhKRDIcFXJ2f6P2X8D9WriE/epvRqpZsuJ4SS+iEXdRv4p2p7537Dlur0tKeXK6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ED4NOUce; arc=pass smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1189134F257
+	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 09:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772791042; cv=none; b=a20S7geIR0APpGaanbxjWn8FUkwfVj6ZORPWjaG6G8+87Eb4P/CPBZsM/OH/AIn2Lb42B1dYDum9Laym4olnnRoX7zg98kks/aa9MxHuapLndgySCaGmWwl9biSZBLfv62HxXW+AUGSrsx99TcC3XyYqytXIttPSVvI6urefTDM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772791042; c=relaxed/simple;
+	bh=pEQzWCAb2iRAqiobf7jxVYCtdRuojtFnQZa3BQ+Dyyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PNETXjXwxOTRwyhy0izgf2kQmsgpxx0ZlCoYj6Nw7sF9Z1OmY1vPIjTj069TZCRYo0YB/FQePsaT8OViPdrXrJflfq/HdeCpl1kchPXBVAs5zA7K+DjRmyCEVQF5gz0HXFtJgoisZegMlqnuFjhNSA+Z++cc4Ac8NJ6l0UB6dRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EOsxzA63; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ED4NOUce"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64c9a6d6b70so7748652d50.3
-        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 00:54:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772787249; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Y/Uv0bk7YfDTviEc18N53sBJyPUnfz9+W//lv9r/XwVY/AuC/ffxynWTyVImKVIbHw
-         jll/phAcJCo5rPdmOmqr91gIec/J0bTb/tGAblSx+R6uLTHu14IFgaTgjyTJ9vSy2vib
-         ZZX2pSKfVBxnzZnbrEtVUv6qJe68YFH/c/tHN9bV/B6Ofbs8AhJZrmdUTGYYHUPOwXQD
-         j8/Llgrrx04DeBbcdOey6tA/Ge/fqwOn5c8D2z3Jn60ipDVSzDGxQkspXAd4thi4IM8X
-         Ad8Vv5CojrqXpc+X9fK4PiJuT5ehP+qqNnfPnkp8p1fpwqXOMVEN/YN6nRbsU0VZW8xs
-         akPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Aw8D4Y5kt7NM4MjYbrQrX2vFoTbmx8s3dgBNZzvOJ8I=;
-        fh=TgCZdIziI5/eAO64K0/bKEoivLG5DBrzdUbsxM1N4fM=;
-        b=PTNiTEU4wKtDCQwv4Ac4ydVy6QRGfWoswayb0684jxP0/bbG3ovYyCp8JkPW3iQ9eT
-         GsApfnd/ZYAWScZQx+Dnn2KuGS5eCNSwdm+Cxx1AZ3zA9pADPpqZM5jsF8A4+a/Ky259
-         56WFrv2LGQg7+XGTbBI4MgxS+YI29+lQqEDO/LpZ9D+U35nyQbUp70D2UFNbChOeXVY0
-         mN10OSR4WEzA4dxXjfSdB9gAy3pMeK6AXG4qyEZErLdoTCJKx6WxMJAxhJf6zsd6TcJN
-         odT9tHVK8Bs330xchpphdyDY7rt2xe/9bOwxw8Vr9KFK9visc+NCg+fwZ5fSipvU4/bp
-         /iWA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EOsxzA63"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso78164255e9.3
+        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 01:57:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772787249; x=1773392049; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Aw8D4Y5kt7NM4MjYbrQrX2vFoTbmx8s3dgBNZzvOJ8I=;
-        b=ED4NOUcevo0TIgGlr8lDdkbWaxP2jc30ZnZAGA4YShNDmfS5HiztAoEm3Ipmhrc7VP
-         fQWRBmEkaOeZkRW6fLfxciXF5pEexhty7XBxqBl3qlN3xyoZDWBojzpC7500YtWt9OSk
-         22tOhBYeNpeoi6v1DwIF8/+IXp4dawBIFIYvcAoy3/1urlo0uxKKf7e1dRxGGBHtFClN
-         klBBNGT32BzMW2ZSyj9RQM5J/i3uS78HLRZ644NWWk3ptDDinLGUPdaEFs4D0kIgIvdt
-         93se3zP12Oqa9nr8V8IcSIt3suMkaTYNa8RqpXqVcyIuBQFawxzRRUMFJVENws+hBSYH
-         qSNg==
+        d=suse.com; s=google; t=1772791035; x=1773395835; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O/K2aprkN4j5Qcb7Uph8KKaqrtRBJnLURcoh9D3mrUw=;
+        b=EOsxzA63XzaseIkVZ6IrLdWGyCJaNf3twu9123Mtl4OPI8F4HlgxpeTUDbG8KmhtST
+         F2YhOX4N///ZNqP/vH0J+ChwK7apappP2VS6FKF95kdzjFeb3eIg6Dc3uwe9cksVBblo
+         Bco2ntcM6lmH0lhej+mRCnQ/12+V4dVodu/YXpS2b0vxwPnRiLFocVbbTu8uGJMvmDPw
+         e28vjCtbCp5M9Y8N7t7s+ExpRU7tnImyBX0Mw8Ku3dvzWyypeRbVElXvm0gQ6IhzZrPC
+         NTI/wAx+pRjlOUAxYebVAFUUqqu9MijnltA7jcVtyLyJSsPPwt7sL3OFKHrbnVMBghqv
+         tO8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772787249; x=1773392049;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Aw8D4Y5kt7NM4MjYbrQrX2vFoTbmx8s3dgBNZzvOJ8I=;
-        b=fz9UbwXBVyiJT2PPs2UyY/ZHLb7ZVIJYJrAcCoC6c5sQ9TJJ/sm5HTv0+1r9Z9GwAx
-         lH0FHIteh1mF7QIx118C+k5RJAwSm6liw9gTiCpLPFuKv8Vidvmz4c/xWWCuNf1gQt3+
-         g8xzHcdV6BinmzeyjngfYq7ikCUm2253urzY+s+RC67Olj+C4BIDp763g7D9zIYi60S+
-         GXV145B9JKYa7qhT9P+lAOiScIL4wOqNgCQ9YsgfMbsMIdlK8aMPIV/O5ON0kKRy6VMG
-         lz5u7qPlKQDkgCmWiKIqBeUaONtJIgcQhC8dBu83FPE/TJij9Wfao1wgoD3UGHXvoUxs
-         4S6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXXtRlh1304KS9YSmSiKNdJxnwliQzj4dfw9gaosXAN4VjwM7eq28mAyBDczf2I4SE3qRaCUZoMIcABoT2u@vger.kernel.org
-X-Gm-Message-State: AOJu0YzncJhXRbttv0+C2dPVDGKltg3bKGdP+gpNxj9/ujU0oIC3GGnA
-	1FgDIKbJ0t9gj7KUnIOAqjxSaT+LKe+2L5yYFRg7e9B/Gf8jhs9DseKLZ5yT3ROeWY0lkSUqQxH
-	Mgcmi/edR2txF2lf/KiOG4b/hW1Fq5FhoKvSJ
-X-Gm-Gg: ATEYQzw1F9IUwnqefwih068j3FtRss+tYF3oSFGERj1xEm+SZgRTIHkFIe+EanNDYlS
-	0lz2sc5DIWS9SFXCzcEj4v9NghrSVelTe6iTOEUVNaP3t+A6lzCy8U28yPdk/+4lJe3TDK8t9p6
-	ARRCG3V+88AuiE8KoeFi3J5M5Nab2ga18WjIP2/aJc2vSozF2UhP6TmxkNVAsclThoIlAUuLYsI
-	7jY8nQrBJFeQgCeFi25f/Gm/YS7TQ3pW6SGuZttyjhWQO74nwyU1V7X/Sufvw2EMAxyxJ+u+mc0
-	YlBV/rEGrg0ojBg/
-X-Received: by 2002:a05:690e:11c6:b0:64c:a815:511b with SMTP id
- 956f58d0204a3-64d1408d74bmr1254215d50.3.1772787249430; Fri, 06 Mar 2026
- 00:54:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1772791035; x=1773395835;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O/K2aprkN4j5Qcb7Uph8KKaqrtRBJnLURcoh9D3mrUw=;
+        b=D3EBOYwHRFg1lfFa5364UxZhGRU3ymnldHZi0YDijk9tw6RJs8C1hLKJ+oM75YMBjv
+         tEWUyUc0ub1W3BVIRybgCSIgQtM8KTPdW43CSZbjTfQhjmNkrzsHPC+90iGMNCFwV612
+         W2+VttV7Y8dt5GY2+8R80gb5zRTfKvact7AoPPsQaBkXwt9E9gdsG9bxAKihQcFeW+99
+         bCyybqcT/3xVNnqiBD146oVS7DYsVZ8AocC3jvuu1kJYmWPlTXM+DmcwDSOeWXQz7D48
+         q2OVO8YYpGvppxXdhFfVLQ3BISC925luDFmwuVvUrTKbrndMqq9o1t+H08H5//4q8cW8
+         IORA==
+X-Forwarded-Encrypted: i=1; AJvYcCWab0CMOX/E4cMpMMfmGMxpqu72ohya019KrKBhYQoO7gspZft6Rdv/NyYqItMzNOlAq9NShrZjdcqac/EV@vger.kernel.org
+X-Gm-Message-State: AOJu0YxH+wgeJ1wH6fiUWGODzVBokBAb+Dp1toNAzKilr+L1JlgJVJ6p
+	6tvLL2l47hPXhmxU1cawQyXda4ann+HOHNWIgjaWvErZTtZ6bsB2kYXYmM9fdExHWLM=
+X-Gm-Gg: ATEYQzxRWmPZbp1E/u7ZbOODkobvrqFnwJ6Uy+zTC0QdEOUjJNZXO1uGvcEbc+hsMlk
+	jzUbCb+EiJtJciQq9cNHDOvCVLVWda2sxXPJmVuPVMj0KCm1zECXPF/53Tzf/egI6xwoDJFwytd
+	0VfBLmI8I2TA51aokAyKzIKXLWlwdVtpO7e+4M5/gIgYqf+szSrpOaOqCwMZt0/29Meen5I0QRP
+	hB/J0q2Qbg0+vlzD9kOWFNJtf3/6kgrGI4KE9+4KjeNiGiodbMziuKdI/kVVIKHH/qrZhv+Hsa4
+	dfbd7S1jKHEVLuXIufYvT6GTZ7wsK0joB024hvtEeoKWeTgBcDZ5ek2SqzPC7HOZ6Ib/JMk/ZjA
+	aSMPwkniIir5M5D6jDO4DyJabS0Yw5hB4Ga8c0DLNVIELhYlbrwZtEqXUbhblBSSqo3hsrfT67l
+	gsp7ppiMSlRsruNNIqAdzeKualNQ==
+X-Received: by 2002:a05:600c:4e89:b0:45d:d97c:236c with SMTP id 5b1f17b1804b1-48526951430mr23896805e9.21.1772791035167;
+        Fri, 06 Mar 2026 01:57:15 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485256b1eacsm24251685e9.0.2026.03.06.01.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Mar 2026 01:57:14 -0800 (PST)
+Date: Fri, 6 Mar 2026 10:57:12 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Song Chen <chensong_2000@189.cn>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Miroslav Benes <mbenes@suse.cz>,
+	mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+	samitolvanen@google.com, atomlin@atomlin.com, mhiramat@kernel.org,
+	mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: [PATCH] kernel/trace/ftrace: introduce ftrace module notifier
+Message-ID: <aaqk-GrpCTqO36xj@pathway.suse.cz>
+References: <20260225054639.21637-1-chensong_2000@189.cn>
+ <20260225192724.48ed165e@fedora>
+ <e18ed5f4-3917-46e7-bca9-78063e6e4457@189.cn>
+ <alpine.LSU.2.21.2602261147150.5739@pobox.suse.cz>
+ <20260226123014.2197d9b7@gandalf.local.home>
+ <321d4670-27cb-453f-a50d-426c83894074@189.cn>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231094004.37851-1-laoar.shao@gmail.com> <20260305234344.GA788042@google.com>
-In-Reply-To: <20260305234344.GA788042@google.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 6 Mar 2026 16:53:32 +0800
-X-Gm-Features: AaiRm52YuDGMTei2U-duixAZc3ezplg-GrnVYEYAkJn6ERpnkoGCdzljOtRl1b8
-Message-ID: <CALOAHbAaN7qYmyTLc=oNRbnpHCiac_JTfCBVYEqVZDfDcW0Nvg@mail.gmail.com>
-Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
-To: Sami Tolvanen <samitolvanen@google.com>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <321d4670-27cb-453f-a50d-426c83894074@189.cn>
 
-On Fri, Mar 6, 2026 at 7:43=E2=80=AFAM Sami Tolvanen <samitolvanen@google.c=
-om> wrote:
->
-> On Wed, Dec 31, 2025 at 05:40:04PM +0800, Yafang Shao wrote:
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3901,7 +3901,11 @@ void print_modules(void)
-> >       list_for_each_entry_rcu(mod, &modules, list) {
-> >               if (mod->state =3D=3D MODULE_STATE_UNFORMED)
-> >                       continue;
-> > -             pr_cont(" %s%s", mod->name, module_flags(mod, buf, true))=
-;
-> > +             pr_cont(" %s", mod->name);
-> > +             /* Only append version for out-of-tree modules */
-> > +             if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->tain=
-ts))
-> > +                     pr_cont("-%s", mod->version);
-> > +             pr_cont("%s", module_flags(mod, buf, true));
->
-> On second thought, is using mod->version here safe? We release the
-> memory for mod->version in:
->
->   free_module
->     -> mod_sysfs_teardown
->     -> module_remove_modinfo_attrs
->     -> attr->free =3D free_modinfo_version
->
-> And this happens before the module is removed from the
-> list. Couldn't there be a race condition where we read a non-NULL
-> mod->version here, but the buffer is being concurrently released
-> by another core that's unloading the module, resulting in a
-> use-after-free in the pr_cont call?
+On Fri 2026-02-27 09:34:59, Song Chen wrote:
+> Hi,
+> 
+> 在 2026/2/27 01:30, Steven Rostedt 写道:
+> > On Thu, 26 Feb 2026 11:51:53 +0100 (CET)
+> > Miroslav Benes <mbenes@suse.cz> wrote:
+> > 
+> > > > Let me see if there is any way to use notifier and remain below calling
+> > > > sequence:
+> > > > 
+> > > > ftrace_module_enable
+> > > > klp_module_coming
+> > > > blocking_notifier_call_chain_robust(MODULE_STATE_COMING)
+> > > > 
+> > > > blocking_notifier_call_chain(MODULE_STATE_GOING)
+> > > > klp_module_going
+> > > > ftrace_release_mod
+> > > 
+> > > Both klp and ftrace used module notifiers in the past. We abandoned that
+> > > and opted for direct calls due to issues with ordering at the time. I do
+> > > not have the list of problems at hand but I remember it was very fragile.
+> > > 
+> > > See commits 7dcd182bec27 ("ftrace/module: remove ftrace module
+> > > notifier"), 7e545d6eca20 ("livepatch/module: remove livepatch module
+> > > notifier") and their surroundings.
+> > > 
+> > > So unless there is a reason for the change (which should be then carefully
+> > > reviewed and properly tested), I would prefer to keep it as is. What is
+> > > the motivation? I am failing to find it in the commit log.
+> 
+> There is no special motivation, i just read btf initialization in module
+> loading and found direct calls of ftrace and klp, i thought they were just
+> forgotten to use notifier and i even didn't search git log to verify, sorry
+> about that.
+> 
+> > 
+> > Honestly, I do think just decoupling ftrace and live kernel patching from
+> > modules is rationale enough, as it makes the code a bit cleaner. But to do
+> > so, we really need to make sure there is absolutely no regressions.
+> > 
+> > Thus, to allow such a change, I would ask those that are proposing it, show
+> > a full work flow of how ftrace, live kernel patching, and modules work with
+> > each other and why those functions are currently injected in the module code.
+> > 
+> > As Miroslav stated, we tried to do it via notifiers in the past and it
+> > failed. I don't want to find out why they failed by just adding them back
+> > to notifiers again. Instead, the reasons must be fully understood and
+> > updates made to make sure they will not fail in the future.
+> 
+> Yes, you are right, i read commit msg of 7dcd182bec27, this patch just
+> reverses it simply and will introduce order issue back. I will try to find
+> out the problem in the past at first.
 
-You're right. This can happen.
+AFAIK, the root of the problem is that livepatch uses the ftrace
+framework. It means that:
 
->
-> In order to do this safely, we should presumably drop the attr->free
-> call from module_remove_modinfo_attrs and release the attributes
-> only after the synchronize_rcu call in free_module (there's already
-> free_modinfo we can use), so mod->version is valid for the entire
-> time the module is on the list.
->
-> Thoughts?
+   + ftrace must be initialized before livepatch gets enabled
+   + livepatch must be disabled before ftrace support gets removed
 
-It looks like this could work. I'll analyze it further=E2=80=94thanks for t=
-he
-suggestion.
+My understanding is that this can't be achieved by notifiers easily
+because they are always proceed in the same order.
 
---=20
-Regards
-Yafang
+An elegant solution would be to introduce  notifier_reverse_call_chain()
+which would process the callbacks in the reverse order. But it might
+be non-trivial:
+
+  + We would need to make sure that it does not break some
+    existing "hidden" dependencies.
+
+  + notifier_call_chain() uses RCU to process the list of registered
+    callbacks. I am not sure how complicated would be to make it safe
+    in both directions.
+
+Best Regards,
+Petr
