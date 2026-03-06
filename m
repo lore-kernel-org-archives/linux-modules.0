@@ -1,37 +1,66 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C80E17C69;
-	Fri,  6 Mar 2026 05:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7F9EEBA
+	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 08:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772775108; cv=none; b=jdZwWK2jCpgemMX0hfAvsEvuKcEkL4jmPkmZe6uAC9mRMSzh5zLEmNraJfJ0IzEhgmEU6pSydB+DUyaEd9cRCrv3ufikeQiou0f4kfwthAgeuTjz1AAzyp0CVFGNuWNiHOUAgYB/cNiWtQ0RAi/W5WbPMKPckdt7B/bvKSrh7A0=
+	t=1772784967; cv=none; b=QkQ0LPSy7f9JjW2houC1N1aHL4VUk/dLTanALBBDYexIMIH1TR9dG/AJ2QLjZL/MgL6ZDYe2JLv9MIyz7pSkMAHaOp6PaEJ5nkoC9Ng1zx1ATP/99ZQW3+yKTbaeOj98VsTprQwgiFTAA0jkm6aQwTJvkHLy7Nhp3OOUpM2JOak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772775108; c=relaxed/simple;
-	bh=TuZ4HMuvMsyaE+P8oAO3m10hFVVxMOdkXaWq3jt0wrA=;
+	s=arc-20240116; t=1772784967; c=relaxed/simple;
+	bh=zBhlocaaU1ftXLafB3C+PGfdR2lQVqw31IpslNbRNlA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=X+TrwMTrbHRj5OdxnSms5JAVrhmkqtZIWaaNDDPfzb9mfuEOniP0xiA+gD2yMVpg+XGAxpVIwoWx8HmsGGy8ugcdjOdK2lJYSI8IvTGDFMJ4svZcLcLCHfRgWf45ESNDkO1/E/4UZ9oTys/yD0EgUoTZ69lreSC7K4pZDjW7QLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NEifPV4A; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 In-Reply-To:Content-Type; b=rqSevmucnxykjjq9A2KPToMRCNjAa23iBD2IdBsZSkO2XwcVnRmIHbpvOBol5z5355Pxk/Sz/N+zDUgB7BrquiynRxgrjblZU5n9phCfmFGgQgHDhBme0F/AnbfxEWmfq0L2urK/rHQefcWdhPIu/KQL0kBuQmxASuA/0A3kqhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PRD7tV3c; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NEifPV4A"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=YTy9WH4252KkEisoIowgga7hEsIxg8Hn2L4+MHnhZgw=; b=NEifPV4AurNeboy+GzmVzpJVHk
-	pwctB56sgrisw4DR+3m59BGRuE3/eH2ucib1ru2Foeoyijws5jEGElOGUzEPvtPclmrZ99bf5qths
-	a1IWjYqYaNWxitOcK1mvNEi88gIiIj9SvUkXvpZDHmWl/mAmiXLamVGOuXYH0bWlocnbVVPjbJ6Zy
-	locXi+7Kl9zKNKwfvkW31VzCNF+9fvduS54pqYATipwVQvgCATggLs94JIlg/393ipmtYYj+DTSIA
-	3xnED0N2OWbE+I74sUHAzeKsWY255E2+PuX1zxiXGzbSZ8kf2Erk9ZoFzKjvCJ+BuRDwC2ea7UY9Q
-	eBt0H2Uw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vyNml-000000032wP-2vq8;
-	Fri, 06 Mar 2026 05:31:39 +0000
-Message-ID: <14977e29-cd76-424c-89c3-9f8c73186e27@infradead.org>
-Date: Thu, 5 Mar 2026 21:31:38 -0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PRD7tV3c"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-439c5b40f60so2427699f8f.0
+        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 00:16:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1772784964; x=1773389764; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zt+B51beLAsa2CtRXOeLzQASAwXeBbbyk6+dmth4+xI=;
+        b=PRD7tV3czwChHLi9lS7YjHbWdjypnY+C4qcJuBA/msKQoHgOYGojcisThrNUJ1GX49
+         iS4/lB3gsx0dY5US7213uas9dUk096xLZfFdQEJWTI6D/dcRCJwtWMQtlt+25BehimE0
+         4/Ks3h2lseyapKFJ/gGkSfKQ2ykUgi53AIc2ED0XcDazeWqKx6mRrXgXhvMzCMxRHNZv
+         KUzBdmj/AyD+OkUDcbG5uvS3bJEjAUO3qeChL5+yaTrJ9vnn0y5K7OfJqNIqSRpCemDU
+         rBuaNn7wMazCfE42VxVmnopuj2J0nh0x5jzXMHe7xHsYC29wPSnuBqYoPpdpr00Qijgu
+         dBGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772784964; x=1773389764;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zt+B51beLAsa2CtRXOeLzQASAwXeBbbyk6+dmth4+xI=;
+        b=ejNl3RSivguGMXIS0b9KM0IdqEo4fP+3dLLpiedN+qrAXQZAAysrvuoAionvVqjOkr
+         nITdoUZlzXhoA2Tw+1kpeQP2gPXuCpLRAIgsvREd7KjtAeyjkh/Thrwpoojn6Tq+yx/L
+         eeZ/Yo3+Pgrje9yN2EXBiwWadlLxz9PoEq9GxODxK4Ts8nuhivyxyaNgSDyku2IyafW8
+         /ZOFoRCfPUktpIcMgfqsr63KDJ84Mpd8KS7ODAaVowOQ+5E49mZYPV6qqiUQmPyoeSfs
+         GuGg7HaB/LSWqoYUg9VxfhqSW9EVp4rJQW4QajbJbek5nGh+fMAlvytCXlyxP9XIWJMD
+         uVAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXyYVnlW/2Qyu36MY3svSmqlgG6p0Lkg3ls/uGvmRaJQOJutneEsmW+RD6kOq10T9DMWvStS/f5rsWIxfSG@vger.kernel.org
+X-Gm-Message-State: AOJu0YznpZ0CmNSpXsJLvSOv+tgrQF+BIOSzRZQVvb/HYVF8f0/HjAL9
+	a0Z+jJofkjakXfnQBe1hxjbw2rTxfnevhMlsE0KwO1CBRj3KQ1lpVr/8CC/sDBZ3YbA=
+X-Gm-Gg: ATEYQzyFzAI7qQwlRn9g6/ZG8/VrPoNkvQEN6P3ovJUP5UKyP61NmSf0BH/mwZqreYC
+	kB85YINnT1c1DGgTNyYSE4Y+EvIZfgxA+gVod+YzimNHYvgeNkpGyVBj/LDVpS4qDgXYeQuIih3
+	fiNW3BWhc0zMTz/cUVsqOgzvE3islAuRHNOLcqGVxwadU/5GFXql1RqNTleBjnvk+2OyesiAZJI
+	w8z7bJpKYQ9lfaPNE3A3UboypHU8v+7npjEBEwJG7rSx9k5I7wUWw8qYUD/94qsLt+c4/vLv3Ec
+	Mc0IDKOnpAe7EltRAD/gDG0VsO+lpAKB+vNoe3Pj+Mmvns33ZRDZegrkBRBoQ6naoY2KFN5eoTV
+	cCJeh/nMcQ/VguzY26QedFWwG/tIM3LkjtQ+K4h6JVAavqW6AsnMHupyGxKIh4DfNsfd/wkcj2T
+	gigZsK1R/v0QeZfsUXwpI+T+Ze9NVcCiRsawzDg3gnecwq
+X-Received: by 2002:a05:600c:8218:b0:480:69ae:f0e9 with SMTP id 5b1f17b1804b1-48526958b30mr19816615e9.16.1772784964020;
+        Fri, 06 Mar 2026 00:16:04 -0800 (PST)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485276bc6bbsm16768355e9.15.2026.03.06.00.16.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Mar 2026 00:16:02 -0800 (PST)
+Message-ID: <2b3a0699-2170-43f8-917f-4acea18195ca@suse.com>
+Date: Fri, 6 Mar 2026 09:15:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -39,94 +68,40 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] kallsyms: embed source file:line info in kernel stack
- traces
-To: Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Richard Weinberger <richard@nod.at>, Juergen Gross <jgross@suse.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thorsten Leemhuis <linux@leemhuis.info>, Vlastimil Babka
- <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20260303182103.3523438-1-sashal@kernel.org>
- <20260303182103.3523438-2-sashal@kernel.org>
- <258d7167-2e82-4402-9545-108c501ae69e@gmx.de> <aajoETEtX9r2XzT7@laps>
- <eab67de3-74af-45d9-bf67-1bf2c10aec37@gmx.de>
+Subject: Re: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Petr Mladek <pmladek@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260305015237.299727-1-joe.lawrence@redhat.com>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <eab67de3-74af-45d9-bf67-1bf2c10aec37@gmx.de>
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260305015237.299727-1-joe.lawrence@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-On 3/5/26 2:26 PM, Helge Deller wrote:
-> On 3/5/26 03:18, Sasha Levin wrote:
->> On Wed, Mar 04, 2026 at 09:17:37PM +0100, Helge Deller wrote:
->>> On 3/3/26 19:21, Sasha Levin wrote:
->>>> Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
->>>> lookup table in the kernel image so stack traces directly print source
->>>> file and line number information:
->>>>
->>>>   root@localhost:~# echo c > /proc/sysrq-trigger
->>>>   [   11.201987] sysrq: Trigger a crash
->>>>   [   11.202831] Kernel panic - not syncing: sysrq triggered crash
->>>>   [   11.206218] Call Trace:
->>>>   [   11.206501]  <TASK>
->>>>   [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
->>>>   [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
->>>>   [   11.208565]  ? __lock_acquire+0x465/0x2240 (kernel/locking/lockdep.c:4674)
->>>>   [   11.209324]  panic+0xc9/0xd0 (kernel/panic.c:787)
->>>>   [   11.211873]  ? find_held_lock+0x2b/0x80 (kernel/locking/lockdep.c:5350)
->>>>   [   11.212597]  ? lock_release+0xd3/0x300 (kernel/locking/lockdep.c:5535)
->>>>   [   11.213312]  sysrq_handle_crash+0x1a/0x20 (drivers/tty/sysrq.c:154)
->>>>   [   11.214005]  __handle_sysrq.cold+0x66/0x256 (drivers/tty/sysrq.c:611)
->>>>   [   11.214712]  write_sysrq_trigger+0x65/0x80 (drivers/tty/sysrq.c:1221)
->>>>   [   11.215424]  proc_reg_write+0x1bd/0x3c0 (fs/proc/inode.c:330)
->>>>   [   11.216061]  vfs_write+0x1c6/0xff0 (fs/read_write.c:686)
->>>>   [   11.218848]  ksys_write+0xfa/0x200 (fs/read_write.c:740)
->>>>   [   11.222394]  do_syscall_64+0xf3/0x690 (arch/x86/entry/syscall_64.c:63)
->>>>   [   11.223942]  entry_SYSCALL_64_after_hwframe+0x77/0x7f (arch/x86/entry/entry_64.S:121)
->>>
->>> As mentioned in the other series, I really like this patch series.
->>>
->>> I tested this series again on the parisc architecture, and the relative
->>> directories are now stripped with this version of your patch.
->>> IIRC, the previous patch did show the subdirectory names.
->>> [  132.840382] Backtrace:
->>> [  132.840382]  [<104254d8>] show_stack+0x50/0x64 (traps.c:212)
->>> [  132.840382]  [<1041c0c8>] dump_stack_lvl+0x6c/0xa0 (dump_stack.c:122)
->>> [  132.840382]  [<1041c118>] dump_stack+0x1c/0x2c (dump_stack.c:130)
->>> [  132.840382]  [<10402218>] vpanic+0x154/0x344 (panic.c:550)
->>> [  132.840382]  [<10402438>] panic+0x30/0x34 (panic.c:787)
->>> [  132.840382]  [<10bebea8>] sysrq_handle_crash+0x30/0x34 (rcupdate.h:110)
->>> [  132.840382]  [<10bec720>] __handle_sysrq+0xc0/0x1e4 (preempt.h:14)
->>
->> Ugh... Can you confirm that you've build this kernel with O=?
+On 3/5/26 2:52 AM, Joe Lawrence wrote:
+> Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
+> related macros") added .text and made .data, .bss, and .rodata sections
+> unconditional in the module linker script, but without an explicit
+> address like the other sections in the same file.
 > 
-> Yes. Both -Os and -O2 do not show the relative path.
+> When linking modules with ld.bfd -r, sections defined without an address
+> inherit the location counter, resulting in non-zero sh_addr values in
+> the .ko.  Relocatable objects are expected to have sh_addr=0 for these
+> sections and these non-zero addresses confuse elfutils and have been
+> reported to cause segmentation faults in SystemTap [1].
+> 
+> Add the 0 address specifier to all sections in module.lds, including the
+> .codetag.* sections via MOD_SEPARATE_CODETAG_SECTIONS macro.
+> 
+> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
+> Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 
-Helge,
-I'm fairly sure that Sasha meant with O=build_dir_name,
-not -O for optimization levels.
-
->> The RFC had a dirty dirty hack around how we turn these absolute paths into
->> relative ones, but I tried to re-do it so no one would yell at me :)
-> 
-> Seems it is needed...
-> 
-> Helge
-> 
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 
 -- 
-~Randy
-
+Thanks,
+Petr
