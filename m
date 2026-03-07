@@ -1,133 +1,109 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D761D36EA89
-	for <linux-modules@vger.kernel.org>; Fri,  6 Mar 2026 19:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249B22D7DDB;
+	Sat,  7 Mar 2026 09:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772825287; cv=none; b=FF+iwcg8VBg7YQB/3IfC6KpZK6SQWoK0sHTXNTYscPM94Oe1ZhR0LbvoF8XocLI+o7gqkdIxYItBbAYNk1U9Ym0rw13ht6XMXzUfjJI3JMDy8ebgjB6FvjzMlma26786m3BfhkUHKmGpk/1hn0sgvKB0tfaa6wH40f9ZfkacCl8=
+	t=1772874024; cv=none; b=u9yF4BeoT6OWuwAeRfdTs2ahp0NCxfQG2GS8gOpfvWzeI0fEA2HSboNzf5wzZm8rGJIlUTo/SwCCj/FFRsfKetIDbzIHsoYhIjQPzMBKZDJwEDrK7EhMy4Xpf25zrmqM2EX+74ic8gqcp+QBdwph5HGLjuw3dehwDJnSiQgWJOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772825287; c=relaxed/simple;
-	bh=1wSzry9qXgOGT6an8EaEVFIb7De7cskzidp6Q/iEeZ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=APfpAUwowbWXGla58NhlLOFtrm3TPg6SuQw6kw7S8lxVEMzykH9T5/phKXZYm18QvUbLxQx4MKT9+ETUdXpzVWOu0M5mBGYyTCYqrKgwvtSLQV17ZtU2Mt/tWBck7oB1ng6Rv3rsy35gjLRtAQP3vRAagsF+j0Xe2Sq5UUroPN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RrSPeJQn; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772874024; c=relaxed/simple;
+	bh=rZDUnuQy7P9XaYnLYn16SJaXfibyQK3FL3f/3cZOGXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FNL10Put+2IrEuCRml1AyMg95qcfv7rbeBhoY0Tn+/juO85SSBS/wjGoF/AfAMbCSbg6ykyve9CgZZVZJeauQSbgkB/1zM6gBK9eHM5qF2sPndvKj+4Zwajt3BlKhe1dW2OKkTP/rAkhaoe5kBL2RGWBvE+Eqoba6pU07ncdOc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com; spf=none smtp.mailfrom=opensource.nslick.com; dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b=LRjlzkf5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PeaKTDBk; arc=none smtp.client-ip=202.12.124.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=opensource.nslick.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RrSPeJQn"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ae49120e97so10295ad.0
-        for <linux-modules@vger.kernel.org>; Fri, 06 Mar 2026 11:28:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772825286; x=1773430086; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PvXYP23IhuFH1eZo6K/xzmMOw61rGrmSbBCOFimt1yM=;
-        b=RrSPeJQnLdLtKC0ennxeJvxxlxVOcRVe2l/C8vOk2RHhFqhvRnGb01aNx6vA2Vpz2L
-         xOyfFl/WVz2E14hgaOoutMZQY/he1ZBVTjPLZ3z43NzUTazwZ+iqky+T4kfo6aUyqFIN
-         dgafzgrhlP3CI0L8A5CiGgTqAAmR/7wt3H5a7iQskbBfIIP19A1A4yZxzNIcufVKl6jk
-         jGmAVEISb76IhMdDrH/mVz8eksJmJmRwhmnLKlyGXMRA2KA493eAFMAo/Sfpfsu4/T16
-         fyJNU6G2ladry1Zof/+tmT7VMBO2uvBV4QW7RPrxy8s6/fYQwOSH4wThf2OGS0v1k12p
-         vFmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772825286; x=1773430086;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PvXYP23IhuFH1eZo6K/xzmMOw61rGrmSbBCOFimt1yM=;
-        b=HaUbT7I6eqrkgLjqgelh+xjOhc3y5r2EWf41gEhv+MZtmvjoagL6Vm+o9tJK2mQGAQ
-         6rRQHZg5DFoBd69Xx84DJa3Q4Def858uWvINndMN062+GpHbSyyidgUbKkR6xUawewWt
-         I1iOHunb+sw7yCNJRfJegBIOdLeAZ+qQXf6+8M8bX0NqD5bcwf45JyTl5t2/LSRTfcFK
-         7pA0NaXVadrAKMVodbzEqUzq1lJzlx9nV+LYtmuStmlLTpSFFvjrFNyOp09sBQRQabT/
-         cQiNRpAgSvREmJbAiqtsDuixi8wOucmDJd4JVUtnohl8KnNPIRw+kOLGBSfbpSycQJDO
-         x7tw==
-X-Forwarded-Encrypted: i=1; AJvYcCVB3qn7asolAKxoz9s85gxvharSqqikpz5B3ed4Yofpw5XPX0iESu23fTKNWWzDOeznQ+yqAGgy7hTWzNE3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2RgUY5kFjOK3/68NYNZaGT3IwybZQtYnoC2UgO2hU/scIg1ZR
-	cWw/n8Z+lMwhSgaYSgyfbDJ4gOVA3iLY6IFMWaivY123uYjW7ZpFTJkr8WnEw9Kl/g==
-X-Gm-Gg: ATEYQzy+9PcB1lQC5h7p4gTE+kANieQitlNUqlrmgQGM3EECiMkDzLZzBtnn8K90/Bx
-	eIbm9p8c0/foP3grN5H9FqtFMIdZ9orWL86HwoLjEEcrGz0gzlV8a++6vsYrWIoh0wawgkX7JhK
-	lQXW7CeH0M0zRCi3HaUpQHkQPQ7u0xhn6U7mzwCXtjU2nyyrGMeqa1KCJvSDQNXXUmbPdPBtGFM
-	bnM4cqlNElRzz6T/wZj8/N7FsAvYsoO7056bmzJ57YAz8pY3UZn2Nmo8fXGH6H1ECcJfo4Ld7sk
-	QSFW0KtDLdzMLTbU7OuSkaO5JG6+HADKLODlxNVUVmY0lgOfHGVMsAXI51IHi8av+iGA3ul5pak
-	0AmhJKUf4k6uEWMBWP8qHtZWe8YtPbxcUWpNBPMexfFcPXgtiShtv9aUKNHK08nohvsDrcQscIu
-	TpjJ+XI1RcbjlXsX/4Gs2lCMNFPnCZIP9g6MzEvcLEWJeawPXunCjFjlNmBUFEp+ZIGIc=
-X-Received: by 2002:a17:902:d487:b0:2a7:4151:2c74 with SMTP id d9443c01a7336-2ae8ad895d7mr224085ad.16.1772825285389;
-        Fri, 06 Mar 2026 11:28:05 -0800 (PST)
-Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c739e0cb598sm2259382a12.13.2026.03.06.11.28.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2026 11:28:04 -0800 (PST)
-Date: Fri, 6 Mar 2026 19:27:59 +0000
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Matthew Wood <thepacketgeek@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b="LRjlzkf5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PeaKTDBk"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id A2B3C7A026E;
+	Sat,  7 Mar 2026 04:00:21 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Sat, 07 Mar 2026 04:00:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nslick.com; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm2; t=1772874021; x=1772960421; bh=Os7er9WYslCoaajGmGRTM
+	57xLafy+XkKflJDIrwq9N0=; b=LRjlzkf58uZq9lzJ1m5MK6+Cz0KkwOIezPq6c
+	9DJAWQyVeXISNkWPQnwCKu0KP2c5eEGeHgqM7tPFQVctNKtVZd9MQ7g62YPfiWR3
+	fQd/oTxfCY1nLtcld+7oINs6v2qOJE7k6pJXNiO7u9PATu7JcJqLMVqWyW4W8pY0
+	1GVFJULiMzQLHsJCIIiSQDLSgzR7WqB5hdNYevz8g6psoL7BdJDBIWiLT/1aJuwW
+	ZrYOkgu3CZaU2e7Eoat+Vltgdg7l1ZJVe9iMIbMft9xAOXo0nhSrnnYIjCA2Q8iN
+	d1ud40ZsFEz6mX6qYqwehA5p2gSqd23g3JMB8BkRSIZXYjYyA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1772874021; x=1772960421; bh=Os7er9WYslCoaajGmGRTM57xLafy+XkKflJ
+	DIrwq9N0=; b=PeaKTDBkC5Ry75jUHCGhzL0vUpENgax/ALb8UFe0Z9o1mve/JAZ
+	miNkRwuNG/QNZC1CaIBodJIEOjbgn/pNo0nge9oIJnibLu+xFn3YeDTjm6pu7+Ro
+	IDs9hhaEsWoyeRoyVtAYQijoX6oNbXh5qxkue0nokLgbtERSWeraKqgtC5rWntfH
+	NTBxcJS2uVdQ8VgV6hVwNJwAWEzRRw1esOIWESPASZQSlOlXl3V3uS9IthKCmk8y
+	i7X7SeEbOISmemGRK8a81kRHQWlMZ2j2hJzq7jO0Wco+ZowfE9oVwqsqvTFmj0k+
+	QgHYL/k2q126tT7F5f6zdXMz2dDuGOfaOGw==
+X-ME-Sender: <xms:IumraZkVXaMwaEXdLITmJZf3IAwsRVfGTYJngO1O1_jfJIJn1YrRJw>
+    <xme:IumraRMo9gcbufsoRVVKrq1WauxeTcKGXI9AnwGTeBdgU0QfenW977k7hJ3hVwj_L
+    edTl5tpkckpEeHB2jVCMblOjQcYMZwfBRW3-9jZOCYjBN5hYp4t--Q>
+X-ME-Received: <xmr:IumraUGzDzrABNZyUv7oRiMh8MQqPuu7TMuTTBd5_-4tATY5c8XolJEZkD4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvjedukedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheppfhitghhohhlrghs
+    ucfuihgvlhhitghkihcuoehlihhnuhigsehophgvnhhsohhurhgtvgdrnhhslhhitghkrd
+    gtohhmqeenucggtffrrghtthgvrhhnpeduieeuffeguddvuefhteetueeuffevgeekueei
+    tedvkeffkeelteefhfehveffvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehlihhnuhigsehophgvnhhsohhurhgtvgdrnhhslhhitghkrdgt
+    ohhmpdhnsggprhgtphhtthhopedugedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epmhgtghhrohhfsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtrhdrphgrvhhl
+    uhesshhushgvrdgtohhmpdhrtghpthhtohepuggrrdhgohhmvgiisehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehsrghmihhtohhlvhgrnhgvnhesghhoohhglhgvrdgtohhmpdhr
+    tghpthhtoheprghtohhmlhhinhesrghtohhmlhhinhdrtghomhdprhgtphhtthhopehmrg
+    gvnhhnihgthhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhf
+    rhgruggvrggurdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpdhrtg
+    hpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurghtihhonhdrohhrgh
+X-ME-Proxy: <xmx:IumraXvN3Pho6LzadnRMWwkL3IE3SxeFlxHGrw7NZJEOHVZ5ich5bg>
+    <xmx:IumraUSfyhq6jySZ-916wrYTO4jqu4-rrk5KGKdgNmWr8NsTmae__w>
+    <xmx:IumraRMMdFkvkCM3IbQtdqTn3RvVU6E98x2SDVSCxpIJWq7JPgscdA>
+    <xmx:IumraS478Yg-M0VprUTp_gxQYcR2KhWc0b3URopc1BbE5XzXXyKMbg>
+    <xmx:JemraXwCksR8kvoEOnNNAOs1IzTvE3sBuC6qwRf01Y991PX8OFElgXuQ>
+Feedback-ID: i78f146c6:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Mar 2026 04:00:13 -0500 (EST)
+From: Nicholas Sielicki <linux@opensource.nslick.com>
+To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Tamir Duberstein <tamird@kernel.org>,
-	David Gow <davidgow@google.com>,
-	=?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/8] rust: module_param: wire StringParam into the
- module! macro
-Message-ID: <20260306192759.GA1369418@google.com>
-References: <20260226234736.428341-1-thepacketgeek@gmail.com>
- <20260226234736.428341-3-thepacketgeek@gmail.com>
+	Daniel Gomez <da.gomez@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Matthias Maennich <maennich@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nicholas Sielicki <linux@opensource.nslick.com>
+Subject: [PATCH v2 0/2] module: expose imported namespaces via sysfs
+Date: Sat,  7 Mar 2026 03:00:08 -0600
+Message-ID: <20260307090010.20828-1-linux@opensource.nslick.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260226234736.428341-3-thepacketgeek@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 26, 2026 at 03:47:28PM -0800, Matthew Wood wrote:
-> +/// Set a string module parameter from a string.
-> +///
-> +/// Similar to [`set_param`] but for [`StringParam`].
-> +///
-> +/// # Safety
-> +///
-> +/// Same requirements as [`set_param`].
-> +unsafe extern "C" fn set_string_param(
-> +    val: *const c_char,
-> +    param: *const bindings::kernel_param,
-> +) -> c_int {
-> +    if val.is_null() {
-> +        crate::pr_warn!("Null pointer passed to `module_param::set_string_param`");
-> +        return EINVAL.to_errno();
-> +    }
-> +
-> +    crate::error::from_result(|| {
-> +        // SAFETY: val points to a valid C string from the kernel.
-> +        let cstr_param = unsafe { StringParam::from_ptr(val) };
-> +
-> +        // SAFETY: By function safety requirements, param.arg points to our SetOnce<StringParam>.
-> +        let container = unsafe { &*((*param).__bindgen_anon_1.arg.cast::<SetOnce<StringParam>>()) };
+Add /sys/module/*/import_ns to expose the symbol namespaces imported
+by a loaded module.
 
-I do realize this matches set_param, and there's a good chance I
-missed something when reading the macros, but doesn't arg actually
-point to ModuleParamAccess<T> here? Since the struct is not repr(C),
-isn't the compiler technically speaking allowed to reorder the
-fields, which means SetOnce<T> might not actually be at offset 0?
-
-> +
-> +        container
-> +            .populate(cstr_param)
-> +            .then_some(0)
-> +            .ok_or(kernel::error::code::EEXIST)
-
-Does this mean the behavior for Rust modules differs from C modules if
-the user specifies multiple instances of the same parameter? I believe
-we just use the last value of the parameter instead of failing in C.
-
-Sami
+Changes since v1:
+- Simplified commit message to drop unnecessary/incorrect background
+- Use .setup/.free callbacks in module_attribute to ensure
+  imported_namespaces is NULL-initialized before error paths and
+  NULL'd after kfree (Sami)
+- Updated KernelVersion to 7.1 in docs for next merge window
