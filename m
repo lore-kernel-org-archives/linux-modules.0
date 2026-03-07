@@ -1,55 +1,55 @@
-Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B8E3081D6;
-	Sat,  7 Mar 2026 09:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2797387570;
+	Sat,  7 Mar 2026 09:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772874026; cv=none; b=HuFVPT3ws+Jke6K4dUbN5ResPW8wFb6LwhCLxv7c1hYQ52l+wK/kEq03ZTL1alK1Ye44n/VfZ5Ls+l6fi+XoT6bu7krtmr1TiWM3qYV6M7udJULQYcmSaWW1Lc2C+PpRRSgPVIt1y0v+LK4jvjvIUY+ZnR1mSNDSoggmQ0iUntc=
+	t=1772874027; cv=none; b=WLhhZ4h6glf2Na8XRkSSdJz3HwgRSN1frE96KsLF7amR+SpPVBuujAABiXQ7uYzkxTBLj1dMZxrbZFqs7nMk01BmS3LOxqYR+MW6hWB2BvpiX5Ou2j3k7oqIYcRA6DAXueCfJbC1pfWrqXhbsd/UqBkQ1kNvdKJDSC/iOSKurDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772874026; c=relaxed/simple;
-	bh=3Z272WYFtO5uGBnjs7PVCEN6ue8hLru9MIHqIwAzxpw=;
+	s=arc-20240116; t=1772874027; c=relaxed/simple;
+	bh=4FUgOUrZ1hC5U7kxPWVLWjuecLqnImFCvvAOKygFs8Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KmCrVF7bgKd8qTFJhZvT41f8ywwAqigmf1MloTvfrRpMs5s0y1/UEmmg34dB4ic/MulEOdRnFrH/HN/iLShK8GEvdgFP8DeApyOkzN5F6/o4PKMFfgVkskI3wPCwPIot9xAQQ1pm9FyTCUm3BHb7WNzAaYAP3v2SCCtJ5KU2ges=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com; spf=none smtp.mailfrom=opensource.nslick.com; dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b=VHXdamZ3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W9HnBZDG; arc=none smtp.client-ip=202.12.124.147
+	 MIME-Version; b=JYWU3UNSNGnr/E1ODfQQpEZr2pzWnXQmD2JG7ky35BsSBsr8y2P01ceL7M6MQLPLd4ovXDmAEMXZDfdHn0nFwldITTXi1DCbnn/3Id1EBYikxi0V/KaSP5TONLNCEA+YnnvmcKEWzuI2xDjmZW0ylta1vXH9XbWlrP79bPYQul8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com; spf=none smtp.mailfrom=opensource.nslick.com; dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b=CwnRupca; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PMlJx67J; arc=none smtp.client-ip=202.12.124.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=opensource.nslick.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=opensource.nslick.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b="VHXdamZ3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W9HnBZDG"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id 9382C1D00278;
-	Sat,  7 Mar 2026 04:00:23 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sat, 07 Mar 2026 04:00:23 -0500
+	dkim=pass (2048-bit key) header.d=nslick.com header.i=@nslick.com header.b="CwnRupca";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PMlJx67J"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 1717A7A0269;
+	Sat,  7 Mar 2026 04:00:25 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Sat, 07 Mar 2026 04:00:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nslick.com; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1772874023; x=
-	1772960423; bh=L5R2K3GzCxY/Yqfz5ray4C4Nua3KsWSO21oO3oIVPj8=; b=V
-	HXdamZ3hgKRR8D9hszEiPARZ6CzYYQ3IN/RxhwJPbNV66XbP1AXCEfMX547axYyA
-	NsSGWOP2/FNPrjTNP1OPVSKZxB5tiXcKaBYw1BAtasj6eOPIJbfdGbdMUHDXb7N8
-	3bCoZrAN0R6ybwEG9pyVisYNjEhJ22AeAW36TR4WbG1rnpYjxMrFQSY7rDsc79CN
-	nQ5bYKPqeN2L+cIWtJMCH85n+2N+aHTzYX1FHfLWGsI64gi0qkyzBqEG1unnmgKc
-	sU0TtjVXYtvGOiB2jyb6ewpkkxfihFII1+yedA19FDemHfBcpX4PubXbEvAs2n2R
-	bScGFCYOTns7yEC9eQnbw==
+	:reply-to:subject:subject:to:to; s=fm2; t=1772874024; x=
+	1772960424; bh=1KxeQ6pIsqLba7ZzzJifr8CDCAYKv5nTwzGMM4oSELs=; b=C
+	wnRupcalwbQotZPwwKH/WUxkOkFOl2hnXZ3vavRhxuzxeQJqqP1UUEyGdeitlzwV
+	Zb8gPmK4fKpDjqxdYbcMbqNjJtNlx+sx9kqVImIzZPXSH6a2jpjxemqyJL1bmstr
+	Dh1rtL5P/bQ6B4Dt6oDGOpQzl2FvEqVzBUvXQI5meLc+SsikGDgBzHHOiBJqz1XF
+	P7GZvsg0lWuHazn0+5y20OseymEd5GfExNF85T7NnqbUwfd5osZmEqXeA1KdQe4P
+	JZOQ+O7QPuB53LlG+lmW3m1sn+kugvQDT5Io/ZvDQQNNgS0reeouYW4gq2BeDze+
+	ZCUaMAgtP7d6twRzrfPzA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm1; t=1772874023; x=1772960423; bh=L
-	5R2K3GzCxY/Yqfz5ray4C4Nua3KsWSO21oO3oIVPj8=; b=W9HnBZDGWkBO00GTM
-	oZkrRLCQP0YkbkJQZAbGYGkaeD14FzmOlsxAY8fopr5LiJirFV1SkQ6doh3EqvAf
-	hiQ8BcLWbxj1CaoLw5cvJfmoVe771M7bd5ADiZU6tJLdx/7yjdbkhHRXWVHKfQTU
-	K2heuooF7i5Dn2XRWSBibuAbv7sIAA2VHHH0dU0aoikeV6sO1+c2bKfTMr8w2vCJ
-	/XvGye8z5u9WpvI5q4ePqRIElKhHbuobPxsAeCLx0xdnS5idU9JmKxdG5pjQ/BgM
-	pAxxugVGwsebk6DZS9vwIlnqYkl7/r5/azHKfpfPtfcLZCYiHOLZHscSkQlxj66F
-	Eu9Tw==
-X-ME-Sender: <xms:J-mradlmV5bfJTuJOMvcO5GQeQpdL8NGTjklIpdo9ot9QmYWElxSgQ>
-    <xme:J-mraVNAisgrIxL_sV3dXWn3-Ed5DfiEerOu_LF3zEvDXkXceEWVr2APZPVbB_pPY
-    -5zLR36-LxaDIL4DsTlUAbUpgFips1fE1SjzIefD3Wy4HPkrJmLibs>
-X-ME-Received: <xmr:J-mraYGG5yGWtxBndShAKuRHXwcYakl0ZWNwglySMaBqR9q-xqDaNXoaoZU>
+	:x-me-sender:x-sasl-enc; s=fm1; t=1772874024; x=1772960424; bh=1
+	KxeQ6pIsqLba7ZzzJifr8CDCAYKv5nTwzGMM4oSELs=; b=PMlJx67JpN/syT8H6
+	Syvaouami92MLjow2oOI+y6iOh1xI1B457MW/EM3xvmyTD+R6tD5FSP6P7LNIHTN
+	dL7vo7K9gZlZAH+tF+UlGo1XX0DO+I4nqQrAPyNBbelbYaKlmIVZ4FLnD5va+HqD
+	pdGwE6gJSQGwrgMKnx7aKn8+z0rCmrB3yXACY/JfeP12c8heS7Iqdf75nsmReyfH
+	ljbT/q2FArSxQbgZUBNkNawUp2/gAUQVJvmCfdpJ73xQQE42i1ancwH18/RkLJgu
+	DtZFK718wmNH5NEmq6+n+4dwoc1nZjwAvGVEBF3NH0BW9VTIYzIIQUPDQXxEKRQi
+	2W0tg==
+X-ME-Sender: <xms:KOmraakW8y4h0f6-djhLWDuSj_3-agRGDNIB3n6s9BpWR7TlUVwF8w>
+    <xme:KOmraeP7iBbas1ymYgrMv2KofPM8ZhwdsfNIMPwchKBp0Ci2-WywppIiMpb5HwnNT
+    HAaFcqsOrXZri-kKVkQRNyd9FwI4mwNr8Lm-u2ylK_1vb0zjKsAmc0>
+X-ME-Received: <xmr:KOmradHCoPxzSLw5sVd4Q0sxQRHX5bzpeFY_WJXM4vnzvDF7aVKkGiDF08s>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvjedukedtucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
@@ -66,14 +66,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvjedukedtucetufdote
     hmrggvnhhnihgthhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehi
     nhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheptghorhgsvghtsehlfihnrdhnvghtpd
     hrtghpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurghtihhonhdrohhrgh
-X-ME-Proxy: <xmx:J-mrabs_jdaR9MTgpZOpgoCPX9AmQlvDw7Ps6ipRDjpy3B76b2vqMw>
-    <xmx:J-mraYTEkNioB1CSSvqzCx3XLLASQdh6w7c-aFX_CeE7isx01J7vIw>
-    <xmx:J-mraVNoSQNcpyVTPMWgEce8QAyfCyMn1zIS1n-cTyM2TbtARY6teg>
-    <xmx:J-mraW4CqxSlsdwsukPkzCoxLdDwBsoJJ7Tj6VJgaxyyo_7S7oD9Aw>
-    <xmx:J-mraa9Nw9wZqSR4puXzjGJxdSOL7_gpjCEA08CKj1Aa-LhNyqGRrCOD>
+X-ME-Proxy: <xmx:KOmracvNW13Mz5nvEoSlW98YL2MIomrkoKKAGSrM5xq3_CilvZMdfQ>
+    <xmx:KOmraVSh5ajyUPBsb60Fn1DPnol4YRcnSkb0_horsMm-mB2Z8I0zOg>
+    <xmx:KOmraeNMjuXDEa2qr_g-S9i_RCc1qbTKENXe_tliSVNu88oywZOj3w>
+    <xmx:KOmrab6zGeYtnmUzxBPewDoiTKB5AmYYDfOvdwq0E2AyjoM3GoUBTw>
+    <xmx:KOmraUw7SqtJjkqtGHXZuXXTIu7ms1W04yB9Rj9BHv8n8nKCmtxMysuv>
 Feedback-ID: i78f146c6:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 7 Mar 2026 04:00:22 -0500 (EST)
+ 7 Mar 2026 04:00:24 -0500 (EST)
 From: Nicholas Sielicki <linux@opensource.nslick.com>
 To: Luis Chamberlain <mcgrof@kernel.org>,
 	Petr Pavlu <petr.pavlu@suse.com>,
@@ -89,9 +89,9 @@ Cc: Sami Tolvanen <samitolvanen@google.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Nicholas Sielicki <linux@opensource.nslick.com>
-Subject: [PATCH v2 1/2] module: expose imported namespaces via sysfs
-Date: Sat,  7 Mar 2026 03:00:09 -0600
-Message-ID: <20260307090010.20828-2-linux@opensource.nslick.com>
+Subject: [PATCH v2 2/2] docs: symbol-namespaces: mention sysfs attribute
+Date: Sat,  7 Mar 2026 03:00:10 -0600
+Message-ID: <20260307090010.20828-3-linux@opensource.nslick.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260307090010.20828-1-linux@opensource.nslick.com>
 References: <20260307090010.20828-1-linux@opensource.nslick.com>
@@ -103,159 +103,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previously, the only way for userspace to inspect the symbol
-namespaces a module imports is to locate the .ko on disk and invoke
-modinfo(8) to decompress/parse the metadata. The kernel validated
-namespaces at load time, but it was otherwise discarded.
-
-Add /sys/module/*/import_ns to expose imported namespaces for
-currently loaded modules. The file contains one namespace per line and
-only exists for modules that import at least one namespace.
+Reference the new /sys/module/*/import_ns sysfs attribute in docs as an
+alternative to modinfo for inspecting imported namespaces of loaded
+modules.
 
 Signed-off-by: Nicholas Sielicki <linux@opensource.nslick.com>
 ---
- Documentation/ABI/testing/sysfs-module |  9 ++++
- include/linux/module.h                 |  1 +
- kernel/module/main.c                   | 69 +++++++++++++++++++++++++-
- 3 files changed, 78 insertions(+), 1 deletion(-)
+ Documentation/core-api/symbol-namespaces.rst | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-module b/Documentation/ABI/testing/sysfs-module
-index 6bc9af6229f0..d5b7d19bd310 100644
---- a/Documentation/ABI/testing/sysfs-module
-+++ b/Documentation/ABI/testing/sysfs-module
-@@ -48,6 +48,15 @@ Contact:	Kay Sievers <kay.sievers@vrfy.org>
- Description:	Show the initialization state(live, coming, going) of
- 		the module.
+diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
+index 034898e81ba2..2304d5bffcce 100644
+--- a/Documentation/core-api/symbol-namespaces.rst
++++ b/Documentation/core-api/symbol-namespaces.rst
+@@ -114,6 +114,11 @@ inspected with modinfo::
+ 	import_ns:      USB_STORAGE
+ 	[...]
  
-+What:		/sys/module/*/import_ns
-+Date:		January 2026
-+KernelVersion:	7.1
-+Contact:	linux-modules@vger.kernel.org
-+Description:	List of symbol namespaces imported by this module via
-+		MODULE_IMPORT_NS(). Each namespace appears on a separate line.
-+		This file only exists for modules that import at least one
-+		namespace.
++For modules that are currently loaded, imported namespaces are also available
++via sysfs::
 +
- What:		/sys/module/*/taint
- Date:		Jan 2012
- KernelVersion:	3.3
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 14f391b186c6..60ed1c3e0ed9 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -413,6 +413,7 @@ struct module {
- 	struct module_attribute *modinfo_attrs;
- 	const char *version;
- 	const char *srcversion;
-+	const char *imported_namespaces;
- 	struct kobject *holders_dir;
++	$ cat /sys/module/ums_karma/import_ns
++	USB_STORAGE
  
- 	/* Exported symbols */
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c3ce106c70af..53e421ff2ede 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -607,6 +607,36 @@ static const struct module_attribute modinfo_##field = {              \
- MODINFO_ATTR(version);
- MODINFO_ATTR(srcversion);
- 
-+static void setup_modinfo_import_ns(struct module *mod, const char *s)
-+{
-+	mod->imported_namespaces = NULL;
-+}
-+
-+static ssize_t show_modinfo_import_ns(const struct module_attribute *mattr,
-+				      struct module_kobject *mk, char *buffer)
-+{
-+	return sysfs_emit(buffer, "%s\n", mk->mod->imported_namespaces);
-+}
-+
-+static int modinfo_import_ns_exists(struct module *mod)
-+{
-+	return mod->imported_namespaces != NULL;
-+}
-+
-+static void free_modinfo_import_ns(struct module *mod)
-+{
-+	kfree(mod->imported_namespaces);
-+	mod->imported_namespaces = NULL;
-+}
-+
-+static const struct module_attribute modinfo_import_ns = {
-+	.attr = { .name = "import_ns", .mode = 0444 },
-+	.show = show_modinfo_import_ns,
-+	.setup = setup_modinfo_import_ns,
-+	.test = modinfo_import_ns_exists,
-+	.free = free_modinfo_import_ns,
-+};
-+
- static struct {
- 	char name[MODULE_NAME_LEN];
- 	char taints[MODULE_FLAGS_BUF_SIZE];
-@@ -1058,6 +1088,7 @@ const struct module_attribute *const modinfo_attrs[] = {
- 	&module_uevent,
- 	&modinfo_version,
- 	&modinfo_srcversion,
-+	&modinfo_import_ns,
- 	&modinfo_initstate,
- 	&modinfo_coresize,
- #ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-@@ -1760,11 +1791,43 @@ static void module_license_taint_check(struct module *mod, const char *license)
- 	}
- }
- 
-+static int copy_modinfo_import_ns(struct module *mod, struct load_info *info)
-+{
-+	char *ns;
-+	size_t len, total_len = 0;
-+	char *buf, *p;
-+
-+	for_each_modinfo_entry(ns, info, "import_ns")
-+		total_len += strlen(ns) + 1;
-+
-+	if (!total_len) {
-+		mod->imported_namespaces = NULL;
-+		return 0;
-+	}
-+
-+	buf = kmalloc(total_len, GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	p = buf;
-+	for_each_modinfo_entry(ns, info, "import_ns") {
-+		len = strlen(ns);
-+		memcpy(p, ns, len);
-+		p += len;
-+		*p++ = '\n';
-+	}
-+	/* Replace trailing newline with null terminator. */
-+	*(p - 1) = '\0';
-+
-+	mod->imported_namespaces = buf;
-+	return 0;
-+}
-+
- static int setup_modinfo(struct module *mod, struct load_info *info)
- {
- 	const struct module_attribute *attr;
- 	char *imported_namespace;
--	int i;
-+	int i, err;
- 
- 	for (i = 0; (attr = modinfo_attrs[i]); i++) {
- 		if (attr->setup)
-@@ -1783,6 +1846,10 @@ static int setup_modinfo(struct module *mod, struct load_info *info)
- 		}
- 	}
- 
-+	err = copy_modinfo_import_ns(mod, info);
-+	if (err)
-+		return err;
-+
- 	return 0;
- }
- 
+ It is advisable to add the MODULE_IMPORT_NS() statement close to other module
+ metadata definitions like MODULE_AUTHOR() or MODULE_LICENSE().
 -- 
 2.53.0
 
