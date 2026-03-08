@@ -1,171 +1,152 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A8826B777
-	for <linux-modules@vger.kernel.org>; Sun,  8 Mar 2026 14:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772979278; cv=pass; b=VzcEQ9M0lgPrdtJ6VGkq7hLBOpZkjI9xrbpgGWpYBrOwZbP+KQ+pjKmdfh0q/4tvhRmG9i2wxgI6Ltzm5M3+3xh3OHtxThd5TFJfdjkE3UbhPvzIpcN9NuytK2AglvSkAHVvSS7u44IMrltFHZq+OaTVMWNvtQA4ix1aCO/X+Mw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772979278; c=relaxed/simple;
-	bh=04Pdk0NM4P+LF80r4KSUSkjBilo6BsdXPtk2ljAJftg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OqxOrYnwy3+ahcatRXTfQG4E2802ZnW9Wzih3nI98IgQLygiDqUKCYRXFt4I+dni+3RXJUi1gilN0X325A05FEYh2U72EG+PvKili37wJID6yK3hf8CVSbwFxS/7EYVPLVhCnXxOQLI5ufXVtbhw3LbQy29vSC2a2GLT7bjsmhI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I3xbLG+C; arc=pass smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA2433344C;
+	Sun,  8 Mar 2026 18:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772995108; cv=none; b=AKGT6JY09XsHcIy4htN3JlJH60Y14qS0kmCtt84FehA/nZVkHJptGgzkU9sW2qSY58A1pEMzncW3ohPC7/3ByCiW1/vxdg30eg9a9LJSCF4BsAW8Sy6TOpXFN+9EMI7691F5FQpSvnXO8HNk10OZQWinCcj1GOCZA63Hi4Z50oI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772995108; c=relaxed/simple;
+	bh=jZJBIlksgatlFHsMEq+0aBvFqu9v03d1c2RJYYj3/Vw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dYTUq7dQ7zqCAtabLk0Z5qbDhfQc8+oCvLFIGqbe4nvq27MXgm7si51Jm6sWjlhkEa7IfShH+OQSmSpZGy5mLD0ZwoFVR9gGH60/BUyvy/u72/V3eQ24G/xPJQ4R16X0suMUSY7XNaDCnPkLtCq7W1el8fTHIJS90fHZrREWHJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZdlCCoG6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I3xbLG+C"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-64ca4dfdd88so10484611d50.0
-        for <linux-modules@vger.kernel.org>; Sun, 08 Mar 2026 07:14:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1772979276; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VgcVrkm08jHgU6ibDENkQlP8b/tYbQMed02azvvwEE/pF/KwfdwpCmvuV4CwX/mb/b
-         Wi9TTGPCE3wxcJcOFHli1KpskZ9qAE9H8FiL56S8ORcYgMxrArVXV4nBz5Xz87ckZqL0
-         js1jLbiahvXmAaGxUiAcfOSY1RY4eTJPucHmC/Hq6ErYJrwt8bYKoe8+bW57LIBslXAJ
-         HDHWSq9VUcevBZPAU7vnKAIzGHEYjLuoltA+PKdxZsCO3gbnqITzpGzSlWMnTBfXbEl7
-         45rssQnYV1UzQNxkzBmStrS5MnMLWCuovHhZz6X9afnaAaDveQXUGq872ZPWy+syWFav
-         0LSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
-        fh=HZjyULRY1HqmY5JyuTAXvtq1qqeCUxmzEndTqEjr010=;
-        b=LmaodM322f1stpErJXsm0szBcQfIzRnB8glav31MzZsGxWXSvaoF6V229a+0cAMk9k
-         KDK8LH+jVftCm4MjhQ6YyL2t4FQr/qy7QZFs78Zvqgk/Uh8bdxzu4KsiTb7TNjJok6IR
-         +ZPYBtGpq4tGpUkVWhKzNYjiyhGeupM1SNDsplpJaSK+UX2nQFictQdZRBOVJcaozk9E
-         slckvJwutkcglS+T2c7y6Cycu219ZzmJuLihEvjIkGp79tGHf5qjTcofJ6HD+k+HpFJ7
-         4WDt2g8+PfElMMl3nt5aTjOvueJiQmB56Pz8174CFfEDnOmn8t+rT/X/IoD9BH6wyCf/
-         /A1Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772979276; x=1773584076; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
-        b=I3xbLG+CXjySLYJirPlHT23vWyW4FnmxcSMHCTwgUb19bdspjB4wUg2gHbWuEvBKyF
-         x1lJ0QmrpbFCBGZXYdg6p00Bpg5K/Kcs2zCZZ7/vcDxQ95WrZe06vb/RIF3Hv4Jqnkp6
-         Ps3lC4WuWUK6miDc1m0kw9ZWa5lUXgqASshf73+hyIgL2TPdz/jCN46vobhdnDf/MVQD
-         PTNGsJM0dKQkpTjNAkwPhsoHtuqqFe6BwG1TrBmK06UQJBRyDPsTYTJdTtsbhtRIWqcH
-         /jqjQS1z5uLyt4pEPfOJYACscGCLLqezKFn4RYrZici5BLXXIzLLcYNnX9QG90ztw5T/
-         mYuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772979276; x=1773584076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
-        b=KblmqUoMLw6/T7aHz8/FMgKlooVhe+RkXaDK94VPcQtLYODnWmK1NLyFa+kBxtF8Yl
-         XHmyRx2UClpOThf6lKYzmwYgbBFsw1J1QRwar6cgYBp40hPx0iGYMhddNktmgnMTtJFt
-         o1nXPh+hiO9wjaOwdui47qeh6jEQyGysLB35Weht44RRZWcCwD3O23s/Qdr9M9sF3V14
-         Xw+QyOkTl6e07x2vwqZa85BjapGrYsMe4vqGqMDOzn2Zxp7HteAlbg2KtAPPm595+GUx
-         vBR3+lPQ2PByvCjlQ38lmNd2TvlWcSZqU+UZUXJQ/ZKG4fWM9CAKgCjiUwk++cksohK0
-         Q5fA==
-X-Forwarded-Encrypted: i=1; AJvYcCWiYvr1jPQ+fisnvsjBe/vDYbecKZDoec5dnpnK/r2ODCgrR944mKVqEH32ittF8NJY9IyV4kqrhOdP1yrw@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOj1Bhy3QYOivWb6e3gOEx9IfRsPDPzqHb2iPYm85K8fY4eTXK
-	Ng8dms01LDhzmRZq8yKA2JZhcNYEkesluI4bpc4burJfSvrJnxUcYAFzTNAs+tg7Myc1isVGhgY
-	Hka/+iTrkqJ+vbeMLt4Aj2ep8HCfSZZw=
-X-Gm-Gg: ATEYQzzIFL/JH7IHMztmcjRreK/7AihYO3eogS/4KacwoIyndn4ZK6hRXdovyFatxh4
-	KkY0sWUnL4QNjK5fhO53cU3VLQ8Blv8mORoOXYc2fb2PfVMl0miTpc311olGV6D19Qqlit5LZQc
-	/XL0Q3ySQmrggYxLI5qh/Fj+m95bdy9gejs3MJm+W/cG1pwfG8R/+0irdDfddu/IhzLUYvIk/l0
-	Xah2WSWVB4GIMIVpezBtYXn7yPxmw8biFEW6mp4u9L7ISHKQVPrkTzL0V2Q5ksvwpkU+opwsIya
-	UvNDylRDfM67tJoRimk=
-X-Received: by 2002:a05:690e:16d5:b0:64c:a1b9:ffa4 with SMTP id
- 956f58d0204a3-64d140977d9mr5775796d50.4.1772979275970; Sun, 08 Mar 2026
- 07:14:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZdlCCoG6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71AEAC116C6;
+	Sun,  8 Mar 2026 18:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772995107;
+	bh=jZJBIlksgatlFHsMEq+0aBvFqu9v03d1c2RJYYj3/Vw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZdlCCoG6Ebyt/aF+JtWn7ConBk0iCh3KFkGnTKE7yJGso4f70z61PDqQtRXrEOvn2
+	 +D+NCfDBND9QYYPFr66KckKOiSR3m0BQhweE79tNRn93I4FRQXoq6ZKxKoMywkv6fG
+	 58+nryM1wSgC25gN5Vo3PMjWHJPatD085BEbVbAQkOwyCHW6nSZ3B272MaIDA7+oX6
+	 Wjh0NMvkNbAq29M3izmciA6W9WXnJUws4C0qPWRd11j5Yk5e0boHvq2MrXovrJbyXe
+	 PZKUwnTHoVX6Hq1byo/tE/oypmbk8JJ7+VS1/tE76gWKfhc0dijkSg0SWLt/e4DO1Z
+	 /6tTN6EBTF5xA==
+Date: Sun, 8 Mar 2026 14:38:26 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Helge Deller <deller@gmx.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Richard Weinberger <richard@nod.at>,
+	Juergen Gross <jgross@suse.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Vlastimil Babka <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-doc@vger.kernel.org, rdunlap@infradead.org,
+	laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v2 1/4] kallsyms: embed source file:line info in kernel
+ stack traces
+Message-ID: <aa3CIjVhSsQUXSej@laps>
+References: <20260307172022.460402-1-sashal@kernel.org>
+ <20260307172022.460402-2-sashal@kernel.org>
+ <3ab0cad6-bf55-4ae5-afb7-d9129ac2032e@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231094004.37851-1-laoar.shao@gmail.com> <20260305234344.GA788042@google.com>
- <87a72531-5730-443d-8b6f-07ae9b8df6dc@suse.com>
-In-Reply-To: <87a72531-5730-443d-8b6f-07ae9b8df6dc@suse.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 8 Mar 2026 22:14:00 +0800
-X-Gm-Features: AaiRm52rpoHRNwzBvfZOulB54t5No0j0lp9MWDfDVDN973uAAFg-EC7G1VpgbZ8
-Message-ID: <CALOAHbAB=ubQ8X6gRY_04UYVvmGA1tY49o5w8GV7Nh==Y3nveQ@mail.gmail.com>
-Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, mcgrof@kernel.org, da.gomez@kernel.org, 
-	atomlin@atomlin.com, linux-modules@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <3ab0cad6-bf55-4ae5-afb7-d9129ac2032e@gmx.de>
 
-On Fri, Mar 6, 2026 at 6:10=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wro=
-te:
+On Sat, Mar 07, 2026 at 10:41:20PM +0100, Helge Deller wrote:
+>Hi Sasha,
 >
-> On 3/6/26 12:43 AM, Sami Tolvanen wrote:
-> > On Wed, Dec 31, 2025 at 05:40:04PM +0800, Yafang Shao wrote:
-> >> --- a/kernel/module/main.c
-> >> +++ b/kernel/module/main.c
-> >> @@ -3901,7 +3901,11 @@ void print_modules(void)
-> >>      list_for_each_entry_rcu(mod, &modules, list) {
-> >>              if (mod->state =3D=3D MODULE_STATE_UNFORMED)
-> >>                      continue;
-> >> -            pr_cont(" %s%s", mod->name, module_flags(mod, buf, true))=
-;
-> >> +            pr_cont(" %s", mod->name);
-> >> +            /* Only append version for out-of-tree modules */
-> >> +            if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->tain=
-ts))
-> >> +                    pr_cont("-%s", mod->version);
-> >> +            pr_cont("%s", module_flags(mod, buf, true));
-> >
-> > On second thought, is using mod->version here safe? We release the
-> > memory for mod->version in:
-> >
-> >   free_module
-> >     -> mod_sysfs_teardown
-> >     -> module_remove_modinfo_attrs
-> >     -> attr->free =3D free_modinfo_version
-> >
-> > And this happens before the module is removed from the
-> > list. Couldn't there be a race condition where we read a non-NULL
-> > mod->version here, but the buffer is being concurrently released
-> > by another core that's unloading the module, resulting in a
-> > use-after-free in the pr_cont call?
-> >
-> > In order to do this safely, we should presumably drop the attr->free
-> > call from module_remove_modinfo_attrs and release the attributes
-> > only after the synchronize_rcu call in free_module (there's already
-> > free_modinfo we can use), so mod->version is valid for the entire
-> > time the module is on the list.
+>On 3/7/26 18:20, Sasha Levin wrote:
+>>Add CONFIG_KALLSYMS_LINEINFO, which embeds a compact address-to-line
+>>lookup table in the kernel image so stack traces directly print source
+>>file and line number information:
+>>
+>>   root@localhost:~# echo c > /proc/sysrq-trigger
+>>   [   11.201987] sysrq: Trigger a crash
+>>   [   11.202831] Kernel panic - not syncing: sysrq triggered crash
+>>   [   11.206218] Call Trace:
+>>   [   11.206501]  <TASK>
+>>   [   11.206749]  dump_stack_lvl+0x5d/0x80 (lib/dump_stack.c:94)
+>>   [   11.207403]  vpanic+0x36e/0x620 (kernel/panic.c:650)
+>>   [   11.208565]  ? __lock_acquire+0x465/0x2240 (kernel/locking/lockdep.c:4674)
+>>[...]
+>>
+>>Assisted-by: Claude:claude-opus-4-6
+>>Signed-off-by: Sasha Levin <sashal@kernel.org>
 >
-> This looks reasonable to me as a simple fix.
+>Shows relative paths and works OK on 32- and 64-bit parisc kernel.
+>You may add
+>Tested-by: Helge Deller <deller@gmx.de>
 
-I will send a fix for it first.
+Thanks for testing! I'm happy the regression was fixed.
 
-> I also noticed that
-> setup_modinfo() with its attr->setup() calls is invoked unconditionally
-> in kernel/module/main.c, while module_remove_modinfo_attrs() with
-> attr->free() is present in kernel/module/sysfs.c, which is conditional
-> on CONFIG_SYSFS. In the unlikely configuration where CONFIG_SYSFS=3Dn and
-> CONFIG_MODULES=3Dy, this can result in a memory leak of module::version
-> when a module is unloaded.
+>A few notes/suggestions below....
 >
-> In general, I think this could benefit from more cleanup in the future.
-> Most of the code related to modinfo_attrs should be moved into
-> kernel/module/sysfs.c.
+>
+>>---
+>>  Documentation/admin-guide/index.rst           |   1 +
+>>  .../admin-guide/kallsyms-lineinfo.rst         |  72 +++
+>>  MAINTAINERS                                   |   6 +
+>>  include/linux/kallsyms.h                      |  32 +-
+>>  init/Kconfig                                  |  20 +
+>>  kernel/kallsyms.c                             |  61 +++
+>>  kernel/kallsyms_internal.h                    |  11 +
+>>  scripts/.gitignore                            |   1 +
+>>  scripts/Makefile                              |   3 +
+>>  scripts/gen_lineinfo.c                        | 510 ++++++++++++++++++
+>>  scripts/kallsyms.c                            |  16 +
+>>  scripts/link-vmlinux.sh                       |  70 ++-
+>>  12 files changed, 799 insertions(+), 4 deletions(-)
+>>  create mode 100644 Documentation/admin-guide/kallsyms-lineinfo.rst
+>>  create mode 100644 scripts/gen_lineinfo.c
+>
+>>diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+>>index aec2f06858afd..c94d8f332c5df 100644
+>>--- a/kernel/kallsyms.c
+>>+++ b/kernel/kallsyms.c
+>>@@ -467,6 +467,54 @@ static int append_buildid(char *buffer,   const char *modname,
+>>  #endif /* CONFIG_STACKTRACE_BUILD_ID */
+>>+#ifdef CONFIG_KALLSYMS_LINEINFO
+>>+bool kallsyms_lookup_lineinfo(unsigned long addr, unsigned long sym_start,
+>>+			      const char **file, unsigned int *line)
+>>+{
+>>+	unsigned long long raw_offset;
+>>+	unsigned int offset, low, high, mid, file_id;
+>>+
+>>+	if (!lineinfo_num_entries)
+>>+		return false;
+>
+>The "#ifdef CONFIG_KALLSYMS_LINEINFO" above prevents that this function
+>is compiled when the option is disabled.
+>
+>Instead, you *could* move the "CONFIG_KALLSYMS_LINEINFO" option into
+>the function with "IS_ENABLED()", like this...:
+>+	if (!IS_ENABLED(CONFIG_KALLSYMS_LINEINFO) || !lineinfo_num_entries)
+>+		return false;
+>
+>That way your code will always be compiled, and the code will be optimized
+>away by the compiler if the option is disabled. The huge benefit is, that
+>the compiler will do syntax-checking at every build, so you will see coding
+>bugs early.
+>
+>You could use the same semantic at other places in your patches, and of
+>course you then need to remove the #ifdef ...
 
-Following the change suggested by Sami, the modinfo_attrs definition,
-along with attr->free() and attr->setup(), remains in
-kernel/module/main.c. Should any of these components be relocated to
-kernel/module/sysfs.c?
+Ack, this makes sense. I'll do it in the v3 if it's needed.
 
-> Since module::version is now used from
-> print_modules(), which is part of the general module loader code, the
-> initialization of the variable should be independent of all sysfs logic.
-> Ideally, the sysfs code should only read module::version and no longer
-> manage it.
-
-After the above change, both the allocation and freeing of
-module::version now reside in kernel/module/main.c. Is this
-sufficient?
-
---=20
-Regards
-Yafang
+-- 
+Thanks,
+Sasha
