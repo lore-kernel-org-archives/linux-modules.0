@@ -1,115 +1,171 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1D92D8771;
-	Sun,  8 Mar 2026 08:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772959309; cv=none; b=EzGMBqBwNGXn8Jb8x6yfjiuiLE6jKTG7DWUZJXYrt+1QDEdcugVbMd5XAxsKbadbzL0O/1R/Eb9wnT+/Jwy1W+8Whstuq7BYpaBPJ3pX6d/XAV4pb6pCPg8dqc/oAtgaSjxS4q4GVaSMf6lNHViogO+7LAGhks3TCi4aAphCBQ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772959309; c=relaxed/simple;
-	bh=Knb4Xoodhrmve8INDkUo+7HYC1WNtVl3+yivDKX50KE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G2Bw508krTAs8x+fh2axkTH7k5W3fwI4N7/g3KhWxwXHNZXtizfLCZayRDGRmO1kGF35ENFEnrV7doyeaactPOJUAEOVE916R3wvpD+zcVgadZWm9Q7P5Ba6voPiKOtiUQLmkCahTx+xvH8w80UHaPXPqNwU9PAOoN10dY6M8KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=E1VMigsn; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=hMW0T7HX; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7A8826B777
+	for <linux-modules@vger.kernel.org>; Sun,  8 Mar 2026 14:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772979278; cv=pass; b=VzcEQ9M0lgPrdtJ6VGkq7hLBOpZkjI9xrbpgGWpYBrOwZbP+KQ+pjKmdfh0q/4tvhRmG9i2wxgI6Ltzm5M3+3xh3OHtxThd5TFJfdjkE3UbhPvzIpcN9NuytK2AglvSkAHVvSS7u44IMrltFHZq+OaTVMWNvtQA4ix1aCO/X+Mw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772979278; c=relaxed/simple;
+	bh=04Pdk0NM4P+LF80r4KSUSkjBilo6BsdXPtk2ljAJftg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OqxOrYnwy3+ahcatRXTfQG4E2802ZnW9Wzih3nI98IgQLygiDqUKCYRXFt4I+dni+3RXJUi1gilN0X325A05FEYh2U72EG+PvKili37wJID6yK3hf8CVSbwFxS/7EYVPLVhCnXxOQLI5ufXVtbhw3LbQy29vSC2a2GLT7bjsmhI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I3xbLG+C; arc=pass smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="E1VMigsn";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="hMW0T7HX"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772959299;
-	bh=Knb4Xoodhrmve8INDkUo+7HYC1WNtVl3+yivDKX50KE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=E1VMigsnA7wPsJ61Mb/AOBlmay9BItR3tg1sDmRazk+qZfsHTAPG3F+p7QwDxq9w7
-	 7ft/S/F/+sVu+XG2TEqALifwEQ5UhJ+E04mGUU+w6bJ3TRqPWiI2dHHfZ92QlNaWQo
-	 phgzOO8D7W/osdKd9WJ0iHe7pETRPK1CAoaCjF3Y/hxyz0Iv22h6iH+yPZHTiJQItI
-	 YBlcOAqH+JNI1RyIQJvLumGqXZWqDqeD/xyPgZCx3bD8QCTl+YP4+Z3QfK+A3hs3fW
-	 MTiIR1mxY9VKnYRcTxRZUL61yQBNA4Ii3ImV0s1wUAhccdfbUPtLSRR3u1C+KIyfMF
-	 FGEQFDU8Y+SRz+kfgHqjLkh1FPI04oy3a+A2vAlzgzV+ytE4nHgqcRieDyeocCR2iU
-	 pv0aZgh0KRB8GBthc75zN6yK9py1i0xIWBZ4m5yAfE+qrcuHipRg468oX+NYDswNW+
-	 zVRHpwhbHB2evT2Lzo2ItygDVSDFrT5FzIBOYAvtK8YIEme6MySQBldo/cMRT1nBn8
-	 5Yt71y3NF7nd4sQ2rz65x4fgW68aVxDVZ+30xmd/wTSBAPYdZHMACi9rJmAPgK/Gr6
-	 I6ybO198utsBGK0TdO33lY6HpssIldpRwYn2z88dJzDDVIqkd5BV/VhQbh0eI8IdVd
-	 KC+tjo21qPOxGUv4PN67VerA=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 05A141E7D0D; Sun,  8 Mar 2026 16:41:39 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1772959295;
-	bh=Knb4Xoodhrmve8INDkUo+7HYC1WNtVl3+yivDKX50KE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hMW0T7HX5XyRPd33+hfTJo9vma2kEYtb3C6wnPNkoou7NRD30oNk+3diCa6r3w15q
-	 CgbNF3XYf+5w1HaluQ/dom0QmQSiE5Z463bYoXluVk4xwC7+po5YjcbaiDlrjVnf5x
-	 4so5r4bl4X9EPgqKqGY4sFeps7N8CREH9w87MwrRqGUq8UjhKYH0HUOAnxZ5WiyH/2
-	 A3jKS3tYVrDgchSJX4+S1OX2wqfKYEwsVhEqQRYWQVK1xTWvM9sZp2k5Pxw2O3ZKrH
-	 sKLU0JGeQTxHm5sncYAMCDhzJWhbmga4o9iLZUfwwpdsOPVAk5UhaMfwK4Lw2rdhQz
-	 9W9lmW/wurh/oLtqPG2h82eb8jBqBHpbOJwqOX462TJe1lrykS1Uh2lM0zsDI6oHu5
-	 nyAtVenjmBjopCPgNSEC6qdUVXNlgggJz1g74eKDC+6dIuhXuQ4La6aQhAFRJewd2t
-	 Vb59gC4fJF2llMd8ciAlcOX0slPqio0CF/9wCHzIKrZdY5L/KZuVtUg0ih40RurLDA
-	 fnAfVmfG//PxBcjmJuWnDl5vQXwQrkOsaE5JILop6IOf8+snLXaV85bqU3obDtU6J3
-	 WqKqVjT6vTFfIZ+gnlGbHlHZX45j9CPT4oTTSXbU0fxWHTK6udAJL0nebSB44yJbFb
-	 cYTt+93mCGXaADDf7UTCAUZU=
-Received: from [IPV6:2001:8003:8824:9e00:6d16:7ef9:c827:387c] (unknown [IPv6:2001:8003:8824:9e00:6d16:7ef9:c827:387c])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id B3D0E1E7CFB;
-	Sun,  8 Mar 2026 16:41:35 +0800 (AWST)
-Message-ID: <61367c90-a2c0-4525-975a-fecbc9cb2bdf@davidgow.net>
-Date: Sun, 8 Mar 2026 16:41:32 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I3xbLG+C"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-64ca4dfdd88so10484611d50.0
+        for <linux-modules@vger.kernel.org>; Sun, 08 Mar 2026 07:14:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1772979276; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VgcVrkm08jHgU6ibDENkQlP8b/tYbQMed02azvvwEE/pF/KwfdwpCmvuV4CwX/mb/b
+         Wi9TTGPCE3wxcJcOFHli1KpskZ9qAE9H8FiL56S8ORcYgMxrArVXV4nBz5Xz87ckZqL0
+         js1jLbiahvXmAaGxUiAcfOSY1RY4eTJPucHmC/Hq6ErYJrwt8bYKoe8+bW57LIBslXAJ
+         HDHWSq9VUcevBZPAU7vnKAIzGHEYjLuoltA+PKdxZsCO3gbnqITzpGzSlWMnTBfXbEl7
+         45rssQnYV1UzQNxkzBmStrS5MnMLWCuovHhZz6X9afnaAaDveQXUGq872ZPWy+syWFav
+         0LSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
+        fh=HZjyULRY1HqmY5JyuTAXvtq1qqeCUxmzEndTqEjr010=;
+        b=LmaodM322f1stpErJXsm0szBcQfIzRnB8glav31MzZsGxWXSvaoF6V229a+0cAMk9k
+         KDK8LH+jVftCm4MjhQ6YyL2t4FQr/qy7QZFs78Zvqgk/Uh8bdxzu4KsiTb7TNjJok6IR
+         +ZPYBtGpq4tGpUkVWhKzNYjiyhGeupM1SNDsplpJaSK+UX2nQFictQdZRBOVJcaozk9E
+         slckvJwutkcglS+T2c7y6Cycu219ZzmJuLihEvjIkGp79tGHf5qjTcofJ6HD+k+HpFJ7
+         4WDt2g8+PfElMMl3nt5aTjOvueJiQmB56Pz8174CFfEDnOmn8t+rT/X/IoD9BH6wyCf/
+         /A1Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772979276; x=1773584076; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
+        b=I3xbLG+CXjySLYJirPlHT23vWyW4FnmxcSMHCTwgUb19bdspjB4wUg2gHbWuEvBKyF
+         x1lJ0QmrpbFCBGZXYdg6p00Bpg5K/Kcs2zCZZ7/vcDxQ95WrZe06vb/RIF3Hv4Jqnkp6
+         Ps3lC4WuWUK6miDc1m0kw9ZWa5lUXgqASshf73+hyIgL2TPdz/jCN46vobhdnDf/MVQD
+         PTNGsJM0dKQkpTjNAkwPhsoHtuqqFe6BwG1TrBmK06UQJBRyDPsTYTJdTtsbhtRIWqcH
+         /jqjQS1z5uLyt4pEPfOJYACscGCLLqezKFn4RYrZici5BLXXIzLLcYNnX9QG90ztw5T/
+         mYuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772979276; x=1773584076;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kxs5aKR0De8xRmljQCzHD/eSc7IuPRZZkVJfHr39BkQ=;
+        b=KblmqUoMLw6/T7aHz8/FMgKlooVhe+RkXaDK94VPcQtLYODnWmK1NLyFa+kBxtF8Yl
+         XHmyRx2UClpOThf6lKYzmwYgbBFsw1J1QRwar6cgYBp40hPx0iGYMhddNktmgnMTtJFt
+         o1nXPh+hiO9wjaOwdui47qeh6jEQyGysLB35Weht44RRZWcCwD3O23s/Qdr9M9sF3V14
+         Xw+QyOkTl6e07x2vwqZa85BjapGrYsMe4vqGqMDOzn2Zxp7HteAlbg2KtAPPm595+GUx
+         vBR3+lPQ2PByvCjlQ38lmNd2TvlWcSZqU+UZUXJQ/ZKG4fWM9CAKgCjiUwk++cksohK0
+         Q5fA==
+X-Forwarded-Encrypted: i=1; AJvYcCWiYvr1jPQ+fisnvsjBe/vDYbecKZDoec5dnpnK/r2ODCgrR944mKVqEH32ittF8NJY9IyV4kqrhOdP1yrw@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOj1Bhy3QYOivWb6e3gOEx9IfRsPDPzqHb2iPYm85K8fY4eTXK
+	Ng8dms01LDhzmRZq8yKA2JZhcNYEkesluI4bpc4burJfSvrJnxUcYAFzTNAs+tg7Myc1isVGhgY
+	Hka/+iTrkqJ+vbeMLt4Aj2ep8HCfSZZw=
+X-Gm-Gg: ATEYQzzIFL/JH7IHMztmcjRreK/7AihYO3eogS/4KacwoIyndn4ZK6hRXdovyFatxh4
+	KkY0sWUnL4QNjK5fhO53cU3VLQ8Blv8mORoOXYc2fb2PfVMl0miTpc311olGV6D19Qqlit5LZQc
+	/XL0Q3ySQmrggYxLI5qh/Fj+m95bdy9gejs3MJm+W/cG1pwfG8R/+0irdDfddu/IhzLUYvIk/l0
+	Xah2WSWVB4GIMIVpezBtYXn7yPxmw8biFEW6mp4u9L7ISHKQVPrkTzL0V2Q5ksvwpkU+opwsIya
+	UvNDylRDfM67tJoRimk=
+X-Received: by 2002:a05:690e:16d5:b0:64c:a1b9:ffa4 with SMTP id
+ 956f58d0204a3-64d140977d9mr5775796d50.4.1772979275970; Sun, 08 Mar 2026
+ 07:14:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-To: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
- Aaron Tomlin <atomlin@atomlin.com>, Chuck Lever <chuck.lever@oracle.com>,
- Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
- Tom Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>,
- Anna Schumaker <anna@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>,
- Linus Torvalds <torvalds@linux-foundation.org>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
-Content-Language: fr
-From: David Gow <david@davidgow.net>
-In-Reply-To: <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251231094004.37851-1-laoar.shao@gmail.com> <20260305234344.GA788042@google.com>
+ <87a72531-5730-443d-8b6f-07ae9b8df6dc@suse.com>
+In-Reply-To: <87a72531-5730-443d-8b6f-07ae9b8df6dc@suse.com>
+From: Yafang Shao <laoar.shao@gmail.com>
+Date: Sun, 8 Mar 2026 22:14:00 +0800
+X-Gm-Features: AaiRm52rpoHRNwzBvfZOulB54t5No0j0lp9MWDfDVDN973uAAFg-EC7G1VpgbZ8
+Message-ID: <CALOAHbAB=ubQ8X6gRY_04UYVvmGA1tY49o5w8GV7Nh==Y3nveQ@mail.gmail.com>
+Subject: Re: [PATCH v2] module: print version for external modules in print_modules()
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>, mcgrof@kernel.org, da.gomez@kernel.org, 
+	atomlin@atomlin.com, linux-modules@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 06/03/2026 à 10:07 PM, 'Christian Brauner' via KUnit Development a 
-écrit :
-> In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
-> we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
-> We left kthread_exit() around as an alias to do_exit(). Remove it
-> completely.
-> 
-> Reported-by: Christian Loehle <christian.loehle@arm.com>
-> Link: https://lore.kernel.org/1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
+On Fri, Mar 6, 2026 at 6:10=E2=80=AFPM Petr Pavlu <petr.pavlu@suse.com> wro=
+te:
+>
+> On 3/6/26 12:43 AM, Sami Tolvanen wrote:
+> > On Wed, Dec 31, 2025 at 05:40:04PM +0800, Yafang Shao wrote:
+> >> --- a/kernel/module/main.c
+> >> +++ b/kernel/module/main.c
+> >> @@ -3901,7 +3901,11 @@ void print_modules(void)
+> >>      list_for_each_entry_rcu(mod, &modules, list) {
+> >>              if (mod->state =3D=3D MODULE_STATE_UNFORMED)
+> >>                      continue;
+> >> -            pr_cont(" %s%s", mod->name, module_flags(mod, buf, true))=
+;
+> >> +            pr_cont(" %s", mod->name);
+> >> +            /* Only append version for out-of-tree modules */
+> >> +            if (mod->version && test_bit(TAINT_OOT_MODULE, &mod->tain=
+ts))
+> >> +                    pr_cont("-%s", mod->version);
+> >> +            pr_cont("%s", module_flags(mod, buf, true));
+> >
+> > On second thought, is using mod->version here safe? We release the
+> > memory for mod->version in:
+> >
+> >   free_module
+> >     -> mod_sysfs_teardown
+> >     -> module_remove_modinfo_attrs
+> >     -> attr->free =3D free_modinfo_version
+> >
+> > And this happens before the module is removed from the
+> > list. Couldn't there be a race condition where we read a non-NULL
+> > mod->version here, but the buffer is being concurrently released
+> > by another core that's unloading the module, resulting in a
+> > use-after-free in the pr_cont call?
+> >
+> > In order to do this safely, we should presumably drop the attr->free
+> > call from module_remove_modinfo_attrs and release the attributes
+> > only after the synchronize_rcu call in free_module (there's already
+> > free_modinfo we can use), so mod->version is valid for the entire
+> > time the module is on the list.
+>
+> This looks reasonable to me as a simple fix.
 
-The KUnit bits of this look fine, and it all works for me.
+I will send a fix for it first.
 
-(That being said, I agree that do_exit() isn't as nice a name.)
+> I also noticed that
+> setup_modinfo() with its attr->setup() calls is invoked unconditionally
+> in kernel/module/main.c, while module_remove_modinfo_attrs() with
+> attr->free() is present in kernel/module/sysfs.c, which is conditional
+> on CONFIG_SYSFS. In the unlikely configuration where CONFIG_SYSFS=3Dn and
+> CONFIG_MODULES=3Dy, this can result in a memory leak of module::version
+> when a module is unloaded.
+>
+> In general, I think this could benefit from more cleanup in the future.
+> Most of the code related to modinfo_attrs should be moved into
+> kernel/module/sysfs.c.
 
-Acked-by: David Gow <david@davidgow.net>
-Tested-by: David Gow <david@davidgow.net>
+Following the change suggested by Sami, the modinfo_attrs definition,
+along with attr->free() and attr->setup(), remains in
+kernel/module/main.c. Should any of these components be relocated to
+kernel/module/sysfs.c?
 
-Cheers,
--- David
+> Since module::version is now used from
+> print_modules(), which is part of the general module loader code, the
+> initialization of the variable should be independent of all sysfs logic.
+> Ideally, the sysfs code should only read module::version and no longer
+> manage it.
+
+After the above change, both the allocation and freeing of
+module::version now reside in kernel/module/main.c. Is this
+sufficient?
+
+--=20
+Regards
+Yafang
