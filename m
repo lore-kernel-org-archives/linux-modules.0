@@ -1,119 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22213368B9;
-	Mon,  9 Mar 2026 09:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773049023; cv=none; b=b8o3g+53DVKYLFhZ8/c4S3uzBFq7Mmnt/i/LqrbLdP4q7ZdbmmobpcvuJrVJ2HkBS+yZYPJoIy6ClJYpSQ7jf0wTimTb013cRI6K0j7t8S53ojId4PRusKZvWQzcnv8aJgQQ+s8wGY+wZN9lihpNq+SzlSGynq140pb0bD0xijQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773049023; c=relaxed/simple;
-	bh=hfPMNYiI0Us/JfLHm+ZntEVlSNqxT57YtFaci0q7bNA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cMrJmc5my6zh2xbsRFYqsXm5bSXelfq7MKHFI2iXi+9mRAG0E0TkFfqNICPMVHvB2nICXg+KRjNSWuXzNqZTayM6QR2OZer97NmgrEs4K12RPrSszN264vh1KZEyII+ZWbmAlnkGMargIoKK5mszvQ8TROImkC4k40lS54EN/yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jpQNRM7s; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550253939BE
+	for <linux-modules@vger.kernel.org>; Mon,  9 Mar 2026 11:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773054946; cv=pass; b=djJGWEcppQa4S+NrNY0HbM6hGOkLb2LdU+/+ervRkk5R3TMJDk2ie4Eb4F3y3gNGc2W62k8Ma3AcXNjLtNDeqDyDIEFU1Cs+PAmh2Zg4CCTBEzioQ3E6EFAmGqq3t5vMGYanebnkwrp+bgInXwaSIaUMAYfZzgyQw9OZhCILPOU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773054946; c=relaxed/simple;
+	bh=bwnTPQewhTZfBV+DUD3SsbtLeKJPcVZC52nT9OgQfwk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J+nDlnBDYGQsmtNxy3VER7w4PTX8umR72b91nUmmiq3j1eAWai56nHtqwy9XY2r3g03F5hT2bKd3X7SkhXsd+P5MGbDH43+m5pYW4OayPedyK8v+ZbbQz/Yw1KWwJkbZuvSraMT4ItUldWkectOmVpewL+xRkHKpMmacAHfoa88=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3YPkrhXS; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jpQNRM7s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D427C4CEF7;
-	Mon,  9 Mar 2026 09:36:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773049022;
-	bh=hfPMNYiI0Us/JfLHm+ZntEVlSNqxT57YtFaci0q7bNA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jpQNRM7sGBhSX5hthsHBYeMFJmze9uxAMn31l1oMxMFAKQjdsg/pNF2zJbSVHQn1j
-	 vyQUlVy9Mm6LeU7hdFn2DsK7cGaUUr52bONPlYECFFPBjT4Sjkg/kGDtwGB6G4rhlC
-	 KWkAvxmwTJXAzeGskhx05BwsxLPsufLGXlXKNhQzgjGVVhDa5AEFa7Fz90/35kcRLp
-	 Zi2XEf95RJySyl6WHerOFLSOSgKXh3IceA6FvLS0cc1zO9fz3BxK7ZZMxcAOQIBroy
-	 wH9rUYWq56/XtkrEvy4Hng0Jj4rDyTFY3h+NDBkCaVe/45tiDkKWKuKZu7UNohu+Xb
-	 /kXhfGNw2xRTg==
-Date: Mon, 9 Mar 2026 10:36:51 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Christoph Hellwig <hch@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-nfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
-	Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [PATCH] kthread: remove kthread_exit()
-Message-ID: <20260309-aufrechnung-flugzeit-f8e22786a8b2@brauner>
-References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
- <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
- <aaroReSCj1qXUeQb@infradead.org>
- <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3YPkrhXS"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-509062d829dso733711cf.1
+        for <linux-modules@vger.kernel.org>; Mon, 09 Mar 2026 04:15:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1773054944; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lzdxtmErttDXJX5mqUZiI3YaOsIfsJTEVTshbu0S5LTwcrf4SAfzCL+dTt0lx2o/ck
+         qm6wY41ZhzYQv2sMhag2H+V7A/dQVMzjTM0bpgpyXv2cUqSFVChlUtLE3J/6U+JBN6i8
+         mSk8tcZw9YB/lbOmYd1syZPjq1yu6AEWvQYlppF18K0johVszGIJlYgxwXOJIZhKp2U0
+         I3oWubGOdRdn2j9iEzdLKZYbjxwhJF85JkFEIZrTg732Vm1J9zMvMB5g3XmQdMbDgLUo
+         L8FD/PqqSmFobAZDefv+DICMLselO/slpaIUMZuasPe6B2BS+u2Aw+j5JzTTTffhGwE3
+         V4ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bwnTPQewhTZfBV+DUD3SsbtLeKJPcVZC52nT9OgQfwk=;
+        fh=RLYuLSeDiSleqGH9oeVeE6jrqoCVf02L27Owd5p39TU=;
+        b=LsvQFKaT72nSZMBxDE1q0w4T47ivbuou82az8+dn4R+8mUTbOxivjAj8t751Dv5/vj
+         y/s/xH47GYNpIhcrUm07hRvZDaMGb6YHFMU5zEcQLIBs9Bi4R3dnkxlNyc5+Y+sjb4zG
+         DlQBnhsobLDp426dsz6AMhHHe4wJJd5EA6q/NfvxSbsJw12Au9TG2HYtzUwVOFIewnCs
+         Rmmmc8hIpZF9L+a0KRI6hbcPzoLUPa8kpcyHMplwGv1YK8INQRlMfxFK9JJjVglLjy4e
+         c8KRgumcb+kBuWmueULu/D7jTdVyXQYGvviAFrAhMjpWNVH/VIaL3q2m6jasoBQsYJkR
+         wCcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773054944; x=1773659744; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bwnTPQewhTZfBV+DUD3SsbtLeKJPcVZC52nT9OgQfwk=;
+        b=3YPkrhXSm3GaAy9SxVLzdt94rUHSB+eXLPeosRqRxoAI0ep5W6GAZGf/jCY3OQDu+0
+         hYlxZV5tvhH7VVEupO4NO1fNUXfhrjtvN7PRNkHGpCZ6AvnLItNROnPtj2Zz0uoPM0D7
+         L3jVb7o+GDp1O6Bfa66iiJey97f9aSvu5nEAgTrKA9XKwSU3WdKV7ytrJjNjx8oeL2Da
+         pMJbk6J8JAkE1YvwnJC7kTz7yRBcphUudl6qTAm3cTt4d+07QYw/Hq9iYob1sYVmk9n/
+         oSKL0UhjCYNTs4l/+7m+Wfwh8e+y2ytopKZ2TCBtCYf7grNtYC9ehkLq0O8CRfeM4kaa
+         kZZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773054944; x=1773659744;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bwnTPQewhTZfBV+DUD3SsbtLeKJPcVZC52nT9OgQfwk=;
+        b=eE4+qTBpVd3bt3bGLv4QBvttkFThc09+68gHC2oOaC19+lmTzlFXftJce1H46AlbLe
+         L0c7mB3IU32KROisCMhA84zs9JZws6Px9PZhRVqBjY2l02lhGVdPV0c/bMueLj4YINz6
+         DY2YFqsKeV3grEELBd6EEgENvc95DsLSWxiFdjngFzXWXmPktXtJCg2M4Ju8VoFYYa3E
+         z/cUyapn1BKmpXHHnEN3pDz9wF7TUAHsIOjUssPlUARbEi6VAKTDxZ+oe0rfcUhlf9Yw
+         CzAamlwehHdRhGN8UxANiHyVSA7CL5ByIoUrdRf7WkvxRCiPmfHwx4Walu7lwc9miEkK
+         vNKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWwekjjxTR+B+Av7LnKkslY8XLjjbC2c9pJeBXmeUoQ5wzwIT3mOQaFMqZO2UTbqZJJ3BOeZ5pPLj+Rm0RR@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4ap1osP8Cz8TwsCk6gvyRjYQusKPS4F2LCtdfAvVtruGk+3ZR
+	LAS+FrU4+H9/L3PVtvk77TXyqX3hyPutQyFMCy6UyUrgdxv+mSB0tTVqY6tBoT9qeDHXRwq4+3h
+	IquqIK76i7fRJxBvQh9nHdINmFrBemlnQ71aoq4sx
+X-Gm-Gg: ATEYQzwgUMMvjMcDqec0QMYpCJpCSw7IrPUjRk+mRwa0f1ZNpmF13Q08zF+iN4vUvfr
+	KoA+/xkwi0ECuQJ3b++CVJ1PFP1E/ph0jweNKnAbqJCEZySbPU+JMXewIVg4pGDVKmq543ZAVrB
+	izekK5e/uoBhfgN53GptDMOR9xlfNl4FlNhCGbp8jHIBISCJ0TiRf4h4ERNLbIznzvTc5XzJjEq
+	NhEASv84neATf6/Gp0xFNWKTEKR+nRo3xnWKTUvUQx3am93AHmzj7PL7vQtAkMJcOpz18s1qXms
+	J/zDUxOrccJdAB1KSUYshAlR7i0Z5XQfohXuTHn8Qw==
+X-Received: by 2002:a05:622a:309:b0:4ed:8103:8c37 with SMTP id
+ d75a77b69052e-50900fa7fa4mr22518531cf.12.1773054943674; Mon, 09 Mar 2026
+ 04:15:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+References: <20260307090010.20828-1-linux@opensource.nslick.com>
+ <20260307090010.20828-2-linux@opensource.nslick.com> <20260307093006.GU606826@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260307093006.GU606826@noisy.programming.kicks-ass.net>
+From: =?UTF-8?Q?Matthias_M=C3=A4nnich?= <maennich@google.com>
+Date: Mon, 9 Mar 2026 11:15:27 +0000
+X-Gm-Features: AaiRm537s3HnYYKX-9TgG4VRgrwS-5joKWrN8ricsEVy1qLcUU_sUcpVi_zjyDg
+Message-ID: <CAJFNNnoweqzaTn6GVb2L7dpvnby7Zi0je25hVbQHXS_kX2O08g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] module: expose imported namespaces via sysfs
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Nicholas Sielicki <linux@opensource.nslick.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-modules@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 06, 2026 at 10:27:26AM -0800, Linus Torvalds wrote:
-> On Fri, 6 Mar 2026 at 06:44, Christoph Hellwig <hch@infradead.org> wrote:
+On Sat, Mar 7, 2026 at 9:30=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> On Sat, Mar 07, 2026 at 03:00:09AM -0600, Nicholas Sielicki wrote:
+> > Previously, the only way for userspace to inspect the symbol
+> > namespaces a module imports is to locate the .ko on disk and invoke
+> > modinfo(8) to decompress/parse the metadata. The kernel validated
+> > namespaces at load time, but it was otherwise discarded.
 > >
-> > More a comment on the previous patch, but I think exporting do_exit
-> > which can work on any task is a really bad idea.
-> 
-> What is the advantage of a module only being able to do
-> kthread_exit(), and not able to do a regular do_exit()?
-> 
-> I think the only real advantage of having a "kthread_exit()" is that
-> it's a nicer name.
-> 
-> Because if that's the main issue, then I agree that "do_exit()" is
-> really not a great name, and it matches a very traditional "this is an
-> internal function" naming convention, and not typically a "this is
-> what random modules should use".
-> 
-> So kthread_exit() is a much better name, but it basically *has* to act
-> exactly like do_exit(), and adding a limitation to only work on
-> kthreads doesn't actually seem like an improvement.
-> 
-> Why make a function that is intentionally limited with no real
-> technical upside? It's not like there's any real reason why a module
-> couldn't call exit - we may not have exported it before, but we do
-> have code that looks like it *could* be a module that calls do_exit()
-> today.
-> 
-> For example, I'm looking at kernel/vhost_task.c, and the only users
-> are things that *are* modules, and it's not hugely obvious that
-> there's a big advantage to saying "that task handling has to be
-> built-in for those modules".
-> 
-> So my reaction is that "no, do_exit() is not a great name, but there's
-> no real technical upside to havign a separate kthread_exit()"
-> function.
-> 
-> If it's just about naming, maybe we could just unify it all and call
-> it "task_exit()" or something?
+> > Add /sys/module/*/import_ns to expose imported namespaces for
+> > currently loaded modules. The file contains one namespace per line and
+> > only exists for modules that import at least one namespace.
+>
+> What I'm missing here is why users would care about this?
 
-I have that as a follow-up series... But I didn't want to muddle the two
-patches as this one was meant as a clean-up for the kthread_exit()
-leftover. Now that you've applied the fixup for the BTF thing directly I
-can send both at the same time. Give me a few minutes.
+FWIW, we use a symbol namespace in Android (GKI) [1] for symbols that
+should not be used by all drivers (e.g. direct file system access).
+This change would make it much easier to surface at runtime, which
+drivers are using which namespace and thus have access to symbols they
+should not.
 
-And no, we should definitely not keep kthread_exit() as a separate thing
-around. That just seems weird and clearly that has led to bugs before.
+Cheers,
+Matthias
 
-The vhost example is good for another reason: the line between a task
-acting as a proper kthread and something that is aking to a kthread is
-very very blurry by now. Let's ignore usermodehelpers for a minute
-(ugh). There's io workers or more generalized - like vhost - user
-workers which are hybrid workers that aren't clearly completely
-userspace conceptually but also aren't clearly kthreads so I'd not want
-to have special-cases for any of them. task_exit() just should to the
-right thing no matter what exactly exits. We also have way to many
-cleanup hooks that need to be called depending on what precisely exists
-to split this over different helpers.
+[1] https://android.googlesource.com/kernel/common/+/a38b207d4f4e02041f72a8=
+168bb24d1617099988
