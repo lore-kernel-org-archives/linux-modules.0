@@ -1,67 +1,68 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881C3392809
-	for <linux-modules@vger.kernel.org>; Mon,  9 Mar 2026 16:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAEE3D301A
+	for <linux-modules@vger.kernel.org>; Mon,  9 Mar 2026 17:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773074268; cv=none; b=mycUW8LCfWIO15SXNdUteST6XNY8dOvDX5KiurL/0FURN1qSieUxGD+HFEebmOzlcVbcLScB7jece74EDOcqP3j0X25MG5qIUInsxz/XgZvTbA01NeU7OOPPkqkhWPE55iHJvOjrlnVgsi+DcgRnSlKzTJQSoXbHSdp+eAFR3Is=
+	t=1773077298; cv=none; b=DvoPyT0nuGxEipEnbZNC2jYSpoQuV3roSGx456606+BuAYxZbaXn0PON+/Uq27ksPyPSOUfjAl1h75oMoz3C/ECmXScuumA1RmW+RACDPkRaGMFLQq214iEUbjgul4gSi028Ups6DkB2mom6nIvCEIMl+aCfHYn0Pmj2M5Ocb1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773074268; c=relaxed/simple;
-	bh=zAR72wDXdxq5C9PjPsyeD4QQxyEK/1hXtEl2Xpss9d0=;
+	s=arc-20240116; t=1773077298; c=relaxed/simple;
+	bh=LcKBSGkUJ4jOZjfNY8MJfZV+UOABBnNyslHE4iTDcoI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P1/mq0zq/MUpedlw/+Xcb4sJiXZD6FNCu7RXHrxDt/HwqNcoHEhhNXqmJd0ZiCNjsVgzRAhpwGjdHLhLj/6H0XT0F2+hlSWiGe5j44/4/gQ2k/KEImSY0rcq5GpwBxOgyfFPrxn2sUdSfR3ucJNnZyRibyvrk95fOFRLjYoKuJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=OUhtxiZS; arc=none smtp.client-ip=209.85.218.48
+	 To:Cc:Content-Type; b=WYSx21MqMuO5vCdFqyfJTuSLVQYsAWTgJnHhEVSDYHmlIer9OMzl/avk/qYa7sWSnENUD4wkvzdyYrxXTTjwynoKkKYgw2TndT6tRw1/shxilm1zVWhLytBoWA38wL4H3fjfP4PcKQQmCxK2swrAKQQgMOl6rxaBdsn4da8s0Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=GLxT0H3x; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OUhtxiZS"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b96dc65b886so268308066b.0
-        for <linux-modules@vger.kernel.org>; Mon, 09 Mar 2026 09:37:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="GLxT0H3x"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6615c766e60so6820309a12.3
+        for <linux-modules@vger.kernel.org>; Mon, 09 Mar 2026 10:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1773074265; x=1773679065; darn=vger.kernel.org;
+        d=linux-foundation.org; s=google; t=1773077295; x=1773682095; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=OUhtxiZSd3fD8FxP+CuE4U0ccCfq7SOwWFEhdCB+UEgRzQUaEGzJPNaQDR5lsgMKsL
-         Uuuv/UpvTmmFdKL+0ntv/JO9wNRv2fid5tS9ClAs1jOEPzbeurnUF9aWo36gYY1Jjaue
-         28AwxMzUEi5C5fChkIRODMwKx4acJeAruEVpU=
+        bh=y/0fgmHhC0VOep6ZWbqzX4YfecogO4RJ08oTSaCn8/k=;
+        b=GLxT0H3xHna/5poGFHNUoY7YZB0pFj59+5ancojwDd8hEY6CBDtRK36DxbMXMpHPZI
+         WC4l2UN2/ObYwq2jno0zBVygFhEh0AXN4QLCChqfdKx+7cHHAdKNcSST9V0kT/nt/8LI
+         Ra8iWKajawUQJYkz5zpkete6udhaKp3m5eElk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773074265; x=1773679065;
+        d=1e100.net; s=20230601; t=1773077295; x=1773682095;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5aGclf2D5Ad+FZRYNo1Igm1i3XSKWX/TJgjzbw+i9o4=;
-        b=jKaFm9CivUXkEzAwmgOivRLIMJlXdmi319d5/TvQrgneXKZRk9Z3OEfAiE4ilK5cnn
-         qq9YDIYH+bhxImJEqWIHu2SpSKqPlFJH5y+k2ROKA10x00oim2tdDdMSv3690CxFPnqd
-         o/RCTGez7bBrO+7ft9FIY5ciUThasVNLjwPesyvTowLzfTcFp8hb1XsPye30Bu3CnDbW
-         jnU3eFphvkJ+/hcuBAJ2iJzf5NjzRS2No085mc5lP/EWvTaRogMKQ3vpuaoJZt/cJ0Er
-         SixjThsKr1tdxxAYiCdZUUA82Q34UTHQvoe+eyHosFnv1sinERhSQPMySQ/+FG6K4PEr
-         ntJA==
-X-Forwarded-Encrypted: i=1; AJvYcCWTgLwZBT5AM5qgUs5HqoIW4XWw8MpJljcWkawKpMaHMzbeCl3VuYJUvK02YEF8OFEMY/2A/wsQKb5lTi/R@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUSZkUe8o1z7R8adf6DUG8qMCa9w2/fVSUMDQy520CwDDZOTj4
-	D2ahyue7LaLG3CKxjZR3zdOziZrl/FgTkZ+LTgMNYmRDhzPL0U6uNoZLXmIEODkR8yhx/coJR/T
-	GRBUWbbU=
-X-Gm-Gg: ATEYQzz1I2LMpH0Lt06B5tbzDfgdcPD0+eDiI6Z/tBMspmDg+TNa+za4z3aLNn+W1RU
-	XT+EQ7G0lxW2x4i7c2k2Nf66nFrxkE09s0QlBsnJag+7SLey5Gyn+AnnL1LJ5OU7qQk9AkFLvN9
-	IIe3IfZrgNKfASQnfhcM1o0MFnu3JcfAVDq7ODNPmnKx9VTohGNKDsFG2CpRPv4CIQ7fjUigLqy
-	z0HKk1NpjkK9sel83XZ9U+DO9hifcMIy4yAuPkVMvoOwZzAsaJz3UEV5h8xG8JpeMOxVrXCkU3q
-	2bXdtLEZbBw8sycsRwx4fDzj2PfSVOTk7O9lzdlO7zQ6pk+f5eetWF6ng6t2He/aSFJzD+wN6Aj
-	GT0E39VRWcx3YimKCcRzQGcqvfPOnz5CZkr1JvPyTZAK+JBf3VhgKU1MJjrqvOnFvjSf+jUspr3
-	HDmL9h6nra9fpa+ukuVeFUpTxI4qKBZT/kJlogwINGpJQmbQqyFls0/lCNzvfhVX0PoeiF9pSt
-X-Received: by 2002:a17:907:9694:b0:b8f:de69:b597 with SMTP id a640c23a62f3a-b97118b83e1mr19060866b.7.1773074264697;
-        Mon, 09 Mar 2026 09:37:44 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b942f15d56fsm401522466b.56.2026.03.09.09.37.43
+        bh=y/0fgmHhC0VOep6ZWbqzX4YfecogO4RJ08oTSaCn8/k=;
+        b=AjmrJ4KpQzKRnIkq2oyh5BikvqNUh9SH4tG4TxZDrKJFCR4tp0ia3wA43j7oJURPaa
+         VBhDpopyGqIsjdryHgVWBJeMXOKz/ePFEwc9Yw76RC9RCaihsBGI6xIKSE1YsZDg2wKu
+         1TxtrN805RclekIhsNb/kQ112ms42p6NMxgcv3RluxQG5yYZXc9sPPW3ckebjHMWBabz
+         dYCCAPvDt3+Y35xvbFTmuNlY45CqIISRh71kVBSLuxUFzwUcj3OMIyMEmUJW4oy+eeCT
+         nra7oy+QUh7wEANI82YhlEfZ33pxaUXHQjEOna4OcU4kTvJRIs4AKUMS/zgyFtDMyzdf
+         KXkA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/RWEp0Zui7WpY1jQHosgyqfbImePSxHw7BjlJaCccBIO1DUvF76QuDNaVr0iLd7K2dWwHrWaZfa6PIkec@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkA0VMrk5SFnuuXdMoluaQMsJTjyW+gIH5QIpTrVow+tMab4QC
+	yrI4D19ZgruwZDvKBliKiqjZJi7rjEdi+czecqTFIho9rC8wzBfe7+KmjMzCLjv91QIbxa4P7td
+	Ruxws+oM=
+X-Gm-Gg: ATEYQzx5UmVfX/SBbPgIdlQBLtwbkdNbHtmGEUVqembXuPvr24O2fcf9YVAN62Zmy7+
+	UW0UJeEIJc8a9mmJJ9juSJ8TNNTD8arjsc8c2T9Oh2hcmOc1Mbj+u4pX4h0EAd4p3qJvnfBkTqv
+	SKJ1C7SItUjdgdusXbuFpqMyU71YiI8Jp58kR27ShmmxRvfrTaPXWP+tRTLRZaspTMtDiVT+6Nj
+	1H+if0mJiy0SEuCXw4bKDr+7+ahRYbGjGB+l79oWPCk6J27u0WErJcNWaSsxoGBZSD7hJ1q11HW
+	/hDaOzlesu+LixHJsG46/lGY3qqAdO4IaGgkQ+eJkgzpsLS5znKKeIr6NunIJu2tEmfm5f9boLn
+	X5Bkbm0HlauxEAOzd1bPg5sgG/hrsZM+0PDteDqBkT4D+yDe6NWsn+PXeYKuYYw7VaAu0NCrEtU
+	XfT5TAi78frrogK//9vy84240nr7Jsxjuz83OWkER47/AC+pDevlvymv76MXWxiHHgZFcgfkldb
+	on8Xkur5pA=
+X-Received: by 2002:a05:6402:2683:b0:65f:730d:8010 with SMTP id 4fb4d7f45d1cf-6619d45a03dmr6770584a12.3.1773077295226;
+        Mon, 09 Mar 2026 10:28:15 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6629f7cbc78sm690286a12.17.2026.03.09.10.28.10
         for <linux-modules@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Mar 2026 09:37:43 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b9423d62cbbso455310666b.1
-        for <linux-modules@vger.kernel.org>; Mon, 09 Mar 2026 09:37:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXa6RTr49nHPQZRXQV50QW+M5ww4bCvsEw7aQ0ioszI3Vdwul5S2S4kpcKX7dZeNmVB12vSKuSRP0Uap7IX@vger.kernel.org
-X-Received: by 2002:a17:907:3e10:b0:b96:e1de:db04 with SMTP id
- a640c23a62f3a-b9711a1fe33mr14904266b.18.1773074262570; Mon, 09 Mar 2026
- 09:37:42 -0700 (PDT)
+        Mon, 09 Mar 2026 10:28:10 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-662b933f8d1so384786a12.2
+        for <linux-modules@vger.kernel.org>; Mon, 09 Mar 2026 10:28:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUsg54e/fYmaahbQMivsahR4IUY2qx3PN9aVXuhGGbShilRUq94qWHclO2Z+ek+beH7WKyCHrOzMdDWUBOw@vger.kernel.org
+X-Received: by 2002:a05:6402:50d4:b0:65c:23f0:a80d with SMTP id
+ 4fb4d7f45d1cf-6619d4e3738mr5814793a12.19.1773077289768; Mon, 09 Mar 2026
+ 10:28:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -70,13 +71,13 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com> <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
  <aaroReSCj1qXUeQb@infradead.org> <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
- <aa7qson15uJpL-BL@infradead.org>
-In-Reply-To: <aa7qson15uJpL-BL@infradead.org>
+ <aa7qson15uJpL-BL@infradead.org> <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
 From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 9 Mar 2026 09:37:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
-X-Gm-Features: AaiRm52k8FmvIAxaWFSwelL44z7-IyhgZowK3grBWDh2zbSjeLnGfYwalrLVlLs
-Message-ID: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
+Date: Mon, 9 Mar 2026 10:27:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi-QpnBHMH4Oa6tsYVhp+Uv+hKU_oedAUnt4icMqwPtzQ@mail.gmail.com>
+X-Gm-Features: AaiRm50OcoxR7YXKVzqClnrYq6PJcpS66d_jgF8-UVsQY5IDs7VWWvYFcU4JSa0
+Message-ID: <CAHk-=wi-QpnBHMH4Oa6tsYVhp+Uv+hKU_oedAUnt4icMqwPtzQ@mail.gmail.com>
 Subject: Re: [PATCH] kthread: remove kthread_exit()
 To: Christoph Hellwig <hch@infradead.org>
 Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org, 
@@ -95,75 +96,71 @@ Cc: Christian Brauner <brauner@kernel.org>, linux-kernel@vger.kernel.org,
 	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
 	Rae Moar <raemoar63@gmail.com>, Christian Loehle <christian.loehle@arm.com>
+Content-Type: multipart/mixed; boundary="0000000000000491e3064c9abac4"
+
+--0000000000000491e3064c9abac4
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, 9 Mar 2026 at 09:37, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Because it can't f&*^ up the state of random tasks.
+> Now, there are real exports in this area that are actually strange and
+> should be removed: for some historical reason we export 'free_task()'
+> which makes no sense to me at all (but probably did at some point).
+>
+> Now *that* is a strange export that can mess up another task in major ways.
+>
+> [ Ok, I was intrigued and I went and dug into history: we used to do
+> it in the oprofile driver many many moons ago. ]
 
-Christoph, you make no sense.
+It looks like it should not only no longer be exported, it should
+actually be static to kernel/fork.c. As far as I can tell, that
+historic oprofile use was the only reason ever this was exposed in any
+way.
 
-"do_exit()" cannot mess up random tasks. It can only exit the
-*current* task. The task that is running right now in that module.
+IOW, a patch like the attached is probably a good idea.
 
-And exiting a task is about the least effed up you can do to a task
-when you are in kernel mode.
+Somebody should probably remind me next merge window (I'm not going to
+make 7.0 bigger, and I find examples of people using
+kretprobe/free_task, which *should* still work just fine with a static
+function, but for all I know if the compiler inlines things it will
+cause issues).
 
-Compared to everything else you can do by mistake - like just
-corrupting task state randomly - it's a very benign operation, *and*
-it is obvious both in source code and in behavior. It's not like it is
-some subtle operation.
+Or just add this patch to one of the trees scheduled for next merge
+window. I'm not currently carrying a linux-next branch (I actively
+deleted it because it caused problems due to messing up other peoples
+linux-next branches, so if I ever introduce one I will have to come up
+with a better name anyway)
 
-I'd be *much* more worried about actual subtle bugs, not somebody
-explicitly calling exit.
+                  Linus
 
-So what is the actual problem? No more random rants. Explain yourself
-without making wild handwaving gestures.
+--0000000000000491e3064c9abac4
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mmjgdgcc0>
+X-Attachment-Id: f_mmjgdgcc0
 
-Now, there are real exports in this area that are actually strange and
-should be removed: for some historical reason we export 'free_task()'
-which makes no sense to me at all (but probably did at some point).
-
-Now *that* is a strange export that can mess up another task in major ways.
-
-[ Ok, I was intrigued and I went and dug into history: we used to do
-it in the oprofile driver many many moons ago. ]
-
-And since I looked at the history of this all due to that odd export,
-that also made it clear that historically we used to export
-complete_and_exit(), which was this beauty:
-
-    NORET_TYPE void complete_and_exit(struct completion *comp, long code)
-    {
-        if (comp)
-                complete(comp);
-
-        do_exit(code);
-    }
-
-so you could always do "do_exit()" by just doing
-"complete_and_exit(NULL, code)".
-
-And yes, that function was exported since at least 2003 (it was
-exported even before that, under the name 'up_and_exit()', and that's
-the point where I couldn't be bothered any more because it predates
-even the old BK history).
-
-Yes, it was indeed renamed to kthread_complete_and_exit() back in
-2021, but that wasn't due to any fundamental "it has to work only on
-kthreads". It was simply because nothing but kthreads used it - and
-because that was also the time when kthread_exit() started doing
-*extra* things over and beyond just the regular do_exit().
-
-So it was a practical thing brought on by kthread changes, not some
-kind of "exit is evil" thing.
-
-And that "ktrhead_exit() does extra things" was the actual bug that
-needed fixing and caused nasty memory corruption due to subtle lack of
-cleanup when it was bypassed.
-
-End result: we've never historically felt that exit() was somehow bad,
-and when we limited it to kthreads and made it special, it caused
-actual bugs.
-
-            Linus
+IGluY2x1ZGUvbGludXgvc2NoZWQvdGFzay5oIHwgMiAtLQoga2VybmVsL2ZvcmsuYyAgICAgICAg
+ICAgICAgfCAzICstLQogMiBmaWxlcyBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNCBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3NjaGVkL3Rhc2suaCBiL2luY2x1ZGUv
+bGludXgvc2NoZWQvdGFzay5oCmluZGV4IDQxZWQ4ODRjZmZjOS4uMGVkYjM2MTA3YWM1IDEwMDY0
+NAotLS0gYS9pbmNsdWRlL2xpbnV4L3NjaGVkL3Rhc2suaAorKysgYi9pbmNsdWRlL2xpbnV4L3Nj
+aGVkL3Rhc2suaApAQCAtMTA2LDggKzEwNiw2IEBAIGV4dGVybiBwaWRfdCB1c2VyX21vZGVfdGhy
+ZWFkKGludCAoKmZuKSh2b2lkICopLCB2b2lkICphcmcsIHVuc2lnbmVkIGxvbmcgZmxhZ3MpCiBl
+eHRlcm4gbG9uZyBrZXJuZWxfd2FpdDQocGlkX3QsIGludCBfX3VzZXIgKiwgaW50LCBzdHJ1Y3Qg
+cnVzYWdlICopOwogaW50IGtlcm5lbF93YWl0KHBpZF90IHBpZCwgaW50ICpzdGF0KTsKIAotZXh0
+ZXJuIHZvaWQgZnJlZV90YXNrKHN0cnVjdCB0YXNrX3N0cnVjdCAqdHNrKTsKLQogLyogc2NoZWRf
+ZXhlYyBpcyBjYWxsZWQgYnkgcHJvY2Vzc2VzIHBlcmZvcm1pbmcgYW4gZXhlYyAqLwogZXh0ZXJu
+IHZvaWQgc2NoZWRfZXhlYyh2b2lkKTsKIApkaWZmIC0tZ2l0IGEva2VybmVsL2ZvcmsuYyBiL2tl
+cm5lbC9mb3JrLmMKaW5kZXggNjUxMTNhMzA0NTE4Li4zODVkODA0MzJhODkgMTAwNjQ0Ci0tLSBh
+L2tlcm5lbC9mb3JrLmMKKysrIGIva2VybmVsL2ZvcmsuYwpAQCAtNTI2LDcgKzUyNiw3IEBAIHZv
+aWQgcHV0X3Rhc2tfc3RhY2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB9CiAjZW5kaWYKIAot
+dm9pZCBmcmVlX3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCitzdGF0aWMgdm9pZCBmcmVl
+X3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiB7CiAjaWZkZWYgQ09ORklHX1NFQ0NPTVAK
+IAlXQVJOX09OX09OQ0UodHNrLT5zZWNjb21wLmZpbHRlcik7CkBAIC01NTUsNyArNTU1LDYgQEAg
+dm9pZCBmcmVlX3Rhc2soc3RydWN0IHRhc2tfc3RydWN0ICp0c2spCiAJYnBmX3Rhc2tfc3RvcmFn
+ZV9mcmVlKHRzayk7CiAJZnJlZV90YXNrX3N0cnVjdCh0c2spOwogfQotRVhQT1JUX1NZTUJPTChm
+cmVlX3Rhc2spOwogCiB2b2lkIGR1cF9tbV9leGVfZmlsZShzdHJ1Y3QgbW1fc3RydWN0ICptbSwg
+c3RydWN0IG1tX3N0cnVjdCAqb2xkbW0pCiB7Cg==
+--0000000000000491e3064c9abac4--
