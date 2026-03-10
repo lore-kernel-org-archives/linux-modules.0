@@ -1,230 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.120])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633CE4779A3;
-	Tue, 10 Mar 2026 09:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D8342188A;
+	Tue, 10 Mar 2026 11:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773133363; cv=none; b=U4Ly5Xqn34sAg6SVs3iOoC6435NLly3vMDnCX2ze9Gua1WoG5sNge5VD9mLu/2g9RjJFftnGzNWd+ghVAfTrYrMLA1UQ6qoWDJWczsSbrsT0FBx+nL7NOhBWbM+Q8rCofmXZO8uD/vYrM862nFTO2LLX3JGZw/PeMneHqoSkJtg=
+	t=1773143736; cv=none; b=JyjpjDNBamRX/d/0cBxhn8krCQOjexJ2vrQdxL9etQTgsSveWfmqAXU9Utungvjhf1ymk2tyTygW3eFbj9ceo2rBjCRHZq3BBsZECgAl7/pH+x9OcO6hwaUjZ7EqkgDRsUFouXu1RhYhXogSD8c1uEUyZLhZ0zSpr9skyUkgM2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773133363; c=relaxed/simple;
-	bh=gaTNqiFYKF2nQTOrGVWHvVkyMdmKXIWK06YEnqVPe+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FAPAvlqeYWzOSKVBTMiPMI1gZr5NIYO3J0M5xXI8Q3B3kW0t5Q8H0WqnnMPiBcdUqLdoRsmXRjiQWQeqtdAa/W7vGbYpr6AMTnKf5k3hh2/bQluJfZXEnLPSLDzUvUgyZtr5chL2qTPFMJJ3I7Mw54s3RHVjkdDCtnxW5ibKBQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCoelCow; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773143736; c=relaxed/simple;
+	bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Y14YQFuhCN3Kna4n1bwdJLy6NiH7PsoBM7Us66PzPbSe668DAzp4tTo4cuQaqKhLnGId48d7VcOl3YdYa4gX896kymcYC+OJsptk56QFk5wYX8Gajg4MTVHJ9JF9m3oSlGutdRSt3+thWos4pR/PlY2QtSRm5Z/QKNjYzOak55w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=E8nt1Igf; arc=none smtp.client-ip=212.42.244.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCoelCow"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B12C19423;
-	Tue, 10 Mar 2026 09:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773133363;
-	bh=gaTNqiFYKF2nQTOrGVWHvVkyMdmKXIWK06YEnqVPe+o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RCoelCowOescjTZb+ha9AXWx+dsip+hx7+uNb1+zj2N0iXCT+gIjJ7Fe11yuxH95I
-	 G6XWg4dkVG1R3xwR+l8Rc09XUpBpiTTvxlUZeVbwgc/cJm9ky+ulUA+qafa/OQIz8a
-	 sJK4CA7uPY7rBNd0EM/w3y/1NwQSFP7MHHhjbhNk1O+zAigqvhOOeV9tlBelSX89Ph
-	 jIIfVsUmHxCpHDg30P6lCbw0Vo826WLc1b1ZwS0eHjip4OOqn9/078xy2oGniiHUhe
-	 jFBGq7YOcqATU7dBL8GYo961kN55KZMibZD/3VOcHIjrXinHyGWQBJ5J2d2Hi3Q4/j
-	 Y8dF85xSep1wA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Sasha Levin <sashal@kernel.org>,
-	mcgrof@kernel.org,
-	da.gomez@kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-5.15] module: Fix kernel panic when a symbol st_shndx is out of bounds
-Date: Tue, 10 Mar 2026 05:01:39 -0400
-Message-ID: <20260310090145.2709021-39-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260310090145.2709021-1-sashal@kernel.org>
-References: <20260310090145.2709021-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="E8nt1Igf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+	t=1773143723; bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=E8nt1Igfikzg1UTgOGISAzAMiKswf2ND49bi7Kfi9UIZL/Ebzc+UJJz79rFMcVayH
+	 w+/EzW9fK7u4Bg5GlsqH3X/nHnzFmDjyW7AnMKYXmhb+RvNdMihtj8ZP/p/a51PpAe
+	 gPrdgwP6uGn176nZZmhXnabbuO0mAOF/przWQZhQ=
+Received: from [212.42.244.71] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.55.2)
+	(envelope-from <phahn-oss@avm.de>)
+	id 69b006ab-b734-7f0000032729-7f000001bfd2-1
+	for <multiple-recipients>; Tue, 10 Mar 2026 12:55:23 +0100
+Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Tue, 10 Mar 2026 12:55:23 +0100 (CET)
+From: Philipp Hahn <phahn-oss@avm.de>
+Date: Tue, 10 Mar 2026 12:48:39 +0100
+Subject: [PATCH 13/61] squashfs: Prefer IS_ERR_OR_NULL over manual NULL
+ check
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19.6
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260310-b4-is_err_or_null-v1-13-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+To: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
+ dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, 
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org, 
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org, 
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org, 
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org, 
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, 
+ Philipp Hahn <phahn-oss@avm.de>
+Cc: Phillip Lougher <phillip@squashfs.org.uk>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=775; i=phahn-oss@avm.de;
+ h=from:subject:message-id; bh=5P0DiWaZEPF/d3SPdMB+rZQJk1DY1mVuY8d9xffySsA=;
+ b=owEBbQGS/pANAwAKATQtBlPRrKzbAcsmYgBpsAYCOfXcw6nKYZXjZ+DBieT/hiu2NsAfQUre0
+ jlVRw6aXW2JATMEAAEKAB0WIQQ5bPBtrWDUcDQCppg0LQZT0ays2wUCabAGAgAKCRA0LQZT0ays
+ 213oB/sHjZoOpAMz20yPf5W58oaVS3VDOW1zZjyOZfXyKihmnOb8lV99cBPQClALjvBUcqLXemg
+ tpELfmCMWmmS2DLDh38s8m7H4SkSFm3iB+qUl+u8a8NGrDjTz2g0nlLXJ2i4mzmAqWbDldfEhAp
+ ePslhLAf6MqAOAwxF9goTetOQ472ZWbOa7vI5fCqcvwcF/q5QIEUmGs+z5b0yUklyrSflqQlQo4
+ adffOC5kl3ETGEGqBgVXEIg3h8JiDkJe6MaBbDmB/JG3IQRjeJ8YfJc6t+cVg+eXVpCRQOreMFS
+ jG7NgF/eCJBIlcELmHlOCy2pst+P0hiPrthj4RBlPC3hRS93
+X-Developer-Key: i=phahn-oss@avm.de; a=openpgp;
+ fpr=58AF7C2E007CDBE62C59E078F50EFDCF8AD04B1A
+X-purgate-ID: 149429::1773143723-265C1A3D-EB4B679C/0/0
+X-purgate-type: clean
+X-purgate-size: 777
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
 
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
+Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+check.
 
-[ Upstream commit f9d69d5e7bde2295eb7488a56f094ac8f5383b92 ]
+Change generated with coccinelle.
 
-The module loader doesn't check for bounds of the ELF section index in
-simplify_symbols():
-
-       for (i = 1; i < symsec->sh_size / sizeof(Elf_Sym); i++) {
-		const char *name = info->strtab + sym[i].st_name;
-
-		switch (sym[i].st_shndx) {
-		case SHN_COMMON:
-
-		[...]
-
-		default:
-			/* Divert to percpu allocation if a percpu var. */
-			if (sym[i].st_shndx == info->index.pcpu)
-				secbase = (unsigned long)mod_percpu(mod);
-			else
-  /** HERE --> **/		secbase = info->sechdrs[sym[i].st_shndx].sh_addr;
-			sym[i].st_value += secbase;
-			break;
-		}
-	}
-
-A symbol with an out-of-bounds st_shndx value, for example 0xffff
-(known as SHN_XINDEX or SHN_HIRESERVE), may cause a kernel panic:
-
-  BUG: unable to handle page fault for address: ...
-  RIP: 0010:simplify_symbols+0x2b2/0x480
-  ...
-  Kernel panic - not syncing: Fatal exception
-
-This can happen when module ELF is legitimately using SHN_XINDEX or
-when it is corrupted.
-
-Add a bounds check in simplify_symbols() to validate that st_shndx is
-within the valid range before using it.
-
-This issue was discovered due to a bug in llvm-objcopy, see relevant
-discussion for details [1].
-
-[1] https://lore.kernel.org/linux-modules/20251224005752.201911-1-ihor.solodrai@linux.dev/
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
-Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To: Phillip Lougher <phillip@squashfs.org.uk>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 ---
+ fs/squashfs/cache.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-LLM Generated explanations, may be completely bogus:
-
-Now I have all the information needed for a thorough analysis.
-
-## Analysis
-
-### 1. Commit Message Analysis
-The commit message is clear and detailed: it fixes a **kernel panic**
-(page fault) in `simplify_symbols()` when a symbol's `st_shndx` (ELF
-section header index) is out of bounds. The commit includes a concrete
-crash trace (`BUG: unable to handle page fault`, `Kernel panic - not
-syncing: Fatal exception`). The bug was discovered via a real-world
-trigger (llvm-objcopy bug) with a linked mailing list discussion.
-
-### 2. Code Change Analysis
-The fix adds a **6-line bounds check** before the out-of-bounds array
-access at line 1582:
-```c
-if (sym[i].st_shndx >= info->hdr->e_shnum) {
-    pr_err(...);
-    ret = -ENOEXEC;
-    break;
-}
-```
-
-Without this check, `info->sechdrs[sym[i].st_shndx]` can access memory
-far beyond the allocated `sechdrs` array, causing a page fault and
-kernel panic. Values like `SHN_XINDEX` (0xffff) or any corrupted value
->= `e_shnum` trigger this.
-
-### 3. Bug Severity
-- **Impact**: Kernel panic (crash) - the most severe possible outcome
-- **Trigger**: Loading a module with an out-of-bounds `st_shndx` value,
-  which can happen legitimately (SHN_XINDEX) or via corrupted/malicious
-  ELF
-- **Security angle**: This is an out-of-bounds read that could
-  potentially be exploited for information disclosure or denial of
-  service by anyone who can load kernel modules
-
-### 4. Code History
-The vulnerable code has existed since Linux 2.6.12 (2005), with the
-specific `sechdrs` access pattern dating to Rusty Russell's 2010
-refactoring. The bug is present in **every stable kernel tree**.
-
-### 5. Fix Quality
-- **Small and surgical**: 6 lines added, no lines removed, single file
-  changed
-- **Obviously correct**: Simple bounds check comparing `st_shndx`
-  against `e_shnum`
-- **Pattern consistent**: The `apply_relocations()` function right below
-  (line 1597) already does equivalent validation with `infosec >=
-  info->hdr->e_shnum`
-- **Reviewed**: Has `Reviewed-by` from Daniel Gomez (Samsung) and Petr
-  Pavlu (SUSE)
-- **No side effects**: Returns `-ENOEXEC` on invalid module, which is
-  the correct error
-
-### 6. Backport Risk
-- **Minimal**: The fix is a pure addition of a bounds check before
-  existing code
-- **No dependencies**: Standalone fix, no prerequisites
-- **Clean backport**: The surrounding code is stable and unchanged for
-  many years; this should apply cleanly to all stable trees
-
-### 7. Stable Kernel Rules Compliance
-- Obviously correct and tested: Yes (reviewed by two engineers, clear
-  logic)
-- Fixes a real bug: Yes (kernel panic)
-- Important issue: Yes (crash/panic, potential security issue)
-- Small and contained: Yes (6 lines, 1 file)
-- No new features: Correct (pure safety check)
-
-### Verification
-
-- **git blame** confirmed the vulnerable line (`secbase =
-  info->sechdrs[sym[i].st_shndx].sh_addr`) has existed since commit
-  `49668688dd5a5f` by Rusty Russell (2010), with the overall pattern
-  from `1da177e4c3f41` (2005)
-- **Read of main.c:1570-1589** confirmed the fix is correctly placed
-  before the array access in the `default` case
-- **Read of main.c:1591-1598** confirmed `apply_relocations()` already
-  validates section indices with the same pattern (`infosec >=
-  info->hdr->e_shnum`)
-- **git log** confirmed this fix commit is `6186212750892` merged
-  2025-12-30
-- **Explored** `is_core_symbol()` in kallsyms.c which has an equivalent
-  `st_shndx >= shnum` check, confirming the pattern is well-established
-- **git log** on stable tree versions confirmed the vulnerable code path
-  exists in all current stable trees
-
-This is a textbook stable backport candidate: a small, surgical fix for
-a kernel panic caused by a missing bounds check on an array access, in
-code that has been vulnerable for 20 years, with clear real-world
-triggers (llvm-objcopy bug) and proper review.
-
-**YES**
-
- kernel/module/main.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index 710ee30b3beab..5bf456fad63e1 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -1568,6 +1568,13 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
- 			break;
+diff --git a/fs/squashfs/cache.c b/fs/squashfs/cache.c
+index 67abd4dff222235e75d8c2b10d5e9b811d6e38d8..8888cc02966e2e33210c872c733205d4c581ecc9 100644
+--- a/fs/squashfs/cache.c
++++ b/fs/squashfs/cache.c
+@@ -198,7 +198,7 @@ void squashfs_cache_delete(struct squashfs_cache *cache)
+ {
+ 	int i, j;
  
- 		default:
-+			if (sym[i].st_shndx >= info->hdr->e_shnum) {
-+				pr_err("%s: Symbol %s has an invalid section index %u (max %u)\n",
-+				       mod->name, name, sym[i].st_shndx, info->hdr->e_shnum - 1);
-+				ret = -ENOEXEC;
-+				break;
-+			}
-+
- 			/* Divert to percpu allocation if a percpu var. */
- 			if (sym[i].st_shndx == info->index.pcpu)
- 				secbase = (unsigned long)mod_percpu(mod);
+-	if (IS_ERR(cache) || cache == NULL)
++	if (IS_ERR_OR_NULL(cache))
+ 		return;
+ 
+ 	for (i = 0; i < cache->entries; i++) {
+
 -- 
-2.51.0
+2.43.0
 
