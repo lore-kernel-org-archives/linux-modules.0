@@ -1,45 +1,73 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B26C3A75B9
-	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB5FC40DFD8;
+	Tue, 10 Mar 2026 13:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773148050; cv=none; b=oFfMhMH5G8x3fZdCe+8txagGCLe8RSssQtJV5h4NZztzJNGhdJWuNjcYgnwaAkFJTMyZWmDlI0P8k7mzI3fCWsqszVcAL/DIhL1BSfgKsMHv/dbBV7ZWR3C8m5RIzVQOXxB3W2v5lf2UGe+tm+dOxWYK0/KFfCMMzQGkUUAPJa0=
+	t=1773148283; cv=none; b=tEABEEvqDqa0V7+ESDSq5kmLYcyaOJHELbUu/r5qwWJrzOw1Xw73QwWs6BfwZ+00IHzw7bpJoQbUm0f1cVvNQ2z61Q+UKECAR3uTIkXpjaFGoAvSlWaNs3cu0JlVPLnl6tfuqp4yckFPOSTdn9UO1fmQOTdv2g2C51zD3t3ba/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773148050; c=relaxed/simple;
-	bh=FxbQYXrSz5YTlXTz2zBDndIQt9sA2w8YutchPvYOSGU=;
+	s=arc-20240116; t=1773148283; c=relaxed/simple;
+	bh=5c5DIHV4hT2SeTfqSM2LG61yHypW02KyRFmvcmJdQnk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l0ELM8cqBxlc8ggvRU2E1jLFEsgLgjsgmgIUPuPBnPalSrDfMjlb35ayR+r4fxGDCO6/f/OwvXbBvM0Vv6JInOCTFYBj+aC9ruO8QrDhpIpjNTXU52oqzFTTis3wz5lbqWzZHak/xttgZ9En9mvsdjV0LetL8NemhhLHOGkgEqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=czRgpX8a; arc=none smtp.client-ip=198.137.202.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=UbMLsg79aoUQgPLSqaMQHq+6phSGmNFKqhjEBsbqyWbEDSV5tzgJL5+dFXN1DuzMvJkHXBnOR1izy3ISkSS+LrfWnHcXhezTj1/QNdDbze8PNNttWzPhQFL+6HNinqs4lr0eeZXLFannlPzFyrLE9YSR1EuZWcmrPczPyo+eXok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=2IZB0CLI; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="czRgpX8a"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="2IZB0CLI"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
 	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=V/W8fUnIestLy4XQqxH/cuC4beXLBH3+wMpCM6OOPp0=; b=czRgpX8ao3GyEYJ68vvdf1QH8l
-	CX4rAY9LmXmlvnR2Jxt9DIESDKqia4BO5jX+ZFBF7xkbYh5154ikLEDyhE6BoY/MRTzz2e59BHhTg
-	Pg6UGoZFzcKuKPmpHeksvOnypeDT3KY1F51QBb+p8jh/y57vPUh7Wy2Ew1MYJdVbdhB0tlRExSokn
-	ojcj5P8H485XhciASqnOwr+GY7RHypQMT4EnekWTgdlfDxr84imxxw5dm6oVbNCA312V+UsVBFEOn
-	UvGzKRc0gbtpOin0o+zfjXDxbXdMwvi+VQiKluzfHf5YrIPlsC7W5uBGjj6LwA3AoHWCNfqXHDJAP
-	Eu6TyvFw==;
+	bh=l4GpPH3ubmx3aruEVyuRzz3DC1ibbOvvKhNccLuCdJw=; b=2IZB0CLIMhRCWLDyZPKVLAP3Zi
+	vkxq5N+BauqfWJ2D08pYk2yJx04ORVTcyKmDDrK6LuqW8XMpcwg6np0wljWMF5F1kr01sH+Q+jTrq
+	xDq8JKn+NuwXEQgsNA7+BSOA7KRyX1wksWfz9wKmL9hYInXwz8XUG9LBohaI66rEoRupv9ltfhBxQ
+	B67SFwm+9VlBJyWk6UVQWx2m2KvS0cFVxa8tSFUpKwxJS1FIprhUVpsGM4inI8xOeVYE3OTfvQkpq
+	d83SjBx8OUeAWD15fpQ3CkfgrZHzJdUM6o/iIAO634R5cNSd9paceV9MYix4ApeSzSnk0L+NmiwTZ
+	zlAStFSw==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzwo1-00000009YhP-2lgN;
-	Tue, 10 Mar 2026 13:07:25 +0000
-Date: Tue, 10 Mar 2026 06:07:25 -0700
+	id 1vzwrl-00000009Yu9-2fbO;
+	Tue, 10 Mar 2026 13:11:17 +0000
+Date: Tue, 10 Mar 2026 06:11:17 -0700
 From: Christoph Hellwig <hch@infradead.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: hch@infradead.org, atomlin@atomlin.com, da.gomez@kernel.org,
-	linux-modules@vger.kernel.org, mcgrof@kernel.org,
-	petr.pavlu@suse.com, samitolvanen@google.com
-Subject: Re: [PATCH v3] module: print version for external modules in
- print_modules()
-Message-ID: <abAXjc6OihRcdoAA@infradead.org>
-References: <aa-6wILF90Y4ndnd@infradead.org>
- <4215f061-488b-4c2b-98b3-45db4aabed5e@gmail.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	Christian Brauner <brauner@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [PATCH] kthread: remove kthread_exit()
+Message-ID: <abAYdbtYE2tHPNnM@infradead.org>
+References: <1ff1bce2-8bb4-463c-a631-16e14f4ea7e2@arm.com>
+ <20260306-work-kernel-exit-v1-1-8f871f6281cb@kernel.org>
+ <aaroReSCj1qXUeQb@infradead.org>
+ <CAHk-=whCiPr-cR3hVv=46Qo0Nw_vN422YUxqU0GmNai+KRtg2w@mail.gmail.com>
+ <aa7qson15uJpL-BL@infradead.org>
+ <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -48,19 +76,38 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4215f061-488b-4c2b-98b3-45db4aabed5e@gmail.com>
+In-Reply-To: <CAHk-=wi_kwtWt4Swi=k2zJTnStoBaw3vneHz8ccVNDyVD1nvWg@mail.gmail.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Tue, Mar 10, 2026 at 09:04:14PM +0800, Yafang Shao wrote:
+On Mon, Mar 09, 2026 at 09:37:26AM -0700, Linus Torvalds wrote:
+> On Mon, 9 Mar 2026 at 08:43, Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > Because it can't f&*^ up the state of random tasks.
 > 
-> 
-> > Then don't run extetrnal modules, which are not a first part citizen.
-> > Get your changeas upstream instead of just leeching the upstream
-> > developers work.
-> 
-> That doesn't make any sense.
-> Could you please explain the rationale behind introducing
-> EXPORT_SYMBOL_GPL() and TAINT_OOT_MODULE ?
+> Christoph, you make no sense.
 
-Your straw man doesn't make any sense to me.
+Thanks, I always appreciated rational and detailed answers.
+
+> 
+> "do_exit()" cannot mess up random tasks. It can only exit the
+> *current* task. The task that is running right now in that module.
+
+Yes.  And random code should not be able to end arbitrary tasks.
+
+> So what is the actual problem? No more random rants. Explain yourself
+> without making wild handwaving gestures.
+
+Wow, you're a bit aggressive, aren't you?  Maybe take your meds in the
+morning to stay a bit calmer.  As said before I don't think allowing
+random code (and module is a proxy for that) do exit a task.  They
+really should not be exiting random kthreads either, but certainly
+not more than that.
+
+> Now, there are real exports in this area that are actually strange and
+> should be removed: for some historical reason we export 'free_task()'
+> which makes no sense to me at all (but probably did at some point).
+> 
+> Now *that* is a strange export that can mess up another task in major ways.
+
+No argument about that, but that's not the point here.
 
