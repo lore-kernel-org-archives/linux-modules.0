@@ -1,134 +1,125 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EB92FFF90
-	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773150593; cv=pass; b=OX9wXqufy6BbKYoJ6NhRMiUFz/h4GETwmk6BGhyscaDQ568P+GOvxw4NJ3RWWHjze+BYuxuVFY8QULU7KVgE6TuZ0IVR3EiDnN7CA/d1IiMA17LLHCkz/QgHV3u6U07M8k7U0BEc9GLWnXhTnepkiM8HXTDI1nc2jaKIKyCZA+g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773150593; c=relaxed/simple;
-	bh=cke0iWNjC9FGJkXPt1DwmcKNAsGD7TuhD05sI+e5Ot4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rWAWodYmWilCCim2eoer5gZCnbLiCayJ63TG03aiigzm44yiV78D3KUCtIReSp/wxpli2g5tHcXAg5rouptw3uAvT7601qcso0RwPtL3EASnAz4VXJJdrnPGTYnqCtZCa5vRh6V9GLnF9L0jXOVzRxfEIn89yjjBzU7rlVtlFQg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdE8aaAK; arc=pass smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdE8aaAK"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7982c3b7dfcso131219307b3.0
-        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 06:49:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773150591; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UE46Ojmlnl+uAC4Lr7hTXmCMrmZuROxnZ0HJ6xSXJ/CXV6Dhuohcbwpc5hb4rTj8O7
-         o1YPdRvE6Gj2pGyZbKB+yhTzZFuJAw2ySdE8iNi67dObqvDVLLQXIuKe0NOuxkm445H9
-         kytNbIFHxL+BZX0JGY9EcgQDSH6GaYgJMK83pqSW7Pfeben/8I78t7KGwQ1XYO3cPxwq
-         zfz0sEtBijCvGc/me+CpkuHrP/MUgwWvyYPUOO6jRbAzxDkhYj7f19q/s4XpGwCYQXrG
-         ezVrUNX58vSYpLbQz28WAw2CudBkkjjYXhETXzKsB5T1ujvlFcJJKPql33OWNi4O8KI/
-         yfxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j0zycgx/8X64idQhYAv2xcJ067bqdtcHIUEWEUbidDg=;
-        fh=CuUwWngeye//TvPeTmPpEfFk5zUm3UQ1fMdermGAcfs=;
-        b=N+nNPwOtvOeBiYc9LI5Nl0cv/+l3sxmaq7zOadJKvFuHyAQJjUwdiJRXFrOx3EeY2p
-         qCQum0e2V5mZdZyKYL3FsXk+a2gtpfQ3udcm1UcNmlqcf7/xKIBXVNlzdzY64SaKr28D
-         LUtay24hn5m8eqo3fDA95ZNqhKWEbRkSX4k/liNTaVcQuho7AKTnfFXmtG6OEteenLRY
-         yTDkxetbrSm9waeJSO/KmQB/mkJHjAdhirGUorcBIXkbeR1qPvO2DhCLEqAWYkNcxqOa
-         pr9iRUgIjBS+w5z+jI6mcnFvpaTbTVgBrt6zxoPzCEYuNHn8LRVeMhBGjx/Ks7q9xfDs
-         Kx6w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773150591; x=1773755391; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j0zycgx/8X64idQhYAv2xcJ067bqdtcHIUEWEUbidDg=;
-        b=BdE8aaAKHOu/uT+jtY0gbqtYzRr5YDYGvQJRPJUjkZiBFMKnYXloAgRbjAyxc0UX8/
-         WdCTwXGBpryZBffVLcabVowfaDBOr2Ge3t8Rt9+zzIwNKeB1jzEjcGJfdV4WGtnmeFjO
-         FNVNwnwlTMdT3AsD5dDEShixB70e6R7qtUIC/EJnGK1A9BMl5BNAdccKxU8Qk9Rv7wsL
-         Ew+4+YfsP/0wVPFltlNN1iFKojObkdekuHCM4J9vYovzjFNV3R5MNRdXJeQKAjx28Oc8
-         msksJAM8EH40EoEftWuo6K9wh+3DFZLKCGxmkQb35d5uXcTaVe2XbDtfzTPn+czD7CZu
-         iHOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773150591; x=1773755391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j0zycgx/8X64idQhYAv2xcJ067bqdtcHIUEWEUbidDg=;
-        b=HheUOULk/AVSND6h2UWkqUj//R8au67O43/YXxANArkry9G9DZ1xieSieoLC3MJFnP
-         rQTtvI81S94k2fA3llrXNk4ai2hAwf3zVNe/xqJuusBbwiWyhJuZpUnYhuUHPze9kDyE
-         BPIEmof1Ds+noSyDxVV356CkKQKUHmQ6MJjuH72+LBzaNlPb+TRpbdRZZwCxEbnw1YdT
-         sVoI0z5QS47MmRLMbLm7zZb2JXOz8CYZGeOc4Hi822NFzuoGfXOXwr+WzB3CTiqDrehV
-         xv0Kmy9Wu0IKvgYKmwVLapzWH8nSNFiOmvphrR2T5gTYDSg+3XzdteJZPIDAHBiKyvqt
-         BG0g==
-X-Forwarded-Encrypted: i=1; AJvYcCWNYRi8fSx7wIxqvuD8ws/BV5j80r4xuE3IfePsslat4bIXbJcl+o0/pCcLX/9e+8P0JZgM2cf1FvTtl/KU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNV+BCx9To1sTBvqfgwmI+8fkGfOR/zMiDaBYq5PdsDWW8oik3
-	/HCtmg0pQAA42aRpCw3ZGGeH+92NLRnC3r3IsyzNNZMQjKMaZZ5YK4Ig4IhiMlp1V6ParmVdSvQ
-	xyecNDrJP5YWeLyeCBerjlET8QKqxXV4=
-X-Gm-Gg: ATEYQzzF6nAJKd8+T9bDUsHC1pONFtP7SnH2PKq6FML2fcVEgJj1uDNY2N4o9Ps9DkK
-	A1FmZEyQFLFFHsZM0sISAU3nhdGatJfFZAweDUSPwC0WN887/D9xaTAjjhnpE4GinYj839S5P9m
-	CRQ8tQxnV9zNhb7Sp1TIMX9y4e8B2HgObm6HUOsrtthcrby72fVaffIR/YUedlFRhkLw7ftIUEp
-	5pRg9nXxKGthSM4rrWgVUdTakKfRTRcijv/CrmiZEiByOPZjyToyX6YaQOKHckIObPS7MX1Cr9V
-	3auFV2Zd
-X-Received: by 2002:a05:690c:6305:b0:797:afeb:de62 with SMTP id
- 00721157ae682-798dd6b5c38mr149255297b3.23.1773150591297; Tue, 10 Mar 2026
- 06:49:51 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4ECB2FFF90;
+	Tue, 10 Mar 2026 13:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773150974; cv=none; b=Qk4/Xrgt5Sj9P95xXLzQSzP3bfCVB+xh5G6PbnPTyGgXknF1nIwFyDD4BheE+1PFH4RbQIJspfylvolmZBxmc2OIKLujB+PDdXK2DOn9YGSUijqFBwmAgM/niwzj+34UXZO65dOV8+5pm8gMp0V0dH61m4yTpayLAgN7r1Fjxss=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773150974; c=relaxed/simple;
+	bh=FDMwXaHKDrOM7khDAib7qUUe1UeRwowP+SR16jql6lQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZTIc6zSixu52GG6Cq6DFY5tJLrjwcodwjvew156TLPu3UZdI/AjKkUoXgOHKlz5EhlvD0JwfW9l6hkoTCobqwWX4GpFOJz/Rmhc6shERJ+T2pbqVQYjj2Ua3YEWV9POuFDCGFdks1EToRJhzERQReKQXEpnzrNJCKxMa84Jkcbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net; spf=pass smtp.mailfrom=hadess.net; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hadess.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hadess.net
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 539B3433BD;
+	Tue, 10 Mar 2026 13:55:53 +0000 (UTC)
+Message-ID: <375c7c30c184d331c199876e45920976030f3cbc.camel@hadess.net>
+Subject: Re: [PATCH 25/61] net/bluetooth: Prefer IS_ERR_OR_NULL over manual
+ NULL check
+From: Bastien Nocera <hadess@hadess.net>
+To: Philipp Hahn <phahn-oss@avm.de>, amd-gfx@lists.freedesktop.org, 
+	apparmor@lists.ubuntu.com, bpf@vger.kernel.org, ceph-devel@vger.kernel.org,
+ 	cocci@inria.fr, dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ 	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, 	linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, 	linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, 	linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, 	linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, 	linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, 	linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, 	samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, 	target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, 	v9fs@lists.linux.dev
+Cc: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+	 <johan.hedberg@gmail.com>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date: Tue, 10 Mar 2026 14:55:52 +0100
+In-Reply-To: <20260310-b4-is_err_or_null-v1-25-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	 <20260310-b4-is_err_or_null-v1-25-bd63b656022d@avm.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <abAXjc6OihRcdoAA@infradead.org> <CALOAHbA3g=UVavYgxJXH_5v0TYMLd6QKUTd=HDbD74Cp+9Kgvg@mail.gmail.com>
- <abAZSCbSEGUhTdUn@infradead.org> <CALOAHbBpAi_FM=odrNkGwXGj1d-ydn=cwURXkUGLawzOMUufuQ@mail.gmail.com>
- <abAa03DO9aLxWcwX@infradead.org> <CALOAHbBoX00_eDLq4X6vTrbdLG5X=9-07jW=Ba+Oa-QjtZX3MQ@mail.gmail.com>
- <abAdr6zqeqSNMJ8X@infradead.org> <CALOAHbCmxa0ptYTcq1EjRKMrzvFHCyyrv8CeEDYOhuuo7-QbOw@mail.gmail.com>
- <abAf5ZtiQGFoOQvT@infradead.org> <CALOAHbCg=nmwtoaMJj1KpeGqAXEuuAdnW+RCbe5KXxKKYGozzA@mail.gmail.com>
- <abAg7Wgq6N49pezT@infradead.org>
-In-Reply-To: <abAg7Wgq6N49pezT@infradead.org>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 10 Mar 2026 21:49:15 +0800
-X-Gm-Features: AaiRm5058W62Q6sYiifD6jxZGBdkqXzzBIu1DijiA_Wv0J7pCt954GAsO_oYFJY
-Message-ID: <CALOAHbCHw+YKtJoERMXRr-KRnnGT77hx=MZCe6Nj4-vBZ4yYbQ@mail.gmail.com>
-Subject: Re: [PATCH v3] module: print version for external modules in print_modules()
-To: Christoph Hellwig <hch@infradead.org>
-Cc: atomlin@atomlin.com, da.gomez@kernel.org, linux-modules@vger.kernel.org, 
-	mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: hadess@hadess.net
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvkeduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepuegrshhtihgvnhcupfhotggvrhgruceohhgruggvshhssehhrgguvghsshdrnhgvtheqnecuggftrfgrthhtvghrnhepieffgfehtedtgefgjeeggfffgeeuvdegveekveejfeekkedujeehteffueefffeunecukfhppedvrgdtudemvgefgeemvggtjeefmegtfhdvtdemsggrgeefmegrieejieemtgdvugefmeejrgehfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgefgeemvggtjeefmegtfhdvtdemsggrgeefmegrieejieemtgdvugefmeejrgehfedphhgvlhhopeglkffrvheimedvrgdtudemvgefgeemvggtjeefmegtfhdvtdemsggrgeefmegrieejieemtgdvugefmeejrgehfegnpdhmrghilhhfrhhomhephhgruggvshhssehhrgguvghsshdrnhgvthdpqhhiugepheefleeufeegfeefueffpdhmohguvgepshhmthhpohhuthdpnhgspghrtghpthhtohepheejpdhrtghpthhtohepphhhrghhnhdqohhsshesrghvmhdruggvpdhrtghpthhtoheprghmugdqghhfgieslhhishhtshdrfhhrvggvu
+ ggvshhkthhophdrohhrghdprhgtphhtthhopegrphhprghrmhhorheslhhishhtshdruhgsuhhnthhurdgtohhmpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtvghphhdquggvvhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohgttghisehinhhrihgrrdhfrh
+X-GND-State: clean
+X-GND-Score: -100
 
-On Tue, Mar 10, 2026 at 9:47=E2=80=AFPM Christoph Hellwig <hch@infradead.or=
-g> wrote:
->
-> On Tue, Mar 10, 2026 at 09:44:56PM +0800, Yafang Shao wrote:
-> > On Tue, Mar 10, 2026 at 9:43=E2=80=AFPM Christoph Hellwig <hch@infradea=
-d.org> wrote:
-> > >
-> > > On Tue, Mar 10, 2026 at 09:35:23PM +0800, Yafang Shao wrote:
-> > > > > Why would that matter?  You don't get a wild card to do things ot=
-herwise
-> > > > > rejected because you contributed something before.
-> > > >
-> > > > Could you please explain why I am being characterized as a "leecher=
-"?
-> > >
-> > > Because you're adding overhead to the kernel for your out of tree cod=
-e,
-> > > which only you and not the kernel project itself benefits from.
-> >
-> > Why do you believe the kernel project cannot benefit from them, given
-> > that all module maintainers have acknowledged their value?
->
-> Because by definition it does not benefit from making life for
-> out of tree modules easier.  And I really don't get your whole
-> call to authority here, it makes hard for me to take you serious.
+On Tue, 2026-03-10 at 12:48 +0100, Philipp Hahn wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+>=20
+> Change generated with coccinelle.
+>=20
+> To: Marcel Holtmann <marcel@holtmann.org>
+> To: Johan Hedberg <johan.hedberg@gmail.com>
+> To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+> Cc: linux-bluetooth@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 
-I think we'll have to agree to disagree on this.
-Ultimately, it's up to the module maintainers to decide whether to accept i=
-t.
+Reviewed-by: Bastien Nocera <hadess@hadess.net>
 
---=20
-Regards
-Yafang
+> ---
+> =C2=A0net/bluetooth/mgmt.c | 6 +++---
+> =C2=A01 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> index
+> a7238fd3b03bb54f39af1afee74dc1acd931c324..06d2da67bbe14e17ee478aa939d
+> e26526c333d91 100644
+> --- a/net/bluetooth/mgmt.c
+> +++ b/net/bluetooth/mgmt.c
+> @@ -4169,7 +4169,7 @@ static void set_default_phy_complete(struct
+> hci_dev *hdev, void *data, int err)
+> =C2=A0		mgmt_phy_configuration_changed(hdev, cmd->sk);
+> =C2=A0	}
+> =C2=A0
+> -	if (skb && !IS_ERR(skb))
+> +	if (!IS_ERR_OR_NULL(skb))
+> =C2=A0		kfree_skb(skb);
+> =C2=A0
+> =C2=A0	mgmt_pending_free(cmd);
+> @@ -5730,7 +5730,7 @@ static void read_local_oob_data_complete(struct
+> hci_dev *hdev, void *data,
+> =C2=A0			=C2=A0 MGMT_STATUS_SUCCESS, &mgmt_rp, rp_size);
+> =C2=A0
+> =C2=A0remove:
+> -	if (skb && !IS_ERR(skb))
+> +	if (!IS_ERR_OR_NULL(skb))
+> =C2=A0		kfree_skb(skb);
+> =C2=A0
+> =C2=A0	mgmt_pending_free(cmd);
+> @@ -8277,7 +8277,7 @@ static void
+> read_local_oob_ext_data_complete(struct hci_dev *hdev, void *data,
+> =C2=A0				 mgmt_rp, sizeof(*mgmt_rp) +
+> eir_len,
+> =C2=A0				 HCI_MGMT_OOB_DATA_EVENTS, cmd->sk);
+> =C2=A0done:
+> -	if (skb && !IS_ERR(skb))
+> +	if (!IS_ERR_OR_NULL(skb))
+> =C2=A0		kfree_skb(skb);
+> =C2=A0
+> =C2=A0	kfree(mgmt_rp);
