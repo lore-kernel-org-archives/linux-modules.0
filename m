@@ -1,49 +1,119 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BF83A5447
-	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C393B0ADC
+	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773148884; cv=none; b=jN9XDffQrD5sSQa0VsGIqdj7UxuU4zy2uvYAqTqdiB9WwasOqVzoMM2SUxZHlayl7E64Ba1W6VbHGh3xDs0JyPmm4okVbsVNVGKXWh5ukAw5ZyhZ42Fh/Cif4HJQ4iLexYVuslhDZLmR/Zzoa0StNSYmOWTjkFogPm3As2pArkU=
+	t=1773148931; cv=none; b=bNBKH4HeAOszmSpAeCQAq0ow2W2v5dy5/NZNSeKAoBLIhGBdgolv8m23tYSq34l51zZ+l+7al6/GQ7IsMWmICbtZVhXBOXWHGr4RW3WACFfdcFqHptJyhJsB/lVYQzVvT7Hisg2E7BzIMxVI0eox3CBlV7n5LPLgbmsbfOJdotA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773148884; c=relaxed/simple;
-	bh=gYbmvHWG+uv3Q6l2mat6TP34tBEF7dbjfOXXSNwqF44=;
+	s=arc-20240116; t=1773148931; c=relaxed/simple;
+	bh=7C48eJwQxF2SZSyojjO4eehKdtPdDBqSboD/LkVXOwA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RjW0HKaQsZBasVAPkFmPXu3cCznvRVnJLpSycdVYxdguisfInZeP4VXDwlBE1SxnRWL7YlwPiUpXemyUPOMbq87El/V50R1km3oNvttWJAGBFTE2s2uUQ67rogsSwrbv+0rW7QHRS+Eh3iIvmNDkr/NiY7Bb9nIaRM0Ht3lNWvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xle91yO+; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=AYGeDBxiQMINTbp3VS/3n5Bd4x0IR+4khISO1vIOEw8y98wzPWBcIktk3iuzCASsswBMyzd5/NtfmuJinp4QkIRsZbAz/+A0X6wtR+DYc3j3e9Gg0YhY+WkPf73YL45p6aP97OrxC3f/H4WQIUuhxHv97ZA8oGptFoRkx9STDZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ADQQpd+b; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=DLhvlaPb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xle91yO+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=3PmWFAxuYAgFRgQE1lT4fhSbgwxkkFQhUozuWpAfNWU=; b=xle91yO+B7G/mwxwlV8Te7bPZ5
-	p90yKR4UbEwR/mQzddYrqxQ9gvFEmPWB8KjHtfqtlAX987ggk9HgbM5LyqyzBVmv5eiSb2ojq93Lq
-	z8QkBS2UkbupOgqE2owWYJA8MaG1Z8kxWjV95vu0v4P9H2ZHgCX3B7fu1Fj0zNah+H2ZwZ07SqSHw
-	DhdhQcGjJyui1YYJXXANgB/t7af/lqAgu2PI2gosey5O1EYf8EqJ/z9t6zeu7+EQR3/M3485qZ3e5
-	NhzX0i3KEU9u+aXBRA9lSFmtqDBJPGaQO0BxoyqRW5ZoGLk0Q0/1z+Gr2+/Hlc9Y0fR/jcIFtXSXS
-	cY7N+qQw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vzx1X-00000009aB8-0ZPD;
-	Tue, 10 Mar 2026 13:21:23 +0000
-Date: Tue, 10 Mar 2026 06:21:23 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, atomlin@atomlin.com,
-	da.gomez@kernel.org, linux-modules@vger.kernel.org,
-	mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com
-Subject: Re: [PATCH v3] module: print version for external modules in
- print_modules()
-Message-ID: <abAa03DO9aLxWcwX@infradead.org>
-References: <aa-6wILF90Y4ndnd@infradead.org>
- <4215f061-488b-4c2b-98b3-45db4aabed5e@gmail.com>
- <abAXjc6OihRcdoAA@infradead.org>
- <CALOAHbA3g=UVavYgxJXH_5v0TYMLd6QKUTd=HDbD74Cp+9Kgvg@mail.gmail.com>
- <abAZSCbSEGUhTdUn@infradead.org>
- <CALOAHbBpAi_FM=odrNkGwXGj1d-ydn=cwURXkUGLawzOMUufuQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ADQQpd+b";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="DLhvlaPb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1773148926;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5/adDEbR57gUpYJcJq84OoDVxrrM3xMPFmZCRo0jKXM=;
+	b=ADQQpd+bpcMvyiI6BuK6I/AtlFPVjRaT1jbvm8x0bcg2sn4Mv+l/q+wGsOaa7zGZavpvJL
+	HOw6n0NTrJxN8BVrJlzy+3Oyq/AicE10gafpjzfnHFVMImjvlOy3qRSEO7jpexZVWETsUQ
+	RoRPrXnJkd5ZbUZ0X+x9wM3CIJYSD9c=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-376-n_pu4oaYPMK57yVGONFJcQ-1; Tue, 10 Mar 2026 09:22:05 -0400
+X-MC-Unique: n_pu4oaYPMK57yVGONFJcQ-1
+X-Mimecast-MFC-AGG-ID: n_pu4oaYPMK57yVGONFJcQ_1773148925
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8cd773dd39bso2180668985a.2
+        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 06:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1773148925; x=1773753725; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5/adDEbR57gUpYJcJq84OoDVxrrM3xMPFmZCRo0jKXM=;
+        b=DLhvlaPbwaSFQKg/FmxemLJJZifDd7cIIhpxvIrZaWROKjgqKnQK81zS2r/WSu9mvZ
+         1x4TVLhhO06glvOYJXTBYTQHe1C/lCEECiyKmpprEGkSpnbhT/+Xy+wfN5x6paEUKxsd
+         eleVUcWebznHZRscghpqRSurxi7A6fJyr8+SC/oFm4tth2mVEOc19JKZit9S00HY03E/
+         XNzQnAGkguTRFL3rrkTJWt1Ev4Xq7DVoDTHr6r9kNjeVPxV8v11X5FGr4E58NddnvLYv
+         QUA4HTbgZjVMx4thX/P6FGMyY+HUc/G2+EnczacjtLqtmfpojjqt59bZxWNPmXy2pn5x
+         ulpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773148925; x=1773753725;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5/adDEbR57gUpYJcJq84OoDVxrrM3xMPFmZCRo0jKXM=;
+        b=EfNNSjGa/XT0Octf0zXGdDFhZNWSJhFt22+LrGLSmRuOV7bBh5dCpUMgle7BplXenM
+         y3EEzyp0QmG6LLPtHjpbKHp3ppcQdWsbegPvqrA0Ej76mYLFVLfDqpOTzueXoe/cVucZ
+         MhNRvcpsOcUzAM4AMK02/2R20j1mMqG6kIy1Zb37/jeYOr9INEDtOHdGo0lQMWoQjVJl
+         /iIMfQjKIE2FaT4LvEj+id2rsxi5YLQbWzkryyYoWNs+qtdA8kHWFO7O0HdpFgORUDAZ
+         p4DshKOiPayQemyIKFGaplvm7VKzQyXKjwlY9UOimV4wU2A06WvuwDM3O1AUBeJMtL+r
+         genw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTmRVcC5tTged6VirOQUd/3LDTeL3f78cUEgjNB1M5UIzWRrIy5yGytl8ZDq8BkDShxrRns+Atg2tpjtmq@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuUIP5E1OvnHZMB323Ya4T2lQYlJudsq0saCVarioPKCr5ZoE9
+	dT/BQkKEdnuetCgHWHBpinBQ2fLS48xzY1sM45CZ5mQacK6ZiCJfmtrHVGPGfkubm9xhmIN/+ao
+	/tUrUL4YODKu98jQHlACm0Gg6UmqAqyYor35WjsymEkXjRiu5mw1jszi8VGCANufY4g8=
+X-Gm-Gg: ATEYQzyIB1lajs1AFDa91RLA7Z2TmfUf+XkvwNriiiJA2PJwWAfD9aIcKOAq9myFy/q
+	DPH574rDgJsXI67NiVn1fiPfHYHC839dr80+qWSCfn0vEg1OSzo/oz+EldePMy/CwNQVFHhbiHl
+	bEB2M32QYDbkDxiYZqcutfiI+ZSNTNCPOOKGoDkQOTFQ7fvVG0NFyHOnPWWyEi37d4OljAEHq8h
+	4dVD7d5lX2rcj1FQjKxmGDLrZ5vUtMoGZBKux7lnYOv6qztimFp66+X2NVlgz72OpNa0raHfIXf
+	OzvT3f2MTyDbgbtbPB40bJvOVFT2e8oeNxm7DYWdzkwSibIDg4XESEwh2MgSrq9HNBR7KpZTDTa
+	ZLQuZ19klsuvwhDyOtZKHwlFYAvIJGC1G+3j/TcpJsJayFmuVizY1MLJp
+X-Received: by 2002:a05:620a:3713:b0:8ca:1240:4991 with SMTP id af79cd13be357-8cd6d4f9469mr1830787485a.45.1773148924734;
+        Tue, 10 Mar 2026 06:22:04 -0700 (PDT)
+X-Received: by 2002:a05:620a:3713:b0:8ca:1240:4991 with SMTP id af79cd13be357-8cd6d4f9469mr1830766185a.45.1773148922638;
+        Tue, 10 Mar 2026 06:22:02 -0700 (PDT)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cd8576db0esm474754485a.47.2026.03.10.06.21.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2026 06:22:01 -0700 (PDT)
+Date: Tue, 10 Mar 2026 09:21:58 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>
+Subject: Re: [PATCH 56/61] clk: Prefer IS_ERR_OR_NULL over manual NULL check
+Message-ID: <abAa9vQg4BSxl1BJ@redhat.com>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+ <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -52,18 +122,31 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALOAHbBpAi_FM=odrNkGwXGj1d-ydn=cwURXkUGLawzOMUufuQ@mail.gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-On Tue, Mar 10, 2026 at 09:19:22PM +0800, Yafang Shao wrote:
-> Given that the Linux kernel officially supports out-of-tree modules,
+On Tue, Mar 10, 2026 at 12:49:22PM +0100, Philipp Hahn wrote:
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+> 
+> Semantich change: Previously the code only printed the warning on error,
 
-It does not officially support them as a first class entity.
+Semantic ...
 
-> we should aim to support them where reasonable. My change is generic
-> and improves the core code without being tied to any specific external
-> module.
+> but not when the pointer was NULL. Now the warning is printed in both
+> cases!
+> 
+> Change found with coccinelle.
+> 
+> To: Michael Turquette <mturquette@baylibre.com>
+> To: Stephen Boyd <sboyd@kernel.org>
+> To: Daniel Lezcano <daniel.lezcano@kernel.org>
+> To: Thomas Gleixner <tglx@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
 
-It adds overhead to the kernel just for leechers like you that don't
-actually contibute their code upstream.  That's always a bad idea.
+With the minor typo addressed:
+
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
