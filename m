@@ -1,141 +1,93 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BAF39934B
-	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 12:54:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E323AF647
+	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773147252; cv=none; b=cZEcJ39Lg9sLsBkBEHSuKsN7bg169KF5vmxCXEW8htgFwXkE2z8j6a4itwM/9t9FE9DG8Ok1lmr/wH3bVi+Vr9gC5hKUFOwZp1Qi4+6X126eqBAjRpKDRijk/lw+XXKXLEeca+8uY914WP2v5SbPaufo+wENUx1nV04L9gNiyWw=
+	t=1773147867; cv=none; b=jTYHsVQLQfsPtnNm5tygxCCsiAn76f3td5jf4o4VEYX4YkrWAPt2eksUOeevq73CiooiQJPUh2lEPW/pLnjZUGZxj5ZVwNJJmHgahmjrYkvd9umwRMABNUGKNT2Zhi4KKC+jHIQ/GPlXzb4/ly4BhOkq45x6f2I7GyQCS6zpKtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773147252; c=relaxed/simple;
-	bh=TgoJchP8+G/BTHDKgmEWupOwORUqE0/FZPIUEYu9Z9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=asfQ/K/ent1JbF/QutyLNIJLFI1Rzhz775m9ZJZbgaWcVPtV8KOaNfkkp9tzFWvKDl2H2CKdD4hahAk/2CW1O7lQEmm7nReHUVaVegm9iOzV+N94L+PiOIDhG0fQ1+QY32opExhQvfxMP3PzHukA4h96JAP56dXmHCqWtojgLWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0+cOK+VW; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1773147867; c=relaxed/simple;
+	bh=y4lsaI0Z53oOhst01yq85deaRRzpPQZxx52q7qPxghc=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=oDgKSz/c9p5vk6KN414qXewYoM/WeyWKvxeHOt/ODPApKjl7uQSirTdl+lbHaeiORMdxb6GtjdEH3ScxQ1kxJ9BpvWi1R4ehyCFcvlBYviF9T6T02CFcSb/Gt3kk/6tvBS5EpZ5YQXIaQ+RVQu+OuCI+h/9QsyEHcHR5TihBj/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+sBZMeG; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0+cOK+VW"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2aeab6ff148so1325ad.1
-        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 05:54:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+sBZMeG"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c73bb6662d8so511244a12.1
+        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 06:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1773147248; x=1773752048; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mm6hm+LHoMGo5Ew01sq1dP9YSITnoqIDxYFDqmtgvh0=;
-        b=0+cOK+VWVXA7uE31Sh5y2bmP9hRSr0LFsM2f3kDgfCZ6lyHaVbAytIQCv+2vF+eTEx
-         oUic6e9ZAVnZqnGzIPB8kHUyMA2zwpMw5U/9RUdKEhoG2/xX9/VKIHC9XNEBOVXeDKo9
-         mU/QEMBf02iFKn4H5erDKYU3pW/pqjbI7j+6ZcB0Qt9z/KGqBlkshVJTzzKx2oXtAxlL
-         E18h73O/s3dn+xBEwK308w7agQS5m2RYZzHNrLUdhfdZKeG/e+Dr27X21QpoIwd1KCAl
-         PxttLdZl6PZf2goM/cRw6Bbw12/00xnTFdgSr8ytAWjU88JMxI5kTd4reOjRdKpNjh+N
-         Ix/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773147248; x=1773752048;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20230601; t=1773147865; x=1773752665; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mm6hm+LHoMGo5Ew01sq1dP9YSITnoqIDxYFDqmtgvh0=;
-        b=lklP3K5nTfaCG1LA3L7fs3wlf7zmiJssGBn3pbgo8u7C5gLwybhkM480i+nom45lTi
-         /aubFnBgR0SXmrOKgqORJW4x7C3RUtWjrXp2Yfr8Y84BFqH/qRoaYO8WCoCBpNDUDYqy
-         J73uAYTf6rFAwre1r1Ahc/RGtwXCXdUiCANSAvMcurGCjzt77j0A2jvfREl4FYpC97Ae
-         3K5ZDSW/2FM2JYNyLPP+Rs8/qcTMVyc3ARcWqgfPMIQyZCHuf3K/+CZlMxtGC+QSvqm4
-         kzwOdjL4H4sQD5O9FpsFhvQen5xKqN5EAygfo9knjULiZ15O9zQ3ab6vKuqItTA6xehG
-         8oVw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIIvQBKbf1r0xkYG1UmkL6DzVNfeJF/+dy+8Azl8P5vcwXWdwBz4XNiv89fYaJ0pcPTlj8KVQNexsFXKCr@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhSVPEjKUGyh5CvWoBh4CQB7Afgxkv313ODZxDrHuEToUfwT/V
-	+maaitacGF0kmeLVSWs869nlZo/TeUWlKN8aeYzVCjEJmbgQZwMhBNJ+FyDf8Ysjgw==
-X-Gm-Gg: ATEYQzxGK+z+WukJxDD2rdG3zDKrQK2BmYvSRE75Bz9BnlrY+/jvQ+Gh5lVV7XFm3x7
-	nmz2yDCc6VDnVckQD9DG02AvJrkGskDmAqHO3G90i/TZqkevfNH4txRfg0V0kcZbZ4f44niiFw0
-	JySxEKz3FgueaG+cv3+z622y7UU50xqzRT3tnXsYecTyxBEcy5AXfyyH/eGbhmHstNLT0yCftD1
-	PZTE4Eq0nhSODSs3ewwsfPbR9Bq8U9DH6b3bOso5LyATZMBeQt3hjHox30Itbd0Wp7/IvbLLfVT
-	5+pZga6aRpMEA8Ky9RAY/iwhdMqgGC+45IOoygx4HN0bfy5SC11nR0Q7SxSTeC9Z5MlT8srLtdR
-	ebGfaqHoVjplBy5Mx3f5b2aLAIgThXw2jPqc1Ya3TSYxvUyym7jIk94lJeVRXWO+XAHOFZOwFsF
-	3F4cCBuHC932FZQ8/KBHH7ipC0IYq712boQoC52gwmuyLR2K4r6t4Ry/g4CA==
-X-Received: by 2002:a17:902:ebd2:b0:2ae:45bb:bc4e with SMTP id d9443c01a7336-2aea30ebe48mr3008685ad.24.1773147247400;
-        Tue, 10 Mar 2026 05:54:07 -0700 (PDT)
-Received: from google.com (10.129.124.34.bc.googleusercontent.com. [34.124.129.10])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c739e0cb73dsm12445679a12.11.2026.03.10.05.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2026 05:54:06 -0700 (PDT)
-Date: Tue, 10 Mar 2026 12:53:54 +0000
-From: Pranjal Shrivastava <praan@google.com>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
-	Alex Williamson <alex@shazbot.org>
-Subject: Re: [PATCH 46/61] vfio: Prefer IS_ERR_OR_NULL over manual NULL check
-Message-ID: <abAUYvx6VEdSmInm@google.com>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
+        bh=Lf07QwHYKXnNseSZHISFXkm0dXoJRQ7SsuVDO+ZY+ek=;
+        b=D+sBZMeGU/21Fbw5exP/Qz3cOF8mLnd6TDab53z9KD/zTW0754bDdl+IUBgEFYaKbi
+         79I9pJUPmrA2R+TBBTrjAcbDidC0CWjUTVSWjsC7VUlrQYAm37Lnbcs1pOr8Dfr5AqBG
+         nloLSsDS8aT4um9xSXy3328MXJYlyVtuJgwEavEt/ehGdE83thDyfT1NF2dIxvXrbqkb
+         wDYN2/6VpKXeZTmCQCOymnCfVssWNXItJ3hGY9prvLmEIACgd/cD8gKgBIUbzHOBabj1
+         N1kIdW89tQmL4kgGkY5NvoAbYpHwWdtvxiHR2eKnzOt6UP7EDi+a44Ya4peRtFPNTXW/
+         6jaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773147865; x=1773752665;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lf07QwHYKXnNseSZHISFXkm0dXoJRQ7SsuVDO+ZY+ek=;
+        b=knkeVR7Gdrj6Uis+NZaYrzCRz0908tg6s0ezQhq37aq9PDoiHGumuMuopS8NfRZwHt
+         JYDIaNESJHZYCn6JXFmqPQCymNlrOf7MmUH0DPVOxp99LbvWOb3zFrrx4Gr/yo2bR7a6
+         4daVQEa09v10V31HFhqmLdmFVqgJzIOLFmDhdGNF7Nbugpx9u324No66jNkw+WehU1yI
+         uKkHO89+rli8V/nG0IN6uJWZHWwYSptNoD9v63RxKaisbg5ucpMK8KwNAX4MqIeAqr0K
+         S8NdZNc3PLSfAdP1uFOTXK5LSdChcxB8/UmbuZsa4EHThYPAgMGVpBfgNwG2h4JHSd4f
+         a9aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/W4sldYLhi87tuHU/ZRYIxe9TKpu3LBG0mAdsYTSTFn/gjeIlMkqb6hwVOZ568TD5S7Es8ldAKKsp2QCx@vger.kernel.org
+X-Gm-Message-State: AOJu0YymbKf6TMWKNz0W+3OO/l019UWu5Wz3wxpZGiSIark/5gOPvvDM
+	v9Qe6fVoIeBFc7TRJ4Z/Obbfj752zzSN7ugfMBGOcO2t8F9GIwz9B7FZ
+X-Gm-Gg: ATEYQzyE0GIxS6OrNNeBW1I2cfB+8JMCi+vYovRyQrM1rDcoK+FDtXJ2RCfWYBdzyif
+	AsNlj6xtnDAmmR94quiQEfOxTgXFnyS43ZGsYXLMtIi+OrZEqklGtdfniAtW1noAv8o/jj8s0CS
+	pRmJp5bt9BNd+fO1GOTyGhEdMbWp/raurKHmCbloCAzNQSSM6eQYWbtfmn+NDSwUlJBFVzBDKGt
+	FoFxsmTuozZyn9gev455xu427bVrqvFuFl/4djkgu7HiPr2fNLpWPN2zNeTH/jdPpmfMWIzALvV
+	BMcywvTfbZNpdUvWo2za3mLWgNIxsuhDyBRzH4Crm0Ixbr0caYiM0wPUMZZVsEgfFHlK1+BLY21
+	gtmqt5DitvzMcyIxNwC5nB3PTqvY4oBix8Cyg+BTwZ/tso6L4KwNuuWTugOIGJB5fOV5Y9tMR2q
+	V1uGz3kXvsTnsiztilHedg9jTtuLZN09BUu/0=
+X-Received: by 2002:a17:903:228f:b0:2ae:aa16:acf7 with SMTP id d9443c01a7336-2aeaa16b19amr6692015ad.40.1773147865224;
+        Tue, 10 Mar 2026 06:04:25 -0700 (PDT)
+Received: from [192.19.0.1] ([116.232.34.251])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae83e83ad5sm156776805ad.26.2026.03.10.06.04.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Mar 2026 06:04:24 -0700 (PDT)
+Message-ID: <4215f061-488b-4c2b-98b3-45db4aabed5e@gmail.com>
+Date: Tue, 10 Mar 2026 21:04:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-46-bd63b656022d@avm.de>
+User-Agent: Mozilla Thunderbird
+To: hch@infradead.org
+Cc: atomlin@atomlin.com, da.gomez@kernel.org, laoar.shao@gmail.com,
+ linux-modules@vger.kernel.org, mcgrof@kernel.org, petr.pavlu@suse.com,
+ samitolvanen@google.com
+References: <aa-6wILF90Y4ndnd@infradead.org>
+Subject: Re: [PATCH v3] module: print version for external modules in
+ print_modules()
+Content-Language: en-US
+From: Yafang Shao <laoar.shao@gmail.com>
+In-Reply-To: <aa-6wILF90Y4ndnd@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 10, 2026 at 12:49:12PM +0100, Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
-> 
-> Change generated with coccinelle.
-> 
-> To: Alex Williamson <alex@shazbot.org>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  drivers/vfio/vfio_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-> index 742477546b15d4dbaf9ebcfb2e67627db71521e0..d71922dfde5885967398deddec3e9e04b05adfec 100644
-> --- a/drivers/vfio/vfio_main.c
-> +++ b/drivers/vfio/vfio_main.c
-> @@ -923,7 +923,7 @@ vfio_ioctl_device_feature_mig_device_state(struct vfio_device *device,
->  
->  	/* Handle the VFIO_DEVICE_FEATURE_SET */
->  	filp = device->mig_ops->migration_set_state(device, mig.device_state);
-> -	if (IS_ERR(filp) || !filp)
-> +	if (IS_ERR_OR_NULL(filp))
->  		goto out_copy;
->  
->  	return vfio_ioct_mig_return_fd(filp, arg, &mig);
-> 
 
-Reviewed-by: Pranjal Shrivastava <praan@google.com>
 
-The cleanup alone looks fine, but I'm not sure if the maintainers would
-be happy about the tree-wide spam, since each patch might go through a
-different tree. I'd wait for Alex's preference/ack on that.
+ > Then don't run extetrnal modules, which are not a first part citizen.
+ > Get your changeas upstream instead of just leeching the upstream
+ > developers work.
 
-Thanks,
-Praan
+That doesn't make any sense.
+Could you please explain the rationale behind introducing 
+EXPORT_SYMBOL_GPL() and TAINT_OOT_MODULE ?
+
+
