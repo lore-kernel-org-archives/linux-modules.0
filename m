@@ -1,151 +1,81 @@
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B203376BE1;
-	Tue, 10 Mar 2026 13:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.189.157.229
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B84D738D6A5
+	for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 13:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773150444; cv=none; b=mH+S2OnBWMGU4+RNslP9Jh64Zqnfn6MxtT1JvICMT7YRXVp3mfjcyqu8CV01nJcJsSXO0by0wvvUY/1OTjPf8kgTPB+PabA1UW230JoPi3NoC3rbbgWllrGp0Jtu9yFJJ5yGJ6cp8RKVGg1rLGRwr8LM5hIpqlhG9c6sQ0F4TJk=
+	t=1773150446; cv=none; b=uGrByiajLpUBKaxMH0k2gbdPYRqtnxy59XYT4PpO2YaTJFjwA/jyJMLsqZbNkN8A4w4axpQS7MoLE2z4gzBBJb35x5OR/MMkL+Gozga8NnY8zJdJmVoPBmjZgviwY4sLokVPhPMkgaI6ZgMAaKyw0ABs26PKj/wdDC/U36I8+Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773150444; c=relaxed/simple;
-	bh=JkhE8XRZB+0Xn8XaQBSlw7psFcPor8BTZgZawoRBPkU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pJ+XTcpvWOAdf3ER7KROpAAvO8ZD64v8jLBM2zAmi+71S4z7XaG8mrensYMR9GzDDpH5Ga9N5RRMGfU8nu5s43noOlxxQZK0AGn7piXf1IIL/+irGvI2UYi+0kGb+M5uwzXu8qkiVP6hNV4RBDHvdLAZoLTSBX3qyBE1BWPQ+t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com; spf=pass smtp.mailfrom=crudebyte.com; dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b=dTpIUmFy; arc=none smtp.client-ip=5.189.157.229
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crudebyte.com
+	s=arc-20240116; t=1773150446; c=relaxed/simple;
+	bh=1xrgyhnoPeWpQlJ3XfS+PaK67HHhvy64N+FepmYUwaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N6eRdTgGwCk0iT1WZqKAEGbzTVW6uxVbpYftfdur3NoAmZ/W1eNHEqtRT7U7NL+zhDeQUtDokTppmU41bPVcqO4gBDLJ4on/DfW87b3/Kyl/EV8nVQ7/lEOibLHGMFST7W1bbfccEMmUa3AZJY75jGs+LdCbz6T0YjZy3Mqc1tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=1tjztiL/; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b="dTpIUmFy"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="1tjztiL/"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Content-ID:Content-Description;
-	bh=aVv/PSZT5NGeZjfHxwg8OpWgNHlsgZDJ/5CMzeiUbdo=; b=dTpIUmFyfV+bP6Hy0ueZpN32tu
-	piiOrm2xYxIB724JO1nPYEvLrwNppM7ldi2VsLNiB9a22ZPzaNJQ0YaGHJwVuraOF2yk5SpAHZold
-	s8t7GSMCpZMXoj2MN+HCYF9oJcPgVF+TLl3oulmGF4t7YrhkwJ3IfsTmzXldUh96w/myd3pDSVX1g
-	/e8bzPXWMBYBNoEloTPI5IYSewDyrYj60Js0etFfclp4hEgkn7HaHPBIdN5mmqp8OC3Z4JyMZY1In
-	us3k02cy2EDC8Yr2DD9TZj2Bfv2JCzi8o1CBU/q/X+4deOd5/tymAnt0Bem3HGOfb0TZNQXc+sRV/
-	1upKIM10UX7QbQ98BeJxn1cHAUt80a13aLlrns2kgX3r4ZD43IvQ3qOgYizweNeHFZvB+bpwBSNFD
-	hlDW1qIdKmIN+wC7qSL6cU7m+YgH+eIF1AeR8pLLvTFBNqmI6qti9D+O96RBcbYAwE/olpfjlTGn5
-	mdLSL9FFfI7mx4Sepl5WAdeD1XVerb2KTcAMA8AXYimzng7DssEnPDbX6u+t3yAcQjc1BrWIujZyx
-	Gao2D20IgKGUx784nxNUpYJ2ZiCkXzoDKyugnEIdTC+VrOwC2OEJanP1Uq3/BrGj0qOrmxYFeI51c
-	48zjYWWU3v40e6itkF189TkI8Acs6/RLaheNlL7MM=;
-From: Christian Schoenebeck <linux_oss@crudebyte.com>
-To: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
- bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
- dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
- gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
- intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
- linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
- sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
- Philipp Hahn <phahn-oss@avm.de>, Philipp Hahn <phahn-oss@avm.de>
-Cc: Eric Van Hensbergen <ericvh@kernel.org>,
- Latchesar Ionkov <lucho@ionkov.net>,
- Dominique Martinet <asmadeus@codewreck.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>
-Subject:
- Re: [PATCH 24/61] net/9p: Prefer IS_ERR_OR_NULL over manual NULL check
-Date: Tue, 10 Mar 2026 14:47:03 +0100
-Message-ID: <1948861.tdWV9SEqCh@weasel>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-24-bd63b656022d@avm.de>
-References:
- <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
- <20260310-b4-is_err_or_null-v1-24-bd63b656022d@avm.de>
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=b3YJMvH/gbG0VTYghOtySntLrY1eKOBJat/84P+wphM=; b=1tjztiL/CBq1l8FCALfCKIGNKb
+	ZEM/VWzGdles13yCsGop0lCY+rqnMPr5HN8BL7DgoYj/zr3WZ7GVP9QJkvFkzYiyVQ4Fi+HhH75ph
+	daYV0d9TSuzkHvsW2p1Q57uh4+B36tiUWrdLJE6FbpS4yrDNswSdnkhE+Vlw+tKMsFFf0XoJk8MO2
+	OsMjDE48IpdNWcf+oiOFHjSlndJgb560tPRCNdcwhyX2cj0jzMHKV5mnmzeNFF9lsQRFX4NOWkHEu
+	6b+Fav1XHs4Ci4FK9z+CZuxJ2jxuHOw0KNghSPf8vmRMi0q5dHvDqF3+xEfEnzltf5kVnUuOzvEBx
+	mxeaoDRw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vzxQj-00000009d4t-0NTt;
+	Tue, 10 Mar 2026 13:47:25 +0000
+Date: Tue, 10 Mar 2026 06:47:25 -0700
+From: Christoph Hellwig <hch@infradead.org>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: Christoph Hellwig <hch@infradead.org>, atomlin@atomlin.com,
+	da.gomez@kernel.org, linux-modules@vger.kernel.org,
+	mcgrof@kernel.org, petr.pavlu@suse.com, samitolvanen@google.com
+Subject: Re: [PATCH v3] module: print version for external modules in
+ print_modules()
+Message-ID: <abAg7Wgq6N49pezT@infradead.org>
+References: <abAXjc6OihRcdoAA@infradead.org>
+ <CALOAHbA3g=UVavYgxJXH_5v0TYMLd6QKUTd=HDbD74Cp+9Kgvg@mail.gmail.com>
+ <abAZSCbSEGUhTdUn@infradead.org>
+ <CALOAHbBpAi_FM=odrNkGwXGj1d-ydn=cwURXkUGLawzOMUufuQ@mail.gmail.com>
+ <abAa03DO9aLxWcwX@infradead.org>
+ <CALOAHbBoX00_eDLq4X6vTrbdLG5X=9-07jW=Ba+Oa-QjtZX3MQ@mail.gmail.com>
+ <abAdr6zqeqSNMJ8X@infradead.org>
+ <CALOAHbCmxa0ptYTcq1EjRKMrzvFHCyyrv8CeEDYOhuuo7-QbOw@mail.gmail.com>
+ <abAf5ZtiQGFoOQvT@infradead.org>
+ <CALOAHbCg=nmwtoaMJj1KpeGqAXEuuAdnW+RCbe5KXxKKYGozzA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbCg=nmwtoaMJj1KpeGqAXEuuAdnW+RCbe5KXxKKYGozzA@mail.gmail.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Tuesday, 10 March 2026 12:48:50 CET Philipp Hahn wrote:
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
+On Tue, Mar 10, 2026 at 09:44:56PM +0800, Yafang Shao wrote:
+> On Tue, Mar 10, 2026 at 9:43 PM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Tue, Mar 10, 2026 at 09:35:23PM +0800, Yafang Shao wrote:
+> > > > Why would that matter?  You don't get a wild card to do things otherwise
+> > > > rejected because you contributed something before.
+> > >
+> > > Could you please explain why I am being characterized as a "leecher"?
+> >
+> > Because you're adding overhead to the kernel for your out of tree code,
+> > which only you and not the kernel project itself benefits from.
 > 
-> Change generated with coccinelle.
-> 
-> To: Eric Van Hensbergen <ericvh@kernel.org>
-> To: Latchesar Ionkov <lucho@ionkov.net>
-> To: Dominique Martinet <asmadeus@codewreck.org>
-> To: Christian Schoenebeck <linux_oss@crudebyte.com>
-> To: "David S. Miller" <davem@davemloft.net>
-> To: Eric Dumazet <edumazet@google.com>
-> To: Jakub Kicinski <kuba@kernel.org>
-> To: Paolo Abeni <pabeni@redhat.com>
-> To: Simon Horman <horms@kernel.org>
-> Cc: v9fs@lists.linux.dev
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
-> ---
->  include/net/9p/client.h | 2 +-
->  net/9p/trans_rdma.c     | 8 ++++----
->  2 files changed, 5 insertions(+), 5 deletions(-)
+> Why do you believe the kernel project cannot benefit from them, given
+> that all module maintainers have acknowledged their value?
 
-Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
- 
-> diff --git a/include/net/9p/client.h b/include/net/9p/client.h
-> index
-> 838a94218b593f3fb19e6827c472753380193461..4bde6bd716f323c819745e64c7aac0dea
-> 7beb72f 100644 --- a/include/net/9p/client.h
-> +++ b/include/net/9p/client.h
-> @@ -364,7 +364,7 @@ static inline struct p9_fid *p9_fid_get(struct p9_fid
-> *fid)
-> 
->  static inline int p9_fid_put(struct p9_fid *fid)
->  {
-> -	if (!fid || IS_ERR(fid))
-> +	if (IS_ERR_OR_NULL(fid))
->  		return 0;
-> 
->  	if (tracepoint_enabled(9p_fid_ref))
-> diff --git a/net/9p/trans_rdma.c b/net/9p/trans_rdma.c
-> index
-> aa5bd74d333f3b5e6fd1e4344d26bc0201ff7f7f..60461344b536bcb6e94112aace75a88b6
-> a99ad86 100644 --- a/net/9p/trans_rdma.c
-> +++ b/net/9p/trans_rdma.c
-> @@ -252,16 +252,16 @@ static void rdma_destroy_trans(struct p9_trans_rdma
-> *rdma) if (!rdma)
->  		return;
-> 
-> -	if (rdma->qp && !IS_ERR(rdma->qp))
-> +	if (!IS_ERR_OR_NULL(rdma->qp))
->  		ib_destroy_qp(rdma->qp);
-> 
-> -	if (rdma->pd && !IS_ERR(rdma->pd))
-> +	if (!IS_ERR_OR_NULL(rdma->pd))
->  		ib_dealloc_pd(rdma->pd);
-> 
-> -	if (rdma->cq && !IS_ERR(rdma->cq))
-> +	if (!IS_ERR_OR_NULL(rdma->cq))
->  		ib_free_cq(rdma->cq);
-> 
-> -	if (rdma->cm_id && !IS_ERR(rdma->cm_id))
-> +	if (!IS_ERR_OR_NULL(rdma->cm_id))
->  		rdma_destroy_id(rdma->cm_id);
-> 
->  	kfree(rdma);
-
+Because by definition it does not benefit from making life for
+out of tree modules easier.  And I really don't get your whole
+call to authority here, it makes hard for me to take you serious.
 
