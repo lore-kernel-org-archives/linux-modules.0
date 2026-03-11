@@ -1,197 +1,851 @@
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8522DECBF
-	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 02:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773194856; cv=pass; b=eXShOOKKt6wZXkDzi04Si/gW6svskRy+dxnfWGKolX6DRTlMXU+QlXrSVdCfyAPPR+xXwHpdC13A/1m2DfGWplxIpZEHJFgKALc0YiiSzjTvrhfCes+y9zUzxNEGu/L+4oKPYhA/mjGHtFONaoT10rQaYKwGiBRJdnDvqz7f4KE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773194856; c=relaxed/simple;
-	bh=8UJnLa/DDQ+b65RDSHa97nR/Rm6zetnRjswOkVb13wc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=byGraMQCie9pYDK7hyfJCwHVY6+oJ7d18FyYUD4bBwNC53+8/gHQFHF3kdMJE3gJYPTxGZa2ZdHRETsTevyL7LHCX2hAY3P8TZUDfnw+tebrl5xJi4Vj1Lk8SmBVyhVVN3qEQv7ELWcDfeD2EOtSNSbyNBwOa4aP39b6M7eyl6w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SqpOgAb4; arc=pass smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SqpOgAb4"
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a0fc5e2c59so9992849e87.1
-        for <linux-modules@vger.kernel.org>; Tue, 10 Mar 2026 19:07:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1773194852; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VU3++0l1cPeFJmVpSHqKpzfICrfXdCHs9w8svHrfLPoTrdJ6oSKe2Y2sSmBg96NryI
-         M67b/LtyOstM5QAefryBu2kWC1dgu3zZCOLjZqCLC5HAgVMQAug6ETM37bSpgrTj5MUv
-         QTIRzc7KxprLhZm6XypWXFFDDz+EwMOK4ItNnlzVvP5zlPX0FNdy0KAFucWJ/QvuFxG1
-         LNZxjZrHgc4BBeqqmWsFUTW1PKYwf8JJqUg1W9JHumAeSEQYLJdDA3jgujRvWs0MIBSk
-         3gFnIUqXqdlUCWjBbHTF+iMEessPRfcpxVjx+YSo/RGX3+8DzqVqrtiF/0RQ5YD1b4Rq
-         5R/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        fh=FJEMeqO34/63CoGuHkpVkBx+gZbhXgXPh5VA34bHzt8=;
-        b=IJ8oR9BQtjHzCibT3pY9YZI1R0Jaj7e7+XEO93N/FwnzKQ0W4TnTIBR+nfCASaRPJD
-         +TNElng1U4SOrxfXYurDMh6h2xT3rA940kG17jD6YNa2xbf7iPrp+2N7vyGN7yPo28nv
-         pqNBexErwQ29mocCs69cFfI3I7pD+hCo4ZMQb01aAkLBFwWWo5W/21/9/Y0kDH8OlHkY
-         7ZWLwl+3uVAzcQqBTCZwB0K53jHLCtzC2xGigD5aLZRXxQxDEf+PMVeHNDq4GMbOlAe3
-         kgcjnITu7QExPZRJcK4BnHDOhcu1pfqyhXVoRGOdXRUhzZvNF8veYuQQHrukl/gbrr9O
-         ifjg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1773194852; x=1773799652; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        b=SqpOgAb4CQOCp6QT1IhDiJXNOENCCAthmmQiQ2Xm1LqdH6AuNnr9pWEOxoaM6J2EHp
-         TaZvrNsWvEAAdeAh3rGZCGLrxzU767HUy57VJt43+079ae3+2kuAr2+JBVbU8T9+l/BT
-         vjjO+GANIyds0bGFgUhdgNG0FnF3NJi/nWQH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773194852; x=1773799652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+zLBLQzKjcztDlxJqoLP6w+B6xnZmfHibV4jlBQCebA=;
-        b=iQs/IcL7S4NUsu14qn4dyX2C9gK07b+FNNWOTFVWI/gH9wjmekCw28V3rms/uo0rsr
-         IqySkgXR5QdeG69Zb46Q3euylUVsNQ9WurnXc2TbFOPzDciCHI5dJqEP7V+WlSmfvo1S
-         ILUdyQwGj+hYLDLfCZlrJEfmH15CSclS4NZ6ZJ1RP/oOxNrXKHOhFy6wbgd1FcvXTyIO
-         OjWBQlMZ8B8O3S3EgG87E1yKCRTQyrUHWC9eIfE3Hi4iZeB9m0a0OYDle6TWIYxnq18A
-         d8E+bxTlS/6Yy6T1239hmliW96PXA8gcZ0IRNiqyTHPPEsHqkGakDGgLKu4eLmk66mgO
-         6PXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPGNSo1zKzB/PfDGLpRdSxIGyexmSu5tHemAJeYbLvpwk6+lJtiCDfW6Jm0iYXDxkgHhwpIJc1/+6QNDBL@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5RGu9Y3oTeH19z1qI3+t8mGvLVSOpm9bFAs2mphgf/lzR3L+m
-	krsqDpT2tmFV8+VjGcrawuOdulkeozIjymr7nj5JjezLK5Kf02tv80fSRKM9IuMy8w7RPK4LGmj
-	19VcxziNb+m/CHxiyJDYp1zWYE0WEBF1xOITVkl4Q
-X-Gm-Gg: ATEYQzxyCZrg6f1v9agIB1tRXApsGKMl8UrWn5GUHbA0pJdBSh78Ehsl8UpZ+xzVxLG
-	K3P2oTJlQeTxVjV13G7vThy62wDJvcX77GIa/eU8rxW5pB6h9VWnxELR7RWTxib14VuoXncnpMd
-	1TKZVodsZrGp7Ru5vG33Adv4PfYaWL5o2OkD7GQidSNvU2Zgz6nqzMKGWz6wpt18pW5cQCmg5JD
-	x/7vp9fIvtBvlSv8Ws0ari5m9t4T/8hzbhb0ZWl++pz3uFqPIisFlTrKuN/g3YhQmvLFWvzwniC
-	8Rk/fvMqcA==
-X-Received: by 2002:ac2:4427:0:b0:5a1:3134:9bac with SMTP id
- 2adb3069b0e04-5a156cbd1bbmr169453e87.28.1773194852284; Tue, 10 Mar 2026
- 19:07:32 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5EE26B777;
+	Wed, 11 Mar 2026 03:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1773200098; cv=none; b=SiCo92Itt+miVvqSBMJf2Wk82t//Zm30xb/2hqn4ccdNTcWk8SeA1T+YP1s83cmT4gLX/B7zOkOTyiHhHyeyWaZfuI/oHZ2Kr0aO7sNBLLXbzqOay4t7u4YTRiIT9vaaMCcNdyx5jeC/mwf43odiyyKaEpOlzSjeL0nZHf927uM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1773200098; c=relaxed/simple;
+	bh=GaqiIJVMnQ6NWxT7XKYZDglFtTNOHWf61pFujmouSM0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PWoyQC7lIdIgc3RXq1QvuB25+Bt2TY5kYt6ljXoFEGPzI4AUYb+bRJOhyuCZXXQAN95s4LeCD4P/DjSE7g+SfL9RM5CaYqDPuK+jVVZIitnqly2etg3jP8278SU1qdL5vjGz6YKGYOJ/arGiaCbQ7ZooUsWj6grCTH3Ksn35NaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from [10.213.22.86] (unknown [210.73.43.101])
+	by APP-01 (Coremail) with SMTP id qwCowABn027A4rBpdn+3CQ--.6054S2;
+	Wed, 11 Mar 2026 11:34:24 +0800 (CST)
+Message-ID: <e393e07f-368f-4b38-b2ed-937ddcc0a217@iscas.ac.cn>
+Date: Wed, 11 Mar 2026 11:34:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-56-bd63b656022d@avm.de>
-From: Chen-Yu Tsai <wenst@chromium.org>
-Date: Wed, 11 Mar 2026 11:07:21 +0900
-X-Gm-Features: AaiRm5028PWt8n-JnveiRgn8oYMksdR_-_nk4JOkvxMfplWs-GDr7RRk-OxICyw
-Message-ID: <CAGXv+5FQAVaJjqhv+Xq-ysOc4SHQn2mCNTgCAp8XocmWBWGGoA@mail.gmail.com>
-Subject: Re: [PATCH 56/61] clk: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Daniel Lezcano <daniel.lezcano@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] kallsyms: delta-compress lineinfo tables for ~2.7x
+ size reduction
+To: Sasha Levin <sashal@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ Richard Weinberger <richard@nod.at>, Juergen Gross <jgross@suse.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
+ Daniel Gomez <da.gomez@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thorsten Leemhuis <linux@leemhuis.info>, Vlastimil Babka
+ <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20260303182103.3523438-1-sashal@kernel.org>
+ <20260303182103.3523438-4-sashal@kernel.org>
+Content-Language: en-US
+From: Vivian Wang <wangruikang@iscas.ac.cn>
+In-Reply-To: <20260303182103.3523438-4-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:qwCowABn027A4rBpdn+3CQ--.6054S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfXF4rCF17ZFWxGFWxtw1fWFg_yoW5GrWfAo
+	Z3ua1UW3WxCry7CrW5AF18Jr9xuFWvyrsrArWYv3yUKF13XrWFkFZxK3W5XFs8ta1UKF9F
+	k34Iqw13Ja10qw18n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUYP7k0a2IF6w4kM7kC6x804xWl14x267AKxVW5JVWrJwAFc2x0
+	x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj4
+	1l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0
+	I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4
+	vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVAC
+	Y4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JV
+	WxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
+	wI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xSY4AK67AK6r48MxAIw28IcxkI7VAKI48JMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUYWGQDUUUUU==
+X-CM-SenderInfo: pzdqw2pxlnt03j6l2u1dvotugofq/
 
-On Tue, Mar 10, 2026 at 9:57=E2=80=AFPM Philipp Hahn <phahn-oss@avm.de> wro=
-te:
+Hi Sasha,
+
+I've been trying this out and AFAICT this does work perfectly.=C2=A0Thank=
+ you
+for this.
+
+There are a few oddities I found:
+
+Firstly I've been building with something like O=3D_riscv out of
+convenience, and the file names have an extra ../ in the front. (This is
+just me exiting out of init=3D/bin/sh.)
+
+[    2.317268] Kernel panic - not syncing: Attempted to kill init! exitco=
+de=3D0x00000000
+[    2.320283] CPU: 0 UID: 0 PID: 1 Comm: sh Not tainted 7.0.0-rc3-00004-=
+g8ad18f1a1a2f #31 PREEMPTLAZY=20
+[    2.322048] Hardware name: riscv-virtio,qemu (DT)
+[    2.323220] Call Trace:
+[    2.324465] [<ffffffff800172a8>] dump_backtrace+0x1c/0x24 (../arch/ris=
+cv/kernel/stacktrace.c:150)
+[    2.329061] [<ffffffff8000241e>] show_stack+0x2a/0x34 (../arch/riscv/k=
+ernel/stacktrace.c:156)
+[    2.330334] [<ffffffff8000fe32>] dump_stack_lvl+0x4a/0x68 (../lib/dump=
+_stack.c:122)
+[    2.331462] [<ffffffff8000fe64>] dump_stack+0x14/0x1c (../lib/dump_sta=
+ck.c:130)
+[    2.332571] [<ffffffff80002a88>] vpanic+0x108/0x2bc (../kernel/panic.c=
+:651)
+[    2.333674] [<ffffffff80002c6e>] panic+0x32/0x34 (../kernel/panic.c:78=
+7)
+[    2.334427] [<ffffffff8002e97a>] do_exit+0x7ee/0x7f4 (../kernel/exit.c=
+:930)
+[    2.335194] [<ffffffff8002eade>] do_group_exit+0x1a/0x88 (../kernel/ex=
+it.c:1099)
+[    2.335945] [<ffffffff8002eb62>] __riscv_sys_exit_group+0x16/0x18 (../=
+kernel/exit.c:1129)
+[    2.336763] [<ffffffff80b3e868>] do_trap_ecall_u+0x260/0x45c (../arch/=
+riscv/include/asm/syscall.h:112)
+[    2.337765] [<ffffffff80b4c034>] handle_exception+0x168/0x174 (../arch=
+/riscv/kernel/entry.S:233)
+
+This is fine by me, but I've seen mentions of O=3D builds but I'm not sur=
+e
+if it's expected.
+
+Also, toggling CONFIG_KALLSYMS_LINEINFO seems to rebuild every single
+file. I haven't debugged why, but is this expected?
+
+I have a few ideas about the code as well. Since this patch 3 touches
+most of the files involved, I'll just dump my thoughts on the whole
+series here. I want to note that I haven't read the RFC thread too
+carefully, but I don't think there were many comments on the implementati=
+on.
+
+On 3/4/26 02:21, Sasha Levin wrote:
+> Replace the flat uncompressed parallel arrays (lineinfo_addrs[],
+> lineinfo_file_ids[], lineinfo_lines[]) with a block-indexed,
+> delta-encoded, ULEB128 varint compressed format.
 >
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
+> The sorted address array has small deltas between consecutive entries
+> (typically 1-50 bytes), file IDs have high locality (delta often 0,
+> same file), and line numbers change slowly.  Delta-encoding followed
+> by ULEB128 varint compression shrinks most values from 4 bytes to 1.
 >
-> Semantich change: Previously the code only printed the warning on error,
-> but not when the pointer was NULL. Now the warning is printed in both
-> cases!
+> Entries are grouped into blocks of 64.  A small uncompressed block
+> index (first addr + byte offset per block) enables O(log(N/64)) binary
+> search, followed by sequential decode of at most 64 varints within the
+> matching block.  All decode state lives on the stack -- zero
+> allocations, still safe for NMI/panic context.
 >
-> Change found with coccinelle.
+> Measured on a defconfig+debug x86_64 build (3,017,154 entries, 4,822
+> source files, 47,144 blocks):
 >
-> To: Michael Turquette <mturquette@baylibre.com>
-> To: Stephen Boyd <sboyd@kernel.org>
-> To: Daniel Lezcano <daniel.lezcano@kernel.org>
-> To: Thomas Gleixner <tglx@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+>   Before (flat arrays):
+>     lineinfo_addrs[]    12,068,616 bytes (u32 x 3.0M)
+>     lineinfo_file_ids[]  6,034,308 bytes (u16 x 3.0M)
+>     lineinfo_lines[]    12,068,616 bytes (u32 x 3.0M)
+>     Total:              30,171,540 bytes (28.8 MiB, 10.0 bytes/entry)
+>
+>   After (block-indexed delta + ULEB128):
+>     lineinfo_block_addrs[]    188,576 bytes (184 KiB)
+>     lineinfo_block_offsets[]  188,576 bytes (184 KiB)
+>     lineinfo_data[]        10,926,128 bytes (10.4 MiB)
+>     Total:                 11,303,280 bytes (10.8 MiB, 3.7 bytes/entry)=
+
+>
+>   Savings: 18.0 MiB (2.7x reduction)
+>
+> Booted in QEMU and verified with SysRq-l that annotations still work:
+>
+>   default_idle+0x9/0x10 (arch/x86/kernel/process.c:767)
+>   default_idle_call+0x6c/0xb0 (kernel/sched/idle.c:122)
+>   do_idle+0x335/0x490 (kernel/sched/idle.c:191)
+>   cpu_startup_entry+0x4e/0x60 (kernel/sched/idle.c:429)
+>   rest_init+0x1aa/0x1b0 (init/main.c:760)
+>
+> Suggested-by: Juergen Gross <jgross@suse.com>
+> Assisted-by: Claude:claude-opus-4-6
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  drivers/clk/clk.c               | 4 ++--
->  drivers/clocksource/timer-pxa.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../admin-guide/kallsyms-lineinfo.rst         |   7 +-
+>  include/linux/mod_lineinfo.h                  | 103 ++++++++--
+>  init/Kconfig                                  |   8 +-
+>  kernel/kallsyms.c                             |  91 +++++++--
+>  kernel/kallsyms_internal.h                    |   7 +-
+>  kernel/module/kallsyms.c                      | 107 +++++++---
+>  scripts/gen_lineinfo.c                        | 192 ++++++++++++++----=
+
+>  scripts/kallsyms.c                            |   7 +-
+>  scripts/link-vmlinux.sh                       |  16 +-
+>  9 files changed, 423 insertions(+), 115 deletions(-)
 >
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 47093cda9df32223c1120c3710261296027c4cd3..35146e3869a7dd93741d10b72=
-23d4488a9216ed1 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -4558,7 +4558,7 @@ void clk_unregister(struct clk *clk)
->         unsigned long flags;
->         const struct clk_ops *ops;
->
-> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
-> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
->                 return;
->
->         clk_debug_unregister(clk->core);
-> @@ -4744,7 +4744,7 @@ void __clk_put(struct clk *clk)
+> diff --git a/Documentation/admin-guide/kallsyms-lineinfo.rst b/Document=
+ation/admin-guide/kallsyms-lineinfo.rst
+> index 21450569d5324..fe92c5dde16b3 100644
+> --- a/Documentation/admin-guide/kallsyms-lineinfo.rst
+> +++ b/Documentation/admin-guide/kallsyms-lineinfo.rst
+> @@ -76,10 +76,11 @@ Memory Overhead
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+>  The vmlinux lineinfo tables are stored in ``.rodata`` and typically ad=
+d
+> -approximately 44 MiB to the kernel image for a standard configuration
+> -(~4.6 million DWARF line entries, ~10 bytes per entry after deduplicat=
+ion).
+> +approximately 10-15 MiB to the kernel image for a standard configurati=
+on
+> +(~4.6 million DWARF line entries, ~2-3 bytes per entry after delta
+> +compression).
+> =20
+> -Per-module lineinfo adds approximately 10 bytes per DWARF line entry t=
+o each
+> +Per-module lineinfo adds approximately 2-3 bytes per DWARF line entry =
+to each
+>  ``.ko`` file.
+> =20
+
+Maybe this could be given in terms of percentages? It wasn't obvious to
+me what 10-15 MiB amounts to.
+
+On riscv64, I'm seeing a 24.2 MiB to 30.2 MiB increase in
+arch/riscv/boot/Image size on an approximately defconfig+mod2noconfig
+build, which is about a 25% increase. I haven't checked yet, but if 25%
+is similar to what other archs get, that's a more useful figure than
+10-15 MiB, given that the size increase is correlated to the total
+amount of code linked into the kernel/module.
+
+>  Known Limitations
+> diff --git a/include/linux/mod_lineinfo.h b/include/linux/mod_lineinfo.=
+h
+> index d62e9608f0f82..ab758acfadceb 100644
+> --- a/include/linux/mod_lineinfo.h
+> +++ b/include/linux/mod_lineinfo.h
+> @@ -8,13 +8,19 @@
+>   *
+>   * Section layout (all values in target-native endianness):
+>   *
+> - *   struct mod_lineinfo_header     (16 bytes)
+> - *   u32 addrs[num_entries]         -- offsets from .text base, sorted=
+
+> - *   u16 file_ids[num_entries]      -- parallel to addrs
+> - *   <2-byte pad if num_entries is odd>
+> - *   u32 lines[num_entries]         -- parallel to addrs
+> + *   struct mod_lineinfo_header     (24 bytes)
+> + *   u32 block_addrs[num_blocks]    -- first addr per block, for binar=
+y search
+> + *   u32 block_offsets[num_blocks]  -- byte offset into compressed dat=
+a stream
+> + *   u8  data[data_size]            -- ULEB128 delta-compressed entrie=
+s
+>   *   u32 file_offsets[num_files]    -- byte offset into filenames[]
+>   *   char filenames[filenames_size] -- concatenated NUL-terminated str=
+ings
+> + *
+> + * Compressed stream format (per block of LINEINFO_BLOCK_ENTRIES entri=
+es):
+> + *   Entry 0: file_id (ULEB128), line (ULEB128)
+> + *            addr is in block_addrs[]
+> + *   Entry 1..N: addr_delta (ULEB128),
+> + *               file_id_delta (zigzag-encoded ULEB128),
+> + *               line_delta (zigzag-encoded ULEB128)
+>   */
+>  #ifndef _LINUX_MOD_LINEINFO_H
+>  #define _LINUX_MOD_LINEINFO_H
+> @@ -25,44 +31,107 @@
+>  #include <stdint.h>
+>  typedef uint32_t u32;
+>  typedef uint16_t u16;
+> +typedef uint8_t  u8;
+>  #endif
+> =20
+> +#define LINEINFO_BLOCK_ENTRIES 64
+> +
+>  struct mod_lineinfo_header {
+>  	u32 num_entries;
+>  	u32 num_files;
+>  	u32 filenames_size;	/* total bytes of concatenated filenames */
+> +	u32 num_blocks;
+> +	u32 data_size;		/* total bytes of compressed data stream */
+>  	u32 reserved;		/* padding, must be 0 */
+>  };
+> =20
+>  /* Offset helpers: compute byte offset from start of section to each a=
+rray */
+> =20
+> -static inline u32 mod_lineinfo_addrs_off(void)
+> +static inline u32 mod_lineinfo_block_addrs_off(void)
 >  {
->         struct module *owner;
->
-> -       if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
-> +       if (WARN_ON_ONCE(IS_ERR_OR_NULL(clk)))
+>  	return sizeof(struct mod_lineinfo_header);
+>  }
+> =20
+> -static inline u32 mod_lineinfo_file_ids_off(u32 num_entries)
+> +static inline u32 mod_lineinfo_block_offsets_off(u32 num_blocks)
+>  {
+> -	return mod_lineinfo_addrs_off() + num_entries * sizeof(u32);
+> +	return mod_lineinfo_block_addrs_off() + num_blocks * sizeof(u32);
+>  }
+> =20
+> -static inline u32 mod_lineinfo_lines_off(u32 num_entries)
+> +static inline u32 mod_lineinfo_data_off(u32 num_blocks)
+>  {
+> -	/* u16 file_ids[] may need 2-byte padding to align lines[] to 4 bytes=
+ */
+> -	u32 off =3D mod_lineinfo_file_ids_off(num_entries) +
+> -		  num_entries * sizeof(u16);
+> -	return (off + 3) & ~3u;
+> +	return mod_lineinfo_block_offsets_off(num_blocks) +
+> +	       num_blocks * sizeof(u32);
+>  }
+> =20
+> -static inline u32 mod_lineinfo_file_offsets_off(u32 num_entries)
+> +static inline u32 mod_lineinfo_file_offsets_off(u32 num_blocks, u32 da=
+ta_size)
+>  {
+> -	return mod_lineinfo_lines_off(num_entries) + num_entries * sizeof(u32=
+);
+> +	return mod_lineinfo_data_off(num_blocks) + data_size;
+>  }
+> =20
+> -static inline u32 mod_lineinfo_filenames_off(u32 num_entries, u32 num_=
+files)
+> +static inline u32 mod_lineinfo_filenames_off(u32 num_blocks, u32 data_=
+size,
+> +					     u32 num_files)
+>  {
+> -	return mod_lineinfo_file_offsets_off(num_entries) +
+> +	return mod_lineinfo_file_offsets_off(num_blocks, data_size) +
+>  	       num_files * sizeof(u32);
+>  }
+> =20
 
-clk_get_optional() returns NULL if the clk isn't present.
+I wonder if these headers could use a slightly simpler representation,
+with each part represented with its offset from header start and total
+size in bytes, a bit like flattened devicetrees. So like, blocks_offset,
+blocks_size, files_offset, files_size...
 
-Drivers would just pass this to clk_put(). Your change here would cause
-this pattern to emit a very big warning.
+This would make the assembly generation below more readable, and IMO
+make understanding offset and array bound calculations way simpler, at
+the cost of a few extra words in the header.
 
-I don't think this change should be landed.
+(Re: array bounds, I know there are easier ways to break the kernel
+intentionally if you're writing kernel code. but these things that run
+in the "ouch something bad happened" cases really should be a bit more
+defensive against possibly bad data, esp. in dealing with loadable
+modules. I haven't looked closely to the in-kernel lookup code, but I
+don't see much sanity checks against lineinfo data? I *think* for
+badly-sorted binary search just spits out a nonsensical offset, but I
+really don't want to find out what happens to the whole
+binary-then-linear search code with negative sizes or out-of-bounds
+offsets or something like that.)
 
+> +/* Zigzag encoding: map signed to unsigned so small magnitudes are sma=
+ll */
+> +static inline u32 zigzag_encode(int32_t v)
+> +{
+> +	return ((u32)v << 1) ^ (u32)(v >> 31);
+> +}
+> +
+> +static inline int32_t zigzag_decode(u32 v)
+> +{
+> +	return (int32_t)((v >> 1) ^ -(v & 1));
+> +}
+> +
+> +/*
+> + * Read a ULEB128 varint from a byte stream.
+> + * Returns the decoded value and advances *pos past the encoded bytes.=
 
-ChenYu
+> + * If *pos would exceed 'end', returns 0 and sets *pos =3D end (safe f=
+or
+> + * NMI/panic context -- no crash, just a missed annotation).
 
->                 return;
->
->         clk_prepare_lock();
-> diff --git a/drivers/clocksource/timer-pxa.c b/drivers/clocksource/timer-=
-pxa.c
-> index 7ad0e5adb2ffac4125c34710fc67f4b45f30331d..f65fb0b7fc318b766227e5e7a=
-4c0fb08ba11c8f9 100644
-> --- a/drivers/clocksource/timer-pxa.c
-> +++ b/drivers/clocksource/timer-pxa.c
-> @@ -218,7 +218,7 @@ void __init pxa_timer_nodt_init(int irq, void __iomem=
- *base)
->
->         timer_base =3D base;
->         clk =3D clk_get(NULL, "OSTIMER0");
-> -       if (clk && !IS_ERR(clk)) {
-> +       if (!IS_ERR_OR_NULL(clk)) {
->                 clk_prepare_enable(clk);
->                 pxa_timer_common_init(irq, clk_get_rate(clk));
->         } else {
->
-> --
-> 2.43.0
->
->
+What does that last bit mean...?
+
+> + */
+> +static inline u32 lineinfo_read_uleb128(const u8 *data, u32 *pos, u32 =
+end)
+> +{
+> +	u32 result =3D 0;
+> +	unsigned int shift =3D 0;
+> +
+> +	while (*pos < end) {
+> +		u8 byte =3D data[*pos];
+> +		(*pos)++;
+> +		result |=3D (u32)(byte & 0x7f) << shift;
+> +		if (!(byte & 0x80))
+> +			return result;
+> +		shift +=3D 7;
+> +		if (shift >=3D 32) {
+> +			/* Malformed -- skip remaining continuation bytes */
+> +			while (*pos < end && (data[*pos] & 0x80))
+> +				(*pos)++;
+> +			if (*pos < end)
+> +				(*pos)++;
+> +			return result;
+> +		}
+> +	}
+> +	return result;
+> +}
+> +
+> +/* Write a ULEB128 varint -- build tool only */
+> +#ifndef __KERNEL__
+> +static inline unsigned int lineinfo_write_uleb128(u8 *buf, u32 value)
+> +{
+> +	unsigned int len =3D 0;
+> +
+> +	do {
+> +		u8 byte =3D value & 0x7f;
+> +
+> +		value >>=3D 7;
+> +		if (value)
+> +			byte |=3D 0x80;
+> +		buf[len++] =3D byte;
+> +	} while (value);
+> +	return len;
+> +}
+> +#endif /* !__KERNEL__ */
+> +
+>  #endif /* _LINUX_MOD_LINEINFO_H */
+> diff --git a/init/Kconfig b/init/Kconfig
+> index bf53275bc405a..6e3795b3dbd62 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2065,8 +2065,9 @@ config KALLSYMS_LINEINFO
+>  	    anon_vma_clone+0x2ed/0xcf0 (mm/rmap.c:412)
+> =20
+>  	  This requires elfutils (libdw-dev/elfutils-devel) on the build host=
+=2E
+> -	  Adds approximately 44MB to a typical kernel image (10 bytes per
+> -	  DWARF line-table entry, ~4.6M entries for a typical config).
+> +	  Adds approximately 10-15MB to a typical kernel image (~2-3 bytes
+> +	  per entry after delta compression, ~4.6M entries for a typical
+> +	  config).
+> =20
+>  	  If unsure, say N.
+> =20
+> @@ -2079,7 +2080,8 @@ config KALLSYMS_LINEINFO_MODULES
+>  	  so stack traces from module code include (file.c:123) annotations.
+> =20
+>  	  Requires elfutils (libdw-dev/elfutils-devel) on the build host.
+> -	  Increases .ko sizes by approximately 10 bytes per DWARF line entry.=
+
+> +	  Increases .ko sizes by approximately 2-3 bytes per DWARF line
+> +	  entry after delta compression.
+> =20
+>  	  If unsure, say N.
+> =20
+
+(Same as above, maybe use percentages when talking about sizes?)
+
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index cea74992e5427..de4aa8fcfd69d 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -468,14 +468,20 @@ static int append_buildid(char *buffer,   const c=
+har *modname,
+>  #endif /* CONFIG_STACKTRACE_BUILD_ID */
+> =20
+>  #ifdef CONFIG_KALLSYMS_LINEINFO
+> +#include <linux/mod_lineinfo.h>
+> +
+>  bool kallsyms_lookup_lineinfo(unsigned long addr, unsigned long sym_st=
+art,
+>  			      const char **file, unsigned int *line)
+>  {
+
+[...]
+
+> diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+> index 868a1d5035212..691be44440395 100644
+> --- a/kernel/kallsyms_internal.h
+> +++ b/kernel/kallsyms_internal.h
+> @@ -17,10 +17,11 @@ extern const u8 kallsyms_seqs_of_names[];
+> =20
+>  #ifdef CONFIG_KALLSYMS_LINEINFO
+>  extern const u32 lineinfo_num_entries;
+> -extern const u32 lineinfo_addrs[];
+> -extern const u16 lineinfo_file_ids[];
+> -extern const u32 lineinfo_lines[];
+>  extern const u32 lineinfo_num_files;
+> +extern const u32 lineinfo_num_blocks;
+> +extern const u32 lineinfo_block_addrs[];
+> +extern const u32 lineinfo_block_offsets[];
+> +extern const u8  lineinfo_data[];
+>  extern const u32 lineinfo_file_offsets[];
+>  extern const char lineinfo_filenames[];
+>  #endif
+> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> index 7af414bd65e79..0ead1bb69de4e 100644
+> --- a/kernel/module/kallsyms.c
+> +++ b/kernel/module/kallsyms.c
+> @@ -512,15 +512,19 @@ bool module_lookup_lineinfo(struct module *mod, u=
+nsigned long addr,
+>  {
+
+This and kallsyms_lookup_lineinfo() above look like almost exactly the
+same code twice. Some refactoring would be nice, just so that others
+don't have to read the same code twice, or worse, change the same code
+twice later on.
+
+[...]
+
+> diff --git a/scripts/gen_lineinfo.c b/scripts/gen_lineinfo.c
+> index 609de59f47ffd..9507ed9bcbe55 100644
+> --- a/scripts/gen_lineinfo.c
+> +++ b/scripts/gen_lineinfo.c
+> @@ -8,6 +8,9 @@
+>   * file containing sorted lookup tables that the kernel uses to annota=
+te
+>   * stack traces with source file:line information.
+>   *
+> + * The output uses a block-indexed, delta-encoded, ULEB128-compressed =
+format
+> + * for ~3-4x size reduction compared to flat arrays.
+> + *
+>   * Requires libdw from elfutils.
+>   */
+> =20
+> @@ -53,6 +56,15 @@ static struct file_entry *files;
+>  static unsigned int num_files;
+>  static unsigned int files_capacity;
+> =20
+> +/* Compressed output */
+> +static unsigned char *compressed_data;
+> +static unsigned int compressed_size;
+> +static unsigned int compressed_capacity;
+> +
+> +static unsigned int *block_addrs;
+> +static unsigned int *block_offsets;
+> +static unsigned int num_blocks;
+> +
+>  #define FILE_HASH_BITS 13
+>  #define FILE_HASH_SIZE (1 << FILE_HASH_BITS)
+> =20
+> @@ -352,6 +364,93 @@ static void deduplicate(void)
+>  	num_entries =3D j + 1;
+>  }
+> =20
+> +static void compressed_ensure(unsigned int need)
+> +{
+> +	if (compressed_size + need <=3D compressed_capacity)
+> +		return;
+> +	compressed_capacity =3D compressed_capacity ? compressed_capacity * 2=
+ : 1024 * 1024;
+> +	while (compressed_capacity < compressed_size + need)
+> +		compressed_capacity *=3D 2;
+> +	compressed_data =3D realloc(compressed_data, compressed_capacity);
+> +	if (!compressed_data) {
+> +		fprintf(stderr, "out of memory\n");
+> +		exit(1);
+> +	}
+> +}
+> +
+> +static void compress_entries(void)
+> +{
+> +	unsigned int i, block;
+> +
+> +	if (num_entries =3D=3D 0) {
+> +		num_blocks =3D 0;
+> +		return;
+> +	}
+> +
+> +	num_blocks =3D (num_entries + LINEINFO_BLOCK_ENTRIES - 1) / LINEINFO_=
+BLOCK_ENTRIES;
+> +	block_addrs =3D calloc(num_blocks, sizeof(*block_addrs));
+> +	block_offsets =3D calloc(num_blocks, sizeof(*block_offsets));
+> +	if (!block_addrs || !block_offsets) {
+> +		fprintf(stderr, "out of memory\n");
+> +		exit(1);
+> +	}
+> +
+> +	for (block =3D 0; block < num_blocks; block++) {
+> +		unsigned int base =3D block * LINEINFO_BLOCK_ENTRIES;
+> +		unsigned int count =3D num_entries - base;
+> +		unsigned int prev_addr, prev_file_id, prev_line;
+> +		unsigned char buf[10]; /* max 5 bytes per ULEB128 */
+> +
+> +		if (count > LINEINFO_BLOCK_ENTRIES)
+> +			count =3D LINEINFO_BLOCK_ENTRIES;
+> +
+> +		block_addrs[block] =3D entries[base].offset;
+> +		block_offsets[block] =3D compressed_size;
+> +
+> +		/* Entry 0: file_id (ULEB128), line (ULEB128) */
+> +		compressed_ensure(20);
+> +		compressed_size +=3D lineinfo_write_uleb128(
+> +			compressed_data + compressed_size,
+> +			entries[base].file_id);
+> +		compressed_size +=3D lineinfo_write_uleb128(
+> +			compressed_data + compressed_size,
+> +			entries[base].line);
+> +
+> +		prev_addr =3D entries[base].offset;
+> +		prev_file_id =3D entries[base].file_id;
+> +		prev_line =3D entries[base].line;
+> +
+> +		/* Entries 1..N: deltas */
+> +		for (i =3D 1; i < count; i++) {
+> +			unsigned int idx =3D base + i;
+> +			unsigned int addr_delta;
+> +			int32_t file_delta, line_delta;
+> +			unsigned int n;
+> +
+> +			addr_delta =3D entries[idx].offset - prev_addr;
+> +			file_delta =3D (int32_t)entries[idx].file_id - (int32_t)prev_file_i=
+d;
+> +			line_delta =3D (int32_t)entries[idx].line - (int32_t)prev_line;
+> +
+> +			compressed_ensure(15);
+> +			n =3D lineinfo_write_uleb128(buf, addr_delta);
+> +			memcpy(compressed_data + compressed_size, buf, n);
+> +			compressed_size +=3D n;
+> +
+> +			n =3D lineinfo_write_uleb128(buf, zigzag_encode(file_delta));
+> +			memcpy(compressed_data + compressed_size, buf, n);
+> +			compressed_size +=3D n;
+> +
+> +			n =3D lineinfo_write_uleb128(buf, zigzag_encode(line_delta));
+> +			memcpy(compressed_data + compressed_size, buf, n);
+> +			compressed_size +=3D n;
+> +
+> +			prev_addr =3D entries[idx].offset;
+> +			prev_file_id =3D entries[idx].file_id;
+> +			prev_line =3D entries[idx].line;
+> +		}
+> +	}
+> +}
+> +
+>  static void compute_file_offsets(void)
+>  {
+>  	unsigned int offset =3D 0;
+> @@ -395,28 +494,40 @@ static void output_assembly(void)
+>  	printf("lineinfo_num_files:\n");
+>  	printf("\t.long %u\n\n", num_files);
+> =20
+> -	/* Sorted address offsets from _text */
+> -	printf("\t.globl lineinfo_addrs\n");
+> +	/* Number of blocks */
+> +	printf("\t.globl lineinfo_num_blocks\n");
+>  	printf("\t.balign 4\n");
+> -	printf("lineinfo_addrs:\n");
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.long 0x%x\n", entries[i].offset);
+> -	printf("\n");
+> +	printf("lineinfo_num_blocks:\n");
+> +	printf("\t.long %u\n\n", num_blocks);
+> =20
+> -	/* File IDs, parallel to addrs (u16 -- supports up to 65535 files) */=
+
+> -	printf("\t.globl lineinfo_file_ids\n");
+> -	printf("\t.balign 2\n");
+> -	printf("lineinfo_file_ids:\n");
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.short %u\n", entries[i].file_id);
+> +	/* Block first-addresses for binary search */
+> +	printf("\t.globl lineinfo_block_addrs\n");
+> +	printf("\t.balign 4\n");
+> +	printf("lineinfo_block_addrs:\n");
+> +	for (unsigned int i =3D 0; i < num_blocks; i++)
+> +		printf("\t.long 0x%x\n", block_addrs[i]);
+>  	printf("\n");
+> =20
+> -	/* Line numbers, parallel to addrs */
+> -	printf("\t.globl lineinfo_lines\n");
+> +	/* Block byte offsets into compressed stream */
+> +	printf("\t.globl lineinfo_block_offsets\n");
+>  	printf("\t.balign 4\n");
+> -	printf("lineinfo_lines:\n");
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.long %u\n", entries[i].line);
+> +	printf("lineinfo_block_offsets:\n");
+> +	for (unsigned int i =3D 0; i < num_blocks; i++)
+> +		printf("\t.long %u\n", block_offsets[i]);
+> +	printf("\n");
+> +
+> +	/* Compressed data stream */
+> +	printf("\t.globl lineinfo_data\n");
+> +	printf("lineinfo_data:\n");
+> +	for (unsigned int i =3D 0; i < compressed_size; i++) {
+> +		if ((i % 16) =3D=3D 0)
+> +			printf("\t.byte ");
+> +		else
+> +			printf(",");
+> +		printf("0x%02x", compressed_data[i]);
+> +		if ((i % 16) =3D=3D 15 || i =3D=3D compressed_size - 1)
+> +			printf("\n");
+> +	}
+>  	printf("\n");
+> =20
+
+Note how compute_file_offsets() gives symbol names to the data it
+generates. Meanwhile...
+
+>  	/* File string offset table */
+> @@ -450,33 +561,38 @@ static void output_module_assembly(void)
+> =20
+>  	printf("\t.section .mod_lineinfo, \"a\"\n\n");
+> =20
+> -	/* Header: num_entries, num_files, filenames_size, reserved */
+> +	/* Header: num_entries, num_files, filenames_size, num_blocks, data_s=
+ize, reserved */
+>  	printf("\t.balign 4\n");
+>  	printf("\t.long %u\n", num_entries);
+>  	printf("\t.long %u\n", num_files);
+>  	printf("\t.long %u\n", filenames_size);
+> +	printf("\t.long %u\n", num_blocks);
+> +	printf("\t.long %u\n", compressed_size);
+>  	printf("\t.long 0\n\n");
+> =20
+> -	/* addrs[] */
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.long 0x%x\n", entries[i].offset);
+> -	if (num_entries)
+> +	/* block_addrs[] */
+> +	for (unsigned int i =3D 0; i < num_blocks; i++)
+> +		printf("\t.long 0x%x\n", block_addrs[i]);
+> +	if (num_blocks)
+>  		printf("\n");
+> =20
+For the modules, it's comments in the C code that doesn't end up in the
+assembly.
+
+I'm thinking we could have something like:
+
+	printf(".Lmod_lineinfo_block_addrs:\n")
+	for (unsigned int i =3D 0; i < num_entries; i++)
+		printf("\t.long 0x%x\n", ...);
+	printf("\n")
+
+(And similarly for the other blocks of data.)
+
+This would make the assembly a tiny bit more readable, get rid of the
+kinda ugly printf("\n") checks and prints, and would be useful for the
+offset + size header format I mentioned earlier.
+
+> -	/* file_ids[] */
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.short %u\n", entries[i].file_id);
+> -
+> -	/* Padding to align lines[] to 4 bytes */
+> -	if (num_entries & 1)
+> -		printf("\t.short 0\n");
+> -	if (num_entries)
+> +	/* block_offsets[] */
+> +	for (unsigned int i =3D 0; i < num_blocks; i++)
+> +		printf("\t.long %u\n", block_offsets[i]);
+> +	if (num_blocks)
+>  		printf("\n");
+> =20
+> -	/* lines[] */
+> -	for (unsigned int i =3D 0; i < num_entries; i++)
+> -		printf("\t.long %u\n", entries[i].line);
+> -	if (num_entries)
+> +	/* compressed data[] */
+> +	for (unsigned int i =3D 0; i < compressed_size; i++) {
+> +		if ((i % 16) =3D=3D 0)
+> +			printf("\t.byte ");
+> +		else
+> +			printf(",");
+> +		printf("0x%02x", compressed_data[i]);
+> +		if ((i % 16) =3D=3D 15 || i =3D=3D compressed_size - 1)
+> +			printf("\n");
+> +	}
+> +	if (compressed_size)
+>  		printf("\n");
+> =20
+
+Also, maybe we can use .uleb128/.sleb128 here, and generate something lik=
+e:
+
+	printf("\t.sleb128 %#x - %#x\n", cur_addr, prev_addr);=20
+
+And have the assembler do the subtraction and encoding for us? If that
+works it should significantly simplify the compression code above.
+
+Speaking of... Why do we use uleb128(zigzag(num)) and not just sleb128(nu=
+m)?
+
+[...]
+
+> @@ -558,10 +674,11 @@ int main(int argc, char *argv[])
+>  			skipped_overflow);
+> =20
+>  	deduplicate();
+> +	compress_entries();
+>  	compute_file_offsets();
+> =20
+> -	fprintf(stderr, "lineinfo: %u entries, %u files\n",
+> -		num_entries, num_files);
+> +	fprintf(stderr, "lineinfo: %u entries, %u files, %u blocks, %u compre=
+ssed bytes\n",
+> +		num_entries, num_files, num_blocks, compressed_size);
+> =20
+>  	if (module_mode)
+>  		output_module_assembly();
+> @@ -577,6 +694,9 @@ int main(int argc, char *argv[])
+>  	for (unsigned int i =3D 0; i < num_files; i++)
+>  		free(files[i].name);
+>  	free(files);
+> +	free(compressed_data);
+> +	free(block_addrs);
+> +	free(block_offsets);
+> =20
+>  	return 0;
+>  }
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 42662c4fbc6c9..94fbdad3df7c6 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -80,11 +80,12 @@ static bool is_ignored_symbol(const char *name, cha=
+r type)
+>  {
+>  	/* Ignore lineinfo symbols for kallsyms pass stability */
+>  	static const char * const lineinfo_syms[] =3D {
+> -		"lineinfo_addrs",
+> -		"lineinfo_file_ids",
+> +		"lineinfo_block_addrs",
+> +		"lineinfo_block_offsets",
+> +		"lineinfo_data",
+>  		"lineinfo_file_offsets",
+>  		"lineinfo_filenames",
+> -		"lineinfo_lines",
+> +		"lineinfo_num_blocks",
+>  		"lineinfo_num_entries",
+>  		"lineinfo_num_files",
+>  	};
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index 640209f2e9eb9..3c122cf9b95c5 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -235,12 +235,16 @@ lineinfo_num_entries:
+>  	.balign 4
+>  lineinfo_num_files:
+>  	.long 0
+> -	.globl lineinfo_addrs
+> -lineinfo_addrs:
+> -	.globl lineinfo_file_ids
+> -lineinfo_file_ids:
+> -	.globl lineinfo_lines
+> -lineinfo_lines:
+> +	.globl lineinfo_num_blocks
+> +	.balign 4
+> +lineinfo_num_blocks:
+> +	.long 0
+> +	.globl lineinfo_block_addrs
+> +lineinfo_block_addrs:
+> +	.globl lineinfo_block_offsets
+> +lineinfo_block_offsets:
+> +	.globl lineinfo_data
+> +lineinfo_data:
+>  	.globl lineinfo_file_offsets
+>  lineinfo_file_offsets:
+>  	.globl lineinfo_filenames
+
+The contents of this .tmp_lineinfo.S is fixed, so it feels like it could
+just be a proper file, instead of something "generated" dynamically.
+
+Thanks,
+Vivian "dramforever" Wang
+
