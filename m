@@ -1,202 +1,110 @@
-Received: from mout.web.de (mout.web.de [212.227.15.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEEEF3DDDAC;
-	Wed, 11 Mar 2026 15:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1AF0324716
+	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 21:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773241983; cv=none; b=pov7a7sI/MINLOsdFC8+RIik9KczOOobUHEEsamZI9QTlXiHJTjoCTOMpS+nWDMUkDa7NDYRddnTQ8eRonoXx3hVxeuLyqCLLueHmYeguQ31QKyOpoHFHm5ntIhbp7UuX1z2c/8fGGga4Is+VZ8SeDw0VBSQPmALqZhObfrLaHM=
+	t=1773263535; cv=none; b=L4H3jIfjsNXzRaugSUqKstV1oGclVChQfTRFxxRf838z6ctW2zmrEE/f2wxDaK+8fR2ssxdk+rOYOOt86zuygHulJ06kofedVIREheOE7J59c85+RUFJc2FthzWYtWbs4ryFX6+Xawuybt4ETNWZUz+6FwdGrbJMumsfMTHg6J4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773241983; c=relaxed/simple;
-	bh=8xayem6yt0HtfhsQlYY0bHMXVNy1I+u8tIW/Rzn2tYE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=XdLEpbCQyRHi4jFbyvJOpxFxhnT4Q5Wz554cp5HU/aJiLNl7OcUxT5c3VL59Bqaisz79LQy1DGRkl+H2AVmtEOylanY+woySO+1+MVAxhzHCNnPN1qijPIbsISIxBcFXc7H1iPvyDUAb1Xpp3YG2QCuKV6riViUDsU17m6UKTQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=Wag9Fxf+; arc=none smtp.client-ip=212.227.15.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1773263535; c=relaxed/simple;
+	bh=QQfTmCsvjuP9DFFtDxR1itB3grzbZ//YtLxljgkYJ4g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gXKp42AyRb4oZJ/5rctIICJQeCDWP9T4+gwkWcwJkfrMolG6ooIdyqYrep5OiJaec2AZcV8jEn/oDiR3bcMjQuQemy1Mjjxgr2ZOPF4tLYpmUWuPMmiCwP58WxJThOTS2VbLJM5XQPQ+wbXNF4gDiutwusvIccLjJndqBg6qPVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pCqSkzkP; arc=none smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="Wag9Fxf+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1773241960; x=1773846760; i=markus.elfring@web.de;
-	bh=giiOm4nN20bJPCHKicALa9KbdO4HtuSxDT6eKFGA2mo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=Wag9Fxf+yNYQPXsTRyON3wRt6746M7liQFpZpr6olBI3Hroz514SMRate1mi9Xg/
-	 MIASsdEYNcunoz8/0486PBcCtmiUbXpXZk7SZ9UfEjg2yZ/tPzswVOTPVBMcMOZI0
-	 P5tpvgiKmN/AWRSyt4QzAOeFSzOnPlGV7COlz4Px5LChMrnWVtTVF6O0hgI7HspJ9
-	 ZFokJK/ysEIyBkMx8vWGA+V0bsSD1FiKNQpHbXMbvGQ3/XnE4gJZFGitvxFp9Ukqq
-	 G2o9A+gT473BGTVzhrJiV0v2XUcnMqFfYGkufDQuk2aN8veffUebr4e9kMFhtnu0/
-	 59bsB5DtXuFN3mqFBA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from client.hidden.invalid by smtp.web.de (mrweb006
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1N9cHJ-1vWLef0wrt-00vzxd; Wed, 11
- Mar 2026 16:12:40 +0100
-Message-ID: <e6145c17-64ce-494e-a41a-c847df3d999e@web.de>
-Date: Wed, 11 Mar 2026 16:12:34 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pCqSkzkP"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-126ea4e9697so1143c88.1
+        for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 14:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773263533; x=1773868333; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtz42F1xPwBdJk/xPFFDJA5HY6dDuesaKHHTOQD4ozQ=;
+        b=pCqSkzkP0jdT7nSyygeEPqipsrBQOCibr1Fa/tMzyjQLtUX4n37AYM/9UZiMRjZF1E
+         UYzUIrFg98oWoM+Tmb0xOeFunSbeSc0F6OlG4Ek5UrOfMFHF2q9sRm9x/3Bwj3cIO4jZ
+         aHr8UFC3kvHjNENa1/uCQY/xIhMhoNC2ufFcJ7RsUSi/yrVS6tgP0hGjnNW/CnjkljxX
+         ovC6zjAmphgh1gnSocZ/skXu0dvBldL+seHOLq4aSpu9pyoB/3rOO7EoD11ZVR+CWtvX
+         WWGM+NUrBWpfql1xx5cMfZRAlFb5x6a3tw79AgR8NgWN7iqCIORh9ahR9HjgwOgJu9nI
+         l8fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773263533; x=1773868333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rtz42F1xPwBdJk/xPFFDJA5HY6dDuesaKHHTOQD4ozQ=;
+        b=rd/UNrFFwj9wpt4AkDzhsA4WaOyOHFWoGo+QUD0JO34VKmPv8RQCyemAnoALGb1yis
+         xKrxO5cl6H9s5jepWfqFLQnb8gPAi6qvfUobw61AngBY3G3tdM0P5E75jaJuK/eIZH38
+         5KMWAI/HIHGE6Kh8vUPxPfCoWJD5ggwPG0yComKcSSTaq9uCIe1X9xQOaBqdZjonmZru
+         Hawa8ZBzaMwNPBgE64C+gbYSuvd9ucmAKKsv+BG7Vha61uOLf7NJw9md6V9QMnYvHgVv
+         zLEsvrLuT41ARkbBnI9sKuabYTQW1a71b1HMLi/EzrlSrTNKi11vBjiZbt3gMfsv5pm4
+         N8Ng==
+X-Gm-Message-State: AOJu0Yw1muLfSCt+kU2T/GzOwVnVITMkcNWUkjYJWN0CXAg5rB+34NyX
+	AWWZiyyKZfLVhQ2mjPmW5uc/OQCTNmOBk9kjSZL5tGvjd2cS3a0eS+tAsEaXNbWpiQ==
+X-Gm-Gg: ATEYQzxfIj0k4G5VODtdh74OeEiJC6afgqyAhmUntCkvMmMVhnkmXJKOdDAl59SqOXM
+	kxM9aW5lySJxg2qJWrpPgz7FQKmO4qIv51lK3smHEPhla6LzkyThNwdPrzM44rQuqX3n1nGe62i
+	2ZC7+criMUNCxjv2w0a/fkkFxjRSxIEYvqQnam3/cYYglDO8DlXBoILlU0s3keBhhfIrlrUG+9p
+	q2CbAs/zJ8yAOToeWIoAbetYW8bB30vbtfK0J+h5zNLMgC0tmaD8lKy8G1mN9nYo6K+7apOZ8w+
+	bH+mI55m+E/fp3uFcWsAaVRgnVMNWYLDMuDvIIiPY/+XQr/fzh6+tA62VgItpl1ZLoseeN3WAQX
+	lsrTc9mFB1YYlQ+e/FP/1DCG6xtTNKngZral48fh64cCGFvkPwuiE1ZcysPDEe+7ujtbX6+21/t
+	+zFBouRp+UZJ/2N0tYwCumwC6lPoRVy2N3F62vDkREPwtWTeIu/WDjfVncuQRgdRZqPD8=
+X-Received: by 2002:a05:701b:231b:b0:120:5719:1856 with SMTP id a92af1059eb24-128ed17640dmr48302c88.20.1773263532267;
+        Wed, 11 Mar 2026 14:12:12 -0700 (PDT)
+Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-128e7c1780bsm4480538c88.7.2026.03.11.14.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 14:12:11 -0700 (PDT)
+Date: Wed, 11 Mar 2026 21:12:07 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>, Petr Mladek <pmladek@suse.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: Re: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
+Message-ID: <20260311211207.GA2440964@google.com>
+References: <20260305015237.299727-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Philipp Hahn <phahn-oss@avm.de>, cocci@inria.fr,
- Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
- bpf@vger.kernel.org, ceph-devel@vger.kernel.org, dm-devel@lists.linux.dev,
- dri-devel@lists.freedesktop.org, gfs2@lists.linux.dev,
- intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
- iommu@lists.linux.dev, kvm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
- linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
- linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
- sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
- tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
- LKML <linux-kernel@vger.kernel.org>
-References: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
-Subject: Re: [PATCH 01/61] Coccinelle: Prefer IS_ERR_OR_NULL over manual NULL
- check
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-1-bd63b656022d@avm.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:8uNlJJTAs0E3eVrueF6w+kamgZld8V5k307BMa2qc/KwhoVrne3
- cPN5KceT1D2i5YOSNggwsPxOs655cWyte1CKlNlBLyuH93VGvstvy+ggV5GDmk4PUMu8Iwj
- lIBpLLqKBgo7uQxQM9uBZQLnvS5wa1t6ITQ23zK6Z5KinOA9Ud5Ss1etUILA/92IsKQJLWt
- MbIOhZYtTIg4ZGnA6bYYw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:JCtAJ/zNjOI=;sDWY82KXUVoSud92r84ZXuFAtv9
- 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
- tJ2F8GMFz7+S2uTh+G9X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260305015237.299727-1-joe.lawrence@redhat.com>
 
-=E2=80=A6
-> +// Confidence: High
+On Wed, Mar 04, 2026 at 08:52:37PM -0500, Joe Lawrence wrote:
+> Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
+> related macros") added .text and made .data, .bss, and .rodata sections
+> unconditional in the module linker script, but without an explicit
+> address like the other sections in the same file.
+> 
+> When linking modules with ld.bfd -r, sections defined without an address
+> inherit the location counter, resulting in non-zero sh_addr values in
+> the .ko.  Relocatable objects are expected to have sh_addr=0 for these
+> sections and these non-zero addresses confuse elfutils and have been
+> reported to cause segmentation faults in SystemTap [1].
+> 
+> Add the 0 address specifier to all sections in module.lds, including the
+> .codetag.* sections via MOD_SEPARATE_CODETAG_SECTIONS macro.
+> 
+> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
+> Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
+>  include/asm-generic/codetag.lds.h |  2 +-
+>  scripts/module.lds.S              | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> v2:
+> - Update the MOD_SEPARATE_CODETAG_SECTION for .codetag.* as well [Petr]
 
-Some contributors presented discerning comments for this change approach.
-Thus I became also curious how much they can eventually be taken better in=
-to account
-by the means of the semantic patch language (Coccinelle software).
+Do we also need similar changes in any of the architecture-specific module
+linker scripts (arch/*/include/asm/module.lds.h)?
 
-=E2=80=A6
-+@p1 depends on patch@
-+expression E;
-+@@
-+(
-> +-	E !=3D NULL && !IS_ERR(E)
-> ++	!IS_ERR_OR_NULL(E)
-> +|
-> +-	E =3D=3D NULL || IS_ERR(E)
-> ++	IS_ERR_OR_NULL(E)
-> +|
-> +-	!IS_ERR(E) && E !=3D NULL
-> ++	!IS_ERR_OR_NULL(E)
-> +|
-> +-	IS_ERR(E) || E =3D=3D NULL
-> ++	IS_ERR_OR_NULL(E)
-> +)
-
-Several detected expressions should refer to return values from function c=
-alls.
-https://en.wikipedia.org/wiki/Return_statement
-
-* Do any development challenges hinder still the determination of correspo=
-nding
-  failure predicates?
-
-* How will interests evolve to improve data processing any further for suc=
-h
-  use cases?
-
-
-Regards,
-Markus
+Sami
