@@ -1,119 +1,155 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF0E3D3CF6
-	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 10:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034912D77E9;
+	Wed, 11 Mar 2026 12:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773226062; cv=none; b=DtLJF66d+WVOpgNgLslaqUxnnQIyYgfU7jEoqdtJcnTKmsCxEzFlpezr+0g1DHX6Ow/3REcowijJmbRz4ntW026nNb202Q3S1PwwS1EWCsy7lmWy8zoKFssK1OMX1Xjh4JtgFOt9l4Aj/HNiTiSA9wL4u1N1glvLHoZEbqdgm58=
+	t=1773233899; cv=none; b=ah23GgkQ8r8EJCXe/3YDK+RM0aCqNSFMUm+E/wWO08b2aD4JLhuRpXZ0QacM3V7l+IvemFw6sFQPs/0ndC9AWPfZWZxA5acuL/2MCgqIveMV5e/c4AkJM+61hROGpBtGN10w+LS9vr2d/kaG75h3r68AexdJt4If8vfSFONEXoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773226062; c=relaxed/simple;
-	bh=zRCIOZXGAulewyBbqGE0TlQlTPqeFeIDTbPGyy24MV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M/Kvey38hxllltljXfUMcc0Q0tWF+/5PyKrN9phktKQxGWnHkG3ATtbdm6KS0CpsAme7GrSDTLiT9fBCVdIL57ALELxUEsO1pj0IgxmWrCUGRlRMNdO7Et2C3DSFDYEl0Y2ARDIs2wdfyOtsmkSOaIdm1vxK5oWecDvWPZ648R4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+NfnaGG; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773233899; c=relaxed/simple;
+	bh=mRn/wE2BOJdmVXtetURpi3qdtZ2DQzJb6SnV9QqyjkE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RkpxTzlrx8dOT03xldKIH5NGSJDK2wIvCukbd+VbiCiQYD1G9dC9HCZwHlxDqoLfG8MerP6Ws8kca5140X6a6EPd7mPvYbxOhdGU5KnaodmHwio4VFf1geLumsq/GHQX9bHMhyaIPHyJ5BM9K7bq/Cj4QYtD5MQSQuQv36FxM9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=k90soJZP; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+NfnaGG"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-485345e1013so6526445e9.1
-        for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 03:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773226059; x=1773830859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=l+NfnaGGhGE/Qag8NAZKtowOcVY2wLQCbEgf8MnpvieTQKfxTgLXG7gVpu41GQE3Cp
-         lhcuSJ3ojhuoA+XvMW4ZK8DqWwguSBIQJdzHM+m0gGn1i58Im+PG8aw4GSSmMwNkHayu
-         W9J2Et5BO3MOuAYEpSQbP4o8f9J9gsDj/OANzpqDRda1qkC6GXeo6tLR1/FbLVhhy7Cf
-         MUxhHc5jx0lvSaHnxQ6WahuluHX1XzGqARVN8PyVe1PrQbU+agAKtUfEmOiyxhtTA+gY
-         BR6kn5ugraDiB91Rov4L/mant481Z758KVbs1s66hkgz+KSI4U1uv3Da1yI4gGWMgZ4d
-         Uvjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773226059; x=1773830859;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
-        b=Q6N2qpA3CciVVocAV92CIPPvVEZwuoxWVKF4utk1YIuBfaLYQdNCDAUhAd7LXDeWVX
-         v+JGY10m7jA0Fs3Hw0FIAnaK/GfN59dm94SWDGqzZVP3yU0uDPTbkKT6Nr3fWfw7Gwj3
-         RIdbgm06r6FPvTfRtFyB2qPIqAV4drDjq4+jPrpz0hh0dvojBbnDMmxu97l4kUia9EFz
-         0hXomar5eI8pzzqvAJe7QboHsT397ey4di6cH4R7pXiibi/jz+tmFPqpBlUI2R2hbZ4l
-         spViVN4X4H+QV0LF07atq7JAun++1OS5Ybt4Fospb4OdwDNJ885RdsklZbgfFQ1Y8Ed/
-         v0rg==
-X-Forwarded-Encrypted: i=1; AJvYcCUjdDEY2vP4HZYRlXX+eWBj5m2ghaDuhuLdAzpYhEjrzmNqI+RX/8CW7RS/aV3esEpUNwQ0SAlRFJXGuQrJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu6RBusHRy1aXObuLBpGDbpshWk67pPsmPBLS0zlaZW25I/fL7
-	54Bvyb/zY+2HyxvE6oA0iK0qhn/oFishX7SSTMU9La7nEMqSpilbAOUk
-X-Gm-Gg: ATEYQzxHdd57knfrgZYHmpZlzVLWANwoa5l8QuXzuUCJBt1EaEaPG0PM/h0lcgN1KP5
-	UHUZLoiCoTIN7L0SWV+ke597uyYCdI2Cf0FdAnIA3EscwU2C26wTKcYnolsImmkGU0drtTVkvPu
-	JOmscfd3+ZHx5RBdY6o26ShEz4dlkOr9d+UBgP6MNp0gDZiFOVJhqEadfMbXMo5vpk0opG6luGO
-	Aej1eMlsW+X3krj6SsKR/0vv+6HsPYTI3G+Z89xkFpeZBpvIi1hcTwsykHkAy+kJkJ6ZjYqmpdy
-	luluE9o/r+PpduCfrMHgOw3qjgf7c4SMvvq5oTvFKckqMI1doUqn+gwoHrlgoP5VDQB2N/q1jni
-	lR931E4EuYD7Th9Un3tp78Vd9aWwgAwQChIWY01osu82vnExWbWYtLAXY2E6LaiYw/awQjJ9vNl
-	EoY8Pj57ySUPoKuVEg8tEwaaxrN7l8nxNBLUm1h+XoP1gb51sW6Jm8Rm6LzrgYuJUr/uDC1vLUF
-	UQ=
-X-Received: by 2002:a05:600c:5298:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4854b291dc2mr30148705e9.15.1773226058755;
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f820a2f1sm5725154f8f.30.2026.03.11.03.47.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
-Date: Wed, 11 Mar 2026 10:47:36 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-nfs@vger.kernel.org, bpf@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-doc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- netfs@lists.linux.dev, io-uring@vger.kernel.org, audit@vger.kernel.org,
- rcu@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, Christian Loehle
- <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
-Message-ID: <20260311104736.51b53405@pumpkin>
-In-Reply-To: <20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
-	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="k90soJZP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1773233887;
+	bh=mRn/wE2BOJdmVXtetURpi3qdtZ2DQzJb6SnV9QqyjkE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k90soJZPKmK3WO0aN0btxQNxuBpFawAlVAt8Y/y5iCKKutCz/URHVI6erF06qEnJb
+	 UErb09oCmFeFT4NoInvtsQ57j4bPe83GaAnwXmLf73CWGB4LgUkwkKHVTuqOzhv039
+	 l997WH4HQ39CRI7rjR0x4LOMudFJrvf8taL+1xCg=
+Date: Wed, 11 Mar 2026 13:58:07 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez <da.gomez@kernel.org>, 
+	Aaron Tomlin <atomlin@atomlin.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
+	Xiu Jianfeng <xiujianfeng@huawei.com>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+	kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 06/17] kbuild: add stamp file for vmlinux BTF data
+Message-ID: <cf122165-ebf3-4027-aa31-a37755eb352f@t-8ch.de>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-6-0b932db9b56b@weissschuh.net>
+ <20260310213606.GD120274@quark>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260310213606.GD120274@quark>
 
-On Tue, 10 Mar 2026 15:56:09 +0100
-Christian Brauner <brauner@kernel.org> wrote:
+On 2026-03-10 14:36:06-0700, Eric Biggers wrote:
+> On Tue, Jan 13, 2026 at 01:28:50PM +0100, Thomas Weißschuh wrote:
+> > The upcoming module hashes functionality will build the modules in
+> > between the generation of the BTF data and the final link of vmlinux.
+> > Having a dependency from the modules on vmlinux would make this
+> > impossible as it would mean having a cyclic dependency.
+> > Break this cyclic dependency by introducing a new target.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
+> >  scripts/Makefile.modfinal | 4 ++--
+> >  scripts/link-vmlinux.sh   | 6 ++++++
+> >  2 files changed, 8 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> > index 149e12ff5700..adfef1e002a9 100644
+> > --- a/scripts/Makefile.modfinal
+> > +++ b/scripts/Makefile.modfinal
+> > @@ -56,8 +56,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+> >  	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+> >  
+> >  # Re-generate module BTFs if either module's .ko or vmlinux changed
+> > -%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> > -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
+> > +%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/.tmp_vmlinux_btf.stamp) FORCE
+> > +	+$(call if_changed_except,ld_ko_o,$(objtree)/.tmp_vmlinux_btf.stamp)
+> >  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> >  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+> >  endif
+> > diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> > index 4ab44c73da4d..8c98f8645a5c 100755
+> > --- a/scripts/link-vmlinux.sh
+> > +++ b/scripts/link-vmlinux.sh
+> > @@ -111,6 +111,7 @@ vmlinux_link()
+> >  gen_btf()
+> >  {
+> >  	local btf_data=${1}.btf.o
+> > +	local btf_stamp=.tmp_vmlinux_btf.stamp
+> >  
+> >  	info BTF "${btf_data}"
+> >  	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+> > @@ -131,6 +132,11 @@ gen_btf()
+> >  	fi
+> >  	printf "${et_rel}" | dd of="${btf_data}" conv=notrunc bs=1 seek=16 status=none
+> >  
+> > +	info STAMP $btf_stamp
+> > +	if ! cmp --silent $btf_data $btf_stamp; then
+> > +		cp $btf_data $btf_stamp
+> > +	fi
 
-> In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
-> we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
-> We left kthread_exit() around as an alias to do_exit(). Remove it
-> completely.
-...
-> -#define module_put_and_kthread_exit(code) kthread_exit(code)
-> +#define module_put_and_kthread_exit(code) do_exit(code)
+This patch will be gone from the next revision of the series.
+Making use of the recently introduced vmlinux.unstripped,
+as suggested by Petr, removes any modifications to link-vmlinux.sh
+and the issue that this patch tried to address.
 
-I'm intrigued...
-How does that actually know to do the module_put()?
-(I know it does one - otherwise my driver wouldn't unload.)
+> A "stamp file" is traditionally an empty file that is written when some
+> build step has completed.  The above code is instead copying the entire
+> .tmp_vmlinux1.btf.o file (megabytes in size) to .tmp_vmlinux_btf.stamp.
 
-The corresponding try_module_get(THIS_MODULE) is done before the
-kthread_run() (and has to be 'put' if that fails).
-So there is an explicit 'get' but an implicit 'put'.
+The goal here was not to only have a reference timestamp, but
+specifically the reference file contents.
 
-While a loadable module that creates a kthread usually needs to give
-the kthread a reference to its module and then have that reference
-released as the kthread exits, I can imagine cases where that isn't true.
-(Or broken code that just hopes the module won't be unloaded just
-as the kthread exits.)
+Note: The duplicated vmlinux.unstripped in its current form is by far
+larger than .tmp_vmlinux1.btf.o.
 
-It actually makes me think that module_put_and_exit() ought to have
-a 'module' parameter.
-Or, perhaps, kthread_create() should have the module parameter and
-hold a reference to that module until it exits.
+> So, it's not clear to me why the stamp file is needed at all, versus
+> depending directly on .tmp_vmlinux1.btf.o.
+>
+> I guess 'make' doesn't know about the dependencies of
+> .tmp_vmlinux1.btf.o.  But the same is true of the stamp file, right?  So
+> either way, how would 'make' know to finish rebuilding the file before
+> starting to execute the "Re-generate module BTFs" rule?
 
-	David
+The problem was not the ordering, this is handled within link-vmlinux.sh.
+IIRC originally without this patch even no-op rebuilds would end up
+rebuilding the modules. Using .tmp_vmlinux1.btf.o may have worked too.
+But in v4, the patch "kbuild: generate module BTF based on
+vmlinux.unstripped" was added, which also solves this problem.
+
+> Also, passing the long option '--silent' to 'cmp' creates a dependency
+> on the GNU implementation of 'cmp', which isn't documented as a kernel
+> build dependency.  Probably better to use the short option '-s'.
+
+Ack.
+
+> Also, the stamp file isn't being deleted by 'make clean'.  It looks like
+> it would need to be added to cleanup() in link-vmlinux.sh.
+
+Ack.
+
+
+Thomas
