@@ -1,97 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115893C9ED7
-	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 09:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF0E3D3CF6
+	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 10:47:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773221546; cv=none; b=kefWfG04ZEWLrFt355ty9msnULu6pVq0OFSgTQg/x4g/XgyHrldo/FLOHub6mEjHtSxSHKMUeCfIsZBq7iUiwfNbFTIei0JpPse34r8eYtsrSKZvhKjQIS6uDjGtKQM3Ib3xfKv8fXkFbvCO8raiEpUCW1hNJS4LzY1w/w/Ft/w=
+	t=1773226062; cv=none; b=DtLJF66d+WVOpgNgLslaqUxnnQIyYgfU7jEoqdtJcnTKmsCxEzFlpezr+0g1DHX6Ow/3REcowijJmbRz4ntW026nNb202Q3S1PwwS1EWCsy7lmWy8zoKFssK1OMX1Xjh4JtgFOt9l4Aj/HNiTiSA9wL4u1N1glvLHoZEbqdgm58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773221546; c=relaxed/simple;
-	bh=JGYhPK256pxU9EiY8jbQSSjgozqR8V5kd9EUseD+GRo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lDPbIJX30/OfdLsE2BHzTX7jbYMiPXOpA5j6nZZN0URtgNrQnRggRxPparRQodJln6PKo0iETdOrUjfDMLAU6+mt52wlIj51GDRWbeyEWHKG6nftPOXTd1tMgwd1Ubeyd3mhnJ+hfZD/E/jaONTblzUxAJdIQu923r0pSmwOvoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfVWEI4z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773226062; c=relaxed/simple;
+	bh=zRCIOZXGAulewyBbqGE0TlQlTPqeFeIDTbPGyy24MV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M/Kvey38hxllltljXfUMcc0Q0tWF+/5PyKrN9phktKQxGWnHkG3ATtbdm6KS0CpsAme7GrSDTLiT9fBCVdIL57ALELxUEsO1pj0IgxmWrCUGRlRMNdO7Et2C3DSFDYEl0Y2ARDIs2wdfyOtsmkSOaIdm1vxK5oWecDvWPZ648R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+NfnaGG; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfVWEI4z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2ABC2BCB7
-	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 09:32:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773221545;
-	bh=JGYhPK256pxU9EiY8jbQSSjgozqR8V5kd9EUseD+GRo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JfVWEI4zDrh3iHX+1r4cle8Phcf0RBN0zERjJ8PQNA3EYWSATJ9h5lha/xBvVFGnI
-	 lElqdFOyu5rUcg336ldY8JBHZo/CNZ6A5HFkXurPLCqwCA7763w9Gzh1MrCiovz1O6
-	 4/dhditNlUPPz/o6nb1awN/pC+8W+SveVLbbW1M3XSJ0LknHbar0z1P9mnX5NF58yX
-	 1Uj5dsDyxTrkO1DJZv/qpV8j6iPNzVVJVRqNM1MXMlgjgqpNnn65QlcqD5KydSFEzI
-	 yLns3+tdmVfBsvgohk6ekX61JLdkJkatIbZorvb97Pbamw8/hcF79oQl43JkoSoDtA
-	 x5H4ornHcPhQg==
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-64ad79dfb6eso13636804d50.0
-        for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 02:32:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU+OXsRrp+UEFMYtzsdMeOaqAvyaB7b7xOBqLVWSUUP4snTgM9WT6N3Sp6tqp70MhG2KaoO6xm3oa/ZIT5V@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcCTUujl4sTN9cL7AHVnIPBBmzJWhNY0WzvTI+IXmbFO0SJNZt
-	mdhL/r+nbjXZEHCEfvfwwwDo1tqVFWmPYgJoHEfymoenZaaCabocVTCUep1biS+wKp8Oa9KaJPQ
-	1huH0OaSOgRswiHkpURBfQo+AV7fBZw0=
-X-Received: by 2002:a05:690e:144d:b0:64c:e890:fbb9 with SMTP id
- 956f58d0204a3-64d656f696dmr1649157d50.20.1773221544775; Wed, 11 Mar 2026
- 02:32:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+NfnaGG"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-485345e1013so6526445e9.1
+        for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 03:47:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773226059; x=1773830859; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
+        b=l+NfnaGGhGE/Qag8NAZKtowOcVY2wLQCbEgf8MnpvieTQKfxTgLXG7gVpu41GQE3Cp
+         lhcuSJ3ojhuoA+XvMW4ZK8DqWwguSBIQJdzHM+m0gGn1i58Im+PG8aw4GSSmMwNkHayu
+         W9J2Et5BO3MOuAYEpSQbP4o8f9J9gsDj/OANzpqDRda1qkC6GXeo6tLR1/FbLVhhy7Cf
+         MUxhHc5jx0lvSaHnxQ6WahuluHX1XzGqARVN8PyVe1PrQbU+agAKtUfEmOiyxhtTA+gY
+         BR6kn5ugraDiB91Rov4L/mant481Z758KVbs1s66hkgz+KSI4U1uv3Da1yI4gGWMgZ4d
+         Uvjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773226059; x=1773830859;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=us9WYwCiTBLLsk5cVeG22xmuXfkRkjPu0Kbcd1njBZs=;
+        b=Q6N2qpA3CciVVocAV92CIPPvVEZwuoxWVKF4utk1YIuBfaLYQdNCDAUhAd7LXDeWVX
+         v+JGY10m7jA0Fs3Hw0FIAnaK/GfN59dm94SWDGqzZVP3yU0uDPTbkKT6Nr3fWfw7Gwj3
+         RIdbgm06r6FPvTfRtFyB2qPIqAV4drDjq4+jPrpz0hh0dvojBbnDMmxu97l4kUia9EFz
+         0hXomar5eI8pzzqvAJe7QboHsT397ey4di6cH4R7pXiibi/jz+tmFPqpBlUI2R2hbZ4l
+         spViVN4X4H+QV0LF07atq7JAun++1OS5Ybt4Fospb4OdwDNJ885RdsklZbgfFQ1Y8Ed/
+         v0rg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjdDEY2vP4HZYRlXX+eWBj5m2ghaDuhuLdAzpYhEjrzmNqI+RX/8CW7RS/aV3esEpUNwQ0SAlRFJXGuQrJ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu6RBusHRy1aXObuLBpGDbpshWk67pPsmPBLS0zlaZW25I/fL7
+	54Bvyb/zY+2HyxvE6oA0iK0qhn/oFishX7SSTMU9La7nEMqSpilbAOUk
+X-Gm-Gg: ATEYQzxHdd57knfrgZYHmpZlzVLWANwoa5l8QuXzuUCJBt1EaEaPG0PM/h0lcgN1KP5
+	UHUZLoiCoTIN7L0SWV+ke597uyYCdI2Cf0FdAnIA3EscwU2C26wTKcYnolsImmkGU0drtTVkvPu
+	JOmscfd3+ZHx5RBdY6o26ShEz4dlkOr9d+UBgP6MNp0gDZiFOVJhqEadfMbXMo5vpk0opG6luGO
+	Aej1eMlsW+X3krj6SsKR/0vv+6HsPYTI3G+Z89xkFpeZBpvIi1hcTwsykHkAy+kJkJ6ZjYqmpdy
+	luluE9o/r+PpduCfrMHgOw3qjgf7c4SMvvq5oTvFKckqMI1doUqn+gwoHrlgoP5VDQB2N/q1jni
+	lR931E4EuYD7Th9Un3tp78Vd9aWwgAwQChIWY01osu82vnExWbWYtLAXY2E6LaiYw/awQjJ9vNl
+	EoY8Pj57ySUPoKuVEg8tEwaaxrN7l8nxNBLUm1h+XoP1gb51sW6Jm8Rm6LzrgYuJUr/uDC1vLUF
+	UQ=
+X-Received: by 2002:a05:600c:5298:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4854b291dc2mr30148705e9.15.1773226058755;
+        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-439f820a2f1sm5725154f8f.30.2026.03.11.03.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 03:47:38 -0700 (PDT)
+Date: Wed, 11 Mar 2026 10:47:36 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-nfs@vger.kernel.org, bpf@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-doc@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ netfs@lists.linux.dev, io-uring@vger.kernel.org, audit@vger.kernel.org,
+ rcu@vger.kernel.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, Christian Loehle
+ <christian.loehle@arm.com>, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] kthread: remove kthread_exit()
+Message-ID: <20260311104736.51b53405@pumpkin>
+In-Reply-To: <20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
+References: <20260310-work-kernel-exit-v2-0-30711759d87b@kernel.org>
+	<20260310-work-kernel-exit-v2-1-30711759d87b@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de> <20260310-b4-is_err_or_null-v1-41-bd63b656022d@avm.de>
-In-Reply-To: <20260310-b4-is_err_or_null-v1-41-bd63b656022d@avm.de>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 11 Mar 2026 10:32:12 +0100
-X-Gmail-Original-Message-ID: <CAD++jLnDv00ErgVdQ4EBpKH9KMWrPD8ODrQ6m846zyQ=wNzCzQ@mail.gmail.com>
-X-Gm-Features: AaiRm52aI8z_G2E4qYaKWPEA43RhLektjwMDQXSLwHd-Xy_BYcin-6heFFY4jM4
-Message-ID: <CAD++jLnDv00ErgVdQ4EBpKH9KMWrPD8ODrQ6m846zyQ=wNzCzQ@mail.gmail.com>
-Subject: Re: [PATCH 41/61] pinctrl: Prefer IS_ERR_OR_NULL over manual NULL check
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com, 
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr, 
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org, 
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org, 
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-	linux-cifs@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, ntfs3@lists.linux.dev, 
-	samba-technical@lists.samba.org, sched-ext@lists.linux.dev, 
-	target-devel@vger.kernel.org, tipc-discussion@lists.sourceforge.net, 
-	v9fs@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Mar 10, 2026 at 12:55=E2=80=AFPM Philipp Hahn <phahn-oss@avm.de> wr=
-ote:
+On Tue, 10 Mar 2026 15:56:09 +0100
+Christian Brauner <brauner@kernel.org> wrote:
 
-> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
-> check.
->
-> Change generated with coccinelle.
->
-> To: Linus Walleij <linusw@kernel.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> In 28aaa9c39945 ("kthread: consolidate kthread exit paths to prevent use-after-free")
+> we folded kthread_exit() into do_exit() when we fixed a nasty UAF bug.
+> We left kthread_exit() around as an alias to do_exit(). Remove it
+> completely.
+...
+> -#define module_put_and_kthread_exit(code) kthread_exit(code)
+> +#define module_put_and_kthread_exit(code) do_exit(code)
 
-Patch applied to the pinctrl tree as obviously correct.
+I'm intrigued...
+How does that actually know to do the module_put()?
+(I know it does one - otherwise my driver wouldn't unload.)
 
-Yours,
-Linus Walleij
+The corresponding try_module_get(THIS_MODULE) is done before the
+kthread_run() (and has to be 'put' if that fails).
+So there is an explicit 'get' but an implicit 'put'.
+
+While a loadable module that creates a kthread usually needs to give
+the kthread a reference to its module and then have that reference
+released as the kthread exits, I can imagine cases where that isn't true.
+(Or broken code that just hopes the module won't be unloaded just
+as the kthread exits.)
+
+It actually makes me think that module_put_and_exit() ought to have
+a 'module' parameter.
+Or, perhaps, kthread_create() should have the module parameter and
+hold a reference to that module until it exits.
+
+	David
