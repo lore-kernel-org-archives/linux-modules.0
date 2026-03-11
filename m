@@ -1,140 +1,121 @@
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216A1156F45;
-	Wed, 11 Mar 2026 04:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A6A23ABA8;
+	Wed, 11 Mar 2026 04:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773202476; cv=none; b=ukzMMZTvDMIlZcbn08gSUUpsdRTcEbY+krK1AxTz6EMA1stpjgtuGLBEmSN/77wZ0GXTKxh+jYrDz3Au8i4RAqkbM4GjZEE2T6A5P9FxlxkbfOYip8adjo9NC2JuVfEWkXYmIKYuFcbcpwzT0hU/g+O/bC+Tc9c8a0iI7bctG8I=
+	t=1773205159; cv=none; b=AfUOn7Xr22tdivnqiMJmXtugg75clXxy/ixinW+84d9P9bQcU6XygWynS5vcLY1bvg0ClT+/FZLNRV3acp/hmfB7bGKfikZIxgb4DM7rG+GfxYVjjZgSZlcXDJ+WHdNfJlM6MXdJ14xAjKoxZwyPwj2kpc1le2hoxL9iMo6ym0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773202476; c=relaxed/simple;
-	bh=nndBuIvvvc8s3P+94WWplXSwKQrlkxY1Dk02gVlifk4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=QYgr0UO9edWsqXwa9hWyKoy0fbwsxY3/uY0ZyRtkIMmLqd9f2wqGkVHVKrEnuU8nSmq41NcrbeCw1wAIMeFnhR9IxOKWA13iZibUNa3XFaL4wM/WBSOGU+NeSpeOpaN+vVTrtnLi1UTAt1Xjpy/u1tzw3B9e1EQcGwKz+umQc1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from [10.213.22.86] (unknown [210.73.43.101])
-	by APP-01 (Coremail) with SMTP id qwCowABH8WwC7LBpnxu4CQ--.2041S2;
-	Wed, 11 Mar 2026 12:13:55 +0800 (CST)
-Message-ID: <37d9cd62-da72-4dc4-bc08-48d6e26c5222@iscas.ac.cn>
-Date: Wed, 11 Mar 2026 12:13:54 +0800
+	s=arc-20240116; t=1773205159; c=relaxed/simple;
+	bh=hs7h01zebVZ3Cw5TSlyQoCCjwzUa+l8Cgq+3i/i+v4I=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=d+XpBF8R6hSjSTcMBfmH4ILegC+T+VFU6cnWCeL1UynvVuQvwhGK9HU46EbLxpSuUjgEosLLNlyp/vWQRByhJqvaUVytBWX5j1mOlK0gjr5ZpJ0vTdvEsR3BRMdUbUK3k1H4T5bY1NHCoXs6ClvsiRYESo1PnmzsuR0fJZq8vHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7QWHNq5; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7QWHNq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C9CC4CEF7;
+	Wed, 11 Mar 2026 04:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773205158;
+	bh=hs7h01zebVZ3Cw5TSlyQoCCjwzUa+l8Cgq+3i/i+v4I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=R7QWHNq5KYIpTwVo6Up5GHHSOdSE2gpk5GaKkIBbqjAR4gbzmNPFWIlQW10KkTPof
+	 EwepFELDieEhDwLa7MFg7ekO96kgeq0l/+LlK0SmYNrKgD9B5JFn2p8cKdN19q4bAB
+	 ZH5nM61a+EeP1bfo59H2leGLnAv8MA9DVbVTjKyoY75UQZCsrcqb+6U4ml2aryZAOd
+	 53HkEOSnemZkK807SePgE6JYJ0qIK9ypnQbQrEKCx7cEo9CjlroOKs6BchxOV0buhD
+	 E4Ehzc8FteV6XUFhu9KE6nGI0Pkr7s204WVgcSsEwXmzro7D3LuhuKd0AU39V1R3Ja
+	 2cWkRLISF31UQ==
+Date: Wed, 11 Mar 2026 13:59:11 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+ bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
+ dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+ gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+ intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+ kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+ linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mm@kvack.org,
+ linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+ linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+ sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+ tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev, Philipp Zabel
+ <p.zabel@pengutronix.de>
+Subject: Re: [PATCH 57/61] reset: Prefer IS_ERR_OR_NULL over manual NULL
+ check
+Message-Id: <20260311135911.ced50d67e940cdf933a98d1a@kernel.org>
+In-Reply-To: <20260310-b4-is_err_or_null-v1-57-bd63b656022d@avm.de>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	<20260310-b4-is_err_or_null-v1-57-bd63b656022d@avm.de>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] kallsyms: delta-compress lineinfo tables for ~2.7x
- size reduction
-From: Vivian Wang <wangruikang@iscas.ac.cn>
-To: Sasha Levin <sashal@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>,
- Luis Chamberlain <mcgrof@kernel.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Richard Weinberger <richard@nod.at>, Juergen Gross <jgross@suse.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,
- Daniel Gomez <da.gomez@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
- Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Thorsten Leemhuis <linux@leemhuis.info>, Vlastimil Babka
- <vbabka@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20260303182103.3523438-1-sashal@kernel.org>
- <20260303182103.3523438-4-sashal@kernel.org>
- <e393e07f-368f-4b38-b2ed-937ddcc0a217@iscas.ac.cn>
-Content-Language: en-US
-In-Reply-To: <e393e07f-368f-4b38-b2ed-937ddcc0a217@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-CM-TRANSID:qwCowABH8WwC7LBpnxu4CQ--.2041S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFWfZF48ZF4UGryUWw4kWFg_yoW5XryUpr
-	98Kr1DCr48Jw4fA34Svrn8Zay8uw4kGa43Jr97Zrn8AF40gF4ktFySqF429r1DKr9YkFyx
-	Xw4qkFWDK34kJa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvvb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
-	c7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-	14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-	IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-	IFyTuYvjxU9ebkUUUUU
-X-CM-SenderInfo: pzdqw2pxlnt03j6l2u1dvotugofq/
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 3/11/26 11:34, Vivian Wang wrote:
-> Hi Sasha,
->
-> I've been trying this out and AFAICT this does work perfectly.=C2=A0Tha=
-nk you
-> for this.
->
-> There are a few oddities I found:
->
-> Firstly I've been building with something like O=3D_riscv out of
-> convenience, and the file names have an extra ../ in the front. (This i=
-s
-> just me exiting out of init=3D/bin/sh.)
->
-> [    2.317268] Kernel panic - not syncing: Attempted to kill init! exit=
-code=3D0x00000000
-> [    2.320283] CPU: 0 UID: 0 PID: 1 Comm: sh Not tainted 7.0.0-rc3-0000=
-4-g8ad18f1a1a2f #31 PREEMPTLAZY=20
-> [    2.322048] Hardware name: riscv-virtio,qemu (DT)
-> [    2.323220] Call Trace:
-> [    2.324465] [<ffffffff800172a8>] dump_backtrace+0x1c/0x24 (../arch/r=
-iscv/kernel/stacktrace.c:150)
-> [    2.329061] [<ffffffff8000241e>] show_stack+0x2a/0x34 (../arch/riscv=
-/kernel/stacktrace.c:156)
-> [    2.330334] [<ffffffff8000fe32>] dump_stack_lvl+0x4a/0x68 (../lib/du=
-mp_stack.c:122)
-> [    2.331462] [<ffffffff8000fe64>] dump_stack+0x14/0x1c (../lib/dump_s=
-tack.c:130)
-> [    2.332571] [<ffffffff80002a88>] vpanic+0x108/0x2bc (../kernel/panic=
-=2Ec:651)
-> [    2.333674] [<ffffffff80002c6e>] panic+0x32/0x34 (../kernel/panic.c:=
-787)
-> [    2.334427] [<ffffffff8002e97a>] do_exit+0x7ee/0x7f4 (../kernel/exit=
-=2Ec:930)
-> [    2.335194] [<ffffffff8002eade>] do_group_exit+0x1a/0x88 (../kernel/=
-exit.c:1099)
-> [    2.335945] [<ffffffff8002eb62>] __riscv_sys_exit_group+0x16/0x18 (.=
-=2E/kernel/exit.c:1129)
-> [    2.336763] [<ffffffff80b3e868>] do_trap_ecall_u+0x260/0x45c (../arc=
-h/riscv/include/asm/syscall.h:112)
-> [    2.337765] [<ffffffff80b4c034>] handle_exception+0x168/0x174 (../ar=
-ch/riscv/kernel/entry.S:233)
->
-> This is fine by me, but I've seen mentions of O=3D builds but I'm not s=
-ure
-> if it's expected.
->
-> Also, toggling CONFIG_KALLSYMS_LINEINFO seems to rebuild every single
-> file. I haven't debugged why, but is this expected?
->
-> I have a few ideas about the code as well. Since this patch 3 touches
-> most of the files involved, I'll just dump my thoughts on the whole
-> series here. I want to note that I haven't read the RFC thread too
-> carefully, but I don't think there were many comments on the implementa=
-tion.
+On Tue, 10 Mar 2026 12:49:23 +0100
+Philipp Hahn <phahn-oss@avm.de> wrote:
 
-Uh, oops, I just realized I was replying on v1 not v2.
+> Prefer using IS_ERR_OR_NULL() over using IS_ERR() and a manual NULL
+> check.
+> 
+> Semantich change: Previously the code only printed the warning on error,
+> but not when the pointer was NULL. Now the warning is printed in both
+> cases!
+> 
+> Change found with coccinelle.
+> 
+> To: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
+> ---
+>  drivers/reset/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/reset/core.c b/drivers/reset/core.c
+> index fceec45c8afc1e74fe46311bdc023ff257e8d770..649bb4ebabb20a09349ccbfc62f8280621df450e 100644
+> --- a/drivers/reset/core.c
+> +++ b/drivers/reset/core.c
+> @@ -715,7 +715,7 @@ EXPORT_SYMBOL_GPL(reset_control_bulk_acquire);
+>   */
+>  void reset_control_release(struct reset_control *rstc)
+>  {
+> -	if (!rstc || WARN_ON(IS_ERR(rstc)))
+> +	if (WARN_ON(IS_ERR_OR_NULL(rstc)))
 
-Most of my idea should still apply. One notable idea was the module
-lineinfo header offset/size one. I see that one of the things addressed
-in v2 was the alignment after compressed data. If we'd been using
-offset/size in the header it would be just, code-wise, one extra .balign
-4 and done. No need to fiddle with alignment when decoding in
-mod_lineinfo_file_offsets_off().
+This changes the behavior when rstc == NULL.
+WARN_ON does not hit when rstc == NULL in the original code.
 
-Sorry for the inconvenience.
+Thanks,
 
+>  		return;
+>  
+>  	if (reset_control_is_array(rstc))
+> 
+> -- 
+> 2.43.0
+> 
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
