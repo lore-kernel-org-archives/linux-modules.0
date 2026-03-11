@@ -1,117 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9943231F9AB;
-	Wed, 11 Mar 2026 21:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E6F395240
+	for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 22:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773263677; cv=none; b=ruTruuBqqZwORMt6erWJEAqBJ/GQbbmkTE/W9A3JxvbQ1D8F/l+BsplEKzP4IbsMYA51PKQV+PkM5tdj3lJKQKjARJa5X7Jk22TmoXod028VCrwhw5kk5BYrzmyyaadg0KL4abx2BhkZqcwhlvdhDmxgu/39FC/1EHCr7D7E/cQ=
+	t=1773269068; cv=none; b=jpX/3HEAU5a6e4D1vlZHlZqLxYKpJu5LTEUWpjxhJLLK64YGfXGW/2kny5z1d1QpQMtKRzBu/4uws+2b/pURWmYNXBZ+P5qLIvYdQw7A6VxUi/DuJxMyAV/wtgxalmdjPzQtAvj4k0JwCHl+rld7dUbW1uSHbF7r8QzkCD3hYhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773263677; c=relaxed/simple;
-	bh=4AK1rqDz6/A4qjK/w9x6JibTYdqI2D5USa9Uljlor+U=;
+	s=arc-20240116; t=1773269068; c=relaxed/simple;
+	bh=mqovvhK1aHJtE1FXWbHRZbczMQz1tYtALYdGIWzno1s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G8Ba+jORxSVzx09M0OAT2/hugqsjaGtZXcbsQvktFn1MG4d1e6XYyP/pMxeq6LPHyU6x0IzprbFX6WZaf7ACKc0jvpzCy+iy0+XnPnCiANChwwp+I2nt06ai4GIQB0jjdGNu/fdhavmooleb3IiBKVw37puQ31G63V8su6bv7ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nB1ceOIT; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cddHVAD/UNAfq/tL0Wz2D9RLSsA+0BpQHfnYdNQXIVjD4iJ1e0PkcyOFEaqWPlMSAc9S2ByIxd4sBuuzTdUG7OWOh1GKft6UeU0R+a8fX0kJf8h8Y9n7SxtaQqdTQFLnytGLrBbsR99JOJJWRTnimXaMa7UAiGTsz0orDxk3sPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hHg/Chq2; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nB1ceOIT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB722C4CEF7;
-	Wed, 11 Mar 2026 21:14:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773263677;
-	bh=4AK1rqDz6/A4qjK/w9x6JibTYdqI2D5USa9Uljlor+U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nB1ceOIToPCiG2Ga6fYFvAKYgRMq4rBLUcUJz61ILzyuOdXns1FvKE63ZPdgZQHZl
-	 Sb4nNTfsbw0QQI5n6wXKZka0cIrk//AuTKoo0ISRoDGLOBcwr8YHsLLIUfXs3ewVur
-	 Y//Sw9zR3uoc7l0O5LZdS/vroMKyuP4eog+uvpPQG9u86rx9FDtkb5kBULGBJiQpKA
-	 ykMX0LdNVLH7xwVNGKzNvHSeT8rR69Tat3JUo29pWbE2YUJJsafK9N2xB5JCRpAIUo
-	 okDFx5h1iJaRVeUidyBXYGIr+WO3tVsGNN7BB1kj1hqBJl5sHNlsdHbQV7Px/yDwRA
-	 t4r5txKCfn75g==
-Date: Wed, 11 Mar 2026 21:14:34 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <20260311211434.GA4173404@google.com>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <20260311011218.GA212983@quark>
- <5726fc65-7d24-4353-b341-81b785f2575c@t-8ch.de>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hHg/Chq2"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-126ea4e9697so1986c88.1
+        for <linux-modules@vger.kernel.org>; Wed, 11 Mar 2026 15:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1773269067; x=1773873867; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENEw4lCC3j6vIuqcozSOUgOwZUIpv+glL+Ofm4fta1Y=;
+        b=hHg/Chq2GL98QXWQfCflTB/jog/ciFWZe9YJYg1QlYR/+kce6tzPF/qer5Aa1pxX/0
+         J+2Gvbg+ux6P+6zvrlnVXgwDwS6/PNdMKeSPGScO09pabqAYVuyMalctHsvKfFYoyZ72
+         G0rB1eogBFN4omOWhjJm8nUBTo4bhOCkbPiiNZ382HbWEVkzi1sROxoBGLGcXZgLPipG
+         Nb9XwzqNCKgySIvr362UNovFjypcYQd3sr07eq6po+NhncXNL0n6n44JhTQSn3V6ipqr
+         phbzCBNjkOVdi2x0pmAXHB5+T0RZ80YjgVHvZNZOIxGWM8H6g5Y++wMf6IOUPTbUle/R
+         d/iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1773269067; x=1773873867;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ENEw4lCC3j6vIuqcozSOUgOwZUIpv+glL+Ofm4fta1Y=;
+        b=Khp9KxovyHyOxY97cJqfGcCxWoMqp+EGfiQ8X0f3u3pceujsYDAYXEqhOKlPH2hC7w
+         C/T2R2rk4MyIKftMRLr37yR8/+/DR1R/ltsD71vzgG+yT3ag8/BDQqVXxDOJsVVpadfg
+         oemAqQPgDOHZ3Nqyd//BByQD2IJ9uaEVNsv9YZ+P8xq8/He9Yo+bkomKKOUreYfGbwMo
+         qbUg3VWKEDnjXwia9Kh+7vo4UGxFXwSqi0dbaQtNMgVpaYEMy/Pd0AnaR/81TDhHJepn
+         nocq6/NxdjBp/dP1e4Rf3bs4YEoKgfgTMXi4FswLE9bTbjRgfjROuNrxJuS7N46BMEDY
+         PQJw==
+X-Forwarded-Encrypted: i=1; AJvYcCVH8eYGTHqS1pCVCEe6cdCyciRnp2FYjH2cSIAH32hcH4JhBAWmp2MjCdK8m8Kfxw9vM4DJ+vxIYUI3Bo6G@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzuv1t+8R3BDe1U8fY+qmw4RfEutwcMcapZwe3UuThh3P1lthzq
+	BGtlqWfUGX91m4/BcQttrqIF6QXEhiLw9BQM3cO0tQdz9NHMbaiuCME1mOHl1/ivrw==
+X-Gm-Gg: ATEYQzw9cI/x5rXrEoQ+1vdCgryS0aj7qEAIRftoIbIKviN770E2YDhDDC4M5hD0jVX
+	ZC4eoQcgS4LK6TSWj0jTDR3v9znJJVkqe6rgfUpwbfOu7ieOkLTLeC9Zxf6w7U3s4R4QtjIixCI
+	6DA5FYVh7m8qYbYDjDTXh5p6d+4lTQ9zJcL1lvdLXVnIMDDGz/sZMpN6WwtnMHhfMuVg/WWWE5f
+	Sin82FY/dMDZ/pUe98ntOfplXcUPShRI9t+QMGA5ExJSbuHICwqXhFlwhebyoddPvB0m5W0SizD
+	A6FXOjNYHqdW4K19ORYzWFe0WiA2nv8C+iyJtXUW0srRA4SC7K6espMQrteaUOKwD08BEue6ZR+
+	quurxXRdHlxIR76qwzHP4ZNomX+Jnurt8+Kcl0tdabVsAI5dkX4k+3orEY8FN9ejsjB0s+QRHMw
+	pm4JFi1B8rQ5fpDAVVLn9E6QJcw+bSAsd7rWxabazRNFDibuiiDzbPK8cIR631YtwdFA8=
+X-Received: by 2002:a05:7022:158c:b0:11a:b4dc:7773 with SMTP id a92af1059eb24-128ed117908mr59874c88.12.1773269065915;
+        Wed, 11 Mar 2026 15:44:25 -0700 (PDT)
+Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2be8a833a22sm5077416eec.7.2026.03.11.15.44.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2026 15:44:25 -0700 (PDT)
+Date: Wed, 11 Mar 2026 22:44:20 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Yafang Shao <laoar.shao@gmail.com>, mcgrof@kernel.org,
+	petr.pavlu@suse.com, da.gomez@kernel.org, atomlin@atomlin.com,
+	linux-modules@vger.kernel.org
+Subject: Re: [PATCH v3] module: print version for external modules in
+ print_modules()
+Message-ID: <20260311224420.GB2440964@google.com>
+References: <20260310023807.80140-1-laoar.shao@gmail.com>
+ <aa-6wILF90Y4ndnd@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5726fc65-7d24-4353-b341-81b785f2575c@t-8ch.de>
+In-Reply-To: <aa-6wILF90Y4ndnd@infradead.org>
 
-On Wed, Mar 11, 2026 at 02:19:02PM +0100, Thomas Weißschuh wrote:
-> > > diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
-> > > index a45ce3b24403..3b510651830d 100644
-> > > --- a/include/linux/module_signature.h
-> > > +++ b/include/linux/module_signature.h
-> > > @@ -18,6 +18,7 @@ enum pkey_id_type {
-> > >  	PKEY_ID_PGP,		/* OpenPGP generated key ID */
-> > >  	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
-> > >  	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
-> > > +	PKEY_ID_MERKLE,		/* Merkle proof for modules */
-> > 
-> > I recommend making the hash algorithm explicit:
-> > 
-> >         PKEY_ID_MERKLE_SHA256,	/* SHA-256 merkle proof for modules */
-> > 
-> > While I wouldn't encourage the addition of another hash algorithm
-> > (specifying one good algorithm for now is absolutely the right choice),
-> > if someone ever does need to add another one, we'd want them to be
-> > guided to simply introduce a new value of this enum rather than hack it
-> > in some other way.
+On Mon, Mar 09, 2026 at 11:31:28PM -0700, Christoph Hellwig wrote:
+> On Tue, Mar 10, 2026 at 10:38:07AM +0800, Yafang Shao wrote:
+> > For vmcores triggered by a driver bug, the system calls print_modules() to
+> > list the loaded modules. However, print_modules() does not output module
+> > version information.
 > 
-> The idea here was that this will only ever be used for module built as
-> part of the kernel build. So the actual implementation could change freely
-> without affecting anything.
+> And it should not.
 > 
-> But I don't have hard feelings about it.
+> >
+> > Across a large fleet of servers, there are often many
+> > different module versions running simultaneously, and we need to know which
+> > driver version caused a given vmcore.
+> 
+> Then don't run extetrnal modules, which are not a first part citizen.
+> Get your changeas upstream instead of just leeching the upstream
+> developers work.
 
-Ah, okay.  That's even better then: if someone adds another algorithm it
-would simply be a kconfig option.
+As much as I would like to see these modules upstreamed, distributions
+do ship out-of-tree modules to users. If adding the OOT module version
+to print_modules() helps folks better handle the resulting bug reports,
+and maybe even indirectly keeps some of the noise away from upstream, I
+feel it's worth the small maintenance burden from this change.
 
-It seems 'struct module_signature' itself is intended to be a stable
-ABI, though.  So I think there's an opportunity for confusion here.  It
-might be worth leaving a note somewhere that the format of the
-PKEY_ID_MERKLE portion of the struct does not need to be kept stable and
-can freely change in each kernel build.
-
-- Eric
+Sami
