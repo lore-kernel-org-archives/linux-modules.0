@@ -1,154 +1,107 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CE226ED3E
-	for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 14:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C272326D45
+	for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 17:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773671004; cv=none; b=um5ff1Ge8gwTLraaHiPSdA44DjYuU674d5H2ukGXrZdd6HUDH3IoJXmJu0ibbwedBiyXi0l8h2dTqiBYeJLZewsHs2/41+vnCb79aQ9YGBQ2fEmLw/HtoeTWHLaY+75fcap858RrzmMpHQb691cZrZQb3FWpGi8+HYmL4vVZSjU=
+	t=1773681928; cv=none; b=KQJsr2XSMvo8HF55cCsDwaVmYstl0vsup/ky6xatBmCqySlwAOu/CGsLrkEgBeuiYF/hblcuJLEngBQv5WestzPMi3ZmNb6ixVBHybrnfxE1QBq3dC4go3CeWPKOZKqDMBSiousKTcM35v/k+G8L4I6ByIEQvTg2xvj+CUgyHAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773671004; c=relaxed/simple;
-	bh=1jL8wE53ez09VmWxBwheIuOofd4JrIq2MvGzCJVFSK8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JagOt7sd7ixFogvg1PemMpj15nd7jSAQkYsdiHhzQbo7IaXpvb8MXaUigK3ALalpEGNuJ51IQZfTzNkbZdjeN86DKNRk//WeuGAo6eCetznadkecNkRPkY1zWA7ffte73XVI8b1H/XUtZGueESnk9oQTWmVk6TTPV41ApGDlxs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Uvu/quro; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1773681928; c=relaxed/simple;
+	bh=a5fm5PyeXCPgtwIg9w8CZw9qWuFeu25iVj9Q/e811YA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iFHHzi2fqosdnF87hTBHDpD9UNYRQXHjbBQBSIpEWugbkdqSEVw+EFeTiHMdK63VDGtcaSxfVuUYHf0xvtKuR40z1jc8h6FgeBgOdphSg4rynJqh39pAaxsEEFJsOOjkqkrrDENZp72SSuuNwNk+PeqA+XjH+RO5ORnpgFD14J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sq65owoc; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Uvu/quro"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-663a6bb0fa1so5561999a12.3
-        for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 07:23:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sq65owoc"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2b052ec7176so6305ad.1
+        for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 10:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1773671001; x=1774275801; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gq20qf8GOfZpeWKB6LCgq1j0kTfiDeFW7gACX+xgRqM=;
-        b=Uvu/qurocdZAxm/GpV7rDiqwVaYhrhgfTphpAc1+8Kout2wSDQOUC3Nt6rLtpr/I8n
-         EkBeqmZYm+t3q2ciqEAfTPIve4FF9a180iKDRo1srnae6LZFDYFaRqULnrHtvJG7qsCV
-         2V4YcF6AiGRJ5Yf/VkSPTshHwHSq7wdz4FkcG77Dy5G3bvi+XGyZSTqmq4s3et8dttHW
-         uZ5ZfNMa0cMFtybIptoEDiwzwo5M0ydCqqr8N52wU2i6B9GtOUUDv58O5KAdM/YrJy+R
-         pKMbTLEgnDxVyNfu6doMJOXtfFjjBxktELsnv2HBBtBA56y20vyQtIT09+ts3lIYXQL7
-         FwOw==
+        d=google.com; s=20251104; t=1773681927; x=1774286727; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lEoMPSWLlB9I48+tiZvbvrcTwB3X5od00xQklbNhgN4=;
+        b=sq65owoc+dP08uUfXe4T/hEABtnyZTjElLsQrTP4d31ZZ0GBEGm8Gvqgmh5CBpRo+Z
+         hh1wYu60LkBhXC77GYNrD+Wl3zmASvgnAUM+Zh9zVUafi3IyJXxupQUwoM1z59xhbwFX
+         uMFNtwuL+N8Gx8NzSefhem+rIEdLqa5gJPB35xn0n+9ab6p7MzvUclD6yHcQH2uuNkHg
+         7R6JV68DKVQlxI1LAb+uMl0Pq58i/XnIHiME3aRRzU6Bq6zX/8nooVNwKkbfIZh9E186
+         0p7/huCLAezbVMxvdHVAFHliz1ty11iKR/S0xRSUsSZPLFQpYyJLiILMNG68JsgDN6+0
+         4V0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773671001; x=1774275801;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gq20qf8GOfZpeWKB6LCgq1j0kTfiDeFW7gACX+xgRqM=;
-        b=JGnNBlC9sJkriHBD0UiDZBhMEJ879rIpIP1jRkSSnyllixX2yEuYkVeRA2Hazxg9sc
-         qwrhJFkORM0u+ioUMz8V8RdCgWuy/MwDkmdVAmX782BgRFGnniEEIoB8OWTtcqgXp4h7
-         rIfn3yz3zqCpind+Q6CVkuhG0MahWUZPH/rW7iYE1jQ75MtGZxyxZ5C5XraHhuapbizL
-         +dvFrLXijsnB5As/rcjJrYWj+HPNwCVR+P97vExKjzSV0HzKdNcztadZbcb0C8Dz1Yed
-         24BrkP1Id33507XXew9lGjnuLTLnpkX1tnRjrSAR7eXAgU41rvYL7Ll8tbl6xnnu/wq3
-         7qHg==
-X-Gm-Message-State: AOJu0YxU4h1myHPPCSl8QSWXQ/V5DvjRQRtLdKrAEUwZ5HMicoA6S70i
-	ZA+8pfZsZNy7c1iXmt3OykvfU893RCWamjF/fsGRP9PQwnuKNLb3BdME4U9Afy1q+wI=
-X-Gm-Gg: ATEYQzyGY7Ja6AARKcEWWRigGfp0bT1DKAgWjYii3pvFNQ80w4F3hZYG7bem8hB6ZUV
-	N2aEgnA05NjVwUHD2HX5ZwgNB01Do9Q2hbI/OmpV5eN8pkHq1lXpuvdbvKcfo1MvvZl70jRxZzb
-	nTuPEbyF0llPZGKSmU4WTQZC5E/CprfhdQ393emVZAYwZ9/s1sMFjoW7Y1OYba/BIE5Y4krUD/0
-	sfUIPNjRYTBcSkHW9nTSVy8U4/eGwVW9uCcTnNJDmhcPzDxiBBID/onqazt5ghgl9YjkNuP24J/
-	mr7rCELyZ10zfT8dMS+w0elD3umFdiTu3UC1xgZ7AuJQOAnte5ekLP43nL6XoXAhdKrQASyDaB6
-	+KC/kKL6ne+AULAuUI1+wSTWIG5eMI1GwDl+HY2/9zedFgB8IDAHUEa3h7sP1DZPaR7aaOr2us1
-	uu1s26wklgpitzeXJe359JzH20l53b+lZWA1oOS4xLSu8ctrjS8OQf7rI=
-X-Received: by 2002:a05:6402:40d6:b0:665:57ca:9033 with SMTP id 4fb4d7f45d1cf-66557ca94f2mr1992718a12.28.1773671001093;
-        Mon, 16 Mar 2026 07:23:21 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6639fe6dc9csm4597445a12.17.2026.03.16.07.23.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Mar 2026 07:23:20 -0700 (PDT)
-Message-ID: <3969f887-4d3d-4fb8-870d-6af834d120e5@suse.com>
-Date: Mon, 16 Mar 2026 15:23:20 +0100
+        d=1e100.net; s=20251104; t=1773681927; x=1774286727;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lEoMPSWLlB9I48+tiZvbvrcTwB3X5od00xQklbNhgN4=;
+        b=JOWFJkms6iAq2u/hvZGRkjxkIjWjhaBBgbIsurs9q/I0Us4xLWWTPtq9BbwnpbsGfa
+         VAhYP1x8sQEkXM8OIN+pz0EfHYeJPaB7mST0IhawAalBPmpVGRvxvqkKwuaDSJhgHJ3w
+         nMUUbfF3rrjtG/5WS6HCQZsaK3VcLPHwom9vaS07/+qtXaiku08M9s7dfxEsSKKGA3OD
+         e5yRqCUQvr9ViRMyZH1yI0oslYLOwp3XAApNOVexZonTllWRlYhhEfHKjkWIC8WOrwDB
+         DHlkEYvqqhN3j0A3375kBLhhdeNmMOpC00I9M7RBWhOzFUL7Bbc2AAn0ym8RLllanbcj
+         y9Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCWriID6jlQ5KpUp/QQA1mmaaI6MMQcjU4EbCrn5ede2NlRUyIKgJjqf3iAyaEa5NuR9leZbi1CsqHcNCO+s@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1z/UX3Jh2NMfhCQwe05uNPvbOc3JpUQ/LJs7YZybmuW+g15do
+	YUBch3QYIxk2AW/SsD6YLs6bU6CPWqpSZTA7HWfLwAXye0KtXWFQirCzujheKWsZUQ==
+X-Gm-Gg: ATEYQzx7CfV4oDJGZAgGF9wdXG7mTzzd0i058ohfnR+b/FCsQt5qR0GbDd0TPy1ZJi0
+	Ld13xqFEWD/TeQWO7ZUpuRc7CkPszBb61VKP9v9KVLkbQh+vk57lZSwu2qJ9IuhPfeSCjwuYXp+
+	zo3asHrT+AvLWQdeCGlZOSIDw+d8Hui8Spxd0f1VrMTzi8cGHiUuWW9/Y38g5eNK3CtgCMu0DuC
+	xQ/4qRiyJ52kr9rmyjXErx0zARIpaOIWO5AbE9mzZcqgQVFWHzp8fXRSLARVEF/t/QHVPF7D4qB
+	0eeQ0vxFwK223ezlk6K/94fdhLh6g1g/yNd4rfyah0AhmtEyG87EkcH9XpUy8jNi9CYNk+R/I80
+	1K+WD3chpZx/tcfLJjue5MKFgrkfXfF7GlItgqA+gLQ5zpLvhSDDbkgcFZA2qgpvxo9ESKscSmq
+	uwV4TZN417n6+edzpJGN2n9o7+X3M6IPZsoBKgfv6F7X6F3hibzv9aA0kB6pugw6Bnxbg=
+X-Received: by 2002:a17:902:c947:b0:2b0:55cf:5e91 with SMTP id d9443c01a7336-2b0642b34b3mr10455ad.19.1773681926446;
+        Mon, 16 Mar 2026 10:25:26 -0700 (PDT)
+Received: from google.com (197.23.125.34.bc.googleusercontent.com. [34.125.23.197])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c740000056esm5873565a12.24.2026.03.16.10.25.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Mar 2026 10:25:25 -0700 (PDT)
+Date: Mon, 16 Mar 2026 17:25:21 +0000
+From: Sami Tolvanen <samitolvanen@google.com>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Shyam Saini <shyamsaini@linux.microsoft.com>,
+	Kees Cook <kees@kernel.org>,
+	Thorsten Blum <thorsten.blum@linux.dev>
+Subject: Re: [PATCH] module: remove MODULE_VERSION()
+Message-ID: <20260316172521.GA1300047@google.com>
+References: <2026031341-evolve-repeater-987b@gregkh>
+ <2026031303-prelaunch-creation-3fce@gregkh>
+ <f036410e-f53c-4284-b108-18bcdb2f0d28@kernel.org>
+ <abfGQUxgm8mEWlAz@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
-To: Sami Tolvanen <samitolvanen@google.com>,
- Joe Lawrence <joe.lawrence@redhat.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
- Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
- Aaron Tomlin <atomlin@atomlin.com>, Petr Mladek <pmladek@suse.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>
-References: <20260305015237.299727-1-joe.lawrence@redhat.com>
- <20260311211207.GA2440964@google.com>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260311211207.GA2440964@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <abfGQUxgm8mEWlAz@infradead.org>
 
-On 3/11/26 10:12 PM, Sami Tolvanen wrote:
-> On Wed, Mar 04, 2026 at 08:52:37PM -0500, Joe Lawrence wrote:
->> Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
->> related macros") added .text and made .data, .bss, and .rodata sections
->> unconditional in the module linker script, but without an explicit
->> address like the other sections in the same file.
->>
->> When linking modules with ld.bfd -r, sections defined without an address
->> inherit the location counter, resulting in non-zero sh_addr values in
->> the .ko.  Relocatable objects are expected to have sh_addr=0 for these
->> sections and these non-zero addresses confuse elfutils and have been
->> reported to cause segmentation faults in SystemTap [1].
->>
->> Add the 0 address specifier to all sections in module.lds, including the
->> .codetag.* sections via MOD_SEPARATE_CODETAG_SECTIONS macro.
->>
->> Link: https://sourceware.org/bugzilla/show_bug.cgi?id=33958
->> Fixes: 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and related macros")
->> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
->> ---
->>  include/asm-generic/codetag.lds.h |  2 +-
->>  scripts/module.lds.S              | 12 ++++++------
->>  2 files changed, 7 insertions(+), 7 deletions(-)
->>
->> v2:
->> - Update the MOD_SEPARATE_CODETAG_SECTION for .codetag.* as well [Petr]
+On Mon, Mar 16, 2026 at 01:58:41AM -0700, Christoph Hellwig wrote:
+> On Sat, Mar 14, 2026 at 11:22:22AM +0100, Christophe Leroy (CS GROUP) wrote:
+> > > Sami just pointed out to me off-list that maybe I should also drop the
+> > > srcversion stuff too.  I'll gladly do that too, does anyone know if
+> > > anyone even uses that anymore?
+> > 
+> > If I understand correctly the text in kernel/module/Kconfig, srcversion is
+> > added only for modules which contain a MODULE_VERSION.
+> > 
+> > So as you drop MODULE_VERSION, srcversion becomes completely useless doesn't
+> > it ?
 > 
-> Do we also need similar changes in any of the architecture-specific module
-> linker scripts (arch/*/include/asm/module.lds.h)?
+> Looks like it.
 
-I overlooked these architecture-specific files. I believe we should do
-the same for them. For instance, riscv explicitly defines the .plt, .got
-and .got.plt sections, and they have misleading addresses:
+Looking at modpost, srcversions are added to all modules if
+MODULE_SRCVERSION_ALL is enabled, whether they have MODULE_VERSION or
+not. Doesn't mean it's not completely useless, of course.
 
-$ readelf -t fs/xfs/xfs.ko
-[...]
-Section Headers:
-  [Nr] Name
-       Type              Address          Offset            Link
-       Size              EntSize          Info              Align
-       Flags
-[...]
-  [48] __versions
-       PROGBITS         0000000000000000  0000000000194e90  0
-       0000000000007900 0000000000000000  0                 8
-       [0000000000000002]: ALLOC
-  [49] .plt
-       PROGBITS         0000000000007900  000000000019c790  0
-       0000000000000001 0000000000000000  0                 1
-       [0000000000000006]: ALLOC, EXEC
-  [50] .got
-       PROGBITS         0000000000007901  000000000019c791  0
-       0000000000000001 0000000000000000  0                 1
-       [0000000000000003]: WRITE, ALLOC
-  [51] .got.plt
-       PROGBITS         0000000000007902  000000000019c792  0
-       0000000000000001 0000000000000000  0                 1
-       [0000000000000002]: ALLOC
-[...]
-
-Nonetheless, this can be done separately. I think fixes for these files
-should better go through architecture-specific trees anyway.
-
-I can check the individual architectures and prepare the necessary
-patches, unless someone else is already looking into this or wants to
-take a look.
-
--- 
-Thanks,
-Petr
+Sami
