@@ -1,113 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9583038C2C8;
-	Mon, 16 Mar 2026 10:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBE938D6A9
+	for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 10:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773655388; cv=none; b=J7dYemPmUX53C+VZ8kdHTK1zLNztNLr/ZJNTQYUvRNpMZFYdalDOlYIecqcEchTPsZyej6GAYH3Sa0L/Xtkye97cHQrHH/LtyoSQ3oishMi3L028MVpBgl7P/s8tw5B/biw7S2YSI62Q3gZd/iTWMOowiVM/oYVmxAnUIf3lUYk=
+	t=1773658092; cv=none; b=JVI9ywy3cVpRrKxnJkbIKJB6suq9psDgndK9GmZYtHQDuAJfqqMPc0O/WZyMwgUZN3wm2azuq2o+tG9zk5N2btD9qiAqY89RbsuHmGSdgp0Tcu0/th2FufkuGZuN3mFO+2HG29jTTtNYWn2+1NhGPBPe2JuyAY4C11DxHxa8324=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773655388; c=relaxed/simple;
-	bh=THNcfZ0++srLzzaWy3ftlDPtfcjjqIQGjT6qrdeMrOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mU2KOaB3bS19BB9naarh4+a9UsOQ5nJbzc3stUHLYRyJM4Q24sFwCrVyqHx/eGTl7vqNOt9yVzweG7fo/Nf+8pDx+rfTRyfAgMYtwX4Ji+sLGewrUbDTI4o60OkVgmiP7NGLXRZWGex63ccKAU8AYjM/bNnWhCaPP7CVy841/BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FdYDbfW1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1773658092; c=relaxed/simple;
+	bh=RvKLcKkFi38KdIwPbZcxye0llCWFTvcL/SQDV4UaCb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Aqvg7fzZ0LpgqWV2SG1Ahxy8M0yLVj3grQ9KNFv3l3h0dwxaeZ/R2Hl3n4q08tURBWG2xEcPgf7Nx3xUHB2tD+JuLl9RPWfLgGLdMb5Bt+A1Y6tswcBJvVxyzTVTdAt98MrUv5gEbxwXhQLHRTBFVKdmxThorCxGxY4jfLQEg4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Gaj1RaG+; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FdYDbfW1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B73C19421;
-	Mon, 16 Mar 2026 10:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1773655388;
-	bh=THNcfZ0++srLzzaWy3ftlDPtfcjjqIQGjT6qrdeMrOA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FdYDbfW1t6V76qLyQGQIc3LgIXhICtdy3f5FvdwepmX0Q2Ge5g1R3EChLi9uA4kds
-	 jwlfqz9gIZkTzyUVir8GDRG70RKY5lVSLo+oX0KT94nZdzAz3OTY7B5GVjHihgh9n6
-	 7b+3BtDVEpGfoN1A+5JPSQX28Os9ZLjb1vXX/uGA=
-Date: Mon, 16 Mar 2026 11:03:03 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Shyam Saini <shyamsaini@linux.microsoft.com>,
-	Kees Cook <kees@kernel.org>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] module: remove MODULE_VERSION()
-Message-ID: <2026031630-linseed-powdered-a0d1@gregkh>
-References: <2026031341-evolve-repeater-987b@gregkh>
- <d622c70a-f79a-4215-84fb-c5de0a8f6ce5@suse.com>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Gaj1RaG+"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48534b59cf3so39259715e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 16 Mar 2026 03:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773658089; x=1774262889; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=COAVljU9VJ7FLI0cTY3WOLojAyLOilMuqo6ThWcTiZA=;
+        b=Gaj1RaG+WOoqtud/+UB/fubOZjPECaJ/7hVuIMW96A9o1G5f6Yq0/IfNVWFabxETpp
+         2A01acbmpW4X0Wbuejy5TGLqshTXET9/arwqvO5Lcs5dt1KAxG/kImrQaj/EOckkL+Sw
+         Wi/xXdmbD68B1R6n+UTinlvXonRmJyLI9Pj8z7XCxuOdPa3mLZrSEZ4wmCtVTgXtyfEl
+         KyLnB+p3ydnfiNP41j1kYp7aE5TulW3dWso80oMpc+iYnxxUEBPJ2Ra1jhJ9LM31pYcO
+         KCsNTFik5i1gieAUfDehCP7K0HA42p7lIfZ7Xtkv88epr97ObFXFQFvR+vUwkubocui9
+         lAuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773658089; x=1774262889;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=COAVljU9VJ7FLI0cTY3WOLojAyLOilMuqo6ThWcTiZA=;
+        b=Q5RFDf8nj2po7KhSfHaliY5nGcPtJZDPWEe5k0g8MRORsURkblXb6iZ8hFr+aWIe8X
+         ROXO814KIGBieqA12aulaf2ceeG2G6cb1LckOn4xMK+oZvh3dWr8zigGzQwUwaaZPDQA
+         dm/qCiWgx1PLh2enecbKJBLsw4Z5ZhH2ywYgTUyyBEZOE6xrrYTmVoFo4AyjwkR8c/6p
+         PQF4AW03fVhG4XSiaCpZ/b3B9SU7gFSk6QfOoU/gdwW1VoK6jN7DDQMQ6QaJ3b3YcVq0
+         Ycfxa1Idx94KsYIZ6pHS/s7PrwBWoTL9lZ1bpYlsW9HVDIrYYIitvOiXQ/CEAMJ6Vcj9
+         wKQA==
+X-Gm-Message-State: AOJu0YzN84FS0w6rFXsnOzcI3XiICO2F5x/IqiwhGe21fM5IWFE/GnZy
+	FKePMkc0tAFLJk6kU48D7wJC8EpTSRkgaNs9fS2xvAJzSspwenAWatN9Mu4abCWf5YY=
+X-Gm-Gg: ATEYQzzVZT+gN7VV+2bOiGdZHBbfdh8xrLDMv6kroIFucwJQwX6GCHzS/LLyDSdqdQc
+	Puh7oKWU5pXpCjBIvS8Wf3jgICTpWnfwA+ujtR70/fQa2IZEZDe3KS8nuPZ1UdRRMb3u6xKuzMv
+	ZVN1GA4LpabUl1nNbpV34Jy0NLlIYn5YXWqewP82WidM8FdQHX2R51L/OpgW8pqzGbQzI39DeQC
+	yAcx7OT2X007kMpzErK6ZD2YQEKmEXPycTmGm2IRSnT9era8E1stZ60+tu7hmuOvLDg2JlgGs4s
+	q0ESSouqu43ENrknwZM1mdlSxAlOTePqETJPrOPlHmI3Jo5Tbi2psCFzfX1yX9iefI4ujJKBwtn
+	wjZWjcENkSwsw4VC7qGx25/TLleWByYOdhHBqTUIZr9ppGkPdedMHBM2gcS9esdouR0u5pMpZ3n
+	XH59Y0IP0tmX2Pj+fPm1OkPI09P0bhVWc9VYXjgH4tuNd6
+X-Received: by 2002:a05:600c:3b14:b0:485:3aa1:a7f0 with SMTP id 5b1f17b1804b1-485566cfbadmr214165865e9.4.1773658089472;
+        Mon, 16 Mar 2026 03:48:09 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48556395df4sm86533895e9.0.2026.03.16.03.48.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 03:48:09 -0700 (PDT)
+Message-ID: <f037d2de-a88e-4f19-8545-b82ae10e7e75@suse.com>
+Date: Mon, 16 Mar 2026 11:48:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d622c70a-f79a-4215-84fb-c5de0a8f6ce5@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: remove MODULE_VERSION()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Shyam Saini <shyamsaini@linux.microsoft.com>, Kees Cook <kees@kernel.org>,
+ Thorsten Blum <thorsten.blum@linux.dev>,
+ Christoph Hellwig <hch@infradead.org>
+References: <2026031341-evolve-repeater-987b@gregkh>
+ <2026031303-prelaunch-creation-3fce@gregkh>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <2026031303-prelaunch-creation-3fce@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 16, 2026 at 10:37:38AM +0100, Petr Pavlu wrote:
-> On 3/13/26 3:20 PM, Greg Kroah-Hartman wrote:
-> > Module "versions" do not make sense as the kernel is built all at once,
-> > the "version" is the overall kernel version number, so modules can not
-> > really be described as having a unique version given that they rely on
-> > the infrastructure of the whole kernel.
-> > 
-> > For now, just make this an "empty" define, to keep existing code
-> > building properly as the tree is slowly purged of the use of this over
-> > time.
-> > 
-> > This macro will be removed entirely in the future when there are no
-> > in-tree users.
+On 3/13/26 4:46 PM, Greg Kroah-Hartman wrote:
+> On Fri, Mar 13, 2026 at 03:20:42PM +0100, Greg Kroah-Hartman wrote:
+>> Module "versions" do not make sense as the kernel is built all at once,
+>> the "version" is the overall kernel version number, so modules can not
+>> really be described as having a unique version given that they rely on
+>> the infrastructure of the whole kernel.
+>>
+>> For now, just make this an "empty" define, to keep existing code
+>> building properly as the tree is slowly purged of the use of this over
+>> time.
+>>
+>> This macro will be removed entirely in the future when there are no
+>> in-tree users.
+>>
+>> Cc: Luis Chamberlain <mcgrof@kernel.org>
+>> Cc: Petr Pavlu <petr.pavlu@suse.com>
+>> Cc: Daniel Gomez <da.gomez@kernel.org>
+>> Cc: Sami Tolvanen <samitolvanen@google.com>
+>> Cc: Aaron Tomlin <atomlin@atomlin.com>
+>> Cc: Shyam Saini <shyamsaini@linux.microsoft.com>
+>> Cc: Kees Cook <kees@kernel.org>
+>> Cc: Thorsten Blum <thorsten.blum@linux.dev>
+>> Cc: Christoph Hellwig <hch@infradead.org>
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ---
+>>  include/linux/module.h | 56 +++++++++---------------------------------
+>>  kernel/params.c        | 30 ----------------------
+>>  2 files changed, 11 insertions(+), 75 deletions(-)
 > 
-> I share a similar sentiment that module versions set by MODULE_VERSION()
-> are not particularly useful for in-tree modules and the macro is often
-> used unnecessarily. However, I don't think this patch takes the best
-> approach to phase it out.
 > 
-> The file Documentation/ABI/stable/sysfs-module documents
-> /sys/module/<MODULENAME>/version as a stable ABI. Searching for
-> '^MODULE_VERSION' in v7.0-rc4 shows 600 uses of the macro. My concern is
-> that if any of these modules has a userspace part that checks the
-> version, this patch could potentially break users' systems.
+> Sami just pointed out to me off-list that maybe I should also drop the
+> srcversion stuff too.  I'll gladly do that too, does anyone know if
+> anyone even uses that anymore?
 
-sysfs use is ALWAYS "if the file is not there, the userspace tool should
-keep working".  How would userspace every do something different if a
-module version flag is not there, that is not how a kernel driver should
-ever be attempting to communicate with userspace as to what the api is,
-or is not.
+Despite its name, I believe srcversion is primarily used to identify
+binaries. Nowadays, modules contain build IDs, which is a standard
+mechanism for this. The information is available already via
+/sys/module/<module>/notes/.note.gnu.build-id, so removing the
+srcversion data makes sense to me.
 
-And as the module version does not even work for any stable kernel
-release, it's kind of proof that userspace does not rely on this.
-
-> I believe it would be safer to start by removing individual uses of
-> MODULE_VERSION(). That way, we can also learn if we're missing any use
-> cases for having module versions.
-
-Sure, I'll make up a patch to drop all 700 uses, but how is that much
-different?  :)
-
-> The original patch "Add a MODULE_VERSION macro" [1] from 2004 doesn't
-> say much about the motivation for adding module versions, but it does
-> mention that they should be accessible via sysfs.
-
-That was because we were just exporting all of the module information in
-sysfs, not due to us attempting to do anything special with that info in
-userspace other than "hey we have an attribute, let's export it!"
-
-> That was implemented
-> a year later in commit c988d2b28454 ("[PATCH] modules: add version and
-> srcversion to sysfs") [2], which primarily discusses use cases related
-> to DKMS, and to administrators + tech support needing to know what is
-> actually loaded on the system. For the latter, I believe srcversion (or
-> something similar) should be sufficient.
-
-And does dkms actually do anything with this sysfs value?  At quick
-glance, I couldn't see anything.
-
-thanks,
-
-greg k-h
+-- 
+Thanks,
+Petr
