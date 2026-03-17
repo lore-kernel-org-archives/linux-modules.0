@@ -1,430 +1,214 @@
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361B53AC0E4
-	for <linux-modules@vger.kernel.org>; Tue, 17 Mar 2026 11:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F95F3644C6
+	for <linux-modules@vger.kernel.org>; Tue, 17 Mar 2026 12:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773747074; cv=none; b=Z+qpXVI3cAkOpTf1A1mRGD5z4oPaAd66TTEdkUGy/k0TwL2cNL9yrZqwnG69oaZHdR632UiXpU5bJ5/KAeJpYrR4wvRcwGhA8CU/mRwAGJxvyv75o7GR+32tW92Zyfk55/Y60tB+fOBoX7RPhY4cllByY88BjQZxIr9HWhUlfu4=
+	t=1773751864; cv=none; b=X/EEWEskM6T3ZB4NNA9k3PQ1ihKwYSZ9E2Pf7ucZ5soKu/g3UCOwN1lpQryss7a8L7ZcmGXIJXGFoSJc8IQJ4Axde/l6IRO9fhCs8G/LE27l1t7EW9exdG1V/29jgX2YMI9gOu8qvTV0PIFaNwqXuTWcvBi87UDsxID1sFnYEPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773747074; c=relaxed/simple;
-	bh=38tyHv7wuHHcpccPs+5d23jC5IPbjLRZHGHO7btAVBc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qTm0NVQKTGQfjqVfZ5zRAqdCLkoEIQWjKPVv8PDmkxYW8AAHmOkRy9tl9iL8QqOEWVM0pQta3uNuEfAILNJSwhTqWDRrSQWXUMRRqrq9fXwxWw8shupsbT6e91iZMaKlmAGZ7yRHddqAEd3fribo0++jIa4S2pK8YgtoYHxV5sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=xkSA2DCh; arc=none smtp.client-ip=212.77.101.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+	s=arc-20240116; t=1773751864; c=relaxed/simple;
+	bh=9x4rSJQhtKV4SnOioksCqGOgd6yo22HmDkvguE0dioE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=meAdSydTcqTcUntT8oKYM8PqgMh8CGgaHMfDoHAtOqdxVoME6rNLaNVDV8+ufDHsgsckzfobE8xRr008FoVy24ycQ2wIDVhgPbEUhWQy02KsaDe2vA4+ZY6PNPcjF4qSVKucrhIQCTrhHIzmRfiJ5ONkiuwYRPjJmoie4F2j66w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZwDWtvNn; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="xkSA2DCh"
-Received: (wp-smtpd smtp.wp.pl 21088 invoked from network); 17 Mar 2026 12:04:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1773745464; bh=YNrP3/4/AFv8r78dLUtKzhiMnAhsRXO66HDMuG86UUs=;
-          h=From:To:Cc:Subject;
-          b=xkSA2DChepF86drnkQaNVoVT3eNhCJfZWGpqveUzu/RxdGqyxhbK4XT1c/Jmi6oX9
-           78r75VXzl/sfBOc7u2FiIoSfHWBlvj4Y6ibHPjE5tCUFdTy6dlheSMsydHBI/hCULX
-           JZenk3WbTHu0GB2H10+NYsKJOGCG1HrHHEdOKXOh/nukq0DlY70Qk6RYGLaFz6lWof
-           cHbI3I+I9qGZz1GyxmC33HEFeJ/0H3VS4f2xRAUtfJWTSqSEFWY3rdZLcZYDqCOfbm
-           xFKDLxrUOVI+deLTdN93rQ+aMZtXrG2aQWL9PV9/IJiIigb02OhYjuxkXFqx+Ru63+
-           SUpGiHV/WKRSw==
-Received: from 213-134-179-48.net.autocom.pl (HELO localhost) (stf_xl@wp.pl@[77.236.5.191])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <linux-modules@vger.kernel.org>; 17 Mar 2026 12:04:24 +0100
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: linux-modules@vger.kernel.org,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jordan Rome <linux@jordanrome.com>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH] module/kallsyms: sort function symbols and use binary search
-Date: Tue, 17 Mar 2026 12:04:23 +0100
-Message-Id: <20260317110423.45481-1-stf_xl@wp.pl>
-X-Mailer: git-send-email 2.25.4
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZwDWtvNn"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-485345e1013so5686915e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 17 Mar 2026 05:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1773751861; x=1774356661; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z9FF3jptzwdTviK++wQdCMhUD9QB9yKDmCDYs1F27lA=;
+        b=ZwDWtvNn7cEEFWUmjhJPSKp/7PwWA/UpqoKksqEcLxVkRQhF3fUOKxNHCGI91TWuBU
+         rcTo0m40iwDc1Dbh1AZkafj6St6fFrjqAA5wJXM/u9ZNvgw2u7x66JG6JZAHz9oly75W
+         FSYXKGw1fVvscn6GPGiz+r7yWNxTZ8/1E7Cf8kQXQaEFP9Na0xN5FE5cQWwHLWrRaAeA
+         Jf0/seGTY38yD0U9Cj++TIlUm6nBNAwvwmEgn9BZ5fhXM1tOr8DpJeipGI5MDuPw1KXA
+         NGFJ60JGvRaqdzxsriCsOJ2Ep84yRG/pFXHgAAMXS8LmR/rmFgFjrwL7fc9ebMSuK9SE
+         AuSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773751861; x=1774356661;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z9FF3jptzwdTviK++wQdCMhUD9QB9yKDmCDYs1F27lA=;
+        b=UtkguM4sCCM5YLMdI1GPKr4dCADDPSo0dVulZM3OThjdmG/EbxNVGAGuKx9IViPUW/
+         NPLDzoz/KqGGjupxhl5yDYJGxl+O+PcPv8xQ6o76wVMz2Y9J2tLx2VXhp5zFQXDPfH/J
+         QsjS7Sy/aCKT2tf2gxtg74v9NOR+8IQW89UpI9rVKLeBAXuCFvg6OLo10lR3qkGWA51s
+         1rG+5gxGkWbJH4Ti83hwbhL2WRpjIOmoJ9aIubCErrvx5VVlOc4Bp2Qpv9mkFbYxgQH0
+         mTp1TJ5nWzleZphy+Gjzfyxhz0JC7jELQw933QuraZhHA2foiCEUtyA6zHl6cn4XXKXV
+         axsw==
+X-Gm-Message-State: AOJu0YxTrtbPrHPtz4dXUPqTwBgdiCFernkT+MVaX8VBV5Wh3yA+hAMa
+	jPXIOT6GS7n2IgmF1BufUGhoB7H2mra686yOT9h6//5qyeUakpi1QDErfHck/yGsgAt2ZEFCqGq
+	4Khvl
+X-Gm-Gg: ATEYQzzL41hnv3o/zGqXYF7RrbDg1SBI958po9JhwGb3D8d/dNHn+Tp/kP5mdbi5Vpm
+	+saqfAzS1ySrDEToyaV4rKUoT7+A/6r61S376cfVetqikQuEeuFLy1XBhcMJqzAKlqSlaSM77JI
+	W8mxOdA8W2u4LpihJKWgYBdjfh/L2ObjTsT8Afy6U2a1I6syjSmA5CSalKffYadkHb9+RcuBYyf
+	3zqXDzQYfG0iLk+h3w0ydfCX2RXbilEQ2nZNO3R8wlPmoU43xfmL82KpD5iQcIbdlubruP1PFW5
+	eQQMoX8w/P8BpfX0HOLGMpLLM5N+Vurz49Ov5RqIDIdmMcQWqx3GU7bbhzxlch1/G6NbQLiZXZb
+	u7jawqNZ45BhDGSWCFpENRwKr0KoW+Yg0HzgAmFBhyGFtdVFgGahWplnC/Xc0yCktJV/1TUedoF
+	dr6jYPRNixfeLN9nArKinzz6/QwGOdE3AUW/BSP40em1ZlYG+/RhDyILU=
+X-Received: by 2002:a05:600c:8488:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4856eadba01mr53496405e9.15.1773751860635;
+        Tue, 17 Mar 2026 05:51:00 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48634a7ac2csm32740025e9.1.2026.03.17.05.50.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Mar 2026 05:51:00 -0700 (PDT)
+Message-ID: <bbfaa9ab-8bfb-46a2-ba90-f6c19782e66d@suse.com>
+Date: Tue, 17 Mar 2026 13:50:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 52189929bed410a2db838ecf1818816a
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000003 [EeA0]                               
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module: remove MODULE_VERSION()
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Shyam Saini <shyamsaini@linux.microsoft.com>, Kees Cook <kees@kernel.org>,
+ Thorsten Blum <thorsten.blum@linux.dev>,
+ Christoph Hellwig <hch@infradead.org>
+References: <2026031341-evolve-repeater-987b@gregkh>
+ <d622c70a-f79a-4215-84fb-c5de0a8f6ce5@suse.com>
+ <2026031630-linseed-powdered-a0d1@gregkh>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <2026031630-linseed-powdered-a0d1@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Module symbol lookup via find_kallsyms_symbol() performs a linear scan
-over the entire symtab when resolving an address. The number of symbols
-in module symtabs has grown over the years, largely due to additional
-metadata in non-standard sections, making this lookup very slow.
+On 3/16/26 11:03 AM, Greg Kroah-Hartman wrote:
+> On Mon, Mar 16, 2026 at 10:37:38AM +0100, Petr Pavlu wrote:
+>> On 3/13/26 3:20 PM, Greg Kroah-Hartman wrote:
+>>> Module "versions" do not make sense as the kernel is built all at once,
+>>> the "version" is the overall kernel version number, so modules can not
+>>> really be described as having a unique version given that they rely on
+>>> the infrastructure of the whole kernel.
+>>>
+>>> For now, just make this an "empty" define, to keep existing code
+>>> building properly as the tree is slowly purged of the use of this over
+>>> time.
+>>>
+>>> This macro will be removed entirely in the future when there are no
+>>> in-tree users.
+>>
+>> I share a similar sentiment that module versions set by MODULE_VERSION()
+>> are not particularly useful for in-tree modules and the macro is often
+>> used unnecessarily. However, I don't think this patch takes the best
+>> approach to phase it out.
+>>
+>> The file Documentation/ABI/stable/sysfs-module documents
+>> /sys/module/<MODULENAME>/version as a stable ABI. Searching for
+>> '^MODULE_VERSION' in v7.0-rc4 shows 600 uses of the macro. My concern is
+>> that if any of these modules has a userspace part that checks the
+>> version, this patch could potentially break users' systems.
+> 
+> sysfs use is ALWAYS "if the file is not there, the userspace tool should
+> keep working".  How would userspace every do something different if a
+> module version flag is not there, that is not how a kernel driver should
+> ever be attempting to communicate with userspace as to what the api is,
+> or is not.
+> 
+> And as the module version does not even work for any stable kernel
+> release, it's kind of proof that userspace does not rely on this.
 
-Improve this by separating function symbols during module load, placing
-them at the beginning of the symtab, sorting them by address, and using
-binary search when resolving addresses in module text.
+Makes sense. I have now also reviewed updates of MODULE_VERSION()
+invocations going back 5 years and my impression is that removing this
+macro should be generally safe.
 
-This also should improve times for linear symbol name lookups, as valid
-function symbols are now located at the beginning of the symtab.
+New instances of MODULE_VERSION() are typically introduced when a new
+driver is added to the codebase.
 
-The cost of sorting is small relative to module load time. In repeated
-module load tests [1], depending on .config options, this change
-increases load time between 2% and 4%. With cold caches, the difference
-is not measurable, as memory access latency dominates.
+There were numerous commits where MODULE_VERSION() is removed with the
+argument that it is unnecessary for in-tree modules and that the main
+kernel version should be used instead. This suggest that there is
+already a broader consensus that module versions are not particularly
+useful, at least not for in-tree modules.
 
-The sorting theoretically could be done in compile time, but much more
-complicated as we would have to simulate kernel addresses resolution
-for symbols, and then correct relocation entries. That would be risky
-if get out of sync.
+There was a limited number of cases where a per-module version is
+actually updated. Examples:
 
-The improvement can be observed when listing ftrace filter functions:
+ea7af9454815 ("platform/x86: dell_rbu: Bump version")
+93d09773d1a5 ("xz: add RISC-V BCJ filter")
+98d5b61ef5fa ("coda: bump module version to 7.2")
+8cb5d216ab33 ("char: xillybus: Move class-related functions to new xillybus_class.c")
+74f46a0524f8 ("scsi: fnic: Turn off FDMI ACTIVE flags on link down")
+6cd379f75f42 ("ata: pata_hpt3x2n: pass base DPLL frequency to hpt3x2n_pci_clock()")
+47adef20e67d ("pata: ixp4xx: Rewrite to use device tree")
 
-root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-74908
+(The last three commits are indirect updates, where the module contains
+MODULE_VERSION(DRV_VERSION); and DRV_VERSION is updated.)
 
-real	0m1.315s
-user	0m0.000s
-sys	0m1.312s
+Most of these version bumps do not seem particularly noteworthy. Only
+commit 98d5b61ef5fa appears somewhat interesting with the description:
 
-After:
+    coda: bump module version to 7.2
 
-root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
-74911
+    Helps with tracking which patches have been propagated upstream and if
+    users are running the latest known version.
 
-real	0m0.167s
-user	0m0.004s
-sys	0m0.175s
+> 
+>> I believe it would be safer to start by removing individual uses of
+>> MODULE_VERSION(). That way, we can also learn if we're missing any use
+>> cases for having module versions.
+> 
+> Sure, I'll make up a patch to drop all 700 uses, but how is that much
+> different?  :)
 
-(there are three more symbols introduced by the patch)
+The end result is ultimately the same. The kernel will no longer have
+any uses of MODULE_VERSION() or its implementation.
 
-For livepatch modules, the symtab layout is preserved and the existing
-linear search is used. For this case, it should be possible to keep
-the original ELF symtab instead of copying it 1:1, but that is outside
-the scope of this patch.
+The difference is that by removing the uses of MODULE_VERSION() first,
+the maintainers of the relevant code will be properly informed about
+this change, rather than being told afterwards, when they will no longer
+have a chance to provide any feedback.
 
-Link: https://gist.github.com/sgruszka/09f3fb1dad53a97b1aad96e1927ab117 [1]
-Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
----
- include/linux/module.h   |   6 ++
- kernel/module/internal.h |   1 +
- kernel/module/kallsyms.c | 169 ++++++++++++++++++++++++++++-----------
- 3 files changed, 131 insertions(+), 45 deletions(-)
+Another aspect is that MODULE_VERSION() still appears useful for
+external modules. Sure, we won't keep this macro if all uses in the
+kernel are removed and these external modules will need to replace it
+with a different mechanism. However, changing MODULE_VERSION() now to
+only a dummy implementation can silently break version tracking for
+these modules, which is not ideal.
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index ac254525014c..4da0289fba02 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -379,8 +379,14 @@ struct module_memory {
- struct mod_kallsyms {
- 	Elf_Sym *symtab;
- 	unsigned int num_symtab;
-+	unsigned int num_func_syms;
- 	char *strtab;
- 	char *typetab;
-+
-+	unsigned int (*search)(struct mod_kallsyms *kallsyms,
-+			       struct module_memory *mod_mem,
-+			       unsigned long addr, unsigned long *bestval,
-+			       unsigned long *nextval);
- };
- 
- #ifdef CONFIG_LIVEPATCH
-diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 618202578b42..6a4d498619b1 100644
---- a/kernel/module/internal.h
-+++ b/kernel/module/internal.h
-@@ -73,6 +73,7 @@ struct load_info {
- 	bool sig_ok;
- #ifdef CONFIG_KALLSYMS
- 	unsigned long mod_kallsyms_init_off;
-+	unsigned long num_func_syms;
- #endif
- #ifdef CONFIG_MODULE_DECOMPRESS
- #ifdef CONFIG_MODULE_STATS
-diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-index 0fc11e45df9b..9e131baae441 100644
---- a/kernel/module/kallsyms.c
-+++ b/kernel/module/kallsyms.c
-@@ -10,6 +10,7 @@
- #include <linux/kallsyms.h>
- #include <linux/buildid.h>
- #include <linux/bsearch.h>
-+#include <linux/sort.h>
- #include "internal.h"
- 
- /* Lookup exported symbol in given range of kernel_symbols */
-@@ -103,6 +104,95 @@ static bool is_core_symbol(const Elf_Sym *src, const Elf_Shdr *sechdrs,
- 	return true;
- }
- 
-+static inline bool is_func_symbol(const Elf_Sym *sym)
-+{
-+	return sym->st_shndx != SHN_UNDEF && sym->st_size != 0 &&
-+	       ELF_ST_TYPE(sym->st_info) == STT_FUNC;
-+}
-+
-+static unsigned int bsearch_kallsyms_symbol(struct mod_kallsyms *kallsyms,
-+					    struct module_memory *mod_mem,
-+					    unsigned long addr,
-+					    unsigned long *bestval,
-+					    unsigned long *nextval)
-+
-+{
-+	unsigned int mid, low = 1, high = kallsyms->num_func_syms + 1;
-+	unsigned int best = 0;
-+	unsigned long thisval;
-+
-+	while (low < high) {
-+		mid = low + (high - low) / 2;
-+		thisval = kallsyms_symbol_value(&kallsyms->symtab[mid]);
-+
-+		if (thisval <= addr) {
-+			*bestval = thisval;
-+			best = mid;
-+			low = mid + 1;
-+		} else {
-+			*nextval = thisval;
-+			high = mid;
-+		}
-+	}
-+
-+	return best;
-+}
-+
-+static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms,
-+					unsigned int symnum)
-+{
-+	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
-+}
-+
-+static unsigned int search_kallsyms_symbol(struct mod_kallsyms *kallsyms,
-+					   struct module_memory *mod_mem,
-+					   unsigned long addr,
-+					   unsigned long *bestval,
-+					   unsigned long *nextval)
-+{
-+	unsigned int i, best = 0;
-+
-+	/*
-+	 * Scan for closest preceding symbol, and next symbol. (ELF
-+	 * starts real symbols at 1).
-+	 */
-+	for (i = 1; i < kallsyms->num_symtab; i++) {
-+		const Elf_Sym *sym = &kallsyms->symtab[i];
-+		unsigned long thisval = kallsyms_symbol_value(sym);
-+
-+		if (sym->st_shndx == SHN_UNDEF)
-+			continue;
-+
-+		/*
-+		 * We ignore unnamed symbols: they're uninformative
-+		 * and inserted at a whim.
-+		 */
-+		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
-+		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
-+			continue;
-+
-+		if (thisval <= addr && thisval > *bestval) {
-+			best = i;
-+			*bestval = thisval;
-+		}
-+		if (thisval > addr && thisval < *nextval)
-+			*nextval = thisval;
-+	}
-+
-+	return best;
-+}
-+
-+static int elf_sym_cmp(const void *a, const void *b)
-+{
-+	const Elf_Sym *sym_a = a;
-+	const Elf_Sym *sym_b = b;
-+
-+	if (sym_a->st_value < sym_b->st_value)
-+		return -1;
-+
-+	return sym_a->st_value > sym_b->st_value;
-+}
-+
- /*
-  * We only allocate and copy the strings needed by the parts of symtab
-  * we keep.  This is simple, but has the effect of making multiple
-@@ -115,9 +205,10 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	Elf_Shdr *symsect = info->sechdrs + info->index.sym;
- 	Elf_Shdr *strsect = info->sechdrs + info->index.str;
- 	const Elf_Sym *src;
--	unsigned int i, nsrc, ndst, strtab_size = 0;
-+	unsigned int i, nsrc, ndst, nfunc, strtab_size = 0;
- 	struct module_memory *mod_mem_data = &mod->mem[MOD_DATA];
- 	struct module_memory *mod_mem_init_data = &mod->mem[MOD_INIT_DATA];
-+	bool is_lp_mod = is_livepatch_module(mod);
- 
- 	/* Put symbol section at end of init part of module. */
- 	symsect->sh_flags |= SHF_ALLOC;
-@@ -129,12 +220,14 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	nsrc = symsect->sh_size / sizeof(*src);
- 
- 	/* Compute total space required for the core symbols' strtab. */
--	for (ndst = i = 0; i < nsrc; i++) {
--		if (i == 0 || is_livepatch_module(mod) ||
-+	for (ndst = nfunc = i = 0; i < nsrc; i++) {
-+		if (i == 0 || is_lp_mod ||
- 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
- 				   info->index.pcpu)) {
- 			strtab_size += strlen(&info->strtab[src[i].st_name]) + 1;
- 			ndst++;
-+			if (!is_lp_mod && is_func_symbol(src + i))
-+				nfunc++;
- 		}
- 	}
- 
-@@ -156,6 +249,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
- 	mod_mem_init_data->size = ALIGN(mod_mem_init_data->size,
- 					__alignof__(struct mod_kallsyms));
- 	info->mod_kallsyms_init_off = mod_mem_init_data->size;
-+	info->num_func_syms = nfunc;
- 
- 	mod_mem_init_data->size += sizeof(struct mod_kallsyms);
- 	info->init_typeoffs = mod_mem_init_data->size;
-@@ -169,7 +263,7 @@ void layout_symtab(struct module *mod, struct load_info *info)
-  */
- void add_kallsyms(struct module *mod, const struct load_info *info)
- {
--	unsigned int i, ndst;
-+	unsigned int i, di, nfunc, ndst;
- 	const Elf_Sym *src;
- 	Elf_Sym *dst;
- 	char *s;
-@@ -178,6 +272,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	void *data_base = mod->mem[MOD_DATA].base;
- 	void *init_data_base = mod->mem[MOD_INIT_DATA].base;
- 	struct mod_kallsyms *kallsyms;
-+	bool is_lp_mod = is_livepatch_module(mod);
- 
- 	kallsyms = init_data_base + info->mod_kallsyms_init_off;
- 
-@@ -186,6 +281,7 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	/* Make sure we get permanent strtab: don't use info->strtab. */
- 	kallsyms->strtab = (void *)info->sechdrs[info->index.str].sh_addr;
- 	kallsyms->typetab = init_data_base + info->init_typeoffs;
-+	kallsyms->search = search_kallsyms_symbol;
- 
- 	/*
- 	 * Now populate the cut down core kallsyms for after init
-@@ -194,19 +290,30 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 	mod->core_kallsyms.symtab = dst = data_base + info->symoffs;
- 	mod->core_kallsyms.strtab = s = data_base + info->stroffs;
- 	mod->core_kallsyms.typetab = data_base + info->core_typeoffs;
-+	mod->core_kallsyms.search = is_lp_mod ? search_kallsyms_symbol :
-+						bsearch_kallsyms_symbol;
-+
- 	strtab_size = info->core_typeoffs - info->stroffs;
- 	src = kallsyms->symtab;
--	for (ndst = i = 0; i < kallsyms->num_symtab; i++) {
-+	ndst = info->num_func_syms + 1;
-+
-+	for (nfunc = i = 0; i < kallsyms->num_symtab; i++) {
- 		kallsyms->typetab[i] = elf_type(src + i, info);
--		if (i == 0 || is_livepatch_module(mod) ||
-+		if (i == 0 || is_lp_mod ||
- 		    is_core_symbol(src + i, info->sechdrs, info->hdr->e_shnum,
- 				   info->index.pcpu)) {
- 			ssize_t ret;
- 
--			mod->core_kallsyms.typetab[ndst] =
--				kallsyms->typetab[i];
--			dst[ndst] = src[i];
--			dst[ndst++].st_name = s - mod->core_kallsyms.strtab;
-+			if (i == 0)
-+				di = 0;
-+			else if (!is_lp_mod && is_func_symbol(src + i))
-+				di = 1 + nfunc++;
-+			else
-+				di = ndst++;
-+
-+			mod->core_kallsyms.typetab[di] = kallsyms->typetab[i];
-+			dst[di] = src[i];
-+			dst[di].st_name = s - mod->core_kallsyms.strtab;
- 			ret = strscpy(s, &kallsyms->strtab[src[i].st_name],
- 				      strtab_size);
- 			if (ret < 0)
-@@ -216,9 +323,13 @@ void add_kallsyms(struct module *mod, const struct load_info *info)
- 		}
- 	}
- 
-+	WARN_ON_ONCE(nfunc != info->num_func_syms);
-+	sort(dst + 1, nfunc, sizeof(Elf_Sym), elf_sym_cmp, NULL);
-+
- 	/* Set up to point into init section. */
- 	rcu_assign_pointer(mod->kallsyms, kallsyms);
- 	mod->core_kallsyms.num_symtab = ndst;
-+	mod->core_kallsyms.num_func_syms = nfunc;
- }
- 
- #if IS_ENABLED(CONFIG_STACKTRACE_BUILD_ID)
-@@ -241,11 +352,6 @@ void init_build_id(struct module *mod, const struct load_info *info)
- }
- #endif
- 
--static const char *kallsyms_symbol_name(struct mod_kallsyms *kallsyms, unsigned int symnum)
--{
--	return kallsyms->strtab + kallsyms->symtab[symnum].st_name;
--}
--
- /*
-  * Given a module and address, find the corresponding symbol and return its name
-  * while providing its size and offset if needed.
-@@ -255,7 +361,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 					unsigned long *size,
- 					unsigned long *offset)
- {
--	unsigned int i, best = 0;
-+	unsigned int best;
- 	unsigned long nextval, bestval;
- 	struct mod_kallsyms *kallsyms = rcu_dereference(mod->kallsyms);
- 	struct module_memory *mod_mem;
-@@ -267,36 +373,9 @@ static const char *find_kallsyms_symbol(struct module *mod,
- 		mod_mem = &mod->mem[MOD_TEXT];
- 
- 	nextval = (unsigned long)mod_mem->base + mod_mem->size;
-+	bestval = kallsyms_symbol_value(&kallsyms->symtab[0]);
- 
--	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
--
--	/*
--	 * Scan for closest preceding symbol, and next symbol. (ELF
--	 * starts real symbols at 1).
--	 */
--	for (i = 1; i < kallsyms->num_symtab; i++) {
--		const Elf_Sym *sym = &kallsyms->symtab[i];
--		unsigned long thisval = kallsyms_symbol_value(sym);
--
--		if (sym->st_shndx == SHN_UNDEF)
--			continue;
--
--		/*
--		 * We ignore unnamed symbols: they're uninformative
--		 * and inserted at a whim.
--		 */
--		if (*kallsyms_symbol_name(kallsyms, i) == '\0' ||
--		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
--			continue;
--
--		if (thisval <= addr && thisval > bestval) {
--			best = i;
--			bestval = thisval;
--		}
--		if (thisval > addr && thisval < nextval)
--			nextval = thisval;
--	}
--
-+	best = kallsyms->search(kallsyms, mod_mem, addr, &bestval, &nextval);
- 	if (!best)
- 		return NULL;
- 
+If I end up being the only one who prefers removing the invocations of
+this macro first, then please at least CC a few more lists on v2 of the
+patch, such as driver-core and netdev, as well as the authors of the
+recent version-bump commits that I identified above.
+
+> 
+>> The original patch "Add a MODULE_VERSION macro" [1] from 2004 doesn't
+>> say much about the motivation for adding module versions, but it does
+>> mention that they should be accessible via sysfs.
+> 
+> That was because we were just exporting all of the module information in
+> sysfs, not due to us attempting to do anything special with that info in
+> userspace other than "hey we have an attribute, let's export it!"
+> 
+>> That was implemented
+>> a year later in commit c988d2b28454 ("[PATCH] modules: add version and
+>> srcversion to sysfs") [2], which primarily discusses use cases related
+>> to DKMS, and to administrators + tech support needing to know what is
+>> actually loaded on the system. For the latter, I believe srcversion (or
+>> something similar) should be sufficient.
+> 
+> And does dkms actually do anything with this sysfs value?  At quick
+> glance, I couldn't see anything.
+
+I'm not familiar with DKMS. From a quick look, it parses both the
+version and srcversion, although it calls modinfo and doesn't read the
+values from sysfs. See get_module_verinfo() and compare_module_version()
+in dkms.in [1].
+
+[1] https://github.com/dkms-project/dkms/blob/2c35ae1d32eb6377ef8e8dd7e15427d56b63828d/dkms.in#L983
+
 -- 
-2.50.1
-
+Thanks,
+Petr
