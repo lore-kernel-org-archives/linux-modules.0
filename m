@@ -1,99 +1,94 @@
 Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82762E54A2
-	for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 17:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3622B3033C0
+	for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 17:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774028757; cv=none; b=trwbSmgvYyLXc+sZpXXzn5it6EJWr5wT4fN+vYf8/K4vJYTay8m/asG9meDtjZa9Mth0UitwnARs+SXk+sE/9nQjkP173geP9uQ7pYUShDG/KAdX2V42iu+gp9S89JtOdJlaOiPu8PLzzuIkLmSZkrbZsdeWDfNoPNAYM+5DMw4=
+	t=1774028759; cv=none; b=b5NvV2nhcUfWtwHm2+mlRHUZQhgu5iBNjR+9xiHqp0IsVh1+I5QldE8l4ZdoyIOX2kyaQoVxuNFyIHVeacM+z81hNijl+Mt9/m7ji3zBm2Ntzm7bHs5pEfMh7XMJCi2tJ4ciK6yKTbaMfDB19Kfi5ncYgAXVGmS8FwaDp0gtH4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774028757; c=relaxed/simple;
-	bh=pxxvNmnYWrrC7lSMceFSjwC9c2YknhqgthmBTOcaYj0=;
+	s=arc-20240116; t=1774028759; c=relaxed/simple;
+	bh=EcOY+3sl/y3gmE/1cHinofuMdoJkfkIO2WeYZw2TDjw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SDD0mPGY/QlH6QH7Mq7d4G4Xp7iQixhW5RuRCgiCuQOFOMWGyZNQfVE87E/YVXYHCDglYyo7FwuspbUKTaJ+giaqKuXOl6uRJc5dFu7qqQD6bMeaeyxpSX4bIa6L6KbyroKHFKDWFGQY2fFoOECNiwT6QaottweQwjCXjRqPY5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lA7ildpP; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=lyZxpicZC2rfLHfF8nw6xSRVrdjpQpzNImuWMjs5r9/jzCtgNy7ILJDFYV6AwDE88ccX96umsA7SnBfbOo05AmmhoYbZ04QMewwqpZmFi5eA34/YXMpb3atXesEgfOuVfxLyErhM8z8gWCNsLX3p01/A1KwN/EetSl0zhvNmtEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BRSLTSxC; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lA7ildpP"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso1830069eec.0
-        for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 10:45:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BRSLTSxC"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c0f6593ef5so752381eec.1
+        for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 10:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774028755; x=1774633555; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774028757; x=1774633557; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HSTckojUIMWUPsHGCLzNd6Rpx/5NKHFio6PcCySPewo=;
-        b=lA7ildpPKHSCgpKeRnb9Gw9F8Pr315r8AbHEDnN/GYKbf7xzU4DExUzl3kZ7ci33Aj
-         kUG3P45LKxbwMpLkvru3IStg43GNfmapku9UD3AFJD25NSQyYZ3E0horhBx4Cr9rfs8h
-         e/wml9dp7al3P/D/ITt2fsy5UmVMJ6/wT0i+zEsmMDmGqQL4luZBuifkdWcidDZTKbgK
-         yPFLaFDpX6g0YkZ82vMVb4fXUp2QJp8JKj+DXbDUDj3uW+6tFoUgACPYZULBo/8lcvhF
-         OIyh1wS2uRCoaB+92L8uJ6BM+DXEEwa+duj5hXfYbOXfKL0aO4Yi8vyRs3KWalIH/vxG
-         VjiA==
+        bh=7jADpC9+tWP1R9nEbp5/ZrMMGvQP1aDHnBRajrcrePs=;
+        b=BRSLTSxCv8PXV5DZqrwhNOuyWO0dgKiuqZxqh4UOorXHdTABNTegv8klIgEu0aaN15
+         XfFU2pDYBhwruylXWjRKHerYhEElgyT4DJWp9awLOOW0w+IXjHoOINnwt4AA6qd9tiiF
+         OwXKA4PnUBMSj69H1wdWqxG9JmgIrHXZOzNWHNU9g7x3i/DwG1qELspaxFYU2er5byBy
+         yOt6luvXYYREJbEVuSSLHOZ04xE88U7QdopYc0O+8MA8sykSJ5FjLy+6z/AxdXAUj5Uo
+         eOcv7wz6oQTa4yVdVg/Q3hhjYAbLCu7BA87G2qoiz4CJWuDRQkkPscVcOnrzAcSlq58r
+         pYng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774028755; x=1774633555;
+        d=1e100.net; s=20251104; t=1774028757; x=1774633557;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HSTckojUIMWUPsHGCLzNd6Rpx/5NKHFio6PcCySPewo=;
-        b=eIINWiLuoFkynMPGstZFCe8V2KeQKbT9+2qGtgSHKsIOuoQXyOMBCUmzqeeAhHY4Ou
-         eQy3bYlCojRhB5tlXqeV2fzxN2SpxbmD9g48Ks8WoqXKSjvDiH9X5MKz9umTF6ouKOK2
-         teLyPNQ3FlD0TeD6VdaUt2QBN00tiglcBxyglOX+TThwmoUFGcFwde4O19VleL5HdMEC
-         m0j0SuJ5I1uCyfk3ubp+zFY7xVbyg3BLodrAyUtHA2rXpeLWmsU4Sj5NFPmuiqAmlvuu
-         ZfOKOpfE53cuu8a90g29nu/MRPTrIT0TNyolOjnnRlni7bB6AnhVO7xGWl2JlkH4mU+x
-         kF+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWbpCM1iqWxfii8WgPbaXAZhFNwSUSApK2lfeu34Ds0lLxtRBH9qM8ZLOyupkQm+PGhoaVM0v8YY5f2Qzq6@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze8mHmVl6MUS5foI6CgUVWC9ntTn576CgL4mzCEnt3a/sAL/5E
-	714UFqKLUf0zH7sS4UbFedU7OleZTG8Z+PokjOZ/gqsOtfCtP7JvtA7kAr51krXeNDBmRjxT06m
-	AO2sO6+smC/y3smFcu7lGXDBVJChteA==
-X-Received: from dybgi3.prod.google.com ([2002:a05:7301:83:b0:2c0:fbcb:769c])
+        bh=7jADpC9+tWP1R9nEbp5/ZrMMGvQP1aDHnBRajrcrePs=;
+        b=AoPSJHQT/JLZ2Ko6cj8a1LfSjBqjzOqTzbVuEzpF4ZR0MqhxrzgrdRTMnmgfkn36PL
+         wIif5ErflrpVTwlJhvT0Pda1pHxDNzcDcP9QRGnKumJ9vM1aR05GnYGxKAiavdGuY2pR
+         +lmdXH/e+BaC/KM0EsX1TG5GjDH9y25kFXFl04t3ukvQdaxuUaCyKA0K4H3bJk6W+kAD
+         MtTMkA0IpyWrgjH7rqC3YzMRVpBK2t95UD6YASTFLD+2fQixty8KESCBmx3oU+KA8Jit
+         ybaTQbWJ3mQrsAWnIMWuQpW9z+yxCw5Aj/MbA+Wl+lTuFQaMW4a8svPa2z58F4dXEqEn
+         +Jpg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+xyMF3mvg0t7JEBgpD054lYwosoJLq+4r+yVdbxU6egj+aT6xTvVEw5rFAgETvg4T5r0ugKCIlSCfPLXL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPUKeEfv8LSuGxl6EtB127ALmVGuXb/ef81eX2mRBT0USfuh7x
+	CBDp2ObmWL+QPoTyJedxvfC6L/1rrYqJWAnl7UfNRNRoxMjeLxdhuU4M1o0kQ4kybbgSHsA3SVP
+	/fW7jC4zDkTao41hbq7W35BiZktW5eQ==
+X-Received: from dyu19.prod.google.com ([2002:a05:693c:8113:b0:2be:4b94:33af])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:300b:b0:2ba:85d6:e777 with SMTP id 5a478bee46e88-2c109567b30mr1586129eec.2.1774028754862;
- Fri, 20 Mar 2026 10:45:54 -0700 (PDT)
-Date: Fri, 20 Mar 2026 17:45:53 +0000
-In-Reply-To: <20260313134932.335275-1-petr.pavlu@suse.com>
+ 2002:a05:7301:1f05:b0:2be:1246:4dad with SMTP id 5a478bee46e88-2c1095a8109mr1574829eec.8.1774028757194;
+ Fri, 20 Mar 2026 10:45:57 -0700 (PDT)
+Date: Fri, 20 Mar 2026 17:45:55 +0000
+In-Reply-To: <20260307090010.20828-1-linux@opensource.nslick.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260313134932.335275-1-petr.pavlu@suse.com>
+References: <20260307090010.20828-1-linux@opensource.nslick.com>
 X-Mailer: b4 0.14.3
-Message-ID: <177402875381.3545153.14837068718372243586.b4-ty@google.com>
-Subject: Re: [PATCH v2 0/3] module: Fix freeing of charp module parameters
- when CONFIG_SYSFS=n
+Message-ID: <177402875586.3545153.7837463244242752504.b4-ty@google.com>
+Subject: Re: [PATCH v2 0/2] module: expose imported namespaces via sysfs
 From: Sami Tolvanen <samitolvanen@google.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>
-Cc: Christophe Leroy <chleroy@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-modules@vger.kernel.org, 
+To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Nicholas Sielicki <linux@opensource.nslick.com>
+Cc: Aaron Tomlin <atomlin@atomlin.com>, Matthias Maennich <maennich@google.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Fri, 13 Mar 2026 14:48:01 +0100, Petr Pavlu wrote:
-> Fix freeing of charp module parameters when CONFIG_SYSFS=n and, related to
-> this, update moduleparam.h to keep its coding style consistent.
+On Sat, 07 Mar 2026 03:00:08 -0600, Nicholas Sielicki wrote:
+> Add /sys/module/*/import_ns to expose the symbol namespaces imported
+> by a loaded module.
 > 
-> Changes since v1 [1]:
-> * Remove the extern keyword from the declaration of module_destroy_params()
->   and update the type of its num parameter from `unsigned` to
->   `unsigned int`.
-> * Add a cleanup patch for parse_args() to similarly update its num
->   parameter to `unsigned int` and to synchronize the parameter names
->   between its prototype and definition.
-> * Add a cleanup patch to drop the unnecessary extern keyword for all
->   function declarations in moduleparam.h.
+> Changes since v1:
+> - Simplified commit message to drop unnecessary/incorrect background
+> - Use .setup/.free callbacks in module_attribute to ensure
+>   imported_namespaces is NULL-initialized before error paths and
+>   NULL'd after kfree (Sami)
+> - Updated KernelVersion to 7.1 in docs for next merge window
 > 
 > [...]
 
 Applied to modules-next, thanks!
 
-[1/3] module: Fix freeing of charp module parameters when CONFIG_SYSFS=n
-      commit: deffe1edba626d474fef38007c03646ca5876a0e
-[2/3] module: Clean up parse_args() arguments
-      commit: 65f535501e2a3378629b8650eca553920de5e5a2
-[3/3] module: Remove extern keyword from param prototypes
-      commit: 44a063c00fb13cf1f2e8a53a2ab10b232a44954b
+[1/2] module: expose imported namespaces via sysfs
+      commit: 3fe1dcbc2d20c5dbc581c0bb458e05365bfffcf7
+[2/2] docs: symbol-namespaces: mention sysfs attribute
+      commit: f15dbe8a94b6e3768b10e10bf8ab95b28682db80
 
 Best regards,
 
