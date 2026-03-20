@@ -1,97 +1,177 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3622B3033C0
-	for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 17:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A300F34CFAC;
+	Fri, 20 Mar 2026 20:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774028759; cv=none; b=b5NvV2nhcUfWtwHm2+mlRHUZQhgu5iBNjR+9xiHqp0IsVh1+I5QldE8l4ZdoyIOX2kyaQoVxuNFyIHVeacM+z81hNijl+Mt9/m7ji3zBm2Ntzm7bHs5pEfMh7XMJCi2tJ4ciK6yKTbaMfDB19Kfi5ncYgAXVGmS8FwaDp0gtH4Y=
+	t=1774037308; cv=none; b=Av1i+baBPjwkaa8gRdcu9CD0vacKNAocQmZSurX849c7fVpfCDk6pVQ9aijVGPTdiHRFZdSmE0xlmWbi4BjQWfWHhEe1qrmp7VM6HW+4AuiBElQbBHPITT/WbrF6Z30xWOHsXVb6EOHM1jLjWB42NtaEw54fbBOywuHt6AtCC6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774028759; c=relaxed/simple;
-	bh=EcOY+3sl/y3gmE/1cHinofuMdoJkfkIO2WeYZw2TDjw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lyZxpicZC2rfLHfF8nw6xSRVrdjpQpzNImuWMjs5r9/jzCtgNy7ILJDFYV6AwDE88ccX96umsA7SnBfbOo05AmmhoYbZ04QMewwqpZmFi5eA34/YXMpb3atXesEgfOuVfxLyErhM8z8gWCNsLX3p01/A1KwN/EetSl0zhvNmtEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BRSLTSxC; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	s=arc-20240116; t=1774037308; c=relaxed/simple;
+	bh=vx3bx2hdX+DWgaO/OJedYdtXCDdFIOissz/oOsXsnDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P5Ega9n8kTkhwQkLP4iKkKyIMmRUbZZs3sf5FkKhhQuqbznjd1JdQRSgoSTSakapbS3II4Ef2OhxyyTiYIXta2lnqLNCmxV+GNCGr1VKTDenfCxTjvcokoAjin8RDpiNmvYdAfMeTzX/vF29Y+OXpibMvJ8x0YK9VWlxrpD5mFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LodkSHxI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BRSLTSxC"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2c0f6593ef5so752381eec.1
-        for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 10:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774028757; x=1774633557; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jADpC9+tWP1R9nEbp5/ZrMMGvQP1aDHnBRajrcrePs=;
-        b=BRSLTSxCv8PXV5DZqrwhNOuyWO0dgKiuqZxqh4UOorXHdTABNTegv8klIgEu0aaN15
-         XfFU2pDYBhwruylXWjRKHerYhEElgyT4DJWp9awLOOW0w+IXjHoOINnwt4AA6qd9tiiF
-         OwXKA4PnUBMSj69H1wdWqxG9JmgIrHXZOzNWHNU9g7x3i/DwG1qELspaxFYU2er5byBy
-         yOt6luvXYYREJbEVuSSLHOZ04xE88U7QdopYc0O+8MA8sykSJ5FjLy+6z/AxdXAUj5Uo
-         eOcv7wz6oQTa4yVdVg/Q3hhjYAbLCu7BA87G2qoiz4CJWuDRQkkPscVcOnrzAcSlq58r
-         pYng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774028757; x=1774633557;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jADpC9+tWP1R9nEbp5/ZrMMGvQP1aDHnBRajrcrePs=;
-        b=AoPSJHQT/JLZ2Ko6cj8a1LfSjBqjzOqTzbVuEzpF4ZR0MqhxrzgrdRTMnmgfkn36PL
-         wIif5ErflrpVTwlJhvT0Pda1pHxDNzcDcP9QRGnKumJ9vM1aR05GnYGxKAiavdGuY2pR
-         +lmdXH/e+BaC/KM0EsX1TG5GjDH9y25kFXFl04t3ukvQdaxuUaCyKA0K4H3bJk6W+kAD
-         MtTMkA0IpyWrgjH7rqC3YzMRVpBK2t95UD6YASTFLD+2fQixty8KESCBmx3oU+KA8Jit
-         ybaTQbWJ3mQrsAWnIMWuQpW9z+yxCw5Aj/MbA+Wl+lTuFQaMW4a8svPa2z58F4dXEqEn
-         +Jpg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+xyMF3mvg0t7JEBgpD054lYwosoJLq+4r+yVdbxU6egj+aT6xTvVEw5rFAgETvg4T5r0ugKCIlSCfPLXL@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPUKeEfv8LSuGxl6EtB127ALmVGuXb/ef81eX2mRBT0USfuh7x
-	CBDp2ObmWL+QPoTyJedxvfC6L/1rrYqJWAnl7UfNRNRoxMjeLxdhuU4M1o0kQ4kybbgSHsA3SVP
-	/fW7jC4zDkTao41hbq7W35BiZktW5eQ==
-X-Received: from dyu19.prod.google.com ([2002:a05:693c:8113:b0:2be:4b94:33af])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7301:1f05:b0:2be:1246:4dad with SMTP id 5a478bee46e88-2c1095a8109mr1574829eec.8.1774028757194;
- Fri, 20 Mar 2026 10:45:57 -0700 (PDT)
-Date: Fri, 20 Mar 2026 17:45:55 +0000
-In-Reply-To: <20260307090010.20828-1-linux@opensource.nslick.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LodkSHxI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9029DC4CEF7;
+	Fri, 20 Mar 2026 20:08:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774037308;
+	bh=vx3bx2hdX+DWgaO/OJedYdtXCDdFIOissz/oOsXsnDE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LodkSHxIvJNRjJ0QlVSnqUTNKoqzLyjXZ+54g67kcbIxbHi60e6zwY7sNAClqP5I8
+	 Q8LvyL15y9l4BrWYAyfVyIIV5Ae2PUhuSvF8Tp2iBHEWwRvbRAAerY9UGvJQbo1jgO
+	 X+e7I546E6wrP2trtDpWAItyrn1Eq+NL/30BDr8aQ86kT9t8+AjMy+h54FWzzg6mP5
+	 HWiSzZ9TLocC75m0qhCvQOW++S5+Eu/6Wu4GOw2T8CvWhJotr/QVSMlhk+nwwAuixm
+	 PCdCV1b6N27TqbyXHcS5Ok0Rm4d52ULLI/Z30UhtoRYyx/PEvmHYPxWduAIUaDc2GJ
+	 DvhLcsnwXbPYg==
+Date: Fri, 20 Mar 2026 21:06:13 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: David Howells <dhowells@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, keyrings@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/8] module: Move 'struct module_signature' to UAPI
+Message-ID: <ab2otbZrni1GKn0U@derry.ads.avm.de>
+References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260307090010.20828-1-linux@opensource.nslick.com>
-X-Mailer: b4 0.14.3
-Message-ID: <177402875586.3545153.7837463244242752504.b4-ty@google.com>
-Subject: Re: [PATCH v2 0/2] module: expose imported namespaces via sysfs
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Nicholas Sielicki <linux@opensource.nslick.com>
-Cc: Aaron Tomlin <atomlin@atomlin.com>, Matthias Maennich <maennich@google.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	linux-modules@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-
-On Sat, 07 Mar 2026 03:00:08 -0600, Nicholas Sielicki wrote:
-> Add /sys/module/*/import_ns to expose the symbol namespaces imported
-> by a loaded module.
-> 
-> Changes since v1:
-> - Simplified commit message to drop unnecessary/incorrect background
-> - Use .setup/.free callbacks in module_attribute to ensure
->   imported_namespaces is NULL-initialized before error paths and
->   NULL'd after kfree (Sami)
-> - Updated KernelVersion to 7.1 in docs for next merge window
-> 
-> [...]
-
-Applied to modules-next, thanks!
-
-[1/2] module: expose imported namespaces via sysfs
-      commit: 3fe1dcbc2d20c5dbc581c0bb458e05365bfffcf7
-[2/2] docs: symbol-namespaces: mention sysfs attribute
-      commit: f15dbe8a94b6e3768b10e10bf8ab95b28682db80
-
-Best regards,
-
-	Sami
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yJawVUAGknQ6l3sb"
+Content-Disposition: inline
+In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 
 
+--yJawVUAGknQ6l3sb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Mar 05, 2026 at 10:31:36AM +0100, Thomas Wei=DFschuh wrote:
+> This structure definition is used outside the kernel proper.
+> For example in kmod and the kernel build environment.
+>=20
+> To allow reuse, move it to a new UAPI header.
+>=20
+> While it is not a true UAPI, it is a common practice to have
+> non-UAPI interface definitions in the kernel's UAPI headers.
+>=20
+> This came up as part of my CONFIG_MODULE_HASHES series [0].
+> But it is useful on its own and so we get it out of the way.
+>=20
+> [0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
+>=20
+> Signed-off-by: Thomas Wei=DFschuh <thomas.weissschuh@linutronix.de>
+> ---
+> Changes in v3:
+> - Also adapt the include path for the custom sign-file rule in the bpf se=
+lftests.
+>   (My manual run of BPF CI still fails, due to an BUG() on s390,
+>   I don't see how this is due to this patch)
+> - Link to v2: https://lore.kernel.org/r/20260305-module-signature-uapi-v2=
+-0-dc4d81129dee@linutronix.de
+>=20
+> Changes in v2:
+> - Drop spurious definition of MODULE_SIGNATURE_TYPE_MERKLE.
+> - s/modules/module/ in two patch subjects.
+> - Pick up review tags.
+> - Link to v1: https://lore.kernel.org/r/20260302-module-signature-uapi-v1=
+-0-207d955e0d69@linutronix.de
+>=20
+> ---
+> Thomas Wei=DFschuh (8):
+>       extract-cert: drop unused definition of PKEY_ID_PKCS7
+>       module: Drop unused signature types
+>       module: Give 'enum pkey_id_type' a more specific name
+>       module: Give MODULE_SIG_STRING a more descriptive name
+>       module: Move 'struct module_signature' to UAPI
+>       tools uapi headers: add linux/module_signature.h
+>       sign-file: use 'struct module_signature' from the UAPI headers
+>       selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from=
+ the UAPI headers
+>=20
+>  arch/s390/kernel/machine_kexec_file.c              |  6 ++--
+>  certs/extract-cert.c                               |  2 --
+>  include/linux/module_signature.h                   | 30 +---------------
+>  include/uapi/linux/module_signature.h              | 41 ++++++++++++++++=
+++++++
+>  kernel/module/signing.c                            |  4 +--
+>  kernel/module_signature.c                          |  2 +-
+>  scripts/Makefile                                   |  1 +
+>  scripts/sign-file.c                                | 19 +++-------
+>  security/integrity/ima/ima_modsig.c                |  6 ++--
+>  tools/include/uapi/linux/module_signature.h        | 41 ++++++++++++++++=
+++++++
+>  tools/testing/selftests/bpf/Makefile               |  1 +
+>  .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 ++-------------
+>  12 files changed, 101 insertions(+), 80 deletions(-)
+> ---
+> base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+> change-id: 20260302-module-signature-uapi-61fa80b1e2bb
+>=20
+
+Thanks for these patches!
+
+For the whole series:
+
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
+
+--=20
+Nicolas
+
+--yJawVUAGknQ6l3sb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmm9qLUACgkQB1IKcBYm
+Emm24hAAtnE71JBVW9GLy5SvZjxPMmvU7d7e2U0M4eVgP9+ddzbw7tF/ZjE42raS
+w1jpL29qt7ESYnCXSkuH7/ABfeH0ALjPsm0Wsz9wl3l9dqqPAnYcRNxc2VzH6BNA
+rrVYspjDhrArD6fzZHXi9t7gaN2md/qr8GQVl2tzYXq+ORadVve64niJ5HXVEGtk
+igmI03sH5OaQXvg78v/Ui51AdL+8HbHNZUxG3G5n1VN8Qag0/aH6hfcwlSmayNvn
+W0iAghaJHI4qfPufwYl+FPCKVGE10+rIKQx4AUQcm0fysHAn+4LSOnFqI2mCwL6y
+oqbZdOAOdCh6YezgtK/WdwVdrZNVYNuukHmm1FPuGXIU/bIA1me5oC1NmEsWtqQB
+QgI3yvKBO7UrtNYmElLOMDt2FnlSB6l5XX7FqWBHGlfhHymzo8vVNkWuRw6/z63P
+ezdeAR0qwkxesxRSgwJdcICz2r7G2MAmWBJgSBRzdTIyGF3GHwb8uOQLNEXag6Dm
+9SjsnyS5mkq4CWHKanGqUrfUFvw04DPM5o/7D6l5Uj41kJ0scVixHT36NtJkg4hG
+k2rFFfEp/qmTcb3V8fVVBzHFKuasNWAzkHLRviOxugoFXjC7ctxU7+YcmAB3yez1
+ZRZTrXsVpAtC1xI+L4J/vIFW4jZlXgte8nOZK3/TWAlAYMGp7pk=
+=Qr2Y
+-----END PGP SIGNATURE-----
+
+--yJawVUAGknQ6l3sb--
