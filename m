@@ -1,92 +1,99 @@
-Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCDB1C860B
-	for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 17:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82762E54A2
+	for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 17:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774028754; cv=none; b=C5Y6RcFnqFSA/LV2hNr3jgic8FEucO0H8MsBkE3peCfGzctaqvZxvtNNp+0wJwW/W0Y+204Obw1UX7LZutj0Q2glfXCkvW27QMMZCrVWTM1Y00ep+4QFuoCgBLj5c/D1AyVwkJktNlkO55wjyiKNmmtPOr7Oj96m+Z50BOPqRnE=
+	t=1774028757; cv=none; b=trwbSmgvYyLXc+sZpXXzn5it6EJWr5wT4fN+vYf8/K4vJYTay8m/asG9meDtjZa9Mth0UitwnARs+SXk+sE/9nQjkP173geP9uQ7pYUShDG/KAdX2V42iu+gp9S89JtOdJlaOiPu8PLzzuIkLmSZkrbZsdeWDfNoPNAYM+5DMw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774028754; c=relaxed/simple;
-	bh=M1TnJyGoxk18zfJ7+bdEQa3L4gCGNW5McQWG99EOUYo=;
+	s=arc-20240116; t=1774028757; c=relaxed/simple;
+	bh=pxxvNmnYWrrC7lSMceFSjwC9c2YknhqgthmBTOcaYj0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tcpNuxZvGVawpwtJ/Rv3aevZYyW42GMli9MNl6dGMxoGJMBwoWrNKtfT6Wvkt12kJP1IeJOYczS/B/9wd75fy6WtBryveB4DWvfGfxFE2dDhhnSFYfkkxHrBHmqEzofn2tIz/gHF/SuT8mg0X3Itn41xTZHJIUTZQCq4mLdzi6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XjK/OrWs; arc=none smtp.client-ip=74.125.82.73
+	 To:Cc:Content-Type; b=SDD0mPGY/QlH6QH7Mq7d4G4Xp7iQixhW5RuRCgiCuQOFOMWGyZNQfVE87E/YVXYHCDglYyo7FwuspbUKTaJ+giaqKuXOl6uRJc5dFu7qqQD6bMeaeyxpSX4bIa6L6KbyroKHFKDWFGQY2fFoOECNiwT6QaottweQwjCXjRqPY5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lA7ildpP; arc=none smtp.client-ip=74.125.82.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XjK/OrWs"
-Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-1273dfdaf5dso1333954c88.0
-        for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 10:45:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lA7ildpP"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso1830069eec.0
+        for <linux-modules@vger.kernel.org>; Fri, 20 Mar 2026 10:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774028752; x=1774633552; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774028755; x=1774633555; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0++HSGeF8vukyIF9xdQ3UG+tReehtKpPJp6a6k4VKZ8=;
-        b=XjK/OrWs7mBqKvn+DKRupbVFDE2TCqXtSdY81BuIX6bgRkLs8pxoHlfZfqCXEAY58a
-         JsK3UQlCpzbUIOM29gP2J9h7c/FOl2ssRDlJnHNFawSENgCQSiyR7BrGkb0ws5no84Ji
-         qrC0aVnjcWNAxik3yhrCLv4XYtIINKJ09FAHfaZ4VmavN22pCQHQjKviOETL1xLUH1Hg
-         G6mAktAAvKewKkHrgkNU1sCePcMUPLGkzviVHDRguCsnbb1J+vffJJHDGU/SwN80c5l1
-         04loYF4qt+Qfoq5k26z68w8FK21xfB2mg1CPZx7ohJzeMdexMRVPrsyzOUY9YpVKVuGG
-         j3cA==
+        bh=HSTckojUIMWUPsHGCLzNd6Rpx/5NKHFio6PcCySPewo=;
+        b=lA7ildpPKHSCgpKeRnb9Gw9F8Pr315r8AbHEDnN/GYKbf7xzU4DExUzl3kZ7ci33Aj
+         kUG3P45LKxbwMpLkvru3IStg43GNfmapku9UD3AFJD25NSQyYZ3E0horhBx4Cr9rfs8h
+         e/wml9dp7al3P/D/ITt2fsy5UmVMJ6/wT0i+zEsmMDmGqQL4luZBuifkdWcidDZTKbgK
+         yPFLaFDpX6g0YkZ82vMVb4fXUp2QJp8JKj+DXbDUDj3uW+6tFoUgACPYZULBo/8lcvhF
+         OIyh1wS2uRCoaB+92L8uJ6BM+DXEEwa+duj5hXfYbOXfKL0aO4Yi8vyRs3KWalIH/vxG
+         VjiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774028752; x=1774633552;
+        d=1e100.net; s=20251104; t=1774028755; x=1774633555;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0++HSGeF8vukyIF9xdQ3UG+tReehtKpPJp6a6k4VKZ8=;
-        b=FLBkKa+VxQkE8q+Ihlv/h6Fv6TmYc3G9AQ0p7sK25RKoRjLSISyNCVqj+kLizwNKWF
-         tQmckGMdi/2MjBfARt1aJ2lfkKVpdvk5GuYtD76EfP07BPpZExCTgfoH9pdeQlTOyZ4Y
-         ihNK6K2pKbtX0A8V1QTCQCmIFytEA4hjYFvnR3+fAYg6mAcWnwR2xq/UFaUF0DrBspmL
-         OHWIka7XdzyREEG7bK69A/zIUlq32pMVrCDXFHZMfbKuqbzMKr8CZPD4GrZOAfk1s+B7
-         DAT7y1lmfnlU+DKyVUoKmbYHkkeFeGX3m6KXZfS7GuIlj2v2OHwHSc2t3n0iYUAEPJuE
-         hKVw==
-X-Gm-Message-State: AOJu0YyPe8rh7H6caJIs2xZpW7YP9WztpKD5q6b9D7HcJh80zVllmMai
-	aQdv9bRhsWhEnwnaVj/moKRHyRXjpG2QwzdJ4HGRT0aHjDDmmkN+4NtrVrlI5CL3wMpbuTE+/zR
-	9TSrn5GpbvRDURTaBEv5DDrWmEizbzKMxpDOUgy2PpL4zH7x8sNupbbju8PlmUWHnluWcg6bfKN
-	lGUItqYYP8xfROdehdPN5R49wRX9zqd+BEj2eivDPnf6hKJLcOtk4JTSg7amyTX95XuXajWREIp
-	n4KLA==
-X-Received: from dlbps2.prod.google.com ([2002:a05:7023:882:b0:12a:7182:6cb])
+        bh=HSTckojUIMWUPsHGCLzNd6Rpx/5NKHFio6PcCySPewo=;
+        b=eIINWiLuoFkynMPGstZFCe8V2KeQKbT9+2qGtgSHKsIOuoQXyOMBCUmzqeeAhHY4Ou
+         eQy3bYlCojRhB5tlXqeV2fzxN2SpxbmD9g48Ks8WoqXKSjvDiH9X5MKz9umTF6ouKOK2
+         teLyPNQ3FlD0TeD6VdaUt2QBN00tiglcBxyglOX+TThwmoUFGcFwde4O19VleL5HdMEC
+         m0j0SuJ5I1uCyfk3ubp+zFY7xVbyg3BLodrAyUtHA2rXpeLWmsU4Sj5NFPmuiqAmlvuu
+         ZfOKOpfE53cuu8a90g29nu/MRPTrIT0TNyolOjnnRlni7bB6AnhVO7xGWl2JlkH4mU+x
+         kF+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWbpCM1iqWxfii8WgPbaXAZhFNwSUSApK2lfeu34Ds0lLxtRBH9qM8ZLOyupkQm+PGhoaVM0v8YY5f2Qzq6@vger.kernel.org
+X-Gm-Message-State: AOJu0Yze8mHmVl6MUS5foI6CgUVWC9ntTn576CgL4mzCEnt3a/sAL/5E
+	714UFqKLUf0zH7sS4UbFedU7OleZTG8Z+PokjOZ/gqsOtfCtP7JvtA7kAr51krXeNDBmRjxT06m
+	AO2sO6+smC/y3smFcu7lGXDBVJChteA==
+X-Received: from dybgi3.prod.google.com ([2002:a05:7301:83:b0:2c0:fbcb:769c])
  (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:388e:b0:123:2de5:346e with SMTP id a92af1059eb24-12a720ab433mr1511969c88.0.1774028752285;
- Fri, 20 Mar 2026 10:45:52 -0700 (PDT)
-Date: Fri, 20 Mar 2026 17:45:50 +0000
-In-Reply-To: <20260305015237.299727-1-joe.lawrence@redhat.com>
+ 2002:a05:693c:300b:b0:2ba:85d6:e777 with SMTP id 5a478bee46e88-2c109567b30mr1586129eec.2.1774028754862;
+ Fri, 20 Mar 2026 10:45:54 -0700 (PDT)
+Date: Fri, 20 Mar 2026 17:45:53 +0000
+In-Reply-To: <20260313134932.335275-1-petr.pavlu@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260305015237.299727-1-joe.lawrence@redhat.com>
+References: <20260313134932.335275-1-petr.pavlu@suse.com>
 X-Mailer: b4 0.14.3
-Message-ID: <177402875063.3545153.1306886249608000042.b4-ty@google.com>
-Subject: Re: [PATCH v2] module.lds,codetag: force 0 sh_addr for sections
+Message-ID: <177402875381.3545153.14837068718372243586.b4-ty@google.com>
+Subject: Re: [PATCH v2 0/3] module: Fix freeing of charp module parameters
+ when CONFIG_SYSFS=n
 From: Sami Tolvanen <samitolvanen@google.com>
-To: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Petr Mladek <pmladek@suse.com>, Josh Poimboeuf <jpoimboe@kernel.org>
+To: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>
+Cc: Christophe Leroy <chleroy@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Wed, 04 Mar 2026 20:52:37 -0500, Joe Lawrence wrote:
-> Commit 1ba9f8979426 ("vmlinux.lds: Unify TEXT_MAIN, DATA_MAIN, and
-> related macros") added .text and made .data, .bss, and .rodata sections
-> unconditional in the module linker script, but without an explicit
-> address like the other sections in the same file.
+On Fri, 13 Mar 2026 14:48:01 +0100, Petr Pavlu wrote:
+> Fix freeing of charp module parameters when CONFIG_SYSFS=n and, related to
+> this, update moduleparam.h to keep its coding style consistent.
 > 
-> When linking modules with ld.bfd -r, sections defined without an address
-> inherit the location counter, resulting in non-zero sh_addr values in
-> the .ko.  Relocatable objects are expected to have sh_addr=0 for these
-> sections and these non-zero addresses confuse elfutils and have been
-> reported to cause segmentation faults in SystemTap [1].
+> Changes since v1 [1]:
+> * Remove the extern keyword from the declaration of module_destroy_params()
+>   and update the type of its num parameter from `unsigned` to
+>   `unsigned int`.
+> * Add a cleanup patch for parse_args() to similarly update its num
+>   parameter to `unsigned int` and to synchronize the parameter names
+>   between its prototype and definition.
+> * Add a cleanup patch to drop the unnecessary extern keyword for all
+>   function declarations in moduleparam.h.
 > 
 > [...]
 
 Applied to modules-next, thanks!
 
-[1/1] module.lds,codetag: force 0 sh_addr for sections
-      commit: 4afc71bba8b7d7841681e7647ae02f5079aaf28f
+[1/3] module: Fix freeing of charp module parameters when CONFIG_SYSFS=n
+      commit: deffe1edba626d474fef38007c03646ca5876a0e
+[2/3] module: Clean up parse_args() arguments
+      commit: 65f535501e2a3378629b8650eca553920de5e5a2
+[3/3] module: Remove extern keyword from param prototypes
+      commit: 44a063c00fb13cf1f2e8a53a2ab10b232a44954b
 
 Best regards,
 
