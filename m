@@ -1,226 +1,155 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020128.outbound.protection.outlook.com [52.101.196.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2916F3A961E;
-	Mon, 23 Mar 2026 12:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.128
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774270367; cv=fail; b=E4AzmVihfv2qAal7vDdwpoEplujWq1fVJj2BJ80at9pilZKLHhgOTRg/sioyqd/kEpJJIKRm1+dMkk7grffUAnLsZ8o6Hz7Wh5f/OVPOFsrYqmNEQThIJdr6HxHyfqqZkPRjelVjDN+v1twW36IiNDNHyPE3B3oLCtCbVc4K2j4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774270367; c=relaxed/simple;
-	bh=fW16JjoP7MuVqwwPO26CyCEh52ly9xAbV6v9haNp4Xs=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=Cel5P1j8xE7tVW28NK9QToS9jMf/YxYTSaIQ6oK63E0NOOlfCrDPZb7jZVubJP7im2pNr/i0k5xjalij8BlafQPsqjhQ0/tbgvpV1q58BFSeM/ee1whY/zQV5FBtY+gtQpkxx0QMBaSyfoJAZsgLOEY1UhIas9rTRfmypNNNxyA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Qc9UCqCm; arc=fail smtp.client-ip=52.101.196.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5658A23183C
+	for <linux-modules@vger.kernel.org>; Mon, 23 Mar 2026 13:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774271207; cv=none; b=TBpeG9JPJyX3ZiVIoe2K9oOaHxxHkQ6dUFSw0JBG7522bl9a1YkeNIJZ2V3VwZOaEQ2balLUtTUwPt7FNX1CrsN8MqTnLzqtjhduYVI4zybx4339MH6uWN7TADuqKrWUmx7W4Ou/WYL5zgGgQPA2mR0v+bmxMmY71FuK2PWF/f0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774271207; c=relaxed/simple;
+	bh=MyPj7IilmsOkQbPJ0UsoFWuSk6o+6Jy+Fsm+s2cZ70g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SOp+77kt+aq0Tsul75NUkxRKJ/8J4kowdjMUr8ljEUF5OJ64g9Z6tIkzsHqh3vDnyv54P5MWRDPTBeklDA0QWw5QM/zGz71CRzy6F0Ml6hkgBAgyokJavL+4hWw7hMfv2HmIKsjN+EljusrzCUXIHlobKyEOWp9D8ltyVzX6Xa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CWoWw0kO; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Qc9UCqCm"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xAGLmie8n5MdwUYdGSwn83H+Pwco9TU/mA9NitT53okcW+UbgivXbrxWC0d9Hz3oen75lh3MSVTBF3R/+kiHzAAhEVmgAIsVbB6xWFJNHeb0WMyto19bConDMHdiF/ZwwLSesud+7I5ijl4TpQCzygzSIbZKYOIee9eBtWzJSJJ1bUM1C1tm5MSqQ3/sr94MkaJFvL1YP1R4ZfEnlZJzHCfvDUHRj+N+f5nCc1pZ5vVfUi5TR8WJHaYx+kYH60nNLB9Fr/ueubPzQWUr5VdQj5Yh6lPZo547eJQbkaZ4DYcLOAa5fVPZBIwzA+Q595+HeTwCkti/+YuZ1Oh+EVW7hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qfda9k7l5uLA2eUiNSp0X/6VCU8jG7NPR2Ea3qxsbOo=;
- b=G1GtO9Hoep0n3hJol6LMLFX4gRPi1brKqOr41qa4glDVoR4DFGt6tsGdDUGXrcHyfMW3w+KZOwMM3L2UzMDKiR5iiqIEodcBFJxzl7I55zr2zpQ8jmRFS9o5TfvgV25MTID4JckYsALOW9cRgheHL6tvNXv/WADctp1MUR0KEW96RZzZrn850tjDJnV2lhHaEHmALjyB8NjIRD3PX7hdy4Xy8rQGhJmXsyjjVHjqtUmtT66Jl3bIFMCtwRNvF6QMq4z8SCS49h78t+z6e8ajsMBaUQctqm8Gw+za4t65Pi+AENHJ3JOqS1eD+su2ZUwj5pGQe5BPBwa1wEaBSaOYFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qfda9k7l5uLA2eUiNSp0X/6VCU8jG7NPR2Ea3qxsbOo=;
- b=Qc9UCqCmuFJAgIM4HkNPFgZfPB8HqlrZYO2QJTJwrR72GUHSdTJJqewnV/WhGbyDkxtpF2G0/CmOCRqCXNJLVIT+Ivy/npKvrhuPJ8M8Kb7AameKQwlgqkx3BJE1Tv3t9tXnSuQRpZFBclgN2ML07ieTbvoaQhWKoKZsTB8GAes=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by LO4P265MB6235.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:273::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.31; Mon, 23 Mar
- 2026 12:52:42 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%5]) with mapi id 15.20.9723.030; Mon, 23 Mar 2026
- 12:52:42 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Mar 2026 12:52:42 +0000
-Message-Id: <DHA6CNZ4W0DH.388Y1VMS61C7T@garyguo.net>
-Cc: <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH] rust: module_param: return copy from value() for Copy
- types
-From: "Gary Guo" <gary@garyguo.net>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
- <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Aaron
- Tomlin" <atomlin@atomlin.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun
- Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross"
- <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260323-module-value-ref-v1-1-32507e1085f1@kernel.org>
-In-Reply-To: <20260323-module-value-ref-v1-1-32507e1085f1@kernel.org>
-X-ClientProxiedBy: LO4P265CA0184.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:311::10) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CWoWw0kO"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4852afd42ceso723435e9.2
+        for <linux-modules@vger.kernel.org>; Mon, 23 Mar 2026 06:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774271205; x=1774876005; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M3gKprxO6kW+gnEONjHAGOtiSkxzFKPQeFPHkZURXxg=;
+        b=CWoWw0kO4+wgMLumIHjt9NUjfOlw2QY5IUVwapeASjcM9zW/eyuwoREsXV7f41TZ0P
+         fCIMy5QKc77hZLJ7/uwIDhNO/hKo/4nOfQU7hRzhNz8wB6JEBcbwVeDdkN6it/fRuwqN
+         IzfMUhc+hCs+lHE6pB+LpnhXSOJHVmO0ePz2xMgq/WgvqMuWkF/+OTxw/0I3lp8xjBZi
+         dtzMg+JlZaMf7zXFHIuG3KLQ4hwgh9zlCXP/bRa8Vdr2N256JLyn7dccy8YAHjT5Q0h0
+         xwRhvw8mR2WC6zD6zIz+1PufXGV8xRTTyJVMt8s+XkPBdtJwwSkuwlXovOBTy83El7Do
+         1Z3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774271205; x=1774876005;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M3gKprxO6kW+gnEONjHAGOtiSkxzFKPQeFPHkZURXxg=;
+        b=AnYF5383r5iR9LBifAfKG5b45cza1HxrMSyY5BNzQ8sKV0WD8kWzvS18Uu3Sfn4WNO
+         7d+WB1Y2H18p6SMsoaHoXKqsvjNew//EoXz7zrub/6+xJmjbnpWTigWH88tA6sh3SWtQ
+         gI4DWz5bWPOd6dbMk3hm4lA/r7lz2uVsgOEOzNEBivQVY3GTxDh/4ax0ygv1eqpB1N+7
+         QIxlMWyToR5Ppl1J8ELtKV7Jb2whnlnWTpYa4Ep4ZPjLh7RMUCBgIU7pm2RD7n8GVQqP
+         I4ou0Y0XDuIihxUwFUJFpoaviWOHolcHJHiPGvFIm0HrkcLQX12l39paLiW/ixcz1Tqg
+         dLeA==
+X-Gm-Message-State: AOJu0Yxr+9UwHXR7/tL+0GohX7NL04JJaeJeYursnOwZYCFTwG8cPZdC
+	RPHD0lzc/LojdQTD36E9cguBgb6FKfI4rC/yBOkoStr06sIqFBV232aTyvQt3tjiQmQ=
+X-Gm-Gg: ATEYQzzVpTOjJ9Av5kosH9HuHbDPXuXCCibFzMpmhGu0AEoMZ8To4j5c0L8cKSa7znu
+	y10a7EGVmPONzqEGtD4oDSrRBybXj1GDvMEVYcBvlSTTk27POPzqMDBMgI381+eQXoBRB9fr5oV
+	ZSVMpFSlc4nfBaU0A4aR8QOYsGBcHp0MyczxfhuYVc7h46/Vv6uSjwa5wWh7NfBtsYNYF7wQYLA
+	BUXJEu7j+g8sHrJgVH2kzZLgordbrlGYb+L2Ustz75yzR7tlcJOCVFTlMG5TpHLzZ9KM8ZRojkL
+	miT1W+kwteNMQ9EIZGpHT+a3+ql9fqOiHmuzNwOhP+NCZNfDpaQoUj2gI2O7Uq70hbc2wRgShQK
+	0uHfXuesoJvBEl4aw7UU3wC5h/Eg4nTKiVa00cqu9oy6HjYUAVzf8G3O5ehy+XAG9ekisxYlyo2
+	t611AGloS7jPqDLFUup6QUoC/QgeG0wKZV7BZGHzKGTphG
+X-Received: by 2002:a05:600c:3b07:b0:485:3aa1:a7f1 with SMTP id 5b1f17b1804b1-486fedab4bdmr170699615e9.7.1774271204664;
+        Mon, 23 Mar 2026 06:06:44 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-486ff1c16absm79866135e9.26.2026.03.23.06.06.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Mar 2026 06:06:44 -0700 (PDT)
+Message-ID: <b6030f42-b4d2-4e52-acec-76e25c0f40db@suse.com>
+Date: Mon, 23 Mar 2026 14:06:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO4P265MB6235:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b69bd10-d1fe-47db-eaa7-08de88db12b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|921020|7053199007|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	KpjGLxjqneP0oneEsuuXMmAHLrpl14QZT09kKm43a3TOp9NnIPFdVwtDA37F0hbsqhBG502XQ+O58eFYS7pAmtwqYwKvWz2tPlpwILRnI4XeLU7qRiRKMsECfMaOPCBrOJ61xc0gRkohUE/a2IzxCMnS7G/waoPjIS8x5NgAVhVtbDSsDRfUrqcdlrbyaY8Bru1PGcmyPsUkNfJCet3f8b/vs4f3ScJMs4vKnq3989ssg/iUTaQKisDRNe00wNo3l4I/uGmrW3iu/WjcbQsAGS+J5fqw+QbQMlYbLn2tv2E7krlYccRoOeApyhsK706PoDF8oWW84oa3ANeGiTnePeYN5e8mFaJZGSMUXsWjpnGii1XX9am7Esed0QSX3gMyjS32aAZSL2envkolICQXZWva7tcrkN0aet4VZ4gUxQpOIff+d9TvsSmIfb42JzifQBOgLi9x7IBo73pxmSHifMmokPU3TlyLAKE7aetJV6yTkFyxKlqMuUhYdA+rb2//JZxSDcy3rHpAzgpNBAE5yS8w+m7W3itxH60coFv7A/qJmm4tD0DcwrSxtq8vbFWBvZgWq+ODN6xLpLXkEngawZYztr2AW7JhU3l1dmVuVYh5AL+UY4o9ab+a9i0BVbFoiWKrpzOWdM6aB5NZokUg6ICpJSiueRI5vn4Uf8yQF+4neTNC/2UyWpekFluB+KIWLOpkvfc7vmZPymBRlLUgq90BLD/I62u56ZgSZhv0ySUbl8W4aGUnXcfGcXICAiOMlfiyMwL+bT3fUf48kvEqYA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(921020)(7053199007)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T2hpQmJ4S3QwZUp4RXNqYkV6WmRQaTdIdDRYVGx2ZjF0cHVpdlgyOXFoQ1k0?=
- =?utf-8?B?OUgvazhkNzFCbS8vSlRnNm9DSWxwQXJLSUhpV1RoYi9qUFhFNUg0SldURTJh?=
- =?utf-8?B?WEFwMEtaYmdCbjlLL2swRjAzTTdJc0lqWUV3VGRtbkpDNFpMRE9DZ0hEdlFR?=
- =?utf-8?B?NXc5N0Q0ZFQ2elpSQmt3dkNRZlpIb2xFaCtxblJ5WE93ayt0RHV5ck9QTWVo?=
- =?utf-8?B?RUhoVldhM1VBdHVnZS9KRk1HYU1IKzZwWktYVkxaR1hSejNucHkrRUllUUoz?=
- =?utf-8?B?dXRmNGVTYUd0OWs4ZjRNKzJmTy9PWjV0cTExOXNaNnJadmV5TXlFZ2gzQXMy?=
- =?utf-8?B?NlpQTFJvOExWaUNlV1M4ZUVmYU5yN21GNjAzeW5WbzdHTG42dDZNb2x5VDNO?=
- =?utf-8?B?Z2FWc08rY1RVZnVXZ1NMVDdvSFZnZHFTVTVDY2U2STV1aEpIbWI5c2wrdlYw?=
- =?utf-8?B?UEFtSWFhd2h2SzVpQ2JXUWpNRjRtY2RRa2UzNVdzdXMyRUpWRnBpcUFvSGJh?=
- =?utf-8?B?enBzd1BFdXpyRlNRaS8wWGlQYk5naDByaE5ybHVqeVZKTWlYUU54R2FySTRD?=
- =?utf-8?B?OUQ4RTRtTUVNeVZkVXZZQ1RhSUpFU3JybTdYYzVlbXcvWGhoa1JHbDNGVERz?=
- =?utf-8?B?TVp0eGxwZ2o5WmtnZENHMm9PR0htNEgzSkNPRVcrYitiQVNxR2p5eWdVdDJB?=
- =?utf-8?B?RVkxYWliWFhxVTNzVlA0WVoxdVNPbURiRUE4YzlKTWl5b2xTdlZYbHd4bWtX?=
- =?utf-8?B?RjNab3Q3anBNUldMcjM1TE56cEM0Ri9KZTB2ZDliVU5EVkNXdkJ1SG9MS3kw?=
- =?utf-8?B?Yi94ZE9sQVQ0TElmK05ucXZsZUpSZThPdEhGak5CUTd5U0JnMXQ5SDBBNXFh?=
- =?utf-8?B?elJpWVlmaG5nOUhXc2pKZFZDaVhGRDA1VmpCRFN2RU1XMGJ2emJBMDZvVWZT?=
- =?utf-8?B?b3JrYSszVXZwOG1mVUIwUkpqa3JSLzZKaVFMZGd6Zk00VWd2UERkRHp6WEJq?=
- =?utf-8?B?aExOWS9nUHZ6UUNodysvUG91TDJZc3hPbksxNG5uR00zek9DMERnSVlnaFE1?=
- =?utf-8?B?L3lvZS92aXU5OXQ1ZGZ5ME9oQmQ4czFYNzZaMGRkN3JmWVRJVkRua1AxOFli?=
- =?utf-8?B?eU9BSVAxelJleUhSYnYwVkUzbmJhdmZYS3RwcER6TExFSjJ3ZjVyK2diRm1m?=
- =?utf-8?B?UlNDZThNWWJZbVJVRW11WHBqWGw4YTlJYTFpREZtSzFhTWlmRnBjMXRNSWR0?=
- =?utf-8?B?aDI2dVNrRmRqeUIzaitZRTBMT2NLOE9IRTV0SFJQOEo2WU95TURIT1kvRjMz?=
- =?utf-8?B?MHFqQjd3bzAwek5tQnhzUzFwei9Ba0RUN29aVmFPWkhYTTNVTUxWc3VPbjdl?=
- =?utf-8?B?RnNUc3c5a0orQzlabW5yZklCR0xxYURiS3BTclVLdmFBdThPai9KUjdMM1NX?=
- =?utf-8?B?K2VxbU45bk1ubWdIekhzY203azQyVEhaN2JlcXNVaVQ1bDBiMEpSRXE2WlFJ?=
- =?utf-8?B?blEwd2Y5U2thZlZZYnh0cFBKQ3Bad2ZSSjBjM1VWTjNQSjBIL1BHRW9HNDlu?=
- =?utf-8?B?Vkl3WElhVTZ1bHN0S0x5L0tETXk1L1F2RGQwbWhEN1F6cHFZOVo1U3VKQ1BI?=
- =?utf-8?B?RmJ4aG04aEVQYUVwSTQvN0o0bUM1OUl3UXZPQ3pPZXpEVU5PV0VnOUdNNjJw?=
- =?utf-8?B?bEp3MkM1d1ZJZjQvSXZ0c1dTbE9BMG9WOC9HYUZRclgvOFJlS3FhWi9NR2Jq?=
- =?utf-8?B?NnZ4ZjYzVnk3YUlPRTdiTkZQSDdhS094VmFJSGo0UEs1YUxNZTdPdGI4Q1JO?=
- =?utf-8?B?dUtQNThQa1RRaW5YTVJsVmt6RjlFMjhocmxVOFppc0Z1UTJxZTgzcytHTzlu?=
- =?utf-8?B?c2NXbXF3a1FSZklRenhwaTZxWWFWMEtZZGFSRnBKRVlCV3ZvTGJkdW0vQk5L?=
- =?utf-8?B?bmVpdURxdlNoQk1Hc3lqUC9ybm1mckYvU2lzd0xzUGxKbHdiWGlvWGMxY2x2?=
- =?utf-8?B?OTFtMGsydkRidUdvOC9FSWhkRHAwUHZWMnhEdEZ2SFcrMXltRUt1WW5wOVlu?=
- =?utf-8?B?WGdvWmNuSnpmTENBcXV4YVVjQzRDZ0paZUtyTmE0czRFam0wdWZHMnFBNXVP?=
- =?utf-8?B?bktyTGxGK29vN1NhdDFONGUyZk40c2QyRWIvY2cyM21BWHJCM0hTTWViWWZO?=
- =?utf-8?B?cFk2Qmdycnp4QzJxNCtHOExPVEtpZG0xMHVMdVJBdXgxSUdGVjZ5ODNsaW5q?=
- =?utf-8?B?U3M1TUFXM2NadjR0ZjRrcjBubVRUb2ZlbS85UlNodHFPenpTeWVpUWpDS2xh?=
- =?utf-8?B?S1dDUFVYVzVhYjFhTFRGbEtyTUd5N1V0NURISlNmMDB2YkpDR2JPQT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b69bd10-d1fe-47db-eaa7-08de88db12b8
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2026 12:52:42.7066
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ni0y3v2se6P5aYYwZr9vJoH8TToEK1PkFOc5wavhegXvILTcL94NRwoeYlBx2hjZDNGic//0grTRge9eY5401g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6235
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module/kallsyms: sort function symbols and use binary
+ search
+To: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
+ Viktor Malik <vmalik@redhat.com>
+References: <20260317110423.45481-1-stf_xl@wp.pl>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260317110423.45481-1-stf_xl@wp.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon Mar 23, 2026 at 12:47 PM GMT, Andreas Hindborg wrote:
-> Rename the existing `value()` method to `value_ref()` which returns a
-> shared reference to the parameter value, and add a new `value()`
-> method on `ModuleParamAccess<T>` where `T: Copy` that returns the
-> value by copy.
->
-> This provides a more ergonomic API for the common case where the
-> parameter type implements `Copy`, avoiding the need to explicitly
-> dereference the return value at call sites.
->
-> Currently `value_ref()` has no in-tree callers, but it will be needed
-> when support for non-`Copy` parameter types such as arrays and
-> strings is added.
->
-> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
-> ---
-> This change was suggested at [1].
->
-> Link: https://lore.kernel.org/r/87cy13swpw.fsf@t14s.mail-host-address-is-=
-not-set [1]
-> ---
->  rust/kernel/module_param.rs  | 11 ++++++++++-
->  samples/rust/rust_minimal.rs |  2 +-
->  2 files changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-> index 6a8a7a875643..5dcfe2ba87a1 100644
-> --- a/rust/kernel/module_param.rs
-> +++ b/rust/kernel/module_param.rs
-> @@ -134,7 +134,7 @@ pub const fn new(default: T) -> Self {
->      /// Get a shared reference to the parameter value.
->      // Note: When sysfs access to parameters are enabled, we have to pas=
-s in a
->      // held lock guard here.
-> -    pub fn value(&self) -> &T {
-> +    pub fn value_ref(&self) -> &T {
->          self.value.as_ref().unwrap_or(&self.default)
->      }
-> =20
-> @@ -146,6 +146,15 @@ pub const fn as_void_ptr(&self) -> *mut c_void {
->      }
->  }
-> =20
-> +impl<T: Copy> ModuleParamAccess<T> {
-> +    /// Get a copy of the parameter value.
-> +    // Note: When sysfs access to parameters are enabled, we have to pas=
-s in a
-> +    // held lock guard here.
-> +    pub fn value(&self) -> T {
+On 3/17/26 12:04 PM, Stanislaw Gruszka wrote:
+> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
+> over the entire symtab when resolving an address. The number of symbols
+> in module symtabs has grown over the years, largely due to additional
+> metadata in non-standard sections, making this lookup very slow.
+> 
+> Improve this by separating function symbols during module load, placing
+> them at the beginning of the symtab, sorting them by address, and using
+> binary search when resolving addresses in module text.
 
-It's better to keep this close to `value_ref` in the same impl block. The `=
-T:
-Copy` bound doesn't need to be on the impl block, it can be on the item its=
-elf
-with
+Doesn't considering only function symbols break the expected behavior
+with CONFIG_KALLSYMS_ALL=y. For instance, when using kdb, is it still
+able to see all symbols in a module? The module loader should be remain
+consistent with the main kallsyms code regarding which symbols can be
+looked up.
 
-    pub fn value(&self) -> T where T: Copy
+> 
+> This also should improve times for linear symbol name lookups, as valid
+> function symbols are now located at the beginning of the symtab.
+> 
+> The cost of sorting is small relative to module load time. In repeated
+> module load tests [1], depending on .config options, this change
+> increases load time between 2% and 4%. With cold caches, the difference
+> is not measurable, as memory access latency dominates.
+> 
+> The sorting theoretically could be done in compile time, but much more
+> complicated as we would have to simulate kernel addresses resolution
+> for symbols, and then correct relocation entries. That would be risky
+> if get out of sync.
+> 
+> The improvement can be observed when listing ftrace filter functions:
+> 
+> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> 74908
+> 
+> real	0m1.315s
+> user	0m0.000s
+> sys	0m1.312s
+> 
+> After:
+> 
+> root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> 74911
+> 
+> real	0m0.167s
+> user	0m0.004s
+> sys	0m0.175s
+> 
+> (there are three more symbols introduced by the patch)
 
-Best,
-Gary
+This looks as a reasonable improvement.
 
-> +        self.value.copy().unwrap_or(self.default)
-> +    }
-> +}
-> +
->  #[doc(hidden)]
->  /// Generate a static [`kernel_param_ops`](srctree/include/linux/modulep=
-aram.h) struct.
->  ///
-> diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
-> index 8eb9583571d7..60d03df6cd80 100644
-> --- a/samples/rust/rust_minimal.rs
-> +++ b/samples/rust/rust_minimal.rs
-> @@ -28,7 +28,7 @@ fn init(_module: &'static ThisModule) -> Result<Self> {
->          pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
->          pr_info!(
->              "test_parameter: {}\n",
-> -            *module_parameters::test_parameter.value()
-> +            module_parameters::test_parameter.value()
->          );
-> =20
->          let mut numbers =3D KVec::new();
->
-> ---
-> base-commit: c369299895a591d96745d6492d4888259b004a9e
-> change-id: 20260323-module-value-ref-5884b5ae6b2a
->
-> Best regards,
+> 
+> For livepatch modules, the symtab layout is preserved and the existing
+> linear search is used. For this case, it should be possible to keep
+> the original ELF symtab instead of copying it 1:1, but that is outside
+> the scope of this patch.
 
+Livepatch modules are already handled specially by the kallsyms module
+code so excluding them from this optimization is probably ok.
+
+However, it might be worth revisiting this exception. I believe that
+livepatch support requires the original symbol table for relocations to
+remain usable. It might make sense to investigate whether updating the
+relocation data with the adjusted symbol indexes would be sensible.
+
+-- 
+Thanks,
+Petr
