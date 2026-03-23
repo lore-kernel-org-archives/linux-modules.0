@@ -1,51 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4B435AC05;
-	Mon, 23 Mar 2026 19:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B1F383C7F;
+	Mon, 23 Mar 2026 22:50:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774293959; cv=none; b=XNpQ8xrXGsD4E+SW56ExdJlw5mPH8+bX9b8LqoiO+/tQO2uAABTQGHmxv8OYZjGylRUjP0PfXeiQE3KPg8aV4IX6VDaqg3JpLj4e0X+ujWw+QcYHBDpbxwRB7LNC81rdhaJedrdrtWqmbpqTsHDiVxmDS4LP1aUo/VzZn45KqHQ=
+	t=1774306259; cv=none; b=cTVBQbXUTBwqxpQfL8gDRMdPCQZ40MPEkk8D/L7pACOFxFWGl2TqXCvGCuUVAhSxwpoRwtKXxKwHmCzoAAttieCV9g4FCVYbJhb+R1m/tooKs6WUZZmdushmFXCHxzcxJ+M5lELa3OhyL9vmt/x7S+fWMh5vc6wy3CmqDloTs+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774293959; c=relaxed/simple;
-	bh=pRVwcjWbGZOMkMxCgyb3wrPsEMkf/bME02y11ek+PBY=;
+	s=arc-20240116; t=1774306259; c=relaxed/simple;
+	bh=iM8xi+g7eJ2LFfiOb87u1NfLeTFkw/SR9m4C+FJUB4E=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=kkEK+jDLmwM9bJ1I5fRaSWdjo7NFvwLROpn2V784Z6uA2sv6aasjni9nohECvAu2qDY+nlK+pF+uFGihvZfNY9Lqu6qawrG2nlheSccekVIpG702mpJFAPbq2EXDHDeAd4ogJVaYdpqHyeFMFf8SzS98562RMGhE/Pco3a+5Q7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=f4tkw1r7; arc=none smtp.client-ip=10.30.226.201
+	 Mime-Version:Content-Type; b=cYDrVjS+RAMkdJLYWeX2oOCsz1P5fERSHxjjzA9JX4ECkHipWp4k/9iyc/F/jKt19sGnT1Ac0IIMHHPBRGnlt7gSbUN1XGfV/Le6bHy+ysaWkRTVFDOvQl7CIKUKCxwqsQQw+nfL61nK3QFhZgyJFSKWuK/6JyQQirlmOaSm9ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=no2U1SRC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="f4tkw1r7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F156EC4CEF7;
-	Mon, 23 Mar 2026 19:25:57 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="no2U1SRC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F7FC2BCB6;
+	Mon, 23 Mar 2026 22:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1774293958;
-	bh=pRVwcjWbGZOMkMxCgyb3wrPsEMkf/bME02y11ek+PBY=;
+	s=korg; t=1774306259;
+	bh=iM8xi+g7eJ2LFfiOb87u1NfLeTFkw/SR9m4C+FJUB4E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=f4tkw1r7yCmiIt3fIzSU21Bfp5TOVStZzHX6uyHlxTKAvxTTD2+o9fSiS7kBmu9gG
-	 airEsJ4osNi/vKFGX/JVHen33a1O9MJgHfmS8piqFGL8JXf8bywLfK1W16lFbnip6h
-	 mtpENkWsVlgrn9HCAqyv5vQKDdeCjtPLsOEGsjcw=
-Date: Mon, 23 Mar 2026 12:25:57 -0700
+	b=no2U1SRCbCx+YwOea+jmKOmJACmet5hnyb2IKo4hHES+gDnQsL9Mqe5fn1AYbROPB
+	 6xce46J5W3z7K7k+XhCtnsd3zXSpWWfNLKnhyZM7RnDsE3pHkfUZlslfXZa8qrzC3F
+	 /m1O+7ZTV5VkLQzEFIRjwi1qIrhRLH1r3C2x/4lg=
+Date: Mon, 23 Mar 2026 15:50:57 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
 To: Sasha Levin <sashal@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>,
- Richard Weinberger <richard@nod.at>, Juergen Gross <jgross@suse.com>, Geert
- Uytterhoeven <geert@linux-m68k.org>, James Bottomley
- <James.Bottomley@HansenPartnership.com>, Jonathan Corbet <corbet@lwn.net>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Greg
- KH <gregkh@linuxfoundation.org>, Petr Mladek <pmladek@suse.com>, Steven
- Rostedt <rostedt@goodmis.org>, Kees Cook <kees@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Thorsten Leemhuis <linux@leemhuis.info>, Vlastimil
- Babka <vbabka@kernel.org>, Helge Deller <deller@gmx.de>, Randy Dunlap
- <rdunlap@infradead.org>, Laurent Pinchart
- <laurent.pinchart@ideasonboard.com>, Vivian Wang <wangruikang@iscas.ac.cn>,
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 0/4] kallsyms: embed source file:line info in kernel
- stack traces
-Message-Id: <20260323122557.3e0ef47671a0eea7c3d89253@linux-foundation.org>
-In-Reply-To: <20260322131543.971079-1-sashal@kernel.org>
-References: <20260322131543.971079-1-sashal@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin"
+ <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Petr Mladek <pmladek@suse.com>, Alexei Starovoitov
+ <ast@kernel.org>, Jonathan Corbet <corbet@lwn.net>, David Gow
+ <davidgow@google.com>, Kees Cook <kees@kernel.org>, Greg KH
+ <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>, Randy Dunlap
+ <rdunlap@infradead.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Juergen
+ Gross <jgross@suse.com>, James Bottomley
+ <James.Bottomley@HansenPartnership.com>, Alexey Dobriyan
+ <adobriyan@gmail.com>, Vlastimil Babka <vbabka@kernel.org>, Laurent
+ Pinchart <laurent.pinchart@ideasonboard.com>, Petr Pavlu
+ <petr.pavlu@suse.com>, x86@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-modules@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
+ oops/WARN dumps
+Message-Id: <20260323155057.29b8e17d10421962d5ed798d@linux-foundation.org>
+In-Reply-To: <20260323164858.1939248-1-sashal@kernel.org>
+References: <20260323164858.1939248-1-sashal@kernel.org>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -56,161 +59,14 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 22 Mar 2026 09:15:39 -0400 Sasha Levin <sashal@kernel.org> wrote:
+On Mon, 23 Mar 2026 12:48:55 -0400 Sasha Levin <sashal@kernel.org> wrote:
 
-> This series adds CONFIG_KALLSYMS_LINEINFO, which embeds source file:line
-> information directly in the kernel image so that stack traces annotate
-> every frame with the originating source location - no external tools, no
-> debug symbols at runtime, and safe to use in NMI/panic context.
+> Building on the lineinfo series, this adds typed function parameter
+> display to oops and WARN dumps.  A build-time tool extracts parameter
+> names and types from DWARF, and the kernel maps pt_regs to the calling
+> convention at crash time.  When BTF is available, struct pointer
+> parameters are dereferenced and their members displayed.
 
-Thanks, I've updated mm.git's mm-nonmm-unstable branch to this version.
-
-> Changes since v3
-> =================
-> 
-> - Remove redundant gen_lineinfo entry in scripts/Makefile for
->   CONFIG_KALLSYMS_LINEINFO_MODULES (depends on CONFIG_KALLSYMS_LINEINFO
->   which already builds it). (Reported by Petr Pavlu)
-> 
-> - Use R_* constants from <elf.h> instead of hardcoded relocation type
->   values in r_type_abs32(). (Reported by Petr Pavlu)
-> 
-> - Simplify duplicated-path detection in make_relative(): replace loop
->   over every '/' with a direct midpoint check, since true path
->   duplication always splits at len/2. (Suggested by Petr Pavlu)
-> 
-> - Fix comment in process_dwarf(): sections in ET_REL objects have
->   sh_addr == 0 and therefore overlapping address ranges; this is
->   expected behavior, not a "may" situation. (Reported by Petr Pavlu)
-> 
-> - Use U32_MAX instead of UINT_MAX for the module raw_offset bounds
->   check, matching the u32 type of the addrs array.
->   (Reported by Petr Pavlu)
-> 
-> - Document the assumption that .text is at the start of the MOD_TEXT
->   segment in module_lookup_lineinfo(). A proper fix using ELF
->   relocations is planned for a future series.
->   (Reported by Petr Pavlu)
-> 
-> - Wrap -fno-inline-functions-called-once in $(call cc-option,...) for
->   clang compatibility. Clang does not support this GCC-specific flag;
->   the noinline attribute is sufficient.
-
-Here's how v3 altered mm.git:
-
-
- kernel/module/kallsyms.c |    8 +++++--
- lib/tests/Makefile       |    2 -
- scripts/Makefile         |    1 
- scripts/gen_lineinfo.c   |   40 +++++++++++++++++--------------------
- 4 files changed, 26 insertions(+), 25 deletions(-)
-
---- a/kernel/module/kallsyms.c~b
-+++ a/kernel/module/kallsyms.c
-@@ -547,13 +547,17 @@ bool module_lookup_lineinfo(struct modul
- 	if (hdr->files_size < hdr->num_files * sizeof(u32))
- 		return false;
- 
--	/* Compute offset from module .text base */
-+	/*
-+	 * Compute offset from module .text base.
-+	 * NOTE: This assumes .text is at the start of the MOD_TEXT segment.
-+	 * A proper fix would use ELF relocations to reference .text directly.
-+	 */
- 	text_base = (unsigned long)mod->mem[MOD_TEXT].base;
- 	if (addr < text_base)
- 		return false;
- 
- 	raw_offset = addr - text_base;
--	if (raw_offset > UINT_MAX)
-+	if (raw_offset > U32_MAX)
- 		return false;
- 
- 	tbl.blk_addrs	= base + hdr->blocks_offset;
---- a/lib/tests/Makefile~b
-+++ a/lib/tests/Makefile
-@@ -36,7 +36,7 @@ obj-$(CONFIG_LIVEUPDATE_TEST) += liveupd
- CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
- obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
- 
--CFLAGS_lineinfo_kunit.o += -fno-inline-functions-called-once
-+CFLAGS_lineinfo_kunit.o += $(call cc-option,-fno-inline-functions-called-once)
- obj-$(CONFIG_LINEINFO_KUNIT_TEST) += lineinfo_kunit.o
- 
- obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
---- a/scripts/gen_lineinfo.c~b
-+++ a/scripts/gen_lineinfo.c
-@@ -206,14 +206,11 @@ static const char *make_relative(const c
- 	 */
- 	{
- 		size_t len = strlen(path);
-+		size_t mid = len / 2;
- 
--		for (p = path; (p = strchr(p, '/')) != NULL; p++) {
--			size_t prefix = p - path;
--			size_t rest = len - prefix - 1;
--
--			if (rest == prefix && !memcmp(path, p + 1, prefix))
--				return p + 1;
--		}
-+		if (len > 1 && path[mid] == '/' &&
-+		    !memcmp(path, path + mid + 1, mid))
-+			return path + mid + 1;
- 	}
- 
- 	/*
-@@ -340,17 +337,17 @@ static void find_text_section_range(Elf
- static unsigned int r_type_abs32(unsigned int e_machine)
- {
- 	switch (e_machine) {
--	case EM_X86_64:		return 10;	/* R_X86_64_32 */
--	case EM_386:		return 1;	/* R_386_32 */
--	case EM_AARCH64:	return 258;	/* R_AARCH64_ABS32 */
--	case EM_ARM:		return 2;	/* R_ARM_ABS32 */
--	case EM_RISCV:		return 1;	/* R_RISCV_32 */
--	case EM_S390:		return 4;	/* R_390_32 */
--	case EM_MIPS:		return 2;	/* R_MIPS_32 */
--	case EM_PPC64:		return 1;	/* R_PPC64_ADDR32 */
--	case EM_PPC:		return 1;	/* R_PPC_ADDR32 */
--	case EM_LOONGARCH:	return 1;	/* R_LARCH_32 */
--	case EM_PARISC:		return 1;	/* R_PARISC_DIR32 */
-+	case EM_X86_64:		return R_X86_64_32;
-+	case EM_386:		return R_386_32;
-+	case EM_AARCH64:	return R_AARCH64_ABS32;
-+	case EM_ARM:		return R_ARM_ABS32;
-+	case EM_RISCV:		return R_RISCV_32;
-+	case EM_S390:		return R_390_32;
-+	case EM_MIPS:		return R_MIPS_32;
-+	case EM_PPC64:		return R_PPC64_ADDR32;
-+	case EM_PPC:		return R_PPC_ADDR32;
-+	case EM_LOONGARCH:	return R_LARCH_32;
-+	case EM_PARISC:		return R_PARISC_DIR32;
- 	default:		return 0;
- 	}
- }
-@@ -492,9 +489,10 @@ static void process_dwarf(Dwarf *dwarf,
- 
- 			/*
- 			 * In module mode, keep only .text addresses.
--			 * In ET_REL .ko files, .init.text/.exit.text may
--			 * overlap with .text address ranges, so we must
--			 * explicitly check against the .text bounds.
-+			 * In ET_REL .ko files, .text, .init.text and
-+			 * .exit.text all have sh_addr == 0 and therefore
-+			 * overlapping address ranges.  Explicitly check
-+			 * against the .text bounds.
- 			 */
- 			if (module_mode && text_section_end > text_section_start &&
- 			    (addr < text_section_start || addr >= text_section_end))
---- a/scripts/Makefile~b
-+++ a/scripts/Makefile
-@@ -5,7 +5,6 @@
- 
- hostprogs-always-$(CONFIG_KALLSYMS)			+= kallsyms
- hostprogs-always-$(CONFIG_KALLSYMS_LINEINFO)		+= gen_lineinfo
--hostprogs-always-$(CONFIG_KALLSYMS_LINEINFO_MODULES)	+= gen_lineinfo
- hostprogs-always-$(BUILD_C_RECORDMCOUNT)		+= recordmcount
- hostprogs-always-$(CONFIG_BUILDTIME_TABLE_SORT)		+= sorttable
- hostprogs-always-$(CONFIG_ASN1)				+= asn1_compiler
-_
-
+mm.git is full and I'm seriously looking at loadshedded.  Can we please
+leave this until next cycle, give your "kallsyms: embed source file:line
+info in kernel stack traces", v4 time to settle in?
