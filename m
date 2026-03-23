@@ -1,146 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED93D382297;
-	Mon, 23 Mar 2026 12:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774270117; cv=none; b=bByTggPVQaUBXU52BPdVlrnnjD86hYpGJ5PCBPoUYZzz7TpxRDaZD9ZuFyM+p4WIoNREZ/EjMwSht2FgaLWilypItLz5l4PlXZLkOr052mOTzC4l3ZDc0MDyLPVRgZAZf204y3CfYpAlCQ07RrJLrIsaH7mj8qD0lG4Tg4rWx9I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774270117; c=relaxed/simple;
-	bh=NH04tbhY13Lrlqx874OPUd7KS2vl12I5bTlzcU2/oJo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uR9yLibRJIa3gUTJmPSts6U3OZKvigPb5z5hj/bggAvqcIA0M2qxbn3cxQIrNddwfKCBiwJ3F7U6Xae/xpPdIeOlhbMp/B7zAm+Tv6eNyKEyqRI4iUZn+Z8togqqabbYHPDMwCa94rey8fxxwBQAEBxApZTEO/ueYepbSQtHf5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khZd0Ktj; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF9439EF27
+	for <linux-modules@vger.kernel.org>; Mon, 23 Mar 2026 12:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774270194; cv=pass; b=iXZugpOBGc6kOSqhjJLL5qq6pfqt5JpCJHxzuJN99aVbzXD0Okzqmip5BefxzaEjC06kWrIC1bjOBaSaTt2YfmuO1pKhTaU7XQyw1ow/v4hnclH9e5pQ/dizb2qFJSiHwrgHxoA1I34DrhUnhwNKg8sv0gYb04jDmYJzMgkQFX4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774270194; c=relaxed/simple;
+	bh=mhaI30SNytJzSanfaF6YNaJhdYu5uF4diqTzJ/Jmkig=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MwtT8ZEIekfaVTTzXfJv9gVFzua7/qB+Mc1HU2/+hQ63AD36b2GJ7yFtdYZAlR1OV+XoWwObU7SYf+fs/uclFkXVXT8TYOi1yGmuxmvev1NQzsdO2rV8CAVxuI5v0lzhhtJot2grlRg/wzz8u0zqUeKESzRjF2e1AI1vuxRAKZ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W7BVK1J8; arc=pass smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khZd0Ktj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45721C4CEF7;
-	Mon, 23 Mar 2026 12:48:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774270116;
-	bh=NH04tbhY13Lrlqx874OPUd7KS2vl12I5bTlzcU2/oJo=;
-	h=From:Date:Subject:To:Cc:From;
-	b=khZd0KtjEQ5ZIJjyQFnGLApXOrBUjkH+iSeTynaGVi3/g41Re25Ojlc8D9SW/krGS
-	 od4xzbh1rLSRgH0yrtHxe8czZgdqpOGVRLRBLqbBhGGFu5V2St5ZSgDlbXjGzYqbHY
-	 0BzytaX0W4YmLl9gRdxh7WCmQO34ekVWQDLTBbDrVwaVQII28YSaA6bOpHMEMO/j/c
-	 wv4xAj1QXIYHrLsbUNAevlDqZAdx0fM0jdL6LwfOd18sQQ8JtrFM4Bmfkrq8UJyUDv
-	 qURa/LI5QGWuS5n+zumBnW0t9sQmwsordrpwlLGzn8bf4/CSdPu0dC28Jo597OWrjD
-	 3lZVfLqJI13RQ==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-Date: Mon, 23 Mar 2026 13:47:12 +0100
-Subject: [PATCH] rust: module_param: return copy from value() for Copy
- types
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W7BVK1J8"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-439b7c2788dso1768639f8f.1
+        for <linux-modules@vger.kernel.org>; Mon, 23 Mar 2026 05:49:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774270192; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WvdG6DlhXRDIsKIhPcWXUtJyyYBRFLm+4Hm14qrVVHHPjUJHMpPwBNVGe/PLiQDdL4
+         Eh5BY23NdDqbMnR1yc322SYADSKDkWF/NefkOpgr/TXygZlkvKFA+nhvvwgpDw7NurDq
+         Ta7UlzKVMvtUdvele8x7pTaCOUzo1HGCdcI118d/1Ar0VFBJu/VqCYXf9ZVNOirXaB+U
+         4sIM/x6k1fhFQb3L9OphGiGonzAtYPS7NHleNSuQwSeuuypK02uc5yUA2hyQ9ublyQVG
+         IpCWg06kjkvqDIYlmLWHYXeS490wCqn1FZcXD0uxgEsQutWnor6LhUkp10QBzeOxRH8w
+         CWTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mhaI30SNytJzSanfaF6YNaJhdYu5uF4diqTzJ/Jmkig=;
+        fh=K1DIMdLVFblVIcKR0Rmc+xy9CEaSUn3yov9nzf4UpkI=;
+        b=HcPlqYE4rNeiLLnJHwcfPiO49ny1T5jp6wyfhaqy+u5H0XHh7x+0oveB0v+/WPbEMm
+         W/7j9D9ZC8VZrwG1dxGXJ6hBdIb7sBNJc3asfKIE4hL8pQFoJJlyklEyBvI/upYvMNTm
+         PjxVK/cUOadWwFo9NMGR8wG/4hLcCmVMp3aDzy+1NZSJWs/PTgMsbZrV/CEMGDI5GNT8
+         sv2T5CSLma4L2q0PdOJFw/w2rjrIHD1MOpdUYYgPD/akUMMtMlBCZg7aZQLJRj2WdhXl
+         GEyGxzXxANIxI/095Jh0zthtNGM7/xGjzeuM9Yr8FU3pBUndLOXfDUM283B8MNk05pV/
+         aZCA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1774270192; x=1774874992; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mhaI30SNytJzSanfaF6YNaJhdYu5uF4diqTzJ/Jmkig=;
+        b=W7BVK1J8C7hOAv2IsN3dZ/3ZRDnVgfuVtWlfg694QvPoeqMjEJy05bHxfT//R1sWsJ
+         HLkq6S+Hzi1kZRBWgiRMbefQ6Di3MwbdZc+C7pqNg+DsS2UFGUpTQkC9/9IT9gUP2zSh
+         Ng1W/pYXvTP6QXir4fcj0F9HUeRcbnj+TWS0+g9aACFpOun+F3kmY2hXHRGCallO8Mw5
+         YW3Kp/7KH26iuBKqigakHK04wYc0Qbal9Xnm/Epjc2KfvsryyIlda/Nc1W00fn81W6YC
+         hIsR61HIxY2iEuyJLrzgOf+jZDiHVbG33ih9aQbW7HT1toQFlN+2VNUpCDxxuacrtxey
+         3Dkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774270192; x=1774874992;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mhaI30SNytJzSanfaF6YNaJhdYu5uF4diqTzJ/Jmkig=;
+        b=Ln3klXeXuGzlB0Y0J9ch7tlCSwByuRA1tcgappZm3UGRjvIsLoSQ5Q4kp4t9WHqk2E
+         HJM9PDHLxJ1wIS0W7oT41WkcMmznIkdI2GkgnY+zQLcu1eHrOgo0R9ZrC6f80xyiOTuy
+         n2ysaNBEWo3dcL5QkJp0384YVyJh1xypQ+I06BcPFA5SAdL0jtpr8vJ5BRaeYIAdUYVE
+         +5SYp3lFXKuDir+lKJxLlVBxK6M3LbVHH249+veIX0bLJd8hWSzVRsbRlH5nHIJtxnbb
+         s6jixUkWGqklOr0DBvTCHir8tGb0ew8YJsBxSaEME441mEf0Log7zITKucPcC4r2GbEa
+         aTiA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9diYy4SsKTDftaZgnPGmIU9y18gkXBWLcnVcrPVegYytc6Oh0WuQTx+cpYC6qpp+hdQ4s1ealW+EgCxdA@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYBpaJO+1fcZrIFLraBgJ6GtwtbbYdldsKJsHUnq0WAs93xiJM
+	FVjJrv9KsTgwKOF4TtpIFqU2AiOtGILoYgbF1R3i2SkgoZKot9VeoyIvTG4N9b4TfjDYSyS1Ts4
+	CSJjH6ssL/wAMIdILrNBTTz7on4Cq6BC9vu+AfVIR
+X-Gm-Gg: ATEYQzyhyzWerMBdwgrA7w3IvvGrRj8L2ZaOn0sbI9Y/xb3VbNqu9gARNxiRnnW9HJH
+	BSMpHcba61nwJ+w7K/a6H50hiN32blUM8y10YSOVK2XVoBQLwIYhanlLlLEf5bluyO1Q+Xyot+f
+	iIA5Tu7PSihK8eTSLsQUL7gm8qCFaYlMs/XKRsSmIk0/ICISFbOnHG1YC3nqtF6A2JM8FSOM6eZ
+	7oOZu32wlUI5qmmdyG4sKdnEsJUHGBTl02FTt4a7O1HUT9id/ipUSdbcpBPy67dRr48f9cQekAE
+	GeE8aL80O9/eLV0XULHHx7btlMFG+UrRZC8RYAe6tZWC2JVQfSwhY2/ryItXHTGZDVn7FIBfMbe
+	Pefdx
+X-Received: by 2002:a05:6000:2601:b0:43b:4352:1bd9 with SMTP id
+ ffacd0b85a97d-43b64290e38mr18021646f8f.48.1774270191803; Mon, 23 Mar 2026
+ 05:49:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260323-module-value-ref-v1-1-32507e1085f1@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAE82wWkC/x2MQQqAIBAAvxJ7bsEsQ/pKdLDaasE0lCKI/t7Sc
- QZmHsiUmDJ0xQOJLs4cg0BVFjBtLqyEPAuDVrpVta5xj/PpCS/nT8JECxprm9E4akftQLJDJN/
- /sh/e9wPMllPHYgAAAA==
-X-Change-ID: 20260323-module-value-ref-5884b5ae6b2a
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
- Aaron Tomlin <atomlin@atomlin.com>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, Andreas Hindborg <a.hindborg@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2659; i=a.hindborg@kernel.org;
- h=from:subject:message-id; bh=NH04tbhY13Lrlqx874OPUd7KS2vl12I5bTlzcU2/oJo=;
- b=owEBbQKS/ZANAwAKAeG4Gj55KGN3AcsmYgBpwTZQJe38c0N8srN7yP7r8zhkhUKIQ+AKgdSug
- L2HwHu0kz+JAjMEAAEKAB0WIQQSwflHVr98KhXWwBLhuBo+eShjdwUCacE2UAAKCRDhuBo+eShj
- d7OQD/9YJw/Sy3e1/2oOd1WEoJx5wyy9uIhQDuFrxDeT4ou7AssYlgPKaYmikFwQc74rVMLxzVj
- mIvNW9dOvmWqqGOofi3W4Qf532JEmCORuMMuKqCi5NU+FKN5Qh6E8Fpn2WSVJ0wUZ/FQ8j9G8OG
- 8deXe58OBw3/f2imiJ2KLFGITOumuc7bb18QDnIo+jrk10ir6Rx9jnjG6W2d9CckzAjcfayO4wi
- i7X8HqKyP9iE8Wlsx2HAVEnv6McCbvbA3qzubUgyfqoNyZkE467yFM8d8h+JYTneLY86Y/cbah9
- 7YicEnLwRAxELVg/lORv2+Vzxa6jH0lbeAWFjTgy2zPSuvYW+PVUcOVA5uS4PdI0PeESiG0ysxJ
- Pj05Z35gYlbutFtTxJQ4AQ9K/NyYZe3zy7iYJqVd8Ju8TNj8Q1EL5u/Oi9w1vWqwPmu2aq7op8I
- rjQXBzYXsiQDbNlyyy25cnWnDQ72cJU85B1rKkBx2FP6jKDjNWg+U5ifxqMs+LJJLdGi1vvLQV6
- 05EqplAUqbXz4Ny69UM1pNfyGp9Bpx28lQ9YcgUpSQnYzW9AYC6ahGni+45tpl3v7nXUwF0guST
- dziLwSi5bNtWiRDApaB7Iw4FH1SSbLcW0WMCeNwtudYYd3zDVm7r0Q5K1uDvRfK3fG81FWSHGzM
- b7BSHwZ+SGlEPCA==
-X-Developer-Key: i=a.hindborg@kernel.org; a=openpgp;
- fpr=3108C10F46872E248D1FB221376EB100563EF7A7
+References: <20260323-module-value-ref-v1-1-32507e1085f1@kernel.org>
+In-Reply-To: <20260323-module-value-ref-v1-1-32507e1085f1@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 23 Mar 2026 13:49:39 +0100
+X-Gm-Features: AQROBzClFWF7ntMYn_osU78DJFaK2xsZEw0vRnwYGIT2wSlft8Tag7vijAEcrPw
+Message-ID: <CAH5fLghnHvnSNsZ_ME14KiPeKh2V93L1ZQJOqs0Ztn4YToam8g@mail.gmail.com>
+Subject: Re: [PATCH] rust: module_param: return copy from value() for Copy types
+To: Andreas Hindborg <a.hindborg@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Aaron Tomlin <atomlin@atomlin.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Rename the existing `value()` method to `value_ref()` which returns a
-shared reference to the parameter value, and add a new `value()`
-method on `ModuleParamAccess<T>` where `T: Copy` that returns the
-value by copy.
+On Mon, Mar 23, 2026 at 1:48=E2=80=AFPM Andreas Hindborg <a.hindborg@kernel=
+.org> wrote:
+>
+> Rename the existing `value()` method to `value_ref()` which returns a
+> shared reference to the parameter value, and add a new `value()`
+> method on `ModuleParamAccess<T>` where `T: Copy` that returns the
+> value by copy.
+>
+> This provides a more ergonomic API for the common case where the
+> parameter type implements `Copy`, avoiding the need to explicitly
+> dereference the return value at call sites.
+>
+> Currently `value_ref()` has no in-tree callers, but it will be needed
+> when support for non-`Copy` parameter types such as arrays and
+> strings is added.
+>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
 
-This provides a more ergonomic API for the common case where the
-parameter type implements `Copy`, avoiding the need to explicitly
-dereference the return value at call sites.
-
-Currently `value_ref()` has no in-tree callers, but it will be needed
-when support for non-`Copy` parameter types such as arrays and
-strings is added.
-
-Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
----
-This change was suggested at [1].
-
-Link: https://lore.kernel.org/r/87cy13swpw.fsf@t14s.mail-host-address-is-not-set [1]
----
- rust/kernel/module_param.rs  | 11 ++++++++++-
- samples/rust/rust_minimal.rs |  2 +-
- 2 files changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-index 6a8a7a875643..5dcfe2ba87a1 100644
---- a/rust/kernel/module_param.rs
-+++ b/rust/kernel/module_param.rs
-@@ -134,7 +134,7 @@ pub const fn new(default: T) -> Self {
-     /// Get a shared reference to the parameter value.
-     // Note: When sysfs access to parameters are enabled, we have to pass in a
-     // held lock guard here.
--    pub fn value(&self) -> &T {
-+    pub fn value_ref(&self) -> &T {
-         self.value.as_ref().unwrap_or(&self.default)
-     }
- 
-@@ -146,6 +146,15 @@ pub const fn as_void_ptr(&self) -> *mut c_void {
-     }
- }
- 
-+impl<T: Copy> ModuleParamAccess<T> {
-+    /// Get a copy of the parameter value.
-+    // Note: When sysfs access to parameters are enabled, we have to pass in a
-+    // held lock guard here.
-+    pub fn value(&self) -> T {
-+        self.value.copy().unwrap_or(self.default)
-+    }
-+}
-+
- #[doc(hidden)]
- /// Generate a static [`kernel_param_ops`](srctree/include/linux/moduleparam.h) struct.
- ///
-diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
-index 8eb9583571d7..60d03df6cd80 100644
---- a/samples/rust/rust_minimal.rs
-+++ b/samples/rust/rust_minimal.rs
-@@ -28,7 +28,7 @@ fn init(_module: &'static ThisModule) -> Result<Self> {
-         pr_info!("Am I built-in? {}\n", !cfg!(MODULE));
-         pr_info!(
-             "test_parameter: {}\n",
--            *module_parameters::test_parameter.value()
-+            module_parameters::test_parameter.value()
-         );
- 
-         let mut numbers = KVec::new();
-
----
-base-commit: c369299895a591d96745d6492d4888259b004a9e
-change-id: 20260323-module-value-ref-5884b5ae6b2a
-
-Best regards,
--- 
-Andreas Hindborg <a.hindborg@kernel.org>
-
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
