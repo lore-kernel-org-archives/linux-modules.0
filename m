@@ -1,90 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C643A3EF0B6;
-	Tue, 24 Mar 2026 11:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D2F381AF6
+	for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 12:53:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774352381; cv=none; b=bWB8xXRFWQL0gInkQNXNRYrojvIHiX9wwKn+TZtTlgMGF1nQ6VISKF6YgfSM+63YIqsv6lUSFPhMjWhCLHcrMFVEzmoksCAW2Kn3WcLg8rQuBpUUOQ0Py956tEcQFQXBNV06/JJ97RIkiqZ7WgkoTzyvEbv3JFfVAGqCA7t6PU8=
+	t=1774356800; cv=none; b=cAqH5PpW7s8xgjpL0syRBXVvzuKyuB5TyKBTleEa+fYcf7Ge5SbOd4m3lUgk7gcqAnFMU+JtQ4QklymeJKgR08gCEc42CiWwVLqgOZmIw/f6OQjmrq5522As3t4beetzj+iTrG4UBMXWfQ7RmB5WeJrCZWFNrh+Wd9lwlwxGnj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774352381; c=relaxed/simple;
-	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
+	s=arc-20240116; t=1774356800; c=relaxed/simple;
+	bh=czOsuqvFQqvM6JI9RdObWMtbvC9KS3m+61g9x9nKrZQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cY72cCSg/ES/VQQ98/cWlEbzZXAE3sQ0WAKV6G56P9h+fd7Y9pviS4TMD0yGTZm1JBIFAYSJeNJN2hv+xA3aU4mNXgzvx5LU7UAGrFgbcNZt+4X1v7sFMKKZjuhaOEV1In6xL4+ayzOVIn3pATBh2bV6KBjLny3869wtQMMCI4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olXoGqqK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=aA9P49K65/DfNkTRobt6EpZUaFuUH9l06GUGw22/GaEsMTP5h3WDAVIKR020zt8ZGsIpk150RhGc3FxDwmrGGsi62hppaCorM7fo8LmuE05YzN0DftWobwSOzKFuehza0x72VdHr2enExQ25Ip6N4pNYPTTFEquezUNa6mnEFDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=LESe/nCj; arc=none smtp.client-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olXoGqqK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDDDC2BCB2;
-	Tue, 24 Mar 2026 11:39:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774352381;
-	bh=UknkrSuNDYtTn/8MeNcb6hXJiGQu0qdkPOIQvTQmQ2I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=olXoGqqKINrHT9MBi6UPkYfU0ZKw58C6sHbsrU3gtf4636xlcN++qk0VzQMXWxDWR
-	 RjmJ6XKhs+g0WIzxddkigtIvUu+JTdZJmWQpVScLIGjGk0mgOeCa+oLzslnceDcKaG
-	 XXMNYxhQZ4u0C2UbNsSUt6nVjTWuayrXcjW28BiZtmw09XeLaoHQPh8+CSoYBV3J1F
-	 ceqOX7ceZiuusH8+vqKDrtdVJRVMM5uTfwyA3Yrf1xnC7RPx00LjSDTHzcok7q9KoA
-	 aKiz3rbo7ie/MbZ/8nW8jnV0gjc+LVYjGUP16XWI8MdzgJtY6FED24yR2nsYTR6sCz
-	 8YBc+94F/v0Rw==
-Date: Tue, 24 Mar 2026 07:39:39 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, David Gow <davidgow@google.com>,
-	Kees Cook <kees@kernel.org>, Greg KH <gregkh@linuxfoundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Juergen Gross <jgross@suse.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Alexey Dobriyan <adobriyan@gmail.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Petr Pavlu <petr.pavlu@suse.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-modules@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 0/2] kallsyms: show typed function parameters in
- oops/WARN dumps
-Message-ID: <acJ3-2o0yxsFWwGJ@laps>
-References: <20260323164858.1939248-1-sashal@kernel.org>
- <acJR51EAjn-7EOPm@krava>
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="LESe/nCj"
+Received: (wp-smtpd smtp.wp.pl 38048 invoked from network); 24 Mar 2026 13:53:05 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1774356785; bh=3I8BdEJ6fNQCElTQ50WkDj9eLS0W2x/JwM2lSBg4wFg=;
+          h=From:To:Cc:Subject;
+          b=LESe/nCjch/35QijCLpbvuDy/b+jpWkftSuhHZI/PMLG8528l80AwGDzUmerECn1U
+           KTIIgMtyJ9l2+SDRN+9TkfaUjx9bmvJDyVfHcyrFnC28gXwe612NrnzoUYGtFw462n
+           iDZaaOIl4xopbJZLYk4RUwEqrOeE+wcZyjym0ODoQv1V1ZuTvA7HkuMBWwayZZF/lv
+           uOoBfC3K5n5uFXMHsjLaO3KQwstZnb/HrjJ7QRixvN+83LBHNoIgJc/BotI7JNpT2z
+           RQ+Y6NU0bDaA8T5EJowXPnvEE2msTGb3lhHanAdNGNK/wdewaUXBDNPHI5wpjeH6q/
+           JWRLjt8J6OlKA==
+Received: from zbigniew33.net.autocom.pl (HELO localhost) (stf_xl@wp.pl@[77.236.6.42])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
+          for <petr.pavlu@suse.com>; 24 Mar 2026 13:53:05 +0100
+Date: Tue, 24 Mar 2026 13:53:04 +0100
+From: Stanislaw Gruszka <stf_xl@wp.pl>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jordan Rome <linux@jordanrome.com>,
+	Viktor Malik <vmalik@redhat.com>
+Subject: Re: [PATCH] module/kallsyms: sort function symbols and use binary
+ search
+Message-ID: <20260324125304.GA15972@wp.pl>
+References: <20260317110423.45481-1-stf_xl@wp.pl>
+ <b6030f42-b4d2-4e52-acec-76e25c0f40db@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <acJR51EAjn-7EOPm@krava>
+In-Reply-To: <b6030f42-b4d2-4e52-acec-76e25c0f40db@suse.com>
+X-WP-MailID: 03314cd79dc357a376b4607d17023d82
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000001 [AcKt]                               
 
-On Tue, Mar 24, 2026 at 09:57:11AM +0100, Jiri Olsa wrote:
->On Mon, Mar 23, 2026 at 12:48:55PM -0400, Sasha Levin wrote:
->> Building on the lineinfo series, this adds typed function parameter
->
->hi,
->could you please specify the exact tree/commit and point to the
->series this patchset is based on?
+Hi,
 
-Yup, sorry, I should have noted that. This series is based on Andrew Morton's
-mm-nonmm-unstable branch (git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-mm-nonmm-unstable) since he took the base lineinfo patches and these build on
-code adjacent to it.
+On Mon, Mar 23, 2026 at 02:06:43PM +0100, Petr Pavlu wrote:
+> On 3/17/26 12:04 PM, Stanislaw Gruszka wrote:
+> > Module symbol lookup via find_kallsyms_symbol() performs a linear scan
+> > over the entire symtab when resolving an address. The number of symbols
+> > in module symtabs has grown over the years, largely due to additional
+> > metadata in non-standard sections, making this lookup very slow.
+> > 
+> > Improve this by separating function symbols during module load, placing
+> > them at the beginning of the symtab, sorting them by address, and using
+> > binary search when resolving addresses in module text.
+> 
+> Doesn't considering only function symbols break the expected behavior
+> with CONFIG_KALLSYMS_ALL=y. For instance, when using kdb, is it still
+> able to see all symbols in a module? The module loader should be remain
+> consistent with the main kallsyms code regarding which symbols can be
+> looked up.
 
-There's no direct dependency between the two, but they touch the same parts of
-the code.
+We already have a CONFIG_KALLSYMS_ALL=y inconsistency between kernel and 
+module symbol lookup, independent of this patch. find_kallsyms_symbol()
+restricts the search to MOD_TEXT (or MOD_INIT_TEXT) address ranges, so
+it cannot resolve data or rodata symbols.
 
--- 
-Thanks,
-Sasha
+This appears to be acceptable in practice, most kallsyms_lookup() users are
+interested in function symbols. Users relying on CONFIG_KALLSYMS_ALL=y
+seems to use name-based lookups or iterate over the full symtab. Though kdb 
+looks like the exception: it can resolve data symbols by address in the kernel,
+but not in modules. But, I think, resolving symbols by name is more common for
+kdb.
+
+To make the behavior consistent, we could either: extend find_kallsyms_symbol()
+to cover data/rodata symbols (for CONFIG_KALLSYSM_ALL), or restrict
+kallsyms_lookup() to text symbols and introduce a separate API for data symbols
+lookup for users that really need that. I think second option is better, as
+some (maybe most) users are not interested in all symbols, even if
+CONFIG_KALLSYSM_ALL is set.
+
+However, either would require substantial rework and is outside the scope
+of this patch.
+
+Regards
+Stanislaw
+
+> > This also should improve times for linear symbol name lookups, as valid
+> > function symbols are now located at the beginning of the symtab.
+> > 
+> > The cost of sorting is small relative to module load time. In repeated
+> > module load tests [1], depending on .config options, this change
+> > increases load time between 2% and 4%. With cold caches, the difference
+> > is not measurable, as memory access latency dominates.
+> > 
+> > The sorting theoretically could be done in compile time, but much more
+> > complicated as we would have to simulate kernel addresses resolution
+> > for symbols, and then correct relocation entries. That would be risky
+> > if get out of sync.
+> > 
+> > The improvement can be observed when listing ftrace filter functions:
+> > 
+> > root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> > 74908
+> > 
+> > real	0m1.315s
+> > user	0m0.000s
+> > sys	0m1.312s
+> > 
+> > After:
+> > 
+> > root@nano:~# time cat /sys/kernel/tracing/available_filter_functions | wc -l
+> > 74911
+> > 
+> > real	0m0.167s
+> > user	0m0.004s
+> > sys	0m0.175s
+> > 
+> > (there are three more symbols introduced by the patch)
+> 
+> This looks as a reasonable improvement.
+> 
+> > 
+> > For livepatch modules, the symtab layout is preserved and the existing
+> > linear search is used. For this case, it should be possible to keep
+> > the original ELF symtab instead of copying it 1:1, but that is outside
+> > the scope of this patch.
+> 
+> Livepatch modules are already handled specially by the kallsyms module
+> code so excluding them from this optimization is probably ok.
+> 
+> However, it might be worth revisiting this exception. I believe that
+> livepatch support requires the original symbol table for relocations to
+> remain usable. It might make sense to investigate whether updating the
+> relocation data with the adjusted symbol indexes would be sensible.
+> 
+> -- 
+> Thanks,
+> Petr
