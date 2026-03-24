@@ -1,94 +1,95 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDB14035BC
-	for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 15:03:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2264035C6
+	for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 15:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364624; cv=pass; b=cG6zvW831vn6YctLwxZl9gkL091v2ki9uP2m9O1E2MoAv+412ZcBCKkL3urCqf8Uw3QFTZz+o5KEw8gbg10zsgwzDYBj4sAhaB2B04gi8k0nmVKo5u16rQao8yWxcB5LUJx0hKK+PsNvQ1exB3NMNE4DOBXQb0hB0UutIv9jecg=
+	t=1774364874; cv=pass; b=rZoXqlCubvxIQQYmrLoW4g53iLepz+fOCfld0KBedf/aDUO3fj6eOOirmus7n3Yp38EOUvx6WuttTA7IcDVYRMIbxMRRTql740WpqspZG2yEr676z67zdvyhFAW3Xo5dzjRhKXuWcUurW2Bs6w7SijLJPEMso0sU1LsrrV9Y+CI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364624; c=relaxed/simple;
-	bh=pGbN+jWmTUnUhmVdSv4PjGYUGPR4AJuGRrmDZfe9TOk=;
+	s=arc-20240116; t=1774364874; c=relaxed/simple;
+	bh=1Z6JMNCHSGaxtIAix0aAtaZagu/pLyzUz7fEOf63FQo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N81PoRE/pWtRx0qkUjyrH3QRZqnD8YnKfgJn6gikZnSlogF9f3X42U96lljJ3spGDJQfGtSemOE0UB+M6noQjc+BTar/NDESUQ1HUMbTTU4n4Z82rYoK1i6tknmNDqpwZdRqCFt2GS/fF5R+HuSkAFAFcz8nr5ssXT7OQIoSqPc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=siUVWbSY; arc=pass smtp.client-ip=209.85.221.47
+	 To:Cc:Content-Type; b=RAETc51iRsAFet2AcXJMes2YcoXNEVPMvYimBQMfkhkFScf1TnJg85MpOhO7CNFldaAzPo4JvQphzu1fexbqKnDLpuFPEBwvxklWp8Q7t09MmVlgArRAaZrjNKbcjvuK2Y5L6lBr4TNLdYqsMdIh5sX8/0abNDIL8iSESho4m5g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PhE2htIX; arc=pass smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="siUVWbSY"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43b4d734678so1400708f8f.1
-        for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 08:03:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774364622; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PhE2htIX"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-483487335c2so43334335e9.2
+        for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 08:07:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774364871; cv=none;
         d=google.com; s=arc-20240605;
-        b=VZ0PKoXPBlgVwc29DcgAnvBOol6+d+VFYO+MZYwkARJsVTj7x9m0iOCydVih+Al4oN
-         fDBpp5YBTsrzU4AZUzJrX62dcG+59krimMWshMSXut69Yl9DvoW1tuBczjmWdOKon1pq
-         o3XXt1YvJuGVCtgjMtCtzPqqki6Fl48pX/j9agUGSws4U1AqNsRFfbYnSdzXm707PNHJ
-         P+hCJABqT/jvpeCYjS819McPfWi6qNILmEAkrZoK7aPVbxlBuG/Ms1ZOWFbWYjkk6LuT
-         hLmQDV04tx04d2Hj+vBVOgFQYS63NehWnU0ZcQEvOt7tOfSpmxB0pyLnWSoyqvpKDhOB
-         HKIQ==
+        b=ibnJA/hjlizEZgFmLXbqEZpSy+D8lueMdkSVlECrPEarr/mJ21OMzcBMEG1/UlyqFH
+         Ks6b51TAvAuGk56Y9sNtZncPHsYnYZmeuOpDiN871I1KD/kxeh/2rTHY6fumRC7CPzPg
+         SaKcDjZ+T1v/G796UdUk7t+xSdN2UhjBm6WRg4iRSfNpmdkmlhzaqqZjIVzCPKfSmkU8
+         Papej0ZDKRKm/SgvcZinD1VwUJxkxDxy9mlq1oWS3F8vx7xpf2epC5ds8ffWuw/EglKE
+         RB20F+uRyBj7EVsPyHnNQgo0hSw2OX4g5hd5DUnvc909GmfI2upwcSqt7/N0BBsGhQOf
+         rPTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
-        fh=JkVEuNQQE7dn63KhR2bqd+b9fhscLOGVQpyzkam5108=;
-        b=HF319jokU3BZfBprMsbAxsUjKVMypmOd9+qsmqzj/z2PYtqNgHvIBDfvH9zwD3UWq4
-         EdJOxkMaT22x6Be1DXF9e9+NN9rPU0cmx/Vh1HWMPc4tDyc+HMdJIKd88xtphESWfzEM
-         ZntD+TNGhXlBRt3BqpNaGSoUsQ1DE/nbQgDbIBHDNpkfBETrbD+6s987PAU2hQynWur6
-         jbuxZG83aQ+VhRPPHUVMW36iIQlI5scpaZiQn6nJip21bSoBao54g7ClyrIM6g+AyQz+
-         hek5ebj7+DXmshUPMi9flGZe/QNngyiSrnp59bpNFvZDBnMgA+NUSymHfXl8EJGCJqVW
-         7z1w==;
+        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
+        fh=5SnwfD2p7mVVsbhBjYIERfm5YjiBnjDcjq+gf36te/U=;
+        b=ckn2PqWLFXYFW9jm57eLG8W1HLz9ePcGW+PkWWPWD/Y/LHjRmluKswbSPjwaieN7KI
+         Ww6q3KaefMmn89zvhCKDhgqks2kHMqtlw1VpqJ9Ypv9/iwAPzuaBqImiHuYqSPN9XmCl
+         Nalr7Wb5+WalAoK++GvZCWYCNrR7G570xGR7TO2ooM+wYq8W/+wr4cgUlO753QTG5fi9
+         Tp7dZkvlkyl3RH8LCUITDfn5VDIU71QcFKj9VMGO4oc8kp3LhLmb9CYSdbgPP5rUxwfX
+         Cjtp4ISi2OcDdTDYSxwNAzFx13YbVEzs9akHzo5XNO/8vWb+4OO77oOOLiJ4xyI9Uyb9
+         Hf0g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774364622; x=1774969422; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1774364871; x=1774969671; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
-        b=siUVWbSYsavvuxYNjP/noYbF2sxVqbJG6PaAsB9okjKvG4Aw9y6LDOLp5hiqMfM5ke
-         tD7QxgOChmurznz/jclKWPLualaCjOt5+yIbyBsTzQrH8ogjBbxzmJa5C8IqbKDGzY+0
-         N+rxbhTOA+aJX1jJnKSgnOpsxYDj//mNeWklMxXUWL2ohm/SMETvB9MkMIxLq+Ea+jwX
-         zv6TnqozUCoU6aT8Fks/btbFo1BwM1nnYq8JI50vzsGEvC3hFeDGsq6VNFp/iYvbmVmf
-         bS/6Yx1EwlafiRevKRIo34SPtKeyi5qBkiydVySWmV8KG+ynX0l7s0PnX6AY63fMduCQ
-         mUvA==
+        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
+        b=PhE2htIXEQo5bYFb7KluljetQMoLlA9n2RRoXwzblUDzswJ8bFRC6AM5DRa+GExEBN
+         FZGpT0eVO+zwKmDBhjlBIH5iZc6Jbb4aGj+Rm40RMZ5qOlrDF+nEJ4+hkxlUhCT2xYZG
+         67EJ4PzVn1dA/LNeZr73nxAkCCp4C1SiD5w29nFBlv8bZI2ZGHEUdjGdZzygTOR4Prpx
+         09ESScw+O9kLOAdlDMApNQWbRFOXjzOBQQteLYK3DMmvaN1vEh7qejhC1P1QvjIGg8bf
+         LO4zH2XZV/QtPOEBc0k+CTr3Te3THej35F3tYmzoP0O5O+sQbP9ywiMg+bCB8bJ4kEvi
+         tpcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774364622; x=1774969422;
+        d=1e100.net; s=20251104; t=1774364871; x=1774969671;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7pygaIxmYy8vrcTultPBr5yJtweQmbJOPxaBB0Dq1tM=;
-        b=hIgig1Kjotb2RaArPooVeIopfA+sFGE+7zQFR8iaLtLPsCtvbm4+PfCcs1a2Q67UWr
-         xU/YUFEWIHMUpGwtAGujDJEv6EKcY8INPRDtBA0yxes1bB/+8NEN+lt27v38UBonequE
-         NHru7B48uVOqd0hFdLXtw5QDhmNymiPheqQdv4SZK6zYBe5CstblspXC/z85+QeznTJC
-         GShs9HqcuBQDDJNkxL4aF6WxWv6uDl+2g4YpHjGZvb+6cY1DxbxD+d+hQ+Q5shNnxDGU
-         I0+IgIo1oCASxhNZBFFC5QRD77CFBQBGBGknHPeA7hYYYtq7vsucM4lZ9SPcSMoQ/wvj
-         BTLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2SWH/MzEeh4p7HmnxChX1qXFbQ4Nf/RI6i/H1DQ+BeJxVYU3mNrKC4nkzD8+8o1a9nv7EGfWGdhG+rPAV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyt3vJzt4wg/bA15OAZPJmE5foRa3RVCI60Qy4Ypi0gJUBJt4IB
-	r2umjl1AxtFUm0BhnfU1QbkcL+GsFL4A7ru3nvrpaDDs/zp/poegnQdVW/eHT4c0K3vmTPzuzEG
-	hb41isjeohu8tvpiTKSn3gOWA5iAYUQQ=
-X-Gm-Gg: ATEYQzyBriccpGdn3RakPuXQM8qo78L6wWzlelxFfI/tXeJ+CBKbnDWVfJ2loJ0xtrQ
-	X6h3vhqQJfBxgacUMUj6Gwf4egPcUzUGM3z3IcfUdEd+7J+MWS+S8nef6AX178Du+dCPwUNplcE
-	IDwnkidWpp6KhJ5C7VrIS9DRSbRcIt3FWu3Nnt/luo7SK+xNR3P/vsXFGx6gOpMEkfPDLVwaPzN
-	qw2PjHsRoMx6zDQwBzJsFBh5q1VF21hb5VvloprwzAhF4x5iiGWtQCN0U/2vjc0TBJ3d/c7gktA
-	qs/0C4tEmyzO1/lIpRt8gc8+WWCBotEjN5DBw6CxcXrOJxvIVksWhoTgTohf1ngka6j0OdibX7r
-	ANadz+L3rbJRDRBGyQK+1It24DQ==
-X-Received: by 2002:a05:6000:420e:b0:43b:5231:e94a with SMTP id
- ffacd0b85a97d-43b6426580dmr25272373f8f.30.1774364621590; Tue, 24 Mar 2026
- 08:03:41 -0700 (PDT)
+        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
+        b=cjq6rtvuOEKn5ROQDUQNk59S1hNdcfyHgqD3C/PpTq7TUDnSF4f1aRNLJAfZ74aVsJ
+         kUEyhc06Ga1/LVqgZSbn2vY4LpPu0a1ne8vSw6rJuxQkJ5LbhaapJo0JDrcqMa1N3bCc
+         9XWAzxrv1udhiyKAiqX4y/DAT7xmvcptpz0jCMqTb1bJSqdmn4qNMNnCzScOCOM29Gt6
+         Dpue7PDeYZG/OA1CCeUTwAS+X2oXn6ll67HXQx0ZyIZIaxHurilqOT5FM9WgJx1ubcEO
+         LvFgIi3G7P2lDQkrtC7yh2WErsc//qFhnEwXuV8aUWtDSYGkNug/ZhydtEwpSk5DpDPX
+         AkLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUoNUxj2qSRrXXoWWV1/CMQToCbGX8OVZhNK1WheBtT38dpr8pHSLhFth6qwvUMNgcbB6tbUK6I3VjZ8SgW@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPcRi4m3/GPllnPIYLstkHnw514mzmPgGpBoA3c7odAUmHDYdN
+	nZjehVA6eBWkIECpwq++LLWLRj/+C9bSYbdo+WxQLNPGG4AfNzttLnLz4bNK6H4K2IkhQAQsu0t
+	yQVHWqKK5DraKBcaH37wh7Hk0kGTgUCs=
+X-Gm-Gg: ATEYQzza2OPOKN0S4pfm7NRAj9YjmVgarrYOCEpb+x3IqPq4eRFBbqo+uHjTa9HnbRe
+	6OUqp6cfVhirS7ygdKDZv0qQOQx3reF8bvhhjXI1BJTZlfZS5I19koQGipIfYIU2crCjCYFZaga
+	TQycrf5dVJ6yYBlYRKvuWbbZn+gaQ4jLxL/RWhMSF7il1gzrPKlO+3yJb7RxeXKO4AaRi6j1DeH
+	UPfXd1Piq+9+Hqk1YoEFGzxwPND0sQw71zIDrgrrLh4FnqiRwC0vcscmfM3NnA6Z9lCgKNZj3Wp
+	XpCXWr7VIoHYSl9X3wCpgcd6LtWUtFCRCEdT9Pzv22DRrU/Zv9e+FNGThilxEqfAb+WHcVBSRtf
+	gZwZ0lt2fzNbGQdnP/afpG/ZoMw==
+X-Received: by 2002:a05:600c:8489:b0:486:fd3a:fd22 with SMTP id
+ 5b1f17b1804b1-48715fc384dmr1835815e9.4.1774364871041; Tue, 24 Mar 2026
+ 08:07:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323164858.1939248-1-sashal@kernel.org> <20260323164858.1939248-2-sashal@kernel.org>
-In-Reply-To: <20260323164858.1939248-2-sashal@kernel.org>
+References: <20260323164858.1939248-1-sashal@kernel.org> <20260323164858.1939248-3-sashal@kernel.org>
+In-Reply-To: <20260323164858.1939248-3-sashal@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 08:03:30 -0700
-X-Gm-Features: AQROBzBtYHLNynVUYaVr0FFPgK1a9gR9szjQmqF2fXdYPXYOTswB5hwZbCigrcE
-Message-ID: <CAADnVQJjJwRtUQNZAhLoXF7DYprhU97xJReZg9izV7n3f7=uJQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kallsyms: show function parameter info in oops/WARN dumps
+Date: Tue, 24 Mar 2026 08:07:39 -0700
+X-Gm-Features: AQROBzBqtCVnV-aokcS_jfx2Rq64gl7691VsnwgJMvcALBoTl8K4Z3ivzRJzHjM
+Message-ID: <CAADnVQ+oBm7Gj3KScFujGwVKc5d2sqcK3MWX5K6dTAjekYitSA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kallsyms: add BTF-based deep parameter rendering in
+ oops dumps
 To: Sasha Levin <sashal@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
@@ -113,48 +114,44 @@ Content-Transfer-Encoding: quoted-printable
 On Mon, Mar 23, 2026 at 9:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
 te:
 >
-> Embed DWARF-derived function parameter name and type information in the
-> kernel image so that oops and WARN dumps display the crashing function's
-> register-passed arguments with their names, types, and values.
->
-> A new build-time tool (scripts/gen_paraminfo.c) parses DW_TAG_subprogram
-> and DW_TAG_formal_parameter entries from DWARF .debug_info, extracting
-> parameter names and human-readable type strings. The resulting tables are
-> stored in .rodata using the same two-phase link approach as lineinfo.
->
-> At runtime, kallsyms_show_paraminfo() performs a binary search on the
-> paraminfo tables, maps parameters to x86-64 calling convention registers
-> (RDI, RSI, RDX, RCX, R8, R9), and prints each parameter's name, type,
-> and value from pt_regs. If a parameter value matches the page fault
-> address (CR2), it is highlighted with "<-- fault address".
->
-> Integration at show_regs() means this works for both oops and WARN()
-> automatically, since both paths provide full pt_regs at the exception
-> point.
->
-> Example output:
->
->   Function parameters (ext4_readdir):
->     file     (struct file *)         =3D 0xffff888123456000
->     ctx      (struct dir_context *)  =3D 0x0000000000001234  <-- fault ad=
-dress
->
-> Gated behind CONFIG_KALLSYMS_PARAMINFO (depends on CONFIG_KALLSYMS_LINEIN=
-FO).
-> Adds approximately 1-2 MB to the kernel image for ~58K functions.
->
-> Assisted-by: Claude:claude-opus-4-6
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> +static const char *extract_struct_name(const char *type_str, bool *is_un=
+ion,
+> +                                      char *name_buf, size_t bufsz)
+> +{
+> +       const char *p, *end;
+> +
+> +       *is_union =3D false;
+> +
+> +       /* Must end with " *" to be a pointer */
+> +       end =3D type_str + strlen(type_str);
+> +       if (end - type_str < 3 || end[-1] !=3D '*' || end[-2] !=3D ' ')
+> +               return NULL;
+> +
+> +       if (!strncmp(type_str, "struct ", 7)) {
+> +               p =3D type_str + 7;
+> +       } else if (!strncmp(type_str, "union ", 6)) {
+> +               p =3D type_str + 6;
+> +               *is_union =3D true;
+> +       } else {
+> +               return NULL;
+> +       }
+> +
+> +       /* Copy name up to the " *" */
+> +       {
+> +               size_t len =3D (end - 2) - p;
+> +
+> +               if (len =3D=3D 0 || len >=3D bufsz)
+> +                       return NULL;
+> +               memcpy(name_buf, p, len);
+> +               name_buf[len] =3D '\0';
+> +       }
+> +
+> +       return name_buf;
 
-Nack.
 
-You asked claude to reinvent pahole and BTF and it did it
-completely missing years of fine tuning that pahole does.
-dwarf cannot be trusted as-is. pahole converts it carefully
-by analyzing optimized out arguments and dropping signatures
-from BTF that are not accurate. This work is still ongoing.
-For example see this set:
-https://lore.kernel.org/bpf/20260320190917.1970524-1-yonghong.song@linux.de=
-v/
-pahole isn't perfect, but what you attempted to do here
-is just broken.
+Nack. This is just awful.
+You didn't even bother to reformat what claude spat out.
+Which means you didn't think it through.
+It prints something that looks plausible
+which is the opposite of what kernel crash dump should be.
+crash output should be accurate and not a guess work.
