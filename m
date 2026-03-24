@@ -1,157 +1,148 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2264035C6
-	for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 15:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774364874; cv=pass; b=rZoXqlCubvxIQQYmrLoW4g53iLepz+fOCfld0KBedf/aDUO3fj6eOOirmus7n3Yp38EOUvx6WuttTA7IcDVYRMIbxMRRTql740WpqspZG2yEr676z67zdvyhFAW3Xo5dzjRhKXuWcUurW2Bs6w7SijLJPEMso0sU1LsrrV9Y+CI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774364874; c=relaxed/simple;
-	bh=1Z6JMNCHSGaxtIAix0aAtaZagu/pLyzUz7fEOf63FQo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RAETc51iRsAFet2AcXJMes2YcoXNEVPMvYimBQMfkhkFScf1TnJg85MpOhO7CNFldaAzPo4JvQphzu1fexbqKnDLpuFPEBwvxklWp8Q7t09MmVlgArRAaZrjNKbcjvuK2Y5L6lBr4TNLdYqsMdIh5sX8/0abNDIL8iSESho4m5g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PhE2htIX; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91201242D9D
+	for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 16:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774368024; cv=none; b=df9sGsUZoazJyqnaT82QXH3IGN0GEVazwkNepePpPt1qmfnSlRpG49AyctKtrHzqIqoJfkxo1ev5bMjepMjZjYqoS8uTw91Us7Gw0DEaoIPNRTUBc5nXubqXUN3Ul7pA2aQiMUrNmBBfzSP988SGUNOo236zWpfGBEDGjIl9oxk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774368024; c=relaxed/simple;
+	bh=o+cMkXZ4AL0yvc8YxODTxfgOpONgzCRH94hoPaiSk6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oQeXOJs4vDISNP0ac+cI7N/qFkNEHCc3CPIMBW7Dwc/tE072SfequGC7KKqcSyMsF6OdpJJFEcWpODGdyWPNja2X4EI1oXHG11CIfzMYXcwqnUD0h+iUlqjouojZKVVprdQaQdgyJcrlkSz4Kw/06LpMn9vnI166z2S9KvpmAwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KkAkN/7n; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PhE2htIX"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-483487335c2so43334335e9.2
-        for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 08:07:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1774364871; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ibnJA/hjlizEZgFmLXbqEZpSy+D8lueMdkSVlECrPEarr/mJ21OMzcBMEG1/UlyqFH
-         Ks6b51TAvAuGk56Y9sNtZncPHsYnYZmeuOpDiN871I1KD/kxeh/2rTHY6fumRC7CPzPg
-         SaKcDjZ+T1v/G796UdUk7t+xSdN2UhjBm6WRg4iRSfNpmdkmlhzaqqZjIVzCPKfSmkU8
-         Papej0ZDKRKm/SgvcZinD1VwUJxkxDxy9mlq1oWS3F8vx7xpf2epC5ds8ffWuw/EglKE
-         RB20F+uRyBj7EVsPyHnNQgo0hSw2OX4g5hd5DUnvc909GmfI2upwcSqt7/N0BBsGhQOf
-         rPTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
-        fh=5SnwfD2p7mVVsbhBjYIERfm5YjiBnjDcjq+gf36te/U=;
-        b=ckn2PqWLFXYFW9jm57eLG8W1HLz9ePcGW+PkWWPWD/Y/LHjRmluKswbSPjwaieN7KI
-         Ww6q3KaefMmn89zvhCKDhgqks2kHMqtlw1VpqJ9Ypv9/iwAPzuaBqImiHuYqSPN9XmCl
-         Nalr7Wb5+WalAoK++GvZCWYCNrR7G570xGR7TO2ooM+wYq8W/+wr4cgUlO753QTG5fi9
-         Tp7dZkvlkyl3RH8LCUITDfn5VDIU71QcFKj9VMGO4oc8kp3LhLmb9CYSdbgPP5rUxwfX
-         Cjtp4ISi2OcDdTDYSxwNAzFx13YbVEzs9akHzo5XNO/8vWb+4OO77oOOLiJ4xyI9Uyb9
-         Hf0g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KkAkN/7n"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-486fd5360d4so16401855e9.1
+        for <linux-modules@vger.kernel.org>; Tue, 24 Mar 2026 09:00:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1774364871; x=1774969671; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
-        b=PhE2htIXEQo5bYFb7KluljetQMoLlA9n2RRoXwzblUDzswJ8bFRC6AM5DRa+GExEBN
-         FZGpT0eVO+zwKmDBhjlBIH5iZc6Jbb4aGj+Rm40RMZ5qOlrDF+nEJ4+hkxlUhCT2xYZG
-         67EJ4PzVn1dA/LNeZr73nxAkCCp4C1SiD5w29nFBlv8bZI2ZGHEUdjGdZzygTOR4Prpx
-         09ESScw+O9kLOAdlDMApNQWbRFOXjzOBQQteLYK3DMmvaN1vEh7qejhC1P1QvjIGg8bf
-         LO4zH2XZV/QtPOEBc0k+CTr3Te3THej35F3tYmzoP0O5O+sQbP9ywiMg+bCB8bJ4kEvi
-         tpcA==
+        d=suse.com; s=google; t=1774368021; x=1774972821; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JZud2txb2+gokYF6qCswpOqRe8hThYc5D0An7F/T1G0=;
+        b=KkAkN/7nZwFHSlOrMHhFIszI7EZfNiGhn2NZaPp3knF8FbvT7qhEsjnixr18ZsPQ8F
+         Np694D1YOe7BoBzB06L6vrk44wLjWMWnkgXEjYUCNuk/nUAcrOazMZ/scQP6rctvOpQ8
+         LlUa3xx/PjV6E1b47uLOkTh4GrxZBh25woSoYps5wJzpOkbCjEWWEtHoIFpGIpZoSFIj
+         FX+VQxihc19Umdtg1EwdS+Qt0Q/v4QCIIVnV5969BwS118bpndgeKe1mzo4Y6KDlWneV
+         JFTCVf11QpRpe1vcHy7jPH+oE6oAejDbwwylsLzsf9nhEs0vc51h886yPsVqpln9Xq5q
+         3JFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774364871; x=1774969671;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BskBfui7rapELmoLhcbRuH9sFyg4/N10zalNMto/sCg=;
-        b=cjq6rtvuOEKn5ROQDUQNk59S1hNdcfyHgqD3C/PpTq7TUDnSF4f1aRNLJAfZ74aVsJ
-         kUEyhc06Ga1/LVqgZSbn2vY4LpPu0a1ne8vSw6rJuxQkJ5LbhaapJo0JDrcqMa1N3bCc
-         9XWAzxrv1udhiyKAiqX4y/DAT7xmvcptpz0jCMqTb1bJSqdmn4qNMNnCzScOCOM29Gt6
-         Dpue7PDeYZG/OA1CCeUTwAS+X2oXn6ll67HXQx0ZyIZIaxHurilqOT5FM9WgJx1ubcEO
-         LvFgIi3G7P2lDQkrtC7yh2WErsc//qFhnEwXuV8aUWtDSYGkNug/ZhydtEwpSk5DpDPX
-         AkLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUoNUxj2qSRrXXoWWV1/CMQToCbGX8OVZhNK1WheBtT38dpr8pHSLhFth6qwvUMNgcbB6tbUK6I3VjZ8SgW@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPcRi4m3/GPllnPIYLstkHnw514mzmPgGpBoA3c7odAUmHDYdN
-	nZjehVA6eBWkIECpwq++LLWLRj/+C9bSYbdo+WxQLNPGG4AfNzttLnLz4bNK6H4K2IkhQAQsu0t
-	yQVHWqKK5DraKBcaH37wh7Hk0kGTgUCs=
-X-Gm-Gg: ATEYQzza2OPOKN0S4pfm7NRAj9YjmVgarrYOCEpb+x3IqPq4eRFBbqo+uHjTa9HnbRe
-	6OUqp6cfVhirS7ygdKDZv0qQOQx3reF8bvhhjXI1BJTZlfZS5I19koQGipIfYIU2crCjCYFZaga
-	TQycrf5dVJ6yYBlYRKvuWbbZn+gaQ4jLxL/RWhMSF7il1gzrPKlO+3yJb7RxeXKO4AaRi6j1DeH
-	UPfXd1Piq+9+Hqk1YoEFGzxwPND0sQw71zIDrgrrLh4FnqiRwC0vcscmfM3NnA6Z9lCgKNZj3Wp
-	XpCXWr7VIoHYSl9X3wCpgcd6LtWUtFCRCEdT9Pzv22DRrU/Zv9e+FNGThilxEqfAb+WHcVBSRtf
-	gZwZ0lt2fzNbGQdnP/afpG/ZoMw==
-X-Received: by 2002:a05:600c:8489:b0:486:fd3a:fd22 with SMTP id
- 5b1f17b1804b1-48715fc384dmr1835815e9.4.1774364871041; Tue, 24 Mar 2026
- 08:07:51 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1774368021; x=1774972821;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JZud2txb2+gokYF6qCswpOqRe8hThYc5D0An7F/T1G0=;
+        b=lf0fzxT1xEyPLXY/SktiLCgnoL3nP22WGPtMOSO+LMccC8wPF178aBc4lZrOZ0K1RM
+         bfKXBE6Om7tHJxjb65OQ95/P9PReUzYYzHNJ/SCiIIA4telnKHoVnlJpFRfFnD56GdX8
+         NRkkTnkYpiiyj9Ga0fIBQnKXLj7uL9hQCtdaayqjhd8sh0BiGsEv1NprdIF787jgUkpM
+         zvpwfEbnDvdO68BUvY3EUGnx+1NSgg9f1AZAzda7oX7Q74m0RnY/YXwHNSHDW+YMPFnH
+         cY7QC8KTgdZtJVU4eds+CYJrNvxoqY1NETb4nDvMazSEpP16ctVXNO/PVL2MxSvISZuM
+         QHiA==
+X-Gm-Message-State: AOJu0Yz7AbERghXPas/DR2sJ9rHKCgjbIxRB9R7saBu+eBxtYoUU+miF
+	Kgbl7Lc5PxscgVYU8gG030/CW8xbcMTereYFJeIfkR3j0oq2xtvLudQMSYCvbPtNZU4=
+X-Gm-Gg: ATEYQzzmU8cblRM1aWAfi4Hwqu67wdzzvapDwHShG+eBSmGl1HCgn/dNMGU8d8ugN0u
+	hogkQmGrgYc6eY4yvP6a5l8jUV+NvxQdN0PGsQcIQqjDm47dF2fzCQ88kFWrhx1mBVxIlgrRuXf
+	RK7HDKeS8IKLw8NGOumrKOOYfc5cjf78rT5KuNS96RdgmyMYo97cu2mhdtlDCPNH2LnlMaSraiA
+	WEPoIxpLW1WsTLkqMsTMvq4nt/e1x931FVGQX8lfpwfrFh+ws/WCNeVkH/QxmnfjcDNxUZaJRPI
+	vrZCXwNWBh8NxO32TjLGTJviPSFp4XcF01aD6QTrms9wIcBcRKqwi+noU8XOIt4wKMjj78ZiSyy
+	KD6rG0fNl9mcaYAS1z+DnsEsWQ1MvoXBb2CKZKC797VQWl5MqPplS7c8rI6E7ZYEhbCbEPvc+dF
+	BMvJrkcGeOcL38y439zffgLK3byZk4SPcHDv2zVU2l7l3h
+X-Received: by 2002:a05:600c:8b31:b0:485:30f7:6e88 with SMTP id 5b1f17b1804b1-487160881a5mr4153985e9.31.1774368020765;
+        Tue, 24 Mar 2026 09:00:20 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-487113c4eb3sm68147455e9.0.2026.03.24.09.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Mar 2026 09:00:20 -0700 (PDT)
+Message-ID: <282574df-7689-4677-929b-b844e7201bd5@suse.com>
+Date: Tue, 24 Mar 2026 17:00:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323164858.1939248-1-sashal@kernel.org> <20260323164858.1939248-3-sashal@kernel.org>
-In-Reply-To: <20260323164858.1939248-3-sashal@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Mar 2026 08:07:39 -0700
-X-Gm-Features: AQROBzBqtCVnV-aokcS_jfx2Rq64gl7691VsnwgJMvcALBoTl8K4Z3ivzRJzHjM
-Message-ID: <CAADnVQ+oBm7Gj3KScFujGwVKc5d2sqcK3MWX5K6dTAjekYitSA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kallsyms: add BTF-based deep parameter rendering in
- oops dumps
-To: Sasha Levin <sashal@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Petr Mladek <pmladek@suse.com>, Alexei Starovoitov <ast@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	David Gow <davidgow@google.com>, Kees Cook <kees@kernel.org>, 
-	Greg KH <gregkh@linuxfoundation.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Helge Deller <deller@gmx.de>, 
-	Randy Dunlap <rdunlap@infradead.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Juergen Gross <jgross@suse.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-modules@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] module/kallsyms: sort function symbols and use binary
+ search
+To: Stanislaw Gruszka <stf_xl@wp.pl>
+Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+ Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+ Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
+ Viktor Malik <vmalik@redhat.com>
+References: <20260317110423.45481-1-stf_xl@wp.pl>
+ <b6030f42-b4d2-4e52-acec-76e25c0f40db@suse.com>
+ <20260324125304.GA15972@wp.pl>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260324125304.GA15972@wp.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Mar 23, 2026 at 9:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> +static const char *extract_struct_name(const char *type_str, bool *is_un=
-ion,
-> +                                      char *name_buf, size_t bufsz)
-> +{
-> +       const char *p, *end;
-> +
-> +       *is_union =3D false;
-> +
-> +       /* Must end with " *" to be a pointer */
-> +       end =3D type_str + strlen(type_str);
-> +       if (end - type_str < 3 || end[-1] !=3D '*' || end[-2] !=3D ' ')
-> +               return NULL;
-> +
-> +       if (!strncmp(type_str, "struct ", 7)) {
-> +               p =3D type_str + 7;
-> +       } else if (!strncmp(type_str, "union ", 6)) {
-> +               p =3D type_str + 6;
-> +               *is_union =3D true;
-> +       } else {
-> +               return NULL;
-> +       }
-> +
-> +       /* Copy name up to the " *" */
-> +       {
-> +               size_t len =3D (end - 2) - p;
-> +
-> +               if (len =3D=3D 0 || len >=3D bufsz)
-> +                       return NULL;
-> +               memcpy(name_buf, p, len);
-> +               name_buf[len] =3D '\0';
-> +       }
-> +
-> +       return name_buf;
+On 3/24/26 1:53 PM, Stanislaw Gruszka wrote:
+> Hi,
+> 
+> On Mon, Mar 23, 2026 at 02:06:43PM +0100, Petr Pavlu wrote:
+>> On 3/17/26 12:04 PM, Stanislaw Gruszka wrote:
+>>> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
+>>> over the entire symtab when resolving an address. The number of symbols
+>>> in module symtabs has grown over the years, largely due to additional
+>>> metadata in non-standard sections, making this lookup very slow.
+>>>
+>>> Improve this by separating function symbols during module load, placing
+>>> them at the beginning of the symtab, sorting them by address, and using
+>>> binary search when resolving addresses in module text.
+>>
+>> Doesn't considering only function symbols break the expected behavior
+>> with CONFIG_KALLSYMS_ALL=y. For instance, when using kdb, is it still
+>> able to see all symbols in a module? The module loader should be remain
+>> consistent with the main kallsyms code regarding which symbols can be
+>> looked up.
+> 
+> We already have a CONFIG_KALLSYMS_ALL=y inconsistency between kernel and 
+> module symbol lookup, independent of this patch. find_kallsyms_symbol()
+> restricts the search to MOD_TEXT (or MOD_INIT_TEXT) address ranges, so
+> it cannot resolve data or rodata symbols.
 
+My understanding is that find_kallsyms_symbol() can identify all symbols
+in a module by their addresses. However, the issue I see with
+MOD_TEXT/MOD_INIT_TEXT is that the function may incorrectly calculate
+the size of symbols that are not within these ranges, which is a bug
+that should be fixed.
 
-Nack. This is just awful.
-You didn't even bother to reformat what claude spat out.
-Which means you didn't think it through.
-It prints something that looks plausible
-which is the opposite of what kernel crash dump should be.
-crash output should be accurate and not a guess work.
+A test using kdb confirms that non-text symbols can be found by their
+addresses. The following shows the current behavior with 7.0-rc5 when
+printing a module parameter in mlx4_en:
+
+[1]kdb> mds __param_arr_num_vfs
+0xffffffffc1209f20 0000000100000003   ........
+0xffffffffc1209f28 ffffffffc0fbf07c [mlx4_core]num_vfs_argc  
+0xffffffffc1209f30 ffffffff8844bba0 param_ops_byte  
+0xffffffffc1209f38 ffffffffc0fbf080 [mlx4_core]num_vfs  
+0xffffffffc1209f40 000000785f69736d   msi_x...
+0xffffffffc1209f48 656c5f6775626564   debug_le
+0xffffffffc1209f50 00000000006c6576   vel.....
+0xffffffffc1209f58 0000000000000000   ........
+
+.. and the behavior with the proposed patch:
+
+[1]kdb> mds __param_arr_num_vfs
+0xffffffffc1077f20 0000000100000003   ........
+0xffffffffc1077f28 ffffffffc104707c   |p......
+0xffffffffc1077f30 ffffffffb4a4bba0 param_ops_byte  
+0xffffffffc1077f38 ffffffffc1047080   .p......
+0xffffffffc1077f40 000000785f69736d   msi_x...
+0xffffffffc1077f48 656c5f6775626564   debug_le
+0xffffffffc1077f50 00000000006c6576   vel.....
+0xffffffffc1077f58 0000000000000000   ........
+
+-- 
+Thanks,
+Petr
