@@ -1,154 +1,115 @@
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440AE39B967
-	for <linux-modules@vger.kernel.org>; Wed, 25 Mar 2026 10:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056423D47DE
+	for <linux-modules@vger.kernel.org>; Wed, 25 Mar 2026 12:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774432938; cv=none; b=SRKy0Nqv7o16xRTeDDqUX3xE5zHshFvUCdt70jj86GXciugZR3dh3aMCSgf0wnpPgAU+K0+NlSAD8aAWxW7LFz3a6CNCqz7ZTAO6P5eT0RSFcSBJmQd6Oa1UXUCgp4byRR19a47i/pCMzikBZwEaaSmuFeEEOYDA1WZH+XiLE+s=
+	t=1774442973; cv=none; b=k1t7PgW7Ekfph1I6wTXbblhXfl1wHckEvqt/tTMi2Kuw0d5nI4vxSciAFpxG6+M5UP6Z+0zSWLdNL3qnbsTexOjTus3j3Mr8UQ3daIYrA3SZc3o1OVaYCwBYKrSpjb6JFQtRMeBMLIVBHgzis+cq5TKav3xUSsrsYwvwDU/TzrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774432938; c=relaxed/simple;
-	bh=BOHQdiU/gvG8mcDwZGxgkiG7C1zsf4yixpRiH2WNyPc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V58opRJ061FiqB9VDRxxdvg8W6J+8CBzyY5C7+2XPnQf0EBX5Zyij9YsY4VCKlCeNQPdEIvzSkxe+YGQvO0EeFesxeRcJb6oeqiHA7qIvTV+1ziYKjk2Gx+pgB0XLD4prUgU/frjX8Qo+3N5M9RNLjeMCOUfDV1ydb3KZFWuPR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=P9l3nviL; arc=none smtp.client-ip=212.77.101.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+	s=arc-20240116; t=1774442973; c=relaxed/simple;
+	bh=0jbWB3FjVQp+P8Ybiw1JdATIo1RfpVsEkcvfvEH0fIQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cdi9rQmP6okhycaXqcUbZH5UM6K9DS46djxiqaf120pdKnbaeHnCfj2OO90B+a+Na2UQ1e28fLpwEtsbDgJp/p+eEUvHAva/0MgzQj5SwwOtymEFwcFsLa0chVVQlQKAZi9gq9Sa25/KPL17QSjxymsBnbDiNA7HmNrSR7jSD44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QsQTBQ2R; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="P9l3nviL"
-Received: (wp-smtpd smtp.wp.pl 45216 invoked from network); 25 Mar 2026 11:02:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1774432925; bh=WjvzYWzbjDqBs7Z1emu9dcy8LFxZG9M7Xjaah8E6lgg=;
-          h=From:To:Cc:Subject;
-          b=P9l3nviLmxoMmV1QNHAHt2ufbxAEyY0CuaiZoXFh4aud7k0AwYNFkmb3GK9b8qOBQ
-           ajX63NC4WN5y5MjhwjyL+0VydkI/IfDTpebBofGWsijE8zyYMqotFo7VG2fVZ3U78v
-           ul12DgoZ/6wae7DiCuRz1JXsZCr35nu/fYCT86l9apf0GRe+8cPXdMvLb1JwxAfcYB
-           sNYwXd0Aj/+SQ6Gs03GDbMvSnSfjh69rP9qWuqx4uFhZbUgQ5QFaA4EXDypiHm5Ztr
-           v7A7H2ggp4owWg2zIpZlDjhkBlwETtDe4CwzDo6sPw17pXpMJMpesN7jlzxdTBfkmP
-           W2WR1FlMntI5w==
-Received: from zbigniew33.net.autocom.pl (HELO localhost) (stf_xl@wp.pl@[77.236.6.42])
-          (envelope-sender <stf_xl@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with TLS_AES_256_GCM_SHA384 encrypted SMTP
-          for <petr.pavlu@suse.com>; 25 Mar 2026 11:02:05 +0100
-Date: Wed, 25 Mar 2026 11:02:02 +0100
-From: Stanislaw Gruszka <stf_xl@wp.pl>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
-	Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jordan Rome <linux@jordanrome.com>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: Re: [PATCH] module/kallsyms: sort function symbols and use binary
- search
-Message-ID: <20260325100202.GA22612@wp.pl>
-References: <20260317110423.45481-1-stf_xl@wp.pl>
- <b6030f42-b4d2-4e52-acec-76e25c0f40db@suse.com>
- <20260324125304.GA15972@wp.pl>
- <282574df-7689-4677-929b-b844e7201bd5@suse.com>
- <20260325082648.GA18968@wp.pl>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QsQTBQ2R"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-439b6d9c981so609323f8f.1
+        for <linux-modules@vger.kernel.org>; Wed, 25 Mar 2026 05:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774442970; x=1775047770; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BJ4RwDdYC7l5LX4+kxPiqchKwdT0zRAfuYVx8dHTGTI=;
+        b=QsQTBQ2RkrQE7IMnUQFMVZf91MzfH5VhYOdj1f6Kc0qHkUjbpodcFhfNqvP7j00lIL
+         7+0NS3ce2sJFLeV0zP1vFfjxIhzEfBOaUThEj56njyTJBz08hVYC3GsWPreyMX0/s+SI
+         bqiSjb8e/MteSBDYDfZ88BtS+5N4oP3+lCjFDol0aDha2po5mM/macY7Gqc9+Qj7BF1Q
+         Q9kC8G6jUxbYVPT/E3pXanzVD1QenpTOeoh5HahyBpCrlKLC34dPfa3dBGd4ozO0YZsi
+         7nw+Vgi2bbhvnadrOePJ2jhdU86tkN+eJJiNDLdUr890bBTyvTbkDcI5FEOSvJZkri2v
+         oHGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774442970; x=1775047770;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BJ4RwDdYC7l5LX4+kxPiqchKwdT0zRAfuYVx8dHTGTI=;
+        b=Tjk/SP0DA3kJ2TMcpNFM1NHiXJDLrKvyBX6sATbQgbqzUes4sty4Q+4tLOsC5E/0Us
+         1anXP2lNut9p1rE6GERGCdIJBINusQXID1BlrvzNK8dhFguqEkqnpzvVcdLNnVoDQiU7
+         bBdDMLnAa73edFbzSrUOnDFacpa1limgtG2rMP0w5fKXIBcBfYm+wDdXHWsYTRoc36QW
+         O54KGJawMD0RcanU4d9GwXPLPYXiJ74lpu1yFtdtko3hsZzHRTfSWW4i3eVSPqsiztK2
+         4fI2OuK7U5oBN4tE2JjGm8GVGvXCWN4tiwlv/z/o6eUhEr5lXDks/huoMkPBUIDyFe9b
+         VPPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW5KcnYUnfd+OVI//ZVuLgBqwHDJAJTFgz+srndGkDXIJ6DTcQJKFm9LVK4wqQx/YWPlN+aHew9Clz3Znky@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws6oA8R0z9+sS4Uc9r5fAFIgFKKoxTMrdKXLA2Qh4TwqSyzHGI
+	6m/jCksWSqiY23nRO0RQDBpoG8ZxeZicM46iZ+8Zl6n/oogRxETeDuZXzhzBisZBF+0=
+X-Gm-Gg: ATEYQzwURTGMLg301d1gWQkRlm6MOqOkAlHeEIZ31ieEyyPRozp0MRx8/fJXIEXGL07
+	RAIxJ2RRGZdEPQK1KIo8GZ3CDQALzJNexngal9fo9+OSsA10aYFAZADfBvoQpOgJGsZJzQClQY6
+	MrgFq3XTQLuVMmMZWWjtWLbwDoQCzszWWtxXJCz+/KHtNasFg3gDL9/NbcCe9KAerlfY0/6F2EZ
+	v1SivbP0pnRAcnszxmlH+b3XcTJaBAKV/zwO/TOqh1wLnVcbAO2fryCqo7skcEACAtJbYs4jWlC
+	U8fx8OqING/DqYUvmRecsMvg91St3FaxtQS9x2U+QAWGyp9nQLFaTBZwKk1Nn9JdgHn/paJazJ8
+	FUo516QpzndBHWKSaO5iKq4rB9Xw8Ql5PFNz5Z2vH31V980Xna1rVMzS1huyFZQr2RYmzssaLqy
+	8LQbtDhpDVE/cYvTpGupaLngXp4kWVU4csuZbtBR9Inb2D
+X-Received: by 2002:a05:6000:228a:b0:43b:4909:203c with SMTP id ffacd0b85a97d-43b883c881dmr5791312f8f.21.1774442970332;
+        Wed, 25 Mar 2026 05:49:30 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43b8508285esm13445921f8f.19.2026.03.25.05.49.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Mar 2026 05:49:30 -0700 (PDT)
+Message-ID: <b83c9524-13df-47dd-a597-bebab93288d8@suse.com>
+Date: Wed, 25 Mar 2026 13:49:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260325082648.GA18968@wp.pl>
-X-WP-MailID: 5038ef7f550eeb2bd6590bf38a52a15d
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000000 [UXMR]                               
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/8] scalable symbol flags with __kflagstab
+To: Siddharth Nayyar <sidnayyar@google.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+ maennich@google.com, gprocida@google.com
+References: <20260305-kflagstab-v4-0-6a76bf8b83c7@google.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260305-kflagstab-v4-0-6a76bf8b83c7@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 25, 2026 at 09:26:56AM +0100, Stanislaw Gruszka wrote:
-> On Tue, Mar 24, 2026 at 05:00:19PM +0100, Petr Pavlu wrote:
-> > On 3/24/26 1:53 PM, Stanislaw Gruszka wrote:
-> > > Hi,
-> > > 
-> > > On Mon, Mar 23, 2026 at 02:06:43PM +0100, Petr Pavlu wrote:
-> > >> On 3/17/26 12:04 PM, Stanislaw Gruszka wrote:
-> > >>> Module symbol lookup via find_kallsyms_symbol() performs a linear scan
-> > >>> over the entire symtab when resolving an address. The number of symbols
-> > >>> in module symtabs has grown over the years, largely due to additional
-> > >>> metadata in non-standard sections, making this lookup very slow.
-> > >>>
-> > >>> Improve this by separating function symbols during module load, placing
-> > >>> them at the beginning of the symtab, sorting them by address, and using
-> > >>> binary search when resolving addresses in module text.
-> > >>
-> > >> Doesn't considering only function symbols break the expected behavior
-> > >> with CONFIG_KALLSYMS_ALL=y. For instance, when using kdb, is it still
-> > >> able to see all symbols in a module? The module loader should be remain
-> > >> consistent with the main kallsyms code regarding which symbols can be
-> > >> looked up.
-> > > 
-> > > We already have a CONFIG_KALLSYMS_ALL=y inconsistency between kernel and 
-> > > module symbol lookup, independent of this patch. find_kallsyms_symbol()
-> > > restricts the search to MOD_TEXT (or MOD_INIT_TEXT) address ranges, so
-> > > it cannot resolve data or rodata symbols.
-> > 
-> > My understanding is that find_kallsyms_symbol() can identify all symbols
-> > in a module by their addresses. However, the issue I see with
-> > MOD_TEXT/MOD_INIT_TEXT is that the function may incorrectly calculate
-> > the size of symbols that are not within these ranges, which is a bug
-> > that should be fixed.
-> 
-> You are right, I misinterpreted the code:
-> 
-> 	if (within_module_init(addr, mod))
-> 		mod_mem = &mod->mem[MOD_INIT_TEXT];
-> 	else
-> 		mod_mem = &mod->mem[MOD_TEXT];
-> 
-> 	nextval = (unsigned long)mod_mem->base + mod_mem->size;
-> 
-> 	bestval = kallsyms_symbol_value(&kallsyms->symtab[best]);
-> 
-> For best = 0, bestval is also 0 as it comes from the ELF null symbol.
-> 
-> > A test using kdb confirms that non-text symbols can be found by their
-> > addresses. The following shows the current behavior with 7.0-rc5 when
-> > printing a module parameter in mlx4_en:
-> > 
-> > [1]kdb> mds __param_arr_num_vfs
-> > 0xffffffffc1209f20 0000000100000003   ........
-> > 0xffffffffc1209f28 ffffffffc0fbf07c [mlx4_core]num_vfs_argc  
-> > 0xffffffffc1209f30 ffffffff8844bba0 param_ops_byte  
-> > 0xffffffffc1209f38 ffffffffc0fbf080 [mlx4_core]num_vfs  
-> > 0xffffffffc1209f40 000000785f69736d   msi_x...
-> > 0xffffffffc1209f48 656c5f6775626564   debug_le
-> > 0xffffffffc1209f50 00000000006c6576   vel.....
-> > 0xffffffffc1209f58 0000000000000000   ........
-> > 
-> > .. and the behavior with the proposed patch:
-> > 
-> > [1]kdb> mds __param_arr_num_vfs
-> > 0xffffffffc1077f20 0000000100000003   ........
-> > 0xffffffffc1077f28 ffffffffc104707c   |p......
-> > 0xffffffffc1077f30 ffffffffb4a4bba0 param_ops_byte  
-> > 0xffffffffc1077f38 ffffffffc1047080   .p......
-> > 0xffffffffc1077f40 000000785f69736d   msi_x...
-> > 0xffffffffc1077f48 656c5f6775626564   debug_le
-> > 0xffffffffc1077f50 00000000006c6576   vel.....
-> > 0xffffffffc1077f58 0000000000000000   ........
-> 
-> Thanks for testing and pointing this out. Patch indeed breaks
-> the CONFIG_KALLSYMS_ALL case. 
-> 
-> I think, possible fix would be to track the relevant sections in 
-> __layout_sections() and use defined symbols from those sections,
-> instead of just function symbols. 
+On 3/5/26 5:55 PM, Siddharth Nayyar wrote:
+> This patch series implements a mechanism for scalable exported symbol
+> flags using a separate section called __kflagstab. The series introduces
+> __kflagstab support, removes *_gpl sections in favor of a GPL flag,
+> simplifies symbol resolution during module loading.
 
-I considered sorting data symbols as well, but this is nontrivial, 
-it is difficult to reliably distinguish real data sections from metadata
-sections containing symbols we do not want to include.
+I noticed that the series has a bisecting issue. The module loader
+doesn't see any GPL-only exports after patch #4. I think you'll need to
+squash patches #4 and #5 to fix this. Alternatively, the patches could
+be swapped, with the caveat that GPL-only symbols would lose their GPL
+property for one commit.
 
-An alternative approach is to check the module memory type and fall back to
-a linear search for ranges other than MOD_TEXT. This approach would also
-fix the incorrect nextval/size problem.
+Nit: Please use simply the "module" prefix in commit subjects:
 
-Regards
-Stanislaw
+#1: module: define ksym_flags enumeration to represent kernel symbol flags
+#2: module: add kflagstab section to vmlinux and modules
+#4: module: use kflagstab instead of *_gpl sections
+#6: module: deprecate usage of *_gpl sections
+#7: module: remove *_gpl sections from vmlinux and modules
+
+The changes look otherwise ok to me. With the above fixed, feel free to
+add:
+
+Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+
+-- 
+Thanks,
+Petr
