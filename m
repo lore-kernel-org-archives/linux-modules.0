@@ -1,53 +1,53 @@
-Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
+Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CED3A9002
-	for <linux-modules@vger.kernel.org>; Thu, 26 Mar 2026 21:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F793A8735
+	for <linux-modules@vger.kernel.org>; Thu, 26 Mar 2026 21:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774560103; cv=none; b=XzXwi+T6i4GF2QZ10jmqn6HbnHT/54WWpq9xIgxxCRtxn0loHhtXFMgEElQHfrbPqow0gGpXnC3jrS1tKRcNePXtOBOSBu3QQjBxI/A1EmjWjqInRnHJ4ixhN5VrVhUG/DecCBbmSOBYR1W6LQoNYY37y16EQhGojpwJdEy/rOM=
+	t=1774560103; cv=none; b=rop5hwOMkFe24KNE9yx41h5pSnfRJEg1QJUkAAsi2N53u/XKCPkp/6GY6wnOD1Pcl/Rpimq3W7LWD1wZ+m3eywwVgGLZrmus8zFYGsNzwbB+nYBMsrfxAPlg0E7QLXpqACjjH4m/eiUNGAE2c80khsBMXwT2ZQGSux+H09eBdUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1774560103; c=relaxed/simple;
-	bh=YJ12M66JVdOPpUyl/ZnRqsezMQxQSFmDChR9hjNAYhg=;
+	bh=dhaz9oRBN2LrlO9PSGOfI7otVV2KGMDVKhDfQTLvm0g=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RfTz7o8pzCCJQgVmLjgOBa8iE6T75KqSDWbd2ZJOl57xU8wx8uJuPPw8yRk7FoPWaaqK1tSm4wbfYFufL/qolvxtAmxbou3MJgaEZIoI8jmb7VdMyMjWA276PWUf+j7Q3jZMqO7x6v+uPdmyB0a/hajmbNoqnYGWfRUv9VBs/jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A66LlWSn; arc=none smtp.client-ip=209.85.218.74
+	 To:Cc:Content-Type; b=dryhorP+RU2bygiN/qDWG8UIO6FVNXqauPL0sQoXiAbpGiBysEOyBTaW2ZmJHqPYc5bnWNq3Zl552tmQwgQ8kmDdDvCrxCrkl8LjL49/GVlgyOEpDQuZCveuMxeSLPaqSNQ3SeqjES9+iRsAR0dEF04arX0bvdB52ExbJSopjQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CNYgqHo+; arc=none smtp.client-ip=209.85.208.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sidnayyar.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A66LlWSn"
-Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-b9399d68111so175552666b.0
-        for <linux-modules@vger.kernel.org>; Thu, 26 Mar 2026 14:21:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CNYgqHo+"
+Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-66b069e9485so1389963a12.1
+        for <linux-modules@vger.kernel.org>; Thu, 26 Mar 2026 14:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1774560100; x=1775164900; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1774560099; x=1775164899; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGYiW8Rqw4kRzbw632ADCfNRFJHG+c2ihwrVrUq2DSI=;
-        b=A66LlWSnTmXuhiNodjP1e0XL9V+0cM3AjT/FGZ1x6y1rc7R2YdvFKisvEF6seR+Qhh
-         8gn7ZGeYWattf87yAWHl7vBPdJP8w7dcmzDrPU7F7BQWAaO++QNMtAz1z3TWBe7WZsUO
-         n18KBfH1Pbf6rYj9iKRFfR653P2D0nPoa/Nqr3OCabhUQDtjMvb8dQPUB7Et0WWFDYZb
-         BDs9HGxUiClz7kTC+JS7CcrOdYzk+YIIkzwFgM5pSO8tDO31uu5H3p3Ify6ppNwTUSjc
-         wxy5MBGUTwQotH4vDU6NBjXpDNo1TEHAMuKgE279zdN4zzXU/STqmm7Cs63N5mt0GZFV
-         Phlw==
+        bh=ZE42C9hekLpveGyF6RMfwZOJjelI4nIxMgNfnUlAiOM=;
+        b=CNYgqHo+nsn6+52h3Vz5Dy2vrKxUl4vVbYIm+G8/CPASSSepVNkkCZPZhs4OW5CLJK
+         JQX2nLjlXgeUi4qysCCZ0O8YkKyDPiDzaEEykBEsbPdGeK6q7hBoVcTmPTnOgKCbPyVx
+         LCMEvP+pb99HwI0KsWVC647uLtBJWkx+T2T3kn7CquQbYud3JoKW+w/Wu2OncK/0hyx2
+         DpI1JG4S/rdGpxkyPhZWgCEO1xvvrnwz6z8unSJjfJ7fBWt/7/pptbxVCJaIb+4r7GRO
+         fzgVb35fC355FOgTxuN5w3HY6penk2cySDbedjNGqtQ6czxBdUaN5fmhXZ/Eiz5G9jlL
+         qQhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774560100; x=1775164900;
+        d=1e100.net; s=20251104; t=1774560099; x=1775164899;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aGYiW8Rqw4kRzbw632ADCfNRFJHG+c2ihwrVrUq2DSI=;
-        b=GObd4DgcItdq7eXxeA7O2Ft7mSFNIvcxQMT0uI7W3FPUWtlFvOoqtktrPyWn6PBnYn
-         jhtGEhCEwqGFrv/X9e6L+GcUmLJfz4EykLCmGD/ZOOByEjHQmBSBcY+ZllW1eX1fY96Q
-         vV0lNETOhRSeOEOkX+kyd2JO22e3l9cFx890c8PnC7KWYY3cv/+fXlNqmB6qPvfSawEr
-         hqzleaPn9pUAwfDKk54CNAPUn08nhBADzU7ZP45in2AnLAP7nMsrBvcPCj4751UlDB+s
-         MPuEZByZl5SW3Rxsm+TIoh1d9BSoMTO3TotrwXaCayIXJD4SWVoJxt6EI6pzTfvwXW/m
-         6bcQ==
-X-Gm-Message-State: AOJu0Yw1SEvqhiZ9t60LdR2WORAeARYuqf8uXKzOEkvNDItqQZ1Jxa+w
-	BRU874HWlkzQafGe9f8isSJ1SQcii6CQQVZAH7UbEXVrHSnJSry6qefge7wpd7PAauevAaD8+SV
-	cE8uWH4/DRA8L1mP/sw==
-X-Received: from ejdao21.prod.google.com ([2002:a17:907:f495:b0:b94:2007:4d01])
+        bh=ZE42C9hekLpveGyF6RMfwZOJjelI4nIxMgNfnUlAiOM=;
+        b=ADmgqB+vUCMzNo9nzgb7m9qWUfZLIUOpYcwyI8zVKpG5lFNktHbcQKcWmovRBCppB7
+         igELfe5/ATjHdEujF7qYX31Ic1f32m59PLwARvWE67ajeNO/x9PMFw443Dm/y3PotleG
+         ni4O9SeUp7fMy2EO7GwkHoNzNHy9ZFDyLrmTZKs8S7O/kRl8FAwIRjDT6e0iCnXjpTHr
+         YvCuITEayByUnmy25FzaK5sVIewrAkpQsdOycO7R6WXDojSqAy7giJ1vkt0WC+wskJnt
+         T6vhbfTTW193wN029033tZeVfaAlWXkgPKkeF63//2lopa6RLz1hm+CfiXY9iB1UNjSI
+         xXiA==
+X-Gm-Message-State: AOJu0Yy2e+kKdamjDTjKyGvLcn+xdASyuxLtQ8c821XOgV5h4Djmuh5Q
+	fNWjwVI16Qn0E2dSe6qlrPVhUwtEVvnF7vRlcMCvtwNq3neOtPPnfvIWLYgmxeJsBbrMjSKKXt6
+	QbXDdteSc4EIdza4L9w==
+X-Received: from ejccw7.prod.google.com ([2002:a17:906:4787:b0:b98:2423:3942])
  (user=sidnayyar job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:907:1c1e:b0:b9b:38d4:2cea with SMTP id a640c23a62f3a-b9b5036d57dmr1187466b.23.1774560099877;
- Thu, 26 Mar 2026 14:21:39 -0700 (PDT)
-Date: Thu, 26 Mar 2026 21:21:34 +0000
+ 2002:a17:907:e0d8:b0:b97:c968:d9ba with SMTP id a640c23a62f3a-b9b502c08b3mr856766b.5.1774560098750;
+ Thu, 26 Mar 2026 14:21:38 -0700 (PDT)
+Date: Thu, 26 Mar 2026 21:21:33 +0000
 In-Reply-To: <20260326-kflagstab-v5-0-455cd723dddf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -57,8 +57,8 @@ List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260326-kflagstab-v5-0-455cd723dddf@google.com>
 X-Mailer: b4 0.14.3
-Message-ID: <20260326-kflagstab-v5-6-455cd723dddf@google.com>
-Subject: [PATCH v5 6/7] module: remove *_gpl sections from vmlinux and modules
+Message-ID: <20260326-kflagstab-v5-5-455cd723dddf@google.com>
+Subject: [PATCH v5 5/7] module: deprecate usage of *_gpl sections in module loader
 From: Siddharth Nayyar <sidnayyar@google.com>
 To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
 	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
@@ -70,71 +70,124 @@ Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, Siddharth Nayyar <sidnayyar@google.com>, gprocida@google.com
 Content-Type: text/plain; charset="utf-8"
 
-These sections are not used anymore and can be removed from vmlinux and
-modules during linking.
+The *_gpl section are not being used populated by modpost anymore. Hence
+the module loader doesn't need to find and process these sections in
+modules.
+
+This patch also simplifies symbol finding logic in module loader since
+*_gpl sections don't have to be searched anymore.
 
 Signed-off-by: Siddharth Nayyar <sidnayyar@google.com>
 Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- include/asm-generic/vmlinux.lds.h | 18 ++----------------
- scripts/module.lds.S              |  2 --
- 2 files changed, 2 insertions(+), 18 deletions(-)
+ include/linux/module.h   |  3 ---
+ kernel/module/internal.h |  3 ---
+ kernel/module/main.c     | 46 ++++++++++++++++++----------------------------
+ 3 files changed, 18 insertions(+), 34 deletions(-)
 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index d64a475c468a..6f47c4c56574 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -508,34 +508,20 @@
- 									\
- 	PRINTK_INDEX							\
- 									\
--	/* Kernel symbol table: Normal symbols */			\
-+	/* Kernel symbol table */					\
- 	__ksymtab         : AT(ADDR(__ksymtab) - LOAD_OFFSET) {		\
- 		__start___ksymtab = .;					\
- 		KEEP(*(SORT(___ksymtab+*)))				\
- 		__stop___ksymtab = .;					\
- 	}								\
- 									\
--	/* Kernel symbol table: GPL-only symbols */			\
--	__ksymtab_gpl     : AT(ADDR(__ksymtab_gpl) - LOAD_OFFSET) {	\
--		__start___ksymtab_gpl = .;				\
--		KEEP(*(SORT(___ksymtab_gpl+*)))				\
--		__stop___ksymtab_gpl = .;				\
--	}								\
--									\
--	/* Kernel symbol table: Normal symbols */			\
-+	/* Kernel symbol CRC table */					\
- 	__kcrctab         : AT(ADDR(__kcrctab) - LOAD_OFFSET) {		\
- 		__start___kcrctab = .;					\
- 		KEEP(*(SORT(___kcrctab+*)))				\
- 		__stop___kcrctab = .;					\
- 	}								\
- 									\
--	/* Kernel symbol table: GPL-only symbols */			\
--	__kcrctab_gpl     : AT(ADDR(__kcrctab_gpl) - LOAD_OFFSET) {	\
--		__start___kcrctab_gpl = .;				\
--		KEEP(*(SORT(___kcrctab_gpl+*)))				\
--		__stop___kcrctab_gpl = .;				\
--	}								\
--									\
- 	/* Kernel symbol flags table */					\
- 	__kflagstab       : AT(ADDR(__kflagstab) - LOAD_OFFSET) {	\
- 		__start___kflagstab = .;				\
-diff --git a/scripts/module.lds.S b/scripts/module.lds.S
-index d7a8ba278dfc..23fa452eb16d 100644
---- a/scripts/module.lds.S
-+++ b/scripts/module.lds.S
-@@ -20,9 +20,7 @@ SECTIONS {
+diff --git a/include/linux/module.h b/include/linux/module.h
+index aee3accba73c..a0ec1a9f97b4 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -434,9 +434,6 @@ struct module {
+ 	unsigned int num_kp;
+ 
+ 	/* GPL-only exported symbols. */
+-	unsigned int num_gpl_syms;
+-	const struct kernel_symbol *gpl_syms;
+-	const u32 *gpl_crcs;
+ 	bool using_gplonly_symbols;
+ 
+ #ifdef CONFIG_MODULE_SIG
+diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+index 69b84510e097..061161cc79d9 100644
+--- a/kernel/module/internal.h
++++ b/kernel/module/internal.h
+@@ -53,10 +53,7 @@ extern const size_t modinfo_attrs_count;
+ /* Provided by the linker */
+ extern const struct kernel_symbol __start___ksymtab[];
+ extern const struct kernel_symbol __stop___ksymtab[];
+-extern const struct kernel_symbol __start___ksymtab_gpl[];
+-extern const struct kernel_symbol __stop___ksymtab_gpl[];
+ extern const u32 __start___kcrctab[];
+-extern const u32 __start___kcrctab_gpl[];
+ extern const u8 __start___kflagstab[];
+ 
+ #define KMOD_PATH_LEN 256
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index d237fa4e0737..189e18b8103d 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1464,29 +1464,17 @@ EXPORT_SYMBOL_GPL(__symbol_get);
+  */
+ static int verify_exported_symbols(struct module *mod)
+ {
+-	unsigned int i;
+ 	const struct kernel_symbol *s;
+-	struct {
+-		const struct kernel_symbol *sym;
+-		unsigned int num;
+-	} arr[] = {
+-		{ mod->syms, mod->num_syms },
+-		{ mod->gpl_syms, mod->num_gpl_syms },
+-	};
+-
+-	for (i = 0; i < ARRAY_SIZE(arr); i++) {
+-		for (s = arr[i].sym; s < arr[i].sym + arr[i].num; s++) {
+-			struct find_symbol_arg fsa = {
+-				.name	= kernel_symbol_name(s),
+-				.gplok	= true,
+-			};
+-			if (find_symbol(&fsa)) {
+-				pr_err("%s: exports duplicate symbol %s"
+-				       " (owned by %s)\n",
+-				       mod->name, kernel_symbol_name(s),
+-				       module_name(fsa.owner));
+-				return -ENOEXEC;
+-			}
++	for (s = mod->syms; s < mod->syms + mod->num_syms; s++) {
++		struct find_symbol_arg fsa = {
++			.name	= kernel_symbol_name(s),
++			.gplok	= true,
++		};
++		if (find_symbol(&fsa)) {
++			pr_err("%s: exports duplicate symbol %s (owned by %s)\n",
++				mod->name, kernel_symbol_name(s),
++				module_name(fsa.owner));
++			return -ENOEXEC;
+ 		}
  	}
+ 	return 0;
+@@ -2608,12 +2596,15 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 	mod->syms = section_objs(info, "__ksymtab",
+ 				 sizeof(*mod->syms), &mod->num_syms);
+ 	mod->crcs = section_addr(info, "__kcrctab");
+-	mod->gpl_syms = section_objs(info, "__ksymtab_gpl",
+-				     sizeof(*mod->gpl_syms),
+-				     &mod->num_gpl_syms);
+-	mod->gpl_crcs = section_addr(info, "__kcrctab_gpl");
+ 	mod->flagstab = section_addr(info, "__kflagstab");
  
- 	__ksymtab		0 : ALIGN(8) { *(SORT(___ksymtab+*)) }
--	__ksymtab_gpl		0 : ALIGN(8) { *(SORT(___ksymtab_gpl+*)) }
- 	__kcrctab		0 : ALIGN(4) { *(SORT(___kcrctab+*)) }
--	__kcrctab_gpl		0 : ALIGN(4) { *(SORT(___kcrctab_gpl+*)) }
- 	__kflagstab		0 : ALIGN(1) { *(SORT(___kflagstab+*)) }
- 
- 	.ctors			0 : ALIGN(8) { *(SORT(.ctors.*)) *(.ctors) }
++	if (section_addr(info, "__ksymtab_gpl"))
++		pr_warn("%s: ignoring obsolete section __ksymtab_gpl\n",
++			mod->name);
++	if (section_addr(info, "__kcrctab_gpl"))
++		pr_warn("%s: ignoring obsolete section __kcrctab_gpl\n",
++			mod->name);
++
+ #ifdef CONFIG_CONSTRUCTORS
+ 	mod->ctors = section_objs(info, ".ctors",
+ 				  sizeof(*mod->ctors), &mod->num_ctors);
+@@ -2823,8 +2814,7 @@ static int check_export_symbol_sections(struct module *mod)
+ 		return -ENOEXEC;
+ 	}
+ #ifdef CONFIG_MODVERSIONS
+-	if ((mod->num_syms && !mod->crcs) ||
+-	    (mod->num_gpl_syms && !mod->gpl_crcs)) {
++	if (mod->num_syms && !mod->crcs) {
+ 		return try_to_force_load(mod,
+ 					 "no versions for exported symbols");
+ 	}
 
 -- 
 2.53.0.1018.g2bb0e51243-goog
