@@ -1,290 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450013E0244;
-	Tue, 31 Mar 2026 13:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774964238; cv=fail; b=u8H6qjZbI5WZU/+8P/+zye9Ok2GBRSgz1x7pzVnjoaEdVD6ynGJrdb4x5w/knlTWQwVMEUF/aGWHcQ3uhUi2GrmojfxO0ihw59ry514Moy3Xh5LTiFMYrQYhWY7APASslWBXXIAPVuVORiAxxmoYAbjRntKQtdFIz4QVEVJ0E90=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774964238; c=relaxed/simple;
-	bh=z05ZHtk87tiE2IlzI8G09Nq25iFDWPZ4YRofEm8WgAA=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=JiuXfyKBRvcFNZBIuCa+npJ/nJ2yyoS6mY2XTT2MHTBlhpf3yq2Ol4/AFRaDMvVb5uoOVr4uObuDFAq6kaxKi3sj1nLcGo9FJjREg3jgKpTg2klt4CabMhw9LJBmmBTowbsEc7TMRXH53tTcOXIEUSRKA80k4hJR0O+wH5rFSak=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZXGchAYo; arc=fail smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE7536BCCC
+	for <linux-modules@vger.kernel.org>; Tue, 31 Mar 2026 14:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774968972; cv=none; b=VMskR/wjeqJJi1ueAG6Zqf5mY+UkTjmL7Z/+kFuVor3GN5/iUsWtWYTbG+CBuSKYh7tSMJMeAZXrKrL5rxYt/nPhW1TUYlLiCEFQqaRxb480GpAcZ4hqFFZ1zdpoY+W7lrTwaoSC7k2/s1dsv24GL5GWAmGK8bg30TKplqjICC0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774968972; c=relaxed/simple;
+	bh=jKxaM8XS+QGoasE5LVre1ULC0QIBA1mU1HIQ8CMnbPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZDTAf6uG4Lv99PH0hJw9NJI3usr2QHOFVKqR2Y//GFtm6yq/S7CH4KSg48o2qVKPlNyeLhu0BZENX5DLgWMjOD5UlkBofMw7rD/eP3J/px4VDtX7LXriEcBiBra5dqM7h+axwa9Ez/epsNh4tWKSqTBvJji70IKRKWer5hPOFOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ja6qDZVD; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZXGchAYo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1774964234; x=1806500234;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   mime-version;
-  bh=z05ZHtk87tiE2IlzI8G09Nq25iFDWPZ4YRofEm8WgAA=;
-  b=ZXGchAYoTuVsCbY4Z05dSYuZ3uGc7C3KGWI0gLLThHemiwBm1JmM9kcf
-   2R/3PmWIxnu13ZDRDU4Aqxudy8b1j05X9wKippgMVwny9cOkWKmuYkLiQ
-   yTm8DwGo1BB8YZpb4Ih9rx4alsXdML+bwLWEjge9cjRIsvz6/By0D/3CC
-   Gqm5JA28LDhb/yLGZf6dY8nMqgoIHQNU4+ojDJiC70rEZD8c4JNLwB5vi
-   1WKaA0kRcKjay0n4DiN8rc9MkRGtY5ppWb1RM1e8cwcZWs8BWCTzxxJvH
-   YQizFXoUHKF5KewHoJpDtoM4H0pIMgMCFbXHHIiP54Qvc9GRC8+0gob1u
-   A==;
-X-CSE-ConnectionGUID: KTO7tefQTfeutyrrfC//yQ==
-X-CSE-MsgGUID: k+gssEYqRdu5ExNr+GwsHA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11745"; a="63528559"
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="63528559"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 06:37:13 -0700
-X-CSE-ConnectionGUID: D8Y8xYYHT8yhorlzTZSaBg==
-X-CSE-MsgGUID: NiEJYfxoTOaBO6YNnLSVnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,152,1770624000"; 
-   d="scan'208";a="221969115"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Mar 2026 06:37:13 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 06:37:12 -0700
-Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Tue, 31 Mar 2026 06:37:12 -0700
-Received: from PH8PR06CU001.outbound.protection.outlook.com (40.107.209.50) by
- edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Tue, 31 Mar 2026 06:37:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=feWxhZ7RdmXztBGVEGShAZ+yFD8sjxDuHL8Z+uHq6Yd0jrn2RZ6IhwJVtHDl9ZKl/bcb564eAxO6ZFOctkfx+5hOemWale4okC7UU4t59DSX7/ORK+cFt6LRLlY2sblwORr1cIDdSZ2sFaxYtSO43DGIhjdM1rZLrnclGe6SlCTAminSVRVgdGIxyhuOak1bofHU72qZem3zg0edOSPyg3EXFlVOouLMxQfJpKunYM+KA857BA/QnsrF/W1Dz031zYZb56tLnl6tSWQvBpxv5NRlkyA3SQ4TQLQE4iTzqY7SEU8rH/hklbtFi0uJJDdDwZKepQc3H5GOX5wNIAOdlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Wup2agZZ61Z37W4JVnKSIj3OJeQzXwHSPWqR1OUN6w=;
- b=TZE0ghtK7YUeTURpprvruTLkgBLR9lFSaY6XlZLDgI68FI+a8uE/B/1vPhvljAGj+nrjiKNIc/9M7zdYRQDTdUU645yUeA4Hqk+bcewOe3u4bHH85irXYNvtCfwEX4ZyBzm1pgbV++Qkr/JqYYa1I0D5/TyWkuKg1NTjXiq+OEz0STYTOvBPoLkKqsG1s3k1TvRy8rgNqy/9hmJ2c/BqESFjfbPHJh9g9ok5wXIdf6sO4StuQSfJVFysIgilIy8gmXelTohRIGAanCvn/IEeH6D7qMxTUg2NygcaGH5JzbPez7z/b4wD9hLWXEmOpEG8YFRghCP6tATU62B9Eei4ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB5832.namprd11.prod.outlook.com (2603:10b6:510:141::7)
- by PH8PR11MB9722.namprd11.prod.outlook.com (2603:10b6:510:3a5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.15; Tue, 31 Mar
- 2026 13:37:11 +0000
-Received: from PH0PR11MB5832.namprd11.prod.outlook.com
- ([fe80::106e:78dd:4c96:d707]) by PH0PR11MB5832.namprd11.prod.outlook.com
- ([fe80::106e:78dd:4c96:d707%3]) with mapi id 15.20.9769.006; Tue, 31 Mar 2026
- 13:37:10 +0000
-Date: Tue, 31 Mar 2026 21:37:04 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Dmitry Antipov <dmantipov@yandex.ru>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-	<linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
-	<petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen
-	<samitolvanen@google.com>, Dmitry Antipov <dmantipov@yandex.ru>,
-	<oliver.sang@intel.com>
-Subject: Re: [RFC PATCH] modules: extend {kstrdup,kfree}_const() to handle
- per-module .rodata
-Message-ID: <202603312130.f9ed8d89-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260327132247.861984-1-dmantipov@yandex.ru>
-X-ClientProxiedBy: TPYP295CA0019.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:7d0:a::14) To PH0PR11MB5832.namprd11.prod.outlook.com
- (2603:10b6:510:141::7)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ja6qDZVD"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-43cfde3c3f3so1885301f8f.3
+        for <linux-modules@vger.kernel.org>; Tue, 31 Mar 2026 07:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1774968970; x=1775573770; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gOWUdy++pUefUEURVk9zZcOvlfK+YwiTNt/ou4gudNE=;
+        b=Ja6qDZVDy0h/sUo6hcIdYSLoQmmKtNcVxEGyPGUA6v8KdsyMaTbRvRGvNceBj+Y8gd
+         IDZ0LrrZpzJd0aN/rtuU6YcdKfRzjxAufGPR/Y+FfInty758n3UvwMNwV+UTisn1OgVw
+         6VgagNOntG+VlIHBKByO+p7axUoImoEEHqfFPzGxNQ1AJLi7Z8gXzfNbwYjMP14RNAsW
+         wcwqJPp+kNK3CELbzKKxjA0UyW7IP2O8ohkUsyLmQzUOjOl4UKU2VW8QWjlRp6qQIrUT
+         nZ89/xuIQ/WfFRR168GH7MXgIb3KiEo7N1q6HUIIZD1+91za91We4vnWFx8PFRYGR30R
+         oQ9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774968970; x=1775573770;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gOWUdy++pUefUEURVk9zZcOvlfK+YwiTNt/ou4gudNE=;
+        b=ZP01W8GhrezK55rs6vvypTKN9CcRL9SdHPTVr7e/VtaCOZrD/4vSQIc2ExSdoqdpo4
+         7HUdOPfeZuzMzdqV/wLl+Lw6UqI7HnAU+SjI84bEySHHUmuAUl8LemYLNujtsVWIXxjN
+         kIxanuxCtJtIppYh2Wh/VxrZtMnAztphb89r4jymdcd/fFrykRlQBNYYhfdghOwcp54i
+         Kpy1HTpsg+G9HZqo2glMtJ+FskEvKy00ZAS54T1BiH0RtuIr1o4PK3BTrRkSRLnTeSOK
+         iXJWX4MfEW751Fv3F8y9pN1vJ83zY3VRtA857NZ45s9zWrxM/ef4sTZQ7uzGjhSQ5Ql7
+         pYSA==
+X-Forwarded-Encrypted: i=1; AJvYcCWosjV5EshYX8NUoFBGCRszABz03qrW2HbqM+gsoWW3hT2H48BrYkXSX56jSurnDr271sfZhK4P5ZyJRhYD@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJEFoDQBlI36a1mfuSfqfS72g7f05Vjws69OT9rmIVfkM6D3UD
+	fDq/7Fd6RsPsYcvRf6G35kBsF+Cwq7f+g7fhrGjPtu42eYrm1on/sIVn4gN0glgXfKE=
+X-Gm-Gg: ATEYQzy7sb1MVxC1J0K/SJ1cOAREZn/DlevgXpuiwksj7f4pOYGs899PW+TsqpIl9rb
+	faIlVm4xuNCudjTZCFn0DnF4EYrp/ku4TSSPMMO+OlFnozrPne8JRARxKGq+VkbqR0A8inMp8sj
+	Gx8G90MK/5EbCqpz6DNnObXGv3/C2WU8+DY37TAjB8zq+TIHMxYDd+Wh/DRc+KvwT2pV+xFniaC
+	vlx/CnvL3yWLHbpQ8TwPc3etg8V9yjDsOHB4OrJPmGQPm2eSgUYtXpr2dRx8o8q3ONo61gj06UB
+	yMAYwwLm9fcWGeCwsRqgyulUkcbs1nm5IGqpl4nBCGQsDZX2X+3vya8IVJ1abCWkmRzrtL7aeRh
+	Xf1JV2D24mXhjFm0kG6mANl0qjiz/IqHCYWTC8isr3aKNbrXxPPPCFkZL2c1EsTUj4oYZR8QI89
+	X7oHFR8/6LI/cNJunD52Eg6+zHEA==
+X-Received: by 2002:a05:6000:2dc9:b0:43b:490a:db51 with SMTP id ffacd0b85a97d-43b9e9fb32cmr29895659f8f.24.1774968966934;
+        Tue, 31 Mar 2026 07:56:06 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d14c53928sm336419f8f.5.2026.03.31.07.56.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2026 07:56:06 -0700 (PDT)
+Date: Tue, 31 Mar 2026 16:56:04 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>,
+	Marco Elver <elver@google.com>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] init.h: discard exitcall symbols early
+Message-ID: <acvghO4glmZamFSZ@pathway.suse.cz>
+References: <20260331142846.3187706-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB5832:EE_|PH8PR11MB9722:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2fea70f2-3a81-4aa6-491d-08de8f2a9c42
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: VD2vlJlCi6yCdbH0ThkESJeeA4lyy61Jd6iQhC/L+pyKeeTburcO7ioF4ue72bfu5Zc2895dzTpuyU72tXDmvoBLweYyFpjASSfmllu8hq0PcoT++AujZcaAPVwI/S8T8CCoBRezauYI7DXuvFcmmAkp8GRsCiSeULxiQWkQB+ARpLBLDO9VIEjSfz0JA59akzEvp2p4gzyVDDc2/1wIMNx+75Pun4+jfZnZeOaPJN1U1Tmx6Q60K3qzvLkvA7Vf2uPqKWW7yy/RIhmv9rdSq99m1z+TrexOflYNbf3z4k3+jUATFTZMjdS90w1oW88Gf6g/r4EmQWgJwMOzkcjJ2UYqly7C/sle0Pu9AX9DVswW5q8id6zvnzW0q1y/x39rjWw3ZO8M3/txrKhtwqUg3L9zfAU5MPS1M8Yqn8S3yzCPWRwa5V4m8pN7h2lPZ6EGSjYSjdRGQ9fLVUTNJehn9YQg6VnNGnARnEx7+9XMeIdw3hiCOjN87dcaDfls7Bgu9cjWoM2AxGIf8fKM9DNWiIOAv4Fx8gry3AJFrfnq8RN1YofaY3zpPgBj9gVuQq+3kNjdxUfMwevd+unUCqcLZlTe3GRBJwZmGb1HD69DyUeHNHcUJ6otryDb0pcNhVzReQwfLtNwpCvBz5ddaKfH86+bL4SzxoBQxML75nMY1QMubTkdnRtRpWzElsHnyhtpEA9gFA2yrhzIPNzMwOmj5A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5832.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NxbccNslyUAi8mEwtYUTpLVp1vB1exIl+r5IqRr4irZ69G20kERYfGuDAQYT?=
- =?us-ascii?Q?quQk7HCx0urtUJAxQomd3OxeGDjgeeZ6dJsnvc4hBe0lZLAx4TEUyHo9t0bI?=
- =?us-ascii?Q?IvJILc8vUX7LBWdZQCBQ8SAGUJ/g9DXhlQf1O5xAnnL9ciWUY2D041C0BtQk?=
- =?us-ascii?Q?HTh+9BV7PLSWE5YJVMQigZvxZ06VrqC+VH8mEkO3mHY11fLLK3J3Z5Oi84Rm?=
- =?us-ascii?Q?1jCJJHAG0udzX7QeIM0r7FiAs+gC8Kk+fnJgSY0NXM6nJ07IZIhAFbSWzaun?=
- =?us-ascii?Q?HailvXKGrHEJkrj7v6CVTKg0xibX4dywzbq5r1+cFmLxwOd2fnUt9SqUiwqt?=
- =?us-ascii?Q?6CsDrhsKxlqqmloQsDArLpnTJjGEep77sY8f3o0GqNDCgA9fyr7En8iDgw6j?=
- =?us-ascii?Q?R0U0MxxAByWKKnf9TdcOh/9zI1raf+DrERny6I5QX/EShWFyqqa70zK7nCxE?=
- =?us-ascii?Q?+VqQZFseIny3ijHtefxI/lji0drF88JIBuSkYw9z4NK5OQwyvk718GWQMEx/?=
- =?us-ascii?Q?Pt4UwWC1zjryyr7We9kS23kerPhACVEwZUa7UpxdDxBMzh4Q7N9VVG/QZGKN?=
- =?us-ascii?Q?Vn+biuXbfkxAGBfjqxbZw6Bmjxm+r3nj4X8AJIuXxhzc6/ET7IiJJ0RbO1xp?=
- =?us-ascii?Q?0E6Fw8mRAUl30Qy+7kw0XDacKzt6GU0QigF7EI9PSq3eplQvLtWCxIqCU3oo?=
- =?us-ascii?Q?2hngKPxR+7nWwSCuXlBwlJsrLvbTa3m6aKFgYEpthg3eLJaCrbT+jKL/SCzt?=
- =?us-ascii?Q?AmVArOG5SM4I2M77qB2szpQhu+hQu9sKkrD3NqiKQwwmZbnsMq3AHnOToETz?=
- =?us-ascii?Q?SI91UDYUIHJLbqlHizkW2CacSj1iD0RTyYoNW8YPsxEYU/nbZkyZY54OJqoH?=
- =?us-ascii?Q?nZaoBSm7hjMaGnWe8ctBbGftMRv0F8dADGlFho9tTbYiiIWjWWJIvnBUYiEZ?=
- =?us-ascii?Q?y64y9rJwqxbww2F0025NDjhZj0D3UMGiLL+P3ujgN+LaNsSYJPtE7qhfzwRp?=
- =?us-ascii?Q?Qt2/QJX3N8tn3jWixgWINFWIZa3RiZ/vZpjzItISTNdChw6P5Hg3zREJDlLU?=
- =?us-ascii?Q?fkF9Vl8p7v1mLP+SHJ4TVuCGRsSEemN1fQnlgO8TNo8PpLoBoegPgyM2yTp7?=
- =?us-ascii?Q?9syRER3CEU0EAju09+XMFkqKM55oBoSPrbEGKrHNIuTTV1BAgZqrNZDztCLa?=
- =?us-ascii?Q?2w6Vvq+fAwUyBTYeob7lJso+U0ztXIq+wevKJKdlALh1b9eIoQEHHUf7CmZr?=
- =?us-ascii?Q?lJmxpJLgxes/ge7qK0X6icF8QIzc2BKtWmzItfvouIGjai1sDO1D61lS+EJm?=
- =?us-ascii?Q?rDLYQT6mOi5ADJPSSMAbbyzyQmHyZ/bV2fWI5JbdILwhIbNep7lCHyVeEzKs?=
- =?us-ascii?Q?1RWs49NKJ4Bz2FKdBpfKZiFBks+QzMeLQiCjBxbWUKugGzy8XNsnSFrZYrIs?=
- =?us-ascii?Q?pVmtmBHPxbY9iKcfZEfykPBf1BVS5SNGy7X+LgPQrIjPwz2GFJfs2elvSCtW?=
- =?us-ascii?Q?6oxdjV+dEdYCDROML/lrLf3+6gFsI/e6DjxXAC/w0Gj5T5etqvarBH8gYl8G?=
- =?us-ascii?Q?xijJGqY7Ig2AZ9pO5/tugQYypHDoCS2x3677AllwuEZw+RVd2MaoE4YmToB/?=
- =?us-ascii?Q?vFomOOvuUjZnsP3OgQOmspmZ8IS8gS/pF1tCf4v1norF9V5qpYp69OgIt61t?=
- =?us-ascii?Q?86U2UOqVbVr6reTpgCVzcEoni7mAcJ6nRTDyCfxDSUHC1bq3f4jW8+CasErC?=
- =?us-ascii?Q?Du6yKxniZw=3D=3D?=
-X-Exchange-RoutingPolicyChecked: wViZ0YFSKdBJUQ7FMrnIRP/yWGouTGfWrLRQV4zhLfHO9xSMaD+46XMLoS4iux5EKu36dcM3hfX6HXq2UqZN+BKADvYKuGMPt/yYzQYYapy1WZz7w1vvOLJQbKzSobhkzkG8xghCjxARRYZrN3UAc6RlHV7yO4/9ez96cLjxaUDym8PYAt0Gd8XMn0zEhwk9muJiRfmTAilNBO2W3rcc08S3bGEmlQye3DjWjuhhA77IXb9+DehpEdXkIW4dvBgImxsIVNfwPS/8yzxubHO7Sl9mXbBzpn7BTIXdUfzbwa1X/fWOaBx0FvmozxkEZWKlrQO262UcvrksGuqQ1kLGgA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fea70f2-3a81-4aa6-491d-08de8f2a9c42
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5832.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2026 13:37:10.8588
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +Wd5kFn5bBOJ1IAR8oLWTD6wg/ogAd0blMEpH0SX1uknKhWw8PJtk5rWCObQ854bcOP0Dp9VTtln4koMdVHg5Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB9722
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260331142846.3187706-1-arnd@kernel.org>
 
+Adding module loader maintainers into Cc to make them aware of this
+change.
 
+On Tue 2026-03-31 16:28:38, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Any __exitcall() and built-in module_exit() handler is marked as __used,
+> which leads to the code being included in the object file and later
+> discarded at link time.
 
-Hello,
+Is this safe for dynamically loaded modules?
 
-kernel test robot noticed "kernel_BUG_at_arch/x86/mm/physaddr.c" on:
+Honestly, I am not sure what is the exact efect of this change.
+The dynamically loadded modules just came to my mind...
 
-commit: 0803ad97505a632fc3d0cddd6659617deb0ff34b ("[RFC PATCH] modules: extend {kstrdup,kfree}_const() to handle per-module .rodata")
-url: https://github.com/intel-lab-lkp/linux/commits/Dmitry-Antipov/modules-extend-kstrdup-kfree-_const-to-handle-per-module-rodata/20260329-123400
-base: https://git.kernel.org/cgit/linux/kernel/git/akpm/mm.git mm-everything
-patch link: https://lore.kernel.org/all/20260327132247.861984-1-dmantipov@yandex.ru/
-patch subject: [RFC PATCH] modules: extend {kstrdup,kfree}_const() to handle per-module .rodata
+Best Regards,
+Petr
 
-in testcase: boot
-
-config: i386-randconfig-002-20260331
-compiler: gcc-14
-test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202603312130.f9ed8d89-lkp@intel.com
-
-
-
-[   17.209008][    C0] ------------[ cut here ]------------
-[   17.209572][    C0] kernel BUG at arch/x86/mm/physaddr.c:66!
-[   17.210058][    C0] Oops: invalid opcode: 0000 [#1]
-[   17.210470][    C0] CPU: 0 UID: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 7.0.0-rc5-00667-g0803ad97505a #1 PREEMPT(full)  4fef6f10f7892f9689059524fd4d050b8163a9be
-[   17.211614][    C0] EIP: __phys_addr (arch/x86/mm/physaddr.c:66 (discriminator 3))
-[   17.211995][    C0] Code: e5 56 53 85 c0 78 09 0f 0b b8 ec a1 e6 81 eb 21 80 3d f8 e9 4d 82 00 89 c3 8d b0 00 00 00 80 74 15 e8 cf c5 19 00 84 c0 74 0c <0f> 0b b8 e0 a1 e6 81 e8 77 3e fb ff a1 30 14 d3 82 85 c0 74 2a 89
-All code
-========
-   0:	e5 56                	in     $0x56,%eax
-   2:	53                   	push   %rbx
-   3:	85 c0                	test   %eax,%eax
-   5:	78 09                	js     0x10
-   7:	0f 0b                	ud2
-   9:	b8 ec a1 e6 81       	mov    $0x81e6a1ec,%eax
-   e:	eb 21                	jmp    0x31
-  10:	80 3d f8 e9 4d 82 00 	cmpb   $0x0,-0x7db21608(%rip)        # 0xffffffff824dea0f
-  17:	89 c3                	mov    %eax,%ebx
-  19:	8d b0 00 00 00 80    	lea    -0x80000000(%rax),%esi
-  1f:	74 15                	je     0x36
-  21:	e8 cf c5 19 00       	call   0x19c5f5
-  26:	84 c0                	test   %al,%al
-  28:	74 0c                	je     0x36
-  2a:*	0f 0b                	ud2		<-- trapping instruction
-  2c:	b8 e0 a1 e6 81       	mov    $0x81e6a1e0,%eax
-  31:	e8 77 3e fb ff       	call   0xfffffffffffb3ead
-  36:	a1 30 14 d3 82 85 c0 	movabs 0x2a74c08582d31430,%eax
-  3d:	74 2a 
-  3f:	89                   	.byte 0x89
-
-Code starting with the faulting instruction
-===========================================
-   0:	0f 0b                	ud2
-   2:	b8 e0 a1 e6 81       	mov    $0x81e6a1e0,%eax
-   7:	e8 77 3e fb ff       	call   0xfffffffffffb3e83
-   c:	a1 30 14 d3 82 85 c0 	movabs 0x2a74c08582d31430,%eax
-  13:	74 2a 
-  15:	89                   	.byte 0x89
-[   17.214426][    C0] EAX: f7e9f401 EBX: f7e9f4ac ECX: fffff000 EDX: ff5fe000
-[   17.215476][    C0] ESI: 77e9f4ac EDI: 00000000 EBP: 80b0be68 ESP: 80b0be60
-[   17.216539][    C0] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068 EFLAGS: 00010202
-[   17.217741][    C0] CR0: 80050033 CR2: 7fbf9dd8 CR3: 032cd000 CR4: 000406b0
-[   17.218849][    C0] Call Trace:
-[   17.219371][    C0]  kfree (mm/slub.c:6474 (discriminator 1))
-[   17.220011][    C0]  ? rcu_read_unlock (include/linux/rcupdate.h:884)
-[   17.220786][    C0]  kfree_const (mm/util.c:49)
-[   17.221549][    C0]  kernfs_free_rcu (fs/kernfs/dir.c:550)
-[   17.222201][    C0]  ? lock_is_held (arch/x86/events/intel/core.c:4034)
-[   17.222920][    C0]  rcu_do_batch+0x329/0x6a8
-[   17.223812][    C0]  rcu_core (kernel/rcu/tree.c:2871)
-[   17.224493][    C0]  rcu_core_si (kernel/rcu/tree.c:2887)
-[   17.225255][    C0]  handle_softirqs (arch/x86/include/asm/atomic.h:23 include/linux/atomic/atomic-arch-fallback.h:457 include/linux/jump_label.h:262 include/trace/events/irq.h:142 kernel/softirq.c:623)
-[   17.226002][    C0]  run_ksoftirqd (kernel/softirq.c:479 kernel/softirq.c:1064 kernel/softirq.c:1055)
-[   17.226737][    C0]  smpboot_thread_fn (kernel/smpboot.c:160)
-[   17.227510][    C0]  ? sort_range (kernel/smpboot.c:103)
-[   17.228198][    C0]  kthread (kernel/kthread.c:438)
-[   17.228839][    C0]  ? sort_range (kernel/smpboot.c:103)
-[   17.229601][    C0]  ? kthread_affine_node (kernel/kthread.c:381)
-[   17.230400][    C0]  ret_from_fork (arch/x86/kernel/process.c:164)
-[   17.231112][    C0]  ? kthread_affine_node (kernel/kthread.c:381)
-[   17.231971][    C0]  ret_from_fork_asm (arch/x86/entry/entry_32.S:737)
-[   17.232755][    C0]  entry_INT80_32 (arch/x86/entry/entry_32.S:942)
-[   17.233621][    C0] Modules linked in: usbtest(+) serio_raw evdev parport_pc parport qemu_fw_cfg button
-[   17.235190][    C0] ---[ end trace 0000000000000000 ]---
-[   17.236068][    C0] EIP: __phys_addr (arch/x86/mm/physaddr.c:66 (discriminator 3))
-[   17.236831][    C0] Code: e5 56 53 85 c0 78 09 0f 0b b8 ec a1 e6 81 eb 21 80 3d f8 e9 4d 82 00 89 c3 8d b0 00 00 00 80 74 15 e8 cf c5 19 00 84 c0 74 0c <0f> 0b b8 e0 a1 e6 81 e8 77 3e fb ff a1 30 14 d3 82 85 c0 74 2a 89
-All code
-========
-   0:	e5 56                	in     $0x56,%eax
-   2:	53                   	push   %rbx
-   3:	85 c0                	test   %eax,%eax
-   5:	78 09                	js     0x10
-   7:	0f 0b                	ud2
-   9:	b8 ec a1 e6 81       	mov    $0x81e6a1ec,%eax
-   e:	eb 21                	jmp    0x31
-  10:	80 3d f8 e9 4d 82 00 	cmpb   $0x0,-0x7db21608(%rip)        # 0xffffffff824dea0f
-  17:	89 c3                	mov    %eax,%ebx
-  19:	8d b0 00 00 00 80    	lea    -0x80000000(%rax),%esi
-  1f:	74 15                	je     0x36
-  21:	e8 cf c5 19 00       	call   0x19c5f5
-  26:	84 c0                	test   %al,%al
-  28:	74 0c                	je     0x36
-  2a:*	0f 0b                	ud2		<-- trapping instruction
-  2c:	b8 e0 a1 e6 81       	mov    $0x81e6a1e0,%eax
-  31:	e8 77 3e fb ff       	call   0xfffffffffffb3ead
-  36:	a1 30 14 d3 82 85 c0 	movabs 0x2a74c08582d31430,%eax
-  3d:	74 2a 
-  3f:	89                   	.byte 0x89
-
-Code starting with the faulting instruction
-===========================================
-   0:	0f 0b                	ud2
-   2:	b8 e0 a1 e6 81       	mov    $0x81e6a1e0,%eax
-   7:	e8 77 3e fb ff       	call   0xfffffffffffb3e83
-   c:	a1 30 14 d3 82 85 c0 	movabs 0x2a74c08582d31430,%eax
-  13:	74 2a 
-  15:	89                   	.byte 0x89
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20260331/202603312130.f9ed8d89-lkp@intel.com
-
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+> As far as I can tell, this was originally added at the same time
+> as initcalls were marked the same way, to prevent them from getting
+> dropped with gcc-3.4, but it was never actaully necessary to keep exit
+> functions around.
+> 
+> Mark them as __maybe_unused instead, which lets the compiler treat
+> the exitcalls as entirely unused, and make better decisions about
+> dropping specializing static functions called from these.
+> 
+> Link: https://lore.kernel.org/all/acruxMNdnUlyRHiy@google.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  include/linux/init.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/init.h b/include/linux/init.h
+> index 5db55c660124..ad5c19763034 100644
+> --- a/include/linux/init.h
+> +++ b/include/linux/init.h
+> @@ -47,7 +47,7 @@
+>  #define __initdata	__section(".init.data")
+>  #define __initconst	__section(".init.rodata")
+>  #define __exitdata	__section(".exit.data")
+> -#define __exit_call	__used __section(".exitcall.exit")
+> +#define __exit_call	__maybe_unused __section(".exitcall.exit")
+>  
+>  /*
+>   * modpost check for section mismatches during the kernel build.
+> -- 
+> 2.39.5
