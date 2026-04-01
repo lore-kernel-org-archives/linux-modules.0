@@ -1,107 +1,178 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021119.outbound.protection.outlook.com [52.101.95.119])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BACB2D0606
-	for <linux-modules@vger.kernel.org>; Wed,  1 Apr 2026 01:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775007023; cv=none; b=kItKOWBPQfJ1nIi9p/pvSFBB+YzRC5VS/hchqeOW16ggFMOVXoVk1oH+9XAFYYhzF3cMaygTHt6bREz4yqp4IZ9FO1QbhNbhAB5aYM7DDOatLWYxuumU0+7Pf+G9NXtMrtuZ/2hnhkUgDbUkcDqep6sDiqfn+MCxn24m2uUI4EU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775007023; c=relaxed/simple;
-	bh=31TfvCLwbknK8QU0XVOHI6FK0vdxmYqr/snmIVckegg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=suNWaRIBqJxo9hFpjTTekJBkce0hv/uWY6wN6+attLXZ1TnPqBKLT+vyvZeylSf+HmNfNoF1+z/6MLHvNre4kO6h3tsCfj1GN1ZFrJPMvQLGVX49+FKmbzhZbmkEfH7Uv869xyrP+fnQGSG3b0QWmReDRwZWqzjca67bjHLHtWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jKEW9F1G; arc=none smtp.client-ip=74.125.82.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--samitolvanen.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C8036D9FE;
+	Wed,  1 Apr 2026 15:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.119
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775057806; cv=fail; b=oSKEFf9FxeQhoiTPgH1fyjN5u4+QrFeaYE8hl8GCsUS7vZfwE4kHi/UBXsaxg3/giUby1mGbAL2KknDAAx4+joWYfVON5k0uzvSO3FrUWE6YKXuTfkvDDqNidqtjlYN4pmhXNPXJtV++KEqywAm3CPdscFCvUk7oqXVCEm+VgK4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775057806; c=relaxed/simple;
+	bh=1V0GwvuS2zdl89iDXmGSGMMvQBksIDNw3T5eANlpUB0=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=Pf7zVNxxvIXdxzugSTJwQvGURYjsMU82D563F5XfPIXrbK4Pu5h2YoVPuuvkeG9RsJPVQX7T1L2LI7RwkvYlaVA+Yo3YZ1g6cmgxlZGHiyeWZqPPDUH31Y5KEFfGkU25kRuZv1Q9q1n4nEss8WUXs4h5jScwJ6A+g1TF5+MWieE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=ZDFzZzej; arc=fail smtp.client-ip=52.101.95.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jKEW9F1G"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2bdf75bc88fso5470654eec.0
-        for <linux-modules@vger.kernel.org>; Tue, 31 Mar 2026 18:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775007022; x=1775611822; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1/BQLq9I+ernXavRvxZYNZROQSXYmepGs6Tk+w+QVg=;
-        b=jKEW9F1GtFDJu1oSrVQ4fBmh51vm0ej6HPOhm4jQHGM0AICgFsvYpC5w8JyATLvuKt
-         qgGnGu59RpjSsyH4RR9wt3fFvKp7V+i9dI8RJ6ckYyfCYtrJ/zDydvrhc8O/3kJ/jjSN
-         q0sJ3cCNpafYYrlmhGucxhDyn4CDKIgirsGlyfDsCHT6Rfdom+k/cHN3svkXwjCPfYXj
-         94HrWnd5CHpLT88AGgNxxb0ObQ7k533Y02V3hf/sPB/E8+zey7klT4NJVuva4Pkeqakc
-         cIudRDdfke5m7rVJDhxNjUxZngRaGbjfmYz1S1gdiRdk+uKztHrqcWONAKbMzGO8ZdJx
-         Sjzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775007022; x=1775611822;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1/BQLq9I+ernXavRvxZYNZROQSXYmepGs6Tk+w+QVg=;
-        b=IV8JYoufJKmzi/y4qnzXkMzFvrUTioVBTHf8htkbTFjthHdZm645lggX7D5htHB2R9
-         WC5/T57vSwAGWJ6NGR4j+ddi82vgXwjBzSVI+P0lDTXE1oT57K95OYmXqbqUWDdgi5Dj
-         LwewYDg9eqEifgD1IVj1u6ToWjxkJw2tNqx9coLyJOGyU76oZ0klDXjwyOqoERSg+ebG
-         rlNTGFX8EuwKLzulBBdg9X/9rlyqC1IqOKwQ5OFrahgJAVVJZT81pVET7dd4oufBKE6A
-         kU/X7hPl22dRTQEwcVOZ+h7rCWUt8zH5wZax2sZAP24jr+cCQCbFNzBWXn9MZnfi86Sk
-         ZVoA==
-X-Gm-Message-State: AOJu0YzfKTGS8vVH0z5g98F+ac/jGA4I9MPMLGTIG/DNSSxoJNbAB7zr
-	SSYKsYDJaUZWbZmxVMBrmfaZeSmfEdY+s3sYJbYj68uUNtVoWBMviJO66+ei3BSwNXYhdCLxg2Y
-	2wzt0LDokjbeoA7KUe/dslDhaSWo7Aw==
-X-Received: from dybmh41.prod.google.com ([2002:a05:7301:f29:b0:2c3:dfe3:6dbb])
- (user=samitolvanen job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:693c:2c8c:b0:2c6:2bac:8a8 with SMTP id 5a478bee46e88-2c9333b8061mr822830eec.30.1775007021499;
- Tue, 31 Mar 2026 18:30:21 -0700 (PDT)
-Date: Wed, 01 Apr 2026 01:30:19 +0000
-In-Reply-To: <20260326-kflagstab-v5-0-fa0796fe88d9@google.com>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="ZDFzZzej"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UG6tXZDBvorWDfvTNtWEtZiDNVkFtrm61PRT6mk8f9T9s/c2YFMaek6qW5ETqIizsUqMUtCJHHa43IuG+oy+ROmYjbjZV82B4f67YsEmucbFrUsrNgJWWsipo2nFT4a2gBmRt2BXkNhlqUlNzK12WVWe/RHpC76ikxTyWJFM0Ix2RrRdWC+A8Bnmm6/jcEvUHEO+5bDPCVBZBhpRoQM/ZvzupGu1ewHLyxqBpZT1wMcXbsSRa+OSf4sTqopVZMH0awn0uZHmrY0mLiqi42R0PXCpQWIInBYzqHeUXSv+H1jD8u7lmC/GvlyN9UqXzJWqNQP6Ai6WnDe8fIDAVhFeRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1V0GwvuS2zdl89iDXmGSGMMvQBksIDNw3T5eANlpUB0=;
+ b=FS+nyiVWX5DPIgjZbD8zh+x88DBDZQfLkSM04IRVX5kCJ9Uq1Xp5CPuF8FPriPcayiMBankPgQs2FzuKtaSS9Fc7d2moTxfSlwj0u0L7UabXU4zCWwmeceN/iiVpMPXW8gJSRiTH0trNkxoYgcorhsGRqdIx2+1WCCQG1y35gKRaXgWsalT9GyCfdfn0WwS/LVQWUMUKxBxzqo4r5A9lz77SdLdWmHUbKDrhJ3B1WWiED/qXxuAbfQsjZei/EEAlpFZkqeM7VzJNm23JrclOA5T494Eznw63IobqAtUPUa3nGnfz2O8Jb/3AoDH3OPzPt9umViYlJtSlxbKzjxCP6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1V0GwvuS2zdl89iDXmGSGMMvQBksIDNw3T5eANlpUB0=;
+ b=ZDFzZzejYIREyTAtooGJJKWJHa5tOAE/Ir3urnnMmLJ1ENDZKKiSoTjKwDYv8Yh2R+bOpKQwo0GHUWlp2bVZHtK61UQwI2OdTThPLyekoky6aiNjy6dZZ9o9AiJNiP0r/tppL8csowEdY+ebSyqSE3/dz4263YGTCUZLVlNbAQk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by CW1P265MB8797.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:27a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.17; Wed, 1 Apr
+ 2026 15:36:42 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.014; Wed, 1 Apr 2026
+ 15:36:42 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 01 Apr 2026 16:36:41 +0100
+Message-Id: <DHHXH4LMU5QT.18SOC1FSR41JL@garyguo.net>
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Luis Chamberlain"
+ <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
+ <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Nathan
+ Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Boqun
+ Feng" <boqun@kernel.org>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ <rust-for-linux@vger.kernel.org>, "Aaron Tomlin" <atomlin@atomlin.com>,
+ <linux-modules@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/2] kbuild: rust: allow `clippy::uninlined_format_args`
+From: "Gary Guo" <gary@garyguo.net>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>
+X-Mailer: aerc 0.21.0
+References: <20260331205849.498295-1-ojeda@kernel.org>
+ <DHH9VRFULJST.383BKVSWUTZ3E@garyguo.net>
+ <CANiq72=wsdJf1_qwAADhmKA2i7y9U+3WOm+9utE2rv52_eqnpQ@mail.gmail.com>
+ <DHHANEJI7LQ0.3PGBQH34QK0DJ@garyguo.net>
+ <CANiq72=8d03wo3_28Q91DpHs=LF8D5N3pmuZtAsr8gLuco5hKQ@mail.gmail.com>
+In-Reply-To: <CANiq72=8d03wo3_28Q91DpHs=LF8D5N3pmuZtAsr8gLuco5hKQ@mail.gmail.com>
+X-ClientProxiedBy: LO2P265CA0431.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a0::35) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260326-kflagstab-v5-0-fa0796fe88d9@google.com>
-X-Mailer: b4 0.14.3
-Message-ID: <177500701994.1603852.8130352881871388132.b4-ty@google.com>
-Subject: Re: [PATCH v5 0/7] scalable symbol flags with __kflagstab
-From: Sami Tolvanen <samitolvanen@google.com>
-To: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Siddharth Nayyar <sidnayyar@google.com>
-Cc: linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-doc@vger.kernel.org, maennich@google.com, gprocida@google.com
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CW1P265MB8797:EE_
+X-MS-Office365-Filtering-Correlation-Id: 701daa85-4fe1-431f-ca0e-08de90047934
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	55MgyCsUtR9uM7LdoP/etNBAAi239uS7PqHN8a2EuL0sueB9zQovNuIGAW2nNKfkiMaW0eExqdngzfhctFR68bDGl4yqSr3pUrNLGreZiwfU5rvzEEbjESiodOYMUfI6SQMmTm1LVzA3cxF3HFE2jSlPRfM3B1kaHHJPQ4ZiUv7ZgJ/Cg5V1X6qHUmh/MqLPmu2UALC+jYkCt0WjWhKMV76TlGf/GkyXNeAK04c1jOaE0EcO6KMFtU7g+Rbk7MsEC58080MyYTl6R5kaCVbiRbkOlE6+4hkKz0Nz9HjazYy9aap2QmEYvAh187Jdx4XM8+uXk+XL6QdJJ9Y6ifn5XS0dfEqmggzx7fnmMgImlqgH/EMP2W40xZB6lr923SBCwRWELye/8yZT0xILGaL/Khv7E42UJ4CF4smOd7Os/X+rEk++uTck6mnv/wVFQhQMpCyfknPD67ndUgDSqNe1FEZUfFZZwnIM5wINXSz53HH78n+rGqAJYwrySPibk0bkZvKdvpjBKAsS3DnHw0gxIjqtAfkf4qna3+1GEUEb4V37uEo603n3gS8d/YVEquYZmrJPegi8M3ce5gMR+SiSelXMv0EC7VOEsOa0Vv9H6PByOG52EaOIM4xTxHmL+ODKy3VF2vzs/teI23hSZpFV/e1Xi/vDYnO/pDCWAXO9YQEslzKSwEbTCsin5QeuEXRBPKkv12VK9k8N6JYrZUeUXNEXCaZTVwTSIWNg9NK65Lk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZzFDdjhld09nMFE2N3FIdmpjTVlqdDFXdk5iU2xWenFPVlQ0bnMvcUFvTitR?=
+ =?utf-8?B?aHk3eksyTkptc1J6ZmpZcVhpUGVURzF3bVJsTWlpbVp6M3ZaZ09mQmRxRTcw?=
+ =?utf-8?B?cTZ4YTNHOFR0cHdkemNFYVk0NVdXckJQSzIvTmZTSWZkTlQzVDJoYktEOFZF?=
+ =?utf-8?B?UmRZVG9uaGxrNlB6TXhHMmcvWEU3RldDZ0R2MDIyTmlDWGx0eEszTWpyVXRP?=
+ =?utf-8?B?U0toNDEwc3lUVjJIYlJ1eWVidjRVYnhKOHdBQ2NnWWpjR1pPWGVMQmxsMFhU?=
+ =?utf-8?B?LzNHOHpNTnpvOUp3NmRXeHlkN0JDSmdCRXErcGpKcDdkU1Q3dUR4U0ZFaXYy?=
+ =?utf-8?B?Q2VKTWxIU1UwUHd4Ymp3OFJ4MUtNSXY4U3JQaDVnOURSVVJQR25JZXUxcExX?=
+ =?utf-8?B?SEIvVjUyY1hZczAwYzJmODFLVE9pTnBqby83NHkzS3E2cFRuVDhzWVJPQkxo?=
+ =?utf-8?B?UFFRMWE5WmxyWGlBdHYvRENoL3NKWVdLQUFhTDg4bWk0Um0vbVljc0tXT3dv?=
+ =?utf-8?B?VzVpWmxuQXdsVkxVd2pqZ240SHhubVNPdmxxd2VqUlVlVEx4bnBpa0M3T0RG?=
+ =?utf-8?B?aGdobnFKeDhtZnFXT0U3dHhBaXA2UEt4NGJlNTZmdTJ1RStIRmthUnF5VUNh?=
+ =?utf-8?B?WThQZmJENHdDVS9ieEd3T095S2NudzIyTnlkdytYeUtQcUZmK1NVREZyNmlZ?=
+ =?utf-8?B?T21JZkdqMnBLU2h2SU5KTUV4bHRlWTFQdyswdU1ieGtoS3ZjMVUyeW5iR1E4?=
+ =?utf-8?B?M00vTmJuTldkWkY0RlNpQmprNEg3ZTNNYnVvN09hYTlLcTBtRkUrRkZDc0kz?=
+ =?utf-8?B?S3RnSUFtb1ZPN0FwdWdoVlRqa1ZjVVlveUJTVmFqSFBZQjJUQWw5R0xZK2pS?=
+ =?utf-8?B?ZkxpQzV0aSt2VW12VWNYdXBob3h1TmN6UTJjQ1VLbmoxS3V3bmF2RzZ2Yk5G?=
+ =?utf-8?B?UnFERS9LVUcwSGlkRk5rUHpYd1EySFh3TEJ1MDNlQ3hKLyt3QlhmYUI0eXY3?=
+ =?utf-8?B?N0FHVHVTa3BFZXVZMDdTRzBta2R4MEFIcis0TW9KR0lrYXE2K0RnRU1lYkt3?=
+ =?utf-8?B?YmtMV05jSmpGR0JUbkZTd2pBODB3RFdkTlByMC9mT2R6TjNNQzk3RkFLTVQ3?=
+ =?utf-8?B?WEdDYXpwNE0yUGZYWUNLendZbXpTbmZCL0NxL3c0YXJYS1ZFSldZL211ajM3?=
+ =?utf-8?B?VWFRaEdGdFdvKzVFTzVkWVBCK3h1UkFBWTJBUStObWJwMWRBL1IveHlra3ox?=
+ =?utf-8?B?QWNRV3YzNW82cWFWTUs4WVkzS0FmZWhla1lCN09JN3NQSFByWlVVSDJ4QkE5?=
+ =?utf-8?B?NGdQbXdnVVIyNnpRWG1YN1o1eGpiU002WXlHU0podGZOVnBROFlBd015TUkw?=
+ =?utf-8?B?WkZ0a2M2ckFIYWU2ZzVoeTF1OE1rSHlWaTRDUW96TVJBbDVrRkpXV3VuajZF?=
+ =?utf-8?B?TWp2Qzlmenh5VDUyN254NWc3ZzdLcUtDSy80S2JTcVA1eXdETHB6SVFGa1Qz?=
+ =?utf-8?B?bkZZN0RCS3FxMjlzS2Y3WkZPUmNYOXVhLzdEQXZPS296YkFCQm1qaVpxV3hl?=
+ =?utf-8?B?SWhFYUZqb3c4OG9iaWNFbUorZFk5R0FSWnNXdlk4U1ZzSmlrL1p0a3RPSHA2?=
+ =?utf-8?B?WmRyYXV3N3FPazNXUktBcFoxMnEzbUxNVjdXSzBFYXZhWWE5a0VpdzZHZHpo?=
+ =?utf-8?B?eC9GM3gya2hWMmRyenE5RGRzc1k5cDJoZThhcW80WjFMVTVnRjMydC9SSDkw?=
+ =?utf-8?B?dmNZR0IreE9CTnBRZVdKNTQ2V1hGSTdCM2hVeVBVM2NPZ3I0UElmY21CK0ZF?=
+ =?utf-8?B?ZzNISzRveXh1VkhkSFBVMFlybUlHYXpyQ3VCV002eVJOTDlFTGZYU2xTcHNx?=
+ =?utf-8?B?eEM2RENQT09IL29mOUI2Njlqb2dYUlBOb29haVkxWlA3NThMQkRJSldBMHAr?=
+ =?utf-8?B?UjVvVXlJd1luS1JVUWtBK2U0WTh0RTlWblE4OWFGcU1uR09vVnJKVWwwN3Nz?=
+ =?utf-8?B?aDhHU0VvU0ZTcm44S2xqQmNDM3lQSTNQdmpvbUF6eEpXTHV4WXgyVEdNNTBO?=
+ =?utf-8?B?U2xQWlhmUDlQdGVWbXNyYVhvQUJSdk5KSHJpNnBDS0hQeDRYWGR6V21QZTRs?=
+ =?utf-8?B?VU9ReXJzN21UazF0blk1UHRCWCtSaFllR2o1Tk9mTnlMeWQzbVpoRFRxZU5W?=
+ =?utf-8?B?SmU3Y2hyWGRQNDd4ei9Kb01aK3JKb1NkWEM4YXNwRHZFYlo2Z1FOZ1BaMDdI?=
+ =?utf-8?B?Sk92NVRhdEZZMHhmNGo2ckRjelFBUlBrNVRqRjNxcHNDVEhNcUtMNXVidFkv?=
+ =?utf-8?B?S3BvZXpNRFRwdFltRmpwZU1mZDJxUnpkSmg5dHRHaWxBTk5sWjJHZz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 701daa85-4fe1-431f-ca0e-08de90047934
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Apr 2026 15:36:42.1709
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z94J+C6R2CZ/wMVeYWJl9rr6l43Kk0DtsahILARr6rsL/0H3wC6WzdIFE2r2MvsX0Q/E3JDrBIpTu1iEKt9n2Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB8797
 
-On Thu, 26 Mar 2026 21:25:01 +0000, Siddharth Nayyar wrote:
-> This patch series implements a mechanism for scalable exported symbol
-> flags using a separate section called __kflagstab. The series introduces
-> __kflagstab support, removes *_gpl sections in favor of a GPL flag,
-> simplifies symbol resolution during module loading.
-> 
-> The __kflagstab contains an 8-bit bitset which can represent up to 8
-> boolean flags per symbol exported in the __ksymtab. The patch series
-> also uses this bitset to store GPL-only flag values for kernel symbols,
-> thereby eliminating the need for *_gpl sections for representing GPL
-> only symbols.
-> 
-> [...]
+On Tue Mar 31, 2026 at 10:53 PM BST, Miguel Ojeda wrote:
+> On Tue, Mar 31, 2026 at 11:43=E2=80=AFPM Gary Guo <gary@garyguo.net> wrot=
+e:
+>>
+>> I mean the lint is kinda useful, and I don't want to disable it just bec=
+ause
+>> it doesn't exist in older versions of rustc.
+>
+> Yeah, personally I like the inlined way, i.e. I use it myself, so I
+> don't mind enabling it everywhere if people is happy that it only
+> applies to some cases.
+>
+> Another consideration is that the issue linked mentions that they
+> don't want to mix inline and not (for field access cases), so that
+> could be annoying for some, which is why they moved it back.
 
-Applied to modules-next, thanks!
+For mixed cases I suppose it's really up to personal taste. In that case we=
+ can
+say it does have "false positive" and allow the lint.
 
-[1/7] module: define ksym_flags enumeration to represent kernel symbol flags
-      commit: 10a4eb5882ba16164ece86d99486084f02f148bb
-[2/7] module: add kflagstab section to vmlinux and modules
-      commit: 9743311b4535dc76ce81f46303da0f69bfaa5fd6
-[3/7] module: populate kflagstab in modpost
-      commit: 16d0e04f546ffba78c74bbfeb57d93147bcaf2c5
-[4/7] module: use kflagstab instead of *_gpl sections
-      commit: 55fcb926b6d8b5cfb40873e4840a69961db1bb69
-[5/7] module: deprecate usage of *_gpl sections in module loader
-      commit: b4760ff2a5e4351c59d185967735f59c0b0bd7f6
-[6/7] module: remove *_gpl sections from vmlinux and modules
-      commit: f18540256b70c9e1f0e26e2c38f3d43a131926d9
-[7/7] documentation: remove references to *_gpl sections
-      commit: 3b1299f25b07ef83e020d049dfc62ced9c09450d
+Best,
+Gary
 
-Best regards,
-
-	Sami
-
+>
+> Either way sounds fine for me.
+>
+> Anyway, if we enable it, I should apply the other suggestion too, put
+> the Cc: stable@ on them, and switch to `-W` here and remove the Cc:
+> stable@.
+>
+> Thanks for taking a look!
+>
+> Cheers,
+> Miguel
 
