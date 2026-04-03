@@ -1,185 +1,153 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F8F317161
-	for <linux-modules@vger.kernel.org>; Thu,  2 Apr 2026 14:19:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775139597; cv=none; b=GvrzRzAhg7tsToOFfscI+U38jHG7VhhW6ImU9XcISl4fmssXu3sW+JvSgJs7yz6u5l8vS1HG4hN/ZBZJuW9ZASv9aMVU0M36w1NhRbaOiGi7vXQ7zLSyE6iKQ1AMS3Qnn2AC8+VqjbKoqGe2gw7+e827aVgGsQTsb7RSgwasQkk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775139597; c=relaxed/simple;
-	bh=cyVMP9Kyo1scTrFB2LAaQ/90OVciv1KyB7OE0taNBB0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sea8IvcNYc3eWA8fbY3oQ4gS61kJTH/NNT9sH1zm9tgsuTg1t2rwhCxVjDy9EhHmiaNDAQqN4H0s0RaCr3e/JeMSJBpBUCs1asHSvJ5nusItGJwMRya6UexHb15icUMEVMpR3aTzHcOam58nXD4MVSXH8X/vp0tSYmZWCIzKBgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SdjdwZH7; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01EF9309F08
+	for <linux-modules@vger.kernel.org>; Fri,  3 Apr 2026 04:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775191998; cv=pass; b=HvxV1Q7YvLNXW1602i6ce0/ihM6Tl6kQvL/6VfzwLWvVPHWlRr5M3/FFwQ2daO0ZPnP7+enOYYDSaRUHNOVjwXwDfgm11s7MyqRKWkmY2aEPpiYAQtw1+G9gY+KkJUZi+vtgHmalYiPqRONpNV0iGcqPWPxK2z85ADrTh8lFmCw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775191998; c=relaxed/simple;
+	bh=yl2v4HCLZpTTCWiNSHezHoQggNNu2rh4MEf6BSYZ4xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dT7xZr6UkvnoKfi9bXlgpVga6OESTOd3izSIktyARQ4/c7/EP2KWgebns3NOIwnj6iFXSJtiVhC5UYMhLJulXtDeU3BgPVseJaChK+QOt+YzqLz3Bv8kqBlXgBdVs3/uZgy+873B6csRDeD0ElZOBiDJfhX1FXNbMl6zafZnfTQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ScgQv2X5; arc=pass smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SdjdwZH7"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43cfb723698so848034f8f.3
-        for <linux-modules@vger.kernel.org>; Thu, 02 Apr 2026 07:19:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ScgQv2X5"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-124b07e5fe4so56585c88.3
+        for <linux-modules@vger.kernel.org>; Thu, 02 Apr 2026 21:53:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775191995; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XNJdjgPCwZFCA7FarJeh90MgQhtQJSJxVhSns834J4FnAI4HfKBHgFP9sEylIyoyzv
+         GohzNzyV4zRmhk19DKsZHXjahel8ChqTQZmwROX4h36g/8tGPpkwbl7bf4iWReC/axd7
+         g/CgnotP7cgiyD0kR5AEU7ak3DcqEvK14kYZ+NOP0RyMoxvblAu3L/+1EHIP2O8CF3Q0
+         vLGY1bdBk3QjST5xz5xj+woXbJaaeNBLBmzziInnad7M+mD31MOAWKaGH+d2fdbC9M/D
+         QxCeOYFClel89bb3/idnjLT+FG5Le08RtOZYC/Pol3zVp5UwPS6R7sa9FuLk+acn9N4U
+         7C9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BFl652h+zh7LQ70IxgsBAbSjGMJ2GOXvRo1wsMp6Q80=;
+        fh=2/+eMRZ9MzssOdibBi6E1sjrfwCUqKKnPNb+m2PNis0=;
+        b=PWRrF1jYEhRRaRMkrB0BJIuPRRpvwqAA9VAbfn+0OVkiEV2ZdLix/hoJY9rexjJeIC
+         dZ1PgAVofEe4QduJauLowXeXbeI/6QS+n0EjFo07xel0FaCli6GYgYkOMjp/5frXy99A
+         34pwu4kOV79/LBFSQX5Om0a0GziRprgk2sV7gvLlp3OKTs9WYxsOmguP/TS6u23/BAgE
+         zXp1g3KLeiYGVyrVryfnfPqjjSe/80VuiC+Ah7/Xkb2/bWabdkARXc8c7JEdnqLXes7b
+         kdejwHn0koS7mE8aygH9IxIq0qPySN9IQj6vJ97np1wUS4yWnBIqxTMniSpdBiZOH+d5
+         QfKg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775139592; x=1775744392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bkH+lobUTgIXjLrXq0Aorb2k1wsHUrp5cbKHFvjFzNY=;
-        b=SdjdwZH7ORwF0PTFgr47fahmbNTCkh8sH2yGbNg+Px3nxe6LufZXy4A1ljskE43AWZ
-         EeNOEV39EtEos49BEaOvJ+XtX5i+lryx9zHD+P22it0wBq54BbZqO7ax95SgtlvgYIEI
-         x0fXKDLmTuCXt0gGCgDcRQJJsl8jk7cXj1LMwYEzr1Roqo4ARb3AWSfVSTQ8sXDiG7fT
-         XF9iW2YiZ3pTDKdwmvGZhoZeEP9PaNc3k5QHvnE74HQptla3pQ3OuVnT3m91autnLkMP
-         n+DEKDLLoAZRvHDn+rOALzqXa91YJiB+tmXuYX94xBwklZsl2qI1UjTmWkxkwcGLPaQx
-         ehsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775139592; x=1775744392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1775191995; x=1775796795; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bkH+lobUTgIXjLrXq0Aorb2k1wsHUrp5cbKHFvjFzNY=;
-        b=DOZiquhFvQbzgPTiLdDW2jHqxt7m9IwsaK/B1KXgGtTea+X2WmUsnIiqFziAmXywyE
-         uaUfYl/wQgGJDxqVVKl4rkjhw79cF11gEkWF5W2q7/xUsr6yT0jnsp15Lcx72UY44IuR
-         JGrsGwmq9EwH8yAEQfQ1tAbf3fzyCFgCCO0zWhTz4XcMXSHLujjx0Xedm02XoPMeYi7q
-         6fpmqZ47lgtH6A+79xN3/fx3nDGhwahJ6cuK6RAh3/HoxJWpaEWNvB/ds1DAxTtUmHys
-         qv9KuWtw3ga9ckdM+FTtkTRoQcUMNz71TCwRSj0sqO3vl4gDvBrrs4OiNJyVE1/gq1HZ
-         QpSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoLl1vjJreKEu5sfR0bhvcbAlwJDRgko8wQZKto6nlIZn5hcUEJLf8sIfjdkyTgYQP0xJbHNzNicDHdfn8@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz/jOYUGRMQYHVDozTWh9yfOUoFoRZ/H0ppueOFn9fzOyFubi3
-	uP2qRPh9jzihO+Qs4dnsRIRNhnKR2CbDik227xlaq8cfBNRoveVpfXOh7ZTLbkisS6g=
-X-Gm-Gg: AeBDietatM1P/eIWsu0xEGBKWYvdtGLnaceh39g17DiaVrG0PIcxb0xa1aVYideF/ww
-	CFuqahvVxe14e5X/yDGA6ij5/pg9w7WDs6EitoSgzF1v2mgf3v1NwI82WTzstKET89uzXHkwKl7
-	jqnXjWI9w4vf6N5g32SIFrkRzk+r7EvyyNeKr4LRJRyGdP1jjx+iJ69MEza/WvnQDqVc/lXXhp/
-	fjBtjRzclP+Y1dx9dY8fR5TJGXCRDw/TdubwfT/XCXcUbra7Binw4Ga/qzbIP5rbOOZd5KBmlwh
-	ERKhcwqwahFKxl5vRjaznx212pmD6J/B22jUq1+txSF+HYVL149kKt4bCa/t7W+wvPjNlYffbsD
-	s9hKRPwBVs+30Adfhzb1n2yF+kS4LwB9OU39zFwsMtBwYFxuU0nLqI2OMuEwYzQYNE3SXORswHJ
-	wVLswDmV+GI5Hd/gN2EtLEp9iYSWwlMKoTVixX9S6K
-X-Received: by 2002:a05:6000:250a:b0:43d:4c:229f with SMTP id ffacd0b85a97d-43d150e161amr13806399f8f.44.1775139592291;
-        Thu, 02 Apr 2026 07:19:52 -0700 (PDT)
-Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4e56fesm8459818f8f.27.2026.04.02.07.19.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2026 07:19:51 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH] kbuild/btf: Avoid relinking modules when only vmlinux changes
-Date: Thu,  2 Apr 2026 16:17:16 +0200
-Message-ID: <20260402141911.1577711-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.53.0
+        bh=BFl652h+zh7LQ70IxgsBAbSjGMJ2GOXvRo1wsMp6Q80=;
+        b=ScgQv2X5z/bPy2+z10wPDBjbAJjE3PoN74nC1/UvC8JtZrsNakh9CrdwIoI/YgeAZv
+         vPnuj3BDj0nN8pXYnK9uVgnS+bFJraVVqGHAKvAp43hVsAuo9JXI9HsRc7m/RruZY+vG
+         rk6zChqSM20v1riLHfqgMxA/BGVzxS2mQvBQsi/njNzqEKa+gFAhXxn7438rzumaCaM/
+         I9UCC8FnDWjbGb6klI9w9/Y6Dk4cGDccSFAOfqrlJfmKvW2sre73jo6S+2MGhHYQ2xxo
+         Asu1zybAk6UXgPIuDpPXjhff0bq+nGK829+7dFbpRs3XJupsBJS/81apoQjRSdwId/1b
+         rCCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775191995; x=1775796795;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BFl652h+zh7LQ70IxgsBAbSjGMJ2GOXvRo1wsMp6Q80=;
+        b=ZpVPaUEQ6HrasStmDpc6FCC8+3oIqv3o843CLihfJfzf0bKfD876N1OuSdtZPNMQUq
+         XnZWWwpPKnNYUOPJkB7bEiXkFLYlK9i2paDSDZMfLAtMKQd9F97E4/k/3q6GO1ZS7RgS
+         rkTrR19ptXaFBAttSR7H93qojiRX0qQ9OKydMw/MCfWNVKHW/8Dhbvu6WHViO39WRIyH
+         E4e/3qlNm33naIz8zoSoawngZldfFc5PTqKxt4m4y9kRgM3Y/pP8tSpssp+8i2O4CSAj
+         r4ppEjYNyjQQkWIbouDkhQDbyU0HDOkLIPhihjbkA18nnGXYbxAJ78o+n2TviyAh9NUa
+         GpKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWr2FgD2Ihh09s+tQSsRqvWXdI3bBnEUDlr1R4eZ7pVogCQr6WWf6cwhpBZ90pbu6zRRZPzIBvShWviK+8T@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3g8o4c0Iu84SzpwyYXBj4g0U9dABKNjaOkztof2urpg5XVjiR
+	q0rOaZy/+7MS6zaDOea0kzTa7zlO16wLjMAKz5E/pVjGu1QS/wNZau6ZriavAB7GdNv9DP6z5wg
+	dHSHxGkqigorsovQD2+bs6QQRfSW1d4s=
+X-Gm-Gg: ATEYQzyqdY5vyq1WUJpnB3I3aN29tk5APui0FoGUMyC4dPLgmh8mxpZARXpzxMVbbfW
+	GuHiP33ehkuWBoROAY5gXePpDLqcVo0J7TGnErZ1KJQtAs9YrAdd8oa1iv0MvsRkqpoYGhxINeF
+	TnPBWgfJvCEOvAFvPqSbFtRHi1NXRda3LQB4/lDWA1Hdv5Je7j4Pt7oa2ltk63hv5Qeztlf47r5
+	h6A+fI0HI2jNCZAR5qfsRieFqTRGUjQmkZ5dWp72ENzMzEOBOA5NvOgc0XVs6AWEt3Y93o5pd/1
+	tOcM36feDBrykc8vUPPZOL+O/tGnArO3it8uv+4l8/WOru5tZ1/ZQiY1QpWwJ+OD7JHJCEdkcnZ
+	gzvYwiXYvaQA05pv9/ngEemY=
+X-Received: by 2002:a05:7022:929:b0:128:d590:2947 with SMTP id
+ a92af1059eb24-12bfb740ef0mr367589c88.4.1775191994985; Thu, 02 Apr 2026
+ 21:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260331205849.498295-1-ojeda@kernel.org> <20260331205849.498295-2-ojeda@kernel.org>
+In-Reply-To: <20260331205849.498295-2-ojeda@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 3 Apr 2026 06:53:02 +0200
+X-Gm-Features: AQROBzDJbkOKUs3Pbx6-NjHKhuMni-H63EEyi2tvHo0-KK_56o32Fe31dKQRj3Y
+Message-ID: <CANiq72kNqmGpFurRy2X+a=9fHV_hxpfWBJ-+dEL_qj2daLM8ww@mail.gmail.com>
+Subject: Re: [PATCH 2/2] rust: macros: simplify `format!` arguments
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org, 
+	Aaron Tomlin <atomlin@atomlin.com>, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
-and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
-to enable generation of split BTF for kernel modules. This change required
-the %.ko Makefile rule to additionally depend on vmlinux, which is used as
-a base for deduplication. The regular ld_ko_o command executed by the rule
-was then modified to be skipped if only vmlinux changes. This was done by
-introducing a new if_changed_except command and updating the original call
-to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
+On Tue, Mar 31, 2026 at 10:59=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wr=
+ote:
+>
+> Clippy in Rust 1.88.0 (only) reported [1] up to the previous commit:
+>
+>     warning: variables can be used directly in the `format!` string
+>        --> rust/macros/module.rs:112:23
+>         |
+>     112 |         let content =3D format!("{param}:{content}", param =3D =
+param, content =3D content);
+>         |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^=
+^^^^^^^^^^^^^^^^^^^^^
+>         |
+>         =3D help: for further information visit https://rust-lang.github.=
+io/rust-clippy/master/index.html#uninlined_format_args
+>         =3D note: `-W clippy::uninlined-format-args` implied by `-W clipp=
+y::all`
+>         =3D help: to override `-W clippy::all` add `#[allow(clippy::uninl=
+ined_format_args)]`
+>     help: change this to
+>         |
+>     112 -         let content =3D format!("{param}:{content}", param =3D =
+param, content =3D content);
+>     112 +         let content =3D format!("{param}:{content}");
+>
+> The reason it only triggers in that version is that the lint was moved
+> from `pedantic` to `style` in Rust 1.88.0 and then back to `pedantic`
+> in Rust 1.89.0 [2][3].
+>
+> In this case, the suggestion is fair and a pure simplification, thus
+> just apply it.
+>
+> In addition, do the same for another place in the file that Clippy does
+> not report because it is multi-line.
+>
+> Link: https://lore.kernel.org/rust-for-linux/CANiq72=3DdrAtf3y_DZ-2o4jb6A=
+z9J3Yj4QYwWnbRui4sm4AJD3Q@mail.gmail.com/ [1]
+> Link: https://github.com/rust-lang/rust-clippy/pull/15287 [2]
+> Link: https://github.com/rust-lang/rust-clippy/issues/15151 [3]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
-in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
-from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
-previous logic to skip relinking modules if only vmlinux changes. The issue
-is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
-prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
-retains the raw './vmlinux'. As a result, if_changed_except doesn't
-correctly filter out vmlinux. Consequently, with
-CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
-changes.
+I will pick this one up together with the other one, but if someone
+prefers that I don't, please shout (e.g. if modules wants to pick it
+themselves).
 
-Additionally, commit 522397d05e7d ("resolve_btfids: Change in-place update
-with raw binary output") in 2025 reworked the method for patching BTF data
-into the resulting modules by using 'objcopy --add-section'. This command
-fails if a section already exists.
+An Acked-by is also appreciated, thanks!
 
-Fix the unnecessary relinking issue by also excluding the normalized form
-'vmlinux' when invoking ld_ko_o. Adjust embed_btf_data() to first use the
---remove-section option to remove the patched BTF section if it is already
-present.
-
-Fixes: 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some in-kernel build artifacts")
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- scripts/Makefile.modfinal | 14 ++++++++++++--
- scripts/gen-btf.sh        |  6 ++++--
- 2 files changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index adcbcde16a07..2981745a172f 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -54,9 +54,19 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
- 	$(cmd);                                                              \
- 	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
- 
--# Re-generate module BTFs if either module's .ko or vmlinux changed
-+# Build final module objects.
-+#
-+# The *.ko files are usually independent of vmlinux. However, special handling
-+# is required for module BTFs, which need to be regenerated if either the
-+# module's .ko file or vmlinux has changed, as vmlinux is used as a base for
-+# deduplication. Consequently, vmlinux is included in the rule prerequisites.
-+#
-+# The regular ld_ko_o call is conditional and is skipped if only vmlinux has
-+# changed. The exclusion pattern used in the if_changed_except call contains
-+# '$(objtree)/vmlinux' to match the exact prerequisite and plain 'vmlinux' to
-+# cover the case when make normalizes './vmlinux' to 'vmlinux'.
- %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
--	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
-+	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux vmlinux)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
- endif
-diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-index 8ca96eb10a69..6d4e629c79ca 100755
---- a/scripts/gen-btf.sh
-+++ b/scripts/gen-btf.sh
-@@ -104,12 +104,14 @@ gen_btf_o()
- 
- embed_btf_data()
- {
--	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
-+	${OBJCOPY} --remove-section .BTF \
-+		--add-section .BTF=${ELF_FILE}.BTF ${ELF_FILE}
- 
- 	# a module might not have a .BTF_ids or .BTF.base section
- 	btf_base="${ELF_FILE}.BTF.base"
- 	if [ -f "${btf_base}" ]; then
--		${OBJCOPY} --add-section .BTF.base=${btf_base} ${ELF_FILE}
-+		${OBJCOPY} --remove-section .BTF.base \
-+			--add-section .BTF.base=${btf_base} ${ELF_FILE}
- 	fi
- 	btf_ids="${ELF_FILE}.BTF_ids"
- 	if [ -f "${btf_ids}" ]; then
-
-base-commit: 7aaa8047eafd0bd628065b15757d9b48c5f9c07d
--- 
-2.53.0
-
+Cheers,
+Miguel
