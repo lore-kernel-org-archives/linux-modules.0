@@ -1,80 +1,81 @@
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B912E1EE7
-	for <linux-modules@vger.kernel.org>; Fri,  3 Apr 2026 15:53:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D403361DB1
+	for <linux-modules@vger.kernel.org>; Fri,  3 Apr 2026 21:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775231597; cv=pass; b=m9SIYp5uVfJJhiIngRfmKT1NpI4o4C0XoY7fwmRF6sQAJaKcQfmU2PU5OBfN0IOWQZnjYEaVEjRqIEHcJ0jvL1hInJ+XMORGEcRLv7QJw6J6dFysTG+Ixp4hzRH4Xe4h+odblFyKDAWoublsXgyyNo+cejjp7OsS1/GmpZ6ZrCE=
+	t=1775251451; cv=pass; b=E5F0j9ZiJmnjyPi+fXMb/1R873/XWCjZErwALnzsxbA/pCYEB/ZcyzQLehNeo6oLYrtaMniDZCP2E+PIS679iAWlrWu2xBHQ/hZpg/ES3emZxz8sBC9i653GfvycN06r4HETuTVOcZLHgs7lftRZgdLGD5iVaCXvLTqSVq9ojmk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775231597; c=relaxed/simple;
-	bh=t23z0PvZ5SLNM3iOMGWZAQbIb7X50AxZc0jqO7F0tJ0=;
+	s=arc-20240116; t=1775251451; c=relaxed/simple;
+	bh=Cs3nAqRjHjioxjYHhaJzVFtzKHaPCe2OYhO+RwJxfGQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IWgaYYcECSXbG0hNEELfmfNWFX0fViuLPdal+jvpJUnQcFKSzKWGAAAtpiX+yorgfs+edhWF774US884vgAV4zKyuvPzklo60cE8n+9q7Z4Lxp03H03qpO/pz0Ym+YmD1/1WnYiad7WmPYlKwJmSr26W6IgCFlS8/DoU+iRLhgw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NjFAMa/4; arc=pass smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=ZveSPy1O1vXYistUjY8wkIkgwqdh8jufYBOduJw/FuIQ1Git5KCzpgDFnLx+6DTJ6EroMunDTxQdFLC+n4iNY2jsWZA8ZcdcE41sCBZByn9LTe1gDpTt/85TtDsTm7tJKX/m/JHGVf5NVmFmLvj8zHu+MjxvZG7r5gQ3VDe4brU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MRoXO55O; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NjFAMa/4"
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-66ba6d3dab3so11292a12.0
-        for <linux-modules@vger.kernel.org>; Fri, 03 Apr 2026 08:53:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1775231594; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MRoXO55O"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2b8095668ebso162069eec.2
+        for <linux-modules@vger.kernel.org>; Fri, 03 Apr 2026 14:24:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1775251449; cv=none;
         d=google.com; s=arc-20240605;
-        b=Zh28LlDgbbEpcGbKDkMn0HylzdTq3kTDGEN/2utvIAIutALJLoatetBpOIABlmxsd7
-         d/3DJOreMuEGj2qxToqC8QhI89WacA55hU9nE05HOwIVRfJ0fQXOKXCQcXzxP1CF5Uut
-         Vw5jkWVLzHkAjyLgyf+qYlAjoNE34vEdkiXrY9DffyS524/xZLjGodRLaoZmafEbFfJS
-         Qos8o/InMZsxN3tFl2pzpYbrqh94AZpzr8XavKQXJUDTKMWrNUH/0WvzhUq2NxgTxc8b
-         cnVQt83KKOOvRl7i+vvW/qR3dJc+YUH6A9eeqZwjl19EnYegdQa9vNy06BdxQGZmoYMf
-         SGCA==
+        b=jfDpOceXidRObfKUAoLUogX7w2V0mLioaFwv3RzKvJfBcTvpAddu0dZHWP0cTClMFK
+         5grM+QwXCBj+iNAjXujb/kQnoT1aoE4LRBe/oCVCKV5kbH7fgB8vU5KeYxj+4RPvW8Mt
+         inrOOXhfQMKD0XXfi3YW9R4Rikok0YLqdWuEVIEO14CA/7b9LOodnVg4e8L9Jm2N1gHE
+         DLHTB863cLPiFfVq+lSZEMyR9smxMnWeyhK1wdSTI4J5EY8+uNgIZWQONR7+Z9P5Eucf
+         DEQImLWkrn3u/OQIlYFqZAPRE6D3QkgkyCyyrBF7SYxoCSr5tFss08Hm7Sa4ypVrPFjA
+         PbIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=coqr6EFlArhl/x0h/ZohwmdyLe+IJgT11ByZbHHxjb8=;
-        fh=56l+UdEvL4b23NALdevsnUkdUaR6zLPnwL2+LAqvhHY=;
-        b=VEm2kIc1Sg3Q6u1aJldNcL86yBC7e8M7uMiW9REKDt72tB4DT4/wN1cfmCAY8M0bVD
-         se6vcqGT7fUBIfCx16CBHMsp29Qshtq3h9XO7hgO6Mz2Yl/SLZvhImERJuDkyD5uAmff
-         rZq8aPzXOVXQQbngzyh72uqP3jCCHXCy+YEbl1bwQOt1igLHF55guKlqy0S0iRsnnBZB
-         uC2A5jkjWqQoenuJBOgy3gGsuFf+J3s9bq95uvyIpVpdKFpfbR/PelRT48is7y8xErJ0
-         PaSLDVvY0AIw/JqoOQ9YmRo1Q5GJKMonj4jEWUPz3xfHDhIGnPM9i1YQvH+PFBvkLmuy
-         K45g==;
+        bh=Cs3nAqRjHjioxjYHhaJzVFtzKHaPCe2OYhO+RwJxfGQ=;
+        fh=kRcV+3B3vR6LGJlKrxDfPai1g1pdfwdDeOTz5RGJYnA=;
+        b=XfyncVeSyQ4jQP5rzOIDMiHbG4Ka4OVpn9VCsUkYRsNWcFjdsCAUxPaJgwpjyHhRCt
+         XnTLoX4V+uSbitUg4L2UXc7S5JHcwcIAssXGuELs+ksOCd2MlyPCynwtPiBmJS7f8/WK
+         orkOTI8NyI4GTsDqaojPnyvewALzPM1QEj2H6XsXar6tOfDYTEAajlzw4glPpHNcx5aN
+         YCJYDYoGEQ97o1X5OAa0acory9ei7k/1ZH6u/MLyJZH3AvJZ1GEj1e2WVd1bwSLvhVgI
+         H78c3otj7/ij6D8uXZ+ek3j9vAtfqQAPlOH4+j5uM56syom5M/C2rWxyE0imF+6IxtPC
+         f2cA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1775231594; x=1775836394; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1775251449; x=1775856249; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=coqr6EFlArhl/x0h/ZohwmdyLe+IJgT11ByZbHHxjb8=;
-        b=NjFAMa/4gMTIyl7BlE0aQyZ1GJ+rVpy10ZCGEpSJ/JxduwK/HxPapOnuNDmM8yi0XL
-         SJZDXBcBl1vyCSWAbiZcgPMQXpWU5jNGVHcHuaybl5DFK3N2UoCL4zYWIPH/Ay7n17oU
-         U0QEpAgorn4C7554o/d/BOg0tfERKk7lnBAeSaxZNypiOk3sGQxVcMmqdk/Xd33+FFp9
-         3xqtJRkJWutehg0v6hTx9YRcIQxaHhjmspQNxGGbsyDcjT6nzWncOwVEnQIuBK9+v62J
-         4+7kOwppmVeW8hBhcnZwLfJKu8D/gaLZaqLtVn6jUoHa9DiO97vlq2o2T4PkUNAIxnZb
-         cgmw==
+        bh=Cs3nAqRjHjioxjYHhaJzVFtzKHaPCe2OYhO+RwJxfGQ=;
+        b=MRoXO55O/3wKUufhV3SSQkDEWLLF7sw+4UaSow6fSGuPaqpTLL3joUlLfqAIefncsx
+         hmOOuDT4NsMh6dbicranaiy/KMHKd44INZdXmVsvQHuWkn8F+q/6PSTEtHh3++cj1zEz
+         ixtkye5Hb5iHk6KcFg2z//zaU2mbBWJAVLQCwPEgLi3bGjU3P5aMJdbIfgQxXNY+9tQ9
+         WqUHSj3kWddcy4W/sHeiIeiElH7guUfjdPJa52bD0j9qx0DcytjHoaOFFCcHIi6GoBc5
+         0VzPPCPs5daxSp4VG2OJWfXIkOmRiKr3k1PE0m6AQTIdKb6WKdMxBPlDS5SU6ykcKSvF
+         QRMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775231594; x=1775836394;
+        d=1e100.net; s=20251104; t=1775251449; x=1775856249;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=coqr6EFlArhl/x0h/ZohwmdyLe+IJgT11ByZbHHxjb8=;
-        b=gAYU9rGC6Qqxxcu/F+FtOGe4/QLu7B4wFsu3oW5Rn380EkH3dowLahJSQfK2bOPEb5
-         Ztrh5J/kdx+K1VEfY+5SVeeYVRTs5tMy8vr/j73RXR4zzS6tYRJi9BeG6/192PwGje4b
-         YtFIw+5KbU8dPVfnshqwan3Lyqw3CPZg5XyknRN1BwH2N5ohUAcXPMX8qgh+csW1EceZ
-         LlE/4aiTMly0r45nJFgohdj3GriC2ZCgZpAEpynXFIqmJJ6m2cgMx1JYL5Mu9asepp5c
-         Wrm0FIgdrPpegNpcWmTc53XeTlwvghaJZiU6xLgYhcqHK02HRS2lhAE45ew/FyEWOCKW
-         a1SA==
-X-Forwarded-Encrypted: i=1; AJvYcCUEwaW+ptOG1m0VHNoa8U66khgrm0X9vLptkysBdPSKTpoxyO6AqkKDI0WamZFDj7BJ+ktQSrz/ShXCTeLh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyskXBMsaMBd0gsaqyq8+eCO3KZvmZa27IIaw5nO3w0deSCfNZ4
-	gfHWo8fObsJ/x4OVA1zWN36tCPYsXtVSHV42nd+4KhYivsFXYFlxKBkM6dBLqGxl2K0PeZ44POE
-	RUObKLuqplzpzS/I6R9rVe5vHb2jn7C46bo/zGHAU
-X-Gm-Gg: AeBDievlX6WGJUX99IxBQzOUwXHOlUaK0T+JBw1dHHOlVznOfZQ1w+UgMCZ6p+8KLmb
-	fxzs6X+yN+KUnWiqjy2cT8/Vlt+ZLYvMK6FR+OCqgfSkEqwJADYt3nWYOYz+WpKom8h9mw5S2Nc
-	PX1cQ6kc2h/4WJg6V9D9N0uT8EpA8hBZ3INKK0LUF4JEzDxNSBl5fRO/7cSY2jAx3URmOmjDKQv
-	L52MonoypouTdMSvRB5oHtON+NpFkPZxzH+Igj0m9X3JAZemDg/CqAV8dgRlSw3cYXJwr1YyLYD
-	ve0ZB9nDHQ+GRco=
-X-Received: by 2002:a05:6402:4244:20b0:66b:eb42:be7 with SMTP id
- 4fb4d7f45d1cf-66e43f7f81amr19687a12.13.1775231594022; Fri, 03 Apr 2026
- 08:53:14 -0700 (PDT)
+        bh=Cs3nAqRjHjioxjYHhaJzVFtzKHaPCe2OYhO+RwJxfGQ=;
+        b=JsSBvIHZfzvRdaunHwlpdaCFsyUFnDkYwkUdGHXdT+dinGPIFWEPjvUpewYiDGqJGC
+         TUjyI6ufIUp74FaP4npgGauGPGXF/Fp56PDkWqKiIu+lpCTjp/8a3XxLOFb1HIsI0Whi
+         CL75Mm4Yed4s+2zNyXddoeJRTsHGjTmJgLTmytlyClMVaNzSSPWyJ1VTZy+HVliFLuJI
+         e6uEJ8WkM8frhNENuGWtZ+bi29pdVsNFGTKCt8TvbI1wpbTBdefX1aQF1HvaO4WCUoYQ
+         KEyhtg7XbYNKIpco0Blnuf9kRdyOqMJfXWqDS5Uko7ui0oNoDthvdfVYtWtplkUppg7I
+         91hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWp4e2dR1Cf6RvOOQl/zIMogh+kkqdUo2QrgvO/h3ewvY4qjRar0yt53B1AcrOtRDaznBkULx4JhedWeGuJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK60OuzT33xMcnPPw815jE85IbyArRKsU8Rq5x04cV9Ly8qpvE
+	SwWd9NJwpdjj8z8uCWRxl5IO9bJa60vBr5xSplWsYD1Y5OrsWgb+UlPvE75XxqIe7mYtciCKhw5
+	1RfGmPf4vMSGXjF25uXIf5/zXZFOuYJM=
+X-Gm-Gg: AeBDieuDwmOtFpTdT1JxKZCUjYslEFBaGB/FnARKYcJtLWf9lohAUH82zRY3BYjh1m8
+	057uLmqMfgeViDTsXSSWdlIailPFFsOgsvvSfGWaWHE5b6ycKxhZClVNCaaFujsZHuKAtoImybl
+	MeXfKcewUssmx8dTt7y2JGujIe/ySe5vT913VV18nHtU4/D56vgSXDNHiWgnYUf/oMLqEY+GStq
+	Y/2+iFCQT+34HxuwN6Ay+Yhgzo0T1ab0t68mL0CNiFy8TOdasA8Qrxb6yhl4fHzR2prxquVilko
+	cGDiV2ZRW/0yH6e49MtfmpUBo94zu4GRw/5YZz/L3NIjaCCmX8QwI2pBl+Ylyw3zWXEjwLl2S9G
+	IpJlJvQpE/wn1klGxlq9GD58=
+X-Received: by 2002:a05:7301:d1b:b0:2bd:db75:c28b with SMTP id
+ 5a478bee46e88-2cbfcd54f9bmr1105240eec.7.1775251448669; Fri, 03 Apr 2026
+ 14:24:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
@@ -82,14 +83,14 @@ List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260331205849.498295-1-ojeda@kernel.org> <20260331205849.498295-2-ojeda@kernel.org>
- <CANiq72kNqmGpFurRy2X+a=9fHV_hxpfWBJ-+dEL_qj2daLM8ww@mail.gmail.com>
-In-Reply-To: <CANiq72kNqmGpFurRy2X+a=9fHV_hxpfWBJ-+dEL_qj2daLM8ww@mail.gmail.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Fri, 3 Apr 2026 08:52:37 -0700
-X-Gm-Features: AQROBzAYADRZHwIlu_Hu7-_xFAf5tXH5Q2bpU3B-T608yTRVpmc4-aeDHJhGvtI
-Message-ID: <CABCJKucPKB-ntYi=EzPqyypy0kEHwnZvEvCEyjdQUWqfeAnGig@mail.gmail.com>
+ <CANiq72kNqmGpFurRy2X+a=9fHV_hxpfWBJ-+dEL_qj2daLM8ww@mail.gmail.com> <CABCJKucPKB-ntYi=EzPqyypy0kEHwnZvEvCEyjdQUWqfeAnGig@mail.gmail.com>
+In-Reply-To: <CABCJKucPKB-ntYi=EzPqyypy0kEHwnZvEvCEyjdQUWqfeAnGig@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 3 Apr 2026 23:23:55 +0200
+X-Gm-Features: AQROBzB3MUuJJ3FThSbyL0_qVKcvYvwi_z1x37J_iBtfZ4z7dOAlfjoh1a-7qKA
+Message-ID: <CANiq72==CZDMbjq0VE1e0ov7uLoSDBs_g3TR8S=EfsyC-m0mUQ@mail.gmail.com>
 Subject: Re: [PATCH 2/2] rust: macros: simplify `format!` arguments
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+To: Sami Tolvanen <samitolvanen@google.com>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
 	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
 	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Boqun Feng <boqun@kernel.org>, 
@@ -102,60 +103,14 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Miguel,
-
-On Thu, Apr 2, 2026 at 9:53=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+On Fri, Apr 3, 2026 at 5:53=E2=80=AFPM Sami Tolvanen <samitolvanen@google.c=
+om> wrote:
 >
-> On Tue, Mar 31, 2026 at 10:59=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> =
-wrote:
-> >
-> > Clippy in Rust 1.88.0 (only) reported [1] up to the previous commit:
-> >
-> >     warning: variables can be used directly in the `format!` string
-> >        --> rust/macros/module.rs:112:23
-> >         |
-> >     112 |         let content =3D format!("{param}:{content}", param =
-=3D param, content =3D content);
-> >         |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^^^^^^^^^^^^^
-> >         |
-> >         =3D help: for further information visit https://rust-lang.githu=
-b.io/rust-clippy/master/index.html#uninlined_format_args
-> >         =3D note: `-W clippy::uninlined-format-args` implied by `-W cli=
-ppy::all`
-> >         =3D help: to override `-W clippy::all` add `#[allow(clippy::uni=
-nlined_format_args)]`
-> >     help: change this to
-> >         |
-> >     112 -         let content =3D format!("{param}:{content}", param =
-=3D param, content =3D content);
-> >     112 +         let content =3D format!("{param}:{content}");
-> >
-> > The reason it only triggers in that version is that the lint was moved
-> > from `pedantic` to `style` in Rust 1.88.0 and then back to `pedantic`
-> > in Rust 1.89.0 [2][3].
-> >
-> > In this case, the suggestion is fair and a pure simplification, thus
-> > just apply it.
-> >
-> > In addition, do the same for another place in the file that Clippy does
-> > not report because it is multi-line.
-> >
-> > Link: https://lore.kernel.org/rust-for-linux/CANiq72=3DdrAtf3y_DZ-2o4jb=
-6Az9J3Yj4QYwWnbRui4sm4AJD3Q@mail.gmail.com/ [1]
-> > Link: https://github.com/rust-lang/rust-clippy/pull/15287 [2]
-> > Link: https://github.com/rust-lang/rust-clippy/issues/15151 [3]
-> > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> Sounds good to me, thanks.
 >
-> I will pick this one up together with the other one, but if someone
-> prefers that I don't, please shout (e.g. if modules wants to pick it
-> themselves).
+> Acked-by: Sami Tolvanen <samitolvanen@google.com>
 
-Sounds good to me, thanks.
+Great, I have added the tag now -- thanks!
 
-> An Acked-by is also appreciated, thanks!
-
-Acked-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
+Cheers,
+Miguel
