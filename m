@@ -1,267 +1,128 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C3B55B21A;
-	Mon,  6 Apr 2026 17:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3BA93AD51D
+	for <linux-modules@vger.kernel.org>; Tue,  7 Apr 2026 11:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775495444; cv=none; b=NtzeQ7BxuBnDjHafXJKFb9wYUOA3IduPTWm52hDuTOyj2YFiqqsPYDCeKkt1RMxWb295AdiFwEOGhSKQGDBoV9pM+DXbvk5KbwhrAmUFroQ+VHxQ8X/g+2N30zQ8bhGKiFbJdgNfwz1LgB55aOzIN7B8kgNB6nH5KamgM3A2Q7g=
+	t=1775561413; cv=none; b=q4D03smPM4gS7fP8+4WBY11IHUi6+sY+xu61D0OYoa83nGr7+NyUsXkwKu7YTV0BJ0P4xTGAIXRsCeN5Qebh7mtIo0aRf5vps3bJ0WbE9EwfNh1keopAdeLV6xhBZ/QGTEz4nPSnqENwOMqLCKoEEIjwiCCLqepLPwb4k1oeJjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775495444; c=relaxed/simple;
-	bh=MXWMfm7gYuCy+lH29Ulu+OgomyQFa4RlJVCCUcO2sq0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VDXh1Ry/xDiY+EH/HoXJwFMXdJSixpR2RRfhmJlplrVj6kJzwv/+u/EF830rHemRJbK9VvxF2wPo7dFJbF+wRoYIB79ZBGKGAPnJhJH7zxK0idSDkO5hPs5ely3q+MJp/NIKpp411isaH+RpeBag2OASGzzEHnyWutzHJ0nSOl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NJWaSml/; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1775561413; c=relaxed/simple;
+	bh=gJmeGJ4YN8tSj2UwwdnqaAqNbb191sdvW00bw/KMDMo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uHSm1r83vwZpxiP5gC0yeqvskv04NoR2ZpLTHJ+v4UF/MEn8Trl16gL09Xe8xX5GbSWGKShBgkRfpjr9J5k/O6kc6o86zlcKVXuJURModK3ogQuSLrD0pqM+mSvloclH+5uNTq6viih9NZpZcdBVP2W46N7sEiqWAu7VnO4ZqjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=LlgejsTs; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NJWaSml/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=3f
-	/CqEZ6rAhrvqy84EMB+c5jUzWz13pC4lbmPe/95RM=; b=NJWaSml/YpA23MeChR
-	4oneWjsJvUkTDgw37unXxB+bfv2Wid8HF+tCME1qWG+9MetTHso0Rg6DxQi+VMdS
-	VNl8ZUE4e6czH6nEbGQ2PzU2reOKXUmjw1V+22kEeSFANsj+3Jk66kTcGk2cr/09
-	camzlSI/1M5jKJU9dN5hKi+KI=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD31xDd6NNpTvd2Dg--.47409S2;
-	Tue, 07 Apr 2026 01:09:51 +0800 (CST)
-From: Cao Ruichuang <create0818@163.com>
-To: rostedt@goodmis.org
-Cc: mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	atomlin@atomlin.com,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org
-Subject: [PATCH] tracing: preserve module tracepoint strings
-Date: Tue,  7 Apr 2026 01:09:44 +0800
-Message-Id: <20260406170944.51047-1-create0818@163.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="LlgejsTs"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so2680987f8f.0
+        for <linux-modules@vger.kernel.org>; Tue, 07 Apr 2026 04:30:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775561410; x=1776166210; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X0AK+dItOezHrfutn/S86jIfwBt1tYlgVzWPhG3Rkg4=;
+        b=LlgejsTsH9VJsNm/3X0MBF7h9YHfSL4diYMLtPfjqUh+JpV3M/Y0wPgN7Y1ctIcwv2
+         im0KDa4nk/17sDatAoJzu6p6lyobo6xkj48+5xoDwElSUvwwMoKONYjukr2NLxduW5Wb
+         +iltYLAfBzgwtTrOGZKBSMJHqcRVW6TDVpQShQTV27EfvapSBIluxWltwNuz9cqcpQ3i
+         SsOi/aySKC0/5Xv+pPdLYyf0yh7JNmJdDTJVWMZ2EZoYF4pMyV5IbO02ahzOPrPKqezQ
+         2hS3oEhzVOs69yrWQvLr8Ah6apAMl7QV/heiiKU1KlTUYP1v5y6KfAlpDab3lqldAZxd
+         ompA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775561410; x=1776166210;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X0AK+dItOezHrfutn/S86jIfwBt1tYlgVzWPhG3Rkg4=;
+        b=eK1+vyLVSVEzd8oJg/2fqsD6pMji1Mp4AcvMkAFaLdiGJgF69bYBU+zuf1cwexRMw8
+         z1kgObJzxjmpKi41jHIWSuyw+g3x8F/811sTIx9hOY8NsN9LQBSmRluURmfiN5+ULx5L
+         TmWd+s3PaJ60KIH2sdoP7F4FXkyN5WPSfTLMavC/eVGLYA5Sa//bDzLmQvF9zDSTimoH
+         Yoylxhu3+875H+U0hCEe4VjU/nOJqXp6yxWy1mqpmPnKKCVw0IFkfnLKC012u/QbWvRA
+         /5gghJjC3zsBAxjw+m4EvOlfVtSff/uMjjwZYAw4iKvegGKnbqoFklEhMjOixuW+f8sr
+         ZzQg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiLE54ZCdl02oKn1IOnAXFdmtMY0hiXxevBrupzO3fKqejl9zPTMmIjcSwmcqpxRq1yBgF5f/gaEP8LLho@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVbyFXxoX9uBTNxzpAnDxS2iJwN7MId1LR2+rZtHgtAdNIWxka
+	tMUHMqWkciVFLyh23qdUfWdNxNVME5LHz3OskxKFLLyoJB0dMLlmPIjfXtJMYI4RtNg=
+X-Gm-Gg: AeBDietMqEcixPTR+x7gnpfV27ES1FCSK3N5sSjH8BXQigxPLd1Mzxh2G3Wo2WX8Hl9
+	U5ty8yhfMlPjzftNBvXCJ9fUrVCYCL4oiA2kMm4YKaIed+55/NbjhHc9rUofL1VVT8B1OFFHs2H
+	fWAVFAoUpjrdyEQfnH/j+u1OUx5aqGNm8oC1lILqXbUQH2Vg5rbtIhy3VTm/BnNnMwCALJPORB6
+	fcxmZW88ROH7IWKFA0AZlWExyC/zk7Cq76xUNAbYfQ51+LuLOpn73fiVSTVQxX5snU+OMkafZGz
+	wQgl0Z5S4Cmdkuni8O6dwZHODU7aZh1nDUNkhe5LtJtspBZuQvV4qDqZI/Xgjq1ZIvnaX1xl+qM
+	GLFJACqH+s5s5fdF1vgJ2BovWHNbrLCwv8MhiFZx53Qdzuf07gEIu4ofPJyQC5XPv/Xe8lmhdkP
+	74dJaPHL4ZfY9d+/iCFn/sraEGvioQbuCfhLYd563doyD8
+X-Received: by 2002:a5d:5d0f:0:b0:43d:184:8a9b with SMTP id ffacd0b85a97d-43d2929d8fcmr23481469f8f.16.1775561409975;
+        Tue, 07 Apr 2026 04:30:09 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e2a720dsm49743604f8f.4.2026.04.07.04.30.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Apr 2026 04:30:09 -0700 (PDT)
+Message-ID: <dc3db54f-f95d-46aa-ad84-6258abd13fab@suse.com>
+Date: Tue, 7 Apr 2026 13:30:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD31xDd6NNpTvd2Dg--.47409S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3WFWDJw1DWr1kCr4fKF47CFg_yoWxuw1Up3
-	Wayr9xtrs8AF4qgFW0g34qkry3GrZ8CryjqFZxCr1fA3Z8t34DZa17tws8Aw18CryUWrya
-	kF1Y9r97Cr48Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbAwsUUUUU=
-X-CM-SenderInfo: pfuht3jhqyimi6rwjhhfrp/xtbCwADB+mnT6OA7JAAA3W
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kbuild/btf: Avoid relinking modules when only vmlinux
+ changes
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+ Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>,
+ Aaron Tomlin <atomlin@atomlin.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org,
+ bpf@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260402141911.1577711-1-petr.pavlu@suse.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260402141911.1577711-1-petr.pavlu@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tracepoint_string() is documented as exporting constant strings
-through printk_formats, including when it is used from modules.
-That currently does not work.
+On 4/2/26 4:17 PM, Petr Pavlu wrote:
+> Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
+> and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
+> to enable generation of split BTF for kernel modules. This change required
+> the %.ko Makefile rule to additionally depend on vmlinux, which is used as
+> a base for deduplication. The regular ld_ko_o command executed by the rule
+> was then modified to be skipped if only vmlinux changes. This was done by
+> introducing a new if_changed_except command and updating the original call
+> to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
+> 
+> Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
+> in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
+> from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
+> previous logic to skip relinking modules if only vmlinux changes. The issue
+> is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
+> prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
+> retains the raw './vmlinux'. As a result, if_changed_except doesn't
+> correctly filter out vmlinux. Consequently, with
+> CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
+> changes.
+> 
+> Additionally, commit 522397d05e7d ("resolve_btfids: Change in-place update
+> with raw binary output") in 2025 reworked the method for patching BTF data
+> into the resulting modules by using 'objcopy --add-section'. This command
+> fails if a section already exists.
+> 
+> Fix the unnecessary relinking issue by also excluding the normalized form
+> 'vmlinux' when invoking ld_ko_o. Adjust embed_btf_data() to first use the
+> --remove-section option to remove the patched BTF section if it is already
+> present.
 
-A small test module that calls
-tracepoint_string("tracepoint_string_test_module_string") loads
-successfully and gets a pointer back, but the string never appears
-in /sys/kernel/tracing/printk_formats. The loader only collects
-__trace_printk_fmt from modules and ignores __tracepoint_str.
+I noticed that sorting id+flags in BTF_SET8 by resolve_btfids doesn't
+seem to be idempotent, so this requires additional work.
 
-Collect module __tracepoint_str entries too, copy them to stable
-tracing-managed storage like module trace_printk formats, and let
-trace_is_tracepoint_string() recognize those copied strings. This
-makes module tracepoint strings visible through printk_formats and
-keeps them accepted by the trace string safety checks.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217196
-Signed-off-by: Cao Ruichuang <create0818@163.com>
----
- include/linux/module.h      |  2 ++
- kernel/module/main.c        |  4 +++
- kernel/trace/trace_printk.c | 63 ++++++++++++++++++++++++++++---------
- 3 files changed, 54 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 14f391b18..e475466a7 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -515,6 +515,8 @@ struct module {
- #ifdef CONFIG_TRACING
- 	unsigned int num_trace_bprintk_fmt;
- 	const char **trace_bprintk_fmt_start;
-+	unsigned int num_tracepoint_strings;
-+	const char **tracepoint_strings_start;
- #endif
- #ifdef CONFIG_EVENT_TRACING
- 	struct trace_event_call **trace_events;
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c3ce106c7..d7d890138 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2672,6 +2672,10 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 	mod->trace_bprintk_fmt_start = section_objs(info, "__trace_printk_fmt",
- 					 sizeof(*mod->trace_bprintk_fmt_start),
- 					 &mod->num_trace_bprintk_fmt);
-+	mod->tracepoint_strings_start =
-+		section_objs(info, "__tracepoint_str",
-+			     sizeof(*mod->tracepoint_strings_start),
-+			     &mod->num_tracepoint_strings);
- #endif
- #ifdef CONFIG_DYNAMIC_FTRACE
- 	/* sechdrs[0].sh_size is always zero */
-diff --git a/kernel/trace/trace_printk.c b/kernel/trace/trace_printk.c
-index 5ea5e0d76..9f67ce42e 100644
---- a/kernel/trace/trace_printk.c
-+++ b/kernel/trace/trace_printk.c
-@@ -22,8 +22,9 @@
- #ifdef CONFIG_MODULES
- 
- /*
-- * modules trace_printk()'s formats are autosaved in struct trace_bprintk_fmt
-- * which are queued on trace_bprintk_fmt_list.
-+ * modules trace_printk() formats and tracepoint_string() strings are
-+ * autosaved in struct trace_bprintk_fmt, which are queued on
-+ * trace_bprintk_fmt_list.
-  */
- static LIST_HEAD(trace_bprintk_fmt_list);
- 
-@@ -33,8 +34,12 @@ static DEFINE_MUTEX(btrace_mutex);
- struct trace_bprintk_fmt {
- 	struct list_head list;
- 	const char *fmt;
-+	unsigned int type;
- };
- 
-+#define TRACE_BPRINTK_TYPE		BIT(0)
-+#define TRACE_TRACEPOINT_TYPE		BIT(1)
-+
- static inline struct trace_bprintk_fmt *lookup_format(const char *fmt)
- {
- 	struct trace_bprintk_fmt *pos;
-@@ -49,22 +54,24 @@ static inline struct trace_bprintk_fmt *lookup_format(const char *fmt)
- 	return NULL;
- }
- 
--static
--void hold_module_trace_bprintk_format(const char **start, const char **end)
-+static void hold_module_trace_format(const char **start, const char **end,
-+				     unsigned int type)
- {
- 	const char **iter;
- 	char *fmt;
- 
- 	/* allocate the trace_printk per cpu buffers */
--	if (start != end)
-+	if ((type & TRACE_BPRINTK_TYPE) && start != end)
- 		trace_printk_init_buffers();
- 
- 	mutex_lock(&btrace_mutex);
- 	for (iter = start; iter < end; iter++) {
- 		struct trace_bprintk_fmt *tb_fmt = lookup_format(*iter);
- 		if (tb_fmt) {
--			if (!IS_ERR(tb_fmt))
-+			if (!IS_ERR(tb_fmt)) {
-+				tb_fmt->type |= type;
- 				*iter = tb_fmt->fmt;
-+			}
- 			continue;
- 		}
- 
-@@ -76,6 +83,7 @@ void hold_module_trace_bprintk_format(const char **start, const char **end)
- 				list_add_tail(&tb_fmt->list, &trace_bprintk_fmt_list);
- 				strcpy(fmt, *iter);
- 				tb_fmt->fmt = fmt;
-+				tb_fmt->type = type;
- 			} else
- 				kfree(tb_fmt);
- 		}
-@@ -85,17 +93,28 @@ void hold_module_trace_bprintk_format(const char **start, const char **end)
- 	mutex_unlock(&btrace_mutex);
- }
- 
--static int module_trace_bprintk_format_notify(struct notifier_block *self,
--		unsigned long val, void *data)
-+static int module_trace_format_notify(struct notifier_block *self,
-+				      unsigned long val, void *data)
- {
- 	struct module *mod = data;
-+
-+	if (val != MODULE_STATE_COMING)
-+		return NOTIFY_OK;
-+
- 	if (mod->num_trace_bprintk_fmt) {
- 		const char **start = mod->trace_bprintk_fmt_start;
- 		const char **end = start + mod->num_trace_bprintk_fmt;
- 
--		if (val == MODULE_STATE_COMING)
--			hold_module_trace_bprintk_format(start, end);
-+		hold_module_trace_format(start, end, TRACE_BPRINTK_TYPE);
-+	}
-+
-+	if (mod->num_tracepoint_strings) {
-+		const char **start = mod->tracepoint_strings_start;
-+		const char **end = start + mod->num_tracepoint_strings;
-+
-+		hold_module_trace_format(start, end, TRACE_TRACEPOINT_TYPE);
- 	}
-+
- 	return NOTIFY_OK;
- }
- 
-@@ -171,8 +190,8 @@ static void format_mod_stop(void)
- 
- #else /* !CONFIG_MODULES */
- __init static int
--module_trace_bprintk_format_notify(struct notifier_block *self,
--		unsigned long val, void *data)
-+module_trace_format_notify(struct notifier_block *self,
-+			   unsigned long val, void *data)
- {
- 	return NOTIFY_OK;
- }
-@@ -193,8 +212,8 @@ void trace_printk_control(bool enabled)
- }
- 
- __initdata_or_module static
--struct notifier_block module_trace_bprintk_format_nb = {
--	.notifier_call = module_trace_bprintk_format_notify,
-+struct notifier_block module_trace_format_nb = {
-+	.notifier_call = module_trace_format_notify,
- };
- 
- int __trace_bprintk(unsigned long ip, const char *fmt, ...)
-@@ -254,11 +273,25 @@ EXPORT_SYMBOL_GPL(__ftrace_vprintk);
- bool trace_is_tracepoint_string(const char *str)
- {
- 	const char **ptr = __start___tracepoint_str;
-+#ifdef CONFIG_MODULES
-+	struct trace_bprintk_fmt *tb_fmt;
-+#endif
- 
- 	for (ptr = __start___tracepoint_str; ptr < __stop___tracepoint_str; ptr++) {
- 		if (str == *ptr)
- 			return true;
- 	}
-+
-+#ifdef CONFIG_MODULES
-+	mutex_lock(&btrace_mutex);
-+	list_for_each_entry(tb_fmt, &trace_bprintk_fmt_list, list) {
-+		if ((tb_fmt->type & TRACE_TRACEPOINT_TYPE) && str == tb_fmt->fmt) {
-+			mutex_unlock(&btrace_mutex);
-+			return true;
-+		}
-+	}
-+	mutex_unlock(&btrace_mutex);
-+#endif
- 	return false;
- }
- 
-@@ -824,7 +857,7 @@ fs_initcall(init_trace_printk_function_export);
- 
- static __init int init_trace_printk(void)
- {
--	return register_module_notifier(&module_trace_bprintk_format_nb);
-+	return register_module_notifier(&module_trace_format_nb);
- }
- 
- early_initcall(init_trace_printk);
--- 
-2.39.5 (Apple Git-154)
-
+-- Petr
