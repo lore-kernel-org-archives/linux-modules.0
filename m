@@ -1,115 +1,77 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2899139F176
-	for <linux-modules@vger.kernel.org>; Wed,  8 Apr 2026 15:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D2A3DA7F4;
+	Wed,  8 Apr 2026 20:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775661900; cv=none; b=N3QN8s1phobyqXMk/3nmLFS/VSlU6aMEVR3twbh7NK1GXiodvU/eNOySrl0gC11gP4Mi4s71UzStjGwQJ7e7UBeR0e4uul1qpZE5BqQ4hbI0sxlcqH6Neua7IFyjpoMRpBkxcbYkj4lsow8U1lMmbWyo/cdk+z1qHTYP3FOWBpM=
+	t=1775680291; cv=none; b=rn113PQrqd4226OkjsA1JAJIILrJXWKDxzGlh/wv7ebufwGfZVLYRlxyCVkcFipuioX7dGonBPZ9g8q/9MTlIz3XlUhWpJtiAdbjTGhx5FXZwQ7cniALpFyg07Z8DAYehb2SOUT35sa6IsnyBAaCVbSYWUKCubD7Ii9vcRWm27A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775661900; c=relaxed/simple;
-	bh=Xvx5NbnOpNGEloDoPzkjBb0luYYTDDyuKVmozJ9v8uc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V+8UjXfotvk9hebYfhDnAYrdW1L5rclxVKeH3EdSaGyiE9qR+U9VGDPXd33iS6/emDAtgQAFh3islMYIFW4OpLeMkcMP78boJshYTEJgbOxnTaUxxAkMasCNuFveXUt5kJJnoOdkjtIbAH+K4Qo65/BA3k7CsMvEuJ7QGZvzutE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=KQ8bUH1h; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="KQ8bUH1h"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-488ba840146so23225935e9.1
-        for <linux-modules@vger.kernel.org>; Wed, 08 Apr 2026 08:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1775661897; x=1776266697; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=laiXp2rBEiPl8a2Z73ajRETlDqB8PAbCI44ILQPyqZU=;
-        b=KQ8bUH1hLy5ICPteP8XT2Q6t0+rlQFNWsPFCl0HCql1CbnJ0uRDCxcVkPRvqW5Kzgn
-         limg3sB/6MZcSJOUeCuCA/6yViMs/f2/r+0Cq3GsW+V9sUl6nhSOXPNuY+kI6gvgD8wO
-         CZSgsI1OHjm/agsWyGQR4XpR8DTSZZK+J01GYz3kjzgci60g6mhIu8XLlPLz1iFXHT8z
-         UEqYixHVm1J2RzS/zBZ7Oq2k9D/x0HOQN43GiF0wmtUhgXlz4z65B1OHdS+Gh5cDTQ0a
-         GyhodOMFStaJvY0TN04ONJXSx9wFzSg7MV3oiH6wQdoz1D/KBTVwe+ujuiU7srTaXg1/
-         FpZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775661897; x=1776266697;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=laiXp2rBEiPl8a2Z73ajRETlDqB8PAbCI44ILQPyqZU=;
-        b=aLbPXZhqYgrWjtL40eJx+a/yTQytFA/7Gx7qJ90gHGhI+zjg3BH7CE7nzyc/zplX/7
-         6B0fA75F74Mm/BNls6i6UqxFyXvxTGykS4yX1g+Q1LJHrxhW8rh7F7/CoPJdq6OYs439
-         GgIFGnoDeycbFv9EYEtb2A2WevmD8BdXI+EyqJPcT4QNpfOihWGFHn/e2yigr6xKoa51
-         COLDgoTnisiMy9N6H0wAqnblDVQwZg1bFoGC6QHTFJNmhguNH+E4zcUvLb1MG9fuenMy
-         j0kVfEUNNuB315/hsuB8tjnEtKieWKi7MveGK4gJ7wArEOHg3E6+IQmdK3ttz+L/e7Qs
-         +LsA==
-X-Gm-Message-State: AOJu0YxWRzoAyQPrsHpgZ+ASLU5xacE9vciZM5j0p8T7QTQSkzGFKHhM
-	jjj2SsCSvM+GjkpEqfKmPMgbVn+iDU5qoqg57AIkNR5XWE9kj39WawvXZ5KFw0tLndo=
-X-Gm-Gg: AeBDiet6m7qycZE3NBmkmkHcbnINGiH9ghlddgfm+1pd6BOpXXskDT3cpB43alggTVF
-	EnvMmmEXFaOI0WdqBtMYmP3YJoxEJyh7oahBOslYhs7Z9r4qVqgdRb4G5oQDnxqfwzT+NFrxYrB
-	uVl5KtjsTlDINkBcbxv8wpJNC1marCqQZZrdSw6HcSbITXTeqYYrXHIEsoB2nTgRcV7X7BXWQBy
-	GFPGdDHLOEa5EkV/JsF3rj3AK6zM2CtrcUlN49SLH/JH7ruOljiPtPsfgGEYO6JoMofQmFx8VS8
-	8m71xSRmujiVTGs1DqI8PuXg7OeLqgeirQ5OdzlZ4AxRfXGvbE6tlQYZzpiSyv9pEitMDRftQ77
-	F+VpV6aa1OD6fPcShZuAAJdCBKFiehVih/FRjC92J2zBdA625MZ+pOicUIiTQKS27CeZLBeLNAW
-	1B5mXjFI42orQ+3Ytin+hOD3efWeNscBVIbwnUikhLKNkm
-X-Received: by 2002:a05:600c:6208:b0:488:aa3d:fab1 with SMTP id 5b1f17b1804b1-488ccfc0554mr2091505e9.17.1775661894090;
-        Wed, 08 Apr 2026 08:24:54 -0700 (PDT)
-Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488cd1bb778sm32985e9.7.2026.04.08.08.24.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2026 08:24:53 -0700 (PDT)
-Message-ID: <999772c1-ec48-407a-a0fe-64665620d855@suse.com>
-Date: Wed, 8 Apr 2026 17:24:53 +0200
+	s=arc-20240116; t=1775680291; c=relaxed/simple;
+	bh=l2TKk7RqXY/yMRSmUxdi7j2QnQh7YNKuTn7QDnQrWmY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YwnW8FXlkYDH6t3l3T7ljejgLz3FhFmr4UokBDUKx66RC9SPLff6uDxVqcv6a3loNKkrkcK1KlB6knhanDQaG9UGdF7HNen78F//ydLo7g5403jLUygMuf3R4nf0fZc3I6hFDCY3rPtIvm0s1eoxRREiqPN7ih870oEZfM0Q5bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id B45BB8A939;
+	Wed,  8 Apr 2026 20:31:27 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 4B9A93D;
+	Wed,  8 Apr 2026 20:31:25 +0000 (UTC)
+Date: Wed, 8 Apr 2026 16:32:41 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Cao Ruichuang <create0818@163.com>
+Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, mcgrof@kernel.org,
+ petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
+ atomlin@atomlin.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] tracing: preserve module tracepoint strings
+Message-ID: <20260408163241.20723018@gandalf.local.home>
+In-Reply-To: <20260406170944.51047-1-create0818@163.com>
+References: <20260406170944.51047-1-create0818@163.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] module/kallsyms: fix nextval for data symbol
- lookup
-To: Stanislaw Gruszka <stf_xl@wp.pl>
-Cc: linux-modules@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
- Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org,
- Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jordan Rome <linux@jordanrome.com>,
- Viktor Malik <vmalik@redhat.com>
-References: <20260327110005.16499-1-stf_xl@wp.pl>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260327110005.16499-1-stf_xl@wp.pl>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: 4B9A93D
+X-Rspamd-Server: rspamout06
+X-Stat-Signature: qz54nsrq8xuy37mcmdyur6po33pfkf3t
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+iwW7Gtqwsk+QAjNp3uRmGVuX1BXG0bag=
+X-HE-Tag: 1775680285-191952
+X-HE-Meta: U2FsdGVkX1/rUfSbfUF7EOXAQ/GusUWaam3Jn4qgGJJoYvLXr4GFTy+zki6MXBbqNPsL8B06K40XFi0izN0ZiFTolPovPQwV2yMHjGENYNFn5Ftp5pDFrHUgHxIGeLe5kJYy05TIamBhX4GeSWn0r2QhH1APLAJge47svX3PC1+hpriOBhKS25Kvf6ah6SR14F/4WOkbOu3UT443jFn9g+KCWNadeEig28I0kBS4xoD2MmHyH9BZQr6ZM+Mzz11EtgKdV7/9ngwMs1sjHscO7aysyHRnraPVDjfKdFvCQDZil86pMxJiRttHFTBJ/ViOLS2mnWUkGl7DjVPCOj7aCRr0XMq5Aa+/r2b2seRbCIeayXo5b0LuTQ==
 
-On 3/27/26 12:00 PM, Stanislaw Gruszka wrote:
-> The symbol lookup code assumes the queried address resides in either
-> MOD_TEXT or MOD_INIT_TEXT. This breaks for addresses in other module
-> memory regions (e.g. rodata or data), resulting in incorrect upper
-> bounds and wrong symbol size.
+On Tue,  7 Apr 2026 01:09:44 +0800
+Cao Ruichuang <create0818@163.com> wrote:
+
+> tracepoint_string() is documented as exporting constant strings
+> through printk_formats, including when it is used from modules.
+> That currently does not work.
 > 
-> Select the module memory region the address belongs to instead of
-> hardcoding text sections. Also initialize the lower bound to the start
-> of that region, as searching from address 0 is unnecessary.
+> A small test module that calls
+> tracepoint_string("tracepoint_string_test_module_string") loads
+> successfully and gets a pointer back, but the string never appears
+> in /sys/kernel/tracing/printk_formats. The loader only collects
+> __trace_printk_fmt from modules and ignores __tracepoint_str.
 > 
-> Signed-off-by: Stanislaw Gruszka <stf_xl@wp.pl>
+> Collect module __tracepoint_str entries too, copy them to stable
+> tracing-managed storage like module trace_printk formats, and let
+> trace_is_tracepoint_string() recognize those copied strings. This
+> makes module tracepoint strings visible through printk_formats and
+> keeps them accepted by the trace string safety checks.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217196
+> Signed-off-by: Cao Ruichuang <create0818@163.com>
+> ---
 
-Looks ok to me. Feel free to add:
 
-Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
+As this is not a trivial change, and affects module code, I'm going to hold
+off until after v7.1-rc1 to apply it.
 
-As a side note, I wonder if manually determining symbol sizes this way
-is the best approach for modules, instead of simply returning the
-st_size of the symbol. The logic comes from the original implementation
-in "[PATCH] kallsyms for new modules" [1]. Unfortunately, the
-description doesn't explain this aspect but considering that the patch
-rewrote both the main and module kallsyms code, I expect it was done
-this way for consistency between vmlinux and modules.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/mpe/linux-fullhistory.git/commit/?id=d069cf94ca296b7fb4c7e362e8f27e2c8aca70f1
-
--- 
-Thanks,
-Petr
+-- Steve
