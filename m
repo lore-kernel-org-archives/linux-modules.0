@@ -1,55 +1,87 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D2A3DA7F4;
-	Wed,  8 Apr 2026 20:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6761A304A
+	for <linux-modules@vger.kernel.org>; Thu,  9 Apr 2026 12:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775680291; cv=none; b=rn113PQrqd4226OkjsA1JAJIILrJXWKDxzGlh/wv7ebufwGfZVLYRlxyCVkcFipuioX7dGonBPZ9g8q/9MTlIz3XlUhWpJtiAdbjTGhx5FXZwQ7cniALpFyg07Z8DAYehb2SOUT35sa6IsnyBAaCVbSYWUKCubD7Ii9vcRWm27A=
+	t=1775738240; cv=none; b=agB5UrUibw5gA8a4xbl9pxn4pMQ2B2naVVdNQhiBp3Ml8jjJv0tVeQBivYqjxvG58vdRQlWECFIsKV+ZaCbKPhnaWEHr8GJ8Cp/0Qjm226mkLeTzBQdoqQgtiNvNJyiaeZnTn22qXZNIoufBpyJBy9+4W6ilbAwe6FKWzD1UsYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775680291; c=relaxed/simple;
-	bh=l2TKk7RqXY/yMRSmUxdi7j2QnQh7YNKuTn7QDnQrWmY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YwnW8FXlkYDH6t3l3T7ljejgLz3FhFmr4UokBDUKx66RC9SPLff6uDxVqcv6a3loNKkrkcK1KlB6knhanDQaG9UGdF7HNen78F//ydLo7g5403jLUygMuf3R4nf0fZc3I6hFDCY3rPtIvm0s1eoxRREiqPN7ih870oEZfM0Q5bY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf10.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id B45BB8A939;
-	Wed,  8 Apr 2026 20:31:27 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf10.hostedemail.com (Postfix) with ESMTPA id 4B9A93D;
-	Wed,  8 Apr 2026 20:31:25 +0000 (UTC)
-Date: Wed, 8 Apr 2026 16:32:41 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Cao Ruichuang <create0818@163.com>
-Cc: mhiramat@kernel.org, mathieu.desnoyers@efficios.com, mcgrof@kernel.org,
- petr.pavlu@suse.com, da.gomez@kernel.org, samitolvanen@google.com,
- atomlin@atomlin.com, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] tracing: preserve module tracepoint strings
-Message-ID: <20260408163241.20723018@gandalf.local.home>
-In-Reply-To: <20260406170944.51047-1-create0818@163.com>
-References: <20260406170944.51047-1-create0818@163.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1775738240; c=relaxed/simple;
+	bh=kXqVC67K7Ok0URFdMQss6lTIGbLrxnPL13nMpdUnN/k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dX/ALoN84T5nvxWfCCquiANQVpX4mASwF66SYAauZpX4QM+MB4aTV7c87ASUcfEDsv8VbaPNWeLp/wxY8AuKANPGGEjNZAo4PdY7lOSi3+YRIoQeKmOnLugFYZ+55CD0hJfBPcdYRTusv/xfRlPV6qe7QvpDVEIuIrczjoUZPrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SueCztIF; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SueCztIF"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4838c15e3cbso6932145e9.3
+        for <linux-modules@vger.kernel.org>; Thu, 09 Apr 2026 05:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775738238; x=1776343038; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DXMv5P2otA71oVxzctM87KJsMKwFOqSK4K4FBNtEt2c=;
+        b=SueCztIFgURyMdqUY2D5JdT1xiLTmI/DfOmKuqUjDrd2r7hrlpHxDhhSrvnzauD/Db
+         gd6XWOToDf651nfNocXYFmCXeSjWtm1/Re1Kwuimr/GaBtNn5hFcjPIsAsGQC5UFemDo
+         DXcEOPpGOFkj+crkWm/fpAb8KgP6izmquk/0l8LF/z4z+bWAF6p9yXDUAqFW5xyfCb8e
+         QlYTEztF/CbIN8HI2K7HJBXnyiS3LBmN30ag8w4ksIpVltauPn/itCWb88qd5hCDc1lH
+         EtLAvTKieQDEOYzX0KAMdhEDB3F9CdwpTFy3Ko4/nrVwS9IA0r1iocNFM8HhdcxD2Q56
+         MqJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775738238; x=1776343038;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DXMv5P2otA71oVxzctM87KJsMKwFOqSK4K4FBNtEt2c=;
+        b=dnGPgYcWTnqi1va3OE2HcizSvkzDrCLODnlHocayh1yZY/yMmpjeFgJVuuNa0/1lUE
+         iJklcPQuovWDtN7b3j8dZ6IM6tsm5dZizPCx1STpWmO6TjPYhIRg19Lcr6pP550+Af54
+         RzsaXjTvhOD4vLStRDEDbumeoLgegVxxcs84TfInAgMPADFmdL1+UX8HAjJEsc+UuRks
+         Ss3sn+aUdtC6fuUeg5KIR6V1W1LoFj7zYY+eRz0KseFcHiAoPzeq2sctFVjD1VKnIBkf
+         UmZn+NP1xojBg5LvU8rMiPSnLWkOJs3+AvYD2BVm3sPqcokm9E32uF9384IvTl6q74fi
+         +CAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWXaLoAbi2SKiYgNxGBvB/8tl4kRi3aeTIJ29MDWs32gppA5VchNPalCl3CCEiehniIFgKOG6mzoOqaJa1o@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZYnW2IutrrtY5qn3oSvD4i62mAphB1liD0S8+G75SSzaNeBWd
+	R0ER1sbQOEv5U9WKvWm9lFwvACNi1ubBSAljxn78dgqocdpjbNe2dvLlV1fHa1NO5Fk=
+X-Gm-Gg: AeBDiesmFA4VpiawCHYkZ/u6c35ZDVRd6q2Rob8GsQsAnWsfHrF01onMkmvsjUS55fi
+	enZ4UrcB3OCXEp6fEsyhHg8n3NEuHb6Z4ryQhsxFQ107Nx72MYWHdvKWOcJ+dA+qd9VC6have9/
+	wpgsE6SYHbxPeGOHAuWZD7jw1D8Bj/3dc0rKwGxzKKTTWtqHgRZONjT5KW9PFsNP/Vr7XeljGp7
+	8k2KQ/yrNNrQCiXmcBWPLqdms6m2r6FJTglgqWSixSSt+2qgz6BHsW92EORsHdH0Ps2LN0p7smz
+	p1qX6PlBxobPK+1L3XLIdqu53d8KfwZHEsel+eaAumQjgQI3WMxEKHdrD0HDjr/+Axq2Ek284IE
+	yRcAxW7YjJ+i8n7HnyUPct59jYIY6/tpM/8+/aXfxT2TpOBLNHdp1/K4lQqUuZrcxCVVpxE/bW5
+	NmrGUKBDo9dpTqXsrUm/b8IzwPKZ42ZhhEKxiGX54P9FaA
+X-Received: by 2002:a05:600c:314d:b0:488:bc6a:5285 with SMTP id 5b1f17b1804b1-488bc6a538bmr157487535e9.30.1775738238024;
+        Thu, 09 Apr 2026 05:37:18 -0700 (PDT)
+Received: from [10.100.51.209] (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488cfa75ae2sm100719905e9.14.2026.04.09.05.37.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Apr 2026 05:37:17 -0700 (PDT)
+Message-ID: <47cd7c31-c914-433c-82d8-22875c32122c@suse.com>
+Date: Thu, 9 Apr 2026 14:37:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tracing: preserve module tracepoint strings
+To: Cao Ruichuang <create0818@163.com>
+Cc: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ mcgrof@kernel.org, da.gomez@kernel.org, samitolvanen@google.com,
+ atomlin@atomlin.com, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+References: <20260406170944.51047-1-create0818@163.com>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260406170944.51047-1-create0818@163.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4B9A93D
-X-Rspamd-Server: rspamout06
-X-Stat-Signature: qz54nsrq8xuy37mcmdyur6po33pfkf3t
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+iwW7Gtqwsk+QAjNp3uRmGVuX1BXG0bag=
-X-HE-Tag: 1775680285-191952
-X-HE-Meta: U2FsdGVkX1/rUfSbfUF7EOXAQ/GusUWaam3Jn4qgGJJoYvLXr4GFTy+zki6MXBbqNPsL8B06K40XFi0izN0ZiFTolPovPQwV2yMHjGENYNFn5Ftp5pDFrHUgHxIGeLe5kJYy05TIamBhX4GeSWn0r2QhH1APLAJge47svX3PC1+hpriOBhKS25Kvf6ah6SR14F/4WOkbOu3UT443jFn9g+KCWNadeEig28I0kBS4xoD2MmHyH9BZQr6ZM+Mzz11EtgKdV7/9ngwMs1sjHscO7aysyHRnraPVDjfKdFvCQDZil86pMxJiRttHFTBJ/ViOLS2mnWUkGl7DjVPCOj7aCRr0XMq5Aa+/r2b2seRbCIeayXo5b0LuTQ==
 
-On Tue,  7 Apr 2026 01:09:44 +0800
-Cao Ruichuang <create0818@163.com> wrote:
-
+On 4/6/26 7:09 PM, Cao Ruichuang wrote:
 > tracepoint_string() is documented as exporting constant strings
 > through printk_formats, including when it is used from modules.
 > That currently does not work.
@@ -65,13 +97,23 @@ Cao Ruichuang <create0818@163.com> wrote:
 > trace_is_tracepoint_string() recognize those copied strings. This
 > makes module tracepoint strings visible through printk_formats and
 > keeps them accepted by the trace string safety checks.
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217196
-> Signed-off-by: Cao Ruichuang <create0818@163.com>
-> ---
 
+The documentation for tracepoint_string() in include/linux/tracepoint.h
+contains:
 
-As this is not a trivial change, and affects module code, I'm going to hold
-off until after v7.1-rc1 to apply it.
+ * The @str used must be a constant string and persistent as it would not
+ * make sense to show a string that no longer exists. But it is still fine
+ * to be used with modules, because when modules are unloaded, if they
+ * had tracepoints, the ring buffers are cleared too. As long as the string
+ * does not change during the life of the module, it is fine to use
+ * tracepoint_string() within a module.
 
--- Steve
+The implemented approach copies all strings referenced by
+__tracepoint_str and keeps them for the kernel's lifetime. I wonder if
+the code could directly reference the original data and handle its
+removal when the module is unloaded, or if the quoted comment should be
+updated to reflect the new behavior.
+
+-- 
+Thanks,
+Petr
