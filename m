@@ -1,194 +1,248 @@
-Received: from CWXP265CU009.outbound.protection.outlook.com (mail-ukwestazon11021081.outbound.protection.outlook.com [52.101.100.81])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AE229B200;
-	Thu,  9 Apr 2026 17:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.100.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775754397; cv=fail; b=K92Tv9cXLa9j7jbMtOpwA0volmHFQzmEkUE20/IcmamqiW+quED3cKdtKDtmnyWvvKjSL02I9pU286lWn7cxPjo3B7Nri6Dx7LCJAJ23agfv1BenGF4MRYY9F1bhjTMVPHrbzJ5+NW3b9EOmCtX/EMWbBO3oiUWfReAQRE4VqR0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775754397; c=relaxed/simple;
-	bh=scBGPATeBJKO3mDEv8BK0u7ZOoGJ/sn/f+6v5qM/IsY=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=AgOZ72jfKT0LG27ijLV4IKWzo3crjvd/DgGFAc1rar+0h+LFNltmD44zdhd/kPqcBxpdJuN53B45IZRsSXTngNIzArKV/MUMeB1iNt23HCVdWMrvBruy3fZSPnkKqpRHm6s3fUKyXjATnhUbyYv5xY/HPvFW0mYbm0PvJA+yCM8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=oUrFn+oo; arc=fail smtp.client-ip=52.101.100.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7156D3E314E;
+	Thu,  9 Apr 2026 18:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1775758382; cv=none; b=jPBFkce5IdXM1oR73zp4d1LQl0Kwxcrj3NcvsS19vR4mmxL8wW/vH//PX2n7RpmzuRHzssvYEPhl5QPncuxqBy+krKZnaIm0reghk/4NWMmfYlJ8evh3v7iUEaEc0I+SF6w4e1Ha4sSEUxrh4xsoCtEMjb8aPXFlJblfS6a99es=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1775758382; c=relaxed/simple;
+	bh=BoGW7oywgvm57yYmgFIJhKPYzBfyhEW/uN+KSu6heaU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z1pkP+nYR0+2vauJLLzvKfLodZ7EBKfx8ohRzW6suEJnaHscQ4K//wJ7y+uvbvFBWGNcUG/+A0YIABFmqUyBZ8NS1VCLOEy6CEBGLnc7RZqBdLn9hWKo5XW/dWgWg1Fas/wZxp/gVYCP0n4sY3yf/wK+9LX+VXoeij5b9l9mkaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=JJcsCEca; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="oUrFn+oo"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Nr0TOCxfI4dfr4F//dGYAHFjmH5mPWmbA+FCFU8l0Q6CiCTyOyYlcTYy0SapMstk6LULSMt/dD4ZGp1WLvgwMH7fNXefzqg8USnN1HvwU/JOIwlJG9QdWEpTwSp9BAdGQTrIlvO3SlHpsfIDevyjXnYeNQ9JUMYe3LFeM3DjJjR9qQLHMhzMl94OlZ4Wh3fKMB1X9aAYNfBe/Ot7X7EJA0eRCse2Vt7RYeesecvqOD9pgP+e2SZBjun2Sozb5puqfMcy3QcowxWOdwFq8xiwhBcgXXd973vnpxeU/j1zSL/0RUddoCeN7vI+23OqCkoEVESfKyiLPLaepRnzw+FOVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AiXGMhqWN2+XuO6hJyfvnAi6MTvpojiWNoZWHwbvTCE=;
- b=XfCN7yvHLNIHYKea5mBrwJmU9NyaZuE33bB5rmrXrvKwNIJbZjMvemRvEiGzZMuyIRz4w4lLw93MT5gLpeOAkEeKXau4KtXsRlOSOWOvUs3H0IjVTFc8el3MoOARcKkj08e6j4auKokCwFAL15EkW6EbN5hSsWkoF7bMqXUiadOl5Xx3W/oVy8fQ8bu0c0rJNcYB4HMH/Xd3sx7wR3l26644FhrQAxqkylzWS3CgfklfKKY0J/0OicyqIOi4VBBH84xqfKCAF2Ccv6nVofXax0h9ZZiHx6o6gOiecNtx3BWVz+qzoSmnEn0lrZT2uuSHcQ3Z3UFb+bjjms7ALxe/nA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AiXGMhqWN2+XuO6hJyfvnAi6MTvpojiWNoZWHwbvTCE=;
- b=oUrFn+ooTIH1w8y0PybNuj5ir25Ro4MVQbZLqUbgqvGaB4z8McswYvi7BExI0jAW5PCSyN+33V9/2Vouytjfrd01Cq+AIFInKFKttx1wCuRwePisLkhPxKeU5KMNq4ZikNiL5MhMGNek61d+zXAAckr0bM234b6hG1QKc+PUCCU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
- by LO2P265MB3024.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:179::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9769.39; Thu, 9 Apr
- 2026 17:06:31 +0000
-Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1c3:ceba:21b4:9986%4]) with mapi id 15.20.9769.041; Thu, 9 Apr 2026
- 17:06:31 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 09 Apr 2026 18:06:30 +0100
-Message-Id: <DHOSE8ZNA27J.J412X7HM45OM@garyguo.net>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Luis Chamberlain"
- <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>, "Daniel Gomez"
- <da.gomez@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>, "Nathan
- Chancellor" <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Boqun
- Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, <rust-for-linux@vger.kernel.org>, "Aaron
- Tomlin" <atomlin@atomlin.com>, <linux-modules@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
- <stable@vger.kernel.org>
-Subject: Re: [PATCH 1/2] kbuild: rust: allow `clippy::uninlined_format_args`
-From: "Gary Guo" <gary@garyguo.net>
-To: "Tamir Duberstein" <tamird@kernel.org>, "Miguel Ojeda"
- <miguel.ojeda.sandonis@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260331205849.498295-1-ojeda@kernel.org>
- <CAJ-ks9nqv30SOiCia8LE6XbKEURNCa9qwwcszsQ0a8FRxR0Msg@mail.gmail.com>
- <CANiq72mKuQgK_R=xs6270nwYigzCvJiFJ1PcOB+WT3OdXO7E0A@mail.gmail.com>
- <CAJ-ks9nMA1zqGhHhOk8hmfNgoODQ+D-WforPU6iCciYbPsDD-Q@mail.gmail.com>
-In-Reply-To: <CAJ-ks9nMA1zqGhHhOk8hmfNgoODQ+D-WforPU6iCciYbPsDD-Q@mail.gmail.com>
-X-ClientProxiedBy: LO4P265CA0150.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c7::10) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:488::16)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="JJcsCEca"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=BoGW7oywgvm57yYmgFIJhKPYzBfyhEW/uN+KSu6heaU=; b=JJcsCEcaKqyNrvJOUZ8XOnA1AS
+	yC//2gnLRa8FcBRiXofOYljopOoyt9r8CbkWaLEFmbUVfW5qK5utkUh3D77jxlkhKoZiYVbvdTEnm
+	X8jEr88bUddVEJ+24e8elVa7rPEDm9C+KeO3Yi+QSp+riwZi9Be8u3P2jnyNq7RhzU24dEi9YT5JB
+	9o5OjQL5vQk2h32ksN+l6XHB7LZbu7YtKRAMPXU1ZH+Yata0JOXemtl88QWI3UJ7mBXR7GCgddkg5
+	qrhpzNPrKwHYiMCapxKfC0E4ZwUatWZBULD1y88efyo7haqTewJrOOn317SRlKBwAg9TXV76h3bsC
+	A/eZOWQA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wAtvH-00000003xj6-26He;
+	Thu, 09 Apr 2026 18:16:11 +0000
+Date: Thu, 9 Apr 2026 19:16:11 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Philipp Hahn <phahn-oss@avm.de>
+Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
+	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
+	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
+	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
+	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
+	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
+	Julia Lawall <Julia.Lawall@inria.fr>,
+	Nicolas Palix <nicolas.palix@imag.fr>, Chris Mason <clm@fb.com>,
+	David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
+	Alex Markuze <amarkuze@redhat.com>,
+	Viacheslav Dubeyko <slava@dubeyko.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.org>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
+	Yue Hu <zbestahu@gmail.com>, Jeffle Xu <jefflexu@linux.alibaba.com>,
+	Sandeep Dhavale <dhavale@google.com>,
+	Hongbo Li <lihongbo22@huawei.com>,
+	Chunhai Guo <guochunhai@vivo.com>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Jan Kara <jack@suse.com>, Phillip Lougher <phillip@squashfs.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Jon Maloy <jmaloy@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Russell King <linux@armlinux.org.uk>,
+	John Crispin <john@phrozen.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Zhenyu Wang <zhenyuw.linux@gmail.com>,
+	Zhi Wang <zhi.wang.linux@gmail.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Sandy Huang <hjc@rock-chips.com>,
+	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Igor Russkikh <irusskikh@marvell.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Michael Chan <mchan@broadcom.com>,
+	Potnuri Bharat Teja <bharat@chelsio.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Taras Chornyi <taras.chornyi@plvision.eu>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Keyur Chudgar <keyur@os.amperecomputing.com>,
+	Quan Nguyen <quan@os.amperecomputing.com>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Vinod Koul <vkoul@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Mark Greer <mgreer@animalcreek.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Kieran Bingham <kieran.bingham@ideasonboard.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Lee Jones <lee@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, Dave Penkler <dpenkler@gmail.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>, Justin Sanders <justin@coraid.com>,
+	Jens Axboe <axboe@kernel.dk>, Georgi Djakov <djakov@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
+ check - refactor
+Message-ID: <20260409181611.GP3836593@ZenIV>
+References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|LO2P265MB3024:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4f9512a-ae55-48f3-b606-08de965a5868
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|10070799003|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	2gpRQnjDAAIjKqjMJk1B/CaiRBvl89QUrLMsvJLWykhOKujH7tKN0hzl8MZ+VLAJ43qbUKhTU/zwXUGagjBfGOlP9fznWwrOgxt1ybJ3TlEN+PCgpytvpUUFDOlrSjDfuCocghmeXt8lcxAkAYXMiXBmRztNiCnROCD21Sd4TGBo7wut1TUb+Dt4MgBNIJPySaY709jU8Z97g1xbbjLEjhHWsvJK3ZdpuFzPxTyaa9EqOneihuePakWZ7wWCssbb3ImnNRN9taOO9OfFBg3bY8Bz84RMl1g3k0tRrun532wbhiwoBPTYhHD703QD5vGZUWpZ8HZyQdvR+wJtc88C1SB+4T9Kf5N/6+oCgFfKRbQe5cUkPC3CbSFoQEQiRz+WPVtDiom+3PfO8S+haoz8DtqdLi2WqeXdRGj2UP/gqRfzothYEo5j1GJHFUG7CENub2+Iewdk+MK0Gs7NmVi4c1RLCGsIrvitEJ0aUktQfV8qKpm/M4rQ8P+eyQ30DgX1rX1kyE4j64FnKnGXhR21iSgyziH+bTvmi+War8RjXHR1MDpBMf7SfEYoGW9ZDZgNIVbMubDJ1K78Bx0SRtVpLDIOHSwMqIlRn5K1vpL2FowUd35d0p/dr5n3/BNREn0FI8zOk+lEky56xSNbsXH4qRO9jC+2VC3d8e4RvjSjMbpUFSWhTax42LMH0fD9rLTY82JCIrKSCsxBSOxd/a7819YRm3E18840sMOirnrw4xY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(10070799003)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aHpXUktHaTZsdytpTWJBY2Y1eFp3QTl1RDhyYkZRek5tQm82djN4ZENzQ09i?=
- =?utf-8?B?TEdGNTZNSldKY2tDaHRxT0xKemhQSGd6Z24zRnNjbFIrY0g4MTNubHdmTS9Y?=
- =?utf-8?B?T3JhdDYwOG5SNXNwaHpHYUtBVXVRN0dDVVVCQWQrK2o3WEdVTFlPd1ZTVG5K?=
- =?utf-8?B?NUZYVGZ2S1FIbHF4clpNUUZwcnZWUkQ2bXl2N0p3cXJ0dVYxMk1ra1RrN0pi?=
- =?utf-8?B?Z21CREw5ejhLUmdyYjFqNXlkWUEydUd2VzQwNnlvbGo2dHRUK2ZKVEpDWG9F?=
- =?utf-8?B?QkdqWDM3R2ViTG8wN3FqNUkzM2RON291TFYwVlpnTkFEbldVK014RE5maFFu?=
- =?utf-8?B?aWwwNGlnRkoxZzZpMmhrSGQ4Uyt2WWFYTkRPZVNjYWJsaHEyMEJwQ2VNOVFV?=
- =?utf-8?B?dzFUOTlSNHlNOVQ1Wk90Tm85UXJsT1hEWExsUVMxNUNOVW1ubXZtUzFYaGxK?=
- =?utf-8?B?UWRpd3lGZVA2bU91N0wrTi9iNjRSeXc4TkVLSlUvNXc3WlBEZ004bUVuZkFT?=
- =?utf-8?B?S1NXNVZqdW1yb241UU40RStObWdKdkhTOWJJZHdqaWJES0N4R0VyUXYvTld6?=
- =?utf-8?B?djBaUEpLS0F4VUdGTy8rTXVROXpCbGpXbXVpbWVQQjNVL3RLSi9sblVNTm1B?=
- =?utf-8?B?Y3VEU1dkTVgxWXNIYk4xOGdxTitRai9IVitLbW9FNEVjeTI1dGhTOGRuWWJW?=
- =?utf-8?B?dHpkUW9OeDFtQURnRFdTdHhqdGp5UGNvcTl1dXFpN2NIRXZLT0NjQ05HTlJy?=
- =?utf-8?B?eW5DTTN2TUF4bUpERTY5aUdPZStIT2pQbkdMaDBVT09JSVdCeWlkdEFQeklw?=
- =?utf-8?B?Tkk5aVgwcmNxOEY4UWlsUEtSUnIxTXVFNWhUbVkvT0lkU1JPTHBMb1FjbWEy?=
- =?utf-8?B?c09QZEFJMm5IM2ttenQ4N1lRSVJqQWhkU1dOOG42RGVzbkFiTTdVWkNSZXdV?=
- =?utf-8?B?VmlQVmlmbXJKeUx1WmxxYzhjMWJ4eFBvNElURnFLcjhuYllSK05tTExFTmVo?=
- =?utf-8?B?TVNpYXpZZTVzeHZYdnRHeVdXM040SEF6UXFKL2p2OGRKZUR6T2hvdDdnOW9F?=
- =?utf-8?B?Zm1sTWRCaVdWMERqc280UlczTHdWVjhRQnZ6Ym9jM0tOUkNBQXlmWHZSM01E?=
- =?utf-8?B?MzJsTXhHK2loYWZyRnQ3M2hSL2NScUF6b3hUYmN3RG1GR0NxS1pQSEJSYmN1?=
- =?utf-8?B?cnd3ZGhkb0k2eGZBWmhJZDlLaWpWT0hXZHhQK0M3ekVTTUNmSy8yMkRWeXF5?=
- =?utf-8?B?WkZVNDRkVWRFdWlUZWRML1dZdXdldVl3aWJzNnNaVnZPL3pCZjhPZ1hOWXhw?=
- =?utf-8?B?ZkdKamlTVHN3WnhOVjloTEk4MWsrREV0aHM0S3ZjVWxQTk1xSk5mVkdOU1B6?=
- =?utf-8?B?OVlFWnV4aDBJZUxzbzhZclNTY0MzUjZPcS9zSXpyTmZ1N0xwQjBVWTZMUTND?=
- =?utf-8?B?VG1mUllURHc4dEIyV3lKT0NERU9MVUQ2dWRpcWNHNGEvVUVhOEU4Vi9QOVZa?=
- =?utf-8?B?ME5lV2sxRWc0TEk3ZDR5Q1NhZ2hQcEZ6R0tLWVBwdzNscjdCcnRyZndBYWJk?=
- =?utf-8?B?U3EweGtKZzR3Um93RmNhcjFWUHdUWkdzTjB6YlRkUTFlMHNTTmRVQ1V1T0w1?=
- =?utf-8?B?N25sUlByeFpPUkZmQTRLeU1COFlmZnZ6dnU5akJnSkZaYmI5VVlpb1RjbFg1?=
- =?utf-8?B?OUQwYnI1TEdtVnlwdmEvQkJBdmFyT3djZWJLZ1RDNS9uN1BWSEE0dXA0bWNy?=
- =?utf-8?B?TTYzZXM4dTFncDlxd3NaZG12STY0L2NXVE5rVGtKS0ZwYmI0cStFUFZoRTdr?=
- =?utf-8?B?SVhyVWtqYXRDNVcxS1NRUG5ZaWdMRjJpbld5RFYySnlBblVXUGFXMTB0UlFj?=
- =?utf-8?B?cHFJdTZhZzNlUVJUY2Q5bm1KTFpGU2EvSWRNWWZ5bm9WaVBpMlRaY01uUXly?=
- =?utf-8?B?VWVtYmt4d1poRzdacDRPRUNTNzlzN1h6ZXBNUVNHZlR2TFcwcVdmdDNqS2dq?=
- =?utf-8?B?QVozcUZGbEJvalUzY2liR0trOTlNQlFMWnM1TjJOd1BZUW9MVk1Yd3Juc3Qr?=
- =?utf-8?B?VlVZT2tNcmZUMmJnZFZpZW1BWnA4MGorMnpmeTBKbVQzc2FTL3FZL0Y2MGpy?=
- =?utf-8?B?YTB4bjUzcGNIb2YyZFRZWW5JNFhEWXQ3ZlQyMC80ekJIOXF2MlVlNXJGU0Ni?=
- =?utf-8?B?T3ZiUzFMQlZpeWpGejN6aWZXUG1CazVqNVZkTjhyYkNmYmgvd1YrWDhoVzhS?=
- =?utf-8?B?eVRnblVmRGpoUzFVYWYvOE0xNHA2TXV3UnphMWltQVBPSlZiOGFkMnphbFZu?=
- =?utf-8?B?QVhXbmg3YlE0UkYxbkVtdzYyUjRDVWlhNDRQZEhSZXFFZVU1ZmxvQT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4f9512a-ae55-48f3-b606-08de965a5868
-X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2026 17:06:30.8957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: r4gI/67fyR4WxT7fy+7YWEGnABF+DgtMjcN1qbKNmgiNuUMRMvV3svn798K6iYVjJZutanKdPO5wzktrrDVcDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB3024
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Thu Apr 9, 2026 at 5:18 PM BST, Tamir Duberstein wrote:
-> On Fri, Apr 3, 2026 at 9:07=E2=80=AFAM Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
->>
->> On Fri, Apr 3, 2026 at 12:25=E2=80=AFPM Tamir Duberstein <tamird@kernel.=
-org> wrote:
->> >
->> > Seeing this patch a bit late but in clippy 1.85.0 there is
->> > `#[clippy::format_args]` which would permit us to make the lint work
->> > with our custom macros.
->>
->> +1, that may be good to consider, especially with the bump -- added
->> and backlinked in:
->>
->>   https://github.com/Rust-for-Linux/linux/issues/349
->>
->> Maybe an issue would be good to create too.
->
-> Turns out `#[clippy::format_args]` doesn't work for us due to the
-> `fmt!` proc-macro.
->
-> It seems the handling of `#[clippy::format_args]` is more
-> sophisticated than (at least I) expected: it doesn't blindly check the
-> inputs to annotated macros, but rather looks for the place where
-> `fmt::Arguments` are created.
->
-> In our case something like `pr_info!("{}", i)` ends up expanding to
-> `core::format_args!("{}", Adapter(&(i)))`, which does not trigger
-> `uninlined_format_args`.
->
-> We also cannot fix that just by having `fmt!` assign `Adapter(&(i))`
-> to a local variable and then return `fmt::Arguments`, since
-> `core::format_args!` borrows its arguments. The local would not live
-> long enough.
->
-> I filed this upstream as https://github.com/rust-lang/rust-clippy/issues/=
-16833.
+On Tue, Mar 10, 2026 at 12:48:26PM +0100, Philipp Hahn wrote:
+> While doing some static code analysis I stumbled over a common pattern,
+> where IS_ERR() is combined with a NULL check. For that there is
+> IS_ERR_OR_NULL().
 
-The issue is that by the time Clippy lints run, it only have post-expansion
-results. The pre-expansion AST is no longer available.
+... and valid uses of IS_ERR_OR_NULL are rare as hen teeth.
+Most of those are "I'm not sure how this function returns an
+error, let's use that just in case".
 
-But if you run your lints pre-expansion, the name resolver and query engine=
- is
-not yet available (resolution of macro names happen during expansion).
-
-This is generally tricky, the way Clippy works is it tries to reconstruct t=
-he
-macro invocation from the expanded result.
-
-Best,
-Gary
+Please, do not introduce more of that crap.
