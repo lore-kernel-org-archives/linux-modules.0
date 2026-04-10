@@ -1,248 +1,181 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7156D3E314E;
-	Thu,  9 Apr 2026 18:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF12833F8C3
+	for <linux-modules@vger.kernel.org>; Fri, 10 Apr 2026 13:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775758382; cv=none; b=jPBFkce5IdXM1oR73zp4d1LQl0Kwxcrj3NcvsS19vR4mmxL8wW/vH//PX2n7RpmzuRHzssvYEPhl5QPncuxqBy+krKZnaIm0reghk/4NWMmfYlJ8evh3v7iUEaEc0I+SF6w4e1Ha4sSEUxrh4xsoCtEMjb8aPXFlJblfS6a99es=
+	t=1775826843; cv=none; b=l8GOyfctDPCBlF1pDiQPy+WoUhYnPxC2GCb/D+x4FkHaUxpb97xSmt8VNOMdm9gLSQQWoKS7Emv36jYk6HBWQRx+v/LY4slGLN5NlySc0uJjm5x0/l0juqW/+5VIm39yOGhdIe+rpbWovbugDAVx7Qo0cA/D+mRMHYYCZl7Sq8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775758382; c=relaxed/simple;
-	bh=BoGW7oywgvm57yYmgFIJhKPYzBfyhEW/uN+KSu6heaU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z1pkP+nYR0+2vauJLLzvKfLodZ7EBKfx8ohRzW6suEJnaHscQ4K//wJ7y+uvbvFBWGNcUG/+A0YIABFmqUyBZ8NS1VCLOEy6CEBGLnc7RZqBdLn9hWKo5XW/dWgWg1Fas/wZxp/gVYCP0n4sY3yf/wK+9LX+VXoeij5b9l9mkaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=JJcsCEca; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1775826843; c=relaxed/simple;
+	bh=976uIWqM+FAARkVCOlYC9MMYiaR61LoNWXMDyjXKX0c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QM+qwLPygFCsUN2/VjYwIyo0SwUpoB1na6JqmDteNO3f6EqyK0HgKRyedGPTcUqpu52TjmzNvbQXx6znt9jAbRuW4rQNc5DNuOjS4lSD3it/y9zrOhhdMo/1rv0IVruJLBN0KnQyJD1kZ52sa/j1z/FEtZCa1euZOXmm+0d7Km8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=SOssgENC; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="JJcsCEca"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BoGW7oywgvm57yYmgFIJhKPYzBfyhEW/uN+KSu6heaU=; b=JJcsCEcaKqyNrvJOUZ8XOnA1AS
-	yC//2gnLRa8FcBRiXofOYljopOoyt9r8CbkWaLEFmbUVfW5qK5utkUh3D77jxlkhKoZiYVbvdTEnm
-	X8jEr88bUddVEJ+24e8elVa7rPEDm9C+KeO3Yi+QSp+riwZi9Be8u3P2jnyNq7RhzU24dEi9YT5JB
-	9o5OjQL5vQk2h32ksN+l6XHB7LZbu7YtKRAMPXU1ZH+Yata0JOXemtl88QWI3UJ7mBXR7GCgddkg5
-	qrhpzNPrKwHYiMCapxKfC0E4ZwUatWZBULD1y88efyo7haqTewJrOOn317SRlKBwAg9TXV76h3bsC
-	A/eZOWQA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wAtvH-00000003xj6-26He;
-	Thu, 09 Apr 2026 18:16:11 +0000
-Date: Thu, 9 Apr 2026 19:16:11 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Philipp Hahn <phahn-oss@avm.de>
-Cc: amd-gfx@lists.freedesktop.org, apparmor@lists.ubuntu.com,
-	bpf@vger.kernel.org, ceph-devel@vger.kernel.org, cocci@inria.fr,
-	dm-devel@lists.linux.dev, dri-devel@lists.freedesktop.org,
-	gfs2@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-	intel-wired-lan@lists.osuosl.org, iommu@lists.linux.dev,
-	kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-block@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-nfs@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-	ntfs3@lists.linux.dev, samba-technical@lists.samba.org,
-	sched-ext@lists.linux.dev, target-devel@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, v9fs@lists.linux.dev,
-	Julia Lawall <Julia.Lawall@inria.fr>,
-	Nicolas Palix <nicolas.palix@imag.fr>, Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
-	Alex Markuze <amarkuze@redhat.com>,
-	Viacheslav Dubeyko <slava@dubeyko.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.org>,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Shyam Prasad N <sprasad@microsoft.com>, Tom Talpey <tom@talpey.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,
-	Yue Hu <zbestahu@gmail.com>, Jeffle Xu <jefflexu@linux.alibaba.com>,
-	Sandeep Dhavale <dhavale@google.com>,
-	Hongbo Li <lihongbo22@huawei.com>,
-	Chunhai Guo <guochunhai@vivo.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Jan Kara <jack@suse.com>, Phillip Lougher <phillip@squashfs.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="SOssgENC"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43b8982c2f4so1218978f8f.2
+        for <linux-modules@vger.kernel.org>; Fri, 10 Apr 2026 06:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1775826840; x=1776431640; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cj9MH/EknDN0OlocU9ytBdhpwEb+nE5xbjRi72XOo6g=;
+        b=SOssgENCYtFE8mMVtaMPc4Eoanim850Xwgv5AIOXTwp8WqM+VRz/jO9HfLl3Zpo62r
+         keKflhQXPsZFzzpxLmfd/0lQok7w8NW96ijMqf3HNKlXKxjv2LDkbEh3F5Jmb3kxTbfC
+         6wHGd/VZqMs1325dwNf8x0z4PXwL9Qre8fDXPHNye5r7Vd1t40lgy3xbhUh6ei0SVKZ4
+         l1ajlWnjdjIP+YRAOwI5SKUkJBxGjNnCaht2VjryD4yaBkoF4ZwuHMLlEvWPBKJskfTI
+         2538yxL1Oi+CNNXWjXNmPW+ozXC6LuZRpJy7ldrWcvGskS5pubm2t5yc8/dMKn+Zrc3x
+         Tcbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1775826840; x=1776431640;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cj9MH/EknDN0OlocU9ytBdhpwEb+nE5xbjRi72XOo6g=;
+        b=jGnE74XuwM7uGDifD3KDT26LLJ6cbhldYWyy0ZnujeZ/fZIM7yCaOtiR0saVhMJT9A
+         mQ8bTbJezhsf4tLcPOzdzwVFhyWY+5CDS7KP/Ez+9fPTT3wZ77GCvwmmQ+9KhOpeCwFU
+         wIo3r8it5x3P02VjS64neY2Zb+5dZvJXR5KeNqB7yXD0VTy5iNmhNsCa+Jd1PhWc0jly
+         p25ZNqsC3C+v3jfW6+gnKZGEyjqJOqoRNpOTGaJEVRiAgV95MNdTSPFqBm9bxcFra+hT
+         PSkcRItbECyoam1etZLvQaczbpe7t5uKy4D5xJGN4/1VdQKbZLj8C198gC4sFrrkxwRj
+         5n+g==
+X-Forwarded-Encrypted: i=1; AJvYcCW0kB/ZXVy6CFFhaSyW+rzXbYBk4TUYaOx8W9kbwzfhTJk/d9z5Yg1c+fT0i2jlRaewc9CfsyzvZS0/QcTE@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg49fqELDkCzid+VQcGvnlLCApZIQnBZTub6oJ8hX9yO8iMETQ
+	MnGgQWWKUY3CFOXeVKhLdMShiKOycWlLGKX22u9tic5WPLS8EGyjTxaks++hfON8uoM=
+X-Gm-Gg: AeBDieuxwefZASisS1fNKU8lzG1soRF3ioonvqs52zU36QbUiJ4dw91luUsCdw3zag/
+	O3xU1GT9/YKLs5c4ZRJXPuq0nx9ZZwb13EW0yOhB5Xq9vKXUvQcDxDHzCTQdopNNlIcgF9gzVhi
+	Pi7AD5LiVs1Z1RomFlrKyScCPZ5K/8ekNSQdmzSxZLNZoqknVEMsdG20K/7CcW/CZU5bj3rLEkc
+	WFi1+XYmAEKYLTZfbOZrp5TvLJpz85TG1ds4KqrMzBv++TegXL5FiXPZTg8ptQLKVdbXsVbeU2/
+	AroCGPnNer1V6eoVHqHq2+MI5C9wQT1FMddcUf/jiR43L+39Lq51H3S6COvVPxJOt1RUIpi5gz7
+	gTwFgBRg1c4NVv2M2t7ytmBj75V9tnDeIpn41DrAkOfwJ9VHfs4FCMXi57f/usiS2nE92x1lXgz
+	LTPgCYlsng8kLtAeq53/yg64sLP2fUQlWjnN/mbxST70RLvQp7s10=
+X-Received: by 2002:a05:6000:200f:b0:43b:8806:be32 with SMTP id ffacd0b85a97d-43d642552f3mr5071820f8f.7.1775826840140;
+        Fri, 10 Apr 2026 06:14:00 -0700 (PDT)
+Received: from zovi.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d63de3499sm6993731f8f.1.2026.04.10.06.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2026 06:13:59 -0700 (PDT)
+From: Petr Pavlu <petr.pavlu@suse.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
 	Daniel Gomez <da.gomez@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Aaron Tomlin <atomlin@atomlin.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Trond Myklebust <trondmy@kernel.org>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
-	Olga Kornievskaia <okorniev@redhat.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>, Jon Maloy <jmaloy@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Russell King <linux@armlinux.org.uk>,
-	John Crispin <john@phrozen.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Zhenyu Wang <zhenyuw.linux@gmail.com>,
-	Zhi Wang <zhi.wang.linux@gmail.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Sandy Huang <hjc@rock-chips.com>,
-	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
-	Andy Yan <andy.yan@rock-chips.com>,
-	Igor Russkikh <irusskikh@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <mchan@broadcom.com>,
-	Potnuri Bharat Teja <bharat@chelsio.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Taras Chornyi <taras.chornyi@plvision.eu>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Keyur Chudgar <keyur@os.amperecomputing.com>,
-	Quan Nguyen <quan@os.amperecomputing.com>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Alex Williamson <alex@shazbot.org>,
-	Mark Greer <mgreer@animalcreek.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Lee Jones <lee@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, Dave Penkler <dpenkler@gmail.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Justin Sanders <justin@coraid.com>,
-	Jens Axboe <axboe@kernel.dk>, Georgi Djakov <djakov@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 00/61] treewide: Use IS_ERR_OR_NULL over manual NULL
- check - refactor
-Message-ID: <20260409181611.GP3836593@ZenIV>
-References: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-kbuild@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] kbuild/btf: Remove broken module relinking exclusion
+Date: Fri, 10 Apr 2026 15:13:29 +0200
+Message-ID: <20260410131343.2519532-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260310-b4-is_err_or_null-v1-0-bd63b656022d@avm.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Mar 10, 2026 at 12:48:26PM +0100, Philipp Hahn wrote:
-> While doing some static code analysis I stumbled over a common pattern,
-> where IS_ERR() is combined with a NULL check. For that there is
-> IS_ERR_OR_NULL().
+Commit 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled
+and pahole supports it") in 2020 introduced CONFIG_DEBUG_INFO_BTF_MODULES
+to enable generation of split BTF for kernel modules. This change required
+the %.ko Makefile rule to additionally depend on vmlinux, which is used as
+a base for deduplication. The regular ld_ko_o command executed by the rule
+was then modified to be skipped if only vmlinux changes. This was done by
+introducing a new if_changed_except command and updating the original call
+to '+$(call if_changed_except,ld_ko_o,vmlinux)'.
 
-... and valid uses of IS_ERR_OR_NULL are rare as hen teeth.
-Most of those are "I'm not sure how this function returns an
-error, let's use that just in case".
+Later, commit 214c0eea43b2 ("kbuild: add $(objtree)/ prefix to some
+in-kernel build artifacts") in 2024 updated the rule's reference to vmlinux
+from 'vmlinux' to '$(objtree)/vmlinux'. This accidentally broke the
+previous logic to skip relinking modules if only vmlinux changes. The issue
+is that '$(objtree)' is typically '.' and GNU Make normalizes the resulting
+prerequisite './vmlinux' to just 'vmlinux', while the exclusion logic
+retains the raw './vmlinux'. As a result, if_changed_except doesn't
+correctly filter out vmlinux. Consequently, with
+CONFIG_DEBUG_INFO_BTF_MODULES=y, modules are relinked even if only vmlinux
+changes.
 
-Please, do not introduce more of that crap.
+It is possible to fix this Makefile issue. However, having the %.ko rule
+update the resulting file in place without starting from the original
+inputs is rather fragile. The logic is harder to debug if something breaks
+during a subsequent .ko update because the old input is lost due to the
+overwrite. Additionally, it requires that the BTF processing is idempotent.
+For example, sorting id+flags BTF_SET8 pairs in .BTF_ids by resolve_btfids
+currently doesn't have this property.
+
+One option is to split the %.ko target into two rules: the first for
+partial linking and the second one for generating the BTF data. However,
+this approach runs into an issue with requiring additional intermediate
+files, which increases the size of the build directory. On my system, when
+using a large distribution config with ~5500 modules, the size of the build
+directory with debuginfo enabled is already ~25 GB, with .ko files
+occupying ~8 GB. Duplicating these .ko files doesn't seem practical.
+
+Measuring the speed of the %.ko processing shows that the link step is
+actually relatively fast. It takes about 20% of the overall rule time,
+while the BTF processing accounts for 80%. Moreover, skipping the link part
+becomes relevant only during local development. In such cases, developers
+typically use configs that enable a limited number of modules, so having
+the %.ko rule slightly slower doesn't significantly impact the total
+rebuild time. This is supported by the fact that no one has complained
+about this optimization being broken for the past two years.
+
+Therefore, remove the logic that prevents module relinking when only
+vmlinux changes and simplify Makefile.modfinal.
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+My previous attempt to fix this logic can be found at
+https://lore.kernel.org/linux-modules/20260402141911.1577711-1-petr.pavlu@suse.com/
+---
+ scripts/Makefile.modfinal | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index adcbcde16a07..01a37ec872b9 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -46,17 +46,9 @@ quiet_cmd_btf_ko = BTF [M] $@
+ 		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
+ 	fi;
+ 
+-# Same as newer-prereqs, but allows to exclude specified extra dependencies
+-newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
+-
+-# Same as if_changed, but allows to exclude specified extra dependencies
+-if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+-	$(cmd);                                                              \
+-	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+-
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+ %.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+-	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
++	+$(call if_changed,ld_ko_o)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+ endif
+
+base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+-- 
+2.53.0
+
