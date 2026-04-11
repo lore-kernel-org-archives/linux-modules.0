@@ -1,47 +1,89 @@
-Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A497F222580;
-	Sat, 11 Apr 2026 13:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199B425333F;
+	Sat, 11 Apr 2026 13:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775912600; cv=none; b=ud5Bxlf62S48JqGfUvzFndTPdNB+MsrMexJ0tt4H9fIjjJZQ7EWIbADC1JKO3UAMSJ/eBaArVQUOvrETjS9OUCKdiJ20iBbjabu0uk8VTtomFUWjvNY3IBb65fszK0UhCfdZdPZ5OpWakvXq1kLt4sslkj47EXkTJbVoNwNjGE0=
+	t=1775913658; cv=none; b=vBWucIW7gPzFTnjOzmuydWBH8qkE6GtflUqinm4/IA1qZyU8R4srOTm95Rquy9BixRfPg1SGkl8x6Ha8FDtvN8Ktg5GedsZ82OtPU6Spyh0ZwSet2kitvQdGwF5Dx7FV2zkDbWT7G0kv8n+G8eDrEVSmwN5rASy0ZPQWu7hI/90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775912600; c=relaxed/simple;
-	bh=C98cBPZXiFfKy8C8RqL01MOAH7u/ZaqgoiKxK+LrAZI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NQMKdneRq+2Em63oepbU5arUNJN5vjqStC/0IMwv9DCPzsSd187/MIQVKMwvCRNEyYNtB67nTKxKm+shdyjl8eOiYOc/7l27KVAt7qOo50aQsRZG42gEG/Tz1XOcaZdwosP/OaaJtupmtOupCe4RwOV+Vjm+vGFFaPzAWZfdZSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ruc.edu.cn; spf=pass smtp.mailfrom=ruc.edu.cn; dkim=pass (1024-bit key) header.d=ruc.edu.cn header.i=@ruc.edu.cn header.b=mdxE+Jcv; arc=none smtp.client-ip=45.254.49.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ruc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ruc.edu.cn
+	s=arc-20240116; t=1775913658; c=relaxed/simple;
+	bh=KexCEwsn8tgj8ITmKZkHfakCP/z0b/n2hvVLRpyAIKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QwX5f+mBpLOnoaU2dQJPas1NrBjxEdt8RjuJWcX7vnOJP99H6lc7FkND0yQM+g2Mx3i79Pi1wdPIgwE1EBm38nN6OTwp5QHapnrXuJ2m7y0KwxJ32Z3dqwLBO63uSJXni/c0LgKaVRI5Ys60rczKu4L43bC8VBaVhsMfDaals/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=eUJgZxSj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E6jIQjo5; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ruc.edu.cn header.i=@ruc.edu.cn header.b="mdxE+Jcv"
-Received: from lwz.tail698a0e.ts.net (gy-adaptive-ssl-proxy-3-entmail-virt135.gy.ntes [36.112.3.244])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 3a5a3b14e;
-	Sat, 11 Apr 2026 21:03:01 +0800 (GMT+08:00)
-From: Wenzhao Liao <wenzhaoliao@ruc.edu.cn>
-To: mcgrof@kernel.org,
-	petr.pavlu@suse.com,
-	da.gomez@kernel.org,
-	samitolvanen@google.com,
-	ojeda@kernel.org,
-	linux-modules@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Cc: atomlin@atomlin.com,
-	boqun@kernel.org,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="eUJgZxSj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E6jIQjo5"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id 1790BEC04A9;
+	Sat, 11 Apr 2026 09:20:55 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sat, 11 Apr 2026 09:20:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1775913655; x=1776000055; bh=FdCyEOQqIs
+	qz8wwEc6yrYhoUb6n6TEFycu4E+exCaYM=; b=eUJgZxSjRH2h/tbhmjzrWyEDCW
+	79QrcTu63tRrNa+lA6It3JnYWsDEmexGMTGo7afd5PVVpVLV/i32qUuLxVCDDWME
+	p3kyeBuHN8oCCLcUWJ8ktIBfsBnamRZ9hC2Urr3p7H60SWSByao8ppeiGZtdDABi
+	zOaPES97H46MPQFQMiodtatP5GexNuhhoBxqErl/e++RVQtwG+0Df9UxtEKyKTIu
+	rkEubA31n1kc/c3W38kqlUg8YdZO21crflWOoLAKqKAWsOv5fUzM6cXjvvuMzTCh
+	GERcSP/vUQLmY6Z4M9JH8Zo4OKZZJvhwDRHof22fq6xYFtjODBF/3fC/O8gA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1775913655; x=1776000055; bh=FdCyEOQqIsqz8wwEc6yrYhoUb6n6TEFycu4
+	E+exCaYM=; b=E6jIQjo5tOsiCW5jSfMYqzh/P4caQNAIWbA8ZUD5w32RezaX0QB
+	BUYZkSHyhrg8FBQqmZoGCcYvaGIGXUtJa2l4eqaGoBA8oRTU0LJ9Z4jzI1MmU648
+	Ua4uH3ja8QIrSAd6OFCKb/1WY0I6obqfcmaKAHx8S8ac/HzaUBwToVGM1RyqohSI
+	hBAAhV8no/lm64Z+0/vs335R6k882UC+z9L8jseIyMHI/J6V+K/3/6z9zoM76cKS
+	Sn6offNN/KJFJ4L+Lz0d+21CbA0UWoeMVSPnhu6unEpnsTYLzuCoogIg4gk+ZQ+c
+	98KpDCYS00VcQTJDv4vy6G356id5qstFp8g==
+X-ME-Sender: <xms:tkraaVsDwdB006d-M6SmNh9GMLSkFXVC_sqOq7oCQUKtfdi5uQpxyg>
+    <xme:tkraadvQEqwCnAGGe40RpsHvRLdJs4XBp3vug5psc97w8R29eWY5Y3gZQ5o7in4SO
+    qwHx1rC5zI4glh7HVfpzKctqZ7szLPtFxe6SgOLFj2vqe1A2A>
+X-ME-Received: <xmr:tkraaU9E7N33VNO4c63BJvHYTEwycQ2Rf3pAa0Lflzy7XxnSIk8kS2gPBqq1XJuNBTLS-wmlOC0fkvGjyOLzQ6U>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdefvdegjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
+    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
+    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
+    homhdpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthho
+    peifvghniihhrgholhhirghosehruhgtrdgvughurdgtnhdprhgtphhtthhopehmtghgrh
+    hofheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthhrrdhprghvlhhusehsuhhs
+    vgdrtghomhdprhgtphhtthhopegurgdrghhomhgviieskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtohepshgrmhhithholhhvrghnvghnsehgohhoghhlvgdrtghomhdprhgtphhtthho
+    pehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuh
+    hlvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhr
+    qdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghtohhmlh
+    hinhesrghtohhmlhhinhdrtghomh
+X-ME-Proxy: <xmx:tkraaW9IvdmJVJLtTvKOZU_bEwrZA9Ff9sjW9OY8ze7BIVXsCZ7S4A>
+    <xmx:tkraaY89RMra1qdYnwkak3vWdGYeXtdapt5EY-S0c3bqC_Ye-whRNw>
+    <xmx:tkraacHOb071ZP7CVlXOPTpQzbIJX7pUcO3xoSQEhn4sR1qw-kEw7Q>
+    <xmx:tkraaXZ0-f2lul_FfU7g0jVbrEUKI8CAy3f630BoyUDuh7dFl3TUug>
+    <xmx:t0raacOCr6qyKEXdyq5-8gL-cytbJXMm2oGmXE_1KpiGMgApK4DiC-zM>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 11 Apr 2026 09:20:54 -0400 (EDT)
+Date: Sat, 11 Apr 2026 15:20:52 +0200
+From: Greg KH <greg@kroah.com>
+To: Wenzhao Liao <wenzhaoliao@ruc.edu.cn>
+Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+	samitolvanen@google.com, ojeda@kernel.org,
+	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	atomlin@atomlin.com, boqun@kernel.org, gary@garyguo.net,
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] rust: module_param: support bool parameters
-Date: Sat, 11 Apr 2026 09:02:54 -0400
-Message-Id: <20260411130254.3510128-2-wenzhaoliao@ruc.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260411130254.3510128-1-wenzhaoliao@ruc.edu.cn>
+Subject: Re: [PATCH 0/1] rust: module_param: support bool parameters
+Message-ID: <2026041118-croak-serving-ff5e@gregkh>
 References: <20260411130254.3510128-1-wenzhaoliao@ruc.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
@@ -49,121 +91,28 @@ List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9d7ca37abd03a2kunm330ff492110e81
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCGBoZVhpKTxpJSRpOTU1MQlYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlITVVKSklVSFVJT09ZV1kWGg8SFR0UWUFZT0tIVUpLSEpOTE5VSktLVUpCS0
-	tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=mdxE+JcvqoYnSozh5Z0vdKHEEN9IO5h7fnVmzX7BYTps0KzjzCPGR25hG7cdj3r4XW4mUo8Lb98eFt0Cz+a667hatssgMMx2GjiV6e9lRt5enR70gmx/SxU4pZk7hmlvLgJPUNfWVcRoiR0etLaYEH5SZwBGX8B32UmqaneGdsg=; s=default; c=relaxed/relaxed; d=ruc.edu.cn; v=1;
-	bh=7J+NbGgWORvyUQjrxluVhEHOF1XbM3sLUWLgh59wiRM=;
-	h=date:mime-version:subject:message-id:from;
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260411130254.3510128-1-wenzhaoliao@ruc.edu.cn>
 
-Add support for parsing boolean module parameters in the Rust
-module! macro.
+On Sat, Apr 11, 2026 at 09:02:53AM -0400, Wenzhao Liao wrote:
+> Sorry for the earlier noise and for our unfamiliarity with parts of the
+> kernel submission process, which created extra burden for maintainers.
+> 
+> This patch adds boolean module parameter support to the Rust `module!`
+> parameter path.
+> 
+> It implements `ModuleParam` for `bool` and wires `PARAM_OPS_BOOL` into
+> the Rust module parameter machinery, so Rust-side parsing reuses the
+> existing kernel `kstrtobool()` semantics through `kstrtobool_bytes()`
+> instead of introducing a separate parser. A boolean parameter is also
+> added to `samples/rust/rust_minimal.rs` as a small reference user and
+> build-time validation point.
 
-Currently, only integer types are supported by the `module_param!`
-macros. This patch implements the `ModuleParam` trait for `bool`
-by delegating the string parsing to the existing C implementation
-via `kstrtobool_bytes()`. It also wires up `PARAM_OPS_BOOL` so that
-the Rust parameter system correctly links to the C `param_ops_bool`
-structure.
+What driver needs this feature?  Module options should be very rare
+going forward as they are 1990's technology and do not fit the "modern"
+kernel model at all.
 
-For demonstration and verification, a boolean parameter is added
-to `samples/rust/rust_minimal.rs`.
+thanks,
 
-Assisted-by: Codex:GPT-5
-Signed-off-by: Wenzhao Liao <wenzhaoliao@ruc.edu.cn>
----
- rust/kernel/module_param.rs  | 9 ++++++++-
- rust/macros/lib.rs           | 1 +
- rust/macros/module.rs        | 1 +
- samples/rust/rust_minimal.rs | 8 ++++++++
- 4 files changed, 18 insertions(+), 1 deletion(-)
-
-diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-index 6a8a7a875643..04ce9eda6731 100644
---- a/rust/kernel/module_param.rs
-+++ b/rust/kernel/module_param.rs
-@@ -5,7 +5,7 @@
- //! C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
- 
- use crate::prelude::*;
--use crate::str::BStr;
-+use crate::str::{kstrtobool_bytes, BStr};
- use bindings;
- use kernel::sync::SetOnce;
- 
-@@ -106,6 +106,12 @@ fn try_from_param_arg(arg: &BStr) -> Result<Self> {
- impl_int_module_param!(isize);
- impl_int_module_param!(usize);
- 
-+impl ModuleParam for bool {
-+    fn try_from_param_arg(arg: &BStr) -> Result<Self> {
-+        kstrtobool_bytes(arg)
-+    }
-+}
-+
- /// A wrapper for kernel parameters.
- ///
- /// This type is instantiated by the [`module!`] macro when module parameters are
-@@ -180,3 +186,4 @@ macro_rules! make_param_ops {
- make_param_ops!(PARAM_OPS_U64, u64);
- make_param_ops!(PARAM_OPS_ISIZE, isize);
- make_param_ops!(PARAM_OPS_USIZE, usize);
-+make_param_ops!(PARAM_OPS_BOOL, bool);
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index 0c36194d9971..95bc3f066b49 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -52,6 +52,7 @@
- /// - [`u64`]
- /// - [`isize`]
- /// - [`usize`]
-+/// - [`bool`]
- ///
- /// C header: [`include/linux/moduleparam.h`](srctree/include/linux/moduleparam.h)
- ///
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index e16298e520c7..feafa0c1623c 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -197,6 +197,7 @@ fn param_ops_path(param_type: &str) -> Path {
-         "u64" => parse_quote!(::kernel::module_param::PARAM_OPS_U64),
-         "isize" => parse_quote!(::kernel::module_param::PARAM_OPS_ISIZE),
-         "usize" => parse_quote!(::kernel::module_param::PARAM_OPS_USIZE),
-+        "bool" => parse_quote!(::kernel::module_param::PARAM_OPS_BOOL),
-         t => panic!("Unsupported parameter type {}", t),
-     }
- }
-diff --git a/samples/rust/rust_minimal.rs b/samples/rust/rust_minimal.rs
-index 8eb9583571d7..fedf5be1f713 100644
---- a/samples/rust/rust_minimal.rs
-+++ b/samples/rust/rust_minimal.rs
-@@ -15,6 +15,10 @@
-             default: 1,
-             description: "This parameter has a default of 1",
-         },
-+        test_bool_parameter: bool {
-+            default: false,
-+            description: "This boolean parameter defaults to false",
-+        },
-     },
- }
- 
-@@ -30,6 +34,10 @@ fn init(_module: &'static ThisModule) -> Result<Self> {
-             "test_parameter: {}\n",
-             *module_parameters::test_parameter.value()
-         );
-+        pr_info!(
-+            "test_bool_parameter: {}\n",
-+            *module_parameters::test_bool_parameter.value()
-+        );
- 
-         let mut numbers = KVec::new();
-         numbers.push(72, GFP_KERNEL)?;
--- 
-2.34.1
-
+greg k-h
