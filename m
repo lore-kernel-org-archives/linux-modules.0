@@ -1,118 +1,189 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199B425333F;
-	Sat, 11 Apr 2026 13:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+Received: from mail.189.cn (189sx01-ptr.21cn.com [125.88.204.37])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C88B1D130E;
+	Sun, 12 Apr 2026 14:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=125.88.204.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775913658; cv=none; b=vBWucIW7gPzFTnjOzmuydWBH8qkE6GtflUqinm4/IA1qZyU8R4srOTm95Rquy9BixRfPg1SGkl8x6Ha8FDtvN8Ktg5GedsZ82OtPU6Spyh0ZwSet2kitvQdGwF5Dx7FV2zkDbWT7G0kv8n+G8eDrEVSmwN5rASy0ZPQWu7hI/90=
+	t=1776003059; cv=none; b=Sg2/Ed4KrEVHC98XYAwBGVFSKuAkpifI82sAdsXi8mSVZCJ+wtKCQkee4laj8UNvt0s7eyMfS1HlL8ZXJxEo6kIF442qF3iLCABYqwxI1+OgCpWtWtMT6Q+N/gHZE+LiwbxZbI70Aa43FXdlTcjPP3ugQltFimYudHEFLmzyHN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775913658; c=relaxed/simple;
-	bh=KexCEwsn8tgj8ITmKZkHfakCP/z0b/n2hvVLRpyAIKI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwX5f+mBpLOnoaU2dQJPas1NrBjxEdt8RjuJWcX7vnOJP99H6lc7FkND0yQM+g2Mx3i79Pi1wdPIgwE1EBm38nN6OTwp5QHapnrXuJ2m7y0KwxJ32Z3dqwLBO63uSJXni/c0LgKaVRI5Ys60rczKu4L43bC8VBaVhsMfDaals/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=eUJgZxSj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E6jIQjo5; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="eUJgZxSj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E6jIQjo5"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 1790BEC04A9;
-	Sat, 11 Apr 2026 09:20:55 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sat, 11 Apr 2026 09:20:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1775913655; x=1776000055; bh=FdCyEOQqIs
-	qz8wwEc6yrYhoUb6n6TEFycu4E+exCaYM=; b=eUJgZxSjRH2h/tbhmjzrWyEDCW
-	79QrcTu63tRrNa+lA6It3JnYWsDEmexGMTGo7afd5PVVpVLV/i32qUuLxVCDDWME
-	p3kyeBuHN8oCCLcUWJ8ktIBfsBnamRZ9hC2Urr3p7H60SWSByao8ppeiGZtdDABi
-	zOaPES97H46MPQFQMiodtatP5GexNuhhoBxqErl/e++RVQtwG+0Df9UxtEKyKTIu
-	rkEubA31n1kc/c3W38kqlUg8YdZO21crflWOoLAKqKAWsOv5fUzM6cXjvvuMzTCh
-	GERcSP/vUQLmY6Z4M9JH8Zo4OKZZJvhwDRHof22fq6xYFtjODBF/3fC/O8gA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1775913655; x=1776000055; bh=FdCyEOQqIsqz8wwEc6yrYhoUb6n6TEFycu4
-	E+exCaYM=; b=E6jIQjo5tOsiCW5jSfMYqzh/P4caQNAIWbA8ZUD5w32RezaX0QB
-	BUYZkSHyhrg8FBQqmZoGCcYvaGIGXUtJa2l4eqaGoBA8oRTU0LJ9Z4jzI1MmU648
-	Ua4uH3ja8QIrSAd6OFCKb/1WY0I6obqfcmaKAHx8S8ac/HzaUBwToVGM1RyqohSI
-	hBAAhV8no/lm64Z+0/vs335R6k882UC+z9L8jseIyMHI/J6V+K/3/6z9zoM76cKS
-	Sn6offNN/KJFJ4L+Lz0d+21CbA0UWoeMVSPnhu6unEpnsTYLzuCoogIg4gk+ZQ+c
-	98KpDCYS00VcQTJDv4vy6G356id5qstFp8g==
-X-ME-Sender: <xms:tkraaVsDwdB006d-M6SmNh9GMLSkFXVC_sqOq7oCQUKtfdi5uQpxyg>
-    <xme:tkraadvQEqwCnAGGe40RpsHvRLdJs4XBp3vug5psc97w8R29eWY5Y3gZQ5o7in4SO
-    qwHx1rC5zI4glh7HVfpzKctqZ7szLPtFxe6SgOLFj2vqe1A2A>
-X-ME-Received: <xmr:tkraaU9E7N33VNO4c63BJvHYTEwycQ2Rf3pAa0Lflzy7XxnSIk8kS2gPBqq1XJuNBTLS-wmlOC0fkvGjyOLzQ6U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdefvdegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
-    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
-    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
-    homhdpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthho
-    peifvghniihhrgholhhirghosehruhgtrdgvughurdgtnhdprhgtphhtthhopehmtghgrh
-    hofheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthhrrdhprghvlhhusehsuhhs
-    vgdrtghomhdprhgtphhtthhopegurgdrghhomhgviieskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtohepshgrmhhithholhhvrghnvghnsehgohhoghhlvgdrtghomhdprhgtphhtthho
-    pehojhgvuggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmohguuh
-    hlvghssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhushhtqdhfohhr
-    qdhlihhnuhigsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghtohhmlh
-    hinhesrghtohhmlhhinhdrtghomh
-X-ME-Proxy: <xmx:tkraaW9IvdmJVJLtTvKOZU_bEwrZA9Ff9sjW9OY8ze7BIVXsCZ7S4A>
-    <xmx:tkraaY89RMra1qdYnwkak3vWdGYeXtdapt5EY-S0c3bqC_Ye-whRNw>
-    <xmx:tkraacHOb071ZP7CVlXOPTpQzbIJX7pUcO3xoSQEhn4sR1qw-kEw7Q>
-    <xmx:tkraaXZ0-f2lul_FfU7g0jVbrEUKI8CAy3f630BoyUDuh7dFl3TUug>
-    <xmx:t0raacOCr6qyKEXdyq5-8gL-cytbJXMm2oGmXE_1KpiGMgApK4DiC-zM>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Apr 2026 09:20:54 -0400 (EDT)
-Date: Sat, 11 Apr 2026 15:20:52 +0200
-From: Greg KH <greg@kroah.com>
-To: Wenzhao Liao <wenzhaoliao@ruc.edu.cn>
-Cc: mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
-	samitolvanen@google.com, ojeda@kernel.org,
-	linux-modules@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	atomlin@atomlin.com, boqun@kernel.org, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] rust: module_param: support bool parameters
-Message-ID: <2026041118-croak-serving-ff5e@gregkh>
-References: <20260411130254.3510128-1-wenzhaoliao@ruc.edu.cn>
+	s=arc-20240116; t=1776003059; c=relaxed/simple;
+	bh=tjc5iA5/ozTIRXHnu8IdHTw93PzAQJPc6iB3DoAvfkc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cofka6B6BOcgDoiDTtjB5NhOYlD7UIWQjBpWTgSGOKJyTLhhSIacrB1R+IboRs29CIpBhm8bSp2fDACUvrjO2P1U8l6TcoDVokkRxYAfl/YYSJCrwthkBJziCYOct1rOzgau+AIfAo96hX0t7ASz7nl72ThR5e4cGYx9Hyyufog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=125.88.204.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
+HMM_SOURCE_IP:10.158.243.18:0.740051472
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-111.162.143.142 (unknown [10.158.243.18])
+	by mail.189.cn (HERMES) with SMTP id 39A0840029F;
+	Sun, 12 Apr 2026 22:10:46 +0800 (CST)
+Received: from  ([111.162.143.142])
+	by gateway-153622-dep-76cc7bc9cd-8dbpn with ESMTP id a7f5d2f936e74b1dbc442e4419dc0d7f for pmladek@suse.com;
+	Sun, 12 Apr 2026 22:10:48 CST
+X-Transaction-ID: a7f5d2f936e74b1dbc442e4419dc0d7f
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 111.162.143.142
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <4037aa19-1b01-4076-b823-5cc0e43becac@189.cn>
+Date: Sun, 12 Apr 2026 22:10:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-modules@vger.kernel.org
 List-Id: <linux-modules.vger.kernel.org>
 List-Subscribe: <mailto:linux-modules+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-modules+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260411130254.3510128-1-wenzhaoliao@ruc.edu.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kernel/trace/ftrace: introduce ftrace module notifier
+To: Petr Mladek <pmladek@suse.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Miroslav Benes <mbenes@suse.cz>,
+ mcgrof@kernel.org, petr.pavlu@suse.com, da.gomez@kernel.org,
+ samitolvanen@google.com, atomlin@atomlin.com, mhiramat@kernel.org,
+ mark.rutland@arm.com, mathieu.desnoyers@efficios.com,
+ linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, live-patching@vger.kernel.org
+References: <20260225054639.21637-1-chensong_2000@189.cn>
+ <20260225192724.48ed165e@fedora>
+ <e18ed5f4-3917-46e7-bca9-78063e6e4457@189.cn>
+ <alpine.LSU.2.21.2602261147150.5739@pobox.suse.cz>
+ <20260226123014.2197d9b7@gandalf.local.home>
+ <321d4670-27cb-453f-a50d-426c83894074@189.cn>
+ <aaqk-GrpCTqO36xj@pathway.suse.cz>
+Content-Language: en-US
+From: Song Chen <chensong_2000@189.cn>
+In-Reply-To: <aaqk-GrpCTqO36xj@pathway.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Apr 11, 2026 at 09:02:53AM -0400, Wenzhao Liao wrote:
-> Sorry for the earlier noise and for our unfamiliarity with parts of the
-> kernel submission process, which created extra burden for maintainers.
+Hi,
+
+
+在 2026/3/6 17:57, Petr Mladek 写道:
+> On Fri 2026-02-27 09:34:59, Song Chen wrote:
+>> Hi,
+>>
+>> 在 2026/2/27 01:30, Steven Rostedt 写道:
+>>> On Thu, 26 Feb 2026 11:51:53 +0100 (CET)
+>>> Miroslav Benes <mbenes@suse.cz> wrote:
+>>>
+>>>>> Let me see if there is any way to use notifier and remain below calling
+>>>>> sequence:
+>>>>>
+>>>>> ftrace_module_enable
+>>>>> klp_module_coming
+>>>>> blocking_notifier_call_chain_robust(MODULE_STATE_COMING)
+>>>>>
+>>>>> blocking_notifier_call_chain(MODULE_STATE_GOING)
+>>>>> klp_module_going
+>>>>> ftrace_release_mod
+>>>>
+>>>> Both klp and ftrace used module notifiers in the past. We abandoned that
+>>>> and opted for direct calls due to issues with ordering at the time. I do
+>>>> not have the list of problems at hand but I remember it was very fragile.
+>>>>
+>>>> See commits 7dcd182bec27 ("ftrace/module: remove ftrace module
+>>>> notifier"), 7e545d6eca20 ("livepatch/module: remove livepatch module
+>>>> notifier") and their surroundings.
+>>>>
+>>>> So unless there is a reason for the change (which should be then carefully
+>>>> reviewed and properly tested), I would prefer to keep it as is. What is
+>>>> the motivation? I am failing to find it in the commit log.
+>>
+>> There is no special motivation, i just read btf initialization in module
+>> loading and found direct calls of ftrace and klp, i thought they were just
+>> forgotten to use notifier and i even didn't search git log to verify, sorry
+>> about that.
+>>
+>>>
+>>> Honestly, I do think just decoupling ftrace and live kernel patching from
+>>> modules is rationale enough, as it makes the code a bit cleaner. But to do
+>>> so, we really need to make sure there is absolutely no regressions.
+>>>
+>>> Thus, to allow such a change, I would ask those that are proposing it, show
+>>> a full work flow of how ftrace, live kernel patching, and modules work with
+>>> each other and why those functions are currently injected in the module code.
+>>>
+>>> As Miroslav stated, we tried to do it via notifiers in the past and it
+>>> failed. I don't want to find out why they failed by just adding them back
+>>> to notifiers again. Instead, the reasons must be fully understood and
+>>> updates made to make sure they will not fail in the future.
+>>
+>> Yes, you are right, i read commit msg of 7dcd182bec27, this patch just
+>> reverses it simply and will introduce order issue back. I will try to find
+>> out the problem in the past at first.
 > 
-> This patch adds boolean module parameter support to the Rust `module!`
-> parameter path.
+> AFAIK, the root of the problem is that livepatch uses the ftrace
+> framework. It means that:
 > 
-> It implements `ModuleParam` for `bool` and wires `PARAM_OPS_BOOL` into
-> the Rust module parameter machinery, so Rust-side parsing reuses the
-> existing kernel `kstrtobool()` semantics through `kstrtobool_bytes()`
-> instead of introducing a separate parser. A boolean parameter is also
-> added to `samples/rust/rust_minimal.rs` as a small reference user and
-> build-time validation point.
+>     + ftrace must be initialized before livepatch gets enabled
+>     + livepatch must be disabled before ftrace support gets removed
+> 
+> My understanding is that this can't be achieved by notifiers easily
+> because they are always proceed in the same order.
+> 
+> An elegant solution would be to introduce  notifier_reverse_call_chain()
+> which would process the callbacks in the reverse order. But it might
+> be non-trivial:
+> 
+>    + We would need to make sure that it does not break some
+>      existing "hidden" dependencies.
+> 
+Thanks so much, this is the solution i'm working on. I replaced next 
+with a list_head in notifier_block and implemented 
+anotifier_call_chain_reverse to address the order issues, like your 
+suggestion. And a new robust revision for rolling back.
 
-What driver needs this feature?  Module options should be very rare
-going forward as they are 1990's technology and do not fit the "modern"
-kernel model at all.
++static int notifier_call_chain_reverse(struct list_head *nl,
++                    struct notifier_block *start,
++                    unsigned long val, void *v,
++                    int nr_to_call, int *nr_calls)
++{
++    int ret = NOTIFY_DONE;
++    struct notifier_block *nb;
++    bool do_call = (start == NULL);
++
++    if (!nr_to_call)
++        return ret;
++
++    list_for_each_entry_reverse(nb, nl, entry) {
++        if (!do_call) {
++            if (nb == start)
++                do_call = true;
++            continue;
++        }
++#ifdef CONFIG_DEBUG_NOTIFIERS
++        if (unlikely(!func_ptr_is_kernel_text(nb->notifier_call))) {
++            WARN(1, "Invalid notifier called!");
++            continue;
++        }
++#endif
++        trace_notifier_run((void *)nb->notifier_call);
++        ret = nb->notifier_call(nb, val, v);
++
++        if (nr_calls)
++            (*nr_calls)++;
++
++        if (ret & NOTIFY_STOP_MASK)
++            break;
++
++        if (nr_to_call-- == 0)
++            break;
++    }
++    return ret;
++}
++NOKPROBE_SYMBOL(notifier_call_chain_reverse);
 
-thanks,
+I'll send the patches for review soon.
 
-greg k-h
+Best regards
+
+Song
+>    + notifier_call_chain() uses RCU to process the list of registered
+>      callbacks. I am not sure how complicated would be to make it safe
+>      in both directions.
+> 
+> Best Regards,
+> Petr
+> 
+> 
